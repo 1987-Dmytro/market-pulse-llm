@@ -23,9 +23,7 @@ def sentiment_macro_f1(
     raise NotImplementedError("Phase 3: scorer implementation")
 
 
-def sarcasm_slice_fix_rate(
-    y_true: list[str], base_pred: list[str], tuned_pred: list[str]
-) -> float:
+def sarcasm_slice_fix_rate(y_true: list[str], base_pred: list[str], tuned_pred: list[str]) -> float:
     """G1b — share of the curated sarcasm slice that the fine-tune repairs.
 
     The slice holds 150-200 examples the base model gets wrong, so the rate is
