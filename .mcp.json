@@ -1,0 +1,4 @@
+{
+  "mcpServers": {},
+  "_comment": "Scoping: project-specific servers (the project's DB/API) go here, committed; stable cross-project ones live at user level or in plugins. CLI > MCP wherever a CLI exists (gh, gcloud). Secrets via env vars only. Every server must be explainable — otherwise do not wire it up."
+}
