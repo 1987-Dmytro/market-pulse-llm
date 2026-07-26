@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+
+# Tooling caches
+.pytest_cache/
+.ruff_cache/
+
+# Secrets and Telegram session state (docs/SPEC.md §2)
+.env
+*.session
+*.session-journal
+
+# Raw / derived data and model weights never go into git
+data/
+models/
+*.safetensors
+*.gguf
