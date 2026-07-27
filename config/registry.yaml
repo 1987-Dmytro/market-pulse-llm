@@ -1,0 +1,134 @@
+# Source registry — sources + category taxonomy + brand watchlist (docs/SPEC.md §3).
+#
+# Three entities, extended by editing this file only (no code changes):
+#   sources   — Telegram channels to collect from, tagged by source_type
+#   taxonomy  — tracked category groups; everything else is dropped by the T2a filter
+#   watchlist — brands highlighted in analytics (coverage stays category-wide)
+
+sources:
+  # Candidate handles only. verified: false until the step-2b entry check resolves
+  # each chain to its blue-check channel and confirms comments are enabled (SPEC §2).
+  - id: silpo
+    name: Сільпо
+    source_type: official_retail
+    telegram_channels:
+      - "@silpoua"
+      - "@silposilpo"
+    verified: false
+
+  - id: atb
+    name: АТБ
+    source_type: official_retail
+    telegram_channels:
+      - "@atb_market_official"
+    verified: false
+
+  - id: varus
+    name: Varus
+    source_type: official_retail
+    telegram_channels:
+      - "@varus_ua"
+      - "@VARUS_channel"
+    verified: false
+
+  - id: znizhki-ua
+    name: Знижки UA
+    source_type: aggregator
+    telegram_channels:
+      - "@znizhki_ua"
+    verified: false
+
+taxonomy:
+  # Keys are kebab-case and stable (they end up in result files); values are the
+  # UA display names used by the dashboard.
+  tracked_groups:
+    dairy:
+      name: Молочні продукти
+      subcategories:
+        milk: Молоко
+        kefir-ryazhanka: Кефір та ряжанка
+        yogurt: Йогурти
+        curd: Сир кисломолочний та сирки
+        sour-cream: Сметана
+        butter: Масло
+        cheese: Сир твердий
+        dairy-desserts: Молочні десерти
+        plant-based-analogs: Рослинні аналоги молочних продуктів
+    ice-cream:
+      name: Морозиво
+      # Tracked as one group — no subcategory split.
+
+watchlist:
+  # Entry shape: {brand_id: kebab-case stable key, display_names: [UA/RU spellings
+  # seen in posts and comments], own: true for the operator's own brands}.
+  # Source: docs/WATCHLIST.md, confirmed by the operator 2026-07-26.
+
+  # --- own brands ---
+  - brand_id: garmonija
+    display_names: ["Гармонія", "Гармония", "ТМ Гармонія"]
+    own: true
+  - brand_id: mgarske
+    display_names: ["Мгарське", "Мгарский"]
+    own: true
+
+  # --- competitors, dairy (national, present in АТБ / Сільпо / Varus) ---
+  - brand_id: yagotynske
+    display_names: ["Яготинське", "Яготинское"]
+    own: false
+  - brand_id: molokija
+    display_names: ["Молокія", "Молокия"]
+    own: false
+  - brand_id: halychyna
+    display_names: ["Галичина"]
+    own: false
+  - brand_id: prostokvashyno
+    display_names: ["Простоквашино"]
+    own: false
+  - brand_id: ferma
+    display_names: ["Ферма"]
+    own: false
+  - brand_id: selianske
+    display_names: ["Селянське", "Селянское"]
+    own: false
+  - brand_id: president
+    display_names: ["President", "Президент"]
+    own: false
+  - brand_id: zlahoda
+    display_names: ["Злагода"]
+    own: false
+  - brand_id: voloshkove-pole
+    display_names: ["Волошкове поле", "Волошково поле"]
+    own: false
+
+  # --- competitors, ice cream ---
+  - brand_id: rud
+    display_names: ["Рудь"]
+    own: false
+  - brand_id: lasunka
+    display_names: ["Ласунка"]
+    own: false
+  - brand_id: try-vedmedi
+    display_names: ["Три Ведмеді", "Три Медведя"]
+    own: false
+  - brand_id: limo
+    display_names: ["Лімо", "Лимо"]
+    own: false
+  - brand_id: khladyk
+    display_names: ["Хладик"]
+    own: false
+
+  # --- private labels of the tracked chains ---
+  - brand_id: premia
+    display_names: ["Премія", "Премия"]
+    own: false
+  - brand_id: svoia-liniia
+    display_names: ["Своя Лінія", "Своя Линия"]
+    own: false
+  - brand_id: varto
+    # Current dairy usage verified at the 2b entry check.
+    display_names: ["Varto", "Варто"]
+    own: false
+  - brand_id: varus-pl
+    # Exact dairy private-label naming verified at the 2b entry check.
+    display_names: ["VARUS"]
+    own: false

@@ -1,11 +1,12 @@
 # market-pulse-llm
 
-Competitor Intelligence System for the food / snack / confectionery market
-(RU / UA / EN). The operator registers 2-3 direct competitors; the system
-monitors their Telegram channels, detects new-product launch announcements, and
+Category Intelligence System for the Ukrainian food retail market (UA / RU / EN).
+The system monitors the Telegram channels of retail chains and discount
+aggregators, filters the stream to the tracked category (dairy and ice cream),
+detects new-product and promo announcements, extracts brand mentions, and
 classifies audience reactions in the comments (sentiment, sarcasm, and the
 hidden intents taste / price / packaging / quality / availability) into
-comparative launch analytics.
+comparative per-brand and per-launch analytics.
 
 **MVP constraint:** Telegram only, $0 data budget. X, FB/IG and website
 monitoring are deferred extensions with no code in this repo.
@@ -25,14 +26,17 @@ your PATH already).
 make check        # ruff check . && pytest -q — must be green after every commit
 ```
 
-## Competitor registry
+## Source registry
 
-`config/competitors.yaml` maps each competitor to their Telegram channels. The
-entries shipped today are placeholders: the real competitors are selected in
-Phase 2, after checking that their channels have comments enabled.
+`config/registry.yaml` holds the three registry entities (SPEC §3): **sources**
+(Telegram channels per retail chain / aggregator, tagged by `source_type`),
+**taxonomy** (tracked category groups) and the brand **watchlist**. New sources,
+groups and brands are added by editing that file — no code changes. Channel
+handles ship as candidates with `verified: false` until the Phase 2 entry check
+confirms the blue-check channel and that comments are enabled.
 
 ```
-PYTHONPATH=src python3 -m market_pulse.registry config/competitors.yaml
+PYTHONPATH=src python3 -m market_pulse.registry config/registry.yaml
 ```
 
 ## Results
