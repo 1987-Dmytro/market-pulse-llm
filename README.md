@@ -12,7 +12,7 @@ comparative per-brand and per-launch analytics.
 monitoring are deferred extensions with no code in this repo.
 
 **`docs/SPEC.md` is the single source of truth** for scope, success gates and
-phases — read it before any task. Current phase: **1 — verifier skeleton**.
+phases — read it before any task.
 
 ## Requirements
 
