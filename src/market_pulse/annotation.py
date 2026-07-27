@@ -95,6 +95,38 @@ def stratified_sample(rows: list[dict], key, total: int, rng, weight_of=None):
     return picked, table
 
 
+def grouped_split(rows: list[dict], group_of, key, total: int, rng, weight_of=None):
+    """Draw ~``total`` test rows without splitting a group across the two sides.
+
+    A comment thread is one group: a thread-mate on the training side leaks the
+    post's context into the test score, so a group is taken whole or not at all.
+    Stratum quotas are therefore only as exact as whole groups allow — the caller
+    gets ``stratum -> (pool, quota, taken)`` and reports the difference rather
+    than pretending there is none.
+    """
+    groups: dict = {}
+    for row in rows:
+        groups.setdefault(group_of(row), []).append(row)
+
+    capacity = Counter(key(row) for row in rows)
+    weight = {name: weight_of(name) for name in capacity} if weight_of else None
+    quota = allocate(dict(capacity), total, weight=weight)
+
+    order = sorted(groups, key=str)
+    rng.shuffle(order)
+
+    taken: Counter = Counter()
+    picked = []
+    for name in order:
+        want = Counter(key(row) for row in groups[name])
+        if any(taken[stratum] + count > quota[stratum] for stratum, count in want.items()):
+            continue
+        taken += want
+        picked += groups[name]
+    table = {name: (capacity[name], quota[name], taken[name]) for name in sorted(capacity, key=str)}
+    return picked, table
+
+
 def comment_row(record: dict, language: str) -> dict:
     return {
         "id": f"{record['channel']}:{record['msg_id']}",

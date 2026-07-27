@@ -11,6 +11,7 @@ from market_pulse.annotation import (
     allocate,
     check_batch,
     comment_row,
+    grouped_split,
     parse_verdict,
     post_row,
     row_state,
@@ -393,3 +394,74 @@ def test_a_malformed_verdict_names_the_defect():
     ):
         with pytest.raises(ValueError, match=message):
             parse_verdict(bad, "comments")
+
+
+# --- leakage-controlled split -----------------------------------------------
+
+
+def threads(tag: str, count: int, size: int, **fields) -> list[dict]:
+    """``count`` threads of ``size`` rows each, all in one stratum."""
+    return [
+        {"id": f"{tag}-{parent}-{i}", "parent": f"{tag}-{parent}", **fields}
+        for parent in range(count)
+        for i in range(size)
+    ]
+
+
+def parent_of(row: dict) -> str:
+    return row["parent"]
+
+
+def stratum_of(row: dict) -> str:
+    return row["sentiment"]
+
+
+def test_a_thread_never_lands_on_both_sides():
+    rows = threads("a", 40, 3, sentiment="negative") + threads("b", 60, 1, sentiment="neutral")
+    picked, _ = grouped_split(rows, parent_of, stratum_of, 60, random.Random(42))
+
+    in_test = {row["id"] for row in picked}
+    for parent in {row["parent"] for row in rows}:
+        sides = {row["id"] in in_test for row in rows if row["parent"] == parent}
+        assert len(sides) == 1, f"{parent} is on both sides"
+
+
+def test_no_stratum_is_drawn_beyond_its_quota():
+    rows = threads("a", 40, 3, sentiment="negative") + threads("b", 60, 1, sentiment="neutral")
+    picked, table = grouped_split(rows, parent_of, stratum_of, 60, random.Random(42))
+
+    assert len(picked) == sum(taken for _, _, taken in table.values())
+    for pool, quota, taken in table.values():
+        assert taken <= quota <= pool
+
+
+def test_the_same_seed_splits_the_same_way():
+    rows = threads("a", 40, 3, sentiment="negative") + threads("b", 60, 1, sentiment="neutral")
+    draw = dict(rows=rows, group_of=parent_of, key=stratum_of, total=60)
+    first, _ = grouped_split(**draw, rng=random.Random(42))
+    again, _ = grouped_split(**draw, rng=random.Random(42))
+    assert [row["id"] for row in first] == [row["id"] for row in again]
+
+
+def test_a_thread_bigger_than_its_quota_is_skipped_whole():
+    rows = threads("big", 1, 10, sentiment="negative") + threads("s", 50, 1, sentiment="neutral")
+    picked, table = grouped_split(rows, parent_of, stratum_of, 10, random.Random(42))
+
+    assert table["negative"][2] == 0, "the oversized thread was drawn in part"
+    assert all(row["sentiment"] == "neutral" for row in picked)
+
+
+def test_the_flagged_stratum_is_oversampled_in_the_split():
+    rows = threads("flag", 30, 1, sentiment="negative") + threads(
+        "rest", 270, 1, sentiment="neutral"
+    )
+    draw = dict(rows=rows, group_of=parent_of, key=stratum_of, total=100)
+    plain, _ = grouped_split(**draw, rng=random.Random(42))
+    lifted, _ = grouped_split(
+        **draw, rng=random.Random(42), weight_of=lambda name: 2 if name == "negative" else 1
+    )
+
+    def flagged(picked: list[dict]) -> int:
+        return sum(1 for row in picked if row["sentiment"] == "negative")
+
+    assert flagged(plain) < flagged(lifted) <= 30

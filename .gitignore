@@ -17,8 +17,10 @@ __pycache__/
 knowledge/.vault-state.json
 .obsidian/
 
-# Raw / derived data and model weights never go into git
-data/
+# Raw / derived data and model weights never go into git — except the curated,
+# frozen train/test splits, which are deliverables (docs/frozen-testsets.md).
+data/*
+!data/frozen/
 models/
 *.safetensors
 *.gguf
