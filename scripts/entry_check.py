@@ -7,15 +7,22 @@ data/entry_check_report.json (gitignored raw data) and prints the table the
 operator reviews before flipping `verified:` in the registry — this script never
 edits the registry itself.
 
+`--discover "<query>"` runs the same check over Telegram's global search instead of
+the registry: SPEC §9 falls back to aggregator and community channels wherever a
+chain has comments disabled, and this is how those candidates are found.
+
 Read-only and deliberately slow: one channel at a time, a pause between channels,
 no joins, no member lists. FloodWait aborts the run but keeps what was collected.
 
     python3.11 scripts/tg_login.py     # once, to create the session
     python3.11 scripts/entry_check.py
+    python3.11 scripts/entry_check.py --discover "молочні продукти"
 """
 
+import argparse
 import asyncio
 import json
+import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -32,13 +39,14 @@ from telethon.errors import (
 )
 
 from market_pulse.entry_check import build_verdict, collapse_albums, traffic_stats
-from market_pulse.registry import load_registry
+from market_pulse.registry import Source, load_registry
 from market_pulse.telegram_client import build_client
 
 REGISTRY = REPO_ROOT / "config" / "registry.yaml"
-REPORT = REPO_ROOT / "data" / "entry_check_report.json"
+DATA_DIR = REPO_ROOT / "data"
 POST_SAMPLE = 50
 PAUSE_SECONDS = 2.0
+DISCOVER_LIMIT = 15
 RESOLVE_ERRORS = (UsernameNotOccupiedError, UsernameInvalidError, ChannelPrivateError, ValueError)
 
 
@@ -170,8 +178,76 @@ def print_table(records: list[dict]) -> None:
             print(f"{'':<11}  ? @{match['username']} {check} {match['title']}")
 
 
-async def main() -> int:
-    registry = load_registry(REGISTRY)
+async def collect(client, candidates: list[tuple[Source, str]], records: list[dict]) -> int | None:
+    """Check every (source, handle) pair, appending records. Returns FloodWait seconds."""
+    for source, handle in candidates:
+        print(f"checking {handle} ({source.id})...", flush=True)
+        try:
+            records.append(await check_channel(client, source, handle))
+        except FloodWaitError as exc:
+            return exc.seconds
+        except Exception as exc:
+            # One unusable channel must not discard the rest of the run.
+            records.append(
+                {
+                    "source_id": source.id,
+                    "source_name": source.name,
+                    "source_type": source.source_type,
+                    "handle": handle,
+                    "resolved": False,
+                    "error": f"{type(exc).__name__}: {exc}",
+                    "verdict": "error",
+                    "reasons": ["unexpected failure, see error"],
+                }
+            )
+        await asyncio.sleep(PAUSE_SECONDS)
+    return None
+
+
+async def search_channels(client, query: str) -> list[tuple[Source, str]]:
+    """Top public channels for a query, as candidates for the same per-channel check.
+
+    Everything found is `community` until the operator decides otherwise — a real
+    aggregator gets that source_type when it is added to the registry by hand.
+    """
+    found = await client(functions.contacts.SearchRequest(q=query, limit=DISCOVER_LIMIT))
+    candidates = []
+    for chat in found.chats:
+        username = getattr(chat, "username", None)
+        if not username:
+            continue  # private or invite-only: not collectable
+        handle = f"@{username}"
+        source = Source("found", chat.title, "community", (handle,))
+        candidates.append((source, handle))
+    return candidates
+
+
+def report_path(query: str | None) -> Path:
+    if query is None:
+        return DATA_DIR / "entry_check_report.json"
+    # One file per query: three discovery runs must not overwrite each other, and
+    # re-running a scan costs another rate-limited pass.
+    slug = re.sub(r"\W+", "-", query.strip()).strip("-").lower()
+    return DATA_DIR / f"discovery_{slug}.json"
+
+
+def rank(record: dict) -> tuple:
+    """Discovery order: channels that carry comments first, liveliest first."""
+    return (
+        bool(record.get("comments_enabled")),
+        record.get("traffic", {}).get("median_comments", 0),
+    )
+
+
+async def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description="Telegram channel entry check.")
+    parser.add_argument(
+        "--discover",
+        metavar="QUERY",
+        help="check the top public channels Telegram returns for QUERY instead of the registry",
+    )
+    args = parser.parse_args(argv)
+
     records: list[dict] = []
     flood_wait = None
 
@@ -181,49 +257,39 @@ async def main() -> int:
         if not await client.is_user_authorized():
             print("No Telegram session. Run: python3.11 scripts/tg_login.py")
             return 2
-        for source in registry.sources:
-            for handle in source.telegram_channels:
-                print(f"checking {handle} ({source.id})...", flush=True)
-                try:
-                    records.append(await check_channel(client, source, handle))
-                except FloodWaitError as exc:
-                    flood_wait = exc.seconds
-                    break
-                except Exception as exc:
-                    # One unusable channel must not discard the rest of the run.
-                    records.append(
-                        {
-                            "source_id": source.id,
-                            "source_name": source.name,
-                            "source_type": source.source_type,
-                            "handle": handle,
-                            "resolved": False,
-                            "error": f"{type(exc).__name__}: {exc}",
-                            "verdict": "error",
-                            "reasons": ["unexpected failure, see error"],
-                        }
-                    )
-                await asyncio.sleep(PAUSE_SECONDS)
-            if flood_wait is not None:
-                break
+        if args.discover:
+            candidates = await search_channels(client, args.discover)
+            print(f"{len(candidates)} public channels found for {args.discover!r}")
+        else:
+            candidates = [
+                (source, handle)
+                for source in load_registry(REGISTRY).sources
+                for handle in source.telegram_channels
+            ]
+        flood_wait = await collect(client, candidates, records)
     finally:
         await client.disconnect()
 
-    REPORT.parent.mkdir(parents=True, exist_ok=True)
+    if args.discover:
+        records.sort(key=rank, reverse=True)
+
+    path = report_path(args.discover)
+    path.parent.mkdir(parents=True, exist_ok=True)
     report = {
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-        "registry": str(REGISTRY.relative_to(REPO_ROOT)),
+        "query": args.discover,
+        "registry": None if args.discover else str(REGISTRY.relative_to(REPO_ROOT)),
         "post_sample": POST_SAMPLE,
         "channels": records,
     }
-    REPORT.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+    path.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
 
     print_table(records)
-    print(f"\nreport: {REPORT.relative_to(REPO_ROOT)} ({len(records)} channels)")
+    print(f"\nreport: {path.relative_to(REPO_ROOT)} ({len(records)} channels)")
     if flood_wait is not None:
         print(f"FloodWait: Telegram asks for {flood_wait}s — stopped early, re-run after that.")
         return 1
-    print("Registry stays untouched: the team lead flips `verified:` after reviewing this.")
+    print("Registry stays untouched: the team lead edits it after reviewing this.")
     return 0
 
 
