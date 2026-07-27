@@ -37,3 +37,4 @@ line-length = 100
 "scripts/entry_check.py" = ["E402"]
 "scripts/make_annotation_batch.py" = ["E402"]
 "scripts/tg_login.py" = ["E402"]
+"scripts/validate_annotations.py" = ["E402"]

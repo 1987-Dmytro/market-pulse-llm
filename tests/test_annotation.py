@@ -1,12 +1,18 @@
-"""Offline tests for the annotation sampling maths and the emitted row shapes."""
+"""Offline tests for the annotation sampling maths, row shapes and label checks."""
+
+import copy
 
 from market_pulse.annotation import (
     COMMENT_LABELS,
     POST_LABELS,
     allocate,
+    check_batch,
     comment_row,
     post_row,
+    row_state,
 )
+
+WATCHLIST = ("rud", "premia")
 
 RECORD = {
     "record_type": "comment",
@@ -111,3 +117,162 @@ def test_label_lists_are_not_shared_between_rows():
     first, second = comment_row(RECORD, "ua"), comment_row(RECORD, "ru")
     first["intents"].append("price")
     assert second["intents"] == []
+
+
+# --- validation -------------------------------------------------------------
+
+
+def batch(kind: str, *labels: dict) -> tuple[list[dict], list[dict]]:
+    """(rows, pristine) for as many rows as label sets were passed."""
+    builder = comment_row if kind == "comments" else post_row
+    source = RECORD if kind == "comments" else POST
+    pristine = []
+    for index in range(len(labels)):
+        record = dict(source, msg_id=source["msg_id"] + index, text=f"text {index}")
+        pristine.append(builder(record, "ua"))
+    rows = [dict(copy.deepcopy(row), **label) for row, label in zip(pristine, labels)]
+    return rows, pristine
+
+
+CLEAN_COMMENT = {
+    "sentiment": "negative",
+    "sarcasm": True,
+    "intents": ["price"],
+    "annotator": "llm-precheck",
+}
+CLEAN_POST = {
+    "relevant": True,
+    "post_type": "promo",
+    "brands": [{"brand_id": "rud", "mention": "Рудь"}],
+    "annotator": "llm-precheck",
+}
+
+
+def violations(kind: str, *labels: dict) -> list[str]:
+    rows, pristine = batch(kind, *labels)
+    return check_batch(rows, pristine, kind, WATCHLIST).violations
+
+
+def test_a_clean_batch_passes():
+    assert violations("comments", CLEAN_COMMENT, CLEAN_COMMENT) == []
+    assert violations("posts", CLEAN_POST) == []
+
+
+def test_untouched_rows_are_progress_not_violations():
+    # The batch is validated after every chunk, so most rows are still blank.
+    rows, pristine = batch("comments", CLEAN_COMMENT, {})
+    report = check_batch(rows, pristine, "comments", WATCHLIST)
+    assert report.ok
+    assert (report.stats["labeled"], report.stats["unlabeled"]) == (1, 1)
+
+
+def test_a_half_labelled_row_is_caught():
+    bad = violations("comments", {"sentiment": "negative", "annotator": "llm-precheck"})
+    assert len(bad) == 1
+    assert "half-labelled" in bad[0] and "sarcasm" in bad[0]
+    assert row_state({"sentiment": "negative", "sarcasm": None, "annotator": None}, "comments") == (
+        "partial"
+    )
+
+
+def test_illegal_values_name_the_field():
+    bad = violations(
+        "comments",
+        dict(CLEAN_COMMENT, sentiment="mixed", sarcasm="yes", intents=["price", "delivery"]),
+    )
+    assert len(bad) == 3
+    assert any("sentiment" in line for line in bad)
+    assert any("sarcasm" in line for line in bad)
+    assert any("delivery" in line for line in bad)
+
+
+def test_repeated_intent_is_caught():
+    bad = violations("comments", dict(CLEAN_COMMENT, intents=["price", "price"]))
+    assert len(bad) == 1 and "duplicate" in bad[0]
+
+
+def test_an_unclear_row_still_needs_legal_labels():
+    # The guideline asks for the labels even on unclear rows; they are excluded
+    # from the gates, not from the schema.
+    assert violations("comments", dict(CLEAN_COMMENT, unclear=True)) == []
+    bad = violations("comments", dict(CLEAN_COMMENT, unclear="yes"))
+    assert len(bad) == 1 and "unclear" in bad[0]
+
+
+def test_annotator_is_required():
+    bad = violations("comments", dict(CLEAN_COMMENT, annotator="  "))
+    assert len(bad) == 1 and "annotator" in bad[0]
+
+
+def test_a_lost_row_is_caught():
+    rows, pristine = batch("comments", CLEAN_COMMENT, CLEAN_COMMENT)
+    bad = check_batch(rows[:1], pristine, "comments", WATCHLIST).violations
+    assert len(bad) == 1 and "row lost" in bad[0]
+
+
+def test_a_row_outside_the_pristine_copy_is_caught():
+    rows, pristine = batch("comments", CLEAN_COMMENT, CLEAN_COMMENT)
+    bad = check_batch(rows, pristine[:1], "comments", WATCHLIST).violations
+    assert len(bad) == 1 and "not in the pristine copy" in bad[0]
+
+
+def test_a_duplicated_row_is_caught():
+    rows, pristine = batch("comments", CLEAN_COMMENT)
+    bad = check_batch(rows * 2, pristine, "comments", WATCHLIST).violations
+    assert len(bad) == 1 and "duplicate id" in bad[0]
+
+
+def test_editing_the_text_being_labelled_is_caught():
+    rows, pristine = batch("comments", CLEAN_COMMENT)
+    rows[0]["text"] = "tidied up"
+    bad = check_batch(rows, pristine, "comments", WATCHLIST).violations
+    assert len(bad) == 1 and "record fields edited: text" in bad[0]
+
+
+def test_post_type_is_required_even_for_an_irrelevant_post():
+    bad = violations("posts", dict(CLEAN_POST, relevant=False, post_type=None, brands=[]))
+    assert len(bad) == 1 and "half-labelled" in bad[0]
+
+
+def test_an_invented_brand_id_is_caught():
+    bad = violations("posts", dict(CLEAN_POST, brands=[{"brand_id": "rude", "mention": "Рудь"}]))
+    assert len(bad) == 1 and "watchlist" in bad[0]
+
+
+def test_an_off_watchlist_brand_is_legal_with_a_null_id():
+    assert (
+        violations("posts", dict(CLEAN_POST, brands=[{"brand_id": None, "mention": "Звени"}])) == []
+    )
+
+
+def test_a_brand_entry_needs_both_keys():
+    bad = violations("posts", dict(CLEAN_POST, brands=[{"mention": "Рудь"}]))
+    assert len(bad) == 1 and "brand_id and mention" in bad[0]
+
+
+def test_stats_count_unclear_among_the_labelled():
+    rows, pristine = batch(
+        "comments",
+        dict(CLEAN_COMMENT, unclear=True),
+        CLEAN_COMMENT,
+        dict(CLEAN_COMMENT, unclear=True),
+    )
+    stats = check_batch(rows, pristine, "comments", WATCHLIST).stats
+    assert (stats["labeled"], stats["unclear"]) == (3, 2)
+    assert stats["unclear_share"] == 2 / 3
+    assert stats["dist"]["sentiment"]["negative"] == 3
+    assert stats["dist"]["annotator"] == {"llm-precheck": 3}
+
+
+def test_post_stats_separate_off_watchlist_from_absent_brands():
+    rows, pristine = batch(
+        "posts",
+        CLEAN_POST,
+        dict(CLEAN_POST, brands=[{"brand_id": None, "mention": "Звени гора"}]),
+        dict(CLEAN_POST, relevant=False, post_type="other", brands=[]),
+    )
+    dist = check_batch(rows, pristine, "posts", WATCHLIST).stats["dist"]
+    assert dist["brand_id"]["rud"] == 1
+    assert dist["brand_id"]["(off-watchlist)"] == 1
+    assert dist["brand_id"]["(no brands)"] == 1
+    assert dist["post_type"] == {"promo": 2, "other": 1}
