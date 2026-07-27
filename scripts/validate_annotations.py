@@ -55,12 +55,13 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("batch", type=Path)
     parser.add_argument("--pristine", type=Path, help="default: <batch>.pristine.jsonl")
     parser.add_argument("--registry", type=Path, default=REPO_ROOT / "config" / "registry.yaml")
+    parser.add_argument("--kind", choices=("comments", "posts"), help="default: from the file name")
     args = parser.parse_args(argv)
 
     pristine = args.pristine or args.batch.with_name(
         args.batch.name.replace(".jsonl", ".pristine.jsonl")
     )
-    kind = kind_of(args.batch)
+    kind = args.kind or kind_of(args.batch)
     brand_ids = tuple(brand.brand_id for brand in load_registry(args.registry).watchlist)
 
     report = check_batch(load(args.batch), load(pristine), kind, brand_ids)

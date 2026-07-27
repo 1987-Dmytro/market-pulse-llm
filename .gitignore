@@ -21,6 +21,11 @@ knowledge/.vault-state.json
 # frozen train/test splits, which are deliverables (docs/frozen-testsets.md).
 data/*
 !data/frozen/
+# Same reason for the hand-labelled sarcasm pool: it is annotation output that
+# feeds training, not collected data (docs/frozen-testsets.md).
+!data/annotation/
+data/annotation/*
+!data/annotation/sarcasm_candidates.jsonl
 models/
 *.safetensors
 *.gguf
