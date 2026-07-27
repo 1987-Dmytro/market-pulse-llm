@@ -43,13 +43,8 @@ sources:
     verified: true
     comments_enabled: true
 
-  - id: znizhki-ua
-    name: Знижки UA
-    source_type: aggregator
-    telegram_channels:
-      - "@znizhki_ua"
-    verified: true
-    comments_enabled: true
+  # znizhki-ua (@znizhki_ua) removed 2026-07-27: channel dead since 2024-03,
+  # zero records inside the backfill window (see data/entry_check_report.json).
 
 taxonomy:
   # Keys are kebab-case and stable (they end up in result files); values are the
