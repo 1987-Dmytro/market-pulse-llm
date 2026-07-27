@@ -259,6 +259,51 @@ def check_batch(
     return report
 
 
+# --- operator review --------------------------------------------------------
+# The review CSV comes back with one verdict per row; `fix:` is the only way a
+# label changes after the batch was labelled, so the syntax is parsed strictly
+# and a typo raises instead of silently leaving the wrong label in place.
+
+BOOL_FIELDS = ("sarcasm", "unclear", "relevant")
+BOOL_WORDS = {"1": True, "true": True, "0": False, "false": False}
+
+
+def parse_verdict(verdict: str, kind: str) -> dict | None:
+    """The label changes one ``operator_verdict`` cell asks for.
+
+    ``ok`` → no changes, an empty cell → ``None`` (the row was not reviewed),
+    ``unclear`` → the escape hatch, ``fix:field=value[,field=value...]`` → those
+    fields. Raises ``ValueError`` naming the defect on anything else.
+    """
+    text = verdict.strip()
+    if not text:
+        return None
+    if text == "ok":
+        return {}
+    if text == "unclear":
+        return {"unclear": True}
+    if not text.startswith("fix:"):
+        raise ValueError(f"verdict must be ok, unclear or fix:field=value — got {verdict!r}")
+
+    changes: dict = {}
+    for pair in text[len("fix:") :].split(","):
+        name, sign, value = (part.strip() for part in pair.partition("="))
+        if not sign or not name:
+            raise ValueError(f"fix needs field=value, got {pair!r}")
+        if name not in TEMPLATES[kind]:
+            raise ValueError(f"{name!r} is not a {kind} label field")
+        if isinstance(TEMPLATES[kind][name], list):
+            raise ValueError(f"{name!r} is a list — fix it in the batch by hand, not by verdict")
+        if name in changes:
+            raise ValueError(f"{name!r} fixed twice in {verdict!r}")
+        if name in BOOL_FIELDS:
+            if value.lower() not in BOOL_WORDS:
+                raise ValueError(f"{name}={value!r} is not a boolean")
+            value = BOOL_WORDS[value.lower()]
+        changes[name] = value
+    return changes
+
+
 def _list_field(row: dict, name: str, of_dicts: bool = False) -> list:
     """The list a row holds under ``name``, tolerating whatever a bad row holds.
 

@@ -33,6 +33,7 @@ line-length = 100
 [tool.ruff.lint.per-file-ignores]
 # These run as `python3.11 scripts/<name>.py` without the package installed, so they
 # must extend sys.path before importing market_pulse.
+"scripts/apply_review.py" = ["E402"]
 "scripts/backfill.py" = ["E402"]
 "scripts/entry_check.py" = ["E402"]
 "scripts/make_annotation_batch.py" = ["E402"]

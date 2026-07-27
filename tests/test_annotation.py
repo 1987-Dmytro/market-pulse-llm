@@ -3,12 +3,15 @@
 import copy
 import random
 
+import pytest
+
 from market_pulse.annotation import (
     COMMENT_LABELS,
     POST_LABELS,
     allocate,
     check_batch,
     comment_row,
+    parse_verdict,
     post_row,
     row_state,
     stratified_sample,
@@ -338,3 +341,55 @@ def test_post_stats_separate_off_watchlist_from_absent_brands():
     assert dist["brand_id"]["(off-watchlist)"] == 1
     assert dist["brand_id"]["(no brands)"] == 1
     assert dist["post_type"] == {"promo": 2, "other": 1}
+
+
+# --- operator review --------------------------------------------------------
+
+
+def test_a_plain_verdict_changes_nothing():
+    assert parse_verdict("ok", "comments") == {}
+    assert parse_verdict("  ok  ", "comments") == {}
+
+
+def test_an_empty_cell_means_the_row_was_not_reviewed():
+    assert parse_verdict("", "comments") is None
+    assert parse_verdict("   ", "posts") is None
+
+
+def test_the_escape_hatch_sets_unclear():
+    assert parse_verdict("unclear", "comments") == {"unclear": True}
+
+
+def test_a_fix_carries_the_fields_it_names():
+    assert parse_verdict("fix:sentiment=negative", "comments") == {"sentiment": "negative"}
+    assert parse_verdict("fix:sentiment=negative,sarcasm=1,unclear=0", "comments") == {
+        "sentiment": "negative",
+        "sarcasm": True,
+        "unclear": False,
+    }
+    assert parse_verdict("fix:relevant=false,post_type=launch", "posts") == {
+        "relevant": False,
+        "post_type": "launch",
+    }
+
+
+def test_a_field_of_the_other_task_is_refused():
+    with pytest.raises(ValueError, match="not a posts label field"):
+        parse_verdict("fix:sarcasm=1", "posts")
+
+
+def test_list_fields_are_not_fixable_by_verdict():
+    with pytest.raises(ValueError, match="list"):
+        parse_verdict("fix:intents=price", "comments")
+
+
+def test_a_malformed_verdict_names_the_defect():
+    for bad, message in (
+        ("okay", "must be ok"),
+        ("fix:sentiment", "field=value"),
+        ("fix:=negative", "field=value"),
+        ("fix:sarcasm=yes", "not a boolean"),
+        ("fix:sarcasm=1,sarcasm=0", "twice"),
+    ):
+        with pytest.raises(ValueError, match=message):
+            parse_verdict(bad, "comments")
