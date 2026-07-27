@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-07-27 11:13:45 (every SessionStart)
+**Auto-refreshed:** 2026-07-27 19:06:20 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-3abbc8c docs: track the confirmed brand watchlist
-0e02ae2 docs: land SPEC rev. 3 and the CLAUDE.md fold-in
-3bd01e4 docs: drop stale competitor references after the rev. 3 migration
-146aa5c test: cover new registry validation
-d36e211 feat: migrate registry to sources/taxonomy/watchlist schema
+19c2385 fix: count CSV rows, not physical lines, in the review sample summary
+e3441dc feat: review sample export
+6da48e3 feat: annotation validator
+e845840 docs: amendment 3.1 drops EN from per-language gates
+385ea1d docs: quote the corpus exactly in the annotation guidelines
 ```
 
 ## 📅 Recent daily logs
@@ -24,26 +24,42 @@ d36e211 feat: migrate registry to sources/taxonomy/watchlist schema
 
 # Hot Cache — curated
 
-**Last update:** 2026-07-27 11:08 (edited by hand / `/close`; the section above is auto-generated — do NOT touch the marker)
+**Last update:** 2026-07-27 19:02 (edited by hand / `/close`; the section above is auto-generated — do NOT touch the marker)
 
 ## 🔥 What's Hot
-SPEC Phase 2, step **2a (registry migration) delivered**: `config/registry.yaml` = sources +
-taxonomy + watchlist, `registry.py` rewritten, 9 tests, `make check` green after each of the 5
-commits. Awaiting operator acceptance — the executor never self-accepts a step.
-Phase 1 acceptance is still open. SPEC rev. 3 is committed but its status line says DRAFT:
-approval is the operator's to give.
+SPEC Phase 2 steps **2a–2d-2 delivered**, 91 tests, `make check` green after every commit.
+SPEC is **APPROVED rev. 3 + amendment 3.1** (EN out of the per-language gates). Registry:
+4 live sources (silpo, atb posts-only; varus, msuaaaa with comments). Raw store holds
+**6 057 posts + 11 338 comments** back to 2024-07-01; the pre-registered 5 000-comment
+gate reads PASSED — never self-accepted, 1/2a-2d still await the operator.
+
+**All 3 000 rows carry `annotator: "llm-precheck"` labels** and both files validate clean.
+Comments: unclear 694 (34.7%) → **1306 usable**, sarcasm 74, intents led by price 261 /
+availability 235. Posts: relevant 115, launch 61, 143 brand mentions. Operator review
+slices exported: `data/annotation/review_{comments,posts}.csv` (300 + 150, seed 42,
+`operator_verdict` empty).
 
 ## ⏭️ Next
-- Operator closes Phase 1 and accepts step 2a.
-- Step **2b**: Telegram entry check per channel — resolve each chain to its blue-check channel,
-  confirm comments enabled + traffic, then flip `verified: true` in `config/registry.yaml`.
-  Handles shipped today are candidates only; `varto` / `varus-pl` private-label naming is verified
-  in the same pass.
-- Then 2c/2d: collector (rate-limited, incremental, provenance), annotation guidelines, FROZEN
-  test sets.
+- **Operator decides two open calls** (both in the 19:02 log, affected ids listed):
+  posts hold four rules I extrapolated rather than marked unclear — worst of them,
+  "an incidental mention makes a post relevant" (7 posts); and EN survived labelling
+  but rounds out of the review sample.
+- Fill `operator_verdict` in the review CSVs → then the §8 QA gate: self-agreement ≥90%
+  on a re-labelled random 100.
+- Step **2e**: FROZEN test sets + committed hashes; dataset cards; public-dataset licences.
+- Then Phase 3 baselines (TF-IDF+logreg, XLM-R, zero-shot) through `scorer.py`.
 
 ## 🚧 Blockers
 - none
+
+## ⚠️ Footguns for the next run
+- `scripts/make_annotation_batch.py` overwrites `data/annotation/*.jsonl` without asking —
+  a rerun now destroys 3 000 labels. `*.pristine.jsonl` are the blank originals; verified
+  untouched, keep them that way.
+- `RAW_STORE_SALT` in `.env` was generated 2026-07-27 and must never be rotated: a new salt
+  orphans every `sender_anon_id` in the store.
+- **G1b needs 150–200 sarcasm examples; this batch yields 74.** And `packaging` has 38 rows
+  in 2 000 — single digits once 2e freezes the split. Both need a plan before Phase 4.
 
 ## 🐞 Known harness bug
 `knowledge/templates/daily-log.md` hard-codes `2026-07-26` instead of `{{DATE}}` → every daily-log
