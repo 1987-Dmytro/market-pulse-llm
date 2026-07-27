@@ -10,14 +10,13 @@ edits the registry itself.
 Read-only and deliberately slow: one channel at a time, a pause between channels,
 no joins, no member lists. FloodWait aborts the run but keeps what was collected.
 
+    python3.11 scripts/tg_login.py     # once, to create the session
     python3.11 scripts/entry_check.py
-
-The first run performs an interactive login (phone number + confirmation code).
 """
 
+import asyncio
 import json
 import sys
-import time
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -43,9 +42,9 @@ PAUSE_SECONDS = 2.0
 RESOLVE_ERRORS = (UsernameNotOccupiedError, UsernameInvalidError, ChannelPrivateError, ValueError)
 
 
-def suggest(client, name: str) -> list[dict]:
+async def suggest(client, name: str) -> list[dict]:
     """Global search fallback for a handle that does not resolve, verified first."""
-    found = client(functions.contacts.SearchRequest(q=name, limit=10))
+    found = await client(functions.contacts.SearchRequest(q=name, limit=10))
     matches = [
         {
             "title": chat.title,
@@ -60,14 +59,14 @@ def suggest(client, name: str) -> list[dict]:
     return matches
 
 
-def sample_traffic(client, entity) -> dict:
+async def sample_traffic(client, entity) -> dict:
     """Traffic over the last POST_SAMPLE posts.
 
     The comment count comes from each post's reply counter rather than from reading
     the linked group: it is the same number for one request instead of N, and it
     needs no join (SPEC §9 — conservative limits).
     """
-    messages = client.get_messages(entity, limit=POST_SAMPLE)
+    messages = await client.get_messages(entity, limit=POST_SAMPLE)
     samples = [
         (
             m.date,
@@ -80,7 +79,7 @@ def sample_traffic(client, entity) -> dict:
     return traffic_stats(collapse_albums(samples))
 
 
-def check_channel(client, source, handle: str) -> dict:
+async def check_channel(client, source, handle: str) -> dict:
     record = {
         "source_id": source.id,
         "source_name": source.name,
@@ -89,11 +88,11 @@ def check_channel(client, source, handle: str) -> dict:
     }
 
     try:
-        entity = client.get_entity(handle)
+        entity = await client.get_entity(handle)
     except RESOLVE_ERRORS as exc:
         record["resolved"] = False
         record["error"] = f"{type(exc).__name__}: {exc}"
-        record["suggestions"] = suggest(client, source.name)
+        record["suggestions"] = await suggest(client, source.name)
         return record | build_verdict(
             resolved=False,
             telegram_verified=False,
@@ -106,11 +105,11 @@ def check_channel(client, source, handle: str) -> dict:
     if not isinstance(entity, types.Channel):
         record["resolved"] = False
         record["error"] = f"resolves to {type(entity).__name__}, not a channel"
-        record["suggestions"] = suggest(client, source.name)
+        record["suggestions"] = await suggest(client, source.name)
         return record | {"verdict": "rejected", "reasons": [record["error"]]}
 
-    full = client(functions.channels.GetFullChannelRequest(channel=entity)).full_chat
-    stats = sample_traffic(client, entity)
+    full = (await client(functions.channels.GetFullChannelRequest(channel=entity))).full_chat
+    stats = await sample_traffic(client, entity)
     record |= {
         "resolved": True,
         "title": entity.title,
@@ -171,17 +170,22 @@ def print_table(records: list[dict]) -> None:
             print(f"{'':<11}  ? @{match['username']} {check} {match['title']}")
 
 
-def main() -> int:
+async def main() -> int:
     registry = load_registry(REGISTRY)
     records: list[dict] = []
     flood_wait = None
 
-    with build_client() as client:
+    client = build_client()
+    await client.connect()
+    try:
+        if not await client.is_user_authorized():
+            print("No Telegram session. Run: python3.11 scripts/tg_login.py")
+            return 2
         for source in registry.sources:
             for handle in source.telegram_channels:
                 print(f"checking {handle} ({source.id})...", flush=True)
                 try:
-                    records.append(check_channel(client, source, handle))
+                    records.append(await check_channel(client, source, handle))
                 except FloodWaitError as exc:
                     flood_wait = exc.seconds
                     break
@@ -199,9 +203,11 @@ def main() -> int:
                             "reasons": ["unexpected failure, see error"],
                         }
                     )
-                time.sleep(PAUSE_SECONDS)
+                await asyncio.sleep(PAUSE_SECONDS)
             if flood_wait is not None:
                 break
+    finally:
+        await client.disconnect()
 
     REPORT.parent.mkdir(parents=True, exist_ok=True)
     report = {
@@ -222,4 +228,4 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit(asyncio.run(main()))
