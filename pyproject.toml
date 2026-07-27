@@ -5,6 +5,8 @@ description = "Category Intelligence System for Ukrainian food retail (dairy + i
 requires-python = ">=3.11"
 dependencies = [
     "pyyaml>=6.0.2",
+    "telethon>=1.44.0",
+    "python-dotenv>=1.0.0",
 ]
 
 [project.optional-dependencies]
