@@ -61,3 +61,30 @@ def test_malformed_channel_handle_rejected(tmp_path):
     )
     with pytest.raises(ValueError, match="malformed handle"):
         load_registry(path)
+
+
+def test_unknown_source_type_rejected(tmp_path):
+    path = write(
+        tmp_path,
+        "sources:\n  - id: a\n    name: A\n    source_type: newspaper\n"
+        "    telegram_channels: ['@chan_one']\n" + TAXONOMY,
+    )
+    with pytest.raises(ValueError, match="unknown source_type"):
+        load_registry(path)
+
+
+def test_empty_tracked_groups_rejected(tmp_path):
+    path = write(tmp_path, SOURCES + "taxonomy:\n  tracked_groups: {}\n")
+    with pytest.raises(ValueError, match="tracked_groups"):
+        load_registry(path)
+
+
+def test_duplicate_brand_id_rejected(tmp_path):
+    path = write(
+        tmp_path,
+        SOURCES + TAXONOMY + "watchlist:\n"
+        "  - brand_id: rud\n    display_names: ['Рудь']\n"
+        "  - brand_id: rud\n    display_names: ['Rud']\n",
+    )
+    with pytest.raises(ValueError, match="duplicate brand_id"):
+        load_registry(path)
