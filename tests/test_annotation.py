@@ -1,6 +1,7 @@
 """Offline tests for the annotation sampling maths, row shapes and label checks."""
 
 import copy
+import random
 
 from market_pulse.annotation import (
     COMMENT_LABELS,
@@ -10,6 +11,7 @@ from market_pulse.annotation import (
     comment_row,
     post_row,
     row_state,
+    stratified_sample,
 )
 
 WATCHLIST = ("rud", "premia")
@@ -262,6 +264,66 @@ def test_stats_count_unclear_among_the_labelled():
     assert stats["unclear_share"] == 2 / 3
     assert stats["dist"]["sentiment"]["negative"] == 3
     assert stats["dist"]["annotator"] == {"llm-precheck": 3}
+
+
+# --- review sampling --------------------------------------------------------
+
+
+def pool(count: int, start: int = 0, **fields) -> list[dict]:
+    return [dict(id=f"@c:{index}", **fields) for index in range(start, start + count)]
+
+
+def test_the_review_sample_is_spread_over_the_strata():
+    rows = pool(60, 0, language="ua") + pool(30, 60, language="ru") + pool(10, 90, language="en")
+    picked, table = stratified_sample(rows, lambda row: row["language"], 10, random.Random(42))
+
+    assert len(picked) == 10
+    assert {name: drawn for name, (_, drawn) in table.items()} == {"ua": 6, "ru": 3, "en": 1}
+    assert table["ua"][0] == 60
+
+
+def test_the_same_seed_draws_the_same_rows():
+    rows = pool(50, 0, language="ua") + pool(50, 50, language="ru")
+    first, _ = stratified_sample(rows, lambda row: row["language"], 20, random.Random(42))
+    second, _ = stratified_sample(rows, lambda row: row["language"], 20, random.Random(42))
+    assert [row["id"] for row in first] == [row["id"] for row in second]
+
+
+def test_drawn_rows_are_distinct_rows_of_the_batch():
+    rows = pool(40, 0, language="ua") + pool(40, 40, language="ru")
+    picked, _ = stratified_sample(rows, lambda row: row["language"], 30, random.Random(42))
+    ids = [row["id"] for row in picked]
+    assert len(set(ids)) == 30
+    assert set(ids) <= {row["id"] for row in rows}
+
+
+def test_the_flagged_stratum_is_oversampled():
+    # Equal pools of sarcastic and plain rows; the review budget goes to sarcasm.
+    rows = pool(300, 0, sarcasm=True) + pool(300, 300, sarcasm=False)
+    _, table = stratified_sample(
+        rows,
+        lambda row: row["sarcasm"],
+        90,
+        random.Random(42),
+        weight_of=lambda name: 3 if name else 1,
+    )
+    sarcastic, plain = table[True][1], table[False][1]
+    assert sarcastic + plain == 90
+    assert sarcastic > 2.5 * plain
+
+
+def test_a_scarce_stratum_is_lifted_but_never_overdrawn():
+    # Only 5 sarcastic rows exist. The 3x weight pulls more of them in than their
+    # share would give, cannot invent a sixth, and the sample stays at 90.
+    rows = pool(5, 0, sarcasm=True) + pool(300, 5, sarcasm=False)
+    draw = dict(rows=rows, key=lambda row: row["sarcasm"], total=90)
+    picked, table = stratified_sample(
+        **draw, rng=random.Random(42), weight_of=lambda name: 3 if name else 1
+    )
+    _, plain = stratified_sample(**draw, rng=random.Random(42))
+
+    assert len(picked) == 90
+    assert plain[True][1] < table[True][1] <= 5
 
 
 def test_post_stats_separate_off_watchlist_from_absent_brands():

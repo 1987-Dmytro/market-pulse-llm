@@ -72,6 +72,29 @@ def allocate(capacity: dict, total: int, weight: dict | None = None) -> dict:
     return quota
 
 
+def stratified_sample(rows: list[dict], key, total: int, rng, weight_of=None):
+    """Draw ``total`` rows spread over the strata ``key`` puts them in.
+
+    ``weight_of(stratum) -> int`` oversamples a stratum — weight 3 on the sarcastic
+    cells is how the review sample spends its budget where label quality is least
+    certain. Returns the drawn rows and ``stratum -> (pool size, drawn)``.
+    """
+    strata: dict = {}
+    for row in rows:
+        strata.setdefault(key(row), []).append(row)
+    for pool in strata.values():
+        pool.sort(key=lambda row: str(row["id"]))
+
+    weight = {name: weight_of(name) for name in strata} if weight_of else None
+    quota = allocate({name: len(pool) for name, pool in strata.items()}, total, weight=weight)
+
+    picked = []
+    for name in sorted(strata, key=str):
+        picked += rng.sample(strata[name], quota[name])
+    table = {name: (len(strata[name]), quota[name]) for name in sorted(strata, key=str)}
+    return picked, table
+
+
 def comment_row(record: dict, language: str) -> dict:
     return {
         "id": f"{record['channel']}:{record['msg_id']}",
