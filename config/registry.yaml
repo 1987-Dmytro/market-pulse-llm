@@ -35,6 +35,14 @@ sources:
     verified: true
     comments_enabled: true
 
+  - id: msuaaaa
+    name: MSUa Акції та знижки
+    source_type: aggregator
+    telegram_channels:
+      - "@msuaaaa"
+    verified: true
+    comments_enabled: true
+
   - id: znizhki-ua
     name: Знижки UA
     source_type: aggregator
