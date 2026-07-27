@@ -72,6 +72,12 @@ def write(rows: list[dict], labels: dict, name: str) -> Path:
     return path
 
 
+def count_rows(path: Path) -> int:
+    """Data rows, not physical lines — a post text carries its own newlines."""
+    with path.open(encoding="utf-8", newline="") as handle:
+        return sum(1 for _ in csv.reader(handle)) - 1
+
+
 def main() -> int:
     rng = random.Random(SEED)
 
@@ -98,7 +104,7 @@ def main() -> int:
         write(comments, COMMENT_LABELS, "review_comments.csv"),
         write(posts, POST_LABELS, "review_posts.csv"),
     ):
-        print(f"{path}: {len(path.read_text(encoding='utf-8').splitlines())} lines incl. header")
+        print(f"{path}: {count_rows(path)} rows for review")
     return 0
 
 
