@@ -24,6 +24,9 @@ class Source:
     source_type: str
     telegram_channels: tuple[str, ...]
     verified: bool = False
+    # Set from the entry check. False means the source carries launches but no
+    # reactions — those come from another source (SPEC §9 fallback).
+    comments_enabled: bool = False
 
 
 @dataclass(frozen=True)
@@ -88,7 +91,16 @@ def _sources(path: str | Path, entries) -> tuple[Source, ...]:
         for channel in channels:
             if not isinstance(channel, str) or not _HANDLE.match(channel):
                 raise ValueError(f"{path}: source {sid!r} has a malformed handle {channel!r}")
-        sources.append(Source(sid, name, source_type, tuple(channels), bool(entry.get("verified"))))
+        sources.append(
+            Source(
+                sid,
+                name,
+                source_type,
+                tuple(channels),
+                bool(entry.get("verified")),
+                bool(entry.get("comments_enabled")),
+            )
+        )
     return tuple(sources)
 
 
@@ -122,7 +134,8 @@ if __name__ == "__main__":
     registry = load_registry(sys.argv[1])
     for source in registry.sources:
         state = "verified" if source.verified else "UNVERIFIED"
+        comments = "comments" if source.comments_enabled else "posts-only"
         channels = " ".join(source.telegram_channels)
-        print(f"{source.id}\t{source.source_type}\t{state}\t{channels}")
+        print(f"{source.id}\t{source.source_type}\t{state}\t{comments}\t{channels}")
     print(f"tracked groups: {', '.join(registry.taxonomy.tracked_groups)}")
     print(f"watchlist: {len(registry.watchlist)} brands")

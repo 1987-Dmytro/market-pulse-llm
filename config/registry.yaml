@@ -6,37 +6,42 @@
 #   watchlist — brands highlighted in analytics (coverage stays category-wide)
 
 sources:
-  # Candidate handles only. verified: false until the step-2b entry check resolves
-  # each chain to its blue-check channel and confirms comments are enabled (SPEC §2).
+  # Resolved by the 2026-07-27 entry check (data/entry_check_report.json):
+  # dropped @silpoua (does not resolve) and @varus_ua (dead, 0 posts).
+  # comments_enabled says where reactions can be read at all: a false source still
+  # supplies launches (T2), its reactions come from elsewhere (SPEC §9 fallback).
+  # Subscriber counts and traffic stay in the report file, never here.
   - id: silpo
     name: Сільпо
     source_type: official_retail
     telegram_channels:
-      - "@silpoua"
       - "@silposilpo"
-    verified: false
+    verified: true
+    comments_enabled: false
 
   - id: atb
     name: АТБ
     source_type: official_retail
     telegram_channels:
       - "@atb_market_official"
-    verified: false
+    verified: true
+    comments_enabled: false
 
   - id: varus
     name: Varus
     source_type: official_retail
     telegram_channels:
-      - "@varus_ua"
       - "@VARUS_channel"
-    verified: false
+    verified: true
+    comments_enabled: true
 
   - id: znizhki-ua
     name: Знижки UA
     source_type: aggregator
     telegram_channels:
       - "@znizhki_ua"
-    verified: false
+    verified: true
+    comments_enabled: true
 
 taxonomy:
   # Keys are kebab-case and stable (they end up in result files); values are the

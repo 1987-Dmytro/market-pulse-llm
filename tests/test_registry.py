@@ -28,6 +28,14 @@ def test_shipped_registry_loads():
     assert len({s.id for s in registry.sources}) == len(registry.sources)
     assert registry.taxonomy.tracked_groups
     assert any(b.own for b in registry.watchlist)
+    # Reactions must be readable somewhere, or T1 has no input at all (SPEC §9).
+    assert any(s.comments_enabled for s in registry.sources)
+
+
+def test_comments_enabled_defaults_to_false(tmp_path):
+    # A source added before its entry check must not claim it carries comments.
+    registry = load_registry(write(tmp_path, SOURCES + TAXONOMY))
+    assert registry.sources[0].comments_enabled is False
 
 
 def test_duplicate_source_id_rejected(tmp_path):
