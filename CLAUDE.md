@@ -1,7 +1,13 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
 # market-pulse-llm
 
-Competitor Intelligence System (food/snack, RU/UA/EN): Telegram-only MVP, $0 data
-budget. docs/SPEC.md is the source of truth — read it before any task.
+Category Intelligence System for Ukrainian food retail (UA/RU/EN): retail-chain and
+aggregator Telegram channels, tracked category = dairy + ice cream, brand watchlist.
+Telegram-only MVP, $0 data budget. docs/SPEC.md is the source of truth — read it
+before any task.
 
 ## Rules
 - Chat: Russian. All artifacts (code, comments, commits, docs): English.
@@ -16,7 +22,7 @@ budget. docs/SPEC.md is the source of truth — read it before any task.
 
 ## Pitfalls
 - Handle Telegram FloodWait with backoff + cursor resume; no member harvesting.
-- Verify competitor channels have comments enabled before relying on them.
+- Verify source channels have comments enabled before relying on them.
 - Sarcasm labeling: follow the annotation guideline; `unclear` excluded from gates.
 - src/market_pulse/scorer.py is the single judge of all numbers; never fork it.
 
@@ -32,4 +38,42 @@ budget. docs/SPEC.md is the source of truth — read it before any task.
 - Bulky instructions scoped to a path → `.claude/rules/*.md` with `paths:` frontmatter (0 tokens at
   startup). This file keeps only always-needed rules and stays ≤200 lines.
 
-<!-- /init fold-in: code map / stack, filled by native /init; apply the removal test afterwards -->
+## Stack & commands
+
+Python 3.11+, no framework. Runtime dep: `pyyaml`. Dev: `pytest`, `ruff` — `pip install -e '.[dev]'`
+inside a `.venv` if they are not on PATH.
+
+- `make check` → `ruff check . && pytest -q`. The single verifier; must be green after every commit.
+- `make fmt` → `ruff format .` (line-length 100, configured in `pyproject.toml`).
+- One test: `pytest tests/test_registry.py::test_duplicate_source_id_rejected -q`.
+  `pythonpath = ["src"]` is set in `pyproject.toml`, so pytest needs no `PYTHONPATH`.
+  Outside pytest the package is not installed — plain `python3 -c "import market_pulse"`
+  fails; prefix with `PYTHONPATH=src`.
+- Registry CLI: `PYTHONPATH=src python3 -m market_pulse.registry config/registry.yaml`.
+
+## Code map
+
+`docs/SPEC.md` is the spine: §3 defines the registry entities, §5 pre-registers gates G1a–G1e,
+§8 lists the phases and their verify-gates. Which phase is live is in `knowledge/hot.md`, never
+here or in code comments.
+
+- `src/market_pulse/scorer.py` — one public function per Tier-1 gate; every one raises
+  `NotImplementedError` until its phase implements it. `tests/test_scorer.py` discovers those
+  functions reflectively, so adding a public function to the module immediately puts it under the
+  same rule: it must refuse to run until real numbers back it.
+- `src/market_pulse/registry.py` — `config/registry.yaml` → frozen `Source` / `Taxonomy` /
+  `WatchlistBrand` inside a `Registry`, raising `ValueError` that names the defect (malformed
+  `@handle`, duplicate id, empty channel list, unknown `source_type`, no tracked groups). Strict on
+  purpose: a silently accepted typo collects nothing and only surfaces as wrong analytics much
+  later. Channel handles are candidates with `verified: false` until the Phase 2 entry check.
+- The target pipeline — collector → normalize/dedup/lang-id → model service → aggregation →
+  dashboard, behind a source-agnostic connector interface — is specified in SPEC §5; `src/` is the
+  authority on which parts are built.
+
+## Harness plumbing
+
+- Hooks in `.claude/settings.json`: SessionStart runs `scripts/refresh-hot-cache.py`,
+  `scripts/stale-check.sh` and `scripts/context-census.py`; Stop runs
+  `scripts/brain-session-end.py`, which regenerates `knowledge/index.md` and the daily-log stub.
+  Generated regions belong to those scripts — do not hand-edit them.
+- `/save` (checkpoint) and `/close` (end of day) in `.claude/commands/` are operator-invoked only.
