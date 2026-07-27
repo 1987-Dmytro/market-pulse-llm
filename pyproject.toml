@@ -35,4 +35,5 @@ line-length = 100
 # must extend sys.path before importing market_pulse.
 "scripts/backfill.py" = ["E402"]
 "scripts/entry_check.py" = ["E402"]
+"scripts/make_annotation_batch.py" = ["E402"]
 "scripts/tg_login.py" = ["E402"]
