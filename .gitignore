@@ -26,6 +26,7 @@ data/*
 !data/annotation/
 data/annotation/*
 !data/annotation/sarcasm_candidates.jsonl
+!data/annotation/sarcasm_holdout_pool.jsonl
 models/
 *.safetensors
 *.gguf
