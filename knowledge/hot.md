@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-07-27 19:06:20 (every SessionStart)
+**Auto-refreshed:** 2026-07-27 20:36:19 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-19c2385 fix: count CSV rows, not physical lines, in the review sample summary
-e3441dc feat: review sample export
-6da48e3 feat: annotation validator
-e845840 docs: amendment 3.1 drops EN from per-language gates
-385ea1d docs: quote the corpus exactly in the annotation guidelines
+a99f9cf chore: pending vault session artifacts
+0124f52 docs: v2 hashes, changelog and train-source card
+f59bf31 feat: operator-approved test-set corrections, refreeze v2
+a6b774b feat: sarcasm candidate mining and labeled pool
+e444284 feat: leakage-controlled split and frozen test sets
 ```
 
 ## 📅 Recent daily logs
@@ -24,42 +24,40 @@ e845840 docs: amendment 3.1 drops EN from per-language gates
 
 # Hot Cache — curated
 
-**Last update:** 2026-07-27 19:02 (edited by hand / `/close`; the section above is auto-generated — do NOT touch the marker)
+**Last update:** 2026-07-27 21:40 (edited by hand / `/close`; the section above is auto-generated — do NOT touch the marker)
 
 ## 🔥 What's Hot
-SPEC Phase 2 steps **2a–2d-2 delivered**, 91 tests, `make check` green after every commit.
-SPEC is **APPROVED rev. 3 + amendment 3.1** (EN out of the per-language gates). Registry:
-4 live sources (silpo, atb posts-only; varus, msuaaaa with comments). Raw store holds
-**6 057 posts + 11 338 comments** back to 2024-07-01; the pre-registered 5 000-comment
-gate reads PASSED — never self-accepted, 1/2a-2d still await the operator.
+**Phase 2 is delivered end to end** (2a–2f), 108 tests, `make check` green after every commit.
+SPEC APPROVED rev. 3 + amendment 3.1. Registry: 4 live sources. Raw store 6 057 posts +
+11 338 comments.
 
-**All 3 000 rows carry `annotator: "llm-precheck"` labels** and both files validate clean.
-Comments: unclear 694 (34.7%) → **1306 usable**, sarcasm 74, intents led by price 261 /
-availability 235. Posts: relevant 115, launch 61, 143 brand mentions. Operator review
-slices exported: `data/annotation/review_{comments,posts}.csv` (300 + 150, seed 42,
-`operator_verdict` empty).
+**Frozen test sets are at v2** — `docs/frozen-testsets.md` carries the hashes, the changelog
+and the per-gate depth. comments 400/1600, posts 250/750, thread-disjoint, zero `unclear` in
+test. v2 = 11 operator-approved corrections (2026-07-27) applied by `scripts/refreeze_v2.py`;
+the set is immutable again.
+
+**Training data is two files**: `comments_train.jsonl` (1600) + `sarcasm_candidates.jsonl`
+(800 mined + hand-labelled). Both recalibrated to the v2 sarcasm reading — sarcasm now 10.7%
+of the scorable train pool against 13.0% in test.
 
 ## ⏭️ Next
-- **Operator decides two open calls** (both in the 19:02 log, affected ids listed):
-  posts hold four rules I extrapolated rather than marked unclear — worst of them,
-  "an incidental mention makes a post relevant" (7 posts); and EN survived labelling
-  but rounds out of the review sample.
-- Fill `operator_verdict` in the review CSVs → then the §8 QA gate: self-agreement ≥90%
-  on a re-labelled random 100.
-- Step **2e**: FROZEN test sets + committed hashes; dataset cards; public-dataset licences.
-- Then Phase 3 baselines (TF-IDF+logreg, XLM-R, zero-shot) through `scorer.py`.
+- **Phase 3 baselines**: TF-IDF+logreg, XLM-R, zero-shot for T1 and T2, pre-registered and
+  scored only through `src/market_pulse/scorer.py`; results file committed (SPEC §8).
+- Before scoring: decide whether G1a's per-language clause is usable — expected label noise on
+  RU (n=86) is ~1.7 rows, the same width as the 2 pp margin (card, "Depth" section).
+- Still open from Phase 2: dataset cards for the public augmentation datasets + licence check;
+  operator acceptance of Phase 1 and 2a–2f.
 
 ## 🚧 Blockers
 - none
 
 ## ⚠️ Footguns for the next run
-- `scripts/make_annotation_batch.py` overwrites `data/annotation/*.jsonl` without asking —
-  a rerun now destroys 3 000 labels. `*.pristine.jsonl` are the blank originals; verified
-  untouched, keep them that way.
-- `RAW_STORE_SALT` in `.env` was generated 2026-07-27 and must never be rotated: a new salt
-  orphans every `sender_anon_id` in the store.
-- **G1b needs 150–200 sarcasm examples; this batch yields 74.** And `packaging` has 38 rows
-  in 2 000 — single digits once 2e freezes the split. Both need a plan before Phase 4.
+- **`scripts/freeze_testsets.py --force` would rebuild the split and destroy v2.** The batch is
+  synced, so labels are safe, but a fresh draw differs from v2 by 8 rows. Do not run it.
+- `scripts/mine_sarcasm_candidates.py --force` overwrites 800 hand labels; `refreeze_v2.py` and
+  `sync_batch_v2.py` are one-shot and refuse or no-op on a second run.
+- `RAW_STORE_SALT` in `.env` must never be rotated: a new salt orphans every `sender_anon_id`.
+- `packaging` has 19 rows in the test set — G1c is thin by construction, not by accident.
 
 ## 🐞 Known harness bug
 `knowledge/templates/daily-log.md` hard-codes `2026-07-26` instead of `{{DATE}}` → every daily-log
