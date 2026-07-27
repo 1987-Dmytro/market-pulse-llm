@@ -4,7 +4,8 @@ Task T2 of `docs/SPEC.md` §4: category relevance, post type and brand mentions 
 posts from retail-chain and aggregator channels. Labels from this guideline feed
 gates G1d (relevance + 3-class) and G1e (brand extraction).
 
-Examples are verbatim from `data/raw/posts/`, left in the original UA/RU.
+Examples are verbatim from `data/raw/posts/`, left in the original UA/RU. The few
+illustrations marked *(constructed)* are shapes to recognise, not corpus strings.
 
 ## Unit
 
@@ -56,8 +57,8 @@ Borderline calls, decided once here:
   lists them explicitly.
 - **Eggs, mayonnaise, margarine, condensed milk, cheese-flavoured snacks** → `false`.
   They live next to dairy in the store, not in the taxonomy.
-- **A generic mention with no product** (`знижки на молочку до 30%`) → `true`, group
-  named, no brand.
+- **A generic mention with no product** — *(constructed)* `знижки на молочку до 30%`
+  → `true`, group named, no brand.
 
 ## post_type
 
@@ -108,8 +109,9 @@ For each mention record what is written and, when it matches, the watchlist id:
   → `Галичина`.
 - **Private labels** count as brands: `Премія` (`premia`), `Своя Лінія`
   (`svoia-liniia`), `Varto` (`varto`). A bare chain name used as a product brand
-  (`Морозиво VARUS`) → `varus-pl`; the same chain name used as the shop
-  (`у магазинах VARUS`) is **not** a brand mention.
+  — *(constructed)* `Морозиво VARUS` — → `varus-pl`; the same chain name used as the
+  shop (`Наявність перевіряйте в додатку або на сайті VARUS.UA`) is **not** a brand
+  mention.
 - The same brand named twice in one post → one entry.
 - No qualifying brand → `brands: []`. This is the common case, including for relevant
   posts that only name a category.

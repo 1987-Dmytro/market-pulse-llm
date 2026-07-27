@@ -4,14 +4,19 @@ Task T1 of `docs/SPEC.md` §4: sentiment, sarcasm and intents for comments colle
 under retailer and aggregator posts. Labels from this guideline train the model and
 feed gates G1a–G1c, so the rules below are the definition of those numbers.
 
-Examples are verbatim from `data/raw/comments/`, left in the original UA/RU. Do not
-translate them, and do not fix their spelling.
+Examples are verbatim from `data/raw/comments/`, left in the original UA/RU — do not
+translate them, and do not fix their spelling. The few illustrations marked
+*(constructed)* are shapes to recognise, not corpus strings.
 
 ## Unit
 
 One comment = one row = one label set. Judge the comment on its own text, plus the
-parent post only when the comment is meaningless without it (`Так`, `+1`, `А коли?`).
-Never label from the thread's mood or from other comments.
+parent post only when the comment is meaningless without it (`Так`, `+`, *(constructed)*
+`А коли?`). Never label from the thread's mood or from other comments.
+
+The parent post is the row with `msg_id == parent_msg_id` in
+`data/raw/posts/<channel>.jsonl` — the same channel as the comment. Every parent is
+there, because comments were collected from the threads of stored posts.
 
 ## Schema
 
@@ -81,7 +86,8 @@ less than an invented one.
 Multi-label, empty allowed. What the comment is *about*:
 
 - `taste` — flavour, smell, texture: `Виглядають дуже смачно, поживно і корисно`
-- `price` — cost, discount, promo value: `Це по "Акції" а до "акції" було 932 за килограмм`
+- `price` — cost, discount, promo value:
+  `Чому в телеграм каналі ціна одна в додатку інша , а в магазині ще інша ?`
 - `packaging` — package, volume, label, portion: `4- шт это и есть сто грамм 😂`
 - `quality` — freshness, spoilage, composition, production: `В магазині Варус продається неякісний цукор`
 - `availability` — presence in a store, stock, delivery of the product:
