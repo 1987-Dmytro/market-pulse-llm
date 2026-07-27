@@ -116,6 +116,9 @@ def check_channel(client, source, handle: str) -> dict:
         "title": entity.title,
         "username": entity.username,
         "telegram_verified": bool(entity.verified),
+        # A supergroup resolves as a Channel too — record which one it really is.
+        "broadcast": bool(entity.broadcast),
+        "megagroup": bool(entity.megagroup),
         "scam": bool(entity.scam),
         "fake": bool(entity.fake),
         "subscribers": full.participants_count,
@@ -130,6 +133,7 @@ def check_channel(client, source, handle: str) -> dict:
         fake=record["fake"],
         comments_enabled=record["comments_enabled"],
         stats=stats,
+        broadcast=record["broadcast"],
     )
 
 

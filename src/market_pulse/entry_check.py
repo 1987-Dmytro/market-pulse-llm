@@ -74,6 +74,7 @@ def build_verdict(
     fake: bool,
     comments_enabled: bool,
     stats: dict,
+    broadcast: bool = True,
 ) -> dict:
     """Grade one channel. The verdict is about capability, the reasons about quality.
 
@@ -90,6 +91,10 @@ def build_verdict(
 
     if not telegram_verified:
         reasons.append("no blue check — confirm this is the official channel")
+    if not broadcast:
+        # A supergroup resolves like a channel but is a chat: it may be the aggregator's
+        # own community, or the discussion group of the channel we were actually after.
+        reasons.append("supergroup, not a broadcast channel — confirm this is the right entity")
     if not stats.get("n_posts"):
         reasons.append("no posts in the sampled window")
     if not comments_enabled:

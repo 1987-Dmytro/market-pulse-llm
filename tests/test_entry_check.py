@@ -89,6 +89,19 @@ def test_verdict_posts_only_without_a_discussion_group():
     assert any("comments disabled" in r for r in verdict["reasons"])
 
 
+def test_verdict_flags_a_supergroup():
+    verdict = build_verdict(
+        resolved=True,
+        telegram_verified=True,
+        scam=False,
+        fake=False,
+        comments_enabled=True,
+        stats=traffic_stats(posts((0, 4))),
+        broadcast=False,
+    )
+    assert any("supergroup" in r for r in verdict["reasons"])
+
+
 def test_verdict_usable_channel_flags_a_missing_blue_check():
     verdict = build_verdict(
         resolved=True,
