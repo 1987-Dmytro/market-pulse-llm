@@ -28,3 +28,8 @@ pythonpath = ["src"]
 
 [tool.ruff]
 line-length = 100
+
+[tool.ruff.lint.per-file-ignores]
+# The script runs as `python3.11 scripts/entry_check.py` without the package installed,
+# so it must extend sys.path before importing market_pulse.
+"scripts/entry_check.py" = ["E402"]
