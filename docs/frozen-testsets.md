@@ -10,13 +10,32 @@ published against them must name the version and the hashes below.
 | file | rows | sha256 (v2) |
 |---|---|---|
 | `data/frozen/comments_test.jsonl` | 400 | `14b6172472e482d511d36c6a95e5204482a3c14c058c972d39005c82609b9627` |
-| `data/frozen/comments_train.jsonl` | 1600 | `aa73fd717054e6f9e905b3d17438aa0ad8968b1a3c5f50a45cb5f8deab32ae7f` |
+| `data/frozen/comments_train.jsonl` | 1600 | `4b6ea7f354bcc396ee526ce193c445bb358fab1d070bbe429dfdeb3bace1a1d7` |
 | `data/frozen/posts_test.jsonl` | 250 | `183de2b56e9cb7cc958884db51638c281404cf5c4b06e91ba61ac6330e3dade2` |
 | `data/frozen/posts_train.jsonl` | 750 | `d9b87cdd44586b8011b164f1e3be00457c75e675fad8db7524535306cc609049` |
 
 The post sets are byte-identical to v1; only the two comment files changed.
 
 ## Changelog
+
+**Train-source recalibration — 2026-07-27.** The v2 corrections landed on the test set only,
+which left the training data measurably worse labelled than the test set on the very axis G1b
+scores. Every scoreable `sarcasm: false` row of the two train sources that fires the irony
+heuristics of `market_pulse.sarcasm` was read again under the v2 calibration — 908 candidates,
+labelled in chunks of 100 with the validator after each. Changed rows carry `annotator:
+"llm-recheck-v2"`.
+
+| file | candidates | rows changed | sarcasm before | after |
+|---|---|---|---|---|
+| `data/frozen/comments_train.jsonl` | 286 | 60 | 37 | 97 |
+| `data/annotation/sarcasm_candidates.jsonl` | 622 | 37 | 178 | 215 |
+
+The sarcastic share of the scorable train pool moves from 4.1% to 10.7%, against 13.0% in the
+test set — the two calibrations now agree to within a couple of points instead of a factor of
+three. The test set is untouched: it stays at its v2 hash. The corrections were also synced
+upstream into `data/annotation/comments_batch.jsonl` by `scripts/sync_batch_v2.py`, so a
+forced rebuild cannot resurrect a pre-v2 label; the recalibration itself is deliberately not
+synced back, the batch remains the 2d-2 record.
 
 **v2 — 2026-07-27, operator-approved.** Eleven corrections to `comments_test.jsonl`, applied
 by `scripts/refreeze_v2.py` (kept in the repo so the v1→v2 diff has provenance). None of
@@ -55,8 +74,8 @@ alone silently drops 800 hand-labelled rows.
 
 | file | rows | scorable | sha256 |
 |---|---|---|---|
-| `data/frozen/comments_train.jsonl` | 1600 | 906 | `aa73fd717054e6f9e905b3d17438aa0ad8968b1a3c5f50a45cb5f8deab32ae7f` |
-| `data/annotation/sarcasm_candidates.jsonl` | 800 | 594 | `cd61a83e921545d899486fa418cc77a60c9cc3300bbb93eb10ef5f08da5831a5` |
+| `data/frozen/comments_train.jsonl` | 1600 | 906 | `4b6ea7f354bcc396ee526ce193c445bb358fab1d070bbe429dfdeb3bace1a1d7` |
+| `data/annotation/sarcasm_candidates.jsonl` | 800 | 594 | `16b554dc5d38c38e02ec499b87c87957ad19e86f192c145cd1f28152e9d7851d` |
 
 The mined pool (`scripts/mine_sarcasm_candidates.py`) is a training source only — it is
 excluded from the test set by construction, and its hash is a snapshot, not a freeze: unlike
@@ -135,6 +154,10 @@ on, recorded before any model exists.
   language. They are scored in the overall macro-F1 and in no per-language gate.
 - **EN rounds out again**: 2 scorable EN comments across the strata gave it 0 test rows.
   Expected under amendment 3.1, noted so it is not a surprise twice.
+- **Test and train are now calibrated alike, but by different hands.** The test set carries
+  the operator's judgement (11 rows); the train sources carry the recalibration described in
+  the changelog (97 rows), read from the operator's 22 corrections as worked examples. If the
+  two ever disagree, the test set is the authority.
 - **The test set has now been through two operator passes, and 326 rows through neither.**
   64 rows were in the 2d-2 review sample (1 correction); the v2 pass corrected 11 further
   rows, none of them from that sample. 11 rows carry `annotator: "operator-reviewed"`. The
