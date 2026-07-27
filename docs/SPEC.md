@@ -1,6 +1,11 @@
-# market-pulse-llm — Project Specification (rev. 3)
+# market-pulse-llm — Project Specification (rev. 3.1)
 
-**Status:** DRAFT rev. 3 — awaiting operator approval (rev. 2 approved 2026-07-26).
+**Status:** APPROVED rev. 3 (2026-07-26); amendment 3.1 approved 2026-07-27.
+**Amendment 3.1:** EN removed from per-language gates — the collected corpus
+contains 8 EN comments out of 2,000 sampled (retail channels post in UA); a
+per-language metric over n=8 is meaningless. Gates run on UA and RU. The model
+stays multilingual; EN support is untested, not claimed. Decided BEFORE
+baselines were scored.
 **Date:** 2026-07-26 · **Team lead:** Fable session · **Executor:** Claude Code
 **Repo folder:** `/Users/hdv_1987/Desktop/Projects/market-pulse-llm`
 **rev. 3 change (operator decision):** producers in Ukraine barely use Telegram for
@@ -63,9 +68,9 @@ One base LLM, QLoRA fine-tuned, multi-task via instruction prefixes:
 ## 5. Success metrics (pre-registered; the scorer is the judge)
 
 **Tier 1 — Model (primary project gate), one attempt after full training:**
-- G1a: frozen held-out comment test set (per-language UA/RU/EN): fine-tuned
-  sentiment macro-F1 ≥ best baseline + 5 pp overall; no language below its
-  baseline by more than 2 pp.
+- G1a: frozen held-out comment test set (per-language UA/RU; EN excluded by
+  amendment 3.1): fine-tuned sentiment macro-F1 ≥ best baseline + 5 pp overall;
+  no gated language below its baseline by more than 2 pp.
 - G1b: sarcasm slice (150–200 curated examples the base model gets wrong):
   fine-tuned fixes ≥60% while overall macro-F1 degrades ≤2 pp.
 - G1c: intents multi-label micro-F1 ≥ baseline + 5 pp.
