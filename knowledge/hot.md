@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-07-28 11:44:02 (every SessionStart)
+**Auto-refreshed:** 2026-07-28 11:47:14 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+a588917 chore: section-scoped SPEC rule and hot.md refresh
 2cbf47d docs: backfill decision records and index
 a54cdf1 chore: record the pristine-baseline shrink as a footgun
 f010a7d feat: freeze hybrid sarcasm holdout + SPEC 3.2 + card
 b7ff907 feat: label wave-2 candidates
-7c714b3 feat: mine and label sarcasm holdout candidates
 ```
 
 ## 📋 Recent decisions
@@ -89,5 +89,6 @@ Phase 3 — smaller than 108, unknown until then.
 - `packaging` has 19 rows in the test set — G1c is thin by construction, not by accident.
 
 ## 🐞 Known harness bug
-`knowledge/templates/daily-log.md` hard-codes `2026-07-26` instead of `{{DATE}}` → every daily-log
-stub the Stop hook writes is stamped with the wrong date. One-word fix, operator's call.
+Fixed 2026-07-28: `knowledge/templates/daily-log.md` now carries `{{DATE}}`, the placeholder
+`scripts/brain-session-end.py` actually substitutes; `tests/test_templates.py` keeps the pair
+honest. The three stubs the bug already stamped 2026-07-26 were re-stamped with their own dates.
