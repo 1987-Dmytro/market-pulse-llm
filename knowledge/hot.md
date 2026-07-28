@@ -2,21 +2,28 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-07-28 09:27:18 (every SessionStart)
+**Auto-refreshed:** 2026-07-28 11:44:02 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+2cbf47d docs: backfill decision records and index
+a54cdf1 chore: record the pristine-baseline shrink as a footgun
+f010a7d feat: freeze hybrid sarcasm holdout + SPEC 3.2 + card
 b7ff907 feat: label wave-2 candidates
 7c714b3 feat: mine and label sarcasm holdout candidates
-33c8613 chore: sync v2 corrections upstream and refresh hot.md
-8bbe76e feat: v2 sarcasm recalibration of train sources
-a99f9cf chore: pending vault session artifacts
 ```
+
+## 📋 Recent decisions
+
+- `INDEX.md` — Decision records
+- `holdout-residual-thread-leak-accepted.md` — Residual holdout/train thread overlap accepted
+- `hybrid-sarcasm-holdout-3.2.md` — Hybrid sarcasm holdout for G1b (amendment 3.2, option 1a)
 
 ## 📅 Recent daily logs
 
+- `2026-07-28.md`
 - `2026-07-27.md`
 - `2026-07-26.md`
 
@@ -24,12 +31,12 @@ a99f9cf chore: pending vault session artifacts
 
 # Hot Cache — curated
 
-**Last update:** 2026-07-27 20:43 (edited by hand / `/close`; the section above is auto-generated — do NOT touch the marker)
+**Last update:** 2026-07-28 11:28 (edited by hand / `/close`; the section above is auto-generated — do NOT touch the marker)
 
 ## 🔥 What's Hot
-**Phase 2 is delivered end to end** (2a–2f), 108 tests, `make check` green after every commit.
-SPEC APPROVED rev. 3 + amendment 3.1. Registry: 4 live sources. Raw store 6 057 posts +
-11 338 comments.
+**Phases 1 and 2 are DONE and accepted** (2026-07-28), 108 tests, `make check` green after every
+commit. SPEC APPROVED rev. 3 + amendments 3.1 and 3.2. Registry: 4 live sources. Raw store
+6 057 posts + 11 338 comments. Decision records: `knowledge/decisions/` ([[INDEX]]).
 
 **Frozen test sets are at v2** — `docs/frozen-testsets.md` carries the hashes, the changelog
 and the per-gate depth. comments 400/1600, posts 250/750, thread-disjoint, zero `unclear` in
@@ -46,22 +53,24 @@ thread-disjoint from test and train. The slice is whatever the base model gets w
 Phase 3 — smaller than 108, unknown until then.
 
 ## ⏭️ Next
-- **Phase 3 baselines**: TF-IDF+logreg, XLM-R, zero-shot for T1 and T2, pre-registered and
-  scored only through `src/market_pulse/scorer.py`; results file committed (SPEC §8).
-  Score the zero-shot base model on `data/frozen/sarcasm_holdout.jsonl` in the same run —
-  that scoring is what defines the G1b slice.
-- Still open from Phase 2: dataset cards for the public augmentation datasets + licence check;
-  operator acceptance of Phase 1 and 2a–2g.
+- **Phase 3a — scorer + TF-IDF baseline**, locally: implement the `scorer.py` gate functions and
+  the TF-IDF+logreg baseline, pre-registered, results file committed (SPEC §8). Every number goes
+  through the scorer, nowhere else.
+- Then Phase 3b (XLM-R + zero-shot LLM on a rented GPU). The zero-shot run must also score
+  `data/frozen/sarcasm_holdout.jsonl` — that scoring is what defines the G1b slice and its actual
+  n. The base-model choice is made on those numbers, not on taste (docs/STATUS.md).
+- Architecture session with the operator (model candidates, serving, dashboard stack, production
+  loop) is the other open item from the 2026-07-28 revision — see docs/STATUS.md.
+- Still open from Phase 2: dataset cards for the public augmentation datasets + licence check.
 
 ## 🚧 Blockers
-- **G1a's per-language clause is noise-dominated.** 2 pp on RU (n=86) is ~1.7 rows; the
-  2d-2 review measured 2.3% label error per field, ~1.7 rows on the same n. 326 test rows
-  have been through neither operator pass. Free to decide now, expensive after the first
-  baseline number.
-- **One residual leak in the holdout, operator's call.** 25 holdout threads still hold a
-  scoreable row of the mined training pool (31 of the 108 rows). Wave 1 excluded test threads
-  only, and 2g was allowed to remove moved rows from training and nothing else. Closing it
-  means dropping those 31 rows or pulling their mined thread-mates out of training.
+**None.** Both former blockers were closed on 2026-07-28:
+- *G1a per-language noise* — resolved by the operator's v2 review of all 400 test rows (11
+  corrections came out of it), so the "326 rows through neither pass" caveat no longer holds.
+- *Holdout/train thread overlap* — accepted with a rationale, see
+  [[holdout-residual-thread-leak-accepted]]: the classifier is fed comment text only, so a
+  thread-mate in training carries no label information. Compensation is more sarcasm data for
+  training, source under discussion.
 
 ## ⚠️ Footguns for the next run
 - **`scripts/freeze_testsets.py --force` would rebuild the split and destroy v2.** The batch is

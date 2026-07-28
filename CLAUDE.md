@@ -6,8 +6,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Category Intelligence System for Ukrainian food retail (UA/RU/EN): retail-chain and
 aggregator Telegram channels, tracked category = dairy + ice cream, brand watchlist.
-Telegram-only MVP, $0 data budget. docs/SPEC.md is the source of truth — read it
-before any task.
+Telegram-only MVP, $0 data budget.
+
+## Where the truth lives
+
+`docs/SPEC.md` is the contract, not a briefing — consult the sections your task touches, not the
+whole file: **§3** registry entities · **§5** pre-registered gates G1a–G1e · **§6** architecture ·
+**§8** phases and their verify-gates. Amendments are in the header block.
+`docs/STATUS.md` is the current map (phase, proven numbers, what is deferred). Decisions and their
+numbers live in `knowledge/decisions/` (start at `INDEX.md`); the Russian summaries of the same
+decisions are in STATUS.md.
 
 ## Rules
 - Chat: Russian. All artifacts (code, comments, commits, docs): English.
@@ -53,9 +61,7 @@ inside a `.venv` if they are not on PATH.
 
 ## Code map
 
-`docs/SPEC.md` is the spine: §3 defines the registry entities, §5 pre-registers gates G1a–G1e,
-§8 lists the phases and their verify-gates. Which phase is live is in `knowledge/hot.md`, never
-here or in code comments.
+Which phase is live is in `knowledge/hot.md` and `docs/STATUS.md`, never here or in code comments.
 
 - `src/market_pulse/scorer.py` — one public function per Tier-1 gate; every one raises
   `NotImplementedError` until its phase implements it. `tests/test_scorer.py` discovers those
