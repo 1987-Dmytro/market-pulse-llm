@@ -20,6 +20,15 @@ from market_pulse.annotation import check_batch
 from market_pulse.registry import load_registry
 
 SHOWN = 25
+GENERATED = "synthetic"
+"""Marks a file written by a generator rather than labelled by hand.
+
+`data/annotation/synthetic_sarcasm.jsonl` carries the comment label set, so the
+value checks apply unchanged — but there is no state "before labelling" for it,
+hence no pristine copy, hence nothing for the row-loss and record-edit checks to
+compare against. They are run against the file itself and say so out loud: a
+check that cannot fail is worth exactly what it looks like.
+"""
 
 
 def load(path: Path) -> list[dict]:
@@ -31,6 +40,8 @@ def load(path: Path) -> list[dict]:
 
 
 def kind_of(path: Path) -> str:
+    if GENERATED in path.name:
+        return "comments"
     for kind in ("comments", "posts"):
         if kind in path.name:
             return kind
@@ -64,8 +75,19 @@ def main(argv: list[str] | None = None) -> int:
     kind = args.kind or kind_of(args.batch)
     brand_ids = tuple(brand.brand_id for brand in load_registry(args.registry).watchlist)
 
+    generated = GENERATED in args.batch.name and not pristine.exists()
+    if generated:
+        pristine = args.batch
+
     report = check_batch(load(args.batch), load(pristine), kind, brand_ids)
     print(f"{args.batch} ({kind}, pristine: {pristine})\n")
+    if generated:
+        print(
+            "NOTE: generated file, no pristine copy — the row-loss and record-edit checks\n"
+            "      compare it with itself and pass by construction. Only the label values\n"
+            "      and the coverage below say anything; the text is checked by\n"
+            "      scripts/check_synthetic.py.\n"
+        )
     print_stats(report.stats)
 
     if report.ok:

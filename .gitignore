@@ -27,6 +27,9 @@ data/*
 data/annotation/*
 !data/annotation/sarcasm_candidates.jsonl
 !data/annotation/sarcasm_holdout_pool.jsonl
+# Generated, not collected — but the same kind of artifact: a curated training
+# source, ablation-gated (knowledge/decisions/synthetic-sarcasm-augmentation.md).
+!data/annotation/synthetic_sarcasm.jsonl
 models/
 *.safetensors
 *.gguf

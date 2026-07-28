@@ -41,6 +41,7 @@ line-length = 100
 # must extend sys.path before importing market_pulse.
 "scripts/apply_review.py" = ["E402"]
 "scripts/backfill.py" = ["E402"]
+"scripts/check_synthetic.py" = ["E402"]
 "scripts/entry_check.py" = ["E402"]
 "scripts/freeze_testsets.py" = ["E402"]
 "scripts/make_annotation_batch.py" = ["E402"]
@@ -48,6 +49,7 @@ line-length = 100
 "scripts/mine_sarcasm_holdout.py" = ["E402"]
 "scripts/freeze_sarcasm_holdout.py" = ["E402"]
 "scripts/make_review_sample.py" = ["E402"]
+"scripts/make_synthetic_qa.py" = ["E402"]
 "scripts/run_baseline.py" = ["E402"]
 "scripts/tg_login.py" = ["E402"]
 "scripts/validate_annotations.py" = ["E402"]
