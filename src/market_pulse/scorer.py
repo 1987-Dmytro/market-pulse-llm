@@ -136,19 +136,25 @@ def launch_detection_macro_f1(y_true: list[str], y_pred: list[str]) -> float:
     frozen post test set. Every post carries a ``post_type``, relevant or not
     (docs/annotation/posts.md), so this runs on the whole scoreable set.
 
+    **This is the number G1d gates** (amendment 3.3): rev. 3 worded the gate as
+    "relevance + 3-class", and the operator resolved it to the 3-class head
+    alone. :func:`relevance_macro_f1` is reported beside it, never inside it.
+
     Gate: fine-tuned >= zero-shot base LLM + 10 pp.
     """
     return macro_f1(y_true, y_pred)
 
 
 def relevance_macro_f1(y_true: list[bool], y_pred: list[bool]) -> float:
-    """G1d, second head — macro-F1 of the binary category-relevance decision.
+    """Binary category relevance — reported next to G1d, **not gated**.
 
-    SPEC §5 words G1d as "relevance + 3-class"; the two heads are reported
-    separately, each with its own n, because merging them into one 4-class macro
+    The two heads were always two metrics: merging them into one 4-class macro
     average would put an n=1 class (relevant + other) into the denominator and
-    let a single row swing the gate. Which of the two the gate reads is an
-    operator decision recorded before Phase 4.
+    let a single row swing the gate. Amendment 3.3 settled which one G1d reads —
+    :func:`launch_detection_macro_f1`, the 3-class post type — because relevance
+    sits near its ceiling and a +10 pp demand on a blend would be met by the head
+    with the least room to give. This number is still published with its own n:
+    T2a relevance is on the pipeline's critical path (SPEC §9).
     """
     return macro_f1(y_true, y_pred)
 

@@ -23,3 +23,5 @@ docs/STATUS.md; these are the English long form with the numbers.
 | 2026-07-28 | [[architecture-stack]] — serverless inference · Mac cron · SQLite · Streamlit | accepted |
 | 2026-07-28 | [[gpu-provider-runpod]] — RunPod, Vast.ai as the experiment fallback | accepted |
 | 2026-07-28 | [[frontier-api-reference-baseline]] — Claude Haiku as a reference row, not a gate | accepted |
+| 2026-07-28 | [[g1d-gate-clarification-3-3]] — G1d gates the 3-class post type; relevance reported only | accepted |
+| 2026-07-28 | [[synthetic-sarcasm-augmentation]] — 600 synthetic sarcastic rows, ablation-gated | accepted |

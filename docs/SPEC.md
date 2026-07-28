@@ -1,7 +1,7 @@
-# market-pulse-llm — Project Specification (rev. 3.2)
+# market-pulse-llm — Project Specification (rev. 3.3)
 
 **Status:** APPROVED rev. 3 (2026-07-26); amendment 3.1 approved 2026-07-27;
-amendment 3.2 approved 2026-07-28.
+amendments 3.2 and 3.3 approved 2026-07-28.
 **Amendment 3.1:** EN removed from per-language gates — the collected corpus
 contains 8 EN comments out of 2,000 sampled (retail channels post in UA); a
 per-language metric over n=8 is meaningless. Gates run on UA and RU. The model
@@ -19,6 +19,17 @@ slice is whatever it errs on, and the smaller n is reported next to the gate
 verdict. The corpus bounded the freeze at 108 rows (54 fresh + 54 moved) —
 counts and provenance in `docs/frozen-testsets.md`. Decided BEFORE baselines
 were scored.
+**Amendment 3.3:** G1d gates the **3-class post-type** macro-F1 alone. The
+rev. 3 wording "relevance + 3-class" named two distinct metrics and read as one
+number; scoring them separately at Phase 3a showed why the difference matters —
+relevance is already near its ceiling (TF-IDF+logreg 0.8119 against post-type
+0.6653), so demanding +10 pp on a blended number would be arithmetically
+dishonest: the blend would move on the head with the least room to give.
+Relevance macro-F1 is REPORTED next to the gate with its own n and never enters
+it. The threshold and the test set are unchanged. Unlike 3.1 and 3.2 this
+amendment was decided AFTER a baseline was scored (2026-07-28, the TF-IDF+logreg
+run) — it disambiguates a gate that was never one metric, and no fine-tuned
+number exists yet, but the ordering is recorded rather than smoothed over.
 **Date:** 2026-07-26 · **Team lead:** Fable session · **Executor:** Claude Code
 **Repo folder:** `/Users/hdv_1987/Desktop/Projects/market-pulse-llm`
 **rev. 3 change (operator decision):** producers in Ukraine barely use Telegram for
@@ -88,8 +99,10 @@ One base LLM, QLoRA fine-tuned, multi-task via instruction prefixes:
   model gets wrong (amendment 3.2 replaces the 150–200 curated examples of
   rev. 3): fine-tuned fixes ≥60% while overall macro-F1 degrades ≤2 pp.
 - G1c: intents multi-label micro-F1 ≥ baseline + 5 pp.
-- G1d: T2 post classification (relevance + 3-class) macro-F1 ≥ zero-shot base
-  LLM + 10 pp on the frozen post test set.
+- G1d: T2 post-type classification (3-class: launch / promo / other) macro-F1 ≥
+  zero-shot base LLM + 10 pp on the frozen post test set. Binary relevance
+  macro-F1 is reported beside it with its own n and is not gated (amendment
+  3.3, which reads rev. 3's "relevance + 3-class" as the two metrics it is).
 - G1e: T2 brand-mention extraction F1 (exact match after normalization) ≥
   zero-shot base LLM + 10 pp on the same frozen post test set.
 - A failed gate closes the question; negative result is a result.
