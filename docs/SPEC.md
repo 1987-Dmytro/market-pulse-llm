@@ -1,11 +1,24 @@
-# market-pulse-llm — Project Specification (rev. 3.1)
+# market-pulse-llm — Project Specification (rev. 3.2)
 
-**Status:** APPROVED rev. 3 (2026-07-26); amendment 3.1 approved 2026-07-27.
+**Status:** APPROVED rev. 3 (2026-07-26); amendment 3.1 approved 2026-07-27;
+amendment 3.2 approved 2026-07-28.
 **Amendment 3.1:** EN removed from per-language gates — the collected corpus
 contains 8 EN comments out of 2,000 sampled (retail channels post in UA); a
 per-language metric over n=8 is meaningless. Gates run on UA and RU. The model
 stays multilingual; EN support is untested, not claimed. Decided BEFORE
 baselines were scored.
+**Amendment 3.2:** G1b's slice is drawn from the frozen sarcasm holdout
+(`data/frozen/sarcasm_holdout.jsonl`): fresh-corpus sarcastic rows (wave-2
+mining of threads disjoint from test and train) topped up with rows moved OUT of
+the mined training pool — removed from training, not copied (option 1a). At
+Phase 3 the zero-shot base model is scored on the holdout; the G1b slice = the
+holdout rows the base model misclassifies. The gate itself is unchanged: the
+fine-tuned model fixes ≥60% of the slice with ≤2 pp overall macro-F1 loss.
+Fallback recorded: if the base model errs on fewer than 100 holdout rows, the
+slice is whatever it errs on, and the smaller n is reported next to the gate
+verdict. The corpus bounded the freeze at 108 rows (54 fresh + 54 moved) —
+counts and provenance in `docs/frozen-testsets.md`. Decided BEFORE baselines
+were scored.
 **Date:** 2026-07-26 · **Team lead:** Fable session · **Executor:** Claude Code
 **Repo folder:** `/Users/hdv_1987/Desktop/Projects/market-pulse-llm`
 **rev. 3 change (operator decision):** producers in Ukraine barely use Telegram for
@@ -71,8 +84,9 @@ One base LLM, QLoRA fine-tuned, multi-task via instruction prefixes:
 - G1a: frozen held-out comment test set (per-language UA/RU; EN excluded by
   amendment 3.1): fine-tuned sentiment macro-F1 ≥ best baseline + 5 pp overall;
   no gated language below its baseline by more than 2 pp.
-- G1b: sarcasm slice (150–200 curated examples the base model gets wrong):
-  fine-tuned fixes ≥60% while overall macro-F1 degrades ≤2 pp.
+- G1b: sarcasm slice — the rows of the frozen sarcasm holdout that the base
+  model gets wrong (amendment 3.2 replaces the 150–200 curated examples of
+  rev. 3): fine-tuned fixes ≥60% while overall macro-F1 degrades ≤2 pp.
 - G1c: intents multi-label micro-F1 ≥ baseline + 5 pp.
 - G1d: T2 post classification (relevance + 3-class) macro-F1 ≥ zero-shot base
   LLM + 10 pp on the frozen post test set.

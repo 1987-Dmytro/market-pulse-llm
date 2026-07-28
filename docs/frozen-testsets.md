@@ -75,11 +75,75 @@ alone silently drops 800 hand-labelled rows.
 | file | rows | scorable | sha256 |
 |---|---|---|---|
 | `data/frozen/comments_train.jsonl` | 1600 | 906 | `4b6ea7f354bcc396ee526ce193c445bb358fab1d070bbe429dfdeb3bace1a1d7` |
-| `data/annotation/sarcasm_candidates.jsonl` | 800 | 594 | `16b554dc5d38c38e02ec499b87c87957ad19e86f192c145cd1f28152e9d7851d` |
+| `data/annotation/sarcasm_candidates.jsonl` | 746 | 540 | `44cd226245bc5f6fd5ecd2edd588d4a77c6ae9faca024af42787f4f1f4279423` |
 
 The mined pool (`scripts/mine_sarcasm_candidates.py`) is a training source only — it is
 excluded from the test set by construction, and its hash is a snapshot, not a freeze: unlike
-the four files above it may be extended by mining deeper.
+the four files above it may be extended by mining deeper. It lost 54 rows to the holdout on
+2026-07-28 (800 → 746); those rows are training data no longer.
+
+**`data/annotation/sarcasm_holdout_pool.jsonl` (971 rows) is not a training source.** It is
+the wave-2 mining pool the holdout was cut from; its 617 scorable non-sarcastic rows sit in
+the same threads as holdout rows, so training on them would leak the holdout. It is kept
+labelled for error analysis and for any future holdout extension.
+
+## Sarcasm holdout (G1b)
+
+**Frozen 2026-07-28, immutable without operator approval** — same rule as the four files
+above. Approved by the operator as option 1a after the fresh-corpus-only holdout was shown to
+be unreachable.
+
+| file | rows | sha256 |
+|---|---|---|
+| `data/frozen/sarcasm_holdout.jsonl` | 108 | `f83a6cf0fecd0bb266f851803107771309b17d946719cb6da3ca4ff614cb37c3` |
+
+Every row is `sarcasm: true`, `unclear: false`. SPEC amendment 3.2 scores the zero-shot base
+model on this file at Phase 3; the G1b slice is the subset the base model gets wrong, so the
+slice is smaller than 108 by however often the base model is right.
+
+| origin | rows | ua | ru | other | sentiment |
+|---|---|---|---|---|---|
+| fresh corpus (wave 2) | 54 | 32 | 13 | 9 | 53 negative, 1 positive |
+| moved out of the mined pool | 54 | 34 | 16 | 4 | 54 negative |
+| **total** | **108** | **66** | **29** | **13** | 107 negative, 1 positive |
+
+The single positive row is a mock reproach that means praise — sarcasm is a flag, not a
+sentiment (`docs/annotation/comments.md`).
+
+### Why 108 and not 180
+
+`scripts/mine_sarcasm_holdout.py` swept the corpus for comments in threads disjoint from both
+the test set and the scoreable train pool: 7,224 comments with text → 4,424 unlabelled →
+1,068 outside those threads → 971 candidates after dropping verbatim copies of labelled texts
+and repeats. All 971 were labelled (`annotator: llm-holdout`, v2 calibration); 54 came out
+sarcastic and scoreable. Wave 1 had already skimmed the marked rows — only 89 of the 971 fire
+an irony heuristic at all.
+
+The top-up is bounded harder than it looks. Of the 187 sarcastic scoreable rows in the mined
+pool, **131 share a thread with a scoreable `comments_train.jsonl` row** and 2 repeat a
+training row's text verbatim; moving any of them would leak a thread that stays in training,
+and train rows may not be removed. That leaves 54 movable, all of which were taken — seed 42
+would only have chosen between them if more had been eligible.
+
+### What training keeps
+
+| source | sarcastic scoreable rows |
+|---|---|
+| `data/frozen/comments_train.jsonl` | 97 |
+| `data/annotation/sarcasm_candidates.jsonl` (after the move) | 133 |
+| **total** | **230** |
+
+### Leakage, and the one residual
+
+Checked independently of the freeze script: 0 holdout ids in the test set, the train pool or
+the mined pool · 0 threads shared with the test set · 0 threads shared with the scoreable
+train pool · 0 verbatim text overlap with any remaining training row.
+
+**Residual:** 25 holdout threads still hold a scoreable row of the mined training pool — 31
+of the 108 holdout rows. Wave 1 excluded test threads only, so its rows are spread through
+threads this holdout also draws from, and the approved change allows removing moved rows from
+the mined pool and nothing else. Closing it would mean either dropping those 31 holdout rows
+or pulling their mined thread-mates out of training; both need a new operator decision.
 
 ## Leakage control
 
@@ -143,7 +207,7 @@ on, recorded before any model exists.
 | gate | what it needs | rows in test |
 |---|---|---|
 | G1a | per-language sentiment, UA + RU (amendment 3.1) | UA 248, RU 86 = 334 gated; `other` 66, EN 0 ungated |
-| G1b | sarcasm | 52 (43 in v1, +9 from the v2 corrections) |
+| G1b | sarcasm | scored on the holdout, not here (amendment 3.2): 108 rows, of which the slice is whatever the base model gets wrong. The test set's own 52 sarcastic rows stay in the overall macro-F1 |
 | G1c | packaging intent | 19 |
 | G1d | relevant posts | 26 |
 | G1e | brand mentions | 36 |
