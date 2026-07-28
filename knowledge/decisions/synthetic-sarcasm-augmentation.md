@@ -29,10 +29,14 @@ conditions bind it:
   flagged failure patterns are regenerated **once**. The threshold was fixed before the sample was
   drawn, and the executor does not score it — SPEC §10.
 
-**Numbers:** 600 rows against 230 real sarcastic scoreable training rows. Written to the corpus'
-own proportions, measured from those 230: UA:RU ≈ 70:30, ~95% negative, ~53% of rows with no
-intent at all (the guideline sends rigged-giveaway and service complaints to `intents: []`), then
-price ~30%, availability ~17%, quality ~6%, packaging ~3%, taste ~1%; median 13 words.
+**Numbers:** 600 rows against 230 real sarcastic scoreable training rows, written to proportions
+measured from those 230 — UA:RU 70:30, 96% negative, half the rows with no intent at all (the
+guideline sends rigged-giveaway and service complaints to `intents: []`), then price ~30%,
+availability ~17%, quality ~7%, packaging ~3%, taste ~1%. **Targets and achieved figures are
+tabulated side by side in docs/frozen-testsets.md, "The third source is generated, and
+conditional" — including the two the file misses**: no-intent rows land at 49.2% against 52.6%,
+and the length tail is short (median 12 against 13, p75 20 against 27) because the brief caps a
+row at 40 words while real complaints run past 100.
 
 **Why:** the alternative to synthetic rows is not more real rows — that ceiling was measured, not
 assumed. G1b asks the fine-tune to repair the base model on sarcasm, and 230 examples is thin for

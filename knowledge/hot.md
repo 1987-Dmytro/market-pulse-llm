@@ -92,8 +92,9 @@ Phase 3 — smaller than 108, unknown until then.
   trained on, cited or counted before the 80% gate is answered.
 
 Open, not blocking: **`docs/STATUS.md` is committed but stale in content** — it still shows
-Phase 3 as ⏸ ПРИОСТАНОВЛЕНА, says "108 тестов" (142 now), schedules the RunPod ADR "промтом
-шага 3b" (added 2026-07-28), and lists Phase 3a as a pending next step. It is the team lead's
+Phase 3 as ⏸ ПРИОСТАНОВЛЕНА, calls the SPEC "rev. 3.2" (3.3 since today), says "108 тестов"
+(142 now), schedules the RunPod ADR "промтом шага 3b" (added 2026-07-28), and lists Phase 3a as
+a pending next step. It is the team lead's
 document, so it is recorded here rather than rewritten. Nothing outside it and
 `docs/frozen-testsets.md` points at `results/baselines.json`.
 
