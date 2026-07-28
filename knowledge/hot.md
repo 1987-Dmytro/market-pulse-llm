@@ -72,6 +72,10 @@ Phase 3 — smaller than 108, unknown until then.
 - **`data/annotation/sarcasm_holdout_pool.jsonl` is not training data** — its non-sarcastic
   rows share threads with the holdout. Train on `comments_train.jsonl` + `sarcasm_candidates`
   only.
+- **The freeze shrank `sarcasm_candidates.pristine.jsonl` 800 → 746** so the validator would
+  not read the moved rows as lost. Legitimate once, audited (the 54 dropped ids are exactly
+  the 54 moved into the holdout) — but the validator can be silenced the same way again. Any
+  further row loss must be diffed against the baseline before it is believed.
 - `RAW_STORE_SALT` in `.env` must never be rotated: a new salt orphans every `sender_anon_id`.
 - `packaging` has 19 rows in the test set — G1c is thin by construction, not by accident.
 
