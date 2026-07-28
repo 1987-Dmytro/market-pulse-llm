@@ -21,6 +21,21 @@ PUBLIC = [
 ]
 
 
+# --- the shared average -----------------------------------------------------
+#
+#   gold [a, a, b, c] vs pred [a, b, b, c]
+#   a: tp 1, fp 0, fn 1 -> 2/3 · b: tp 1, fp 1, fn 0 -> 2/3 · c: tp 1, fp 0, fn 0 -> 1.0
+#   macro = (2/3 + 2/3 + 1) / 3 = 7/9
+def test_macro_f1_matches_the_hand_computed_fixture():
+    assert scorer.macro_f1(["a", "a", "b", "c"], ["a", "b", "b", "c"]) == pytest.approx(7 / 9)
+
+
+def test_macro_f1_excludes_unclear_rows():
+    assert scorer.macro_f1(
+        ["a", "a", "b", "c", scorer.UNCLEAR], ["a", "b", "b", "c", "a"]
+    ) == pytest.approx(7 / 9)
+
+
 # --- G1a: sentiment ---------------------------------------------------------
 #
 #   idx  gold      pred      lang

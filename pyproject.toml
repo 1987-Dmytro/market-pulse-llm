@@ -15,6 +15,12 @@ dev = [
     "pytest>=8.4.2",
     "ruff>=0.15.22",
 ]
+# Only scripts/run_baseline.py needs these: hand-rolling TF-IDF + multinomial
+# logreg would be numeric code the scorer then has to trust. `make check` stays
+# green without them — no test imports sklearn.
+baseline = [
+    "scikit-learn>=1.5",
+]
 
 [build-system]
 requires = ["setuptools>=68"]
@@ -42,5 +48,6 @@ line-length = 100
 "scripts/mine_sarcasm_holdout.py" = ["E402"]
 "scripts/freeze_sarcasm_holdout.py" = ["E402"]
 "scripts/make_review_sample.py" = ["E402"]
+"scripts/run_baseline.py" = ["E402"]
 "scripts/tg_login.py" = ["E402"]
 "scripts/validate_annotations.py" = ["E402"]

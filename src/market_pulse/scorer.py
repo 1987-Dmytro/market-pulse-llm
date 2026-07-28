@@ -45,8 +45,15 @@ def _f1(true_positives: int, false_positives: int, false_negatives: int) -> floa
     return 2 * true_positives / denominator if denominator else 0.0
 
 
-def _macro_f1(y_true: list[Hashable], y_pred: list[Hashable]) -> float:
-    """Macro-F1 averaged over the labels present in ``y_true``."""
+def macro_f1(y_true: list[Hashable], y_pred: list[Hashable]) -> float:
+    """Macro-F1 averaged over the labels present in ``y_true``, unclear rows dropped.
+
+    Public because the gates are not the only numbers that must come from this
+    module: a diagnostic reported next to them (the sarcasm head on the comment
+    test set, say) has to be computed by the same code, or the results file
+    quietly mixes two arithmetics.
+    """
+    y_true, y_pred = _drop_unclear(y_true, y_pred)
     if not y_true:
         raise ValueError("no scoreable rows: every row was unclear or the input was empty")
     labels = sorted(set(y_true), key=str)
@@ -74,10 +81,10 @@ def sentiment_macro_f1(
     below its own baseline by more than 2 pp.
     """
     y_true, y_pred, languages = _drop_unclear(y_true, y_pred, languages)
-    scores = {"overall": _macro_f1(y_true, y_pred)}
+    scores = {"overall": macro_f1(y_true, y_pred)}
     for language in sorted(set(languages)):
         rows = [i for i, lang in enumerate(languages) if lang == language]
-        scores[language] = _macro_f1([y_true[i] for i in rows], [y_pred[i] for i in rows])
+        scores[language] = macro_f1([y_true[i] for i in rows], [y_pred[i] for i in rows])
     return scores
 
 
@@ -131,7 +138,7 @@ def launch_detection_macro_f1(y_true: list[str], y_pred: list[str]) -> float:
 
     Gate: fine-tuned >= zero-shot base LLM + 10 pp.
     """
-    return _macro_f1(*_drop_unclear(y_true, y_pred))
+    return macro_f1(y_true, y_pred)
 
 
 def relevance_macro_f1(y_true: list[bool], y_pred: list[bool]) -> float:
@@ -143,7 +150,7 @@ def relevance_macro_f1(y_true: list[bool], y_pred: list[bool]) -> float:
     let a single row swing the gate. Which of the two the gate reads is an
     operator decision recorded before Phase 4.
     """
-    return _macro_f1(*_drop_unclear(y_true, y_pred))
+    return macro_f1(y_true, y_pred)
 
 
 def normalise_brand(entry: dict, aliases: dict[str, str]) -> str:

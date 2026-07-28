@@ -1,0 +1,134 @@
+{
+  "tfidf-logreg": [
+    {
+      "model": "tfidf-logreg",
+      "timestamp": "2026-07-28T12:17:00+00:00",
+      "git": {
+        "commit": "323a909ee9eb84d027c51fc5b5c2959602050411",
+        "dirty": [
+          "docs/STATUS.md",
+          "knowledge/hot.md",
+          "knowledge/index.md",
+          "nowledge/daily_logs/2026-07-28.md",
+          "pyproject.toml",
+          "scripts/run_baseline.py",
+          "scripts/show_results.py",
+          "src/market_pulse/brands.py",
+          "src/market_pulse/scorer.py",
+          "tests/test_brands.py",
+          "tests/test_scorer.py"
+        ]
+      },
+      "config": {
+        "seed": 42,
+        "vectorizer": {
+          "analyzer": "char_wb",
+          "ngram_range": [
+            3,
+            5
+          ],
+          "min_df": 2,
+          "sublinear_tf": true
+        },
+        "classifier": {
+          "max_iter": 1000,
+          "class_weight": "balanced",
+          "random_state": 42
+        },
+        "heads": {
+          "T1": "sentiment 3-class · sarcasm binary · intents 5x binary",
+          "T2": "relevance binary · post_type 3-class · brands = watchlist string match"
+        },
+        "brand_match": "watchlist display_names, casefolded, word-bounded; watchlist-only",
+        "train_sources": {
+          "data/frozen/comments_train.jsonl": 906,
+          "data/annotation/sarcasm_candidates.jsonl": 540,
+          "data/frozen/posts_train.jsonl": 749
+        },
+        "train_note": "sarcasm_candidates is sarcasm-enriched (378 of 540 scoreable rows negative), so the T1 sentiment prior is shifted against the test set's 212/400"
+      },
+      "gates": [
+        {
+          "gate": "G1a",
+          "metric": "sentiment macro-F1 (comments_test)",
+          "values": {
+            "overall": 0.6834271825899676,
+            "other": 0.6460883312933496,
+            "ru": 0.6729608111187059,
+            "ua": 0.6981884854217825
+          },
+          "n": {
+            "overall": 400,
+            "ua": 248,
+            "other": 66,
+            "ru": 86
+          },
+          "gated_languages": [
+            "ua",
+            "ru"
+          ]
+        },
+        {
+          "gate": "G1b",
+          "metric": "sarcasm slice fix-rate (sarcasm_holdout)",
+          "value": null,
+          "n": {
+            "holdout": 108
+          },
+          "note": "not computable at 3a: amendment 3.2 defines the slice by the zero-shot base LLM's errors and the fix-rate needs a fine-tune. Both land in 3b/4."
+        },
+        {
+          "gate": "G1c",
+          "metric": "intents micro-F1 (comments_test)",
+          "value": 0.6,
+          "n": {
+            "overall": 400
+          }
+        },
+        {
+          "gate": "G1d",
+          "metric": "post_type macro-F1 (posts_test)",
+          "value": 0.6652781478936123,
+          "n": {
+            "overall": 250,
+            "promo": 177,
+            "launch": 30,
+            "other": 43
+          }
+        },
+        {
+          "gate": "G1d",
+          "metric": "relevance macro-F1 (posts_test)",
+          "value": 0.8118886380737396,
+          "n": {
+            "overall": 250,
+            "relevant": 26
+          },
+          "note": "second head of G1d; SPEC §5 says 'relevance + 3-class', reported separately"
+        },
+        {
+          "gate": "G1e",
+          "metric": "brand extraction F1 (posts_test)",
+          "value": 0.19642857142857142,
+          "n": {
+            "overall": 250,
+            "posts_with_brands": 21,
+            "gold_entities": 36
+          }
+        }
+      ],
+      "diagnostics": {
+        "sarcasm_binary_macro_f1_comments_test": 0.5866102036700948,
+        "holdout_sentiment_macro_f1": {
+          "overall": 0.43157894736842106,
+          "other": 0.38095238095238093,
+          "ru": 0.8846153846153846,
+          "ua": 0.8717948717948718
+        },
+        "holdout_sentiment_errors": 26,
+        "holdout_sarcasm_detected": 35,
+        "note": "diagnostics, not gates. The holdout error count is this baseline's error set, NOT the G1b slice — amendment 3.2 defines that one by the zero-shot base LLM. Read the holdout scores against its base rate: 107 of 108 rows are negative, so a model trained on a sarcasm-enriched pool scores well there by leaning negative, not by reading irony — which is what holdout_sarcasm_detected (of 108) shows."
+      }
+    }
+  ]
+}
