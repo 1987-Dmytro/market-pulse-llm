@@ -69,13 +69,52 @@ Built by `scripts/freeze_testsets.py`, seed 42, from `data/annotation/comments_b
 
 ## Training sources
 
-Training reads **two** files, not one. Reconstructing the training data from the frozen set
-alone silently drops 800 hand-labelled rows.
+Training reads **three** files, not one. Reconstructing the training data from the frozen set
+alone silently drops 800 hand-labelled rows — and the third file is not hand-labelled at all.
 
 | file | rows | scorable | sha256 |
 |---|---|---|---|
 | `data/frozen/comments_train.jsonl` | 1600 | 906 | `4b6ea7f354bcc396ee526ce193c445bb358fab1d070bbe429dfdeb3bace1a1d7` |
 | `data/annotation/sarcasm_candidates.jsonl` | 746 | 540 | `44cd226245bc5f6fd5ecd2edd588d4a77c6ae9faca024af42787f4f1f4279423` |
+| `data/annotation/synthetic_sarcasm.jsonl` **ABLATION-GATED, QA-pending** | 600 | 600 | `f037f62bb9e0680501d53f72fed50a146eb6faae63c13afcc354e8f55871efb3` |
+
+### The third source is generated, and conditional
+
+`data/annotation/synthetic_sarcasm.jsonl` is 600 sarcastic comments written by an LLM session on
+2026-07-28, not collected and not hand-labelled
+(`knowledge/decisions/synthetic-sarcasm-augmentation.md`). Two conditions travel with it:
+
+- **ABLATION-GATED.** Phase 4 trains with and without it and keeps it only if the gates improve.
+  It stays a separate file for exactly that reason; every row also carries a `synthetic:NNNN` id
+  and `source_id: "synthetic"`, so a merge into a real source would still be visible.
+- **QA-pending.** 50 rows (seed 42) are exported by `scripts/make_synthetic_qa.py` to
+  `data/annotation/synthetic_qa.csv`; the pre-registered gate is **≥80% `ok`** from the operator,
+  and below that the flagged failure patterns are regenerated once. **No QA number exists yet** —
+  the sample has been exported, not scored, and the executor does not score it (SPEC §10).
+
+It is never in a test set or in the G1b holdout, and `scripts/check_synthetic.py` enforces that
+from the other side: no row is a verbatim or near-verbatim (word-3-gram Jaccard ≥ 0.50) copy of
+any row in the six real comment files, including `comments_test.jsonl` and
+`sarcasm_holdout.jsonl`. The same check bounds internal near-duplicates (≥ 0.60), caps any single
+two-word opening or closing at 8% of the file, and refuses a capitalised mid-sentence word that is
+not a registry brand or chain.
+
+Written to the proportions measured from the 230 real sarcastic scoreable training rows — the
+targets, and what the file actually holds:
+
+| property | real (n=230) | generated (n=600) |
+|---|---|---|
+| UA : RU | 67 : 26 (+7 `other`) | 70 : 30 |
+| negative / neutral | 96.5% / 3.0% | 96.0% / 4.0% |
+| no intent at all | 52.6% | 49.2% |
+| price · availability · quality · packaging · taste | 30% · 17% · 6% · 3% · 1% | 30% · 17% · 7% · 3% · 1% |
+| emoji · `))` | 43% · 12% | 39% · 7% |
+| words: p25 / median / p75 / max | 8 / 13 / 27 / 168 | 7 / 12 / 20 / 37 |
+
+The length tail is the one target the file cannot match: the generation brief caps a row at 40
+words, and the real corpus' p75 of 27 is produced by complaints that run past 100. Median and the
+lower quartile agree; above p75 the generated rows are systematically shorter, and a model trained
+on them sees fewer long-form ironic complaints than the corpus contains.
 
 The mined pool (`scripts/mine_sarcasm_candidates.py`) is a training source only — it is
 excluded from the test set by construction, and its hash is a snapshot, not a freeze: unlike
@@ -132,6 +171,10 @@ would only have chosen between them if more had been eligible.
 | `data/frozen/comments_train.jsonl` | 97 |
 | `data/annotation/sarcasm_candidates.jsonl` (after the move) | 133 |
 | **total** | **230** |
+
+These 230 are the *real* sarcastic rows, and they are the reason the generated third source
+exists. Counting `synthetic_sarcasm.jsonl` here would blur exactly the line the ablation has to
+cut along, so it stays out of this table.
 
 ### Leakage, and the one residual
 
