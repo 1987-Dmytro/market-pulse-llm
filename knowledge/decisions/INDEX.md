@@ -20,3 +20,6 @@ docs/STATUS.md; these are the English long form with the numbers.
 | 2026-07-27 | [[train-recalibration-v2]] — train sources recalibrated to the v2 reading | accepted |
 | 2026-07-28 | [[hybrid-sarcasm-holdout-3.2]] — hybrid 108-row holdout for G1b | accepted |
 | 2026-07-28 | [[holdout-residual-thread-leak-accepted]] — 31 rows share threads with training | accepted |
+| 2026-07-28 | [[architecture-stack]] — serverless inference · Mac cron · SQLite · Streamlit | accepted |
+| 2026-07-28 | [[gpu-provider-runpod]] — RunPod, Vast.ai as the experiment fallback | accepted |
+| 2026-07-28 | [[frontier-api-reference-baseline]] — Claude Haiku as a reference row, not a gate | accepted |
