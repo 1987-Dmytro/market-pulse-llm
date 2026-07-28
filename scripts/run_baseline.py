@@ -98,11 +98,13 @@ def git_state() -> dict:
     def run(*args: str) -> str:
         return subprocess.run(
             ["git", *args], cwd=REPO_ROOT, capture_output=True, text=True, check=True
-        ).stdout.strip()
+        ).stdout
 
-    dirty = [line[3:] for line in run("status", "--porcelain").splitlines()]
+    # `XY <path>`, and the X of an unstaged change is a space — stripping the
+    # output first eats it and the first path loses a character.
+    dirty = [line.split(maxsplit=1)[1] for line in run("status", "--porcelain").splitlines()]
     return {
-        "commit": run("rev-parse", "HEAD"),
+        "commit": run("rev-parse", "HEAD").strip(),
         "dirty": sorted(path for path in dirty if path != str(RESULTS.relative_to(REPO_ROOT))),
     }
 

@@ -2,21 +2,15 @@
   "tfidf-logreg": [
     {
       "model": "tfidf-logreg",
-      "timestamp": "2026-07-28T12:17:00+00:00",
+      "timestamp": "2026-07-28T12:19:33+00:00",
       "git": {
-        "commit": "323a909ee9eb84d027c51fc5b5c2959602050411",
+        "commit": "e6e93b4ce85638d1d20ae726c72d47cca183b3b0",
         "dirty": [
           "docs/STATUS.md",
+          "knowledge/daily_logs/2026-07-28.md",
           "knowledge/hot.md",
           "knowledge/index.md",
-          "nowledge/daily_logs/2026-07-28.md",
-          "pyproject.toml",
-          "scripts/run_baseline.py",
-          "scripts/show_results.py",
-          "src/market_pulse/brands.py",
-          "src/market_pulse/scorer.py",
-          "tests/test_brands.py",
-          "tests/test_scorer.py"
+          "scripts/run_baseline.py"
         ]
       },
       "config": {
