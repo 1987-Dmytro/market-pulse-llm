@@ -2,36 +2,36 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-07-28 17:55:56 (every SessionStart)
+**Auto-refreshed:** 2026-07-30 11:42:59 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+9a83604 docs: quote the achieved numbers, not the targets
+ea6f42c chore: status commit and card/hot refresh
 3e16392 feat: synthetic sarcasm training source
 a9c6d7b docs: amendment 3.3 and decision records
 8bc7d66 docs: record architecture-session decisions
-fa98055 fix: record every dirty path, not the first one minus a character
-e6e93b4 feat: tfidf-logreg baseline and results file
 ```
 
 ## 📋 Recent decisions
 
-- `INDEX.md` — Decision records
 - `synthetic-sarcasm-augmentation.md` — 600 synthetic sarcastic comments as a fourth, ablation-gated training source
+- `INDEX.md` — Decision records
 - `g1d-gate-clarification-3-3.md` — G1d gates the 3-class post type, not a relevance blend (amendment 3.3)
 
 ## 📅 Recent daily logs
 
+- `2026-07-30.md`
 - `2026-07-28.md`
 - `2026-07-27.md`
-- `2026-07-26.md`
 
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 
 # Hot Cache — curated
 
-**Last update:** 2026-07-28 19:40 (edited by hand / `/close`; the section above is auto-generated — do NOT touch the marker)
+**Last update:** 2026-07-30 11:45 (edited by hand / `/save`; the section above is auto-generated — do NOT touch the marker)
 
 ## 🔥 What's Hot
 **Phases 1 and 2 are DONE and accepted** (2026-07-28); **Phase 3a is done** — 142 tests,
@@ -63,7 +63,7 @@ the set is immutable again.
 **Training data is three files now**: `comments_train.jsonl` (1600) + `sarcasm_candidates.jsonl`
 (746 after the holdout took 54) — both recalibrated to the v2 sarcasm reading, 230 sarcastic
 scoreable rows between them (97 + 133) — plus `synthetic_sarcasm.jsonl`, **600 generated rows,
-ablation-gated and QA-pending** ([[synthetic-sarcasm-augmentation]]). The generated file is
+ablation-gated, QA passed 2026-07-30** ([[synthetic-sarcasm-augmentation]]). The generated file is
 checked by `scripts/check_synthetic.py`, not by eye: nothing copied from the six real comment
 files (test and holdout included), nothing repeated inside it, no frame over 8%.
 
@@ -76,27 +76,35 @@ Phase 3 — smaller than 108, unknown until then.
 - **Operator QA of the generated rows** — `data/annotation/synthetic_qa.csv`, 50 rows, seed 42,
   `operator_verdict` per row (`ok` / `unclear` / `fix:field=value`). The gate is **≥80% `ok`**,
   pre-registered before the sample was drawn; below it the flagged patterns are regenerated once.
-  Nothing downstream may use the file's numbers until this comes back.
+  **Closed 2026-07-30 — the operator confirmed the gate passed**; the verdict lives in
+  [[synthetic-sarcasm-augmentation]], the CSV cells stay empty. Nothing further is owed here.
 - **Phase 3b — XLM-R + zero-shot LLM on RunPod** ([[gpu-provider-runpod]]). The zero-shot run must
   also score `data/frozen/sarcasm_holdout.jsonl`: that scoring is what defines the G1b slice and
   its actual n. The base-model choice is made on those numbers, not on taste (docs/STATUS.md), and
   the Phase-4 candidate list gets refreshed by live search in 3b.
+  The executor prompt is written and frozen: **`docs/PROMPT-3b.md`, paste without edits**
+  ($20 hard cap · bf16 on A6000 · Haiku reference row · no QLoRA, no scorer changes).
+  It is **untracked** — commit it together with STATUS.md, which already points at it.
+- Operator pre-flight for 3b: top up RunPod (~$25) and the Anthropic console (~$5), then add
+  `ANTHROPIC_API_KEY` to `.env`.
 - The frontier-API reference row (Claude Haiku, ~$1–3) belongs to the same table —
   reference only, gates stay on the three primary baselines
   ([[frontier-api-reference-baseline]]).
 - Still open from Phase 2: dataset cards for the public augmentation datasets + licence check.
 
 ## 🚧 Blockers
-**None.** One thing is waiting on the operator and does not block 3b:
-- **The synthetic QA verdicts** (see Next). The file may sit in the repo unscored; it may not be
-  trained on, cited or counted before the 80% gate is answered.
+**None.** 3b is free to start.
 
-Open, not blocking: **`docs/STATUS.md` is committed but stale in content** — it still shows
-Phase 3 as ⏸ ПРИОСТАНОВЛЕНА, calls the SPEC "rev. 3.2" (3.3 since today), says "108 тестов"
-(142 now), schedules the RunPod ADR "промтом шага 3b" (added 2026-07-28), and lists Phase 3a as
-a pending next step. It is the team lead's
-document, so it is recorded here rather than rewritten. Nothing outside it and
-`docs/frozen-testsets.md` points at `results/baselines.json`.
+The synthetic QA gate closed on 2026-07-30: the operator confirmed ≥80% `ok`, and
+[[synthetic-sarcasm-augmentation]] now carries the verdict, so `synthetic_sarcasm.jsonl` is
+cleared for the Phase-4 ablation and owes no regeneration round. One caveat that outlives the
+blocker: **the ruling is recorded without the 50-row tally** — `data/annotation/synthetic_qa.csv`
+still has every `operator_verdict` cell empty and was deliberately not filled in from a spoken
+verdict (SPEC §10). The gate is pass/fail and it passed; nothing downstream needs the counts.
+
+The older "STATUS.md is stale" note is closed too: the 2026-07-30 rewrite refreshed the Phase 3
+row with the achieved numbers and replaced "следующие шаги" with a HANDOFF block. Still true that
+nothing outside it and `docs/frozen-testsets.md` points at `results/baselines.json`.
 
 Three former blockers were closed on 2026-07-28: *G1a per-language noise* — resolved by the
 operator's v2 review of all 400 test rows; *holdout/train thread overlap* — accepted with a
@@ -116,9 +124,11 @@ amendment 3.3, see [[g1d-gate-clarification-3-3]].
   drop it by dropping one path; merged, it cannot be removed and it sits behind a frozen hash.
   `data/annotation/*` is gitignored, so the file survives only through an explicit `!` exception —
   do not "tidy" that line away.
-- **The generated rows carry no QA number, and that is not an oversight.** 50 rows are exported
-  for the operator; ≥80% `ok` was pre-registered before the draw. The executor never scores its
-  own sample (SPEC §10), so any number here must come back from the operator's CSV.
+- **The generated rows passed QA but carry no QA number, and that is not an oversight.** ≥80%
+  `ok` was pre-registered before the 50-row draw; the operator ruled it passed on 2026-07-30
+  without returning the marked-up CSV. The executor never scores its own sample (SPEC §10), so
+  the empty `operator_verdict` column stays empty — do not back-fill it to make the record look
+  tidy. The ADR is the authority on the verdict.
 - **The freeze shrank `sarcasm_candidates.pristine.jsonl` 800 → 746** so the validator would
   not read the moved rows as lost. Legitimate once, audited (the 54 dropped ids are exactly
   the 54 moved into the holdout) — but the validator can be silenced the same way again. Any
