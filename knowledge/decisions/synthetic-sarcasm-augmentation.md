@@ -29,6 +29,15 @@ conditions bind it:
   flagged failure patterns are regenerated **once**. The threshold was fixed before the sample was
   drawn, and the executor does not score it — SPEC §10.
 
+**QA outcome — gate passed (operator, 2026-07-28; confirmed to the executor 2026-07-30).** The
+≥80% `ok` threshold is met, so the file is cleared for the Phase-4 ablation and no regeneration
+round is owed. The verdict is the operator's and is recorded here as given: the per-row
+`operator_verdict` column in `data/annotation/synthetic_qa.csv` was **not** filled in, so this ADR
+carries the ruling without the 50-row tally behind it. The CSV was left untouched — SPEC §10 keeps
+the executor out of its own sample, and that includes transcribing a spoken verdict into the
+column that is supposed to produce it. If the marked-up CSV turns up, add the counts here; nothing
+downstream needs them, because the gate is pass/fail and it passed.
+
 **Numbers:** 600 rows against 230 real sarcastic scoreable training rows, written to proportions
 measured from those 230 — UA:RU 70:30, 96% negative, half the rows with no intent at all (the
 guideline sends rigged-giveaway and service complaints to `intents: []`), then price ~30%,
