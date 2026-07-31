@@ -6,6 +6,8 @@ is also the only way to prove the failure counters are wired to something.
 """
 
 import importlib.util
+import json
+from hashlib import sha256
 from pathlib import Path
 
 import pytest
@@ -138,3 +140,102 @@ def test_every_pinned_row_is_fp8_or_an_explicitly_unpinnable_reference():
     references = {slug: row for slug, row in runner.ROWS.items() if row.get("ref")}
     assert all(row["quantization"] is None for row in references.values())
     assert all(slug.startswith("anthropic/") for slug in references)
+
+
+# --- the per-row prediction dump (step 3c) -----------------------------------
+#
+# 3b stored a hash of the scored ids and called a paired re-score "reproducible
+# from the file". It was not: a hash cannot re-score anything. These tests hold
+# the fix in place.
+
+SCORED_INPUTS = {
+    "posts_test": (
+        [{"id": "@ch:9", "text": "друга посилка"}, {"id": "@ch:2", "text": "перша посилка"}],
+        [{"relevant": True, "post_type": "launch"}, {"relevant": False, "post_type": "promo"}],
+    ),
+    "comments_test": (
+        [{"id": "@ch:5", "text": "смачно"}],
+        [{"sentiment": "positive", "sarcasm": False, "intents": ["taste"]}],
+    ),
+}
+
+
+def test_the_dump_is_sorted_so_its_hash_belongs_to_the_data_not_the_thread_pool(tmp_path):
+    """Rows come back from four workers. A hash that depends on who finished
+    first is not a hash of the run."""
+    shuffled = {
+        name: ([r for r in reversed(rows)], [x for x in reversed(labels)])
+        for name, (rows, labels) in reversed(SCORED_INPUTS.items())
+    }
+    assert runner.prediction_lines(shuffled) == runner.prediction_lines(SCORED_INPUTS)
+    a = runner.write_predictions(tmp_path / "a.jsonl", SCORED_INPUTS)
+    b = runner.write_predictions(tmp_path / "b.jsonl", shuffled)
+    assert a == b
+    ordering = [
+        (json.loads(x)["input"], json.loads(x)["id"])
+        for x in runner.prediction_lines(SCORED_INPUTS)
+    ]
+    assert ordering == sorted(ordering)
+
+
+def test_the_dump_carries_ids_and_predictions_only(tmp_path):
+    """Ids and predicted labels. No gold label, no source text — a prediction
+    dump must never become a second copy of a frozen file."""
+    path = tmp_path / "d.jsonl"
+    runner.write_predictions(path, SCORED_INPUTS)
+    text = path.read_text(encoding="utf-8")
+    for line in text.splitlines():
+        assert set(json.loads(line)) == {"input", "id", "pred"}
+    for row, _ in SCORED_INPUTS.values():
+        for source in row:
+            assert source["text"] not in text
+
+
+def test_the_dump_rebuilds_the_scored_id_hash_the_record_already_carries(tmp_path):
+    """The reconstruction whose absence caused the 3b correction: read the dump,
+    recover the exact scored subset, and land on the same SHA256."""
+    path = tmp_path / "d.jsonl"
+    runner.write_predictions(path, SCORED_INPUTS)
+    dumped = {}
+    for line in path.read_text(encoding="utf-8").splitlines():
+        entry = json.loads(line)
+        dumped.setdefault(entry["input"], []).append({"id": entry["id"]})
+    for name, (rows, _) in SCORED_INPUTS.items():
+        assert runner.scored_ids_sha256(dumped[name]) == runner.scored_ids_sha256(
+            sorted(rows, key=lambda r: r["id"])
+        )
+
+
+def test_the_recorded_hash_is_the_hash_of_the_file_on_disk(tmp_path):
+    path = tmp_path / "d.jsonl"
+    digest = runner.write_predictions(path, SCORED_INPUTS)
+    assert digest == sha256(path.read_bytes()).hexdigest()
+    assert path.read_text(encoding="utf-8").endswith("\n")
+
+
+def test_the_dump_path_is_one_file_per_run_and_survives_a_filesystem():
+    a = runner.predictions_path("google/gemma-4-31b-it", "2026-07-31T18:04:05+00:00")
+    b = runner.predictions_path("google/gemma-4-31b-it", "2026-08-01T06:00:00+00:00")
+    assert a != b
+    assert a.parent == runner.PREDICTIONS
+    assert a.name == "google-gemma-4-31b-it--20260731T180405Z.jsonl"
+    assert not {"/", ":"} & set(a.name)
+
+
+def test_every_record_that_claims_a_dump_points_at_a_real_one():
+    """A ratchet, empty until the first 3c-era run: the six 3b records carry no
+    dumps and must not be backfilled, but any record that names one must not lie.
+    See implementation-notes.md, "Correction (2026-07-31, team-lead review)"."""
+    results = Path(__file__).resolve().parents[1] / "results" / "baselines.json"
+    if not results.exists():
+        pytest.skip("no results yet")
+    for runs in json.loads(results.read_text(encoding="utf-8")).values():
+        for record in runs:
+            claimed = record["config"].get("predictions_path")
+            if claimed is None:
+                continue
+            dump = results.parents[1] / claimed
+            assert dump.exists(), f"{record['model']} names a dump that is not there: {claimed}"
+            assert (
+                sha256(dump.read_bytes()).hexdigest() == record["config"]["predictions_sha256"]
+            ), f"{record['model']}: the dump on disk is not the one the record hashed"

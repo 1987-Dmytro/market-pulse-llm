@@ -27,6 +27,7 @@ import argparse
 import itertools
 import json
 import os
+import re
 import subprocess
 import sys
 import threading
@@ -47,6 +48,7 @@ from market_pulse.scorer import UNCLEAR  # noqa: E402
 FROZEN = REPO_ROOT / "data" / "frozen"
 RESULTS = REPO_ROOT / "results" / "baselines.json"
 LEDGER = REPO_ROOT / "results" / "spend_3b.json"
+PREDICTIONS = REPO_ROOT / "results" / "predictions"
 
 SEED = 42
 TEMPERATURE = 0.0
@@ -286,6 +288,45 @@ def failure_block(name: str, outcomes: list[dict], failures: list[dict]) -> dict
 def scored_ids_sha256(rows: list[dict]) -> str:
     """The exact paired subset a gate was anchored on, in one field."""
     return sha256("\n".join(row["id"] for row in rows).encode("utf-8")).hexdigest()
+
+
+def prediction_lines(scored_inputs: dict) -> list[str]:
+    """One JSON line per scored row: the input, the id, and what the model answered.
+
+    Ids and predicted labels only — no gold label and no source text, so the dump
+    is a record of the model and never a second copy of a frozen file.
+
+    Sorted by ``(input, id)``: rows come back from a thread pool, and a hash that
+    depends on which worker finished first is not a hash of the data.
+    """
+    rows = sorted(
+        (
+            (name, row["id"], pred)
+            for name, (scored, labels) in scored_inputs.items()
+            for row, pred in zip(scored, labels)
+        ),
+        key=lambda entry: entry[:2],
+    )
+    return [
+        json.dumps({"input": name, "id": row_id, "pred": pred}, ensure_ascii=False, sort_keys=True)
+        for name, row_id, pred in rows
+    ]
+
+
+def write_predictions(path: Path, scored_inputs: dict) -> str:
+    """Persist the dump, return its SHA256. The gap 3b left: a hash of ids cannot
+    re-score them, so a later paired comparison needs the answers themselves."""
+    text = "".join(line + "\n" for line in prediction_lines(scored_inputs))
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(text, encoding="utf-8")
+    return sha256(text.encode("utf-8")).hexdigest()
+
+
+def predictions_path(model: str, timestamp: str) -> Path:
+    """``results/predictions/<sanitized-slug>--<UTC-ts>.jsonl``."""
+    slug = re.sub(r"[^A-Za-z0-9._-]+", "-", model)
+    stamp = re.sub(r"[^0-9TZ]", "", timestamp.replace("+00:00", "Z"))
+    return PREDICTIONS / f"{slug}--{stamp}.jsonl"
 
 
 def verify_pin(key: str, model: str, tag: str, quantization: str | None) -> dict:
@@ -643,9 +684,12 @@ def main(argv: list[str] | None = None) -> int:
     usage_after = zero_shot.total_usage(key)
     budget.reconcile(usage_after - ledger["openrouter_total_usage_at_3b_start"])
     actual = usage_after - usage_now
+    timestamp = datetime.now(UTC).isoformat(timespec="seconds")
+    dump = predictions_path(args.model, timestamp)
+    dump_sha = write_predictions(dump, scored_inputs)
     record = zero_shot.build_record(
         model=args.model,
-        timestamp=datetime.now(UTC).isoformat(timespec="seconds"),
+        timestamp=timestamp,
         git=git_state(),
         config={
             "seed": SEED,
@@ -667,6 +711,8 @@ def main(argv: list[str] | None = None) -> int:
             "scored_ids_sha256": {
                 name: scored_ids_sha256(rows) for name, (rows, _) in scored_inputs.items()
             },
+            "predictions_path": str(dump.relative_to(REPO_ROOT)),
+            "predictions_sha256": dump_sha,
             "spend_usd": round(actual, 6),
             "tokens": dict(client.usage),
             "determinism_note": (
@@ -698,6 +744,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     print(f"tokens {dict(client.usage)}")
     print(f"wrote {RESULTS.relative_to(REPO_ROOT)} — read it with scripts/show_results.py")
+    print(f"wrote {dump.relative_to(REPO_ROOT)} — {len(prediction_lines(scored_inputs))} rows")
     code = [p for p in record["git"]["dirty"] if p.startswith(("src/", "scripts/", "config/"))]
     if code:
         print(
