@@ -40,8 +40,13 @@ stays runnable without them:
 
 ```bash
 pip install -e '.[xlmr]'                  # ~2.5 GB of wheels if torch is not already present
-pip install 'transformers>=4.44'          # enough on its own when torch is already installed
+# or, when torch is already installed and you do not want the editable install:
+pip install 'transformers>=4.44'
 ```
+
+The second form is what was used on 2026-07-31 — torch 2.13.0 was already present, and it keeps
+`market_pulse` uninstalled, which is what `CLAUDE.md` documents (outside pytest, prefix scripts
+with `PYTHONPATH=src`; the scripts here do it themselves).
 
 ## 2. Precision probe — free, GET requests only
 

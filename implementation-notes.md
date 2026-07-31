@@ -59,6 +59,30 @@ note says "this run must not anchor G1d/G1e" whichever input lost the rows. For
 `diagnostics.failures` are the authority; the note is coarse. The record is append-only and is not
 being hand-corrected.
 
+## The three candidate rows are not paired on identical instances
+
+`gate_anchor_valid` answers "may this run anchor a gate". It does not answer the question the
+operator asks next, which is comparing the three rows to pick a base model — and those rows were
+not scored on the same instances:
+
+| row | comments_test | posts_test | sarcasm_holdout |
+|---|---|---|---|
+| `google/gemma-4-31b-it` | 400 | 250 | 108 |
+| `qwen/qwen3.5-9b` (2nd run) | 400 | 250 | 108 |
+| `qwen/qwen3.6-27b` | **396** | **249** | **103** |
+| `anthropic/claude-haiku-4.5` (ref) | 400 | 250 | 108 |
+
+So qwen3.6-27b's G1a 0.8522 and gemma's 0.8944 have different denominators, and SPEC §5 requires
+"comparisons paired on identical instances" — the same rule `scorer.py`'s module docstring spells
+out for macro averaging. **Nothing here is unrecoverable and nothing needs re-spending:** every
+record carries `config.scored_ids_sha256` per input, so a paired re-score on the intersection of
+the four rows is reproducible from the file.
+
+What it would take to close it properly is the operator's call, because the missing rows are
+`missing field: sentiment` from the model itself, not 429s from an endpoint — at temperature 0 a
+re-run is not obviously a fix, and a model that cannot answer 9 rows is telling you something. A
+re-run of qwen3.6-27b costs $0.13 and 20 minutes.
+
 ## Batch variant — resolved 2026-07-31
 
 `anthropic/claude-haiku-4.5:batch` exists on OpenRouter at half price ($0.50/$2.50 per Mtok against
