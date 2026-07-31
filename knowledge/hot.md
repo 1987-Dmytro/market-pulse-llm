@@ -46,7 +46,8 @@ rev. 3 + amendments 3.1, 3.2 and **3.3**. Registry: 4 live sources. Raw store 6 
 per model across four models is a token bill. **fp8 for all three candidates**, because
 `qwen/qwen3.6-27b` offers no bf16 endpoint anywhere and the rule was written before the probe.
 Pins: gemma-4-31b-it → `parasail/fp8` · qwen3.6-27b → `io-net/fp8` · qwen3.5-9b → `venice/fp8`,
-`allow_fallbacks: false`. **Phase spend $0.7569 of the $8 cap.** Gemma 4's licence is
+`allow_fallbacks: false`. **Phase spend $0.7795 of the $8 cap** ($0.7490 across the five
+recorded runs; the rest is the live sizing probes). Gemma 4's licence is
 **Apache-2.0**, not the Gemma Terms of Use the candidate list assumed.
 
 **The scorer computes, and it is the only thing that may.** `src/market_pulse/scorer.py` has every

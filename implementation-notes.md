@@ -118,5 +118,9 @@ written:**
 - 2026-07-31 — first `qwen/qwen3.5-9b` run at 8 workers lost 11 rows to HTTP 429; the 2% guard
   marked it `gate_anchor_valid: false`. Concurrency dropped to 4, retries raised to 6.
 - 2026-07-31 — four scoring runs: qwen3.5-9b, gemma-4-31b-it, qwen3.6-27b, and the Haiku
-  reference row. **Phase spend $0.7569 of the $8 cap**, five records in the results file.
+  reference row. **Phase spend $0.7795 of the $8 cap** once OpenRouter's usage settled — the
+  last run printed $0.7569, and `/credits` lags by a few cents for minutes afterwards, which is
+  exactly why `Budget.reconcile` takes the larger of the local sum and the provider's figure.
+  $0.7490 of it is the five recorded runs; the remainder is the live sizing probes. Five records
+  in the results file.
 - 2026-07-31 — XLM-R smoke on both devices; both over the 60-minute ceiling, full run not started.

@@ -7,7 +7,8 @@ hand-edited. The decisions behind the commands are in
 
 **Budget: $8 hard cap across all of 3b.** The runner enforces it against OpenRouter's own usage
 figures, not against a local guess. If the cap trips, see the last section — the answer is never
-"raise it a little". The 2026-07-31 execution of this runbook spent **$0.75** in total.
+"raise it a little". The 2026-07-31 execution of this runbook spent **$0.78** in total —
+$0.749 across the five recorded runs plus a few cents of live sizing probes.
 
 ---
 
