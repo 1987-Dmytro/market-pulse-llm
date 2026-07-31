@@ -302,6 +302,59 @@ def verify_pin(key: str, model: str, tag: str, quantization: str | None) -> dict
     return match[0]
 
 
+def precision_probe(key: str) -> int:
+    """Task 2 of the 3b brief, as a command rather than a one-off.
+
+    Prints candidate x provider x quantization, applies the pre-registered rule
+    verbatim, and names the branch that fires. Read-only: GET requests, no spend.
+    """
+    candidates = [slug for slug, row in ROWS.items() if not row.get("ref")]
+    offered, listings = {}, {}
+    for slug in candidates:
+        listings[slug] = zero_shot.get(f"/models/{slug}/endpoints", key)["data"]["endpoints"]
+        offered[slug] = {e.get("quantization") for e in listings[slug]}
+
+    print(
+        f"{'candidate':<24} {'endpoint tag':<22} {'quant':<8} {'$in':>7} {'$out':>8} {'st':>4} up1d"
+    )
+    for slug in candidates:
+        for endpoint in listings[slug]:
+            pricing = endpoint["pricing"]
+            print(
+                f"{slug.split('/')[-1]:<24} {str(endpoint.get('tag')):<22}"
+                f" {str(endpoint.get('quantization')):<8}"
+                f" {float(pricing['prompt']) * 1e6:>7.3f} {float(pricing['completion']) * 1e6:>8.3f}"
+                f" {str(endpoint.get('status')):>4} {(endpoint.get('uptime_last_1d') or 0):.1f}%"
+            )
+        print()
+
+    # The rule, verbatim: bf16 for ALL THREE, otherwise fp8 for ALL THREE.
+    missing_bf16 = [slug for slug in candidates if "bf16" not in offered[slug]]
+    chosen = "fp8" if missing_bf16 else "bf16"
+    if missing_bf16:
+        print(f"bf16 branch does NOT fire: no bf16 endpoint for {', '.join(missing_bf16)}")
+    print(f"RULE FIRES: {chosen} for all {len(candidates)} candidates")
+
+    without = [slug for slug in candidates if chosen not in offered[slug]]
+    if without:
+        raise SystemExit(
+            f"STOP: {chosen} is not offered for {', '.join(without)} and bf16 is not offered for"
+            f" {', '.join(missing_bf16)} — neither precision covers all three. Report; do not"
+            " improvise a third option."
+        )
+
+    print("\npinned endpoints (ADR 3b-infra-and-precision §(b)):")
+    for slug in candidates:
+        pinned = ROWS[slug]
+        match = [e for e in listings[slug] if e.get("tag") == pinned["tag"]]
+        state = "GONE" if not match else match[0].get("quantization")
+        agrees = "ok" if state == chosen == pinned["quantization"] else "MISMATCH — stop and report"
+        print(
+            f"  {slug:<24} {pinned['tag']:<22} pinned {pinned['quantization']} · now {state} · {agrees}"
+        )
+    return 0
+
+
 def read_ledger(usage_now: float) -> dict:
     if LEDGER.exists():
         return json.loads(LEDGER.read_text(encoding="utf-8"))
@@ -433,7 +486,12 @@ def build_gates(inputs: dict, aliases: dict) -> tuple[list[dict], dict]:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--model", choices=sorted(ROWS), required=True)
+    parser.add_argument("--model", choices=sorted(ROWS))
+    parser.add_argument(
+        "--precision-probe",
+        action="store_true",
+        help="print candidate x provider x quantization and the branch the rule fires (free)",
+    )
     parser.add_argument(
         "--reference-only",
         action="store_true",
@@ -445,6 +503,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--max-run-usd", type=float, default=DEFAULT_RUN_CAP_USD)
     parser.add_argument("--concurrency", type=int, default=DEFAULT_CONCURRENCY)
     args = parser.parse_args(argv)
+
+    if args.precision_probe:
+        return precision_probe(api_key())
+    if not args.model:
+        parser.error("--model is required unless --precision-probe is given")
 
     row = ROWS[args.model]
     if row.get("batch_only"):
