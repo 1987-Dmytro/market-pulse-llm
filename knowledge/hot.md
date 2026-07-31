@@ -2,24 +2,24 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-07-31 14:19:16 (every SessionStart)
+**Auto-refreshed:** 2026-07-31 17:41:56 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-aae7b8f docs: demand explicit XLM-R gate coverage, record the adapter-merge footgun
-58a610d docs: record the bf16-LoRA vs QLoRA fork as a deferred Phase-4 decision
-7b56d32 docs: re-scope 3b onto OpenRouter, pre-register the precision rule
-5088f7a chore: ignore .DS_Store
-88ddad7 chore: daily logs and hot-cache refresh
+8918709 feat: every scoring run dumps its per-row predictions
+632b40c docs: the base-model gate, and the bound that closes the unpaired row
+6017721 docs: qwen3.6-27b re-run, and STATUS.md brought up to 3b's close
+5b723af docs: the three candidate rows are not paired, and the install form used
+443f1f0 docs: the notes claimed a prompt rule the prompt does not carry
 ```
 
 ## 📋 Recent decisions
 
-- `synthetic-sarcasm-augmentation.md` — 600 synthetic sarcastic comments as a fourth, ablation-gated training source
+- `3b-infra-and-precision.md` — Phase 3b runs on OpenRouter at a pinned precision, not on a rented GPU
 - `INDEX.md` — Decision records
-- `g1d-gate-clarification-3-3.md` — G1d gates the 3-class post type, not a relevance blend (amendment 3.3)
+- `phase4-base-model-gate.md` — Phase 4 base model = google/gemma-4-31b-it, and the unpaired 27B row cannot flip that
 
 ## 📅 Recent daily logs
 
@@ -31,16 +31,22 @@ aae7b8f docs: demand explicit XLM-R gate coverage, record the adapter-merge foot
 
 # Hot Cache — curated
 
-**Last update:** 2026-07-31 (edited by hand / `/save`; the section above is auto-generated — do NOT touch the marker)
+**Last update:** 2026-07-31 17:42 (step 3c; edited by hand / `/save`; the section above is auto-generated — do NOT touch the marker)
 
 ## 🔥 What's Hot
 **Phases 1 and 2 are DONE and accepted** (2026-07-28); **Phase 3a is done**; **3b's zero-shot
-half is done** (2026-07-31) — 196 tests, `make check` green after every commit. SPEC APPROVED
-rev. 3 + amendments 3.1, 3.2 and **3.3**. Registry: 4 live sources. Raw store 6 057 posts +
-11 338 comments. Decision records: `knowledge/decisions/` ([[INDEX]]), 15 ADRs
-([[architecture-stack]], [[gpu-provider-runpod]], [[frontier-api-reference-baseline]],
-[[g1d-gate-clarification-3-3]], [[synthetic-sarcasm-augmentation]],
-[[3b-infra-and-precision]]).
+half is DONE AND ACCEPTED** (gate review, evening 2026-07-31) — 202 tests, `make check` green
+after every commit. SPEC APPROVED rev. 3 + amendments 3.1, 3.2 and **3.3**. Registry: 4 live
+sources. Raw store 6 057 posts + 11 338 comments. Decision records: `knowledge/decisions/`
+([[INDEX]]), 16 ADRs ([[architecture-stack]], [[gpu-provider-runpod]],
+[[frontier-api-reference-baseline]], [[g1d-gate-clarification-3-3]],
+[[synthetic-sarcasm-augmentation]], [[3b-infra-and-precision]],
+**[[phase4-base-model-gate]]**).
+
+**The XLM-R supervised baseline is IN FLIGHT** — launched on this Mac's CPU on the evening of
+2026-07-31 for an unattended overnight run. It writes its own record into
+`results/baselines.json` through the same scorer; that record is committed in the morning
+session, not tonight.
 
 **3b runs on OpenRouter, not on a rented GPU** ([[3b-infra-and-precision]]): 758 short requests
 per model across four models is a token bill. **fp8 for all three candidates**, because
@@ -72,7 +78,7 @@ in **both** runs: the model returns JSON with no `sentiment` field, on largely t
 0.7308 → 0.7605 purely from a different scored subset — the determinism caveat, demonstrated. qwen3.5-9b: G1a 0.7745 · G1c 0.6252 ·
 G1d 0.5077 (0.9778) · G1e 0.6476 · errs 26 / 70. Reference row (never anchors a gate)
 claude-haiku-4.5: G1a 0.8708 · G1c 0.7739 · G1d 0.7718 (0.9694) · G1e 0.8537 · errs 21 / 47.
-**No model has been chosen** — that is the Phase 4 gate, with the operator.
+**The model was chosen at the gate the same evening — Gemma-4-31B, [[phase4-base-model-gate]].**
 
 **Frozen test sets are at v2** — `docs/frozen-testsets.md` carries the hashes, the changelog
 and the per-gate depth. comments 400/1600, posts 250/750, thread-disjoint, zero `unclear` in
@@ -91,70 +97,82 @@ files (test and holdout included), nothing repeated inside it, no frame over 8%.
 thread-disjoint from test and train. The slice is whatever the base model gets wrong at
 Phase 3 — smaller than 108, unknown until then.
 
-## ⏭️ Next (rewritten 2026-07-31)
-- **Phase 4 model-choice gate, with the operator**, off the table above. Two questions come with
-  it: which reading of "misclassifies" defines the G1b slice (sentiment errors, sarcasm errors or
-  their union — all three are in every record, [[3b-infra-and-precision]] §(e)), and whether
-  qwen3.6-27b's `gate_anchor_valid: false` run is re-run before it can anchor anything.
-  Until a base model is picked, **G1d and G1e have no anchor** — §(f).
-- **XLM-R full run is owed and was not started**: the timed smoke projects **130.8 min** on this
-  Mac's CPU and **1764 min** on MPS, both over the 60-minute ceiling, so `scripts/eval_zero_shot.py`'s
-  sibling `scripts/train_xlmr_baseline.py` stopped and reported instead. It needs a pod, or a
-  raised ceiling (`--time-budget-min`). Nothing about the baseline was tuned to fit the clock.
-- RunPod top-up moved to the Phase 4 gate by operator decision; the chosen model owes **one
-  zero-shot re-run on our own GPU during the Phase 4 smoke** as the cross-check against its
-  third-party-served row.
+## ✅ Gate decisions (operator + team lead, evening 2026-07-31) — [[phase4-base-model-gate]]
+1. **Phase-4 base model = Gemma-4-31B.** Ahead on every gated head among the candidates; ahead of
+   the Haiku reference row on four of five cells (Haiku leads G1a `ru` by 0.0300, and a reference
+   row never anchors a gate). Clean run, no lost rows, Apache-2.0.
+2. **The 27B row's unpairedness is closed by a bound analysis, $0 — done, and every head is
+   protected.** Worst case = Gemma perfect on the 8 dropped instances: G1a `ua` bound 0.0186 vs
+   gap 0.0421 · G1a `ru` bound 0 (no `ru` row dropped — already paired) vs 0.0021 · G1c 0.0087 vs
+   0.0376 · G1d 0.0037 vs 0.1293 · G1e bound 0 (dropped post has no gold brand) vs 0.0292. The
+   ~$0.90 paired re-run held in reserve was not needed. The 27B rows keep
+   `gate_anchor_valid: false` permanently.
+3. **The G1b slice = the UNION of errors (sentiment ∪ sarcasm)**, and it is defined by re-running
+   the chosen model on **our own pod** in the Phase-4 smoke — full 108 rows, deterministic, with a
+   prediction dump. The 40/108 from OpenRouter is a preview, not the slice.
+4. **XLM-R runs overnight on this Mac's CPU** — the 60-minute ceiling is lifted by the operator.
+   The baseline is still not cut to fit the clock: epochs, `MAX_LENGTH` and the architecture stay
+   as pre-registered.
 
-## ⏭️ Next (from 3a, still open)
-- **Operator QA of the generated rows** — `data/annotation/synthetic_qa.csv`, 50 rows, seed 42,
-  `operator_verdict` per row (`ok` / `unclear` / `fix:field=value`). The gate is **≥80% `ok`**,
-  pre-registered before the sample was drawn; below it the flagged patterns are regenerated once.
-  **Closed 2026-07-30 — the operator confirmed the gate passed**; the verdict lives in
-  [[synthetic-sarcasm-augmentation]], the CSV cells stay empty. Nothing further is owed here.
-- **Phase 3b — re-scoped on 2026-07-31: zero-shot runs on the OpenRouter API, no GPU is rented.**
-  The operator funded OpenRouter ($9.84) and left RunPod at $0.00, so the rented-A6000 premise of
-  rev. 1 is gone. RunPod stays the Phase-4 training provider ([[gpu-provider-runpod]]); its top-up
-  is deliberately deferred to the Phase-4 gate. The zero-shot run must still score
-  `data/frozen/sarcasm_holdout.jsonl`: that scoring is what defines the G1b slice and its actual n.
-  The base-model choice is made on those numbers, not on taste (docs/STATUS.md).
-  The executor prompt is rewritten and frozen at **`docs/PROMPT-3b.md` rev. 2, paste without
-  edits** ($8 hard cap · OpenRouter only · fixed candidates · precision RULE · XLM-R on local MPS ·
-  no QLoRA, no scorer changes). Its header keeps the diff against rev. 1.
-- **The precision rule is pre-registered and must not be re-litigated after numbers exist:**
-  probe `/api/v1/models/<slug>/endpoints` for all three candidates first — `bf16` for all three if
-  every candidate offers it, otherwise `fp8` for all three, never mixed, routing pinned with
-  `allow_fallbacks: false`, provider + quantization in every provenance record. The honest caveat
-  (third-party serving, not our hardware) is paid off by ONE zero-shot re-run of the CHOSEN model
-  on our own pod during the Phase-4 smoke.
-- Candidates are FIXED by the operator (live search done 2026-07-31, do not re-select):
-  `google/gemma-4-31b-it`, `qwen/qwen3.6-27b`, `qwen/qwen3.5-9b`. Reference row is
-  `anthropic/claude-haiku-4.5:batch` **through OpenRouter** — no Anthropic key anywhere.
-- Operator pre-flight for 3b: create an OpenRouter key (cap it at $8 in their dashboard too), add
-  `OPENROUTER_API_KEY` to `.env` (template is in `.env.example`), and install `runpodctl`
-  (`brew install runpod/runpodctl/runpodctl`, then `runpodctl doctor`) — money on RunPod waits.
-- The frontier-API reference row (Claude Haiku, ~$1–3) belongs to the same table —
-  reference only, gates stay on the three primary baselines
-  ([[frontier-api-reference-baseline]]).
-- **Open Phase-4 fork raised by the operator 2026-07-31 — bf16 LoRA vs 4-bit QLoRA.** Plain LoRA
-  on an unquantized base is on the table and is decided at the Phase-4 gate together with the
-  model. VRAM (base + adapters + activations): Gemma-4-31B ~70 GB bf16 / ~24 GB 4-bit ·
+**Read the `ru` cell twice.** Gemma leads the 27B there by **0.0021**, against a **0.0298**
+same-config swing measured on the 27B's own G1d between two identical runs. On `ru` the two are
+tied inside third-party-endpoint noise; the selection rests on the other four gaps (0.03–0.13).
+That is why the chosen model owes a zero-shot re-run on our own pod.
+
+**Standing guard from step 3c on: every run writes a per-row prediction dump** (id + labels, no
+gold, no texts) plus `predictions_path` / `predictions_sha256` in the record. Implemented in
+`scripts/eval_zero_shot.py`, six tests. See the correction below for why.
+
+## ⚠️ Correction the acceptance found in the 3b report
+The executor's report and `implementation-notes.md` claimed the pairing could be closed by
+re-scoring on the intersection "for free, from the file". **It could not.** Records hold
+`config.scored_ids_sha256` — a hash of the id list — and `failed_ids`, so the scored *subset* is
+recoverable, but **no per-row predictions were ever stored**, so the metrics on that subset cannot
+be recomputed without new requests. Both files are corrected; the guard above is the fix.
+
+## ⏭️ Next (rewritten 2026-07-31, evening — step 3c)
+1. **Morning: commit the XLM-R record.** The overnight run appends to `results/baselines.json`
+   while nothing is committed; the first job of the morning session is reading it with
+   `scripts/show_results.py --model xlm-roberta-base` and committing the record. Its G1b is
+   `null` and its G1e says **NOT COVERED** — "not attempted", never "scored zero".
+2. **Close Phase 3.** With the zero-shot rows accepted and the supervised baseline in, the phase
+   has its full baseline table; the close-out is the team lead's.
+3. **RunPod top-up** — deferred to the Phase 4 gate by operator decision, still owed before any
+   training.
+4. **Phase 4 briefing**, which settles the LoRA/QLoRA fork below and schedules the chosen model's
+   **zero-shot re-run on our own pod** — the cross-check against its third-party-served row and
+   the run that *defines* the G1b slice (decision 3).
+
+## ⏭️ Still open, older than 3b
+- **Phase-4 fork raised by the operator 2026-07-31 — bf16 LoRA vs 4-bit QLoRA.** Plain LoRA on an
+  unquantized base is on the table and is decided at the Phase-4 gate together with the model.
+  VRAM (base + adapters + activations): Gemma-4-31B ~70 GB bf16 / ~24 GB 4-bit ·
   Qwen3.6-27B ~62 / ~21 · **Qwen3.5-9B ~22 / ~8, so bf16 fits a 48 GB A6000.** Training cost is
   NOT the deciding argument — the dataset is ~2 950 short rows, a run is 1-1.5 h, and A6000
   QLoRA ($0.53/h) vs A100-80 bf16 LoRA ($1.39/h) differ by single dollars. The principle is
   train-in-the-precision-you-serve: an adapter trained against a quantized base and merged into
-  bf16 weights drifts, and so does the mirror case. Details and the three branches are in
-  docs/STATUS.md.
+  bf16 weights drifts, and so does the mirror case. Three branches in docs/STATUS.md.
+  **Since Gemma-4-31B won the gate (bf16 ~70 GB does not fit an A6000, and production is the
+  quantized serverless path decided 2026-07-28), the working hypothesis is branch (2): 4-bit
+  QLoRA on an A6000.** Confirmed at the Phase-4 briefing, not before.
 - Still open from Phase 2: dataset cards for the public augmentation datasets + licence check.
 
-## 🚧 Blockers
-**One, and it is hardware.** The XLM-R baseline cannot run here: 2 193 training steps across
-9 heads project **130.8 min** on this Mac's CPU (3.503 s/step) and **1764 min** on MPS
-(48.117 s/step, and MPS OOMs at 9.07 GiB unless the 250k×768 embedding matrix is frozen, which it
-is). The 60-minute ceiling is the operator's, so the script stopped and reported. Unblocking is a
-pod or a raised `--time-budget-min` — **not** fewer epochs, not a shared-encoder rewrite, not a
-shorter `MAX_LENGTH`; each of those is tuning a pre-registered baseline to a wall clock.
+Everything else that used to sit here is done and has a permanent home: the 3b re-scope, the
+precision rule, the fixed candidate list and the pre-flight are in [[3b-infra-and-precision]];
+the synthetic-QA gate is in [[synthetic-sarcasm-augmentation]]; the frontier reference row has
+been run ([[frontier-api-reference-baseline]]).
 
-The zero-shot half is not blocked and is finished.
+## 🚧 Blockers
+**None — the one blocker was lifted by the operator on the evening of 2026-07-31**, who raised the
+60-minute ceiling; the run was launched the same evening and is **in flight**. The measurement
+that produced the blocker still stands and is why it runs overnight: 2 193 training steps across 9 heads project
+**130.8 min** on this Mac's CPU (3.503 s/step) and **1764 min** on MPS (48.117 s/step, and MPS
+OOMs at 9.07 GiB unless the 250k×768 embedding matrix is frozen, which it is).
+
+What must NOT happen even now that the clock is open: fewer epochs, a shared-encoder rewrite, a
+shorter `MAX_LENGTH`. Each is tuning a pre-registered baseline to a wall clock.
+
+The zero-shot half is finished and accepted.
 
 The synthetic QA gate closed on 2026-07-30: the operator confirmed ≥80% `ok`, and
 [[synthetic-sarcasm-augmentation]] now carries the verdict, so `synthetic_sarcasm.jsonl` is
@@ -173,6 +191,10 @@ rationale, see [[holdout-residual-thread-leak-accepted]]; *which head G1d reads*
 amendment 3.3, see [[g1d-gate-clarification-3-3]].
 
 ## ⚠️ Footguns for the next run
+- **The six 3b zero-shot records carry no per-row predictions — never claim paired re-scoring
+  from them.** They hold `scored_ids_sha256` (a hash of the id list) and error counts, nothing
+  that can be re-scored. Dumps exist only from step 3c onward, and the six are **not** backfilled:
+  they cannot be reconstructed and a synthesized dump would be worse than the gap.
 - **`results/spend_3b.json` is the $8 cap's anchor, and it must not be regenerated.** It stores
   the lifetime OpenRouter usage as of the first 3b request; delete it and the next run re-anchors
   at today's usage, which silently resets the phase counter to zero.
