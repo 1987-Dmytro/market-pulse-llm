@@ -1,4 +1,11 @@
 {
+  "permissions": {
+    "deny": [
+      "Edit(/docs/STATUS.md)",
+      "Edit(/docs/SPEC.md)",
+      "Edit(/docs/PROMPT-*.md)"
+    ]
+  },
   "hooks": {
     "SessionStart": [
       {

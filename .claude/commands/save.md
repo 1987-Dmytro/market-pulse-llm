@@ -11,4 +11,7 @@ Only on the operator's explicit request.
    fix them silently).
 5. A durable lesson showed up? → write it to native memory (topic file + a line in MEMORY.md).
 
+Never write `docs/STATUS.md`, `docs/SPEC.md` or `docs/PROMPT-*.md` — team-lead files; phase-end
+facts go to the daily log / `implementation-notes.md`.
+
 Commits are separate, on the operator's request.

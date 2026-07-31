@@ -10,3 +10,6 @@ Invoked ONLY by the operator at the end of the workday. Order:
    `**Last update:** <today>`. Do NOT touch the `AUTO-GEN END` marker.
 4. If the validator is installed: `python3 scripts/check-wikilinks.py` → 0 broken links in today's log.
 5. Report to the operator: done / next / blockers / updated files. Offer a commit, do NOT run it.
+
+Never write `docs/STATUS.md`, `docs/SPEC.md` or `docs/PROMPT-*.md` — team-lead files; phase-end
+facts go to the daily log / `implementation-notes.md`.

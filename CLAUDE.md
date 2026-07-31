@@ -17,6 +17,15 @@ whole file: **§3** registry entities · **§5** pre-registered gates G1a–G1e 
 numbers live in `knowledge/decisions/` (start at `INDEX.md`); the Russian summaries of the same
 decisions are in STATUS.md.
 
+## File ownership — one writer per file
+
+- Team-lead files: `docs/STATUS.md`, `docs/SPEC.md`, `docs/PROMPT-*.md` — read and commit them,
+  never edit. `permissions.deny` in `.claude/settings.json` enforces it (an `Edit(...)` rule covers
+  every file-editing tool, Write included). Phase-end facts go to the daily log or
+  `implementation-notes.md`, never into STATUS.md.
+- Executor files (the team lead does not edit them): `src/`, `tests/`, `scripts/`, `results/`,
+  `config/`, `knowledge/**`, `implementation-notes.md`, runbooks, the rest of `docs/`.
+
 ## Rules
 - Chat: Russian. All artifacts (code, comments, commits, docs): English.
 - Sources: Telegram only. No X/FB/IG/web code in MVP.
