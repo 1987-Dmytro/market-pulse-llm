@@ -54,6 +54,11 @@ MAX_TOKENS = 256
 PHASE_CAP_USD = 8.00
 DEFAULT_RUN_CAP_USD = 1.50
 UNUSABLE_LIMIT = 0.02
+# Fallbacks are off, so a pinned endpoint's rate limit is ours to wait out. Six
+# attempts is ~46 s of backoff per row; four workers is what stopped `venice/fp8`
+# from returning 429 at all (the first qwen3.5-9b run lost 11 rows to it).
+RETRY_ATTEMPTS = 6
+DEFAULT_CONCURRENCY = 4
 
 # Pinned by `knowledge/decisions/3b-infra-and-precision.md` §(b): fp8 for all three
 # candidates (qwen3.6-27b offers no bf16 anywhere), cheapest healthy fp8 endpoint
@@ -161,7 +166,7 @@ class Client:
             seed=SEED,
         )
         payload, headers = zero_shot.call_with_retry(
-            lambda: zero_shot.post("/chat/completions", body, self.key)
+            lambda: zero_shot.post("/chat/completions", body, self.key), attempts=RETRY_ATTEMPTS
         )
         usage = payload.get("usage") or {}
         cost = float(usage.get("cost") or 0.0)
@@ -438,7 +443,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--dry-run", action="store_true", help="estimate and routing, then stop")
     parser.add_argument("--probe", type=int, default=0, metavar="N", help="N live rows per input")
     parser.add_argument("--max-run-usd", type=float, default=DEFAULT_RUN_CAP_USD)
-    parser.add_argument("--concurrency", type=int, default=8)
+    parser.add_argument("--concurrency", type=int, default=DEFAULT_CONCURRENCY)
     args = parser.parse_args(argv)
 
     row = ROWS[args.model]
