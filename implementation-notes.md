@@ -69,7 +69,7 @@ not scored on the same instances:
 |---|---|---|---|
 | `google/gemma-4-31b-it` | 400 | 250 | 108 |
 | `qwen/qwen3.5-9b` (2nd run) | 400 | 250 | 108 |
-| `qwen/qwen3.6-27b` | **396** | **249** | **103** |
+| `qwen/qwen3.6-27b` (2nd run) | **397** | **249** | **104** |
 | `anthropic/claude-haiku-4.5` (ref) | 400 | 250 | 108 |
 
 So qwen3.6-27b's G1a 0.8522 and gemma's 0.8944 have different denominators, and SPEC §5 requires
@@ -78,10 +78,16 @@ out for macro averaging. **Nothing here is unrecoverable and nothing needs re-sp
 record carries `config.scored_ids_sha256` per input, so a paired re-score on the intersection of
 the four rows is reproducible from the file.
 
-What it would take to close it properly is the operator's call, because the missing rows are
-`missing field: sentiment` from the model itself, not 429s from an endpoint — at temperature 0 a
-re-run is not obviously a fix, and a model that cannot answer 9 rows is telling you something. A
-re-run of qwen3.6-27b costs $0.13 and 20 minutes.
+What it would take to close it properly is the operator's call. **The re-run happened**
+(2026-07-31, $0.1328, operator request) and did not close it: 8 unusable rows instead of 10, the
+holdout still at 3.7% and the record still `gate_anchor_valid: false`. The failures repeat on
+largely the same rows — 3 of 4 comment ids and 3 of 5 holdout ids are shared between the two runs
+— so they are a property of those texts, not network noise, and a third run is not the fix.
+
+The re-run also produced the sharpest evidence for the determinism caveat in ADR §(d): with
+everything held identical — same commit, same prompt hash, same pin, temperature 0, seed 42 —
+qwen3.6-27b's **G1d moved 0.7308 → 0.7605**, nearly 3 pp, from nothing but a different scored
+subset. Both runs are in the file; neither is the "right" one.
 
 ## Batch variant — resolved 2026-07-31
 
@@ -150,3 +156,5 @@ written:**
   $0.7490 of it is the five recorded runs; the remainder is the live sizing probes. Five records
   in the results file.
 - 2026-07-31 — XLM-R smoke on both devices; both over the 60-minute ceiling, full run not started.
+- 2026-07-31 — `qwen/qwen3.6-27b` re-run at operator request: same failure mode, mostly the same
+  rows, still `gate_anchor_valid: false`. Phase spend **$0.9124 of $8.00** across six runs.

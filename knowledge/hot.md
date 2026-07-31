@@ -46,8 +46,8 @@ rev. 3 + amendments 3.1, 3.2 and **3.3**. Registry: 4 live sources. Raw store 6 
 per model across four models is a token bill. **fp8 for all three candidates**, because
 `qwen/qwen3.6-27b` offers no bf16 endpoint anywhere and the rule was written before the probe.
 Pins: gemma-4-31b-it → `parasail/fp8` · qwen3.6-27b → `io-net/fp8` · qwen3.5-9b → `venice/fp8`,
-`allow_fallbacks: false`. **Phase spend $0.7795 of the $8 cap** ($0.7490 across the five
-recorded runs; the rest is the live sizing probes). Gemma 4's licence is
+`allow_fallbacks: false`. **Phase spend $0.9124 of the $8 cap** ($0.8818 across six recorded
+runs; the rest is the live sizing probes). Gemma 4's licence is
 **Apache-2.0**, not the Gemma Terms of Use the candidate list assumed.
 
 **The scorer computes, and it is the only thing that may.** `src/market_pulse/scorer.py` has every
@@ -65,9 +65,11 @@ G1b is `null`: amendment 3.2 defines its slice by the zero-shot base LLM's error
 work. Cross-checked against `sklearn.metrics.f1_score` to 6 decimals.
 
 **Zero-shot rows, 3b (`--last` of each).** gemma-4-31b-it: G1a 0.8944 · G1c 0.7981 · G1d 0.8898
-(relevance 0.9505) · G1e 0.9211 · holdout errs 10 sentiment / 40 sarcasm. qwen3.6-27b: G1a 0.8522 ·
-G1c 0.7681 · G1d 0.7308 (0.9778) · G1e 0.8919 · errs 13 / 64 — but `gate_anchor_valid: false`,
-5 of 108 holdout rows came back without a `sentiment` field. qwen3.5-9b: G1a 0.7745 · G1c 0.6252 ·
+(relevance 0.9505) · G1e 0.9211 · holdout errs 10 sentiment / 40 sarcasm. qwen3.6-27b: G1a 0.8541 ·
+G1c 0.7606 · G1d 0.7605 (0.9778) · G1e 0.8919 · errs 14 / 64 — but `gate_anchor_valid: false`
+in **both** runs: the model returns JSON with no `sentiment` field, on largely the same rows
+(3 of 4 comments and 3 of 5 holdout ids repeated), so a re-run does not fix it. Its G1d moved
+0.7308 → 0.7605 purely from a different scored subset — the determinism caveat, demonstrated. qwen3.5-9b: G1a 0.7745 · G1c 0.6252 ·
 G1d 0.5077 (0.9778) · G1e 0.6476 · errs 26 / 70. Reference row (never anchors a gate)
 claude-haiku-4.5: G1a 0.8708 · G1c 0.7739 · G1d 0.7718 (0.9694) · G1e 0.8537 · errs 21 / 47.
 **No model has been chosen** — that is the Phase 4 gate, with the operator.
