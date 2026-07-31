@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-07-30 11:42:59 (every SessionStart)
+**Auto-refreshed:** 2026-07-30 11:49:19 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+5088f7a chore: ignore .DS_Store
+88ddad7 chore: daily logs and hot-cache refresh
+162876d docs: record the synthetic QA verdict in its ADR
+ab25618 docs: 3b handoff and the executor prompt
 9a83604 docs: quote the achieved numbers, not the targets
-ea6f42c chore: status commit and card/hot refresh
-3e16392 feat: synthetic sarcasm training source
-a9c6d7b docs: amendment 3.3 and decision records
-8bc7d66 docs: record architecture-session decisions
 ```
 
 ## 📋 Recent decisions
@@ -78,15 +78,27 @@ Phase 3 — smaller than 108, unknown until then.
   pre-registered before the sample was drawn; below it the flagged patterns are regenerated once.
   **Closed 2026-07-30 — the operator confirmed the gate passed**; the verdict lives in
   [[synthetic-sarcasm-augmentation]], the CSV cells stay empty. Nothing further is owed here.
-- **Phase 3b — XLM-R + zero-shot LLM on RunPod** ([[gpu-provider-runpod]]). The zero-shot run must
-  also score `data/frozen/sarcasm_holdout.jsonl`: that scoring is what defines the G1b slice and
-  its actual n. The base-model choice is made on those numbers, not on taste (docs/STATUS.md), and
-  the Phase-4 candidate list gets refreshed by live search in 3b.
-  The executor prompt is written and frozen: **`docs/PROMPT-3b.md`, paste without edits**
-  ($20 hard cap · bf16 on A6000 · Haiku reference row · no QLoRA, no scorer changes).
-  It is **untracked** — commit it together with STATUS.md, which already points at it.
-- Operator pre-flight for 3b: top up RunPod (~$25) and the Anthropic console (~$5), then add
-  `ANTHROPIC_API_KEY` to `.env`.
+- **Phase 3b — re-scoped on 2026-07-31: zero-shot runs on the OpenRouter API, no GPU is rented.**
+  The operator funded OpenRouter ($9.84) and left RunPod at $0.00, so the rented-A6000 premise of
+  rev. 1 is gone. RunPod stays the Phase-4 training provider ([[gpu-provider-runpod]]); its top-up
+  is deliberately deferred to the Phase-4 gate. The zero-shot run must still score
+  `data/frozen/sarcasm_holdout.jsonl`: that scoring is what defines the G1b slice and its actual n.
+  The base-model choice is made on those numbers, not on taste (docs/STATUS.md).
+  The executor prompt is rewritten and frozen at **`docs/PROMPT-3b.md` rev. 2, paste without
+  edits** ($8 hard cap · OpenRouter only · fixed candidates · precision RULE · XLM-R on local MPS ·
+  no QLoRA, no scorer changes). Its header keeps the diff against rev. 1.
+- **The precision rule is pre-registered and must not be re-litigated after numbers exist:**
+  probe `/api/v1/models/<slug>/endpoints` for all three candidates first — `bf16` for all three if
+  every candidate offers it, otherwise `fp8` for all three, never mixed, routing pinned with
+  `allow_fallbacks: false`, provider + quantization in every provenance record. The honest caveat
+  (third-party serving, not our hardware) is paid off by ONE zero-shot re-run of the CHOSEN model
+  on our own pod during the Phase-4 smoke.
+- Candidates are FIXED by the operator (live search done 2026-07-31, do not re-select):
+  `google/gemma-4-31b-it`, `qwen/qwen3.6-27b`, `qwen/qwen3.5-9b`. Reference row is
+  `anthropic/claude-haiku-4.5:batch` **through OpenRouter** — no Anthropic key anywhere.
+- Operator pre-flight for 3b: create an OpenRouter key (cap it at $8 in their dashboard too), add
+  `OPENROUTER_API_KEY` to `.env` (template is in `.env.example`), and install `runpodctl`
+  (`brew install runpod/runpodctl/runpodctl`, then `runpodctl doctor`) — money on RunPod waits.
 - The frontier-API reference row (Claude Haiku, ~$1–3) belongs to the same table —
   reference only, gates stay on the three primary baselines
   ([[frontier-api-reference-baseline]]).
