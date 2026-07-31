@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-07-30 11:49:19 (every SessionStart)
+**Auto-refreshed:** 2026-07-31 14:19:16 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+aae7b8f docs: demand explicit XLM-R gate coverage, record the adapter-merge footgun
+58a610d docs: record the bf16-LoRA vs QLoRA fork as a deferred Phase-4 decision
+7b56d32 docs: re-scope 3b onto OpenRouter, pre-register the precision rule
 5088f7a chore: ignore .DS_Store
 88ddad7 chore: daily logs and hot-cache refresh
-162876d docs: record the synthetic QA verdict in its ADR
-ab25618 docs: 3b handoff and the executor prompt
-9a83604 docs: quote the achieved numbers, not the targets
 ```
 
 ## 📋 Recent decisions
@@ -23,9 +23,9 @@ ab25618 docs: 3b handoff and the executor prompt
 
 ## 📅 Recent daily logs
 
+- `2026-07-31.md`
 - `2026-07-30.md`
 - `2026-07-28.md`
-- `2026-07-27.md`
 
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 
