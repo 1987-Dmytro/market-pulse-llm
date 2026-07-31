@@ -102,6 +102,15 @@ Phase 3 — smaller than 108, unknown until then.
 - The frontier-API reference row (Claude Haiku, ~$1–3) belongs to the same table —
   reference only, gates stay on the three primary baselines
   ([[frontier-api-reference-baseline]]).
+- **Open Phase-4 fork raised by the operator 2026-07-31 — bf16 LoRA vs 4-bit QLoRA.** Plain LoRA
+  on an unquantized base is on the table and is decided at the Phase-4 gate together with the
+  model. VRAM (base + adapters + activations): Gemma-4-31B ~70 GB bf16 / ~24 GB 4-bit ·
+  Qwen3.6-27B ~62 / ~21 · **Qwen3.5-9B ~22 / ~8, so bf16 fits a 48 GB A6000.** Training cost is
+  NOT the deciding argument — the dataset is ~2 950 short rows, a run is 1-1.5 h, and A6000
+  QLoRA ($0.53/h) vs A100-80 bf16 LoRA ($1.39/h) differ by single dollars. The principle is
+  train-in-the-precision-you-serve: an adapter trained against a quantized base and merged into
+  bf16 weights drifts, and so does the mirror case. Details and the three branches are in
+  docs/STATUS.md.
 - Still open from Phase 2: dataset cards for the public augmentation datasets + licence check.
 
 ## 🚧 Blockers
