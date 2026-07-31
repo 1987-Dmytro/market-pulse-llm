@@ -12,9 +12,11 @@ reference row. Decisions with a lifetime beyond this step live in
    "Batched with bounded concurrency" is read as concurrency, not prompt-packing.
 2. **The prompt is the guideline, compressed.** `docs/annotation/comments.md` and
    `docs/annotation/posts.md` are the definition of the labels, so the zero-shot prompt states
-   those rules — including the ones a model cannot guess (retailer's own replies are `unclear`,
-   dairy as an ingredient is not relevant, `launch` beats `promo` when both apply). Giving a
-   zero-shot model *less* than the annotator had would measure prompt starvation, not the model.
+   those rules — including the ones a model cannot guess: a promo-mechanic complaint is not
+   `price`, a service-only complaint carries no product intent, dairy as an ingredient is not
+   relevant, and `launch` beats `promo` when both apply. Giving a zero-shot model *less* than the
+   annotator had would measure prompt starvation, not the model. The guideline's `unclear` rules
+   are the exception and are deliberately absent — see 3.
 3. **`unclear` is not offered to the model.** The frozen test sets contain zero `unclear` rows
    (400/400, 250/250, 108/108 scoreable), so an `unclear` option could only ever cost a model a
    row. Gold `unclear` handling stays where it belongs — inside the scorer.
