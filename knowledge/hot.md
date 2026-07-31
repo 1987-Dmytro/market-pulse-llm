@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-07-31 18:05:17 (every SessionStart)
+**Auto-refreshed:** 2026-07-31 19:56:42 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+ffcb33e chore: the day's log, hot.md and the index as /close left them
+87e3327 feat: the xlm-roberta-base row, 101 min on CPU
 6d4deb3 chore: hot.md at the gate's close, plus the team-lead files as they were left
 8918709 feat: every scoring run dumps its per-row predictions
 632b40c docs: the base-model gate, and the bound that closes the unpaired row
-6017721 docs: qwen3.6-27b re-run, and STATUS.md brought up to 3b's close
-5b723af docs: the three candidate rows are not paired, and the install form used
 ```
 
 ## 📋 Recent decisions
@@ -31,7 +31,7 @@
 
 # Hot Cache — curated
 
-**Last update:** 2026-07-31 (`/close`; edited by hand — the section above is auto-generated, do NOT touch the marker)
+**Last update:** 2026-07-31 19:52 (`/save` checkpoint, after the XLM-R run landed; edited by hand — the section above is auto-generated, do NOT touch the marker)
 
 ## 🔥 What's Hot
 
@@ -50,17 +50,20 @@ closed by a **worst-case bound analysis at $0**, and every head survived: bound 
 against a 0.0298 same-config swing measured on a re-run — on `ru` the two are tied inside
 third-party noise, and the selection rests on the other four gaps.
 
-**XLM-R was IN FLIGHT at close** — launched 2026-07-31 17:43 on this Mac's CPU, PID 3931,
-projected 128.0 min. First job of the morning is `tail -n 30 xlmr_full_run.log`, then
-`scripts/show_results.py --model xlm-roberta-base`, then commit the record. See Blockers for what
-a finished and a dead run look like.
+**XLM-R is DONE and committed** — launched 17:43 on this Mac's CPU, ended **19:24 in 101.0 min
+against its own 128.0 projection**, no crash and no restart. Row `87e3327`, `make check` green
+(202 tests). **The Phase 3 baseline table is now complete**, and the row does not move the Phase 4
+choice: XLM-R beats `tfidf-logreg` on G1a by 0.0990 and G1d by 0.0694, ties it on G1c
+(0.6007 vs 0.6000), and is under `gemma-4-31b-it` on every comparable cell.
 
 **The baseline table so far** (`results/baselines.json`, read only via `scripts/show_results.py`),
 G1a overall / G1c / G1d 3-class / G1e:
 `tfidf-logreg` 0.6834 / 0.6000 / 0.6653 / 0.1964 · **gemma-4-31b-it 0.8944 / 0.7981 / 0.8898 /
 0.9211** · qwen3.6-27b 0.8541 / 0.7606 / 0.7605 / 0.8919 (`gate_anchor_valid: false`) ·
-qwen3.5-9b 0.7745 / 0.6252 / 0.5077 / 0.6476 · ref `claude-haiku-4.5` 0.8708 / 0.7739 / 0.7718 /
-0.8537. G1b is `null` everywhere: its fix-rate needs a fine-tune. **The G1b slice = the union of
+qwen3.5-9b 0.7745 / 0.6252 / 0.5077 / 0.6476 · **xlm-roberta-base 0.7824 / 0.6007 / 0.7347 /
+NOT COVERED** (per-language G1a: `ua` 0.7859 · `ru` 0.7507 · `other` 0.7575; relevance 0.6610
+reported beside G1d, not gated) · ref `claude-haiku-4.5` 0.8708 / 0.7739 / 0.7718 / 0.8537.
+G1b is `null` everywhere: its fix-rate needs a fine-tune. **The G1b slice = the union of
 sentiment ∪ sarcasm errors, and it is defined by the chosen model's re-run on our own pod during
 the Phase 4 smoke** — OpenRouter's 40/108 is a preview, not the slice.
 
@@ -85,33 +88,38 @@ QA passed 2026-07-30** ([[synthetic-sarcasm-augmentation]]). **G1b's holdout** i
 
 ## ⏭️ Next
 
-1. **Commit the XLM-R record** (see What's Hot). Its **G1b is `null`** and its **G1e says NOT
-   COVERED** — "not attempted", never "scored zero", in any comparison table.
-2. **Close Phase 3** — team lead's, once the baseline table is complete.
-3. **RunPod top-up**, deferred to the Phase 4 gate by operator decision, still owed before any
+1. **Close Phase 3** — team lead's, and **no longer blocked**: the baseline table is complete as of
+   19:24. Carry both empties across verbatim — XLM-R's **G1b is `null`** and its **G1e says NOT
+   COVERED**, "not attempted", never "scored zero", in any comparison table.
+2. **RunPod top-up**, deferred to the Phase 4 gate by operator decision, still owed before any
    training ([[gpu-provider-runpod]]).
-4. **Phase 4 briefing.** Settles the LoRA fork and schedules the chosen model's **zero-shot re-run
+3. **Phase 4 briefing.** Settles the LoRA fork and schedules the chosen model's **zero-shot re-run
    on our own pod** — the cross-check against its third-party-served row *and* the run that defines
    the G1b slice. **Working hypothesis: branch (2), 4-bit QLoRA on an A6000** — Gemma-4-31B needs
    ~70 GB in bf16, which does not fit a 48 GB A6000, and production is the quantized serverless
    path decided 2026-07-28. Training cost is NOT the deciding argument (~2 950 short rows, 1–1.5 h,
    single dollars apart); the criterion is **train in the precision you serve**. Confirmed at the
    briefing, not before. Three branches in `docs/STATUS.md`.
-5. Still open from Phase 2: dataset cards for the public augmentation datasets + licence check.
+4. Still open from Phase 2: dataset cards for the public augmentation datasets + licence check.
 
 ## 🚧 Blockers
 
 **None.** The day's one blocker — XLM-R over its 60-minute ceiling on both devices — was lifted by
-the operator and the run launched the same evening.
+the operator, the run launched the same evening and **finished clean in 101.0 min**.
 
-**Reading the overnight run.** Finished: the log ends with `full run took … min (projected 128.0)`
-and `wrote results/baselines.json`. Dead: it stops mid-head with no such line and no new record —
-nothing is corrupted, the file is written only at the end, and it restarts with
-`caffeinate -i nohup python3.11 scripts/train_xlmr_baseline.py --device cpu --time-budget-min 600
-> xlmr_full_run.log 2>&1 &`. **`caffeinate -i` suppresses idle sleep only** — lid open, Mac on
-mains. The measurement that produced the blocker still stands and is why it runs overnight:
-2 193 steps across 9 heads, **CPU 3.5 s/step → ~130 min**, **MPS 48.1 s/step → 1764 min** (and MPS
-OOMs at 9.07 GiB unless the 250k×768 embedding matrix is frozen, which it is).
+**The device measurement stands** and is the reason any re-run is an evening job, not an
+interactive one: 2 193 steps across 9 heads, **CPU 3.5 s/step → ~130 min projected, 101 actual**, **MPS
+48.1 s/step → 1764 min** (and MPS OOMs at 9.07 GiB unless the 250k×768 embedding matrix is frozen,
+which it is). A re-run is `caffeinate -i nohup python3.11 scripts/train_xlmr_baseline.py --device
+cpu --time-budget-min 600 > xlmr_full_run.log 2>&1 &` — **`caffeinate -i` suppresses idle sleep
+only**, lid open and Mac on mains. `results/baselines.json` is written only at the end, so a run
+killed mid-head corrupts nothing.
+
+**Watching a long unattended run: check the process, not the log.** Poll `kill -0 <pid>` on a
+short interval and split the verdict by whether the success marker (`wrote
+results/baselines.json`) reached the log; a grep for the success line alone is silent through a
+crash, and an hourly-only tick is an hour of blindness. The hourly heartbeat earns its place by
+carrying the current head plus the log's mtime — that is what distinguishes "running" from "hung".
 
 What must NOT happen even now that the clock is open: fewer epochs, a shared-encoder rewrite, a
 shorter `MAX_LENGTH`. Each is tuning a pre-registered baseline to a wall clock.
