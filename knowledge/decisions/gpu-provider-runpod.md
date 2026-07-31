@@ -30,3 +30,16 @@ the European ones remain the answer if data residency ever becomes a requirement
 
 **Sources:** docs/STATUS.md, "~~GPU-провайдер~~ РЕШЕНО 2026-07-28" · docs/SPEC.md §7 ·
 [[2026-07-28]] · related [[architecture-stack]].
+
+## Amendment 2026-07-31 — 3b rents nothing; the provider decision is untouched
+
+Phase 3b was the step this record expected to rent the first GPU. It no longer does: the zero-shot
+baselines run through OpenRouter instead ([[3b-infra-and-precision]]), because 758 short requests
+per model across four models is a token bill, not a GPU-hour bill. **RunPod remains the decided
+provider for the Phase 4 QLoRA training**, on the same numbers and the same reasoning as above —
+nothing here is reversed, only its first invoice moves. By operator decision the RunPod top-up is
+deferred from the 3b pre-flight to the **Phase 4 gate**.
+
+One obligation lands back on this provider: the model chosen at the Phase 4 gate gets **one
+zero-shot re-run on the rented GPU during the Phase 4 smoke**, as the cross-check against its
+third-party-served OpenRouter row. Budget the smoke accordingly.
