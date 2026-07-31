@@ -165,6 +165,18 @@ amendment 3.3, see [[g1d-gate-clarification-3-3]].
   no test may import it or `make check` stops being runnable on a bare checkout.
 - `RAW_STORE_SALT` in `.env` must never be rotated: a new salt orphans every `sender_anon_id`.
 - `packaging` has 19 rows in the test set — G1c is thin by construction, not by accident.
+- **Do not merge a QLoRA adapter into bf16 base weights without measuring it (Phase 5 footgun).**
+  An adapter trained against a 4-bit NF4 base learned to compensate THAT base's quantization
+  error; merged into unquantized weights it is compensating errors that are no longer there.
+  The drift is second-order, not catastrophic — but it is measurable, so measure it: score the
+  final artefact on the frozen test set in the EXACT configuration that will serve production.
+  The safe default is to serve the same 4-bit base plus the adapter, unmerged. The mirror case is
+  milder: bf16 -> fp8 at serving time is a short hop and needs no special treatment, which is why
+  ordinary LoRA is fine when production runs fp8. Rule of thumb: the further the production format
+  sits from the training format, the more mandatory it is to train against it.
+- XLM-R is a classifier and cannot do G1e brand extraction without a token-classification head.
+  If its row leaves G1e empty, that cell means "not attempted", not "scored zero" — the two must
+  never be conflated in a comparison table.
 
 ## 🐞 Known harness bug
 Fixed 2026-07-28: `knowledge/templates/daily-log.md` now carries `{{DATE}}`, the placeholder

@@ -113,6 +113,13 @@ TASKS
    Put torch/transformers in a new `xlmr` optional-dependency extra in
    pyproject.toml, mirroring how `baseline` isolates sklearn: `make check`
    must stay green on a bare checkout and no test may import them.
+   GATE COVERAGE — state it explicitly, do not leave it implicit: XLM-R is a
+   classifier, so name in your report which of G1a-G1e it covers and which it
+   does NOT (G1e brand extraction is a span/NER task, not classification —
+   if you do not implement a token-classification head for it, say so and
+   leave the cell as an explicit "not covered by this baseline", never as a
+   silent blank or a zero). A blank cell that reads as "scored badly" when it
+   means "was never attempted" is a reporting bug.
 
 6. Offline tests for the pure parts: prompt building, output parsing
    (including the failure counter), routing-config assembly, result-record
