@@ -45,6 +45,17 @@ Every departure is logged here. Silence is not compliance.
 | D3 | Candidate list annotated "`google/gemma-4-31b-it` (~31B dense, **Gemma Terms of Use**)" | Recorded as **Apache-2.0**. | "record the licence you actually find". The HF card says `license: apache-2.0` and Google's own `gemma_4_license` page is titled "Apache License 2.0". The candidate was not substituted; only the licence annotation differs. |
 | D4 | — (addition, not a departure) | `gate_anchor_valid: false` is written into any record where unusable rows exceed 2% of an input. | G1d and G1e are defined *relative to this number*, so a run with holes must not become an anchor by default. Pre-registered before the first request; ADR §(e). |
 | D5 | the frontier row's slug given as `anthropic/claude-haiku-4.5:batch` | The reference row runs on **`anthropic/claude-haiku-4.5`** — the synchronous slug for the same model. See "Batch variant" below. | `:batch` 404s on `/chat/completions`. Costs ~$0.24 more on a row that anchors no gate; the alternative was an asynchronous second code path with a 24 h worst case. |
+| D6 | "Atomic commits … (a) … (b) … (c) … (d)" | **Seven** commits, not four. The four named ones plus: `fix: patience over parallelism` (the 429 fix, after the first run), `feat: precision probe as a runner mode` (making task 2 reproducible as a command), and `chore: 3b zero-shot results and the phase spend ledger`. | The first two are real work that arrived after (b) was already committed and squashing them would have orphaned the commit hash a results record already names. The third is SPEC §8, which gates Phase 3 on "results file committed". |
+| D7 | "XLM-R supervised baseline — LOCAL, on this Mac (**Apple MPS**)" | The script's device default is **`cpu`**; `--device mps` still exists. | Measured, not assumed: 3.503 s/step on the CPU against 48.117 s/step on MPS, and MPS OOMs at its 9.07 GiB allocator ceiling. Committing an MPS default would hand the next operator a 29-hour run. |
+| D8 | — (config decision forced by hardware) | XLM-R's **word-embedding matrix is frozen** (192M of 278M parameters). | AdamW's two fp32 moments for a 250k × 768 matrix are exactly what the MPS allocator refuses, and 1,446 training rows cannot move a 250k-row vocabulary anyway. Chosen before any number existed and recorded in `config.frozen_parameters`, not left silent. |
+| D9 | "train on REAL sources only (comments_train.jsonl + sarcasm_candidates.jsonl…)" | The two T2 heads also train on **`data/frozen/posts_train.jsonl`** (749 scoreable rows). | The named pair is the T1 pool, and the sentence's subject is excluding `synthetic_sarcasm.jsonl` — which was not opened. G1d is a T2 gate and cannot be covered without T2 training data; `scripts/run_baseline.py` uses the same three sources. `synthetic_sarcasm.jsonl` and `sarcasm_holdout_pool.jsonl` were not read by either script. |
+
+**One imprecision inside a written record, noted rather than edited.** The `gate_anchor_valid`
+note says "this run must not anchor G1d/G1e" whichever input lost the rows. For
+`qwen/qwen3.6-27b` the input over 2% is `sarcasm_holdout` (5 of 108, 4.6%), which bears on the
+**G1b slice**, not on G1d/G1e — `posts_test` lost 0.4% there. The per-input shares in
+`diagnostics.failures` are the authority; the note is coarse. The record is append-only and is not
+being hand-corrected.
 
 ## Batch variant — resolved 2026-07-31
 
@@ -64,6 +75,48 @@ modes, for the one row in the table that anchors no gate. The reference row ther
 synchronous, ~$0.48 instead of ~$0.24. The runner refuses the `:batch` slug with this explanation
 rather than letting 758 rows 404 one at a time.
 
+## XLM-R: why the full run did not start
+
+The contract's own stop condition, not a departure from it: *"If the estimate exceeds 60 minutes,
+STOP and report the estimate instead of starting the full run."*
+
+The plan is 9 heads, **2,193 training steps** and **3,516 eval rows** (sentiment and sarcasm each
+predict `comments_test` + the holdout; five intent heads predict `comments_test`; relevance and
+post_type predict `posts_test`). The timed smoke trains 12 real steps on the sentiment head, drops
+the first (lazy kernel compilation) and measures the rest:
+
+| device | s/step | ms/eval row | projected full run |
+|---|---|---|---|
+| `cpu` | 3.503 | 47.3 | **130.8 min** |
+| `mps` | 48.117 | 90.8 | **1764.0 min** (29.4 h) |
+
+Both are over the ceiling, so nothing was trained and no `xlm-roberta-base` record exists in
+`results/baselines.json`. Treat 130.8 min as a **floor**: the rate was measured on the sentiment
+head over comments (mean 87 chars), and the two T2 heads train on posts (mean 278 chars) with
+dynamic padding, so their 282 steps will run slower than the extrapolation assumes.
+
+Three things were *not* done to make it fit, because each would be tuning a pre-registered
+baseline to a wall clock: fewer epochs, a shared-encoder multi-head model in place of nine
+independent fine-tunes, and a shorter `MAX_LENGTH`. That call is the operator's.
+
+**Gate coverage of this baseline, stated here because the record that would state it was never
+written:**
+
+| gate | status |
+|---|---|
+| G1a sentiment | covered |
+| G1b sarcasm slice | `null` — amendment 3.2 defines the slice by the *zero-shot* base LLM's errors, and a fix-rate needs a fine-tune. Same reason TF-IDF's is `null` |
+| G1c intents | covered |
+| G1d post type | covered (relevance reported beside it, not gated — amendment 3.3) |
+| G1e brand extraction | **NOT COVERED — not attempted.** Brand extraction is span extraction; this baseline is a sequence classifier and no token-classification head was trained for it. Not a zero, not a blank |
+
 ## Build log
 
 - 2026-07-31 — precision probe run, `fp8` branch fired (ADR §(b)); ADR + INDEX written.
+- 2026-07-31 — prompts, harness and offline tests; live sizing probes on all four models
+  (`reasoning: {"enabled": false}` confirmed honoured, `reasoning_tokens: 0` everywhere).
+- 2026-07-31 — first `qwen/qwen3.5-9b` run at 8 workers lost 11 rows to HTTP 429; the 2% guard
+  marked it `gate_anchor_valid: false`. Concurrency dropped to 4, retries raised to 6.
+- 2026-07-31 — four scoring runs: qwen3.5-9b, gemma-4-31b-it, qwen3.6-27b, and the Haiku
+  reference row. **Phase spend $0.7569 of the $8 cap**, five records in the results file.
+- 2026-07-31 — XLM-R smoke on both devices; both over the 60-minute ceiling, full run not started.

@@ -132,6 +132,16 @@ the base model "misclassifies", and the holdout carries two labels — `sentimen
 The executor does not pick the reading. Every candidate's run reports **both** error sets and
 their union with separate `n`, and the choice belongs to the operator at the Phase 4 gate.
 
+## (f) Which row anchors G1d and G1e
+
+G1d and G1e are worded "≥ zero-shot base LLM + 10 pp", and 3b produces **three** zero-shot rows
+with three different numbers. The anchor is not the best of them and not their mean: it is the row
+belonging to **whichever model the Phase 4 gate selects as the base model** — the same model
+§(d) commits to re-running zero-shot on our own GPU during the Phase 4 smoke. Until that selection
+is made, G1d and G1e have no anchor, and no run in `results/baselines.json` should be read as
+having supplied one. A row marked `gate_anchor_valid: false` cannot serve even after selection
+without an operator decision.
+
 **Sources:** docs/PROMPT-3b.md rev. 2 (operator constraints, 2026-07-31) · docs/SPEC.md §5, §7,
 amendments 3.1–3.3 · OpenRouter `/api/v1/models/<slug>/endpoints`, probed 2026-07-31 ·
 related [[gpu-provider-runpod]], [[frontier-api-reference-baseline]], [[architecture-stack]].

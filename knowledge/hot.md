@@ -31,15 +31,23 @@ aae7b8f docs: demand explicit XLM-R gate coverage, record the adapter-merge foot
 
 # Hot Cache — curated
 
-**Last update:** 2026-07-30 11:45 (edited by hand / `/save`; the section above is auto-generated — do NOT touch the marker)
+**Last update:** 2026-07-31 (edited by hand / `/save`; the section above is auto-generated — do NOT touch the marker)
 
 ## 🔥 What's Hot
-**Phases 1 and 2 are DONE and accepted** (2026-07-28); **Phase 3a is done** — 142 tests,
-`make check` green after every commit. SPEC APPROVED rev. 3 + amendments 3.1, 3.2 and **3.3**.
-Registry: 4 live sources. Raw store 6 057 posts + 11 338 comments. Decision records:
-`knowledge/decisions/` ([[INDEX]]), 14 ADRs ([[architecture-stack]], [[gpu-provider-runpod]],
-[[frontier-api-reference-baseline]], [[g1d-gate-clarification-3-3]],
-[[synthetic-sarcasm-augmentation]]).
+**Phases 1 and 2 are DONE and accepted** (2026-07-28); **Phase 3a is done**; **3b's zero-shot
+half is done** (2026-07-31) — 196 tests, `make check` green after every commit. SPEC APPROVED
+rev. 3 + amendments 3.1, 3.2 and **3.3**. Registry: 4 live sources. Raw store 6 057 posts +
+11 338 comments. Decision records: `knowledge/decisions/` ([[INDEX]]), 15 ADRs
+([[architecture-stack]], [[gpu-provider-runpod]], [[frontier-api-reference-baseline]],
+[[g1d-gate-clarification-3-3]], [[synthetic-sarcasm-augmentation]],
+[[3b-infra-and-precision]]).
+
+**3b runs on OpenRouter, not on a rented GPU** ([[3b-infra-and-precision]]): 758 short requests
+per model across four models is a token bill. **fp8 for all three candidates**, because
+`qwen/qwen3.6-27b` offers no bf16 endpoint anywhere and the rule was written before the probe.
+Pins: gemma-4-31b-it → `parasail/fp8` · qwen3.6-27b → `io-net/fp8` · qwen3.5-9b → `venice/fp8`,
+`allow_fallbacks: false`. **Phase spend $0.7569 of the $8 cap.** Gemma 4's licence is
+**Apache-2.0**, not the Gemma Terms of Use the candidate list assumed.
 
 **The scorer computes, and it is the only thing that may.** `src/market_pulse/scorer.py` has every
 gate function plus a public `macro_f1` so diagnostics use the same arithmetic. Two conventions the
@@ -54,6 +62,14 @@ function without one now fails the suite.
 G1e 0.1964 (tp 11 · fp 65 · fn 25, low by construction — the extractor only knows the watchlist).
 G1b is `null`: amendment 3.2 defines its slice by the zero-shot base LLM's errors, which is 3b
 work. Cross-checked against `sklearn.metrics.f1_score` to 6 decimals.
+
+**Zero-shot rows, 3b (`--last` of each).** gemma-4-31b-it: G1a 0.8944 · G1c 0.7981 · G1d 0.8898
+(relevance 0.9505) · G1e 0.9211 · holdout errs 10 sentiment / 40 sarcasm. qwen3.6-27b: G1a 0.8522 ·
+G1c 0.7681 · G1d 0.7308 (0.9778) · G1e 0.8919 · errs 13 / 64 — but `gate_anchor_valid: false`,
+5 of 108 holdout rows came back without a `sentiment` field. qwen3.5-9b: G1a 0.7745 · G1c 0.6252 ·
+G1d 0.5077 (0.9778) · G1e 0.6476 · errs 26 / 70. Reference row (never anchors a gate)
+claude-haiku-4.5: G1a 0.8708 · G1c 0.7739 · G1d 0.7718 (0.9694) · G1e 0.8537 · errs 21 / 47.
+**No model has been chosen** — that is the Phase 4 gate, with the operator.
 
 **Frozen test sets are at v2** — `docs/frozen-testsets.md` carries the hashes, the changelog
 and the per-gate depth. comments 400/1600, posts 250/750, thread-disjoint, zero `unclear` in
@@ -72,7 +88,21 @@ files (test and holdout included), nothing repeated inside it, no frame over 8%.
 thread-disjoint from test and train. The slice is whatever the base model gets wrong at
 Phase 3 — smaller than 108, unknown until then.
 
-## ⏭️ Next
+## ⏭️ Next (rewritten 2026-07-31)
+- **Phase 4 model-choice gate, with the operator**, off the table above. Two questions come with
+  it: which reading of "misclassifies" defines the G1b slice (sentiment errors, sarcasm errors or
+  their union — all three are in every record, [[3b-infra-and-precision]] §(e)), and whether
+  qwen3.6-27b's `gate_anchor_valid: false` run is re-run before it can anchor anything.
+  Until a base model is picked, **G1d and G1e have no anchor** — §(f).
+- **XLM-R full run is owed and was not started**: the timed smoke projects **130.8 min** on this
+  Mac's CPU and **1764 min** on MPS, both over the 60-minute ceiling, so `scripts/eval_zero_shot.py`'s
+  sibling `scripts/train_xlmr_baseline.py` stopped and reported instead. It needs a pod, or a
+  raised ceiling (`--time-budget-min`). Nothing about the baseline was tuned to fit the clock.
+- RunPod top-up moved to the Phase 4 gate by operator decision; the chosen model owes **one
+  zero-shot re-run on our own GPU during the Phase 4 smoke** as the cross-check against its
+  third-party-served row.
+
+## ⏭️ Next (from 3a, still open)
 - **Operator QA of the generated rows** — `data/annotation/synthetic_qa.csv`, 50 rows, seed 42,
   `operator_verdict` per row (`ok` / `unclear` / `fix:field=value`). The gate is **≥80% `ok`**,
   pre-registered before the sample was drawn; below it the flagged patterns are regenerated once.
@@ -114,7 +144,14 @@ Phase 3 — smaller than 108, unknown until then.
 - Still open from Phase 2: dataset cards for the public augmentation datasets + licence check.
 
 ## 🚧 Blockers
-**None.** 3b is free to start.
+**One, and it is hardware.** The XLM-R baseline cannot run here: 2 193 training steps across
+9 heads project **130.8 min** on this Mac's CPU (3.503 s/step) and **1764 min** on MPS
+(48.117 s/step, and MPS OOMs at 9.07 GiB unless the 250k×768 embedding matrix is frozen, which it
+is). The 60-minute ceiling is the operator's, so the script stopped and reported. Unblocking is a
+pod or a raised `--time-budget-min` — **not** fewer epochs, not a shared-encoder rewrite, not a
+shorter `MAX_LENGTH`; each of those is tuning a pre-registered baseline to a wall clock.
+
+The zero-shot half is not blocked and is finished.
 
 The synthetic QA gate closed on 2026-07-30: the operator confirmed ≥80% `ok`, and
 [[synthetic-sarcasm-augmentation]] now carries the verdict, so `synthetic_sarcasm.jsonl` is
@@ -133,6 +170,23 @@ rationale, see [[holdout-residual-thread-leak-accepted]]; *which head G1d reads*
 amendment 3.3, see [[g1d-gate-clarification-3-3]].
 
 ## ⚠️ Footguns for the next run
+- **`results/spend_3b.json` is the $8 cap's anchor, and it must not be regenerated.** It stores
+  the lifetime OpenRouter usage as of the first 3b request; delete it and the next run re-anchors
+  at today's usage, which silently resets the phase counter to zero.
+- **Never use `anthropic/claude-haiku-4.5:batch`** — OpenRouter serves it only through
+  `/api/beta/batches` and it 404s on `/chat/completions`. The runner refuses the slug on purpose.
+- **The reference row is marked in the record, not just in the filename.** `build_record` rewrites
+  every `gate` field of a `--reference-only` run to `ref`, so a lookup for `G1d` cannot find it.
+  Do not "fix" those entries back to gate ids.
+- **A run that trips the cap writes no record.** That is deliberate: a partial run must never
+  become a gate anchor. Do not re-run with a bigger `--max-run-usd` to get the record.
+- **`GET /api/v1/generation?id=` 404s for our generations** at every delay tried (2 s to 60 s).
+  Spend tracking reads `usage.cost` off the response and reconciles against `/credits`; do not
+  "restore" the generation-endpoint path on the assumption that it works.
+- **Endpoint health readings are point-in-time.** The pins in [[3b-infra-and-precision]] were
+  chosen on `status`/uptime as read at pin time; `deepinfra/fp8` was deranked then and healthy
+  hours later. The precision *rule* is pre-registered; the provider choice is not a number and
+  re-pinning is legal — but say so if you do it.
 - **`scripts/freeze_testsets.py --force` would rebuild the split and destroy v2.** The batch is
   synced, so labels are safe, but a fresh draw differs from v2 by 8 rows. Do not run it.
 - `scripts/mine_sarcasm_candidates.py --force` overwrites 746 hand labels and
