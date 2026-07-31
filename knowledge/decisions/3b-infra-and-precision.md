@@ -80,7 +80,10 @@ The Haiku reference row cannot join the pin: every Anthropic-served endpoint rep
 `quantization: "unknown"`, so there is nothing to pin. It is routed to the first-party `anthropic`
 endpoint with `allow_fallbacks: false` and no `quantizations` clause. This does not violate "never
 mix precisions across candidates" — Haiku is not a candidate, it anchors no gate, and its number is
-reference only.
+reference only. It also runs on the **synchronous** slug `anthropic/claude-haiku-4.5`, not the
+half-price `:batch` variant the 3b prompt named: OpenRouter serves `:batch` only through
+`/api/beta/batches`, which returns 404 on `/chat/completions` and is asynchronous by design. Same
+model, same prompt, ~$0.24 more, and no second async code path for a row that anchors nothing.
 
 ## (c) The $8 cap
 

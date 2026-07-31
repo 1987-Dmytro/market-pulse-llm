@@ -21,6 +21,13 @@ dev = [
 baseline = [
     "scikit-learn>=1.5",
 ]
+# Only scripts/train_xlmr_baseline.py needs these, and they are ~2.5 GB of wheels.
+# Isolated exactly like `baseline`: no test imports torch or transformers, so
+# `make check` stays green on a bare checkout.
+xlmr = [
+    "torch>=2.4",
+    "transformers>=4.44",
+]
 
 [build-system]
 requires = ["setuptools>=68"]
@@ -43,6 +50,7 @@ line-length = 100
 "scripts/backfill.py" = ["E402"]
 "scripts/check_synthetic.py" = ["E402"]
 "scripts/entry_check.py" = ["E402"]
+"scripts/eval_zero_shot.py" = ["E402"]
 "scripts/freeze_testsets.py" = ["E402"]
 "scripts/make_annotation_batch.py" = ["E402"]
 "scripts/mine_sarcasm_candidates.py" = ["E402"]
@@ -52,4 +60,5 @@ line-length = 100
 "scripts/make_synthetic_qa.py" = ["E402"]
 "scripts/run_baseline.py" = ["E402"]
 "scripts/tg_login.py" = ["E402"]
+"scripts/train_xlmr_baseline.py" = ["E402"]
 "scripts/validate_annotations.py" = ["E402"]
