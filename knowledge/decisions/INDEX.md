@@ -26,3 +26,4 @@ docs/STATUS.md; these are the English long form with the numbers.
 | 2026-07-28 | [[g1d-gate-clarification-3-3]] — G1d gates the 3-class post type; relevance reported only | accepted |
 | 2026-07-28 | [[synthetic-sarcasm-augmentation]] — 600 synthetic sarcastic rows, ablation-gated | accepted |
 | 2026-07-31 | [[3b-infra-and-precision]] — 3b zero-shot on OpenRouter at pinned fp8, $8 cap | accepted |
+| 2026-07-31 | [[phase4-base-model-gate]] — base model gemma-4-31b-it; the unpaired 27B row cannot flip it | accepted |

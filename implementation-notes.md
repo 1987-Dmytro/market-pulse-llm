@@ -52,6 +52,15 @@ Every departure is logged here. Silence is not compliance.
 | D8 | — (config decision forced by hardware) | XLM-R's **word-embedding matrix is frozen** (192M of 278M parameters). | AdamW's two fp32 moments for a 250k × 768 matrix are exactly what the MPS allocator refuses, and 1,446 training rows cannot move a 250k-row vocabulary anyway. Chosen before any number existed and recorded in `config.frozen_parameters`, not left silent. |
 | D9 | "train on REAL sources only (comments_train.jsonl + sarcasm_candidates.jsonl…)" | The two T2 heads also train on **`data/frozen/posts_train.jsonl`** (749 scoreable rows). | The named pair is the T1 pool, and the sentence's subject is excluding `synthetic_sarcasm.jsonl` — which was not opened. G1d is a T2 gate and cannot be covered without T2 training data; `scripts/run_baseline.py` uses the same three sources. `synthetic_sarcasm.jsonl` and `sarcasm_holdout_pool.jsonl` were not read by either script. |
 
+### Deviations from `docs/PROMPT-3c.md` (rev. 1) and its team-lead addendum
+
+| # | Contract text | What was done | Why |
+|---|---|---|---|
+| E1 | "use the full-run command from `scripts/runbook_3b.md` wrapped for an unattended night" | The launched command adds **`--time-budget-min 600`**. | G4 lifted the *operator's* ceiling; the 60-minute ceiling is also **code** — `train_xlmr_baseline.py:307` prints the projection and refuses to train above it, exiting **3**. The runbook command as written would have produced a log, no process and no run. Nothing else about the command changed: same script, `--device cpu`, no epoch / `MAX_LENGTH` / architecture change. |
+| E2 | "Append a dated subsection … the original sentence stays as written" | The original sentence was **restored verbatim** first — a `/save` edit earlier the same day had rewritten it away, together with its stale `0.8522` — and the correction subsection sits at the **end** of that section rather than immediately under the sentence. | The claim has to be readable next to its correction, so the rewrite had to be undone. The subsection is a heading: placing it mid-section would have swallowed the two paragraphs that follow the sentence into "Correction". |
+| E3 | "Commit the modified stragglers (`knowledge/daily_logs/2026-07-31.md`, `knowledge/index.md`)" plus VERIFY's "only the running log untracked" | `docs/STATUS.md` and `docs/PROMPT-3c.md` were also committed — **byte-for-byte as the team lead left them**, zero lines authored here. | The addendum forbids *editing* those files, and task 5 requires a clean tree before the launch. Leaving them modified/untracked would fail that precondition; editing them is what is forbidden, and none was done (`git show --stat` and `git diff` on the commit both show it). |
+| E4 | "the record and your report must state per-gate coverage explicitly" | Stated in the report and in the run's own record, but **the record does not exist yet tonight** — it is written when the run finishes. | The run is launched last and finishes unattended. Coverage is pre-registered in `train_xlmr_baseline.py` (G1b `null`, G1e the explicit "NOT COVERED" string) so the finished record cannot come out silent on it. |
+
 **One imprecision inside a written record, noted rather than edited.** The `gate_anchor_valid`
 note says "this run must not anchor G1d/G1e" whichever input lost the rows. For
 `qwen/qwen3.6-27b` the input over 2% is `sarcasm_holdout` (5 of 108, 4.6%), which bears on the
@@ -88,6 +97,29 @@ The re-run also produced the sharpest evidence for the determinism caveat in ADR
 everything held identical — same commit, same prompt hash, same pin, temperature 0, seed 42 —
 qwen3.6-27b's **G1d moved 0.7308 → 0.7605**, nearly 3 pp, from nothing but a different scored
 subset. Both runs are in the file; neither is the "right" one.
+
+### Correction (2026-07-31, team-lead review)
+
+**The sentence above — "a paired re-score on the intersection of the four rows is reproducible
+from the file" — is false, and it stays above unedited so the claim and its correction can be read
+together.**
+
+Per-row predictions and holdout error ids were **never persisted**. `results/baselines.json`
+carries `config.scored_ids_sha256` — a SHA256 *of the id list* — plus per-input error **counts**
+and `diagnostics.failures[].failed_ids`. That recovers which rows a run scored. It does not
+recover **what the model answered on them**, and without the answers no metric can be recomputed
+on any subset, intersection or otherwise. So the "$0, from the file" paired option that this
+section offered the operator, and that the executor's 3b report repeated, does not exist. Closing
+the pairing by re-scoring costs a fresh paired run (~$0.90).
+
+The claim was made by reading the field list and finding it sufficient-looking; it was disproved
+by trying the reconstruction. The gate closed the unpairedness a different way — a worst-case
+bound analysis over the dropped instances, [[phase4-base-model-gate]] §(b), $0 — and every real
+run from step 3c persists a per-row prediction dump so that next time the sentence is true. The
+six existing 3b runs get no dumps: they cannot be reconstructed and must not be faked.
+
+(One number in the original sentence is also stale: `0.8522` is the 27B's **run-1** G1a overall on
+396 rows; run 2 reads 0.8541 on 397. Left as written — it is what the claim said.)
 
 ## Batch variant — resolved 2026-07-31
 

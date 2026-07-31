@@ -127,6 +127,12 @@ Fixed before any spend:
   `gate_anchor_valid: false` and the run is not silently used as the G1d/G1e anchor; the operator
   decides whether to re-run.
 
+**Amendment 2026-07-31 (gate review).** The third bullet promised more than the records deliver:
+storing the scored ids and their SHA256 recovers the *subset*, not the numbers on it, because
+per-row predictions were never written. [[phase4-base-model-gate]] §(b) closes the resulting
+unpairedness with a bound analysis instead, §(d) records the gap, and every run from step 3c
+writes a per-row prediction dump so the promise becomes true going forward.
+
 **One thing this ADR does not decide.** Amendment 3.2 defines the G1b slice as the holdout rows
 the base model "misclassifies", and the holdout carries two labels — `sentiment` and `sarcasm`.
 The executor does not pick the reading. Every candidate's run reports **both** error sets and
