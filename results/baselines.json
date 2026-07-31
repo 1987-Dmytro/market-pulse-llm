@@ -124,5 +124,904 @@
         "note": "diagnostics, not gates. The holdout error count is this baseline's error set, NOT the G1b slice — amendment 3.2 defines that one by the zero-shot base LLM. Read the holdout scores against its base rate: 107 of 108 rows are negative, so a model trained on a sarcasm-enriched pool scores well there by leaning negative, not by reading irony — which is what holdout_sarcasm_detected (of 108) shows."
       }
     }
+  ],
+  "qwen/qwen3.5-9b": [
+    {
+      "model": "qwen/qwen3.5-9b",
+      "timestamp": "2026-07-31T13:13:22+00:00",
+      "reference_only": false,
+      "git": {
+        "commit": "b3ba067bd1948792cfeed622c0a11ff44156b0e2",
+        "dirty": [
+          "docs/STATUS.md"
+        ]
+      },
+      "config": {
+        "seed": 42,
+        "temperature": 0.0,
+        "max_tokens": 256,
+        "provider": {
+          "endpoint": "venice/fp8",
+          "provider_name": "Venice",
+          "quantization": "fp8",
+          "pinned_quantization": "fp8",
+          "allow_fallbacks": false
+        },
+        "prompt_sha256": {
+          "T1": "9b2a021783212022bb335d7a32a365d532ff94c7da92336bf054d8709c0de355",
+          "T2": "6a7e66efb3eb4091b8d787e38213f3b1b0c9115e78d2b41fb9cc6bcaab3a54b4"
+        },
+        "heads": {
+          "T1": "zero-shot sentiment 3-class · sarcasm binary · intents multi-label",
+          "T2": "zero-shot relevance binary · post_type 3-class · brands free-text"
+        },
+        "train_sources": {
+          "zero-shot": "no training data"
+        },
+        "scored_ids_sha256": {
+          "comments_test": "df62f576c67e44a6390e260dfd59fbba145d9ed1dcde3c3de1717deec87bc461",
+          "posts_test": "2110cfb5803d4bd76cfd6e74e785f8a6c0928c36ddb05703e25943309258741d",
+          "sarcasm_holdout": "8f91074395d585cc989bb8c5639d3b8e7da55efbac4f21b06efafa3054a50fbf"
+        },
+        "spend_usd": 0.038118,
+        "tokens": {
+          "prompt_tokens": 381183,
+          "completion_tokens": 15857,
+          "reasoning_tokens": 0
+        },
+        "determinism_note": "third-party serving endpoint: provider-side determinism is NOT guaranteed, temperature 0 and a fixed seed notwithstanding. The model chosen at the Phase 4 gate is re-run zero-shot on our own GPU during the Phase 4 smoke as the cross-check (ADR 3b-infra-and-precision §(d))."
+      },
+      "gates": [
+        {
+          "gate": "G1a",
+          "metric": "sentiment macro-F1 (comments_test)",
+          "values": {
+            "overall": 0.7717357187696171,
+            "other": 0.6530764029749832,
+            "ru": 0.8541545331003689,
+            "ua": 0.7944678024496709
+          },
+          "n": {
+            "overall": 389,
+            "ua": 240,
+            "other": 66,
+            "ru": 83
+          },
+          "gated_languages": [
+            "ua",
+            "ru"
+          ]
+        },
+        {
+          "gate": "G1b",
+          "metric": "sarcasm slice fix-rate (sarcasm_holdout)",
+          "value": null,
+          "n": {
+            "holdout_scored": 107,
+            "base_errs_sentiment": 26,
+            "base_errs_sarcasm": 69,
+            "base_errs_union": 69
+          },
+          "note": "the fix-rate needs a fine-tune (Phase 4); what this run contributes is the slice. Amendment 3.2 defines it as the rows this base model misclassifies and the holdout carries two labels, so all three counts are reported and the reading is the operator's call at the Phase 4 gate."
+        },
+        {
+          "gate": "G1c",
+          "metric": "intents micro-F1 (comments_test)",
+          "value": 0.6303939962476548,
+          "n": {
+            "overall": 389
+          }
+        },
+        {
+          "gate": "G1d",
+          "metric": "post_type macro-F1 (posts_test)",
+          "value": 0.509391033262001,
+          "n": {
+            "overall": 249,
+            "promo": 176,
+            "launch": 30,
+            "other": 43
+          }
+        },
+        {
+          "gate": "G1d",
+          "metric": "relevance macro-F1 (posts_test)",
+          "value": 0.9777678571428572,
+          "n": {
+            "overall": 249,
+            "relevant": 26
+          },
+          "note": "second head of G1d; reported beside it and not gated (amendment 3.3)"
+        },
+        {
+          "gate": "G1e",
+          "metric": "brand extraction F1 (posts_test)",
+          "value": 0.6415094339622641,
+          "n": {
+            "overall": 249,
+            "posts_with_brands": 21,
+            "gold_entities": 36,
+            "predicted_entities": 70
+          }
+        }
+      ],
+      "diagnostics": {
+        "sarcasm_binary_macro_f1_comments_test": 0.7164723032069971,
+        "holdout_sentiment_macro_f1": {
+          "overall": 0.43315508021390375,
+          "other": 0.2,
+          "ru": 0.88,
+          "ua": 0.9180327868852459
+        },
+        "holdout_sarcasm_macro_f1": 0.5241379310344828,
+        "holdout_sarcasm_detected": 38,
+        "base_errs_sentiment": 26,
+        "base_errs_sarcasm": 69,
+        "base_errs_union": 69,
+        "failures": [
+          {
+            "input": "comments_test",
+            "rows": 400,
+            "scored": 389,
+            "parse_failures": 0,
+            "api_failures": 11,
+            "truncated": 0,
+            "reasons": {
+              "ApiError: HTTP 429: {\"error\":{\"message\":\"Provider returned e": 11
+            },
+            "failed_ids": [
+              "@VARUS_channel:14702",
+              "@VARUS_channel:15628",
+              "@VARUS_channel:15715",
+              "@VARUS_channel:16634",
+              "@VARUS_channel:18074",
+              "@VARUS_channel:553",
+              "@VARUS_channel:6165",
+              "@VARUS_channel:6928",
+              "@VARUS_channel:7903",
+              "@VARUS_channel:7985",
+              "@VARUS_channel:9665"
+            ]
+          },
+          {
+            "input": "posts_test",
+            "rows": 250,
+            "scored": 249,
+            "parse_failures": 0,
+            "api_failures": 1,
+            "truncated": 0,
+            "reasons": {
+              "ApiError: HTTP 429: {\"error\":{\"message\":\"Provider returned e": 1
+            },
+            "failed_ids": [
+              "@VARUS_channel:6857"
+            ]
+          },
+          {
+            "input": "sarcasm_holdout",
+            "rows": 108,
+            "scored": 107,
+            "parse_failures": 0,
+            "api_failures": 1,
+            "truncated": 0,
+            "reasons": {
+              "ApiError: HTTP 429: {\"error\":{\"message\":\"Provider returned e": 1
+            },
+            "failed_ids": [
+              "@VARUS_channel:16728"
+            ]
+          }
+        ],
+        "gate_anchor_valid": false,
+        "note": "diagnostics, not gates. base_errs_* are this base model's error sets on the frozen sarcasm holdout — the raw material of the G1b slice (amendment 3.2), reported for both labels because the amendment names neither. GATE ANCHOR INVALID: unusable rows exceed 2% in ['comments_test'] — this run must not anchor G1d/G1e without an operator decision."
+      }
+    },
+    {
+      "model": "qwen/qwen3.5-9b",
+      "timestamp": "2026-07-31T13:19:05+00:00",
+      "reference_only": false,
+      "git": {
+        "commit": "04c055435d23652375425af0e94d530f4a4286b8",
+        "dirty": [
+          "docs/STATUS.md",
+          "scripts/train_xlmr_baseline.py"
+        ]
+      },
+      "config": {
+        "seed": 42,
+        "temperature": 0.0,
+        "max_tokens": 256,
+        "provider": {
+          "endpoint": "venice/fp8",
+          "provider_name": "Venice",
+          "quantization": "fp8",
+          "pinned_quantization": "fp8",
+          "allow_fallbacks": false
+        },
+        "prompt_sha256": {
+          "T1": "9b2a021783212022bb335d7a32a365d532ff94c7da92336bf054d8709c0de355",
+          "T2": "6a7e66efb3eb4091b8d787e38213f3b1b0c9115e78d2b41fb9cc6bcaab3a54b4"
+        },
+        "heads": {
+          "T1": "zero-shot sentiment 3-class · sarcasm binary · intents multi-label",
+          "T2": "zero-shot relevance binary · post_type 3-class · brands free-text"
+        },
+        "train_sources": {
+          "zero-shot": "no training data"
+        },
+        "scored_ids_sha256": {
+          "comments_test": "066ed97e3098b02d2dd7df9430a0f7f36eb9589caf24704e4cfe883e1696de83",
+          "posts_test": "b8265e227e25ea638a8e9dcd0c5fd86245f60f2ac091657cc7a8002a5ef91c42",
+          "sarcasm_holdout": "7d43578e7314273de7e931e35c6068a39fcedb85a2194497b261674f05a15707"
+        },
+        "spend_usd": 0.033545,
+        "tokens": {
+          "prompt_tokens": 387184,
+          "completion_tokens": 16138,
+          "reasoning_tokens": 0
+        },
+        "determinism_note": "third-party serving endpoint: provider-side determinism is NOT guaranteed, temperature 0 and a fixed seed notwithstanding. The model chosen at the Phase 4 gate is re-run zero-shot on our own GPU during the Phase 4 smoke as the cross-check (ADR 3b-infra-and-precision §(d))."
+      },
+      "gates": [
+        {
+          "gate": "G1a",
+          "metric": "sentiment macro-F1 (comments_test)",
+          "values": {
+            "overall": 0.77448048716567,
+            "other": 0.6530764029749832,
+            "ru": 0.8578529657477025,
+            "ua": 0.7957168355963536
+          },
+          "n": {
+            "overall": 400,
+            "ua": 248,
+            "other": 66,
+            "ru": 86
+          },
+          "gated_languages": [
+            "ua",
+            "ru"
+          ]
+        },
+        {
+          "gate": "G1b",
+          "metric": "sarcasm slice fix-rate (sarcasm_holdout)",
+          "value": null,
+          "n": {
+            "holdout_scored": 108,
+            "base_errs_sentiment": 26,
+            "base_errs_sarcasm": 70,
+            "base_errs_union": 70
+          },
+          "note": "the fix-rate needs a fine-tune (Phase 4); what this run contributes is the slice. Amendment 3.2 defines it as the rows this base model misclassifies and the holdout carries two labels, so all three counts are reported and the reading is the operator's call at the Phase 4 gate."
+        },
+        {
+          "gate": "G1c",
+          "metric": "intents micro-F1 (comments_test)",
+          "value": 0.6252285191956124,
+          "n": {
+            "overall": 400
+          }
+        },
+        {
+          "gate": "G1d",
+          "metric": "post_type macro-F1 (posts_test)",
+          "value": 0.5077106919426705,
+          "n": {
+            "overall": 250,
+            "promo": 177,
+            "launch": 30,
+            "other": 43
+          }
+        },
+        {
+          "gate": "G1d",
+          "metric": "relevance macro-F1 (posts_test)",
+          "value": 0.9777777777777777,
+          "n": {
+            "overall": 250,
+            "relevant": 26
+          },
+          "note": "second head of G1d; reported beside it and not gated (amendment 3.3)"
+        },
+        {
+          "gate": "G1e",
+          "metric": "brand extraction F1 (posts_test)",
+          "value": 0.6476190476190476,
+          "n": {
+            "overall": 250,
+            "posts_with_brands": 21,
+            "gold_entities": 36,
+            "predicted_entities": 69
+          }
+        }
+      ],
+      "diagnostics": {
+        "sarcasm_binary_macro_f1_comments_test": 0.7277462121212122,
+        "holdout_sentiment_macro_f1": {
+          "overall": 0.43386243386243384,
+          "other": 0.2,
+          "ru": 0.8846153846153846,
+          "ua": 0.9180327868852459
+        },
+        "holdout_sarcasm_macro_f1": 0.5205479452054794,
+        "holdout_sarcasm_detected": 38,
+        "base_errs_sentiment": 26,
+        "base_errs_sarcasm": 70,
+        "base_errs_union": 70,
+        "failures": [
+          {
+            "input": "comments_test",
+            "rows": 400,
+            "scored": 400,
+            "parse_failures": 0,
+            "api_failures": 0,
+            "truncated": 0,
+            "reasons": {},
+            "failed_ids": []
+          },
+          {
+            "input": "posts_test",
+            "rows": 250,
+            "scored": 250,
+            "parse_failures": 0,
+            "api_failures": 0,
+            "truncated": 0,
+            "reasons": {},
+            "failed_ids": []
+          },
+          {
+            "input": "sarcasm_holdout",
+            "rows": 108,
+            "scored": 108,
+            "parse_failures": 0,
+            "api_failures": 0,
+            "truncated": 0,
+            "reasons": {},
+            "failed_ids": []
+          }
+        ],
+        "gate_anchor_valid": true,
+        "note": "diagnostics, not gates. base_errs_* are this base model's error sets on the frozen sarcasm holdout — the raw material of the G1b slice (amendment 3.2), reported for both labels because the amendment names neither."
+      }
+    }
+  ],
+  "google/gemma-4-31b-it": [
+    {
+      "model": "google/gemma-4-31b-it",
+      "timestamp": "2026-07-31T13:25:00+00:00",
+      "reference_only": false,
+      "git": {
+        "commit": "04c055435d23652375425af0e94d530f4a4286b8",
+        "dirty": [
+          "docs/STATUS.md",
+          "scripts/train_xlmr_baseline.py"
+        ]
+      },
+      "config": {
+        "seed": 42,
+        "temperature": 0.0,
+        "max_tokens": 256,
+        "provider": {
+          "endpoint": "parasail/fp8",
+          "provider_name": "Parasail",
+          "quantization": "fp8",
+          "pinned_quantization": "fp8",
+          "allow_fallbacks": false
+        },
+        "prompt_sha256": {
+          "T1": "9b2a021783212022bb335d7a32a365d532ff94c7da92336bf054d8709c0de355",
+          "T2": "6a7e66efb3eb4091b8d787e38213f3b1b0c9115e78d2b41fb9cc6bcaab3a54b4"
+        },
+        "heads": {
+          "T1": "zero-shot sentiment 3-class · sarcasm binary · intents multi-label",
+          "T2": "zero-shot relevance binary · post_type 3-class · brands free-text"
+        },
+        "train_sources": {
+          "zero-shot": "no training data"
+        },
+        "scored_ids_sha256": {
+          "comments_test": "066ed97e3098b02d2dd7df9430a0f7f36eb9589caf24704e4cfe883e1696de83",
+          "posts_test": "b8265e227e25ea638a8e9dcd0c5fd86245f60f2ac091657cc7a8002a5ef91c42",
+          "sarcasm_holdout": "7d43578e7314273de7e931e35c6068a39fcedb85a2194497b261674f05a15707"
+        },
+        "spend_usd": 0.034133,
+        "tokens": {
+          "prompt_tokens": 379443,
+          "completion_tokens": 15522,
+          "reasoning_tokens": 0
+        },
+        "determinism_note": "third-party serving endpoint: provider-side determinism is NOT guaranteed, temperature 0 and a fixed seed notwithstanding. The model chosen at the Phase 4 gate is re-run zero-shot on our own GPU during the Phase 4 smoke as the cross-check (ADR 3b-infra-and-precision §(d))."
+      },
+      "gates": [
+        {
+          "gate": "G1a",
+          "metric": "sentiment macro-F1 (comments_test)",
+          "values": {
+            "overall": 0.8944295152180871,
+            "other": 0.8865499377008329,
+            "ru": 0.8687733605164798,
+            "ua": 0.895691181832387
+          },
+          "n": {
+            "overall": 400,
+            "ua": 248,
+            "other": 66,
+            "ru": 86
+          },
+          "gated_languages": [
+            "ua",
+            "ru"
+          ]
+        },
+        {
+          "gate": "G1b",
+          "metric": "sarcasm slice fix-rate (sarcasm_holdout)",
+          "value": null,
+          "n": {
+            "holdout_scored": 108,
+            "base_errs_sentiment": 10,
+            "base_errs_sarcasm": 40,
+            "base_errs_union": 40
+          },
+          "note": "the fix-rate needs a fine-tune (Phase 4); what this run contributes is the slice. Amendment 3.2 defines it as the rows this base model misclassifies and the holdout carries two labels, so all three counts are reported and the reading is the operator's call at the Phase 4 gate."
+        },
+        {
+          "gate": "G1c",
+          "metric": "intents micro-F1 (comments_test)",
+          "value": 0.7981438515081206,
+          "n": {
+            "overall": 400
+          }
+        },
+        {
+          "gate": "G1d",
+          "metric": "post_type macro-F1 (posts_test)",
+          "value": 0.8897980388336905,
+          "n": {
+            "overall": 250,
+            "promo": 177,
+            "launch": 30,
+            "other": 43
+          }
+        },
+        {
+          "gate": "G1d",
+          "metric": "relevance macro-F1 (posts_test)",
+          "value": 0.9504970100194051,
+          "n": {
+            "overall": 250,
+            "relevant": 26
+          },
+          "note": "second head of G1d; reported beside it and not gated (amendment 3.3)"
+        },
+        {
+          "gate": "G1e",
+          "metric": "brand extraction F1 (posts_test)",
+          "value": 0.9210526315789473,
+          "n": {
+            "overall": 250,
+            "posts_with_brands": 21,
+            "gold_entities": 36,
+            "predicted_entities": 40
+          }
+        }
+      ],
+      "diagnostics": {
+        "sarcasm_binary_macro_f1_comments_test": 0.7918121231355125,
+        "holdout_sentiment_macro_f1": {
+          "overall": 0.47804878048780486,
+          "other": 0.3684210526315789,
+          "ru": 0.9642857142857143,
+          "ua": 0.9846153846153847
+        },
+        "holdout_sarcasm_macro_f1": 0.7727272727272727,
+        "holdout_sarcasm_detected": 68,
+        "base_errs_sentiment": 10,
+        "base_errs_sarcasm": 40,
+        "base_errs_union": 40,
+        "failures": [
+          {
+            "input": "comments_test",
+            "rows": 400,
+            "scored": 400,
+            "parse_failures": 0,
+            "api_failures": 0,
+            "truncated": 0,
+            "reasons": {},
+            "failed_ids": []
+          },
+          {
+            "input": "posts_test",
+            "rows": 250,
+            "scored": 250,
+            "parse_failures": 0,
+            "api_failures": 0,
+            "truncated": 0,
+            "reasons": {},
+            "failed_ids": []
+          },
+          {
+            "input": "sarcasm_holdout",
+            "rows": 108,
+            "scored": 108,
+            "parse_failures": 0,
+            "api_failures": 0,
+            "truncated": 0,
+            "reasons": {},
+            "failed_ids": []
+          }
+        ],
+        "gate_anchor_valid": true,
+        "note": "diagnostics, not gates. base_errs_* are this base model's error sets on the frozen sarcasm holdout — the raw material of the G1b slice (amendment 3.2), reported for both labels because the amendment names neither."
+      }
+    }
+  ],
+  "qwen/qwen3.6-27b": [
+    {
+      "model": "qwen/qwen3.6-27b",
+      "timestamp": "2026-07-31T13:44:27+00:00",
+      "reference_only": false,
+      "git": {
+        "commit": "04c055435d23652375425af0e94d530f4a4286b8",
+        "dirty": [
+          "docs/STATUS.md",
+          "scripts/train_xlmr_baseline.py"
+        ]
+      },
+      "config": {
+        "seed": 42,
+        "temperature": 0.0,
+        "max_tokens": 256,
+        "provider": {
+          "endpoint": "io-net/fp8",
+          "provider_name": "Io Net",
+          "quantization": "fp8",
+          "pinned_quantization": "fp8",
+          "allow_fallbacks": false
+        },
+        "prompt_sha256": {
+          "T1": "9b2a021783212022bb335d7a32a365d532ff94c7da92336bf054d8709c0de355",
+          "T2": "6a7e66efb3eb4091b8d787e38213f3b1b0c9115e78d2b41fb9cc6bcaab3a54b4"
+        },
+        "heads": {
+          "T1": "zero-shot sentiment 3-class · sarcasm binary · intents multi-label",
+          "T2": "zero-shot relevance binary · post_type 3-class · brands free-text"
+        },
+        "train_sources": {
+          "zero-shot": "no training data"
+        },
+        "scored_ids_sha256": {
+          "comments_test": "e068ba3695f6088efdd22b35b26f90734754e7f4eba35d879e3f0d54b1a93469",
+          "posts_test": "dfcc6ad5dbdf302bf7e612158257414e6196b7468f0f9e270261aad334e331a3",
+          "sarcasm_holdout": "03e345e16ec234c8c5813cad21af619df688df80175d846535505a206079d3d2"
+        },
+        "spend_usd": 0.129414,
+        "tokens": {
+          "prompt_tokens": 387181,
+          "completion_tokens": 16182,
+          "reasoning_tokens": 0
+        },
+        "determinism_note": "third-party serving endpoint: provider-side determinism is NOT guaranteed, temperature 0 and a fixed seed notwithstanding. The model chosen at the Phase 4 gate is re-run zero-shot on our own GPU during the Phase 4 smoke as the cross-check (ADR 3b-infra-and-precision §(d))."
+      },
+      "gates": [
+        {
+          "gate": "G1a",
+          "metric": "sentiment macro-F1 (comments_test)",
+          "values": {
+            "overall": 0.8521770968964332,
+            "other": 0.8269756387403446,
+            "ru": 0.8795235038816553,
+            "ua": 0.8462481345938596
+          },
+          "n": {
+            "overall": 396,
+            "ua": 245,
+            "other": 65,
+            "ru": 86
+          },
+          "gated_languages": [
+            "ua",
+            "ru"
+          ]
+        },
+        {
+          "gate": "G1b",
+          "metric": "sarcasm slice fix-rate (sarcasm_holdout)",
+          "value": null,
+          "n": {
+            "holdout_scored": 103,
+            "base_errs_sentiment": 13,
+            "base_errs_sarcasm": 64,
+            "base_errs_union": 64
+          },
+          "note": "the fix-rate needs a fine-tune (Phase 4); what this run contributes is the slice. Amendment 3.2 defines it as the rows this base model misclassifies and the holdout carries two labels, so all three counts are reported and the reading is the operator's call at the Phase 4 gate."
+        },
+        {
+          "gate": "G1c",
+          "metric": "intents micro-F1 (comments_test)",
+          "value": 0.7681498829039812,
+          "n": {
+            "overall": 396
+          }
+        },
+        {
+          "gate": "G1d",
+          "metric": "post_type macro-F1 (posts_test)",
+          "value": 0.730762125357999,
+          "n": {
+            "overall": 249,
+            "promo": 176,
+            "launch": 30,
+            "other": 43
+          }
+        },
+        {
+          "gate": "G1d",
+          "metric": "relevance macro-F1 (posts_test)",
+          "value": 0.9777678571428572,
+          "n": {
+            "overall": 249,
+            "relevant": 26
+          },
+          "note": "second head of G1d; reported beside it and not gated (amendment 3.3)"
+        },
+        {
+          "gate": "G1e",
+          "metric": "brand extraction F1 (posts_test)",
+          "value": 0.8918918918918919,
+          "n": {
+            "overall": 249,
+            "posts_with_brands": 21,
+            "gold_entities": 36,
+            "predicted_entities": 38
+          }
+        }
+      ],
+      "diagnostics": {
+        "sarcasm_binary_macro_f1_comments_test": 0.7417391304347826,
+        "holdout_sentiment_macro_f1": {
+          "overall": 0.6326352530541012,
+          "other": 0.4857142857142857,
+          "ru": 0.9433962264150944,
+          "ua": 0.967741935483871
+        },
+        "holdout_sarcasm_macro_f1": 0.5492957746478874,
+        "holdout_sarcasm_detected": 39,
+        "base_errs_sentiment": 13,
+        "base_errs_sarcasm": 64,
+        "base_errs_union": 64,
+        "failures": [
+          {
+            "input": "comments_test",
+            "rows": 400,
+            "scored": 396,
+            "parse_failures": 4,
+            "api_failures": 0,
+            "truncated": 0,
+            "reasons": {
+              "missing field: sentiment": 4
+            },
+            "failed_ids": [
+              "@VARUS_channel:10235",
+              "@VARUS_channel:12642",
+              "@msuaaaa:3598",
+              "@msuaaaa:5534"
+            ]
+          },
+          {
+            "input": "posts_test",
+            "rows": 250,
+            "scored": 249,
+            "parse_failures": 1,
+            "api_failures": 0,
+            "truncated": 0,
+            "reasons": {
+              "malformed JSON": 1
+            },
+            "failed_ids": [
+              "@msuaaaa:1785"
+            ]
+          },
+          {
+            "input": "sarcasm_holdout",
+            "rows": 108,
+            "scored": 103,
+            "parse_failures": 5,
+            "api_failures": 0,
+            "truncated": 0,
+            "reasons": {
+              "missing field: sentiment": 5
+            },
+            "failed_ids": [
+              "@VARUS_channel:13725",
+              "@VARUS_channel:21420",
+              "@VARUS_channel:2430",
+              "@msuaaaa:12955",
+              "@msuaaaa:2220"
+            ]
+          }
+        ],
+        "gate_anchor_valid": false,
+        "note": "diagnostics, not gates. base_errs_* are this base model's error sets on the frozen sarcasm holdout — the raw material of the G1b slice (amendment 3.2), reported for both labels because the amendment names neither. GATE ANCHOR INVALID: unusable rows exceed 2% in ['sarcasm_holdout'] — this run must not anchor G1d/G1e without an operator decision."
+      }
+    }
+  ],
+  "anthropic/claude-haiku-4.5": [
+    {
+      "model": "anthropic/claude-haiku-4.5",
+      "timestamp": "2026-07-31T13:50:15+00:00",
+      "reference_only": true,
+      "git": {
+        "commit": "04c055435d23652375425af0e94d530f4a4286b8",
+        "dirty": [
+          "docs/STATUS.md",
+          "scripts/train_xlmr_baseline.py"
+        ]
+      },
+      "config": {
+        "seed": 42,
+        "temperature": 0.0,
+        "max_tokens": 256,
+        "provider": {
+          "endpoint": "anthropic",
+          "provider_name": "Anthropic",
+          "quantization": "unknown",
+          "pinned_quantization": null,
+          "allow_fallbacks": false
+        },
+        "prompt_sha256": {
+          "T1": "9b2a021783212022bb335d7a32a365d532ff94c7da92336bf054d8709c0de355",
+          "T2": "6a7e66efb3eb4091b8d787e38213f3b1b0c9115e78d2b41fb9cc6bcaab3a54b4"
+        },
+        "heads": {
+          "T1": "zero-shot sentiment 3-class · sarcasm binary · intents multi-label",
+          "T2": "zero-shot relevance binary · post_type 3-class · brands free-text"
+        },
+        "train_sources": {
+          "zero-shot": "no training data"
+        },
+        "scored_ids_sha256": {
+          "comments_test": "066ed97e3098b02d2dd7df9430a0f7f36eb9589caf24704e4cfe883e1696de83",
+          "posts_test": "b8265e227e25ea638a8e9dcd0c5fd86245f60f2ac091657cc7a8002a5ef91c42",
+          "sarcasm_holdout": "7d43578e7314273de7e931e35c6068a39fcedb85a2194497b261674f05a15707"
+        },
+        "spend_usd": 0.513803,
+        "tokens": {
+          "prompt_tokens": 413852,
+          "completion_tokens": 21441,
+          "reasoning_tokens": 0
+        },
+        "determinism_note": "third-party serving endpoint: provider-side determinism is NOT guaranteed, temperature 0 and a fixed seed notwithstanding. The model chosen at the Phase 4 gate is re-run zero-shot on our own GPU during the Phase 4 smoke as the cross-check (ADR 3b-infra-and-precision §(d))."
+      },
+      "gates": [
+        {
+          "gate": "ref",
+          "metric": "sentiment macro-F1 (comments_test)",
+          "values": {
+            "overall": 0.870827024298796,
+            "other": 0.8291143317230274,
+            "ru": 0.8987650752356634,
+            "ua": 0.8691862930295947
+          },
+          "n": {
+            "overall": 400,
+            "ua": 248,
+            "other": 66,
+            "ru": 86
+          },
+          "gated_languages": [
+            "ua",
+            "ru"
+          ],
+          "reference_metric": "G1a"
+        },
+        {
+          "gate": "ref",
+          "metric": "sarcasm slice fix-rate (sarcasm_holdout)",
+          "value": null,
+          "n": {
+            "holdout_scored": 108,
+            "base_errs_sentiment": 21,
+            "base_errs_sarcasm": 47,
+            "base_errs_union": 47
+          },
+          "note": "the fix-rate needs a fine-tune (Phase 4); what this run contributes is the slice. Amendment 3.2 defines it as the rows this base model misclassifies and the holdout carries two labels, so all three counts are reported and the reading is the operator's call at the Phase 4 gate.",
+          "reference_metric": "G1b"
+        },
+        {
+          "gate": "ref",
+          "metric": "intents micro-F1 (comments_test)",
+          "value": 0.7739130434782608,
+          "n": {
+            "overall": 400
+          },
+          "reference_metric": "G1c"
+        },
+        {
+          "gate": "ref",
+          "metric": "post_type macro-F1 (posts_test)",
+          "value": 0.7717569371090267,
+          "n": {
+            "overall": 250,
+            "promo": 177,
+            "launch": 30,
+            "other": 43
+          },
+          "reference_metric": "G1d"
+        },
+        {
+          "gate": "ref",
+          "metric": "relevance macro-F1 (posts_test)",
+          "value": 0.9693564862104188,
+          "n": {
+            "overall": 250,
+            "relevant": 26
+          },
+          "note": "second head of G1d; reported beside it and not gated (amendment 3.3)",
+          "reference_metric": "G1d"
+        },
+        {
+          "gate": "ref",
+          "metric": "brand extraction F1 (posts_test)",
+          "value": 0.8536585365853658,
+          "n": {
+            "overall": 250,
+            "posts_with_brands": 21,
+            "gold_entities": 36,
+            "predicted_entities": 46
+          },
+          "reference_metric": "G1e"
+        }
+      ],
+      "diagnostics": {
+        "sarcasm_binary_macro_f1_comments_test": 0.7646412740752364,
+        "holdout_sentiment_macro_f1": {
+          "overall": 0.4461538461538462,
+          "other": 0.13333333333333333,
+          "ru": 0.9259259259259259,
+          "ua": 0.9523809523809523
+        },
+        "holdout_sarcasm_macro_f1": 0.7218934911242604,
+        "holdout_sarcasm_detected": 61,
+        "base_errs_sentiment": 21,
+        "base_errs_sarcasm": 47,
+        "base_errs_union": 47,
+        "failures": [
+          {
+            "input": "comments_test",
+            "rows": 400,
+            "scored": 400,
+            "parse_failures": 0,
+            "api_failures": 0,
+            "truncated": 0,
+            "reasons": {},
+            "failed_ids": []
+          },
+          {
+            "input": "posts_test",
+            "rows": 250,
+            "scored": 250,
+            "parse_failures": 0,
+            "api_failures": 0,
+            "truncated": 0,
+            "reasons": {},
+            "failed_ids": []
+          },
+          {
+            "input": "sarcasm_holdout",
+            "rows": 108,
+            "scored": 108,
+            "parse_failures": 0,
+            "api_failures": 0,
+            "truncated": 0,
+            "reasons": {},
+            "failed_ids": []
+          }
+        ],
+        "gate_anchor_valid": true,
+        "note": "REFERENCE ONLY — never anchors a gate. diagnostics, not gates. base_errs_* are this base model's error sets on the frozen sarcasm holdout — the raw material of the G1b slice (amendment 3.2), reported for both labels because the amendment names neither."
+      }
+    }
   ]
 }

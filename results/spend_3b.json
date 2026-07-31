@@ -1,0 +1,36 @@
+{
+  "openrouter_total_usage_at_3b_start": 0.162297005,
+  "note": "lifetime OpenRouter usage read at the start of 3b, before the first request of this phase (including the precision probe and the live sizing probes). Phase spend = total_usage now minus this. The $8 cap is enforced against that difference.",
+  "runs": [
+    {
+      "model": "qwen/qwen3.5-9b",
+      "timestamp": "2026-07-31T13:13:22+00:00",
+      "usd": 0.038118,
+      "requests": 758
+    },
+    {
+      "model": "qwen/qwen3.5-9b",
+      "timestamp": "2026-07-31T13:19:05+00:00",
+      "usd": 0.033545,
+      "requests": 758
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "timestamp": "2026-07-31T13:25:00+00:00",
+      "usd": 0.034133,
+      "requests": 758
+    },
+    {
+      "model": "qwen/qwen3.6-27b",
+      "timestamp": "2026-07-31T13:44:27+00:00",
+      "usd": 0.129414,
+      "requests": 758
+    },
+    {
+      "model": "anthropic/claude-haiku-4.5",
+      "timestamp": "2026-07-31T13:50:15+00:00",
+      "usd": 0.513803,
+      "requests": 758
+    }
+  ]
+}
