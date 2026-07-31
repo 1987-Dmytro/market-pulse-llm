@@ -1210,5 +1210,133 @@
         "note": "REFERENCE ONLY — never anchors a gate. diagnostics, not gates. base_errs_* are this base model's error sets on the frozen sarcasm holdout — the raw material of the G1b slice (amendment 3.2), reported for both labels because the amendment names neither."
       }
     }
+  ],
+  "xlm-roberta-base": [
+    {
+      "model": "xlm-roberta-base",
+      "timestamp": "2026-07-31T17:25:02+00:00",
+      "git": {
+        "commit": "6d4deb30717fe3caa57d85cbb1015fa98fbb2298",
+        "dirty": [
+          "knowledge/daily_logs/2026-07-31.md",
+          "knowledge/hot.md",
+          "knowledge/index.md"
+        ]
+      },
+      "config": {
+        "seed": 42,
+        "base_model": "xlm-roberta-base",
+        "device": "cpu",
+        "epochs": 3,
+        "batch_size": 16,
+        "learning_rate": 2e-05,
+        "max_length": 256,
+        "warmup_share": 0.1,
+        "class_weights": "inverse frequency per head",
+        "frozen_parameters": "word embeddings (192M of 278M) — fits a 9 GB MPS allocator",
+        "heads": {
+          "T1": "sentiment 3-class · sarcasm binary · intents 5x binary",
+          "T2": "relevance binary · post_type 3-class · brands NOT MODELLED"
+        },
+        "train_sources": {
+          "data/frozen/comments_train.jsonl": 906,
+          "data/annotation/sarcasm_candidates.jsonl": 540,
+          "data/frozen/posts_train.jsonl": 749
+        },
+        "train_note": "real sources only — synthetic_sarcasm.jsonl is ablation-gated for Phase 4 and was not read. Nine independent fine-tunes, one per head, mirroring the TF-IDF baseline; no shared encoder.",
+        "determinism_note": "seeded, but Apple MPS does not guarantee bitwise-reproducible kernels; a re-run may differ in the last decimals."
+      },
+      "gates": [
+        {
+          "gate": "G1a",
+          "metric": "sentiment macro-F1 (comments_test)",
+          "values": {
+            "overall": 0.782379005786848,
+            "other": 0.7575187969924811,
+            "ru": 0.7506611443472927,
+            "ua": 0.7859126984126984
+          },
+          "n": {
+            "overall": 400,
+            "ua": 248,
+            "other": 66,
+            "ru": 86
+          },
+          "gated_languages": [
+            "ua",
+            "ru"
+          ]
+        },
+        {
+          "gate": "G1b",
+          "metric": "sarcasm slice fix-rate (sarcasm_holdout)",
+          "value": null,
+          "n": {
+            "holdout": 108
+          },
+          "note": "not computable for a baseline: amendment 3.2 defines the slice by the zero-shot base LLM's errors and the fix-rate needs a fine-tune (Phase 4)."
+        },
+        {
+          "gate": "G1c",
+          "metric": "intents micro-F1 (comments_test)",
+          "value": 0.6006944444444444,
+          "n": {
+            "overall": 400
+          }
+        },
+        {
+          "gate": "G1d",
+          "metric": "post_type macro-F1 (posts_test)",
+          "value": 0.7347207951348588,
+          "n": {
+            "overall": 250,
+            "promo": 177,
+            "launch": 30,
+            "other": 43
+          }
+        },
+        {
+          "gate": "G1d",
+          "metric": "relevance macro-F1 (posts_test)",
+          "value": 0.6610472998900002,
+          "n": {
+            "overall": 250,
+            "relevant": 26
+          },
+          "note": "second head of G1d; reported beside it and not gated (amendment 3.3)"
+        },
+        {
+          "gate": "G1e",
+          "metric": "brand extraction F1 (posts_test) — NOT COVERED",
+          "value": null,
+          "n": {
+            "overall": 250,
+            "gold_entities": 36
+          },
+          "note": "NOT COVERED BY THIS BASELINE, not scored badly: brand extraction is span extraction and this baseline is a sequence classifier — no token-classification head was trained for it. Read this cell as 'not attempted'. The G1e anchor is the zero-shot base LLM (SPEC §5); TF-IDF's watchlist matcher is the other reported number."
+        }
+      ],
+      "diagnostics": {
+        "sarcasm_binary_macro_f1_comments_test": 0.5320619201784694,
+        "holdout_sentiment_macro_f1": {
+          "overall": 0.398876404494382,
+          "other": 0.14285714285714285,
+          "ru": 0.84,
+          "ua": 0.8421052631578947
+        },
+        "holdout_sentiment_errors": 37,
+        "holdout_sarcasm_detected": 54,
+        "wall_clock_minutes": 101.01,
+        "projected_minutes": 127.99,
+        "gate_coverage": {
+          "G1a": "covered",
+          "G1b": "not computable for a baseline (amendment 3.2 + needs a fine-tune)",
+          "G1c": "covered",
+          "G1d": "covered (post_type gated, relevance reported)",
+          "G1e": "NOT COVERED — span extraction, no token-classification head trained"
+        },
+        "note": "diagnostics, not gates. The holdout error count is this baseline's error set, NOT the G1b slice — amendment 3.2 defines that one by the zero-shot base LLM. 107 of 108 holdout rows are negative, so a model trained on a sarcasm-enriched pool scores well there by leaning negative rather than by reading irony."
+      }
+    }
   ]
 }
