@@ -222,6 +222,207 @@ def test_the_dump_path_is_one_file_per_run_and_survives_a_filesystem():
     assert not {"/", ":"} & set(a.name)
 
 
+# --- the local GPU backend (step 4a) -----------------------------------------
+#
+# The run that anchors G1d/G1e happens on a rented pod, so what can be tested
+# here is everything except the weights: that the prompts are provably 3b's,
+# that a failed generation is counted rather than guessed, and that the G1b
+# slice leaves the run as an id list and not as a number in a report.
+
+GEMMA = "google/gemma-4-31b-it"
+
+
+class BatchClient:
+    """Replies per batch; an entry that is an exception stands for one bad row."""
+
+    def __init__(self, replies, explode=False):
+        self.replies = list(replies)
+        self.explode = explode
+        self.batches = []
+
+    def batch(self, task, texts):
+        self.batches.append(list(texts))
+        if self.explode:
+            raise RuntimeError("CUDA kernel died")
+        taken = [self.replies.pop(0) for _ in texts]
+        return [
+            item
+            if isinstance(item, Exception)
+            else {
+                "content": item,
+                "finish_reason": "stop",
+                "cost": 0.0,
+                "usage": {},
+                "generation_id": None,
+            }
+            for item in taken
+        ]
+
+
+def test_the_prompt_check_reads_the_recorded_run_not_itself():
+    """The assertion that would pass forever is `prompt_sha256 == prompt_sha256`.
+    This one has to find the hash the OpenRouter run stored and match it."""
+    stored = runner.recorded_prompt_sha256(GEMMA)
+    assert stored, "the 3b gemma row is what the local run claims to be identical to"
+    assert runner.assert_prompt_sha_matches_3b(GEMMA) == stored[0]
+
+
+def test_a_prompt_that_moved_refuses_to_run(monkeypatch):
+    """The negative control: without it, the check above proves nothing."""
+    drifted = dict(runner.recorded_prompt_sha256(GEMMA)[0], T1="0" * 64)
+    monkeypatch.setattr(runner, "recorded_prompt_sha256", lambda model: [drifted])
+    with pytest.raises(SystemExit) as caught:
+        runner.assert_prompt_sha_matches_3b(GEMMA)
+    assert "T1" in str(caught.value)
+
+
+def test_a_model_with_no_recorded_run_has_nothing_to_be_identical_to():
+    with pytest.raises(SystemExit) as caught:
+        runner.assert_prompt_sha_matches_3b("qwen/qwen3.5-9b-nonexistent")
+    assert "prompt_sha256" in str(caught.value)
+
+
+def test_batched_classification_keeps_every_row_in_its_own_place():
+    good = '{"sentiment": "positive", "sarcasm": false, "intents": ["taste"]}'
+    client = BatchClient([good] * 6)
+    outcomes = runner.classify_local(client, "T1", ROWS, batch_size=4)
+    assert [o["id"] for o in outcomes] == [row["id"] for row in ROWS]
+    assert [len(b) for b in client.batches] == [4, 2]
+
+
+def test_a_row_the_model_could_not_generate_is_counted_not_guessed():
+    good = '{"sentiment": "neutral", "sarcasm": false, "intents": []}'
+    client = BatchClient([good, RuntimeError("no output"), good, "not json", good, good])
+    outcomes = runner.classify_local(client, "T1", ROWS, batch_size=3)
+    block = runner.failure_block("sarcasm_holdout", outcomes, runner.split(ROWS, outcomes)[2])
+    assert block["generation_failures"] == 1
+    assert block["parse_failures"] == 1
+    assert block["api_failures"] == 0, "there is no API here — the bucket must stay empty"
+    assert block["failed_ids"] == ["@ch:1", "@ch:3"]
+
+
+def test_a_batch_that_dies_is_charged_to_its_own_rows():
+    outcomes = runner.classify_local(BatchClient([], explode=True), "T1", ROWS, batch_size=6)
+    block = runner.failure_block("comments_test", outcomes, runner.split(ROWS, outcomes)[2])
+    assert block["generation_failures"] == 6
+    assert block["scored"] == 0
+
+
+def test_the_smoke_client_drives_the_batched_path_too():
+    rows = [{"id": str(i), "text": "x"} for i in range(10)]
+    outcomes = runner.classify_local(runner.FakeClient(), "T1", rows, batch_size=4)
+    block = runner.failure_block("smoke", outcomes, runner.split(rows, outcomes)[2])
+    assert block["generation_failures"] > 0
+    assert block["parse_failures"] > 0
+    assert block["scored"] > 0
+
+
+def test_the_local_smoke_run_scores_every_frozen_row_without_a_gpu():
+    """Driven through `main`, not imported: a backend that only imports is a
+    backend nothing has run."""
+    assert runner.main(["--model", GEMMA, "--backend", "local", "--smoke"]) == 0
+
+
+def test_the_reference_row_cannot_be_run_on_our_own_weights():
+    with pytest.raises(SystemExit) as caught:
+        runner.main(["--model", "anthropic/claude-haiku-4.5", "--backend", "local"])
+    assert "reference row" in str(caught.value)
+
+
+# --- the G1b slice ------------------------------------------------------------
+
+HOLDOUT = [{"id": f"@ch:{i}"} for i in range(4)]
+SLICE_IDS = {"sentiment": ["@ch:1"], "sarcasm": ["@ch:1", "@ch:3"], "union": ["@ch:1", "@ch:3"]}
+
+
+def test_the_slice_is_an_id_list_and_its_hash_is_the_file_on_disk(tmp_path):
+    """Counts chose a base model; a gate needs the rows. Phase 4's fix-rate is
+    computed against exactly this list, so it has to be a file with a hash."""
+    path = tmp_path / "g1b_slice.json"
+    digest = runner.write_slice(path, HOLDOUT, SLICE_IDS)
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    assert payload["ids"] == ["@ch:1", "@ch:3"]
+    assert payload["n"] == 2
+    assert payload["n_holdout_scored"] == 4
+    assert digest == sha256(path.read_bytes()).hexdigest()
+
+
+def test_build_gates_reports_the_union_as_the_set_union_it_is():
+    """The union is `len(sentiment | sarcasm)`, never the sum: the sentiment
+    errors are largely a subset of the sarcasm ones."""
+    holdout = [
+        {"id": "a", "sentiment": "negative", "sarcasm": True, "unclear": False, "language": "ua"},
+        {"id": "b", "sentiment": "negative", "sarcasm": True, "unclear": False, "language": "ua"},
+    ]
+    labels = [
+        {"sentiment": "positive", "sarcasm": False, "intents": []},  # wrong on both
+        {"sentiment": "negative", "sarcasm": False, "intents": []},  # wrong on sarcasm only
+    ]
+    comments = [
+        {
+            "id": "c",
+            "sentiment": "neutral",
+            "sarcasm": False,
+            "intents": [],
+            "unclear": False,
+            "language": "ua",
+        }
+    ]
+    posts = [
+        {
+            "id": "p",
+            "relevant": True,
+            "post_type": "promo",
+            "brands": [],
+            "unclear": False,
+        }
+    ]
+    _, diagnostics, slice_ids = runner.build_gates(
+        {
+            "comments_test": (
+                comments,
+                [{"sentiment": "neutral", "sarcasm": False, "intents": []}],
+            ),
+            "posts_test": (posts, [{"relevant": True, "post_type": "promo", "brands": []}]),
+            "sarcasm_holdout": (holdout, labels),
+        },
+        {},
+    )
+    assert slice_ids == {"sentiment": ["a"], "sarcasm": ["a", "b"], "union": ["a", "b"]}
+    assert diagnostics["base_errs_union"] == 2
+
+
+# --- transporting a record off the pod ----------------------------------------
+
+
+def test_a_record_written_on_the_pod_appends_here(tmp_path, monkeypatch):
+    """The pod's `results/baselines.json` is a throwaway checkout's file and must
+    never travel over the project's append-only anchor. The record does."""
+    monkeypatch.setattr(runner, "RESULTS", tmp_path / "baselines.json")
+    record = {"model": GEMMA, "timestamp": "2026-08-01T12:00:00+00:00", "config": {}}
+    incoming = tmp_path / "record.json"
+    incoming.write_text(json.dumps(record), encoding="utf-8")
+
+    assert runner.append_record_file(incoming) == 0
+    history = json.loads((tmp_path / "baselines.json").read_text(encoding="utf-8"))
+    assert history[GEMMA] == [record]
+
+    with pytest.raises(SystemExit) as caught:
+        runner.append_record_file(incoming)
+    assert "already in" in str(caught.value)
+
+
+def test_every_record_carries_what_show_results_prints():
+    """`show_results.py` is the only sanctioned reader of the file, and it reads
+    these by key. A record that lacks one makes the whole table unreadable."""
+    results = Path(__file__).resolve().parents[1] / "results" / "baselines.json"
+    for runs in json.loads(results.read_text(encoding="utf-8")).values():
+        for record in runs:
+            config = record["config"]
+            assert {"seed", "heads", "train_sources"} <= set(config)
+            assert {"T1", "T2"} <= set(config["heads"])
+
+
 def test_every_record_that_claims_a_dump_points_at_a_real_one():
     """A ratchet, empty until the first 3c-era run: the six 3b records carry no
     dumps and must not be backfilled, but any record that names one must not lie.

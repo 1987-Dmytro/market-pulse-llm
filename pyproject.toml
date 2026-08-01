@@ -28,6 +28,19 @@ xlmr = [
     "torch>=2.4",
     "transformers>=4.44",
 ]
+# Only the Phase 4 GPU path needs these — `src/market_pulse/local_llm.py` and the
+# runner's `--backend local`. Installed on the rented pod, never on this Mac (no
+# CUDA, and bitsandbytes has no use for one). Isolated exactly like `baseline`
+# and `xlmr`: no test imports them, so `make check` stays green on a bare
+# checkout, and the imports live inside functions rather than at module scope.
+# transformers >= 5.5 is not a preference: `google/gemma-4-31b-it` ships a
+# `gemma4` config and a chat template that older releases cannot read.
+gpu = [
+    "torch>=2.6",
+    "transformers>=5.5",
+    "bitsandbytes>=0.45",
+    "accelerate>=1.0",
+]
 
 [build-system]
 requires = ["setuptools>=68"]

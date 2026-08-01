@@ -40,7 +40,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))  # the package is not pip-installed
 
-from market_pulse import prompts, scorer, zero_shot  # noqa: E402
+from market_pulse import local_llm, prompts, scorer, zero_shot  # noqa: E402
 from market_pulse.brands import watchlist_aliases  # noqa: E402
 from market_pulse.registry import load_registry  # noqa: E402
 from market_pulse.scorer import UNCLEAR  # noqa: E402
@@ -49,6 +49,7 @@ FROZEN = REPO_ROOT / "data" / "frozen"
 RESULTS = REPO_ROOT / "results" / "baselines.json"
 LEDGER = REPO_ROOT / "results" / "spend_3b.json"
 PREDICTIONS = REPO_ROOT / "results" / "predictions"
+G1B_SLICE = REPO_ROOT / "results" / "g1b_slice.json"
 
 SEED = 42
 TEMPERATURE = 0.0
@@ -232,6 +233,38 @@ class FakeClient:
             "generation_id": f"fake-{task}-{step}",
         }
 
+    def batch(self, task: str, texts: list[str]) -> list[dict]:
+        """`--backend local --smoke`: the batched path, same canned replies.
+
+        A row that fails comes back *as* its exception rather than raising, the
+        way a single bad generation does — a whole batch only fails when the
+        generate call itself does.
+        """
+        replies = []
+        for text in texts:
+            try:
+                replies.append(self(task, text))
+            except zero_shot.ApiError as err:
+                replies.append(err)
+        return replies
+
+
+def outcome(task: str, row_id: str, reply, unusable: str) -> dict:
+    """One reply — or the exception instead of one — as the row's outcome.
+
+    Shared by both backends so that the failure taxonomy cannot drift between
+    them: only the name of the non-parse bucket differs (``api`` for a
+    third-party endpoint, ``generation`` for our own weights), because 3b §(e)
+    counts "no usable response" separately from "a response we cannot read".
+    """
+    if isinstance(reply, BaseException):
+        return {"id": row_id, "failure": unusable, "reason": f"{type(reply).__name__}: {reply}"}
+    entry = {"id": row_id, "finish_reason": reply["finish_reason"]}
+    try:
+        return entry | {"labels": prompts.parse_reply(task, reply["content"])}
+    except prompts.ParseError as err:
+        return entry | {"failure": "parse", "reason": err.reason}
+
 
 def classify(client, task: str, rows: list[dict], concurrency: int) -> list[dict]:
     """One request per row, bounded concurrency, ordered results.
@@ -246,15 +279,42 @@ def classify(client, task: str, rows: list[dict], concurrency: int) -> list[dict
         except zero_shot.BudgetExceeded:
             raise  # the cap stops the run; it is not one more failed row
         except Exception as err:  # noqa: BLE001 — every other failure mode is a counted row
-            return {"id": row["id"], "failure": "api", "reason": f"{type(err).__name__}: {err}"}
-        outcome = {"id": row["id"], "finish_reason": reply["finish_reason"]}
-        try:
-            return outcome | {"labels": prompts.parse_reply(task, reply["content"])}
-        except prompts.ParseError as err:
-            return outcome | {"failure": "parse", "reason": err.reason}
+            reply = err
+        return outcome(task, row["id"], reply, "api")
 
     with ThreadPoolExecutor(max_workers=concurrency) as pool:
         return list(pool.map(one, rows))
+
+
+def classify_local(client, task: str, rows: list[dict], batch_size: int) -> list[dict]:
+    """The same contract, one padded batch at a time instead of one request per row.
+
+    Batches are a throughput choice and nothing else — decoding is greedy, so
+    the runbook's batch-invariance check on the pod is what makes that claim a
+    measurement rather than an assumption.
+
+    A batch that raises is charged to its own rows as generation failures; an
+    out-of-memory is not, because it is a fact about the machine and not about
+    any row, and turning it into 758 counted failures would bury the one line
+    that says what actually happened.
+    """
+    outcomes = []
+    for start in range(0, len(rows), batch_size):
+        chunk = rows[start : start + batch_size]
+        try:
+            replies = client.batch(task, [row["text"] for row in chunk])
+        except MemoryError:
+            raise
+        except Exception as err:  # noqa: BLE001 — counted against every row of the batch
+            # Older torch raises a plain RuntimeError for OOM, newer one a named
+            # class; both mean the batch size was wrong, not that a row was.
+            if type(err).__name__ == "OutOfMemoryError" or "out of memory" in str(err).lower():
+                raise
+            replies = [err] * len(chunk)
+        outcomes += [
+            outcome(task, row["id"], reply, "generation") for row, reply in zip(chunk, replies)
+        ]
+    return outcomes
 
 
 def split(rows: list[dict], outcomes: list[dict]) -> tuple[list[dict], list[dict], list[dict]]:
@@ -276,7 +336,12 @@ def failure_block(name: str, outcomes: list[dict], failures: list[dict]) -> dict
         "rows": len(outcomes),
         "scored": len(outcomes) - len(failures),
         "parse_failures": kinds["parse"],
+        # Both buckets are always present, whichever backend ran: a schema that
+        # changed with the runtime would make the two rows harder to compare
+        # than the numbers they carry. The local path leaves `api_failures` 0,
+        # the OpenRouter path leaves `generation_failures` 0.
         "api_failures": kinds["api"],
+        "generation_failures": kinds["generation"],
         # A truncated reply is a parse failure with a cause worth separating: it
         # says max_tokens was too small, not that the model cannot follow a format.
         "truncated": sum(1 for o in outcomes if o.get("finish_reason") == "length"),
@@ -327,6 +392,97 @@ def predictions_path(model: str, timestamp: str) -> Path:
     slug = re.sub(r"[^A-Za-z0-9._-]+", "-", model)
     stamp = re.sub(r"[^0-9TZ]", "", timestamp.replace("+00:00", "Z"))
     return PREDICTIONS / f"{slug}--{stamp}.jsonl"
+
+
+def recorded_prompt_sha256(model: str) -> list[dict]:
+    """Every ``prompt_sha256`` map the results file already holds for a model."""
+    history = json.loads(RESULTS.read_text(encoding="utf-8")) if RESULTS.exists() else {}
+    return [
+        record["config"]["prompt_sha256"]
+        for record in history.get(model, [])
+        if not record.get("reference_only") and "prompt_sha256" in record["config"]
+    ]
+
+
+def assert_prompt_sha_matches_3b(model: str) -> dict:
+    """Refuse to run unless this checkout's prompts are byte-identical to 3b's.
+
+    Compared against the hashes **stored in the 3b records**, never against
+    `prompts.prompt_sha256` on both sides of the equals sign — that assertion
+    passes forever and proves nothing. A cross-check whose prompt moved is not
+    a cross-check of a serving stack; it is two different measurements with one
+    name (SPEC amendment 3.4 (2)).
+    """
+    stored = recorded_prompt_sha256(model)
+    if not stored:
+        raise SystemExit(
+            f"{model}: no earlier record carries a prompt_sha256 to check against — the local run"
+            " would have nothing to be identical to. Stop and report."
+        )
+    current = {task: prompts.prompt_sha256(task) for task in prompts.TASKS}
+    for recorded in stored:
+        if recorded != current:
+            differ = sorted(t for t in current if recorded.get(t) != current[t])
+            raise SystemExit(
+                f"{model}: prompt SHA256 differs from the recorded run on {differ} — recorded"
+                f" {recorded}, now {current}. The prompt is part of the measurement (SPEC §7);"
+                " stop and report rather than re-baselining silently."
+            )
+    return current
+
+
+def write_slice(path: Path, holdout: list[dict], slice_ids: dict) -> str:
+    """Persist the G1b slice as an explicit id list, and return its SHA256.
+
+    Amendment 3.2 draws G1b from "the holdout rows the base model
+    misclassifies"; the gate review of 2026-07-31 read that as the **union** of
+    the sentiment and sarcasm error sets, and amendment 3.4 (2) puts the
+    measurement on our own pod. Counts were enough to choose a base model; a
+    gate needs the ids, because Phase 4's fix-rate is computed row by row
+    against exactly this list.
+    """
+    payload = {
+        "definition": "union(sentiment errors, sarcasm errors) of the base model on the frozen"
+        " sarcasm holdout — SPEC amendment 3.2 as read by the 2026-07-31 gate review,"
+        " measured on our own pod per amendment 3.4 (2)",
+        "input": "sarcasm_holdout",
+        "n_holdout_scored": len(holdout),
+        "n": len(slice_ids["union"]),
+        "n_sentiment_errors": len(slice_ids["sentiment"]),
+        "n_sarcasm_errors": len(slice_ids["sarcasm"]),
+        "ids": slice_ids["union"],
+        "sentiment_error_ids": slice_ids["sentiment"],
+        "sarcasm_error_ids": slice_ids["sarcasm"],
+        "note": (
+            "Fewer than 100 rows is the pre-registered fallback, not a defect: amendment 3.2"
+            " says the slice is then whatever the base model errs on and the smaller n is"
+            " reported next to the gate verdict. Nothing is topped up to reach a count."
+        ),
+    }
+    text = json.dumps(payload, ensure_ascii=False, indent=2) + "\n"
+    path.write_text(text, encoding="utf-8")
+    return sha256(text.encode("utf-8")).hexdigest()
+
+
+def append_record_file(path: Path) -> int:
+    """Append a record produced by ``--record-out`` on another machine.
+
+    The pod holds a throwaway checkout, so its `results/baselines.json` is not
+    the project's file and must never travel back over it — wholesale
+    replacement of an append-only anchor is the mistake `spend_3b.json` has a
+    footgun note about. What travels is the record the scorer built there.
+    """
+    record = json.loads(path.read_text(encoding="utf-8"))
+    history = json.loads(RESULTS.read_text(encoding="utf-8")) if RESULTS.exists() else {}
+    for existing in history.get(record["model"], []):
+        if existing["timestamp"] == record["timestamp"]:
+            raise SystemExit(
+                f"{record['model']} @ {record['timestamp']} is already in"
+                f" {RESULTS.name} — appending it twice would double a row, not add one"
+            )
+    append(record)
+    print(f"appended {record['model']} @ {record['timestamp']} to {RESULTS.name}")
+    return 0
 
 
 def verify_pin(key: str, model: str, tag: str, quantization: str | None) -> dict:
@@ -407,8 +563,8 @@ def write_ledger(ledger: dict) -> None:
     LEDGER.write_text(json.dumps(ledger, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
-def build_gates(inputs: dict, aliases: dict) -> tuple[list[dict], dict]:
-    """Gate entries and diagnostics, every number computed by the scorer."""
+def build_gates(inputs: dict, aliases: dict) -> tuple[list[dict], dict, dict]:
+    """Gate entries, diagnostics and the G1b error sets — every number from the scorer."""
     comments, comment_labels = inputs["comments_test"]
     posts, post_labels = inputs["posts_test"]
     holdout, holdout_labels = inputs["sarcasm_holdout"]
@@ -522,7 +678,12 @@ def build_gates(inputs: dict, aliases: dict) -> tuple[list[dict], dict]:
         "base_errs_sarcasm": len(sarcasm_errs),
         "base_errs_union": len(sentiment_errs | sarcasm_errs),
     }
-    return gates, diagnostics
+    slice_ids = {
+        "sentiment": sorted(sentiment_errs),
+        "sarcasm": sorted(sarcasm_errs),
+        "union": sorted(sentiment_errs | sarcasm_errs),
+    }
+    return gates, diagnostics, slice_ids
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -543,14 +704,52 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--probe", type=int, default=0, metavar="N", help="N live rows per input")
     parser.add_argument("--max-run-usd", type=float, default=DEFAULT_RUN_CAP_USD)
     parser.add_argument("--concurrency", type=int, default=DEFAULT_CONCURRENCY)
+    parser.add_argument(
+        "--backend",
+        choices=("openrouter", "local"),
+        default="openrouter",
+        help="where the weights are: OpenRouter (3b's rows) or this GPU (Phase 4)",
+    )
+    parser.add_argument(
+        "--batch-size",
+        type=int,
+        default=local_llm.DEFAULT_BATCH_SIZE,
+        help="--backend local: rows per padded generate call",
+    )
+    parser.add_argument(
+        "--model-path",
+        help="--backend local: weights directory, if not the Hugging Face repo id",
+    )
+    parser.add_argument(
+        "--revision",
+        help="--backend local: pin the weights to one Hugging Face revision",
+    )
+    parser.add_argument(
+        "--record-out",
+        type=Path,
+        metavar="PATH",
+        help="write the record here instead of appending — for a run on a machine whose"
+        " results/ is not the project's (the pod). Append it later with --append-record.",
+    )
+    parser.add_argument(
+        "--append-record",
+        type=Path,
+        metavar="PATH",
+        help="append a record written by --record-out to results/baselines.json",
+    )
     args = parser.parse_args(argv)
 
+    if args.append_record:
+        return append_record_file(args.append_record)
     if args.precision_probe:
         return precision_probe(api_key())
     if not args.model:
         parser.error("--model is required unless --precision-probe is given")
 
     row = ROWS[args.model]
+    local = args.backend == "local"
+    if local and row.get("ref"):
+        raise SystemExit(f"{args.model} is a reference row — the local backend runs the base model")
     if row.get("batch_only"):
         raise SystemExit(
             f"{args.model}: OpenRouter serves this variant only through /api/beta/batches,"
@@ -567,13 +766,34 @@ def main(argv: list[str] | None = None) -> int:
     if args.probe:
         data = {name: rows[: args.probe] for name, rows in data.items()}
     aliases = watchlist_aliases(load_registry(REPO_ROOT / "config" / "registry.yaml").watchlist)
-    print(f"model {args.model} · endpoint {row['tag']} · quantization {row['quantization']}")
-    print(f"temperature {TEMPERATURE} · max_tokens {MAX_TOKENS} · seed {SEED}")
+    if local:
+        # Before the weights, before the pod bill: the prompts must be the ones
+        # the recorded run sent, or this is not a cross-check.
+        assert_prompt_sha_matches_3b(args.model)
+        print(f"model {args.model} · backend local · quantization {local_llm.QUANTIZATION}")
+        print(f"greedy · max_new_tokens {local_llm.MAX_NEW_TOKENS} · seed {SEED}")
+        print(f"prompt SHA256 equal to the recorded {args.model} run: yes")
+    else:
+        print(f"model {args.model} · endpoint {row['tag']} · quantization {row['quantization']}")
+        print(f"temperature {TEMPERATURE} · max_tokens {MAX_TOKENS} · seed {SEED}")
     for task in prompts.TASKS:
         print(f"prompt {task} sha256 {prompts.prompt_sha256(task)}")
 
+    runtime = None
     if args.smoke:
         client, budget = FakeClient(), None
+        if local:
+            runtime = {"smoke": "no weights were loaded"}
+    elif local:
+        budget = None
+        tokenizer, model = local_llm.load(args.model_path or local_llm.MODEL_ID, args.revision)
+        client = local_llm.LocalClient(tokenizer, model)
+        runtime = local_llm.environment(model)
+        for field, value in runtime.items():
+            print(f"  {field:<20} {value}")
+        if args.dry_run:
+            print("\n--dry-run: weights loaded, nothing scored")
+            return 0
     else:
         key = api_key()
         endpoint = verify_pin(key, args.model, row["tag"], row["quantization"])
@@ -615,7 +835,10 @@ def main(argv: list[str] | None = None) -> int:
     scored_inputs, failure_blocks = {}, []
     try:
         for name, task, _ in INPUTS:
-            outcomes = classify(client, task, data[name], args.concurrency)
+            if local:
+                outcomes = classify_local(client, task, data[name], args.batch_size)
+            else:
+                outcomes = classify(client, task, data[name], args.concurrency)
             rows, labels, failures = split(data[name], outcomes)
             scored_inputs[name] = (rows, labels)
             block = failure_block(name, outcomes, failures)
@@ -623,6 +846,7 @@ def main(argv: list[str] | None = None) -> int:
             print(
                 f"\n{name}: scored {block['scored']}/{block['rows']}"
                 f" · parse {block['parse_failures']} · api {block['api_failures']}"
+                f" · generation {block['generation_failures']}"
                 f" · truncated {block['truncated']}"
             )
             for reason, count in block["reasons"].items():
@@ -649,7 +873,7 @@ def main(argv: list[str] | None = None) -> int:
     if any(block["scored"] == 0 for block in failure_blocks):
         raise SystemExit("an input scored zero rows — stop and report, do not write a record")
 
-    gates, diagnostics = build_gates(scored_inputs, aliases)
+    gates, diagnostics, slice_ids = build_gates(scored_inputs, aliases)
     unusable = {b["input"]: (b["rows"] - b["scored"]) / b["rows"] for b in failure_blocks}
     anchor_valid = all(share <= UNUSABLE_LIMIT for share in unusable.values())
     diagnostics |= {
@@ -681,19 +905,60 @@ def main(argv: list[str] | None = None) -> int:
         )
         return 0
 
-    usage_after = zero_shot.total_usage(key)
-    budget.reconcile(usage_after - ledger["openrouter_total_usage_at_3b_start"])
-    actual = usage_after - usage_now
     timestamp = datetime.now(UTC).isoformat(timespec="seconds")
     dump = predictions_path(args.model, timestamp)
     dump_sha = write_predictions(dump, scored_inputs)
-    record = zero_shot.build_record(
-        model=args.model,
-        timestamp=timestamp,
-        git=git_state(),
-        config={
-            "seed": SEED,
-            "temperature": TEMPERATURE,
+    shared = {
+        "seed": SEED,
+        "temperature": TEMPERATURE,
+        "prompt_sha256": {task: prompts.prompt_sha256(task) for task in prompts.TASKS},
+        "heads": {
+            "T1": "zero-shot sentiment 3-class · sarcasm binary · intents multi-label",
+            "T2": "zero-shot relevance binary · post_type 3-class · brands free-text",
+        },
+        "train_sources": {"zero-shot": "no training data"},
+        "scored_ids_sha256": {
+            name: scored_ids_sha256(rows) for name, (rows, _) in scored_inputs.items()
+        },
+        "predictions_path": str(dump.relative_to(REPO_ROOT)),
+        "predictions_sha256": dump_sha,
+        "tokens": dict(client.usage),
+    }
+
+    if local:
+        config = shared | {
+            "backend": "local",
+            "max_tokens": local_llm.MAX_NEW_TOKENS,
+            "quantization": local_llm.QUANTIZATION,
+            "generation": {
+                "greedy": True,
+                "do_sample": False,
+                "batch_size": args.batch_size,
+                "chat_template": local_llm.CHAT_TEMPLATE,
+            },
+            "runtime": runtime,
+            "spend_ledger": "results/spend_phase4.json",
+            "determinism_note": (
+                "our own pod: weights, kernels and tokenizer are all in this record's"
+                " `runtime`, decoding is greedy and the prompts are byte-identical to the"
+                " OpenRouter run of the same model (asserted before the weights load). This"
+                " row is the G1d/G1e anchor (SPEC amendment 3.4 (2)); where it disagrees with"
+                " the OpenRouter fp8 row, this one anchors and the disagreement is recorded,"
+                " never averaged (ADR 3b-infra-and-precision §(d))."
+            ),
+        }
+        if anchor_valid:
+            slice_sha = write_slice(G1B_SLICE, scored_inputs["sarcasm_holdout"][0], slice_ids)
+            config |= {
+                "g1b_slice_path": str(G1B_SLICE.relative_to(REPO_ROOT)),
+                "g1b_slice_sha256": slice_sha,
+            }
+    else:
+        usage_after = zero_shot.total_usage(key)
+        budget.reconcile(usage_after - ledger["openrouter_total_usage_at_3b_start"])
+        actual = usage_after - usage_now
+        config = shared | {
+            "backend": "openrouter",
             "max_tokens": MAX_TOKENS,
             "provider": {
                 "endpoint": row["tag"],
@@ -702,54 +967,76 @@ def main(argv: list[str] | None = None) -> int:
                 "pinned_quantization": row["quantization"],
                 "allow_fallbacks": False,
             },
-            "prompt_sha256": {task: prompts.prompt_sha256(task) for task in prompts.TASKS},
-            "heads": {
-                "T1": "zero-shot sentiment 3-class · sarcasm binary · intents multi-label",
-                "T2": "zero-shot relevance binary · post_type 3-class · brands free-text",
-            },
-            "train_sources": {"zero-shot": "no training data"},
-            "scored_ids_sha256": {
-                name: scored_ids_sha256(rows) for name, (rows, _) in scored_inputs.items()
-            },
-            "predictions_path": str(dump.relative_to(REPO_ROOT)),
-            "predictions_sha256": dump_sha,
             "spend_usd": round(actual, 6),
-            "tokens": dict(client.usage),
             "determinism_note": (
                 "third-party serving endpoint: provider-side determinism is NOT guaranteed,"
                 " temperature 0 and a fixed seed notwithstanding. The model chosen at the"
                 " Phase 4 gate is re-run zero-shot on our own GPU during the Phase 4 smoke"
                 " as the cross-check (ADR 3b-infra-and-precision §(d))."
             ),
-        },
+        }
+
+    record = zero_shot.build_record(
+        model=args.model,
+        timestamp=timestamp,
+        git=git_state(),
+        config=config,
         gates=gates,
         diagnostics=diagnostics,
         reference_only=args.reference_only,
     )
-    append(record)
-    ledger["runs"].append(
-        {
-            "model": args.model,
-            "timestamp": record["timestamp"],
-            "usd": round(actual, 6),
-            "requests": sum(b["rows"] for b in failure_blocks),
-        }
-    )
-    write_ledger(ledger)
+    if args.record_out:
+        args.record_out.parent.mkdir(parents=True, exist_ok=True)
+        args.record_out.write_text(
+            json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        )
+        print(f"\nwrote {args.record_out} — append it with --append-record, nothing appended here")
+    else:
+        append(record)
+        print(f"\nwrote {RESULTS.relative_to(REPO_ROOT)} — read it with scripts/show_results.py")
 
-    print(
-        f"\nactual spend this run ${actual:.4f}"
-        f" · 3b total ${usage_after - ledger['openrouter_total_usage_at_3b_start']:.4f}"
-        f" of ${PHASE_CAP_USD:.2f}"
-    )
+    if not local:
+        ledger["runs"].append(
+            {
+                "model": args.model,
+                "timestamp": record["timestamp"],
+                "usd": round(actual, 6),
+                "requests": sum(b["rows"] for b in failure_blocks),
+            }
+        )
+        write_ledger(ledger)
+        print(
+            f"actual spend this run ${actual:.4f}"
+            f" · 3b total ${usage_after - ledger['openrouter_total_usage_at_3b_start']:.4f}"
+            f" of ${PHASE_CAP_USD:.2f}"
+        )
     print(f"tokens {dict(client.usage)}")
-    print(f"wrote {RESULTS.relative_to(REPO_ROOT)} — read it with scripts/show_results.py")
     print(f"wrote {dump.relative_to(REPO_ROOT)} — {len(prediction_lines(scored_inputs))} rows")
+    if local and anchor_valid:
+        print(
+            f"wrote {G1B_SLICE.relative_to(REPO_ROOT)} — G1b slice n {len(slice_ids['union'])}"
+            f" of {len(scored_inputs['sarcasm_holdout'][0])} holdout rows"
+            f" (sentiment {len(slice_ids['sentiment'])} ∪ sarcasm {len(slice_ids['sarcasm'])})"
+        )
+        if len(slice_ids["union"]) < 100:
+            print(
+                "  n < 100: amendment 3.2's pre-registered fallback — the slice is whatever the"
+                " base model errs on and the smaller n is reported beside the gate verdict."
+                " Nothing is topped up."
+            )
     code = [p for p in record["git"]["dirty"] if p.startswith(("src/", "scripts/", "config/"))]
     if code:
         print(
             f"WARNING: uncommitted code — {record['git']['commit'][:9]} does not reproduce: {code}"
         )
+    if not anchor_valid:
+        print(
+            f"\nSTOP AND REPORT: unusable rows exceed {UNUSABLE_LIMIT:.0%} in"
+            f" {[k for k, v in unusable.items() if v > UNUSABLE_LIMIT]}. The record is written"
+            " so the evidence survives, marked gate_anchor_valid false; no G1b slice was"
+            " written and this run anchors nothing. Do not re-run in a loop — report."
+        )
+        return 3
     return 0
 
 
