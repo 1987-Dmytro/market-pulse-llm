@@ -1350,7 +1350,10 @@ def main(argv: list[str] | None = None) -> int:
         )
     print(f"tokens {dict(client.usage)}")
     print(f"wrote {dump.relative_to(REPO_ROOT)} — {len(prediction_lines(scored_inputs))} rows")
-    if local and anchor_valid:
+    # `slice_ids` is None when an arm scored the pre-registered slice instead of
+    # writing one — the same condition `local_config` branches on, and the reason
+    # this line is not guarded by `anchor_valid` alone.
+    if local and anchor_valid and slice_ids is not None:
         print(
             f"wrote {G1B_SLICE.relative_to(REPO_ROOT)} — G1b slice n {len(slice_ids['union'])}"
             f" of {len(scored_inputs['sarcasm_holdout'][0])} holdout rows"

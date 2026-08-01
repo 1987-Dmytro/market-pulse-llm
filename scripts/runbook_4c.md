@@ -78,8 +78,12 @@ runpodctl ssh info <POD_ID>        # "pod not ready" for a minute or two is norm
 Then the bundle, the venv and the dataset check — 4b's steps 3 and 4, unchanged except that a
 volume-less pod has no venv and no weights cache yet:
 
+**Both arms clone the same bundle file.** The ablation is "identical config and seed, exactly one
+data path differs"; a second bundle built from a later HEAD would make the arms differ by a commit
+as well, however harmless that commit looks. Build it once, before arm A, and reuse the file.
+
 ```bash
-git bundle create /tmp/market-pulse-4c.bundle HEAD
+git bundle create /tmp/market-pulse-4c.bundle HEAD      # once, for both arms
 scp -P <PORT> /tmp/market-pulse-4c.bundle root@<HOST>:/workspace/
 
 ssh -p <PORT> root@<HOST>

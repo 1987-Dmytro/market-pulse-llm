@@ -1,0 +1,3 @@
+{"step": 5, "epoch": 0, "loss": 0.18050515746340637, "lr": 6.25e-05, "seconds_per_step": 43.617389392852786, "micro_batch": 2, "gpu_gb": 29.85}
+{"step": 10, "epoch": 0, "loss": 0.10973685070451893, "lr": 9.998583973465646e-05, "seconds_per_step": 44.137664794921875, "micro_batch": 2, "gpu_gb": 29.85, "carve_loss": 0.11246729347449975}
+{"step": 15, "epoch": 1, "loss": 0.056799832917022286, "lr": 9.982662884590662e-05, "seconds_per_step": 42.92238712310791, "micro_batch": 2, "gpu_gb": 29.03, "carve_loss": 0.059149926664152495}

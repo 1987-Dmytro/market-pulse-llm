@@ -601,7 +601,7 @@ def arm_dir(tmp_path, **overrides):
     """A trainer output directory: the adapter beside the run's provenance."""
     provenance = json.loads((SMOKE_PROVENANCE / "provenance.json").read_text(encoding="utf-8"))
     provenance |= overrides
-    (tmp_path / "adapter").mkdir()
+    (tmp_path / "adapter").mkdir(parents=True)
     (tmp_path / "adapter" / "adapter_config.json").write_text("{}", encoding="utf-8")
     (tmp_path / "adapter" / "adapter_model.safetensors").write_bytes(b"not really weights")
     (tmp_path / "provenance.json").write_text(json.dumps(provenance), encoding="utf-8")
@@ -769,6 +769,9 @@ class AlwaysAnswers:
     def batch(self, task, texts):
         return [self(task, text) for text in texts]
 
+    def eval(self):  # a stubbed model stands in for the PeftModel the arm loads
+        return self
+
 
 def test_an_arms_gate_eval_runs_end_to_end_over_the_real_frozen_rows(monkeypatch, tmp_path, capsys):
     """Driven through `main` with a stub client: the 758 frozen rows, the
@@ -795,3 +798,59 @@ def test_an_arms_gate_eval_runs_end_to_end_over_the_real_frozen_rows(monkeypatch
     # G1b entry is the second gate and lands well inside it.
     assert '"slice": 44' in printed and '"fixed":' in printed and '"delta":' in printed
     assert "base_errs" not in printed, "a fine-tuned run must not report base error sets"
+
+
+def test_an_arm_writes_a_complete_record_without_a_gpu(monkeypatch, tmp_path, capsys):
+    """The record-writing path, driven end to end with stubbed weights.
+
+    `--smoke` returns before the record is built and `--probe` before it is
+    written, so until this test nothing had ever run an arm's `--record-out`.
+    Discovering a defect there costs a 3.4 h training run; discovering it here
+    costs a second.
+    """
+    import sys
+    import types
+
+    monkeypatch.setitem(
+        sys.modules,
+        "peft",
+        types.SimpleNamespace(PeftModel=types.SimpleNamespace(from_pretrained=lambda m, p: m)),
+    )
+    monkeypatch.setattr(runner.local_llm, "load", lambda *a, **k: (None, AlwaysAnswers()))
+    monkeypatch.setattr(runner.local_llm, "environment", lambda *a, **k: {"gpu": "stub"})
+    monkeypatch.setattr(runner, "LocalClient", None, raising=False)
+    monkeypatch.setattr(runner.local_llm, "LocalClient", lambda tok, model: model)
+    # inside the repo, because the record stores the dump path relative to it —
+    # `.pytest_cache/` is gitignored, so nothing lands in the tree
+    dumps = runner.REPO_ROOT / ".pytest_cache" / "predictions"
+    monkeypatch.setattr(runner, "PREDICTIONS", dumps)
+    monkeypatch.setattr(runner, "write_slice", boom)
+
+    out = tmp_path / "record.json"
+    assert (
+        runner.main(
+            [
+                *("--model", GEMMA, "--backend", "local", "--batch-size", "1"),
+                *("--adapter", str(arm_dir(tmp_path / "run", arm="with-synthetic"))),
+                *("--arm", "with-synthetic"),
+                *("--eval-checkpoint", str(tmp_path / "eval.jsonl")),
+                *("--record-out", str(out)),
+            ]
+        )
+        == 0
+    )
+    record = json.loads(out.read_text(encoding="utf-8"))
+    config = record["config"]
+    assert config["backend"] == "local"
+    assert config["generation"]["batch_size"] == 1
+    assert config["fine_tune"]["arm"] == "with-synthetic"
+    assert config["train_sources"] != {"zero-shot": "no training data"}
+    assert config["g1b_slice_sha256"] == sha256(runner.G1B_SLICE.read_bytes()).hexdigest()
+    g1b = next(entry for entry in record["gates"] if entry["gate"] == "G1b")
+    assert g1b["n"]["slice"] == 44 and g1b["guard"]["max_drop"] == 0.02
+    # the dump the record names, and the checkpoint that would have resumed it
+    dump = runner.REPO_ROOT / config["predictions_path"]
+    assert sha256(dump.read_bytes()).hexdigest() == config["predictions_sha256"]
+    assert len(dump.read_text(encoding="utf-8").splitlines()) == 758
+    assert len((tmp_path / "eval.jsonl").read_text(encoding="utf-8").splitlines()) == 759
+    dump.unlink()
