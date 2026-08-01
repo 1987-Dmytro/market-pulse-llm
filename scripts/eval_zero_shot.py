@@ -40,7 +40,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))  # the package is not pip-installed
 
-from market_pulse import local_llm, prompts, scorer, zero_shot  # noqa: E402
+from market_pulse import local_llm, prompts, records, scorer, zero_shot  # noqa: E402
 from market_pulse.brands import watchlist_aliases  # noqa: E402
 from market_pulse.registry import load_registry  # noqa: E402
 from market_pulse.scorer import UNCLEAR  # noqa: E402
@@ -410,47 +410,28 @@ def predictions_path(model: str, timestamp: str) -> Path:
     return PREDICTIONS / f"{slug}--{stamp}.jsonl"
 
 
+def history() -> dict:
+    return json.loads(RESULTS.read_text(encoding="utf-8")) if RESULTS.exists() else {}
+
+
 def recorded_prompt_sha256(model: str) -> list[dict]:
     """Every ``prompt_sha256`` map the results file already holds for a model."""
-    history = json.loads(RESULTS.read_text(encoding="utf-8")) if RESULTS.exists() else {}
-    return [
-        record["config"]["prompt_sha256"]
-        for record in history.get(model, [])
-        if not record.get("reference_only") and "prompt_sha256" in record["config"]
-    ]
+    return records.prompt_sha_history(history(), model)
 
 
 def assert_prompt_sha_matches_3b(model: str) -> dict:
     """Refuse to run unless this checkout's fixed prompts hash to 3b's hashes.
 
-    Compared against the hashes **stored in the 3b records**, never against
-    `prompts.prompt_sha256` on both sides of the equals sign — that assertion
-    passes forever and proves nothing. A cross-check whose prompt moved is not
-    a cross-check of a serving stack; it is two different measurements with one
-    name (SPEC amendment 3.4 (2)).
-
-    What the hash covers is exactly what 3b's hash covered: `prompts.PROMPTS`.
-    The row wrapper and the single `user` role come from
-    `prompts.build_messages`, which both backends call — they are shared code,
-    not a hashed field, and widening the hash now would make this run
-    incomparable to the row it exists to check.
+    A cross-check whose prompt moved is not a cross-check of a serving stack; it
+    is two different measurements with one name (SPEC amendment 3.4 (2)). The
+    comparison itself is `records.assert_prompt_sha`, which the trainer runs
+    against the same records at dataset build — one prompt identity, one
+    implementation.
     """
-    stored = recorded_prompt_sha256(model)
-    if not stored:
-        raise SystemExit(
-            f"{model}: no earlier record carries a prompt_sha256 to check against — the local run"
-            " would have nothing to be identical to. Stop and report."
-        )
-    current = {task: prompts.prompt_sha256(task) for task in prompts.TASKS}
-    for recorded in stored:
-        if recorded != current:
-            differ = sorted(t for t in current if recorded.get(t) != current[t])
-            raise SystemExit(
-                f"{model}: prompt SHA256 differs from the recorded run on {differ} — recorded"
-                f" {recorded}, now {current}. The prompt is part of the measurement (SPEC §7);"
-                " stop and report rather than re-baselining silently."
-            )
-    return current
+    try:
+        return records.assert_prompt_sha(recorded_prompt_sha256(model), model)
+    except ValueError as err:
+        raise SystemExit(str(err)) from None
 
 
 def write_slice(path: Path, holdout: list[dict], slice_ids: dict) -> str:

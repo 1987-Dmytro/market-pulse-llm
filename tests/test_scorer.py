@@ -106,36 +106,72 @@ def test_sentiment_macro_f1_rejects_an_all_unclear_input():
         scorer.sentiment_macro_f1([scorer.UNCLEAR], ["positive"], ["ua"])
 
 
-# --- G1b: sarcasm slice -----------------------------------------------------
+# --- G1b: the persisted sarcasm slice ---------------------------------------
 #
-#   idx  gold      base      tuned      in slice?  fixed?
-#    0   negative  positive  negative   yes        yes
-#    1   negative  positive  positive   yes        no
-#    2   positive  positive  negative   no         (broken, but outside the slice)
-#    3   negative  negative  negative   no
+# Amendment 3.5 (3): the slice is the id list the anchor run persisted, and a
+# row is FIXED only when the fine-tune is right on BOTH labels — it leaves the
+# union of sentiment and sarcasm errors that put it there.
 #
-# slice = {0, 1}, fixed = {0} -> 1/2
-SLICE_GOLD = ["negative", "negative", "positive", "negative"]
-SLICE_BASE = ["positive", "positive", "positive", "negative"]
-SLICE_TUNED = ["negative", "positive", "negative", "negative"]
+#   id   gold (sentiment, sarcasm)  tuned (sentiment, sarcasm)  in slice?  fixed?
+#    a   negative  True             negative  True              yes        yes
+#    b   negative  True             negative  False             yes        no (sarcasm)
+#    c   positive  False            negative  False             yes        no (sentiment)
+#    d   neutral   False            negative  True              NO         (broken outside it)
+#
+# fixed 1 of n 3 -> rate 1/3
+SLICE_IDS = ["a", "b", "c"]
+SLICE_GOLD = {
+    "a": {"sentiment": "negative", "sarcasm": True},
+    "b": {"sentiment": "negative", "sarcasm": True},
+    "c": {"sentiment": "positive", "sarcasm": False},
+    "d": {"sentiment": "neutral", "sarcasm": False},
+}
+SLICE_TUNED = {
+    "a": {"sentiment": "negative", "sarcasm": True},
+    "b": {"sentiment": "negative", "sarcasm": False},
+    "c": {"sentiment": "negative", "sarcasm": False},
+    "d": {"sentiment": "negative", "sarcasm": True},
+}
 
 
-def test_sarcasm_slice_fix_rate_counts_only_the_rows_the_base_model_got_wrong():
-    assert scorer.sarcasm_slice_fix_rate(SLICE_GOLD, SLICE_BASE, SLICE_TUNED) == pytest.approx(0.5)
-
-
-def test_sarcasm_slice_fix_rate_excludes_unclear_rows():
-    """Dropping an unclear row the base model also got wrong must shrink the slice."""
-    gold = [*SLICE_GOLD, scorer.UNCLEAR]
-    rate = scorer.sarcasm_slice_fix_rate(
-        gold, [*SLICE_BASE, "positive"], [*SLICE_TUNED, "negative"]
+def test_sarcasm_slice_fix_rate_counts_a_row_only_when_both_labels_are_right():
+    assert scorer.sarcasm_slice_fix_rate(SLICE_IDS, SLICE_GOLD, SLICE_TUNED) == pytest.approx(
+        {"fixed": 1, "n": 3, "rate": 1 / 3}
     )
-    assert rate == pytest.approx(0.5)  # not 2/3, which counting the unclear row would give
+
+
+def test_sarcasm_slice_fix_rate_scores_the_given_slice_and_never_recomputes_one():
+    """Row `d` is wrong on both labels and outside the slice: it must not appear.
+
+    This is the whole point of the amendment — a slice recomputed from whatever
+    predictions the caller passed is not the pre-registered slice.
+    """
+    with_d = scorer.sarcasm_slice_fix_rate([*SLICE_IDS, "d"], SLICE_GOLD, SLICE_TUNED)
+    assert with_d["n"] == 4 and with_d["fixed"] == 1  # the id list decides, nothing else
+    assert scorer.sarcasm_slice_fix_rate(SLICE_IDS, SLICE_GOLD, SLICE_TUNED)["n"] == 3
+
+
+def test_sarcasm_slice_fix_rate_refuses_a_slice_row_it_was_given_no_prediction_for():
+    """An incomplete run must not read as a failed gate."""
+    with pytest.raises(ValueError, match="no prediction"):
+        scorer.sarcasm_slice_fix_rate(SLICE_IDS, SLICE_GOLD, {"a": SLICE_TUNED["a"]})
+
+
+def test_sarcasm_slice_fix_rate_refuses_an_unclear_slice_row():
+    """Dropping it would shrink the pre-registered denominator in silence."""
+    gold = dict(SLICE_GOLD, b={"sentiment": scorer.UNCLEAR, "sarcasm": None})
+    with pytest.raises(ValueError, match="unclear"):
+        scorer.sarcasm_slice_fix_rate(SLICE_IDS, gold, SLICE_TUNED)
+
+
+def test_sarcasm_slice_fix_rate_refuses_a_repeated_id():
+    with pytest.raises(ValueError, match="repeats an id"):
+        scorer.sarcasm_slice_fix_rate(["a", "a"], SLICE_GOLD, SLICE_TUNED)
 
 
 def test_sarcasm_slice_fix_rate_refuses_an_empty_slice():
     with pytest.raises(ValueError, match="empty slice"):
-        scorer.sarcasm_slice_fix_rate(["negative"], ["negative"], ["positive"])
+        scorer.sarcasm_slice_fix_rate([], SLICE_GOLD, SLICE_TUNED)
 
 
 # --- G1c: intents -----------------------------------------------------------
@@ -251,6 +287,55 @@ def test_normalise_brand_trusts_the_gold_brand_id_over_the_alias_map():
     assert scorer.normalise_brand(entry, ALIASES) == "yagotynske"
     assert scorer.normalise_brand({"brand_id": None, "mention": " Рудь "}, ALIASES) == "rud"
     assert scorer.normalise_brand({"brand_id": None, "mention": "Baltais"}, ALIASES) == "baltais"
+
+
+# --- the bars ---------------------------------------------------------------
+#
+# Anchors invented for the fixture on purpose: the real ones are measurements
+# and live in `results/baselines.json` (amendment 3.5 (1)). A test that typed
+# them would be the second copy that drifts.
+#
+#   G1a  overall 0.80 + 5 pp = 0.85 · floors ua 0.75 - 2 pp = 0.73, ru 0.70 - 2 pp = 0.68
+#   G1b  ceil(0.60 * 44) = ceil(26.4) = 27 of 44
+#   G1c  0.60 + 5 pp = 0.65 · G1d 0.90 - 1 pp = 0.89 · G1e 0.85 - 1 pp = 0.84
+ANCHORS = {
+    "G1a": {"overall": 0.80, "ua": 0.75, "ru": 0.70, "other": 0.60},
+    "G1c": 0.60,
+    "G1d": 0.90,
+    "G1e": 0.85,
+}
+
+
+def test_gate_thresholds_matches_the_hand_computed_bars():
+    bars = scorer.gate_thresholds(ANCHORS, slice_n=44)
+    assert bars["G1a"]["min"] == pytest.approx(0.85)
+    assert bars["G1a"]["floors"] == pytest.approx({"ua": 0.73, "ru": 0.68})
+    assert bars["G1b"] == {"min_fixed": 27, "n": 44, "max_macro_f1_drop": 0.02}
+    assert bars["G1c"]["min"] == pytest.approx(0.65)
+    assert bars["G1d"]["min"] == pytest.approx(0.89)
+    assert bars["G1e"]["min"] == pytest.approx(0.84)
+
+
+def test_gate_thresholds_floors_only_the_languages_the_spec_gates():
+    """`other` is in the record and out of the gate (amendment 3.1)."""
+    assert set(scorer.gate_thresholds(ANCHORS, 44)["G1a"]["floors"]) == set(scorer.GATED_LANGUAGES)
+
+
+def test_gate_thresholds_refuses_a_bar_above_the_metric_ceiling():
+    """The negative control, and the situation amendment 3.5 (2) had to repair.
+
+    An anchor of 0.97 with a +5 pp margin demands 1.02 of a macro-F1 — arithmetic
+    about the gate, not a prediction about the model.
+    """
+    saturated = dict(ANCHORS, G1c=0.97)
+    with pytest.raises(ValueError, match="above the 1.0 ceiling"):
+        scorer.gate_thresholds(saturated, 44)
+
+
+def test_gate_thresholds_rounds_the_g1b_count_up_without_the_binary_artefact():
+    """0.60 * 45 is 27.000000000000004 in floating point: the bar is 27, not 28."""
+    assert scorer.gate_thresholds(ANCHORS, 45)["G1b"]["min_fixed"] == 27
+    assert scorer.gate_thresholds(ANCHORS, 46)["G1b"]["min_fixed"] == 28  # ceil(27.6)
 
 
 # --- the mechanism ----------------------------------------------------------

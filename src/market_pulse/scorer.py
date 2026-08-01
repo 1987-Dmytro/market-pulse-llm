@@ -19,6 +19,7 @@ Rules every implementation honours:
 - pure functions: no model, no dataset, no file is loaded here.
 """
 
+import math
 from collections.abc import Hashable, Iterable
 
 UNCLEAR = "unclear"
@@ -88,25 +89,57 @@ def sentiment_macro_f1(
     return scores
 
 
-def sarcasm_slice_fix_rate(y_true: list[str], base_pred: list[str], tuned_pred: list[str]) -> float:
-    """G1b — share of the sarcasm slice that the fine-tune repairs.
+def sarcasm_slice_fix_rate(
+    slice_ids: Iterable[str], gold: dict[str, dict], predicted: dict[str, dict]
+) -> dict:
+    """G1b — how much of the persisted sarcasm slice the fine-tune repairs.
 
-    The slice is defined by the base model: exactly the rows of the frozen
-    sarcasm holdout it gets wrong (amendment 3.2, which replaced rev. 3's curated
-    150-200 examples). Its size is whatever that error set is — the amendment
-    records the fallback for fewer than 100 rows, so a small slice is legal and
-    only its ``n`` has to be reported next to the verdict. An *empty* slice is
-    not: there is nothing to fix and the caller must not silently read 0.0 or 1.0
-    into that.
+    The slice is **given, not recomputed** (SPEC amendment 3.5 (3)): it is the
+    id list in ``results/g1b_slice.json``, measured once by the own-pod base
+    run, and the caller verifies that file's SHA256 against the anchor record
+    before it gets here. Recomputing it from a label column — which is what this
+    function did until the amendment — would let the slice drift with whatever
+    predictions the caller happened to pass, and the base model's error set is
+    pre-registered, not re-derivable at gate time.
 
-    Gate: >= 0.60 fixed while ``overall`` from :func:`sentiment_macro_f1`
-    degrades by no more than 2 pp.
+    A row is **FIXED** iff the fine-tuned model is right on *both* labels of that
+    row: the slice is the union of the base model's sentiment and sarcasm errors,
+    so a row leaves the union only when neither error is left. Fix-rate is
+    ``fixed / len(slice_ids)`` — the pre-registered denominator, which is why a
+    slice row this caller cannot answer for raises instead of scoring 0:
+
+    - an id missing from ``predicted`` means the run did not score the whole
+      slice, and an incomplete run must not read as a failed gate;
+    - an id whose gold is unclear cannot be in a slice built from scoreable rows,
+      so it is an input defect; dropping it would silently shrink the
+      pre-registered denominator (the one place this module does not apply its
+      own ``unclear`` rule, and it is deliberate).
+
+    ``gold`` and ``predicted`` map an id to ``{"sentiment": str, "sarcasm":
+    bool}``. Returns ``fixed`` / ``n`` / ``rate``: the gate is a count against
+    :func:`gate_thresholds`, and n travels with it (amendment 3.2's fallback
+    says the smaller n is reported beside the verdict).
+
+    Gate: ``fixed`` >= 60% of n, while ``overall`` from
+    :func:`sentiment_macro_f1` degrades by no more than 2 pp.
     """
-    y_true, base_pred, tuned_pred = _drop_unclear(y_true, base_pred, tuned_pred)
-    slice_rows = [i for i, gold in enumerate(y_true) if base_pred[i] != gold]
-    if not slice_rows:
-        raise ValueError("empty slice: the base model got every scoreable row right")
-    return sum(1 for i in slice_rows if tuned_pred[i] == y_true[i]) / len(slice_rows)
+    ids = list(slice_ids)
+    if not ids:
+        raise ValueError("empty slice: G1b has nothing to measure and no default to fall back on")
+    if len(set(ids)) != len(ids):
+        raise ValueError("the slice repeats an id — its length is the gate's denominator")
+    fixed = 0
+    for row_id in ids:
+        for name, table in (("gold", gold), ("prediction", predicted)):
+            if row_id not in table:
+                raise ValueError(f"{row_id} is in the slice but has no {name}")
+        truth = gold[row_id]
+        if truth["sentiment"] == UNCLEAR or truth["sarcasm"] is None:
+            raise ValueError(f"{row_id} is unclear, so it cannot be a slice row: check the inputs")
+        answer = predicted[row_id]
+        if answer["sentiment"] == truth["sentiment"] and answer["sarcasm"] == truth["sarcasm"]:
+            fixed += 1
+    return {"fixed": fixed, "n": len(ids), "rate": fixed / len(ids)}
 
 
 def intents_micro_f1(y_true: list[Iterable[str] | None], y_pred: list[Iterable[str]]) -> float:
@@ -203,3 +236,72 @@ def brand_extraction_f1(
         sum(len(p - g) for g, p in zip(gold, pred)),
         sum(len(g - p) for g, p in zip(gold, pred)),
     )
+
+
+# --- the bars ---------------------------------------------------------------
+#
+# Every Tier-1 gate is stated as a margin over a baseline, so a bar is one
+# margin plus one measured anchor. The margins are gate *definitions* and belong
+# in code; the anchors are *measurements* and are read out of the own-pod record
+# by the caller (amendment 3.5 (1) — "never hand-typed"), because a threshold
+# nobody can re-derive from a result file is a threshold nobody can audit.
+G1A_MARGIN = 0.05
+G1A_LANGUAGE_DROP = 0.02
+G1B_FIX_SHARE = 0.60
+G1B_MACRO_F1_DROP = 0.02
+G1C_MARGIN = 0.05
+NO_REGRESSION_DROP = 0.01
+"""G1d and G1e: amendment 3.5 (2) replaced "+10 pp" with `anchor - 1 pp`."""
+
+
+def gate_thresholds(anchors: dict, slice_n: int) -> dict:
+    """The pre-registered bars, derived from one anchor row and the margins.
+
+    ``anchors`` is ``{"G1a": {"overall": f, "<lang>": f, ...}, "G1c": f,
+    "G1d": f, "G1e": f}`` — the gated values of the zero-shot anchor. Only
+    :data:`GATED_LANGUAGES` get floors; a language the record carries but the
+    spec does not gate (``other``, amendment 3.1) must not grow one here.
+
+    A bar above 1.0 raises. All five metrics are bounded by 1.0, so "anchor +
+    margin" can state a threshold no model can reach — that is arithmetic about
+    the gate, not a prediction about the model, and it is exactly what happened
+    to G1d and G1e before amendment 3.5 (2). The check is cheap and it fires the
+    day an anchor lands, which is the only moment at which a mis-specified gate
+    can still be renegotiated honestly.
+    """
+    if slice_n < 1:
+        raise ValueError("the G1b slice is empty: its size is the gate's denominator")
+    bars = {
+        "G1a": {
+            "min": anchors["G1a"]["overall"] + G1A_MARGIN,
+            "floors": {
+                language: anchors["G1a"][language] - G1A_LANGUAGE_DROP
+                for language in GATED_LANGUAGES
+            },
+        },
+        "G1b": {
+            # 0.60 * 45 is 27.000000000000004 in binary floating point, and an
+            # unrounded ceiling would demand 28 of 45. Round, then ceil.
+            "min_fixed": math.ceil(round(G1B_FIX_SHARE * slice_n, 6)),
+            "n": slice_n,
+            "max_macro_f1_drop": G1B_MACRO_F1_DROP,
+        },
+        "G1c": {"min": anchors["G1c"] + G1C_MARGIN},
+        "G1d": {"min": anchors["G1d"] - NO_REGRESSION_DROP},
+        "G1e": {"min": anchors["G1e"] - NO_REGRESSION_DROP},
+    }
+    unreachable = {
+        gate: sorted(
+            bar for bar in [block.get("min"), *block.get("floors", {}).values()] if bar > 1
+        )
+        for gate, block in bars.items()
+        if "min" in block
+    }
+    named = {gate: bars for gate, bars in unreachable.items() if bars}
+    if named:
+        raise ValueError(
+            f"a bar above the 1.0 ceiling of a bounded metric: {named} — the gate is"
+            " mis-specified, not failed; report it to the operator (docs/SPEC.md §5 is"
+            " a team-lead file and thresholds are immutable without approval)"
+        )
+    return bars
