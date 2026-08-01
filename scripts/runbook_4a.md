@@ -150,9 +150,14 @@ PY
 Nothing below writes a record. Each step is a stop-and-report if it fails — and a stop-and-report
 means **stop the pod first** (`runpodctl pod stop <POD_ID>`), then write the report.
 
+`RUNPOD_POD_ID` is set for the container's main process and **not** for an SSH session, so the
+record's `runtime.pod_id` is `None` unless it is exported by hand. Export it — a rented number that
+cannot name the machine it came from is half a provenance.
+
 ```bash
 cd /workspace/market-pulse
 export HF_HOME=/workspace/hf
+export RUNPOD_POD_ID=<POD_ID>          # not inherited over ssh; runpodctl pod list has it
 PY=/workspace/venv/bin/python
 
 # (a) the whole pipeline with no weights at all — prompts, parser, failure buckets, scorer.
@@ -189,6 +194,27 @@ Both `test -s` guards matter: two crashed probes produce two empty files, and `d
 files is silent success. If the labels differ, the run uses `--batch-size 1` and the deviation is
 reported. A faster wrong number is still a wrong number.
 
+**On 2026-08-01 this check failed, and that is why it exists.** One row of 24 came back with
+different intents at batch 8 (`[]` at batch 1, `["packaging", "quality"]` at batch 8) — same
+weights, same prompt, greedy decoding, temperature 0. Left padding and kernel selection move a
+logit, so "greedy, therefore batch-invariant" is false on bitsandbytes NF4 + A6000. **The run went
+at `--batch-size 1`.**
+
+Batch 1 is trivially invariant — one row, no padding — but that is an argument, not a measurement,
+so measure the other half: the same probe twice must produce identical labels.
+
+```bash
+$PY scripts/eval_zero_shot.py --model google/gemma-4-31b-it --backend local \
+  --revision <SHA> --probe 16 --batch-size 1 > /tmp/a1.txt 2>&1
+$PY scripts/eval_zero_shot.py --model google/gemma-4-31b-it --backend local \
+  --revision <SHA> --probe 16 --batch-size 1 > /tmp/a2.txt 2>&1
+diff <(grep '"pred"' /tmp/a1.txt) <(grep '"pred"' /tmp/a2.txt) && echo "run-to-run identical"
+```
+
+It also gives the projection the smoke owes the full run. 2026-08-01: 48 rows in 191 s wall, of
+which ~45 s is the model load — **3.04 s/row**, so 758 rows ≈ **39 min**, ≈ **$0.35** at $0.53/hr,
+far inside amendment 3.4 (4)'s 4 h per arm. A projection over that ceiling stops the line.
+
 ## 6. The run — once
 
 All 758 frozen rows: 400 comments + 250 posts + 108 holdout. One run, no re-run loops. If unusable
@@ -209,13 +235,18 @@ date -u +%Y-%m-%dT%H:%M:%SZ
 
 # --- on the pod ---
 cd /workspace/market-pulse
-export HF_HOME=/workspace/hf
 mkdir -p /workspace/out
-/workspace/venv/bin/python scripts/eval_zero_shot.py \
+setsid nohup env HF_HOME=/workspace/hf RUNPOD_POD_ID=<POD_ID> \
+  /workspace/venv/bin/python scripts/eval_zero_shot.py \
   --model google/gemma-4-31b-it --backend local --revision <SHA> \
-  --batch-size 8 \
-  --record-out /workspace/out/record.json 2>&1 | tee /workspace/out/run.log
+  --batch-size 1 \
+  --record-out /workspace/out/record.json > /workspace/out/run.log 2>&1 < /dev/null &
+pgrep -af eval_zero_shot          # the process is the liveness check, not the log
 ```
+
+Detached on purpose: 39 minutes is longer than an SSH session should be trusted for, and a dropped
+connection must not kill the one paid run. Poll `pgrep -af eval_zero_shot` **and** the log — a
+success-only `grep` stays silent through a crash.
 
 ## 7. Bring the three artifacts home, then stop the pod
 
@@ -227,8 +258,25 @@ scp -P <PORT> root@<HOST>:/workspace/out/run.log /tmp/4a/
 scp -P <PORT> 'root@<HOST>:/workspace/market-pulse/results/predictions/*.jsonl' results/predictions/
 scp -P <PORT> root@<HOST>:/workspace/market-pulse/results/g1b_slice.json results/
 
+```
+
+**Check the hashes before appending, not after.** `results/baselines.json` is append-only; a record
+whose artifacts did not survive the copy is a row that can never be removed.
+
+```bash
+python3 - <<'PY'
+import hashlib, json, pathlib
+record = json.loads(pathlib.Path("/tmp/4a/record.json").read_text())
+config = record["config"]
+for key in [k for k in config if k.endswith("_path") and f"{k[:-5]}_sha256" in config]:
+    path = pathlib.Path(config[key])
+    ok = path.exists() and hashlib.sha256(path.read_bytes()).hexdigest() == config[f"{key[:-5]}_sha256"]
+    print(f"{key:<18} {config[key]:<60} {'ok' if ok else 'MISMATCH'}")
+PY
+
 python3 scripts/eval_zero_shot.py --append-record /tmp/4a/record.json
 python3 scripts/show_results.py --last
+make check                        # the artifact ratchet now covers the new row
 ```
 
 If the record says `gate_anchor_valid: false`, `--append-record` says so on the way in. Append it
