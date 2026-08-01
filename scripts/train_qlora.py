@@ -284,12 +284,12 @@ def encode(tokenizer, example: dict, max_seq_len: int) -> dict:
     return {"input_ids": context + target, "labels": [-100] * len(context) + target}
 
 
-def collate(rows: list[dict], pad_id: int):
+def collate(rows: list[dict], pad_id: int, device=None) -> dict:
     """Right-padded tensors; padding is masked out of both attention and loss."""
     import torch
 
     width = max(len(row["input_ids"]) for row in rows)
-    return {
+    batch = {
         "input_ids": torch.tensor(
             [row["input_ids"] + [pad_id] * (width - len(row["input_ids"])) for row in rows]
         ),
@@ -300,6 +300,9 @@ def collate(rows: list[dict], pad_id: int):
             [row["labels"] + [-100] * (width - len(row["labels"])) for row in rows]
         ),
     }
+    # a plain dict, so the move is explicit: `BatchEncoding.to` is the tokenizer's,
+    # and this collator does not build one
+    return batch if device is None else {key: value.to(device) for key, value in batch.items()}
 
 
 def adapter_targets(model, lora: dict) -> list[str]:
@@ -377,20 +380,24 @@ def train(config: dict, built: dict, out: Path, max_steps: int | None, resume: P
     tokenizer, model = load_for_training(config, resume)
     encoded = [encode(tokenizer, row, settings["max_seq_len"]) for row in built["train"]]
     carve = [
-        collate([encode(tokenizer, row, settings["max_seq_len"])], tokenizer.pad_token_id).to(
-            model.device
+        collate(
+            [encode(tokenizer, row, settings["max_seq_len"])], tokenizer.pad_token_id, model.device
         )
         for row in built["carve"]
     ]
 
     micro, accum = settings["micro_batch_size"], settings["grad_accum"]
     per_epoch = -(-len(encoded) // (micro * accum))
-    total = min(per_epoch * settings["epochs"], max_steps or per_epoch * settings["epochs"])
+    planned = per_epoch * settings["epochs"]
+    # The schedule is always the FULL run's, and `--max-steps` only stops early:
+    # a smoke whose cosine decayed to zero in 50 steps would preview a different
+    # trajectory than the run it is supposed to project.
+    total = min(planned, max_steps or planned)
     optimizer = PagedAdamW8bit(
         [p for p in model.parameters() if p.requires_grad], lr=tuning["learning_rate"]
     )
     scheduler = get_cosine_schedule_with_warmup(
-        optimizer, int(tuning["warmup_ratio"] * total), total
+        optimizer, int(tuning["warmup_ratio"] * planned), planned
     )
     start_epoch, start_index, step = 0, 0, 0
     if resume:
@@ -414,7 +421,7 @@ def train(config: dict, built: dict, out: Path, max_steps: int | None, resume: P
         while index < len(rows) and step < total:
             chunk = [encoded[i] for i in rows[index : index + micro]]
             try:
-                loss = model(**collate(chunk, tokenizer.pad_token_id).to(model.device)).loss
+                loss = model(**collate(chunk, tokenizer.pad_token_id, model.device)).loss
                 (loss / accum).backward()
             except torch.cuda.OutOfMemoryError:
                 if micro == 1:
@@ -424,7 +431,7 @@ def train(config: dict, built: dict, out: Path, max_steps: int | None, resume: P
                 torch.cuda.empty_cache()
                 print(f"OOM: micro_batch -> {micro}, grad_accum -> {accum} (effective batch held)")
                 continue
-            window.append(float(loss))
+            window.append(float(loss.detach()))
             index += len(chunk)
             seen += 1
             if seen % accum:
