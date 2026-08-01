@@ -36,6 +36,12 @@ data/annotation/*
 models/
 *.safetensors
 *.gguf
+# Phase 4c syncs each arm's checkpoint home continuously (nothing may exist only
+# on a pod), so the 250 MB optimizer state lands in the working tree. It is a
+# resume artifact, not a deliverable; the adapter beside it is already covered by
+# *.safetensors, and adapter_config.json / loss.jsonl / provenance.json are the
+# small files that do get committed.
+*.pt
 
 # the overnight XLM-R baseline writes here; the record it produces goes to results/
 xlmr_full_run.log
