@@ -134,6 +134,54 @@ def anchor_values(record: dict) -> dict:
     return values
 
 
+def arm_record(history: dict, arm: str) -> dict:
+    """The one record of an ablation arm, or a refusal — :func:`anchor`'s sibling.
+
+    Selected on ``config.fine_tune.arm``, which only a run that loaded an adapter
+    writes. Two rows for one arm would mean the arm was scored twice, and 4c's
+    contract is that it is scored once: picking either would be choosing a gate
+    verdict by position in a file.
+    """
+    rows = [
+        record
+        for runs in history.values()
+        for record in runs
+        if record.get("config", {}).get("fine_tune", {}).get("arm") == arm
+        and not record.get("reference_only")
+    ]
+    if len(rows) != 1:
+        found = [f"{record['model']} @ {record['timestamp']}" for record in rows]
+        raise ValueError(
+            f"the {arm!r} arm must be exactly one record, found {len(rows)}: {found}."
+            " Each arm is trained once and scored once (SPEC amendment 3.4 (3))."
+        )
+    return rows[0]
+
+
+def arm_values(record: dict) -> dict:
+    """An arm's gated numbers, G1b included — what the rule and the bars read.
+
+    :func:`anchor_values` covers the four heads that are margins over a baseline;
+    G1b is the one gate whose value is a count over a pre-registered slice, so it
+    is read here with the guard delta that is the other half of it.
+    """
+    values = anchor_values(record)
+    matched = [entry for entry in record["gates"] if entry["gate"] == "G1b"]
+    if len(matched) != 1 or matched[0].get("value") is None:
+        raise ValueError(
+            f"an arm record must carry exactly one scored G1b, found {len(matched)}"
+            f" ({[entry.get('value') for entry in matched]}) — a fix-rate needs a fine-tune"
+        )
+    entry = matched[0]
+    values["G1b"] = {
+        "rate": entry["value"],
+        "fixed": entry["fixed"],
+        "n": entry["n"]["slice"],
+        "guard_delta": entry["guard"]["delta"],
+    }
+    return values
+
+
 def slice_ids(text: str, record: dict) -> list[str]:
     """The G1b slice ids, or a refusal — the file has to be the anchor's file.
 

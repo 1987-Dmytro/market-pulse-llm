@@ -348,3 +348,122 @@ def test_every_public_scorer_function_has_a_hand_computed_test():
     uncovered = [name for name in PUBLIC if not any(t.startswith(f"test_{name}_") for t in tests)]
     assert PUBLIC, "scorer exposes no public functions"
     assert not uncovered, f"no hand-computed test for {uncovered}"
+
+
+# --- the ablation's pre-registered decision ----------------------------------
+#
+# Amendment 3.4 (3): synthetic stays iff its arm's G1b fix-rate is strictly
+# higher AND no other gated head is lower by more than 0.5 pp. Every fixture
+# here is invented; the two arms' real numbers do not exist yet.
+
+REAL = {
+    "G1a": {"overall": 0.90, "ua": 0.89, "ru": 0.88},
+    "G1b": 0.50,
+    "G1c": 0.80,
+    "G1d": 0.91,
+    "G1e": 0.90,
+}
+
+
+def arm(**overrides) -> dict:
+    return {**REAL, **overrides}
+
+
+def test_select_arm_keeps_synthetic_when_it_wins_g1b_and_costs_nothing_material():
+    #   G1b 0.50 -> 0.60 (higher) · G1a overall -0.001, others 0 -> no regression
+    decision = scorer.select_arm(
+        REAL, arm(G1b=0.60, G1a={"overall": 0.899, "ua": 0.89, "ru": 0.88})
+    )
+    assert decision["keep_synthetic"] is True
+    assert decision["selected"] == "with-synthetic"
+    assert decision["head_deltas"] == pytest.approx(
+        {"G1a": -0.001, "G1c": 0.0, "G1d": 0.0, "G1e": 0.0}
+    )
+    assert decision["regressions"] == {}
+
+
+def test_select_arm_rejects_synthetic_when_another_head_pays_for_the_fix_rate():
+    #   G1b 0.50 -> 0.70, but G1c 0.80 -> 0.794 is -0.6 pp, past the 0.5 pp tolerance
+    decision = scorer.select_arm(REAL, arm(G1b=0.70, G1c=0.794))
+    assert decision["keep_synthetic"] is False
+    assert decision["selected"] == "real-only"
+    assert decision["regressions"] == pytest.approx({"G1c": -0.006})
+
+
+def test_select_arm_reads_lower_by_more_than_as_more_than():
+    #   G1c 0.80 -> 0.795 is exactly -0.5 pp: the rule says "MORE than 0.5 pp",
+    #   so this is not a regression, and the subtraction's last bit must not decide it.
+    decision = scorer.select_arm(REAL, arm(G1b=0.70, G1c=0.795))
+    assert decision["head_deltas"]["G1c"] == -0.005
+    assert decision["regressions"] == {}
+    assert decision["keep_synthetic"] is True
+
+
+def test_select_arm_needs_g1b_strictly_higher_not_merely_equal():
+    assert scorer.select_arm(REAL, arm())["keep_synthetic"] is False
+    assert scorer.select_arm(REAL, arm(G1b=0.49999))["keep_synthetic"] is False
+
+
+def test_select_arm_protects_every_head_the_records_carry_not_a_typed_list():
+    """The heads come from the data, so a gate added to the record cannot fall
+    outside the rule by being forgotten here."""
+    real = {"G1b": 0.5, "G1z": 0.90}
+    assert scorer.select_arm(real, {"G1b": 0.9, "G1z": 0.80})["regressions"] == {"G1z": -0.1}
+    with pytest.raises(ValueError, match="different heads"):
+        scorer.select_arm(real, {"G1b": 0.9})
+
+
+# --- the five verdicts -------------------------------------------------------
+#
+#   anchors G1a overall 0.90 (ua 0.90, ru 0.89) · G1c 0.80 · G1d 0.91 · G1e 0.89
+#   bars    G1a >= 0.95 (ua >= 0.88, ru >= 0.87) · G1b >= 27 of 44, guard >= -0.02
+#           G1c >= 0.85 · G1d >= 0.90 · G1e >= 0.88
+
+VERDICT_ANCHORS = {
+    "G1a": {"overall": 0.90, "ua": 0.90, "ru": 0.89},
+    "G1c": 0.80,
+    "G1d": 0.91,
+    "G1e": 0.89,
+}
+VERDICT_BARS = scorer.gate_thresholds(VERDICT_ANCHORS, 44)
+ON_THE_BAR = {
+    "G1a": {"overall": 0.95, "ua": 0.88, "ru": 0.87},
+    "G1b": {"fixed": 27, "guard_delta": -0.02},
+    "G1c": 0.85,
+    "G1d": 0.90,
+    "G1e": 0.88,
+}
+
+
+def test_gate_verdicts_passes_a_run_that_lands_exactly_on_every_bar():
+    """The gates are ">=". A model on its bar passes, and no addition's last bit
+    may decide otherwise."""
+    verdicts = scorer.gate_verdicts(ON_THE_BAR, VERDICT_BARS)
+    assert [gate for gate, v in verdicts.items() if not v["pass"]] == []
+    assert verdicts["G1b"]["n"] == 44
+
+
+def test_gate_verdicts_fails_g1a_on_a_language_floor_the_overall_hides():
+    """G1a is one gate with three checks: an overall above the bar does not buy
+    a language that fell 2 pp."""
+    values = {**ON_THE_BAR, "G1a": {"overall": 0.96, "ua": 0.88, "ru": 0.8699}}
+    verdicts = scorer.gate_verdicts(values, VERDICT_BARS)
+    assert verdicts["G1a"]["pass"] is False
+    assert [c["what"] for c in verdicts["G1a"]["checks"] if not c["pass"]] == ["ru"]
+
+
+def test_gate_verdicts_fails_g1b_when_the_guard_moves_even_if_the_slice_is_fixed():
+    """ "Fixes >=60% WHILE overall macro-F1 degrades <=2 pp" — both halves are
+    the gate, and a guard nobody checks is half a gate."""
+    values = {**ON_THE_BAR, "G1b": {"fixed": 44, "guard_delta": -0.0201}}
+    verdicts = scorer.gate_verdicts(values, VERDICT_BARS)
+    assert verdicts["G1b"]["pass"] is False
+    assert [c["what"] for c in verdicts["G1b"]["checks"] if not c["pass"]] == ["guard delta"]
+
+
+def test_gate_verdicts_reports_each_no_regression_gate_against_its_own_bar():
+    values = {**ON_THE_BAR, "G1d": 0.8999, "G1e": 0.9500}
+    verdicts = scorer.gate_verdicts(values, VERDICT_BARS)
+    assert verdicts["G1d"]["pass"] is False
+    assert verdicts["G1e"]["pass"] is True
+    assert verdicts["G1d"]["checks"][0]["bar"] == 0.90

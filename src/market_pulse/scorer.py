@@ -253,6 +253,11 @@ G1C_MARGIN = 0.05
 NO_REGRESSION_DROP = 0.01
 """G1d and G1e: amendment 3.5 (2) replaced "+10 pp" with `anchor - 1 pp`."""
 
+BAR_PRECISION = 10
+"""Decimals a derived bar is rounded to, so ">= the bar" is not decided by the
+last bit of an addition. Far below anything reported, and far above anything a
+macro-F1 over hundreds of rows resolves."""
+
 
 def gate_thresholds(anchors: dict, slice_n: int) -> dict:
     """The pre-registered bars, derived from one anchor row and the margins.
@@ -271,11 +276,17 @@ def gate_thresholds(anchors: dict, slice_n: int) -> dict:
     """
     if slice_n < 1:
         raise ValueError("the G1b slice is empty: its size is the gate's denominator")
+    # Every bar is rounded to `BAR_PRECISION`. `0.90 + 0.05` is 0.9500000000000001
+    # in binary floating point, and the gate is ">=": a model landing exactly on
+    # its bar would fail on an artefact of the addition, not on its numbers. Ten
+    # decimals cannot move a bar anyone reports to four — the same reasoning the
+    # G1b ceiling below already uses.
+    bar = lambda value: round(value, BAR_PRECISION)  # noqa: E731
     bars = {
         "G1a": {
-            "min": anchors["G1a"]["overall"] + G1A_MARGIN,
+            "min": bar(anchors["G1a"]["overall"] + G1A_MARGIN),
             "floors": {
-                language: anchors["G1a"][language] - G1A_LANGUAGE_DROP
+                language: bar(anchors["G1a"][language] - G1A_LANGUAGE_DROP)
                 for language in GATED_LANGUAGES
             },
         },
@@ -286,9 +297,9 @@ def gate_thresholds(anchors: dict, slice_n: int) -> dict:
             "n": slice_n,
             "max_macro_f1_drop": G1B_MACRO_F1_DROP,
         },
-        "G1c": {"min": anchors["G1c"] + G1C_MARGIN},
-        "G1d": {"min": anchors["G1d"] - NO_REGRESSION_DROP},
-        "G1e": {"min": anchors["G1e"] - NO_REGRESSION_DROP},
+        "G1c": {"min": bar(anchors["G1c"] + G1C_MARGIN)},
+        "G1d": {"min": bar(anchors["G1d"] - NO_REGRESSION_DROP)},
+        "G1e": {"min": bar(anchors["G1e"] - NO_REGRESSION_DROP)},
     }
     unreachable = {
         gate: sorted(
@@ -305,3 +316,120 @@ def gate_thresholds(anchors: dict, slice_n: int) -> dict:
             " a team-lead file and thresholds are immutable without approval)"
         )
     return bars
+
+
+SYNTHETIC_HEAD_TOLERANCE = 0.005
+"""Amendment 3.4 (3): "no other gated head is lower by more than 0.5 pp"."""
+
+SELECTION_RULE = (
+    "the synthetic source stays iff its arm's G1b fix-rate is strictly higher AND no other"
+    " gated head is lower by more than 0.5 pp (SPEC amendment 3.4 (3), fixed before any"
+    " Phase 4 code or GPU spend)"
+)
+
+
+def select_arm(real: dict, synthetic: dict) -> dict:
+    """The ablation's pre-registered decision, applied — not re-argued.
+
+    ``real`` and ``synthetic`` are the two arms' gated values in the shape
+    :func:`gate_thresholds` reads, plus ``G1b`` as the fix-rate. The "other
+    gated heads" are derived — every key that is not ``G1b`` — rather than
+    listed, so a gate added to the record cannot quietly fall outside the rule.
+    G1a contributes its ``overall``; the per-language numbers are floors of the
+    G1a *gate*, not heads of their own, and they are reported beside this and
+    never inside it.
+
+    Returns the inputs, the deltas and the verdict together: the rule's
+    application has to be readable as arithmetic, because there is no third run
+    in which to re-do it.
+    """
+    if set(real) != set(synthetic):
+        raise ValueError(
+            f"the two arms report different heads: {sorted(real)} vs {sorted(synthetic)}"
+        )
+    if "G1b" not in real:
+        raise ValueError("the rule turns on G1b: an arm with no fix-rate cannot be compared")
+    heads = sorted(set(real) - {"G1b"})
+    if not heads:
+        raise ValueError("no other gated head to protect: the rule's second half needs one")
+    # Rounded for the same reason the bars are: 0.80 - 0.794 is 0.006000000000000005,
+    # and a head that is lower by exactly the tolerance must not be a regression
+    # ("lower by MORE than 0.5 pp") because of the subtraction's last bit.
+    deltas = {
+        head: round(_overall(synthetic[head]) - _overall(real[head]), BAR_PRECISION)
+        for head in heads
+    }
+    regressions = {
+        head: delta for head, delta in deltas.items() if delta < -SYNTHETIC_HEAD_TOLERANCE
+    }
+    higher = synthetic["G1b"] > real["G1b"]
+    keep = higher and not regressions
+    return {
+        "rule": SELECTION_RULE,
+        "tolerance": SYNTHETIC_HEAD_TOLERANCE,
+        "g1b": {
+            "real-only": real["G1b"],
+            "with-synthetic": synthetic["G1b"],
+            "strictly_higher": higher,
+        },
+        "head_deltas": deltas,
+        "regressions": regressions,
+        "keep_synthetic": keep,
+        "selected": "with-synthetic" if keep else "real-only",
+    }
+
+
+def _overall(value):
+    """A head's single number: G1a reports per language beside its overall."""
+    return value["overall"] if isinstance(value, dict) else value
+
+
+def gate_verdicts(values: dict, bars: dict) -> dict:
+    """Every Tier-1 gate against its bar — the comparison, and what it compared.
+
+    ``values`` carries the selected arm's numbers: ``G1a`` as its per-language
+    map including ``overall``, ``G1b`` as ``{"fixed": int, "guard_delta":
+    float}``, and one float each for G1c/G1d/G1e. ``bars`` is
+    :func:`gate_thresholds`.
+
+    G1b is the only two-part verdict, and both parts are the gate: "fixes ≥60%
+    **while** overall macro-F1 degrades ≤2 pp". A guard that is not checked is a
+    gate that measures half of what it says.
+    """
+    verdicts = {}
+    g1a = [("overall", values["G1a"]["overall"], bars["G1a"]["min"])] + [
+        (language, values["G1a"][language], floor)
+        for language, floor in bars["G1a"]["floors"].items()
+    ]
+    verdicts["G1a"] = {
+        "pass": all(value >= bar for _, value, bar in g1a),
+        "checks": [
+            {"what": what, "value": value, "bar": bar, "pass": value >= bar}
+            for what, value, bar in g1a
+        ],
+    }
+    g1b = [
+        ("fixed", values["G1b"]["fixed"], bars["G1b"]["min_fixed"]),
+        ("guard delta", values["G1b"]["guard_delta"], -bars["G1b"]["max_macro_f1_drop"]),
+    ]
+    verdicts["G1b"] = {
+        "pass": all(value >= bar for _, value, bar in g1b),
+        "n": bars["G1b"]["n"],
+        "checks": [
+            {"what": what, "value": value, "bar": bar, "pass": value >= bar}
+            for what, value, bar in g1b
+        ],
+    }
+    for gate in ("G1c", "G1d", "G1e"):
+        verdicts[gate] = {
+            "pass": values[gate] >= bars[gate]["min"],
+            "checks": [
+                {
+                    "what": gate,
+                    "value": values[gate],
+                    "bar": bars[gate]["min"],
+                    "pass": values[gate] >= bars[gate]["min"],
+                }
+            ],
+        }
+    return verdicts
