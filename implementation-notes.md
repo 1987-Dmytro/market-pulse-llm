@@ -340,6 +340,8 @@ measurement rather than a coincidence. The numbers, the cross-check table and th
   (RTX A6000, $0.53/hr, auto-stop 14:30 UTC). Weights downloaded in 3 minutes.
 - 2026-08-01 09:11–09:45 UTC — the run. Pod stopped 09:52 UTC, `desiredStatus: EXITED`, the moment
   the artifacts were on this Mac and both sha256 fields re-derived. Volume kept for 4b.
-- 2026-08-01 — phase spend **$0.6203 of $25.00**, volume included. The pod itself was ~$0.62 of
+- 2026-08-01 — phase spend **$0.6203 of $25.00 at 09:52 UTC**, when the pod stopped; **$0.6456 at
+  10:15 UTC**. The volume bills continuously, so a phase figure without its timestamp is stale by
+  construction. The pod itself was ~$0.62 of
   wall-clock at $0.53/hr; the volume keeps billing while stopped, which is why the guard reads the
   account balance and not only the pod billing rows.

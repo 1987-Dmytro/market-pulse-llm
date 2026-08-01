@@ -288,7 +288,9 @@ ADR — the moment the files are on the Mac and their hashes check out.
 
 ```bash
 runpodctl pod stop <POD_ID>
-runpodctl pod list                     # show the stopped state; this goes into the report
+runpodctl pod get <POD_ID>             # desiredStatus EXITED — this is what goes into the report
+runpodctl pod list                     # running pods ONLY: [] means nothing is running, not
+                                       # that nothing exists. `pod list -a` shows exited ones.
 python3 scripts/runpod_guard.py --note "4a own-pod zero-shot run"
 ```
 

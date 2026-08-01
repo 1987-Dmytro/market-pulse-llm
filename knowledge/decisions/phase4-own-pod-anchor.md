@@ -32,7 +32,7 @@ production serves. No training happened in this step.
 | rows | comments_test 400/400 · posts_test 250/250 · sarcasm_holdout 108/108 |
 | failures | **zero** — parse 0, generation 0, truncated 0, on every input. `gate_anchor_valid: true` |
 | artifacts | `results/predictions/google-gemma-4-31b-it--20260801T094500Z.jsonl` (758 rows, sha in the record) · `results/g1b_slice.json` (sha in the record) |
-| cost | 39 min at $0.53/hr ≈ $0.35; phase ledger $0.6203 of the $25 cap, volume included |
+| cost | 39 min at $0.53/hr ≈ $0.35. Phase ledger **$0.6203 at 09:52 UTC**, when the pod stopped — the figure keeps growing while the volume exists (**$0.6456 at 10:15 UTC**), which is the point of reading the account balance rather than the pod billing rows. Any quoted phase spend needs its timestamp. |
 
 The prompts are 3b's, and that is checked rather than assumed: the runner reads
 `config.prompt_sha256` out of the recorded OpenRouter run of the same model and refuses to load the
@@ -153,7 +153,9 @@ The corollary already in `knowledge/hot.md` stands and is now load-bearing: the 
 4-bit base **plus the unmerged adapter**, and merging into bf16 weights is forbidden until measured
 (Phase 5). Every gate number from here on is produced in this configuration.
 
-## (f) Open question this run hands to 4b
+## (f) Two open questions this run hands forward
+
+### The slice file the scorer cannot read
 
 `scorer.sarcasm_slice_fix_rate(y_true, base_pred, tuned_pred)` recomputes its slice internally as
 `[i for i, gold in enumerate(y_true) if base_pred[i] != gold]` — one label column, and no argument
@@ -163,6 +165,21 @@ arithmetic that will compute G1b's fix-rate are, today, two different definition
 `scorer.py`**, and scorer arithmetic is not something the executor changes on its own
 (`docs/PROMPT-4a.md` DO-NOT; SPEC §5). Flagged for the operator before 4b is scoped, not worked
 around.
+
+### Which gemma row is baseline (c) for G1a and G1c
+
+Amendment 3.4 (2) and [[3b-infra-and-precision]] §(f) both reason about **G1d and G1e**, because
+those two gates are worded "≥ zero-shot base LLM + 10 pp" and name the anchor explicitly. But SPEC
+§7 lists "zero-shot base LLM with fixed prompt" as baseline **(c) for every task**, and G1a is
+"≥ **best baseline** + 5 pp" — where the best baseline is this same Gemma zero-shot row
+(0.8944 against `xlm-roberta-base` 0.7824 and `tfidf-logreg` 0.6834). G1c is the same shape.
+
+So there are now **two** Gemma zero-shot rows and no pre-registered rule saying which one G1a and
+G1c measure from. The difference is small and it makes the gate **easier** in both cases — G1a
+overall 0.8944 → 0.8918 (bar down 0.0026), G1c 0.7981 → 0.7936 (bar down 0.0046) — which is exactly
+why it has to be settled **before** 4b trains rather than after the fine-tuned numbers exist. The
+executor does not pick. The consistent-looking answer — the own-pod row everywhere, since it is the
+row produced on the hardware every Phase 4 number comes from — is still an operator's to make.
 
 **Sources:** `docs/PROMPT-4a.md` rev. 1 · SPEC amendment 3.4 · `scripts/show_results.py` over
 `results/baselines.json` (both rows) · `results/g1b_slice.json` · `scripts/runbook_4a.md` ·

@@ -64,7 +64,9 @@ against a 4 h/arm ceiling, so the correctness win was free. Batch 1's own claim 
 the same 48-row probe twice, byte-identical labels. **4b's ablation arms inherit batch size 1**
 unless someone re-measures on the training stack and records it.
 
-**GPU money: $0.6203 of the $25 Phase 4 cap.** `results/spend_phase4.json` anchors the balance at
+**GPU money: $0.6456 of the $25 Phase 4 cap, read 10:15 UTC** ($0.6203 when the pod stopped at
+09:52 — the volume bills continuously, so a phase figure without its timestamp is stale by
+construction). `results/spend_phase4.json` anchors the balance at
 $35.00 as of 2026-08-01T08:34:09Z — **never regenerate it**, same footgun as `spend_3b.json`.
 `scripts/runpod_guard.py` refuses at the cap and on a mid-phase top-up. Pod `gxkdecf3g7k3y7`
 **EXITED**; network volume `gfwa2an8fn` (100 GB, CA-MTL-3) **kept on purpose** for 4b — it bills
@@ -103,9 +105,10 @@ G1a overall / G1c / G1d 3-class / G1e:
 qwen3.5-9b 0.7745 / 0.6252 / 0.5077 / 0.6476 · **xlm-roberta-base 0.7824 / 0.6007 / 0.7347 /
 NOT COVERED** (per-language G1a: `ua` 0.7859 · `ru` 0.7507 · `other` 0.7575; relevance 0.6610
 reported beside G1d, not gated) · ref `claude-haiku-4.5` 0.8708 / 0.7739 / 0.7718 / 0.8537.
-G1b is `null` everywhere: its fix-rate needs a fine-tune. **The G1b slice = the union of
-sentiment ∪ sarcasm errors, and it is defined by the chosen model's re-run on our own pod during
-the Phase 4 smoke** — OpenRouter's 40/108 is a preview, not the slice.
+G1b is `null` everywhere: its fix-rate needs a fine-tune. That table is the **Phase 3** table and
+its gemma column is the OpenRouter row; the own-pod row is a Phase 4 row and lives above. **The G1b
+slice question is closed**: 44 ids in `results/g1b_slice.json`, measured on our own pod — the
+preview's 40 is superseded.
 
 **3b ran on OpenRouter at pinned fp8** ([[3b-infra-and-precision]]), not on a rented GPU: 758
 short requests per model is a token bill, not a GPU-hour. fp8 because `qwen/qwen3.6-27b` offers no
@@ -144,12 +147,19 @@ QA passed 2026-07-30** ([[synthetic-sarcasm-augmentation]]). **G1b's holdout** i
 **None for 4a.** One open question is handed to 4b and needs an operator decision before it is
 scoped — see below.
 
-**OPEN QUESTION, in the report and unresolved:** `scorer.sarcasm_slice_fix_rate` recomputes its
+**OPEN QUESTION 1, in the report and unresolved:** `scorer.sarcasm_slice_fix_rate` recomputes its
 slice internally from **one** label column (`base_pred[i] != gold`) and takes no argument through
 which a caller could pass `results/g1b_slice.json`. The persisted 44-id union and the arithmetic
 that will compute G1b's fix-rate are therefore two different definitions today. 4a's contract was
 to persist the slice and it did; **4b cannot consume it without a change to `scorer.py`**, and
 scorer arithmetic is not the executor's to change. Not worked around.
+
+**OPEN QUESTION 2, same class:** amendment 3.4 (2) names the own-pod row as the **G1d/G1e** anchor,
+but SPEC §7 makes "zero-shot base LLM" baseline **(c) for every task**, and G1a's bar is "best
+baseline + 5 pp" — where the best baseline *is* a Gemma zero-shot row. There are now two of them
+and no rule saying which one G1a and G1c measure from. Both readings make the gate easier (G1a
+overall 0.8944 → 0.8918, G1c 0.7981 → 0.7936), which is why it must be pre-registered **before 4b
+trains**, not after the fine-tuned numbers exist.
 
 **This Mac's device numbers, if anything is ever trained locally again:** 2 193 steps across
 9 heads, **CPU 3.5 s/step**, **MPS 48.1 s/step** and OOM at 9.07 GiB unless the 250k×768 embedding
