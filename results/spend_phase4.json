@@ -3,5 +3,13 @@
   "runpod_balance_at_phase4_start": 35.0,
   "anchored_at": "2026-08-01T08:34:09+00:00",
   "note": "RunPod account balance read at the start of Phase 4, before the first pod or network volume existed. Phase spend = this anchor minus the balance now, and the $25 cap of SPEC amendment 3.4 (4) is enforced against that difference. Delete or regenerate this file and the counter silently restarts at today's balance — the same footgun results/spend_3b.json carries.",
-  "sessions": []
+  "sessions": [
+    {
+      "at": "2026-08-01T09:52:31+00:00",
+      "balance": 34.3797041592,
+      "spent_usd": 0.6203,
+      "remaining_usd": 24.3797,
+      "note": "4a own-pod zero-shot run: 758 rows, batch size 1, 39 min"
+    }
+  ]
 }
