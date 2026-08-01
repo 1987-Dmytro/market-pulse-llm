@@ -507,3 +507,291 @@ def test_every_record_that_claims_a_file_points_at_a_real_one():
                 assert sha256(artifact.read_bytes()).hexdigest() == config[f"{key[:-5]}_sha256"], (
                     f"{record['model']}: {claimed} on disk is not the file the record hashed"
                 )
+
+
+# --- the fine-tuned branch: an ablation arm's gate eval -----------------------
+#
+# Phase 4c scores each arm exactly once, so the parts that decide a number get a
+# test that can fail rather than a careful reading.
+
+FT_COMMENTS = [
+    {
+        "id": "c1",
+        "sentiment": "neutral",
+        "sarcasm": False,
+        "intents": [],
+        "unclear": False,
+        "language": "ua",
+    }
+]
+FT_POSTS = [{"id": "p1", "relevant": True, "post_type": "promo", "brands": [], "unclear": False}]
+FT_HOLDOUT = [
+    {"id": "h1", "sentiment": "negative", "sarcasm": True, "unclear": False, "language": "ua"},
+    {"id": "h2", "sentiment": "negative", "sarcasm": True, "unclear": False, "language": "ua"},
+    {"id": "h3", "sentiment": "positive", "sarcasm": True, "unclear": False, "language": "ru"},
+]
+
+
+def ft_inputs(holdout_labels):
+    return {
+        "comments_test": (FT_COMMENTS, [{"sentiment": "neutral", "sarcasm": False, "intents": []}]),
+        "posts_test": (FT_POSTS, [{"relevant": True, "post_type": "promo", "brands": []}]),
+        "sarcasm_holdout": (FT_HOLDOUT, holdout_labels),
+    }
+
+
+def test_a_slice_row_counts_as_fixed_only_when_both_labels_are_right():
+    """Amendment 3.5 (3): FIXED means the row leaves the union of sentiment and
+    sarcasm errors. Right on one label and wrong on the other is not fixed, and
+    a fix-rate that scored the labels separately would report 2 of 3 here."""
+    labels = [
+        {"sentiment": "negative", "sarcasm": True, "intents": []},  # both right -> fixed
+        {"sentiment": "negative", "sarcasm": False, "intents": []},  # sarcasm wrong
+        {"sentiment": "neutral", "sarcasm": True, "intents": []},  # sentiment wrong
+    ]
+    gates, _, slice_ids = runner.build_gates(
+        ft_inputs(labels), {}, {"ids": ["h1", "h2", "h3"], "anchor_overall": 0.8918}
+    )
+    g1b = next(entry for entry in gates if entry["gate"] == "G1b")
+    assert g1b["fixed"] == 1
+    assert g1b["n"]["slice"] == 3
+    assert g1b["value"] == pytest.approx(1 / 3)
+    assert slice_ids is None, "an arm scores the pre-registered slice; it never writes one"
+
+
+def test_the_fine_tuned_record_carries_no_base_errs_under_a_name_that_says_base():
+    """On a fine-tuned run those counts would be THIS model's errors. Same trap
+    as the two G1d rows: a plausible number nothing downstream can question."""
+    labels = [{"sentiment": "negative", "sarcasm": True, "intents": []}] * 3
+    gates, diagnostics, _ = runner.build_gates(
+        ft_inputs(labels), {}, {"ids": ["h1"], "anchor_overall": 0.8918}
+    )
+    g1b = next(entry for entry in gates if entry["gate"] == "G1b")
+    assert not [key for key in diagnostics if key.startswith("base_errs")]
+    assert not [key for key in g1b["n"] if key.startswith("base_errs")]
+
+
+def test_the_guard_delta_is_this_runs_macro_f1_minus_the_anchors():
+    """G1b is 'fixes >=60% WHILE overall macro-F1 degrades <=2 pp'. The guard
+    travels with the fix-rate because it is half of the gate."""
+    labels = [{"sentiment": "negative", "sarcasm": True, "intents": []}] * 3
+    gates, _, _ = runner.build_gates(ft_inputs(labels), {}, {"ids": ["h1"], "anchor_overall": 0.80})
+    g1a = next(entry for entry in gates if entry["gate"] == "G1a")
+    guard = next(entry for entry in gates if entry["gate"] == "G1b")["guard"]
+    assert guard["anchor"] == 0.80
+    assert guard["value"] == g1a["values"]["overall"]
+    assert guard["delta"] == pytest.approx(g1a["values"]["overall"] - 0.80)
+    assert guard["max_drop"] == 0.02
+
+
+def test_a_slice_row_this_run_did_not_score_stops_the_record():
+    """An incomplete run must not read as a failed gate — the scorer raises and
+    the caller has a checkpoint to resume from, which is the point of both."""
+    labels = [{"sentiment": "negative", "sarcasm": True, "intents": []}] * 2
+    inputs = ft_inputs(labels)
+    inputs["sarcasm_holdout"] = (FT_HOLDOUT[:2], labels)  # h3 failed to parse
+    with pytest.raises(SystemExit, match="were not scored by this run"):
+        runner.build_gates(inputs, {}, {"ids": ["h1", "h3"], "anchor_overall": 0.89})
+
+
+SMOKE_PROVENANCE = Path(__file__).resolve().parents[1] / "results" / "train" / "4b-smoke"
+
+
+def arm_dir(tmp_path, **overrides):
+    """A trainer output directory: the adapter beside the run's provenance."""
+    provenance = json.loads((SMOKE_PROVENANCE / "provenance.json").read_text(encoding="utf-8"))
+    provenance |= overrides
+    (tmp_path / "adapter").mkdir()
+    (tmp_path / "adapter" / "adapter_config.json").write_text("{}", encoding="utf-8")
+    (tmp_path / "adapter" / "adapter_model.safetensors").write_bytes(b"not really weights")
+    (tmp_path / "provenance.json").write_text(json.dumps(provenance), encoding="utf-8")
+    return tmp_path / "adapter"
+
+
+def test_the_arm_preflight_reads_the_anchor_the_slice_and_the_dataset(tmp_path):
+    """Everything that decides the gate, before 62 GB of weights and an hour of
+    A6000 time: the anchor row, its slice, and what this adapter was trained on."""
+    gate_slice, training = runner.arm_preflight(arm_dir(tmp_path), "real-only")
+    assert len(gate_slice["ids"]) == 44
+    assert 0 < gate_slice["anchor_overall"] < 1
+    assert training["train_sha256"] and training["adapter_sha256"]
+    assert training["arm"] == "real-only"
+
+
+def test_an_adapter_cannot_be_scored_under_the_other_arms_name(tmp_path):
+    """The ablation is decided by comparing two columns; mislabelling one of them
+    decides it by accident."""
+    with pytest.raises(SystemExit, match="'real-only' arm, not 'with-synthetic'"):
+        runner.arm_preflight(arm_dir(tmp_path), "with-synthetic")
+
+
+def test_an_adapter_trained_on_moved_prompts_is_refused(tmp_path):
+    """The prompt is part of the measurement (SPEC §7): an adapter trained on a
+    different one is fine-tuned for a different task than the gate scores."""
+    adapter = arm_dir(tmp_path, prompt_sha256={"T1": "0" * 64, "T2": "0" * 64})
+    with pytest.raises(SystemExit, match="trained on different prompts"):
+        runner.arm_preflight(adapter, "real-only")
+
+
+def test_an_adapter_without_its_run_provenance_is_refused(tmp_path):
+    adapter = arm_dir(tmp_path)
+    (tmp_path / "provenance.json").unlink()
+    with pytest.raises(SystemExit, match="provenance.json is missing"):
+        runner.arm_preflight(adapter, "real-only")
+
+
+def test_an_arm_eval_refuses_any_batch_size_but_one(tmp_path):
+    """Greedy is not batch-invariant on this stack — measured, not assumed."""
+    with pytest.raises(SystemExit, match="not batch-invariant"):
+        runner.main(
+            [
+                *("--model", GEMMA, "--backend", "local", "--smoke"),
+                *("--adapter", str(arm_dir(tmp_path)), "--arm", "real-only"),
+                *("--batch-size", "8"),
+            ]
+        )
+
+
+def test_an_adapter_and_its_arm_travel_together(tmp_path):
+    with pytest.raises(SystemExit):
+        runner.main(
+            [*("--model", GEMMA, "--backend", "local", "--smoke"), "--adapter", str(tmp_path)]
+        )
+
+
+# --- the eval checkpoint: a crashed eval resumes, and never re-scores ----------
+
+HEADER = {"model": GEMMA, "arm": "real-only", "batch_size": 1}
+
+
+def test_the_checkpoint_starts_empty_and_holds_what_it_is_given(tmp_path):
+    path = tmp_path / "eval.jsonl"
+    assert runner.open_checkpoint(path, HEADER) == {}
+    runner.append_checkpoint(path, "comments_test", {"id": "c1", "labels": {"sentiment": "ok"}})
+    assert runner.open_checkpoint(path, HEADER) == {
+        ("comments_test", "c1"): {"id": "c1", "labels": {"sentiment": "ok"}}
+    }
+
+
+def test_the_checkpoint_refuses_a_file_another_run_wrote(tmp_path):
+    """Arm A's file left in place must not quietly donate 400 of arm B's rows."""
+    path = tmp_path / "eval.jsonl"
+    runner.open_checkpoint(path, HEADER)
+    with pytest.raises(SystemExit, match="differs on"):
+        runner.open_checkpoint(path, HEADER | {"arm": "with-synthetic"})
+
+
+def test_a_resumed_eval_asks_the_model_only_for_the_rows_it_is_missing(tmp_path):
+    """The crash protocol: resume on what is left, re-score nothing."""
+    path = tmp_path / "eval.jsonl"
+    good = '{"sentiment": "neutral", "sarcasm": false, "intents": []}'
+    first = BatchClient([good] * 6)
+    runner.open_checkpoint(path, HEADER)
+    runner.classify_local(
+        first, "T1", ROWS[:2], 1, lambda scored: runner.append_checkpoint(path, "x", scored)
+    )
+    assert first.batches == [["row 0"], ["row 1"]]
+
+    done = runner.open_checkpoint(path, HEADER)
+    pending = [row for row in ROWS if row["id"] not in {rid for _, rid in done}]
+    second = BatchClient([good] * 6)
+    fresh = runner.classify_local(second, "T1", pending, 1)
+    assert second.batches == [[row["text"]] for row in ROWS[2:]], "a resumed row was re-asked"
+    assert len(done) + len(fresh) == len(ROWS)
+
+
+# --- the record a fine-tuned arm writes about itself --------------------------
+
+
+def boom(*args, **kwargs):
+    raise AssertionError("write_slice was called")
+
+
+def test_an_arm_never_rewrites_the_pre_registered_slice(monkeypatch, tmp_path):
+    """The slice is the gate's denominator (amendment 3.5 (3)). An arm that
+    replaced it with its own error set would move the gate without moving one
+    number in this record."""
+    monkeypatch.setattr(runner, "write_slice", boom)
+    _, training = runner.arm_preflight(arm_dir(tmp_path), "real-only")
+    config = runner.local_config({}, 1, {}, training, True, None, {})
+    assert config["fine_tune"]["adapter_sha256"] == training["adapter_sha256"]
+    assert config["g1b_slice_sha256"] == sha256(runner.G1B_SLICE.read_bytes()).hexdigest()
+
+
+def test_the_same_call_without_an_adapter_does_write_one(monkeypatch):
+    """The negative control: the refusal above is about the arm, not about a
+    write_slice nothing calls any more."""
+    monkeypatch.setattr(runner, "write_slice", boom)
+    with pytest.raises(AssertionError, match="write_slice was called"):
+        runner.local_config({}, 1, {}, None, True, {"union": []}, {"sarcasm_holdout": ([], [])})
+
+
+def test_an_arms_record_does_not_claim_it_trained_on_nothing(monkeypatch, tmp_path):
+    """`records.anchor` narrows on `train_sources` precisely because Phase 4's
+    arms are also `backend: local`. A row that lied here would hand a model
+    itself as its own baseline."""
+    monkeypatch.setattr(runner, "write_slice", boom)
+    _, training = runner.arm_preflight(arm_dir(tmp_path), "real-only")
+    shared = {"train_sources": runner.records.ANCHOR_TRAIN_SOURCES}
+    config = runner.local_config(shared, 1, {}, training, True, None, {})
+    assert config["train_sources"] != runner.records.ANCHOR_TRAIN_SOURCES
+    assert config["train_sources"]["comments_train.jsonl"] == 895
+    assert runner.local_config(shared, 1, {}, None, False, None, {})["train_sources"] == {
+        "zero-shot": "no training data"
+    }
+
+
+class AlwaysAnswers:
+    """A client that answers every row, so the whole arm path can run on a Mac.
+
+    `--smoke`'s own client fails one row in five on purpose, which is right for
+    exercising the failure counters and wrong for exercising the gate: a slice
+    row it dropped would stop the run before G1b was ever computed.
+    """
+
+    REPLIES = {
+        "T1": '{"sentiment": "negative", "sarcasm": true, "intents": ["price"]}',
+        "T2": '{"relevant": true, "post_type": "promo", "brands": [{"mention": "Rud"}]}',
+    }
+
+    def __init__(self):
+        self.usage = __import__("collections").Counter()
+
+    def __call__(self, task, text):
+        return {
+            "content": self.REPLIES[task],
+            "finish_reason": "stop",
+            "cost": 0.0,
+            "usage": {},
+            "generation_id": "stub",
+        }
+
+    def batch(self, task, texts):
+        return [self(task, text) for text in texts]
+
+
+def test_an_arms_gate_eval_runs_end_to_end_over_the_real_frozen_rows(monkeypatch, tmp_path, capsys):
+    """Driven through `main` with a stub client: the 758 frozen rows, the
+    pre-registered 44-id slice, the fix-rate and the guard — everything the pod
+    will do except the weights. An arm eval that only type-checks is an arm eval
+    nothing has run, and this phase gets one attempt."""
+    monkeypatch.setattr(runner, "FakeClient", AlwaysAnswers)
+    assert (
+        runner.main(
+            [
+                *("--model", GEMMA, "--backend", "local", "--smoke"),
+                *("--adapter", str(arm_dir(tmp_path)), "--arm", "real-only"),
+                *("--batch-size", "1"),
+            ]
+        )
+        == 0
+    )
+    printed = capsys.readouterr().out
+    assert "arm real-only · adapter sha256" in printed
+    assert "G1b slice 44 ids, sha256 verified against the anchor" in printed
+    assert "comments_test: scored 400/400" in printed
+    assert "sarcasm_holdout: scored 108/108" in printed
+    # The smoke prints the record's head, so the assertions are on the text: the
+    # G1b entry is the second gate and lands well inside it.
+    assert '"slice": 44' in printed and '"fixed":' in printed and '"delta":' in printed
+    assert "base_errs" not in printed, "a fine-tuned run must not report base error sets"

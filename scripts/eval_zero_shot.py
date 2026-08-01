@@ -286,7 +286,7 @@ def classify(client, task: str, rows: list[dict], concurrency: int) -> list[dict
         return list(pool.map(one, rows))
 
 
-def classify_local(client, task: str, rows: list[dict], batch_size: int) -> list[dict]:
+def classify_local(client, task: str, rows: list[dict], batch_size: int, on_row=None) -> list[dict]:
     """The same contract, one padded batch at a time instead of one request per row.
 
     Batches are a throughput choice and nothing else — decoding is greedy, so
@@ -302,6 +302,12 @@ def classify_local(client, task: str, rows: list[dict], batch_size: int) -> list
     An out-of-memory is never charged to a row: it is a fact about the machine,
     and turning it into 758 counted failures would bury the one line that says
     what actually happened.
+
+    ``on_row`` is called with each outcome the moment it exists. That is what
+    makes an eval resumable: PROMPT-4c's crash protocol says a crashed eval
+    resumes on the rows it has left and never re-scores a completed one, and a
+    result that lives only in this list until the last input finishes cannot
+    honour it.
     """
     outcomes = []
     for start in range(0, len(rows), batch_size):
@@ -317,9 +323,11 @@ def classify_local(client, task: str, rows: list[dict], batch_size: int) -> list
                 raise
             print(f"    batch at row {start} failed ({err}) — retrying its rows one by one")
             replies = [_one_row(client, task, row["text"]) for row in chunk]
-        outcomes += [
-            outcome(task, row["id"], reply, "generation") for row, reply in zip(chunk, replies)
-        ]
+        for row, reply in zip(chunk, replies):
+            scored = outcome(task, row["id"], reply, "generation")
+            if on_row is not None:
+                on_row(scored)  # persisted before the next batch: a crash resumes here
+            outcomes.append(scored)
     return outcomes
 
 
@@ -403,6 +411,45 @@ def write_predictions(path: Path, scored_inputs: dict) -> str:
     return sha256(text.encode("utf-8")).hexdigest()
 
 
+def open_checkpoint(path: Path, header: dict) -> dict:
+    """Rows this eval already scored, or an empty ledger with its header written.
+
+    One JSON line per row, opened and closed per write — the same discipline
+    `loss.jsonl` follows, and for the same reason: a buffered file is empty
+    exactly when the process died. The header is the refusal that makes resuming
+    safe. A checkpoint carries the model, the arm and the adapter it was scored
+    with, so an arm-A file left in place cannot quietly donate 400 of arm B's
+    rows; the prompt hashes are in it because a prompt that moved is a different
+    measurement (SPEC §7) and half a record from each would be neither.
+    """
+    if not path.exists():
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps({"header": header}, sort_keys=True) + "\n", encoding="utf-8")
+        return {}
+    lines = [line for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+    stored = json.loads(lines[0]).get("header") if lines else None
+    if stored != header:
+        differ = sorted(
+            key for key in set(header) | set(stored or {}) if (stored or {}).get(key) != header[key]
+        )
+        raise SystemExit(
+            f"{path.name} was written by a different run — it differs on {differ}."
+            " Scoring on top of it would mix two models' rows into one gate record."
+            " Delete it to start this eval from zero, or point --eval-checkpoint at its own file."
+        )
+    done = {}
+    for line in lines[1:]:
+        entry = json.loads(line)
+        done[(entry["input"], entry["outcome"]["id"])] = entry["outcome"]
+    return done
+
+
+def append_checkpoint(path: Path, name: str, scored: dict) -> None:
+    """One scored row, on disk before the next one is asked for."""
+    with path.open("a", encoding="utf-8") as handle:
+        handle.write(json.dumps({"input": name, "outcome": scored}, ensure_ascii=False) + "\n")
+
+
 def predictions_path(model: str, timestamp: str) -> Path:
     """``results/predictions/<sanitized-slug>--<UTC-ts>.jsonl``."""
     slug = re.sub(r"[^A-Za-z0-9._-]+", "-", model)
@@ -432,6 +479,132 @@ def assert_prompt_sha_matches_3b(model: str) -> dict:
         return records.assert_prompt_sha(recorded_prompt_sha256(model), model)
     except ValueError as err:
         raise SystemExit(str(err)) from None
+
+
+def local_config(
+    shared: dict,
+    batch_size: int,
+    runtime: dict,
+    training: dict | None,
+    anchor_valid: bool,
+    slice_ids: dict | None,
+    scored_inputs: dict,
+) -> dict:
+    """What a run on our own weights records about itself.
+
+    Two rows come out of here and they must not be confusable. The zero-shot one
+    anchors every Phase 4 bar and *writes* the G1b slice; the fine-tuned one is
+    an ablation arm and only *reads* it. So:
+
+    - ``train_sources`` stops saying "no training data" the moment an adapter is
+      loaded. ``records.anchor`` narrows on exactly that field precisely because
+      Phase 4's arms are also ``backend: local`` — a row that lied here would
+      hand a model itself as its own baseline, and every derived bar would be
+      quietly wrong.
+    - the slice file is never rewritten by an arm. It is pre-registered
+      (amendment 3.5 (3)); replacing it with a fine-tuned model's error set would
+      move the gate's denominator without moving one number in this record.
+      ``slice_ids`` is ``None`` on that branch, so ``write_slice`` has nothing to
+      be called with even by accident.
+    """
+    config = shared | {
+        "backend": "local",
+        "max_tokens": local_llm.MAX_NEW_TOKENS,
+        "quantization": local_llm.QUANTIZATION,
+        "generation": {
+            "greedy": True,
+            "do_sample": False,
+            "batch_size": batch_size,
+            "chat_template": local_llm.CHAT_TEMPLATE,
+        },
+        "runtime": runtime,
+        "spend_ledger": "results/spend_phase4.json",
+        "determinism_note": (
+            "our own pod: weights, kernels and tokenizer are all in this record's `runtime`,"
+            " decoding is greedy and the prompts are byte-identical to the OpenRouter run of"
+            " the same model (asserted before the weights load)."
+        )
+        + (
+            " This is a Phase 4 ablation arm — the 4-bit base plus its UNMERGED adapter, the"
+            " exact configuration the artefact serves in (amendment 3.4 (1)). It is scored"
+            " once; nothing is retrained or re-scored after a gate number is seen."
+            if training
+            else " This row is the G1d/G1e anchor (SPEC amendment 3.4 (2)); where it disagrees"
+            " with the OpenRouter fp8 row, this one anchors and the disagreement is recorded,"
+            " never averaged (ADR 3b-infra-and-precision §(d))."
+        ),
+    }
+    if training:
+        return config | {
+            "train_sources": training["rows_per_source"],
+            "fine_tune": training,
+            "g1b_slice_path": str(G1B_SLICE.relative_to(REPO_ROOT)),
+            "g1b_slice_sha256": sha256(
+                G1B_SLICE.read_text(encoding="utf-8").encode("utf-8")
+            ).hexdigest(),
+        }
+    if anchor_valid:
+        return config | {
+            "g1b_slice_path": str(G1B_SLICE.relative_to(REPO_ROOT)),
+            "g1b_slice_sha256": write_slice(
+                G1B_SLICE, scored_inputs["sarcasm_holdout"][0], slice_ids
+            ),
+        }
+    return config
+
+
+def arm_preflight(adapter: Path, arm: str) -> tuple[dict, dict]:
+    """Everything an ablation arm's gate eval must be sure of, before the weights.
+
+    Ordered by what it costs to learn late: the anchor and its slice decide the
+    gate and are free to read; the adapter hash is a directory walk. All of it
+    happens before 62 GB of base model and an hour of A6000 time — and before
+    the one attempt this phase gets is spent scoring the wrong artefact.
+
+    Returns the G1b inputs and the training provenance the record carries, so
+    that a gate number can name the dataset and the adapter it came from.
+    """
+    try:
+        record = records.anchor(history())
+        ids = records.slice_ids(G1B_SLICE.read_text(encoding="utf-8"), record)
+        overall = records.anchor_values(record)["G1a"]["overall"]
+    except (ValueError, OSError) as err:
+        raise SystemExit(f"the anchor this arm is measured against is unusable: {err}") from None
+
+    source = adapter.parent / "provenance.json"
+    if not adapter.is_dir() or not source.exists():
+        raise SystemExit(
+            f"{adapter} must be a trainer output directory holding the adapter, beside the"
+            f" run's provenance.json ({source} is missing). A gate record whose adapter"
+            " cannot name the dataset it was trained on is not provenance."
+        )
+    training = json.loads(source.read_text(encoding="utf-8"))
+    if training["arm"] != arm:
+        raise SystemExit(
+            f"{source} says this adapter is the {training['arm']!r} arm, not {arm!r}."
+            " Scoring one arm under the other's name would decide the ablation by mislabelling."
+        )
+    current = {task: prompts.prompt_sha256(task) for task in prompts.TASKS}
+    if training["prompt_sha256"] != current:
+        raise SystemExit(
+            f"the adapter was trained on different prompts: {training['prompt_sha256']} against"
+            f" {current}. The prompt is part of the measurement (SPEC §7) — stop and report."
+        )
+    return (
+        {"ids": ids, "anchor_overall": overall},
+        {
+            "arm": arm,
+            "adapter_path": str(adapter),
+            "adapter_sha256": records.artifact_sha256(adapter),
+            "train_sha256": training["train_sha256"],
+            "carve_sha256": training["carve_sha256"],
+            "n_train": training["n_train"],
+            "rows_per_source": training["rows_per_source"],
+            "synthetic_ids_added": training["synthetic_ids_added"],
+            "training_run": training.get("run"),
+            "anchor": {"model": record["model"], "timestamp": record["timestamp"]},
+        },
+    )
 
 
 def write_slice(path: Path, holdout: list[dict], slice_ids: dict) -> str:
@@ -572,8 +745,124 @@ def write_ledger(ledger: dict) -> None:
     LEDGER.write_text(json.dumps(ledger, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
-def build_gates(inputs: dict, aliases: dict) -> tuple[list[dict], dict, dict]:
-    """Gate entries, diagnostics and the G1b error sets — every number from the scorer."""
+def g1b_zero_shot(holdout: list[dict], holdout_labels: list[dict]) -> tuple[dict, dict, dict]:
+    """The G1b entry of a run with no fine-tune: the slice, not the fix-rate.
+
+    Amendment 3.2 says the slice is what the base model "misclassifies"; the
+    holdout carries two labels and the amendment names neither, so both error
+    sets and their union are reported and the operator picks the reading at the
+    Phase 4 gate — the executor does not decide a gate definition.
+    """
+    errs = {
+        field: {
+            row["id"]
+            for row, pred in zip(holdout, holdout_labels)
+            if not row["unclear"] and row[field] != pred[field]
+        }
+        for field in ("sentiment", "sarcasm")
+    }
+    counts = {
+        "base_errs_sentiment": len(errs["sentiment"]),
+        "base_errs_sarcasm": len(errs["sarcasm"]),
+        "base_errs_union": len(errs["sentiment"] | errs["sarcasm"]),
+    }
+    entry = {
+        "gate": "G1b",
+        "metric": "sarcasm slice fix-rate (sarcasm_holdout)",
+        "value": None,
+        "n": {"holdout_scored": len(holdout), **counts},
+        "note": (
+            "the fix-rate needs a fine-tune (Phase 4); what this run contributes is the"
+            " slice. Amendment 3.2 defines it as the rows this base model misclassifies"
+            " and the holdout carries two labels, so all three counts are reported and"
+            " the reading is the operator's call at the Phase 4 gate."
+        ),
+    }
+    ids = {
+        "sentiment": sorted(errs["sentiment"]),
+        "sarcasm": sorted(errs["sarcasm"]),
+        "union": sorted(errs["sentiment"] | errs["sarcasm"]),
+    }
+    return entry, counts, ids
+
+
+def g1b_fix_rate(
+    holdout: list[dict], holdout_labels: list[dict], gate_slice: dict, overall: float
+) -> dict:
+    # ``overall`` is this run's G1a number; ``gate_slice["anchor_overall"]`` is
+    # the anchor's, and the gate is the drop between them.
+    """The G1b entry of a fine-tuned run: the pre-registered slice, scored.
+
+    The slice is the anchor's persisted 44 ids (amendment 3.5 (3)) — never this
+    model's error set, which is why nothing here recomputes one. A row of the
+    slice that this run did not score raises inside the scorer rather than
+    counting as unfixed: an incomplete run must not read as a failed gate.
+
+    ``base_errs_*`` deliberately do not appear. On a fine-tuned run those
+    numbers would be *this* model's errors under a field name that says "base" —
+    a plausible number in a gate record that nothing downstream could question.
+
+    The ≤2 pp guard travels with the fix-rate because it is half of the gate:
+    G1b is "fixes ≥60% **while** overall macro-F1 degrades ≤2 pp", and the
+    overall in question is :func:`scorer.sentiment_macro_f1`'s, measured on the
+    comment test set against the same anchor every other bar is measured from.
+    """
+    gold_labels = {
+        row["id"]: {
+            "sentiment": UNCLEAR if row["unclear"] else row["sentiment"],
+            "sarcasm": None if row["unclear"] else row["sarcasm"],
+        }
+        for row in holdout
+    }
+    predicted = {
+        row["id"]: {"sentiment": pred["sentiment"], "sarcasm": pred["sarcasm"]}
+        for row, pred in zip(holdout, holdout_labels)
+    }
+    # `holdout` is the SCORED rows, so a slice row that failed to parse is absent
+    # from both maps and the scorer would name whichever it checks first. Say what
+    # actually happened instead: the denominator is pre-registered, so an unscored
+    # slice row is an incomplete eval and never a failed gate.
+    missing = [row_id for row_id in gate_slice["ids"] if row_id not in predicted]
+    if missing:
+        raise SystemExit(
+            f"{len(missing)} of {len(gate_slice['ids'])} slice rows were not scored by this"
+            f" run: {missing[:5]}. Resume the eval on what is left (--eval-checkpoint) rather"
+            " than reading a short slice as a failed G1b; nothing already scored is re-scored."
+        )
+    fix = scorer.sarcasm_slice_fix_rate(gate_slice["ids"], gold_labels, predicted)
+    return {
+        "gate": "G1b",
+        "metric": "sarcasm slice fix-rate (sarcasm_holdout)",
+        "value": fix["rate"],
+        "fixed": fix["fixed"],
+        "n": {"slice": fix["n"], "holdout_scored": len(holdout)},
+        "guard": {
+            "metric": "sentiment macro-F1 overall (comments_test)",
+            "anchor": gate_slice["anchor_overall"],
+            "value": overall,
+            "delta": overall - gate_slice["anchor_overall"],
+            "max_drop": scorer.G1B_MACRO_F1_DROP,
+        },
+        "note": (
+            "FIXED means the row leaves the union of sentiment and sarcasm errors — correct"
+            " on BOTH labels (amendment 3.5 (3)). n is the pre-registered denominator and"
+            " travels with the verdict (amendment 3.2's fallback)."
+        ),
+    }
+
+
+def build_gates(
+    inputs: dict, aliases: dict, gate_slice: dict | None = None
+) -> tuple[list, dict, dict | None]:
+    """Gate entries, diagnostics and the G1b error sets — every number from the scorer.
+
+    ``gate_slice`` is the fine-tuned branch: ``{"ids": [...], "anchor_overall":
+    float}``, the anchor's persisted G1b slice and the macro-F1 its ≤2 pp guard
+    is measured against. Without it this is a zero-shot run, which *produces* a
+    slice instead of scoring one — and the third return value is that slice, or
+    ``None`` when the run scored a pre-registered one and has no business
+    writing the file.
+    """
     comments, comment_labels = inputs["comments_test"]
     posts, post_labels = inputs["posts_test"]
     holdout, holdout_labels = inputs["sarcasm_holdout"]
@@ -587,20 +876,11 @@ def build_gates(inputs: dict, aliases: dict) -> tuple[list[dict], dict, dict]:
         [x["sentiment"] for x in holdout_labels],
         [row["language"] for row in holdout],
     )
-    # Amendment 3.2 says the slice is what the base model "misclassifies"; the
-    # holdout carries two labels and the amendment names neither. Both error sets
-    # and their union are reported, and the operator picks the reading at the
-    # Phase 4 gate — the executor does not decide a gate definition.
-    sentiment_errs = {
-        row["id"]
-        for row, pred in zip(holdout, holdout_labels)
-        if not row["unclear"] and row["sentiment"] != pred["sentiment"]
-    }
-    sarcasm_errs = {
-        row["id"]
-        for row, pred in zip(holdout, holdout_labels)
-        if not row["unclear"] and row["sarcasm"] != pred["sarcasm"]
-    }
+    if gate_slice is None:
+        g1b, g1b_diagnostics, slice_ids = g1b_zero_shot(holdout, holdout_labels)
+    else:
+        g1b = g1b_fix_rate(holdout, holdout_labels, gate_slice, sentiment["overall"])
+        g1b_diagnostics, slice_ids = {}, None
     gates = [
         {
             "gate": "G1a",
@@ -609,23 +889,7 @@ def build_gates(inputs: dict, aliases: dict) -> tuple[list[dict], dict, dict]:
             "n": {"overall": len(comments), **Counter(languages)},
             "gated_languages": list(scorer.GATED_LANGUAGES),
         },
-        {
-            "gate": "G1b",
-            "metric": "sarcasm slice fix-rate (sarcasm_holdout)",
-            "value": None,
-            "n": {
-                "holdout_scored": len(holdout),
-                "base_errs_sentiment": len(sentiment_errs),
-                "base_errs_sarcasm": len(sarcasm_errs),
-                "base_errs_union": len(sentiment_errs | sarcasm_errs),
-            },
-            "note": (
-                "the fix-rate needs a fine-tune (Phase 4); what this run contributes is the"
-                " slice. Amendment 3.2 defines it as the rows this base model misclassifies"
-                " and the holdout carries two labels, so all three counts are reported and"
-                " the reading is the operator's call at the Phase 4 gate."
-            ),
-        },
+        g1b,
         {
             "gate": "G1c",
             "metric": "intents micro-F1 (comments_test)",
@@ -683,15 +947,7 @@ def build_gates(inputs: dict, aliases: dict) -> tuple[list[dict], dict, dict]:
             gold(holdout, "sarcasm"), [x["sarcasm"] for x in holdout_labels]
         ),
         "holdout_sarcasm_detected": sum(1 for x in holdout_labels if x["sarcasm"]),
-        "base_errs_sentiment": len(sentiment_errs),
-        "base_errs_sarcasm": len(sarcasm_errs),
-        "base_errs_union": len(sentiment_errs | sarcasm_errs),
-    }
-    slice_ids = {
-        "sentiment": sorted(sentiment_errs),
-        "sarcasm": sorted(sarcasm_errs),
-        "union": sorted(sentiment_errs | sarcasm_errs),
-    }
+    } | g1b_diagnostics
     return gates, diagnostics, slice_ids
 
 
@@ -734,6 +990,26 @@ def main(argv: list[str] | None = None) -> int:
         help="--backend local: pin the weights to one Hugging Face revision",
     )
     parser.add_argument(
+        "--adapter",
+        type=Path,
+        metavar="DIR",
+        help="--backend local: a Phase 4 LoRA adapter, loaded UNMERGED onto the NF4 base"
+        " (amendment 3.4 (1)). Turns this into an ablation arm's gate eval: G1b becomes the"
+        " fix-rate over the anchor's pre-registered slice instead of a slice to write.",
+    )
+    parser.add_argument(
+        "--arm",
+        choices=("real-only", "with-synthetic"),
+        help="--adapter: which ablation arm this adapter is (amendment 3.4 (3))",
+    )
+    parser.add_argument(
+        "--eval-checkpoint",
+        type=Path,
+        metavar="PATH",
+        help="append every scored row here and skip the rows it already holds, so a crashed"
+        " eval resumes on what is left instead of re-scoring (PROMPT-4c crash protocol)",
+    )
+    parser.add_argument(
         "--record-out",
         type=Path,
         metavar="PATH",
@@ -757,6 +1033,22 @@ def main(argv: list[str] | None = None) -> int:
 
     row = ROWS[args.model]
     local = args.backend == "local"
+    if bool(args.adapter) != bool(args.arm):
+        parser.error("--adapter and --arm go together: a gate record must name its arm")
+    if args.adapter:
+        if not local:
+            parser.error("--adapter is a local-weights run: pass --backend local")
+        if args.reference_only:
+            raise SystemExit("--reference-only would hide the arm this phase exists to score")
+        if args.batch_size != 1:
+            # ADR phase4-own-pod-anchor §(c): greedy is NOT batch-invariant on this
+            # stack — measured, one row of 24 flipped its intents between batch 8
+            # and batch 1. Defaulting it silently would hide the decision.
+            raise SystemExit(
+                f"--adapter runs at --batch-size 1, not {args.batch_size}: greedy decoding is"
+                " not batch-invariant on bitsandbytes NF4 + A6000 (measured 2026-08-01,"
+                " ADR phase4-own-pod-anchor §(c)). Re-measure and record it, or pass 1."
+            )
     if local and row.get("ref"):
         raise SystemExit(f"{args.model} is a reference row — the local backend runs the base model")
     if row.get("batch_only"):
@@ -775,6 +1067,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.probe:
         data = {name: rows[: args.probe] for name, rows in data.items()}
     aliases = watchlist_aliases(load_registry(REPO_ROOT / "config" / "registry.yaml").watchlist)
+    gate_slice, training = None, None
     if local:
         # Before the weights, before the pod bill: the prompts must be the ones
         # the recorded run sent, or this is not a cross-check.
@@ -782,6 +1075,12 @@ def main(argv: list[str] | None = None) -> int:
         print(f"model {args.model} · backend local · quantization {local_llm.QUANTIZATION}")
         print(f"greedy · max_new_tokens {local_llm.MAX_NEW_TOKENS} · seed {SEED}")
         print(f"prompt SHA256 equal to the recorded {args.model} run: yes")
+        if args.adapter:
+            gate_slice, training = arm_preflight(args.adapter, args.arm)
+            print(f"arm {training['arm']} · adapter sha256 {training['adapter_sha256']}")
+            print(f"  dataset sha256 {training['train_sha256']} ({training['n_train']} rows)")
+            print(f"  G1b slice {len(gate_slice['ids'])} ids, sha256 verified against the anchor")
+            print(f"  guard anchor (G1a overall) {gate_slice['anchor_overall']:.4f}")
     else:
         print(f"model {args.model} · endpoint {row['tag']} · quantization {row['quantization']}")
         print(f"temperature {TEMPERATURE} · max_tokens {MAX_TOKENS} · seed {SEED}")
@@ -797,6 +1096,14 @@ def main(argv: list[str] | None = None) -> int:
         budget = None
         weights = args.model_path or local_llm.MODEL_ID
         tokenizer, model = local_llm.load(weights, args.revision)
+        if args.adapter:
+            # Unmerged, onto the 4-bit base: the deliverable artefact is exactly
+            # this pair, and every gate is scored in the configuration that
+            # serves (amendment 3.4 (1); merging stays forbidden until Phase 5).
+            from peft import PeftModel
+
+            model = PeftModel.from_pretrained(model, str(args.adapter))
+            model.eval()
         client = local_llm.LocalClient(tokenizer, model)
         runtime = local_llm.environment(model, weights=weights, revision=args.revision)
         for field, value in runtime.items():
@@ -842,11 +1149,40 @@ def main(argv: list[str] | None = None) -> int:
         budget = zero_shot.Budget(PHASE_CAP_USD, args.max_run_usd, spent_before)
         client = Client(key, args.model, row["tag"], row["quantization"], budget, threading.Lock())
 
+    checkpoint, resumed = args.eval_checkpoint, {}
+    if checkpoint:
+        resumed = open_checkpoint(
+            checkpoint,
+            {
+                "model": args.model,
+                "arm": args.arm,
+                "adapter_sha256": training["adapter_sha256"] if training else None,
+                "batch_size": args.batch_size if local else None,
+                "probe": args.probe,
+                "prompt_sha256": {task: prompts.prompt_sha256(task) for task in prompts.TASKS},
+            },
+        )
+        print(f"\ncheckpoint {checkpoint} — {len(resumed)} rows already scored")
+
     scored_inputs, failure_blocks = {}, []
     try:
         for name, task, _ in INPUTS:
             if local:
-                outcomes = classify_local(client, task, data[name], args.batch_size)
+                done = {
+                    row_id: entry for (input_, row_id), entry in resumed.items() if input_ == name
+                }
+                pending = [row for row in data[name] if row["id"] not in done]
+                if done:
+                    print(f"\n{name}: {len(done)} rows resumed, {len(pending)} left to score")
+                on_row = None
+                if checkpoint:
+
+                    def on_row(scored, name=name):  # noqa: E731 — the input it belongs to
+                        append_checkpoint(checkpoint, name, scored)
+
+                fresh = classify_local(client, task, pending, args.batch_size, on_row)
+                by_id = done | {entry["id"]: entry for entry in fresh}
+                outcomes = [by_id[row["id"]] for row in data[name]]
             else:
                 outcomes = classify(client, task, data[name], args.concurrency)
             rows, labels, failures = split(data[name], outcomes)
@@ -889,16 +1225,23 @@ def main(argv: list[str] | None = None) -> int:
     if any(block["scored"] == 0 for block in failure_blocks):
         raise SystemExit("an input scored zero rows — stop and report, do not write a record")
 
-    gates, diagnostics, slice_ids = build_gates(scored_inputs, aliases)
+    gates, diagnostics, slice_ids = build_gates(scored_inputs, aliases, gate_slice)
     unusable = {b["input"]: (b["rows"] - b["scored"]) / b["rows"] for b in failure_blocks}
     anchor_valid = all(share <= UNUSABLE_LIMIT for share in unusable.values())
     diagnostics |= {
         "failures": failure_blocks,
         "gate_anchor_valid": anchor_valid,
         "note": (
-            "diagnostics, not gates. base_errs_* are this base model's error sets on the"
-            " frozen sarcasm holdout — the raw material of the G1b slice (amendment 3.2),"
-            " reported for both labels because the amendment names neither."
+            "diagnostics, not gates."
+            + (
+                " G1b is the fix-rate over the anchor's pre-registered slice; no base_errs_*"
+                " appear, because on a fine-tuned run they would be this model's errors under"
+                " a name that says base."
+                if gate_slice
+                else " base_errs_* are this base model's error sets on the frozen sarcasm"
+                " holdout — the raw material of the G1b slice (amendment 3.2), reported for"
+                " both labels because the amendment names neither."
+            )
             + (
                 ""
                 if anchor_valid
@@ -924,15 +1267,18 @@ def main(argv: list[str] | None = None) -> int:
     timestamp = datetime.now(UTC).isoformat(timespec="seconds")
     dump = predictions_path(args.model, timestamp)
     dump_sha = write_predictions(dump, scored_inputs)
+    head_prefix = f"{training['arm']} fine-tune · " if training else "zero-shot "
     shared = {
         "seed": SEED,
         "temperature": TEMPERATURE,
         "prompt_sha256": {task: prompts.prompt_sha256(task) for task in prompts.TASKS},
         "heads": {
-            "T1": "zero-shot sentiment 3-class · sarcasm binary · intents multi-label",
-            "T2": "zero-shot relevance binary · post_type 3-class · brands free-text",
+            "T1": f"{head_prefix}sentiment 3-class · sarcasm binary · intents multi-label",
+            "T2": f"{head_prefix}relevance binary · post_type 3-class · brands free-text",
         },
-        "train_sources": {"zero-shot": "no training data"},
+        # Overridden by `local_config` when an adapter was loaded — see there for
+        # why the difference is what keeps `records.anchor` honest.
+        "train_sources": records.ANCHOR_TRAIN_SOURCES,
         "scored_ids_sha256": {
             name: scored_ids_sha256(rows) for name, (rows, _) in scored_inputs.items()
         },
@@ -942,33 +1288,9 @@ def main(argv: list[str] | None = None) -> int:
     }
 
     if local:
-        config = shared | {
-            "backend": "local",
-            "max_tokens": local_llm.MAX_NEW_TOKENS,
-            "quantization": local_llm.QUANTIZATION,
-            "generation": {
-                "greedy": True,
-                "do_sample": False,
-                "batch_size": args.batch_size,
-                "chat_template": local_llm.CHAT_TEMPLATE,
-            },
-            "runtime": runtime,
-            "spend_ledger": "results/spend_phase4.json",
-            "determinism_note": (
-                "our own pod: weights, kernels and tokenizer are all in this record's"
-                " `runtime`, decoding is greedy and the prompts are byte-identical to the"
-                " OpenRouter run of the same model (asserted before the weights load). This"
-                " row is the G1d/G1e anchor (SPEC amendment 3.4 (2)); where it disagrees with"
-                " the OpenRouter fp8 row, this one anchors and the disagreement is recorded,"
-                " never averaged (ADR 3b-infra-and-precision §(d))."
-            ),
-        }
-        if anchor_valid:
-            slice_sha = write_slice(G1B_SLICE, scored_inputs["sarcasm_holdout"][0], slice_ids)
-            config |= {
-                "g1b_slice_path": str(G1B_SLICE.relative_to(REPO_ROOT)),
-                "g1b_slice_sha256": slice_sha,
-            }
+        config = local_config(
+            shared, args.batch_size, runtime, training, anchor_valid, slice_ids, scored_inputs
+        )
     else:
         usage_after = zero_shot.total_usage(key)
         budget.reconcile(usage_after - ledger["openrouter_total_usage_at_3b_start"])

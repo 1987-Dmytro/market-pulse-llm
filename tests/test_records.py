@@ -129,3 +129,35 @@ def test_the_real_anchor_and_the_real_slice_produce_a_reachable_bar_for_every_ga
     assert 0 < bars["G1b"]["min_fixed"] <= len(ids)
     for language in scorer.GATED_LANGUAGES:
         assert bars["G1a"]["floors"][language] < values["G1a"][language]
+
+
+# --- the adapter's hash, in one implementation --------------------------------
+
+
+def adapter(root: Path, files: dict[str, bytes]) -> Path:
+    for name, payload in files.items():
+        path = root / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(payload)
+    return root
+
+
+def test_artifact_sha256_is_the_content_and_not_the_walk_order(tmp_path):
+    """The pod writes this number into a gate record and the Mac re-checks it
+    after the sync. It has to hash the adapter, not the order a filesystem
+    happened to hand the files over."""
+    files = {"adapter_config.json": b"{}", "nested/adapter_model.safetensors": b"weights"}
+    first = records.artifact_sha256(adapter(tmp_path / "a", files))
+    second = records.artifact_sha256(adapter(tmp_path / "b", dict(reversed(files.items()))))
+    assert first == second
+    assert len(first) == 64
+
+
+def test_artifact_sha256_notices_a_renamed_file_as_well_as_a_changed_one(tmp_path):
+    """A hash over bytes alone would call two different adapters equal the day
+    one of them ships its weights under a different name."""
+    base = records.artifact_sha256(adapter(tmp_path / "a", {"w.safetensors": b"weights"}))
+    renamed = records.artifact_sha256(adapter(tmp_path / "b", {"x.safetensors": b"weights"}))
+    edited = records.artifact_sha256(adapter(tmp_path / "c", {"w.safetensors": b"weightz"}))
+    assert base != renamed
+    assert base != edited

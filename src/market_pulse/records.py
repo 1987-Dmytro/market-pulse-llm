@@ -24,6 +24,7 @@ package is not the place that knows where the repo is.
 
 import json
 from hashlib import sha256
+from pathlib import Path
 
 from market_pulse import prompts
 
@@ -148,3 +149,20 @@ def slice_ids(text: str, record: dict) -> list[str]:
             " regenerated or edited file is a different gate, not a fresher one."
         )
     return json.loads(text)["ids"]
+
+
+def artifact_sha256(root: Path) -> str:
+    """Content hash of a directory — the adapter, in exactly one implementation.
+
+    The one function here that takes a path instead of loaded data, and
+    deliberately: the pod writes this number into a gate record and the Mac
+    re-checks it after the sync, so a second implementation would produce a
+    mismatch that means nothing about the artefact. Every file under ``root``
+    contributes its POSIX-relative path and its bytes in sorted order, so the
+    digest is of the adapter and not of the order a filesystem walked it.
+    """
+    digest = sha256()
+    for path in sorted(p for p in root.rglob("*") if p.is_file()):
+        digest.update(path.relative_to(root).as_posix().encode("utf-8") + b"\0")
+        digest.update(path.read_bytes())
+    return digest.hexdigest()
