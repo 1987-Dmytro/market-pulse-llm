@@ -38,7 +38,7 @@ c2eb510 docs: the 4a record — ADR, notes and hot.md
 **STEP 4b IS DONE AND AWAITING REVIEW — no self-acceptance.** 4a accepted 2026-08-01 with
 **amendment 3.5**; 4b delivered the scorer's slice input, the QLoRA trainer with a frozen config,
 and a 50-step training smoke. **No full run happened, and nothing in 4b opened a frozen set or the
-holdout.** **277 tests**, `make check` green after every commit. Phase 3 closed at `952e5dd`;
+holdout.** **275 tests**, `make check` green after every commit. Phase 3 closed at `952e5dd`;
 phases 1 and 2 accepted 2026-07-28, 3a/3b/3c 2026-07-31.
 Registry: 4 live sources. Raw store 6 057 posts + 11 338 comments. **18 ADRs** ([[INDEX]]).
 
