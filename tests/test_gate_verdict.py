@@ -18,7 +18,24 @@ spec = importlib.util.spec_from_file_location("gate_verdict", SCRIPT)
 verdict = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(verdict)
 
-HISTORY = json.loads((REPO_ROOT / "results" / "baselines.json").read_text(encoding="utf-8"))
+def without_arms(history: dict) -> dict:
+    """The committed history with any real ablation arm removed.
+
+    The fixtures below are two arms, and the anchor they are measured against has
+    to be the real one — so the file is the real file. Once 4c has actually run,
+    that file also holds the real arms, and a fixture arm added on top would be a
+    second row for the same arm: `records.arm_record` would refuse, and the test
+    would be failing on its own setup rather than on the code.
+    """
+    return {
+        model: [run for run in runs if "fine_tune" not in run.get("config", {})]
+        for model, runs in history.items()
+    }
+
+
+HISTORY = without_arms(
+    json.loads((REPO_ROOT / "results" / "baselines.json").read_text(encoding="utf-8"))
+)
 
 
 def arm_record(arm: str, *, g1a, g1b, guard, g1c, g1d, g1e, relevance=0.94) -> dict:

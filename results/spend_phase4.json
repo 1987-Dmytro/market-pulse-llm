@@ -17,6 +17,13 @@
       "spent_usd": 1.1203,
       "remaining_usd": 23.8797,
       "note": "4b training smoke: 50 steps real-only, US-TX-1 volume-less A6000"
+    },
+    {
+      "at": "2026-08-01T18:43:55+00:00",
+      "balance": 31.0486051628,
+      "spent_usd": 3.9514,
+      "remaining_usd": 21.0486,
+      "note": "4c arm A: resume proof + 270 steps + 758-row gate eval"
     }
   ]
 }
