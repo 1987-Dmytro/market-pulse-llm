@@ -12,6 +12,8 @@ its own characters and a test reads as the thing it is checking.
 import ast
 from pathlib import Path
 
+import pytest
+
 from market_pulse import local_llm, prompts
 
 PAD, EOS = 0, 1
@@ -25,16 +27,18 @@ class Encoding(dict):
 class FakeTokenizer:
     pad_token_id = PAD
     eos_token_id = EOS
+    bos_token = "<bos>"
 
-    def __init__(self, width: int = 4) -> None:
+    def __init__(self, width: int = 4, bos: str = "<bos>") -> None:
         self.width = width
+        self.bos = bos
         self.template_kwargs = None
         self.rendered: list[str] = []
 
     def apply_chat_template(self, messages, tokenize=False, **kwargs) -> str:
         self.template_kwargs = kwargs
         assert tokenize is False
-        return f"<|turn>user\n{messages[0]['content']}<turn|><|turn>model\n"
+        return f"{self.bos}<|turn>user\n{messages[0]['content']}<turn|><|turn>model\n"
 
     def __call__(self, texts, return_tensors=None, padding=None, add_special_tokens=None):
         self.rendered = list(texts)
@@ -159,6 +163,16 @@ def test_token_usage_accumulates_across_batches():
     backend.batch("T1", ["one", "two"])
     assert backend.usage["prompt_tokens"] == 8  # two rows, four prompt tokens each
     assert backend.usage["completion_tokens"] == 2 * len(GOOD)
+
+
+def test_a_template_that_stopped_emitting_bos_refuses_to_run():
+    """`add_special_tokens=False` is a silent bug if the template ever changes:
+    a missing BOS makes the answers a little worse, never an error, and the run
+    would read as the model disagreeing with its OpenRouter row."""
+    tokenizer = FakeTokenizer(bos="")
+    with pytest.raises(RuntimeError) as caught:
+        local_llm.LocalClient(tokenizer, FakeModel([(GOOD, True)]))
+    assert "add_special_tokens=False" in str(caught.value)
 
 
 def test_the_gpu_extra_never_reaches_module_scope():

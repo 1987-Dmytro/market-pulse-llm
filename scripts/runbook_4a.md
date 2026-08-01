@@ -41,13 +41,22 @@ python3 scripts/runpod_guard.py          # exit 0 = under the cap; exit 1 = stop
 ## 1. The network volume
 
 100 GB: the weights are 62 GB and the HF cache holds a blob plus a snapshot link, so 100 GB is the
-first round number with headroom. `EU-SE-1` is the datacenter that had A6000 stock at
-`Medium` — check before creating, because a volume can only be attached to a pod in **its own**
-datacenter and moving one means creating another.
+first round number with headroom.
+
+**The datacenter is chosen by an intersection, not by stock alone.** Not every datacenter supports
+network volumes, and a volume can only be attached to a pod in **its own** datacenter — picking on
+A6000 stock and finding out afterwards means a second volume and a second monthly bill. On
+2026-08-01 the A6000 lived in `CA-MTL-3`, `EU-RO-1`, `EU-SE-1`, `US-KS-2` and `US-TX-1`; of those
+only `CA-MTL-3` and `EU-RO-1` take network volumes, and `EU-RO-1` had no stock. So: **CA-MTL-3**.
+Re-derive it rather than trusting that sentence — both lists move.
 
 ```bash
+# A6000 stock per datacenter
 runpodctl gpu list | python3 -c "import json,sys;[print(g['displayName'],g['dataCenterAvailability']) for g in json.load(sys.stdin) if 'A6000' in g['displayName']]"
-runpodctl network-volume create --name market-pulse-phase4 --size 100 --data-center-id EU-SE-1
+# the network-volume datacenters: the error message of a deliberately bad id lists them all
+runpodctl network-volume create --name probe --size 1 --data-center-id NOPE
+
+runpodctl network-volume create --name market-pulse-phase4 --size 100 --data-center-id CA-MTL-3
 runpodctl network-volume list
 ```
 
@@ -60,7 +69,9 @@ the secure-cloud path). The image is the official PyTorch 2.8 / CUDA 12.8 one, s
 present and only the three Phase-4 wheels are installed on top.
 
 `--stop-after` is a belt to the idle-discipline braces: if the session is interrupted, the pod
-stops by itself rather than billing overnight. Set it to a couple of hours out, in UTC.
+stops by itself rather than billing overnight. Set it generously — the setup below is a `pip
+install`, a 62 GB download and four full NF4 loads before the one run that matters, so a deadline
+sized for "the run" expires during the smoke. **Step 6 re-reads it before starting the run.**
 
 ```bash
 python3 scripts/runpod_guard.py                       # before every start, without exception
@@ -73,15 +84,18 @@ runpodctl pod create \
   --container-disk-in-gb 40 \
   --network-volume-id <VOLUME_ID> \
   --volume-mount-path /workspace \
-  --data-center-ids EU-SE-1 \
+  --data-center-ids CA-MTL-3 \
   --cloud-type SECURE \
   --ports '22/tcp' \
   --ssh \
-  --stop-after <UTC ISO8601, e.g. 2026-08-01T14:00:00Z>
+  --stop-after <UTC ISO8601, e.g. 2026-08-01T14:30:00Z>
 
 runpodctl pod list
 runpodctl ssh info <POD_ID>            # host and port for the ssh/scp lines below
 ```
+
+`ssh info` reports `pod not ready` for a minute or two after the pod goes `RUNNING`; wait for the
+`ip`/`port` rather than concluding the pod is broken.
 
 ## 3. The code and the frozen inputs
 
@@ -102,24 +116,30 @@ git status --short                     # must be empty
 
 ## 4. The environment and the weights
 
-`HF_HOME` on the volume is what makes the download survive a stopped pod.
+`HF_HOME` on the volume is what makes the download survive a stopped pod. The image's Python is
+PEP 668 "externally managed", so a plain `pip install` refuses; a venv **with**
+`--system-site-packages` reuses the image's CUDA-matched torch instead of pulling 3 GB of a
+possibly different build.
 
 ```bash
+mkdir -p /workspace/hf /workspace/out          # `tee` below opens its target before python starts
 export HF_HOME=/workspace/hf
-pip install -e '.[dev,gpu]'
-python3 -c "import torch,transformers,bitsandbytes;print(torch.__version__,transformers.__version__,bitsandbytes.__version__,torch.cuda.get_device_name(0))"
+
+python3 -m venv --system-site-packages /workspace/venv
+/workspace/venv/bin/pip install -e '.[dev,gpu]'
+/workspace/venv/bin/python -c "import torch,transformers,bitsandbytes;print(torch.__version__,transformers.__version__,bitsandbytes.__version__,torch.cuda.get_device_name(0))"
 nvidia-smi
 
 # 62 GB. Resumable, and it lands on the volume, not the container disk.
-hf download google/gemma-4-31b-it --revision main
+/workspace/venv/bin/hf download google/gemma-4-31b-it --revision <SHA>
 du -sh /workspace/hf
 ```
 
-Record the revision the download resolved to — it goes into the run as `--revision` so the record
-names a commit and not a moving branch:
+Resolve the revision **before** the download and pass the same SHA to both — a record that names a
+moving branch names nothing:
 
 ```bash
-python3 - <<'PY'
+/workspace/venv/bin/python - <<'PY'
 from huggingface_hub import HfApi
 print(HfApi().model_info("google/gemma-4-31b-it").sha)
 PY
@@ -127,39 +147,47 @@ PY
 
 ## 5. Smoke, in three widening steps
 
-Nothing below writes a record. Each step is a stop-and-report if it fails.
+Nothing below writes a record. Each step is a stop-and-report if it fails — and a stop-and-report
+means **stop the pod first** (`runpodctl pod stop <POD_ID>`), then write the report.
 
 ```bash
+cd /workspace/market-pulse
 export HF_HOME=/workspace/hf
+PY=/workspace/venv/bin/python
 
 # (a) the whole pipeline with no weights at all — prompts, parser, failure buckets, scorer.
-python3 scripts/eval_zero_shot.py --model google/gemma-4-31b-it --backend local --smoke
+$PY scripts/eval_zero_shot.py --model google/gemma-4-31b-it --backend local --smoke
 
 # (b) the weights load, quantized, and the environment is what the record will claim.
-python3 scripts/eval_zero_shot.py --model google/gemma-4-31b-it --backend local \
+$PY scripts/eval_zero_shot.py --model google/gemma-4-31b-it --backend local \
   --revision <SHA> --dry-run
 
-# (c) three real rows per input. Prints the failure table; still writes nothing.
-python3 scripts/eval_zero_shot.py --model google/gemma-4-31b-it --backend local \
+# (c) three real rows per input. Prints the failure table and the per-row labels;
+#     still writes nothing.
+$PY scripts/eval_zero_shot.py --model google/gemma-4-31b-it --backend local \
   --revision <SHA> --probe 3
 ```
 
 **The batch-invariance check — do this before the full run, not after.** Greedy decoding makes
 batch size a throughput choice *in principle*; on a real stack, left padding and kernel selection
 can move a logit. So measure it: the same rows at batch 1 and at batch 8 must produce the same
-parsed labels. Two probes and a `diff` are enough, because `--probe` prints per-row outcomes and
-the dump writer is not involved.
+parsed **labels**. `--probe` prints one JSON line per scored row, so the diff compares answers and
+not counts — an aggregate "scored 8/8 · parse 0" is identical whenever both sizes merely parse,
+and a check that cannot fail is not a check.
 
 ```bash
-python3 scripts/eval_zero_shot.py --model google/gemma-4-31b-it --backend local \
-  --revision <SHA> --probe 8 --batch-size 1 | tee /tmp/b1.txt
-python3 scripts/eval_zero_shot.py --model google/gemma-4-31b-it --backend local \
-  --revision <SHA> --probe 8 --batch-size 8 | tee /tmp/b8.txt
-diff <(grep -A4 'scored' /tmp/b1.txt) <(grep -A4 'scored' /tmp/b8.txt) && echo "batch invariant"
+$PY scripts/eval_zero_shot.py --model google/gemma-4-31b-it --backend local \
+  --revision <SHA> --probe 8 --batch-size 1 > /tmp/b1.txt 2>&1 || echo "PROBE 1 FAILED"
+$PY scripts/eval_zero_shot.py --model google/gemma-4-31b-it --backend local \
+  --revision <SHA> --probe 8 --batch-size 8 > /tmp/b8.txt 2>&1 || echo "PROBE 8 FAILED"
+grep '"pred"' /tmp/b1.txt > /tmp/b1.pred; grep '"pred"' /tmp/b8.txt > /tmp/b8.pred
+test -s /tmp/b1.pred && test -s /tmp/b8.pred || echo "NO PREDICTIONS — the check proved nothing"
+diff /tmp/b1.pred /tmp/b8.pred && echo "batch invariant on $(wc -l < /tmp/b1.pred) rows"
 ```
 
-If they differ, the run uses `--batch-size 1` and the deviation is reported. A faster wrong number
-is still a wrong number.
+Both `test -s` guards matter: two crashed probes produce two empty files, and `diff` on two empty
+files is silent success. If the labels differ, the run uses `--batch-size 1` and the deviation is
+reported. A faster wrong number is still a wrong number.
 
 ## 6. The run — once
 
@@ -171,20 +199,29 @@ no G1b slice, and exits 3 — that is a stop-and-report, not a retry.
 checkout, and wholesale-replacing an append-only anchor is the mistake this project already has a
 footgun note about. What comes back is the record the scorer built.
 
+Re-read the auto-stop deadline first: it was set before an hour of setup, and a pod that stops
+mid-run wastes the whole run.
+
 ```bash
+# --- on the Mac ---
+runpodctl pod get <POD_ID>            # check the auto-stop is still comfortably ahead
+date -u +%Y-%m-%dT%H:%M:%SZ
+
+# --- on the pod ---
 cd /workspace/market-pulse
 export HF_HOME=/workspace/hf
-python3 scripts/eval_zero_shot.py \
+mkdir -p /workspace/out
+/workspace/venv/bin/python scripts/eval_zero_shot.py \
   --model google/gemma-4-31b-it --backend local --revision <SHA> \
   --batch-size 8 \
-  --record-out /workspace/out/record.json | tee /workspace/out/run.log
+  --record-out /workspace/out/record.json 2>&1 | tee /workspace/out/run.log
 ```
 
 ## 7. Bring the three artifacts home, then stop the pod
 
 ```bash
 # --- back on the Mac ---
-mkdir -p /tmp/4a
+mkdir -p /tmp/4a results/predictions      # neither exists on a fresh checkout
 scp -P <PORT> root@<HOST>:/workspace/out/record.json /tmp/4a/
 scp -P <PORT> root@<HOST>:/workspace/out/run.log /tmp/4a/
 scp -P <PORT> 'root@<HOST>:/workspace/market-pulse/results/predictions/*.jsonl' results/predictions/
@@ -193,6 +230,10 @@ scp -P <PORT> root@<HOST>:/workspace/market-pulse/results/g1b_slice.json results
 python3 scripts/eval_zero_shot.py --append-record /tmp/4a/record.json
 python3 scripts/show_results.py --last
 ```
+
+If the record says `gate_anchor_valid: false`, `--append-record` says so on the way in. Append it
+anyway — the two `qwen3.6-27b` rows live in the file the same way, and evidence of a bad run beats
+a gap — but it anchors nothing without an operator decision.
 
 **Stop the pod the moment the copy is verified.** Not after the report is written, not after the
 ADR — the moment the files are on the Mac and their hashes check out.
@@ -226,6 +267,15 @@ PY
 
 ## When something goes wrong
 
+**Every branch below starts the same way: `runpodctl pod stop <POD_ID>`, then write the report.**
+A stop-and-report that leaves the GPU running is a stop-and-bill; the pod costs nothing to start
+again, and the volume keeps the weights.
+
+```bash
+runpodctl pod stop <POD_ID> && runpodctl pod list
+python3 scripts/runpod_guard.py --note "4a aborted: <one line on why>"
+```
+
 - **The guard refuses.** Read which clause fired. A cap trip is a stop-and-report. A balance above
   the anchor means the account was topped up mid-phase and the ledger has to be re-anchored by an
   operator decision, never by deleting the file.
@@ -234,8 +284,13 @@ PY
   another datacenter without an operator decision — that is a second monthly bill.
 - **The model will not load.** The record is worth nothing without the environment it names, so do
   not work around a load error by dropping quantization or changing dtype: that would silently
-  score a different model than step 4b trains. Stop and report.
-- **Over 2% unusable rows.** The runner already stopped. Report the ids and the reasons it printed;
-  do not re-run in a loop hoping for a better draw.
+  score a different model than step 4b trains. Stop the pod, then report.
+- **The BOS assertion fires.** The chat template stopped starting the prompt with `<bos>`, so
+  `add_special_tokens=False` would drop it. Not a thing to work around — it changes every prompt.
+  Stop the pod and report.
+- **The batch-invariance check finds a difference, or proves nothing.** Fall back to
+  `--batch-size 1` for the run and record the deviation. Do not skip the check to save pod minutes.
+- **Over 2% unusable rows.** The runner already stopped and exited 3. Stop the pod, then report the
+  ids and the reasons it printed; do not re-run in a loop hoping for a better draw.
 - **You are unsure whether the pod is running.** `runpodctl pod list`. If in doubt, stop it — a
   stopped pod costs nothing to start again, and an idle one bills by the second.

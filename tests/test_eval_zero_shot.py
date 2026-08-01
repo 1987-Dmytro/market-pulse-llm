@@ -317,10 +317,67 @@ def test_the_smoke_client_drives_the_batched_path_too():
     assert block["scored"] > 0
 
 
+def test_a_transient_batch_failure_costs_its_own_rows_and_no_others():
+    """The OpenRouter client retries every row six times; without a per-row
+    fallback here one transient would cost a whole batch. The 2% limit is two
+    rows on the 108-row holdout, so a batch of eight would end the run."""
+
+    class FlakyOnce(BatchClient):
+        def __init__(self, replies):
+            super().__init__(replies)
+            self.failed = False
+
+        def batch(self, task, texts):
+            if len(texts) > 1 and not self.failed:
+                self.failed = True
+                raise RuntimeError("transient kernel hiccup")
+            return super().batch(task, texts)
+
+    good = '{"sentiment": "neutral", "sarcasm": false, "intents": []}'
+    outcomes = runner.classify_local(FlakyOnce([good] * 6), "T1", ROWS, batch_size=3)
+    block = runner.failure_block("sarcasm_holdout", outcomes, runner.split(ROWS, outcomes)[2])
+    assert block["scored"] == 6
+    assert block["generation_failures"] == 0
+
+
+def test_a_row_that_fails_alone_is_still_charged():
+    """The retry must not swallow a genuine failure into a scored row."""
+
+    class AlwaysDies(BatchClient):
+        def batch(self, task, texts):
+            raise RuntimeError("this row really is broken")
+
+    outcomes = runner.classify_local(AlwaysDies([]), "T1", ROWS[:2], batch_size=2)
+    block = runner.failure_block("comments_test", outcomes, runner.split(ROWS[:2], outcomes)[2])
+    assert block["generation_failures"] == 2
+    assert block["scored"] == 0
+
+
+def test_an_out_of_memory_is_never_charged_to_a_row():
+    """A batch size that does not fit is a fact about the machine. Turning it
+    into 758 counted failures would bury the one line that says what happened."""
+
+    class Oom(BatchClient):
+        def batch(self, task, texts):
+            raise RuntimeError("CUDA out of memory. Tried to allocate 2.00 GiB")
+
+    with pytest.raises(RuntimeError, match="out of memory"):
+        runner.classify_local(Oom([]), "T1", ROWS, batch_size=6)
+
+
 def test_the_local_smoke_run_scores_every_frozen_row_without_a_gpu():
     """Driven through `main`, not imported: a backend that only imports is a
     backend nothing has run."""
     assert runner.main(["--model", GEMMA, "--backend", "local", "--smoke"]) == 0
+
+
+def test_a_local_probe_prints_the_labels_a_batch_check_has_to_compare(capsys):
+    """The batch-invariance check diffs two probes. Aggregate counts are equal
+    whenever both parse, so a probe that printed only counts could not fail —
+    and this path used to crash outright on a null budget."""
+    assert runner.main(["--model", GEMMA, "--backend", "local", "--smoke", "--probe", "2"]) == 0
+    printed = capsys.readouterr().out
+    assert '"pred"' in printed and '"id"' in printed
 
 
 def test_the_reference_row_cannot_be_run_on_our_own_weights():
@@ -423,20 +480,30 @@ def test_every_record_carries_what_show_results_prints():
             assert {"T1", "T2"} <= set(config["heads"])
 
 
-def test_every_record_that_claims_a_dump_points_at_a_real_one():
+def test_every_record_that_claims_a_file_points_at_a_real_one():
     """A ratchet, empty until the first 3c-era run: the six 3b records carry no
     dumps and must not be backfilled, but any record that names one must not lie.
-    See implementation-notes.md, "Correction (2026-07-31, team-lead review)"."""
+    See implementation-notes.md, "Correction (2026-07-31, team-lead review)".
+
+    Every `*_path` with a matching `*_sha256` is checked, not just the dump —
+    the G1b slice goes to a fixed filename that a later local run overwrites in
+    place, and an overwrite has to fail loudly here rather than leave the record
+    pointing at a file that is no longer the one it hashed."""
     results = Path(__file__).resolve().parents[1] / "results" / "baselines.json"
     if not results.exists():
         pytest.skip("no results yet")
     for runs in json.loads(results.read_text(encoding="utf-8")).values():
         for record in runs:
-            claimed = record["config"].get("predictions_path")
-            if claimed is None:
-                continue
-            dump = results.parents[1] / claimed
-            assert dump.exists(), f"{record['model']} names a dump that is not there: {claimed}"
-            assert (
-                sha256(dump.read_bytes()).hexdigest() == record["config"]["predictions_sha256"]
-            ), f"{record['model']}: the dump on disk is not the one the record hashed"
+            config = record["config"]
+            claims = [
+                key for key in config if key.endswith("_path") and f"{key[:-5]}_sha256" in config
+            ]
+            for key in claims:
+                claimed = config[key]
+                artifact = results.parents[1] / claimed
+                assert artifact.exists(), (
+                    f"{record['model']} names a {key} that is not there: {claimed}"
+                )
+                assert sha256(artifact.read_bytes()).hexdigest() == config[f"{key[:-5]}_sha256"], (
+                    f"{record['model']}: {claimed} on disk is not the file the record hashed"
+                )

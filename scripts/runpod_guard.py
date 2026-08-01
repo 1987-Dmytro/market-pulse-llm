@@ -138,6 +138,15 @@ def main(argv: list[str] | None = None) -> int:
     print(f"balance now       ${balance_now:.2f}")
     print(f"  balance delta   ${anchor - balance_now:.4f}")
     print(f"  billing since   ${billing_total:.4f} ({how})")
+    if how.startswith("unreadable"):
+        # The cap still holds — the balance delta is the binding reading and it
+        # cannot be fooled by a schema change. But a corroborating number that
+        # silently became $0.00 must say so out loud, not blend into the table.
+        print(
+            "  WARNING: the billing payload could not be read, so only the balance delta is"
+            " counting. Look at `runpodctl billing pods` by hand before the next start.",
+            file=sys.stderr,
+        )
     print(f"PHASE 4 SPENT     ${spent:.4f} of ${PHASE_CAP_USD:.2f}")
     print(f"REMAINING         ${remaining:.4f}")
 

@@ -205,3 +205,75 @@ written:**
 - 2026-07-31 — XLM-R smoke on both devices; both over the 60-minute ceiling, full run not started.
 - 2026-07-31 — `qwen/qwen3.6-27b` re-run at operator request: same failure mode, mostly the same
   rows, still `gate_anchor_valid: false`. Phase spend **$0.9124 of $8.00** across six runs.
+
+---
+
+# Implementation notes — Phase 4a
+
+Working notes for the step specified in `docs/PROMPT-4a.md` rev. 1 (operator, 2026-08-01): pod
+bootstrap, the local inference path, and the own-pod zero-shot re-run that anchors G1d/G1e and
+defines the G1b slice. No training. Decisions with a lifetime beyond this step live in
+`knowledge/decisions/phase4-own-pod-anchor.md`; this file is the build log.
+
+## Read-back, before any file changed
+
+- **Ablation selection rule** — two arms, with and without `data/annotation/synthetic_sarcasm.jsonl`,
+  identical config and seed, exactly one data path differing; the synthetic source stays **iff** its
+  arm's G1b fix-rate is strictly higher **and** no other gated head is lower by more than 0.5 pp.
+  The Tier-1 verdict is the selected arm's, both columns are published, there is no third run.
+- **Cap and per-arm ceiling** — hard **$25** GPU spend across all of Phase 4, checked against RunPod
+  billing before every start; a projection over **4 h per arm** stops the line for an operator
+  decision.
+- **The G1b slice** — the union of the base model's sentiment and sarcasm errors on the 108-row
+  frozen sarcasm holdout, measured by *its own zero-shot re-run on our pod*. OpenRouter's 40/108 is
+  a preview, not the slice.
+- **G1d/G1e anchor** — the own-pod `google/gemma-4-31b-it` row, and it anchors regardless of whether
+  it agrees with the OpenRouter fp8 row (amendment 3.4 (2), ADR 3b-infra-and-precision §(d)/(f)).
+
+## Assumptions stated before the code was written
+
+1. **The cross-check must not move the measurement.** The local path reuses 3b's prompt builder,
+   parser, failure taxonomy, record builder, dump writer and scorer unchanged; only the runtime
+   differs. Anything else and the two rows would differ for reasons that are not the serving stack.
+2. **The prompt-SHA equality is checked against the stored record, not recomputed on both sides.**
+   `prompts.prompt_sha256(task) == prompts.prompt_sha256(task)` passes forever. The guard reads
+   `config.prompt_sha256` out of the recorded OpenRouter run of the same model and refuses on any
+   difference, before the weights load and before a dollar is spent.
+3. **The own-pod row keys under the same model name.** `results/baselines.json` already
+   accumulates several runs per model (the two qwen3.6-27b runs), and the runtime distinction
+   belongs in `config.backend` / `config.runtime`, not in an invented pseudo-model name.
+4. **A generation failure gets its own bucket.** `api_failures` keeps its meaning — no usable
+   response from a third-party endpoint — and `generation_failures` is the local equivalent. Both
+   keys are present in every record whichever backend ran, so the two rows stay diffable.
+5. **The pod's `results/baselines.json` never travels home.** It belongs to a throwaway checkout;
+   `--record-out` writes the record the scorer built, `--append-record` appends it here. Copying an
+   append-only anchor wholesale is the mistake `results/spend_3b.json` carries a footgun note about.
+6. **The batch-invariance claim is measured, not assumed.** Greedy decoding makes batch size a
+   throughput choice in principle; left padding and kernel selection can still move a logit, so the
+   runbook compares the same rows at batch 1 and batch 8 before the full run.
+
+## The chat template, verified before the pod existed
+
+Gemma 4 has a thinking channel, and `prompts.parse_reply` reads the first `{` it finds — so a
+model that thinks out loud before answering would have looked like a systematic disagreement with
+the OpenRouter row rather than a bug. The shipped `chat_template.jinja` was rendered locally
+against the real prompts (jinja2 only, no weights, no transformers):
+
+- `add_generation_prompt=True, enable_thinking=False` ends the prompt with
+  `<|turn>model\n<|channel>thought\n<channel|>` — an already-closed thought channel, which is the
+  local equivalent of the `reasoning: {"enabled": false}` every 3b request carried.
+- `enable_thinking` already defaults to false, so passing it explicitly is a **pin**, not a change:
+  the rendered strings are byte-identical either way. It is passed because a template revision that
+  flipped the default would silently change every reply.
+- The template emits `<bos>` itself, which is why the tokenizer is called with
+  `add_special_tokens=False`; a second BOS would shift every position.
+- Both fixed prompts appear verbatim in the rendered string and the row is fenced as
+  `<comment>…</comment>` / `<post>…</post>`, so the measurement's prompt survives templating whole.
+
+## Deviations from `docs/PROMPT-4a.md`
+
+Every departure is logged here. Silence is not compliance.
+
+| # | Contract text | What was done | Why |
+|---|---|---|---|
+| F1 | Step 0: "Expect modified team-lead files … (docs/STATUS.md, docs/SPEC.md, docs/PROMPT-4a.md, knowledge/daily_logs/2026-07-31.md, knowledge/index.md)" | The actual dirty set was committed as the one commit: the three named `docs/` files, `knowledge/index.md`, **`knowledge/daily_logs/2026-08-01.md`** instead of `2026-07-31.md`, and **`knowledge/hot.md`**, which the list omits. | The `/close` that produced them ran just past midnight, so the Stop hook stamped the new day's log; the SessionStart hook then refreshed `hot.md`'s auto-generated block. Both are hook output, not edits. "Commit them all as ONE commit" was followed on the set that actually existed. |

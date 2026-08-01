@@ -293,10 +293,15 @@ def classify_local(client, task: str, rows: list[dict], batch_size: int) -> list
     the runbook's batch-invariance check on the pod is what makes that claim a
     measurement rather than an assumption.
 
-    A batch that raises is charged to its own rows as generation failures; an
-    out-of-memory is not, because it is a fact about the machine and not about
-    any row, and turning it into 758 counted failures would bury the one line
-    that says what actually happened.
+    A batch that raises is retried one row at a time before anything is charged.
+    The OpenRouter client retries every row six times; without the fallback a
+    single transient would cost eight rows here against nought or one there, and
+    the 2% limit is two rows on the 108-row holdout — one bad batch would end the
+    run. Only a row that fails alone is a generation failure.
+
+    An out-of-memory is never charged to a row: it is a fact about the machine,
+    and turning it into 758 counted failures would bury the one line that says
+    what actually happened.
     """
     outcomes = []
     for start in range(0, len(rows), batch_size):
@@ -305,16 +310,27 @@ def classify_local(client, task: str, rows: list[dict], batch_size: int) -> list
             replies = client.batch(task, [row["text"] for row in chunk])
         except MemoryError:
             raise
-        except Exception as err:  # noqa: BLE001 — counted against every row of the batch
+        except Exception as err:  # noqa: BLE001 — retried per row, then counted
             # Older torch raises a plain RuntimeError for OOM, newer one a named
             # class; both mean the batch size was wrong, not that a row was.
             if type(err).__name__ == "OutOfMemoryError" or "out of memory" in str(err).lower():
                 raise
-            replies = [err] * len(chunk)
+            print(f"    batch at row {start} failed ({err}) — retrying its rows one by one")
+            replies = [_one_row(client, task, row["text"]) for row in chunk]
         outcomes += [
             outcome(task, row["id"], reply, "generation") for row, reply in zip(chunk, replies)
         ]
     return outcomes
+
+
+def _one_row(client, task: str, text: str):
+    """One row on its own; the exception itself when even that fails."""
+    try:
+        return client.batch(task, [text])[0]
+    except Exception as err:  # noqa: BLE001 — now it really is this row's failure
+        if type(err).__name__ == "OutOfMemoryError" or "out of memory" in str(err).lower():
+            raise
+        return err
 
 
 def split(rows: list[dict], outcomes: list[dict]) -> tuple[list[dict], list[dict], list[dict]]:
@@ -405,13 +421,19 @@ def recorded_prompt_sha256(model: str) -> list[dict]:
 
 
 def assert_prompt_sha_matches_3b(model: str) -> dict:
-    """Refuse to run unless this checkout's prompts are byte-identical to 3b's.
+    """Refuse to run unless this checkout's fixed prompts hash to 3b's hashes.
 
     Compared against the hashes **stored in the 3b records**, never against
     `prompts.prompt_sha256` on both sides of the equals sign — that assertion
     passes forever and proves nothing. A cross-check whose prompt moved is not
     a cross-check of a serving stack; it is two different measurements with one
     name (SPEC amendment 3.4 (2)).
+
+    What the hash covers is exactly what 3b's hash covered: `prompts.PROMPTS`.
+    The row wrapper and the single `user` role come from
+    `prompts.build_messages`, which both backends call — they are shared code,
+    not a hashed field, and widening the hash now would make this run
+    incomparable to the row it exists to check.
     """
     stored = recorded_prompt_sha256(model)
     if not stored:
@@ -482,6 +504,12 @@ def append_record_file(path: Path) -> int:
             )
     append(record)
     print(f"appended {record['model']} @ {record['timestamp']} to {RESULTS.name}")
+    if record.get("diagnostics", {}).get("gate_anchor_valid") is False:
+        # Appending it is right — the 27B rows live in the file the same way, and
+        # evidence of a bad run beats a gap. Saying so out loud is what stops it
+        # from being read as this phase's anchor.
+        print("  NOTE: gate_anchor_valid is false — this row anchors no gate without an operator")
+        print("        decision, and no G1b slice was written for it.")
     return 0
 
 
@@ -786,9 +814,10 @@ def main(argv: list[str] | None = None) -> int:
             runtime = {"smoke": "no weights were loaded"}
     elif local:
         budget = None
-        tokenizer, model = local_llm.load(args.model_path or local_llm.MODEL_ID, args.revision)
+        weights = args.model_path or local_llm.MODEL_ID
+        tokenizer, model = local_llm.load(weights, args.revision)
         client = local_llm.LocalClient(tokenizer, model)
-        runtime = local_llm.environment(model)
+        runtime = local_llm.environment(model, weights=weights, revision=args.revision)
         for field, value in runtime.items():
             print(f"  {field:<20} {value}")
         if args.dry_run:
@@ -865,8 +894,14 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.probe:
         print("\n--probe: no record written")
-        if not args.smoke:
+        # The per-row answers, not just the counts. Two probes at different batch
+        # sizes are only a batch-invariance check if what they print is the
+        # labels; an aggregate "scored 3/3" is identical whenever both parse.
+        for line in prediction_lines(scored_inputs):
+            print(f"  {line}")
+        if budget is not None:
             print(f"actual spend this probe ${budget.run_spend:.4f}")
+        if not args.smoke:
             print(f"tokens {dict(client.usage)}")
         return 0
 

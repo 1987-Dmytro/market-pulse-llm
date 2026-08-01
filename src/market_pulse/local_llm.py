@@ -136,6 +136,26 @@ class LocalClient:
         if tokenizer.pad_token_id is not None:
             # generate() pads rows that stopped early; a pad is an end for us too.
             self.stop_ids.add(tokenizer.pad_token_id)
+        self._assert_template_emits_bos()
+
+    def _assert_template_emits_bos(self) -> None:
+        """`add_special_tokens=False` is only safe while the template emits <bos>.
+
+        Checked once, at construction, because nothing downstream can see it: a
+        missing BOS produces slightly worse answers, not an error, and the run
+        would read as a model disagreeing with its OpenRouter row. Verified
+        against the shipped Gemma 4 template before the first pod existed; this
+        keeps it true if the template is ever revised under us.
+        """
+        bos = getattr(self.tokenizer, "bos_token", None)
+        if not bos:
+            return  # a tokenizer with no BOS has nothing for the flag to drop
+        rendered = self.render(prompts.TASKS[0], "probe")
+        if not rendered.startswith(bos):
+            raise RuntimeError(
+                f"the chat template no longer starts the prompt with {bos!r}, so"
+                " add_special_tokens=False would drop it silently — stop and report"
+            )
 
     def render(self, task: str, text: str) -> str:
         """The one request, through the model's own chat template."""
@@ -202,12 +222,18 @@ def nvidia_smi() -> dict:
     return dict(zip(("driver_version", "name", "memory_total"), fields))
 
 
-def environment(model=None) -> dict:
-    """Which machine, which driver, which wheels — provenance for a rented number.
+def environment(model=None, weights: str = MODEL_ID, revision: str | None = None) -> dict:
+    """Which machine, which driver, which wheels, which weights — provenance.
 
     A GPU number that does not name its stack cannot be re-run: bitsandbytes
     kernels and the transformers generation path both move between releases,
     and step 4b trains against exactly this environment.
+
+    ``weights`` and ``revision`` are what the operator asked for and are
+    recorded as asked, beside ``model_revision``, which is what transformers
+    resolved. The resolved one is a best-effort read of a private attribute and
+    is ``None`` for a local-directory load — so it can corroborate the request,
+    never replace it.
     """
     import bitsandbytes
     import torch
@@ -224,6 +250,7 @@ def environment(model=None) -> dict:
         "transformers": transformers.__version__,
         "bitsandbytes": bitsandbytes.__version__,
         "pod_id": os.environ.get("RUNPOD_POD_ID"),
-        "model_id": MODEL_ID,
+        "weights_requested": weights,
+        "revision_requested": revision,
         "model_revision": getattr(getattr(model, "config", None), "_commit_hash", None),
     }
