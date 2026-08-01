@@ -359,3 +359,143 @@ The decision made one arithmetic fact unavoidable and it went straight back to t
 4a — on the OpenRouter anchor it was G1e that was impossible (1.0211) and G1d that was merely brutal
 (0.9898) — so no anchor makes both +10 pp gates satisfiable. The executor does not touch SPEC §5;
 flagged and left.
+
+# Implementation notes — Phase 4b
+
+Executed under `docs/PROMPT-4b.md` rev. 1 on 2026-08-01, after 4a was accepted and SPEC amendment
+3.5 landed. Scope: the scorer learns the persisted slice, the QLoRA trainer and its frozen config,
+one training smoke. **No full training run, and nothing scored a frozen set or the holdout.**
+
+## Read-back, before any file changed
+
+- **The two things 4b must not do:** no full training runs (that is 4c, after this report is
+  accepted), and no scoring of any frozen set or the holdout by anything in this step — the
+  one-attempt gates see a fine-tuned model exactly once.
+- **The pre-registered synthetic selection rule** (amendment 3.4 (3)): the synthetic source stays
+  iff its arm's G1b fix-rate is strictly higher AND no other gated head is lower by more than
+  0.5 pp; both columns published, no third run, no retraining after gate numbers are seen.
+- **The per-arm hour ceiling:** 4 h (amendment 3.4 (4)); a projection over it stops the line for an
+  operator decision.
+- **"Fixed" under amendment 3.5 (3):** a G1b slice row is fixed iff the fine-tuned model is correct
+  on BOTH sentiment and sarcasm for that row — it leaves the union that put it in the slice.
+
+## Assumptions stated before the code was written
+
+1. **`unclear` rows are dropped from training** (the brief's default, taken). 694 of 1 600 comments
+   and 206 of 746 candidates — a 43% drop on the comment sources. A row the annotator could not
+   decide has no right answer to teach, and SPEC §4 already excludes it from every gate; training
+   on it would teach a label `parse_reply` rejects out of hand.
+2. **The brief's "never read `data/frozen/*`" means the frozen test inputs**, not the folder: the
+   same sentence names `comments_train.jsonl` and `posts_train.jsonl` as training sources and both
+   live there. Enforced as a named refusal list — the two test sets, the holdout and the holdout
+   pool — rather than a path prefix, so it can neither forbid the training data nor accidentally
+   permit a test set.
+3. **The carve is held out of training**, 24 rows drawn from the real pool before the synthetic
+   rows join. "A carve from the training pool" that stayed in training would report training loss
+   under another name; drawing it after the synthetic rows would break arm identity.
+4. **`gate_thresholds` refuses a bar above 1.0.** The lesson of 4a's escalation turned into a
+   guard: a bounded metric cannot clear `anchor + margin` when that exceeds its ceiling, and the
+   cheapest moment to notice is when the anchor lands.
+5. **The smoke's adapter is evidence, not an artefact.** 4c trains from scratch on the same config;
+   the smoke's 490 MB adapter was hashed, its `adapter_config.json` kept, and the file left on the
+   pod that was then deleted.
+
+## The train/eval skew caught before the pod existed
+
+Rendering the whole assistant turn through the chat template — the obvious way to build a training
+example — produces a different prefix than the eval path sends. With `enable_thinking=False` the
+*generation* prompt ends with an already-closed thinking channel; the *turn* form drops that
+channel entirely:
+
+```
+eval / generation prompt : …</comment><turn|>\n<|turn>model\n<|channel>thought\n<channel|>
+assistant-turn form      : …</comment><turn|>\n<|turn>model\n{"sentiment": …}<turn|>\n
+```
+
+Training on the turn form would have conditioned the model on a context no gate row ever carries —
+no error, no failing assert at gate time, just lower numbers and nothing to point at. The
+assertion that caught it was written because the split needed one, and it fired on the real
+template on this Mac, before any pod was created. The trainer now takes the prompt from the same
+`apply_chat_template(..., **local_llm.CHAT_TEMPLATE)` call the eval client makes and only the
+end-of-turn marker from the turn form.
+
+## What the stub run of the training loop caught
+
+The loop is the densest new logic in 4b and had never executed, so it was driven end to end on this
+Mac's CPU with a stub model — real tokenizer, real examples, a fake bitsandbytes optimizer.
+
+1. `collate()` returns a plain dict and the loop called `.to(device)` on it. That is
+   `BatchEncoding`'s method, not `dict`'s: the first forward pass of the first paid step would have
+   died with `AttributeError` after a 62 GB load.
+2. The cosine schedule was built over `min(planned, --max-steps)`, so a 50-step smoke decayed the
+   learning rate to zero inside the smoke and previewed a trajectory the full run never follows.
+
+The same run exercised the OOM branch (micro-batch 2 → 1, accumulation 2 → 4, effective batch
+held) and resume (step 6 → 8, row index restored), neither of which the real smoke happened to
+touch.
+
+## The record's two G1d rows
+
+`anchor_values` was first written as a dict keyed by gate id, and it returned the **wrong G1d**:
+`build_gates` writes two rows under that id — post_type, which gates, and relevance, which
+amendment 3.3 reports beside the gate and never inside it. The bar came out 0.9315 instead of
+0.8984 and looked entirely plausible. It now selects on the metric name and refuses anything but
+exactly one match. Nothing downstream had consumed the wrong number.
+
+## Deviations from `docs/PROMPT-4b.md`
+
+- **D1 — Step 0's docs commit carried less than the brief expected.** `docs/SPEC.md` rev. 3.5 and
+  `docs/STATUS.md` were already in the tree at 12:18 on 2026-08-01 and went into `35c44c1`, so this
+  step's commit carries `docs/PROMPT-4b.md` and the day's records only. Named because `35c44c1`'s
+  own message flags G1d's bar as unresolved while the SPEC text in the same commit resolves it —
+  an inconsistency of mine, retired in the Step 0 commit body.
+- **D2 — the smoke ran in US-TX-1 on a volume-less pod, not in CA-MTL-3 on the network volume.**
+  CA-MTL-3 had no A6000 from 10:49 to 11:38 UTC and the exited 4a pod's host had no free GPU. The
+  fallback re-downloaded the 62 GB in 4 minutes (~$0.04) onto an 80 GB container disk. Same card
+  and driver as 4a, so `s/step` transfers; the pod was **deleted** rather than stopped, because a
+  container disk bills by the month whether the pod runs or not. Not gate-relevant: the smoke
+  measures mechanics and throughput, not a gate. See the ADR §(g) — the same constraint is a real
+  scheduling risk for 4c and it is an operator decision.
+- **D3 — `results/baselines.json` was not touched.** The brief does not ask for a record and the
+  smoke's numbers are meaningless by construction; an append-only anchor file must not carry a row
+  that looks like a baseline and is not.
+- **D4 — the with-synthetic arm's dataset was built but not trained**, as the brief specifies
+  ("smoke the `--with-synthetic` dataset BUILD too; no second training needed"). Its content hash
+  was reproduced on the pod.
+
+Nothing else. No prompt, frozen file, slice, spend anchor, threshold or gate definition changed.
+
+## The run
+
+| | |
+|---|---|
+| pod | `ouhimpvjem3spe`, RTX A6000 48 GB, US-TX-1, secure, no network volume |
+| stack | driver 570.195.03 · CUDA 12.8 · torch 2.8.0+cu128 · transformers 5.14.1 · bitsandbytes 0.50.0 · peft 0.20.0 |
+| dataset | real-only arm, 2 171 train + 24 carve, `train_sha256 d2fa6742…` reproduced on the pod |
+| steps | 50 of a planned 272, micro-batch 2 × accum 8, never halved |
+| loss | 0.1799 (step 5) → 0.0399 (step 50); carve 0.0585 → 0.0335 |
+| LoRA | 410 modules, all `model.language_model.*`, zero vision modules |
+| memory | peak 30.47 GB of 48 (4a's inference figure was 18.9 GB) |
+| checkpoint | adapter 490 MB saved, base reloaded from scratch, adapter loaded onto it |
+| mechanics | 24 carved training rows at batch size 1, **zero parse failures** |
+| wall-clock | 2 261.6 s of training → **45.23 s/step** |
+| money | $0.4649 for the session; phase spend **$1.1203 of $25.00** at 12:00 UTC |
+
+## Build log
+
+- 2026-08-01 — `ff471e3` the docs set; `8c2c774` the scorer's slice input, `records.py` and the
+  derived bars; `975a731` the trainer and `config/qlora.yaml`; `221d2a1` the 4b runbook;
+  `fde75d2` the two stub-run fixes. `make check` green after each.
+- 2026-08-01 — CA-MTL-3 A6000 stock observed every 3 minutes from 10:50 to 11:38 UTC: `none`
+  throughout, then `Low`. The poller creates nothing; it only reads `runpodctl gpu list`.
+- 2026-08-01 — the smoke, 11:07 → 11:46 UTC. Artifacts in `results/train/4b-smoke/`.
+- 2026-08-01 — pod stopped (`EXITED` shown), then deleted; only the 4a pod and the CA-MTL-3 volume
+  remain. Guard re-read: **$1.1203 of $25.00 spent, $23.8797 remaining.**
+
+## Two things the next session should not relearn
+
+- **Python buffers stdout when it is redirected to a file.** The smoke's `print` lines were still
+  in the buffer while the run was 15 minutes in; `loss.jsonl` is written with an explicit
+  open/write/close per line and is the live view. `python3 -u` would fix the log.
+- **A stopped pod without a network volume still bills for its container disk.** 80 GB is roughly
+  the price of the 100 GB network volume, which is why this one was deleted and not stopped.

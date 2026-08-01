@@ -127,42 +127,83 @@ is the 4-bit base **plus the unmerged adapter**, served in exactly the configura
 scored in; merging into bf16 weights stays forbidden until measured (amendment 3.4 (1), Phase 5).
 The base is never written by this script.
 
-## (e) The smoke
+## (e) The smoke, and what it measured
 
-Not run in this session: RunPod had **no A6000 capacity in CA-MTL-3** — the datacenter that holds
-network volume `gfwa2an8fn`, and a volume cannot move — from 10:49 UTC onward, and restarting the
-exited 4a pod failed with "not enough free GPUs on the host machine". Stock was `Medium` in EU-SE-1
-and `Low` in US-TX-1, neither of which takes network volumes. See §(g).
+50 optimizer steps on the real-only arm, pod `ouhimpvjem3spe`, RTX A6000 / driver 570.195.03 /
+torch 2.8.0+cu128 / transformers 5.14.1 / bitsandbytes 0.50.0 / peft 0.20.0 — the 4a stack plus
+peft. Artifacts in `results/train/4b-smoke/`.
 
-## (f) The projection
+- **Loss falls**: 0.1799 at step 5 → **0.0399** at step 50, and the held-out carve tracks it
+  (0.0585 at step 25 → 0.0335 at step 50) rather than diverging from it. The numbers are small in
+  absolute terms because ~20 of the ~460 tokens in a sequence carry loss: the answer is a short
+  JSON object and the rest is a fixed prompt the model does not have to predict.
+- **LoRA attached to 410 modules**, every one under `model.language_model.*` and not one under
+  `vision_tower` or `multi_modal_projector` — the exclusion is verified in the saved
+  `adapter_config.json`, not merely configured.
+- **The checkpoint round-trips.** The adapter was saved (490 MB), the training model dropped, the
+  NF4 base reloaded from scratch and the adapter loaded onto it with `PeftModel.from_pretrained`,
+  and the local eval path ran over the 24 carved rows at batch size 1: **zero parse failures**,
+  19 T1 and 5 T2 rows scored. Those scores are mechanics evidence and nothing else — the rows come
+  from the training pool, and the record labels them so in the file itself.
+- **Peak GPU 30.47 GB of 48**, micro-batch never halved, so the OOM branch did not fire. That is
+  11.6 GB above 4a's inference figure of 18.9 GB, and it leaves 17.5 GB of headroom.
 
-Steps per arm follow from the frozen config and the row counts, and they are exact:
+Nothing in this step opened a frozen test set or the holdout, and no record was appended to
+`results/baselines.json`.
 
-| arm | rows | steps/epoch | steps (2 epochs) |
-|---|---|---|---|
-| real-only | 2 171 | 136 | **272** |
-| with-synthetic | 2 771 | 174 | **348** |
+## (f) The projection, and the ceiling it crosses
 
-The one input the smoke owes is seconds/step, and it is the one number this ADR cannot yet carry.
-Against amendment 3.4 (4)'s **4 h per arm**, the ceiling is 53 s/step for the real-only arm and
-41 s/step for the with-synthetic one; 4a measured 3.04 s/row of *inference* at batch 1, and a
-training step at effective batch 16 with checkpointing is a different quantity — which is exactly
-why the number is measured rather than argued.
+Steps follow exactly from the frozen config; seconds/step is measured.
+
+| arm | rows | steps (2 epochs) | s/step | hours | $ at 0.53/h | vs 4 h |
+|---|---|---|---|---|---|---|
+| real-only | 2 171 | 272 | 45.23 | **3.42** | 1.81 | under |
+| with-synthetic | 2 771 | 348 | 45.23 | **4.37** | 2.32 | **OVER** |
+
+45.23 s/step is the wall-clock average over all 50 steps, carve readings included. The eight
+windows that contain no carve reading average 44.35 s/step (43.40–45.60), which moves the
+with-synthetic arm to 4.29 h — over the ceiling either way, so the pessimistic figure is the one
+tabled.
+
+**Amendment 3.4 (4) says a projection over 4 h per arm stops the line for an operator decision, so
+the line is stopped.** The cost is not a surprise to be worked around: bitsandbytes NF4 dequantizes
+every weight on every forward *and* backward pass, so a 31B model at effective batch 16 over ~460
+tokens a row is roughly 45 s of A6000 time per step, and the same quantization that makes the model
+fit is what makes the step slow. The levers all belong to the operator because each changes a
+pre-registered quantity:
+
+- **1 epoch instead of 2** halves both arms (real-only 1.71 h, with-synthetic 2.19 h). It changes a
+  frozen hyperparameter, and it changes it for both arms or the ablation stops being paired.
+- **Raise the ceiling for the second arm only.** 4.37 h against a 4 h box, on a $23.88 remaining
+  budget that the run would consume $2.32 of — the ceiling was written as a time-box, and the
+  money it was protecting is not the binding constraint here.
+- **Drop the synthetic arm.** It is the arm that crosses, and amendment 3.4 (3) makes the ablation
+  the way the synthetic source is judged; dropping it would decide by default what the ablation
+  was designed to measure. Not recommended, listed for completeness.
 
 ## (g) The open question 4c cannot start without
 
 **The weights are in a datacenter the GPU keeps leaving.** 4a got an A6000 in CA-MTL-3 at 08:34
-UTC; by 10:49 the stock there was `none` and stayed there. 4c needs **two arms of up to 4 h each**
-on that same pairing, and it is a one-attempt phase. Three ways out, all the operator's:
+UTC. By 10:49 the stock there was `none`, restarting the exited 4a pod failed with "not enough free
+GPUs on the host machine", and the window did not reopen until **11:38 — 49 minutes later, at
+`Low`**. This smoke ran instead on a **volume-less pod in US-TX-1**, which cost 4 minutes to
+re-download the 62 GB and nothing else; that is fine for a 40-minute smoke and it is not fine for
+4c, which needs **two arms of 3.4 h and 4.4 h** and is a one-attempt phase.
 
-1. **Wait for CA-MTL-3 windows.** Free, and it makes a one-attempt phase depend on stock.
-2. **A second network volume** in a higher-stock datacenter (EU-SE-1 has no volume support at all,
-   so this means EU-RO-1, whose A6000 stock was also `none`). ~$7/month per 100 GB, and the weights
-   must be downloaded into it once.
-3. **Run volume-less** and re-download 62 GB per session onto a larger container disk. Costs pod
-   time and a bigger disk per hour, and a volume-less pod is deleted unrecoverably at a $0 balance.
+Three ways out, all the operator's:
 
-Nothing here is chosen by the executor: (2) and (3) both spend money in ways the budget time-box
+1. **Wait for CA-MTL-3 windows.** Free, and it makes a one-attempt phase depend on stock that was
+   observed to vanish for 50 minutes and come back at `Low`.
+2. **A second network volume** in a higher-stock datacenter — EU-SE-1 has no volume support at all,
+   so this means EU-RO-1, whose A6000 stock was `none` for the whole observation window. ~$7/month
+   per 100 GB plus one download.
+3. **Run volume-less again**, as this smoke did. The download is genuinely cheap (4 min, ~$0.04)
+   and the real cost is the container disk: 80 GB bills by the month while the pod exists, stopped
+   or running, which is why this pod was **deleted** rather than stopped once its artifacts were
+   home. For 4c that means a session that cannot be paused — a 4.4 h arm would have to run to
+   completion or be restarted from a re-downloaded base.
+
+Nothing here is the executor's to choose: (2) and (3) both spend money in ways the budget time-box
 was written to control.
 
 **Related:** [[phase4-own-pod-anchor]] · [[phase4-base-model-gate]] · [[3b-infra-and-precision]] ·

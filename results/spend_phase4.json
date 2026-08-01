@@ -10,6 +10,13 @@
       "spent_usd": 0.6203,
       "remaining_usd": 24.3797,
       "note": "4a own-pod zero-shot run: 758 rows, batch size 1, 39 min"
+    },
+    {
+      "at": "2026-08-01T11:49:51+00:00",
+      "balance": 33.87974065,
+      "spent_usd": 1.1203,
+      "remaining_usd": 23.8797,
+      "note": "4b training smoke: 50 steps real-only, US-TX-1 volume-less A6000"
     }
   ]
 }

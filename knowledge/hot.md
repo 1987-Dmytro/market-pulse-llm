@@ -31,16 +31,33 @@ c2eb510 docs: the 4a record — ADR, notes and hot.md
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-01 12:29 (4a ACCEPTED, amendment 3.5 lands — both blockers decided, step 4b opens; edited by hand — the section above is auto-generated, do NOT touch the marker)
+**Last update:** 2026-08-01 14:05 (step 4b delivered and awaiting review — trainer frozen, smoke green, and the second arm projects over the 4 h ceiling; edited by hand — the section above is auto-generated, do NOT touch the marker)
 
 ## 🔥 What's Hot
 
-**STEP 4a IS ACCEPTED (2026-08-01) and 4b is live** — the scorer's slice input, the QLoRA trainer
-and a training smoke; **no full runs (4c) and no frozen set or holdout touched by anything in 4b**.
-Phase 3 closed and committed (`952e5dd`); Phase 4 opened at the 2026-08-01 briefing with **SPEC
-amendment 3.4** and the 4a acceptance added **amendment 3.5**. `make check` green after every
-commit. Phases 1 and 2 accepted 2026-07-28; 3a/3b/3c 2026-07-31.
-Registry: 4 live sources. Raw store 6 057 posts + 11 338 comments. **17 ADRs** ([[INDEX]]).
+**STEP 4b IS DONE AND AWAITING REVIEW — no self-acceptance.** 4a accepted 2026-08-01 with
+**amendment 3.5**; 4b delivered the scorer's slice input, the QLoRA trainer with a frozen config,
+and a 50-step training smoke. **No full run happened, and nothing in 4b opened a frozen set or the
+holdout.** **277 tests**, `make check` green after every commit. Phase 3 closed at `952e5dd`;
+phases 1 and 2 accepted 2026-07-28, 3a/3b/3c 2026-07-31.
+Registry: 4 live sources. Raw store 6 057 posts + 11 338 comments. **18 ADRs** ([[INDEX]]).
+
+**THE SMOKE PROJECTS THE SECOND ARM OVER THE CEILING — the line is stopped** ([[4b-training-contract]]
+§(f)). Measured **45.23 s/step** on an A6000: real-only **272 steps = 3.42 h** (under), with-synthetic
+**348 steps = 4.37 h** (**over amendment 3.4 (4)'s 4 h per arm**). Not a defect to work around —
+bitsandbytes NF4 dequantizes on every forward and backward, so the quantization that makes the model
+fit is what makes the step slow. Every lever is the operator's: 1 epoch instead of 2 (halves both,
+and it must change for both arms or the ablation stops being paired), or a raised ceiling for the
+second arm ($2.32 of $23.88 remaining), or dropping the arm the ablation exists to measure.
+
+**The trainer is frozen and the smoke was clean.** Loss 0.1799 → 0.0399 over 50 steps with the
+held-out carve tracking it (0.0585 → 0.0335); LoRA on **410 modules**, all `model.language_model.*`
+and zero vision modules; adapter saved, base reloaded from scratch, adapter loaded onto it and the
+local eval path run over 24 carved **training** rows with **zero parse failures**; peak GPU
+**30.47 GB of 48** and the OOM branch never fired. `config/qlora.yaml` holds every hyperparameter
+with its rationale — r 16 / alpha 32 / dropout 0.05, paged AdamW 8-bit at 1e-4 cosine, 2 fixed
+epochs and **no early stopping**, micro-batch 2 × accum 8, seed 42, `max_seq_len` **1024 measured**
+(the longest of 2 795 rows is 973 tokens, so nothing truncates).
 
 **The own-pod row is baseline (c) EVERYWHERE** — operator decision 2026-08-01, pre-registered
 before 4b trains ([[phase4-own-pod-anchor]] §(f)). Not just the G1d/G1e anchor: SPEC §7 makes
@@ -50,7 +67,9 @@ amendment 3.5 leaves them:** G1a overall **≥ 0.9418** (floors `ua` 0.8718 · `
 G1b **≥ 27 of 44** with the ≤2 pp macro-F1 guard · G1c **≥ 0.8436** · **G1d ≥ 0.8984** ·
 **G1e ≥ 0.8874**. G1d/G1e are `anchor − 1 pp` **no-regression** gates now (3.5 (2) replaced
 "+10 pp", which was unreachable on a saturated base); improvement is reported, never gated. **Every
-one of those numbers is derived in code from the own-pod record — none is typed anywhere.**
+one of those numbers is derived in code from the own-pod record — none is typed anywhere**, and
+`PYTHONPATH=src python3 scripts/gate_bars.py` prints exactly that table from
+`results/baselines.json` plus the sha-verified slice file.
 
 **The own-pod row anchors G1d/G1e** ([[phase4-own-pod-anchor]]): `google/gemma-4-31b-it` at
 revision `842da379…`, NF4 4-bit, RTX A6000, **758/758 rows scored, zero failures of any kind**,
@@ -142,22 +161,41 @@ QA passed 2026-07-30** ([[synthetic-sarcasm-augmentation]]). **G1b's holdout** i
 
 ## ⏭️ Next
 
-1. **Step 4b, live** (`docs/PROMPT-4b.md`): the scorer learns the slice file (amendment 3.5 (3)),
-   `scripts/train_qlora.py` + a committed hyperparameter config, and ONE pod session for a
-   40–60-step training smoke on the real-only arm. Frozen sets and the holdout stay shut.
-2. **Team-lead review of 4b**, then **4c**: the two ablation arms (with and without
-   `synthetic_sarcasm.jsonl`, identical config and seed, one data path differing) and the gates,
-   one attempt. The selection rule is fixed: the synthetic source stays **iff** its arm's G1b
-   fix-rate is strictly higher **and** no other gated head is lower by more than 0.5 pp; both
-   columns published, no third run, no retraining after gate numbers are seen. 4b's smoke must
-   project the full run and a projection over **4 h per arm** stops the line.
+1. **Team-lead review of step 4b** against `docs/PROMPT-4b.md`'s checklist. The executor does not
+   self-accept, and full runs need an explicit go on the report. Two decisions travel with it: the
+   4 h ceiling the second arm crosses, and where 4c's pod runs (see Blockers).
+2. **4c, after that go**: the two ablation arms (with and without `synthetic_sarcasm.jsonl`,
+   identical config and seed, one data path differing) and the gates, one attempt. The selection
+   rule is fixed: the synthetic source stays **iff** its arm's G1b fix-rate is strictly higher
+   **and** no other gated head is lower by more than 0.5 pp; both columns published, no third run,
+   no retraining after gate numbers are seen. Everything 4c needs is frozen and committed —
+   `config/qlora.yaml`, `scripts/train_qlora.py`, `scripts/gate_bars.py`, `scripts/runbook_4b.md`.
 3. Still open from Phase 2 (not a blocker): dataset cards for the public augmentation datasets +
    licence check.
 
 ## 🚧 Blockers
 
-**None open.** Both of 4a's escalations came back decided at the acceptance, in **SPEC amendment
-3.5** — the executor flagged, the operator ruled, nothing was worked around:
+**TWO OPEN, both from 4b's smoke and both operator decisions before 4c is scoped.**
+
+**BLOCKER 1 — the with-synthetic arm projects at 4.37 h against a 4 h per-arm ceiling.** Measured,
+not estimated: 45.23 s/step × 348 steps. The real-only arm is 3.42 h and clears it. Amendment
+3.4 (4) says a projection over the ceiling stops the line, so it is stopped. Levers, all the
+operator's, none taken: **1 epoch instead of 2** (real-only 1.71 h, with-synthetic 2.19 h — but it
+must change for both arms or the ablation stops being paired) · **raise the ceiling for the second
+arm** (it would cost $2.32 of $23.88 remaining, and the box was written as time, not money) ·
+**drop the synthetic arm** (that decides by default what the ablation exists to measure — listed,
+not recommended). Detail in [[4b-training-contract]] §(f).
+
+**BLOCKER 2 — the weights are in a datacenter the GPU keeps leaving.** The 100 GB network volume
+`gfwa2an8fn` lives in **CA-MTL-3** and cannot move; A6000 stock there was `none` from 10:49 to
+11:38 UTC on 2026-08-01, and restarting the exited 4a pod failed for lack of free GPUs on its host.
+4b's smoke ran volume-less in US-TX-1 instead — fine for 40 minutes, and **not** fine for 4c's
+3.4 h + 4.4 h on a one-attempt phase. Three ways out, all costing something: wait for CA-MTL-3
+windows · a second volume in EU-RO-1 (~$7/month, and its stock was `none` all window) · run
+volume-less again and accept a session that cannot be paused. [[4b-training-contract]] §(g).
+
+**Both of 4a's escalations are closed** — decided at the acceptance in **SPEC amendment 3.5**; the
+executor flagged, the operator ruled, nothing was worked around:
 
 - **G1d's unreachable bar → 3.5 (2).** "+10 pp" is replaced by a no-regression gate, fine-tuned
   ≥ anchor − 1 pp (G1d ≥ 0.8984, G1e ≥ 0.8874); improvement is reported beside the verdict and
@@ -177,6 +215,22 @@ matrix is frozen. Local training is an evening job, not an interactive one — a
 
 ## ⚠️ Footguns for the next run
 
+- **The results record holds TWO rows under the gate id `G1d`** — post_type, which gates, and
+  relevance, which amendment 3.3 reports beside it and never inside it. A dict keyed by gate id
+  returns the relevance number and a bar that looks entirely plausible (0.9315 instead of 0.8984).
+  `records.anchor_values` selects on the metric name and refuses anything but one match.
+- **Gemma 4's chat template drops the thinking channel when you render a full assistant turn.**
+  The generation prompt ends `<|turn>model\n<|channel>thought\n<channel|>`; the turn form ends
+  `<|turn>model\n` and then the content. Build a training example from the turn form and the model
+  is conditioned on a context no gate row carries — silent, and it only shows up as gates lower
+  than the smoke suggested. Take the prompt from the eval call, the end-of-turn marker from the
+  turn form.
+- **A stopped pod with no network volume still bills its container disk.** 80 GB is about what the
+  100 GB network volume costs per month. If the pod exists only for one session, **delete** it
+  (`runpodctl pod delete` — there is no `pod terminate`), do not stop it.
+- **Python buffers stdout when it is redirected to a file.** 15 minutes into the 4b smoke the log
+  still held nothing after the model load. `loss.jsonl` is written open/write/close per line and is
+  the live view; `python3 -u` fixes the log itself.
 - **`results/spend_phase4.json` is the $25 cap's anchor and must not be regenerated.** It stores
   the RunPod balance as Phase 4 opened; delete it and the counter silently restarts at today's
   balance. The guard also refuses when the balance is *above* the anchor — a mid-phase top-up means

@@ -44,14 +44,26 @@ for g in json.load(sys.stdin):
 ```
 
 - **CA-MTL-3 has stock** → step 2.
-- **CA-MTL-3 is `none`** → poll (`scratchpad/wait_stock.sh` in the 4b session is 30 tries, 3 min
-  apart, and creates nothing). Do **not** create a second network volume in another datacenter:
-  that is a second monthly bill and an operator decision. Running volume-less in another
-  datacenter re-downloads 62 GB and is a fallback with a price, not a shortcut — it is only worth
-  it if the wait is long, and it goes in the deviations log.
+- **CA-MTL-3 is `none`** → poll (30 tries, 3 min apart, reading `gpu list` and creating nothing).
+  On 2026-08-01 the window stayed shut for **49 minutes** and reopened at `Low`. Do **not** create
+  a second network volume in another datacenter: that is a second monthly bill and an operator
+  decision.
 - Restarting the exited 4a pod (`runpodctl pod start gxkdecf3g7k3y7`) is worth one try and costs
   nothing, but "not enough free GPUs on the host machine" is a normal answer: a stopped pod holds
   no reservation.
+- **The volume-less fallback, measured.** It is cheaper than it sounds: the 62 GB re-download took
+  **4 minutes** (~$0.04), so for a 40-minute smoke it is a fine trade. What it costs is the disk —
+  see step 7 — and the inability to pause: a stopped volume-less pod keeps billing its container
+  disk, and a deleted one has to re-download. For 4c's 3.4 h and 4.4 h arms that is a real
+  constraint and an operator decision, not a fallback to take quietly.
+
+Capacity errors say different things and only one of them is about the datacenter:
+
+- *"There are no longer any instances available with the requested specifications"* — no GPU there.
+- *"This machine does not have the resources to deploy your pod"* — the GPU exists and the request
+  does not fit it. EU-SE-1 refused a 100, 80 **and** 70 GB container disk this way while reporting
+  `Medium` A6000 stock; US-TX-1 took 80 GB on the first try. Vary the disk before believing the
+  datacenter is full.
 
 ## 2. The pod
 
@@ -141,11 +153,19 @@ setsid nohup env HF_HOME=/workspace/hf RUNPOD_POD_ID=<POD_ID> \
   $PY scripts/train_qlora.py --out /workspace/out/smoke --max-steps 50 --carve-eval \
   > /workspace/out/smoke.log 2>&1 < /dev/null &
 pgrep -af train_qlora                  # the process is the liveness check, not the log
-tail -f /workspace/out/smoke.log
+tail -f /workspace/out/smoke/loss.jsonl    # NOT smoke.log — see below
 ```
 
 Detached for the same reason 4a's run was: a dropped SSH session must not kill a paid run. Poll the
-process **and** the log — a grep for the success line is silent through a crash.
+process **and** the output — a grep for the success line is silent through a crash.
+
+**Watch `loss.jsonl`, not the log.** Python buffers stdout when it is redirected to a file: fifteen
+minutes into the 2026-08-01 smoke the log ended at the model load and looked hung, while
+`loss.jsonl` — written with an explicit open/write/close per line — was three steps ahead. Launch
+with `python3 -u` if the log itself has to be live.
+
+Measured on 2026-08-01, as the shape to expect: model load ~30 s, then **45 s/step** at micro-batch
+2 with a peak of **30.47 GB of 48**, loss 0.1799 at step 5 falling to 0.0399 at step 50.
 
 What the log must show, and what each line means if it does not:
 
@@ -188,23 +208,36 @@ run and hope. The XLM-R baseline is the precedent: its projection was honoured a
 
 ## 7. Home, then stop the pod
 
+Take the small artifacts — `loss.jsonl`, `provenance.json`, `adapter_config.json` (it names the 410
+modules LoRA actually attached to) and the log. Hash the adapter and the optimizer state rather
+than copying 740 MB of them: the adapter is a smoke artifact that proves the checkpoint
+round-trips, not a model anyone scores, and 4c trains from scratch on the same config.
+
 ```bash
 # --- on the Mac ---
-mkdir -p results/train
-scp -P <PORT> -r root@<HOST>:/workspace/out/smoke results/train/4b-smoke
-scp -P <PORT> root@<HOST>:/workspace/out/smoke.log results/train/4b-smoke/
+mkdir -p results/train/4b-smoke
+for f in smoke/loss.jsonl smoke/provenance.json smoke/adapter/adapter_config.json smoke.log; do
+  scp -P <PORT> "root@<HOST>:/workspace/out/$f" results/train/4b-smoke/
+done
 
 runpodctl pod stop <POD_ID>
 runpodctl pod get <POD_ID>        # desiredStatus EXITED — this goes in the report
+```
+
+**Then decide stop-or-delete by whether the pod has a volume.** A pod on the network volume can be
+stopped and left: its disk is the volume, already paid for. A **volume-less** pod keeps billing its
+container disk while stopped — 80 GB is about what the 100 GB network volume costs per month — so
+once its artifacts are home it should be deleted. The subcommand is `delete`; there is no
+`pod terminate`.
+
+```bash
+runpodctl pod delete <POD_ID>     # volume-less pods only
+runpodctl pod list -a
 python3 scripts/runpod_guard.py --note "4b training smoke"
 ```
 
-The adapter is a smoke artifact: it proves the checkpoint round-trips, and it is **not** a model
-anyone scores. 4c trains from scratch with the same config on the full data.
-
-Keep the network volume. 4c needs the same weights, and re-downloading 62 GB costs more pod time
-than the volume costs to hold — which is exactly why the guard reads the account balance and not
-just the pod's billing rows.
+Keep the network volume itself. 4c needs the same weights, and the guard reads the account balance
+precisely because a volume nobody is using still bills.
 
 ## When something goes wrong
 
