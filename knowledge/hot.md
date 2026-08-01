@@ -31,15 +31,24 @@ ffcb33e chore: the day's log, hot.md and the index as /close left them
 
 # Hot Cache — curated
 
-**Last update:** 2026-07-31 19:52 (`/save` checkpoint, after the XLM-R run landed; edited by hand — the section above is auto-generated, do NOT touch the marker)
+**Last update:** 2026-08-01 (`/close` of the 2026-07-31 workday, run just past midnight; edited by hand — the section above is auto-generated, do NOT touch the marker)
 
 ## 🔥 What's Hot
 
-**Phases 1 and 2 DONE and accepted** (2026-07-28). **Phase 3a done.** **Phase 3b done and
-accepted** at the gate review of 2026-07-31 — 202 tests, `make check` green after every commit,
-**$0.9201 spent of the $8 cap**. SPEC APPROVED rev. 3 + amendments 3.1, 3.2, **3.3**. Registry:
-4 live sources. Raw store 6 057 posts + 11 338 comments. 16 ADRs in `knowledge/decisions/`
-([[INDEX]]).
+**PHASE 3 IS CLOSED — accepted 2026-07-31 late evening. Phase 4 is next**, and its entry
+conditions are a RunPod top-up and the briefing (see Next). Phases 1 and 2 DONE and accepted
+(2026-07-28); 3a, 3b and 3c all landed on 2026-07-31 — 202 tests, `make check` green after every
+commit, **$0.9201 spent of the $8 cap**, the supervised baseline at $0 on this Mac. SPEC APPROVED
+rev. 3 + amendments 3.1, 3.2, **3.3**. Registry: 4 live sources. Raw store 6 057 posts + 11 338
+comments. 16 ADRs in `knowledge/decisions/` ([[INDEX]]).
+
+**One writer per file, and the layer is live** (`2b423c8`): `docs/STATUS.md`, `docs/SPEC.md` and
+`docs/PROMPT-*.md` are **team-lead files** — read them, commit them verbatim, never edit them;
+everything else is the executor's. Deny rules in `.claude/settings.json` refuse **both `Edit` and
+`Write`** on those three (on Claude Code 2.1.220 only `Edit(path)` rules are consulted, and they
+cover every writing tool — a `Write(path)` rule would be dead), proved by refusal on all three
+files with `docs/WATCHLIST.md` as the negative control. `docs/STATUS.md` carries the team lead's
+Phase-3 closure **uncommitted in the tree** at this close — commit it as it is.
 
 **Phase 4's base model is `google/gemma-4-31b-it`** ([[phase4-base-model-gate]]) — ahead on every
 gated head among the candidates, ahead of the Haiku reference row on four cells of five (Haiku
@@ -50,13 +59,15 @@ closed by a **worst-case bound analysis at $0**, and every head survived: bound 
 against a 0.0298 same-config swing measured on a re-run — on `ru` the two are tied inside
 third-party noise, and the selection rests on the other four gaps.
 
-**XLM-R is DONE and committed** — launched 17:43 on this Mac's CPU, ended **19:24 in 101.0 min
-against its own 128.0 projection**, no crash and no restart. Row `87e3327`, `make check` green
-(202 tests). **The Phase 3 baseline table is now complete**, and the row does not move the Phase 4
-choice: XLM-R beats `tfidf-logreg` on G1a by 0.0990 and G1d by 0.0694, ties it on G1c
-(0.6007 vs 0.6000), and is under `gemma-4-31b-it` on every comparable cell.
+**XLM-R is DONE, committed and accepted** — 2026-07-31 on this Mac's CPU, **101.0 min against its
+own 128.0 projection**, no crash and no restart, provenance checked (the record's `git.commit` is
+`6d4deb3` with only `knowledge/*` dirty). Row `87e3327`. **The Phase 3 baseline table is
+complete**, and the row does not move the Phase 4 choice: XLM-R beats `tfidf-logreg` on G1a by
+0.0990 and G1d by 0.0694, ties it on G1c (0.6007 vs 0.6000), and is under `gemma-4-31b-it` on
+every comparable cell. Its `holdout_sarcasm_detected 54/108` is a **negative-lean diagnostic**
+(107 of those 108 rows are negative), not irony reading and not the G1b slice.
 
-**The baseline table so far** (`results/baselines.json`, read only via `scripts/show_results.py`),
+**The baseline table** (`results/baselines.json`, read only via `scripts/show_results.py`),
 G1a overall / G1c / G1d 3-class / G1e:
 `tfidf-logreg` 0.6834 / 0.6000 / 0.6653 / 0.1964 · **gemma-4-31b-it 0.8944 / 0.7981 / 0.8898 /
 0.9211** · qwen3.6-27b 0.8541 / 0.7606 / 0.7605 / 0.8919 (`gate_anchor_valid: false`) ·
@@ -88,44 +99,41 @@ QA passed 2026-07-30** ([[synthetic-sarcasm-augmentation]]). **G1b's holdout** i
 
 ## ⏭️ Next
 
-1. **Close Phase 3** — team lead's, and **no longer blocked**: the baseline table is complete as of
-   19:24. Carry both empties across verbatim — XLM-R's **G1b is `null`** and its **G1e says NOT
-   COVERED**, "not attempted", never "scored zero", in any comparison table.
-2. **RunPod top-up**, deferred to the Phase 4 gate by operator decision, still owed before any
-   training ([[gpu-provider-runpod]]).
-3. **Phase 4 briefing.** Settles the LoRA fork and schedules the chosen model's **zero-shot re-run
-   on our own pod** — the cross-check against its third-party-served row *and* the run that defines
-   the G1b slice. **Working hypothesis: branch (2), 4-bit QLoRA on an A6000** — Gemma-4-31B needs
+1. **RunPod top-up ~$30–40** — the operator's call, owed before any training
+   ([[gpu-provider-runpod]]). At a $0 balance, pods without a network volume are deleted
+   irreversibly.
+2. **Phase 4 briefing** — a joint working session, not a prompt. Settles the LoRA fork and
+   schedules the chosen model's **zero-shot re-run on our own pod** — the cross-check against its
+   third-party-served row, the run that defines the **G1b slice**, and the anchor for G1d/G1e.
+   Also on the agenda: the synthetic-ablation plan, and G1a–e as **one pre-registered attempt**.
+   **Working hypothesis: branch (2), 4-bit QLoRA on an A6000** — Gemma-4-31B needs
    ~70 GB in bf16, which does not fit a 48 GB A6000, and production is the quantized serverless
    path decided 2026-07-28. Training cost is NOT the deciding argument (~2 950 short rows, 1–1.5 h,
    single dollars apart); the criterion is **train in the precision you serve**. Confirmed at the
    briefing, not before. Three branches in `docs/STATUS.md`.
-4. Still open from Phase 2: dataset cards for the public augmentation datasets + licence check.
+3. Still open from Phase 2 (not a blocker): dataset cards for the public augmentation datasets +
+   licence check.
 
 ## 🚧 Blockers
 
-**None.** The day's one blocker — XLM-R over its 60-minute ceiling on both devices — was lifted by
-the operator, the run launched the same evening and **finished clean in 101.0 min**.
+**None.** Phase 3's one blocker — XLM-R over its 60-minute ceiling on both devices — was lifted by
+the operator and the run finished clean in 101.0 min.
 
-**The device measurement stands** and is the reason any re-run is an evening job, not an
-interactive one: 2 193 steps across 9 heads, **CPU 3.5 s/step → ~130 min projected, 101 actual**, **MPS
-48.1 s/step → 1764 min** (and MPS OOMs at 9.07 GiB unless the 250k×768 embedding matrix is frozen,
-which it is). A re-run is `caffeinate -i nohup python3.11 scripts/train_xlmr_baseline.py --device
-cpu --time-budget-min 600 > xlmr_full_run.log 2>&1 &` — **`caffeinate -i` suppresses idle sleep
-only**, lid open and Mac on mains. `results/baselines.json` is written only at the end, so a run
-killed mid-head corrupts nothing.
+**Uncommitted in the tree at this close, by design:** `docs/STATUS.md`, the team lead's Phase-3
+closure. The executor commits it **verbatim** and never edits it (the deny rules make that
+mechanical, not a matter of care).
 
-**Watching a long unattended run: check the process, not the log.** Poll `kill -0 <pid>` on a
-short interval and split the verdict by whether the success marker (`wrote
-results/baselines.json`) reached the log; a grep for the success line alone is silent through a
-crash, and an hourly-only tick is an hour of blindness. The hourly heartbeat earns its place by
-carrying the current head plus the log's mtime — that is what distinguishes "running" from "hung".
-
-What must NOT happen even now that the clock is open: fewer epochs, a shared-encoder rewrite, a
-shorter `MAX_LENGTH`. Each is tuning a pre-registered baseline to a wall clock.
+**This Mac's device numbers, if anything is ever trained locally again:** 2 193 steps across
+9 heads, **CPU 3.5 s/step**, **MPS 48.1 s/step** and OOM at 9.07 GiB unless the 250k×768 embedding
+matrix is frozen. Local training is an evening job, not an interactive one — and CPU beats MPS by
+14×, which is the opposite of the intuition.
 
 ## ⚠️ Footguns for the next run
 
+- **`docs/STATUS.md`, `docs/SPEC.md`, `docs/PROMPT-*.md` are team-lead files.** Read and commit,
+  never edit — the deny rules refuse `Edit` *and* `Write` on them, without a restart. Phase-end
+  facts go to the daily log or `implementation-notes.md`. The refusal reads "File is in a directory
+  that is denied", but the rules are file-scoped: the rest of `docs/` is still writable.
 - **A ceiling lifted by the operator is not a ceiling lifted in code.** `train_xlmr_baseline.py`
   refuses to train above `--time-budget-min` and exits **3** — it prints a projection and leaves no
   process, which reads exactly like a crash. Grep your own guards before any unattended launch.
