@@ -1,0 +1,55 @@
+# Phase 4 QLoRA hyperparameters — FROZEN before 4c (docs/PROMPT-4b.md Step 2).
+#
+# One rationale per value is in knowledge/decisions/4b-training-contract.md; the
+# short version is in the comments. Both ablation arms read this same file, and
+# the only thing that differs between them is one data path, so anything changed
+# here after 4c starts invalidates the comparison, not just a run.
+#
+# The base model and its NF4 quantization are NOT here: they live in
+# src/market_pulse/local_llm.py, which eval, training and serving all read, and
+# a second copy is how "train in the precision you serve" stops being true.
+
+base:
+  # The weights the 4a anchor was measured on. Pinned, not floating: a revision
+  # bump between the anchor and the fine-tune would make the gates unpaired.
+  revision: 842da3794eaa0b77d5f08bae87a17459d91ff475
+
+lora:
+  r: 16
+  alpha: 32 # 2r, the usual QLoRA ratio: alpha/r = 2 is the scale the LR below assumes
+  dropout: 0.05
+  # Every attention and MLP projection of the language model. QLoRA's own result
+  # is that adapting all linear layers, not just q/v, is what closes the gap to
+  # full fine-tuning; at r=16 that is still ~0.2% of 31B parameters.
+  target_suffixes: [q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj]
+  # Gemma 4 is an image-text model. The tower has linear layers of its own and we
+  # train on text only — an adapter there would be untrained noise on the serving
+  # path. The trainer refuses if these prefixes match nothing it can name.
+  exclude_prefixes: [vision_tower, multi_modal_projector, vision_model]
+
+optimizer:
+  name: paged_adamw_8bit # paged: the 48 GB card must survive a long-sequence spike
+  learning_rate: 0.0001 # 1e-4, the QLoRA default for r=16 adapters on an instruct base
+  scheduler: cosine
+  warmup_ratio: 0.03
+  weight_decay: 0.0 # LoRA B starts at zero; decaying it fights the only thing that learns
+  max_grad_norm: 0.3
+
+training:
+  epochs: 2 # fixed, and NO early stopping: nothing may select against an eval (SPEC §5)
+  # Measured, not guessed: the longest of the 2 795 scoreable rows renders to 973
+  # tokens (prompt + answer + end-of-turn) under this checkout's prompts. 1024
+  # truncates nothing, and a truncated row would teach a cut-off label.
+  max_seq_len: 1024
+  micro_batch_size: 2
+  grad_accum: 8 # effective batch 16; on OOM the trainer halves one and doubles the other
+  seed: 42
+  gradient_checkpointing: true
+  log_every: 5 # optimizer steps between loss lines
+  carve_every: 25 # optimizer steps between train-carve loss readings (thermometer only)
+  save_every: 100 # adapter-only checkpoints, resumable
+  # Held out of training by seed, drawn from the REAL pool before the synthetic
+  # rows join, so both arms hold out exactly the same rows and the arms still
+  # differ by exactly the 600 synthetic ids. It is a convergence thermometer and
+  # a mechanics fixture; it selects nothing, and it never touches a frozen set.
+  carve_rows: 24
