@@ -163,7 +163,8 @@ Steps follow exactly from the frozen config; seconds/step is measured.
 45.23 s/step is the wall-clock average over all 50 steps, carve readings included. The eight
 windows that contain no carve reading average 44.35 s/step (43.40–45.60), which moves the
 with-synthetic arm to 4.29 h — over the ceiling either way, so the pessimistic figure is the one
-tabled.
+tabled. It is **training-loop time**: the clock starts after the model load and the tokenization of
+2 171 examples, so a session's wall clock adds a few minutes on top and the overrun only widens.
 
 **Amendment 3.4 (4) says a projection over 4 h per arm stops the line for an operator decision, so
 the line is stopped.** The cost is not a surprise to be worked around: bitsandbytes NF4 dequantizes
@@ -205,6 +206,21 @@ Three ways out, all the operator's:
 
 Nothing here is the executor's to choose: (2) and (3) both spend money in ways the budget time-box
 was written to control.
+
+## (h) One thing 4c should prove in its first ten minutes
+
+**The trainable adapter reload has only been exercised against a stub.** Two halves of resume are
+verified and one is not: the loop's bookkeeping (step and row index restored, seen on the CPU stub
+run) and `PeftModel.from_pretrained` for *inference* (the carve mechanics, where `is_trainable`
+defaults to false). What has never run on the real stack is the reload **with `is_trainable=True`**
+onto a k-bit-prepared base, together with `torch.load(state.pt, weights_only=True)` on a 250 MB
+paged-AdamW state.
+
+That matters because of §(g): a volume-less arm cannot be paused, the arms are 3.42 h and 4.37 h,
+and the phase is one attempt. If an arm dies at hour three, resume is the only thing between that
+and a lost run. Ten minutes at the start of 4c — train 3 steps, kill it, resume from the
+checkpoint, confirm the loss continues rather than restarts — buys that certainty before it is
+needed rather than after.
 
 **Related:** [[phase4-own-pod-anchor]] · [[phase4-base-model-gate]] · [[3b-infra-and-precision]] ·
 [[synthetic-sarcasm-augmentation]] · [[gpu-provider-runpod]]

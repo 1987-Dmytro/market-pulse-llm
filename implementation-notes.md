@@ -465,6 +465,17 @@ exactly one match. Nothing downstream had consumed the wrong number.
 
 Nothing else. No prompt, frozen file, slice, spend anchor, threshold or gate definition changed.
 
+## What 4c should prove before it starts a four-hour arm
+
+**The trainable adapter reload has only been exercised against a stub.** The stub run verified the
+loop's bookkeeping (step and row index restored) and the smoke verified `PeftModel.from_pretrained`
+for *inference*, where `is_trainable` defaults to false. The path that has never run on the real
+stack is the reload with `is_trainable=True` onto a k-bit-prepared base, plus
+`torch.load(state.pt, weights_only=True)` on a 250 MB paged-AdamW state. With arms of 3.42 h and
+4.37 h that cannot be paused, resume is the only thing between a death at hour three and a lost
+run — so 4c should train three steps, kill them, resume, and watch the loss continue. Ten minutes,
+before it is needed rather than after.
+
 ## The run
 
 | | |
