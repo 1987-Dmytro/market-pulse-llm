@@ -359,6 +359,25 @@ def load_for_training(config: dict, resume: Path | None = None):
     return tokenizer, model
 
 
+def assert_resumable(state: dict, trainable: int) -> None:
+    """A resumed optimizer state must cover exactly the parameters that train.
+
+    ``load_state_dict`` maps state onto parameters **by index**. If the trainable
+    reload yields a different parameter list than the run that saved the state —
+    a different LoRA config, a different target set, an adapter from another arm
+    — the wrong momentum lands on the wrong tensor and nothing raises. The loss
+    curve is what would eventually show it; this shows it in the first second,
+    which is the difference between losing a resume and losing an arm.
+    """
+    loaded = len(state["optimizer"]["state"])
+    if loaded != trainable:
+        raise SystemExit(
+            f"the checkpoint carries optimizer state for {loaded} parameters and this model has"
+            f" {trainable} trainable ones. Resuming would map momentum onto the wrong tensors"
+            " silently — stop and report rather than continuing from a state that does not fit."
+        )
+
+
 def carve_loss(model, batches) -> float:
     """Mean loss over the held-out carve. A thermometer: it selects nothing."""
     import torch
@@ -403,6 +422,7 @@ def train(config: dict, built: dict, out: Path, max_steps: int | None, resume: P
     if resume:
         # tensors and plain containers only, so the safe loader reads it
         state = torch.load(resume / "state.pt", map_location="cpu", weights_only=True)
+        assert_resumable(state, sum(1 for p in model.parameters() if p.requires_grad))
         optimizer.load_state_dict(state["optimizer"])
         scheduler.load_state_dict(state["scheduler"])
         start_epoch, start_index, step = state["epoch"], state["index"], state["step"]

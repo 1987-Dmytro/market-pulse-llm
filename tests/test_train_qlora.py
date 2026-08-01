@@ -145,3 +145,17 @@ def test_the_gpu_extra_never_reaches_module_scope():
             assert not banned & {alias.name.split(".")[0] for alias in node.names}
         if isinstance(node, ast.ImportFrom):
             assert (node.module or "").split(".")[0] not in banned
+
+
+# --- resume, the half no stub can prove ---------------------------------------
+
+
+def test_assert_resumable_accepts_a_state_that_covers_every_trainable_parameter():
+    trainer.assert_resumable({"optimizer": {"state": {0: {}, 1: {}, 2: {}}}}, 3)
+
+
+def test_assert_resumable_refuses_a_state_from_a_different_parameter_list():
+    """`load_state_dict` maps by index. A mismatch puts the wrong momentum on the
+    wrong tensor and raises nothing at all — so this has to raise instead."""
+    with pytest.raises(SystemExit, match="state for 3 parameters and this model has 4"):
+        trainer.assert_resumable({"optimizer": {"state": {0: {}, 1: {}, 2: {}}}}, 4)
