@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-07-31 19:56:42 (every SessionStart)
+**Auto-refreshed:** 2026-08-01 10:02:40 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+759f72d chore: the day's log, hot.md and the index as /close left them
+a5f5907 docs: phase 3 closed, as the team lead left it
+2b423c8 chore: one writer per file — deny rules, command write-lists, the matrix
+8fc81ff chore: hot.md and the log catch up with the finished run
 ffcb33e chore: the day's log, hot.md and the index as /close left them
-87e3327 feat: the xlm-roberta-base row, 101 min on CPU
-6d4deb3 chore: hot.md at the gate's close, plus the team-lead files as they were left
-8918709 feat: every scoring run dumps its per-row predictions
-632b40c docs: the base-model gate, and the bound that closes the unpaired row
 ```
 
 ## 📋 Recent decisions
@@ -23,9 +23,9 @@ ffcb33e chore: the day's log, hot.md and the index as /close left them
 
 ## 📅 Recent daily logs
 
+- `2026-08-01.md`
 - `2026-07-31.md`
 - `2026-07-30.md`
-- `2026-07-28.md`
 
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 

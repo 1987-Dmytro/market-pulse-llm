@@ -1,7 +1,7 @@
-# market-pulse-llm — Project Specification (rev. 3.3)
+# market-pulse-llm — Project Specification (rev. 3.4)
 
 **Status:** APPROVED rev. 3 (2026-07-26); amendment 3.1 approved 2026-07-27;
-amendments 3.2 and 3.3 approved 2026-07-28.
+amendments 3.2 and 3.3 approved 2026-07-28; amendment 3.4 approved 2026-08-01.
 **Amendment 3.1:** EN removed from per-language gates — the collected corpus
 contains 8 EN comments out of 2,000 sampled (retail channels post in UA); a
 per-language metric over n=8 is meaningless. Gates run on UA and RU. The model
@@ -30,6 +30,38 @@ it. The threshold and the test set are unchanged. Unlike 3.1 and 3.2 this
 amendment was decided AFTER a baseline was scored (2026-07-28, the TF-IDF+logreg
 run) — it disambiguates a gate that was never one metric, and no fine-tuned
 number exists yet, but the ordering is recorded rather than smoothed over.
+**Amendment 3.4 (Phase 4 briefing, 2026-08-01):** four operator decisions, all
+pre-registered before any Phase 4 code or GPU spend.
+(1) **Base + precision — branch (2).** The base model is `google/gemma-4-31b-it`
+(gate decision 2026-07-31, ADR `phase4-base-model-gate`; supersedes §7's
+candidate list, which predates the 2026-07-31 live search). Training is QLoRA:
+frozen base quantized NF4 4-bit (bf16 compute dtype) + LoRA adapters, on a
+RunPod A6000 48 GB. Rationale: train in the precision you serve — production is
+the quantized serverless path (2026-07-28); bf16 needs ~70 GB and does not fit
+a 48 GB card. The deliverable artefact is the 4-bit base plus the UNMERGED
+adapter, and every gate is scored in exactly that configuration. Merging the
+adapter into bf16 weights is forbidden until measured (Phase 5).
+(2) **Own-pod zero-shot re-run** — the first smoke step: the base model, the
+same NF4 config, the same frozen inputs and byte-identical prompts as 3b, with
+per-row prediction dumps. It anchors G1d/G1e, defines the G1b slice (the union
+of sentiment ∪ sarcasm errors on the 108-row holdout, gate-review decision of
+2026-07-31), and cross-checks the OpenRouter fp8 row; on material disagreement
+the own-pod number anchors and the disagreement is recorded, never averaged.
+The Phase 4 gate eval reuses this same local inference path, the adapter being
+the only difference.
+(3) **Ablation protocol for the synthetic source.** Two arms — with and without
+`data/annotation/synthetic_sarcasm.jsonl` — identical config and seed, exactly
+one data path differs. BOTH arms are scored on the frozen sets. Selection rule,
+fixed now: the synthetic source stays iff its arm's G1b fix-rate is strictly
+higher AND no other gated head is lower by more than 0.5 pp. The Tier-1 gate
+verdict is the selected arm's; both columns are published side by side; there
+is no third run. No retraining after gate numbers are seen — a failed gate
+closes the question.
+(4) **Budget time-box (§7/§9).** Hard cap **$25** GPU spend across all of
+Phase 4, checked against RunPod billing before every start; the smoke must
+project the full run, and a projection over **4 h per arm** stops the line for
+an operator decision. Top-up $35 with a ~100 GB network volume (pods without a
+volume are deleted unrecoverably at $0 balance).
 **Date:** 2026-07-26 · **Team lead:** Fable session · **Executor:** Claude Code
 **Repo folder:** `/Users/hdv_1987/Desktop/Projects/market-pulse-llm`
 **rev. 3 change (operator decision):** producers in Ukraine barely use Telegram for
