@@ -1,7 +1,7 @@
-# market-pulse-llm — Project Specification (rev. 3.5)
+# market-pulse-llm — Project Specification (rev. 3.6)
 
 **Status:** APPROVED rev. 3 (2026-07-26); amendment 3.1 approved 2026-07-27;
-amendments 3.2 and 3.3 approved 2026-07-28; amendments 3.4 and 3.5 approved
+amendments 3.2 and 3.3 approved 2026-07-28; amendments 3.4–3.6 approved
 2026-08-01.
 **Amendment 3.1:** EN removed from per-language gates — the collected corpus
 contains 8 EN comments out of 2,000 sampled (retail channels post in UA); a
@@ -92,6 +92,18 @@ with the existing ≤2 pp overall macro-F1 guard; n=44 is reported beside the
 verdict (amendment 3.2 fallback). Gate evals run the local inference path at
 batch size 1 unless batch-invariance is re-measured and recorded (4a ADR
 §(c)).
+**Amendment 3.6 (4b acceptance, 2026-08-01 — before any full run):** the
+per-arm projection ceiling of 3.4 (4) rises 4 h → **5 h**, uniformly for both
+arms. The smoke measured 45.23 s/step (NF4 dequantizes on every forward and
+backward — the quantization that fits the card prices the step), projecting
+3.42 h / 4.37 h per arm; the pre-registered stop fired on the second arm, and
+the operator resolved it by raising the time proxy rather than touching the
+frozen config: 2 epochs and every other hyperparameter stand, the ablation
+stays paired, and the $25 cap remains the binding protection (projected
+training total ≈ $4.13). Rejected: 1 epoch for both arms (halves the training
+of the small G1b signal to satisfy a proxy) and dropping the synthetic arm
+(decides the ablation without measuring it). Ordering recorded: decided after
+smoke timing and loss curves only — no gate or frozen-set number existed.
 **Date:** 2026-07-26 · **Team lead:** Fable session · **Executor:** Claude Code
 **Repo folder:** `/Users/hdv_1987/Desktop/Projects/market-pulse-llm`
 **rev. 3 change (operator decision):** producers in Ukraine barely use Telegram for
