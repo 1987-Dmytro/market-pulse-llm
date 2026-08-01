@@ -1,7 +1,8 @@
-# market-pulse-llm — Project Specification (rev. 3.4)
+# market-pulse-llm — Project Specification (rev. 3.5)
 
 **Status:** APPROVED rev. 3 (2026-07-26); amendment 3.1 approved 2026-07-27;
-amendments 3.2 and 3.3 approved 2026-07-28; amendment 3.4 approved 2026-08-01.
+amendments 3.2 and 3.3 approved 2026-07-28; amendments 3.4 and 3.5 approved
+2026-08-01.
 **Amendment 3.1:** EN removed from per-language gates — the collected corpus
 contains 8 EN comments out of 2,000 sampled (retail channels post in UA); a
 per-language metric over n=8 is meaningless. Gates run on UA and RU. The model
@@ -62,6 +63,35 @@ Phase 4, checked against RunPod billing before every start; the smoke must
 project the full run, and a projection over **4 h per arm** stops the line for
 an operator decision. Top-up $35 with a ~100 GB network volume (pods without a
 volume are deleted unrecoverably at $0 balance).
+**Amendment 3.5 (4a acceptance, 2026-08-01 — before any fine-tuned number exists):**
+(1) **The own-pod NF4 row is baseline (c) for every gate** (operator decision):
+G1a's best baseline and per-language floors, G1c's baseline, and the G1d/G1e
+anchor already pre-registered in 3.4 (2). Anchors are read programmatically
+from the own-pod record in `results/baselines.json` (config.backend "local"),
+never hand-typed. Resulting targets: G1a ≥ 0.9418 overall (floors: ua 0.8718,
+ru 0.8649), G1c ≥ 0.8436.
+(2) **G1d and G1e replace "+ 10 pp" with a no-regression gate:** fine-tuned ≥
+anchor − 1 pp (G1d ≥ 0.8984, G1e ≥ 0.8874); improvement is reported beside
+the verdict, never gated. Ordering recorded honestly: "+10 pp" was written
+2026-07-26 assuming a weak zero-shot base; the selected base saturated both
+heads (anchor + 10 pp exceeds 1.0 for G1d and demands 0.9974 for G1e), the
+impossibility was arithmetically visible in the 3b numbers on 2026-07-31 and
+was named only at the 4a acceptance — a team-lead miss, recorded not smoothed.
+No fine-tuned number existed at decision time (amendment 3.3's epistemic
+position). The rescaled-ambition alternative (relative error reduction ≥25%)
+was considered and rejected: near the ceiling it collides with label noise
+and a failure would be uninterpretable. The T2 heads now gate the real
+multi-task risk — forgetting; the phase's ambition burden lies on G1a, G1b,
+G1c.
+(3) **G1b mechanics, fixed before training:** the slice IS
+`results/g1b_slice.json` (44 ids); the scorer's fix-rate function is changed —
+by this team-lead instruction — to consume that persisted list. A slice row
+counts as FIXED iff it leaves the fine-tuned model's union of sentiment ∪
+sarcasm errors (correct on BOTH labels). Gate: ≥60% of 44 → **≥27 rows**,
+with the existing ≤2 pp overall macro-F1 guard; n=44 is reported beside the
+verdict (amendment 3.2 fallback). Gate evals run the local inference path at
+batch size 1 unless batch-invariance is re-measured and recorded (4a ADR
+§(c)).
 **Date:** 2026-07-26 · **Team lead:** Fable session · **Executor:** Claude Code
 **Repo folder:** `/Users/hdv_1987/Desktop/Projects/market-pulse-llm`
 **rev. 3 change (operator decision):** producers in Ukraine barely use Telegram for

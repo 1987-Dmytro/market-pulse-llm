@@ -41,6 +41,13 @@ the pod, built the local inference path and produced the own-pod zero-shot row. 
 `make check` green after every commit. Phases 1 and 2 accepted 2026-07-28; 3a/3b/3c 2026-07-31.
 Registry: 4 live sources. Raw store 6 057 posts + 11 338 comments. **17 ADRs** ([[INDEX]]).
 
+**The own-pod row is baseline (c) EVERYWHERE** — operator decision 2026-08-01, pre-registered
+before 4b trains ([[phase4-own-pod-anchor]] §(f)). Not just the G1d/G1e anchor: SPEC §7 makes
+zero-shot baseline (c) for every task, so G1a and G1c measure from it too. The OpenRouter row stays
+in the Phase 3 table and is no longer a baseline candidate for any Tier-1 gate. **The bars that
+follow, fixed now:** G1a overall **≥ 0.9418** (floors `ua` 0.8718 · `ru` 0.8649) · G1c **≥ 0.8436** ·
+G1d **1.0084** · G1e **≥ 0.9974**. Read the G1d cell — see the blocker under Blockers.
+
 **The own-pod row anchors G1d/G1e** ([[phase4-own-pod-anchor]]): `google/gemma-4-31b-it` at
 revision `842da379…`, NF4 4-bit, RTX A6000, **758/758 rows scored, zero failures of any kind**,
 `gate_anchor_valid: true`. Gated heads, own-pod vs its OpenRouter fp8 row:
@@ -144,8 +151,8 @@ QA passed 2026-07-30** ([[synthetic-sarcasm-augmentation]]). **G1b's holdout** i
 
 ## 🚧 Blockers
 
-**None for 4a.** One open question is handed to 4b and needs an operator decision before it is
-scoped — see below.
+**4a itself: none.** One blocker and one open question go to 4b; both need an operator decision
+before it is scoped.
 
 **OPEN QUESTION 1, in the report and unresolved:** `scorer.sarcasm_slice_fix_rate` recomputes its
 slice internally from **one** label column (`base_pred[i] != gold`) and takes no argument through
@@ -154,12 +161,15 @@ that will compute G1b's fix-rate are therefore two different definitions today. 
 to persist the slice and it did; **4b cannot consume it without a change to `scorer.py`**, and
 scorer arithmetic is not the executor's to change. Not worked around.
 
-**OPEN QUESTION 2, same class:** amendment 3.4 (2) names the own-pod row as the **G1d/G1e** anchor,
-but SPEC §7 makes "zero-shot base LLM" baseline **(c) for every task**, and G1a's bar is "best
-baseline + 5 pp" — where the best baseline *is* a Gemma zero-shot row. There are now two of them
-and no rule saying which one G1a and G1c measure from. Both readings make the gate easier (G1a
-overall 0.8944 → 0.8918, G1c 0.7981 → 0.7936), which is why it must be pre-registered **before 4b
-trains**, not after the fine-tuned numbers exist.
+**BLOCKER FOR 4b — G1d's bar is above 1.0 and no model can clear it.** Follows from arithmetic, not
+from a prediction: the own-pod baseline is 0.9084 and G1d says "+10 pp", so the bar is **1.0084**
+while a macro-F1 caps at 1.0. Not created by the baseline decision below — the OpenRouter anchor
+had the *other* gate impossible (G1d bar 0.9898 reachable, **G1e bar 1.0211 unreachable**), and the
+own-pod anchor swaps them (G1d **1.0084 unreachable**, G1e 0.9974 reachable). **No anchor makes
+both +10 pp gates satisfiable**: `gemma-4-31b-it` zero-shot is already above 0.90 on both heads.
+A threshold no model can reach is a mis-specified gate, not the "negative result is a result" of
+SPEC §5. G1d/G1e wording lives in `docs/SPEC.md` §5 — team-lead file, thresholds immutable without
+operator approval. Flagged, untouched, and it needs an answer **before 4b is scoped**.
 
 **This Mac's device numbers, if anything is ever trained locally again:** 2 193 steps across
 9 heads, **CPU 3.5 s/step**, **MPS 48.1 s/step** and OOM at 9.07 GiB unless the 250k×768 embedding

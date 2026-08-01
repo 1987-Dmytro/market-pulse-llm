@@ -345,3 +345,17 @@ measurement rather than a coincidence. The numbers, the cross-check table and th
   construction. The pod itself was ~$0.62 of
   wall-clock at $0.53/hr; the volume keeps billing while stopped, which is why the guard reads the
   account balance and not only the pod billing rows.
+
+## Operator decision received after the report (2026-08-01)
+
+**The own-pod row is baseline (c) everywhere**, not only the G1d/G1e anchor — the second open
+question of the report, closed by the operator before 4b trains and before any fine-tuned number
+exists. Recorded in `knowledge/decisions/phase4-own-pod-anchor.md` §(f) with the bar table it
+implies. No code changed: nothing in `src/` or `scripts/` selects a baseline row today, and adding
+that machinery now would be building 4b's comparison ahead of 4b.
+
+The decision made one arithmetic fact unavoidable and it went straight back to the operator:
+**G1d's bar is 0.9084 + 0.10 = 1.0084, above the 1.0 ceiling of a macro-F1.** The condition predates
+4a — on the OpenRouter anchor it was G1e that was impossible (1.0211) and G1d that was merely brutal
+(0.9898) — so no anchor makes both +10 pp gates satisfiable. The executor does not touch SPEC §5;
+flagged and left.

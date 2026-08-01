@@ -153,7 +153,59 @@ The corollary already in `knowledge/hot.md` stands and is now load-bearing: the 
 4-bit base **plus the unmerged adapter**, and merging into bf16 weights is forbidden until measured
 (Phase 5). Every gate number from here on is produced in this configuration.
 
-## (f) Two open questions this run hands forward
+## (f) One open question, and one the operator closed
+
+### The own-pod row is baseline (c) everywhere — operator decision, 2026-08-01
+
+**Decided (operator, 2026-08-01, after this report):** the own-pod row is baseline **(c)** for
+**every** task, not only the G1d/G1e anchor. Amendment 3.4 (2) and [[3b-infra-and-precision]] §(f)
+reason about G1d and G1e because those two are worded "≥ zero-shot base LLM + 10 pp" and name the
+anchor; SPEC §7 makes "zero-shot base LLM with fixed prompt" baseline (c) for every task, and G1a is
+"≥ **best baseline** + 5 pp". Two Gemma zero-shot rows existed and no rule said which one G1a and
+G1c measured from. Now one does, and it is the row produced on the hardware every Phase 4 number
+comes from. The OpenRouter row keeps its place in the Phase 3 table and is no longer a baseline
+candidate for any Tier-1 gate.
+
+Pre-registered **before** 4b trains and before any fine-tuned number exists, which is the only time
+this decision could honestly be made. Every figure below is `scripts/show_results.py` over
+`results/baselines.json`; none is typed from memory.
+
+| gate | rule (SPEC §5) | best baseline, per the decision | **bar the fine-tune must clear** |
+|---|---|---|---|
+| G1a sentiment macro-F1 · overall | best baseline + 5 pp | **0.8918** own-pod (xlm-r 0.7824, tfidf 0.6834) | **0.9418** |
+| G1a · `ua` floor | not below its baseline by >2 pp | 0.8918 | **≥ 0.8718** |
+| G1a · `ru` floor | not below its baseline by >2 pp | 0.8849 | **≥ 0.8649** |
+| G1c intents micro-F1 | best baseline + 5 pp | **0.7936** own-pod (xlm-r 0.6007, tfidf 0.6000) | **0.8436** |
+| G1d post_type macro-F1 | zero-shot base LLM + 10 pp | 0.9084 own-pod | **1.0084** |
+| G1e brand extraction F1 | zero-shot base LLM + 10 pp | 0.8974 own-pod | **0.9974** |
+
+The own-pod row is the best baseline on both G1a and G1c by a wide margin, so the "best baseline"
+clause selects it whichever way it is read: the per-language reading picks the same row
+(`ua` 0.8918, `ru` 0.8849 are both its own), so the two readings coincide here and no second
+decision is needed.
+
+### The consequence that has to go back to the operator: G1d's bar is above 1.0
+
+**A macro-F1 cannot exceed 1.0, so G1d as written can no longer be passed by any model.**
+0.9084 + 0.10 = **1.0084**. This is arithmetic, not a prediction about the fine-tune.
+
+It is not something this decision created, and the OpenRouter anchor was no better — it was the
+*other* gate that was impossible:
+
+| anchor | G1d bar | G1e bar |
+|---|---|---|
+| OpenRouter fp8 (Phase 3 row) | 0.9898 — reachable | **1.0211 — unreachable** |
+| own-pod NF4 (the decision) | **1.0084 — unreachable** | 0.9974 — reachable |
+
+So the condition predates 4a: **no anchor makes both +10 pp gates satisfiable**, because
+`gemma-4-31b-it` zero-shot already scores above 0.90 on both heads and a +10 pp gate over a >0.90
+baseline has no room left. SPEC §5's "a failed gate closes the question; negative result is a
+result" is about a fine-tune that did not deliver — a threshold no model can reach is a
+mis-specified gate, not a negative result, and reporting it as one would be dishonest.
+
+The executor does not touch this: G1d/G1e's wording is `docs/SPEC.md` §5, a team-lead file, and
+thresholds are immutable without operator approval (`CLAUDE.md`; SPEC §10). **Flagged before 4b is
+scoped.** Recorded here so the number is in the vault whatever is decided.
 
 ### The slice file the scorer cannot read
 
@@ -164,22 +216,9 @@ arithmetic that will compute G1b's fix-rate are, today, two different definition
 4a's contract was to persist the slice and it did; **4b cannot consume it without a change to
 `scorer.py`**, and scorer arithmetic is not something the executor changes on its own
 (`docs/PROMPT-4a.md` DO-NOT; SPEC §5). Flagged for the operator before 4b is scoped, not worked
-around.
-
-### Which gemma row is baseline (c) for G1a and G1c
-
-Amendment 3.4 (2) and [[3b-infra-and-precision]] §(f) both reason about **G1d and G1e**, because
-those two gates are worded "≥ zero-shot base LLM + 10 pp" and name the anchor explicitly. But SPEC
-§7 lists "zero-shot base LLM with fixed prompt" as baseline **(c) for every task**, and G1a is
-"≥ **best baseline** + 5 pp" — where the best baseline is this same Gemma zero-shot row
-(0.8944 against `xlm-roberta-base` 0.7824 and `tfidf-logreg` 0.6834). G1c is the same shape.
-
-So there are now **two** Gemma zero-shot rows and no pre-registered rule saying which one G1a and
-G1c measure from. The difference is small and it makes the gate **easier** in both cases — G1a
-overall 0.8944 → 0.8918 (bar down 0.0026), G1c 0.7981 → 0.7936 (bar down 0.0046) — which is exactly
-why it has to be settled **before** 4b trains rather than after the fine-tuned numbers exist. The
-executor does not pick. The consistent-looking answer — the own-pod row everywhere, since it is the
-row produced on the hardware every Phase 4 number comes from — is still an operator's to make.
+around. The baseline decision above sharpens it rather than settling it: G1b's slice is now
+unambiguously the own-pod row's 44 ids, and `scorer.sarcasm_slice_fix_rate` still cannot be handed
+them.
 
 **Sources:** `docs/PROMPT-4a.md` rev. 1 · SPEC amendment 3.4 · `scripts/show_results.py` over
 `results/baselines.json` (both rows) · `results/g1b_slice.json` · `scripts/runbook_4a.md` ·
