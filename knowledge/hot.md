@@ -2,24 +2,24 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-01 10:02:40 (every SessionStart)
+**Auto-refreshed:** 2026-08-01 12:24:33 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-759f72d chore: the day's log, hot.md and the index as /close left them
-a5f5907 docs: phase 3 closed, as the team lead left it
-2b423c8 chore: one writer per file — deny rules, command write-lists, the matrix
-8fc81ff chore: hot.md and the log catch up with the finished run
-ffcb33e chore: the day's log, hot.md and the index as /close left them
+35c44c1 docs: baseline (c) is the own-pod row everywhere — and G1d's bar is 1.0084
+50686ff docs: the second open question, and a phase-spend figure that names its clock
+dc15f92 chore: the day's log for step 4a
+c2eb510 docs: the 4a record — ADR, notes and hot.md
+18a1b29 feat: the own-pod zero-shot row, and the G1b slice it defines
 ```
 
 ## 📋 Recent decisions
 
-- `3b-infra-and-precision.md` — Phase 3b runs on OpenRouter at a pinned precision, not on a rented GPU
+- `phase4-own-pod-anchor.md` — The own-pod zero-shot row anchors G1d/G1e, and it is the run that defines the G1b slice
 - `INDEX.md` — Decision records
-- `phase4-base-model-gate.md` — Phase 4 base model = google/gemma-4-31b-it, and the unpaired 27B row cannot flip that
+- `3b-infra-and-precision.md` — Phase 3b runs on OpenRouter at a pinned precision, not on a rented GPU
 
 ## 📅 Recent daily logs
 
@@ -31,22 +31,26 @@ ffcb33e chore: the day's log, hot.md and the index as /close left them
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-01 (end of step 4a; edited by hand — the section above is auto-generated, do NOT touch the marker)
+**Last update:** 2026-08-01 12:29 (4a ACCEPTED, amendment 3.5 lands — both blockers decided, step 4b opens; edited by hand — the section above is auto-generated, do NOT touch the marker)
 
 ## 🔥 What's Hot
 
-**STEP 4a IS DONE AND AWAITING REVIEW — no self-acceptance.** Phase 3 closed and committed
-(`952e5dd`); Phase 4 opened at the 2026-08-01 briefing with **SPEC amendment 3.4**. 4a stood up
-the pod, built the local inference path and produced the own-pod zero-shot row. **239 tests**,
-`make check` green after every commit. Phases 1 and 2 accepted 2026-07-28; 3a/3b/3c 2026-07-31.
+**STEP 4a IS ACCEPTED (2026-08-01) and 4b is live** — the scorer's slice input, the QLoRA trainer
+and a training smoke; **no full runs (4c) and no frozen set or holdout touched by anything in 4b**.
+Phase 3 closed and committed (`952e5dd`); Phase 4 opened at the 2026-08-01 briefing with **SPEC
+amendment 3.4** and the 4a acceptance added **amendment 3.5**. `make check` green after every
+commit. Phases 1 and 2 accepted 2026-07-28; 3a/3b/3c 2026-07-31.
 Registry: 4 live sources. Raw store 6 057 posts + 11 338 comments. **17 ADRs** ([[INDEX]]).
 
 **The own-pod row is baseline (c) EVERYWHERE** — operator decision 2026-08-01, pre-registered
 before 4b trains ([[phase4-own-pod-anchor]] §(f)). Not just the G1d/G1e anchor: SPEC §7 makes
 zero-shot baseline (c) for every task, so G1a and G1c measure from it too. The OpenRouter row stays
-in the Phase 3 table and is no longer a baseline candidate for any Tier-1 gate. **The bars that
-follow, fixed now:** G1a overall **≥ 0.9418** (floors `ua` 0.8718 · `ru` 0.8649) · G1c **≥ 0.8436** ·
-G1d **1.0084** · G1e **≥ 0.9974**. Read the G1d cell — see the blocker under Blockers.
+in the Phase 3 table and is no longer a baseline candidate for any Tier-1 gate. **The bars, as
+amendment 3.5 leaves them:** G1a overall **≥ 0.9418** (floors `ua` 0.8718 · `ru` 0.8649) ·
+G1b **≥ 27 of 44** with the ≤2 pp macro-F1 guard · G1c **≥ 0.8436** · **G1d ≥ 0.8984** ·
+**G1e ≥ 0.8874**. G1d/G1e are `anchor − 1 pp` **no-regression** gates now (3.5 (2) replaced
+"+10 pp", which was unreachable on a saturated base); improvement is reported, never gated. **Every
+one of those numbers is derived in code from the own-pod record — none is typed anywhere.**
 
 **The own-pod row anchors G1d/G1e** ([[phase4-own-pod-anchor]]): `google/gemma-4-31b-it` at
 revision `842da379…`, NF4 4-bit, RTX A6000, **758/758 rows scored, zero failures of any kind**,
@@ -138,38 +142,33 @@ QA passed 2026-07-30** ([[synthetic-sarcasm-augmentation]]). **G1b's holdout** i
 
 ## ⏭️ Next
 
-1. **Team-lead review of step 4a** against `docs/PROMPT-4a.md`'s checklist. The executor does not
-   self-accept. Report delivered; open question below travels with it.
-2. **Step 4b** once 4a is accepted: the training smoke, then the two ablation arms (with and
-   without `synthetic_sarcasm.jsonl`, identical config and seed, one data path differing). The
-   selection rule is fixed: the synthetic source stays **iff** its arm's G1b fix-rate is strictly
-   higher **and** no other gated head is lower by more than 0.5 pp; both columns published, no
-   third run, no retraining after gate numbers are seen. The smoke must project the full run and a
-   projection over **4 h per arm** stops the line.
+1. **Step 4b, live** (`docs/PROMPT-4b.md`): the scorer learns the slice file (amendment 3.5 (3)),
+   `scripts/train_qlora.py` + a committed hyperparameter config, and ONE pod session for a
+   40–60-step training smoke on the real-only arm. Frozen sets and the holdout stay shut.
+2. **Team-lead review of 4b**, then **4c**: the two ablation arms (with and without
+   `synthetic_sarcasm.jsonl`, identical config and seed, one data path differing) and the gates,
+   one attempt. The selection rule is fixed: the synthetic source stays **iff** its arm's G1b
+   fix-rate is strictly higher **and** no other gated head is lower by more than 0.5 pp; both
+   columns published, no third run, no retraining after gate numbers are seen. 4b's smoke must
+   project the full run and a projection over **4 h per arm** stops the line.
 3. Still open from Phase 2 (not a blocker): dataset cards for the public augmentation datasets +
    licence check.
 
 ## 🚧 Blockers
 
-**4a itself: none.** One blocker and one open question go to 4b; both need an operator decision
-before it is scoped.
+**None open.** Both of 4a's escalations came back decided at the acceptance, in **SPEC amendment
+3.5** — the executor flagged, the operator ruled, nothing was worked around:
 
-**OPEN QUESTION 1, in the report and unresolved:** `scorer.sarcasm_slice_fix_rate` recomputes its
-slice internally from **one** label column (`base_pred[i] != gold`) and takes no argument through
-which a caller could pass `results/g1b_slice.json`. The persisted 44-id union and the arithmetic
-that will compute G1b's fix-rate are therefore two different definitions today. 4a's contract was
-to persist the slice and it did; **4b cannot consume it without a change to `scorer.py`**, and
-scorer arithmetic is not the executor's to change. Not worked around.
-
-**BLOCKER FOR 4b — G1d's bar is above 1.0 and no model can clear it.** Follows from arithmetic, not
-from a prediction: the own-pod baseline is 0.9084 and G1d says "+10 pp", so the bar is **1.0084**
-while a macro-F1 caps at 1.0. Not created by the baseline decision below — the OpenRouter anchor
-had the *other* gate impossible (G1d bar 0.9898 reachable, **G1e bar 1.0211 unreachable**), and the
-own-pod anchor swaps them (G1d **1.0084 unreachable**, G1e 0.9974 reachable). **No anchor makes
-both +10 pp gates satisfiable**: `gemma-4-31b-it` zero-shot is already above 0.90 on both heads.
-A threshold no model can reach is a mis-specified gate, not the "negative result is a result" of
-SPEC §5. G1d/G1e wording lives in `docs/SPEC.md` §5 — team-lead file, thresholds immutable without
-operator approval. Flagged, untouched, and it needs an answer **before 4b is scoped**.
+- **G1d's unreachable bar → 3.5 (2).** "+10 pp" is replaced by a no-regression gate, fine-tuned
+  ≥ anchor − 1 pp (G1d ≥ 0.8984, G1e ≥ 0.8874); improvement is reported beside the verdict and
+  never gated. The spec records the ordering honestly (the impossibility was arithmetically
+  visible in the 3b numbers on 2026-07-31 and was named only at the 4a acceptance) and records
+  why the rescaled-ambition alternative — relative error reduction ≥25% — was rejected: near the
+  ceiling it collides with label noise. **The phase's ambition burden now lies on G1a, G1b, G1c;
+  T2's heads gate forgetting.**
+- **The scorer could not read the slice file → 3.5 (3),** which is a team-lead instruction to
+  change the fix-rate function: it takes the 44 ids explicitly, FIXED means correct on **both**
+  sentiment and sarcasm, the rate is fixed/44 and the gate is **≥27**. Executed in 4b Step 1.
 
 **This Mac's device numbers, if anything is ever trained locally again:** 2 193 steps across
 9 heads, **CPU 3.5 s/step**, **MPS 48.1 s/step** and OOM at 9.07 GiB unless the 250k×768 embedding
