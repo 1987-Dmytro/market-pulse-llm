@@ -31,24 +31,53 @@ ffcb33e chore: the day's log, hot.md and the index as /close left them
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-01 (`/close` of the 2026-07-31 workday, run just past midnight; edited by hand — the section above is auto-generated, do NOT touch the marker)
+**Last update:** 2026-08-01 (end of step 4a; edited by hand — the section above is auto-generated, do NOT touch the marker)
 
 ## 🔥 What's Hot
 
-**PHASE 3 IS CLOSED — accepted 2026-07-31 late evening. Phase 4 is next**, and its entry
-conditions are a RunPod top-up and the briefing (see Next). Phases 1 and 2 DONE and accepted
-(2026-07-28); 3a, 3b and 3c all landed on 2026-07-31 — 202 tests, `make check` green after every
-commit, **$0.9201 spent of the $8 cap**, the supervised baseline at $0 on this Mac. SPEC APPROVED
-rev. 3 + amendments 3.1, 3.2, **3.3**. Registry: 4 live sources. Raw store 6 057 posts + 11 338
-comments. 16 ADRs in `knowledge/decisions/` ([[INDEX]]).
+**STEP 4a IS DONE AND AWAITING REVIEW — no self-acceptance.** Phase 3 closed and committed
+(`952e5dd`); Phase 4 opened at the 2026-08-01 briefing with **SPEC amendment 3.4**. 4a stood up
+the pod, built the local inference path and produced the own-pod zero-shot row. **239 tests**,
+`make check` green after every commit. Phases 1 and 2 accepted 2026-07-28; 3a/3b/3c 2026-07-31.
+Registry: 4 live sources. Raw store 6 057 posts + 11 338 comments. **17 ADRs** ([[INDEX]]).
+
+**The own-pod row anchors G1d/G1e** ([[phase4-own-pod-anchor]]): `google/gemma-4-31b-it` at
+revision `842da379…`, NF4 4-bit, RTX A6000, **758/758 rows scored, zero failures of any kind**,
+`gate_anchor_valid: true`. Gated heads, own-pod vs its OpenRouter fp8 row:
+G1a `ua` **0.8918** (-0.0039) · G1a `ru` **0.8849** (+0.0162) · G1c **0.7936** (-0.0046) ·
+G1d **0.9084** (+0.0187) · G1e **0.8974** (-0.0236); relevance 0.9415, not gated. **The own-pod
+number anchors regardless of the disagreement — nothing is averaged.** So G1d's 10 pp bar is now
+measured from 0.9084 (harder than the Phase 3 table implied) and G1e's from 0.8974 (easier). The
+selection of the base model is NOT reopened: one model re-measured on new hardware is not a paired
+comparison against rows nobody re-measured.
+
+**The G1b slice exists as a file: `results/g1b_slice.json`, n = 44**, sha256 in the record.
+Sentiment errors **13 ⊂** sarcasm errors **44**, so the union is 44 — the containment the
+OpenRouter preview showed at 10 ⊂ 40 held at different numbers. **44 < 100 → amendment 3.2's
+pre-registered fallback**: report the smaller n beside the gate verdict, top nothing up. The
+OpenRouter 40 was a preview and is now superseded.
+
+**GREEDY IS NOT BATCH-INVARIANT on bitsandbytes NF4 + A6000.** Measured, not assumed: one probe
+row of 24 came back with different intents at batch 8 than at batch 1, same weights, same prompt,
+`do_sample: false`. **The run went at `--batch-size 1`** — 3.04 s/row, 39 min for 758 rows, $0.35,
+against a 4 h/arm ceiling, so the correctness win was free. Batch 1's own claim was measured too:
+the same 48-row probe twice, byte-identical labels. **4b's ablation arms inherit batch size 1**
+unless someone re-measures on the training stack and records it.
+
+**GPU money: $0.6203 of the $25 Phase 4 cap.** `results/spend_phase4.json` anchors the balance at
+$35.00 as of 2026-08-01T08:34:09Z — **never regenerate it**, same footgun as `spend_3b.json`.
+`scripts/runpod_guard.py` refuses at the cap and on a mid-phase top-up. Pod `gxkdecf3g7k3y7`
+**EXITED**; network volume `gfwa2an8fn` (100 GB, CA-MTL-3) **kept on purpose** for 4b — it bills
+~$7/month whether or not a pod is attached, which is why the guard reads the account balance and
+not just the pod billing rows.
 
 **One writer per file, and the layer is live** (`2b423c8`): `docs/STATUS.md`, `docs/SPEC.md` and
 `docs/PROMPT-*.md` are **team-lead files** — read them, commit them verbatim, never edit them;
 everything else is the executor's. Deny rules in `.claude/settings.json` refuse **both `Edit` and
 `Write`** on those three (on Claude Code 2.1.220 only `Edit(path)` rules are consulted, and they
-cover every writing tool — a `Write(path)` rule would be dead), proved by refusal on all three
-files with `docs/WATCHLIST.md` as the negative control. `docs/STATUS.md` carries the team lead's
-Phase-3 closure **uncommitted in the tree** at this close — commit it as it is.
+cover every writing tool — a `Write(path)` rule would be dead). Re-probed 2026-08-01 with the
+Write tool on `docs/STATUS.md`: *"File is in a directory that is denied by your permission
+settings."*, and the file was not touched.
 
 **Phase 4's base model is `google/gemma-4-31b-it`** ([[phase4-base-model-gate]]) — ahead on every
 gated head among the candidates, ahead of the Haiku reference row on four cells of five (Haiku
@@ -99,29 +128,28 @@ QA passed 2026-07-30** ([[synthetic-sarcasm-augmentation]]). **G1b's holdout** i
 
 ## ⏭️ Next
 
-1. **RunPod top-up ~$30–40** — the operator's call, owed before any training
-   ([[gpu-provider-runpod]]). At a $0 balance, pods without a network volume are deleted
-   irreversibly.
-2. **Phase 4 briefing** — a joint working session, not a prompt. Settles the LoRA fork and
-   schedules the chosen model's **zero-shot re-run on our own pod** — the cross-check against its
-   third-party-served row, the run that defines the **G1b slice**, and the anchor for G1d/G1e.
-   Also on the agenda: the synthetic-ablation plan, and G1a–e as **one pre-registered attempt**.
-   **Working hypothesis: branch (2), 4-bit QLoRA on an A6000** — Gemma-4-31B needs
-   ~70 GB in bf16, which does not fit a 48 GB A6000, and production is the quantized serverless
-   path decided 2026-07-28. Training cost is NOT the deciding argument (~2 950 short rows, 1–1.5 h,
-   single dollars apart); the criterion is **train in the precision you serve**. Confirmed at the
-   briefing, not before. Three branches in `docs/STATUS.md`.
+1. **Team-lead review of step 4a** against `docs/PROMPT-4a.md`'s checklist. The executor does not
+   self-accept. Report delivered; open question below travels with it.
+2. **Step 4b** once 4a is accepted: the training smoke, then the two ablation arms (with and
+   without `synthetic_sarcasm.jsonl`, identical config and seed, one data path differing). The
+   selection rule is fixed: the synthetic source stays **iff** its arm's G1b fix-rate is strictly
+   higher **and** no other gated head is lower by more than 0.5 pp; both columns published, no
+   third run, no retraining after gate numbers are seen. The smoke must project the full run and a
+   projection over **4 h per arm** stops the line.
 3. Still open from Phase 2 (not a blocker): dataset cards for the public augmentation datasets +
    licence check.
 
 ## 🚧 Blockers
 
-**None.** Phase 3's one blocker — XLM-R over its 60-minute ceiling on both devices — was lifted by
-the operator and the run finished clean in 101.0 min.
+**None for 4a.** One open question is handed to 4b and needs an operator decision before it is
+scoped — see below.
 
-**Uncommitted in the tree at this close, by design:** `docs/STATUS.md`, the team lead's Phase-3
-closure. The executor commits it **verbatim** and never edits it (the deny rules make that
-mechanical, not a matter of care).
+**OPEN QUESTION, in the report and unresolved:** `scorer.sarcasm_slice_fix_rate` recomputes its
+slice internally from **one** label column (`base_pred[i] != gold`) and takes no argument through
+which a caller could pass `results/g1b_slice.json`. The persisted 44-id union and the arithmetic
+that will compute G1b's fix-rate are therefore two different definitions today. 4a's contract was
+to persist the slice and it did; **4b cannot consume it without a change to `scorer.py`**, and
+scorer arithmetic is not the executor's to change. Not worked around.
 
 **This Mac's device numbers, if anything is ever trained locally again:** 2 193 steps across
 9 heads, **CPU 3.5 s/step**, **MPS 48.1 s/step** and OOM at 9.07 GiB unless the 250k×768 embedding
@@ -129,6 +157,38 @@ matrix is frozen. Local training is an evening job, not an interactive one — a
 14×, which is the opposite of the intuition.
 
 ## ⚠️ Footguns for the next run
+
+- **`results/spend_phase4.json` is the $25 cap's anchor and must not be regenerated.** It stores
+  the RunPod balance as Phase 4 opened; delete it and the counter silently restarts at today's
+  balance. The guard also refuses when the balance is *above* the anchor — a mid-phase top-up means
+  the delta stopped measuring this phase, and re-anchoring is an operator decision.
+- **A stopped pod is not a stopped bill.** The 100 GB network volume bills by the month with no pod
+  attached. `runpodctl billing pods` cannot see it; only the account-balance delta can, which is why
+  the guard reads both and takes the larger.
+- **`runpodctl pod list` shows running pods only.** An empty list is "nothing running", not
+  "nothing exists". Use `pod list -a` or `pod get <id>` to show a stopped pod's `EXITED` state.
+- **Network volumes live in a different datacenter set than the A6000 does.** `EU-SE-1` had the
+  best A6000 stock and takes no volumes at all; the intersection was `CA-MTL-3`. Pick on the
+  intersection or pay for a second volume.
+- **`RUNPOD_POD_ID` is not inherited over ssh** — export it in the run command or the record's
+  `runtime.pod_id` is `None` and the number cannot name its machine.
+- **The RunPod PyTorch image's python is PEP 668 managed.** `pip install` refuses; use
+  `python3 -m venv --system-site-packages` so the image's CUDA-matched torch is reused rather than
+  a 3 GB re-download of a possibly different build.
+- **Greedy decoding is NOT batch-invariant on bitsandbytes NF4 + A6000** — measured 2026-08-01, one
+  row of 24 flipped its intents between batch 8 and batch 1. Every gate run goes at `--batch-size 1`
+  until someone re-measures and records the result. Batch 1 is run-to-run identical, also measured.
+- **`add_special_tokens=False` is load-bearing and now asserted.** Gemma 4's chat template emits
+  `<bos>` itself; a template revision that stopped would silently make every prompt worse, so
+  `LocalClient` refuses to construct if the rendered prompt does not start with the BOS token.
+- **Gemma 4 has a thinking channel.** `enable_thinking=False` + `add_generation_prompt=True` emits
+  an already-closed `<|channel>thought\n<channel|>` — the local equivalent of 3b's
+  `reasoning: {"enabled": false}`. It is the current default and is passed explicitly anyway: with
+  thinking on, `parse_reply` would read the first brace inside the reasoning text.
+- **A `--probe` is not a smoke test unless it prints rows.** Aggregate counts are identical whenever
+  two configurations merely parse, so a check built on them cannot fail. The batch-invariance check
+  diffs the per-row prediction lines and guards with `test -s` — two crashed probes produce two
+  empty files, and `diff` on those is silent success.
 
 - **`docs/STATUS.md`, `docs/SPEC.md`, `docs/PROMPT-*.md` are team-lead files.** Read and commit,
   never edit — the deny rules refuse `Edit` *and* `Write` on them, without a restart. Phase-end

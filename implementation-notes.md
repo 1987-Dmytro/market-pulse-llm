@@ -277,3 +277,69 @@ Every departure is logged here. Silence is not compliance.
 | # | Contract text | What was done | Why |
 |---|---|---|---|
 | F1 | Step 0: "Expect modified team-lead files … (docs/STATUS.md, docs/SPEC.md, docs/PROMPT-4a.md, knowledge/daily_logs/2026-07-31.md, knowledge/index.md)" | The actual dirty set was committed as the one commit: the three named `docs/` files, `knowledge/index.md`, **`knowledge/daily_logs/2026-08-01.md`** instead of `2026-07-31.md`, and **`knowledge/hot.md`**, which the list omits. | The `/close` that produced them ran just past midnight, so the Stop hook stamped the new day's log; the SessionStart hook then refreshed `hot.md`'s auto-generated block. Both are hook output, not edits. "Commit them all as ONE commit" was followed on the set that actually existed. |
+| F2 | Step 1: "batching as memory allows (greedy — batch size must not change outputs)" | The run went at **`--batch-size 1`**. | The parenthesis was treated as a claim to test, not a licence. At batch 8, one probe row of 24 came back with different intents than at batch 1 (`[]` against `["packaging", "quality"]`) — same weights, same prompt, greedy, temperature 0. Left padding and kernel selection move a logit on bitsandbytes NF4 + A6000, so the premise of "batching as memory allows" does not hold here. Batch 1 was then checked the other way: the same 48-row probe twice, byte-identical labels. Cost of the choice: 3.04 s/row, 39 min for 758 rows — inside every ceiling. |
+| F3 | Step 2: "create a ~100 GB network volume, then an A6000 48 GB pod attached to it" | Datacenter **CA-MTL-3**, not the one with the most A6000 stock. | Network volumes exist in a different set of datacenters than the A6000 does. `EU-SE-1` had the best stock (`Medium`) and does not take volumes at all; the intersection of the two lists was `CA-MTL-3` (`Low`) and `EU-RO-1` (no stock). Discovered by the create call's own error message, before a volume existed — picking on stock alone and finding out afterwards is a second volume and a second monthly bill. |
+| F4 | Step 2: "env install from the `gpu` extra" | Installed into a venv on the network volume (`python3 -m venv --system-site-packages /workspace/venv`), not into the image's Python. | The RunPod PyTorch image's Python is PEP 668 "externally managed" and refuses a plain `pip install`. `--system-site-packages` reuses the image's CUDA-matched `torch 2.8.0+cu128` instead of pulling ~3 GB of a possibly different build, and the venv lives on the volume so step 4b inherits it. |
+| F5 | Step 1: "Provenance additions: … pod id" | `RUNPOD_POD_ID` is exported by hand in the run command. | RunPod sets it for the container's main process, not for an SSH session, so the first `--dry-run` recorded `pod_id: None`. Caught by reading the printed provenance block rather than by trusting the field existed. |
+
+**Deviations: F1–F5 above. Nothing else departed from `docs/PROMPT-4a.md`.**
+
+## What the preflight review caught, before the pod was paid for
+
+The local path could not be tested on this Mac — no CUDA, and 62 GB of weights — so it went through
+an adversarial read-only review (five lenses, each finding independently verified by a refuter)
+while the pod downloaded. Twelve findings survived verification; all twelve were fixed in `ec2dfc9`
+before the run. The three that would have cost real money:
+
+1. **`--probe` dereferenced a null budget on the local backend.** Three of the runbook's five smoke
+   commands would have crashed with `AttributeError` *after* loading 62 GB and generating the rows.
+   No test drove `main()` with `--backend local --probe`; one does now.
+2. **The batch-invariance check compared aggregate counts**, which are equal whenever both batch
+   sizes merely parse — a check that could not fail, and which sat on top of the crash above, so two
+   empty files would have `diff`ed clean and printed "batch invariant". `--probe` now prints the
+   per-row prediction lines and the runbook diffs those behind `test -s` guards. This is the finding
+   that made F2 possible: without it the run would have gone at batch 8 and quietly used labels that
+   batch size had moved.
+3. **One transient generation error was charged to all rows of its batch.** The OpenRouter client
+   retries each row six times; the local path had none, and the 2% limit is 2.16 rows on the 108-row
+   holdout — a single hiccup at batch 8 would have ended the run. A failed batch is now retried row
+   by row and only rows that fail alone are counted.
+
+Also fixed: `add_special_tokens=False` rested on an unasserted claim that the chat template emits
+`<bos>` (now asserted at construction, with a negative-control test); `--revision` and
+`--model-path` were accepted and recorded nowhere; the artifact ratchet covered only the prediction
+dump and now covers every `*_path` with a matching `*_sha256`, which is what makes the fixed-name
+`results/g1b_slice.json` safe.
+
+## The run
+
+One run, no re-runs. 758 rows, batch size 1, 39 minutes, `gate_anchor_valid: true`:
+
+| input | scored | parse | generation | api | truncated |
+|---|---|---|---|---|---|
+| comments_test | 400/400 | 0 | 0 | 0 | 0 |
+| posts_test | 250/250 | 0 | 0 | 0 | 0 |
+| sarcasm_holdout | 108/108 | 0 | 0 | 0 | 0 |
+
+379 443 prompt tokens, 14 782 completion tokens — ~19.5 completion tokens per row against a 256
+ceiling, so `max_new_tokens` was never close to binding and the zero in the truncated column is a
+measurement rather than a coincidence. The numbers, the cross-check table and the G1b slice are in
+`knowledge/decisions/phase4-own-pod-anchor.md`; nothing is repeated here.
+
+## Build log
+
+- 2026-08-01 — step 0: the phase-3 close and the 4a briefing committed as one commit (`952e5dd`);
+  the Write-tool probe on `docs/STATUS.md` refused with *"File is in a directory that is denied by
+  your permission settings."* before the file was touched, `git status` clean afterwards.
+- 2026-08-01 — go/no-go on the weights before any spend: `google/gemma-4-31B-it` on Hugging Face is
+  **not gated**, Apache-2.0, 62.6 GB, `Gemma4ForConditionalGeneration`. A gated repo would have been
+  an operator action and a stop.
+- 2026-08-01 — the local backend and its tests (`4165306`); the $25 guard and the runbook
+  (`57c976f`); the preflight review's twelve fixes (`ec2dfc9`).
+- 2026-08-01 08:41 UTC — volume `gfwa2an8fn` (100 GB, CA-MTL-3) and pod `gxkdecf3g7k3y7`
+  (RTX A6000, $0.53/hr, auto-stop 14:30 UTC). Weights downloaded in 3 minutes.
+- 2026-08-01 09:11–09:45 UTC — the run. Pod stopped 09:52 UTC, `desiredStatus: EXITED`, the moment
+  the artifacts were on this Mac and both sha256 fields re-derived. Volume kept for 4b.
+- 2026-08-01 — phase spend **$0.6203 of $25.00**, volume included. The pod itself was ~$0.62 of
+  wall-clock at $0.53/hr; the volume keeps billing while stopped, which is why the guard reads the
+  account balance and not only the pod billing rows.
