@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-02 17:24:39 (every SessionStart)
+**Auto-refreshed:** 2026-08-02 18:48:24 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+d103a34 docs: the version block says v3 exists, and G1b's section says what it moved
+4775e21 docs: test v3 recorded — the fixes, the re-scores, and what stays a v2 result
 c75504e feat: every dumped run re-scored against v3, from dumps only
 5054a90 feat: test v3 — the operator's 38 blind verdicts, applied and provable
 0906de6 feat: the intents law-review pack — the rules sliced out, not retyped
-29d63e1 docs: gate 4.5 — the law review and test v3 are ordered
-b6f52cd docs: the intents control, split by the shape of the label it agreed on
 ```
 
 ## 📋 Recent decisions
@@ -31,7 +31,7 @@ b6f52cd docs: the intents control, split by the shape of the label it agreed on
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-02 18:10 (`PROMPT-4.5c` executed — **test v3 is frozen beside v2 (38 fixes), every dumped run is re-scored, and the intents law-review pack is waiting on the operator's 10–15 minutes**. [[test-v3]] and [[phase45a-ceiling]] are both `proposed`. Phase 4 stays closed at 2 of 5 against v2; edited by hand — the section above is auto-generated, do NOT touch the marker)
+**Last update:** 2026-08-02 18:45 (`/save` after `PROMPT-4.5c` — **test v3 is frozen beside v2 (38 fixes), every dumped run is re-scored, and the intents law-review pack is waiting on the operator's 10–15 minutes**. [[test-v3]] and [[phase45a-ceiling]] are both `proposed`. Phase 4 stays closed at 2 of 5 against v2; edited by hand — the section above is auto-generated, do NOT touch the marker)
 
 ## 🔥 What's Hot
 
@@ -57,7 +57,9 @@ because 15 of its 44 "errors" were gold's. `python3 scripts/show_results.py --go
 **The fixes came out of arm A's dump**, so arm A's v3 column is not independent of v3 the way arm
 B's is. On G1e the sign is visible on three rows: A rises, B falls.
 
-**THE INTENTS LAW PACK IS WAITING ON THE OPERATOR** —
+**THE INTENTS LAW PACK IS WAITING ON THE OPERATOR** (and `docs/PROMPT-4.5d.md` is queued —
+untracked, with `docs/SPEC.md` and `docs/STATUS.md` modified; team-lead files, committed by that
+prompt's own step 0, never edited here) —
 `data/annotation/audit_45a/intents-law-review.md` (Russian, gitignored data; the builder
 `scripts/build_intents_law_pack.py` is committed). The guideline's `[]` rules **sliced verbatim**
 from `docs/annotation/comments.md` with line citations, beside the 19 agreed-`[]` rows ruled

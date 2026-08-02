@@ -1,8 +1,8 @@
-# market-pulse-llm — Project Specification (rev. 3.7)
+# market-pulse-llm — Project Specification (rev. 3.8)
 
 **Status:** APPROVED rev. 3 (2026-07-26); amendment 3.1 approved 2026-07-27;
 amendments 3.2 and 3.3 approved 2026-07-28; amendments 3.4–3.6 approved
-2026-08-01; amendment 3.7 approved 2026-08-02.
+2026-08-01; amendments 3.7 and 3.8 approved 2026-08-02.
 **Amendment 3.1:** EN removed from per-language gates — the collected corpus
 contains 8 EN comments out of 2,000 sampled (retail channels post in UA); a
 per-language metric over n=8 is meaningless. Gates run on UA and RU. The model
@@ -125,6 +125,32 @@ changes in 4.5a: gold re-adjudication, if the audit justifies it, is a
 separate test-set-v3 decision at the 4.5a gate with honest versioning (all
 old runs re-scored from their dumps at $0). Output: per-head ceiling
 estimate, gold-error rate, error taxonomy.
+**Amendment 3.8 (intents law gate, 2026-08-02):** the operator, in a
+structured interview over the audited rows, resolved the intents question in
+two parts. (1) **The old law largely stands where it was challenged:** 17 of
+the 19 disputed `[]` control rows are confirmed correct under the Phase-2
+guideline (emoji-only, thanks, jokes, giveaway distrust); those control
+verdicts are recorded as a context artifact — the audit pack showed the
+intents field WITHOUT sentiment and sarcasm, inviting conflation (a pack
+design flaw, recorded). The 4.5b "22/40 incorrect" figure therefore does NOT
+mean mass mislabeling under the old law. (2) **The taxonomy changes — v2
+adds a sixth intent `service`** (operator product decision): "interaction
+with the retailer as a service — in-store and online service, the delivery
+PROCESS, app/checkout, support hotline, staff, and the organization of
+promos and giveaways (mechanics, fairness, communication)". The WIDE
+boundary was chosen explicitly: giveaway-distrust rows move from `[]` to
+`service`; `availability` keeps product presence/stock/delivery-of-the-
+product; co-occurrence (`service` + product intents) is allowed. The three
+audited non-empty rows fall into the service family under v2.
+Pre-registered consequences, executed as 4.5d (prep, $0-ish) then 4.5e
+(label + retrain), each gated: guideline v2; intents re-label of ALL
+labeled data via the Phase-2 pipeline with operator calibration (the same
+≥90% pre-registered threshold); test **v4** = v3 + the re-labeled intents
+column; the T1 prompt grows the sixth class, so G1c re-anchors on a fresh
+own-pod zero-shot of the base model with the v2 prompt (old prompt SHAs
+remain valid for old records); one retrain; new program bars pre-registered
+BEFORE the retrain is scored. Timing: combined with the corpus up-labeling
+(its appetite is decided at the 4.5d gate on concrete candidate counts).
 **Date:** 2026-07-26 · **Team lead:** Fable session · **Executor:** Claude Code
 **Repo folder:** `/Users/hdv_1987/Desktop/Projects/market-pulse-llm`
 **rev. 3 change (operator decision):** producers in Ukraine barely use Telegram for
