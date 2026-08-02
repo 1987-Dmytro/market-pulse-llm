@@ -110,26 +110,14 @@ def test_blind_is_a_seeded_coin_flip():
     assert set(draws()) == {"A", "B"}, "a flip that never lands on both sides is not blinding"
 
 
-def test_the_pack_never_names_a_side():
-    """The vocabulary check the verify-gate runs, as a test that travels with the code."""
-    rows = [comment("c1", "positive"), comment("c2", "negative")]
-    predicted = {
-        "c1": {"sentiment": "negative", "sarcasm": False, "intents": []},
-        "c2": {"sentiment": "positive", "sarcasm": False, "intents": []},
-    }
-    pack, _ = build_audit_pack.build(
-        {"comments_test": rows, "posts_test": [], "sarcasm_holdout": []},
-        {"comments_test": predicted, "posts_test": {}, "sarcasm_holdout": {}},
-        ALIASES,
-        [],
-    )
-    text = json.dumps(pack["blinded"], ensure_ascii=False).casefold()
-    for word in ("model", "gold", "pred", "truth", "arm"):
-        assert word not in text
-
-
 def written_pack(tmp_path):
-    """A two-row pack on disk, written by the builder's own writer."""
+    """A two-row pack on disk, written by the builder's own writer.
+
+    The blinding is checked here and only here, through the same
+    :func:`build_audit_pack.blinding_sweep` the builder refuses on, against the
+    same :data:`market_pulse.audit.ATTRIBUTION` list. A second check with its own
+    copy of the word list would pass forever after someone extends the real one.
+    """
     rows = [comment("c1", "positive"), comment("c2", "negative")]
     predicted = {
         "c1": {"sentiment": "negative", "sarcasm": False, "intents": []},
