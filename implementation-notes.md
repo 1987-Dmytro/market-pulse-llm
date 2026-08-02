@@ -936,3 +936,140 @@ scoping figure and not a measurement, and the full pass is why.
 - **A retry is only cheap if the run can be resumed by id.** The retries cost $0.017 against a
   first pass of $0.53 — 3% — because `--resume` re-asks exactly the rows that have no answer. A
   re-run of the file would have cost thirty times that and produced a different measurement.
+
+# Phase 4.5f — the verdicts read, three rulings applied, and the emptied rows counted
+
+$0. Four steps, five commits, no API call. The re-label is **accepted**: 100 of 100 gated rows
+came back `correct`, against a bar of 0.90 registered before the pack went out.
+
+## The gate is arithmetic, and the arithmetic is checked against the sealed bytes
+
+`scripts/read_calibration_returns.py` does not read the returns and add them up. It rebuilds the
+pack first — `build_calibration_pack.load_pairs` → `strata` → the two row builders, seed 42, the
+two sample sizes taken from the manifest rather than from the builder's constants — serializes it
+in the builder's own dialect and requires the result to hash to the sha256 the manifest pins. It
+does: `f26fb86c…` for `gated.csv`, `6192643a…` for `changed.csv`. Only then are the returned cells
+compared, one cell at a time, because a spreadsheet round-trip changes bytes (`;`, a BOM, `Old` for
+`old`) and changes no row.
+
+Three refusals carry it: an unknown verdict form stops the run (`'правильно' is not one of
+['correct', 'incorrect']`); a returned row whose `intents` cell was retyped stops it; rows that
+came back in a different order stop it, positionally *and* by id. `verdict` and `notes` are the
+only two mutable columns — `notes` because 11902 came back carrying the team lead's transcription
+of the operator's dictation.
+
+A blank gated cell is not a missing row. `results/calib_45e_manifest.json` registered it as
+disagreement before the pack shipped, so it counts against the bar and the run continues. The real
+returns contain no blanks, which is exactly why the behaviour has its own fixture rather than
+sharing one with the unknown-form control.
+
+**The record keeps the counter-signal beside the number, not under it.** `gate` is 100/100 = 1.00,
+PASS. `diagnostic` is 47 `new` / 2 `old` / 1 `neither`, labelled as not gated and unable to move
+the verdict. Both are in `results/calib_45e_verdict.json`, with the rule quoted verbatim and every
+per-row verdict.
+
+## The three rulings, and what makes each one law
+
+| id | text | staged v2 | ruling | authority |
+|---|---|---|---|---|
+| `@VARUS_channel:11972` | `Картопля з печінкою` | `[]` | `["taste"]` | diagnostic verdict `old` |
+| `@VARUS_channel:11960` | `З вишнею` | `[]` | `["taste"]` | diagnostic verdict `old` |
+| `@VARUS_channel:11902` | `…зʼявився суп том ям` | `["availability"]` | `["taste"]` | verdict `neither` + dictation |
+
+All three are in `comments_train_tax2.jsonl` and the diff is three lines. `old` is never retyped
+into the ruling table: a row ruled `old` has its v1 label read out of the **source** file and the
+run stops if the two disagree — which is the check that would have caught a transcription slip.
+The dictated one cannot be checked that way, so it is carried by its `neither` cell plus the table,
+and the record says so; a notes cell is free text and is never validated.
+
+Each rewritten line goes through `relabel.relabelled`, so putting the old intents back has to
+reproduce the staged line byte for byte. A second run reports `already ['taste'] — nothing to
+apply` and writes nothing, including the record.
+
+**The drift block of `results/relabel_45e.json` is deliberately not recomputed.** It is what the
+calibration judged; a block silently corrected by its own verdicts stops describing the thing that
+was verdicted. The `fixes` block beside it names each row, both values, the authority, and the
+staged sha on either side — which is also the only place the chain from the sealed manifest's
+`staged` hashes to the current bytes is written down.
+
+A consequence worth stating: **the reader now refuses to run.** `comments_train_tax2.jsonl` hashes
+to `e5a52a08…` where the sealed manifest pins `d2132c1e…`, and the refusal names
+`results/calib_45e_verdict.json` as the place the gate was computed. That is the intended end
+state, not a regression — the gate is a measurement of a corpus that has since been corrected.
+
+## The emptied rows: 97, and a third of the drift the taxonomy cannot explain
+
+| population | rows | changed | changed w/o `service` | emptied | share of the unexplained |
+|---|---:|---:|---:|---:|---:|
+| all | 3249 | 1474 | 473 (14.6%) | **97** | **20.5%** |
+| scoreable | 2059 | 1018 | 311 (15.1%) | **96** | **30.9%** |
+| `unclear` | 1190 | 456 | 162 (13.6%) | 1 | 0.6% |
+
+"The 15%" is `changed_without_service_rate`, and it resolves two ways: 14.6% over all 3,249 rows
+(the 473 the prompt names) and 15.1% over the 2,059 a gate scores. The decomposition is
+**97 emptied + 376 other = 473** overall, and **96 + 215 = 311** on the population that matters.
+
+Length, as quantiles because the distribution is long-tailed:
+
+| | n | p25 | median | p75 | max |
+|---|---:|---:|---:|---:|---:|
+| emptied | 97 | 8 | **18** | 30 | 247 |
+| the rest | 3152 | 24 | **55** | 109 | 2677 |
+
+The label they lost: `taste` 40, `price` 29, `availability` 12, `packaging` 9, `quality` 6,
+`packaging + quality` 1.
+
+The premise is measured, not cited. `prompts.build_messages(TASK, row["text"])` is rendered for a
+row that carries all four context fields, and `parent_msg_id`, `msg_id`, `channel` and `date` are
+required to be absent from it — so a future change that starts threading a parent into the prompt
+ends this explanation instead of leaving it stale. **All 3,249 re-labelled rows are replies**;
+the reply share therefore separates nothing, and that is the finding: the parent is missing for
+the whole corpus and only bites where the comment alone carries no intent.
+
+The three rulings are **reversed** before counting. This measures the re-labeller, and two of the
+three ruled rows are the cleanest instances of the class being measured — leaving them corrected
+would have understated it by 2. `changed` 1474 and `changed_without_service` 473 come out equal to
+the 4.5e record's own numbers, which is the check that the reversal restored exactly the model's
+output. A re-run reproduces every number byte for byte; only the `git` block moves.
+
+## Deviations from `docs/PROMPT-4.5f.md`
+
+1. **The reader stops working after step 2, by design.** It sha-pins the staged files against the
+   sealed manifest, and step 2 moves them. The alternative — un-applying known fixes inside the
+   reader — buys re-runnability for a one-time gate at the cost of a code path that could rewrite
+   history. The refusal names the record instead.
+2. **The rulings table lives in code, checked against the verdict record.** Every id must carry the
+   stated non-`new` verdict in `results/calib_45e_verdict.json` or the run stops. A ruling that no
+   returned cell backs is a label invented by the executor.
+3. **The drop measurement reverses the fixes.** Not asked for; without it the number depends on
+   which side of step 2 the script runs on, and it drops the two rows that are the best evidence
+   for the hypothesis.
+4. **The measurement is split three ways** (all / scoreable / `unclear`), following 4.5e's own
+   split. The prompt names one share; the gate's population gives a different one (31% against
+   20.5%) and reporting only the first would understate it.
+5. **The micro-pack ships a README.** The prompt asks for the CSV and its manifest. Twelve lines
+   of Russian say what an `intents_v2` cell looks like (`["taste", "service"]`), that `[]` is a
+   real answer, and that `intents_v1` is a reference and not a proposal — the alternative is a
+   round-trip with the operator over cell format.
+6. **The micro-pack's row set is derived twice.** Source minus staged minus frozen, against the
+   unusable ids the paid runs recorded; a disagreement stops the build. A list of failures is the
+   kind of set that quietly becomes "the ones I happened to collect".
+7. **The micro-pack stays gitignored, its manifest is committed.** The pack convention. The filled
+   `gated.csv` and `changed.csv` were committed with `git add -f` because the prompt asks for the
+   operator-filled pack and those three files are now the authority a gate was computed from.
+8. **Four scripts, four records.** `read_calibration_returns.py`, `apply_calibration_rulings.py`,
+   `measure_empty_drop.py`, `build_micro_pack.py` — one per step, each with its own tests, because
+   the four have different write scopes (nothing / the corpus / nothing / a new pack).
+
+## Two things the next session should not relearn
+
+- **A gate computed from a returned file is only as good as the file it is compared to.** Hashing
+  the *returns* proves nothing — they are supposed to differ. What has to be proved is that the
+  thing they are compared against is the thing that went out, and the only way to say that is to
+  rebuild it and match the sealed sha. It cost one `lineterminator="\n"` and bought the whole
+  chain.
+- **An operator ruling and a model measurement pull in opposite directions on the same rows.**
+  Applying the rulings makes the corpus better and the measurement of the model worse, because the
+  corrected rows are the evidence. Whichever artifact the number is about has to be reconstructed
+  explicitly — and how many rows were reconstructed has to be printed, or the number silently means
+  something different depending on the order the scripts ran in.
