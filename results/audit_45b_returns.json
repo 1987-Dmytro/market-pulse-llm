@@ -1,0 +1,78 @@
+{
+  "normalized_by": "scripts/normalize_audit_returns.py",
+  "returns_path": "data/annotation/audit_45a_returned",
+  "pack_path": "data/annotation/audit_45a",
+  "manifest_path": "results/audit_45a_manifest.json",
+  "key_sha256": "67bc859658f3663f0a2495fe02224dc50b846dd397219027d98cec009b175356",
+  "verdict_forms": {
+    "A — правильная метка label_A": "A",
+    "B — правильная метка label_B": "B",
+    "ambiguous — по тексту решить нельзя": "ambiguous",
+    "correct": "correct",
+    "incorrect": "incorrect"
+  },
+  "files": {
+    "comments_sentiment.csv": {
+      "rows": 35,
+      "raw_sha256": "c590192f404958ef4df976a1c58dce8f91769f55d5506b7334726c351e15d427",
+      "sealed_sha256": "250b0ec8f24d980f2cd07e7c8234189bc95f992295542d533f424d36c4fbb674",
+      "normalized_sha256": "d63899e815c937455e61fa0b927f48e2ac19297099fd2fe52b16498c95b7c8aa",
+      "verdicts": {
+        "A": 19,
+        "B": 16
+      }
+    },
+    "comments_intents.csv": {
+      "rows": 67,
+      "raw_sha256": "e1333a8aaf5f8aedddc2dc3df2518e093c8663c80f7ea49d72690df75e7f0d77",
+      "sealed_sha256": "f30a0d1a7289cce759561afe73086861e1da4aea6b4cf88d664615435fcb0832",
+      "normalized_sha256": "e910d5918eff78464332c52352e6ca22682ef7ca4f43f4167b0d90cdbc76bc4b",
+      "verdicts": {
+        "A": 32,
+        "B": 33,
+        "ambiguous": 2
+      }
+    },
+    "slice_unfixed.csv": {
+      "rows": 23,
+      "raw_sha256": "6f0fd7ddc8f5622da70048774cd83aa0036f9dd1916b53e0c1588a6aa26885bd",
+      "sealed_sha256": "ced494d5d09782fd27f3c3651b96a2527c905cf7367f93901f34a474b5124b4e",
+      "normalized_sha256": "11c3f94145e3b741202fe143ade23bc24b501c93d99d6e22326a909a9b306d85",
+      "verdicts": {
+        "A": 3,
+        "B": 20
+      }
+    },
+    "posts.csv": {
+      "rows": 15,
+      "raw_sha256": "e254499abf40e25723e06fd985e1aa6779f6f06ba84d24bd6ec8c9c8dddec93f",
+      "sealed_sha256": "7c277c22b3ece8e2f0fceabca482b11e39890f53ce816f313bbcc9222fd2837a",
+      "normalized_sha256": "534d36daf8d7d9c2c43f237dcaee38870bc3bbbcc12d5ecd22517086a70e5a50",
+      "verdicts": {
+        "A": 7,
+        "B": 8
+      }
+    },
+    "control.csv": {
+      "rows": 104,
+      "raw_sha256": "4410090fa95f0c01aa936ce97218d67f4ab308569945e88807bbaab8adc02dbd",
+      "sealed_sha256": "0a832769b16e86f75e913f5fd683799f4fab5c3063d95662917f9abeb5b2d2e8",
+      "normalized_sha256": "19cfad71a626b7f3b4671dac9e577878fb2bfc0a860498578d783e8e4635ba3d",
+      "verdicts": {
+        "correct": 81,
+        "incorrect": 23
+      }
+    }
+  },
+  "git": {
+    "commit": "62784c8c82a525993eba6d3a13e3d9e385b6e5ea",
+    "dirty": [
+      "knowledge/daily_logs/2026-08-02.md",
+      "knowledge/hot.md",
+      "knowledge/index.md",
+      "scripts/build_audit_pack.py",
+      "scripts/normalize_audit_returns.py",
+      "tests/test_normalize_returns.py"
+    ]
+  }
+}

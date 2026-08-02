@@ -159,19 +159,20 @@ def digest(path: Path) -> str:
     return sha256(path.read_bytes()).hexdigest()
 
 
-def git_state() -> dict:
+def git_state(mine: Path) -> dict:
     """HEAD plus the paths that differ from it — a file cannot name the commit
-    that will contain it, so the honest record is what it was built against."""
+    that will contain it, so the honest record is what it was built against.
+
+    ``mine`` is the record being written: it is left out of its own dirty list,
+    being dirty on every rerun and absent on the first, which would make the field
+    say more about how often this ran than about what it ran against."""
 
     def run(*args: str) -> str:
         return subprocess.run(
             ["git", *args], cwd=REPO_ROOT, capture_output=True, text=True, check=True
         ).stdout
 
-    # The manifest is left out of its own dirty list: it is dirty on every rebuild
-    # and absent on the first, which would make the field say more about how often
-    # this ran than about what the pack was built against.
-    mine = str(MANIFEST.relative_to(REPO_ROOT))
+    mine = str(mine.relative_to(REPO_ROOT)) if mine.is_relative_to(REPO_ROOT) else str(mine)
     dirty = [line.split(maxsplit=1)[1] for line in run("status", "--porcelain").splitlines()]
     return {"commit": run("rev-parse", "HEAD").strip(), "dirty": [p for p in dirty if p != mine]}
 
@@ -380,7 +381,7 @@ def main(argv: list[str] | None = None) -> int:
         },
         "readme_sha256": digest(PACK / "README-audit.md"),
         "strata": strata,
-        "git": git_state(),
+        "git": git_state(MANIFEST),
     }
     MANIFEST.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
