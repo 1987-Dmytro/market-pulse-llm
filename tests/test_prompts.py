@@ -267,11 +267,11 @@ def test_build_messages_refuses_a_half_applied_change_in_both_directions():
     """The negative control on the plumbing: a with-post prompt rendered without a post
     promises the model something that is not there, and a v1 prompt handed one would
     silently produce a measurement nothing recorded."""
-    with pytest.raises(ValueError, match="required"):
+    with pytest.raises(ValueError, match="requires"):
         prompts.build_messages("T1v2_with_post", "Так")
-    with pytest.raises(ValueError, match="not part of this"):
+    with pytest.raises(ValueError, match="takes no"):
         prompts.build_messages("T1v2", "Так", parent="Новинка")
-    with pytest.raises(ValueError, match="not part of this"):
+    with pytest.raises(ValueError, match="takes no"):
         prompts.build_messages("relabel_intents_v2", "Так", parent="")
 
 

@@ -352,8 +352,8 @@ def build_messages(task: str, text: str, parent: str | None = None) -> list[dict
     tag = DELIMITERS[task]
     if (task in WITH_POST) != (parent is not None):
         raise ValueError(
-            f"{task}: a parent post is {'required' if task in WITH_POST else 'not part of this'}"
-            f" prompt, and {'none' if parent is None else 'one'} was given"
+            f"{task}: this prompt {'requires' if task in WITH_POST else 'takes no'} parent post,"
+            f" and {'none' if parent is None else 'one'} was given"
         )
     row = f"<{tag}>\n{text}\n</{tag}>"
     if parent is None:
