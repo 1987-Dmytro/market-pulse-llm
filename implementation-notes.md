@@ -613,3 +613,29 @@ appended: identical both times, so the sync is verified rather than assumed.
 - **Two runs of the same arm at the same seed do not give the same loss.** 0.18010 against 0.18051
   at step 5, identical data and config on the same pod. Say "paired on data and config", never
   "identical".
+
+# Phase 4.5a — the audit pack, and one finding filed rather than fixed
+
+## Registry brand normalization does not fold Unicode homoglyphs
+
+Found while building the 4.5a pack, on the four rows where arm A and gold disagree on `brands`
+(G1e's whole disagreement stratum). One of them is not a semantic disagreement at all: gold carries
+a watchlist `brand_id`, the model emitted a mention spelled with a **Cyrillic `о` in a Latin-script
+word**, and `scorer.normalise_brand` casefolds it and looks it up in `watchlist_aliases` — where it
+misses, because the alias table is keyed on the Latin spelling. Two strings that render identically
+score as two different entities: one false positive and one false negative on a metric whose whole
+gold stratum is 246 posts.
+
+**Filed, not fixed — deliberately.** `docs/PROMPT-4.5a-add.md` §3 says so, and the reason outlives
+the prompt: a normalization change would silently redefine every future G1e number against every
+past one. The Phase 3 baselines, the own-pod anchor and both Phase 4 arms were all scored through
+today's `normalise_brand`; folding homoglyphs would make the next G1e incomparable to all of them
+without a single line of the change saying so. It is a test-set-v3-shaped decision, not a bug fix,
+and it belongs to the 4.5 follow-ups with its own re-scoring plan (every old run can be re-scored
+from its persisted dump at $0 — that is what makes the deferral cheap).
+
+**What it costs meanwhile:** G1e's disagreement stratum is n=4 and at least one of the four is this
+artifact, so the effective semantic n is ≤3. The brands ceiling is not estimable from this audit at
+any confidence, whatever the operator rules on those four rows. The operator still judges them —
+the executor does not pre-empt a verdict — but the harness's brands line should be read as a
+placeholder, not a measurement.

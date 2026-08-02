@@ -31,29 +31,39 @@ d5c6a24 feat: arm B, the rule, and the five verdicts — 4c is executed
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-02 (`PROMPT-4.5a` — **Phase 4.5 is OPEN and 4.5a's audit pack is built**: 140 blinded disagreement rows + a 40-row control await the operator, and the ceiling harness is committed but unrun. Phase 4 stays closed at 2 of 5; edited by hand — the section above is auto-generated, do NOT touch the marker)
+**Last update:** 2026-08-02 (`PROMPT-4.5a-add` — **the pack is ACCEPTED and the ceiling formula APPROVED**; control widened 40 → 104 rows, so **244 rows await the operator**, and the harness is hardened but still unrun. Phase 4 stays closed at 2 of 5; edited by hand — the section above is auto-generated, do NOT touch the marker)
 
 ## 🔥 What's Hot
 
-**PHASE 4.5a IS BUILT AND WAITING ON THE OPERATOR (2026-08-02).** Amendment 3.7 inserts Phase 4.5
-— a ceiling-driven quality program — before Phase 5, because the operator's 0.98 target sits above
-the instrument: comment gold was calibrated at 96.3% agreement. **The adjudication pack is
-`data/annotation/audit_45a/` (gitignored data; `scripts/build_audit_pack.py` is the committed,
-deterministic builder, seed 42).** 180 rows: sentiment **35** · intents **67** · slice pair **23** ·
-posts (post_type 11 + brands 4) **15** · control **40**. **Every disagreement row shows two
-candidate labels as `label_A`/`label_B` in per-row random order and NOTHING says which is whose** —
-the key is `data/annotation/audit_45a_key.json`, outside the folder the operator opens, and its
-sha256 lives in the committed `results/audit_45a_manifest.json` beside every CSV's. **The executor
-does not pre-fill, suggest or comment on a verdict** (SPEC §10). Nothing was judged, re-scored, or
-written back to a frozen file.
+**PHASE 4.5a IS ACCEPTED AND WAITING ON THE OPERATOR (2026-08-02) — 244 rows.** Amendment 3.7
+inserts Phase 4.5 — a ceiling-driven quality program — before Phase 5, because the operator's 0.98
+target sits above the instrument: comment gold was calibrated at 96.3% agreement. **The
+adjudication pack is `data/annotation/audit_45a/` (gitignored data; `scripts/build_audit_pack.py`
+is the committed, deterministic builder, seed 42).** 140 disagreements — sentiment **35** · intents
+**67** · slice pair **23** · posts **15** (post_type 11 + brands 4) — plus **control 104**
+(sentiment 40 · intents 40 · the other three 8 each, operator decision after the formula review).
+**Every disagreement row shows two candidate labels as `label_A`/`label_B` in per-row random order
+and NOTHING says which is whose** — the key is `data/annotation/audit_45a_key.json`, outside the
+folder the operator opens, and its sha256 lives in the committed
+`results/audit_45a_manifest.json` beside every CSV's. **The executor does not pre-fill, suggest or
+comment on a verdict** (SPEC §10). Nothing was judged, re-scored, or written back to a frozen file.
 
-**`scripts/audit_ceiling.py` is built and MUST NOT RUN YET** — the team lead reviews its formula
-before any verdict is ingested, and it refuses while a single verdict cell is empty. It prints
-**two ceilings that are not interchangeable**: the *metric-unit* one re-scores a simulated perfect
-model through `scorer.py` (comparable to a G1a/G1c bar, and an **upper bound** — it sees only the
-disagreement stratum), and the *accuracy-unit* one counts both strata and is **not comparable to an
-F1 bar**. The agreement stratum is ~90% of every head and is measured at **n=8**, so the harness
-prints a sensitivity line beside the point estimate.
+**The expansion did not resample the accepted pack.** All four disagreement CSVs and the key are
+byte-identical to the accepted build, and the accepted 40 control rows are present verbatim inside
+the 104: every head draws its first 8 before any head draws a top-up, so the seeded stream that
+produced them is untouched. Widening a stratum by resampling it would make "the same pack,
+expanded" a claim nobody could check.
+
+**`scripts/audit_ceiling.py` is hardened and still MUST NOT RUN** — the formula is approved, but it
+waits for filled CSVs and refuses while a single verdict cell is empty, on an unknown column
+(a spreadsheet round-trip is how one appears), on an edited label, or on a regenerated key. It
+prints **two ceilings that are not interchangeable**: the *metric-unit* one re-scores a simulated
+perfect model through `scorer.py` (comparable to a G1a/G1c bar, and an **upper bound** — it sees
+only the disagreement stratum), and the *accuracy-unit* one counts both strata and is **not
+comparable to an F1 bar**. The agreement stratum is ~90% of every head, so the harness prints a
+sensitivity line beside the point estimate. **What the expansion bought:** one extra `incorrect`
+now moves sentiment **2.28 pp** and intents **2.08 pp**, against **11.41** and **10.41 pp** at n=8.
+The other three heads still sit at n=8 and their ceilings are read at that resolution.
 
 **PHASE 4 IS CLOSED AT 2 OF 5 (2026-08-02) — accepted, and the one attempt is spent.** The team
 lead recomputed every verdict number **bit-exact from the per-row dumps**, re-ran the selection
@@ -186,11 +196,11 @@ files**: `comments_train.jsonl` (1600) + `sarcasm_candidates.jsonl` (746) plus
 
 ## ⏭️ Next
 
-1. **The operator adjudicates `data/annotation/audit_45a/` on their own clock. Nothing else moves
-   until the CSVs come back.** The team lead reviews the ceiling formula in parallel; the harness
-   runs only after BOTH — the formula approved and the verdicts filled. Do not rebuild the pack
-   once a verdict cell is filled (`build_audit_pack.py` refuses without `--force`, and that is the
-   point).
+1. **The operator adjudicates the 244-row `data/annotation/audit_45a/` on their own clock. Nothing
+   else moves until the CSVs come back.** The formula is already approved, so the harness runs the
+   moment the verdicts are filled — and not before. **Do not rebuild the pack once a verdict cell
+   is filled** (`build_audit_pack.py` refuses without `--force`, and that is the point); the
+   expansion was legal only because every cell was still empty and that was checked first.
 2. **Phase 5 is still PAUSED** — nothing Phase-5-shaped is scoped, planned or started; 4.5 comes
    first (operator sequencing decision, amendment 3.7). Everything after 4.5a — targeted
    re-labelling at scale, synthetic v2, a dev-set hyperparameter search — is **DEFERRED until
@@ -222,6 +232,14 @@ matrix is frozen. CPU beats MPS by 14×, which is the opposite of the intuition.
 
 ## ⚠️ Footguns for the next run
 
+- **Registry brand normalization does not fold Unicode homoglyphs.** A mention spelled with a
+  Cyrillic `о` inside a Latin-script brand casefolds to a token the watchlist alias table misses,
+  so two strings that render identically score as two different entities — one FP and one FN on
+  G1e. Found on the 4.5a brands stratum (n=4, so at least a quarter of it). **The fix is deferred
+  to the 4.5 follow-ups on purpose: a normalization change mid-audit would silently redefine future
+  G1e numbers against past ones** — Phase 3, the own-pod anchor and both arms were all scored
+  through today's `normalise_brand`. Do not "just fix" it; it is a re-scoring decision with a plan,
+  and every old run can be re-scored from its dump at $0 (`implementation-notes.md`, Phase 4.5a).
 - **The results record holds TWO rows under the gate id `G1d`** — post_type, which gates, and
   relevance, which amendment 3.3 reports beside it and never inside it. A dict keyed by gate id
   returns the relevance number and a bar that looks entirely plausible (0.9315 instead of 0.8984).
