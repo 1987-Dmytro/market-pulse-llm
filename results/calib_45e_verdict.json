@@ -1,0 +1,808 @@
+{
+  "read_by": "scripts/read_calibration_returns.py",
+  "pack": "data/annotation/calib_45e",
+  "manifest": "results/calib_45e_manifest.json",
+  "rule": "agreement = rows marked `correct` / 100 rows shipped. A blank cell or any other value counts as disagreement. Registered before the pack was handed over and not recomputed on any other denominator.",
+  "bar": 0.9,
+  "gate": {
+    "rows": 100,
+    "correct": 100,
+    "tally": {
+      "correct": 100
+    },
+    "agreement": 1.0,
+    "verdict": "PASS"
+  },
+  "diagnostic": {
+    "rows": 50,
+    "tally": {
+      "neither": 1,
+      "new": 47,
+      "old": 2
+    },
+    "note": "Not gated and it does not move the verdict above — the manifest registered the gate on gated.csv alone. It stands beside the gate number rather than under it: the diagnostic shows the old label beside the new one and is the sharper instrument, so a disagreement here is a signal about the re-label that the gated hundred, judging a label with no contrast, cannot produce."
+  },
+  "verdict_forms": {
+    "gated.csv": {
+      "correct": "correct",
+      "incorrect": "incorrect"
+    },
+    "changed.csv": {
+      "old": "old",
+      "new": "new",
+      "neither": "neither"
+    }
+  },
+  "blank_counts_as": "(blank)",
+  "returned_sha256": {
+    "gated.csv": "1b8194b9492ca1e0843aca2067f75778c0ac7ad511b0a699094aa90256e288ec",
+    "changed.csv": "e5ca21ed40a33abd388c7f5fdd6b1870282817b410e221f474935fe30bdb9422"
+  },
+  "sealed_sha256": {
+    "gated.csv": "f26fb86c9a941019dded4803a9913f30ad6d85ed0a933dc44e4ec98a0d8d370d",
+    "changed.csv": "6192643ae1a7a679b53cf5ab38052d0da239557b69e7003a61caabcb48178186"
+  },
+  "rows": {
+    "gated": [
+      {
+        "id": "@VARUS_channel:4940",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:12271",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:18889",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:14259",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:10350",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:7535",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:4153",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:2222",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:372",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:13157",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:128",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:32",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@msuaaaa:9810",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:11961",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:12322",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@msuaaaa:6664",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:2988",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@msuaaaa:9965",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:9947",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:19633",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:10452",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:8889",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:3818",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:8238",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:19579",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:8669",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@msuaaaa:9006",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:7799",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:4093",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:3073",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:11873",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:3370",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@msuaaaa:11298",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:8925",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:17804",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:14908",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@msuaaaa:11612",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:6566",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:11646",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:20174",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:266",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@msuaaaa:13136",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@msuaaaa:4256",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:18881",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:15491",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:11339",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:21628",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:20460",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:11976",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:4016",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@msuaaaa:10800",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@msuaaaa:7632",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:9003",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:10161",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@msuaaaa:10181",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@msuaaaa:8033",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:18001",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:19075",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:9738",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:13913",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:9033",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@msuaaaa:12206",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:11742",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:18246",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@msuaaaa:9930",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:6735",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:17037",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:11559",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:13179",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:6092",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:1820",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:18085",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:18494",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@msuaaaa:8335",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:5988",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@msuaaaa:8483",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@msuaaaa:9563",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:16521",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@msuaaaa:11498",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:7789",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:17806",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:1460",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:17701",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:5055",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:1756",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@msuaaaa:13519",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@msuaaaa:9839",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:7472",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@msuaaaa:8753",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:2799",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:15588",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:4818",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:8391",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:8920",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:3769",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:18116",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:1371",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:12196",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@msuaaaa:13703",
+        "verdict": "correct",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:15610",
+        "verdict": "correct",
+        "notes": ""
+      }
+    ],
+    "changed": [
+      {
+        "id": "@VARUS_channel:8359",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:19215",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:11845",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:17984",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:8884",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:7764",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:7232",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:2391",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:16809",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:18103",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@msuaaaa:12274",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:179",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@msuaaaa:5405",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:4254",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:16859",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:6565",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:13461",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:11972",
+        "verdict": "old",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:11960",
+        "verdict": "old",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:17367",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:7139",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:7426",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:20664",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:7082",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:11902",
+        "verdict": "neither",
+        "notes": "operator: correct set is [\"taste\"] — dish-wish reads as flavour preference; dictated in chat 2026-08-02, transcribed by team lead"
+      },
+      {
+        "id": "@VARUS_channel:4844",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:6499",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:13597",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:9133",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:10469",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:13393",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:7171",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:16858",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:6561",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:8891",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:6666",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@msuaaaa:12388",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:10165",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:21170",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:6405",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:4473",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:10342",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@msuaaaa:6410",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:4218",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:7124",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:21576",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@msuaaaa:3856",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:17280",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:10112",
+        "verdict": "new",
+        "notes": ""
+      },
+      {
+        "id": "@VARUS_channel:1788",
+        "verdict": "new",
+        "notes": ""
+      }
+    ]
+  },
+  "git": {
+    "commit": "d81bb0a708ab5cfd03e8bf358d460cdabc2cc378",
+    "dirty": [
+      "scripts/read_calibration_returns.py",
+      "tests/test_calibration_returns.py"
+    ]
+  }
+}
