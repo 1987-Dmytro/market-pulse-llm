@@ -1,0 +1,126 @@
+{
+  "measured_by": "scripts/measure_empty_drop.py",
+  "question": "How many rows carried an intent under v1 and none under v2, how short they are, and how much of `changed_without_service` — the drift the taxonomy does not explain — they account for.",
+  "rulings_reversed": [
+    "@VARUS_channel:11902",
+    "@VARUS_channel:11960",
+    "@VARUS_channel:11972"
+  ],
+  "reversal_note": "The 4.5f operator rulings are put back to what the re-labeller produced. This measures the model, and two of the three ruled rows are the clearest instances of the class being measured — leaving them corrected would understate it.",
+  "premise": {
+    "checked_on": "@VARUS_channel:10017",
+    "row_fields_in_the_prompt": [
+      "text"
+    ],
+    "absent_from_the_prompt": [
+      "parent_msg_id",
+      "msg_id",
+      "channel",
+      "date"
+    ],
+    "replies_among_the_relabelled": 3249
+  },
+  "populations": {
+    "all": {
+      "rows": 3249,
+      "changed": 1474,
+      "changed_without_service": 473,
+      "changed_without_service_rate": 0.14558325638658048,
+      "emptied": 97,
+      "share_of_rows": 0.029855340104647583,
+      "share_of_changed_without_service": 0.20507399577167018,
+      "emptied_from": {
+        "taste": 40,
+        "price": 29,
+        "availability": 12,
+        "packaging": 9,
+        "quality": 6,
+        "packaging, quality": 1
+      },
+      "emptied_text": {
+        "rows": 97,
+        "chars_p25": 8.0,
+        "chars_median": 18,
+        "chars_p75": 29.5,
+        "chars_max": 247,
+        "reply_share": 1.0
+      },
+      "rest_text": {
+        "rows": 3152,
+        "chars_p25": 24.0,
+        "chars_median": 55.0,
+        "chars_p75": 109.0,
+        "chars_max": 2677,
+        "reply_share": 1.0
+      }
+    },
+    "scoreable": {
+      "rows": 2059,
+      "changed": 1018,
+      "changed_without_service": 311,
+      "changed_without_service_rate": 0.15104419621175327,
+      "emptied": 96,
+      "share_of_rows": 0.04662457503642545,
+      "share_of_changed_without_service": 0.3086816720257235,
+      "emptied_from": {
+        "taste": 40,
+        "price": 29,
+        "availability": 12,
+        "packaging": 8,
+        "quality": 6,
+        "packaging, quality": 1
+      },
+      "emptied_text": {
+        "rows": 96,
+        "chars_p25": 8.0,
+        "chars_median": 18.0,
+        "chars_p75": 28.8,
+        "chars_max": 247,
+        "reply_share": 1.0
+      },
+      "rest_text": {
+        "rows": 1963,
+        "chars_p25": 25.0,
+        "chars_median": 51,
+        "chars_p75": 101.0,
+        "chars_max": 1513,
+        "reply_share": 1.0
+      }
+    },
+    "unclear": {
+      "rows": 1190,
+      "changed": 456,
+      "changed_without_service": 162,
+      "changed_without_service_rate": 0.1361344537815126,
+      "emptied": 1,
+      "share_of_rows": 0.0008403361344537816,
+      "share_of_changed_without_service": 0.006172839506172839,
+      "emptied_from": {
+        "packaging": 1
+      },
+      "emptied_text": {
+        "rows": 1,
+        "chars_p25": 86,
+        "chars_median": 86,
+        "chars_p75": 86,
+        "chars_max": 86,
+        "reply_share": 1.0
+      },
+      "rest_text": {
+        "rows": 1189,
+        "chars_p25": 23.0,
+        "chars_median": 64,
+        "chars_p75": 121.5,
+        "chars_max": 2677,
+        "reply_share": 1.0
+      }
+    }
+  },
+  "git": {
+    "commit": "dce2f26462c1c9cf6249b3ee5ff914df84b442cd",
+    "dirty": [
+      "scripts/measure_empty_drop.py",
+      "tests/test_empty_drop.py"
+    ]
+  }
+}
