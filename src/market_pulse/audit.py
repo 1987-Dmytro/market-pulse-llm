@@ -63,6 +63,19 @@ VERDICTS = ("A", "B", "ambiguous")
 CONTROL_VERDICTS = ("correct", "incorrect", "ambiguous")
 """Agreement vocabulary: the shown label is right, wrong, or undecidable."""
 
+COLUMNS = ("head", "id", "text", "label_A", "label_B", "verdict", "notes")
+CONTROL_COLUMNS = ("head", "id", "text", "label", "verdict", "notes")
+"""The exact shape of a pack CSV, shared so the harness can refuse anything else.
+
+A spreadsheet round-trip is the realistic way a column appears — an autofilled
+helper column, a stray paste — and a harness that reads by name would not notice.
+The pack's columns are part of the sealed artifact, like the labels are."""
+
+ATTRIBUTION = ("model", "gold", "pred", "truth", "arm", "модел", "эталон", "золот")
+"""Words that would say which side a label came from. Checked against column
+names and every structural cell, never against the row's own ``text``: a comment
+is free to contain any of these, and dropping such rows would bias the pack."""
+
 
 def value(head: str, labels: dict, aliases: dict[str, str]):
     """The canonical object this head compares — same function for gold and prediction.

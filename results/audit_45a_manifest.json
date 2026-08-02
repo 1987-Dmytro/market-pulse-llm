@@ -37,11 +37,11 @@
       "sha256": "7c277c22b3ece8e2f0fceabca482b11e39890f53ce816f313bbcc9222fd2837a"
     },
     "control.csv": {
-      "rows": 40,
-      "sha256": "ad94a5a4311db80665ab067b9df34a030154eae9cb090a61424094992bd1ea1d"
+      "rows": 104,
+      "sha256": "0a832769b16e86f75e913f5fd683799f4fab5c3063d95662917f9abeb5b2d2e8"
     }
   },
-  "readme_sha256": "617abc7ef74327eebb2ec4bb179e8390a42564b10d0ccc88bcca7b5d2fe5d7bb",
+  "readme_sha256": "2f7a45aa7959de03f6e1c247d27b6a53ecef52bf046a965ad405ba655973c9ca",
   "strata": {
     "sentiment": {
       "gate": "G1a",
@@ -49,7 +49,7 @@
       "scoreable": 400,
       "disagreements": 35,
       "agreements": 365,
-      "control": 8
+      "control": 40
     },
     "intents": {
       "gate": "G1c",
@@ -57,7 +57,7 @@
       "scoreable": 400,
       "disagreements": 67,
       "agreements": 333,
-      "control": 8
+      "control": 40
     },
     "sarcasm_pair": {
       "gate": "G1b",
@@ -85,10 +85,9 @@
     }
   },
   "git": {
-    "commit": "b2772cef6c9e48ec594e6efaff4754ab8ec05160",
+    "commit": "f1a12218e79aaea04e5a4aeb86fd2f4f06244ce3",
     "dirty": [
       "knowledge/daily_logs/2026-08-02.md",
-      "knowledge/hot.md",
       "knowledge/index.md",
       "scripts/audit_ceiling.py",
       "scripts/build_audit_pack.py",

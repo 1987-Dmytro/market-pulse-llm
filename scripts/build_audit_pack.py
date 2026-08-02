@@ -50,9 +50,19 @@ MANIFEST = REPO_ROOT / "results" / "audit_45a_manifest.json"
 
 ARM = "real-only"
 SEED = 42
-N_CONTROL = 40
-COLUMNS = ("head", "id", "text", "label_A", "label_B", "verdict", "notes")
-CONTROL_COLUMNS = ("head", "id", "text", "label", "verdict", "notes")
+BASE_CONTROL = 8
+"""The accepted pack's per-head control draw, kept as the FIRST draw of the run.
+
+Widening a stratum must not resample it: the operator accepted a pack, and rows
+that silently changed underneath an accepted artifact would make "the same pack,
+expanded" a claim nobody could check. Every head still draws its 8 before any
+head draws its top-up, so the seeded stream up to that point is the stream that
+produced the accepted 40 rows."""
+
+N_CONTROL = {"sentiment": 40, "intents": 40, "sarcasm_pair": 8, "post_type": 8, "brands": 8}
+"""Per-head control size (operator decision, 2026-08-02). Sentiment and intents
+carry the two largest agreement strata and the two heads whose ceilings a phase
+decision will be read off, so their gold-error rate stops resting on n=8."""
 
 README = """# Аудит разногласий 4.5a — как заполнять
 
@@ -62,6 +72,16 @@ README = """# Аудит разногласий 4.5a — как заполнят
 кто из них прав** — и именно это надо выяснить. Ты единственный арбитр
 (SPEC §10). Результат: оценка потолка качества на этом тесте, то есть сколько
 может набрать идеальная модель против нашей нынешней разметки.
+
+**Всего строк: {total}.**
+
+| файл | строк | что судим |
+|---|---:|---|
+| `comments_sentiment.csv` | {comments_sentiment} | тональность комментария |
+| `comments_intents.csv` | {comments_intents} | набор интентов целиком |
+| `slice_unfixed.csv` | {slice_unfixed} | пара `sentiment` + `sarcasm` |
+| `posts.csv` | {posts} | тип поста и набор брендов |
+| `control.csv` | {control} | согласие: права ли общая метка |
 
 ## Как это устроено
 
@@ -100,8 +120,8 @@ README = """# Аудит разногласий 4.5a — как заполнят
 | `incorrect` | метка неверна — оба ошиблись одинаково |
 | `ambiguous` | не решается |
 
-Этот файл маленький, но он единственный измеряет ошибку разметки там, где
-никто не спорит. Не пропускай его.
+Этот файл — единственный, который измеряет ошибку разметки там, где никто не
+спорит. Он не «на сдачу»: по нему считается бо́льшая часть потолка. Не пропускай.
 
 ## Правила
 
@@ -122,6 +142,13 @@ README = """# Аудит разногласий 4.5a — как заполнят
 Туда же, где взял: `data/annotation/audit_45a/`, те же имена файлов.
 Потом скажи — считаем потолок.
 """
+
+
+def sizes(counts: dict[str, int]) -> dict[str, int]:
+    """CSV row counts keyed for :data:`README`'s placeholders, plus their total."""
+    return {path.removesuffix(".csv"): n for path, n in counts.items()} | {
+        "total": sum(counts.values())
+    }
 
 
 def load(path: Path) -> list[dict]:
@@ -192,9 +219,11 @@ def has_verdicts(directory: Path) -> list[str]:
 def build(rows: dict, predicted: dict, aliases: dict, slice_ids: list[str]) -> tuple[dict, dict]:
     """Every head's blinded disagreements and its control sample.
 
-    Two passes over the heads, each in :data:`market_pulse.audit.HEADS` order and
-    each drawing from one seeded generator, so the pack is a function of the seed
-    and the inputs alone.
+    Three passes over the heads, each in :data:`market_pulse.audit.HEADS` order
+    and all drawing from one seeded generator, so the pack is a function of the
+    seed and the inputs alone: blinding, then every head's :data:`BASE_CONTROL`
+    draw, then the top-ups. The order is the point — the top-up pass runs last so
+    it cannot move the stream that produced the accepted control rows.
     """
     rng = random.Random(SEED)
     universe = {
@@ -228,21 +257,55 @@ def build(rows: dict, predicted: dict, aliases: dict, slice_ids: list[str]) -> t
                 "label_B": cell["label_B"],
             }
 
-    per_head = N_CONTROL // len(audit.HEADS)
+    pools = {
+        head: audit.agreements(head, universe[head], predicted[audit.INPUT_OF[head]], aliases)
+        for head in audit.HEADS
+    }
+    picked = {
+        head: rng.sample(pools[head], min(BASE_CONTROL, len(pools[head]))) for head in audit.HEADS
+    }
+    for head in audit.HEADS:
+        already = {row["id"] for row in picked[head]}
+        remaining = [row for row in pools[head] if row["id"] not in already]
+        wanted = min(N_CONTROL[head] - len(picked[head]), len(remaining))
+        if wanted > 0:
+            picked[head] += rng.sample(remaining, wanted)
+
     control, strata = [], {}
     for head in audit.HEADS:
-        pool = audit.agreements(head, universe[head], predicted[audit.INPUT_OF[head]], aliases)
-        picked = sorted(rng.sample(pool, min(per_head, len(pool))), key=lambda row: row["id"])
-        control.extend({"head": head, **row, "verdict": "", "notes": ""} for row in picked)
+        rows_of_head = sorted(picked[head], key=lambda row: row["id"])
+        control.extend({"head": head, **row, "verdict": "", "notes": ""} for row in rows_of_head)
         strata[head] = {
             "gate": audit.GATE_OF[head],
             "input": audit.INPUT_OF[head],
-            "scoreable": len(blinded[head]) + len(pool),
+            "scoreable": len(blinded[head]) + len(pools[head]),
             "disagreements": len(blinded[head]),
-            "agreements": len(pool),
-            "control": len(picked),
+            "agreements": len(pools[head]),
+            "control": len(rows_of_head),
         }
     return {"blinded": blinded, "control": control, "key": key}, strata
+
+
+def blinding_sweep(directory: Path) -> list[tuple[str, str]]:
+    """Every structural cell of the pack that would say which side a label is from.
+
+    Column names and every cell except ``text`` and ``notes`` — the row's own text
+    is source data and may legitimately contain any of these words. Returns the
+    offenders as ``(file, cell)``; an empty list is the pack being blind.
+    """
+    found = []
+    for path in sorted(directory.glob("*.csv")):
+        with path.open(encoding="utf-8", newline="") as handle:
+            reader = csv.DictReader(handle)
+            cells = [path.name, *(reader.fieldnames or [])]
+            for row in reader:
+                cells += [v for k, v in row.items() if k not in ("text", "notes")]
+        found += [
+            (path.name, cell)
+            for cell in cells
+            if any(word in cell.casefold() for word in audit.ATTRIBUTION)
+        ]
+    return found
 
 
 def write_csv(path: Path, columns: tuple[str, ...], rows: list[dict]) -> None:
@@ -279,10 +342,20 @@ def main(argv: list[str] | None = None) -> int:
     for head in audit.HEADS:
         by_csv.setdefault(audit.CSV_OF[head], []).extend(pack["blinded"][head])
     for name, cells in by_csv.items():
-        write_csv(PACK / name, COLUMNS, cells)
-    write_csv(PACK / "control.csv", CONTROL_COLUMNS, pack["control"])
-    (PACK / "README-audit.md").write_text(README, encoding="utf-8")
+        write_csv(PACK / name, audit.COLUMNS, cells)
+    write_csv(PACK / "control.csv", audit.CONTROL_COLUMNS, pack["control"])
+    counts = {
+        **{name: len(cells) for name, cells in by_csv.items()},
+        "control.csv": len(pack["control"]),
+    }
+    (PACK / "README-audit.md").write_text(README.format(**sizes(counts)), encoding="utf-8")
     KEY.write_text(json.dumps(pack["key"], ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+    if leaks := blinding_sweep(PACK):
+        raise SystemExit(
+            f"the pack names a side in {len(leaks)} structural cell(s): {leaks[:3]}."
+            " A blinded artifact that says whose label is whose measures attribution, not judgement."
+        )
 
     manifest = {
         "built_by": "scripts/build_audit_pack.py",

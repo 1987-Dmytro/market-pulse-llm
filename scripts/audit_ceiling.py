@@ -67,9 +67,26 @@ def load_jsonl(path: Path) -> list[dict]:
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
 
 
-def read_csv(path: Path) -> list[dict]:
+def read_csv(path: Path, columns: tuple[str, ...]) -> list[dict]:
+    """A pack CSV, or a refusal naming the columns that are not the sealed ones.
+
+    A spreadsheet round-trip is how a column actually appears — an autofilled
+    helper, a stray paste, a re-export that renames one. Reading by name would
+    not notice, and an unknown column can hold anything, including an attribution
+    or a second opinion that the ingestion would silently ignore.
+    """
     with path.open(encoding="utf-8", newline="") as handle:
-        return list(csv.DictReader(handle))
+        reader = csv.DictReader(handle)
+        found = tuple(reader.fieldnames or ())
+        if unexpected := [name for name in found if name not in columns]:
+            raise SystemExit(
+                f"{path.name}: unknown column(s) {unexpected}. The pack's columns are"
+                f" {list(columns)} and they are part of the sealed artifact — remove the extra"
+                " column, or rebuild the pack if it belongs there."
+            )
+        if missing := [name for name in columns if name not in found]:
+            raise SystemExit(f"{path.name}: missing column(s) {missing} — this is not the pack")
+        return list(reader)
 
 
 def check_vocabulary(rows: list[dict], vocabulary: tuple[str, ...]) -> None:
@@ -82,10 +99,10 @@ def check_vocabulary(rows: list[dict], vocabulary: tuple[str, ...]) -> None:
 
 def rulings(pack: Path, key: dict, heads: list[str]) -> tuple[dict[str, list[dict]], list[dict]]:
     """The filled pack, checked against the key — or a refusal naming the defect."""
-    control = read_csv(pack / "control.csv")
+    control = read_csv(pack / "control.csv", audit.CONTROL_COLUMNS)
     disagreements: dict[str, list[dict]] = {head: [] for head in heads}
     for name in sorted({audit.CSV_OF[head] for head in heads}):
-        for row in read_csv(pack / name):
+        for row in read_csv(pack / name, audit.COLUMNS):
             entry = key.get(f"{row['head']}|{row['id']}")
             if entry is None:
                 raise SystemExit(f"{name}: {row['id']} ({row['head']}) is not in the key")

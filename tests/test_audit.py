@@ -128,6 +128,64 @@ def test_the_pack_never_names_a_side():
         assert word not in text
 
 
+def written_pack(tmp_path):
+    """A two-row pack on disk, written by the builder's own writer."""
+    rows = [comment("c1", "positive"), comment("c2", "negative")]
+    predicted = {
+        "c1": {"sentiment": "negative", "sarcasm": False, "intents": []},
+        "c2": {"sentiment": "positive", "sarcasm": False, "intents": []},
+    }
+    pack, _ = build_audit_pack.build(
+        {"comments_test": rows, "posts_test": [], "sarcasm_holdout": []},
+        {"comments_test": predicted, "posts_test": {}, "sarcasm_holdout": {}},
+        ALIASES,
+        [],
+    )
+    path = tmp_path / "comments_sentiment.csv"
+    build_audit_pack.write_csv(path, audit.COLUMNS, pack["blinded"]["sentiment"])
+    return path
+
+
+def test_blinding_sweep_passes_a_clean_pack(tmp_path):
+    written_pack(tmp_path)
+    assert build_audit_pack.blinding_sweep(tmp_path) == []
+
+
+def test_blinding_sweep_fails_a_planted_attribution(tmp_path):
+    """The negative control: a sweep that never fails is a ceremony, not a guard.
+
+    The leak this plants is the realistic one — not a word inside a label, but a
+    COLUMN whose name says which side its neighbour came from.
+    """
+    path = written_pack(tmp_path)
+    lines = path.read_text(encoding="utf-8").splitlines()
+    planted = [lines[0] + ",label_gold"] + [line + ",yes" for line in lines[1:]]
+    path.write_text("\n".join(planted) + "\n", encoding="utf-8")
+    found = build_audit_pack.blinding_sweep(tmp_path)
+    assert found and all(cell == "label_gold" for _, cell in found)
+
+
+def test_blinding_sweep_ignores_the_rows_own_text(tmp_path):
+    """A comment may legitimately say "модель" — dropping such rows would bias the pack."""
+    path = tmp_path / "comments_sentiment.csv"
+    build_audit_pack.write_csv(
+        path,
+        audit.COLUMNS,
+        [
+            {
+                "head": "sentiment",
+                "id": "c1",
+                "text": "ця модель холодильника — golden standard",
+                "label_A": "positive",
+                "label_B": "negative",
+                "verdict": "",
+                "notes": "",
+            }
+        ],
+    )
+    assert build_audit_pack.blinding_sweep(tmp_path) == []
+
+
 def test_has_verdicts_guards_a_filled_pack(tmp_path):
     blank, filled = tmp_path / "a.csv", tmp_path / "b.csv"
     blank.write_text("head,id,verdict\nsentiment,c1,\n", encoding="utf-8")
@@ -358,7 +416,7 @@ def pack(tmp_path):
 
     key = {}
     with (directory / "comments_sentiment.csv").open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=build_audit_pack.COLUMNS)
+        writer = csv.DictWriter(handle, fieldnames=audit.COLUMNS)
         writer.writeheader()
         for row_id, column in MODEL_COLUMN.items():
             labels = {
@@ -377,7 +435,7 @@ def pack(tmp_path):
                 }
             )
     with (directory / "control.csv").open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=build_audit_pack.CONTROL_COLUMNS)
+        writer = csv.DictWriter(handle, fieldnames=audit.CONTROL_COLUMNS)
         writer.writeheader()
         for row_id, label, verdict in (
             ("c4", "positive", "correct"),
@@ -458,4 +516,30 @@ def test_harness_refuses_a_regenerated_key(pack):
     manifest, _, key_path = pack
     key_path.write_text(key_path.read_text(encoding="utf-8") + " ", encoding="utf-8")
     with pytest.raises(SystemExit, match="regenerated or edited"):
+        audit_ceiling.main(["--manifest", str(manifest)])
+
+
+def test_harness_refuses_a_column_a_spreadsheet_added(pack):
+    """The realistic corruption: a round-trip through a spreadsheet adds a column.
+
+    Reading by name would not notice, and the extra column can hold anything the
+    ingestion would then silently ignore — including a second opinion.
+    """
+    manifest, directory, _ = pack
+    path = directory / "comments_sentiment.csv"
+    lines = path.read_text(encoding="utf-8").splitlines()
+    path.write_text(
+        "\n".join([lines[0] + ",Column 8"] + [line + "," for line in lines[1:]]) + "\n",
+        encoding="utf-8",
+    )
+    with pytest.raises(SystemExit, match=r"unknown column\(s\) \['Column 8'\]"):
+        audit_ceiling.main(["--manifest", str(manifest)])
+
+
+def test_harness_refuses_a_missing_column(pack):
+    manifest, directory, _ = pack
+    path = directory / "control.csv"
+    lines = [line.rsplit(",", 1)[0] for line in path.read_text(encoding="utf-8").splitlines()]
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    with pytest.raises(SystemExit, match=r"missing column\(s\) \['notes'\]"):
         audit_ceiling.main(["--manifest", str(manifest)])
