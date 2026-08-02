@@ -193,8 +193,13 @@ def ask_all(rows: list[dict], ask) -> list[dict]:
     return outcomes
 
 
-def drift(rows: list[dict], outcomes: list[dict]) -> dict:
-    """What moved, split into the part v2 explains and the part it does not."""
+def drift(rows: list[dict], outcomes: list[dict], split: bool = True) -> dict:
+    """What moved, split into the part v2 explains and the part it does not.
+
+    Split again by ``unclear``, because half of a train sample is `unclear` and those
+    rows are excluded from every gate: a prevalence over all of them answers "how
+    much does v2 move this file" and not "how much does v2 move what G1c scores".
+    """
     old_of = {row["id"]: set(row["intents"]) for row in rows}
     scored = [out for out in outcomes if out["intents"] is not None]
     added: dict[str, int] = {}
@@ -217,7 +222,7 @@ def drift(rows: list[dict], outcomes: list[dict]) -> dict:
         # that changed *without* gaining it moved for a reason the taxonomy does not
         # explain, and that is the part of the drift that is model-versus-annotator.
         unexplained += "service" not in new and old != new
-    return {
+    found = {
         "rows": len(outcomes),
         "scored": len(scored),
         "unusable": [out for out in outcomes if out["intents"] is None],
@@ -231,6 +236,17 @@ def drift(rows: list[dict], outcomes: list[dict]) -> dict:
         "labels_added": dict(sorted(added.items(), key=lambda kv: -kv[1])),
         "labels_removed": dict(sorted(removed.items(), key=lambda kv: -kv[1])),
     }
+    if split:
+        unclear_of = {row["id"]: row["unclear"] for row in rows}
+        found["by_unclear"] = {
+            name: drift(
+                [row for row in rows if unclear_of[row["id"]] is flag],
+                [out for out in outcomes if unclear_of[out["id"]] is flag],
+                split=False,
+            )
+            for name, flag in (("scoreable", False), ("unclear", True))
+        }
+    return found
 
 
 def read_ledger(usage_now: float) -> dict:
@@ -262,6 +278,23 @@ def append_record(path: Path, record: dict) -> None:
     write_json(path, history)
 
 
+def redrift(source: Path, produced: Path) -> tuple[list[dict], list[dict]]:
+    """The drift of a finished run, recomputed from its own output. No requests.
+
+    The split by ``unclear`` was added after the probe had already been paid for,
+    and re-running would produce a *different* run (greedy is not deterministic
+    across a provider's batches). Re-reading the rows it wrote is the same run.
+    """
+    by_id = {row["id"]: row for row in load(source)[0]}
+    rows, outcomes = [], []
+    for row in load(produced)[0]:
+        if row["id"] not in by_id:
+            raise SystemExit(f"{row['id']}: not in {rel(source)} — these rows came from elsewhere")
+        rows.append(by_id[row["id"]])
+        outcomes.append({"id": row["id"], "intents": row["intents"], "usage": {}})
+    return rows, outcomes
+
+
 def report(record: dict) -> None:
     found = record["drift"]
     print(f"\nsource: {record['source']} · {found['rows']} rows drawn, seed {record['seed']}")
@@ -281,7 +314,18 @@ def report(record: dict) -> None:
     print(f"  labels removed {json.dumps(found['labels_removed'], ensure_ascii=False)}")
     print(f"  `service` replaced {json.dumps(found['service_came_from'], ensure_ascii=False)}")
 
+    print("\nthe same rows split by `unclear`, which no gate scores")
+    print(f"  {'':<12}{'n':>4} {'changed':>9} {'no service':>12} {'`service`':>11}")
+    for name, part in found.get("by_unclear", {}).items():
+        print(
+            f"  {name:<12}{part['scored']:>4} {part['changed_rate']:>8.0%}"
+            f" {part['changed_without_service_rate']:>12.0%} {part['service_prevalence']:>11.0%}"
+        )
+
     cost = record["cost"]
+    if not cost["requests"]:
+        print("\nre-derived from the rows a paid run wrote — no requests, no spend")
+        return
     print(f"\ncost: ${cost['usd']:.4f} over {cost['requests']} requests")
     print(
         f"  per row ${cost['usd_per_row']:.6f} · phase spend ${cost['phase_spend_usd']:.4f}"
@@ -307,6 +351,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--dry-run", action="store_true", help="draw the sample, then stop")
     parser.add_argument("--rows-out", type=Path, default=None)
     parser.add_argument("--record", type=Path, default=None)
+    parser.add_argument(
+        "--from-rows",
+        type=Path,
+        help="re-derive the drift of a finished run from the rows it wrote, no requests",
+    )
     args = parser.parse_args(argv)
     # A smoke run produces a record shaped exactly like a real one; the one thing it
     # must not do is land where the real one is read from.
@@ -315,6 +364,33 @@ def main(argv: list[str] | None = None) -> int:
     args.record = args.record or (smoke_dir / RECORD.name if args.smoke else RECORD)
 
     source = SOURCES[args.source]
+    if args.from_rows:
+        rows, outcomes = redrift(source, args.from_rows)
+        record = {
+            "timestamp": datetime.now(UTC).isoformat(timespec="seconds"),
+            "task": TASK,
+            "model": args.model,
+            "endpoint": {"tag": "—", "quantization": None},
+            "smoke": False,
+            "source": rel(source),
+            "source_sha256": sha256(source.read_bytes()).hexdigest(),
+            "seed": args.seed,
+            "prompt_sha256": {},
+            "git": evaluator.git_state(),
+            "drift": drift(rows, outcomes),
+            "cost": {"requests": 0, "usd": 0.0, "usd_per_row": 0.0, "phase_spend_usd": 0.0},
+            "alternatives": {},
+            "rows_out": rel(args.from_rows),
+            "note": (
+                f"RE-DERIVED from {rel(args.from_rows)}, the rows a paid run wrote — no model was"
+                " called. The split by `unclear` was added after that run; re-running would have"
+                " been a different run, not the same one measured twice."
+            ),
+        }
+        append_record(args.record, record)
+        report(record)
+        return 0
+
     rows, lines = draw(*load(source), args.limit, args.seed)
     banned = forbidden_ids() & {row["id"] for row in rows}
     if banned:

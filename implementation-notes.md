@@ -827,3 +827,16 @@ scores 3 on the irony heuristic, and the highest score in it is 1.
 - **`{}` is an answer in the model's mind and a failure in the parser's.** Any prompt that allows an
   empty collection has to demand the key explicitly, or it loses rows at the rate the empty class
   occurs — 6% here, and all of them from the class the taxonomy question is about.
+
+## Added after the probe was paid for: the split by `unclear`
+
+The headline drift was computed over all 50 drawn rows, and **half of that draw is `unclear`** —
+retailer replies and cross-commenter banter, which every gate excludes. Over a population a third
+to a half of which G1c never scores, "30% carry `service`" answers a question about a file rather
+than about the measurement. Split, the same 50 rows say: scoreable (n=25) 64% changed, 40% carry
+`service`, 24% changed without gaining it; `unclear` (n=25) 32% / 20% / 12%.
+
+Re-running was the wrong way to get that: greedy decoding is not deterministic across a provider's
+batches (Phase 4a), so a second run is a second measurement. `relabel_intents.py --from-rows`
+re-derives the drift block from the rows the paid run wrote — no requests, cost `0` in the record,
+and the record says so. The two paid runs' own `drift` blocks stay as they were written.

@@ -87,12 +87,25 @@ def test_the_doc_quotes_the_records_own_tables():
 
 
 def test_the_docs_probe_numbers_are_the_probes():
-    """Four figures the gate will read; each one is in the record it came from."""
-    run = json.loads(PROBE.read_text(encoding="utf-8"))["runs"][-1]
+    """Every figure the gate will read, out of the record it came from.
+
+    Two records are in play: the last run that spent money carries the cost, and the
+    re-derivation of it carries the split by `unclear`.
+    """
+    runs = json.loads(PROBE.read_text(encoding="utf-8"))["runs"]
+    paid = [run for run in runs if run["cost"]["requests"]][-1]
+    found, cost = runs[-1]["drift"], paid["cost"]
     doc = DOC.read_text(encoding="utf-8")
-    found, cost = run["drift"], run["cost"]
-    assert f"{found['changed']} rows, {found['changed_rate']:.0%}" in doc
-    assert f"{found['service_rows']} rows, {found['service_prevalence']:.0%}" in doc
+
+    assert f"{found['changed']}, {found['changed_rate']:.0%}" in doc
+    assert f"{found['service_rows']}, {found['service_prevalence']:.0%}" in doc
+    for name, part in found["by_unclear"].items():
+        assert name in doc and f"n={part['scored']}" in doc
+        assert f"{part['changed']}, {part['changed_rate']:.0%}" in doc
+        assert (
+            f"{part['changed_without_service']}, {part['changed_without_service_rate']:.0%}" in doc
+        )
+        assert f"{part['service_rows']}, {part['service_prevalence']:.0%}" in doc
     assert f"${cost['usd_per_row']:.6f} per row" in doc
     for rows in (2746, 3771):
         assert f"**${rows * cost['usd_per_row']:.2f}**" in doc

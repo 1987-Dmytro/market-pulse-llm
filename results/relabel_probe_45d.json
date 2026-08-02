@@ -226,6 +226,114 @@
       },
       "rows_out": "results/relabel_45d_probe_rows.jsonl",
       "note": "PROBE. Intents only; every other column is byte-identical to the source line. The re-labelled rows are evidence for the 4.5d gate, not a gold file."
+    },
+    {
+      "timestamp": "2026-08-02T17:27:14+00:00",
+      "task": "relabel_intents_v2",
+      "model": "qwen/qwen3.6-27b",
+      "endpoint": {
+        "tag": "—",
+        "quantization": null
+      },
+      "smoke": false,
+      "source": "data/frozen/comments_train.jsonl",
+      "source_sha256": "4b6ea7f354bcc396ee526ce193c445bb358fab1d070bbe429dfdeb3bace1a1d7",
+      "seed": 42,
+      "prompt_sha256": {},
+      "git": {
+        "commit": "170bb7621ac65357cc6466d769256655fbb1070c",
+        "dirty": [
+          "scripts/relabel_intents.py"
+        ]
+      },
+      "drift": {
+        "rows": 50,
+        "scored": 50,
+        "unusable": [],
+        "changed": 24,
+        "changed_rate": 0.48,
+        "changed_without_service": 9,
+        "changed_without_service_rate": 0.18,
+        "service_rows": 15,
+        "service_prevalence": 0.3,
+        "service_came_from": {
+          "[]": 12,
+          "availability": 2,
+          "price": 1
+        },
+        "labels_added": {
+          "service": 15,
+          "quality": 4,
+          "taste": 1,
+          "availability": 1
+        },
+        "labels_removed": {
+          "quality": 2,
+          "availability": 2,
+          "price": 2,
+          "taste": 1,
+          "packaging": 1
+        },
+        "by_unclear": {
+          "scoreable": {
+            "rows": 25,
+            "scored": 25,
+            "unusable": [],
+            "changed": 16,
+            "changed_rate": 0.64,
+            "changed_without_service": 6,
+            "changed_without_service_rate": 0.24,
+            "service_rows": 10,
+            "service_prevalence": 0.4,
+            "service_came_from": {
+              "[]": 7,
+              "availability": 2,
+              "price": 1
+            },
+            "labels_added": {
+              "service": 10,
+              "taste": 1,
+              "quality": 1
+            },
+            "labels_removed": {
+              "quality": 2,
+              "availability": 2,
+              "price": 2,
+              "taste": 1,
+              "packaging": 1
+            }
+          },
+          "unclear": {
+            "rows": 25,
+            "scored": 25,
+            "unusable": [],
+            "changed": 8,
+            "changed_rate": 0.32,
+            "changed_without_service": 3,
+            "changed_without_service_rate": 0.12,
+            "service_rows": 5,
+            "service_prevalence": 0.2,
+            "service_came_from": {
+              "[]": 5
+            },
+            "labels_added": {
+              "service": 5,
+              "quality": 3,
+              "availability": 1
+            },
+            "labels_removed": {}
+          }
+        }
+      },
+      "cost": {
+        "requests": 0,
+        "usd": 0.0,
+        "usd_per_row": 0.0,
+        "phase_spend_usd": 0.0
+      },
+      "alternatives": {},
+      "rows_out": "results/relabel_45d_probe_rows.jsonl",
+      "note": "RE-DERIVED from results/relabel_45d_probe_rows.jsonl, the rows a paid run wrote — no model was called. The split by `unclear` was added after that run; re-running would have been a different run, not the same one measured twice."
     }
   ]
 }

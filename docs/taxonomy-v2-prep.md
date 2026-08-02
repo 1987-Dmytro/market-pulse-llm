@@ -30,14 +30,21 @@ micro-F1 against human gold on the comment test set (3b) — 0.768 here, 0.774 f
 `claude-haiku-4.5`, 0.798 for `gemma-4-31b-it`, and the last is the model under test, so gold made
 by it would turn part of G1c into agreement with itself.
 
-| measured | value |
-|---|---|
-| rows scored | 50 of 50, 0 unusable |
-| intent set changed | 24 rows, 48% |
-| ... changed **without** gaining `service` | 9 rows, 18% — drift v2 does not explain |
-| rows carrying `service` | 15 rows, 30% |
-| `service` replaced | `[]` ×12, `availability` ×2, `price` ×1 |
-| cost | $0.0081, **$0.000162 per row** |
+| measured | all 50 | scoreable, n=25 | `unclear`, n=25 |
+|---|---|---|---|
+| intent set changed | 24, 48% | **16, 64%** | 8, 32% |
+| ... **without** gaining `service` — drift v2 does not explain | 9, 18% | **6, 24%** | 3, 12% |
+| rows carrying `service` | 15, 30% | **10, 40%** | 5, 20% |
+
+50 of 50 rows scored, 0 unusable; `service` replaced `[]` ×12, `availability` ×2, `price` ×1;
+cost $0.0081, **$0.000162 per row**.
+
+**Read the scoreable column.** Half of this draw is `unclear` — retailer replies and banter, which
+every gate excludes — and those rows move less. What v2 does to the data G1c is scored on is the
+middle column: two rows in five gain `service`. It rests on 25 rows, which is a scoping number and
+not a measurement of anything; widening it is 4.5e's call, at $0.000162 a row. The split was added
+after the run was paid for and re-derived from the rows it wrote
+(`relabel_intents.py --from-rows`), because re-running would have been a different run.
 
 The first attempt lost 3 of 50 rows to replies of `{}` — the model's way of saying "no intents",
 which the parser refuses rather than coerces. One clause was added to the re-label prompt (*always
@@ -53,6 +60,11 @@ their own prompt hashes.
 
 The alternatives are arithmetic off `results/spend_3b.json`, where all three models ran 758 rows
 under a prompt of the same shape — no second probe was bought to produce them.
+
+**The whole phase spent $0.0187 of its $2.00 cap**, in four ledger entries: a 3-row sizing run, the
+50-row probe, three diagnostic calls on the rows that came back as `{}`, and the 50-row probe again
+under the fixed prompt. Two of the four produced records — the sizing run wrote to a scratch path
+and the diagnostics were three hand-made calls, both named in `results/spend_45d.json`.
 
 ## The corpus: what is left to label
 
@@ -128,16 +140,29 @@ batch is what got bigger.
 
 ## Open questions for the gate
 
-1. **The re-label set is larger than the prompt says.** 2,746 = train + candidates + test. Another
+1. **Three boundary calls in guideline v2 are the executor's, not the operator's.** Amendment 3.8
+   approved the class and the wide boundary; these three rows it does not decide, and each is now
+   law that thousands of rows will be labelled against:
+   - `@VARUS_channel:5951` (the shashlik promo refused at the till) → `["price","service"]`. The
+     operator ruled its old `["availability","price"]` *incorrect* but did not say what replaces
+     it; dropping `availability` is the reading that the product was there and the promo was not.
+   - `docs/annotation/comments.md` sarcasm example 3 (`ми знову в прольоті`) → `["service"]`, and
+     the changelog says its v1 `["availability"]` was wrong under v1 too. The row sits under a
+     giveaway post, which is why.
+   - Sarcasm example 2 (`Знову виграв працівник компанії`) → `["service"]`, on a row whose `[]` the
+     amendment records as **correct** under the old law. Under v2's wide boundary a rigged-draw
+     accusation is `service`; under a narrow one it would stay `[]`.
+2. **The re-label set is larger than the prompt says.** 2,746 = train + candidates + test. Another
    1,025 labelled comment rows carry an intents column: the 971-row wave-2 holdout pool (kept for
    error analysis and any future holdout extension) and the 54 holdout rows drawn from the
    candidates pool. Amendment 3.8 says "ALL labelled data". Re-labelling them costs $0.16 more;
    leaving them out means two taxonomies live in the same repo.
-2. **Provenance of a re-labelled row.** The prompt says intents column only, so a re-labelled row
+3. **Provenance of a re-labelled row.** The prompt says intents column only, so a re-labelled row
    still carries `annotator: "llm-precheck"` — the row cannot say who moved its intents, and only
    the record can. Test v3 took the opposite convention (`annotator: "operator-blind-audit-45a"`).
-3. **The unexplained 18%.** Nearly a fifth of the probe rows changed inside the five old classes.
-   That is the model disagreeing with the annotator, not the taxonomy moving, and it is the number
-   the ≥90% calibration will be deciding on.
-4. **`unclear` rows.** They carry intents and are excluded from every gate. Re-labelling them costs
+4. **The unexplained 24%.**
+   Nearly a quarter of the *scoreable* probe rows changed inside the five old classes — the model
+   disagreeing with the annotator, not the taxonomy moving. It is consistent with this model's
+   measured G1c of 0.768, and it is the number the ≥90% calibration will be deciding on.
+5. **`unclear` rows.** They carry intents and are excluded from every gate. Re-labelling them costs
    money and changes nothing that is scored; skipping them leaves the column mixed-taxonomy.

@@ -100,6 +100,7 @@ def test_drift_separates_the_taxonomy_from_the_disagreement():
         row("@c:2", ["price"]),  # price -> price+service: same
         row("@c:3", ["price"]),  # price -> quality: nothing in v2 explains this
         row("@c:4", ["taste"]),  # unchanged
+        row("@c:5", ["price"]),  # the reply came back unreadable
     ]
     outcomes = [
         {"id": "@c:1", "intents": ["service"]},
@@ -115,6 +116,53 @@ def test_drift_separates_the_taxonomy_from_the_disagreement():
     assert found["service_came_from"] == {"[]": 1, "price": 1}
     assert found["labels_added"] == {"service": 2, "quality": 1}
     assert found["labels_removed"] == {"price": 1}
+
+
+def test_drift_splits_the_rows_a_gate_scores_from_the_rows_it_never_will():
+    """Half a train sample is `unclear`; a prevalence over all of it answers a
+    question about a file, not about what G1c is measured on."""
+    rows = [
+        {**row("@c:1", []), "unclear": False},
+        {**row("@c:2", ["price"]), "unclear": False},
+        {**row("@c:3", []), "unclear": True},
+        {**row("@c:4", ["taste"]), "unclear": True},
+    ]
+    outcomes = [
+        {"id": "@c:1", "intents": ["service"]},
+        {"id": "@c:2", "intents": ["quality"]},
+        {"id": "@c:3", "intents": ["service"]},
+        {"id": "@c:4", "intents": ["taste"]},
+    ]
+    parts = relabel.drift(rows, outcomes)["by_unclear"]
+    assert parts["scoreable"]["scored"] == 2 and parts["unclear"]["scored"] == 2
+    assert parts["scoreable"]["service_prevalence"] == 0.5
+    assert parts["scoreable"]["changed_without_service_rate"] == 0.5
+    assert parts["unclear"]["changed_rate"] == 0.5
+    assert "by_unclear" not in parts["scoreable"], "one level of splitting, not a recursion"
+
+
+def test_a_finished_run_is_re_derived_from_its_own_rows(tmp_path, monkeypatch):
+    source = tmp_path / "source.jsonl"
+    rows = [{**row("@c:1", []), "unclear": False}, {**row("@c:2", ["price"]), "unclear": True}]
+    source.write_text("\n".join(line_of(r) for r in rows) + "\n", encoding="utf-8")
+    produced = tmp_path / "produced.jsonl"
+    produced.write_text(
+        "\n".join(line_of({**r, "intents": ["service"]}) for r in rows) + "\n", encoding="utf-8"
+    )
+    monkeypatch.setitem(relabel.SOURCES, "comments_train", source)
+
+    record = tmp_path / "probe.json"
+    args = ["--from-rows", str(produced), "--record", str(record)]
+    assert relabel.main(args) == 0
+    written = json.loads(record.read_text(encoding="utf-8"))["runs"][0]
+    assert written["cost"]["requests"] == 0 and written["cost"]["usd"] == 0.0
+    assert written["drift"]["service_rows"] == 2
+    assert written["drift"]["by_unclear"]["scoreable"]["service_prevalence"] == 1.0
+
+    stray = tmp_path / "stray.jsonl"
+    stray.write_text(line_of(row("@c:9", ["service"])) + "\n", encoding="utf-8")
+    with pytest.raises(SystemExit, match="came from elsewhere"):
+        relabel.main(["--from-rows", str(stray), "--record", str(record)])
 
 
 def test_a_smoke_run_writes_the_record_the_gate_reads(tmp_path):
