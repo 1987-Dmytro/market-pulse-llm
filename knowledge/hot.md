@@ -2,24 +2,24 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-02 19:37:24 (every SessionStart)
+**Auto-refreshed:** 2026-08-02 21:30:23 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-199225d fix: half the probe draw is unclear — the drift split, re-derived without a request
-170bb76 docs: 4.5d notes — the TASKS trap, the two probes, and the exclusions that decide the counts
-960809b feat: what is left to label — the pool is 1912 rows and mined out for sarcasm
-ba0df91 feat: the taxonomy-v2 probe — 50 train rows re-labelled, ledger anchored at $0.008
-ee88b4e feat: taxonomy v2 — prompt v2 beside v1, and a re-labeller that moves one column
+946a60b docs: the churn cells count pairs, not rows — the margins are the totals to read
+cf208a1 feat: the calibration pack is built — 100 gated, 50 diagnostic, manifest pinned
+05e2320 feat: every labelled non-frozen row re-labelled under taxonomy v2 — 3,249 staged
+296bb88 feat: the calibration pack — 100 gated rows, 50 diagnostic, one denominator
+497a2f9 feat: the re-labeller does a full pass — phased ledgers, staged copies, resume
 ```
 
 ## 📋 Recent decisions
 
+- `taxonomy-v2-relabel-and-appetite.md` — Taxonomy v2: the up-label appetite, three boundary calls, and how the re-label is staged
 - `INDEX.md` — Decision records
 - `test-v3.md` — Test set v3: 38 blind verdicts applied, and what they do not reopen
-- `phase45a-ceiling.md` — The 4.5a ceiling: 244 blind verdicts, and what each head can score at best
 
 ## 📅 Recent daily logs
 
@@ -31,11 +31,43 @@ ee88b4e feat: taxonomy v2 — prompt v2 beside v1, and a re-labeller that moves 
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-02 19:31 (`/save` after `PROMPT-4.5d` — **the intents law is DECIDED (amendment 3.8: a sixth intent, `service`), guideline v2 and prompt v2 exist beside v1, the re-label is probed at $0.000162/row — and the corpus has only 1,912 labelable rows left, so no appetite tier is reachable**. Test v3 is frozen beside v2; Phase 4 stays closed at 2 of 5 against v2; edited by hand — the section above is auto-generated, do NOT touch the marker)
+**Last update:** 2026-08-02 21:24 (`/save` after `PROMPT-4.5e` — **every labelled non-frozen row is re-labelled under taxonomy v2: 3,249 rows staged beside their sources for $0.5448, and the calibration pack is with the operator. The ≥90% gate is UNDECIDED and nothing downstream starts until it comes back**. Test v3 is frozen beside v2; Phase 4 stays closed at 2 of 5 against v2; edited by hand — the section above is auto-generated, do NOT touch the marker)
 
 ## 🔥 What's Hot
 
-**TAXONOMY v2 IS PREPARED AND PRICED — the 4.5d gate decides the appetite (2026-08-02).** The law
+**THE RE-LABEL IS DONE AND THE PACK IS WITH THE OPERATOR — the ≥90% gate is next (2026-08-02,
+4.5e).** 3,317 rows in three files → 54 frozen holdout ids skipped → **3,249 staged** in `_tax2`
+copies beside their sources (`data/frozen/comments_train_tax2.jsonl`,
+`data/annotation/sarcasm_candidates_tax2.jsonl`, `sarcasm_holdout_pool_tax2.jsonl`); originals byte
+for byte untouched. 3,263 labelable + 508 frozen = **3,771**, the figure 4.5d priced — that equality
+is what proves the file list complete. **$0.5448 of $1.50** against `results/spend_45e.json`,
+anchored before the first request. Record: `results/relabel_45e.json`. ADR:
+[[taxonomy-v2-relabel-and-appetite]] (`accepted`).
+
+**Drift, over the rows a gate scores (n=2,059): 49% of intent sets changed, 34% carry `service`,
+15% changed WITHOUT gaining it.** Over all 3,249: 45% / 31% / 15%; over `unclear` (n=1,190): 38% /
+25% / 14%. **The probe's n=25 (64 / 40 / 24) is superseded** — it was a scoping figure and this is
+the measurement. The churn matrix (`drift.churn`) says where it came from: `price` loses 184 rows,
+166 of them now carry `service`; `availability` gains 166 and **149 of those were `[]`** — drift no
+taxonomy rule explains, and the only instrument for it is the calibration. Cells count (old → new)
+pairs, so they do not sum to the margins; read totals off `before/after/kept/lost/gained`.
+
+**14 rows have no v2 label, and 13 of them carried `[]` under v1.** All are
+`parse: missing field: intents` — the model's `{}` answer, which the parser refuses. `--resume`
+re-asked exactly the failing ids: **66 → 29 → 18 → 14** over four passes for $0.017, and the ids
+repeat between passes, so the residual is the model, not the transport. Not coerced to `[]`: the
+hole sits in the very class the taxonomy question is about, and filling it would have handed the
+model the answer it declined to give.
+
+**The pack: `data/annotation/calib_45e/` (gitignored), manifest `results/calib_45e_manifest.json`
+with every sha.** `gated.csv` — 100 scoreable rows, `correct`/`incorrect`, **this is the gate**;
+`changed.csv` — 50 changed rows with old beside new, `old`/`new`/`neither`, diagnostic only and it
+cannot move the verdict. Disjoint by construction. Two things fixed **before** any verdict exists:
+the denominator (`correct` / 100, a blank cell counting against the bar), worded identically in the
+README and the manifest; and blinding — no column and no ordering reveals which rows moved. ~1.0 h.
+**Nothing reads the returned CSVs yet** — the returns processor is the next step's first build.
+
+**TAXONOMY v2 WAS PREPARED AND PRICED IN 4.5d — the gate then decided the appetite.** The law
 question closed by interview, not by the pack: **amendment 3.8** keeps the old law where it was
 challenged (17 of the 19 disputed `[]` rows stand; the "22 of 40" reading was a pack-design
 artifact — intents were shown without sentiment and sarcasm) and adds a **sixth intent `service`**
@@ -54,11 +86,10 @@ recorded run fail to verify. `TASKS` stays `("T1","T2")`; `T1_PROMPT_V2` and
 **The probe: 50 train rows, `qwen3.6-27b` at the pinned fp8 endpoint, $0.0081.** Model chosen on
 the only measurement that exists for the job — intents micro-F1 vs human gold in 3b: **0.768** here
 vs 0.774 (haiku) vs 0.798 (gemma, i.e. the model under test, whose labels would make part of G1c
-agreement with itself). **Half the draw is `unclear`, so read the scoreable half (n=25): 64%
-changed, 40% carry `service`, 24% changed WITHOUT gaining it** — that last number is
-model-vs-annotator disagreement inside the five old classes and is what the ≥90% calibration will
-decide on. Full re-label projects to **$0.45** (2,746 rows) or **$0.61** (all 3,771). Ledger:
-`results/spend_45d.json`, **$0.0187 of $2.00**, anchored before the first request.
+agreement with itself). Its scoreable half was n=25 and its rates (64 / 40 / 24) are **superseded by
+the 4.5e full pass** above; what stands is the per-row cost, **$0.000162**, which the 3,263-row pass
+reproduced at $0.000165. Ledger: `results/spend_45d.json`, **$0.0187 of $2.00** — a closed phase's
+anchor, never written again.
 
 **THE CORPUS IS THE BINDING CONSTRAINT, not money or hours.** After the two exclusions that decide
 the count — 3,771 rows already labelled across five files, 1,239 rows in threads that carry a test
@@ -67,7 +98,9 @@ or holdout row — **1,912 rows are labelable**. Of them 382 are service-rich by
 **No appetite tier is reachable**: +2k is 88 rows short (~2 weeks of collection at ~443 labelable
 rows/month), +5k ~7 months, +9k ~16 months or a new source — and only two registry channels have
 comments enabled at all. Calibration hours do **not** scale with the tier (0.7 h re-label, 2.0 h
-up-label at any size); what a bigger tier buys is risk, not review.
+up-label at any size); what a bigger tier buys is risk, not review. **The gate took all 1,912** —
+de facto +2k without waiting — **strictly after** the re-label passes ≥90%, and ratified the three
+boundary calls in guideline v2 as written.
 
 **Two probe details worth not relearning:** `{}` is a model's way of saying "no intents" and the
 parser refuses it (6% of rows lost until the prompt demanded the key explicitly — both runs are in
@@ -286,22 +319,26 @@ files**: `comments_train.jsonl` (1600) + `sarcasm_candidates.jsonl` (746) plus
 
 ## ⏭️ Next
 
-1. **THE 4.5d GATE: the up-labelling appetite, and go/no-go on 4.5e.** The tiers as written
-   (+2k/+5k/+9k) are all above what the corpus holds — the honest options are "take the 1,912",
-   "collect first", or "add a source". Nothing of 4.5e (full re-label → test v4 → fresh G1c anchor
-   under `T1v2` → retrain → new bars pre-registered BEFORE scoring) starts until that decision.
-2. **Five open questions carried into the gate**, listed at the end of `docs/taxonomy-v2-prep.md`:
-   three boundary rulings in guideline v2 are the executor's and not the operator's (the shashlik
-   row `@VARUS_channel:5951` → `price`+`service`, and two sarcasm examples about giveaways — one of
-   which amendment 3.8 records as correctly `[]` under the old law); "ALL labelled data" is 3,771
-   rows and not the 2,746 the prompt names (+$0.16); a re-labelled row keeps
-   `annotator: "llm-precheck"` and so cannot say who moved its intents; the unexplained 24%; and
-   whether `unclear` rows are re-labelled at all. Also still unnamed from 4.5a: **which unit the
-   program calls "the ceiling"** — a macro-F1 bound and an accuracy share cannot both be read
-   against 0.98.
-3. **4.5e will have to lift a guard, not flip a flag.** `relabel_intents.py` refuses any row that
-   sits in a frozen test file, unconditionally — and test v4 is exactly a re-label of the test set.
-   It is a code change with a test, deliberately not a `--allow-test-rows` switch that exists today.
+1. **THE ≥90% CALIBRATION GATE — the operator's ~1.0 h, and it decides whether the re-label is
+   accepted at all.** `data/annotation/calib_45e/gated.csv` (100 rows) is the gate;
+   `changed.csv` (50) is diagnostic and cannot move it. **No script reads the returned CSVs yet** —
+   a returns processor (verify against `results/calib_45e_manifest.json`, then count `correct` over
+   100 by the pre-registered rule) is the first thing the next step builds, the way
+   `audit_ceiling.py` followed the 4.5a pack.
+2. **Four things the gate should be told before it rules.** A pass accepts a file **37% of which the
+   calibration never sampled** — the 1,190 `unclear` staged rows, excluded from every metric but
+   headed for training. The 54 frozen ids will have **two homes** after 4.5f: their v1 copy stays in
+   `sarcasm_holdout_pool.jsonl` while the holdout itself moves to v2 — nobody is named to reconcile
+   it. **14 rows are still on v1** and unowned. And if the diagnostic 50 read "old was closer", that
+   changes the reading of the 15% unexplained drift, not the verdict. Also still unnamed from 4.5a:
+   **which unit the program calls "the ceiling"** — a macro-F1 bound and an accuracy share cannot
+   both be read against 0.98.
+3. **Only after the gate:** up-label the 1,912 (LLM pass + ~2 h of operator calibration), then
+   **4.5f — test v4**. That one has to **lift a guard, not flip a flag**: `relabel_intents.py`
+   refuses any row sitting in a frozen test file, unconditionally, and test v4 is exactly a re-label
+   of the test set. A code change with a test, deliberately not a `--allow-test-rows` switch that
+   exists today. Then a fresh G1c anchor under `T1v2` → retrain → new bars pre-registered BEFORE
+   scoring.
 4. **The filled pack is now the only copy of 244 verdicts.** `build_audit_pack.py --force` would
    destroy them and there is still no snapshot in the flow — the question the team lead has not
    ruled on. `normalize_audit_returns.py` is safe to re-run (it no-ops on an already-normalized
@@ -344,9 +381,17 @@ matrix is frozen. CPU beats MPS by 14×, which is the opposite of the intuition.
   use. **Never widen the five-member tuple** — it would change old label spaces in files nobody
   edited. And never add a prompt to `prompts.TASKS`: that tuple is the identity map
   `records.assert_prompt_sha` compares whole against every stored record.
-- **`results/spend_45d.json` is an anchor, not a log.** Same footgun as `results/spend_3b.json` and
-  `results/spend_phase4.json`: delete or regenerate it and the $2.00 counter silently restarts at
-  today's lifetime usage. It is written *before* the first request on purpose.
+- **`results/spend_45d.json` and `results/spend_45e.json` are anchors, not logs.** Same footgun as
+  `results/spend_3b.json` and `results/spend_phase4.json`: delete or regenerate one and its counter
+  silently restarts at today's lifetime usage. Each is written *before* the first request on
+  purpose, and `relabel_intents.py --phase` refuses a ledger carrying another phase's anchor key.
+  **The run entries do not sum to the phase spend** — `Budget.reconcile` can only push a number up,
+  so a run whose predecessor had not yet posted absorbs its tail ($0.5778 of entries against
+  $0.5448 measured from the anchor). The anchored difference is the spend; the sum is a bound.
+- **The `_tax2` files are staged, not gold, and not drop-in replacements.** Nothing reads them as
+  labels until the ≥90% gate says so, and `sarcasm_holdout_pool_tax2.jsonl` has 915 of 971 rows (54
+  frozen ids + 2 with no answer). A trainer pointed at them today would be training on an
+  unvalidated taxonomy and silently dropping rows.
 - **Two gold versions exist now, so every number has to name one.** `data/frozen/*_v3.jsonl` sit
   beside the v2 files and **nothing reads them by default** — the gates, the bars,
   `eval_zero_shot.py` and `run_baseline.py` all still score against v2, which is what keeps Phase 4's
