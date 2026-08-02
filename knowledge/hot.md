@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-02 12:42:24 (every SessionStart)
+**Auto-refreshed:** 2026-08-02 12:45:45 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+378f467 docs: phase 4 closed at 2 of 5 — acceptance, pause before phase 5
 d5c6a24 feat: arm B, the rule, and the five verdicts — 4c is executed
 8314dfb feat: arm A (real-only) — 270 steps, and 758 frozen rows scored once
 34a27d7 fix: an arm's eval crashed on its last line, and a stub found it before the pod did
 411bd84 chore: the optimizer state syncs home and does not belong in git
-16e3af1 docs: the 4c runbook, and the one assert a resume can be wrong without
 ```
 
 ## 📋 Recent decisions
@@ -31,9 +31,29 @@ d5c6a24 feat: arm B, the rule, and the five verdicts — 4c is executed
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-02 (`PROMPT-4-close` — **Phase 4 is CLOSED at 2 of 5**, the 4c report accepted by the team lead, [[phase4-gate-verdict]] flipped to `accepted`, the stale 4a pod deleted and the ledger appended; edited by hand — the section above is auto-generated, do NOT touch the marker)
+**Last update:** 2026-08-02 (`PROMPT-4.5a` — **Phase 4.5 is OPEN and 4.5a's audit pack is built**: 140 blinded disagreement rows + a 40-row control await the operator, and the ceiling harness is committed but unrun. Phase 4 stays closed at 2 of 5; edited by hand — the section above is auto-generated, do NOT touch the marker)
 
 ## 🔥 What's Hot
+
+**PHASE 4.5a IS BUILT AND WAITING ON THE OPERATOR (2026-08-02).** Amendment 3.7 inserts Phase 4.5
+— a ceiling-driven quality program — before Phase 5, because the operator's 0.98 target sits above
+the instrument: comment gold was calibrated at 96.3% agreement. **The adjudication pack is
+`data/annotation/audit_45a/` (gitignored data; `scripts/build_audit_pack.py` is the committed,
+deterministic builder, seed 42).** 180 rows: sentiment **35** · intents **67** · slice pair **23** ·
+posts (post_type 11 + brands 4) **15** · control **40**. **Every disagreement row shows two
+candidate labels as `label_A`/`label_B` in per-row random order and NOTHING says which is whose** —
+the key is `data/annotation/audit_45a_key.json`, outside the folder the operator opens, and its
+sha256 lives in the committed `results/audit_45a_manifest.json` beside every CSV's. **The executor
+does not pre-fill, suggest or comment on a verdict** (SPEC §10). Nothing was judged, re-scored, or
+written back to a frozen file.
+
+**`scripts/audit_ceiling.py` is built and MUST NOT RUN YET** — the team lead reviews its formula
+before any verdict is ingested, and it refuses while a single verdict cell is empty. It prints
+**two ceilings that are not interchangeable**: the *metric-unit* one re-scores a simulated perfect
+model through `scorer.py` (comparable to a G1a/G1c bar, and an **upper bound** — it sees only the
+disagreement stratum), and the *accuracy-unit* one counts both strata and is **not comparable to an
+F1 bar**. The agreement stratum is ~90% of every head and is measured at **n=8**, so the harness
+prints a sensitivity line beside the point estimate.
 
 **PHASE 4 IS CLOSED AT 2 OF 5 (2026-08-02) — accepted, and the one attempt is spent.** The team
 lead recomputed every verdict number **bit-exact from the per-row dumps**, re-ran the selection
@@ -41,7 +61,7 @@ rule (output matched word for word), confirmed the one-attempt protocol from art
 operator's quiz came back **2/2**. [[phase4-gate-verdict]] is `accepted`. Both ablation arms
 trained in full on the frozen config, each scored on the frozen sets **exactly once**; **nothing
 was retrained, re-scored or reconfigured after a gate number was seen** — arm B launched while arm
-A's three failures were already on screen. **313 tests**, `make check` green after every commit.
+A's three failures were already on screen. **330 tests**, `make check` green after every commit.
 **20 ADRs** ([[INDEX]]).
 
 **THE DELIVERABLE: `results/train/4c-arm-a/adapter`** — the real-only LoRA adapter, sha256
@@ -166,15 +186,15 @@ files**: `comments_train.jsonl` (1600) + `sarcasm_candidates.jsonl` (746) plus
 
 ## ⏭️ Next
 
-1. **The operator's pre-Phase-5 discussion is the next thing that happens.** Phase 4 is closed and
-   Phase 5 is PAUSED — nothing Phase-5-shaped is scoped, planned or started until that discussion
-   lands.
-2. **Two team-lead files sit UNCOMMITTED in the tree, on purpose, and are not this session's to
-   commit:** `docs/SPEC.md` (rev. 3.7 — amendment 3.7, which inserts Phase 4.5, a quality program,
-   before Phase 5) and `docs/PROMPT-4.5a.md`. `PROMPT-4.5a.md` §0 claims both for its own commit
-   (`docs: phase 4.5 opens — amendment 3.7 and the audit prompt`), so `PROMPT-4-close`'s commit
-   deliberately left them alone. Do not commit them outside that step, and do not read them as work
-   in progress — they are queued, not started.
+1. **The operator adjudicates `data/annotation/audit_45a/` on their own clock. Nothing else moves
+   until the CSVs come back.** The team lead reviews the ceiling formula in parallel; the harness
+   runs only after BOTH — the formula approved and the verdicts filled. Do not rebuild the pack
+   once a verdict cell is filled (`build_audit_pack.py` refuses without `--force`, and that is the
+   point).
+2. **Phase 5 is still PAUSED** — nothing Phase-5-shaped is scoped, planned or started; 4.5 comes
+   first (operator sequencing decision, amendment 3.7). Everything after 4.5a — targeted
+   re-labelling at scale, synthetic v2, a dev-set hyperparameter search — is **DEFERRED until
+   4.5a's results exist**, and each gets its own pre-registered gate.
 3. **Still the operator's, carried out of Phase 4:** Phase 5's first measurement is already named —
    **do not merge the adapter into bf16 without scoring the merged artefact in the configuration
    production serves**; and the 100 GB CA-MTL-3 volume is kept pending the Phase 5 briefing.
