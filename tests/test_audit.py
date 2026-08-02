@@ -10,7 +10,10 @@ Two things have to be checked here that no downstream number would reveal:
 
 The end-to-end test drives ``audit_ceiling.main`` over a six-row pack whose every
 expected figure is computed in the comment above it, so the harness is checked
-through its printed output and not through its own internals.
+through its printed output and not through its own internals. That pack carries
+one head, so ``metric_ceiling`` is exercised head by head separately: four of its
+five branches would otherwise run for the first time on the evening the
+operator's verdicts come back, which is the worst moment to meet a shape bug.
 """
 
 import csv
@@ -159,6 +162,142 @@ def test_ceiling_refuses_more_disagreements_than_rows():
         audit.ceiling(10, 20, 5, 2, 10, 1, 0)
 
 
+# --- the perfect model, head by head ----------------------------------------
+#
+# `metric_ceiling` re-scores a model that answers gold everywhere except the rows
+# the operator ruled gold-wrong, where it answers what the model said. Each head
+# below is three or four rows with the F1 done by hand, and each carries one row
+# whose gold is `None`: the scorer drops that index from BOTH columns, and the
+# perfect column is built positionally, so a drop that moved one side and not the
+# other would show up here as a wrong number rather than as a wrong ceiling.
+
+
+def post(row_id, post_type="promo", brands=(), relevant=True):
+    return {
+        "id": row_id,
+        "text": f"text of {row_id}",
+        "post_type": post_type,
+        "brands": None if brands is None else list(brands),
+        "relevant": relevant,
+    }
+
+
+def predicted_for(name, rows):
+    return {name: {row["id"]: row for row in rows}}
+
+
+#   gold [price] [taste] []  · perfect [taste] [taste] []  (i1 ruled gold-wrong)
+#   tp 1 · fp 1 · fn 1 -> 2*1 / (2*1 + 1 + 1) = 0.5 · the None row drops out
+def test_metric_ceiling_intents():
+    gold = [
+        comment("i1", "neutral", intents=["price"]),
+        comment("i2", "neutral", intents=["taste"]),
+        comment("i3", "neutral"),
+        comment("i4", "neutral", unclear=True),
+    ]
+    model = [
+        comment("i1", "neutral", intents=["taste"]),
+        comment("i2", "neutral", intents=["taste"]),
+        comment("i3", "neutral"),
+        comment("i4", "neutral", intents=["price"]),
+    ]
+    unit, score = audit_ceiling.metric_ceiling(
+        "intents",
+        {"comments_test": gold},
+        predicted_for("comments_test", model),
+        ALIASES,
+        {"i1"},
+        [],
+    )
+    assert unit == "micro-F1"
+    assert score == pytest.approx(0.5)
+
+
+#   gold    [launch, promo, other, launch]
+#   perfect [promo,  promo, other, launch]   (p1 ruled gold-wrong)
+#   launch tp1 fp0 fn1 -> 2/3 · other tp1 -> 1 · promo tp1 fp1 fn0 -> 2/3
+#   macro = (2/3 + 1 + 2/3) / 3 = 7/9
+def test_metric_ceiling_post_type():
+    gold = [post("p1", "launch"), post("p2", "promo"), post("p3", "other"), post("p4", "launch")]
+    model = [post("p1", "promo"), post("p2", "promo"), post("p3", "other"), post("p4", "launch")]
+    unit, score = audit_ceiling.metric_ceiling(
+        "post_type", {"posts_test": gold}, predicted_for("posts_test", model), ALIASES, {"p1"}, []
+    )
+    assert unit == "macro-F1"
+    assert score == pytest.approx(7 / 9)
+
+
+#   gold    {rud} {rud} {} · perfect {ласунка} {rud} {}   (b1 ruled gold-wrong)
+#   tp 1 · fp 1 · fn 1 -> 0.5. `Рудь` and `рудь` normalise to the same token, so
+#   b2 is a hit across two surface forms; the None row drops out.
+def test_metric_ceiling_brands():
+    rud_gold = [{"mention": "Рудь", "brand_id": "rud"}]
+    gold = [
+        post("b1", brands=rud_gold),
+        post("b2", brands=rud_gold),
+        post("b3"),
+        post("b4", brands=None),
+    ]
+    model = [
+        post("b1", brands=[{"mention": "Ласунка"}]),
+        post("b2", brands=[{"mention": "рудь"}]),
+        post("b3"),
+        post("b4", brands=[{"mention": "рудь"}]),
+    ]
+    unit, score = audit_ceiling.metric_ceiling(
+        "brands", {"posts_test": gold}, predicted_for("posts_test", model), ALIASES, {"b1"}, []
+    )
+    assert unit == "F1"
+    assert score == pytest.approx(0.5)
+
+
+#   The slice is s1 s2 s3; s4 is in the holdout and must not be scored.
+#   s1 ruled gold-wrong -> perfect answers (negative, False) against gold
+#   (negative, True) and does NOT fix it. s2 and s3 keep gold and do.
+#   fixed 2 of 3 -> 2/3
+def test_metric_ceiling_sarcasm_pair():
+    gold = [
+        comment("s1", "negative", sarcasm=True),
+        comment("s2", "positive", sarcasm=True),
+        comment("s3", "neutral", sarcasm=True),
+        comment("s4", "negative", sarcasm=True),
+    ]
+    model = [
+        comment("s1", "negative", sarcasm=False),
+        comment("s2", "positive", sarcasm=True),
+        comment("s3", "negative", sarcasm=False),
+        comment("s4", "positive", sarcasm=False),
+    ]
+    unit, score = audit_ceiling.metric_ceiling(
+        "sarcasm_pair",
+        {"sarcasm_holdout": gold},
+        predicted_for("sarcasm_holdout", model),
+        ALIASES,
+        {"s1"},
+        ["s1", "s2", "s3"],
+    )
+    assert unit == "fix-rate"
+    assert score == pytest.approx(2 / 3)
+
+
+def test_universe_restricts_the_slice_head_to_the_slice():
+    rows = {"sarcasm_holdout": [{"id": "s1"}, {"id": "s4"}]}
+    assert [row["id"] for row in audit_ceiling.universe("sarcasm_pair", rows, ["s1"])] == ["s1"]
+
+
+def test_metric_ceiling_refuses_a_slice_id_the_holdout_lacks():
+    gold = [comment("s1", "negative", sarcasm=True)]
+    with pytest.raises(ValueError, match="no gold"):
+        audit_ceiling.metric_ceiling(
+            "sarcasm_pair",
+            {"sarcasm_holdout": gold},
+            predicted_for("sarcasm_holdout", gold),
+            ALIASES,
+            set(),
+            ["s1", "s2"],
+        )
+
+
 # --- end to end -------------------------------------------------------------
 #
 # Six comment rows, one head. c1 c2 c3 disagree, c4 c5 c6 agree, control = c4 c5.
@@ -240,13 +379,16 @@ def pack(tmp_path):
     with (directory / "control.csv").open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=build_audit_pack.CONTROL_COLUMNS)
         writer.writeheader()
-        for row_id, verdict in (("c4", "correct"), ("c5", "incorrect")):
+        for row_id, label, verdict in (
+            ("c4", "positive", "correct"),
+            ("c5", "negative", "incorrect"),
+        ):
             writer.writerow(
                 {
                     "head": "sentiment",
                     "id": row_id,
                     "text": f"text of {row_id}",
-                    "label": GOLD.get(row_id, ""),
+                    "label": label,
                     "verdict": verdict,
                     "notes": "",
                 }
