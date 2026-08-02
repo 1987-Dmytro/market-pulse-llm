@@ -30,6 +30,7 @@ reads it — the sanctioned exception of docs/PROMPT-4.5c.md.
 import argparse
 import csv
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -39,6 +40,14 @@ sys.path.insert(0, str(REPO_ROOT / "src"))  # the package is not pip-installed
 from market_pulse import audit  # noqa: E402
 
 GUIDELINE = REPO_ROOT / "docs" / "annotation" / "comments.md"
+GUIDELINE_REV = "0906de6"
+"""The guideline revision this pack quotes — the law that was under review.
+
+The pack asked one question: do these rules stay? The answer (SPEC amendment 3.8)
+was that they largely do and that the taxonomy gains a sixth intent, which rewrote
+the very spans quoted here. Reading the working tree would therefore re-issue a
+pack quoting the law that *replaced* the one the operator ruled on. Pass
+``--guideline-rev ''`` to quote the working tree instead."""
 CONTROL = REPO_ROOT / "data" / "annotation" / "audit_45a" / "control.csv"
 OUT = REPO_ROOT / "data" / "annotation" / "audit_45a" / "intents-law-review.md"
 EMPTY = "[]"
@@ -108,6 +117,22 @@ def span(text: str, first: str, stop: str) -> tuple[str, int, int]:
     return body, text[:start].count("\n") + 1, text[:start].count("\n") + body.count("\n") + 1
 
 
+def guideline_text(path: Path, rev: str) -> str:
+    """The guideline as of ``rev``, or the working tree when ``rev`` is empty."""
+    if not rev:
+        return path.read_text(encoding="utf-8")
+    where = path.relative_to(REPO_ROOT) if path.is_relative_to(REPO_ROOT) else path
+    done = subprocess.run(
+        ["git", "show", f"{rev}:{where.as_posix()}"],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+    )
+    if done.returncode:
+        raise SystemExit(f"git show {rev}:{where}: {done.stderr.strip()}")
+    return done.stdout
+
+
 def groups(rows: list[dict]) -> dict[str, list[dict]]:
     """The three groups the pack shows, in the pack's own row order."""
     intents = [row for row in rows if row["head"] == "intents"]
@@ -166,6 +191,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--control", type=Path, default=CONTROL)
     parser.add_argument("--guideline", type=Path, default=GUIDELINE)
+    parser.add_argument("--guideline-rev", default=GUIDELINE_REV)
     parser.add_argument("--out", type=Path, default=OUT)
     args = parser.parse_args(argv)
 
@@ -179,7 +205,7 @@ def main(argv: list[str] | None = None) -> int:
     ]:
         raise SystemExit(f"{len(empty)} intents control rows are unruled ({empty[:3]}) — no pack")
 
-    page = render(rows, args.guideline.read_text(encoding="utf-8"))
+    page = render(rows, guideline_text(args.guideline, args.guideline_rev))
     if leaked := attribution(page):
         raise SystemExit(
             f"{args.out.name}: the prose outside the quoted texts carries {leaked}."

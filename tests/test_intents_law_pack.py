@@ -74,7 +74,10 @@ def test_the_pack_quotes_the_real_guideline_and_groups_the_real_rows(tmp_path):
     assert law.main(["--control", str(pack), "--guideline", str(GUIDELINE), "--out", str(out)]) == 0
 
     page = out.read_text(encoding="utf-8")
-    guideline = GUIDELINE.read_text(encoding="utf-8")
+    # the law under review, not the law that replaced it: guideline v2 rewrote three
+    # of these spans, and the pack has to keep quoting the ones the operator ruled on
+    guideline = law.guideline_text(GUIDELINE, law.GUIDELINE_REV)
+    assert guideline != GUIDELINE.read_text(encoding="utf-8")
     for _, first, stop in law.QUOTES:
         body, _, _ = law.span(guideline, first, stop)
         assert body in page  # verbatim, not paraphrased

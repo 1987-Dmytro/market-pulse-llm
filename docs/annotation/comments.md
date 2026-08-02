@@ -1,5 +1,23 @@
 # Annotation guideline — comments (T1)
 
+> **Guideline v2 changelog — 2026-08-02** (`docs/SPEC.md` amendment 3.8). One field changes:
+> `intents` gains a sixth class, **`service`**. `sentiment`, `sarcasm` and `unclear` are
+> untouched, and so is every rule about them. What moved:
+>
+> - **§intents** — the `service` bullet; the `availability` boundary (the product, not the
+>   process around it); and the promo-mechanic rule, which sent those rows to `[]` in v1 and
+>   sends them to `service` now. Co-occurrence with a product intent is allowed.
+> - **§sarcasm** — two of the five examples are giveaway comments that carried `[]` and
+>   `["availability"]`; both are `["service"]` under v2. The second was wrong under v1 too:
+>   a draw nobody won is not a product missing from a shelf.
+> - **Decision rules** — "Off-topic replies" becomes a `service` rule instead of an `[]` rule;
+>   a new giveaway rule; bot `+` spam stays `unclear: true` and is never `service`.
+>
+> **Why:** the blind audit (4.5a) had the operator rule 22 of 40 agreed `intents` rows wrong.
+> His review found the old law right where it was challenged — 17 of the 19 disputed `[]` rows
+> stand — and the *taxonomy* one class short: a reaction to the retailer as a service had
+> nowhere to go but `[]`. v1 stays readable in git history.
+
 Task T1 of `docs/SPEC.md` §4: sentiment, sarcasm and intents for comments collected
 under retailer and aggregator posts. Labels from this guideline train the model and
 feed gates G1a–G1c, so the rules below are the definition of those numbers.
@@ -28,7 +46,7 @@ plus the empty label fields to fill:
 |---|---|
 | `sentiment` | `"positive"` \| `"negative"` \| `"neutral"` |
 | `sarcasm` | `true` \| `false` |
-| `intents` | subset of `["taste","price","packaging","quality","availability"]`, may be empty |
+| `intents` | subset of `["taste","price","packaging","quality","availability","service"]`, may be empty |
 | `unclear` | `true` \| `false` — excluded from every gate |
 | `annotator` | your initials |
 | `notes` | free text, only where the call was hard |
@@ -63,9 +81,11 @@ Five real examples, all `sarcasm: true`:
 1. `мабуть смачні млинці по 300-400 грн за кг.... таке враження, що вони не з муки, а з золота...`
    → `negative`, intents `["price"]`. Mock praise plus a price exaggeration.
 2. `Знову виграв працівник компанії або хтось із їхньої родини👍`
-   → `negative`, intents `[]`. The 👍 contradicts the accusation.
+   → `negative`, intents `["service"]`. The 👍 contradicts the accusation; the accusation is
+   about how the draw is run.
 3. `Софія,ми знову в прольоті,як фанера над Парижем😃😃😃`
-   → `negative`, intents `["availability"]`. Smileys carry resignation, not joy.
+   → `negative`, intents `["service"]`. Smileys carry resignation, not joy. The comment is under
+   a giveaway post — nothing here is missing from a shelf.
 4. `Это по "Акции" а до "акции" было 932 за килограмм 😂😂😂`
    → `negative`, intents `["price"]`. Quotation marks around the promo word are the marker.
 5. `Перевіряю і в не одному немає, як завжди акція є товару немає`
@@ -92,13 +112,29 @@ Multi-label, empty allowed. What the comment is *about*:
 - `quality` — freshness, spoilage, composition, production: `В магазині Варус продається неякісний цукор`
 - `availability` — presence in a store, stock, delivery of the product:
   `Перевіряю і в не одному немає`
+- `service` — interaction with the retailer as a service: in-store and online service, the
+  delivery process, the app and the checkout, the support hotline, staff, and how promos and
+  giveaways are organised — mechanics, fairness, communication:
+  `А головне що оператори на сайті варуса навіть не знали що е такий розіграш😂😂😂`
 
-A comment can carry several (`акція є товару немає` = `price` + `availability`) or none
-(`Дякую`).
+The first five are about the **product**; `service` is about the **retailer**. A comment can
+carry several (`акція є товару немає` = `price` + `availability`) or none (`Дякую`), and a
+product intent and `service` can be true at once — label both:
+`Хотіла вчора купити шашлик "Кавказький", який зараз в акції,  але мені відмовили!!! Сказали в нашому магазині такої акції немає!😡 м.Кривий Ріг, вул. М.Світальського, 15`
+= `price` + `service`. The promo is what she came for; being turned away at the shop is how the
+retailer served her. The shashlik itself was there, so `availability` is not the label.
 
-`price` covers what the buyer pays. A complaint about a *promo mechanic* being unfair
-(giveaway rigged, terms unclear) is not `price` — leave intents empty and let the
-sentiment carry it.
+`availability` stays about the **product** — whether it is in the shop, in stock, or delivered at
+all. The process around the order is `service`: a slot moved, a courier, an order that cannot be
+cancelled.
+
+`price` covers what the buyer pays. A question or a complaint about a *promo mechanic* — how a
+discount is applied, whether a giveaway is fair, what the terms say — is `service`, not `price`:
+`Підкажіть, будь ласка, як працює ця акція? Вона автоматично розраховується на касі коли скануєш додаток?`
+(v1 sent these rows to `[]`.)
+
+What still takes no intent: bare thanks (`Дякую за відповідь`), emoji-only rows, and jokes or
+banter about neither the product nor the retailer (`А говорят мужиков в Украине мало уже 🤣`).
 
 ## Decision rules for the cases that repeat
 
@@ -112,12 +148,17 @@ Ambiguous or mixed emoji (`🤦🤣🤣`, `🥲`) → `unclear: true`.
 
 **Bot spam and giveaway noise.** `+`, `++++++`, `➕` — participation markers under
 giveaway posts, the single most repeated string in the corpus. Always
-`unclear: true`, `sentiment: neutral`, `intents: []`. They are not reactions.
+`unclear: true`, `sentiment: neutral`, `intents: []`. They are not reactions — a ticket into a
+draw says nothing about how the draw is run, so it is never `service`.
 
-**Off-topic replies.** Service complaints that never touch a product — app failures,
-delivery slots, loyalty points: `Вже добу чекаю на доставку і знову перенесли на обід
-завтра`. These are real reactions to the retailer: label `sentiment` normally,
-`intents: []` (no product intent applies), `unclear: false`.
+**Giveaways: the reaction, not the ticket.** Distrust of a draw, an accusation that it is rigged,
+a complaint that the rules or the winners were never communicated → `service`:
+`В Варусі роблю закупи з моменту його відкриття, через день! Гроші там зоставляю бешенні!!! НІКОЛИ НІЧОГО ЗА ЦІ РОКИ НЕ ВИГРАЛА! НЕ ВІРЮ в ці розіграші!`
+
+**Service complaints with no product in them.** App failures, delivery slots, loyalty points,
+the queue at the till: `Вже добу чекаю на доставку і знову перенесли на обід завтра`. These are
+real reactions to the retailer: label `sentiment` normally, `intents: ["service"]`,
+`unclear: false`. (v1 gave these rows `intents: []`.)
 A reply aimed at another commenter rather than at the retailer (`Дурнів багато. Хто
 хоче той і купує`) → `unclear: true`.
 
