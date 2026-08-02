@@ -265,8 +265,12 @@ def churn(old_of: dict[str, set], scored: list[dict]) -> dict:
 
     `labels_added` / `labels_removed` are margins and cannot answer the question the
     calibration will be read against — *which* old class the movement came out of.
-    A row with two labels is counted under both: this is a co-occurrence matrix, and
-    the margins beside it (`before`/`after`) are the row and column totals."""
+
+    A cell counts (old label → new label) pairs, so a row carrying two labels before
+    and two after contributes four cells; a row's cells therefore sum to at least its
+    `before` and the matrix does not add up to the margins. `before` / `after` /
+    `kept` / `lost` / `gained` are row counts per label and are the numbers to read
+    a total off."""
     matrix = {label: dict.fromkeys(LABELS, 0) for label in LABELS}
     before = dict.fromkeys(LABELS, 0)
     after = dict.fromkeys(LABELS, 0)
