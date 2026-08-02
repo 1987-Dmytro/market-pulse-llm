@@ -1,0 +1,553 @@
+[
+  {
+    "gold_version": "v3",
+    "model": "google/gemma-4-31b-it",
+    "arm": null,
+    "source": {
+      "record_timestamp": "2026-08-01T09:45:00+00:00",
+      "predictions_path": "results/predictions/google-gemma-4-31b-it--20260801T094500Z.jsonl",
+      "predictions_sha256": "acf8e4b171a1118a1af305b06451c41e18dc4e03bdd953d2710cf5eb0456c735",
+      "gold_v2_sha256": {
+        "comments_test.jsonl": "14b6172472e482d511d36c6a95e5204482a3c14c058c972d39005c82609b9627",
+        "comments_train.jsonl": "4b6ea7f354bcc396ee526ce193c445bb358fab1d070bbe429dfdeb3bace1a1d7",
+        "posts_test.jsonl": "183de2b56e9cb7cc958884db51638c281404cf5c4b06e91ba61ac6330e3dade2",
+        "posts_train.jsonl": "d9b87cdd44586b8011b164f1e3be00457c75e675fad8db7524535306cc609049",
+        "sarcasm_holdout.jsonl": "f83a6cf0fecd0bb266f851803107771309b17d946719cb6da3ca4ff614cb37c3"
+      }
+    },
+    "derivation": {
+      "rescored_by": "scripts/rescore_v3.py",
+      "judge": "scripts/eval_zero_shot.py:build_gates",
+      "frozen_v3_record": "results/frozen_v3.json",
+      "v3_sha256": {
+        "comments_test_v3.jsonl": "d993ca6ff057060e73583a38addfbb78965b0f51a3cd994a5c9129d0606f135e",
+        "posts_test_v3.jsonl": "a476414e26c410c12a56596edab2ff362989a67193dd0d93e3794eb2c073770d",
+        "sarcasm_holdout_v3.jsonl": "9164d6f9aad24a469ea04745ef040984c8c5fabdf20fd83ad3f8448d614b8147"
+      },
+      "note": "a program measurement of a corrected test set, never a gate result: the Tier-1 verdicts of Phase 4 were decided once, against v2"
+    },
+    "gates": [
+      {
+        "gate": "G1a",
+        "metric": "sentiment macro-F1 (comments_test)",
+        "values": {
+          "overall": 0.9066703799197683,
+          "other": 0.9002686053704126,
+          "ru": 0.9297272306981045,
+          "ua": 0.8944023569023569
+        },
+        "n": {
+          "overall": 400,
+          "ua": 248,
+          "other": 66,
+          "ru": 86
+        },
+        "gated_languages": [
+          "ua",
+          "ru"
+        ]
+      },
+      {
+        "gate": "G1b",
+        "metric": "sarcasm slice fix-rate (sarcasm_holdout)",
+        "value": null,
+        "n": {
+          "holdout_scored": 108,
+          "base_errs_sentiment": 12,
+          "base_errs_sarcasm": 29,
+          "base_errs_union": 29
+        },
+        "note": "the fix-rate needs a fine-tune (Phase 4); what this run contributes is the slice. Amendment 3.2 defines it as the rows this base model misclassifies and the holdout carries two labels, so all three counts are reported and the reading is the operator's call at the Phase 4 gate."
+      },
+      {
+        "gate": "G1c",
+        "metric": "intents micro-F1 (comments_test)",
+        "value": 0.7935779816513762,
+        "n": {
+          "overall": 400
+        }
+      },
+      {
+        "gate": "G1d",
+        "metric": "post_type macro-F1 (posts_test)",
+        "value": 0.9190105073725764,
+        "n": {
+          "overall": 250,
+          "promo": 175,
+          "launch": 31,
+          "other": 44
+        }
+      },
+      {
+        "gate": "G1d",
+        "metric": "relevance macro-F1 (posts_test)",
+        "value": 0.9414885317522235,
+        "n": {
+          "overall": 250,
+          "relevant": 26
+        },
+        "note": "second head of G1d; reported beside it and not gated (amendment 3.3)"
+      },
+      {
+        "gate": "G1e",
+        "metric": "brand extraction F1 (posts_test)",
+        "value": 0.9382716049382716,
+        "n": {
+          "overall": 250,
+          "posts_with_brands": 24,
+          "gold_entities": 39,
+          "predicted_entities": 42
+        }
+      }
+    ],
+    "diagnostics": {
+      "sarcasm_binary_macro_f1_comments_test": 0.8027408637873754,
+      "holdout_sentiment_macro_f1": {
+        "overall": 0.3756972712196593,
+        "other": 0.3684210526315789,
+        "ru": 0.8242424242424242,
+        "ua": 0.9606299212598425
+      },
+      "holdout_sarcasm_macro_f1": 0.6618806002375041,
+      "holdout_sarcasm_detected": 64,
+      "base_errs_sentiment": 12,
+      "base_errs_sarcasm": 29,
+      "base_errs_union": 29
+    },
+    "g1b": {
+      "original_slice": {
+        "definition": "the pre-registered 44 ids of results/g1b_slice.json, re-scored vs v3 — the reading comparable with the Phase 4 verdict row",
+        "n": 44,
+        "entry": null
+      },
+      "v3_slice": {
+        "definition": "the base model's error union recomputed vs v3 from its own dump — a different denominator, so a different question",
+        "n": 29,
+        "ids": [
+          "@VARUS_channel:10371",
+          "@VARUS_channel:11336",
+          "@VARUS_channel:11557",
+          "@VARUS_channel:11813",
+          "@VARUS_channel:13078",
+          "@VARUS_channel:13407",
+          "@VARUS_channel:13579",
+          "@VARUS_channel:13725",
+          "@VARUS_channel:15148",
+          "@VARUS_channel:1753",
+          "@VARUS_channel:17540",
+          "@VARUS_channel:18272",
+          "@VARUS_channel:2164",
+          "@VARUS_channel:3056",
+          "@VARUS_channel:5163",
+          "@VARUS_channel:5170",
+          "@VARUS_channel:6149",
+          "@VARUS_channel:6327",
+          "@VARUS_channel:6461",
+          "@VARUS_channel:6912",
+          "@VARUS_channel:7217",
+          "@VARUS_channel:7220",
+          "@VARUS_channel:7516",
+          "@msuaaaa:10997",
+          "@msuaaaa:2509",
+          "@msuaaaa:6157",
+          "@msuaaaa:7055",
+          "@msuaaaa:7497",
+          "@msuaaaa:9643"
+        ],
+        "entry": null
+      }
+    }
+  },
+  {
+    "gold_version": "v3",
+    "model": "google/gemma-4-31b-it",
+    "arm": "real-only",
+    "source": {
+      "record_timestamp": "2026-08-01T18:37:47+00:00",
+      "predictions_path": "results/predictions/google-gemma-4-31b-it--20260801T183747Z.jsonl",
+      "predictions_sha256": "bdff8a4ad36b60f6adc16332f8780592f20d00b21cb3087d3b662df46018f6db",
+      "gold_v2_sha256": {
+        "comments_test.jsonl": "14b6172472e482d511d36c6a95e5204482a3c14c058c972d39005c82609b9627",
+        "comments_train.jsonl": "4b6ea7f354bcc396ee526ce193c445bb358fab1d070bbe429dfdeb3bace1a1d7",
+        "posts_test.jsonl": "183de2b56e9cb7cc958884db51638c281404cf5c4b06e91ba61ac6330e3dade2",
+        "posts_train.jsonl": "d9b87cdd44586b8011b164f1e3be00457c75e675fad8db7524535306cc609049",
+        "sarcasm_holdout.jsonl": "f83a6cf0fecd0bb266f851803107771309b17d946719cb6da3ca4ff614cb37c3"
+      }
+    },
+    "derivation": {
+      "rescored_by": "scripts/rescore_v3.py",
+      "judge": "scripts/eval_zero_shot.py:build_gates",
+      "frozen_v3_record": "results/frozen_v3.json",
+      "v3_sha256": {
+        "comments_test_v3.jsonl": "d993ca6ff057060e73583a38addfbb78965b0f51a3cd994a5c9129d0606f135e",
+        "posts_test_v3.jsonl": "a476414e26c410c12a56596edab2ff362989a67193dd0d93e3794eb2c073770d",
+        "sarcasm_holdout_v3.jsonl": "9164d6f9aad24a469ea04745ef040984c8c5fabdf20fd83ad3f8448d614b8147"
+      },
+      "note": "a program measurement of a corrected test set, never a gate result: the Tier-1 verdicts of Phase 4 were decided once, against v2"
+    },
+    "gates": [
+      {
+        "gate": "G1a",
+        "metric": "sentiment macro-F1 (comments_test)",
+        "values": {
+          "overall": 0.9498955879203255,
+          "other": 0.9355998611317761,
+          "ru": 0.9584358764014219,
+          "ua": 0.9510856125866912
+        },
+        "n": {
+          "overall": 400,
+          "ua": 248,
+          "other": 66,
+          "ru": 86
+        },
+        "gated_languages": [
+          "ua",
+          "ru"
+        ]
+      },
+      {
+        "gate": "G1b",
+        "metric": "sarcasm slice fix-rate (sarcasm_holdout)",
+        "value": 0.8181818181818182,
+        "fixed": 36,
+        "n": {
+          "slice": 44,
+          "holdout_scored": 108
+        },
+        "guard": {
+          "metric": "sentiment macro-F1 overall (comments_test)",
+          "anchor": 0.9066703799197683,
+          "value": 0.9498955879203255,
+          "delta": 0.04322520800055718,
+          "max_drop": 0.02
+        },
+        "note": "FIXED means the row leaves the union of sentiment and sarcasm errors — correct on BOTH labels (amendment 3.5 (3)). n is the pre-registered denominator and travels with the verdict (amendment 3.2's fallback)."
+      },
+      {
+        "gate": "G1c",
+        "metric": "intents micro-F1 (comments_test)",
+        "value": 0.8211920529801324,
+        "n": {
+          "overall": 400
+        }
+      },
+      {
+        "gate": "G1d",
+        "metric": "post_type macro-F1 (posts_test)",
+        "value": 0.9704733743738831,
+        "n": {
+          "overall": 250,
+          "promo": 175,
+          "launch": 31,
+          "other": 44
+        }
+      },
+      {
+        "gate": "G1d",
+        "metric": "relevance macro-F1 (posts_test)",
+        "value": 0.9894474695031868,
+        "n": {
+          "overall": 250,
+          "relevant": 26
+        },
+        "note": "second head of G1d; reported beside it and not gated (amendment 3.3)"
+      },
+      {
+        "gate": "G1e",
+        "metric": "brand extraction F1 (posts_test)",
+        "value": 0.9743589743589743,
+        "n": {
+          "overall": 250,
+          "posts_with_brands": 24,
+          "gold_entities": 39,
+          "predicted_entities": 39
+        }
+      }
+    ],
+    "diagnostics": {
+      "sarcasm_binary_macro_f1_comments_test": 0.8248050956689317,
+      "holdout_sentiment_macro_f1": {
+        "overall": 0.5663956639566395,
+        "other": 0.6000000000000001,
+        "ru": 0.8242424242424242,
+        "ua": 0.9846153846153847
+      },
+      "holdout_sarcasm_macro_f1": 0.8344250871080139,
+      "holdout_sarcasm_detected": 82
+    },
+    "g1b": {
+      "original_slice": {
+        "definition": "the pre-registered 44 ids of results/g1b_slice.json, re-scored vs v3 — the reading comparable with the Phase 4 verdict row",
+        "n": 44,
+        "entry": {
+          "gate": "G1b",
+          "metric": "sarcasm slice fix-rate (sarcasm_holdout)",
+          "value": 0.8181818181818182,
+          "fixed": 36,
+          "n": {
+            "slice": 44,
+            "holdout_scored": 108
+          },
+          "guard": {
+            "metric": "sentiment macro-F1 overall (comments_test)",
+            "anchor": 0.9066703799197683,
+            "value": 0.9498955879203255,
+            "delta": 0.04322520800055718,
+            "max_drop": 0.02
+          },
+          "note": "FIXED means the row leaves the union of sentiment and sarcasm errors — correct on BOTH labels (amendment 3.5 (3)). n is the pre-registered denominator and travels with the verdict (amendment 3.2's fallback)."
+        }
+      },
+      "v3_slice": {
+        "definition": "the base model's error union recomputed vs v3 from its own dump — a different denominator, so a different question",
+        "n": 29,
+        "ids": [
+          "@VARUS_channel:10371",
+          "@VARUS_channel:11336",
+          "@VARUS_channel:11557",
+          "@VARUS_channel:11813",
+          "@VARUS_channel:13078",
+          "@VARUS_channel:13407",
+          "@VARUS_channel:13579",
+          "@VARUS_channel:13725",
+          "@VARUS_channel:15148",
+          "@VARUS_channel:1753",
+          "@VARUS_channel:17540",
+          "@VARUS_channel:18272",
+          "@VARUS_channel:2164",
+          "@VARUS_channel:3056",
+          "@VARUS_channel:5163",
+          "@VARUS_channel:5170",
+          "@VARUS_channel:6149",
+          "@VARUS_channel:6327",
+          "@VARUS_channel:6461",
+          "@VARUS_channel:6912",
+          "@VARUS_channel:7217",
+          "@VARUS_channel:7220",
+          "@VARUS_channel:7516",
+          "@msuaaaa:10997",
+          "@msuaaaa:2509",
+          "@msuaaaa:6157",
+          "@msuaaaa:7055",
+          "@msuaaaa:7497",
+          "@msuaaaa:9643"
+        ],
+        "entry": {
+          "gate": "G1b",
+          "metric": "sarcasm slice fix-rate (sarcasm_holdout)",
+          "value": 0.7241379310344828,
+          "fixed": 21,
+          "n": {
+            "slice": 29,
+            "holdout_scored": 108
+          },
+          "guard": {
+            "metric": "sentiment macro-F1 overall (comments_test)",
+            "anchor": 0.9066703799197683,
+            "value": 0.9498955879203255,
+            "delta": 0.04322520800055718,
+            "max_drop": 0.02
+          },
+          "note": "FIXED means the row leaves the union of sentiment and sarcasm errors — correct on BOTH labels (amendment 3.5 (3)). n is the pre-registered denominator and travels with the verdict (amendment 3.2's fallback)."
+        }
+      }
+    }
+  },
+  {
+    "gold_version": "v3",
+    "model": "google/gemma-4-31b-it",
+    "arm": "with-synthetic",
+    "source": {
+      "record_timestamp": "2026-08-01T23:56:21+00:00",
+      "predictions_path": "results/predictions/google-gemma-4-31b-it--20260801T235621Z.jsonl",
+      "predictions_sha256": "b5efbece28f740d7632e2c1a457e600cbfcc0b2563162adb8e56e738e47c8b32",
+      "gold_v2_sha256": {
+        "comments_test.jsonl": "14b6172472e482d511d36c6a95e5204482a3c14c058c972d39005c82609b9627",
+        "comments_train.jsonl": "4b6ea7f354bcc396ee526ce193c445bb358fab1d070bbe429dfdeb3bace1a1d7",
+        "posts_test.jsonl": "183de2b56e9cb7cc958884db51638c281404cf5c4b06e91ba61ac6330e3dade2",
+        "posts_train.jsonl": "d9b87cdd44586b8011b164f1e3be00457c75e675fad8db7524535306cc609049",
+        "sarcasm_holdout.jsonl": "f83a6cf0fecd0bb266f851803107771309b17d946719cb6da3ca4ff614cb37c3"
+      }
+    },
+    "derivation": {
+      "rescored_by": "scripts/rescore_v3.py",
+      "judge": "scripts/eval_zero_shot.py:build_gates",
+      "frozen_v3_record": "results/frozen_v3.json",
+      "v3_sha256": {
+        "comments_test_v3.jsonl": "d993ca6ff057060e73583a38addfbb78965b0f51a3cd994a5c9129d0606f135e",
+        "posts_test_v3.jsonl": "a476414e26c410c12a56596edab2ff362989a67193dd0d93e3794eb2c073770d",
+        "sarcasm_holdout_v3.jsonl": "9164d6f9aad24a469ea04745ef040984c8c5fabdf20fd83ad3f8448d614b8147"
+      },
+      "note": "a program measurement of a corrected test set, never a gate result: the Tier-1 verdicts of Phase 4 were decided once, against v2"
+    },
+    "gates": [
+      {
+        "gate": "G1a",
+        "metric": "sentiment macro-F1 (comments_test)",
+        "values": {
+          "overall": 0.945649385128864,
+          "other": 0.9198998748435544,
+          "ru": 0.9590434419381788,
+          "ua": 0.9469101786249142
+        },
+        "n": {
+          "overall": 400,
+          "ua": 248,
+          "other": 66,
+          "ru": 86
+        },
+        "gated_languages": [
+          "ua",
+          "ru"
+        ]
+      },
+      {
+        "gate": "G1b",
+        "metric": "sarcasm slice fix-rate (sarcasm_holdout)",
+        "value": 0.6590909090909091,
+        "fixed": 29,
+        "n": {
+          "slice": 44,
+          "holdout_scored": 108
+        },
+        "guard": {
+          "metric": "sentiment macro-F1 overall (comments_test)",
+          "anchor": 0.9066703799197683,
+          "value": 0.945649385128864,
+          "delta": 0.038979005209095696,
+          "max_drop": 0.02
+        },
+        "note": "FIXED means the row leaves the union of sentiment and sarcasm errors — correct on BOTH labels (amendment 3.5 (3)). n is the pre-registered denominator and travels with the verdict (amendment 3.2's fallback)."
+      },
+      {
+        "gate": "G1c",
+        "metric": "intents micro-F1 (comments_test)",
+        "value": 0.8073394495412844,
+        "n": {
+          "overall": 400
+        }
+      },
+      {
+        "gate": "G1d",
+        "metric": "post_type macro-F1 (posts_test)",
+        "value": 0.9357192615813306,
+        "n": {
+          "overall": 250,
+          "promo": 175,
+          "launch": 31,
+          "other": 44
+        }
+      },
+      {
+        "gate": "G1d",
+        "metric": "relevance macro-F1 (posts_test)",
+        "value": 0.9890824926852702,
+        "n": {
+          "overall": 250,
+          "relevant": 26
+        },
+        "note": "second head of G1d; reported beside it and not gated (amendment 3.3)"
+      },
+      {
+        "gate": "G1e",
+        "metric": "brand extraction F1 (posts_test)",
+        "value": 0.918918918918919,
+        "n": {
+          "overall": 250,
+          "posts_with_brands": 24,
+          "gold_entities": 39,
+          "predicted_entities": 35
+        }
+      }
+    ],
+    "diagnostics": {
+      "sarcasm_binary_macro_f1_comments_test": 0.8151111111111111,
+      "holdout_sentiment_macro_f1": {
+        "overall": 0.48705501618122976,
+        "other": 0.65,
+        "ru": 0.4727272727272727,
+        "ua": 0.9923664122137404
+      },
+      "holdout_sarcasm_macro_f1": 0.6931818181818181,
+      "holdout_sarcasm_detected": 83
+    },
+    "g1b": {
+      "original_slice": {
+        "definition": "the pre-registered 44 ids of results/g1b_slice.json, re-scored vs v3 — the reading comparable with the Phase 4 verdict row",
+        "n": 44,
+        "entry": {
+          "gate": "G1b",
+          "metric": "sarcasm slice fix-rate (sarcasm_holdout)",
+          "value": 0.6590909090909091,
+          "fixed": 29,
+          "n": {
+            "slice": 44,
+            "holdout_scored": 108
+          },
+          "guard": {
+            "metric": "sentiment macro-F1 overall (comments_test)",
+            "anchor": 0.9066703799197683,
+            "value": 0.945649385128864,
+            "delta": 0.038979005209095696,
+            "max_drop": 0.02
+          },
+          "note": "FIXED means the row leaves the union of sentiment and sarcasm errors — correct on BOTH labels (amendment 3.5 (3)). n is the pre-registered denominator and travels with the verdict (amendment 3.2's fallback)."
+        }
+      },
+      "v3_slice": {
+        "definition": "the base model's error union recomputed vs v3 from its own dump — a different denominator, so a different question",
+        "n": 29,
+        "ids": [
+          "@VARUS_channel:10371",
+          "@VARUS_channel:11336",
+          "@VARUS_channel:11557",
+          "@VARUS_channel:11813",
+          "@VARUS_channel:13078",
+          "@VARUS_channel:13407",
+          "@VARUS_channel:13579",
+          "@VARUS_channel:13725",
+          "@VARUS_channel:15148",
+          "@VARUS_channel:1753",
+          "@VARUS_channel:17540",
+          "@VARUS_channel:18272",
+          "@VARUS_channel:2164",
+          "@VARUS_channel:3056",
+          "@VARUS_channel:5163",
+          "@VARUS_channel:5170",
+          "@VARUS_channel:6149",
+          "@VARUS_channel:6327",
+          "@VARUS_channel:6461",
+          "@VARUS_channel:6912",
+          "@VARUS_channel:7217",
+          "@VARUS_channel:7220",
+          "@VARUS_channel:7516",
+          "@msuaaaa:10997",
+          "@msuaaaa:2509",
+          "@msuaaaa:6157",
+          "@msuaaaa:7055",
+          "@msuaaaa:7497",
+          "@msuaaaa:9643"
+        ],
+        "entry": {
+          "gate": "G1b",
+          "metric": "sarcasm slice fix-rate (sarcasm_holdout)",
+          "value": 0.6551724137931034,
+          "fixed": 19,
+          "n": {
+            "slice": 29,
+            "holdout_scored": 108
+          },
+          "guard": {
+            "metric": "sentiment macro-F1 overall (comments_test)",
+            "anchor": 0.9066703799197683,
+            "value": 0.945649385128864,
+            "delta": 0.038979005209095696,
+            "max_drop": 0.02
+          },
+          "note": "FIXED means the row leaves the union of sentiment and sarcasm errors — correct on BOTH labels (amendment 3.5 (3)). n is the pre-registered denominator and travels with the verdict (amendment 3.2's fallback)."
+        }
+      }
+    }
+  }
+]
