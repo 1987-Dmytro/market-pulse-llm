@@ -1073,3 +1073,142 @@ output. A re-run reproduces every number byte for byte; only the `git` block mov
   corrected rows are the evidence. Whichever artifact the number is about has to be reconstructed
   explicitly — and how many rows were reconstructed has to be printed, or the number silently means
   something different depending on the order the scripts ran in.
+
+# Phase 4.5g — the parent post enters the prompts, the 97 are re-asked, 1,912 prechecked
+
+The 4.5f gate passed at 100/100 and left a defect in the instrument that produced it: 97 rows
+carried an intent under v1 and none under v2, 30.9% of the drift the taxonomy does not explain on
+the rows a gate scores. 4.5g is the fix and what follows from it — the with-post prompt revisions,
+the 97 re-asked under them, the whole labelable pool prechecked, and one sitting that decides all
+three. `$0.5978 of the $1.25 cap`, anchored before request one in `results/spend_45g.json`.
+
+## What the root cause turned out to be
+
+**The prompts contradicted the guideline, and had since Phase 2.** `docs/annotation/comments.md`
+§Unit: *"Judge the comment on its own text, plus the parent post only when the comment is
+meaningless without it"*, and the next paragraph names the plumbing — `msg_id == parent_msg_id` in
+`data/raw/posts/<channel>.jsonl`, *"Every parent is there"*. Every prompt in
+`src/market_pulse/prompts.py` says *"Judge the text you are given, never the thread around it."*
+The model was scored against gold produced under a law it was not given, and the 97 emptied rows
+are what that costs on exactly the class the guideline wrote its clause for. So this is a bug fix
+against the annotation law, not a widening of it — which is also why the sitting pack shows the
+operator the post: withholding it would judge the labels under a stricter law than the one that
+wrote them.
+
+## The three revisions, registered beside
+
+| task | sha256 | |
+|---|---|---|
+| `T1` `T2` `T1v2` `relabel_intents_v2` | unchanged | four recorded prompts, byte for byte |
+| `T1v2_with_post` | `495b43d1…` | `T1v2` with one clause swapped |
+| `relabel_intents_v2_with_post` | `5965966d…` | same swap, the re-label prompt |
+| `precheck_v2_with_post` | `113000df…` | new: all four fields, `unclear` included |
+
+`TASKS` is still `("T1", "T2")`, so `records.assert_prompt_sha` is untouched. The with-post
+variants are **derived** — `_swap(base, JUDGE_TEXT_ALONE, PARENT_POST_RULE)` with a guard that
+refuses a replace matching zero or two occurrences — so a revision cannot drift from its base, and
+a test asserts the derivation both ways.
+
+`records.assert_prompt_sha` is the wrong negative control here: it builds its map from `TASKS` and
+passes whatever happens to `T1v2`. The only thing on disk that pins the two v2 prompts is
+`results/relabel_45e.json`, the record of the run that wrote every `_tax2` file — so a test reads
+that file and requires the checkout to reproduce it. `results/relabel_probe_45d.json` carries one
+map that does *not* reproduce: the probe was paid for twice and the re-label prompt was revised
+between the two runs. That is pinned as a fact (exactly one map differs, on exactly
+`relabel_intents_v2`) rather than skipped, because a control that excludes its own exception
+permits what it exists to forbid.
+
+## The 97, re-asked with the post
+
+**33 of 85 regained a label — 39%, and the split is the finding.**
+
+| population | asked | regained | rate | = v1 exactly |
+|---|---:|---:|---:|---:|
+| all | 85 | 33 | 39% | 26 |
+| parent has text | 62 | 26 | 42% | 20 |
+| parent is media-only | 23 | 7 | 30% | 6 |
+
+**23 of the 97 reply to a post whose text is in the image** — including both rows the operator
+ruled in 4.5f (`@VARUS_channel:11960`, `:11972`, both under post 7146, a poll with 89 replies and
+no text of its own). For those the with-post prompt hands the model an explicit marker saying the
+post has no text, which is honest and does not help. The remedy is bounded by what is in the store,
+and the store has no image captions.
+
+32 rows were rewritten in the staged `_tax2` files, intents only; 51 came back `[]` again; 2 were
+held; **12 the model still refuses after three passes** (20 → 14 → 12, the same ids repeating, all
+`missing field: intents`, one probe showed a literal `{}` reply). Those 12 keep `[]` and are named
+in `results/emptied_with_post_45g.json`.
+
+`git show dac7688 -- results/relabel_45e.json` is **282 insertions, 1 deletion** (the file header):
+the drift block the 4.5f gate judged is not recomputed, the correction is a `fixes` block beside it.
+
+## The precheck: 1,912 in, 1,912 out
+
+| | |
+|---|---|
+| pool | 1,912, every funnel step re-derived and compared against `results/uplabel_candidates.json` |
+| labelled | 1,912 · unusable 0 (one row failed the first pass and answered on resume) |
+| media-only parents | 424 |
+| `unclear` | 665 (34.8%) — the labelled corpus carries 37%, so the field was not coerced |
+| sentiment | neutral 1,092 · negative 632 · positive 188 |
+| sarcasm | 88 |
+| intents | service 676 · availability 164 · price 120 · taste 91 · quality 80 · packaging 18 · none 826 |
+| estimate vs actual | $0.6574 estimated, $0.5731 spent |
+
+Every produced row goes through `annotation.check_labels` before it reaches the file — the same
+checker the hand-labelled batches pass — so a precheck a later merge could not accept fails here
+instead of there. Every row carries `annotator: "llm-precheck"`; nothing merges anywhere.
+
+## The sitting: 300 + 40 + 14
+
+`results/sitting_45g_manifest.json` pins all of it, with the denominators written before handover.
+
+- **`precheck300.csv`** — 100 from each of three disjoint classes (service-rich 382, short text ≤30
+  chars 671, general 859), then one seeded shuffle over all 300 together, so neither a column nor
+  the row order says which stratum a row is in. `stratum_of` lives in the manifest because the
+  reader needs it and the operator must not have it. Row-level `correct`/`incorrect`, and a row is
+  `correct` only if **every** field is; a stratum below 0.90 sends back its whole population, not
+  the 100 judged.
+- **`emptied40.csv`** — the pre-registered contrastive draw. Its composition is in the record:
+  **11 identical to v1, 23 empty again, 6 different and not empty.** Registered before the requests
+  went out: an identical row counts as `new`, a blank counts as not `new`.
+- **`unreadable14.csv`** — the 4.5f micro-pack, pinned where it lives and *not* copied into the
+  sitting directory; the build stops if its sha has moved since its own manifest, and reports how
+  many labels it already carries (0).
+
+## Deviations
+
+1. **The precheck prompt is new, not a revision.** No v1 prompt asks for `unclear`, so there was
+   nothing to register it beside. It is assembled from `T1v2_with_post` so the three labels it
+   shares arrive as the same bytes.
+2. **`data/annotation/uplabel_precheck_45g.jsonl` is committed**, through a gitignore exception
+   mirroring the `_tax2` one. Paid model output that a gate decision reads, living only in a
+   working tree, is money spent twice.
+3. **The micro-pack is bundled by reference, not by copy.** A second copy of a file the operator
+   may already be filling in is how an evening's work ends up in the file nobody reads.
+4. **The 300 are drawn from all 1,912, `unclear` rows included** — unlike the 4.5e gated sample,
+   which drew only scoreable rows. There `unclear` answered nothing about intents; here it is one
+   of the four fields under judgement.
+5. **`results/emptied_with_post_45g.json` was deleted and rebuilt once.** The first version carried
+   a wrong `held_by_operator_ruling` list (see below). Nothing paid was lost: the answers live in
+   `results/emptied_45g_rows.jsonl` and the spend in the anchored ledger, which carries all five
+   runs. The staged files and `results/relabel_45e.json` were restored to HEAD first, so one
+   `fixes` block records the whole application.
+6. **`relabel_emptied.Asker` takes its task as a parameter** so the precheck reuses it. A second
+   copy of that class is a second place for the budget lock to be forgotten.
+7. **The 97 are re-derived, not read from a file.** `results/drop_45f.json` persists counts and not
+   ids, so the population comes from `measure_empty_drop`'s own functions and is then checked
+   against the record's count *and* its distribution of lost labels — a count can agree by accident.
+8. **12 rows of the 97 are still unusable** after three passes and keep `[]`. Not coerced; named.
+9. **`build_sitting_pack.py` has a hidden `--root`** so its bundled-file check can be driven
+   against a temp tree; the manifest stores repo-relative paths either way.
+
+## The bug worth writing down
+
+**A hold derived from "a fix has moved this row" holds this script's own answers on the second
+run.** The rule was right once. The second invocation read back the `fixes` block the first one had
+written and reported 32 model answers as operator rulings — which, had a row needed correcting,
+would have silently refused to correct it. The fix is to narrow the hold by *authorship*
+(`fix["applied_by"] != this script`), which still protects a ruling applied tomorrow without naming
+an id in the code. The general shape: a script that appends to a history and also reads that
+history back has to be able to tell its own writes from everyone else's.
