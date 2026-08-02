@@ -2,24 +2,24 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-02 16:51:53 (every SessionStart)
+**Auto-refreshed:** 2026-08-02 17:24:39 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-471cc64 feat: the returns normalized into the sealed pack, one column at a time
-62784c8 docs: the audit returns — prompt 4.5b
-492502c test: one blinding check, one word list
-64ac276 docs: the homoglyph finding, filed with the reason it stays unfixed
-bc88a9f feat: control 40 -> 104, and a harness that refuses a spreadsheet's column
+c75504e feat: every dumped run re-scored against v3, from dumps only
+5054a90 feat: test v3 — the operator's 38 blind verdicts, applied and provable
+0906de6 feat: the intents law-review pack — the rules sliced out, not retyped
+29d63e1 docs: gate 4.5 — the law review and test v3 are ordered
+b6f52cd docs: the intents control, split by the shape of the label it agreed on
 ```
 
 ## 📋 Recent decisions
 
 - `INDEX.md` — Decision records
+- `test-v3.md` — Test set v3: 38 blind verdicts applied, and what they do not reopen
 - `phase45a-ceiling.md` — The 4.5a ceiling: 244 blind verdicts, and what each head can score at best
-- `phase4-gate-verdict.md` — The one attempt: two arms trained, each scored once, and the Tier-1 gates decided
 
 ## 📅 Recent daily logs
 
@@ -31,9 +31,38 @@ bc88a9f feat: control 40 -> 104, and a harness that refuses a spreadsheet's colu
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-02 16:50 (`PROMPT-4.5b` executed — **244/244 verdicts ingested and the approved harness has RUN ONCE**; the per-head ceilings are in [[phase45a-ceiling]] (`proposed`) and the 4.5a gate review is next. Phase 4 stays closed at 2 of 5; edited by hand — the section above is auto-generated, do NOT touch the marker)
+**Last update:** 2026-08-02 18:10 (`PROMPT-4.5c` executed — **test v3 is frozen beside v2 (38 fixes), every dumped run is re-scored, and the intents law-review pack is waiting on the operator's 10–15 minutes**. [[test-v3]] and [[phase45a-ceiling]] are both `proposed`. Phase 4 stays closed at 2 of 5 against v2; edited by hand — the section above is auto-generated, do NOT touch the marker)
 
 ## 🔥 What's Hot
+
+**TEST v3 EXISTS, BESIDE v2 — 38 point fixes from the blind audit (2026-08-02).** Three new files:
+`data/frozen/comments_test_v3.jsonl` (400 rows, 15 changed) · `sarcasm_holdout_v3.jsonl` (108, 15) ·
+`posts_test_v3.jsonl` (250, 7). **v2 is untouched and immutable forever**, every published number
+keeps its version, and **Phase 4's verdict (2 of 5) is a v2 result that v3 does not reopen** —
+`results/rescores_v3.json` is a separate, append-only file and `results/baselines.json` was not
+written. Rulings: sentiment 15 · G1b pair 15 · post_type 5 · brands 3, the split gate 4.5
+pre-registered and `scripts/freeze_testsets_v3.py` refuses to deviate from. **`intents` in v3 is
+byte-identical to v2** — 31 rulings derived, none applied, pending the law review. Record:
+`results/frozen_v3.json`; changelog: `docs/frozen-testsets.md`; ADR: [[test-v3]] (`proposed`).
+
+**What the same predictions score against corrected gold** (v2 → v3, program measurements, never
+gate results): **arm A G1a 0.9107 → 0.9499** · G1d 0.9386 → **0.9705** · G1e 0.9333 → **0.9744** ·
+**G1b on the pre-registered 44-id slice 21/44 → 36/44**. Arm B: G1a 0.9172 → 0.9456, G1e 0.9577 →
+**0.9189**, G1b 24/44 → 29/44. Base: G1a 0.8918 → 0.9067, G1e 0.8974 → 0.9383. G1c and relevance are
+unchanged to the last decimal — the cheapest proof that `intents` and `relevant` were not touched.
+**Two G1b readings, and neither is *the* fix-rate:** the pre-registered 44 ids re-scored vs v3
+(comparable with the verdict row) and the base model's error union recomputed vs v3 — **29 ids**,
+because 15 of its 44 "errors" were gold's. `python3 scripts/show_results.py --gold v3` renders it.
+
+**The fixes came out of arm A's dump**, so arm A's v3 column is not independent of v3 the way arm
+B's is. On G1e the sign is visible on three rows: A rises, B falls.
+
+**THE INTENTS LAW PACK IS WAITING ON THE OPERATOR** —
+`data/annotation/audit_45a/intents-law-review.md` (Russian, gitignored data; the builder
+`scripts/build_intents_law_pack.py` is committed). The guideline's `[]` rules **sliced verbatim**
+from `docs/annotation/comments.md` with line citations, beside the 19 agreed-`[]` rows ruled
+incorrect, the 6 ruled correct, and the 3 non-empty incorrect ones. 10–15 minutes, then the next
+gate decides the law — and only then does anything happen to `intents`.
 
 **THE 244 VERDICTS ARE IN AND THE CEILINGS ARE COMPUTED (2026-08-02) — awaiting the 4.5a gate
 review.** The numbers, per head, metric-unit first (upper bound, disagreements only) then the
@@ -90,8 +119,8 @@ rule (output matched word for word), confirmed the one-attempt protocol from art
 operator's quiz came back **2/2**. [[phase4-gate-verdict]] is `accepted`. Both ablation arms
 trained in full on the frozen config, each scored on the frozen sets **exactly once**; **nothing
 was retrained, re-scored or reconfigured after a gate number was seen** — arm B launched while arm
-A's three failures were already on screen. **348 tests**, `make check` green after every commit.
-**21 ADRs** ([[INDEX]]).
+A's three failures were already on screen. **369 tests**, `make check` green after every commit.
+**22 ADRs** ([[INDEX]]).
 
 **THE DELIVERABLE: `results/train/4c-arm-a/adapter`** — the real-only LoRA adapter, sha256
 `c0e462af81aad9f1…`, served **UNMERGED** on the same NF4 4-bit base every gate was scored through.
@@ -215,9 +244,10 @@ files**: `comments_train.jsonl` (1600) + `sarcasm_candidates.jsonl` (746) plus
 
 ## ⏭️ Next
 
-1. **The 4.5a gate review (team lead + operator) reads [[phase45a-ceiling]] and decides everything
-   downstream** — targeted re-labelling, synthetic v2, a dev-set search, test-set v3. The ADR is
-   `proposed` and deliberately carries no recommendation; nothing moves until that review happens.
+1. **The operator's 10–15 minutes: `data/annotation/audit_45a/intents-law-review.md`.** The next
+   gate decides the intents law from it; until then `intents` gold does not move anywhere — not in
+   v3, not in training data. Everything else in the 4.5 program (re-labelling appetite, synthetic
+   v2, a dev-set sweep) waits on that same gate.
 2. **Open for the review, in the ADR's own terms:** `intents` control says 22 of 40 agreement rows
    carry a wrong gold, against the 96.3% agreement the whole phase was premised on — do the two
    readings measure the same thing? One count from the returned data, no conclusion attached:
@@ -261,6 +291,12 @@ matrix is frozen. CPU beats MPS by 14×, which is the opposite of the intuition.
 
 ## ⚠️ Footguns for the next run
 
+- **Two gold versions exist now, so every number has to name one.** `data/frozen/*_v3.jsonl` sit
+  beside the v2 files and **nothing reads them by default** — the gates, the bars,
+  `eval_zero_shot.py` and `run_baseline.py` all still score against v2, which is what keeps Phase 4's
+  verdict meaningful. v3 numbers live only in `results/rescores_v3.json` (`gold_version: "v3"`) and
+  are **program measurements, never gate results**; they must never be appended to
+  `results/baselines.json`. Scoring a *new* run against v3 is a gate decision nobody has taken.
 - **`data/annotation/audit_45a/` now holds 244 verdicts and gitignored data has no HEAD to restore
   from.** `build_audit_pack.py --force` is the only path that overwrites a filled pack and it takes
   no snapshot — do not run it to "regenerate" anything. What can be re-run safely:

@@ -695,3 +695,64 @@ team lead's independent count of the returns exactly (A19/B16 · A32/B33/amb2 ·
   definition; the control adds nothing because its 8 rows carry no `incorrect`. Nowhere else do the
   columns mean the same thing, and a reader who generalizes from that row will read a macro-F1 bound
   as an accuracy share.
+
+# Phase 4.5c — the law-review pack, test v3, and every dump re-scored
+
+## Three artifacts, three refusal surfaces
+
+- **`scripts/build_intents_law_pack.py`** slices the guideline's `[]` rules out of
+  `docs/annotation/comments.md` by anchor string and prints them with the line numbers they came
+  from. Nothing is retyped, because a paraphrase of a rule under review is an argument about it —
+  and the end-to-end test runs against the real guideline, so an anchor that stops matching fails
+  the suite instead of quoting whatever moved into its place. The finished page is swept for
+  attribution vocabulary outside the fenced row texts.
+- **`scripts/freeze_testsets_v3.py`** applies the 38 rulings and proves the rest: every row that
+  took no fix is re-serialised and must reproduce its v2 line byte for byte. That check is what
+  turns "v3 differs from v2 in 38 rows" into a statement with a failure mode — a JSON writer that
+  reordered keys or changed spacing would otherwise rewrite all 758 rows silently.
+- **`scripts/rescore_v3.py`** re-scores from dumps only, verifies each dump against the sha256 its
+  own record stored, and names the eight runs that have none. `results/baselines.json` is read and
+  never written.
+
+## What the numbers turned out to be
+
+Arm A on the original 44-id slice goes 21/44 → **36/44** under v3, and its G1a overall 0.9107 →
+0.9499. G1c and relevance are unchanged to the last decimal, which is the cheapest available proof
+that `intents` and `relevant` were not touched. The base model's own error union shrinks 44 → 29
+ids, which is why G1b needs two readings and why neither is called *the* fix-rate.
+
+**The fixes came out of arm A's dump.** Where the operator ruled for the arm, v3's gold now carries
+arm A's label, so arm A's v3 column is not independent of v3 the way arm B's is. On G1e the sign is
+visible: arm A 0.9333 → 0.9744, arm B 0.9577 → 0.9189, on three fixed rows.
+
+## Deviations from `docs/PROMPT-4.5c.md`
+
+1. **The changelog is generated, and the doc quotes it.** `docs/frozen-testsets.md` carries the
+   table `freeze_testsets_v3.py` prints, and `tests/test_freeze_v3.py` asserts the doc still
+   contains exactly what `results/frozen_v3.json` renders. A hand-typed changelog is a second
+   source of truth that disagrees with nothing.
+2. **A field the ruling confirms is not logged as a change.** 13 of the 15 pair rulings leave
+   `sentiment` where it was; a changelog line reading `negative -> negative` is noise in the one
+   document that has to be read row by row. The rulings are counted per head (38); the field-level
+   changes are 39 over 37 rows, and all three counts are in the record.
+3. **A brand entry's `brand_id` is derived, not copied.** `docs/annotation/posts.md` makes both keys
+   mandatory and a prediction carries only the mention, so the id comes from the watchlist alias
+   table — the same lookup `scorer.normalise_brand` performs, which makes the written row score
+   identically to the entry it came from.
+4. **v3 is written for all three inputs**, including one that took no fix, so "v3" names a whole
+   test set rather than a subset. In this run all three changed, so the rule is only visible in the
+   tests.
+5. **Additive, not asked for:** the deriver refuses a count other than the gate's 15/15/5/3; the
+   re-scorer is idempotent (a second run appends nothing) and takes `--frozen` / `--slice` /
+   `--out` so its tests cannot reach real data; 21 new tests; today's daily log.
+
+## Two things the next session should not relearn
+
+- **A corrected test set does not un-measure anything.** Phase 4's verdict is a v2 result and stays
+  one; the v3 columns say what the same predictions would have scored had gold been right. Keeping
+  them in a separate file with `gold_version: "v3"` is what stops a program measurement from being
+  read as a gate result six weeks later.
+- **When gold moves, the base model's error set moves with it.** G1b's denominator is defined as
+  "the rows the base model gets wrong", so re-scoring the slice against corrected gold silently
+  changes the question unless the pre-registered ids travel with the number. Report both, name both,
+  persist the new ids.

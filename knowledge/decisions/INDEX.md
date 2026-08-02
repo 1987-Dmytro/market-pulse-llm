@@ -31,3 +31,4 @@ docs/STATUS.md; these are the English long form with the numbers.
 | 2026-08-01 | [[4b-training-contract]] — frozen QLoRA hyperparameters; a training example is an eval prompt; the second arm projects over the 4 h ceiling | accepted |
 | 2026-08-02 | [[phase4-gate-verdict]] — both arms trained and scored once; the rule drops synthetic; 2 of 5 Tier-1 gates pass | accepted |
 | 2026-08-02 | [[phase45a-ceiling]] — 244 blind verdicts: the per-head ceiling in metric and accuracy units | proposed |
+| 2026-08-02 | [[test-v3]] — 38 blind verdicts applied beside v2; intents pending the law review | proposed |
