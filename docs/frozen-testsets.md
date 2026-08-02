@@ -1,4 +1,4 @@
-# Frozen test sets (Phase 2, step 2e) — v2
+# Frozen test sets (Phase 2, step 2e) — v2, and v3 beside it
 
 **Version: v2, 2026-07-27.** **Immutable without operator approval** (CLAUDE.md). v2 exists
 only because the operator approved 11 corrections on 2026-07-27, before any baseline number
@@ -15,6 +15,92 @@ published against them must name the version and the hashes below.
 | `data/frozen/posts_train.jsonl` | 750 | `d9b87cdd44586b8011b164f1e3be00457c75e675fad8db7524535306cc609049` |
 
 The post sets are byte-identical to v1; only the two comment files changed.
+
+## v3 — 38 point fixes from the blind audit (2026-08-02)
+
+**v3 does not replace v2, it sits beside it.** Three new files; every v2 file keeps its hash, and
+every number ever published against v2 keeps meaning what it meant. Phase 4's verdict (2 of 5) is a
+v2 result and stays one — the v3 re-scores in `results/rescores_v3.json` are program measurements,
+never gate results.
+
+| file | rows | rows changed | sha256 (v3) |
+|---|---|---|---|
+| `data/frozen/comments_test_v3.jsonl` | 400 | 15 | `d993ca6ff057060e73583a38addfbb78965b0f51a3cd994a5c9129d0606f135e` |
+| `data/frozen/posts_test_v3.jsonl` | 250 | 7 | `a476414e26c410c12a56596edab2ff362989a67193dd0d93e3794eb2c073770d` |
+| `data/frozen/sarcasm_holdout_v3.jsonl` | 108 | 15 | `9164d6f9aad24a469ea04745ef040984c8c5fabdf20fd83ad3f8448d614b8147` |
+
+**Where the fixes come from.** Phase 4.5a put every disagreement between the deliverable arm
+(`real-only`) and gold to the operator with the two candidate labels blinded, plus a control sample
+of rows where both agreed. The operator ruled 244 rows without knowing which label was whose; on 38
+of them the arm was right and gold was wrong — sentiment 15, the G1b `sentiment`+`sarcasm` pair 15,
+`post_type` 5, `brands` 3, exactly the split gate 4.5 approved. `scripts/freeze_testsets_v3.py`
+applies them from the sealed key and the arm's own dump; there are no hand edits, and a row that
+takes no fix is proved byte-identical to its v2 line before anything is written.
+
+Provenance — the audit manifest `results/audit_45a_manifest.json`, the returned verdicts
+`results/audit_45b_returns.json`, the arm's dump `results/predictions/google-gemma-4-31b-it--20260801T183747Z.jsonl`
+(`bdff8a4ad36b60f6…`) and the blinding key (`67bc859658f3663f…`). The full
+record, with every sha and the machine-readable changelog, is `results/frozen_v3.json`.
+
+**`intents` in v3 is byte-identical to v2**, deliberately. The operator ruled for the arm on 31
+intents disagreements and none of them is applied: the audit's control sample says 22 of 40 agreed
+`intents` rows carry a label the operator considers wrong, and 19 of those agreed on the *empty*
+set — a disagreement about the annotation law rather than about these 400 rows. Gate 4.5 sent that
+question to a face-to-face review; until it is decided, half-relabelling the head against two
+readings at once would be worse than leaving it.
+
+**A pair ruling confirms both labels and changes only what differed**: 13 of the 15 G1b rows keep
+their `sentiment` and move only `sarcasm`. That is why the changelog below has 39 lines over 37
+rows for 38 rulings.
+
+**Three fixed rows amend a v2 operator correction.** `@msuaaaa:8175` — v2 set `sentiment` to
+`negative`, v3 sets `positive`; `@VARUS_channel:9797` and `@msuaaaa:5534` — v2 set `sarcasm: true`,
+v3 moves their `sentiment`. Recorded here because a signed-off correction that changes in silence
+reads as a defect later.
+
+Every changed row carries `annotator: "operator-blind-audit-45a"`.
+
+| file | id | field | v2 | v3 |
+|---|---|---|---|---|
+| `comments_test_v3.jsonl` | `@VARUS_channel:10221` | `sentiment` | "negative" | "neutral" |
+| `comments_test_v3.jsonl` | `@VARUS_channel:11424` | `sentiment` | "negative" | "neutral" |
+| `comments_test_v3.jsonl` | `@VARUS_channel:12833` | `sentiment` | "negative" | "neutral" |
+| `comments_test_v3.jsonl` | `@VARUS_channel:14969` | `sentiment` | "positive" | "neutral" |
+| `comments_test_v3.jsonl` | `@VARUS_channel:19944` | `sentiment` | "positive" | "neutral" |
+| `comments_test_v3.jsonl` | `@VARUS_channel:8087` | `sentiment` | "negative" | "neutral" |
+| `comments_test_v3.jsonl` | `@VARUS_channel:8129` | `sentiment` | "negative" | "neutral" |
+| `comments_test_v3.jsonl` | `@VARUS_channel:9797` | `sentiment` | "negative" | "neutral" |
+| `comments_test_v3.jsonl` | `@msuaaaa:12252` | `sentiment` | "negative" | "positive" |
+| `comments_test_v3.jsonl` | `@msuaaaa:12980` | `sentiment` | "negative" | "neutral" |
+| `comments_test_v3.jsonl` | `@msuaaaa:13530` | `sentiment` | "neutral" | "negative" |
+| `comments_test_v3.jsonl` | `@msuaaaa:4774` | `sentiment` | "negative" | "neutral" |
+| `comments_test_v3.jsonl` | `@msuaaaa:4785` | `sentiment` | "negative" | "positive" |
+| `comments_test_v3.jsonl` | `@msuaaaa:5534` | `sentiment` | "neutral" | "negative" |
+| `comments_test_v3.jsonl` | `@msuaaaa:8175` | `sentiment` | "negative" | "positive" |
+| `posts_test_v3.jsonl` | `@VARUS_channel:6737` | `post_type` | "promo" | "other" |
+| `posts_test_v3.jsonl` | `@VARUS_channel:9450` | `post_type` | "promo" | "other" |
+| `posts_test_v3.jsonl` | `@msuaaaa:10651` | `brands` | [] | [{"brand_id": null, "mention": "KFC"}] |
+| `posts_test_v3.jsonl` | `@msuaaaa:5150` | `brands` | [] | [{"brand_id": null, "mention": "McDonald’s"}] |
+| `posts_test_v3.jsonl` | `@msuaaaa:8280` | `post_type` | "promo" | "launch" |
+| `posts_test_v3.jsonl` | `@msuaaaa:9676` | `post_type` | "other" | "launch" |
+| `posts_test_v3.jsonl` | `@msuaaaa:9676` | `brands` | [] | [{"brand_id": null, "mention": "Roshen"}] |
+| `posts_test_v3.jsonl` | `@silposilpo:3558` | `post_type` | "launch" | "promo" |
+| `sarcasm_holdout_v3.jsonl` | `@VARUS_channel:10046` | `sarcasm` | true | false |
+| `sarcasm_holdout_v3.jsonl` | `@VARUS_channel:10064` | `sarcasm` | true | false |
+| `sarcasm_holdout_v3.jsonl` | `@VARUS_channel:11849` | `sarcasm` | true | false |
+| `sarcasm_holdout_v3.jsonl` | `@VARUS_channel:14785` | `sarcasm` | true | false |
+| `sarcasm_holdout_v3.jsonl` | `@VARUS_channel:16281` | `sarcasm` | true | false |
+| `sarcasm_holdout_v3.jsonl` | `@VARUS_channel:16728` | `sarcasm` | true | false |
+| `sarcasm_holdout_v3.jsonl` | `@VARUS_channel:18066` | `sarcasm` | true | false |
+| `sarcasm_holdout_v3.jsonl` | `@VARUS_channel:2181` | `sarcasm` | true | false |
+| `sarcasm_holdout_v3.jsonl` | `@VARUS_channel:2953` | `sarcasm` | true | false |
+| `sarcasm_holdout_v3.jsonl` | `@VARUS_channel:2989` | `sarcasm` | true | false |
+| `sarcasm_holdout_v3.jsonl` | `@VARUS_channel:3342` | `sarcasm` | true | false |
+| `sarcasm_holdout_v3.jsonl` | `@VARUS_channel:3551` | `sarcasm` | true | false |
+| `sarcasm_holdout_v3.jsonl` | `@VARUS_channel:7389` | `sarcasm` | true | false |
+| `sarcasm_holdout_v3.jsonl` | `@msuaaaa:7500` | `sentiment` | "negative" | "neutral" |
+| `sarcasm_holdout_v3.jsonl` | `@msuaaaa:7500` | `sarcasm` | true | false |
+| `sarcasm_holdout_v3.jsonl` | `@msuaaaa:7907` | `sarcasm` | true | false |
 
 ## Changelog
 

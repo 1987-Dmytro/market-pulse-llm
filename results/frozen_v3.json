@@ -1,0 +1,323 @@
+{
+  "derived_by": "scripts/freeze_testsets_v3.py",
+  "gate": "4.5 (operator, 2026-08-02): 38 point fixes from the blind audit",
+  "law_pending": [
+    "intents"
+  ],
+  "law_pending_rulings": {
+    "intents": 31
+  },
+  "source": {
+    "manifest": "results/audit_45a_manifest.json",
+    "pack": "data/annotation/audit_45a",
+    "returns_record": "results/audit_45b_returns.json",
+    "arm": "real-only",
+    "predictions_path": "results/predictions/google-gemma-4-31b-it--20260801T183747Z.jsonl",
+    "predictions_sha256": "bdff8a4ad36b60f6adc16332f8780592f20d00b21cb3087d3b662df46018f6db",
+    "key_sha256": "67bc859658f3663f0a2495fe02224dc50b846dd397219027d98cec009b175356"
+  },
+  "v2_sha256": {
+    "comments_test.jsonl": "14b6172472e482d511d36c6a95e5204482a3c14c058c972d39005c82609b9627",
+    "comments_train.jsonl": "4b6ea7f354bcc396ee526ce193c445bb358fab1d070bbe429dfdeb3bace1a1d7",
+    "posts_test.jsonl": "183de2b56e9cb7cc958884db51638c281404cf5c4b06e91ba61ac6330e3dade2",
+    "posts_train.jsonl": "d9b87cdd44586b8011b164f1e3be00457c75e675fad8db7524535306cc609049",
+    "sarcasm_holdout.jsonl": "f83a6cf0fecd0bb266f851803107771309b17d946719cb6da3ca4ff614cb37c3"
+  },
+  "v3_sha256": {
+    "comments_test_v3.jsonl": "d993ca6ff057060e73583a38addfbb78965b0f51a3cd994a5c9129d0606f135e",
+    "posts_test_v3.jsonl": "a476414e26c410c12a56596edab2ff362989a67193dd0d93e3794eb2c073770d",
+    "sarcasm_holdout_v3.jsonl": "9164d6f9aad24a469ea04745ef040984c8c5fabdf20fd83ad3f8448d614b8147"
+  },
+  "rows": {
+    "comments_test_v3.jsonl": {
+      "rows": 400,
+      "rows_changed": 15,
+      "fields_changed": 15
+    },
+    "posts_test_v3.jsonl": {
+      "rows": 250,
+      "rows_changed": 7,
+      "fields_changed": 8
+    },
+    "sarcasm_holdout_v3.jsonl": {
+      "rows": 108,
+      "rows_changed": 15,
+      "fields_changed": 16
+    }
+  },
+  "fixes": {
+    "sentiment": 15,
+    "sarcasm_pair": 15,
+    "post_type": 5,
+    "brands": 3
+  },
+  "changes": {
+    "comments_test_v3.jsonl": [
+      {
+        "id": "@VARUS_channel:10221",
+        "field": "sentiment",
+        "from": "negative",
+        "to": "neutral"
+      },
+      {
+        "id": "@VARUS_channel:11424",
+        "field": "sentiment",
+        "from": "negative",
+        "to": "neutral"
+      },
+      {
+        "id": "@VARUS_channel:12833",
+        "field": "sentiment",
+        "from": "negative",
+        "to": "neutral"
+      },
+      {
+        "id": "@VARUS_channel:14969",
+        "field": "sentiment",
+        "from": "positive",
+        "to": "neutral"
+      },
+      {
+        "id": "@VARUS_channel:19944",
+        "field": "sentiment",
+        "from": "positive",
+        "to": "neutral"
+      },
+      {
+        "id": "@VARUS_channel:8087",
+        "field": "sentiment",
+        "from": "negative",
+        "to": "neutral"
+      },
+      {
+        "id": "@VARUS_channel:8129",
+        "field": "sentiment",
+        "from": "negative",
+        "to": "neutral"
+      },
+      {
+        "id": "@VARUS_channel:9797",
+        "field": "sentiment",
+        "from": "negative",
+        "to": "neutral"
+      },
+      {
+        "id": "@msuaaaa:12252",
+        "field": "sentiment",
+        "from": "negative",
+        "to": "positive"
+      },
+      {
+        "id": "@msuaaaa:12980",
+        "field": "sentiment",
+        "from": "negative",
+        "to": "neutral"
+      },
+      {
+        "id": "@msuaaaa:13530",
+        "field": "sentiment",
+        "from": "neutral",
+        "to": "negative"
+      },
+      {
+        "id": "@msuaaaa:4774",
+        "field": "sentiment",
+        "from": "negative",
+        "to": "neutral"
+      },
+      {
+        "id": "@msuaaaa:4785",
+        "field": "sentiment",
+        "from": "negative",
+        "to": "positive"
+      },
+      {
+        "id": "@msuaaaa:5534",
+        "field": "sentiment",
+        "from": "neutral",
+        "to": "negative"
+      },
+      {
+        "id": "@msuaaaa:8175",
+        "field": "sentiment",
+        "from": "negative",
+        "to": "positive"
+      }
+    ],
+    "posts_test_v3.jsonl": [
+      {
+        "id": "@VARUS_channel:6737",
+        "field": "post_type",
+        "from": "promo",
+        "to": "other"
+      },
+      {
+        "id": "@VARUS_channel:9450",
+        "field": "post_type",
+        "from": "promo",
+        "to": "other"
+      },
+      {
+        "id": "@msuaaaa:10651",
+        "field": "brands",
+        "from": [],
+        "to": [
+          {
+            "brand_id": null,
+            "mention": "KFC"
+          }
+        ]
+      },
+      {
+        "id": "@msuaaaa:5150",
+        "field": "brands",
+        "from": [],
+        "to": [
+          {
+            "brand_id": null,
+            "mention": "McDonald’s"
+          }
+        ]
+      },
+      {
+        "id": "@msuaaaa:8280",
+        "field": "post_type",
+        "from": "promo",
+        "to": "launch"
+      },
+      {
+        "id": "@msuaaaa:9676",
+        "field": "post_type",
+        "from": "other",
+        "to": "launch"
+      },
+      {
+        "id": "@msuaaaa:9676",
+        "field": "brands",
+        "from": [],
+        "to": [
+          {
+            "brand_id": null,
+            "mention": "Roshen"
+          }
+        ]
+      },
+      {
+        "id": "@silposilpo:3558",
+        "field": "post_type",
+        "from": "launch",
+        "to": "promo"
+      }
+    ],
+    "sarcasm_holdout_v3.jsonl": [
+      {
+        "id": "@VARUS_channel:10046",
+        "field": "sarcasm",
+        "from": true,
+        "to": false
+      },
+      {
+        "id": "@VARUS_channel:10064",
+        "field": "sarcasm",
+        "from": true,
+        "to": false
+      },
+      {
+        "id": "@VARUS_channel:11849",
+        "field": "sarcasm",
+        "from": true,
+        "to": false
+      },
+      {
+        "id": "@VARUS_channel:14785",
+        "field": "sarcasm",
+        "from": true,
+        "to": false
+      },
+      {
+        "id": "@VARUS_channel:16281",
+        "field": "sarcasm",
+        "from": true,
+        "to": false
+      },
+      {
+        "id": "@VARUS_channel:16728",
+        "field": "sarcasm",
+        "from": true,
+        "to": false
+      },
+      {
+        "id": "@VARUS_channel:18066",
+        "field": "sarcasm",
+        "from": true,
+        "to": false
+      },
+      {
+        "id": "@VARUS_channel:2181",
+        "field": "sarcasm",
+        "from": true,
+        "to": false
+      },
+      {
+        "id": "@VARUS_channel:2953",
+        "field": "sarcasm",
+        "from": true,
+        "to": false
+      },
+      {
+        "id": "@VARUS_channel:2989",
+        "field": "sarcasm",
+        "from": true,
+        "to": false
+      },
+      {
+        "id": "@VARUS_channel:3342",
+        "field": "sarcasm",
+        "from": true,
+        "to": false
+      },
+      {
+        "id": "@VARUS_channel:3551",
+        "field": "sarcasm",
+        "from": true,
+        "to": false
+      },
+      {
+        "id": "@VARUS_channel:7389",
+        "field": "sarcasm",
+        "from": true,
+        "to": false
+      },
+      {
+        "id": "@msuaaaa:7500",
+        "field": "sentiment",
+        "from": "negative",
+        "to": "neutral"
+      },
+      {
+        "id": "@msuaaaa:7500",
+        "field": "sarcasm",
+        "from": true,
+        "to": false
+      },
+      {
+        "id": "@msuaaaa:7907",
+        "field": "sarcasm",
+        "from": true,
+        "to": false
+      }
+    ]
+  },
+  "git": {
+    "commit": "0906de6cd22c1cae1dcddd81da103277080200c8",
+    "dirty": [
+      "knowledge/daily_logs/2026-08-02.md",
+      "knowledge/index.md",
+      "data/frozen/comments_test_v3.jsonl",
+      "data/frozen/posts_test_v3.jsonl",
+      "data/frozen/sarcasm_holdout_v3.jsonl",
+      "scripts/freeze_testsets_v3.py",
+      "tests/test_freeze_v3.py"
+    ]
+  }
+}
