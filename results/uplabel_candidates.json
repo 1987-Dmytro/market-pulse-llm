@@ -1,0 +1,150 @@
+{
+  "funnel": {
+    "corpus": 11338,
+    "no text (media only)": 4114,
+    "already labelled": 3771,
+    "in a test or holdout thread": 1239,
+    "verbatim copy of a labelled text": 283,
+    "repeat of another candidate": 19,
+    "labelable pool": 1912
+  },
+  "strata": {
+    "service-rich": 382,
+    "sarcasm-rich": 0,
+    "any irony signal at all": 149,
+    "highest irony score in the pool": 1,
+    "in both": 0,
+    "general": 1530,
+    "of the general pool, bot participation markers": 4,
+    "service signals (a row can fire several)": {
+      "delivery / order": 99,
+      "app / site / checkout": 126,
+      "support / staff": 46,
+      "loyalty / points": 41,
+      "promo mechanics / giveaway": 113,
+      "queue / shop floor": 35
+    }
+  },
+  "growth": {
+    "comments per month (last 3 complete)": 805.0,
+    "months": {
+      "2026-04": 759,
+      "2026-05": 745,
+      "2026-06": 911
+    },
+    "labelable share, this corpus": 0.253,
+    "labelable share, a fresh month": 0.55,
+    "labelable rows per month": 442.9
+  },
+  "tiers": [
+    {
+      "tier": "+2k",
+      "rows": 2000,
+      "from the targeted strata": 382,
+      "from the general pool": 1618,
+      "reachable": false
+    },
+    {
+      "tier": "+5k",
+      "rows": 5000,
+      "from the targeted strata": 382,
+      "from the general pool": 4618,
+      "reachable": false
+    },
+    {
+      "tier": "+9k",
+      "rows": 9000,
+      "from the targeted strata": 382,
+      "from the general pool": 8618,
+      "reachable": false
+    }
+  ],
+  "calibration": {
+    "bar": 0.9,
+    "sample": 100,
+    "rate_rows_per_hour": 150,
+    "rate_band": [
+      120,
+      180
+    ],
+    "precision_at_n100_pp": 5.9,
+    "relabel": {
+      "gated": {
+        "rows": 100,
+        "hours": 0.6666666666666666,
+        "band_hours": [
+          0.5555555555555556,
+          0.8333333333333334
+        ]
+      },
+      "with the changed-row diagnostic": {
+        "rows": 150,
+        "hours": 1.0,
+        "band_hours": [
+          0.8333333333333334,
+          1.25
+        ]
+      }
+    },
+    "uplabel": {
+      "+2k": {
+        "rows": 300,
+        "hours": 2.0,
+        "band_hours": [
+          1.6666666666666667,
+          2.5
+        ]
+      },
+      "+5k": {
+        "rows": 300,
+        "hours": 2.0,
+        "band_hours": [
+          1.6666666666666667,
+          2.5
+        ]
+      },
+      "+9k": {
+        "rows": 300,
+        "hours": 2.0,
+        "band_hours": [
+          1.6666666666666667,
+          2.5
+        ]
+      }
+    },
+    "second round if a stratum misses the bar": {
+      "rows": 100,
+      "hours": 0.6666666666666666,
+      "band_hours": [
+        0.5555555555555556,
+        0.8333333333333334
+      ]
+    }
+  },
+  "heuristic_vs_probe": {
+    "rows": 50,
+    "labelled service": 15,
+    "heuristic fires": 16,
+    "both": 10,
+    "recall": 0.6666666666666666,
+    "precision": 0.625
+  },
+  "sources": {
+    "corpus": [
+      "data/raw/comments/VARUS_channel.jsonl",
+      "data/raw/comments/msuaaaa.jsonl"
+    ],
+    "labelled": [
+      "data/frozen/comments_train.jsonl",
+      "data/frozen/comments_test.jsonl",
+      "data/frozen/sarcasm_holdout.jsonl",
+      "data/annotation/sarcasm_candidates.jsonl",
+      "data/annotation/sarcasm_holdout_pool.jsonl"
+    ],
+    "evaluation threads from": [
+      "data/frozen/comments_test.jsonl",
+      "data/frozen/sarcasm_holdout.jsonl"
+    ]
+  },
+  "note": "Counts and overlaps only — nothing here labels a row."
+}
