@@ -30,6 +30,9 @@ data/*
 data/annotation/*
 !data/annotation/sarcasm_candidates.jsonl
 !data/annotation/sarcasm_holdout_pool.jsonl
+# The taxonomy-v2 copies staged beside them (4.5e). Same kind of artifact as the
+# file they were derived from, and useless to a reader who cannot diff the two.
+!data/annotation/*_tax2.jsonl
 # Generated, not collected — but the same kind of artifact: a curated training
 # source, ablation-gated (knowledge/decisions/synthetic-sarcasm-augmentation.md).
 !data/annotation/synthetic_sarcasm.jsonl
