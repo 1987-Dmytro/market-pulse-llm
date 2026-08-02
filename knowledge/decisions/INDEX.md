@@ -32,3 +32,4 @@ docs/STATUS.md; these are the English long form with the numbers.
 | 2026-08-02 | [[phase4-gate-verdict]] — both arms trained and scored once; the rule drops synthetic; 2 of 5 Tier-1 gates pass | accepted |
 | 2026-08-02 | [[phase45a-ceiling]] — 244 blind verdicts: the per-head ceiling in metric and accuracy units | proposed |
 | 2026-08-02 | [[test-v3]] — 38 blind verdicts applied beside v2; intents pending the law review | proposed |
+| 2026-08-02 | [[taxonomy-v2-relabel-and-appetite]] — all 1,912 rows up-labelled after the ≥90% gate; three boundary calls ratified; v2 copies beside originals | accepted |
