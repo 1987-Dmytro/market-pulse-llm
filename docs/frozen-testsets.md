@@ -5,6 +5,11 @@ only because the operator approved 11 corrections on 2026-07-27, before any base
 was scored — see the changelog. After v2 the sets are immutable again; every number ever
 published against them must name the version and the hashes below.
 
+**Version v3, 2026-08-02**, lives in three *separate* files and changes none of the above: it
+applies the 38 point fixes the operator ruled blind in the Phase 4.5a audit, and `intents` in it is
+byte-identical to v2 pending the annotation-law review. v2 keeps every hash it has, and every number
+already published against v2 stays a v2 number. See "v3 — 38 point fixes from the blind audit".
+
 ## Files
 
 | file | rows | sha256 (v2) |
@@ -213,6 +218,11 @@ the same threads as holdout rows, so training on them would leak the holdout. It
 labelled for error analysis and for any future holdout extension.
 
 ## Sarcasm holdout (G1b)
+
+**Under v3 this file has a sibling**, `sarcasm_holdout_v3.jsonl`: 15 of these rows had gold
+wrong on the `sentiment`+`sarcasm` pair, all 15 inside the pre-registered 44-id G1b slice. That
+moves the slice's own definition — the base model's error union is 29 ids against v3, not 44 —
+so a fix-rate must name which denominator it used. Both readings are in `results/rescores_v3.json`.
 
 **Frozen 2026-07-28, immutable without operator approval** — same rule as the four files
 above. Approved by the operator as option 1a after the fresh-corpus-only holdout was shown to
