@@ -1,0 +1,62 @@
+{
+  "pack": "data/annotation/calib_45e",
+  "seed": 42,
+  "bar": 0.9,
+  "rule": "agreement = rows marked `correct` / 100 rows shipped. A blank cell or any other value counts as disagreement. Registered before the pack was handed over and not recomputed on any other denominator.",
+  "gated_verdicts": [
+    "correct",
+    "incorrect"
+  ],
+  "diagnostic_verdicts": [
+    "old",
+    "new",
+    "neither"
+  ],
+  "gated_is_scoreable_only": true,
+  "strata_are_disjoint": true,
+  "sha256": {
+    "gated.csv": "f26fb86c9a941019dded4803a9913f30ad6d85ed0a933dc44e4ec98a0d8d370d",
+    "changed.csv": "6192643ae1a7a679b53cf5ab38052d0da239557b69e7003a61caabcb48178186",
+    "README-calibration.md": "94119836ce74c3b6556dbad1122086d1eb83d70f3d9c1b3bd09af8ca02bf7ed7"
+  },
+  "staged": {
+    "data/frozen/comments_train_tax2.jsonl": "d2132c1e5d45f4f0514fd7c149939048a68969acdebabab2dcc94148893ea350",
+    "data/annotation/sarcasm_candidates_tax2.jsonl": "56328acbd4bfba69517f0792596ab3f2c0ba299af7bdf92ab7919e8881df3ab1",
+    "data/annotation/sarcasm_holdout_pool_tax2.jsonl": "a00942ccf2ab681139c8c9fcc41144f4bca85b67eb13841289d96065b1f8fe91"
+  },
+  "sources": {
+    "data/frozen/comments_train.jsonl": "4b6ea7f354bcc396ee526ce193c445bb358fab1d070bbe429dfdeb3bace1a1d7",
+    "data/annotation/sarcasm_candidates.jsonl": "44cd226245bc5f6fd5ecd2edd588d4a77c6ae9faca024af42787f4f1f4279423",
+    "data/annotation/sarcasm_holdout_pool.jsonl": "ea00ed6544e135afc6f78c0c0ae5875832cf7b95fe68890e7a68ec23f5162e30"
+  },
+  "population": {
+    "staged_rows": 3249,
+    "scoreable": 2059,
+    "changed_scoreable": 1018
+  },
+  "composition": {
+    "gated": {
+      "rows": 100,
+      "changed": 52,
+      "carry_service": 43,
+      "empty_after": 30,
+      "by_source": {
+        "comments_train": 47,
+        "sarcasm_candidates": 26,
+        "holdout_pool": 27
+      }
+    },
+    "changed": {
+      "rows": 50,
+      "changed": 50,
+      "carry_service": 38,
+      "empty_after": 6,
+      "by_source": {
+        "comments_train": 25,
+        "sarcasm_candidates": 12,
+        "holdout_pool": 13
+      }
+    }
+  },
+  "note": "The gated sample decides the re-label under SPEC §8; the changed sample is a diagnostic and no reading of it moves the verdict. The composition block is provenance for the analysis that follows the verdicts — it is not in the pack, because a pack that says how many of its rows moved is not blind."
+}

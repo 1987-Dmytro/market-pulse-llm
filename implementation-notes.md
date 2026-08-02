@@ -840,3 +840,99 @@ Re-running was the wrong way to get that: greedy decoding is not deterministic a
 batches (Phase 4a), so a second run is a second measurement. `relabel_intents.py --from-rows`
 re-derives the drift block from the rows the paid run wrote — no requests, cost `0` in the record,
 and the record says so. The two paid runs' own `drift` blocks stay as they were written.
+
+# Phase 4.5e — the taxonomy-v2 re-label, staged and put up for calibration
+
+## What ran
+
+Every labelled **non-frozen** row, three files, one column:
+
+| source | rows | staged | frozen ids skipped | unusable |
+|---|---:|---:|---:|---:|
+| `data/frozen/comments_train.jsonl` | 1600 | 1594 | 0 | 6 |
+| `data/annotation/sarcasm_candidates.jsonl` | 746 | 740 | 0 | 6 |
+| `data/annotation/sarcasm_holdout_pool.jsonl` | 971 | 915 | 54 | 2 |
+| **total** | **3317** | **3249** | **54** | **14** |
+
+3,317 − 54 = **3,263** rows this step may legally label, and 3,263 + the 508 frozen test/holdout ids
+= **3,771**, the "every labelled comment row" figure 4.5d priced. That equality is the proof the
+file list is complete, and the per-file identity (`source = staged + skipped + unusable`) is
+asserted in the script rather than reported by it.
+
+**$0.5448 of the $1.50 cap**, measured as lifetime usage minus the anchor. The ledger's twelve
+run entries sum to $0.5778, which is higher: `Budget.reconcile` can only push a run's number *up*,
+so a run whose predecessor's cost had not yet posted absorbs the tail of it. The anchored
+difference is the phase's spend; the sum of the entries is an upper bound on it.
+
+The first pass took 10.5 minutes at four workers. Each row is its own generation, so concurrency
+buys wall-clock and changes no label.
+
+## The rows that came back without an answer are not a random 14
+
+`parse: missing field: intents` for every one of them — the 4.5d failure mode, which the prompt
+clause reduced but did not close. Retrying is what `--resume` is for and it worked: **66 → 29 → 18
+→ 14** over four passes, at $0.017 for all three retries. The ids repeat between passes, so this is
+the model and not the transport.
+
+**Thirteen of the fourteen carried `[]` under v1.** The hole is not random: it sits almost entirely
+in the empty class, which is the class the taxonomy question is about. Coercing them to `[]` would
+have closed the accounting and quietly handed the model the answer it failed to give — so they are
+absent from the staged files, named in the record, and their rows stay on v1 until something
+decides them.
+
+## Deviations from `docs/PROMPT-4.5e.md`
+
+1. **`--phase` is required and has no default.** The prompt names one ledger; a forgotten flag
+   would have spent 4.5e's rows against 4.5d's anchor and 4.5d's $2.00 cap. `read_ledger` also
+   refuses a ledger file that carries another phase's anchor key.
+2. **Four workers.** Not asked for. Sequential is ~70 minutes for 3,263 rows and the exposure
+   window of a paid run is worth cutting; the pattern (locked budget, ordered results) is
+   `eval_zero_shot`'s, which has run this endpoint before.
+3. **`--skip-frozen` instead of the bare refusal.** 54 of the holdout pool's 971 rows are the
+   frozen holdout's own ids. The guard is not switched off — the post-draw check runs either way
+   and the dropped rows are counted; the flag chooses *skip* over *stop*.
+4. **`--resume` and incremental writes.** A 3,263-row pass that dies at row 3,000 has still been
+   paid for. Rows land on disk as they arrive and are re-emitted in source order at the end; a
+   resume re-checks every line already on disk against its source before adopting it.
+5. **A staged file is not a drop-in replacement for its source.** `sarcasm_holdout_pool_tax2.jsonl`
+   has 915 of 971 rows. The 54 frozen ids are 4.5f's and the 2 unusable are nobody's yet.
+6. **`--from-rows` verifies as well as re-derives.** Each staged line must be its source line with
+   only `intents` moved, and in the source's order, or the drift pass stops. That makes one command
+   the evidence for both verify-gate items instead of a second script nobody would test.
+7. **The diagnostic 50 are drawn from *scoreable* changed rows.** The prompt says "50 changed
+   rows". `unclear` rows are excluded from every metric, so operator attention spent on them
+   answers a question no gate asks.
+8. **The denominator is pre-registered in the pack.** The prompt names the ≥90% bar; it does not
+   say what a blank cell is. `agreement = correct / 100`, blank or anything else counting against
+   the bar — written into the README and the manifest in the same words, before the pack shipped.
+9. **`.gitignore`: `!data/annotation/*_tax2.jsonl`.** The two annotation sources are whitelisted by
+   name, so their v2 copies would have been ignored and the deliverable would have existed only on
+   this laptop.
+
+## What the drift says, over 3,249 rows
+
+| | all | scoreable, n=2059 | `unclear`, n=1190 |
+|---|---|---|---|
+| intent set changed | 1474, 45% | **49%** | 38% |
+| ... without gaining `service` | 473, 15% | **15%** | 14% |
+| rows carrying `service` | 1001, 31% | **34%** | 25% |
+
+`service` replaced `[]` 730 times, `price` 118, `availability` 80, `availability + price` 42. The
+churn matrix (`results/relabel_45e.json`, `drift.churn`) is what says where it came from: `price`
+loses 184 rows and 166 of them now carry `service`; `availability` loses 84 and gains 166 —
+149 of the gains are rows that were `[]`, which is drift the taxonomy does not explain and which
+the calibration is the only instrument for.
+
+**The probe over-read every one of these.** 4.5d's scoreable half (n=25) said 64% changed, 40%
+carrying `service`, 24% unexplained; the full pass says 49% / 34% / 15%. 4.5d called that number a
+scoping figure and not a measurement, and the full pass is why.
+
+## Two things the next session should not relearn
+
+- **A JSON-shaped answer goes missing exactly where the answer is "nothing".** Demanding the key in
+  the prompt cut it from 6% to 2%; four retries cut it to 0.4%; it does not reach zero, and the
+  survivors are the empty class. Any pipeline that fills a collection field has to count that hole
+  and report which class it falls in, because coercing it is free and wrong.
+- **A retry is only cheap if the run can be resumed by id.** The retries cost $0.017 against a
+  first pass of $0.53 — 3% — because `--resume` re-asks exactly the rows that have no answer. A
+  re-run of the file would have cost thirty times that and produced a different measurement.
