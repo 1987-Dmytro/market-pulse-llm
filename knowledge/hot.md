@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-02 18:48:24 (every SessionStart)
+**Auto-refreshed:** 2026-08-02 19:37:24 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-d103a34 docs: the version block says v3 exists, and G1b's section says what it moved
-4775e21 docs: test v3 recorded — the fixes, the re-scores, and what stays a v2 result
-c75504e feat: every dumped run re-scored against v3, from dumps only
-5054a90 feat: test v3 — the operator's 38 blind verdicts, applied and provable
-0906de6 feat: the intents law-review pack — the rules sliced out, not retyped
+199225d fix: half the probe draw is unclear — the drift split, re-derived without a request
+170bb76 docs: 4.5d notes — the TASKS trap, the two probes, and the exclusions that decide the counts
+960809b feat: what is left to label — the pool is 1912 rows and mined out for sarcasm
+ba0df91 feat: the taxonomy-v2 probe — 50 train rows re-labelled, ledger anchored at $0.008
+ee88b4e feat: taxonomy v2 — prompt v2 beside v1, and a re-labeller that moves one column
 ```
 
 ## 📋 Recent decisions
@@ -31,9 +31,49 @@ c75504e feat: every dumped run re-scored against v3, from dumps only
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-02 18:45 (`/save` after `PROMPT-4.5c` — **test v3 is frozen beside v2 (38 fixes), every dumped run is re-scored, and the intents law-review pack is waiting on the operator's 10–15 minutes**. [[test-v3]] and [[phase45a-ceiling]] are both `proposed`. Phase 4 stays closed at 2 of 5 against v2; edited by hand — the section above is auto-generated, do NOT touch the marker)
+**Last update:** 2026-08-02 19:31 (`/save` after `PROMPT-4.5d` — **the intents law is DECIDED (amendment 3.8: a sixth intent, `service`), guideline v2 and prompt v2 exist beside v1, the re-label is probed at $0.000162/row — and the corpus has only 1,912 labelable rows left, so no appetite tier is reachable**. Test v3 is frozen beside v2; Phase 4 stays closed at 2 of 5 against v2; edited by hand — the section above is auto-generated, do NOT touch the marker)
 
 ## 🔥 What's Hot
+
+**TAXONOMY v2 IS PREPARED AND PRICED — the 4.5d gate decides the appetite (2026-08-02).** The law
+question closed by interview, not by the pack: **amendment 3.8** keeps the old law where it was
+challenged (17 of the 19 disputed `[]` rows stand; the "22 of 40" reading was a pack-design
+artifact — intents were shown without sentiment and sarcasm) and adds a **sixth intent `service`**
+with the WIDE boundary: in-store and online service, the delivery *process*, app/checkout, hotline,
+staff, and how promos and giveaways are organised. `availability` keeps the *product*;
+co-occurrence is allowed. Everything is in `docs/taxonomy-v2-prep.md` and `docs/annotation/comments.md`
+(guideline v2, changelog at the top).
+
+**The one trap, and it is load-bearing:** `records.assert_prompt_sha` builds its map out of
+`prompts.TASKS` and compares whole maps, so registering `T1v2` **there** would have made every
+recorded run fail to verify. `TASKS` stays `("T1","T2")`; `T1_PROMPT_V2` and
+`RELABEL_INTENTS_PROMPT` live in `PROMPTS`/`DELIMITERS`, the label space is routed by task
+(`prompts.INTENTS_OF`), and `scorer.INTENTS` stays at **five** members — `run_baseline.py` and
+`train_xlmr_baseline.py` build one classifier per member. `INTENTS_V2` is a new constant.
+
+**The probe: 50 train rows, `qwen3.6-27b` at the pinned fp8 endpoint, $0.0081.** Model chosen on
+the only measurement that exists for the job — intents micro-F1 vs human gold in 3b: **0.768** here
+vs 0.774 (haiku) vs 0.798 (gemma, i.e. the model under test, whose labels would make part of G1c
+agreement with itself). **Half the draw is `unclear`, so read the scoreable half (n=25): 64%
+changed, 40% carry `service`, 24% changed WITHOUT gaining it** — that last number is
+model-vs-annotator disagreement inside the five old classes and is what the ≥90% calibration will
+decide on. Full re-label projects to **$0.45** (2,746 rows) or **$0.61** (all 3,771). Ledger:
+`results/spend_45d.json`, **$0.0187 of $2.00**, anchored before the first request.
+
+**THE CORPUS IS THE BINDING CONSTRAINT, not money or hours.** After the two exclusions that decide
+the count — 3,771 rows already labelled across five files, 1,239 rows in threads that carry a test
+or holdout row — **1,912 rows are labelable**. Of them 382 are service-rich by keyword and
+**ZERO are sarcasm candidates**: the highest irony score anywhere in the remaining pool is 1.
+**No appetite tier is reachable**: +2k is 88 rows short (~2 weeks of collection at ~443 labelable
+rows/month), +5k ~7 months, +9k ~16 months or a new source — and only two registry channels have
+comments enabled at all. Calibration hours do **not** scale with the tier (0.7 h re-label, 2.0 h
+up-label at any size); what a bigger tier buys is risk, not review.
+
+**Two probe details worth not relearning:** `{}` is a model's way of saying "no intents" and the
+parser refuses it (6% of rows lost until the prompt demanded the key explicitly — both runs are in
+`results/relabel_probe_45d.json` under their own prompt hashes); and the `unclear` split was
+**re-derived from the rows the paid run wrote** (`relabel_intents.py --from-rows`), because greedy
+is not deterministic across a provider's batches and a re-run would be a second measurement.
 
 **TEST v3 EXISTS, BESIDE v2 — 38 point fixes from the blind audit (2026-08-02).** Three new files:
 `data/frozen/comments_test_v3.jsonl` (400 rows, 15 changed) · `sarcasm_holdout_v3.jsonl` (108, 15) ·
@@ -57,14 +97,14 @@ because 15 of its 44 "errors" were gold's. `python3 scripts/show_results.py --go
 **The fixes came out of arm A's dump**, so arm A's v3 column is not independent of v3 the way arm
 B's is. On G1e the sign is visible on three rows: A rises, B falls.
 
-**THE INTENTS LAW PACK IS WAITING ON THE OPERATOR** (and `docs/PROMPT-4.5d.md` is queued —
-untracked, with `docs/SPEC.md` and `docs/STATUS.md` modified; team-lead files, committed by that
-prompt's own step 0, never edited here) —
-`data/annotation/audit_45a/intents-law-review.md` (Russian, gitignored data; the builder
-`scripts/build_intents_law_pack.py` is committed). The guideline's `[]` rules **sliced verbatim**
-from `docs/annotation/comments.md` with line citations, beside the 19 agreed-`[]` rows ruled
-incorrect, the 6 ruled correct, and the 3 non-empty incorrect ones. 10–15 minutes, then the next
-gate decides the law — and only then does anything happen to `intents`.
+**The intents law pack did its job and is now history.** `data/annotation/audit_45a/`
+`intents-law-review.md` (Russian, gitignored data) put the guideline's `[]` rules verbatim beside
+the 19 agreed-`[]` rows ruled incorrect, the 6 ruled correct and the 3 non-empty ones; the operator
+answered it in a structured interview instead of a read-through, and the answer is amendment 3.8.
+**Its builder is pinned to the guideline revision under review** (`GUIDELINE_REV = "0906de6"`) —
+guideline v2 rewrote three of the spans it quotes, so reading the working tree would re-issue a
+pack quoting the law that *replaced* the one the operator ruled on. It still rebuilds byte-for-byte
+(`c6642920…`).
 
 **THE 244 VERDICTS ARE IN AND THE CEILINGS ARE COMPUTED (2026-08-02) — awaiting the 4.5a gate
 review.** The numbers, per head, metric-unit first (upper bound, disagreements only) then the
@@ -246,35 +286,40 @@ files**: `comments_train.jsonl` (1600) + `sarcasm_candidates.jsonl` (746) plus
 
 ## ⏭️ Next
 
-1. **The operator's 10–15 minutes: `data/annotation/audit_45a/intents-law-review.md`.** The next
-   gate decides the intents law from it; until then `intents` gold does not move anywhere — not in
-   v3, not in training data. Everything else in the 4.5 program (re-labelling appetite, synthetic
-   v2, a dev-set sweep) waits on that same gate.
-2. **Open for the review, in the ADR's own terms:** `intents` control says 22 of 40 agreement rows
-   carry a wrong gold, against the 96.3% agreement the whole phase was premised on — do the two
-   readings measure the same thing? One count from the returned data, no conclusion attached:
-   **19 of those 22 are rows where both sides agreed on the EMPTY set `[]`** (3 are non-empty), and
-   6 of the 18 `correct` rows are `[]` too. And the harness prints one number per head per unit;
-   **which of them the 4.5 program calls "the ceiling" is still unnamed** — a macro-F1 bound and an
-   accuracy share cannot both be read against 0.98.
-3. **The filled pack is now the only copy of 244 verdicts.** `build_audit_pack.py --force` would
+1. **THE 4.5d GATE: the up-labelling appetite, and go/no-go on 4.5e.** The tiers as written
+   (+2k/+5k/+9k) are all above what the corpus holds — the honest options are "take the 1,912",
+   "collect first", or "add a source". Nothing of 4.5e (full re-label → test v4 → fresh G1c anchor
+   under `T1v2` → retrain → new bars pre-registered BEFORE scoring) starts until that decision.
+2. **Five open questions carried into the gate**, listed at the end of `docs/taxonomy-v2-prep.md`:
+   three boundary rulings in guideline v2 are the executor's and not the operator's (the shashlik
+   row `@VARUS_channel:5951` → `price`+`service`, and two sarcasm examples about giveaways — one of
+   which amendment 3.8 records as correctly `[]` under the old law); "ALL labelled data" is 3,771
+   rows and not the 2,746 the prompt names (+$0.16); a re-labelled row keeps
+   `annotator: "llm-precheck"` and so cannot say who moved its intents; the unexplained 24%; and
+   whether `unclear` rows are re-labelled at all. Also still unnamed from 4.5a: **which unit the
+   program calls "the ceiling"** — a macro-F1 bound and an accuracy share cannot both be read
+   against 0.98.
+3. **4.5e will have to lift a guard, not flip a flag.** `relabel_intents.py` refuses any row that
+   sits in a frozen test file, unconditionally — and test v4 is exactly a re-label of the test set.
+   It is a code change with a test, deliberately not a `--allow-test-rows` switch that exists today.
+4. **The filled pack is now the only copy of 244 verdicts.** `build_audit_pack.py --force` would
    destroy them and there is still no snapshot in the flow — the question the team lead has not
    ruled on. `normalize_audit_returns.py` is safe to re-run (it no-ops on an already-normalized
    pack), and the raw returns in `data/annotation/audit_45a_returned/` are the backup, sha-pinned
    in `results/audit_45b_returns.json`.
-4. **Phase 5 is still PAUSED** — nothing Phase-5-shaped is scoped, planned or started; 4.5 comes
+5. **Phase 5 is still PAUSED** — nothing Phase-5-shaped is scoped, planned or started; 4.5 comes
    first (operator sequencing decision, amendment 3.7). Everything after 4.5a — targeted
    re-labelling at scale, synthetic v2, a dev-set hyperparameter search — is **DEFERRED until the
    4.5a gate review rules on the numbers**, and each gets its own pre-registered gate.
-5. **Still the operator's, carried out of Phase 4:** Phase 5's first measurement is already named —
+6. **Still the operator's, carried out of Phase 4:** Phase 5's first measurement is already named —
    **do not merge the adapter into bf16 without scoring the merged artefact in the configuration
    production serves**; and the 100 GB CA-MTL-3 volume is kept pending the Phase 5 briefing.
-6. **Six findings for Phase 5, none gate-relevant, all in [[phase4-gate-verdict]] §(f):** `planned`
+7. **Six findings for Phase 5, none gate-relevant, all in [[phase4-gate-verdict]] §(f):** `planned`
    over-counts steps by one per epoch (272 planned, 270 run); leftover micro-batch gradients carry
    across the epoch boundary; the post-loop `save()` records the loop variable rather than the stop
    position after an early `--max-steps`; `seconds_per_step` in a resumed provenance is understated;
    training is not bit-reproducible; and the eval's last-line crash that the stub caught.
-7. Still open from Phase 2 (not a blocker): dataset cards for the public augmentation datasets +
+8. Still open from Phase 2 (not a blocker): dataset cards for the public augmentation datasets +
    licence check.
 
 ## 🚧 Blockers
@@ -293,6 +338,15 @@ matrix is frozen. CPU beats MPS by 14×, which is the opposite of the intuition.
 
 ## ⚠️ Footguns for the next run
 
+- **Two taxonomies exist now, and the five-class one is still the one every number was measured
+  over.** `scorer.INTENTS` (5) is what `run_baseline.py`, `train_xlmr_baseline.py` and
+  `parse_reply("T1", ...)` use; `INTENTS_V2` (6) is what guideline v2, `T1v2` and the re-labeller
+  use. **Never widen the five-member tuple** — it would change old label spaces in files nobody
+  edited. And never add a prompt to `prompts.TASKS`: that tuple is the identity map
+  `records.assert_prompt_sha` compares whole against every stored record.
+- **`results/spend_45d.json` is an anchor, not a log.** Same footgun as `results/spend_3b.json` and
+  `results/spend_phase4.json`: delete or regenerate it and the $2.00 counter silently restarts at
+  today's lifetime usage. It is written *before* the first request on purpose.
 - **Two gold versions exist now, so every number has to name one.** `data/frozen/*_v3.jsonl` sit
   beside the v2 files and **nothing reads them by default** — the gates, the bars,
   `eval_zero_shot.py` and `run_baseline.py` all still score against v2, which is what keeps Phase 4's
