@@ -219,10 +219,12 @@ files**: `comments_train.jsonl` (1600) + `sarcasm_candidates.jsonl` (746) plus
    downstream** — targeted re-labelling, synthetic v2, a dev-set search, test-set v3. The ADR is
    `proposed` and deliberately carries no recommendation; nothing moves until that review happens.
 2. **Open for the review, in the ADR's own terms:** `intents` control says 22 of 40 agreement rows
-   carry a wrong gold, against the 96.3% agreement the whole phase was premised on — the two
-   readings are of different things and the gap is a decision, not a bug to patch. And the harness
-   prints one number per head per unit; **which of them the 4.5 program calls "the ceiling" is
-   still unnamed** — a macro-F1 bound and an accuracy share cannot both be read against 0.98.
+   carry a wrong gold, against the 96.3% agreement the whole phase was premised on — do the two
+   readings measure the same thing? One count from the returned data, no conclusion attached:
+   **19 of those 22 are rows where both sides agreed on the EMPTY set `[]`** (3 are non-empty), and
+   6 of the 18 `correct` rows are `[]` too. And the harness prints one number per head per unit;
+   **which of them the 4.5 program calls "the ceiling" is still unnamed** — a macro-F1 bound and an
+   accuracy share cannot both be read against 0.98.
 3. **The filled pack is now the only copy of 244 verdicts.** `build_audit_pack.py --force` would
    destroy them and there is still no snapshot in the flow — the question the team lead has not
    ruled on. `normalize_audit_returns.py` is safe to re-run (it no-ops on an already-normalized

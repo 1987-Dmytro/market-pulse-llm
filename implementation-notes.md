@@ -678,6 +678,10 @@ team lead's independent count of the returns exactly (A19/B16 · A32/B33/amb2 ·
 4. **`git_state` took a parameter.** The builder's helper leaves the record it is writing out of its
    own dirty list; it now takes that path as an argument so the normalizer can reuse it instead of
    copying it. The manifest it produces is unchanged.
+5. **Four additive ones, none asked for.** The five raw-return sha256 are pinned *inside* the script
+   (the prompt made matching them a verify-gate item, i.e. a thing to check afterwards); a rerun
+   over an already-normalized pack is a no-op instead of a second overwrite; the normalizer ships
+   with 8 tests; and today's daily log carries the checkpoint.
 
 ## Two things the next session should not relearn
 
