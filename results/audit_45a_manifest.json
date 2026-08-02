@@ -1,0 +1,99 @@
+{
+  "built_by": "scripts/build_audit_pack.py",
+  "seed": 42,
+  "arm": "real-only",
+  "arm_record_timestamp": "2026-08-01T18:37:47+00:00",
+  "adapter_sha256": "c0e462af81aad9f14e5dbbe67bf53213db1b1b8e3cd4e172a5927f597d37a986",
+  "predictions_path": "results/predictions/google-gemma-4-31b-it--20260801T183747Z.jsonl",
+  "predictions_sha256": "bdff8a4ad36b60f6adc16332f8780592f20d00b21cb3087d3b662df46018f6db",
+  "frozen_path": "data/frozen",
+  "slice_path": "results/g1b_slice.json",
+  "frozen_sha256": {
+    "comments_test.jsonl": "14b6172472e482d511d36c6a95e5204482a3c14c058c972d39005c82609b9627",
+    "comments_train.jsonl": "4b6ea7f354bcc396ee526ce193c445bb358fab1d070bbe429dfdeb3bace1a1d7",
+    "posts_test.jsonl": "183de2b56e9cb7cc958884db51638c281404cf5c4b06e91ba61ac6330e3dade2",
+    "posts_train.jsonl": "d9b87cdd44586b8011b164f1e3be00457c75e675fad8db7524535306cc609049",
+    "sarcasm_holdout.jsonl": "f83a6cf0fecd0bb266f851803107771309b17d946719cb6da3ca4ff614cb37c3"
+  },
+  "g1b_slice_sha256": "222f1e1014808a291ba78e7421271d2fa93a1520dfa6b76d5eeda87eb3361a31",
+  "key_path": "data/annotation/audit_45a_key.json",
+  "key_sha256": "67bc859658f3663f0a2495fe02224dc50b846dd397219027d98cec009b175356",
+  "pack_path": "data/annotation/audit_45a",
+  "csv": {
+    "comments_sentiment.csv": {
+      "rows": 35,
+      "sha256": "250b0ec8f24d980f2cd07e7c8234189bc95f992295542d533f424d36c4fbb674"
+    },
+    "comments_intents.csv": {
+      "rows": 67,
+      "sha256": "f30a0d1a7289cce759561afe73086861e1da4aea6b4cf88d664615435fcb0832"
+    },
+    "slice_unfixed.csv": {
+      "rows": 23,
+      "sha256": "ced494d5d09782fd27f3c3651b96a2527c905cf7367f93901f34a474b5124b4e"
+    },
+    "posts.csv": {
+      "rows": 15,
+      "sha256": "7c277c22b3ece8e2f0fceabca482b11e39890f53ce816f313bbcc9222fd2837a"
+    },
+    "control.csv": {
+      "rows": 40,
+      "sha256": "ad94a5a4311db80665ab067b9df34a030154eae9cb090a61424094992bd1ea1d"
+    }
+  },
+  "readme_sha256": "617abc7ef74327eebb2ec4bb179e8390a42564b10d0ccc88bcca7b5d2fe5d7bb",
+  "strata": {
+    "sentiment": {
+      "gate": "G1a",
+      "input": "comments_test",
+      "scoreable": 400,
+      "disagreements": 35,
+      "agreements": 365,
+      "control": 8
+    },
+    "intents": {
+      "gate": "G1c",
+      "input": "comments_test",
+      "scoreable": 400,
+      "disagreements": 67,
+      "agreements": 333,
+      "control": 8
+    },
+    "sarcasm_pair": {
+      "gate": "G1b",
+      "input": "sarcasm_holdout",
+      "scoreable": 44,
+      "disagreements": 23,
+      "agreements": 21,
+      "control": 8
+    },
+    "post_type": {
+      "gate": "G1d",
+      "input": "posts_test",
+      "scoreable": 250,
+      "disagreements": 11,
+      "agreements": 239,
+      "control": 8
+    },
+    "brands": {
+      "gate": "G1e",
+      "input": "posts_test",
+      "scoreable": 250,
+      "disagreements": 4,
+      "agreements": 246,
+      "control": 8
+    }
+  },
+  "git": {
+    "commit": "b2772cef6c9e48ec594e6efaff4754ab8ec05160",
+    "dirty": [
+      "knowledge/daily_logs/2026-08-02.md",
+      "knowledge/hot.md",
+      "knowledge/index.md",
+      "scripts/audit_ceiling.py",
+      "scripts/build_audit_pack.py",
+      "src/market_pulse/audit.py",
+      "tests/test_audit.py"
+    ]
+  }
+}
