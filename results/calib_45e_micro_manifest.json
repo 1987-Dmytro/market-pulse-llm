@@ -1,0 +1,58 @@
+{
+  "pack": "data/annotation/calib_45e/unreadable14.csv",
+  "readme": "data/annotation/calib_45e/README-unreadable14.md",
+  "rows": 14,
+  "columns": [
+    "id",
+    "text",
+    "intents_v1",
+    "intents_v2",
+    "notes"
+  ],
+  "delimiter": ";",
+  "to_fill": "intents_v2",
+  "gated": false,
+  "sha256": {
+    "data/annotation/calib_45e/unreadable14.csv": "ba406cf2ffbfb6a18d4e2bafa8a84882c1d735d65f44a702593accec243f8ea8",
+    "data/annotation/calib_45e/README-unreadable14.md": "79d201898076b45efebf4c7b5216fa8bc2cbaddc652d99c4664767445b58665f"
+  },
+  "ids": [
+    "@VARUS_channel:12043",
+    "@VARUS_channel:1696",
+    "@VARUS_channel:19490",
+    "@VARUS_channel:8447",
+    "@VARUS_channel:9078",
+    "@msuaaaa:9805",
+    "@VARUS_channel:10149",
+    "@VARUS_channel:13008",
+    "@VARUS_channel:17747",
+    "@VARUS_channel:6551",
+    "@VARUS_channel:7468",
+    "@VARUS_channel:8126",
+    "@VARUS_channel:2269",
+    "@VARUS_channel:350"
+  ],
+  "carried_empty_under_v1": 13,
+  "by_source": {
+    "comments_train": 6,
+    "sarcasm_candidates": 6,
+    "holdout_pool": 2
+  },
+  "sources": {
+    "data/frozen/comments_train.jsonl": "4b6ea7f354bcc396ee526ce193c445bb358fab1d070bbe429dfdeb3bace1a1d7",
+    "data/annotation/sarcasm_candidates.jsonl": "44cd226245bc5f6fd5ecd2edd588d4a77c6ae9faca024af42787f4f1f4279423",
+    "data/annotation/sarcasm_holdout_pool.jsonl": "ea00ed6544e135afc6f78c0c0ae5875832cf7b95fe68890e7a68ec23f5162e30"
+  },
+  "staged": {
+    "data/frozen/comments_train_tax2.jsonl": "e5a52a08cc64ed10cb0512c8f23e29d9d43b69e584915a70e9cd6aca1339ad2c",
+    "data/annotation/sarcasm_candidates_tax2.jsonl": "56328acbd4bfba69517f0792596ab3f2c0ba299af7bdf92ab7919e8881df3ab1",
+    "data/annotation/sarcasm_holdout_pool_tax2.jsonl": "a00942ccf2ab681139c8c9fcc41144f4bca85b67eb13841289d96065b1f8fe91"
+  },
+  "note": "The rows four paid passes could not read. Derived as source-minus-staged and cross-checked against the unusable ids in results/relabel_45e.json. Nothing is proposed: `intents_v2` ships blank, and until it comes back these rows keep their v1 labels and are absent from every `_tax2` file. This manifest is its own — results/calib_45e_manifest.json seals the gated pack and is never rewritten.",
+  "git": {
+    "commit": "c4e545ea244c319668dbd6967340189717c17a3a",
+    "dirty": [
+      "scripts/build_micro_pack.py"
+    ]
+  }
+}
