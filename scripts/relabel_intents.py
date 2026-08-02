@@ -567,6 +567,10 @@ def main(argv: list[str] | None = None) -> int:
     if args.from_rows:
         rows, outcomes = redrift(sources, args.from_rows)
         produced_paths = [rel(path) for path in args.from_rows]
+        print(
+            f"{len(rows)} staged rows verified against their sources: each line is its source"
+            " line with `intents` moved and nothing else, and in the source's order"
+        )
         record = {
             "timestamp": datetime.now(UTC).isoformat(timespec="seconds"),
             "task": TASK,
