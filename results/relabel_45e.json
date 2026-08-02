@@ -13661,5 +13661,61 @@
       ],
       "note": "RE-DERIVED from ['data/frozen/comments_train_tax2.jsonl', 'data/annotation/sarcasm_candidates_tax2.jsonl', 'data/annotation/sarcasm_holdout_pool_tax2.jsonl'], the rows a paid run wrote — no model was called. Re-running would have been a different run, not the same one measured twice: greedy decoding is not deterministic across a provider's batches."
     }
+  ],
+  "fixes": [
+    {
+      "applied_by": "scripts/apply_calibration_rulings.py",
+      "timestamp": "2026-08-02T19:41:15+00:00",
+      "authority": "results/calib_45e_verdict.json",
+      "rows": [
+        {
+          "id": "@VARUS_channel:11972",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "taste"
+          ],
+          "verdict": "old",
+          "authority": "operator diagnostic verdict `old` — the v1 label was right, and the row is a reply under a poll-style post that the re-labeller does not see"
+        },
+        {
+          "id": "@VARUS_channel:11960",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "taste"
+          ],
+          "verdict": "old",
+          "authority": "operator diagnostic verdict `old` — same class as 11972: a two-word reply whose intent is in the parent post"
+        },
+        {
+          "id": "@VARUS_channel:11902",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [
+            "availability"
+          ],
+          "new": [
+            "taste"
+          ],
+          "verdict": "neither",
+          "authority": "operator diagnostic verdict `neither`, correct set dictated in chat 2026-08-02 and transcribed by the team lead into the notes cell of changed.csv and docs/STATUS.md — notes are free text and are never validated, so the ruling is carried by this table and the verdict cell"
+        }
+      ],
+      "staged_sha256_before": {
+        "data/frozen/comments_train_tax2.jsonl": "d2132c1e5d45f4f0514fd7c149939048a68969acdebabab2dcc94148893ea350"
+      },
+      "staged_sha256_after": {
+        "data/frozen/comments_train_tax2.jsonl": "e5a52a08cc64ed10cb0512c8f23e29d9d43b69e584915a70e9cd6aca1339ad2c"
+      },
+      "note": "Operator rulings applied to the intents column of the staged files after the run above. The drift and churn in `runs` are the re-labeller's own output and are deliberately NOT recomputed: they are what the calibration judged, and a block silently corrected by its own verdicts stops describing the thing that was verdicted. `results/calib_45e_manifest.json` pins the staged bytes as they were sealed; `staged_sha256_after` is where they are now.",
+      "git": {
+        "commit": "826d08edeac1346e9a0c1ab90ff4583a4350dfe2",
+        "dirty": [
+          "data/frozen/comments_train_tax2.jsonl",
+          "scripts/apply_calibration_rulings.py",
+          "tests/test_apply_rulings.py"
+        ]
+      }
+    }
   ]
 }
