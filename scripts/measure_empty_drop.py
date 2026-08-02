@@ -87,6 +87,12 @@ def premise(rows: list[dict], sources: dict[str, Path]) -> dict:
     One row settles it, because the prompt is a template and not a per-row decision —
     but it has to be a row that actually carries the fields, or the check passes by
     having nothing to look for.
+
+    Deliberately still ``relabel.TASK``, the prompt that produced the staged corpus. 4.5g
+    registered `relabel_intents_v2_with_post` beside it, and rendering *that* one here
+    would raise from :func:`prompts.build_messages` (a with-post task without a post) —
+    which would be a re-run of this measurement reading the new prompt's guard as a
+    regression in the old one's finding.
     """
     full = {row["id"] for row in rows if row["parent_msg_id"] is not None}
     raw = next(

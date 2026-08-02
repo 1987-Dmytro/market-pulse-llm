@@ -199,20 +199,128 @@ not to write the other two back. Asking only for ``intents`` makes "sentiment,
 sarcasm and unclear untouched" a property of the request rather than a promise
 about the code that reads the reply."""
 
+JUDGE_TEXT_ALONE = "Judge the text you are given, never the thread around it."
+"""The sentence every prompt above carries — and the one that disagreed with the law.
+
+`docs/annotation/comments.md` §Unit has told the annotator since Phase 2 to judge the
+comment on its own text "plus the parent post only when the comment is meaningless
+without it". Gold was written under that rule and the model was scored without it, which
+is what emptied 97 short replies of their intents in 4.5e (`results/drop_45f.json`)."""
+
+PARENT_POST_RULE = (
+    "You are given the comment and the post it replies to. Judge the comment on its own text, "
+    "and read the post only when the comment is meaningless without it — a bare agreement, a "
+    "participation marker, a two-word answer to a question the post asked. Never label from "
+    "other comments: you cannot see them."
+)
+"""The guideline's §Unit rule in the prompt's voice — one clause, three with-post prompts.
+
+Same discipline as :data:`SERVICE_INTENT`: a rule rendered separately in three places
+drifts apart silently, so it is written once and a test holds the three to it."""
+
+NO_POST_TEXT = "(this post has no text of its own — it is an image or a video)"
+"""What a media-only parent renders as. 23 of the 97 emptied rows and 424 of the 1,912
+up-label candidates have one, and an empty tag would read as "the post said nothing"."""
+
+UNCLEAR_RULE = """\
+unclear — true when the row must not be scored at all: it is not a consumer reaction, or it \
+cannot be read. Mark it for a participation marker under a giveaway post, for ambiguous or mixed \
+emoji, for a reply aimed at another commenter rather than at the retailer, for a reply written by \
+the retailer in its own corporate voice, and for any text that is neither Ukrainian, Russian nor \
+English or cannot be read at all. Prefer it over a guess, but do not use it to avoid a decision \
+you can make. Give the other three labels anyway where you can — an unclear row is excluded from \
+scoring either way.\
+"""
+"""The fourth field, in the words of `docs/annotation/comments.md` §Decision rules and
+§Quality control. Asked rather than defaulted: 37% of the labelled corpus carries it, and
+writing ``false`` into 1,912 rows would coerce the field that decides what is scored."""
+
+
+def _swap(text: str, old: str, new: str) -> str:
+    """One occurrence replaced, or a refusal — a no-op replace would ship a prompt that lies."""
+    if text.count(old) != 1:
+        raise ValueError(f"{old[:40]!r} appears {text.count(old)} times, expected exactly one")
+    return text.replace(old, new)
+
+
+T1_PROMPT_V2_WITH_POST = _swap(T1_PROMPT_V2, JUDGE_TEXT_ALONE, PARENT_POST_RULE)
+"""T1 under taxonomy v2, with the parent post — derived, so it cannot drift from its base.
+
+Registered beside :data:`T1_PROMPT_V2` and never over it: `results/relabel_45e.json` and
+`results/relabel_probe_45d.json` pin that prompt's SHA256, and a record whose prompt moved
+is a different measurement under the same name (SPEC §7)."""
+
+RELABEL_INTENTS_PROMPT_WITH_POST = _swap(RELABEL_INTENTS_PROMPT, JUDGE_TEXT_ALONE, PARENT_POST_RULE)
+
+_shape_v2 = (
+    '{"sentiment": "positive|negative|neutral", "sarcasm": true|false, "intents": ["price"]}'
+)
+PRECHECK_PROMPT_V2_WITH_POST = _swap(
+    _swap(
+        _swap(T1_PROMPT_V2_WITH_POST, "Return three labels.", "Return four labels."),
+        "\nAnswer with one JSON object",
+        f"\n{UNCLEAR_RULE}\n\nAnswer with one JSON object",
+    ),
+    _shape_v2,
+    _shape_v2[:-1] + ', "unclear": true|false}',
+)
+"""All four comment fields at once — the up-label precheck's instrument (4.5g).
+
+New rather than a revision: no v1 prompt asks for ``unclear``, so there is nothing to
+register this one beside. Assembled from :data:`T1_PROMPT_V2_WITH_POST` so that the three
+labels it shares with the eval prompt are the same bytes and stay that way."""
+
 PROMPTS = {
     "T1": T1_PROMPT,
     "T2": T2_PROMPT,
     "T1v2": T1_PROMPT_V2,
     "relabel_intents_v2": RELABEL_INTENTS_PROMPT,
+    "T1v2_with_post": T1_PROMPT_V2_WITH_POST,
+    "relabel_intents_v2_with_post": RELABEL_INTENTS_PROMPT_WITH_POST,
+    "precheck_v2_with_post": PRECHECK_PROMPT_V2_WITH_POST,
 }
-DELIMITERS = {"T1": "comment", "T2": "post", "T1v2": "comment", "relabel_intents_v2": "comment"}
-INTENTS_OF = {"T1": INTENTS, "T1v2": INTENTS_V2, "relabel_intents_v2": INTENTS_V2}
+WITH_POST = frozenset({"T1v2_with_post", "relabel_intents_v2_with_post", "precheck_v2_with_post"})
+"""The tasks whose request carries the parent post. :func:`build_messages` requires one for
+each of them and refuses one for every other task, so a caller cannot half-apply the change:
+a with-post prompt rendered without a post promises the model something that is not there."""
+
+DELIMITERS = {
+    "T1": "comment",
+    "T2": "post",
+    "T1v2": "comment",
+    "relabel_intents_v2": "comment",
+    "T1v2_with_post": "comment",
+    "relabel_intents_v2_with_post": "comment",
+    "precheck_v2_with_post": "comment",
+}
+INTENTS_OF = {
+    "T1": INTENTS,
+    "T1v2": INTENTS_V2,
+    "relabel_intents_v2": INTENTS_V2,
+    "T1v2_with_post": INTENTS_V2,
+    "relabel_intents_v2_with_post": INTENTS_V2,
+    "precheck_v2_with_post": INTENTS_V2,
+}
 """The label space each prompt promises — v1 asks for five, the v2 prompts for six.
 
 Routed by task rather than by a module-level constant so that ``parse_reply("T1",
 ...)`` keeps refusing ``service``: a v1 record's numbers were produced by a parser
 that could not accept it, and re-running that path leniently would produce a
 different measurement under the same name."""
+
+COMMENT_FIELDS = {
+    "T1": ("sentiment", "sarcasm", "intents"),
+    "T1v2": ("sentiment", "sarcasm", "intents"),
+    "T1v2_with_post": ("sentiment", "sarcasm", "intents"),
+    "relabel_intents_v2": ("intents",),
+    "relabel_intents_v2_with_post": ("intents",),
+    "precheck_v2_with_post": ("sentiment", "sarcasm", "intents", "unclear"),
+}
+"""What each comment prompt asks for, and therefore what :func:`parse_reply` returns.
+
+A table rather than a chain of ``if task ==``: the re-label's contract is that
+``sentiment``, ``sarcasm`` and ``unclear`` cannot move through a path that never carries
+them, and that is only true while the fields a task returns are the fields it asked for."""
 
 
 class ParseError(ValueError):
@@ -228,16 +336,30 @@ def prompt_sha256(task: str) -> str:
     return hashlib.sha256(PROMPTS[task].encode("utf-8")).hexdigest()
 
 
-def build_messages(task: str, text: str) -> list[dict]:
-    """The whole request: instructions and the one row, in a single user turn.
+def build_messages(task: str, text: str, parent: str | None = None) -> list[dict]:
+    """The whole request: instructions, the parent post if the task takes one, and the row.
 
     The row is fenced in a tag so that a comment ending in "Answer with one JSON
     object" cannot read as instructions — retail comment threads contain
     everything, and a prompt-shaped comment must not get a different request
-    than its neighbours.
+    than its neighbours. The post is fenced the same way and for the same reason.
+
+    ``parent`` is required by exactly the tasks in :data:`WITH_POST` and refused by
+    every other one. ``""`` is a parent that exists and has no text of its own; only
+    ``None`` means no post was given, and for a with-post task that is a defect in the
+    caller, not a row to render without one.
     """
     tag = DELIMITERS[task]
-    return [{"role": "user", "content": f"{PROMPTS[task]}\n\n<{tag}>\n{text}\n</{tag}>"}]
+    if (task in WITH_POST) != (parent is not None):
+        raise ValueError(
+            f"{task}: a parent post is {'required' if task in WITH_POST else 'not part of this'}"
+            f" prompt, and {'none' if parent is None else 'one'} was given"
+        )
+    row = f"<{tag}>\n{text}\n</{tag}>"
+    if parent is None:
+        return [{"role": "user", "content": f"{PROMPTS[task]}\n\n{row}"}]
+    post = parent.strip() or NO_POST_TEXT
+    return [{"role": "user", "content": f"{PROMPTS[task]}\n\n<post>\n{post}\n</post>\n\n{row}"}]
 
 
 def _object(reply: str) -> dict:
@@ -296,24 +418,22 @@ def parse_reply(task: str, reply: str) -> dict:
     weakest (docs/PROMPT-3b.md; ADR 3b-infra-and-precision §(e)).
     """
     payload = _object(reply)
-    if task in ("T1", "T1v2", "relabel_intents_v2"):
-        fields = (
-            ("intents",) if task == "relabel_intents_v2" else ("sentiment", "sarcasm", "intents")
-        )
+    if fields := COMMENT_FIELDS.get(task):
         _require(payload, *fields)
         intents = payload["intents"]
         if isinstance(intents, str):  # a lone label instead of a list of one
             intents = [intents]
         if not isinstance(intents, list):
             raise ParseError("intents is not a list")
-        labels = {"intents": sorted({_choice(i, "intents", INTENTS_OF[task]) for i in intents})}
-        if task == "relabel_intents_v2":
-            return labels
-        return {
-            "sentiment": _choice(payload["sentiment"], "sentiment", SENTIMENT_LABELS),
-            "sarcasm": _flag(payload["sarcasm"], "sarcasm"),
-            **labels,
-        }
+        labels = {}
+        if "sentiment" in fields:
+            labels["sentiment"] = _choice(payload["sentiment"], "sentiment", SENTIMENT_LABELS)
+        if "sarcasm" in fields:
+            labels["sarcasm"] = _flag(payload["sarcasm"], "sarcasm")
+        labels["intents"] = sorted({_choice(i, "intents", INTENTS_OF[task]) for i in intents})
+        if "unclear" in fields:
+            labels["unclear"] = _flag(payload["unclear"], "unclear")
+        return labels
     if task == "T2":
         _require(payload, "relevant", "post_type", "brands")
         brands = payload["brands"]
