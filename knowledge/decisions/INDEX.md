@@ -29,3 +29,4 @@ docs/STATUS.md; these are the English long form with the numbers.
 | 2026-07-31 | [[phase4-base-model-gate]] — base model gemma-4-31b-it; the unpaired 27B row cannot flip it | accepted |
 | 2026-08-01 | [[phase4-own-pod-anchor]] — the own-pod NF4 row anchors G1d/G1e; G1b slice = 44 ids; greedy is not batch-invariant | accepted |
 | 2026-08-01 | [[4b-training-contract]] — frozen QLoRA hyperparameters; a training example is an eval prompt; the second arm projects over the 4 h ceiling | accepted |
+| 2026-08-02 | [[phase4-gate-verdict]] — both arms trained and scored once; the rule drops synthetic; 2 of 5 Tier-1 gates pass | proposed |

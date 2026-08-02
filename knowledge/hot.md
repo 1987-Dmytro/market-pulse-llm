@@ -2,24 +2,24 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-01 15:05:55 (every SessionStart)
+**Auto-refreshed:** 2026-08-02 02:03:49 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-43d9a51 docs: what resume has and has not been proved against
-d4cc56d chore: the runbook says what the pod actually did, and the test count is the real one
-bbe535c docs: the 4b record — the training contract, the smoke, and the ceiling it crosses
-fde75d2 fix: two defects the stub run of the training loop found before the pod did
-221d2a1 docs: the 4b runbook, written before the pod exists
+8314dfb feat: arm A (real-only) — 270 steps, and 758 frozen rows scored once
+34a27d7 fix: an arm's eval crashed on its last line, and a stub found it before the pod did
+411bd84 chore: the optimizer state syncs home and does not belong in git
+16e3af1 docs: the 4c runbook, and the one assert a resume can be wrong without
+01aa6c9 feat: the selection rule and the five verdicts, as arithmetic a reviewer can re-run
 ```
 
 ## 📋 Recent decisions
 
-- `4b-training-contract.md` — The training contract: frozen hyperparameters, and the invariant that a training example is an eval prompt
 - `INDEX.md` — Decision records
-- `phase4-own-pod-anchor.md` — The own-pod zero-shot row anchors G1d/G1e, and it is the run that defines the G1b slice
+- `phase4-gate-verdict.md` — The one attempt: two arms trained, each scored once, and the Tier-1 gates decided
+- `4b-training-contract.md` — The training contract: frozen hyperparameters, and the invariant that a training example is an eval prompt
 
 ## 📅 Recent daily logs
 
@@ -31,184 +31,162 @@ fde75d2 fix: two defects the stub run of the training loop found before the pod 
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-01 15:00 (`/save` checkpoint — 4b ACCEPTED, amendment 3.6 raises the ceiling to 5 h/arm, all three open items closed, 4c is next; edited by hand — the section above is auto-generated, do NOT touch the marker)
+**Last update:** 2026-08-02 00:15 (step 4c executed — both arms trained and scored once, the rule dropped synthetic, **2 of 5 Tier-1 gates pass**, awaiting team-lead review; edited by hand — the section above is auto-generated, do NOT touch the marker)
 
 ## 🔥 What's Hot
 
-**STEP 4b IS ACCEPTED (2026-08-01) — 4c is next and it is the ONE ATTEMPT.** 4a accepted with
-**amendment 3.5**, 4b the same evening with **amendment 3.6**. 4b delivered the scorer's slice
-input, the QLoRA trainer with a frozen config, and a 50-step smoke; no full run happened and
-nothing in it opened a frozen set or the holdout. **275 tests**, `make check` green after every
-commit. Phase 3 closed at `952e5dd`; phases 1 and 2 accepted 2026-07-28, 3a/3b/3c 2026-07-31.
-Registry: 4 live sources. Raw store 6 057 posts + 11 338 comments. **18 ADRs** ([[INDEX]]).
+**STEP 4c IS EXECUTED AND AWAITS REVIEW (2026-08-02) — the one attempt is spent.** Both ablation
+arms trained in full on the frozen config, each scored on the frozen sets **exactly once**, the
+pre-registered rule applied mechanically, five verdicts produced. **Nothing was retrained,
+re-scored or reconfigured after a gate number was seen** — arm B launched while arm A's three
+failures were already on screen. **313 tests**, `make check` green after every commit. **19 ADRs**
+([[INDEX]]); [[phase4-gate-verdict]] is the record.
 
-**THE CEILING IS 5 h PER ARM NOW — amendment 3.6**, raised uniformly after 4b's pre-registered stop
-fired on the second arm. Measured **45.23 s/step**: real-only **272 steps = 3.42 h**, with-synthetic
-**348 steps = 4.37 h**, both now inside the box. **The config did not move** — 2 epochs and every
-hyperparameter stand, so the ablation stays paired, and the **$25 cap is the binding protection**
-(projected training total ≈ $4.13). Rejected on the record: 1 epoch for both arms (halves the
-training of the small G1b signal to satisfy a proxy) and dropping the synthetic arm (decides the
-ablation without measuring it). The cost itself is physics, not a bug: bitsandbytes NF4
-dequantizes on every forward and backward, so what makes the model fit is what prices the step.
+**THE VERDICT: 2 of 5 Tier-1 gates pass, on the real-only arm.**
+G1d **0.9386** ≥ 0.8984 **PASS** · G1e **0.9333** ≥ 0.8874 **PASS** ·
+G1a **0.9107** < 0.9418 FAIL · G1b **21/44** < 27 FAIL · G1c **0.8212** < 0.8436 FAIL.
+The two that pass are the no-regression gates of amendment 3.5 (2), and they pass by **+3.02** and
+**+3.59 pp above the anchor**, not by holding a line — the multi-task forgetting risk they were
+rewritten to measure did not materialise. The three that fail are margin gates and they fail **by
+margin, never by regression**: every gated head of both arms is above the zero-shot anchor. G1a
+asked +5 pp and got +1.89, G1c asked +5 pp and got +2.76, G1b needed 27 of the base model's own 44
+errors and fixed 21. A failed gate closes its question (SPEC §5) — nothing is retried.
 
-**The trainer is frozen and the smoke was clean.** Loss 0.1799 → 0.0399 over 50 steps with the
-held-out carve tracking it (0.0585 → 0.0335); LoRA on **410 modules**, all `model.language_model.*`
-and zero vision modules; adapter saved, base reloaded from scratch, adapter loaded onto it and the
-local eval path run over 24 carved **training** rows with **zero parse failures**; peak GPU
-**30.47 GB of 48** and the OOM branch never fired. `config/qlora.yaml` holds every hyperparameter
-with its rationale — r 16 / alpha 32 / dropout 0.05, paged AdamW 8-bit at 1e-4 cosine, 2 fixed
-epochs and **no early stopping**, micro-batch 2 × accum 8, seed 42, `max_seq_len` **1024 measured**
-(the longest of 2 795 rows is 973 tokens, so nothing truncates).
+**THE SYNTHETIC SOURCE IS DROPPED, on the half of the rule it was written for.** with-synthetic won
+G1b outright — **24/44 against 21/44**, the largest single-head move either arm made — and lost the
+second clause: G1c −1.39 pp and G1d −2.27 pp, both past the 0.5 pp tolerance. Exactly the trade
+amendment 3.4 (3) pre-refused before any number existed. **Read this beside it and do not confuse
+it with the verdict:** with-synthetic's G1a `ru` is **+4.44 pp** over real-only (0.9364 vs 0.8919),
+the biggest per-language gap in the table — the strongest sign the generated Russian rows did
+something real, and it changed nothing, because the rule was fixed first. Both columns are
+published; there is no third run.
 
-**The own-pod row is baseline (c) EVERYWHERE** — operator decision 2026-08-01, pre-registered
-before 4b trains ([[phase4-own-pod-anchor]] §(f)). Not just the G1d/G1e anchor: SPEC §7 makes
-zero-shot baseline (c) for every task, so G1a and G1c measure from it too. The OpenRouter row stays
-in the Phase 3 table and is no longer a baseline candidate for any Tier-1 gate. **The bars, as
-amendment 3.5 leaves them:** G1a overall **≥ 0.9418** (floors `ua` 0.8718 · `ru` 0.8649) ·
-G1b **≥ 27 of 44** with the ≤2 pp macro-F1 guard · G1c **≥ 0.8436** · **G1d ≥ 0.8984** ·
-**G1e ≥ 0.8874**. G1d/G1e are `anchor − 1 pp` **no-regression** gates now (3.5 (2) replaced
-"+10 pp", which was unreachable on a saturated base); improvement is reported, never gated. **Every
-one of those numbers is derived in code from the own-pod record — none is typed anywhere**, and
-`PYTHONPATH=src python3 scripts/gate_bars.py` prints exactly that table from
-`results/baselines.json` plus the sha-verified slice file.
+**Both arms, every gated head** (anchor → real-only → with-synthetic):
+G1a overall 0.8918 → **0.9107** → 0.9172 · `ua` 0.8918 → 0.9146 → 0.9171 · `ru` 0.8849 → 0.8919 →
+**0.9364** · G1b — → **21/44** → 24/44 · G1c 0.7936 → **0.8212** → 0.8073 · G1d 0.9084 →
+**0.9386** → 0.9159 · G1e 0.8974 → **0.9333** → 0.9577 · relevance (not gated) 0.9415 → 0.9894 →
+0.9891. Both arms' ≤2 pp G1b guard is **positive** (+0.0189, +0.0254): neither traded overall
+sentiment for the slice.
+
+**What G1b's failure is made of** — read off the committed dumps, nothing re-scored: of the 23
+slice rows real-only misses, **15 are wrong on sarcasm only, 8 on both, 0 on sentiment only**. On
+the full 108-row holdout (every row gold `sarcasm: true`) real-only detects **82** and
+with-synthetic **83**, against the base model's **64**. Both arms moved that head ~19 rows and
+neither cleared a bar defined as 60% of the base model's own errors.
+
+**THE DELIVERABLE: `results/train/4c-arm-a/adapter`** — the real-only LoRA adapter, sha256
+`c0e462af81aad9f1…`, served **UNMERGED** on the same NF4 4-bit base every gate was scored through.
+Merging into bf16 stays forbidden until measured (Phase 5). The with-synthetic adapter
+(`0566900e3f42451e…`) is kept beside it — the ablation's second column is evidence, not waste.
+
+**Both arms ran clean and inside every box.** Arm A **270 steps in 3.40 h**, arm B **346 steps in
+4.17 h** — both under 4b's own projections (3.42 / 4.37 h) and well under the 5 h ceiling. Peak GPU
+30.86 / 30.84 GB of 48; micro-batch 2 × accum 8 held throughout, the OOM branch never fired.
+**758/758 rows scored on both evals with zero failures of any kind** — no parse, no generation, no
+truncation. Adapter hashes computed on the pod and on the Mac matched before either record was
+appended.
+
+**RESUME IS PROVED against the real stack** — 4b's [[4b-training-contract]] §(h) question, closed
+in the first ten minutes of the first pod. Ten steps, reload with `is_trainable=True` onto the
+k-bit base, `torch.load` of a real 238 MiB paged-AdamW state, five more steps: the optimizer step
+counter continued (10 → 15, no reset) and the loss stayed on trajectory (0.10974 → **0.05680**,
+carve 0.11247 → 0.05915). `assert_resumable` — added for this — stayed silent.
+
+**TRAINING IS NOT BIT-REPRODUCIBLE ON THIS STACK.** Arm A's step-5 loss is **0.18010**; the resume
+proof, on identical data, identical seed 42 and identical config on the same pod, gave **0.18051**.
+Cause not isolated — NF4 reduction order (the family 4a measured when greedy turned out not to be
+batch-invariant) or the `lora_dropout: 0.05` mask sequence. **Say "the ablation is paired on data
+and config", never "identical"**; amendment 3.4 (3)'s "identical config and seed" reads stronger
+than the hardware delivers, and the rule's 0.5 pp tolerance is what absorbs it.
+
+**GPU money: $6.8779 of the $25 cap**, read after the second pod was deleted. 4c itself cost
+**$5.74** against ~$5.2 projected; remaining **$18.12**. Both 4c pods **deleted** (volume-less: a
+stopped one bills 80 GB by the month). The 4a pod `gxkdecf3g7k3y7` is still `EXITED` on the
+CA-MTL-3 volume — it predates 4c and was left alone; it is still billing something and is worth an
+operator decision.
+
+**The own-pod row is baseline (c) EVERYWHERE** — operator decision 2026-08-01
+([[phase4-own-pod-anchor]] §(f)). **The bars, as amendment 3.5 leaves them:** G1a overall
+**≥ 0.9418** (floors `ua` 0.8718 · `ru` 0.8649) · G1b **≥ 27 of 44** with the ≤2 pp macro-F1 guard ·
+G1c **≥ 0.8436** · **G1d ≥ 0.8984** · **G1e ≥ 0.8874**. **Every one is derived in code from the
+own-pod record — none is typed anywhere**; `PYTHONPATH=src python3 scripts/gate_bars.py` prints the
+table and `scripts/gate_verdict.py` prints the rule's arithmetic and the verdicts.
 
 **The own-pod row anchors G1d/G1e** ([[phase4-own-pod-anchor]]): `google/gemma-4-31b-it` at
-revision `842da379…`, NF4 4-bit, RTX A6000, **758/758 rows scored, zero failures of any kind**,
-`gate_anchor_valid: true`. Gated heads, own-pod vs its OpenRouter fp8 row:
-G1a `ua` **0.8918** (-0.0039) · G1a `ru` **0.8849** (+0.0162) · G1c **0.7936** (-0.0046) ·
-G1d **0.9084** (+0.0187) · G1e **0.8974** (-0.0236); relevance 0.9415, not gated. **The own-pod
-number anchors regardless of the disagreement — nothing is averaged.** So G1d's 10 pp bar is now
-measured from 0.9084 (harder than the Phase 3 table implied) and G1e's from 0.8974 (easier). The
-selection of the base model is NOT reopened: one model re-measured on new hardware is not a paired
-comparison against rows nobody re-measured.
+revision `842da379…`, NF4 4-bit, RTX A6000, **758/758 rows scored, zero failures**,
+`gate_anchor_valid: true`. Gated heads: G1a `ua` **0.8918** · `ru` **0.8849** · G1c **0.7936** ·
+G1d **0.9084** · G1e **0.8974**; relevance 0.9415, not gated. **The own-pod number anchors
+regardless of the OpenRouter disagreement — nothing is averaged.**
 
-**The G1b slice exists as a file: `results/g1b_slice.json`, n = 44**, sha256 in the record.
-Sentiment errors **13 ⊂** sarcasm errors **44**, so the union is 44 — the containment the
-OpenRouter preview showed at 10 ⊂ 40 held at different numbers. **44 < 100 → amendment 3.2's
-pre-registered fallback**: report the smaller n beside the gate verdict, top nothing up. The
-OpenRouter 40 was a preview and is now superseded.
+**The G1b slice is a file: `results/g1b_slice.json`, n = 44**, sha256 in the record and verified on
+every load. Sentiment errors **13 ⊂** sarcasm errors **44**. 44 < 100 → amendment 3.2's
+pre-registered fallback: report the smaller n beside the verdict, top nothing up. **An arm READS
+this file and never writes it** — `build_gates` returns `None` for the slice on the fine-tuned
+branch, so `write_slice` cannot be reached even by accident.
 
-**GREEDY IS NOT BATCH-INVARIANT on bitsandbytes NF4 + A6000.** Measured, not assumed: one probe
-row of 24 came back with different intents at batch 8 than at batch 1, same weights, same prompt,
-`do_sample: false`. **The run went at `--batch-size 1`** — 3.04 s/row, 39 min for 758 rows, $0.35,
-so the correctness win was free. Batch 1's own claim was measured too: the same 48-row probe twice,
-byte-identical labels. **4c's gate evals inherit batch size 1** unless someone re-measures on the
-training stack and records it — the 4b smoke's carve mechanics ran at batch 1 for the same reason.
-
-**GPU money: $1.1203 of the $25 Phase 4 cap, read 12:00 UTC** (4a $0.6554, 4b's smoke $0.4649; the
-volume bills continuously, so a phase figure without its timestamp is stale by construction).
-Remaining **$23.88**, against ~$5.2 projected for 4c's two arms. `results/spend_phase4.json` anchors
-the balance at $35.00 as of 2026-08-01T08:34:09Z — **never regenerate it**, same footgun as
-`spend_3b.json`. `scripts/runpod_guard.py` refuses at the cap and on a mid-phase top-up. Pod
-`gxkdecf3g7k3y7` **EXITED**; the 4b pod was **deleted** (volume-less: its container disk would bill
-by the month either way). Network volume `gfwa2an8fn` (100 GB, CA-MTL-3) kept — it bills ~$7/month
-whether or not a pod is attached, which is why the guard reads the account balance and not just the
-pod billing rows.
+**GREEDY IS NOT BATCH-INVARIANT on bitsandbytes NF4 + A6000.** Measured 2026-08-01: one probe row
+of 24 flipped its intents between batch 8 and batch 1. **Every gate eval ran at `--batch-size 1`**,
+and the arm path *refuses* any other value by name rather than defaulting it.
 
 **One writer per file, and the layer is live** (`2b423c8`): `docs/STATUS.md`, `docs/SPEC.md` and
-`docs/PROMPT-*.md` are **team-lead files** — read them, commit them verbatim, never edit them;
-everything else is the executor's. Deny rules in `.claude/settings.json` refuse **both `Edit` and
-`Write`** on those three (on Claude Code 2.1.220 only `Edit(path)` rules are consulted, and they
-cover every writing tool — a `Write(path)` rule would be dead). Re-probed 2026-08-01 with the
-Write tool on `docs/STATUS.md`: *"File is in a directory that is denied by your permission
-settings."*, and the file was not touched.
+`docs/PROMPT-*.md` are **team-lead files** — read them, commit them verbatim, never edit them.
+Deny rules in `.claude/settings.json` refuse **both `Edit` and `Write`**.
 
 **Phase 4's base model is `google/gemma-4-31b-it`** ([[phase4-base-model-gate]]) — ahead on every
-gated head among the candidates, ahead of the Haiku reference row on four cells of five (Haiku
-takes G1a `ru` by 0.0300; a reference row never anchors a gate). The 27B row's unpairedness was
-closed by a **worst-case bound analysis at $0**, and every head survived: bound vs gap G1a `ua`
-0.0186/0.0421 · G1a `ru` 0/0.0021 · G1c 0.0087/0.0376 · G1d 0.0037/0.1293 · G1e 0/0.0292. The
-27B rows keep `gate_anchor_valid: false` permanently. **Read the `ru` cell twice**: a 0.0021 lead
-against a 0.0298 same-config swing measured on a re-run — on `ru` the two are tied inside
-third-party noise, and the selection rests on the other four gaps.
+gated head among the candidates. The 27B row's unpairedness was closed by a worst-case bound
+analysis at $0; those rows keep `gate_anchor_valid: false` permanently.
 
-**XLM-R is DONE, committed and accepted** — 2026-07-31 on this Mac's CPU, **101.0 min against its
-own 128.0 projection**, no crash and no restart, provenance checked (the record's `git.commit` is
-`6d4deb3` with only `knowledge/*` dirty). Row `87e3327`. **The Phase 3 baseline table is
-complete**, and the row does not move the Phase 4 choice: XLM-R beats `tfidf-logreg` on G1a by
-0.0990 and G1d by 0.0694, ties it on G1c (0.6007 vs 0.6000), and is under `gemma-4-31b-it` on
-every comparable cell. Its `holdout_sarcasm_detected 54/108` is a **negative-lean diagnostic**
-(107 of those 108 rows are negative), not irony reading and not the G1b slice.
-
-**The baseline table** (`results/baselines.json`, read only via `scripts/show_results.py`),
+**The Phase 3 baseline table** (`results/baselines.json`, read only via `scripts/show_results.py`),
 G1a overall / G1c / G1d 3-class / G1e:
-`tfidf-logreg` 0.6834 / 0.6000 / 0.6653 / 0.1964 · **gemma-4-31b-it 0.8944 / 0.7981 / 0.8898 /
-0.9211** · qwen3.6-27b 0.8541 / 0.7606 / 0.7605 / 0.8919 (`gate_anchor_valid: false`) ·
-qwen3.5-9b 0.7745 / 0.6252 / 0.5077 / 0.6476 · **xlm-roberta-base 0.7824 / 0.6007 / 0.7347 /
-NOT COVERED** (per-language G1a: `ua` 0.7859 · `ru` 0.7507 · `other` 0.7575; relevance 0.6610
-reported beside G1d, not gated) · ref `claude-haiku-4.5` 0.8708 / 0.7739 / 0.7718 / 0.8537.
-G1b is `null` everywhere: its fix-rate needs a fine-tune. That table is the **Phase 3** table and
-its gemma column is the OpenRouter row; the own-pod row is a Phase 4 row and lives above. **The G1b
-slice question is closed**: 44 ids in `results/g1b_slice.json`, measured on our own pod — the
-preview's 40 is superseded.
-
-**3b ran on OpenRouter at pinned fp8** ([[3b-infra-and-precision]]), not on a rented GPU: 758
-short requests per model is a token bill, not a GPU-hour. fp8 because `qwen/qwen3.6-27b` offers no
-bf16 endpoint anywhere and the rule was fixed before the probe. Pins `parasail/fp8` ·
-`io-net/fp8` · `venice/fp8`, `allow_fallbacks: false`. Gemma 4's licence is **Apache-2.0**.
+`tfidf-logreg` 0.6834 / 0.6000 / 0.6653 / 0.1964 · **gemma-4-31b-it (OpenRouter fp8) 0.8944 /
+0.7981 / 0.8898 / 0.9211** · qwen3.6-27b 0.8541 / 0.7606 / 0.7605 / 0.8919 (`gate_anchor_valid:
+false`) · qwen3.5-9b 0.7745 / 0.6252 / 0.5077 / 0.6476 · **xlm-roberta-base 0.7824 / 0.6007 /
+0.7347 / NOT COVERED** · ref `claude-haiku-4.5` 0.8708 / 0.7739 / 0.7718 / 0.8537. That is the
+**Phase 3** table; the own-pod anchor and the two Phase 4 arms are separate rows.
 
 **The scorer computes, and it is the only thing that may.** `src/market_pulse/scorer.py` holds
-every gate function plus a public `macro_f1` so diagnostics use the same arithmetic. Two
-conventions the numbers hang on: macro averages run over the labels **gold** supports (never over
-what a model predicted — that breaks paired comparison), and the `unclear` exclusion lives in the
-scorer, driven by a sentinel the caller passes. Both pinned by hand-computed tests; a public
-function without one fails the suite.
+every gate function, the margins, the selection rule and the verdicts. Bars and head deltas round
+to ten decimals: `0.90 + 0.05` is 0.9500000000000001 and the gates are ">=", so a model exactly on
+its bar must not fail on the last bit of an addition. A public function without a hand-computed
+test fails the suite.
 
-**Frozen test sets are at v2** — `docs/frozen-testsets.md` has the hashes, changelog and per-gate
-depth. comments 400/1600, posts 250/750, thread-disjoint, zero `unclear` in test. **Training data
-is three files**: `comments_train.jsonl` (1600) + `sarcasm_candidates.jsonl` (746) — 230 sarcastic
-scoreable rows between them — plus `synthetic_sarcasm.jsonl`, 600 generated rows, **ablation-gated,
-QA passed 2026-07-30** ([[synthetic-sarcasm-augmentation]]). **G1b's holdout** is 108 rows, all
-`sarcasm: true`, thread-disjoint from test and train ([[hybrid-sarcasm-holdout-3.2]]).
+**Frozen test sets are at v2** — `docs/frozen-testsets.md` has the hashes and per-gate depth.
+comments 400/1600, posts 250/750, thread-disjoint, zero `unclear` in test. **Training data is three
+files**: `comments_train.jsonl` (1600) + `sarcasm_candidates.jsonl` (746) plus
+`synthetic_sarcasm.jsonl`, 600 generated rows — **now measured and dropped by the ablation**
+([[synthetic-sarcasm-augmentation]] stands as the record of how it was made and QA'd).
+**G1b's holdout** is 108 rows, all `sarcasm: true`, thread-disjoint ([[hybrid-sarcasm-holdout-3.2]]).
 
 ## ⏭️ Next
 
-1. **Step 4c** (`docs/PROMPT-4c.md`, untracked in the tree — read it whole first). Both ablation
-   arms trained in full (identical config and seed, one data path differing), each scored **once**
-   on the frozen sets, then the selection rule applied: the synthetic source stays **iff** its
-   arm's G1b fix-rate is strictly higher **and** no other gated head is lower by more than 0.5 pp;
-   both columns published, no third run, **no retraining after gate numbers are seen**. Two pod
-   sub-sessions of 4–5.5 h, ~$5.2 projected. Everything it needs is frozen and committed:
-   `config/qlora.yaml` · `scripts/train_qlora.py` · `scripts/gate_bars.py` · `scripts/runbook_4b.md`.
-2. **The resume test is the mandatory first step on the 4c pod** (team-lead decision): train ~3
-   steps, kill it, resume, watch the loss continue. An arm is a volume-less session that cannot be
-   paused, and resume's trainable-reload path is the one thing 4b could only exercise against a
-   stub ([[4b-training-contract]] §(h)).
-3. Still open from Phase 2 (not a blocker): dataset cards for the public augmentation datasets +
+1. **The 4c report is with the team lead. STOP — there is no self-acceptance.** Phase acceptance
+   (team-lead verification, operator quiz, RECORD sweep, STATUS) happens on that report. Until it
+   lands, nothing in Phase 4 is retrained, re-scored or reconfigured — the one attempt is spent.
+2. **Open questions the report raises, all the operator's:** three Tier-1 gates failed by margin
+   with every head above its anchor — what a failed Tier-1 means for the phase is a team-lead call;
+   the stale 4a pod `gxkdecf3g7k3y7` is still `EXITED` and still billing; and Phase 5's first
+   measurement is already named — **do not merge the adapter into bf16 without scoring the merged
+   artefact in the configuration production serves**.
+3. **Six findings for Phase 5, none gate-relevant, all in [[phase4-gate-verdict]] §(f):** `planned`
+   over-counts steps by one per epoch (272 planned, 270 run); leftover micro-batch gradients carry
+   across the epoch boundary; the post-loop `save()` records the loop variable rather than the stop
+   position after an early `--max-steps`; `seconds_per_step` in a resumed provenance is understated;
+   training is not bit-reproducible; and the eval's last-line crash that the stub caught.
+4. Still open from Phase 2 (not a blocker): dataset cards for the public augmentation datasets +
    licence check.
 
 ## 🚧 Blockers
 
-**None open.** Every escalation this phase raised came back decided at the next acceptance — the
-executor flagged, the operator ruled, nothing was worked around. **4b's three, closed by the
-acceptance of 2026-08-01 (SPEC rev. 3.6):**
-
-- **The 4.37 h projection → the ceiling rises to 5 h/arm**, uniformly, with the frozen config
-  untouched. See What's Hot; the rejected alternatives are on the record in SPEC.
-- **The stranded volume → an arm is a volume-less pod session** wherever the A6000 has stock; the
-  62 GB re-download measured 4 minutes (~$0.04), the CA-MTL-3 volume is a bonus when stock happens
-  to coincide, and a second volume in EU-RO-1 is rejected (its stock was `none` the whole window).
-  The consequence to plan around: such a session **cannot be paused**.
-- **The untested trainable resume → a mandatory first step on the 4c pod**, before a 4–5 h arm
-  starts. [[4b-training-contract]] §(h).
-
-**And 4a's two, closed by amendment 3.5:**
-
-- **G1d's unreachable bar → 3.5 (2).** "+10 pp" is replaced by a no-regression gate, fine-tuned
-  ≥ anchor − 1 pp (G1d ≥ 0.8984, G1e ≥ 0.8874); improvement is reported beside the verdict and
-  never gated. The spec records the ordering honestly (the impossibility was arithmetically
-  visible in the 3b numbers on 2026-07-31 and was named only at the 4a acceptance) and records
-  why the rescaled-ambition alternative — relative error reduction ≥25% — was rejected: near the
-  ceiling it collides with label noise. **The phase's ambition burden now lies on G1a, G1b, G1c;
-  T2's heads gate forgetting.**
-- **The scorer could not read the slice file → 3.5 (3),** which is a team-lead instruction to
-  change the fix-rate function: it takes the 44 ids explicitly, FIXED means correct on **both**
-  sentiment and sarcasm, the rate is fixed/44 and the gate is **≥27**. Executed in 4b Step 1.
+**None open.** 4c raised no escalation: the one pre-registered stop it could have hit — a projection
+crossing the 5 h per-arm ceiling — did not fire (3.40 h and 4.17 h, both under 4b's own
+projections). Every earlier escalation came back decided at the next acceptance: 4b's three closed
+by SPEC rev. 3.6 (the ceiling to 5 h/arm, an arm is a volume-less pod session, resume proved first
+on the 4c pod — **done, and it passed**), and 4a's two by amendment 3.5 (G1d/G1e rescaled to
+no-regression bars, the scorer taught to read the persisted slice).
 
 **This Mac's device numbers, if anything is ever trained locally again:** 2 193 steps across
 9 heads, **CPU 3.5 s/step**, **MPS 48.1 s/step** and OOM at 9.07 GiB unless the 250k×768 embedding
-matrix is frozen. Local training is an evening job, not an interactive one — and CPU beats MPS by
-14×, which is the opposite of the intuition.
+matrix is frozen. CPU beats MPS by 14×, which is the opposite of the intuition.
 
 ## ⚠️ Footguns for the next run
 
@@ -320,6 +298,20 @@ matrix is frozen. Local training is an evening job, not an interactive one — a
   production. Safe default: serve the same 4-bit base plus the adapter, unmerged.
 - **XLM-R cannot do G1e** without a token-classification head. An empty G1e cell means "not
   attempted", never "scored zero" — the two must never be conflated in a comparison table.
+
+- **A print statement can crash a run after the record is written.** The G1b-slice line at the end
+  of `eval_zero_shot.main` was guarded by `anchor_valid` alone; on a fine-tuned arm `slice_ids` is
+  `None`. It would have raised at the end of a 45-minute eval following a 3.4 h training run. Drive
+  `main` through `--record-out` with a stub: `--smoke` returns before the record is built and
+  `--probe` before it is written, so neither exercises that path.
+- **`planned` is not `steps`.** `ceil(rows / (micro × accum)) × epochs` over-counts by one step per
+  epoch whenever the epoch's micro-batches do not divide by the accumulation, and those leftovers'
+  gradients are never zeroed — they fold into the next epoch's first step. 272 planned, 270 run.
+- **Two runs of the same arm at the same seed give different losses** (0.18010 vs 0.18051 at step 5,
+  same pod, same data, same config). Never write "identical" about two runs on this stack.
+- **A test fixture that copies the real results file will collide with reality.** `test_gate_verdict`
+  adds two fixture arms to the committed history; once the real arms existed that was two rows per
+  arm and the suite failed on its own setup. It now strips records carrying `config.fine_tune`.
 
 ## 🐞 Known harness bug
 

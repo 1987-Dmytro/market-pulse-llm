@@ -510,3 +510,106 @@ before it is needed rather than after.
   open/write/close per line and is the live view. `python3 -u` would fix the log.
 - **A stopped pod without a network volume still bills for its container disk.** 80 GB is roughly
   the price of the 100 GB network volume, which is why this one was deleted and not stopped.
+
+# Phase 4c — the two arms, and the one attempt
+
+Executed under `docs/PROMPT-4c.md` rev. 1, 2026-08-01 13:33 → 2026-08-02 00:03 UTC. Both arms
+trained in full, each scored on the frozen sets exactly once, the pre-registered rule applied, the
+five Tier-1 gates decided. The record is [[phase4-gate-verdict]]; this file carries the mechanics.
+
+## Read-back, before any file changed
+
+The selection rule verbatim (amendment 3.4 (3)); the five bars **as `scripts/gate_bars.py` derives
+them** — G1a ≥ 0.9418 (floors ua 0.8718, ru 0.8649) · G1b ≥ 27 of n=44 with ≤2 pp macro-F1 loss ·
+G1c ≥ 0.8436 · G1d ≥ 0.8984 · G1e ≥ 0.8874; that after any gate number is seen nothing is
+retrained, re-scored or reconfigured and no third run exists; the resume protocol and its two-part
+PASS; the 5 h per-arm ceiling of amendment 3.6.
+
+## Assumptions stated because they are assumptions
+
+1. **"One arm per pod session" was read as "one pod per arm".** Each arm got a freshly created,
+   volume-less pod, deleted once its artifacts were home. The alternative reading — reuse one pod
+   for both — would have saved one 62 GB download (~7 min, ~$0.06) and was not taken, because arm
+   A's pod carried a `--stop-after` that could not be extended past arm B's needs anyway.
+2. **The ≤2 pp G1b guard is measured against `sentiment_macro_f1`'s `overall` on the comment test
+   set**, against the same anchor every other bar uses. That reading was already fixed in the
+   scorer's docstring at 4b and is not a new decision here.
+3. **Reading the committed per-row dumps to characterise a failed gate is analysis, not a frozen-set
+   pass.** No model was run outside the two sanctioned arm evals; the G1b breakdown in the ADR is
+   arithmetic over files that already existed.
+4. **The stale 4a pod is not 4c's to delete.** `gxkdecf3g7k3y7` (`EXITED`, on the CA-MTL-3 network
+   volume) predates this step; it is flagged in the report, not touched.
+
+## Deviations
+
+- **D1 — arm A trained at `16e3af1` and was scored at `34a27d7`; arm B ran `34a27d7` throughout.**
+  The commit between them fixes a crash in the *eval* script's last line and adds its test.
+  `git diff 16e3af1 34a27d7 -- scripts/train_qlora.py config/ src/` is **empty**, so both arms
+  trained on identical code, config and seed. Gate-relevant only if that diff were non-empty; it
+  was checked, not assumed.
+- **D2 — the resume proof's two runs ended at their own `--max-steps` cap rather than being killed
+  by a signal.** `docs/PROMPT-4c.md` step 1 says "kill the process". The same unconditional
+  `save()` writes the same artifact either way and the reload path under test is unchanged, so the
+  proof stands; recorded because it is a difference from the written protocol.
+- **D3 — arm A's checkpoints synced every 10–15 minutes, not continuously.** The adapter and
+  optimizer state are only rewritten at `save_every: 100` — about every 75 minutes at the measured
+  step time — so that save cadence, not the rsync cadence, is the real recovery granularity. A
+  crash would have cost ≤75 minutes of training (~$0.66). Recorded rather than fixed: editing a
+  frozen config to improve a number nobody is measuring is the wrong trade.
+- **D4 — the two pods ran different drivers** (550.127.08 for arm A, 570.195.03 for arm B), because
+  volume-less pods land on whichever host has stock. Everything else in the stack was identical and
+  both records carry their own `runtime` block. See finding 5 for why bit-identical arms were never
+  on the table anyway.
+
+Nothing above is gate-relevant, so nothing stopped for an operator decision. The one thing that
+would have — a projection crossing the 5 h ceiling — did not happen: 3.40 h and 4.17 h, both under
+4b's own projections.
+
+## The run table
+
+| | resume proof | arm A (real-only) | arm B (with-synthetic) |
+|---|---|---|---|
+| pod | `wol5tdhnbyrj1c` | `wol5tdhnbyrj1c` | `lxsgsyxdw9jqvd` |
+| datacenter | US-TX-1, volume-less, 80 GB | same pod | US-TX-1, volume-less, 80 GB |
+| driver | 550.127.08 | 550.127.08 | 570.195.03 |
+| rows | 2 171 | 2 171 | 2 771 |
+| `train_sha256` | `d2fa6742…` | `d2fa6742…` (= 4b's) | `d6d3c800…` |
+| steps | 10 then 15 | **270** | **346** |
+| training | ~11 min | **12 244 s = 3.40 h** | **15 022 s = 4.17 h** |
+| s/step | 43.6 → 42.9 | 45.35 | 43.42 |
+| peak GPU | 29.85 GB | 30.86 GB | 30.84 GB |
+| micro × accum | 2 × 8, never halved | 2 × 8, never halved | 2 × 8, never halved |
+| adapter sha256 | — | `c0e462af…` | `0566900e…` |
+| eval | — | 758/758, 0 failures | 758/758, 0 failures |
+| record | — | `2026-08-01T18:37:47Z` | `2026-08-01T23:56:21Z` |
+
+Adapter hashes were computed on the pod and on the Mac and compared before either record was
+appended: identical both times, so the sync is verified rather than assumed.
+
+## Build log
+
+- 2026-08-01 — `42ac2ea` the team lead's SPEC rev. 3.6 / STATUS / PROMPT-4c, committed verbatim;
+  `b690f02` the arm eval path with its crash-resume checkpoint; `01aa6c9` the selection rule and
+  the verdict script; `16e3af1` the 4c runbook and `assert_resumable`; `411bd84` `.gitignore` for
+  the 250 MB optimizer state; `34a27d7` the eval's last-line crash and the stub test that found it;
+  `8314dfb` arm A. `make check` green after every one.
+- 2026-08-01 13:33 → 14:10 UTC — pod, 62 GB download (~7 min at ~235 MB/s), venv, dataset check,
+  resume proof.
+- 2026-08-01 14:10 → 18:37 UTC — arm A trained and scored. Pod deleted, ledger logged.
+- 2026-08-01 18:44 → 23:56 UTC — arm B, second pod, same protocol. Pod deleted, ledger logged.
+- 2026-08-02 — `scripts/gate_verdict.py` applied the rule and produced the five verdicts.
+
+## Three things the next session should not relearn
+
+- **A print statement can crash a run after the record is written.** The G1b-slice line at the end
+  of `eval_zero_shot.main` was guarded by `anchor_valid` alone; on an arm, `slice_ids` is `None`.
+  It would have raised at the end of a 45-minute eval following a 3.4 h training run. The test that
+  found it drives `main` through the whole `--record-out` path with stubbed weights — that path had
+  never run, because `--smoke` returns before the record is built and `--probe` before it is
+  written.
+- **`planned` is not `steps`.** `ceil(rows / (micro × accum)) × epochs` over-counts by one step per
+  epoch whenever the epoch's micro-batches do not divide by the accumulation, and the leftovers'
+  gradients carry into the next epoch's first step. 272 planned, 270 run.
+- **Two runs of the same arm at the same seed do not give the same loss.** 0.18010 against 0.18051
+  at step 5, identical data and config on the same pod. Say "paired on data and config", never
+  "identical".
