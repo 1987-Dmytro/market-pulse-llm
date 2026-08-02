@@ -639,3 +639,55 @@ artifact, so the effective semantic n is ≤3. The brands ceiling is not estimab
 any confidence, whatever the operator rules on those four rows. The operator still judges them —
 the executor does not pre-empt a verdict — but the harness's brands line should be read as a
 placeholder, not a measurement.
+
+# Phase 4.5b — the returns ingested, the harness run once
+
+## What the normalization is allowed to change, and how that is proved
+
+The pack went out as five UTF-8, comma-separated CSVs and came back through a spreadsheet:
+semicolons, and verdicts written out as `B — правильная метка label_B`. `scripts/normalize_audit_returns.py`
+maps the five forms the returns actually carry by table, derives every verdict twice (the table and
+the cell's leading token, which must agree), and — the part that matters — builds every output row
+from the **sealed** row with one cell replaced. It then blanks those cells again and requires the
+sealed bytes back. A round-trip to the sealed file covers quoting, column order, line endings and
+encoding; a field-by-field comparison covers none of them, and this pack is the only copy of 244
+verdicts.
+
+Checked outside the script as well, sealed against normalized: 244 verdict cells filled, **0**
+non-verdict cells changed, CRLF and comma preserved, no BOM. The verdict tallies reproduce the
+team lead's independent count of the returns exactly (A19/B16 · A32/B33/amb2 · A3/B20 · A7/B8 ·
+81/23).
+
+## Deviations from `docs/PROMPT-4.5b.md`
+
+1. **"Assert per-row against the empty originals (git HEAD copies)" — there are no HEAD copies.**
+   `data/annotation/*` is gitignored (only the frozen sets and the sarcasm pool are exceptions), so
+   the sealed pack has never been in git. The authority used instead is the committed
+   `results/audit_45a_manifest.json`, whose per-CSV sha256 all five on-disk originals matched
+   exactly before the run — a stronger pin than a HEAD copy, since the manifest is the file the
+   harness already trusts for the key. The assertion itself is per-row as prompted, plus the byte
+   round-trip above.
+2. **The record is a sibling file, not an extension of the manifest.** `results/audit_45b_returns.json`
+   holds the raw / sealed / normalized sha256 of every file, the verdict tallies and the mapping
+   table. The manifest's `csv` shas describe the *sealed empty* pack; overwriting them would erase
+   the only record of what went out, and `scripts/audit_ceiling.py` reads `key_sha256` from that
+   same file.
+3. **G1e: the harness prints it, the record excludes it.** `scripts/audit_ceiling.py` is the
+   approved artifact and was run unmodified, so its brands lines are in the complete output. The
+   ADR carries G1e as raw verdict counts only, per the team-lead decision of 02.08.
+4. **`git_state` took a parameter.** The builder's helper leaves the record it is writing out of its
+   own dirty list; it now takes that path as an argument so the normalizer can reuse it instead of
+   copying it. The manifest it produces is unchanged.
+
+## Two things the next session should not relearn
+
+- **A pin belongs in the script, not in the checklist.** The team lead sha-pinned the authoritative
+  return set in the prompt; encoding those five digests in the normalizer means an unauthorized copy
+  cannot be ingested by accident, rather than being caught by whoever remembers to hash the files.
+  The same guard makes a rerun a no-op: a pack that is neither sealed nor already-normalized stops
+  the run instead of being overwritten.
+- **For G1b the two ceiling units coincide, and that is arithmetic, not agreement.** The fix-rate is
+  the share of the 44 slice rows a perfect model gets right, which is the accuracy ceiling's own
+  definition; the control adds nothing because its 8 rows carry no `incorrect`. Nowhere else do the
+  columns mean the same thing, and a reader who generalizes from that row will read a macro-F1 bound
+  as an accuracy share.
