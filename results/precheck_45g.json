@@ -1,0 +1,165 @@
+{
+  "runs": [
+    {
+      "timestamp": "2026-08-02T20:26:58+00:00",
+      "task": "precheck_v2_with_post",
+      "model": "qwen/qwen3.6-27b",
+      "endpoint": {
+        "tag": "io-net/fp8",
+        "quantization": "fp8",
+        "served_quantization": "fp8",
+        "status": 0
+      },
+      "smoke": false,
+      "annotator": "llm-precheck",
+      "prompt_sha256": {
+        "precheck_v2_with_post": "113000df199536a5657b4ed531058ce2e8029384f2d11e721e2af5d0f665fed0",
+        "T1v2_with_post": "495b43d1361d0e4f5f7a186eebb971f4dc3ed9f8afd128f539ba0f6a8ffc2a19"
+      },
+      "funnel": {
+        "corpus": 11338,
+        "no text (media only)": 4114,
+        "already labelled": 3771,
+        "in a test or holdout thread": 1239,
+        "verbatim copy of a labelled text": 283,
+        "repeat of another candidate": 19,
+        "labelable pool": 1912
+      },
+      "pool": {
+        "rows": 1912,
+        "parent_is_media_only": 424,
+        "labelled": 1911,
+        "unusable": 1
+      },
+      "unusable_rows": [
+        {
+          "id": "@msuaaaa:6919",
+          "labels": null,
+          "unusable": "parse: no JSON object in reply"
+        }
+      ],
+      "distribution": {
+        "rows": 1911,
+        "unclear": 665,
+        "unclear_share": 0.34798534798534797,
+        "sentiment": {
+          "neutral": 1091,
+          "negative": 632,
+          "positive": 188
+        },
+        "sarcasm": 88,
+        "intents": {
+          "service": 676,
+          "availability": 163,
+          "price": 120,
+          "taste": 91,
+          "quality": 80,
+          "packaging": 18
+        },
+        "no_intent": 826,
+        "scoreable": 1246,
+        "language": {
+          "ua": 1166,
+          "other": 389,
+          "ru": 343,
+          "en": 13
+        }
+      },
+      "batch": "data/annotation/uplabel_precheck_45g.jsonl",
+      "batch_sha256": "fcdb73ffac682e5c025d77cf7eff01ac2a1a109d60c3ee09b4f377490936077e",
+      "estimate_usd": 0.657368816,
+      "cost": {
+        "requests": 1912,
+        "usd": 0.5727993500000006,
+        "phase_spend_usd": 0.5978709700000007,
+        "cap_usd": 1.25
+      },
+      "git": {
+        "commit": "dac76888b27e11452c02403f2122695dbadf982d",
+        "dirty": [
+          "scripts/relabel_emptied.py",
+          "scripts/precheck_uplabel.py"
+        ]
+      },
+      "note": "A PRECHECK, not annotation. Every row carries annotator `llm-precheck` and nothing merges into a train or candidates file until the three strata of the sitting pack come back at >=90% each (4.5g). Each row was asked with the post it replies to, under the with-post revision registered beside T1v2."
+    },
+    {
+      "timestamp": "2026-08-02T20:35:58+00:00",
+      "task": "precheck_v2_with_post",
+      "model": "qwen/qwen3.6-27b",
+      "endpoint": {
+        "tag": "io-net/fp8",
+        "quantization": "fp8",
+        "served_quantization": "fp8",
+        "status": 0
+      },
+      "smoke": false,
+      "annotator": "llm-precheck",
+      "prompt_sha256": {
+        "precheck_v2_with_post": "113000df199536a5657b4ed531058ce2e8029384f2d11e721e2af5d0f665fed0",
+        "T1v2_with_post": "495b43d1361d0e4f5f7a186eebb971f4dc3ed9f8afd128f539ba0f6a8ffc2a19"
+      },
+      "funnel": {
+        "corpus": 11338,
+        "no text (media only)": 4114,
+        "already labelled": 3771,
+        "in a test or holdout thread": 1239,
+        "verbatim copy of a labelled text": 283,
+        "repeat of another candidate": 19,
+        "labelable pool": 1912
+      },
+      "pool": {
+        "rows": 1912,
+        "parent_is_media_only": 424,
+        "labelled": 1912,
+        "unusable": 0
+      },
+      "unusable_rows": [],
+      "distribution": {
+        "rows": 1912,
+        "unclear": 665,
+        "unclear_share": 0.34780334728033474,
+        "sentiment": {
+          "neutral": 1092,
+          "negative": 632,
+          "positive": 188
+        },
+        "sarcasm": 88,
+        "intents": {
+          "service": 676,
+          "availability": 164,
+          "price": 120,
+          "taste": 91,
+          "quality": 80,
+          "packaging": 18
+        },
+        "no_intent": 826,
+        "scoreable": 1247,
+        "language": {
+          "ua": 1167,
+          "other": 389,
+          "ru": 343,
+          "en": 13
+        }
+      },
+      "batch": "data/annotation/uplabel_precheck_45g.jsonl",
+      "batch_sha256": "b797dc5a134ffe77d03ee65714479ec1e8c24dacc8219cb6f9707fd7fb175df9",
+      "estimate_usd": 0.657368816,
+      "cost": {
+        "requests": 1,
+        "usd": 0.00028924,
+        "phase_spend_usd": 0.5784457899999998,
+        "cap_usd": 1.25
+      },
+      "git": {
+        "commit": "dac76888b27e11452c02403f2122695dbadf982d",
+        "dirty": [
+          "results/spend_45g.json",
+          "scripts/relabel_emptied.py",
+          "scripts/precheck_uplabel.py"
+        ]
+      },
+      "note": "A PRECHECK, not annotation. Every row carries annotator `llm-precheck` and nothing merges into a train or candidates file until the three strata of the sitting pack come back at >=90% each (4.5g). Each row was asked with the post it replies to, under the with-post revision registered beside T1v2."
+    }
+  ]
+}

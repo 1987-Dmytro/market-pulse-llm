@@ -146,11 +146,17 @@ def with_context(rows: list[dict], posts: dict) -> list[dict]:
 
 
 class Asker:
-    """One pinned endpoint, one budget, retries — the with-post prompt and nothing else."""
+    """One pinned endpoint, one budget, retries — a with-post prompt and nothing else.
 
-    def __init__(self, key: str, model: str, tag: str, quantization: str | None, budget):
+    Thread-safe because the budget is: with workers in flight the guard has to see every
+    row's cost as it lands, or the cap is only a cap on average. `--task` is a parameter
+    because the up-label precheck asks the same endpoint for a different prompt and a
+    second copy of this class is a second place for the budget lock to be forgotten.
+    """
+
+    def __init__(self, key, model, tag, quantization, budget, task=TASK, max_tokens=MAX_TOKENS):
         self.key, self.model, self.tag, self.quantization = key, model, tag, quantization
-        self.budget = budget
+        self.budget, self.task, self.max_tokens = budget, task, max_tokens
         self.lock = threading.Lock()
 
     def __call__(self, text: str, parent: str) -> str:
@@ -159,10 +165,10 @@ class Asker:
                 "/chat/completions",
                 zero_shot.request_body(
                     model=self.model,
-                    messages=prompts.build_messages(TASK, text, parent=parent),
+                    messages=prompts.build_messages(self.task, text, parent=parent),
                     tag=self.tag,
                     quantization=self.quantization,
-                    max_tokens=MAX_TOKENS,
+                    max_tokens=self.max_tokens,
                     seed=SEED,
                 ),
                 self.key,

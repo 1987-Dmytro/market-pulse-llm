@@ -23,6 +23,20 @@
       "usd": 0.00258946,
       "requests": 14,
       "note": "45g: 14 emptied rows re-asked with the parent post"
+    },
+    {
+      "model": "qwen/qwen3.6-27b",
+      "timestamp": "2026-08-02T20:26:58+00:00",
+      "usd": 0.5727993500000006,
+      "requests": 1912,
+      "note": "45g: 1912 up-label candidates prechecked, all four fields"
+    },
+    {
+      "model": "qwen/qwen3.6-27b",
+      "timestamp": "2026-08-02T20:35:58+00:00",
+      "usd": 0.00028924,
+      "requests": 1,
+      "note": "45g: 1 up-label candidates prechecked, all four fields"
     }
   ]
 }
