@@ -1202,6 +1202,14 @@ instead of there. Every row carries `annotator: "llm-precheck"`; nothing merges 
 8. **12 rows of the 97 are still unusable** after three passes and keep `[]`. Not coerced; named.
 9. **`build_sitting_pack.py` has a hidden `--root`** so its bundled-file check can be driven
    against a temp tree; the manifest stores repo-relative paths either way.
+10. **The sitting manifest was rebuilt once from a clean tree.** Its first build named a commit
+    with `scripts/build_sitting_pack.py` still uncommitted, and the manifest is what 4.5h verifies
+    the returns against — a pack whose record cannot reproduce it is a weaker chain than the one
+    4.5f built. Rebuilding cost nothing (0 verdicts, `--force`) and the three shas came back byte
+    for byte, which is itself the evidence that nothing between the two builds changed the pack.
+    The two paid records keep their honest `dirty` lists (`results/precheck_45g.json`,
+    `results/emptied_with_post_45g.json`) — the same shape `results/drop_45f.json` carries, and
+    re-running a paid pass to clean a provenance field is not a trade worth making.
 
 ## The bug worth writing down
 

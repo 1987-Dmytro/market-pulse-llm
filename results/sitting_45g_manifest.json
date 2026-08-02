@@ -366,10 +366,7 @@
   },
   "note": "Three questions, one sitting. `precheck300.csv` is the gate on the up-label precheck and nothing merges into a train or candidates file until every stratum passes. Nothing in any pack file says which stratum a row is in; `stratum_of` is here because the reader needs it and the operator must not have it.",
   "git": {
-    "commit": "806400892363f7b1d1e6ec02ba92b0574ca58b17",
-    "dirty": [
-      "scripts/build_sitting_pack.py",
-      "tests/test_sitting_pack.py"
-    ]
+    "commit": "8d8bb54535ca9e30483339c2d2167ff330878c3d",
+    "dirty": []
   }
 }
