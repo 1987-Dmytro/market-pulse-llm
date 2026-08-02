@@ -33,3 +33,4 @@ docs/STATUS.md; these are the English long form with the numbers.
 | 2026-08-02 | [[phase45a-ceiling]] — 244 blind verdicts: the per-head ceiling in metric and accuracy units | proposed |
 | 2026-08-02 | [[test-v3]] — 38 blind verdicts applied beside v2; intents pending the law review | proposed |
 | 2026-08-02 | [[taxonomy-v2-relabel-and-appetite]] — all 1,912 rows up-labelled after the ≥90% gate; three boundary calls ratified; v2 copies beside originals | accepted |
+| 2026-08-02 | [[45g-parent-context-and-uplabel]] — the parent post joins the v2 prompts as new revisions; the 97 emptied rows re-asked; the 1,912 up-label goes as a calibrated precheck | accepted |
