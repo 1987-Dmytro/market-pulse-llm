@@ -149,6 +149,30 @@ def test_a_row_under_an_operator_ruling_is_asked_and_never_written(tmp_path):
     assert [fix["id"] for fix in out["applied"]] == ["@c:2"]
 
 
+def test_this_script_reading_its_own_fixes_back_is_not_an_operator_ruling(tmp_path):
+    """The bug this exists to stop: the hold is `a fix has moved this row`, and after one
+    invocation that is true of every row this script just wrote. A second pass would then
+    report its own 32 answers as rulings and refuse to touch them."""
+    sources, store = corpus(tmp_path, [row("@c:1", 1, ["taste"])], [row("@c:1", 1, [])])
+    drop, record = records(
+        tmp_path,
+        1,
+        {"taste": 1},
+        fixes=[
+            {"applied_by": emptied.APPLIED_BY, "rows": [{"id": "@c:1", "old": []}]},
+            {
+                "applied_by": "scripts/apply_calibration_rulings.py",
+                "rows": [{"id": "@c:2", "old": []}],
+            },
+        ],
+    )
+    assert emptied.ruled(record) == {"@c:2"}
+
+    _, out = run(tmp_path, sources, store, drop, record, {"Так": '{"intents": ["price"]}'})
+    assert out["population"]["held_by_operator_ruling"] == []
+    assert staged_rows(sources)["@c:1"]["intents"] == ["price"], "its own row is still writable"
+
+
 def test_an_answer_moves_the_intents_column_and_nothing_else(tmp_path):
     sources, store = corpus(tmp_path, [row("@c:1", 1, ["taste"])], [row("@c:1", 1, [])])
     drop, record = records(tmp_path, 1, {"taste": 1})

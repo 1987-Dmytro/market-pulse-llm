@@ -89,10 +89,13 @@ SAMPLE_RULE = (
 )
 
 
-def population(drop_record: Path, run: Path) -> tuple[list[dict], dict]:
-    """The 97, re-derived and then checked against the record that measured them."""
-    reversed_rows = drop.reversals(run)
-    rows = drop.pairs(relabel.SOURCES, reversed_rows)
+def population(drop_record: Path, run: Path) -> list[dict]:
+    """The 97, re-derived and then checked against the record that measured them.
+
+    Every fix is reversed first, this run's own included: the population is the class the
+    re-labeller produced, so it stays the same set however many times this has been applied.
+    """
+    rows = drop.pairs(relabel.SOURCES, drop.reversals(run))
     emptied = [row for row in rows if row["before"] and not row["after"]]
     recorded = json.loads(drop_record.read_text(encoding="utf-8"))["populations"]["all"]
     lost = Counter(", ".join(row["before"]) for row in emptied)
@@ -103,7 +106,30 @@ def population(drop_record: Path, run: Path) -> tuple[list[dict], dict]:
             f" {recorded['emptied_from']}. The population and the record of it disagree, so"
             " neither says which rows this run is about."
         )
-    return emptied, reversed_rows
+    return emptied
+
+
+APPLIED_BY = "scripts/relabel_emptied.py"
+
+
+def ruled(run: Path) -> set[str]:
+    """Rows a fix *this script did not write* has moved — an operator ruling, and only that.
+
+    `measure_empty_drop.reversals` answers a different question: every row any fix has
+    moved, which is what the population is re-derived from. Using it for the hold would be
+    right exactly once — the second invocation would read this run's own `fixes` block back
+    and report 32 model answers as operator rulings. So the hold is narrowed by authorship,
+    which still protects a ruling applied tomorrow without naming an id here.
+    """
+    if not run.exists():
+        return set()
+    history = json.loads(run.read_text(encoding="utf-8"))
+    return {
+        row["id"]
+        for fix in history.get("fixes", [])
+        if fix.get("applied_by") != APPLIED_BY
+        for row in fix["rows"]
+    }
 
 
 def with_context(rows: list[dict], posts: dict) -> list[dict]:
@@ -311,8 +337,8 @@ def main(argv: list[str] | None = None, asker=None) -> int:
         args.record = smoke / args.record.name
         args.rows_out = smoke / args.rows_out.name
 
-    emptied, reversed_rows = population(args.drop, args.relabel_record)
-    held = {row["id"] for row in emptied if row["id"] in reversed_rows}
+    emptied = population(args.drop, args.relabel_record)
+    held = {row["id"] for row in emptied} & ruled(args.relabel_record)
     rows = with_context(emptied, parents.load(args.posts))
     media_only = sum(1 for row in rows if row["parent_empty"])
     print(
@@ -419,6 +445,21 @@ def main(argv: list[str] | None = None, asker=None) -> int:
             "identical_to_v1": sum(
                 1 for row in drawn if row["intents_with_post"] == row["intents_v1"]
             ),
+            # What the operator is actually being shown. `new` is plausible for a row the
+            # model recovered and for one it moved somewhere else; a row it emptied again is
+            # the one where the two columns argue, and the count says how many there are
+            # before a single verdict comes back.
+            "drawn_composition": {
+                "identical_to_v1": sum(
+                    1 for row in drawn if row["intents_with_post"] == row["intents_v1"]
+                ),
+                "empty_again": sum(1 for row in drawn if not row["intents_with_post"]),
+                "different_and_not_empty": sum(
+                    1
+                    for row in drawn
+                    if row["intents_with_post"] and row["intents_with_post"] != row["intents_v1"]
+                ),
+            },
             "rows_drawn": drawn,
         },
         "cost": {
