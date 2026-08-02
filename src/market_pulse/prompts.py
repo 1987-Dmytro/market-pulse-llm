@@ -187,7 +187,8 @@ the hotline, the queue, the staff: "service". A product missing from the shelf: 
 Return the intents of this comment and nothing else. Do not judge its sentiment, its sarcasm or \
 whether it is clear — those labels are already set and you are not being asked about them.
 
-Answer with one JSON object and nothing else: no explanation, no code fence.
+Answer with one JSON object and nothing else: no explanation, no code fence. Always write the \
+"intents" key, with an empty list when the comment is about none of the six.
 {{"intents": ["price"]}}\
 """
 """The annotation prompt of the taxonomy-v2 re-label — one field, by construction.

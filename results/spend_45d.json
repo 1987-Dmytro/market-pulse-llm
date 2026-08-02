@@ -1,0 +1,35 @@
+{
+  "openrouter_total_usage_at_45d_start": 1.082441585,
+  "note": "lifetime OpenRouter usage read at the start of 4.5d, before the first request of this phase. Phase spend = total_usage now minus this, and the $2.00 cap of docs/PROMPT-4.5d.md is enforced against that difference. Delete or regenerate this file and the counter silently restarts at today's usage — the same footgun results/spend_3b.json carries. results/spend_3b.json is a different phase's anchor and is never written here.",
+  "cap_usd": 2.0,
+  "runs": [
+    {
+      "model": "qwen/qwen3.6-27b",
+      "timestamp": "2026-08-02T17:12:14+00:00",
+      "usd": 0.0004932000000000001,
+      "requests": 3,
+      "note": "4.5d probe: 3 comments_train rows re-labelled under taxonomy v2"
+    },
+    {
+      "model": "qwen/qwen3.6-27b",
+      "timestamp": "2026-08-02T17:13:07+00:00",
+      "usd": 0.007758059999999998,
+      "requests": 50,
+      "note": "4.5d probe: 50 comments_train rows re-labelled under taxonomy v2"
+    },
+    {
+      "model": "qwen/qwen3.6-27b",
+      "timestamp": "2026-08-02T17:14:17+00:00",
+      "usd": 0.002333,
+      "requests": 3,
+      "note": "4.5d: one diagnostic call for each probe row that came back without an intents field"
+    },
+    {
+      "model": "qwen/qwen3.6-27b",
+      "timestamp": "2026-08-02T17:14:46+00:00",
+      "usd": 0.008107920000000001,
+      "requests": 50,
+      "note": "4.5d probe: 50 comments_train rows re-labelled under taxonomy v2"
+    }
+  ]
+}

@@ -1,0 +1,231 @@
+{
+  "runs": [
+    {
+      "timestamp": "2026-08-02T17:13:07+00:00",
+      "task": "relabel_intents_v2",
+      "model": "qwen/qwen3.6-27b",
+      "endpoint": {
+        "tag": "io-net/fp8",
+        "quantization": "fp8",
+        "served_quantization": "fp8",
+        "status": 0
+      },
+      "smoke": false,
+      "source": "data/frozen/comments_train.jsonl",
+      "source_sha256": "4b6ea7f354bcc396ee526ce193c445bb358fab1d070bbe429dfdeb3bace1a1d7",
+      "seed": 42,
+      "prompt_sha256": {
+        "relabel_intents_v2": "95e655b481e1ed122ef1ce982cf4f2367dfe4d7d826ab75faeb83a351fc1788a",
+        "T1v2": "d33ff50dc7bd414f3246fe4d1fa7366c40c81ad2a9514b27eb1c25d41f38c4b3"
+      },
+      "git": {
+        "commit": "ee88b4e3296ceae452958b6f5fc1c418fe95bb7b",
+        "dirty": [
+          "results/relabel_45d_probe_rows.jsonl",
+          "results/spend_45d.json",
+          "scripts/relabel_intents.py",
+          "tests/test_relabel_intents.py"
+        ]
+      },
+      "drift": {
+        "rows": 50,
+        "scored": 47,
+        "unusable": [
+          {
+            "id": "@VARUS_channel:1269",
+            "intents": null,
+            "unusable": "parse: missing field: intents",
+            "usage": {
+              "prompt_tokens": 479,
+              "completion_tokens": 2,
+              "total_tokens": 481,
+              "cost": 0.0001381,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.0001381,
+                "upstream_inference_prompt_cost": 0.00013412,
+                "upstream_inference_completions_cost": 3.98e-06
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            }
+          },
+          {
+            "id": "@VARUS_channel:17283",
+            "intents": null,
+            "unusable": "parse: missing field: intents",
+            "usage": {
+              "prompt_tokens": 533,
+              "completion_tokens": 2,
+              "total_tokens": 535,
+              "cost": 0.00015322,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00015322,
+                "upstream_inference_prompt_cost": 0.00014924,
+                "upstream_inference_completions_cost": 3.98e-06
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            }
+          },
+          {
+            "id": "@msuaaaa:13588",
+            "intents": null,
+            "unusable": "parse: missing field: intents",
+            "usage": {
+              "prompt_tokens": 485,
+              "completion_tokens": 2,
+              "total_tokens": 487,
+              "cost": 0.00013978,
+              "is_byok": false,
+              "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "audio_tokens": 0,
+                "video_tokens": 0
+              },
+              "cost_details": {
+                "upstream_inference_cost": 0.00013978,
+                "upstream_inference_prompt_cost": 0.0001358,
+                "upstream_inference_completions_cost": 3.98e-06
+              },
+              "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "image_tokens": 0,
+                "audio_tokens": 0
+              }
+            }
+          }
+        ],
+        "changed": 26,
+        "changed_rate": 0.5531914893617021,
+        "changed_without_service": 11,
+        "changed_without_service_rate": 0.23404255319148937,
+        "service_rows": 15,
+        "service_prevalence": 0.3191489361702128,
+        "service_came_from": {
+          "[]": 13,
+          "availability": 2
+        },
+        "labels_added": {
+          "service": 15,
+          "quality": 4,
+          "taste": 1,
+          "availability": 1,
+          "price": 1
+        },
+        "labels_removed": {
+          "quality": 2,
+          "availability": 2,
+          "price": 2,
+          "taste": 1,
+          "packaging": 1
+        }
+      },
+      "cost": {
+        "requests": 50,
+        "usd": 0.007758059999999998,
+        "usd_per_row": 0.00016506510638297867,
+        "phase_spend_usd": 0.007758059999999998,
+        "cap_usd": 2.0
+      },
+      "alternatives": {
+        "anthropic/claude-haiku-4.5": 0.000678,
+        "google/gemma-4-31b-it": 4.5e-05
+      },
+      "rows_out": "results/relabel_45d_probe_rows.jsonl",
+      "note": "PROBE. Intents only; every other column is byte-identical to the source line. The re-labelled rows are evidence for the 4.5d gate, not a gold file."
+    },
+    {
+      "timestamp": "2026-08-02T17:14:46+00:00",
+      "task": "relabel_intents_v2",
+      "model": "qwen/qwen3.6-27b",
+      "endpoint": {
+        "tag": "io-net/fp8",
+        "quantization": "fp8",
+        "served_quantization": "fp8",
+        "status": 0
+      },
+      "smoke": false,
+      "source": "data/frozen/comments_train.jsonl",
+      "source_sha256": "4b6ea7f354bcc396ee526ce193c445bb358fab1d070bbe429dfdeb3bace1a1d7",
+      "seed": 42,
+      "prompt_sha256": {
+        "relabel_intents_v2": "b54a62ed0982c6cff84938ab00a5bcacbca52dad52ab618ca44fce2412b910a7",
+        "T1v2": "d33ff50dc7bd414f3246fe4d1fa7366c40c81ad2a9514b27eb1c25d41f38c4b3"
+      },
+      "git": {
+        "commit": "ee88b4e3296ceae452958b6f5fc1c418fe95bb7b",
+        "dirty": [
+          "results/relabel_45d_probe_rows.jsonl",
+          "results/relabel_probe_45d.json",
+          "results/spend_45d.json",
+          "scripts/relabel_intents.py",
+          "src/market_pulse/prompts.py",
+          "tests/test_relabel_intents.py"
+        ]
+      },
+      "drift": {
+        "rows": 50,
+        "scored": 50,
+        "unusable": [],
+        "changed": 24,
+        "changed_rate": 0.48,
+        "changed_without_service": 9,
+        "changed_without_service_rate": 0.18,
+        "service_rows": 15,
+        "service_prevalence": 0.3,
+        "service_came_from": {
+          "[]": 12,
+          "availability": 2,
+          "price": 1
+        },
+        "labels_added": {
+          "service": 15,
+          "quality": 4,
+          "taste": 1,
+          "availability": 1
+        },
+        "labels_removed": {
+          "quality": 2,
+          "availability": 2,
+          "price": 2,
+          "taste": 1,
+          "packaging": 1
+        }
+      },
+      "cost": {
+        "requests": 50,
+        "usd": 0.008107920000000001,
+        "usd_per_row": 0.00016215840000000003,
+        "phase_spend_usd": 0.016359179999999984,
+        "cap_usd": 2.0
+      },
+      "alternatives": {
+        "anthropic/claude-haiku-4.5": 0.000678,
+        "google/gemma-4-31b-it": 4.5e-05
+      },
+      "rows_out": "results/relabel_45d_probe_rows.jsonl",
+      "note": "PROBE. Intents only; every other column is byte-identical to the source line. The re-labelled rows are evidence for the 4.5d gate, not a gold file."
+    }
+  ]
+}

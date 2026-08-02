@@ -98,7 +98,7 @@ def test_drift_separates_the_taxonomy_from_the_disagreement():
     rows = [
         row("@c:1", []),  # [] -> service: the taxonomy, and only the taxonomy
         row("@c:2", ["price"]),  # price -> price+service: same
-        row("@c:3", ["price"]),  # price -> quality: a disagreement inside v1's five
+        row("@c:3", ["price"]),  # price -> quality: nothing in v2 explains this
         row("@c:4", ["taste"]),  # unchanged
     ]
     outcomes = [
@@ -111,7 +111,7 @@ def test_drift_separates_the_taxonomy_from_the_disagreement():
     found = relabel.drift(rows, outcomes)
     assert (found["rows"], found["scored"], len(found["unusable"])) == (5, 4, 1)
     assert found["changed"] == 3 and found["service_rows"] == 2
-    assert found["v1_vocabulary_changed"] == 1, "gaining `service` is not a disagreement"
+    assert found["changed_without_service"] == 1, "gaining `service` is a move v2 explains"
     assert found["service_came_from"] == {"[]": 1, "price": 1}
     assert found["labels_added"] == {"service": 2, "quality": 1}
     assert found["labels_removed"] == {"price": 1}

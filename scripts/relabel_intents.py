@@ -199,7 +199,7 @@ def drift(rows: list[dict], outcomes: list[dict]) -> dict:
     scored = [out for out in outcomes if out["intents"] is not None]
     added: dict[str, int] = {}
     removed: dict[str, int] = {}
-    changed = service = v1_changed = 0
+    changed = service = unexplained = 0
     service_from: dict[str, int] = {}
     for out in scored:
         old, new = old_of[out["id"]], set(out["intents"])
@@ -212,16 +212,19 @@ def drift(rows: list[dict], outcomes: list[dict]) -> dict:
             service += 1
             key = ", ".join(sorted(old)) or "[]"
             service_from[key] = service_from.get(key, 0) + 1
-        # the same row read under the v1 vocabulary: this part is not the taxonomy
-        v1_changed += (new - {"service"}) != old
+        # A row that gained `service` moved for a reason v2 states — including one
+        # whose old label the new rule replaces (a promo mechanic was `price`). A row
+        # that changed *without* gaining it moved for a reason the taxonomy does not
+        # explain, and that is the part of the drift that is model-versus-annotator.
+        unexplained += "service" not in new and old != new
     return {
         "rows": len(outcomes),
         "scored": len(scored),
         "unusable": [out for out in outcomes if out["intents"] is None],
         "changed": changed,
         "changed_rate": changed / len(scored) if scored else 0.0,
-        "v1_vocabulary_changed": v1_changed,
-        "v1_vocabulary_changed_rate": v1_changed / len(scored) if scored else 0.0,
+        "changed_without_service": unexplained,
+        "changed_without_service_rate": unexplained / len(scored) if scored else 0.0,
         "service_rows": service,
         "service_prevalence": service / len(scored) if scored else 0.0,
         "service_came_from": dict(sorted(service_from.items(), key=lambda kv: -kv[1])),
@@ -267,8 +270,8 @@ def report(record: dict) -> None:
     print("\ndrift, old intents vs re-labelled")
     print(f"  rows whose set changed          {found['changed']:>4}  {found['changed_rate']:.1%}")
     print(
-        f"  ... changed inside v1's five    {found['v1_vocabulary_changed']:>4} "
-        f" {found['v1_vocabulary_changed_rate']:.1%}  (model vs annotator, not the taxonomy)"
+        f"  ... and did not gain `service`  {found['changed_without_service']:>4} "
+        f" {found['changed_without_service_rate']:.1%}  (drift the taxonomy does not explain)"
     )
     print(
         f"  rows carrying `service`         {found['service_rows']:>4} "
