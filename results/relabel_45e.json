@@ -13716,6 +13716,288 @@
           "tests/test_apply_rulings.py"
         ]
       }
+    },
+    {
+      "applied_by": "scripts/relabel_emptied.py",
+      "timestamp": "2026-08-02T20:24:26+00:00",
+      "authority": "results/emptied_with_post_45g.json",
+      "rows": [
+        {
+          "id": "@VARUS_channel:11650",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "taste"
+          ]
+        },
+        {
+          "id": "@VARUS_channel:12044",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "taste"
+          ]
+        },
+        {
+          "id": "@VARUS_channel:12269",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "taste"
+          ]
+        },
+        {
+          "id": "@VARUS_channel:12271",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "taste"
+          ]
+        },
+        {
+          "id": "@VARUS_channel:12323",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "taste"
+          ]
+        },
+        {
+          "id": "@VARUS_channel:1453",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "service"
+          ]
+        },
+        {
+          "id": "@VARUS_channel:18888",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "availability"
+          ]
+        },
+        {
+          "id": "@VARUS_channel:6885",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "taste"
+          ]
+        },
+        {
+          "id": "@msuaaaa:13325",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "availability"
+          ]
+        },
+        {
+          "id": "@msuaaaa:13741",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "service"
+          ]
+        },
+        {
+          "id": "@msuaaaa:6656",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "service"
+          ]
+        },
+        {
+          "id": "@msuaaaa:6752",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "service"
+          ]
+        },
+        {
+          "id": "@msuaaaa:7540",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "service"
+          ]
+        },
+        {
+          "id": "@msuaaaa:7690",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "availability"
+          ]
+        },
+        {
+          "id": "@msuaaaa:8678",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "service"
+          ]
+        },
+        {
+          "id": "@msuaaaa:9542",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "availability"
+          ]
+        },
+        {
+          "id": "@VARUS_channel:10542",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "new": [
+            "taste"
+          ]
+        },
+        {
+          "id": "@VARUS_channel:10737",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "new": [
+            "availability"
+          ]
+        },
+        {
+          "id": "@VARUS_channel:10867",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "new": [
+            "availability"
+          ]
+        },
+        {
+          "id": "@VARUS_channel:414",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "new": [
+            "taste"
+          ]
+        },
+        {
+          "id": "@VARUS_channel:6969",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "new": [
+            "price"
+          ]
+        },
+        {
+          "id": "@msuaaaa:10694",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "new": [
+            "taste"
+          ]
+        },
+        {
+          "id": "@msuaaaa:11291",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "new": [
+            "taste"
+          ]
+        },
+        {
+          "id": "@msuaaaa:12251",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "new": [
+            "packaging"
+          ]
+        },
+        {
+          "id": "@msuaaaa:12279",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "new": [
+            "packaging"
+          ]
+        },
+        {
+          "id": "@msuaaaa:13113",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "new": [
+            "price"
+          ]
+        },
+        {
+          "id": "@msuaaaa:5405",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "new": [
+            "availability"
+          ]
+        },
+        {
+          "id": "@msuaaaa:5528",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "new": [
+            "price"
+          ]
+        },
+        {
+          "id": "@msuaaaa:5531",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "new": [
+            "price"
+          ]
+        },
+        {
+          "id": "@msuaaaa:7551",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "new": [
+            "quality"
+          ]
+        },
+        {
+          "id": "@msuaaaa:7552",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "new": [
+            "price"
+          ]
+        },
+        {
+          "id": "@msuaaaa:9510",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "new": [
+            "price"
+          ]
+        }
+      ],
+      "staged_sha256_before": {
+        "data/frozen/comments_train_tax2.jsonl": "e5a52a08cc64ed10cb0512c8f23e29d9d43b69e584915a70e9cd6aca1339ad2c",
+        "data/annotation/sarcasm_holdout_pool_tax2.jsonl": "a00942ccf2ab681139c8c9fcc41144f4bca85b67eb13841289d96065b1f8fe91"
+      },
+      "staged_sha256_after": {
+        "data/frozen/comments_train_tax2.jsonl": "d785d557e75e031860b246958f58152b2e52169d796a149e5a02db45966f5d37",
+        "data/annotation/sarcasm_holdout_pool_tax2.jsonl": "d4021274794e8765c2cf13ef44d6fb3dcbcd3b23ba6ccbd1cbccce620114196b"
+      },
+      "note": "The with-post re-label of the rows 4.5e emptied. The drift and churn in `runs` are the re-labeller's own output under the old prompt and are deliberately NOT recomputed — they are what the 4.5f gate judged. These rows are not accepted yet: the 40-row contrastive check in results/emptied_with_post_45g.json decides the batch.",
+      "git": {
+        "commit": "4a0ea004db99bbca035c6e81287db5be8da6539e",
+        "dirty": [
+          "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "data/frozen/comments_train_tax2.jsonl",
+          "results/emptied_45g_rows.jsonl",
+          "results/emptied_with_post_45g.json",
+          "results/spend_45g.json"
+        ]
+      }
     }
   ]
 }

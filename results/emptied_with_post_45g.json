@@ -1,0 +1,819 @@
+{
+  "runs": [
+    {
+      "timestamp": "2026-08-02T20:24:26+00:00",
+      "task": "relabel_intents_v2_with_post",
+      "model": "qwen/qwen3.6-27b",
+      "endpoint": {
+        "tag": "io-net/fp8",
+        "quantization": "fp8",
+        "served_quantization": "fp8",
+        "status": 0
+      },
+      "smoke": false,
+      "prompt_sha256": {
+        "relabel_intents_v2_with_post": "5965966d9b98279770407b0a5d858a85db578663120041f72359703658bbea9d",
+        "relabel_intents_v2": "b54a62ed0982c6cff84938ab00a5bcacbca52dad52ab618ca44fce2412b910a7",
+        "T1v2_with_post": "495b43d1361d0e4f5f7a186eebb971f4dc3ed9f8afd128f539ba0f6a8ffc2a19"
+      },
+      "population": {
+        "rows": 97,
+        "source": "results/drop_45f.json",
+        "parent_is_media_only": 23,
+        "held_by_operator_ruling": [
+          "@VARUS_channel:11960",
+          "@VARUS_channel:11972"
+        ]
+      },
+      "answers": {
+        "all": {
+          "asked": 85,
+          "regained_a_label": 33,
+          "rate": 0.38823529411764707,
+          "still_empty": 52,
+          "matches_v1": 26
+        },
+        "parent_has_text": {
+          "asked": 62,
+          "regained_a_label": 26,
+          "rate": 0.41935483870967744,
+          "still_empty": 36,
+          "matches_v1": 20
+        },
+        "parent_is_media_only": {
+          "asked": 23,
+          "regained_a_label": 7,
+          "rate": 0.30434782608695654,
+          "still_empty": 16,
+          "matches_v1": 6
+        }
+      },
+      "unusable": [
+        {
+          "id": "@VARUS_channel:12430",
+          "intents": null,
+          "unusable": "parse: missing field: intents"
+        },
+        {
+          "id": "@VARUS_channel:12682",
+          "intents": null,
+          "unusable": "parse: missing field: intents"
+        },
+        {
+          "id": "@VARUS_channel:19215",
+          "intents": null,
+          "unusable": "parse: missing field: intents"
+        },
+        {
+          "id": "@VARUS_channel:20136",
+          "intents": null,
+          "unusable": "parse: missing field: intents"
+        },
+        {
+          "id": "@VARUS_channel:2799",
+          "intents": null,
+          "unusable": "parse: missing field: intents"
+        },
+        {
+          "id": "@msuaaaa:11270",
+          "intents": null,
+          "unusable": "parse: missing field: intents"
+        },
+        {
+          "id": "@msuaaaa:7091",
+          "intents": null,
+          "unusable": "parse: missing field: intents"
+        },
+        {
+          "id": "@msuaaaa:9385",
+          "intents": null,
+          "unusable": "parse: missing field: intents"
+        },
+        {
+          "id": "@msuaaaa:12205",
+          "intents": null,
+          "unusable": "parse: missing field: intents"
+        },
+        {
+          "id": "@VARUS_channel:21576",
+          "intents": null,
+          "unusable": "parse: missing field: intents"
+        },
+        {
+          "id": "@msuaaaa:11941",
+          "intents": null,
+          "unusable": "parse: missing field: intents"
+        },
+        {
+          "id": "@msuaaaa:9049",
+          "intents": null,
+          "unusable": "parse: missing field: intents"
+        }
+      ],
+      "applied": [
+        {
+          "id": "@VARUS_channel:11650",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "taste"
+          ]
+        },
+        {
+          "id": "@VARUS_channel:12044",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "taste"
+          ]
+        },
+        {
+          "id": "@VARUS_channel:12269",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "taste"
+          ]
+        },
+        {
+          "id": "@VARUS_channel:12271",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "taste"
+          ]
+        },
+        {
+          "id": "@VARUS_channel:12323",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "taste"
+          ]
+        },
+        {
+          "id": "@VARUS_channel:1453",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "service"
+          ]
+        },
+        {
+          "id": "@VARUS_channel:18888",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "availability"
+          ]
+        },
+        {
+          "id": "@VARUS_channel:6885",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "taste"
+          ]
+        },
+        {
+          "id": "@msuaaaa:13325",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "availability"
+          ]
+        },
+        {
+          "id": "@msuaaaa:13741",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "service"
+          ]
+        },
+        {
+          "id": "@msuaaaa:6656",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "service"
+          ]
+        },
+        {
+          "id": "@msuaaaa:6752",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "service"
+          ]
+        },
+        {
+          "id": "@msuaaaa:7540",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "service"
+          ]
+        },
+        {
+          "id": "@msuaaaa:7690",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "availability"
+          ]
+        },
+        {
+          "id": "@msuaaaa:8678",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "service"
+          ]
+        },
+        {
+          "id": "@msuaaaa:9542",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "availability"
+          ]
+        },
+        {
+          "id": "@VARUS_channel:10542",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "new": [
+            "taste"
+          ]
+        },
+        {
+          "id": "@VARUS_channel:10737",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "new": [
+            "availability"
+          ]
+        },
+        {
+          "id": "@VARUS_channel:10867",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "new": [
+            "availability"
+          ]
+        },
+        {
+          "id": "@VARUS_channel:414",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "new": [
+            "taste"
+          ]
+        },
+        {
+          "id": "@VARUS_channel:6969",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "new": [
+            "price"
+          ]
+        },
+        {
+          "id": "@msuaaaa:10694",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "new": [
+            "taste"
+          ]
+        },
+        {
+          "id": "@msuaaaa:11291",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "new": [
+            "taste"
+          ]
+        },
+        {
+          "id": "@msuaaaa:12251",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "new": [
+            "packaging"
+          ]
+        },
+        {
+          "id": "@msuaaaa:12279",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "new": [
+            "packaging"
+          ]
+        },
+        {
+          "id": "@msuaaaa:13113",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "new": [
+            "price"
+          ]
+        },
+        {
+          "id": "@msuaaaa:5405",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "new": [
+            "availability"
+          ]
+        },
+        {
+          "id": "@msuaaaa:5528",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "new": [
+            "price"
+          ]
+        },
+        {
+          "id": "@msuaaaa:5531",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "new": [
+            "price"
+          ]
+        },
+        {
+          "id": "@msuaaaa:7551",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "new": [
+            "quality"
+          ]
+        },
+        {
+          "id": "@msuaaaa:7552",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "new": [
+            "price"
+          ]
+        },
+        {
+          "id": "@msuaaaa:9510",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "new": [
+            "price"
+          ]
+        }
+      ],
+      "unchanged": [
+        "@VARUS_channel:11938",
+        "@VARUS_channel:11974",
+        "@VARUS_channel:11983",
+        "@VARUS_channel:12021",
+        "@VARUS_channel:12023",
+        "@VARUS_channel:12024",
+        "@VARUS_channel:12049",
+        "@VARUS_channel:12062",
+        "@VARUS_channel:1219",
+        "@VARUS_channel:12261",
+        "@VARUS_channel:12263",
+        "@VARUS_channel:12278",
+        "@VARUS_channel:12280",
+        "@VARUS_channel:12322",
+        "@VARUS_channel:1308",
+        "@VARUS_channel:13451",
+        "@VARUS_channel:17767",
+        "@VARUS_channel:20655",
+        "@VARUS_channel:4549",
+        "@msuaaaa:10572",
+        "@msuaaaa:11243",
+        "@msuaaaa:11280",
+        "@msuaaaa:11786",
+        "@msuaaaa:11975",
+        "@msuaaaa:13021",
+        "@msuaaaa:3133",
+        "@msuaaaa:3488",
+        "@msuaaaa:6303",
+        "@msuaaaa:8335",
+        "@msuaaaa:9712",
+        "@msuaaaa:9810",
+        "@VARUS_channel:3831",
+        "@VARUS_channel:7158",
+        "@VARUS_channel:9097",
+        "@msuaaaa:13560",
+        "@msuaaaa:12395",
+        "@msuaaaa:8522",
+        "@msuaaaa:10363",
+        "@msuaaaa:12206",
+        "@msuaaaa:12333",
+        "@msuaaaa:4009",
+        "@msuaaaa:8612",
+        "@msuaaaa:9400",
+        "@VARUS_channel:18780",
+        "@VARUS_channel:7701",
+        "@msuaaaa:6410",
+        "@msuaaaa:7033",
+        "@VARUS_channel:15526",
+        "@VARUS_channel:21253",
+        "@VARUS_channel:11963",
+        "@VARUS_channel:13510"
+      ],
+      "staged_sha256_before": {
+        "data/frozen/comments_train_tax2.jsonl": "e5a52a08cc64ed10cb0512c8f23e29d9d43b69e584915a70e9cd6aca1339ad2c",
+        "data/annotation/sarcasm_holdout_pool_tax2.jsonl": "a00942ccf2ab681139c8c9fcc41144f4bca85b67eb13841289d96065b1f8fe91"
+      },
+      "staged_sha256_after": {
+        "data/frozen/comments_train_tax2.jsonl": "d785d557e75e031860b246958f58152b2e52169d796a149e5a02db45966f5d37",
+        "data/annotation/sarcasm_holdout_pool_tax2.jsonl": "d4021274794e8765c2cf13ef44d6fb3dcbcd3b23ba6ccbd1cbccce620114196b"
+      },
+      "check": {
+        "rows": 40,
+        "bar": 0.9,
+        "rule": "A seeded 40-of-97 contrastive sample: the v1 label beside the with-post set, verdict `old` / `new` / `neither`. The batch of 97 is accepted when rows marked `new` / 40 >= 0.90; below the bar all 97 go to the operator by hand. A row whose with-post set EQUALS its v1 set counts as `new` — the model recovered the annotator's label, which is the thing being tested — and those rows are counted separately in the record so the rate is recomputable from this rule alone. A blank cell counts as not `new`. Registered in knowledge/decisions/45g-parent-context-and-uplabel.md before the first request.",
+        "seed": 42,
+        "identical_to_v1": 11,
+        "drawn_composition": {
+          "identical_to_v1": 11,
+          "empty_again": 23,
+          "different_and_not_empty": 6
+        },
+        "rows_drawn": [
+          {
+            "id": "@VARUS_channel:10542",
+            "text": "Наполеон 🤮",
+            "intents_v1": [
+              "taste"
+            ],
+            "intents_with_post": [
+              "taste"
+            ]
+          },
+          {
+            "id": "@VARUS_channel:11650",
+            "text": "Шашличок під коньячок.",
+            "intents_v1": [
+              "taste"
+            ],
+            "intents_with_post": [
+              "taste"
+            ]
+          },
+          {
+            "id": "@VARUS_channel:11938",
+            "text": "З вишнею",
+            "intents_v1": [
+              "taste"
+            ],
+            "intents_with_post": []
+          },
+          {
+            "id": "@VARUS_channel:11960",
+            "text": "З вишнею",
+            "intents_v1": [
+              "taste"
+            ],
+            "intents_with_post": []
+          },
+          {
+            "id": "@VARUS_channel:11963",
+            "text": "Полуниця",
+            "intents_v1": [
+              "taste"
+            ],
+            "intents_with_post": []
+          },
+          {
+            "id": "@VARUS_channel:11983",
+            "text": "Я з Рівненщини і в дитинстві бабуся ліпила вареники з цією начинкою лише для нас двох, а решта сімʼї любили з картоплею просто, тому ця згадка дуже мене потішила🥰",
+            "intents_v1": [
+              "taste"
+            ],
+            "intents_with_post": []
+          },
+          {
+            "id": "@VARUS_channel:12021",
+            "text": "З ВИШНЕЮ",
+            "intents_v1": [
+              "taste"
+            ],
+            "intents_with_post": []
+          },
+          {
+            "id": "@VARUS_channel:12023",
+            "text": "З м'ясом.",
+            "intents_v1": [
+              "taste"
+            ],
+            "intents_with_post": []
+          },
+          {
+            "id": "@VARUS_channel:12044",
+            "text": "Вареники с грибами і голандським сиром",
+            "intents_v1": [
+              "taste"
+            ],
+            "intents_with_post": [
+              "taste"
+            ]
+          },
+          {
+            "id": "@VARUS_channel:12049",
+            "text": "З вишнею",
+            "intents_v1": [
+              "taste"
+            ],
+            "intents_with_post": []
+          },
+          {
+            "id": "@VARUS_channel:12261",
+            "text": "Вишня",
+            "intents_v1": [
+              "taste"
+            ],
+            "intents_with_post": []
+          },
+          {
+            "id": "@VARUS_channel:12278",
+            "text": "З полуницею",
+            "intents_v1": [
+              "taste"
+            ],
+            "intents_with_post": []
+          },
+          {
+            "id": "@VARUS_channel:1308",
+            "text": "Хоч би башкою поміркували, скільки ті пенсіонери отримують👹👹👹,\nВ колись був любимий магазин\nЗнаю, що мене видалять за цій коментар",
+            "intents_v1": [
+              "price"
+            ],
+            "intents_with_post": []
+          },
+          {
+            "id": "@VARUS_channel:13510",
+            "text": "Військова таємниця.",
+            "intents_v1": [
+              "price"
+            ],
+            "intents_with_post": []
+          },
+          {
+            "id": "@VARUS_channel:1453",
+            "text": "Что-то, конечно, может у меня перележать до состояния просрочки, но это уже будет мой собственный недосмотр, Варус тут уже не при делах.\n\nВы, наверное, не видели, какие скандалисты встречаются среди людей, вряд ли Варус хочет разборки и претензии.",
+            "intents_v1": [
+              "quality"
+            ],
+            "intents_with_post": [
+              "service"
+            ]
+          },
+          {
+            "id": "@VARUS_channel:15526",
+            "text": "Тут дело такое что нужно только пробовать)))",
+            "intents_v1": [
+              "taste"
+            ],
+            "intents_with_post": []
+          },
+          {
+            "id": "@VARUS_channel:18780",
+            "text": "мʼясо",
+            "intents_v1": [
+              "taste"
+            ],
+            "intents_with_post": []
+          },
+          {
+            "id": "@VARUS_channel:3831",
+            "text": "А мені наче норм 🤷‍♀",
+            "intents_v1": [
+              "quality"
+            ],
+            "intents_with_post": []
+          },
+          {
+            "id": "@VARUS_channel:4549",
+            "text": "Сам магазин понравился тем , что ассортимент отличается от других сетей",
+            "intents_v1": [
+              "availability"
+            ],
+            "intents_with_post": []
+          },
+          {
+            "id": "@msuaaaa:10572",
+            "text": "ни о чем",
+            "intents_v1": [
+              "price"
+            ],
+            "intents_with_post": []
+          },
+          {
+            "id": "@msuaaaa:11291",
+            "text": "А все інше фуфло",
+            "intents_v1": [
+              "taste"
+            ],
+            "intents_with_post": [
+              "taste"
+            ]
+          },
+          {
+            "id": "@msuaaaa:12206",
+            "text": "Ммм хуєта",
+            "intents_v1": [
+              "packaging"
+            ],
+            "intents_with_post": []
+          },
+          {
+            "id": "@msuaaaa:12251",
+            "text": "Нагадує якийсь старий дизайн 2000-х",
+            "intents_v1": [
+              "packaging"
+            ],
+            "intents_with_post": [
+              "packaging"
+            ]
+          },
+          {
+            "id": "@msuaaaa:12279",
+            "text": "Хз , мені навіть краще стало",
+            "intents_v1": [
+              "packaging"
+            ],
+            "intents_with_post": [
+              "packaging"
+            ]
+          },
+          {
+            "id": "@msuaaaa:12333",
+            "text": "Нє норм",
+            "intents_v1": [
+              "quality"
+            ],
+            "intents_with_post": []
+          },
+          {
+            "id": "@msuaaaa:12395",
+            "text": "Ото я сліпа ,на упаковці ж написано🫣\nДякую",
+            "intents_v1": [
+              "packaging"
+            ],
+            "intents_with_post": []
+          },
+          {
+            "id": "@msuaaaa:13113",
+            "text": "шось не густо",
+            "intents_v1": [
+              "price"
+            ],
+            "intents_with_post": [
+              "price"
+            ]
+          },
+          {
+            "id": "@msuaaaa:13741",
+            "text": "шось за це буде?",
+            "intents_v1": [
+              "price"
+            ],
+            "intents_with_post": [
+              "service"
+            ]
+          },
+          {
+            "id": "@msuaaaa:3133",
+            "text": "ого",
+            "intents_v1": [
+              "price"
+            ],
+            "intents_with_post": []
+          },
+          {
+            "id": "@msuaaaa:4009",
+            "text": "4 штучки 😉",
+            "intents_v1": [
+              "packaging"
+            ],
+            "intents_with_post": []
+          },
+          {
+            "id": "@msuaaaa:5405",
+            "text": "Так шо прийдеться ще чекати",
+            "intents_v1": [
+              "availability"
+            ],
+            "intents_with_post": [
+              "availability"
+            ]
+          },
+          {
+            "id": "@msuaaaa:6656",
+            "text": "где-то нас наебали",
+            "intents_v1": [
+              "price"
+            ],
+            "intents_with_post": [
+              "service"
+            ]
+          },
+          {
+            "id": "@msuaaaa:6752",
+            "text": "Та може будуть ваучери)",
+            "intents_v1": [
+              "price"
+            ],
+            "intents_with_post": [
+              "service"
+            ]
+          },
+          {
+            "id": "@msuaaaa:7540",
+            "text": "Где-то нас надули",
+            "intents_v1": [
+              "price"
+            ],
+            "intents_with_post": [
+              "service"
+            ]
+          },
+          {
+            "id": "@msuaaaa:7690",
+            "text": "Атб ?",
+            "intents_v1": [
+              "availability"
+            ],
+            "intents_with_post": [
+              "availability"
+            ]
+          },
+          {
+            "id": "@msuaaaa:8522",
+            "text": "Впевнена, що це просто технічна помилка при друці.\nНе варто шукати зради, де її немає.",
+            "intents_v1": [
+              "packaging"
+            ],
+            "intents_with_post": []
+          },
+          {
+            "id": "@msuaaaa:8612",
+            "text": "І також та z😮",
+            "intents_v1": [
+              "packaging"
+            ],
+            "intents_with_post": []
+          },
+          {
+            "id": "@msuaaaa:8678",
+            "text": "А як їх використовувати?",
+            "intents_v1": [
+              "price"
+            ],
+            "intents_with_post": [
+              "service"
+            ]
+          },
+          {
+            "id": "@msuaaaa:9510",
+            "text": "так мало?",
+            "intents_v1": [
+              "price"
+            ],
+            "intents_with_post": [
+              "price"
+            ]
+          },
+          {
+            "id": "@msuaaaa:9542",
+            "text": "Це дивлячись який Новус",
+            "intents_v1": [
+              "availability"
+            ],
+            "intents_with_post": [
+              "availability"
+            ]
+          }
+        ]
+      },
+      "cost": {
+        "requests": 14,
+        "usd": 0.00258946,
+        "phase_spend_usd": 0.024495890000000034,
+        "cap_usd": 1.25
+      },
+      "rows_out": "results/emptied_45g_rows.jsonl",
+      "git": {
+        "commit": "4a0ea004db99bbca035c6e81287db5be8da6539e",
+        "dirty": [
+          "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "data/frozen/comments_train_tax2.jsonl",
+          "results/emptied_45g_rows.jsonl",
+          "results/spend_45g.json"
+        ]
+      },
+      "note": "The 97 rows 4.5e emptied, asked again under the with-post revision of the re-label prompt. Rows held by an operator ruling were asked and their answer recorded, never written. Nothing here recomputes the drift block of results/relabel_45e.json: that is what the 4.5f calibration judged."
+    }
+  ]
+}
