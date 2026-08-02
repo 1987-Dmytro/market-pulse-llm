@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-02 21:30:23 (every SessionStart)
+**Auto-refreshed:** 2026-08-02 22:01:32 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-946a60b docs: the churn cells count pairs, not rows — the margins are the totals to read
-cf208a1 feat: the calibration pack is built — 100 gated, 50 diagnostic, manifest pinned
-05e2320 feat: every labelled non-frozen row re-labelled under taxonomy v2 — 3,249 staged
-296bb88 feat: the calibration pack — 100 gated rows, 50 diagnostic, one denominator
-497a2f9 feat: the re-labeller does a full pass — phased ledgers, staged copies, resume
+91952ca docs: what 4.5f found — the gate, the three rulings, and the 97 emptied rows
+25b14d2 feat: the 14 unreadable rows go to the operator with nothing proposed
+c4e545e feat: the emptied rows measured — 97 of them, and 31% of the drift v2 cannot explain
+dce2f26 feat: the three operator rulings are law — 11972, 11960 and 11902 read `taste`
+826d08e feat: the calibration gate is computed — 100/100, and the rebuild proves the pack
 ```
 
 ## 📋 Recent decisions
@@ -31,12 +31,51 @@ cf208a1 feat: the calibration pack is built — 100 gated, 50 diagnostic, manife
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-02 21:24 (`/save` after `PROMPT-4.5e` — **every labelled non-frozen row is re-labelled under taxonomy v2: 3,249 rows staged beside their sources for $0.5448, and the calibration pack is with the operator. The ≥90% gate is UNDECIDED and nothing downstream starts until it comes back**. Test v3 is frozen beside v2; Phase 4 stays closed at 2 of 5 against v2; edited by hand — the section above is auto-generated, do NOT touch the marker)
+**Last update:** 2026-08-02 21:56 (`/save` after `PROMPT-4.5f` — **the ≥90% calibration gate is DECIDED and it is PASS: 100 of 100 gated rows came back `correct`. The taxonomy-v2 re-label is accepted, three operator rulings are applied, and everything that was waiting on this gate is unblocked — none of it is started**. Test v3 is frozen beside v2; Phase 4 stays closed at 2 of 5 against v2; edited by hand — the section above is auto-generated, do NOT touch the marker)
 
 ## 🔥 What's Hot
 
-**THE RE-LABEL IS DONE AND THE PACK IS WITH THE OPERATOR — the ≥90% gate is next (2026-08-02,
-4.5e).** 3,317 rows in three files → 54 frozen holdout ids skipped → **3,249 staged** in `_tax2`
+**THE GATE IS DECIDED — 100/100 `correct` = 100% against 0.90, PASS (2026-08-02, 4.5f).** The
+taxonomy-v2 re-label is **accepted**. Record: `results/calib_45e_verdict.json` — the pre-registered
+rule verbatim, 150 per-row verdicts, both sets of shas. The number is not read off the returns: the
+reader **rebuilds** the sealed pack (seed 42, staged rows, sample sizes taken from the manifest and
+not from the builder's constants), serializes it in the builder's dialect and requires the result to
+hash to the pinned `f26fb86c…` / `6192643a…` — only then are cells compared, because a spreadsheet
+round-trip changes bytes and no rows. Unregistered verdict form → stop; `Old` and `old` are one
+verdict by a case-folded table; a blank gated cell counts against the bar, as registered.
+**The counter-signal stands beside the number, not under it:** the diagnostic 50 read **47 `new` /
+2 `old` / 1 `neither`**, labelled in the record as unable to move the verdict.
+
+**Three operator rulings are law and applied** (`dce2f26`): `@VARUS_channel:11972` and `:11960`
+`[] → ["taste"]`, `:11902` `["availability"] → ["taste"]` — all three in
+`comments_train_tax2.jsonl`, diff exactly three lines, intents column only. `old` is never retyped
+into the ruling table: such a row reads its v1 label out of the **source** and the run stops if the
+two disagree; the dictated one is carried by its `neither` cell plus the table, because a notes cell
+is free text and is never validated. **The drift block of `results/relabel_45e.json` was NOT
+recomputed and the diff proves it — 56 insertions, 0 deletions**; `fixes` sits beside `runs` with
+each row, both values, the authority and the staged sha on either side.
+
+**The emptied rows: 97, and they are a third of the drift the taxonomy cannot explain.** Non-empty
+under v1 → `[]` under v2: **97 of 3,249** = 20.5% of the 473 unexplained; **96 of 2,059 scoreable** =
+**30.9% of the 311**. Decomposition of "the 15%": 97 + 376 = 473, and 96 + 215 = 311. They are
+short — median **18** chars vs 55 for the rest, p75 30 vs 109 — and the label they lost most is
+`taste` (40 of 97). **The premise is measured, not cited:** `parent_msg_id`, `msg_id`, `channel` and
+`date` are checked absent from the rendered prompt, and **all 3,249 re-labelled rows are replies**,
+so the parent is missing corpus-wide and only bites where the comment alone carries no intent. The
+three rulings are reversed before counting (`changed` 1474 / `changed_without_service` 473 come out
+equal to the 4.5e record — the proof the reversal restored the model's own output). Record:
+`results/drop_45f.json`, $0.
+
+**The 14 unreadable rows are with the operator, with nothing proposed.**
+`data/annotation/calib_45e/unreadable14.csv` + `README-unreadable14.md`, `;`-delimited,
+**`intents_v2` blank** — 13 of the 14 carried `[]`, and pre-filling is the bias that left them
+unlabelled. The set is derived twice (source minus staged minus frozen, against the paid runs'
+unusable ids) and a disagreement stops the build. Pinned in a **new**
+`results/calib_45e_micro_manifest.json`; the sealed manifest is never rewritten. ~6 min of operator
+time, not gated.
+
+**THE RE-LABEL ITSELF (2026-08-02, 4.5e) — accepted by the gate above.** 3,317 rows in three files →
+54 frozen holdout ids skipped → **3,249 staged** in `_tax2`
 copies beside their sources (`data/frozen/comments_train_tax2.jsonl`,
 `data/annotation/sarcasm_candidates_tax2.jsonl`, `sarcasm_holdout_pool_tax2.jsonl`); originals byte
 for byte untouched. 3,263 labelable + 508 frozen = **3,771**, the figure 4.5d priced — that equality
@@ -65,7 +104,9 @@ with every sha.** `gated.csv` — 100 scoreable rows, `correct`/`incorrect`, **t
 cannot move the verdict. Disjoint by construction. Two things fixed **before** any verdict exists:
 the denominator (`correct` / 100, a blank cell counting against the bar), worded identically in the
 README and the manifest; and blinding — no column and no ordering reveals which rows moved. ~1.0 h.
-**Nothing reads the returned CSVs yet** — the returns processor is the next step's first build.
+**Returned, read and decided in 4.5f** — the three files are committed as they came back
+(`git add -f`, the pack directory is gitignored) because they are now the authority a gate was
+computed from.
 
 **TAXONOMY v2 WAS PREPARED AND PRICED IN 4.5d — the gate then decided the appetite.** The law
 question closed by interview, not by the pack: **amendment 3.8** keeps the old law where it was
@@ -319,26 +360,26 @@ files**: `comments_train.jsonl` (1600) + `sarcasm_candidates.jsonl` (746) plus
 
 ## ⏭️ Next
 
-1. **THE ≥90% CALIBRATION GATE — the operator's ~1.0 h, and it decides whether the re-label is
-   accepted at all.** `data/annotation/calib_45e/gated.csv` (100 rows) is the gate;
-   `changed.csv` (50) is diagnostic and cannot move it. **No script reads the returned CSVs yet** —
-   a returns processor (verify against `results/calib_45e_manifest.json`, then count `correct` over
-   100 by the pre-registered rule) is the first thing the next step builds, the way
-   `audit_ceiling.py` followed the 4.5a pack.
-2. **Four things the gate should be told before it rules.** A pass accepts a file **37% of which the
-   calibration never sampled** — the 1,190 `unclear` staged rows, excluded from every metric but
-   headed for training. The 54 frozen ids will have **two homes** after 4.5f: their v1 copy stays in
-   `sarcasm_holdout_pool.jsonl` while the holdout itself moves to v2 — nobody is named to reconcile
-   it. **14 rows are still on v1** and unowned. And if the diagnostic 50 read "old was closer", that
-   changes the reading of the 15% unexplained drift, not the verdict. Also still unnamed from 4.5a:
-   **which unit the program calls "the ceiling"** — a macro-F1 bound and an accuracy share cannot
-   both be read against 0.98.
-3. **Only after the gate:** up-label the 1,912 (LLM pass + ~2 h of operator calibration), then
-   **4.5f — test v4**. That one has to **lift a guard, not flip a flag**: `relabel_intents.py`
-   refuses any row sitting in a frozen test file, unconditionally, and test v4 is exactly a re-label
-   of the test set. A code change with a test, deliberately not a `--allow-test-rows` switch that
-   exists today. Then a fresh G1c anchor under `T1v2` → retrain → new bars pre-registered BEFORE
-   scoring.
+1. **The team lead briefs 4.5g — the up-label of the 1,912** under a full-field v2 precheck plus a
+   3-strata calibration, and the operator's ~2.0 h sitting **bundles with the 14 rows** of
+   `unreadable14.csv` (~6 min, `intents_v2` blank, nothing proposed). The gate that gated this is
+   decided; nothing of it is started here.
+2. **Four things the gate did not answer, and none of them are closed by its PASS.** The 1,190
+   `unclear` staged rows — **37% of the file** — were never sampled by the calibration, are excluded
+   from every metric, and are still headed for training. The 54 frozen ids get **two homes** the
+   moment the holdout moves to v2: their v1 copy stays in `sarcasm_holdout_pool.jsonl`, and 4.5f did
+   not scope them (`no frozen-file changes`), so nobody is named. **Whether `unreadable14.csv` is
+   committed blank** (today it follows the pack convention: gitignored, sha-pinned, rebuildable).
+   And **whether the 97-row emptied class counts as the "repeating class"** that would put 11902's
+   precedent — a dish wish reads `taste`, not `availability` — into the guideline; STATUS.md says
+   only if the class repeats, and the measurement now says it is 97 rows. Also still unnamed from
+   4.5a: **which unit the program calls "the ceiling"** — a macro-F1 bound and an accuracy share
+   cannot both be read against 0.98.
+3. **Test v4 has to lift a guard, not flip a flag.** `relabel_intents.py` refuses any row sitting in
+   a frozen test file, unconditionally, and test v4 is exactly a re-label of the test set — a code
+   change with a test, deliberately not the `--allow-test-rows` switch that does not exist today.
+   Then a fresh G1c anchor under `T1v2` → retrain → new bars pre-registered BEFORE scoring. The three
+   boundary rulings of guideline v2 are law but reach `comments_test.jsonl` only there.
 4. **The filled pack is now the only copy of 244 verdicts.** `build_audit_pack.py --force` would
    destroy them and there is still no snapshot in the flow — the question the team lead has not
    ruled on. `normalize_audit_returns.py` is safe to re-run (it no-ops on an already-normalized
@@ -388,10 +429,16 @@ matrix is frozen. CPU beats MPS by 14×, which is the opposite of the intuition.
   **The run entries do not sum to the phase spend** — `Budget.reconcile` can only push a number up,
   so a run whose predecessor had not yet posted absorbs its tail ($0.5778 of entries against
   $0.5448 measured from the anchor). The anchored difference is the spend; the sum is a bound.
-- **The `_tax2` files are staged, not gold, and not drop-in replacements.** Nothing reads them as
-  labels until the ≥90% gate says so, and `sarcasm_holdout_pool_tax2.jsonl` has 915 of 971 rows (54
-  frozen ids + 2 with no answer). A trainer pointed at them today would be training on an
-  unvalidated taxonomy and silently dropping rows.
+- **The `_tax2` files are accepted now, but they are still not drop-in replacements.** The ≥90% gate
+  passed, so the labels are validated — the row *counts* are not: `sarcasm_holdout_pool_tax2.jsonl`
+  has 915 of 971 rows (54 frozen ids + 2 with no answer) and `comments_train_tax2.jsonl` 1,594 of
+  1,600. A trainer pointed at them silently drops the 14 unreadable rows and the frozen ids.
+- **`read_calibration_returns.py` refuses to run, and that is correct.** It sha-pins the staged
+  files against `results/calib_45e_manifest.json`, and the three 4.5f rulings moved them
+  (`comments_train_tax2.jsonl` `d2132c1e…` → `e5a52a08…`). The gate was computed **before** the
+  rulings and lives in `results/calib_45e_verdict.json`; the sealed manifest describes the corpus as
+  it was sealed, and `fixes` in `results/relabel_45e.json` is the only place the chain to today's
+  bytes is written down. Do not "fix" the refusal by re-pinning the manifest.
 - **Two gold versions exist now, so every number has to name one.** `data/frozen/*_v3.jsonl` sit
   beside the v2 files and **nothing reads them by default** — the gates, the bars,
   `eval_zero_shot.py` and `run_baseline.py` all still score against v2, which is what keeps Phase 4's
