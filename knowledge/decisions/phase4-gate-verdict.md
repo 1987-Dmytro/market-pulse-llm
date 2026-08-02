@@ -2,7 +2,7 @@
 type: decision
 id: dec-2026-08-01-phase4-gate-verdict
 date: 2026-08-01
-status: proposed
+status: accepted
 tags: [decision]
 ---
 

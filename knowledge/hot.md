@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-02 02:03:49 (every SessionStart)
+**Auto-refreshed:** 2026-08-02 12:42:24 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+d5c6a24 feat: arm B, the rule, and the five verdicts — 4c is executed
 8314dfb feat: arm A (real-only) — 270 steps, and 758 frozen rows scored once
 34a27d7 fix: an arm's eval crashed on its last line, and a stub found it before the pod did
 411bd84 chore: the optimizer state syncs home and does not belong in git
 16e3af1 docs: the 4c runbook, and the one assert a resume can be wrong without
-01aa6c9 feat: the selection rule and the five verdicts, as arithmetic a reviewer can re-run
 ```
 
 ## 📋 Recent decisions
@@ -23,24 +23,31 @@
 
 ## 📅 Recent daily logs
 
+- `2026-08-02.md`
 - `2026-08-01.md`
 - `2026-07-31.md`
-- `2026-07-30.md`
 
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-02 00:15 (step 4c executed — both arms trained and scored once, the rule dropped synthetic, **2 of 5 Tier-1 gates pass**, awaiting team-lead review; edited by hand — the section above is auto-generated, do NOT touch the marker)
+**Last update:** 2026-08-02 (`PROMPT-4-close` — **Phase 4 is CLOSED at 2 of 5**, the 4c report accepted by the team lead, [[phase4-gate-verdict]] flipped to `accepted`, the stale 4a pod deleted and the ledger appended; edited by hand — the section above is auto-generated, do NOT touch the marker)
 
 ## 🔥 What's Hot
 
-**STEP 4c IS EXECUTED AND AWAITS REVIEW (2026-08-02) — the one attempt is spent.** Both ablation
-arms trained in full on the frozen config, each scored on the frozen sets **exactly once**, the
-pre-registered rule applied mechanically, five verdicts produced. **Nothing was retrained,
-re-scored or reconfigured after a gate number was seen** — arm B launched while arm A's three
-failures were already on screen. **313 tests**, `make check` green after every commit. **19 ADRs**
-([[INDEX]]); [[phase4-gate-verdict]] is the record.
+**PHASE 4 IS CLOSED AT 2 OF 5 (2026-08-02) — accepted, and the one attempt is spent.** The team
+lead recomputed every verdict number **bit-exact from the per-row dumps**, re-ran the selection
+rule (output matched word for word), confirmed the one-attempt protocol from artefacts, and the
+operator's quiz came back **2/2**. [[phase4-gate-verdict]] is `accepted`. Both ablation arms
+trained in full on the frozen config, each scored on the frozen sets **exactly once**; **nothing
+was retrained, re-scored or reconfigured after a gate number was seen** — arm B launched while arm
+A's three failures were already on screen. **313 tests**, `make check` green after every commit.
+**20 ADRs** ([[INDEX]]).
+
+**THE DELIVERABLE: `results/train/4c-arm-a/adapter`** — the real-only LoRA adapter, sha256
+`c0e462af81aad9f1…`, served **UNMERGED** on the same NF4 4-bit base every gate was scored through.
+**Phase 5 is PAUSED** and Phase 4.5 (quality program, amendment 3.7) comes first — an operator
+sequencing decision.
 
 **THE VERDICT: 2 of 5 Tier-1 gates pass, on the real-only arm.**
 G1d **0.9386** ≥ 0.8984 **PASS** · G1e **0.9333** ≥ 0.8874 **PASS** ·
@@ -74,10 +81,9 @@ the full 108-row holdout (every row gold `sarcasm: true`) real-only detects **82
 with-synthetic **83**, against the base model's **64**. Both arms moved that head ~19 rows and
 neither cleared a bar defined as 60% of the base model's own errors.
 
-**THE DELIVERABLE: `results/train/4c-arm-a/adapter`** — the real-only LoRA adapter, sha256
-`c0e462af81aad9f1…`, served **UNMERGED** on the same NF4 4-bit base every gate was scored through.
-Merging into bf16 stays forbidden until measured (Phase 5). The with-synthetic adapter
-(`0566900e3f42451e…`) is kept beside it — the ablation's second column is evidence, not waste.
+**Beside the deliverable:** merging into bf16 stays forbidden until measured. The with-synthetic
+adapter (`0566900e3f42451e…`) is kept next to arm A's — the ablation's second column is evidence,
+not waste.
 
 **Both arms ran clean and inside every box.** Arm A **270 steps in 3.40 h**, arm B **346 steps in
 4.17 h** — both under 4b's own projections (3.42 / 4.37 h) and well under the 5 h ceiling. Peak GPU
@@ -99,11 +105,12 @@ batch-invariant) or the `lora_dropout: 0.05` mask sequence. **Say "the ablation 
 and config", never "identical"**; amendment 3.4 (3)'s "identical config and seed" reads stronger
 than the hardware delivers, and the rule's 0.5 pp tolerance is what absorbs it.
 
-**GPU money: $6.8779 of the $25 cap**, read after the second pod was deleted. 4c itself cost
-**$5.74** against ~$5.2 projected; remaining **$18.12**. Both 4c pods **deleted** (volume-less: a
-stopped one bills 80 GB by the month). The 4a pod `gxkdecf3g7k3y7` is still `EXITED` on the
-CA-MTL-3 volume — it predates 4c and was left alone; it is still billing something and is worth an
-operator decision.
+**GPU money: $6.9903 of the $25 cap; remaining $18.01**, read at the close-out after the last pod
+was deleted. 4c itself cost **$5.74** against ~$5.2 projected. **No pods exist any more** —
+`pod list -a` is empty; the stale 4a pod `gxkdecf3g7k3y7` was deleted here. **The 100 GB CA-MTL-3
+network volume `gfwa2an8fn` is KEPT on purpose** — its fate is a Phase 5 briefing decision, and it
+is the only thing still billing (~$7/month, and the $0.11 between the 00:00 reading and the
+close-out reading is what that looks like).
 
 **The own-pod row is baseline (c) EVERYWHERE** — operator decision 2026-08-01
 ([[phase4-own-pod-anchor]] §(f)). **The bars, as amendment 3.5 leaves them:** G1a overall
@@ -159,26 +166,31 @@ files**: `comments_train.jsonl` (1600) + `sarcasm_candidates.jsonl` (746) plus
 
 ## ⏭️ Next
 
-1. **The 4c report is with the team lead. STOP — there is no self-acceptance.** Phase acceptance
-   (team-lead verification, operator quiz, RECORD sweep, STATUS) happens on that report. Until it
-   lands, nothing in Phase 4 is retrained, re-scored or reconfigured — the one attempt is spent.
-2. **Open questions the report raises, all the operator's:** three Tier-1 gates failed by margin
-   with every head above its anchor — what a failed Tier-1 means for the phase is a team-lead call;
-   the stale 4a pod `gxkdecf3g7k3y7` is still `EXITED` and still billing; and Phase 5's first
-   measurement is already named — **do not merge the adapter into bf16 without scoring the merged
-   artefact in the configuration production serves**.
-3. **Six findings for Phase 5, none gate-relevant, all in [[phase4-gate-verdict]] §(f):** `planned`
+1. **The operator's pre-Phase-5 discussion is the next thing that happens.** Phase 4 is closed and
+   Phase 5 is PAUSED — nothing Phase-5-shaped is scoped, planned or started until that discussion
+   lands.
+2. **Two team-lead files sit UNCOMMITTED in the tree, on purpose, and are not this session's to
+   commit:** `docs/SPEC.md` (rev. 3.7 — amendment 3.7, which inserts Phase 4.5, a quality program,
+   before Phase 5) and `docs/PROMPT-4.5a.md`. `PROMPT-4.5a.md` §0 claims both for its own commit
+   (`docs: phase 4.5 opens — amendment 3.7 and the audit prompt`), so `PROMPT-4-close`'s commit
+   deliberately left them alone. Do not commit them outside that step, and do not read them as work
+   in progress — they are queued, not started.
+3. **Still the operator's, carried out of Phase 4:** Phase 5's first measurement is already named —
+   **do not merge the adapter into bf16 without scoring the merged artefact in the configuration
+   production serves**; and the 100 GB CA-MTL-3 volume is kept pending the Phase 5 briefing.
+4. **Six findings for Phase 5, none gate-relevant, all in [[phase4-gate-verdict]] §(f):** `planned`
    over-counts steps by one per epoch (272 planned, 270 run); leftover micro-batch gradients carry
    across the epoch boundary; the post-loop `save()` records the loop variable rather than the stop
    position after an early `--max-steps`; `seconds_per_step` in a resumed provenance is understated;
    training is not bit-reproducible; and the eval's last-line crash that the stub caught.
-4. Still open from Phase 2 (not a blocker): dataset cards for the public augmentation datasets +
+5. Still open from Phase 2 (not a blocker): dataset cards for the public augmentation datasets +
    licence check.
 
 ## 🚧 Blockers
 
-**None open.** 4c raised no escalation: the one pre-registered stop it could have hit — a projection
-crossing the 5 h per-arm ceiling — did not fire (3.40 h and 4.17 h, both under 4b's own
+**None open, and Phase 4 closed without leaving one.** 4c raised no escalation: the one
+pre-registered stop it could have hit — a projection crossing the 5 h per-arm ceiling — did not
+fire (3.40 h and 4.17 h, both under 4b's own
 projections). Every earlier escalation came back decided at the next acceptance: 4b's three closed
 by SPEC rev. 3.6 (the ceiling to 5 h/arm, an arm is a volume-less pod session, resume proved first
 on the 4c pod — **done, and it passed**), and 4a's two by amendment 3.5 (G1d/G1e rescaled to

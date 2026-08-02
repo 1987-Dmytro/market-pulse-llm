@@ -31,6 +31,13 @@
       "spent_usd": 6.8779,
       "remaining_usd": 18.1221,
       "note": "4c arm B: 346 steps + 758-row gate eval"
+    },
+    {
+      "at": "2026-08-02T10:40:32+00:00",
+      "balance": 28.009680094,
+      "spent_usd": 6.9903,
+      "remaining_usd": 18.0097,
+      "note": "phase 4 close-out: stale 4a pod gxkdecf3g7k3y7 deleted, no pods remain; the 100 GB CA-MTL-3 volume gfwa2an8fn is kept for the phase 5 briefing"
     }
   ]
 }
