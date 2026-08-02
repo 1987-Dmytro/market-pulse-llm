@@ -24,9 +24,28 @@ only thing allowed to decide whether that promise was kept.
 import hashlib
 import json
 
-from market_pulse.scorer import INTENTS, POST_TYPES, SENTIMENT_LABELS
+from market_pulse.scorer import INTENTS, INTENTS_V2, POST_TYPES, SENTIMENT_LABELS
 
 TASKS = ("T1", "T2")
+"""The prompt identity of every recorded run — v1, and frozen.
+
+``records.assert_prompt_sha`` builds the map it compares against stored records out
+of exactly this tuple, so a sixth prompt joining it would make every past record
+fail to verify. Taxonomy v2's prompts live in :data:`PROMPTS` beside these two and
+are named by whoever asks for them."""
+
+SERVICE_INTENT = (
+    "interaction with the retailer as a service: in-store and online service, the delivery "
+    "process, the app and the checkout, the support hotline, staff, and how promos and "
+    "giveaways are organised — mechanics, fairness, communication"
+)
+"""The sixth intent, in the words SPEC amendment 3.8 approved.
+
+One sentence, three readers: `docs/annotation/comments.md` (the law the annotator
+works from), :data:`T1_PROMPT_V2` (what the model is scored against) and
+:data:`RELABEL_INTENTS_PROMPT` (what re-labels the corpus). Three renderings of one
+definition drift apart silently, so the two prompts embed this constant and a test
+holds the guideline to the same words."""
 
 T1_PROMPT = """\
 You label one comment from a Ukrainian food-retail Telegram channel (retail chains and \
@@ -61,6 +80,50 @@ product intent: return [].
 Answer with one JSON object and nothing else: no explanation, no code fence.
 {"sentiment": "positive|negative|neutral", "sarcasm": true|false, "intents": ["price"]}\
 """
+
+T1_PROMPT_V2 = f"""\
+You label one comment from a Ukrainian food-retail Telegram channel (retail chains and \
+discount aggregators). Comments are in Ukrainian or Russian. Judge the text you are given, \
+never the thread around it.
+
+Return three labels.
+
+sentiment — the attitude the author expresses towards the product, the price or the \
+retailer, not their mood.
+- "positive": praise, thanks, satisfaction.
+- "negative": complaint, disappointment, accusation.
+- "neutral": a question, a factual statement or a request carrying no evaluation.
+Sarcasm outranks the surface wording: a sarcastic compliment is "negative". If praise and \
+complaint are mixed, take the dominant one; if neither dominates, "neutral". For a comment \
+that is only emoji, read the emoji when it is unambiguous.
+
+sarcasm — true when the literal reading contradicts the intended one: irony, mock praise, \
+bitter exaggeration. It is a flag, not a sentiment: "negative" can carry either value. \
+Emoji alone never decide it — the contradiction has to be in the text.
+
+intents — what the comment is about. Any subset of these six, possibly empty:
+- "taste": flavour, smell, texture.
+- "price": cost, discount, promo value — what the buyer pays. A question or a complaint about \
+a promo mechanic — how a discount is applied, whether a giveaway is fair, what the terms say — \
+is not "price", it is "service".
+- "packaging": package, volume, label, portion.
+- "quality": freshness, spoilage, composition, production.
+- "availability": presence in a store, stock, delivery of the product. The product itself, not \
+the process around the order: a slot moved, a courier, an order that cannot be cancelled is \
+"service".
+- "service": {SERVICE_INTENT}.
+The first five are about the product and "service" is about the retailer; a comment can carry \
+both. A bare participation marker under a giveaway post, an emoji-only comment, bare thanks and \
+banter about neither the product nor the retailer carry no intent at all: return [].
+
+Answer with one JSON object and nothing else: no explanation, no code fence.
+{{"sentiment": "positive|negative|neutral", "sarcasm": true|false, "intents": ["price"]}}\
+"""
+"""The T1 prompt under taxonomy v2 — registered beside v1, never instead of it.
+
+Word-for-word ``T1_PROMPT`` outside the ``intents`` block: G1c under v2 has to move
+because the label space moved, not because the sentiment instructions were reworded
+on the way past."""
 
 T2_PROMPT = """\
 You label one post from a Ukrainian food-retail Telegram channel (retail chains and \
@@ -97,8 +160,58 @@ Answer with one JSON object and nothing else: no explanation, no code fence.
 {"relevant": true|false, "post_type": "launch|promo|other", "brands": [{"mention": "brand as written"}]}\
 """
 
-PROMPTS = {"T1": T1_PROMPT, "T2": T2_PROMPT}
-DELIMITERS = {"T1": "comment", "T2": "post"}
+RELABEL_INTENTS_PROMPT = f"""\
+You re-label ONE field of an already-annotated comment from a Ukrainian food-retail Telegram \
+channel (retail chains and discount aggregators). Comments are in Ukrainian or Russian. Judge \
+the text you are given, never the thread around it.
+
+intents — what the comment is about. Any subset of these six, possibly empty:
+- "taste": flavour, smell, texture.
+- "price": cost, discount, promo value — what the buyer pays.
+- "packaging": package, volume, label, portion.
+- "quality": freshness, spoilage, composition, production.
+- "availability": presence in a store, stock, delivery of the product. The product itself, not \
+the process around the order.
+- "service": {SERVICE_INTENT}.
+
+The first five are about the product and "service" is about the retailer; a comment can carry \
+both, and a comment can carry none. The cases that repeat:
+- a question or a complaint about a promo mechanic — how a discount is applied, whether a \
+giveaway is fair, what the terms say — is "service", not "price";
+- distrust of a draw, or an accusation that it is rigged, is "service";
+- a delivery slot moved, a courier, an order that cannot be cancelled, the app, the checkout, \
+the hotline, the queue, the staff: "service". A product missing from the shelf: "availability";
+- a bare participation marker under a giveaway post ("+", "++++", "➕") is not a reaction: [];
+- emoji only, bare thanks, and jokes about neither the product nor the retailer: [].
+
+Return the intents of this comment and nothing else. Do not judge its sentiment, its sarcasm or \
+whether it is clear — those labels are already set and you are not being asked about them.
+
+Answer with one JSON object and nothing else: no explanation, no code fence.
+{{"intents": ["price"]}}\
+"""
+"""The annotation prompt of the taxonomy-v2 re-label — one field, by construction.
+
+Not :data:`T1_PROMPT_V2`: that one is the pre-registered measurement instrument
+(SPEC §7), and a re-label that asked it for three labels would have to be trusted
+not to write the other two back. Asking only for ``intents`` makes "sentiment,
+sarcasm and unclear untouched" a property of the request rather than a promise
+about the code that reads the reply."""
+
+PROMPTS = {
+    "T1": T1_PROMPT,
+    "T2": T2_PROMPT,
+    "T1v2": T1_PROMPT_V2,
+    "relabel_intents_v2": RELABEL_INTENTS_PROMPT,
+}
+DELIMITERS = {"T1": "comment", "T2": "post", "T1v2": "comment", "relabel_intents_v2": "comment"}
+INTENTS_OF = {"T1": INTENTS, "T1v2": INTENTS_V2, "relabel_intents_v2": INTENTS_V2}
+"""The label space each prompt promises — v1 asks for five, the v2 prompts for six.
+
+Routed by task rather than by a module-level constant so that ``parse_reply("T1",
+...)`` keeps refusing ``service``: a v1 record's numbers were produced by a parser
+that could not accept it, and re-running that path leniently would produce a
+different measurement under the same name."""
 
 
 class ParseError(ValueError):
@@ -182,17 +295,23 @@ def parse_reply(task: str, reply: str) -> dict:
     weakest (docs/PROMPT-3b.md; ADR 3b-infra-and-precision §(e)).
     """
     payload = _object(reply)
-    if task == "T1":
-        _require(payload, "sentiment", "sarcasm", "intents")
+    if task in ("T1", "T1v2", "relabel_intents_v2"):
+        fields = (
+            ("intents",) if task == "relabel_intents_v2" else ("sentiment", "sarcasm", "intents")
+        )
+        _require(payload, *fields)
         intents = payload["intents"]
         if isinstance(intents, str):  # a lone label instead of a list of one
             intents = [intents]
         if not isinstance(intents, list):
             raise ParseError("intents is not a list")
+        labels = {"intents": sorted({_choice(i, "intents", INTENTS_OF[task]) for i in intents})}
+        if task == "relabel_intents_v2":
+            return labels
         return {
             "sentiment": _choice(payload["sentiment"], "sentiment", SENTIMENT_LABELS),
             "sarcasm": _flag(payload["sarcasm"], "sarcasm"),
-            "intents": sorted({_choice(item, "intents", INTENTS) for item in intents}),
+            **labels,
         }
     if task == "T2":
         _require(payload, "relevant", "post_type", "brands")

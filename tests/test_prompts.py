@@ -7,9 +7,13 @@ model is allowed to say, and what it is not — because a lenient parser that
 "fixes" a bad answer would hand a model a label it never produced.
 """
 
+from pathlib import Path
+
 import pytest
 
 from market_pulse import prompts
+
+GUIDELINE = Path(__file__).resolve().parents[1] / "docs" / "annotation" / "comments.md"
 
 # The recorded hashes of the prompts as pre-registered for Phase 3b. Changing a
 # prompt is legal; changing it without noticing that every zero-shot number was
@@ -28,11 +32,76 @@ def test_prompt_hash_matches_the_pre_registered_value():
 
 def test_prompts_carry_no_labelled_examples():
     """Zero-shot means zero-shot: rules yes, worked examples no (SPEC §7)."""
-    for task in prompts.TASKS:
+    for task in (*prompts.TASKS, "T1v2"):  # T1v2 is an eval prompt and lives under the same rule
         text = prompts.PROMPTS[task]
         assert "example" not in text.casefold()
         # a labelled example would have to show an answer next to a body of text
         assert text.count('\n{"') == 1, "one JSON shape line, not a demonstration set"
+
+
+def test_taxonomy_v2_prompts_are_registered_beside_v1_and_not_inside_it():
+    """`records.assert_prompt_sha` builds its map from TASKS: a new member there
+    would make every stored record fail to verify, so v2 stays out of it."""
+    assert prompts.TASKS == ("T1", "T2")
+    assert set(prompts.PROMPTS) == {"T1", "T2", "T1v2", "relabel_intents_v2"}
+    assert set(prompts.DELIMITERS) == set(prompts.PROMPTS)
+    assert {task: prompts.prompt_sha256(task) for task in prompts.TASKS} == PROMPT_SHA256
+    assert prompts.prompt_sha256("T1v2") != PROMPT_SHA256["T1"]
+
+
+def test_the_v2_eval_prompt_moved_the_intents_block_and_nothing_else():
+    """G1c under v2 has to move because the label space moved — not because the
+    sentiment instructions were reworded on the way past."""
+    head = "intents — what the comment is about"
+    tail = "\nAnswer with one JSON object"
+    v1, v2 = prompts.T1_PROMPT, prompts.T1_PROMPT_V2
+    assert v1[: v1.index(head)] == v2[: v2.index(head)]
+    assert v1[v1.index(tail) :] == v2[v2.index(tail) :]
+    assert "these five" in v1 and "these six" in v2
+
+
+def test_one_service_definition_reaches_the_guideline_and_both_v2_prompts():
+    """Three renderings of one law drift apart silently; the guideline only differs
+    from the constant by the line wrapping markdown puts in."""
+    assert prompts.SERVICE_INTENT in prompts.T1_PROMPT_V2
+    assert prompts.SERVICE_INTENT in prompts.RELABEL_INTENTS_PROMPT
+    unwrapped = " ".join(GUIDELINE.read_text(encoding="utf-8").split())
+    assert prompts.SERVICE_INTENT in unwrapped
+
+
+def test_the_relabel_prompt_asks_for_one_field():
+    """ "sentiment and sarcasm untouched" is a property of the request, not a hope."""
+    text = prompts.RELABEL_INTENTS_PROMPT
+    assert text.count('\n{"') == 1 and '{"intents"' in text
+    assert prompts.parse_reply("relabel_intents_v2", '{"intents": ["service"]}') == {
+        "intents": ["service"]
+    }
+    # a reply that also carries the other two labels is read for the one field asked
+    reply = '{"sentiment": "positive", "sarcasm": true, "intents": []}'
+    assert prompts.parse_reply("relabel_intents_v2", reply) == {"intents": []}
+
+
+@pytest.mark.parametrize("task", ["T1v2", "relabel_intents_v2"])
+def test_only_the_v2_prompts_may_answer_service(task):
+    assert "service" in prompts.INTENTS_OF[task]
+    assert "service" not in prompts.INTENTS_OF["T1"]
+    with pytest.raises(prompts.ParseError) as caught:
+        prompts.parse_reply(
+            "T1", '{"sentiment": "negative", "sarcasm": false, "intents": ["service"]}'
+        )
+    assert caught.value.reason == "intents outside its domain"
+
+
+def test_the_relabel_parser_still_names_its_defects():
+    for reply, reason in (
+        ('{"sentiment": "negative"}', "missing field: intents"),
+        ('{"intents": 3}', "intents is not a list"),
+        ('{"intents": ["delivery"]}', "intents outside its domain"),
+        ("", "empty reply"),
+    ):
+        with pytest.raises(prompts.ParseError) as caught:
+            prompts.parse_reply("relabel_intents_v2", reply)
+        assert caught.value.reason == reason
 
 
 def test_build_messages_is_one_user_turn_with_the_row_fenced():

@@ -11,7 +11,7 @@ from hashlib import sha256
 from pathlib import Path
 
 import pytest
-from market_pulse import records, scorer
+from market_pulse import prompts, records, scorer
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 RESULTS = REPO_ROOT / "results" / "baselines.json"
@@ -33,6 +33,28 @@ def row(**config) -> dict:
             **config,
         },
     }
+
+
+def test_every_recorded_run_still_verifies_against_this_checkout_s_prompts():
+    """Taxonomy v2 added two prompts; the records were measured under the two that
+    were here before. This reads the real maps out of the real file — nothing is
+    typed, and `prompt_sha256 == prompt_sha256` would prove nothing."""
+    checked = {
+        model: len(stored)
+        for model in HISTORY
+        if (stored := records.prompt_sha_history(HISTORY, model))
+        and records.assert_prompt_sha(stored, model)
+    }
+    assert len(checked) >= 3 and sum(checked.values()) >= 6, checked
+
+
+def test_a_sixth_prompt_joining_TASKS_would_break_every_one_of_them(monkeypatch):
+    """The negative control for the test above: it passes because TASKS is frozen,
+    not because the comparison is loose."""
+    monkeypatch.setattr(prompts, "TASKS", (*prompts.TASKS, "T1v2"))
+    model = next(model for model in HISTORY if records.prompt_sha_history(HISTORY, model))
+    with pytest.raises(ValueError, match="prompt SHA256 differs"):
+        records.assert_prompt_sha(records.prompt_sha_history(HISTORY, model), model)
 
 
 def test_anchor_is_the_own_pod_zero_shot_row_of_the_real_results_file():

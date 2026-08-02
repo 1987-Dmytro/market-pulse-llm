@@ -9,6 +9,8 @@ whether a filled-in batch still matches docs/annotation/.
 from collections import Counter
 from dataclasses import dataclass, field
 
+from market_pulse import scorer
+
 COMMENT_LABELS = {
     "sentiment": None,
     "sarcasm": None,
@@ -164,7 +166,12 @@ def post_row(record: dict, language: str) -> dict:
 # between labelling and every number downstream.
 
 SENTIMENTS = ("positive", "negative", "neutral")
-INTENTS = ("taste", "price", "packaging", "quality", "availability")
+INTENTS = scorer.INTENTS_V2
+"""Guideline v2 — the vocabulary a batch is checked against, from its one home.
+
+Widened by SPEC amendment 3.8; v1 batches carry no ``service`` row, so every file
+labelled under v1 still passes unchanged. Legal values are the guideline's, and the
+guideline now has six."""
 POST_TYPES = ("launch", "promo", "other")
 
 TEMPLATES = {"comments": COMMENT_LABELS, "posts": POST_LABELS}

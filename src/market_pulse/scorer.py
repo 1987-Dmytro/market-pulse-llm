@@ -28,6 +28,14 @@ UNCLEAR = "unclear"
 SENTIMENT_LABELS = ("positive", "negative", "neutral")
 POST_TYPES = ("launch", "promo", "other")
 INTENTS = ("taste", "price", "packaging", "quality", "availability")
+INTENTS_V2 = (*INTENTS, "service")
+"""Taxonomy v2 (SPEC amendment 3.8): the five product intents plus ``service``.
+
+A separate constant rather than a sixth member of :data:`INTENTS`, because every
+number already published was measured over the five — the tf-idf baseline and the
+XLM-R baseline both build one classifier per member of that tuple, and the T1
+prompt's parser refuses anything outside it. Which taxonomy a run used is a
+property of the run, so the label space is chosen by the caller and never here."""
 GATED_LANGUAGES = ("ua", "ru")
 """Languages G1a gates. EN dropped by SPEC amendment 3.1 (n=8 in 2,000 sampled)."""
 
