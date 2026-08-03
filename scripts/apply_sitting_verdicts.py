@@ -124,15 +124,19 @@ def refused_without_a_value(gates: dict, want: dict) -> list[dict]:
     ]
 
 
-def note_for(labels: dict, reason: str) -> str:
+def stated_as(labels: dict) -> str:
+    """The moved fields as `field=value`, in the schema's order."""
+    return ", ".join(f"{field}={json.dumps(labels[field])}" for field in FIELDS if field in labels)
+
+
+def note_for(labels: dict, reason: str, row: dict | None = None) -> str:
     """One line saying which ruling moved this row and to what."""
-    stated = ", ".join(
-        f"{field}={json.dumps(labels[field])}" for field in FIELDS if field in labels
+    return (
+        f"4.5g5: sitting-45g verdict applied ({reason}) — {stated_as(labels)}. Source: {rel(GATES)}"
     )
-    return f"4.5g5: sitting-45g verdict applied ({reason}) — {stated}. Source: {rel(GATES)}"
 
 
-def apply(lines: list[str], want: dict, why: dict) -> tuple[list[str], list[dict]]:
+def apply(lines: list[str], want: dict, why: dict, note=None) -> tuple[list[str], list[dict]]:
     """The rewritten file and one record per touched row. Untouched lines are the same objects."""
     out, touched = list(lines), []
     seen = {}
@@ -143,7 +147,8 @@ def apply(lines: list[str], want: dict, why: dict) -> tuple[list[str], list[dict
         if labels is None:
             continue
         before = {field: row[field] for field in FIELDS}
-        after = {**row, **labels, "annotator": ANNOTATOR, "notes": note_for(labels, why[row["id"]])}
+        written = (note or note_for)(labels, why[row["id"]], row)
+        after = {**row, **labels, "annotator": ANNOTATOR, "notes": written}
         bad = annotation.check_labels(after, "comments")
         if bad:
             raise SystemExit(f"{row['id']}: the verdict produces an illegal row — {bad}")

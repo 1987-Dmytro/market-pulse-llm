@@ -1,0 +1,253 @@
+{
+  "runs": [
+    {
+      "timestamp": "2026-08-03T18:59:54+00:00",
+      "applied_by": "scripts/apply_dictated_verdicts.py",
+      "authority": "team-lead dictation in docs/PROMPT-4.5g6.md Task 1, transcribed field for field; every dictated value read back to the row's own verdict note",
+      "batch": "data/annotation/uplabel_precheck_45g2.jsonl",
+      "gates": "results/sitting_45g_gates.json",
+      "annotator": "sitting-45g-verdicts",
+      "scope": "the six rulings the team lead read out of the notes 4.5g5 could not parse",
+      "batch_sha256_before": "f436c4199277fc3f6ba509f1fdcc96031cf5abaa6b7765ef8bb7c0e41b25acaf",
+      "batch_sha256_after": "ea7fa2aba75a368ca734e630bc75255bcb73da9ff62b8441de5312c1b0e79522",
+      "chained_from": {
+        "record": "results/verdicts_45g5.json",
+        "timestamp": "2026-08-03T17:19:48+00:00",
+        "batch_sha256_after": "f436c4199277fc3f6ba509f1fdcc96031cf5abaa6b7765ef8bb7c0e41b25acaf",
+        "rows": 35
+      },
+      "supersedes": {
+        "manifest": "results/sitting_45g2_manifest.json",
+        "what_moved": "That manifest pins precheck.source_sha256 to the batch as it was sealed for the sitting, and this run moved 35 of its rows. The pin is now stale by design and is not to be re-pinned: it describes the corpus the 300 verdicts were passed on, and this file is the only place the chain to today's bytes is written down. scripts/build_sitting_pack.py will refuse against the new bytes, and that refusal is correct — the same shape results/relabel_45e.json records for results/calib_45e_manifest.json."
+      },
+      "counts": {
+        "rows_touched": 6,
+        "rows_moved": 6,
+        "rows_already_matching": 0,
+        "per_field": {
+          "intents": 6
+        },
+        "by_reason": {
+          "dictated by the team lead from the verdict note (docs/PROMPT-4.5g6.md Task 1)": 6
+        }
+      },
+      "refused_rows": 42,
+      "adjudicated_so_far": 40,
+      "still_unadjudicated": [
+        {
+          "id": "@msuaaaa:11876",
+          "notes": "tl-llm: [\"availability\"] wrong — mocking a novelty claim, not product presence (true value [] or service, for the guideline round)"
+        },
+        {
+          "id": "@VARUS_channel:7555",
+          "notes": "tl-llm: [\"availability\"] wrong — «что попало?» asks box contents, not presence"
+        }
+      ],
+      "source_notes": {
+        "@VARUS_channel:8478": "verdict: operator-P7 retroactive — [] should be [\"service\"] (bare praise of conduct); earlier tl-llm correct overturned by the operator ruling",
+        "@VARUS_channel:14759": "tl-llm: [\"price\"] should be [\"availability\"] — «нічого не дістанеться з акційного» is missing goods, not price",
+        "@VARUS_channel:11615": "tl-llm: [] should be [\"taste\"] — dish answer under food poll (4th of the family)",
+        "@VARUS_channel:18839": "tl-llm: [\"availability\"] wrong — queue joke; queue at the till is service by the guideline letter",
+        "@VARUS_channel:8932": "tl-llm: intents incomplete — «не смачними» is explicit taste beside quality; guideline says label both",
+        "@VARUS_channel:9271": "tl-llm: unclear should be false, and a disappointed prize report is a promo-reward reaction (service family) — scoreable row lost"
+      },
+      "changed_lines": 6,
+      "population_before": {
+        "rows": 1912,
+        "by_annotator": {
+          "llm-precheck": 1877,
+          "sitting-45g-verdicts": 35
+        },
+        "unclear_true": 626,
+        "with_no_intent": 800,
+        "intents": {
+          "availability": 161,
+          "packaging": 16,
+          "price": 110,
+          "quality": 78,
+          "service": 694,
+          "taste": 114
+        },
+        "sarcasm_true": 88,
+        "sentiment": {
+          "negative": 635,
+          "neutral": 1103,
+          "positive": 174
+        }
+      },
+      "population_after": {
+        "rows": 1912,
+        "by_annotator": {
+          "llm-precheck": 1872,
+          "sitting-45g-verdicts": 40
+        },
+        "unclear_true": 626,
+        "with_no_intent": 797,
+        "intents": {
+          "availability": 161,
+          "packaging": 16,
+          "price": 109,
+          "quality": 78,
+          "service": 696,
+          "taste": 116
+        },
+        "sarcasm_true": 88,
+        "sentiment": {
+          "negative": 635,
+          "neutral": 1103,
+          "positive": 174
+        }
+      },
+      "rows": [
+        {
+          "id": "@VARUS_channel:18839",
+          "reason": "dictated by the team lead from the verdict note (docs/PROMPT-4.5g6.md Task 1)",
+          "fields": [
+            "intents"
+          ],
+          "before": {
+            "sentiment": "negative",
+            "sarcasm": true,
+            "intents": [
+              "availability"
+            ],
+            "unclear": false
+          },
+          "after": {
+            "sentiment": "negative",
+            "sarcasm": true,
+            "intents": [
+              "service"
+            ],
+            "unclear": false
+          },
+          "moved": true
+        },
+        {
+          "id": "@VARUS_channel:14759",
+          "reason": "dictated by the team lead from the verdict note (docs/PROMPT-4.5g6.md Task 1)",
+          "fields": [
+            "intents"
+          ],
+          "before": {
+            "sentiment": "negative",
+            "sarcasm": false,
+            "intents": [
+              "price",
+              "service"
+            ],
+            "unclear": false
+          },
+          "after": {
+            "sentiment": "negative",
+            "sarcasm": false,
+            "intents": [
+              "availability"
+            ],
+            "unclear": false
+          },
+          "moved": true
+        },
+        {
+          "id": "@VARUS_channel:11615",
+          "reason": "dictated by the team lead from the verdict note (docs/PROMPT-4.5g6.md Task 1)",
+          "fields": [
+            "intents"
+          ],
+          "before": {
+            "sentiment": "neutral",
+            "sarcasm": false,
+            "intents": [],
+            "unclear": false
+          },
+          "after": {
+            "sentiment": "neutral",
+            "sarcasm": false,
+            "intents": [
+              "taste"
+            ],
+            "unclear": false
+          },
+          "moved": true
+        },
+        {
+          "id": "@VARUS_channel:9271",
+          "reason": "dictated by the team lead from the verdict note (docs/PROMPT-4.5g6.md Task 1)",
+          "fields": [
+            "intents"
+          ],
+          "before": {
+            "sentiment": "neutral",
+            "sarcasm": false,
+            "intents": [],
+            "unclear": false
+          },
+          "after": {
+            "sentiment": "neutral",
+            "sarcasm": false,
+            "intents": [
+              "service"
+            ],
+            "unclear": false
+          },
+          "moved": true
+        },
+        {
+          "id": "@VARUS_channel:8932",
+          "reason": "dictated by the team lead from the verdict note (docs/PROMPT-4.5g6.md Task 1)",
+          "fields": [
+            "intents"
+          ],
+          "before": {
+            "sentiment": "negative",
+            "sarcasm": false,
+            "intents": [
+              "quality"
+            ],
+            "unclear": false
+          },
+          "after": {
+            "sentiment": "negative",
+            "sarcasm": false,
+            "intents": [
+              "quality",
+              "taste"
+            ],
+            "unclear": false
+          },
+          "moved": true
+        },
+        {
+          "id": "@VARUS_channel:8478",
+          "reason": "dictated by the team lead from the verdict note (docs/PROMPT-4.5g6.md Task 1)",
+          "fields": [
+            "intents"
+          ],
+          "before": {
+            "sentiment": "positive",
+            "sarcasm": false,
+            "intents": [],
+            "unclear": false
+          },
+          "after": {
+            "sentiment": "positive",
+            "sarcasm": false,
+            "intents": [
+              "service"
+            ],
+            "unclear": false
+          },
+          "moved": true
+        }
+      ],
+      "git": {
+        "commit": "8bdab6d451979ba5bc00147d018c49107fdc6811",
+        "dirty": [
+          "scripts/apply_sitting_verdicts.py",
+          "scripts/apply_dictated_verdicts.py",
+          "tests/test_dictated_verdicts.py"
+        ]
+      }
+    }
+  ]
+}
