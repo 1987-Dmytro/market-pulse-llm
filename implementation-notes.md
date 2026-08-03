@@ -1342,6 +1342,16 @@ Deviations from `docs/PROMPT-4.5g3.md`, in the order the prompt names them.
     marked as a restatement in the constant's docstring, because a prompt that carries law the
     guideline does not is how the gap gets charged to the model.
 
+13. **The estimate was priced over the scope, not over what the run would buy.** A resume of 17
+    rows was refused by an estimate for 1,912 against the remaining headroom. Fixed by reading
+    the resume file before the ledger block; the guard now prices `pending`.
+14. **The wave-2 frame excludes rows the re-run never answered.** Such a row keeps the previous
+    prompt's labels, and one inside the hundred would gate the old prompt under the new one's
+    name. The set is empty today and the manifest records it either way.
+15. **The batch's `annotator` was added after the long run had started**, so the first pass wrote
+    it without one and the record claimed a field the file did not carry. Regenerated through the
+    resume path — 17 requests, $0.0070 — rather than corrected by hand.
+
 ## The bug worth writing down
 
 **A history's `old` is not "the value that was there" — it is whatever the reader of that history

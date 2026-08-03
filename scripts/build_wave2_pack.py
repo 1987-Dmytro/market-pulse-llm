@@ -32,6 +32,7 @@ Writes `data/annotation/wave2_45g3/` (gitignored, like every pack) and the commi
 import argparse
 import json
 import random
+import re
 import sys
 from collections import Counter
 from hashlib import sha256
@@ -76,7 +77,8 @@ README = """# Вторая волна 4.5g3 — один файл, 100 стро�
 
 - **{changed} строк из {relabelled} ({changed_rate:.0%}) сменили поле** — это не точечная
   правка, это другая разметка;
-- **из 16 строк, ради которых правила v2.1 и писались, промпт теперь верен на 5**;
+- **из {stated} строк, где вердикт прямо назвал правильный ответ, промпт теперь верен
+  на {landed}**;
 - распределение интенций перевернулось: `service` {service_before} → {service_after},
   строк без интенции {none_before} → {none_after}, `price` {price_before} → {price_after};
 - на строках, которые ты в прошлой сессии признал(а) верными, сменилось {kept_moved}
@@ -84,8 +86,7 @@ README = """# Вторая волна 4.5g3 — один файл, 100 стро�
 
 Похоже, что виноват не смысл решений, а форма: блок v2.1 в промпте написан отрицаниями
 («не реакция», «never price», «carries no intent») и стоит последним перед форматом
-ответа. Прогон стоил $0.7359 из $1.50; на исправленный прогон всего пласта нужно ещё
-~$0.85 при остатке $0.76 — то есть он не влезает, и это зарегистрированный стоп.
+ответа. Фаза стоила ${phase_spend:.4f} из ${cap:.2f}.
 
 **Решение твоё**: поднять лимит и переписать блок v2.1 перед новой волной — или судить
 эту сотню как есть. Пакет никуда не денется; если промпт починят, он будет замещён по
@@ -127,11 +128,81 @@ README = """# Вторая волна 4.5g3 — один файл, 100 стро�
 """
 
 
-def frame(rows: list[dict], judged: set[str]) -> list[dict]:
-    """Every re-labelled row the first sitting did not judge — the pool the hundred is drawn
-    from. Excluded by id rather than by stratum: what disqualifies a row is that its verdict
-    was an input to the prompt, and that is a property of the row."""
-    return [row for row in rows if row["id"] not in judged]
+ANNOTATOR = "llm-precheck-v2.1"
+"""What a row this pack may gate has to say produced it. A row the re-run could not answer keeps
+its previous labels and its previous annotator, and a hundred that quietly included one would
+gate the old prompt under the new prompt's name."""
+
+RULING = re.compile(
+    r"(?:^|[;—-]\s*|\b)(sentiment|sarcasm|intents|unclear)\s+should be\s+"
+    r"(true|false|positive|negative|neutral|\[[^\]]*\])",
+    re.IGNORECASE,
+)
+"""The verdict notes that state the right answer outright. Only these are checkable — a note
+saying a label is "unsupported by text" names the error and not the value."""
+
+
+def frame(rows: list[dict], judged: set[str]) -> tuple[list[dict], list[str]]:
+    """The rows this hundred may be drawn from, and the ones the re-run never answered.
+
+    Two exclusions, both by id. The 300 the sitting judged are out because the v2.1 rulings were
+    distilled from their verdicts, so a gate over them measures the prompt against its own
+    source. A row the re-run could not answer is out because it still carries the labels the
+    previous prompt produced.
+    """
+    stale = sorted(row["id"] for row in rows if row.get("annotator") != ANNOTATOR)
+    keep = set(stale)
+    return [row for row in rows if row["id"] not in judged and row["id"] not in keep], stale
+
+
+def expected(note: str) -> dict:
+    """The values a verdict note states outright, as a label dict — `{}` when it states none."""
+    out = {}
+    for field, value in RULING.findall(note):
+        field = field.lower()
+        raw = value.strip()
+        if raw.startswith("["):
+            try:
+                out["intents"] = sorted(json.loads(raw))
+            except ValueError:
+                continue
+        elif raw.lower() in ("true", "false"):
+            out[field] = raw.lower() == "true"
+        else:
+            out[field] = raw.lower()
+    return out
+
+
+def rulings_landed(gates: dict, after: dict) -> dict:
+    """Of the rows whose right answer the sitting wrote down, how many the re-run now gets.
+
+    In-sample and named as such: these are the verdicts the v2.1 rulings were distilled from, so
+    this is a check that the revision does what it says, not evidence that it generalises. It is
+    the sharpest one available before the fresh hundred comes back — a revision that cannot fix
+    the rows it was written for has nothing to offer the ones it was not.
+    """
+    hit, missed = [], []
+    for row in gates["rows"]:
+        if row["verdict"] == "correct" or row["id"] not in after:
+            continue
+        want = expected(row["notes"])
+        if not want:
+            continue
+        got = after[row["id"]]
+        ok = all(
+            sorted(got["intents"]) == value if field == "intents" else got[field] == value
+            for field, value in want.items()
+        )
+        (hit if ok else missed).append(row["id"])
+    return {
+        "rows_with_a_stated_answer": len(hit) + len(missed),
+        "now_right": len(hit),
+        "still_wrong": sorted(missed),
+        "note": (
+            "In-sample: the v2.1 rulings were written from these very verdicts. A revision that"
+            " does not fix the rows it was written for has nothing to offer the ones it was not."
+        ),
+    }
 
 
 def health(run: dict, before: list[dict], after: list[dict]) -> dict:
@@ -153,7 +224,11 @@ def health(run: dict, before: list[dict], after: list[dict]) -> dict:
         }
 
     kept = run["in_sample"]["judged_rows_re_asked"].get("correct", 0)
+    spend = run["cost"]
     return {
+        "phase_spend_usd": spend["phase_spend_usd"],
+        "cap_usd": spend["cap_usd"],
+        "headroom_usd": spend["cap_usd"] - spend["phase_spend_usd"],
         "read_this_first": (
             "The re-run moved a field in"
             f" {run['diff']['changed_any_field']} of {run['scope']['relabelled']} rows"
@@ -218,7 +293,9 @@ def main(argv: list[str] | None = None) -> int:
     rows = builder.load_batch(args.batch)
     was = builder.load_batch(REPO_ROOT / run["scope"]["source"])
     state = health(run, was, rows)
-    pool = frame(rows, judged)
+    state["rulings_landed"] = rulings_landed(gates, {row["id"]: row for row in rows})
+    pool, stale = frame(rows, judged)
+    state["rows_the_rerun_never_answered"] = stale
     drawn = draw(pool, args.rows)
     posts = parents.load(args.posts)
     captions = parents.load_captions(args.captions)
@@ -260,6 +337,10 @@ def main(argv: list[str] | None = None) -> int:
             price_after=state["distribution_after"]["intents"].get("price", 0),
             kept=state["in_sample"]["judged_rows_re_asked"].get("correct", 0),
             kept_moved=state["in_sample"]["moved_a_field"].get("correct", 0),
+            stated=state["rulings_landed"]["rows_with_a_stated_answer"],
+            landed=state["rulings_landed"]["now_right"],
+            phase_spend=state["phase_spend_usd"],
+            cap=state["cap_usd"],
         ),
         encoding="utf-8",
     )

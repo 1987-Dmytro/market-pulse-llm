@@ -190,11 +190,18 @@ def main(argv: list[str] | None = None, asker=None) -> int:
     reask = with_context(failed_rows, posts, captions)
     if args.limit:
         reask = reask[: args.limit]
+    # what a previous invocation already bought, read BEFORE the estimate: the cap is a limit on
+    # what this run spends, and an estimate over rows that are already on disk measures a run
+    # nobody is about to make. A resume of 17 rows was refused by an estimate for 1,912 once.
+    already = answered(args.outcomes, {TASK: {row["id"] for row in reask}})
+    pending = [row for row in reask if row["id"] not in already[TASK]]
     print(
         f"{rel(args.gates)}: failed {gates['failed']}"
         f"\n{len(reask)} rows go back of {len(batch_rows)} in the batch, under {TASK}"
         f"\n  what their post says: {states(reask)}"
     )
+    if already[TASK]:
+        print(f"resume: {len(already[TASK])} rows already paid for, {len(pending)} to go")
 
     pinned = evaluator.ROWS[MODEL]
     endpoint = {"tag": pinned["tag"], "quantization": pinned["quantization"]}
@@ -214,7 +221,7 @@ def main(argv: list[str] | None = None, asker=None) -> int:
         spent_before = usage_now - ledger[relabel.anchor_key(PHASE)]
         budget = zero_shot.Budget(CAP_USD, CAP_USD, spent_before=spent_before)
         estimate = zero_shot.estimate_cost(
-            rows=[f"{row['parent']}\n{row['caption'] or ''}\n{row['text']}" for row in reask],
+            rows=[f"{row['parent']}\n{row['caption'] or ''}\n{row['text']}" for row in pending],
             prompt_chars=len(prompts.PROMPTS[TASK]),
             pricing=live["pricing"],
             completion_tokens=COMPLETION_TOKENS,
@@ -235,9 +242,6 @@ def main(argv: list[str] | None = None, asker=None) -> int:
         return 0
 
     started = datetime.now(UTC).isoformat(timespec="seconds")
-    already = answered(args.outcomes, {TASK: {row["id"] for row in reask}})
-    if already[TASK]:
-        print(f"resume: {len(already[TASK])} rows already paid for")
     args.outcomes.parent.mkdir(parents=True, exist_ok=True)
     handle = args.outcomes.open("a" if already[TASK] else "w", encoding="utf-8")
     done = 0
@@ -251,7 +255,6 @@ def main(argv: list[str] | None = None, asker=None) -> int:
         if outcome["labels"] is None or done % 100 == 0:
             print(f"  {done:>5} {outcome['id']:<24} {outcome.get('unusable') or ''}")
 
-    pending = [row for row in reask if row["id"] not in already[TASK]]
     try:
         outcomes = ask_all(TASK, pending, ask, args.concurrency, dict, persist)
     finally:

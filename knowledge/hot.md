@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-03 13:35:47 (every SessionStart)
+**Auto-refreshed:** 2026-08-03 13:45:15 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+a3f9f17 chore: vault — the 4.5g3 outcome, so the next session starts from it
 e582eee docs: the 4.5g3 record — three FAILs, a v2.1 that regressed, twelve deviations
 69fe512 feat: the wave-2 gate pack, sealed blind and carrying its own warning
 fcacd9c feat: the whole batch re-labelled under v2.1 — and it came back worse
 0c97392 feat: T1v2.1 and its four-field revision, registered beside the old ones
-deba6cc docs: guideline v2.1 — the eight rulings the sitting settled
 ```
 
 ## 📋 Recent decisions
@@ -47,21 +47,25 @@ the 42 refusals the notes name `unclear` **22** · `intents` **17** · `sarcasm`
 was fixed one at a time. ADR [[45g3-sitting-gates]].
 
 **THE v2.1 RE-RUN REGRESSED, AND THAT IS THE FINDING.** All 1,912 rows re-labelled under
-`precheck_v2.1_with_post` — same model, same endpoint, same posts, one thing changed. 1,895
-answered, $0.7359 of $1.50. `service` **689 → 138** · no intent **809 → 1366** · `price`
-**110 → 313** · `sarcasm` **87 → 197**. **1,153 rows (61%) moved a field, including 172 of the 254
-the sitting called CORRECT** against 25 of 41 of the ones it refused — the ratio is backwards. On
-the 16 rows whose right answer the sitting wrote down, v2.1 gets **5**. The rulings are not in
-doubt; the rendering is — eight lines of negations ("is not a consumer reaction at all", "never
-`price`", "carries no intent") sitting last before the answer format. **A corrected re-run
-estimates at $0.8492 against $0.7641 of headroom, so it does not fit — the pre-registered stop.**
+`precheck_v2.1_with_post` — same model, same endpoint, same posts, one thing changed. 1,912
+answered (17 on a second pass), **$0.7429 of $1.50**. `service` **689 → 138** · no intent
+**809 → 1366** · `price` **110 → 313** · `sarcasm` **87 → 197**. **1,153 rows (60%) moved a field,
+including 172 of the 258 the sitting called CORRECT** against 25 of 42 of the ones it refused —
+the ratio is backwards. On the **29** rows whose right answer the verdict note states outright,
+v2.1 now gets **10**. The rulings are not in doubt; the rendering is — eight lines of negations
+("is not a consumer reaction at all", "never `price`", "carries no intent") sitting last before
+the answer format. **A corrected re-run estimates at $0.8492 against $0.7571 of headroom, so it
+does not fit — the pre-registered stop.**
 
 **THE WAVE-2 PACK IS SEALED AND CARRIES ITS OWN WARNING.** `data/annotation/wave2_45g3/` — 100
 rows, one draw, seed 42, blind, `verdicts_present: 0`, bar 0.90, manifest
 `results/wave2_45g3_manifest.json`. **The 300 already-judged rows are out of the frame** (the v2.1
 rulings came from their verdicts; a gate over them measures the prompt against its own source) —
-frame 1,612. One frame instead of three, and the cost is named: a pass here can still hold one
-class below 0.90. `batch_health` in the manifest and a warning at the top of the README, because
+frame 1,612, and any row the re-run could not answer is out too (empty today, recorded either
+way — one of those would gate the old prompt under the new one's name). One frame instead of
+three, and the cost is named: a pass here can still hold one
+class below 0.90. `batch_health` in the manifest — distribution shift, in-sample split, 10-of-29 and headroom, all
+derived — and a warning at the top of the README, because
 a gate pack is a pre-registration and sealing one over a measured regression would pre-register a
 failure. **Judging it, and re-judging `precheck300`, are the operator's and outside 4.5g3.**
 

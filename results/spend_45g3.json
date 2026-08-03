@@ -9,6 +9,13 @@
       "usd": 0.7358922899999994,
       "requests": 1912,
       "note": "45g3: 1912 rows of the failed strata re-labelled under v2.1"
+    },
+    {
+      "model": "qwen/qwen3.6-27b",
+      "timestamp": "2026-08-03T11:41:05+00:00",
+      "usd": 0.007006119999999999,
+      "requests": 17,
+      "note": "45g3: 17 rows of the failed strata re-labelled under v2.1"
     }
   ]
 }

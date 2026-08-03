@@ -131,8 +131,9 @@ this step into a negative result.
 
 ## (f) The v2.1 re-run regressed, and the cap forbids fixing it in this phase
 
-1,895 of 1,912 rows came back (17 unusable, named), $0.7359 of the $1.50 cap. And the diagnostics
-say the revision made the batch worse, not better:
+All 1,912 rows came back — 17 needed a second pass, which is the shape 4.5g2 already recorded —
+for **$0.7429** of the $1.50 cap. And the diagnostics say the revision made the batch worse, not
+better:
 
 | | 4.5g2 (v2 prompt) | 4.5g3 (v2.1 prompt) |
 |---|---|---|
@@ -142,13 +143,13 @@ say the revision made the batch worse, not better:
 | `sarcasm` | 87 | **197** |
 | `unclear` | 612 | 477 |
 
-**1,153 of 1,895 rows (61%) moved a field**, and — the sign that should not appear — **172 of the
-254 previously-`correct` rows moved with them**, against 25 of 41 of the `incorrect` ones. A
+**1,153 of 1,912 rows (60%) moved a field**, and — the sign that should not appear — **172 of the
+258 previously-`correct` rows moved with them**, against 25 of 42 of the `incorrect` ones. A
 revision that fixes what a gate refused should move the refused rows and leave the accepted ones
-alone; this did close to the opposite. Checked directly on the 16 rows whose adjudicated value the
-sitting wrote down: the v2.1 run gets **5 of 16** right. All three P5 promo-question rows still
-answer `[]` where the ruling says `["service"]`, and three of the four P6 rows are still
-`unclear: false`.
+alone; this did close to the opposite. And on the rows whose right answer the sitting wrote down
+outright — 29 of the 42, parsed from the verdict notes rather than listed by hand — the v2.1 run
+now gets **10**. All three P5 promo-question rows still answer `[]` where the ruling says
+`["service"]`, and three of the four P6 rows are still `unclear: false`.
 
 **The likely mechanism is form, not substance.** `SETTLED_CASES` is eight lines dense with
 negations — *"is not a consumer reaction at all"*, *"never `price`"*, *"is not a reaction to
@@ -158,10 +159,17 @@ collect `price`, everything about the retailer collapses to `[]`. The rulings th
 operator's and are not in doubt; how they were rendered is.
 
 **This phase cannot correct it.** A corrected re-run of the same пласт estimates at **$0.8492**
-against **$0.7641** of headroom, and a projected overrun is a pre-registered stop, not a thing to
-trim the scope around. So the wave-2 pack is sealed as instructed and carries the measurement:
-`batch_health` in its manifest, and the warning is the first thing in the README the operator
-would open.
+(measured against this pricing at the start of the phase) and the headroom is **$0.7571**, so it
+does not fit; a projected overrun is a pre-registered stop, not a thing to trim the scope around.
+So the wave-2 pack is sealed as instructed and carries the measurement: `batch_health` in its
+manifest — the distribution shift, the in-sample split, the 10-of-29 and the headroom, all
+derived — and the warning is the first thing in the README the operator would open.
+
+**Two guards changed on the way.** The cost estimate was priced over the whole scope rather than
+over what a resume would actually buy, so a 17-row remainder was refused by an estimate for
+1,912; it now prices `pending`. And the frame of the wave-2 pack excludes any row the re-run did
+not answer — such a row keeps the previous prompt's labels, and one inside the hundred would gate
+the old prompt under the new one's name. Today that set is empty, and the manifest says so.
 
 ## Consequences
 

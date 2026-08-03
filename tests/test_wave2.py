@@ -24,9 +24,9 @@ from recheck_with_captions import FakeAsker  # noqa: E402
 from test_sitting_pack import precheck_row, write_lines  # noqa: E402
 
 
-def spread(count):
+def spread(count, annotator="llm-precheck"):
     """`count` rows of each of the three strata, so every population is known by construction."""
-    return (
+    rows = (
         [precheck_row(i, "доставка затримується") for i in range(count)]
         + [precheck_row(100 + i, "коротко") for i in range(count)]
         + [
@@ -34,6 +34,12 @@ def spread(count):
             for i in range(count)
         ]
     )
+    return [{**row, "annotator": annotator} for row in rows]
+
+
+def relabelled(count):
+    """The same spread as it looks after the re-run: every row carrying the v2.1 annotator."""
+    return spread(count, annotator=wave2.ANNOTATOR)
 
 
 def bench(tmp_path, rows, failed=("general",), judged=()):
@@ -214,6 +220,7 @@ def seal(tmp_path, rows, judged=()):
                             "moved_a_field": {"correct": 1},
                             "note": "In-sample.",
                         },
+                        "cost": {"usd": 0.5, "phase_spend_usd": 0.5, "cap_usd": 1.5},
                     }
                 ]
             }
@@ -259,7 +266,7 @@ def pack_rows(tmp_path):
 def test_the_rows_whose_verdicts_wrote_the_prompt_are_out_of_the_frame(tmp_path):
     """The v2.1 rulings were distilled from the first sitting's verdicts. Drawing the fresh
     hundred from those rows would score the prompt against its own source."""
-    rows = spread(6)
+    rows = relabelled(6)
     already = [(row["id"], "correct") for row in rows[:10]]
     paths = seal(tmp_path, rows, judged=already)
     manifest = build(tmp_path, paths, rows=4)
@@ -272,7 +279,7 @@ def test_the_rows_whose_verdicts_wrote_the_prompt_are_out_of_the_frame(tmp_path)
 
 
 def test_the_pack_is_blind_and_says_so_in_no_column(tmp_path):
-    rows = spread(6)
+    rows = relabelled(6)
     paths = seal(tmp_path, rows)
     build(tmp_path, paths, rows=6)
 
@@ -283,7 +290,7 @@ def test_the_pack_is_blind_and_says_so_in_no_column(tmp_path):
 
 
 def test_a_batch_that_is_not_the_one_the_rerun_wrote_stops_the_build(tmp_path):
-    rows = spread(6)
+    rows = relabelled(6)
     paths = seal(tmp_path, rows)
     paths["batch"].write_text(
         paths["batch"].read_text(encoding="utf-8").replace("коротко", "коротшe"), encoding="utf-8"
@@ -293,7 +300,7 @@ def test_a_batch_that_is_not_the_one_the_rerun_wrote_stops_the_build(tmp_path):
 
 
 def test_a_pack_with_verdicts_in_it_is_not_quietly_rebuilt(tmp_path):
-    rows = spread(6)
+    rows = relabelled(6)
     paths = seal(tmp_path, rows)
     build(tmp_path, paths, rows=4)
     path = tmp_path / "pack" / "wave2_100.csv"
@@ -316,7 +323,7 @@ def test_a_pack_with_verdicts_in_it_is_not_quietly_rebuilt(tmp_path):
 
 
 def test_the_manifest_pins_its_files_the_prompt_and_the_gate_that_sent_the_rows_back(tmp_path):
-    rows = spread(6)
+    rows = relabelled(6)
     paths = seal(tmp_path, rows)
     manifest = build(tmp_path, paths, rows=4)
 
@@ -331,7 +338,7 @@ def test_the_manifest_pins_its_files_the_prompt_and_the_gate_that_sent_the_rows_
 
 
 def test_the_same_seed_draws_the_same_hundred(tmp_path):
-    rows = spread(6)
+    rows = relabelled(6)
     paths = seal(tmp_path, rows)
     build(tmp_path, paths, rows=4)
     first = [row["id"] for row in pack_rows(tmp_path)]
@@ -376,7 +383,7 @@ def test_a_line_that_moved_a_sixth_field_stops_the_run(tmp_path):
 def test_the_pack_carries_what_the_rerun_did_to_the_batch_it_is_drawn_from(tmp_path):
     """A gate pack is a pre-registration. Sealing one over labels that already measure as a
     regression would pre-register a failure, so the measurement travels with the pack."""
-    rows = spread(6)
+    rows = relabelled(6)
     paths = seal(tmp_path, rows, judged=[(row["id"], "correct") for row in rows[:2]])
     manifest = build(tmp_path, paths, rows=4)
 
@@ -385,6 +392,75 @@ def test_the_pack_carries_what_the_rerun_did_to_the_batch_it_is_drawn_from(tmp_p
     assert state["changed_any_field"] == 3
     assert state["in_sample"]["moved_a_field"] == {"correct": 1}
     assert set(state["distribution_before"]) == {"intents", "no_intent", "unclear", "sarcasm"}
+    assert state["headroom_usd"] == 1.0 and state["phase_spend_usd"] == 0.5
+    assert state["rulings_landed"]["rows_with_a_stated_answer"] == 0, "no note states an answer"
+    assert state["rows_the_rerun_never_answered"] == []
     readme = (tmp_path / "pack" / "README-wave2.md").read_text(encoding="utf-8")
     assert readme.index("ПРОЧТИ ПЕРВЫМ") < readme.index("Заполняешь"), "the warning comes first"
     assert "3 строк из 18" in readme and "сменилось 1" in readme
+
+
+def test_the_estimate_is_for_what_this_run_will_buy_not_for_the_whole_scope(tmp_path, monkeypatch):
+    """A resume asks only for the rows a previous invocation could not answer. Estimating the
+    whole population against the remaining headroom refuses a run that would cost cents — which
+    is what happened once: 17 pending rows stopped by an estimate for 1,912."""
+    rows = spread(8)
+    paths = bench(tmp_path, rows, failed=("general",))
+    assert run_rerun(tmp_path, paths) == 0  # fills the resume file through the fake asker
+    paid = rerun.answered(tmp_path / "outcomes.jsonl", {rerun.TASK: {r["id"] for r in rows}})
+    assert 0 < len(paid[rerun.TASK]) < 8, "some answered, some did not — the resume has a remainder"
+
+    estimated = []
+    monkeypatch.setattr(rerun.evaluator, "api_key", lambda: "k")
+    monkeypatch.setattr(
+        rerun.evaluator,
+        "verify_pin",
+        lambda *a, **k: {"pricing": {"prompt": "0", "completion": "0"}, "quantization": "fp8"},
+    )
+    monkeypatch.setattr(rerun.zero_shot, "total_usage", lambda key: 0.0)
+    monkeypatch.setattr(
+        rerun.zero_shot,
+        "estimate_cost",
+        lambda rows, **kw: (estimated.append(len(rows)), {"usd": 0.0, "requests": len(rows)})[1],
+    )
+    assert (
+        rerun.main(
+            [
+                "--batch-in",
+                str(paths["batch"]),
+                "--batch-out",
+                str(tmp_path / "out2.jsonl"),
+                "--gates",
+                str(tmp_path / "gates.json"),
+                "--manifest",
+                str(tmp_path / "manifest.json"),
+                "--captions",
+                str(paths["captions"]),
+                "--posts",
+                str(paths["posts"]),
+                "--outcomes",
+                str(tmp_path / "outcomes.jsonl"),
+                "--record",
+                str(tmp_path / "rerun2.json"),
+                "--ledger",
+                str(tmp_path / "ledger2.json"),
+                "--dry-run",
+            ]
+        )
+        == 0
+    )
+    assert estimated == [8 - len(paid[rerun.TASK])], "priced the remainder, not the population"
+
+
+def test_a_row_the_rerun_never_answered_is_not_gated_under_the_new_prompts_name(tmp_path):
+    """A row the model could not answer keeps its previous labels and its previous annotator.
+    One of those inside the hundred would gate the old prompt under the new prompt's name — and
+    at a bar decided by 88 against 90, one row is a percentage point."""
+    rows = relabelled(6)
+    rows[0] = {**rows[0], "annotator": "llm-precheck"}
+    paths = seal(tmp_path, rows)
+    manifest = build(tmp_path, paths, rows=4)
+
+    assert manifest["batch_health"]["rows_the_rerun_never_answered"] == [rows[0]["id"]]
+    assert manifest["precheck"]["frame"]["rows"] == len(rows) - 1
+    assert rows[0]["id"] not in {row["id"] for row in pack_rows(tmp_path)}

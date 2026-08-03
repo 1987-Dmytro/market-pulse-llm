@@ -6,11 +6,11 @@
   "verdicts_present": 0,
   "sha256": {
     "wave2_100.csv": "e15a71d17d2d4ac264ef4e9d95d6e97331bc44fb5dfc5e18f058d3354b768196",
-    "README-wave2.md": "81f95b4b1f628dfa6d7131e4ef89ed70504933ce8189919bd2a0bd2b0f6626ce"
+    "README-wave2.md": "e54f3932e3e3fc23cf613054f952419c33adda6acc74fd18697eae1ade63492d"
   },
   "precheck": {
     "source": "data/annotation/uplabel_precheck_45g3.jsonl",
-    "source_sha256": "feef4d93aa259b93022bef755cb3bbc7028d0d11c4461aa75e5138cf9499c9af",
+    "source_sha256": "68a2194bfd1542792c8f47e58b5f403177319de0f5b7a096c163506e3f3c0d50",
     "rows": 100,
     "rule": "agreement = rows marked `correct` / 100 rows shipped. A row is `correct` only if EVERY field is right — sentiment, sarcasm, intents and unclear together; one wrong field makes the row `incorrect`. A blank cell or any other value counts as `incorrect`. The bar is >= 0.90 on this one hundred. Registered before the pack was handed over and not recomputed on any other denominator.",
     "verdicts": [
@@ -336,9 +336,12 @@
     "law": "docs/annotation/comments.md, section `v2.1 changelog`"
   },
   "batch_health": {
-    "read_this_first": "The re-run moved a field in 1153 of 1895 rows (61%), and 172 of the 254 rows the first sitting called CORRECT moved with them. That is the sign that should not appear: the v2.1 revision was meant to fix what the sitting refused, not to relabel what it accepted. Judge this hundred only after deciding that the re-run is worth gating.",
+    "phase_spend_usd": 0.7428984099999998,
+    "cap_usd": 1.5,
+    "headroom_usd": 0.7571015900000002,
+    "read_this_first": "The re-run moved a field in 1153 of 1912 rows (60%), and 172 of the 258 rows the first sitting called CORRECT moved with them. That is the sign that should not appear: the v2.1 revision was meant to fix what the sitting refused, not to relabel what it accepted. Judge this hundred only after deciding that the re-run is worth gating.",
     "changed_any_field": 1153,
-    "changed_rate": 0.60844327176781,
+    "changed_rate": 0.6030334728033473,
     "per_field": {
       "sentiment": 182,
       "sarcasm": 134,
@@ -347,8 +350,8 @@
     },
     "in_sample": {
       "judged_rows_re_asked": {
-        "correct": 254,
-        "incorrect": 41
+        "correct": 258,
+        "incorrect": 42
       },
       "moved_a_field": {
         "correct": 172,
@@ -381,7 +384,34 @@
       "no_intent": 1366,
       "unclear": 477,
       "sarcasm": 197
-    }
+    },
+    "rulings_landed": {
+      "rows_with_a_stated_answer": 29,
+      "now_right": 10,
+      "still_wrong": [
+        "@VARUS_channel:10136",
+        "@VARUS_channel:10394",
+        "@VARUS_channel:11605",
+        "@VARUS_channel:11776",
+        "@VARUS_channel:14891",
+        "@VARUS_channel:17855",
+        "@VARUS_channel:17864",
+        "@VARUS_channel:19919",
+        "@VARUS_channel:245",
+        "@VARUS_channel:323",
+        "@VARUS_channel:328",
+        "@VARUS_channel:7545",
+        "@VARUS_channel:7711",
+        "@VARUS_channel:8850",
+        "@VARUS_channel:8916",
+        "@VARUS_channel:8947",
+        "@msuaaaa:11507",
+        "@msuaaaa:12621",
+        "@msuaaaa:12648"
+      ],
+      "note": "In-sample: the v2.1 rulings were written from these very verdicts. A revision that does not fix the rows it was written for has nothing to offer the ones it was not."
+    },
+    "rows_the_rerun_never_answered": []
   },
   "sent_back_by": {
     "record": "results/sitting_45g_gates.json",
@@ -400,13 +430,9 @@
   },
   "note": "Built, not judged. The verdicts belong to the operator's next sitting, and nothing from the 1,912 rows merges into a train or candidates file until this hundred comes back at or above the bar. `verdicts_present` is measured at rebuild time: it is the evidence for `sealed before a single verdict existed`.",
   "git": {
-    "commit": "0c973928d70b7c3b8614d732d4bd2c2cefc61910",
+    "commit": "a3f9f176e3bffd0797b5fa0801865585e961fe87",
     "dirty": [
-      ".gitignore",
-      "implementation-notes.md",
-      "knowledge/decisions/INDEX.md",
       "data/annotation/uplabel_precheck_45g3.jsonl",
-      "knowledge/decisions/45g3-sitting-gates.md",
       "results/rerun_45g3.json",
       "results/rerun_45g3_rows.jsonl",
       "results/spend_45g3.json",

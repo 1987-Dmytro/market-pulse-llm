@@ -237,6 +237,12 @@ def apply_redo(
             "notes": note_for(ruling["notes"], row.get("notes") or ""),
             "annotator": ANNOTATOR,
         }
+        if bad := annotation.check_labels({**row, **changes}, "comments"):
+            raise SystemExit(
+                f"{ruling['id']}: the sitting's answer makes a row the annotation checker refuses"
+                f' ({bad}). `[]` parses as a list and `["srvice"]` does too — a label a later'
+                " merge could not accept has to fail here rather than there."
+            )
         lines[position] = rewritten(row, line, changes)
         rows[position] = {**row, **changes}
         replaced = sorted(row["intents"])

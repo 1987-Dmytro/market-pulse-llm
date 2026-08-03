@@ -331,3 +331,13 @@ def test_a_row_sitting_in_a_frozen_test_file_is_refused(tmp_path, monkeypatch):
     write_lines(tmp_path / "never.jsonl", [row(1, "з вишнею", ["taste"])])
     with pytest.raises(SystemExit, match="sit in a frozen test file"):
         run(tmp_path)
+
+
+def test_a_label_outside_the_taxonomy_fails_here_rather_than_in_the_merge_that_reads_it(
+    tmp_path, monkeypatch
+):
+    """`[]` parses as a list and so does `["srvice"]`. The cell check proves the shape; the
+    annotation checker is what proves the value, and it ran on the appended rows only."""
+    bench(tmp_path, monkeypatch, redo_final={"@c:1": '["srvice"]', "@c:2": "[]"})
+    with pytest.raises(SystemExit, match="the annotation checker refuses"):
+        run(tmp_path)
