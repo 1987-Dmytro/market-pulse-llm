@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-03 21:20:55 (every SessionStart)
+**Auto-refreshed:** 2026-08-03 21:37:06 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+1a92efc docs: the prediction at a matched denominator, and what the 9 is not evidence for
 29fbdec feat: v2ctx bought and KILLed — 41/58 preserved, 9/17 feature-fixed
 7caab2d chore: the team lead's category/position amendment candidate, committed verbatim
 b3eac2d feat: the v2ctx runner, committed before the numbers exist
 8b52971 feat: the v2ctx probe, pre-registered — two denominators, one attempt
-5da9e65 feat: v2ctx — the v2 prompt, and two facts rendered beside the post
 ```
 
 ## 📋 Recent decisions
@@ -31,7 +31,7 @@ b3eac2d feat: the v2ctx runner, committed before the numbers exist
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-03 21:40 (`PROMPT-4.5g6` executed — **six dictated verdicts complete the adjudicated 40, the two features are registered as rendered facts (`precheck_v2ctx_with_post`, RENDER-ONLY: no prompt text moves), and the pre-registered probe returned KILL at preserved 41/58** with feature-fixed 9/17. $0.0301 for 100 requests; $0.8095 of the $1.50 shared cap. Three tracks are now closed by their own gates: v2.1, v2.2 and v2ctx. All three 4.5g strata still FAIL; the wave-2 hundred is still unjudged. The 4.5f calibration gate stays PASS at 100/100; test v3 is frozen beside v2; Phase 4 stays closed at 2 of 5 against v2; edited by hand — the section above is auto-generated, do NOT touch the marker)
+**Last update:** 2026-08-03 21:32 (`/save` after `PROMPT-4.5g6` — **six dictated verdicts complete the adjudicated 40, the two features are registered as rendered facts (`precheck_v2ctx_with_post`, RENDER-ONLY: no prompt text moves), and the pre-registered probe returned KILL at preserved 41/58** with feature-fixed 9/17. $0.0301 for 100 requests; $0.8095 of the $1.50 shared cap. Three tracks are now closed by their own gates: v2.1, v2.2 and v2ctx. Open refusals: `7555` and `11876` (pending law). All three 4.5g strata still FAIL; the wave-2 hundred is still unjudged. The 4.5f calibration gate stays PASS at 100/100; test v3 is frozen beside v2; Phase 4 stays closed at 2 of 5 against v2; edited by hand — the section above is auto-generated, do NOT touch the marker)
 
 ## 🔥 What's Hot
 
