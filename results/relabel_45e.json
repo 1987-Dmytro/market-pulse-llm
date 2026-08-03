@@ -14174,6 +14174,820 @@
           "tests/test_quiz_rulings.py"
         ]
       }
+    },
+    {
+      "applied_by": "scripts/merge_sitting_returns.py",
+      "timestamp": "2026-08-03T11:13:11+00:00",
+      "authority": "results/sitting_45g_gates.json",
+      "rows": [
+        {
+          "id": "@VARUS_channel:11983",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [
+            "taste"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@VARUS_channel:12044",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [
+            "taste"
+          ],
+          "new": [
+            "taste"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@VARUS_channel:1219",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [
+            "taste"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@VARUS_channel:12682",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [
+            "taste"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@VARUS_channel:1308",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [
+            "price"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@VARUS_channel:13451",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [
+            "taste"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@VARUS_channel:13510",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@VARUS_channel:1453",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [
+            "service"
+          ],
+          "new": [],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@VARUS_channel:17767",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [
+            "taste"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@VARUS_channel:18780",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@VARUS_channel:18888",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [
+            "availability"
+          ],
+          "new": [],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@VARUS_channel:19215",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [
+            "availability"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@VARUS_channel:20136",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@VARUS_channel:20655",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [
+            "taste"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@VARUS_channel:2799",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [
+            "service"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@VARUS_channel:4549",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [
+            "availability"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@VARUS_channel:6885",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [
+            "taste"
+          ],
+          "new": [
+            "taste"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@VARUS_channel:7701",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [
+            "taste"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:10572",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [
+            "price"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:11243",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:11270",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [
+            "price"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:11280",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [
+            "price"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:11786",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [
+            "price"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:11975",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [
+            "taste"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:13021",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [
+            "taste"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:13325",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [
+            "availability"
+          ],
+          "new": [
+            "availability"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:13741",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [
+            "service"
+          ],
+          "new": [
+            "service"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:3133",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:3488",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [
+            "service"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:6303",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:6410",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [
+            "taste"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:6656",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [
+            "service"
+          ],
+          "new": [
+            "service"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:6752",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [
+            "service"
+          ],
+          "new": [
+            "price"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:7033",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [
+            "price"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:7091",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [
+            "price"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:7540",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [
+            "service"
+          ],
+          "new": [
+            "service"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:7690",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [
+            "availability"
+          ],
+          "new": [
+            "availability"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:8335",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [
+            "service"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:8678",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [
+            "service"
+          ],
+          "new": [
+            "service"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:9385",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [
+            "service"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:9542",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [
+            "availability"
+          ],
+          "new": [
+            "availability"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:9712",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [
+            "quality"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:9810",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [
+            "packaging",
+            "quality"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@VARUS_channel:15526",
+          "file": "data/annotation/sarcasm_candidates_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [
+            "taste"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@VARUS_channel:21253",
+          "file": "data/annotation/sarcasm_candidates_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [
+            "quality"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@VARUS_channel:3831",
+          "file": "data/annotation/sarcasm_candidates_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@VARUS_channel:7158",
+          "file": "data/annotation/sarcasm_candidates_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [
+            "price",
+            "service"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@VARUS_channel:9097",
+          "file": "data/annotation/sarcasm_candidates_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:13560",
+          "file": "data/annotation/sarcasm_candidates_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [
+            "price"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:12205",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [
+            "packaging"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:12395",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [
+            "packaging"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:8522",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [
+            "packaging"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@VARUS_channel:10737",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "replaced": [
+            "availability"
+          ],
+          "new": [
+            "price"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@VARUS_channel:10867",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "replaced": [
+            "availability"
+          ],
+          "new": [
+            "availability"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@VARUS_channel:21576",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@VARUS_channel:414",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "replaced": [
+            "taste"
+          ],
+          "new": [
+            "taste"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@VARUS_channel:6969",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "replaced": [
+            "price"
+          ],
+          "new": [
+            "price"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:10694",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "replaced": [
+            "taste"
+          ],
+          "new": [
+            "taste"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:11291",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "replaced": [
+            "taste"
+          ],
+          "new": [
+            "taste"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:11941",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [
+            "taste"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:12206",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [
+            "packaging"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:12251",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "replaced": [
+            "packaging"
+          ],
+          "new": [
+            "packaging"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:12279",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "replaced": [
+            "packaging"
+          ],
+          "new": [
+            "packaging"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:12333",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [
+            "price"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:13113",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "replaced": [
+            "price"
+          ],
+          "new": [
+            "price"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:4009",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [
+            "packaging"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:5405",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "replaced": [
+            "availability"
+          ],
+          "new": [
+            "availability"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:5528",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "replaced": [
+            "price"
+          ],
+          "new": [
+            "price"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:5531",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "replaced": [
+            "price"
+          ],
+          "new": [
+            "service"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:7551",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "replaced": [
+            "quality"
+          ],
+          "new": [
+            "price"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:7552",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "replaced": [
+            "price"
+          ],
+          "new": [
+            "price"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:8612",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [
+            "packaging"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:9049",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [
+            "taste"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:9400",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "replaced": [],
+          "new": [
+            "price"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        },
+        {
+          "id": "@msuaaaa:9510",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "replaced": [
+            "price"
+          ],
+          "new": [
+            "price"
+          ],
+          "authority": "team-lead-LLM triage with operator adjudication and operator spot-check"
+        }
+      ],
+      "staged_sha256_before": {
+        "data/frozen/comments_train_tax2.jsonl": "e2c616d96c352cfe6244552a2f2089b0c8fd69658cfb047de23ed6257bb78b22",
+        "data/annotation/sarcasm_candidates_tax2.jsonl": "56328acbd4bfba69517f0792596ab3f2c0ba299af7bdf92ab7919e8881df3ab1",
+        "data/annotation/sarcasm_holdout_pool_tax2.jsonl": "3263bbd59ae6b72209aa8c2ef9bcb51f36942e5452d8199d0b024ac1767be519"
+      },
+      "staged_sha256_after": {
+        "data/frozen/comments_train_tax2.jsonl": "98baf5b05c2cd74ed998727d3402d8aa2108ab66c6707e164af2befb7063749f",
+        "data/annotation/sarcasm_candidates_tax2.jsonl": "e047b59ac5c2674b98876a830f528f865a2ae9618069c7a7a919a57473a0e8d3",
+        "data/annotation/sarcasm_holdout_pool_tax2.jsonl": "7e91c62189445e9d95dc64fa32d7df68ad924315804fdf077d9ac4b3ea7bbc01"
+      },
+      "note": "The 75 emptied rows the 4.5g sitting decided by hand, with the parent post in front of the decider. `old` is what the RE-LABELLER produced, which is what a reversal has to restore; `replaced` is the value actually overwritten, and for 27 rows it is a later fix's answer rather than the re-labeller's. The 14 unreadable rows joined the staged files in the same run and are NOT in this block: the re-labeller never answered them, so it has no answer to revert to.",
+      "git": {
+        "commit": "972fa26c2040d6709ad38270ed951c28ca3e0cdc",
+        "dirty": [
+          "data/annotation/sarcasm_candidates_tax2.jsonl",
+          "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "data/frozen/comments_train_tax2.jsonl",
+          "results/sitting_45g_gates.json",
+          "scripts/merge_sitting_returns.py",
+          "scripts/read_sitting_returns.py",
+          "tests/test_sitting_returns.py"
+        ]
+      }
     }
   ]
 }
