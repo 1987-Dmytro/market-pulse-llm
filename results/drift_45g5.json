@@ -1,0 +1,56 @@
+{
+  "runs": [
+    {
+      "timestamp": "2026-08-03T18:19:22+00:00",
+      "fetched_by": "scripts/fetch_comments_v2.py",
+      "channels": [
+        "@VARUS_channel",
+        "@msuaaaa"
+      ],
+      "fresh_store": "data/raw_fresh_45g5",
+      "v2_dir": "data/raw/comments_v2",
+      "join": "v2 record = the v1 record plus reply_to_msg_id. v1 text is law; a row missing from the fresh fetch carries no reply_to_msg_id key at all.",
+      "frozen_fields": [
+        "text",
+        "sentiment",
+        "sarcasm",
+        "intents",
+        "unclear"
+      ],
+      "comments_fetched_this_run": {
+        "@VARUS_channel": 6412,
+        "@msuaaaa": 4928
+      },
+      "drift": {
+        "@VARUS_channel": {
+          "v1_rows": 6410,
+          "fresh_rows": 6412,
+          "missing_from_the_fresh_fetch": 2,
+          "text_differs": 0,
+          "fresh_only": 4,
+          "v2_rows": 6410,
+          "with_a_reply_target": 6408
+        },
+        "@msuaaaa": {
+          "v1_rows": 4928,
+          "fresh_rows": 4928,
+          "missing_from_the_fresh_fetch": 0,
+          "text_differs": 0,
+          "fresh_only": 0,
+          "v2_rows": 4928,
+          "with_a_reply_target": 4928
+        }
+      },
+      "git": {
+        "commit": "64fd86307ce28c7d4ecec96b09ee545d9afd0674",
+        "dirty": [
+          "knowledge/daily_logs/2026-08-03.md",
+          "knowledge/index.md",
+          "results/spend_45g5.json",
+          "scripts/zero_spend_45g5.py",
+          "tests/test_zero_spend_45g5.py"
+        ]
+      }
+    }
+  ]
+}
