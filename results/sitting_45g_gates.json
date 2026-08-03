@@ -1,0 +1,1585 @@
+{
+  "read_by": "scripts/read_sitting_returns.py",
+  "pack": "data/annotation/sitting_45g",
+  "manifest": "results/sitting_45g2_manifest.json",
+  "provenance": "team-lead-LLM triage with operator adjudication and operator spot-check",
+  "capture_log": "docs/quiz-sitting-45g-log.md",
+  "rule": "Per stratum: agreement = rows marked `correct` / 100 rows of that stratum shipped. A row is `correct` only if EVERY field is right — sentiment, sarcasm, intents and unclear together; one wrong field makes the row `incorrect`. A blank cell or any other value counts as `incorrect`. Each stratum passes at >= 0.90 on its own; a stratum below the bar sends its WHOLE batch back for re-labelling, not just the 100 shown. Registered before the pack was handed over and not recomputed on any other denominator.",
+  "bar": 0.9,
+  "second_round": "A stratum below the bar sends its whole batch back — `population` below is that batch, and it is the number of rows re-labelled, not the 100 judged.",
+  "verdict_forms": [
+    "correct",
+    "incorrect"
+  ],
+  "blank_counts_as": "incorrect",
+  "strata": {
+    "general": {
+      "n": 100,
+      "correct": 81,
+      "tally": {
+        "correct": 81,
+        "incorrect": 19
+      },
+      "agreement": 0.81,
+      "verdict": "FAIL",
+      "population": 859
+    },
+    "service-rich": {
+      "n": 100,
+      "correct": 88,
+      "tally": {
+        "correct": 88,
+        "incorrect": 12
+      },
+      "agreement": 0.88,
+      "verdict": "FAIL",
+      "population": 382
+    },
+    "short-text <= 30 chars": {
+      "n": 100,
+      "correct": 89,
+      "tally": {
+        "correct": 89,
+        "incorrect": 11
+      },
+      "agreement": 0.89,
+      "verdict": "FAIL",
+      "population": 671
+    }
+  },
+  "passed": [],
+  "failed": [
+    "general",
+    "service-rich",
+    "short-text <= 30 chars"
+  ],
+  "second_round_rows": 1912,
+  "totals": {
+    "rows": 300,
+    "correct": 258,
+    "tally": {
+      "correct": 258,
+      "incorrect": 42
+    },
+    "agreement": 0.86,
+    "note": "The corpus-wide number, reported and never gated: the bar is per stratum on its own denominator, and a total is an average over three of them."
+  },
+  "recount_matches_log": true,
+  "recorded_in_log": {
+    "correct": 258,
+    "incorrect": 42
+  },
+  "incorrect_in_passed_strata": [],
+  "returned_sha256": "f181ade3719f061d5edf1b47d308f95c2b0536928f76f71b2b5828f753a5c766",
+  "sealed_sha256": "c0d7656fe3a9629629705f55f27a04cc5b6e600ae6115cc58e61d3e343e619e4",
+  "sha256_note": "The two differ by design: `verdict` and `notes` came back filled. Identity is proved on the seven frozen columns cell by cell against a rebuild of the sealed pack, which reproduces `sealed_sha256` before any verdict is read.",
+  "rows": [
+    {
+      "id": "@VARUS_channel:13806",
+      "verdict": "correct",
+      "notes": ""
+    },
+    {
+      "id": "@msuaaaa:8964",
+      "verdict": "correct",
+      "notes": ""
+    },
+    {
+      "id": "@VARUS_channel:6117",
+      "verdict": "correct",
+      "notes": ""
+    },
+    {
+      "id": "@VARUS_channel:5680",
+      "verdict": "correct",
+      "notes": ""
+    },
+    {
+      "id": "@msuaaaa:6967",
+      "verdict": "correct",
+      "notes": ""
+    },
+    {
+      "id": "@VARUS_channel:3330",
+      "verdict": "correct",
+      "notes": ""
+    },
+    {
+      "id": "@VARUS_channel:18800",
+      "verdict": "correct",
+      "notes": ""
+    },
+    {
+      "id": "@msuaaaa:12512",
+      "verdict": "correct",
+      "notes": ""
+    },
+    {
+      "id": "@VARUS_channel:8942",
+      "verdict": "correct",
+      "notes": ""
+    },
+    {
+      "id": "@VARUS_channel:17785",
+      "verdict": "correct",
+      "notes": ""
+    },
+    {
+      "id": "@msuaaaa:7730",
+      "verdict": "correct",
+      "notes": ""
+    },
+    {
+      "id": "@VARUS_channel:8038",
+      "verdict": "correct",
+      "notes": ""
+    },
+    {
+      "id": "@VARUS_channel:3068",
+      "verdict": "correct",
+      "notes": ""
+    },
+    {
+      "id": "@VARUS_channel:18767",
+      "verdict": "correct",
+      "notes": ""
+    },
+    {
+      "id": "@VARUS_channel:1922",
+      "verdict": "correct",
+      "notes": ""
+    },
+    {
+      "id": "@msuaaaa:9814",
+      "verdict": "correct",
+      "notes": ""
+    },
+    {
+      "id": "@VARUS_channel:12291",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:7740",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:4072",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:11259",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:2693",
+      "verdict": "incorrect",
+      "notes": "tl-llm: unclear should be true — reply aimed at another commenter"
+    },
+    {
+      "id": "@VARUS_channel:15421",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:8335",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:301",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:11776",
+      "verdict": "incorrect",
+      "notes": "tl-llm: intents should be [\"taste\"] — dish answer under food poll, operator precedent 12062"
+    },
+    {
+      "id": "@VARUS_channel:159",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:9806",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:18241",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:11924",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:3444",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:3989",
+      "verdict": "incorrect",
+      "notes": "verdict: operator (P6)"
+    },
+    {
+      "id": "@VARUS_channel:8409",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:2370",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:9779",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:18200",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:5247",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:8755",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:12286",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:190",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:8396",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:19722",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:16632",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:1338",
+      "verdict": "incorrect",
+      "notes": "tl-llm: unclear should be true — corporate voice (\"щоб ми все детально перевірили\")"
+    },
+    {
+      "id": "@VARUS_channel:2694",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:9780",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:8906",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:8292",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:12007",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:12621",
+      "verdict": "incorrect",
+      "notes": "verdict: operator, amended 2026-08-03 — sarcasm should be TRUE (mock-elevation: ketchup as «kimchi») AND intents [\"taste\"]; precheck wrong on two fields"
+    },
+    {
+      "id": "@VARUS_channel:9061",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:16668",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:12283",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:328",
+      "verdict": "incorrect",
+      "notes": "tl-llm: unclear should be true — reply aimed at another commenter"
+    },
+    {
+      "id": "@VARUS_channel:8648",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:11605",
+      "verdict": "incorrect",
+      "notes": "tl-llm: intents should be [\"taste\"] — dish answer under food poll (precedent 12062/11776)"
+    },
+    {
+      "id": "@VARUS_channel:12272",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:5998",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:19358",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:330",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:18782",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:6509",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:1806",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:11861",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:6564",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:9715",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:11660",
+      "verdict": "correct",
+      "notes": "verdict: operator (P1 offtopic->unclear)"
+    },
+    {
+      "id": "@msuaaaa:5989",
+      "verdict": "correct",
+      "notes": "verdict: operator (positive+price as prechecked)"
+    },
+    {
+      "id": "@msuaaaa:8051",
+      "verdict": "incorrect",
+      "notes": "tl-llm: banter aimed at the channel author — unclear should be true; positive+[\"price\"] unsupported by text"
+    },
+    {
+      "id": "@VARUS_channel:14778",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:15587",
+      "verdict": "correct",
+      "notes": "verdict: operator (retailer accusation outweighs addressee -> scoreable service)"
+    },
+    {
+      "id": "@VARUS_channel:6434",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:6522",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:11802",
+      "verdict": "correct",
+      "notes": "verdict: operator (P1)"
+    },
+    {
+      "id": "@VARUS_channel:9106",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:9053",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:8455",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:18850",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:1694",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:8950",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:11793",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:8478",
+      "verdict": "incorrect",
+      "notes": "verdict: operator-P7 retroactive — [] should be [\"service\"] (bare praise of conduct); earlier tl-llm correct overturned by the operator ruling"
+    },
+    {
+      "id": "@VARUS_channel:4262",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:19408",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:8749",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:7706",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:9389",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:17864",
+      "verdict": "incorrect",
+      "notes": "tl-llm: unclear should be true — reply aimed at another commenter («ваша дочка»)"
+    },
+    {
+      "id": "@msuaaaa:8213",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:6578",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:9434",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:7711",
+      "verdict": "incorrect",
+      "notes": "tl-llm: unclear should be true — half of a commenter-to-commenter spat («Я не ДИТИНА»); [\"service\"] unsupported"
+    },
+    {
+      "id": "@VARUS_channel:17718",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:1339",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:5840",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:1272",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:7727",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:4697",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:8028",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:6948",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:12279",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:8280",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:5993",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:8256",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:8947",
+      "verdict": "incorrect",
+      "notes": "tl-llm: intents should be [\"service\"] — negative reaction to the game/promo (wide-service doctrine)"
+    },
+    {
+      "id": "@VARUS_channel:8394",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:11262",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:6121",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:874",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:18095",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:11871",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:9898",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:19072",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:11106",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:4692",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:1786",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:8916",
+      "verdict": "incorrect",
+      "notes": "tl-llm: intents should be [\"service\"] — praise of the promo (pattern P2: positive promo-reactions are service, symmetric with скам/лохотрон rows)"
+    },
+    {
+      "id": "@VARUS_channel:19919",
+      "verdict": "incorrect",
+      "notes": "tl-llm: sarcasm should be false — «пиль пускають» is an idiom, literal accusation, no mock praise"
+    },
+    {
+      "id": "@VARUS_channel:20830",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:18082",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:12338",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:9798",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:13302",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:18232",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:6421",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:3631",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:10136",
+      "verdict": "incorrect",
+      "notes": "tl-llm: unclear should be true — attack aimed at other commenters («у вас ноги не працюють»)"
+    },
+    {
+      "id": "@VARUS_channel:14884",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:3513",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:7747",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:2692",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:11606",
+      "verdict": "incorrect",
+      "notes": "tl-llm: intents should be [\"taste\"] — poll answer naming dishes (precedent 12062/11776/11605)"
+    },
+    {
+      "id": "@VARUS_channel:4317",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:11507",
+      "verdict": "incorrect",
+      "notes": "tl-llm: intents should be [\"packaging\"] — design complaint (operator-confirmed precedent 10363)"
+    },
+    {
+      "id": "@VARUS_channel:4704",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:11798",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:13212",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:6103",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:8744",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:249",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:6533",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:11876",
+      "verdict": "incorrect",
+      "notes": "tl-llm: [\"availability\"] wrong — mocking a novelty claim, not product presence (true value [] or service, for the guideline round)"
+    },
+    {
+      "id": "@VARUS_channel:18839",
+      "verdict": "incorrect",
+      "notes": "tl-llm: [\"availability\"] wrong — queue joke; queue at the till is service by the guideline letter"
+    },
+    {
+      "id": "@VARUS_channel:7679",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:16091",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:4662",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:10113",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:13194",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:9180",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:9649",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:7068",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:9271",
+      "verdict": "incorrect",
+      "notes": "tl-llm: unclear should be false, and a disappointed prize report is a promo-reward reaction (service family) — scoreable row lost"
+    },
+    {
+      "id": "@VARUS_channel:12341",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:5989",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:3626",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:14229",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:8966",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:4817",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:10394",
+      "verdict": "incorrect",
+      "notes": "tl-llm: unclear should be true — advice aimed at another commenter (rule: reply to commenter)"
+    },
+    {
+      "id": "@VARUS_channel:6530",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:6913",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:20490",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:17855",
+      "verdict": "incorrect",
+      "notes": "tl-llm: unclear should be true — question to another commenter («у доньки»), same thread as 17864"
+    },
+    {
+      "id": "@VARUS_channel:16461",
+      "verdict": "incorrect",
+      "notes": "tl-llm: unclear should be false — bare thanks is scoreable [] positive (guideline letter; cf. row 18800)"
+    },
+    {
+      "id": "@VARUS_channel:12339",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:7762",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:8932",
+      "verdict": "incorrect",
+      "notes": "tl-llm: intents incomplete — «не смачними» is explicit taste beside quality; guideline says label both"
+    },
+    {
+      "id": "@VARUS_channel:738",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:11281",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:8062",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:9962",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:6944",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:8831",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:1693",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:9243",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:6722",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:8967",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:264",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:12647",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:12151",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:11602",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:11939",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:12050",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:12006",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:11970",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:12234",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:245",
+      "verdict": "incorrect",
+      "notes": "tl-llm: unclear should be false — unambiguous positive emoji is scoreable (guideline: 👍❤️ → positive, [])"
+    },
+    {
+      "id": "@VARUS_channel:4292",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:17267",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:9650",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:3227",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:9457",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:8903",
+      "verdict": "incorrect",
+      "notes": "tl-llm: unclear should be false — comprehensible poll answer, scoreable"
+    },
+    {
+      "id": "@VARUS_channel:16928",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:3254",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:7545",
+      "verdict": "incorrect",
+      "notes": "tl-llm: unclear should be true — bare one-word «Как?» (one-word family: О/Дивно/Робобот)"
+    },
+    {
+      "id": "@VARUS_channel:20939",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:12648",
+      "verdict": "incorrect",
+      "notes": "tl-llm: sentiment should be positive — thanks per the guideline letter (thanks → positive)"
+    },
+    {
+      "id": "@VARUS_channel:8801",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:8951",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:9145",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:9432",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:7771",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:11026",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:7814",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:9638",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:4516",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:11329",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:9804",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:14515",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:8688",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:16483",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:6487",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:18511",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:8850",
+      "verdict": "incorrect",
+      "notes": "tl-llm: unclear should be true — reply to another commenter about their score («Вы не могли быть в сотне»)"
+    },
+    {
+      "id": "@msuaaaa:7861",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:6489",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:2798",
+      "verdict": "incorrect",
+      "notes": "tl-llm: [] should be [\"service\"] — promo-mechanics question (P5: precheck reproduces the v1 habit the law moved)"
+    },
+    {
+      "id": "@msuaaaa:6923",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:1998",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:4922",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:8264",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:9803",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:6239",
+      "verdict": "incorrect",
+      "notes": "tl-llm: [] should be [\"service\"] — promo-terms clarification question (P5)"
+    },
+    {
+      "id": "@VARUS_channel:1682",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:11985",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:8332",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:7467",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:20474",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:12325",
+      "verdict": "incorrect",
+      "notes": "tl-llm: [] should be [\"service\"] — promo-scope question (P5)"
+    },
+    {
+      "id": "@VARUS_channel:7681",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:11990",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:5087",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:7074",
+      "verdict": "incorrect",
+      "notes": "tl-llm: unclear should be true — argumentative reply to another commenter, defending the store"
+    },
+    {
+      "id": "@VARUS_channel:8757",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:14759",
+      "verdict": "incorrect",
+      "notes": "tl-llm: [\"price\"] should be [\"availability\"] — «нічого не дістанеться з акційного» is missing goods, not price"
+    },
+    {
+      "id": "@VARUS_channel:283",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:1271",
+      "verdict": "incorrect",
+      "notes": "verdict: operator (P6 boilerplate=corporate voice -> unclear should be true)"
+    },
+    {
+      "id": "@msuaaaa:7694",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:19821",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:16999",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:7065",
+      "verdict": "incorrect",
+      "notes": "verdict: operator — sarcasm should be true (mock-quote, scare-quote family)"
+    },
+    {
+      "id": "@VARUS_channel:7330",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:7555",
+      "verdict": "incorrect",
+      "notes": "tl-llm: [\"availability\"] wrong — «что попало?» asks box contents, not presence"
+    },
+    {
+      "id": "@VARUS_channel:12224",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:13195",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:10395",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:4663",
+      "verdict": "incorrect",
+      "notes": "verdict: operator (P6)"
+    },
+    {
+      "id": "@VARUS_channel:2477",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:20505",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:18779",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:8849",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:3628",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:19062",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:3445",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:1329",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:4693",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:11409",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:6545",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:9370",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:9200",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:10150",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:21626",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:6505",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:8964",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:19583",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:15504",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:8004",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:19824",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:5991",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:16953",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:6723",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:9034",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:7651",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:9811",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:9001",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:9055",
+      "verdict": "incorrect",
+      "notes": "verdict: operator (P6)"
+    },
+    {
+      "id": "@VARUS_channel:4790",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:6947",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:9724",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:11615",
+      "verdict": "incorrect",
+      "notes": "tl-llm: [] should be [\"taste\"] — dish answer under food poll (4th of the family)"
+    },
+    {
+      "id": "@VARUS_channel:8653",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:8780",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:12326",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:11369",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:14891",
+      "verdict": "incorrect",
+      "notes": "tl-llm: unclear should be true — personal attack aimed at another commenter"
+    },
+    {
+      "id": "@VARUS_channel:113",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:8428",
+      "verdict": "correct",
+      "notes": "verdict: operator (P7 bare praise of conduct -> [\"service\"], as prechecked)"
+    },
+    {
+      "id": "@VARUS_channel:7786",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:13696",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:323",
+      "verdict": "incorrect",
+      "notes": "tl-llm: unclear should be true — argument with another commenter («Максимально некоректний коментар»)"
+    },
+    {
+      "id": "@VARUS_channel:11664",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:8943",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:6542",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:8649",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:6511",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:12260",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:8839",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:7337",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:7356",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:8788",
+      "verdict": "correct",
+      "notes": "tl-llm"
+    }
+  ],
+  "rows_note": "Every verdict and its note, kept here because the returned CSV is gitignored and this record is the committed copy of an evening nobody will sit through twice.",
+  "git": {
+    "commit": "972fa26c2040d6709ad38270ed951c28ca3e0cdc",
+    "dirty": [
+      "scripts/read_sitting_returns.py"
+    ]
+  }
+}
