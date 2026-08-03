@@ -36,3 +36,4 @@ docs/STATUS.md; these are the English long form with the numbers.
 | 2026-08-02 | [[45g-parent-context-and-uplabel]] — the parent post joins the v2 prompts as new revisions; the 97 emptied rows re-asked; the 1,912 up-label goes as a calibrated precheck | accepted |
 | 2026-08-03 | [[45g2-captions-and-quiz-rulings]] — the 11/20 quiz applies 11 rows plus one validated pattern; media-only posts get an image caption or a poll transcript; the sitting is resealed | accepted |
 | 2026-08-03 | [[45g3-sitting-gates]] — all three strata FAIL (88/89/81); guideline v2.1 from the sitting rulings; the whole 1,912 re-labelled under `precheck_v2.1_with_post` and a fresh blind hundred sealed | accepted |
+| 2026-08-03 | [[45g4-v22-affirmative-rewrite]] — the v2.1 rulings restated affirmatively as v2.2 (FORM-ONLY); a 100-row in-sample probe pre-registered and gated before any full re-run | accepted |

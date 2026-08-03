@@ -8,6 +8,7 @@ model is allowed to say, and what it is not — because a lenient parser that
 """
 
 import json
+import re
 from pathlib import Path
 
 import pytest
@@ -44,6 +45,8 @@ def test_prompts_carry_no_labelled_examples():
         "precheck_v2_with_post",
         "T1v2.1",
         "precheck_v2.1_with_post",
+        "T1v2.2",
+        "precheck_v2.2_with_post",
     ):
         text = prompts.PROMPTS[task]
         assert "example" not in text.casefold()
@@ -66,6 +69,8 @@ def test_taxonomy_v2_prompts_are_registered_beside_v1_and_not_inside_it():
         "caption_post",
         "T1v2.1",
         "precheck_v2.1_with_post",
+        "T1v2.2",
+        "precheck_v2.2_with_post",
     }
     # the label tables describe labelling tasks: the caption prompt answers in prose and is in
     # none of them, and `T2` labels a post rather than a comment
@@ -77,7 +82,7 @@ def test_taxonomy_v2_prompts_are_registered_beside_v1_and_not_inside_it():
     assert not prompts.FREE_TEXT & prompts.WITH_POST
     assert {task: prompts.prompt_sha256(task) for task in prompts.TASKS} == PROMPT_SHA256
     assert prompts.prompt_sha256("T1v2") != PROMPT_SHA256["T1"]
-    # ten prompts, ten hashes: a derived revision that collided with its base would
+    # twelve prompts, twelve hashes: a derived revision that collided with its base would
     # make two measurements indistinguishable in a record
     assert len({prompts.prompt_sha256(task) for task in prompts.PROMPTS}) == len(prompts.PROMPTS)
 
@@ -498,6 +503,98 @@ def test_v2_1_is_v2_plus_the_settled_cases_and_nothing_else():
         == prompts.COMMENT_FIELDS["precheck_v2_with_post"]
     )
     assert "precheck_v2.1_with_post" in prompts.WITH_POST and "T1v2.1" not in prompts.WITH_POST
+
+
+CANONICAL_V2_2 = """\
+Cases the annotation guideline has since settled, and they outrank the general wording above:
+- A joke, a piece of trivia or banter on a topic other than the product or the retailer: set \
+unclear true.
+- Unsigned support wording about demand, stock or how a promo runs is the retailer speaking \
+in its own voice: set unclear true, the same as for any reply the retailer signs.
+- Praise of how the retailer behaves takes intents ["service"], exactly as a complaint about \
+the same conduct does.
+- A question about how a promo works, what its terms are or who it applies to takes intents \
+["service"].
+- A comment aimed at another commenter: set unclear true. When it accuses the retailer \
+directly, the accusation outranks the addressee: set unclear false and judge it normally.
+- An answer naming a dish, a filling or a food someone likes — as a joke or a childhood \
+memory included — takes intents ["taste"].
+- A quotation used to mock what it quotes — the retailer's own words, an app message or a \
+promo line — sets sarcasm true, and so does a joke that elevates something ordinary into \
+something grander.
+- Bare thanks and a single unambiguous emoji are readable reactions: set unclear false, read \
+the sentiment, and give intents [].\
+"""
+"""The v2.2 block as `docs/PROMPT-4.5g4.md` wrote it — a second copy, on purpose.
+
+The team lead wrote this text and the executor transcribed it; a transcription is the one
+change nobody reviews, because it is supposed to be a copy. Wrapped at a different width from
+the constant it checks — the continuations vanish at parse time, so the two literals differ in
+the file and agree in value, and an edit to either one has to break this."""
+
+
+def test_the_v2_2_block_is_the_text_the_prompt_handed_over():
+    """Whitespace-insensitive and content-exact: the realistic defect is a lost space at a
+    line join (`consumer\\` + `reaction` -> `consumerreaction`), which normalising catches and
+    an eyeball does not."""
+    assert " ".join(prompts.SETTLED_CASES_V2_2.split()) == " ".join(CANONICAL_V2_2.split())
+    assert prompts.SETTLED_CASES_V2_2.count("\n- ") == 8, "eight lines for eight settled cases"
+
+
+def test_the_v2_2_block_states_every_rule_affirmatively():
+    """The whole hypothesis of 4.5g4. v2.1 said what a case is *not* — "is not a consumer
+    reaction at all", "never `price`", "carries no intent" — and the label space moved the way
+    a model reading those positively would move it. A negation reaching this block again is the
+    regression coming back, so it fails here rather than $0.04 later."""
+    negation = re.compile(r"\b(not|never|no|none|neither|nor)\b|n't", re.IGNORECASE)
+    assert not negation.findall(prompts.SETTLED_CASES_V2_2)
+    # the negative control: the guard is only worth having if it fires on the block it replaces
+    assert negation.findall(prompts.SETTLED_CASES)
+    # `false` is a field value, not a negation, and every line has to name a field and a value
+    assert "set unclear false" in prompts.SETTLED_CASES_V2_2
+    for line in prompts.SETTLED_CASES_V2_2.split("\n- ")[1:]:
+        assert any(field in line for field in ("unclear", "intents", "sarcasm", "sentiment"))
+
+
+def test_v2_2_is_v2_plus_the_affirmative_block_at_the_v2_1_position():
+    """One variable moves. The block is inserted where v2.1's was, so a difference between the
+    two runs is the wording and not a block that travelled up the prompt."""
+    assert prompts.T1_PROMPT_V2_2 == prompts.T1_PROMPT_V2.replace(
+        "\nAnswer with one JSON object",
+        f"\n{prompts.SETTLED_CASES_V2_2}\n\nAnswer with one JSON object",
+    )
+    old, new = prompts.PRECHECK_PROMPT_V2_WITH_POST, prompts.PRECHECK_PROMPT_V2_2_WITH_POST
+    assert new.replace(f"\n{prompts.SETTLED_CASES_V2_2}\n", "") == old
+    # same insertion point as v2.1: what precedes and follows the block is byte-identical
+    before_2_1, after_2_1 = prompts.PRECHECK_PROMPT_V2_1_WITH_POST.split(prompts.SETTLED_CASES)
+    before_2_2, after_2_2 = new.split(prompts.SETTLED_CASES_V2_2)
+    assert (before_2_1, after_2_1) == (before_2_2, after_2_2)
+    assert prompts.UNCLEAR_RULE in new, "the fourth field's wording is v2's and stays v2's"
+    assert (
+        prompts.COMMENT_FIELDS["precheck_v2.2_with_post"]
+        == prompts.COMMENT_FIELDS["precheck_v2_with_post"]
+    )
+    assert "precheck_v2.2_with_post" in prompts.WITH_POST and "T1v2.2" not in prompts.WITH_POST
+    assert len({prompts.prompt_sha256(task) for task in ("T1v2", "T1v2.1", "T1v2.2")}) == 3
+
+
+def test_every_v2_2_line_maps_to_a_v2_1_line_the_changelog_names():
+    """v2.2 is FORM-ONLY: eight rulings in, eight rulings out, and the changelog says so line
+    by line. A ruling quietly dropped or added would be new law arriving as a rewrite."""
+    text = GUIDELINE.read_text(encoding="utf-8")
+    assert "## v2.2 changelog" in text
+    changelog = " ".join(text.split()).split("v2.2 changelog")[1]
+    assert "FORM-ONLY" in changelog
+    assert prompts.SETTLED_CASES.count("\n- ") == prompts.SETTLED_CASES_V2_2.count("\n- ")
+    for task in ("T1v2.2", "precheck_v2.2_with_post", "T1v2.1", "precheck_v2.1_with_post"):
+        assert f"{prompts.prompt_sha256(task)[:8]}" in changelog, task
+    for field, value in (
+        ("unclear", "true"),
+        ("intents", '["service"]'),
+        ("intents", '["taste"]'),
+        ("sarcasm", "true"),
+    ):
+        assert f"{field} {value}" in prompts.SETTLED_CASES_V2_2
 
 
 def test_every_settled_case_is_a_ruling_the_guideline_carries():

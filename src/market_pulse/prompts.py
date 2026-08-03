@@ -290,6 +290,39 @@ not beside it: where the guideline and the prompt disagree the gap is charged to
 last line restates a v2 clause rather than adding law — the sitting applied it as written and
 the precheck had been over-marking those rows."""
 
+SETTLED_CASES_V2_2 = """\
+Cases the annotation guideline has since settled, and they outrank the general wording above:
+- A joke, a piece of trivia or banter on a topic other than the product or the retailer: set \
+unclear true.
+- Unsigned support wording about demand, stock or how a promo runs is the retailer speaking in \
+its own voice: set unclear true, the same as for any reply the retailer signs.
+- Praise of how the retailer behaves takes intents ["service"], exactly as a complaint about the \
+same conduct does.
+- A question about how a promo works, what its terms are or who it applies to takes intents \
+["service"].
+- A comment aimed at another commenter: set unclear true. When it accuses the retailer directly, \
+the accusation outranks the addressee: set unclear false and judge it normally.
+- An answer naming a dish, a filling or a food someone likes — as a joke or a childhood memory \
+included — takes intents ["taste"].
+- A quotation used to mock what it quotes — the retailer's own words, an app message or a promo \
+line — sets sarcasm true, and so does a joke that elevates something ordinary into something \
+grander.
+- Bare thanks and a single unambiguous emoji are readable reactions: set unclear false, read the \
+sentiment, and give intents [].\
+"""
+"""The same eight rulings as :data:`SETTLED_CASES`, said affirmatively — v2.2 (4.5g4).
+
+The law is unchanged and the mapping is line for line (`docs/annotation/comments.md`, section
+`v2.2 changelog`, marked FORM-ONLY). What changed is the voice: every line now names the output
+field and the value it takes, where v2.1 said what a case is *not* — "is not a consumer reaction
+at all", "never `price`", "carries no intent". The 4.5g3 re-run under v2.1 moved 172 of the 258
+rows the sitting had accepted and landed 10 of its 29 stated rulings, and the label space moved
+the way a model reading those negations positively would move it: `price` 110 → 313, rows with
+no intent 809 → 1,366. One variable moves here — this block's wording. :data:`UNCLEAR_RULE` and
+the position of the insertion are untouched, because both were in v2, which scored 86%.
+
+The last line still restates a v2 clause rather than adding law, exactly as v2.1's did."""
+
 UNCLEAR_RULE = """\
 unclear — true when the row must not be scored at all: it is not a consumer reaction, or it \
 cannot be read. Mark it for a participation marker under a giveaway post, for ambiguous or mixed \
@@ -367,6 +400,34 @@ PRECHECK_PROMPT_V2_1_WITH_POST = _swap(
 :data:`PRECHECK_PROMPT_V2_WITH_POST` — the failed strata are re-labelled on the rules that moved
 and on nothing else, so a difference in the returned labels is the rulings and not the wording."""
 
+T1_PROMPT_V2_2 = _swap(
+    T1_PROMPT_V2,
+    "\nAnswer with one JSON object",
+    f"\n{SETTLED_CASES_V2_2}\n\nAnswer with one JSON object",
+)
+"""T1 under taxonomy v2.2 — the v2 prompt with the settled cases said affirmatively.
+
+Derived from :data:`T1_PROMPT_V2` and inserted at the same position as v2.1, so that the only
+difference between the two revisions is the block itself: a change of position would be a second
+variable and neither run could be charged to one of them."""
+
+T1_PROMPT_V2_2_WITH_POST = _swap(T1_PROMPT_V2_2, JUDGE_TEXT_ALONE, PARENT_POST_RULE)
+"""The v2.2 base with the parent-post clause. A build step, not a registered instrument, for the
+same reason its v2.1 sibling is not one: nothing asks for it."""
+
+PRECHECK_PROMPT_V2_2_WITH_POST = _swap(
+    _swap(
+        _swap(T1_PROMPT_V2_2_WITH_POST, "Return three labels.", "Return four labels."),
+        "\nAnswer with one JSON object",
+        f"\n{UNCLEAR_RULE}\n\nAnswer with one JSON object",
+    ),
+    _shape_v2,
+    _shape_v2[:-1] + ', "unclear": true|false}',
+)
+"""What the 4.5g4 probe asks. The same three swaps as its v2 and v2.1 siblings, so the whole
+difference from `precheck_v2.1_with_post` is the settled-cases block — which is what makes the
+probe attributable to the rewrite rather than to a rewording somewhere else in the prompt."""
+
 PROMPTS = {
     "T1": T1_PROMPT,
     "T2": T2_PROMPT,
@@ -378,6 +439,8 @@ PROMPTS = {
     "caption_post": CAPTION_POST_PROMPT,
     "T1v2.1": T1_PROMPT_V2_1,
     "precheck_v2.1_with_post": PRECHECK_PROMPT_V2_1_WITH_POST,
+    "T1v2.2": T1_PROMPT_V2_2,
+    "precheck_v2.2_with_post": PRECHECK_PROMPT_V2_2_WITH_POST,
 }
 CAPTION_TASK = "caption_post"
 FREE_TEXT = frozenset({CAPTION_TASK})
@@ -392,6 +455,7 @@ WITH_POST = frozenset(
         "relabel_intents_v2_with_post",
         "precheck_v2_with_post",
         "precheck_v2.1_with_post",
+        "precheck_v2.2_with_post",
     }
 )
 """The tasks whose request carries the parent post. :func:`build_messages` requires one for
@@ -408,6 +472,8 @@ DELIMITERS = {
     "precheck_v2_with_post": "comment",
     "T1v2.1": "comment",
     "precheck_v2.1_with_post": "comment",
+    "T1v2.2": "comment",
+    "precheck_v2.2_with_post": "comment",
 }
 INTENTS_OF = {
     "T1": INTENTS,
@@ -418,6 +484,8 @@ INTENTS_OF = {
     "precheck_v2_with_post": INTENTS_V2,
     "T1v2.1": INTENTS_V2,
     "precheck_v2.1_with_post": INTENTS_V2,
+    "T1v2.2": INTENTS_V2,
+    "precheck_v2.2_with_post": INTENTS_V2,
 }
 """The label space each prompt promises — v1 asks for five, the v2 prompts for six.
 
@@ -435,6 +503,8 @@ COMMENT_FIELDS = {
     "precheck_v2_with_post": ("sentiment", "sarcasm", "intents", "unclear"),
     "T1v2.1": ("sentiment", "sarcasm", "intents"),
     "precheck_v2.1_with_post": ("sentiment", "sarcasm", "intents", "unclear"),
+    "T1v2.2": ("sentiment", "sarcasm", "intents"),
+    "precheck_v2.2_with_post": ("sentiment", "sarcasm", "intents", "unclear"),
 }
 """What each comment prompt asks for, and therefore what :func:`parse_reply` returns.
 

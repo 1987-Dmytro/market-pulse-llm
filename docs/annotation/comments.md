@@ -232,3 +232,44 @@ complaint whose referent cannot be recovered even with the post is `[]` + `uncle
 **What this does not change.** The six v2 intents, the `unclear` definition, the §Unit rule and
 the self-agreement gate are as written above. v2.1 adds boundary rulings; it does not move a
 label space.
+
+## v2.2 changelog — the same eight rulings, said affirmatively (2026-08-03)
+
+**FORM-ONLY. No law moves here.** Every ruling above stands exactly as v2.1 wrote it, and this
+section changes nothing an annotator does. What it records is a change to the *prompt*: the
+eight rulings, as the model reads them, are restated so that each one names the output field
+and the value it takes.
+
+The reason is measured, not aesthetic. The 4.5g3 re-run put v2.1's rulings in front of the
+model as negations — "is not a consumer reaction at all", "never `price`", "carries no intent"
+— and the batch came back worse than the one it replaced: 1,153 of 1,912 rows moved a field,
+172 of the 258 rows the sitting had accepted moved with them, and of the 29 rows whose right
+answer the verdicts stated outright the revision got 10. The label space moved the way a model
+reading those negations positively would move it — `price` 110 → 313, rows with no intent
+809 → 1,366 (`results/rerun_45g3.json`, `knowledge/decisions/45g3-sitting-gates.md`). A rule
+the model is told in the negative names a value it must not write and leaves it to guess the
+one it must.
+
+The mapping, line by line. Left: v2.1 as `prompts.SETTLED_CASES` renders it. Right: v2.2, in
+`prompts.SETTLED_CASES_V2_2`. The ruling each line implements is the numbered one above.
+
+| # | v2.1 said | v2.2 says | ruling |
+|---|---|---|---|
+| 1 | off-topic banter "is not a consumer reaction at all" | banter on a topic other than the product or the retailer: **set `unclear` true** | 1 |
+| 2 | an unsigned retailer reply "counts as one even when it carries none of the usual markers" | unsigned support wording is the retailer speaking in its own voice: **set `unclear` true** | 2 |
+| 3 | praise of conduct "is `service`" | praise of how the retailer behaves **takes `intents ["service"]`** | 3 |
+| 4 | a promo question "is `service` — never `price`, and never no intent at all" | a question about how a promo works **takes `intents ["service"]`** | 4 |
+| 5 | a reply to another commenter "is not a reaction to judge, unless it accuses the retailer" | a comment aimed at another commenter: **set `unclear` true**; a direct accusation: **set `unclear` false** and judge normally | 5 |
+| 6 | a dish answer "is `taste`" | an answer naming a dish, a filling or a food someone likes **takes `intents ["taste"]`** | 6 + its amendment |
+| 7 | a mock quotation "is sarcasm" | a quotation used to mock what it quotes **sets `sarcasm` true** | 7 |
+| 8 | bare thanks "are judged, not set aside: read the sentiment, and the comment carries no intent" | bare thanks and a single unambiguous emoji: **set `unclear` false**, read the sentiment, **give `intents []`** | v2 restatement |
+
+Three things did **not** move, deliberately. The `unclear` field's own wording
+(`prompts.UNCLEAR_RULE`) is v2's and stays v2's; the block sits at the same position in the
+prompt as v2.1's did; and the eighth line still restates a v2 clause rather than adding law.
+One variable moves, so a difference between the two runs is attributable to this rewrite and
+to nothing else. Ruling 8 above (`positive` beside `["price"]`) is a ruling about gold and
+reaches no prompt line in either revision.
+
+`prompt_sha256`: `T1v2.2` `8542a1d5…`, `precheck_v2.2_with_post` `02e804b2…`, registered beside
+`T1v2.1` `e131dc06…` and `precheck_v2.1_with_post` `95d506c4…`, which are unmoved.
