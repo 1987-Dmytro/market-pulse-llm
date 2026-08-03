@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-03 20:34:24 (every SessionStart)
+**Auto-refreshed:** 2026-08-03 20:48:07 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+c370537 fix: "23 of 42" was co-occurrence, and "10 of 45" averaged two opposite senders
 cf4ade3 chore: the team lead's channel-expansion entry policy, committed verbatim
 384e12c feat: both families measured, and the big one is the expensive one
 f807094 feat: comments_v2 — 11,338 rows that now know what they replied to
 64fd863 feat: the family measurement, committed before the numbers exist
-5b0c036 feat: the second pass that backfills a comment's reply target
 ```
 
 ## 📋 Recent decisions
@@ -31,7 +31,7 @@ f807094 feat: comments_v2 — 11,338 rows that now know what they replied to
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-03 20:23 (after `PROMPT-4.5g5` — **path A executed at $0.00: 35 adjudicated verdicts are in the batch, the collector stores `reply_to_msg_id`, 11,338 comments were re-fetched into `data/raw/comments_v2/`, and both error families are measured.** The reply family covers 23 of the 42 refusals and a blanket rule over it would flip **62 of the 258** judged-correct rows; the sender family covers 7 and costs **10 of 45**. 19 refusals are in neither. Nothing was registered and no model was called. All three 4.5g strata still FAIL; the wave-2 hundred is still unjudged. The 4.5f calibration gate stays PASS at 100/100; test v3 is frozen beside v2; Phase 4 stays closed at 2 of 5 against v2; edited by hand — the section above is auto-generated, do NOT touch the marker)
+**Last update:** 2026-08-03 20:43 (`/save` after `PROMPT-4.5g5` — **path A executed at $0.00: 35 adjudicated verdicts are in the batch, the collector stores `reply_to_msg_id`, 11,338 comments were re-fetched into `data/raw/comments_v2/`, and both error families are measured.** The reply family covers 23 of the 42 refusals and a blanket rule over it would flip **62 of the 258** judged-correct rows; the sender family covers 7 and costs **10 of 45**. 19 refusals are in neither. Nothing was registered and no model was called. All three 4.5g strata still FAIL; the wave-2 hundred is still unjudged. The 4.5f calibration gate stays PASS at 100/100; test v3 is frozen beside v2; Phase 4 stays closed at 2 of 5 against v2; edited by hand — the section above is auto-generated, do NOT touch the marker)
 
 ## 🔥 What's Hot
 
