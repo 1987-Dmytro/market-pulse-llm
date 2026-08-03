@@ -1,0 +1,4556 @@
+{
+  "media": "data/annotation/sitting_45g/posts_media",
+  "posts": 117,
+  "images": 426,
+  "posts_with_an_image": 95,
+  "posts_without_an_image": [
+    "@VARUS_channel:1835",
+    "@VARUS_channel:1844",
+    "@VARUS_channel:2463",
+    "@VARUS_channel:5369",
+    "@VARUS_channel:5859",
+    "@VARUS_channel:6084",
+    "@VARUS_channel:6096",
+    "@VARUS_channel:6198",
+    "@VARUS_channel:6237",
+    "@VARUS_channel:6240",
+    "@VARUS_channel:6257",
+    "@VARUS_channel:7058",
+    "@VARUS_channel:7099",
+    "@VARUS_channel:7146",
+    "@VARUS_channel:7249",
+    "@VARUS_channel:7622",
+    "@VARUS_channel:7857",
+    "@VARUS_channel:8339",
+    "@VARUS_channel:8822",
+    "@VARUS_channel:9158",
+    "@VARUS_channel:9279",
+    "@VARUS_channel:9968"
+  ],
+  "polls": [
+    "@VARUS_channel:2463",
+    "@VARUS_channel:5859",
+    "@VARUS_channel:6084",
+    "@VARUS_channel:6198",
+    "@VARUS_channel:6237",
+    "@VARUS_channel:6240",
+    "@VARUS_channel:6257",
+    "@VARUS_channel:7058",
+    "@VARUS_channel:7099",
+    "@VARUS_channel:7146",
+    "@VARUS_channel:7249",
+    "@VARUS_channel:7622",
+    "@VARUS_channel:7857",
+    "@VARUS_channel:9158",
+    "@VARUS_channel:9279",
+    "@VARUS_channel:9968"
+  ],
+  "media_only_posts": [
+    "@VARUS_channel:1835",
+    "@VARUS_channel:1844",
+    "@VARUS_channel:2329",
+    "@VARUS_channel:2463",
+    "@VARUS_channel:2725",
+    "@VARUS_channel:3427",
+    "@VARUS_channel:3935",
+    "@VARUS_channel:5021",
+    "@VARUS_channel:5177",
+    "@VARUS_channel:5478",
+    "@VARUS_channel:5687",
+    "@VARUS_channel:5736",
+    "@VARUS_channel:5824",
+    "@VARUS_channel:5859",
+    "@VARUS_channel:5915",
+    "@VARUS_channel:6084",
+    "@VARUS_channel:6155",
+    "@VARUS_channel:6198",
+    "@VARUS_channel:6237",
+    "@VARUS_channel:6240",
+    "@VARUS_channel:6257",
+    "@VARUS_channel:6328",
+    "@VARUS_channel:6395",
+    "@VARUS_channel:6545",
+    "@VARUS_channel:7058",
+    "@VARUS_channel:7099",
+    "@VARUS_channel:7122",
+    "@VARUS_channel:7146",
+    "@VARUS_channel:7206",
+    "@VARUS_channel:7249",
+    "@VARUS_channel:7538",
+    "@VARUS_channel:7622",
+    "@VARUS_channel:7686",
+    "@VARUS_channel:7713",
+    "@VARUS_channel:7857",
+    "@VARUS_channel:8135",
+    "@VARUS_channel:8339",
+    "@VARUS_channel:8822",
+    "@VARUS_channel:9158",
+    "@VARUS_channel:9279",
+    "@VARUS_channel:9968"
+  ],
+  "media_only_with_nothing_to_say": [
+    "@VARUS_channel:1835",
+    "@VARUS_channel:1844",
+    "@VARUS_channel:8339",
+    "@VARUS_channel:8822"
+  ],
+  "media_only_note": "A media-only post is not always a picture: 16 of these are polls, whose question and options Telegram carries in a field `raw_store.post_record` never read (`message.raw_text` is empty for a poll). Those are transcribed rather than captioned — same posts, same fetch, one field further, no vision model involved. What is left in `media_only_with_nothing_to_say` is a video, an audio message and two giveaways: named here, never guessed at.",
+  "sources": {
+    "emptied_97": 97,
+    "uplabel_media_only": 424,
+    "unreadable_14": 14
+  },
+  "entries": {
+    "@VARUS_channel:1835": {
+      "channel": "@VARUS_channel",
+      "msg_id": 1835,
+      "asked_by": [
+        "uplabel_media_only"
+      ],
+      "post_has_text": false,
+      "has_media": true,
+      "album": false,
+      "images": [],
+      "poll": null,
+      "missing": [
+        {
+          "msg_id": 1835,
+          "missing": "media is MessageMediaGiveaway"
+        }
+      ]
+    },
+    "@VARUS_channel:1844": {
+      "channel": "@VARUS_channel",
+      "msg_id": 1844,
+      "asked_by": [
+        "uplabel_media_only"
+      ],
+      "post_has_text": false,
+      "has_media": true,
+      "album": false,
+      "images": [],
+      "poll": null,
+      "missing": [
+        {
+          "msg_id": 1844,
+          "missing": "media is MessageMediaGiveawayResults"
+        }
+      ]
+    },
+    "@VARUS_channel:1874": {
+      "channel": "@VARUS_channel",
+      "msg_id": 1874,
+      "asked_by": [
+        "unreadable_14"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 1874,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_1874.jpg",
+          "sha256": "c47d1fdc8fd56b37a6e20cf9f559196134e9c8221ae845bbc4131379f4449538",
+          "bytes": 164089
+        },
+        {
+          "msg_id": 1875,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_1875.jpg",
+          "sha256": "bfa01409774937c5da7ccc05241a87eebcef10dc5e1718c5629155ad355d813c",
+          "bytes": 142978
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:1901": {
+      "channel": "@VARUS_channel",
+      "msg_id": 1901,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": false,
+      "images": [
+        {
+          "msg_id": 1901,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_1901.jpg",
+          "sha256": "7210c52834bd2946ab401c75c091898b7ef8b5e26ff605162eacae72e188cbb5",
+          "bytes": 169828
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:2295": {
+      "channel": "@VARUS_channel",
+      "msg_id": 2295,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 2295,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_2295.jpg",
+          "sha256": "86add9f45605dcf4703eec037b31b2a4cb693904cb6e971965425a771e19ef3c",
+          "bytes": 241078
+        },
+        {
+          "msg_id": 2296,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_2296.jpg",
+          "sha256": "74386555434be8526e4da67eeef4752a824152345ee42dd1d29a98740797f7bc",
+          "bytes": 242087
+        },
+        {
+          "msg_id": 2297,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_2297.jpg",
+          "sha256": "3d2c4dabc51ab5c7d58f3b4b7382691d7928cef8f8c14c9c2784e8b109aa401f",
+          "bytes": 259980
+        },
+        {
+          "msg_id": 2298,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_2298.jpg",
+          "sha256": "c0d2f4ea249a2c31d7d37524d83999513dc98d09d7fdd7060ca00906840433bd",
+          "bytes": 264415
+        },
+        {
+          "msg_id": 2299,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_2299.jpg",
+          "sha256": "2e61f68e1228ca2df37f80f106c6e7354f53ea02a9ae0a01bb208478ec25ebc8",
+          "bytes": 274068
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:2329": {
+      "channel": "@VARUS_channel",
+      "msg_id": 2329,
+      "asked_by": [
+        "emptied_97",
+        "uplabel_media_only"
+      ],
+      "post_has_text": false,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 2329,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_2329.jpg",
+          "sha256": "b834aa6a667ef6389e389d4cb0a9cf4e47e353226ba8b1252b64d2e1fd471b94",
+          "bytes": 121188
+        },
+        {
+          "msg_id": 2330,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_2330.jpg",
+          "sha256": "cb1d7a1d6ad628ab21fcd087235c4f08a54d9979a7463010d6731672fd4902c0",
+          "bytes": 116800
+        },
+        {
+          "msg_id": 2331,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_2331.jpg",
+          "sha256": "b2a95dd1f0fddf3041e00f4d9c48bb21ac1fe20f70fbb0d61a6b05c6866e7f68",
+          "bytes": 106785
+        },
+        {
+          "msg_id": 2332,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_2332.jpg",
+          "sha256": "d0fd1472b22bd5d417f99d88befd6392b5dc82aad064a35cfc3e3734cc304521",
+          "bytes": 126714
+        },
+        {
+          "msg_id": 2333,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_2333.jpg",
+          "sha256": "e4f8802a7d8f15b3ecd385e6d2578f71eec7d7437d75d95a2f7e59e21114108b",
+          "bytes": 109088
+        },
+        {
+          "msg_id": 2334,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_2334.jpg",
+          "sha256": "0a1552b944c7eaa00f33262faff71468948b6a6ac26411756b64e2cef161dc74",
+          "bytes": 122537
+        },
+        {
+          "msg_id": 2335,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_2335.jpg",
+          "sha256": "c00931f4f99dd84d6472c23443dff3a2c6c43e23098c1badb4e1dbada36fcf3c",
+          "bytes": 115894
+        },
+        {
+          "msg_id": 2336,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_2336.jpg",
+          "sha256": "1213f3e5996ce50f6a5684cb498b3c01e13d5cfcfbc3712a33b6f8cba3d404f9",
+          "bytes": 123892
+        },
+        {
+          "msg_id": 2337,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_2337.jpg",
+          "sha256": "7c549eff84e8790ba9baaff7f94eca041e56f24781cedb3fe754d6381f6b3511",
+          "bytes": 127924
+        },
+        {
+          "msg_id": 2338,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_2338.jpg",
+          "sha256": "67180813229aaf021ea6f9e9ba6e774277cb02a473d7c8f0b6ad1654f8b3d4e8",
+          "bytes": 113358
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:2463": {
+      "channel": "@VARUS_channel",
+      "msg_id": 2463,
+      "asked_by": [
+        "uplabel_media_only"
+      ],
+      "post_has_text": false,
+      "has_media": true,
+      "album": false,
+      "images": [],
+      "poll": {
+        "question": "Як вам зручніше переглядати газету?",
+        "options": [
+          "фото сторінок, але різними повідомленнями",
+          "одним повідомленням, але в форматі файлу (pdf)"
+        ]
+      },
+      "missing": [
+        {
+          "msg_id": 2463,
+          "missing": "media is MessageMediaPoll"
+        }
+      ]
+    },
+    "@VARUS_channel:2540": {
+      "channel": "@VARUS_channel",
+      "msg_id": 2540,
+      "asked_by": [
+        "unreadable_14"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 2540,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_2540.jpg",
+          "sha256": "763a5be7f74eb69cf09968c661d013efbc22434825543eb2e479ff10cf1f23b1",
+          "bytes": 105809
+        },
+        {
+          "msg_id": 2541,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_2541.jpg",
+          "sha256": "0e068509ed0ff926bbfa4df48ccd41b4f6c8a23d2175739cfccf085d65781d4a",
+          "bytes": 116697
+        },
+        {
+          "msg_id": 2542,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_2542.jpg",
+          "sha256": "bcaf6094e48cf80742aec39f682ea03457968fca09255a895b3eed7fd3220ed4",
+          "bytes": 122831
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:2725": {
+      "channel": "@VARUS_channel",
+      "msg_id": 2725,
+      "asked_by": [
+        "uplabel_media_only"
+      ],
+      "post_has_text": false,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 2725,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_2725.jpg",
+          "sha256": "5310918dacc8e73e9da8c9a3e8abd1ff08f3dcff67c5effb9c418bf7f6647d76",
+          "bytes": 129713
+        },
+        {
+          "msg_id": 2726,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_2726.jpg",
+          "sha256": "87ce2e59857d2bcd746f1494686b516ed5e78bb9051d7e8bec3e80b86c168afa",
+          "bytes": 176276
+        },
+        {
+          "msg_id": 2727,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_2727.jpg",
+          "sha256": "b150479e09f81ecfa6737de2faad69e3bc28be2f5a4e1c6811e3fd81b9fe9b29",
+          "bytes": 131972
+        },
+        {
+          "msg_id": 2728,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_2728.jpg",
+          "sha256": "8623af00bac6ea3dd6a0cdda9ea231ea3dea47885b34969ccd07dd114de5b5a0",
+          "bytes": 132227
+        },
+        {
+          "msg_id": 2729,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_2729.jpg",
+          "sha256": "3b53ad8646b85da158fd117f27d1c7c07e040ae2c48da85c1d915576bd859376",
+          "bytes": 127257
+        },
+        {
+          "msg_id": 2730,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_2730.jpg",
+          "sha256": "28e74da96f494f75d78535eaa1595cc97e813ffb5c04ae26e9d26033230a5589",
+          "bytes": 98729
+        },
+        {
+          "msg_id": 2731,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_2731.jpg",
+          "sha256": "0670d3fad0e7f619475433030a87b948d3d0758728e8e0e2630bbf52029ae097",
+          "bytes": 126489
+        },
+        {
+          "msg_id": 2732,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_2732.jpg",
+          "sha256": "cf9ff669a575ded13124fa8c068571d6bab2fa40b520dca5728602da64552a95",
+          "bytes": 117150
+        },
+        {
+          "msg_id": 2733,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_2733.jpg",
+          "sha256": "0a0830e4169a4f98a1830d44f11205863d2974513fc007f6b78ae62e217896ac",
+          "bytes": 123031
+        },
+        {
+          "msg_id": 2734,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_2734.jpg",
+          "sha256": "a9299dbe211bc8c750f4233e91cbc94f0c05c0ce36c071ceaa3fb4e2cdb520d8",
+          "bytes": 174022
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:2838": {
+      "channel": "@VARUS_channel",
+      "msg_id": 2838,
+      "asked_by": [
+        "unreadable_14"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 2838,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_2838.jpg",
+          "sha256": "6f496c67b94aa84e170083325a2a32c660879cd0446e90af426ecf32c3a4b358",
+          "bytes": 187920
+        },
+        {
+          "msg_id": 2839,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_2839.jpg",
+          "sha256": "70cd3e90da02bf387de89aa1e21c6e9e1b4c8d30e5bc95bd30d7ddfd0c06d6ae",
+          "bytes": 181566
+        },
+        {
+          "msg_id": 2840,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_2840.jpg",
+          "sha256": "459c3be5d6148b7de1b8954eef37306f12d4d7915dbe095625930761963cca2d",
+          "bytes": 217205
+        },
+        {
+          "msg_id": 2841,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_2841.jpg",
+          "sha256": "652833cde637f10788ca9ca3f83bcfc937cc452fa93263084d95065717a34b2c",
+          "bytes": 188976
+        },
+        {
+          "msg_id": 2842,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_2842.jpg",
+          "sha256": "1bfb9a091dc8b43aad51201afa122f76183e67291589505202643f78e70b16c4",
+          "bytes": 180669
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:3170": {
+      "channel": "@VARUS_channel",
+      "msg_id": 3170,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 3170,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_3170.jpg",
+          "sha256": "0a6e6c698cc6fd503953f9540e9a335dcd8382f574e1a9ef72709839a0a7a02a",
+          "bytes": 114867
+        },
+        {
+          "msg_id": 3171,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_3171.jpg",
+          "sha256": "abdc2ce1d57db632fdcc02f06f4a3a2b9af01f0cf10e281ab33a405abf98fbb5",
+          "bytes": 115146
+        },
+        {
+          "msg_id": 3172,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_3172.jpg",
+          "sha256": "fce8d2908bc4d8de8c30c49181fb3fc7e97a6c638b2e8ec9c956611e8ec18cfd",
+          "bytes": 112611
+        },
+        {
+          "msg_id": 3173,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_3173.jpg",
+          "sha256": "870e869abccda96f8313bd001c9e766d1fe6d1e9b5b0cd57410edf2b1b157527",
+          "bytes": 127183
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:3427": {
+      "channel": "@VARUS_channel",
+      "msg_id": 3427,
+      "asked_by": [
+        "uplabel_media_only"
+      ],
+      "post_has_text": false,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 3427,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_3427.jpg",
+          "sha256": "12c2dc4f530bc3d66dad84b1dd68e6b7d1675a07390b51c08fb00a778b9d01f9",
+          "bytes": 165554
+        },
+        {
+          "msg_id": 3428,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_3428.jpg",
+          "sha256": "80a42f051fc51268c9de7e0a6f97a9da9aa755d3ee3f035e57600b1a3aa76002",
+          "bytes": 158804
+        },
+        {
+          "msg_id": 3429,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_3429.jpg",
+          "sha256": "e9e319638e99d4e17d5836f62958a48d074b89d71ef7b037116fac12e0389e72",
+          "bytes": 136243
+        },
+        {
+          "msg_id": 3430,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_3430.jpg",
+          "sha256": "552552a643b6ba7a25b6fe55bf14c1de1f7124ed48cf34f3daa8f8ada1621c46",
+          "bytes": 172684
+        },
+        {
+          "msg_id": 3431,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_3431.jpg",
+          "sha256": "a9bdefef7928d445b288ca5670036103c19a54a081e07cecbac7526f4135067d",
+          "bytes": 154707
+        },
+        {
+          "msg_id": 3432,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_3432.jpg",
+          "sha256": "3570f4649cbef98f229b44c4402e0dc31a369b9b5cfc6af215e24cfa1a0077b0",
+          "bytes": 141810
+        },
+        {
+          "msg_id": 3433,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_3433.jpg",
+          "sha256": "51313f7694e5808580065c5c4dd0707a8f010eb807ed4bc5d550b985540f8562",
+          "bytes": 147827
+        },
+        {
+          "msg_id": 3434,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_3434.jpg",
+          "sha256": "aaf28c72a6fee57b9e1c0f61cebace7a74af17de6a996c1678b42098e0ec74e4",
+          "bytes": 134395
+        },
+        {
+          "msg_id": 3435,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_3435.jpg",
+          "sha256": "4d2e7cb5851fb6affa7b5b4e5552377ddbed6c8003cc717b495e7472a5a82ae7",
+          "bytes": 161663
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:3826": {
+      "channel": "@VARUS_channel",
+      "msg_id": 3826,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 3826,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_3826.jpg",
+          "sha256": "f96d589c88c3a4c8b8294b7d1b0f0045688d7212e9d0ddf265bfa8cd0d072e82",
+          "bytes": 117190
+        },
+        {
+          "msg_id": 3827,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_3827.jpg",
+          "sha256": "c774e367c5f133159f7cb5434e13ae707ee8b3ac70a7214906be7f90c9dcbea8",
+          "bytes": 122319
+        },
+        {
+          "msg_id": 3828,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_3828.jpg",
+          "sha256": "92573deed5096c80727ca05764e4bbf620fb2a027d7f05b8bec354ca50f07159",
+          "bytes": 109954
+        },
+        {
+          "msg_id": 3829,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_3829.jpg",
+          "sha256": "28a07a7e58f590f825f96f03f845a23a919f1f2513345ca28f418f431f49efc1",
+          "bytes": 131180
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:3935": {
+      "channel": "@VARUS_channel",
+      "msg_id": 3935,
+      "asked_by": [
+        "uplabel_media_only"
+      ],
+      "post_has_text": false,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 3935,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_3935.jpg",
+          "sha256": "1a47ba0f94d0312c78354a0d2a950b822cbc7cebac7183e004ab22427ff9aae5",
+          "bytes": 141051
+        },
+        {
+          "msg_id": 3936,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_3936.jpg",
+          "sha256": "17cbac92747e5c5513281582d07073cbeb9f219c4613e0ec6678510c79c51047",
+          "bytes": 138766
+        },
+        {
+          "msg_id": 3937,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_3937.jpg",
+          "sha256": "d980a9a422a7f40834af5ad4e81f1fc8029a05f65cb9239d0ee1a5006d5bbf00",
+          "bytes": 154277
+        },
+        {
+          "msg_id": 3938,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_3938.jpg",
+          "sha256": "bcf25e1bbaa775b75031ea8dd8b00e4a07731c2dd7e0d6040a09b3ff755ab255",
+          "bytes": 145914
+        },
+        {
+          "msg_id": 3939,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_3939.jpg",
+          "sha256": "85346212d120657c25cb89df8853a58b51f759085365e01861dd5f998aa0cba5",
+          "bytes": 158975
+        },
+        {
+          "msg_id": 3940,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_3940.jpg",
+          "sha256": "17f5b405456937131b1934c68549adb7ada15f60fe2f9c46c5a13920138ab73a",
+          "bytes": 155844
+        },
+        {
+          "msg_id": 3941,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_3941.jpg",
+          "sha256": "f25875f945f1f3e10283207a7a5e1f7eff39c0fcf1089f0384e291b8210a2d7d",
+          "bytes": 187874
+        },
+        {
+          "msg_id": 3942,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_3942.jpg",
+          "sha256": "d769b533875c2643de60ac2f78e6aadc07d83e21fc4a42276ccd5a6d209e82a2",
+          "bytes": 136381
+        },
+        {
+          "msg_id": 3943,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_3943.jpg",
+          "sha256": "046198053782645daa77a607fd890298059a04bb0381e12ed3954bd1bdb580d9",
+          "bytes": 152062
+        },
+        {
+          "msg_id": 3944,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_3944.jpg",
+          "sha256": "e69f849e7103990efac32c19735b9bfa4629d791796964195665a4fa1d74d4f0",
+          "bytes": 154961
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:4131": {
+      "channel": "@VARUS_channel",
+      "msg_id": 4131,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 4131,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_4131.jpg",
+          "sha256": "7e2fe2a960e62a6d7bf83be70c82162857dbec00f2eb75de2e0aa580fc5ac7a5",
+          "bytes": 169138
+        },
+        {
+          "msg_id": 4132,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_4132.jpg",
+          "sha256": "1596f0f0bc1c6a08e0e203148685bd2ae65c7309291841b8fbdb7f10d5924e7f",
+          "bytes": 148491
+        },
+        {
+          "msg_id": 4133,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_4133.jpg",
+          "sha256": "623889c3c79a02ec322dc9fb595fba66953dff6361e5edba008843b02a65d841",
+          "bytes": 151027
+        },
+        {
+          "msg_id": 4134,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_4134.jpg",
+          "sha256": "3830608d7393c27112dedff9db867a31ac255b490ca4e164fee70b4fa3512e1b",
+          "bytes": 149265
+        },
+        {
+          "msg_id": 4135,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_4135.jpg",
+          "sha256": "be0808ae7a6ae98320d9c881eccf0f51988a9d44972b9d1657ffafe497e145eb",
+          "bytes": 153226
+        },
+        {
+          "msg_id": 4136,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_4136.jpg",
+          "sha256": "9f055fa0bece2f92e21ab4a8bf224aef5a53783a6cecec5a175bcea021a3e2fb",
+          "bytes": 169919
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:5021": {
+      "channel": "@VARUS_channel",
+      "msg_id": 5021,
+      "asked_by": [
+        "uplabel_media_only"
+      ],
+      "post_has_text": false,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 5021,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5021.jpg",
+          "sha256": "064a93b7f64eec9442fa3797623173c26ce9eac5b1dad745f3ab36dd1b1af5bf",
+          "bytes": 109877
+        },
+        {
+          "msg_id": 5022,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5022.jpg",
+          "sha256": "f00bad7a35375d9d0cc4f9fc6bb275d2114c9f95d14c666b2d356f56a4dd454c",
+          "bytes": 115892
+        },
+        {
+          "msg_id": 5023,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5023.jpg",
+          "sha256": "c8166a6a9844d0a6225d0a6cd74c375dfb8064ff156d8cbebf5368d81535b26e",
+          "bytes": 102073
+        },
+        {
+          "msg_id": 5024,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5024.jpg",
+          "sha256": "1ca4a21aa46eb07b7ea169ff4dc307e46ba8c1df1b09fbb9a703e9b8f68883ed",
+          "bytes": 122119
+        },
+        {
+          "msg_id": 5025,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5025.jpg",
+          "sha256": "c485abc69cb0c2075b79bcbb4cd4130fa1a3e99a60141e09816845e352bc0d75",
+          "bytes": 127353
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:5177": {
+      "channel": "@VARUS_channel",
+      "msg_id": 5177,
+      "asked_by": [
+        "uplabel_media_only"
+      ],
+      "post_has_text": false,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 5177,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5177.jpg",
+          "sha256": "af260846fb0f4d4bc4b597da082ff373c478982f0b4bb77c241251f146730699",
+          "bytes": 154872
+        },
+        {
+          "msg_id": 5178,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5178.jpg",
+          "sha256": "8a56a307ce6eecc82c9d2876d831ec51209c7fd8eba6982fa042d05742d7a21d",
+          "bytes": 150559
+        },
+        {
+          "msg_id": 5179,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5179.jpg",
+          "sha256": "427524227cdee2d0694a78c51460cb9884230ff4c6b18a11d85810bb69418c69",
+          "bytes": 168085
+        },
+        {
+          "msg_id": 5180,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5180.jpg",
+          "sha256": "a70d40f43317753dbde17ccc5d02f16391820997debf594a26f7670c95db9ca0",
+          "bytes": 164795
+        },
+        {
+          "msg_id": 5181,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5181.jpg",
+          "sha256": "c63b2d067f7b2343db78b54a3ebffe4ca137685f91e129c9b6a38693804eee3d",
+          "bytes": 86950
+        },
+        {
+          "msg_id": 5182,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5182.jpg",
+          "sha256": "29e68d03cdfda8a571668c21630f25b83f631775b30fe20731f93ab67e603885",
+          "bytes": 119979
+        },
+        {
+          "msg_id": 5183,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5183.jpg",
+          "sha256": "158cae356a742410a46523a7427ef0d3b4d94e479698d1805e81af03f4ae1c77",
+          "bytes": 133302
+        },
+        {
+          "msg_id": 5184,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5184.jpg",
+          "sha256": "fa6f25d23a6a690925527ed4be43a96b844bbbd377df7da5f5d0dfce77146d64",
+          "bytes": 143249
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:5369": {
+      "channel": "@VARUS_channel",
+      "msg_id": 5369,
+      "asked_by": [
+        "unreadable_14"
+      ],
+      "post_has_text": true,
+      "has_media": false,
+      "album": false,
+      "images": [],
+      "poll": null,
+      "missing": [
+        {
+          "reason": "not fetched"
+        }
+      ]
+    },
+    "@VARUS_channel:5478": {
+      "channel": "@VARUS_channel",
+      "msg_id": 5478,
+      "asked_by": [
+        "uplabel_media_only"
+      ],
+      "post_has_text": false,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 5478,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5478.jpg",
+          "sha256": "68d531177b22c9782c791d6678cf16fafb63ffb8d48565d00bac2341732f6416",
+          "bytes": 175205
+        },
+        {
+          "msg_id": 5479,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5479.jpg",
+          "sha256": "3872262598f50bd773f089ecda29a1f729f2b304527870e384ed517fa90ef86b",
+          "bytes": 176779
+        },
+        {
+          "msg_id": 5480,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5480.jpg",
+          "sha256": "10e6d7f0d579dd0afad134f697c16555479d7c268a8de8792b9a406f547c09f5",
+          "bytes": 197478
+        },
+        {
+          "msg_id": 5481,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5481.jpg",
+          "sha256": "bd7d6100bc387c52375bdc8d3f9b1a562178a663fbd1b5dd9d1d33e769a27d62",
+          "bytes": 245650
+        },
+        {
+          "msg_id": 5482,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5482.jpg",
+          "sha256": "78fad7379f574b96140158c7edc8dadaf2127f867d5c82302f5b2540c9b648fb",
+          "bytes": 156112
+        },
+        {
+          "msg_id": 5483,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5483.jpg",
+          "sha256": "3e7206d59974a6b3213e37bf58d15905161bff15df43a9a53b87c8ec6cf288d9",
+          "bytes": 172561
+        },
+        {
+          "msg_id": 5484,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5484.jpg",
+          "sha256": "ae311cc5037872bab903e43dc9bb1868f0c235c1bd6c64584502877016fba473",
+          "bytes": 141188
+        },
+        {
+          "msg_id": 5485,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5485.jpg",
+          "sha256": "1b6e10fb2481fed5d01ea699d47f2f7bded5d9cbf130c0bddf9dafac4db89a0e",
+          "bytes": 188786
+        },
+        {
+          "msg_id": 5486,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5486.jpg",
+          "sha256": "36acbe3b8abc6219f2849cf4fbe5f083b4ff1efc89a5111b54c8047b8ab97cd2",
+          "bytes": 186553
+        },
+        {
+          "msg_id": 5487,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5487.jpg",
+          "sha256": "972c2051aa4f3d39e176361594bf8e1eaf2f2428b5716ab124bc64370b09d981",
+          "bytes": 127846
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:5576": {
+      "channel": "@VARUS_channel",
+      "msg_id": 5576,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 5576,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5576.jpg",
+          "sha256": "62429944b95fef789b8c5839d2eabf79c807b4aae4b2db2eeb9ea7f228564907",
+          "bytes": 139368
+        },
+        {
+          "msg_id": 5577,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5577.jpg",
+          "sha256": "eec5edd2e5cb822dded2fc42b6fbc57a6c1ace7e754acafa10b3da212011dcf4",
+          "bytes": 139346
+        },
+        {
+          "msg_id": 5578,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5578.jpg",
+          "sha256": "c3d48443a9a20a4da571b193236059ade1c1111f07c35741e58d85370aee9303",
+          "bytes": 141425
+        },
+        {
+          "msg_id": 5579,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5579.jpg",
+          "sha256": "6c252fb7f43c9e5e341bbd63e5259335adc4116f015ebb9f2d3bd2264c1a96db",
+          "bytes": 140558
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:5622": {
+      "channel": "@VARUS_channel",
+      "msg_id": 5622,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 5622,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5622.jpg",
+          "sha256": "57122ecb47cd1a51aaec8e292a6642991befce31d7dc496630010d75396f3604",
+          "bytes": 172346
+        },
+        {
+          "msg_id": 5623,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5623.jpg",
+          "sha256": "dcc58c73f1f018b1f15105760445d273a6afaa3ba6a7e597ff4559286dd3f060",
+          "bytes": 170150
+        },
+        {
+          "msg_id": 5624,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5624.jpg",
+          "sha256": "2c28dff7ed91b7a4bb2ed3fb9095714d2913a58996ceaad404970b3c06b6394f",
+          "bytes": 151710
+        },
+        {
+          "msg_id": 5625,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5625.jpg",
+          "sha256": "c351b027afa9c0ac771c1717a2fe2ed5679d824a0a4e25f7e28c007a9bd9ada4",
+          "bytes": 169575
+        },
+        {
+          "msg_id": 5626,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5626.jpg",
+          "sha256": "9206063c8edd32dcd5e6da89a38ea080c34e8bb7599510f8caa6d816e6dacf4c",
+          "bytes": 156896
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:5687": {
+      "channel": "@VARUS_channel",
+      "msg_id": 5687,
+      "asked_by": [
+        "uplabel_media_only"
+      ],
+      "post_has_text": false,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 5687,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5687.jpg",
+          "sha256": "03903f87f969016ecf2ab332048711c483b34c103dcac93ad82ebf662fe1538a",
+          "bytes": 171633
+        },
+        {
+          "msg_id": 5688,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5688.jpg",
+          "sha256": "15a99ac6ef9c5423486bd30f3b09c349f06a2ebdf59ff77996f3d77158e560f6",
+          "bytes": 139743
+        },
+        {
+          "msg_id": 5689,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5689.jpg",
+          "sha256": "29cc30119e09109f23809df3e06ebb4654335d4ba3939f24cc3d78a1e522087f",
+          "bytes": 134590
+        },
+        {
+          "msg_id": 5690,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5690.jpg",
+          "sha256": "29e497098459ed2ee6bb2b1dfd6e105016dfbe2eaedabbd6bda3dfa112ea5af8",
+          "bytes": 161788
+        },
+        {
+          "msg_id": 5691,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5691.jpg",
+          "sha256": "7ef0e13586c2ad3ad03ef01aaee70df881545fe9bab571c14b9d62d1db0cefb7",
+          "bytes": 166542
+        },
+        {
+          "msg_id": 5692,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5692.jpg",
+          "sha256": "b51ccbd52907945d0e198d8932f254c0252352cb0c52678041991562c2144a6e",
+          "bytes": 232675
+        },
+        {
+          "msg_id": 5693,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5693.jpg",
+          "sha256": "1b9f1ee7a7d4025a85b6d0e58b5dbdeee2c3b1cc71a5ff80a3b09e418fb157b7",
+          "bytes": 238226
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:5717": {
+      "channel": "@VARUS_channel",
+      "msg_id": 5717,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": false,
+      "images": [
+        {
+          "msg_id": 5717,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5717.jpg",
+          "sha256": "83c74553f83dc350178602a3ef80948bf61dc6a6bdbcffa80f921c209fc7f2f2",
+          "bytes": 162030
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:5736": {
+      "channel": "@VARUS_channel",
+      "msg_id": 5736,
+      "asked_by": [
+        "uplabel_media_only"
+      ],
+      "post_has_text": false,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 5736,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5736.jpg",
+          "sha256": "a40d9c5bcbd03fc0234f75120de2140e95679bbda68b6e8035d0aac8b8fbf24b",
+          "bytes": 127785
+        },
+        {
+          "msg_id": 5737,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5737.jpg",
+          "sha256": "3ab77784bd6d0bbd930ccdf0b133bb643fea9b4dec850380eb09081e4a899a89",
+          "bytes": 115943
+        },
+        {
+          "msg_id": 5738,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5738.jpg",
+          "sha256": "c93280dd5432dbb12dcb55763ae5248c7dfc1d8171bb06693c14a9f692bd1500",
+          "bytes": 116618
+        },
+        {
+          "msg_id": 5739,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5739.jpg",
+          "sha256": "2746f0a25438f1f2ff5cf9d32ba097825d359c0c40bcfb3bfef4321e47fbfdb7",
+          "bytes": 103991
+        },
+        {
+          "msg_id": 5740,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5740.jpg",
+          "sha256": "760e69370d549c68493498475a4f3035d7be2a7e315570b27e25ab27275ef3a9",
+          "bytes": 107240
+        },
+        {
+          "msg_id": 5741,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5741.jpg",
+          "sha256": "f4945494ca3b59062dfc0e4ef6e3832e96816ae770385efdd52600d1c025026e",
+          "bytes": 154741
+        },
+        {
+          "msg_id": 5742,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5742.jpg",
+          "sha256": "c0c07b622193bdf35f06807bde3df4d04525f600333a6929895fe660c3e3a9c2",
+          "bytes": 160945
+        },
+        {
+          "msg_id": 5743,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5743.jpg",
+          "sha256": "7fc7f223a15f9612d47d078860e57213fc0b60436fa5add700a8d02075be14f9",
+          "bytes": 135580
+        },
+        {
+          "msg_id": 5744,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5744.jpg",
+          "sha256": "d8a94d35d52ee319e74a2c10ea0145808b5fd25a0ff96893802de28f5f589193",
+          "bytes": 101185
+        },
+        {
+          "msg_id": 5745,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5745.jpg",
+          "sha256": "ac34ffac7827137b82f6d1e6c8e748e9df247b2d53b37d86393d2c348e312cb1",
+          "bytes": 148135
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:5824": {
+      "channel": "@VARUS_channel",
+      "msg_id": 5824,
+      "asked_by": [
+        "uplabel_media_only"
+      ],
+      "post_has_text": false,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 5824,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5824.jpg",
+          "sha256": "0cc0da56df08fcb7457aad6e0337f8373a2901853790f0ac7877d7f3be7eb999",
+          "bytes": 150068
+        },
+        {
+          "msg_id": 5825,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5825.jpg",
+          "sha256": "43a5bf9bb88e59c200eea7f0aa5950c242016026e4b1dd18b47a92dbc7bf2f85",
+          "bytes": 167783
+        },
+        {
+          "msg_id": 5826,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5826.jpg",
+          "sha256": "0c7e1a254923fa3147eeeaec2f22b7de949316a516ca98c4d9b62d2e31b8fdff",
+          "bytes": 150001
+        },
+        {
+          "msg_id": 5827,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5827.jpg",
+          "sha256": "621bb11c7d66cf0d558af45cf06630ee76158511b17013ae7800afe387681f5b",
+          "bytes": 190370
+        },
+        {
+          "msg_id": 5828,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5828.jpg",
+          "sha256": "383a30546aca622662c1b0eab57eed14eec335a746ef69639b8eb4d2a362dfd6",
+          "bytes": 217493
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:5859": {
+      "channel": "@VARUS_channel",
+      "msg_id": 5859,
+      "asked_by": [
+        "unreadable_14",
+        "uplabel_media_only"
+      ],
+      "post_has_text": false,
+      "has_media": true,
+      "album": false,
+      "images": [],
+      "poll": {
+        "question": "А ти вже ростиш тамагочі-Варусятко у додатку VARUS? 😏",
+        "options": [
+          "Тааак, вже з вами 🥰",
+          "Ой, ще ні. Вже біжу 🙂‍↔️"
+        ]
+      },
+      "missing": [
+        {
+          "msg_id": 5859,
+          "missing": "media is MessageMediaPoll"
+        }
+      ]
+    },
+    "@VARUS_channel:5915": {
+      "channel": "@VARUS_channel",
+      "msg_id": 5915,
+      "asked_by": [
+        "uplabel_media_only"
+      ],
+      "post_has_text": false,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 5915,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5915.jpg",
+          "sha256": "95e36db11dc2e6b147cd863fe6bc106e959d7ad2dfb1712f3ab0ac93434a4468",
+          "bytes": 162938
+        },
+        {
+          "msg_id": 5916,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5916.jpg",
+          "sha256": "499143fbb1bbf245f3beb25cbb518f4a352f2f9b411606ed3f10fc8429ac79b1",
+          "bytes": 170664
+        },
+        {
+          "msg_id": 5917,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5917.jpg",
+          "sha256": "e7ac0428c666b6a3c4e2e20279450574cb0520950a6c9ee1ec9d985bf62f5b55",
+          "bytes": 178633
+        },
+        {
+          "msg_id": 5918,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5918.jpg",
+          "sha256": "22dffa79db3695a6242f893657f73a5407ec05c4858ad34a977a2609d5b42211",
+          "bytes": 165334
+        },
+        {
+          "msg_id": 5919,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5919.jpg",
+          "sha256": "d86ea825711a4fe7b84e20a36d9fdb438eeee5ccd2983fda168a8d63518347db",
+          "bytes": 167610
+        },
+        {
+          "msg_id": 5920,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5920.jpg",
+          "sha256": "db759abf009aeb761ecce839e56187af7ed25ae7ba90ebb4b80de30ba396e025",
+          "bytes": 157091
+        },
+        {
+          "msg_id": 5921,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5921.jpg",
+          "sha256": "c32cb49d4d8f0dffed12daa94f6cc0996d69068f68dc249e451cfa9de6c74172",
+          "bytes": 176412
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:5969": {
+      "channel": "@VARUS_channel",
+      "msg_id": 5969,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 5969,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5969.jpg",
+          "sha256": "f1dd5a87506d1c3315d4189d108aa44b5f53c00850bee778afef4d7471e42674",
+          "bytes": 170933
+        },
+        {
+          "msg_id": 5970,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5970.jpg",
+          "sha256": "4cb12f60ddb333d76d8a0c77bd930b756ef7b727210fb2f0e069f29252eb2b4f",
+          "bytes": 177220
+        },
+        {
+          "msg_id": 5971,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5971.jpg",
+          "sha256": "d8752a7d7edbcac93025450baa02aa0dc08b35d78f9a8da28a7bb1f98fb5153a",
+          "bytes": 173102
+        },
+        {
+          "msg_id": 5972,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5972.jpg",
+          "sha256": "5b350fbb4e28d552bdf22e48225de743601fe391f172a4835d310dcaacec7cb9",
+          "bytes": 165081
+        },
+        {
+          "msg_id": 5973,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_5973.jpg",
+          "sha256": "2d8bf943aede572889454d33e40d4984370e81c5856338d8dfe7d01f762d47a3",
+          "bytes": 170944
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:6009": {
+      "channel": "@VARUS_channel",
+      "msg_id": 6009,
+      "asked_by": [
+        "unreadable_14"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 6009,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6009.jpg",
+          "sha256": "7bfd999174ffc1e59091b0e030f48b594084da32ec9bc548cb19da05ffb8a78d",
+          "bytes": 144229
+        },
+        {
+          "msg_id": 6010,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6010.jpg",
+          "sha256": "f38984dcf7a00d693c7a77af029339707e7133d41074740af857875116af2d58",
+          "bytes": 245309
+        },
+        {
+          "msg_id": 6011,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6011.jpg",
+          "sha256": "9c996ac3485323b4e877d626f9ec710c354cb649ddf4c5bdcbb40a25533d43d4",
+          "bytes": 244239
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:6084": {
+      "channel": "@VARUS_channel",
+      "msg_id": 6084,
+      "asked_by": [
+        "uplabel_media_only"
+      ],
+      "post_has_text": false,
+      "has_media": true,
+      "album": false,
+      "images": [],
+      "poll": {
+        "question": "Які ігрові завдання у грі «Варусятко-Тамагочі» вже встиг виконати? 🎁",
+        "options": [
+          "Зробив добру справу 🥰",
+          "Зробив онлайн-замовлення від 1000 грн 💰",
+          "Зробив офлайн-покупку від 500 грн ",
+          "Зробив покупку через Scan&Go 📲",
+          "Купив товар партнерів 🛍️",
+          "Підписався на Telegram VARUS 😎",
+          "Залучив друга 🙂‍↔️"
+        ]
+      },
+      "missing": [
+        {
+          "msg_id": 6084,
+          "missing": "media is MessageMediaPoll"
+        }
+      ]
+    },
+    "@VARUS_channel:6096": {
+      "channel": "@VARUS_channel",
+      "msg_id": 6096,
+      "asked_by": [
+        "unreadable_14"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": false,
+      "images": [],
+      "poll": null,
+      "missing": [
+        {
+          "msg_id": 6096,
+          "missing": "media is video/mp4, not an image"
+        }
+      ]
+    },
+    "@VARUS_channel:6155": {
+      "channel": "@VARUS_channel",
+      "msg_id": 6155,
+      "asked_by": [
+        "uplabel_media_only"
+      ],
+      "post_has_text": false,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 6155,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6155.jpg",
+          "sha256": "c4318b6f446f19e367b0dc77b75d364d4ed0270ec90c8bcb6c4370eb3eaecaca",
+          "bytes": 219287
+        },
+        {
+          "msg_id": 6156,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6156.jpg",
+          "sha256": "5c4d3ef1c2608846ed0a3e3eb130c9ad9cf94be781efc8642abfaab5a7d665dc",
+          "bytes": 234161
+        },
+        {
+          "msg_id": 6157,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6157.jpg",
+          "sha256": "691574223559acf9567119472282077058d4a08a124189db1fe149626cf62e05",
+          "bytes": 232627
+        },
+        {
+          "msg_id": 6158,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6158.jpg",
+          "sha256": "620e8ca5def5aee95a4cb8d9f019e99bb90535504d060ec6d6a4758dd48d3ff3",
+          "bytes": 211609
+        },
+        {
+          "msg_id": 6159,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6159.jpg",
+          "sha256": "d959e4e92f7eb6cd322980dd861a7114f8430794254f0df37cbe4557d946eeee",
+          "bytes": 233530
+        },
+        {
+          "msg_id": 6160,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6160.jpg",
+          "sha256": "d3d6ee9a0c4319289063d3e0f548bf2d5c4df70a85fa67ecde1ba5f8808dbd3b",
+          "bytes": 155891
+        },
+        {
+          "msg_id": 6161,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6161.jpg",
+          "sha256": "da970cc163faadb888c766d141c4eb1ff497bb56d5867d9e9e63a1f19cc63e3f",
+          "bytes": 224760
+        },
+        {
+          "msg_id": 6162,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6162.jpg",
+          "sha256": "b76bca791a543f7e5beba468015ddda925a04bc063947b1a6536e16f481cd36d",
+          "bytes": 212665
+        },
+        {
+          "msg_id": 6163,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6163.jpg",
+          "sha256": "9828843f4b08399317ba55c35a068c8c33d529afc0860973186abf81e688088d",
+          "bytes": 237693
+        },
+        {
+          "msg_id": 6164,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6164.jpg",
+          "sha256": "e9233b4e516b30fb16e5d10939d20fe32142e22c6b6c551253f6e51f3a95989b",
+          "bytes": 236968
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:6198": {
+      "channel": "@VARUS_channel",
+      "msg_id": 6198,
+      "asked_by": [
+        "uplabel_media_only"
+      ],
+      "post_has_text": false,
+      "has_media": true,
+      "album": false,
+      "images": [],
+      "poll": {
+        "question": "А ти вже купив Щастябокс? 🎁",
+        "options": [
+          "Таак ☺️",
+          "Ні, але хочу 😎",
+          "А що це? 🙈 (Дивись наші минулі дописи, якщо пропустив) "
+        ]
+      },
+      "missing": [
+        {
+          "msg_id": 6198,
+          "missing": "media is MessageMediaPoll"
+        }
+      ]
+    },
+    "@VARUS_channel:6237": {
+      "channel": "@VARUS_channel",
+      "msg_id": 6237,
+      "asked_by": [
+        "uplabel_media_only"
+      ],
+      "post_has_text": false,
+      "has_media": true,
+      "album": false,
+      "images": [],
+      "poll": {
+        "question": "Які ще завдання від «Варусятко-Тамагочі» тобі залишилось виконати? 🎁",
+        "options": [
+          "Зробити онлайн-замовлення від 1000 грн 💰",
+          "Зробити офлайн-покупку на 500 грн",
+          "Зробити покупку через Scan&Go 📲",
+          "Купити товар-партнерів 🛍️",
+          "Підписатися на Telegram VARUS 😎",
+          "Залучити друга 😏",
+          "Зробити сьогоднішню добру справу 🥰"
+        ]
+      },
+      "missing": [
+        {
+          "msg_id": 6237,
+          "missing": "media is MessageMediaPoll"
+        }
+      ]
+    },
+    "@VARUS_channel:6240": {
+      "channel": "@VARUS_channel",
+      "msg_id": 6240,
+      "asked_by": [
+        "uplabel_media_only"
+      ],
+      "post_has_text": false,
+      "has_media": true,
+      "album": false,
+      "images": [],
+      "poll": {
+        "question": "Скількох друзів вже залучив до гри «Варусятко-Тамагочі»?😎",
+        "options": [
+          "До пʼяти друзів ☺️",
+          "До десяти друзів 🙂‍↔️",
+          "Більше десяти друзів 💪🏼",
+          "Упс, ще не встиг нікого залучити 🙈"
+        ]
+      },
+      "missing": [
+        {
+          "msg_id": 6240,
+          "missing": "media is MessageMediaPoll"
+        }
+      ]
+    },
+    "@VARUS_channel:6257": {
+      "channel": "@VARUS_channel",
+      "msg_id": 6257,
+      "asked_by": [
+        "unreadable_14",
+        "uplabel_media_only"
+      ],
+      "post_has_text": false,
+      "has_media": true,
+      "album": false,
+      "images": [],
+      "poll": {
+        "question": "Яка твоя позиція у рейтингу гри Варусятко-Тамагочі просто зараз?😎",
+        "options": [
+          "Номер 1🤩",
+          "Я в першій десятці ✨",
+          "Я в першій двадцятці 🙏🏼",
+          "Місце серед перших 50-ти моє😊",
+          "Тримаюсь у першій сотні 👌🏼",
+          "Пишу своє у коментарях ✍🏼"
+        ]
+      },
+      "missing": [
+        {
+          "msg_id": 6257,
+          "missing": "media is MessageMediaPoll"
+        }
+      ]
+    },
+    "@VARUS_channel:6259": {
+      "channel": "@VARUS_channel",
+      "msg_id": 6259,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": false,
+      "images": [
+        {
+          "msg_id": 6259,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6259.jpg",
+          "sha256": "515a8dbd2490c0ec25495dfe419a08875854c8ed0fabb9cd6d4d09a8a5645116",
+          "bytes": 100583
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:6328": {
+      "channel": "@VARUS_channel",
+      "msg_id": 6328,
+      "asked_by": [
+        "uplabel_media_only"
+      ],
+      "post_has_text": false,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 6328,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6328.jpg",
+          "sha256": "1e1ec5f873a134f0fea25457ae6e07533f70b2949548bcb36546c71a828363e5",
+          "bytes": 124295
+        },
+        {
+          "msg_id": 6329,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6329.jpg",
+          "sha256": "41c52fb05d207e72be983afb73efa42d8b588a18f4bb8ce6bb14db64f5cd4885",
+          "bytes": 131506
+        },
+        {
+          "msg_id": 6330,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6330.jpg",
+          "sha256": "d61262ae6ae3235405d7d28121b60c7bb1ffe787d4b77296281a20657f83a5cb",
+          "bytes": 124744
+        },
+        {
+          "msg_id": 6331,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6331.jpg",
+          "sha256": "735c38548be63ecdaba795911f7d00f77b06a761aad3895c51f4407d27eb1712",
+          "bytes": 175375
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:6395": {
+      "channel": "@VARUS_channel",
+      "msg_id": 6395,
+      "asked_by": [
+        "uplabel_media_only"
+      ],
+      "post_has_text": false,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 6395,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6395.jpg",
+          "sha256": "27eecee9aa83d60b48162094147187bea7042de09126c68b5c5d503eac9d405f",
+          "bytes": 106557
+        },
+        {
+          "msg_id": 6396,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6396.jpg",
+          "sha256": "7cf51803e643e54ccafb0fceec07467dd27ad6ecb9191270f924fe2c5d331f3b",
+          "bytes": 164763
+        },
+        {
+          "msg_id": 6397,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6397.jpg",
+          "sha256": "65be72245f8ed3d57b097b3b691f0553daa68ec3661d787ab800e558e82d2c50",
+          "bytes": 147474
+        },
+        {
+          "msg_id": 6398,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6398.jpg",
+          "sha256": "832f2333d7e80154046299fc16c3a1d5a64aeb8549b21629691b7b74901fad84",
+          "bytes": 152506
+        },
+        {
+          "msg_id": 6399,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6399.jpg",
+          "sha256": "3ed74f52b9e3a4b22d1b6f1f6cf86a792882ace13d64e72b81ca58004699603f",
+          "bytes": 145254
+        },
+        {
+          "msg_id": 6400,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6400.jpg",
+          "sha256": "8b19ad2c2a4ff20737f5ac402fd7d6b6295a6b3609e15162618a46e71cf91b66",
+          "bytes": 138213
+        },
+        {
+          "msg_id": 6401,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6401.jpg",
+          "sha256": "b16a3725194a7fbbc27e432877fa0095112c389182010334d0744b4e8ce79899",
+          "bytes": 136803
+        },
+        {
+          "msg_id": 6402,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6402.jpg",
+          "sha256": "a6b05e3309d4afe606940f3e76d6f9ea025919d1868d9b0f9bd495b58b449092",
+          "bytes": 134650
+        },
+        {
+          "msg_id": 6403,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6403.jpg",
+          "sha256": "fceaad69aed4536c768001ca5b92379b9eda034ec2d5a4c7288a3c9cea9fb41d",
+          "bytes": 175976
+        },
+        {
+          "msg_id": 6404,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6404.jpg",
+          "sha256": "e4231db990855aa0497beacc0bd2572199f7fc87545c0562710381b24bfeded5",
+          "bytes": 181080
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:6545": {
+      "channel": "@VARUS_channel",
+      "msg_id": 6545,
+      "asked_by": [
+        "uplabel_media_only"
+      ],
+      "post_has_text": false,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 6545,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6545.jpg",
+          "sha256": "c6658ae7aaaf23b213d4f89c5286974377d41f1ed7c3e6497e5e651b634535c8",
+          "bytes": 148712
+        },
+        {
+          "msg_id": 6546,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6546.jpg",
+          "sha256": "e96c54052a4a39c8c65c68c76383874c0070d6c3733adc29e92c4cdb60ced52a",
+          "bytes": 165440
+        },
+        {
+          "msg_id": 6547,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6547.jpg",
+          "sha256": "37fc9a76a35de4d7fb3ccaae7e8a7e5ecbf9191bd24193c0e4fedbcfe2757a03",
+          "bytes": 146175
+        },
+        {
+          "msg_id": 6548,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6548.jpg",
+          "sha256": "659a68e8c3fd7472205addc50d4895f58acba7a163e4f856d8feb03c10f78c2f",
+          "bytes": 158029
+        },
+        {
+          "msg_id": 6549,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6549.jpg",
+          "sha256": "525f49e8112e013fafeea37e0dc64cb1033475f8b002d74ba497f9b41cd7e956",
+          "bytes": 140962
+        },
+        {
+          "msg_id": 6550,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6550.jpg",
+          "sha256": "a11e9ed67eb21743e1c65e417920e36f5ad5b4cef524d073d98537886f994470",
+          "bytes": 121647
+        },
+        {
+          "msg_id": 6551,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6551.jpg",
+          "sha256": "529cd6f00902ff8903ea2c52bf662bf4f80f42efd807e2d59058c9adb128e7e0",
+          "bytes": 122217
+        },
+        {
+          "msg_id": 6552,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6552.jpg",
+          "sha256": "5e718cf923e1790616ee718b2d491b1d06bdf5a7830a2078f8eb00e3b8457827",
+          "bytes": 156108
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:6585": {
+      "channel": "@VARUS_channel",
+      "msg_id": 6585,
+      "asked_by": [
+        "unreadable_14"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": false,
+      "images": [
+        {
+          "msg_id": 6585,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6585.jpg",
+          "sha256": "9b54e6092301873b0a3efbcfe9c1e5579b1acc8a907ac6a2eb8b364ea08a4774",
+          "bytes": 165214
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:6727": {
+      "channel": "@VARUS_channel",
+      "msg_id": 6727,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 6727,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6727.jpg",
+          "sha256": "d057762d5c466e5ee77bbe623b438c57bc7b56934037c6c092c23a6553a490ab",
+          "bytes": 187277
+        },
+        {
+          "msg_id": 6728,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6728.jpg",
+          "sha256": "46ce089e91be6fcef3734f55e87f9d3687d39dad69026449581a0177ff369248",
+          "bytes": 229958
+        },
+        {
+          "msg_id": 6729,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6729.jpg",
+          "sha256": "3ecf0f7af128f7ac3ebe51ec9cef5f9ed2ba44340501ac5bb60f24aa94f3f0e6",
+          "bytes": 256812
+        },
+        {
+          "msg_id": 6730,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6730.jpg",
+          "sha256": "32b6b19391f453ec1a189c14693ed787efe446b1c109ca0779a3596eac4a5d1f",
+          "bytes": 235068
+        },
+        {
+          "msg_id": 6731,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6731.jpg",
+          "sha256": "d49943d3410f13a9dc31058d245649ef7abe06a0bd7616eaebdba1b9af337c02",
+          "bytes": 246144
+        },
+        {
+          "msg_id": 6732,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6732.jpg",
+          "sha256": "6bf9c0999478c3a75d3891c4255ccca8f432cf641bb585f0dbd216ee04b13045",
+          "bytes": 239142
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:6799": {
+      "channel": "@VARUS_channel",
+      "msg_id": 6799,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 6799,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6799.jpg",
+          "sha256": "258e786b882a98124e1076846befe760b5a609622ce0e998e0d3b983c6c00998",
+          "bytes": 135973
+        },
+        {
+          "msg_id": 6800,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6800.jpg",
+          "sha256": "de6c53d0ef1ecd323abc223c75eafe82abdc7107ea137f3c8b0b44c4405c9266",
+          "bytes": 120087
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:6855": {
+      "channel": "@VARUS_channel",
+      "msg_id": 6855,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 6855,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6855.jpg",
+          "sha256": "9d4279cc3a193fa216e54d488ad53ddbac004ed64df6e3a4c596da13b468e98b",
+          "bytes": 230809
+        },
+        {
+          "msg_id": 6856,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_6856.jpg",
+          "sha256": "94343cbe567d4a391156ebf70cca0b49535e7ccc7daa12d486765fe2a54c91a1",
+          "bytes": 224006
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:7058": {
+      "channel": "@VARUS_channel",
+      "msg_id": 7058,
+      "asked_by": [
+        "emptied_97",
+        "uplabel_media_only"
+      ],
+      "post_has_text": false,
+      "has_media": true,
+      "album": false,
+      "images": [],
+      "poll": {
+        "question": "Яка твоя ідеальна романтична \nвечеря? 💓",
+        "options": [
+          "Паста 🍝",
+          "Суші 🍣 ",
+          "Легкий салат 🥗 ",
+          "Мʼясний стейк 🥩 ",
+          "Вистачить десерту 🧁",
+          "Будь-що, аби не готувати 😅",
+          "Пиши свій варіант у коментарях ✍🏼"
+        ]
+      },
+      "missing": [
+        {
+          "msg_id": 7058,
+          "missing": "media is MessageMediaPoll"
+        }
+      ]
+    },
+    "@VARUS_channel:7099": {
+      "channel": "@VARUS_channel",
+      "msg_id": 7099,
+      "asked_by": [
+        "uplabel_media_only"
+      ],
+      "post_has_text": false,
+      "has_media": true,
+      "album": false,
+      "images": [],
+      "poll": {
+        "question": "Що приготуєш на Масницю? 😋",
+        "options": [
+          "Вареники 🥟 ",
+          "Налисники/млинці 🥞 ",
+          "Ліниві вареники 🥟 ",
+          "Сирники 😋",
+          "Свій варіант пишу у коментарях ✍🏼"
+        ]
+      },
+      "missing": [
+        {
+          "msg_id": 7099,
+          "missing": "media is MessageMediaPoll"
+        }
+      ]
+    },
+    "@VARUS_channel:7122": {
+      "channel": "@VARUS_channel",
+      "msg_id": 7122,
+      "asked_by": [
+        "uplabel_media_only"
+      ],
+      "post_has_text": false,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 7122,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7122.jpg",
+          "sha256": "7e6b946075aa635490f962fcca653a5b69fb549180929a43f55e6abca03c9c57",
+          "bytes": 105105
+        },
+        {
+          "msg_id": 7123,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7123.jpg",
+          "sha256": "206bcef9c423d93c9970c92a82a76799a8d492718636d3f49f6357f995fef4fc",
+          "bytes": 170291
+        },
+        {
+          "msg_id": 7124,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7124.jpg",
+          "sha256": "78f5a5dd52f8388c90bd96fb36cc7a5e4fcb0049b707fcbb80d03177587a0cd9",
+          "bytes": 141684
+        },
+        {
+          "msg_id": 7125,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7125.jpg",
+          "sha256": "533c4fc7b2cd9d9dbae5f1ff3bb1218f20065730fe0c2e03a2f39c3fccfbbe50",
+          "bytes": 145863
+        },
+        {
+          "msg_id": 7126,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7126.jpg",
+          "sha256": "3c55845ed46041afaec1e261e443e1b30c13cf306d5ececf6874d459f860436c",
+          "bytes": 128747
+        },
+        {
+          "msg_id": 7127,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7127.jpg",
+          "sha256": "9b6f1f109faf150d779210ae5b8ba85474a7bea5e691cb03889e7384169f50e6",
+          "bytes": 166369
+        },
+        {
+          "msg_id": 7128,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7128.jpg",
+          "sha256": "88be91ed29a6baae72f831a141d335bfeb58632bc4774ac07c3f60db6fd39dc2",
+          "bytes": 128736
+        },
+        {
+          "msg_id": 7129,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7129.jpg",
+          "sha256": "c28f9ea49873a3bdd40c25d54e2ae9d0c8a72c7d86fafaa901c21e36dbc13a2a",
+          "bytes": 161145
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:7146": {
+      "channel": "@VARUS_channel",
+      "msg_id": 7146,
+      "asked_by": [
+        "emptied_97",
+        "uplabel_media_only"
+      ],
+      "post_has_text": false,
+      "has_media": true,
+      "album": false,
+      "images": [],
+      "poll": {
+        "question": "Вареники з якою начинкою смакують більше? 😋🥟",
+        "options": [
+          "З капустою ",
+          "З солодким сиром ",
+          "З картоплею та грибами ",
+          "З картоплею ",
+          "Або пиши свій варіант у коментарях ✍🏼"
+        ]
+      },
+      "missing": [
+        {
+          "msg_id": 7146,
+          "missing": "media is MessageMediaPoll"
+        }
+      ]
+    },
+    "@VARUS_channel:7150": {
+      "channel": "@VARUS_channel",
+      "msg_id": 7150,
+      "asked_by": [
+        "unreadable_14"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 7150,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7150.jpg",
+          "sha256": "b59cd6416a262376645931f99680e3e3ebf079e45738feab58cee607f7362fc8",
+          "bytes": 251121
+        },
+        {
+          "msg_id": 7151,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7151.jpg",
+          "sha256": "a1f2813a67640e7172bb1b0dc439fa36f4c96765f4d85e818ba1915750baf62c",
+          "bytes": 154687
+        },
+        {
+          "msg_id": 7152,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7152.jpg",
+          "sha256": "c1467a0e692d5bcc826668b85e7b85e984573d7e7ef51e364711123d4a844a7c",
+          "bytes": 202012
+        },
+        {
+          "msg_id": 7153,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7153.jpg",
+          "sha256": "88c7eb6815485137bbd39224e4982ab2c29f45297a49a8133ccbfb7492220a1f",
+          "bytes": 80623
+        },
+        {
+          "msg_id": 7154,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7154.jpg",
+          "sha256": "91f1dc27de90a7ac0a1f00c9521f6c02f4a3ca0adf297f71e18f1205c3e05c33",
+          "bytes": 226431
+        },
+        {
+          "msg_id": 7155,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7155.jpg",
+          "sha256": "760d82882c3a51d3f3b5a68df70de60e0cfacc383d7b2645a82e368c15acb14b",
+          "bytes": 205169
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:7206": {
+      "channel": "@VARUS_channel",
+      "msg_id": 7206,
+      "asked_by": [
+        "uplabel_media_only"
+      ],
+      "post_has_text": false,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 7206,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7206.jpg",
+          "sha256": "ad67282dcc5bd0cffb8d489d6e6e3dc443726db5576e42937a20e850c23cde1a",
+          "bytes": 143188
+        },
+        {
+          "msg_id": 7207,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7207.jpg",
+          "sha256": "d96e15c50f606ea5f6dd37d47d71025aa4e685ad5145e5738ccf7070f936e461",
+          "bytes": 166744
+        },
+        {
+          "msg_id": 7208,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7208.jpg",
+          "sha256": "ec357518806f97784f9b6522aaaad898ef0218d980209e09456fdc317234117c",
+          "bytes": 136378
+        },
+        {
+          "msg_id": 7209,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7209.jpg",
+          "sha256": "17abe1c23123f6b4b1785fbb0f35de291b8fa53aa75fb55f0416351fe16d8bd8",
+          "bytes": 142513
+        },
+        {
+          "msg_id": 7210,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7210.jpg",
+          "sha256": "0e4ba4038b209ac93cadc7d7d8726ef41abcf98d51b7fbafcfa42051ee78ba47",
+          "bytes": 123929
+        },
+        {
+          "msg_id": 7211,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7211.jpg",
+          "sha256": "dc68e17e55a5b9380ac9e4aed14d1f35ca214ba92306c5d919e67e3e6fa0b241",
+          "bytes": 150572
+        },
+        {
+          "msg_id": 7212,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7212.jpg",
+          "sha256": "371efb975ef095c938d95a34a7d1a7765528940b39ee6aa18f70062047619cb4",
+          "bytes": 117479
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:7249": {
+      "channel": "@VARUS_channel",
+      "msg_id": 7249,
+      "asked_by": [
+        "emptied_97",
+        "uplabel_media_only"
+      ],
+      "post_has_text": false,
+      "has_media": true,
+      "album": false,
+      "images": [],
+      "poll": {
+        "question": "Млинці з якою начинкою смакують більше? 😋",
+        "options": [
+          "З куркою та грибами 🍄‍🟫",
+          "З сиром і маком 😍",
+          "З сьомгою 🐠",
+          "З яблуками 🍏",
+          "Пишу свій варіант у коментарях ✍🏼"
+        ]
+      },
+      "missing": [
+        {
+          "msg_id": 7249,
+          "missing": "media is MessageMediaPoll"
+        }
+      ]
+    },
+    "@VARUS_channel:7284": {
+      "channel": "@VARUS_channel",
+      "msg_id": 7284,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 7284,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7284.jpg",
+          "sha256": "a826139f6bb015e0fcd851527dafbe3bbedf3d30a99f3c03e31ddf17cf03523e",
+          "bytes": 165691
+        },
+        {
+          "msg_id": 7285,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7285.jpg",
+          "sha256": "e7ef99fa8c83ffd4ddd41629d018f77ce0fdb32248089d1c75434be42c22099f",
+          "bytes": 107547
+        },
+        {
+          "msg_id": 7286,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7286.jpg",
+          "sha256": "ad835292d245ee96e00708d1bcd2e80fde578abbcf5fef395e35a55d0663b835",
+          "bytes": 126977
+        },
+        {
+          "msg_id": 7287,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7287.jpg",
+          "sha256": "99e4d3523e8bae9f9ea4cbb4649550750e5c31d2c11240bdf6c0970c3e8f1f8d",
+          "bytes": 126764
+        },
+        {
+          "msg_id": 7288,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7288.jpg",
+          "sha256": "f77aeb67e5b3a6a2662986bdb80989359aaea28b06fd5a91d67fc03b1890ff94",
+          "bytes": 127013
+        },
+        {
+          "msg_id": 7289,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7289.jpg",
+          "sha256": "4a70cdf4af2d6a3bda6bdf626138ba1f9b2217d0eaa75f55a53175076e14f5e4",
+          "bytes": 145731
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:7422": {
+      "channel": "@VARUS_channel",
+      "msg_id": 7422,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 7422,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7422.jpg",
+          "sha256": "1c47397916f136515e9c2fab5ba1cb3101ff8bc00df3ef4058a090dba185d18b",
+          "bytes": 226209
+        },
+        {
+          "msg_id": 7423,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7423.jpg",
+          "sha256": "6b8b4875e4e86a86e42ed6c7aba76823e91c840e4369e541fcd7fce7235c93d3",
+          "bytes": 196602
+        },
+        {
+          "msg_id": 7424,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7424.jpg",
+          "sha256": "7c03571854043d479b8450ad7e23d1d7d9b16de8412ab13c8243aa97cb19a2f0",
+          "bytes": 222686
+        },
+        {
+          "msg_id": 7425,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7425.jpg",
+          "sha256": "b56cb8f2607184c63be91101ef549512dbff95e470586dcb598168c24b1ce811",
+          "bytes": 186263
+        },
+        {
+          "msg_id": 7426,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7426.jpg",
+          "sha256": "d402d5ce6a5fcfb12c6afc030ed1190d6f719e3944cca51198559317302bb294",
+          "bytes": 223376
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:7538": {
+      "channel": "@VARUS_channel",
+      "msg_id": 7538,
+      "asked_by": [
+        "unreadable_14"
+      ],
+      "post_has_text": false,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 7538,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7538.jpg",
+          "sha256": "4c9ca0ae4f9659301c98c5c66183f4a819582dbe90df4f34a51102c48d22d8e1",
+          "bytes": 144062
+        },
+        {
+          "msg_id": 7539,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7539.jpg",
+          "sha256": "bfb9a52f0aa02e77d4a23e85c0779c4af4955a309c018faf15120d13da7e8054",
+          "bytes": 164847
+        },
+        {
+          "msg_id": 7540,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7540.jpg",
+          "sha256": "4b19e1c5e2a2b637a22f025d7dbddff3f14beac7180d1a2f165f84a75ee6a44d",
+          "bytes": 139547
+        },
+        {
+          "msg_id": 7541,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7541.jpg",
+          "sha256": "748253314c39e292da1391a0205d9fad562adecd22e9ccc7aa8b61c830a1dbfe",
+          "bytes": 151405
+        },
+        {
+          "msg_id": 7542,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7542.jpg",
+          "sha256": "3a93cbafe061ddc5fba85d0a60154df1233027096d4477908dd8fec68ef5ace2",
+          "bytes": 154705
+        },
+        {
+          "msg_id": 7543,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7543.jpg",
+          "sha256": "f942e8583d237146795fe9b44056414dd30bed43bc65dea05aa2ff7ad55fc694",
+          "bytes": 152075
+        },
+        {
+          "msg_id": 7544,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7544.jpg",
+          "sha256": "dec0d5dcc39470bf16e5e518d6c7b399087bb00124b207939ca9dd73085cf0be",
+          "bytes": 149509
+        },
+        {
+          "msg_id": 7545,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7545.jpg",
+          "sha256": "2de348847242ebbdbcc99766f2adc7080bf65b509dd06998d9ca377f8658da71",
+          "bytes": 147098
+        },
+        {
+          "msg_id": 7546,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7546.jpg",
+          "sha256": "d500571bc797fe3a186d112e6845f0b0a61a5c71e2f2883ff16a75eb6a9f0438",
+          "bytes": 134705
+        },
+        {
+          "msg_id": 7547,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7547.jpg",
+          "sha256": "4ada1b6e7ada26e903b21ab3cfad9e7efc1dad8127a4ccc6f36d448dce707ed0",
+          "bytes": 154148
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:7615": {
+      "channel": "@VARUS_channel",
+      "msg_id": 7615,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 7615,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7615.jpg",
+          "sha256": "449630d95249f0fb945cf2ea174b7fbc0991f3d3529211921f19bee9827b5f61",
+          "bytes": 216833
+        },
+        {
+          "msg_id": 7616,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7616.jpg",
+          "sha256": "21e10f5460835af45c9e127199e31a5db39390e06b22d80bc00c8bdbe2c05c13",
+          "bytes": 208066
+        },
+        {
+          "msg_id": 7617,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7617.jpg",
+          "sha256": "f74673215edd585fcfad4f39954c82b52d0a64c9f2fa49c0000815e8d16fb1b6",
+          "bytes": 185615
+        },
+        {
+          "msg_id": 7618,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7618.jpg",
+          "sha256": "a90431be3b5111da51958252eaaf82fa61b44c53c7878efa197db9dcf9d31442",
+          "bytes": 213737
+        },
+        {
+          "msg_id": 7619,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7619.jpg",
+          "sha256": "39f03c0c7b8a274a1fa2ad4ac136e1ceec2034eaeb83de57980e7213eced0fb8",
+          "bytes": 191972
+        },
+        {
+          "msg_id": 7620,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7620.jpg",
+          "sha256": "a35abd999fa4251a50dc6bcfb7fb2c9add5075eea0e3991d157a282fd1b1a941",
+          "bytes": 209713
+        },
+        {
+          "msg_id": 7621,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7621.jpg",
+          "sha256": "a0eecca302407409b605a1eccb4606cd1f5e699a0f584c0f87909f1fe00a4bec",
+          "bytes": 224256
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:7622": {
+      "channel": "@VARUS_channel",
+      "msg_id": 7622,
+      "asked_by": [
+        "uplabel_media_only"
+      ],
+      "post_has_text": false,
+      "has_media": true,
+      "album": false,
+      "images": [],
+      "poll": {
+        "question": "Яку страву замовили б разом з Тарасом Григоровичем? 😋",
+        "options": [
+          "Борщ з мʼясом 🍲",
+          "Вареники з сиром 🥟 ",
+          "Хек у клярі 🐠",
+          "Скумбрію у соусі теріякі 🐟",
+          "Котлету по-київськи 😋",
+          "Пиріжок з капустою 🥧"
+        ]
+      },
+      "missing": [
+        {
+          "msg_id": 7622,
+          "missing": "media is MessageMediaPoll"
+        }
+      ]
+    },
+    "@VARUS_channel:7686": {
+      "channel": "@VARUS_channel",
+      "msg_id": 7686,
+      "asked_by": [
+        "uplabel_media_only"
+      ],
+      "post_has_text": false,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 7686,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7686.jpg",
+          "sha256": "f4c1ca6e9e9b12c40ef99bbe11920a8692e0aecb7a5929650ec87df9cd9b70a0",
+          "bytes": 167441
+        },
+        {
+          "msg_id": 7687,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7687.jpg",
+          "sha256": "696df63a0d20aad0b9c878d0aed9d5ee9e5c0658351de7b901853eed724d4885",
+          "bytes": 150132
+        },
+        {
+          "msg_id": 7688,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7688.jpg",
+          "sha256": "4f942f37bcb22ad85a89f918b180d6d0f109c7f0967e4309be9ce52d378889a5",
+          "bytes": 156173
+        },
+        {
+          "msg_id": 7689,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7689.jpg",
+          "sha256": "45fe9c84d8244ce3dfc3e6ddf26483f1db854611f2ae8cc4c473de9e1115564f",
+          "bytes": 136701
+        },
+        {
+          "msg_id": 7690,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7690.jpg",
+          "sha256": "f55103e291574374cd2d049b4cb90731478a9757def9fb1f247001231aff9ca4",
+          "bytes": 135176
+        },
+        {
+          "msg_id": 7691,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7691.jpg",
+          "sha256": "2a9da9f7fc814510f45b869ce207b2ed98acaa2e1bc467db4a8ea806ef6afceb",
+          "bytes": 163388
+        },
+        {
+          "msg_id": 7692,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7692.jpg",
+          "sha256": "6878e4693b3ddd089188881cfa9480a8afebd4927148dd3fda3c38fe19b8d697",
+          "bytes": 133399
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:7713": {
+      "channel": "@VARUS_channel",
+      "msg_id": 7713,
+      "asked_by": [
+        "uplabel_media_only"
+      ],
+      "post_has_text": false,
+      "has_media": true,
+      "album": false,
+      "images": [
+        {
+          "msg_id": 7713,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7713.jpg",
+          "sha256": "ff8a181a8cf38026b5d5e715b9166d24c94cc1a067adb453ddfaf6e5cb2876e5",
+          "bytes": 125053
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:7732": {
+      "channel": "@VARUS_channel",
+      "msg_id": 7732,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 7732,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7732.jpg",
+          "sha256": "cb95b6605bb0b3f088395a59358ef9cfc3b4a39d6bac3c5a005b7aeacf9ed83d",
+          "bytes": 156914
+        },
+        {
+          "msg_id": 7733,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_7733.jpg",
+          "sha256": "99df120e6b4b66fa801b591027cf052296343c969b61fb858af7035690381191",
+          "bytes": 111413
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:7857": {
+      "channel": "@VARUS_channel",
+      "msg_id": 7857,
+      "asked_by": [
+        "uplabel_media_only"
+      ],
+      "post_has_text": false,
+      "has_media": true,
+      "album": false,
+      "images": [],
+      "poll": {
+        "question": "Памʼятаєш Гуся? 🪿😎",
+        "options": [
+          "Тааак, звісно!",
+          "Щось чув 😎",
+          "Ні, це хто? Чекаю деталей 😏"
+        ]
+      },
+      "missing": [
+        {
+          "msg_id": 7857,
+          "missing": "media is MessageMediaPoll"
+        }
+      ]
+    },
+    "@VARUS_channel:8135": {
+      "channel": "@VARUS_channel",
+      "msg_id": 8135,
+      "asked_by": [
+        "uplabel_media_only"
+      ],
+      "post_has_text": false,
+      "has_media": true,
+      "album": false,
+      "images": [
+        {
+          "msg_id": 8135,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_8135.jpg",
+          "sha256": "8d18ce7e208f429d3bf98958314dd8c1f981e557d2ef75da2900b1a14ef10cd1",
+          "bytes": 115292
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:8339": {
+      "channel": "@VARUS_channel",
+      "msg_id": 8339,
+      "asked_by": [
+        "uplabel_media_only"
+      ],
+      "post_has_text": false,
+      "has_media": true,
+      "album": false,
+      "images": [],
+      "poll": null,
+      "missing": [
+        {
+          "msg_id": 8339,
+          "missing": "media is video/mp4, not an image"
+        }
+      ]
+    },
+    "@VARUS_channel:8669": {
+      "channel": "@VARUS_channel",
+      "msg_id": 8669,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 8669,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_8669.jpg",
+          "sha256": "6afa5e86795ec3225c9f8d5cbc47cba6d61e479d95dbe692e224cec037b5d2f9",
+          "bytes": 196618
+        },
+        {
+          "msg_id": 8670,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_8670.jpg",
+          "sha256": "fde10819d05ced3a05e552449bd24c6f6bad043f612e282522e4db96e12ff031",
+          "bytes": 129925
+        },
+        {
+          "msg_id": 8671,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_8671.jpg",
+          "sha256": "5114e354fe35d4ba3444c0dbeaa3cc62d642b1b3b01d0ed9829029f0ae14e056",
+          "bytes": 137282
+        },
+        {
+          "msg_id": 8672,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_8672.jpg",
+          "sha256": "30cb835b2d4096f2f9056c40f046937687aaf346059a5f1d3564eee66d9135dd",
+          "bytes": 140122
+        },
+        {
+          "msg_id": 8673,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_8673.jpg",
+          "sha256": "2046a6adebfb44172369d98e4d96f6aef4b5974bc9978d3e98bf1149febb6ff6",
+          "bytes": 117061
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:8822": {
+      "channel": "@VARUS_channel",
+      "msg_id": 8822,
+      "asked_by": [
+        "uplabel_media_only"
+      ],
+      "post_has_text": false,
+      "has_media": true,
+      "album": false,
+      "images": [],
+      "poll": null,
+      "missing": [
+        {
+          "msg_id": 8822,
+          "missing": "media is audio/ogg, not an image"
+        }
+      ]
+    },
+    "@VARUS_channel:9158": {
+      "channel": "@VARUS_channel",
+      "msg_id": 9158,
+      "asked_by": [
+        "uplabel_media_only"
+      ],
+      "post_has_text": false,
+      "has_media": true,
+      "album": false,
+      "images": [],
+      "poll": {
+        "question": "А тобі смакує спаржа?",
+        "options": [
+          "Оо тааак😍",
+          "Ні👎🏻",
+          "Поки не визначився👀"
+        ]
+      },
+      "missing": [
+        {
+          "msg_id": 9158,
+          "missing": "media is MessageMediaPoll"
+        }
+      ]
+    },
+    "@VARUS_channel:9279": {
+      "channel": "@VARUS_channel",
+      "msg_id": 9279,
+      "asked_by": [
+        "uplabel_media_only"
+      ],
+      "post_has_text": false,
+      "has_media": true,
+      "album": false,
+      "images": [],
+      "poll": {
+        "question": "З чим будете дивитись бій?",
+        "options": [
+          "Чипси 🧀",
+          "Грінки 🧡",
+          "Піца 🍕"
+        ]
+      },
+      "missing": [
+        {
+          "msg_id": 9279,
+          "missing": "media is MessageMediaPoll"
+        }
+      ]
+    },
+    "@VARUS_channel:9437": {
+      "channel": "@VARUS_channel",
+      "msg_id": 9437,
+      "asked_by": [
+        "unreadable_14"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 9437,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_9437.jpg",
+          "sha256": "8e97f6e0e24ff514032b41f882307945605b2dc58a3bff6543dec8f6f4df2fdb",
+          "bytes": 96878
+        },
+        {
+          "msg_id": 9438,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_9438.jpg",
+          "sha256": "28c567f334426358906e4e1b5dee0248fe496568d0912d735eaec3d0b41a4680",
+          "bytes": 118372
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:9440": {
+      "channel": "@VARUS_channel",
+      "msg_id": 9440,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": false,
+      "images": [
+        {
+          "msg_id": 9440,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_9440.jpg",
+          "sha256": "5ee173d8d473514f4bf55dc7a669f3ab8ffab43e4b2be2c1d9ed6ef915646443",
+          "bytes": 218224
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:9833": {
+      "channel": "@VARUS_channel",
+      "msg_id": 9833,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 9833,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_9833.jpg",
+          "sha256": "2c30f6395b0b857a91a1b7abb9eb37cce8debbc3b085572087db519cfc2d31ef",
+          "bytes": 288953
+        }
+      ],
+      "poll": null,
+      "missing": [
+        {
+          "msg_id": 9834,
+          "missing": "media is video/mp4, not an image"
+        },
+        {
+          "msg_id": 9835,
+          "missing": "media is video/mp4, not an image"
+        },
+        {
+          "msg_id": 9836,
+          "missing": "media is video/mp4, not an image"
+        },
+        {
+          "msg_id": 9837,
+          "missing": "media is video/mp4, not an image"
+        }
+      ]
+    },
+    "@VARUS_channel:9842": {
+      "channel": "@VARUS_channel",
+      "msg_id": 9842,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 9842,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_9842.jpg",
+          "sha256": "0ab99999660f27de7e6642f2d917c40f4555152dee5cda128538c21c69a0f248",
+          "bytes": 160173
+        },
+        {
+          "msg_id": 9843,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_9843.jpg",
+          "sha256": "b1bb77431d35f1a02dd0a462a77533514050353f8e08d8cfed22b23358d4ac80",
+          "bytes": 160062
+        },
+        {
+          "msg_id": 9844,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_9844.jpg",
+          "sha256": "b2081a62caa041605f350ca7e051c4d8ae9cab90c75e942ca4d1a6400a83dc7a",
+          "bytes": 192285
+        },
+        {
+          "msg_id": 9845,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_9845.jpg",
+          "sha256": "c6e057913b5e3988b6cd6953659debb029705665d59378dd8050c12b0cb34f63",
+          "bytes": 226606
+        },
+        {
+          "msg_id": 9846,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_9846.jpg",
+          "sha256": "a3c80c8dfa641a5d9740f1cfc187ef6bab9f9a35ee11782ae22c04e0e744877e",
+          "bytes": 146799
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:9847": {
+      "channel": "@VARUS_channel",
+      "msg_id": 9847,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 9847,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_9847.jpg",
+          "sha256": "72f8b5a0c4cd07b9a4d1b0e0366d04b1417383296a030aea898c45b8b50c7f1e",
+          "bytes": 129188
+        },
+        {
+          "msg_id": 9848,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_9848.jpg",
+          "sha256": "020ab3d1442926478d355ace0ead48287986194f8ce9360fae757df83b6b9b63",
+          "bytes": 126441
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:9968": {
+      "channel": "@VARUS_channel",
+      "msg_id": 9968,
+      "asked_by": [
+        "uplabel_media_only"
+      ],
+      "post_has_text": false,
+      "has_media": true,
+      "album": false,
+      "images": [],
+      "poll": {
+        "question": "За кого будете вболівати? ⚽️",
+        "options": [
+          "Аргентина",
+          "Австрія"
+        ]
+      },
+      "missing": [
+        {
+          "msg_id": 9968,
+          "missing": "media is MessageMediaPoll"
+        }
+      ]
+    },
+    "@VARUS_channel:10001": {
+      "channel": "@VARUS_channel",
+      "msg_id": 10001,
+      "asked_by": [
+        "unreadable_14"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 10001,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_10001.jpg",
+          "sha256": "2fcf51862ad50b16e0583a3fb4e4571e0c0611057d8b5c3fc3fd691cbce7d640",
+          "bytes": 139259
+        },
+        {
+          "msg_id": 10002,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_10002.jpg",
+          "sha256": "a413c8965e77167faaa04df1bb240965518f038a8735ee04ac9e9cb9a86b6918",
+          "bytes": 129418
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:10210": {
+      "channel": "@VARUS_channel",
+      "msg_id": 10210,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": false,
+      "images": [
+        {
+          "msg_id": 10210,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_10210.jpg",
+          "sha256": "e4913842058f1bc5579fa1de08dd3fd17079d6522bb7d6c9f8b008f2165a3cb0",
+          "bytes": 96907
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:10349": {
+      "channel": "@VARUS_channel",
+      "msg_id": 10349,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": false,
+      "images": [
+        {
+          "msg_id": 10349,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_10349.jpg",
+          "sha256": "95864d82de76c4b09afa2144e27c83fec9f897b754a6fcf66bbda760c86b0940",
+          "bytes": 133088
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:10471": {
+      "channel": "@VARUS_channel",
+      "msg_id": 10471,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 10471,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_10471.jpg",
+          "sha256": "aab8bfc4ef35ec159b73bfc134432282b2366783ebe9a6252d8de65434293e50",
+          "bytes": 176825
+        },
+        {
+          "msg_id": 10472,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_10472.jpg",
+          "sha256": "d17eb75d15d310841e70d9985eb5eba05606f5c7ca01dfa0404c8053ce2cb03f",
+          "bytes": 237974
+        },
+        {
+          "msg_id": 10473,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_10473.jpg",
+          "sha256": "fa26e1f0402b4ec8026236c703673010b189111cbaa0b3e24fff4a3960894e35",
+          "bytes": 269182
+        },
+        {
+          "msg_id": 10474,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_10474.jpg",
+          "sha256": "cf670b72d2fd60d913dffd2c77a0e714dfd98401d77d68f8cc7680909c6ba4a6",
+          "bytes": 251589
+        },
+        {
+          "msg_id": 10475,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_10475.jpg",
+          "sha256": "2fe527d1080fb5af58a91edaec88c9052560cfd5ab401eea0bafb239d1632257",
+          "bytes": 238497
+        },
+        {
+          "msg_id": 10476,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_10476.jpg",
+          "sha256": "b7c95fd61f123f118e20d4d2ebd404489aa08b802c779cbfd758847b28a32339",
+          "bytes": 241836
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@VARUS_channel:10603": {
+      "channel": "@VARUS_channel",
+      "msg_id": 10603,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 10603,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_10603.jpg",
+          "sha256": "2d88a28f056d2bba027d726bf438d49be39f83e0d772280224a61138e0078af9",
+          "bytes": 255599
+        },
+        {
+          "msg_id": 10604,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_10604.jpg",
+          "sha256": "ba96ea975b5787d7c6977e6d9651d908b7d1c12fa7d0c5f31f763f44b745bff8",
+          "bytes": 156674
+        },
+        {
+          "msg_id": 10605,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_10605.jpg",
+          "sha256": "bfe4974a5025abca019ecb66eb7abe492c02d693f745e606c0fc14b8b70c57bc",
+          "bytes": 190415
+        },
+        {
+          "msg_id": 10606,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_10606.jpg",
+          "sha256": "cc87af6dcddd1f9ca6fda0dd59adcc398b4f6f0832daa37c79ca2d19f539d677",
+          "bytes": 203313
+        },
+        {
+          "msg_id": 10607,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_10607.jpg",
+          "sha256": "4b5a68cfad2118db2f374fe7104864ab45be76b962e75ff7c87bce6051172270",
+          "bytes": 222703
+        },
+        {
+          "msg_id": 10608,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_10608.jpg",
+          "sha256": "7b017dd2d25eae8a1c6b66fb50b9a60fe836c16b1c4772f04782a15a5684b108",
+          "bytes": 251530
+        },
+        {
+          "msg_id": 10609,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_10609.jpg",
+          "sha256": "c243aa91721124b4df0aa84749846f416b5244090f8773611c9acba355faacd6",
+          "bytes": 206013
+        },
+        {
+          "msg_id": 10610,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_10610.jpg",
+          "sha256": "f8995401197e35bf1025a3309a55863d5a02b3f076ec3847d5c6de4ec5f8a64f",
+          "bytes": 210859
+        },
+        {
+          "msg_id": 10611,
+          "file": "data/annotation/sitting_45g/posts_media/VARUS_channel_10611.jpg",
+          "sha256": "e9e08a0560f9074e90014b0224a47f0b13498494bff03bf3370102592395980b",
+          "bytes": 250550
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@msuaaaa:5113": {
+      "channel": "@msuaaaa",
+      "msg_id": 5113,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 5113,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_5113.jpg",
+          "sha256": "12c593434b25cecfdfbddc9ea2f37eaf4e8587769d13d4f39826460205e155c2",
+          "bytes": 174150
+        },
+        {
+          "msg_id": 5114,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_5114.jpg",
+          "sha256": "78e00d6400450cf8d9f1508493c1b060d596749af0efdda4a5f7624f9f65ce5a",
+          "bytes": 172934
+        },
+        {
+          "msg_id": 5115,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_5115.jpg",
+          "sha256": "6de1706a1e7dcc05117ab124e1b61793f9898a83959ae4e0260b3706fa14edd4",
+          "bytes": 263363
+        },
+        {
+          "msg_id": 5116,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_5116.jpg",
+          "sha256": "918da1fa27c363a48221ba5a8dcab51ff4fc3a444c5a0158e37163874b44322d",
+          "bytes": 189087
+        },
+        {
+          "msg_id": 5117,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_5117.jpg",
+          "sha256": "5ccaee2639322c3f366dc9d3c312c8164335a9fe10ecd6c37aef7dfcb4877a66",
+          "bytes": 238586
+        },
+        {
+          "msg_id": 5118,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_5118.jpg",
+          "sha256": "356806e6f932faac04ba94b7aad192e02c507630a85d34176397f808816e2870",
+          "bytes": 160034
+        },
+        {
+          "msg_id": 5119,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_5119.jpg",
+          "sha256": "85b0470f40bb8966fd4549abe2d77c669aa466e8b9020e232e4ef9cd173c8188",
+          "bytes": 233846
+        },
+        {
+          "msg_id": 5120,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_5120.jpg",
+          "sha256": "07ea68e6c7bb566e8534099e3ea04b63e1bd93897669579d5275c514da3913a5",
+          "bytes": 160516
+        },
+        {
+          "msg_id": 5121,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_5121.jpg",
+          "sha256": "c45073881e48b9137791d602d397a681aeca25a026e3f154cb1cebf0a9dcf417",
+          "bytes": 177690
+        },
+        {
+          "msg_id": 5122,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_5122.jpg",
+          "sha256": "b2c5d0ce284d0049a04bd0691bbb4ec5df41cd7b225dbc6774e8549cc87d5647",
+          "bytes": 213483
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@msuaaaa:5385": {
+      "channel": "@msuaaaa",
+      "msg_id": 5385,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 5385,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_5385.jpg",
+          "sha256": "c09dce1eebceaec9ebddc64613d91b8c5f2dbed8231e384151de98e35b51b40b",
+          "bytes": 90887
+        },
+        {
+          "msg_id": 5386,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_5386.jpg",
+          "sha256": "a996536ef10702e342e1cea9b88ca88cdfdd58689ff7eb35d89b2cdcec4d5f0d",
+          "bytes": 214842
+        },
+        {
+          "msg_id": 5387,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_5387.jpg",
+          "sha256": "fc408d131d7e913bd15f23aa41025c653c99a8c34dbf5d953227dc5c61bb458b",
+          "bytes": 195120
+        },
+        {
+          "msg_id": 5388,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_5388.jpg",
+          "sha256": "6fa624aba142cb881384770b582a0c00ba2b6e31d2a8afb3dd0f9b719a263f56",
+          "bytes": 205960
+        },
+        {
+          "msg_id": 5389,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_5389.jpg",
+          "sha256": "bc55985ea3c3f98698fcd1be51ab5e445b34178d9057486ad65df5705eb6a042",
+          "bytes": 208476
+        },
+        {
+          "msg_id": 5390,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_5390.jpg",
+          "sha256": "a37681ecbecccbd90c181f7b98bc68cf8d67b93a4694a8b17b1402b83b26e3c5",
+          "bytes": 196571
+        },
+        {
+          "msg_id": 5391,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_5391.jpg",
+          "sha256": "1f6fe2bcb1932dc3bc9a77f2ed86744ce3070c100189f4ec98a526ecdc2e016d",
+          "bytes": 180710
+        },
+        {
+          "msg_id": 5392,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_5392.jpg",
+          "sha256": "d8b394fb8c46dd3d8d12d0fc6dc3a884cbb8c4ab104da376e721dd0acf617124",
+          "bytes": 220588
+        },
+        {
+          "msg_id": 5393,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_5393.jpg",
+          "sha256": "7c253374ae2e79c7c9a3b58d5b33784cacb8cb620dbd74f14d0beac92b6e41fa",
+          "bytes": 213183
+        },
+        {
+          "msg_id": 5394,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_5394.jpg",
+          "sha256": "8a604a9f40830b1fc7bcd154427d43318a423d4b25706320ddf545b340601250",
+          "bytes": 218683
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@msuaaaa:5722": {
+      "channel": "@msuaaaa",
+      "msg_id": 5722,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 5722,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_5722.jpg",
+          "sha256": "4207f330df73e73e3e002728a6697fc445a1c805d5573a7e3109e3d68a51fed6",
+          "bytes": 136805
+        },
+        {
+          "msg_id": 5723,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_5723.jpg",
+          "sha256": "2c7ef1c761e7bcc2ba81947e420ce0be63f2cfe0eaa2c421e56d859b3a8cbac6",
+          "bytes": 102974
+        },
+        {
+          "msg_id": 5724,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_5724.jpg",
+          "sha256": "d6a8ad475a39642c7f4eadb627108dc39b415981b97bdc6d15b8e3aa05bdae64",
+          "bytes": 176631
+        },
+        {
+          "msg_id": 5725,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_5725.jpg",
+          "sha256": "898a2dcd8db0c09faa1d6c5360a3858d24e93b92434a780e5a2ee03393e6739d",
+          "bytes": 148811
+        },
+        {
+          "msg_id": 5726,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_5726.jpg",
+          "sha256": "fcf38f34f9d890014fb02d4240849e6114b7e1bef5061d7076577ba0424e5db9",
+          "bytes": 151558
+        },
+        {
+          "msg_id": 5727,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_5727.jpg",
+          "sha256": "651f0bb796fa1d6f2f45fe033c8390eb6f518b9e1aa26a28b23a59fa31215238",
+          "bytes": 187877
+        },
+        {
+          "msg_id": 5728,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_5728.jpg",
+          "sha256": "e3bf715bf52a712b917b02b23c149ffe7a71ddd6c3289909f1643ee91bd9a67a",
+          "bytes": 164652
+        },
+        {
+          "msg_id": 5729,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_5729.jpg",
+          "sha256": "e4937847ea7764fc344c25f85a0436eaa9a4d76f9e27ea0479321dd31c4593aa",
+          "bytes": 168966
+        },
+        {
+          "msg_id": 5730,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_5730.jpg",
+          "sha256": "4dcf756a6a1e68096afccaa53f999ff26fe488abc4b53bfe4c02ae7aaed8fab7",
+          "bytes": 178355
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@msuaaaa:6638": {
+      "channel": "@msuaaaa",
+      "msg_id": 6638,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": false,
+      "images": [
+        {
+          "msg_id": 6638,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_6638.jpg",
+          "sha256": "cbeb14410392532e117a13d69836320e981c2f9bccb6a11e2bf9a8ecd49089c4",
+          "bytes": 93757
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@msuaaaa:6740": {
+      "channel": "@msuaaaa",
+      "msg_id": 6740,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": false,
+      "images": [
+        {
+          "msg_id": 6740,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_6740.jpg",
+          "sha256": "132c4ae42ed98af48bd714816c51b8e4f9ad484237b31829fc8c048663888606",
+          "bytes": 135225
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@msuaaaa:7202": {
+      "channel": "@msuaaaa",
+      "msg_id": 7202,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": false,
+      "images": [
+        {
+          "msg_id": 7202,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_7202.jpg",
+          "sha256": "b316a33796bb6d261e42cdd231d802dedd78cf3252f3f169b1332d2b7f8f8d5b",
+          "bytes": 148258
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@msuaaaa:7230": {
+      "channel": "@msuaaaa",
+      "msg_id": 7230,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 7230,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_7230.jpg",
+          "sha256": "b4307eb2559646b0c5acd00599fc15bcaaaa5c5275196060a17a593462db8a34",
+          "bytes": 105748
+        },
+        {
+          "msg_id": 7231,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_7231.jpg",
+          "sha256": "9e3915dfcf3f6c55ab38d07404236ed7402cb0359367eacd5cdf7094f465a9da",
+          "bytes": 26991
+        },
+        {
+          "msg_id": 7232,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_7232.jpg",
+          "sha256": "a22c69cfe22c35b2bd86b0c9f101581f5a37adf9b1b8c8ce7083b7ddeace4645",
+          "bytes": 24620
+        },
+        {
+          "msg_id": 7233,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_7233.jpg",
+          "sha256": "ba985d44875d3a4cc69af653f1ea83ff9efc6ae719f4b89f85ae4db0142d818c",
+          "bytes": 53577
+        },
+        {
+          "msg_id": 7234,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_7234.jpg",
+          "sha256": "923bcf40a958e4367476609f4b02e77137ef299e18b45e69528485d418bf04f6",
+          "bytes": 38805
+        },
+        {
+          "msg_id": 7235,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_7235.jpg",
+          "sha256": "7973652fe1fd1d5caff7f51bc31df0a4acfe67b0482eee3ecf63cae105264d34",
+          "bytes": 60447
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@msuaaaa:7393": {
+      "channel": "@msuaaaa",
+      "msg_id": 7393,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": false,
+      "images": [
+        {
+          "msg_id": 7393,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_7393.jpg",
+          "sha256": "b4117442740164fbd3b7e36e239ddbfc6af0b05767b2a3d0d74fa74e9c9287d8",
+          "bytes": 97940
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@msuaaaa:7435": {
+      "channel": "@msuaaaa",
+      "msg_id": 7435,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 7435,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_7435.jpg",
+          "sha256": "a014dba4382e990c49e93f5f34934dc6a2c71ad3fcef565d8e19fecd2ec9aa7e",
+          "bytes": 84319
+        },
+        {
+          "msg_id": 7436,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_7436.jpg",
+          "sha256": "33346f39cccd80c45b0372309a9b3b770ea365fa6d8439ee01844129fe41db02",
+          "bytes": 74275
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@msuaaaa:7578": {
+      "channel": "@msuaaaa",
+      "msg_id": 7578,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 7578,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_7578.jpg",
+          "sha256": "d7bd701b2a2c44484728a690b8ef01e3b83bec4ee51d77807b4028985b1515ff",
+          "bytes": 120460
+        },
+        {
+          "msg_id": 7579,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_7579.jpg",
+          "sha256": "45b79ef7919a93a046e80e494560dffb242039de0811fffc3f9e745393dec8cf",
+          "bytes": 160506
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@msuaaaa:7594": {
+      "channel": "@msuaaaa",
+      "msg_id": 7594,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": false,
+      "images": [
+        {
+          "msg_id": 7594,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_7594.jpg",
+          "sha256": "3a3b86828e5ebc2fdc282a931bf601401aa0f0aa1185c63b5dda139d2ceb8bf1",
+          "bytes": 81677
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@msuaaaa:7864": {
+      "channel": "@msuaaaa",
+      "msg_id": 7864,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 7864,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_7864.jpg",
+          "sha256": "50f77ef8d9aeb922a4c295cdfda0dedd7c73d798cf615aea73cffc1142a9f330",
+          "bytes": 421526
+        },
+        {
+          "msg_id": 7865,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_7865.jpg",
+          "sha256": "27b11ed75e395c659e4683d58386d075af13482e925ddbb0b9a722455118d4a5",
+          "bytes": 461621
+        },
+        {
+          "msg_id": 7866,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_7866.jpg",
+          "sha256": "9582affc5e7e40151b05712ba3f57478748143b24edfbc08a605ee637f902f7a",
+          "bytes": 395724
+        },
+        {
+          "msg_id": 7867,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_7867.jpg",
+          "sha256": "611d70973c96b540f5453603fca5a4790092176510f6d329b0f43cffe2430b7c",
+          "bytes": 527614
+        },
+        {
+          "msg_id": 7868,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_7868.jpg",
+          "sha256": "41d1f01dd7df41f0edd1205a91b6f8345b47c57f83de427c39b01efdf4bb203a",
+          "bytes": 492000
+        },
+        {
+          "msg_id": 7869,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_7869.jpg",
+          "sha256": "a41caebafacb33c19a5bd31573617c43d0c5039dc4add1a1f4a67ef59c09ce9e",
+          "bytes": 153158
+        },
+        {
+          "msg_id": 7870,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_7870.jpg",
+          "sha256": "5c0fcd69b0fe8bc28701226ef0844480e0549bbf994a36095bebdc3f0886ae94",
+          "bytes": 143249
+        },
+        {
+          "msg_id": 7871,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_7871.jpg",
+          "sha256": "84d7c3d7c2f80031db2f97d0afcd4edae7a330dfbd6c3a62db2ecfa769990dc9",
+          "bytes": 140407
+        },
+        {
+          "msg_id": 7872,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_7872.jpg",
+          "sha256": "13353a2cdbae57f26c0b7943e7a3b16e4497ebf84a412ac4aef2ed38f59bfc0d",
+          "bytes": 496723
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@msuaaaa:7881": {
+      "channel": "@msuaaaa",
+      "msg_id": 7881,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": false,
+      "images": [
+        {
+          "msg_id": 7881,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_7881.jpg",
+          "sha256": "d44606943b56b1adc85e0dbaa57e45c4ca351bc1a4fa0a5ea44844083bf64bed",
+          "bytes": 228750
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@msuaaaa:7928": {
+      "channel": "@msuaaaa",
+      "msg_id": 7928,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 7928,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_7928.jpg",
+          "sha256": "1b91610bdbdfdcf2df0757be468d8334235f3f56594400a991e24d9d02fdb9e5",
+          "bytes": 175631
+        },
+        {
+          "msg_id": 7929,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_7929.jpg",
+          "sha256": "ceabf7a5940a898571dfc01c21bdea0610ccf9b4795d4e154b98172d34a4faee",
+          "bytes": 212901
+        },
+        {
+          "msg_id": 7930,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_7930.jpg",
+          "sha256": "0a4f9993a1ee28e4ce1fa22ae827e47b3ee8359c12df0e2e7f4048dfb41ccb7a",
+          "bytes": 217386
+        },
+        {
+          "msg_id": 7931,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_7931.jpg",
+          "sha256": "85777187494ab5c33486f4bb00c37dc8c45e6916f0466a3782287979c44640be",
+          "bytes": 228420
+        },
+        {
+          "msg_id": 7932,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_7932.jpg",
+          "sha256": "218b44118a7dbb11a94a2aeec3d6d0882a113327077278ff4a1721e47586333f",
+          "bytes": 198284
+        },
+        {
+          "msg_id": 7933,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_7933.jpg",
+          "sha256": "7f07c166d2b28a7ac9c248ff3f660d80a0ad2d2dd570dd74851686788efe16d1",
+          "bytes": 202531
+        },
+        {
+          "msg_id": 7934,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_7934.jpg",
+          "sha256": "c94fb84032419d339de60f957c349f54da2544c646b79bbd4bac6f60d5ee06d7",
+          "bytes": 193406
+        },
+        {
+          "msg_id": 7935,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_7935.jpg",
+          "sha256": "f5e9a151329dcad96dabc02f31cff45eefa8e0d4be7e5cd601c6f9ec8bfb6bc8",
+          "bytes": 185922
+        },
+        {
+          "msg_id": 7936,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_7936.jpg",
+          "sha256": "7d38b50695459a6e4bcb85f890ad9e415fb4588ea6ce661faf7d0d23248a09d1",
+          "bytes": 169445
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@msuaaaa:8217": {
+      "channel": "@msuaaaa",
+      "msg_id": 8217,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 8217,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_8217.jpg",
+          "sha256": "0601b0be22d4c14d38842137c22cf6e768542020f9a9bff7f3b775e47ad6802f",
+          "bytes": 250838
+        },
+        {
+          "msg_id": 8218,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_8218.jpg",
+          "sha256": "b84f615ab87635ca451ec3df3a8156a0dcb90a20b67eb0b006b09c3a391fa74e",
+          "bytes": 141339
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@msuaaaa:8326": {
+      "channel": "@msuaaaa",
+      "msg_id": 8326,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 8326,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_8326.jpg",
+          "sha256": "29a6f1c40257ed8e22be7d572f90373c7426b06a23c71459aac6acab7a5d5735",
+          "bytes": 99473
+        },
+        {
+          "msg_id": 8327,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_8327.jpg",
+          "sha256": "99a2d41185e4f82709eb2c293a8c567e74ac9bc1f8c0a20209f40d928d6b9973",
+          "bytes": 203219
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@msuaaaa:8394": {
+      "channel": "@msuaaaa",
+      "msg_id": 8394,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": false,
+      "images": [
+        {
+          "msg_id": 8394,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_8394.jpg",
+          "sha256": "250f74db28c158b3a89fddf3c4db46b2c48db7aac236d23ceb7f667eccb80852",
+          "bytes": 77513
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@msuaaaa:8565": {
+      "channel": "@msuaaaa",
+      "msg_id": 8565,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 8565,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_8565.jpg",
+          "sha256": "b9b2aafbda737e2ab488b43ad0b976c34f6706e6be7916beb692420372c99851",
+          "bytes": 175222
+        },
+        {
+          "msg_id": 8566,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_8566.jpg",
+          "sha256": "3b5a5f2fcdf44a92b04be9cec00f4b9d352b91db4a5d1b73099296e4f9c1fe21",
+          "bytes": 184502
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@msuaaaa:8763": {
+      "channel": "@msuaaaa",
+      "msg_id": 8763,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 8763,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_8763.jpg",
+          "sha256": "adcb59a0e3cc4d4a97165da0f4fb0283a026642c8cc7eee1f2dabe2c96e8c88c",
+          "bytes": 174304
+        },
+        {
+          "msg_id": 8764,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_8764.jpg",
+          "sha256": "7713f5ff35cb3e93fc2207b997dee688e108ced2215f30a3c8597cc900914765",
+          "bytes": 159748
+        },
+        {
+          "msg_id": 8765,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_8765.jpg",
+          "sha256": "6c125d35c2813fa2df30818f665121c4351704c5027fb5323b737b0121f38393",
+          "bytes": 200568
+        },
+        {
+          "msg_id": 8766,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_8766.jpg",
+          "sha256": "0b8b3d5f3dd74c904e219dcd49c9858ef28a908811e5986881191604e79f2fd6",
+          "bytes": 184802
+        },
+        {
+          "msg_id": 8767,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_8767.jpg",
+          "sha256": "baf53e21d785e1eb435bf2d2a36ab6764c4ee971acf55dc41fbce9277a72fbc9",
+          "bytes": 164425
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@msuaaaa:8768": {
+      "channel": "@msuaaaa",
+      "msg_id": 8768,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 8768,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_8768.jpg",
+          "sha256": "e43beb332029ed119f8c4cb18273b2d0bddb079bf82e791c813d90a888476050",
+          "bytes": 300530
+        },
+        {
+          "msg_id": 8769,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_8769.jpg",
+          "sha256": "da68a1c69fea97ce7cb1e12415bf313834dcf51c8405a247c5fd97aeb1e5426b",
+          "bytes": 338188
+        },
+        {
+          "msg_id": 8770,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_8770.jpg",
+          "sha256": "954338f5a602dfcd6f21046422a3fab863b4da17300c2a7a6f3722d2c6e139c4",
+          "bytes": 276961
+        },
+        {
+          "msg_id": 8771,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_8771.jpg",
+          "sha256": "b68f48e2e0bba6bfbbb766a74f377f3c5daba643d2b8f68ede469c834c766280",
+          "bytes": 446771
+        },
+        {
+          "msg_id": 8772,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_8772.jpg",
+          "sha256": "c40bd6589cc38ac70dc9f0cc15bb4ac777fa87b9ea475ef01d4870e80e0e9941",
+          "bytes": 283048
+        },
+        {
+          "msg_id": 8773,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_8773.jpg",
+          "sha256": "35875fe6b3aa8c54f6c3eeb00ab5ca96418a4b96f0c87be548b282db9876cc32",
+          "bytes": 336595
+        },
+        {
+          "msg_id": 8774,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_8774.jpg",
+          "sha256": "eaf5f70b3662d17df1e024a9071b6b6cdced4534ce78820842cd8d3f6a026295",
+          "bytes": 293701
+        },
+        {
+          "msg_id": 8775,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_8775.jpg",
+          "sha256": "07479ed8b1d566b4e3c7710d9e0e8881e9e553ca8a7c18b39342685994d6d7ba",
+          "bytes": 361089
+        },
+        {
+          "msg_id": 8776,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_8776.jpg",
+          "sha256": "d8db382674e2ab3eefe9bf49693e03ba5670996b47ac24e1ff5dfbec68bb7003",
+          "bytes": 366587
+        },
+        {
+          "msg_id": 8777,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_8777.jpg",
+          "sha256": "5ee93271540fcf0725ec1ab79d6d3067e48d8d3453d3565faa79886dfbdb4bd0",
+          "bytes": 341161
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@msuaaaa:8821": {
+      "channel": "@msuaaaa",
+      "msg_id": 8821,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 8821,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_8821.jpg",
+          "sha256": "97c2105372d5fbb46eefb732ad67f4d3e9c6d72a16d71732b6c3f21fee34102b",
+          "bytes": 52432
+        },
+        {
+          "msg_id": 8822,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_8822.jpg",
+          "sha256": "f7a17277ac2102c7d480a82464424ad5f089120c445054b5d1e0af688b8dde4b",
+          "bytes": 56680
+        },
+        {
+          "msg_id": 8823,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_8823.jpg",
+          "sha256": "821af0ad7c39c1fb33fef694634f83f3d2da6a0eec4dcee957ce2ed4b378e53d",
+          "bytes": 52290
+        },
+        {
+          "msg_id": 8824,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_8824.jpg",
+          "sha256": "da7599a56596a373587bfcd5048341f9e21a93bdca6c76dcd5fe14d4b0a1df16",
+          "bytes": 56938
+        },
+        {
+          "msg_id": 8825,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_8825.jpg",
+          "sha256": "901a98ed28fce0f2d4b041b93027969ed5af810a6f8bb8f7aeb8a60095e270a1",
+          "bytes": 48487
+        },
+        {
+          "msg_id": 8826,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_8826.jpg",
+          "sha256": "d7a7597674b99f8fdf82d35c8d00a84297c8c865a24b7fde6f51ced831be5fd2",
+          "bytes": 47866
+        },
+        {
+          "msg_id": 8827,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_8827.jpg",
+          "sha256": "fb581118900947cf7bf0d65f10a5faac5eff6f41571424c846a2dc1275d62d03",
+          "bytes": 55622
+        },
+        {
+          "msg_id": 8828,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_8828.jpg",
+          "sha256": "9a72d460bdb1b96c9071bec510bded21f16862114f1562adb3bd04ce07bd5ba5",
+          "bytes": 52055
+        },
+        {
+          "msg_id": 8829,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_8829.jpg",
+          "sha256": "aea943c76ca5e412adfe2cedd96584ff0f2d7b960d81abdefa3183e0b4c586f6",
+          "bytes": 49467
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@msuaaaa:8843": {
+      "channel": "@msuaaaa",
+      "msg_id": 8843,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 8843,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_8843.jpg",
+          "sha256": "57751e4b2ab168d2b8092f8491a53c7f996603bffbb8f4f19935eb375cceead2",
+          "bytes": 204011
+        },
+        {
+          "msg_id": 8844,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_8844.jpg",
+          "sha256": "dca5c3b8b6975458cbd76f15125180fe877d4894a4029daf0dcce4f82ac83a9e",
+          "bytes": 209367
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@msuaaaa:8955": {
+      "channel": "@msuaaaa",
+      "msg_id": 8955,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 8955,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_8955.jpg",
+          "sha256": "d5cbcbd18421ffdc719a370665ac2a712c9a3e401f8cc1dc4209b4ec58efcd2c",
+          "bytes": 217137
+        },
+        {
+          "msg_id": 8956,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_8956.jpg",
+          "sha256": "cd2544b9e64b4ca7e2b5d06f97a627522758a22b899faf11e98a2d28e53cdf71",
+          "bytes": 95500
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@msuaaaa:9003": {
+      "channel": "@msuaaaa",
+      "msg_id": 9003,
+      "asked_by": [
+        "emptied_97",
+        "unreadable_14"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 9003,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_9003.jpg",
+          "sha256": "44e751dd6a6c27e383f959391828a2a39c83f9da6eb9acb66af3466b8730b853",
+          "bytes": 43899
+        },
+        {
+          "msg_id": 9004,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_9004.jpg",
+          "sha256": "3374e45a1398bd34aa12354af57fa07104d5a2013afb634ba0cbddf4503f9d5e",
+          "bytes": 83614
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@msuaaaa:9246": {
+      "channel": "@msuaaaa",
+      "msg_id": 9246,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 9246,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_9246.jpg",
+          "sha256": "598453df04941465945b84248a697026d90c6dd72ad77b1927ab52e569759e83",
+          "bytes": 352826
+        },
+        {
+          "msg_id": 9247,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_9247.jpg",
+          "sha256": "3b579aa1f82ddc9269a03edc028434b32e291bb7a4ac32c5422ce96a682f06f8",
+          "bytes": 247210
+        },
+        {
+          "msg_id": 9248,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_9248.jpg",
+          "sha256": "a3806f2455e0eced8b9ef3c82c105f49ae91cb895e671d6f75ac9bdc8a2b1acc",
+          "bytes": 250638
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@msuaaaa:9354": {
+      "channel": "@msuaaaa",
+      "msg_id": 9354,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 9354,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_9354.jpg",
+          "sha256": "07d6d8ba3ba5e542d1fbc0ae5fa97559a46156c4b0fd587e30e3e9212726af93",
+          "bytes": 340156
+        },
+        {
+          "msg_id": 9355,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_9355.jpg",
+          "sha256": "a980aabe8b511be6774f26faaf6e52feb2067ccada45eceed4a1944d5f665a73",
+          "bytes": 431355
+        },
+        {
+          "msg_id": 9356,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_9356.jpg",
+          "sha256": "0e1386596e7948713b80a6408ecfc382280437de547c41ffdb2cc225e3f0d46b",
+          "bytes": 335236
+        },
+        {
+          "msg_id": 9357,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_9357.jpg",
+          "sha256": "e13e0c9da3528ce1235bf7c3275eaba32c4cd2692f64550e7894769b5e767eea",
+          "bytes": 365482
+        },
+        {
+          "msg_id": 9358,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_9358.jpg",
+          "sha256": "a55be8aadf08cce0ee64494d0b103d003f15f932450dc73c2747b326171204cb",
+          "bytes": 449409
+        },
+        {
+          "msg_id": 9359,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_9359.jpg",
+          "sha256": "f7319f360713a8ad055e6c5b836f7c91e39721a6289e16095f2b62a49aff9954",
+          "bytes": 398016
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@msuaaaa:9416": {
+      "channel": "@msuaaaa",
+      "msg_id": 9416,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": false,
+      "images": [
+        {
+          "msg_id": 9416,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_9416.jpg",
+          "sha256": "2ab332658e9f835b0acbfb29fa711ca3742fed268d42a200c2e37ea062735aa0",
+          "bytes": 119991
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@msuaaaa:9620": {
+      "channel": "@msuaaaa",
+      "msg_id": 9620,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 9620,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_9620.jpg",
+          "sha256": "b09801cca6e9c33b9c95538c55e333f8925f32de87fe71ddfee68db3e691398b",
+          "bytes": 151498
+        },
+        {
+          "msg_id": 9621,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_9621.jpg",
+          "sha256": "2e762e2f0f2b3b62197f06b4804fc97e06236e6fdbbda8fc488b21a560d1a86c",
+          "bytes": 161101
+        },
+        {
+          "msg_id": 9622,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_9622.jpg",
+          "sha256": "4255a506b0d7d415b23dce0a7a0bb1ba2d9dc05a6c289b91b89fda92ddb7be65",
+          "bytes": 140939
+        },
+        {
+          "msg_id": 9623,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_9623.jpg",
+          "sha256": "dc299c15fa6a30f0176a0834934b6a622a0622720e5bfe6cd0f71fd4ff645ede",
+          "bytes": 132877
+        },
+        {
+          "msg_id": 9624,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_9624.jpg",
+          "sha256": "bdb2263f3ce884b3ad96270ccdf93d6d10aaa0c1e26efaf27ecc3aa52454bff8",
+          "bytes": 116753
+        },
+        {
+          "msg_id": 9625,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_9625.jpg",
+          "sha256": "061d17be4978c9ad4c971bb6d8c7f658a45028597c0b6827b64559795edc44e7",
+          "bytes": 165197
+        },
+        {
+          "msg_id": 9626,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_9626.jpg",
+          "sha256": "d111e4637429f50a6adf6beac8c846f606a1959a3ff0798423ba9559c69df452",
+          "bytes": 157474
+        },
+        {
+          "msg_id": 9627,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_9627.jpg",
+          "sha256": "652955922d7c2de96a59f1301871bd2f174d191675fb74a0b834babc383392f8",
+          "bytes": 165713
+        },
+        {
+          "msg_id": 9628,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_9628.jpg",
+          "sha256": "21af85f4da0824642c6c1407e0533180e318b5047854e8ce3e2055e1babf6a42",
+          "bytes": 147809
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@msuaaaa:9631": {
+      "channel": "@msuaaaa",
+      "msg_id": 9631,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 9631,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_9631.jpg",
+          "sha256": "688f623aa1f1216436bc378c328f93e57f77fea8ee31964f7fb0764b679f597d",
+          "bytes": 304099
+        },
+        {
+          "msg_id": 9632,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_9632.jpg",
+          "sha256": "c05888d89b9d6e23368565587a195d473f9633e6160981b1d6d031c796dfd1ab",
+          "bytes": 293737
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@msuaaaa:9887": {
+      "channel": "@msuaaaa",
+      "msg_id": 9887,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 9887,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_9887.jpg",
+          "sha256": "c88c7cf3305baf1b6f2b76be99bb0cc9465ea3c2dd30758106cf6ed5ad179014",
+          "bytes": 159722
+        },
+        {
+          "msg_id": 9888,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_9888.jpg",
+          "sha256": "f8e77f08d4dcb36d089123de7f67bacf39756d51f7a4b5d9ed7bcdc18d153b8c",
+          "bytes": 98359
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@msuaaaa:9949": {
+      "channel": "@msuaaaa",
+      "msg_id": 9949,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 9949,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_9949.jpg",
+          "sha256": "feafee3252919c989f5f1bfe8482846836ae846d8050dfe50720fe20bc60f3c6",
+          "bytes": 280304
+        },
+        {
+          "msg_id": 9950,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_9950.jpg",
+          "sha256": "bc511633864f65c975da9e3abc34a76bbf29a4506bec5b57f2c99a4590d7aa1b",
+          "bytes": 79938
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@msuaaaa:9964": {
+      "channel": "@msuaaaa",
+      "msg_id": 9964,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 9964,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_9964.jpg",
+          "sha256": "f9da4cd02b0718d33346ab23a80b3bcb21ded75dbe2f163a941959c9b80c3432",
+          "bytes": 240696
+        },
+        {
+          "msg_id": 9965,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_9965.jpg",
+          "sha256": "61a7464c362274abc09d70482d984bb16f4a7bf11bfd27f24130516494186375",
+          "bytes": 236160
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@msuaaaa:10049": {
+      "channel": "@msuaaaa",
+      "msg_id": 10049,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 10049,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_10049.jpg",
+          "sha256": "d1246f0790771347a2a97a04aec027b6c16be1db780f3d02cd0e93d2ac3befa3",
+          "bytes": 195642
+        },
+        {
+          "msg_id": 10050,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_10050.jpg",
+          "sha256": "35c6cc62b1d063a0b9cdc397d4ea5e80391d2f0ba64dba87019fe06ac8540457",
+          "bytes": 306984
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@msuaaaa:10099": {
+      "channel": "@msuaaaa",
+      "msg_id": 10099,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 10099,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_10099.jpg",
+          "sha256": "ce27a1939c25158af775b2b1013e3ecf34bcf1d5e148719e206b85483f07e045",
+          "bytes": 307738
+        },
+        {
+          "msg_id": 10100,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_10100.jpg",
+          "sha256": "04c5a4e59ccb76cdfd7094522ffd96a117066dbeb4d1c2000716ad1ae51ed126",
+          "bytes": 283828
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@msuaaaa:10119": {
+      "channel": "@msuaaaa",
+      "msg_id": 10119,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 10119,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_10119.jpg",
+          "sha256": "c313b4e0ff835e26b505e626cb39bd9ecc27d234e764e39ca4faba2cfa3f80f7",
+          "bytes": 303355
+        },
+        {
+          "msg_id": 10120,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_10120.jpg",
+          "sha256": "af3cfb3b99d71568d482be188075c0d4e6cb94a01b194c18e8368d9f2e13714f",
+          "bytes": 332097
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@msuaaaa:10367": {
+      "channel": "@msuaaaa",
+      "msg_id": 10367,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": false,
+      "images": [
+        {
+          "msg_id": 10367,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_10367.jpg",
+          "sha256": "b6aaf7ecd05e5d9f9d0d199e804f8ada007573162640124289e217ddd07cb151",
+          "bytes": 120343
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@msuaaaa:10402": {
+      "channel": "@msuaaaa",
+      "msg_id": 10402,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 10402,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_10402.jpg",
+          "sha256": "8e56c613f342922e9340c979458f12859175431ab9229dfde25f7fa8f9b728ab",
+          "bytes": 132449
+        },
+        {
+          "msg_id": 10403,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_10403.jpg",
+          "sha256": "57d1287a266717f3c6cae3f76b5892dee98ab79b0b36597e7ebd89234cb6888e",
+          "bytes": 141180
+        },
+        {
+          "msg_id": 10404,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_10404.jpg",
+          "sha256": "b2274d1984820853dc00c681360474a6ec818b846e750fcdcee72b1b8caa5ab8",
+          "bytes": 167811
+        },
+        {
+          "msg_id": 10405,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_10405.jpg",
+          "sha256": "90aacf31c408fe314f44f665ef7a196ab75e1b1038a9619c9147f4d382af7ba0",
+          "bytes": 155754
+        },
+        {
+          "msg_id": 10406,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_10406.jpg",
+          "sha256": "e3ad38a87768192d199460e1084a515a951aad20f16cbd2e38d8f112305da269",
+          "bytes": 156336
+        },
+        {
+          "msg_id": 10407,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_10407.jpg",
+          "sha256": "f1bab2d317c58573f920d9448c92c69c3c5a7f1086d014b9fa6902d8a8aaade0",
+          "bytes": 157346
+        },
+        {
+          "msg_id": 10408,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_10408.jpg",
+          "sha256": "2bf1936711b48b7f37156f97dec90362cb081a07bb6ff93ca14c9002ee15976e",
+          "bytes": 146702
+        },
+        {
+          "msg_id": 10409,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_10409.jpg",
+          "sha256": "4a3244b7ebe76495547305296d6740d94fd9a68e2a0ea43cd4e675c265a28d1c",
+          "bytes": 146940
+        },
+        {
+          "msg_id": 10410,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_10410.jpg",
+          "sha256": "5394f7a94e12677cafdb6493cb95cad87ef33ffb8db92e9a2477f5e6aeaef592",
+          "bytes": 166021
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@msuaaaa:10506": {
+      "channel": "@msuaaaa",
+      "msg_id": 10506,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 10506,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_10506.jpg",
+          "sha256": "fecda745307d11218830bbcf7beaf9545dc6f7e2fc4b39eafbdd6e6b9217bc72",
+          "bytes": 207916
+        },
+        {
+          "msg_id": 10507,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_10507.jpg",
+          "sha256": "07682518a948af3a394e118f50c72ce58fb0185a03dc33c1f00c6dfbf4c6ec59",
+          "bytes": 244194
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@msuaaaa:10643": {
+      "channel": "@msuaaaa",
+      "msg_id": 10643,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": false,
+      "images": [
+        {
+          "msg_id": 10643,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_10643.jpg",
+          "sha256": "4069474fe1bc63a4a1b8d2f3bc40a1b372b606f2e23b7b1065f30a8560ee17de",
+          "bytes": 159167
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@msuaaaa:10699": {
+      "channel": "@msuaaaa",
+      "msg_id": 10699,
+      "asked_by": [
+        "emptied_97"
+      ],
+      "post_has_text": true,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 10699,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_10699.jpg",
+          "sha256": "cd887d2b1ff6a34c6a5fec56cd5d26c9ed0cbf22156246f20457dbd79c51be12",
+          "bytes": 67011
+        },
+        {
+          "msg_id": 10700,
+          "file": "data/annotation/sitting_45g/posts_media/msuaaaa_10700.jpg",
+          "sha256": "1a2193be6d8953e385dfb570c1d82b72ebb6ee133d257f4f36c0075cf0345fb2",
+          "bytes": 69638
+        }
+      ],
+      "poll": null,
+      "missing": []
+    }
+  },
+  "git": {
+    "commit": "b27862e56f52a7e19e0d2a67ce2390ac3c063a82",
+    "dirty": [
+      "src/market_pulse/parents.py",
+      "src/market_pulse/prompts.py",
+      "tests/test_parents.py",
+      "tests/test_prompts.py",
+      "scripts/caption_posts.py",
+      "scripts/fetch_post_media.py"
+    ]
+  },
+  "note": "The parent media of the rows 4.5g2 puts in front of the operator and the model. data/raw/posts/*.jsonl is read-only here; nothing about the corpus changed. A post whose media could not be fetched is named in `posts_without_an_image` and is rendered as having no text at all, never as a guess."
+}
