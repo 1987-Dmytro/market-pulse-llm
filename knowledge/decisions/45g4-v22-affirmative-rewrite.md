@@ -76,7 +76,8 @@ own sample, its reference labels and its thresholds:
 - **`fixed`** (the 29 whose verdict note states an answer the 4.5g3 parser can read): every
   field the ruling names matches it, **and** every field it does not name still equals the pack.
   The other 13 refusals are reported moved/unmoved and gate nothing — their notes state the
-  error without stating the value, and the P5 and P6 families are among them.
+  error without stating the value. **All three P5 rows and three of the four P6 rows are among
+  those 13**, so the two families below are diagnostics and not gate arithmetic.
 - **The gate, one attempt, no retry:** PASS = `preserved ≥ 55/58` **and** `fixed ≥ 24/29`.
   KILL = `preserved < 52/58` **or** `fixed < 20/29`. Between the two, the operator decides on
   the numbers. A failed gate closes the form-only hypothesis rather than inviting a third
@@ -112,12 +113,25 @@ One attempt, $0.0365, 100 of 100 rows answered, nothing unusable
 and nothing is pinned for the wave-2 hundred.
 
 And the rewrite is not what failed. On the identical rows, under the identical scorer, v2.2
-preserves **37 where v2.1 preserved 20** and fixes **9 where v2.1 fixed 4**; every field moved
-less (`intents` 31 against 48, `sentiment` 4 against 9, `unclear` 13 against 16, `sarcasm` 2
-against 9). The clearest single case is the **P5 family** — the three promo-mechanics questions
-the sitting refused: v2.1 answered `[]` on all three, v2.2 answers `["service"]` on all three.
-Saying what a case *is* moved the label space back towards the operator's verdicts, exactly as
-the hypothesis predicted. It moved it about a third of the way.
+preserves **37 where v2.1 preserved 20** and fixes **9 where v2.1 fixed 4**. The unconfounded
+view of the improvement is the accepted rows alone, where any movement is a loss:
+
+| lost an accepted row by moving | `intents` | `unclear` | `sarcasm` | `sentiment` | rows lost |
+|---|---|---|---|---|---|
+| v2.1 | 28 | 7 | 6 | 6 | 38 |
+| **v2.2** | **14** | **6** | **2** | **1** | **21** |
+
+(The per-field counts over all 100 rows — `intents` 31 against 48, `sentiment` 4 against 9,
+`unclear` 13 against 16, `sarcasm` 2 against 9 — are in the record as the prompt asked, but they
+sum movement on the 58 accepted rows, where it is a loss, with movement on the 42 refused ones,
+where it is the goal. The table above is the comparable one.)
+
+The clearest single case is the **P5 family** — the three promo-mechanics questions: v2.1
+answered `[]` on all three, v2.2 answers `["service"]` on all three. Their notes name the value
+without naming the field, so the 4.5g3 parser reads nothing and **all three are ungated**: this
+is a diagnostic, not part of the 9/29. Saying what a case *is* moved the label space back
+towards the operator's verdicts, exactly as the hypothesis predicted. It moved it about a third
+of the way.
 
 **Where the remaining misses are is the finding.** Of the 20 stated rulings v2.2 still gets
 wrong, **15 name `unclear`** (3 name `sarcasm`, 2 `intents`), and only 3 of the 20 are the
@@ -134,7 +148,9 @@ Two readings of that, and they point in different directions:
    phase held that block fixed on purpose (it was in v2, which scored 86%), and the ADR
    pre-committed to naming position as the next variable if form failed. It is now named.
 2. **For the P6 family, no wording can work.** The four unsigned corporate-voice rows are the
-   sharpest case and v2.2 still answers `unclear: false` on three of them — even though the
+   sharpest case — and, like P5, mostly ungated: only `@VARUS_channel:1271` carries a parseable
+   ruling and counts in the 29. v2.2 still answers `unclear: false` on three of them — even
+   though the
    rule reaches the model **twice**: v2.2's second line says it, and `UNCLEAR_RULE` already
    listed *"a reply written by the retailer in its own corporate voice"* in v2. Their texts are
    `Акційні товари дійсно мають високий попит…`, `Тамагочі Варусятко живе у мобільному
@@ -161,8 +177,8 @@ Two readings of that, and they point in different directions:
 - **A staged purchase is now the house rule for a prompt revision.** 4.5g3 bought a whole
   population to discover the instrument had changed; this phase buys a hundred rows to find out
   the same thing for four cents. `[[45g3-sitting-gates]]` recorded that lesson; this is the
-  first phase to spend under it — and it returned a KILL for 2.4% of what the same finding cost
-  last time.
+  first phase to spend under it — $0.0365 against the $0.7429 that bought the same class of
+  finding last time, a twentieth of the price.
 - **The form-only hypothesis is closed, and it is closed as a partial success.** Affirmative
   phrasing is worth keeping — it doubled preservation and more than doubled the landed rulings
   — but it does not reach a bar the sitting's own verdicts set. `precheck_v2.2_with_post` is
