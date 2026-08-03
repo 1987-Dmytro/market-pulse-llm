@@ -1,0 +1,329 @@
+{
+  "runs": [
+    {
+      "timestamp": "2026-08-03T08:07:56+00:00",
+      "authority": {
+        "operator-quiz-45g": "docs/quiz-45g-verdicts.md",
+        "quiz-validated-pattern": "v1 intents were exactly [\"taste\"], the comment is at most 30 characters, it names no watchlist brand, and its parent post has no text of its own. Support: of the 11 `taste` proposals in the quiz the operator confirmed 10, and the one refusal (@msuaaaa:11941 \"Вацак 🤮\") is a watchlist-shaped brand name rather than a dish, which is the conjunct that excludes it. The bound is scripts/build_sitting_pack.py's SHORT_CHARS, the same threshold the sitting strata already use, and not a number chosen for this rule."
+      },
+      "quiz": {
+        "rows": 20,
+        "matched": 11,
+        "divergent": [
+          "@VARUS_channel:10737",
+          "@VARUS_channel:10867",
+          "@VARUS_channel:1308",
+          "@msuaaaa:11941",
+          "@msuaaaa:12206",
+          "@msuaaaa:13560",
+          "@msuaaaa:7091",
+          "@msuaaaa:7552",
+          "@msuaaaa:9385"
+        ],
+        "divergent_note": "Ruled blind: the class exists because the parent post is an image, and these nine are the rows where the operator's blind verdict and the policy disagree. They are NOT applied — they go back with the image in emptied_redo.csv."
+      },
+      "population": {
+        "rows": 97,
+        "source": "results/drop_45f.json"
+      },
+      "pattern": {
+        "rule": "v1 intents were exactly [\"taste\"], the comment is at most 30 characters, it names no watchlist brand, and its parent post has no text of its own. Support: of the 11 `taste` proposals in the quiz the operator confirmed 10, and the one refusal (@msuaaaa:11941 \"Вацак 🤮\") is a watchlist-shaped brand name rather than a dish, which is the conjunct that excludes it. The bound is scripts/build_sitting_pack.py's SHORT_CHARS, the same threshold the sitting strata already use, and not a number chosen for this rule.",
+        "short_chars": 30,
+        "matched": [
+          "@VARUS_channel:11650",
+          "@VARUS_channel:11938",
+          "@VARUS_channel:11960",
+          "@VARUS_channel:11963",
+          "@VARUS_channel:11972",
+          "@VARUS_channel:11974",
+          "@VARUS_channel:12021",
+          "@VARUS_channel:12023",
+          "@VARUS_channel:12024",
+          "@VARUS_channel:12049",
+          "@VARUS_channel:12062",
+          "@VARUS_channel:12261",
+          "@VARUS_channel:12263",
+          "@VARUS_channel:12269",
+          "@VARUS_channel:12278",
+          "@VARUS_channel:12280",
+          "@VARUS_channel:12323"
+        ],
+        "new_to_the_operator": [
+          "@VARUS_channel:11650",
+          "@VARUS_channel:11938",
+          "@VARUS_channel:11974",
+          "@VARUS_channel:12021",
+          "@VARUS_channel:12261",
+          "@VARUS_channel:12263",
+          "@VARUS_channel:12269",
+          "@VARUS_channel:12278",
+          "@VARUS_channel:12280"
+        ]
+      },
+      "applied": [
+        {
+          "id": "@VARUS_channel:12049",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "taste"
+          ],
+          "authority": "operator-quiz-45g",
+          "detail": "quiz row restore arm: policy ['taste'], operator agreed"
+        },
+        {
+          "id": "@msuaaaa:10363",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [],
+          "new": [
+            "packaging"
+          ],
+          "authority": "operator-quiz-45g",
+          "detail": "quiz row restore arm: policy ['packaging'], operator agreed"
+        },
+        {
+          "id": "@VARUS_channel:12430",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "taste"
+          ],
+          "authority": "operator-quiz-45g",
+          "detail": "quiz row restore arm: policy ['taste'], operator agreed"
+        },
+        {
+          "id": "@VARUS_channel:11963",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "taste"
+          ],
+          "authority": "operator-quiz-45g",
+          "detail": "quiz row restore arm: policy ['taste'], operator agreed"
+        },
+        {
+          "id": "@VARUS_channel:12024",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "taste"
+          ],
+          "authority": "operator-quiz-45g",
+          "detail": "quiz row restore arm: policy ['taste'], operator agreed"
+        },
+        {
+          "id": "@VARUS_channel:12062",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "taste"
+          ],
+          "authority": "operator-quiz-45g",
+          "detail": "quiz row restore arm: policy ['taste'], operator agreed"
+        },
+        {
+          "id": "@VARUS_channel:12023",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "taste"
+          ],
+          "authority": "operator-quiz-45g",
+          "detail": "quiz row restore arm: policy ['taste'], operator agreed"
+        },
+        {
+          "id": "@VARUS_channel:12322",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "taste"
+          ],
+          "authority": "operator-quiz-45g",
+          "detail": "quiz row restore arm: policy ['taste'], operator agreed"
+        },
+        {
+          "id": "@VARUS_channel:11938",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "taste"
+          ],
+          "authority": "quiz-validated-pattern",
+          "detail": "v1 intents were exactly [\"taste\"], the comment is at most 30 characters, it names no watchlist brand, and its parent post has no text of its own. Support: of the 11 `taste` proposals in the quiz the operator confirmed 10, and the one refusal (@msuaaaa:11941 \"Вацак 🤮\") is a watchlist-shaped brand name rather than a dish, which is the conjunct that excludes it. The bound is scripts/build_sitting_pack.py's SHORT_CHARS, the same threshold the sitting strata already use, and not a number chosen for this rule."
+        },
+        {
+          "id": "@VARUS_channel:11974",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "taste"
+          ],
+          "authority": "quiz-validated-pattern",
+          "detail": "v1 intents were exactly [\"taste\"], the comment is at most 30 characters, it names no watchlist brand, and its parent post has no text of its own. Support: of the 11 `taste` proposals in the quiz the operator confirmed 10, and the one refusal (@msuaaaa:11941 \"Вацак 🤮\") is a watchlist-shaped brand name rather than a dish, which is the conjunct that excludes it. The bound is scripts/build_sitting_pack.py's SHORT_CHARS, the same threshold the sitting strata already use, and not a number chosen for this rule."
+        },
+        {
+          "id": "@VARUS_channel:12021",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "taste"
+          ],
+          "authority": "quiz-validated-pattern",
+          "detail": "v1 intents were exactly [\"taste\"], the comment is at most 30 characters, it names no watchlist brand, and its parent post has no text of its own. Support: of the 11 `taste` proposals in the quiz the operator confirmed 10, and the one refusal (@msuaaaa:11941 \"Вацак 🤮\") is a watchlist-shaped brand name rather than a dish, which is the conjunct that excludes it. The bound is scripts/build_sitting_pack.py's SHORT_CHARS, the same threshold the sitting strata already use, and not a number chosen for this rule."
+        },
+        {
+          "id": "@VARUS_channel:12261",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "taste"
+          ],
+          "authority": "quiz-validated-pattern",
+          "detail": "v1 intents were exactly [\"taste\"], the comment is at most 30 characters, it names no watchlist brand, and its parent post has no text of its own. Support: of the 11 `taste` proposals in the quiz the operator confirmed 10, and the one refusal (@msuaaaa:11941 \"Вацак 🤮\") is a watchlist-shaped brand name rather than a dish, which is the conjunct that excludes it. The bound is scripts/build_sitting_pack.py's SHORT_CHARS, the same threshold the sitting strata already use, and not a number chosen for this rule."
+        },
+        {
+          "id": "@VARUS_channel:12263",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "taste"
+          ],
+          "authority": "quiz-validated-pattern",
+          "detail": "v1 intents were exactly [\"taste\"], the comment is at most 30 characters, it names no watchlist brand, and its parent post has no text of its own. Support: of the 11 `taste` proposals in the quiz the operator confirmed 10, and the one refusal (@msuaaaa:11941 \"Вацак 🤮\") is a watchlist-shaped brand name rather than a dish, which is the conjunct that excludes it. The bound is scripts/build_sitting_pack.py's SHORT_CHARS, the same threshold the sitting strata already use, and not a number chosen for this rule."
+        },
+        {
+          "id": "@VARUS_channel:12278",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "taste"
+          ],
+          "authority": "quiz-validated-pattern",
+          "detail": "v1 intents were exactly [\"taste\"], the comment is at most 30 characters, it names no watchlist brand, and its parent post has no text of its own. Support: of the 11 `taste` proposals in the quiz the operator confirmed 10, and the one refusal (@msuaaaa:11941 \"Вацак 🤮\") is a watchlist-shaped brand name rather than a dish, which is the conjunct that excludes it. The bound is scripts/build_sitting_pack.py's SHORT_CHARS, the same threshold the sitting strata already use, and not a number chosen for this rule."
+        },
+        {
+          "id": "@VARUS_channel:12280",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [],
+          "new": [
+            "taste"
+          ],
+          "authority": "quiz-validated-pattern",
+          "detail": "v1 intents were exactly [\"taste\"], the comment is at most 30 characters, it names no watchlist brand, and its parent post has no text of its own. Support: of the 11 `taste` proposals in the quiz the operator confirmed 10, and the one refusal (@msuaaaa:11941 \"Вацак 🤮\") is a watchlist-shaped brand name rather than a dish, which is the conjunct that excludes it. The bound is scripts/build_sitting_pack.py's SHORT_CHARS, the same threshold the sitting strata already use, and not a number chosen for this rule."
+        }
+      ],
+      "unchanged": [
+        {
+          "id": "@VARUS_channel:12323",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [
+            "taste"
+          ],
+          "new": [
+            "taste"
+          ],
+          "authority": "operator-quiz-45g",
+          "detail": "quiz row model arm: policy ['taste'], operator agreed"
+        },
+        {
+          "id": "@VARUS_channel:12271",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [
+            "taste"
+          ],
+          "new": [
+            "taste"
+          ],
+          "authority": "operator-quiz-45g",
+          "detail": "quiz row model arm: policy ['taste'], operator agreed"
+        },
+        {
+          "id": "@VARUS_channel:10542",
+          "file": "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "old": [
+            "taste"
+          ],
+          "new": [
+            "taste"
+          ],
+          "authority": "operator-quiz-45g",
+          "detail": "quiz row model arm: policy ['taste'], operator agreed"
+        },
+        {
+          "id": "@VARUS_channel:11650",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [
+            "taste"
+          ],
+          "new": [
+            "taste"
+          ],
+          "authority": "quiz-validated-pattern",
+          "detail": "v1 intents were exactly [\"taste\"], the comment is at most 30 characters, it names no watchlist brand, and its parent post has no text of its own. Support: of the 11 `taste` proposals in the quiz the operator confirmed 10, and the one refusal (@msuaaaa:11941 \"Вацак 🤮\") is a watchlist-shaped brand name rather than a dish, which is the conjunct that excludes it. The bound is scripts/build_sitting_pack.py's SHORT_CHARS, the same threshold the sitting strata already use, and not a number chosen for this rule."
+        },
+        {
+          "id": "@VARUS_channel:12269",
+          "file": "data/frozen/comments_train_tax2.jsonl",
+          "old": [
+            "taste"
+          ],
+          "new": [
+            "taste"
+          ],
+          "authority": "quiz-validated-pattern",
+          "detail": "v1 intents were exactly [\"taste\"], the comment is at most 30 characters, it names no watchlist brand, and its parent post has no text of its own. Support: of the 11 `taste` proposals in the quiz the operator confirmed 10, and the one refusal (@msuaaaa:11941 \"Вацак 🤮\") is a watchlist-shaped brand name rather than a dish, which is the conjunct that excludes it. The bound is scripts/build_sitting_pack.py's SHORT_CHARS, the same threshold the sitting strata already use, and not a number chosen for this rule."
+        }
+      ],
+      "held": [
+        {
+          "id": "@VARUS_channel:11960",
+          "intents": [
+            "taste"
+          ],
+          "authority": "quiz-validated-pattern",
+          "detail": "v1 intents were exactly [\"taste\"], the comment is at most 30 characters, it names no watchlist brand, and its parent post has no text of its own. Support: of the 11 `taste` proposals in the quiz the operator confirmed 10, and the one refusal (@msuaaaa:11941 \"Вацак 🤮\") is a watchlist-shaped brand name rather than a dish, which is the conjunct that excludes it. The bound is scripts/build_sitting_pack.py's SHORT_CHARS, the same threshold the sitting strata already use, and not a number chosen for this rule.",
+          "conjuncts": {
+            "v1_is_taste_only": true,
+            "short": true,
+            "no_watchlist_brand": true,
+            "parent_is_media_only": true
+          },
+          "reason": "held by an operator ruling from 4.5f"
+        },
+        {
+          "id": "@VARUS_channel:11972",
+          "intents": [
+            "taste"
+          ],
+          "authority": "quiz-validated-pattern",
+          "detail": "v1 intents were exactly [\"taste\"], the comment is at most 30 characters, it names no watchlist brand, and its parent post has no text of its own. Support: of the 11 `taste` proposals in the quiz the operator confirmed 10, and the one refusal (@msuaaaa:11941 \"Вацак 🤮\") is a watchlist-shaped brand name rather than a dish, which is the conjunct that excludes it. The bound is scripts/build_sitting_pack.py's SHORT_CHARS, the same threshold the sitting strata already use, and not a number chosen for this rule.",
+          "conjuncts": {
+            "v1_is_taste_only": true,
+            "short": true,
+            "no_watchlist_brand": true,
+            "parent_is_media_only": true
+          },
+          "reason": "held by an operator ruling from 4.5f"
+        }
+      ],
+      "staged_sha256_before": {
+        "data/frozen/comments_train_tax2.jsonl": "d785d557e75e031860b246958f58152b2e52169d796a149e5a02db45966f5d37",
+        "data/annotation/sarcasm_holdout_pool_tax2.jsonl": "d4021274794e8765c2cf13ef44d6fb3dcbcd3b23ba6ccbd1cbccce620114196b"
+      },
+      "staged_sha256_after": {
+        "data/frozen/comments_train_tax2.jsonl": "e2c616d96c352cfe6244552a2f2089b0c8fd69658cfb047de23ed6257bb78b22",
+        "data/annotation/sarcasm_holdout_pool_tax2.jsonl": "3263bbd59ae6b72209aa8c2ef9bcb51f36942e5452d8199d0b024ac1767be519"
+      },
+      "git": {
+        "commit": "0b2b397d551c278b2797299ed523ea14ec7f8117",
+        "dirty": [
+          "data/annotation/sarcasm_holdout_pool_tax2.jsonl",
+          "data/frozen/comments_train_tax2.jsonl",
+          "scripts/apply_quiz_rulings.py",
+          "tests/test_quiz_rulings.py"
+        ]
+      },
+      "note": "The two things the 11/20 quiz settled, and nothing else. The bar it was run against (18/20) failed, so the batch of 97 is not accepted: what is written here is the eleven rows the operator matched and the family their taste proposals validated. Everything else in the 97 goes back to the operator with the parent image."
+    }
+  ]
+}
