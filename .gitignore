@@ -41,6 +41,7 @@ data/annotation/*
 # rule again — an input a labelling prompt reads, paid for once, and the images it
 # was written from stay out (posts_media/ is data, and it is big).
 !data/annotation/post_captions.jsonl
+!data/annotation/uplabel_precheck_45g2.jsonl
 # Generated, not collected — but the same kind of artifact: a curated training
 # source, ablation-gated (knowledge/decisions/synthetic-sarcasm-augmentation.md).
 !data/annotation/synthetic_sarcasm.jsonl

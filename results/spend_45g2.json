@@ -72,6 +72,34 @@
       "usd": 0.01013467,
       "requests": 21,
       "note": "45g2: 21 media-only posts captioned by a vision model"
+    },
+    {
+      "model": "qwen/qwen3.6-27b",
+      "timestamp": "2026-08-03T08:34:13+00:00",
+      "usd": 0.14820813000000002,
+      "requests": 499,
+      "note": "45g2: 424 media-only rows re-prechecked, 75 redo"
+    },
+    {
+      "model": "qwen/qwen3.6-27b",
+      "timestamp": "2026-08-03T08:36:51+00:00",
+      "usd": 0.005281970000000002,
+      "requests": 499,
+      "note": "45g2: 424 media-only rows re-prechecked, 75 redo"
+    },
+    {
+      "model": "qwen/qwen3.6-27b",
+      "timestamp": "2026-08-03T08:37:31+00:00",
+      "usd": 0.0032997599999999997,
+      "requests": 499,
+      "note": "45g2: 424 media-only rows re-prechecked, 75 redo"
+    },
+    {
+      "model": "qwen/qwen3.6-27b",
+      "timestamp": "2026-08-03T08:38:00+00:00",
+      "usd": 0.0022498500000000003,
+      "requests": 12,
+      "note": "45g2: 0 media-only rows re-prechecked, 12 redo"
     }
   ]
 }

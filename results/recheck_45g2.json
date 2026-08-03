@@ -1,0 +1,704 @@
+{
+  "runs": [
+    {
+      "timestamp": "2026-08-03T08:34:13+00:00",
+      "model": "qwen/qwen3.6-27b",
+      "endpoint": {
+        "tag": "io-net/fp8",
+        "quantization": "fp8",
+        "served_quantization": "fp8",
+        "status": 0
+      },
+      "smoke": false,
+      "prompt_sha256": {
+        "precheck_v2_with_post": "113000df199536a5657b4ed531058ce2e8029384f2d11e721e2af5d0f665fed0",
+        "relabel_intents_v2_with_post": "5965966d9b98279770407b0a5d858a85db578663120041f72359703658bbea9d",
+        "caption_post": "5dd76ab27fe574a7cf345d82c13f9e69e1683a385c2a9241172b214ea6366193"
+      },
+      "captions": {
+        "file": "data/annotation/post_captions.jsonl",
+        "sha256": "4c1f28071c6d270184d6d490833105ee71506c4399ed974bac89f17869b7e90c",
+        "surrogates": 37,
+        "kinds": {
+          "image": 21,
+          "poll": 16
+        }
+      },
+      "precheck": {
+        "source": "data/annotation/uplabel_precheck_45g.jsonl",
+        "source_sha256": "b797dc5a134ffe77d03ee65714479ec1e8c24dacc8219cb6f9707fd7fb175df9",
+        "batch": "data/annotation/uplabel_precheck_45g2.jsonl",
+        "batch_sha256": "924d019a621836b60023eda3be38330275cf6faed959e453471ee5e989a7473a",
+        "rows_in_batch": 1912,
+        "re_asked": 424,
+        "relabelled": 419,
+        "copied_unchanged": 1493,
+        "context_states": {
+          "poll_text": 322,
+          "image_caption": 77,
+          "no_text_and_no_caption": 25
+        },
+        "diff": {
+          "rows": 419,
+          "changed_any_field": 152,
+          "changed_rate": 0.3627684964200477,
+          "per_field": {
+            "sentiment": 37,
+            "sarcasm": 10,
+            "intents": 87,
+            "unclear": 95
+          },
+          "intents_gained": {
+            "taste": 29,
+            "service": 21,
+            "availability": 3,
+            "price": 1,
+            "quality": 1
+          },
+          "intents_lost": {
+            "price": 11,
+            "taste": 9,
+            "service": 8,
+            "availability": 6,
+            "quality": 3,
+            "packaging": 3
+          }
+        },
+        "unusable": [
+          {
+            "id": "@VARUS_channel:8792",
+            "labels": null,
+            "unusable": "parse: no JSON object in reply"
+          },
+          {
+            "id": "@VARUS_channel:8783",
+            "labels": null,
+            "unusable": "parse: no JSON object in reply"
+          },
+          {
+            "id": "@VARUS_channel:8777",
+            "labels": null,
+            "unusable": "parse: no JSON object in reply"
+          },
+          {
+            "id": "@VARUS_channel:8762",
+            "labels": null,
+            "unusable": "parse: no JSON object in reply"
+          },
+          {
+            "id": "@VARUS_channel:8752",
+            "labels": null,
+            "unusable": "parse: no JSON object in reply"
+          }
+        ]
+      },
+      "redo": {
+        "population": 97,
+        "closed_by_the_quiz": 22,
+        "rows": 75,
+        "answered": 57,
+        "context_states": {
+          "post_text": 71,
+          "poll_text": 2,
+          "image_caption": 2
+        },
+        "rows_out": "results/redo_45g2_rows.jsonl",
+        "outcomes": "results/recheck_45g2_rows.jsonl",
+        "unusable": [
+          {
+            "id": "@VARUS_channel:12682",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:1308",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:18780",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:19215",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:20136",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:2799",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@msuaaaa:11280",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@msuaaaa:13021",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@msuaaaa:6410",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@msuaaaa:7091",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@msuaaaa:9712",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:21253",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:3831",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@msuaaaa:12205",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:21576",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@msuaaaa:11941",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@msuaaaa:12206",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@msuaaaa:9049",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          }
+        ],
+        "note": "An informed model column for the operator to argue with. Nothing here is applied to any file: the 11/20 quiz failed its bar, so these rows are decided by hand with the post in front of the operator."
+      },
+      "cost": {
+        "requests": 499,
+        "usd": 0.14820813000000002,
+        "phase_spend_usd": 0.16602750000000024,
+        "cap_usd": 0.75
+      },
+      "git": {
+        "commit": "39eac7bab6246d87cc2b79faa88368491ed38dd5",
+        "dirty": [
+          "results/recheck_45g2_rows.jsonl",
+          "results/redo_45g2_rows.jsonl",
+          "scripts/recheck_with_captions.py"
+        ]
+      },
+      "note": "The same rows, the same prompts and the same endpoint as 4.5g — the only thing that moved is what stands in the <post> block for a post with no text of its own. The 4.5g batch and record are read-only here; this writes a new batch beside them so that results/sitting_45g_manifest.json still pins the bytes it sealed."
+    },
+    {
+      "timestamp": "2026-08-03T08:36:51+00:00",
+      "model": "qwen/qwen3.6-27b",
+      "endpoint": {
+        "tag": "io-net/fp8",
+        "quantization": "fp8",
+        "served_quantization": "fp8",
+        "status": 0
+      },
+      "smoke": false,
+      "prompt_sha256": {
+        "precheck_v2_with_post": "113000df199536a5657b4ed531058ce2e8029384f2d11e721e2af5d0f665fed0",
+        "relabel_intents_v2_with_post": "5965966d9b98279770407b0a5d858a85db578663120041f72359703658bbea9d",
+        "caption_post": "5dd76ab27fe574a7cf345d82c13f9e69e1683a385c2a9241172b214ea6366193"
+      },
+      "captions": {
+        "file": "data/annotation/post_captions.jsonl",
+        "sha256": "4c1f28071c6d270184d6d490833105ee71506c4399ed974bac89f17869b7e90c",
+        "surrogates": 37,
+        "kinds": {
+          "image": 21,
+          "poll": 16
+        }
+      },
+      "precheck": {
+        "source": "data/annotation/uplabel_precheck_45g.jsonl",
+        "source_sha256": "b797dc5a134ffe77d03ee65714479ec1e8c24dacc8219cb6f9707fd7fb175df9",
+        "batch": "data/annotation/uplabel_precheck_45g2.jsonl",
+        "batch_sha256": "df688e59e0463649c742bd0d053ff616e1a84c2adaee9fcd8ab69bba77a1aeff",
+        "rows_in_batch": 1912,
+        "re_asked": 424,
+        "relabelled": 422,
+        "copied_unchanged": 1490,
+        "context_states": {
+          "poll_text": 322,
+          "image_caption": 77,
+          "no_text_and_no_caption": 25
+        },
+        "diff": {
+          "rows": 422,
+          "changed_any_field": 153,
+          "changed_rate": 0.36255924170616116,
+          "per_field": {
+            "sentiment": 37,
+            "sarcasm": 11,
+            "intents": 87,
+            "unclear": 95
+          },
+          "intents_gained": {
+            "taste": 29,
+            "service": 21,
+            "availability": 3,
+            "price": 1,
+            "quality": 1
+          },
+          "intents_lost": {
+            "price": 11,
+            "taste": 9,
+            "service": 8,
+            "availability": 6,
+            "quality": 3,
+            "packaging": 3
+          }
+        },
+        "unusable": [
+          {
+            "id": "@VARUS_channel:8792",
+            "labels": null,
+            "unusable": "parse: no JSON object in reply"
+          },
+          {
+            "id": "@VARUS_channel:8752",
+            "labels": null,
+            "unusable": "parse: no JSON object in reply"
+          }
+        ]
+      },
+      "redo": {
+        "population": 97,
+        "closed_by_the_quiz": 22,
+        "rows": 75,
+        "answered": 61,
+        "context_states": {
+          "post_text": 71,
+          "poll_text": 2,
+          "image_caption": 2
+        },
+        "rows_out": "results/redo_45g2_rows.jsonl",
+        "outcomes": "results/recheck_45g2_rows.jsonl",
+        "unusable": [
+          {
+            "id": "@VARUS_channel:12682",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:1308",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:18780",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:19215",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:20136",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:2799",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@msuaaaa:6410",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@msuaaaa:7091",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:3831",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@msuaaaa:12205",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:21576",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@msuaaaa:11941",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@msuaaaa:12206",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@msuaaaa:9049",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          }
+        ],
+        "note": "An informed model column for the operator to argue with. Nothing here is applied to any file: the 11/20 quiz failed its bar, so these rows are decided by hand with the post in front of the operator."
+      },
+      "cost": {
+        "requests": 499,
+        "usd": 0.005281970000000002,
+        "phase_spend_usd": 0.16527377000000024,
+        "cap_usd": 0.75
+      },
+      "git": {
+        "commit": "39eac7bab6246d87cc2b79faa88368491ed38dd5",
+        "dirty": [
+          "results/spend_45g2.json",
+          "results/recheck_45g2_rows.jsonl",
+          "results/redo_45g2_rows.jsonl",
+          "scripts/recheck_with_captions.py"
+        ]
+      },
+      "note": "The same rows, the same prompts and the same endpoint as 4.5g — the only thing that moved is what stands in the <post> block for a post with no text of its own. The 4.5g batch and record are read-only here; this writes a new batch beside them so that results/sitting_45g_manifest.json still pins the bytes it sealed."
+    },
+    {
+      "timestamp": "2026-08-03T08:37:31+00:00",
+      "model": "qwen/qwen3.6-27b",
+      "endpoint": {
+        "tag": "io-net/fp8",
+        "quantization": "fp8",
+        "served_quantization": "fp8",
+        "status": 0
+      },
+      "smoke": false,
+      "prompt_sha256": {
+        "precheck_v2_with_post": "113000df199536a5657b4ed531058ce2e8029384f2d11e721e2af5d0f665fed0",
+        "relabel_intents_v2_with_post": "5965966d9b98279770407b0a5d858a85db578663120041f72359703658bbea9d",
+        "caption_post": "5dd76ab27fe574a7cf345d82c13f9e69e1683a385c2a9241172b214ea6366193"
+      },
+      "captions": {
+        "file": "data/annotation/post_captions.jsonl",
+        "sha256": "4c1f28071c6d270184d6d490833105ee71506c4399ed974bac89f17869b7e90c",
+        "surrogates": 37,
+        "kinds": {
+          "image": 21,
+          "poll": 16
+        }
+      },
+      "precheck": {
+        "source": "data/annotation/uplabel_precheck_45g.jsonl",
+        "source_sha256": "b797dc5a134ffe77d03ee65714479ec1e8c24dacc8219cb6f9707fd7fb175df9",
+        "batch": "data/annotation/uplabel_precheck_45g2.jsonl",
+        "batch_sha256": "df688e59e0463649c742bd0d053ff616e1a84c2adaee9fcd8ab69bba77a1aeff",
+        "rows_in_batch": 1912,
+        "re_asked": 424,
+        "relabelled": 424,
+        "copied_unchanged": 1488,
+        "context_states": {
+          "poll_text": 322,
+          "image_caption": 77,
+          "no_text_and_no_caption": 25
+        },
+        "diff": {
+          "rows": 424,
+          "changed_any_field": 153,
+          "changed_rate": 0.3608490566037736,
+          "per_field": {
+            "sentiment": 37,
+            "sarcasm": 11,
+            "intents": 87,
+            "unclear": 95
+          },
+          "intents_gained": {
+            "taste": 29,
+            "service": 21,
+            "availability": 3,
+            "price": 1,
+            "quality": 1
+          },
+          "intents_lost": {
+            "price": 11,
+            "taste": 9,
+            "service": 8,
+            "availability": 6,
+            "quality": 3,
+            "packaging": 3
+          }
+        },
+        "unusable": []
+      },
+      "redo": {
+        "population": 97,
+        "closed_by_the_quiz": 22,
+        "rows": 75,
+        "answered": 63,
+        "context_states": {
+          "post_text": 71,
+          "poll_text": 2,
+          "image_caption": 2
+        },
+        "rows_out": "results/redo_45g2_rows.jsonl",
+        "outcomes": "results/recheck_45g2_rows.jsonl",
+        "unusable": [
+          {
+            "id": "@VARUS_channel:12682",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:18780",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:19215",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:20136",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:2799",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@msuaaaa:6410",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@msuaaaa:7091",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:3831",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@msuaaaa:12205",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:21576",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@msuaaaa:11941",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@msuaaaa:9049",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          }
+        ],
+        "note": "An informed model column for the operator to argue with. Nothing here is applied to any file: the 11/20 quiz failed its bar, so these rows are decided by hand with the post in front of the operator."
+      },
+      "cost": {
+        "requests": 499,
+        "usd": 0.0032997599999999997,
+        "phase_spend_usd": 0.1746092300000002,
+        "cap_usd": 0.75
+      },
+      "git": {
+        "commit": "39eac7bab6246d87cc2b79faa88368491ed38dd5",
+        "dirty": [
+          "results/spend_45g2.json",
+          "results/recheck_45g2_rows.jsonl",
+          "results/redo_45g2_rows.jsonl",
+          "scripts/recheck_with_captions.py"
+        ]
+      },
+      "note": "The same rows, the same prompts and the same endpoint as 4.5g — the only thing that moved is what stands in the <post> block for a post with no text of its own. The 4.5g batch and record are read-only here; this writes a new batch beside them so that results/sitting_45g_manifest.json still pins the bytes it sealed."
+    },
+    {
+      "timestamp": "2026-08-03T08:38:00+00:00",
+      "model": "qwen/qwen3.6-27b",
+      "endpoint": {
+        "tag": "io-net/fp8",
+        "quantization": "fp8",
+        "served_quantization": "fp8",
+        "status": 0
+      },
+      "smoke": false,
+      "prompt_sha256": {
+        "precheck_v2_with_post": "113000df199536a5657b4ed531058ce2e8029384f2d11e721e2af5d0f665fed0",
+        "relabel_intents_v2_with_post": "5965966d9b98279770407b0a5d858a85db578663120041f72359703658bbea9d",
+        "caption_post": "5dd76ab27fe574a7cf345d82c13f9e69e1683a385c2a9241172b214ea6366193"
+      },
+      "captions": {
+        "file": "data/annotation/post_captions.jsonl",
+        "sha256": "4c1f28071c6d270184d6d490833105ee71506c4399ed974bac89f17869b7e90c",
+        "surrogates": 37,
+        "kinds": {
+          "image": 21,
+          "poll": 16
+        }
+      },
+      "precheck": {
+        "source": "data/annotation/uplabel_precheck_45g.jsonl",
+        "source_sha256": "b797dc5a134ffe77d03ee65714479ec1e8c24dacc8219cb6f9707fd7fb175df9",
+        "batch": "data/annotation/uplabel_precheck_45g2.jsonl",
+        "batch_sha256": "df688e59e0463649c742bd0d053ff616e1a84c2adaee9fcd8ab69bba77a1aeff",
+        "rows_in_batch": 1912,
+        "re_asked": 424,
+        "relabelled": 424,
+        "copied_unchanged": 1488,
+        "context_states": {
+          "poll_text": 322,
+          "image_caption": 77,
+          "no_text_and_no_caption": 25
+        },
+        "diff": {
+          "rows": 424,
+          "changed_any_field": 153,
+          "changed_rate": 0.3608490566037736,
+          "per_field": {
+            "sentiment": 37,
+            "sarcasm": 11,
+            "intents": 87,
+            "unclear": 95
+          },
+          "intents_gained": {
+            "taste": 29,
+            "service": 21,
+            "availability": 3,
+            "price": 1,
+            "quality": 1
+          },
+          "intents_lost": {
+            "price": 11,
+            "taste": 9,
+            "service": 8,
+            "availability": 6,
+            "quality": 3,
+            "packaging": 3
+          }
+        },
+        "unusable": []
+      },
+      "redo": {
+        "population": 97,
+        "closed_by_the_quiz": 22,
+        "rows": 75,
+        "answered": 66,
+        "context_states": {
+          "post_text": 71,
+          "poll_text": 2,
+          "image_caption": 2
+        },
+        "rows_out": "results/redo_45g2_rows.jsonl",
+        "outcomes": "results/recheck_45g2_rows.jsonl",
+        "unusable": [
+          {
+            "id": "@VARUS_channel:12682",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:18780",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:19215",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:20136",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:2799",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@msuaaaa:7091",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@msuaaaa:12205",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:21576",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@msuaaaa:11941",
+            "labels": null,
+            "unusable": "parse: missing field: intents"
+          }
+        ],
+        "note": "An informed model column for the operator to argue with. Nothing here is applied to any file: the 11/20 quiz failed its bar, so these rows are decided by hand with the post in front of the operator."
+      },
+      "cost": {
+        "requests": 12,
+        "rows_from_an_earlier_run": 487,
+        "usd": 0.0022498500000000003,
+        "phase_spend_usd": 0.17355932000000018,
+        "cap_usd": 0.75
+      },
+      "git": {
+        "commit": "39eac7bab6246d87cc2b79faa88368491ed38dd5",
+        "dirty": [
+          ".gitignore",
+          "results/spend_45g2.json",
+          "data/annotation/uplabel_precheck_45g2.jsonl",
+          "results/recheck_45g2_rows.jsonl",
+          "results/redo_45g2_rows.jsonl",
+          "scripts/recheck_with_captions.py"
+        ]
+      },
+      "note": "The same rows, the same prompts and the same endpoint as 4.5g — the only thing that moved is what stands in the <post> block for a post with no text of its own. The 4.5g batch and record are read-only here; this writes a new batch beside them so that results/sitting_45g_manifest.json still pins the bytes it sealed."
+    }
+  ]
+}
