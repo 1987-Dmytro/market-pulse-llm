@@ -2,24 +2,24 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-03 19:06:30 (every SessionStart)
+**Auto-refreshed:** 2026-08-03 20:24:50 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-3c946d4 docs: three corrections to the ADR, one of them a wrong number
-8a096ee feat: the v2.2 probe — KILL on the bar, and the rewrite still worked
-0a76bf3 feat: the probe runner, committed before the run it records
-7fb5e83 feat: the v2.2 probe's gate, pre-registered before a row is bought
-43774a0 feat: v2.2 — the same eight rulings, said forwards
+f807094 feat: comments_v2 — 11,338 rows that now know what they replied to
+64fd863 feat: the family measurement, committed before the numbers exist
+5b0c036 feat: the second pass that backfills a comment's reply target
+caf48e5 feat: the collector keeps a comment's reply target
+66b439f feat: the sitting's adjudicated answers, written onto the rows they name
 ```
 
 ## 📋 Recent decisions
 
-- `45g4-v22-affirmative-rewrite.md` — The rulings were right and the sentences were backwards: v2.2, bought a hundred rows at a time
 - `INDEX.md` — Decision records
-- `45g3-sitting-gates.md` — All three strata failed, the guideline grew a v2.1, and the whole batch goes back
+- `45g5-features-over-prompts.md` — The prompt track is closed by its own gate: adjudicated truth into the data, and two features measured before either is bought
+- `45g4-v22-affirmative-rewrite.md` — The rulings were right and the sentences were backwards: v2.2, bought a hundred rows at a time
 
 ## 📅 Recent daily logs
 
@@ -31,9 +31,50 @@
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-03 19:02 (`/save` after `PROMPT-4.5g4` — **v2.2 says the same eight rulings affirmatively and the pre-registered probe came back KILL: preserved 37/58 against a bar of 55, fixed 9/29 against 24. The rewrite is NOT what failed — v2.1 scored 20/58 and 4/29 on the identical rows — it just does not reach the sitting's own bar.** 15 of the 20 remaining misses name `unclear`, and P6 is provably out of the prompt's reach. All three 4.5g strata still FAIL; nothing merges; the wave-2 hundred is still unjudged. The 4.5f calibration gate stays PASS at 100/100; test v3 is frozen beside v2; Phase 4 stays closed at 2 of 5 against v2; edited by hand — the section above is auto-generated, do NOT touch the marker)
+**Last update:** 2026-08-03 20:23 (after `PROMPT-4.5g5` — **path A executed at $0.00: 35 adjudicated verdicts are in the batch, the collector stores `reply_to_msg_id`, 11,338 comments were re-fetched into `data/raw/comments_v2/`, and both error families are measured.** The reply family covers 23 of the 42 refusals and a blanket rule over it would flip **62 of the 258** judged-correct rows; the sender family covers 7 and costs **10 of 45**. 19 refusals are in neither. Nothing was registered and no model was called. All three 4.5g strata still FAIL; the wave-2 hundred is still unjudged. The 4.5f calibration gate stays PASS at 100/100; test v3 is frozen beside v2; Phase 4 stays closed at 2 of 5 against v2; edited by hand — the section above is auto-generated, do NOT touch the marker)
 
 ## 🔥 What's Hot
+
+**PATH A IS EXECUTED, AND IT COST NOTHING.** `results/spend_45g5.json` holds a provider anchor read
+before the work started; the phase-end delta is **$0.000000** against a pre-registration of $0.00.
+`prompts.py` is untouched and nothing new is registered.
+
+**35 OF THE 42 REFUSALS NOW CARRY THE SITTING'S OWN ANSWER.** 29 state it in the verdict note (read
+by the same `expected()` the 4.5g3 wave-2 pack used), 6 more are named only by the guideline's P5
+and P6 brackets, which state their value in the rule's prose. Fields set: `unclear` 22 · `intents`
+9 · `sarcasm` 3 · `sentiment` 1; all 35 moved, none was already right. Only the named fields move.
+`git diff` is exactly 35/35 lines of `uplabel_precheck_45g2.jsonl`, and the batch went 612 → 626
+`unclear: true`, 809 → 800 with no intent. Seven rows name the error and no value and are listed by
+id; three of those seven (`8478` P7, `14759`, `11615`) do write an answer in prose the parser cannot
+read. `results/verdicts_45g5.json`.
+
+**THE TWO FAMILIES, MEASURED — AND THE BIG ONE IS THE EXPENSIVE ONE.**
+
+| | all 11,338 | the 1,912 batch | the 42 refusals | judged correct | of those, `unclear: false` |
+|---|---|---|---|---|---|
+| replies to a comment | 3,147 | 882 | **23** | 120 / 258 | **62** |
+| channel identity (2 pseudonyms) | 4,637 | 236 | **7** | 45 / 258 | **10** |
+| both at once | 941 | 233 | 7 | 43 / 258 | 9 |
+
+`results/features_45g5.json`. The reply discriminator is cross-checked by a second one (the target
+is a comment we collected): 2,971 against 3,147, and the 180-row gap is the class it is blind to —
+replies to comments deleted since. Two threads have no observed head and are named, not counted.
+**The families are nearly nested**: all 7 identity refusals are reply refusals, 233 of 236 identity
+batch rows are, the union covers 23 of 42, and **19 refusals are in neither** (14 name `intents`).
+
+**THE TEAM LEAD'S "219 / 46 / 7" IS TWO SCOPES, NOT ONE.** 219 batch rows and 46 judged are
+`2fa2b73f617b…` **alone** (VARUS support, 876 comments), which owns **6** refusals; the 7th is
+`58805a362c39…` (msuaaaa, 3,761). The pair is 236 / 52 / 7 / 45 judged-correct, **10 of them
+`unclear: false`** — the 10-of-45 exactly. Both readings are in the record; the filter was not
+tuned until 219 appeared. Third-busiest sender: **81** comments, so the cut is not a judgement call.
+
+**THE RE-FETCH LOST ALMOST NOTHING.** 1,538 threads walked; VARUS v1 6,410 / fresh 6,412 (2 deleted,
+4 new), msuaaaa 4,928 / 4,928. **0 texts edited**, so no label is stale. 11,336 of 11,338 v2 rows
+carry a reply target; the 2 that do not carry **no key at all**, so a reader that assumes one raises
+instead of reading `None` as "replies to the post". `data/raw/comments/` is byte-identical.
+
+**A PIN IS NOW STALE BY DESIGN.** `sitting_45g2_manifest.json` pins `df688e59…`; the batch is
+`f436c419…`. `build_sitting_pack.py` will refuse and that refusal is correct — see Footguns.
 
 **THE v2.2 PROBE: KILL, AND THE REWRITE STILL WORKED.** One attempt, 100 rows, $0.0365, 100
 answered, 0 unusable. `results/v22_probe_results.json`, scored by the function
@@ -581,18 +622,21 @@ files**: `comments_train.jsonl` (1600) + `sarcasm_candidates.jsonl` (746) plus
 
 ## ⏭️ Next
 
-1. **THE OPERATOR'S DECISION, NARROWED BY THE PROBE.** The affirmative rewrite was bought and
-   scored: it helps a lot and it does not clear the bar (37/58 · 9/29 against 55 · 24). Three
-   options, and the probe priced all of them. **(a) One more $0.04 probe with the settled
-   `unclear` cases folded into `UNCLEAR_RULE` itself, or that rule moved above the block** — the
-   sample, the reference labels, the scorer and the thresholds already exist and
-   `results/v22_probe_rows.jsonl` makes it a paired comparison on arrival; 15 of the 20 remaining
-   misses are `unclear`, so this is where the mass is. **(b) Carry `sender_anon_id` into the
-   labelling row** and settle the corporate-voice class by lookup instead of inference — that is a
-   registry/pipeline decision, not a prompt one, and it is the only thing that can fix P6.
-   **(c) Judge the wave-2 hundred as it stands** — but it gates the v2.1 labels, which measure
-   worse than v2.2 and worse than v2. Nothing else in 4.5g4 is waiting on anything, and
-   `emptied40.csv` stays superseded and unfilled.
+1. **THE NEXT PROBE IS A CONTEXT LINE, AND 4.5g5 PRICED WHICH ONE.** Path A is executed: the 35
+   adjudicated verdicts are in the batch, the collector stores `reply_to_msg_id`, both channels
+   are re-fetched into `data/raw/comments_v2/`, and both families are measured
+   (`results/features_45g5.json`, ADR [[45g5-features-over-prompts]]). What the numbers say about
+   the next registration: **`sender_anon_id` is the cheap one** — 236 batch rows, 7 of the 42
+   refusals, and a blanket rule costs **10 of 45** judged-correct rows. **The reply feature is the
+   big one and the dangerous one** — 882 batch rows and **23 of 42** refusals, but a blanket "a
+   reply to another commenter is not a consumer reaction" would flip **62 of the 258**
+   judged-correct rows, a quarter of everything the sitting accepted. So the shape to register is
+   a **context line under the v2 prompt** (facts handed to the model, exception left available),
+   **not** a rule and **not** the v2.2 wording the gate already refused. **The families are nearly
+   nested, not additive**: all 7 identity refusals are reply refusals too, the union covers 23 of
+   42, and **19 refusals are in neither** — 14 of those name `intents`. Still unregistered, still
+   unbought: nothing in 4.5g5 called a model. **The wave-2 hundred is still unjudged**, and it
+   gates the v2.1 labels, which measure worse than v2.2 and worse than v2.
 2. **THE POLL FINDING IS A CORPUS QUESTION, AND IT IS THE BIGGEST THING 4.5g2 OPENED.** 16 of the 41
    parents in play are polls whose question the collector never stored. **How many polls are in the
    whole store is unknown**; every one of them is currently recorded as a post that said nothing,
@@ -653,6 +697,31 @@ no-regression bars, the scorer taught to read the persisted slice).
 matrix is frozen. CPU beats MPS by 14×, which is the opposite of the intuition.
 
 ## ⚠️ Footguns for the next run
+
+**`parent_msg_id` and `reply_to_msg_id` are different id spaces, and comparing them looks fine.**
+`parent_msg_id` is the **channel** post; `reply_to_msg_id` is a message in the **discussion
+group**. A top-level comment replies to the group's mirror of the post, a reply-to-a-commenter
+replies to another comment — so `reply_to != parent` is true for essentially every row and would
+report ~100% of comments as replies. The thread head is recoverable without a second field: it is
+the **smallest** reply target in the thread, because the mirror exists before any comment on it.
+Sanity gate: if the reply family comes out near the corpus size, the discriminator is wrong, not
+the corpus. Measured 2026-08-03 on one real thread **before** the 1,538-thread walk.
+
+**`results/sitting_45g2_manifest.json` no longer matches the batch it pins, and that is correct.**
+4.5g5 wrote 35 adjudicated rows into `uplabel_precheck_45g2.jsonl` (`df688e59…` → `f436c419…`).
+`build_sitting_pack.py` will refuse. **Do not re-pin the manifest** — it describes the corpus the
+300 verdicts were passed on; `results/verdicts_45g5.json` is the only place the chain lives. Same
+shape as `calib_45e_manifest.json` and `relabel_45e.json`.
+
+**The batch is no longer pure model output.** 35 of the 1,912 rows carry
+`annotator: sitting-45g-verdicts`. Any counter that says "the precheck said X" has to name which
+rows it means, and any new gate over the batch has to decide whether adjudicated rows are in it.
+
+**A size and a cost are different numbers, and only the cost decides.** The reply family is the
+bigger one — 23 of 42 refusals against the sender family's 7 — and the more expensive by far: a
+blanket rule over it flips 62 of 258 judged-correct rows against the sender family's 10 of 45.
+Measure what a rule would break on the rows already accepted before deciding a feature is worth
+buying.
 
 **A prompt revision can only re-weigh evidence the model HAS.** v2.2 states the corporate-voice
 ruling, and `UNCLEAR_RULE` had already listed it since v2 — the model reads it twice and still

@@ -1,0 +1,201 @@
+{
+  "runs": [
+    {
+      "timestamp": "2026-08-03T18:19:35+00:00",
+      "measured_by": "scripts/measure_families_45g5.py",
+      "sources": {
+        "comments": [
+          "data/raw/comments_v2/VARUS_channel.jsonl",
+          "data/raw/comments_v2/msuaaaa.jsonl"
+        ],
+        "batch": "data/annotation/uplabel_precheck_45g2.jsonl",
+        "gates": "results/sitting_45g_gates.json"
+      },
+      "corpus": {
+        "comments": 11338,
+        "batch_rows": 1912,
+        "judged": 300,
+        "errors": 42,
+        "rows_not_refetched": 2
+      },
+      "families": {
+        "replies_to_comments": {
+          "discriminator": "reply_to_msg_id is not the thread's smallest reply target",
+          "all_comments": {
+            "n": 3147,
+            "of": 11338
+          },
+          "batch": {
+            "n": 882,
+            "of": 1912
+          },
+          "errors": {
+            "n": 23,
+            "of": 42
+          },
+          "judged": {
+            "correct": {
+              "n": 120,
+              "of": 258
+            },
+            "incorrect": {
+              "n": 23,
+              "of": 42
+            }
+          },
+          "judged_correct_with_unclear_false": 62,
+          "cross_check_by_membership": 2971,
+          "discriminators_disagree_on": 180,
+          "threads_with_no_observed_head": 2
+        },
+        "channel_identity": {
+          "discriminator": "one of the 2 busiest sender_anon_ids",
+          "senders": [
+            {
+              "sender_anon_id": "58805a362c39",
+              "comments": 3761
+            },
+            {
+              "sender_anon_id": "2fa2b73f617b",
+              "comments": 876
+            }
+          ],
+          "next_busiest": 81,
+          "all_comments": {
+            "n": 4637,
+            "of": 11338
+          },
+          "batch": {
+            "n": 236,
+            "of": 1912
+          },
+          "errors": {
+            "n": 7,
+            "of": 42
+          },
+          "judged": {
+            "correct": {
+              "n": 45,
+              "of": 258
+            },
+            "incorrect": {
+              "n": 7,
+              "of": 42
+            }
+          },
+          "judged_correct_with_unclear_false": 10,
+          "per_sender": {
+            "58805a362c39": {
+              "all_comments": {
+                "n": 3761,
+                "of": 11338
+              },
+              "batch": {
+                "n": 17,
+                "of": 1912
+              },
+              "errors": {
+                "n": 1,
+                "of": 42
+              },
+              "judged": {
+                "correct": {
+                  "n": 5,
+                  "of": 258
+                },
+                "incorrect": {
+                  "n": 1,
+                  "of": 42
+                }
+              },
+              "judged_correct_with_unclear_false": 4
+            },
+            "2fa2b73f617b": {
+              "all_comments": {
+                "n": 876,
+                "of": 11338
+              },
+              "batch": {
+                "n": 219,
+                "of": 1912
+              },
+              "errors": {
+                "n": 6,
+                "of": 42
+              },
+              "judged": {
+                "correct": {
+                  "n": 40,
+                  "of": 258
+                },
+                "incorrect": {
+                  "n": 6,
+                  "of": 42
+                }
+              },
+              "judged_correct_with_unclear_false": 6
+            }
+          }
+        },
+        "overlap": {
+          "all_comments": {
+            "n": 941,
+            "of": 11338
+          },
+          "batch": {
+            "n": 233,
+            "of": 1912
+          },
+          "errors": {
+            "n": 7,
+            "of": 42
+          },
+          "judged": {
+            "correct": {
+              "n": 43,
+              "of": 258
+            },
+            "incorrect": {
+              "n": 7,
+              "of": 42
+            }
+          },
+          "judged_correct_with_unclear_false": 9,
+          "note": "rows in both families — a rule for either has to say what happens here"
+        }
+      },
+      "errors_in_neither_family": [
+        "@VARUS_channel:11605",
+        "@VARUS_channel:11606",
+        "@VARUS_channel:11615",
+        "@VARUS_channel:11776",
+        "@VARUS_channel:14759",
+        "@VARUS_channel:245",
+        "@VARUS_channel:2798",
+        "@VARUS_channel:7065",
+        "@VARUS_channel:7555",
+        "@VARUS_channel:7711",
+        "@VARUS_channel:8478",
+        "@VARUS_channel:8903",
+        "@VARUS_channel:8916",
+        "@VARUS_channel:8932",
+        "@VARUS_channel:8947",
+        "@msuaaaa:11507",
+        "@msuaaaa:11876",
+        "@msuaaaa:12325",
+        "@msuaaaa:12621"
+      ],
+      "git": {
+        "commit": "64fd86307ce28c7d4ecec96b09ee545d9afd0674",
+        "dirty": [
+          "knowledge/daily_logs/2026-08-03.md",
+          "knowledge/index.md",
+          "results/drift_45g5.json",
+          "results/spend_45g5.json",
+          "scripts/zero_spend_45g5.py",
+          "tests/test_zero_spend_45g5.py"
+        ]
+      }
+    }
+  ]
+}

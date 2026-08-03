@@ -1445,3 +1445,112 @@ input it would need to obey the rule is in the row at all.** A prompt revision c
 evidence the model has. Where the evidence is missing, every revision is a coin flip that costs
 a run to observe — and this one cost two of them, because the same rows failed under v2.1 and
 were charged to the wording both times.
+
+# Phase 4.5g5 — adjudicated truth into the batch, reply_to into the collector, both families measured
+
+Executed against `docs/PROMPT-4.5g5.md`. **Zero completion requests**: `results/spend_45g5.json`
+anchors lifetime provider usage at `3.200080415` read before the work started, and the phase-end
+delta is `$0.000000`. Nothing was registered in `prompts.py`.
+
+## Deviations — silence is not compliance
+
+1. **Task 0 swept two team-lead files it was told to stop on.** Dirty at phase start: the vault
+   tail (`knowledge/hot.md`, `knowledge/index.md`, `knowledge/daily_logs/2026-08-03.md`) plus
+   `docs/STATUS.md` modified upstream and `docs/PROMPT-4.5g5.md` untracked. Task 0 says to stop
+   and report if anything other than the vault tail is dirty. Both extras are team-lead files
+   this executor may only read and commit, neither is this phase's doing, and blocking a phase on
+   "the team lead edited STATUS and dropped the next brief" delivers nothing. Swept into commit 1,
+   staged by explicit path — `git add -A` would have claimed the brief as authored here.
+
+2. **The read-list's description of the target batch matches no file, and the target was chosen.**
+   The brief says to read "the batch file your 4.5g3 merge wrote (the one carrying the 89 hand
+   rows, annotator: sitting-45g)". Those 89 rows are in `data/frozen/comments_train_tax2.jsonl`,
+   `data/annotation/sarcasm_candidates_tax2.jsonl` (12) and `sarcasm_holdout_pool_tax2.jsonl`
+   (28), and **none of the three contains any of the 300 judged ids** — measured, not assumed.
+   The judged ids exist only in `uplabel_precheck_45g2.jsonl` and `uplabel_precheck_45g3.jsonl`.
+   **45g2 was chosen**: the verdicts were passed on the v2 labels it holds; 45g3 is the v2.1
+   re-run whose three strata all failed and whose merge recorded `uplabel.rows_merged: 0`; and
+   Task 4's own next step is a probe of the **v2** prompt. Stated as an assumption rather than
+   treated as a shape mismatch, because once the three candidate files are checked the target is
+   uniquely determined by the ids.
+
+3. **The write breaks a manifest pin on purpose and does not re-pin it.**
+   `results/sitting_45g2_manifest.json` pins `precheck.source_sha256` at `df688e59…`; 35 rows
+   moved and the file is now `f436c419…`. The pin describes the corpus the 300 verdicts were
+   passed on, so it is right and stale at once. `results/verdicts_45g5.json` carries both shas
+   and is the only place the chain is written down — the shape `results/relabel_45e.json` already
+   uses for `results/calib_45e_manifest.json`. `scripts/build_sitting_pack.py` will now refuse
+   against the new bytes, and that refusal is correct.
+
+4. **Three refused rows write their answer down in prose and were still left alone.** Of the
+   seven rows this run does not touch, `@VARUS_channel:8478` (`[]` should be `["service"]`),
+   `@VARUS_channel:14759` (`["price"]` should be `["availability"]`) and `@VARUS_channel:11615`
+   (`[]` should be `["taste"]`) state a value the parser cannot read, because the note omits the
+   field name; 8478 is pattern P7, outside the P5/P6 scope this phase was given. Listed rather
+   than guessed at — filling them is a team-lead decision, not a gap to close here.
+
+5. **One touched row's note also gestures at a value that was not applied.**
+   `@VARUS_channel:9271`'s verdict reads "unclear should be false, and a disappointed prize report
+   is a promo-reward reaction (service family)". Only `unclear: false` is in the shape the parser
+   reads; the row's `intents` stays `[]`. Named for the same reason as deviation 4.
+
+6. **The reply-target discriminator was measured before the long run, not assumed.** One thread
+   was pulled and its raw `MessageReplyHeader` dumped. A top-level comment carries
+   `reply_to_msg_id` = the discussion group's mirror of the post and **no** `reply_to_top_id`; a
+   reply to another commenter carries the target comment's id **plus** `reply_to_top_id` = the
+   same mirror. `parent_msg_id` is a **channel** id and is comparable to neither — comparing them
+   would have classified essentially every comment as a reply and produced a table that looked
+   fine. Cost: one Telegram read, $0.
+
+7. **`reply_to_top_id` is visible in that header and deliberately not stored.** Task 2 is scoped
+   to "the client library's reply-to message id", one field. The thread head is recovered from the
+   stored field instead — it is the smallest reply target in the thread, because the group's
+   mirror of the post exists before any comment on it. Both discriminators (head, and "the target
+   is a comment we collected") are reported side by side, so the number is cross-checked rather
+   than asserted: 3,147 against 2,971, and the 180-row symmetric difference is the deleted-target
+   class the membership test is blind to, plus two threads with no observed head.
+
+8. **The team lead's "219 / 46 / 7" does not reconcile as one scope.** Re-derived: 219 (batch) and
+   46 (judged) are the VARUS support pseudonym `2fa2b73f617b…` **alone**, which accounts for **6**
+   of the 42 refusals; the 7th comes from the second hyperactive pseudonym `58805a362c39…`
+   (msuaaaa, 3,761 comments). The pair together is 236 batch rows, 52 judged, 7 refusals and 45
+   judged-correct — and **10 of those 45 carry `unclear: false`**, which is the team lead's
+   10-of-45 exactly. Both readings are in `results/features_45g5.json`; the filter was not
+   adjusted until 219 appeared.
+
+9. **Six commits, not five.** The fetch runner (`5b0c036`) and the measurement script (`64fd863`)
+   were each committed **before** the run they produce, so that anything changed after seeing the
+   data is visible in git rather than folded into one commit with its own result. The prompt's
+   commits 4 and 5 are each split into a code half and a record half.
+
+10. **`main()` of the fetcher is not unit-tested.** Its live-only branch is the Telegram walk; the
+    helpers that decide anything — the work list, the join, the drift counts, the writer, the
+    round-trip — are, and the walk itself was proven by running it over 1,538 threads. Named
+    rather than glossed: a fake-client bench for the async walk is ~50 lines and was not written.
+
+11. **`comment_record` grew a field, so every future v1 append would carry it.** The v1 files were
+    not appended to and are byte-identical (sha256 checked against a baseline taken before the
+    run, mtimes still on the collection date), but `scripts/backfill.py` now writes
+    `reply_to_msg_id` into `data/raw/comments/` if it is ever run again. That is the intended
+    behaviour and it means the v1 files stop being homogeneous the moment collection resumes.
+
+12. **The first rate estimate for the walk was wrong by 3×, and the operator was told it.** An
+    early reading gave ~7 s/thread and "about three hours"; the walk actually ran 19:25 → 20:19
+    for 1,538 threads, i.e. ~2.1 s/thread in ~54 minutes. Recorded because the wrong figure was
+    reported before it was corrected — a rate read off two log lines minutes apart is a guess,
+    not a measurement.
+
+## The finding worth writing down
+
+**A feature's size and a feature's price are different numbers, and only the price decides.** The
+reply feature is the bigger of the two by every size measure — 3,147 comments against 4,637 but
+882 batch rows against 236, and **23 of the 42 refusals against 7**. It is also, by a wide margin,
+the more expensive: a blanket rule over it flips **62 of the 258 rows the sitting called correct**,
+against **10 of 45** for the sender feature. Nearly a quarter of everything the sitting accepted
+would have to be re-argued to buy 23 refusals.
+
+That ratio is what the guideline's own rule 5 already says in words — *"a direct accusation against
+the retailer outweighs a commenter addressee"* — priced for the first time. It is also the argument
+for the **shape** of the next attempt: a context line states the fact and leaves the exception
+available to the model, where a rule removes it. Had only the sizes been measured, the reply
+feature would look like the obvious buy.

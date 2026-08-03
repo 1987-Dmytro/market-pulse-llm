@@ -1,0 +1,6 @@
+{
+  "openrouter_total_usage_at_45g5_start": 3.200080415,
+  "note": "lifetime OpenRouter usage read at the start of 45g5, before any work. This phase is pre-registered at $0.00 in completion requests (docs/PROMPT-4.5g5.md), so this anchor is a tripwire and not a budget: the phase-end delta has to be exactly zero. Never re-anchor into an existing file — that moves the baseline past the very spend it exists to catch. Every other phase's anchor is a different file and is never written here.",
+  "cap_usd": 0.0,
+  "runs": []
+}

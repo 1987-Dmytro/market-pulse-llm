@@ -37,3 +37,4 @@ docs/STATUS.md; these are the English long form with the numbers.
 | 2026-08-03 | [[45g2-captions-and-quiz-rulings]] — the 11/20 quiz applies 11 rows plus one validated pattern; media-only posts get an image caption or a poll transcript; the sitting is resealed | accepted |
 | 2026-08-03 | [[45g3-sitting-gates]] — all three strata FAIL (88/89/81); guideline v2.1 from the sitting rulings; the whole 1,912 re-labelled under `precheck_v2.1_with_post` and a fresh blind hundred sealed | accepted |
 | 2026-08-03 | [[45g4-v22-affirmative-rewrite]] — the v2.1 rulings restated affirmatively as v2.2 (FORM-ONLY); a 100-row in-sample probe pre-registered and gated before any full re-run | accepted |
+| 2026-08-03 | [[45g5-features-over-prompts]] — the probe's KILL closes the prompt-form track; 35 adjudicated verdicts written into the batch; the collector learns `reply_to`; both families measured, and a naive reply rule would cost 62 of 258 judged-correct rows | accepted |
