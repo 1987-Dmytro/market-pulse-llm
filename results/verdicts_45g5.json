@@ -1,0 +1,917 @@
+{
+  "runs": [
+    {
+      "timestamp": "2026-08-03T17:19:48+00:00",
+      "applied_by": "scripts/apply_sitting_verdicts.py",
+      "authority": "team-lead-LLM triage with operator adjudication and operator spot-check",
+      "batch": "data/annotation/uplabel_precheck_45g2.jsonl",
+      "gates": "results/sitting_45g_gates.json",
+      "guideline": "docs/annotation/comments.md",
+      "annotator": "sitting-45g-verdicts",
+      "scope": "rulings that name a value: the parseable stated rulings of results/sitting_45g_gates.json plus the P5/P6 family values the guideline states in prose",
+      "batch_sha256_before": "df688e59e0463649c742bd0d053ff616e1a84c2adaee9fcd8ab69bba77a1aeff",
+      "batch_sha256_after": "f436c4199277fc3f6ba509f1fdcc96031cf5abaa6b7765ef8bb7c0e41b25acaf",
+      "supersedes": {
+        "manifest": "results/sitting_45g2_manifest.json",
+        "what_moved": "That manifest pins precheck.source_sha256 to the batch as it was sealed for the sitting, and this run moved 35 of its rows. The pin is now stale by design and is not to be re-pinned: it describes the corpus the 300 verdicts were passed on, and this file is the only place the chain to today's bytes is written down. scripts/build_sitting_pack.py will refuse against the new bytes, and that refusal is correct — the same shape results/relabel_45e.json records for results/calib_45e_manifest.json."
+      },
+      "counts": {
+        "rows_touched": 35,
+        "rows_moved": 35,
+        "rows_already_matching": 0,
+        "per_field": {
+          "intents": 9,
+          "sarcasm": 3,
+          "sentiment": 1,
+          "unclear": 22
+        },
+        "by_reason": {
+          "pattern P5": 3,
+          "pattern P6": 3,
+          "stated in the verdict note": 28,
+          "stated in the verdict note; pattern P6": 1
+        }
+      },
+      "refused_rows": 42,
+      "skipped_no_value": [
+        {
+          "id": "@VARUS_channel:8478",
+          "notes": "verdict: operator-P7 retroactive — [] should be [\"service\"] (bare praise of conduct); earlier tl-llm correct overturned by the operator ruling"
+        },
+        {
+          "id": "@msuaaaa:11876",
+          "notes": "tl-llm: [\"availability\"] wrong — mocking a novelty claim, not product presence (true value [] or service, for the guideline round)"
+        },
+        {
+          "id": "@VARUS_channel:18839",
+          "notes": "tl-llm: [\"availability\"] wrong — queue joke; queue at the till is service by the guideline letter"
+        },
+        {
+          "id": "@VARUS_channel:8932",
+          "notes": "tl-llm: intents incomplete — «не смачними» is explicit taste beside quality; guideline says label both"
+        },
+        {
+          "id": "@VARUS_channel:14759",
+          "notes": "tl-llm: [\"price\"] should be [\"availability\"] — «нічого не дістанеться з акційного» is missing goods, not price"
+        },
+        {
+          "id": "@VARUS_channel:7555",
+          "notes": "tl-llm: [\"availability\"] wrong — «что попало?» asks box contents, not presence"
+        },
+        {
+          "id": "@VARUS_channel:11615",
+          "notes": "tl-llm: [] should be [\"taste\"] — dish answer under food poll (4th of the family)"
+        }
+      ],
+      "changed_lines": 35,
+      "population_before": {
+        "rows": 1912,
+        "by_annotator": {
+          "llm-precheck": 1912
+        },
+        "unclear_true": 612,
+        "with_no_intent": 809,
+        "intents": {
+          "availability": 161,
+          "packaging": 15,
+          "price": 110,
+          "quality": 78,
+          "service": 689,
+          "taste": 111
+        },
+        "sarcasm_true": 87,
+        "sentiment": {
+          "negative": 635,
+          "neutral": 1104,
+          "positive": 173
+        }
+      },
+      "population_after": {
+        "rows": 1912,
+        "by_annotator": {
+          "llm-precheck": 1877,
+          "sitting-45g-verdicts": 35
+        },
+        "unclear_true": 626,
+        "with_no_intent": 800,
+        "intents": {
+          "availability": 161,
+          "packaging": 16,
+          "price": 110,
+          "quality": 78,
+          "service": 694,
+          "taste": 114
+        },
+        "sarcasm_true": 88,
+        "sentiment": {
+          "negative": 635,
+          "neutral": 1103,
+          "positive": 174
+        }
+      },
+      "rows": [
+        {
+          "id": "@VARUS_channel:19919",
+          "reason": "stated in the verdict note",
+          "fields": [
+            "sarcasm"
+          ],
+          "before": {
+            "sentiment": "negative",
+            "sarcasm": true,
+            "intents": [
+              "service"
+            ],
+            "unclear": false
+          },
+          "after": {
+            "sentiment": "negative",
+            "sarcasm": false,
+            "intents": [
+              "service"
+            ],
+            "unclear": false
+          },
+          "moved": true
+        },
+        {
+          "id": "@VARUS_channel:17864",
+          "reason": "stated in the verdict note",
+          "fields": [
+            "unclear"
+          ],
+          "before": {
+            "sentiment": "neutral",
+            "sarcasm": false,
+            "intents": [
+              "service"
+            ],
+            "unclear": false
+          },
+          "after": {
+            "sentiment": "neutral",
+            "sarcasm": false,
+            "intents": [
+              "service"
+            ],
+            "unclear": true
+          },
+          "moved": true
+        },
+        {
+          "id": "@VARUS_channel:17855",
+          "reason": "stated in the verdict note",
+          "fields": [
+            "unclear"
+          ],
+          "before": {
+            "sentiment": "negative",
+            "sarcasm": false,
+            "intents": [
+              "service"
+            ],
+            "unclear": false
+          },
+          "after": {
+            "sentiment": "negative",
+            "sarcasm": false,
+            "intents": [
+              "service"
+            ],
+            "unclear": true
+          },
+          "moved": true
+        },
+        {
+          "id": "@VARUS_channel:16461",
+          "reason": "stated in the verdict note",
+          "fields": [
+            "unclear"
+          ],
+          "before": {
+            "sentiment": "positive",
+            "sarcasm": false,
+            "intents": [],
+            "unclear": true
+          },
+          "after": {
+            "sentiment": "positive",
+            "sarcasm": false,
+            "intents": [],
+            "unclear": false
+          },
+          "moved": true
+        },
+        {
+          "id": "@VARUS_channel:14891",
+          "reason": "stated in the verdict note",
+          "fields": [
+            "unclear"
+          ],
+          "before": {
+            "sentiment": "negative",
+            "sarcasm": false,
+            "intents": [
+              "service"
+            ],
+            "unclear": false
+          },
+          "after": {
+            "sentiment": "negative",
+            "sarcasm": false,
+            "intents": [
+              "service"
+            ],
+            "unclear": true
+          },
+          "moved": true
+        },
+        {
+          "id": "@VARUS_channel:11776",
+          "reason": "stated in the verdict note",
+          "fields": [
+            "intents"
+          ],
+          "before": {
+            "sentiment": "neutral",
+            "sarcasm": false,
+            "intents": [],
+            "unclear": false
+          },
+          "after": {
+            "sentiment": "neutral",
+            "sarcasm": false,
+            "intents": [
+              "taste"
+            ],
+            "unclear": false
+          },
+          "moved": true
+        },
+        {
+          "id": "@VARUS_channel:11606",
+          "reason": "stated in the verdict note",
+          "fields": [
+            "intents"
+          ],
+          "before": {
+            "sentiment": "neutral",
+            "sarcasm": false,
+            "intents": [],
+            "unclear": false
+          },
+          "after": {
+            "sentiment": "neutral",
+            "sarcasm": false,
+            "intents": [
+              "taste"
+            ],
+            "unclear": false
+          },
+          "moved": true
+        },
+        {
+          "id": "@VARUS_channel:11605",
+          "reason": "stated in the verdict note",
+          "fields": [
+            "intents"
+          ],
+          "before": {
+            "sentiment": "neutral",
+            "sarcasm": false,
+            "intents": [],
+            "unclear": false
+          },
+          "after": {
+            "sentiment": "neutral",
+            "sarcasm": false,
+            "intents": [
+              "taste"
+            ],
+            "unclear": false
+          },
+          "moved": true
+        },
+        {
+          "id": "@VARUS_channel:10394",
+          "reason": "stated in the verdict note",
+          "fields": [
+            "unclear"
+          ],
+          "before": {
+            "sentiment": "negative",
+            "sarcasm": false,
+            "intents": [
+              "service"
+            ],
+            "unclear": false
+          },
+          "after": {
+            "sentiment": "negative",
+            "sarcasm": false,
+            "intents": [
+              "service"
+            ],
+            "unclear": true
+          },
+          "moved": true
+        },
+        {
+          "id": "@VARUS_channel:10136",
+          "reason": "stated in the verdict note",
+          "fields": [
+            "unclear"
+          ],
+          "before": {
+            "sentiment": "negative",
+            "sarcasm": false,
+            "intents": [
+              "service"
+            ],
+            "unclear": false
+          },
+          "after": {
+            "sentiment": "negative",
+            "sarcasm": false,
+            "intents": [
+              "service"
+            ],
+            "unclear": true
+          },
+          "moved": true
+        },
+        {
+          "id": "@VARUS_channel:9271",
+          "reason": "stated in the verdict note",
+          "fields": [
+            "unclear"
+          ],
+          "before": {
+            "sentiment": "neutral",
+            "sarcasm": false,
+            "intents": [],
+            "unclear": true
+          },
+          "after": {
+            "sentiment": "neutral",
+            "sarcasm": false,
+            "intents": [],
+            "unclear": false
+          },
+          "moved": true
+        },
+        {
+          "id": "@VARUS_channel:9055",
+          "reason": "pattern P6",
+          "fields": [
+            "unclear"
+          ],
+          "before": {
+            "sentiment": "neutral",
+            "sarcasm": false,
+            "intents": [],
+            "unclear": false
+          },
+          "after": {
+            "sentiment": "neutral",
+            "sarcasm": false,
+            "intents": [],
+            "unclear": true
+          },
+          "moved": true
+        },
+        {
+          "id": "@VARUS_channel:8947",
+          "reason": "stated in the verdict note",
+          "fields": [
+            "intents"
+          ],
+          "before": {
+            "sentiment": "negative",
+            "sarcasm": false,
+            "intents": [],
+            "unclear": false
+          },
+          "after": {
+            "sentiment": "negative",
+            "sarcasm": false,
+            "intents": [
+              "service"
+            ],
+            "unclear": false
+          },
+          "moved": true
+        },
+        {
+          "id": "@VARUS_channel:8916",
+          "reason": "stated in the verdict note",
+          "fields": [
+            "intents"
+          ],
+          "before": {
+            "sentiment": "positive",
+            "sarcasm": false,
+            "intents": [],
+            "unclear": false
+          },
+          "after": {
+            "sentiment": "positive",
+            "sarcasm": false,
+            "intents": [
+              "service"
+            ],
+            "unclear": false
+          },
+          "moved": true
+        },
+        {
+          "id": "@VARUS_channel:8903",
+          "reason": "stated in the verdict note",
+          "fields": [
+            "unclear"
+          ],
+          "before": {
+            "sentiment": "positive",
+            "sarcasm": false,
+            "intents": [],
+            "unclear": true
+          },
+          "after": {
+            "sentiment": "positive",
+            "sarcasm": false,
+            "intents": [],
+            "unclear": false
+          },
+          "moved": true
+        },
+        {
+          "id": "@VARUS_channel:8850",
+          "reason": "stated in the verdict note",
+          "fields": [
+            "unclear"
+          ],
+          "before": {
+            "sentiment": "neutral",
+            "sarcasm": false,
+            "intents": [
+              "service"
+            ],
+            "unclear": false
+          },
+          "after": {
+            "sentiment": "neutral",
+            "sarcasm": false,
+            "intents": [
+              "service"
+            ],
+            "unclear": true
+          },
+          "moved": true
+        },
+        {
+          "id": "@VARUS_channel:7711",
+          "reason": "stated in the verdict note",
+          "fields": [
+            "unclear"
+          ],
+          "before": {
+            "sentiment": "negative",
+            "sarcasm": false,
+            "intents": [
+              "service"
+            ],
+            "unclear": false
+          },
+          "after": {
+            "sentiment": "negative",
+            "sarcasm": false,
+            "intents": [
+              "service"
+            ],
+            "unclear": true
+          },
+          "moved": true
+        },
+        {
+          "id": "@VARUS_channel:7545",
+          "reason": "stated in the verdict note",
+          "fields": [
+            "unclear"
+          ],
+          "before": {
+            "sentiment": "neutral",
+            "sarcasm": false,
+            "intents": [],
+            "unclear": false
+          },
+          "after": {
+            "sentiment": "neutral",
+            "sarcasm": false,
+            "intents": [],
+            "unclear": true
+          },
+          "moved": true
+        },
+        {
+          "id": "@VARUS_channel:7074",
+          "reason": "stated in the verdict note",
+          "fields": [
+            "unclear"
+          ],
+          "before": {
+            "sentiment": "neutral",
+            "sarcasm": false,
+            "intents": [
+              "availability",
+              "price"
+            ],
+            "unclear": false
+          },
+          "after": {
+            "sentiment": "neutral",
+            "sarcasm": false,
+            "intents": [
+              "availability",
+              "price"
+            ],
+            "unclear": true
+          },
+          "moved": true
+        },
+        {
+          "id": "@VARUS_channel:7065",
+          "reason": "stated in the verdict note",
+          "fields": [
+            "sarcasm"
+          ],
+          "before": {
+            "sentiment": "negative",
+            "sarcasm": false,
+            "intents": [
+              "service"
+            ],
+            "unclear": false
+          },
+          "after": {
+            "sentiment": "negative",
+            "sarcasm": true,
+            "intents": [
+              "service"
+            ],
+            "unclear": false
+          },
+          "moved": true
+        },
+        {
+          "id": "@VARUS_channel:6239",
+          "reason": "pattern P5",
+          "fields": [
+            "intents"
+          ],
+          "before": {
+            "sentiment": "neutral",
+            "sarcasm": false,
+            "intents": [],
+            "unclear": false
+          },
+          "after": {
+            "sentiment": "neutral",
+            "sarcasm": false,
+            "intents": [
+              "service"
+            ],
+            "unclear": false
+          },
+          "moved": true
+        },
+        {
+          "id": "@VARUS_channel:4663",
+          "reason": "pattern P6",
+          "fields": [
+            "unclear"
+          ],
+          "before": {
+            "sentiment": "neutral",
+            "sarcasm": false,
+            "intents": [
+              "service"
+            ],
+            "unclear": false
+          },
+          "after": {
+            "sentiment": "neutral",
+            "sarcasm": false,
+            "intents": [
+              "service"
+            ],
+            "unclear": true
+          },
+          "moved": true
+        },
+        {
+          "id": "@VARUS_channel:3989",
+          "reason": "pattern P6",
+          "fields": [
+            "unclear"
+          ],
+          "before": {
+            "sentiment": "neutral",
+            "sarcasm": false,
+            "intents": [
+              "service"
+            ],
+            "unclear": false
+          },
+          "after": {
+            "sentiment": "neutral",
+            "sarcasm": false,
+            "intents": [
+              "service"
+            ],
+            "unclear": true
+          },
+          "moved": true
+        },
+        {
+          "id": "@VARUS_channel:2798",
+          "reason": "pattern P5",
+          "fields": [
+            "intents"
+          ],
+          "before": {
+            "sentiment": "neutral",
+            "sarcasm": false,
+            "intents": [],
+            "unclear": false
+          },
+          "after": {
+            "sentiment": "neutral",
+            "sarcasm": false,
+            "intents": [
+              "service"
+            ],
+            "unclear": false
+          },
+          "moved": true
+        },
+        {
+          "id": "@VARUS_channel:2693",
+          "reason": "stated in the verdict note",
+          "fields": [
+            "unclear"
+          ],
+          "before": {
+            "sentiment": "neutral",
+            "sarcasm": false,
+            "intents": [
+              "service"
+            ],
+            "unclear": false
+          },
+          "after": {
+            "sentiment": "neutral",
+            "sarcasm": false,
+            "intents": [
+              "service"
+            ],
+            "unclear": true
+          },
+          "moved": true
+        },
+        {
+          "id": "@VARUS_channel:1338",
+          "reason": "stated in the verdict note",
+          "fields": [
+            "unclear"
+          ],
+          "before": {
+            "sentiment": "neutral",
+            "sarcasm": false,
+            "intents": [
+              "service"
+            ],
+            "unclear": false
+          },
+          "after": {
+            "sentiment": "neutral",
+            "sarcasm": false,
+            "intents": [
+              "service"
+            ],
+            "unclear": true
+          },
+          "moved": true
+        },
+        {
+          "id": "@VARUS_channel:1271",
+          "reason": "stated in the verdict note; pattern P6",
+          "fields": [
+            "unclear"
+          ],
+          "before": {
+            "sentiment": "neutral",
+            "sarcasm": false,
+            "intents": [
+              "availability"
+            ],
+            "unclear": false
+          },
+          "after": {
+            "sentiment": "neutral",
+            "sarcasm": false,
+            "intents": [
+              "availability"
+            ],
+            "unclear": true
+          },
+          "moved": true
+        },
+        {
+          "id": "@VARUS_channel:328",
+          "reason": "stated in the verdict note",
+          "fields": [
+            "unclear"
+          ],
+          "before": {
+            "sentiment": "negative",
+            "sarcasm": false,
+            "intents": [
+              "service"
+            ],
+            "unclear": false
+          },
+          "after": {
+            "sentiment": "negative",
+            "sarcasm": false,
+            "intents": [
+              "service"
+            ],
+            "unclear": true
+          },
+          "moved": true
+        },
+        {
+          "id": "@VARUS_channel:323",
+          "reason": "stated in the verdict note",
+          "fields": [
+            "unclear"
+          ],
+          "before": {
+            "sentiment": "negative",
+            "sarcasm": false,
+            "intents": [
+              "service"
+            ],
+            "unclear": false
+          },
+          "after": {
+            "sentiment": "negative",
+            "sarcasm": false,
+            "intents": [
+              "service"
+            ],
+            "unclear": true
+          },
+          "moved": true
+        },
+        {
+          "id": "@VARUS_channel:245",
+          "reason": "stated in the verdict note",
+          "fields": [
+            "unclear"
+          ],
+          "before": {
+            "sentiment": "positive",
+            "sarcasm": false,
+            "intents": [],
+            "unclear": true
+          },
+          "after": {
+            "sentiment": "positive",
+            "sarcasm": false,
+            "intents": [],
+            "unclear": false
+          },
+          "moved": true
+        },
+        {
+          "id": "@msuaaaa:12648",
+          "reason": "stated in the verdict note",
+          "fields": [
+            "sentiment"
+          ],
+          "before": {
+            "sentiment": "neutral",
+            "sarcasm": false,
+            "intents": [],
+            "unclear": false
+          },
+          "after": {
+            "sentiment": "positive",
+            "sarcasm": false,
+            "intents": [],
+            "unclear": false
+          },
+          "moved": true
+        },
+        {
+          "id": "@msuaaaa:12621",
+          "reason": "stated in the verdict note",
+          "fields": [
+            "sarcasm"
+          ],
+          "before": {
+            "sentiment": "neutral",
+            "sarcasm": false,
+            "intents": [],
+            "unclear": false
+          },
+          "after": {
+            "sentiment": "neutral",
+            "sarcasm": true,
+            "intents": [],
+            "unclear": false
+          },
+          "moved": true
+        },
+        {
+          "id": "@msuaaaa:12325",
+          "reason": "pattern P5",
+          "fields": [
+            "intents"
+          ],
+          "before": {
+            "sentiment": "neutral",
+            "sarcasm": false,
+            "intents": [],
+            "unclear": false
+          },
+          "after": {
+            "sentiment": "neutral",
+            "sarcasm": false,
+            "intents": [
+              "service"
+            ],
+            "unclear": false
+          },
+          "moved": true
+        },
+        {
+          "id": "@msuaaaa:11507",
+          "reason": "stated in the verdict note",
+          "fields": [
+            "intents"
+          ],
+          "before": {
+            "sentiment": "negative",
+            "sarcasm": false,
+            "intents": [],
+            "unclear": false
+          },
+          "after": {
+            "sentiment": "negative",
+            "sarcasm": false,
+            "intents": [
+              "packaging"
+            ],
+            "unclear": false
+          },
+          "moved": true
+        },
+        {
+          "id": "@msuaaaa:8051",
+          "reason": "stated in the verdict note",
+          "fields": [
+            "unclear"
+          ],
+          "before": {
+            "sentiment": "positive",
+            "sarcasm": false,
+            "intents": [
+              "price"
+            ],
+            "unclear": false
+          },
+          "after": {
+            "sentiment": "positive",
+            "sarcasm": false,
+            "intents": [
+              "price"
+            ],
+            "unclear": true
+          },
+          "moved": true
+        }
+      ],
+      "git": {
+        "commit": "523245ab9f146fa42bb4fd113436052cf8b3ba62",
+        "dirty": [
+          "results/spend_45g5.json",
+          "scripts/apply_sitting_verdicts.py",
+          "scripts/zero_spend_45g5.py",
+          "tests/test_apply_verdicts.py"
+        ]
+      }
+    }
+  ]
+}
