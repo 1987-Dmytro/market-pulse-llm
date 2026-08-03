@@ -1,0 +1,460 @@
+{
+  "step": "4.5h precheck",
+  "produced_by": "scripts/precheck_45h.py",
+  "spend_usd": 0.0,
+  "dual_home": {
+    "moved_ids": [
+      "@VARUS_channel:114",
+      "@VARUS_channel:12171",
+      "@VARUS_channel:13407",
+      "@VARUS_channel:13579",
+      "@VARUS_channel:13778",
+      "@VARUS_channel:14144",
+      "@VARUS_channel:14489",
+      "@VARUS_channel:14898",
+      "@VARUS_channel:15469",
+      "@VARUS_channel:17502",
+      "@VARUS_channel:19172",
+      "@VARUS_channel:19729",
+      "@VARUS_channel:21396",
+      "@VARUS_channel:21420",
+      "@VARUS_channel:21431",
+      "@VARUS_channel:2172",
+      "@VARUS_channel:2430",
+      "@VARUS_channel:2697",
+      "@VARUS_channel:2712",
+      "@VARUS_channel:2953",
+      "@VARUS_channel:3056",
+      "@VARUS_channel:3190",
+      "@VARUS_channel:3797",
+      "@VARUS_channel:5919",
+      "@VARUS_channel:6140",
+      "@VARUS_channel:6149",
+      "@VARUS_channel:619",
+      "@VARUS_channel:6461",
+      "@VARUS_channel:7220",
+      "@VARUS_channel:7389",
+      "@VARUS_channel:8730",
+      "@VARUS_channel:9520",
+      "@msuaaaa:10997",
+      "@msuaaaa:1217",
+      "@msuaaaa:12332",
+      "@msuaaaa:12955",
+      "@msuaaaa:13394",
+      "@msuaaaa:1813",
+      "@msuaaaa:2220",
+      "@msuaaaa:2509",
+      "@msuaaaa:4439",
+      "@msuaaaa:6326",
+      "@msuaaaa:6996",
+      "@msuaaaa:7055",
+      "@msuaaaa:7092",
+      "@msuaaaa:7154",
+      "@msuaaaa:7165",
+      "@msuaaaa:7497",
+      "@msuaaaa:7500",
+      "@msuaaaa:7553",
+      "@msuaaaa:7554",
+      "@msuaaaa:7907",
+      "@msuaaaa:7911",
+      "@msuaaaa:9643"
+    ],
+    "n_moved": 54,
+    "second_home": "data/annotation/sarcasm_holdout_pool.jsonl",
+    "id_hits_per_store": {
+      "sarcasm_holdout_pool.jsonl": 54
+    },
+    "verbatim_text_hits_per_store": {
+      "comments_batch.jsonl": 0,
+      "comments_train.jsonl": 0,
+      "comments_train_tax2.jsonl": 0,
+      "sarcasm_candidates.jsonl": 0,
+      "sarcasm_candidates_tax2.jsonl": 0,
+      "sarcasm_holdout_pool.jsonl": 54,
+      "sarcasm_holdout_pool_tax2.jsonl": 0,
+      "uplabel_precheck_45g2.jsonl": 0
+    },
+    "training_side_hits": {
+      "comments_train.jsonl": 0,
+      "sarcasm_candidates.jsonl": 0,
+      "uplabel_precheck_45g2.jsonl": 0
+    },
+    "diverging_columns": {
+      "pool_v1_vs_frozen_v2": {},
+      "pool_v1_vs_frozen_v3": {
+        "annotator": [
+          "@VARUS_channel:2953",
+          "@VARUS_channel:7389",
+          "@msuaaaa:7500",
+          "@msuaaaa:7907"
+        ],
+        "sarcasm": [
+          "@VARUS_channel:2953",
+          "@VARUS_channel:7389",
+          "@msuaaaa:7500",
+          "@msuaaaa:7907"
+        ],
+        "sentiment": [
+          "@msuaaaa:7500"
+        ]
+      },
+      "frozen_v2_vs_frozen_v3_the_54": {
+        "annotator": [
+          "@VARUS_channel:2953",
+          "@VARUS_channel:7389",
+          "@msuaaaa:7500",
+          "@msuaaaa:7907"
+        ],
+        "sarcasm": [
+          "@VARUS_channel:2953",
+          "@VARUS_channel:7389",
+          "@msuaaaa:7500",
+          "@msuaaaa:7907"
+        ],
+        "sentiment": [
+          "@msuaaaa:7500"
+        ]
+      },
+      "frozen_v2_vs_frozen_v3_all_108": {
+        "annotator": [
+          "@VARUS_channel:10046",
+          "@VARUS_channel:10064",
+          "@VARUS_channel:11849",
+          "@VARUS_channel:14785",
+          "@VARUS_channel:16281",
+          "@VARUS_channel:16728",
+          "@VARUS_channel:18066",
+          "@VARUS_channel:2181",
+          "@VARUS_channel:2953",
+          "@VARUS_channel:2989",
+          "@VARUS_channel:3342",
+          "@VARUS_channel:3551",
+          "@VARUS_channel:7389",
+          "@msuaaaa:7500",
+          "@msuaaaa:7907"
+        ],
+        "sarcasm": [
+          "@VARUS_channel:10046",
+          "@VARUS_channel:10064",
+          "@VARUS_channel:11849",
+          "@VARUS_channel:14785",
+          "@VARUS_channel:16281",
+          "@VARUS_channel:16728",
+          "@VARUS_channel:18066",
+          "@VARUS_channel:2181",
+          "@VARUS_channel:2953",
+          "@VARUS_channel:2989",
+          "@VARUS_channel:3342",
+          "@VARUS_channel:3551",
+          "@VARUS_channel:7389",
+          "@msuaaaa:7500",
+          "@msuaaaa:7907"
+        ],
+        "sentiment": [
+          "@msuaaaa:7500"
+        ]
+      }
+    },
+    "v2_taxonomy_rows_in_pool": 0,
+    "v2_taxonomy_rows_in_pool_tax2": 225,
+    "pool_tax2_rows": 917,
+    "pool_rows": 971,
+    "options": [
+      {
+        "option": "(i) single-home materialization in v4",
+        "what": "drop the 54 v1 copies from data/annotation/sarcasm_holdout_pool.jsonl so each id lives in exactly one file; the v2 sibling already excludes them",
+        "rows_on_disk": "971 -> 917",
+        "matches_existing_v2_sibling": true,
+        "training_rows_removed": 0,
+        "g1b_denominator": "unchanged: 108 rows, slice 44 (v2 reading) / 29 (v3 reading)",
+        "usd": 0.0,
+        "cost": "edits an annotation store that four records pin by sha256; the pristine copy sarcasm_holdout_pool.pristine.jsonl keeps the original bytes either way"
+      },
+      {
+        "option": "(ii) scoring-time dedup",
+        "what": "leave both copies and make the reader drop a pool row whose id is in the holdout",
+        "rows_on_disk": "971 -> 971",
+        "matches_existing_v2_sibling": false,
+        "training_rows_removed": 0,
+        "g1b_denominator": "unchanged: 108 rows, slice 44 (v2 reading) / 29 (v3 reading)",
+        "usd": 0.0,
+        "cost": "there is no reader to add it to today: train_qlora.NEVER_READ already refuses the pool and no scorer opens it, so the guard would protect a future caller"
+      }
+    ]
+  },
+  "guards": [
+    {
+      "file": "scripts/freeze_testsets_v3.py",
+      "line": 58,
+      "name": "LAW_PENDING",
+      "holds": "the 31 derived intents rulings are counted and NOT applied to v3",
+      "applied_at": [
+        {
+          "line": 144,
+          "what": "the apply skip"
+        },
+        {
+          "line": 236,
+          "what": "the fix count"
+        },
+        {
+          "line": 273,
+          "what": "the record"
+        }
+      ]
+    },
+    {
+      "file": "scripts/relabel_intents.py",
+      "line": 84,
+      "name": "NEVER / forbidden_ids",
+      "holds": "no frozen test or holdout id may be re-labelled under taxonomy v2",
+      "applied_at": [
+        {
+          "line": 134,
+          "what": "the id set is read"
+        },
+        {
+          "line": 634,
+          "what": "the refusal"
+        },
+        {
+          "line": 539,
+          "what": "the drop-instead switch"
+        }
+      ]
+    },
+    {
+      "file": "scripts/train_qlora.py",
+      "line": 56,
+      "name": "NEVER_READ",
+      "holds": "training may not open the test sets, the holdout or the holdout pool",
+      "applied_at": [
+        {
+          "line": 76,
+          "what": "the refusal"
+        }
+      ]
+    }
+  ],
+  "migration": {
+    "ledger_anchor": {
+      "openrouter_lifetime_usage_at_45g6_start": 3.200080415,
+      "openrouter_45g6_spend": 0.03007665000000001,
+      "openrouter_lifetime_usage_now": 3.2301570649999998,
+      "openrouter_45g3_to_45g6_total": 0.809503,
+      "runpod_balance": 28.009680094,
+      "runpod_phase4_spent": 6.9903,
+      "runpod_read_at": "2026-08-02T10:40:32+00:00",
+      "note": "read from result files only — no live balance call, the phase forbids requests"
+    },
+    "gold_rows": 508,
+    "comments_test": 400,
+    "sarcasm_holdout": 108,
+    "rows_carrying_a_v2_intents_value_today": 0,
+    "rows_needing_a_fresh_pass": 508,
+    "where_the_gold_rows_live": {
+      "comments_batch.jsonl": 400,
+      "sarcasm_holdout_pool.jsonl": 54
+    },
+    "service_rows_per_store": {
+      "comments_batch.jsonl": 0,
+      "comments_train.jsonl": 0,
+      "comments_train_tax2.jsonl": 500,
+      "sarcasm_candidates.jsonl": 0,
+      "sarcasm_candidates_tax2.jsonl": 288,
+      "sarcasm_holdout_pool.jsonl": 0,
+      "sarcasm_holdout_pool_tax2.jsonl": 225,
+      "uplabel_precheck_45g2.jsonl": 696
+    },
+    "observed_rate": {
+      "usd": 0.577771,
+      "requests": 3376,
+      "usd_per_row_all_passes": 0.0001711407968009481,
+      "usd_per_row_first_pass": 0.00016104024375000043,
+      "note": "all passes includes the retries of unusable rows; the first pass is the clean rate"
+    },
+    "projection_usd": {
+      "at_all_passes_rate": 0.0869,
+      "at_first_pass_rate": 0.0818
+    },
+    "posts_test": {
+      "rows": 250,
+      "carries_intents": false,
+      "fields": [
+        "annotator",
+        "brands",
+        "channel",
+        "date",
+        "has_media",
+        "id",
+        "language",
+        "msg_id",
+        "notes",
+        "post_type",
+        "relevant",
+        "reply_count",
+        "source_id",
+        "source_type",
+        "text",
+        "unclear"
+      ],
+      "what_v4_posts_is": "posts_test has no intents column — the T2 heads are relevance, post_type and brands — so v4 posts IS posts_test_v3.jsonl unchanged, re-used under the v4 name or not re-issued at all; nothing in the intents law can move a post row"
+    }
+  },
+  "collisions": {
+    "audit_intents_rulings": 31,
+    "audit_ids": [
+      "@VARUS_channel:10235",
+      "@VARUS_channel:12042",
+      "@VARUS_channel:12357",
+      "@VARUS_channel:1461",
+      "@VARUS_channel:14969",
+      "@VARUS_channel:16608",
+      "@VARUS_channel:16672",
+      "@VARUS_channel:18580",
+      "@VARUS_channel:19881",
+      "@VARUS_channel:20390",
+      "@VARUS_channel:2999",
+      "@VARUS_channel:3564",
+      "@VARUS_channel:3801",
+      "@VARUS_channel:70",
+      "@VARUS_channel:7985",
+      "@VARUS_channel:8120",
+      "@VARUS_channel:9270",
+      "@msuaaaa:12197",
+      "@msuaaaa:12252",
+      "@msuaaaa:13673",
+      "@msuaaaa:13674",
+      "@msuaaaa:13687",
+      "@msuaaaa:1380",
+      "@msuaaaa:3132",
+      "@msuaaaa:6247",
+      "@msuaaaa:6832",
+      "@msuaaaa:7016",
+      "@msuaaaa:7105",
+      "@msuaaaa:7809",
+      "@msuaaaa:8174",
+      "@msuaaaa:8177"
+    ],
+    "audit_ids_in_comments_test": 31,
+    "audit_ids_in_sarcasm_holdout": 0,
+    "law_verdicts": 3,
+    "law_verdict_corpus_rows": [
+      "@VARUS_channel:5951"
+    ],
+    "law_verdict_rows_in_comments_test": 1,
+    "audit_and_law_same_row": [],
+    "collisions_with_a_v2_relabel_value": {
+      "comments_train_tax2.jsonl": [],
+      "sarcasm_candidates_tax2.jsonl": [],
+      "sarcasm_holdout_pool_tax2.jsonl": [],
+      "uplabel_precheck_45g2.jsonl": []
+    },
+    "reading": "a collision needs a v2 intents value on the same id, and no store that has been through the v2 re-label holds one: the guard in relabel_intents.py kept every frozen test and holdout id out of the pass. The 31 and the 3 collide with each other on no row at all, and two of the three are guideline examples rather than corpus rows — so 32 test rows carry a ruling the v4 pass would overwrite. That is a sequencing decision for 4.5h2 (rule first, then re-label, or re-label and re-apply), not a data conflict today"
+  },
+  "arms": {
+    "status_md_claim": 2346,
+    "status_md_claim_is": "the comment rows of the two T1 sources before the unclear filter: comments_train.jsonl 1600 + sarcasm_candidates.jsonl 746 = 2346. It is not the trainer's row count and it excludes posts_train.jsonl entirely",
+    "unclear_filter": {
+      "file": "scripts/train_qlora.py",
+      "line": 126
+    },
+    "scoreable_per_source": {
+      "comments_train.jsonl": 906,
+      "posts_train.jsonl": 749,
+      "sarcasm_candidates.jsonl": 540
+    },
+    "arm_a_scoreable_pool": 2195,
+    "arm_a_train_rows": 2171,
+    "arm_a_4c_recorded_n_train": 2171,
+    "arm_a_matches_4c": true,
+    "plast_rows": 1912,
+    "plast_scoreable": 1286,
+    "plast_ids_already_in_training": 0,
+    "additive": true,
+    "arm_b_scoreable_pool": 3481,
+    "arm_b_train_rows": 3457,
+    "carve_rows": 24,
+    "config": {
+      "epochs": 2,
+      "micro_batch_size": 2,
+      "grad_accum": 8,
+      "carve_rows": 24
+    },
+    "observed": {
+      "arm_a_4c": {
+        "steps": 270,
+        "s_per_step": 45.348
+      },
+      "arm_b_4c": {
+        "steps": 346,
+        "s_per_step": 43.417
+      }
+    },
+    "projected": {
+      "arm_a": {
+        "train_rows": 2171,
+        "steps": 270,
+        "hours_at_slowest": 3.4010999999999996,
+        "hours_at_fastest": 3.256275,
+        "usd_at_slowest": 1.8025829999999998,
+        "over_ceiling": false,
+        "over_ceiling_at_fastest": false
+      },
+      "arm_b": {
+        "train_rows": 3457,
+        "steps": 432,
+        "hours_at_slowest": 5.4417599999999995,
+        "hours_at_fastest": 5.21004,
+        "usd_at_slowest": 2.8841327999999997,
+        "over_ceiling": true,
+        "over_ceiling_at_fastest": true
+      }
+    },
+    "ceiling_hours": 5.0,
+    "usd_per_hour": 0.53,
+    "longest_text_chars": {
+      "current_training_pool": 1513,
+      "plast": 1271,
+      "note": "a proxy for the 1024-token max_seq_len, which was measured at 973 tokens for the longest of the 2795 rows; a longer пласт row would be truncated and teach a cut-off label. Tokens are not counted here — no tokenizer is loaded in a $0 step"
+    }
+  },
+  "leakage": {
+    "plast_scoreable": 1286,
+    "id_overlap": {
+      "comments_test": 0,
+      "sarcasm_holdout": 0
+    },
+    "thread_overlap": {
+      "comments_test": 0,
+      "sarcasm_holdout": 0,
+      "comments_test_v3": 0,
+      "sarcasm_holdout_v3": 0
+    },
+    "verbatim_text_overlap": {
+      "comments_test": 0,
+      "sarcasm_holdout": 0
+    },
+    "note": "docs/frozen-testsets.md checked this at the 2026-07-28 freeze, before the пласт existed; arm B is the first thing that would put these rows into training"
+  },
+  "eval_budget": {
+    "observed_4a": {
+      "rows": 758,
+      "batch_size": 1,
+      "minutes": 39,
+      "seconds_per_row": 3.0870712401055407,
+      "session_usd": 0.6203,
+      "source": "results/spend_phase4.json, the 4a session note"
+    },
+    "runs": {
+      "anchor": 1,
+      "arm_evals": 2
+    },
+    "rows_each": 758,
+    "minutes_total": 117,
+    "hours_total": 1.95,
+    "usd_total_at_gpu_rate": 1.0335,
+    "note": "the two arm evals run on their own training pods and add no pod setup; the anchor is a pod of its own, and the 4a session billed $0.6203 for a 39-minute run — model download and idle included, which is the honest per-anchor figure",
+    "usd_anchor_session_observed": 0.6203
+  }
+}
