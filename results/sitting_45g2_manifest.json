@@ -8,7 +8,7 @@
     "precheck300.csv": "c0d7656fe3a9629629705f55f27a04cc5b6e600ae6115cc58e61d3e343e619e4",
     "emptied_redo.csv": "c39f490e32dcc34421fbfdcdbc4e8d812012bd1ea9119b61f14814f8557c1d2b",
     "media_map.csv": "7ed4e1de8e1deff3b951d2de503686f9d722c0c31a3787616b5091b3316c44ce",
-    "README-sitting.md": "0c7f734e593e51ea023b159c3e4bf0609171549d85e267e7cc9e29c6aea3fdcd"
+    "README-sitting.md": "e2aaecf858174d3afd3b9bb8381b5b33e1076bc040b031e0546d9d189cda4e80"
   },
   "precheck": {
     "source": "data/annotation/uplabel_precheck_45g2.jsonl",
@@ -403,7 +403,7 @@
   },
   "note": "Three questions, one sitting. `precheck300.csv` is the gate on the up-label precheck and nothing merges into a train or candidates file until every stratum passes. Nothing in any pack file says which stratum a row is in; `stratum_of` is here because the reader needs it and the operator must not have it. `verdicts_present` is measured at rebuild time: it is the evidence for `rebuilt before a single verdict existed`, which is otherwise only a sentence in a report.",
   "git": {
-    "commit": "6d777706fed51f25cefd67bdfde379765c4c522d",
+    "commit": "b1f914079633e07cfc3c1e0928a85aca969cdf71",
     "dirty": []
   }
 }
