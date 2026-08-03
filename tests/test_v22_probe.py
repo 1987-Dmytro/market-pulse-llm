@@ -7,6 +7,7 @@ names one field out of four, and what an unanswered row does to a rate.
 """
 
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -129,3 +130,78 @@ def test_the_plan_carries_the_thresholds_the_run_will_be_read_against():
     # the reference labels come off a rebuild that reproduced the sealed hash, not off a file
     assert committed["source"]["rebuilt_sha256"] == committed["source"]["sealed_sha256"]
     assert committed["source"]["sealed_sha256"].startswith("c0d7656f")
+
+
+# --- the runner's guards, exercised before the one attempt is spent -------------------------
+
+import run_v22_probe as runner  # noqa: E402
+
+
+def git_repo(tmp_path):
+    """A throwaway repo with one committed file — enough to tell tracked from modified."""
+
+    def run(*args):
+        subprocess.run(args, cwd=tmp_path, check=True, capture_output=True)
+
+    run("git", "init", "-q")
+    run("git", "config", "user.email", "t@t")
+    run("git", "config", "user.name", "t")
+    plan = tmp_path / "plan.json"
+    plan.write_text('{"task": "x"}\n', encoding="utf-8")
+    run("git", "add", "plan.json")
+    run("git", "commit", "-qm", "plan")
+    return plan
+
+
+def test_the_run_refuses_a_plan_git_has_never_seen(tmp_path):
+    """An untracked plan is not a pre-registration — it is a file that can be rewritten once
+    the numbers are in, which is the failure the plan exists to prevent."""
+    loose = tmp_path / "loose.json"
+    loose.write_text("{}", encoding="utf-8")
+    with pytest.raises(SystemExit, match="not tracked by git"):
+        runner.committed(loose)
+
+
+def test_the_run_refuses_a_plan_edited_after_it_was_committed(tmp_path):
+    """The sharper case: tracked, so a shallow check passes, and edited, so the thresholds
+    being applied are no longer the thresholds that were registered."""
+    plan = git_repo(tmp_path)
+    runner.committed(plan, cwd=tmp_path)  # the control: clean, and it proceeds
+    plan.write_text('{"task": "x", "gate": "loosened"}\n', encoding="utf-8")
+    with pytest.raises(SystemExit, match="differs from HEAD"):
+        runner.committed(plan, cwd=tmp_path)
+
+
+def test_two_readings_of_the_prior_phase_spend_have_to_agree(tmp_path):
+    """The headroom under the shared cap is `cap - what 4.5g3 spent`, and that number lives in
+    two files. A hand-edit to either would silently hand this phase money it does not have."""
+    ledger = tmp_path / "spend.json"
+    record = tmp_path / "run.json"
+    ledger.write_text(json.dumps({"runs": [{"usd": 0.5}, {"usd": 0.25}]}), encoding="utf-8")
+    record.write_text(json.dumps({"runs": [{"cost": {"phase_spend_usd": 0.75}}]}), encoding="utf-8")
+    assert runner.prior_spend(ledger, record) == pytest.approx(0.75)
+
+    record.write_text(json.dumps({"runs": [{"cost": {"phase_spend_usd": 0.2}}]}), encoding="utf-8")
+    with pytest.raises(SystemExit, match="disagree"):
+        runner.prior_spend(ledger, record)
+
+
+def test_the_prior_spend_is_the_one_the_closed_phase_recorded():
+    """Not `total_usage - anchor_45g3`: that difference grows with every request this phase
+    makes, so the cap would loosen as the run proceeded."""
+    prior = runner.prior_spend(runner.PRIOR_LEDGER, runner.PRIOR_RECORD)
+    assert prior == pytest.approx(0.7429, abs=0.0001)
+    assert runner.CAP_USD - prior == pytest.approx(0.7571, abs=0.0001)
+
+
+def test_the_ruling_families_come_from_the_guideline_and_not_from_a_second_list():
+    """P5 and P6 are reported row by row, and a family is whatever the law says it is."""
+    found = runner.families(runner.GUIDELINE)
+    assert found["P5"] == ["@VARUS_channel:2798", "@VARUS_channel:6239", "@msuaaaa:12325"]
+    assert found["P6"][0] == "@VARUS_channel:1271" and len(found["P6"]) == 4
+
+
+def test_per_field_moves_count_answered_rows_only():
+    rows = [row("@c:1", "preserved"), row("@c:2", "preserved")]
+    produced = {"@c:1": {**PACK, "unclear": True, "intents": ["service"]}}
+    assert runner.moves(rows, produced) == {"intents": 1, "unclear": 1}
