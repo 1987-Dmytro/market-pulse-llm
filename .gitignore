@@ -42,6 +42,9 @@ data/annotation/*
 # was written from stay out (posts_media/ is data, and it is big).
 !data/annotation/post_captions.jsonl
 !data/annotation/uplabel_precheck_45g2.jsonl
+# The second round (4.5g3): the same 1,912 rows re-labelled after all three strata came back
+# under the bar. Same rule again, and the file the wave-2 gate pack is drawn from.
+!data/annotation/uplabel_precheck_45g3.jsonl
 # Generated, not collected — but the same kind of artifact: a curated training
 # source, ablation-gated (knowledge/decisions/synthetic-sarcasm-augmentation.md).
 !data/annotation/synthetic_sarcasm.jsonl

@@ -1,0 +1,202 @@
+{
+  "runs": [
+    {
+      "timestamp": "2026-08-03T11:19:29+00:00",
+      "task": "precheck_v2.1_with_post",
+      "model": "qwen/qwen3.6-27b",
+      "endpoint": {
+        "tag": "io-net/fp8",
+        "quantization": "fp8",
+        "served_quantization": "fp8",
+        "status": 0
+      },
+      "smoke": false,
+      "annotator": "llm-precheck-v2.1",
+      "prompt_sha256": {
+        "precheck_v2.1_with_post": "95d506c48a390c80856f51e3c40360a1bb4d6c314dffefd3a88c4efc1239fde3",
+        "T1v2.1": "e131dc0673e94322b71826cd9adfcc7f824edff8e029e0e2da49ab9ca189a9a5",
+        "precheck_v2_with_post": "113000df199536a5657b4ed531058ce2e8029384f2d11e721e2af5d0f665fed0"
+      },
+      "gates": {
+        "record": "results/sitting_45g_gates.json",
+        "bar": 0.9,
+        "failed": [
+          "general",
+          "service-rich",
+          "short-text <= 30 chars"
+        ],
+        "passed": [],
+        "strata": {
+          "general": 0.81,
+          "service-rich": 0.88,
+          "short-text <= 30 chars": 0.89
+        }
+      },
+      "scope": {
+        "source": "data/annotation/uplabel_precheck_45g2.jsonl",
+        "source_sha256": "df688e59e0463649c742bd0d053ff616e1a84c2adaee9fcd8ab69bba77a1aeff",
+        "batch": "data/annotation/uplabel_precheck_45g3.jsonl",
+        "batch_sha256": "feef4d93aa259b93022bef755cb3bbc7028d0d11c4461aa75e5138cf9499c9af",
+        "rows_in_batch": 1912,
+        "re_asked": 1912,
+        "relabelled": 1895,
+        "copied_unchanged": 17,
+        "context_states": {
+          "post_text": 1488,
+          "poll_text": 322,
+          "image_caption": 77,
+          "no_text_and_no_caption": 25
+        },
+        "unusable": [
+          {
+            "id": "@VARUS_channel:5992",
+            "labels": null,
+            "unusable": "parse: intents outside its domain"
+          },
+          {
+            "id": "@VARUS_channel:20452",
+            "labels": null,
+            "unusable": "parse: intents outside its domain"
+          },
+          {
+            "id": "@VARUS_channel:17267",
+            "labels": null,
+            "unusable": "parse: intents outside its domain"
+          },
+          {
+            "id": "@VARUS_channel:11747",
+            "labels": null,
+            "unusable": "parse: intents outside its domain"
+          },
+          {
+            "id": "@VARUS_channel:10393",
+            "labels": null,
+            "unusable": "parse: intents outside its domain"
+          },
+          {
+            "id": "@VARUS_channel:10115",
+            "labels": null,
+            "unusable": "parse: intents outside its domain"
+          },
+          {
+            "id": "@VARUS_channel:9380",
+            "labels": null,
+            "unusable": "parse: intents outside its domain"
+          },
+          {
+            "id": "@VARUS_channel:9374",
+            "labels": null,
+            "unusable": "parse: intents outside its domain"
+          },
+          {
+            "id": "@VARUS_channel:9206",
+            "labels": null,
+            "unusable": "parse: intents outside its domain"
+          },
+          {
+            "id": "@VARUS_channel:9200",
+            "labels": null,
+            "unusable": "parse: intents outside its domain"
+          },
+          {
+            "id": "@VARUS_channel:9150",
+            "labels": null,
+            "unusable": "parse: intents outside its domain"
+          },
+          {
+            "id": "@VARUS_channel:8830",
+            "labels": null,
+            "unusable": "parse: intents outside its domain"
+          },
+          {
+            "id": "@VARUS_channel:8680",
+            "labels": null,
+            "unusable": "parse: intents outside its domain"
+          },
+          {
+            "id": "@VARUS_channel:7850",
+            "labels": null,
+            "unusable": "parse: intents outside its domain"
+          },
+          {
+            "id": "@VARUS_channel:7762",
+            "labels": null,
+            "unusable": "parse: intents outside its domain"
+          },
+          {
+            "id": "@VARUS_channel:328",
+            "labels": null,
+            "unusable": "parse: intents outside its domain"
+          },
+          {
+            "id": "@VARUS_channel:5247",
+            "labels": null,
+            "unusable": "parse: intents outside its domain"
+          }
+        ]
+      },
+      "diff": {
+        "rows": 1895,
+        "changed_any_field": 1153,
+        "changed_rate": 0.60844327176781,
+        "per_field": {
+          "sentiment": 182,
+          "sarcasm": 134,
+          "intents": 863,
+          "unclear": 333
+        },
+        "intents_gained": {
+          "price": 220,
+          "taste": 8,
+          "quality": 8,
+          "availability": 3,
+          "service": 3,
+          "packaging": 3
+        },
+        "intents_lost": {
+          "service": 554,
+          "availability": 136,
+          "taste": 88,
+          "quality": 38,
+          "price": 17,
+          "packaging": 12
+        }
+      },
+      "in_sample": {
+        "judged_rows_re_asked": {
+          "correct": 254,
+          "incorrect": 41
+        },
+        "moved_a_field": {
+          "correct": 172,
+          "incorrect": 25
+        },
+        "note": "In-sample: the v2.1 rulings were distilled from these verdicts. Movement on the `incorrect` rows is the prompt following its instructions; movement on the `correct` rows is the cost of that, and both are read against the fresh hundred."
+      },
+      "estimate_usd": 0.8491822560000001,
+      "cost": {
+        "requests": 1912,
+        "rows_from_an_earlier_run": 0,
+        "usd": 0.7358922899999994,
+        "phase_spend_usd": 0.7358922899999994,
+        "cap_usd": 1.5
+      },
+      "git": {
+        "commit": "0c973928d70b7c3b8614d732d4bd2c2cefc61910",
+        "dirty": [
+          ".gitignore",
+          "implementation-notes.md",
+          "knowledge/decisions/INDEX.md",
+          "data/annotation/uplabel_precheck_45g3.jsonl",
+          "knowledge/decisions/45g3-sitting-gates.md",
+          "results/rerun_45g3_rows.jsonl",
+          "results/spend_45g3.json",
+          "scripts/build_wave2_pack.py",
+          "scripts/rerun_failed_strata.py",
+          "tests/test_wave2.py"
+        ]
+      },
+      "note": "The second round the sitting's three FAIL verdicts require. Still a PRECHECK: every row carries an `llm-precheck-v2.1` annotator and nothing merges until a fresh sealed hundred is judged. The 4.5g2 batch is read-only here so that results/sitting_45g2_manifest.json still pins the bytes it sealed."
+    }
+  ]
+}
