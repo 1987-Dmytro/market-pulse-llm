@@ -183,3 +183,52 @@ dataset card.
 
 `unclear` rows are excluded from the gates, so they cost nothing but the time to mark
 them. Prefer `unclear` over a guess; do not use it to avoid a decision you can make.
+
+## v2.1 changelog — the sitting's rulings (2026-08-03)
+
+**Additive law.** Nothing above this line is edited: v2.1 is what the 4.5g verdict sitting
+settled on cases v2 either did not name or named in a way that contradicted the operator's
+reading. Capture and authority: `docs/quiz-sitting-45g-log.md` (team-lead-LLM triage with
+operator adjudication and operator spot-check; the spot-check passed 20/20 against a bar of
+18/20). Each rule carries the row ids it was decided on, so a disagreement can be argued
+against the rows rather than against the sentence.
+
+1. **Off-topic jokes and trivia — neither the product nor the retailer — are `unclear: true`.**
+   Not scoreable-with-`[]`, which is how the letter of §intents reads. The unit is a consumer
+   reaction; a joke about neither party is not one. (`@VARUS_channel:11660`,
+   `@VARUS_channel:11802` — pattern P1.)
+2. **Unmarked support boilerplate is still the corporate voice, and is `unclear: true`.** The
+   marker list in §Decision rules (plural `Дякуємо/Розуміємо/Передамо`, the 🧡 house style) is
+   **indicative, not exhaustive**: `Акційні товари дійсно мають високий попит...` carries none
+   of them and is the retailer answering in its own voice. (`@VARUS_channel:1271`,
+   `@VARUS_channel:4663`, `@VARUS_channel:9055`, `@VARUS_channel:3989` — pattern P6.)
+3. **Bare praise of how the retailer behaves is `["service"]`.** Symmetric with the service
+   complaint the guideline already labels: if `Вже добу чекаю на доставку` is `service`, so is
+   praise of the same conduct. (`@VARUS_channel:8428` correct; `@VARUS_channel:8478` flipped to
+   incorrect retroactively — pattern P7.)
+4. **A promo-mechanics or promo-terms question is `["service"]`, not `[]`.** The v2 rule moved
+   these out of `price`; they land on `service` and not on nothing.
+   (`@VARUS_channel:2798`, `@VARUS_channel:6239`, `@msuaaaa:12325` — pattern P5.)
+5. **A direct accusation against the retailer outweighs a commenter addressee.** The
+   reply-to-another-commenter rule does not apply when the accusation is aimed at the chain:
+   scoreable, negative, `["service"]`. (`@VARUS_channel:15587`.)
+6. **A food-preference joke is `["taste"]`** — the dish-answer family widened to nostalgia and
+   to jokes about what someone likes to eat. (`@msuaaaa:12621`.)
+   **Amendment (same day, operator self-correction):** a mock-elevation joke also carries
+   `sarcasm: true` — ketchup called «кімчі» is the scare-quote family in a different costume.
+   `@msuaaaa:12621` is therefore `sarcasm: true` + `["taste"]`; its verdict is unchanged.
+7. **A mock-quote of app or promo text is `sarcasm: true`.** Quoting the thing being mocked,
+   verbatim, is the scare-quote family. (`@VARUS_channel:7065`.)
+8. **`positive` beside `["price"]` stands** where the comment praises what the buyer pays; the
+   sentiment and the intent are answering different questions. (`@VARUS_channel:5989`.)
+
+**Rulings from the same sitting, decided on the redo file** (`emptied_redo.csv`, operator
+pattern-quiz, same authority): an argument with another commenter in defence of the retailer is
+`[]` + `unclear` (`@VARUS_channel:1453`); a home-pantry joke is `[]` (`@VARUS_channel:18888`); a
+complaint whose referent cannot be recovered even with the post is `[]` + `unclear`
+(`@VARUS_channel:9097`); reactions to mascot drawings name no taxonomy aspect and are `[]`
+(`@VARUS_channel:21576`).
+
+**What this does not change.** The six v2 intents, the `unclear` definition, the §Unit rule and
+the self-agreement gate are as written above. v2.1 adds boundary rulings; it does not move a
+label space.
