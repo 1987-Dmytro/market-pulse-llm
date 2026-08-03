@@ -1746,6 +1746,15 @@ per-arm ceiling.** It is over at the fastest observed step too (5.21 h). The run
     run before each commit.
 13. **No ADR.** The brief routes phase facts to these notes and the daily log and orders no
     decision record — the precheck decides nothing, it prices decisions.
+14. **Step 1.2's "and anywhere else" was taken to include a fourth site, and it is not a guard.**
+    `train_qlora.SOURCES` (`scripts/train_qlora.py:50`) reads the **v1** files, not their `_tax2`
+    siblings. That is the fourth place `intents` sits at v1, and unlike `LAW_PENDING`, `NEVER` and
+    `NEVER_READ` nothing refuses when it is wrong — the run simply trains on the old taxonomy. It
+    is in the inventory with its `file:line`, and `arms.taxonomy_exposure` in the record carries
+    the counts. Also recorded there: a пласт entering as a source would be drawn from by
+    `assemble()`'s carve, so the two arms would hold out **different** 24 rows — Phase 4 avoided
+    that by letting the synthetic source join after the draw. Both are 4.5h2 code decisions; no
+    code was changed here.
 
 ## What the numbers say
 
@@ -1756,6 +1765,15 @@ and the ceiling would never have come up. Leakage is clean on rows nobody checke
 the freeze's own check predates the пласт: **0 shared ids, 0 shared threads, 0 verbatim texts**
 against `comments_test`, `sarcasm_holdout` and both v3 siblings. The longest пласт text is 1 271
 chars against the current pool's 1 513, so `max_seq_len: 1024` is not newly at risk.
+
+**The two arms would not be trained on the same taxonomy, and the gate cannot see it.** Arm A's
+sources hold **0** `service` rows — `train_qlora.SOURCES` reads the v1 files — while the пласт
+holds **652** among its scoreable rows, and G1c is scored against a v4 test that *is* taxonomy v2.
+The selection rule ("the пласт stays iff arm B's G1c is strictly higher") would then be decided by
+taxonomy exposure and recorded as data volume. The `_tax2` siblings hold the same 906 and 540
+scoreable rows as the v1 files they were derived from, so repointing `SOURCES` at them — which is
+what the brief's own phrase "arm A under the v2 law" means — moves **no hour** in the projection
+above. Flagged, not fixed: it is a 4.5h2 code decision.
 
 **Test v4 has to relabel all 508 gold rows — none of them is already done.** Every store that has
 been through the taxonomy-v2 pass (`*_tax2.jsonl`, the пласт) holds zero gold ids, which is the

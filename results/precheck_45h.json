@@ -234,6 +234,18 @@
           "what": "the refusal"
         }
       ]
+    },
+    {
+      "file": "scripts/train_qlora.py",
+      "line": 50,
+      "name": "SOURCES",
+      "holds": "training reads the v1 files, not their _tax2 siblings — the fourth place intents sits at v1, and the only one that is not a guard: nothing refuses when it is wrong, the run just trains on the old taxonomy",
+      "applied_at": [
+        {
+          "line": 51,
+          "what": "T1"
+        }
+      ]
     }
   ],
   "migration": {
@@ -410,6 +422,28 @@
         "over_ceiling": true,
         "over_ceiling_at_fastest": true
       }
+    },
+    "taxonomy_exposure": {
+      "service_rows_in_arm_a_sources": {
+        "comments_train.jsonl": 0,
+        "posts_train.jsonl": 0,
+        "sarcasm_candidates.jsonl": 0
+      },
+      "service_rows_in_the_plast": 652,
+      "service_rows_in_the_tax2_siblings": {
+        "comments_train_tax2.jsonl": 308,
+        "sarcasm_candidates_tax2.jsonl": 239
+      },
+      "rows_match_between_v1_and_tax2": {
+        "comments_train.jsonl": true,
+        "sarcasm_candidates.jsonl": true
+      },
+      "reading": "arm A trains on a 5-class intents column and arm B on 5-class plus 1 286 rows of 6-class, while the gate scores both against a 6-class test. Repointing SOURCES at the _tax2 siblings is what 'arm A under the v2 law' means; it is a 4.5h2 code decision and it leaves every projected hour where it is"
+    },
+    "carve_is_no_longer_paired": {
+      "what": "train_qlora.assemble draws the carve from the assembled REAL pool, which is why Phase 4's two arms held out the same 24 rows: the synthetic source joined after the draw. A пласт entering as a source would be drawn from, so arms A and B would hold out different rows",
+      "cost": "the carve selects nothing (it is a convergence thermometer), but the arms stop being paired on it, and 4c's carve_sha256 stops being comparable",
+      "decision": "4.5h2 code, not this step"
     },
     "ceiling_hours": 5.0,
     "usd_per_hour": 0.53,

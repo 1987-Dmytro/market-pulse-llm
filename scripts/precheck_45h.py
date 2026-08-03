@@ -259,6 +259,19 @@ def guards() -> list[dict]:
                 {"line": line_of(trainer, "is a frozen test input"), "what": "the refusal"}
             ],
         },
+        {
+            "file": rel(trainer),
+            "line": line_of(trainer, "SOURCES = {"),
+            "name": "SOURCES",
+            "holds": (
+                "training reads the v1 files, not their _tax2 siblings — the fourth place"
+                " intents sits at v1, and the only one that is not a guard: nothing refuses"
+                " when it is wrong, the run just trains on the old taxonomy"
+            ),
+            "applied_at": [
+                {"line": line_of(trainer, '"T1": (FROZEN / "comments_train.jsonl"'), "what": "T1"}
+            ],
+        },
     ]
 
 
@@ -480,6 +493,7 @@ def arms() -> dict:
         }
 
     projected = {"arm_a": project(a_train), "arm_b": project(b_train)}
+    exposure = taxonomy_exposure(real, plast_scoreable)
     longest = max(len(row["text"]) for rows in real.values() for row in rows if "text" in row)
     return {
         "status_md_claim": 2346,
@@ -509,6 +523,18 @@ def arms() -> dict:
         },
         "observed": observed,
         "projected": projected,
+        "taxonomy_exposure": exposure,
+        "carve_is_no_longer_paired": {
+            "what": (
+                "train_qlora.assemble draws the carve from the assembled REAL pool, which is why"
+                " Phase 4's two arms held out the same 24 rows: the synthetic source joined after"
+                " the draw. A пласт entering as a source would be drawn from, so arms A and B"
+                " would hold out different rows"
+            ),
+            "cost": "the carve selects nothing (it is a convergence thermometer), but the arms"
+            " stop being paired on it, and 4c's carve_sha256 stops being comparable",
+            "decision": "4.5h2 code, not this step",
+        },
         "ceiling_hours": CEILING_HOURS,
         "usd_per_hour": GPU_USD_PER_HOUR,
         "longest_text_chars": {
@@ -520,6 +546,52 @@ def arms() -> dict:
                 " cut-off label. Tokens are not counted here — no tokenizer is loaded in a $0 step"
             ),
         },
+    }
+
+
+def taxonomy_exposure(real: dict[str, list[dict]], plast: list[dict]) -> dict:
+    """Which taxonomy each arm would actually be trained on — the confound in the ablation.
+
+    `train_qlora.SOURCES` reads the v1 files. They hold zero `service` rows; the пласт
+    holds hundreds. So arm A as specified today cannot emit the sixth intent at all,
+    while arm B sees it — and G1c is scored against test v4, which IS taxonomy v2. The
+    selection rule ("the пласт stays iff arm B's G1c is strictly higher") would then be
+    decided by taxonomy exposure and read as data volume. Row counts are identical
+    between each v1 file and its `_tax2` sibling, so repointing SOURCES changes no hour
+    in the projection above — only what the arms are comparable on.
+    """
+    counts = {
+        name: sum(1 for row in rows if SERVICE in (row.get("intents") or []))
+        for name, rows in sorted(real.items())
+    }
+    siblings = {
+        "comments_train_tax2.jsonl": FROZEN / "comments_train_tax2.jsonl",
+        "sarcasm_candidates_tax2.jsonl": ANNOTATION / "sarcasm_candidates_tax2.jsonl",
+    }
+    tax2 = {
+        name: [row for row in scoreable(load(path)) if SERVICE in (row.get("intents") or [])]
+        for name, path in siblings.items()
+    }
+    return {
+        "service_rows_in_arm_a_sources": counts,
+        "service_rows_in_the_plast": sum(
+            1 for row in plast if SERVICE in (row.get("intents") or [])
+        ),
+        "service_rows_in_the_tax2_siblings": {
+            name: len(rows) for name, rows in sorted(tax2.items())
+        },
+        "rows_match_between_v1_and_tax2": {
+            "comments_train.jsonl": len(real["comments_train.jsonl"])
+            == len(scoreable(load(FROZEN / "comments_train_tax2.jsonl"))),
+            "sarcasm_candidates.jsonl": len(real["sarcasm_candidates.jsonl"])
+            == len(scoreable(load(ANNOTATION / "sarcasm_candidates_tax2.jsonl"))),
+        },
+        "reading": (
+            "arm A trains on a 5-class intents column and arm B on 5-class plus 1 286 rows of"
+            " 6-class, while the gate scores both against a 6-class test. Repointing SOURCES at"
+            " the _tax2 siblings is what 'arm A under the v2 law' means; it is a 4.5h2 code"
+            " decision and it leaves every projected hour where it is"
+        ),
     }
 
 

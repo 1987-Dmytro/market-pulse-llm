@@ -82,7 +82,7 @@ def test_no_gold_row_carries_a_v2_intents_value():
 
 def test_the_intents_guards_are_where_the_report_says():
     guards = {guard["name"]: guard for guard in pre.guards()}
-    assert set(guards) == {"LAW_PENDING", "NEVER / forbidden_ids", "NEVER_READ"}
+    assert set(guards) == {"LAW_PENDING", "NEVER / forbidden_ids", "NEVER_READ", "SOURCES"}
     for guard in guards.values():
         assert guard["line"] > 0 and guard["applied_at"]
 
@@ -107,3 +107,20 @@ def test_the_record_is_byte_reproducible(tmp_path):
     pre.main(["--record", str(first)])
     pre.main(["--record", str(second)])
     assert first.read_bytes() == second.read_bytes()
+
+
+def test_the_two_arms_would_not_be_trained_on_the_same_taxonomy():
+    """The confound the precheck exists to catch: `train_qlora.SOURCES` reads the v1
+    files, which hold no `service` row at all, while the пласт holds hundreds — and G1c
+    is scored against a v4 test that is taxonomy v2. Arm B would win the selection rule
+    by exposure and the phase would read it as volume."""
+    exposure = pre.arms()["taxonomy_exposure"]
+    assert set(exposure["service_rows_in_arm_a_sources"].values()) == {0}
+    assert exposure["service_rows_in_the_plast"] > 0
+    assert all(exposure["rows_match_between_v1_and_tax2"].values())
+
+
+def test_the_source_list_is_in_the_guard_inventory():
+    """It is not a guard — nothing refuses when it is wrong — which is exactly why the
+    inventory has to name it."""
+    assert "SOURCES" in {guard["name"] for guard in pre.guards()}
