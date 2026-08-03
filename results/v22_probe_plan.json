@@ -1,0 +1,1824 @@
+{
+  "written_by": "scripts/plan_v22_probe.py",
+  "phase": "45g4",
+  "task": "precheck_v2.2_with_post",
+  "hypothesis": "The eight rulings of guideline v2.1 are right and the sentences carrying them to the model were backwards. v2.2 restates them affirmatively — condition, field, value — and changes nothing else: not the `unclear` wording, not the position of the block. If the labels do not come back closer to the sitting's verdicts, the form-only hypothesis is closed and the next variable is position.",
+  "in_sample": true,
+  "in_sample_caveat": "These 100 rows are the verdicts the v2.1 AND v2.2 rulings were both distilled from, so every number here is optimistic by construction. This probe authorises the next purchase and never batch acceptance: only a fresh blind hundred, drawn outside the judged 300, can accept a re-labelled batch. For scale, v2.1 scored 10 of these same 29 stated rulings and moved 172 of the 258 accepted rows corpus-wide (results/rerun_45g3.json).",
+  "source": {
+    "gates": "results/sitting_45g_gates.json",
+    "manifest": "results/sitting_45g2_manifest.json",
+    "batch": "data/annotation/uplabel_precheck_45g2.jsonl",
+    "batch_sha256": "df688e59e0463649c742bd0d053ff616e1a84c2adaee9fcd8ab69bba77a1aeff",
+    "sealed_sha256": "c0d7656fe3a9629629705f55f27a04cc5b6e600ae6115cc58e61d3e343e619e4",
+    "rebuilt_sha256": "c0d7656fe3a9629629705f55f27a04cc5b6e600ae6115cc58e61d3e343e619e4",
+    "rebuild_note": "The reference labels are read off a rebuild of the sealed pack, and the rebuild reproduces the sha256 the pack was sealed with before a label is read. The returned CSV is gitignored; this is how the run proves it is scoring against what the operator ruled on."
+  },
+  "sample": {
+    "rows": 100,
+    "all_refused": 42,
+    "drawn_from_accepted": 58,
+    "of_accepted": 258,
+    "seed": 42,
+    "draw": "random.Random(42).sample(sorted(accepted_ids), 58)",
+    "by_stratum": {
+      "general": 45,
+      "service-rich": 27,
+      "short-text <= 30 chars": 28
+    }
+  },
+  "definitions": {
+    "preserved": "A row the sitting called `correct`: its four fields are the right answer, so v2.2 has to return all four unchanged. Anything else is the revision relabelling what the operator accepted — the failure 4.5g3 measured.",
+    "fixed": "A row the sitting called `incorrect` whose note states the right value in a form the 4.5g3 parser reads. It counts as fixed when every field the ruling names matches the ruling AND every field it does not name equals the pack.",
+    "reported_only": "A refused row whose note names the error without naming the value ('«что попало?» asks box contents, not presence'). Ungated by design: scoring it would need a right answer that was never written down. Moved/unmoved is reported. The P5 and P6 families are here.",
+    "unanswered": "A row the run could not read an answer for counts against its denominator. An unanswered row is not a preserved one, and a probe that dropped it would report a rate over a sample it chose after the fact."
+  },
+  "gate": {
+    "attempts": 1,
+    "no_retry": "One probe. No re-prompting, no second sample, no threshold edit.",
+    "preserved": {
+      "n": 58,
+      "pass_at": 55,
+      "kill_below": 52
+    },
+    "fixed": {
+      "n": 29,
+      "pass_at": 24,
+      "kill_below": 20
+    },
+    "rule": "PASS = preserved >= 55/58 AND fixed >= 24/29. KILL = preserved < 52/58 OR fixed < 20/29. Between the two: the operator decides on the numbers.",
+    "on_pass": "Pin v2.2's answers for the hundred ids of data/annotation/wave2_45g3/ into results/wave2_45g3_v22_labels.json, before any verdict on that pack exists.",
+    "on_fail": "The form-only hypothesis is closed. Task 4 is skipped and the phase reports."
+  },
+  "secondary_reported_never_gated": {
+    "named_field_only": "Of the fixed rows: how many match every field the ruling NAMES while moving a field it does not. 19 of the 29 rulings are `unclear: true`, and an unclear row's other labels are excluded from scoring by the guideline — so this class is real and the pre-registered rule counts it as a miss anyway. Registered here, before the numbers exist, because 'the rulings did not land' and 'the rulings landed and the row moved elsewhere' are different findings.",
+    "per_field_moves": "How many of the 100 moved each of the four fields, against the pack."
+  },
+  "reference_runs": {
+    "v2 (the labels the sitting judged)": {
+      "preserved": {
+        "n": 58,
+        "kept": 58
+      },
+      "fixed": {
+        "n": 29,
+        "landed": 0
+      },
+      "named_field_only": [],
+      "preserved_lost": [],
+      "fixed_missed": [
+        "@VARUS_channel:10136",
+        "@VARUS_channel:10394",
+        "@VARUS_channel:11605",
+        "@VARUS_channel:11606",
+        "@VARUS_channel:11776",
+        "@VARUS_channel:1271",
+        "@VARUS_channel:1338",
+        "@VARUS_channel:14891",
+        "@VARUS_channel:16461",
+        "@VARUS_channel:17855",
+        "@VARUS_channel:17864",
+        "@VARUS_channel:19919",
+        "@VARUS_channel:245",
+        "@VARUS_channel:2693",
+        "@VARUS_channel:323",
+        "@VARUS_channel:328",
+        "@VARUS_channel:7065",
+        "@VARUS_channel:7074",
+        "@VARUS_channel:7545",
+        "@VARUS_channel:7711",
+        "@VARUS_channel:8850",
+        "@VARUS_channel:8903",
+        "@VARUS_channel:8916",
+        "@VARUS_channel:8947",
+        "@VARUS_channel:9271",
+        "@msuaaaa:11507",
+        "@msuaaaa:12621",
+        "@msuaaaa:12648",
+        "@msuaaaa:8051"
+      ],
+      "ungated_moved": [],
+      "ungated_unmoved": [
+        "@VARUS_channel:11615",
+        "@VARUS_channel:14759",
+        "@VARUS_channel:18839",
+        "@VARUS_channel:2798",
+        "@VARUS_channel:3989",
+        "@VARUS_channel:4663",
+        "@VARUS_channel:6239",
+        "@VARUS_channel:7555",
+        "@VARUS_channel:8478",
+        "@VARUS_channel:8932",
+        "@VARUS_channel:9055",
+        "@msuaaaa:11876",
+        "@msuaaaa:12325"
+      ],
+      "answered": 100
+    },
+    "v2.1 (data/annotation/uplabel_precheck_45g3.jsonl)": {
+      "preserved": {
+        "n": 58,
+        "kept": 20
+      },
+      "fixed": {
+        "n": 29,
+        "landed": 4
+      },
+      "named_field_only": [
+        "@VARUS_channel:1271",
+        "@VARUS_channel:1338",
+        "@VARUS_channel:2693",
+        "@VARUS_channel:7065",
+        "@VARUS_channel:7074",
+        "@msuaaaa:8051"
+      ],
+      "preserved_lost": [
+        "@VARUS_channel:10150",
+        "@VARUS_channel:11369",
+        "@VARUS_channel:11798",
+        "@VARUS_channel:12050",
+        "@VARUS_channel:12151",
+        "@VARUS_channel:12224",
+        "@VARUS_channel:12260",
+        "@VARUS_channel:1329",
+        "@VARUS_channel:15504",
+        "@VARUS_channel:16668",
+        "@VARUS_channel:1693",
+        "@VARUS_channel:16999",
+        "@VARUS_channel:1806",
+        "@VARUS_channel:19824",
+        "@VARUS_channel:3330",
+        "@VARUS_channel:3444",
+        "@VARUS_channel:4072",
+        "@VARUS_channel:6505",
+        "@VARUS_channel:6509",
+        "@VARUS_channel:6530",
+        "@VARUS_channel:7330",
+        "@VARUS_channel:7467",
+        "@VARUS_channel:8264",
+        "@VARUS_channel:8409",
+        "@VARUS_channel:8653",
+        "@VARUS_channel:8688",
+        "@VARUS_channel:8755",
+        "@VARUS_channel:8788",
+        "@VARUS_channel:8831",
+        "@VARUS_channel:8839",
+        "@VARUS_channel:9434",
+        "@msuaaaa:12647",
+        "@msuaaaa:5989",
+        "@msuaaaa:7651",
+        "@msuaaaa:7747",
+        "@msuaaaa:8950",
+        "@msuaaaa:9724",
+        "@msuaaaa:9962"
+      ],
+      "fixed_missed": [
+        "@VARUS_channel:10136",
+        "@VARUS_channel:10394",
+        "@VARUS_channel:11605",
+        "@VARUS_channel:11776",
+        "@VARUS_channel:1271",
+        "@VARUS_channel:1338",
+        "@VARUS_channel:14891",
+        "@VARUS_channel:17855",
+        "@VARUS_channel:17864",
+        "@VARUS_channel:19919",
+        "@VARUS_channel:245",
+        "@VARUS_channel:2693",
+        "@VARUS_channel:323",
+        "@VARUS_channel:328",
+        "@VARUS_channel:7065",
+        "@VARUS_channel:7074",
+        "@VARUS_channel:7545",
+        "@VARUS_channel:7711",
+        "@VARUS_channel:8850",
+        "@VARUS_channel:8916",
+        "@VARUS_channel:8947",
+        "@msuaaaa:11507",
+        "@msuaaaa:12621",
+        "@msuaaaa:12648",
+        "@msuaaaa:8051"
+      ],
+      "ungated_moved": [
+        "@VARUS_channel:14759",
+        "@VARUS_channel:18839",
+        "@VARUS_channel:3989",
+        "@VARUS_channel:4663",
+        "@VARUS_channel:6239",
+        "@VARUS_channel:7555",
+        "@VARUS_channel:8478",
+        "@VARUS_channel:8932",
+        "@msuaaaa:11876"
+      ],
+      "ungated_unmoved": [
+        "@VARUS_channel:11615",
+        "@VARUS_channel:2798",
+        "@VARUS_channel:9055",
+        "@msuaaaa:12325"
+      ],
+      "answered": 100
+    }
+  },
+  "reference_note": "The same scorer over the same rows. v2 is the reference labels themselves, so its preserved count is the denominator and its fixed count is zero by construction: those rows were refused precisely because v2 got them wrong. That row is a control on the scorer. v2.1's counters are the number v2.2 has to beat.",
+  "cap_usd": 1.5,
+  "ledger": "results/spend_45g4.json",
+  "rows": [
+    {
+      "id": "@VARUS_channel:10136",
+      "stratum": "service-rich",
+      "verdict": "incorrect",
+      "gated_as": "fixed",
+      "reference": {
+        "sentiment": "negative",
+        "sarcasm": false,
+        "intents": [
+          "service"
+        ],
+        "unclear": false
+      },
+      "ruling": {
+        "unclear": true
+      },
+      "note": "tl-llm: unclear should be true — attack aimed at other commenters («у вас ноги не працюють»)"
+    },
+    {
+      "id": "@VARUS_channel:10394",
+      "stratum": "service-rich",
+      "verdict": "incorrect",
+      "gated_as": "fixed",
+      "reference": {
+        "sentiment": "negative",
+        "sarcasm": false,
+        "intents": [
+          "service"
+        ],
+        "unclear": false
+      },
+      "ruling": {
+        "unclear": true
+      },
+      "note": "tl-llm: unclear should be true — advice aimed at another commenter (rule: reply to commenter)"
+    },
+    {
+      "id": "@VARUS_channel:11605",
+      "stratum": "short-text <= 30 chars",
+      "verdict": "incorrect",
+      "gated_as": "fixed",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": false
+      },
+      "ruling": {
+        "intents": [
+          "taste"
+        ]
+      },
+      "note": "tl-llm: intents should be [\"taste\"] — dish answer under food poll (precedent 12062/11776)"
+    },
+    {
+      "id": "@VARUS_channel:11606",
+      "stratum": "general",
+      "verdict": "incorrect",
+      "gated_as": "fixed",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": false
+      },
+      "ruling": {
+        "intents": [
+          "taste"
+        ]
+      },
+      "note": "tl-llm: intents should be [\"taste\"] — poll answer naming dishes (precedent 12062/11776/11605)"
+    },
+    {
+      "id": "@VARUS_channel:11615",
+      "stratum": "short-text <= 30 chars",
+      "verdict": "incorrect",
+      "gated_as": "reported_only",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm: [] should be [\"taste\"] — dish answer under food poll (4th of the family)"
+    },
+    {
+      "id": "@VARUS_channel:11776",
+      "stratum": "short-text <= 30 chars",
+      "verdict": "incorrect",
+      "gated_as": "fixed",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": false
+      },
+      "ruling": {
+        "intents": [
+          "taste"
+        ]
+      },
+      "note": "tl-llm: intents should be [\"taste\"] — dish answer under food poll, operator precedent 12062"
+    },
+    {
+      "id": "@VARUS_channel:1271",
+      "stratum": "general",
+      "verdict": "incorrect",
+      "gated_as": "fixed",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [
+          "availability"
+        ],
+        "unclear": false
+      },
+      "ruling": {
+        "unclear": true
+      },
+      "note": "verdict: operator (P6 boilerplate=corporate voice -> unclear should be true)"
+    },
+    {
+      "id": "@VARUS_channel:1338",
+      "stratum": "general",
+      "verdict": "incorrect",
+      "gated_as": "fixed",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [
+          "service"
+        ],
+        "unclear": false
+      },
+      "ruling": {
+        "unclear": true
+      },
+      "note": "tl-llm: unclear should be true — corporate voice (\"щоб ми все детально перевірили\")"
+    },
+    {
+      "id": "@VARUS_channel:14759",
+      "stratum": "service-rich",
+      "verdict": "incorrect",
+      "gated_as": "reported_only",
+      "reference": {
+        "sentiment": "negative",
+        "sarcasm": false,
+        "intents": [
+          "price",
+          "service"
+        ],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm: [\"price\"] should be [\"availability\"] — «нічого не дістанеться з акційного» is missing goods, not price"
+    },
+    {
+      "id": "@VARUS_channel:14891",
+      "stratum": "general",
+      "verdict": "incorrect",
+      "gated_as": "fixed",
+      "reference": {
+        "sentiment": "negative",
+        "sarcasm": false,
+        "intents": [
+          "service"
+        ],
+        "unclear": false
+      },
+      "ruling": {
+        "unclear": true
+      },
+      "note": "tl-llm: unclear should be true — personal attack aimed at another commenter"
+    },
+    {
+      "id": "@VARUS_channel:16461",
+      "stratum": "short-text <= 30 chars",
+      "verdict": "incorrect",
+      "gated_as": "fixed",
+      "reference": {
+        "sentiment": "positive",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": true
+      },
+      "ruling": {
+        "unclear": false
+      },
+      "note": "tl-llm: unclear should be false — bare thanks is scoreable [] positive (guideline letter; cf. row 18800)"
+    },
+    {
+      "id": "@VARUS_channel:17855",
+      "stratum": "general",
+      "verdict": "incorrect",
+      "gated_as": "fixed",
+      "reference": {
+        "sentiment": "negative",
+        "sarcasm": false,
+        "intents": [
+          "service"
+        ],
+        "unclear": false
+      },
+      "ruling": {
+        "unclear": true
+      },
+      "note": "tl-llm: unclear should be true — question to another commenter («у доньки»), same thread as 17864"
+    },
+    {
+      "id": "@VARUS_channel:17864",
+      "stratum": "service-rich",
+      "verdict": "incorrect",
+      "gated_as": "fixed",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [
+          "service"
+        ],
+        "unclear": false
+      },
+      "ruling": {
+        "unclear": true
+      },
+      "note": "tl-llm: unclear should be true — reply aimed at another commenter («ваша дочка»)"
+    },
+    {
+      "id": "@VARUS_channel:18839",
+      "stratum": "service-rich",
+      "verdict": "incorrect",
+      "gated_as": "reported_only",
+      "reference": {
+        "sentiment": "negative",
+        "sarcasm": true,
+        "intents": [
+          "availability"
+        ],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm: [\"availability\"] wrong — queue joke; queue at the till is service by the guideline letter"
+    },
+    {
+      "id": "@VARUS_channel:19919",
+      "stratum": "general",
+      "verdict": "incorrect",
+      "gated_as": "fixed",
+      "reference": {
+        "sentiment": "negative",
+        "sarcasm": true,
+        "intents": [
+          "service"
+        ],
+        "unclear": false
+      },
+      "ruling": {
+        "sarcasm": false
+      },
+      "note": "tl-llm: sarcasm should be false — «пиль пускають» is an idiom, literal accusation, no mock praise"
+    },
+    {
+      "id": "@VARUS_channel:245",
+      "stratum": "short-text <= 30 chars",
+      "verdict": "incorrect",
+      "gated_as": "fixed",
+      "reference": {
+        "sentiment": "positive",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": true
+      },
+      "ruling": {
+        "unclear": false
+      },
+      "note": "tl-llm: unclear should be false — unambiguous positive emoji is scoreable (guideline: 👍❤️ → positive, [])"
+    },
+    {
+      "id": "@VARUS_channel:2693",
+      "stratum": "general",
+      "verdict": "incorrect",
+      "gated_as": "fixed",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [
+          "service"
+        ],
+        "unclear": false
+      },
+      "ruling": {
+        "unclear": true
+      },
+      "note": "tl-llm: unclear should be true — reply aimed at another commenter"
+    },
+    {
+      "id": "@VARUS_channel:2798",
+      "stratum": "general",
+      "verdict": "incorrect",
+      "gated_as": "reported_only",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm: [] should be [\"service\"] — promo-mechanics question (P5: precheck reproduces the v1 habit the law moved)"
+    },
+    {
+      "id": "@VARUS_channel:323",
+      "stratum": "service-rich",
+      "verdict": "incorrect",
+      "gated_as": "fixed",
+      "reference": {
+        "sentiment": "negative",
+        "sarcasm": false,
+        "intents": [
+          "service"
+        ],
+        "unclear": false
+      },
+      "ruling": {
+        "unclear": true
+      },
+      "note": "tl-llm: unclear should be true — argument with another commenter («Максимально некоректний коментар»)"
+    },
+    {
+      "id": "@VARUS_channel:328",
+      "stratum": "service-rich",
+      "verdict": "incorrect",
+      "gated_as": "fixed",
+      "reference": {
+        "sentiment": "negative",
+        "sarcasm": false,
+        "intents": [
+          "service"
+        ],
+        "unclear": false
+      },
+      "ruling": {
+        "unclear": true
+      },
+      "note": "tl-llm: unclear should be true — reply aimed at another commenter"
+    },
+    {
+      "id": "@VARUS_channel:3989",
+      "stratum": "general",
+      "verdict": "incorrect",
+      "gated_as": "reported_only",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [
+          "service"
+        ],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "verdict: operator (P6)"
+    },
+    {
+      "id": "@VARUS_channel:4663",
+      "stratum": "service-rich",
+      "verdict": "incorrect",
+      "gated_as": "reported_only",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [
+          "service"
+        ],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "verdict: operator (P6)"
+    },
+    {
+      "id": "@VARUS_channel:6239",
+      "stratum": "service-rich",
+      "verdict": "incorrect",
+      "gated_as": "reported_only",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm: [] should be [\"service\"] — promo-terms clarification question (P5)"
+    },
+    {
+      "id": "@VARUS_channel:7065",
+      "stratum": "service-rich",
+      "verdict": "incorrect",
+      "gated_as": "fixed",
+      "reference": {
+        "sentiment": "negative",
+        "sarcasm": false,
+        "intents": [
+          "service"
+        ],
+        "unclear": false
+      },
+      "ruling": {
+        "sarcasm": true
+      },
+      "note": "verdict: operator — sarcasm should be true (mock-quote, scare-quote family)"
+    },
+    {
+      "id": "@VARUS_channel:7074",
+      "stratum": "service-rich",
+      "verdict": "incorrect",
+      "gated_as": "fixed",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [
+          "availability",
+          "price"
+        ],
+        "unclear": false
+      },
+      "ruling": {
+        "unclear": true
+      },
+      "note": "tl-llm: unclear should be true — argumentative reply to another commenter, defending the store"
+    },
+    {
+      "id": "@VARUS_channel:7545",
+      "stratum": "short-text <= 30 chars",
+      "verdict": "incorrect",
+      "gated_as": "fixed",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": false
+      },
+      "ruling": {
+        "unclear": true
+      },
+      "note": "tl-llm: unclear should be true — bare one-word «Как?» (one-word family: О/Дивно/Робобот)"
+    },
+    {
+      "id": "@VARUS_channel:7555",
+      "stratum": "general",
+      "verdict": "incorrect",
+      "gated_as": "reported_only",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [
+          "availability"
+        ],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm: [\"availability\"] wrong — «что попало?» asks box contents, not presence"
+    },
+    {
+      "id": "@VARUS_channel:7711",
+      "stratum": "short-text <= 30 chars",
+      "verdict": "incorrect",
+      "gated_as": "fixed",
+      "reference": {
+        "sentiment": "negative",
+        "sarcasm": false,
+        "intents": [
+          "service"
+        ],
+        "unclear": false
+      },
+      "ruling": {
+        "unclear": true
+      },
+      "note": "tl-llm: unclear should be true — half of a commenter-to-commenter spat («Я не ДИТИНА»); [\"service\"] unsupported"
+    },
+    {
+      "id": "@VARUS_channel:8478",
+      "stratum": "general",
+      "verdict": "incorrect",
+      "gated_as": "reported_only",
+      "reference": {
+        "sentiment": "positive",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "verdict: operator-P7 retroactive — [] should be [\"service\"] (bare praise of conduct); earlier tl-llm correct overturned by the operator ruling"
+    },
+    {
+      "id": "@VARUS_channel:8850",
+      "stratum": "general",
+      "verdict": "incorrect",
+      "gated_as": "fixed",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [
+          "service"
+        ],
+        "unclear": false
+      },
+      "ruling": {
+        "unclear": true
+      },
+      "note": "tl-llm: unclear should be true — reply to another commenter about their score («Вы не могли быть в сотне»)"
+    },
+    {
+      "id": "@VARUS_channel:8903",
+      "stratum": "short-text <= 30 chars",
+      "verdict": "incorrect",
+      "gated_as": "fixed",
+      "reference": {
+        "sentiment": "positive",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": true
+      },
+      "ruling": {
+        "unclear": false
+      },
+      "note": "tl-llm: unclear should be false — comprehensible poll answer, scoreable"
+    },
+    {
+      "id": "@VARUS_channel:8916",
+      "stratum": "general",
+      "verdict": "incorrect",
+      "gated_as": "fixed",
+      "reference": {
+        "sentiment": "positive",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": false
+      },
+      "ruling": {
+        "intents": [
+          "service"
+        ]
+      },
+      "note": "tl-llm: intents should be [\"service\"] — praise of the promo (pattern P2: positive promo-reactions are service, symmetric with скам/лохотрон rows)"
+    },
+    {
+      "id": "@VARUS_channel:8932",
+      "stratum": "general",
+      "verdict": "incorrect",
+      "gated_as": "reported_only",
+      "reference": {
+        "sentiment": "negative",
+        "sarcasm": false,
+        "intents": [
+          "quality"
+        ],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm: intents incomplete — «не смачними» is explicit taste beside quality; guideline says label both"
+    },
+    {
+      "id": "@VARUS_channel:8947",
+      "stratum": "short-text <= 30 chars",
+      "verdict": "incorrect",
+      "gated_as": "fixed",
+      "reference": {
+        "sentiment": "negative",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": false
+      },
+      "ruling": {
+        "intents": [
+          "service"
+        ]
+      },
+      "note": "tl-llm: intents should be [\"service\"] — negative reaction to the game/promo (wide-service doctrine)"
+    },
+    {
+      "id": "@VARUS_channel:9055",
+      "stratum": "service-rich",
+      "verdict": "incorrect",
+      "gated_as": "reported_only",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "verdict: operator (P6)"
+    },
+    {
+      "id": "@VARUS_channel:9271",
+      "stratum": "general",
+      "verdict": "incorrect",
+      "gated_as": "fixed",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": true
+      },
+      "ruling": {
+        "unclear": false
+      },
+      "note": "tl-llm: unclear should be false, and a disappointed prize report is a promo-reward reaction (service family) — scoreable row lost"
+    },
+    {
+      "id": "@msuaaaa:11507",
+      "stratum": "general",
+      "verdict": "incorrect",
+      "gated_as": "fixed",
+      "reference": {
+        "sentiment": "negative",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": false
+      },
+      "ruling": {
+        "intents": [
+          "packaging"
+        ]
+      },
+      "note": "tl-llm: intents should be [\"packaging\"] — design complaint (operator-confirmed precedent 10363)"
+    },
+    {
+      "id": "@msuaaaa:11876",
+      "stratum": "general",
+      "verdict": "incorrect",
+      "gated_as": "reported_only",
+      "reference": {
+        "sentiment": "negative",
+        "sarcasm": true,
+        "intents": [
+          "availability"
+        ],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm: [\"availability\"] wrong — mocking a novelty claim, not product presence (true value [] or service, for the guideline round)"
+    },
+    {
+      "id": "@msuaaaa:12325",
+      "stratum": "short-text <= 30 chars",
+      "verdict": "incorrect",
+      "gated_as": "reported_only",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm: [] should be [\"service\"] — promo-scope question (P5)"
+    },
+    {
+      "id": "@msuaaaa:12621",
+      "stratum": "general",
+      "verdict": "incorrect",
+      "gated_as": "fixed",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": false
+      },
+      "ruling": {
+        "sarcasm": true
+      },
+      "note": "verdict: operator, amended 2026-08-03 — sarcasm should be TRUE (mock-elevation: ketchup as «kimchi») AND intents [\"taste\"]; precheck wrong on two fields"
+    },
+    {
+      "id": "@msuaaaa:12648",
+      "stratum": "general",
+      "verdict": "incorrect",
+      "gated_as": "fixed",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": false
+      },
+      "ruling": {
+        "sentiment": "positive"
+      },
+      "note": "tl-llm: sentiment should be positive — thanks per the guideline letter (thanks → positive)"
+    },
+    {
+      "id": "@msuaaaa:8051",
+      "stratum": "short-text <= 30 chars",
+      "verdict": "incorrect",
+      "gated_as": "fixed",
+      "reference": {
+        "sentiment": "positive",
+        "sarcasm": false,
+        "intents": [
+          "price"
+        ],
+        "unclear": false
+      },
+      "ruling": {
+        "unclear": true
+      },
+      "note": "tl-llm: banter aimed at the channel author — unclear should be true; positive+[\"price\"] unsupported by text"
+    },
+    {
+      "id": "@VARUS_channel:10150",
+      "stratum": "general",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [
+          "service"
+        ],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:11369",
+      "stratum": "service-rich",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": true
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:11602",
+      "stratum": "general",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "positive",
+        "sarcasm": false,
+        "intents": [
+          "taste"
+        ],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:11660",
+      "stratum": "general",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": true
+      },
+      "ruling": {},
+      "note": "verdict: operator (P1 offtopic->unclear)"
+    },
+    {
+      "id": "@VARUS_channel:11798",
+      "stratum": "general",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:11802",
+      "stratum": "general",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": true
+      },
+      "ruling": {},
+      "note": "verdict: operator (P1)"
+    },
+    {
+      "id": "@VARUS_channel:12050",
+      "stratum": "short-text <= 30 chars",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [
+          "taste"
+        ],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:12151",
+      "stratum": "service-rich",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "negative",
+        "sarcasm": false,
+        "intents": [
+          "service"
+        ],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:12224",
+      "stratum": "service-rich",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [
+          "service"
+        ],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:12260",
+      "stratum": "short-text <= 30 chars",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [
+          "taste"
+        ],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:12341",
+      "stratum": "service-rich",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": true
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:13212",
+      "stratum": "general",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": true
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:1329",
+      "stratum": "short-text <= 30 chars",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [
+          "service"
+        ],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:15504",
+      "stratum": "service-rich",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "negative",
+        "sarcasm": false,
+        "intents": [
+          "service"
+        ],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:16632",
+      "stratum": "general",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": true
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:16668",
+      "stratum": "service-rich",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "negative",
+        "sarcasm": false,
+        "intents": [
+          "price",
+          "service"
+        ],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:1682",
+      "stratum": "general",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": true
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:1693",
+      "stratum": "general",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "negative",
+        "sarcasm": false,
+        "intents": [
+          "service"
+        ],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:16999",
+      "stratum": "general",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "negative",
+        "sarcasm": false,
+        "intents": [
+          "quality",
+          "service"
+        ],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:1806",
+      "stratum": "general",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "negative",
+        "sarcasm": true,
+        "intents": [
+          "service"
+        ],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:18232",
+      "stratum": "short-text <= 30 chars",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": true
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:19722",
+      "stratum": "general",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [
+          "price"
+        ],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:19821",
+      "stratum": "short-text <= 30 chars",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "negative",
+        "sarcasm": false,
+        "intents": [
+          "price"
+        ],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:19824",
+      "stratum": "general",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": true
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:20490",
+      "stratum": "general",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [
+          "availability"
+        ],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:249",
+      "stratum": "short-text <= 30 chars",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": true
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:3330",
+      "stratum": "general",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "negative",
+        "sarcasm": true,
+        "intents": [
+          "availability"
+        ],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": ""
+    },
+    {
+      "id": "@VARUS_channel:3444",
+      "stratum": "service-rich",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "negative",
+        "sarcasm": false,
+        "intents": [
+          "availability",
+          "service"
+        ],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:4072",
+      "stratum": "short-text <= 30 chars",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": true
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:5680",
+      "stratum": "service-rich",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "positive",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": ""
+    },
+    {
+      "id": "@VARUS_channel:6505",
+      "stratum": "short-text <= 30 chars",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "negative",
+        "sarcasm": false,
+        "intents": [
+          "service"
+        ],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:6509",
+      "stratum": "general",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "negative",
+        "sarcasm": false,
+        "intents": [
+          "service"
+        ],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:6530",
+      "stratum": "short-text <= 30 chars",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "negative",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": true
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:7330",
+      "stratum": "service-rich",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "negative",
+        "sarcasm": false,
+        "intents": [
+          "service"
+        ],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:7337",
+      "stratum": "short-text <= 30 chars",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": true
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:7467",
+      "stratum": "short-text <= 30 chars",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": true
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:8264",
+      "stratum": "short-text <= 30 chars",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "negative",
+        "sarcasm": false,
+        "intents": [
+          "service"
+        ],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:8409",
+      "stratum": "short-text <= 30 chars",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": true
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:8653",
+      "stratum": "general",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "negative",
+        "sarcasm": false,
+        "intents": [
+          "price"
+        ],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:8688",
+      "stratum": "service-rich",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "negative",
+        "sarcasm": false,
+        "intents": [
+          "service"
+        ],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:8755",
+      "stratum": "general",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "positive",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": true
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:8788",
+      "stratum": "service-rich",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [
+          "service"
+        ],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:8831",
+      "stratum": "service-rich",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "negative",
+        "sarcasm": false,
+        "intents": [
+          "service"
+        ],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:8839",
+      "stratum": "short-text <= 30 chars",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "positive",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": true
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:8964",
+      "stratum": "short-text <= 30 chars",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "positive",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:9001",
+      "stratum": "general",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": true
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:9432",
+      "stratum": "general",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "negative",
+        "sarcasm": false,
+        "intents": [
+          "service"
+        ],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@VARUS_channel:9434",
+      "stratum": "service-rich",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [
+          "service"
+        ],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:12647",
+      "stratum": "general",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": true
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:5989",
+      "stratum": "general",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "positive",
+        "sarcasm": false,
+        "intents": [
+          "price"
+        ],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "verdict: operator (positive+price as prechecked)"
+    },
+    {
+      "id": "@msuaaaa:6722",
+      "stratum": "short-text <= 30 chars",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:7651",
+      "stratum": "general",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [
+          "price",
+          "service"
+        ],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:7740",
+      "stratum": "service-rich",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [],
+        "unclear": true
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:7747",
+      "stratum": "service-rich",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [
+          "service"
+        ],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:8028",
+      "stratum": "general",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [
+          "price"
+        ],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:8950",
+      "stratum": "general",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "negative",
+        "sarcasm": false,
+        "intents": [
+          "taste"
+        ],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:9724",
+      "stratum": "general",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [
+          "quality"
+        ],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    },
+    {
+      "id": "@msuaaaa:9962",
+      "stratum": "short-text <= 30 chars",
+      "verdict": "correct",
+      "gated_as": "preserved",
+      "reference": {
+        "sentiment": "neutral",
+        "sarcasm": false,
+        "intents": [
+          "taste"
+        ],
+        "unclear": false
+      },
+      "ruling": {},
+      "note": "tl-llm"
+    }
+  ],
+  "git": {
+    "commit": "43774a097cb15cbc6d65b8c27a7d90b4d00a4c7e",
+    "dirty": [
+      "scripts/plan_v22_probe.py",
+      "tests/test_v22_probe.py"
+    ]
+  }
+}
