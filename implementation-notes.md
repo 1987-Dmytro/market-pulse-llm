@@ -1686,3 +1686,99 @@ ceil(0.50·23) = 12, and preserved 41 kills the run either way.
 The corollary is about the instrument, not the model: **the discriminator is too coarse for the
 evidence it carries.** It fires on 52 of 100 rows and explains 10 of 42 refusals. A feature that
 describes half the corpus and a quarter of the errors cannot travel as an undifferentiated fact.
+
+# Phase 4.5h (precheck) — six questions, four measurements, $0
+
+Executed against `docs/PROMPT-4.5h.md`, precheck half only. **No model call, no pod, no freeze.**
+Spend: OpenRouter **$0.000000** (no ledger written, every closed ledger byte-identical), RunPod
+**$0.00** (balance still `$18.0097`, `results/spend_phase4.json` untouched).
+
+Deliverables: `results/precheck_45h.json` (`scripts/precheck_45h.py`) and
+`results/categories_45h.json` + `data/category_lexicon_draft.json` (`scripts/measure_categories.py`).
+Both records are byte-reproducible — each script was run twice into a scratch path and `cmp`'d.
+
+**The number that changes the next decision: arm B projects to 5.44 h, over amendment 3.6's 5 h
+per-arm ceiling.** It is over at the fastest observed step too (5.21 h). The run is not shrunk.
+
+## Deviations — silence is not compliance
+
+1. **Step 0 committed a fifth file it does not enumerate.** `git status` showed the four modified
+   files *and* untracked `docs/PROMPT-4.5h.md` — the briefing itself. The dictated commit message
+   names "the 4.5h briefing", and every prior briefing went into exactly this chore commit
+   (`8bdab6d`, `523245a`, `677d2c0`). Staged by path, never `-A`.
+2. **The hot.md refresh is a second commit.** Step 0.1 commits four files and Step 0.2 then edits
+   one of them; the refresh cannot be inside a commit that precedes it.
+3. **STATUS's "arm A = 2 346" is a different quantity, and it is reported rather than corrected.**
+   2 346 = `comments_train.jsonl` 1 600 + `sarcasm_candidates.jsonl` 746, the comment rows of both
+   T1 sources *before* the unclear filter, posts excluded. The trainer's own count is **2 195**
+   scoreable (906 + 540 + 749) and **2 171** after the 24-row carve — which is exactly what
+   `results/train/4c-arm-a/provenance.json` recorded. `docs/STATUS.md` is a team-lead file.
+4. **Two step rates, not one.** 4c measured 45.348 s/step on arm A and 43.417 on arm B. The
+   projection reports both and calls the ceiling on both, because a single average would have put
+   arm B at 5.3 h and made the verdict look like a rounding question.
+5. **The dual-home premise is largely dissolved, and both options are still presented with
+   numbers.** The 54 have exactly one second home, `data/annotation/sarcasm_holdout_pool.jsonl`,
+   and it is in `train_qlora.NEVER_READ`. Hits in the three training-side stores the brief names
+   (`comments_train.jsonl`, `sarcasm_candidates.jsonl`, the 1 912-row пласт): **0 by id and 0 by
+   verbatim text**. So both options move 0 training rows and leave the G1b denominator at 108
+   (slice 44 / 29); the choice is about which artefact carries the truth, not about a number.
+6. **The "3 operator law verdicts" are two guideline examples and one corpus row.** Only
+   `@VARUS_channel:5951` is a row of a frozen file, so it is the only one a re-label can collide
+   with. Counted as the brief asks and the split is named.
+7. **`RU_VARIANTS` is exempt from the registry prefix check.** The registry's display names are
+   Ukrainian, so `кефир`, `творог` and `морожен` have nothing to be a prefix of. Three stems named
+   one by one rather than loosening a check that exists to catch a typo.
+8. **A second reading of "a brand hit" was added, which the brief did not ask for.** The exact
+   matcher is `market_pulse.brands` — the scorer's, and right for G1e — and it **cannot see the
+   operator's own canonical example**: «Гармонію» is not «Гармонія». An inflected reading is
+   reported beside it, gated on nothing, and a test pins that the two disagree on that row.
+9. **The retailer's own watchlist entries are counted separately.** `varus-pl` and `varto` are on
+   the watchlist and are matched like any brand, but a comment on @VARUS_channel naming VARUS is
+   not a two-product comparison: 10 rows carry ≥2 brands, **6** carry ≥2 once those two are
+   dropped. Both reported.
+10. **`%` is split out of the position measure.** Undivided, "names a concrete position" is mostly
+    "names a discount" — `знижка 20%` on the same line as a category word. 10.2% of texted posts
+    with `%` units, **2.8%** without, decimal percents (`2,5%`) counted apart.
+11. **`.gitignore` gained one allow-line** so `data/category_lexicon_draft.json` — which the brief
+    orders committed — can be added at all. `data/*` is ignored with an explicit allowlist.
+12. **Byte-reproducibility of the category record is checked by hand, not in the suite.** The run
+    takes ~13 s against a 7 s suite; the tests pin determinism on a fixture and the full `cmp` is
+    run before each commit.
+13. **No ADR.** The brief routes phase facts to these notes and the daily log and orders no
+    decision record — the precheck decides nothing, it prices decisions.
+
+## What the numbers say
+
+**The пласт is additive, and that is why arm B breaks the ceiling.** 0 of its 1 286 scoreable rows
+carries an id any training source already has, so B = A + пласт is real: 3 481 scoreable, 3 457
+after the carve, **432 steps**, 5.44 h. Had the ids overlapped, B would have been a relabel of A
+and the ceiling would never have come up. Leakage is clean on rows nobody checked before, because
+the freeze's own check predates the пласт: **0 shared ids, 0 shared threads, 0 verbatim texts**
+against `comments_test`, `sarcasm_holdout` and both v3 siblings. The longest пласт text is 1 271
+chars against the current pool's 1 513, so `max_seq_len: 1024` is not newly at risk.
+
+**Test v4 has to relabel all 508 gold rows — none of them is already done.** Every store that has
+been through the taxonomy-v2 pass (`*_tax2.jsonl`, the пласт) holds zero gold ids, which is the
+`relabel_intents.py` guard working exactly as written. At 4.5e's observed rate that is **$0.0869**
+(all-passes) or $0.0818 (first-pass), against $0.6905 of OpenRouter headroom. `posts_test` carries
+no `intents` column at all — the T2 heads are relevance, post_type and brands — so **v4 posts is
+`posts_test_v3.jsonl` unchanged**.
+
+**32 test rows already carry a ruling the v4 pass would overwrite** — 31 from the blind audit,
+1 from guideline v2 (`@VARUS_channel:5951`), no row in both, and zero collisions with any existing
+v2 value because no v2 value for a gold id exists anywhere. Sequencing, not conflict.
+
+**The category signal is thinner than the promo copy suggests.** 1 875 of 5 242 texted posts
+(35.8%) name a family the draft lexicon knows; **815 posts carry no text at all**, which is the
+same media-only hole 4.5g2 found on the labelling side. Comments talk about a different category
+than their post in **83 of the 353** rows where both sides name one (23.5%; 24.5% on scoreable
+train) — but that denominator is 3% of the corpus, so the inheritance rule is untested on the
+other 97%.
+
+**The comparison case the operator named is not observable at this n.** Over 11 338 comments:
+227 name a watchlist brand at all, 241 carry a comparison marker anywhere, 10 name two brands, 3
+have a marker in the same sentence as a brand — and **a∩b = 0**, in both brand readings, on all
+three populations (all comments, scoreable train, the 400-row test). a∩b∩c = 0 follows. The
+measure is a lower bound built from a draft lexicon, and it is not evidence that such comments do
+not exist; it is evidence that **nothing in this corpus can price a per-(brand+position) amendment
+today.**
