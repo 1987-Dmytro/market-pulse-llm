@@ -1,0 +1,22 @@
+﻿id;text;intents_v1;intents_v2;notes
+@VARUS_channel:12043;"Вітаємо! Дегустації проходять в наступних супермаркетах, за адресою-м.Київ-вул. Васильківська 34
+Кривий Ріг-вул. Чарівна 1Б
+Запоріжжя-вул.Яценка 2
+Одеса-Люстдорфська дорога 114
+Дніпро-пр.Героїв 2";[];[];"tl-llm; corporate voice (degustation addresses reply) -> unclear:true"
+@VARUS_channel:1696;"Вибачте , будь ласка) 😇   То я з  датою місяця  наплутала  . На перед забігла.   
+ 
+Так.  Ви праві 🙄";[];[];"tl-llm; conversational self-correction about dates, no consumer aspect -> unclear:true"
+@VARUS_channel:19490;Ваша кава ще не встигне охолонути, а новий каталог уже буде на сайті! ☕️ Наші відповідальні якраз докручують останні гайки на сторінці з акціями, щоб усе працювало ідеально. Дякуємо, що чекаєте на наші знижки!;[];[];"tl-llm; corporate voice (""нашi вiдповiдальнi"") -> unclear:true"
+@VARUS_channel:8447;Та візьміть той айфон у розстрочку і не парьтесь. З такою кількістю дій вже цей час витратили б на додаткову роботу;[];[];"tl-llm; cross-commenter advice (iphone installments) -> unclear:true"
+@VARUS_channel:9078;Я на 5 місці і в мене 152 000 балів;[];[];"tl-llm; game-standings brag = participation noise (ticket family) -> unclear:true; parent post has no text/surrogate (named honestly)"
+@msuaaaa:9805;охохо, дякую за очередну атрибутику в мене дома макдональдс);"[""packaging""]";"[""packaging""]";"tl-llm; parent = reusable-plastic post: branded cups piling at home -> packaging (v1 kept), joking tone"
+@VARUS_channel:10149;Я не ухилянт, но заказываю доставки, вопросы?😂;[];[];"tl-llm; cross-commenter self-defense joke (political banter) -> unclear:true; parent (power/microwaves post) consulted"
+@VARUS_channel:13008;Monkey Shoulder -Макні шолдерс 😂😂😂😂🙈🙈🙈;[];[];"tl-llm; banter at catalog transliteration (""Макнi шолдерс""); no consumer-reaction aspect; parent album image consulted"
+@VARUS_channel:17747;Не маю відповідної освіти і фінінсів. Вчився за іншим фахом і займаюсь іншою діяльністю. Аграрні справи то не моє. Дякую за прекрасну пораду, і ви займіться;[];[];"tl-llm; cross-commenter retort -> unclear:true"
+@VARUS_channel:6551;типу дякуємо за розкрутку і каналу, і варуса )));[];"[""service""]";"tl-llm; sarcastic thanks-for-promotion under winners post — giveaway-reaction family (check20 row 6 precedent)"
+@VARUS_channel:7468;Я ще цей тиждень спробую, але якщо знов таке буде незрозуміле. То теж вкладу спати 🤣;[];"[""service""]";"tl-llm; tamagotchi game confusing (""вкладу спати"") — promo/game mechanics frustration"
+@VARUS_channel:8126;За інформування дякую, я просто описав, чому Варус не несе відповідальність за виробника😉;[];[];"tl-llm; cross-commenter meta (responsibility debate, sibling of contested 1453) -> unclear:true"
+@VARUS_channel:2269;Дякуємо за відгук👍 Вже маємо власну лінійку сирів VARTO та Вигода. Детальніше з асортиментом ви можете ознайомитись на нашому сайті https://varus.ua/zaporizhzhia/siri~brand_varto_vigoda;[];[];"tl-llm; corporate voice (VARTO lineup reply) -> unclear:true"
+@VARUS_channel:350;"Люди добрі допоможіть на пасху не велику, дуже прошу🙏🙏🙏 
+4441111147256311";[];[];"tl-llm; begging spam with card number -> unclear:true"
