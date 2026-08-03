@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-03 18:27:08 (every SessionStart)
+**Auto-refreshed:** 2026-08-03 19:06:30 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+3c946d4 docs: three corrections to the ADR, one of them a wrong number
+8a096ee feat: the v2.2 probe — KILL on the bar, and the rewrite still worked
 0a76bf3 feat: the probe runner, committed before the run it records
 7fb5e83 feat: the v2.2 probe's gate, pre-registered before a row is bought
 43774a0 feat: v2.2 — the same eight rulings, said forwards
-677d2c0 chore: the tail the hooks wrote after the last commit, and the team lead's next brief
-29a1d68 fix: three guards that were measuring the wrong thing, and a batch that said so
 ```
 
 ## 📋 Recent decisions
@@ -31,7 +31,7 @@
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-04 (after `PROMPT-4.5g4` — **v2.2 says the same eight rulings affirmatively and the pre-registered probe came back KILL: preserved 37/58 against a bar of 55, fixed 9/29 against 24. The rewrite is NOT what failed — v2.1 scored 20/58 and 4/29 on the identical rows — it just does not reach the sitting's own bar.** 15 of the 20 remaining misses name `unclear`, and P6 is provably out of the prompt's reach. All three 4.5g strata still FAIL; nothing merges; the wave-2 hundred is still unjudged. The 4.5f calibration gate stays PASS at 100/100; test v3 is frozen beside v2; Phase 4 stays closed at 2 of 5 against v2; edited by hand — the section above is auto-generated, do NOT touch the marker)
+**Last update:** 2026-08-03 19:02 (`/save` after `PROMPT-4.5g4` — **v2.2 says the same eight rulings affirmatively and the pre-registered probe came back KILL: preserved 37/58 against a bar of 55, fixed 9/29 against 24. The rewrite is NOT what failed — v2.1 scored 20/58 and 4/29 on the identical rows — it just does not reach the sitting's own bar.** 15 of the 20 remaining misses name `unclear`, and P6 is provably out of the prompt's reach. All three 4.5g strata still FAIL; nothing merges; the wave-2 hundred is still unjudged. The 4.5f calibration gate stays PASS at 100/100; test v3 is frozen beside v2; Phase 4 stays closed at 2 of 5 against v2; edited by hand — the section above is auto-generated, do NOT touch the marker)
 
 ## 🔥 What's Hot
 
