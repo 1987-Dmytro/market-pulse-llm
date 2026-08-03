@@ -2,24 +2,24 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-03 20:48:07 (every SessionStart)
+**Auto-refreshed:** 2026-08-03 21:17:08 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-c370537 fix: "23 of 42" was co-occurrence, and "10 of 45" averaged two opposite senders
-cf4ade3 chore: the team lead's channel-expansion entry policy, committed verbatim
-384e12c feat: both families measured, and the big one is the expensive one
-f807094 feat: comments_v2 — 11,338 rows that now know what they replied to
-64fd863 feat: the family measurement, committed before the numbers exist
+7caab2d chore: the team lead's category/position amendment candidate, committed verbatim
+b3eac2d feat: the v2ctx runner, committed before the numbers exist
+8b52971 feat: the v2ctx probe, pre-registered — two denominators, one attempt
+5da9e65 feat: v2ctx — the v2 prompt, and two facts rendered beside the post
+16fe110 feat: a v1 comment walk is now a decision, not the default
 ```
 
 ## 📋 Recent decisions
 
-- `45g5-features-over-prompts.md` — The prompt track is closed by its own gate: adjudicated truth into the data, and two features measured before either is bought
 - `INDEX.md` — Decision records
-- `45g4-v22-affirmative-rewrite.md` — The rulings were right and the sentences were backwards: v2.2, bought a hundred rows at a time
+- `45g6-context-lines-probe.md` — Facts, not rules — and the fact turned out to be the rule: v2ctx is KILLed at 41/58
+- `45g5-features-over-prompts.md` — The prompt track is closed by its own gate: adjudicated truth into the data, and two features measured before either is bought
 
 ## 📅 Recent daily logs
 
@@ -31,9 +31,51 @@ f807094 feat: comments_v2 — 11,338 rows that now know what they replied to
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-03 20:43 (`/save` after `PROMPT-4.5g5` — **path A executed at $0.00: 35 adjudicated verdicts are in the batch, the collector stores `reply_to_msg_id`, 11,338 comments were re-fetched into `data/raw/comments_v2/`, and both error families are measured.** The reply family covers 23 of the 42 refusals and a blanket rule over it would flip **62 of the 258** judged-correct rows; the sender family covers 7 and costs **10 of 45**. 19 refusals are in neither. Nothing was registered and no model was called. All three 4.5g strata still FAIL; the wave-2 hundred is still unjudged. The 4.5f calibration gate stays PASS at 100/100; test v3 is frozen beside v2; Phase 4 stays closed at 2 of 5 against v2; edited by hand — the section above is auto-generated, do NOT touch the marker)
+**Last update:** 2026-08-03 21:40 (`PROMPT-4.5g6` executed — **six dictated verdicts complete the adjudicated 40, the two features are registered as rendered facts (`precheck_v2ctx_with_post`, RENDER-ONLY: no prompt text moves), and the pre-registered probe returned KILL at preserved 41/58** with feature-fixed 9/17. $0.0301 for 100 requests; $0.8095 of the $1.50 shared cap. Three tracks are now closed by their own gates: v2.1, v2.2 and v2ctx. All three 4.5g strata still FAIL; the wave-2 hundred is still unjudged. The 4.5f calibration gate stays PASS at 100/100; test v3 is frozen beside v2; Phase 4 stays closed at 2 of 5 against v2; edited by hand — the section above is auto-generated, do NOT touch the marker)
 
 ## 🔥 What's Hot
+
+**THE FACT WAS THE RULE. v2ctx IS KILLED AT 41/58.** One attempt, 100 rows, $0.0301, 100 answered,
+0 unusable. `results/v2ctx_probe_results.json`, scored by the function
+`results/v2ctx_probe_plan.json` committed **before** the first request.
+
+| | v2 (the pack) | v2.1 | v2.2 | **v2ctx** | PASS at | KILL below |
+|---|---|---|---|---|---|---|
+| `preserved` | 58/58 | 20/58 | 37/58 | **41/58** | 55 | 52 |
+| `feature-fixed` | 0/17 | 0/17 | 3/17 | **9/17** | 12 | 9 |
+| other named (ungated) | 0/23 | 4/23 | 11/23 | 11/23 | — | — |
+
+**The feature counter did not kill it; the preserved counter did.** Handing the model the two
+facts tripled what the best prompt revision landed (3 → 9) and beat every revision on
+preservation (20 → 37 → 41) — and cost 17 accepted rows, **16 of which carry a feature**: 53% of
+the 30 featured accepted rows against 1 of 28 featureless, and **14 of the 17 flipped `unclear`
+false → true**. `unclear` moved on 35 of 100 rows against 13 under v2.2. 4.5g5 priced a blanket
+reply rule at 62 of 258 (24%); this lost 28% of its accepted sample. **The prediction held: a fact
+rendered for a whole family behaves like a rule over it**, because `UNCLEAR_RULE` already keys on
+exactly that fact. And the discriminator is too coarse for the evidence — it fires on 52 of 100
+rows and explains 10 of 42 refusals. ADR [[45g6-context-lines-probe]].
+
+**THE GATE'S DENOMINATOR WAS A CHOICE: 17, NOT 23.** `feature_named` = the refusals whose *own
+record* names the feature (`refusals_explained_by_a_feature`) ∩ the 40 rows that state a value =
+**17**, so PASS = ceil(0.70·17) = 12 and KILL below ceil(0.50·17) = 9. Family *membership* gives
+23 and would price co-occurrence as explanation. Membership still drives **rendering** (52 reply ·
+20 sender · 19 both · 47 neither); explanation drives the **gate**. Both are in the plan. The
+briefing's "v2.2 = 2" is **3** under these definitions — `@VARUS_channel:6239`, whose value comes
+from the P5 family and not its own note.
+
+**40 OF THE 42 REFUSALS NOW STATE A VALUE.** Six dictated by the team lead and *transcribed*: every
+intent written has to be a word the row's own verdict note uses, or the run stops. `8478` → service ·
+`14759` → availability · `11615` → taste · `18839` → service · `8932` → quality+taste · `9271` →
+service (its note keeps the 4.5g5 clause that explains `unclear`). Batch chain `f436c419…` →
+`ea7fa2ab…`, `results/verdicts_45g6.json`. **Still open: `@VARUS_channel:7555`** (note names the
+error, not the answer) and **`@msuaaaa:11876`** (pending law, operator 03.08).
+
+**A REGISTERED PROMPT THAT HASHES TO ANOTHER ONE, ON PURPOSE.** `precheck_v2ctx_with_post` **is**
+`precheck_v2_with_post` — same object, same `113000df…`. The revision is `build_messages`, which
+renders `[reply]` / `[sender]` between `</post>` and `<comment>`. Declared in `prompts.RENDER_ONLY`,
+so the distinctness guard reads the intent; guideline gains a **`v2ctx changelog` marked
+RENDER-ONLY**. **A row with no feature renders the v2 request byte for byte** — checked as a unit
+test, by the plan on a real featureless row, and on the wire through the real `Asker`.
 
 **PATH A IS EXECUTED, AND IT COST NOTHING.** `results/spend_45g5.json` holds a provider anchor read
 before the work started; the phase-end delta is **$0.000000** against a pre-registration of $0.00.
@@ -634,23 +676,19 @@ files**: `comments_train.jsonl` (1600) + `sarcasm_candidates.jsonl` (746) plus
 
 ## ⏭️ Next
 
-1. **THE NEXT PROBE IS A CONTEXT LINE, AND 4.5g5 PRICED WHICH ONE.** Path A is executed: the 35
-   adjudicated verdicts are in the batch, the collector stores `reply_to_msg_id`, both channels
-   are re-fetched into `data/raw/comments_v2/`, and both families are measured
-   (`results/features_45g5.json`, ADR [[45g5-features-over-prompts]]). What the numbers say about
-   the next registration: **`sender_anon_id` is the cheap one** — 236 batch rows, 7 of the 42
-   refusals, and a blanket rule costs **10 of 45** judged-correct rows, or **6 of 40** scoped to
-   the VARUS support account the rule is actually about. **The reply feature is the big one and
-   the dangerous one** — 882 batch rows and 23 refusals it co-occurs with, but only **10** it
-   explains, and a blanket "a reply to another commenter is not a consumer reaction" would flip
-   **62 of the 258** judged-correct rows, a quarter of everything the sitting accepted, to fix
-   those 10. So the shape to register is
-   a **context line under the v2 prompt** (facts handed to the model, exception left available),
-   **not** a rule and **not** the v2.2 wording the gate already refused. **The families are nearly
-   nested, not additive**: all 7 identity refusals are reply refusals too, the union covers 23 of
-   42, and **19 refusals are in neither** — 14 of those name `intents`. Still unregistered, still
-   unbought: nothing in 4.5g5 called a model. **The wave-2 hundred is still unjudged**, and it
-   gates the v2.1 labels, which measure worse than v2.2 and worse than v2.
+1. **THREE TRACKS ARE CLOSED BY THEIR OWN GATES, AND THE NEXT MOVE IS THE OPERATOR'S.** v2.1
+   (negations), v2.2 (affirmations) and v2ctx (the features as rendered facts) each failed a bar
+   set before the numbers existed. What has **not** been tried, and what 4.5g6 measured the case
+   for: a **narrower discriminator** — the law's own carve-out is that a reply which accuses the
+   retailer directly is judged normally, and the current feature does not know that; it fires on
+   52 of 100 rows to explain 10 of 42 refusals — or the features reaching a **classifier** rather
+   than a prompt, where a coarse signal can be weighted instead of obeyed. Neither is scoped, and
+   nothing Phase-5-shaped is started. **No surgical batch run is authorised by this probe**: it is
+   in-sample by construction, and only a fresh blind hundred drawn outside the judged 300 can
+   accept a re-labelled batch. **The wave-2 hundred is still unjudged**, and it gates the v2.1
+   labels, which measure worse than v2.2, worse than v2ctx and worse than v2. Money: **$0.8095 of
+   $1.50**, $0.6905 left — a full 1,912-row re-run still does not fit under any revision.
+
 2. **THE POLL FINDING IS A CORPUS QUESTION, AND IT IS THE BIGGEST THING 4.5g2 OPENED.** 16 of the 41
    parents in play are polls whose question the collector never stored. **How many polls are in the
    whole store is unknown**; every one of them is currently recorded as a post that said nothing,

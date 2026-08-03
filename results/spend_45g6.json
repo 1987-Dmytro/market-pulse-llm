@@ -1,0 +1,14 @@
+{
+  "openrouter_total_usage_at_45g6_start": 3.200080415,
+  "note": "lifetime OpenRouter usage read at the start of 45g6, before the first request of this phase. Phase spend = total_usage now minus this, and the $1.50 cap of docs/PROMPT-4.5g6.md is enforced against that difference. Delete or regenerate this file and the counter silently restarts at today's usage — the same footgun results/spend_3b.json carries. Every other phase's anchor is a different file and is never written here.",
+  "cap_usd": 1.5,
+  "runs": [
+    {
+      "model": "qwen/qwen3.6-27b",
+      "timestamp": "2026-08-03T19:12:49+00:00",
+      "usd": 0.03007665000000001,
+      "requests": 100,
+      "note": "45g6: 100 pre-registered probe rows under precheck_v2ctx_with_post"
+    }
+  ]
+}

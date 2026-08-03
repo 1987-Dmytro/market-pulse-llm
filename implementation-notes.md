@@ -1578,3 +1578,103 @@ the retailer outweighs a commenter addressee"* — priced for the first time. It
 for the **shape** of the next attempt: a context line states the fact and leaves the exception
 available to the model, where a rule removes it. Had only the sizes been measured, the reply
 feature would look like the obvious buy.
+
+# Phase 4.5g6 — six dictated verdicts, the v2ctx rendering, and the probe that KILLed it
+
+Executed against `docs/PROMPT-4.5g6.md`. 100 completion requests, **$0.030077**, against an
+estimate of $0.0345 and a briefing figure of ~$0.037. Anchor `results/spend_45g6.json` written
+before the first request; total against the $1.50 shared cap **$0.809503**.
+
+**Gate: KILL** — preserved 41/58 (KILL below 52), feature-fixed 9/17 (KILL below 9, PASS at 12).
+The feature counter did not kill it; the preserved counter did.
+
+## Deviations — silence is not compliance
+
+1. **Task 0 swept a team-lead file it was told to stop on, and a second one arrived mid-phase.**
+   Dirty at phase start: the vault tail (`knowledge/hot.md`, `knowledge/index.md`,
+   `knowledge/daily_logs/2026-08-03.md`), `docs/STATUS.md` modified upstream and
+   `docs/PROMPT-4.5g6.md` untracked. Task 0 names the vault tail and the team-lead files, so this
+   was in scope; the `git add` was by explicit path, never `-A`. A *second* `docs/STATUS.md` edit
+   (the category/position amendment candidate) appeared after commit 5 and was committed verbatim
+   as a separate chore — seven commits, not the six the briefing lists.
+
+2. **The briefing's "v2.2 = 2" reference point is 3 under the plan's own definitions.** Named in
+   the plan, the ADR and the report rather than silently adopted or silently overridden. The extra
+   row is `@VARUS_channel:6239`, whose value comes from the P5 family and not from its own note,
+   so it was `reported_only` in the 4.5g4 plan and is `fixed` here. The gate is unaffected — n=17
+   either way — but the number v2ctx had to beat was 3.
+
+3. **`feature_named` = 17 is a reading, and the other reading is 23.** The briefing says
+   "named-value rulings whose row carries a feature per features_45g5 (expected ≈17)". Membership
+   in a family gives 23; `refusals_explained_by_a_feature` ∩ the 40 named-value rows gives exactly
+   17. Both were computed before choosing; 17 was taken because it hits the briefing's own
+   expectation exactly, because "Non-feature named rulings: reported, ungated" then has a coherent
+   complement (23), and because gating membership would price co-occurrence as explanation — the
+   finding [[45g5-features-over-prompts]] exists to prevent. Membership still drives *rendering*;
+   only the gate uses explanation. Both numbers are in the plan.
+
+4. **The reference labels come from the committed 4.5g4 plan, not from a rebuild of the sealed
+   pack.** That rebuild is no longer possible: 41 adjudicated values are in the batch the pack is
+   built from, and `results/sitting_45g2_manifest.json` is stale **by design** and must not be
+   re-pinned. In its place the plan checks the chain — the batch sha is the one 4.5g6 left, and
+   the 60 sampled rows no verdict ever touched still equal that reference field for field. The
+   60 is asserted as a literal.
+
+5. **`tests/test_prompts.py` had to be amended: it forbade exactly what Task 3 asked for.** The
+   guard `len({prompt_sha256(t) for t in PROMPTS}) == len(PROMPTS)` predates render-only
+   revisions, and v2ctx registers the same text under a second name on purpose. The exception is
+   declared in `prompts.RENDER_ONLY` (module, not test) and the guard now asserts distinctness
+   over everything else plus `PROMPTS[twin] is PROMPTS[base]` — the same object, so two literals
+   cannot be edited apart.
+
+6. **`build_messages` does not mirror `WITH_POST`'s symmetry, deliberately.** `WITH_POST` is
+   required-and-refused; context is **optional for v2ctx and refused for everyone else**. 47 of
+   the 100 rows carry no feature and a symmetric rule would refuse all of them.
+
+7. **`apply_sitting_verdicts.apply()` gained a `note=` parameter and `note_for` a third argument.**
+   Needed so 4.5g6's clause could be *appended* to `@VARUS_channel:9271`'s existing 4.5g5 note
+   instead of replacing it — a row with two adjudicated fields and a note explaining one of them
+   is a row nobody can audit. Default behaviour is unchanged and the 4.5g5 tests still pass.
+
+8. **The 4.5g6 re-run guard asks the fields, not the annotator.** 4.5g5's guard reads
+   `annotator == "sitting-45g-verdicts"`, and 9271 already carried it before this phase began.
+   Also, the idempotency check runs *before* the chain check: after a successful run the batch
+   legitimately no longer matches 4.5g5's sha, and the first version reported that as a broken
+   chain, which reads like a defect rather than an idempotent no-op.
+
+9. **The v1-write guard stops the whole `backfill.py` run, not just the comment walk.** The
+   briefing says it must refuse to write into `data/raw/comments/`; both verified sources have
+   comments enabled, so any run would. It fires on the argument list before a client, a salt or a
+   session is read, and the refusal names `comments_v2` as the way forward.
+
+10. **The byte-identity guard is in three places, not one.** The briefing asks for a unit test on
+    a real featureless row; the batch text a row needs is tracked but *which* rows are featureless
+    comes from gitignored `data/raw/comments_v2/`, and the test lands one commit before the plan
+    exists. So: a unit test on a literal pair and on a real batch row's text, the plan asserting
+    it on a genuinely featureless row of the sample (`@VARUS_channel:11605`) and recording that it
+    did, and a run test asserting it on the wire through the real `Asker`.
+
+11. **`prior_total` reads three things, one of them not asked for.** The briefing says prior spend
+    comes from the ledger files ($0.7794). Implemented as: each ledger against its own run record
+    (the 4.5g4 pattern), their sum against the briefing's figure to the cent, and
+    `results/spend_45g5.json` asserted to hold **no** runs — a $0.00 phase with a run in its
+    ledger would mean a tripwire fired unnoticed and every headroom computed since is wrong.
+
+12. **The estimate includes the context lines.** `estimate_cost` is fed the rendered fact lines
+    per row alongside the post, the caption and the text; pricing the v2 request would have
+    under-stated a run whose whole revision is extra tokens.
+
+## What this phase measured, and it is not what it set out to measure
+
+**A fact rendered for a whole family behaves like a rule over that family.** "Evidence, not law"
+is a distinction in wording, not in effect, when the law downstream keys on exactly that fact:
+`UNCLEAR_RULE` already says to mark `unclear` for a reply aimed at another commenter, so telling
+the model the row *is* one fires that clause rather than handing it something to weigh. 16 of the
+17 lost accepted rows carry a feature — 53% of the 30 featured accepted rows, against 1 of 28
+featureless — and 14 of the 17 flipped `unclear` false → true. [[45g5-features-over-prompts]]
+priced a blanket reply rule at 62 of 258 judged-correct rows (24%); this run lost 28% of its
+accepted sample. The prediction held, and the context line was bought at the rule's price.
+
+The corollary is about the instrument, not the model: **the discriminator is too coarse for the
+evidence it carries.** It fires on 52 of 100 rows and explains 10 of 42 refusals. A feature that
+describes half the corpus and a quarter of the errors cannot travel as an undifferentiated fact.
