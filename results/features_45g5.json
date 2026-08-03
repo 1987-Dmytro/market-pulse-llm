@@ -1,7 +1,7 @@
 {
   "runs": [
     {
-      "timestamp": "2026-08-03T18:19:35+00:00",
+      "timestamp": "2026-08-03T18:33:07+00:00",
       "measured_by": "scripts/measure_families_45g5.py",
       "sources": {
         "comments": [
@@ -46,18 +46,51 @@
           "judged_correct_with_unclear_false": 62,
           "cross_check_by_membership": 2971,
           "discriminators_disagree_on": 180,
-          "threads_with_no_observed_head": 2
+          "threads_with_no_observed_head": 2,
+          "refusals": {
+            "named_by_the_note": [
+              "@VARUS_channel:10136",
+              "@VARUS_channel:10394",
+              "@VARUS_channel:14891",
+              "@VARUS_channel:17855",
+              "@VARUS_channel:17864",
+              "@VARUS_channel:2693",
+              "@VARUS_channel:323",
+              "@VARUS_channel:328",
+              "@VARUS_channel:7074",
+              "@VARUS_channel:8850"
+            ],
+            "co_occurring_only": [
+              "@VARUS_channel:1271",
+              "@VARUS_channel:1338",
+              "@VARUS_channel:16461",
+              "@VARUS_channel:18839",
+              "@VARUS_channel:19919",
+              "@VARUS_channel:3989",
+              "@VARUS_channel:4663",
+              "@VARUS_channel:6239",
+              "@VARUS_channel:7545",
+              "@VARUS_channel:9055",
+              "@VARUS_channel:9271",
+              "@msuaaaa:12648",
+              "@msuaaaa:8051"
+            ]
+          }
         },
         "channel_identity": {
           "discriminator": "one of the 2 busiest sender_anon_ids",
           "senders": [
             {
               "sender_anon_id": "58805a362c39",
-              "comments": 3761
+              "comments": 3761,
+              "channel": "@msuaaaa",
+              "with_text": 73
             },
             {
               "sender_anon_id": "2fa2b73f617b",
-              "comments": 876
+              "comments": 876,
+              "channel": "@VARUS_channel",
+              "with_text": 874
             }
           ],
           "next_busiest": 81,
@@ -185,15 +218,59 @@
         "@msuaaaa:12325",
         "@msuaaaa:12621"
       ],
+      "refusals_explained_by_a_feature": [
+        "@VARUS_channel:10136",
+        "@VARUS_channel:10394",
+        "@VARUS_channel:1271",
+        "@VARUS_channel:1338",
+        "@VARUS_channel:14891",
+        "@VARUS_channel:17855",
+        "@VARUS_channel:17864",
+        "@VARUS_channel:2693",
+        "@VARUS_channel:323",
+        "@VARUS_channel:328",
+        "@VARUS_channel:3989",
+        "@VARUS_channel:4663",
+        "@VARUS_channel:6239",
+        "@VARUS_channel:7074",
+        "@VARUS_channel:8850",
+        "@VARUS_channel:9055",
+        "@msuaaaa:12648"
+      ],
+      "refusals_explained_by_neither": [
+        "@VARUS_channel:11605",
+        "@VARUS_channel:11606",
+        "@VARUS_channel:11615",
+        "@VARUS_channel:11776",
+        "@VARUS_channel:14759",
+        "@VARUS_channel:16461",
+        "@VARUS_channel:18839",
+        "@VARUS_channel:19919",
+        "@VARUS_channel:245",
+        "@VARUS_channel:2798",
+        "@VARUS_channel:7065",
+        "@VARUS_channel:7545",
+        "@VARUS_channel:7555",
+        "@VARUS_channel:7711",
+        "@VARUS_channel:8478",
+        "@VARUS_channel:8903",
+        "@VARUS_channel:8916",
+        "@VARUS_channel:8932",
+        "@VARUS_channel:8947",
+        "@VARUS_channel:9271",
+        "@msuaaaa:11507",
+        "@msuaaaa:11876",
+        "@msuaaaa:12325",
+        "@msuaaaa:12621",
+        "@msuaaaa:8051"
+      ],
       "git": {
-        "commit": "64fd86307ce28c7d4ecec96b09ee545d9afd0674",
+        "commit": "cf4ade31e854ac66182dfde505a40d6fc9d889c5",
         "dirty": [
-          "knowledge/daily_logs/2026-08-03.md",
-          "knowledge/index.md",
-          "results/drift_45g5.json",
-          "results/spend_45g5.json",
-          "scripts/zero_spend_45g5.py",
-          "tests/test_zero_spend_45g5.py"
+          "implementation-notes.md",
+          "knowledge/decisions/45g5-features-over-prompts.md",
+          "knowledge/hot.md",
+          "scripts/measure_families_45g5.py"
         ]
       }
     }

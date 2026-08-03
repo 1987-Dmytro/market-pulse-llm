@@ -2,23 +2,23 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-03 20:24:50 (every SessionStart)
+**Auto-refreshed:** 2026-08-03 20:34:24 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+cf4ade3 chore: the team lead's channel-expansion entry policy, committed verbatim
+384e12c feat: both families measured, and the big one is the expensive one
 f807094 feat: comments_v2 — 11,338 rows that now know what they replied to
 64fd863 feat: the family measurement, committed before the numbers exist
 5b0c036 feat: the second pass that backfills a comment's reply target
-caf48e5 feat: the collector keeps a comment's reply target
-66b439f feat: the sitting's adjudicated answers, written onto the rows they name
 ```
 
 ## 📋 Recent decisions
 
-- `INDEX.md` — Decision records
 - `45g5-features-over-prompts.md` — The prompt track is closed by its own gate: adjudicated truth into the data, and two features measured before either is bought
+- `INDEX.md` — Decision records
 - `45g4-v22-affirmative-rewrite.md` — The rulings were right and the sentences were backwards: v2.2, bought a hundred rows at a time
 
 ## 📅 Recent daily logs
@@ -52,15 +52,27 @@ read. `results/verdicts_45g5.json`.
 
 | | all 11,338 | the 1,912 batch | the 42 refusals | judged correct | of those, `unclear: false` |
 |---|---|---|---|---|---|
-| replies to a comment | 3,147 | 882 | **23** | 120 / 258 | **62** |
+| replies to a comment | 3,147 | 882 | 23 co-occur, **10 explained** | 120 / 258 | **62** |
 | channel identity (2 pseudonyms) | 4,637 | 236 | **7** | 45 / 258 | **10** |
+| — `2fa2b73f617b…` @VARUS (retail) | 876 (874 texted) | 219 | 6 | 40 | **6** |
+| — `58805a362c39…` @msuaaaa (aggr.) | 3,761 (**73** texted) | 17 | 1 | 5 | **4** |
 | both at once | 941 | 233 | 7 | 43 / 258 | 9 |
 
-`results/features_45g5.json`. The reply discriminator is cross-checked by a second one (the target
-is a comment we collected): 2,971 against 3,147, and the 180-row gap is the class it is blind to —
-replies to comments deleted since. Two threads have no observed head and are named, not counted.
-**The families are nearly nested**: all 7 identity refusals are reply refusals, 233 of 236 identity
-batch rows are, the union covers 23 of 42, and **19 refusals are in neither** (14 name `intents`).
+`results/features_45g5.json`. **"23 of 42" is co-occurrence, not explanation** — only **10** of
+those 23 have a verdict note naming a commenter addressee (the other 13 are P5, P6, a queue joke,
+a sarcasm idiom, bare thanks), and 10 is what the team lead's "~10–12 of 42" meant. So the reply
+rule would break **62 judged-correct rows to fix 10**. **The identity family is two senders
+behaving oppositely**: the VARUS support account is 874 texted comments, 219 batch rows, and costs
+6 of 40; the msuaaaa pseudonym is the channel's own author with **3,688 of its 3,761 rows
+media-only**, 17 batch rows, and costs 4 of its 5 — and `@msuaaaa` is an `aggregator`, so P6 (*the
+retailer* answering in its own voice) does not describe it. A rule scoped to VARUS alone costs
+**6 of 40**. The reply discriminator is cross-checked by a second one (the target is a comment we
+collected): 2,971 against 3,147, the 180-row gap being the class it is blind to — replies to
+comments deleted since. Two threads have no observed head and are named, not counted. **The
+families are nearly nested**: all 7 identity refusals are reply refusals, 233 of 236 identity batch
+rows are, and **19 refusals are in neither family at all** (14 name `intents`). Counted by
+explanation rather than by structure, **17 of the 42 are explained and 25 are not** — derived in
+the record, because 19-in-neither plus 13-co-occurring double-counts the identity rows.
 
 **THE TEAM LEAD'S "219 / 46 / 7" IS TWO SCOPES, NOT ONE.** 219 batch rows and 46 judged are
 `2fa2b73f617b…` **alone** (VARUS support, 876 comments), which owns **6** refusals; the 7th is
@@ -627,10 +639,12 @@ files**: `comments_train.jsonl` (1600) + `sarcasm_candidates.jsonl` (746) plus
    are re-fetched into `data/raw/comments_v2/`, and both families are measured
    (`results/features_45g5.json`, ADR [[45g5-features-over-prompts]]). What the numbers say about
    the next registration: **`sender_anon_id` is the cheap one** — 236 batch rows, 7 of the 42
-   refusals, and a blanket rule costs **10 of 45** judged-correct rows. **The reply feature is the
-   big one and the dangerous one** — 882 batch rows and **23 of 42** refusals, but a blanket "a
-   reply to another commenter is not a consumer reaction" would flip **62 of the 258**
-   judged-correct rows, a quarter of everything the sitting accepted. So the shape to register is
+   refusals, and a blanket rule costs **10 of 45** judged-correct rows, or **6 of 40** scoped to
+   the VARUS support account the rule is actually about. **The reply feature is the big one and
+   the dangerous one** — 882 batch rows and 23 refusals it co-occurs with, but only **10** it
+   explains, and a blanket "a reply to another commenter is not a consumer reaction" would flip
+   **62 of the 258** judged-correct rows, a quarter of everything the sitting accepted, to fix
+   those 10. So the shape to register is
    a **context line under the v2 prompt** (facts handed to the model, exception left available),
    **not** a rule and **not** the v2.2 wording the gate already refused. **The families are nearly
    nested, not additive**: all 7 identity refusals are reply refusals too, the union covers 23 of
@@ -722,6 +736,16 @@ bigger one — 23 of 42 refusals against the sender family's 7 — and the more 
 blanket rule over it flips 62 of 258 judged-correct rows against the sender family's 10 of 45.
 Measure what a rule would break on the rows already accepted before deciding a feature is worth
 buying.
+
+**"N of the refusals are in family F" is co-occurrence and reads as explanation.** 23 refusals are
+structurally replies; only **10** have a note that says the refusal was *about* the reply. The
+other 13 are food-poll `taste` rulings and P5/P6 rows that happen to sit on replying rows. Before
+a family size becomes an argument, check the notes: does the verdict name the feature?
+
+**A family averaged over two members can hide that they behave oppositely.** The two hyperactive
+pseudonyms cost 6-of-40 and 4-of-5 under the same rule, one is `official_retail` and the other an
+`aggregator`, and one has 874 texted comments against the other's 73 in 3,761 rows. The pair's
+"10 of 45" is arithmetic, not a description of either. Split before pricing.
 
 **A prompt revision can only re-weigh evidence the model HAS.** v2.2 states the corporate-voice
 ruling, and `UNCLEAR_RULE` had already listed it since v2 — the model reads it twice and still

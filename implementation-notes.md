@@ -1518,10 +1518,13 @@ delta is `$0.000000`. Nothing was registered in `prompts.py`.
    10-of-45 exactly. Both readings are in `results/features_45g5.json`; the filter was not
    adjusted until 219 appeared.
 
-9. **Six commits, not five.** The fetch runner (`5b0c036`) and the measurement script (`64fd863`)
-   were each committed **before** the run they produce, so that anything changed after seeing the
-   data is visible in git rather than folded into one commit with its own result. The prompt's
-   commits 4 and 5 are each split into a code half and a record half.
+9. **Eight commits, not five.** The fetch runner (`5b0c036`) and the measurement script
+   (`64fd863`) were each committed **before** the run they produce, so that anything changed after
+   seeing the data is visible in git rather than folded into one commit with its own result — the
+   prompt's commits 4 and 5 are each split into a code half and a record half. `cf4ade3` is a
+   second chore: `docs/STATUS.md` was written upstream *while this phase ran* (a channel-expansion
+   entry policy that cites 4.5g5) and was committed verbatim rather than left dirty. The eighth is
+   the correction commit of deviation 13.
 
 10. **`main()` of the fetcher is not unit-tested.** Its live-only branch is the Telegram walk; the
     helpers that decide anything — the work list, the join, the drift counts, the writer, the
@@ -1540,16 +1543,37 @@ delta is `$0.000000`. Nothing was registered in `prompts.py`.
     reported before it was corrected — a rate read off two log lines minutes apart is a guess,
     not a measurement.
 
+13. **Two numbers were corrected after the first measurement, and both corrections are in git.**
+    The first run reported "23 of 42 refusals" for the reply family and "10 of 45" for the
+    identity family, and both were reported to the operator before being refined.
+    **(a) 23 is co-occurrence, not explanation.** The brief's own context line said "~10–12 of
+    42"; that gap was not reconciled the way 219/46/7 was. Grepping the 23 notes:
+    **10 name a commenter addressee** ("reply aimed at another commenter", "argument with another
+    commenter"), and the other 13 are P5, P6, a queue joke, a sarcasm idiom, bare thanks — rows
+    where a note-level error happens to sit on a structurally replying row. The 10 agrees with
+    the team lead. `explained_by_the_note()` and the `refusals` block now report both.
+    **(b) The identity family averages two senders that behave oppositely.**
+    `2fa2b73f617b…` (@VARUS_channel, `official_retail`) is 876 comments of which 874 carry text,
+    219 batch rows, 6 refusals, and costs **6 of 40**. `58805a362c39…` (@msuaaaa, `aggregator`)
+    is 3,761 comments of which only **73** carry text — 3,688 are media-only — 17 batch rows, 1
+    refusal, and costs **4 of its 5**. It is 81% of the family's corpus column and 7% of its
+    batch column, and P6 (*the retailer* in its own voice) does not describe an aggregator's own
+    author at all. The per-sender split is now in the ADR table, not buried in `per_sender`.
+
 ## The finding worth writing down
 
 **A feature's size and a feature's price are different numbers, and only the price decides.** The
-reply feature is the bigger of the two by every size measure — 3,147 comments against 4,637 but
-882 batch rows against 236, and **23 of the 42 refusals against 7**. It is also, by a wide margin,
-the more expensive: a blanket rule over it flips **62 of the 258 rows the sitting called correct**,
-against **10 of 45** for the sender feature. Nearly a quarter of everything the sitting accepted
-would have to be re-argued to buy 23 refusals.
+reply feature is the bigger of the two by every size measure — 882 batch rows against 236, and 23
+of the 42 refusals against 7. It is also, by a wide margin, the more expensive: a blanket rule
+over it flips **62 of the 258 rows the sitting called correct**, against **10 of 45** for the
+sender feature (6 of 40 scoped to the retailer's own account).
 
-That ratio is what the guideline's own rule 5 already says in words — *"a direct accusation against
+And the size was itself two numbers wearing one name. Only **10** of those 23 refusals have a
+verdict note saying the refusal was *about* the reply; the rest co-occur. So the honest trade is
+**62 broken to fix 10** — six times the damage of the thing it repairs — where the first reading
+said 62 to fix 23.
+
+That ratio is what the guideline's own rule 5 already says in words — *"A direct accusation against
 the retailer outweighs a commenter addressee"* — priced for the first time. It is also the argument
 for the **shape** of the next attempt: a context line states the fact and leaves the exception
 available to the model, where a rule removes it. Had only the sizes been measured, the reply

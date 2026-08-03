@@ -9,12 +9,13 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 import measure_families_45g5 as families  # noqa: E402
 
 
-def comment(msg_id, *, parent=100, reply_to=..., sender="s1", channel="@c"):
+def comment(msg_id, *, parent=100, reply_to=..., sender="s1", channel="@c", text="смачно"):
     row = {
         "channel": channel,
         "msg_id": msg_id,
         "parent_msg_id": parent,
         "sender_anon_id": sender,
+        "text": text,
     }
     if reply_to is not ...:
         row["reply_to_msg_id"] = reply_to
@@ -96,6 +97,40 @@ def test_the_busiest_senders_and_the_gap_to_the_next():
     assert found["next_busiest"] == 2
     assert len(found["ids"]) == 15
     assert set(found["per_sender_ids"]) == {"a", "b"}
+
+
+def test_a_media_only_sender_is_counted_apart_from_a_talking_one():
+    """One pseudonym's 3,761 corpus rows are 3,688 media-only. Its size column and another
+    sender's are not the same measurement, and the record has to say so."""
+    rows = [comment(i, sender="a", text="" if i else "щось") for i in range(6)] + [
+        comment(100 + i, sender="b") for i in range(3)
+    ]
+    found = families.hyperactive(rows, n=2)
+
+    assert found["senders"][0] == {
+        "sender_anon_id": "a",
+        "comments": 6,
+        "channel": "@c",
+        "with_text": 1,
+    }
+    assert found["senders"][1]["with_text"] == 3
+
+
+# --- co-occurrence is not explanation ----------------------------------------------------
+
+
+def test_a_refusal_in_a_family_is_not_a_refusal_the_family_explains():
+    gates = {
+        "rows": [
+            {"id": "@c:1", "verdict": "incorrect", "notes": "reply aimed at another commenter"},
+            {"id": "@c:2", "verdict": "incorrect", "notes": '[] should be ["taste"] — poll'},
+            {"id": "@c:3", "verdict": "correct", "notes": "reply to another commenter"},
+        ]
+    }
+    found = families.explained_by_the_note({"@c:1", "@c:2", "@c:3", "@c:9"}, gates)
+
+    assert found["named_by_the_note"] == ["@c:1"]
+    assert found["co_occurring_only"] == ["@c:2"]  # in the family, refused for another reason
 
 
 def test_a_sender_telegram_never_gave_us_is_not_a_family():

@@ -23,6 +23,7 @@ Writes `results/features_45g5.json`. Reads no model and calls nothing.
 
 import argparse
 import json
+import re
 import sys
 from collections import Counter, defaultdict
 from datetime import UTC, datetime
@@ -102,18 +103,49 @@ def replies_to_comments(rows: list[dict]) -> dict:
     }
 
 
+ADDRESSEE = re.compile(r"(another|other) commenters?", re.IGNORECASE)
+"""What a verdict note says when the refusal is *about* the reply structure. A refusal can sit
+in the reply family without the feature explaining it — a food-poll `taste` ruling is a note-level
+error that happens to be on a row which structurally replies to someone. Co-occurrence is not
+explanation, and the two counts have to be reported apart."""
+
+
+def explained_by_the_note(ids: set[str], gates: dict, pattern=ADDRESSEE) -> dict:
+    """Of the refusals in a family, the ones whose own note names the feature."""
+    notes = {row["id"]: row["notes"] for row in gates["rows"] if row["verdict"] == "incorrect"}
+    named = sorted(i for i in ids & set(notes) if pattern.search(notes[i]))
+    return {
+        "named_by_the_note": named,
+        "co_occurring_only": sorted((ids & set(notes)) - set(named)),
+    }
+
+
 def hyperactive(rows: list[dict], n: int = HYPERACTIVE) -> dict:
     """The n busiest pseudonyms and the rows they wrote, with the gap to the next one."""
     per_sender = Counter(row["sender_anon_id"] for row in rows if row.get("sender_anon_id"))
     ranked = per_sender.most_common(n + 1)
     top = {sender for sender, _ in ranked[:n]}
+    written = {
+        sender[:12]: [row for row in rows if row.get("sender_anon_id") == sender]
+        for sender, _ in ranked[:n]
+    }
     return {
-        "senders": [{"sender_anon_id": s[:12], "comments": c} for s, c in ranked[:n]],
+        "senders": [
+            {
+                "sender_anon_id": sender[:12],
+                "comments": count,
+                "channel": written[sender[:12]][0]["channel"],
+                # 3,688 of one pseudonym's 3,761 rows are media-only. Its "all comments" number
+                # is mostly rows no labelling batch can ever contain, and a reader comparing it
+                # to another sender's would be comparing two different things.
+                "with_text": sum(1 for row in written[sender[:12]] if row["text"].strip()),
+            }
+            for sender, count in ranked[:n]
+        ],
         "next_busiest": ranked[n][1] if len(ranked) > n else None,
         "ids": sorted(row_id(row) for row in rows if row.get("sender_anon_id") in top),
         "per_sender_ids": {
-            sender[:12]: sorted(row_id(row) for row in rows if row.get("sender_anon_id") == sender)
-            for sender, _ in ranked[:n]
+            sender: sorted(row_id(row) for row in written[sender]) for sender in written
         },
     }
 
@@ -167,8 +199,10 @@ def main() -> int:
         raise SystemExit(f"{len(moved & correct)} judged-correct rows carry an applied verdict")
 
     replies = replies_to_comments(rows)
+    replies["refusals"] = explained_by_the_note(set(replies["ids"]), gates)
     identity = hyperactive(rows)
     reply_ids, identity_ids = set(replies["ids"]), set(identity["ids"])
+    refusals = {i for i, verdict in pop["judged"].items() if verdict == "incorrect"}
 
     record = {
         "timestamp": datetime.now(UTC).isoformat(timespec="seconds"),
@@ -192,6 +226,7 @@ def main() -> int:
                 "cross_check_by_membership": len(replies["by_membership"]),
                 "discriminators_disagree_on": len(replies["disagree"]),
                 "threads_with_no_observed_head": len(replies["threads_with_no_observed_head"]),
+                "refusals": replies["refusals"],
             },
             "channel_identity": {
                 "discriminator": f"one of the {HYPERACTIVE} busiest sender_anon_ids",
@@ -213,6 +248,15 @@ def main() -> int:
             for i, verdict in pop["judged"].items()
             if verdict == "incorrect" and i not in reply_ids and i not in identity_ids
         ),
+        # Explanation, not co-occurrence, and derived rather than added up by hand: the two
+        # explained sets overlap in principle, and 19-in-neither plus 13-co-occurring
+        # double-counts the identity refusals that sit inside the reply family.
+        "refusals_explained_by_a_feature": sorted(
+            set(replies["refusals"]["named_by_the_note"]) | (identity_ids & refusals)
+        ),
+        "refusals_explained_by_neither": sorted(
+            refusals - set(replies["refusals"]["named_by_the_note"]) - identity_ids
+        ),
         "git": git_state(args.record),
     }
     relabel.append_record(args.record, record)
@@ -226,7 +270,24 @@ def main() -> int:
             f"judged-correct ({family['judged_correct_with_unclear_false']} of them "
             f"unclear=false)"
         )
+    named = record["families"]["replies_to_comments"]["refusals"]["named_by_the_note"]
+    print(
+        f"  of those {len(reply_ids & refusals)} reply refusals, {len(named)} have a note that"
+        f" names a commenter addressee; the rest co-occur"
+    )
+    for sender in record["families"]["channel_identity"]["senders"]:
+        per = record["families"]["channel_identity"]["per_sender"][sender["sender_anon_id"]]
+        print(
+            f"  {sender['sender_anon_id']} ({sender['channel']}): {sender['comments']} comments,"
+            f" {sender['with_text']} with text · {per['batch']['n']} batch ·"
+            f" {per['errors']['n']} refusals · {per['judged_correct_with_unclear_false']} of"
+            f" {per['judged']['correct']['n']} judged-correct would flip"
+        )
     print(f"errors in neither family: {len(record['errors_in_neither_family'])}")
+    print(
+        f"refusals a feature explains: {len(record['refusals_explained_by_a_feature'])}"
+        f" · explained by neither: {len(record['refusals_explained_by_neither'])}"
+    )
     print(f"wrote {rel(args.record)}")
     return 0
 
