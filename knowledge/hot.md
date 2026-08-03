@@ -2,41 +2,106 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-02 22:01:32 (every SessionStart)
+**Auto-refreshed:** 2026-08-03 09:52:35 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-91952ca docs: what 4.5f found — the gate, the three rulings, and the 97 emptied rows
-25b14d2 feat: the 14 unreadable rows go to the operator with nothing proposed
-c4e545e feat: the emptied rows measured — 97 of them, and 31% of the drift v2 cannot explain
-dce2f26 feat: the three operator rulings are law — 11972, 11960 and 11902 read `taste`
-826d08e feat: the calibration gate is computed — 100/100, and the rebuild proves the pack
+e6fbaab chore: the sitting manifest names a commit that reproduces it
+8d8bb54 docs: what 4.5g found — the guideline said post all along, and 39% of the 97 came back
+8a04937 fix: the refusal message read as a sentence fragment
+72981b2 feat: the sitting pack — 300 blind precheck rows, 40 contrastive, 14 pinned in place
+8064008 feat: 1,912 rows prechecked with the post — four fields, nothing merged
 ```
 
 ## 📋 Recent decisions
 
-- `taxonomy-v2-relabel-and-appetite.md` — Taxonomy v2: the up-label appetite, three boundary calls, and how the re-label is staged
 - `INDEX.md` — Decision records
-- `test-v3.md` — Test set v3: 38 blind verdicts applied, and what they do not reopen
+- `45g-parent-context-and-uplabel.md` — The parent post enters the v2 prompts, the 97 emptied rows are re-asked, and the up-label goes
+- `taxonomy-v2-relabel-and-appetite.md` — Taxonomy v2: the up-label appetite, three boundary calls, and how the re-label is staged
 
 ## 📅 Recent daily logs
 
+- `2026-08-03.md`
 - `2026-08-02.md`
 - `2026-08-01.md`
-- `2026-07-31.md`
 
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-02 21:56 (`/save` after `PROMPT-4.5f` — **the ≥90% calibration gate is DECIDED and it is PASS: 100 of 100 gated rows came back `correct`. The taxonomy-v2 re-label is accepted, three operator rulings are applied, and everything that was waiting on this gate is unblocked — none of it is started**. Test v3 is frozen beside v2; Phase 4 stays closed at 2 of 5 against v2; edited by hand — the section above is auto-generated, do NOT touch the marker)
+**Last update:** 2026-08-02 22:45 (`/save` after `PROMPT-4.5g`, written 03.08 morning — **the parent post is in the v2 prompts as three revisions registered beside; the 97 emptied rows were re-asked and 39% came back; all 1,912 labelable rows are prechecked and NOTHING is merged. The operator's sitting — 300 + 40 + 14 — is built and waiting; the three strata decide the merge**. The 4.5f calibration gate stays PASS at 100/100; test v3 is frozen beside v2; Phase 4 stays closed at 2 of 5 against v2; edited by hand — the section above is auto-generated, do NOT touch the marker)
 
 ## 🔥 What's Hot
 
-**THE GATE IS DECIDED — 100/100 `correct` = 100% against 0.90, PASS (2026-08-02, 4.5f).** The
-taxonomy-v2 re-label is **accepted**. Record: `results/calib_45e_verdict.json` — the pre-registered
+**THE PROMPTS DISAGREED WITH THE GUIDELINE, AND HAD SINCE PHASE 2 (2026-08-02, 4.5g).**
+`docs/annotation/comments.md` §Unit tells the annotator to judge the comment *"plus the parent post
+only when the comment is meaningless without it"* and names the plumbing in the next paragraph;
+every prompt said *"Judge the text you are given, never the thread around it."* The model was
+scored against gold written under a law it was never given, and the 97 emptied rows are what that
+costs on exactly the class the clause was written for. **Adding the post is a bug fix against the
+annotation law, not a widening of it** — which is also why the sitting pack shows the operator the
+post. ADR [[45g-parent-context-and-uplabel]] (`accepted`).
+
+**Three with-post revisions, registered BESIDE and never over.** `T1v2_with_post` `495b43d1…` ·
+`relabel_intents_v2_with_post` `5965966d…` · `precheck_v2_with_post` `113000df…` (new, not a
+revision — no v1 prompt asks for `unclear`). The four old SHAs are byte for byte and `TASKS` is
+still `("T1","T2")`. The variants are **derived** — `_swap(base, JUDGE_TEXT_ALONE,
+PARENT_POST_RULE)` refuses a replace matching zero or two occurrences — so a revision cannot drift
+from its base. `build_messages(task, text, parent=)` refuses **both** directions: a with-post task
+without a post, and a v1 task handed one. `""` is a parent that exists with no text (rendered as an
+explicit marker); only `None` means none was given. A missing parent **stops** — checked, not
+trusted: 0 of 97 and 0 of 1,912.
+
+**The control `records.assert_prompt_sha` cannot give.** It builds its map from `TASKS`, so it
+passes whatever happens to `T1v2`. The only thing on disk pinning the two v2 prompts is
+`results/relabel_45e.json` — the record of the run that wrote every `_tax2` file — so a test reads
+that file and requires the checkout to reproduce it. `results/relabel_probe_45d.json` holds one map
+that does **not**: 4.5d paid for its probe twice and the re-label prompt moved between the runs.
+Pinned as a fact (exactly one map, exactly on `relabel_intents_v2`), never skipped.
+
+**The 97 re-asked with the post: 33 of 85 regained a label — 39%, and the split is the finding.**
+Parent has text **26/62 (42%)**; parent is media-only **7/23 (30%)**. 32 rows rewritten (intents
+only), 51 came back `[]` again, 2 held under the 4.5f rulings and asked but never written,
+**12 the model still refuses after three passes** (20 → 14 → 12, same ids, all `missing field:
+intents`, one probe returned a literal `{}`) — they keep `[]` and are named in
+`results/emptied_with_post_45g.json`. `git show dac7688 -- results/relabel_45e.json` = **282
+insertions, 1 deletion**: the drift block the gate judged is not recomputed, the correction is a
+`fixes` block beside it. **23 of the 97 reply to a post whose text is in an image** — including both
+ruled rows, under post 7146, a poll with 89 replies — so the remedy is bounded by what the store
+holds, and the store has no image captions.
+
+**THE NUMBER THE NEXT DECISION TURNS ON.** `emptied40.csv` is built and its rule was registered
+before the requests went out, but the draw's composition is already known: **11 identical to v1 ·
+23 empty again · 6 different and not empty**. Those 23 are the shape on which the operator ruled
+`old` twice in 4.5f. If most go `old`, `new/40` lands near 0.3–0.4 and the pre-registered fallback
+fires — **all 97 by hand**. The rule permits going straight there; the ~15 minutes are the
+operator's to spend or skip. Not decided by the executor — surfaced.
+
+**THE UP-LABEL PRECHECK RAN ON THE WHOLE POOL: 1,912 in → 1,912 labelled, 0 unusable.**
+`data/annotation/uplabel_precheck_45g.jsonl` (committed, gitignore exception — paid model output a
+gate reads), record `results/precheck_45g.json`. All four fields with the post:
+`unclear` **665 = 34.8%** against 37% in the labelled corpus, so the field was asked and not
+coerced; sentiment neutral 1,092 / negative 632 / positive 188; sarcasm 88; intents `service` 676 ·
+`availability` 164 · `price` 120 · `taste` 91 · `quality` 80 · `packaging` 18 · **none 826**. Every
+row passes `annotation.check_labels` before it reaches the file and every row carries
+`annotator: "llm-precheck"`. **NOTHING IS MERGED** — the three strata decide that. Estimate $0.6574,
+spent $0.5731; whole phase **$0.5978 of $1.25**, anchor `results/spend_45g.json`.
+
+**THE SITTING IS BUILT AND WAITING: 300 + 40 + 14 (~2.5 h).**
+`data/annotation/sitting_45g/` (gitignored), manifest `results/sitting_45g_manifest.json` with every
+sha and a clean `git` block. `precheck300.csv` — 100 from each of three disjoint classes
+(**service-rich 382 · short ≤30 chars 671 · general 859**), shuffled together *after* the three
+draws so neither a column nor the row order leaks the stratum; `stratum_of` lives in the manifest
+because the reader needs it and the operator must not have it. **A row is `correct` only if EVERY
+field is**, a blank counts `incorrect`, and a stratum below 0.90 sends back its **whole population**,
+not the 100 judged. Drawn from all 1,912 including `unclear` rows — unlike 4.5e, because here
+`unclear` is itself one of the four fields under judgement. `unreadable14.csv` is bundled **by
+reference**, pinned where it lives (0 filled); the build stops if its sha moved.
+
+**THE 4.5f CALIBRATION GATE — 100/100 `correct` = 100% against 0.90, PASS (2026-08-02); it stands,
+and 4.5g is what followed from it.** The taxonomy-v2 re-label is **accepted**. Record: `results/calib_45e_verdict.json` — the pre-registered
 rule verbatim, 150 per-row verdicts, both sets of shas. The number is not read off the returns: the
 reader **rebuilds** the sealed pack (seed 42, staged rows, sample sizes taken from the manifest and
 not from the builder's constants), serializes it in the builder's dialect and requires the result to
@@ -66,7 +131,8 @@ three rulings are reversed before counting (`changed` 1474 / `changed_without_se
 equal to the 4.5e record — the proof the reversal restored the model's own output). Record:
 `results/drop_45f.json`, $0.
 
-**The 14 unreadable rows are with the operator, with nothing proposed.**
+**The 14 unreadable rows are with the operator, with nothing proposed — and are now bundled into
+the 4.5g sitting by reference.**
 `data/annotation/calib_45e/unreadable14.csv` + `README-unreadable14.md`, `;`-delimited,
 **`intents_v2` blank** — 13 of the 14 carried `[]`, and pre-filling is the bias that left them
 unlabelled. The set is derived twice (source minus staged minus frozen, against the paid runs'
@@ -360,44 +426,47 @@ files**: `comments_train.jsonl` (1600) + `sarcasm_candidates.jsonl` (746) plus
 
 ## ⏭️ Next
 
-1. **The team lead briefs 4.5g — the up-label of the 1,912** under a full-field v2 precheck plus a
-   3-strata calibration, and the operator's ~2.0 h sitting **bundles with the 14 rows** of
-   `unreadable14.csv` (~6 min, `intents_v2` blank, nothing proposed). The gate that gated this is
-   decided; nothing of it is started here.
-2. **Four things the gate did not answer, and none of them are closed by its PASS.** The 1,190
-   `unclear` staged rows — **37% of the file** — were never sampled by the calibration, are excluded
-   from every metric, and are still headed for training. The 54 frozen ids get **two homes** the
-   moment the holdout moves to v2: their v1 copy stays in `sarcasm_holdout_pool.jsonl`, and 4.5f did
-   not scope them (`no frozen-file changes`), so nobody is named. **Whether `unreadable14.csv` is
-   committed blank** (today it follows the pack convention: gitignored, sha-pinned, rebuildable).
-   And **whether the 97-row emptied class counts as the "repeating class"** that would put 11902's
-   precedent — a dish wish reads `taste`, not `availability` — into the guideline; STATUS.md says
-   only if the class repeats, and the measurement now says it is 97 rows. Also still unnamed from
-   4.5a: **which unit the program calls "the ceiling"** — a macro-F1 bound and an accuracy share
-   cannot both be read against 0.98.
-3. **Test v4 has to lift a guard, not flip a flag.** `relabel_intents.py` refuses any row sitting in
+1. **THE OPERATOR'S SITTING, ~2.5 h, one go.** `data/annotation/sitting_45g/README-sitting.md` is
+   the instruction sheet. `precheck300.csv` (~2.0 h) is the gate; `emptied40.csv` (~15 min) may be
+   skipped straight to the fallback if the team lead reads the 11/23/6 composition that way;
+   `unreadable14.csv` (~6 min) sits where it always has. Then the strata decide the merge and the
+   team lead briefs 4.5h.
+2. **Four things 4.5g raised and did not close.** Whether to skip `emptied40.csv` for the fallback.
+   **The 12 residual rows** the model refuses after three passes — a second micro-pack, or leave
+   them at `[]`? **The strata cannot see the 826 rows the precheck gave no intent**, and 4.5f proved
+   the empty class is where failures pile up — if that class needs checking it has to be a stratum
+   in a later round. And **424 of the 1,912 reply to a post whose text is only in an image**, which
+   no with-post prompt can reach.
+3. **Still open from the 4.5f gate, untouched by 4.5g.** The 1,190 `unclear` staged rows — **37% of
+   the file** — were never sampled by any calibration, are excluded from every metric, and are still
+   headed for training. The 54 frozen ids get **two homes** the moment the holdout moves to v2
+   (their v1 copy stays in `sarcasm_holdout_pool.jsonl`); 4.5h is where they are named. **Whether
+   the 97-row emptied class counts as the "repeating class"** that would put 11902's precedent into
+   the guideline. And from 4.5a: **which unit the program calls "the ceiling"** — a macro-F1 bound
+   and an accuracy share cannot both be read against 0.98.
+4. **Test v4 has to lift a guard, not flip a flag.** `relabel_intents.py` refuses any row sitting in
    a frozen test file, unconditionally, and test v4 is exactly a re-label of the test set — a code
    change with a test, deliberately not the `--allow-test-rows` switch that does not exist today.
    Then a fresh G1c anchor under `T1v2` → retrain → new bars pre-registered BEFORE scoring. The three
    boundary rulings of guideline v2 are law but reach `comments_test.jsonl` only there.
-4. **The filled pack is now the only copy of 244 verdicts.** `build_audit_pack.py --force` would
+5. **The filled pack is now the only copy of 244 verdicts.** `build_audit_pack.py --force` would
    destroy them and there is still no snapshot in the flow — the question the team lead has not
    ruled on. `normalize_audit_returns.py` is safe to re-run (it no-ops on an already-normalized
    pack), and the raw returns in `data/annotation/audit_45a_returned/` are the backup, sha-pinned
    in `results/audit_45b_returns.json`.
-5. **Phase 5 is still PAUSED** — nothing Phase-5-shaped is scoped, planned or started; 4.5 comes
+6. **Phase 5 is still PAUSED** — nothing Phase-5-shaped is scoped, planned or started; 4.5 comes
    first (operator sequencing decision, amendment 3.7). Everything after 4.5a — targeted
    re-labelling at scale, synthetic v2, a dev-set hyperparameter search — is **DEFERRED until the
    4.5a gate review rules on the numbers**, and each gets its own pre-registered gate.
-6. **Still the operator's, carried out of Phase 4:** Phase 5's first measurement is already named —
+7. **Still the operator's, carried out of Phase 4:** Phase 5's first measurement is already named —
    **do not merge the adapter into bf16 without scoring the merged artefact in the configuration
    production serves**; and the 100 GB CA-MTL-3 volume is kept pending the Phase 5 briefing.
-7. **Six findings for Phase 5, none gate-relevant, all in [[phase4-gate-verdict]] §(f):** `planned`
+8. **Six findings for Phase 5, none gate-relevant, all in [[phase4-gate-verdict]] §(f):** `planned`
    over-counts steps by one per epoch (272 planned, 270 run); leftover micro-batch gradients carry
    across the epoch boundary; the post-loop `save()` records the loop variable rather than the stop
    position after an early `--max-steps`; `seconds_per_step` in a resumed provenance is understated;
    training is not bit-reproducible; and the eval's last-line crash that the stub caught.
-8. Still open from Phase 2 (not a blocker): dataset cards for the public augmentation datasets +
+9. Still open from Phase 2 (not a blocker): dataset cards for the public augmentation datasets +
    licence check.
 
 ## 🚧 Blockers
@@ -422,6 +491,17 @@ matrix is frozen. CPU beats MPS by 14×, which is the opposite of the intuition.
   use. **Never widen the five-member tuple** — it would change old label spaces in files nobody
   edited. And never add a prompt to `prompts.TASKS`: that tuple is the identity map
   `records.assert_prompt_sha` compares whole against every stored record.
+- **Seven registered prompts now, and only four of them may ever be edited in place — none.** 4.5g
+  added `T1v2_with_post`, `relabel_intents_v2_with_post` and `precheck_v2_with_post` **beside** the
+  four, which are pinned in `results/relabel_45e.json` / `relabel_probe_45d.json`. A with-post
+  variant is *derived* from its base at import through `_swap`, so editing the base silently moves
+  the revision too — that is the point, and it is also why the derivation is asserted both ways in
+  `tests/test_prompts.py`. Adding another prompt means adding it to `PROMPTS`, `DELIMITERS`,
+  `INTENTS_OF` **and** `COMMENT_FIELDS`; the registration test fails on any one of them missing.
+- **A script that appends to a history and reads it back must tell its own writes apart.**
+  `relabel_emptied.py` held rows by "a `fixes` block has moved this row" — right on the first run,
+  and on the second it read back its own block and called 32 model answers operator rulings. It is
+  narrowed by `applied_by` now. Anything else that grows a `fixes` list inherits the same trap.
 - **`results/spend_45d.json` and `results/spend_45e.json` are anchors, not logs.** Same footgun as
   `results/spend_3b.json` and `results/spend_phase4.json`: delete or regenerate one and its counter
   silently restarts at today's lifetime usage. Each is written *before* the first request on
@@ -432,13 +512,25 @@ matrix is frozen. CPU beats MPS by 14×, which is the opposite of the intuition.
 - **The `_tax2` files are accepted now, but they are still not drop-in replacements.** The ≥90% gate
   passed, so the labels are validated — the row *counts* are not: `sarcasm_holdout_pool_tax2.jsonl`
   has 915 of 971 rows (54 frozen ids + 2 with no answer) and `comments_train_tax2.jsonl` 1,594 of
-  1,600. A trainer pointed at them silently drops the 14 unreadable rows and the frozen ids.
+  1,600. A trainer pointed at them silently drops the 14 unreadable rows and the frozen ids. 4.5g
+  moved 32 of their `intents` cells and did **not** change any count.
 - **`read_calibration_returns.py` refuses to run, and that is correct.** It sha-pins the staged
   files against `results/calib_45e_manifest.json`, and the three 4.5f rulings moved them
   (`comments_train_tax2.jsonl` `d2132c1e…` → `e5a52a08…`). The gate was computed **before** the
   rulings and lives in `results/calib_45e_verdict.json`; the sealed manifest describes the corpus as
   it was sealed, and `fixes` in `results/relabel_45e.json` is the only place the chain to today's
   bytes is written down. Do not "fix" the refusal by re-pinning the manifest.
+- **`data/annotation/uplabel_precheck_45g.jsonl` is 1,912 rows of MODEL output, and it is
+  committed.** The gitignore exception is deliberate (paid output a gate decision reads), but the
+  file is *not* annotation: every row carries `annotator: "llm-precheck"` and nothing may merge it
+  into a train or candidates file until all three strata of `results/sitting_45g_manifest.json` come
+  back ≥0.90. A stratum that misses sends back its **whole population** — 382 / 671 / 859 rows, not
+  the 100 judged.
+- **`build_sitting_pack.py --force` destroys an evening's verdicts** — the same footgun
+  `build_audit_pack.py` and `build_micro_pack.py` carry, and the pack directory is gitignored, so
+  there is no HEAD to restore from. The build also stops if `unreadable14.csv` no longer hashes to
+  what `results/calib_45e_micro_manifest.json` pinned; that means the operator has started on it,
+  and the answer is to say so in the manifest, never to re-pin.
 - **Two gold versions exist now, so every number has to name one.** `data/frozen/*_v3.jsonl` sit
   beside the v2 files and **nothing reads them by default** — the gates, the bars,
   `eval_zero_shot.py` and `run_baseline.py` all still score against v2, which is what keeps Phase 4's
