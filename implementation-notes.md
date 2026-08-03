@@ -1220,3 +1220,73 @@ would have silently refused to correct it. The fix is to narrow the hold by *aut
 (`fix["applied_by"] != this script`), which still protects a ruling applied tomorrow without naming
 an id in the code. The general shape: a script that appends to a history and also reads that
 history back has to be able to tell its own writes from everyone else's.
+
+# Phase 4.5g2 — the quiz rulings, a voice for the silent post, and a reseal
+
+Executed 2026-08-03 against `docs/PROMPT-4.5g2.md`. $0.1791 of the $0.75 cap
+(`results/spend_45g2.json`, anchored before the first request). ADR:
+`knowledge/decisions/45g2-captions-and-quiz-rulings.md`.
+
+## Deviations
+
+1. **A poll is not a picture, and 16 of the 41 silent parents are polls.** The brief said fetch
+   the images and caption them. Of the 41 media-only parents only 21 have an image; 16 are polls
+   whose question and options live in `message.poll`, a field `raw_store.post_record` never read
+   (it stores `message.raw_text`, which Telegram leaves empty for a poll). Two of them —
+   `@VARUS_channel:7146` and `:7249` — are the parents of 8 of the 20 quiz rows and of the whole
+   confirmed taste family, so captioning alone would have left exactly the class this phase
+   exists for still blind. Their question is transcribed from the message the run had already
+   fetched: no new collection, `data/raw/posts` read-only, no vision model, and the record for a
+   poll carries no model and no prompt hash because none was involved. It reaches the prompt as
+   `[poll] …` rather than `[image description] …` — a transcript is not a description.
+   **This is the one place 4.5g2 does more than its brief says, and it is the reason the phase
+   works.**
+2. **`emptied_redo.csv` carries a `post` column the brief's list does not.** 71 of its 75 rows
+   sit under a post that HAS text, and `caption` only ever speaks for the ones that do not.
+   Shipping the columns as written would have handed those 71 back to be judged blind.
+3. **The redo file is 75 rows, not the ~40 the brief estimated.** "The 9 + whatever Step 2 did
+   not close" over the 97: Step 2 closes 22 (11 operator verdicts, 9 by the validated pattern, 2
+   earlier 4.5f rulings), and 97 − 22 = 75. That is also the 4.5g fallback — "below the bar all
+   97 go to the operator by hand" — minus what the quiz validated. The sitting grows by ~25 min.
+4. **117 parents were fetched and only 21 captioned.** The brief names the fetch population (the
+   97, the 424, the 14) and separately says the caption stands in *for a post with no text*, so a
+   caption for a post that has text has no consumer. The 426 images ship anyway: the operator can
+   open any row's picture from `media_map.csv`.
+5. **The caption prompt was tuned twice before the production run, on measured output.** Its
+   first draft asked to "transcribe every piece of text" in "at most two sentences" — for a
+   six-image promo leaflet those contradict, and the answer ran past 600 tokens mid-word without
+   ever reaching its summary. It now says *do not list every item on a price leaflet* and asks for
+   the whole answer in the image's own language. Bake-off records: `results/smoke/bo*.json`.
+6. **The captioner was chosen by reading output, not by reputation.** Three candidates on the
+   same real images: `mistralai/mistral-small-3.2-24b-instruct` returned 429 on all three,
+   `google/gemini-2.5-flash-lite` degenerated into a list of country names on one post and bled
+   marketing copy the prompt forbids on another, `qwen/qwen3.5-flash-02-23` transcribed headline,
+   dates, brands and prices and then summarised. It also has a pinnable `fp8` endpoint, which
+   gemini's `unknown` quantization does not.
+7. **`MAX_IMAGES = 6`.** 157 images across the 21 captioned posts, 112 sent; the record names
+   every post whose album was longer than the cap, because a silent cap reads as "the model saw
+   the whole post".
+8. **`build_sitting_pack.py` was rewritten in place rather than forked.** One home for the
+   strata, the draw and the blindness rule. Its 4.5g outputs are superseded by naming:
+   `emptied40.csv` is left on disk byte-identical so the sha `results/sitting_45g_manifest.json`
+   pinned still verifies, the old manifest is not edited and not deleted, and the README tells
+   the operator not to fill it.
+9. **Two extra retry passes over the redo rows.** 18 came back without an `intents` key, then 12,
+   then 9 — the same ids each time, so the residue is the model and not the transport. A probe
+   showed `@msuaaaa:12206` ("Ммм хуєта") answering `{}`. Named in the record, blank cell for the
+   operator, never coerced to `[]`.
+10. **`caption_posts.py --only` exists** so the bake-off could re-caption two named posts. The
+    bake-off's $0.0093 went through the same anchored ledger as everything else.
+11. **The 4.5g2 scripts declare their own `PHASE`, `CAP_USD` and `LEDGER`** instead of importing
+    them from `relabel_emptied`, which is what `precheck_uplabel.py` does for 4.5g. Importing
+    would have charged this phase's work against the $1.25 4.5g cap and the 4.5g anchor.
+
+## The bug worth writing down
+
+**A guard that fires after the thing it guards has been rewritten is not a guard.** The pack
+builder verified the bundled 4.5f micro-pack's sha inside the manifest literal — i.e. after
+`precheck300.csv`, `emptied_redo.csv` and `media_map.csv` had already been written to disk. It
+had been harmless while nothing else read that pack; 4.5g2's `media_map.csv` does read it, and
+the first symptom was a `KeyError` from the row-reading code rather than the refusal the sha
+check exists to raise. A test caught it, and the fix is one line of ordering: verify first, then
+build. The general shape — the check belongs before the first side effect, not before the last.
