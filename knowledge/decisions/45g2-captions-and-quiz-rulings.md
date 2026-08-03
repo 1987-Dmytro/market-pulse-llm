@@ -118,3 +118,25 @@ artifact has to carry as evidence, not a sentence in a report.
 - **Polls are a corpus-level defect, not a 4.5g2 one.** 16 of 41 here; how many across the whole
   store, and whether the collector should read `message.poll` on the next pass, is a Phase-5
   question this ADR does not answer.
+
+## Amendment (same day) — what the surrogate bought, split, and its variance floor
+
+The aggregate "153 of 424 rows moved a field" understates the effect and hides which surrogate
+did the work. Split by what actually stood in the `<post>` block:
+
+| what the post said | rows | moved a field | intents | unclear | sentiment | sarcasm |
+|---|---|---|---|---|---|---|
+| `[poll]` question | 322 | **140 (43%)** | 81 | 90 | 33 | 10 |
+| `[image description]` | 77 | **13 (17%)** | 6 | 5 | 4 | 1 |
+| nothing — video, audio, giveaway | 25 | **0 (0%)** | 0 | 0 | 0 | 0 |
+
+Two things follow. **The denominator for "what the surrogate bought" is 399, not 424** — 38%,
+not 36% — because 25 of the rows were handed the same `(this post has no text of its own)` as
+in 4.5g and had nothing new to read.
+
+And those 25 are a **free negative control**: their rendered prompt was byte-identical to the
+4.5g one, so anything moving there would have been run-to-run variance, which this repo knows
+is real (`relabel_intents.py`: greedy decoding is not deterministic across a provider's
+batches). **Nothing moved — 0 of 25.** So the 153 are the instrument and not the weather, and
+the effect is concentrated where the finding said it would be: the poll question moves 43% of
+its rows against the image description's 17%. 36 of the 300 gate rows carry a label this moved.
