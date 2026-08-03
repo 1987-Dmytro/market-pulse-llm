@@ -1290,3 +1290,66 @@ had been harmless while nothing else read that pack; 4.5g2's `media_map.csv` doe
 the first symptom was a `KeyError` from the row-reading code rather than the refusal the sha
 check exists to raise. A test caught it, and the fix is one line of ordering: verify first, then
 build. The general shape — the check belongs before the first side effect, not before the last.
+
+# Phase 4.5g3
+
+Deviations from `docs/PROMPT-4.5g3.md`, in the order the prompt names them.
+
+1. **Step 0 needed a third commit.** The prompt names two, and demands a clean tree afterwards;
+   the `/save` in Step 0.1 writes three vault files. They went in as `chore: vault checkpoint`
+   rather than being swept into either named commit.
+2. **`.gitignore` gained three negations, not `git add -f`.** The two returned CSVs and
+   `unreadable14.csv` were ignored by `data/annotation/*`. A file under an excluded directory
+   cannot be re-included, so each directory is re-admitted and then emptied again. The images and
+   `precheck300.csv` stay out.
+3. **`precheck300.csv` is still not in git** — the prompt's commit lists do not name it. Its 300
+   verdicts and notes are committed all the same, inside `results/sitting_45g_gates.json`: the
+   returned CSV is gitignored and an evening nobody will sit through twice should not exist in
+   one working tree only.
+4. **Task 2 applied nothing, because there was nothing it could apply.** Every one of the 42
+   adjudicated errors sits in a stratum that failed, and a failed stratum's rows are not fixed
+   one at a time. `incorrect_in_passed_strata` is in the gate record and is empty, so the
+   emptiness is an artifact rather than a claim. No script was written for it: one that applies
+   zero fixes is dead code.
+5. **Task 3's first bullet merged nothing, and its path is deliberately unbuilt.** With no
+   stratum passing there was nothing to exercise it against, and none of the 1,912 precheck ids
+   is in any source file — accepting a stratum is a decision about which file its rows join and
+   under what annotator. `uplabel_scope` stops the run if a stratum ever passes.
+6. **The merge writes three columns, not one.** `intents`, `notes` (per-row authorship, which
+   Amendment 2 requires) and `annotator`. `relabel.relabelled` proves one column; this is the
+   same inverse widened to three, the way `recheck_with_captions.rewritten` widened it to four.
+7. **T1v2.1 is registered in `src/market_pulse/prompts.py`, not `config/registry.yaml`.** The
+   prompt names the YAML; that file registers sources, taxonomy and the watchlist and has no
+   prompt section, and `PROMPTS` is where a SHA256 comes from — the only place "old SHAs
+   immutable" can mean anything.
+8. **A second revision was registered beside T1v2.1: `precheck_v2.1_with_post`.** The batch was
+   labelled on four fields including `unclear`, and the gate judges all four; `T1_PROMPT_V2` asks
+   for three. Re-running on it would have dropped the field the pack is scored on. Derived
+   through the same three swaps as its v2 sibling.
+9. **The wave-2 frame excludes the 300 rows the sitting judged.** The prompt says "sampled from
+   the re-run пласт" and does not mention them. The v2.1 rulings were distilled from those
+   verdicts, so a fresh gate drawn over them would be measured against its own source. Excluded
+   by id, listed in the manifest, and the frame size is in the README the operator reads.
+10. **One frame of 100, not three of 100.** That is what the prompt asks for, and the cost is
+    named in the manifest instead of being left implicit: a pass on one pool can still hold one
+    class below 0.90.
+11. **The v2.1 changelog carries four rulings the prompt did not list** — the operator's
+    pattern-quiz decisions on the redo file's four contested rows. Same sitting, same authority.
+    A guideline that omitted them would let a later annotator contradict the operator.
+12. **One line of the prompt's settled-cases block restates a v2 rule rather than adding one.**
+    Bare thanks and an unambiguous single emoji are readable reactions: the sitting applied
+    §Decision rules as written and the precheck had been over-marking those rows `unclear`. It is
+    marked as a restatement in the constant's docstring, because a prompt that carries law the
+    guideline does not is how the gap gets charged to the model.
+
+## The bug worth writing down
+
+**A history's `old` is not "the value that was there" — it is whatever the reader of that history
+reverses to.** The merge recorded, in its `fixes` block, the `intents` it found on disk. For 27 of
+75 rows that value was a *later* fix's answer rather than the re-labeller's, and
+`measure_empty_drop.reversals` keeps the last fix per id — so the reversal restored the 4.5g model
+answer, those rows stopped counting as emptied, and a population every later step derives came
+back as 70 instead of 97. Nothing about the write was wrong; the field meant something other than
+what it was filled with. The fix is two fields — `old` for what the reversal has to restore,
+`replaced` for what this run overwrote — and the general shape is: before writing into a shared
+history, read the function that consumes it and fill its fields with what *that* function means.
