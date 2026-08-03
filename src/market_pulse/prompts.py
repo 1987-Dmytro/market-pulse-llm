@@ -428,6 +428,44 @@ PRECHECK_PROMPT_V2_2_WITH_POST = _swap(
 difference from `precheck_v2.1_with_post` is the settled-cases block — which is what makes the
 probe attributable to the rewrite rather than to a rewording somewhere else in the prompt."""
 
+PRECHECK_PROMPT_V2CTX_WITH_POST = PRECHECK_PROMPT_V2_WITH_POST
+"""The v2 precheck prompt, unchanged — what moves is the request around it (4.5g6).
+
+Not a revision of the text: the same object as its base, so the two cannot drift and
+:func:`prompt_sha256` returns one hash for both. That collision is the point and it is declared
+in :data:`RENDER_ONLY`. Three prompt rewrites already failed to teach the model rules the
+evidence in the row cannot support (`results/v22_probe_results.json`, KILL), so this revision
+hands it the missing **evidence** instead: the two facts of `results/features_45g5.json`,
+rendered beside the post. The law stays in :data:`UNCLEAR_RULE`, word for word."""
+
+REPLY_CONTEXT = "[reply] Addressed to another commenter in the thread."
+"""Rendered when the reply discriminator fires — the row's reply target is not its thread head.
+
+A statement of fact, not a rule: it says what the row is, and `unclear`'s own wording already
+says what to do about a reply aimed at another commenter. `docs/PROMPT-4.5g6.md` §Task 3 wrote
+this sentence and the executor transcribed it; a test holds the two together."""
+
+SENDER_CONTEXT = {
+    "@VARUS_channel": (
+        "[sender] The channel's own identity of @VARUS_channel is speaking — the retailer itself."
+    ),
+    "@msuaaaa": (
+        "[sender] The channel's own identity of @msuaaaa is speaking — an aggregator that reposts"
+        " retail offers."
+    ),
+}
+"""One line per channel-identity pseudonym, keyed by the channel it writes in.
+
+Two entries, because `results/features_45g5.json` measured two hyperactive senders and the next
+busiest is 81 comments behind. They differ in the registry as well as in volume — one an
+`official_retail` source, the other an `aggregator` — which is why the fact is rendered per
+channel rather than as one sentence about "the channel"."""
+
+CONTEXT_TEMPLATES = (REPLY_CONTEXT, *SENDER_CONTEXT.values())
+"""The three lines the revision adds, in one tuple — what the transcription and negation guards
+run over, and what the probe record hashes. The prompt hash cannot see them: it covers
+:data:`PROMPTS`, and this revision's entry there is byte-identical to v2's."""
+
 PROMPTS = {
     "T1": T1_PROMPT,
     "T2": T2_PROMPT,
@@ -441,7 +479,25 @@ PROMPTS = {
     "precheck_v2.1_with_post": PRECHECK_PROMPT_V2_1_WITH_POST,
     "T1v2.2": T1_PROMPT_V2_2,
     "precheck_v2.2_with_post": PRECHECK_PROMPT_V2_2_WITH_POST,
+    "precheck_v2ctx_with_post": PRECHECK_PROMPT_V2CTX_WITH_POST,
 }
+RENDER_ONLY = {"precheck_v2ctx_with_post": "precheck_v2_with_post"}
+"""Registered tasks whose prompt text *is* another task's, mapped to the base they share.
+
+Every other pair of entries in :data:`PROMPTS` has to hash differently — two measurements under
+one hash are indistinguishable in a record. This one is deliberately the same text: the
+revision is in :func:`build_messages`, not in the prompt, and declaring the exception here means
+the guard that enforces distinctness reads the intent instead of hiding it. What tells the two
+runs apart in a record is the rendering: the context templates and the per-row flags."""
+
+WITH_CONTEXT = frozenset(RENDER_ONLY)
+"""The tasks :func:`build_messages` will render a context line for.
+
+Deliberately not the symmetric rule :data:`WITH_POST` uses. Context is **optional** here: 47 of
+the probe's 100 rows carry neither feature, and for them the rendered request has to be the v2
+request byte for byte. Required-and-refused would make that impossible; refused-for-everyone-
+else is what stops a context line from reaching a prompt whose recorded runs never had one."""
+
 CAPTION_TASK = "caption_post"
 FREE_TEXT = frozenset({CAPTION_TASK})
 """Prompts whose answer is prose, not labels. They are registered and hashed like the others and
@@ -456,6 +512,7 @@ WITH_POST = frozenset(
         "precheck_v2_with_post",
         "precheck_v2.1_with_post",
         "precheck_v2.2_with_post",
+        "precheck_v2ctx_with_post",
     }
 )
 """The tasks whose request carries the parent post. :func:`build_messages` requires one for
@@ -474,6 +531,7 @@ DELIMITERS = {
     "precheck_v2.1_with_post": "comment",
     "T1v2.2": "comment",
     "precheck_v2.2_with_post": "comment",
+    "precheck_v2ctx_with_post": "comment",
 }
 INTENTS_OF = {
     "T1": INTENTS,
@@ -486,6 +544,7 @@ INTENTS_OF = {
     "precheck_v2.1_with_post": INTENTS_V2,
     "T1v2.2": INTENTS_V2,
     "precheck_v2.2_with_post": INTENTS_V2,
+    "precheck_v2ctx_with_post": INTENTS_V2,
 }
 """The label space each prompt promises — v1 asks for five, the v2 prompts for six.
 
@@ -505,6 +564,7 @@ COMMENT_FIELDS = {
     "precheck_v2.1_with_post": ("sentiment", "sarcasm", "intents", "unclear"),
     "T1v2.2": ("sentiment", "sarcasm", "intents"),
     "precheck_v2.2_with_post": ("sentiment", "sarcasm", "intents", "unclear"),
+    "precheck_v2ctx_with_post": ("sentiment", "sarcasm", "intents", "unclear"),
 }
 """What each comment prompt asks for, and therefore what :func:`parse_reply` returns.
 
@@ -526,12 +586,29 @@ def prompt_sha256(task: str) -> str:
     return hashlib.sha256(PROMPTS[task].encode("utf-8")).hexdigest()
 
 
+def context_lines(reply: bool = False, sender: str | None = None) -> tuple[str, ...]:
+    """The FACT lines a row's features render as, in a fixed order: reply first, sender second.
+
+    Rendered here rather than by the caller so that one implementation writes the sentence the
+    transcription guard checks — a caller assembling its own string would be a second copy of the
+    template with nothing holding it to the first.
+    """
+    if sender is not None and sender not in SENDER_CONTEXT:
+        raise ValueError(
+            f"{sender}: no channel-identity line is registered for it. The two pseudonyms"
+            f" results/features_45g5.json measured write in {sorted(SENDER_CONTEXT)}."
+        )
+    return (*([REPLY_CONTEXT] if reply else ()), *([SENDER_CONTEXT[sender]] if sender else ()))
+
+
 def build_messages(
     task: str,
     text: str,
     parent: str | None = None,
     caption: str | None = None,
     caption_kind: str = "image",
+    reply: bool = False,
+    sender: str | None = None,
 ) -> list[dict]:
     """The whole request: instructions, the parent post if the task takes one, and the row.
 
@@ -551,10 +628,21 @@ def build_messages(
     "The post's text if there is any, else the surrogate" is one rule, and a caption
     silently ignored beside a text post would let two callers disagree about it without
     either of them failing.
+
+    ``reply`` and ``sender`` are the two features of `results/features_45g5.json`, and they are
+    **optional** for the tasks in :data:`WITH_CONTEXT` and refused for every other one. A row
+    carrying neither renders byte for byte what its base prompt renders — that identity is what
+    makes the 4.5g6 probe a comparison rather than two unrelated runs.
     """
     if task in FREE_TEXT:
         raise ValueError(f"{task}: this prompt answers in prose — use caption_messages")
     tag = DELIMITERS[task]
+    facts = context_lines(reply, sender)
+    if facts and task not in WITH_CONTEXT:
+        raise ValueError(
+            f"{task}: this prompt takes no context lines. Its recorded runs were asked without"
+            f" them, and adding one would measure {sorted(WITH_CONTEXT)[0]} under its name."
+        )
     if (task in WITH_POST) != (parent is not None):
         raise ValueError(
             f"{task}: this prompt {'requires' if task in WITH_POST else 'takes no'} parent post,"
@@ -568,12 +656,15 @@ def build_messages(
     if caption is not None and caption_kind not in POST_SURROGATE:
         raise ValueError(f"{caption_kind}: not one of {sorted(POST_SURROGATE)}")
     row = f"<{tag}>\n{text}\n</{tag}>"
+    # empty when no feature fires, so the whole block vanishes rather than leaving a blank line
+    block = "".join(f"{line}\n" for line in facts) + "\n" if facts else ""
     if parent is None:
-        return [{"role": "user", "content": f"{PROMPTS[task]}\n\n{row}"}]
+        return [{"role": "user", "content": f"{PROMPTS[task]}\n\n{block}{row}"}]
     post = parent.strip() or (
         POST_SURROGATE[caption_kind].format(text=caption.strip()) if caption else NO_POST_TEXT
     )
-    return [{"role": "user", "content": f"{PROMPTS[task]}\n\n<post>\n{post}\n</post>\n\n{row}"}]
+    content = f"{PROMPTS[task]}\n\n<post>\n{post}\n</post>\n\n{block}{row}"
+    return [{"role": "user", "content": content}]
 
 
 def caption_messages(images: list[str]) -> list[dict]:

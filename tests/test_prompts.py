@@ -19,6 +19,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 GUIDELINE = REPO_ROOT / "docs" / "annotation" / "comments.md"
 RELABEL_45E = REPO_ROOT / "results" / "relabel_45e.json"
 RELABEL_45D = REPO_ROOT / "results" / "relabel_probe_45d.json"
+BATCH = REPO_ROOT / "data" / "annotation" / "uplabel_precheck_45g2.jsonl"
 
 # The recorded hashes of the prompts as pre-registered for Phase 3b. Changing a
 # prompt is legal; changing it without noticing that every zero-shot number was
@@ -71,6 +72,7 @@ def test_taxonomy_v2_prompts_are_registered_beside_v1_and_not_inside_it():
         "precheck_v2.1_with_post",
         "T1v2.2",
         "precheck_v2.2_with_post",
+        "precheck_v2ctx_with_post",
     }
     # the label tables describe labelling tasks: the caption prompt answers in prose and is in
     # none of them, and `T2` labels a post rather than a comment
@@ -82,9 +84,15 @@ def test_taxonomy_v2_prompts_are_registered_beside_v1_and_not_inside_it():
     assert not prompts.FREE_TEXT & prompts.WITH_POST
     assert {task: prompts.prompt_sha256(task) for task in prompts.TASKS} == PROMPT_SHA256
     assert prompts.prompt_sha256("T1v2") != PROMPT_SHA256["T1"]
-    # twelve prompts, twelve hashes: a derived revision that collided with its base would
-    # make two measurements indistinguishable in a record
-    assert len({prompts.prompt_sha256(task) for task in prompts.PROMPTS}) == len(prompts.PROMPTS)
+    # a hash apiece, so that no two measurements are indistinguishable in a record — except
+    # where a revision changes the rendering and not the text, which has to be declared
+    assert set(prompts.RENDER_ONLY) < set(prompts.PROMPTS)
+    assert set(prompts.RENDER_ONLY.values()) < set(prompts.PROMPTS)
+    distinct = set(prompts.PROMPTS) - set(prompts.RENDER_ONLY)
+    assert len({prompts.prompt_sha256(task) for task in distinct}) == len(distinct)
+    for twin, base in prompts.RENDER_ONLY.items():
+        # the same object, not merely equal text: two literals can be edited apart
+        assert prompts.PROMPTS[twin] is prompts.PROMPTS[base]
 
 
 def recorded_prompt_maps(path):
@@ -615,3 +623,138 @@ def test_every_settled_case_is_a_ruling_the_guideline_carries():
     ):
         assert phrase in changelog, phrase
     assert prompts.SETTLED_CASES.count("\n- ") == 8, "eight lines for eight settled cases"
+
+
+CANONICAL_CONTEXT = (
+    "[reply] Addressed to another commenter in the thread.",
+    "[sender] The channel's own identity of @VARUS_channel is speaking — the retailer itself.",
+    "[sender] The channel's own identity of @msuaaaa is speaking "
+    "— an aggregator that reposts retail offers.",
+)
+"""The three lines as `docs/PROMPT-4.5g6.md` §Task 3 wrote them — a second copy, on purpose.
+
+Same discipline as `CANONICAL_V2_2`: the team lead wrote them, the executor transcribed them,
+and a transcription is the one change nobody reviews. Broken at different points from the
+constants they check, so the two literals differ in the file and agree in value."""
+
+
+def test_the_context_lines_are_the_text_the_briefing_handed_over():
+    """Whitespace-insensitive and content-exact — a lost space at a line join is invisible to
+    an eyeball and changes what the model reads."""
+    assert len(prompts.CONTEXT_TEMPLATES) == 3
+    for written, canonical in zip(prompts.CONTEXT_TEMPLATES, CANONICAL_CONTEXT, strict=True):
+        assert " ".join(written.split()) == " ".join(canonical.split())
+    assert set(prompts.SENDER_CONTEXT) == {"@VARUS_channel", "@msuaaaa"}
+    for channel, line in prompts.SENDER_CONTEXT.items():
+        assert channel in line, "the line names the channel it is rendered for"
+
+
+def test_the_context_lines_state_a_fact_and_never_a_rule():
+    """They are evidence, not law. Two things follow and both are checked: no negation (the
+    4.5g4 finding — a model reads one positively), and no output field named, because
+    `UNCLEAR_RULE` is where the law lives and this revision does not touch it."""
+    negation = re.compile(r"\b(not|never|no|none|neither|nor)\b|n't", re.IGNORECASE)
+    for line in prompts.CONTEXT_TEMPLATES:
+        assert not negation.findall(line), line
+        for field in ("unclear", "intents", "sarcasm", "sentiment"):
+            assert field not in line.casefold(), f"{field} is law, and law stays in the prompt"
+    # the negative control: the scan is only worth having if it fires on a block that has one
+    assert negation.findall(prompts.SETTLED_CASES)
+
+
+def test_v2ctx_is_the_v2_prompt_and_the_revision_is_the_rendering():
+    """The text does not move, so the prompt hash cannot see this revision. That collision is
+    declared rather than discovered — and what tells the two runs apart is the render."""
+    assert prompts.PROMPTS["precheck_v2ctx_with_post"] is prompts.PRECHECK_PROMPT_V2_WITH_POST
+    assert prompts.prompt_sha256("precheck_v2ctx_with_post") == prompts.prompt_sha256(
+        "precheck_v2_with_post"
+    )
+    assert prompts.RENDER_ONLY == {"precheck_v2ctx_with_post": "precheck_v2_with_post"}
+    assert prompts.UNCLEAR_RULE in prompts.PROMPTS["precheck_v2ctx_with_post"]
+    assert prompts.SETTLED_CASES not in prompts.PROMPTS["precheck_v2ctx_with_post"]
+    assert prompts.SETTLED_CASES_V2_2 not in prompts.PROMPTS["precheck_v2ctx_with_post"]
+    assert (
+        prompts.COMMENT_FIELDS["precheck_v2ctx_with_post"]
+        == prompts.COMMENT_FIELDS["precheck_v2_with_post"]
+    )
+    assert "precheck_v2ctx_with_post" in prompts.WITH_POST
+
+
+def render(task, **context):
+    return prompts.build_messages(task, "текст", parent="пост", **context)[0]["content"]
+
+
+def test_a_row_with_no_feature_renders_the_v2_request_byte_for_byte():
+    """The guard the whole comparison rests on. 47 of the probe's 100 rows carry neither
+    feature; if their request differed from v2's by so much as a newline, the probe would be
+    measuring two prompts at once and could not attribute a moved label to the context lines."""
+    assert render("precheck_v2ctx_with_post") == render("precheck_v2_with_post")
+    assert render("precheck_v2ctx_with_post", reply=False, sender=None) == render(
+        "precheck_v2_with_post"
+    )
+    # and on a real row of the batch, text and post as they actually travel
+    row = json.loads(BATCH.read_text(encoding="utf-8").splitlines()[0]) if BATCH.exists() else None
+    if row is not None:
+        pair = [
+            prompts.build_messages(task, row["text"], parent="Акція на молоко")[0]["content"]
+            for task in ("precheck_v2ctx_with_post", "precheck_v2_with_post")
+        ]
+        assert pair[0] == pair[1]
+
+
+def test_the_context_block_sits_between_the_post_and_the_comment():
+    """Beside the post's own tagged surrogates, and outside its fence: these are facts about the
+    comment, and a `[reply]` line inside `<post>` would read as something the post said."""
+    content = render("precheck_v2ctx_with_post", reply=True, sender="@VARUS_channel")
+    assert content.startswith(prompts.PRECHECK_PROMPT_V2_WITH_POST)
+    head, tail = content.split("</post>\n\n", 1)
+    assert (
+        prompts.REPLY_CONTEXT not in head and prompts.SENDER_CONTEXT["@VARUS_channel"] not in head
+    )
+    assert tail == (
+        f"{prompts.REPLY_CONTEXT}\n{prompts.SENDER_CONTEXT['@VARUS_channel']}\n\n"
+        "<comment>\nтекст\n</comment>"
+    )
+
+
+def test_one_feature_renders_one_line():
+    assert prompts.context_lines(reply=True) == (prompts.REPLY_CONTEXT,)
+    assert prompts.context_lines(sender="@msuaaaa") == (prompts.SENDER_CONTEXT["@msuaaaa"],)
+    assert prompts.context_lines() == ()
+    only_reply = render("precheck_v2ctx_with_post", reply=True)
+    assert only_reply.count("[reply]") == 1 and "[sender]" not in only_reply
+
+
+def test_a_sender_with_no_registered_line_is_refused():
+    """The negative control on the sender table: an unknown pseudonym has to stop the render
+    rather than quietly drop the fact the run pre-registered."""
+    with pytest.raises(ValueError, match="no channel-identity line"):
+        prompts.context_lines(sender="@somebody_else")
+
+
+@pytest.mark.parametrize(
+    "task", ["precheck_v2_with_post", "precheck_v2.2_with_post", "T1v2_with_post"]
+)
+def test_context_is_refused_by_every_prompt_that_is_not_the_revision(task):
+    """A context line reaching a registered instrument would measure v2ctx under its name, and
+    the prompt hash — identical across the two — could not tell anyone afterwards."""
+    with pytest.raises(ValueError, match="takes no context lines"):
+        render(task, reply=True)
+    with pytest.raises(ValueError, match="takes no context lines"):
+        render(task, sender="@VARUS_channel")
+
+
+def test_the_v2ctx_changelog_says_the_hash_collision_is_deliberate():
+    """The prompt hash is identical to v2's, so the record cannot flag the revision — the
+    guideline is the one place where that is written down as intent rather than as an accident.
+    Mirrors the v2.2 changelog guard, on the thing that actually moved here: the rendering."""
+    text = GUIDELINE.read_text(encoding="utf-8")
+    assert "## v2ctx changelog" in text
+    changelog = " ".join(text.split()).split("v2ctx changelog")[1]
+    assert "RENDER-ONLY" in changelog
+    assert f"{prompts.prompt_sha256('precheck_v2ctx_with_post')[:8]}" in changelog
+    for template in prompts.CONTEXT_TEMPLATES:
+        assert " ".join(template.split()) in changelog, template
+    # the section has to say what fires each block, or it documents three sentences and no rule
+    for when in ("reply_to_msg_id", "sender_anon_id", "byte for byte"):
+        assert when in changelog

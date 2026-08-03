@@ -95,6 +95,10 @@ class Asker:
                         parent=row["parent"],
                         caption=row["caption"],
                         caption_kind=row["caption_kind"] or "image",
+                        # absent for every task but v2ctx, where they are the whole revision;
+                        # one render path, so what a probe buys is what a test can check
+                        reply=row.get("reply", False),
+                        sender=row.get("sender"),
                     ),
                     tag=self.tag,
                     quantization=self.quantization,

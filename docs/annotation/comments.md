@@ -273,3 +273,47 @@ reaches no prompt line in either revision.
 
 `prompt_sha256`: `T1v2.2` `8542a1d5…`, `precheck_v2.2_with_post` `02e804b2…`, registered beside
 `T1v2.1` `e131dc06…` and `precheck_v2.1_with_post` `95d506c4…`, which are unmoved.
+
+## v2ctx changelog — the same prompt, with two facts rendered beside the post (2026-08-03)
+
+**RENDER-ONLY. No law moves here, and the prompt text does not move either.** The registered
+`precheck_v2ctx_with_post` **is** `precheck_v2_with_post` — the same object, the same
+`prompt_sha256` `113000df…`. Nothing in this
+section changes what an annotator does, and nothing in it changes a sentence the model reads as
+a rule. What changes is the **request**: where a row carries one of the two features
+`results/features_45g5.json` measured, the request now carries a line of fact about it.
+
+The reason is measured. Three prompt revisions tried to teach the model rulings it kept
+missing, and the pre-registered v2.2 probe returned KILL — 37 of 58 accepted rows preserved
+against a bar of 55, 9 of 29 rulings landed against a bar of 24 (`results/v22_probe_results.json`).
+The 4.5g5 family measurement says why: of the 42 refusals, 17 are explained by a feature that is
+**not in the text of the row** — who wrote it, and what it replies to. A blanket rule over the
+larger of the two families would flip 62 of the 258 rows the sitting accepted to fix 10
+(`knowledge/decisions/45g5-features-over-prompts.md`). So the facts go to the model as evidence
+and the law stays where it was.
+
+What renders, and when:
+
+| block | rendered when | text |
+|---|---|---|
+| `[reply]` | the row's `reply_to_msg_id` is not its thread's smallest reply target — it answers another comment, not the post | `[reply] Addressed to another commenter in the thread.` |
+| `[sender]` | the row's `sender_anon_id` is `2fa2b73f…`, the busiest pseudonym of @VARUS_channel | `[sender] The channel's own identity of @VARUS_channel is speaking — the retailer itself.` |
+| `[sender]` | the row's `sender_anon_id` is `58805a36…`, the busiest pseudonym of @msuaaaa | `[sender] The channel's own identity of @msuaaaa is speaking — an aggregator that reposts retail offers.` |
+
+Both blocks are optional and independent: a row can carry both, either or neither. They are
+rendered between `</post>` and `<comment>` — beside the post's own `[poll]` and
+`[image description]` surrogates in style, and outside its fence in position, because they are
+facts about the comment and a `[reply]` line inside `<post>` would read as something the post
+said. **A row that carries neither feature renders the v2 request byte for byte**, which is the
+property that makes the probe a comparison; it is asserted as a unit test and again, on a real
+featureless row of the sample, by `scripts/plan_v2ctx_probe.py`.
+
+Three things did **not** move. `prompts.UNCLEAR_RULE` is v2's, word for word — it already tells
+the model what to do about a reply aimed at another commenter, and this revision only tells it
+that the row *is* one. No line names an output field or a value; a template that did would be
+law arriving as evidence, and a test refuses it. And the v2.1/v2.2 settled-case blocks are
+absent: this is a revision of v2, not of the two revisions the gate refused.
+
+Because the prompt hash cannot see any of this, the rendering is what a record has to pin:
+`sha256` of the three templates above, `c435561a…`, plus the per-row flags, in
+`results/v2ctx_probe_plan.json` and `results/v2ctx_probe_results.json`.
