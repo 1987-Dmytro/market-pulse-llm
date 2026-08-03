@@ -1,8 +1,10 @@
 """The sitting the up-label precheck is accepted or rejected on.
 
-Three properties are worth a test and the rest is plumbing: the strata are what the rule
-says and not what the previous draw left over, the file does not tell the operator which
-stratum a row is in, and nothing that arrives with verdicts already in it is rebuilt.
+Four properties are worth a test and the rest is plumbing: the strata are what the rule says
+and not what the previous draw left over, the file does not tell the operator which stratum a
+row is in, a post with no text of its own reaches the operator tagged exactly as it reached the
+model, and nothing that arrives with verdicts already in it is rebuilt. The reseal adds a fifth:
+"the same 300 ids" is asserted against the manifest it supersedes rather than reasoned about.
 """
 
 import csv
@@ -36,58 +38,73 @@ def precheck_row(msg_id, text, parent=1, unclear=False):
     }
 
 
-def bench(tmp_path, rows, drawn=(), posts=((1, "Новинка: сирок"),)):
-    """A precheck batch, an emptied record, a micro-pack and its manifest, and a post store."""
-    batch = tmp_path / "batch.jsonl"
-    batch.write_text(
+def write_lines(path: Path, rows) -> Path:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
         "".join(json.dumps(row, ensure_ascii=False) + "\n" for row in rows), encoding="utf-8"
     )
-    emptied = tmp_path / "emptied.json"
-    emptied.write_text(
-        json.dumps(
-            {
-                "runs": [
-                    {
-                        "check": {
-                            "rule": "new / 40 >= 0.90, and an identical row counts as `new`",
-                            "drawn_composition": {"identical_to_v1": 1},
-                            "rows_drawn": list(drawn),
-                        }
-                    }
-                ]
-            }
-        ),
-        encoding="utf-8",
+    return path
+
+
+def bench(tmp_path, rows, posts=((1, "Новинка: сирок"),), captions=(), per_stratum=2):
+    """A precheck batch, its captions and media, an empty redo population, and a micro-pack."""
+    paths = {
+        "batch": write_lines(tmp_path / "batch.jsonl", rows),
+        "captions": write_lines(tmp_path / "captions.jsonl", captions),
+        "redo_rows": write_lines(tmp_path / "redo_rows.jsonl", []),
+        "source": write_lines(tmp_path / "source.jsonl", rows),
+        "staged": write_lines(tmp_path / "source_tax2.jsonl", rows),
+    }
+    (tmp_path / "media.json").write_text(json.dumps({"entries": {}}), encoding="utf-8")
+    (tmp_path / "quiz.json").write_text(
+        json.dumps({"runs": [{"applied": [], "unchanged": [], "held": []}]}), encoding="utf-8"
     )
+    (tmp_path / "drop.json").write_text(
+        json.dumps({"populations": {"all": {"emptied": 0, "emptied_from": {}}}}), encoding="utf-8"
+    )
+    (tmp_path / "relabel.json").write_text(json.dumps({"runs": [], "fixes": []}), encoding="utf-8")
+
     micro_pack = tmp_path / "packs" / "unreadable14.csv"
     micro_pack.parent.mkdir(parents=True, exist_ok=True)
-    micro_pack.write_text("id;text;intents_v1;intents_v2;notes\n@c:9;x;[];;\n", encoding="utf-8")
-    micro = tmp_path / "micro.json"
-    micro.write_text(
+    micro_pack.write_text("id;text;intents_v1;intents_v2;notes\n", encoding="utf-8")
+    (tmp_path / "micro.json").write_text(
         json.dumps(
             {
                 "pack": "packs/unreadable14.csv",
                 "readme": "packs/README.md",
-                "rows": 1,
+                "rows": 0,
                 "to_fill": "intents_v2",
                 "sha256": {"packs/unreadable14.csv": sha256(micro_pack.read_bytes()).hexdigest()},
             }
         ),
         encoding="utf-8",
     )
+    paths["micro_pack"] = micro_pack
+
     store = tmp_path / "posts"
-    store.mkdir()
-    (store / "c.jsonl").write_text(
-        "".join(
-            json.dumps({"channel": "@c", "msg_id": mid, "text": text}, ensure_ascii=False) + "\n"
-            for mid, text in posts
-        ),
+    store.mkdir(exist_ok=True)
+    write_lines(
+        store / "c.jsonl",
+        [{"channel": "@c", "msg_id": mid, "text": text} for mid, text in posts],
+    )
+    paths["posts"] = store
+
+    # the manifest this rebuild supersedes: the same draw, computed with the same functions.
+    # A bench built for the too-small-stratum case cannot draw at all, and that is the case
+    # under test rather than a broken fixture.
+    try:
+        _, where = sitting.draw(sitting.strata(rows), per_stratum)
+    except SystemExit:
+        where = {}
+    (tmp_path / "sealed.json").write_text(
+        json.dumps({"sha256": {"precheck300.csv": "0" * 64}, "precheck": {"stratum_of": where}}),
         encoding="utf-8",
     )
-    return batch, emptied, micro, micro_pack, store
+    return paths
 
 
-def build(tmp_path, batch, emptied, micro, store, per_stratum=2, extra=()):
+def build(tmp_path, paths, monkeypatch, per_stratum=2, extra=()):
+    monkeypatch.setattr(relabel, "SOURCES", {"comments_train": paths["source"]})
     assert (
         sitting.main(
             [
@@ -96,15 +113,27 @@ def build(tmp_path, batch, emptied, micro, store, per_stratum=2, extra=()):
                 "--manifest",
                 str(tmp_path / "manifest.json"),
                 "--batch",
-                str(batch),
-                "--emptied",
-                str(emptied),
+                str(paths["batch"]),
+                "--captions",
+                str(paths["captions"]),
+                "--media-manifest",
+                str(tmp_path / "media.json"),
+                "--redo-rows",
+                str(paths["redo_rows"]),
+                "--quiz-record",
+                str(tmp_path / "quiz.json"),
+                "--drop",
+                str(tmp_path / "drop.json"),
+                "--relabel-record",
+                str(tmp_path / "relabel.json"),
+                "--supersedes",
+                str(tmp_path / "sealed.json"),
                 "--micro-manifest",
-                str(micro),
+                str(tmp_path / "micro.json"),
                 "--root",
                 str(tmp_path),
                 "--posts",
-                str(store),
+                str(paths["posts"]),
                 "--per-stratum",
                 str(per_stratum),
                 *extra,
@@ -120,7 +149,19 @@ def rows_of(path):
         return list(csv.DictReader(handle, delimiter=sitting.DELIMITER))
 
 
-def test_a_short_row_that_is_also_service_rich_belongs_to_one_stratum(tmp_path):
+def spread(count, parent=1):
+    """`count` rows of each stratum, so a draw of any size up to `count` is possible."""
+    return (
+        [precheck_row(i, "доставка затримується", parent=parent) for i in range(count)]
+        + [precheck_row(100 + i, "коротко", parent=parent) for i in range(count)]
+        + [
+            precheck_row(200 + i, "довгий коментар про смак цього морозива, дуже", parent=parent)
+            for i in range(count)
+        ]
+    )
+
+
+def test_a_short_row_that_is_also_service_rich_belongs_to_one_stratum():
     """Disjoint by rule, in a fixed order — otherwise the same row could be judged twice and
     a stratum's denominator would depend on which draw ran first."""
     pools = sitting.strata(
@@ -135,17 +176,9 @@ def test_a_short_row_that_is_also_service_rich_belongs_to_one_stratum(tmp_path):
     assert [row["id"] for row in pools["general"]] == ["@c:3"]
 
 
-def test_the_pack_does_not_say_which_stratum_a_row_is_in(tmp_path):
-    rows = (
-        [precheck_row(i, "доставка затримується") for i in range(10)]
-        + [precheck_row(100 + i, "коротко") for i in range(10)]
-        + [
-            precheck_row(200 + i, "довгий коментар про смак цього морозива, дуже")
-            for i in range(10)
-        ]
-    )
-    batch, emptied, micro, _, store = bench(tmp_path, rows)
-    manifest = build(tmp_path, batch, emptied, micro, store, per_stratum=5)
+def test_the_pack_does_not_say_which_stratum_a_row_is_in(tmp_path, monkeypatch):
+    rows = spread(10)
+    manifest = build(tmp_path, bench(tmp_path, rows, per_stratum=5), monkeypatch, per_stratum=5)
 
     pack = rows_of(tmp_path / "pack" / "precheck300.csv")
     assert list(pack[0]) == list(sitting.PRECHECK_COLUMNS)
@@ -157,14 +190,11 @@ def test_the_pack_does_not_say_which_stratum_a_row_is_in(tmp_path):
     assert order != sorted(order, key=str), "row order would hand the operator the stratum"
 
 
-def test_the_denominators_and_the_second_round_rule_are_written_before_handover(tmp_path):
-    rows = (
-        [precheck_row(i, "доставка затримується") for i in range(4)]
-        + [precheck_row(100 + i, "коротко") for i in range(4)]
-        + [precheck_row(200 + i, "довгий коментар про смак цього морозива, дуже") for i in range(4)]
-    )
-    batch, emptied, micro, _, store = bench(tmp_path, rows)
-    manifest = build(tmp_path, batch, emptied, micro, store, per_stratum=2)
+def test_the_denominators_and_the_second_round_rule_are_written_before_handover(
+    tmp_path, monkeypatch
+):
+    rows = spread(4)
+    manifest = build(tmp_path, bench(tmp_path, rows), monkeypatch)
 
     block = manifest["precheck"]
     assert block["verdicts"] == ["correct", "incorrect"]
@@ -177,34 +207,41 @@ def test_the_denominators_and_the_second_round_rule_are_written_before_handover(
         "general": 4,
     }
     assert all(entry["drawn"] == 2 for entry in block["strata"].values())
-    assert manifest["emptied"]["verdicts"] == ["old", "new", "neither"]
-    assert "identical" in manifest["emptied"]["rule"]
+    assert manifest["verdicts_present"] == 0, "the evidence for `rebuilt before a verdict existed`"
 
 
-def test_the_post_travels_into_the_pack_and_a_media_only_one_says_so(tmp_path):
-    """The guideline lets the annotator read the parent post and the model was given it —
-    judging the labels without it would apply a stricter law than the one that wrote them."""
-    rows = [
-        precheck_row(1, "доставка затримується", parent=1),
-        precheck_row(2, "коротко", parent=2),
-        precheck_row(3, "довгий коментар про смак цього морозива, дуже", parent=1),
-    ]
-    batch, emptied, micro, _, store = bench(tmp_path, rows, posts=((1, "Новинка: сирок"), (2, "")))
-    build(tmp_path, batch, emptied, micro, store, per_stratum=1)
+@pytest.mark.parametrize(
+    "post,caption,shown",
+    [
+        ("Новинка: сирок", (), "Новинка: сирок"),
+        (
+            "",
+            ({"channel": "@c", "msg_id": 1, "caption": "Полиця", "kind": "image"},),
+            "[картинка] Полиця",
+        ),
+        (
+            "",
+            ({"channel": "@c", "msg_id": 1, "caption": "З чим?", "kind": "poll"},),
+            "[опрос] З чим?",
+        ),
+        ("", (), "(нет текста — ни картинки, ни опроса)"),
+    ],
+)
+def test_the_post_reaches_the_operator_tagged_as_it_reached_the_model(
+    tmp_path, monkeypatch, post, caption, shown
+):
+    """A vision model's description is not the post's own words, and a poll question is not a
+    description. Judging one as the other is the same error on either side of the table."""
+    rows = spread(2)
+    paths = bench(tmp_path, rows, posts=((1, post),), captions=caption)
+    build(tmp_path, paths, monkeypatch)
+    assert {row["post"] for row in rows_of(tmp_path / "pack" / "precheck300.csv")} == {shown}
 
-    posts = {row["id"]: row["post"] for row in rows_of(tmp_path / "pack" / "precheck300.csv")}
-    assert posts["@c:1"] == "Новинка: сирок"
-    assert posts["@c:2"] == "(нет текста)"
 
-
-def test_a_pack_with_verdicts_in_it_is_not_quietly_rebuilt(tmp_path):
-    rows = [
-        precheck_row(1, "доставка затримується"),
-        precheck_row(2, "коротко"),
-        precheck_row(3, "довгий коментар про смак цього морозива, дуже"),
-    ]
-    batch, emptied, micro, _, store = bench(tmp_path, rows)
-    build(tmp_path, batch, emptied, micro, store, per_stratum=1)
+def test_a_pack_with_verdicts_in_it_is_not_quietly_rebuilt(tmp_path, monkeypatch):
+    rows = spread(2)
+    paths = bench(tmp_path, rows)
+    build(tmp_path, paths, monkeypatch)
 
     path = tmp_path / "pack" / "precheck300.csv"
     lines = rows_of(path)
@@ -220,62 +257,62 @@ def test_a_pack_with_verdicts_in_it_is_not_quietly_rebuilt(tmp_path):
         writer.writerows(lines)
 
     with pytest.raises(SystemExit, match="already carries 1 verdicts"):
-        build(tmp_path, batch, emptied, micro, store, per_stratum=1)
+        build(tmp_path, paths, monkeypatch)
     assert sitting.filled(path) == 1, "the refusal left the operator's work alone"
-    build(tmp_path, batch, emptied, micro, store, per_stratum=1, extra=["--force"])
+    manifest = build(tmp_path, paths, monkeypatch, extra=["--force"])
     assert sitting.filled(path) == 0
+    assert manifest["verdicts_present"] == 1, "a forced rebuild says what it destroyed"
 
 
-def test_a_bundled_file_that_moved_since_its_own_manifest_stops_the_build(tmp_path):
+def test_a_draw_that_moved_stops_the_reseal(tmp_path, monkeypatch):
+    """ "Same 300 ids" is the claim the whole reseal rests on: refreshed labels were supposed to
+    leave the sample alone, so a draw that moved means something upstream of it changed."""
+    rows = spread(4)
+    paths = bench(tmp_path, rows)
+    sealed = json.loads((tmp_path / "sealed.json").read_text(encoding="utf-8"))
+    moved = dict(sealed["precheck"]["stratum_of"])
+    moved["@c:999"] = "general"
+    sealed["precheck"]["stratum_of"] = moved
+    (tmp_path / "sealed.json").write_text(json.dumps(sealed), encoding="utf-8")
+    monkeypatch.setattr(relabel, "SOURCES", {"comments_train": paths["source"]})
+    with pytest.raises(SystemExit, match="the draw moved"):
+        build(tmp_path, paths, monkeypatch)
+
+
+def test_a_bundled_file_that_moved_since_its_own_manifest_stops_the_build(tmp_path, monkeypatch):
     """The 4.5f micro-pack is pinned in place, so the operator may already have started on
     it — a sitting that bundles a file it cannot describe has no manifest."""
-    rows = [
-        precheck_row(1, "доставка затримується"),
-        precheck_row(2, "коротко"),
-        precheck_row(3, "довгий коментар про смак цього морозива, дуже"),
-    ]
-    batch, emptied, micro, micro_pack, store = bench(tmp_path, rows)
-    micro_pack.write_text(
+    rows = spread(2)
+    paths = bench(tmp_path, rows)
+    paths["micro_pack"].write_text(
         'id;text;intents_v1;intents_v2;notes\n@c:9;x;[];["taste"];\n', encoding="utf-8"
     )
     with pytest.raises(SystemExit, match="carries 1 labels"):
-        build(tmp_path, batch, emptied, micro, store, per_stratum=1)
+        build(tmp_path, paths, monkeypatch)
 
 
-def test_a_stratum_too_small_to_draw_from_stops_the_build(tmp_path):
+def test_a_stratum_too_small_to_draw_from_stops_the_build(tmp_path, monkeypatch):
     rows = [precheck_row(1, "доставка затримується"), precheck_row(2, "коротко")]
-    batch, emptied, micro, _, store = bench(tmp_path, rows)
+    paths = bench(tmp_path, rows, per_stratum=1)
     with pytest.raises(SystemExit, match="general: 0 rows, fewer than the 1"):
-        build(tmp_path, batch, emptied, micro, store, per_stratum=1)
+        build(tmp_path, paths, monkeypatch, per_stratum=1)
 
 
-def test_the_manifest_pins_every_file_it_ships(tmp_path):
-    rows = [
-        precheck_row(1, "доставка затримується"),
-        precheck_row(2, "коротко"),
-        precheck_row(3, "довгий коментар про смак цього морозива, дуже"),
-    ]
-    drawn = [
-        {
-            "id": "@c:1",
-            "text": "доставка затримується",
-            "intents_v1": ["price"],
-            "intents_with_post": [],
-        }
-    ]
-    batch, emptied, micro, micro_pack, store = bench(tmp_path, rows, drawn=drawn)
-    # the 40 contrastive rows come out of the labelled sources, not out of the precheck pool
-    source = tmp_path / "labelled.jsonl"
-    source.write_text(json.dumps(rows[0], ensure_ascii=False) + "\n", encoding="utf-8")
-    original = relabel.SOURCES
-    relabel.SOURCES = {"labelled": source}
-    try:
-        manifest = build(tmp_path, batch, emptied, micro, store, per_stratum=1)
-    finally:
-        relabel.SOURCES = original
+def test_the_manifest_pins_every_file_it_ships_and_names_the_one_it_supersedes(
+    tmp_path, monkeypatch
+):
+    rows = spread(2)
+    paths = bench(tmp_path, rows)
+    manifest = build(tmp_path, paths, monkeypatch)
 
     for name, digest in manifest["sha256"].items():
         assert sha256((tmp_path / "pack" / name).read_bytes()).hexdigest() == digest
-    assert manifest["unreadable"]["sha256"] == sha256(micro_pack.read_bytes()).hexdigest()
-    assert manifest["precheck"]["source_sha256"] == sha256(batch.read_bytes()).hexdigest()
-    assert relabel.rel(Path(manifest["pack"])) or True  # the pack path is recorded
+    assert set(manifest["sha256"]) == {
+        "precheck300.csv",
+        "emptied_redo.csv",
+        "media_map.csv",
+        "README-sitting.md",
+    }
+    assert manifest["precheck"]["source_sha256"] == sha256(paths["batch"].read_bytes()).hexdigest()
+    assert manifest["supersedes"]["manifest"].endswith("sealed.json")
+    assert "not edited and not deleted" in manifest["supersedes"]["what_moved"]
