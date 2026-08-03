@@ -45,6 +45,17 @@ data/annotation/*
 # Generated, not collected — but the same kind of artifact: a curated training
 # source, ablation-gated (knowledge/decisions/synthetic-sarcasm-augmentation.md).
 !data/annotation/synthetic_sarcasm.jsonl
+# What came back from the verdict sitting (4.5g3). Hand-made labels, not collected
+# data, and a working tree is the only place they exist. A directory that is itself
+# excluded cannot have a file re-included out of it, so each one is re-admitted and
+# then re-emptied. The images stay out — posts_media/ is data, and it is big.
+!data/annotation/sitting_45g/
+data/annotation/sitting_45g/*
+!data/annotation/sitting_45g/check20_blind.csv
+!data/annotation/sitting_45g/emptied_redo.csv
+!data/annotation/calib_45e/
+data/annotation/calib_45e/*
+!data/annotation/calib_45e/unreadable14.csv
 models/
 *.safetensors
 *.gguf
