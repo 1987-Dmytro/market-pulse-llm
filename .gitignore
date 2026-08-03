@@ -24,6 +24,10 @@ knowledge/.vault-state.json
 # frozen train/test splits, which are deliverables (docs/frozen-testsets.md).
 data/*
 !data/frozen/
+# The draft category lexicon (4.5h): hand-written keyword stems, not collected data,
+# and the only thing results/categories_45h.json can be re-derived from. It is marked
+# `draft-not-law` in its own body — the taxonomy is the operator's word later.
+!data/category_lexicon_draft.json
 # Same reason for the hand-labelled sarcasm pool: it is annotation output that
 # feeds training, not collected data (docs/frozen-testsets.md).
 !data/annotation/

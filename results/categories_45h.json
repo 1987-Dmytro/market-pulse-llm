@@ -1,0 +1,1715 @@
+{
+  "step": "4.5h Step 2 — category measurements",
+  "produced_by": "scripts/measure_categories.py",
+  "spend_usd": 0.0,
+  "lexicon": "data/category_lexicon_draft.json",
+  "lexicon_status": "draft-not-law",
+  "caveat": "every share is a lower bound: a draft lexicon, stem + closed inflectional endings, and no morphology beyond it",
+  "post_category_coverage": {
+    "posts": 6057,
+    "posts_with_text": 5242,
+    "posts_without_text": 815,
+    "posts_with_a_category_signal": 1875,
+    "share_of_all_posts": 0.30955918771669144,
+    "share_of_texted_posts": 0.3576879053796261,
+    "posts_naming_a_tracked_group": 734,
+    "share_of_texted_naming_tracked": 0.14002289202594428,
+    "per_family": {
+      "bakery": 172,
+      "confectionery": 207,
+      "dairy": 605,
+      "drinks": 587,
+      "eggs": 55,
+      "grocery": 169,
+      "ice-cream": 165,
+      "meat": 165,
+      "preserved": 8,
+      "produce": 203,
+      "ready-meals": 296,
+      "sauces": 108,
+      "seafood": 118,
+      "snacks": 143
+    },
+    "examples": [
+      {
+        "id": "@msuaaaa:340",
+        "categories": [
+          "dairy"
+        ],
+        "matched": {
+          "dairy": [
+            "десерти"
+          ]
+        },
+        "text": "🧋Осінні десерти у МакДональдс ❗️З 09.10.24 по 30.11.24 ❗️"
+      },
+      {
+        "id": "@atb_market_official:925",
+        "categories": [
+          "dairy",
+          "grocery",
+          "produce"
+        ],
+        "matched": {
+          "dairy": [
+            "маслом"
+          ],
+          "grocery": [
+            "рису"
+          ],
+          "produce": [
+            "овочами"
+          ]
+        },
+        "text": "Свіжа рибка зі знижкою 25% 🎣 Сьомга слабосолена — ідеальне доповнення до канапок з вершковим маслом на сніданок або до рису з овочами на обід 🍛 Тільки до 02.07.…"
+      },
+      {
+        "id": "@atb_market_official:928",
+        "categories": [
+          "snacks"
+        ],
+        "matched": {
+          "snacks": [
+            "снеки"
+          ]
+        },
+        "text": "Гарна компанія до перегляду улюблених матчів — снеки з АТБ 🤩 Ловіть знижку аж до 45% на обрані товари. Акція діє з 03.07.24 по 09.07.24 у мережі магазинів АТБ т…"
+      },
+      {
+        "id": "@atb_market_official:931",
+        "categories": [
+          "drinks"
+        ],
+        "matched": {
+          "drinks": [
+            "кави"
+          ]
+        },
+        "text": "50 гривень. Це могло б бути горнятко кави і булочка на сніданок. Але сьогодні це буде маленький вклад до благодійної ініціативи АТБ 🙌🏼 Адже важливий кожен внесо…"
+      },
+      {
+        "id": "@atb_market_official:957",
+        "categories": [
+          "drinks"
+        ],
+        "matched": {
+          "drinks": [
+            "каву"
+          ]
+        },
+        "text": "￼ Кавуйте не виходячи з дому 🥰 -39% на каву ТМ Jacobs ☕️ • розчинна сублімована; • мелена; • смажена в зернах; Тільки до 09.07.24, шукайте у магазинах АТБ і на …"
+      },
+      {
+        "id": "@atb_market_official:959",
+        "categories": [
+          "bakery",
+          "dairy",
+          "eggs",
+          "meat",
+          "produce"
+        ],
+        "matched": {
+          "bakery": [
+            "хліб"
+          ],
+          "dairy": [
+            "десерт",
+            "молоко"
+          ],
+          "eggs": [
+            "яйця"
+          ],
+          "meat": [
+            "м'ясо"
+          ],
+          "produce": [
+            "овочі"
+          ]
+        },
+        "text": "Хотіли б отримати всі необхідні продукти не виходячи з дому? Тоді саме час замовити доставку з улюбленого АТБ 😉🛍 Свіжі овочі, молоко, хліб, яйця, м'ясо і ще тор…"
+      },
+      {
+        "id": "@atb_market_official:960",
+        "categories": [
+          "ice-cream"
+        ],
+        "matched": {
+          "ice-cream": [
+            "морозиво",
+            "морозивом"
+          ]
+        },
+        "text": "Рятуємось від спеки морозивом зі знижками 🤩 -45% на ванільне, або ванільно-шоколадне морозиво ТМ Рудь 🍨 Тільки до 09.07.24, шукайте у магазинах АТБ і на сайті 🛒"
+      },
+      {
+        "id": "@atb_market_official:961",
+        "categories": [
+          "dairy",
+          "eggs",
+          "grocery",
+          "ready-meals"
+        ],
+        "matched": {
+          "dairy": [
+            "масло",
+            "сиром",
+            "сметаною"
+          ],
+          "eggs": [
+            "яйця"
+          ],
+          "grocery": [
+            "борошно",
+            "олії",
+            "сіль"
+          ],
+          "ready-meals": [
+            "готово"
+          ]
+        },
+        "text": "Кабачковий сезон в АТБ 🔥 Сьогодні готуємо прості та корисні оладки з кабачків 🥞 Для рецепту знадобиться: - кабачок 1 шт; - яйця 2 шт; - вершкове масло 30 г; - ц…"
+      },
+      {
+        "id": "@atb_market_official:992",
+        "categories": [
+          "dairy"
+        ],
+        "matched": {
+          "dairy": [
+            "йогурти"
+          ]
+        },
+        "text": "Корисні перекуси — йогурти ТМ Лактонія ☺️ Знижка 28% на питні йогурти: • висівки-злаки • персик • Імун+ полуниця • Імун+ малина-ехінацея • Імун+ чорниця Шукайте…"
+      },
+      {
+        "id": "@atb_market_official:993",
+        "categories": [
+          "dairy",
+          "drinks",
+          "eggs",
+          "grocery",
+          "produce",
+          "ready-meals"
+        ],
+        "matched": {
+          "dairy": [
+            "сир",
+            "сиром"
+          ],
+          "drinks": [
+            "сік"
+          ],
+          "eggs": [
+            "яйце",
+            "яйця"
+          ],
+          "grocery": [
+            "сіль"
+          ],
+          "produce": [
+            "овочі"
+          ],
+          "ready-meals": [
+            "готово"
+          ]
+        },
+        "text": "Літня овочева запіканка, що підкорить ваше серце 💘 Для рецепту знадобиться: - кабачок 1 шт - баклажан 1 шт - томати 2 шт - гречані пластівці - твердий сир - спе…"
+      }
+    ]
+  },
+  "cross_category_comments": [
+    {
+      "population": "all comments (raw v2 store)",
+      "rows": 11338,
+      "rows_where_both_sides_name_a_category": 353,
+      "cross_category_rows": 83,
+      "share_of_comparable_rows": 0.23512747875354106,
+      "share_of_all_rows": 0.007320515082025049,
+      "examples": [
+        {
+          "id": "@VARUS_channel:316",
+          "channel": "@VARUS_channel",
+          "post_category": [
+            "bakery"
+          ],
+          "comment_category": [
+            "drinks"
+          ],
+          "matched_in_comment": {
+            "drinks": [
+              "виски"
+            ]
+          },
+          "text": "Наверное там в промокод зашита скидка. Не может же быть промо на промо. Хотя у Варуса может быть Виски, скидка 52% и ещё акция два по цене одного)))"
+        },
+        {
+          "id": "@VARUS_channel:317",
+          "channel": "@VARUS_channel",
+          "post_category": [
+            "bakery"
+          ],
+          "comment_category": [
+            "drinks"
+          ],
+          "matched_in_comment": {
+            "drinks": [
+              "віскі"
+            ]
+          },
+          "text": "Віскі, це за одну пляшку 649грн, а не за дві"
+        },
+        {
+          "id": "@VARUS_channel:327",
+          "channel": "@VARUS_channel",
+          "post_category": [
+            "bakery"
+          ],
+          "comment_category": [
+            "bakery",
+            "dairy"
+          ],
+          "matched_in_comment": {
+            "bakery": [
+              "випічка",
+              "хліба"
+            ],
+            "dairy": [
+              "масла",
+              "сир"
+            ]
+          },
+          "text": "ChatGPT: Привіт! Як справи? Чим можу допомогти сьогодні? Ви сказали: Яка відмінність паски від куліча Програма ChatGPT сказала: Дуже цікаве запитання — дякую! В…"
+        },
+        {
+          "id": "@VARUS_channel:857",
+          "channel": "@VARUS_channel",
+          "post_category": [
+            "ice-cream"
+          ],
+          "comment_category": [
+            "dairy",
+            "ready-meals"
+          ],
+          "matched_in_comment": {
+            "dairy": [
+              "творог"
+            ],
+            "ready-meals": [
+              "салат"
+            ]
+          },
+          "text": "Я в дитинстві манку не любила, вівсяну кашу, творог, вінегрет і буряковий салат. Особливо творог не любила. Зараз вінегрет, буряковий салат мені, 30-річній, нав…"
+        },
+        {
+          "id": "@VARUS_channel:960",
+          "channel": "@VARUS_channel",
+          "post_category": [
+            "dairy",
+            "grocery",
+            "ready-meals",
+            "snacks"
+          ],
+          "comment_category": [
+            "bakery"
+          ],
+          "matched_in_comment": {
+            "bakery": [
+              "хліб"
+            ]
+          },
+          "text": "Оформила онлайн замовлення. Впевнена, як завжди невдале🤬 Бо ваших смаковершників тільки за смертю посилати🤪 Колись чекала на хліб 3 (ТРИ) дні. Навіщо стіки вкла…"
+        },
+        {
+          "id": "@VARUS_channel:979",
+          "channel": "@VARUS_channel",
+          "post_category": [
+            "sauces"
+          ],
+          "comment_category": [
+            "meat"
+          ],
+          "matched_in_comment": {
+            "meat": [
+              "м'яса"
+            ]
+          },
+          "text": "Товар може відрізнятися від зображення, але ж не на стільки!!! Фарш з м'яса з додаванням сала і фарш з жиру, курячих шкір з додаванням м'яса- відрізняється."
+        },
+        {
+          "id": "@VARUS_channel:1370",
+          "channel": "@VARUS_channel",
+          "post_category": [
+            "drinks"
+          ],
+          "comment_category": [
+            "grocery"
+          ],
+          "matched_in_comment": {
+            "grocery": [
+              "цукор"
+            ]
+          },
+          "text": "Мабуть малось на увазі що не містить буряковий цукор (сахарозу). Для всіх \"активно-спортивних\" перш за все корисно пам'ятати шкільний курс хімії - https://uk.wi…"
+        },
+        {
+          "id": "@VARUS_channel:1821",
+          "channel": "@VARUS_channel",
+          "post_category": [
+            "drinks",
+            "sauces"
+          ],
+          "comment_category": [
+            "meat",
+            "ready-meals"
+          ],
+          "matched_in_comment": {
+            "meat": [
+              "м'ясні"
+            ],
+            "ready-meals": [
+              "салати"
+            ]
+          },
+          "text": "Я там працювала,м'ясні страви продаються поки не зіпсуються,можуть і два тижня.Списання тільки салати,котрі стікають.Все інше продається.Ще багато готується с п…"
+        },
+        {
+          "id": "@VARUS_channel:2185",
+          "channel": "@VARUS_channel",
+          "post_category": [
+            "drinks"
+          ],
+          "comment_category": [
+            "meat"
+          ],
+          "matched_in_comment": {
+            "meat": [
+              "м'ясо"
+            ]
+          },
+          "text": "Очікувала на м'ясо гомілки а його не має.?????"
+        },
+        {
+          "id": "@VARUS_channel:2206",
+          "channel": "@VARUS_channel",
+          "post_category": [
+            "dairy",
+            "produce",
+            "seafood",
+            "snacks"
+          ],
+          "comment_category": [
+            "ready-meals"
+          ],
+          "matched_in_comment": {
+            "ready-meals": [
+              "борщем",
+              "варениками"
+            ]
+          },
+          "text": "З крабом З борщем З варениками Чого тільки немає"
+        }
+      ]
+    },
+    {
+      "population": "scoreable train rows",
+      "rows": 1446,
+      "rows_where_both_sides_name_a_category": 98,
+      "cross_category_rows": 24,
+      "share_of_comparable_rows": 0.24489795918367346,
+      "share_of_all_rows": 0.016597510373443983,
+      "examples": [
+        {
+          "id": "@VARUS_channel:960",
+          "channel": "@VARUS_channel",
+          "post_category": [
+            "dairy",
+            "grocery",
+            "ready-meals",
+            "snacks"
+          ],
+          "comment_category": [
+            "bakery"
+          ],
+          "matched_in_comment": {
+            "bakery": [
+              "хліб"
+            ]
+          },
+          "text": "Оформила онлайн замовлення. Впевнена, як завжди невдале🤬 Бо ваших смаковершників тільки за смертю посилати🤪 Колись чекала на хліб 3 (ТРИ) дні. Навіщо стіки вкла…"
+        },
+        {
+          "id": "@VARUS_channel:2185",
+          "channel": "@VARUS_channel",
+          "post_category": [
+            "drinks"
+          ],
+          "comment_category": [
+            "meat"
+          ],
+          "matched_in_comment": {
+            "meat": [
+              "м'ясо"
+            ]
+          },
+          "text": "Очікувала на м'ясо гомілки а його не має.?????"
+        },
+        {
+          "id": "@VARUS_channel:2258",
+          "channel": "@VARUS_channel",
+          "post_category": [
+            "confectionery",
+            "produce"
+          ],
+          "comment_category": [
+            "bakery",
+            "produce"
+          ],
+          "matched_in_comment": {
+            "bakery": [
+              "хліба"
+            ],
+            "produce": [
+              "картопля",
+              "морква"
+            ]
+          },
+          "text": "Особливо брудна картопля..морква..буряк..земля через неї сипеться усюди..іще штук 8 цінників навколо приліпити..для зручності сканування((( краще вже пакети з п…"
+        },
+        {
+          "id": "@VARUS_channel:3066",
+          "channel": "@VARUS_channel",
+          "post_category": [
+            "ice-cream"
+          ],
+          "comment_category": [
+            "seafood"
+          ],
+          "matched_in_comment": {
+            "seafood": [
+              "лосося"
+            ]
+          },
+          "text": "Интересная цена Лосося 299,90 ,наверное с потолка,так как в магазине без акции 209гр. Как то скидка 50 процентов не получается."
+        },
+        {
+          "id": "@VARUS_channel:3070",
+          "channel": "@VARUS_channel",
+          "post_category": [
+            "ice-cream"
+          ],
+          "comment_category": [
+            "seafood"
+          ],
+          "matched_in_comment": {
+            "seafood": [
+              "лосося"
+            ]
+          },
+          "text": "И не только лосося))) Много на какие товары по факту далеко не минус 50 😂"
+        },
+        {
+          "id": "@VARUS_channel:6735",
+          "channel": "@VARUS_channel",
+          "post_category": [
+            "drinks",
+            "meat",
+            "seafood"
+          ],
+          "comment_category": [
+            "dairy"
+          ],
+          "matched_in_comment": {
+            "dairy": [
+              "сири"
+            ]
+          },
+          "text": "Зранку навпаки - товар був, але акційні ціни не діяли, бо не працював інтернет. Зате протерміновані сири з часів «сирфесту» ніяк з полиць не приберуть"
+        },
+        {
+          "id": "@msuaaaa:6805",
+          "channel": "@msuaaaa",
+          "post_category": [
+            "snacks"
+          ],
+          "comment_category": [
+            "produce"
+          ],
+          "matched_in_comment": {
+            "produce": [
+              "картопля",
+              "яблука"
+            ]
+          },
+          "text": "Там же не картопля із каремеллю, а яблучка. А хіба яблука можуть бути солоними?"
+        },
+        {
+          "id": "@VARUS_channel:6889",
+          "channel": "@VARUS_channel",
+          "post_category": [
+            "confectionery",
+            "drinks"
+          ],
+          "comment_category": [
+            "seafood"
+          ],
+          "matched_in_comment": {
+            "seafood": [
+              "лососю"
+            ]
+          },
+          "text": "В Апельмоні за 149 грн., лососю 500 грам і м'який в пластиковій баночці"
+        },
+        {
+          "id": "@msuaaaa:9799",
+          "channel": "@msuaaaa",
+          "post_category": [
+            "produce"
+          ],
+          "comment_category": [
+            "meat"
+          ],
+          "matched_in_comment": {
+            "meat": [
+              "м'яса"
+            ]
+          },
+          "text": "скоро замість м'яса в бургер будуть класти пластие"
+        },
+        {
+          "id": "@VARUS_channel:10112",
+          "channel": "@VARUS_channel",
+          "post_category": [
+            "drinks",
+            "meat"
+          ],
+          "comment_category": [
+            "dairy"
+          ],
+          "matched_in_comment": {
+            "dairy": [
+              "сирі"
+            ]
+          },
+          "text": "А в мене інше питання: це ж сирі крильця? Не приготовані?)))) По фото не зрозуміло мені"
+        }
+      ]
+    }
+  ],
+  "post_position_mentions": {
+    "posts_with_text": 5242,
+    "naming_a_position": 536,
+    "share_of_texted_posts": 0.10225104921785579,
+    "of_which_the_unit_is_percent": 390,
+    "of_which_a_decimal_percent": 44,
+    "share_excluding_percent_units": 0.027851964898893553,
+    "by_source_type": {
+      "aggregator": {
+        "posts_with_text": 1901,
+        "naming_a_position": 34,
+        "share": 0.01788532351394003
+      },
+      "official_retail": {
+        "posts_with_text": 3341,
+        "naming_a_position": 502,
+        "share": 0.15025441484585453
+      }
+    },
+    "examples": [
+      {
+        "id": "@atb_market_official:957",
+        "source_type": "official_retail",
+        "matched_span": "￼ Кавуйте не виходячи з дому 🥰 -39% на каву ТМ Jacobs ☕️",
+        "unit": "39%",
+        "categories": [
+          "drinks"
+        ],
+        "brands": []
+      },
+      {
+        "id": "@atb_market_official:960",
+        "source_type": "official_retail",
+        "matched_span": "-45% на ванільне, або ванільно-шоколадне морозиво ТМ Рудь 🍨",
+        "unit": "45%",
+        "categories": [
+          "ice-cream"
+        ],
+        "brands": [
+          "rud"
+        ]
+      },
+      {
+        "id": "@atb_market_official:961",
+        "source_type": "official_retail",
+        "matched_span": "- яйця 2 шт;",
+        "unit": "2 шт",
+        "categories": [
+          "eggs"
+        ],
+        "brands": []
+      },
+      {
+        "id": "@atb_market_official:992",
+        "source_type": "official_retail",
+        "matched_span": "Знижка 28% на питні йогурти:",
+        "unit": "28%",
+        "categories": [
+          "dairy"
+        ],
+        "brands": []
+      },
+      {
+        "id": "@atb_market_official:998",
+        "source_type": "official_retail",
+        "matched_span": "-37% на майонез ТМ Королівський смак:",
+        "unit": "37%",
+        "categories": [
+          "sauces"
+        ],
+        "brands": []
+      },
+      {
+        "id": "@atb_market_official:1019",
+        "source_type": "official_retail",
+        "matched_span": "До -50% на морозиво, улюблені продукти, засоби гігієни, побутову хімію і дрібнички для дому ⛱️",
+        "unit": "50%",
+        "categories": [
+          "ice-cream"
+        ],
+        "brands": []
+      },
+      {
+        "id": "@atb_market_official:1029",
+        "source_type": "official_retail",
+        "matched_span": "- борошно 150 г",
+        "unit": "150 г",
+        "categories": [
+          "grocery"
+        ],
+        "brands": []
+      },
+      {
+        "id": "@atb_market_official:1056",
+        "source_type": "official_retail",
+        "matched_span": "Знижка 40% на ковбаси 🥩",
+        "unit": "40%",
+        "categories": [
+          "meat"
+        ],
+        "brands": []
+      },
+      {
+        "id": "@atb_market_official:1059",
+        "source_type": "official_retail",
+        "matched_span": "-31% на глазуровані сирки зі смаком дитинства ТМ Злагода.",
+        "unit": "31%",
+        "categories": [
+          "dairy"
+        ],
+        "brands": [
+          "zlahoda"
+        ]
+      },
+      {
+        "id": "@atb_market_official:1062",
+        "source_type": "official_retail",
+        "matched_span": "До -50% на морозиво в АТБ:",
+        "unit": "50%",
+        "categories": [
+          "ice-cream"
+        ],
+        "brands": []
+      }
+    ]
+  },
+  "comment_comparisons": [
+    {
+      "population": "all comments (raw v2 store)",
+      "rows_with_text": 7224,
+      "brand_matching": "`exact` is market_pulse.brands — the display name as written, the way G1e is scored. `inflected` allows the case endings and is a strictly wider, looser count; the operator's canonical example needs it, because «Гармонію» is not «Гармонія». Neither is law; both are reported.",
+      "context": {
+        "rows_naming_at_least_one_watchlist_brand": 222,
+        "rows_with_any_comparison_marker_anywhere": 241,
+        "note": "the denominators the gated measures sit inside: (b) needs the marker and the brand in ONE sentence, so it can only ever be a subset of both"
+      },
+      "a_two_or_more_watchlist_brands": {
+        "rows": 10,
+        "share": 0.0013842746400885937,
+        "rows_excluding_the_retailer_entries": 6,
+        "retailer_entries_excluded": [
+          "varto",
+          "varus-pl"
+        ],
+        "examples": [
+          {
+            "id": "@VARUS_channel:10794",
+            "brands": [
+              "varto",
+              "varus-pl"
+            ],
+            "text": "Замовляв онлайн у VARUS: з 14 позицій 9 були відсутні, і така ситуація не рідкість у вас. Проблема в тому, що на сайті немає актуальної наявності — ти оформлюєш…"
+          },
+          {
+            "id": "@VARUS_channel:13209",
+            "brands": [
+              "ferma",
+              "molokija"
+            ],
+            "text": "Знаєте що мені в Варусе не подобається. Це, що не контролюють якість товару. Наприклад, масло Харківське, на упаковці написано ДСТУ, а це спред. Сметана Харківс…"
+          },
+          {
+            "id": "@VARUS_channel:14969",
+            "brands": [
+              "halychyna",
+              "zlahoda"
+            ],
+            "text": "Спробуйте злагода 82% і Галичина 82%."
+          },
+          {
+            "id": "@VARUS_channel:14971",
+            "brands": [
+              "halychyna",
+              "yagotynske",
+              "zlahoda"
+            ],
+            "text": "Злагода та Галичина це хороше масло. Яготинське та Білоцерківське теж хороше масло.А Богодухівсьве це незнамо що.. Щоб зрозуміти що це фальсифікат і експертизи …"
+          },
+          {
+            "id": "@VARUS_channel:17300",
+            "brands": [
+              "lasunka",
+              "limo",
+              "rud",
+              "varus-pl"
+            ],
+            "text": "Вітаємо!В асортименті VARUS є морозиво без додавання цукру (на замінниках). ​Ви можете знайти такі марки та позиції: ​Рудь (Ванільне без цукру, ескімо) ​Ласунка…"
+          },
+          {
+            "id": "@VARUS_channel:18161",
+            "brands": [
+              "varto",
+              "varus-pl"
+            ],
+            "text": "Можливо, за обраною адресою товар наразі відсутній у наявності, тому ціна може не відображатися 🙏 Спробуйте обрати інший магазин у вашому місті та перевірити ще…"
+          },
+          {
+            "id": "@VARUS_channel:19475",
+            "brands": [
+              "ferma",
+              "halychyna",
+              "varto",
+              "zlahoda"
+            ],
+            "text": "Спробуйте масло варто 82%, ферма 82% ,злагода 82%, Галичина 82%. Ну 73% , то є домішки звісно. Але ж таке масло не тільки у Варусі продається."
+          },
+          {
+            "id": "@VARUS_channel:21601",
+            "brands": [
+              "limo",
+              "rud",
+              "varus-pl"
+            ],
+            "text": "Вітаємо Валентина!Так у VARUS є морозиво без цукру,а саме Рудь ванільне (ескімо 60 г або в стаканчику 110 г)Рудь шоколадне (ескімо 60 г)Лімо Velvet полуничне (з…"
+          },
+          {
+            "id": "@VARUS_channel:2269",
+            "brands": [
+              "varto",
+              "varus-pl"
+            ],
+            "text": "Дякуємо за відгук👍 Вже маємо власну лінійку сирів VARTO та Вигода. Детальніше з асортиментом ви можете ознайомитись на нашому сайті https://varus.ua/zaporizhzhi…"
+          },
+          {
+            "id": "@VARUS_channel:3002",
+            "brands": [
+              "varto",
+              "varus-pl"
+            ],
+            "text": "https://varus.ua/napiy-varto-zeleniy-chay-zi-smakom-sausepa-ta-polunici-bezalkogolniy-silnogazovaniy-1-l"
+          }
+        ]
+      },
+      "b_comparison_marker_beside_a_brand": {
+        "rows": 3,
+        "share": 0.0004152823920265781,
+        "rows_carried_only_by_the_comparative_za": 0,
+        "share_without_za": 0.0004152823920265781,
+        "examples": [
+          {
+            "id": "@VARUS_channel:2788",
+            "marker": "краще",
+            "text": "Наш Гусь Призолов не надто щедрий — яєць залишив небагато, мабуть, інвестував у біткоїн🙂 Щоб не шукати даремно, краще зазирніть на VARUS.UA і перевірте наявніст…"
+          },
+          {
+            "id": "@VARUS_channel:710",
+            "marker": "найкращ",
+            "text": "Уже торгуємо на усю! Команда Varus найкраща Привіт з Кривого Рогу 🥰♥️"
+          },
+          {
+            "id": "@VARUS_channel:8430",
+            "marker": "найкращ",
+            "text": "VARUS Ви Найкращі !!!"
+          }
+        ]
+      },
+      "c_position_or_category_token": {
+        "rows": 692,
+        "share": 0.09579180509413067,
+        "rows_with_a_unit_token_beside_a_hit": 39,
+        "rows_with_a_category_word_only": 653,
+        "examples": [
+          {
+            "id": "@VARUS_channel:10017",
+            "span": null,
+            "categories": [
+              "bakery"
+            ],
+            "text": "Лишу відгук. Одеса вулиця Василя Спрейса 2. Брала багет поряд ваша співробітниця, не бачила дрібних цифр та слів ,бо забула вдома окуляри. Бачила тільки ціну де…"
+          },
+          {
+            "id": "@VARUS_channel:10083",
+            "span": null,
+            "categories": [
+              "drinks"
+            ],
+            "text": "Кава є, знижки нема. Дніпро."
+          },
+          {
+            "id": "@VARUS_channel:10112",
+            "span": null,
+            "categories": [
+              "dairy"
+            ],
+            "text": "А в мене інше питання: це ж сирі крильця? Не приготовані?)))) По фото не зрозуміло мені"
+          },
+          {
+            "id": "@VARUS_channel:10113",
+            "span": null,
+            "categories": [
+              "dairy"
+            ],
+            "text": "Сирі"
+          },
+          {
+            "id": "@VARUS_channel:10129",
+            "span": null,
+            "categories": [
+              "grocery"
+            ],
+            "text": "Ну и где ваши макароны на акции, каждый день захожу на Даманском их нету,даже ценника нету"
+          },
+          {
+            "id": "@VARUS_channel:10147",
+            "span": "Коли ти живеш сам і йдеш по хліб і молоко, то звісно легко, але коли ти роками по 30+кг продуктів тягаєш за 2 км пішки при будь-якій погоді по кілька разів на тиждень з хворим хребтом, то можна й доставку іноді замовити. Лише двічі замовляла і більше не стану, бо 6 днів, то занадто. А ти як розумний такий, то принеси мені 4 пакети по 15 кг, буду вдячна.",
+            "categories": [
+              "bakery",
+              "dairy"
+            ],
+            "text": "Коли ти живеш сам і йдеш по хліб і молоко, то звісно легко, але коли ти роками по 30+кг продуктів тягаєш за 2 км пішки при будь-якій погоді по кілька разів на т…"
+          },
+          {
+            "id": "@VARUS_channel:10330",
+            "span": null,
+            "categories": [
+              "dairy"
+            ],
+            "text": "Шо це за сир кулінарний ? Допоможіть зрозуміти що воно таке ?"
+          },
+          {
+            "id": "@VARUS_channel:10336",
+            "span": null,
+            "categories": [
+              "dairy"
+            ],
+            "text": "Якщо вірити Гуглу, то можна використовувати як крем сир для всього. І для солодких страв, і для солених. Треба спробувати)"
+          },
+          {
+            "id": "@VARUS_channel:10338",
+            "span": null,
+            "categories": [
+              "dairy"
+            ],
+            "text": "Він як крем сир,піде на запіканку, сирники,дуже ніжний"
+          },
+          {
+            "id": "@VARUS_channel:10340",
+            "span": null,
+            "categories": [
+              "confectionery",
+              "dairy"
+            ],
+            "text": "Честно говоря покупал думал что оно как крем-сыр но на самом-то деле оно как творог измельчённый сделали торт в итоге"
+          }
+        ]
+      },
+      "intersections": {
+        "a_and_b": 0,
+        "a_and_b_share": 0.0,
+        "a_and_b_and_c": 0,
+        "a_and_b_and_c_share": 0.0,
+        "a_and_b_ids": [],
+        "a_and_b_and_c_ids": [],
+        "product_pairs_and_b": 0,
+        "product_pairs_and_b_and_c": 0
+      },
+      "inflected": {
+        "context": {
+          "rows_naming_at_least_one_watchlist_brand": 227,
+          "rows_with_any_comparison_marker_anywhere": 241,
+          "note": "the denominators the gated measures sit inside: (b) needs the marker and the brand in ONE sentence, so it can only ever be a subset of both"
+        },
+        "a_two_or_more_watchlist_brands": {
+          "rows": 11,
+          "share": 0.001522702104097453,
+          "rows_excluding_the_retailer_entries": 6,
+          "retailer_entries_excluded": [
+            "varto",
+            "varus-pl"
+          ],
+          "examples": [
+            {
+              "id": "@VARUS_channel:10794",
+              "brands": [
+                "varto",
+                "varus-pl"
+              ],
+              "text": "Замовляв онлайн у VARUS: з 14 позицій 9 були відсутні, і така ситуація не рідкість у вас. Проблема в тому, що на сайті немає актуальної наявності — ти оформлюєш…"
+            },
+            {
+              "id": "@VARUS_channel:12157",
+              "brands": [
+                "varto",
+                "varus-pl"
+              ],
+              "text": "Трошки далі, зате з бонусом для гаманця 😄 Деякі пропозиції таки того варті 🧡 Чекаємо вас у VARUS."
+            },
+            {
+              "id": "@VARUS_channel:13209",
+              "brands": [
+                "ferma",
+                "molokija"
+              ],
+              "text": "Знаєте що мені в Варусе не подобається. Це, що не контролюють якість товару. Наприклад, масло Харківське, на упаковці написано ДСТУ, а це спред. Сметана Харківс…"
+            },
+            {
+              "id": "@VARUS_channel:14969",
+              "brands": [
+                "halychyna",
+                "zlahoda"
+              ],
+              "text": "Спробуйте злагода 82% і Галичина 82%."
+            },
+            {
+              "id": "@VARUS_channel:14971",
+              "brands": [
+                "halychyna",
+                "yagotynske",
+                "zlahoda"
+              ],
+              "text": "Злагода та Галичина це хороше масло. Яготинське та Білоцерківське теж хороше масло.А Богодухівсьве це незнамо що.. Щоб зрозуміти що це фальсифікат і експертизи …"
+            },
+            {
+              "id": "@VARUS_channel:17300",
+              "brands": [
+                "lasunka",
+                "limo",
+                "rud",
+                "varus-pl"
+              ],
+              "text": "Вітаємо!В асортименті VARUS є морозиво без додавання цукру (на замінниках). ​Ви можете знайти такі марки та позиції: ​Рудь (Ванільне без цукру, ескімо) ​Ласунка…"
+            },
+            {
+              "id": "@VARUS_channel:18161",
+              "brands": [
+                "varto",
+                "varus-pl"
+              ],
+              "text": "Можливо, за обраною адресою товар наразі відсутній у наявності, тому ціна може не відображатися 🙏 Спробуйте обрати інший магазин у вашому місті та перевірити ще…"
+            },
+            {
+              "id": "@VARUS_channel:19475",
+              "brands": [
+                "ferma",
+                "halychyna",
+                "varto",
+                "zlahoda"
+              ],
+              "text": "Спробуйте масло варто 82%, ферма 82% ,злагода 82%, Галичина 82%. Ну 73% , то є домішки звісно. Але ж таке масло не тільки у Варусі продається."
+            },
+            {
+              "id": "@VARUS_channel:21601",
+              "brands": [
+                "limo",
+                "rud",
+                "varus-pl"
+              ],
+              "text": "Вітаємо Валентина!Так у VARUS є морозиво без цукру,а саме Рудь ванільне (ескімо 60 г або в стаканчику 110 г)Рудь шоколадне (ескімо 60 г)Лімо Velvet полуничне (з…"
+            },
+            {
+              "id": "@VARUS_channel:2269",
+              "brands": [
+                "varto",
+                "varus-pl"
+              ],
+              "text": "Дякуємо за відгук👍 Вже маємо власну лінійку сирів VARTO та Вигода. Детальніше з асортиментом ви можете ознайомитись на нашому сайті https://varus.ua/zaporizhzhi…"
+            }
+          ]
+        },
+        "b_comparison_marker_beside_a_brand": {
+          "rows": 3,
+          "share": 0.0004152823920265781,
+          "rows_carried_only_by_the_comparative_za": 0,
+          "share_without_za": 0.0004152823920265781,
+          "examples": [
+            {
+              "id": "@VARUS_channel:2788",
+              "marker": "краще",
+              "text": "Наш Гусь Призолов не надто щедрий — яєць залишив небагато, мабуть, інвестував у біткоїн🙂 Щоб не шукати даремно, краще зазирніть на VARUS.UA і перевірте наявніст…"
+            },
+            {
+              "id": "@VARUS_channel:710",
+              "marker": "найкращ",
+              "text": "Уже торгуємо на усю! Команда Varus найкраща Привіт з Кривого Рогу 🥰♥️"
+            },
+            {
+              "id": "@VARUS_channel:8430",
+              "marker": "найкращ",
+              "text": "VARUS Ви Найкращі !!!"
+            }
+          ]
+        },
+        "c_position_or_category_token": {
+          "rows": 692,
+          "share": 0.09579180509413067,
+          "rows_with_a_unit_token_beside_a_hit": 39,
+          "rows_with_a_category_word_only": 653,
+          "examples": [
+            {
+              "id": "@VARUS_channel:10017",
+              "span": null,
+              "categories": [
+                "bakery"
+              ],
+              "text": "Лишу відгук. Одеса вулиця Василя Спрейса 2. Брала багет поряд ваша співробітниця, не бачила дрібних цифр та слів ,бо забула вдома окуляри. Бачила тільки ціну де…"
+            },
+            {
+              "id": "@VARUS_channel:10083",
+              "span": null,
+              "categories": [
+                "drinks"
+              ],
+              "text": "Кава є, знижки нема. Дніпро."
+            },
+            {
+              "id": "@VARUS_channel:10112",
+              "span": null,
+              "categories": [
+                "dairy"
+              ],
+              "text": "А в мене інше питання: це ж сирі крильця? Не приготовані?)))) По фото не зрозуміло мені"
+            },
+            {
+              "id": "@VARUS_channel:10113",
+              "span": null,
+              "categories": [
+                "dairy"
+              ],
+              "text": "Сирі"
+            },
+            {
+              "id": "@VARUS_channel:10129",
+              "span": null,
+              "categories": [
+                "grocery"
+              ],
+              "text": "Ну и где ваши макароны на акции, каждый день захожу на Даманском их нету,даже ценника нету"
+            },
+            {
+              "id": "@VARUS_channel:10147",
+              "span": "Коли ти живеш сам і йдеш по хліб і молоко, то звісно легко, але коли ти роками по 30+кг продуктів тягаєш за 2 км пішки при будь-якій погоді по кілька разів на тиждень з хворим хребтом, то можна й доставку іноді замовити. Лише двічі замовляла і більше не стану, бо 6 днів, то занадто. А ти як розумний такий, то принеси мені 4 пакети по 15 кг, буду вдячна.",
+              "categories": [
+                "bakery",
+                "dairy"
+              ],
+              "text": "Коли ти живеш сам і йдеш по хліб і молоко, то звісно легко, але коли ти роками по 30+кг продуктів тягаєш за 2 км пішки при будь-якій погоді по кілька разів на т…"
+            },
+            {
+              "id": "@VARUS_channel:10330",
+              "span": null,
+              "categories": [
+                "dairy"
+              ],
+              "text": "Шо це за сир кулінарний ? Допоможіть зрозуміти що воно таке ?"
+            },
+            {
+              "id": "@VARUS_channel:10336",
+              "span": null,
+              "categories": [
+                "dairy"
+              ],
+              "text": "Якщо вірити Гуглу, то можна використовувати як крем сир для всього. І для солодких страв, і для солених. Треба спробувати)"
+            },
+            {
+              "id": "@VARUS_channel:10338",
+              "span": null,
+              "categories": [
+                "dairy"
+              ],
+              "text": "Він як крем сир,піде на запіканку, сирники,дуже ніжний"
+            },
+            {
+              "id": "@VARUS_channel:10340",
+              "span": null,
+              "categories": [
+                "confectionery",
+                "dairy"
+              ],
+              "text": "Честно говоря покупал думал что оно как крем-сыр но на самом-то деле оно как творог измельчённый сделали торт в итоге"
+            }
+          ]
+        },
+        "intersections": {
+          "a_and_b": 0,
+          "a_and_b_share": 0.0,
+          "a_and_b_and_c": 0,
+          "a_and_b_and_c_share": 0.0,
+          "a_and_b_ids": [],
+          "a_and_b_and_c_ids": [],
+          "product_pairs_and_b": 0,
+          "product_pairs_and_b_and_c": 0
+        }
+      }
+    },
+    {
+      "population": "scoreable train rows",
+      "rows_with_text": 1446,
+      "brand_matching": "`exact` is market_pulse.brands — the display name as written, the way G1e is scored. `inflected` allows the case endings and is a strictly wider, looser count; the operator's canonical example needs it, because «Гармонію» is not «Гармонія». Neither is law; both are reported.",
+      "context": {
+        "rows_naming_at_least_one_watchlist_brand": 29,
+        "rows_with_any_comparison_marker_anywhere": 68,
+        "note": "the denominators the gated measures sit inside: (b) needs the marker and the brand in ONE sentence, so it can only ever be a subset of both"
+      },
+      "a_two_or_more_watchlist_brands": {
+        "rows": 1,
+        "share": 0.0006915629322268327,
+        "rows_excluding_the_retailer_entries": 1,
+        "retailer_entries_excluded": [
+          "varto",
+          "varus-pl"
+        ],
+        "examples": [
+          {
+            "id": "@VARUS_channel:13209",
+            "brands": [
+              "ferma",
+              "molokija"
+            ],
+            "text": "Знаєте що мені в Варусе не подобається. Це, що не контролюють якість товару. Наприклад, масло Харківське, на упаковці написано ДСТУ, а це спред. Сметана Харківс…"
+          }
+        ]
+      },
+      "b_comparison_marker_beside_a_brand": {
+        "rows": 0,
+        "share": 0.0,
+        "rows_carried_only_by_the_comparative_za": 0,
+        "share_without_za": 0.0,
+        "examples": []
+      },
+      "c_position_or_category_token": {
+        "rows": 189,
+        "share": 0.13070539419087138,
+        "rows_with_a_unit_token_beside_a_hit": 9,
+        "rows_with_a_category_word_only": 180,
+        "examples": [
+          {
+            "id": "@VARUS_channel:10017",
+            "span": null,
+            "categories": [
+              "bakery"
+            ],
+            "text": "Лишу відгук. Одеса вулиця Василя Спрейса 2. Брала багет поряд ваша співробітниця, не бачила дрібних цифр та слів ,бо забула вдома окуляри. Бачила тільки ціну де…"
+          },
+          {
+            "id": "@VARUS_channel:10112",
+            "span": null,
+            "categories": [
+              "dairy"
+            ],
+            "text": "А в мене інше питання: це ж сирі крильця? Не приготовані?)))) По фото не зрозуміло мені"
+          },
+          {
+            "id": "@VARUS_channel:10440",
+            "span": null,
+            "categories": [
+              "confectionery"
+            ],
+            "text": "На цукерки акційна ціна не запрограмована"
+          },
+          {
+            "id": "@VARUS_channel:10905",
+            "span": null,
+            "categories": [
+              "meat"
+            ],
+            "text": "Але в нашому місті таких тістечок майже ніколи не буває, як і домашньої курки"
+          },
+          {
+            "id": "@VARUS_channel:10974",
+            "span": null,
+            "categories": [
+              "confectionery"
+            ],
+            "text": "Прийшла в магазин о 7.30 ціна на наполеон 99.90.По акційній ціні відмовилися продавати,сказали,що ще в програмі немає такої ціни.Замовила відразу онлайн,щоб заб…"
+          },
+          {
+            "id": "@VARUS_channel:10994",
+            "span": null,
+            "categories": [
+              "drinks"
+            ],
+            "text": "Чай Basilure зовсім не від 107 грн. Самий дешевий від 155 і те, зелений. Чорний голд, який на картинці 194 грн"
+          },
+          {
+            "id": "@VARUS_channel:11025",
+            "span": null,
+            "categories": [
+              "bakery"
+            ],
+            "text": "Токери подобоються: і макарошки, і палички, і соломка . І хліб чорний дуже смачний. Поздоровлення!"
+          },
+          {
+            "id": "@VARUS_channel:11037",
+            "span": null,
+            "categories": [
+              "grocery"
+            ],
+            "text": "А мені сподобалася,олія добра!"
+          },
+          {
+            "id": "@VARUS_channel:11405",
+            "span": null,
+            "categories": [
+              "grocery"
+            ],
+            "text": "Чому в Кривому Розі на вул Петра Калнишевського 15-а у магазині немає акції на рис,він стоїть по 77.9,;75.9 ,продавці розводять рукам,як це називається?"
+          },
+          {
+            "id": "@VARUS_channel:11601",
+            "span": null,
+            "categories": [
+              "produce",
+              "ready-meals"
+            ],
+            "text": "Борщ, сало,огірки та картопля смажена)))"
+          }
+        ]
+      },
+      "intersections": {
+        "a_and_b": 0,
+        "a_and_b_share": 0.0,
+        "a_and_b_and_c": 0,
+        "a_and_b_and_c_share": 0.0,
+        "a_and_b_ids": [],
+        "a_and_b_and_c_ids": [],
+        "product_pairs_and_b": 0,
+        "product_pairs_and_b_and_c": 0
+      },
+      "inflected": {
+        "context": {
+          "rows_naming_at_least_one_watchlist_brand": 30,
+          "rows_with_any_comparison_marker_anywhere": 68,
+          "note": "the denominators the gated measures sit inside: (b) needs the marker and the brand in ONE sentence, so it can only ever be a subset of both"
+        },
+        "a_two_or_more_watchlist_brands": {
+          "rows": 1,
+          "share": 0.0006915629322268327,
+          "rows_excluding_the_retailer_entries": 1,
+          "retailer_entries_excluded": [
+            "varto",
+            "varus-pl"
+          ],
+          "examples": [
+            {
+              "id": "@VARUS_channel:13209",
+              "brands": [
+                "ferma",
+                "molokija"
+              ],
+              "text": "Знаєте що мені в Варусе не подобається. Це, що не контролюють якість товару. Наприклад, масло Харківське, на упаковці написано ДСТУ, а це спред. Сметана Харківс…"
+            }
+          ]
+        },
+        "b_comparison_marker_beside_a_brand": {
+          "rows": 0,
+          "share": 0.0,
+          "rows_carried_only_by_the_comparative_za": 0,
+          "share_without_za": 0.0,
+          "examples": []
+        },
+        "c_position_or_category_token": {
+          "rows": 189,
+          "share": 0.13070539419087138,
+          "rows_with_a_unit_token_beside_a_hit": 9,
+          "rows_with_a_category_word_only": 180,
+          "examples": [
+            {
+              "id": "@VARUS_channel:10017",
+              "span": null,
+              "categories": [
+                "bakery"
+              ],
+              "text": "Лишу відгук. Одеса вулиця Василя Спрейса 2. Брала багет поряд ваша співробітниця, не бачила дрібних цифр та слів ,бо забула вдома окуляри. Бачила тільки ціну де…"
+            },
+            {
+              "id": "@VARUS_channel:10112",
+              "span": null,
+              "categories": [
+                "dairy"
+              ],
+              "text": "А в мене інше питання: це ж сирі крильця? Не приготовані?)))) По фото не зрозуміло мені"
+            },
+            {
+              "id": "@VARUS_channel:10440",
+              "span": null,
+              "categories": [
+                "confectionery"
+              ],
+              "text": "На цукерки акційна ціна не запрограмована"
+            },
+            {
+              "id": "@VARUS_channel:10905",
+              "span": null,
+              "categories": [
+                "meat"
+              ],
+              "text": "Але в нашому місті таких тістечок майже ніколи не буває, як і домашньої курки"
+            },
+            {
+              "id": "@VARUS_channel:10974",
+              "span": null,
+              "categories": [
+                "confectionery"
+              ],
+              "text": "Прийшла в магазин о 7.30 ціна на наполеон 99.90.По акційній ціні відмовилися продавати,сказали,що ще в програмі немає такої ціни.Замовила відразу онлайн,щоб заб…"
+            },
+            {
+              "id": "@VARUS_channel:10994",
+              "span": null,
+              "categories": [
+                "drinks"
+              ],
+              "text": "Чай Basilure зовсім не від 107 грн. Самий дешевий від 155 і те, зелений. Чорний голд, який на картинці 194 грн"
+            },
+            {
+              "id": "@VARUS_channel:11025",
+              "span": null,
+              "categories": [
+                "bakery"
+              ],
+              "text": "Токери подобоються: і макарошки, і палички, і соломка . І хліб чорний дуже смачний. Поздоровлення!"
+            },
+            {
+              "id": "@VARUS_channel:11037",
+              "span": null,
+              "categories": [
+                "grocery"
+              ],
+              "text": "А мені сподобалася,олія добра!"
+            },
+            {
+              "id": "@VARUS_channel:11405",
+              "span": null,
+              "categories": [
+                "grocery"
+              ],
+              "text": "Чому в Кривому Розі на вул Петра Калнишевського 15-а у магазині немає акції на рис,він стоїть по 77.9,;75.9 ,продавці розводять рукам,як це називається?"
+            },
+            {
+              "id": "@VARUS_channel:11601",
+              "span": null,
+              "categories": [
+                "produce",
+                "ready-meals"
+              ],
+              "text": "Борщ, сало,огірки та картопля смажена)))"
+            }
+          ]
+        },
+        "intersections": {
+          "a_and_b": 0,
+          "a_and_b_share": 0.0,
+          "a_and_b_and_c": 0,
+          "a_and_b_and_c_share": 0.0,
+          "a_and_b_ids": [],
+          "a_and_b_and_c_ids": [],
+          "product_pairs_and_b": 0,
+          "product_pairs_and_b_and_c": 0
+        }
+      }
+    },
+    {
+      "population": "comments_test.jsonl (400 rows)",
+      "rows_with_text": 400,
+      "brand_matching": "`exact` is market_pulse.brands — the display name as written, the way G1e is scored. `inflected` allows the case endings and is a strictly wider, looser count; the operator's canonical example needs it, because «Гармонію» is not «Гармонія». Neither is law; both are reported.",
+      "context": {
+        "rows_naming_at_least_one_watchlist_brand": 5,
+        "rows_with_any_comparison_marker_anywhere": 11,
+        "note": "the denominators the gated measures sit inside: (b) needs the marker and the brand in ONE sentence, so it can only ever be a subset of both"
+      },
+      "a_two_or_more_watchlist_brands": {
+        "rows": 1,
+        "share": 0.0025,
+        "rows_excluding_the_retailer_entries": 1,
+        "retailer_entries_excluded": [
+          "varto",
+          "varus-pl"
+        ],
+        "examples": [
+          {
+            "id": "@VARUS_channel:14969",
+            "brands": [
+              "halychyna",
+              "zlahoda"
+            ],
+            "text": "Спробуйте злагода 82% і Галичина 82%."
+          }
+        ]
+      },
+      "b_comparison_marker_beside_a_brand": {
+        "rows": 0,
+        "share": 0.0,
+        "rows_carried_only_by_the_comparative_za": 0,
+        "share_without_za": 0.0,
+        "examples": []
+      },
+      "c_position_or_category_token": {
+        "rows": 52,
+        "share": 0.13,
+        "rows_with_a_unit_token_beside_a_hit": 3,
+        "rows_with_a_category_word_only": 49,
+        "examples": [
+          {
+            "id": "@VARUS_channel:11542",
+            "span": null,
+            "categories": [
+              "drinks",
+              "seafood",
+              "snacks"
+            ],
+            "text": "Пиво, креветки и мясные чипсы? 😀"
+          },
+          {
+            "id": "@VARUS_channel:12046",
+            "span": null,
+            "categories": [
+              "ready-meals"
+            ],
+            "text": "На останньому фото на задньому плані жіночка по ходу разом з горщиком вареники з'їла"
+          },
+          {
+            "id": "@VARUS_channel:12058",
+            "span": null,
+            "categories": [
+              "ready-meals"
+            ],
+            "text": "У запорізькому Варусі дуже смачні млинці 🥞 вишня-мак то 🫰🫰🫰"
+          },
+          {
+            "id": "@VARUS_channel:12229",
+            "span": null,
+            "categories": [
+              "ready-meals"
+            ],
+            "text": "ЛЮДИ НЕ БЕРІТЬ ЇЖУ У ВАРУСІ!!!!!! Моя подруга вже 2 раз бере салат олів'є з варуса, і в же другий раз ним отравилася, перший раз пронесло а другий раз вона у бо…"
+          },
+          {
+            "id": "@VARUS_channel:12357",
+            "span": null,
+            "categories": [
+              "seafood"
+            ],
+            "text": "Отвратительное обслуживание на рыбном отделе! Продавец - грубиянка со стажем, хамка! Попросили положить черевця лосося в баночку одноразовую, так она начала ора…"
+          },
+          {
+            "id": "@VARUS_channel:12369",
+            "span": null,
+            "categories": [
+              "dairy"
+            ],
+            "text": "И масло"
+          },
+          {
+            "id": "@VARUS_channel:12766",
+            "span": null,
+            "categories": [
+              "snacks"
+            ],
+            "text": "Як отримати національний кешбек за товар з позначкою \"тільки онлайн\" і \"національний кешбек \", якщо ви прибрали функцію оплата при отриманні товару в магазині? …"
+          },
+          {
+            "id": "@VARUS_channel:13926",
+            "span": null,
+            "categories": [
+              "confectionery"
+            ],
+            "text": "Был в нулевых такой вафельный торт, назывался «Вдохновение». Это было лучшее, что касалось шоколадных вафель, до сих пор."
+          },
+          {
+            "id": "@VARUS_channel:1490",
+            "span": null,
+            "categories": [
+              "dairy"
+            ],
+            "text": "Спасибо большое за акцию на молоко!!!! Просроченое нужно списывать, а не людям продавать!!!"
+          },
+          {
+            "id": "@VARUS_channel:14969",
+            "span": "Спробуйте злагода 82% і Галичина 82%.",
+            "categories": [],
+            "text": "Спробуйте злагода 82% і Галичина 82%."
+          }
+        ]
+      },
+      "intersections": {
+        "a_and_b": 0,
+        "a_and_b_share": 0.0,
+        "a_and_b_and_c": 0,
+        "a_and_b_and_c_share": 0.0,
+        "a_and_b_ids": [],
+        "a_and_b_and_c_ids": [],
+        "product_pairs_and_b": 0,
+        "product_pairs_and_b_and_c": 0
+      },
+      "inflected": {
+        "context": {
+          "rows_naming_at_least_one_watchlist_brand": 5,
+          "rows_with_any_comparison_marker_anywhere": 11,
+          "note": "the denominators the gated measures sit inside: (b) needs the marker and the brand in ONE sentence, so it can only ever be a subset of both"
+        },
+        "a_two_or_more_watchlist_brands": {
+          "rows": 1,
+          "share": 0.0025,
+          "rows_excluding_the_retailer_entries": 1,
+          "retailer_entries_excluded": [
+            "varto",
+            "varus-pl"
+          ],
+          "examples": [
+            {
+              "id": "@VARUS_channel:14969",
+              "brands": [
+                "halychyna",
+                "zlahoda"
+              ],
+              "text": "Спробуйте злагода 82% і Галичина 82%."
+            }
+          ]
+        },
+        "b_comparison_marker_beside_a_brand": {
+          "rows": 0,
+          "share": 0.0,
+          "rows_carried_only_by_the_comparative_za": 0,
+          "share_without_za": 0.0,
+          "examples": []
+        },
+        "c_position_or_category_token": {
+          "rows": 52,
+          "share": 0.13,
+          "rows_with_a_unit_token_beside_a_hit": 3,
+          "rows_with_a_category_word_only": 49,
+          "examples": [
+            {
+              "id": "@VARUS_channel:11542",
+              "span": null,
+              "categories": [
+                "drinks",
+                "seafood",
+                "snacks"
+              ],
+              "text": "Пиво, креветки и мясные чипсы? 😀"
+            },
+            {
+              "id": "@VARUS_channel:12046",
+              "span": null,
+              "categories": [
+                "ready-meals"
+              ],
+              "text": "На останньому фото на задньому плані жіночка по ходу разом з горщиком вареники з'їла"
+            },
+            {
+              "id": "@VARUS_channel:12058",
+              "span": null,
+              "categories": [
+                "ready-meals"
+              ],
+              "text": "У запорізькому Варусі дуже смачні млинці 🥞 вишня-мак то 🫰🫰🫰"
+            },
+            {
+              "id": "@VARUS_channel:12229",
+              "span": null,
+              "categories": [
+                "ready-meals"
+              ],
+              "text": "ЛЮДИ НЕ БЕРІТЬ ЇЖУ У ВАРУСІ!!!!!! Моя подруга вже 2 раз бере салат олів'є з варуса, і в же другий раз ним отравилася, перший раз пронесло а другий раз вона у бо…"
+            },
+            {
+              "id": "@VARUS_channel:12357",
+              "span": null,
+              "categories": [
+                "seafood"
+              ],
+              "text": "Отвратительное обслуживание на рыбном отделе! Продавец - грубиянка со стажем, хамка! Попросили положить черевця лосося в баночку одноразовую, так она начала ора…"
+            },
+            {
+              "id": "@VARUS_channel:12369",
+              "span": null,
+              "categories": [
+                "dairy"
+              ],
+              "text": "И масло"
+            },
+            {
+              "id": "@VARUS_channel:12766",
+              "span": null,
+              "categories": [
+                "snacks"
+              ],
+              "text": "Як отримати національний кешбек за товар з позначкою \"тільки онлайн\" і \"національний кешбек \", якщо ви прибрали функцію оплата при отриманні товару в магазині? …"
+            },
+            {
+              "id": "@VARUS_channel:13926",
+              "span": null,
+              "categories": [
+                "confectionery"
+              ],
+              "text": "Был в нулевых такой вафельный торт, назывался «Вдохновение». Это было лучшее, что касалось шоколадных вафель, до сих пор."
+            },
+            {
+              "id": "@VARUS_channel:1490",
+              "span": null,
+              "categories": [
+                "dairy"
+              ],
+              "text": "Спасибо большое за акцию на молоко!!!! Просроченое нужно списывать, а не людям продавать!!!"
+            },
+            {
+              "id": "@VARUS_channel:14969",
+              "span": "Спробуйте злагода 82% і Галичина 82%.",
+              "categories": [],
+              "text": "Спробуйте злагода 82% і Галичина 82%."
+            }
+          ]
+        },
+        "intersections": {
+          "a_and_b": 0,
+          "a_and_b_share": 0.0,
+          "a_and_b_and_c": 0,
+          "a_and_b_and_c_share": 0.0,
+          "a_and_b_ids": [],
+          "a_and_b_and_c_ids": [],
+          "product_pairs_and_b": 0,
+          "product_pairs_and_b_and_c": 0
+        }
+      }
+    }
+  ]
+}
