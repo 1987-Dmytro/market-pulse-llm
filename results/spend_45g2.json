@@ -1,0 +1,77 @@
+{
+  "openrouter_total_usage_at_45g2_start": 2.243434335,
+  "note": "lifetime OpenRouter usage read at the start of 45g2, before the first request of this phase. Phase spend = total_usage now minus this, and the $0.75 cap of docs/PROMPT-4.5g2.md is enforced against that difference. Delete or regenerate this file and the counter silently restarts at today's usage — the same footgun results/spend_3b.json carries. Every other phase's anchor is a different file and is never written here.",
+  "cap_usd": 0.75,
+  "runs": [
+    {
+      "model": "qwen/qwen3.5-flash-02-23",
+      "timestamp": "2026-08-03T08:22:32+00:00",
+      "usd": 0.00132405,
+      "requests": 3,
+      "note": "45g2: 3 media-only posts captioned by a vision model"
+    },
+    {
+      "model": "mistralai/mistral-small-3.2-24b-instruct",
+      "timestamp": "2026-08-03T08:22:42+00:00",
+      "usd": 0.0,
+      "requests": 3,
+      "note": "45g2: 3 media-only posts captioned by a vision model"
+    },
+    {
+      "model": "google/gemini-2.5-flash-lite",
+      "timestamp": "2026-08-03T08:23:40+00:00",
+      "usd": 0.0005999,
+      "requests": 3,
+      "note": "45g2: 3 media-only posts captioned by a vision model"
+    },
+    {
+      "model": "qwen/qwen3.5-flash-02-23",
+      "timestamp": "2026-08-03T08:24:27+00:00",
+      "usd": 0.0007823400000000001,
+      "requests": 2,
+      "note": "45g2: 2 media-only posts captioned by a vision model"
+    },
+    {
+      "model": "google/gemini-2.5-flash-lite",
+      "timestamp": "2026-08-03T08:24:42+00:00",
+      "usd": 0.00047500000000000005,
+      "requests": 2,
+      "note": "45g2: 2 media-only posts captioned by a vision model"
+    },
+    {
+      "model": "qwen/qwen3.5-flash-02-23",
+      "timestamp": "2026-08-03T08:25:32+00:00",
+      "usd": 0.0031812900000001143,
+      "requests": 2,
+      "note": "45g2: 2 media-only posts captioned by a vision model"
+    },
+    {
+      "model": "qwen/qwen3.5-flash-02-23",
+      "timestamp": "2026-08-03T08:26:25+00:00",
+      "usd": 0.00130208,
+      "requests": 3,
+      "note": "45g2: 3 media-only posts captioned by a vision model"
+    },
+    {
+      "model": "google/gemini-2.5-flash-lite",
+      "timestamp": "2026-08-03T08:26:37+00:00",
+      "usd": 0.0008326,
+      "requests": 3,
+      "note": "45g2: 3 media-only posts captioned by a vision model"
+    },
+    {
+      "model": "qwen/qwen3.5-flash-02-23",
+      "timestamp": "2026-08-03T08:27:06+00:00",
+      "usd": 0.00141687,
+      "requests": 3,
+      "note": "45g2: 3 media-only posts captioned by a vision model"
+    },
+    {
+      "model": "qwen/qwen3.5-flash-02-23",
+      "timestamp": "2026-08-03T08:27:26+00:00",
+      "usd": 0.01013467,
+      "requests": 21,
+      "note": "45g2: 21 media-only posts captioned by a vision model"
+    }
+  ]
+}

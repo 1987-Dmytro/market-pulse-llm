@@ -38,6 +38,49 @@ def load(directory: Path) -> dict[tuple[str, int], str]:
     return index(records)
 
 
+STATE_OF = {"image": "image_caption", "poll": "poll_text"}
+"""Which surrogate a row was asked with, in the words the records count."""
+
+
+def load_captions(path: Path) -> dict[tuple[str, int], dict]:
+    """``(channel, msg_id) -> {text, kind}`` over a 4.5g2 caption file. No file, no captions."""
+    if not path.exists():
+        return {}
+    found = {}
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if not line.strip():
+            continue
+        record = json.loads(line)
+        key = (record["channel"], record["msg_id"])
+        if key in found:
+            raise ValueError(f"{path}: {key[0]}:{key[1]} is captioned twice, so neither is the one")
+        if record["kind"] not in STATE_OF:
+            raise ValueError(f"{path}: {key[0]}:{key[1]} has kind {record['kind']!r}")
+        found[key] = {"text": record["caption"], "kind": record["kind"]}
+    return found
+
+
+def context(posts: dict, captions: dict, row: dict) -> dict:
+    """What reaches the model in the post's place, and which of the four states that is.
+
+    One home for the rule "the post's text if there is any, else what stands in for it": every
+    caller that renders a with-post prompt goes through here, so no run can end up asking half
+    its rows with a description and half without because two call sites disagreed. The ``state``
+    is returned rather than derived by the caller for the same reason — it is what the record
+    counts, and a count nobody can compute is a claim nobody can check.
+    """
+    text = text_for(posts, row)
+    if text.strip():
+        return {"parent": text, "caption": None, "caption_kind": None, "state": "post_text"}
+    caption = captions.get((row["channel"], row["parent_msg_id"]))
+    return {
+        "parent": text,
+        "caption": caption and caption["text"],
+        "caption_kind": caption and caption["kind"],
+        "state": STATE_OF[caption["kind"]] if caption else "no_text_and_no_caption",
+    }
+
+
 def text_for(posts: dict[tuple[str, int], str], row: dict) -> str:
     """The parent post's text for one comment row, or a refusal naming the row.
 

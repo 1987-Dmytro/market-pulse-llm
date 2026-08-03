@@ -56,13 +56,19 @@ def test_taxonomy_v2_prompts_are_registered_beside_v1_and_not_inside_it():
         "T1v2_with_post",
         "relabel_intents_v2_with_post",
         "precheck_v2_with_post",
+        "caption_post",
     }
-    assert set(prompts.DELIMITERS) == set(prompts.PROMPTS)
-    assert set(prompts.COMMENT_FIELDS) == set(prompts.PROMPTS) - {"T2"}
+    # the label tables describe labelling tasks: the caption prompt answers in prose and is in
+    # none of them, and `T2` labels a post rather than a comment
+    assert set(prompts.DELIMITERS) == set(prompts.PROMPTS) - prompts.FREE_TEXT
+    assert set(prompts.COMMENT_FIELDS) == set(prompts.PROMPTS) - prompts.FREE_TEXT - {"T2"}
+    assert set(prompts.INTENTS_OF) == set(prompts.COMMENT_FIELDS)
     assert prompts.WITH_POST < set(prompts.PROMPTS)
+    assert prompts.FREE_TEXT < set(prompts.PROMPTS)
+    assert not prompts.FREE_TEXT & prompts.WITH_POST
     assert {task: prompts.prompt_sha256(task) for task in prompts.TASKS} == PROMPT_SHA256
     assert prompts.prompt_sha256("T1v2") != PROMPT_SHA256["T1"]
-    # seven prompts, seven hashes: a derived revision that collided with its base would
+    # eight prompts, eight hashes: a derived revision that collided with its base would
     # make two measurements indistinguishable in a record
     assert len({prompts.prompt_sha256(task) for task in prompts.PROMPTS}) == len(prompts.PROMPTS)
 
@@ -261,6 +267,58 @@ def test_a_media_only_parent_says_so_instead_of_rendering_an_empty_tag(empty):
     An empty tag would read as `the post said nothing`, which is a different claim."""
     content = prompts.build_messages("T1v2_with_post", "Так", parent=empty)[0]["content"]
     assert f"<post>\n{prompts.NO_POST_TEXT}\n</post>" in content
+
+
+def test_a_captioned_image_takes_the_place_of_the_missing_post_text():
+    """What 4.5g2 buys: the class that failed the quiz was judged blind by everyone. The
+    description is tagged, so the model knows it is reading a picture and not the post."""
+    content = prompts.build_messages(
+        "precheck_v2_with_post", "З вишнею", parent="", caption="Опитування: з чим вареники?"
+    )[0]["content"]
+    assert "<post>\n[image description] Опитування: з чим вареники?\n</post>" in content
+    assert prompts.NO_POST_TEXT not in content
+
+
+def test_a_caption_is_refused_wherever_it_would_not_be_read():
+    """One rule — the post's text if there is any, else the caption — and no way to half-apply
+    it. A caption quietly dropped beside a text post is two callers disagreeing in silence."""
+    with pytest.raises(ValueError, match="has text of its own"):
+        prompts.build_messages("T1v2_with_post", "Так", parent="Новинка", caption="a shelf")
+    with pytest.raises(ValueError, match="takes no post"):
+        prompts.build_messages("T1v2", "Так", caption="a shelf")
+
+
+def test_the_caption_prompt_is_registered_and_asks_for_what_the_labeller_needs():
+    text = prompts.PROMPTS[prompts.CAPTION_TASK]
+    assert prompts.prompt_sha256(prompts.CAPTION_TASK)
+    assert "Transcribe, exactly as written, the text that tells a reader what this post is" in text
+    assert "Do not list every item on a price leaflet" in text
+    assert "in the language of the text in the image" in text
+    assert "no guess" in text
+
+
+def test_the_caption_prompt_is_not_rendered_or_parsed_as_a_labelling_one():
+    with pytest.raises(ValueError, match="answers in prose"):
+        prompts.build_messages(prompts.CAPTION_TASK, "Так")
+    with pytest.raises(ValueError, match="unknown task"):
+        prompts.parse_reply(prompts.CAPTION_TASK, '{"intents": []}')
+
+
+def test_every_image_of_one_post_travels_in_one_caption_request():
+    """A post is an album as often as it is one picture, and the poll question can be on any
+    item — one description per post, or whoever reads it has to pick a picture."""
+    messages = prompts.caption_messages(
+        ["data:image/jpeg;base64,AAA", "data:image/jpeg;base64,BBB"]
+    )
+    assert len(messages) == 1 and messages[0]["role"] == "user"
+    parts = messages[0]["content"]
+    assert parts[0] == {"type": "text", "text": prompts.PROMPTS[prompts.CAPTION_TASK]}
+    assert [part["image_url"]["url"] for part in parts[1:]] == [
+        "data:image/jpeg;base64,AAA",
+        "data:image/jpeg;base64,BBB",
+    ]
+    with pytest.raises(ValueError, match="no image"):
+        prompts.caption_messages([])
 
 
 def test_build_messages_refuses_a_half_applied_change_in_both_directions():

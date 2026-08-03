@@ -1,0 +1,81 @@
+{
+  "runs": [
+    {
+      "timestamp": "2026-08-03T08:27:26+00:00",
+      "task": "caption_post",
+      "model": "qwen/qwen3.5-flash-02-23",
+      "endpoint": {
+        "tag": "alibaba/fp8",
+        "quantization": "fp8",
+        "served_quantization": "fp8",
+        "status": 0
+      },
+      "smoke": false,
+      "prompt_sha256": {
+        "caption_post": "5dd76ab27fe574a7cf345d82c13f9e69e1683a385c2a9241172b214ea6366193"
+      },
+      "source": "results/post_media_45g2.json",
+      "population": {
+        "media_only_posts": 41,
+        "captioned": 21,
+        "transcribed_polls": 16,
+        "unusable": [],
+        "no_surrogate_at_all": [
+          "@VARUS_channel:1835",
+          "@VARUS_channel:1844",
+          "@VARUS_channel:8339",
+          "@VARUS_channel:8822"
+        ]
+      },
+      "images": {
+        "sent": 112,
+        "available": 157,
+        "max_per_request": 6,
+        "posts_truncated": [
+          "@VARUS_channel:2329",
+          "@VARUS_channel:2725",
+          "@VARUS_channel:3427",
+          "@VARUS_channel:3935",
+          "@VARUS_channel:5177",
+          "@VARUS_channel:5478",
+          "@VARUS_channel:5687",
+          "@VARUS_channel:5736",
+          "@VARUS_channel:5915",
+          "@VARUS_channel:6155",
+          "@VARUS_channel:6395",
+          "@VARUS_channel:6545",
+          "@VARUS_channel:7122",
+          "@VARUS_channel:7206",
+          "@VARUS_channel:7538",
+          "@VARUS_channel:7686"
+        ]
+      },
+      "kinds": {
+        "image": 21,
+        "poll": 16
+      },
+      "out": "data/annotation/post_captions.jsonl",
+      "out_sha256": "4c1f28071c6d270184d6d490833105ee71506c4399ed974bac89f17869b7e90c",
+      "cost": {
+        "requests": 21,
+        "usd": 0.01013467,
+        "phase_spend_usd": 0.013315960000000114,
+        "cap_usd": 0.75
+      },
+      "git": {
+        "commit": "b27862e56f52a7e19e0d2a67ce2390ac3c063a82",
+        "dirty": [
+          "src/market_pulse/parents.py",
+          "src/market_pulse/prompts.py",
+          "tests/test_parents.py",
+          "tests/test_prompts.py",
+          "results/post_media_45g2.json",
+          "results/spend_45g2.json",
+          "scripts/caption_posts.py",
+          "scripts/fetch_post_media.py"
+        ]
+      },
+      "note": "What stands in for a media-only post's missing text. `image` rows were written by the pinned vision model under the registered caption prompt; `poll` rows are Telegram's own question and options, transcribed, with no model involved — which is why they carry no model and no prompt hash. The two are tagged differently where they reach a labelling prompt (prompts.POST_SURROGATE)."
+    }
+  ]
+}

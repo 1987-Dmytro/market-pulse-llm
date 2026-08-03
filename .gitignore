@@ -37,6 +37,10 @@ data/annotation/*
 # rule as the line above — model output the operator calibrates, not collected
 # data — and an artifact living only in a working tree is money spent twice.
 !data/annotation/uplabel_precheck_45g.jsonl
+# What a media-only post says (4.5g2): vision captions and poll transcripts. Same
+# rule again — an input a labelling prompt reads, paid for once, and the images it
+# was written from stay out (posts_media/ is data, and it is big).
+!data/annotation/post_captions.jsonl
 # Generated, not collected — but the same kind of artifact: a curated training
 # source, ablation-gated (knowledge/decisions/synthetic-sarcasm-augmentation.md).
 !data/annotation/synthetic_sarcasm.jsonl

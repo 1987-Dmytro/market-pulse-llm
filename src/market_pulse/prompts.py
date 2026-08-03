@@ -219,8 +219,48 @@ Same discipline as :data:`SERVICE_INTENT`: a rule rendered separately in three p
 drifts apart silently, so it is written once and a test holds the three to it."""
 
 NO_POST_TEXT = "(this post has no text of its own — it is an image or a video)"
-"""What a media-only parent renders as. 23 of the 97 emptied rows and 424 of the 1,912
-up-label candidates have one, and an empty tag would read as "the post said nothing"."""
+"""What a media-only parent renders as when nothing can speak for it. 23 of the 97 emptied rows
+and 424 of the 1,912 up-label candidates have one, and an empty tag would read as "the post said
+nothing". Where 4.5g2 fetched the image and captioned it, :data:`IMAGE_DESCRIPTION` is used
+instead — this string is what is left when the media could not be fetched at all."""
+
+POST_SURROGATE = {
+    "image": "[image description] {text}",
+    "poll": "[poll] {text}",
+}
+"""What stands in for a media-only post's missing text, and what the model is told it is.
+
+Two kinds, because 4.5g2 found two: an image, described by a vision model, and a poll, whose
+question and options Telegram carries in a field the collector never read. Both are tagged
+rather than pasted in bare — a description of a picture is not the post's own words, and a
+labeller told otherwise would weigh it as if it were. `[[45g2-captions-and-quiz-rulings]]`."""
+
+CAPTION_POST_PROMPT = """\
+You describe the image of one post from a Ukrainian food-retail Telegram channel (retail chains \
+and discount aggregators). The post has no text of its own, so this image is everything a reader \
+has, and your description is what somebody labelling the comments under it will read instead.
+
+Transcribe, exactly as written, the text that tells a reader what this post is: the question it \
+asks and the options it offers, the headline of an offer, the dates it runs for, the shop or \
+brand named at the top. Then add one sentence saying what the image shows as a whole — which \
+kinds of product, and whether it is a promotion, a new product or something else.
+
+Do not list every item on a price leaflet. Name the kinds of goods and at most the few most \
+prominent products, and never write the same line twice.
+
+Write the whole answer, the closing sentence included, in the language of the text in the image, \
+and in Ukrainian if it carries none. State what is there and nothing else: no marketing copy, no \
+guess at what the post is trying to achieve, no opinion about the product. If the image cannot \
+be read, say exactly that and nothing more.
+
+Answer with the description alone: no preamble, no quotes, no formatting."""
+"""The 4.5g2 captioning instrument, registered beside the label prompts and hashed like them.
+
+Its answer is free text rather than a JSON object, so it is the one entry in :data:`PROMPTS`
+that :func:`parse_reply` cannot read and :func:`build_messages` will not render — see
+:data:`FREE_TEXT`. It is in the registry anyway because the caption it produces reaches a
+labelling prompt, and a record that cannot name the prompt that wrote its input describes a run
+nobody can reproduce."""
 
 UNCLEAR_RULE = """\
 unclear — true when the row must not be scored at all: it is not a consumer reaction, or it \
@@ -278,7 +318,15 @@ PROMPTS = {
     "T1v2_with_post": T1_PROMPT_V2_WITH_POST,
     "relabel_intents_v2_with_post": RELABEL_INTENTS_PROMPT_WITH_POST,
     "precheck_v2_with_post": PRECHECK_PROMPT_V2_WITH_POST,
+    "caption_post": CAPTION_POST_PROMPT,
 }
+CAPTION_TASK = "caption_post"
+FREE_TEXT = frozenset({CAPTION_TASK})
+"""Prompts whose answer is prose, not labels. They are registered and hashed like the others and
+are excluded from every table that only makes sense for a labelling task: no delimiter, no label
+space, no field list. :func:`build_messages` and :func:`parse_reply` refuse them by name rather
+than failing on a missing table entry."""
+
 WITH_POST = frozenset({"T1v2_with_post", "relabel_intents_v2_with_post", "precheck_v2_with_post"})
 """The tasks whose request carries the parent post. :func:`build_messages` requires one for
 each of them and refuses one for every other task, so a caller cannot half-apply the change:
@@ -336,7 +384,13 @@ def prompt_sha256(task: str) -> str:
     return hashlib.sha256(PROMPTS[task].encode("utf-8")).hexdigest()
 
 
-def build_messages(task: str, text: str, parent: str | None = None) -> list[dict]:
+def build_messages(
+    task: str,
+    text: str,
+    parent: str | None = None,
+    caption: str | None = None,
+    caption_kind: str = "image",
+) -> list[dict]:
     """The whole request: instructions, the parent post if the task takes one, and the row.
 
     The row is fenced in a tag so that a comment ending in "Answer with one JSON
@@ -348,18 +402,57 @@ def build_messages(task: str, text: str, parent: str | None = None) -> list[dict
     every other one. ``""`` is a parent that exists and has no text of its own; only
     ``None`` means no post was given, and for a with-post task that is a defect in the
     caller, not a row to render without one.
+
+    ``caption`` is what stands in for a media-only post — a description of its image or
+    the text of its poll, per ``caption_kind`` — and it is refused wherever it would not
+    be read: by a task that takes no post at all, and by a post that has text of its own.
+    "The post's text if there is any, else the surrogate" is one rule, and a caption
+    silently ignored beside a text post would let two callers disagree about it without
+    either of them failing.
     """
+    if task in FREE_TEXT:
+        raise ValueError(f"{task}: this prompt answers in prose — use caption_messages")
     tag = DELIMITERS[task]
     if (task in WITH_POST) != (parent is not None):
         raise ValueError(
             f"{task}: this prompt {'requires' if task in WITH_POST else 'takes no'} parent post,"
             f" and {'none' if parent is None else 'one'} was given"
         )
+    if caption is not None and (parent is None or parent.strip()):
+        raise ValueError(
+            f"{task}: a caption stands in for a post that has no text of its own, and this one"
+            f" {'takes no post' if parent is None else 'has text of its own'}"
+        )
+    if caption is not None and caption_kind not in POST_SURROGATE:
+        raise ValueError(f"{caption_kind}: not one of {sorted(POST_SURROGATE)}")
     row = f"<{tag}>\n{text}\n</{tag}>"
     if parent is None:
         return [{"role": "user", "content": f"{PROMPTS[task]}\n\n{row}"}]
-    post = parent.strip() or NO_POST_TEXT
+    post = parent.strip() or (
+        POST_SURROGATE[caption_kind].format(text=caption.strip()) if caption else NO_POST_TEXT
+    )
     return [{"role": "user", "content": f"{PROMPTS[task]}\n\n<post>\n{post}\n</post>\n\n{row}"}]
+
+
+def caption_messages(images: list[str]) -> list[dict]:
+    """The captioning request: the instructions, then every image of one post.
+
+    A post is an album as often as it is one picture, and its text — the poll question, the
+    price, the date — can be on any of them. So the images travel together in one request and
+    come back as one description: a caption per image would leave whoever reads it deciding
+    which picture the post was.
+    """
+    if not images:
+        raise ValueError("a caption request with no image would describe nothing")
+    return [
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": PROMPTS[CAPTION_TASK]},
+                *({"type": "image_url", "image_url": {"url": url}} for url in images),
+            ],
+        }
+    ]
 
 
 def _object(reply: str) -> dict:

@@ -53,6 +53,76 @@ def test_a_media_only_parent_is_a_parent(tmp_path):
     assert prompts.NO_POST_TEXT in content
 
 
+def captions(tmp_path: Path, records: list[dict]) -> Path:
+    path = tmp_path / "post_captions.jsonl"
+    path.write_text(
+        "".join(json.dumps(record, ensure_ascii=False) + "\n" for record in records),
+        encoding="utf-8",
+    )
+    return path
+
+
+def test_the_three_states_a_post_can_reach_the_model_in(tmp_path):
+    """`post_text` / `image_caption` / `no_text_and_no_caption` is what the record counts, and
+    the counts are only checkable while one function decides all three."""
+    posts = parents.load(store(tmp_path, [post("@a", 1), post("@a", 2, ""), post("@a", 3, "")]))
+    seen = parents.load_captions(
+        captions(
+            tmp_path,
+            [{"channel": "@a", "msg_id": 2, "caption": "Опитування про начинку", "kind": "image"}],
+        )
+    )
+    assert parents.context(posts, seen, comment("@a", 1)) == {
+        "parent": "Новинка: сирок",
+        "caption": None,
+        "caption_kind": None,
+        "state": "post_text",
+    }
+    assert parents.context(posts, seen, comment("@a", 2)) == {
+        "parent": "",
+        "caption": "Опитування про начинку",
+        "caption_kind": "image",
+        "state": "image_caption",
+    }
+    assert parents.context(posts, seen, comment("@a", 3))["state"] == "no_text_and_no_caption"
+
+
+def test_a_post_captioned_twice_is_refused(tmp_path):
+    """Last-wins would pick a description silently, and the record would name the other one."""
+    path = captions(
+        tmp_path,
+        [
+            {"channel": "@a", "msg_id": 2, "caption": "first", "kind": "image"},
+            {"channel": "@a", "msg_id": 2, "caption": "second", "kind": "poll"},
+        ],
+    )
+    with pytest.raises(ValueError, match="captioned twice"):
+        parents.load_captions(path)
+
+
+def test_a_missing_caption_file_is_no_captions_and_not_a_crash(tmp_path):
+    assert parents.load_captions(tmp_path / "absent.jsonl") == {}
+
+
+def test_a_poll_reaches_the_model_tagged_as_a_poll_and_not_as_a_picture(tmp_path):
+    """16 of the 41 media-only parents are polls. A question read out as an image description
+    would be a claim about what a vision model saw, and no vision model saw it."""
+    posts = parents.load(store(tmp_path, [post("@a", 1, "")]))
+    seen = parents.load_captions(
+        captions(tmp_path, [{"channel": "@a", "msg_id": 1, "caption": "З чим?", "kind": "poll"}])
+    )
+    found = parents.context(posts, seen, comment("@a", 1))
+    assert found["state"] == "poll_text"
+    content = prompts.build_messages(
+        "T1v2_with_post",
+        "З вишнею",
+        parent=found["parent"],
+        caption=found["caption"],
+        caption_kind=found["caption_kind"],
+    )[0]["content"]
+    assert "<post>\n[poll] З чим?\n</post>" in content
+
+
 def test_an_empty_store_is_a_defect_and_not_an_empty_index(tmp_path):
     """Otherwise every lookup fails one by one and the report reads as a corpus problem."""
     directory = tmp_path / "posts"
