@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-03 21:37:06 (every SessionStart)
+**Auto-refreshed:** 2026-08-03 22:34:52 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+2842208 chore: the 4.5g6 close and the 4.5h briefing — status, log, vault tail
 1a92efc docs: the prediction at a matched denominator, and what the 9 is not evidence for
 29fbdec feat: v2ctx bought and KILLed — 41/58 preserved, 9/17 feature-fixed
 7caab2d chore: the team lead's category/position amendment candidate, committed verbatim
 b3eac2d feat: the v2ctx runner, committed before the numbers exist
-8b52971 feat: the v2ctx probe, pre-registered — two denominators, one attempt
 ```
 
 ## 📋 Recent decisions
@@ -31,9 +31,16 @@ b3eac2d feat: the v2ctx runner, committed before the numbers exist
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-03 21:32 (`/save` after `PROMPT-4.5g6` — **six dictated verdicts complete the adjudicated 40, the two features are registered as rendered facts (`precheck_v2ctx_with_post`, RENDER-ONLY: no prompt text moves), and the pre-registered probe returned KILL at preserved 41/58** with feature-fixed 9/17. $0.0301 for 100 requests; $0.8095 of the $1.50 shared cap. Three tracks are now closed by their own gates: v2.1, v2.2 and v2ctx. Open refusals: `7555` and `11876` (pending law). All three 4.5g strata still FAIL; the wave-2 hundred is still unjudged. The 4.5f calibration gate stays PASS at 100/100; test v3 is frozen beside v2; Phase 4 stays closed at 2 of 5 against v2; edited by hand — the section above is auto-generated, do NOT touch the marker)
+**Last update:** 2026-08-03 22:10 (`PROMPT-4.5h` Step 0 — **the 4.5h precheck is in flight: read-only, $0, no freeze**. The relabel gate-program is closed by three KILLs and the пласт now earns its place by a pre-registered A/B ablation in 4.5h2, not by a re-run. This half answers six precheck questions and takes four category measurements; the freeze, the fresh anchor, the bars and the retrain are 4.5h2, after the team lead signs off. Previous state, still true — **six dictated verdicts complete the adjudicated 40, the two features are registered as rendered facts (`precheck_v2ctx_with_post`, RENDER-ONLY: no prompt text moves), and the pre-registered probe returned KILL at preserved 41/58** with feature-fixed 9/17. $0.0301 for 100 requests; $0.8095 of the $1.50 shared cap. Three tracks are now closed by their own gates: v2.1, v2.2 and v2ctx. Open refusals: `7555` and `11876` (pending law). All three 4.5g strata still FAIL; the wave-2 hundred is still unjudged. The 4.5f calibration gate stays PASS at 100/100; test v3 is frozen beside v2; Phase 4 stays closed at 2 of 5 against v2; edited by hand — the section above is auto-generated, do NOT touch the marker)
 
 ## 🔥 What's Hot
+
+**NOW: 4.5h PRECHECK IN FLIGHT — read-only, $0 spend, nothing freezes.** `docs/PROMPT-4.5h.md`.
+Deliverables: `results/precheck_45h.json` (dual-home 54 · the intents guard · v4 migration counts ·
+v3-vs-v2 collisions · the arm-B projection against the 5 h ceiling · anchor+eval budget) and
+`results/categories_45h.json` (post category coverage · cross-category comments · position mentions ·
+brand comparisons). **The freeze, the fresh own-pod anchor, `gate_bars.py`, the A/B retrain and the
+selection rule are 4.5h2** — a separate prompt after the team lead signs off on these numbers.
 
 **THE FACT WAS THE RULE. v2ctx IS KILLED AT 41/58.** One attempt, 100 rows, $0.0301, 100 answered,
 0 unusable. `results/v2ctx_probe_results.json`, scored by the function
@@ -681,18 +688,18 @@ files**: `comments_train.jsonl` (1600) + `sarcasm_candidates.jsonl` (746) plus
 
 ## ⏭️ Next
 
-1. **THREE TRACKS ARE CLOSED BY THEIR OWN GATES, AND THE NEXT MOVE IS THE OPERATOR'S.** v2.1
-   (negations), v2.2 (affirmations) and v2ctx (the features as rendered facts) each failed a bar
-   set before the numbers existed. What has **not** been tried, and what 4.5g6 measured the case
-   for: a **narrower discriminator** — the law's own carve-out is that a reply which accuses the
-   retailer directly is judged normally, and the current feature does not know that; it fires on
-   52 of 100 rows to explain 10 of 42 refusals — or the features reaching a **classifier** rather
-   than a prompt, where a coarse signal can be weighted instead of obeyed. Neither is scoped, and
-   nothing Phase-5-shaped is started. **No surgical batch run is authorised by this probe**: it is
-   in-sample by construction, and only a fresh blind hundred drawn outside the judged 300 can
-   accept a re-labelled batch. **The wave-2 hundred is still unjudged**, and it gates the v2.1
-   labels, which measure worse than v2.2, worse than v2ctx and worse than v2. Money: **$0.8095 of
-   $1.50**, $0.6905 left — a full 1,912-row re-run still does not fit under any revision.
+1. **THE OPERATOR RULED (03.08, night): THE ПЛАСТ EARNS ITS PLACE BY ABLATION, NOT BY A RE-RUN.**
+   The relabel gate-program closes at an honest FAIL — three tracks, three pre-registered KILLs
+   (v2.1 negations, v2.2 affirmations, v2ctx features-as-facts), $0.10 total. **No surgical batch
+   run and no fresh hundred**: the пласт (v2 labels + 41 manual verdicts, `unclear` excluded from
+   training by contract) goes into **4.5h as arm B against arm A**, judged by the frozen v3 tests,
+   selection rule committed as code before scoring (amendment 3.4 (3) transposed). The wave-2 pack
+   is **SUPERSEDED** — it gated the v2.1 labels, which measure worse than every other revision, and
+   there is nothing left to gate. Money frozen where it stands: **$0.8095 of $1.50** OpenRouter,
+   $0.6905 left, of which 4.5h expects to spend only the intents migration (~$0.17 at the 4.5e rate)
+   **if the precheck confirms it**. What was never tried and is still not scoped: a **narrower
+   discriminator** (the law's carve-out for a reply that accuses the retailer directly) or the
+   features reaching a **classifier** rather than a prompt.
 
 2. **THE POLL FINDING IS A CORPUS QUESTION, AND IT IS THE BIGGEST THING 4.5g2 OPENED.** 16 of the 41
    parents in play are polls whose question the collector never stored. **How many polls are in the
@@ -714,9 +721,12 @@ files**: `comments_train.jsonl` (1600) + `sarcasm_candidates.jsonl` (746) plus
    named. **Whether the 97-row emptied class counts as the "repeating class"** that would put
    11902's precedent into the guideline. And from 4.5a: **which unit the program calls "the
    ceiling"** — a macro-F1 bound and an accuracy share cannot both be read against 0.98.
+   *(The two homes are Step 1.1 of the 4.5h precheck — in flight, inventory only, no reconciliation
+   is applied there.)*
 5. **Test v4 has to lift a guard, not flip a flag.** `relabel_intents.py` refuses any row sitting in
    a frozen test file, unconditionally, and test v4 is exactly a re-label of the test set — a code
    change with a test, deliberately not the `--allow-test-rows` switch that does not exist today.
+   *(The precheck locates the guard by `file:line` and changes no code — the lift is 4.5h2.)*
    Then a fresh G1c anchor under `T1v2` → retrain → new bars pre-registered BEFORE scoring. The three
    boundary rulings of guideline v2 are law but reach `comments_test.jsonl` only there.
 6. **The filled pack is now the only copy of 244 verdicts.** `build_audit_pack.py --force` would
@@ -741,7 +751,13 @@ files**: `comments_train.jsonl` (1600) + `sarcasm_candidates.jsonl` (746) plus
 
 ## 🚧 Blockers
 
-**None open, and Phase 4 closed without leaving one.** 4c raised no escalation: the one
+**One, by design: 4.5h2 waits on the team lead's sign-off of this precheck** (owner: team lead).
+Nothing freezes, no pod starts and no bar is derived until the precheck numbers come back accepted —
+the executor's half is read-only and $0. If the arm-B projection crosses the 5 h per-arm ceiling of
+amendment 3.6, that is a **second** item for the same owner: SPEC is amended before 4.5h2, and the
+run is never shrunk to fit.
+
+**Nothing else open, and Phase 4 closed without leaving one.** 4c raised no escalation: the one
 pre-registered stop it could have hit — a projection crossing the 5 h per-arm ceiling — did not
 fire (3.40 h and 4.17 h, both under 4b's own
 projections). Every earlier escalation came back decided at the next acceptance: 4b's three closed
