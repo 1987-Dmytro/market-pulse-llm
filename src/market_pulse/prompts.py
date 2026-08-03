@@ -262,6 +262,34 @@ that :func:`parse_reply` cannot read and :func:`build_messages` will not render 
 labelling prompt, and a record that cannot name the prompt that wrote its input describes a run
 nobody can reproduce."""
 
+SETTLED_CASES = """\
+Cases the annotation guideline has since settled, and they outrank the general wording above:
+- A joke, a piece of trivia or banter about neither a product nor the retailer is not a consumer \
+reaction at all.
+- A reply written by the retailer in its own voice counts as one even when it carries none of the \
+usual markers: unsigned support wording about demand, stock or how a promo runs is the retailer \
+speaking, not a customer.
+- Praise of how the retailer behaves is "service", exactly as a complaint about the same conduct \
+would be.
+- A question about how a promo works, what its terms are or who it applies to is "service" — \
+never "price", and never no intent at all.
+- A comment aimed at another commenter rather than at the retailer is not a reaction to judge, \
+unless it accuses the retailer directly: that outranks who it is addressed to and is judged \
+normally.
+- An answer naming a dish, a filling or a food someone likes — including as a joke or a childhood \
+memory — is "taste".
+- A quotation used to mock what it quotes, whether the retailer's own words, an app message or a \
+promo line, is sarcasm. So is a joke that elevates something ordinary into something it is not.
+- Bare thanks and a single unambiguous emoji are readable reactions and are judged, not set \
+aside: read the sentiment, and the comment carries no intent.\
+"""
+"""The v2.1 rulings of `docs/annotation/comments.md`, in the prompt's voice.
+
+Eight lines for eight boundary cases the 4.5g sitting settled, written from the changelog and
+not beside it: where the guideline and the prompt disagree the gap is charged to the model. The
+last line restates a v2 clause rather than adding law — the sitting applied it as written and
+the precheck had been over-marking those rows."""
+
 UNCLEAR_RULE = """\
 unclear — true when the row must not be scored at all: it is not a consumer reaction, or it \
 cannot be read. Mark it for a participation marker under a giveaway post, for ambiguous or mixed \
@@ -310,6 +338,35 @@ New rather than a revision: no v1 prompt asks for ``unclear``, so there is nothi
 register this one beside. Assembled from :data:`T1_PROMPT_V2_WITH_POST` so that the three
 labels it shares with the eval prompt are the same bytes and stay that way."""
 
+T1_PROMPT_V2_1 = _swap(
+    T1_PROMPT_V2,
+    "\nAnswer with one JSON object",
+    f"\n{SETTLED_CASES}\n\nAnswer with one JSON object",
+)
+"""T1 under taxonomy v2.1 — the v2 prompt with the sitting's rulings, registered beside it.
+
+Derived rather than retyped, for the reason every revision here is: `results/precheck_45g.json`
+and `results/recheck_45g2.json` pin `precheck_v2_with_post`, and the 4.5g3 re-run is a second
+measurement of the same corpus. Two prompts under one name would make the two records
+indistinguishable."""
+
+T1_PROMPT_V2_1_WITH_POST = _swap(T1_PROMPT_V2_1, JUDGE_TEXT_ALONE, PARENT_POST_RULE)
+"""The v2.1 base with the parent-post clause. A build step, not a registered instrument: nothing
+asks for it, and a prompt in the registry that no run can name is a hash nobody can check."""
+
+PRECHECK_PROMPT_V2_1_WITH_POST = _swap(
+    _swap(
+        _swap(T1_PROMPT_V2_1_WITH_POST, "Return three labels.", "Return four labels."),
+        "\nAnswer with one JSON object",
+        f"\n{UNCLEAR_RULE}\n\nAnswer with one JSON object",
+    ),
+    _shape_v2,
+    _shape_v2[:-1] + ', "unclear": true|false}',
+)
+"""What the second round asks. The same four fields, the same shape and the same three swaps as
+:data:`PRECHECK_PROMPT_V2_WITH_POST` — the failed strata are re-labelled on the rules that moved
+and on nothing else, so a difference in the returned labels is the rulings and not the wording."""
+
 PROMPTS = {
     "T1": T1_PROMPT,
     "T2": T2_PROMPT,
@@ -319,6 +376,8 @@ PROMPTS = {
     "relabel_intents_v2_with_post": RELABEL_INTENTS_PROMPT_WITH_POST,
     "precheck_v2_with_post": PRECHECK_PROMPT_V2_WITH_POST,
     "caption_post": CAPTION_POST_PROMPT,
+    "T1v2.1": T1_PROMPT_V2_1,
+    "precheck_v2.1_with_post": PRECHECK_PROMPT_V2_1_WITH_POST,
 }
 CAPTION_TASK = "caption_post"
 FREE_TEXT = frozenset({CAPTION_TASK})
@@ -327,7 +386,14 @@ are excluded from every table that only makes sense for a labelling task: no del
 space, no field list. :func:`build_messages` and :func:`parse_reply` refuse them by name rather
 than failing on a missing table entry."""
 
-WITH_POST = frozenset({"T1v2_with_post", "relabel_intents_v2_with_post", "precheck_v2_with_post"})
+WITH_POST = frozenset(
+    {
+        "T1v2_with_post",
+        "relabel_intents_v2_with_post",
+        "precheck_v2_with_post",
+        "precheck_v2.1_with_post",
+    }
+)
 """The tasks whose request carries the parent post. :func:`build_messages` requires one for
 each of them and refuses one for every other task, so a caller cannot half-apply the change:
 a with-post prompt rendered without a post promises the model something that is not there."""
@@ -340,6 +406,8 @@ DELIMITERS = {
     "T1v2_with_post": "comment",
     "relabel_intents_v2_with_post": "comment",
     "precheck_v2_with_post": "comment",
+    "T1v2.1": "comment",
+    "precheck_v2.1_with_post": "comment",
 }
 INTENTS_OF = {
     "T1": INTENTS,
@@ -348,6 +416,8 @@ INTENTS_OF = {
     "T1v2_with_post": INTENTS_V2,
     "relabel_intents_v2_with_post": INTENTS_V2,
     "precheck_v2_with_post": INTENTS_V2,
+    "T1v2.1": INTENTS_V2,
+    "precheck_v2.1_with_post": INTENTS_V2,
 }
 """The label space each prompt promises — v1 asks for five, the v2 prompts for six.
 
@@ -363,6 +433,8 @@ COMMENT_FIELDS = {
     "relabel_intents_v2": ("intents",),
     "relabel_intents_v2_with_post": ("intents",),
     "precheck_v2_with_post": ("sentiment", "sarcasm", "intents", "unclear"),
+    "T1v2.1": ("sentiment", "sarcasm", "intents"),
+    "precheck_v2.1_with_post": ("sentiment", "sarcasm", "intents", "unclear"),
 }
 """What each comment prompt asks for, and therefore what :func:`parse_reply` returns.
 

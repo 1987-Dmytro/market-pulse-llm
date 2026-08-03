@@ -37,7 +37,14 @@ def test_prompt_hash_matches_the_pre_registered_value():
 def test_prompts_carry_no_labelled_examples():
     """Zero-shot means zero-shot: rules yes, worked examples no (SPEC §7)."""
     # every prompt that scores rows lives under the rule, the with-post revisions included
-    for task in (*prompts.TASKS, "T1v2", "T1v2_with_post", "precheck_v2_with_post"):
+    for task in (
+        *prompts.TASKS,
+        "T1v2",
+        "T1v2_with_post",
+        "precheck_v2_with_post",
+        "T1v2.1",
+        "precheck_v2.1_with_post",
+    ):
         text = prompts.PROMPTS[task]
         assert "example" not in text.casefold()
         # a labelled example would have to show an answer next to a body of text
@@ -57,6 +64,8 @@ def test_taxonomy_v2_prompts_are_registered_beside_v1_and_not_inside_it():
         "relabel_intents_v2_with_post",
         "precheck_v2_with_post",
         "caption_post",
+        "T1v2.1",
+        "precheck_v2.1_with_post",
     }
     # the label tables describe labelling tasks: the caption prompt answers in prose and is in
     # none of them, and `T2` labels a post rather than a comment
@@ -68,7 +77,7 @@ def test_taxonomy_v2_prompts_are_registered_beside_v1_and_not_inside_it():
     assert not prompts.FREE_TEXT & prompts.WITH_POST
     assert {task: prompts.prompt_sha256(task) for task in prompts.TASKS} == PROMPT_SHA256
     assert prompts.prompt_sha256("T1v2") != PROMPT_SHA256["T1"]
-    # eight prompts, eight hashes: a derived revision that collided with its base would
+    # ten prompts, ten hashes: a derived revision that collided with its base would
     # make two measurements indistinguishable in a record
     assert len({prompts.prompt_sha256(task) for task in prompts.PROMPTS}) == len(prompts.PROMPTS)
 
@@ -471,3 +480,41 @@ def test_parse_never_invents_a_label():
         for reply in ("", "no", "{}", "null", '{"foo": 1}'):
             with pytest.raises(prompts.ParseError):
                 prompts.parse_reply(task, reply)
+
+
+def test_v2_1_is_v2_plus_the_settled_cases_and_nothing_else():
+    """A revision that also reworded a rule would move the measurement for a second reason,
+    and the 4.5g3 re-run exists to attribute a change to the sitting's rulings alone."""
+    assert prompts.T1_PROMPT_V2_1 == prompts.T1_PROMPT_V2.replace(
+        "\nAnswer with one JSON object",
+        f"\n{prompts.SETTLED_CASES}\n\nAnswer with one JSON object",
+    )
+    assert prompts.prompt_sha256("T1v2.1") != prompts.prompt_sha256("T1v2")
+    # the four-field revision is assembled by the same three swaps as its v2 sibling
+    old, new = prompts.PRECHECK_PROMPT_V2_WITH_POST, prompts.PRECHECK_PROMPT_V2_1_WITH_POST
+    assert new.replace(f"\n{prompts.SETTLED_CASES}\n", "") == old
+    assert (
+        prompts.COMMENT_FIELDS["precheck_v2.1_with_post"]
+        == prompts.COMMENT_FIELDS["precheck_v2_with_post"]
+    )
+    assert "precheck_v2.1_with_post" in prompts.WITH_POST and "T1v2.1" not in prompts.WITH_POST
+
+
+def test_every_settled_case_is_a_ruling_the_guideline_carries():
+    """Where the prompt and the guideline disagree, the gap is charged to the model. The v2.1
+    block is written from the changelog, so the changelog has to exist and to rule on each of
+    the eight things the prompt now tells the model."""
+    law = " ".join(GUIDELINE.read_text(encoding="utf-8").split())
+    assert "## v2.1 changelog" in GUIDELINE.read_text(encoding="utf-8")
+    changelog = law.split("v2.1 changelog")[1]
+    for phrase in (
+        "are `unclear: true`",  # off-topic banter
+        "marker list in §Decision rules",  # unsigned corporate voice
+        'Bare praise of how the retailer behaves is `["service"]`',
+        'promo-terms question is `["service"]`',
+        "outweighs a commenter addressee",
+        'food-preference joke is `["taste"]`',
+        "mock-quote of app or promo text is `sarcasm: true`",
+    ):
+        assert phrase in changelog, phrase
+    assert prompts.SETTLED_CASES.count("\n- ") == 8, "eight lines for eight settled cases"
