@@ -13,6 +13,7 @@ anything twice.
     python3.11 scripts/backfill.py
 """
 
+import argparse
 import asyncio
 import os
 import sys
@@ -56,6 +57,34 @@ THREAD_PAUSE = 1.0  # between comment threads
 CHANNEL_PAUSE = 2.0
 FLOOD_RETRIES = 3
 PROGRESS_EVERY = 50
+
+
+V1_COMMENTS = "data/raw/comments/"
+"""The comment store as it was collected before 4.5g5 taught the collector `reply_to_msg_id`.
+
+Every row in it predates that field, and this script would append rows that carry it — so one
+file would hold two kinds of record distinguishable only by a missing key. `data/raw/comments_v2/`
+is where the joined store lives and `scripts/fetch_comments_v2.py` is what writes it; a v1 walk
+is now an explicit decision rather than the default (4.5g5, deviation 11)."""
+
+
+def v1_write_refusal(channels: list[tuple], allow: bool) -> str | None:
+    """Why this run may not append to the v1 comment store, or ``None`` if it may.
+
+    Returned rather than raised so the reason can be tested and printed by one caller. Posts are
+    untouched by this: their records did not change shape.
+    """
+    if allow or not any(source.comments_enabled for source, _ in channels):
+        return None
+    enabled = sorted({handle for source, handle in channels if source.comments_enabled})
+    return (
+        f"this run would append comments to {V1_COMMENTS} for {', '.join(enabled)}, and every row"
+        " already there was collected before the store learned `reply_to_msg_id`. Mixing the two"
+        " leaves one file whose rows differ by a missing key, and `measure_families_45g5.py`"
+        " counts a row without that key as un-refetched rather than as top-level. Re-fetch into"
+        " data/raw/comments_v2/ with scripts/fetch_comments_v2.py, or pass --allow-v1-write if"
+        " appending to v1 is what you mean."
+    )
 
 
 @dataclass
@@ -168,19 +197,30 @@ async def backfill_channel(client, job: Job) -> str:
     return stopped
 
 
-async def main() -> int:
-    registry = load_registry(REGISTRY)
-    salt = load_salt()  # also loads .env, so the session name is available below
-    session = os.environ["TELEGRAM_SESSION"]
-    store = RawStore()
-    cursor = load_cursor(CURSOR)
+async def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--allow-v1-write",
+        action="store_true",
+        help=f"append comments to {V1_COMMENTS}, which no longer carry reply_to_msg_id",
+    )
+    args = parser.parse_args(argv)
 
+    registry = load_registry(REGISTRY)
     channels = [
         (source, handle)
         for source in registry.sources
         if source.verified
         for handle in source.telegram_channels
     ]
+    if refusal := v1_write_refusal(channels, args.allow_v1_write):
+        raise SystemExit(refusal)
+
+    salt = load_salt()  # also loads .env, so the session name is available below
+    session = os.environ["TELEGRAM_SESSION"]
+    store = RawStore()
+    cursor = load_cursor(CURSOR)
+
     rows = {
         handle: channel_row(store, source, handle, "not started") for source, handle in channels
     }
