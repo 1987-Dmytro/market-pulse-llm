@@ -2,24 +2,24 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-03 18:03:48 (every SessionStart)
+**Auto-refreshed:** 2026-08-03 18:27:08 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+0a76bf3 feat: the probe runner, committed before the run it records
+7fb5e83 feat: the v2.2 probe's gate, pre-registered before a row is bought
+43774a0 feat: v2.2 — the same eight rulings, said forwards
+677d2c0 chore: the tail the hooks wrote after the last commit, and the team lead's next brief
 29a1d68 fix: three guards that were measuring the wrong thing, and a batch that said so
-a3f9f17 chore: vault — the 4.5g3 outcome, so the next session starts from it
-e582eee docs: the 4.5g3 record — three FAILs, a v2.1 that regressed, twelve deviations
-69fe512 feat: the wave-2 gate pack, sealed blind and carrying its own warning
-fcacd9c feat: the whole batch re-labelled under v2.1 — and it came back worse
 ```
 
 ## 📋 Recent decisions
 
-- `45g3-sitting-gates.md` — All three strata failed, the guideline grew a v2.1, and the whole batch goes back
+- `45g4-v22-affirmative-rewrite.md` — The rulings were right and the sentences were backwards: v2.2, bought a hundred rows at a time
 - `INDEX.md` — Decision records
-- `45g2-captions-and-quiz-rulings.md` — The quiz failed its bar, the media-only post gets a voice, and the sitting is resealed
+- `45g3-sitting-gates.md` — All three strata failed, the guideline grew a v2.1, and the whole batch goes back
 
 ## 📅 Recent daily logs
 
@@ -31,11 +31,54 @@ fcacd9c feat: the whole batch re-labelled under v2.1 — and it came back worse
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-03 17:59 (`/save` after `PROMPT-4.5g3` — **all three strata FAIL at 88/89/81, so the whole 1,912 went back; the v2.1 prompt REGRESSED and the cap forbids a corrected re-run: that is the one decision waiting for the operator**. 89 hand-decided rows merged, guideline v2.1 is law, the wave-2 hundred is sealed and carries its own warning. The 4.5f calibration gate stays PASS at 100/100; test v3 is frozen beside v2; Phase 4 stays closed at 2 of 5 against v2; edited by hand — the section above is auto-generated, do NOT touch the marker)
+**Last update:** 2026-08-04 (after `PROMPT-4.5g4` — **v2.2 says the same eight rulings affirmatively and the pre-registered probe came back KILL: preserved 37/58 against a bar of 55, fixed 9/29 against 24. The rewrite is NOT what failed — v2.1 scored 20/58 and 4/29 on the identical rows — it just does not reach the sitting's own bar.** 15 of the 20 remaining misses name `unclear`, and P6 is provably out of the prompt's reach. All three 4.5g strata still FAIL; nothing merges; the wave-2 hundred is still unjudged. The 4.5f calibration gate stays PASS at 100/100; test v3 is frozen beside v2; Phase 4 stays closed at 2 of 5 against v2; edited by hand — the section above is auto-generated, do NOT touch the marker)
 
 ## 🔥 What's Hot
 
-**THE GATE: 88 / 89 / 81 AGAINST 0.90 — ALL THREE STRATA FAIL, AND THE WHOLE 1,912 GO BACK.**
+**THE v2.2 PROBE: KILL, AND THE REWRITE STILL WORKED.** One attempt, 100 rows, $0.0365, 100
+answered, 0 unusable. `results/v22_probe_results.json`, scored by the function
+`results/v22_probe_plan.json` committed **before** the first request — `run_v22_probe.py` shells
+out to git and refuses a plan that is untracked *or modified*.
+
+| | v2 (the pack) | v2.1 | **v2.2** | PASS at | KILL below |
+|---|---|---|---|---|---|
+| `preserved` | 58/58 | 20/58 | **37/58** | 55 | 52 |
+| `fixed` | 0/29 | 4/29 | **9/29** | 24 | 20 |
+
+Affirmative phrasing nearly doubled preservation and more than doubled the landed rulings, and
+every field moved less (`intents` 31 vs 48 · `sentiment` 4 vs 9 · `unclear` 13 vs 16 · `sarcasm`
+2 vs 9). **The P5 family is fully fixed**: all three promo-mechanics questions answer
+`["service"]` where v2.1 answered `[]`. It reaches about a third of the way to the bar. **Task 4
+was NOT run** (PASS-only) and nothing under `data/annotation/wave2_45g3/` was opened.
+
+**WHERE IT STILL FAILS, AND WHY THE NEXT MOVE IS NOT A THIRD WORDING.** Of the 20 stated rulings
+still missed, **15 name `unclear`** (3 `sarcasm`, 2 `intents`), and only 3 of the 20 are the
+benign "ruling landed, unnamed field moved" class the plan pre-registered. Two readings:
+(1) **`UNCLEAR_RULE` speaks last** — settled cases at offset 2410, the untouched v2 unclear rule
+at 3642, answer format at 4240, and that rule closes on *"do not use it to avoid a decision you
+can make"*. Position was held fixed on purpose this phase and is now the named next variable.
+(2) **P6 is a missing feature, not a missing sentence** — the rule reaches the model twice (v2.2's
+second line, and `UNCLEAR_RULE` since v2) and it still answers `unclear: false` on 3 of the 4
+unsigned corporate-voice rows. Their texts identify no retailer. But **all four share one
+`sender_anon_id`** (`2fa2b73f617b…`, 876 comments against 81 for the next busiest) — the support
+account, already in `data/raw/comments/` under a stable HMAC, never reaching the labelling row.
+ADR [[45g4-v22-affirmative-rewrite]].
+
+**v2.2 IS REGISTERED AND NOTHING ON DISK IS LABELLED WITH IT.** `T1v2.2` `8542a1d5…` ·
+`precheck_v2.2_with_post` `02e804b2…`, beside the ten older hashes, all unmoved. Guideline gains
+a **`v2.2 changelog` marked FORM-ONLY** with a line-by-line old→new table — no law moves.
+`UNCLEAR_RULE` and the block's position are untouched and asserted by test. Two guards: a
+**transcription guard** (the team lead's text as a second literal, wrapped at another width,
+compared whitespace-insensitively) and a **negation guard** (no `not|never|no|none|neither|nor|n't`
+in the block, with a negative control proving the same regex still fires on v2.1's).
+
+**MONEY: $0.7794 OF $1.50 SPENT, $0.7206 LEFT.** 4.5g3 $0.7429 + this phase $0.0365.
+`results/spend_45g4.json`, its own anchor, read from the provider before the first request. The
+prior phase's spend is **read from `spend_45g3.json` and cross-checked against `rerun_45g3.json`**
+— never as `total_usage - anchor_45g3`, which grows with every request this phase makes. A full
+1,912-row re-run under any revision still does not fit, and that has not changed.
+
+**THE 4.5g3 GATE STANDS: 88 / 89 / 81 AGAINST 0.90 — ALL THREE STRATA FAIL, AND THE WHOLE 1,912 GO BACK.**
 `results/sitting_45g_gates.json`, computed by `scripts/read_sitting_returns.py` and nowhere else.
 The returned file does **not** hash to what the manifest pinned and cannot — two columns were
 filled in — so identity is proved the other way: rebuild the sealed pack from the batch the
@@ -538,11 +581,18 @@ files**: `comments_train.jsonl` (1600) + `sarcasm_candidates.jsonl` (746) plus
 
 ## ⏭️ Next
 
-1. **THE OPERATOR'S DECISION, AND IT IS ONE QUESTION.** The v2.1 re-run regressed and a corrected
-   one does not fit the $1.50 cap. Either **raise the cap** for one more pass — and rewrite
-   `prompts.SETTLED_CASES` in the positive voice first, then **probe it on ~100 paid rows (~4
-   cents) before buying the whole пласт** — or **judge the wave-2 hundred as it stands**. Nothing
-   else in 4.5g3 is waiting on anything. `emptied40.csv` stays superseded and unfilled.
+1. **THE OPERATOR'S DECISION, NARROWED BY THE PROBE.** The affirmative rewrite was bought and
+   scored: it helps a lot and it does not clear the bar (37/58 · 9/29 against 55 · 24). Three
+   options, and the probe priced all of them. **(a) One more $0.04 probe with the settled
+   `unclear` cases folded into `UNCLEAR_RULE` itself, or that rule moved above the block** — the
+   sample, the reference labels, the scorer and the thresholds already exist and
+   `results/v22_probe_rows.jsonl` makes it a paired comparison on arrival; 15 of the 20 remaining
+   misses are `unclear`, so this is where the mass is. **(b) Carry `sender_anon_id` into the
+   labelling row** and settle the corporate-voice class by lookup instead of inference — that is a
+   registry/pipeline decision, not a prompt one, and it is the only thing that can fix P6.
+   **(c) Judge the wave-2 hundred as it stands** — but it gates the v2.1 labels, which measure
+   worse than v2.2 and worse than v2. Nothing else in 4.5g4 is waiting on anything, and
+   `emptied40.csv` stays superseded and unfilled.
 2. **THE POLL FINDING IS A CORPUS QUESTION, AND IT IS THE BIGGEST THING 4.5g2 OPENED.** 16 of the 41
    parents in play are polls whose question the collector never stored. **How many polls are in the
    whole store is unknown**; every one of them is currently recorded as a post that said nothing,
@@ -603,6 +653,23 @@ no-regression bars, the scorer taught to read the persisted slice).
 matrix is frozen. CPU beats MPS by 14×, which is the opposite of the intuition.
 
 ## ⚠️ Footguns for the next run
+
+**A prompt revision can only re-weigh evidence the model HAS.** v2.2 states the corporate-voice
+ruling, and `UNCLEAR_RULE` had already listed it since v2 — the model reads it twice and still
+answers `unclear: false` on 3 of the 4 P6 rows, because nothing in their text identifies a
+retailer. The discriminator was one directory away the whole time (`sender_anon_id`, same
+pseudonym on all four). Before rewording a rule the model keeps breaking, check whether the input
+it would need to obey the rule is in the row at all.
+
+**A pre-registration that is not committed is not a pre-registration.** `run_v22_probe.py` shells
+out to `git ls-files` and `git diff HEAD` and refuses to spend against a plan that is untracked
+**or modified** — tracked-but-edited is the case a shallow check misses. Both branches are tested
+against a throwaway repo.
+
+**A comparison row read off the wrong file looks like a perfect score.** The v2.1 baseline was
+first computed from the plan's own source batch, which holds the labels the sitting judged: v2
+against itself, reported as 58/58 for a prompt that scores 20. The smoke run caught it. Whenever
+a record carries a "before" column, check which file it came from.
 
 **A cost estimate must price what the run will BUY, not what it chooses from.** `rerun_failed_strata`
 priced the whole 1,912-row scope against the remaining headroom and refused a 17-row resume that

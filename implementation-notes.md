@@ -1363,3 +1363,85 @@ back as 70 instead of 97. Nothing about the write was wrong; the field meant som
 what it was filled with. The fix is two fields — `old` for what the reversal has to restore,
 `replaced` for what this run overwrote — and the general shape is: before writing into a shared
 history, read the function that consumes it and fill its fields with what *that* function means.
+
+# Phase 4.5g4 — v2.2 and the pre-registered probe
+
+Executed against `docs/PROMPT-4.5g4.md`. `make check` green at **587 tests**, `ruff format
+--check .` clean, every number below produced by a script and none typed into a document.
+
+## Deviations — silence is not compliance
+
+1. **Task 0 swept five files, not three.** The prompt named the daily log, `knowledge/index.md`
+   and `results/sitting_45g_gates.json`, and said to stop if anything else was dirty. Two more
+   were: `knowledge/hot.md` (the `/save` checkpoint at 17:59) and `docs/STATUS.md` (the team
+   lead's own 4.5g3 acceptance and 4.5g4 briefing), plus the untracked `docs/PROMPT-4.5g4.md`.
+   None is drift — all three are the operator's or the harness's known output, and STATUS.md
+   *contains* the brief being executed. Swept together, the two team-lead files committed
+   verbatim and unedited, and named in the commit message rather than hidden under "chore".
+2. **The prompt named three registry tables that do not exist under those names.**
+   `PROMPT_KIND`, `PROMPT_INTENTS` and `PROMPT_FIELDS` are `DELIMITERS`, `INTENTS_OF` and
+   `COMMENT_FIELDS` in `src/market_pulse/prompts.py`. Same tables, same shapes; registered
+   under the real names. A fourth was needed and unnamed: **`WITH_POST`**, without which
+   `build_messages` refuses a with-post prompt outright. `T1_PROMPT_V2_2_WITH_POST` stays
+   unregistered, exactly as its v2.1 sibling does.
+3. **The transcription guard's "different bytes" assertion was wrong and was removed.** A
+   backslash continuation is resolved at parse time, so the constant and the test's copy are
+   two different literals in two files with the same *value* — which is what makes the
+   comparison meaningful, and what made `assert constant != canonical` fail on the first run.
+4. **The plan/run split is two scripts, and the plan-committed check is `git`.** The prompt's
+   hard stop is "no API request before the plan commit". A comment cannot enforce that, so
+   `run_v22_probe.py` shells out to `git ls-files` and `git diff HEAD` and refuses an untracked
+   *or modified* plan before the ledger is even read. Both branches are tested against a
+   throwaway repo.
+5. **Commit 4 was split in two.** The runner and its tests are committed *before* the run, and
+   the results after. The probe is one attempt: a run made from a dirty tree writes a record
+   pinning a commit that does not contain the script that made it. The record's `git` block now
+   names `0a76bf30` with only the run's own outputs dirty.
+6. **The prior-phase spend is read from `spend_45g3.json` and cross-checked against
+   `rerun_45g3.json`**, not computed as `total_usage - anchor_45g3` — that difference grows
+   with every request 4.5g4 makes, so the cap would have loosened as the run proceeded. The two
+   readings must agree within a cent or the run stops.
+7. **The plan carries a paired baseline the prompt did not ask for.** It cites "v2.1
+   preservation ~33% in-sample", a corpus average. v2.1's answers for these exact 100 rows are
+   on disk, so the plan computes v2.1's own `preserved` and `fixed` under the same scorer
+   (20/58 and 4/29) and the probe reads as a paired comparison. The v2 control is there for the
+   same money: v2's labels *are* the reference, so 58/58 and 0/29 is a test of the scorer.
+8. **A secondary counter was pre-registered, not invented afterwards.** 19 of the 29 rulings say
+   `unclear: true`, and the guideline excludes an unclear row's other labels from scoring — so
+   a row where v2.2 sets `unclear` right and moves `intents` counts as a miss under the
+   registered rule. That rule stands; `named_field_only` reports the class separately. It came
+   to 3 of 20, so it changes nothing — which is only knowable because it was registered before
+   the numbers existed.
+9. **Two defects the checks caught before the money went out.** A unit test found that an
+   unanswered row raised `KeyError` instead of counting against its denominator. The smoke run
+   found the comparison row reading v2.1 off the plan's *source* batch — the labels the sitting
+   judged — and reporting a flawless 58/58 for a prompt that scores 20.
+10. **Task 4 was not executed.** The gate returned KILL on both counters; `data/annotation/
+    wave2_45g3/` was never opened, and its manifest hashes were therefore never at risk.
+11. **The 4.5g3 guard fixes already had regression tests**, as the prompt allowed for:
+    `tests/test_wave2.py::test_the_estimate_is_for_what_this_run_will_buy_not_for_the_whole_scope`
+    and `tests/test_merge_sitting.py::test_a_label_outside_the_taxonomy_fails_here_rather_than_in_the_merge_that_reads_it`.
+12. **`main()` of the runner is covered by `--smoke` and not by a unit test.** Its live-only
+    branch is the ledger/estimate block, which is the same shape as
+    `rerun_failed_strata.py`'s and is regression-tested there. The helpers that are new here —
+    the git check, the prior-spend cross-check, the family parser, the per-field mover — are
+    unit-tested. Named rather than glossed: the bench for a full live-path fake is ~40 lines
+    and was not written.
+
+## The finding worth writing down
+
+**A rule the model reads twice is not a rule it can apply.** v2.2 states the corporate-voice
+ruling in its own words, and `UNCLEAR_RULE` had already listed *"a reply written by the retailer
+in its own corporate voice"* since v2 — and the model still answers `unclear: false` on three of
+the four P6 rows. Their texts (`Акційні товари дійсно мають високий попит…`, `Тамагочі Варусятко
+живе у мобільному додатку VARUS.`) carry nothing that identifies a retailer; the discriminator
+is not in the text at all. It is on disk, one directory away: **all four rows share a
+`sender_anon_id`** — `2fa2b73f617b…`, 876 comments against 81 for the next busiest sender in the
+channel, i.e. the support account, stable under the raw-store HMAC and never deanonymised. The
+labelling row does not carry the field.
+
+So the general shape: **before rewording a rule the model keeps breaking, check whether the
+input it would need to obey the rule is in the row at all.** A prompt revision can only re-weigh
+evidence the model has. Where the evidence is missing, every revision is a coin flip that costs
+a run to observe — and this one cost two of them, because the same rows failed under v2.1 and
+were charged to the wording both times.

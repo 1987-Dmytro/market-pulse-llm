@@ -98,6 +98,54 @@ breakdown — how many of the 29 match every *named* field regardless of unnamed
 "the rulings did not land" and "the rulings landed and the row moved elsewhere" are different
 findings and the difference has to be decidable without a second run.
 
+## (d) The probe came back KILL — and the rewrite still worked
+
+One attempt, $0.0365, 100 of 100 rows answered, nothing unusable
+(`results/v22_probe_results.json`).
+
+| | v2 (the pack) | v2.1 | **v2.2** | PASS at | KILL below |
+|---|---|---|---|---|---|
+| `preserved` | 58/58 | 20/58 | **37/58** | 55 | 52 |
+| `fixed` | 0/29 | 4/29 | **9/29** | 24 | 20 |
+
+**Verdict: KILL**, on both counters, by the rule registered before the run. Task 4 is skipped
+and nothing is pinned for the wave-2 hundred.
+
+And the rewrite is not what failed. On the identical rows, under the identical scorer, v2.2
+preserves **37 where v2.1 preserved 20** and fixes **9 where v2.1 fixed 4**; every field moved
+less (`intents` 31 against 48, `sentiment` 4 against 9, `unclear` 13 against 16, `sarcasm` 2
+against 9). The clearest single case is the **P5 family** — the three promo-mechanics questions
+the sitting refused: v2.1 answered `[]` on all three, v2.2 answers `["service"]` on all three.
+Saying what a case *is* moved the label space back towards the operator's verdicts, exactly as
+the hypothesis predicted. It moved it about a third of the way.
+
+**Where the remaining misses are is the finding.** Of the 20 stated rulings v2.2 still gets
+wrong, **15 name `unclear`** (3 name `sarcasm`, 2 `intents`), and only 3 of the 20 are the
+benign class the plan pre-registered — the ruling landed and an unnamed field moved. The other
+17 miss the field the ruling names. `unclear` is also the second-largest source of preserved
+losses (6 of 21, behind `intents` at 14).
+
+Two readings of that, and they point in different directions:
+
+1. **`UNCLEAR_RULE` speaks last.** In the assembled prompt the settled cases sit at offset
+   2,410, the untouched v2 `unclear` rule at 3,642, and the answer format at 4,240 — so the
+   final thing the model reads about `unclear` is v2's own list, which knows nothing of the
+   sitting's rulings and closes on *"do not use it to avoid a decision you can make"*. This
+   phase held that block fixed on purpose (it was in v2, which scored 86%), and the ADR
+   pre-committed to naming position as the next variable if form failed. It is now named.
+2. **For the P6 family, no wording can work.** The four unsigned corporate-voice rows are the
+   sharpest case and v2.2 still answers `unclear: false` on three of them — even though the
+   rule reaches the model **twice**: v2.2's second line says it, and `UNCLEAR_RULE` already
+   listed *"a reply written by the retailer in its own corporate voice"* in v2. Their texts are
+   `Акційні товари дійсно мають високий попит…`, `Тамагочі Варусятко живе у мобільному
+   додатку VARUS.`, `Акція з ОТР банком була завершена 15.08.25р.` — statements no reader can
+   attribute to a retailer from the text alone. And the discriminator already exists on disk:
+   **all four carry the same `sender_anon_id`** (`2fa2b73f617b…`), the busiest sender in the
+   channel at 876 comments against 81 for the next — the support account, stable under the
+   raw-store HMAC and never deanonymised. `data/raw/comments/` has it; the labelling row does
+   not. P6 is a **missing feature, not a missing sentence**, and a third prompt revision would
+   spend money proving that again.
+
 ## Consequences
 
 - **The cap does not move.** $1.50 total, `results/spend_45g4.json` anchored against the
@@ -113,4 +161,22 @@ findings and the difference has to be decidable without a second run.
 - **A staged purchase is now the house rule for a prompt revision.** 4.5g3 bought a whole
   population to discover the instrument had changed; this phase buys a hundred rows to find out
   the same thing for four cents. `[[45g3-sitting-gates]]` recorded that lesson; this is the
-  first phase to spend under it.
+  first phase to spend under it — and it returned a KILL for 2.4% of what the same finding cost
+  last time.
+- **The form-only hypothesis is closed, and it is closed as a partial success.** Affirmative
+  phrasing is worth keeping — it doubled preservation and more than doubled the landed rulings
+  — but it does not reach a bar the sitting's own verdicts set. `precheck_v2.2_with_post` is
+  registered and is the best prompt on file; nothing on disk is labelled with it.
+- **The next variable is position, and it is a smaller experiment than it looks.** Fold the
+  settled `unclear` cases into `UNCLEAR_RULE` itself — or move that rule above the block — and
+  re-run the same committed plan. The sample, the reference labels, the scorer and the
+  thresholds already exist; the marginal cost is another $0.04. The 100 answers of this run are
+  in `results/v22_probe_rows.jsonl`, so it is a paired comparison on arrival.
+- **P6 is out of the prompt's reach and should stop being asked of it.** The retailer's own
+  support account is already a stable pseudonym in `data/raw/comments/`; carrying
+  `sender_anon_id` into the labelling row would settle the corporate-voice class by lookup
+  rather than by inference. No code is written for that here — it changes what a labelled row
+  is, which is a registry and pipeline decision, not a prompt one.
+- **The shared cap has $0.7206 left.** 4.5g3 spent $0.7429 and this phase $0.0365 of $1.50
+  (`results/spend_45g4.json`, anchored against the provider before the first request). A full
+  1,912-row re-run under any revision still does not fit, and that has not changed.

@@ -1,0 +1,613 @@
+{
+  "runs": [
+    {
+      "timestamp": "2026-08-03T16:21:13+00:00",
+      "phase": "45g4",
+      "task": "precheck_v2.2_with_post",
+      "model": "qwen/qwen3.6-27b",
+      "endpoint": {
+        "tag": "io-net/fp8",
+        "quantization": "fp8",
+        "served_quantization": "fp8",
+        "status": 0
+      },
+      "smoke": false,
+      "annotator": "llm-precheck-v2.2",
+      "plan": "results/v22_probe_plan.json",
+      "plan_sha256": "d4e5f21cb84638119ab95515b710e3de6c44878014823ba93bc00d43c84c2322",
+      "prompt_sha256": {
+        "precheck_v2.2_with_post": "02e804b28c480e49f2699bb171a106165caddce0c011b16ff59e17a09b5900a8",
+        "T1v2.2": "8542a1d5b37c4c4aab61dfaf7067713b8ce7e0b546aa00998765c98cf4992880",
+        "precheck_v2.1_with_post": "95d506c48a390c80856f51e3c40360a1bb4d6c314dffefd3a88c4efc1239fde3",
+        "precheck_v2_with_post": "113000df199536a5657b4ed531058ce2e8029384f2d11e721e2af5d0f665fed0"
+      },
+      "gate": {
+        "verdict": "KILL",
+        "rule": "PASS = preserved >= 55/58 AND fixed >= 24/29. KILL = preserved < 52/58 OR fixed < 20/29. Between the two: the operator decides on the numbers.",
+        "attempts": 1,
+        "preserved": "37/58",
+        "fixed": "9/29",
+        "thresholds": {
+          "preserved": {
+            "n": 58,
+            "pass_at": 55,
+            "kill_below": 52
+          },
+          "fixed": {
+            "n": 29,
+            "pass_at": 24,
+            "kill_below": 20
+          }
+        }
+      },
+      "counts": {
+        "preserved": {
+          "n": 58,
+          "kept": 37
+        },
+        "fixed": {
+          "n": 29,
+          "landed": 9
+        },
+        "named_field_only": [
+          "@VARUS_channel:1271",
+          "@VARUS_channel:7711",
+          "@msuaaaa:8051"
+        ],
+        "preserved_lost": [
+          "@VARUS_channel:10150",
+          "@VARUS_channel:11798",
+          "@VARUS_channel:11802",
+          "@VARUS_channel:16668",
+          "@VARUS_channel:1693",
+          "@VARUS_channel:1806",
+          "@VARUS_channel:18232",
+          "@VARUS_channel:3330",
+          "@VARUS_channel:3444",
+          "@VARUS_channel:6505",
+          "@VARUS_channel:7330",
+          "@VARUS_channel:7467",
+          "@VARUS_channel:8264",
+          "@VARUS_channel:8653",
+          "@VARUS_channel:8688",
+          "@VARUS_channel:8755",
+          "@VARUS_channel:8831",
+          "@VARUS_channel:8839",
+          "@msuaaaa:8950",
+          "@msuaaaa:9724",
+          "@msuaaaa:9962"
+        ],
+        "fixed_missed": [
+          "@VARUS_channel:10136",
+          "@VARUS_channel:1271",
+          "@VARUS_channel:1338",
+          "@VARUS_channel:14891",
+          "@VARUS_channel:17855",
+          "@VARUS_channel:17864",
+          "@VARUS_channel:19919",
+          "@VARUS_channel:2693",
+          "@VARUS_channel:323",
+          "@VARUS_channel:328",
+          "@VARUS_channel:7065",
+          "@VARUS_channel:7074",
+          "@VARUS_channel:7545",
+          "@VARUS_channel:7711",
+          "@VARUS_channel:8850",
+          "@VARUS_channel:8916",
+          "@VARUS_channel:9271",
+          "@msuaaaa:11507",
+          "@msuaaaa:12621",
+          "@msuaaaa:8051"
+        ],
+        "ungated_moved": [
+          "@VARUS_channel:11615",
+          "@VARUS_channel:2798",
+          "@VARUS_channel:6239",
+          "@VARUS_channel:7555",
+          "@VARUS_channel:8478",
+          "@VARUS_channel:8932",
+          "@msuaaaa:11876",
+          "@msuaaaa:12325"
+        ],
+        "ungated_unmoved": [
+          "@VARUS_channel:14759",
+          "@VARUS_channel:18839",
+          "@VARUS_channel:3989",
+          "@VARUS_channel:4663",
+          "@VARUS_channel:9055"
+        ],
+        "answered": 100
+      },
+      "in_sample": true,
+      "in_sample_caveat": "These 100 rows are the verdicts the v2.1 AND v2.2 rulings were both distilled from, so every number here is optimistic by construction. This probe authorises the next purchase and never batch acceptance: only a fresh blind hundred, drawn outside the judged 300, can accept a re-labelled batch. For scale, v2.1 scored 10 of these same 29 stated rulings and moved 172 of the 258 accepted rows corpus-wide (results/rerun_45g3.json).",
+      "compared_with": {
+        "v2 (the labels the sitting judged)": {
+          "preserved": {
+            "n": 58,
+            "kept": 58
+          },
+          "fixed": {
+            "n": 29,
+            "landed": 0
+          },
+          "named_field_only": [],
+          "preserved_lost": [],
+          "fixed_missed": [
+            "@VARUS_channel:10136",
+            "@VARUS_channel:10394",
+            "@VARUS_channel:11605",
+            "@VARUS_channel:11606",
+            "@VARUS_channel:11776",
+            "@VARUS_channel:1271",
+            "@VARUS_channel:1338",
+            "@VARUS_channel:14891",
+            "@VARUS_channel:16461",
+            "@VARUS_channel:17855",
+            "@VARUS_channel:17864",
+            "@VARUS_channel:19919",
+            "@VARUS_channel:245",
+            "@VARUS_channel:2693",
+            "@VARUS_channel:323",
+            "@VARUS_channel:328",
+            "@VARUS_channel:7065",
+            "@VARUS_channel:7074",
+            "@VARUS_channel:7545",
+            "@VARUS_channel:7711",
+            "@VARUS_channel:8850",
+            "@VARUS_channel:8903",
+            "@VARUS_channel:8916",
+            "@VARUS_channel:8947",
+            "@VARUS_channel:9271",
+            "@msuaaaa:11507",
+            "@msuaaaa:12621",
+            "@msuaaaa:12648",
+            "@msuaaaa:8051"
+          ],
+          "ungated_moved": [],
+          "ungated_unmoved": [
+            "@VARUS_channel:11615",
+            "@VARUS_channel:14759",
+            "@VARUS_channel:18839",
+            "@VARUS_channel:2798",
+            "@VARUS_channel:3989",
+            "@VARUS_channel:4663",
+            "@VARUS_channel:6239",
+            "@VARUS_channel:7555",
+            "@VARUS_channel:8478",
+            "@VARUS_channel:8932",
+            "@VARUS_channel:9055",
+            "@msuaaaa:11876",
+            "@msuaaaa:12325"
+          ],
+          "answered": 100
+        },
+        "v2.1 (data/annotation/uplabel_precheck_45g3.jsonl)": {
+          "preserved": {
+            "n": 58,
+            "kept": 20
+          },
+          "fixed": {
+            "n": 29,
+            "landed": 4
+          },
+          "named_field_only": [
+            "@VARUS_channel:1271",
+            "@VARUS_channel:1338",
+            "@VARUS_channel:2693",
+            "@VARUS_channel:7065",
+            "@VARUS_channel:7074",
+            "@msuaaaa:8051"
+          ],
+          "preserved_lost": [
+            "@VARUS_channel:10150",
+            "@VARUS_channel:11369",
+            "@VARUS_channel:11798",
+            "@VARUS_channel:12050",
+            "@VARUS_channel:12151",
+            "@VARUS_channel:12224",
+            "@VARUS_channel:12260",
+            "@VARUS_channel:1329",
+            "@VARUS_channel:15504",
+            "@VARUS_channel:16668",
+            "@VARUS_channel:1693",
+            "@VARUS_channel:16999",
+            "@VARUS_channel:1806",
+            "@VARUS_channel:19824",
+            "@VARUS_channel:3330",
+            "@VARUS_channel:3444",
+            "@VARUS_channel:4072",
+            "@VARUS_channel:6505",
+            "@VARUS_channel:6509",
+            "@VARUS_channel:6530",
+            "@VARUS_channel:7330",
+            "@VARUS_channel:7467",
+            "@VARUS_channel:8264",
+            "@VARUS_channel:8409",
+            "@VARUS_channel:8653",
+            "@VARUS_channel:8688",
+            "@VARUS_channel:8755",
+            "@VARUS_channel:8788",
+            "@VARUS_channel:8831",
+            "@VARUS_channel:8839",
+            "@VARUS_channel:9434",
+            "@msuaaaa:12647",
+            "@msuaaaa:5989",
+            "@msuaaaa:7651",
+            "@msuaaaa:7747",
+            "@msuaaaa:8950",
+            "@msuaaaa:9724",
+            "@msuaaaa:9962"
+          ],
+          "fixed_missed": [
+            "@VARUS_channel:10136",
+            "@VARUS_channel:10394",
+            "@VARUS_channel:11605",
+            "@VARUS_channel:11776",
+            "@VARUS_channel:1271",
+            "@VARUS_channel:1338",
+            "@VARUS_channel:14891",
+            "@VARUS_channel:17855",
+            "@VARUS_channel:17864",
+            "@VARUS_channel:19919",
+            "@VARUS_channel:245",
+            "@VARUS_channel:2693",
+            "@VARUS_channel:323",
+            "@VARUS_channel:328",
+            "@VARUS_channel:7065",
+            "@VARUS_channel:7074",
+            "@VARUS_channel:7545",
+            "@VARUS_channel:7711",
+            "@VARUS_channel:8850",
+            "@VARUS_channel:8916",
+            "@VARUS_channel:8947",
+            "@msuaaaa:11507",
+            "@msuaaaa:12621",
+            "@msuaaaa:12648",
+            "@msuaaaa:8051"
+          ],
+          "ungated_moved": [
+            "@VARUS_channel:14759",
+            "@VARUS_channel:18839",
+            "@VARUS_channel:3989",
+            "@VARUS_channel:4663",
+            "@VARUS_channel:6239",
+            "@VARUS_channel:7555",
+            "@VARUS_channel:8478",
+            "@VARUS_channel:8932",
+            "@msuaaaa:11876"
+          ],
+          "ungated_unmoved": [
+            "@VARUS_channel:11615",
+            "@VARUS_channel:2798",
+            "@VARUS_channel:9055",
+            "@msuaaaa:12325"
+          ],
+          "answered": 100
+        },
+        "v2.1 recomputed here": {
+          "preserved": {
+            "n": 58,
+            "kept": 20
+          },
+          "fixed": {
+            "n": 29,
+            "landed": 4
+          },
+          "named_field_only": [
+            "@VARUS_channel:1271",
+            "@VARUS_channel:1338",
+            "@VARUS_channel:2693",
+            "@VARUS_channel:7065",
+            "@VARUS_channel:7074",
+            "@msuaaaa:8051"
+          ],
+          "preserved_lost": [
+            "@VARUS_channel:10150",
+            "@VARUS_channel:11369",
+            "@VARUS_channel:11798",
+            "@VARUS_channel:12050",
+            "@VARUS_channel:12151",
+            "@VARUS_channel:12224",
+            "@VARUS_channel:12260",
+            "@VARUS_channel:1329",
+            "@VARUS_channel:15504",
+            "@VARUS_channel:16668",
+            "@VARUS_channel:1693",
+            "@VARUS_channel:16999",
+            "@VARUS_channel:1806",
+            "@VARUS_channel:19824",
+            "@VARUS_channel:3330",
+            "@VARUS_channel:3444",
+            "@VARUS_channel:4072",
+            "@VARUS_channel:6505",
+            "@VARUS_channel:6509",
+            "@VARUS_channel:6530",
+            "@VARUS_channel:7330",
+            "@VARUS_channel:7467",
+            "@VARUS_channel:8264",
+            "@VARUS_channel:8409",
+            "@VARUS_channel:8653",
+            "@VARUS_channel:8688",
+            "@VARUS_channel:8755",
+            "@VARUS_channel:8788",
+            "@VARUS_channel:8831",
+            "@VARUS_channel:8839",
+            "@VARUS_channel:9434",
+            "@msuaaaa:12647",
+            "@msuaaaa:5989",
+            "@msuaaaa:7651",
+            "@msuaaaa:7747",
+            "@msuaaaa:8950",
+            "@msuaaaa:9724",
+            "@msuaaaa:9962"
+          ],
+          "fixed_missed": [
+            "@VARUS_channel:10136",
+            "@VARUS_channel:10394",
+            "@VARUS_channel:11605",
+            "@VARUS_channel:11776",
+            "@VARUS_channel:1271",
+            "@VARUS_channel:1338",
+            "@VARUS_channel:14891",
+            "@VARUS_channel:17855",
+            "@VARUS_channel:17864",
+            "@VARUS_channel:19919",
+            "@VARUS_channel:245",
+            "@VARUS_channel:2693",
+            "@VARUS_channel:323",
+            "@VARUS_channel:328",
+            "@VARUS_channel:7065",
+            "@VARUS_channel:7074",
+            "@VARUS_channel:7545",
+            "@VARUS_channel:7711",
+            "@VARUS_channel:8850",
+            "@VARUS_channel:8916",
+            "@VARUS_channel:8947",
+            "@msuaaaa:11507",
+            "@msuaaaa:12621",
+            "@msuaaaa:12648",
+            "@msuaaaa:8051"
+          ],
+          "ungated_moved": [
+            "@VARUS_channel:14759",
+            "@VARUS_channel:18839",
+            "@VARUS_channel:3989",
+            "@VARUS_channel:4663",
+            "@VARUS_channel:6239",
+            "@VARUS_channel:7555",
+            "@VARUS_channel:8478",
+            "@VARUS_channel:8932",
+            "@msuaaaa:11876"
+          ],
+          "ungated_unmoved": [
+            "@VARUS_channel:11615",
+            "@VARUS_channel:2798",
+            "@VARUS_channel:9055",
+            "@msuaaaa:12325"
+          ],
+          "answered": 100
+        }
+      },
+      "per_field_moved_from_the_pack": {
+        "v2.2": {
+          "intents": 31,
+          "sarcasm": 2,
+          "sentiment": 4,
+          "unclear": 13
+        },
+        "v2.1": {
+          "intents": 48,
+          "sarcasm": 9,
+          "sentiment": 9,
+          "unclear": 16
+        },
+        "of": 100
+      },
+      "families": {
+        "P6": [
+          {
+            "id": "@VARUS_channel:1271",
+            "verdict": "incorrect",
+            "pack": {
+              "sentiment": "neutral",
+              "sarcasm": false,
+              "intents": [
+                "availability"
+              ],
+              "unclear": false
+            },
+            "v2.1": {
+              "sentiment": "neutral",
+              "sarcasm": false,
+              "intents": [],
+              "unclear": true
+            },
+            "v2.2": {
+              "sentiment": "neutral",
+              "sarcasm": false,
+              "intents": [],
+              "unclear": true
+            }
+          },
+          {
+            "id": "@VARUS_channel:4663",
+            "verdict": "incorrect",
+            "pack": {
+              "sentiment": "neutral",
+              "sarcasm": false,
+              "intents": [
+                "service"
+              ],
+              "unclear": false
+            },
+            "v2.1": {
+              "sentiment": "neutral",
+              "sarcasm": false,
+              "intents": [],
+              "unclear": false
+            },
+            "v2.2": {
+              "sentiment": "neutral",
+              "sarcasm": false,
+              "intents": [
+                "service"
+              ],
+              "unclear": false
+            }
+          },
+          {
+            "id": "@VARUS_channel:9055",
+            "verdict": "incorrect",
+            "pack": {
+              "sentiment": "neutral",
+              "sarcasm": false,
+              "intents": [],
+              "unclear": false
+            },
+            "v2.1": {
+              "sentiment": "neutral",
+              "sarcasm": false,
+              "intents": [],
+              "unclear": false
+            },
+            "v2.2": {
+              "sentiment": "neutral",
+              "sarcasm": false,
+              "intents": [],
+              "unclear": false
+            }
+          },
+          {
+            "id": "@VARUS_channel:3989",
+            "verdict": "incorrect",
+            "pack": {
+              "sentiment": "neutral",
+              "sarcasm": false,
+              "intents": [
+                "service"
+              ],
+              "unclear": false
+            },
+            "v2.1": {
+              "sentiment": "neutral",
+              "sarcasm": false,
+              "intents": [],
+              "unclear": false
+            },
+            "v2.2": {
+              "sentiment": "neutral",
+              "sarcasm": false,
+              "intents": [
+                "service"
+              ],
+              "unclear": false
+            }
+          }
+        ],
+        "P5": [
+          {
+            "id": "@VARUS_channel:2798",
+            "verdict": "incorrect",
+            "pack": {
+              "sentiment": "neutral",
+              "sarcasm": false,
+              "intents": [],
+              "unclear": false
+            },
+            "v2.1": {
+              "sentiment": "neutral",
+              "sarcasm": false,
+              "intents": [],
+              "unclear": false
+            },
+            "v2.2": {
+              "sentiment": "neutral",
+              "sarcasm": false,
+              "intents": [
+                "service"
+              ],
+              "unclear": false
+            }
+          },
+          {
+            "id": "@VARUS_channel:6239",
+            "verdict": "incorrect",
+            "pack": {
+              "sentiment": "neutral",
+              "sarcasm": false,
+              "intents": [],
+              "unclear": false
+            },
+            "v2.1": {
+              "sentiment": "neutral",
+              "sarcasm": false,
+              "intents": [],
+              "unclear": true
+            },
+            "v2.2": {
+              "sentiment": "neutral",
+              "sarcasm": false,
+              "intents": [
+                "service"
+              ],
+              "unclear": false
+            }
+          },
+          {
+            "id": "@msuaaaa:12325",
+            "verdict": "incorrect",
+            "pack": {
+              "sentiment": "neutral",
+              "sarcasm": false,
+              "intents": [],
+              "unclear": false
+            },
+            "v2.1": {
+              "sentiment": "neutral",
+              "sarcasm": false,
+              "intents": [],
+              "unclear": false
+            },
+            "v2.2": {
+              "sentiment": "neutral",
+              "sarcasm": false,
+              "intents": [
+                "service"
+              ],
+              "unclear": false
+            }
+          }
+        ]
+      },
+      "rows": {
+        "asked": 100,
+        "answered": 100,
+        "unusable": [],
+        "context_states": {
+          "post_text": 70,
+          "poll_text": 25,
+          "image_caption": 3,
+          "no_text_and_no_caption": 2
+        }
+      },
+      "estimate_usd": 0.044037264,
+      "cost": {
+        "requests": 100,
+        "rows_from_an_earlier_run": 0,
+        "usd": 0.03652767999999998,
+        "prior_phase_usd": 0.7428984099999995,
+        "phase_spend_usd": 0.03652767999999998,
+        "against_shared_cap_usd": 0.7794260899999994,
+        "cap_usd": 1.5
+      },
+      "note": "In-sample by construction and pre-registered because of it: the plan was committed before the first request and this run is scored by the function that plan applied to its own baselines. Nothing is written to a batch file — the probe measures a prompt, it does not re-label a corpus.",
+      "git": {
+        "commit": "0a76bf303113ea9f46db1e15acf37c8fc7a19a5e",
+        "dirty": [
+          "results/spend_45g4.json",
+          "results/v22_probe_rows.jsonl"
+        ]
+      }
+    }
+  ]
+}
