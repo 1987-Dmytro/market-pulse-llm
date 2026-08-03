@@ -2,24 +2,24 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-03 13:02:03 (every SessionStart)
+**Auto-refreshed:** 2026-08-03 13:35:47 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-49efac9 chore: reseal after the README correction, from a clean tree
-b1f9140 docs: the 424 split by what actually spoke, and its variance floor
-d0fee0b docs: what 4.5g2 did that its brief did not say, and why
-822d38e chore: the resealed sitting manifest, from a clean tree
-6d77770 feat: the sitting resealed — same 300 ids, a post that speaks, 75 rows to redo
+e582eee docs: the 4.5g3 record — three FAILs, a v2.1 that regressed, twelve deviations
+69fe512 feat: the wave-2 gate pack, sealed blind and carrying its own warning
+fcacd9c feat: the whole batch re-labelled under v2.1 — and it came back worse
+0c97392 feat: T1v2.1 and its four-field revision, registered beside the old ones
+deba6cc docs: guideline v2.1 — the eight rulings the sitting settled
 ```
 
 ## 📋 Recent decisions
 
-- `45g2-captions-and-quiz-rulings.md` — The quiz failed its bar, the media-only post gets a voice, and the sitting is resealed
+- `45g3-sitting-gates.md` — All three strata failed, the guideline grew a v2.1, and the whole batch goes back
 - `INDEX.md` — Decision records
-- `45g-parent-context-and-uplabel.md` — The parent post enters the v2 prompts, the 97 emptied rows are re-asked, and the up-label goes
+- `45g2-captions-and-quiz-rulings.md` — The quiz failed its bar, the media-only post gets a voice, and the sitting is resealed
 
 ## 📅 Recent daily logs
 
@@ -31,9 +31,46 @@ d0fee0b docs: what 4.5g2 did that its brief did not say, and why
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-03 13:00 (`/save` at Step 0 of `PROMPT-4.5g3` — **the sitting came back filled: 300 gated + 75 redo + 14 unreadable. The capture changed hands mid-way under a pre-registered amendment, and the blind check ON the team lead passed 20/20, so its verdicts stand — but the provenance is renamed for it. The gate numbers are computed by the reader script in this phase and are not in this file yet.** The 4.5f calibration gate stays PASS at 100/100; test v3 is frozen beside v2; Phase 4 stays closed at 2 of 5 against v2; edited by hand — the section above is auto-generated, do NOT touch the marker)
+**Last update:** 2026-08-03 (end of `PROMPT-4.5g3` — **all three strata FAIL at 88/89/81; the whole 1,912 went back under a v2.1 prompt and came back WORSE, and the cap forbids a corrected re-run: that is the decision waiting for the operator**. Earlier that day, `/save` at Step 0 of the same prompt — **the sitting came back filled: 300 gated + 75 redo + 14 unreadable. The capture changed hands mid-way under a pre-registered amendment, and the blind check ON the team lead passed 20/20, so its verdicts stand — but the provenance is renamed for it. The gate numbers are computed by the reader script in this phase and are not in this file yet.** The 4.5f calibration gate stays PASS at 100/100; test v3 is frozen beside v2; Phase 4 stays closed at 2 of 5 against v2; edited by hand — the section above is auto-generated, do NOT touch the marker)
 
 ## 🔥 What's Hot
+
+**THE GATE: 88 / 89 / 81 AGAINST 0.90 — ALL THREE STRATA FAIL, AND THE WHOLE 1,912 GO BACK.**
+`results/sitting_45g_gates.json`, computed by `scripts/read_sitting_returns.py` and nowhere else.
+The returned file does **not** hash to what the manifest pinned and cannot — two columns were
+filled in — so identity is proved the other way: rebuild the sealed pack from the batch the
+manifest pins, reproduce its sha256, then compare the seven frozen columns cell by cell. The
+recount 258/42 matched the capture log before a stratum number existed. **Total 86% is reported
+and gates nothing**: an average over three denominators passes while one of them sits at 81. Of
+the 42 refusals the notes name `unclear` **22** · `intents` **17** · `sarcasm` **3** ·
+`sentiment` **1**. `incorrect_in_passed_strata` is empty, which is the artifact that says no row
+was fixed one at a time. ADR [[45g3-sitting-gates]].
+
+**THE v2.1 RE-RUN REGRESSED, AND THAT IS THE FINDING.** All 1,912 rows re-labelled under
+`precheck_v2.1_with_post` — same model, same endpoint, same posts, one thing changed. 1,895
+answered, $0.7359 of $1.50. `service` **689 → 138** · no intent **809 → 1366** · `price`
+**110 → 313** · `sarcasm` **87 → 197**. **1,153 rows (61%) moved a field, including 172 of the 254
+the sitting called CORRECT** against 25 of 41 of the ones it refused — the ratio is backwards. On
+the 16 rows whose right answer the sitting wrote down, v2.1 gets **5**. The rulings are not in
+doubt; the rendering is — eight lines of negations ("is not a consumer reaction at all", "never
+`price`", "carries no intent") sitting last before the answer format. **A corrected re-run
+estimates at $0.8492 against $0.7641 of headroom, so it does not fit — the pre-registered stop.**
+
+**THE WAVE-2 PACK IS SEALED AND CARRIES ITS OWN WARNING.** `data/annotation/wave2_45g3/` — 100
+rows, one draw, seed 42, blind, `verdicts_present: 0`, bar 0.90, manifest
+`results/wave2_45g3_manifest.json`. **The 300 already-judged rows are out of the frame** (the v2.1
+rulings came from their verdicts; a gate over them measures the prompt against its own source) —
+frame 1,612. One frame instead of three, and the cost is named: a pass here can still hold one
+class below 0.90. `batch_health` in the manifest and a warning at the top of the README, because
+a gate pack is a pre-registration and sealing one over a measured regression would pre-register a
+failure. **Judging it, and re-judging `precheck300`, are the operator's and outside 4.5g3.**
+
+**WHAT MERGED: 89 ROWS, AND NOTHING FROM THE 1,912.** 75 redo rows into the staged `intents`
+column (45 moved, 11 answer `[]`), 14 unreadable rows inserted at their **source file's own
+position**, all 89 carrying an `sitting-45g` annotator and the sitting's own note. The up-label
+merge path is **deliberately unbuilt** and stops the run if a stratum ever passes: none of the
+1,912 ids is in any source file, so accepting a stratum is a decision about which file its rows
+join. `results/merge_45g3.json`.
 
 **THE SITTING RETURNED FILLED, AND THE CAPTURE CHANGED HANDS UNDER A PRE-REGISTERED AMENDMENT
 (2026-08-03).** `docs/quiz-sitting-45g-log.md` is the whole capture. The operator judged 36 gated
@@ -497,12 +534,11 @@ files**: `comments_train.jsonl` (1600) + `sarcasm_candidates.jsonl` (746) plus
 
 ## ⏭️ Next
 
-1. **DONE — the sitting is filled and 4.5g3 is reading it.** All three files came back complete.
-   What is left of it is `scripts/read_sitting_returns.py`: the per-stratum gates, the merge the
-   strata decide, guideline v2.1 from the operator's rulings, and — for any stratum under the bar —
-   a re-run of its **whole population** under a v2.1 prompt plus a fresh sealed 100-row gate pack.
-   The numbers reach any report only from that script's output. **`emptied40.csv` stays superseded
-   and unfilled.**
+1. **THE OPERATOR'S DECISION, AND IT IS ONE QUESTION.** The v2.1 re-run regressed and a corrected
+   one does not fit the $1.50 cap. Either **raise the cap** for one more pass — and rewrite
+   `prompts.SETTLED_CASES` in the positive voice first, then **probe it on ~100 paid rows (~4
+   cents) before buying the whole пласт** — or **judge the wave-2 hundred as it stands**. Nothing
+   else in 4.5g3 is waiting on anything. `emptied40.csv` stays superseded and unfilled.
 2. **THE POLL FINDING IS A CORPUS QUESTION, AND IT IS THE BIGGEST THING 4.5g2 OPENED.** 16 of the 41
    parents in play are polls whose question the collector never stored. **How many polls are in the
    whole store is unknown**; every one of them is currently recorded as a post that said nothing,
