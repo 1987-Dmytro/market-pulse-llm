@@ -1672,8 +1672,16 @@ is a distinction in wording, not in effect, when the law downstream keys on exac
 the model the row *is* one fires that clause rather than handing it something to weigh. 16 of the
 17 lost accepted rows carry a feature — 53% of the 30 featured accepted rows, against 1 of 28
 featureless — and 14 of the 17 flipped `unclear` false → true. [[45g5-features-over-prompts]]
-priced a blanket reply rule at 62 of 258 judged-correct rows (24%); this run lost 28% of its
-accepted sample. The prediction held, and the context line was bought at the rule's price.
+priced a blanket reply rule at **62 of the 120** judged-correct rows *in that family* — 52% — and
+this run lost **16 of the 30** featured accepted rows: **53%**. Same denominator, same rate. The 28
+featureless accepted rows are the control and they render byte for byte what v2 rendered: **1 of 28
+moved**. Re-run variance does not explain 16 of 30. All 9 landings are `unclear: true` rulings, so
+one mechanism produced both columns — the line pushes `unclear` towards `true`, right 9 times among
+the refusals and wrong 14 times among the accepted rows. Two readings the numbers do not support:
+**no gated row carries the sender feature alone** (10 reply-only, 7 both, 0 sender-only), so the
+`[sender]` line's contribution to fixing is unattributable while it is fully present in the cost;
+and the verdict is invariant to deviation 3 — with the wider denominator 23 the KILL line is
+ceil(0.50·23) = 12, and preserved 41 kills the run either way.
 
 The corollary is about the instrument, not the model: **the discriminator is too coarse for the
 evidence it carries.** It fires on 52 of 100 rows and explains 10 of 42 refusals. A feature that

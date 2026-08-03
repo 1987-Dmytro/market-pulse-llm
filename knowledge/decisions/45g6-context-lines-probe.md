@@ -116,6 +116,27 @@ revisions (20 → 37 → 41). It failed on price, and the price is measurable:
   carry one, **53%** were lost; of the 28 that carry none, one was (3.6%).
 - **14 of the 17** flipped `unclear` from `false` to `true`.
 - Per field, `unclear` moved on 35 of the 100 rows, against 13 under v2.2.
+- **All 9 landings are `unclear: true` rulings.** One mechanism produced both columns: the
+  `[reply]` line pushes `unclear` towards `true`, which is the right answer 9 times among the
+  refusals and the wrong one 14 times among the accepted rows.
+
+Two readings of "9 of 17" that the numbers do not support, and it matters for what gets scoped
+next. **No gated row carries the sender feature alone** — the split is 10 reply-only and 7 both,
+zero sender-only — so the `[sender]` line's contribution to fixing is **unattributable** while it
+is fully present in the cost (4 of the 16 featured losses carry it). And the verdict does not turn
+on the gate's most contestable choice: with the wider denominator (23, family membership) the KILL
+line would be `ceil(0.50·23) = 12`, and preserved 41 kills the run either way. The 17-vs-23 reading
+changes no outcome here.
+
+## (d2) The prediction, at a matched denominator
+
+4.5g5's number was not a ballpark. It measured **62 of the 120** judged-correct rows in the reply
+family at `unclear: false` — **52%** of the accepted rows a blanket reply rule would flip. This run
+lost **16 of the 30** featured accepted rows in its sample: **53%**. Same denominator, same rate.
+
+The 28 featureless accepted rows are the control, and they are a strong one: they render **byte for
+byte** what v2 rendered, and **1 of 28 moved** (3.6%). Re-run variance does not explain 16 of 30.
+What separates the two groups is one sentence of fact.
 
 ## (e) What this measured, and it is not what it set out to measure
 
@@ -143,7 +164,8 @@ undifferentiated fact — whatever the model does with it, it does to half the c
   been tried is a **narrower discriminator** — the law's own carve-out is that a reply which
   accuses the retailer directly is judged normally, and nothing in the current feature knows that
   — or the features reaching a *classifier* rather than a prompt. Both are the next briefing's
-  decision, and neither is scoped here.
+  decision, and neither is scoped here. Whichever is chosen, the evidence in this probe is about
+  the **reply** feature: the sender line never appears alone on a gated row.
 - The batch now holds 40 adjudicated refusals. `@VARUS_channel:7555` and `@msuaaaa:11876` are the
   two open rows, the second pending law.
 - No surgical batch run was made and none is authorised by this probe: it is in-sample by

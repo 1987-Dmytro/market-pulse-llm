@@ -2,23 +2,23 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-03 21:17:08 (every SessionStart)
+**Auto-refreshed:** 2026-08-03 21:20:55 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+29fbdec feat: v2ctx bought and KILLed — 41/58 preserved, 9/17 feature-fixed
 7caab2d chore: the team lead's category/position amendment candidate, committed verbatim
 b3eac2d feat: the v2ctx runner, committed before the numbers exist
 8b52971 feat: the v2ctx probe, pre-registered — two denominators, one attempt
 5da9e65 feat: v2ctx — the v2 prompt, and two facts rendered beside the post
-16fe110 feat: a v1 comment walk is now a decision, not the default
 ```
 
 ## 📋 Recent decisions
 
-- `INDEX.md` — Decision records
 - `45g6-context-lines-probe.md` — Facts, not rules — and the fact turned out to be the rule: v2ctx is KILLed at 41/58
+- `INDEX.md` — Decision records
 - `45g5-features-over-prompts.md` — The prompt track is closed by its own gate: adjudicated truth into the data, and two features measured before either is bought
 
 ## 📅 Recent daily logs
@@ -49,10 +49,15 @@ b3eac2d feat: the v2ctx runner, committed before the numbers exist
 facts tripled what the best prompt revision landed (3 → 9) and beat every revision on
 preservation (20 → 37 → 41) — and cost 17 accepted rows, **16 of which carry a feature**: 53% of
 the 30 featured accepted rows against 1 of 28 featureless, and **14 of the 17 flipped `unclear`
-false → true**. `unclear` moved on 35 of 100 rows against 13 under v2.2. 4.5g5 priced a blanket
-reply rule at 62 of 258 (24%); this lost 28% of its accepted sample. **The prediction held: a fact
+false → true**, and **all 9 landings are `unclear: true` rulings** — one mechanism, both columns.
+`unclear` moved on 35 of 100 rows against 13 under v2.2. **At a matched denominator the 4.5g5
+prediction is exact**: 62 of the 120 judged-correct rows in the reply family (52%) predicted,
+**16 of 30** featured accepted rows lost (53%) — while the 28 featureless accepted rows, which
+render **byte for byte** what v2 rendered, lost **1**. Re-run variance does not explain it. **A fact
 rendered for a whole family behaves like a rule over it**, because `UNCLEAR_RULE` already keys on
-exactly that fact. And the discriminator is too coarse for the evidence — it fires on 52 of 100
+exactly that fact. **The 9 are evidence about the reply line only**: 10 gated rows are reply-only,
+7 are both, **none is sender-only**. The verdict is invariant to the 17-vs-23 choice — at n=23 the
+KILL line is 12 and preserved 41 kills it either way. And the discriminator is too coarse for the evidence — it fires on 52 of 100
 rows and explains 10 of 42 refusals. ADR [[45g6-context-lines-probe]].
 
 **THE GATE'S DENOMINATOR WAS A CHOICE: 17, NOT 23.** `feature_named` = the refusals whose *own
