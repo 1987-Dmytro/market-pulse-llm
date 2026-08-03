@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-03 13:45:15 (every SessionStart)
+**Auto-refreshed:** 2026-08-03 18:03:48 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+29a1d68 fix: three guards that were measuring the wrong thing, and a batch that said so
 a3f9f17 chore: vault — the 4.5g3 outcome, so the next session starts from it
 e582eee docs: the 4.5g3 record — three FAILs, a v2.1 that regressed, twelve deviations
 69fe512 feat: the wave-2 gate pack, sealed blind and carrying its own warning
 fcacd9c feat: the whole batch re-labelled under v2.1 — and it came back worse
-0c97392 feat: T1v2.1 and its four-field revision, registered beside the old ones
 ```
 
 ## 📋 Recent decisions
@@ -31,7 +31,7 @@ fcacd9c feat: the whole batch re-labelled under v2.1 — and it came back worse
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-03 (end of `PROMPT-4.5g3` — **all three strata FAIL at 88/89/81; the whole 1,912 went back under a v2.1 prompt and came back WORSE, and the cap forbids a corrected re-run: that is the decision waiting for the operator**. Earlier that day, `/save` at Step 0 of the same prompt — **the sitting came back filled: 300 gated + 75 redo + 14 unreadable. The capture changed hands mid-way under a pre-registered amendment, and the blind check ON the team lead passed 20/20, so its verdicts stand — but the provenance is renamed for it. The gate numbers are computed by the reader script in this phase and are not in this file yet.** The 4.5f calibration gate stays PASS at 100/100; test v3 is frozen beside v2; Phase 4 stays closed at 2 of 5 against v2; edited by hand — the section above is auto-generated, do NOT touch the marker)
+**Last update:** 2026-08-03 17:59 (`/save` after `PROMPT-4.5g3` — **all three strata FAIL at 88/89/81, so the whole 1,912 went back; the v2.1 prompt REGRESSED and the cap forbids a corrected re-run: that is the one decision waiting for the operator**. 89 hand-decided rows merged, guideline v2.1 is law, the wave-2 hundred is sealed and carries its own warning. The 4.5f calibration gate stays PASS at 100/100; test v3 is frozen beside v2; Phase 4 stays closed at 2 of 5 against v2; edited by hand — the section above is auto-generated, do NOT touch the marker)
 
 ## 🔥 What's Hot
 
@@ -603,6 +603,20 @@ no-regression bars, the scorer taught to read the persisted slice).
 matrix is frozen. CPU beats MPS by 14×, which is the opposite of the intuition.
 
 ## ⚠️ Footguns for the next run
+
+**A cost estimate must price what the run will BUY, not what it chooses from.** `rerun_failed_strata`
+priced the whole 1,912-row scope against the remaining headroom and refused a 17-row resume that
+would have cost $0.008. It now reads the resume file before the ledger block and prices `pending`.
+`precheck_uplabel.py` still has the older shape — if a resume of it is ever refused, that is why.
+
+**A history's `old` is whatever the reader of that history reverses to — not the value on disk.**
+`measure_empty_drop.reversals` keeps the LAST fix per id, so a block recording the disk value
+restores a later fix's answer and the population stops deriving. `merge_sitting_returns` writes
+`old` (the re-labeller's answer) and `replaced` (what this run overwrote) as two fields. Anything
+appending to `results/relabel_45e.json` has to do the same.
+
+**Never `git add -A` here.** `docs/PROMPT-4.5g4.md` is already sitting untracked in the tree, and
+`docs/STATUS.md` is modified by the team lead. Stage by path.
 
 - **Two taxonomies exist now, and the five-class one is still the one every number was measured
   over.** `scorer.INTENTS` (5) is what `run_baseline.py`, `train_xlmr_baseline.py` and

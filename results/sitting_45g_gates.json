@@ -1577,9 +1577,7 @@
   ],
   "rows_note": "Every verdict and its note, kept here because the returned CSV is gitignored and this record is the committed copy of an evening nobody will sit through twice.",
   "git": {
-    "commit": "972fa26c2040d6709ad38270ed951c28ca3e0cdc",
-    "dirty": [
-      "scripts/read_sitting_returns.py"
-    ]
+    "commit": "29a1d6824c1d269d364c58f88be9f1fce4ad1b4f",
+    "dirty": []
   }
 }
