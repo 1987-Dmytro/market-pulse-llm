@@ -21,7 +21,17 @@ SOURCE = Source("varus", "Varus", "official_retail", ("@VARUS_channel",), True, 
 class FakeMessage:
     """The handful of Telethon Message attributes the record builders read."""
 
-    def __init__(self, id, *, text="", media=None, grouped_id=None, replies=0, sender_id=None):
+    def __init__(
+        self,
+        id,
+        *,
+        text="",
+        media=None,
+        grouped_id=None,
+        replies=0,
+        sender_id=None,
+        reply_to_msg_id=None,
+    ):
         self.id = id
         self.date = datetime(2026, 7, 1, 12, 0, tzinfo=timezone.utc)
         self.raw_text = text
@@ -29,6 +39,8 @@ class FakeMessage:
         self.grouped_id = grouped_id
         self.replies = type("Replies", (), {"replies": replies})() if replies else None
         self.sender_id = sender_id
+        # Telethon's own property: None when the message replies to nothing.
+        self.reply_to_msg_id = reply_to_msg_id
 
 
 def provenance():
@@ -70,6 +82,35 @@ def test_comment_record_carries_no_raw_sender():
     assert record["parent_msg_id"] == 7
     assert record["sender_anon_id"] == sender_anon_id(555, SALT)
     assert "555" not in str(record)
+
+
+def test_comment_record_keeps_the_reply_target_raw():
+    """Whatever Telethon reports, unread and unresolved — the store is not the place to decide
+    whether a reply target is the mirrored post or another commenter."""
+    prov = provenance()
+    replying = comment_record(
+        FakeMessage(9, sender_id=1, reply_to_msg_id=8), SOURCE, "@c", 7, SALT, prov
+    )
+    top_level = comment_record(FakeMessage(10, sender_id=1), SOURCE, "@c", 7, SALT, prov)
+
+    assert replying["reply_to_msg_id"] == 8
+    assert replying["parent_msg_id"] == 7  # the channel post; a different id space
+    assert top_level["reply_to_msg_id"] is None
+
+
+def test_the_library_still_calls_it_reply_to_msg_id():
+    """The fake above proves the record builder, not the attribute name it reads. A rename in
+    Telethon would leave every test green and every stored reply target None."""
+    from telethon.tl.custom.message import Message
+
+    assert isinstance(Message.reply_to_msg_id, property)
+
+
+def test_post_collection_is_untouched_by_the_reply_target():
+    """4.5g5 Task 2 is scoped to comments; a post's record must not have grown a field."""
+    record = post_record(FakeMessage(11, text="пост"), SOURCE, "@c", provenance())
+
+    assert "reply_to_msg_id" not in record
 
 
 def test_collapse_albums_merges_by_grouped_id():

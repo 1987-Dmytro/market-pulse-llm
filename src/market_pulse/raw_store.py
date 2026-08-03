@@ -75,12 +75,18 @@ def post_record(message, source, channel: str, provenance: dict) -> dict:
 
 
 def comment_record(message, source, channel: str, parent_msg_id: int, salt, provenance) -> dict:
+    # reply_to_msg_id is stored raw and interpreted nowhere here. It lives in the
+    # discussion group's id space, not the channel's, so it is not comparable to
+    # parent_msg_id: a top-level comment replies to the group's mirror of the post,
+    # a reply-to-a-commenter replies to another comment. Deciding which is which
+    # needs the whole store, and a collector that guessed would bake the guess in.
     return {
         "record_type": "comment",
         "source_id": source.id,
         "channel": channel,
         "parent_msg_id": parent_msg_id,
         "msg_id": message.id,
+        "reply_to_msg_id": message.reply_to_msg_id,
         "date": message.date.isoformat(),
         "text": message.raw_text or "",
         "sender_anon_id": sender_anon_id(message.sender_id, salt),
