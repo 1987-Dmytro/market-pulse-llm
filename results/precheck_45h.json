@@ -254,9 +254,11 @@
       "openrouter_45g6_spend": 0.03007665000000001,
       "openrouter_lifetime_usage_now": 3.2301570649999998,
       "openrouter_45g3_to_45g6_total": 0.809503,
-      "runpod_balance": 28.009680094,
+      "runpod_account_balance": 28.009680094,
       "runpod_phase4_spent": 6.9903,
+      "runpod_remaining_under_the_phase4_cap": 18.0097,
       "runpod_read_at": "2026-08-02T10:40:32+00:00",
+      "runpod_note": "two different numbers that both look like 'the money left': the account balance ($28.01) and what is left under amendment 3.4 (4)'s $25 Phase-4 cap ($18.01). STATUS's '$18.12 RunPod' is the second one, at the previous session",
       "note": "read from result files only — no live balance call, the phase forbids requests"
     },
     "gold_rows": 508,

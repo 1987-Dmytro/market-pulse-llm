@@ -1691,7 +1691,9 @@ describes half the corpus and a quarter of the errors cannot travel as an undiff
 
 Executed against `docs/PROMPT-4.5h.md`, precheck half only. **No model call, no pod, no freeze.**
 Spend: OpenRouter **$0.000000** (no ledger written, every closed ledger byte-identical), RunPod
-**$0.00** (balance still `$18.0097`, `results/spend_phase4.json` untouched).
+**$0.00** (`results/spend_phase4.json` untouched; account balance `$28.0097`, **`$18.0097`
+left under amendment 3.4 (4)'s $25 Phase-4 cap** — two numbers that both read as "the money left",
+and STATUS's "$18.12 RunPod" is the second one at the previous session).
 
 Deliverables: `results/precheck_45h.json` (`scripts/precheck_45h.py`) and
 `results/categories_45h.json` + `data/category_lexicon_draft.json` (`scripts/measure_categories.py`).

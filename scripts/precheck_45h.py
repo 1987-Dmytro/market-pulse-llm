@@ -304,9 +304,15 @@ def ledger_anchor() -> dict:
             ),
             6,
         ),
-        "runpod_balance": last["balance"],
+        "runpod_account_balance": last["balance"],
         "runpod_phase4_spent": last["spent_usd"],
+        "runpod_remaining_under_the_phase4_cap": last["remaining_usd"],
         "runpod_read_at": last["at"],
+        "runpod_note": (
+            "two different numbers that both look like 'the money left': the account balance"
+            " ($28.01) and what is left under amendment 3.4 (4)'s $25 Phase-4 cap ($18.01)."
+            " STATUS's '$18.12 RunPod' is the second one, at the previous session"
+        ),
         "note": "read from result files only — no live balance call, the phase forbids requests",
     }
 
