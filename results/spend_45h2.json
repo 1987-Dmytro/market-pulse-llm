@@ -17,5 +17,9 @@
       "requests": 47,
       "note": "45h2: 47 gold rows re-asked for `intents` under relabel_intents_v2_with_post"
     }
-  ]
+  ],
+  "runpod_balance_at_45h2_start": 27.5332912062,
+  "45h2_gpu_cap_usd": 9.0,
+  "gpu_sessions": [],
+  "gpu_note": "RunPod account balance read before the first pod of 45h2. Step spend = this anchor minus the balance now, enforced against $9.00. The SPEC amendment 3.4 (4) phase cap is enforced separately, against results/spend_phase4.json, and neither anchor may be regenerated."
 }

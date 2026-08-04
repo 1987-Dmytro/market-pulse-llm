@@ -101,3 +101,31 @@ def test_a_session_note_is_only_logged_when_the_start_is_allowed(ledger, monkeyp
     drive(monkeypatch, balance=5.0)
     assert guard.main(["--note", "would have been a fourth arm"]) == 1
     assert json.loads(ledger.read_text(encoding="utf-8"))["sessions"] == []
+
+
+# --- a step's own cap, inside the phase's (4.5h2) ------------------------------
+
+
+def test_a_step_anchors_once_and_never_re_anchors(tmp_path):
+    """Regenerating a step anchor restarts its counter at today's balance — the same
+    footgun the phase ledger carries, on a smaller cap."""
+    path = tmp_path / "spend_45h2.json"
+    first = guard.read_step(path, "45h2", 9.0, 27.53)
+    guard.write_ledger_at(path, first)
+    again = guard.read_step(path, "45h2", 9.0, 3.00)
+    assert again["runpod_balance_at_45h2_start"] == 27.53
+
+
+def test_a_step_anchor_lands_beside_what_the_ledger_already_holds(tmp_path):
+    """One file per step, so "what did 4.5h2 cost" is one document: the OpenRouter
+    anchor written by the migration pass must survive the GPU one."""
+    path = tmp_path / "spend_45h2.json"
+    path.write_text(json.dumps({"openrouter_total_usage_at_45h2_start": 3.23}), encoding="utf-8")
+    ledger = guard.read_step(path, "45h2", 9.0, 27.53)
+    assert ledger["openrouter_total_usage_at_45h2_start"] == 3.23
+    assert ledger["runpod_balance_at_45h2_start"] == 27.53
+
+
+def test_a_cap_without_an_anchor_is_refused():
+    with pytest.raises(SystemExit):
+        guard.main(["--step-cap", "9.00"])

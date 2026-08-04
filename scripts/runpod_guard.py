@@ -19,8 +19,13 @@ spend, and the pessimistic one wins.
 The anchor file is `spend_3b.json`'s sibling and carries its footgun: delete or
 regenerate it and the phase counter silently resets to zero at today's balance.
 
+A step inside the phase can carry its own smaller cap — `docs/PROMPT-4.5h2.md` fixes
+$9.00 of the phase's headroom — and it is enforced the same way, against its own anchor
+in its own file. Two caps, both binding, neither able to spend the other's room.
+
     python3.11 scripts/runpod_guard.py                 # before a start; exit 1 refuses
     python3.11 scripts/runpod_guard.py --note "4a zero-shot run"   # log a session
+    python3.11 scripts/runpod_guard.py --step 45h2 --step-cap 9.00
 """
 
 import argparse
@@ -98,6 +103,32 @@ def spend(anchor_balance: float, balance_now: float, billing_total: float) -> fl
     return max(anchor_balance - balance_now, billing_total)
 
 
+def step_anchor_key(step: str) -> str:
+    return f"runpod_balance_at_{step}_start"
+
+
+def read_step(path: Path, step: str, cap: float, balance_now: float) -> dict:
+    """A step's own anchor, created once beside whatever else its ledger already holds.
+
+    The step ledger is shared with the step's OpenRouter anchor on purpose: one file per
+    step, so "what did 4.5h2 cost" is one document rather than two that can disagree. The
+    GPU anchor is a separate key and is written once, before the step's first pod.
+    """
+    ledger = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
+    key = step_anchor_key(step)
+    if key not in ledger:
+        ledger[key] = balance_now
+        ledger[f"{step}_gpu_cap_usd"] = cap
+        ledger.setdefault("gpu_sessions", [])
+        ledger["gpu_note"] = (
+            f"RunPod account balance read before the first pod of {step}. Step spend = this"
+            f" anchor minus the balance now, enforced against ${cap:.2f}. The SPEC amendment"
+            " 3.4 (4) phase cap is enforced separately, against results/spend_phase4.json,"
+            " and neither anchor may be regenerated."
+        )
+    return ledger
+
+
 def read_ledger(balance_now: float) -> dict:
     """The anchor, created once. Never regenerated — see the module docstring."""
     if LEDGER.exists():
@@ -117,15 +148,24 @@ def read_ledger(balance_now: float) -> dict:
     }
 
 
+def write_ledger_at(path: Path, ledger: dict) -> None:
+    path.parent.mkdir(exist_ok=True)
+    path.write_text(json.dumps(ledger, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
 def write_ledger(ledger: dict) -> None:
-    LEDGER.parent.mkdir(exist_ok=True)
-    LEDGER.write_text(json.dumps(ledger, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    write_ledger_at(LEDGER, ledger)
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--note", help="record this reading as a pod session in the ledger")
+    parser.add_argument("--step", help="also enforce a step cap, anchored in its own ledger")
+    parser.add_argument("--step-cap", type=float, help="the step's cap in USD")
+    parser.add_argument("--step-ledger", type=Path, default=None)
     args = parser.parse_args(argv)
+    if bool(args.step) != bool(args.step_cap):
+        parser.error("--step and --step-cap go together: a cap with no anchor is not a cap")
 
     balance_now = balance()
     ledger = read_ledger(balance_now)
@@ -170,7 +210,43 @@ def main(argv: list[str] | None = None) -> int:
         )
         return 1
 
+    step_ledger, step_spent = None, None
+    if args.step:
+        path = args.step_ledger or REPO_ROOT / "results" / f"spend_{args.step}.json"
+        step_ledger = read_step(path, args.step, args.step_cap, balance_now)
+        step_anchor = float(step_ledger[step_anchor_key(args.step)])
+        step_spent = step_anchor - balance_now
+        print(
+            f"{args.step.upper()} SPENT      ${step_spent:.4f} of ${args.step_cap:.2f}"
+            f"  (anchor ${step_anchor:.2f})"
+        )
+        if not path.exists() or step_anchor_key(args.step) not in json.loads(
+            path.read_text(encoding="utf-8")
+        ):
+            write_ledger_at(path, step_ledger)
+            print(f"anchored {path.name} for {args.step} — commit it and never regenerate it")
+        if step_spent >= args.step_cap:
+            print(
+                f"\nREFUSED: {args.step}'s ${args.step_cap:.2f} cap is reached"
+                f" (${step_spent:.4f} spent). Stop and report — an overrun aborts, it does"
+                " not raise the cap.",
+                file=sys.stderr,
+            )
+            return 1
+
     if args.note:
+        if step_ledger is not None:
+            step_ledger["gpu_sessions"].append(
+                {
+                    "at": datetime.now(UTC).isoformat(timespec="seconds"),
+                    "balance": balance_now,
+                    "step_spent_usd": round(step_spent, 4),
+                    "note": args.note,
+                }
+            )
+            write_ledger_at(
+                args.step_ledger or REPO_ROOT / "results" / f"spend_{args.step}.json", step_ledger
+            )
         ledger["sessions"].append(
             {
                 "at": datetime.now(UTC).isoformat(timespec="seconds"),
