@@ -467,3 +467,78 @@ def test_gate_verdicts_reports_each_no_regression_gate_against_its_own_bar():
     assert verdicts["G1d"]["pass"] is False
     assert verdicts["G1e"]["pass"] is True
     assert verdicts["G1d"]["checks"][0]["bar"] == 0.90
+
+
+# --- the same rule, transposed onto another head (4.5h2) ----------------------
+#
+# Amendment 3.4 (3) transposed, fixed before any 4.5h2 code or GPU spend: the
+# пласт stays iff arm B's G1c is strictly higher AND no other gated head is
+# lower by more than 0.5 pp. Every fixture here is invented.
+
+PLAST_RULE = "the пласт stays iff arm B's G1c is strictly higher AND no other gated head is lower"
+ARMS = ("without-plast", "with-plast")
+
+
+def by_g1c(base, other):
+    return scorer.select_arm_by(base, other, pivot="G1c", rule=PLAST_RULE, names=ARMS)
+
+
+def test_select_arm_by_turns_on_the_pivot_it_is_given():
+    """The same two arms decide differently under the two rules — which is the whole
+    reason the pivot is a parameter and not a constant."""
+    base = {"G1a": {"overall": 0.90}, "G1b": 0.60, "G1c": 0.80, "G1d": 0.90, "G1e": 0.90}
+    other = base | {"G1b": 0.599, "G1c": 0.82}  # G1b a shade down, G1c up
+    assert by_g1c(base, other)["selected"] == "with-plast"
+    assert scorer.select_arm(base, other)["selected"] == "real-only"
+
+
+def test_select_arm_by_protects_the_head_the_other_rule_turns_on():
+    """Transposing the rule does not retire G1b — it demotes it to a protected head, so
+    an arm that buys intents with a collapsed sarcasm slice is dropped."""
+    base = {"G1a": {"overall": 0.90}, "G1b": 0.60, "G1c": 0.80, "G1d": 0.90, "G1e": 0.90}
+    other = base | {"G1b": 0.50, "G1c": 0.95}
+    decision = by_g1c(base, other)
+    assert decision["g1c"]["strictly_higher"] is True
+    assert decision["regressions"] == {"G1b": -0.1}
+    assert decision["selected"] == "without-plast"
+
+
+def test_select_arm_by_drops_the_arm_on_a_regression_however_good_the_pivot():
+    base = {"G1a": {"overall": 0.90}, "G1b": 0.60, "G1c": 0.80, "G1d": 0.90, "G1e": 0.90}
+    other = base | {"G1c": 0.95, "G1d": 0.89}  # 1 pp down: more than the tolerance
+    decision = by_g1c(base, other)
+    assert decision["regressions"] == {"G1d": -0.01}
+    assert decision["keep"] is False and decision["selected"] == "without-plast"
+
+
+def test_select_arm_by_treats_exactly_the_tolerance_as_no_regression():
+    """ "lower by MORE than 0.5 pp" — and 0.90 - 0.895 is 0.005000000000000004."""
+    base = {"G1a": {"overall": 0.90}, "G1b": 0.60, "G1c": 0.80, "G1d": 0.90, "G1e": 0.90}
+    other = base | {"G1c": 0.81, "G1d": 0.895}
+    assert by_g1c(base, other)["regressions"] == {}
+    assert by_g1c(base, other)["keep"] is True
+
+
+def test_select_arm_by_needs_the_pivot_to_be_reported():
+    with pytest.raises(ValueError, match="the rule turns on G1c"):
+        by_g1c({"G1a": 0.9}, {"G1a": 0.9})
+
+
+def test_select_arm_by_names_the_arms_it_was_given():
+    base = {"G1a": {"overall": 0.90}, "G1b": 0.60, "G1c": 0.80}
+    decision = by_g1c(base, base | {"G1c": 0.81})
+    assert decision["arms"] == list(ARMS)
+    assert decision["g1c"][ARMS[0]] == 0.80 and decision["g1c"][ARMS[1]] == 0.81
+    assert decision["rule"] == PLAST_RULE and decision["pivot"] == "G1c"
+
+
+def test_select_arm_is_byte_identical_to_what_phase_4_recorded():
+    """The wrapper must not move 4c's output: its ADR quotes the printed table."""
+    base = {"G1a": {"overall": 0.9107}, "G1b": 0.4773, "G1c": 0.8212, "G1d": 0.9386}
+    other = {"G1a": {"overall": 0.9172}, "G1b": 0.5455, "G1c": 0.8073, "G1d": 0.9159}
+    decision = scorer.select_arm(base, other)
+    assert decision["rule"] == scorer.SELECTION_RULE
+    assert decision["g1b"]["strictly_higher"] is True
+    assert decision["keep_synthetic"] is False
+    assert decision["selected"] == "real-only"
+    assert set(decision["regressions"]) == {"G1c", "G1d"}

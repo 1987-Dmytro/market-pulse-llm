@@ -337,12 +337,35 @@ SELECTION_RULE = (
 
 
 def select_arm(real: dict, synthetic: dict) -> dict:
+    """Phase 4's ablation decision, applied — not re-argued. Pivots on G1b.
+
+    A thin name over :func:`select_arm_by` so that 4c's record, its ADR quote and this
+    function's output stay byte-identical while a later phase pivots on a different head.
+    """
+    return select_arm_by(real, synthetic, pivot="G1b", rule=SELECTION_RULE)
+
+
+def select_arm_by(
+    base: dict,
+    other: dict,
+    *,
+    pivot: str,
+    rule: str,
+    tolerance: float = SYNTHETIC_HEAD_TOLERANCE,
+    names: tuple[str, str] = ("real-only", "with-synthetic"),
+) -> dict:
     """The ablation's pre-registered decision, applied — not re-argued.
 
-    ``real`` and ``synthetic`` are the two arms' gated values in the shape
+    ``base`` and ``other`` are the two arms' gated values in the shape
     :func:`gate_thresholds` reads, plus ``G1b`` as the fix-rate. The "other
-    gated heads" are derived — every key that is not ``G1b`` — rather than
+    gated heads" are derived — every key that is not the ``pivot`` — rather than
     listed, so a gate added to the record cannot quietly fall outside the rule.
+
+    ``pivot`` is the head the rule turns on: G1b for Phase 4's synthetic ablation
+    (amendment 3.4 (3)), G1c for 4.5h2's пласт ablation (amendment 3.4 (3) transposed,
+    fixed before any of its code or GPU spend). One implementation, because the second
+    half of the rule — "no OTHER gated head lower by more than the tolerance" — is what
+    the pivot changes the meaning of, and two copies would drift on exactly that.
     G1a contributes its ``overall``; the per-language numbers are floors of the
     G1a *gate*, not heads of their own, and they are reported beside this and
     never inside it.
@@ -351,39 +374,37 @@ def select_arm(real: dict, synthetic: dict) -> dict:
     application has to be readable as arithmetic, because there is no third run
     in which to re-do it.
     """
-    if set(real) != set(synthetic):
-        raise ValueError(
-            f"the two arms report different heads: {sorted(real)} vs {sorted(synthetic)}"
-        )
-    if "G1b" not in real:
-        raise ValueError("the rule turns on G1b: an arm with no fix-rate cannot be compared")
-    heads = sorted(set(real) - {"G1b"})
+    if set(base) != set(other):
+        raise ValueError(f"the two arms report different heads: {sorted(base)} vs {sorted(other)}")
+    if pivot not in base:
+        raise ValueError(f"the rule turns on {pivot}: an arm without it cannot be compared")
+    heads = sorted(set(base) - {pivot})
     if not heads:
         raise ValueError("no other gated head to protect: the rule's second half needs one")
     # Rounded for the same reason the bars are: 0.80 - 0.794 is 0.006000000000000005,
     # and a head that is lower by exactly the tolerance must not be a regression
     # ("lower by MORE than 0.5 pp") because of the subtraction's last bit.
     deltas = {
-        head: round(_overall(synthetic[head]) - _overall(real[head]), BAR_PRECISION)
-        for head in heads
+        head: round(_overall(other[head]) - _overall(base[head]), BAR_PRECISION) for head in heads
     }
-    regressions = {
-        head: delta for head, delta in deltas.items() if delta < -SYNTHETIC_HEAD_TOLERANCE
-    }
-    higher = synthetic["G1b"] > real["G1b"]
+    regressions = {head: delta for head, delta in deltas.items() if delta < -tolerance}
+    higher = _overall(other[pivot]) > _overall(base[pivot])
     keep = higher and not regressions
     return {
-        "rule": SELECTION_RULE,
-        "tolerance": SYNTHETIC_HEAD_TOLERANCE,
-        "g1b": {
-            "real-only": real["G1b"],
-            "with-synthetic": synthetic["G1b"],
+        "rule": rule,
+        "pivot": pivot,
+        "tolerance": tolerance,
+        "arms": list(names),
+        pivot.lower(): {
+            names[0]: base[pivot],
+            names[1]: other[pivot],
             "strictly_higher": higher,
         },
         "head_deltas": deltas,
         "regressions": regressions,
+        "keep": keep,
         "keep_synthetic": keep,
-        "selected": "with-synthetic" if keep else "real-only",
+        "selected": names[1] if keep else names[0],
     }
 
 
