@@ -928,3 +928,12 @@ def test_an_adapter_that_predates_the_field_is_read_as_v2(tmp_path):
     assert "prompt_revision_sha256" not in provenance
     _, training = runner.arm_preflight(arm_dir(tmp_path), "real-only")
     assert training["prompt_revision_sha256"] is None
+
+
+def test_the_arm_name_is_checked_against_the_adapter_not_a_hardcoded_list(tmp_path):
+    """`--arm` carried Phase 4's two names as argparse `choices` and refused 4.5h2's
+    outright, after the arm had trained. The adapter's own provenance is the authority
+    and it already refuses a mismatch — before the weights, which is what matters."""
+    adapter = arm_dir(tmp_path, arm="without-plast")
+    with pytest.raises(SystemExit, match="'without-plast' arm, not 'with-plast'"):
+        runner.arm_preflight(adapter, "with-plast")

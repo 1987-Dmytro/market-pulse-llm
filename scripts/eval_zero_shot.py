@@ -1064,8 +1064,10 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument(
         "--arm",
-        choices=("real-only", "with-synthetic"),
-        help="--adapter: which ablation arm this adapter is (amendment 3.4 (3))",
+        help="--adapter: which ablation arm this adapter is (amendment 3.4 (3)). Checked"
+        " against the adapter's own provenance by `arm_preflight`, before the weights load —"
+        " a fixed `choices` here was a second, staler source of truth and it refused 4.5h2's"
+        " arm names outright.",
     )
     parser.add_argument(
         "--eval-checkpoint",
