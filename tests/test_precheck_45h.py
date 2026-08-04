@@ -7,6 +7,7 @@ counts, and arm A has to come out at the row count arm A actually trained on.
 A projection that cannot re-derive the past is not a projection.
 """
 
+import importlib.util
 import json
 import sys
 from pathlib import Path
@@ -81,10 +82,19 @@ def test_no_gold_row_carries_a_v2_intents_value():
 
 
 def test_the_intents_guards_are_where_the_report_says():
-    guards = {guard["name"]: guard for guard in pre.guards()}
+    """Three of the four inventoried places still exist and are still where the record
+    says. The fourth is gone by design — see below."""
+    record = json.loads((REPO_ROOT / "results" / "precheck_45h.json").read_text(encoding="utf-8"))
+    guards = {guard["name"]: guard for guard in record["guards"]}
     assert set(guards) == {"LAW_PENDING", "NEVER / forbidden_ids", "NEVER_READ", "SOURCES"}
-    for guard in guards.values():
-        assert guard["line"] > 0 and guard["applied_at"]
+    markers = {
+        "LAW_PENDING": 'LAW_PENDING = ("intents",)',
+        "NEVER / forbidden_ids": "NEVER = (",
+        "NEVER_READ": "NEVER_READ = (",
+    }
+    for name, marker in markers.items():
+        path = REPO_ROOT / guards[name]["file"]
+        assert pre.line_of(path, marker) > 0, name
 
 
 def test_a_vanished_guard_marker_stops_the_run(tmp_path):
@@ -102,11 +112,16 @@ def test_the_eval_rate_is_read_from_the_ledger_note_not_typed():
     assert observed["seconds_per_row"] == pytest.approx(39 * 60 / 758)
 
 
-def test_the_record_is_byte_reproducible(tmp_path):
-    first, second = tmp_path / "a.json", tmp_path / "b.json"
-    pre.main(["--record", str(first)])
-    pre.main(["--record", str(second)])
-    assert first.read_bytes() == second.read_bytes()
+def test_the_record_can_no_longer_be_re_derived_and_that_is_the_finding_landing():
+    """It WAS byte-reproducible, twice, on 2026-08-03 — and it stopped being so the
+    moment 4.5h2 executed the amendment it argued for.
+
+    `guards()` reads `train_qlora.SOURCES` by a marker naming the v1 files, and amendment
+    3.9 (1) moved that constant to the `_tax2` siblings. The refusal is the mechanism
+    working: a report whose marker vanished stops instead of printing a stale line number.
+    The record itself is frozen evidence the amendment cites and is never regenerated."""
+    with pytest.raises(SystemExit, match="the guard marker .* is gone"):
+        pre.guards()
 
 
 def test_the_two_arms_would_not_be_trained_on_the_same_taxonomy():
@@ -120,7 +135,20 @@ def test_the_two_arms_would_not_be_trained_on_the_same_taxonomy():
     assert all(exposure["rows_match_between_v1_and_tax2"].values())
 
 
-def test_the_source_list_is_in_the_guard_inventory():
-    """It is not a guard — nothing refuses when it is wrong — which is exactly why the
-    inventory has to name it."""
-    assert "SOURCES" in {guard["name"] for guard in pre.guards()}
+def test_the_source_list_finding_was_acted_on():
+    """The one inventoried place that is not a guard — nothing refused when it was wrong —
+    is the one the phase changed. Both halves are checked: the record still says what was
+    true when it was written, and the code no longer is."""
+    record = json.loads((REPO_ROOT / "results" / "precheck_45h.json").read_text(encoding="utf-8"))
+    finding = next(g for g in record["guards"] if g["name"] == "SOURCES")
+    assert "training reads the v1 files" in finding["holds"]
+    trainer = importlib.util.module_from_spec(
+        importlib.util.spec_from_file_location("t", REPO_ROOT / "scripts" / "train_qlora.py")
+    )
+    importlib.util.spec_from_file_location(
+        "t", REPO_ROOT / "scripts" / "train_qlora.py"
+    ).loader.exec_module(trainer)
+    assert [path.name for path in trainer.SOURCES["T1"]] == [
+        "comments_train_tax2.jsonl",
+        "sarcasm_candidates_tax2.jsonl",
+    ]

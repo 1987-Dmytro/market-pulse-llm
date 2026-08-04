@@ -37,10 +37,17 @@ optimizer:
 
 training:
   epochs: 2 # fixed, and NO early stopping: nothing may select against an eval (SPEC §5)
-  # Measured, not guessed: the longest of the 2 795 scoreable rows renders to 973
-  # tokens (prompt + answer + end-of-turn) under this checkout's prompts. 1024
-  # truncates nothing, and a truncated row would teach a cut-off label.
-  max_seq_len: 1024
+  # Measured, not guessed, twice. Under Phase 4's v1 prompts the longest of the
+  # 2 795 scoreable rows rendered to 973 tokens and 1024 truncated nothing. 4.5h2
+  # renders `T1v2_with_post` (SPEC amendment 3.9 (1) puts both arms on the
+  # taxonomy-v2 sources, whose `service` rows the v1 parser refuses), and the post
+  # travels in the request: the longest row is then 1 388 tokens and 79 of 4 743
+  # cross 1024. Raised to 1 408 by operator decision of 2026-08-04, which is the
+  # measured maximum plus a token of margin. This is a guard threshold, not a pad
+  # width — `collate` pads to the longest row in each micro-batch — so raising it
+  # changes no step time and no memory except on the batches that need it.
+  # Truncating instead would teach a cut-off label on the rows richest in context.
+  max_seq_len: 1408
   micro_batch_size: 2
   grad_accum: 8 # effective batch 16; on OOM the trainer halves one and doubles the other
   seed: 42

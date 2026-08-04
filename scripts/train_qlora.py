@@ -14,8 +14,8 @@ dict that 4a's zero-shot anchor was measured through, that this trains adapters
 against, and that production serves. The deliverable is the 4-bit base plus the
 UNMERGED adapter (SPEC amendment 3.4 (1)).
 
-The two ablation arms differ by exactly one data path — `--with-synthetic` adds
-`synthetic_sarcasm.jsonl` and nothing else, and the assertion that says so is
+The two ablation arms differ by exactly one data path — `--with-plast` adds
+`uplabel_precheck_45g2.jsonl` and nothing else, and the assertion that says so is
 not optional (amendment 3.4 (3)).
 
     PYTHONPATH=src python3 scripts/train_qlora.py --build-only
@@ -40,24 +40,55 @@ sys.path.insert(0, str(REPO_ROOT / "src"))  # the package is not pip-installed
 
 import yaml  # noqa: E402
 
-from market_pulse import local_llm, prompts, records, scorer  # noqa: E402
+from market_pulse import local_llm, parents, prompts, records, scorer  # noqa: E402
 
 FROZEN = REPO_ROOT / "data" / "frozen"
 ANNOTATION = REPO_ROOT / "data" / "annotation"
 RESULTS = REPO_ROOT / "results" / "baselines.json"
 CONFIG = REPO_ROOT / "config" / "qlora.yaml"
 
+TESTSET_VERSION = "v4"
+"""Which frozen test set this training run is aimed at, and therefore which prompt
+revision it renders (`prompts.REVISIONS`).
+
+Not a flag. Train/eval format identity is the invariant this script exists to hold, and a
+run that could be pointed at one rendering while the gate scored another would hold it by
+convention. The version is written into the provenance and `eval_zero_shot.arm_preflight`
+refuses an adapter whose rendering is not the one it is scoring through."""
+
 SOURCES = {
-    "T1": (FROZEN / "comments_train.jsonl", ANNOTATION / "sarcasm_candidates.jsonl"),
+    "T1": (FROZEN / "comments_train_tax2.jsonl", ANNOTATION / "sarcasm_candidates_tax2.jsonl"),
     "T2": (FROZEN / "posts_train.jsonl",),
 }
-SYNTHETIC = ANNOTATION / "synthetic_sarcasm.jsonl"
+"""SPEC amendment 3.9 (1): the taxonomy-v2 siblings, not the v1 files they were staged
+beside. The v1 pair holds ZERO `service` rows while the gate scores against a test set
+that is taxonomy v2 — an arm trained on them would be the only arm never shown the class
+it is graded on, and the selection rule would measure taxonomy exposure and record it as
+data volume (`results/precheck_45h.json`). The siblings hold the same 906 + 540 scoreable
+rows, so no projected hour moves. `posts_train.jsonl` stays: posts carry no intents."""
+
+PLAST = ANNOTATION / "uplabel_precheck_45g2.jsonl"
+"""The ablation's one variable: the 1,912 up-labelled rows (v2 labels plus the operator's
+verdicts) that 4.5h2 exists to price. It replaces `synthetic_sarcasm.jsonl`, which 4c's
+own selection rule dropped (`knowledge/decisions/phase4-gate-verdict.md`) — keeping the
+flag would offer a third arm no gate may run."""
+
+ARM = {False: "without-plast", True: "with-plast"}
+"""Distinct from 4c's `real-only` / `with-synthetic`: `records.arm_record` refuses two rows
+for one arm name, and both phases append to the same results file."""
 
 NEVER_READ = (
     FROZEN / "comments_test.jsonl",
+    FROZEN / "comments_test_v3.jsonl",
+    FROZEN / "comments_test_v4.jsonl",
     FROZEN / "posts_test.jsonl",
+    FROZEN / "posts_test_v3.jsonl",
+    FROZEN / "posts_test_v4.jsonl",
     FROZEN / "sarcasm_holdout.jsonl",
+    FROZEN / "sarcasm_holdout_v3.jsonl",
+    FROZEN / "sarcasm_holdout_v4.jsonl",
     ANNOTATION / "sarcasm_holdout_pool.jsonl",
+    ANNOTATION / "sarcasm_holdout_pool_v4.jsonl",
 )
 """The files no training run may open, named one by one rather than by folder.
 
@@ -67,7 +98,26 @@ and both of those live in `data/frozen/`. The rule the sentence means is the
 one enforced here: the frozen *test* sets and the holdout, plus the holdout pool
 whose non-sarcastic rows share threads with the holdout. A folder rule would
 either forbid the training data or, written loosely, permit the test sets.
-"""
+
+Every version of each, because a list that names only v2 is a guard that stopped covering
+the test set the moment v3 was frozen beside it."""
+
+RAW_POSTS = REPO_ROOT / "data" / "raw" / "posts"
+CAPTIONS = ANNOTATION / "post_captions.jsonl"
+_POSTS: dict | None = None
+
+
+def post_index() -> tuple[dict, dict]:
+    """The parent-post index and the 4.5g2 captions, loaded once per process."""
+    global _POSTS
+    if _POSTS is None:
+        _POSTS = (parents.load(RAW_POSTS), parents.load_captions(CAPTIONS))
+    return _POSTS
+
+
+def rendering(task: str) -> str:
+    """Which registered prompt this run renders a task through — one lookup, one answer."""
+    return prompts.REVISIONS[TESTSET_VERSION][task]
 
 
 # --- the dataset ------------------------------------------------------------
@@ -106,7 +156,7 @@ def answer(task: str, row: dict) -> str:
 
 
 def examples(task: str, path: Path) -> list[dict]:
-    """Scoreable rows of one file as training examples.
+    """Scoreable rows of one file as training examples, each with what it renders through.
 
     ``unclear`` rows are dropped. The assumption, stated because the brief asks
     for it: a row the annotator could not decide has no right answer to teach,
@@ -114,12 +164,20 @@ def examples(task: str, path: Path) -> list[dict]:
     label into the model that the scorer refuses to score. It is a large drop
     (694 of 1 600 comments, 206 of 746 candidates) and the counts are printed.
     """
+    with_post = rendering(task) in prompts.WITH_POST
+    posts, captions = post_index() if with_post else ({}, {})
     return [
         {
             "task": task,
             "id": row["id"],
             "source": path.name,
             "text": row["text"],
+            # Stored on the example rather than resolved at render time, so `content_hash`
+            # covers the post the model actually sees: two runs whose raw store differed
+            # would otherwise share a dataset hash and train on different requests.
+            "post": parents.post_kwargs(parents.context(posts, captions, row))
+            if with_post
+            else None,
             "target": answer(task, row),
         }
         for row in load(path)
@@ -131,11 +189,13 @@ def order(example: dict) -> tuple[str, str]:
     return example["task"], example["id"]
 
 
-def assemble(with_synthetic: bool, carve_rows: int, seed: int) -> dict:
+def assemble(with_plast: bool, carve_rows: int, seed: int) -> dict:
     """The training set and the carve, both deterministic.
 
-    The carve is drawn from the REAL pool before the synthetic rows join, so both
-    arms hold out the same rows and still differ by exactly the synthetic ids.
+    The carve is drawn from the REAL pool before the пласт joins, so both arms hold out the
+    same rows and still differ by exactly the пласт's ids — the pairing discipline of
+    amendment 3.4 (3), restated in 3.9 (2) because a пласт entering as a *source* would be
+    drawn from and the two arms would hold out different rows.
     """
     real = sorted(
         (row for task, paths in SOURCES.items() for path in paths for row in examples(task, path)),
@@ -151,8 +211,8 @@ def assemble(with_synthetic: bool, carve_rows: int, seed: int) -> dict:
     held = sorted(random.Random(seed).sample(real, carve_rows), key=order)
     held_ids = {order(row) for row in held}
     train = [row for row in real if order(row) not in held_ids]
-    if with_synthetic:
-        train += examples("T1", SYNTHETIC)
+    if with_plast:
+        train += examples("T1", PLAST)
     train.sort(key=order)
     return {"train": train, "carve": held}
 
@@ -171,23 +231,23 @@ def assert_format_identity(rows: list[dict]) -> None:
     to produce and the scorer would count as a parse failure.
     """
     for row in rows:
-        parsed = prompts.parse_reply(row["task"], row["target"])
+        parsed = prompts.parse_reply(rendering(row["task"]), row["target"])
         if json.dumps(parsed, ensure_ascii=False, sort_keys=True) != json.dumps(
             json.loads(row["target"]), ensure_ascii=False, sort_keys=True
         ):
             raise SystemExit(f"{row['id']}: the parser does not read this target back: {parsed}")
 
 
-def assert_arm_identity(real: list[dict], synthetic: list[dict]) -> list[str]:
-    """The two arms differ by exactly the synthetic rows, in both directions."""
-    real_ids = {order(row) for row in real}
-    synthetic_ids = {order(row) for row in synthetic}
-    added = synthetic_ids - real_ids
-    removed = real_ids - synthetic_ids
-    expected = {order(row) for row in examples("T1", SYNTHETIC)}
+def assert_arm_identity(without: list[dict], with_plast: list[dict]) -> list[str]:
+    """The two arms differ by exactly the пласт's rows, in both directions."""
+    base_ids = {order(row) for row in without}
+    other_ids = {order(row) for row in with_plast}
+    added = other_ids - base_ids
+    removed = base_ids - other_ids
+    expected = {order(row) for row in examples("T1", PLAST)}
     if removed or added != expected:
         raise SystemExit(
-            f"the arms differ by more than the synthetic source: {len(added)} added,"
+            f"the arms differ by more than the пласт: {len(added)} added,"
             f" {len(removed)} removed, {len(expected)} expected added and 0 removed."
             " One data path is the whole ablation (SPEC amendment 3.4 (3))."
         )
@@ -205,7 +265,11 @@ def provenance(config: dict, arm: str, built: dict, ids: list[str]) -> dict:
         "rows_per_source": counts,
         "train_sha256": content_hash(built["train"]),
         "carve_sha256": content_hash(built["carve"]),
-        "synthetic_ids_added": len(ids),
+        "added_source": PLAST.name if arm == ARM[True] else None,
+        "added_ids": len(ids),
+        "testset_version": TESTSET_VERSION,
+        "prompt_revision": prompts.REVISIONS[TESTSET_VERSION],
+        "prompt_revision_sha256": prompts.revision_sha256(TESTSET_VERSION),
         "prompt_sha256": {task: prompts.prompt_sha256(task) for task in prompts.TASKS},
         "quantization": local_llm.QUANTIZATION,
         "chat_template": local_llm.CHAT_TEMPLATE,
@@ -213,13 +277,13 @@ def provenance(config: dict, arm: str, built: dict, ids: list[str]) -> dict:
     }
 
 
-def build(config: dict, with_synthetic: bool) -> tuple[dict, dict]:
+def build(config: dict, with_plast: bool) -> tuple[dict, dict]:
     """Both arms, asserted against each other, and the one this run trains on."""
     training = config["training"]
     real = assemble(False, training["carve_rows"], training["seed"])
     other = assemble(True, training["carve_rows"], training["seed"])
     added = assert_arm_identity(real["train"], other["train"])
-    built = other if with_synthetic else real
+    built = other if with_plast else real
     assert_format_identity(built["train"] + built["carve"])
     history = json.loads(RESULTS.read_text(encoding="utf-8"))
     try:
@@ -228,8 +292,7 @@ def build(config: dict, with_synthetic: bool) -> tuple[dict, dict]:
         )
     except ValueError as err:
         raise SystemExit(str(err)) from None
-    arm = "with-synthetic" if with_synthetic else "real-only"
-    return built, provenance(config, arm, built, added)
+    return built, provenance(config, ARM[with_plast], built, added)
 
 
 # --- training ---------------------------------------------------------------
@@ -251,7 +314,9 @@ def rendered(tokenizer, example: dict) -> tuple[str, str]:
     from the template rather than typed here, because it is the token that stops
     generation and `_trim` reads it back.
     """
-    messages = prompts.build_messages(example["task"], example["text"])
+    messages = prompts.build_messages(
+        rendering(example["task"]), example["text"], **(example["post"] or {})
+    )
     prompt = tokenizer.apply_chat_template(messages, tokenize=False, **local_llm.CHAT_TEMPLATE)
     turn = tokenizer.apply_chat_template(
         [*messages, {"role": "assistant", "content": example["target"]}],
@@ -533,9 +598,10 @@ def carve_mechanics(config: dict, built: dict, adapter: Path) -> dict:
     client = local_llm.LocalClient(tokenizer, model)
     parsed, failures = {}, []
     for row in built["carve"]:  # batch size 1: 4a measured that batching moves outputs
-        reply = client.batch(row["task"], [row["text"]])[0]
+        task = rendering(row["task"])
+        reply = client.batch(task, [row["text"]], [row["post"]] if row["post"] else None)[0]
         try:
-            parsed[row["id"]] = prompts.parse_reply(row["task"], reply["content"])
+            parsed[row["id"]] = prompts.parse_reply(task, reply["content"])
         except prompts.ParseError as err:
             failures.append({"id": row["id"], "reason": err.reason})
     gold = {row["id"]: json.loads(row["target"]) for row in built["carve"]}
@@ -558,7 +624,7 @@ def carve_mechanics(config: dict, built: dict, adapter: Path) -> dict:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--config", type=Path, default=CONFIG)
-    parser.add_argument("--with-synthetic", action="store_true", help="the ablation's second arm")
+    parser.add_argument("--with-plast", action="store_true", help="the ablation's second arm")
     parser.add_argument("--build-only", action="store_true", help="assemble and assert; no GPU")
     parser.add_argument("--out", type=Path, help="run directory: adapter, loss curve, provenance")
     parser.add_argument("--max-steps", type=int, help="stop after N optimizer steps (smoke)")
@@ -567,7 +633,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     config = yaml.safe_load(args.config.read_text(encoding="utf-8"))
-    built, record = build(config, args.with_synthetic)
+    built, record = build(config, args.with_plast)
     print(json.dumps({k: v for k, v in record.items() if k != "config"}, indent=2, sort_keys=True))
     if args.build_only:
         return 0

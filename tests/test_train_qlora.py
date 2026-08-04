@@ -22,7 +22,7 @@ spec.loader.exec_module(trainer)
 
 CARVE, SEED = 24, 42
 REAL = trainer.assemble(False, CARVE, SEED)
-SYNTH = trainer.assemble(True, CARVE, SEED)
+SYNTH = trainer.assemble(True, CARVE, SEED)  # the with-пласт arm (4.5h2's one variable)
 
 
 def test_answer_writes_the_gold_in_the_schema_the_parser_reads():
@@ -32,7 +32,8 @@ def test_answer_writes_the_gold_in_the_schema_the_parser_reads():
     trained to produce and the scorer would count as a parse failure.
     """
     for row in SYNTH["train"] + SYNTH["carve"]:
-        assert prompts.parse_reply(row["task"], row["target"]) == json.loads(row["target"])
+        rendered = trainer.rendering(row["task"])
+        assert prompts.parse_reply(rendered, row["target"]) == json.loads(row["target"])
 
 
 def test_answer_normalises_the_way_the_parser_normalises():
@@ -59,7 +60,7 @@ def test_assemble_holds_the_carve_out_of_training():
 
 
 def test_assemble_draws_the_same_carve_for_both_arms():
-    """Carving before the synthetic rows join is what keeps the arms one path apart."""
+    """Carving before the пласт joins is what keeps the arms one path apart."""
     assert [trainer.order(row) for row in REAL["carve"]] == [
         trainer.order(row) for row in SYNTH["carve"]
     ]
@@ -76,20 +77,21 @@ def test_content_hash_is_a_hash_of_the_data_not_of_the_order():
     assert trainer.content_hash(shuffled) == trainer.content_hash(REAL["train"])
 
 
-def test_the_two_arms_differ_by_exactly_the_synthetic_rows():
+def test_the_two_arms_differ_by_exactly_the_plast_rows():
     added = trainer.assert_arm_identity(REAL["train"], SYNTH["train"])
-    assert len(added) == len(SYNTH["train"]) - len(REAL["train"])
-    assert all(row_id.startswith("synthetic:") for row_id in added)
+    assert len(added) == len(SYNTH["train"]) - len(REAL["train"]) == 1286
+    plast = {row["id"] for row in trainer.load(trainer.PLAST)}
+    assert set(added) <= plast
 
 
 def test_arm_identity_refuses_a_second_difference():
     """The negative control: without it the assert above is decoration.
 
-    One real row dropped from the synthetic arm is invisible in the counts if
-    only the added side is checked — the arm would still be 600 rows longer.
+    One real row dropped from the with-пласт arm is invisible in the counts if
+    only the added side is checked — the arm would still be 1,285 rows longer.
     """
     tampered = [row for row in SYNTH["train"] if row["id"] != REAL["train"][0]["id"]]
-    with pytest.raises(SystemExit, match="differ by more than the synthetic source"):
+    with pytest.raises(SystemExit, match="differ by more than the пласт"):
         trainer.assert_arm_identity(REAL["train"], tampered)
 
 
@@ -107,7 +109,7 @@ def test_training_refuses_to_open_a_frozen_test_input(path):
 
 
 def test_no_training_source_is_a_frozen_test_input():
-    sources = {path for paths in trainer.SOURCES.values() for path in paths} | {trainer.SYNTHETIC}
+    sources = {path for paths in trainer.SOURCES.values() for path in paths} | {trainer.PLAST}
     assert not sources & set(trainer.NEVER_READ)
 
 
@@ -159,3 +161,90 @@ def test_assert_resumable_refuses_a_state_from_a_different_parameter_list():
     wrong tensor and raises nothing at all — so this has to raise instead."""
     with pytest.raises(SystemExit, match="state for 3 parameters and this model has 4"):
         trainer.assert_resumable({"optimizer": {"state": {0: {}, 1: {}, 2: {}}}}, 4)
+
+
+# --- 4.5h2: the taxonomy the arms are trained in, and the one the gate scores ---
+
+
+def test_both_arms_train_on_the_taxonomy_v2_sources():
+    """SPEC amendment 3.9 (1). The v1 pair holds ZERO `service` rows while the gate
+    scores against a v4 test set that IS taxonomy v2 — an arm trained on them would be
+    the only arm never shown the class it is graded on, and the selection rule would
+    measure taxonomy exposure and record it as data volume."""
+    assert [path.name for path in trainer.SOURCES["T1"]] == [
+        "comments_train_tax2.jsonl",
+        "sarcasm_candidates_tax2.jsonl",
+    ]
+    for row in REAL["train"]:
+        assert not row["source"].endswith(("comments_train.jsonl", "sarcasm_candidates.jsonl"))
+
+
+def test_the_sixth_class_is_in_both_arms_and_in_the_right_proportion():
+    """The confound, counted rather than argued: the label vocabulary on each side."""
+
+    def service(rows):
+        return sum(1 for row in rows if "service" in json.loads(row["target"]).get("intents", []))
+
+    assert service(REAL["train"]) > 0
+    assert service(SYNTH["train"]) > service(REAL["train"])
+    v1 = trainer.FROZEN / "comments_train.jsonl", trainer.ANNOTATION / "sarcasm_candidates.jsonl"
+    assert (
+        sum(1 for path in v1 for row in trainer.load(path) if "service" in row["intents"]) == 0
+    ), "the v1 sources are the confound this amendment removes"
+
+
+def test_the_row_counts_are_the_precheck_s_and_the_carve_is_shared():
+    """`results/precheck_45h.json` priced the ablation at these two numbers, and
+    amendment 3.9 (2) requires the arms to hold out the identical carve."""
+    assert len(REAL["train"]) == 2171
+    assert len(SYNTH["train"]) == 3457
+    assert trainer.content_hash(REAL["carve"]) == trainer.content_hash(SYNTH["carve"])
+
+
+def test_every_comment_example_carries_the_post_it_renders_with():
+    """The rendering is with-post, so a row without one would raise at build_messages —
+    on the pod, after the weights. And `content_hash` covers the post, so two runs whose
+    raw store differed cannot share a dataset hash."""
+    for row in SYNTH["train"]:
+        if row["task"] == "T1":
+            assert set(row["post"]) == {"parent", "caption", "caption_kind"}
+        else:
+            assert row["post"] is None
+    stripped = [dict(row, post=None) for row in REAL["train"]]
+    assert trainer.content_hash(stripped) != trainer.content_hash(REAL["train"])
+
+
+def test_the_run_renders_the_version_it_is_aimed_at():
+    assert trainer.TESTSET_VERSION == "v4"
+    assert trainer.rendering("T1") == prompts.REVISIONS["v4"]["T1"] == "T1v2_with_post"
+    assert trainer.rendering("T2") == "T2"
+
+
+def test_the_arm_names_do_not_collide_with_phase_4_s():
+    """`records.arm_record` refuses two rows for one arm name, and both phases append
+    to `results/baselines.json`."""
+    assert set(trainer.ARM.values()) == {"without-plast", "with-plast"}
+    assert not set(trainer.ARM.values()) & {"real-only", "with-synthetic"}
+
+
+def test_the_never_read_list_covers_every_version_of_every_test_file():
+    """A list that named only v2 stopped covering the test set the moment v3 was frozen
+    beside it — and v4 is what this phase scores."""
+    names = {path.name for path in trainer.NEVER_READ}
+    for stem in ("comments_test", "posts_test", "sarcasm_holdout"):
+        for suffix in ("", "_v3", "_v4"):
+            assert f"{stem}{suffix}.jsonl" in names, f"{stem}{suffix}"
+    for path in trainer.NEVER_READ:
+        assert path.exists(), path
+
+
+def test_the_provenance_names_the_rendering_the_gate_will_check(tmp_path):
+    import yaml
+
+    config = yaml.safe_load((REPO_ROOT / "config" / "qlora.yaml").read_text(encoding="utf-8"))
+    _, record = trainer.build(config, True)
+    assert record["arm"] == "with-plast"
+    assert record["added_source"] == "uplabel_precheck_45g2.jsonl"
+    assert record["testset_version"] == "v4"
+    assert record["prompt_revision_sha256"] == prompts.revision_sha256("v4")
+    assert record["config"]["training"]["max_seq_len"] == 1408
