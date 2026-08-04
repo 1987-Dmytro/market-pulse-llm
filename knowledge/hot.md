@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-03 22:34:52 (every SessionStart)
+**Auto-refreshed:** 2026-08-04 13:03:46 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-2842208 chore: the 4.5g6 close and the 4.5h briefing — status, log, vault tail
-1a92efc docs: the prediction at a matched denominator, and what the 9 is not evidence for
-29fbdec feat: v2ctx bought and KILLed — 41/58 preserved, 9/17 feature-fixed
-7caab2d chore: the team lead's category/position amendment candidate, committed verbatim
-b3eac2d feat: the v2ctx runner, committed before the numbers exist
+6a4a02a chore: the hook tail — the 08-03 session marker and the regenerated vault index
+f601edf chore: the 4.5h acceptance, amendment 3.9, PRODUCT.md and the 4.5h2 contract
+ff5430b fix: the balance and the headroom are two numbers, and the notes named the wrong one
+bd1977c feat: the fourth place intents sits at v1, and it is not a guard
+70940e6 docs: the 4.5h precheck notes — 13 deviations and what the numbers say
 ```
 
 ## 📋 Recent decisions
@@ -23,24 +23,81 @@ b3eac2d feat: the v2ctx runner, committed before the numbers exist
 
 ## 📅 Recent daily logs
 
+- `2026-08-04.md`
 - `2026-08-03.md`
 - `2026-08-02.md`
-- `2026-08-01.md`
 
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-03 22:10 (`PROMPT-4.5h` Step 0 — **the 4.5h precheck is in flight: read-only, $0, no freeze**. The relabel gate-program is closed by three KILLs and the пласт now earns its place by a pre-registered A/B ablation in 4.5h2, not by a re-run. This half answers six precheck questions and takes four category measurements; the freeze, the fresh anchor, the bars and the retrain are 4.5h2, after the team lead signs off. Previous state, still true — **six dictated verdicts complete the adjudicated 40, the two features are registered as rendered facts (`precheck_v2ctx_with_post`, RENDER-ONLY: no prompt text moves), and the pre-registered probe returned KILL at preserved 41/58** with feature-fixed 9/17. $0.0301 for 100 requests; $0.8095 of the $1.50 shared cap. Three tracks are now closed by their own gates: v2.1, v2.2 and v2ctx. Open refusals: `7555` and `11876` (pending law). All three 4.5g strata still FAIL; the wave-2 hundred is still unjudged. The 4.5f calibration gate stays PASS at 100/100; test v3 is frozen beside v2; Phase 4 stays closed at 2 of 5 against v2; edited by hand — the section above is auto-generated, do NOT touch the marker)
+**Last update:** 2026-08-04 13:20 (**4.5h2 IS IN FLIGHT** — test v4 → fresh own-pod anchor → bars and the selection rule as code → the A/B пласт ablation. Step 0 is committed; the open question is the **prompt identity** the whole phase inherits, and its owner is **the gates**: the anchor defines the instrument every bar and both arms are measured through, and it is scored once. Previous state — `/save` after `PROMPT-4.5h` precheck — **executed, reported at $0, and ACCEPTED the same day: amendment 3.9 rules all three flags**. The ceiling rises 5 → **6.5 h** for the 4.5h2 ablation only; **both arms train on the `_tax2` siblings** (the executor's confound finding, adopted); the **carve is drawn before the пласт is appended**, so the arms stay paired. The 54 are resolved by option (i) — the pool is materialized at 917 beside the pristine file — and the per-(brand+position) amendment is **DEFERRED on the numbers**. `docs/PROMPT-4.5h2.md` is queued and `docs/PRODUCT.md` is approved. Precheck state as delivered — Two numbers decide what happens next: **arm B projects to 5.44 h against amendment 3.6's 5 h ceiling** (over at both observed step rates; the run was not shrunk), and **the two arms would not be trained on the same taxonomy** — `train_qlora.SOURCES` reads the v1 files (0 `service` rows) while the пласт carries 652 and G1c is scored against a v4 test that IS taxonomy v2. Everything else came back clean: the пласт is additive (0 id overlap), leakage is 0/0/0, all 508 gold rows need a fresh pass at $0.0869, the 54's dual home is a file the trainer may not open, and the corpus holds no brand comparison at all. Previous state — **the 4.5h precheck is in flight: read-only, $0, no freeze**. The relabel gate-program is closed by three KILLs and the пласт now earns its place by a pre-registered A/B ablation in 4.5h2, not by a re-run. This half answers six precheck questions and takes four category measurements; the freeze, the fresh anchor, the bars and the retrain are 4.5h2, after the team lead signs off. Previous state, still true — **six dictated verdicts complete the adjudicated 40, the two features are registered as rendered facts (`precheck_v2ctx_with_post`, RENDER-ONLY: no prompt text moves), and the pre-registered probe returned KILL at preserved 41/58** with feature-fixed 9/17. $0.0301 for 100 requests; $0.8095 of the $1.50 shared cap. Three tracks are now closed by their own gates: v2.1, v2.2 and v2ctx. Open refusals: `7555` and `11876` (pending law). All three 4.5g strata still FAIL; the wave-2 hundred is still unjudged. The 4.5f calibration gate stays PASS at 100/100; test v3 is frozen beside v2; Phase 4 stays closed at 2 of 5 against v2; edited by hand — the section above is auto-generated, do NOT touch the marker)
 
 ## 🔥 What's Hot
 
-**NOW: 4.5h PRECHECK IN FLIGHT — read-only, $0 spend, nothing freezes.** `docs/PROMPT-4.5h.md`.
-Deliverables: `results/precheck_45h.json` (dual-home 54 · the intents guard · v4 migration counts ·
-v3-vs-v2 collisions · the arm-B projection against the 5 h ceiling · anchor+eval budget) and
-`results/categories_45h.json` (post category coverage · cross-category comments · position mentions ·
-brand comparisons). **The freeze, the fresh own-pod anchor, `gate_bars.py`, the A/B retrain and the
-selection rule are 4.5h2** — a separate prompt after the team lead signs off on these numbers.
+**4.5h2 IS IN FLIGHT — AND THE FIRST THING IT NEEDS IS A PROMPT DECISION, NOT A POD.** Step 0 is
+committed (`f601edf`, `6a4a02a`). Everything downstream inherits one choice: **the anchor's prompt
+revision**. Every recorded gate run — 4a's anchor and both 4c arms — hashes `{T1, T2}`, the **v1**
+prompts, whose label space has five intents; v4 gold has six. Retargeting `SOURCES` at the `_tax2`
+siblings as amendment 3.9 directs makes `train_qlora.assert_format_identity` **refuse to build**:
+`parse_reply("T1", …)` rejects `service`, and 547 of the retargeted rows carry it. So the trainer's
+prompt has to move to a v2 revision, and train/eval format identity says the eval's has to move with
+it — which is what the brief's "v2-with-post" already says for the anchor. The measurements that
+price that fork are below; the fork itself is the gates' to settle, because the anchor is scored
+**once**.
+
+**THE 4.5h PRECHECK IS DONE AND IT COST $0.** `results/precheck_45h.json` · `results/categories_45h.json`
+· `data/category_lexicon_draft.json`. No model call, no pod, no freeze; both records byte-reproducible
+(run twice, `cmp`). **4.5h2 — the freeze, the fresh anchor, `gate_bars.py`, the A/B retrain and the
+selection rule — waits on the team lead.**
+
+**ARM B PROJECTS TO 5.44 h AGAINST A 5 h CEILING**, and to 5.21 h at the fastest step 4c observed —
+over on both. The run was **not** shrunk; amendment 3.6 is the team lead's to amend.
+
+| | scoreable | train rows | steps | h @45.35 s | h @43.42 s | $ @0.53 |
+|---|---|---|---|---|---|---|
+| arm A | 2 195 | 2 171 | 270 | **3.40** | 3.26 | 1.80 |
+| arm B | 3 481 | 3 457 | 432 | **5.44** | 5.21 | 2.88 |
+
+**IT IS OVER THE CEILING *BECAUSE* THE ПЛАСТ IS ADDITIVE.** 0 of its 1 286 scoreable rows carries an
+id any training source already holds — had they overlapped, B would have been a relabel of A and the
+hours would not have moved. **STATUS's "arm A = 2 346" is a different quantity**: 1 600 + 746, the
+comment rows of both T1 sources *before* the `unclear` filter (`train_qlora.py:126`), posts excluded.
+The trainer's own count is 2 195 / 2 171, which is exactly `4c-arm-a/provenance.json`. Step formula
+`floor(rows/16)·2`, pinned by test against 4c's 270 and 346.
+
+**THE ARMS WOULD NOT BE TRAINED ON THE SAME TAXONOMY.** `train_qlora.py:50` `SOURCES` reads the **v1**
+files — **0** `service` rows between them — while the пласт carries **652** among its scoreable rows,
+and G1c is scored against a v4 test that IS taxonomy v2. The selection rule would be decided by
+taxonomy exposure and recorded as data volume. The `_tax2` siblings hold the same 906 / 540 scoreable
+rows, so repointing `SOURCES` — the brief's own "arm A under the v2 law" — moves **no hour**. It is
+the fourth place `intents` sits at v1 and the only one that is **not a guard**: nothing refuses when
+it is wrong. Beside it: a пласт entering as a source is drawn from by the carve, so the arms stop
+holding out the same 24 rows (Phase 4 avoided that by letting synthetic join *after* the draw).
+
+**ALL 508 GOLD ROWS NEED A FRESH INTENTS PASS — 0 ARE ALREADY DONE.** The `relabel_intents.py` guard
+worked: every `*_tax2` store and the пласт hold zero gold ids. $0.0869 at 4.5e's observed
+$0.0001711/row, against **$0.690497** of OpenRouter headroom. **`posts_test` has no `intents` column
+at all**, so v4 posts is `posts_test_v3.jsonl` unchanged. **32 test rows already carry a ruling** the
+pass would overwrite — 31 blind-audit + `@VARUS_channel:5951` from guideline v2, no row in both, and
+**0 collisions** with any existing v2 value because none exists for a gold id.
+
+**THE 54's SECOND HOME IS A FILE THE TRAINER MAY NOT OPEN.** `sarcasm_holdout_pool.jsonl`, and it is
+in `train_qlora.NEVER_READ`; **0 hits by id and 0 by verbatim text** in the three training-side stores
+the brief names. Field-identical to the v2 freeze, 4 rows diverge from v3 (`sarcasm` 4, `sentiment` 1),
+no v2 intents value anywhere (the tax2 pool is 917 = 971 − 54). Both reconciliation options move **0**
+training rows and leave G1b at 108 / slice 44 / 29. Leakage on rows the 2026-07-28 check never saw:
+**0 ids, 0 threads, 0 verbatim texts** against `comments_test`, `sarcasm_holdout` and both v3 siblings.
+
+**THE CATEGORY SIGNAL IS THIN AND THE COMPARISON CASE IS ABSENT.** 1 875 of 5 242 texted posts (35.8%)
+read as a family, only 734 (14.0%) as a *tracked* one, and **815 posts carry no text at all**.
+Cross-category comments: 83 of 353 comparable (23.5%; 24.5% on scoreable train) — but that denominator
+is 3% of the corpus. Positions 10.2% of texted posts **with** `%` units and **2.8% without** (official
+retail 15.0% vs aggregator 1.8%) — undivided, the measure counts discounts. Comparisons over 11 338
+comments: 227 name a brand, 241 carry a marker somewhere, 10 name two brands, 3 put a marker in one
+sentence with a brand, and **a∩b = 0** in both brand readings on all three populations. And the exact
+matcher — the scorer's, the one G1e is graded with — **cannot see the operator's own canonical
+example**: «Гармонію» is not «Гармонія». Lower bounds from a draft lexicon, `draft-not-law`.
 
 **THE FACT WAS THE RULE. v2ctx IS KILLED AT 41/58.** One attempt, 100 rows, $0.0301, 100 answered,
 0 unusable. `results/v2ctx_probe_results.json`, scored by the function
@@ -688,60 +745,87 @@ files**: `comments_train.jsonl` (1600) + `sarcasm_candidates.jsonl` (746) plus
 
 ## ⏭️ Next
 
-1. **THE OPERATOR RULED (03.08, night): THE ПЛАСТ EARNS ITS PLACE BY ABLATION, NOT BY A RE-RUN.**
-   The relabel gate-program closes at an honest FAIL — three tracks, three pre-registered KILLs
-   (v2.1 negations, v2.2 affirmations, v2ctx features-as-facts), $0.10 total. **No surgical batch
-   run and no fresh hundred**: the пласт (v2 labels + 41 manual verdicts, `unclear` excluded from
-   training by contract) goes into **4.5h as arm B against arm A**, judged by the frozen v3 tests,
-   selection rule committed as code before scoring (amendment 3.4 (3) transposed). The wave-2 pack
-   is **SUPERSEDED** — it gated the v2.1 labels, which measure worse than every other revision, and
-   there is nothing left to gate. Money frozen where it stands: **$0.8095 of $1.50** OpenRouter,
-   $0.6905 left, of which 4.5h expects to spend only the intents migration (~$0.17 at the 4.5e rate)
-   **if the precheck confirms it**. What was never tried and is still not scoped: a **narrower
-   discriminator** (the law's carve-out for a reply that accuses the retailer directly) or the
-   features reaching a **classifier** rather than a prompt.
+1. **4.5h2 IS WRITTEN AGAINST THREE DECISIONS THAT ARE NOT MADE YET** — the sign-off, the 5 h
+   ceiling and whether arm A reads `_tax2` (Blockers). Its shape is fixed: test v4 freeze (lift the
+   `relabel_intents.py` guard as a code change with a test — **all 508 gold rows**, $0.0869, and
+   v4 posts is `posts_test_v3.jsonl` unchanged) → **fresh full own-pod anchor** (~$0.4, all heads,
+   new G1b slice) → bars derived programmatically by `gate_bars.py` from that anchor, no number
+   typed → the **A/B retrain**, selection rule committed as code *before* scoring (amendment 3.4 (3)
+   transposed: the пласт stays iff arm B's G1c is strictly higher AND no other gated head is lower
+   by more than 0.5 pp). Budget from the precheck: **$1.80 + $2.88 training + ~$1.03 for the anchor
+   and both evals**, against **$18.0097** left under the $25 Phase-4 cap (account balance $28.0097
+   — two different numbers). OpenRouter: **$0.8095 of $1.50**, $0.690497 left, and the only planned
+   spend is the intents migration.
 
-2. **THE POLL FINDING IS A CORPUS QUESTION, AND IT IS THE BIGGEST THING 4.5g2 OPENED.** 16 of the 41
+2. **THE OPERATOR RULED (03.08, night): THE ПЛАСТ EARNS ITS PLACE BY ABLATION, NOT BY A RE-RUN.**
+   The relabel gate-program closed at an honest FAIL — three tracks, three pre-registered KILLs
+   (v2.1 negations, v2.2 affirmations, v2ctx features-as-facts), $0.10 total. **No surgical batch
+   run and no fresh hundred.** The wave-2 pack is **SUPERSEDED** — it gated the v2.1 labels, which
+   measure worse than every other revision, and there is nothing left to gate. What was never tried
+   and is still not scoped: a **narrower discriminator** (the law's carve-out for a reply that
+   accuses the retailer directly) or the features reaching a **classifier** rather than a prompt.
+
+3. **THE CATEGORY / POSITION LAYER HAS ITS FIRST NUMBERS AND THEY ARE NOT ENCOURAGING.** A category
+   layer would run on 35.8% of texted posts (14.0% for a *tracked* group) and inherit into comments
+   through a denominator worth 3% of the corpus; **815 posts carry no text at all**, which is the
+   media-only hole again. The SKU layer's honest share is **2.8%**, not 10.2% — the difference is
+   `знижка 20%`. And the per-(brand+position) amendment has **no rows to exist for**: a∩b = 0 on
+   11 338 comments. Whatever is scoped next, the first fix is cheaper than any of it — the exact
+   brand matcher cannot read an inflected brand name, and that is `market_pulse.brands`, which G1e
+   is scored with. **Ruled 04.08:** the per-(brand+position) amendment is **DEFERRED on these
+   numbers** — measure 4 becomes a free counter inside the Phase-5 loop and the question reopens if
+   the share moves; the brand matcher is fixed at loop design. Category and position are a
+   **post-layer, not training**: the model is fine-tuned on sentiment + sarcasm + aspects + brands
+   from the comment alone, and comments inherit the category through `parent_msg_id`
+   (`docs/PRODUCT.md`, approved by the operator 04.08). All of it is draft measurement,
+   `draft-not-law`.
+
+4. **THE POLL FINDING IS A CORPUS QUESTION, AND IT IS THE BIGGEST THING 4.5g2 OPENED.** 16 of the 41
    parents in play are polls whose question the collector never stored. **How many polls are in the
    whole store is unknown**; every one of them is currently recorded as a post that said nothing,
    which is wrong for anything that reads post text — the T2 relevance/post-type labelling included.
    Whether `raw_store.post_record` should read `message.poll` (and `MessageMediaGiveaway`, the other
    structured body it drops) on the next collection pass belongs to the Phase-5 briefing. **This is
    not a 4.5g2 defect and 4.5g2 did not fix it** — it read the field for 16 named posts.
-3. **Three smaller things 4.5g2 leaves open.** **9 redo rows have no model column** — the model
+5. **Three smaller things 4.5g2 leaves open.** **9 redo rows have no model column** — the model
    answers `{}` on the same ids across three passes, so the residue is the model; blank cell, never
    a coerced `[]`. **4 posts have no surrogate at all** (a video, an audio message, two giveaways),
    which is 25 of the 424 rows. And **the strata still cannot see the 826 rows the precheck gave no
    intent** — 4.5f proved the empty class is where failures pile up; if it needs checking it has to
    be a stratum in a later round.
-4. **Still open from the 4.5f gate, untouched by both 4.5g and 4.5g2.** The 1,190 `unclear` staged
+6. **Still open from the 4.5f gate, untouched by both 4.5g and 4.5g2.** The 1,190 `unclear` staged
    rows — **37% of the file** — were never sampled by any calibration, are excluded from every
    metric, and are still headed for training. The 54 frozen ids get **two homes** the moment the
    holdout moves to v2 (their v1 copy stays in `sarcasm_holdout_pool.jsonl`); 4.5h is where they are
    named. **Whether the 97-row emptied class counts as the "repeating class"** that would put
    11902's precedent into the guideline. And from 4.5a: **which unit the program calls "the
    ceiling"** — a macro-F1 bound and an accuracy share cannot both be read against 0.98.
-   *(The two homes are Step 1.1 of the 4.5h precheck — in flight, inventory only, no reconciliation
-   is applied there.)*
-5. **Test v4 has to lift a guard, not flip a flag.** `relabel_intents.py` refuses any row sitting in
+   *(The two homes were Step 1.1 of the 4.5h precheck and the premise mostly dissolved: the second
+   home is `sarcasm_holdout_pool.jsonl`, which `train_qlora.NEVER_READ` forbids, and both
+   reconciliation options move 0 training rows. The 1,190 `unclear` rows and the ceiling unit are
+   still open.)*
+7. **Test v4 has to lift a guard, not flip a flag.** `relabel_intents.py` refuses any row sitting in
    a frozen test file, unconditionally, and test v4 is exactly a re-label of the test set — a code
    change with a test, deliberately not the `--allow-test-rows` switch that does not exist today.
-   *(The precheck locates the guard by `file:line` and changes no code — the lift is 4.5h2.)*
+   *(The 4.5h precheck answered its counts and changed no code: the guard is
+   `relabel_intents.py:84` `NEVER` / `:134` `forbidden_ids`, **all 508 gold rows** need the pass at
+   **$0.0869**, and **32 test rows already carry a ruling** it would overwrite. The lift itself is
+   4.5h2, and so is the fourth site — `train_qlora.py:50` `SOURCES`, which is not a guard.)*
    Then a fresh G1c anchor under `T1v2` → retrain → new bars pre-registered BEFORE scoring. The three
    boundary rulings of guideline v2 are law but reach `comments_test.jsonl` only there.
-6. **The filled pack is now the only copy of 244 verdicts.** `build_audit_pack.py --force` would
+8. **The filled pack is now the only copy of 244 verdicts.** `build_audit_pack.py --force` would
    destroy them and there is still no snapshot in the flow — the question the team lead has not
    ruled on. `normalize_audit_returns.py` is safe to re-run (it no-ops on an already-normalized
    pack), and the raw returns in `data/annotation/audit_45a_returned/` are the backup, sha-pinned
    in `results/audit_45b_returns.json`.
-7. **Phase 5 is still PAUSED** — nothing Phase-5-shaped is scoped, planned or started; 4.5 comes
+9. **Phase 5 is still PAUSED** — nothing Phase-5-shaped is scoped, planned or started; 4.5 comes
    first (operator sequencing decision, amendment 3.7). Everything after 4.5a — targeted
    re-labelling at scale, synthetic v2, a dev-set hyperparameter search — is **DEFERRED until the
    4.5a gate review rules on the numbers**, and each gets its own pre-registered gate.
-8. **Still the operator's, carried out of Phase 4:** Phase 5's first measurement is already named —
+10. **Still the operator's, carried out of Phase 4:** Phase 5's first measurement is already named —
    **do not merge the adapter into bf16 without scoring the merged artefact in the configuration
    production serves**; and the 100 GB CA-MTL-3 volume is kept pending the Phase 5 briefing.
-9. **Six findings for Phase 5, none gate-relevant, all in [[phase4-gate-verdict]] §(f):** `planned`
+11. **Six findings for Phase 5, none gate-relevant, all in [[phase4-gate-verdict]] §(f):** `planned`
    over-counts steps by one per epoch (272 planned, 270 run); leftover micro-batch gradients carry
    across the epoch boundary; the post-loop `save()` records the loop variable rather than the stop
    position after an early `--max-steps`; `seconds_per_step` in a resumed provenance is understated;
@@ -751,11 +835,30 @@ files**: `comments_train.jsonl` (1600) + `sarcasm_candidates.jsonl` (746) plus
 
 ## 🚧 Blockers
 
-**One, by design: 4.5h2 waits on the team lead's sign-off of this precheck** (owner: team lead).
-Nothing freezes, no pod starts and no bar is derived until the precheck numbers come back accepted —
-the executor's half is read-only and $0. If the arm-B projection crosses the 5 h per-arm ceiling of
-amendment 3.6, that is a **second** item for the same owner: SPEC is amended before 4.5h2, and the
-run is never shrunk to fit.
+**ONE OPEN, AND ITS OWNER IS THE GATES: which prompt revision the fresh anchor is measured through.**
+It blocks the anchor pod and nothing before it — the freeze machinery and the ≤$0.30 migration pass
+run underneath it. It is a blocker rather than an executor call for one reason: the anchor is scored
+**once**, and every bar, both arms and all five verdicts are read through whatever instrument it
+used. Amendment 3.9 directs both arms at the `_tax2` siblings; those rows carry `service`; the v1
+`T1` prompt's parser refuses `service`; so the training prompt must move, and the trainer's own
+invariant (train/eval format identity) moves the eval prompt with it. `records.assert_prompt_sha`
+hashes only `{T1, T2}` and would stay green through the whole change — the guard cannot see this
+one. Measurements attached in the phase report.
+
+**The three the precheck raised came back ruled the same day** (amendment 3.9, operator sign-off
+04.08), which is the outcome a precheck exists for — the confound was caught before the money.
+
+1. ~~Sign-off~~ → **ACCEPTED.** `make check` re-run by the team lead, six frozen SHAs intact,
+   ownership sweep clean, tables recomputed from `precheck_45h.json`, 14 deviations ratified.
+2. ~~The 5 h ceiling~~ → **6.5 h for the 4.5h2 ablation only** (amendment 3.9). The margin is
+   deliberate: room for a crash-resume without breaching.
+3. ~~Does arm A read `_tax2`?~~ → **both arms do.** Same 906 + 540 scoreable rows, so no hour moves;
+   and the 24-row carve is drawn **before** the пласт is appended, so the arms hold the identical
+   carve (the pairing discipline of 3.4 (3)).
+
+Also ruled without veto: test v4 = v3 → the 508-row intents pass (`intents` only, ~$0.09) → the 31
+audit rulings + 1 law verdict re-applied **on top** (an operator ruling supersedes the model); the 4
+v2/v3 divergences among the 54 inherit v3.
 
 **Nothing else open, and Phase 4 closed without leaving one.** 4c raised no escalation: the one
 pre-registered stop it could have hit — a projection crossing the 5 h per-arm ceiling — did not
