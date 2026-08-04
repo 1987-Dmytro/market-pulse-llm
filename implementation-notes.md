@@ -1957,3 +1957,35 @@ consequences to state beside the gate, never after it: the bar is **23 of 38**, 
 is 2.6 pp** of the fix-rate. Under this phase's rule G1c is the pivot and G1b is a *protected*
 head, so a single noisy slice row can drop an arm that won on G1c. That is what the
 pre-registered rule says and it is not adjusted after the fact — it is reported.
+
+## Three of one kind, and what they cost
+
+**D19 — `pgrep -f` / `pkill -f` match the shell that runs them.** A wrapper whose own command
+line contains the pattern is itself a match, so `while pgrep -f "train_qlora.py --out"` never
+exits and `pkill -f "scripts/eval_zero_shot"` kills the shell about to launch the eval. Both
+happened, back to back. Wait on a **PID** (`kill -0 $PID`) — a number cannot match itself —
+and check liveness with `ps -eo pid,cmd | grep "[e]val_zero_shot"`, whose bracket trick is
+there for exactly this.
+
+**D20 — an ssh command outlives the client that started it.** When the harness killed a
+background waiter, the remote `bash -c until ! pgrep …` kept running on the pod for hours and
+would have fired a second `train_qlora` **onto the same card** the moment arm A finished — two
+processes at 33 GB on a 48 GB A6000. Found by listing processes rather than by trusting that a
+dead ssh means a dead job. Every long pod-side job is `setsid nohup`; every *waiter* must be
+disposable, and the pod checked for orphans before anything else is launched on it.
+
+**D21 — the eval died twice on stale couplings, after the arm had trained.** `--arm` carried
+Phase 4's two names as argparse `choices`, and `arm_preflight` read
+`training["synthetic_ids_added"]`, which this phase renamed. Neither could be caught by the
+suite, because the fixture is a Phase-4-era `provenance.json` on disk: it pins the schema of
+2026-08-01 and cannot notice the writer moving. Both fixed, and the new test builds the record
+from the **live trainer** and drives the preflight with it. Cost: about 45 minutes of idle pod
+(~$0.40) and two restarts. The lesson is cheaper than it looks — the same seam would have
+broken arm B four hours later.
+
+**D22 — the two arms train at one commit and are scored at another.** Arm A trained at
+`551c7828`; the eval fixes above landed as `d3a7fe3` and `0310dfe`, and both arms' evals run
+at the later one. That is more paired, not less: what the ablation requires is that the
+*training* commit and the *scoring* commit each be shared, and the fixes touch only the eval's
+argument handling and one dict lookup. Arm B therefore trains from the same
+`/tmp/market-pulse-45h2.bundle` as arm A and fetches the fix before its own eval.
