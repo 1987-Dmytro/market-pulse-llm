@@ -37,6 +37,11 @@ data/annotation/*
 # The taxonomy-v2 copies staged beside them (4.5e). Same kind of artifact as the
 # file they were derived from, and useless to a reader who cannot diff the two.
 !data/annotation/*_tax2.jsonl
+# The pool at 917 rows (4.5h2): option (i) of the precheck, a NEW file beside the
+# pristine 971 so that each of the 54 dual-home ids lives in exactly one place and
+# the four records pinning the original's sha256 stay valid. Derived, and committed
+# for the same reason its source is: the reader has to be able to diff the two.
+!data/annotation/sarcasm_holdout_pool_v4.jsonl
 # The up-label precheck (4.5g): 1,912 paid rows that a gate decision reads. Same
 # rule as the line above — model output the operator calibrates, not collected
 # data — and an artifact living only in a working tree is money spent twice.

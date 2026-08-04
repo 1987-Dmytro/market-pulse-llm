@@ -1,0 +1,21 @@
+{
+  "openrouter_total_usage_at_45h2_start": 3.230157065,
+  "note": "lifetime OpenRouter usage read at the start of 45h2, before the first request of this phase. Phase spend = total_usage now minus this, and the $0.30 cap of docs/PROMPT-4.5h2.md is enforced against that difference. Delete or regenerate this file and the counter silently restarts at today's usage — the same footgun results/spend_3b.json carries. Every other phase's anchor is a different file and is never written here.",
+  "cap_usd": 0.3,
+  "runs": [
+    {
+      "model": "qwen/qwen3.6-27b",
+      "timestamp": "2026-08-04T11:21:53+00:00",
+      "usd": 0.09926873999999992,
+      "requests": 508,
+      "note": "45h2: 508 gold rows re-asked for `intents` under relabel_intents_v2_with_post"
+    },
+    {
+      "model": "qwen/qwen3.6-27b",
+      "timestamp": "2026-08-04T11:24:37+00:00",
+      "usd": 0.008694,
+      "requests": 47,
+      "note": "45h2: 47 gold rows re-asked for `intents` under relabel_intents_v2_with_post"
+    }
+  ]
+}

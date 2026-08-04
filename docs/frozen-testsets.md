@@ -1,4 +1,4 @@
-# Frozen test sets (Phase 2, step 2e) — v2, and v3 beside it
+# Frozen test sets (Phase 2, step 2e) — v2, with v3 and v4 beside it
 
 **Version: v2, 2026-07-27.** **Immutable without operator approval** (CLAUDE.md). v2 exists
 only because the operator approved 11 corrections on 2026-07-27, before any baseline number
@@ -9,6 +9,10 @@ published against them must name the version and the hashes below.
 applies the 38 point fixes the operator ruled blind in the Phase 4.5a audit, and `intents` in it is
 byte-identical to v2 pending the annotation-law review. v2 keeps every hash it has, and every number
 already published against v2 stays a v2 number. See "v3 — 38 point fixes from the blind audit".
+
+**Version v4, 2026-08-04**, lives in four further files and changes none of the above: it
+materializes the taxonomy-v2 `intents` column v3 left byte-identical to v2, and resolves the 54
+dual-home holdout ids. v2 and v3 keep every hash. See "v4 — the intents law, materialized".
 
 ## Files
 
@@ -106,6 +110,60 @@ Every changed row carries `annotator: "operator-blind-audit-45a"`.
 | `sarcasm_holdout_v3.jsonl` | `@msuaaaa:7500` | `sentiment` | "negative" | "neutral" |
 | `sarcasm_holdout_v3.jsonl` | `@msuaaaa:7500` | `sarcasm` | true | false |
 | `sarcasm_holdout_v3.jsonl` | `@msuaaaa:7907` | `sarcasm` | true | false |
+
+## v4 — the intents law, materialized (2026-08-04)
+
+**v4 does not replace v3 either.** Four new files; v2 and v3 keep every hash, and Phase 4's
+Tier-1 verdict stays the v2 result it was decided as. What v4 adds is the one column v3
+deliberately left alone: `intents` under taxonomy v2 (SPEC amendment 3.8), which is what makes
+G1c scoreable at all — v3's gold cannot say `service`, and 189 of v4's 508 comment rows do.
+
+Derived by `scripts/freeze_testsets_v4.py`, in the order amendment 3.9 (3) fixes:
+
+    v3  ->  the migration pass (`intents` only, 508 rows attempted)
+        ->  the 31 audit intents rulings, re-applied ON TOP
+        ->  the 1 law verdict of guideline v2, on top of those
+
+"On top" is observable on **23 rows**, where the operator's
+ruling and the pass disagree; there the operator's answer is gold. No hand edits: every row that
+takes no fix is required to reproduce its v3 line byte for byte, and a row that takes one must
+differ from it in `intents` and `annotator` alone.
+
+| file | rows | changed | migration | audit | law | sha256 (v4) |
+|---|---|---|---|---|---|---|
+| `data/frozen/comments_test_v4.jsonl` | 400 | 213 | 181 | 31 | 1 | `43fc38e116785b3db365d64905adc1045fafc36752933ecd472df9a9b9f9d7be` |
+| `data/frozen/sarcasm_holdout_v4.jsonl` | 108 | 61 | 61 | 0 | 0 | `954e46a6be5ddc7550d542cd147bf809aca687823ff0cf0fcefe60de84482d0a` |
+| `data/frozen/posts_test_v4.jsonl` | 250 | 0 | 0 | 0 | 0 | `a476414e26c410c12a56596edab2ff362989a67193dd0d93e3794eb2c073770d` |
+| `data/annotation/sarcasm_holdout_pool_v4.jsonl` | 917 | — | — | — | — | `84c2a2f795aacaea17c497b77248397d74b2c2ac9ec9c444b3eed2afb482b1aa` |
+
+**The instrument was `relabel_intents_v2_with_post`** (`qwen/qwen3.6-27b`, the pinned fp8
+endpoint, seed 42, $0.1080 over 555 requests against a $0.30 cap). Operator decision of
+2026-08-04: `docs/PROMPT-4.5h2.md` named "T1v2.1-with-parent-post", the only registered prompt of
+that family is `precheck_v2.1_with_post`, and revision v2.1 failed its own pre-registered gate at
+preserved 20/58 against v2's 58/58. This prompt asks for `intents` alone — so the other columns
+cannot move through a path that never carries them — carries the v2 law no gate killed, and takes
+the parent post `docs/annotation/comments.md` §Unit allows and gold was annotated with.
+
+**39 rows the pass could not read**, and the failure mode is
+named rather than smoothed: the model answered a bare `{}` — a JSON object with no `intents`
+key — on every one of them, the same ids on a re-ask. Four are covered by an operator ruling,
+which supersedes the pass whether or not it answered. The other
+**35 keep their v3 `intents`** and are listed by id in
+`results/frozen_v4.json` (`kept_v3_intents`): 28 in the comment test set, 7 in the holdout, all
+scoreable. **31 of the 35 already carry `[]`** — which is what the bare `{}` appears to mean —
+and **4 carry a v1 label v4 did not revisit** (`price`, `quality`, `availability`, `taste`, one
+each). Coercing `{}` to `[]` would have closed the hole where the instrument failed and where
+the majority answer sits, so it was counted instead.
+
+**The 54 dual-home ids are resolved by option (i)** of `results/precheck_45h.json`: the sarcasm
+holdout pool is written out at 917 rows as a NEW file, `data/annotation/sarcasm_holdout_pool_v4.jsonl`,
+so each id lives in exactly one place. The pristine 971-row file is untouched and keeps its
+sha256, so the four records pinning it stay valid.
+
+**What v4 does not reopen.** No published number moves: v2 numbers stay v2 numbers, the v3
+re-scores in `results/rescores_v3.json` stay program measurements, and Phase 4's verdict of 2 of 5
+was decided once against v2 under the one-attempt protocol. v4 exists to be the test set of the
+4.5h2 ablation and of nothing already scored.
 
 ## Changelog
 

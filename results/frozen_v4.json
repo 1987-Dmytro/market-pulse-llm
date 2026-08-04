@@ -1,0 +1,2803 @@
+{
+  "derived_by": "scripts/freeze_testsets_v4.py",
+  "gate": "SPEC amendment 3.9 (3): v3 -> intents migration -> 31 audit rulings -> 1 law verdict, operator rulings on top",
+  "testset_version": "v4",
+  "order": [
+    "migration",
+    "audit",
+    "law"
+  ],
+  "source": {
+    "v3_record": "results/frozen_v3.json",
+    "migration_rows": "results/migration_45h2_rows.jsonl",
+    "migration_rows_sha256": "77613c3aa575efa8d23a67d5ff70d8d6a5b24716a68b3b83ad33ccda961cbec6",
+    "migration_record": "results/migration_45h2.json",
+    "audit_manifest": "results/audit_45a_manifest.json",
+    "predictions_path": "results/predictions/google-gemma-4-31b-it--20260801T183747Z.jsonl",
+    "predictions_sha256": "bdff8a4ad36b60f6adc16332f8780592f20d00b21cb3087d3b662df46018f6db",
+    "key_sha256": "67bc859658f3663f0a2495fe02224dc50b846dd397219027d98cec009b175356",
+    "law": "knowledge/decisions/taxonomy-v2-relabel-and-appetite.md §(b), via scripts/precheck_45h.py LAW_VERDICTS"
+  },
+  "v2_sha256": {
+    "comments_test.jsonl": "14b6172472e482d511d36c6a95e5204482a3c14c058c972d39005c82609b9627",
+    "comments_train.jsonl": "4b6ea7f354bcc396ee526ce193c445bb358fab1d070bbe429dfdeb3bace1a1d7",
+    "posts_test.jsonl": "183de2b56e9cb7cc958884db51638c281404cf5c4b06e91ba61ac6330e3dade2",
+    "posts_train.jsonl": "d9b87cdd44586b8011b164f1e3be00457c75e675fad8db7524535306cc609049",
+    "sarcasm_holdout.jsonl": "f83a6cf0fecd0bb266f851803107771309b17d946719cb6da3ca4ff614cb37c3"
+  },
+  "v3_sha256": {
+    "comments_test_v3.jsonl": "d993ca6ff057060e73583a38addfbb78965b0f51a3cd994a5c9129d0606f135e",
+    "posts_test_v3.jsonl": "a476414e26c410c12a56596edab2ff362989a67193dd0d93e3794eb2c073770d",
+    "sarcasm_holdout_v3.jsonl": "9164d6f9aad24a469ea04745ef040984c8c5fabdf20fd83ad3f8448d614b8147"
+  },
+  "v4_sha256": {
+    "comments_test_v4.jsonl": "43fc38e116785b3db365d64905adc1045fafc36752933ecd472df9a9b9f9d7be",
+    "sarcasm_holdout_v4.jsonl": "954e46a6be5ddc7550d542cd147bf809aca687823ff0cf0fcefe60de84482d0a",
+    "posts_test_v4.jsonl": "a476414e26c410c12a56596edab2ff362989a67193dd0d93e3794eb2c073770d"
+  },
+  "rows": {
+    "comments_test_v4.jsonl": {
+      "rows": 400,
+      "rows_changed": 213,
+      "by_source": {
+        "migration": 181,
+        "audit": 31,
+        "law": 1
+      }
+    },
+    "sarcasm_holdout_v4.jsonl": {
+      "rows": 108,
+      "rows_changed": 61,
+      "by_source": {
+        "migration": 61,
+        "audit": 0,
+        "law": 0
+      }
+    },
+    "posts_test_v4.jsonl": {
+      "rows": 250,
+      "rows_changed": 0,
+      "by_source": {
+        "migration": 0,
+        "audit": 0,
+        "law": 0
+      }
+    }
+  },
+  "counts": {
+    "migration_attempted": 508,
+    "migration_written": 469,
+    "migration_unread": 39,
+    "migration_kept_v3": 35,
+    "audit_rulings": 31,
+    "law_verdicts": 1,
+    "rulings_over_the_pass": 23
+  },
+  "unread_by_the_pass": [
+    "@VARUS_channel:10221",
+    "@VARUS_channel:10224",
+    "@VARUS_channel:10248",
+    "@VARUS_channel:10413",
+    "@VARUS_channel:10421",
+    "@VARUS_channel:10658",
+    "@VARUS_channel:11542",
+    "@VARUS_channel:11853",
+    "@VARUS_channel:12833",
+    "@VARUS_channel:13407",
+    "@VARUS_channel:13725",
+    "@VARUS_channel:15626",
+    "@VARUS_channel:16214",
+    "@VARUS_channel:17540",
+    "@VARUS_channel:17859",
+    "@VARUS_channel:18716",
+    "@VARUS_channel:19007",
+    "@VARUS_channel:19023",
+    "@VARUS_channel:1956",
+    "@VARUS_channel:20383",
+    "@VARUS_channel:21383",
+    "@VARUS_channel:3545",
+    "@VARUS_channel:4192",
+    "@VARUS_channel:4299",
+    "@VARUS_channel:5163",
+    "@VARUS_channel:6912",
+    "@VARUS_channel:7892",
+    "@VARUS_channel:8120",
+    "@VARUS_channel:8129",
+    "@VARUS_channel:8510",
+    "@msuaaaa:12841",
+    "@msuaaaa:13673",
+    "@msuaaaa:2012",
+    "@msuaaaa:6247",
+    "@msuaaaa:7038",
+    "@msuaaaa:7600",
+    "@msuaaaa:7604",
+    "@msuaaaa:8174",
+    "@msuaaaa:9643"
+  ],
+  "kept_v3_intents": [
+    "@VARUS_channel:10221",
+    "@VARUS_channel:10224",
+    "@VARUS_channel:10248",
+    "@VARUS_channel:10413",
+    "@VARUS_channel:10421",
+    "@VARUS_channel:10658",
+    "@VARUS_channel:11542",
+    "@VARUS_channel:11853",
+    "@VARUS_channel:12833",
+    "@VARUS_channel:13407",
+    "@VARUS_channel:13725",
+    "@VARUS_channel:15626",
+    "@VARUS_channel:16214",
+    "@VARUS_channel:17540",
+    "@VARUS_channel:17859",
+    "@VARUS_channel:18716",
+    "@VARUS_channel:19007",
+    "@VARUS_channel:19023",
+    "@VARUS_channel:1956",
+    "@VARUS_channel:20383",
+    "@VARUS_channel:21383",
+    "@VARUS_channel:3545",
+    "@VARUS_channel:4192",
+    "@VARUS_channel:4299",
+    "@VARUS_channel:5163",
+    "@VARUS_channel:6912",
+    "@VARUS_channel:7892",
+    "@VARUS_channel:8129",
+    "@VARUS_channel:8510",
+    "@msuaaaa:12841",
+    "@msuaaaa:2012",
+    "@msuaaaa:7038",
+    "@msuaaaa:7600",
+    "@msuaaaa:7604",
+    "@msuaaaa:9643"
+  ],
+  "unread_but_ruled": [
+    "@VARUS_channel:8120",
+    "@msuaaaa:13673",
+    "@msuaaaa:6247",
+    "@msuaaaa:8174"
+  ],
+  "superseded_by_a_ruling": {
+    "@VARUS_channel:10235": [
+      "service"
+    ],
+    "@VARUS_channel:12042": [
+      "service"
+    ],
+    "@VARUS_channel:12357": [
+      "service"
+    ],
+    "@VARUS_channel:14969": [],
+    "@VARUS_channel:16608": [
+      "service"
+    ],
+    "@VARUS_channel:18580": [
+      "packaging",
+      "service"
+    ],
+    "@VARUS_channel:20390": [
+      "packaging"
+    ],
+    "@VARUS_channel:2999": [
+      "availability"
+    ],
+    "@VARUS_channel:3564": [
+      "availability"
+    ],
+    "@VARUS_channel:3801": [
+      "service"
+    ],
+    "@VARUS_channel:70": [],
+    "@VARUS_channel:7985": [
+      "service"
+    ],
+    "@VARUS_channel:9270": [],
+    "@msuaaaa:12197": [
+      "availability"
+    ],
+    "@msuaaaa:13674": [
+      "service"
+    ],
+    "@msuaaaa:13687": [
+      "service"
+    ],
+    "@msuaaaa:3132": [
+      "price"
+    ],
+    "@msuaaaa:6832": [
+      "quality",
+      "taste"
+    ],
+    "@msuaaaa:7016": [
+      "availability"
+    ],
+    "@msuaaaa:7105": [
+      "service"
+    ],
+    "@msuaaaa:7809": [
+      "availability"
+    ],
+    "@msuaaaa:8177": [
+      "price",
+      "quality"
+    ],
+    "@VARUS_channel:5951": [
+      "service"
+    ]
+  },
+  "audit_ruling_ids": [
+    "@VARUS_channel:10235",
+    "@VARUS_channel:12042",
+    "@VARUS_channel:12357",
+    "@VARUS_channel:1461",
+    "@VARUS_channel:14969",
+    "@VARUS_channel:16608",
+    "@VARUS_channel:16672",
+    "@VARUS_channel:18580",
+    "@VARUS_channel:19881",
+    "@VARUS_channel:20390",
+    "@VARUS_channel:2999",
+    "@VARUS_channel:3564",
+    "@VARUS_channel:3801",
+    "@VARUS_channel:70",
+    "@VARUS_channel:7985",
+    "@VARUS_channel:8120",
+    "@VARUS_channel:9270",
+    "@msuaaaa:12197",
+    "@msuaaaa:12252",
+    "@msuaaaa:13673",
+    "@msuaaaa:13674",
+    "@msuaaaa:13687",
+    "@msuaaaa:1380",
+    "@msuaaaa:3132",
+    "@msuaaaa:6247",
+    "@msuaaaa:6832",
+    "@msuaaaa:7016",
+    "@msuaaaa:7105",
+    "@msuaaaa:7809",
+    "@msuaaaa:8174",
+    "@msuaaaa:8177"
+  ],
+  "law_verdict_ids": [
+    "@VARUS_channel:5951"
+  ],
+  "intents_rulings_derived_by_v3": 31,
+  "posts": {
+    "file": "posts_test_v4.jsonl",
+    "carries_intents": false,
+    "note": "posts_test_v3.jsonl re-serialised under the v4 name. The T2 heads are relevance, post_type and brands; nothing in the intents law can move a post row, and the changelog is required to be empty."
+  },
+  "holdout_pool": {
+    "pristine": "data/annotation/sarcasm_holdout_pool.jsonl",
+    "pristine_sha256": "ea00ed6544e135afc6f78c0c0ae5875832cf7b95fe68890e7a68ec23f5162e30",
+    "v4": "data/annotation/sarcasm_holdout_pool_v4.jsonl",
+    "v4_sha256": "84c2a2f795aacaea17c497b77248397d74b2c2ac9ec9c444b3eed2afb482b1aa",
+    "rows": 917,
+    "dropped": 54,
+    "why": "option (i) of results/precheck_45h.json: each id lives in exactly one file. A new file, so the four records pinning the pristine sha stay valid."
+  },
+  "changes": {
+    "comments_test_v4.jsonl": [
+      {
+        "id": "@VARUS_channel:10092",
+        "from": [
+          "price"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:10235",
+        "from": [],
+        "to": [
+          "price"
+        ],
+        "source": "audit"
+      },
+      {
+        "id": "@VARUS_channel:10250",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:10253",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:10367",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:10803",
+        "from": [
+          "availability"
+        ],
+        "to": [
+          "availability",
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:10990",
+        "from": [
+          "quality"
+        ],
+        "to": [
+          "taste"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:11019",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:11298",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:11312",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:11322",
+        "from": [
+          "availability"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:11411",
+        "from": [
+          "quality"
+        ],
+        "to": [],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:11424",
+        "from": [
+          "price"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:11573",
+        "from": [
+          "price",
+          "availability"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:12037",
+        "from": [],
+        "to": [
+          "availability"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:12042",
+        "from": [],
+        "to": [
+          "availability"
+        ],
+        "source": "audit"
+      },
+      {
+        "id": "@VARUS_channel:1209",
+        "from": [
+          "price",
+          "availability"
+        ],
+        "to": [
+          "availability"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:12354",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:12357",
+        "from": [
+          "packaging",
+          "quality"
+        ],
+        "to": [],
+        "source": "audit"
+      },
+      {
+        "id": "@VARUS_channel:12406",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:12569",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:12613",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:12642",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:12695",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:12746",
+        "from": [
+          "quality"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:12751",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:12764",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:12766",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:13714",
+        "from": [
+          "price"
+        ],
+        "to": [
+          "availability",
+          "price"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:13759",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:1383",
+        "from": [
+          "price"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:1461",
+        "from": [
+          "packaging"
+        ],
+        "to": [
+          "quality"
+        ],
+        "source": "audit"
+      },
+      {
+        "id": "@VARUS_channel:14674",
+        "from": [
+          "price"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:14702",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:14705",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:1475",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:14787",
+        "from": [],
+        "to": [
+          "availability"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:1481",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:1482",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:1490",
+        "from": [
+          "price",
+          "quality"
+        ],
+        "to": [
+          "quality"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:14969",
+        "from": [
+          "quality"
+        ],
+        "to": [
+          "taste"
+        ],
+        "source": "audit"
+      },
+      {
+        "id": "@VARUS_channel:15279",
+        "from": [
+          "quality"
+        ],
+        "to": [
+          "packaging",
+          "quality"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:15631",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:15718",
+        "from": [
+          "taste",
+          "quality"
+        ],
+        "to": [
+          "price",
+          "quality",
+          "taste"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:15822",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:15843",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:15874",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:16178",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:16381",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:16412",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:16435",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:16597",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:16607",
+        "from": [
+          "availability"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:16608",
+        "from": [
+          "availability"
+        ],
+        "to": [],
+        "source": "audit"
+      },
+      {
+        "id": "@VARUS_channel:16672",
+        "from": [],
+        "to": [
+          "availability"
+        ],
+        "source": "audit"
+      },
+      {
+        "id": "@VARUS_channel:17837",
+        "from": [
+          "price"
+        ],
+        "to": [
+          "price",
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:18074",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:18580",
+        "from": [
+          "price",
+          "packaging"
+        ],
+        "to": [
+          "packaging"
+        ],
+        "source": "audit"
+      },
+      {
+        "id": "@VARUS_channel:18650",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:19137",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:1917",
+        "from": [
+          "price",
+          "availability"
+        ],
+        "to": [
+          "availability"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:19177",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:19477",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:19484",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:1957",
+        "from": [
+          "availability"
+        ],
+        "to": [
+          "taste"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:19683",
+        "from": [
+          "price"
+        ],
+        "to": [
+          "availability",
+          "price"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:19686",
+        "from": [
+          "availability"
+        ],
+        "to": [
+          "availability",
+          "price"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:19881",
+        "from": [
+          "taste"
+        ],
+        "to": [],
+        "source": "audit"
+      },
+      {
+        "id": "@VARUS_channel:19910",
+        "from": [
+          "taste"
+        ],
+        "to": [],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:20004",
+        "from": [
+          "quality"
+        ],
+        "to": [
+          "packaging"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:20390",
+        "from": [],
+        "to": [
+          "availability"
+        ],
+        "source": "audit"
+      },
+      {
+        "id": "@VARUS_channel:21198",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:21209",
+        "from": [
+          "price"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:21385",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:2196",
+        "from": [
+          "price"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:2219",
+        "from": [
+          "price"
+        ],
+        "to": [
+          "price",
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:2225",
+        "from": [
+          "price"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:2423",
+        "from": [
+          "availability"
+        ],
+        "to": [
+          "availability",
+          "price"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:2466",
+        "from": [],
+        "to": [
+          "quality"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:2620",
+        "from": [
+          "price"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:2785",
+        "from": [],
+        "to": [
+          "availability"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:2999",
+        "from": [
+          "availability"
+        ],
+        "to": [],
+        "source": "audit"
+      },
+      {
+        "id": "@VARUS_channel:3058",
+        "from": [
+          "price",
+          "availability"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:316",
+        "from": [
+          "price"
+        ],
+        "to": [
+          "price",
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:3231",
+        "from": [
+          "availability"
+        ],
+        "to": [
+          "availability",
+          "price"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:3237",
+        "from": [],
+        "to": [
+          "price"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:3331",
+        "from": [
+          "price"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:3461",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:3564",
+        "from": [
+          "availability"
+        ],
+        "to": [
+          "packaging"
+        ],
+        "source": "audit"
+      },
+      {
+        "id": "@VARUS_channel:3799",
+        "from": [
+          "availability"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:3801",
+        "from": [
+          "availability"
+        ],
+        "to": [],
+        "source": "audit"
+      },
+      {
+        "id": "@VARUS_channel:4005",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:4164",
+        "from": [
+          "price"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:4209",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:4302",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:4307",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:4499",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:4505",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:4573",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:4577",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:4586",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:4587",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:4899",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:4917",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:4921",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:5045",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:5104",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:5129",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:5131",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:5133",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:5135",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:5303",
+        "from": [
+          "packaging",
+          "quality"
+        ],
+        "to": [
+          "quality",
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:5317",
+        "from": [
+          "price",
+          "availability"
+        ],
+        "to": [
+          "availability",
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:5556",
+        "from": [
+          "price"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:5587",
+        "from": [
+          "quality"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:57",
+        "from": [
+          "price",
+          "quality"
+        ],
+        "to": [
+          "price",
+          "taste"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:5760",
+        "from": [
+          "price",
+          "packaging"
+        ],
+        "to": [
+          "availability",
+          "packaging",
+          "price",
+          "quality"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:5764",
+        "from": [
+          "price",
+          "packaging"
+        ],
+        "to": [
+          "price",
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:5765",
+        "from": [
+          "price",
+          "packaging"
+        ],
+        "to": [
+          "price"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:58",
+        "from": [
+          "quality"
+        ],
+        "to": [
+          "packaging"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:5951",
+        "from": [
+          "price",
+          "availability"
+        ],
+        "to": [
+          "price",
+          "service"
+        ],
+        "source": "law"
+      },
+      {
+        "id": "@VARUS_channel:61",
+        "from": [
+          "price",
+          "quality"
+        ],
+        "to": [
+          "quality",
+          "taste"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:6165",
+        "from": [
+          "quality"
+        ],
+        "to": [
+          "price",
+          "quality"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:6966",
+        "from": [
+          "price"
+        ],
+        "to": [
+          "price",
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:70",
+        "from": [],
+        "to": [
+          "availability"
+        ],
+        "source": "audit"
+      },
+      {
+        "id": "@VARUS_channel:7006",
+        "from": [
+          "price"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:7368",
+        "from": [
+          "price",
+          "availability"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:7369",
+        "from": [
+          "price",
+          "availability"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:7819",
+        "from": [
+          "availability"
+        ],
+        "to": [
+          "availability",
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:7891",
+        "from": [],
+        "to": [
+          "quality"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:7903",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:7940",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:7951",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:7956",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:7985",
+        "from": [
+          "price"
+        ],
+        "to": [],
+        "source": "audit"
+      },
+      {
+        "id": "@VARUS_channel:7990",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:7994",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:8015",
+        "from": [
+          "taste",
+          "quality"
+        ],
+        "to": [
+          "taste"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:8045",
+        "from": [
+          "availability"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:8087",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:8097",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:8101",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:8102",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:8120",
+        "from": [],
+        "to": [
+          "availability"
+        ],
+        "source": "audit"
+      },
+      {
+        "id": "@VARUS_channel:8125",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:8302",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:8534",
+        "from": [
+          "packaging"
+        ],
+        "to": [
+          "packaging",
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:8646",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:8858",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:8866",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:8876",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:8893",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:8895",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:9011",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:9103",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:9223",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:9225",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:9270",
+        "from": [],
+        "to": [
+          "price"
+        ],
+        "source": "audit"
+      },
+      {
+        "id": "@VARUS_channel:9300",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:9665",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:9669",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:9682",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:9684",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:9688",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:9690",
+        "from": [
+          "availability"
+        ],
+        "to": [
+          "availability",
+          "price"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:9744",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:9757",
+        "from": [
+          "availability"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:9759",
+        "from": [
+          "availability"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:9808",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:9843",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:9845",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:9848",
+        "from": [
+          "price"
+        ],
+        "to": [
+          "price",
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:9851",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:9883",
+        "from": [
+          "price"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:9894",
+        "from": [
+          "availability"
+        ],
+        "to": [
+          "availability",
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:991",
+        "from": [],
+        "to": [
+          "availability"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@msuaaaa:10025",
+        "from": [
+          "price"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@msuaaaa:10322",
+        "from": [
+          "availability"
+        ],
+        "to": [],
+        "source": "migration"
+      },
+      {
+        "id": "@msuaaaa:10468",
+        "from": [
+          "taste",
+          "quality"
+        ],
+        "to": [
+          "taste"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@msuaaaa:10533",
+        "from": [
+          "price"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@msuaaaa:10692",
+        "from": [
+          "price",
+          "availability"
+        ],
+        "to": [
+          "availability"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@msuaaaa:12197",
+        "from": [
+          "availability"
+        ],
+        "to": [],
+        "source": "audit"
+      },
+      {
+        "id": "@msuaaaa:12252",
+        "from": [
+          "price"
+        ],
+        "to": [],
+        "source": "audit"
+      },
+      {
+        "id": "@msuaaaa:12604",
+        "from": [
+          "availability"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@msuaaaa:12873",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@msuaaaa:12980",
+        "from": [
+          "price"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@msuaaaa:13542",
+        "from": [
+          "price"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@msuaaaa:13673",
+        "from": [],
+        "to": [
+          "taste"
+        ],
+        "source": "audit"
+      },
+      {
+        "id": "@msuaaaa:13674",
+        "from": [
+          "price",
+          "packaging"
+        ],
+        "to": [
+          "packaging"
+        ],
+        "source": "audit"
+      },
+      {
+        "id": "@msuaaaa:13675",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@msuaaaa:13683",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@msuaaaa:13685",
+        "from": [
+          "packaging",
+          "availability"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@msuaaaa:13687",
+        "from": [
+          "price",
+          "packaging"
+        ],
+        "to": [
+          "packaging"
+        ],
+        "source": "audit"
+      },
+      {
+        "id": "@msuaaaa:1380",
+        "from": [
+          "price"
+        ],
+        "to": [],
+        "source": "audit"
+      },
+      {
+        "id": "@msuaaaa:17",
+        "from": [
+          "price"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@msuaaaa:1880",
+        "from": [
+          "price"
+        ],
+        "to": [
+          "price",
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@msuaaaa:2284",
+        "from": [
+          "price"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@msuaaaa:3132",
+        "from": [
+          "price"
+        ],
+        "to": [],
+        "source": "audit"
+      },
+      {
+        "id": "@msuaaaa:3172",
+        "from": [
+          "taste",
+          "quality"
+        ],
+        "to": [
+          "taste"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@msuaaaa:5293",
+        "from": [
+          "price"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@msuaaaa:5385",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@msuaaaa:5534",
+        "from": [
+          "quality"
+        ],
+        "to": [
+          "taste"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@msuaaaa:5562",
+        "from": [
+          "quality"
+        ],
+        "to": [
+          "packaging"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@msuaaaa:6247",
+        "from": [
+          "price"
+        ],
+        "to": [],
+        "source": "audit"
+      },
+      {
+        "id": "@msuaaaa:6832",
+        "from": [
+          "packaging",
+          "quality"
+        ],
+        "to": [
+          "quality"
+        ],
+        "source": "audit"
+      },
+      {
+        "id": "@msuaaaa:7016",
+        "from": [
+          "price"
+        ],
+        "to": [],
+        "source": "audit"
+      },
+      {
+        "id": "@msuaaaa:7105",
+        "from": [
+          "price"
+        ],
+        "to": [],
+        "source": "audit"
+      },
+      {
+        "id": "@msuaaaa:7448",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@msuaaaa:7809",
+        "from": [
+          "price",
+          "availability"
+        ],
+        "to": [],
+        "source": "audit"
+      },
+      {
+        "id": "@msuaaaa:8174",
+        "from": [
+          "price"
+        ],
+        "to": [],
+        "source": "audit"
+      },
+      {
+        "id": "@msuaaaa:8177",
+        "from": [
+          "taste",
+          "price"
+        ],
+        "to": [
+          "quality"
+        ],
+        "source": "audit"
+      },
+      {
+        "id": "@msuaaaa:841",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@msuaaaa:9008",
+        "from": [
+          "price"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      }
+    ],
+    "sarcasm_holdout_v4.jsonl": [
+      {
+        "id": "@VARUS_channel:10046",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:10064",
+        "from": [
+          "price",
+          "quality"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:10371",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:10788",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:10804",
+        "from": [
+          "availability"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:11336",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:11417",
+        "from": [
+          "price",
+          "availability"
+        ],
+        "to": [
+          "availability"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:11419",
+        "from": [
+          "availability",
+          "price"
+        ],
+        "to": [
+          "availability"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:11557",
+        "from": [],
+        "to": [
+          "availability"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:11813",
+        "from": [
+          "availability"
+        ],
+        "to": [],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:11849",
+        "from": [
+          "availability",
+          "quality"
+        ],
+        "to": [
+          "availability",
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:12171",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:13051",
+        "from": [
+          "price",
+          "packaging",
+          "availability"
+        ],
+        "to": [
+          "price",
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:13411",
+        "from": [
+          "availability"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:13425",
+        "from": [
+          "quality"
+        ],
+        "to": [],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:14144",
+        "from": [
+          "price"
+        ],
+        "to": [
+          "price",
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:14785",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:14878",
+        "from": [
+          "price"
+        ],
+        "to": [
+          "price",
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:14898",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:15148",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:15181",
+        "from": [
+          "availability"
+        ],
+        "to": [
+          "availability",
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:15469",
+        "from": [
+          "price"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:16281",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:16728",
+        "from": [
+          "price",
+          "availability"
+        ],
+        "to": [
+          "availability"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:17537",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:21396",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:21406",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:21431",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:2164",
+        "from": [
+          "price",
+          "availability"
+        ],
+        "to": [
+          "availability",
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:21720",
+        "from": [
+          "price"
+        ],
+        "to": [
+          "price",
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:2181",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:2697",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:2712",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:2953",
+        "from": [
+          "quality"
+        ],
+        "to": [
+          "availability",
+          "quality"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:2989",
+        "from": [
+          "price"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:3056",
+        "from": [
+          "availability",
+          "price"
+        ],
+        "to": [
+          "price"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:3190",
+        "from": [
+          "quality"
+        ],
+        "to": [
+          "taste"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:3342",
+        "from": [
+          "price",
+          "availability"
+        ],
+        "to": [
+          "availability",
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:5166",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:6140",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:6149",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:617",
+        "from": [
+          "price",
+          "availability"
+        ],
+        "to": [
+          "availability"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:6327",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:6461",
+        "from": [
+          "price"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:7217",
+        "from": [
+          "price"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:7220",
+        "from": [
+          "price"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:8730",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:9520",
+        "from": [],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@VARUS_channel:9568",
+        "from": [
+          "price"
+        ],
+        "to": [
+          "price",
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@msuaaaa:10997",
+        "from": [],
+        "to": [
+          "availability"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@msuaaaa:1217",
+        "from": [],
+        "to": [
+          "price"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@msuaaaa:12332",
+        "from": [
+          "quality"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@msuaaaa:13394",
+        "from": [
+          "price"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@msuaaaa:2220",
+        "from": [],
+        "to": [
+          "price"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@msuaaaa:2509",
+        "from": [
+          "quality"
+        ],
+        "to": [
+          "availability",
+          "quality"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@msuaaaa:6157",
+        "from": [
+          "taste",
+          "quality"
+        ],
+        "to": [],
+        "source": "migration"
+      },
+      {
+        "id": "@msuaaaa:6326",
+        "from": [
+          "price"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@msuaaaa:6996",
+        "from": [
+          "quality"
+        ],
+        "to": [
+          "packaging",
+          "taste"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@msuaaaa:7055",
+        "from": [
+          "price"
+        ],
+        "to": [
+          "service"
+        ],
+        "source": "migration"
+      },
+      {
+        "id": "@msuaaaa:7092",
+        "from": [
+          "price"
+        ],
+        "to": [],
+        "source": "migration"
+      },
+      {
+        "id": "@msuaaaa:7554",
+        "from": [
+          "quality",
+          "availability"
+        ],
+        "to": [
+          "quality"
+        ],
+        "source": "migration"
+      }
+    ],
+    "posts_test_v4.jsonl": []
+  },
+  "git": {
+    "commit": "2e21b980eabac0f247bff859795721db05bc798b",
+    "dirty": [
+      ".gitignore",
+      "data/annotation/sarcasm_holdout_pool_v4.jsonl",
+      "data/frozen/comments_test_v4.jsonl",
+      "data/frozen/posts_test_v4.jsonl",
+      "data/frozen/sarcasm_holdout_v4.jsonl",
+      "results/migration_45h2.json",
+      "results/migration_45h2_rows.jsonl",
+      "results/spend_45h2.json",
+      "scripts/freeze_testsets_v4.py",
+      "tests/test_freeze_v4.py"
+    ]
+  }
+}

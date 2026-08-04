@@ -1,0 +1,671 @@
+{
+  "runs": [
+    {
+      "timestamp": "2026-08-04T11:21:53+00:00",
+      "step": "4.5h2 intents migration",
+      "task": "relabel_intents_v2_with_post",
+      "testset_version": "v4",
+      "model": "qwen/qwen3.6-27b",
+      "endpoint": {
+        "tag": "io-net/fp8",
+        "quantization": "fp8",
+        "served_quantization": "fp8",
+        "status": 0
+      },
+      "smoke": false,
+      "sources": {
+        "data/frozen/comments_test_v3.jsonl": "d993ca6ff057060e73583a38addfbb78965b0f51a3cd994a5c9129d0606f135e",
+        "data/frozen/sarcasm_holdout_v3.jsonl": "9164d6f9aad24a469ea04745ef040984c8c5fabdf20fd83ad3f8448d614b8147"
+      },
+      "seed": 42,
+      "prompt_sha256": {
+        "relabel_intents_v2_with_post": "5965966d9b98279770407b0a5d858a85db578663120041f72359703658bbea9d"
+      },
+      "git": {
+        "commit": "2e21b980eabac0f247bff859795721db05bc798b",
+        "dirty": [
+          "results/migration_45h2_rows.jsonl",
+          "results/spend_45h2.json"
+        ]
+      },
+      "drift": {
+        "rows": 508,
+        "scored": 461,
+        "unusable": [
+          {
+            "id": "@VARUS_channel:10221",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:10224",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:10226",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:10248",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:10413",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:10421",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:10658",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:11542",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:11853",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:12046",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:12369",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:12833",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:15626",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:15628",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:16214",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:17859",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:18716",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:19007",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:19023",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:1956",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:19676",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:19910",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:20383",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:3545",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:4192",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:4299",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:4492",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:4565",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:7892",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:8120",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:8129",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:8510",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@msuaaaa:12841",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@msuaaaa:13673",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@msuaaaa:2012",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@msuaaaa:6247",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@msuaaaa:7038",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@msuaaaa:7600",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@msuaaaa:7604",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@msuaaaa:8174",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:13407",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:13725",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:17540",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:21383",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:5163",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:6912",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@msuaaaa:9643",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          }
+        ],
+        "changed": 263,
+        "changed_rate": 0.5704989154013015,
+        "service_rows": 199,
+        "service_prevalence": 0.4316702819956616,
+        "labels_added": {
+          "service": 199,
+          "availability": 13,
+          "price": 9,
+          "taste": 8,
+          "packaging": 6,
+          "quality": 5
+        },
+        "labels_removed": {
+          "price": 57,
+          "availability": 23,
+          "quality": 21,
+          "packaging": 10,
+          "taste": 3
+        },
+        "post_states": {
+          "image_caption": 1,
+          "no_text_and_no_caption": 43,
+          "post_text": 417
+        }
+      },
+      "accounting": {
+        "gold_rows": 508,
+        "written": 461,
+        "unusable": 47,
+        "unusable_keep_v3": [
+          "@VARUS_channel:10221",
+          "@VARUS_channel:10224",
+          "@VARUS_channel:10226",
+          "@VARUS_channel:10248",
+          "@VARUS_channel:10413",
+          "@VARUS_channel:10421",
+          "@VARUS_channel:10658",
+          "@VARUS_channel:11542",
+          "@VARUS_channel:11853",
+          "@VARUS_channel:12046",
+          "@VARUS_channel:12369",
+          "@VARUS_channel:12833",
+          "@VARUS_channel:15626",
+          "@VARUS_channel:15628",
+          "@VARUS_channel:16214",
+          "@VARUS_channel:17859",
+          "@VARUS_channel:18716",
+          "@VARUS_channel:19007",
+          "@VARUS_channel:19023",
+          "@VARUS_channel:1956",
+          "@VARUS_channel:19676",
+          "@VARUS_channel:19910",
+          "@VARUS_channel:20383",
+          "@VARUS_channel:3545",
+          "@VARUS_channel:4192",
+          "@VARUS_channel:4299",
+          "@VARUS_channel:4492",
+          "@VARUS_channel:4565",
+          "@VARUS_channel:7892",
+          "@VARUS_channel:8120",
+          "@VARUS_channel:8129",
+          "@VARUS_channel:8510",
+          "@msuaaaa:12841",
+          "@msuaaaa:13673",
+          "@msuaaaa:2012",
+          "@msuaaaa:6247",
+          "@msuaaaa:7038",
+          "@msuaaaa:7600",
+          "@msuaaaa:7604",
+          "@msuaaaa:8174",
+          "@VARUS_channel:13407",
+          "@VARUS_channel:13725",
+          "@VARUS_channel:17540",
+          "@VARUS_channel:21383",
+          "@VARUS_channel:5163",
+          "@VARUS_channel:6912",
+          "@msuaaaa:9643"
+        ]
+      },
+      "cost": {
+        "requests": 508,
+        "usd": 0.09926873999999992,
+        "usd_per_row": 0.00021533349240780895,
+        "phase_spend_usd": 0.09926873999999992,
+        "cap_usd": 0.3
+      },
+      "rows_out": "results/migration_45h2_rows.jsonl",
+      "note": "Intents only; every other column is byte-identical to its v3 line. These rows are an input to scripts/freeze_testsets_v4.py, not gold: the 31 audit rulings and the operator's law verdict are applied ON TOP of them there (amendment 3.9 (3))."
+    },
+    {
+      "timestamp": "2026-08-04T11:24:37+00:00",
+      "step": "4.5h2 intents migration",
+      "task": "relabel_intents_v2_with_post",
+      "testset_version": "v4",
+      "model": "qwen/qwen3.6-27b",
+      "endpoint": {
+        "tag": "io-net/fp8",
+        "quantization": "fp8",
+        "served_quantization": "fp8",
+        "status": 0
+      },
+      "smoke": false,
+      "sources": {
+        "data/frozen/comments_test_v3.jsonl": "d993ca6ff057060e73583a38addfbb78965b0f51a3cd994a5c9129d0606f135e",
+        "data/frozen/sarcasm_holdout_v3.jsonl": "9164d6f9aad24a469ea04745ef040984c8c5fabdf20fd83ad3f8448d614b8147"
+      },
+      "seed": 42,
+      "prompt_sha256": {
+        "relabel_intents_v2_with_post": "5965966d9b98279770407b0a5d858a85db578663120041f72359703658bbea9d"
+      },
+      "git": {
+        "commit": "2e21b980eabac0f247bff859795721db05bc798b",
+        "dirty": [
+          "results/migration_45h2.json",
+          "results/migration_45h2_rows.jsonl",
+          "results/spend_45h2.json"
+        ]
+      },
+      "drift": {
+        "rows": 508,
+        "scored": 469,
+        "unusable": [
+          {
+            "id": "@VARUS_channel:10221",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:10224",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:10248",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:10413",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:10421",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:10658",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:11542",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:11853",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:12833",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:15626",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:16214",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:17859",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:18716",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:19007",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:19023",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:1956",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:20383",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:3545",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:4192",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:4299",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:7892",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:8120",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:8129",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:8510",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@msuaaaa:12841",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@msuaaaa:13673",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@msuaaaa:2012",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@msuaaaa:6247",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@msuaaaa:7038",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@msuaaaa:7600",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@msuaaaa:7604",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@msuaaaa:8174",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:13407",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:13725",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:17540",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:21383",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:5163",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@VARUS_channel:6912",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          },
+          {
+            "id": "@msuaaaa:9643",
+            "intents": null,
+            "unusable": "parse: missing field: intents"
+          }
+        ],
+        "changed": 264,
+        "changed_rate": 0.5628997867803838,
+        "service_rows": 199,
+        "service_prevalence": 0.42430703624733473,
+        "labels_added": {
+          "service": 199,
+          "availability": 13,
+          "price": 9,
+          "taste": 8,
+          "packaging": 6,
+          "quality": 5
+        },
+        "labels_removed": {
+          "price": 57,
+          "availability": 23,
+          "quality": 21,
+          "packaging": 10,
+          "taste": 4
+        },
+        "post_states": {
+          "image_caption": 1,
+          "no_text_and_no_caption": 43,
+          "post_text": 425
+        }
+      },
+      "accounting": {
+        "gold_rows": 508,
+        "written": 469,
+        "unusable": 39,
+        "unusable_keep_v3": [
+          "@VARUS_channel:10221",
+          "@VARUS_channel:10224",
+          "@VARUS_channel:10248",
+          "@VARUS_channel:10413",
+          "@VARUS_channel:10421",
+          "@VARUS_channel:10658",
+          "@VARUS_channel:11542",
+          "@VARUS_channel:11853",
+          "@VARUS_channel:12833",
+          "@VARUS_channel:15626",
+          "@VARUS_channel:16214",
+          "@VARUS_channel:17859",
+          "@VARUS_channel:18716",
+          "@VARUS_channel:19007",
+          "@VARUS_channel:19023",
+          "@VARUS_channel:1956",
+          "@VARUS_channel:20383",
+          "@VARUS_channel:3545",
+          "@VARUS_channel:4192",
+          "@VARUS_channel:4299",
+          "@VARUS_channel:7892",
+          "@VARUS_channel:8120",
+          "@VARUS_channel:8129",
+          "@VARUS_channel:8510",
+          "@msuaaaa:12841",
+          "@msuaaaa:13673",
+          "@msuaaaa:2012",
+          "@msuaaaa:6247",
+          "@msuaaaa:7038",
+          "@msuaaaa:7600",
+          "@msuaaaa:7604",
+          "@msuaaaa:8174",
+          "@VARUS_channel:13407",
+          "@VARUS_channel:13725",
+          "@VARUS_channel:17540",
+          "@VARUS_channel:21383",
+          "@VARUS_channel:5163",
+          "@VARUS_channel:6912",
+          "@msuaaaa:9643"
+        ]
+      },
+      "cost": {
+        "requests": 47,
+        "usd": 0.008694,
+        "usd_per_row": 0.00108675,
+        "phase_spend_usd": 0.10247795999999967,
+        "cap_usd": 0.3
+      },
+      "rows_out": "results/migration_45h2_rows.jsonl",
+      "note": "Intents only; every other column is byte-identical to its v3 line. These rows are an input to scripts/freeze_testsets_v4.py, not gold: the 31 audit rulings and the operator's law verdict are applied ON TOP of them there (amendment 3.9 (3))."
+    }
+  ]
+}
