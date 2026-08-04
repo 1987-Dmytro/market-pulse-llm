@@ -1802,3 +1802,136 @@ three populations (all comments, scoreable train, the 400-row test). a∩b∩c =
 measure is a lower bound built from a draft lexicon, and it is not evidence that such comments do
 not exist; it is evidence that **nothing in this corpus can price a per-(brand+position) amendment
 today.**
+
+# Phase 4.5h2 — test v4, the fresh anchor, and the пласт ablation
+
+`docs/PROMPT-4.5h2.md`, executed after the 4.5h precheck was accepted. The contract's own
+DO-NOTs held: v2/v3 frozen bytes are untouched, the пласт and the pristine 971-row pool are
+read-only, the migration pass moved `intents` and nothing else, no gate was attempted twice,
+and no cap was raised — both were enforced by a script before every start.
+
+Two things the contract fixed could not both be true, and the operator ruled on each before
+any money was spent. They are D1 and D2 below and everything downstream follows from them.
+
+## Deviations — silence is not compliance
+
+**D1 — the migration prompt is not the one the contract names.** §Step 1.1 says
+"T1v2.1-with-parent-post prompt revisions already registered". The only registered prompt of
+that family is `precheck_v2.1_with_post`, and **revision v2.1 failed its own pre-registered
+gate**: preserved 20/58 against v2's 58/58, v2.2's 37/58 and v2ctx's 41/58, PASS at 55
+(`knowledge/decisions/45g6-context-lines-probe.md`). Writing 508 gold rows with a revision
+the program KILLed is not what the sentence was for. Operator decision 2026-08-04:
+**`relabel_intents_v2_with_post`** — registered, asks for `intents` alone (so the other
+columns cannot move through a path that never carries them), carries the v2 law no gate
+killed, and takes the parent post gold was annotated with. Recorded as the instrument in
+`results/migration_45h2.json` and in the dataset card.
+
+**D2 — "only SOURCES differs" is not executable, and both branches out of it break the
+frozen config.** Amendment 3.9 (1) points both arms at the `_tax2` siblings; 547 of those
+scoreable rows carry `service`; `prompts.parse_reply("T1", …)` refuses it, so
+`train_qlora.assert_format_identity` stops the build. The training prompt therefore has to
+move to a v2 revision, and the trainer's own invariant — train/eval format identity — moves
+the eval's with it, which is what §Step 2 already says for the anchor ("v2-with-post").
+Measured on the cached tokenizer at the pinned revision, with an s/step model fitted on 4c
+arm A (r = +0.850) and validated on 4c arm B it never saw (predicted 43.36 against an
+observed 43.417, −0.1%):
+
+| arm | rendering | rows | steps | padded tok | s/step | hours | $ | rows > 1024 |
+|---|---|---|---|---|---|---|---|---|
+| A | `T1v2` | 2 171 | 270 | 1 276 | 54.29 | 4.07 | 2.16 | 1 |
+| A | `T1v2_with_post` | 2 171 | 270 | 1 543 | 66.86 | **5.01** | 2.66 | 52 |
+| B | `T1v2` | 3 457 | 432 | 1 249 | 53.01 | 6.36 | 3.37 | 1 |
+| B | `T1v2_with_post` | 3 457 | 432 | 1 567 | 67.97 | **8.16** | 4.32 | 79 |
+
+Operator decision 2026-08-04: **with the post**, the instrument gold was written with —
+4.5f measured what dropping it costs (97 rows emptied, `results/drop_45f.json`). Two
+consequences, both authorised in the same breath and **both needing a team-lead amendment
+this executor cannot write**: the per-arm ceiling **6.5 h → 8.5 h** (amendment 3.9's 6.5 was
+set against a rendering without the post) and **`max_seq_len` 1024 → 1408** in the frozen
+`config/qlora.yaml`. The cap is a guard threshold, not a pad width — `collate` pads per
+micro-batch — so raising it moves no step time; every row of both arms now encodes under it
+(0 over, checked by driving `encode` over all 5 676 rows).
+
+**D3 — Step 0 moved four files, not the five it names.** `docs/PROMPT-4.5h.md` was committed
+verbatim at `2842208` when the briefing arrived and carried no change.
+
+**D4 — the migration is its own script, not a fourth `--phase` of `relabel_intents.py`.**
+That module's `NEVER` guard forbids exactly these 508 ids and has held since 4.5d; widening
+it for one authorised pass would retire it for every later one. `scripts/migrate_intents_v4.py`
+inverts the permission instead: `allowed()` is the only set it will label, read out of the
+two v3 files rather than listed.
+
+**D5 — 39 of the 508 rows came back unreadable and keep their v3 `intents`.** The model
+answered a bare `{}` — a JSON object with no `intents` key — and the **same ids** failed on a
+re-ask, so it is the model on those rows and not the transport. Counted by cause rather than
+coerced: 4 are covered by an operator ruling that supersedes the pass either way, and of the
+remaining 35, **31 already carry `[]`** (which is what `{}` appears to mean) and **4 carry a
+v1 label v4 did not revisit**. `[]` is the majority answer, so coercing would have filled the
+hole exactly where the instrument failed and where the answer is most likely to look right.
+Every id is in `results/frozen_v4.json`.
+
+**D6 — a fix is compared as a SET.** The pass returns sorted labels and 34 v3 rows do not
+carry them sorted, so 4 rows differ from v3 in label ORDER alone. `intents` is scored as a
+label set (`scorer.intents_micro_f1`), so rewriting those rows would have moved bytes,
+stamped a different annotator and changed no answer.
+
+**D7 — the fixes are keyed per input.** 5 gold comment ids are also post ids — a different
+namespace, the same `@channel:msg_id`. A lookup by id alone wrote a comment's intents onto a
+post row on the first run, and it only raised because a post has no `intents` key to
+overwrite.
+
+**D8 — `records.anchor` takes a version.** 4.5h2's anchor is a zero-shot own-pod row with
+valid gate anchoring exactly like 4a's, so appending it would have made `records.anchor`
+find two — taking out `gate_bars.py` and `gate_verdict.py` after the pod money was spent. A
+record that names no version reads as v2, which is what every Phase 4 record was measured on.
+
+**D9 — the prompt-SHA guard cannot see a rendering change.** It hashes the frozen v1
+prompts, which stay frozen through one. `prompts.revision_sha256` is the field that moves
+with the rendering, it is in every new record, and `eval_zero_shot.arm_preflight` refuses an
+adapter whose revision is not the one the eval renders.
+
+**D10 — `train_qlora.NEVER_READ` named only the v2 test files**, so it stopped covering the
+test set the moment v3 was frozen beside it. All three versions of all three files are listed
+now. Found while retargeting the sources; not in the contract's scope, one line, and the
+alternative was a guard that does not guard what this phase scores.
+
+**D11 — the arm names are the executor's choice.** The contract says "arm A" and "arm B";
+`records.arm_record` refuses two rows for one arm name and both phases append to
+`results/baselines.json`, so they cannot be 4c's. `without-plast` / `with-plast`.
+
+**D12 — the selection rule is a parameter of one judge, not a second copy.**
+`scorer.select_arm_by(pivot=…)`, with `select_arm` left as a thin wrapper so 4c's output and
+its ADR quote stay byte-identical. What the pivot changes is the rule's *second* half: under
+G1c, **G1b becomes a protected head** — which is what stops an arm buying intents with a
+collapsed sarcasm slice. Pinned by its own test.
+
+**D13 — `runpod_guard.py` gained a step cap.** The contract fixes $9.00 of the phase's
+headroom for 4.5h2; a cap checked by hand at the end is a cap that gets missed. Its own
+anchor, in the step's own ledger, refusing at the line — beside the $25 phase cap, neither
+able to spend the other's room.
+
+**D14 — `gate_bars.py` gained `--version` and `--out`.** A bar that only ever existed in a
+terminal is not pre-registered, and v4's anchor is a different row from Phase 4's in the same
+file.
+
+**D15 — the eval refuses test set v4 on the OpenRouter backend.** That path sends one text
+per row with no parent post; a v4 row asked without one is a different instrument and the
+record could not say so. Every v4 run is an own-pod run.
+
+**D16 — `data/raw/posts/` is not in git** and the with-post rendering cannot run without it,
+so it travels to each pod as its own tarball. `COPYFILE_DISABLE=1` is not optional on a Mac:
+without it the tar carries `._*` AppleDouble files, `parents.load` globs `*.jsonl`, and the
+run dies on a UnicodeDecodeError *after* the weights have loaded. It cost one pod restart
+and is in the runbook.
+
+**D17 — the migration cost $0.1080 over 555 requests against a $0.0869 projection** (24%
+over, inside the $0.30 cap). The projection was 508 rows at 4.5e's observed rate; the pass
+asked 555 because 47 rows were re-asked, and the with-post request is longer than the one the
+rate was measured on.
+
+**D18 — the precheck's guard inventory can no longer re-derive itself.** `precheck_45h.py`
+reads `train_qlora.SOURCES` by a marker naming the v1 files, and this phase moved that
+constant. The refusal is the mechanism working — a report whose marker vanished stops instead
+of printing a stale line number — and `results/precheck_45h.json` stays frozen evidence the
+amendment cites. Its tests now check that the finding landed instead of re-deriving a world
+it changed.
