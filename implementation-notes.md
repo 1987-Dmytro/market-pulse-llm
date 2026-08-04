@@ -1935,3 +1935,25 @@ constant. The refusal is the mechanism working — a report whose marker vanishe
 of printing a stale line number — and `results/precheck_45h.json` stays frozen evidence the
 amendment cites. Its tests now check that the finding landed instead of re-deriving a world
 it changed.
+
+## Owed to the team lead — two amendments this executor cannot write
+
+Both were authorised by the operator on 2026-08-04 (D2) and both are recorded here, in
+`scripts/runbook_45h2.md` and in the run's own provenance. **Neither is in `docs/SPEC.md`,**
+which is a team-lead file:
+
+1. **the per-arm training ceiling 6.5 h → 8.5 h.** Amendment 3.9's 6.5 was set against a
+   rendering *without* the parent post; the authorised rendering projects arm B at 8.16 h.
+   Without the amendment a later reader finds arm B over the ceiling SPEC states and reads
+   it as a breach rather than as a decision.
+2. **`config/qlora.yaml` `max_seq_len` 1024 → 1408.** The frozen config of the 4b contract
+   moved in exactly one value; the file itself carries the measurement and the date.
+
+## One number that has to travel with the verdict
+
+The v4 G1b slice is **38 ids**, not Phase 4's 44 — the base model errs on fewer rows of the
+corrected holdout, which is amendment 3.2's pre-registered fallback and not a defect. Two
+consequences to state beside the gate, never after it: the bar is **23 of 38**, and **one row
+is 2.6 pp** of the fix-rate. Under this phase's rule G1c is the pivot and G1b is a *protected*
+head, so a single noisy slice row can drop an arm that won on G1c. That is what the
+pre-registered rule says and it is not adjusted after the fact — it is reported.
