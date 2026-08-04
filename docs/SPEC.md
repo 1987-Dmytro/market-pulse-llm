@@ -151,6 +151,22 @@ own-pod zero-shot of the base model with the v2 prompt (old prompt SHAs
 remain valid for old records); one retrain; new program bars pre-registered
 BEFORE the retrain is scored. Timing: combined with the corpus up-labeling
 (its appetite is decided at the 4.5d gate on concrete candidate counts).
+
+**Amendment 3.9 (4.5h precheck acceptance, 2026-08-03):** the per-arm training
+ceiling rises 5 h → **6.5 h** for the 4.5h2 ablation only (arm B projects to
+5.44 h at the slowest observed rate; the margin leaves room for a crash-resume
+without breaching). Three bound decisions from the same acceptance, recorded
+here because they alter what a gate reads: (1) both arms train on the `_tax2`
+(taxonomy-v2) siblings of the T1 comment sources — the v1 `SOURCES` would give
+arm A zero `service` exposure and turn the selection rule into a
+taxonomy-exposure measurement (precheck finding, `results/precheck_45h.json`);
+(2) the 24-row carve is drawn BEFORE the пласт is appended, so both arms hold
+the identical carve (pairing discipline of 3.4 (3)); (3) test v4 is derived
+v3 → intents migration pass (508 rows, the `intents` field only) → the 31
+audit rulings + 1 law verdict re-applied ON TOP (operator rulings supersede
+the model); the 54 dual-home ids are resolved by option (i): the holdout pool
+is materialized at 917 rows as a new version beside the pristine file, and v4
+inherits v3 values on the 4 diverging rows.
 **Date:** 2026-07-26 · **Team lead:** Fable session · **Executor:** Claude Code
 **Repo folder:** `/Users/hdv_1987/Desktop/Projects/market-pulse-llm`
 **rev. 3 change (operator decision):** producers in Ukraine barely use Telegram for
