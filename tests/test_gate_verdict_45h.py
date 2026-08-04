@@ -63,12 +63,20 @@ def test_it_refuses_a_results_file_with_no_v4_anchor(tmp_path):
 
 
 def test_the_arm_names_are_this_phase_s_and_not_phase_4_s():
-    """`records.arm_record` refuses two rows for one arm name, and Phase 4's two live in
-    the same file."""
+    """`records.arm_record` refuses two rows for one arm name, and both phases append to
+    the same file — so each of this phase's arms must appear at most once, and never
+    under a name Phase 4 already used."""
+    from market_pulse import records
+
     history = json.loads((REPO_ROOT / "results" / "baselines.json").read_text(encoding="utf-8"))
-    recorded = {
-        record.get("config", {}).get("fine_tune", {}).get("arm")
-        for runs in history.values()
-        for record in runs
-    }
-    assert not set(verdict.ARMS) & recorded
+    assert not set(verdict.ARMS) & {"real-only", "with-synthetic"}
+    for arm in verdict.ARMS:
+        rows = [
+            record
+            for runs in history.values()
+            for record in runs
+            if record.get("config", {}).get("fine_tune", {}).get("arm") == arm
+        ]
+        assert len(rows) <= 1, f"{arm} is recorded {len(rows)} times"
+        if rows:
+            assert records.arm_record(history, arm) is rows[0]

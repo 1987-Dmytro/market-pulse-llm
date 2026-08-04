@@ -211,14 +211,31 @@ scored; its header refuses a file another arm or another adapter wrote.
 
 ## 7. Home, verify, delete — then the verdict
 
+**One command per fetch, each one checked before the next.** A compound `a && b && c` hides
+which link failed, and `2>/dev/null` hides that any did — arm A's per-row dump was lost exactly
+that way, twenty minutes before its volume-less pod was deleted
+(`results/predictions/LOST.md`). And `/tmp` still holds Phase 4's files under the same names,
+so fetch to a name of this phase and never to `/tmp/arm-a-record.json`.
+
 ```bash
-rsync -az -e "ssh $SSHOPT -p <PORT>" root@<HOST>:/workspace/out/arm-a/ results/train/45h2-arm-a/
-scp $SSHOPT -P <PORT> root@<HOST>:/workspace/out/arm-a-record.json /tmp/
-scp $SSHOPT -P <PORT> "root@<HOST>:/workspace/repo/results/predictions/*.jsonl" results/predictions/
+rsync -az -e "ssh -i $SSHK $SSHOPT -p <PORT>" root@<HOST>:/workspace/out/arm-a/ results/train/45h2-arm-a/
+scp -i $SSHK $SSHOPT -P <PORT> root@<HOST>:/workspace/out/arm-a-record.json /tmp/arm-a-45h2.json
+scp -i $SSHK $SSHOPT -P <PORT> root@<HOST>:/workspace/out/arm-a-eval.log results/train/45h2-arm-a/
+scp -i $SSHK $SSHOPT -P <PORT> "root@<HOST>:/workspace/repo/results/predictions/*.jsonl" results/predictions/
+
+# BEFORE the pod is deleted: the dump the record names is on this Mac and hashes to it
 PYTHONPATH=src python3 -c "
-from market_pulse import records; from pathlib import Path
-print(records.artifact_sha256(Path('results/train/45h2-arm-a/adapter')))"   # equals the record's
-python3 scripts/eval_zero_shot.py --append-record /tmp/arm-a-record.json
+import json, sys; from hashlib import sha256; from pathlib import Path
+from market_pulse import records
+r = json.load(open('/tmp/arm-a-45h2.json'))['config']
+dump = Path(r['predictions_path'])
+assert dump.exists(), f'{dump} was not fetched — do NOT delete the pod'
+assert sha256(dump.read_bytes()).hexdigest() == r['predictions_sha256'], 'the dump is not the one'
+mac = records.artifact_sha256(Path('results/train/45h2-arm-a/adapter'))
+assert mac == r['fine_tune']['adapter_sha256'], f'adapter differs: {mac}'
+print('dump and adapter verified against the record')"
+
+python3 scripts/eval_zero_shot.py --append-record /tmp/arm-a-45h2.json
 runpodctl pod delete <POD_ID>
 python3 scripts/runpod_guard.py --step 45h2 --step-cap 9.00 --note "45h2 arm A"
 ```

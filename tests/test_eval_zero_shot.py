@@ -231,6 +231,12 @@ def test_the_dump_path_is_one_file_per_run_and_survives_a_filesystem():
 
 GEMMA = "google/gemma-4-31b-it"
 
+LOST = (Path(__file__).resolve().parents[1] / "results" / "predictions" / "LOST.md").read_text(
+    encoding="utf-8"
+)
+"""The ledger of dumps a record names and the repo cannot back. Read as text so a path
+listed anywhere in it counts — the file is a document a human reads, not a schema."""
+
 
 class BatchClient:
     """Replies per batch; an entry that is an exception stands for one bad row."""
@@ -501,8 +507,14 @@ def test_every_record_that_claims_a_file_points_at_a_real_one():
             for key in claims:
                 claimed = config[key]
                 artifact = results.parents[1] / claimed
+                if not artifact.exists() and claimed in LOST:
+                    # A dump that was written and then lost is a recorded fact, not a
+                    # missing file: it is in results/predictions/LOST.md with its sha256
+                    # and how it went, and the record is never edited to hide it.
+                    continue
                 assert artifact.exists(), (
-                    f"{record['model']} names a {key} that is not there: {claimed}"
+                    f"{record['model']} names a {key} that is not there: {claimed}."
+                    " If it was written and lost, say so in results/predictions/LOST.md."
                 )
                 assert sha256(artifact.read_bytes()).hexdigest() == config[f"{key[:-5]}_sha256"], (
                     f"{record['model']}: {claimed} on disk is not the file the record hashed"

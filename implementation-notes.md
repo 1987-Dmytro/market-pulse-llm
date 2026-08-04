@@ -1989,3 +1989,22 @@ at the later one. That is more paired, not less: what the ablation requires is t
 *training* commit and the *scoring* commit each be shared, and the fixes touch only the eval's
 argument handling and one dict lookup. Arm B therefore trains from the same
 `/tmp/market-pulse-45h2.bundle` as arm A and fetches the fix before its own eval.
+
+**D23 — arm A's per-row dump was written and then lost.** The fetch was issued inside a
+compound `scp … && scp … && scp …` whose first link failed on an unquoted option string; the
+chain stopped before the dump, the failure scrolled past under a `2>/dev/null`, and the
+volume-less pod was deleted about twenty minutes later. **No gate number moves** — every
+value the verdict reads is in `results/baselines.json` and the `scored_ids_sha256` of all
+three inputs is recorded, so which rows were scored is still provable. What is lost is the
+re-score: if gold is corrected again the way 4.5a corrected it, arm `without-plast` cannot be
+re-measured and arm `with-plast` can, so a future comparison of the two would be **unpaired**
+and must say so. Recorded in `results/predictions/LOST.md` with the sha256 the record names;
+the record itself is not edited, and the ratchet test now distinguishes "lost and declared"
+from "missing and silent". The runbook fetches one artifact per command and **verifies the
+dump against the record before the pod is deleted**.
+
+**D24 — a stale `/tmp/arm-a-record.json` from Phase 4 nearly became this arm's record.** The
+failed fetch left the 2026-08-01 file in place, and its numbers are plausible — they are the
+Phase 4 arm-A column. The adapter-sha comparison the runbook prescribes is what caught it:
+the record claimed `c0e462af…`, the adapter on the Mac hashed to `b3ca6308…`. Both a phase's
+own filenames and that check are now in the runbook.

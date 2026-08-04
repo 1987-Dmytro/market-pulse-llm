@@ -45,6 +45,13 @@
       "spent_usd": 7.8871,
       "remaining_usd": 17.1129,
       "note": "45h2 anchor: 758 v4 rows, 0 failures"
+    },
+    {
+      "at": "2026-08-04T18:56:02+00:00",
+      "balance": 23.5873792773,
+      "spent_usd": 11.4126,
+      "remaining_usd": 13.5874,
+      "note": "45h2 arm A: 270 steps 4.58 h, eval 758 rows 0 failures"
     }
   ]
 }
