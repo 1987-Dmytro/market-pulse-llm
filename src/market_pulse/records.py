@@ -68,13 +68,25 @@ def assert_prompt_sha(recorded: list[dict], model: str) -> dict:
     return current
 
 
-def anchor(history: dict) -> dict:
-    """The one zero-shot own-pod record every Phase 4 bar is measured from.
+DEFAULT_TESTSET_VERSION = "v2"
+"""What a record that names no test-set version was measured on.
+
+Every Phase 4 record predates the field, and all of them scored the v2 files. Read as a
+default rather than back-filled into the file: a record is what a run wrote."""
+
+
+def anchor(history: dict, version: str = DEFAULT_TESTSET_VERSION) -> dict:
+    """The one zero-shot own-pod record a version's bars are measured from.
 
     Raises unless exactly one row qualifies. Zero means the anchor was never
     appended; more than one means two rows claim the same job and picking either
     is a guess — 4c's fine-tuned rows share the ``local`` backend, so this is the
     realistic failure and it must be loud.
+
+    ``version`` is the fourth narrowing and it was added when the second anchor
+    existed: 4.5h2's v4 anchor is a zero-shot own-pod row with valid gate anchoring,
+    exactly like 4a's, so without it the two are indistinguishable and every Phase 4
+    bar would start refusing the moment the new row landed.
     """
     rows = [
         record
@@ -82,13 +94,15 @@ def anchor(history: dict) -> dict:
         for record in records
         if record.get("config", {}).get("backend") == "local"
         and record["config"].get("train_sources") == ANCHOR_TRAIN_SOURCES
+        and record["config"].get("testset_version", DEFAULT_TESTSET_VERSION) == version
         and record.get("diagnostics", {}).get("gate_anchor_valid") is True
         and not record.get("reference_only")
     ]
     if len(rows) != 1:
         found = [f"{record['model']} @ {record['timestamp']}" for record in rows]
         raise ValueError(
-            f"the zero-shot own-pod anchor must be exactly one record, found {len(rows)}: {found}."
+            f"the zero-shot own-pod anchor for test set {version} must be exactly one record,"
+            f" found {len(rows)}: {found}."
             " A gate anchored on a guess is not anchored (SPEC amendment 3.5 (1))."
         )
     return rows[0]

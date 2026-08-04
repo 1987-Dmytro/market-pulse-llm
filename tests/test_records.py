@@ -183,3 +183,29 @@ def test_artifact_sha256_notices_a_renamed_file_as_well_as_a_changed_one(tmp_pat
     edited = records.artifact_sha256(adapter(tmp_path / "c", {"w.safetensors": b"weightz"}))
     assert base != renamed
     assert base != edited
+
+
+# --- two anchors, one file (4.5h2) --------------------------------------------
+
+
+def test_the_default_version_is_what_a_record_that_names_none_was_measured_on():
+    """Every Phase 4 record predates the field, so the default has to reproduce
+    today's answer exactly — not approximately, and not by re-deriving it."""
+    assert records.anchor(HISTORY) is records.anchor(HISTORY, records.DEFAULT_TESTSET_VERSION)
+    assert "testset_version" not in ANCHOR["config"]
+
+
+def test_a_v4_anchor_does_not_collide_with_the_phase_4_one():
+    """The realistic failure of 4.5h2: the fresh anchor is a zero-shot own-pod row with
+    valid gate anchoring, exactly like 4a's. Without the version narrowing, appending it
+    makes `gate_bars.py` and `gate_verdict.py` refuse — after the pod money is spent."""
+    history = {"m": [row(), row(timestamp="2026-08-04T00:00:00+00:00", testset_version="v4")]}
+    with pytest.raises(ValueError, match="found 2"):
+        records.anchor({"m": [row(), row(timestamp="2026-08-04T00:00:00+00:00")]})
+    assert records.anchor(history, "v2")["timestamp"] == "2026-08-01T00:00:00+00:00"
+    assert records.anchor(history, "v4")["timestamp"] == "2026-08-04T00:00:00+00:00"
+
+
+def test_a_version_nothing_has_scored_yet_is_a_refusal_that_names_it():
+    with pytest.raises(ValueError, match="test set v4 must be exactly one record, found 0"):
+        records.anchor(HISTORY, "v4")

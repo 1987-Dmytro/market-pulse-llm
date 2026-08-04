@@ -758,3 +758,46 @@ def test_the_v2ctx_changelog_says_the_hash_collision_is_deliberate():
     # the section has to say what fires each block, or it documents three sentences and no rule
     for when in ("reply_to_msg_id", "sender_anon_id", "byte for byte"):
         assert when in changelog
+
+
+# --- the v4 rendering: which instrument a version's runs are measured through ---
+
+
+def test_every_rendering_revision_names_a_registered_prompt():
+    """A revision pointing at an unregistered name would fail on the pod, after the
+    weights, with a KeyError nobody budgeted for."""
+    for version, tasks in prompts.REVISIONS.items():
+        assert set(tasks) == set(prompts.TASKS), version
+        for task, name in tasks.items():
+            assert name in prompts.PROMPTS, (version, task, name)
+
+
+def test_the_v2_rendering_is_the_frozen_pair_every_phase_4_record_carries():
+    """`config.prompt_sha256` in `results/baselines.json` is exactly this map, which is
+    why it cannot see the v4 change and why `revision_sha256` exists beside it."""
+    assert prompts.revision_sha256("v2") == {
+        task: prompts.prompt_sha256(task) for task in prompts.TASKS
+    }
+
+
+def test_the_v4_rendering_moves_T1_and_leaves_T2_where_it_was():
+    """One head's label space grew; posts carry no intents column at all, so the T2
+    instrument must NOT move — a moved T2 would re-baseline G1d and G1e for nothing."""
+    v2, v4 = prompts.revision_sha256("v2"), prompts.revision_sha256("v4")
+    assert v4["T1"] != v2["T1"]
+    assert v4["T2"] == v2["T2"]
+
+
+def test_revision_sha256_refuses_a_version_nothing_is_registered_for():
+    with pytest.raises(ValueError, match="no rendering is registered"):
+        prompts.revision_sha256("v3")
+
+
+def test_the_v2_rendering_cannot_read_the_sixth_intent_and_the_v4_one_can():
+    """The whole reason the rendering has to move: amendment 3.9 points both arms at the
+    `_tax2` sources, 547 of whose scoreable rows carry `service`, and the frozen T1 parser
+    refuses it. Without this the trainer stops at `assert_format_identity`."""
+    answer = json.dumps({"sentiment": "negative", "sarcasm": False, "intents": ["service"]})
+    with pytest.raises(prompts.ParseError, match="intents outside its domain"):
+        prompts.parse_reply(prompts.REVISIONS["v2"]["T1"], answer)
+    assert prompts.parse_reply(prompts.REVISIONS["v4"]["T1"], answer)["intents"] == ["service"]

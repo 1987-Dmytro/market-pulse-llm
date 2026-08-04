@@ -185,3 +185,39 @@ def test_the_gpu_extra_never_reaches_module_scope():
             assert not banned & {alias.name.split(".")[0] for alias in node.names}
         if isinstance(node, ast.ImportFrom):
             assert (node.module or "").split(".")[0] not in banned
+
+
+# --- the parent post on the eval path (4.5h2) ---------------------------------
+
+
+def test_a_with_post_request_carries_the_post_the_row_replies_to():
+    backend = client([(GOOD, True)])
+    rendered = backend.render(
+        "T1v2_with_post",
+        "смачно",
+        {"parent": "Нове морозиво", "caption": None, "caption_kind": "image"},
+    )
+    assert "<post>\nНове морозиво\n</post>" in rendered
+    assert "<comment>\nсмачно\n</comment>" in rendered
+
+
+def test_a_with_post_batch_gives_each_row_its_own_post():
+    """The failure this stops is silent: one post reused for a whole batch reads as a
+    labelled run and is a different instrument for every row but the first."""
+    backend = client([(GOOD, True), (GOOD, True)])
+    backend.batch(
+        "T1v2_with_post",
+        ["перший", "другий"],
+        [
+            {"parent": "пост А", "caption": None, "caption_kind": "image"},
+            {"parent": "пост Б", "caption": None, "caption_kind": "image"},
+        ],
+    )
+    assert "<post>\nпост А\n</post>" in backend.tokenizer.rendered[0]
+    assert "<post>\nпост Б\n</post>" in backend.tokenizer.rendered[1]
+
+
+def test_a_short_list_of_posts_is_refused_rather_than_zipped():
+    backend = client([(GOOD, True), (GOOD, True)])
+    with pytest.raises(ValueError, match="1 parent posts for 2 rows"):
+        backend.batch("T1v2_with_post", ["перший", "другий"], [{"parent": "пост А"}])

@@ -157,10 +157,15 @@ class LocalClient:
                 " add_special_tokens=False would drop it silently — stop and report"
             )
 
-    def render(self, task: str, text: str) -> str:
-        """The one request, through the model's own chat template."""
+    def render(self, task: str, text: str, post: dict | None = None) -> str:
+        """The one request, through the model's own chat template.
+
+        ``post`` is :func:`parents.post_kwargs`' answer for this row, and it is required
+        by exactly the tasks in :data:`prompts.WITH_POST` — ``build_messages`` refuses
+        the mismatch either way, so a caller cannot half-apply the with-post rendering.
+        """
         return self.tokenizer.apply_chat_template(
-            prompts.build_messages(task, text), tokenize=False, **CHAT_TEMPLATE
+            prompts.build_messages(task, text, **(post or {})), tokenize=False, **CHAT_TEMPLATE
         )
 
     def _trim(self, tokens: list[int]) -> tuple[list[int], bool]:
@@ -174,10 +179,21 @@ class LocalClient:
                 return tokens[:position], True
         return tokens, False
 
-    def batch(self, task: str, texts: list[str]) -> list[dict]:
-        """Generate for a batch of rows; one reply dict per text, in order."""
+    def batch(self, task: str, texts: list[str], posts: list[dict] | None = None) -> list[dict]:
+        """Generate for a batch of rows; one reply dict per text, in order.
+
+        ``posts`` is one :func:`parents.post_kwargs` per text, or ``None`` for a task that
+        takes no parent post. Positional and length-checked rather than zipped short: a
+        silently truncated list would ask the tail of the batch without the context the
+        head was asked with, and nothing downstream could see it.
+        """
+        if posts is not None and len(posts) != len(texts):
+            raise ValueError(f"{len(posts)} parent posts for {len(texts)} rows")
         encoded = self.tokenizer(
-            [self.render(task, text) for text in texts],
+            [
+                self.render(task, text, post)
+                for text, post in zip(texts, posts or [None] * len(texts))
+            ],
             return_tensors="pt",
             padding=True,
             add_special_tokens=False,  # the chat template already emits <bos>

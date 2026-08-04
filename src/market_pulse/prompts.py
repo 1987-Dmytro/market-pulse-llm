@@ -498,6 +498,38 @@ the probe's 100 rows carry neither feature, and for them the rendered request ha
 request byte for byte. Required-and-refused would make that impossible; refused-for-everyone-
 else is what stops a context line from reaching a prompt whose recorded runs never had one."""
 
+REVISIONS = {
+    "v2": {"T1": "T1", "T2": "T2"},
+    "v4": {"T1": "T1v2_with_post", "T2": "T2"},
+}
+"""Which registered prompt renders each task, per frozen-test-set version.
+
+The one place that answers "what instrument is this run using". Phase 4 rendered
+:data:`TASKS` themselves — v1, five intents — and every record in
+`results/baselines.json` carries their hashes. v4's gold has six, so `parse_reply("T1",
+…)` refuses `service` and a v4 run cannot use them; and its `intents` were written with
+the parent post in the request (`docs/annotation/comments.md` §Unit), so the with-post
+revision is what scores them.
+
+Keyed by test-set version rather than by phase because that is what makes the pairing
+checkable: training, the anchor and both arms of one version must render through the same
+entry, and :func:`revision_sha256` is what a record stores to prove they did.
+:data:`TASKS` is deliberately untouched — widening it would make every past record fail
+to verify (see its own docstring)."""
+
+
+def revision_sha256(version: str) -> dict:
+    """The prompt hashes of one version's rendering — what a record names its instrument by.
+
+    ``config.prompt_sha256`` answers "are the frozen v1 prompts still the frozen v1
+    prompts", which stays true through this whole change and therefore cannot see it.
+    This is the field that can: it moves the day the rendering does.
+    """
+    if version not in REVISIONS:
+        raise ValueError(f"{version}: no rendering is registered for it — {sorted(REVISIONS)}")
+    return {task: prompt_sha256(name) for task, name in REVISIONS[version].items()}
+
+
 CAPTION_TASK = "caption_post"
 FREE_TEXT = frozenset({CAPTION_TASK})
 """Prompts whose answer is prose, not labels. They are registered and hashed like the others and

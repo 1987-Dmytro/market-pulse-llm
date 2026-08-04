@@ -81,6 +81,21 @@ def context(posts: dict, captions: dict, row: dict) -> dict:
     }
 
 
+def post_kwargs(found: dict) -> dict:
+    """:func:`context`'s answer in the keywords :func:`prompts.build_messages` takes.
+
+    The translation exists once. Four callers now render a with-post prompt — the
+    labelling passes, the trainer and the gate eval — and a caller that assembled these
+    three keys itself would be a second place that could disagree about which of the four
+    states gets a caption.
+    """
+    return {
+        "parent": found["parent"],
+        "caption": found["caption"],
+        "caption_kind": found["caption_kind"] or "image",
+    }
+
+
 def text_for(posts: dict[tuple[str, int], str], row: dict) -> str:
     """The parent post's text for one comment row, or a refusal naming the row.
 
