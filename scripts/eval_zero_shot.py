@@ -40,7 +40,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))  # the package is not pip-installed
 
-from market_pulse import local_llm, prompts, records, scorer, zero_shot  # noqa: E402
+from market_pulse import local_llm, parents, prompts, records, scorer, zero_shot  # noqa: E402
 from market_pulse.brands import watchlist_aliases  # noqa: E402
 from market_pulse.registry import load_registry  # noqa: E402
 from market_pulse.scorer import UNCLEAR  # noqa: E402
@@ -50,6 +50,12 @@ RESULTS = REPO_ROOT / "results" / "baselines.json"
 LEDGER = REPO_ROOT / "results" / "spend_3b.json"
 PREDICTIONS = REPO_ROOT / "results" / "predictions"
 G1B_SLICE = REPO_ROOT / "results" / "g1b_slice.json"
+SLICE_OF = {"v2": G1B_SLICE, "v4": REPO_ROOT / "results" / "g1b_slice_v4.json"}
+"""One G1b slice per frozen-test-set version, and never one file for two.
+
+The slice is the gate's denominator (amendment 3.5 (3)) and is written by the version's own
+anchor from that version's own holdout. Sharing a path would let a v4 anchor overwrite the 44
+pre-registered ids Phase 4's verdict was decided against."""
 
 SEED = 42
 TEMPERATURE = 0.0
@@ -82,11 +88,37 @@ ROWS = {
     "anthropic/claude-haiku-4.5": {"tag": "anthropic", "quantization": None, "ref": True},
 }
 
-INPUTS = (
-    ("comments_test", "T1", "comments_test.jsonl"),
-    ("posts_test", "T2", "posts_test.jsonl"),
-    ("sarcasm_holdout", "T1", "sarcasm_holdout.jsonl"),
-)
+INPUTS = (("comments_test", "T1"), ("posts_test", "T2"), ("sarcasm_holdout", "T1"))
+"""The three frozen inputs and the task each one is, before a version resolves either."""
+
+RAW_POSTS = REPO_ROOT / "data" / "raw" / "posts"
+CAPTIONS = REPO_ROOT / "data" / "annotation" / "post_captions.jsonl"
+
+
+def inputs_for(version: str) -> tuple[tuple[str, str, str], ...]:
+    """``(name, the task to render, the file to score)`` for one test-set version.
+
+    v2 is the unsuffixed files and the frozen v1 prompts — what every Phase 4 record was
+    measured on. A later version resolves both at once, because those are not two choices: a
+    v4 file's gold carries six intents and `parse_reply("T1", …)` refuses the sixth."""
+    suffix = "" if version == records.DEFAULT_TESTSET_VERSION else f"_{version}"
+    return tuple(
+        (name, prompts.REVISIONS[version][base], f"{name}{suffix}.jsonl") for name, base in INPUTS
+    )
+
+
+def post_context(task: str, rows: list[dict]) -> list[dict] | None:
+    """One :func:`parents.post_kwargs` per row, or ``None`` for a task that takes no post.
+
+    The parent index is loaded once per input rather than per row, and a missing parent
+    raises out of `parents.text_for` — a row asked without the post its neighbours got would
+    be labelled by a different instrument and nothing downstream could see it.
+    """
+    if task not in prompts.WITH_POST:
+        return None
+    posts = parents.load(RAW_POSTS)
+    captions = parents.load_captions(CAPTIONS)
+    return [parents.post_kwargs(parents.context(posts, captions, row)) for row in rows]
 
 
 def load(path: Path) -> list[dict]:
@@ -220,20 +252,24 @@ class FakeClient:
         self.usage = Counter()
         self.lock = threading.Lock()
 
-    def __call__(self, task: str, text: str) -> dict:
+    def __call__(self, task: str, text: str, post: dict | None = None) -> dict:
+        # the same refusals a real request goes through, so --smoke exercises the with-post
+        # contract instead of only the code that follows a successful render
+        prompts.build_messages(task, text, **(post or {}))
+        family = "T2" if prompts.DELIMITERS[task] == "post" else "T1"
         with self.lock:
-            step = next(self.cycles[task])
+            step = next(self.cycles[family])
         if step == 4:
             raise zero_shot.ApiError(503, "fake endpoint down")
         return {
-            "content": self.REPLIES[task][step],
+            "content": self.REPLIES[family][step],
             "finish_reason": "stop",
             "cost": 0.0,
             "usage": {},
-            "generation_id": f"fake-{task}-{step}",
+            "generation_id": f"fake-{family}-{step}",
         }
 
-    def batch(self, task: str, texts: list[str]) -> list[dict]:
+    def batch(self, task: str, texts: list[str], posts: list[dict] | None = None) -> list[dict]:
         """`--backend local --smoke`: the batched path, same canned replies.
 
         A row that fails comes back *as* its exception rather than raising, the
@@ -241,9 +277,9 @@ class FakeClient:
         generate call itself does.
         """
         replies = []
-        for text in texts:
+        for text, post in zip(texts, posts or [None] * len(texts)):
             try:
-                replies.append(self(task, text))
+                replies.append(self(task, text, post))
             except zero_shot.ApiError as err:
                 replies.append(err)
         return replies
@@ -286,7 +322,9 @@ def classify(client, task: str, rows: list[dict], concurrency: int) -> list[dict
         return list(pool.map(one, rows))
 
 
-def classify_local(client, task: str, rows: list[dict], batch_size: int, on_row=None) -> list[dict]:
+def classify_local(
+    client, task: str, rows: list[dict], batch_size: int, on_row=None, posts=None
+) -> list[dict]:
     """The same contract, one padded batch at a time instead of one request per row.
 
     Batches are a throughput choice and nothing else — decoding is greedy, so
@@ -312,8 +350,10 @@ def classify_local(client, task: str, rows: list[dict], batch_size: int, on_row=
     outcomes = []
     for start in range(0, len(rows), batch_size):
         chunk = rows[start : start + batch_size]
+        window = posts[start : start + batch_size] if posts is not None else None
+        texts = [row["text"] for row in chunk]
         try:
-            replies = client.batch(task, [row["text"] for row in chunk])
+            replies = client.batch(task, texts, window) if window else client.batch(task, texts)
         except MemoryError:
             raise
         except Exception as err:  # noqa: BLE001 — retried per row, then counted
@@ -322,7 +362,10 @@ def classify_local(client, task: str, rows: list[dict], batch_size: int, on_row=
             if type(err).__name__ == "OutOfMemoryError" or "out of memory" in str(err).lower():
                 raise
             print(f"    batch at row {start} failed ({err}) — retrying its rows one by one")
-            replies = [_one_row(client, task, row["text"]) for row in chunk]
+            replies = [
+                _one_row(client, task, row["text"], window[index] if window else None)
+                for index, row in enumerate(chunk)
+            ]
         for row, reply in zip(chunk, replies):
             scored = outcome(task, row["id"], reply, "generation")
             if on_row is not None:
@@ -331,10 +374,11 @@ def classify_local(client, task: str, rows: list[dict], batch_size: int, on_row=
     return outcomes
 
 
-def _one_row(client, task: str, text: str):
+def _one_row(client, task: str, text: str, post: dict | None = None):
     """One row on its own; the exception itself when even that fails."""
     try:
-        return client.batch(task, [text])[0]
+        # positional-optional: a client that predates the parent post takes two arguments
+        return client.batch(task, [text], [post])[0] if post else client.batch(task, [text])[0]
     except Exception as err:  # noqa: BLE001 — now it really is this row's failure
         if type(err).__name__ == "OutOfMemoryError" or "out of memory" in str(err).lower():
             raise
@@ -489,6 +533,7 @@ def local_config(
     anchor_valid: bool,
     slice_ids: dict | None,
     scored_inputs: dict,
+    version: str = records.DEFAULT_TESTSET_VERSION,
 ) -> dict:
     """What a run on our own weights records about itself.
 
@@ -534,26 +579,29 @@ def local_config(
             " never averaged (ADR 3b-infra-and-precision §(d))."
         ),
     }
+    gate_slice = SLICE_OF[version]
     if training:
         return config | {
             "train_sources": training["rows_per_source"],
             "fine_tune": training,
-            "g1b_slice_path": str(G1B_SLICE.relative_to(REPO_ROOT)),
+            "g1b_slice_path": str(gate_slice.relative_to(REPO_ROOT)),
             "g1b_slice_sha256": sha256(
-                G1B_SLICE.read_text(encoding="utf-8").encode("utf-8")
+                gate_slice.read_text(encoding="utf-8").encode("utf-8")
             ).hexdigest(),
         }
     if anchor_valid:
         return config | {
-            "g1b_slice_path": str(G1B_SLICE.relative_to(REPO_ROOT)),
+            "g1b_slice_path": str(gate_slice.relative_to(REPO_ROOT)),
             "g1b_slice_sha256": write_slice(
-                G1B_SLICE, scored_inputs["sarcasm_holdout"][0], slice_ids
+                gate_slice, scored_inputs["sarcasm_holdout"][0], slice_ids
             ),
         }
     return config
 
 
-def arm_preflight(adapter: Path, arm: str) -> tuple[dict, dict]:
+def arm_preflight(
+    adapter: Path, arm: str, version: str = records.DEFAULT_TESTSET_VERSION
+) -> tuple[dict, dict]:
     """Everything an ablation arm's gate eval must be sure of, before the weights.
 
     Ordered by what it costs to learn late: the anchor and its slice decide the
@@ -565,8 +613,8 @@ def arm_preflight(adapter: Path, arm: str) -> tuple[dict, dict]:
     that a gate number can name the dataset and the adapter it came from.
     """
     try:
-        record = records.anchor(history())
-        ids = records.slice_ids(G1B_SLICE.read_text(encoding="utf-8"), record)
+        record = records.anchor(history(), version)
+        ids = records.slice_ids(SLICE_OF[version].read_text(encoding="utf-8"), record)
         overall = records.anchor_values(record)["G1a"]["overall"]
     except (ValueError, OSError) as err:
         raise SystemExit(f"the anchor this arm is measured against is unusable: {err}") from None
@@ -590,6 +638,16 @@ def arm_preflight(adapter: Path, arm: str) -> tuple[dict, dict]:
             f"the adapter was trained on different prompts: {training['prompt_sha256']} against"
             f" {current}. The prompt is part of the measurement (SPEC §7) — stop and report."
         )
+    # The check above cannot see a rendering change: it covers the frozen v1 prompts, which
+    # stay frozen through one. This is the one that can, and it is what makes "the arm was
+    # trained in the space the gate scores in" a check instead of a claim.
+    rendering = prompts.revision_sha256(version)
+    if training.get("prompt_revision_sha256", prompts.revision_sha256("v2")) != rendering:
+        raise SystemExit(
+            f"the adapter renders {training.get('prompt_revision_sha256')} and this eval renders"
+            f" {rendering}. An arm scored through a prompt it was not trained on measures the"
+            " rendering, not the data — stop and report."
+        )
     return (
         {"ids": ids, "anchor_overall": overall},
         {
@@ -602,6 +660,7 @@ def arm_preflight(adapter: Path, arm: str) -> tuple[dict, dict]:
             "rows_per_source": training["rows_per_source"],
             "synthetic_ids_added": training["synthetic_ids_added"],
             "training_run": training.get("run"),
+            "prompt_revision_sha256": training.get("prompt_revision_sha256"),
             "anchor": {"model": record["model"], "timestamp": record["timestamp"]},
         },
     )
@@ -964,6 +1023,12 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="mark the record so no gate can read it (the frontier row)",
     )
+    parser.add_argument(
+        "--testset-version",
+        choices=sorted(prompts.REVISIONS),
+        default=records.DEFAULT_TESTSET_VERSION,
+        help="which frozen test set to score, and therefore which prompt revision to render",
+    )
     parser.add_argument("--smoke", action="store_true", help="mocked client, no network, no write")
     parser.add_argument("--dry-run", action="store_true", help="estimate and routing, then stop")
     parser.add_argument("--probe", type=int, default=0, metavar="N", help="N live rows per input")
@@ -1063,9 +1128,18 @@ def main(argv: list[str] | None = None) -> int:
     if args.reference_only and not row.get("ref"):
         raise SystemExit(f"{args.model} is a gated candidate — --reference-only would hide it")
 
-    data = {name: load(FROZEN / filename) for name, _, filename in INPUTS}
+    version = args.testset_version
+    resolved = inputs_for(version)
+    if version != records.DEFAULT_TESTSET_VERSION and not local:
+        raise SystemExit(
+            f"test set {version} renders {prompts.REVISIONS[version]}, and the OpenRouter path"
+            " sends one text per row with no parent post. Every run of this version is an"
+            " own-pod run — pass --backend local."
+        )
+    data = {name: load(FROZEN / filename) for name, _, filename in resolved}
     if args.probe:
         data = {name: rows[: args.probe] for name, rows in data.items()}
+    contexts = {name: post_context(task, data[name]) for name, task, _ in resolved}
     aliases = watchlist_aliases(load_registry(REPO_ROOT / "config" / "registry.yaml").watchlist)
     gate_slice, training = None, None
     if local:
@@ -1076,7 +1150,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"greedy · max_new_tokens {local_llm.MAX_NEW_TOKENS} · seed {SEED}")
         print(f"prompt SHA256 equal to the recorded {args.model} run: yes")
         if args.adapter:
-            gate_slice, training = arm_preflight(args.adapter, args.arm)
+            gate_slice, training = arm_preflight(args.adapter, args.arm, version)
             print(f"arm {training['arm']} · adapter sha256 {training['adapter_sha256']}")
             print(f"  dataset sha256 {training['train_sha256']} ({training['n_train']} rows)")
             print(f"  G1b slice {len(gate_slice['ids'])} ids, sha256 verified against the anchor")
@@ -1086,6 +1160,10 @@ def main(argv: list[str] | None = None) -> int:
         print(f"temperature {TEMPERATURE} · max_tokens {MAX_TOKENS} · seed {SEED}")
     for task in prompts.TASKS:
         print(f"prompt {task} sha256 {prompts.prompt_sha256(task)}")
+    print(f"test set {version} · rendering {prompts.REVISIONS[version]}")
+    for name, task, filename in resolved:
+        state = "" if contexts[name] is None else f" · {len(contexts[name])} parent posts"
+        print(f"  {name:<16} {filename:<26} {task}{state}")
 
     runtime = None
     if args.smoke:
@@ -1124,7 +1202,7 @@ def main(argv: list[str] | None = None) -> int:
                 pricing=endpoint["pricing"],
                 completion_tokens=60,
             )
-            for name, task, _ in INPUTS
+            for name, task, _ in resolved
         }
         estimate = sum(e["usd"] for e in estimates.values())
         print(
@@ -1160,13 +1238,15 @@ def main(argv: list[str] | None = None) -> int:
                 "batch_size": args.batch_size if local else None,
                 "probe": args.probe,
                 "prompt_sha256": {task: prompts.prompt_sha256(task) for task in prompts.TASKS},
+                "testset_version": version,
+                "prompt_revision_sha256": prompts.revision_sha256(version),
             },
         )
         print(f"\ncheckpoint {checkpoint} — {len(resumed)} rows already scored")
 
     scored_inputs, failure_blocks = {}, []
     try:
-        for name, task, _ in INPUTS:
+        for name, task, _ in resolved:
             if local:
                 done = {
                     row_id: entry for (input_, row_id), entry in resumed.items() if input_ == name
@@ -1180,7 +1260,19 @@ def main(argv: list[str] | None = None) -> int:
                     def on_row(scored, name=name):  # noqa: E731 — the input it belongs to
                         append_checkpoint(checkpoint, name, scored)
 
-                fresh = classify_local(client, task, pending, args.batch_size, on_row)
+                by_row = (
+                    None
+                    if contexts[name] is None
+                    else {row["id"]: post for row, post in zip(data[name], contexts[name])}
+                )
+                fresh = classify_local(
+                    client,
+                    task,
+                    pending,
+                    args.batch_size,
+                    on_row,
+                    None if by_row is None else [by_row[row["id"]] for row in pending],
+                )
                 by_id = done | {entry["id"]: entry for entry in fresh}
                 outcomes = [by_id[row["id"]] for row in data[name]]
             else:
@@ -1272,6 +1364,13 @@ def main(argv: list[str] | None = None) -> int:
         "seed": SEED,
         "temperature": TEMPERATURE,
         "prompt_sha256": {task: prompts.prompt_sha256(task) for task in prompts.TASKS},
+        "testset_version": version,
+        "prompt_revision": prompts.REVISIONS[version],
+        "prompt_revision_sha256": prompts.revision_sha256(version),
+        "inputs": {
+            name: {"file": filename, "sha256": sha256((FROZEN / filename).read_bytes()).hexdigest()}
+            for name, _, filename in resolved
+        },
         "heads": {
             "T1": f"{head_prefix}sentiment 3-class · sarcasm binary · intents multi-label",
             "T2": f"{head_prefix}relevance binary · post_type 3-class · brands free-text",
@@ -1289,7 +1388,14 @@ def main(argv: list[str] | None = None) -> int:
 
     if local:
         config = local_config(
-            shared, args.batch_size, runtime, training, anchor_valid, slice_ids, scored_inputs
+            shared,
+            args.batch_size,
+            runtime,
+            training,
+            anchor_valid,
+            slice_ids,
+            scored_inputs,
+            version,
         )
     else:
         usage_after = zero_shot.total_usage(key)
@@ -1355,7 +1461,8 @@ def main(argv: list[str] | None = None) -> int:
     # this line is not guarded by `anchor_valid` alone.
     if local and anchor_valid and slice_ids is not None:
         print(
-            f"wrote {G1B_SLICE.relative_to(REPO_ROOT)} — G1b slice n {len(slice_ids['union'])}"
+            f"wrote {SLICE_OF[version].relative_to(REPO_ROOT)} — G1b slice n"
+            f" {len(slice_ids['union'])}"
             f" of {len(scored_inputs['sarcasm_holdout'][0])} holdout rows"
             f" (sentiment {len(slice_ids['sentiment'])} ∪ sarcasm {len(slice_ids['sarcasm'])})"
         )

@@ -12,7 +12,7 @@ from pathlib import Path
 
 import pytest
 
-from market_pulse import zero_shot
+from market_pulse import prompts, zero_shot
 
 SCRIPT = Path(__file__).resolve().parents[1] / "scripts" / "eval_zero_shot.py"
 spec = importlib.util.spec_from_file_location("eval_zero_shot", SCRIPT)
@@ -854,3 +854,77 @@ def test_an_arm_writes_a_complete_record_without_a_gpu(monkeypatch, tmp_path, ca
     assert len(dump.read_text(encoding="utf-8").splitlines()) == 758
     assert len((tmp_path / "eval.jsonl").read_text(encoding="utf-8").splitlines()) == 759
     dump.unlink()
+
+
+# --- test set v4: which files, which rendering, which slice (4.5h2) -----------
+
+
+def test_the_v2_resolution_is_the_phase_4_one_file_for_file():
+    """Every Phase 4 record was measured on these three files through the frozen v1
+    prompts. The default has to reproduce that exactly, not approximately."""
+    assert runner.inputs_for("v2") == (
+        ("comments_test", "T1", "comments_test.jsonl"),
+        ("posts_test", "T2", "posts_test.jsonl"),
+        ("sarcasm_holdout", "T1", "sarcasm_holdout.jsonl"),
+    )
+
+
+def test_the_v4_resolution_moves_the_files_and_the_comment_rendering_together():
+    """Not two choices: a v4 file's gold carries six intents and the frozen T1 parser
+    refuses the sixth, so scoring v4 through v1 prompts is not a thing that can happen."""
+    assert runner.inputs_for("v4") == (
+        ("comments_test", "T1v2_with_post", "comments_test_v4.jsonl"),
+        ("posts_test", "T2", "posts_test_v4.jsonl"),
+        ("sarcasm_holdout", "T1v2_with_post", "sarcasm_holdout_v4.jsonl"),
+    )
+
+
+def test_each_version_writes_its_own_g1b_slice():
+    """The slice is the gate's denominator. One path for two versions would let a v4
+    anchor overwrite the 44 pre-registered ids Phase 4's verdict was decided against."""
+    assert runner.SLICE_OF["v2"] == runner.G1B_SLICE
+    assert runner.SLICE_OF["v4"] != runner.SLICE_OF["v2"]
+    assert runner.SLICE_OF["v4"].name == "g1b_slice_v4.json"
+
+
+def test_post_context_is_one_entry_per_row_for_a_with_post_task_and_none_otherwise():
+    rows = runner.load(runner.FROZEN / "sarcasm_holdout_v4.jsonl")
+    assert runner.post_context("T2", rows) is None
+    contexts = runner.post_context("T1v2_with_post", rows)
+    assert len(contexts) == len(rows)
+    assert set(contexts[0]) == {"parent", "caption", "caption_kind"}
+
+
+def test_a_v4_run_on_the_remote_backend_is_refused():
+    """The OpenRouter path sends one text per row with no parent post; a v4 row asked
+    without it is a different instrument, and the record could not say so."""
+    with pytest.raises(SystemExit, match="own-pod run"):
+        runner.main(["--model", GEMMA, "--smoke", "--testset-version", "v4"])
+
+
+def test_a_v4_smoke_scores_the_v4_files_through_the_with_post_rendering(capsys):
+    assert (
+        runner.main(["--model", GEMMA, "--backend", "local", "--smoke", "--testset-version", "v4"])
+        == 0
+    )
+    out = capsys.readouterr().out
+    assert "test set v4 · rendering {'T1': 'T1v2_with_post', 'T2': 'T2'}" in out
+    assert "comments_test_v4.jsonl" in out and "400 parent posts" in out
+
+
+def test_an_adapter_rendered_through_another_revision_is_refused(tmp_path):
+    """The guard above it hashes the FROZEN v1 prompts, which stay frozen through a
+    rendering change — it cannot see this one. An arm scored through a prompt it was not
+    trained on measures the rendering, not the data."""
+    adapter = arm_dir(tmp_path, prompt_revision_sha256=prompts.revision_sha256("v4"))
+    with pytest.raises(SystemExit, match="renders .* and this eval renders"):
+        runner.arm_preflight(adapter, "real-only")
+
+
+def test_an_adapter_that_predates_the_field_is_read_as_v2(tmp_path):
+    """4c's two arms carry no `prompt_revision_sha256`; they were rendered through the
+    frozen prompts, which is what v2 means."""
+    provenance = json.loads((SMOKE_PROVENANCE / "provenance.json").read_text(encoding="utf-8"))
+    assert "prompt_revision_sha256" not in provenance
+    _, training = runner.arm_preflight(arm_dir(tmp_path), "real-only")
+    assert training["prompt_revision_sha256"] is None
