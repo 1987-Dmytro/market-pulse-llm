@@ -937,3 +937,25 @@ def test_the_arm_name_is_checked_against_the_adapter_not_a_hardcoded_list(tmp_pa
     adapter = arm_dir(tmp_path, arm="without-plast")
     with pytest.raises(SystemExit, match="'without-plast' arm, not 'with-plast'"):
         runner.arm_preflight(adapter, "with-plast")
+
+
+def test_the_preflight_reads_the_provenance_the_trainer_writes_today(tmp_path):
+    """The fixture above is a Phase-4-era `provenance.json`, so it cannot see the schema
+    move — and it did not: 4.5h2 renamed `synthetic_ids_added` and the preflight died on
+    the pod after the arm had trained. This one builds the record from the live trainer."""
+    import sys
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+    import yaml
+
+    import train_qlora
+
+    config = yaml.safe_load(
+        (Path(__file__).resolve().parents[1] / "config" / "qlora.yaml").read_text(encoding="utf-8")
+    )
+    _, record = train_qlora.build(config, False)
+    adapter = arm_dir(tmp_path, **record)
+    _, training = runner.arm_preflight(adapter, "without-plast", "v4")
+    assert training["added_ids"] == record["added_ids"]
+    assert training["n_train"] == record["n_train"]
+    assert training["prompt_revision_sha256"] == record["prompt_revision_sha256"]

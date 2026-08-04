@@ -658,7 +658,11 @@ def arm_preflight(
             "carve_sha256": training["carve_sha256"],
             "n_train": training["n_train"],
             "rows_per_source": training["rows_per_source"],
-            "synthetic_ids_added": training["synthetic_ids_added"],
+            # `synthetic_ids_added` is what Phase 4's trainer wrote; 4.5h2 renamed it when
+            # the ablation's added source stopped being the synthetic one. Both are read so
+            # that an adapter from either phase can be scored, and the source is named.
+            "added_source": training.get("added_source"),
+            "added_ids": training.get("added_ids", training.get("synthetic_ids_added")),
             "training_run": training.get("run"),
             "prompt_revision_sha256": training.get("prompt_revision_sha256"),
             "anchor": {"model": record["model"], "timestamp": record["timestamp"]},
