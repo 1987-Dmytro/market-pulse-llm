@@ -20,6 +20,13 @@
   ],
   "runpod_balance_at_45h2_start": 27.5332912062,
   "45h2_gpu_cap_usd": 9.0,
-  "gpu_sessions": [],
+  "gpu_sessions": [
+    {
+      "at": "2026-08-04T12:32:37+00:00",
+      "balance": 27.1128684841,
+      "step_spent_usd": 0.4204,
+      "note": "45h2 anchor: 758 v4 rows, 0 failures"
+    }
+  ],
   "gpu_note": "RunPod account balance read before the first pod of 45h2. Step spend = this anchor minus the balance now, enforced against $9.00. The SPEC amendment 3.4 (4) phase cap is enforced separately, against results/spend_phase4.json, and neither anchor may be regenerated."
 }

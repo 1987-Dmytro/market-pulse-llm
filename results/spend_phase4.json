@@ -38,6 +38,13 @@
       "spent_usd": 6.9903,
       "remaining_usd": 18.0097,
       "note": "phase 4 close-out: stale 4a pod gxkdecf3g7k3y7 deleted, no pods remain; the 100 GB CA-MTL-3 volume gfwa2an8fn is kept for the phase 5 briefing"
+    },
+    {
+      "at": "2026-08-04T12:32:37+00:00",
+      "balance": 27.1128684841,
+      "spent_usd": 7.8871,
+      "remaining_usd": 17.1129,
+      "note": "45h2 anchor: 758 v4 rows, 0 failures"
     }
   ]
 }
