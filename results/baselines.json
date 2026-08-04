@@ -1315,6 +1315,227 @@
         "gate_anchor_valid": true,
         "note": "diagnostics, not gates. G1b is the fix-rate over the anchor's pre-registered slice; no base_errs_* appear, because on a fine-tuned run they would be this model's errors under a name that says base."
       }
+    },
+    {
+      "model": "google/gemma-4-31b-it",
+      "timestamp": "2026-08-04T12:26:38+00:00",
+      "reference_only": false,
+      "git": {
+        "commit": "4714682797f9277b84701560178cce541e021134",
+        "dirty": [
+          "results/g1b_slice_v4.json",
+          "results/predictions/google-gemma-4-31b-it--20260804T122638Z.jsonl"
+        ]
+      },
+      "config": {
+        "seed": 42,
+        "temperature": 0.0,
+        "prompt_sha256": {
+          "T1": "9b2a021783212022bb335d7a32a365d532ff94c7da92336bf054d8709c0de355",
+          "T2": "6a7e66efb3eb4091b8d787e38213f3b1b0c9115e78d2b41fb9cc6bcaab3a54b4"
+        },
+        "testset_version": "v4",
+        "prompt_revision": {
+          "T1": "T1v2_with_post",
+          "T2": "T2"
+        },
+        "prompt_revision_sha256": {
+          "T1": "495b43d1361d0e4f5f7a186eebb971f4dc3ed9f8afd128f539ba0f6a8ffc2a19",
+          "T2": "6a7e66efb3eb4091b8d787e38213f3b1b0c9115e78d2b41fb9cc6bcaab3a54b4"
+        },
+        "inputs": {
+          "comments_test": {
+            "file": "comments_test_v4.jsonl",
+            "sha256": "43fc38e116785b3db365d64905adc1045fafc36752933ecd472df9a9b9f9d7be"
+          },
+          "posts_test": {
+            "file": "posts_test_v4.jsonl",
+            "sha256": "a476414e26c410c12a56596edab2ff362989a67193dd0d93e3794eb2c073770d"
+          },
+          "sarcasm_holdout": {
+            "file": "sarcasm_holdout_v4.jsonl",
+            "sha256": "954e46a6be5ddc7550d542cd147bf809aca687823ff0cf0fcefe60de84482d0a"
+          }
+        },
+        "heads": {
+          "T1": "zero-shot sentiment 3-class · sarcasm binary · intents multi-label",
+          "T2": "zero-shot relevance binary · post_type 3-class · brands free-text"
+        },
+        "train_sources": {
+          "zero-shot": "no training data"
+        },
+        "scored_ids_sha256": {
+          "comments_test": "066ed97e3098b02d2dd7df9430a0f7f36eb9589caf24704e4cfe883e1696de83",
+          "posts_test": "b8265e227e25ea638a8e9dcd0c5fd86245f60f2ac091657cc7a8002a5ef91c42",
+          "sarcasm_holdout": "7d43578e7314273de7e931e35c6068a39fcedb85a2194497b261674f05a15707"
+        },
+        "predictions_path": "results/predictions/google-gemma-4-31b-it--20260804T122638Z.jsonl",
+        "predictions_sha256": "4c34649e7ee3b453eb67d7d421e7a81b9ada7855d2237b809fe8a986c0536122",
+        "tokens": {
+          "prompt_tokens": 513148,
+          "completion_tokens": 15071
+        },
+        "backend": "local",
+        "max_tokens": 256,
+        "quantization": {
+          "load_in_4bit": true,
+          "bnb_4bit_quant_type": "nf4",
+          "bnb_4bit_use_double_quant": true,
+          "bnb_4bit_compute_dtype": "bfloat16"
+        },
+        "generation": {
+          "greedy": true,
+          "do_sample": false,
+          "batch_size": 1,
+          "chat_template": {
+            "add_generation_prompt": true,
+            "enable_thinking": false
+          }
+        },
+        "runtime": {
+          "gpu": "NVIDIA RTX A6000",
+          "gpu_count": 1,
+          "gpu_memory_total": "49140 MiB",
+          "driver": "550.127.08",
+          "cuda_runtime": "12.8",
+          "torch": "2.8.0+cu128",
+          "transformers": "5.14.1",
+          "bitsandbytes": "0.50.0",
+          "pod_id": "7jlx7ukhq5f2v2",
+          "weights_requested": "google/gemma-4-31b-it",
+          "revision_requested": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+          "model_revision": "842da3794eaa0b77d5f08bae87a17459d91ff475"
+        },
+        "spend_ledger": "results/spend_phase4.json",
+        "determinism_note": "our own pod: weights, kernels and tokenizer are all in this record's `runtime`, decoding is greedy and the prompts are byte-identical to the OpenRouter run of the same model (asserted before the weights load). This row is the G1d/G1e anchor (SPEC amendment 3.4 (2)); where it disagrees with the OpenRouter fp8 row, this one anchors and the disagreement is recorded, never averaged (ADR 3b-infra-and-precision §(d)).",
+        "g1b_slice_path": "results/g1b_slice_v4.json",
+        "g1b_slice_sha256": "6dc6be0132c12f568d90bbe8c59cf03dcb23a9b8c86ef884824379984cc1b67a"
+      },
+      "gates": [
+        {
+          "gate": "G1a",
+          "metric": "sentiment macro-F1 (comments_test)",
+          "values": {
+            "overall": 0.8970086900307784,
+            "other": 0.9125541125541125,
+            "ru": 0.9039501502169801,
+            "ua": 0.8963700877388227
+          },
+          "n": {
+            "overall": 400,
+            "ua": 248,
+            "other": 66,
+            "ru": 86
+          },
+          "gated_languages": [
+            "ua",
+            "ru"
+          ]
+        },
+        {
+          "gate": "G1b",
+          "metric": "sarcasm slice fix-rate (sarcasm_holdout)",
+          "value": null,
+          "n": {
+            "holdout_scored": 108,
+            "base_errs_sentiment": 10,
+            "base_errs_sarcasm": 37,
+            "base_errs_union": 38
+          },
+          "note": "the fix-rate needs a fine-tune (Phase 4); what this run contributes is the slice. Amendment 3.2 defines it as the rows this base model misclassifies and the holdout carries two labels, so all three counts are reported and the reading is the operator's call at the Phase 4 gate."
+        },
+        {
+          "gate": "G1c",
+          "metric": "intents micro-F1 (comments_test)",
+          "value": 0.7982954545454546,
+          "n": {
+            "overall": 400
+          }
+        },
+        {
+          "gate": "G1d",
+          "metric": "post_type macro-F1 (posts_test)",
+          "value": 0.9190105073725764,
+          "n": {
+            "overall": 250,
+            "promo": 175,
+            "launch": 31,
+            "other": 44
+          }
+        },
+        {
+          "gate": "G1d",
+          "metric": "relevance macro-F1 (posts_test)",
+          "value": 0.9414885317522235,
+          "n": {
+            "overall": 250,
+            "relevant": 26
+          },
+          "note": "second head of G1d; reported beside it and not gated (amendment 3.3)"
+        },
+        {
+          "gate": "G1e",
+          "metric": "brand extraction F1 (posts_test)",
+          "value": 0.9382716049382716,
+          "n": {
+            "overall": 250,
+            "posts_with_brands": 24,
+            "gold_entities": 39,
+            "predicted_entities": 42
+          }
+        }
+      ],
+      "diagnostics": {
+        "sarcasm_binary_macro_f1_comments_test": 0.8260958518745845,
+        "holdout_sentiment_macro_f1": {
+          "overall": 0.5242390905757243,
+          "other": 0.5684210526315789,
+          "ru": 0.8242424242424242,
+          "ua": 0.96875
+        },
+        "holdout_sarcasm_macro_f1": 0.599719523189422,
+        "holdout_sarcasm_detected": 56,
+        "base_errs_sentiment": 10,
+        "base_errs_sarcasm": 37,
+        "base_errs_union": 38,
+        "failures": [
+          {
+            "input": "comments_test",
+            "rows": 400,
+            "scored": 400,
+            "parse_failures": 0,
+            "api_failures": 0,
+            "generation_failures": 0,
+            "truncated": 0,
+            "reasons": {},
+            "failed_ids": []
+          },
+          {
+            "input": "posts_test",
+            "rows": 250,
+            "scored": 250,
+            "parse_failures": 0,
+            "api_failures": 0,
+            "generation_failures": 0,
+            "truncated": 0,
+            "reasons": {},
+            "failed_ids": []
+          },
+          {
+            "input": "sarcasm_holdout",
+            "rows": 108,
+            "scored": 108,
+            "parse_failures": 0,
+            "api_failures": 0,
+            "generation_failures": 0,
+            "truncated": 0,
+            "reasons": {},
+            "failed_ids": []
+          }
+        ],
+        "gate_anchor_valid": true,
+        "note": "diagnostics, not gates. base_errs_* are this base model's error sets on the frozen sarcasm holdout — the raw material of the G1b slice (amendment 3.2), reported for both labels because the amendment names neither."
+      }
     }
   ],
   "qwen/qwen3.6-27b": [

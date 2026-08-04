@@ -206,6 +206,15 @@ def test_a_v4_anchor_does_not_collide_with_the_phase_4_one():
     assert records.anchor(history, "v4")["timestamp"] == "2026-08-04T00:00:00+00:00"
 
 
-def test_a_version_nothing_has_scored_yet_is_a_refusal_that_names_it():
-    with pytest.raises(ValueError, match="test set v4 must be exactly one record, found 0"):
-        records.anchor(HISTORY, "v4")
+def test_both_anchors_live_in_the_one_file_and_the_version_tells_them_apart():
+    """The live check, now that 4.5h2's anchor is appended: two zero-shot own-pod rows
+    with valid gate anchoring, and neither shadows the other."""
+    v2, v4 = records.anchor(HISTORY, "v2"), records.anchor(HISTORY, "v4")
+    assert v2["timestamp"] != v4["timestamp"]
+    assert v4["config"]["testset_version"] == "v4"
+    assert v2["config"]["g1b_slice_path"] != v4["config"]["g1b_slice_path"]
+
+
+def test_a_version_nothing_has_scored_is_a_refusal_that_names_it():
+    with pytest.raises(ValueError, match="test set v9 must be exactly one record, found 0"):
+        records.anchor(HISTORY, "v9")

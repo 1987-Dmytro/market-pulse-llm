@@ -1,0 +1,50 @@
+{
+  "derived_by": "scripts/gate_bars.py",
+  "testset_version": "v4",
+  "rule": "SPEC amendment 3.5: G1a anchor + 5 pp with per-language floors at anchor - 2 pp, G1b >= 60% of the slice with <= 2 pp macro-F1 loss, G1c anchor + 5 pp, G1d/G1e anchor - 1 pp (no-regression). No number typed.",
+  "anchor": {
+    "model": "google/gemma-4-31b-it",
+    "timestamp": "2026-08-04T12:26:38+00:00",
+    "commit": "4714682797f9277b84701560178cce541e021134",
+    "prompt_revision_sha256": {
+      "T1": "495b43d1361d0e4f5f7a186eebb971f4dc3ed9f8afd128f539ba0f6a8ffc2a19",
+      "T2": "6a7e66efb3eb4091b8d787e38213f3b1b0c9115e78d2b41fb9cc6bcaab3a54b4"
+    },
+    "g1b_slice_path": "results/g1b_slice_v4.json",
+    "g1b_slice_sha256": "6dc6be0132c12f568d90bbe8c59cf03dcb23a9b8c86ef884824379984cc1b67a"
+  },
+  "anchor_values": {
+    "G1a": {
+      "overall": 0.8970086900307784,
+      "other": 0.9125541125541125,
+      "ru": 0.9039501502169801,
+      "ua": 0.8963700877388227
+    },
+    "G1c": 0.7982954545454546,
+    "G1d": 0.9190105073725764,
+    "G1e": 0.9382716049382716
+  },
+  "bars": {
+    "G1a": {
+      "min": 0.94700869,
+      "floors": {
+        "ua": 0.8763700877,
+        "ru": 0.8839501502
+      }
+    },
+    "G1b": {
+      "min_fixed": 23,
+      "n": 38,
+      "max_macro_f1_drop": 0.02
+    },
+    "G1c": {
+      "min": 0.8482954545
+    },
+    "G1d": {
+      "min": 0.9090105074
+    },
+    "G1e": {
+      "min": 0.9282716049
+    }
+  }
+}

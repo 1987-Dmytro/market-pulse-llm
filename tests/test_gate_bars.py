@@ -28,5 +28,19 @@ def test_the_bars_record_carries_the_anchor_it_was_derived_from(tmp_path):
 
 
 def test_a_version_with_no_anchor_refuses_instead_of_falling_back():
-    with pytest.raises(SystemExit, match="test set v4 must be exactly one record, found 0"):
-        bars.main(["--version", "v4"])
+    with pytest.raises(SystemExit, match="test set v9 must be exactly one record, found 0"):
+        bars.main(["--version", "v9"])
+
+
+def test_the_v4_bars_are_derived_from_the_v4_anchor_and_its_own_slice(tmp_path):
+    """Both anchors are in one file now. Scoring a v4 arm against Phase 4's bars would
+    compare a six-class head to a five-class baseline and call the difference a fine-tune."""
+    out = tmp_path / "v4.json"
+    assert bars.main(["--version", "v4", "--out", str(out)]) == 0
+    record = json.loads(out.read_text(encoding="utf-8"))
+    assert record["anchor"]["g1b_slice_path"] == "results/g1b_slice_v4.json"
+    assert record["anchor"]["prompt_revision_sha256"], "the v4 anchor names its rendering"
+    committed = json.loads(
+        (REPO_ROOT / "results" / "gate_bars_45h.json").read_text(encoding="utf-8")
+    )
+    assert committed["bars"] == record["bars"], "the committed bars are re-derivable"
