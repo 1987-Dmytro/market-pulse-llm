@@ -1,0 +1,4418 @@
+{
+  "generated_at": "2026-08-05T20:06:57+00:00",
+  "ledger_rebuilt_at": "2026-08-05T20:18:19+00:00",
+  "authorised": "operator 2026-08-04 (themes) / 2026-08-05 (coverage target), SPEC 3.11 (4)",
+  "themes": {
+    "mothers_kids": [
+      "мами",
+      "материнство",
+      "мама і малюк",
+      "дітки"
+    ],
+    "healthy_lifestyle": [
+      "здорове харчування",
+      "здоровий спосіб життя",
+      "ЗОЖ",
+      "нутриціологія"
+    ],
+    "baby_food": [
+      "дитяче харчування",
+      "прикорм",
+      "дитяче меню"
+    ]
+  },
+  "search_limit_per_query": 15,
+  "post_sample": 50,
+  "window_days": 28,
+  "registry": {
+    "path": "config/registry.yaml",
+    "rows": [
+      {
+        "title": "Сільпо",
+        "handle": "@silposilpo",
+        "subscribers": 19743,
+        "discussion_group": false,
+        "posts_per_week": 9.5,
+        "language_mix": {
+          "ua": 1.0
+        },
+        "last_post": "2026-08-05T08:25:03+00:00",
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "posts-only",
+        "reasons": [
+          "no blue check — confirm this is the official channel",
+          "comments disabled (no linked discussion group)"
+        ],
+        "found_by": [
+          "registry"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 38,
+          "posts_per_week": 9.5,
+          "last_post": "2026-08-05T08:25:03+00:00",
+          "n_texts": 38,
+          "language_mix": {
+            "ua": 1.0
+          }
+        },
+        "error": null,
+        "source_id": "silpo"
+      },
+      {
+        "title": "АТБ-МАРКЕТ (офіційна сторінка)",
+        "handle": "@atb_market_official",
+        "subscribers": 41776,
+        "discussion_group": false,
+        "posts_per_week": 6.5,
+        "language_mix": {
+          "ua": 1.0
+        },
+        "last_post": "2026-08-05T12:51:44+00:00",
+        "telegram_verified": true,
+        "broadcast": true,
+        "verdict": "posts-only",
+        "reasons": [
+          "comments disabled (no linked discussion group)"
+        ],
+        "found_by": [
+          "registry"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 26,
+          "posts_per_week": 6.5,
+          "last_post": "2026-08-05T12:51:44+00:00",
+          "n_texts": 4,
+          "language_mix": {
+            "ua": 1.0
+          }
+        },
+        "error": null,
+        "source_id": "atb"
+      },
+      {
+        "title": "VARUS",
+        "handle": "@VARUS_channel",
+        "subscribers": 103197,
+        "discussion_group": true,
+        "posts_per_week": 37.0,
+        "language_mix": {
+          "other": 0.09,
+          "ua": 0.91
+        },
+        "last_post": "2026-08-05T15:00:30+00:00",
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "usable",
+        "reasons": [
+          "no blue check — confirm this is the official channel"
+        ],
+        "found_by": [
+          "registry"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 148,
+          "posts_per_week": 37.0,
+          "last_post": "2026-08-05T15:00:30+00:00",
+          "n_texts": 116,
+          "language_mix": {
+            "other": 0.09,
+            "ua": 0.91
+          }
+        },
+        "error": null,
+        "source_id": "varus"
+      },
+      {
+        "title": "MSUa | Акції та знижки супермаркетів | MarketSaleUa",
+        "handle": "@msuaaaa",
+        "subscribers": 13656,
+        "discussion_group": true,
+        "posts_per_week": 15.0,
+        "language_mix": {
+          "other": 0.03,
+          "ua": 0.97
+        },
+        "last_post": "2026-08-05T10:43:05+00:00",
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "usable",
+        "reasons": [
+          "no blue check — confirm this is the official channel"
+        ],
+        "found_by": [
+          "registry"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 60,
+          "posts_per_week": 15.0,
+          "last_post": "2026-08-05T10:43:05+00:00",
+          "n_texts": 60,
+          "language_mix": {
+            "other": 0.03,
+            "ua": 0.97
+          }
+        },
+        "error": null,
+        "source_id": "msuaaaa"
+      }
+    ],
+    "note": "Subscriber counts read live at this run, not from the registry file — the registry stores no numbers (config/registry.yaml, §Sources). These are the channels the loop launches on; the file is not edited by this script."
+  },
+  "candidates": [
+    {
+      "title": "Mamix🥼",
+      "handle": "@itsmamix",
+      "subscribers": 280895,
+      "discussion_group": true,
+      "posts_per_week": 0.0,
+      "language_mix": {},
+      "last_post": null,
+      "telegram_verified": true,
+      "broadcast": true,
+      "verdict": "usable",
+      "reasons": [],
+      "found_by": [
+        "mothers_kids:мами"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 0,
+        "posts_per_week": 0.0,
+        "last_post": null,
+        "n_texts": 0,
+        "language_mix": {}
+      },
+      "error": null
+    },
+    {
+      "title": "Алан Мамиев ИНТЕНСИВ",
+      "handle": "@intensiv_Mamiev",
+      "subscribers": 29623,
+      "discussion_group": false,
+      "posts_per_week": 0.25,
+      "language_mix": {
+        "ru": 1.0
+      },
+      "last_post": "2026-07-24T07:12:46+00:00",
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "posts-only",
+      "reasons": [
+        "no blue check — confirm this is the official channel",
+        "comments disabled (no linked discussion group)"
+      ],
+      "found_by": [
+        "mothers_kids:мами"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 1,
+        "posts_per_week": 0.25,
+        "last_post": "2026-07-24T07:12:46+00:00",
+        "n_texts": 1,
+        "language_mix": {
+          "ru": 1.0
+        }
+      },
+      "error": null
+    },
+    {
+      "title": "🇺🇦Мами з малюками🇺🇦",
+      "handle": "@Mambabyua",
+      "subscribers": 19434,
+      "discussion_group": false,
+      "posts_per_week": 280.75,
+      "language_mix": {
+        "en": 0.02,
+        "other": 0.04,
+        "ru": 0.02,
+        "ua": 0.92
+      },
+      "last_post": "2026-08-05T20:04:14+00:00",
+      "telegram_verified": false,
+      "broadcast": false,
+      "verdict": "posts-only",
+      "reasons": [
+        "no blue check — confirm this is the official channel",
+        "supergroup, not a broadcast channel — confirm this is the right entity",
+        "comments disabled (no linked discussion group)"
+      ],
+      "found_by": [
+        "mothers_kids:мами"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": true,
+        "n_posts": 1123,
+        "posts_per_week": 280.75,
+        "last_post": "2026-08-05T20:04:14+00:00",
+        "n_texts": 1112,
+        "language_mix": {
+          "en": 0.02,
+          "other": 0.04,
+          "ru": 0.02,
+          "ua": 0.92
+        }
+      },
+      "error": null
+    },
+    {
+      "title": "Витамины из Германии «Мамина полочка»",
+      "handle": "@apte_ka",
+      "subscribers": 2177,
+      "discussion_group": false,
+      "posts_per_week": 0.0,
+      "language_mix": {},
+      "last_post": null,
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "posts-only",
+      "reasons": [
+        "no blue check — confirm this is the official channel",
+        "comments disabled (no linked discussion group)"
+      ],
+      "found_by": [
+        "mothers_kids:мами"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 0,
+        "posts_per_week": 0.0,
+        "last_post": null,
+        "n_texts": 0,
+        "language_mix": {}
+      },
+      "error": null
+    },
+    {
+      "title": "MAMI PEKER 🇹🇷",
+      "handle": "@MAMIPEKER1",
+      "subscribers": 3869,
+      "discussion_group": false,
+      "posts_per_week": 37.5,
+      "language_mix": {
+        "en": 1.0
+      },
+      "last_post": "2026-08-05T18:31:37+00:00",
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "posts-only",
+      "reasons": [
+        "no blue check — confirm this is the official channel",
+        "comments disabled (no linked discussion group)"
+      ],
+      "found_by": [
+        "mothers_kids:мами"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 150,
+        "posts_per_week": 37.5,
+        "last_post": "2026-08-05T18:31:37+00:00",
+        "n_texts": 150,
+        "language_mix": {
+          "en": 1.0
+        }
+      },
+      "error": null
+    },
+    {
+      "title": "Ребёнок маминой подруги!",
+      "handle": "@offspringrus",
+      "subscribers": 3276,
+      "discussion_group": true,
+      "posts_per_week": 4.25,
+      "language_mix": {
+        "ru": 1.0
+      },
+      "last_post": "2026-08-05T11:29:02+00:00",
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "usable",
+      "reasons": [
+        "no blue check — confirm this is the official channel"
+      ],
+      "found_by": [
+        "mothers_kids:мами"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 17,
+        "posts_per_week": 4.25,
+        "last_post": "2026-08-05T11:29:02+00:00",
+        "n_texts": 16,
+        "language_mix": {
+          "ru": 1.0
+        }
+      },
+      "error": null
+    },
+    {
+      "title": "Mami",
+      "handle": "@Mamit",
+      "subscribers": 209,
+      "discussion_group": false,
+      "posts_per_week": 0.0,
+      "language_mix": {},
+      "last_post": null,
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "posts-only",
+      "reasons": [
+        "no blue check — confirm this is the official channel",
+        "comments disabled (no linked discussion group)"
+      ],
+      "found_by": [
+        "mothers_kids:мами"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 0,
+        "posts_per_week": 0.0,
+        "last_post": null,
+        "n_texts": 0,
+        "language_mix": {}
+      },
+      "error": null
+    },
+    {
+      "title": "-خــيال ✿",
+      "handle": "@Mamyv",
+      "subscribers": 33,
+      "discussion_group": false,
+      "posts_per_week": 0.0,
+      "language_mix": {},
+      "last_post": null,
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "posts-only",
+      "reasons": [
+        "no blue check — confirm this is the official channel",
+        "comments disabled (no linked discussion group)"
+      ],
+      "found_by": [
+        "mothers_kids:мами"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 0,
+        "posts_per_week": 0.0,
+        "last_post": null,
+        "n_texts": 0,
+        "language_mix": {}
+      },
+      "error": null
+    },
+    {
+      "title": "Третьякова Елена Блогер 👧 Материнство-Lifestyle-Beauty",
+      "handle": "@tretyakovaele",
+      "subscribers": 244639,
+      "discussion_group": true,
+      "posts_per_week": 0.25,
+      "language_mix": {
+        "ru": 1.0
+      },
+      "last_post": "2026-07-16T13:52:03+00:00",
+      "telegram_verified": true,
+      "broadcast": true,
+      "verdict": "usable",
+      "reasons": [],
+      "found_by": [
+        "mothers_kids:материнство"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 1,
+        "posts_per_week": 0.25,
+        "last_post": "2026-07-16T13:52:03+00:00",
+        "n_texts": 1,
+        "language_mix": {
+          "ru": 1.0
+        }
+      },
+      "error": null
+    },
+    {
+      "title": "Екатерина Кукса. Материнство в радость",
+      "handle": "@kuksa2022",
+      "subscribers": 7075,
+      "discussion_group": true,
+      "posts_per_week": 0.5,
+      "language_mix": {
+        "ru": 1.0
+      },
+      "last_post": "2026-08-05T10:30:45+00:00",
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "usable",
+      "reasons": [
+        "no blue check — confirm this is the official channel"
+      ],
+      "found_by": [
+        "mothers_kids:материнство"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 2,
+        "posts_per_week": 0.5,
+        "last_post": "2026-08-05T10:30:45+00:00",
+        "n_texts": 2,
+        "language_mix": {
+          "ru": 1.0
+        }
+      },
+      "error": null
+    },
+    {
+      "title": "Регинаграмм | Материнство , путешествия",
+      "handle": "@regina_tatlybaeva",
+      "subscribers": 5389,
+      "discussion_group": true,
+      "posts_per_week": 0.0,
+      "language_mix": {},
+      "last_post": null,
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "usable",
+      "reasons": [
+        "no blue check — confirm this is the official channel"
+      ],
+      "found_by": [
+        "mothers_kids:материнство"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 0,
+        "posts_per_week": 0.0,
+        "last_post": null,
+        "n_texts": 0,
+        "language_mix": {}
+      },
+      "error": null
+    },
+    {
+      "title": "Материнство в кадре",
+      "handle": "@katyal55",
+      "subscribers": 15025,
+      "discussion_group": true,
+      "posts_per_week": 9.25,
+      "language_mix": {
+        "ru": 1.0
+      },
+      "last_post": "2026-08-05T07:15:03+00:00",
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "usable",
+      "reasons": [
+        "no blue check — confirm this is the official channel"
+      ],
+      "found_by": [
+        "mothers_kids:материнство"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 37,
+        "posts_per_week": 9.25,
+        "last_post": "2026-08-05T07:15:03+00:00",
+        "n_texts": 35,
+        "language_mix": {
+          "ru": 1.0
+        }
+      },
+      "error": null
+    },
+    {
+      "title": "София Стец | про материнство",
+      "handle": "@prostetsofa",
+      "subscribers": 3432,
+      "discussion_group": true,
+      "posts_per_week": 0.0,
+      "language_mix": {},
+      "last_post": null,
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "usable",
+      "reasons": [
+        "no blue check — confirm this is the official channel"
+      ],
+      "found_by": [
+        "mothers_kids:материнство"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 0,
+        "posts_per_week": 0.0,
+        "last_post": null,
+        "n_texts": 0,
+        "language_mix": {}
+      },
+      "error": null
+    },
+    {
+      "title": "Уютное материнство",
+      "handle": "@cozymotherhood",
+      "subscribers": 1440,
+      "discussion_group": true,
+      "posts_per_week": 0.0,
+      "language_mix": {},
+      "last_post": null,
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "usable",
+      "reasons": [
+        "no blue check — confirm this is the official channel"
+      ],
+      "found_by": [
+        "mothers_kids:материнство"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 0,
+        "posts_per_week": 0.0,
+        "last_post": null,
+        "n_texts": 0,
+        "language_mix": {}
+      },
+      "error": null
+    },
+    {
+      "title": "Интуитивное Материнство",
+      "handle": "@Pro_Detyintumama",
+      "subscribers": 2664,
+      "discussion_group": true,
+      "posts_per_week": 1.0,
+      "language_mix": {
+        "ru": 1.0
+      },
+      "last_post": "2026-08-05T12:07:57+00:00",
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "usable",
+      "reasons": [
+        "no blue check — confirm this is the official channel"
+      ],
+      "found_by": [
+        "mothers_kids:материнство"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 4,
+        "posts_per_week": 1.0,
+        "last_post": "2026-08-05T12:07:57+00:00",
+        "n_texts": 3,
+        "language_mix": {
+          "ru": 1.0
+        }
+      },
+      "error": null
+    },
+    {
+      "title": "Материнство & Саморазвитие",
+      "handle": "@materinstvoe",
+      "subscribers": 202,
+      "discussion_group": true,
+      "posts_per_week": 5.75,
+      "language_mix": {
+        "ru": 1.0
+      },
+      "last_post": "2026-08-04T05:50:37+00:00",
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "usable",
+      "reasons": [
+        "no blue check — confirm this is the official channel"
+      ],
+      "found_by": [
+        "mothers_kids:материнство"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 23,
+        "posts_per_week": 5.75,
+        "last_post": "2026-08-04T05:50:37+00:00",
+        "n_texts": 21,
+        "language_mix": {
+          "ru": 1.0
+        }
+      },
+      "error": null
+    },
+    {
+      "title": "Материнство без Фильтров",
+      "handle": "@materinstvoi",
+      "subscribers": 37,
+      "discussion_group": true,
+      "posts_per_week": 0.0,
+      "language_mix": {},
+      "last_post": null,
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "usable",
+      "reasons": [
+        "no blue check — confirm this is the official channel"
+      ],
+      "found_by": [
+        "mothers_kids:материнство"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 0,
+        "posts_per_week": 0.0,
+        "last_post": null,
+        "n_texts": 0,
+        "language_mix": {}
+      },
+      "error": null
+    },
+    {
+      "title": "Мама і малюк",
+      "handle": "@mamaimaliuk",
+      "subscribers": 10,
+      "discussion_group": false,
+      "posts_per_week": 2.0,
+      "language_mix": {
+        "ua": 1.0
+      },
+      "last_post": "2026-08-05T12:35:03+00:00",
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "posts-only",
+      "reasons": [
+        "no blue check — confirm this is the official channel",
+        "comments disabled (no linked discussion group)"
+      ],
+      "found_by": [
+        "mothers_kids:мама і малюк"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 8,
+        "posts_per_week": 2.0,
+        "last_post": "2026-08-05T12:35:03+00:00",
+        "n_texts": 8,
+        "language_mix": {
+          "ua": 1.0
+        }
+      },
+      "error": null
+    },
+    {
+      "title": "Мама в ресурсі і виспана ✨ Все про сон малюка",
+      "handle": "@mamavresursi",
+      "subscribers": 533,
+      "discussion_group": true,
+      "posts_per_week": 6.0,
+      "language_mix": {
+        "ua": 1.0
+      },
+      "last_post": "2026-08-05T11:58:04+00:00",
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "usable",
+      "reasons": [
+        "no blue check — confirm this is the official channel"
+      ],
+      "found_by": [
+        "mothers_kids:мама і малюк"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 24,
+        "posts_per_week": 6.0,
+        "last_post": "2026-08-05T11:58:04+00:00",
+        "n_texts": 23,
+        "language_mix": {
+          "ua": 1.0
+        }
+      },
+      "error": null
+    },
+    {
+      "title": "Мама і малюк | 🤍чат підтримки🤍",
+      "handle": "@mama_i_malysh_chat",
+      "subscribers": 2,
+      "discussion_group": true,
+      "posts_per_week": 0.0,
+      "language_mix": {},
+      "last_post": null,
+      "telegram_verified": false,
+      "broadcast": false,
+      "verdict": "usable",
+      "reasons": [
+        "no blue check — confirm this is the official channel",
+        "supergroup, not a broadcast channel — confirm this is the right entity",
+        "linked group present but no comments on the sampled posts"
+      ],
+      "found_by": [
+        "mothers_kids:мама і малюк"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 0,
+        "posts_per_week": 0.0,
+        "last_post": null,
+        "n_texts": 0,
+        "language_mix": {}
+      },
+      "error": null
+    },
+    {
+      "title": "Мама знає (знахідки для мам і малюків)",
+      "handle": "@mamaknows_ua",
+      "subscribers": 1,
+      "discussion_group": false,
+      "posts_per_week": 0.0,
+      "language_mix": {},
+      "last_post": null,
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "posts-only",
+      "reasons": [
+        "no blue check — confirm this is the official channel",
+        "comments disabled (no linked discussion group)"
+      ],
+      "found_by": [
+        "mothers_kids:мама і малюк"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 0,
+        "posts_per_week": 0.0,
+        "last_post": null,
+        "n_texts": 0,
+        "language_mix": {}
+      },
+      "error": null
+    },
+    {
+      "title": "Малюкам та їх мамам",
+      "handle": "@rozvytokmaljat",
+      "subscribers": 0,
+      "discussion_group": false,
+      "posts_per_week": 0.0,
+      "language_mix": {},
+      "last_post": null,
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "posts-only",
+      "reasons": [
+        "no blue check — confirm this is the official channel",
+        "no posts in the sampled window",
+        "comments disabled (no linked discussion group)"
+      ],
+      "found_by": [
+        "mothers_kids:мама і малюк"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 0,
+        "posts_per_week": 0.0,
+        "last_post": null,
+        "n_texts": 0,
+        "language_mix": {}
+      },
+      "error": null
+    },
+    {
+      "title": "РАСтемо разом: нейродивовижні дітки",
+      "handle": "@rastemorazom",
+      "subscribers": 41,
+      "discussion_group": false,
+      "posts_per_week": 31.75,
+      "language_mix": {
+        "en": 0.05,
+        "other": 0.07,
+        "ua": 0.88
+      },
+      "last_post": "2026-08-02T18:29:40+00:00",
+      "telegram_verified": false,
+      "broadcast": false,
+      "verdict": "posts-only",
+      "reasons": [
+        "no blue check — confirm this is the official channel",
+        "supergroup, not a broadcast channel — confirm this is the right entity",
+        "comments disabled (no linked discussion group)"
+      ],
+      "found_by": [
+        "mothers_kids:дітки"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 127,
+        "posts_per_week": 31.75,
+        "last_post": "2026-08-02T18:29:40+00:00",
+        "n_texts": 101,
+        "language_mix": {
+          "en": 0.05,
+          "other": 0.07,
+          "ua": 0.88
+        }
+      },
+      "error": null
+    },
+    {
+      "title": "Дітки Адо",
+      "handle": "@naimadailychat",
+      "subscribers": 19,
+      "discussion_group": true,
+      "posts_per_week": 0.0,
+      "language_mix": {},
+      "last_post": null,
+      "telegram_verified": false,
+      "broadcast": false,
+      "verdict": "usable",
+      "reasons": [
+        "no blue check — confirm this is the official channel",
+        "supergroup, not a broadcast channel — confirm this is the right entity"
+      ],
+      "found_by": [
+        "mothers_kids:дітки"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 0,
+        "posts_per_week": 0.0,
+        "last_post": null,
+        "n_texts": 0,
+        "language_mix": {}
+      },
+      "error": null
+    },
+    {
+      "title": "Стильні дітки 7км | Дитячий одяг",
+      "handle": "@justkids7km",
+      "subscribers": 261,
+      "discussion_group": false,
+      "posts_per_week": 17.25,
+      "language_mix": {
+        "other": 0.03,
+        "ua": 0.97
+      },
+      "last_post": "2026-08-01T07:02:27+00:00",
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "posts-only",
+      "reasons": [
+        "no blue check — confirm this is the official channel",
+        "comments disabled (no linked discussion group)"
+      ],
+      "found_by": [
+        "mothers_kids:дітки"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 69,
+        "posts_per_week": 17.25,
+        "last_post": "2026-08-01T07:02:27+00:00",
+        "n_texts": 38,
+        "language_mix": {
+          "other": 0.03,
+          "ua": 0.97
+        }
+      },
+      "error": null
+    },
+    {
+      "title": "Розумні дітки.UA",
+      "handle": "@rozymniditkiua",
+      "subscribers": 149,
+      "discussion_group": false,
+      "posts_per_week": 0.0,
+      "language_mix": {},
+      "last_post": null,
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "posts-only",
+      "reasons": [
+        "no blue check — confirm this is the official channel",
+        "comments disabled (no linked discussion group)"
+      ],
+      "found_by": [
+        "mothers_kids:дітки"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 0,
+        "posts_per_week": 0.0,
+        "last_post": null,
+        "n_texts": 0,
+        "language_mix": {}
+      },
+      "error": null
+    },
+    {
+      "title": "Дітки (танці)",
+      "handle": "@juniors1kids",
+      "subscribers": 19,
+      "discussion_group": false,
+      "posts_per_week": 0.0,
+      "language_mix": {},
+      "last_post": null,
+      "telegram_verified": false,
+      "broadcast": false,
+      "verdict": "posts-only",
+      "reasons": [
+        "no blue check — confirm this is the official channel",
+        "supergroup, not a broadcast channel — confirm this is the right entity",
+        "comments disabled (no linked discussion group)"
+      ],
+      "found_by": [
+        "mothers_kids:дітки"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 0,
+        "posts_per_week": 0.0,
+        "last_post": null,
+        "n_texts": 0,
+        "language_mix": {}
+      },
+      "error": null
+    },
+    {
+      "title": "Українські дітки - Дітцінген Chat",
+      "handle": "@ukrditkuditzingen",
+      "subscribers": 28,
+      "discussion_group": true,
+      "posts_per_week": 2.5,
+      "language_mix": {
+        "other": 0.3,
+        "ru": 0.7
+      },
+      "last_post": "2026-08-05T19:03:55+00:00",
+      "telegram_verified": false,
+      "broadcast": false,
+      "verdict": "usable",
+      "reasons": [
+        "no blue check — confirm this is the official channel",
+        "supergroup, not a broadcast channel — confirm this is the right entity",
+        "linked group present but no comments on the sampled posts"
+      ],
+      "found_by": [
+        "mothers_kids:дітки"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 10,
+        "posts_per_week": 2.5,
+        "last_post": "2026-08-05T19:03:55+00:00",
+        "n_texts": 10,
+        "language_mix": {
+          "other": 0.3,
+          "ru": 0.7
+        }
+      },
+      "error": null
+    },
+    {
+      "title": "СОНЯЧНІ ДІТКИ 🫶",
+      "handle": "@CarpathianTrail000",
+      "subscribers": 26,
+      "discussion_group": false,
+      "posts_per_week": 213.0,
+      "language_mix": {
+        "en": 0.02,
+        "other": 0.48,
+        "ru": 0.17,
+        "ua": 0.34
+      },
+      "last_post": "2026-08-05T16:02:02+00:00",
+      "telegram_verified": false,
+      "broadcast": false,
+      "verdict": "posts-only",
+      "reasons": [
+        "no blue check — confirm this is the official channel",
+        "supergroup, not a broadcast channel — confirm this is the right entity",
+        "comments disabled (no linked discussion group)"
+      ],
+      "found_by": [
+        "mothers_kids:дітки"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 852,
+        "posts_per_week": 213.0,
+        "last_post": "2026-08-05T16:02:02+00:00",
+        "n_texts": 714,
+        "language_mix": {
+          "en": 0.02,
+          "other": 0.48,
+          "ru": 0.17,
+          "ua": 0.34
+        }
+      },
+      "error": null
+    },
+    {
+      "title": "Здорове харчування🥦🍎🍊",
+      "handle": "@zdoroviharchi",
+      "subscribers": 632,
+      "discussion_group": true,
+      "posts_per_week": 0.0,
+      "language_mix": {},
+      "last_post": null,
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "usable",
+      "reasons": [
+        "no blue check — confirm this is the official channel"
+      ],
+      "found_by": [
+        "healthy_lifestyle:здорове харчування"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 0,
+        "posts_per_week": 0.0,
+        "last_post": null,
+        "n_texts": 0,
+        "language_mix": {}
+      },
+      "error": null
+    },
+    {
+      "title": "Здорове харчування разом з @nk_1802",
+      "handle": "@healthy_food_nk",
+      "subscribers": 136,
+      "discussion_group": true,
+      "posts_per_week": 0.0,
+      "language_mix": {},
+      "last_post": null,
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "usable",
+      "reasons": [
+        "no blue check — confirm this is the official channel"
+      ],
+      "found_by": [
+        "healthy_lifestyle:здорове харчування"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 0,
+        "posts_per_week": 0.0,
+        "last_post": null,
+        "n_texts": 0,
+        "language_mix": {}
+      },
+      "error": null
+    },
+    {
+      "title": "ЗДОРОВЕ ХАРЧУВАННЯ🥑🥦",
+      "handle": "@tkachenko_health",
+      "subscribers": 40,
+      "discussion_group": true,
+      "posts_per_week": 1.0,
+      "language_mix": {
+        "ua": 1.0
+      },
+      "last_post": "2026-07-24T17:50:04+00:00",
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "usable",
+      "reasons": [
+        "no blue check — confirm this is the official channel"
+      ],
+      "found_by": [
+        "healthy_lifestyle:здорове харчування"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 4,
+        "posts_per_week": 1.0,
+        "last_post": "2026-07-24T17:50:04+00:00",
+        "n_texts": 2,
+        "language_mix": {
+          "ua": 1.0
+        }
+      },
+      "error": null
+    },
+    {
+      "title": "Здорове харчування| Софія Ігорівна",
+      "handle": "@useful_healthy_fitness_menu",
+      "subscribers": 1430,
+      "discussion_group": true,
+      "posts_per_week": 3.75,
+      "language_mix": {
+        "ua": 1.0
+      },
+      "last_post": "2026-08-02T15:19:43+00:00",
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "usable",
+      "reasons": [
+        "no blue check — confirm this is the official channel"
+      ],
+      "found_by": [
+        "healthy_lifestyle:здорове харчування"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 15,
+        "posts_per_week": 3.75,
+        "last_post": "2026-08-02T15:19:43+00:00",
+        "n_texts": 8,
+        "language_mix": {
+          "ua": 1.0
+        }
+      },
+      "error": null
+    },
+    {
+      "title": "«Здорове харчування.Збалансована тарілка.»",
+      "handle": "@miykanal2026",
+      "subscribers": 62,
+      "discussion_group": false,
+      "posts_per_week": 0.0,
+      "language_mix": {},
+      "last_post": null,
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "posts-only",
+      "reasons": [
+        "no blue check — confirm this is the official channel",
+        "comments disabled (no linked discussion group)"
+      ],
+      "found_by": [
+        "healthy_lifestyle:здорове харчування"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 0,
+        "posts_per_week": 0.0,
+        "last_post": null,
+        "n_texts": 0,
+        "language_mix": {}
+      },
+      "error": null
+    },
+    {
+      "title": "СМАЙЛІ | Онлайн тренування | Здорове харчування",
+      "handle": "@smiley_com_ua",
+      "subscribers": 12,
+      "discussion_group": true,
+      "posts_per_week": 0.0,
+      "language_mix": {},
+      "last_post": null,
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "usable",
+      "reasons": [
+        "no blue check — confirm this is the official channel"
+      ],
+      "found_by": [
+        "healthy_lifestyle:здорове харчування"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 0,
+        "posts_per_week": 0.0,
+        "last_post": null,
+        "n_texts": 0,
+        "language_mix": {}
+      },
+      "error": null
+    },
+    {
+      "title": "За Здоровий Спосіб Життя ХНЕУ ім. С. Кузнеця",
+      "handle": "@hneusport",
+      "subscribers": 479,
+      "discussion_group": false,
+      "posts_per_week": 0.25,
+      "language_mix": {
+        "ua": 1.0
+      },
+      "last_post": "2026-07-10T08:56:34+00:00",
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "posts-only",
+      "reasons": [
+        "no blue check — confirm this is the official channel",
+        "comments disabled (no linked discussion group)"
+      ],
+      "found_by": [
+        "healthy_lifestyle:здоровий спосіб життя"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 1,
+        "posts_per_week": 0.25,
+        "last_post": "2026-07-10T08:56:34+00:00",
+        "n_texts": 1,
+        "language_mix": {
+          "ua": 1.0
+        }
+      },
+      "error": null
+    },
+    {
+      "title": "💜 PRO Здоровий спосіб життя",
+      "handle": "@pro_zsg",
+      "subscribers": 109,
+      "discussion_group": true,
+      "posts_per_week": 16.25,
+      "language_mix": {
+        "en": 0.06,
+        "other": 0.04,
+        "ua": 0.9
+      },
+      "last_post": "2026-08-05T06:42:09+00:00",
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "usable",
+      "reasons": [
+        "no blue check — confirm this is the official channel",
+        "linked group present but no comments on the sampled posts"
+      ],
+      "found_by": [
+        "healthy_lifestyle:здоровий спосіб життя"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 65,
+        "posts_per_week": 16.25,
+        "last_post": "2026-08-05T06:42:09+00:00",
+        "n_texts": 49,
+        "language_mix": {
+          "en": 0.06,
+          "other": 0.04,
+          "ua": 0.9
+        }
+      },
+      "error": null
+    },
+    {
+      "title": "Спортивна Січ: Здоровий спосіб життя💪",
+      "handle": "@sportivniydietolog",
+      "subscribers": 3896,
+      "discussion_group": false,
+      "posts_per_week": 0.0,
+      "language_mix": {},
+      "last_post": null,
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "posts-only",
+      "reasons": [
+        "no blue check — confirm this is the official channel",
+        "comments disabled (no linked discussion group)"
+      ],
+      "found_by": [
+        "healthy_lifestyle:здоровий спосіб життя"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 0,
+        "posts_per_week": 0.0,
+        "last_post": null,
+        "n_texts": 0,
+        "language_mix": {}
+      },
+      "error": null
+    },
+    {
+      "title": "Я та здоровий спосіб життя.",
+      "handle": "@everysunday6am",
+      "subscribers": 128,
+      "discussion_group": true,
+      "posts_per_week": 0.0,
+      "language_mix": {},
+      "last_post": null,
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "usable",
+      "reasons": [
+        "no blue check — confirm this is the official channel"
+      ],
+      "found_by": [
+        "healthy_lifestyle:здоровий спосіб життя"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 0,
+        "posts_per_week": 0.0,
+        "last_post": null,
+        "n_texts": 0,
+        "language_mix": {}
+      },
+      "error": null
+    },
+    {
+      "title": "ЗДОРОВИЙ СПОСІБ ЖИТТЯ",
+      "handle": "@ZOZHanytye",
+      "subscribers": 36,
+      "discussion_group": true,
+      "posts_per_week": 0.0,
+      "language_mix": {},
+      "last_post": null,
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "usable",
+      "reasons": [
+        "no blue check — confirm this is the official channel"
+      ],
+      "found_by": [
+        "healthy_lifestyle:здоровий спосіб життя"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 0,
+        "posts_per_week": 0.0,
+        "last_post": null,
+        "n_texts": 0,
+        "language_mix": {}
+      },
+      "error": null
+    },
+    {
+      "title": "Здоровий спосіб життя з Наталі",
+      "handle": "@zdrowysposobzyciaznatali",
+      "subscribers": 25,
+      "discussion_group": true,
+      "posts_per_week": 0.0,
+      "language_mix": {},
+      "last_post": null,
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "usable",
+      "reasons": [
+        "no blue check — confirm this is the official channel"
+      ],
+      "found_by": [
+        "healthy_lifestyle:здоровий спосіб життя"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 0,
+        "posts_per_week": 0.0,
+        "last_post": null,
+        "n_texts": 0,
+        "language_mix": {}
+      },
+      "error": null
+    },
+    {
+      "title": "Здоровий спосіб життя",
+      "handle": "@kutos419_63",
+      "subscribers": 70,
+      "discussion_group": true,
+      "posts_per_week": 2.5,
+      "language_mix": {
+        "ua": 1.0
+      },
+      "last_post": "2026-07-31T07:55:45+00:00",
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "usable",
+      "reasons": [
+        "no blue check — confirm this is the official channel",
+        "linked group present but no comments on the sampled posts"
+      ],
+      "found_by": [
+        "healthy_lifestyle:здоровий спосіб життя"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 10,
+        "posts_per_week": 2.5,
+        "last_post": "2026-07-31T07:55:45+00:00",
+        "n_texts": 5,
+        "language_mix": {
+          "ua": 1.0
+        }
+      },
+      "error": null
+    },
+    {
+      "title": "БАЛАНСування / психологія, дієтологія, нутриціологія",
+      "handle": "@balancerpp",
+      "subscribers": 867,
+      "discussion_group": false,
+      "posts_per_week": 0.0,
+      "language_mix": {},
+      "last_post": null,
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "posts-only",
+      "reasons": [
+        "no blue check — confirm this is the official channel",
+        "comments disabled (no linked discussion group)"
+      ],
+      "found_by": [
+        "healthy_lifestyle:нутриціологія"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 0,
+        "posts_per_week": 0.0,
+        "last_post": null,
+        "n_texts": 0,
+        "language_mix": {}
+      },
+      "error": null
+    },
+    {
+      "title": "Нутриціологія | Молодість | ЖИТТЯ",
+      "handle": "@denisovapro",
+      "subscribers": 1086,
+      "discussion_group": true,
+      "posts_per_week": 4.5,
+      "language_mix": {
+        "en": 0.06,
+        "ua": 0.94
+      },
+      "last_post": "2026-08-03T13:21:03+00:00",
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "usable",
+      "reasons": [
+        "no blue check — confirm this is the official channel"
+      ],
+      "found_by": [
+        "healthy_lifestyle:нутриціологія"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 18,
+        "posts_per_week": 4.5,
+        "last_post": "2026-08-03T13:21:03+00:00",
+        "n_texts": 16,
+        "language_mix": {
+          "en": 0.06,
+          "ua": 0.94
+        }
+      },
+      "error": null
+    },
+    {
+      "title": "Forever_Aloe🌱: нутриціологія, психологія, реабілітація.",
+      "handle": "@Basja_SV_Forever",
+      "subscribers": 202,
+      "discussion_group": true,
+      "posts_per_week": 4.0,
+      "language_mix": {
+        "ua": 1.0
+      },
+      "last_post": "2026-08-04T11:57:51+00:00",
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "usable",
+      "reasons": [
+        "no blue check — confirm this is the official channel"
+      ],
+      "found_by": [
+        "healthy_lifestyle:нутриціологія"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 16,
+        "posts_per_week": 4.0,
+        "last_post": "2026-08-04T11:57:51+00:00",
+        "n_texts": 15,
+        "language_mix": {
+          "ua": 1.0
+        }
+      },
+      "error": null
+    },
+    {
+      "title": "Тренування дієтологія нутриціологія",
+      "handle": "@sport_fitness_trainer",
+      "subscribers": 178,
+      "discussion_group": false,
+      "posts_per_week": 0.0,
+      "language_mix": {},
+      "last_post": null,
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "posts-only",
+      "reasons": [
+        "no blue check — confirm this is the official channel",
+        "comments disabled (no linked discussion group)"
+      ],
+      "found_by": [
+        "healthy_lifestyle:нутриціологія"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 0,
+        "posts_per_week": 0.0,
+        "last_post": null,
+        "n_texts": 0,
+        "language_mix": {}
+      },
+      "error": null
+    },
+    {
+      "title": "Нутриціологія для жінок",
+      "handle": "@olka_star1",
+      "subscribers": 37,
+      "discussion_group": true,
+      "posts_per_week": 0.0,
+      "language_mix": {},
+      "last_post": null,
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "usable",
+      "reasons": [
+        "no blue check — confirm this is the official channel",
+        "linked group present but no comments on the sampled posts"
+      ],
+      "found_by": [
+        "healthy_lifestyle:нутриціологія"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 0,
+        "posts_per_week": 0.0,
+        "last_post": null,
+        "n_texts": 0,
+        "language_mix": {}
+      },
+      "error": null
+    },
+    {
+      "title": "Катерина Ненька — грудне вигодовування та дитяче харчування | сон",
+      "handle": "@ya_Nenka",
+      "subscribers": 2367,
+      "discussion_group": true,
+      "posts_per_week": 2.25,
+      "language_mix": {
+        "ua": 1.0
+      },
+      "last_post": "2026-07-29T21:21:49+00:00",
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "usable",
+      "reasons": [
+        "no blue check — confirm this is the official channel"
+      ],
+      "found_by": [
+        "baby_food:дитяче харчування"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 9,
+        "posts_per_week": 2.25,
+        "last_post": "2026-07-29T21:21:49+00:00",
+        "n_texts": 9,
+        "language_mix": {
+          "ua": 1.0
+        }
+      },
+      "error": null
+    },
+    {
+      "title": "ДИТЯЧЕ ХАРЧУВАННЯ (ДОБРОБУТ)",
+      "handle": "@dobrobutPoltava",
+      "subscribers": 439,
+      "discussion_group": false,
+      "posts_per_week": 1.0,
+      "language_mix": {
+        "en": 0.25,
+        "ua": 0.75
+      },
+      "last_post": "2026-07-30T14:35:26+00:00",
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "posts-only",
+      "reasons": [
+        "no blue check — confirm this is the official channel",
+        "comments disabled (no linked discussion group)"
+      ],
+      "found_by": [
+        "baby_food:дитяче харчування"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 4,
+        "posts_per_week": 1.0,
+        "last_post": "2026-07-30T14:35:26+00:00",
+        "n_texts": 4,
+        "language_mix": {
+          "en": 0.25,
+          "ua": 0.75
+        }
+      },
+      "error": null
+    },
+    {
+      "title": "Babyshop -дитяче харчування",
+      "handle": "@babyshopuz16",
+      "subscribers": 28,
+      "discussion_group": false,
+      "posts_per_week": 0.0,
+      "language_mix": {},
+      "last_post": null,
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "posts-only",
+      "reasons": [
+        "no blue check — confirm this is the official channel",
+        "comments disabled (no linked discussion group)"
+      ],
+      "found_by": [
+        "baby_food:дитяче харчування"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 0,
+        "posts_per_week": 0.0,
+        "last_post": null,
+        "n_texts": 0,
+        "language_mix": {}
+      },
+      "error": null
+    },
+    {
+      "title": "TOWERMARKET дитяче харчування",
+      "handle": "@towermarket_lviv_baby",
+      "subscribers": 4,
+      "discussion_group": false,
+      "posts_per_week": 0.0,
+      "language_mix": {},
+      "last_post": null,
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "posts-only",
+      "reasons": [
+        "no blue check — confirm this is the official channel",
+        "comments disabled (no linked discussion group)"
+      ],
+      "found_by": [
+        "baby_food:дитяче харчування"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 0,
+        "posts_per_week": 0.0,
+        "last_post": null,
+        "n_texts": 0,
+        "language_mix": {}
+      },
+      "error": null
+    },
+    {
+      "title": "Тарілка Малюка • Прикорм",
+      "handle": "@tarilka_malyuka",
+      "subscribers": 10446,
+      "discussion_group": true,
+      "posts_per_week": 20.0,
+      "language_mix": {
+        "other": 0.01,
+        "ua": 0.99
+      },
+      "last_post": "2026-08-05T15:15:34+00:00",
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "usable",
+      "reasons": [
+        "no blue check — confirm this is the official channel"
+      ],
+      "found_by": [
+        "baby_food:прикорм"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 80,
+        "posts_per_week": 20.0,
+        "last_post": "2026-08-05T15:15:34+00:00",
+        "n_texts": 79,
+        "language_mix": {
+          "other": 0.01,
+          "ua": 0.99
+        }
+      },
+      "error": null
+    },
+    {
+      "title": "ГВ/прикорм/сон с Полиной Лыковой 🤱🏻",
+      "handle": "@polinalykovagv",
+      "subscribers": 1570,
+      "discussion_group": true,
+      "posts_per_week": 0.0,
+      "language_mix": {},
+      "last_post": null,
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "usable",
+      "reasons": [
+        "no blue check — confirm this is the official channel"
+      ],
+      "found_by": [
+        "baby_food:прикорм"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 0,
+        "posts_per_week": 0.0,
+        "last_post": null,
+        "n_texts": 0,
+        "language_mix": {}
+      },
+      "error": null
+    },
+    {
+      "title": "Катерина Третьякова ГВ | Прикорм, Отлучение, ИВ",
+      "handle": "@kati_blog",
+      "subscribers": 773,
+      "discussion_group": true,
+      "posts_per_week": 3.0,
+      "language_mix": {
+        "other": 0.1,
+        "ru": 0.9
+      },
+      "last_post": "2026-07-31T09:14:50+00:00",
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "usable",
+      "reasons": [
+        "no blue check — confirm this is the official channel"
+      ],
+      "found_by": [
+        "baby_food:прикорм"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 12,
+        "posts_per_week": 3.0,
+        "last_post": "2026-07-31T09:14:50+00:00",
+        "n_texts": 10,
+        "language_mix": {
+          "other": 0.1,
+          "ru": 0.9
+        }
+      },
+      "error": null
+    },
+    {
+      "title": "Материнство | ГВ | Прикорм | Доула",
+      "handle": "@grezina_o_gv",
+      "subscribers": 349,
+      "discussion_group": true,
+      "posts_per_week": 8.75,
+      "language_mix": {
+        "other": 0.06,
+        "ru": 0.94
+      },
+      "last_post": "2026-08-05T05:54:29+00:00",
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "usable",
+      "reasons": [
+        "no blue check — confirm this is the official channel"
+      ],
+      "found_by": [
+        "baby_food:прикорм"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 35,
+        "posts_per_week": 8.75,
+        "last_post": "2026-08-05T05:54:29+00:00",
+        "n_texts": 31,
+        "language_mix": {
+          "other": 0.06,
+          "ru": 0.94
+        }
+      },
+      "error": null
+    },
+    {
+      "title": "Брокколи клуб | прикорм | развитие",
+      "handle": "@baby_broccoli_club",
+      "subscribers": 1499,
+      "discussion_group": true,
+      "posts_per_week": 0.25,
+      "language_mix": {
+        "ru": 1.0
+      },
+      "last_post": "2026-07-17T16:19:54+00:00",
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "usable",
+      "reasons": [
+        "no blue check — confirm this is the official channel"
+      ],
+      "found_by": [
+        "baby_food:прикорм"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 1,
+        "posts_per_week": 0.25,
+        "last_post": "2026-07-17T16:19:54+00:00",
+        "n_texts": 1,
+        "language_mix": {
+          "ru": 1.0
+        }
+      },
+      "error": null
+    },
+    {
+      "title": "Все о прикорме",
+      "handle": "@prikorm",
+      "subscribers": 722,
+      "discussion_group": false,
+      "posts_per_week": 0.0,
+      "language_mix": {},
+      "last_post": null,
+      "telegram_verified": false,
+      "broadcast": false,
+      "verdict": "posts-only",
+      "reasons": [
+        "no blue check — confirm this is the official channel",
+        "supergroup, not a broadcast channel — confirm this is the right entity",
+        "comments disabled (no linked discussion group)"
+      ],
+      "found_by": [
+        "baby_food:прикорм"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 0,
+        "posts_per_week": 0.0,
+        "last_post": null,
+        "n_texts": 0,
+        "language_mix": {}
+      },
+      "error": null
+    },
+    {
+      "title": "Прикорм",
+      "handle": "@prikorm7",
+      "subscribers": 99,
+      "discussion_group": true,
+      "posts_per_week": 0.0,
+      "language_mix": {},
+      "last_post": null,
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "usable",
+      "reasons": [
+        "no blue check — confirm this is the official channel"
+      ],
+      "found_by": [
+        "baby_food:прикорм"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 0,
+        "posts_per_week": 0.0,
+        "last_post": null,
+        "n_texts": 0,
+        "language_mix": {}
+      },
+      "error": null
+    },
+    {
+      "title": "Рецепты от Эси 🤍",
+      "handle": "@prikorm1",
+      "subscribers": 38,
+      "discussion_group": true,
+      "posts_per_week": 0.0,
+      "language_mix": {},
+      "last_post": null,
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "usable",
+      "reasons": [
+        "no blue check — confirm this is the official channel"
+      ],
+      "found_by": [
+        "baby_food:прикорм"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 0,
+        "posts_per_week": 0.0,
+        "last_post": null,
+        "n_texts": 0,
+        "language_mix": {}
+      },
+      "error": null
+    },
+    {
+      "title": "BLW.BABIES 🥦🍓 СМАЧНИЙ ПРИКОРМ 🥑 BLW 🥑 САМОПРИКОРМ 🥑 ДИТЯЧЕ МЕНЮ 🥑 РЕЦЕПТИ",
+      "handle": "@blwbabies",
+      "subscribers": 10052,
+      "discussion_group": false,
+      "posts_per_week": 1.0,
+      "language_mix": {
+        "ua": 1.0
+      },
+      "last_post": "2026-07-31T07:06:03+00:00",
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "posts-only",
+      "reasons": [
+        "no blue check — confirm this is the official channel",
+        "comments disabled (no linked discussion group)"
+      ],
+      "found_by": [
+        "baby_food:дитяче меню"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 4,
+        "posts_per_week": 1.0,
+        "last_post": "2026-07-31T07:06:03+00:00",
+        "n_texts": 4,
+        "language_mix": {
+          "ua": 1.0
+        }
+      },
+      "error": null
+    },
+    {
+      "title": "Євгенія_Дитяче меню",
+      "handle": "@Evgenija_dutjache_menu",
+      "subscribers": 1535,
+      "discussion_group": true,
+      "posts_per_week": 0.0,
+      "language_mix": {},
+      "last_post": null,
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "usable",
+      "reasons": [
+        "no blue check — confirm this is the official channel"
+      ],
+      "found_by": [
+        "baby_food:дитяче меню"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 0,
+        "posts_per_week": 0.0,
+        "last_post": null,
+        "n_texts": 0,
+        "language_mix": {}
+      },
+      "error": null
+    },
+    {
+      "title": "Дитяче меню",
+      "handle": "@dutyache_menu",
+      "subscribers": 1637,
+      "discussion_group": true,
+      "posts_per_week": 0.0,
+      "language_mix": {},
+      "last_post": null,
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "usable",
+      "reasons": [
+        "no blue check — confirm this is the official channel"
+      ],
+      "found_by": [
+        "baby_food:дитяче меню"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 0,
+        "posts_per_week": 0.0,
+        "last_post": null,
+        "n_texts": 0,
+        "language_mix": {}
+      },
+      "error": null
+    },
+    {
+      "title": "Дитяче меню🥕Прикорм🥕Рецепти",
+      "handle": "@prikorm_kids_menu",
+      "subscribers": 6396,
+      "discussion_group": false,
+      "posts_per_week": 0.0,
+      "language_mix": {},
+      "last_post": null,
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "posts-only",
+      "reasons": [
+        "no blue check — confirm this is the official channel",
+        "comments disabled (no linked discussion group)"
+      ],
+      "found_by": [
+        "baby_food:дитяче меню"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 0,
+        "posts_per_week": 0.0,
+        "last_post": null,
+        "n_texts": 0,
+        "language_mix": {}
+      },
+      "error": null
+    },
+    {
+      "title": "Прикорм малюка. Дитяче меню",
+      "handle": "@prukorm_malyka",
+      "subscribers": 259,
+      "discussion_group": true,
+      "posts_per_week": 0.0,
+      "language_mix": {},
+      "last_post": null,
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "usable",
+      "reasons": [
+        "no blue check — confirm this is the official channel"
+      ],
+      "found_by": [
+        "baby_food:дитяче меню"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 0,
+        "posts_per_week": 0.0,
+        "last_post": null,
+        "n_texts": 0,
+        "language_mix": {}
+      },
+      "error": null
+    },
+    {
+      "title": "дитяче меню",
+      "handle": "@takamamaua",
+      "subscribers": 16,
+      "discussion_group": false,
+      "posts_per_week": 0.0,
+      "language_mix": {},
+      "last_post": null,
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "posts-only",
+      "reasons": [
+        "no blue check — confirm this is the official channel",
+        "comments disabled (no linked discussion group)"
+      ],
+      "found_by": [
+        "baby_food:дитяче меню"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 0,
+        "posts_per_week": 0.0,
+        "last_post": null,
+        "n_texts": 0,
+        "language_mix": {}
+      },
+      "error": null
+    },
+    {
+      "title": "Перший прикорм🥦 Дитяче меню",
+      "handle": "@pershyi_prykorm",
+      "subscribers": 9,
+      "discussion_group": true,
+      "posts_per_week": 0.0,
+      "language_mix": {},
+      "last_post": null,
+      "telegram_verified": false,
+      "broadcast": true,
+      "verdict": "usable",
+      "reasons": [
+        "no blue check — confirm this is the official channel",
+        "linked group present but no comments on the sampled posts"
+      ],
+      "found_by": [
+        "baby_food:дитяче меню"
+      ],
+      "window": {
+        "window_days": 28,
+        "window_truncated": false,
+        "n_posts": 0,
+        "posts_per_week": 0.0,
+        "last_post": null,
+        "n_texts": 0,
+        "language_mix": {}
+      },
+      "error": null
+    }
+  ],
+  "ledger": {
+    "target_subscribers": 10000000,
+    "caveats": [
+      "summed subscribers != unique reach",
+      "subscribers != comment flow"
+    ],
+    "registry_channels": 4,
+    "registry_subscribers": 178372,
+    "gap_before_any_candidate": 9821628,
+    "candidates_found": 66,
+    "candidates_counted": 66,
+    "counted_verdicts": [
+      "usable",
+      "posts-only"
+    ],
+    "candidate_subscribers_total": 668171,
+    "portfolio_if_all_counted_entered": 846543,
+    "gap_if_all_counted_entered": 9153457,
+    "candidates_posting_in_the_window": 29,
+    "candidates_silent_in_the_window": 37,
+    "live_candidate_subscribers": 356047,
+    "portfolio_if_only_live_entered": 534419,
+    "gap_if_only_live_entered": 9465581,
+    "with_a_discussion_group": 40,
+    "live_note": "'live' = at least one post in the last 28 days. The split is the second caveat as a number: a silent channel adds subscribers to the sum and no comment rows to the loop.",
+    "ranked": [
+      {
+        "title": "Mamix🥼",
+        "handle": "@itsmamix",
+        "subscribers": 280895,
+        "discussion_group": true,
+        "posts_per_week": 0.0,
+        "language_mix": {},
+        "last_post": null,
+        "telegram_verified": true,
+        "broadcast": true,
+        "verdict": "usable",
+        "reasons": [],
+        "found_by": [
+          "mothers_kids:мами"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "n_texts": 0,
+          "language_mix": {}
+        },
+        "error": null,
+        "cumulative_subscribers": 459267,
+        "gap_after": 9540733
+      },
+      {
+        "title": "Третьякова Елена Блогер 👧 Материнство-Lifestyle-Beauty",
+        "handle": "@tretyakovaele",
+        "subscribers": 244639,
+        "discussion_group": true,
+        "posts_per_week": 0.25,
+        "language_mix": {
+          "ru": 1.0
+        },
+        "last_post": "2026-07-16T13:52:03+00:00",
+        "telegram_verified": true,
+        "broadcast": true,
+        "verdict": "usable",
+        "reasons": [],
+        "found_by": [
+          "mothers_kids:материнство"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 1,
+          "posts_per_week": 0.25,
+          "last_post": "2026-07-16T13:52:03+00:00",
+          "n_texts": 1,
+          "language_mix": {
+            "ru": 1.0
+          }
+        },
+        "error": null,
+        "cumulative_subscribers": 703906,
+        "gap_after": 9296094
+      },
+      {
+        "title": "Алан Мамиев ИНТЕНСИВ",
+        "handle": "@intensiv_Mamiev",
+        "subscribers": 29623,
+        "discussion_group": false,
+        "posts_per_week": 0.25,
+        "language_mix": {
+          "ru": 1.0
+        },
+        "last_post": "2026-07-24T07:12:46+00:00",
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "posts-only",
+        "reasons": [
+          "no blue check — confirm this is the official channel",
+          "comments disabled (no linked discussion group)"
+        ],
+        "found_by": [
+          "mothers_kids:мами"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 1,
+          "posts_per_week": 0.25,
+          "last_post": "2026-07-24T07:12:46+00:00",
+          "n_texts": 1,
+          "language_mix": {
+            "ru": 1.0
+          }
+        },
+        "error": null,
+        "cumulative_subscribers": 733529,
+        "gap_after": 9266471
+      },
+      {
+        "title": "🇺🇦Мами з малюками🇺🇦",
+        "handle": "@Mambabyua",
+        "subscribers": 19434,
+        "discussion_group": false,
+        "posts_per_week": 280.75,
+        "language_mix": {
+          "en": 0.02,
+          "other": 0.04,
+          "ru": 0.02,
+          "ua": 0.92
+        },
+        "last_post": "2026-08-05T20:04:14+00:00",
+        "telegram_verified": false,
+        "broadcast": false,
+        "verdict": "posts-only",
+        "reasons": [
+          "no blue check — confirm this is the official channel",
+          "supergroup, not a broadcast channel — confirm this is the right entity",
+          "comments disabled (no linked discussion group)"
+        ],
+        "found_by": [
+          "mothers_kids:мами"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": true,
+          "n_posts": 1123,
+          "posts_per_week": 280.75,
+          "last_post": "2026-08-05T20:04:14+00:00",
+          "n_texts": 1112,
+          "language_mix": {
+            "en": 0.02,
+            "other": 0.04,
+            "ru": 0.02,
+            "ua": 0.92
+          }
+        },
+        "error": null,
+        "cumulative_subscribers": 752963,
+        "gap_after": 9247037
+      },
+      {
+        "title": "Материнство в кадре",
+        "handle": "@katyal55",
+        "subscribers": 15025,
+        "discussion_group": true,
+        "posts_per_week": 9.25,
+        "language_mix": {
+          "ru": 1.0
+        },
+        "last_post": "2026-08-05T07:15:03+00:00",
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "usable",
+        "reasons": [
+          "no blue check — confirm this is the official channel"
+        ],
+        "found_by": [
+          "mothers_kids:материнство"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 37,
+          "posts_per_week": 9.25,
+          "last_post": "2026-08-05T07:15:03+00:00",
+          "n_texts": 35,
+          "language_mix": {
+            "ru": 1.0
+          }
+        },
+        "error": null,
+        "cumulative_subscribers": 767988,
+        "gap_after": 9232012
+      },
+      {
+        "title": "Тарілка Малюка • Прикорм",
+        "handle": "@tarilka_malyuka",
+        "subscribers": 10446,
+        "discussion_group": true,
+        "posts_per_week": 20.0,
+        "language_mix": {
+          "other": 0.01,
+          "ua": 0.99
+        },
+        "last_post": "2026-08-05T15:15:34+00:00",
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "usable",
+        "reasons": [
+          "no blue check — confirm this is the official channel"
+        ],
+        "found_by": [
+          "baby_food:прикорм"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 80,
+          "posts_per_week": 20.0,
+          "last_post": "2026-08-05T15:15:34+00:00",
+          "n_texts": 79,
+          "language_mix": {
+            "other": 0.01,
+            "ua": 0.99
+          }
+        },
+        "error": null,
+        "cumulative_subscribers": 778434,
+        "gap_after": 9221566
+      },
+      {
+        "title": "BLW.BABIES 🥦🍓 СМАЧНИЙ ПРИКОРМ 🥑 BLW 🥑 САМОПРИКОРМ 🥑 ДИТЯЧЕ МЕНЮ 🥑 РЕЦЕПТИ",
+        "handle": "@blwbabies",
+        "subscribers": 10052,
+        "discussion_group": false,
+        "posts_per_week": 1.0,
+        "language_mix": {
+          "ua": 1.0
+        },
+        "last_post": "2026-07-31T07:06:03+00:00",
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "posts-only",
+        "reasons": [
+          "no blue check — confirm this is the official channel",
+          "comments disabled (no linked discussion group)"
+        ],
+        "found_by": [
+          "baby_food:дитяче меню"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 4,
+          "posts_per_week": 1.0,
+          "last_post": "2026-07-31T07:06:03+00:00",
+          "n_texts": 4,
+          "language_mix": {
+            "ua": 1.0
+          }
+        },
+        "error": null,
+        "cumulative_subscribers": 788486,
+        "gap_after": 9211514
+      },
+      {
+        "title": "Екатерина Кукса. Материнство в радость",
+        "handle": "@kuksa2022",
+        "subscribers": 7075,
+        "discussion_group": true,
+        "posts_per_week": 0.5,
+        "language_mix": {
+          "ru": 1.0
+        },
+        "last_post": "2026-08-05T10:30:45+00:00",
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "usable",
+        "reasons": [
+          "no blue check — confirm this is the official channel"
+        ],
+        "found_by": [
+          "mothers_kids:материнство"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 2,
+          "posts_per_week": 0.5,
+          "last_post": "2026-08-05T10:30:45+00:00",
+          "n_texts": 2,
+          "language_mix": {
+            "ru": 1.0
+          }
+        },
+        "error": null,
+        "cumulative_subscribers": 795561,
+        "gap_after": 9204439
+      },
+      {
+        "title": "Дитяче меню🥕Прикорм🥕Рецепти",
+        "handle": "@prikorm_kids_menu",
+        "subscribers": 6396,
+        "discussion_group": false,
+        "posts_per_week": 0.0,
+        "language_mix": {},
+        "last_post": null,
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "posts-only",
+        "reasons": [
+          "no blue check — confirm this is the official channel",
+          "comments disabled (no linked discussion group)"
+        ],
+        "found_by": [
+          "baby_food:дитяче меню"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "n_texts": 0,
+          "language_mix": {}
+        },
+        "error": null,
+        "cumulative_subscribers": 801957,
+        "gap_after": 9198043
+      },
+      {
+        "title": "Регинаграмм | Материнство , путешествия",
+        "handle": "@regina_tatlybaeva",
+        "subscribers": 5389,
+        "discussion_group": true,
+        "posts_per_week": 0.0,
+        "language_mix": {},
+        "last_post": null,
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "usable",
+        "reasons": [
+          "no blue check — confirm this is the official channel"
+        ],
+        "found_by": [
+          "mothers_kids:материнство"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "n_texts": 0,
+          "language_mix": {}
+        },
+        "error": null,
+        "cumulative_subscribers": 807346,
+        "gap_after": 9192654
+      },
+      {
+        "title": "Спортивна Січ: Здоровий спосіб життя💪",
+        "handle": "@sportivniydietolog",
+        "subscribers": 3896,
+        "discussion_group": false,
+        "posts_per_week": 0.0,
+        "language_mix": {},
+        "last_post": null,
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "posts-only",
+        "reasons": [
+          "no blue check — confirm this is the official channel",
+          "comments disabled (no linked discussion group)"
+        ],
+        "found_by": [
+          "healthy_lifestyle:здоровий спосіб життя"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "n_texts": 0,
+          "language_mix": {}
+        },
+        "error": null,
+        "cumulative_subscribers": 811242,
+        "gap_after": 9188758
+      },
+      {
+        "title": "MAMI PEKER 🇹🇷",
+        "handle": "@MAMIPEKER1",
+        "subscribers": 3869,
+        "discussion_group": false,
+        "posts_per_week": 37.5,
+        "language_mix": {
+          "en": 1.0
+        },
+        "last_post": "2026-08-05T18:31:37+00:00",
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "posts-only",
+        "reasons": [
+          "no blue check — confirm this is the official channel",
+          "comments disabled (no linked discussion group)"
+        ],
+        "found_by": [
+          "mothers_kids:мами"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 150,
+          "posts_per_week": 37.5,
+          "last_post": "2026-08-05T18:31:37+00:00",
+          "n_texts": 150,
+          "language_mix": {
+            "en": 1.0
+          }
+        },
+        "error": null,
+        "cumulative_subscribers": 815111,
+        "gap_after": 9184889
+      },
+      {
+        "title": "София Стец | про материнство",
+        "handle": "@prostetsofa",
+        "subscribers": 3432,
+        "discussion_group": true,
+        "posts_per_week": 0.0,
+        "language_mix": {},
+        "last_post": null,
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "usable",
+        "reasons": [
+          "no blue check — confirm this is the official channel"
+        ],
+        "found_by": [
+          "mothers_kids:материнство"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "n_texts": 0,
+          "language_mix": {}
+        },
+        "error": null,
+        "cumulative_subscribers": 818543,
+        "gap_after": 9181457
+      },
+      {
+        "title": "Ребёнок маминой подруги!",
+        "handle": "@offspringrus",
+        "subscribers": 3276,
+        "discussion_group": true,
+        "posts_per_week": 4.25,
+        "language_mix": {
+          "ru": 1.0
+        },
+        "last_post": "2026-08-05T11:29:02+00:00",
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "usable",
+        "reasons": [
+          "no blue check — confirm this is the official channel"
+        ],
+        "found_by": [
+          "mothers_kids:мами"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 17,
+          "posts_per_week": 4.25,
+          "last_post": "2026-08-05T11:29:02+00:00",
+          "n_texts": 16,
+          "language_mix": {
+            "ru": 1.0
+          }
+        },
+        "error": null,
+        "cumulative_subscribers": 821819,
+        "gap_after": 9178181
+      },
+      {
+        "title": "Интуитивное Материнство",
+        "handle": "@Pro_Detyintumama",
+        "subscribers": 2664,
+        "discussion_group": true,
+        "posts_per_week": 1.0,
+        "language_mix": {
+          "ru": 1.0
+        },
+        "last_post": "2026-08-05T12:07:57+00:00",
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "usable",
+        "reasons": [
+          "no blue check — confirm this is the official channel"
+        ],
+        "found_by": [
+          "mothers_kids:материнство"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 4,
+          "posts_per_week": 1.0,
+          "last_post": "2026-08-05T12:07:57+00:00",
+          "n_texts": 3,
+          "language_mix": {
+            "ru": 1.0
+          }
+        },
+        "error": null,
+        "cumulative_subscribers": 824483,
+        "gap_after": 9175517
+      },
+      {
+        "title": "Катерина Ненька — грудне вигодовування та дитяче харчування | сон",
+        "handle": "@ya_Nenka",
+        "subscribers": 2367,
+        "discussion_group": true,
+        "posts_per_week": 2.25,
+        "language_mix": {
+          "ua": 1.0
+        },
+        "last_post": "2026-07-29T21:21:49+00:00",
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "usable",
+        "reasons": [
+          "no blue check — confirm this is the official channel"
+        ],
+        "found_by": [
+          "baby_food:дитяче харчування"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 9,
+          "posts_per_week": 2.25,
+          "last_post": "2026-07-29T21:21:49+00:00",
+          "n_texts": 9,
+          "language_mix": {
+            "ua": 1.0
+          }
+        },
+        "error": null,
+        "cumulative_subscribers": 826850,
+        "gap_after": 9173150
+      },
+      {
+        "title": "Витамины из Германии «Мамина полочка»",
+        "handle": "@apte_ka",
+        "subscribers": 2177,
+        "discussion_group": false,
+        "posts_per_week": 0.0,
+        "language_mix": {},
+        "last_post": null,
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "posts-only",
+        "reasons": [
+          "no blue check — confirm this is the official channel",
+          "comments disabled (no linked discussion group)"
+        ],
+        "found_by": [
+          "mothers_kids:мами"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "n_texts": 0,
+          "language_mix": {}
+        },
+        "error": null,
+        "cumulative_subscribers": 829027,
+        "gap_after": 9170973
+      },
+      {
+        "title": "Дитяче меню",
+        "handle": "@dutyache_menu",
+        "subscribers": 1637,
+        "discussion_group": true,
+        "posts_per_week": 0.0,
+        "language_mix": {},
+        "last_post": null,
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "usable",
+        "reasons": [
+          "no blue check — confirm this is the official channel"
+        ],
+        "found_by": [
+          "baby_food:дитяче меню"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "n_texts": 0,
+          "language_mix": {}
+        },
+        "error": null,
+        "cumulative_subscribers": 830664,
+        "gap_after": 9169336
+      },
+      {
+        "title": "ГВ/прикорм/сон с Полиной Лыковой 🤱🏻",
+        "handle": "@polinalykovagv",
+        "subscribers": 1570,
+        "discussion_group": true,
+        "posts_per_week": 0.0,
+        "language_mix": {},
+        "last_post": null,
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "usable",
+        "reasons": [
+          "no blue check — confirm this is the official channel"
+        ],
+        "found_by": [
+          "baby_food:прикорм"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "n_texts": 0,
+          "language_mix": {}
+        },
+        "error": null,
+        "cumulative_subscribers": 832234,
+        "gap_after": 9167766
+      },
+      {
+        "title": "Євгенія_Дитяче меню",
+        "handle": "@Evgenija_dutjache_menu",
+        "subscribers": 1535,
+        "discussion_group": true,
+        "posts_per_week": 0.0,
+        "language_mix": {},
+        "last_post": null,
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "usable",
+        "reasons": [
+          "no blue check — confirm this is the official channel"
+        ],
+        "found_by": [
+          "baby_food:дитяче меню"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "n_texts": 0,
+          "language_mix": {}
+        },
+        "error": null,
+        "cumulative_subscribers": 833769,
+        "gap_after": 9166231
+      },
+      {
+        "title": "Брокколи клуб | прикорм | развитие",
+        "handle": "@baby_broccoli_club",
+        "subscribers": 1499,
+        "discussion_group": true,
+        "posts_per_week": 0.25,
+        "language_mix": {
+          "ru": 1.0
+        },
+        "last_post": "2026-07-17T16:19:54+00:00",
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "usable",
+        "reasons": [
+          "no blue check — confirm this is the official channel"
+        ],
+        "found_by": [
+          "baby_food:прикорм"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 1,
+          "posts_per_week": 0.25,
+          "last_post": "2026-07-17T16:19:54+00:00",
+          "n_texts": 1,
+          "language_mix": {
+            "ru": 1.0
+          }
+        },
+        "error": null,
+        "cumulative_subscribers": 835268,
+        "gap_after": 9164732
+      },
+      {
+        "title": "Уютное материнство",
+        "handle": "@cozymotherhood",
+        "subscribers": 1440,
+        "discussion_group": true,
+        "posts_per_week": 0.0,
+        "language_mix": {},
+        "last_post": null,
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "usable",
+        "reasons": [
+          "no blue check — confirm this is the official channel"
+        ],
+        "found_by": [
+          "mothers_kids:материнство"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "n_texts": 0,
+          "language_mix": {}
+        },
+        "error": null,
+        "cumulative_subscribers": 836708,
+        "gap_after": 9163292
+      },
+      {
+        "title": "Здорове харчування| Софія Ігорівна",
+        "handle": "@useful_healthy_fitness_menu",
+        "subscribers": 1430,
+        "discussion_group": true,
+        "posts_per_week": 3.75,
+        "language_mix": {
+          "ua": 1.0
+        },
+        "last_post": "2026-08-02T15:19:43+00:00",
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "usable",
+        "reasons": [
+          "no blue check — confirm this is the official channel"
+        ],
+        "found_by": [
+          "healthy_lifestyle:здорове харчування"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 15,
+          "posts_per_week": 3.75,
+          "last_post": "2026-08-02T15:19:43+00:00",
+          "n_texts": 8,
+          "language_mix": {
+            "ua": 1.0
+          }
+        },
+        "error": null,
+        "cumulative_subscribers": 838138,
+        "gap_after": 9161862
+      },
+      {
+        "title": "Нутриціологія | Молодість | ЖИТТЯ",
+        "handle": "@denisovapro",
+        "subscribers": 1086,
+        "discussion_group": true,
+        "posts_per_week": 4.5,
+        "language_mix": {
+          "en": 0.06,
+          "ua": 0.94
+        },
+        "last_post": "2026-08-03T13:21:03+00:00",
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "usable",
+        "reasons": [
+          "no blue check — confirm this is the official channel"
+        ],
+        "found_by": [
+          "healthy_lifestyle:нутриціологія"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 18,
+          "posts_per_week": 4.5,
+          "last_post": "2026-08-03T13:21:03+00:00",
+          "n_texts": 16,
+          "language_mix": {
+            "en": 0.06,
+            "ua": 0.94
+          }
+        },
+        "error": null,
+        "cumulative_subscribers": 839224,
+        "gap_after": 9160776
+      },
+      {
+        "title": "БАЛАНСування / психологія, дієтологія, нутриціологія",
+        "handle": "@balancerpp",
+        "subscribers": 867,
+        "discussion_group": false,
+        "posts_per_week": 0.0,
+        "language_mix": {},
+        "last_post": null,
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "posts-only",
+        "reasons": [
+          "no blue check — confirm this is the official channel",
+          "comments disabled (no linked discussion group)"
+        ],
+        "found_by": [
+          "healthy_lifestyle:нутриціологія"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "n_texts": 0,
+          "language_mix": {}
+        },
+        "error": null,
+        "cumulative_subscribers": 840091,
+        "gap_after": 9159909
+      },
+      {
+        "title": "Катерина Третьякова ГВ | Прикорм, Отлучение, ИВ",
+        "handle": "@kati_blog",
+        "subscribers": 773,
+        "discussion_group": true,
+        "posts_per_week": 3.0,
+        "language_mix": {
+          "other": 0.1,
+          "ru": 0.9
+        },
+        "last_post": "2026-07-31T09:14:50+00:00",
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "usable",
+        "reasons": [
+          "no blue check — confirm this is the official channel"
+        ],
+        "found_by": [
+          "baby_food:прикорм"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 12,
+          "posts_per_week": 3.0,
+          "last_post": "2026-07-31T09:14:50+00:00",
+          "n_texts": 10,
+          "language_mix": {
+            "other": 0.1,
+            "ru": 0.9
+          }
+        },
+        "error": null,
+        "cumulative_subscribers": 840864,
+        "gap_after": 9159136
+      },
+      {
+        "title": "Все о прикорме",
+        "handle": "@prikorm",
+        "subscribers": 722,
+        "discussion_group": false,
+        "posts_per_week": 0.0,
+        "language_mix": {},
+        "last_post": null,
+        "telegram_verified": false,
+        "broadcast": false,
+        "verdict": "posts-only",
+        "reasons": [
+          "no blue check — confirm this is the official channel",
+          "supergroup, not a broadcast channel — confirm this is the right entity",
+          "comments disabled (no linked discussion group)"
+        ],
+        "found_by": [
+          "baby_food:прикорм"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "n_texts": 0,
+          "language_mix": {}
+        },
+        "error": null,
+        "cumulative_subscribers": 841586,
+        "gap_after": 9158414
+      },
+      {
+        "title": "Здорове харчування🥦🍎🍊",
+        "handle": "@zdoroviharchi",
+        "subscribers": 632,
+        "discussion_group": true,
+        "posts_per_week": 0.0,
+        "language_mix": {},
+        "last_post": null,
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "usable",
+        "reasons": [
+          "no blue check — confirm this is the official channel"
+        ],
+        "found_by": [
+          "healthy_lifestyle:здорове харчування"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "n_texts": 0,
+          "language_mix": {}
+        },
+        "error": null,
+        "cumulative_subscribers": 842218,
+        "gap_after": 9157782
+      },
+      {
+        "title": "Мама в ресурсі і виспана ✨ Все про сон малюка",
+        "handle": "@mamavresursi",
+        "subscribers": 533,
+        "discussion_group": true,
+        "posts_per_week": 6.0,
+        "language_mix": {
+          "ua": 1.0
+        },
+        "last_post": "2026-08-05T11:58:04+00:00",
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "usable",
+        "reasons": [
+          "no blue check — confirm this is the official channel"
+        ],
+        "found_by": [
+          "mothers_kids:мама і малюк"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 24,
+          "posts_per_week": 6.0,
+          "last_post": "2026-08-05T11:58:04+00:00",
+          "n_texts": 23,
+          "language_mix": {
+            "ua": 1.0
+          }
+        },
+        "error": null,
+        "cumulative_subscribers": 842751,
+        "gap_after": 9157249
+      },
+      {
+        "title": "За Здоровий Спосіб Життя ХНЕУ ім. С. Кузнеця",
+        "handle": "@hneusport",
+        "subscribers": 479,
+        "discussion_group": false,
+        "posts_per_week": 0.25,
+        "language_mix": {
+          "ua": 1.0
+        },
+        "last_post": "2026-07-10T08:56:34+00:00",
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "posts-only",
+        "reasons": [
+          "no blue check — confirm this is the official channel",
+          "comments disabled (no linked discussion group)"
+        ],
+        "found_by": [
+          "healthy_lifestyle:здоровий спосіб життя"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 1,
+          "posts_per_week": 0.25,
+          "last_post": "2026-07-10T08:56:34+00:00",
+          "n_texts": 1,
+          "language_mix": {
+            "ua": 1.0
+          }
+        },
+        "error": null,
+        "cumulative_subscribers": 843230,
+        "gap_after": 9156770
+      },
+      {
+        "title": "ДИТЯЧЕ ХАРЧУВАННЯ (ДОБРОБУТ)",
+        "handle": "@dobrobutPoltava",
+        "subscribers": 439,
+        "discussion_group": false,
+        "posts_per_week": 1.0,
+        "language_mix": {
+          "en": 0.25,
+          "ua": 0.75
+        },
+        "last_post": "2026-07-30T14:35:26+00:00",
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "posts-only",
+        "reasons": [
+          "no blue check — confirm this is the official channel",
+          "comments disabled (no linked discussion group)"
+        ],
+        "found_by": [
+          "baby_food:дитяче харчування"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 4,
+          "posts_per_week": 1.0,
+          "last_post": "2026-07-30T14:35:26+00:00",
+          "n_texts": 4,
+          "language_mix": {
+            "en": 0.25,
+            "ua": 0.75
+          }
+        },
+        "error": null,
+        "cumulative_subscribers": 843669,
+        "gap_after": 9156331
+      },
+      {
+        "title": "Материнство | ГВ | Прикорм | Доула",
+        "handle": "@grezina_o_gv",
+        "subscribers": 349,
+        "discussion_group": true,
+        "posts_per_week": 8.75,
+        "language_mix": {
+          "other": 0.06,
+          "ru": 0.94
+        },
+        "last_post": "2026-08-05T05:54:29+00:00",
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "usable",
+        "reasons": [
+          "no blue check — confirm this is the official channel"
+        ],
+        "found_by": [
+          "baby_food:прикорм"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 35,
+          "posts_per_week": 8.75,
+          "last_post": "2026-08-05T05:54:29+00:00",
+          "n_texts": 31,
+          "language_mix": {
+            "other": 0.06,
+            "ru": 0.94
+          }
+        },
+        "error": null,
+        "cumulative_subscribers": 844018,
+        "gap_after": 9155982
+      },
+      {
+        "title": "Стильні дітки 7км | Дитячий одяг",
+        "handle": "@justkids7km",
+        "subscribers": 261,
+        "discussion_group": false,
+        "posts_per_week": 17.25,
+        "language_mix": {
+          "other": 0.03,
+          "ua": 0.97
+        },
+        "last_post": "2026-08-01T07:02:27+00:00",
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "posts-only",
+        "reasons": [
+          "no blue check — confirm this is the official channel",
+          "comments disabled (no linked discussion group)"
+        ],
+        "found_by": [
+          "mothers_kids:дітки"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 69,
+          "posts_per_week": 17.25,
+          "last_post": "2026-08-01T07:02:27+00:00",
+          "n_texts": 38,
+          "language_mix": {
+            "other": 0.03,
+            "ua": 0.97
+          }
+        },
+        "error": null,
+        "cumulative_subscribers": 844279,
+        "gap_after": 9155721
+      },
+      {
+        "title": "Прикорм малюка. Дитяче меню",
+        "handle": "@prukorm_malyka",
+        "subscribers": 259,
+        "discussion_group": true,
+        "posts_per_week": 0.0,
+        "language_mix": {},
+        "last_post": null,
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "usable",
+        "reasons": [
+          "no blue check — confirm this is the official channel"
+        ],
+        "found_by": [
+          "baby_food:дитяче меню"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "n_texts": 0,
+          "language_mix": {}
+        },
+        "error": null,
+        "cumulative_subscribers": 844538,
+        "gap_after": 9155462
+      },
+      {
+        "title": "Mami",
+        "handle": "@Mamit",
+        "subscribers": 209,
+        "discussion_group": false,
+        "posts_per_week": 0.0,
+        "language_mix": {},
+        "last_post": null,
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "posts-only",
+        "reasons": [
+          "no blue check — confirm this is the official channel",
+          "comments disabled (no linked discussion group)"
+        ],
+        "found_by": [
+          "mothers_kids:мами"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "n_texts": 0,
+          "language_mix": {}
+        },
+        "error": null,
+        "cumulative_subscribers": 844747,
+        "gap_after": 9155253
+      },
+      {
+        "title": "Материнство & Саморазвитие",
+        "handle": "@materinstvoe",
+        "subscribers": 202,
+        "discussion_group": true,
+        "posts_per_week": 5.75,
+        "language_mix": {
+          "ru": 1.0
+        },
+        "last_post": "2026-08-04T05:50:37+00:00",
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "usable",
+        "reasons": [
+          "no blue check — confirm this is the official channel"
+        ],
+        "found_by": [
+          "mothers_kids:материнство"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 23,
+          "posts_per_week": 5.75,
+          "last_post": "2026-08-04T05:50:37+00:00",
+          "n_texts": 21,
+          "language_mix": {
+            "ru": 1.0
+          }
+        },
+        "error": null,
+        "cumulative_subscribers": 844949,
+        "gap_after": 9155051
+      },
+      {
+        "title": "Forever_Aloe🌱: нутриціологія, психологія, реабілітація.",
+        "handle": "@Basja_SV_Forever",
+        "subscribers": 202,
+        "discussion_group": true,
+        "posts_per_week": 4.0,
+        "language_mix": {
+          "ua": 1.0
+        },
+        "last_post": "2026-08-04T11:57:51+00:00",
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "usable",
+        "reasons": [
+          "no blue check — confirm this is the official channel"
+        ],
+        "found_by": [
+          "healthy_lifestyle:нутриціологія"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 16,
+          "posts_per_week": 4.0,
+          "last_post": "2026-08-04T11:57:51+00:00",
+          "n_texts": 15,
+          "language_mix": {
+            "ua": 1.0
+          }
+        },
+        "error": null,
+        "cumulative_subscribers": 845151,
+        "gap_after": 9154849
+      },
+      {
+        "title": "Тренування дієтологія нутриціологія",
+        "handle": "@sport_fitness_trainer",
+        "subscribers": 178,
+        "discussion_group": false,
+        "posts_per_week": 0.0,
+        "language_mix": {},
+        "last_post": null,
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "posts-only",
+        "reasons": [
+          "no blue check — confirm this is the official channel",
+          "comments disabled (no linked discussion group)"
+        ],
+        "found_by": [
+          "healthy_lifestyle:нутриціологія"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "n_texts": 0,
+          "language_mix": {}
+        },
+        "error": null,
+        "cumulative_subscribers": 845329,
+        "gap_after": 9154671
+      },
+      {
+        "title": "Розумні дітки.UA",
+        "handle": "@rozymniditkiua",
+        "subscribers": 149,
+        "discussion_group": false,
+        "posts_per_week": 0.0,
+        "language_mix": {},
+        "last_post": null,
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "posts-only",
+        "reasons": [
+          "no blue check — confirm this is the official channel",
+          "comments disabled (no linked discussion group)"
+        ],
+        "found_by": [
+          "mothers_kids:дітки"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "n_texts": 0,
+          "language_mix": {}
+        },
+        "error": null,
+        "cumulative_subscribers": 845478,
+        "gap_after": 9154522
+      },
+      {
+        "title": "Здорове харчування разом з @nk_1802",
+        "handle": "@healthy_food_nk",
+        "subscribers": 136,
+        "discussion_group": true,
+        "posts_per_week": 0.0,
+        "language_mix": {},
+        "last_post": null,
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "usable",
+        "reasons": [
+          "no blue check — confirm this is the official channel"
+        ],
+        "found_by": [
+          "healthy_lifestyle:здорове харчування"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "n_texts": 0,
+          "language_mix": {}
+        },
+        "error": null,
+        "cumulative_subscribers": 845614,
+        "gap_after": 9154386
+      },
+      {
+        "title": "Я та здоровий спосіб життя.",
+        "handle": "@everysunday6am",
+        "subscribers": 128,
+        "discussion_group": true,
+        "posts_per_week": 0.0,
+        "language_mix": {},
+        "last_post": null,
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "usable",
+        "reasons": [
+          "no blue check — confirm this is the official channel"
+        ],
+        "found_by": [
+          "healthy_lifestyle:здоровий спосіб життя"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "n_texts": 0,
+          "language_mix": {}
+        },
+        "error": null,
+        "cumulative_subscribers": 845742,
+        "gap_after": 9154258
+      },
+      {
+        "title": "💜 PRO Здоровий спосіб життя",
+        "handle": "@pro_zsg",
+        "subscribers": 109,
+        "discussion_group": true,
+        "posts_per_week": 16.25,
+        "language_mix": {
+          "en": 0.06,
+          "other": 0.04,
+          "ua": 0.9
+        },
+        "last_post": "2026-08-05T06:42:09+00:00",
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "usable",
+        "reasons": [
+          "no blue check — confirm this is the official channel",
+          "linked group present but no comments on the sampled posts"
+        ],
+        "found_by": [
+          "healthy_lifestyle:здоровий спосіб життя"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 65,
+          "posts_per_week": 16.25,
+          "last_post": "2026-08-05T06:42:09+00:00",
+          "n_texts": 49,
+          "language_mix": {
+            "en": 0.06,
+            "other": 0.04,
+            "ua": 0.9
+          }
+        },
+        "error": null,
+        "cumulative_subscribers": 845851,
+        "gap_after": 9154149
+      },
+      {
+        "title": "Прикорм",
+        "handle": "@prikorm7",
+        "subscribers": 99,
+        "discussion_group": true,
+        "posts_per_week": 0.0,
+        "language_mix": {},
+        "last_post": null,
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "usable",
+        "reasons": [
+          "no blue check — confirm this is the official channel"
+        ],
+        "found_by": [
+          "baby_food:прикорм"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "n_texts": 0,
+          "language_mix": {}
+        },
+        "error": null,
+        "cumulative_subscribers": 845950,
+        "gap_after": 9154050
+      },
+      {
+        "title": "Здоровий спосіб життя",
+        "handle": "@kutos419_63",
+        "subscribers": 70,
+        "discussion_group": true,
+        "posts_per_week": 2.5,
+        "language_mix": {
+          "ua": 1.0
+        },
+        "last_post": "2026-07-31T07:55:45+00:00",
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "usable",
+        "reasons": [
+          "no blue check — confirm this is the official channel",
+          "linked group present but no comments on the sampled posts"
+        ],
+        "found_by": [
+          "healthy_lifestyle:здоровий спосіб життя"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 10,
+          "posts_per_week": 2.5,
+          "last_post": "2026-07-31T07:55:45+00:00",
+          "n_texts": 5,
+          "language_mix": {
+            "ua": 1.0
+          }
+        },
+        "error": null,
+        "cumulative_subscribers": 846020,
+        "gap_after": 9153980
+      },
+      {
+        "title": "«Здорове харчування.Збалансована тарілка.»",
+        "handle": "@miykanal2026",
+        "subscribers": 62,
+        "discussion_group": false,
+        "posts_per_week": 0.0,
+        "language_mix": {},
+        "last_post": null,
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "posts-only",
+        "reasons": [
+          "no blue check — confirm this is the official channel",
+          "comments disabled (no linked discussion group)"
+        ],
+        "found_by": [
+          "healthy_lifestyle:здорове харчування"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "n_texts": 0,
+          "language_mix": {}
+        },
+        "error": null,
+        "cumulative_subscribers": 846082,
+        "gap_after": 9153918
+      },
+      {
+        "title": "РАСтемо разом: нейродивовижні дітки",
+        "handle": "@rastemorazom",
+        "subscribers": 41,
+        "discussion_group": false,
+        "posts_per_week": 31.75,
+        "language_mix": {
+          "en": 0.05,
+          "other": 0.07,
+          "ua": 0.88
+        },
+        "last_post": "2026-08-02T18:29:40+00:00",
+        "telegram_verified": false,
+        "broadcast": false,
+        "verdict": "posts-only",
+        "reasons": [
+          "no blue check — confirm this is the official channel",
+          "supergroup, not a broadcast channel — confirm this is the right entity",
+          "comments disabled (no linked discussion group)"
+        ],
+        "found_by": [
+          "mothers_kids:дітки"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 127,
+          "posts_per_week": 31.75,
+          "last_post": "2026-08-02T18:29:40+00:00",
+          "n_texts": 101,
+          "language_mix": {
+            "en": 0.05,
+            "other": 0.07,
+            "ua": 0.88
+          }
+        },
+        "error": null,
+        "cumulative_subscribers": 846123,
+        "gap_after": 9153877
+      },
+      {
+        "title": "ЗДОРОВЕ ХАРЧУВАННЯ🥑🥦",
+        "handle": "@tkachenko_health",
+        "subscribers": 40,
+        "discussion_group": true,
+        "posts_per_week": 1.0,
+        "language_mix": {
+          "ua": 1.0
+        },
+        "last_post": "2026-07-24T17:50:04+00:00",
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "usable",
+        "reasons": [
+          "no blue check — confirm this is the official channel"
+        ],
+        "found_by": [
+          "healthy_lifestyle:здорове харчування"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 4,
+          "posts_per_week": 1.0,
+          "last_post": "2026-07-24T17:50:04+00:00",
+          "n_texts": 2,
+          "language_mix": {
+            "ua": 1.0
+          }
+        },
+        "error": null,
+        "cumulative_subscribers": 846163,
+        "gap_after": 9153837
+      },
+      {
+        "title": "Рецепты от Эси 🤍",
+        "handle": "@prikorm1",
+        "subscribers": 38,
+        "discussion_group": true,
+        "posts_per_week": 0.0,
+        "language_mix": {},
+        "last_post": null,
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "usable",
+        "reasons": [
+          "no blue check — confirm this is the official channel"
+        ],
+        "found_by": [
+          "baby_food:прикорм"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "n_texts": 0,
+          "language_mix": {}
+        },
+        "error": null,
+        "cumulative_subscribers": 846201,
+        "gap_after": 9153799
+      },
+      {
+        "title": "Материнство без Фильтров",
+        "handle": "@materinstvoi",
+        "subscribers": 37,
+        "discussion_group": true,
+        "posts_per_week": 0.0,
+        "language_mix": {},
+        "last_post": null,
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "usable",
+        "reasons": [
+          "no blue check — confirm this is the official channel"
+        ],
+        "found_by": [
+          "mothers_kids:материнство"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "n_texts": 0,
+          "language_mix": {}
+        },
+        "error": null,
+        "cumulative_subscribers": 846238,
+        "gap_after": 9153762
+      },
+      {
+        "title": "Нутриціологія для жінок",
+        "handle": "@olka_star1",
+        "subscribers": 37,
+        "discussion_group": true,
+        "posts_per_week": 0.0,
+        "language_mix": {},
+        "last_post": null,
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "usable",
+        "reasons": [
+          "no blue check — confirm this is the official channel",
+          "linked group present but no comments on the sampled posts"
+        ],
+        "found_by": [
+          "healthy_lifestyle:нутриціологія"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "n_texts": 0,
+          "language_mix": {}
+        },
+        "error": null,
+        "cumulative_subscribers": 846275,
+        "gap_after": 9153725
+      },
+      {
+        "title": "ЗДОРОВИЙ СПОСІБ ЖИТТЯ",
+        "handle": "@ZOZHanytye",
+        "subscribers": 36,
+        "discussion_group": true,
+        "posts_per_week": 0.0,
+        "language_mix": {},
+        "last_post": null,
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "usable",
+        "reasons": [
+          "no blue check — confirm this is the official channel"
+        ],
+        "found_by": [
+          "healthy_lifestyle:здоровий спосіб життя"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "n_texts": 0,
+          "language_mix": {}
+        },
+        "error": null,
+        "cumulative_subscribers": 846311,
+        "gap_after": 9153689
+      },
+      {
+        "title": "-خــيال ✿",
+        "handle": "@Mamyv",
+        "subscribers": 33,
+        "discussion_group": false,
+        "posts_per_week": 0.0,
+        "language_mix": {},
+        "last_post": null,
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "posts-only",
+        "reasons": [
+          "no blue check — confirm this is the official channel",
+          "comments disabled (no linked discussion group)"
+        ],
+        "found_by": [
+          "mothers_kids:мами"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "n_texts": 0,
+          "language_mix": {}
+        },
+        "error": null,
+        "cumulative_subscribers": 846344,
+        "gap_after": 9153656
+      },
+      {
+        "title": "Українські дітки - Дітцінген Chat",
+        "handle": "@ukrditkuditzingen",
+        "subscribers": 28,
+        "discussion_group": true,
+        "posts_per_week": 2.5,
+        "language_mix": {
+          "other": 0.3,
+          "ru": 0.7
+        },
+        "last_post": "2026-08-05T19:03:55+00:00",
+        "telegram_verified": false,
+        "broadcast": false,
+        "verdict": "usable",
+        "reasons": [
+          "no blue check — confirm this is the official channel",
+          "supergroup, not a broadcast channel — confirm this is the right entity",
+          "linked group present but no comments on the sampled posts"
+        ],
+        "found_by": [
+          "mothers_kids:дітки"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 10,
+          "posts_per_week": 2.5,
+          "last_post": "2026-08-05T19:03:55+00:00",
+          "n_texts": 10,
+          "language_mix": {
+            "other": 0.3,
+            "ru": 0.7
+          }
+        },
+        "error": null,
+        "cumulative_subscribers": 846372,
+        "gap_after": 9153628
+      },
+      {
+        "title": "Babyshop -дитяче харчування",
+        "handle": "@babyshopuz16",
+        "subscribers": 28,
+        "discussion_group": false,
+        "posts_per_week": 0.0,
+        "language_mix": {},
+        "last_post": null,
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "posts-only",
+        "reasons": [
+          "no blue check — confirm this is the official channel",
+          "comments disabled (no linked discussion group)"
+        ],
+        "found_by": [
+          "baby_food:дитяче харчування"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "n_texts": 0,
+          "language_mix": {}
+        },
+        "error": null,
+        "cumulative_subscribers": 846400,
+        "gap_after": 9153600
+      },
+      {
+        "title": "СОНЯЧНІ ДІТКИ 🫶",
+        "handle": "@CarpathianTrail000",
+        "subscribers": 26,
+        "discussion_group": false,
+        "posts_per_week": 213.0,
+        "language_mix": {
+          "en": 0.02,
+          "other": 0.48,
+          "ru": 0.17,
+          "ua": 0.34
+        },
+        "last_post": "2026-08-05T16:02:02+00:00",
+        "telegram_verified": false,
+        "broadcast": false,
+        "verdict": "posts-only",
+        "reasons": [
+          "no blue check — confirm this is the official channel",
+          "supergroup, not a broadcast channel — confirm this is the right entity",
+          "comments disabled (no linked discussion group)"
+        ],
+        "found_by": [
+          "mothers_kids:дітки"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 852,
+          "posts_per_week": 213.0,
+          "last_post": "2026-08-05T16:02:02+00:00",
+          "n_texts": 714,
+          "language_mix": {
+            "en": 0.02,
+            "other": 0.48,
+            "ru": 0.17,
+            "ua": 0.34
+          }
+        },
+        "error": null,
+        "cumulative_subscribers": 846426,
+        "gap_after": 9153574
+      },
+      {
+        "title": "Здоровий спосіб життя з Наталі",
+        "handle": "@zdrowysposobzyciaznatali",
+        "subscribers": 25,
+        "discussion_group": true,
+        "posts_per_week": 0.0,
+        "language_mix": {},
+        "last_post": null,
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "usable",
+        "reasons": [
+          "no blue check — confirm this is the official channel"
+        ],
+        "found_by": [
+          "healthy_lifestyle:здоровий спосіб життя"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "n_texts": 0,
+          "language_mix": {}
+        },
+        "error": null,
+        "cumulative_subscribers": 846451,
+        "gap_after": 9153549
+      },
+      {
+        "title": "Дітки Адо",
+        "handle": "@naimadailychat",
+        "subscribers": 19,
+        "discussion_group": true,
+        "posts_per_week": 0.0,
+        "language_mix": {},
+        "last_post": null,
+        "telegram_verified": false,
+        "broadcast": false,
+        "verdict": "usable",
+        "reasons": [
+          "no blue check — confirm this is the official channel",
+          "supergroup, not a broadcast channel — confirm this is the right entity"
+        ],
+        "found_by": [
+          "mothers_kids:дітки"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "n_texts": 0,
+          "language_mix": {}
+        },
+        "error": null,
+        "cumulative_subscribers": 846470,
+        "gap_after": 9153530
+      },
+      {
+        "title": "Дітки (танці)",
+        "handle": "@juniors1kids",
+        "subscribers": 19,
+        "discussion_group": false,
+        "posts_per_week": 0.0,
+        "language_mix": {},
+        "last_post": null,
+        "telegram_verified": false,
+        "broadcast": false,
+        "verdict": "posts-only",
+        "reasons": [
+          "no blue check — confirm this is the official channel",
+          "supergroup, not a broadcast channel — confirm this is the right entity",
+          "comments disabled (no linked discussion group)"
+        ],
+        "found_by": [
+          "mothers_kids:дітки"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "n_texts": 0,
+          "language_mix": {}
+        },
+        "error": null,
+        "cumulative_subscribers": 846489,
+        "gap_after": 9153511
+      },
+      {
+        "title": "дитяче меню",
+        "handle": "@takamamaua",
+        "subscribers": 16,
+        "discussion_group": false,
+        "posts_per_week": 0.0,
+        "language_mix": {},
+        "last_post": null,
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "posts-only",
+        "reasons": [
+          "no blue check — confirm this is the official channel",
+          "comments disabled (no linked discussion group)"
+        ],
+        "found_by": [
+          "baby_food:дитяче меню"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "n_texts": 0,
+          "language_mix": {}
+        },
+        "error": null,
+        "cumulative_subscribers": 846505,
+        "gap_after": 9153495
+      },
+      {
+        "title": "СМАЙЛІ | Онлайн тренування | Здорове харчування",
+        "handle": "@smiley_com_ua",
+        "subscribers": 12,
+        "discussion_group": true,
+        "posts_per_week": 0.0,
+        "language_mix": {},
+        "last_post": null,
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "usable",
+        "reasons": [
+          "no blue check — confirm this is the official channel"
+        ],
+        "found_by": [
+          "healthy_lifestyle:здорове харчування"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "n_texts": 0,
+          "language_mix": {}
+        },
+        "error": null,
+        "cumulative_subscribers": 846517,
+        "gap_after": 9153483
+      },
+      {
+        "title": "Мама і малюк",
+        "handle": "@mamaimaliuk",
+        "subscribers": 10,
+        "discussion_group": false,
+        "posts_per_week": 2.0,
+        "language_mix": {
+          "ua": 1.0
+        },
+        "last_post": "2026-08-05T12:35:03+00:00",
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "posts-only",
+        "reasons": [
+          "no blue check — confirm this is the official channel",
+          "comments disabled (no linked discussion group)"
+        ],
+        "found_by": [
+          "mothers_kids:мама і малюк"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 8,
+          "posts_per_week": 2.0,
+          "last_post": "2026-08-05T12:35:03+00:00",
+          "n_texts": 8,
+          "language_mix": {
+            "ua": 1.0
+          }
+        },
+        "error": null,
+        "cumulative_subscribers": 846527,
+        "gap_after": 9153473
+      },
+      {
+        "title": "Перший прикорм🥦 Дитяче меню",
+        "handle": "@pershyi_prykorm",
+        "subscribers": 9,
+        "discussion_group": true,
+        "posts_per_week": 0.0,
+        "language_mix": {},
+        "last_post": null,
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "usable",
+        "reasons": [
+          "no blue check — confirm this is the official channel",
+          "linked group present but no comments on the sampled posts"
+        ],
+        "found_by": [
+          "baby_food:дитяче меню"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "n_texts": 0,
+          "language_mix": {}
+        },
+        "error": null,
+        "cumulative_subscribers": 846536,
+        "gap_after": 9153464
+      },
+      {
+        "title": "TOWERMARKET дитяче харчування",
+        "handle": "@towermarket_lviv_baby",
+        "subscribers": 4,
+        "discussion_group": false,
+        "posts_per_week": 0.0,
+        "language_mix": {},
+        "last_post": null,
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "posts-only",
+        "reasons": [
+          "no blue check — confirm this is the official channel",
+          "comments disabled (no linked discussion group)"
+        ],
+        "found_by": [
+          "baby_food:дитяче харчування"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "n_texts": 0,
+          "language_mix": {}
+        },
+        "error": null,
+        "cumulative_subscribers": 846540,
+        "gap_after": 9153460
+      },
+      {
+        "title": "Мама і малюк | 🤍чат підтримки🤍",
+        "handle": "@mama_i_malysh_chat",
+        "subscribers": 2,
+        "discussion_group": true,
+        "posts_per_week": 0.0,
+        "language_mix": {},
+        "last_post": null,
+        "telegram_verified": false,
+        "broadcast": false,
+        "verdict": "usable",
+        "reasons": [
+          "no blue check — confirm this is the official channel",
+          "supergroup, not a broadcast channel — confirm this is the right entity",
+          "linked group present but no comments on the sampled posts"
+        ],
+        "found_by": [
+          "mothers_kids:мама і малюк"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "n_texts": 0,
+          "language_mix": {}
+        },
+        "error": null,
+        "cumulative_subscribers": 846542,
+        "gap_after": 9153458
+      },
+      {
+        "title": "Мама знає (знахідки для мам і малюків)",
+        "handle": "@mamaknows_ua",
+        "subscribers": 1,
+        "discussion_group": false,
+        "posts_per_week": 0.0,
+        "language_mix": {},
+        "last_post": null,
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "posts-only",
+        "reasons": [
+          "no blue check — confirm this is the official channel",
+          "comments disabled (no linked discussion group)"
+        ],
+        "found_by": [
+          "mothers_kids:мама і малюк"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "n_texts": 0,
+          "language_mix": {}
+        },
+        "error": null,
+        "cumulative_subscribers": 846543,
+        "gap_after": 9153457
+      },
+      {
+        "title": "Малюкам та їх мамам",
+        "handle": "@rozvytokmaljat",
+        "subscribers": 0,
+        "discussion_group": false,
+        "posts_per_week": 0.0,
+        "language_mix": {},
+        "last_post": null,
+        "telegram_verified": false,
+        "broadcast": true,
+        "verdict": "posts-only",
+        "reasons": [
+          "no blue check — confirm this is the official channel",
+          "no posts in the sampled window",
+          "comments disabled (no linked discussion group)"
+        ],
+        "found_by": [
+          "mothers_kids:мама і малюк"
+        ],
+        "window": {
+          "window_days": 28,
+          "window_truncated": false,
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "n_texts": 0,
+          "language_mix": {}
+        },
+        "error": null,
+        "cumulative_subscribers": 846543,
+        "gap_after": 9153457
+      }
+    ]
+  },
+  "caveats": [
+    "summed subscribers != unique reach",
+    "subscribers != comment flow"
+  ],
+  "note": "Candidates only. config/registry.yaml is untouched: a new channel enters through the track-R entry gate by the operator's choice (SPEC 3.11 (4)). The coverage ledger is an upper bound in both directions named in `caveats` — summed subscribers != unique reach, and subscribers != comment flow.",
+  "git": {
+    "commit": "242fcdcb1ad6dc67b0733717c7a5ee64475dde6e",
+    "dirty": [
+      "results/poll_census_5a.json",
+      "scripts/discover_channels.py",
+      "scripts/poll_census.py",
+      "scripts/run_loop.py",
+      "src/market_pulse/loop.py",
+      "tests/test_loop.py"
+    ]
+  }
+}

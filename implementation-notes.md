@@ -2008,3 +2008,210 @@ failed fetch left the 2026-08-01 file in place, and its numbers are plausible �
 Phase 4 arm-A column. The adapter-sha comparison the runbook prescribes is what caught it:
 the record claimed `c0e462af…`, the adapter on the Mac hashed to `b3ca6308…`. Both a phase's
 own filenames and that check are now in the runbook.
+
+# Phase 5a — the loop's skeleton, a storewide poll census, and a ledger that comes up short
+
+Three deliverables, all $0. No GPU, no serverless, no model call of any kind; the only network
+traffic is Telegram's free API, paced by the collector's existing waits. `make check` **861
+passed** (814 before 5a), `ruff format --check .` **147 files already formatted**.
+
+## Deviations — silence is not compliance
+
+**D1 — step 0's status list was short by one path, and the extra one was expected.** The brief
+names five paths; `git status --short` showed six. The sixth is `knowledge/hot.md`, which the
+previous session's `/close` rewrote and which the SessionStart hook refreshes on every start.
+`hot.md`'s own ⏭️ Next block anticipates this by name: *"the brief's expected status list does not
+include `knowledge/hot.md` … that one extra file is expected, not a surprise."* Committed with
+the other five, by path, one commit, `242fcdc`. Nothing else was in the tree.
+
+**D2 — Deliverable 2's premise is false: there is no poll payload on disk, and 4.5g2 never read
+one from disk.** The brief says *"The poll payload already sits in the stored raw messages (4.5g2
+took its transcripts from them; the collector just never surfaced it as text)"*. Measured, not
+argued: all 6,057 records in `data/raw/posts/*.jsonl` carry exactly ten keys — `record_type,
+source_id, channel, msg_id, date, text, has_media, grouped_id, reply_count, provenance` — and
+`raw_store.post_record` never reads `message.poll` or the media type. 4.5g2's sixteen transcripts
+came from a **live** `client.get_messages` in `scripts/fetch_post_media.py:180`, not from bytes.
+A storewide census is therefore uncomputable offline for 774 of the 815 text-less posts.
+
+Resolution: the census re-reads those ids from Telegram. `$0` holds — the Budget section says
+"Telegram API is free" and Deliverable 1 is API-only — but the heading's "no API" does not, and
+that word is the part of the brief that is wrong, not the deliverable. The alternative (census
+only the 41 posts 4.5g2 already typed, and name 774 as unknown) would have re-reported a number
+the brief already quotes, so it was not taken. Nine batched requests, about ninety seconds.
+
+**D3 — "the CURRENT five registry channels" is four.** `config/registry.yaml` holds four sources
+— silpo, atb, varus, msuaaaa — one channel each. The fifth, `@znizhki_ua`, was removed on
+2026-07-27 (dead since 2024-03, zero records in the window; the registry says so in a comment).
+The ledger sums **four**. SPEC 3.11 (4) carries the same stale count; both are team-lead files
+and neither was edited.
+
+**D4 — `--dry-run` and `--smoke` are two flags here, because in this repo they mean two things.**
+The brief asks for a `--dry-run` *and* for a dry-run smoke recorded in `results/smoke/loop_5a.json`.
+House convention (`scripts/migrate_intents_v4.py`, `scripts/precheck_uplabel.py`) is that a
+`--dry-run` returns before writing anything, while `--smoke` writes a real-shaped record with
+`"smoke": true`. A dry-run that wrote a file would break the first convention, so both flags
+exist: `--once --dry-run` is the brief's literal command and writes nothing; `--once --smoke`
+does the same pass and records it.
+
+**D5 — 5a's loop has no live pass, and that follows from the brief's own DO NOT list.** A live
+pass appends to `data/raw/`, which "touch … raw v1 stores (derived columns beside only)" forbids.
+`scripts/run_loop.py --once` without a dry flag therefore **refuses**, names the reason and names
+where the live pass belongs (5c, with its own store root). Consequence to be honest about: the
+idempotency of `loop.ingest` is proven by tests over fabricated records, not by a real fetch —
+`RawStore.append` is the dedup, and it has carried the backfill since Phase 2.
+
+**D6 — the brief's `marketpulse.session` is the session file, not a module.** There is no
+`marketpulse` package; the file at the repo root is Telethon's session. Both new API scripts use
+`market_pulse.telegram_client.build_client`, which reads it through `.env`.
+
+**D7 — the caveats are printed in the brief's ASCII spelling.** `docs/PROMPT-5a.md` writes
+`summed subscribers != unique reach` / `subscribers != comment flow`; SPEC 3.11 (4) writes the
+same two with `≠`. The brief says "this file is the whole brief", so its bytes are what
+`results/discovery_5a.json` carries, and a test holds the constant to them.
+
+**D8 — the ledger carries one column the brief did not ask for, and it is the one that matters.**
+37 of the 66 candidates posted **nothing** in the four-week window, and they hold 312 k of the
+668 k candidate subscribers — including the single largest, `@itsmamix` at 280,895. Summed
+without that split, the ledger's headline would be a portfolio number made mostly of channels
+that produce no rows. `subscribers != comment flow` is printed beside it as instructed; the split
+is that caveat as an arithmetic the operator can act on.
+
+**D9 — discovery reuses `scripts/entry_check.py` rather than forking its checker.** Resolve,
+subscriber count, linked-group test and the `usable / posts-only / rejected / unresolved` verdict
+vocabulary are that script's, so the 5a rows stay comparable to the 27.07 `data/discovery_*.json`
+artifacts. Two things it does not measure are added here: a **fixed** 28-day window (its own
+sample is the last 50 posts, however long that took — the artifacts on disk span 18 to 73 days)
+and a language mix from `langid.detect`. The ledger goes to `results/`, not `data/`, because it
+is a result file the operator reads, and `data/*` is gitignored.
+
+**D10 — one FloodWait policy per script, chosen and named.** The census uses `scripts/backfill.py`'s
+(sleep `exc.seconds`, retry three times) because the job is nine bounded requests and a dropped
+batch would put 100 ids into `not_fetched`. Discovery uses `entry_check.py`'s per-candidate
+tolerance: one bad channel is recorded as an error and the scan continues. Neither blends the two.
+
+**D11 — "giveaway" here is Telegram's, not the retailer's.** `MessageMediaGiveaway` is the
+premium-subscription feature (2 posts). A retail «розыгрыш» is an ordinary image post whose *text*
+announces a draw — it is not text-less and is outside this population entirely. `voice` is the
+`DocumentAttributeAudio` voice flag, never a mime type: an uploaded `audio/ogg` file and a voice
+note are counted apart. Both definitions are written into `results/poll_census_5a.json`.
+
+**D12 — the poll sidecar stays gitignored, deliberately.** `data/raw/post_polls.jsonl` is the
+post's own words read from Telegram — collected data, the same class as the `text` field of the
+v1 store beside it, which is also not committed. `data/annotation/post_captions.jsonl` is
+committed because it is *paid model output*; a poll transcript costs nothing and involves no
+model (`scripts/fetch_post_media.py:304`: "transcribed rather than captioned — same posts, same
+fetch, one field further, no vision model involved"). No
+`.gitignore` exception was added. Its sha256 and every count derived from it are in the committed
+`results/poll_census_5a.json`.
+
+**D13 — the four-week window truncates on the busiest channels, and says so.** `WINDOW_LIMIT` is
+1,200 raw messages per channel; a channel that fills it before reaching the cutoff gets
+`window_truncated: true` and its `posts_per_week` is a floor. It fires on the retail channels
+(@VARUS_channel posts ~4 raw messages per collapsed post), never on the candidates.
+
+**D14 — `results/smoke/loop_5a.json` is gitignored (`.gitignore:82`), so a clean `git status`
+proves nothing about it.** Its contents are quoted below instead.
+
+## What 5a measured
+
+**Discovery — `results/discovery_5a.json`** (11 queries over the three authorised themes; the
+query list is a printed constant and is echoed into the record):
+
+| | channels | subscribers | gap to 10,000,000 |
+|---|---|---|---|
+| registry today | 4 | 178,372 | 9,821,628 |
+| + all 66 candidates | 70 | 846,543 | **9,153,457** |
+| + only the 29 that posted in 28 days | 33 | 534,419 | **9,465,581** |
+
+40 of the 66 have a discussion group; **19** have one *and* posted in the window — those are the
+only ones that can produce comment rows at all. One query (`ЗОЖ`) returned no new candidate;
+the rest returned 4–9 each, none approaching `DISCOVER_LIMIT = 15`. The three authorised themes
+close **6.8%** of the gap taking every candidate, **3.6%** taking only the ones that post, and
+closing the rest is not a discovery problem this brief can
+solve — widening beyond the three themes is the operator's decision, taken on this gap
+(SPEC 3.11 (4)). Both caveats are in the record verbatim.
+
+**Poll census — `results/poll_census_5a.json`** over all 6,057 stored posts:
+
+| channel | posts | empty text | polls | share | other kinds |
+|---|---|---|---|---|---|
+| @VARUS_channel | 2,252 | 469 | **33** | 7.0% | 421 photo · 12 video · 2 giveaway · 1 voice |
+| @atb_market_official | 777 | 343 | **4** | 1.2% | 335 photo · 4 video |
+| @msuaaaa | 1,904 | 3 | 0 | 0% | 2 photo · 1 document |
+| @silposilpo | 1,124 | 0 | — | — | — |
+| **total** | **6,057** | **815** | **37** | **4.54%** | 758 photo · 16 video · 2 giveaway · 1 voice · 1 document |
+
+Zero `gone` — every text-less id still exists in Telegram — and zero `not_fetched`.
+
+**37 of 815 is not a continuation of 16 of 41.** The 4.5g2 number counted polls among the
+media-only *parents of one sitting pack*, all @VARUS_channel. This counts polls among every
+text-less post in the store. The rates (39% against 4.5%) are not comparable and the record says
+so in its own field.
+
+**The positive control passed 16/16.** All sixteen 4.5g2 poll rows are in this run's output and
+every transcript is **byte-identical** to the one `caption_posts.py` wrote in August —
+`cross_check_45g2: {rows_45g2: 16, also_found_here: 16, transcripts_identical: 16,
+missing_from_this_run: [], transcripts_that_differ: []}`. The transcript format is
+`caption_posts.poll_caption`'s and the record shape is the one `parents.load_captions` already
+reads; a test loads the sidecar through that loader rather than asserting it.
+
+**Raw v1 is byte-identical.** `git status` cannot show this — `data/` is gitignored — so a
+sha256 baseline of all six store files was taken *before* the first fetch and re-checked after
+the census and again after the full suite: six of six OK both times.
+
+**Loop skeleton — `results/smoke/loop_5a.json`** (gitignored; quoted, not pointed at):
+
+```json
+{"task": "loop_pass_5a", "smoke": true, "mode": "dry-run",
+ "scope": {"store_root": "data/raw", "cursor": "data/loop_cursor.json",
+           "cursor_exists": false, "channel": "@VARUS_channel", "channels_in_pass": 1},
+ "plan": [{"channel": "@VARUS_channel", "posts_stored": 2252, "comments_stored": 6410,
+           "fetch_posts_newer_than": null, "threads_to_fetch": 0,
+           "inference_watermark": null, "rows_to_inference": 6410, "damaged_lines": 0}],
+ "totals": {"threads_to_fetch": 0, "rows_to_inference": 6410},
+ "inference": {"endpoint": null, "refusal": "6410 rows are queued and no serving endpoint is
+   registered. SPEC 3.11 (2) pre-registers a serving-parity measurement before any serving
+   number reaches an aggregate, so 5a queues rows and sends none."}}
+```
+
+Over all four channels the dry pass reports **0 threads to fetch and 11,338 rows to inference** —
+the corpus total STATUS records, arrived at independently from the store index, and 0 threads
+because every post with replies already has its thread stored.
+
+## The design choices, and the alternatives not built
+
+**Two watermarks, not one.** `posts` is where collection has walked to; `inference` is what has
+been scored. Nothing advances the second in 5a, which is why the queue reads 11,338 — and that
+is the number 5b needs before it can size a serving-parity run. The alternative, a single cursor,
+cannot express "collected but not yet judged", which is the loop's whole steady state.
+
+**The spend guard defaults closed.** `loop.inference_refusal(rows, endpoint)` refuses while
+`run_loop.ENDPOINT is None` and opens the moment an endpoint is registered — the negative control
+is a test, because a guard that refuses everything proves nothing about what it blocks. 5b changes
+one constant. The alternative — a real spend counter like `scripts/runpod_guard.py` — has nothing
+to count in 5a and would have been a meter with no meter reading.
+
+**Dry-run purity is checked by digest, not by intention.** The test hashes every byte under a
+throwaway store and cursor before and after the pass and requires them equal, and patches
+`telethon.TelegramClient` itself — not the repo's `build_client` — so "no network" holds for
+every door, not just the front one.
+
+**Not built, on purpose:** a live collection pass (D5); a third surrogate for video, voice or
+giveaway posts (the brief says count only); a second poll-text format (three layers already
+exist — `caption_posts.poll_caption`, `prompts.POST_SURROGATE["poll"]`,
+`build_sitting_pack.SHOWN["poll_text"]` — and all three are reused, none replaced); any change to
+`config/registry.yaml`.
+
+## What the operator has to decide next
+
+The gap is the finding. 66 candidates across the three authorised themes add **668,171**
+subscribers, of which **356,047** belong to channels that actually post, and the target is
+10,000,000. Every reading of the ledger leaves more than 9.1 M outstanding. The 19 candidates
+that both carry a discussion group and posted in the window are the only ones that can produce
+comment rows; `@tarilka_malyuka` (10,446 · 20 posts/week · comments · 99% ua) and `@pro_zsg`
+(109 · 16.25 posts/week · comments) are the liveliest of them — and note the second one's size.
+Across the 66 counted candidates subscriber count and posting rate are **uncorrelated**
+(Pearson −0.01), so a portfolio picked off the top of the subscriber column is not a portfolio
+picked for flow. Whether that means widening the themes, revisiting the
+target, or launching on the four registry channels and letting the loop's first cycle price the
+question is not a decision this phase can make.

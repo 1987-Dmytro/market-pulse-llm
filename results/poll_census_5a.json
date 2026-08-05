@@ -1,0 +1,88 @@
+{
+  "generated_at": "2026-08-05T20:17:22+00:00",
+  "population": "every post in data/raw/posts/*.jsonl whose stored `text` is empty, storewide",
+  "limit_per_channel": null,
+  "counts": {
+    "per_channel": {
+      "@VARUS_channel": {
+        "posts_stored": 2252,
+        "empty_text": 469,
+        "polls": 33,
+        "poll_share_of_empty": 0.0704,
+        "kinds": {
+          "giveaway": 2,
+          "photo": 421,
+          "poll": 33,
+          "video": 12,
+          "voice": 1
+        }
+      },
+      "@atb_market_official": {
+        "posts_stored": 777,
+        "empty_text": 343,
+        "polls": 4,
+        "poll_share_of_empty": 0.0117,
+        "kinds": {
+          "photo": 335,
+          "poll": 4,
+          "video": 4
+        }
+      },
+      "@msuaaaa": {
+        "posts_stored": 1904,
+        "empty_text": 3,
+        "polls": 0,
+        "poll_share_of_empty": 0.0,
+        "kinds": {
+          "document": 1,
+          "photo": 2
+        }
+      }
+    },
+    "total": {
+      "posts_stored": 6057,
+      "empty_text": 815,
+      "polls": 37,
+      "poll_share_of_empty": 0.0454,
+      "kinds": {
+        "document": 1,
+        "giveaway": 2,
+        "photo": 758,
+        "poll": 37,
+        "video": 16,
+        "voice": 1
+      }
+    }
+  },
+  "sidecar": {
+    "path": "data/raw/post_polls.jsonl",
+    "rows": 37,
+    "cross_check_45g2": {
+      "captions": "data/annotation/post_captions.jsonl",
+      "found": true,
+      "rows_45g2": 16,
+      "also_found_here": 16,
+      "transcripts_identical": 16,
+      "missing_from_this_run": [],
+      "transcripts_that_differ": []
+    },
+    "kinds_built": [
+      "poll"
+    ],
+    "format": "caption_posts.poll_caption — the question, then its options one per line; rendered by prompts.POST_SURROGATE['poll'] and read by parents.load_captions.",
+    "note": "Derived, beside the v1 store. data/raw/posts/*.jsonl is opened read-only and its bytes are unchanged — the same rule 4.5g5 followed for reply_to_msg_id."
+  },
+  "not_a_continuation_of_16_of_41": "results/post_media_45g2.json counted 16 polls among the 41 media-only parents of ONE sitting pack, one channel. This run counts polls among every text-less post in the store. Different populations: the rates are not comparable and the 4.5g2 number is not superseded by this one.",
+  "giveaways_video_voice": "counted and named only — docs/PROMPT-5a.md builds no third surrogate in 5a. `giveaway` here is Telegram's own MessageMediaGiveaway (the premium-subscription feature), NOT a retail «розыгрыш»: that one is an ordinary image post whose TEXT announces a draw, so it is not text-less and is outside this population entirely. `voice` is the DocumentAttributeAudio voice flag, not a mime type — an uploaded audio file and a voice note share audio/ogg and are counted apart.",
+  "git": {
+    "commit": "242fcdcb1ad6dc67b0733717c7a5ee64475dde6e",
+    "dirty": [
+      "results/discovery_5a.json",
+      "scripts/discover_channels.py",
+      "scripts/poll_census.py",
+      "scripts/run_loop.py",
+      "src/market_pulse/loop.py",
+      "tests/test_loop.py"
+    ]
+  }
+}
