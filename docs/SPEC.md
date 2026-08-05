@@ -1,8 +1,9 @@
-# market-pulse-llm — Project Specification (rev. 3.8)
+# market-pulse-llm — Project Specification (rev. 3.10)
 
 **Status:** APPROVED rev. 3 (2026-07-26); amendment 3.1 approved 2026-07-27;
 amendments 3.2 and 3.3 approved 2026-07-28; amendments 3.4–3.6 approved
-2026-08-01; amendments 3.7 and 3.8 approved 2026-08-02.
+2026-08-01; amendments 3.7 and 3.8 approved 2026-08-02; amendment 3.9 approved
+2026-08-03; amendment 3.10 authorised 2026-08-04, recorded 2026-08-05.
 **Amendment 3.1:** EN removed from per-language gates — the collected corpus
 contains 8 EN comments out of 2,000 sampled (retail channels post in UA); a
 per-language metric over n=8 is meaningless. Gates run on UA and RU. The model
@@ -167,6 +168,25 @@ audit rulings + 1 law verdict re-applied ON TOP (operator rulings supersede
 the model); the 54 dual-home ids are resolved by option (i): the holdout pool
 is materialized at 917 rows as a new version beside the pristine file, and v4
 inherits v3 values on the 4 diverging rows.
+**Amendment 3.10 (4.5h2 mid-phase ruling, authorised 2026-08-04, recorded
+2026-08-05):** amendment 3.9 (1)'s `_tax2` sources are unparseable under the
+frozen v1 training prompt (`service` is not a T1v1 label; the trainer's
+train/eval format-identity invariant then moves the eval's rendering with it —
+implementation-notes.md D2), so the training/eval rendering moves to
+**`T1v2_with_post`**, the instrument the gold was annotated with. Two bound
+consequences, both operator-authorised in the same ruling: (1) the per-arm
+training ceiling rises **6.5 h → 8.5 h** for the 4.5h2 ablation only —
+3.9's 6.5 h was projected against a rendering without the parent post;
+with-post projected arm B at 8.16 h (observed: arm A 4.58 h, arm B 7.51 h);
+(2) `config/qlora.yaml` **`max_seq_len` 1024 → 1408** — a guard threshold, not
+a pad width (`collate` pads per micro-batch), so step time does not move, and
+all 5 676 rows of both arms encode under it (0 over). The authorisation was
+recorded same-day in implementation-notes.md D2, `scripts/runbook_45h2.md` and
+both runs' provenance; it reached this file only at the 4.5h2 acceptance
+(2026-08-05) — a team-lead process fault, recorded rather than smoothed over.
+Rule going forward (written into the team-lead skill, 2026-08-05): a mid-phase
+authorisation that changes a contract limit is written into SPEC the same
+session it is made, before the run that depends on it.
 **Date:** 2026-07-26 · **Team lead:** Fable session · **Executor:** Claude Code
 **Repo folder:** `/Users/hdv_1987/Desktop/Projects/market-pulse-llm`
 **rev. 3 change (operator decision):** producers in Ukraine barely use Telegram for
