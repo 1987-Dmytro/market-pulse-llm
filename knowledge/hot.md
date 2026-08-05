@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-05 11:49:20 (every SessionStart)
+**Auto-refreshed:** 2026-08-05 21:56:02 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+c32a46c docs: 45h2 tail — amendments blocker paid, 626-row accounting, 08-05 log
+5a7e848 docs: SPEC amendment 3.10 recorded; STATUS at the 4.5-close briefing
 38a0166 chore: the settled GPU figure and the hook tail — $8.8630 of $9.00, both pods deleted
 70a9ad7 docs: hot.md and the 08-05 log — the пласт is dropped, and two amendments are owed
 4646001 docs: ADR 45h2 — the numbers, the rule's output, and G1c short by 0.0005
-e237be2 feat: the пласт ablation is decided — the пласт is dropped, 3 of 5 gates pass
-a41df70 feat: arm A scored on v4 — and the dump it wrote is gone, recorded as such
 ```
 
 ## 📋 Recent decisions
@@ -31,49 +31,39 @@ a41df70 feat: arm A scored on v4 — and the dump it wrote is gone, recorded as 
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-05 11:53 (step-0 bookkeeping. **PHASE 4.5h2 IS DONE AND THE ПЛАСТ IS DROPPED — by measurement, not by argument.** Both arms trained once and scored once on test v4, one data path apart. Arm B's G1c came out **4.05 pp LOWER**, so the pre-registered rule fails at its first clause; G1b, G1d and G1e also regress past the 0.5 pp tolerance, and only ru sentiment moved up (+2.46 pp, n=86, noise-dominated). On the selected `without-plast` arm **3 of 5 Tier-1 gates pass**. Spend: GPU $8.8630 of $9.00, OpenRouter $0.1080 of $0.30. **The two owed amendments are PAID — SPEC rev. 3.10 records both** (see Blockers), and **Phase 5 is open** (see Next). Edited by hand; the section above is auto-generated, do NOT touch the marker.)
+**Last update:** 2026-08-05 (`/close`. **PHASE 4.5 IS CLOSED, PHASE 5 — THE PRODUCTION LOOP — IS OPEN**, and its contract is **SPEC amendment 3.11**, written at the briefing of 05.08. 4.5h2 ended the phase by measurement: the пласт is dropped, **3 of 5 Tier-1 gates pass** on arm A, G1c short by 0.0005. The two owed amendments are **PAID** (SPEC 3.10); the ADR now accounts for the пласт's 626 excluded rows — all `unclear` — and `5a7e848` / `c32a46c` closed the phase's bookkeeping. Since then the team lead has landed **SPEC 3.11, a STATUS compacted 1 172 → 196 lines, and `docs/PROMPT-5a.md`** — all three UNCOMMITTED, and 5a's own step 0 commits them. Phase 4+4.5 spend: **$16.30 of $25**, $8.70 left; no pods. Edited by hand; the section above is auto-generated, do NOT touch the marker.)
 
 ## 🔥 What's Hot
 
-**THE ПЛАСТ IS DROPPED.** `results/verdict_45h2.json`, decided by `scripts/gate_verdict_45h.py`
-committed at `dabc12c` — **before either arm existed**. ADR [[45h2-ablation-verdict]].
+**PHASE 5 IS LIVE AND `docs/PROMPT-5a.md` IS QUEUED — read SPEC §3.11 only, not the whole spec.**
+The loop is polling → batch inference → SQLite aggregates → a 14-day first reporting cycle.
+`docs/STATUS.md` is now a **196-line map** (compacted at the briefing; the full phase chronicle
+lives in that file's git history) and `docs/PRODUCT.md` is the north star. Nothing of Phase 5 is
+built yet.
 
-| | `without-plast` | `with-plast` | delta | bar | verdict |
-|---|---|---|---|---|---|
-| G1a overall | **0.9214** | 0.9264 | +0.0049 | 0.9470 | **FAIL** |
-| — ua / ru | 0.9306 / **0.8697** | 0.9237 / 0.8943 | −0.0069 / **+0.0246** | 0.8764 / 0.8840 | PASS / **FAIL** |
-| G1b | **23/38** | 20/38 | −0.0789 | 23 | **PASS** (on the bar) |
-| G1c | **0.8478** | 0.8073 | **−0.0405** | 0.8483 | **FAIL by 0.0005** |
-| G1d | **0.9586** | 0.9348 | −0.0237 | 0.9090 | PASS |
-| G1e | **0.9610** | 0.9333 | −0.0277 | 0.9283 | PASS |
+**5a is $0 and builds three things:** channel discovery for the three authorised themes
+(mothers/kids · ЗОЖ · baby food) with a **coverage ledger against a ≥10,000,000 summed-subscriber
+target**; a storewide **poll census** with poll text surfaced *beside* the raw v1 stores; and the
+**loop skeleton** — cursor state, idempotent ingest, `--dry-run`, tests. No GPU, no serving, no
+aggregates, no model calls: if one seems needed, STOP and report.
 
-**The rule failed at its FIRST clause** — arm B's G1c is not higher, it is 4.05 pp lower. The пласт
-is 1 912 rows whose whole purpose was the `intents` column, and **G1c is the head it damaged most**,
-which is what the program's own three KILLs already said about those labels. The last open question
-about them is closed by measurement.
+**Two honesty clauses ride with the coverage ledger and must be printed verbatim in the record:**
+*summed subscribers ≠ unique reach* (overlap is unmeasurable from the API) and *subscribers ≠
+comment flow* (rows are born in discussion groups). Discovery yields **candidates only** —
+`config/registry.yaml` is not touched, and a new channel enters through the track-R gate by the
+operator's choice.
 
-**G1c FAILS BY FIVE TEN-THOUSANDTHS** — 0.8478 against 0.8483, where the fine-tune gained 4.95 pp
-over the anchor and the bar asks 5.00. **Not retried and no bar adjusted**: a failed gate closes its
-question, and a threshold that moves after the number arrives is not a threshold.
+**The deliverable Phase 5 inherits is one artifact: the NF4 base plus the UNMERGED arm-A adapter**
+(`b3ca6308…`, `results/train/45h2-arm-a/`, dataset `ba368273cc4d…`, 2 171 rows, rendering
+`T1v2_with_post`, every eval at batch 1). **Merging stays forbidden until 5b's serving-parity
+measurement selects it** — SPEC 3.11 (2) pre-registers that the exact production configuration is
+scored once against test v4 before any serving number reaches an aggregate, and the delta is
+reported, never averaged away.
 
-**One G1b row is 2.6 pp.** The v4 slice is **38 ids**, not Phase 4's 44 — amendment 3.2's
-pre-registered fallback, not a defect — and under this phase's rule G1b is a *protected* head, so a
-single noisy slice row could have decided an arm. It did not have to: arm B lost on the pivot.
-
-**3 of 5 against Phase 4's 2 of 5 is NOT a comparable score** — different test set, different
-anchor, different bars, a slice of 38 instead of 44. What is comparable: **G1b now passes and did
-not before**.
-
-**Both arms are provably one path apart.** Same bundle `551c7828`, same eval commit `0310dfe`,
-`carve_sha256` `8347abd74ae9…` **identical**, 2 171 vs 3 457 rows, resume proof PASS on each pod, and
-**758 rows with zero failures of any kind in all three evals** (anchor, A, B). Arm A 270 steps /
-4.58 h; arm B 432 steps / **7.51 h** against the 8.5 h authorised on 04.08.
-
-**Test v4 exists and is byte-reproducible.** v3 → the 508-row intents pass → the 31 audit rulings +
-1 law verdict **on top** (observable on 23 rows). 213 of 400 comment rows and 61 of 108 holdout rows
-moved; **189 of the 508 now carry `service`**, which no v3 gold row could say. `posts_test_v4` is
-byte-identical to v3. The holdout pool is single-homed at **917** beside the pristine 971.
-`docs/frozen-testsets.md` §v4, `results/frozen_v4.json`.
+**The gates are 3 of 5 and CLOSED, not pending** — G1a FAIL (0.9214 / bar 0.9470, ru floor also
+fails), G1b PASS 23/38 exactly on the bar, **G1c FAIL by 0.0005**, G1d and G1e PASS. The full table
+with the ceilings is in STATUS «Модель сейчас»; the reasoning is ADR [[45h2-ablation-verdict]].
+No bar moves and nothing is re-run: a failed gate closes its question.
 
 **ARM A'S PER-ROW DUMP IS LOST** — `results/predictions/LOST.md`. No gate number moves and
 `scored_ids_sha256` still proves which rows were scored; what is gone is the **re-score**, so a
@@ -81,16 +71,32 @@ future corrected-gold comparison of the two arms is **unpaired and must say so**
 
 ## ⏭️ Next
 
-1. **Phase 5 (the production loop) is open** — Phase 4.5 was formally closed and Phase 5 opened at
-   the team-lead briefing of 2026-08-05. `docs/STATUS.md` is the map.
-2. **G1a and G1c are deferred** until after the loop's first reporting cycle.
-3. **The 100 GB CA-MTL-3 volume is kept** — review ~2026-09-05.
+1. **Run `docs/PROMPT-5a.md`.** Its step 0 commits the team-lead tail — `docs/STATUS.md`,
+   `docs/SPEC.md`, the untracked `docs/PROMPT-5a.md`, plus today's `knowledge/` files — **by path,
+   never `git add -A`**. Note the brief's expected status list does not include `knowledge/hot.md`,
+   which `/close` rewrote; that one extra file is expected, not a surprise.
+2. **After 5a:** team-lead acceptance → the operator picks channels off the ledger → **5b serving
+   parity** (the merge/batch measurement above) → **5c** loop core + aggregates + the category
+   post-layer (taxonomy is the operator's word BEFORE any labeling) → **5d** first reporting cycle
+   + alerts v0 on spikes of both polarities.
+3. **G1a and G1c are DEFERRED until after the loop's first reporting cycle**, on its fresh data —
+   which is also the only new source of ru rows for G1a and of sarcasm for G1b, the old corpus
+   having been exhausted at 4.5d. Whatever is decided then starts a **new pre-registration**.
+4. **Budgets for Phase 5 are pre-registered: $8 GPU + $1 OpenRouter**, run-rate ceiling ~$9–12/mo.
+   Spend anchors are written before the first spend. The 100 GB CA-MTL-3 volume is kept — review
+   **~2026-09-05** if no GPU work has started by then.
 
 ## 🚧 Blockers
 
-**THE TWO AMENDMENTS ARE PAID** — `docs/SPEC.md` **amendment 3.10** (rev. 3.10) records both: the
-per-arm training ceiling **6.5 h → 8.5 h** for the 4.5h2 ablation only, and `config/qlora.yaml`
-**`max_seq_len` 1024 → 1408**. Authorised 2026-08-04, recorded in SPEC 2026-08-05.
+**None open.** The two owed amendments are **PAID** — `docs/SPEC.md` amendment **3.10** records the
+per-arm ceiling 6.5 h → 8.5 h and `max_seq_len` 1024 → 1408, with the recording delay admitted in
+its own text. `docs/STATUS.md` **has caught up with the briefing**: it was still the acceptance
+document when this session began (Phase 5 `⏸`, the briefing listed as upcoming) and the team lead
+refreshed it the same day, so the gap flagged at step 0 is closed. Both pods are deleted and
+`runpodctl pod list -a` is empty.
+
+**One cosmetic staleness, the team lead's to fix, flagged not edited:** STATUS's phase table still
+reads «Спека (rev. 3.10)» while the SPEC header is now **rev. 3.11**.
 
 **Nothing else is open.** The prompt-revision blocker of 04.08 was ruled the same day (with the
 post, both sides), the anchor was scored through it once, and every record now names its rendering.
@@ -162,8 +168,9 @@ restores a later fix's answer and the population stops deriving. `merge_sitting_
 `old` (the re-labeller's answer) and `replaced` (what this run overwrote) as two fields. Anything
 appending to `results/relabel_45e.json` has to do the same.
 
-**Never `git add -A` here.** `docs/PROMPT-4.5g4.md` is already sitting untracked in the tree, and
-`docs/STATUS.md` is modified by the team lead. Stage by path.
+**Never `git add -A` here.** `docs/PROMPT-5a.md` is sitting untracked in the tree right now, and
+`docs/SPEC.md` / `docs/STATUS.md` are modified by the team lead. Stage by path. The same trap has
+fired with every queued prompt since `docs/PROMPT-4.5g4.md`.
 
 - **Two taxonomies exist now, and the five-class one is still the one every number was measured
   over.** `scorer.INTENTS` (5) is what `run_baseline.py`, `train_xlmr_baseline.py` and

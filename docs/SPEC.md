@@ -1,9 +1,10 @@
-# market-pulse-llm — Project Specification (rev. 3.10)
+# market-pulse-llm — Project Specification (rev. 3.11)
 
 **Status:** APPROVED rev. 3 (2026-07-26); amendment 3.1 approved 2026-07-27;
 amendments 3.2 and 3.3 approved 2026-07-28; amendments 3.4–3.6 approved
 2026-08-01; amendments 3.7 and 3.8 approved 2026-08-02; amendment 3.9 approved
-2026-08-03; amendment 3.10 authorised 2026-08-04, recorded 2026-08-05.
+2026-08-03; amendment 3.10 authorised 2026-08-04, recorded 2026-08-05;
+amendment 3.11 (Phase 5 contract) approved at the briefing 2026-08-05.
 **Amendment 3.1:** EN removed from per-language gates — the collected corpus
 contains 8 EN comments out of 2,000 sampled (retail channels post in UA); a
 per-language metric over n=8 is meaningless. Gates run on UA and RU. The model
@@ -187,6 +188,53 @@ both runs' provenance; it reached this file only at the 4.5h2 acceptance
 Rule going forward (written into the team-lead skill, 2026-08-05): a mid-phase
 authorisation that changes a contract limit is written into SPEC the same
 session it is made, before the run that depends on it.
+**Amendment 3.11 (Phase 5 contract, briefing 2026-08-05):** Phase 4.5 is
+formally closed — 3/5 gates on arm A accepted as the measured result; the
+G1a/G1c question is deferred until after the loop's first reporting cycle.
+Phase 5 (production loop) opens under this contract:
+(1) **Scope & cadence:** collection via Mac cron at **2 passes/day** (operator
+choice; frequency is a recorded knob, not a constant), batch inference on
+RunPod serverless (NF4 base + arm-A adapter of 4.5h2), SQLite aggregates
+(brand × intent × sentiment × time × category), a **14-day first reporting
+cycle** + alerts v0 on spikes of both polarities, own and competitors
+(PRODUCT.md §6; alert latency = collection interval).
+(2) **Serving parity, pre-registered:** before any serving number reaches an
+aggregate, the EXACT production configuration (merge state, batch size,
+runtime) is scored once against test v4 and recorded beside the 4.5h2 gate
+numbers; the delta is reported, never averaged away. Merging the adapter
+stays forbidden unless this measurement selects it.
+(3) **Category post-layer is in-phase** (operator choice): the taxonomy is
+the operator's word BEFORE any labeling; one LLM pass over ~6k posts
+(~$0.2–0.5) with its own pre-registered gate (sealed hundred of posts,
+operator session); comments inherit the category via parent_msg_id; the
+fine-tuned comment model is untouched.
+(4) **Channels & coverage:** the loop launches on the current five registry
+channels; discovery (mothers/kids, healthy-lifestyle, baby-food themes —
+authorised 2026-08-04) produces candidates only, and every new channel
+enters through the track-R entry gate before its rows reach train or
+production aggregates. **Coverage target (operator, 2026-08-05): the
+monitored portfolio aims at ≥10,000,000 summed subscribers.** Discovery
+keeps a coverage ledger: per-candidate subscriber counts, the current
+five's sum, and the gap to target — with two caveats printed beside the
+ledger: summed subscribers ≠ unique reach (overlap is unmeasurable from
+the API), and subscribers ≠ comment flow (rows are born in discussion
+groups). Widening discovery beyond the three themes is an operator
+decision taken on the ledger's gap.
+(5) **Brand normalization v2** (declensions + homoglyphs) is registered
+BESIDE v1; historical dumps are re-scored under v2 at $0; every number
+names its normalization version; gate history under v1 is not rewritten.
+(6) **Budgets, pre-registered:** phase cap **$8 GPU** (of the $8.70
+remainder) + **$1 OpenRouter**; post-launch run-rate ceiling ~$9–12/month
+(serverless + the CA-MTL-3 volume, kept — review ~2026-09-05 if no GPU
+work has started). Spend anchors are written before the first spend.
+(7) **Out of scope:** any retrain; dashboard UI (Phase 6); a VPS; merging
+without the (2) measurement; new-domain rows in aggregates before their
+entry gate. Raw v1 stores stay byte-untouched — derived columns land
+beside them, as reply_to did.
+Sub-phases, each with its own verify-gate: **5a** loop skeleton + poll
+census + discovery → **5b** serving parity → **5c** loop core + aggregates
++ category layer → **5d** first reporting cycle + alerts v0 → the G1a/G1c
+decision briefing.
 **Date:** 2026-07-26 · **Team lead:** Fable session · **Executor:** Claude Code
 **Repo folder:** `/Users/hdv_1987/Desktop/Projects/market-pulse-llm`
 **rev. 3 change (operator decision):** producers in Ukraine barely use Telegram for
