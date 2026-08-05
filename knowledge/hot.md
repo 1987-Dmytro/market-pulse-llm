@@ -31,27 +31,42 @@ c32a46c docs: 45h2 tail — amendments blocker paid, 626-row accounting, 08-05 l
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-05 (`/close`. **PHASE 4.5 IS CLOSED, PHASE 5 — THE PRODUCTION LOOP — IS OPEN**, and its contract is **SPEC amendment 3.11**, written at the briefing of 05.08. 4.5h2 ended the phase by measurement: the пласт is dropped, **3 of 5 Tier-1 gates pass** on arm A, G1c short by 0.0005. The two owed amendments are **PAID** (SPEC 3.10); the ADR now accounts for the пласт's 626 excluded rows — all `unclear` — and `5a7e848` / `c32a46c` closed the phase's bookkeeping. Since then the team lead has landed **SPEC 3.11, a STATUS compacted 1 172 → 196 lines, and `docs/PROMPT-5a.md`** — all three UNCOMMITTED, and 5a's own step 0 commits them. Phase 4+4.5 spend: **$16.30 of $25**, $8.70 left; no pods. Edited by hand; the section above is auto-generated, do NOT touch the marker.)
+**Last update:** 2026-08-05 (**5a IS BUILT AND COMMITTED — `15723c1`, awaiting team-lead acceptance.** Step 0 landed the team-lead tail at `242fcdc` (six paths, `hot.md` the expected sixth). All three deliverables done at **$0**: discovery + coverage ledger, the storewide poll census, the loop skeleton. `make check` **861 passed** (814 before), `ruff format --check` clean, raw v1 byte-identical against a pre-run sha256 baseline. **The ledger's verdict: the three authorised themes close 6.8% of the gap** — that is the operator's decision now. Phase 4+4.5 spend unchanged: **$16.30 of $25**, $8.70 left; no pods, 5a spent nothing. Edited by hand; the section above is auto-generated, do NOT touch the marker.)
 
 ## 🔥 What's Hot
 
-**PHASE 5 IS LIVE AND `docs/PROMPT-5a.md` IS QUEUED — read SPEC §3.11 only, not the whole spec.**
-The loop is polling → batch inference → SQLite aggregates → a 14-day first reporting cycle.
-`docs/STATUS.md` is now a **196-line map** (compacted at the briefing; the full phase chronicle
-lives in that file's git history) and `docs/PRODUCT.md` is the north star. Nothing of Phase 5 is
-built yet.
+**5a IS DONE AND THE COVERAGE TARGET IS THE FINDING.** 66 candidates across the three authorised
+themes (mothers/kids · ЗОЖ · baby food) add **668,171** subscribers to the registry's **178,372**
+— **846,543 against a target of 10,000,000, still 9,153,457 short**. 37 of the 66 posted *nothing*
+in four weeks and hold 312 k of that sum; taking only the 29 live ones leaves **9,465,581**
+outstanding. Only **19** candidates both carry a discussion group and post, and subscriber count
+and posting rate are **uncorrelated** (Pearson −0.01) — the top of the subscriber column is not
+the top of the flow column. `results/discovery_5a.json`, ledger `ranked` is what to pick off.
+**Widening beyond the three themes is an operator decision taken on this gap** (SPEC 3.11 (4)).
 
-**5a is $0 and builds three things:** channel discovery for the three authorised themes
-(mothers/kids · ЗОЖ · baby food) with a **coverage ledger against a ≥10,000,000 summed-subscriber
-target**; a storewide **poll census** with poll text surfaced *beside* the raw v1 stores; and the
-**loop skeleton** — cursor state, idempotent ingest, `--dry-run`, tests. No GPU, no serving, no
-aggregates, no model calls: if one seems needed, STOP and report.
+**The registry has FOUR channels, not five.** `@znizhki_ua` was dropped 2026-07-27 (dead since
+2024-03). The brief and SPEC 3.11 (4) both say "five"; the ledger sums four. Team-lead files were
+not edited — this is flagged, not fixed.
 
-**Two honesty clauses ride with the coverage ledger and must be printed verbatim in the record:**
-*summed subscribers ≠ unique reach* (overlap is unmeasurable from the API) and *subscribers ≠
-comment flow* (rows are born in discussion groups). Discovery yields **candidates only** —
-`config/registry.yaml` is not touched, and a new channel enters through the track-R gate by the
-operator's choice.
+**THE POLL PAYLOAD WAS NEVER ON DISK.** The brief's Deliverable-2 premise is false: a v1 post
+record has ten keys and none is a poll, and 4.5g2 read its sixteen transcripts from a **live**
+fetch. So the census re-read the 815 text-less ids from Telegram ($0 — the API is free) and wrote
+`data/raw/post_polls.jsonl` beside v1. **37 polls of 815 (4.54%)** — *not* a continuation of
+4.5g2's 16/41, which counted one sitting pack of one channel. All 16 old rows reproduce
+**byte-identically**; the rest are 758 photo · 16 video · 2 giveaway · 1 voice · 1 document, and
+zero are gone from Telegram.
+
+**The loop refuses to run live in 5a, by design.** `scripts/run_loop.py --once` without a dry flag
+exits 1: a live pass would append to the raw v1 store, which the brief forbids. The dry pass over
+all four channels reports **0 threads to fetch and 11,338 rows queued for inference** — the corpus
+total, arrived at independently. The spend guard (`loop.inference_refusal`) **defaults closed** and
+opens the moment `run_loop.ENDPOINT` stops being `None`: that is 5b's one-constant change.
+
+**Two honesty clauses ride with the coverage ledger and are printed verbatim in the record:**
+*summed subscribers != unique reach* (overlap is unmeasurable from the API) and *subscribers !=
+comment flow* (rows are born in discussion groups) — the brief's ASCII spelling, not SPEC's `≠`.
+Discovery yielded **candidates only**: `config/registry.yaml` is untouched, and a new channel
+enters through the track-R gate by the operator's choice.
 
 **The deliverable Phase 5 inherits is one artifact: the NF4 base plus the UNMERGED arm-A adapter**
 (`b3ca6308…`, `results/train/45h2-arm-a/`, dataset `ba368273cc4d…`, 2 171 rows, rendering
@@ -71,14 +86,14 @@ future corrected-gold comparison of the two arms is **unpaired and must say so**
 
 ## ⏭️ Next
 
-1. **Run `docs/PROMPT-5a.md`.** Its step 0 commits the team-lead tail — `docs/STATUS.md`,
-   `docs/SPEC.md`, the untracked `docs/PROMPT-5a.md`, plus today's `knowledge/` files — **by path,
-   never `git add -A`**. Note the brief's expected status list does not include `knowledge/hot.md`,
-   which `/close` rewrote; that one extra file is expected, not a surprise.
-2. **After 5a:** team-lead acceptance → the operator picks channels off the ledger → **5b serving
-   parity** (the merge/batch measurement above) → **5c** loop core + aggregates + the category
-   post-layer (taxonomy is the operator's word BEFORE any labeling) → **5d** first reporting cycle
-   + alerts v0 on spikes of both polarities.
+1. **Team-lead acceptance of 5a** — report in `implementation-notes.md` («Phase 5a», 14
+   deviations), numbers in `results/discovery_5a.json` and `results/poll_census_5a.json`.
+   The smoke record `results/smoke/loop_5a.json` is **gitignored** and is quoted in the report.
+2. **The operator picks channels off the ledger** — and answers the gap: widen the themes,
+   revisit the 10 M target, or launch on the four registry channels and let the first cycle
+   price the question. Then **5b serving parity** (the merge/batch measurement above) → **5c**
+   loop core + aggregates + the category post-layer (taxonomy is the operator's word BEFORE any
+   labeling) → **5d** first reporting cycle + alerts v0 on spikes of both polarities.
 3. **G1a and G1c are DEFERRED until after the loop's first reporting cycle**, on its fresh data —
    which is also the only new source of ru rows for G1a and of sarcasm for G1b, the old corpus
    having been exhausted at 4.5d. Whatever is decided then starts a **new pre-registration**.
@@ -95,8 +110,11 @@ document when this session began (Phase 5 `⏸`, the briefing listed as upcoming
 refreshed it the same day, so the gap flagged at step 0 is closed. Both pods are deleted and
 `runpodctl pod list -a` is empty.
 
-**One cosmetic staleness, the team lead's to fix, flagged not edited:** STATUS's phase table still
-reads «Спека (rev. 3.10)» while the SPEC header is now **rev. 3.11**.
+**Three stalenesses in team-lead files, flagged not edited.** (1) STATUS's phase table still reads
+«Спека (rev. 3.10)» while the SPEC header is **rev. 3.11**. (2) `docs/PROMPT-5a.md` and SPEC
+3.11 (4) both say "the CURRENT five registry channels" — there are **four**. (3) PROMPT-5a's
+Deliverable 2 heading says "$0, no API" on a premise that turned out false; the deliverable needs
+the (free) Telegram API, and `$0` still held.
 
 **Nothing else is open.** The prompt-revision blocker of 04.08 was ruled the same day (with the
 post, both sides), the anchor was scored through it once, and every record now names its rendering.
