@@ -48,11 +48,34 @@ def test_the_verdict_reads_the_v4_anchor_and_not_phase_4_s():
     assert verdict.VERSION == "v4"
 
 
-def test_it_refuses_before_both_arms_exist(tmp_path):
-    """Read-only and loud: no arm, no verdict. Today `results/baselines.json` holds
-    neither of this phase's arms, so the refusal is the live behaviour, not a fixture."""
-    with pytest.raises(SystemExit, match="refused:"):
-        verdict.main([])
+def test_it_runs_now_that_both_arms_exist_and_refuses_when_one_does_not(tmp_path):
+    """Read-only and loud: no arm, no verdict. It refused for the whole of 2026-08-04,
+    which is what "committed before any arm was scored" means; both arms are in the file
+    now, so the live behaviour is the verdict itself."""
+    assert verdict.main([]) == 0
+    history = json.loads((REPO_ROOT / "results" / "baselines.json").read_text(encoding="utf-8"))
+    for runs in history.values():
+        for record in runs:
+            if record.get("config", {}).get("fine_tune", {}).get("arm") == verdict.ARMS[1]:
+                record["config"]["fine_tune"]["arm"] = "somewhere-else"
+    path = tmp_path / "one-arm.json"
+    path.write_text(json.dumps(history), encoding="utf-8")
+    with pytest.raises(SystemExit, match="'with-plast' arm must be exactly one record, found 0"):
+        verdict.main(["--results", str(path)])
+
+
+def test_the_persisted_verdict_is_the_one_the_script_prints(tmp_path):
+    """ "The gate passed" in prose is not the gate. The committed record has to be what a
+    reviewer gets by re-running the script, byte for byte on the numbers that decide it."""
+    fresh = tmp_path / "again.json"
+    assert verdict.main(["--record", str(fresh)]) == 0
+    committed = json.loads(
+        (REPO_ROOT / "results" / "verdict_45h2.json").read_text(encoding="utf-8")
+    )
+    again = json.loads(fresh.read_text(encoding="utf-8"))
+    assert committed == again
+    assert committed["decision"]["selected"] == "without-plast"
+    assert committed["decision"]["keep"] is False
 
 
 def test_it_refuses_a_results_file_with_no_v4_anchor(tmp_path):

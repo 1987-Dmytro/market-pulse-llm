@@ -32,6 +32,12 @@
       "balance": 23.5873792773,
       "step_spent_usd": 3.9459,
       "note": "45h2 arm A: 270 steps 4.58 h, eval 758 rows 0 failures"
+    },
+    {
+      "at": "2026-08-05T06:42:18+00:00",
+      "balance": 18.7045774359,
+      "step_spent_usd": 8.8287,
+      "note": "45h2 arm B: 432 steps 7.51 h, eval 758 rows 0 failures"
     }
   ],
   "gpu_note": "RunPod account balance read before the first pod of 45h2. Step spend = this anchor minus the balance now, enforced against $9.00. The SPEC amendment 3.4 (4) phase cap is enforced separately, against results/spend_phase4.json, and neither anchor may be regenerated."

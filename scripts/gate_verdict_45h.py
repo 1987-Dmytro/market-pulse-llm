@@ -215,7 +215,12 @@ def main(argv: list[str] | None = None) -> int:
             + "\n",
             encoding="utf-8",
         )
-        print(f"\nrecord: {args.record.relative_to(REPO_ROOT)}")
+        shown = (
+            args.record.relative_to(REPO_ROOT)
+            if args.record.is_absolute() and args.record.is_relative_to(REPO_ROOT)
+            else args.record
+        )
+        print(f"\nrecord: {shown}")
     return 0
 
 

@@ -1,0 +1,254 @@
+{
+  "step": "4.5h2 пласт ablation",
+  "testset_version": "v4",
+  "anchor": {
+    "model": "google/gemma-4-31b-it",
+    "timestamp": "2026-08-04T12:26:38+00:00",
+    "g1b_slice_path": "results/g1b_slice_v4.json",
+    "g1b_slice_sha256": "6dc6be0132c12f568d90bbe8c59cf03dcb23a9b8c86ef884824379984cc1b67a",
+    "prompt_revision_sha256": {
+      "T1": "495b43d1361d0e4f5f7a186eebb971f4dc3ed9f8afd128f539ba0f6a8ffc2a19",
+      "T2": "6a7e66efb3eb4091b8d787e38213f3b1b0c9115e78d2b41fb9cc6bcaab3a54b4"
+    }
+  },
+  "bars": {
+    "G1a": {
+      "min": 0.94700869,
+      "floors": {
+        "ua": 0.8763700877,
+        "ru": 0.8839501502
+      }
+    },
+    "G1b": {
+      "min_fixed": 23,
+      "n": 38,
+      "max_macro_f1_drop": 0.02
+    },
+    "G1c": {
+      "min": 0.8482954545
+    },
+    "G1d": {
+      "min": 0.9090105074
+    },
+    "G1e": {
+      "min": 0.9282716049
+    }
+  },
+  "arms": {
+    "without-plast": {
+      "timestamp": "2026-08-04T18:54:42+00:00",
+      "fine_tune": {
+        "arm": "without-plast",
+        "adapter_path": "/workspace/out/arm-a/adapter",
+        "adapter_sha256": "b3ca630846c7e75c5e7058ce45804c45a6bff5c49dcf2389cb8cdda0b7a68a6c",
+        "train_sha256": "ba368273cc4debb657500256d0d8abe2621aee06cdc4b49fcaea8b85e4bfd1f9",
+        "carve_sha256": "8347abd74ae91f49161bdffdd907e2428ea862f02f1f103e543e63ac27a547fa",
+        "n_train": 2171,
+        "rows_per_source": {
+          "comments_train_tax2.jsonl": 895,
+          "posts_train.jsonl": 744,
+          "sarcasm_candidates_tax2.jsonl": 532
+        },
+        "added_source": null,
+        "added_ids": 1286,
+        "training_run": {
+          "adapter": "/workspace/out/arm-a/adapter",
+          "gpu_gb_peak": 33.13,
+          "grad_accum_final": 8,
+          "micro_batch_final": 2,
+          "seconds": 16482.8,
+          "seconds_per_step": 61.047,
+          "steps": 270,
+          "steps_per_epoch": 136
+        },
+        "prompt_revision_sha256": {
+          "T1": "495b43d1361d0e4f5f7a186eebb971f4dc3ed9f8afd128f539ba0f6a8ffc2a19",
+          "T2": "6a7e66efb3eb4091b8d787e38213f3b1b0c9115e78d2b41fb9cc6bcaab3a54b4"
+        },
+        "anchor": {
+          "model": "google/gemma-4-31b-it",
+          "timestamp": "2026-08-04T12:26:38+00:00"
+        }
+      },
+      "values": {
+        "G1a": {
+          "overall": 0.9214075146604309,
+          "other": 0.9368186423505572,
+          "ru": 0.8697089947089948,
+          "ua": 0.9306036598902109
+        },
+        "G1c": 0.8478260869565217,
+        "G1d": 0.9585858585858587,
+        "G1e": 0.961038961038961,
+        "G1b": {
+          "rate": 0.6052631578947368,
+          "fixed": 23,
+          "n": 38,
+          "guard_delta": 0.024398824629652482
+        }
+      },
+      "relevance_reported_not_gated": 1.0
+    },
+    "with-plast": {
+      "timestamp": "2026-08-05T06:41:22+00:00",
+      "fine_tune": {
+        "arm": "with-plast",
+        "adapter_path": "/workspace/out/arm-b/adapter",
+        "adapter_sha256": "d8ef92a5fedd770c3516d84b8633638b87792450462d9969545c010fce766df2",
+        "train_sha256": "a4ecb36332f06725835854ed1aea9c3ee491f253999ecef64179b51661f2a198",
+        "carve_sha256": "8347abd74ae91f49161bdffdd907e2428ea862f02f1f103e543e63ac27a547fa",
+        "n_train": 3457,
+        "rows_per_source": {
+          "comments_train_tax2.jsonl": 895,
+          "posts_train.jsonl": 744,
+          "sarcasm_candidates_tax2.jsonl": 532,
+          "uplabel_precheck_45g2.jsonl": 1286
+        },
+        "added_source": "uplabel_precheck_45g2.jsonl",
+        "added_ids": 1286,
+        "training_run": {
+          "adapter": "/workspace/out/arm-b/adapter",
+          "gpu_gb_peak": 35.13,
+          "grad_accum_final": 8,
+          "micro_batch_final": 2,
+          "seconds": 27035.2,
+          "seconds_per_step": 62.582,
+          "steps": 432,
+          "steps_per_epoch": 217
+        },
+        "prompt_revision_sha256": {
+          "T1": "495b43d1361d0e4f5f7a186eebb971f4dc3ed9f8afd128f539ba0f6a8ffc2a19",
+          "T2": "6a7e66efb3eb4091b8d787e38213f3b1b0c9115e78d2b41fb9cc6bcaab3a54b4"
+        },
+        "anchor": {
+          "model": "google/gemma-4-31b-it",
+          "timestamp": "2026-08-04T12:26:38+00:00"
+        }
+      },
+      "values": {
+        "G1a": {
+          "overall": 0.9263531328724873,
+          "other": 0.9497842582948967,
+          "ru": 0.8943271439650001,
+          "ua": 0.9236747783437087
+        },
+        "G1c": 0.8072837632776935,
+        "G1d": 0.9348383726834776,
+        "G1e": 0.9333333333333333,
+        "G1b": {
+          "rate": 0.5263157894736842,
+          "fixed": 20,
+          "n": 38,
+          "guard_delta": 0.029344442841708895
+        }
+      },
+      "relevance_reported_not_gated": 1.0
+    }
+  },
+  "decision": {
+    "rule": "the пласт stays iff arm B's G1c is strictly higher than arm A's AND no other gated head of B is lower than A's by more than 0.5 pp (SPEC amendment 3.4 (3) transposed; operator decision of 2026-08-04, fixed and committed before any arm was scored)",
+    "pivot": "G1c",
+    "tolerance": 0.005,
+    "arms": [
+      "without-plast",
+      "with-plast"
+    ],
+    "g1c": {
+      "without-plast": 0.8478260869565217,
+      "with-plast": 0.8072837632776935,
+      "strictly_higher": false
+    },
+    "head_deltas": {
+      "G1a": 0.0049456182,
+      "G1b": -0.0789473684,
+      "G1d": -0.0237474859,
+      "G1e": -0.0277056277
+    },
+    "regressions": {
+      "G1b": -0.0789473684,
+      "G1d": -0.0237474859,
+      "G1e": -0.0277056277
+    },
+    "keep": false,
+    "keep_synthetic": false,
+    "selected": "without-plast"
+  },
+  "verdicts": {
+    "G1a": {
+      "pass": false,
+      "checks": [
+        {
+          "what": "overall",
+          "value": 0.9214075146604309,
+          "bar": 0.94700869,
+          "pass": false
+        },
+        {
+          "what": "ua",
+          "value": 0.9306036598902109,
+          "bar": 0.8763700877,
+          "pass": true
+        },
+        {
+          "what": "ru",
+          "value": 0.8697089947089948,
+          "bar": 0.8839501502,
+          "pass": false
+        }
+      ]
+    },
+    "G1b": {
+      "pass": true,
+      "n": 38,
+      "checks": [
+        {
+          "what": "fixed",
+          "value": 23,
+          "bar": 23,
+          "pass": true
+        },
+        {
+          "what": "guard delta",
+          "value": 0.024398824629652482,
+          "bar": -0.02,
+          "pass": true
+        }
+      ]
+    },
+    "G1c": {
+      "pass": false,
+      "checks": [
+        {
+          "what": "G1c",
+          "value": 0.8478260869565217,
+          "bar": 0.8482954545,
+          "pass": false
+        }
+      ]
+    },
+    "G1d": {
+      "pass": true,
+      "checks": [
+        {
+          "what": "G1d",
+          "value": 0.9585858585858587,
+          "bar": 0.9090105074,
+          "pass": true
+        }
+      ]
+    },
+    "G1e": {
+      "pass": true,
+      "checks": [
+        {
+          "what": "G1e",
+          "value": 0.961038961038961,
+          "bar": 0.9282716049,
+          "pass": true
+        }
+      ]
+    }
+  },
+  "passed": 3,
+  "of": 5
+}

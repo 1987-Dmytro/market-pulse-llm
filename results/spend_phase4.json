@@ -52,6 +52,13 @@
       "spent_usd": 11.4126,
       "remaining_usd": 13.5874,
       "note": "45h2 arm A: 270 steps 4.58 h, eval 758 rows 0 failures"
+    },
+    {
+      "at": "2026-08-05T06:42:18+00:00",
+      "balance": 18.7045774359,
+      "spent_usd": 16.2954,
+      "remaining_usd": 8.7046,
+      "note": "45h2 arm B: 432 steps 7.51 h, eval 758 rows 0 failures"
     }
   ]
 }
