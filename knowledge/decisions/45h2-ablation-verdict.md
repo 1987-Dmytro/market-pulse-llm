@@ -91,7 +91,7 @@ here — arm B lost on the pivot outright.
 | | |
 |---|---|
 | OpenRouter | **$0.1080** over 555 requests of a $0.30 cap (508 gold rows + 47 re-asked) |
-| GPU | **$8.8287** of a $9.00 cap — anchor $0.4204, arm A $3.5255, arm B $4.8828 |
+| GPU | **$8.8287** of a $9.00 cap — anchor $0.4204, arm A $3.5255, arm B $4.8828. Read at the moment arm B's pod was deleted; RunPod's billing settles upward afterwards and the same ledger read **$8.8630** an hour later, still inside the cap. Both pods are deleted (`runpodctl pod list -a` empty); what still accrues is the 100 GB CA-MTL-3 volume, which bills whether or not a pod exists. |
 | Phase 4 total | $16.2954 of the $25.00 cap (amendment 3.4 (4)) |
 | ceiling | arm A 4.58 h, arm B **7.51 h**, against the 8.5 h the operator authorised on 2026-08-04 |
 
