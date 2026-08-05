@@ -36,6 +36,18 @@ Provenance: `without-plast` dataset `ba368273cc4d…` / adapter `b3ca630846c7…
 the same bundle at commit `551c7828` and were scored at `0310dfe`; each eval scored 758 rows with
 **zero failures of any kind**.
 
+**The 626 rows between the пласт's 1 912 and arm B's 1 286 `added_ids` are all `unclear`, and
+nothing else was excluded.** `train_qlora.examples` drops `unclear` before assembly (SPEC §4 keeps
+those rows out of every gate, so there is no right answer to teach) and
+`data/annotation/uplabel_precheck_45g2.jsonl` carries exactly 626 of them: 1 912 − 626 = 1 286 =
+`added_ids` = 3 457 − 2 171, which leaves nothing for the other two candidates — the file's 1 912
+ids are distinct and none of them is in the real T1 pool, so no dedup fired, and NEVER_READ is a
+*file* guard that filters no rows at all (the пласт is not one of its files, and no пласт id
+reaches a T1-scored frozen set; the 9 that string-match `posts_test` are the documented
+comment/post `@channel:msg_id` collision, a different task and a different text). An unparseable
+row could not have survived either: `load` and `assert_format_identity` abort the run on one, and
+`assert_arm_identity` aborts unless the added key set equals the пласт's kept rows exactly.
+
 ## (b) The rule, applied
 
 > the пласт stays iff arm B's G1c is strictly higher than arm A's AND no other gated head of B is
