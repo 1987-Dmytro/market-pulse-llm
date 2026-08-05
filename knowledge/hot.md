@@ -2,40 +2,75 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-04 13:03:46 (every SessionStart)
+**Auto-refreshed:** 2026-08-05 08:46:06 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-6a4a02a chore: the hook tail — the 08-03 session marker and the regenerated vault index
-f601edf chore: the 4.5h acceptance, amendment 3.9, PRODUCT.md and the 4.5h2 contract
-ff5430b fix: the balance and the headroom are two numbers, and the notes named the wrong one
-bd1977c feat: the fourth place intents sits at v1, and it is not a guard
-70940e6 docs: the 4.5h precheck notes — 13 deviations and what the numbers say
+4646001 docs: ADR 45h2 — the numbers, the rule's output, and G1c short by 0.0005
+e237be2 feat: the пласт ablation is decided — the пласт is dropped, 3 of 5 gates pass
+a41df70 feat: arm A scored on v4 — and the dump it wrote is gone, recorded as such
+33cd9cd docs: three self-matching-process bugs, an orphan that would have shared the card, and what they cost
+0310dfe fix: the preflight read a field the trainer stopped writing, and no test could see it
 ```
 
 ## 📋 Recent decisions
 
-- `45g6-context-lines-probe.md` — Facts, not rules — and the fact turned out to be the rule: v2ctx is KILLed at 41/58
 - `INDEX.md` — Decision records
-- `45g5-features-over-prompts.md` — The prompt track is closed by its own gate: adjudicated truth into the data, and two features measured before either is bought
+- `45h2-ablation-verdict.md` — The пласт is dropped: it made every gated head worse but one
+- `45h-v4-and-the-precheck.md` — Test v4, and the confound the precheck caught before the money
 
 ## 📅 Recent daily logs
 
+- `2026-08-05.md`
 - `2026-08-04.md`
 - `2026-08-03.md`
-- `2026-08-02.md`
 
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-04 13:20 (**4.5h2 IS IN FLIGHT** — test v4 → fresh own-pod anchor → bars and the selection rule as code → the A/B пласт ablation. Step 0 is committed; the open question is the **prompt identity** the whole phase inherits, and its owner is **the gates**: the anchor defines the instrument every bar and both arms are measured through, and it is scored once. Previous state — `/save` after `PROMPT-4.5h` precheck — **executed, reported at $0, and ACCEPTED the same day: amendment 3.9 rules all three flags**. The ceiling rises 5 → **6.5 h** for the 4.5h2 ablation only; **both arms train on the `_tax2` siblings** (the executor's confound finding, adopted); the **carve is drawn before the пласт is appended**, so the arms stay paired. The 54 are resolved by option (i) — the pool is materialized at 917 beside the pristine file — and the per-(brand+position) amendment is **DEFERRED on the numbers**. `docs/PROMPT-4.5h2.md` is queued and `docs/PRODUCT.md` is approved. Precheck state as delivered — Two numbers decide what happens next: **arm B projects to 5.44 h against amendment 3.6's 5 h ceiling** (over at both observed step rates; the run was not shrunk), and **the two arms would not be trained on the same taxonomy** — `train_qlora.SOURCES` reads the v1 files (0 `service` rows) while the пласт carries 652 and G1c is scored against a v4 test that IS taxonomy v2. Everything else came back clean: the пласт is additive (0 id overlap), leakage is 0/0/0, all 508 gold rows need a fresh pass at $0.0869, the 54's dual home is a file the trainer may not open, and the corpus holds no brand comparison at all. Previous state — **the 4.5h precheck is in flight: read-only, $0, no freeze**. The relabel gate-program is closed by three KILLs and the пласт now earns its place by a pre-registered A/B ablation in 4.5h2, not by a re-run. This half answers six precheck questions and takes four category measurements; the freeze, the fresh anchor, the bars and the retrain are 4.5h2, after the team lead signs off. Previous state, still true — **six dictated verdicts complete the adjudicated 40, the two features are registered as rendered facts (`precheck_v2ctx_with_post`, RENDER-ONLY: no prompt text moves), and the pre-registered probe returned KILL at preserved 41/58** with feature-fixed 9/17. $0.0301 for 100 requests; $0.8095 of the $1.50 shared cap. Three tracks are now closed by their own gates: v2.1, v2.2 and v2ctx. Open refusals: `7555` and `11876` (pending law). All three 4.5g strata still FAIL; the wave-2 hundred is still unjudged. The 4.5f calibration gate stays PASS at 100/100; test v3 is frozen beside v2; Phase 4 stays closed at 2 of 5 against v2; edited by hand — the section above is auto-generated, do NOT touch the marker)
+**Last update:** 2026-08-05 07:10 (**4.5h2 IS DONE AND THE ПЛАСТ IS DROPPED.** Both arms trained once and scored once on test v4, one data path apart. Arm B's G1c is **4.05 pp LOWER** — the rule fails at its first clause — and G1b, G1d, G1e all regress past the 0.5 pp tolerance; only ru sentiment moved up (+2.46 pp, n=86, noise-dominated). On the selected `without-plast` arm **3 of 5 Tier-1 gates pass**: G1b 23/38 exactly at the bar, G1d and G1e pass, G1a fails overall and on the ru floor, and **G1c fails by 0.0005** — not retried, a failed gate closes its question. Spend: GPU $8.8287 of $9.00, OpenRouter $0.1080 of $0.30, arm B 7.51 h of the 8.5 h ceiling. Two amendments are owed to the team lead and are NOT in SPEC. Previous state — **4.5h2 IS IN FLIGHT** — test v4 → fresh own-pod anchor → bars and the selection rule as code → the A/B пласт ablation. Step 0 is committed; the open question is the **prompt identity** the whole phase inherits, and its owner is **the gates**: the anchor defines the instrument every bar and both arms are measured through, and it is scored once. Previous state — `/save` after `PROMPT-4.5h` precheck — **executed, reported at $0, and ACCEPTED the same day: amendment 3.9 rules all three flags**. The ceiling rises 5 → **6.5 h** for the 4.5h2 ablation only; **both arms train on the `_tax2` siblings** (the executor's confound finding, adopted); the **carve is drawn before the пласт is appended**, so the arms stay paired. The 54 are resolved by option (i) — the pool is materialized at 917 beside the pristine file — and the per-(brand+position) amendment is **DEFERRED on the numbers**. `docs/PROMPT-4.5h2.md` is queued and `docs/PRODUCT.md` is approved. Precheck state as delivered — Two numbers decide what happens next: **arm B projects to 5.44 h against amendment 3.6's 5 h ceiling** (over at both observed step rates; the run was not shrunk), and **the two arms would not be trained on the same taxonomy** — `train_qlora.SOURCES` reads the v1 files (0 `service` rows) while the пласт carries 652 and G1c is scored against a v4 test that IS taxonomy v2. Everything else came back clean: the пласт is additive (0 id overlap), leakage is 0/0/0, all 508 gold rows need a fresh pass at $0.0869, the 54's dual home is a file the trainer may not open, and the corpus holds no brand comparison at all. Previous state — **the 4.5h precheck is in flight: read-only, $0, no freeze**. The relabel gate-program is closed by three KILLs and the пласт now earns its place by a pre-registered A/B ablation in 4.5h2, not by a re-run. This half answers six precheck questions and takes four category measurements; the freeze, the fresh anchor, the bars and the retrain are 4.5h2, after the team lead signs off. Previous state, still true — **six dictated verdicts complete the adjudicated 40, the two features are registered as rendered facts (`precheck_v2ctx_with_post`, RENDER-ONLY: no prompt text moves), and the pre-registered probe returned KILL at preserved 41/58** with feature-fixed 9/17. $0.0301 for 100 requests; $0.8095 of the $1.50 shared cap. Three tracks are now closed by their own gates: v2.1, v2.2 and v2ctx. Open refusals: `7555` and `11876` (pending law). All three 4.5g strata still FAIL; the wave-2 hundred is still unjudged. The 4.5f calibration gate stays PASS at 100/100; test v3 is frozen beside v2; Phase 4 stays closed at 2 of 5 against v2; edited by hand — the section above is auto-generated, do NOT touch the marker)
 
 ## 🔥 What's Hot
 
-**4.5h2 IS IN FLIGHT — AND THE FIRST THING IT NEEDS IS A PROMPT DECISION, NOT A POD.** Step 0 is
+**THE ПЛАСТ IS DROPPED — BY MEASUREMENT, NOT BY ARGUMENT.** `results/verdict_45h2.json`,
+`scripts/gate_verdict_45h.py` (committed at `dabc12c`, **before** either arm was scored).
+
+| | `without-plast` | `with-plast` | delta | bar |
+|---|---|---|---|---|
+| G1a overall | **0.9214** | 0.9264 | +0.0049 | 0.9470 |
+| — ua / ru | 0.9306 / **0.8697** | 0.9237 / 0.8943 | −0.0069 / **+0.0246** | 0.8764 / 0.8840 |
+| G1b | **23/38** | 20/38 | −0.0789 | 23 |
+| G1c | **0.8478** | 0.8073 | **−0.0405** | 0.8483 |
+| G1d | **0.9586** | 0.9348 | −0.0237 | 0.9090 |
+| G1e | **0.9610** | 0.9333 | −0.0277 | 0.9283 |
+
+**The rule fails at its FIRST clause**: arm B's G1c is not higher, it is 4.05 pp lower — and the
+пласт is 1 912 rows whose whole purpose was the `intents` column. G1c is the head it damaged most,
+which is what the program's own three KILLs already said about those labels. **3 of 5 gates pass**
+on the selected arm (Phase 4 was 2 of 5 on v2 — a different test, different bars, not a comparable
+score; what IS comparable is that G1b now passes and did not before).
+
+**G1c FAILS BY 0.0005.** 0.8478 against a bar of 0.8483 — the fine-tune gained 4.95 pp over the
+anchor where the bar asks 5.00. Not retried, no bar adjusted: a failed gate closes its question.
+**And one G1b row is 2.6 pp** — the v4 slice is 38 ids, not 44 (amendment 3.2's pre-registered
+fallback), and under this rule G1b is a *protected* head, so a single noisy slice row could have
+decided an arm. It did not have to; arm B lost on the pivot outright.
+
+**Both arms are provably one path apart:** same bundle `551c7828`, same eval commit `0310dfe`,
+`carve_sha256` `8347abd74ae9…` **identical**, 2 171 vs 3 457 rows, resume proof PASS on each pod,
+758 rows scored per arm with **zero failures of any kind** in all three evals.
+
+**ARM A'S PER-ROW DUMP IS LOST** (`results/predictions/LOST.md`). No gate number moves and
+`scored_ids_sha256` still proves which rows were scored — what is lost is the re-score, so a future
+corrected-gold comparison of the two arms would be **unpaired and must say so**. Cause: a compound
+`scp && scp && scp` whose first link failed under `2>/dev/null`, twenty minutes before a
+volume-less pod was deleted. The runbook now fetches one artifact per command and verifies the dump
+against the record **before** any delete.
+
+**Previous state — 4.5h2 IS IN FLIGHT — AND THE FIRST THING IT NEEDS IS A PROMPT DECISION, NOT A POD.** Step 0 is
 committed (`f601edf`, `6a4a02a`). Everything downstream inherits one choice: **the anchor's prompt
 revision**. Every recorded gate run — 4a's anchor and both 4c arms — hashes `{T1, T2}`, the **v1**
 prompts, whose label space has five intents; v4 gold has six. Retargeting `SOURCES` at the `_tax2`
@@ -835,7 +870,20 @@ files**: `comments_train.jsonl` (1600) + `sarcasm_candidates.jsonl` (746) plus
 
 ## 🚧 Blockers
 
-**ONE OPEN, AND ITS OWNER IS THE GATES: which prompt revision the fresh anchor is measured through.**
+**TWO AMENDMENTS ARE OWED, AND THEIR OWNER IS THE TEAM LEAD.** Both were authorised by the operator
+on 2026-08-04 and both are recorded in `implementation-notes.md` D2, `scripts/runbook_45h2.md` and
+the runs' own provenance — **neither is in `docs/SPEC.md`**, which the executor may not edit:
+
+1. **the per-arm ceiling 6.5 h → 8.5 h.** Amendment 3.9's 6.5 was set against a rendering *without*
+   the parent post. Arm B ran 7.51 h. Without the amendment a later reader finds a decision and
+   reads it as a breach.
+2. **`config/qlora.yaml` `max_seq_len` 1024 → 1408.** The frozen config of the 4b contract moved in
+   exactly one value; the file carries the measurement and the date, SPEC does not.
+
+**The prompt-revision blocker is closed** — the operator ruled on 2026-08-04 (with the post, both
+sides), the anchor was scored through it once, and every record now names its rendering.
+
+**Previous — ONE OPEN, AND ITS OWNER WAS THE GATES: which prompt revision the fresh anchor is measured through.**
 It blocks the anchor pod and nothing before it — the freeze machinery and the ≤$0.30 migration pass
 run underneath it. It is a blocker rather than an executor call for one reason: the anchor is scored
 **once**, and every bar, both arms and all five verdicts are read through whatever instrument it
