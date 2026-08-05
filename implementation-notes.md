@@ -2012,7 +2012,7 @@ own filenames and that check are now in the runbook.
 # Phase 5a — the loop's skeleton, a storewide poll census, and a ledger that comes up short
 
 Three deliverables, all $0. No GPU, no serverless, no model call of any kind; the only network
-traffic is Telegram's free API, paced by the collector's existing waits. `make check` **861
+traffic is Telegram's free API, paced by the collector's existing waits. `make check` **863
 passed** (814 before 5a), `ruff format --check .` **147 files already formatted**.
 
 ## Deviations — silence is not compliance
@@ -2109,7 +2109,14 @@ fetch, one field further, no vision model involved"). No
 `window_truncated: true` and its `posts_per_week` is a floor. It fires on the retail channels
 (@VARUS_channel posts ~4 raw messages per collapsed post), never on the candidates.
 
-**D14 — `results/smoke/loop_5a.json` is gitignored (`.gitignore:82`), so a clean `git status`
+**D14 — `--rebuild-ledger` recomputes the ledger from the record instead of rescanning.**
+The liveness split of D8 was added after the scan had already run; a rescan costs another
+rate-limited pass and would measure a different day, so the flag re-derives the arithmetic from
+the rows already in the record. `generated_at` keeps the scan's time and a separate
+`ledger_rebuilt_at` carries the re-derivation's — two tests hold that apart, one of them the
+negative control that a normal run leaves the stamp `null`.
+
+**D15 — `results/smoke/loop_5a.json` is gitignored (`.gitignore:82`), so a clean `git status`
 proves nothing about it.** Its contents are quoted below instead.
 
 ## What 5a measured
@@ -2154,6 +2161,14 @@ every transcript is **byte-identical** to the one `caption_posts.py` wrote in Au
 missing_from_this_run: [], transcripts_that_differ: []}`. The transcript format is
 `caption_posts.poll_caption`'s and the record shape is the one `parents.load_captions` already
 reads; a test loads the sidecar through that loader rather than asserting it.
+
+**The records were written before the commit that contains them, and by the scripts in it.**
+`git_state` records what a file was built *against* — both records name `242fcdc` and list the
+producing scripts as dirty, which is the field working as designed. What the reviewer needs beside
+that: `git show 15723c1:scripts/discover_channels.py | shasum` and `git show
+15723c1:scripts/poll_census.py | shasum` are **byte-identical** to the working copies that
+produced `results/discovery_5a.json` and `results/poll_census_5a.json`. Nothing was edited between
+the run and the commit.
 
 **Raw v1 is byte-identical.** `git status` cannot show this — `data/` is gitignored — so a
 sha256 baseline of all six store files was taken *before* the first fetch and re-checked after

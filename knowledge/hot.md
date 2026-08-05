@@ -31,7 +31,7 @@ c32a46c docs: 45h2 tail — amendments blocker paid, 626-row accounting, 08-05 l
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-05 (**5a IS BUILT AND COMMITTED — `15723c1`, awaiting team-lead acceptance.** Step 0 landed the team-lead tail at `242fcdc` (six paths, `hot.md` the expected sixth). All three deliverables done at **$0**: discovery + coverage ledger, the storewide poll census, the loop skeleton. `make check` **861 passed** (814 before), `ruff format --check` clean, raw v1 byte-identical against a pre-run sha256 baseline. **The ledger's verdict: the three authorised themes close 6.8% of the gap** — that is the operator's decision now. Phase 4+4.5 spend unchanged: **$16.30 of $25**, $8.70 left; no pods, 5a spent nothing. Edited by hand; the section above is auto-generated, do NOT touch the marker.)
+**Last update:** 2026-08-05 (**5a IS BUILT AND COMMITTED — `15723c1`, awaiting team-lead acceptance.** Step 0 landed the team-lead tail at `242fcdc` (six paths, `hot.md` the expected sixth). All three deliverables done at **$0**: discovery + coverage ledger, the storewide poll census, the loop skeleton. `make check` **863 passed** (814 before), `ruff format --check` clean, raw v1 byte-identical against a pre-run sha256 baseline. **The ledger's verdict: the three authorised themes close 6.8% of the gap** — that is the operator's decision now. Phase 4+4.5 spend unchanged: **$16.30 of $25**, $8.70 left; no pods, 5a spent nothing. Edited by hand; the section above is auto-generated, do NOT touch the marker.)
 
 ## 🔥 What's Hot
 
@@ -86,7 +86,7 @@ future corrected-gold comparison of the two arms is **unpaired and must say so**
 
 ## ⏭️ Next
 
-1. **Team-lead acceptance of 5a** — report in `implementation-notes.md` («Phase 5a», 14
+1. **Team-lead acceptance of 5a** — report in `implementation-notes.md` («Phase 5a», 15
    deviations), numbers in `results/discovery_5a.json` and `results/poll_census_5a.json`.
    The smoke record `results/smoke/loop_5a.json` is **gitignored** and is quoted in the report.
 2. **The operator picks channels off the ledger** — and answers the gap: widen the themes,

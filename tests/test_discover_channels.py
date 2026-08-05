@@ -1,8 +1,11 @@
 """Offline tests for Phase-5a channel discovery — no Telegram, no session."""
 
+import json
 import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+
+import pytest
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
@@ -143,3 +146,55 @@ def test_the_two_caveats_are_the_briefs_own_words():
 
 def test_the_coverage_target_is_the_operators_number():
     assert discovery.COVERAGE_TARGET == 10_000_000
+
+
+# --- re-deriving the ledger without a rescan --------------------------------------------------
+
+
+def test_rebuild_ledger_re_derives_from_the_record_and_talks_to_nobody(monkeypatch, tmp_path):
+    """A ledger rule that changed is recomputed from the rows already measured.
+
+    The two fields that must not blur into each other: `generated_at` is when the channels were
+    read, `ledger_rebuilt_at` is when the arithmetic over them was redone. A rebuild that moved
+    the first would turn a re-derivation into a claim about a day nobody measured.
+    """
+    path = tmp_path / "discovery_5a.json"
+    held = {
+        "generated_at": "2026-08-05T18:00:00+00:00",
+        "registry": {"path": "config/registry.yaml", "rows": [row("@a", 1_000)], "note": "x"},
+        "candidates": [row("@live", 2_000, ppw=5.0), row("@silent", 400_000, ppw=0.0)],
+        "ledger": {"stale": True},
+    }
+    path.write_text(json.dumps(held, ensure_ascii=False), encoding="utf-8")
+    monkeypatch.setattr(discovery, "RECORD", path)
+    monkeypatch.setattr(
+        discovery, "build_client", lambda *a, **k: pytest.fail("a rebuild talked to Telegram")
+    )
+
+    assert discovery.main(["--rebuild-ledger"]) == 0
+
+    rebuilt = json.loads(path.read_text(encoding="utf-8"))
+    assert rebuilt["generated_at"] == held["generated_at"], "a rebuild is not a new measurement"
+    assert rebuilt["ledger_rebuilt_at"] is not None
+    assert rebuilt["candidates"] == held["candidates"], "rows are re-read, never re-measured"
+    assert rebuilt["ledger"]["portfolio_if_only_live_entered"] == 3_000
+    assert "stale" not in rebuilt["ledger"]
+
+
+def test_a_normal_run_leaves_the_rebuild_stamp_empty(monkeypatch, tmp_path):
+    """The negative control: the stamp has to be absent when nothing was rebuilt."""
+    path = tmp_path / "discovery_5a.json"
+    monkeypatch.setattr(discovery, "RECORD", path)
+
+    async def scanned(_channels):
+        return {
+            "registry_rows": [row("@a", 1_000)],
+            "candidates": [row("@live", 2_000, ppw=5.0)],
+            "generated_at": datetime(2026, 8, 5, 18, tzinfo=timezone.utc),
+        }
+
+    monkeypatch.setattr(discovery, "run", scanned)
+
+    assert discovery.main([]) == 0
+
+    assert json.loads(path.read_text(encoding="utf-8"))["ledger_rebuilt_at"] is None
