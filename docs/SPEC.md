@@ -203,6 +203,18 @@ aggregate, the EXACT production configuration (merge state, batch size,
 runtime) is scored once against test v4 and recorded beside the 4.5h2 gate
 numbers; the delta is reported, never averaged away. Merging the adapter
 stays forbidden unless this measurement selects it.
+**Pair pre-registered (operator, 2026-08-06):** config A = NF4 base +
+unmerged arm-A adapter, batch 1 (the 4.5h2 replica); config B = adapter
+merged in bf16 then REQUANTIZED to NF4, batch 1 (bf16 serving does not
+fit the GPU class — ~62 GB weights vs 48). Both scored once on test v4
+through the PRODUCTION serverless runtime, one attempt each, smoke
+before any paid call, hard budget stop $4 of the $8 cap, spend anchors
+written before the first spend. Selection rule, committed BEFORE the
+run: B is adopted only if every 4.5h2-passed gate stays passing on B
+(G1b fix-count, G1d, G1e against the bars in
+`results/verdict_45h2.json`) and no gate head drops more than 0.005
+vs A; any tie or doubt ships A — the safe default. A failed or aborted
+pair closes the merge question in favour of A; no retry.
 (3) **Category post-layer is in-phase** (operator choice): the taxonomy is
 the operator's word BEFORE any labeling; one LLM pass over ~6k posts
 (~$0.2–0.5) with its own pre-registered gate (sealed hundred of posts,
@@ -230,6 +242,25 @@ the API), and subscribers ≠ comment flow (rows are born in discussion
 groups). Widening discovery beyond the authorised themes — and the
 coverage-target ruling itself — are operator decisions taken on the
 combined ledger (next reading: after the 5a.1 scan).
+**Coverage rulings (operator, 2026-08-06, on the combined ledger):**
+the ≥10,000,000 target STANDS as aspirational (the ledger keeps
+reporting the honest gap); launch composition is fixed at **51
+channels** (registry 4 + 29 comment-capable + 18 posts-only,
+1,199,519 subscribers) plus **14 watch** (group present, currently
+silent: track-R gate passed, posts collected, NO group joins until
+the channel posts again; reviewed after reporting cycle 1); 12
+operator picks excluded (7 off-topic/non-UA, 6 dead, one overlap);
++1 operator addition (2026-08-06 evening): @marketopt_official —
+Poltava/Kremenchuk regional grocery chain, 41,518 subscribers,
+verified, dairy/ice-cream promos throughout — enters via the same
+track-R gate. The authoritative per-channel list:
+`docs/CHANNELS-launch.md`.
+**Signal layer (operator, 2026-08-06):** beside post text and comment
+text, the loop extracts reactions (emoji valence), views and forwards
+— absent from raw v1's ten keys, fetched retroactively at zero cost
+by the poll-census pattern into a v2 sidecar (5c deliverable); poll
+vote counts join the same sidecar. Reaction valence is reported
+BESIDE model sentiment with its own scale, never merged into it.
 (5) **Brand normalization v2** (declensions + homoglyphs) is registered
 BESIDE v1; historical dumps are re-scored under v2 at $0; every number
 names its normalization version; gate history under v1 is not rewritten.
