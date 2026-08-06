@@ -2,24 +2,24 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-06 15:40:01 (every SessionStart)
+**Auto-refreshed:** 2026-08-06 18:10:55 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-fffc062 docs(5b): mark the runbook's unexecuted half, and lead with the hub control
-76abacf feat(5b): the pair is aborted — the serverless runtime cannot be reached, and A ships
-144284f docs(5b): the instrument, the pod-proven cold start, and the capacity matrix
-8ac63ad feat(5b): refuse a worker whose library stack is not the one 4.5h2 measured
-fd5d742 feat(5b): the projection reads the smoke's artifact, weighted to the paid run's task mix
+4c43d5e docs(5b1): state the parity claim at the strength the evidence supports
+b6c04a0 docs(vault): the generated log stub and index after the 5b.1 run
+206cc63 feat(5b1): config A on the pod reproduces the 4.5h2 anchor exactly — every delta is 0.0000
+cb1498a docs(5b1): the fetch that would clobber the stamped smoke, and what to read before comparing
+f6c22cf feat(5b1): the smoke on the pod — 24/24 carve rows, 53 s cold start, and the run clears
 ```
 
 ## 📋 Recent decisions
 
 - `INDEX.md` — Decision records
+- `5b-parity-abort-and-pod-runtime.md` — The pair aborted on a runtime that never took a job, and production moves to a stop-after pod
 - `5a-census-api-and-theme-expansion.md` — The census had to fetch, and three themes buy 6.8% of the gap
-- `45h2-ablation-verdict.md` — The пласт is dropped: it made every gated head worse but one
 
 ## 📅 Recent daily logs
 
@@ -31,9 +31,53 @@ fd5d742 feat(5b): the projection reads the smoke's artifact, weighted to the pai
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-06 15:33 (`/save`. **PHASE 5b IS DONE AND THE PAIR WAS NEVER SCORED — the serverless runtime is unreachable, and SPEC's pre-registered outcome is that A ships and merging stays forbidden.** 12 commits, `7ee98ba` → `fffc062`. `make check` **979 passed** (884 at the 5a.1 close), `ruff format --check` clean, `git status` clean, **$0.5324 of the $4.00 stop — $3.47 unspent**. The instrument is built, tested and committed in full; what does not exist is a single gate number, because no worker on this account ever consumed a job. The control that closed it: **RunPod's own hub vLLM worker** — their template, their image, no volume, no datacenter pin, none of our code — cycled `initializing`/`throttled` for five minutes and never took its job either. Against that, the same worker code, venv, weights and adapter answered a 3-row T2 batch correctly on an A6000 **pod** through the identical `start.sh`. Earlier the same day, `/save`: 5a.1 built and committed, and the coverage ruling came back — the ≥10 M target stands, 51 channels launch. Edited by hand; the section above is auto-generated, do NOT touch the marker.)
+**Last update:** 2026-08-06 18:04 (`/save`. **PHASE 5b.1 IS DONE AND THE SERVING DELTA IS ZERO — config A on a booted-per-pass A6000 pod reproduced every reported 4.5h2 number exactly, 758/758 rows, no failures of any kind.** 10 commits, `c878e7b` → `4c43d5e`. `make check` **989 passed** (979 at the 5b close), `ruff format --check` clean, `git status` clean, **$1.2324 of the $4.00 stop — $2.77 unspent**, no pod/endpoint/template left running. The measurement SPEC §3.11 (2) pre-registered exists now: `results/parity_5b_a.json` carries it with the anchors and the deltas beside it, and `results/serving_5b.json` is what 5c reads. On the way there, a 45-minute $0 stock-out — A6000 was `none` in the volume's datacenter and I had been reading the wrong availability field — closed by the operator's capacity clause, which made the GPU CLASS the contract and the datacenter a convenience. Earlier the same day, `/save`: **PHASE 5b DONE AND THE PAIR WAS NEVER SCORED — the serverless runtime is unreachable, and SPEC's pre-registered outcome is that A ships and merging stays forbidden.** 12 commits, `7ee98ba` → `fffc062`. `make check` **979 passed** (884 at the 5a.1 close), `ruff format --check` clean, `git status` clean, **$0.5324 of the $4.00 stop — $3.47 unspent**. The instrument is built, tested and committed in full; what does not exist is a single gate number, because no worker on this account ever consumed a job. The control that closed it: **RunPod's own hub vLLM worker** — their template, their image, no volume, no datacenter pin, none of our code — cycled `initializing`/`throttled` for five minutes and never took its job either. Against that, the same worker code, venv, weights and adapter answered a 3-row T2 batch correctly on an A6000 **pod** through the identical `start.sh`. Earlier the same day, `/save`: 5a.1 built and committed, and the coverage ruling came back — the ≥10 M target stands, 51 channels launch. Edited by hand; the section above is auto-generated, do NOT touch the marker.)
 
 ## 🔥 What's Hot
+
+**THE SERVING DELTA IS ZERO, AND THAT IS MEASURED RATHER THAN ASSUMED.** `results/parity_5b_a.json`
+→ block `parity`: config A on a booted-per-pass A6000 pod, **758/758 rows**, zero parse, api,
+generation and truncation failures, one attempt, batch 1, no retry. G1a 0.9214, G1b 0.6053 (23/38),
+G1c 0.8478, G1d 0.9586, G1e 0.9610 — **every one identical to the 4.5h2 anchor**, both G1a language
+floors too, `under_bar` empty, the same 3 of 5 gates passing. **Serving through `serve_handler` over
+HTTP costs the gate numbers nothing**, and SPEC §3.11 (2)'s "the delta is reported, never averaged
+away" has a number to report: `+0.0000`.
+
+**THE PREMISE IS QUOTED, AND SO IS THE LIMIT.** Batch 1 on both sides comes from
+`config.generation.batch_size` in **both** records (greedy is not batch-invariant on this stack —
+ADR [[phase4-own-pod-anchor]] §(c)), and `scored_ids_sha256` matches on all three inputs, so it is
+the same rows proven by hash. What cannot be claimed: a **per-row** identity. Arm A's prediction
+dump was lost on 04.08 (`results/predictions/LOST.md`, and it may not be regenerated), so
+"identical" means seven aggregates over a hash-pinned row set, not 758 verified rows. D12.
+5b.1's own 758-row dump is committed — the next runtime comparison will not have this hole.
+
+**THE GPU CLASS IS THE CONTRACT AND THE DATACENTER IS NOT** (SPEC §3.11 (1) capacity clause,
+operator 2026-08-06 evening). A6000 in any datacenter is the primary path with
+`assert_runtime_matches` as the gate on a fresh stage; **A40** is the authorised in-class fallback
+with the card recorded in provenance; **A100 is refused** — the GPU class is the variable §(2)
+measures. It was written after a $0, 45-minute stock-out: 31 refused `pod create` calls in
+CA-MTL-3 while **`runpodctl gpu list` had said `none` for A6000 there all along**. `datacenter
+list` prints `""` for everything and is the field 5b's runbook says not to trust; `gpu list` has a
+per-datacenter sibling that does answer. The ladder took **A6000 in US-TX-1** on its second rung.
+
+**A FRESH STAGE IS CHEAPER THAN THE VOLUME, AND FASTER TO LOAD FROM.** No network volume outside
+CA-MTL-3, so 59 GB of weights came down in **4 m 15 s** and the venv was rebuilt with the 4.5h2
+versions **pinned by hand** — and the cold start off local NVMe was **53.0 s against 278.9 s** off
+the volume. `assert_runtime_matches` is what says the rebuild is the same instrument, and it passed
+before the first scored row: same card, same driver 550.127.08, same CUDA 12.8, torch 2.8.0+cu128,
+transformers 5.14.1, bitsandbytes 0.50.0. The 100 GB volume now buys convenience in one datacenter
+that had no A6000 capacity that day, and it bills ~$0.24/day regardless.
+
+**A POD HAS NO TEMPLATE, SO IT HAS NO CONFIGURATION.** `SERVING_CONFIG`, `ADAPTER_DIR`,
+`BASE_WEIGHTS` and `MODEL_REVISION` were the serverless endpoint template's `--env`. The first pod
+start refused with `SERVING_CONFIG must be one of ('A','B'), got ''` — for free, because `Worker`
+loads the model lazily and `settings()` runs first. **5c inherits it:** whatever boots the pod per
+pass is now the thing that carries the worker's environment.
+
+**WHAT 5c SIZES OFF.** Cold start **53.0 s**, **4.065 s/row** at batch 1 (`wall_per_call`, 759
+calls), **3085.4 s** of rows against **3110.1 s** projected (−0.8%, so the task-mix weighting
+holds), a full cold pass **≈3138 s**, **$0.60 per 1000 rows**. Two passes a day is **~$28/month of
+GPU** against SPEC §3.11 (6)'s ~$9–12/month ceiling — see ⏭️ Next 1.
 
 **THE 5b PAIR WAS NEVER SCORED, AND THAT IS A VERDICT RATHER THAN A GAP.**
 `results/parity_verdict_5b.json` → `outcome: aborted-runtime-unreachable`, **shipped A**, seven
@@ -133,20 +177,25 @@ future corrected-gold comparison of the two arms is **unpaired and must say so**
 
 ## ⏭️ Next
 
-1. **THE RUNTIME RULING CAME BACK DURING THIS CHECKPOINT, AND `docs/PROMPT-5b1.md` IS QUEUED.**
-   Reading (b) of the 5b report is taken: amended SPEC §3.11 (1) fixes the production runtime as a
-   **stop-after POD on AMPERE_48 (A6000 — the same card the 4.5h2 anchors were measured on)**,
-   booted per pass; serverless may return **only** through a fresh §(2) measurement, and a support
-   ticket runs in parallel at zero cost. Amended §3.11 (2) pre-registers a **single-config
-   measurement**: config A alone, once, on the pod runtime, **the pair stays closed and B stays
-   dead** — hard stop **$3.47**, smoke on the 24-row carve, test v4 exposed exactly once in the
-   paid run. Deltas vs `results/verdict_45h2.json` are reported and no bar moves; a 4.5h2-passed
-   head landing under its bar is a loud finding for an operator briefing, not a ruling this phase
-   takes. **A failed attempt stops the line — aggregates cannot take serving numbers without it.**
-   Its step 0 owes an ADR (`5b-parity-abort-and-pod-runtime.md`) before the team-lead commit.
-   §3.11 (6) also absorbed D9: the "$8.70 remainder" is dated, and live headroom is read from
-   `results/spend_*.json`.
-2. **The three readings 5b handed over are now answered by (1) — kept here for the record.**
+1. **THE ONE OPEN DECISION IS THE RUN-RATE, AND IT IS NOW PRICED.** Two passes a day at
+   ≈3138 s and $0.53/h is **~$28/month of GPU** against SPEC §3.11 (6)'s **~$9–12/month** ceiling.
+   That ceiling was written when inference was serverless and billed by the second; the pod
+   runtime bills wall clock. The obvious lever — **batch > 1** — is closed by contract, because
+   greedy is not batch-invariant on this stack (ADR [[phase4-own-pod-anchor]] §(c)), so reopening
+   it needs its own measurement. Cheaper levers to price if the operator wants them: fewer passes
+   per day (the cadence is a recorded knob, not a constant), or a smaller v4 slice per pass.
+   Neither is this executor's call.
+2. **`docs/PROMPT-5b1.md` IS EXECUTED — the measurement exists and the line is not stopped.**
+   10 commits `c878e7b` → `4c43d5e`, `$1.2324` of the $4.00 stop. SPEC §3.11 (2)'s
+   *"aggregates cannot take serving numbers without this measurement"* is satisfied:
+   `results/parity_5b_a.json` carries the per-head numbers beside the anchors with the deltas, and
+   `results/serving_5b.json` carries the pod config, the cold start, per-row latency and cost —
+   the file the brief says 5c reads. `run_loop.ENDPOINT` is **still `None`**; 5c flips it.
+3. **The serverless ticket is still worth filing, at zero cost and blocking nothing.** The pod
+   runtime is measured and reproduces the anchor exactly, so nothing waits on it. If serverless
+   ever comes back it needs a fresh §(2) measurement, and `results/parity_5b_a.json` is what that
+   would be compared against. The hub-worker observation is the ready-made ticket.
+4. **The three readings 5b handed over are ANSWERED — kept here for the record.**
    Three readings, cheapest first, all in `implementation-notes.md` "Phase 5b": **(a)** ask RunPod
    why serverless workers never consume jobs on this account — costs nothing, and the hub-worker
    observation is a ready-made ticket; endpoints were created through `runpodctl serverless
@@ -157,18 +206,12 @@ future corrected-gold comparison of the two arms is **unpaired and must say so**
    assumption and is not this phase's call. **(c)** leave the merge question closed and go to 5c —
    SPEC already fixes the outcome, nothing downstream waits on config B, and the **$3.47 left
    under the 5b stop stays unspent**.
-3. **`results/serving_5b.json` DOES NOT EXIST YET — 5b.1 is what writes it.** The brief makes it
-   the file 5c reads, now carrying the pod config, cold start, measured per-row latency and cost.
-   In 5b it could not exist: PROMPT-5b D1 named it as what 5c reads to flip `run_loop.ENDPOINT`. The latency
-   and cost figures it was to carry were never measured and are not guessed; the served
-   configuration and its provenance are recorded in `implementation-notes.md` and
-   `scripts/runbook_5b.md` instead.
-4. **Before staging anything on a re-attempt, run the hub control first.**
+5. **Before staging anything on a re-attempt, run the hub control first.**
    `runpodctl hub search vllm` → create → one job → delete, either way. If RunPod's own worker
    completes, `scripts/runbook_5b.md` §3–6 can run as written; if it does not, nothing in this
    repository can make it. §1–2 of that runbook are marked DONE and the volume still holds their
    output — the staging half does not need repeating.
-5. **THE COVERAGE RULING IS TAKEN — and neither of the notes' cheap readings was taken whole.**
+6. **THE COVERAGE RULING IS TAKEN — and neither of the notes' cheap readings was taken whole.**
    Landed during this `/save` in an amended SPEC §3.11 (4) plus `docs/CHANNELS-launch.md`: the
    **≥10 M target STANDS as aspirational** (the ledger keeps reporting the honest gap), and the
    launch is fixed at **51 channels** — registry 4 + 29 comment-capable + 18 posts-only,
@@ -178,7 +221,7 @@ future corrected-gold comparison of the two arms is **unpaired and must say so**
    one late addition `@marketopt_official` (41,518, Poltava/Kremenchuk grocery chain).
    `docs/CHANNELS-launch.md` is the authoritative per-channel list; every entry still goes
    through the track-R gate.
-6. **`docs/PROMPT-5b.md` IS EXECUTED — this was the phase's one paid event, and it aborted.** SPEC §3.11 (2) as
+7. **`docs/PROMPT-5b.md` IS EXECUTED — this was the phase's one paid event, and it aborted.** SPEC §3.11 (2) as
    amended pre-registers the pair — config A = NF4 base + unmerged arm-A adapter at batch 1
    (the 4.5h2 replica), config B = merged in bf16 then **requantized** to NF4 (bf16 does not fit
    the GPU class: ~62 GB of weights against 48) — both scored once on test v4 through the
@@ -188,33 +231,41 @@ future corrected-gold comparison of the two arms is **unpaired and must say so**
    and an aborted pair closes the merge question in favour of A.
    **⚠️ Its step 0 pre-authorises the vault tail as its OWN separate commit** — exactly the
    judgement D1 took here, now the house rule; STOP only for a path neither list explains.
-7. **The ten-key finding is now load-bearing.** `docs/CHANNELS-launch.md` counts **views and
+8. **The ten-key finding is now load-bearing.** `docs/CHANNELS-launch.md` counts **views and
    reactions** among the launch signals and stars both: collector v1 writes neither (the post
    record has exactly ten keys, measured in 5a). The stated plan is a retrospective refetch **by
    the poll-census pattern** — $0, sidecar v2 beside raw v1, never into the v1 stores.
-8. **A brief count to watch, now FOUR times — and SPEC now names one of them:** `docs/PROMPT-5a1.md` said "the five themes" in its read-back
+9. **A brief count to watch, now FOUR times — and SPEC now names one of them:** `docs/PROMPT-5a1.md` said "the five themes" in its read-back
    check while its own Deliverable 3 and SPEC §3.11 (4) name **seven** (three from 04.08 plus
    four from the 06.08 ruling). Seven were built; the discrepancy is D2 in the notes. The same
    class of staleness as the "five registry channels" 5a flagged — twice in two days.
-9. **After 5b.1:** **5c** loop core
+10. **5c IS NEXT — the loop core.**
    + aggregates + the category post-layer (taxonomy is the operator's word BEFORE any labeling)
    → **5d** first reporting cycle + alerts v0 on spikes of both polarities.
-10. **G1a and G1c are DEFERRED until after the loop's first reporting cycle**, on its fresh data —
+11. **G1a and G1c are DEFERRED until after the loop's first reporting cycle**, on its fresh data —
    which is also the only new source of ru rows for G1a and of sarcasm for G1b, the old corpus
    having been exhausted at 4.5d. Whatever is decided then starts a **new pre-registration**.
-11. **Budgets for Phase 5 are pre-registered: $8 GPU + $1 OpenRouter**, run-rate ceiling ~$9–12/mo.
+12. **Budgets for Phase 5 are pre-registered: $8 GPU + $1 OpenRouter**, run-rate ceiling ~$9–12/mo.
    Spend anchors are written before the first spend. The 100 GB CA-MTL-3 volume is kept — review
    **~2026-09-05** if no GPU work has started by then.
 
 ## 🚧 Blockers
 
-**ONE OPEN, AND IT IS EXTERNAL: no RunPod serverless endpoint on this account reaches a
-job-consuming worker.** Jobs stay `IN_QUEUE` while `/health` reports a worker in `idle`, `ready`,
-`running` or `throttled`. Proven not to be ours by RunPod's own hub vLLM worker failing the same
-way, and proven not to be the artifact by the same code answering correctly on a pod. It blocks
-SPEC §3.11 (2)'s pre-registered measurement outright — see ⏭️ Next 1 for the three readings. The
-phase's own outcome is **not** blocked: SPEC fixes it, `results/parity_verdict_5b.json` records
-it, A ships and merging stays forbidden.
+**NOTHING BLOCKS THE LINE. The one external fault is routed around and no longer stops anything.**
+No RunPod serverless endpoint on this account reaches a job-consuming worker — jobs stay
+`IN_QUEUE` while `/health` reports a worker in `idle`, `ready`, `running` or `throttled`; proven
+not to be ours by RunPod's own hub vLLM worker failing the same way, and proven not to be the
+artifact by the same code answering correctly on a pod. **SPEC §3.11 (2)'s measurement is no
+longer blocked by it:** the runtime ruling moved production to a stop-after pod, and 5b.1 scored
+config A there — every reported number identical to the anchor. Serverless returns only through a
+fresh §(2) measurement, and the ticket costs nothing and waits on nothing (⏭️ Next 3).
+
+**A capacity stock-out is a thing that happens and it is now in the contract.** A6000 was `none`
+in the volume's datacenter for 45 minutes and 31 `pod create` calls, at $0. SPEC §3.11 (1)'s
+capacity clause makes the CLASS the contract: A6000 anywhere, then A40 in-class with the card in
+provenance, never A100. **`runpodctl gpu list` is the field that answers** — per-datacenter, and
+it said `none` the whole time; `datacenter list` prints `""` for everything and is the one 5b's
+runbook says not to trust. Read the granular sibling before spending a create call.
 
 **Everything else stays clear.** The two owed amendments are **PAID** — `docs/SPEC.md` amendment **3.10** records the
 per-arm ceiling 6.5 h → 8.5 h and `max_seq_len` 1024 → 1408, with the recording delay admitted in
