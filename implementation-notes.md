@@ -2939,3 +2939,179 @@ run does not offer it either.
 Arm A's prediction dump was lost on 2026-08-04 (`results/predictions/LOST.md`) and may not be
 regenerated, so the per-row diff that would turn this from an inference into a measurement
 cannot be run. The claim is stated at the strength the evidence supports.
+
+## Phase 5b.2 — the batch measurement: it failed, and it failed informatively
+
+SPEC amendment 3.11 (2)'s batch measurement, pre-registered the same session it was authorised.
+One paid attempt at whichever N a 24-row carve ladder selected; the ladder selected 16; the run
+scored 666 of 758 rows and the GPU ran out of memory. **Serving is fixed at batch 1 permanently**
+and the run-rate question goes back to the operator — the rule, applied, not re-argued.
+The decision record with the numbers is `knowledge/decisions/5b2-batch-measurement.md`.
+
+### Step 0 and the offline half
+
+Team-lead tail `cf381e2` and vault tail `765c795`, both by path, no unexplained paths.
+
+**The batching was already there.** `local_llm.LocalClient.batch` pads and generates a batch,
+`serve_handler`'s `batch` op takes a list of texts, `EndpointClient.batch` ships one, and
+`classify_local` chunks rows into `batch_size`. What did not exist was permission: two
+`SystemExit` guards fixed batch 1 for every served run and for every `--adapter` run. So
+Deliverable 1 is one flag (`--batch-measurement`, which refuses `--backend local` outright —
+gate evals stay batch 1 regardless) plus the three guards batching actually needs:
+
+1. **Right padding is refused at construction** (`local_llm.LocalClient._assert_left_padding`).
+   `load()` sets `padding_side = "left"`, but the client is what depends on it: with right
+   padding a batch's shorter rows end in pads, generation continues from a pad, and
+   `row[width:]` slices at the longest row's width. At batch 1 nothing is padded and the bug
+   does not exist — it would first appear in a paid batched run as slightly worse numbers with
+   no failure anywhere.
+2. **A row's reply must not depend on its neighbours' lengths**, pinned with a tokenizer that
+   pads by real length and a model that answers from its own unmasked tokens. The existing
+   `FakeTokenizer` returns a fixed width for every text and cannot fail that way.
+3. **`classify_local`'s per-row fallback is now visible.** It re-generates a failed batch one
+   row at a time while the record still says `batch_size: N` — an instrument swap inside the one
+   run whose entire content is "what does batch N cost the numbers". The ids land in
+   `failure_block`'s `solo_retried`, and the verdict prints `MIXED BATCH` on a non-empty list.
+   (It never fired: the run's 666 rows were all generated at 16.)
+
+Deliverable 2 is `scripts/batch_ladder_5b2.py`; Deliverable 3's verdict is
+`parity_verdict_5b.py --batch`, which applies `scorer.select_serving_config` unforked under a
+new `BATCH_SELECTION_RULE` — same shape, same 0.005 tolerance, one thing moved: the baseline is
+the batch-1 serving record, because batch 1 is what production already does.
+
+`make check` 1028 passed (1019 before the run, 989 at the 5b.1 close), `ruff format --check`
+clean.
+
+### The instrument found a bug in itself before the pod booted
+
+Driving `main` with a stub worker — the real script, a fake client, no GPU — caught
+`args.record.relative_to(REPO_ROOT)` dying on an out-of-repo path. An import would not have.
+The same line reappeared in `salvage_5b2.py` and was caught the same way.
+
+### Staging: the check that belonged before the 59 GB
+
+The first draft of `runbook_5b2.md` had `pip install torch==2.8.0` and then asserted the stack
+at the first `info` — i.e. after a 59 GB download and a cold start. A PyPI `torch==2.8.0` wheel
+can report `2.8.0` with no local version, and the anchor is `2.8.0+cu128` compared exactly. The
+image already carries the right build, so the venv inherits it (`--system-site-packages`, no
+torch in the pip line) and the runbook now asserts before the download. It passed on the first
+try: `torch 2.8.0+cu128 · transformers 5.14.1 · bitsandbytes 0.50.0`, adapter `b3ca630846c7…`,
+carve `8347abd74ae9…`.
+
+A6000 availability was read from `runpodctl gpu list`'s per-datacenter `dataCenterAvailability`
+before any `pod create` — CA-MTL-3 `none`, US-TX-1 `Low` — and the pod allocated on the first
+attempt. Yesterday's 31 refusals cost 45 minutes; today's reading cost one command.
+
+### The ladder (~$0.05)
+
+All five arms, 24/24 parsed, no failures. Byte-identity against the batch-1 arm: the repeat arm
+**identical** (the control), and 16, 8 and 4 **all identical**. The batch-1 arm matched the 5b.1
+smoke on all 24 rows across `finish_reason`, `parsed`, `prompt_tokens`, `completion_tokens`.
+
+Throughput: 4.180 s/row at batch 1, 1.500 at 16, 1.520 at 8, 1.870 at 4.
+
+The projection cleared at $0.1645 for the paid run against $2.53 of headroom, and a free
+`--dry-run` proved the paid invocation's whole argument path opened before it was spent.
+
+### The paid run, and where it stopped
+
+`comments_test` 400/400 and `posts_test` 250/250 at batch 16, zero parse/api/generation/
+truncation failures. Then `torch.OutOfMemoryError` on the second `sarcasm_holdout` batch:
+1.85 GiB requested, 432 MiB free of 47.53 GiB, **42.14 GiB genuinely allocated by PyTorch**
+against a ~20 GiB model at rest, 4.65 GiB reserved-but-unallocated. A real ~22 GiB working set
+for one batch of 16, not mainly fragmentation. `classify_local` re-raises OOM rather than
+charging it to rows, so the process died before writing a record or a prediction dump.
+
+### The salvage, and the shape it had to take
+
+`--eval-checkpoint` was passed for exactly this. `scripts/salvage_5b2.py` reads its 666 rows and
+answers the operator's question — *did batch 16 change the answers, or did it only run out of
+memory* — through the scorer, never by hand:
+
+| | batch 16 | batch 1 | 4.5h2 | Δ vs 1 | bar |
+|---|---|---|---|---|---|
+| G1a | 0.9192 | 0.9214 | 0.9214 | −0.0022 | 0.9470 |
+| G1c | 0.8509 | 0.8478 | 0.8478 | +0.0031 | 0.8483 |
+| G1d | 0.9586 | 0.9586 | 0.9586 | +0.0000 | 0.9090 |
+| G1e | 0.9610 | 0.9610 | 0.9610 | +0.0000 | 0.9283 |
+
+Row agreement vs the batch-1 dump: **660/666** — `posts_test` 250/250, `comments_test` 396/400,
+`sarcasm_holdout` 14/16.
+
+Three deliberate constraints on that table. It is **not** routed through `--batch` and produces
+nothing named `parity_5b2.json`: a head table under a familiar name is indistinguishable from
+the measurement's own output to the next reader, so everything sits under an `outcome` of
+`failed-measurement-oom`. **G1b is absent, not estimated** — 16 of 108 rows — and it is one of
+the three gates the rule requires, which is *why* the rule cannot run. And an input that lost
+rows yields no head at all rather than a head over what finished.
+
+`results/serving_5b.json` gains an `adopted` block **beside** the 5b.1 smoke, saying batch 1,
+`adopted: false`, `measured_at_batch_size: 16` — written by the script, because a block typed
+into a record cannot be re-derived when someone asks where it came from.
+
+### What the operator has to decide
+
+2 passes/day, A6000 at $0.53/h, cold start 46.2 s:
+
+| | s/row | s/pass | $/pass | $/month |
+|---|---|---|---|---|
+| batch 1 — what production is | 4.071 | 3 132 | 0.4611 | **27.67** |
+| batch 8 — projected, not measured | 1.491 | 1 176 | 0.1732 | **10.39** |
+| CA-MTL-3 volume, 100 GB, idle | — | — | — | **~7.20** |
+| SPEC §3.11 (6) ceiling | | | | 9–12 |
+
+The volume alone costs more than the whole batch-8 GPU bill and is attached to nothing.
+
+Spend: **$0.4277** for 5b.2, **$1.7069 of the $4.00** 5b stop. Pod deleted, `pod list -a` → `[]`,
+`serverless list` → `[]`.
+
+### Deviations
+
+**D1 — the brief's byte-for-byte guard is unbuildable as worded.** "batch=1 through the NEW code
+reproduces the recorded 5b.1 smoke outputs byte-for-byte": `results/serving_5b.json` stores
+`finish_reason`, `parsed` and the token counts, never the reply text. Restated to those four
+fields, keyed by id, with the limit written into the record. Byte-identity is measured *inside*
+the ladder, arm against arm, where the replies exist.
+
+**D2 — an addition: the `1-repeat` control arm.** Not in the brief's ladder. ~1.5 cents, and
+without it "N differs from 1" cannot be told from "this stack differs from itself" — the whole
+ladder would be reading noise. It came back identical.
+
+**D3 — the stop drifted between the brief and the run.** SPEC quotes $2.77 remaining; the guard
+read $2.7208 when the phase started, because the CA-MTL-3 volume bills ~$0.24/day whether or not
+anything is attached. The $4.00 phase cap is the invariant and is what was enforced.
+
+**D4 — "extend the serving path to batched generation" was mostly already done.** Reported rather
+than presented as new work: the diff is one flag, three guards and a ladder.
+
+**D5 — N=16's `T2` arm exercised 5 rows, not 16.** The carve holds 19 `T1v2_with_post` and 5
+`T2`, and a call carries one rendering. `max_chunk_per_task` is in the record for every arm.
+
+**D6 — the ladder contradicts [[phase4-own-pod-anchor]] §(c).** That measured one row of 24
+flipping between batch 8 and batch 1 on 2026-08-01; every arm was identical here. Different
+model state (no adapter there) and a different stack, so this bounds the old finding rather than
+repealing it — and it is not re-measured, because that is not authorised.
+
+**D7 — the paid run failed and the phase's one attempt is spent.** No resume (the checkpoint is
+evidence, never a resume), no second N, no re-run at 8. Test v4 was opened once, as authorised.
+
+**D8 — candidate 16 came from a rule with no memory term.** With every candidate identical,
+"the largest byte-identical N" degenerates into "take the maximum". The ladder's longest batch
+fitted and the test set's did not; the rule never asked.
+
+**D9 — six rows moved that the carve said could not.** 660/666 agreement is the phase's real
+finding: a 24-row pre-filter cannot see a 1% effect. Both computable head deltas are still
+inside the 0.005 tolerance.
+
+**D10 — G1c at batch 16 (0.8509) clears the bar batch 1 misses by 0.0005.** Reported and
+explicitly refused as a reason for anything: four flipped rows on a head already within a
+rounding error of its bar.
+
+**D11 — no prediction dump exists for the batch-16 run.** The eval writes it after the last
+input. Row agreement was computed from the checkpoint instead, which is why the checkpoint is
+committed as `results/batch_5b2_checkpoint.jsonl` rather than left in `/tmp`.
+
+**D12 — the zsh word-splitting trap fired a third time.** `SCPO="-o A -o B"` then `scp $SCPO`
+sends one argument. I wrote the warning into this phase's own runbook and then did it anyway,
+mid-teardown. Nothing was lost (the fetch was retried), but a note to myself has now failed
+three times and the memory entry says to use a shell function instead.
