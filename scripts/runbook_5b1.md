@@ -185,19 +185,36 @@ pgrep -af eval_zero_shot                   # NOT a grep of the log for a success
 It refuses before the first row unless the worker's own `info` names the registered adapter
 sha, merge state and quantization, and unless its library stack is the one 4.5h2 measured.
 
-**Fetch everything before deleting the pod** — a partial run's only evidence is in these files:
+**Fetch everything before deleting the pod** — a partial run's only evidence is in these files.
+**Do not re-fetch `results/serving_5b.json`**: the copy on the pod is the smoke's unstamped
+record, and the one on the Mac carries the cost and deployment blocks stamped into it after the
+fact. `--project` reads that file. `git diff results/serving_5b.json` before any post-run commit.
 
 ```bash
 scp -i $SSHK $SSHOPT -P <PORT> root@<HOST>:/workspace/out/parity_5b_a.json results/
 scp -i $SSHK $SSHOPT -P <PORT> root@<HOST>:/workspace/out/parity-5b1.log results/train/
 scp -i $SSHK $SSHOPT -P <PORT> root@<HOST>:/workspace/out/parity-5b1.jsonl /tmp/
 scp -i $SSHK $SSHOPT -P <PORT> "root@<HOST>:/workspace/repo/results/predictions/*.jsonl" results/predictions/
-scp -i $SSHK $SSHOPT -P <PORT> root@<HOST>:/workspace/repo/results/serving_5b.json results/
 runpodctl pod delete <POD_ID> && runpodctl pod list -a       # deletion is PROVEN by the listing
 python3 scripts/runpod_guard.py --step 5b --step-cap 4.00 --note "5b.1 config A scored on the pod"
 ```
 
-## 7. The comparison
+## 7. Read the record before comparing anything
+
+`read_parity` checks only that the record claims config A. Four things it cannot check, and a
+partial or mislabelled run must not reach the comparison:
+
+- **`scored == rows == 758`** across the failure blocks, with parse and api failures at 0. A run
+  that lost rows to an `ApiError` is a failed attempt under §(2), not a lower number.
+- **`config.serving.transport == "pod-loopback"`** — otherwise `--endpoint-url` never reached
+  `serving_config` and the record misnames the runtime that produced it.
+- **`prompt_revision_sha256`** equals `verdict_45h2.json`'s anchor block (`495b43d1…` T1,
+  `6a7e66ef…` T2), and the frozen input hashes match. Same prompts, same files, or the delta is
+  not a runtime delta.
+- **`worker.repo_commit`** names the pod's checkout, which is the bundle's HEAD and not the
+  Mac's if the Mac moved on. Expected, and worth stating rather than leaving to be found.
+
+## 8. The comparison
 
 ```bash
 PYTHONPATH=src python3 scripts/parity_verdict_5b.py --single
