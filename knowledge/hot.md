@@ -2,24 +2,24 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-06 18:10:55 (every SessionStart)
+**Auto-refreshed:** 2026-08-06 19:34:27 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-4c43d5e docs(5b1): state the parity claim at the strength the evidence supports
-b6c04a0 docs(vault): the generated log stub and index after the 5b.1 run
-206cc63 feat(5b1): config A on the pod reproduces the 4.5h2 anchor exactly — every delta is 0.0000
-cb1498a docs(5b1): the fetch that would clobber the stamped smoke, and what to read before comparing
-f6c22cf feat(5b1): the smoke on the pod — 24/24 carve rows, 53 s cold start, and the run clears
+cb41ae3 docs(5b2): the ADR with its numbers, and twelve deviations
+9295e3c feat(5b2): the ladder says every N is identical; the paid run at 16 dies on memory
+0a0e09c docs(5b2): check the stack string before the 59 GB, not after it
+00b82ac feat(5b2): regress batch 1 against the 5b.1 smoke, and the runbook's pre-registered rulings
+db23ee6 feat(5b2): the carve ladder, and the adoption rule as code
 ```
 
 ## 📋 Recent decisions
 
 - `INDEX.md` — Decision records
+- `5b2-batch-measurement.md` — 5b.2 — the batch measurement failed on memory, and serving is fixed at batch 1
 - `5b-parity-abort-and-pod-runtime.md` — The pair aborted on a runtime that never took a job, and production moves to a stop-after pod
-- `5a-census-api-and-theme-expansion.md` — The census had to fetch, and three themes buy 6.8% of the gap
 
 ## 📅 Recent daily logs
 
@@ -31,9 +31,46 @@ f6c22cf feat(5b1): the smoke on the pod — 24/24 carve rows, 53 s cold start, a
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-06 18:04 (`/save`. **PHASE 5b.1 IS DONE AND THE SERVING DELTA IS ZERO — config A on a booted-per-pass A6000 pod reproduced every reported 4.5h2 number exactly, 758/758 rows, no failures of any kind.** 10 commits, `c878e7b` → `4c43d5e`. `make check` **989 passed** (979 at the 5b close), `ruff format --check` clean, `git status` clean, **$1.2324 of the $4.00 stop — $2.77 unspent**, no pod/endpoint/template left running. The measurement SPEC §3.11 (2) pre-registered exists now: `results/parity_5b_a.json` carries it with the anchors and the deltas beside it, and `results/serving_5b.json` is what 5c reads. On the way there, a 45-minute $0 stock-out — A6000 was `none` in the volume's datacenter and I had been reading the wrong availability field — closed by the operator's capacity clause, which made the GPU CLASS the contract and the datacenter a convenience. Earlier the same day, `/save`: **PHASE 5b DONE AND THE PAIR WAS NEVER SCORED — the serverless runtime is unreachable, and SPEC's pre-registered outcome is that A ships and merging stays forbidden.** 12 commits, `7ee98ba` → `fffc062`. `make check` **979 passed** (884 at the 5a.1 close), `ruff format --check` clean, `git status` clean, **$0.5324 of the $4.00 stop — $3.47 unspent**. The instrument is built, tested and committed in full; what does not exist is a single gate number, because no worker on this account ever consumed a job. The control that closed it: **RunPod's own hub vLLM worker** — their template, their image, no volume, no datacenter pin, none of our code — cycled `initializing`/`throttled` for five minutes and never took its job either. Against that, the same worker code, venv, weights and adapter answered a 3-row T2 batch correctly on an A6000 **pod** through the identical `start.sh`. Earlier the same day, `/save`: 5a.1 built and committed, and the coverage ruling came back — the ≥10 M target stands, 51 channels launch. Edited by hand; the section above is auto-generated, do NOT touch the marker.)
+**Last update:** 2026-08-06 19:45 (**PHASE 5b.2 IS DONE AND THE MEASUREMENT FAILED — the paid run at batch 16 scored 666 of 758 rows and the GPU ran out of memory, so serving is fixed at batch 1 PERMANENTLY and the run-rate question goes back to the operator.** SPEC §3.11 (2)'s own outcome, applied rather than re-argued: the adoption rule needs G1b, G1b needs the sarcasm holdout, and 16 of its 108 rows were scored. 7 commits, `cf381e2` → `cb41ae3`. `make check` **1028 passed** (989 at the 5b.1 close), `ruff format --check` clean, **$1.7069 of the $4.00 stop — $2.29 unspent**, pod deleted and proven gone by listing. The ladder found **every** N byte-identical on the 24-row carve, including 16 — which is what selected 16, and which the 758-row test set contradicted: **six rows moved**. The phase's real finding is that a 24-row pre-filter cannot see a 1% effect, and that a selection rule with no memory term picks a batch size nobody checked would fit. Previously, 18:04 `/save`: **5b.1 DONE, SERVING DELTA ZERO** — config A on a booted-per-pass A6000 pod reproduced every reported 4.5h2 number exactly, 758/758 rows, $1.2324 of the stop; and a 45-minute $0 A6000 stock-out closed by the operator's capacity clause, which made the GPU CLASS the contract and the datacenter a convenience. Before that: **5b DONE, THE PAIR NEVER SCORED** — no worker on this account consumes a job, RunPod's own hub vLLM worker included, so A ships and merging stays forbidden. Edited by hand; the section above is auto-generated, do NOT touch the marker.)
 
 ## 🔥 What's Hot
+
+**BATCH IS CLOSED AND IT IS CLOSED BY THE RULE, NOT BY THE NUMBERS.**
+`results/batch_5b2_verdict.json` → `outcome: failed-measurement-oom`. The adoption rule adopts N
+only if every 4.5h2-passed gate stays passing — G1b, G1d, G1e — and G1b is the sarcasm-holdout
+slice, of which the run scored 16 of 108. An unmeasured gate is not a passing one, so the rule has
+no input and does not run. **Batch 1, permanently.** Only a NEW pre-registered measurement can move
+it. One attempt, no retry, no second N, and test v4 is spent. [[5b2-batch-measurement]]
+
+**THE PRE-FILTER SAID IDENTICAL AND THE TEST SET SAID 1%.** All four ladder arms — 16, 8, 4 and a
+repeat of 1 — came back byte-identical to batch 1 over the 24 carve rows. On 758 test rows,
+**660 of 666 agree**: `posts_test` 250/250, `comments_test` 396/400, `sarcasm_holdout` 14/16. Six
+rows moved that the carve swore could not. A 24-row sample cannot see a 1-in-100 effect, and
+"byte-identical on the carve" was never evidence about the population.
+
+**A DISCRIMINATOR EVERYTHING PASSES IS NOT A SELECTION RULE.** With 16, 8 and 4 all identical,
+"the largest byte-identical N" quietly became "take the maximum" — and nothing in the rule asked
+whether the maximum fits in memory. It did not: 1.85 GiB requested, 432 MiB free, **42.14 GiB
+genuinely allocated** against a ~20 GiB model. The carve's longest batch fitted; the test set's
+did not. Any re-opening carries N=8, a memory term, and `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True`.
+
+**THE MONEY FORK, WITH ITS THIRD LINE.** Batch 1 = **$27.67/mo** GPU at 2 passes/day (4.071 s/row,
+3 132 s/pass). Batch 8 = **$10.39/mo** — *projected from the ladder, NOT measured*. SPEC §3.11 (6)
+ceiling = $9–12. And the CA-MTL-3 volume bills **~$7.20/mo attached to nothing**, which is more
+than the entire batch-8 GPU bill; 5b.1 proved fresh staging beats it on money and cold start both.
+Two decisions, not one, and neither is the executor's.
+
+**WHAT 5c READS NOW SAYS BATCH 1 OUT LOUD.** `results/serving_5b.json` → `adopted`:
+`batch_size: 1`, `adopted: false`, `measured_at_batch_size: 16`, **$0.5993/1000 rows**,
+**$0.4611/pass**, cold start 46.2 s (local NVMe; 278.9 s off the network volume). Written by
+`salvage_5b2.py`, beside the 5b.1 smoke and its cost block, never over them.
+
+**THE GUARD THAT WOULD HAVE COST A COLD START.** The runbook's first draft installed
+`torch==2.8.0` from PyPI and checked the stack at the first `info` — after 59 GB and a load. A
+PyPI wheel can report `2.8.0` with no `+cu128`, and `assert_runtime_matches` compares exactly. The
+image already carries the right build: `venv --system-site-packages`, no torch in the pip line,
+assert BEFORE the download. It passed first try.
+
 
 **THE SERVING DELTA IS ZERO, AND THAT IS MEASURED RATHER THAN ASSUMED.** `results/parity_5b_a.json`
 → block `parity`: config A on a booted-per-pass A6000 pod, **758/758 rows**, zero parse, api,
@@ -177,14 +214,16 @@ future corrected-gold comparison of the two arms is **unpaired and must say so**
 
 ## ⏭️ Next
 
-1. **THE ONE OPEN DECISION IS THE RUN-RATE, AND IT IS NOW PRICED.** Two passes a day at
-   ≈3138 s and $0.53/h is **~$28/month of GPU** against SPEC §3.11 (6)'s **~$9–12/month** ceiling.
-   That ceiling was written when inference was serverless and billed by the second; the pod
-   runtime bills wall clock. The obvious lever — **batch > 1** — is closed by contract, because
-   greedy is not batch-invariant on this stack (ADR [[phase4-own-pod-anchor]] §(c)), so reopening
-   it needs its own measurement. Cheaper levers to price if the operator wants them: fewer passes
-   per day (the cadence is a recorded knob, not a constant), or a smaller v4 slice per pass.
-   Neither is this executor's call.
+1. **THE RUN-RATE DECISION IS BACK WITH THE OPERATOR, AND THE ONE LEVER WAS TRIED AND LOST.**
+   Batch > 1 was authorised, measured and **failed**: the paid run at 16 died on GPU memory with
+   G1b unmeasured, so SPEC §3.11 (2) fixes serving at batch 1 **permanently** — only a new
+   pre-registered measurement may move it. What that leaves on the table, all of it the operator's
+   call and none of it started here: **(a)** authorise a fresh batch measurement at **N=8** with a
+   memory term in the rule and `expandable_segments:True` — projected **$10.39/mo**, inside the
+   ceiling, and 660/666 row agreement says the answers survive batching; **(b)** fewer passes a day
+   (the cadence is a recorded knob, not a constant); **(c)** a smaller v4 slice per pass;
+   **(d)** delete or resize the CA-MTL-3 volume, which bills **~$7.20/mo attached to nothing** and
+   is the single biggest line against a $9–12 ceiling. Today: batch 1 = **$27.67/mo**.
 2. **`docs/PROMPT-5b1.md` IS EXECUTED — the measurement exists and the line is not stopped.**
    10 commits `c878e7b` → `4c43d5e`, `$1.2324` of the $4.00 stop. SPEC §3.11 (2)'s
    *"aggregates cannot take serving numbers without this measurement"* is satisfied:
@@ -250,6 +289,13 @@ future corrected-gold comparison of the two arms is **unpaired and must say so**
    **~2026-09-05** if no GPU work has started by then.
 
 ## 🚧 Blockers
+**NOTHING BLOCKS 5c's CODE. What is open is a money decision, not a fault.** Serving is fixed at
+batch 1 by SPEC §3.11 (2), `results/serving_5b.json` → `adopted` carries the numbers 5c sizes off,
+and every gate number the loop needs exists. The open item is whether **$27.67/mo** of GPU is
+acceptable against a **$9–12** ceiling, and that is ⏭️ Next 1 — an operator ruling, not a blocker
+this executor can clear. Starting 5c against a batch-1 run rate is a decision; so is authorising
+another measurement first.
+
 
 **NOTHING BLOCKS THE LINE. The one external fault is routed around and no longer stops anything.**
 No RunPod serverless endpoint on this account reaches a job-consuming worker — jobs stay
