@@ -1,10 +1,22 @@
 # Runbook — Phase 5b: serving parity on the production serverless runtime
 
+> **STOP — §3 onwards did not run, and following them costs money for nothing.**
+> On **2026-08-06** no RunPod serverless endpoint on this account reached a job-consuming
+> worker. Five endpoints across four configurations left their jobs `IN_QUEUE`, and so did
+> **RunPod's own hub vLLM worker** — their template, their image, no network volume, no
+> datacenter pin, none of this project's code. The verdict and the seven observations behind
+> it are in `results/parity_verdict_5b.json` (`outcome: aborted-runtime-unreachable`, shipped
+> A). §1–2 below are **proven and worth reusing**: the volume is staged and the worker
+> answered correctly on a pod. §3–6 are written but unexecuted, and they must not be run
+> until the runtime question is answered — see implementation-notes.md, "three cheapest
+> readings".
+
 Copy-paste, in order. **Budget: $4.00 of the $8 Phase-5 cap**, anchored in
 `results/spend_5b.json` and enforced before every start by
 `scripts/runpod_guard.py --step 5b --step-cap 4.00`. The anchor is committed and is never
 regenerated. The pair is scored **once each**; a crashed or aborted run closes the merge
-question in favour of A (SPEC amendment 3.11 (2)) and nothing is retried.
+question in favour of A (SPEC amendment 3.11 (2)) and nothing is retried. **$0.5324 of the
+$4.00 was spent reaching the abort; $3.47 is unspent.**
 
 ---
 
@@ -46,7 +58,7 @@ The last line costs nothing and is the check that matters most: it rebuilds the 
 and refuses unless it hashes to `8347abd74ae9…`, the sha arm A's own provenance recorded.
 **The smoke never opens a frozen test file** — the one paid run is test v4's only exposure.
 
-## 1. The staging pod (one session, ~15 min, $0.53/h)
+## 1. The staging pod (one session, ~15 min, $0.53/h) — DONE, the volume is staged
 
 A6000 in CA-MTL-3, because that is where the volume lives and a network volume pins the
 region. `runpodctl datacenter list` reported A6000 stock as `""`/`none` there and the pod
@@ -90,7 +102,7 @@ print(records.artifact_sha256(Path('results/train/45h2-arm-a/adapter')))"   # b3
 cp scripts/start_5b_worker.sh /workspace/start.sh && chmod +x /workspace/start.sh
 ```
 
-## 2. Prove the cold start ON THE POD, before a serverless second is billed
+## 2. Prove the cold start ON THE POD, before a serverless second is billed — DONE, 278.9 s
 
 The pod bills $0.53/h; the serverless class bills ~3× that, and a cold start that fails
 there costs the boot *and* the handshake. So the worker's real load path runs here first:
@@ -118,7 +130,7 @@ runpodctl pod delete <POD_ID>
 python3 scripts/runpod_guard.py --step 5b --step-cap 4.00 --note "5b staging + pod cold-start proof"
 ```
 
-## 3. The endpoint (creation is free; workers bill only on a request)
+## 3. The endpoint (creation is free; workers bill only on a request) — BLOCKED, unexecuted
 
 ```bash
 runpodctl template create --name market-pulse-5b-a --serverless \
@@ -143,7 +155,7 @@ Three flags are money and two of them default wrong:
 - **`--idle-timeout 60`.** Long enough that sequential rows keep one warm worker, short
   enough that a finished run stops billing.
 
-## 4. The smoke, the projection, and the fork
+## 4. The smoke, the projection, and the fork — BLOCKED, unexecuted
 
 ```bash
 PYTHONPATH=src python3 scripts/smoke_5b.py --endpoint-id <ID> --serving-config A
@@ -167,7 +179,7 @@ phase stops there. That is a complete Deliverable 3, not a failure: SPEC says an
 pair closes the merge question in favour of A, and merging stays forbidden because this
 measurement is what would have permitted it.
 
-## 5. Config B, only if the projection cleared
+## 5. Config B, only if the projection cleared — NOT BUILT (the projection never happened)
 
 ```bash
 runpodctl pod create --name mp-5b-merge --gpu-id "NVIDIA RTX A6000" --gpu-count 1 \
@@ -196,7 +208,7 @@ Fetch the sidecar to `results/merged_5b.json` **before deleting the pod**, then 
 template/endpoint with `SERVING_CONFIG=B` and `MERGED_DIR=/runpod-volume/merged-nf4`, and
 its own 8-row carve smoke.
 
-## 6. The pair — the phase's one paid event
+## 6. The pair — the phase's one paid event — ABORTED, see results/parity_verdict_5b.json
 
 ```bash
 PYTHONPATH=src python3 scripts/eval_zero_shot.py --model google/gemma-4-31b-it \
@@ -228,3 +240,27 @@ python3 scripts/runpod_guard.py --step 5b --step-cap 4.00 --note "5b pair scored
 - **Either cap is reached.** The guard exits 1. A cap is not raised to finish a run.
 - **A pod is left running.** `runpodctl pod list -a` after every session. The volume alone
   bills ~$0.24/day whether or not anything is attached to it.
+
+## What the next attempt should check first, before staging anything
+
+The staging half of this runbook is proven and the volume still holds its output. What is
+not proven is the delivery path, so the cheapest possible first step is the **hub control**:
+
+```bash
+runpodctl hub search vllm                 # a SERVERLESS listing id
+runpodctl serverless create --name hub-control --hub-id <id> \
+  --gpu-id "NVIDIA GeForce RTX 4090" --workers-max 1 --idle-timeout 5 \
+  --execution-timeout 300 \
+  --model-reference https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct:main
+# submit one job, watch /health and /status, DELETE the endpoint either way
+```
+
+If RunPod's own worker completes a job, serverless is back and §3 onwards can run as
+written. If it does not, nothing in this repository can make it, and the phase's outcome
+stands. That control cost about five cents and it is what separated "our handler is broken"
+from "serverless is unreachable" — run it before anything else, every time.
+
+**Verify deletions by listing, never by an exit code.** Two `probe-cls` endpoints survived a
+delete call that silently targeted a mangled id and were only found ~25 minutes later by
+`runpodctl serverless list`. Every session ends with `pod list -a`, `serverless list` and
+`network-volume list`, read out loud.
