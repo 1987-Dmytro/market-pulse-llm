@@ -2462,3 +2462,79 @@ can reach and about twice the segment it is drawn on.** Three readings, cheapest
    today — would be a number the loop can be steered by.
 
 Not decided here, and not decidable by this phase.
+
+---
+
+# Phase 5b — serving parity: the pre-registered pair on the production runtime
+
+Brief: `docs/PROMPT-5b.md`. Law: SPEC amendment 3.11 (2) **as amended 2026-08-06** — the
+pair, the selection rule, the $4 hard stop. Anchors: `results/verdict_45h2.json`.
+
+## Step 0 — the team-lead tail
+
+`git status --short` showed **seven** paths, and both of the brief's lists explain them, so
+no STOP: `docs/SPEC.md`, `docs/STATUS.md`, `docs/PROMPT-5b.md`, `docs/CHANNELS-launch.md`
+(commit `7ee98ba`), and the vault tail `knowledge/hot.md`,
+`knowledge/daily_logs/2026-08-06.md`, `knowledge/index.md`, which the brief pre-authorises
+as its own commit (`382b755`). The judgement I made unilaterally at 5a.1 — keeping the vault
+tail out of the team lead's commit — is now the house rule, in the brief's own words.
+
+## The instrument, built and committed before the spend anchor
+
+Seven commits, none of them touching a paid path until the anchor existed.
+
+| what | where | why it is shaped that way |
+|---|---|---|
+| `EndpointClient` | `src/market_pulse/serving.py` | `LocalClient`'s interface over HTTP, so `classify_local` cannot tell the pod from the endpoint. `retries=0`: the phase gets one attempt. |
+| the worker | `scripts/serve_handler.py` | answers through `market_pulse.local_llm` — same chat template, same greedy `generate`, same reply dict. A different serving library (vLLM, TGI) would confound the runtime delta with a library delta in the one paid run. |
+| `assert_serving` | `serving.py` | the worker names its adapter sha, merge state and quantization, and the run refuses before the first paid row if any of it is not what 5b registered. |
+| `assert_runtime_matches` | `serving.py` | the worker's torch/transformers/bitsandbytes against the 4.5h2 arm record's own runtime block. The GPU is deliberately **not** pinned — which card the worker gets IS the delta this phase reports. |
+| `select_serving_config` | `src/market_pulse/scorer.py` | SPEC's rule, applied as arithmetic. Not `select_arm_by`'s pivot shape: 5b has no head B must win, so a tie has to ship A rather than adopt B. |
+| the abort rule | `scripts/parity_verdict_5b.py --project` | committed before the smoke, and it writes its artifact in **both** directions — a measured "it clears" and a projection nobody ran must not look the same. |
+| config B's artifact | `scripts/merge_requantize.py` | peft's own `merge_and_unload` on a bf16 CPU load, requantized through `local_llm.QUANTIZATION`. The RAM bar (62 GB × 1.15) is checked before the weights, not after an hour of them. |
+
+`make check` 976 passed (960 → 970 → 976 as the corrections landed); at the 5a.1 close it was
+884. `ruff format --check .` clean throughout.
+
+## What the volume already held — why config A is a replica and not a rebuild
+
+`gfwa2an8fn` (100 GB, CA-MTL-3) carried Phase 4a's `hf/` cache: `google/gemma-4-31b-it` at
+the pinned revision `842da3794eaa0b77d5f08bae87a17459d91ff475`, 59 GB — and a venv with
+**exactly** the stack `results/verdict_45h2.json` names: torch 2.8.0+cu128, transformers
+5.14.1, bitsandbytes 0.50.0, accelerate 1.14.0. Only `peft` and `runpod` had to be added. A
+fresh install would have pulled today's releases and quietly made config A a different
+instrument, which is why `assert_runtime_matches` exists at all.
+
+## The cold start and the entrypoint, proven on a pod at a third of the price
+
+An A6000 pod ($0.53/h) rather than the serverless class (~3×), because a cold start that
+fails there costs the boot *and* the handshake:
+
+- **278.9 s** from `Worker()` to `info` answering — weights 1:45 off the network volume, the
+  rest adapter + compile + the adapter's directory walk.
+- `info` named `adapter_sha256 b3ca630846c7e75c5e7058ce45804c45a6bff5c49dcf2389cb8cdda0b7a68a6c`
+  — the sha `results/verdict_45h2.json` records for arm A — and the 4.5h2 stack verbatim.
+- the **real** `start.sh` → `serve_handler.py` → `runpod.serverless.start` path answered a
+  three-row T2 batch: «Рудь … знижка 20%» → `launch`, «Акція на молоко Яготинське» → `promo`,
+  «Графік роботи магазинів» → `relevant: false, other`. Not a mock and not an import check.
+
+## Serverless capacity is per (datacenter × GPU class), and a volume pins the datacenter
+
+The first endpoint — AMPERE_48 (A6000/A40), CA-MTL-3, volume attached — held one queued job
+for **eight minutes with zero workers of any state**, not even `throttled`. The control that
+settled it: the same class, same template, **no volume and no datacenter pin**, allocated a
+worker in **25 s**. So it is regional capacity, not the endpoint's configuration.
+
+Probing the volume's own datacenter, one class at a time, deleting each endpoint the moment
+it answered:
+
+| class | GPU | CA-MTL-3, volume attached |
+|---|---|---|
+| `AMPERE_48` | A6000 / A40 48 GB | no worker |
+| `ADA_48_PRO` | L40S 48 GB | no worker |
+| `AMPERE_80` | A100 80 GB | no worker |
+| `ADA_24` | RTX 4090 24 GB | **allocated** |
+
+`network-volume create` also refuses US-KS-2 outright — only 18 datacenters support network
+volumes, and the intersection of "supports volumes" and "has serverless capacity for a class
+that fits 18 GB of NF4 weights" is, today, `ADA_24` in CA-MTL-3.
