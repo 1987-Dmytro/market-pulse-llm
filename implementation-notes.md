@@ -2653,3 +2653,128 @@ showed the blocker is not regional.
 3. **Let the merge question stay closed and move on to 5c.** SPEC already fixes the outcome:
    A ships, merging stays forbidden. Nothing downstream is waiting on config B, and the
    $3.47 left under the 5b stop stays unspent until the runtime question is answered.
+
+# Phase 5b.1 — config A, scored once, on the runtime production will actually use
+
+`docs/PROMPT-5b1.md`, under SPEC amendment 3.11 (1)'s runtime ruling and 3.11 (2)'s
+single-config measurement, both amended 2026-08-06 after the 5b pair aborted. The pair stays
+closed: no config B, no serverless call, no retry.
+
+## Step 0 — the owed ADR, and the team-lead tails
+
+`knowledge/decisions/5b-parity-abort-and-pod-runtime.md` + its INDEX line carry both halves the
+brief asked for: the abort verdict with its five-endpoint evidence table and RunPod's own hub
+worker as the control, and the operator's runtime ruling with the D7 `ADA_24` finding as its
+rationale. hot.md's Next was already updated at the 15:33 checkpoint. Commits by path:
+`43e7fca` (SPEC, STATUS, PROMPT-5b1, unedited) and `c878e7b` (the vault tail with the ADR).
+
+The brief's "vault tail" enumerates hot.md, the daily log and the index — not literally
+`knowledge/decisions/`. Its own step 0 item 1 orders the ADR into existence, so the ADR went in
+with the vault commit; the reading is logged here rather than stopping the phase for it.
+
+## The instrument: one entrypoint, one client, two runtimes
+
+The runtime moved and nothing else did. `start.sh` forwards `"$@"`, so the RunPod SDK serves
+the *same* `serve_handler.py` over HTTP with `--rp_serve_api` (`POST /runsync`, the identical
+job envelope), and `EndpointClient` takes a `base_url`. Under the HTTP everything is 4.5h2's:
+the chat template, `add_special_tokens=False`, greedy `generate`, the reply dict.
+
+One shape difference, and it is in the code: RunPod's API answers `/status` on GET and the
+SDK's own server registers it POST-only, so the pod transport polls with a body. That branch
+would otherwise surface as a 405 that reads like a dead worker.
+
+**Proven on the Mac before the pod booted**, against the real `Worker` with a stub loader —
+`info` in 2.087 s, a scored row in 1.011 s, a raising handler landing as
+`ApiError(-1) ... ended FAILED` rather than an empty output, and `assert_serving` refusing a
+wrong `merge_state`. `timing.worker_seconds` is **0 by construction** on this transport: the
+SDK's server reports no `executionTime`, so `seconds_per_call` reads 0 and `idle_share` null.
+The record says so in its own `note`, because a real `wall_seconds` beside a zero otherwise
+reads as "the worker did nothing".
+
+## The capacity ladder, and the stock field that does answer
+
+The first `pod create` in CA-MTL-3 — the datacenter the network volume pins — was refused, and
+so were **30 more over 25 minutes**. The reason was readable for free the whole time and I had
+not read it: `runpodctl gpu list` reports availability **per datacenter**, and for
+`NVIDIA RTX A6000` it said CA-MTL-3 `none` while EU-SE-1 / US-KS-2 / US-TX-1 said `Low`. (5b's
+runbook says "the stock field is not a reservation and not a refusal" — that is true of
+`datacenter list`, which prints `""` for everything, and not of this one.) A control with the
+same spec minus the volume and the datacenter pin was refused too, with a different message,
+so the request shape was never the problem.
+
+The operator's ruling, written into SPEC 3.11 (1) the same session: **the CLASS is the contract
+and the datacenter is not** — the volume is a convenience. A6000 anywhere is the primary path,
+A40 the in-class fallback with the card recorded in provenance, A100 refused because the GPU
+class is the variable §(2) measures. The ladder — one create at a time, each result read before
+the next call — hit **A6000 in US-TX-1** on its second rung: pod `9h7ng0ba6tv8b1`, $0.53/h,
+120 GB of its own disk, 62 GB RAM.
+
+## Fresh staging, and the stack came back identical
+
+No volume off CA-MTL-3, so the expensive half was rebuilt: 59 GB of weights at the pinned
+revision `842da379…` in **4 m 15 s** onto local NVMe, and a venv with the 4.5h2 versions
+**pinned by hand** rather than resolved — a fresh `pip install` pulls today's releases and
+config A would quietly stop being the replica. What the pod reported back:
+
+| | 4.5h2 anchor | 5b.1 pod |
+|---|---|---|
+| GPU | NVIDIA RTX A6000, 49140 MiB | **identical** |
+| driver / CUDA | 550.127.08 / 12.8 | **identical** |
+| torch | 2.8.0+cu128 | **identical** |
+| transformers | 5.14.1 | **identical** |
+| bitsandbytes | 0.50.0 | **identical** |
+| adapter sha | `b3ca630846c7…` | **identical** |
+| weights revision | `842da379…` | **identical** |
+
+`assert_runtime_matches` is what says this rather than the table: it ran before the first
+scored row and did not raise. peft came out at 0.20.0 and is not pinned by that gate — it is
+recorded, not asserted.
+
+Two things the fresh stage caught for free:
+
+- **The carve rebuild, before any weights.** This is the exact failure that killed 5b's
+  `podcheck.py` — `data/raw/posts` is gitignored and did not travel. It travels now as a
+  tarball, and the pod rebuilt the carve to `8347abd7…`, 24 rows, before a GPU second was
+  spent on the model.
+- **The worker's configuration has no template to come from.** On serverless, `SERVING_CONFIG`
+  and friends were the endpoint template's `--env`; a pod has no template, so the first start
+  refused with `SERVING_CONFIG must be one of ('A', 'B'), got ''`. It cost nothing because
+  `Worker` loads the model lazily and `settings()` runs first — the design note in
+  `serve_handler.py` that says exactly this, paying for itself. **5c inherits the problem:**
+  whatever boots the pod per pass is now the thing that carries the worker's configuration.
+
+## The smoke: 24 carve rows, 24/24
+
+`results/serving_5b.json`. The whole arm-A carve, not eight of it — SPEC names "the 24-row
+arm-A carve", 24 is a superset of the earlier eight-row reading, it costs about a cent, and it
+gives the projection a per-rendering mean over more than four rows a side.
+
+- **cold start 53.016 s** wall, against 278.9 s on the 5b staging pod. Same weights, same
+  loader: what changed is that they came off local NVMe instead of a network volume. That is a
+  5c number, not a curiosity — it is paid once per pass.
+- **24/24 parsed**, `info` naming the registered adapter sha, and 4.177 s per row wall at
+  batch 1.
+- **cost, attributed rather than derived.** On serverless the smoke's dollars came from the
+  guard's balance delta across it, because workers bill only while they are up. A pod bills
+  continuously, so that delta covers boot and two downloads as well, and dividing it by the
+  smoke's 153 s would have priced the smoke at ten times the machine. The record therefore
+  carries the pod's posted rate applied to the seconds the run held it — $0.0226 — and the
+  rate itself is checked against the guard: **$0.1845 of balance over 1408 s of uptime is 89%
+  of the posted $0.53/h**, which is settlement lag, not a cheap machine. The floor moved with
+  it: the serverless "never below the pod class" inequality would fire on a pod priced
+  correctly, so on this transport the floor is **half** the posted rate, which still catches
+  the unsettled balance (~0) it exists for.
+
+## The projection, and the stop it is measured against
+
+`results/parity_5b1_projection.json`, `--runs 1` because the pair is closed:
+
+| | |
+|---|---|
+| seconds per run (task-mix weighted) | 3163.09 |
+| the paid run | **$0.4657** |
+| already spent (5b + 5b.1 staging + smoke) | $0.7169 |
+| 5b total, projected | **$1.1826 of $4.00** |
+
+$3.47 was the brief's stop and $4.00 the SPEC cap with `spent_usd` beside it — the same
+inequality read from the two ends. It clears with $2.82 to spare, so the paid run went.

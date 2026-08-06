@@ -73,6 +73,13 @@
       "spent_usd": 17.1344,
       "remaining_usd": 7.8656,
       "note": "5b: serverless blocked — no endpoint on this account reaches a job-consuming worker, RunPod's own hub vLLM worker included"
+    },
+    {
+      "at": "2026-08-06T14:53:50+00:00",
+      "balance": 17.6810992885,
+      "spent_usd": 17.3189,
+      "remaining_usd": 7.6811,
+      "note": "5b.1 fresh staging on a US-TX-1 A6000 (no volume: 59 GB weights re-downloaded, venv pinned) + the 24-row carve smoke"
     }
   ]
 }

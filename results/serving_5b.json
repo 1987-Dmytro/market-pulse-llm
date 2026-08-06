@@ -1,0 +1,442 @@
+{
+  "step": "5b smoke",
+  "written_at": "2026-08-06T14:53:01+00:00",
+  "endpoint_id": "9h7ng0ba6tv8b1",
+  "serving_config": "A",
+  "batch_size": 1,
+  "transport": "pod-loopback",
+  "endpoint_url": "http://127.0.0.1:8000",
+  "deployment": {
+    "runtime": "pod",
+    "pod": {
+      "containerDiskInGb": 30,
+      "costPerHr": 0.53,
+      "createdAt": "2026-08-06 14:30:22.939 +0000 UTC",
+      "desiredStatus": "RUNNING",
+      "env": {
+        "PUBLIC_KEY": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCYNFbUgqqxqcTnUzjQEytuqDF7AFpNqEAKd/WBYelZpXlbWJUrA/oxZJA+KWSF83eIN/AZBmBFfmQQZ6olgGLIZzwtQ3O7B3t5ldKPsfH1yuwV3bk2uWsWLKvBMOZJQKo/5Sse0OQbQ5TLELEAZI5jEzSd5DD/ccDDIpjUBdjLqLqtsDL29Jy52+HNp5S1YXAVB/BRA+CuZZ6jdQkxmLSVDAKEDA8BAFyGQQnIsa/mcPk+YXeacTGixyA+tw5uON5UfpqMvLkWw6EOcCDwXFra9mz372k48La25R2m9bjvtpt47yQA1/TXM4vO1CrevRiODWhUG0jagvoZS9TSOzDv runpodctl-ssh-key"
+      },
+      "gpuCount": 1,
+      "id": "9h7ng0ba6tv8b1",
+      "imageName": "runpod/pytorch:1.0.2-cu1281-torch280-ubuntu2404",
+      "lastStatusChange": "Rented by User: Thu Aug 06 2026 14:30:22 GMT+0000 (Coordinated Universal Time)",
+      "memoryInGb": 62,
+      "name": "mp-5b1",
+      "ports": [
+        "22/tcp"
+      ],
+      "ssh": {
+        "id": "9h7ng0ba6tv8b1",
+        "ip": "38.147.83.11",
+        "name": "mp-5b1",
+        "port": 31211,
+        "ssh_command": "ssh -i /Users/hdv_1987/.runpod/ssh/runpodctl-ssh-key root@38.147.83.11 -p 31211",
+        "ssh_key": {
+          "exists": true,
+          "fingerprint": "SHA256:0pfp0eBA2/PC1XGsCWKnKgkgTj64iRh6BJrfpiczwgs",
+          "in_account": true,
+          "path": "/Users/hdv_1987/.runpod/ssh/runpodctl-ssh-key",
+          "source": "runpodctl doctor"
+        }
+      },
+      "uptimeSeconds": 0,
+      "vcpuCount": 16,
+      "volumeInGb": 120,
+      "volumeMountPath": "/workspace"
+    }
+  },
+  "worker": {
+    "serving_config": "A",
+    "merge_state": "unmerged-adapter",
+    "adapter_sha256": "b3ca630846c7e75c5e7058ce45804c45a6bff5c49dcf2389cb8cdda0b7a68a6c",
+    "merged_sha256": null,
+    "quantization": {
+      "load_in_4bit": true,
+      "bnb_4bit_quant_type": "nf4",
+      "bnb_4bit_use_double_quant": true,
+      "bnb_4bit_compute_dtype": "bfloat16"
+    },
+    "chat_template": {
+      "add_generation_prompt": true,
+      "enable_thinking": false
+    },
+    "max_new_tokens": 256,
+    "model": "google/gemma-4-31b-it",
+    "repo_commit": "b2eb28ead1a13f92e55f70d2efaa859de192147c",
+    "weights_dir": "google/gemma-4-31b-it",
+    "adapter_dir": "/runpod-volume/repo/results/train/45h2-arm-a/adapter",
+    "revision_requested": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+    "merged_provenance": null,
+    "runtime": {
+      "gpu": "NVIDIA RTX A6000",
+      "gpu_count": 1,
+      "gpu_memory_total": "49140 MiB",
+      "driver": "550.127.08",
+      "cuda_runtime": "12.8",
+      "torch": "2.8.0+cu128",
+      "transformers": "5.14.1",
+      "bitsandbytes": "0.50.0",
+      "pod_id": "9h7ng0ba6tv8b1",
+      "weights_requested": "google/gemma-4-31b-it",
+      "revision_requested": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+      "model_revision": "842da3794eaa0b77d5f08bae87a17459d91ff475"
+    }
+  },
+  "carve": {
+    "sha256": "8347abd74ae91f49161bdffdd907e2428ea862f02f1f103e543e63ac27a547fa",
+    "n": 24,
+    "asked": 24
+  },
+  "rows": [
+    {
+      "id": "@VARUS_channel:10231",
+      "task": "T1v2_with_post",
+      "finish_reason": "stop",
+      "parsed": true,
+      "parse_failure": null,
+      "worker_seconds": 0.0,
+      "wall_seconds": 4.718,
+      "usage": {
+        "prompt_tokens": 772,
+        "completion_tokens": 20
+      }
+    },
+    {
+      "id": "@atb_market_official:1657",
+      "task": "T2",
+      "finish_reason": "stop",
+      "parsed": true,
+      "parse_failure": null,
+      "worker_seconds": 0.0,
+      "wall_seconds": 3.721,
+      "usage": {
+        "prompt_tokens": 602,
+        "completion_tokens": 18
+      }
+    },
+    {
+      "id": "@VARUS_channel:11879",
+      "task": "T1v2_with_post",
+      "finish_reason": "stop",
+      "parsed": true,
+      "parse_failure": null,
+      "worker_seconds": 0.0,
+      "wall_seconds": 3.906,
+      "usage": {
+        "prompt_tokens": 705,
+        "completion_tokens": 19
+      }
+    },
+    {
+      "id": "@atb_market_official:2429",
+      "task": "T2",
+      "finish_reason": "stop",
+      "parsed": true,
+      "parse_failure": null,
+      "worker_seconds": 0.0,
+      "wall_seconds": 3.587,
+      "usage": {
+        "prompt_tokens": 501,
+        "completion_tokens": 18
+      }
+    },
+    {
+      "id": "@VARUS_channel:11892",
+      "task": "T1v2_with_post",
+      "finish_reason": "stop",
+      "parsed": true,
+      "parse_failure": null,
+      "worker_seconds": 0.0,
+      "wall_seconds": 4.018,
+      "usage": {
+        "prompt_tokens": 634,
+        "completion_tokens": 20
+      }
+    },
+    {
+      "id": "@atb_market_official:2558",
+      "task": "T2",
+      "finish_reason": "stop",
+      "parsed": true,
+      "parse_failure": null,
+      "worker_seconds": 0.0,
+      "wall_seconds": 3.563,
+      "usage": {
+        "prompt_tokens": 496,
+        "completion_tokens": 18
+      }
+    },
+    {
+      "id": "@VARUS_channel:11972",
+      "task": "T1v2_with_post",
+      "finish_reason": "stop",
+      "parsed": true,
+      "parse_failure": null,
+      "worker_seconds": 0.0,
+      "wall_seconds": 4.121,
+      "usage": {
+        "prompt_tokens": 681,
+        "completion_tokens": 20
+      }
+    },
+    {
+      "id": "@msuaaaa:4276",
+      "task": "T2",
+      "finish_reason": "stop",
+      "parsed": true,
+      "parse_failure": null,
+      "worker_seconds": 0.0,
+      "wall_seconds": 3.806,
+      "usage": {
+        "prompt_tokens": 537,
+        "completion_tokens": 18
+      }
+    },
+    {
+      "id": "@VARUS_channel:12009",
+      "task": "T1v2_with_post",
+      "finish_reason": "stop",
+      "parsed": true,
+      "parse_failure": null,
+      "worker_seconds": 0.0,
+      "wall_seconds": 4.076,
+      "usage": {
+        "prompt_tokens": 680,
+        "completion_tokens": 20
+      }
+    },
+    {
+      "id": "@silposilpo:2885",
+      "task": "T2",
+      "finish_reason": "stop",
+      "parsed": true,
+      "parse_failure": null,
+      "worker_seconds": 0.0,
+      "wall_seconds": 3.854,
+      "usage": {
+        "prompt_tokens": 715,
+        "completion_tokens": 18
+      }
+    },
+    {
+      "id": "@VARUS_channel:16726",
+      "task": "T1v2_with_post",
+      "finish_reason": "stop",
+      "parsed": true,
+      "parse_failure": null,
+      "worker_seconds": 0.0,
+      "wall_seconds": 4.227,
+      "usage": {
+        "prompt_tokens": 797,
+        "completion_tokens": 20
+      }
+    },
+    {
+      "id": "@VARUS_channel:17041",
+      "task": "T1v2_with_post",
+      "finish_reason": "stop",
+      "parsed": true,
+      "parse_failure": null,
+      "worker_seconds": 0.0,
+      "wall_seconds": 4.326,
+      "usage": {
+        "prompt_tokens": 759,
+        "completion_tokens": 20
+      }
+    },
+    {
+      "id": "@VARUS_channel:17704",
+      "task": "T1v2_with_post",
+      "finish_reason": "stop",
+      "parsed": true,
+      "parse_failure": null,
+      "worker_seconds": 0.0,
+      "wall_seconds": 4.121,
+      "usage": {
+        "prompt_tokens": 678,
+        "completion_tokens": 20
+      }
+    },
+    {
+      "id": "@VARUS_channel:18114",
+      "task": "T1v2_with_post",
+      "finish_reason": "stop",
+      "parsed": true,
+      "parse_failure": null,
+      "worker_seconds": 0.0,
+      "wall_seconds": 4.356,
+      "usage": {
+        "prompt_tokens": 964,
+        "completion_tokens": 20
+      }
+    },
+    {
+      "id": "@VARUS_channel:20131",
+      "task": "T1v2_with_post",
+      "finish_reason": "stop",
+      "parsed": true,
+      "parse_failure": null,
+      "worker_seconds": 0.0,
+      "wall_seconds": 4.589,
+      "usage": {
+        "prompt_tokens": 650,
+        "completion_tokens": 23
+      }
+    },
+    {
+      "id": "@VARUS_channel:2391",
+      "task": "T1v2_with_post",
+      "finish_reason": "stop",
+      "parsed": true,
+      "parse_failure": null,
+      "worker_seconds": 0.0,
+      "wall_seconds": 4.376,
+      "usage": {
+        "prompt_tokens": 984,
+        "completion_tokens": 20
+      }
+    },
+    {
+      "id": "@VARUS_channel:4815",
+      "task": "T1v2_with_post",
+      "finish_reason": "stop",
+      "parsed": true,
+      "parse_failure": null,
+      "worker_seconds": 0.0,
+      "wall_seconds": 4.256,
+      "usage": {
+        "prompt_tokens": 854,
+        "completion_tokens": 20
+      }
+    },
+    {
+      "id": "@VARUS_channel:6427",
+      "task": "T1v2_with_post",
+      "finish_reason": "stop",
+      "parsed": true,
+      "parse_failure": null,
+      "worker_seconds": 0.0,
+      "wall_seconds": 3.888,
+      "usage": {
+        "prompt_tokens": 638,
+        "completion_tokens": 19
+      }
+    },
+    {
+      "id": "@VARUS_channel:6488",
+      "task": "T1v2_with_post",
+      "finish_reason": "stop",
+      "parsed": true,
+      "parse_failure": null,
+      "worker_seconds": 0.0,
+      "wall_seconds": 4.035,
+      "usage": {
+        "prompt_tokens": 630,
+        "completion_tokens": 19
+      }
+    },
+    {
+      "id": "@VARUS_channel:6534",
+      "task": "T1v2_with_post",
+      "finish_reason": "stop",
+      "parsed": true,
+      "parse_failure": null,
+      "worker_seconds": 0.0,
+      "wall_seconds": 3.955,
+      "usage": {
+        "prompt_tokens": 624,
+        "completion_tokens": 19
+      }
+    },
+    {
+      "id": "@VARUS_channel:6804",
+      "task": "T1v2_with_post",
+      "finish_reason": "stop",
+      "parsed": true,
+      "parse_failure": null,
+      "worker_seconds": 0.0,
+      "wall_seconds": 4.76,
+      "usage": {
+        "prompt_tokens": 731,
+        "completion_tokens": 23
+      }
+    },
+    {
+      "id": "@VARUS_channel:7323",
+      "task": "T1v2_with_post",
+      "finish_reason": "stop",
+      "parsed": true,
+      "parse_failure": null,
+      "worker_seconds": 0.0,
+      "wall_seconds": 4.618,
+      "usage": {
+        "prompt_tokens": 1050,
+        "completion_tokens": 20
+      }
+    },
+    {
+      "id": "@VARUS_channel:8401",
+      "task": "T1v2_with_post",
+      "finish_reason": "stop",
+      "parsed": true,
+      "parse_failure": null,
+      "worker_seconds": 0.0,
+      "wall_seconds": 4.739,
+      "usage": {
+        "prompt_tokens": 999,
+        "completion_tokens": 23
+      }
+    },
+    {
+      "id": "@VARUS_channel:8690",
+      "task": "T1v2_with_post",
+      "finish_reason": "stop",
+      "parsed": true,
+      "parse_failure": null,
+      "worker_seconds": 0.0,
+      "wall_seconds": 4.596,
+      "usage": {
+        "prompt_tokens": 704,
+        "completion_tokens": 23
+      }
+    }
+  ],
+  "parsed": 24,
+  "of": 24,
+  "timing": {
+    "calls": 25,
+    "worker_seconds": 0.0,
+    "queue_seconds": 0.0,
+    "wall_seconds": 153.258,
+    "seconds_per_call": 0.0,
+    "wall_per_call": 6.13,
+    "idle_share": null,
+    "worker_ids": []
+  },
+  "cold_start": {
+    "calls": 1,
+    "worker_seconds": 0.0,
+    "queue_seconds": 0.0,
+    "wall_seconds": 53.016,
+    "seconds_per_call": 0.0,
+    "wall_per_call": 53.016,
+    "idle_share": null,
+    "worker_ids": []
+  },
+  "seconds_per_row_wall": 4.177,
+  "prompt_sha256": {
+    "T1": "9b2a021783212022bb335d7a32a365d532ff94c7da92336bf054d8709c0de355",
+    "T2": "6a7e66efb3eb4091b8d787e38213f3b1b0c9115e78d2b41fb9cc6bcaab3a54b4"
+  },
+  "note": "MECHANICS AND LATENCY ONLY. The rows are the arm's own held-out carve — training data — so nothing here is a gate number and no frozen test file was opened. seconds_per_row_wall excludes the cold start, which is reported separately because the projection scales the two differently. On the pod transport timing.worker_seconds is 0 BY CONSTRUCTION: the worker's own server reports no executionTime, so seconds_per_call reads 0 and idle_share null. wall_seconds is the measurement, and on a pod it is also the billed quantity.",
+  "cost": {
+    "usd": 0.0226,
+    "wall_seconds": 153.258,
+    "usd_per_second": 0.00014722233097130328,
+    "source": "the pod's posted rate applied to the seconds this run held it; the rate itself is checked against results/spend_5b.json's balance delta over the pod's uptime",
+    "stamped_at": "2026-08-06T14:54:19+00:00",
+    "floor_usd_per_second": 7.361111111111111e-05,
+    "floor_basis": "0.5 x the pod's posted $0.53/h — on a pod the derived rate lands AT the machine's rate, so the guard catches an unsettled balance (~0), not a rate that is merely lower than serverless would be",
+    "above_pod_floor": true
+  }
+}

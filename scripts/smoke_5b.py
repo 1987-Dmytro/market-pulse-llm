@@ -237,7 +237,12 @@ def stamp_cost(path: Path, usd: float, pod_usd_per_hour: float = 0.0, pod_id: st
         "usd": round(usd, 4),
         "wall_seconds": wall,
         "usd_per_second": rate,
-        "source": "results/spend_5b.json balance delta across this smoke, via runpod_guard.py",
+        "source": (
+            "the pod's posted rate applied to the seconds this run held it; the rate itself is"
+            " checked against results/spend_5b.json's balance delta over the pod's uptime"
+            if pod_usd_per_hour
+            else "results/spend_5b.json balance delta across this smoke, via runpod_guard.py"
+        ),
         "stamped_at": datetime.now(UTC).isoformat(timespec="seconds"),
         "floor_usd_per_second": floor,
         "floor_basis": (
