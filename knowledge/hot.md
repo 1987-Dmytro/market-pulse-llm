@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-06 12:19:38 (every SessionStart)
+**Auto-refreshed:** 2026-08-06 13:26:55 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+e79967a docs(5a.1): split the group count from the flow count, and name the two FloodWait policies
+8d18a94 feat(5a.1): the combined ledger — 180 candidates close 14.5% of the gap, 8.4 M outstanding
 03915ad feat(5a.1): discovery widened to seven themes plus seed handles, with per-theme subtotals
 260463d docs(adr): 5a — the census had to fetch, and three themes buy 6.8% of the gap
 303ef9f fix(5a.1): the six acceptance items — a rate limit is a wait, a smoke keeps its deliverable
-8a4582d docs: the /save checkpoint of 2026-08-06 — hot.md and the day's log
-f650ce1 docs: 5a accepted — SPEC 3.11 (4) amended to four channels and seven themes, PROMPT-5a1
 ```
 
 ## 📋 Recent decisions
@@ -31,7 +31,7 @@ f650ce1 docs: 5a accepted — SPEC 3.11 (4) amended to four channels and seven t
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-06 (**5a.1 IS BUILT AND COMMITTED — the combined ledger is on disk and the coverage-target ruling is now the operator's to take (see Next).** Six commits: `f650ce1` the team-lead tail · `8a4582d` this checkpoint's two files, kept out of that commit · `303ef9f` the six acceptance fixes · `260463d` the owed ADR · `03915ad` the widened discovery · plus the record. `make check` **884 passed** (863 at the 5a close), `ruff format --check` clean, `shasum -c results/raw_v1_baseline.sha256` **6/6 OK after the scan**. **$0** — no GPU, no serverless, not one model call; the whole scan is Telegram's free API. Earlier the same day, `/save`: **5a WAS BUILT, COMMITTED AND ACCEPTED.** Four commits: `242fcdc` the team-lead tail (six paths, `hot.md` the expected sixth) · `15723c1` the three deliverables · `81c25ea` this file · `5f1b571` the `--rebuild-ledger` test and the provenance check. All three deliverables done at **$0** — no GPU, no serverless, not one model call. `make check` **863 passed** (814 before), `ruff format --check` clean, raw v1 byte-identical against a sha256 baseline taken BEFORE the first fetch. **The ledger's verdict: the three authorised themes close 6.8% of the gap** — that is the operator's decision now. The session opened 05.08 at 21:55 and crossed midnight, so its checkpoint is in [[2026-08-06]] while the 4.5 close and the Phase 5 briefing stay in [[2026-08-05]]. Phase 4+4.5 spend unchanged: **$16.30 of $25**, $8.70 left; no pods. Edited by hand; the section above is auto-generated, do NOT touch the marker.)
+**Last update:** 2026-08-06 13:24 (`/save`. **5a.1 IS BUILT AND COMMITTED, AND THE COVERAGE RULING CAME BACK DURING THIS CHECKPOINT — the target stands, 51 channels launch, `docs/PROMPT-5b.md` is queued (see Next).** Seven commits: `f650ce1` the team-lead tail · `8a4582d` the morning checkpoint's two files, kept out of that commit · `303ef9f` the six acceptance fixes · `260463d` the owed ADR · `03915ad` the widened discovery · `8d18a94` the combined-ledger record and the notes · `e79967a` the group/flow units split apart. `make check` **884 passed** (863 at the 5a close), `ruff format --check` clean, `shasum -c results/raw_v1_baseline.sha256` **6/6 OK after the scan**. **$0** — no GPU, no serverless, not one model call; the whole scan is Telegram's free API. Earlier the same day, `/save`: **5a WAS BUILT, COMMITTED AND ACCEPTED.** Four commits: `242fcdc` the team-lead tail (six paths, `hot.md` the expected sixth) · `15723c1` the three deliverables · `81c25ea` this file · `5f1b571` the `--rebuild-ledger` test and the provenance check. All three deliverables done at **$0** — no GPU, no serverless, not one model call. `make check` **863 passed** (814 before), `ruff format --check` clean, raw v1 byte-identical against a sha256 baseline taken BEFORE the first fetch. **The ledger's verdict: the three authorised themes close 6.8% of the gap** — that is the operator's decision now. The session opened 05.08 at 21:55 and crossed midnight, so its checkpoint is in [[2026-08-06]] while the 4.5 close and the Phase 5 briefing stay in [[2026-08-05]]. Phase 4+4.5 spend unchanged: **$16.30 of $25**, $8.70 left; no pods. Edited by hand; the section above is auto-generated, do NOT touch the marker.)
 
 ## 🔥 What's Hot
 
@@ -44,7 +44,7 @@ four more themes and the seed list roughly doubled the reach and left 8.4 M outs
 only the **90** candidates that posted in four weeks leaves **8,749,263**. **53** both post and
 carry a discussion group — 571,904 subscribers, and the only rows that can ever become comments.
 **The team lead's own survey says the whole segment is ~4–5 M**, so the target is about six times
-what a scan can reach. **The coverage-target ruling is the operator's, on this ledger.**
+what a scan can reach. **Ruled the same evening: the target stands, and 51 channels launch** — see ⏭️ Next 1.
 
 **What the per-theme table says** (`ledger.per_theme`, priced per `found_by` tag): **7 handed
 seed handles (411,399) beat six of the seven searched themes** — `@recepti` 115,783 at 50
@@ -99,19 +99,35 @@ future corrected-gold comparison of the two arms is **unpaired and must say so**
 
 ## ⏭️ Next
 
-1. **THE COVERAGE-TARGET RULING IS OWED, AND THE LEDGER IT WAS DEFERRED TO EXISTS.** Three
-   readings are laid out in `implementation-notes.md` §«Phase 5a.1», cheapest first: **(a)
-   launch on the registry four and let the 14-day cycle price the question** — costs nothing,
-   6,057 posts and 11,338 comment rows are already in the store and have never been through the
-   loop, and it is the only option that can falsify the premise; **(b) enter the 53 candidates
-   that both post and carry a discussion group** (571,904 subscribers, 53 track-R gates);
-   **(c) move the target** — 10 M is ~6× what discovery can reach and ~2× the whole segment.
-   Not this executor's call.
-2. **A brief count to watch:** `docs/PROMPT-5a1.md` says "the five themes" in its read-back
+1. **THE COVERAGE RULING IS TAKEN — and neither of the notes' cheap readings was taken whole.**
+   Landed during this `/save` in an amended SPEC §3.11 (4) plus `docs/CHANNELS-launch.md`: the
+   **≥10 M target STANDS as aspirational** (the ledger keeps reporting the honest gap), and the
+   launch is fixed at **51 channels** — registry 4 + 29 comment-capable + 18 posts-only,
+   **1,199,519 subscribers** — plus **14 watch** (group present, currently silent: track-R
+   passed, posts collected, **no group joins until the channel posts again**, reviewed after
+   cycle 1). 12 of the operator's 77 picks excluded (7 off-topic/non-UA, 6 dead, one overlap),
+   one late addition `@marketopt_official` (41,518, Poltava/Kremenchuk grocery chain).
+   `docs/CHANNELS-launch.md` is the authoritative per-channel list; every entry still goes
+   through the track-R gate.
+2. **`docs/PROMPT-5b.md` IS QUEUED, and 5b is the phase's ONE paid event.** SPEC §3.11 (2) as
+   amended pre-registers the pair — config A = NF4 base + unmerged arm-A adapter at batch 1
+   (the 4.5h2 replica), config B = merged in bf16 then **requantized** to NF4 (bf16 does not fit
+   the GPU class: ~62 GB of weights against 48) — both scored once on test v4 through the
+   PRODUCTION serverless runtime, **hard stop $4 of the $8 cap**, spend anchors before the first
+   spend, **no retry**. Selection rule committed before the run: B is adopted only if every
+   4.5h2-passed gate stays passing and no head drops more than 0.005; any tie or doubt ships A,
+   and an aborted pair closes the merge question in favour of A.
+   **⚠️ Its step 0 pre-authorises the vault tail as its OWN separate commit** — exactly the
+   judgement D1 took here, now the house rule; STOP only for a path neither list explains.
+3. **The ten-key finding is now load-bearing.** `docs/CHANNELS-launch.md` counts **views and
+   reactions** among the launch signals and stars both: collector v1 writes neither (the post
+   record has exactly ten keys, measured in 5a). The stated plan is a retrospective refetch **by
+   the poll-census pattern** — $0, sidecar v2 beside raw v1, never into the v1 stores.
+4. **A brief count to watch:** `docs/PROMPT-5a1.md` said "the five themes" in its read-back
    check while its own Deliverable 3 and SPEC §3.11 (4) name **seven** (three from 04.08 plus
    four from the 06.08 ruling). Seven were built; the discrepancy is D2 in the notes. The same
-   class of staleness as the "five registry channels" 5a flagged.
-3. **After 5a.1:** **5b serving parity** (the merge/batch measurement above) → **5c** loop core
+   class of staleness as the "five registry channels" 5a flagged — twice in two days.
+5. **After 5b:** **5c** loop core
    + aggregates + the category post-layer (taxonomy is the operator's word BEFORE any labeling)
    → **5d** first reporting cycle + alerts v0 on spikes of both polarities.
 4. **G1a and G1c are DEFERRED until after the loop's first reporting cycle**, on its fresh data —
@@ -135,6 +151,12 @@ amended SPEC §3.11 (4) now says the registry is **four** channels, and STATUS w
 it. What 5a reported and the tail did not have to fix: PROMPT-5a's Deliverable 2 heading said
 "$0, no API" on a premise that turned out false — the deliverable needed the (free) Telegram API
 and `$0` still held. Team-lead files were never edited here.
+
+**One open question for the team lead, not a blocker:** whether `8a4582d` should have existed at
+all. `docs/PROMPT-5a1.md`'s step 0 says STOP if `git status` shows anything beyond its six paths;
+it showed eight, the extra two being this session's own operator-invoked `/save`. The phase ran
+to completion and the two files went into their own commit, separable from the team lead's
+`f650ce1`, so reversing that judgement costs one `git revert`. D1 in the notes.
 
 **Nothing else is open.** The prompt-revision blocker of 04.08 was ruled the same day (with the
 post, both sides), the anchor was scored through it once, and every record now names its rendering.
