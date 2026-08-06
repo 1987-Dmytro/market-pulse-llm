@@ -205,8 +205,24 @@ def test_project_pair_usd_reports_every_input_it_used():
         "usd_per_second": 0.002,
         "cold_start_seconds": 0,
         "merge_usd": 0.0,
+        "spent_usd": 0.0,
     }
     assert projection["projected_usd"] == pytest.approx(0.04)
+
+
+#   the cap is on the phase, not on the pair: $0.04 of pair on top of $3.98 already
+#   spent is $4.02, and the pair alone would have read as clearing
+def test_the_projection_carries_what_the_phase_already_spent():
+    projection = serving.project_pair_usd(
+        seconds_per_row=2.0,
+        rows=5,
+        runs=2,
+        usd_per_second=0.002,
+        cold_start_seconds=0,
+        spent_usd=3.98,
+    )
+    assert projection["projected_usd"] == pytest.approx(0.04)
+    assert projection["total_usd"] == pytest.approx(4.02)
 
 
 def test_endpoint_url_is_the_runpod_v2_shape():

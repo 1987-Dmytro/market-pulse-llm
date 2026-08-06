@@ -248,6 +248,7 @@ def project_pair_usd(
     usd_per_second: float,
     cold_start_seconds: float,
     merge_usd: float = 0.0,
+    spent_usd: float = 0.0,
 ) -> dict:
     """What the pre-registered pair would cost, from what the smoke measured.
 
@@ -258,13 +259,19 @@ def project_pair_usd(
     smoke's own billed seconds; ``merge_usd`` is config B's merge/requantize job,
     which the same $4 stop covers.
 
+    ``spent_usd`` is what 5b has *already* cost when the projection is taken —
+    staging, the cold-start proof, the smoke itself. The cap is on the phase and not
+    on the pair, so a projection comparing only the pair against $4 would authorise a
+    run the phase cannot afford. ``total_usd`` is the number the abort rule reads;
+    ``projected_usd`` stays beside it because that is what the rule is worded in.
+
     Every input is reported back beside the total: a projection whose inputs are
     not in the record cannot be re-derived, and this one decides whether the
     phase's one paid event happens at all.
     """
     per_run = rows * seconds_per_row + cold_start_seconds
     scored_usd = per_run * runs * usd_per_second
-    total = scored_usd + merge_usd
+    projected = scored_usd + merge_usd
     return {
         "inputs": {
             "seconds_per_row": seconds_per_row,
@@ -273,9 +280,12 @@ def project_pair_usd(
             "usd_per_second": usd_per_second,
             "cold_start_seconds": cold_start_seconds,
             "merge_usd": merge_usd,
+            "spent_usd": spent_usd,
         },
         "seconds_per_run": round(per_run, 3),
         "scored_usd": round(scored_usd, 4),
         "merge_usd": round(merge_usd, 4),
-        "projected_usd": round(total, 4),
+        "projected_usd": round(projected, 4),
+        "spent_usd": round(spent_usd, 4),
+        "total_usd": round(projected + spent_usd, 4),
     }

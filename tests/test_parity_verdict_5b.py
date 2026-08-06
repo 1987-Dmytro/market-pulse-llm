@@ -118,6 +118,7 @@ def args(**kwargs):
         "usd_per_second": 0.0005,
         "cold_start_seconds": 200.0,
         "merge_usd": 1.0,
+        "spent_usd": 0.0,
         "rows": 758,
     }
     return type("Args", (), defaults | kwargs)
@@ -142,6 +143,15 @@ def test_a_projection_that_clears_writes_no_verdict_but_still_leaves_an_artifact
     assert projection["over_cap"] is False
     assert projection["projection"]["projected_usd"] == pytest.approx(1.958)
     assert projection["cap_usd"] == 4.00
+
+
+def test_what_5b_already_spent_can_tip_a_clearing_projection_over(paths):
+    """$1.958 of pair clears $4 on its own; on top of $2.20 already spent it does not."""
+    assert verdict.run_projection(args(seconds_per_row=1.0, spent_usd=2.20)) == 0
+    record = json.loads(verdict.VERDICT.read_text(encoding="utf-8"))
+    assert record["outcome"] == "aborted-over-cap"
+    assert record["projection"]["total_usd"] == pytest.approx(4.158)
+    assert "which is on the phase, not on the pair" in record["why"]
 
 
 def test_the_projection_needs_the_smoke_to_have_measured_something(paths):

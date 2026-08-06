@@ -134,6 +134,7 @@ def project(args) -> dict:
         usd_per_second=args.usd_per_second,
         cold_start_seconds=args.cold_start_seconds,
         merge_usd=args.merge_usd,
+        spent_usd=args.spent_usd,
     )
 
 
@@ -157,11 +158,13 @@ def write(path: Path, payload: dict) -> None:
 
 def run_projection(args) -> int:
     projection = project(args)
-    over = projection["projected_usd"] > CAP_USD
+    over = projection["total_usd"] > CAP_USD
     print(f"seconds per run    {projection['seconds_per_run']}")
     print(f"scored             ${projection['scored_usd']:.4f}  (2 runs of {args.rows} rows)")
     print(f"merge job          ${projection['merge_usd']:.4f}")
-    print(f"PROJECTED PAIR     ${projection['projected_usd']:.4f} of ${CAP_USD:.2f}")
+    print(f"PROJECTED PAIR     ${projection['projected_usd']:.4f}")
+    print(f"already spent      ${projection['spent_usd']:.4f}  (staging, cold-start proof, smoke)")
+    print(f"5b TOTAL           ${projection['total_usd']:.4f} of ${CAP_USD:.2f}")
     print(f"VERDICT            {'OVER THE CAP — do not run the pair' if over else 'clears'}")
     write(
         PROJECTION,
@@ -181,8 +184,10 @@ def run_projection(args) -> int:
                     "selected": "A",
                     "shipped": "A",
                     "why": (
-                        f"the smoke projects the pair at ${projection['projected_usd']:.4f},"
-                        f" over the ${CAP_USD:.2f} hard stop. No paid pair ran; SPEC amendment"
+                        f"the smoke projects the pair at ${projection['projected_usd']:.4f} on"
+                        f" top of ${projection['spent_usd']:.4f} already spent —"
+                        f" ${projection['total_usd']:.4f} against the ${CAP_USD:.2f} hard stop,"
+                        f" which is on the phase, not on the pair. No paid pair ran; SPEC amendment"
                         " 3.11 (2) closes the merge question in favour of A. Merging stays"
                         " forbidden — it is adopted only if this measurement selects it, and"
                         " this measurement did not happen."
@@ -200,6 +205,13 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--usd-per-second", type=float, help="--project: spend / billed seconds")
     parser.add_argument("--cold-start-seconds", type=float, default=0.0)
     parser.add_argument("--merge-usd", type=float, default=0.0, help="--project: config B's job")
+    parser.add_argument(
+        "--spent-usd",
+        type=float,
+        default=0.0,
+        help="--project: what 5b has already cost, read from runpod_guard. The $4 stop is on"
+        " the phase, so a projection that ignores it authorises a run the phase cannot afford.",
+    )
     parser.add_argument("--rows", type=int, default=TEST_V4_ROWS)
     parser.add_argument("--record", type=Path, help="persist the verdict as well as printing it")
     args = parser.parse_args(argv)
