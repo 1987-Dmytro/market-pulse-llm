@@ -2,24 +2,24 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-06 10:59:49 (every SessionStart)
+**Auto-refreshed:** 2026-08-06 12:19:38 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-5f1b571 test(5a): cover --rebuild-ledger, and record the record/script provenance check
-81c25ea docs: hot.md — 5a is built and committed, and the coverage gap is the finding
-15723c1 feat(5a): loop skeleton, storewide poll census, discovery with a coverage ledger
-242fcdc docs: Phase 5 opened — SPEC 3.11, STATUS compacted to the map, PROMPT-5a
-c32a46c docs: 45h2 tail — amendments blocker paid, 626-row accounting, 08-05 log
+03915ad feat(5a.1): discovery widened to seven themes plus seed handles, with per-theme subtotals
+260463d docs(adr): 5a — the census had to fetch, and three themes buy 6.8% of the gap
+303ef9f fix(5a.1): the six acceptance items — a rate limit is a wait, a smoke keeps its deliverable
+8a4582d docs: the /save checkpoint of 2026-08-06 — hot.md and the day's log
+f650ce1 docs: 5a accepted — SPEC 3.11 (4) amended to four channels and seven themes, PROMPT-5a1
 ```
 
 ## 📋 Recent decisions
 
-- `45h2-ablation-verdict.md` — The пласт is dropped: it made every gated head worse but one
 - `INDEX.md` — Decision records
-- `45h-v4-and-the-precheck.md` — Test v4, and the confound the precheck caught before the money
+- `5a-census-api-and-theme-expansion.md` — The census had to fetch, and three themes buy 6.8% of the gap
+- `45h2-ablation-verdict.md` — The пласт is dropped: it made every gated head worse but one
 
 ## 📅 Recent daily logs
 
@@ -31,19 +31,31 @@ c32a46c docs: 45h2 tail — amendments blocker paid, 626-row accounting, 08-05 l
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-06 (`/save`. **5a IS BUILT, COMMITTED AND ACCEPTED; `docs/PROMPT-5a1.md` IS NOW QUEUED (see Next).** Four commits: `242fcdc` the team-lead tail (six paths, `hot.md` the expected sixth) · `15723c1` the three deliverables · `81c25ea` this file · `5f1b571` the `--rebuild-ledger` test and the provenance check. All three deliverables done at **$0** — no GPU, no serverless, not one model call. `make check` **863 passed** (814 before), `ruff format --check` clean, raw v1 byte-identical against a sha256 baseline taken BEFORE the first fetch. **The ledger's verdict: the three authorised themes close 6.8% of the gap** — that is the operator's decision now. The session opened 05.08 at 21:55 and crossed midnight, so its checkpoint is in [[2026-08-06]] while the 4.5 close and the Phase 5 briefing stay in [[2026-08-05]]. Phase 4+4.5 spend unchanged: **$16.30 of $25**, $8.70 left; no pods. Edited by hand; the section above is auto-generated, do NOT touch the marker.)
+**Last update:** 2026-08-06 (**5a.1 IS BUILT AND COMMITTED — the combined ledger is on disk and the coverage-target ruling is now the operator's to take (see Next).** Six commits: `f650ce1` the team-lead tail · `8a4582d` this checkpoint's two files, kept out of that commit · `303ef9f` the six acceptance fixes · `260463d` the owed ADR · `03915ad` the widened discovery · plus the record. `make check` **884 passed** (863 at the 5a close), `ruff format --check` clean, `shasum -c results/raw_v1_baseline.sha256` **6/6 OK after the scan**. **$0** — no GPU, no serverless, not one model call; the whole scan is Telegram's free API. Earlier the same day, `/save`: **5a WAS BUILT, COMMITTED AND ACCEPTED.** Four commits: `242fcdc` the team-lead tail (six paths, `hot.md` the expected sixth) · `15723c1` the three deliverables · `81c25ea` this file · `5f1b571` the `--rebuild-ledger` test and the provenance check. All three deliverables done at **$0** — no GPU, no serverless, not one model call. `make check` **863 passed** (814 before), `ruff format --check` clean, raw v1 byte-identical against a sha256 baseline taken BEFORE the first fetch. **The ledger's verdict: the three authorised themes close 6.8% of the gap** — that is the operator's decision now. The session opened 05.08 at 21:55 and crossed midnight, so its checkpoint is in [[2026-08-06]] while the 4.5 close and the Phase 5 briefing stay in [[2026-08-05]]. Phase 4+4.5 spend unchanged: **$16.30 of $25**, $8.70 left; no pods. Edited by hand; the section above is auto-generated, do NOT touch the marker.)
 
 ## 🔥 What's Hot
 
-**5a IS DONE AND THE COVERAGE TARGET IS THE FINDING.** 66 candidates across the three authorised
-themes (mothers/kids · ЗОЖ · baby food) add **668,171** subscribers to the registry's **178,372**
-— **846,543 against a target of 10,000,000, still 9,153,457 short**. 37 of the 66 posted *nothing*
-in four weeks and hold 312 k of that sum; taking only the 29 live ones leaves **9,465,581**
-outstanding. Only **19** candidates both carry a discussion group and post, and subscriber count
-and posting rate are **uncorrelated** (Pearson −0.01) — the top of the subscriber column is not
-the top of the flow column. `results/discovery_5a.json`, ledger `ranked` is what to pick off.
-**Widening beyond the three themes was the operator's decision on this gap** — taken 06.08:
-SPEC §3.11 (4) is amended to five themes and `docs/PROMPT-5a1.md` carries the wider scan.
+**THE COMBINED LEDGER IS IN, AND WIDENING DID NOT CLOSE THE GAP.** `results/discovery_5a1.json`:
+seven themes and seven seed handles, **180 candidates** (114 checked in 5a.1, 66 carried from
+`results/discovery_5a.json` unmeasured), no FloodWait, `scan_complete: true`. They add
+**1,427,767** subscribers to the registry's **178,274** — **1,606,041 against a target of
+10,000,000, still 8,393,959 short**. That is **14.5%** of the gap closed, against 5a's 6.8%:
+four more themes and the seed list roughly doubled the reach and left 8.4 M outstanding. Taking
+only the **90** candidates that posted in four weeks leaves **8,749,263**. **53** both post and
+carry a discussion group — 571,904 subscribers, and the only rows that can ever become comments.
+**The team lead's own survey says the whole segment is ~4–5 M**, so the target is about six times
+what a scan can reach. **The coverage-target ruling is the operator's, on this ledger.**
+
+**What the per-theme table says** (`ledger.per_theme`, priced per `found_by` tag): **7 handed
+seed handles (411,399) beat six of the seven searched themes** — `@recepti` 115,783 at 50
+posts/week could never surface through a ranked, capped search. **health_fitness, authorised
+against the team lead's recommendation, is not the worst theme**: 81,490 subscribers and **17
+comment-capable channels, more than any theme but cooking_recipes**. **food_quality is the
+smallest and none of it can carry comments**: 6 candidates, 3,387 subscribers, **0** discussion
+groups — the regional Держпродспоживслужба offices are broadcast-only. The ledger priced a theme
+the recommendation would have dropped and a theme the operator added, in opposite directions.
+And the two biggest candidates are dormant: `@itsmamix` (280,895, silent) and `@tretyakovaele`
+(244,639, one post in 28 days) are **37% of all candidate subscribers**.
 
 **The registry has FOUR channels, not five** — `@znizhki_ua` was dropped 2026-07-27 (dead since
 2024-03). 5a flagged it without editing a team-lead file, and the **06.08 amendment to SPEC
@@ -87,20 +99,18 @@ future corrected-gold comparison of the two arms is **unpaired and must say so**
 
 ## ⏭️ Next
 
-1. **5a IS ACCEPTED AND `docs/PROMPT-5a1.md` IS QUEUED** — it landed in the tree during this
-   `/save`, together with `docs/RESEARCH-5a1-themes.md`, an amended SPEC §3.11 (4) (theme
-   expansion; **the registry is FOUR channels** — the count 5a flagged is now in the contract)
-   and a refreshed STATUS. 5a.1 = the acceptance fixes (six items, F1 first) + discovery widened
-   to **five themes with seed handles**. Still $0.
-   **⚠️ Its step 0 will see two paths beyond the six it lists, and both are this checkpoint's:**
-   `knowledge/hot.md` (edited here) and `knowledge/daily_logs/2026-08-06.md` (created here,
-   because the session crossed midnight). Expected, not a surprise — the same courtesy the
-   previous `/close` paid to 5a's step 0. Everything of 5a itself is committed and the suite is
-   green at `5f1b571`.
-2. **The gap has an answer now, and it is not "search harder".** `docs/RESEARCH-5a1-themes.md`
-   (team lead, TGStat/telemetr, 06.08) puts the **whole relevant UA-Telegram segment at ~4–5 M**
-   summed subscribers even entering everything, overlap included — the ≥10 M target is about
-   twice the segment. That is the operator's call to make on the record, not this executor's.
+1. **THE COVERAGE-TARGET RULING IS OWED, AND THE LEDGER IT WAS DEFERRED TO EXISTS.** Three
+   readings are laid out in `implementation-notes.md` §«Phase 5a.1», cheapest first: **(a)
+   launch on the registry four and let the 14-day cycle price the question** — costs nothing,
+   6,057 posts and 11,338 comment rows are already in the store and have never been through the
+   loop, and it is the only option that can falsify the premise; **(b) enter the 53 candidates
+   that both post and carry a discussion group** (571,904 subscribers, 53 track-R gates);
+   **(c) move the target** — 10 M is ~6× what discovery can reach and ~2× the whole segment.
+   Not this executor's call.
+2. **A brief count to watch:** `docs/PROMPT-5a1.md` says "the five themes" in its read-back
+   check while its own Deliverable 3 and SPEC §3.11 (4) name **seven** (three from 04.08 plus
+   four from the 06.08 ruling). Seven were built; the discrepancy is D2 in the notes. The same
+   class of staleness as the "five registry channels" 5a flagged.
 3. **After 5a.1:** **5b serving parity** (the merge/batch measurement above) → **5c** loop core
    + aggregates + the category post-layer (taxonomy is the operator's word BEFORE any labeling)
    → **5d** first reporting cycle + alerts v0 on spikes of both polarities.

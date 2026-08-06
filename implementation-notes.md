@@ -2230,3 +2230,215 @@ Across the 66 counted candidates subscriber count and posting rate are **uncorre
 picked for flow. Whether that means widening the themes, revisiting the
 target, or launching on the four registry channels and letting the loop's first cycle price the
 question is not a decision this phase can make.
+
+# Phase 5a.1 — the acceptance fixes, the owed ADR, and the combined ledger
+
+Executed from `docs/PROMPT-5a1.md`. **$0**: Telegram's API is free, no GPU, no serverless, no
+model call of any kind. Every number below points at a file; nothing lives only here.
+
+## Step 0 — the tail, and the two paths the brief did not list
+
+`git status --short` showed **eight** paths where step 0 names six. The extra two —
+`knowledge/hot.md` and `knowledge/daily_logs/2026-08-06.md` — are this session's own `/save`
+checkpoint, written an hour earlier at the operator's explicit request. I did not stop the
+phase for them, and I did not sweep them into the team lead's commit either: the six named
+paths went in as `f650ce1`, the two checkpoint files in `8a4582d` with a message that says
+what they are. Recorded as **D1**.
+
+A stale `.git/index.lock` (0 bytes, timestamped 10:32, no `git` process alive — checked before
+touching it) blocked the first commit attempt and was removed. **D6**.
+
+## Deliverable 1 — the six fixes
+
+Each landed with its guard, F1 before the scan ran, as the brief orders.
+
+**F1 — a rate limit is a wait, not a verdict** (`scripts/discover_channels.py`). The candidate
+loop's bare `except Exception` caught `FloodWaitError` and wrote the channel down as
+`verdict: "error"`. Two harms, and the tests name both: a *temporary* state recorded as a
+permanent judgement, indistinguishable in the ledger from a channel that is genuinely broken;
+and a loop that walks straight into the next request while Telegram is still refusing. The
+branch is `scripts/entry_check.py:187`'s — abort, keep what was collected, print the wait —
+placed **before** the generic handler. `tests/test_discover_channels.py` has the positive case
+(scan stops at the raising handle, keeps the row before it, records the 42 s) and its negative
+control (a `RuntimeError` is still one bad row and the scan continues) — without the second,
+"the scan stopped" would also pass for a rewrite that gives up on the first broken handle.
+
+Beyond F1's letter, the record now carries `scan_complete` and `flood_wait_seconds`: a scan cut
+short otherwise writes a ledger that reads as complete. **D5**.
+
+**F2 — a smoke may not destroy what it is smoking** (`scripts/poll_census.py`). `--limit 20`
+wrote its 20-ids-per-channel result over `data/raw/post_polls.jsonl`, replacing 37 real
+transcripts. `output_paths()` sends a limited run to `post_polls.limit20.jsonl` — beside, not
+over, so the write path is still exercised (a smoke that skipped the write would prove less).
+The same defect applied to the **record** path: a `--limit` run also overwrote
+`results/poll_census_5a.json` with counts over a fifth of the population. One line, same fix,
+same function — extended rather than left in place, and flagged as **D3**. The test drives
+`main(["--limit", "20"])` end to end against a fake client and asserts both real paths still
+hold their sentinel bytes.
+
+**F3 — the error that leaks the API hash** (`src/market_pulse/telegram_client.py`). The
+numeric check printed `got {api_id!r}`, and the case it exists for is a swapped `.env`, where
+the thing in `TELEGRAM_API_ID` *is* the hash. The message keeps the variable name only; the
+test asserts the name is present and the secret is not.
+
+**F4 — the guard closes on the empty string** (`src/market_pulse/loop.py`). `if endpoint is
+None` → `if not endpoint`. 5b reads the endpoint out of env or config, where "unset" arrives as
+`""`, and under the old test that counted as registered. The existing negative control keeps
+its job (a real URL still opens the guard); the new one pins `""` closed.
+
+**F5 — the hash the record promised** (`results/poll_census_5a.json`). Added
+`sidecar.sha256 = 78806e99c7f267e4…` and `sidecar_sha256_added_at`, computed from the bytes on
+disk with no refetch and no recount. Implemented as a `--stamp-sidecar-sha` mode rather than a
+hand edit, mirroring `--rebuild-ledger`: a JSON edited by hand is not reproducible (**D7**).
+`diff` against the pre-stamp copy shows exactly two added fields and nothing else — `git` still
+names `242fcdc`, the commit the census actually ran on. The timestamp landed at the end of the
+record rather than beside `generated_at`, because reordering fields would have touched more of
+a record the brief said not to otherwise change (**D8**). Two tests: the stamp moves nothing
+else, and the shipped record's hash recomputes from the sidecar on disk.
+
+**F6 — a baseline that outlives its session** (`results/raw_v1_baseline.sha256`). The six store
+files in `shasum -c` format with a header naming the date and what it baselines. 5a took the
+same measurement into a scratchpad that died with the session; `data/` is gitignored, so
+`git status` is silent about those files in both directions and proves nothing either way.
+Taken **before** this session's first write-capable action. Tests: the file parses and names six
+distinct store files (a baseline that quietly stopped covering one would still print cheerful
+OK lines for the rest), and — when the data is present — every file still hashes to its line.
+
+## Deliverable 2 — the owed ADR
+
+`knowledge/decisions/5a-census-api-and-theme-expansion.md`, plus its INDEX row. Three parts,
+each with the numbers: the census deviation ratified (the premise measured false — ten keys
+over 6,057 records, `raw_store.post_record` never reading `message.poll`, and
+`scripts/fetch_post_media.py:164` showing 4.5g2's own transcripts came off a live
+`client.get_messages`), the coverage finding (three themes close **6.8%** of the gap counting
+every candidate, **3.6%** counting only the ones that post), and the operator ruling of
+2026-08-06 with its reasoning on health/fitness. Every figure in it was re-derived from
+`results/discovery_5a.json` and `results/poll_census_5a.json` before it was written down, not
+copied from the 5a report.
+
+## Deliverable 3 — the widened scan and the combined ledger
+
+`results/discovery_5a1.json`, written at `03915ad` (both scripts that produced it verified
+byte-identical to that commit). 23 queries over the four new themes plus 7 seed handles,
+**114 channels checked here**, 66 carried from `results/discovery_5a.json` unmeasured —
+`scan_complete: true`, **no FloodWait at any point**, 2 windows truncated at the 1200-message
+cap. The three 2026-08-04 themes were not re-scanned; `themes_to_scan` reads what is already
+done off the carried record's own `themes` key rather than off a hand-kept list.
+
+### The combined reading
+
+| | channels | subscribers | gap to 10,000,000 |
+|---|---|---|---|
+| registry now | 4 | 178,274 | 9,821,726 |
+| + all 180 candidates | 184 | 1,606,041 | **8,393,959** |
+| + only the 90 that post | 94 | 1,250,737 | **8,749,263** |
+
+Seven themes and seven seeds close **14.5%** of the gap counting every candidate, **10.9%**
+counting only the ones that posted in the window. 5a's three themes closed 6.8% / 3.6%: four
+more themes and the seed list roughly doubled the reach and left **8.4 M outstanding**.
+95 of the 180 carry a discussion group; **53 both post and carry one**, and those 53 —
+571,904 subscribers — are the entire set of candidates that can produce a comment row at all.
+
+### Per theme, so each can be priced on its own
+
+| theme | candidates | subscribers | live | with a discussion group |
+|---|---|---|---|---|
+| mothers_kids | 29 | 620,508 | 15 | 15 |
+| **seed** (7 handles) | 7 | **411,399** | 7 | 3 |
+| cooking_recipes | 48 | 210,813 | 26 | 23 |
+| health_fitness | 28 | 81,490 | 14 | 17 |
+| supermarket_deals | 26 | 62,559 | 12 | 12 |
+| baby_food | 19 | 38,238 | 7 | 12 |
+| healthy_lifestyle | 18 | 9,425 | 7 | 13 |
+| food_quality | 6 | 3,387 | 3 | **0** |
+
+These are per `found_by` tag and do **not** partition the portfolio: the subtotals sum to
+1,437,819 against a ledger total of 1,427,767, and the 10,052 difference is exactly one
+channel — `@blwbabies`, found by `baby_food` in 5a and handed as a seed in 5a.1. It is counted
+once in the coverage sum and in both subtotals, which is the merge rule working on live data
+rather than in a test: the carried row kept its 5a measurement and gained the seed tag.
+
+Three things the table says that a total would have hidden:
+
+- **Seven handed handles beat six of the seven searched themes.** 411,399 subscribers from
+  7 seeds against 210,813 from cooking_recipes' 48 candidates. `contacts.SearchRequest` ranks
+  by its own relevance and caps each query, so `@recepti` (115,783 · 50 posts/week) and
+  `@mameni_recepti` (90,463 · 63 posts/week) were never going to surface — the research note's
+  hypothesis, measured.
+- **health_fitness, authorised against the team lead's recommendation, is not the worst theme.**
+  81,490 subscribers, third among searched themes, and **17 comment-capable channels — more
+  than any theme except cooking_recipes**. The recommendation would have dropped it. This is
+  the ledger doing the job the ruling assigned it.
+- **food_quality is the smallest by an order of magnitude, and none of it can carry comments.**
+  6 candidates, 3,387 subscribers, 0 discussion groups: the regional Держпродспоживслужба
+  offices are government broadcast channels. The operator's own theme, priced by the same
+  instrument — which is the ledger doing that job in the other direction.
+
+And the caveat that is a number, not a footnote: **the two largest candidates are dormant.**
+`@itsmamix` (280,895, silent for four weeks) and `@tretyakovaele` (244,639, one post in 28 days)
+are 37% of all candidate subscribers between them. Of the five liveliest large channels, three
+have comments disabled. *subscribers != comment flow*, in the scan's own rows.
+
+## Deviations
+
+Every departure from `docs/PROMPT-5a1.md`. Silence is not compliance.
+
+- **D1 — step 0 saw eight paths, not six.** `knowledge/hot.md` and
+  `knowledge/daily_logs/2026-08-06.md` are this session's own `/save`, run at the operator's
+  request an hour before the brief arrived. I did not stop the phase, and did not put them in
+  the team lead's commit: six named paths in `f650ce1`, the two checkpoint files in `8a4582d`.
+- **D2 — "the five themes" in the read-back check is five, and the brief's own Deliverable 3
+  names seven.** Four new theme keys on top of the three authorised 2026-08-04; SPEC 3.11 (4)
+  as amended lists exactly those seven. Built seven. Reducing to five would have silently
+  dropped part of an operator authorisation, which is the one thing worse than over-building.
+- **D3 — F2 extended to the record path.** `--limit` also overwrote
+  `results/poll_census_5a.json` with counts over a fifth of the population, by the same defect
+  in the same function. Fixed with the sidecar rather than left as a known bug beside a fixed one.
+- **D4 — F1 covers the candidate loop, as the brief scopes it.** A `FloodWaitError` raised
+  during the theme search or the registry walk still propagates and ends the run. That is not
+  an oversight: at those points nothing has been measured, so abort-and-keep has nothing to
+  keep. Named rather than silently widened.
+- **D5 — `scan_complete` / `flood_wait_seconds` added to the discovery record.** Beyond F1's
+  letter. A scan cut short writes a ledger that reads as complete; the record now says.
+- **D6 — a stale `.git/index.lock`** (0 bytes, 10:32, no `git` process alive) blocked step 0
+  and was removed after checking that nothing was running.
+- **D7 — F5 built as a `--stamp-sidecar-sha` mode**, not a hand edit of the JSON, mirroring
+  `--rebuild-ledger`: a record edited by hand is a record nobody can reproduce.
+- **D8 — `sidecar_sha256_added_at` sits at the end of the census record**, not beside
+  `generated_at`. Reordering fields would have touched more of a record the brief said to
+  change in exactly two places.
+- **D9 — `found_by` is read with `.get(…, [])`** in `merge_candidates` and `theme_subtotals`.
+  Defensive against a carried record from an older schema, because the failure mode it prevents
+  is a 40-minute rate-limited scan dying at the write step with nothing on disk.
+- **D10 — the registry rows were re-measured in this run.** The combined ledger's registry
+  column is today's reading (178,274), not 5a's (178,372); the 98-subscriber difference is a
+  day's churn, and mixing a fresh candidate scan with yesterday's registry numbers would have
+  put two days in one column.
+- **D11 — `knowledge/hot.md` updated**, which the brief does not ask for. It is injected at
+  every SessionStart and still said `PROMPT-5a1 IS NOW QUEUED`; leaving it would have handed
+  the next session a file that states as live a phase that is finished.
+
+## What the operator has to decide, and the three cheapest readings
+
+The combined ledger is the number the 2026-08-05 coverage-target ruling was deferred to. Seven
+themes, seven seeds, 180 candidates, every channel discovery can currently see: the portfolio
+ceiling is **1,606,041** summed subscribers, and the target is 10,000,000. The team lead's own
+survey (`docs/RESEARCH-5a1-themes.md`) puts the whole relevant UA-Telegram segment at ~4–5 M
+entering everything, overlap included. **The target is roughly six times what a measured scan
+can reach and about twice the segment it is drawn on.** Three readings, cheapest first:
+
+1. **Launch on the registry four and let the first cycle price the question.** Cost: nothing.
+   No entry gates, no new risk, and SPEC 3.11 (1)'s 14-day reporting cycle answers whether
+   coverage is even the binding constraint — 6,057 posts and 11,338 comment rows are already
+   in the store and have never been through the loop. The no-add option is on the menu because
+   it is the only one that costs zero and can still falsify the premise.
+2. **Enter the 53 candidates that both post and carry a discussion group** (571,904
+   subscribers). These are the only candidates that can produce a comment row at all; the other
+   127 add subscribers to a sum and nothing to the corpus. Cost: 53 track-R entry gates, the
+   operator's call one at a time.
+3. **Move the target.** 10 M is not reachable by adding UA-Telegram channels: the measurement
+   says 1.6 M is the ceiling of what discovery can see, and the survey says 4–5 M is the ceiling
+   of what exists. A target set on the portfolio's *comment-capable* subscribers — 571,904
+   today — would be a number the loop can be steered by.
+
+Not decided here, and not decidable by this phase.
