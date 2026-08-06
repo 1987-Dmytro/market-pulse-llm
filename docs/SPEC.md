@@ -241,6 +241,24 @@ never averaged away; this is not a gate and no bar moves, but any
 4.5h2-passed gate head landing under its bar is reported loudly as its
 own finding for an operator briefing. A failed attempt stops the line —
 aggregates cannot take serving numbers without this measurement.
+**Batch measurement pre-registered (operator, 2026-08-06, after the
+Δ=0 batch-1 parity; motive: at batch 1 the one-off backlog ≈ $6.80
+against $6.77 of phase headroom, run-rate ≈ $28/mo against the $9–12
+ceiling):** serving batch>1 may be adopted ONLY through this
+measurement. Candidate ladder {16, 8, 4}: the 24-row carve is smoked
+at each N; the largest N whose carve outputs are byte-identical to the
+batch-1 smoke picks the candidate (a pre-filter on training rows — no
+test exposure); if none is identical, the candidate is 8. Test v4 is
+then scored ONCE at the candidate N. Adopted only if every
+4.5h2-passed gate stays passing and no gate head drops more than
+0.005 vs `results/parity_5b_a.json` (the batch-1 record with its
+committed per-row dump; row-level agreement vs that dump is REPORTED
+as description, never gated). One attempt, no retry, hard stop =
+the $2.77 remaining under the parity $4 stop. A failed measurement
+fixes serving at batch 1 permanently and returns the money question
+to the operator. GATE EVALS stay batch 1 regardless — the anchor
+methodology is untouched, and the batch-1 serving path must remain
+byte-stable under any new batching code (guarded by test).
 (3) **Category post-layer is in-phase** (operator choice): the taxonomy is
 the operator's word BEFORE any labeling; one LLM pass over ~6k posts
 (~$0.2–0.5) with its own pre-registered gate (sealed hundred of posts,
