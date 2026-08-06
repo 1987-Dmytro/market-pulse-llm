@@ -359,6 +359,48 @@ def test_a_row_that_fails_alone_is_still_charged():
     assert block["scored"] == 0
 
 
+def test_the_batch_one_path_still_sends_one_row_per_call_in_row_order():
+    """The batch-1 serving path must not move under the batching code (SPEC 3.11 (2)).
+
+    What can be checked without a GPU is the request stream, and it is the half that
+    would silently change: one text per call, rows in the order the input holds them,
+    parent posts paired positionally with their own rows.
+    """
+    good = '{"sentiment": "neutral", "sarcasm": false, "intents": []}'
+    client = BatchClient([good] * len(ROWS))
+    runner.classify_local(client, "T1", ROWS, batch_size=1)
+    assert client.batches == [[row["text"]] for row in ROWS]
+
+
+def test_rows_the_fallback_regenerated_alone_are_named_in_the_record():
+    """A run whose content is "what does batch N cost the numbers" cannot hide a batch 1.
+
+    `classify_local` retries a failed batch row by row, and the record still says
+    `batch_size: N`. The ids of the rows that were actually generated alone are the
+    difference between a measurement and a mixed one (SPEC amendment 3.11 (2), 5b.2).
+    """
+
+    class FlakyFirst(BatchClient):
+        def batch(self, task, texts):
+            if len(texts) > 1 and not self.batches:
+                self.batches.append(list(texts))
+                raise RuntimeError("transient kernel hiccup")
+            return super().batch(task, texts)
+
+    good = '{"sentiment": "neutral", "sarcasm": false, "intents": []}'
+    outcomes = runner.classify_local(FlakyFirst([good] * 6), "T1", ROWS, batch_size=3)
+    block = runner.failure_block("comments_test", outcomes, runner.split(ROWS, outcomes)[2])
+    assert block["scored"] == 6, "the fallback still scores them"
+    assert block["solo_retried"] == sorted(row["id"] for row in ROWS[:3])
+
+
+def test_a_clean_batched_run_names_no_rows_as_solo():
+    good = '{"sentiment": "neutral", "sarcasm": false, "intents": []}'
+    outcomes = runner.classify_local(BatchClient([good] * 6), "T1", ROWS, batch_size=3)
+    block = runner.failure_block("comments_test", outcomes, runner.split(ROWS, outcomes)[2])
+    assert block["solo_retried"] == []
+
+
 def test_an_out_of_memory_is_never_charged_to_a_row():
     """A batch size that does not fit is a fact about the machine. Turning it
     into 758 counted failures would bury the one line that says what happened."""
@@ -1022,6 +1064,44 @@ def test_the_pair_is_scored_at_batch_one():
     """Greedy is not batch-invariant on this stack, and SPEC amendment 3.11 (2) fixes 1."""
     with pytest.raises(SystemExit, match="scored at batch 1"):
         runner.main(endpoint_args("--endpoint-id", "ep-1", "--serving-config", "A"))
+
+
+def test_only_the_pre_registered_measurement_opens_the_door_above_batch_one(capsys):
+    """SPEC amendment 3.11 (2), 2026-08-06: batch > 1 is reachable through one flag.
+
+    Passing it gets past the batch refusal and lands on the next guard — which is the
+    proof that the door opened, and that nothing else about a served run moved.
+    """
+    refuses(
+        capsys,
+        endpoint_args(
+            "--endpoint-id",
+            "ep-1",
+            "--serving-config",
+            "A",
+            "--batch-size",
+            "8",
+            "--batch-measurement",
+        ),
+        "--serving-config A is the unmerged adapter",
+    )
+
+
+def test_the_batch_measurement_cannot_lift_a_gate_eval(capsys, tmp_path):
+    """ "GATE EVALS stay batch 1 regardless" — the amendment's own words.
+
+    The anchors were all measured through `--backend local`, so the flag has to refuse
+    there even though the run it names is otherwise identical.
+    """
+    refuses(
+        capsys,
+        [
+            *("--model", GEMMA, "--backend", "local", "--smoke"),
+            *("--adapter", str(arm_dir(tmp_path)), "--arm", "real-only"),
+            *("--batch-size", "8", "--batch-measurement"),
+        ],
+        "gate evals stay batch 1",
+    )
 
 
 def test_config_a_is_the_unmerged_adapter_and_must_name_it(capsys):

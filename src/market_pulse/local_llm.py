@@ -149,7 +149,25 @@ class LocalClient:
         if tokenizer.pad_token_id is not None:
             # generate() pads rows that stopped early; a pad is an end for us too.
             self.stop_ids.add(tokenizer.pad_token_id)
+        self._assert_left_padding()
         self._assert_template_emits_bos()
+
+    def _assert_left_padding(self) -> None:
+        """The one thing batching can get wrong that no number downstream can see.
+
+        :func:`load` sets it, but the client is what depends on it: with right padding a
+        batch's shorter rows end in pads, ``generate`` continues from a pad instead of from
+        the prompt, and ``row[width:]`` slices at the longest row's width — so every row but
+        the longest decodes garbage. At batch 1 nothing is padded and the bug does not exist,
+        which is precisely why it would first appear in a paid batched run (SPEC amendment
+        3.11 (2), the batch measurement).
+        """
+        side = getattr(self.tokenizer, "padding_side", None)
+        if side != "left":
+            raise RuntimeError(
+                f"the tokenizer pads on the {side!r} side; decoder-only generation needs 'left'."
+                " Right padding is invisible at batch 1 and wrong for every shorter row above it."
+            )
 
     def _assert_template_emits_bos(self) -> None:
         """`add_special_tokens=False` is only safe while the template emits <bos>.

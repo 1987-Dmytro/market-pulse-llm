@@ -28,6 +28,7 @@ class FakeTokenizer:
     pad_token_id = PAD
     eos_token_id = EOS
     bos_token = "<bos>"
+    padding_side = "left"  # what `load` sets, and what `LocalClient` refuses to run without
 
     def __init__(self, width: int = 4, bos: str = "<bos>") -> None:
         self.width = width
@@ -173,6 +174,104 @@ def test_a_template_that_stopped_emitting_bos_refuses_to_run():
     with pytest.raises(RuntimeError) as caught:
         local_llm.LocalClient(tokenizer, FakeModel([(GOOD, True)]))
     assert "add_special_tokens=False" in str(caught.value)
+
+
+class PaddingTokenizer(FakeTokenizer):
+    """A tokenizer that actually pads — by real length, on the side it names.
+
+    :class:`FakeTokenizer` returns a fixed width for every text, which is enough for the
+    questions the batch-1 tests ask and blind to every question padding raises. This one
+    encodes each rendered prompt as its own characters, so rows differ in length and the
+    mask has something to mask.
+    """
+
+    def __call__(self, texts, return_tensors=None, padding=None, add_special_tokens=None):
+        self.rendered = list(texts)
+        self.add_special_tokens = add_special_tokens
+        ids = [[ord(char) for char in text] for text in texts]
+        width = max(len(row) for row in ids)
+        left = self.padding_side == "left"
+        pad = lambda row: (  # noqa: E731
+            [PAD] * (width - len(row)) + row if left else row + [PAD] * (width - len(row))
+        )
+        mask = lambda row: (  # noqa: E731
+            [0] * (width - len(row)) + [1] * len(row)
+            if left
+            else [1] * len(row) + [0] * (width - len(row))
+        )
+        return Encoding(
+            input_ids=[pad(row) for row in ids], attention_mask=[mask(row) for row in ids]
+        )
+
+
+class EchoModel:
+    """`generate` answers each row from its OWN unmasked tokens, and nothing else.
+
+    The property batching must preserve: a real model attends through the mask, so a row's
+    reply cannot move because a neighbour got longer. A fake that ignores the mask — as
+    :class:`FakeModel` does, replying from a canned list — cannot fail that way and so
+    cannot check it either.
+    """
+
+    device = "cpu"
+
+    class generation_config:  # noqa: N801 — mirrors the transformers attribute
+        eos_token_id = [EOS]
+
+    def generate(self, input_ids=None, attention_mask=None, max_new_tokens=None, **kwargs):
+        rows = []
+        for ids, mask in zip(input_ids, attention_mask):
+            own = [token for token, keep in zip(ids, mask) if keep]
+            # the row's own length, spelled out: a reply that changes if the row's
+            # content changes, and only then
+            reply = [ord(char) for char in str(len(own))][:max_new_tokens]
+            rows.append(list(ids) + reply + [EOS])
+        return Rows(rows)
+
+
+def test_a_right_padding_tokenizer_is_refused():
+    """The one bug batching introduces that no number downstream can see.
+
+    Right padding is harmless at batch 1 — nothing is padded — and wrong for every
+    shorter row above it. It would first appear in a paid batched run, as slightly
+    worse gate numbers with no failure anywhere.
+    """
+    tokenizer = FakeTokenizer()
+    tokenizer.padding_side = "right"
+    with pytest.raises(RuntimeError) as caught:
+        local_llm.LocalClient(tokenizer, FakeModel([(GOOD, True)]))
+    assert "'right'" in str(caught.value) and "left" in str(caught.value)
+
+
+def test_a_rows_reply_does_not_depend_on_its_neighbours_length():
+    """SPEC amendment 3.11 (2)'s batch measurement, as far as a test can pin it.
+
+    Whether greedy is numerically batch-invariant on the GPU is measured on the pod
+    and is not a property of this code. What IS this code's job is that each row is
+    handed its own tokens: batched beside a much longer row, a row's answer must be
+    the answer it gives alone.
+    """
+    short, long = "a", "a much longer neighbour"
+    backend = local_llm.LocalClient(PaddingTokenizer(), EchoModel())
+    together = backend.batch("T1", [short, long])
+    alone = [
+        local_llm.LocalClient(PaddingTokenizer(), EchoModel()).batch("T1", [text])[0]
+        for text in (short, long)
+    ]
+    assert [reply["content"] for reply in together] == [reply["content"] for reply in alone]
+    assert together[0]["content"] != together[1]["content"], "the fake must distinguish the rows"
+
+
+def test_the_prompt_tokens_counted_are_the_rows_own_not_the_padded_width():
+    """`usage.prompt_tokens` reads the attention mask, so it is batch-invariant.
+
+    That is what makes the 5b.1 batch-1 smoke a usable regression baseline for a
+    batched run: the token counts must match row for row, or the rendering moved.
+    """
+    backend = local_llm.LocalClient(PaddingTokenizer(), EchoModel())
+    batched = backend.batch("T1", ["a", "a much longer neighbour"])
+    solo = local_llm.LocalClient(PaddingTokenizer(), EchoModel()).batch("T1", ["a"])
+    assert batched[0]["usage"]["prompt_tokens"] == solo[0]["usage"]["prompt_tokens"]
 
 
 def test_the_gpu_extra_never_reaches_module_scope():

@@ -378,6 +378,7 @@ def classify_local(
         chunk = rows[start : start + batch_size]
         window = posts[start : start + batch_size] if posts is not None else None
         texts = [row["text"] for row in chunk]
+        solo = False
         try:
             replies = client.batch(task, texts, window) if window else client.batch(task, texts)
         except MemoryError:
@@ -392,8 +393,15 @@ def classify_local(
                 _one_row(client, task, row["text"], window[index] if window else None)
                 for index, row in enumerate(chunk)
             ]
+            solo = True
         for row, reply in zip(chunk, replies):
             scored = outcome(task, row["id"], reply, "generation")
+            if solo:
+                # These rows were generated at batch 1, whatever `batch_size` says. On a run
+                # whose entire content is "what does batch N cost the gate numbers" that is an
+                # instrument swap mid-measurement, and the record would otherwise carry one
+                # batch size for rows produced at two (SPEC amendment 3.11 (2), 5b.2).
+                scored["solo_retry"] = True
             if on_row is not None:
                 on_row(scored)  # persisted before the next batch: a crash resumes here
             outcomes.append(scored)
@@ -439,6 +447,10 @@ def failure_block(name: str, outcomes: list[dict], failures: list[dict]) -> dict
         # A truncated reply is a parse failure with a cause worth separating: it
         # says max_tokens was too small, not that the model cannot follow a format.
         "truncated": sum(1 for o in outcomes if o.get("finish_reason") == "length"),
+        # Which rows `classify_local`'s fallback re-generated on their own. Empty on every
+        # backend that never batches, and empty on a clean batched run — a non-empty list
+        # means the record's batch size describes only the rows that are not in it.
+        "solo_retried": sorted(o["id"] for o in outcomes if o.get("solo_retry")),
         "reasons": dict(Counter(f["reason"][:60] for f in failures).most_common(8)),
         "failed_ids": sorted(f["id"] for f in failures)[:20],
     }
@@ -1178,6 +1190,13 @@ def main(argv: list[str] | None = None) -> int:
         help="--backend local: rows per padded generate call",
     )
     parser.add_argument(
+        "--batch-measurement",
+        action="store_true",
+        help="--backend endpoint: the batch measurement SPEC amendment 3.11 (2) pre-registered"
+        " on 2026-08-06 — the ONLY run allowed above batch 1 on our own weights. Gate evals"
+        " stay batch 1 regardless, and the batch-1 serving path does not move.",
+    )
+    parser.add_argument(
         "--model-path",
         help="--backend local: weights directory, if not the Hugging Face repo id",
     )
@@ -1244,11 +1263,18 @@ def main(argv: list[str] | None = None) -> int:
         parser.error("--endpoint-id is a serving run: pass --backend endpoint")
     if args.endpoint_url and not served:
         parser.error("--endpoint-url is a serving run: pass --backend endpoint")
-    if served and args.batch_size != 1:
+    if args.batch_measurement and not served:
+        parser.error(
+            "--batch-measurement is the SERVED run of SPEC amendment 3.11 (2): gate evals stay"
+            " batch 1 regardless, and --backend local is how every anchor was measured"
+        )
+    if served and args.batch_size != 1 and not args.batch_measurement:
         raise SystemExit(
             f"the 5b pair is scored at batch 1, not {args.batch_size}: greedy decoding is not"
             " batch-invariant on this stack (ADR phase4-own-pod-anchor §(c)) and SPEC"
-            " amendment 3.11 (2) fixes batch 1 for both configs."
+            " amendment 3.11 (2) fixed batch 1 for both configs. Batch > 1 is reachable only"
+            " through the batch measurement the same amendment pre-registered on 2026-08-06 —"
+            " pass --batch-measurement, and only for that run."
         )
     if bool(args.adapter) != bool(args.arm):
         parser.error("--adapter and --arm go together: a gate record must name its arm")
@@ -1264,7 +1290,7 @@ def main(argv: list[str] | None = None) -> int:
             parser.error("--adapter is an own-weights run: pass --backend local or endpoint")
         if args.reference_only:
             raise SystemExit("--reference-only would hide the arm this phase exists to score")
-        if args.batch_size != 1:
+        if args.batch_size != 1 and not args.batch_measurement:
             # ADR phase4-own-pod-anchor §(c): greedy is NOT batch-invariant on this
             # stack — measured, one row of 24 flipped its intents between batch 8
             # and batch 1. Defaulting it silently would hide the decision.
