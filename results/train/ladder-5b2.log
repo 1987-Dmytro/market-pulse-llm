@@ -1,0 +1,25 @@
+carve          8347abd74ae91f49161bdffdd907e2428ea862f02f1f103e543e63ac27a547fa (24 rows, 24 asked)
+  T1v2_with_post     19 rows
+  T2                 5 rows
+  test v4 is NOT opened by this run — the carve is training data
+endpoint       5pjikuu7rgitor · config A
+  adapter      b3ca630846c7e75c5e7058ce45804c45a6bff5c49dcf2389cb8cdda0b7a68a6c
+  cold start   46.229s wall
+
+       arm   calls  scored  parsed    wall s    s/row
+         1      24      24      24     100.3    4.180
+  1-repeat      24      24      24      99.5    4.145
+        16       3      24      24      36.0    1.500
+         8       4      24      24      36.5    1.520
+         4       7      24      24      44.9    1.870
+
+--- byte-identity against the batch-1 arm ---
+  batch 1 repeat  True   every reply is byte-identical to the batch-1 arm
+        batch 16  True   every reply is byte-identical to the batch-1 arm
+         batch 8  True   every reply is byte-identical to the batch-1 arm
+         batch 4  True   every reply is byte-identical to the batch-1 arm
+
+batch-1 vs the 5b.1 smoke: 24/24 rows unchanged on ['finish_reason', 'parsed', 'prompt_tokens', 'completion_tokens']
+
+candidate N    16  (largest-identical)
+record         results/batch_ladder_5b2.json

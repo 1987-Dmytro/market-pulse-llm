@@ -1,0 +1,55 @@
+model google/gemma-4-31b-it · backend endpoint · quantization {'load_in_4bit': True, 'bnb_4bit_quant_type': 'nf4', 'bnb_4bit_use_double_quant': True, 'bnb_4bit_compute_dtype': 'bfloat16'}
+greedy · max_new_tokens 256 · seed 42
+prompt SHA256 equal to the recorded google/gemma-4-31b-it run: yes
+arm without-plast · adapter sha256 b3ca630846c7e75c5e7058ce45804c45a6bff5c49dcf2389cb8cdda0b7a68a6c
+  dataset sha256 ba368273cc4debb657500256d0d8abe2621aee06cdc4b49fcaea8b85e4bfd1f9 (2171 rows)
+  G1b slice 38 ids, sha256 verified against the anchor
+  guard anchor (G1a overall) 0.8970
+prompt T1 sha256 9b2a021783212022bb335d7a32a365d532ff94c7da92336bf054d8709c0de355
+prompt T2 sha256 6a7e66efb3eb4091b8d787e38213f3b1b0c9115e78d2b41fb9cc6bcaab3a54b4
+test set v4 · rendering {'T1': 'T1v2_with_post', 'T2': 'T2'}
+  comments_test    comments_test_v4.jsonl     T1v2_with_post · 400 parent posts
+  posts_test       posts_test_v4.jsonl        T2
+  sarcasm_holdout  sarcasm_holdout_v4.jsonl   T1v2_with_post · 108 parent posts
+endpoint 5pjikuu7rgitor · config A
+  merge_state          unmerged-adapter
+  adapter_sha256       b3ca630846c7e75c5e7058ce45804c45a6bff5c49dcf2389cb8cdda0b7a68a6c
+  merged_sha256        None
+  weights_dir          google/gemma-4-31b-it
+  gpu                  NVIDIA RTX A6000
+  gpu_count            1
+  gpu_memory_total     49140 MiB
+  driver               550.127.08
+  cuda_runtime         12.8
+  torch                2.8.0+cu128
+  transformers         5.14.1
+  bitsandbytes         0.50.0
+  pod_id               5pjikuu7rgitor
+  weights_requested    google/gemma-4-31b-it
+  revision_requested   842da3794eaa0b77d5f08bae87a17459d91ff475
+  model_revision       842da3794eaa0b77d5f08bae87a17459d91ff475
+
+checkpoint /workspace/out/parity-5b2.jsonl — 0 rows already scored
+
+comments_test: scored 400/400 · parse 0 · api 0 · generation 0 · truncated 0
+
+posts_test: scored 250/250 · parse 0 · api 0 · generation 0 · truncated 0
+Traceback (most recent call last):
+  File "/workspace/repo/scripts/eval_zero_shot.py", line 1719, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/workspace/repo/scripts/eval_zero_shot.py", line 1493, in main
+    fresh = classify_local(
+            ^^^^^^^^^^^^^^^
+  File "/workspace/repo/scripts/eval_zero_shot.py", line 383, in classify_local
+    replies = client.batch(task, texts, window) if window else client.batch(task, texts)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/repo/src/market_pulse/serving.py", line 201, in batch
+    output = self._run_with_retry(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/repo/src/market_pulse/serving.py", line 178, in _run_with_retry
+    return self._run(payload, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/repo/src/market_pulse/serving.py", line 171, in _run
+    raise ApiError(-1, f"job {job.get('id')} ended {job['status']}: {str(job)[:300]}")
+market_pulse.zero_shot.ApiError: HTTP -1: job test-e8804f89-d07c-41ff-9bef-c641bbecf0f1 ended FAILED: {'id': 'test-e8804f89-d07c-41ff-9bef-c641bbecf0f1', 'status': 'FAILED', 'error': '{"error_type": "<class \'torch.OutOfMemoryError\'>", "error_message": "CUDA out of memory. Tried to allocate 1.85 GiB. GPU 0 has a total capacity of 47.53 GiB of which 432.25 MiB is free. Process 1819453 has 47.10 GiB 

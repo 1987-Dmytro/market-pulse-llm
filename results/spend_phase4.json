@@ -87,6 +87,20 @@
       "spent_usd": 17.8344,
       "remaining_usd": 7.1656,
       "note": "5b.1: config A scored once on the US-TX-1 A6000 pod, 758/758 rows, pod deleted and verified by listing"
+    },
+    {
+      "at": "2026-08-06T17:00:10+00:00",
+      "balance": 16.9309076026,
+      "spent_usd": 18.0691,
+      "remaining_usd": 6.9309,
+      "note": "5b.2 staging + carve ladder (4 arms + repeat control)"
+    },
+    {
+      "at": "2026-08-06T17:25:49+00:00",
+      "balance": 16.6911280943,
+      "spent_usd": 18.3089,
+      "remaining_usd": 6.6911,
+      "note": "5b.2: test v4 at batch 16 — OOM on sarcasm_holdout after 666/758 rows, measurement failed, pod deleted and verified by listing"
     }
   ]
 }

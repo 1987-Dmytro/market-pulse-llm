@@ -1,0 +1,247 @@
+{
+  "outcome": "failed-measurement-oom",
+  "step": "5b.2 batch measurement",
+  "testset_version": "v4",
+  "cap_usd": 4.0,
+  "written_at": "2026-08-06T17:29:39+00:00",
+  "adopted_batch_size": 1,
+  "blocker": "torch.OutOfMemoryError on the worker at the second sarcasm_holdout batch of 16: 1.85 GiB requested, 432 MiB free, 42.14 GiB allocated by PyTorch against a ~20 GiB model at rest",
+  "evidence": [
+    "the ladder selected N=16 on 24 carve rows and the rule it applied has no memory term; the carve's longest T1 batch fitted and the test set's did not",
+    "the eval re-raises an out-of-memory rather than charging it to rows, so the process died before writing a record or a prediction dump",
+    "660 of the 666 rows it did score are label-identical to the batch-1 run, so what failed was memory, not the answers — but 6 rows did move, on a carve where every batch size was byte-identical",
+    "pod 5pjikuu7rgitor deleted and verified by runpodctl pod list -a returning []"
+  ],
+  "rule_could_not_run": "SPEC amendment 3.11 (2) adopts N only if every 4.5h2-passed gate stays passing. Those are G1b, G1d, G1e. G1b is the sarcasm_holdout slice and this run scored 16 of 108 rows, so the rule has no input for it — an unmeasured gate is not a passing one. A failed measurement fixes serving at batch 1 permanently and returns the money question to the operator. One attempt, no retry, no second N.",
+  "attempt": {
+    "batch_size": 16,
+    "adapter_sha256": "b3ca630846c7e75c5e7058ce45804c45a6bff5c49dcf2389cb8cdda0b7a68a6c",
+    "prompt_revision_sha256": {
+      "T1": "495b43d1361d0e4f5f7a186eebb971f4dc3ed9f8afd128f539ba0f6a8ffc2a19",
+      "T2": "6a7e66efb3eb4091b8d787e38213f3b1b0c9115e78d2b41fb9cc6bcaab3a54b4"
+    },
+    "rows_scored": {
+      "comments_test": 400,
+      "posts_test": 250,
+      "sarcasm_holdout": 16
+    },
+    "rows_expected": {
+      "comments_test": 400,
+      "posts_test": 250,
+      "sarcasm_holdout": 108
+    },
+    "failures_before_the_oom": 0,
+    "record_written": false,
+    "predictions_dump_written": false
+  },
+  "salvage": {
+    "what_this_is": [
+      "NOT the measurement. The checkpoint's rows, read after the fact, so the operator can tell 'batch 16 changed the answers' from 'batch 16 ran out of memory'. No bar moves, nothing is adopted, and G1b is absent rather than estimated."
+    ],
+    "complete_inputs": [
+      "comments_test",
+      "posts_test"
+    ],
+    "row_agreement_vs_batch_1": {
+      "compared": 666,
+      "agree": 660,
+      "rate": 0.990991,
+      "per_input": {
+        "comments_test": {
+          "rows": 400,
+          "agree": 396,
+          "rate": 0.99
+        },
+        "posts_test": {
+          "rows": 250,
+          "agree": 250,
+          "rate": 1.0
+        },
+        "sarcasm_holdout": {
+          "rows": 16,
+          "agree": 14,
+          "rate": 0.875
+        }
+      },
+      "disagreeing": [
+        {
+          "input": "comments_test",
+          "id": "@VARUS_channel:14674",
+          "batch_1": {
+            "intents": [
+              "price",
+              "service"
+            ],
+            "sarcasm": true,
+            "sentiment": "negative"
+          },
+          "batch_16": {
+            "sentiment": "negative",
+            "sarcasm": true,
+            "intents": [
+              "service"
+            ]
+          }
+        },
+        {
+          "input": "comments_test",
+          "id": "@VARUS_channel:16593",
+          "batch_1": {
+            "intents": [
+              "packaging"
+            ],
+            "sarcasm": false,
+            "sentiment": "negative"
+          },
+          "batch_16": {
+            "sentiment": "negative",
+            "sarcasm": true,
+            "intents": [
+              "packaging"
+            ]
+          }
+        },
+        {
+          "input": "comments_test",
+          "id": "@VARUS_channel:7940",
+          "batch_1": {
+            "intents": [],
+            "sarcasm": false,
+            "sentiment": "neutral"
+          },
+          "batch_16": {
+            "sentiment": "neutral",
+            "sarcasm": false,
+            "intents": [
+              "service"
+            ]
+          }
+        },
+        {
+          "input": "comments_test",
+          "id": "@msuaaaa:2733",
+          "batch_1": {
+            "intents": [],
+            "sarcasm": false,
+            "sentiment": "neutral"
+          },
+          "batch_16": {
+            "sentiment": "negative",
+            "sarcasm": false,
+            "intents": []
+          }
+        },
+        {
+          "input": "sarcasm_holdout",
+          "id": "@VARUS_channel:11336",
+          "batch_1": {
+            "intents": [
+              "packaging",
+              "quality",
+              "service"
+            ],
+            "sarcasm": true,
+            "sentiment": "negative"
+          },
+          "batch_16": {
+            "sentiment": "negative",
+            "sarcasm": true,
+            "intents": [
+              "availability",
+              "quality",
+              "service"
+            ]
+          }
+        },
+        {
+          "input": "sarcasm_holdout",
+          "id": "@VARUS_channel:13051",
+          "batch_1": {
+            "intents": [
+              "availability",
+              "price",
+              "service"
+            ],
+            "sarcasm": true,
+            "sentiment": "negative"
+          },
+          "batch_16": {
+            "sentiment": "negative",
+            "sarcasm": true,
+            "intents": [
+              "availability",
+              "service"
+            ]
+          }
+        }
+      ]
+    },
+    "heads": {
+      "batch_16": {
+        "G1a": {
+          "overall": 0.919161458765552,
+          "other": 0.921278203952976,
+          "ru": 0.8697089947089948,
+          "ua": 0.9306036598902107
+        },
+        "G1c": 0.8509316770186336,
+        "G1d": 0.9585858585858587,
+        "G1e": 0.961038961038961
+      },
+      "batch_1": {
+        "G1a": {
+          "overall": 0.9214075146604309,
+          "other": 0.9368186423505572,
+          "ru": 0.8697089947089948,
+          "ua": 0.9306036598902109
+        },
+        "G1c": 0.8478260869565217,
+        "G1d": 0.9585858585858587,
+        "G1e": 0.961038961038961,
+        "G1b": 0.6052631578947368
+      },
+      "anchor_45h2": {
+        "G1a": {
+          "overall": 0.9214075146604309,
+          "other": 0.9368186423505572,
+          "ru": 0.8697089947089948,
+          "ua": 0.9306036598902109
+        },
+        "G1c": 0.8478260869565217,
+        "G1d": 0.9585858585858587,
+        "G1e": 0.961038961038961,
+        "G1b": 0.6052631578947368
+      },
+      "bars": {
+        "G1a": {
+          "min": 0.94700869,
+          "floors": {
+            "ua": 0.8763700877,
+            "ru": 0.8839501502
+          }
+        },
+        "G1b": {
+          "min_fixed": 23,
+          "n": 38,
+          "max_macro_f1_drop": 0.02
+        },
+        "G1c": {
+          "min": 0.8482954545
+        },
+        "G1d": {
+          "min": 0.9090105074
+        },
+        "G1e": {
+          "min": 0.9282716049
+        }
+      }
+    },
+    "deltas_vs_batch_1": {
+      "G1a": -0.002246,
+      "G1c": 0.003106,
+      "G1d": 0.0,
+      "G1e": 0.0
+    },
+    "g1b": "not computable — 16 of 108 sarcasm_holdout rows were scored"
+  }
+}

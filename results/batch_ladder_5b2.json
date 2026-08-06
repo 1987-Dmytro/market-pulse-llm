@@ -1,0 +1,2645 @@
+{
+  "step": "5b.2 batch ladder",
+  "written_at": "2026-08-06T16:58:58+00:00",
+  "endpoint_id": "5pjikuu7rgitor",
+  "serving_config": "A",
+  "transport": "pod-loopback",
+  "endpoint_url": "http://127.0.0.1:8000",
+  "worker": {
+    "serving_config": "A",
+    "merge_state": "unmerged-adapter",
+    "adapter_sha256": "b3ca630846c7e75c5e7058ce45804c45a6bff5c49dcf2389cb8cdda0b7a68a6c",
+    "merged_sha256": null,
+    "quantization": {
+      "load_in_4bit": true,
+      "bnb_4bit_quant_type": "nf4",
+      "bnb_4bit_use_double_quant": true,
+      "bnb_4bit_compute_dtype": "bfloat16"
+    },
+    "chat_template": {
+      "add_generation_prompt": true,
+      "enable_thinking": false
+    },
+    "max_new_tokens": 256,
+    "model": "google/gemma-4-31b-it",
+    "repo_commit": "0a0e09c7accb6d33dc21abdc3e83b11e0e206359",
+    "weights_dir": "google/gemma-4-31b-it",
+    "adapter_dir": "/workspace/repo/results/train/45h2-arm-a/adapter",
+    "revision_requested": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+    "merged_provenance": null,
+    "runtime": {
+      "gpu": "NVIDIA RTX A6000",
+      "gpu_count": 1,
+      "gpu_memory_total": "49140 MiB",
+      "driver": "550.127.08",
+      "cuda_runtime": "12.8",
+      "torch": "2.8.0+cu128",
+      "transformers": "5.14.1",
+      "bitsandbytes": "0.50.0",
+      "pod_id": "5pjikuu7rgitor",
+      "weights_requested": "google/gemma-4-31b-it",
+      "revision_requested": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+      "model_revision": "842da3794eaa0b77d5f08bae87a17459d91ff475"
+    }
+  },
+  "carve": {
+    "sha256": "8347abd74ae91f49161bdffdd907e2428ea862f02f1f103e543e63ac27a547fa",
+    "n": 24,
+    "asked": 24
+  },
+  "cold_start": {
+    "calls": 1,
+    "worker_seconds": 0.0,
+    "queue_seconds": 0.0,
+    "wall_seconds": 46.229,
+    "seconds_per_call": 0.0,
+    "wall_per_call": 46.229,
+    "idle_share": null,
+    "worker_ids": []
+  },
+  "prompt_sha256": {
+    "T1": "9b2a021783212022bb335d7a32a365d532ff94c7da92336bf054d8709c0de355",
+    "T2": "6a7e66efb3eb4091b8d787e38213f3b1b0c9115e78d2b41fb9cc6bcaab3a54b4"
+  },
+  "arms": {
+    "1": {
+      "batch_size": 1,
+      "asked": 24,
+      "scored": 24,
+      "parsed": 24,
+      "failed": null,
+      "calls": 24,
+      "max_chunk_per_task": {
+        "T1v2_with_post": 1,
+        "T2": 1
+      },
+      "wall_seconds": 100.317,
+      "seconds_per_row_wall": 4.18,
+      "chunks": [
+        {
+          "chunk": 0,
+          "task": "T1v2_with_post",
+          "rows": 1,
+          "ids": [
+            "@VARUS_channel:10231"
+          ],
+          "wall_seconds": 4.691
+        },
+        {
+          "chunk": 1,
+          "task": "T1v2_with_post",
+          "rows": 1,
+          "ids": [
+            "@VARUS_channel:11879"
+          ],
+          "wall_seconds": 3.967
+        },
+        {
+          "chunk": 2,
+          "task": "T1v2_with_post",
+          "rows": 1,
+          "ids": [
+            "@VARUS_channel:11892"
+          ],
+          "wall_seconds": 4.154
+        },
+        {
+          "chunk": 3,
+          "task": "T1v2_with_post",
+          "rows": 1,
+          "ids": [
+            "@VARUS_channel:11972"
+          ],
+          "wall_seconds": 4.203
+        },
+        {
+          "chunk": 4,
+          "task": "T1v2_with_post",
+          "rows": 1,
+          "ids": [
+            "@VARUS_channel:12009"
+          ],
+          "wall_seconds": 4.147
+        },
+        {
+          "chunk": 5,
+          "task": "T1v2_with_post",
+          "rows": 1,
+          "ids": [
+            "@VARUS_channel:16726"
+          ],
+          "wall_seconds": 4.201
+        },
+        {
+          "chunk": 6,
+          "task": "T1v2_with_post",
+          "rows": 1,
+          "ids": [
+            "@VARUS_channel:17041"
+          ],
+          "wall_seconds": 4.115
+        },
+        {
+          "chunk": 7,
+          "task": "T1v2_with_post",
+          "rows": 1,
+          "ids": [
+            "@VARUS_channel:17704"
+          ],
+          "wall_seconds": 4.107
+        },
+        {
+          "chunk": 8,
+          "task": "T1v2_with_post",
+          "rows": 1,
+          "ids": [
+            "@VARUS_channel:18114"
+          ],
+          "wall_seconds": 4.32
+        },
+        {
+          "chunk": 9,
+          "task": "T1v2_with_post",
+          "rows": 1,
+          "ids": [
+            "@VARUS_channel:20131"
+          ],
+          "wall_seconds": 4.566
+        },
+        {
+          "chunk": 10,
+          "task": "T1v2_with_post",
+          "rows": 1,
+          "ids": [
+            "@VARUS_channel:2391"
+          ],
+          "wall_seconds": 4.366
+        },
+        {
+          "chunk": 11,
+          "task": "T1v2_with_post",
+          "rows": 1,
+          "ids": [
+            "@VARUS_channel:4815"
+          ],
+          "wall_seconds": 4.228
+        },
+        {
+          "chunk": 12,
+          "task": "T1v2_with_post",
+          "rows": 1,
+          "ids": [
+            "@VARUS_channel:6427"
+          ],
+          "wall_seconds": 3.867
+        },
+        {
+          "chunk": 13,
+          "task": "T1v2_with_post",
+          "rows": 1,
+          "ids": [
+            "@VARUS_channel:6488"
+          ],
+          "wall_seconds": 3.832
+        },
+        {
+          "chunk": 14,
+          "task": "T1v2_with_post",
+          "rows": 1,
+          "ids": [
+            "@VARUS_channel:6534"
+          ],
+          "wall_seconds": 3.833
+        },
+        {
+          "chunk": 15,
+          "task": "T1v2_with_post",
+          "rows": 1,
+          "ids": [
+            "@VARUS_channel:6804"
+          ],
+          "wall_seconds": 4.584
+        },
+        {
+          "chunk": 16,
+          "task": "T1v2_with_post",
+          "rows": 1,
+          "ids": [
+            "@VARUS_channel:7323"
+          ],
+          "wall_seconds": 4.743
+        },
+        {
+          "chunk": 17,
+          "task": "T1v2_with_post",
+          "rows": 1,
+          "ids": [
+            "@VARUS_channel:8401"
+          ],
+          "wall_seconds": 4.878
+        },
+        {
+          "chunk": 18,
+          "task": "T1v2_with_post",
+          "rows": 1,
+          "ids": [
+            "@VARUS_channel:8690"
+          ],
+          "wall_seconds": 4.65
+        },
+        {
+          "chunk": 19,
+          "task": "T2",
+          "rows": 1,
+          "ids": [
+            "@atb_market_official:1657"
+          ],
+          "wall_seconds": 3.692
+        },
+        {
+          "chunk": 20,
+          "task": "T2",
+          "rows": 1,
+          "ids": [
+            "@atb_market_official:2429"
+          ],
+          "wall_seconds": 3.566
+        },
+        {
+          "chunk": 21,
+          "task": "T2",
+          "rows": 1,
+          "ids": [
+            "@atb_market_official:2558"
+          ],
+          "wall_seconds": 3.725
+        },
+        {
+          "chunk": 22,
+          "task": "T2",
+          "rows": 1,
+          "ids": [
+            "@msuaaaa:4276"
+          ],
+          "wall_seconds": 3.917
+        },
+        {
+          "chunk": 23,
+          "task": "T2",
+          "rows": 1,
+          "ids": [
+            "@silposilpo:2885"
+          ],
+          "wall_seconds": 3.964
+        }
+      ],
+      "rows": [
+        {
+          "id": "@VARUS_channel:10231",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": true, \"intents\": [\"service\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 0,
+          "chunk_rows": 1,
+          "wall_seconds": 4.691,
+          "usage": {
+            "prompt_tokens": 772,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:11879",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": false, \"intents\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 1,
+          "chunk_rows": 1,
+          "wall_seconds": 3.967,
+          "usage": {
+            "prompt_tokens": 705,
+            "completion_tokens": 19
+          }
+        },
+        {
+          "id": "@VARUS_channel:11892",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": false, \"intents\": [\"availability\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 2,
+          "chunk_rows": 1,
+          "wall_seconds": 4.154,
+          "usage": {
+            "prompt_tokens": 634,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:11972",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"neutral\", \"sarcasm\": false, \"intents\": [\"taste\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 3,
+          "chunk_rows": 1,
+          "wall_seconds": 4.203,
+          "usage": {
+            "prompt_tokens": 681,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:12009",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"positive\", \"sarcasm\": false, \"intents\": [\"taste\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 4,
+          "chunk_rows": 1,
+          "wall_seconds": 4.147,
+          "usage": {
+            "prompt_tokens": 680,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:16726",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"positive\", \"sarcasm\": false, \"intents\": [\"taste\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 5,
+          "chunk_rows": 1,
+          "wall_seconds": 4.201,
+          "usage": {
+            "prompt_tokens": 797,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:17041",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": true, \"intents\": [\"service\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 6,
+          "chunk_rows": 1,
+          "wall_seconds": 4.115,
+          "usage": {
+            "prompt_tokens": 759,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:17704",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": true, \"intents\": [\"price\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 7,
+          "chunk_rows": 1,
+          "wall_seconds": 4.107,
+          "usage": {
+            "prompt_tokens": 678,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:18114",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"positive\", \"sarcasm\": false, \"intents\": [\"service\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 8,
+          "chunk_rows": 1,
+          "wall_seconds": 4.32,
+          "usage": {
+            "prompt_tokens": 964,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:20131",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": false, \"intents\": [\"availability\", \"service\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 9,
+          "chunk_rows": 1,
+          "wall_seconds": 4.566,
+          "usage": {
+            "prompt_tokens": 650,
+            "completion_tokens": 23
+          }
+        },
+        {
+          "id": "@VARUS_channel:2391",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"neutral\", \"sarcasm\": false, \"intents\": [\"service\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 10,
+          "chunk_rows": 1,
+          "wall_seconds": 4.366,
+          "usage": {
+            "prompt_tokens": 984,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:4815",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": false, \"intents\": [\"service\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 11,
+          "chunk_rows": 1,
+          "wall_seconds": 4.228,
+          "usage": {
+            "prompt_tokens": 854,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:6427",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"positive\", \"sarcasm\": false, \"intents\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 12,
+          "chunk_rows": 1,
+          "wall_seconds": 3.867,
+          "usage": {
+            "prompt_tokens": 638,
+            "completion_tokens": 19
+          }
+        },
+        {
+          "id": "@VARUS_channel:6488",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": true, \"intents\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 13,
+          "chunk_rows": 1,
+          "wall_seconds": 3.832,
+          "usage": {
+            "prompt_tokens": 630,
+            "completion_tokens": 19
+          }
+        },
+        {
+          "id": "@VARUS_channel:6534",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": false, \"intents\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 14,
+          "chunk_rows": 1,
+          "wall_seconds": 3.833,
+          "usage": {
+            "prompt_tokens": 624,
+            "completion_tokens": 19
+          }
+        },
+        {
+          "id": "@VARUS_channel:6804",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"neutral\", \"sarcasm\": false, \"intents\": [\"availability\", \"price\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 15,
+          "chunk_rows": 1,
+          "wall_seconds": 4.584,
+          "usage": {
+            "prompt_tokens": 731,
+            "completion_tokens": 23
+          }
+        },
+        {
+          "id": "@VARUS_channel:7323",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": false, \"intents\": [\"availability\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 16,
+          "chunk_rows": 1,
+          "wall_seconds": 4.743,
+          "usage": {
+            "prompt_tokens": 1050,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:8401",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": true, \"intents\": [\"availability\", \"service\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 17,
+          "chunk_rows": 1,
+          "wall_seconds": 4.878,
+          "usage": {
+            "prompt_tokens": 999,
+            "completion_tokens": 23
+          }
+        },
+        {
+          "id": "@VARUS_channel:8690",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": false, \"intents\": [\"price\", \"service\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 18,
+          "chunk_rows": 1,
+          "wall_seconds": 4.65,
+          "usage": {
+            "prompt_tokens": 704,
+            "completion_tokens": 23
+          }
+        },
+        {
+          "id": "@atb_market_official:1657",
+          "task": "T2",
+          "content": "{\"relevant\": false, \"post_type\": \"promo\", \"brands\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 19,
+          "chunk_rows": 1,
+          "wall_seconds": 3.692,
+          "usage": {
+            "prompt_tokens": 602,
+            "completion_tokens": 18
+          }
+        },
+        {
+          "id": "@atb_market_official:2429",
+          "task": "T2",
+          "content": "{\"relevant\": false, \"post_type\": \"other\", \"brands\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 20,
+          "chunk_rows": 1,
+          "wall_seconds": 3.566,
+          "usage": {
+            "prompt_tokens": 501,
+            "completion_tokens": 18
+          }
+        },
+        {
+          "id": "@atb_market_official:2558",
+          "task": "T2",
+          "content": "{\"relevant\": false, \"post_type\": \"other\", \"brands\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 21,
+          "chunk_rows": 1,
+          "wall_seconds": 3.725,
+          "usage": {
+            "prompt_tokens": 496,
+            "completion_tokens": 18
+          }
+        },
+        {
+          "id": "@msuaaaa:4276",
+          "task": "T2",
+          "content": "{\"relevant\": false, \"post_type\": \"promo\", \"brands\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 22,
+          "chunk_rows": 1,
+          "wall_seconds": 3.917,
+          "usage": {
+            "prompt_tokens": 537,
+            "completion_tokens": 18
+          }
+        },
+        {
+          "id": "@silposilpo:2885",
+          "task": "T2",
+          "content": "{\"relevant\": false, \"post_type\": \"promo\", \"brands\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 23,
+          "chunk_rows": 1,
+          "wall_seconds": 3.964,
+          "usage": {
+            "prompt_tokens": 715,
+            "completion_tokens": 18
+          }
+        }
+      ]
+    },
+    "1-repeat": {
+      "batch_size": 1,
+      "asked": 24,
+      "scored": 24,
+      "parsed": 24,
+      "failed": null,
+      "calls": 24,
+      "max_chunk_per_task": {
+        "T1v2_with_post": 1,
+        "T2": 1
+      },
+      "wall_seconds": 99.47,
+      "seconds_per_row_wall": 4.145,
+      "chunks": [
+        {
+          "chunk": 0,
+          "task": "T1v2_with_post",
+          "rows": 1,
+          "ids": [
+            "@VARUS_channel:10231"
+          ],
+          "wall_seconds": 4.229
+        },
+        {
+          "chunk": 1,
+          "task": "T1v2_with_post",
+          "rows": 1,
+          "ids": [
+            "@VARUS_channel:11879"
+          ],
+          "wall_seconds": 4.014
+        },
+        {
+          "chunk": 2,
+          "task": "T1v2_with_post",
+          "rows": 1,
+          "ids": [
+            "@VARUS_channel:11892"
+          ],
+          "wall_seconds": 3.953
+        },
+        {
+          "chunk": 3,
+          "task": "T1v2_with_post",
+          "rows": 1,
+          "ids": [
+            "@VARUS_channel:11972"
+          ],
+          "wall_seconds": 4.097
+        },
+        {
+          "chunk": 4,
+          "task": "T1v2_with_post",
+          "rows": 1,
+          "ids": [
+            "@VARUS_channel:12009"
+          ],
+          "wall_seconds": 4.162
+        },
+        {
+          "chunk": 5,
+          "task": "T1v2_with_post",
+          "rows": 1,
+          "ids": [
+            "@VARUS_channel:16726"
+          ],
+          "wall_seconds": 4.234
+        },
+        {
+          "chunk": 6,
+          "task": "T1v2_with_post",
+          "rows": 1,
+          "ids": [
+            "@VARUS_channel:17041"
+          ],
+          "wall_seconds": 4.101
+        },
+        {
+          "chunk": 7,
+          "task": "T1v2_with_post",
+          "rows": 1,
+          "ids": [
+            "@VARUS_channel:17704"
+          ],
+          "wall_seconds": 4.069
+        },
+        {
+          "chunk": 8,
+          "task": "T1v2_with_post",
+          "rows": 1,
+          "ids": [
+            "@VARUS_channel:18114"
+          ],
+          "wall_seconds": 4.392
+        },
+        {
+          "chunk": 9,
+          "task": "T1v2_with_post",
+          "rows": 1,
+          "ids": [
+            "@VARUS_channel:20131"
+          ],
+          "wall_seconds": 4.572
+        },
+        {
+          "chunk": 10,
+          "task": "T1v2_with_post",
+          "rows": 1,
+          "ids": [
+            "@VARUS_channel:2391"
+          ],
+          "wall_seconds": 4.304
+        },
+        {
+          "chunk": 11,
+          "task": "T1v2_with_post",
+          "rows": 1,
+          "ids": [
+            "@VARUS_channel:4815"
+          ],
+          "wall_seconds": 4.241
+        },
+        {
+          "chunk": 12,
+          "task": "T1v2_with_post",
+          "rows": 1,
+          "ids": [
+            "@VARUS_channel:6427"
+          ],
+          "wall_seconds": 3.95
+        },
+        {
+          "chunk": 13,
+          "task": "T1v2_with_post",
+          "rows": 1,
+          "ids": [
+            "@VARUS_channel:6488"
+          ],
+          "wall_seconds": 3.939
+        },
+        {
+          "chunk": 14,
+          "task": "T1v2_with_post",
+          "rows": 1,
+          "ids": [
+            "@VARUS_channel:6534"
+          ],
+          "wall_seconds": 3.823
+        },
+        {
+          "chunk": 15,
+          "task": "T1v2_with_post",
+          "rows": 1,
+          "ids": [
+            "@VARUS_channel:6804"
+          ],
+          "wall_seconds": 4.562
+        },
+        {
+          "chunk": 16,
+          "task": "T1v2_with_post",
+          "rows": 1,
+          "ids": [
+            "@VARUS_channel:7323"
+          ],
+          "wall_seconds": 4.728
+        },
+        {
+          "chunk": 17,
+          "task": "T1v2_with_post",
+          "rows": 1,
+          "ids": [
+            "@VARUS_channel:8401"
+          ],
+          "wall_seconds": 4.898
+        },
+        {
+          "chunk": 18,
+          "task": "T1v2_with_post",
+          "rows": 1,
+          "ids": [
+            "@VARUS_channel:8690"
+          ],
+          "wall_seconds": 4.63
+        },
+        {
+          "chunk": 19,
+          "task": "T2",
+          "rows": 1,
+          "ids": [
+            "@atb_market_official:1657"
+          ],
+          "wall_seconds": 3.848
+        },
+        {
+          "chunk": 20,
+          "task": "T2",
+          "rows": 1,
+          "ids": [
+            "@atb_market_official:2429"
+          ],
+          "wall_seconds": 3.589
+        },
+        {
+          "chunk": 21,
+          "task": "T2",
+          "rows": 1,
+          "ids": [
+            "@atb_market_official:2558"
+          ],
+          "wall_seconds": 3.659
+        },
+        {
+          "chunk": 22,
+          "task": "T2",
+          "rows": 1,
+          "ids": [
+            "@msuaaaa:4276"
+          ],
+          "wall_seconds": 3.692
+        },
+        {
+          "chunk": 23,
+          "task": "T2",
+          "rows": 1,
+          "ids": [
+            "@silposilpo:2885"
+          ],
+          "wall_seconds": 3.782
+        }
+      ],
+      "rows": [
+        {
+          "id": "@VARUS_channel:10231",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": true, \"intents\": [\"service\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 0,
+          "chunk_rows": 1,
+          "wall_seconds": 4.229,
+          "usage": {
+            "prompt_tokens": 772,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:11879",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": false, \"intents\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 1,
+          "chunk_rows": 1,
+          "wall_seconds": 4.014,
+          "usage": {
+            "prompt_tokens": 705,
+            "completion_tokens": 19
+          }
+        },
+        {
+          "id": "@VARUS_channel:11892",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": false, \"intents\": [\"availability\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 2,
+          "chunk_rows": 1,
+          "wall_seconds": 3.953,
+          "usage": {
+            "prompt_tokens": 634,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:11972",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"neutral\", \"sarcasm\": false, \"intents\": [\"taste\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 3,
+          "chunk_rows": 1,
+          "wall_seconds": 4.097,
+          "usage": {
+            "prompt_tokens": 681,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:12009",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"positive\", \"sarcasm\": false, \"intents\": [\"taste\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 4,
+          "chunk_rows": 1,
+          "wall_seconds": 4.162,
+          "usage": {
+            "prompt_tokens": 680,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:16726",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"positive\", \"sarcasm\": false, \"intents\": [\"taste\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 5,
+          "chunk_rows": 1,
+          "wall_seconds": 4.234,
+          "usage": {
+            "prompt_tokens": 797,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:17041",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": true, \"intents\": [\"service\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 6,
+          "chunk_rows": 1,
+          "wall_seconds": 4.101,
+          "usage": {
+            "prompt_tokens": 759,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:17704",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": true, \"intents\": [\"price\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 7,
+          "chunk_rows": 1,
+          "wall_seconds": 4.069,
+          "usage": {
+            "prompt_tokens": 678,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:18114",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"positive\", \"sarcasm\": false, \"intents\": [\"service\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 8,
+          "chunk_rows": 1,
+          "wall_seconds": 4.392,
+          "usage": {
+            "prompt_tokens": 964,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:20131",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": false, \"intents\": [\"availability\", \"service\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 9,
+          "chunk_rows": 1,
+          "wall_seconds": 4.572,
+          "usage": {
+            "prompt_tokens": 650,
+            "completion_tokens": 23
+          }
+        },
+        {
+          "id": "@VARUS_channel:2391",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"neutral\", \"sarcasm\": false, \"intents\": [\"service\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 10,
+          "chunk_rows": 1,
+          "wall_seconds": 4.304,
+          "usage": {
+            "prompt_tokens": 984,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:4815",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": false, \"intents\": [\"service\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 11,
+          "chunk_rows": 1,
+          "wall_seconds": 4.241,
+          "usage": {
+            "prompt_tokens": 854,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:6427",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"positive\", \"sarcasm\": false, \"intents\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 12,
+          "chunk_rows": 1,
+          "wall_seconds": 3.95,
+          "usage": {
+            "prompt_tokens": 638,
+            "completion_tokens": 19
+          }
+        },
+        {
+          "id": "@VARUS_channel:6488",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": true, \"intents\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 13,
+          "chunk_rows": 1,
+          "wall_seconds": 3.939,
+          "usage": {
+            "prompt_tokens": 630,
+            "completion_tokens": 19
+          }
+        },
+        {
+          "id": "@VARUS_channel:6534",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": false, \"intents\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 14,
+          "chunk_rows": 1,
+          "wall_seconds": 3.823,
+          "usage": {
+            "prompt_tokens": 624,
+            "completion_tokens": 19
+          }
+        },
+        {
+          "id": "@VARUS_channel:6804",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"neutral\", \"sarcasm\": false, \"intents\": [\"availability\", \"price\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 15,
+          "chunk_rows": 1,
+          "wall_seconds": 4.562,
+          "usage": {
+            "prompt_tokens": 731,
+            "completion_tokens": 23
+          }
+        },
+        {
+          "id": "@VARUS_channel:7323",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": false, \"intents\": [\"availability\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 16,
+          "chunk_rows": 1,
+          "wall_seconds": 4.728,
+          "usage": {
+            "prompt_tokens": 1050,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:8401",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": true, \"intents\": [\"availability\", \"service\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 17,
+          "chunk_rows": 1,
+          "wall_seconds": 4.898,
+          "usage": {
+            "prompt_tokens": 999,
+            "completion_tokens": 23
+          }
+        },
+        {
+          "id": "@VARUS_channel:8690",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": false, \"intents\": [\"price\", \"service\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 18,
+          "chunk_rows": 1,
+          "wall_seconds": 4.63,
+          "usage": {
+            "prompt_tokens": 704,
+            "completion_tokens": 23
+          }
+        },
+        {
+          "id": "@atb_market_official:1657",
+          "task": "T2",
+          "content": "{\"relevant\": false, \"post_type\": \"promo\", \"brands\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 19,
+          "chunk_rows": 1,
+          "wall_seconds": 3.848,
+          "usage": {
+            "prompt_tokens": 602,
+            "completion_tokens": 18
+          }
+        },
+        {
+          "id": "@atb_market_official:2429",
+          "task": "T2",
+          "content": "{\"relevant\": false, \"post_type\": \"other\", \"brands\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 20,
+          "chunk_rows": 1,
+          "wall_seconds": 3.589,
+          "usage": {
+            "prompt_tokens": 501,
+            "completion_tokens": 18
+          }
+        },
+        {
+          "id": "@atb_market_official:2558",
+          "task": "T2",
+          "content": "{\"relevant\": false, \"post_type\": \"other\", \"brands\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 21,
+          "chunk_rows": 1,
+          "wall_seconds": 3.659,
+          "usage": {
+            "prompt_tokens": 496,
+            "completion_tokens": 18
+          }
+        },
+        {
+          "id": "@msuaaaa:4276",
+          "task": "T2",
+          "content": "{\"relevant\": false, \"post_type\": \"promo\", \"brands\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 22,
+          "chunk_rows": 1,
+          "wall_seconds": 3.692,
+          "usage": {
+            "prompt_tokens": 537,
+            "completion_tokens": 18
+          }
+        },
+        {
+          "id": "@silposilpo:2885",
+          "task": "T2",
+          "content": "{\"relevant\": false, \"post_type\": \"promo\", \"brands\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 23,
+          "chunk_rows": 1,
+          "wall_seconds": 3.782,
+          "usage": {
+            "prompt_tokens": 715,
+            "completion_tokens": 18
+          }
+        }
+      ]
+    },
+    "16": {
+      "batch_size": 16,
+      "asked": 24,
+      "scored": 24,
+      "parsed": 24,
+      "failed": null,
+      "calls": 3,
+      "max_chunk_per_task": {
+        "T1v2_with_post": 16,
+        "T2": 5
+      },
+      "wall_seconds": 35.999,
+      "seconds_per_row_wall": 1.5,
+      "chunks": [
+        {
+          "chunk": 0,
+          "task": "T1v2_with_post",
+          "rows": 16,
+          "ids": [
+            "@VARUS_channel:10231",
+            "@VARUS_channel:11879",
+            "@VARUS_channel:11892",
+            "@VARUS_channel:11972",
+            "@VARUS_channel:12009",
+            "@VARUS_channel:16726",
+            "@VARUS_channel:17041",
+            "@VARUS_channel:17704",
+            "@VARUS_channel:18114",
+            "@VARUS_channel:20131",
+            "@VARUS_channel:2391",
+            "@VARUS_channel:4815",
+            "@VARUS_channel:6427",
+            "@VARUS_channel:6488",
+            "@VARUS_channel:6534",
+            "@VARUS_channel:6804"
+          ],
+          "wall_seconds": 22.172
+        },
+        {
+          "chunk": 1,
+          "task": "T1v2_with_post",
+          "rows": 3,
+          "ids": [
+            "@VARUS_channel:7323",
+            "@VARUS_channel:8401",
+            "@VARUS_channel:8690"
+          ],
+          "wall_seconds": 7.19
+        },
+        {
+          "chunk": 2,
+          "task": "T2",
+          "rows": 5,
+          "ids": [
+            "@atb_market_official:1657",
+            "@atb_market_official:2429",
+            "@atb_market_official:2558",
+            "@msuaaaa:4276",
+            "@silposilpo:2885"
+          ],
+          "wall_seconds": 6.637
+        }
+      ],
+      "rows": [
+        {
+          "id": "@VARUS_channel:10231",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": true, \"intents\": [\"service\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 0,
+          "chunk_rows": 16,
+          "wall_seconds": 1.386,
+          "usage": {
+            "prompt_tokens": 772,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:11879",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": false, \"intents\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 0,
+          "chunk_rows": 16,
+          "wall_seconds": 1.386,
+          "usage": {
+            "prompt_tokens": 705,
+            "completion_tokens": 19
+          }
+        },
+        {
+          "id": "@VARUS_channel:11892",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": false, \"intents\": [\"availability\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 0,
+          "chunk_rows": 16,
+          "wall_seconds": 1.386,
+          "usage": {
+            "prompt_tokens": 634,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:11972",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"neutral\", \"sarcasm\": false, \"intents\": [\"taste\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 0,
+          "chunk_rows": 16,
+          "wall_seconds": 1.386,
+          "usage": {
+            "prompt_tokens": 681,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:12009",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"positive\", \"sarcasm\": false, \"intents\": [\"taste\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 0,
+          "chunk_rows": 16,
+          "wall_seconds": 1.386,
+          "usage": {
+            "prompt_tokens": 680,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:16726",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"positive\", \"sarcasm\": false, \"intents\": [\"taste\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 0,
+          "chunk_rows": 16,
+          "wall_seconds": 1.386,
+          "usage": {
+            "prompt_tokens": 797,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:17041",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": true, \"intents\": [\"service\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 0,
+          "chunk_rows": 16,
+          "wall_seconds": 1.386,
+          "usage": {
+            "prompt_tokens": 759,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:17704",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": true, \"intents\": [\"price\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 0,
+          "chunk_rows": 16,
+          "wall_seconds": 1.386,
+          "usage": {
+            "prompt_tokens": 678,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:18114",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"positive\", \"sarcasm\": false, \"intents\": [\"service\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 0,
+          "chunk_rows": 16,
+          "wall_seconds": 1.386,
+          "usage": {
+            "prompt_tokens": 964,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:20131",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": false, \"intents\": [\"availability\", \"service\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 0,
+          "chunk_rows": 16,
+          "wall_seconds": 1.386,
+          "usage": {
+            "prompt_tokens": 650,
+            "completion_tokens": 23
+          }
+        },
+        {
+          "id": "@VARUS_channel:2391",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"neutral\", \"sarcasm\": false, \"intents\": [\"service\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 0,
+          "chunk_rows": 16,
+          "wall_seconds": 1.386,
+          "usage": {
+            "prompt_tokens": 984,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:4815",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": false, \"intents\": [\"service\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 0,
+          "chunk_rows": 16,
+          "wall_seconds": 1.386,
+          "usage": {
+            "prompt_tokens": 854,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:6427",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"positive\", \"sarcasm\": false, \"intents\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 0,
+          "chunk_rows": 16,
+          "wall_seconds": 1.386,
+          "usage": {
+            "prompt_tokens": 638,
+            "completion_tokens": 19
+          }
+        },
+        {
+          "id": "@VARUS_channel:6488",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": true, \"intents\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 0,
+          "chunk_rows": 16,
+          "wall_seconds": 1.386,
+          "usage": {
+            "prompt_tokens": 630,
+            "completion_tokens": 19
+          }
+        },
+        {
+          "id": "@VARUS_channel:6534",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": false, \"intents\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 0,
+          "chunk_rows": 16,
+          "wall_seconds": 1.386,
+          "usage": {
+            "prompt_tokens": 624,
+            "completion_tokens": 19
+          }
+        },
+        {
+          "id": "@VARUS_channel:6804",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"neutral\", \"sarcasm\": false, \"intents\": [\"availability\", \"price\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 0,
+          "chunk_rows": 16,
+          "wall_seconds": 1.386,
+          "usage": {
+            "prompt_tokens": 731,
+            "completion_tokens": 23
+          }
+        },
+        {
+          "id": "@VARUS_channel:7323",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": false, \"intents\": [\"availability\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 1,
+          "chunk_rows": 3,
+          "wall_seconds": 2.397,
+          "usage": {
+            "prompt_tokens": 1050,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:8401",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": true, \"intents\": [\"availability\", \"service\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 1,
+          "chunk_rows": 3,
+          "wall_seconds": 2.397,
+          "usage": {
+            "prompt_tokens": 999,
+            "completion_tokens": 23
+          }
+        },
+        {
+          "id": "@VARUS_channel:8690",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": false, \"intents\": [\"price\", \"service\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 1,
+          "chunk_rows": 3,
+          "wall_seconds": 2.397,
+          "usage": {
+            "prompt_tokens": 704,
+            "completion_tokens": 23
+          }
+        },
+        {
+          "id": "@atb_market_official:1657",
+          "task": "T2",
+          "content": "{\"relevant\": false, \"post_type\": \"promo\", \"brands\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 2,
+          "chunk_rows": 5,
+          "wall_seconds": 1.327,
+          "usage": {
+            "prompt_tokens": 602,
+            "completion_tokens": 18
+          }
+        },
+        {
+          "id": "@atb_market_official:2429",
+          "task": "T2",
+          "content": "{\"relevant\": false, \"post_type\": \"other\", \"brands\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 2,
+          "chunk_rows": 5,
+          "wall_seconds": 1.327,
+          "usage": {
+            "prompt_tokens": 501,
+            "completion_tokens": 18
+          }
+        },
+        {
+          "id": "@atb_market_official:2558",
+          "task": "T2",
+          "content": "{\"relevant\": false, \"post_type\": \"other\", \"brands\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 2,
+          "chunk_rows": 5,
+          "wall_seconds": 1.327,
+          "usage": {
+            "prompt_tokens": 496,
+            "completion_tokens": 18
+          }
+        },
+        {
+          "id": "@msuaaaa:4276",
+          "task": "T2",
+          "content": "{\"relevant\": false, \"post_type\": \"promo\", \"brands\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 2,
+          "chunk_rows": 5,
+          "wall_seconds": 1.327,
+          "usage": {
+            "prompt_tokens": 537,
+            "completion_tokens": 18
+          }
+        },
+        {
+          "id": "@silposilpo:2885",
+          "task": "T2",
+          "content": "{\"relevant\": false, \"post_type\": \"promo\", \"brands\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 2,
+          "chunk_rows": 5,
+          "wall_seconds": 1.327,
+          "usage": {
+            "prompt_tokens": 715,
+            "completion_tokens": 18
+          }
+        }
+      ]
+    },
+    "8": {
+      "batch_size": 8,
+      "asked": 24,
+      "scored": 24,
+      "parsed": 24,
+      "failed": null,
+      "calls": 4,
+      "max_chunk_per_task": {
+        "T1v2_with_post": 8,
+        "T2": 5
+      },
+      "wall_seconds": 36.472,
+      "seconds_per_row_wall": 1.52,
+      "chunks": [
+        {
+          "chunk": 0,
+          "task": "T1v2_with_post",
+          "rows": 8,
+          "ids": [
+            "@VARUS_channel:10231",
+            "@VARUS_channel:11879",
+            "@VARUS_channel:11892",
+            "@VARUS_channel:11972",
+            "@VARUS_channel:12009",
+            "@VARUS_channel:16726",
+            "@VARUS_channel:17041",
+            "@VARUS_channel:17704"
+          ],
+          "wall_seconds": 10.099
+        },
+        {
+          "chunk": 1,
+          "task": "T1v2_with_post",
+          "rows": 8,
+          "ids": [
+            "@VARUS_channel:18114",
+            "@VARUS_channel:20131",
+            "@VARUS_channel:2391",
+            "@VARUS_channel:4815",
+            "@VARUS_channel:6427",
+            "@VARUS_channel:6488",
+            "@VARUS_channel:6534",
+            "@VARUS_channel:6804"
+          ],
+          "wall_seconds": 12.58
+        },
+        {
+          "chunk": 2,
+          "task": "T1v2_with_post",
+          "rows": 3,
+          "ids": [
+            "@VARUS_channel:7323",
+            "@VARUS_channel:8401",
+            "@VARUS_channel:8690"
+          ],
+          "wall_seconds": 7.116
+        },
+        {
+          "chunk": 3,
+          "task": "T2",
+          "rows": 5,
+          "ids": [
+            "@atb_market_official:1657",
+            "@atb_market_official:2429",
+            "@atb_market_official:2558",
+            "@msuaaaa:4276",
+            "@silposilpo:2885"
+          ],
+          "wall_seconds": 6.677
+        }
+      ],
+      "rows": [
+        {
+          "id": "@VARUS_channel:10231",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": true, \"intents\": [\"service\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 0,
+          "chunk_rows": 8,
+          "wall_seconds": 1.262,
+          "usage": {
+            "prompt_tokens": 772,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:11879",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": false, \"intents\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 0,
+          "chunk_rows": 8,
+          "wall_seconds": 1.262,
+          "usage": {
+            "prompt_tokens": 705,
+            "completion_tokens": 19
+          }
+        },
+        {
+          "id": "@VARUS_channel:11892",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": false, \"intents\": [\"availability\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 0,
+          "chunk_rows": 8,
+          "wall_seconds": 1.262,
+          "usage": {
+            "prompt_tokens": 634,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:11972",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"neutral\", \"sarcasm\": false, \"intents\": [\"taste\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 0,
+          "chunk_rows": 8,
+          "wall_seconds": 1.262,
+          "usage": {
+            "prompt_tokens": 681,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:12009",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"positive\", \"sarcasm\": false, \"intents\": [\"taste\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 0,
+          "chunk_rows": 8,
+          "wall_seconds": 1.262,
+          "usage": {
+            "prompt_tokens": 680,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:16726",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"positive\", \"sarcasm\": false, \"intents\": [\"taste\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 0,
+          "chunk_rows": 8,
+          "wall_seconds": 1.262,
+          "usage": {
+            "prompt_tokens": 797,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:17041",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": true, \"intents\": [\"service\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 0,
+          "chunk_rows": 8,
+          "wall_seconds": 1.262,
+          "usage": {
+            "prompt_tokens": 759,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:17704",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": true, \"intents\": [\"price\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 0,
+          "chunk_rows": 8,
+          "wall_seconds": 1.262,
+          "usage": {
+            "prompt_tokens": 678,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:18114",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"positive\", \"sarcasm\": false, \"intents\": [\"service\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 1,
+          "chunk_rows": 8,
+          "wall_seconds": 1.572,
+          "usage": {
+            "prompt_tokens": 964,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:20131",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": false, \"intents\": [\"availability\", \"service\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 1,
+          "chunk_rows": 8,
+          "wall_seconds": 1.572,
+          "usage": {
+            "prompt_tokens": 650,
+            "completion_tokens": 23
+          }
+        },
+        {
+          "id": "@VARUS_channel:2391",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"neutral\", \"sarcasm\": false, \"intents\": [\"service\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 1,
+          "chunk_rows": 8,
+          "wall_seconds": 1.572,
+          "usage": {
+            "prompt_tokens": 984,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:4815",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": false, \"intents\": [\"service\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 1,
+          "chunk_rows": 8,
+          "wall_seconds": 1.572,
+          "usage": {
+            "prompt_tokens": 854,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:6427",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"positive\", \"sarcasm\": false, \"intents\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 1,
+          "chunk_rows": 8,
+          "wall_seconds": 1.572,
+          "usage": {
+            "prompt_tokens": 638,
+            "completion_tokens": 19
+          }
+        },
+        {
+          "id": "@VARUS_channel:6488",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": true, \"intents\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 1,
+          "chunk_rows": 8,
+          "wall_seconds": 1.572,
+          "usage": {
+            "prompt_tokens": 630,
+            "completion_tokens": 19
+          }
+        },
+        {
+          "id": "@VARUS_channel:6534",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": false, \"intents\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 1,
+          "chunk_rows": 8,
+          "wall_seconds": 1.572,
+          "usage": {
+            "prompt_tokens": 624,
+            "completion_tokens": 19
+          }
+        },
+        {
+          "id": "@VARUS_channel:6804",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"neutral\", \"sarcasm\": false, \"intents\": [\"availability\", \"price\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 1,
+          "chunk_rows": 8,
+          "wall_seconds": 1.572,
+          "usage": {
+            "prompt_tokens": 731,
+            "completion_tokens": 23
+          }
+        },
+        {
+          "id": "@VARUS_channel:7323",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": false, \"intents\": [\"availability\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 2,
+          "chunk_rows": 3,
+          "wall_seconds": 2.372,
+          "usage": {
+            "prompt_tokens": 1050,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:8401",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": true, \"intents\": [\"availability\", \"service\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 2,
+          "chunk_rows": 3,
+          "wall_seconds": 2.372,
+          "usage": {
+            "prompt_tokens": 999,
+            "completion_tokens": 23
+          }
+        },
+        {
+          "id": "@VARUS_channel:8690",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": false, \"intents\": [\"price\", \"service\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 2,
+          "chunk_rows": 3,
+          "wall_seconds": 2.372,
+          "usage": {
+            "prompt_tokens": 704,
+            "completion_tokens": 23
+          }
+        },
+        {
+          "id": "@atb_market_official:1657",
+          "task": "T2",
+          "content": "{\"relevant\": false, \"post_type\": \"promo\", \"brands\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 3,
+          "chunk_rows": 5,
+          "wall_seconds": 1.335,
+          "usage": {
+            "prompt_tokens": 602,
+            "completion_tokens": 18
+          }
+        },
+        {
+          "id": "@atb_market_official:2429",
+          "task": "T2",
+          "content": "{\"relevant\": false, \"post_type\": \"other\", \"brands\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 3,
+          "chunk_rows": 5,
+          "wall_seconds": 1.335,
+          "usage": {
+            "prompt_tokens": 501,
+            "completion_tokens": 18
+          }
+        },
+        {
+          "id": "@atb_market_official:2558",
+          "task": "T2",
+          "content": "{\"relevant\": false, \"post_type\": \"other\", \"brands\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 3,
+          "chunk_rows": 5,
+          "wall_seconds": 1.335,
+          "usage": {
+            "prompt_tokens": 496,
+            "completion_tokens": 18
+          }
+        },
+        {
+          "id": "@msuaaaa:4276",
+          "task": "T2",
+          "content": "{\"relevant\": false, \"post_type\": \"promo\", \"brands\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 3,
+          "chunk_rows": 5,
+          "wall_seconds": 1.335,
+          "usage": {
+            "prompt_tokens": 537,
+            "completion_tokens": 18
+          }
+        },
+        {
+          "id": "@silposilpo:2885",
+          "task": "T2",
+          "content": "{\"relevant\": false, \"post_type\": \"promo\", \"brands\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 3,
+          "chunk_rows": 5,
+          "wall_seconds": 1.335,
+          "usage": {
+            "prompt_tokens": 715,
+            "completion_tokens": 18
+          }
+        }
+      ]
+    },
+    "4": {
+      "batch_size": 4,
+      "asked": 24,
+      "scored": 24,
+      "parsed": 24,
+      "failed": null,
+      "calls": 7,
+      "max_chunk_per_task": {
+        "T1v2_with_post": 4,
+        "T2": 4
+      },
+      "wall_seconds": 44.875,
+      "seconds_per_row_wall": 1.87,
+      "chunks": [
+        {
+          "chunk": 0,
+          "task": "T1v2_with_post",
+          "rows": 4,
+          "ids": [
+            "@VARUS_channel:10231",
+            "@VARUS_channel:11879",
+            "@VARUS_channel:11892",
+            "@VARUS_channel:11972"
+          ],
+          "wall_seconds": 6.595
+        },
+        {
+          "chunk": 1,
+          "task": "T1v2_with_post",
+          "rows": 4,
+          "ids": [
+            "@VARUS_channel:12009",
+            "@VARUS_channel:16726",
+            "@VARUS_channel:17041",
+            "@VARUS_channel:17704"
+          ],
+          "wall_seconds": 6.764
+        },
+        {
+          "chunk": 2,
+          "task": "T1v2_with_post",
+          "rows": 4,
+          "ids": [
+            "@VARUS_channel:18114",
+            "@VARUS_channel:20131",
+            "@VARUS_channel:2391",
+            "@VARUS_channel:4815"
+          ],
+          "wall_seconds": 8.039
+        },
+        {
+          "chunk": 3,
+          "task": "T1v2_with_post",
+          "rows": 4,
+          "ids": [
+            "@VARUS_channel:6427",
+            "@VARUS_channel:6488",
+            "@VARUS_channel:6534",
+            "@VARUS_channel:6804"
+          ],
+          "wall_seconds": 6.869
+        },
+        {
+          "chunk": 4,
+          "task": "T1v2_with_post",
+          "rows": 3,
+          "ids": [
+            "@VARUS_channel:7323",
+            "@VARUS_channel:8401",
+            "@VARUS_channel:8690"
+          ],
+          "wall_seconds": 7.274
+        },
+        {
+          "chunk": 5,
+          "task": "T2",
+          "rows": 4,
+          "ids": [
+            "@atb_market_official:1657",
+            "@atb_market_official:2429",
+            "@atb_market_official:2558",
+            "@msuaaaa:4276"
+          ],
+          "wall_seconds": 5.493
+        },
+        {
+          "chunk": 6,
+          "task": "T2",
+          "rows": 1,
+          "ids": [
+            "@silposilpo:2885"
+          ],
+          "wall_seconds": 3.84
+        }
+      ],
+      "rows": [
+        {
+          "id": "@VARUS_channel:10231",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": true, \"intents\": [\"service\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 0,
+          "chunk_rows": 4,
+          "wall_seconds": 1.649,
+          "usage": {
+            "prompt_tokens": 772,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:11879",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": false, \"intents\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 0,
+          "chunk_rows": 4,
+          "wall_seconds": 1.649,
+          "usage": {
+            "prompt_tokens": 705,
+            "completion_tokens": 19
+          }
+        },
+        {
+          "id": "@VARUS_channel:11892",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": false, \"intents\": [\"availability\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 0,
+          "chunk_rows": 4,
+          "wall_seconds": 1.649,
+          "usage": {
+            "prompt_tokens": 634,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:11972",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"neutral\", \"sarcasm\": false, \"intents\": [\"taste\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 0,
+          "chunk_rows": 4,
+          "wall_seconds": 1.649,
+          "usage": {
+            "prompt_tokens": 681,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:12009",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"positive\", \"sarcasm\": false, \"intents\": [\"taste\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 1,
+          "chunk_rows": 4,
+          "wall_seconds": 1.691,
+          "usage": {
+            "prompt_tokens": 680,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:16726",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"positive\", \"sarcasm\": false, \"intents\": [\"taste\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 1,
+          "chunk_rows": 4,
+          "wall_seconds": 1.691,
+          "usage": {
+            "prompt_tokens": 797,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:17041",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": true, \"intents\": [\"service\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 1,
+          "chunk_rows": 4,
+          "wall_seconds": 1.691,
+          "usage": {
+            "prompt_tokens": 759,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:17704",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": true, \"intents\": [\"price\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 1,
+          "chunk_rows": 4,
+          "wall_seconds": 1.691,
+          "usage": {
+            "prompt_tokens": 678,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:18114",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"positive\", \"sarcasm\": false, \"intents\": [\"service\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 2,
+          "chunk_rows": 4,
+          "wall_seconds": 2.01,
+          "usage": {
+            "prompt_tokens": 964,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:20131",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": false, \"intents\": [\"availability\", \"service\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 2,
+          "chunk_rows": 4,
+          "wall_seconds": 2.01,
+          "usage": {
+            "prompt_tokens": 650,
+            "completion_tokens": 23
+          }
+        },
+        {
+          "id": "@VARUS_channel:2391",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"neutral\", \"sarcasm\": false, \"intents\": [\"service\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 2,
+          "chunk_rows": 4,
+          "wall_seconds": 2.01,
+          "usage": {
+            "prompt_tokens": 984,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:4815",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": false, \"intents\": [\"service\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 2,
+          "chunk_rows": 4,
+          "wall_seconds": 2.01,
+          "usage": {
+            "prompt_tokens": 854,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:6427",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"positive\", \"sarcasm\": false, \"intents\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 3,
+          "chunk_rows": 4,
+          "wall_seconds": 1.717,
+          "usage": {
+            "prompt_tokens": 638,
+            "completion_tokens": 19
+          }
+        },
+        {
+          "id": "@VARUS_channel:6488",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": true, \"intents\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 3,
+          "chunk_rows": 4,
+          "wall_seconds": 1.717,
+          "usage": {
+            "prompt_tokens": 630,
+            "completion_tokens": 19
+          }
+        },
+        {
+          "id": "@VARUS_channel:6534",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": false, \"intents\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 3,
+          "chunk_rows": 4,
+          "wall_seconds": 1.717,
+          "usage": {
+            "prompt_tokens": 624,
+            "completion_tokens": 19
+          }
+        },
+        {
+          "id": "@VARUS_channel:6804",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"neutral\", \"sarcasm\": false, \"intents\": [\"availability\", \"price\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 3,
+          "chunk_rows": 4,
+          "wall_seconds": 1.717,
+          "usage": {
+            "prompt_tokens": 731,
+            "completion_tokens": 23
+          }
+        },
+        {
+          "id": "@VARUS_channel:7323",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": false, \"intents\": [\"availability\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 4,
+          "chunk_rows": 3,
+          "wall_seconds": 2.425,
+          "usage": {
+            "prompt_tokens": 1050,
+            "completion_tokens": 20
+          }
+        },
+        {
+          "id": "@VARUS_channel:8401",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": true, \"intents\": [\"availability\", \"service\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 4,
+          "chunk_rows": 3,
+          "wall_seconds": 2.425,
+          "usage": {
+            "prompt_tokens": 999,
+            "completion_tokens": 23
+          }
+        },
+        {
+          "id": "@VARUS_channel:8690",
+          "task": "T1v2_with_post",
+          "content": "{\"sentiment\": \"negative\", \"sarcasm\": false, \"intents\": [\"price\", \"service\"]}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 4,
+          "chunk_rows": 3,
+          "wall_seconds": 2.425,
+          "usage": {
+            "prompt_tokens": 704,
+            "completion_tokens": 23
+          }
+        },
+        {
+          "id": "@atb_market_official:1657",
+          "task": "T2",
+          "content": "{\"relevant\": false, \"post_type\": \"promo\", \"brands\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 5,
+          "chunk_rows": 4,
+          "wall_seconds": 1.373,
+          "usage": {
+            "prompt_tokens": 602,
+            "completion_tokens": 18
+          }
+        },
+        {
+          "id": "@atb_market_official:2429",
+          "task": "T2",
+          "content": "{\"relevant\": false, \"post_type\": \"other\", \"brands\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 5,
+          "chunk_rows": 4,
+          "wall_seconds": 1.373,
+          "usage": {
+            "prompt_tokens": 501,
+            "completion_tokens": 18
+          }
+        },
+        {
+          "id": "@atb_market_official:2558",
+          "task": "T2",
+          "content": "{\"relevant\": false, \"post_type\": \"other\", \"brands\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 5,
+          "chunk_rows": 4,
+          "wall_seconds": 1.373,
+          "usage": {
+            "prompt_tokens": 496,
+            "completion_tokens": 18
+          }
+        },
+        {
+          "id": "@msuaaaa:4276",
+          "task": "T2",
+          "content": "{\"relevant\": false, \"post_type\": \"promo\", \"brands\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 5,
+          "chunk_rows": 4,
+          "wall_seconds": 1.373,
+          "usage": {
+            "prompt_tokens": 537,
+            "completion_tokens": 18
+          }
+        },
+        {
+          "id": "@silposilpo:2885",
+          "task": "T2",
+          "content": "{\"relevant\": false, \"post_type\": \"promo\", \"brands\": []}",
+          "finish_reason": "stop",
+          "parsed": true,
+          "parse_failure": null,
+          "chunk": 6,
+          "chunk_rows": 1,
+          "wall_seconds": 3.84,
+          "usage": {
+            "prompt_tokens": 715,
+            "completion_tokens": 18
+          }
+        }
+      ]
+    }
+  },
+  "control": {
+    "identical": true,
+    "why": "every reply is byte-identical to the batch-1 arm",
+    "differing_ids": [],
+    "first_difference": null
+  },
+  "batch_1_regression": {
+    "against": "serving_5b.json",
+    "smoke_step": "5b smoke",
+    "smoke_batch_size": 1,
+    "compared": 24,
+    "only_in_smoke": [],
+    "only_in_ladder": [],
+    "fields": [
+      "finish_reason",
+      "parsed",
+      "prompt_tokens",
+      "completion_tokens"
+    ],
+    "unchanged": 24,
+    "moved": {},
+    "limit": "NOT byte-for-byte: the 5b.1 smoke record stores no reply text, so this compares the four fields it does store. Byte-identity is measured inside this run, arm by arm, against the batch-1 arm whose replies ARE recorded."
+  },
+  "verdicts": {
+    "16": {
+      "identical": true,
+      "why": "every reply is byte-identical to the batch-1 arm",
+      "differing_ids": [],
+      "first_difference": null
+    },
+    "8": {
+      "identical": true,
+      "why": "every reply is byte-identical to the batch-1 arm",
+      "differing_ids": [],
+      "first_difference": null
+    },
+    "4": {
+      "identical": true,
+      "why": "every reply is byte-identical to the batch-1 arm",
+      "differing_ids": [],
+      "first_difference": null
+    }
+  },
+  "selection": {
+    "rule": "the largest N in {16, 8, 4} whose carve replies are byte-identical to the batch-1 arm; if none is identical the candidate is 8 (SPEC amendment 3.11 (2), pre-registered 2026-08-06, before any of these rows was generated)",
+    "ladder": [
+      16,
+      8,
+      4
+    ],
+    "identical_to_batch_1": [
+      16,
+      8,
+      4
+    ],
+    "candidate": 16,
+    "by": "largest-identical",
+    "exercised_max_chunk": {
+      "16": {
+        "T1v2_with_post": 16,
+        "T2": 5
+      },
+      "8": {
+        "T1v2_with_post": 8,
+        "T2": 5
+      },
+      "4": {
+        "T1v2_with_post": 4,
+        "T2": 4
+      }
+    }
+  },
+  "note": "A PRE-FILTER, NOT A GATE. The rows are the arm's own held-out carve — training data — so nothing here is a gate number and no frozen test file was opened. The '1-repeat' arm is the control: if it is not identical to '1', this stack is not deterministic run to run and no verdict below it means anything. wall_seconds per row is the chunk's wall divided by its rows, which is the only per-row latency a batch has. max_chunk_per_task says what each N actually exercised: the carve holds 5 T2 rows, so no arm above 5 batches more than 5 of them."
+}

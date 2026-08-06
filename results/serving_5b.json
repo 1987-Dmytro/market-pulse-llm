@@ -438,5 +438,21 @@
     "floor_usd_per_second": 7.361111111111111e-05,
     "floor_basis": "0.5 x the pod's posted $0.53/h — on a pod the derived rate lands AT the machine's rate, so the guard catches an unsettled balance (~0), not a rate that is merely lower than serverless would be",
     "above_pod_floor": true
+  },
+  "adopted": {
+    "decided_at": "2026-08-06T17:29:39+00:00",
+    "batch_size": 1,
+    "measured_at_batch_size": 16,
+    "adopted": false,
+    "why": "SPEC amendment 3.11 (2) adopts N only if every 4.5h2-passed gate stays passing. Those are G1b, G1d, G1e. G1b is the sarcasm_holdout slice and this run scored 16 of 108 rows, so the rule has no input for it — an unmeasured gate is not a passing one. A failed measurement fixes serving at batch 1 permanently and returns the money question to the operator. One attempt, no retry, no second N.",
+    "rows": 758,
+    "wall_seconds": 3085.447,
+    "seconds_per_row": 4.071,
+    "usd_per_hour": 0.53,
+    "usd_per_1000_rows": 0.5993,
+    "cold_start_seconds": 46.229,
+    "usd_per_pass": 0.4611,
+    "source": "results/batch_5b2_verdict.json — the batch measurement FAILED. These are the batch-1 numbers of results/parity_5b_a.json, which is what production still is.",
+    "note": "seconds_per_row is the 5b.1 paid run's whole wall over its rows, so it carries the handshake call on an already-warm worker and no cold start; usd_per_pass adds the cold start once, which is what a stop-after pod pays per pass. SPEC amendment 3.11 (2) fixes serving at batch 1 permanently on a failed measurement — only a new pre-registered measurement may move it."
   }
 }

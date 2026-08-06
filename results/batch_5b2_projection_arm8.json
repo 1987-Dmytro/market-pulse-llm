@@ -1,0 +1,26 @@
+{
+  "projection": {
+    "inputs": {
+      "seconds_per_row": 1.491,
+      "rows": 758,
+      "runs": 1,
+      "usd_per_second": 0.00014722,
+      "cold_start_seconds": 46.229,
+      "merge_usd": 0.0,
+      "spent_usd": 1.7069
+    },
+    "seconds_per_run": 1176.407,
+    "scored_usd": 0.1732,
+    "merge_usd": 0.0,
+    "projected_usd": 0.1732,
+    "spent_usd": 1.7069,
+    "total_usd": 1.8801
+  },
+  "runs": 1,
+  "abort_rule": "if the smoke projects the pair over $4, stop before the paid run and report projections instead; a failed or aborted pair closes the merge question in favour of A, no retry (SPEC amendment 3.11 (2))",
+  "over_cap": false,
+  "step": "5b serving parity",
+  "testset_version": "v4",
+  "cap_usd": 4.0,
+  "written_at": "2026-08-06T17:30:23+00:00"
+}

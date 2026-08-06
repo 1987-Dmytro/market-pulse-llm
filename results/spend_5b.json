@@ -25,6 +25,18 @@
       "balance": 17.1656462108,
       "step_spent_usd": 1.2324,
       "note": "5b.1: config A scored once on the US-TX-1 A6000 pod, 758/758 rows, pod deleted and verified by listing"
+    },
+    {
+      "at": "2026-08-06T17:00:10+00:00",
+      "balance": 16.9309076026,
+      "step_spent_usd": 1.4671,
+      "note": "5b.2 staging + carve ladder (4 arms + repeat control)"
+    },
+    {
+      "at": "2026-08-06T17:25:49+00:00",
+      "balance": 16.6911280943,
+      "step_spent_usd": 1.7069,
+      "note": "5b.2: test v4 at batch 16 — OOM on sarcasm_holdout after 666/758 rows, measurement failed, pod deleted and verified by listing"
     }
   ],
   "gpu_note": "RunPod account balance read before the first pod of 5b. Step spend = this anchor minus the balance now, enforced against $4.00. The SPEC amendment 3.4 (4) phase cap is enforced separately, against results/spend_phase4.json, and neither anchor may be regenerated."
