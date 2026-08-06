@@ -2319,7 +2319,10 @@ copied from the 5a report.
 ## Deliverable 3 — the widened scan and the combined ledger
 
 `results/discovery_5a1.json`, written at `03915ad` (both scripts that produced it verified
-byte-identical to that commit). 23 queries over the four new themes plus 7 seed handles,
+byte-identical to that commit). The carried record is untouched — `git log --oneline --
+results/discovery_5a.json` still shows `15723c1` as its last and only commit, which is what
+"the old themes are NOT re-scanned" means in evidence rather than in prose. 23 queries over the
+four new themes plus 7 seed handles,
 **114 channels checked here**, 66 carried from `results/discovery_5a.json` unmeasured —
 `scan_complete: true`, **no FloodWait at any point**, 2 windows truncated at the 1200-message
 cap. The three 2026-08-04 themes were not re-scanned; `themes_to_scan` reads what is already
@@ -2366,13 +2369,30 @@ Three things the table says that a total would have hidden:
   `@mameni_recepti` (90,463 · 63 posts/week) were never going to surface — the research note's
   hypothesis, measured.
 - **health_fitness, authorised against the team lead's recommendation, is not the worst theme.**
-  81,490 subscribers, third among searched themes, and **17 comment-capable channels — more
-  than any theme except cooking_recipes**. The recommendation would have dropped it. This is
-  the ledger doing the job the ruling assigned it.
+  81,490 subscribers, third among searched themes, **17 with a discussion group — and 10 of
+  those also posted in the window, second only to cooking_recipes' 12**. The two counts are
+  different units and the table's column is the first one: a discussion group is the *capacity*
+  to carry comments, and a silent channel with a group carries none. The recommendation would
+  have dropped this theme; the ledger it was authorised for says keep it.
 - **food_quality is the smallest by an order of magnitude, and none of it can carry comments.**
   6 candidates, 3,387 subscribers, 0 discussion groups: the regional Держпродспоживслужба
   offices are government broadcast channels. The operator's own theme, priced by the same
   instrument — which is the ledger doing that job in the other direction.
+
+**All 180 counted, zero rejected — which is a fact about the rule, not about the channels.**
+`COUNTED = ("usable", "posts-only")` is 5a's, unchanged, and both verdicts count toward the sum;
+`entry_check` rejects only a handle that fails to resolve or one Telegram itself flags `scam` /
+`fake`. The «накрученные склады» the research note expected to be filtered out are counted if
+they resolve, and 114 fresh channels produced not one rejection. A ledger row is "this channel
+exists and can be collected from", never "this channel is worth entering" — that judgement is
+the track-R gate's and the operator's.
+
+**FloodWait policy stays per script and is named in each.** Discovery aborts-and-keeps
+(`scripts/entry_check.py:187`'s pattern, now via F1: stop, keep the rows already measured, print
+the wait). The census sleeps and retries (`scripts/backfill.py`'s policy, `FLOOD_RETRIES = 3`),
+because its job is nine bounded requests and a dropped batch would put 100 ids in `not_fetched`
+and make the census look like a measurement with a hole in it. Neither script blends the two,
+and each docstring says which one it follows and why.
 
 And the caveat that is a number, not a footnote: **the two largest candidates are dormant.**
 `@itsmamix` (280,895, silent for four weeks) and `@tretyakovaele` (244,639, one post in 28 days)

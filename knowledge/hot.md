@@ -49,8 +49,8 @@ what a scan can reach. **The coverage-target ruling is the operator's, on this l
 **What the per-theme table says** (`ledger.per_theme`, priced per `found_by` tag): **7 handed
 seed handles (411,399) beat six of the seven searched themes** — `@recepti` 115,783 at 50
 posts/week could never surface through a ranked, capped search. **health_fitness, authorised
-against the team lead's recommendation, is not the worst theme**: 81,490 subscribers and **17
-comment-capable channels, more than any theme but cooking_recipes**. **food_quality is the
+against the team lead's recommendation, is not the worst theme**: 81,490 subscribers, **17 with
+a discussion group, 10 of which also post — second only to cooking_recipes' 12**. **food_quality is the
 smallest and none of it can carry comments**: 6 candidates, 3,387 subscribers, **0** discussion
 groups — the regional Держпродспоживслужба offices are broadcast-only. The ledger priced a theme
 the recommendation would have dropped and a theme the operator added, in opposite directions.
