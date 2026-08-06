@@ -208,18 +208,28 @@ the operator's word BEFORE any labeling; one LLM pass over ~6k posts
 (~$0.2–0.5) with its own pre-registered gate (sealed hundred of posts,
 operator session); comments inherit the category via parent_msg_id; the
 fine-tuned comment model is untouched.
-(4) **Channels & coverage:** the loop launches on the current five registry
-channels; discovery (mothers/kids, healthy-lifestyle, baby-food themes —
-authorised 2026-08-04) produces candidates only, and every new channel
+(4) **Channels & coverage:** the loop launches on the current **four** registry
+channels (correction 2026-08-06: this clause said "five" — stale at the time
+of writing; @znizhki_ua was removed 2026-07-27, ADR `znizhki-ua-removed`, and
+`config/registry.yaml` held four for a week before 3.11 was drafted. A
+team-lead preflight fault, recorded, not smoothed over);
+discovery (mothers/kids, healthy-lifestyle, baby-food themes —
+authorised 2026-08-04; **expanded 2026-08-06 at the 5a acceptance,
+operator ruling on docs/RESEARCH-5a1-themes.md:** + cooking/recipes,
++ supermarket discounts/promos, + health/fitness — authorised AGAINST
+the team-lead recommendation, the ledger prices it — + food-quality /
+falsification watch, + direct seed-handle checks from the research
+note) produces candidates only, and every new channel
 enters through the track-R entry gate before its rows reach train or
 production aggregates. **Coverage target (operator, 2026-08-05): the
 monitored portfolio aims at ≥10,000,000 summed subscribers.** Discovery
 keeps a coverage ledger: per-candidate subscriber counts, the current
-five's sum, and the gap to target — with two caveats printed beside the
+four's sum, and the gap to target — with two caveats printed beside the
 ledger: summed subscribers ≠ unique reach (overlap is unmeasurable from
 the API), and subscribers ≠ comment flow (rows are born in discussion
-groups). Widening discovery beyond the three themes is an operator
-decision taken on the ledger's gap.
+groups). Widening discovery beyond the authorised themes — and the
+coverage-target ruling itself — are operator decisions taken on the
+combined ledger (next reading: after the 5a.1 scan).
 (5) **Brand normalization v2** (declensions + homoglyphs) is registered
 BESIDE v1; historical dumps are re-scored under v2 at $0; every number
 names its normalization version; gate history under v1 is not rewritten.
