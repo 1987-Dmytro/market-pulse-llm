@@ -971,3 +971,157 @@ def test_the_preflight_reads_the_provenance_the_trainer_writes_today(tmp_path):
     assert training["added_ids"] == record["added_ids"]
     assert training["n_train"] == record["n_train"]
     assert training["prompt_revision_sha256"] == record["prompt_revision_sha256"]
+
+
+# --- Phase 5b: the endpoint backend -----------------------------------------
+#
+# The third backend is a *client* swap and nothing else: the rendering, the parser and
+# the record builder stay 4.5h2's. What is checked here is the argument surface that
+# decides which half of the pre-registered pair a run is, and the one record shape that
+# could quietly turn a merged fine-tune into a gate anchor.
+
+
+def endpoint_args(*extra):
+    return ["--model", GEMMA, "--backend", "endpoint", "--testset-version", "v4", *extra]
+
+
+def refuses(capsys, argv, message):
+    """argparse writes its refusal to stderr and exits 2 — a bare SystemExit would let a
+    typo in the argv pass as the check this test claims to be."""
+    with pytest.raises(SystemExit):
+        runner.main(argv)
+    captured = capsys.readouterr()
+    assert message in captured.err + captured.out, captured.err + captured.out
+
+
+def test_an_endpoint_run_needs_an_endpoint(capsys):
+    refuses(
+        capsys,
+        endpoint_args("--serving-config", "A", "--batch-size", "1"),
+        "--backend endpoint needs --endpoint-id",
+    )
+
+
+def test_an_endpoint_run_needs_to_name_its_half_of_the_pair(capsys):
+    refuses(
+        capsys,
+        endpoint_args("--endpoint-id", "ep-1", "--batch-size", "1"),
+        "an unnamed half is not a pair",
+    )
+
+
+def test_an_endpoint_id_without_the_backend_is_refused(capsys):
+    refuses(
+        capsys,
+        ["--model", GEMMA, "--endpoint-id", "ep-1", "--smoke"],
+        "--endpoint-id is a serving run",
+    )
+
+
+def test_the_pair_is_scored_at_batch_one():
+    """Greedy is not batch-invariant on this stack, and SPEC amendment 3.11 (2) fixes 1."""
+    with pytest.raises(SystemExit, match="scored at batch 1"):
+        runner.main(endpoint_args("--endpoint-id", "ep-1", "--serving-config", "A"))
+
+
+def test_config_a_is_the_unmerged_adapter_and_must_name_it(capsys):
+    refuses(
+        capsys,
+        endpoint_args("--endpoint-id", "ep-1", "--serving-config", "A", "--batch-size", "1"),
+        "--serving-config A is the unmerged adapter",
+    )
+
+
+def test_config_b_refuses_an_adapter_it_cannot_load(capsys, tmp_path):
+    refuses(
+        capsys,
+        endpoint_args(
+            "--endpoint-id",
+            "ep-1",
+            "--serving-config",
+            "B",
+            "--batch-size",
+            "1",
+            "--adapter",
+            str(tmp_path),
+            "--arm",
+            "without-plast",
+        ),
+        "config B has no adapter to load",
+    )
+
+
+def test_config_b_must_carry_the_merged_artifacts_own_provenance(capsys):
+    refuses(
+        capsys,
+        endpoint_args("--endpoint-id", "ep-1", "--serving-config", "B", "--batch-size", "1"),
+        "the artifact must name itself",
+    )
+
+
+class TimedClient:
+    def usage_dict(self):
+        return {}
+
+    def timing(self):
+        return {"calls": 758, "worker_seconds": 2100.0}
+
+
+def serving_args(config, **kwargs):
+    defaults = {"endpoint_id": "ep-9", "serving_config": config}
+    return type("Args", (), defaults | kwargs)
+
+
+MERGED = {
+    "adapter_sha256": "b3ca6308",
+    "merged_sha256": "9f9f9f",
+    "adapter_path": "results/train/45h2-arm-a/adapter",
+    "merge": "peft merge_and_unload on a bf16 CPU load",
+    "tools": {"peft": "0.18.0"},
+}
+
+
+def test_a_merged_config_b_record_can_never_read_as_a_zero_shot_anchor():
+    """`records.anchor` narrows on train_sources — a merged fine-tune filed as "no
+    training data" would hand a model itself as its own baseline (records.py)."""
+    from market_pulse import records
+
+    base = {"train_sources": records.ANCHOR_TRAIN_SOURCES, "testset_version": "v4"}
+    config = runner.serving_config(
+        base, serving_args("B"), {"merge_state": "merged-requantized"}, MERGED, TimedClient()
+    )
+    assert config["train_sources"] != records.ANCHOR_TRAIN_SOURCES
+    assert config["fine_tune"]["adapter_sha256"] == "b3ca6308"
+    assert config["fine_tune"]["merged_sha256"] == "9f9f9f"
+    assert config["backend"] == "endpoint"
+
+
+def test_config_a_keeps_the_fine_tune_block_the_pod_run_built():
+    base = {
+        "train_sources": {"comments_train_tax2.jsonl": 895},
+        "fine_tune": {"arm": "without-plast", "adapter_sha256": "b3ca6308"},
+        "testset_version": "v4",
+    }
+    config = runner.serving_config(
+        base, serving_args("A"), {"merge_state": "unmerged-adapter"}, None, TimedClient()
+    )
+    assert config["fine_tune"] == base["fine_tune"]
+    assert config["train_sources"] == base["train_sources"]
+
+
+def test_the_serving_block_carries_the_endpoint_the_worker_and_the_billed_seconds():
+    config = runner.serving_config(
+        {"train_sources": {}, "testset_version": "v4"},
+        serving_args("A"),
+        {"merge_state": "unmerged-adapter", "adapter_sha256": "b3ca6308", "runtime": {"gpu": "x"}},
+        None,
+        TimedClient(),
+    )
+    assert config["serving"]["endpoint_id"] == "ep-9"
+    assert config["serving"]["config"] == "A"
+    assert config["serving"]["timing"]["worker_seconds"] == 2100.0
+    assert config["serving"]["spend_ledger"] == "results/spend_5b.json"
+    # the worker's own account travels with the record, minus the runtime block that
+    # `local_config` already stores under its own key
+    assert "runtime" not in config["serving"]["worker"]
+    assert config["serving"]["worker"]["adapter_sha256"] == "b3ca6308"

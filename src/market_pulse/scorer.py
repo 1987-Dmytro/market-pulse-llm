@@ -408,6 +408,85 @@ def select_arm_by(
     }
 
 
+SERVING_SELECTION_RULE = (
+    "B is adopted only if every 4.5h2-passed gate stays passing on B and no gate head drops"
+    " more than 0.005 vs A; any tie or doubt ships A — the safe default (SPEC amendment"
+    " 3.11 (2), operator 2026-08-06, committed before either config was scored)"
+)
+
+
+def select_serving_config(
+    a: dict,
+    b: dict,
+    *,
+    must_stay_passing: dict,
+    rule: str = SERVING_SELECTION_RULE,
+    tolerance: float = SYNTHETIC_HEAD_TOLERANCE,
+    names: tuple[str, str] = ("A", "B"),
+) -> dict:
+    """Phase 5b's merge decision, applied — not re-argued. Sibling of :func:`select_arm_by`.
+
+    Not a pivot rule and deliberately a second function: 4.5h2 asked "did the added
+    data buy the head we care about", 5b asks "did merging cost anything anywhere".
+    There is no head B has to win, so ``select_arm_by``'s ``strictly_higher`` half has
+    no meaning here, and forcing it would make a tie adopt B when SPEC says a tie
+    ships A.
+
+    ``a`` and ``b`` are the two configs' gated values in :func:`gate_thresholds`'s
+    shape, G1b flattened to its fix-rate. ``must_stay_passing`` maps each gate that
+    passed at 4.5h2 to B's verdict for it — derived from the recorded verdicts, never
+    typed, so a gate that is added later cannot fall outside the rule. A gate in
+    ``must_stay_passing`` that B did not report is a refusal: an unmeasured gate is
+    not a passing one.
+
+    Everything the rule read is returned beside the verdict, because there is no
+    second paid run in which to re-do the arithmetic.
+    """
+    if set(a) != set(b):
+        raise ValueError(f"the two configs report different heads: {sorted(a)} vs {sorted(b)}")
+    if not must_stay_passing:
+        raise ValueError(
+            "no gate is required to stay passing — the rule's first half needs at least one,"
+            " and an empty requirement would adopt B on the head deltas alone"
+        )
+    unknown = sorted(gate for gate, verdict in must_stay_passing.items() if verdict is None)
+    if unknown:
+        raise ValueError(f"B reports no verdict for {unknown} — an unmeasured gate is not passing")
+    # Rounded exactly as `select_arm_by` rounds, and for the same last-bit reason: a head
+    # lower by precisely the tolerance is not a drop of "more than" it.
+    deltas = {
+        head: round(_overall(b[head]) - _overall(a[head]), BAR_PRECISION) for head in sorted(a)
+    }
+    drops = {head: delta for head, delta in deltas.items() if delta < -tolerance}
+    still_passing = {gate: bool(verdict) for gate, verdict in sorted(must_stay_passing.items())}
+    lost = sorted(gate for gate, passing in still_passing.items() if not passing)
+    adopt = not lost and not drops
+    return {
+        "rule": rule,
+        "tolerance": tolerance,
+        "configs": list(names),
+        "must_stay_passing": still_passing,
+        "gates_lost": lost,
+        "head_deltas": deltas,
+        "drops": drops,
+        "adopt_b": adopt,
+        "selected": names[1] if adopt else names[0],
+        "why": (
+            "every required gate stays passing and no head drops more than the tolerance"
+            if adopt
+            else "; ".join(
+                filter(
+                    None,
+                    [
+                        f"gates lost on B: {lost}" if lost else "",
+                        f"heads dropped more than {tolerance}: {drops}" if drops else "",
+                    ],
+                )
+            )
+        ),
+    }
+
+
 def _overall(value):
     """A head's single number: G1a reports per language beside its overall."""
     return value["overall"] if isinstance(value, dict) else value

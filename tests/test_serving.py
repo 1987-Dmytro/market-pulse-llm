@@ -1,0 +1,215 @@
+"""The 5b endpoint client: the transport, the guard, and the projection the abort rule reads.
+
+Nothing here touches the network — `_post` is replaced by a stub that returns the RunPod job
+payloads the real endpoint returns. What is being checked is the part that decides a number:
+that a mispaired batch is a refusal rather than a silent relabelling, that a worker serving
+the wrong configuration cannot be scored, and that the projection is arithmetic anyone can
+redo on paper.
+"""
+
+import pytest
+from market_pulse import serving
+from market_pulse.zero_shot import ApiError
+
+
+def reply(content: str = '{"ok": true}', prompt: int = 11, completion: int = 7) -> dict:
+    return {
+        "content": content,
+        "finish_reason": "stop",
+        "cost": 0.0,
+        "usage": {"prompt_tokens": prompt, "completion_tokens": completion},
+        "generation_id": None,
+    }
+
+
+def job(output: dict, *, execution_ms: int = 3000, delay_ms: int = 250) -> dict:
+    return {
+        "id": "job-1",
+        "status": "COMPLETED",
+        "executionTime": execution_ms,
+        "delayTime": delay_ms,
+        "workerId": "worker-a",
+        "output": output,
+    }
+
+
+class Transport:
+    """One canned answer per call, and every request it was asked."""
+
+    def __init__(self, *answers):
+        self.answers, self.seen = list(answers), []
+
+    def __call__(self, url, key, payload, timeout):
+        self.seen.append((url, payload))
+        answer = self.answers.pop(0)
+        if isinstance(answer, Exception):
+            raise answer
+        return answer
+
+
+@pytest.fixture
+def client(monkeypatch):
+    def make(*answers, **kwargs):
+        transport = Transport(*answers)
+        monkeypatch.setattr(serving, "_post", transport)
+        monkeypatch.setattr(serving, "POLL_SECONDS", 0)
+        instance = serving.EndpointClient("ep-1", "key", **kwargs)
+        instance.transport = transport
+        return instance
+
+    return make
+
+
+# --- the transport ----------------------------------------------------------
+
+
+def test_batch_returns_one_reply_per_text_in_order(client):
+    endpoint = client(job({"replies": [reply("a"), reply("b")], "n": 2}))
+    replies = endpoint.batch("T1", ["one", "two"])
+    assert [r["content"] for r in replies] == ["a", "b"]
+    assert endpoint.usage == {"prompt_tokens": 22, "completion_tokens": 14}
+    assert endpoint.timing() == {
+        "calls": 1,
+        "worker_seconds": 3.0,
+        "queue_seconds": 0.25,
+        "seconds_per_call": 3.0,
+        "worker_ids": ["worker-a"],
+    }
+
+
+def test_batch_sends_the_task_texts_and_posts_unrendered(client):
+    """The worker renders. A client that built the prompt would measure two stacks."""
+    endpoint = client(job({"replies": [reply()]}))
+    endpoint.batch("T2", ["row"], [{"post_text": "parent"}])
+    _, payload = endpoint.transport.seen[0]
+    assert payload == {
+        "input": {
+            "op": "batch",
+            "task": "T2",
+            "texts": ["row"],
+            "posts": [{"post_text": "parent"}],
+        }
+    }
+
+
+def test_batch_refuses_a_short_answer(client):
+    """Two texts, one reply: every label after the gap belongs to the wrong row."""
+    endpoint = client(job({"replies": [reply()], "n": 1}))
+    with pytest.raises(ApiError, match="mispaired"):
+        endpoint.batch("T1", ["one", "two"])
+
+
+def test_batch_refuses_mismatched_posts(client):
+    endpoint = client(job({"replies": []}))
+    with pytest.raises(ValueError, match="1 parent posts for 2 rows"):
+        endpoint.batch("T1", ["one", "two"], [{"post_text": "p"}])
+
+
+def test_a_failed_job_is_an_error_not_an_empty_output(client):
+    endpoint = client(job({"replies": []}) | {"status": "FAILED"})
+    with pytest.raises(ApiError, match="ended FAILED"):
+        endpoint.batch("T1", ["one"])
+
+
+def test_an_in_progress_job_is_polled_to_completion(client):
+    endpoint = client(
+        {"id": "job-9", "status": "IN_PROGRESS"},
+        job({"replies": [reply()]}) | {"id": "job-9"},
+    )
+    assert len(endpoint.batch("T1", ["one"])) == 1
+    assert endpoint.transport.seen[1][0].endswith("/status/job-9")
+
+
+def test_the_phase_gets_one_attempt_by_default(client):
+    """SPEC amendment 3.11 (2): no retry. A client that re-asked would hide a failed run."""
+    endpoint = client(ApiError(503, "cold"), job({"replies": [reply()]}))
+    with pytest.raises(ApiError, match="503"):
+        endpoint.batch("T1", ["one"])
+    assert len(endpoint.transport.seen) == 1
+
+
+def test_retries_are_available_but_opt_in(client, monkeypatch):
+    monkeypatch.setattr(serving.time, "sleep", lambda _s: None)
+    endpoint = client(ApiError(503, "cold"), job({"replies": [reply()]}), retries=1)
+    assert len(endpoint.batch("T1", ["one"])) == 1
+
+
+def test_a_non_retryable_status_is_never_retried(client, monkeypatch):
+    monkeypatch.setattr(serving.time, "sleep", lambda _s: None)
+    endpoint = client(ApiError(401, "bad key"), job({"replies": [reply()]}), retries=3)
+    with pytest.raises(ApiError, match="401"):
+        endpoint.batch("T1", ["one"])
+    assert len(endpoint.transport.seen) == 1
+
+
+# --- the guard --------------------------------------------------------------
+
+SERVED = {
+    "serving_config": "A",
+    "merge_state": "unmerged-adapter",
+    "adapter_sha256": "b3ca6308",
+    "quantization": {"load_in_4bit": True},
+}
+
+
+def test_assert_serving_passes_the_configuration_through():
+    assert serving.assert_serving(SERVED | {"extra": 1}, SERVED) == SERVED | {"extra": 1}
+
+
+@pytest.mark.parametrize(
+    "wrong",
+    [
+        {"adapter_sha256": "d8ef92a5"},  # the OTHER 4.5h2 arm — the realistic mix-up
+        {"merge_state": "merged-requantized"},
+        {"serving_config": "B"},
+        {"quantization": {"load_in_4bit": True, "bnb_4bit_quant_type": "fp4"}},
+    ],
+)
+def test_assert_serving_refuses_a_worker_that_is_not_the_registered_config(wrong):
+    with pytest.raises(SystemExit, match="not serving the registered configuration"):
+        serving.assert_serving(SERVED | wrong, SERVED)
+
+
+def test_assert_serving_refuses_a_worker_that_cannot_say_what_it_loaded():
+    """An absent field is a refusal: an endpoint that names nothing is not a configuration."""
+    with pytest.raises(SystemExit, match="adapter_sha256: worker says '<absent>'"):
+        serving.assert_serving({k: v for k, v in SERVED.items() if k != "adapter_sha256"}, SERVED)
+
+
+# --- the projection ---------------------------------------------------------
+#
+#   per run   = 10 rows x 3.0 s + 100 s cold start          = 130 s
+#   scored    = 130 s x 2 runs x $0.001/s                   = $0.26
+#   total     = $0.26 + $0.50 merge                         = $0.76
+def test_project_pair_usd_matches_the_hand_computed_fixture():
+    projection = serving.project_pair_usd(
+        seconds_per_row=3.0,
+        rows=10,
+        runs=2,
+        usd_per_second=0.001,
+        cold_start_seconds=100,
+        merge_usd=0.5,
+    )
+    assert projection["seconds_per_run"] == 130.0
+    assert projection["scored_usd"] == pytest.approx(0.26)
+    assert projection["projected_usd"] == pytest.approx(0.76)
+
+
+def test_project_pair_usd_reports_every_input_it_used():
+    """A projection whose inputs are not in the record cannot be re-derived."""
+    projection = serving.project_pair_usd(
+        seconds_per_row=2.0, rows=5, runs=2, usd_per_second=0.002, cold_start_seconds=0
+    )
+    assert projection["inputs"] == {
+        "seconds_per_row": 2.0,
+        "rows": 5,
+        "runs": 2,
+        "usd_per_second": 0.002,
+        "cold_start_seconds": 0,
+        "merge_usd": 0.0,
+    }
+    assert projection["projected_usd"] == pytest.approx(0.04)
+
+
+def test_endpoint_url_is_the_runpod_v2_shape():
+    assert serving.endpoint_url("ep-1", "runsync") == "https://api.runpod.ai/v2/ep-1/runsync"

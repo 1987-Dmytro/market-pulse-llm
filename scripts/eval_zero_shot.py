@@ -40,7 +40,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))  # the package is not pip-installed
 
-from market_pulse import local_llm, parents, prompts, records, scorer, zero_shot  # noqa: E402
+from market_pulse import local_llm, parents, prompts, records, scorer, serving, zero_shot  # noqa: E402
 from market_pulse.brands import watchlist_aliases  # noqa: E402
 from market_pulse.registry import load_registry  # noqa: E402
 from market_pulse.scorer import UNCLEAR  # noqa: E402
@@ -174,6 +174,29 @@ def api_key() -> str:
                     key = value.strip()
     if not key:
         raise SystemExit("OPENROUTER_API_KEY is not set (environment or .env)")
+    return key
+
+
+def runpod_api_key() -> str:
+    """RUNPOD_API_KEY, the way `runpodctl` already holds it.
+
+    Phase 5b talks to a serverless endpoint, and the key is the same one the CLI was
+    configured with — read from the environment first, then from `runpodctl`'s own
+    config, so the repo never becomes a second place a credential lives.
+    """
+    key = os.environ.get("RUNPOD_API_KEY")
+    if not key:
+        config = Path.home() / ".runpod" / "config.toml"
+        if config.exists():
+            for line in config.read_text(encoding="utf-8").splitlines():
+                name, _, value = line.partition("=")
+                if name.strip() in {"apiKey", "api_key"}:
+                    key = value.strip().strip('"').strip("'")
+    if not key:
+        raise SystemExit(
+            "RUNPOD_API_KEY is not set (environment or ~/.runpod/config.toml)."
+            " `runpodctl doctor` writes it; this repo never stores it."
+        )
     return key
 
 
@@ -597,6 +620,59 @@ def local_config(
             ),
         }
     return config
+
+
+def serving_config(config: dict, args, info: dict, merged: dict | None, client) -> dict:
+    """`local_config`'s output, re-labelled for the run that happened off this machine (5b).
+
+    Everything that decides a number is `local_config`'s, unchanged — the same
+    quantization dict, the same greedy generation block, the same prompt hashes.
+    What is added is the part a serving-parity record has to carry and a pod record
+    does not: which endpoint answered, which half of the pre-registered pair it was
+    serving, and the worker seconds the spend is reconciled against.
+
+    Config B is the branch that needs care. It loads no adapter, so ``training`` is
+    ``None`` and `local_config` would leave ``train_sources`` saying "no training
+    data" — the exact field `records.anchor` narrows on. A merged fine-tune filed as
+    a zero-shot anchor would hand a model itself as its own baseline, so the merged
+    artifact's provenance takes that slot and the record says merged in both places.
+    """
+    fine_tune = config.get("fine_tune")
+    if merged:
+        fine_tune = {
+            "arm": merged.get("arm", "without-plast"),
+            "adapter_path": merged.get("adapter_path"),
+            "adapter_sha256": merged["adapter_sha256"],
+            "merged_sha256": merged["merged_sha256"],
+            "merge": merged.get("merge"),
+            "tools": merged.get("tools"),
+            "prompt_revision_sha256": prompts.revision_sha256(config["testset_version"]),
+        }
+        config = config | {
+            "train_sources": {"merged": "the arm-A adapter, folded into the weights"},
+            "fine_tune": fine_tune,
+        }
+    return config | {
+        "backend": "endpoint",
+        "serving": {
+            "endpoint_id": args.endpoint_id,
+            "config": args.serving_config,
+            "merge_state": info.get("merge_state"),
+            "worker": {k: v for k, v in info.items() if k != "runtime"},
+            "timing": client.timing(),
+            "spend_ledger": "results/spend_5b.json",
+        },
+        "spend_ledger": "results/spend_5b.json",
+        "determinism_note": (
+            "the production serverless runtime, running this repo's scripts/serve_handler.py:"
+            " the chat template, add_special_tokens=False, greedy generate and the reply shape"
+            " are market_pulse.local_llm's, byte-identical to the 4.5h2 pod run. What differs"
+            " is where the process runs and, for config B, whether the adapter is merged —"
+            " which is the delta SPEC amendment 3.11 (2) pre-registers and reports, never"
+            " averages away. The worker's own account of what it loaded is in `serving.worker`"
+            " and was asserted before the first scored row."
+        ),
+    }
 
 
 def arm_preflight(
@@ -1040,9 +1116,32 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--concurrency", type=int, default=DEFAULT_CONCURRENCY)
     parser.add_argument(
         "--backend",
-        choices=("openrouter", "local"),
+        choices=("openrouter", "local", "endpoint"),
         default="openrouter",
-        help="where the weights are: OpenRouter (3b's rows) or this GPU (Phase 4)",
+        help="where the weights are: OpenRouter (3b's rows), this GPU (Phase 4), or the"
+        " production serverless endpoint (Phase 5b)",
+    )
+    parser.add_argument(
+        "--endpoint-id",
+        metavar="ID",
+        help="Phase 5b: score through a RunPod serverless endpoint running this repo's"
+        " scripts/serve_handler.py instead of weights in this process. The rendering,"
+        " the parser and the scorer are unchanged — the runtime is what moves, which is"
+        " the delta SPEC amendment 3.11 (2) pre-registers.",
+    )
+    parser.add_argument(
+        "--serving-config",
+        choices=("A", "B"),
+        help="--endpoint-id: which half of the 5b pair this endpoint serves. Checked against"
+        " the worker's own answer before the first paid row.",
+    )
+    parser.add_argument(
+        "--merged-sidecar",
+        type=Path,
+        metavar="PATH",
+        help="--serving-config B: the merge_requantize sidecar. Its merged_sha256 is what the"
+        " worker must report, and its provenance is what the record carries instead of an"
+        " adapter directory this machine does not hold.",
     )
     parser.add_argument(
         "--batch-size",
@@ -1104,11 +1203,35 @@ def main(argv: list[str] | None = None) -> int:
 
     row = ROWS[args.model]
     local = args.backend == "local"
+    served = args.backend == "endpoint"
+    # "our weights, our rendering, our batch semantics" — true of the pod and of the endpoint
+    # that serves the same code. Only the branch that *loads* weights in this process is
+    # `local`; everything the two runs must share reads this instead.
+    own_weights = local or served
+    if served and not args.endpoint_id:
+        parser.error("--backend endpoint needs --endpoint-id")
+    if served and not args.serving_config:
+        parser.error("--backend endpoint needs --serving-config: an unnamed half is not a pair")
+    if args.endpoint_id and not served:
+        parser.error("--endpoint-id is a serving run: pass --backend endpoint")
+    if served and args.batch_size != 1:
+        raise SystemExit(
+            f"the 5b pair is scored at batch 1, not {args.batch_size}: greedy decoding is not"
+            " batch-invariant on this stack (ADR phase4-own-pod-anchor §(c)) and SPEC"
+            " amendment 3.11 (2) fixes batch 1 for both configs."
+        )
     if bool(args.adapter) != bool(args.arm):
         parser.error("--adapter and --arm go together: a gate record must name its arm")
+    if served and args.serving_config == "B":
+        if args.adapter:
+            parser.error("config B has no adapter to load — its adapter is merged into the weights")
+        if not args.merged_sidecar:
+            parser.error("--serving-config B needs --merged-sidecar: the artifact must name itself")
+    if served and args.serving_config == "A" and not args.adapter:
+        parser.error("--serving-config A is the unmerged adapter — pass --adapter and --arm")
     if args.adapter:
-        if not local:
-            parser.error("--adapter is a local-weights run: pass --backend local")
+        if not own_weights:
+            parser.error("--adapter is an own-weights run: pass --backend local or endpoint")
         if args.reference_only:
             raise SystemExit("--reference-only would hide the arm this phase exists to score")
         if args.batch_size != 1:
@@ -1120,7 +1243,7 @@ def main(argv: list[str] | None = None) -> int:
                 " not batch-invariant on bitsandbytes NF4 + A6000 (measured 2026-08-01,"
                 " ADR phase4-own-pod-anchor §(c)). Re-measure and record it, or pass 1."
             )
-    if local and row.get("ref"):
+    if own_weights and row.get("ref"):
         raise SystemExit(f"{args.model} is a reference row — the local backend runs the base model")
     if row.get("batch_only"):
         raise SystemExit(
@@ -1136,7 +1259,7 @@ def main(argv: list[str] | None = None) -> int:
 
     version = args.testset_version
     resolved = inputs_for(version)
-    if version != records.DEFAULT_TESTSET_VERSION and not local:
+    if version != records.DEFAULT_TESTSET_VERSION and not own_weights:
         raise SystemExit(
             f"test set {version} renders {prompts.REVISIONS[version]}, and the OpenRouter path"
             " sends one text per row with no parent post. Every run of this version is an"
@@ -1148,11 +1271,13 @@ def main(argv: list[str] | None = None) -> int:
     contexts = {name: post_context(task, data[name]) for name, task, _ in resolved}
     aliases = watchlist_aliases(load_registry(REPO_ROOT / "config" / "registry.yaml").watchlist)
     gate_slice, training = None, None
-    if local:
+    if own_weights:
         # Before the weights, before the pod bill: the prompts must be the ones
         # the recorded run sent, or this is not a cross-check.
         assert_prompt_sha_matches_3b(args.model)
-        print(f"model {args.model} · backend local · quantization {local_llm.QUANTIZATION}")
+        print(
+            f"model {args.model} · backend {args.backend} · quantization {local_llm.QUANTIZATION}"
+        )
         print(f"greedy · max_new_tokens {local_llm.MAX_NEW_TOKENS} · seed {SEED}")
         print(f"prompt SHA256 equal to the recorded {args.model} run: yes")
         if args.adapter:
@@ -1171,11 +1296,39 @@ def main(argv: list[str] | None = None) -> int:
         state = "" if contexts[name] is None else f" · {len(contexts[name])} parent posts"
         print(f"  {name:<16} {filename:<26} {task}{state}")
 
-    runtime = None
+    runtime, serving_info, merged = None, None, None
+    if args.merged_sidecar:
+        merged = json.loads(args.merged_sidecar.read_text(encoding="utf-8"))
     if args.smoke:
         client, budget = FakeClient(), None
-        if local:
+        if own_weights:
             runtime = {"smoke": "no weights were loaded"}
+    elif served:
+        budget = None
+        client = serving.EndpointClient(args.endpoint_id, runpod_api_key())
+        # Before the first paid row: the worker has to say what it loaded, and it has to be
+        # the half of the pair this invocation claims. An endpoint is updatable and its name
+        # is not a checksum — the adapter sha is (SPEC amendment 3.11 (2)).
+        expected = {
+            "serving_config": args.serving_config,
+            "merge_state": "merged-requantized" if merged else "unmerged-adapter",
+            "quantization": local_llm.QUANTIZATION,
+            "adapter_sha256": (
+                merged["adapter_sha256"] if merged else records.artifact_sha256(args.adapter)
+            ),
+        }
+        if merged:
+            expected["merged_sha256"] = merged["merged_sha256"]
+        serving_info = serving.assert_serving(client.info(), expected)
+        runtime = serving_info.get("runtime")
+        print(f"endpoint {args.endpoint_id} · config {args.serving_config}")
+        for field in ("merge_state", "adapter_sha256", "merged_sha256", "weights_dir"):
+            print(f"  {field:<20} {serving_info.get(field)}")
+        for field, value in (runtime or {}).items():
+            print(f"  {field:<20} {value}")
+        if args.dry_run:
+            print("\n--dry-run: the endpoint answered info, nothing was scored")
+            return 0
     elif local:
         budget = None
         weights = args.model_path or local_llm.MODEL_ID
@@ -1241,7 +1394,7 @@ def main(argv: list[str] | None = None) -> int:
                 "model": args.model,
                 "arm": args.arm,
                 "adapter_sha256": training["adapter_sha256"] if training else None,
-                "batch_size": args.batch_size if local else None,
+                "batch_size": args.batch_size if own_weights else None,
                 "probe": args.probe,
                 "prompt_sha256": {task: prompts.prompt_sha256(task) for task in prompts.TASKS},
                 "testset_version": version,
@@ -1253,7 +1406,7 @@ def main(argv: list[str] | None = None) -> int:
     scored_inputs, failure_blocks = {}, []
     try:
         for name, task, _ in resolved:
-            if local:
+            if own_weights:
                 done = {
                     row_id: entry for (input_, row_id), entry in resumed.items() if input_ == name
                 }
@@ -1392,7 +1545,7 @@ def main(argv: list[str] | None = None) -> int:
         "tokens": dict(client.usage),
     }
 
-    if local:
+    if own_weights:
         config = local_config(
             shared,
             args.batch_size,
@@ -1403,6 +1556,8 @@ def main(argv: list[str] | None = None) -> int:
             scored_inputs,
             version,
         )
+        if served:
+            config = serving_config(config, args, serving_info, merged, client)
     else:
         usage_after = zero_shot.total_usage(key)
         budget.reconcile(usage_after - ledger["openrouter_total_usage_at_3b_start"])
@@ -1445,7 +1600,7 @@ def main(argv: list[str] | None = None) -> int:
         append(record)
         print(f"\nwrote {RESULTS.relative_to(REPO_ROOT)} — read it with scripts/show_results.py")
 
-    if not local:
+    if not own_weights:
         ledger["runs"].append(
             {
                 "model": args.model,
@@ -1465,7 +1620,7 @@ def main(argv: list[str] | None = None) -> int:
     # `slice_ids` is None when an arm scored the pre-registered slice instead of
     # writing one — the same condition `local_config` branches on, and the reason
     # this line is not guarded by `anchor_valid` alone.
-    if local and anchor_valid and slice_ids is not None:
+    if own_weights and anchor_valid and slice_ids is not None:
         print(
             f"wrote {SLICE_OF[version].relative_to(REPO_ROOT)} — G1b slice n"
             f" {len(slice_ids['union'])}"

@@ -76,12 +76,25 @@ def quantization_config():
     return BitsAndBytesConfig(**kwargs)
 
 
-def load(model_id: str = MODEL_ID, revision: str | None = None, seed: int = SEED):
+def load(
+    model_id: str = MODEL_ID,
+    revision: str | None = None,
+    seed: int = SEED,
+    prequantized: bool = False,
+):
     """Tokenizer + NF4-quantized model, ready to generate.
 
     Gemma 4 is a `Gemma4ForConditionalGeneration`, so the auto-class is the
     image-text-to-text one; the causal-LM fallback exists because a load that
     fails after a 62 GB download costs a pod session, not a stack trace.
+
+    ``prequantized`` is Phase 5b's config B: a checkpoint that was merged in
+    bf16 and then written back out **already** in NF4 carries its own
+    ``quantization_config`` in ``config.json``, and passing a second one is how
+    a run silently double-quantizes or refuses after the weights have loaded.
+    The dict in :data:`QUANTIZATION` is still the single source of truth — the
+    merge script writes the checkpoint *from* it, and 5b's endpoint asserts the
+    served config against it before the first scored row.
     """
     import torch
     import transformers
@@ -101,8 +114,8 @@ def load(model_id: str = MODEL_ID, revision: str | None = None, seed: int = SEED
             model = factory.from_pretrained(
                 model_id,
                 revision=revision,
-                quantization_config=quantization_config(),
                 device_map="auto",
+                **({} if prequantized else {"quantization_config": quantization_config()}),
             )
         except (ValueError, KeyError) as err:  # architecture not in this auto-class
             errors.append(f"{name}: {type(err).__name__}: {err}")

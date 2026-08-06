@@ -542,3 +542,90 @@ def test_select_arm_is_byte_identical_to_what_phase_4_recorded():
     assert decision["keep_synthetic"] is False
     assert decision["selected"] == "real-only"
     assert set(decision["regressions"]) == {"G1c", "G1d"}
+
+
+# --- 5b: the serving-parity selection rule ----------------------------------
+#
+#   A          G1a 0.9214 · G1b 0.6053 · G1c 0.8478 · G1d 0.9586 · G1e 0.9610
+#   B (adopt)  every head equal or higher, and every required gate still passing
+#   the rule:  B is adopted only if every 4.5h2-passed gate stays passing on B AND
+#              no head drops more than 0.005 vs A; a tie or a doubt ships A.
+PARITY_A = {
+    "G1a": {"overall": 0.9214},
+    "G1b": 0.6053,
+    "G1c": 0.8478,
+    "G1d": 0.9586,
+    "G1e": 0.9610,
+}
+REQUIRED = {"G1b": True, "G1d": True, "G1e": True}
+"""What 4.5h2 actually passed on the shipped arm — three of five."""
+
+
+def test_select_serving_config_adopts_b_when_nothing_regressed():
+    decision = scorer.select_serving_config(PARITY_A, PARITY_A, must_stay_passing=REQUIRED)
+    assert decision["adopt_b"] is True
+    assert decision["selected"] == "B"
+    assert decision["drops"] == {} and decision["gates_lost"] == []
+    assert decision["head_deltas"] == {"G1a": 0.0, "G1b": 0.0, "G1c": 0.0, "G1d": 0.0, "G1e": 0.0}
+
+
+def test_select_serving_config_ships_a_when_a_required_gate_stops_passing():
+    """B may be better everywhere and still lose: a lost gate is not a small delta."""
+    better = PARITY_A | {"G1c": 0.9000}
+    decision = scorer.select_serving_config(
+        PARITY_A, better, must_stay_passing=REQUIRED | {"G1d": False}
+    )
+    assert decision["selected"] == "A"
+    assert decision["gates_lost"] == ["G1d"]
+    assert "gates lost on B: ['G1d']" in decision["why"]
+
+
+def test_select_serving_config_ships_a_on_a_head_that_dropped_too_far():
+    #   0.9586 - 0.9500 = 0.0086 > 0.005
+    decision = scorer.select_serving_config(
+        PARITY_A, PARITY_A | {"G1d": 0.9500}, must_stay_passing=REQUIRED
+    )
+    assert decision["selected"] == "A"
+    assert decision["drops"] == {"G1d": pytest.approx(-0.0086)}
+
+
+def test_a_head_lower_by_exactly_the_tolerance_is_not_a_drop():
+    """ "drops MORE than 0.005" — and 0.9586 - 0.9536 is 0.005000000000000004."""
+    decision = scorer.select_serving_config(
+        PARITY_A, PARITY_A | {"G1d": 0.9536}, must_stay_passing=REQUIRED
+    )
+    assert decision["drops"] == {}
+    assert decision["adopt_b"] is True
+
+
+def test_select_serving_config_has_no_head_b_must_win():
+    """4.5h2 pivoted on G1c; 5b has no pivot, so an all-equal pair adopts B rather than
+    shipping A the way `select_arm_by`'s `strictly_higher` half would."""
+    equal = scorer.select_serving_config(PARITY_A, PARITY_A, must_stay_passing=REQUIRED)
+    pivoted = scorer.select_arm_by(PARITY_A, PARITY_A, pivot="G1c", rule="x")
+    assert equal["selected"] == "B" and pivoted["selected"] == "real-only"
+
+
+def test_select_serving_config_refuses_an_unmeasured_gate():
+    with pytest.raises(ValueError, match="an unmeasured gate is not passing"):
+        scorer.select_serving_config(PARITY_A, PARITY_A, must_stay_passing=REQUIRED | {"G1a": None})
+
+
+def test_select_serving_config_refuses_an_empty_requirement():
+    with pytest.raises(ValueError, match="the rule's first half needs at least one"):
+        scorer.select_serving_config(PARITY_A, PARITY_A, must_stay_passing={})
+
+
+def test_select_serving_config_refuses_configs_that_report_different_heads():
+    with pytest.raises(ValueError, match="different heads"):
+        scorer.select_serving_config(
+            PARITY_A, {k: v for k, v in PARITY_A.items() if k != "G1e"}, must_stay_passing=REQUIRED
+        )
+
+
+def test_select_serving_config_returns_the_rule_it_applied():
+    decision = scorer.select_serving_config(PARITY_A, PARITY_A, must_stay_passing=REQUIRED)
+    assert decision["rule"] == scorer.SERVING_SELECTION_RULE
+    assert decision["configs"] == ["A", "B"]
+    assert decision["tolerance"] == 0.005
+    assert decision["must_stay_passing"] == {"G1b": True, "G1d": True, "G1e": True}
