@@ -19,7 +19,7 @@ The transcript format is not invented here: `caption_posts.poll_caption` writes 
 record shape `parents.load_captions` already reads, so nothing downstream needs a second reader.
 
     PYTHONPATH=src python3 scripts/poll_census.py --plan          # the population, no API
-    PYTHONPATH=src python3 scripts/poll_census.py --limit 20      # a smoke over 20 ids
+    PYTHONPATH=src python3 scripts/poll_census.py --limit 20      # smoke, writes *.limit20.*
     PYTHONPATH=src python3 scripts/poll_census.py
 
 Writes `data/raw/post_polls.jsonl` and `results/poll_census_5a.json`. $0 — the Telegram API is
@@ -28,6 +28,7 @@ free and no model is called.
 
 import argparse
 import asyncio
+import hashlib
 import json
 import sys
 from collections import Counter
@@ -240,6 +241,43 @@ async def fetch_kinds(client, empty: dict[str, list[int]], limit: int | None) ->
     return kinds, polls
 
 
+def output_paths(limit: int | None) -> tuple[Path, Path]:
+    """Where a run writes: beside the real files when it is a `--limit` smoke, never over them.
+
+    The documented smoke reads 20 ids per channel. Writing it to `SIDECAR` would replace 37
+    real transcripts with whatever those 20 happened to contain and replace the census record
+    with counts over a fifth of the population — a smoke that destroys what it is smoking. The
+    suffixed path keeps the write path exercised, which is the whole point of running one.
+    """
+    if limit is None:
+        return SIDECAR, RECORD
+    return (
+        SIDECAR.with_name(f"{SIDECAR.stem}.limit{limit}{SIDECAR.suffix}"),
+        RECORD.with_name(f"{RECORD.stem}.limit{limit}{RECORD.suffix}"),
+    )
+
+
+def sha256_of(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def stamp_sidecar_sha(record_path: Path, sidecar: Path) -> int:
+    """Add the sidecar's sha256 to a record written before the field existed (PROMPT-5a1 F5).
+
+    Two fields and nothing else. No refetch, no recount, and `git` is left naming the commit
+    the census actually ran on: a record whose counts silently moved because a later edit
+    re-derived them would be worse than one missing a hash.
+    """
+    record = json.loads(record_path.read_text(encoding="utf-8"))
+    record["sidecar"]["sha256"] = sha256_of(sidecar)
+    record["sidecar_sha256_added_at"] = datetime.now(UTC).isoformat(timespec="seconds")
+    record_path.write_text(
+        json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+    print(f"{relabel.rel(record_path)}: sidecar.sha256 = {record['sidecar']['sha256']}")
+    return 0
+
+
 def write_sidecar(path: Path, polls: dict[tuple[str, int], dict]) -> list[dict]:
     path.parent.mkdir(parents=True, exist_ok=True)
     rows = [
@@ -255,8 +293,17 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--plan", action="store_true", help="print the population and stop, no API")
     parser.add_argument("--limit", type=int, help="read at most N ids per channel (smoke)")
+    parser.add_argument(
+        "--stamp-sidecar-sha",
+        action="store_true",
+        help="add sidecar.sha256 to the existing record from the sidecar on disk — no API",
+    )
     args = parser.parse_args(argv)
 
+    if args.stamp_sidecar_sha:
+        return stamp_sidecar_sha(RECORD, SIDECAR)
+
+    sidecar_path, record_path = output_paths(args.limit)
     records = stored_posts(POSTS)
     total = Counter(record["channel"] for record in records)
     empty = population(records)
@@ -279,7 +326,7 @@ def main(argv: list[str] | None = None) -> int:
             await client.disconnect()
 
     kinds, polls = asyncio.run(run())
-    sidecar_rows = write_sidecar(SIDECAR, polls)
+    sidecar_rows = write_sidecar(sidecar_path, polls)
     counts = census(kinds, empty, total)
 
     record = {
@@ -288,10 +335,12 @@ def main(argv: list[str] | None = None) -> int:
             "every post in data/raw/posts/*.jsonl whose stored `text` is empty, storewide"
         ),
         "limit_per_channel": args.limit,
+        "sidecar_sha256_added_at": None,  # set only by --stamp-sidecar-sha, on an older record
         "counts": counts,
         "sidecar": {
-            "path": relabel.rel(SIDECAR),
+            "path": relabel.rel(sidecar_path),
             "rows": len(sidecar_rows),
+            "sha256": sha256_of(sidecar_path),
             "cross_check_45g2": cross_check(sidecar_rows, CAPTIONS_45G2),
             "kinds_built": list(SURROGATE_BUILT),
             "format": (
@@ -317,10 +366,12 @@ def main(argv: list[str] | None = None) -> int:
             " `voice` is the DocumentAttributeAudio voice flag, not a mime type — an uploaded"
             " audio file and a voice note share audio/ogg and are counted apart."
         ),
-        "git": git_state(RECORD),
+        "git": git_state(record_path),
     }
-    RECORD.parent.mkdir(parents=True, exist_ok=True)
-    RECORD.write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    record_path.parent.mkdir(parents=True, exist_ok=True)
+    record_path.write_text(
+        json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
 
     print()
     for channel, row in counts["per_channel"].items():
@@ -331,7 +382,8 @@ def main(argv: list[str] | None = None) -> int:
     print(f"{'TOTAL':<26}{total_row['polls']:>5} polls of {total_row['empty_text']:>5} empty")
     print(f"kinds: {total_row['kinds']}")
     print(
-        f"\nwrote {relabel.rel(SIDECAR)} ({len(sidecar_rows)} transcripts) and {relabel.rel(RECORD)}"
+        f"\nwrote {relabel.rel(sidecar_path)} ({len(sidecar_rows)} transcripts)"
+        f" and {relabel.rel(record_path)}"
     )
     return 0
 

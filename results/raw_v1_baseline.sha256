@@ -1,0 +1,18 @@
+# raw v1 integrity baseline — sha256 of the six store files, `shasum -c` format.
+# Taken 2026-08-06 (Phase 5a.1, PROMPT-5a1 F6) BEFORE the 5a.1 discovery scan: this is
+# the post-5a state of data/raw/posts|comments. `data/` is gitignored, so `git status`
+# is silent about these files in both directions and proves nothing; this record is the
+# only durable way to re-run the check. 5a took the same measurement into a scratchpad
+# that did not survive the session — acceptance has to be able to repeat it.
+#
+#     shasum -c results/raw_v1_baseline.sha256
+#
+# A line that fails here means a store SPEC 3.11 (4) and PROMPT-5a1 both call read-only
+# was written to. The derived sidecar data/raw/post_polls.jsonl is NOT baselined here:
+# it is 5a output beside the store, and its own sha256 lives in results/poll_census_5a.json.
+959a1949215b616768fa54fb1db080b60948fe540118483c4d02f097289347bd  data/raw/posts/atb_market_official.jsonl
+f7431273d5bb256bdb5f064cdc2629440b5dca7f16b5340bc81f3739535cd94d  data/raw/posts/msuaaaa.jsonl
+8f609e708c8a477cd60202efc000fab7bb728a76d100ccd5722d9212b0ec7082  data/raw/posts/silposilpo.jsonl
+9edc36253fa21d2bf87361c69eca40198c7a26e84b5904050b163e4ccfa59a68  data/raw/posts/VARUS_channel.jsonl
+e6bf67bbe3ff729b2ab1dee00219be3f18a6d5f619ee4eff19a3480c6f1d2ebc  data/raw/comments/msuaaaa.jsonl
+fb1d90efb84db44752c1a0a557d990e723ea9fab621b09da3e3775d8400cb2a2  data/raw/comments/VARUS_channel.jsonl

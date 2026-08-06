@@ -4,6 +4,8 @@ import json
 import sys
 from pathlib import Path
 
+import pytest
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
@@ -185,3 +187,103 @@ def test_the_cross_check_names_a_poll_this_run_did_not_find(tmp_path):
 
     assert checked["missing_from_this_run"] == ["@a:5"]
     assert checked["also_found_here"] == 0
+
+
+# --- F2: a smoke may not destroy what it is smoking -------------------------------------------
+
+
+def test_a_limited_run_writes_beside_the_real_files_never_over_them():
+    """PROMPT-5a1 F2, as arithmetic on the paths themselves."""
+    sidecar, record = census.output_paths(20)
+
+    assert sidecar != census.SIDECAR and record != census.RECORD
+    assert sidecar.name == "post_polls.limit20.jsonl"
+    assert record.name == "poll_census_5a.limit20.json"
+    assert census.output_paths(None) == (census.SIDECAR, census.RECORD)
+
+
+def test_a_limited_run_leaves_the_real_sidecar_and_record_untouched(tmp_path, monkeypatch):
+    """The documented smoke, driven end to end: 37 real transcripts must survive it.
+
+    `--limit 20` reads 20 ids per channel. Written to the real sidecar that is a fifth of the
+    population replacing all of it, and the census record replaced with counts nobody asked
+    for — the deliverable destroyed by the command that was supposed to rehearse it.
+    """
+    posts = tmp_path / "posts"
+    posts.mkdir()
+    (posts / "a.jsonl").write_text(
+        "".join(json.dumps(post("@a", i)) + "\n" for i in range(30)), encoding="utf-8"
+    )
+    sidecar, record = tmp_path / "post_polls.jsonl", tmp_path / "poll_census_5a.json"
+    sidecar.write_text("THE REAL 37 ROWS\n", encoding="utf-8")
+    record.write_text("THE REAL RECORD\n", encoding="utf-8")
+    monkeypatch.setattr(census, "POSTS", posts)
+    monkeypatch.setattr(census, "SIDECAR", sidecar)
+    monkeypatch.setattr(census, "RECORD", record)
+
+    class FakeClient:
+        async def connect(self):
+            pass
+
+        async def is_user_authorized(self):
+            return True
+
+        async def disconnect(self):
+            pass
+
+        async def get_entity(self, channel):
+            return channel
+
+        async def get_messages(self, _entity, ids):
+            return [message(fake_media("MessageMediaPoll")) for _ in ids]
+
+    monkeypatch.setattr(census, "build_client", lambda *a, **k: FakeClient())
+    monkeypatch.setattr(census, "poll_of", lambda _message: POLL)
+    monkeypatch.setattr(census, "PAUSE", 0)
+
+    assert census.main(["--limit", "20"]) == 0
+
+    assert sidecar.read_text(encoding="utf-8") == "THE REAL 37 ROWS\n"
+    assert record.read_text(encoding="utf-8") == "THE REAL RECORD\n"
+    written = json.loads((tmp_path / "poll_census_5a.limit20.json").read_text(encoding="utf-8"))
+    assert written["limit_per_channel"] == 20
+    assert written["sidecar"]["rows"] == 20, "the smoke still has to exercise the write path"
+
+
+# --- F5: the sidecar's own hash, in the record that promises it --------------------------------
+
+
+def test_stamping_the_sidecar_hash_adds_two_fields_and_moves_nothing_else(tmp_path):
+    """PROMPT-5a1 F5. A record edited after the fact must not quietly re-derive its numbers."""
+    sidecar = tmp_path / "post_polls.jsonl"
+    sidecar.write_text("one row\n", encoding="utf-8")
+    record = tmp_path / "poll_census_5a.json"
+    held = {
+        "counts": {"total": {"polls": 37}},
+        "sidecar": {"path": "data/raw/post_polls.jsonl", "rows": 37},
+        "git": {"commit": "242fcdc", "dirty": []},
+    }
+    record.write_text(json.dumps(held, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+    assert census.stamp_sidecar_sha(record, sidecar) == 0
+
+    stamped = json.loads(record.read_text(encoding="utf-8"))
+    assert stamped["sidecar"]["sha256"] == census.sha256_of(sidecar)
+    assert stamped["sidecar_sha256_added_at"] is not None
+    assert stamped["counts"] == held["counts"], "a stamp is not a recount"
+    assert stamped["git"] == held["git"], "the record still names the commit the census ran on"
+    assert stamped["sidecar"]["rows"] == 37
+
+
+@pytest.mark.skipif(
+    not (census.SIDECAR.exists() and census.RECORD.exists()),
+    reason="the sidecar is gitignored data",
+)
+def test_the_shipped_record_matches_the_sidecar_on_disk():
+    """The hash in the artifact, recomputed from the bytes it claims to cover."""
+    record = json.loads(census.RECORD.read_text(encoding="utf-8"))
+
+    assert record["sidecar"]["sha256"] == census.sha256_of(census.SIDECAR)
+    assert record["sidecar"]["rows"] == sum(
+        1 for line in census.SIDECAR.read_text(encoding="utf-8").splitlines() if line
+    )

@@ -70,7 +70,8 @@
       "poll"
     ],
     "format": "caption_posts.poll_caption — the question, then its options one per line; rendered by prompts.POST_SURROGATE['poll'] and read by parents.load_captions.",
-    "note": "Derived, beside the v1 store. data/raw/posts/*.jsonl is opened read-only and its bytes are unchanged — the same rule 4.5g5 followed for reply_to_msg_id."
+    "note": "Derived, beside the v1 store. data/raw/posts/*.jsonl is opened read-only and its bytes are unchanged — the same rule 4.5g5 followed for reply_to_msg_id.",
+    "sha256": "78806e99c7f267e4e97a2cd9005b362794b773a9bfd9ed613149e1d2e216805c"
   },
   "not_a_continuation_of_16_of_41": "results/post_media_45g2.json counted 16 polls among the 41 media-only parents of ONE sitting pack, one channel. This run counts polls among every text-less post in the store. Different populations: the rates are not comparable and the 4.5g2 number is not superseded by this one.",
   "giveaways_video_voice": "counted and named only — docs/PROMPT-5a.md builds no third surrogate in 5a. `giveaway` here is Telegram's own MessageMediaGiveaway (the premium-subscription feature), NOT a retail «розыгрыш»: that one is an ordinary image post whose TEXT announces a draw, so it is not text-less and is outside this population entirely. `voice` is the DocumentAttributeAudio voice flag, not a mime type — an uploaded audio file and a voice note share audio/ogg and are counted apart.",
@@ -84,5 +85,6 @@
       "src/market_pulse/loop.py",
       "tests/test_loop.py"
     ]
-  }
+  },
+  "sidecar_sha256_added_at": "2026-08-06T09:59:38+00:00"
 }

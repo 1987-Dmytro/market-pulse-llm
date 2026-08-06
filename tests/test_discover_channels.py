@@ -1,11 +1,13 @@
 """Offline tests for Phase-5a channel discovery — no Telegram, no session."""
 
+import asyncio
 import json
 import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import pytest
+from telethon.errors import FloodWaitError
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
@@ -191,10 +193,114 @@ def test_a_normal_run_leaves_the_rebuild_stamp_empty(monkeypatch, tmp_path):
             "registry_rows": [row("@a", 1_000)],
             "candidates": [row("@live", 2_000, ppw=5.0)],
             "generated_at": datetime(2026, 8, 5, 18, tzinfo=timezone.utc),
+            "flood_wait_seconds": None,
         }
 
     monkeypatch.setattr(discovery, "run", scanned)
 
     assert discovery.main([]) == 0
 
-    assert json.loads(path.read_text(encoding="utf-8"))["ledger_rebuilt_at"] is None
+    written = json.loads(path.read_text(encoding="utf-8"))
+    assert written["ledger_rebuilt_at"] is None
+    assert written["scan_complete"] is True
+
+
+# --- F1: a rate limit is a wait, not a verdict -------------------------------------------------
+
+
+class FakeClient:
+    """Enough Telethon for `run()` to walk its loop. Nothing here reaches the network."""
+
+    async def connect(self):
+        pass
+
+    async def is_user_authorized(self):
+        return True
+
+    async def disconnect(self):
+        pass
+
+
+def scan_over(monkeypatch, three_handles, blow_up_on):
+    """Run the candidate loop over three handles, raising `blow_up_on(handle)` in `measure`."""
+    checked = []
+
+    async def measure(_client, _source, handle, _now):
+        checked.append(handle)
+        if (exc := blow_up_on(handle)) is not None:
+            raise exc
+        return (
+            {"handle": handle, "resolved": True, "verdict": "usable", "subscribers": 1},
+            discovery.window_stats([], [], False),
+        )
+
+    async def search(_client):
+        return {handle: {"source": None, "found_by": ["t:q"]} for handle in three_handles}
+
+    monkeypatch.setattr(discovery, "build_client", lambda *a, **k: FakeClient())
+    monkeypatch.setattr(discovery, "search_themes", search)
+    monkeypatch.setattr(discovery, "measure", measure)
+    monkeypatch.setattr(discovery.entry_check, "PAUSE_SECONDS", 0)
+    return asyncio.run(discovery.run([])), checked
+
+
+def test_a_floodwait_aborts_the_scan_and_keeps_what_it_collected(monkeypatch):
+    """PROMPT-5a1 F1. Telethon raises a wait; the generic handler below would call it a verdict.
+
+    Two separate harms, and the test names both: the rate-limited channel is written down as
+    `error` — a permanent judgement on a temporary state, which a ledger reader cannot tell
+    from a channel that is genuinely broken — and the loop walks on into the next request
+    while Telegram is still refusing.
+    """
+    result, checked = scan_over(
+        monkeypatch,
+        ["@one", "@two", "@three"],
+        lambda handle: FloodWaitError(request=None, capture=42) if handle == "@two" else None,
+    )
+
+    assert [row["handle"] for row in result["candidates"]] == ["@one"]
+    assert result["flood_wait_seconds"] == 42
+    assert checked == ["@one", "@two"], "the scan kept hammering after the wait"
+    assert "@two" not in {row["handle"] for row in result["candidates"]}
+
+
+def test_an_ordinary_failure_is_still_one_bad_row_and_not_an_abort(monkeypatch):
+    """The negative control for F1: only FloodWait aborts.
+
+    Without this, "the scan stopped" passes for both the fix and a rewrite that gives up on
+    the first channel with a broken handle — which is the behaviour the generic handler was
+    written to prevent in the first place.
+    """
+    result, checked = scan_over(
+        monkeypatch,
+        ["@one", "@two", "@three"],
+        lambda handle: RuntimeError("resolve blew up") if handle == "@two" else None,
+    )
+
+    assert [row["handle"] for row in result["candidates"]] == ["@one", "@two", "@three"]
+    assert checked == ["@one", "@two", "@three"]
+    assert result["flood_wait_seconds"] is None
+    assert result["candidates"][1]["verdict"] == "error"
+    assert "RuntimeError" in result["candidates"][1]["error"]
+
+
+def test_a_scan_cut_short_says_so_in_the_record(monkeypatch, tmp_path):
+    """A truncated scan writes a ledger that reads as complete unless the record admits it."""
+    path = tmp_path / "discovery.json"
+    monkeypatch.setattr(discovery, "RECORD", path)
+
+    async def scanned(_channels):
+        return {
+            "registry_rows": [],
+            "candidates": [row("@live", 2_000, ppw=5.0)],
+            "generated_at": datetime(2026, 8, 6, 12, tzinfo=timezone.utc),
+            "flood_wait_seconds": 300,
+        }
+
+    monkeypatch.setattr(discovery, "run", scanned)
+
+    assert discovery.main([]) == 0
+
+    written = json.loads(path.read_text(encoding="utf-8"))
+    assert written["scan_complete"] is False
+    assert written["flood_wait_seconds"] == 300

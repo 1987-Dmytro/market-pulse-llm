@@ -34,7 +34,10 @@ def build_client(env_file: str | Path | None = None) -> TelegramClient:
 
     api_id = os.environ["TELEGRAM_API_ID"]
     if not api_id.isdigit():
-        raise RuntimeError(f"{env_path}: TELEGRAM_API_ID must be numeric, got {api_id!r}")
+        # The variable NAME only. The case this error exists for is a swapped .env, where the
+        # value it would echo is the API hash — and an error message goes to stderr, into logs
+        # and into whatever a caller pastes into a bug report.
+        raise RuntimeError(f"{env_path}: TELEGRAM_API_ID must be numeric")
 
     # Relative session names resolve against the repo, so the login survives a run
     # from any working directory instead of creating a second session file.

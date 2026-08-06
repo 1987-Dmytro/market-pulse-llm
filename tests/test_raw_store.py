@@ -1,6 +1,8 @@
 """Offline tests for the raw store — no Telegram, no session."""
 
+import hashlib
 from datetime import datetime, timezone
+from pathlib import Path
 
 import pytest
 from market_pulse.raw_store import (
@@ -187,3 +189,42 @@ def test_missing_salt_explains_itself(tmp_path, monkeypatch):
 
     with pytest.raises(RuntimeError, match="RAW_STORE_SALT"):
         load_salt(env)
+
+
+# --- the durable integrity baseline (PROMPT-5a1 F6) ---------------------------------------
+
+
+BASELINE = Path(__file__).resolve().parents[1] / "results" / "raw_v1_baseline.sha256"
+
+
+def baseline_lines() -> list[tuple[str, Path]]:
+    """`shasum -c` format: a hash, two spaces, a repo-relative path. `#` lines are comments."""
+    rows = []
+    for line in BASELINE.read_text(encoding="utf-8").splitlines():
+        if not line.strip() or line.startswith("#"):
+            continue
+        digest, _, name = line.partition("  ")
+        rows.append((digest, BASELINE.parents[1] / name))
+    return rows
+
+
+def test_the_raw_v1_baseline_names_the_six_store_files():
+    """`data/` is gitignored, so nothing in git can say these stores were left alone.
+
+    The parse is asserted here rather than only at the shell, because a baseline that stopped
+    covering a file would still print six cheerful OK lines for the five it kept.
+    """
+    rows = baseline_lines()
+
+    assert len(rows) == 6
+    assert {path.parent.name for _, path in rows} == {"posts", "comments"}
+    assert all(len(digest) == 64 and int(digest, 16) >= 0 for digest, _ in rows)
+    assert len({path for _, path in rows}) == 6
+
+
+@pytest.mark.skipif(not (BASELINE.parents[1] / "data" / "raw").exists(), reason="gitignored data")
+def test_the_raw_v1_stores_still_hash_to_their_baseline():
+    """`shasum -c results/raw_v1_baseline.sha256`, as a test that runs with the suite."""
+    for digest, path in baseline_lines():
+        assert path.exists(), f"{path} is in the baseline and not on disk"
+        assert hashlib.sha256(path.read_bytes()).hexdigest() == digest, f"{path} moved"

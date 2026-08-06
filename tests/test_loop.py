@@ -167,6 +167,15 @@ def test_the_guard_refuses_while_no_endpoint_is_registered():
     assert "1234" in refusal and "3.11 (2)" in refusal
 
 
+def test_an_unset_endpoint_from_env_keeps_the_guard_closed():
+    """PROMPT-5a1 F4. `os.getenv` on an unset-but-present variable is `""`, not `None`.
+
+    5b reads this endpoint out of env or config. Under `is None` the empty string counted as
+    "registered", and the pass would decide it was allowed to spend before failing on the URL.
+    """
+    assert loop.inference_refusal(1234, "") is not None
+
+
 def test_the_guard_opens_once_an_endpoint_exists():
     """The negative control: a guard that refuses everything proves nothing about what it blocks."""
     assert loop.inference_refusal(1234, "https://api.runpod.ai/v2/whatever") is None

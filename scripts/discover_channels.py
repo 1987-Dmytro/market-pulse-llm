@@ -39,6 +39,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import entry_check  # noqa: E402
 import relabel_intents as relabel  # noqa: E402
 from build_audit_pack import git_state  # noqa: E402
+from telethon.errors import FloodWaitError  # noqa: E402
 
 from market_pulse.langid import detect  # noqa: E402
 from market_pulse.registry import load_registry  # noqa: E402
@@ -242,12 +243,25 @@ async def run(registry_channels: list[tuple]) -> dict:
         found = await search_themes(client)
         already = {handle for _, handle in registry_channels}
         candidates = []
+        flood_wait = None
         for handle, entry in found.items():
             if handle in already:
                 continue  # already counted in the registry sum; never twice
             print(f"checking {handle}...", flush=True)
             try:
                 record, window = await measure(client, entry["source"], handle, now)
+            except FloodWaitError as exc:
+                # `scripts/entry_check.py:187`'s policy, and it must be branched BEFORE the
+                # generic handler below: swallowed there, a rate-limited candidate is written
+                # down as `verdict: "error"` — a permanent judgement on a temporary state —
+                # and the scan walks straight into the next request Telegram is refusing.
+                flood_wait = exc.seconds
+                print(
+                    f"FloodWait: Telegram asked for {exc.seconds}s. Scan aborted at {handle},"
+                    f" keeping the {len(candidates)} candidates already checked.",
+                    flush=True,
+                )
+                break
             except Exception as exc:  # one unusable channel must not discard the scan
                 record = {
                     "handle": handle,
@@ -261,7 +275,14 @@ async def run(registry_channels: list[tuple]) -> dict:
             await asyncio.sleep(entry_check.PAUSE_SECONDS)
     finally:
         await client.disconnect()
-    return {"registry_rows": registry_rows, "candidates": candidates, "generated_at": now}
+    return {
+        "registry_rows": registry_rows,
+        "candidates": candidates,
+        "generated_at": now,
+        # A scan cut short by a FloodWait produces a ledger that looks complete. The record
+        # says how many seconds it was asked for, so an under-count reads as one.
+        "flood_wait_seconds": flood_wait,
+    }
 
 
 def print_table(rows: list[dict]) -> None:
@@ -310,6 +331,7 @@ def main(argv: list[str] | None = None) -> int:
             "registry_rows": held["registry"]["rows"],
             "candidates": held["candidates"],
             "generated_at": held["generated_at"],
+            "flood_wait_seconds": held.get("flood_wait_seconds"),
         }
     else:
         result = asyncio.run(run(registry_channels))
@@ -321,6 +343,8 @@ def main(argv: list[str] | None = None) -> int:
         "ledger_rebuilt_at": datetime.now(UTC).isoformat(timespec="seconds")
         if args.rebuild_ledger
         else None,
+        "scan_complete": result.get("flood_wait_seconds") is None,
+        "flood_wait_seconds": result.get("flood_wait_seconds"),
         "authorised": "operator 2026-08-04 (themes) / 2026-08-05 (coverage target), SPEC 3.11 (4)",
         "themes": {theme: list(queries) for theme, queries in THEMES.items()},
         "search_limit_per_query": entry_check.DISCOVER_LIMIT,

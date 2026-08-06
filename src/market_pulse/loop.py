@@ -133,7 +133,10 @@ def inference_refusal(rows: int, endpoint: str | None) -> str | None:
     shape `scripts/runpod_guard.py` enforces against a cap — and until it does, a loop that
     grew an inference call by accident refuses instead of spending.
     """
-    if endpoint is None:
+    # `not endpoint`, not `is None`: 5b reads this out of env or config, where "unset" arrives
+    # as the empty string. A guard that only closes on `None` would open on `TypeError` later,
+    # after the pass had already decided it was allowed to spend.
+    if not endpoint:
         return (
             f"{rows} rows are queued and no serving endpoint is registered. SPEC 3.11 (2)"
             " pre-registers a serving-parity measurement before any serving number reaches an"
