@@ -96,8 +96,9 @@ COPYFILE_DISABLE=1 tar czf /tmp/raw-posts-5b2.tgz data/raw/posts     # ._* break
 git bundle create /tmp/market-pulse-5b2.bundle HEAD
 
 runpodctl pod create --name mp-5b2 --gpu-id "NVIDIA RTX A6000" --gpu-count 1 \
-  --cloud-type SECURE --image runpod/pytorch:1.0.2-cu1281-torch280-ubuntu2404 \
-  --container-disk-in-gb 60 --volume-in-gb 120 --ports '22/tcp' --ssh \
+  --data-center-ids US-TX-1 --cloud-type SECURE \
+  --image runpod/pytorch:1.0.2-cu1281-torch280-ubuntu2404 \
+  --container-disk-in-gb 30 --volume-in-gb 120 --ports '22/tcp' --ssh \
   --terminate-after <UTC ISO8601, ~3 h out>
 runpodctl pod list -a                    # exactly one pod, and its costPerHr
 runpodctl ssh info <POD_ID>
@@ -123,9 +124,32 @@ ln -sfn /workspace /runpod-volume
 cd /workspace && rm -rf repo && git clone -q market-pulse-5b2.bundle repo
 cd repo && git rev-parse HEAD && git status --short        # equals the Mac's HEAD, empty
 tar xzf /workspace/raw-posts-5b2.tgz -C /workspace/repo    # data/raw/posts is gitignored
-python3 -m venv /workspace/venv
-/workspace/venv/bin/pip install -q torch==2.8.0 transformers==5.14.1 bitsandbytes==0.50.0 \
-  peft==0.18.0 accelerate runpod pyyaml    # PINNED: a fresh install is a different instrument
+python3 -m venv --system-site-packages /workspace/venv    # inherit the IMAGE's torch
+/workspace/venv/bin/pip install -q transformers==5.14.1 bitsandbytes==0.50.0 \
+  peft==0.18.0 accelerate runpod pyyaml     # PINNED, and deliberately NO torch
+```
+
+**Check the stack string before the 59 GB, not after it.** The anchor is `torch 2.8.0+cu128`
+and `assert_runtime_matches` compares exactly; a PyPI `torch==2.8.0` wheel can report `2.8.0`
+with no local version, which would refuse the run at the first `info` — one cold start too late.
+The image `runpod/pytorch:1.0.2-cu1281-torch280-ubuntu2404` already carries the right build,
+which is why the venv inherits rather than installs it.
+
+```bash
+cd /workspace/repo && PYTHONPATH=src /workspace/venv/bin/python -c "
+import sys; sys.path.insert(0,'src'); sys.path.insert(0,'scripts')
+import torch, transformers, bitsandbytes
+from eval_zero_shot import arm_runtime
+from market_pulse import serving
+seen = {'torch': torch.__version__, 'transformers': transformers.__version__,
+        'bitsandbytes': bitsandbytes.__version__}
+print(seen); print(arm_runtime())
+serving.assert_runtime_matches(seen, arm_runtime()); print('stack matches the 4.5h2 anchor')"
+```
+
+Only then the weights:
+
+```bash
 HF_HOME=/workspace/hf /workspace/venv/bin/hf download google/gemma-4-31b-it \
   --revision 842da3794eaa0b77d5f08bae87a17459d91ff475
 cp scripts/start_5b_worker.sh /workspace/start.sh && chmod +x /workspace/start.sh
