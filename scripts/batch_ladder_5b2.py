@@ -188,6 +188,57 @@ def compare(reference: dict, arm: dict) -> dict:
     }
 
 
+COMPARABLE = ("finish_reason", "parsed", "prompt_tokens", "completion_tokens")
+"""Every field the 5b.1 smoke record holds that the batch-1 path could move.
+
+Not the reply text: `results/serving_5b.json` stores whether a row parsed and what it cost
+in tokens, never what it said. So "the batch-1 path did not move" is checkable here at
+exactly this strength and no further — which is worth saying out loud, because the brief
+asks for byte-for-byte and the committed artifact cannot answer that. `completion_tokens`
+is the model-dependent half and the one that would move; `prompt_tokens` reads the
+attention mask, so a change there means the *rendering* moved, which is worse.
+"""
+
+
+def regression_vs_smoke(arm: dict, path: Path) -> dict:
+    """The batch-1 arm against the 5b.1 smoke's own 24 rows. SPEC: the path must not move.
+
+    Same carve, same 24 ids, so the comparison is keyed by id — the smoke stores them
+    round-robin across renderings and the ladder groups them by rendering, and a
+    positional comparison would report every row as changed.
+    """
+    if not path.exists():
+        return {"compared": 0, "why": f"{path} is missing — nothing to regress against"}
+    smoke = json.loads(path.read_text(encoding="utf-8"))
+    was = {row["id"]: row for row in smoke.get("rows", [])}
+    now = {row["id"]: row for row in arm["rows"]}
+    fields = lambda row: {  # noqa: E731
+        "finish_reason": row.get("finish_reason"),
+        "parsed": row.get("parsed"),
+        "prompt_tokens": (row.get("usage") or {}).get("prompt_tokens"),
+        "completion_tokens": (row.get("usage") or {}).get("completion_tokens"),
+    }
+    shared = sorted(set(was) & set(now))
+    moved = {row_id: (fields(was[row_id]), fields(now[row_id])) for row_id in shared}
+    moved = {row_id: pair for row_id, pair in moved.items() if pair[0] != pair[1]}
+    return {
+        "against": str(path.name),
+        "smoke_step": smoke.get("step"),
+        "smoke_batch_size": smoke.get("batch_size"),
+        "compared": len(shared),
+        "only_in_smoke": sorted(set(was) - set(now)),
+        "only_in_ladder": sorted(set(now) - set(was)),
+        "fields": list(COMPARABLE),
+        "unchanged": len(shared) - len(moved),
+        "moved": {row_id: {"was": pair[0], "now": pair[1]} for row_id, pair in moved.items()},
+        "limit": (
+            "NOT byte-for-byte: the 5b.1 smoke record stores no reply text, so this compares"
+            " the four fields it does store. Byte-identity is measured inside this run, arm by"
+            " arm, against the batch-1 arm whose replies ARE recorded."
+        ),
+    }
+
+
 SELECTION_RULE = (
     "the largest N in {16, 8, 4} whose carve replies are byte-identical to the batch-1 arm;"
     " if none is identical the candidate is 8 (SPEC amendment 3.11 (2), pre-registered"
@@ -219,6 +270,13 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--record", type=Path, default=RECORD)
     parser.add_argument(
         "--carve-only", action="store_true", help="rebuild and check the carve, send nothing"
+    )
+    parser.add_argument(
+        "--smoke-record",
+        type=Path,
+        default=REPO_ROOT / "results" / "serving_5b.json",
+        help="the 5b.1 batch-1 smoke over these same 24 rows. The batch-1 arm is regressed"
+        " against it, because SPEC amendment 3.11 (2) says the batch-1 path must not move.",
     )
     args = parser.parse_args(argv)
 
@@ -271,12 +329,20 @@ def main(argv: list[str] | None = None) -> int:
         "exercised_max_chunk": {str(size): arms[str(size)]["max_chunk_per_task"] for size in LADDER}
     }
 
+    regression = regression_vs_smoke(reference, args.smoke_record)
+
     print("\n--- byte-identity against the batch-1 arm ---")
     print(f"{'batch 1 repeat':>16}  {control['identical']!s:<6} {control['why']}")
     for size in LADDER:
         print(
             f"{'batch ' + str(size):>16}  {verdicts[size]['identical']!s:<6} {verdicts[size]['why']}"
         )
+    print(
+        f"\nbatch-1 vs the 5b.1 smoke: {regression.get('unchanged')}/{regression['compared']}"
+        f" rows unchanged on {regression.get('fields')}"
+    )
+    for row_id, moved in (regression.get("moved") or {}).items():
+        print(f"  MOVED {row_id}: {moved['was']} -> {moved['now']}")
     print(f"\ncandidate N    {picked['candidate']}  ({picked['by']})")
 
     record = {
@@ -292,6 +358,7 @@ def main(argv: list[str] | None = None) -> int:
         "prompt_sha256": {task: prompts.prompt_sha256(task) for task in prompts.TASKS},
         "arms": arms,
         "control": control,
+        "batch_1_regression": regression,
         "verdicts": {str(size): verdicts[size] for size in LADDER},
         "selection": picked,
         "note": (
@@ -306,7 +373,10 @@ def main(argv: list[str] | None = None) -> int:
     }
     args.record.parent.mkdir(parents=True, exist_ok=True)
     args.record.write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n", "utf-8")
-    print(f"record         {args.record.relative_to(REPO_ROOT)}")
+    shown = (
+        args.record.relative_to(REPO_ROOT) if args.record.is_relative_to(REPO_ROOT) else args.record
+    )
+    print(f"record         {shown}")
 
     if not control["identical"]:
         print(
@@ -317,6 +387,13 @@ def main(argv: list[str] | None = None) -> int:
         return 3
     if any(arm["parsed"] != arm["scored"] for arm in arms.values()):
         print("\nSTOP AND REPORT: a carve row did not parse. The path is not proven at that N.")
+        return 3
+    if regression.get("moved"):
+        print(
+            "\nSTOP AND REPORT: the batch-1 path moved against the 5b.1 smoke. SPEC amendment"
+            " 3.11 (2) requires it to stay byte-stable under any new batching code — the"
+            " candidate below it is not the question any more."
+        )
         return 3
     return 0
 

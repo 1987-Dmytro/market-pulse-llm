@@ -7,6 +7,7 @@ never actually exercised because the carve does not hold that many rows of one r
 """
 
 import importlib.util
+import json
 import sys
 from pathlib import Path
 
@@ -93,3 +94,49 @@ def test_the_ladder_is_the_one_spec_pre_registered():
     assert ladder.LADDER == (16, 8, 4)
     assert "byte-identical" in ladder.SELECTION_RULE
     assert "3.11 (2)" in ladder.SELECTION_RULE
+
+
+def smoke_row(row_id: str, task: str, tokens=(700, 20), finish="stop", parsed=True) -> dict:
+    return {
+        "id": row_id,
+        "task": task,
+        "finish_reason": finish,
+        "parsed": parsed,
+        "usage": {"prompt_tokens": tokens[0], "completion_tokens": tokens[1]},
+    }
+
+
+def smoke_record(tmp_path, rows) -> Path:
+    path = tmp_path / "serving_5b.json"
+    path.write_text(
+        json.dumps({"step": "5b smoke", "batch_size": 1, "rows": rows}), encoding="utf-8"
+    )
+    return path
+
+
+def test_the_batch_one_arm_is_regressed_against_the_5b1_smoke_by_id(tmp_path):
+    """The smoke stores its rows round-robin across renderings and the ladder groups them
+    by rendering — a positional comparison would call every row changed."""
+    rows = [smoke_row("t1:0", "T1v2_with_post"), smoke_row("t2:0", "T2", tokens=(600, 18))]
+    path = smoke_record(tmp_path, list(reversed(rows)))
+    arm = {"rows": rows}
+    out = ladder.regression_vs_smoke(arm, path)
+    assert out["compared"] == 2
+    assert out["unchanged"] == 2
+    assert out["moved"] == {}
+    assert "NOT byte-for-byte" in out["limit"]
+
+
+def test_a_row_whose_tokens_moved_is_named_with_both_readings(tmp_path):
+    path = smoke_record(tmp_path, [smoke_row("t1:0", "T1v2_with_post", tokens=(700, 20))])
+    arm = {"rows": [smoke_row("t1:0", "T1v2_with_post", tokens=(700, 21))]}
+    out = ladder.regression_vs_smoke(arm, path)
+    assert out["unchanged"] == 0
+    assert out["moved"]["t1:0"]["was"]["completion_tokens"] == 20
+    assert out["moved"]["t1:0"]["now"]["completion_tokens"] == 21
+
+
+def test_the_regression_compares_only_what_the_smoke_record_holds():
+    """The brief asks for byte-for-byte and the committed artifact cannot answer that:
+    `results/serving_5b.json` stores no reply text. Saying so is the deliverable."""
+    assert ladder.COMPARABLE == ("finish_reason", "parsed", "prompt_tokens", "completion_tokens")
