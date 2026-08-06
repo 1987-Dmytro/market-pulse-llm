@@ -1,9 +1,15 @@
 #!/usr/bin/env python3
-"""Phase-5a channel discovery for the three authorised themes, with a coverage ledger.
+"""Phase-5a channel discovery for the authorised themes, with a coverage ledger.
 
 SPEC amendment 3.11 (4): discovery over mothers/kids, healthy lifestyle and baby food —
-authorised 2026-08-04 — produces **candidates only**. `config/registry.yaml` is never
-touched here; a channel enters through the track-R entry gate by the operator's choice.
+authorised 2026-08-04, **widened 2026-08-06** at the 5a acceptance to cooking/recipes,
+supermarket promos, health/fitness and food-quality watch, plus direct seed-handle checks —
+produces **candidates only**. `config/registry.yaml` is never touched here; a channel enters
+through the track-R entry gate by the operator's choice.
+
+A run scans only the themes the carried record (`--carry`) has not already searched, and
+merges its rows in: re-running a theme costs another rate-limited pass and would measure a
+different day, so the 5a rows are carried, not re-derived.
 
 The per-channel check is `scripts/entry_check.py`'s, reused rather than reimplemented: same
 resolve, same subscriber count, same linked-group test, same verdict vocabulary. Two things
@@ -22,7 +28,7 @@ and are printed in the record verbatim; neither is a footnote:
     PYTHONPATH=src python3 scripts/discover_channels.py --plan   # the queries, no API
     PYTHONPATH=src python3 scripts/discover_channels.py
 
-Writes `results/discovery_5a.json`. $0: Telegram's API is free and nothing here is a model call.
+Writes `results/discovery_5a1.json`. $0: Telegram's API is free and nothing here is a model call.
 """
 
 import argparse
@@ -46,18 +52,70 @@ from market_pulse.registry import load_registry  # noqa: E402
 from market_pulse.telegram_client import build_client  # noqa: E402
 
 REGISTRY = REPO_ROOT / "config" / "registry.yaml"
-RECORD = REPO_ROOT / "results" / "discovery_5a.json"
+RECORD = REPO_ROOT / "results" / "discovery_5a1.json"
+PRIOR = REPO_ROOT / "results" / "discovery_5a.json"
 
 THEMES = {
     "mothers_kids": ("мами", "материнство", "мама і малюк", "дітки"),
     "healthy_lifestyle": ("здорове харчування", "здоровий спосіб життя", "ЗОЖ", "нутриціологія"),
     "baby_food": ("дитяче харчування", "прикорм", "дитяче меню"),
+    "cooking_recipes": (
+        "рецепти",
+        "кулінарія",
+        "готуємо вдома",
+        "страви",
+        "випічка",
+        "десерти",
+        "вечеря",
+    ),
+    "supermarket_deals": (
+        "знижки",
+        "акції АТБ",
+        "акції Сільпо",
+        "акції Аврора",
+        "супермаркет знижки",
+        "економія продукти",
+    ),
+    "health_fitness": ("здоров'я", "схуднення", "фітнес", "тренування"),
+    "food_quality": (
+        "якість продуктів",
+        "фальсифікат",
+        "експертиза продуктів",
+        "перевірка якості",
+        "безпечність харчових продуктів",
+        "Держпродспоживслужба",
+    ),
 }
-"""The three themes the operator authorised on 2026-08-04, and the exact queries sent.
+"""Every theme the operator has authorised, and the exact queries sent.
 
-Written out rather than composed at run time and echoed into the record, so "only the three
+The first three are the 2026-08-04 ruling; the last four were added 2026-08-06 at the 5a
+acceptance on `docs/RESEARCH-5a1-themes.md` — `health_fitness` AGAINST the team lead's
+recommendation, on the operator's word that the ledger prices a theme better than a forecast
+does, and `food_quality` as the operator's own addition (dairy is the most falsified category
+in UA retail, so a falsification watch lands inside the mission rather than beside it).
+
+Written out rather than composed at run time and echoed into the record, so "only the
 authorised themes were searched" is something a reader checks instead of takes on trust.
 Widening this list is an operator decision taken on the ledger's gap (SPEC 3.11 (4))."""
+
+SEED_HANDLES = (
+    "@recepti",
+    "@mameni_recepti",
+    "@klopotenkofood",
+    "@blwbabies",
+    "@kopiyochka1",
+    "@epicentrk_sale",
+    "@maudau",
+)
+"""Handles named in the research note and checked directly, past the search.
+
+`contacts.SearchRequest` ranks by its own relevance and returns at most DISCOVER_LIMIT rows
+per query, so a channel the operator already knows about can simply never surface. A seed that
+does surface anyway dedups by handle and is measured once."""
+
+SEED_TAG = "seed"
+"""The `found_by` prefix seeds carry, so a subtotal can tell a searched theme from a handed
+one — a theme that only "found" its own seeds found nothing."""
 
 COVERAGE_TARGET = 10_000_000
 """Operator, 2026-08-05 (SPEC 3.11 (4)): the monitored portfolio aims at this many summed
@@ -177,6 +235,53 @@ def build_ledger(registry_rows: list[dict], candidates: list[dict]) -> dict:
     }
 
 
+def merge_candidates(carried: list[dict], fresh: list[dict], extra_tags: dict) -> list[dict]:
+    """The union of two scans, deduped by handle — the combined reading the ledger is built on.
+
+    A carried row keeps its measurement (it was measured, and re-measuring it would be a
+    different day's number) and gains the `found_by` tags of any theme in this scan that also
+    found it.
+    """
+    merged = []
+    for row in carried:
+        held = row.get("found_by", [])
+        tags = [tag for tag in extra_tags.get(row["handle"].lower(), []) if tag not in held]
+        merged.append({**row, "found_by": held + tags} if tags else row)
+    seen = {row["handle"].lower() for row in merged}
+    merged += [row for row in fresh if row["handle"].lower() not in seen]
+    return merged
+
+
+def theme_subtotals(candidates: list[dict]) -> dict:
+    """What each theme would add on its own, so the operator can price it.
+
+    Every authorised theme gets a row even when it found nothing: `health_fitness` was
+    authorised against the team lead's recommendation precisely so the ledger could answer
+    that, and an empty row IS the answer, where a missing one reads as an oversight.
+
+    A channel two themes both found is counted in both, so these do not sum to the ledger's
+    total — `overlap_note` says so in the record rather than in a report nobody re-reads.
+    """
+    rows = {}
+    for theme in [*THEMES, SEED_TAG]:
+        found = [
+            row
+            for row in candidates
+            if any(tag.split(":")[0] == theme for tag in row.get("found_by", []))
+        ]
+        counted = [row for row in found if row["verdict"] in COUNTED]
+        live = [row for row in counted if row["posts_per_week"] > 0]
+        rows[theme] = {
+            "candidates": len(found),
+            "counted": len(counted),
+            "subscribers": sum(row["subscribers"] or 0 for row in counted),
+            "live": len(live),
+            "live_subscribers": sum(row["subscribers"] or 0 for row in live),
+            "with_a_discussion_group": sum(1 for row in counted if row["discussion_group"]),
+        }
+    return rows
+
+
 async def window_sample(client, entity, now: datetime) -> tuple[list[tuple], list[str], bool]:
     """One history request per candidate: the last WINDOW_DAYS of posts, and their texts."""
     cutoff = now - timedelta(days=WINDOW_DAYS)
@@ -210,20 +315,55 @@ async def measure(client, source, handle: str, now: datetime) -> tuple[dict, dic
     return record, window_stats(samples, texts, truncated)
 
 
-async def search_themes(client) -> dict[str, dict]:
-    """Every theme's queries run once, deduplicated by handle, remembering who found what."""
+async def search_themes(client, themes: dict[str, tuple]) -> dict[str, dict]:
+    """Every theme's queries run once, deduplicated by handle, remembering who found what.
+
+    Keyed by the lowered handle: Telegram treats @MAUDAU and @maudau as one channel, and a
+    coverage ledger that counted them apart would add the same audience to the sum twice.
+    """
     found: dict[str, dict] = {}
-    for theme, queries in THEMES.items():
+    for theme, queries in themes.items():
         for query in queries:
             print(f"searching {theme}: {query!r}", flush=True)
             for source, handle in await entry_check.search_channels(client, query):
-                entry = found.setdefault(handle, {"source": source, "found_by": []})
+                entry = found.setdefault(
+                    handle.lower(), {"source": source, "handle": handle, "found_by": []}
+                )
                 entry["found_by"].append(f"{theme}:{query}")
             await asyncio.sleep(entry_check.PAUSE_SECONDS)
     return found
 
 
-async def run(registry_channels: list[tuple]) -> dict:
+def add_seeds(found: dict[str, dict], seeds: tuple[str, ...]) -> None:
+    """Put the research note's handles into the same pipeline the search feeds.
+
+    A seed already found by a query keeps that entry and gains the tag: the same channel
+    measured twice would be the same audience counted twice.
+    """
+    for handle in seeds:
+        entry = found.setdefault(
+            handle.lower(),
+            {
+                "source": entry_check.Source(SEED_TAG, handle, "community", (handle,)),
+                "handle": handle,
+                "found_by": [],
+            },
+        )
+        entry["found_by"].append(f"{SEED_TAG}:{handle}")
+
+
+def themes_to_scan(carried: dict | None) -> dict[str, tuple]:
+    """The authorised themes the carried record has not already searched.
+
+    Read off the prior record's own `themes` key rather than kept in a second constant: a
+    re-scan costs another rate-limited pass and would measure a different day, and a list of
+    "already done" maintained by hand is a list that silently stops matching the file.
+    """
+    done = set(carried["themes"]) if carried else set()
+    return {theme: queries for theme, queries in THEMES.items() if theme not in done}
+
+
+async def run(registry_channels: list[tuple], themes: dict[str, tuple], known: set[str]) -> dict:
     now = datetime.now(UTC)
     client = build_client()
     await client.connect()
@@ -240,13 +380,21 @@ async def run(registry_channels: list[tuple]) -> dict:
             )
             await asyncio.sleep(entry_check.PAUSE_SECONDS)
 
-        found = await search_themes(client)
-        already = {handle for _, handle in registry_channels}
-        candidates = []
+        found = await search_themes(client, themes)
+        add_seeds(found, SEED_HANDLES)
+        already = {handle.lower() for _, handle in registry_channels}
+        candidates, extra_tags = [], {}
         flood_wait = None
-        for handle, entry in found.items():
-            if handle in already:
+        for key, entry in found.items():
+            handle = entry["handle"]
+            if key in already:
                 continue  # already counted in the registry sum; never twice
+            if key in known:
+                # Measured in the carried record. Its row stands; only the tag is new, and a
+                # theme subtotal that dropped it would under-price the theme by exactly the
+                # channels it shares with an older one.
+                extra_tags[key] = entry["found_by"]
+                continue
             print(f"checking {handle}...", flush=True)
             try:
                 record, window = await measure(client, entry["source"], handle, now)
@@ -278,6 +426,7 @@ async def run(registry_channels: list[tuple]) -> dict:
     return {
         "registry_rows": registry_rows,
         "candidates": candidates,
+        "extra_tags": extra_tags,
         "generated_at": now,
         # A scan cut short by a FloodWait produces a ledger that looks complete. The record
         # says how many seconds it was asked for, so an under-count reads as one.
@@ -308,15 +457,27 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="recompute the ledger from the rows already in the record — no API, no re-scan",
     )
+    parser.add_argument(
+        "--carry",
+        default=str(PRIOR),
+        help="a prior record whose themes are not re-scanned and whose rows join the ledger",
+    )
     args = parser.parse_args(argv)
 
     registry = load_registry(REGISTRY)
     registry_channels = [
         (source, handle) for source in registry.sources for handle in source.telegram_channels
     ]
-    print(f"{len(THEMES)} authorised themes, {sum(len(q) for q in THEMES.values())} queries:")
+    carry = Path(args.carry)
+    carried = json.loads(carry.read_text(encoding="utf-8")) if carry.exists() else None
+    scanning = themes_to_scan(carried)
+    print(f"{len(THEMES)} authorised themes, {len(scanning)} to scan now:")
     for theme, queries in THEMES.items():
-        print(f"  {theme:<20}{', '.join(queries)}")
+        mark = " " if theme in scanning else "·"  # · = carried, not re-searched
+        print(f"{mark} {theme:<20}{', '.join(queries)}")
+    print(f"  {SEED_TAG:<20}{', '.join(SEED_HANDLES)}")
+    if carried:
+        print(f"carrying {len(carried['candidates'])} candidates from {relabel.rel(carry)}")
     print(
         f"registry: {len(registry_channels)} channels — {', '.join(h for _, h in registry_channels)}"
     )
@@ -333,10 +494,47 @@ def main(argv: list[str] | None = None) -> int:
             "generated_at": held["generated_at"],
             "flood_wait_seconds": held.get("flood_wait_seconds"),
         }
+        # A rebuild re-derives arithmetic and nothing else: what was scanned, and what was
+        # carried in, are facts about the run that produced the rows, not about this pass.
+        provenance = {
+            "themes_scanned_here": held.get("themes_scanned_here", []),
+            "seed_handles": held.get("seed_handles", []),
+            "carried_from": held.get("carried_from"),
+            "checked_this_run": held.get("checked_this_run"),
+        }
     else:
-        result = asyncio.run(run(registry_channels))
+        carried_rows = carried["candidates"] if carried else []
+        known = {row["handle"].lower() for row in carried_rows}
+        result = asyncio.run(run(registry_channels, scanning, known))
         result["generated_at"] = result["generated_at"].isoformat(timespec="seconds")
+        result["scanned"] = len(result["candidates"])
+        result["candidates"] = merge_candidates(
+            carried_rows, result["candidates"], result.get("extra_tags", {})
+        )
+        provenance = {
+            "themes_scanned_here": sorted(scanning),
+            "seed_handles": list(SEED_HANDLES),
+            "carried_from": {
+                "path": relabel.rel(carry) if carried else None,
+                "generated_at": carried["generated_at"] if carried else None,
+                "themes": sorted(carried["themes"]) if carried else [],
+                "candidates": len(carried_rows),
+                "note": (
+                    "The carried themes were NOT re-scanned: their rows are the earlier"
+                    " measurement, carried whole. A candidate a theme of this run also found"
+                    " keeps that row and gains the tag, so the per-theme subtotals see it and"
+                    " the coverage sum still counts it once."
+                ),
+            },
+            "checked_this_run": result.get("scanned"),
+        }
     ledger = build_ledger(result["registry_rows"], result["candidates"])
+    ledger["per_theme"] = theme_subtotals(result["candidates"])
+    ledger["overlap_note"] = (
+        "per_theme rows are per `found_by` tag: a channel two themes both found is counted in"
+        " both, so the subtotals do not sum to candidate_subscribers_total. They price a theme"
+        " on its own, not a partition of the portfolio."
+    )
 
     record = {
         "generated_at": result["generated_at"],
@@ -345,8 +543,13 @@ def main(argv: list[str] | None = None) -> int:
         else None,
         "scan_complete": result.get("flood_wait_seconds") is None,
         "flood_wait_seconds": result.get("flood_wait_seconds"),
-        "authorised": "operator 2026-08-04 (themes) / 2026-08-05 (coverage target), SPEC 3.11 (4)",
+        "authorised": (
+            "operator 2026-08-04 (first three themes) / 2026-08-05 (coverage target) /"
+            " 2026-08-06 (four more themes + seed handles, on docs/RESEARCH-5a1-themes.md),"
+            " SPEC 3.11 (4)"
+        ),
         "themes": {theme: list(queries) for theme, queries in THEMES.items()},
+        **provenance,
         "search_limit_per_query": entry_check.DISCOVER_LIMIT,
         "post_sample": entry_check.POST_SAMPLE,
         "window_days": WINDOW_DAYS,
@@ -378,7 +581,13 @@ def main(argv: list[str] | None = None) -> int:
         f"\nregistry {ledger['registry_channels']} channels: {ledger['registry_subscribers']:,} subscribers"
     )
     print(f"candidates counted: {ledger['candidates_counted']} of {ledger['candidates_found']}")
-    print(f"portfolio if all counted entered: {ledger['portfolio_if_all_counted_entered']:,}")
+    print(f"\n{'theme':<20}{'cands':>7}{'counted':>9}{'subscribers':>13}{'live':>6}{'w/group':>9}")
+    for theme, row in ledger["per_theme"].items():
+        print(
+            f"{theme:<20}{row['candidates']:>7}{row['counted']:>9}"
+            f"{row['subscribers']:>13,}{row['live']:>6}{row['with_a_discussion_group']:>9}"
+        )
+    print(f"\nportfolio if all counted entered: {ledger['portfolio_if_all_counted_entered']:,}")
     print(f"gap to {COVERAGE_TARGET:,}: {ledger['gap_if_all_counted_entered']:,}")
     for caveat in CAVEATS:
         print(f"  caveat: {caveat}")
