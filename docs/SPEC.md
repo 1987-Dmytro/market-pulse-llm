@@ -195,6 +195,12 @@ Phase 5 (production loop) opens under this contract:
 (1) **Scope & cadence:** collection via Mac cron at **2 passes/day** (operator
 choice; frequency is a recorded knob, not a constant), batch inference on
 RunPod serverless (NF4 base + arm-A adapter of 4.5h2), SQLite aggregates
+**[runtime ruling, operator 2026-08-06: serverless is unreachable on this
+account — no endpoint, including RunPod's own hub worker, consumes a job
+(evidence: results/parity_verdict_5b.json). Production runtime = a
+stop-after POD on AMPERE_48 (A6000 — the same card the 4.5h2 anchors were
+measured on), booted per pass; serverless may return later ONLY through a
+fresh §(2) measurement. A support ticket runs in parallel at zero cost.]**
 (brand × intent × sentiment × time × category), a **14-day first reporting
 cycle** + alerts v0 on spikes of both polarities, own and competitors
 (PRODUCT.md §6; alert latency = collection interval).
@@ -215,6 +221,17 @@ run: B is adopted only if every 4.5h2-passed gate stays passing on B
 `results/verdict_45h2.json`) and no gate head drops more than 0.005
 vs A; any tie or doubt ships A — the safe default. A failed or aborted
 pair closes the merge question in favour of A; no retry.
+**Single-config measurement pre-registered (operator, 2026-08-06, after
+the pair aborted):** config A alone is scored once against test v4 on the
+POD runtime of the (1) ruling — the pair stays closed, B stays dead. One
+attempt, batch 1, hard stop = the $3.47 remaining under the 5b cap; smoke
+on the 24-row arm-A carve (`results/train/45h2-arm-a/provenance.json`,
+`n_carve: 24` — PROMPT-5b's "carve-758" was a team-lead misname; 758 is
+test v4's row count). Deltas vs `results/verdict_45h2.json` are REPORTED,
+never averaged away; this is not a gate and no bar moves, but any
+4.5h2-passed gate head landing under its bar is reported loudly as its
+own finding for an operator briefing. A failed attempt stops the line —
+aggregates cannot take serving numbers without this measurement.
 (3) **Category post-layer is in-phase** (operator choice): the taxonomy is
 the operator's word BEFORE any labeling; one LLM pass over ~6k posts
 (~$0.2–0.5) with its own pre-registered gate (sealed hundred of posts,
@@ -265,7 +282,10 @@ BESIDE model sentiment with its own scale, never merged into it.
 BESIDE v1; historical dumps are re-scored under v2 at $0; every number
 names its normalization version; gate history under v1 is not rewritten.
 (6) **Budgets, pre-registered:** phase cap **$8 GPU** (of the $8.70
-remainder) + **$1 OpenRouter**; post-launch run-rate ceiling ~$9–12/month
+remainder — the 2026-08-05 figure; the live headroom is read from the
+spend anchors `results/spend_*.json`, and the CA-MTL-3 volume bills
+~$0.24/day whether attached or not — correction 2026-08-06, D9)
++ **$1 OpenRouter**; post-launch run-rate ceiling ~$9–12/month
 (serverless + the CA-MTL-3 volume, kept — review ~2026-09-05 if no GPU
 work has started). Spend anchors are written before the first spend.
 (7) **Out of scope:** any retrain; dashboard UI (Phase 6); a VPS; merging
