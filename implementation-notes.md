@@ -2795,17 +2795,39 @@ equal to the ones `verdict_45h2.json` recorded before it compares anything:
 | G1e | 0.9610 | 0.9610 | **+0.0000** | 0.9283 | **yes** |
 | G1a ua / ru | 0.9306 / 0.8697 | 0.9306 / 0.8697 | **+0.0000** | — | — |
 
-**Every head is bit-identical to the anchor.** Not "within tolerance" — the same float. 3 of 5
-gates pass, the same three, and `under_bar` is empty: no 4.5h2-passed head landed under its bar,
-so there is no loud finding and nothing for an operator briefing to rule on. G1c is still the
-interesting number for a reader — it missed by 0.0005 at 4.5h2 and misses by 0.0005 here — but
-this phase moves no bar and rules on nothing.
+**Every reported number is identical to the anchor** — not "within tolerance", the same float,
+on all five heads and both G1a language floors. 3 of 5 gates pass, the same three, and
+`under_bar` is empty: no 4.5h2-passed head landed under its bar, so there is no loud finding and
+nothing for an operator briefing to rule on. G1c is still the interesting number for a reader —
+it missed by 0.0005 at 4.5h2 and misses by 0.0005 here — but this phase moves no bar and rules
+on nothing. (The `--single` table prints G1b's bar as `23.0000` in a column of rates: G1b's bar
+is a **count** of fixed rows out of 38, not a rate. The full bars dict is in the record.)
 
-That the deltas are exactly zero is a statement about the *stack*, not luck: greedy decoding at
-batch 1 on the same card, driver, CUDA, torch, transformers and bitsandbytes, with the same
-prompt revisions (`495b43d1…`, `6a7e66ef…`), the same frozen input hashes and the same G1b slice
-(`6dc6be01…`). ADR `phase4-own-pod-anchor` §(c) records that greedy is *not* batch-invariant on
-this stack; batch 1 on both sides is why this comparison could come out identical at all.
+That the deltas are exactly zero is a statement about the *stack*, and the premise is quoted
+rather than inferred from the match:
+
+| | 4.5h2 arm A | 5b.1 |
+|---|---|---|
+| `config.generation.batch_size` | **1** | **1** |
+| `config.generation.greedy` / `do_sample` | true / false | true / false |
+| frozen input sha256, all three | `43fc38e1…` `a476414e…` `954e46a6…` | **same** |
+| `prompt_revision_sha256` | `495b43d1…` / `6a7e66ef…` | **same** |
+| `g1b_slice_sha256` | `6dc6be01…` | **same** |
+| `scored_ids_sha256`, all three | `066ed97e…` `b8265e22…` `7d43578e…` | **same** |
+
+ADR `phase4-own-pod-anchor` §(c) records that greedy is *not* batch-invariant on this stack, so
+batch 1 on both sides is load-bearing — and it is a field in both records, plus
+`scripts/runbook_45h2.md:198` where the arm-A eval was launched with `--batch-size 1`. The
+matching `scored_ids_sha256` is the other half: the same rows, proven by hash rather than by
+count.
+
+**What cannot be claimed, and why.** A per-row identity check is impossible: arm A's own
+prediction dump was lost on 2026-08-04 and `results/predictions/LOST.md` says plainly that it
+may not be regenerated. So "identical" here means seven identical aggregates over an identical,
+hash-pinned row set — not 758 verified rows. Aggregates can coincide while rows differ; nothing
+in this repository can rule that out for this pair, and the honest statement is the weaker one.
+5b.1's own dump (`results/predictions/google-gemma-4-31b-it--20260806T154612Z.jsonl`, 758 rows)
+is committed, so the next runtime comparison will not have this hole.
 
 **The delta SPEC amendment 3.11 (2) exists to report is zero.** Serving through
 `serve_handler` over HTTP on a booted-per-pass pod costs the gate numbers nothing.
@@ -2816,10 +2838,15 @@ What 5c needs from the same record:
 |---|---|
 | cold start (local NVMe) | **53.0 s** — 278.9 s off a network volume |
 | per row, batch 1, v4 mix | **4.065 s** (`wall_per_call`, 759 calls) |
-| the run | **3085.4 s** wall for 758 rows |
-| projected beforehand | 3163.1 s — **−2.5%**, so the task-mix weighting holds |
+| the run, rows only | **3085.4 s** wall for 758 rows |
+| projected, rows only | 3110.1 s (3163.1 − 53.0) — **−0.8%**, so the task-mix weighting holds |
+| a 5c pass, cold | **≈3138 s** = the cold start plus the rows |
 | $/1000 rows at $0.53/h | **$0.60** |
 | the pod's whole life | 14:30:22 → 15:48:29 UTC, 4 687 s, $0.69 |
+
+The projection's `seconds_per_run` includes a cold start and this run did not pay one — the
+worker process the smoke had loaded was still up, so 3085.4 s is rows only. Rows against rows is
+3110.1 vs 3085.4; a 5c pass boots its own worker and pays both.
 
 ## Spend
 
@@ -2895,7 +2922,7 @@ run does not offer it either.
 ## What the operator gets to decide next
 
 1. **5c can size itself off real numbers now.** 53 s of cold start and 4.065 s per row at batch 1
-   means a 758-row pass is ~52 minutes of A6000, ~$0.46, and two passes a day is ~$28/month of
+   means a 758-row pass is ~3138 s of A6000, ~$0.46, and two passes a day is ~$28/month of
    GPU — against SPEC 3.11 (6)'s ~$9–12/month run-rate ceiling. **That gap is the next decision,
    and it is a real one:** the ceiling was written when inference was serverless and billed by
    the second. Batch >1 is the obvious lever and it is closed by contract, because greedy is not
@@ -2907,3 +2934,8 @@ run does not offer it either.
 3. **The serverless ticket is still worth filing at zero cost.** Nothing depends on it now — the
    pod runtime is measured and reproduces the anchor exactly — but if serverless comes back it
    needs a fresh §(2) measurement, and this record is what that would be compared against.
+
+**D12 — "identical" is seven aggregates over a hash-pinned row set, not 758 verified rows.**
+Arm A's prediction dump was lost on 2026-08-04 (`results/predictions/LOST.md`) and may not be
+regenerated, so the per-row diff that would turn this from an inference into a measurement
+cannot be run. The claim is stated at the strength the evidence supports.
