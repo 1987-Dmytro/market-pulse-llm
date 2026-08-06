@@ -625,6 +625,17 @@ def local_config(
     return config
 
 
+def arm_runtime(arm: str = "without-plast") -> dict:
+    """The library versions the 4.5h2 arm's own record says it was scored with."""
+    try:
+        return records.arm_record(history(), arm)["config"]["runtime"]
+    except (ValueError, KeyError, OSError) as err:
+        raise SystemExit(
+            f"the 4.5h2 {arm!r} record does not name a runtime to match against: {err}."
+            " A serving-parity number needs the stack its anchor was measured on."
+        ) from None
+
+
 def serving_config(config: dict, args, info: dict, merged: dict | None, client) -> dict:
     """`local_config`'s output, re-labelled for the run that happened off this machine (5b).
 
@@ -1324,6 +1335,9 @@ def main(argv: list[str] | None = None) -> int:
             expected["merged_sha256"] = merged["merged_sha256"]
         serving_info = serving.assert_serving(client.info(), expected)
         runtime = serving_info.get("runtime")
+        # The worker's stack, against the stack the 4.5h2 arm was scored on. Read off
+        # that record rather than typed, so a re-scored arm moves this check with it.
+        serving.assert_runtime_matches(runtime or {}, arm_runtime())
         print(f"endpoint {args.endpoint_id} · config {args.serving_config}")
         for field in ("merge_state", "adapter_sha256", "merged_sha256", "weights_dir"):
             print(f"  {field:<20} {serving_info.get(field)}")

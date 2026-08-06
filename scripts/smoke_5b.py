@@ -270,10 +270,11 @@ def main(argv: list[str] | None = None) -> int:
         expected["merged_sha256"] = merged["merged_sha256"]
 
     # eval_zero_shot's own key, so a script that imports it here needs no second copy
-    from eval_zero_shot import runpod_api_key  # noqa: PLC0415
+    from eval_zero_shot import arm_runtime, runpod_api_key  # noqa: PLC0415
 
     client = serving.EndpointClient(args.endpoint_id, runpod_api_key())
     info = serving.assert_serving(client.info(), expected)
+    serving.assert_runtime_matches(info.get("runtime") or {}, arm_runtime())
     handshake = client.timing()
     print(f"endpoint       {args.endpoint_id} · config {args.serving_config}")
     for field in ("merge_state", "adapter_sha256", "merged_sha256", "weights_dir"):

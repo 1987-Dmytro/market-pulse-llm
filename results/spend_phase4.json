@@ -59,6 +59,13 @@
       "spent_usd": 16.2954,
       "remaining_usd": 8.7046,
       "note": "45h2 arm B: 432 steps 7.51 h, eval 758 rows 0 failures"
+    },
+    {
+      "at": "2026-08-06T12:16:12+00:00",
+      "balance": 18.2271420227,
+      "spent_usd": 16.7729,
+      "remaining_usd": 8.2271,
+      "note": "5b staging: repo+adapter+peft on the volume, cold start 278.9s proven on an A6000 pod, entrypoint answered a 3-row T2 batch"
     }
   ]
 }

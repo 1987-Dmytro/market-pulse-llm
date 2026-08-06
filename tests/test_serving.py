@@ -258,3 +258,39 @@ def test_the_handshake_waits_longer_than_a_row(client):
     endpoint.info()
     assert endpoint.transport.seen[0][0].endswith("/runsync")
     assert serving.HANDSHAKE_TIMEOUT > serving.DEFAULT_TIMEOUT * 5
+
+
+# --- the stack, not just the weights -----------------------------------------
+
+ANCHOR_STACK = {
+    "torch": "2.8.0+cu128",
+    "transformers": "5.14.1",
+    "bitsandbytes": "0.50.0",
+    "gpu": "NVIDIA RTX A6000",
+}
+
+
+def test_the_4_5h2_stack_passes_itself():
+    assert serving.assert_runtime_matches(ANCHOR_STACK, ANCHOR_STACK) == ANCHOR_STACK
+
+
+def test_a_different_card_is_the_measurement_not_a_refusal():
+    """Which GPU the worker got IS the runtime delta 5b reports. Pinning it would
+    refuse the measurement instead of making it."""
+    other = ANCHOR_STACK | {"gpu": "NVIDIA GeForce RTX 4090"}
+    assert serving.assert_runtime_matches(other, ANCHOR_STACK) == other
+
+
+@pytest.mark.parametrize(
+    "drift", [{"transformers": "5.15.0"}, {"torch": "2.9.0+cu128"}, {"bitsandbytes": "0.51.0"}]
+)
+def test_a_library_that_moved_is_a_different_instrument(drift):
+    with pytest.raises(SystemExit, match="not the one 4.5h2 measured"):
+        serving.assert_runtime_matches(ANCHOR_STACK | drift, ANCHOR_STACK)
+
+
+def test_a_worker_that_does_not_report_a_library_is_refused():
+    with pytest.raises(SystemExit, match="transformers: worker '<absent>'"):
+        serving.assert_runtime_matches(
+            {k: v for k, v in ANCHOR_STACK.items() if k != "transformers"}, ANCHOR_STACK
+        )

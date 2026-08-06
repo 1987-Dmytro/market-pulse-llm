@@ -240,6 +240,42 @@ def assert_serving(observed: dict, expected: dict) -> dict:
     return observed
 
 
+RUNTIME_LIBRARIES = ("torch", "transformers", "bitsandbytes")
+"""The three whose release moves a generated token, and therefore a gate number.
+
+Not the GPU: which card the worker got is exactly the runtime delta 5b exists to
+report, and pinning it would refuse the measurement instead of making it. A library
+version, though, is not a runtime difference — it is a different instrument, and it
+would land in the record silently beside numbers that look comparable.
+"""
+
+
+def assert_runtime_matches(observed: dict, anchor: dict) -> dict:
+    """Refuse unless the worker's stack is the one the 4.5h2 arm was scored on.
+
+    `assert_serving` checks what the worker loaded; this checks what it loads *with*.
+    A fresh `pip install transformers` on a newly staged volume pulls whatever is
+    current, and config A would stop being the 4.5h2 replica — the runtime delta
+    confounded with a library delta, which is the precise thing serving this repo's
+    own `local_llm` instead of vLLM was meant to avoid.
+    """
+    drift = {
+        library: (observed.get(library, "<absent>"), anchor.get(library))
+        for library in RUNTIME_LIBRARIES
+        if anchor.get(library) and observed.get(library, "<absent>") != anchor[library]
+    }
+    if drift:
+        lines = "; ".join(
+            f"{lib}: worker {got!r}, 4.5h2 {want!r}" for lib, (got, want) in drift.items()
+        )
+        raise SystemExit(
+            f"the worker's stack is not the one 4.5h2 measured — {lines}. Config A is the"
+            " 4.5h2 replica by construction; a library that moved makes the parity number a"
+            " comparison of two instruments. Pin the versions on the volume and re-stage."
+        )
+    return observed
+
+
 def project_pair_usd(
     *,
     seconds_per_row: float,
