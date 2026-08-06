@@ -190,7 +190,10 @@ def runpod_api_key() -> str:
         if config.exists():
             for line in config.read_text(encoding="utf-8").splitlines():
                 name, _, value = line.partition("=")
-                if name.strip() in {"apiKey", "api_key"}:
+                # `runpodctl doctor` writes `apikey = 'rpa_…'` — lower-cased and
+                # single-quoted. Matched case-insensitively so a CLI release that
+                # spells it apiKey does not silently send an unauthenticated request.
+                if name.strip().lower() in {"apikey", "api_key"}:
                     key = value.strip().strip('"').strip("'")
     if not key:
         raise SystemExit(

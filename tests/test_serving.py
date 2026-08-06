@@ -68,13 +68,11 @@ def test_batch_returns_one_reply_per_text_in_order(client):
     replies = endpoint.batch("T1", ["one", "two"])
     assert [r["content"] for r in replies] == ["a", "b"]
     assert endpoint.usage == {"prompt_tokens": 22, "completion_tokens": 14}
-    assert endpoint.timing() == {
-        "calls": 1,
-        "worker_seconds": 3.0,
-        "queue_seconds": 0.25,
-        "seconds_per_call": 3.0,
-        "worker_ids": ["worker-a"],
-    }
+    timing = endpoint.timing()
+    assert timing["calls"] == 1
+    assert timing["worker_seconds"] == 3.0
+    assert timing["queue_seconds"] == 0.25
+    assert timing["worker_ids"] == ["worker-a"]
 
 
 def test_batch_sends_the_task_texts_and_posts_unrendered(client):
@@ -213,3 +211,34 @@ def test_project_pair_usd_reports_every_input_it_used():
 
 def test_endpoint_url_is_the_runpod_v2_shape():
     assert serving.endpoint_url("ep-1", "runsync") == "https://api.runpod.ai/v2/ep-1/runsync"
+
+
+# --- the unit the bill is in -------------------------------------------------
+
+
+def test_timing_reports_wall_clock_beside_the_executed_seconds(client, monkeypatch):
+    """A worker bills while it is up. Summed executionTime is not that number, and an
+    8-row smoke's idle share is nothing like a 758-row run's — so both travel."""
+    ticks = iter([100.0, 100.0, 130.0, 130.0])
+    monkeypatch.setattr(serving.time, "monotonic", lambda: next(ticks))
+    endpoint = client(job({"replies": [reply()]}, execution_ms=6000))
+    endpoint.batch("T1", ["one"])
+    timing = endpoint.timing()
+    assert timing["wall_seconds"] == 30.0
+    assert timing["worker_seconds"] == 6.0
+    assert timing["idle_share"] == 0.8
+    assert timing["wall_per_call"] == 30.0
+
+
+def test_timing_is_empty_rather_than_wrong_before_the_first_call(client):
+    endpoint = client()
+    assert endpoint.timing()["wall_seconds"] is None
+    assert endpoint.timing()["idle_share"] is None
+
+
+def test_the_handshake_waits_longer_than_a_row(client):
+    """A 31 B cold start outlives the per-row budget, and `retries=0` would abort on it."""
+    endpoint = client(job({"serving_config": "A"}))
+    endpoint.info()
+    assert endpoint.transport.seen[0][0].endswith("/runsync")
+    assert serving.HANDSHAKE_TIMEOUT > serving.DEFAULT_TIMEOUT * 5

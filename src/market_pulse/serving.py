@@ -18,8 +18,10 @@ one thing that changes between the two runs is *where the weights live*. So:
 Cost is deliberately *measured* rather than priced from a table: RunPod's published
 per-second rates move, and the phase's $4 stop is enforced against `runpod_guard`'s balance
 delta either way. :func:`project_pair_usd` therefore takes a dollars-per-second that the
-smoke observed — balance actually spent divided by worker seconds actually billed — so the
-projection the abort rule reads is arithmetic over two measurements, not a quoted price.
+smoke observed — the balance the guard says was actually spent, divided by the **wall-clock**
+seconds the client held the endpoint — so the projection the abort rule reads is arithmetic
+over two measurements, not a quoted price. Wall clock and not summed ``executionTime``: a
+worker bills while it is up, including the gaps between sequential rows.
 """
 
 import json
@@ -33,8 +35,16 @@ from market_pulse.zero_shot import RETRYABLE, ApiError
 BASE_URL = "https://api.runpod.ai/v2"
 
 DEFAULT_TIMEOUT = 300.0
-"""One row, batch 1, greedy, 256 new tokens: ~3 s warm. The margin is for a cold start
-that lands inside ``/runsync`` — the weights are 31 B at NF4 off a network volume."""
+"""One row, batch 1, greedy, 256 new tokens: ~3 s warm on the 4.5h2 pod. A per-row budget."""
+
+HANDSHAKE_TIMEOUT = 1800.0
+"""What :meth:`EndpointClient.info` waits, and it is deliberately not the per-row budget.
+
+The first job on a cold endpoint pays for a 31 B model arriving and quantizing to NF4 —
+minutes, and tens of minutes if the weights are not cached on the endpoint. With
+``retries=0`` a 300 s deadline would raise `ApiError(408)` on the handshake, abort the run,
+and still be billed for the boot: the most expensive way to learn nothing.
+"""
 
 POLL_SECONDS = 5.0
 TERMINAL = frozenset({"COMPLETED", "FAILED", "CANCELLED", "TIMED_OUT"})
@@ -74,9 +84,9 @@ class EndpointClient:
     can tell which backend ran.
 
     ``cost`` is 0.0 per row for the same reason the pod's is: serverless bills
-    worker seconds, not rows. What this counts instead is :attr:`worker_seconds`
-    (RunPod's ``executionTime``) and :attr:`queue_seconds` (its ``delayTime``),
-    which is what the projection and the spend record are built from.
+    the worker's uptime, not rows. What this counts instead is :meth:`timing` —
+    RunPod's per-job ``executionTime`` and ``delayTime`` beside the wall-clock span
+    the client actually held the endpoint, which is the quantity the bill tracks.
     """
 
     def __init__(
@@ -85,27 +95,34 @@ class EndpointClient:
         api_key: str,
         *,
         timeout: float = DEFAULT_TIMEOUT,
+        handshake_timeout: float = HANDSHAKE_TIMEOUT,
         retries: int = 0,
     ) -> None:
         self.endpoint_id, self.api_key = endpoint_id, api_key
-        self.timeout, self.retries = timeout, retries
+        self.timeout, self.handshake_timeout = timeout, handshake_timeout
+        self.retries = retries
         self.usage = Counter()
         self.worker_seconds = 0.0
         self.queue_seconds = 0.0
         self.calls = 0
         self.worker_ids: set[str] = set()
+        self.started_at: float | None = None
+        self.finished_at: float | None = None
 
     # -- the transport -----------------------------------------------------
 
-    def _run(self, payload: dict) -> dict:
+    def _run(self, payload: dict, timeout: float | None = None) -> dict:
         """One ``/runsync`` job, polled through ``/status`` if it outlives the call.
 
         ``retries`` defaults to 0 and 5b passes it: SPEC amendment 3.11 (2) gives
         the phase one attempt, and a client that quietly re-asked a row would turn
         a failed run into a slower one.
         """
-        job = _post(endpoint_url(self.endpoint_id, "runsync"), self.api_key, payload, self.timeout)
-        deadline = time.monotonic() + self.timeout
+        timeout = self.timeout if timeout is None else timeout
+        if self.started_at is None:
+            self.started_at = time.monotonic()
+        job = _post(endpoint_url(self.endpoint_id, "runsync"), self.api_key, payload, timeout)
+        deadline = time.monotonic() + timeout
         while job.get("status") not in TERMINAL:
             if "id" not in job:
                 raise ApiError(-1, f"no job id and no terminal status: {str(job)[:200]}")
@@ -116,6 +133,7 @@ class EndpointClient:
                 endpoint_url(self.endpoint_id, f"status/{job['id']}"), self.api_key, None, 60.0
             )
         self.calls += 1
+        self.finished_at = time.monotonic()
         self.worker_seconds += float(job.get("executionTime") or 0) / 1000.0
         self.queue_seconds += float(job.get("delayTime") or 0) / 1000.0
         if job.get("workerId"):
@@ -124,11 +142,11 @@ class EndpointClient:
             raise ApiError(-1, f"job {job.get('id')} ended {job['status']}: {str(job)[:300]}")
         return job.get("output") or {}
 
-    def _run_with_retry(self, payload: dict) -> dict:
+    def _run_with_retry(self, payload: dict, timeout: float | None = None) -> dict:
         attempt = 0
         while True:
             try:
-                return self._run(payload)
+                return self._run(payload, timeout)
             except ApiError as err:
                 attempt += 1
                 if attempt > self.retries or err.status not in RETRYABLE:
@@ -139,7 +157,7 @@ class EndpointClient:
 
     def info(self) -> dict:
         """The worker's own account of what it loaded. Read before the first scored row."""
-        return self._run_with_retry({"input": {"op": "info"}})
+        return self._run_with_retry({"input": {"op": "info"}}, self.handshake_timeout)
 
     def batch(self, task: str, texts: list[str], posts: list[dict] | None = None) -> list[dict]:
         """Generate for a batch of rows; one reply dict per text, in order.
@@ -168,12 +186,31 @@ class EndpointClient:
         return replies
 
     def timing(self) -> dict:
-        """What the run cost in the unit serverless bills in."""
+        """What the run cost, in the unit serverless actually bills in.
+
+        ``worker_seconds`` is what RunPod reports per job and is NOT the billed
+        quantity: a worker is up — and charged — between two sequential jobs as well
+        as during them, and the idle-to-execution ratio of an 8-row smoke is nothing
+        like that of a 758-row run. ``wall_seconds`` is the span the client held the
+        endpoint, first request to last reply, and it is what the projection divides
+        the measured dollars by. Both are reported, because their ratio is the thing
+        a reader has to be able to see.
+        """
+        wall = (
+            round(self.finished_at - self.started_at, 3)
+            if self.started_at is not None and self.finished_at is not None
+            else None
+        )
         return {
             "calls": self.calls,
             "worker_seconds": round(self.worker_seconds, 3),
             "queue_seconds": round(self.queue_seconds, 3),
+            "wall_seconds": wall,
             "seconds_per_call": round(self.worker_seconds / self.calls, 3) if self.calls else None,
+            "wall_per_call": round(wall / self.calls, 3) if wall and self.calls else None,
+            "idle_share": (
+                round(1 - self.worker_seconds / wall, 4) if wall and self.worker_seconds else None
+            ),
             "worker_ids": sorted(self.worker_ids),
         }
 

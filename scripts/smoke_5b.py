@@ -1,0 +1,216 @@
+#!/usr/bin/env python3
+"""The 5b smoke: eight TRAIN-CARVE rows through the endpoint, and what they cost (D1).
+
+`docs/PROMPT-5b.md` Deliverable 1 fixes the smoke at eight rows "drawn from the train carve
+— NEVER from test v4 (no test exposure outside the one paid run)". So this exists instead of
+`eval_zero_shot.py --probe`: every input that script knows about is a frozen test file, and
+one probe through it would spend the phase's single attempt before the paid run.
+
+The carve is `train_qlora.assemble`'s, rebuilt here and **checked against the sha the arm-A
+adapter's own provenance recorded** (`8347abd7…`). That check is the whole reason this is
+safe to call a carve run: the rows are reproducible, they are the ones the adapter held out,
+and no frozen test file is opened at all. `carve_mechanics` on the 4.5h2 pod ran exactly this
+path, so a reply that parses here parses for the same reason it did there.
+
+What it measures — and Deliverable 1 says 5c reads this file to flip `run_loop.ENDPOINT`:
+
+- the endpoint's own account of what it loaded, asserted against the registered config;
+- latency per row, and the wall-clock span the endpoint was held, which is the unit
+  serverless bills in;
+- cold start, taken as the first call's wall time minus its executed time.
+
+Nothing is scored against a gate and nothing is appended to `results/baselines.json`. The
+carve is training data; a number from it measures the path, never the model.
+
+    PYTHONPATH=src python3 scripts/smoke_5b.py --endpoint-id <id> --serving-config A \\
+        --adapter results/train/45h2-arm-a/adapter
+"""
+
+import argparse
+import importlib.util
+import json
+import sys
+from datetime import UTC, datetime
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(REPO_ROOT / "src"))  # the package is not pip-installed
+
+from market_pulse import prompts, records, serving  # noqa: E402
+
+RECORD = REPO_ROOT / "results" / "serving_5b.json"
+ADAPTER = REPO_ROOT / "results" / "train" / "45h2-arm-a" / "adapter"
+SMOKE_ROWS = 8
+"""PROMPT-5b Deliverable 1. Eight, not "a few": the projection divides by this."""
+
+
+def trainer():
+    """`scripts/train_qlora.py` as a module — the carve has exactly one builder."""
+    spec = importlib.util.spec_from_file_location(
+        "train_qlora", REPO_ROOT / "scripts" / "train_qlora.py"
+    )
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def carve_rows(expected_sha: str, n: int) -> list[dict]:
+    """The first ``n`` rows of the arm's own held-out carve, or a refusal.
+
+    Rebuilt rather than read off disk, and then checked: a carve file that drifted,
+    or a rebuild against moved training sources, would put test-adjacent rows into a
+    run whose whole claim is that it touched no test data.
+    """
+    import yaml
+
+    module = trainer()
+    settings = yaml.safe_load(module.CONFIG.read_text(encoding="utf-8"))["training"]
+    built = module.assemble(False, settings["carve_rows"], settings["seed"])
+    digest = module.content_hash(built["carve"])
+    if digest != expected_sha:
+        raise SystemExit(
+            f"the rebuilt carve hashes to {digest}, not the {expected_sha} the adapter's"
+            " provenance recorded. These are not the rows arm A held out — stop and report."
+        )
+    if len(built["carve"]) < n:
+        raise SystemExit(f"the carve holds {len(built['carve'])} rows, fewer than the {n} asked")
+    return balanced(built["carve"], n), digest, len(built["carve"])
+
+
+def balanced(carve: list[dict], n: int) -> list[dict]:
+    """``n`` rows, round-robin across the tasks the carve holds. Deterministic.
+
+    The carve is sorted, so a plain head slice comes back all-T1 and all-one-channel —
+    and T2 is the rendering that carries the parent post, the one path that can fail on
+    the worker with a missing parent the way `parents.text_for` refuses. A smoke that
+    never renders it proves the half that was never in doubt.
+    """
+    tasks = sorted({row["task"] for row in carve})
+    queues = {task: [row for row in carve if row["task"] == task] for task in tasks}
+    picked = []
+    while len(picked) < n and any(queues.values()):
+        for task in tasks:
+            if queues[task] and len(picked) < n:
+                picked.append(queues[task].pop(0))
+    return picked
+
+
+def rendering(task: str) -> str:
+    """The carve rows carry `T1`/`T2`; the endpoint renders the v4 revision of them."""
+    return trainer().rendering(task)
+
+
+def ask(client, rows: list[dict]) -> list[dict]:
+    """One row per call, batch 1 — what the pair is scored at, and what this times."""
+    out = []
+    for row in rows:
+        task = rendering(row["task"])
+        before = client.timing()
+        reply = client.batch(task, [row["text"]], [row["post"]] if row.get("post") else None)[0]
+        after = client.timing()
+        parsed, failure = None, None
+        try:
+            parsed = prompts.parse_reply(task, reply["content"])
+        except prompts.ParseError as err:
+            failure = err.reason
+        out.append(
+            {
+                "id": row["id"],
+                "task": task,
+                "finish_reason": reply.get("finish_reason"),
+                "parsed": parsed is not None,
+                "parse_failure": failure,
+                "worker_seconds": round(
+                    after["worker_seconds"] - (before["worker_seconds"] or 0), 3
+                ),
+                "usage": reply.get("usage"),
+            }
+        )
+    return out
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--endpoint-id", required=True)
+    parser.add_argument("--serving-config", choices=("A", "B"), required=True)
+    parser.add_argument("--adapter", type=Path, default=ADAPTER)
+    parser.add_argument("--merged-sidecar", type=Path, help="config B: the merge sidecar")
+    parser.add_argument("--rows", type=int, default=SMOKE_ROWS)
+    parser.add_argument("--record", type=Path, default=RECORD)
+    parser.add_argument("--carve-only", action="store_true", help="rebuild and check, no network")
+    args = parser.parse_args(argv)
+
+    provenance = json.loads((args.adapter.parent / "provenance.json").read_text(encoding="utf-8"))
+    rows, carve_sha, carve_n = carve_rows(provenance["carve_sha256"], args.rows)
+    print(f"carve          {carve_sha} ({carve_n} rows, {len(rows)} asked)")
+    print(f"  ids          {[row['id'] for row in rows]}")
+    print(f"  tasks        {sorted({row['task'] for row in rows})}")
+    print("  test v4 is NOT opened by this run — the carve is training data")
+    if args.carve_only:
+        return 0
+
+    merged = (
+        json.loads(args.merged_sidecar.read_text(encoding="utf-8")) if args.merged_sidecar else None
+    )
+    expected = {
+        "serving_config": args.serving_config,
+        "merge_state": "merged-requantized" if merged else "unmerged-adapter",
+        "adapter_sha256": (
+            merged["adapter_sha256"] if merged else records.artifact_sha256(args.adapter)
+        ),
+    }
+    if merged:
+        expected["merged_sha256"] = merged["merged_sha256"]
+
+    # eval_zero_shot's own key, so a script that imports it here needs no second copy
+    from eval_zero_shot import runpod_api_key  # noqa: PLC0415
+
+    client = serving.EndpointClient(args.endpoint_id, runpod_api_key())
+    info = serving.assert_serving(client.info(), expected)
+    handshake = client.timing()
+    print(f"endpoint       {args.endpoint_id} · config {args.serving_config}")
+    for field in ("merge_state", "adapter_sha256", "merged_sha256", "weights_dir"):
+        print(f"  {field:<14} {info.get(field)}")
+    print(f"  cold start    {handshake['wall_seconds']}s wall, {handshake['worker_seconds']}s exec")
+
+    scored = ask(client, rows)
+    timing = client.timing()
+    parsed = sum(1 for row in scored if row["parsed"])
+    # The handshake carried the cold start; the rows after it are the steady state.
+    row_wall = (timing["wall_seconds"] or 0) - (handshake["wall_seconds"] or 0)
+    per_row = round(row_wall / len(scored), 3) if scored else None
+    record = {
+        "step": "5b smoke",
+        "written_at": datetime.now(UTC).isoformat(timespec="seconds"),
+        "endpoint_id": args.endpoint_id,
+        "serving_config": args.serving_config,
+        "worker": info,
+        "carve": {"sha256": carve_sha, "n": carve_n, "asked": len(rows)},
+        "rows": scored,
+        "parsed": parsed,
+        "of": len(scored),
+        "timing": timing,
+        "cold_start": handshake,
+        "seconds_per_row_wall": per_row,
+        "prompt_sha256": {task: prompts.prompt_sha256(task) for task in prompts.TASKS},
+        "note": (
+            "MECHANICS AND LATENCY ONLY. The rows are the arm's own held-out carve — training"
+            " data — so nothing here is a gate number and no frozen test file was opened."
+            " seconds_per_row_wall excludes the cold start, which is reported separately"
+            " because the projection scales the two differently."
+        ),
+    }
+    args.record.parent.mkdir(parents=True, exist_ok=True)
+    args.record.write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n", "utf-8")
+    print(f"\nparsed         {parsed}/{len(scored)}")
+    print(f"per row        {per_row}s wall (cold start excluded)")
+    print(f"held           {timing['wall_seconds']}s wall, {timing['worker_seconds']}s executed")
+    print(f"record         {args.record.relative_to(REPO_ROOT)}")
+    if parsed != len(scored):
+        print("\nSTOP AND REPORT: a carve row did not parse. The path is not proven.")
+        return 3
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
