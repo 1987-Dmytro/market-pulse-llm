@@ -217,6 +217,48 @@ def write(path: Path, payload: dict) -> None:
     print(f"record: {shown(path)}")
 
 
+def run_abort(args) -> int:
+    """The pair could not be scored at all. SPEC's outcome, with the evidence.
+
+    Distinct from the cost abort on purpose. `--project` records "we measured what
+    the pair would cost and it is over the cap"; this records "the pre-registered
+    runtime could not be reached", and the two must not be confusable by a reader
+    six weeks from now. Both end in the same shipped config, because SPEC amendment
+    3.11 (2) says a failed or aborted pair closes the merge question in favour of A
+    — and both leave an artifact, because a measured abort and a phase nobody ran
+    look identical otherwise.
+    """
+    write(
+        VERDICT,
+        stamp(
+            {
+                "outcome": "aborted-runtime-unreachable",
+                "abort_rule": ABORT_RULE,
+                "rule": scorer.SERVING_SELECTION_RULE,
+                "selected": "A",
+                "shipped": "A",
+                "blocker": args.blocker,
+                "evidence": args.evidence,
+                "spent_usd": args.spent_usd,
+                "cap_usd": CAP_USD,
+                "why": (
+                    "the pair was never scored: the production serverless runtime SPEC"
+                    " amendment 3.11 (2) pre-registers could not be reached. An aborted pair"
+                    " closes the merge question in favour of A, and merging stays forbidden —"
+                    " it is adopted only if this measurement selects it, and this measurement"
+                    " did not happen. No gate number in results/verdict_45h2.json is touched."
+                ),
+            }
+        ),
+    )
+    print("OUTCOME            aborted-runtime-unreachable, shipped A")
+    print(f"blocker            {args.blocker}")
+    for line in args.evidence:
+        print(f"  - {line}")
+    print(f"spent              ${args.spent_usd:.4f} of ${CAP_USD:.2f}")
+    return 0
+
+
 def run_projection(args) -> int:
     projection = project(args)
     over = projection["total_usd"] > CAP_USD
@@ -262,6 +304,15 @@ def run_projection(args) -> int:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project", action="store_true", help="the abort rule, before the pair")
+    parser.add_argument(
+        "--abort",
+        action="store_true",
+        help="the pair could not be scored at all — record SPEC's outcome and the evidence",
+    )
+    parser.add_argument("--blocker", default="", help="--abort: one line, what stopped it")
+    parser.add_argument(
+        "--evidence", action="append", default=[], help="--abort: repeatable, one fact per flag"
+    )
     parser.add_argument("--seconds-per-row", type=float, help="--project: measured by the smoke")
     parser.add_argument("--usd-per-second", type=float, help="--project: spend / billed seconds")
     parser.add_argument("--cold-start-seconds", type=float, default=0.0)
@@ -283,6 +334,13 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--record", type=Path, help="persist the verdict as well as printing it")
     args = parser.parse_args(argv)
 
+    if args.abort:
+        if not (args.blocker and args.evidence):
+            parser.error(
+                "--abort needs --blocker and at least one --evidence:"
+                " an abort with no evidence is indistinguishable from a phase nobody ran"
+            )
+        return run_abort(args)
     if args.project:
         if args.smoke_record:
             for field, value in from_smoke(args.smoke_record).items():

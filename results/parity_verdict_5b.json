@@ -1,0 +1,23 @@
+{
+  "outcome": "aborted-runtime-unreachable",
+  "abort_rule": "if the smoke projects the pair over $4, stop before the paid run and report projections instead; a failed or aborted pair closes the merge question in favour of A, no retry (SPEC amendment 3.11 (2))",
+  "rule": "B is adopted only if every 4.5h2-passed gate stays passing on B and no gate head drops more than 0.005 vs A; any tie or doubt ships A — the safe default (SPEC amendment 3.11 (2), operator 2026-08-06, committed before either config was scored)",
+  "selected": "A",
+  "shipped": "A",
+  "blocker": "no RunPod serverless endpoint on this account reaches a job-consuming worker; jobs stay IN_QUEUE while workers report idle/ready/running/throttled",
+  "evidence": [
+    "market-pulse-5b-a, AMPERE_48, CA-MTL-3, volume gfwa2an8fn: one queued job, zero workers of any state for 8 min",
+    "same class, no volume, no datacenter pin (US-KS-2): a worker allocated in 25 s — so it is not the endpoint config",
+    "CA-MTL-3 volume-attached class probe: ADA_24 allocated; AMPERE_48, ADA_48_PRO and AMPERE_80 allocated nothing",
+    "ADA_24 endpoint i8axfnlb1g7g9a with the staged volume: worker running for 10 min, job never left IN_QUEUE",
+    "diagnostic worker, stock image, inline handler, no volume, no DC pin: job IN_QUEUE for 5.5 min, never consumed",
+    "RunPod's OWN hub vLLM worker (hub-id cmhy06ie9000002l52b0hcv0l, RTX 4090, no volume): 5 min cycling initializing/throttled, job never consumed",
+    "the same worker code, venv, weights and adapter answered a 3-row T2 batch correctly on an A6000 POD via the identical start.sh entrypoint"
+  ],
+  "spent_usd": 0.5324,
+  "cap_usd": 4.0,
+  "why": "the pair was never scored: the production serverless runtime SPEC amendment 3.11 (2) pre-registers could not be reached. An aborted pair closes the merge question in favour of A, and merging stays forbidden — it is adopted only if this measurement selects it, and this measurement did not happen. No gate number in results/verdict_45h2.json is touched.",
+  "step": "5b serving parity",
+  "testset_version": "v4",
+  "written_at": "2026-08-06T13:17:37+00:00"
+}

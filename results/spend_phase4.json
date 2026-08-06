@@ -66,6 +66,13 @@
       "spent_usd": 16.7729,
       "remaining_usd": 8.2271,
       "note": "5b staging: repo+adapter+peft on the volume, cold start 278.9s proven on an A6000 pod, entrypoint answered a 3-row T2 batch"
+    },
+    {
+      "at": "2026-08-06T13:16:44+00:00",
+      "balance": 17.8655811802,
+      "spent_usd": 17.1344,
+      "remaining_usd": 7.8656,
+      "note": "5b: serverless blocked — no endpoint on this account reaches a job-consuming worker, RunPod's own hub vLLM worker included"
     }
   ]
 }

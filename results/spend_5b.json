@@ -7,6 +7,12 @@
       "balance": 18.2271420227,
       "step_spent_usd": 0.1709,
       "note": "5b staging: repo+adapter+peft on the volume, cold start 278.9s proven on an A6000 pod, entrypoint answered a 3-row T2 batch"
+    },
+    {
+      "at": "2026-08-06T13:16:44+00:00",
+      "balance": 17.8655811802,
+      "step_spent_usd": 0.5324,
+      "note": "5b: serverless blocked — no endpoint on this account reaches a job-consuming worker, RunPod's own hub vLLM worker included"
     }
   ],
   "gpu_note": "RunPod account balance read before the first pod of 5b. Step spend = this anchor minus the balance now, enforced against $4.00. The SPEC amendment 3.4 (4) phase cap is enforced separately, against results/spend_phase4.json, and neither anchor may be regenerated."

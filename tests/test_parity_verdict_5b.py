@@ -291,3 +291,43 @@ def test_a_smoke_with_no_dollars_cannot_be_projected_from(tmp_path):
     path.write_text(json.dumps(record), encoding="utf-8")
     with pytest.raises(SystemExit, match="carries no cost block"):
         verdict.from_smoke(path)
+
+
+# --- the third outcome: the runtime could not be reached --------------------
+
+
+def abort_args(**kwargs):
+    defaults = {
+        "blocker": "no serverless worker reaches a job-consuming state",
+        "evidence": ["RunPod's own hub vLLM worker cycled initializing/throttled"],
+        "spent_usd": 0.5324,
+    }
+    return type("Args", (), defaults | kwargs)
+
+
+def test_a_runtime_that_could_not_be_reached_still_ships_a(paths, capsys):
+    """SPEC: a failed or aborted pair closes the merge question in favour of A."""
+    assert verdict.run_abort(abort_args()) == 0
+    record = json.loads(verdict.VERDICT.read_text(encoding="utf-8"))
+    assert record["outcome"] == "aborted-runtime-unreachable"
+    assert record["shipped"] == "A"
+    assert "merging stays forbidden" in record["why"]
+    assert record["evidence"]
+    assert "hub vLLM worker" in capsys.readouterr().out
+
+
+def test_a_cost_abort_and_a_runtime_abort_are_not_confusable(paths):
+    """Same shipped config, different cause. A reader six weeks out must be able to
+    tell "we priced it and stopped" from "we could not reach the runtime at all"."""
+    verdict.run_abort(abort_args())
+    runtime_abort = json.loads(verdict.VERDICT.read_text(encoding="utf-8"))
+    verdict.run_projection(args(seconds_per_row=6.0))
+    cost_abort = json.loads(verdict.VERDICT.read_text(encoding="utf-8"))
+    assert runtime_abort["outcome"] != cost_abort["outcome"]
+    assert runtime_abort["shipped"] == cost_abort["shipped"] == "A"
+    assert "projection" in cost_abort and "projection" not in runtime_abort
+
+
+def test_an_abort_with_no_evidence_is_refused(paths):
+    with pytest.raises(SystemExit):
+        verdict.main(["--abort", "--blocker", "something went wrong"])

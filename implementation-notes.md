@@ -2538,3 +2538,118 @@ it answered:
 `network-volume create` also refuses US-KS-2 outright — only 18 datacenters support network
 volumes, and the intersection of "supports volumes" and "has serverless capacity for a class
 that fits 18 GB of NF4 weights" is, today, `ADA_24` in CA-MTL-3.
+
+## The blocker: no serverless endpoint on this account reaches a job-consuming worker
+
+Five endpoints, four configurations, and RunPod's own reference worker. Every one of them
+left its job `IN_QUEUE` while the health endpoint reported a worker.
+
+| endpoint | class | volume | datacenter | worker states seen | job |
+|---|---|---|---|---|---|
+| `market-pulse-5b-a` (our handler) | AMPERE_48 | `gfwa2an8fn` | CA-MTL-3 | none for 8 min | queued |
+| capacity control (our handler) | AMPERE_48 | none | any | `idle`, `ready` in 25 s | — |
+| `market-pulse-5b-a` (our handler) | ADA_24 | `gfwa2an8fn` | CA-MTL-3 | `running` for 10 min | queued |
+| diagnostic (stock image, inline handler) | ADA_24 | none | any | `running` | queued 5.5 min |
+| **RunPod hub vLLM worker** | ADA_24 | none | any | `initializing` ⇄ `throttled` | queued 5 min |
+
+The last row is the one that closes it. It is RunPod's own published serverless worker,
+deployed by hub id with a 0.5 B model reference, no network volume, no datacenter pin and
+none of this project's code — and it never consumed its job either. **The blocker is not the
+handler, not the template, not the network volume and not CA-MTL-3.**
+
+Against that, the same worker code, the same venv, the same weights and the same adapter
+answered correctly through the identical `start.sh` entrypoint on an A6000 **pod** — so what
+is proven is that the artifact serves and the *serverless* delivery path is what does not.
+
+## Outcome — and it is the pre-registered one
+
+SPEC amendment 3.11 (2): *"A failed or aborted pair closes the merge question in favour of A;
+no retry."* `results/parity_verdict_5b.json` records it as code, `outcome:
+aborted-runtime-unreachable`, **shipped A**, with the seven observations above as evidence
+and the $0.5324 spent. Merging stays forbidden — it is adopted only if this measurement
+selects it, and this measurement did not happen. Not one number in
+`results/verdict_45h2.json` is touched.
+
+Deliverable by deliverable:
+
+- **D1 — config A endpoint.** Blocked. The endpoint exists and the artifact serves; no
+  worker consumed a job, so there is no `results/serving_5b.json`. What 5c needs from it —
+  the served configuration and its provenance — is proven and recorded here and in
+  `scripts/runbook_5b.md`, but the latency and cost figures do not exist and are not guessed.
+- **D2 — config B artifact.** Not built, deliberately. SPEC forbids merging unless this
+  measurement selects it; the measurement cannot run, so building the artifact would spend
+  inside the cap on something that cannot be adopted. `scripts/merge_requantize.py` is
+  written, tested and committed, and its RAM bar clears on the A6000 host (456 GB).
+- **D3 — the paired measurement.** Aborted, recorded, A shipped.
+
+**Spend: $0.5324 of the $4.00 stop** (`results/spend_5b.json`, four logged readings). No
+pod, endpoint or template is left running; the only standing resource is the CA-MTL-3 volume
+SPEC 3.11 (6) says is kept.
+
+## Deviations
+
+**D1 — the brief's "carve-758" is not the carve.** `docs/PROMPT-5b.md` fixes the smoke at
+"eight rows drawn from the train carve (`carve-758`)". The arm-A carve is **24 rows**, sha
+`8347abd74ae9…` (`results/train/45h2-arm-a/provenance.json`, `n_carve: 24`); 758 is test v4's
+row count. Built from the enumeration — "the train carve" — and not from the label. Same
+class as 5a's "five registry channels" and 5a.1's "five themes", the third in three days.
+
+**D2 — a new script rather than `eval_zero_shot --probe`.** Every input that script knows
+about is a frozen test file, so a probe would have spent test v4's only authorised exposure
+before the paid run. `scripts/smoke_5b.py` rebuilds the carve and refuses unless it hashes to
+the adapter's own recorded sha.
+
+**D3 — the eight rows are drawn round-robin across T1/T2, not head-first.** The carve is
+sorted, so a head slice is all-T1 and all-one-channel, and T2 in v4 is the rendering that
+carries the parent post — the one path that can fail on the worker.
+
+**D4 — I created two billable pods while probing GPU availability.** A shell loop that called
+`pod create` per GPU id got a hit on H200 ($4.59/h) as well as A6000 ($0.53/h) before it
+finished; the H200 was deleted inside a minute. A probe that creates billable resources is
+not a probe. Cost: pennies, but the same loop on a longer list would not have been.
+
+**D5 — two endpoints leaked from a broken probe loop.** `set -- $EP` does not word-split in
+zsh, so two `probe-cls` endpoints were created with an unreadable id and my delete calls
+silently missed them; they were found and deleted ~25 minutes later by listing all endpoints.
+Deletion has to be verified, not assumed.
+
+**D6 — the projection compares against the phase's remaining headroom, not the pair alone.**
+The abort rule is worded about the pair; the cap it enforces is the phase's, anchored before
+staging. `project_pair_usd` therefore takes `spent_usd` and reports `total_usd`.
+
+**D7 — config A would have run on ADA_24 (RTX 4090, 24 GB), not the A6000 4.5h2 used.** The
+only class that allocates with the volume attached. That is a bigger runtime delta than "the
+same card, served differently" — reported, never averaged away — and the 18 GB of NF4 weights
+measured on the pod would have left ~6 GB for KV and activations. Untested, because no worker
+consumed a job.
+
+**D8 — `describe()` gained `repo_commit` after the volume was staged at `91b483a`.** The
+worker on the volume therefore could not have reported its own commit; the record's
+`git_state()` names the Mac's HEAD. Closed at the next staging, which did not happen.
+
+**D9 — SPEC 3.11 (6) says "$8 GPU (of the $8.70 remainder)".** True on 2026-08-05; the
+headroom under the $25 Phase-4 cap `runpod_guard.py` enforces was **$8.3980** when 5b was
+anchored and is **$7.8656** now, because the CA-MTL-3 volume bills ~$0.24/day whether or not
+anything is attached. Both numbers named, neither file edited.
+
+**D10 — no second network volume was created.** US-KS-2, the one datacenter where a
+volume-less worker allocated, does not support network volumes at all; relocating would have
+meant a second 100 GB volume at ~$7/month against SPEC 3.11 (6)'s ~$9–12/month run-rate
+ceiling. That is an operator decision and it stopped being worth asking once the hub worker
+showed the blocker is not regional.
+
+## Three cheapest readings for the operator
+
+1. **Ask RunPod why serverless workers do not consume jobs on this account.** Costs nothing
+   and is the only one that unblocks the pre-registered measurement. The hub-worker
+   observation is the ticket: their own template, their own image, no volume, job never
+   consumed. Endpoints are created through `runpodctl serverless create`; the console may
+   take a different path, which is the first thing worth trying by hand.
+2. **Ship config A on a pod and re-word what "production runtime" means.** The artifact is
+   proven to serve — 278.9 s cold start, correct labels — just not through serverless. A pod
+   with `--stop-after` is more expensive per hour and cheaper per phase, and 5c's loop runs
+   twice a day, not continuously. This changes SPEC 3.11 (1)'s serving assumption and is the
+   operator's call, not this phase's.
+3. **Let the merge question stay closed and move on to 5c.** SPEC already fixes the outcome:
+   A ships, merging stays forbidden. Nothing downstream is waiting on config B, and the
+   $3.47 left under the 5b stop stays unspent until the runtime question is answered.
