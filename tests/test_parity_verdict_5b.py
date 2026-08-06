@@ -113,6 +113,8 @@ def test_the_anchor_column_is_the_shipped_arms_numbers():
 
 
 def args(**kwargs):
+    # The out-paths are read at call time, so the `paths` fixture's redirects are what
+    # these pick up — a default captured at import would write into the repository.
     defaults = {
         "seconds_per_row": 3.0,
         "usd_per_second": 0.0005,
@@ -120,6 +122,9 @@ def args(**kwargs):
         "merge_usd": 1.0,
         "spent_usd": 0.0,
         "rows": 758,
+        "runs": 2,
+        "projection_out": verdict.PROJECTION,
+        "verdict_out": verdict.VERDICT,
     }
     return type("Args", (), defaults | kwargs)
 
@@ -301,6 +306,7 @@ def abort_args(**kwargs):
         "blocker": "no serverless worker reaches a job-consuming state",
         "evidence": ["RunPod's own hub vLLM worker cycled initializing/throttled"],
         "spent_usd": 0.5324,
+        "verdict_out": verdict.VERDICT,
     }
     return type("Args", (), defaults | kwargs)
 
@@ -331,3 +337,71 @@ def test_a_cost_abort_and_a_runtime_abort_are_not_confusable(paths):
 def test_an_abort_with_no_evidence_is_refused(paths):
     with pytest.raises(SystemExit):
         verdict.main(["--abort", "--blocker", "something went wrong"])
+
+
+# --- the single-config measurement (SPEC amendment 3.11 (2), 2026-08-06) -----
+
+
+def single_args(paths, **kwargs):
+    defaults = {"parity_record": paths["A"], "verdict_out": verdict.VERDICT}
+    return type("Args", (), defaults | kwargs)
+
+
+def pod_record(values: dict) -> dict:
+    record = parity_record("A", values)
+    record["config"]["serving"] |= {"transport": "pod-loopback", "endpoint_id": "pod-77"}
+    return record
+
+
+def test_the_single_config_measurement_reports_deltas_beside_the_anchor(paths, capsys):
+    """A on the pod against the 4.5h2 pod numbers. Reported, not ruled on.
+
+    Fed the arm's own 4.5h2 values, so every delta is zero by construction — which is
+    what makes a non-zero one in the real run mean something rather than being lost in
+    a column of noise.
+    """
+    write(paths["A"], pod_record(ARM_A))
+    assert verdict.run_single(single_args(paths)) == 0
+    stamped = json.loads(paths["A"].read_text(encoding="utf-8"))["parity"]
+    assert stamped["outcome"] == "single-config-scored"
+    assert stamped["runtime"] == "pod-loopback"
+    assert stamped["deltas_vs_45h2"] == {head: 0.0 for head in verdict.HEADS}
+    assert stamped["under_bar"] == []
+    assert stamped["passed"] == 3
+    assert stamped["required_gates"] == ["G1b", "G1d", "G1e"]
+    assert "no bar moves" in stamped["not_a_gate"]
+    # the pair's verdict is a committed decision, and this measurement does not re-open it
+    assert not verdict.VERDICT.exists()
+    assert "delta" in capsys.readouterr().out
+
+
+def test_a_head_that_lands_under_its_bar_is_a_loud_finding_and_not_a_verdict(paths, capsys):
+    """SPEC amendment 3.11 (2): no bar moves, and the ruling is an operator briefing."""
+    write(paths["A"], pod_record(ARM_A | {"G1d": 0.80}))
+    assert verdict.run_single(single_args(paths)) == 0
+    stamped = json.loads(paths["A"].read_text(encoding="utf-8"))["parity"]
+    assert stamped["under_bar"] == ["G1d"]
+    assert stamped["deltas_vs_45h2"]["G1d"] < 0
+    assert stamped["bars"] == verdict.bars_from_anchor()[0]  # unmoved
+    assert "LOUD FINDING" in capsys.readouterr().out
+    assert not verdict.VERDICT.exists()
+
+
+def test_the_single_config_projection_is_one_run_not_two(paths, capsys):
+    """The pair is closed, so a projection that still prices two runs would abort a run
+    the phase can afford — the $4 stop is on the phase and `spent_usd` carries the rest."""
+    assert verdict.run_projection(args(runs=1, merge_usd=0.0, spent_usd=0.5324)) == 0
+    one = json.loads(verdict.PROJECTION.read_text(encoding="utf-8"))
+    assert one["runs"] == 1
+    assert one["over_cap"] is False
+    assert one["projection"]["scored_usd"] == pytest.approx(1.2370, abs=1e-4)
+    assert one["projection"]["total_usd"] == pytest.approx(1.7694, abs=1e-4)
+    assert not verdict.VERDICT.exists()
+
+
+def test_an_over_cap_single_run_writes_its_abort_where_it_is_told(paths, capsys):
+    """The 5b verdict file is not a scratch pad: a later phase's abort gets its own path."""
+    elsewhere = verdict.VERDICT.parent / "parity_5b1_verdict.json"
+    assert verdict.run_projection(args(runs=1, seconds_per_row=12.0, verdict_out=elsewhere)) == 0
+    assert json.loads(elsewhere.read_text(encoding="utf-8"))["outcome"] == "aborted-over-cap"
+    assert not verdict.VERDICT.exists()

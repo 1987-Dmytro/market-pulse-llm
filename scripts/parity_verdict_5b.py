@@ -23,9 +23,16 @@ default
     re-derived from the v4 anchor rather than read out of the 4.5h2 verdict, and the two are
     asserted equal: a bar that moved between the phases would silently rewrite the gate.
 
+``--single``
+    what the pair became. SPEC amendment 3.11 (2) was amended again on 2026-08-06, after the
+    pair aborted on an unreachable serverless runtime: config A alone, once, on the pod
+    runtime. There is no rule to apply — the merge question is closed and B is dead — so this
+    mode reports instead of selecting, and it moves no bar.
+
     PYTHONPATH=src python3 scripts/parity_verdict_5b.py --project \\
         --seconds-per-row 2.9 --usd-per-second 0.00047 --cold-start-seconds 240 --merge-usd 1.0
     PYTHONPATH=src python3 scripts/parity_verdict_5b.py --record results/parity_verdict_5b.json
+    PYTHONPATH=src python3 scripts/parity_verdict_5b.py --single
 """
 
 import argparse
@@ -187,11 +194,18 @@ def from_smoke(path: Path) -> dict:
 
 
 def project(args) -> dict:
-    """The abort rule's arithmetic, from what the smoke measured."""
+    """The abort rule's arithmetic, from what the smoke measured.
+
+    ``--runs`` is 2 for the pre-registered pair and 1 for the single-config measurement
+    SPEC amendment 3.11 (2) put in its place. It is a flag rather than a constant because
+    the cap it is compared against never moved: the $4 stop is on the phase, ``spent_usd``
+    carries what the phase has already cost, and "the $3.47 remaining" is the same
+    inequality read from the other end.
+    """
     return serving.project_pair_usd(
         seconds_per_row=args.seconds_per_row,
         rows=args.rows,
-        runs=2,
+        runs=args.runs,
         usd_per_second=args.usd_per_second,
         cold_start_seconds=args.cold_start_seconds,
         merge_usd=args.merge_usd,
@@ -229,7 +243,7 @@ def run_abort(args) -> int:
     look identical otherwise.
     """
     write(
-        VERDICT,
+        args.verdict_out,
         stamp(
             {
                 "outcome": "aborted-runtime-unreachable",
@@ -262,22 +276,31 @@ def run_abort(args) -> int:
 def run_projection(args) -> int:
     projection = project(args)
     over = projection["total_usd"] > CAP_USD
+    scored = "the pair" if args.runs == 2 else f"{args.runs} run"
     print(f"seconds per run    {projection['seconds_per_run']}")
-    print(f"scored             ${projection['scored_usd']:.4f}  (2 runs of {args.rows} rows)")
+    print(f"scored             ${projection['scored_usd']:.4f}  ({args.runs} x {args.rows} rows)")
     print(f"merge job          ${projection['merge_usd']:.4f}")
-    print(f"PROJECTED PAIR     ${projection['projected_usd']:.4f}")
+    print(f"PROJECTED {scored:<8} ${projection['projected_usd']:.4f}")
     print(f"already spent      ${projection['spent_usd']:.4f}  (staging, cold-start proof, smoke)")
     print(f"5b TOTAL           ${projection['total_usd']:.4f} of ${CAP_USD:.2f}")
-    print(f"VERDICT            {'OVER THE CAP — do not run the pair' if over else 'clears'}")
+    print(f"headroom left      ${CAP_USD - projection['spent_usd']:.4f}")
+    print(f"VERDICT            {'OVER THE CAP — do not run' if over else 'clears'}")
     write(
-        PROJECTION,
-        stamp({"projection": projection, "abort_rule": ABORT_RULE, "over_cap": over}),
+        args.projection_out,
+        stamp(
+            {
+                "projection": projection,
+                "runs": args.runs,
+                "abort_rule": ABORT_RULE,
+                "over_cap": over,
+            }
+        ),
     )
     if over:
         # The decision, not just its input. SPEC: an aborted pair closes the merge
         # question in favour of A, so the shipped config is named here and 5c reads it.
         write(
-            VERDICT,
+            args.verdict_out,
             stamp(
                 {
                     "outcome": "aborted-over-cap",
@@ -301,9 +324,123 @@ def run_projection(args) -> int:
     return 0
 
 
+def run_single(args) -> int:
+    """SPEC amendment 3.11 (2)'s single-config measurement: A on the pod, beside the anchors.
+
+    Deliberately **not** `main`'s rule. The pair is closed and B is dead, so there is nothing
+    to select and no config to ship that is not already shipped. What this does is report:
+    every head three ways — the pod-runtime number, the 4.5h2 anchor, the delta — against the
+    bar it is measured by, re-derived from the v4 anchor and asserted equal to the one 4.5h2
+    recorded. Whatever it finds, **no bar moves**: a head that passed at 4.5h2 and lands under
+    its bar here is a loud finding for an operator briefing, not this phase's verdict, and
+    saying so in the artifact is what stops a later reader from taking it for one.
+
+    The comparison is stamped into the parity record itself, because that is where the brief
+    puts it — "per-gate-head numbers BESIDE the 4.5h2 anchors with explicit deltas" — and a
+    number that lives in one file and its baseline in another gets compared by hand exactly
+    once. `results/parity_verdict_5b.json` is never touched: it is the committed verdict of
+    the aborted pair, and this measurement does not re-open it.
+    """
+    bars, recorded = bars_from_anchor()
+    required = passed_at_45h2(recorded)
+    anchor = anchor_values(recorded)
+    record = read_parity(args.parity_record, "A")
+    values = records.arm_values(record)
+    flat_values = flat(values)
+    verdicts = scorer.gate_verdicts(
+        {
+            "G1a": values["G1a"],
+            "G1b": {"fixed": values["G1b"]["fixed"], "guard_delta": values["G1b"]["guard_delta"]},
+            **{gate: values[gate] for gate in ("G1c", "G1d", "G1e")},
+        },
+        bars,
+    )
+    deltas = {
+        head: round(head_value(flat_values[head]) - head_value(anchor[head]), 6) for head in HEADS
+    }
+    under_bar = sorted(gate for gate in required if not verdicts[gate]["pass"])
+
+    block = record["config"]["serving"]
+    print(f"anchor: {recorded['anchor']['model']} @ {recorded['anchor']['timestamp']} — {VERSION}")
+    print(f"4.5h2 shipped arm: {recorded['decision']['selected']}, gates passed {required}")
+    print(
+        f"config A: {block.get('transport', 'serverless-api')} {block.get('endpoint_id')}"
+        f" · {block['merge_state']} · {record['timestamp']}"
+    )
+    print("\n--- every head: the pod runtime, the 4.5h2 pod number, and the delta ---")
+    print(f"{'':26}{'A on pod':>12}{'4.5h2':>14}{'delta':>12}{'bar':>12}{'pass':>7}")
+    for head in HEADS:
+        bar = bars[head].get("min", bars[head].get("min_fixed"))
+        print(
+            f"{head:26}{head_value(flat_values[head]):>12.4f}{head_value(anchor[head]):>14.4f}"
+            f"{deltas[head]:>+12.4f}{bar:>12.4f}{str(verdicts[head]['pass']):>7}"
+        )
+    for language in scorer.GATED_LANGUAGES:
+        pod_value = values["G1a"][language]
+        was = recorded["arms"][recorded["decision"]["selected"]]["values"]["G1a"][language]
+        print(f"{'  G1a ' + language:26}{pod_value:>12.4f}{was:>14.4f}{pod_value - was:>+12.4f}")
+
+    print(f"\npassed {sum(1 for v in verdicts.values() if v['pass'])} of {len(HEADS)}")
+    if under_bar:
+        print(
+            f"\nLOUD FINDING: {under_bar} passed at 4.5h2 and land UNDER the bar on the"
+            " production runtime. No bar moves and this phase rules on nothing — SPEC"
+            " amendment 3.11 (2) sends it to an operator briefing."
+        )
+    payload = stamp(
+        {
+            "outcome": "single-config-scored",
+            "config": "A",
+            "runtime": block.get("transport", "serverless-api"),
+            "not_a_gate": (
+                "SPEC amendment 3.11 (2): the deltas are reported, never averaged away, and no"
+                " bar moves. A 4.5h2-passed head under its bar here is a finding for an operator"
+                " briefing, not a verdict of this phase."
+            ),
+            "pair_status": (
+                "closed — results/parity_verdict_5b.json, aborted-runtime-unreachable, A ships"
+                " and merging stays forbidden. Config B was never built."
+            ),
+            "anchor": recorded["anchor"],
+            "bars": bars,
+            "required_gates": required,
+            "anchor_values_45h2": anchor,
+            "values": values,
+            "deltas_vs_45h2": deltas,
+            "verdicts": verdicts,
+            "passed": sum(1 for v in verdicts.values() if v["pass"]),
+            "under_bar": under_bar,
+        }
+    )
+    write(args.parity_record, record | {"parity": payload})
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project", action="store_true", help="the abort rule, before the pair")
+    parser.add_argument(
+        "--single",
+        action="store_true",
+        help="SPEC amendment 3.11 (2)'s single-config measurement: config A against the 4.5h2"
+        " anchors, deltas reported and no bar moved. Stamps the comparison into the parity"
+        " record; the aborted pair's verdict is not touched.",
+    )
+    parser.add_argument("--parity-record", type=Path, default=PARITY["A"])
+    parser.add_argument(
+        "--runs",
+        type=int,
+        default=2,
+        help="--project: 2 for the pre-registered pair, 1 for the single-config measurement",
+    )
+    parser.add_argument("--projection-out", type=Path, default=PROJECTION)
+    parser.add_argument(
+        "--verdict-out",
+        type=Path,
+        default=VERDICT,
+        help="where an abort lands. Defaults to the pair's verdict — point it elsewhere for a"
+        " later phase, because that file is a committed decision and not a scratch pad.",
+    )
     parser.add_argument(
         "--abort",
         action="store_true",
@@ -334,6 +471,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--record", type=Path, help="persist the verdict as well as printing it")
     args = parser.parse_args(argv)
 
+    if args.single:
+        return run_single(args)
     if args.abort:
         if not (args.blocker and args.evidence):
             parser.error(

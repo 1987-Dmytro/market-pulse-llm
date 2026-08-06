@@ -108,6 +108,41 @@ bills at a premium over the pod class it runs on, never below it, so a derived r
 under this floor means the reading is stale, not that the run was cheap.
 """
 
+POD_FLOOR_SHARE = 0.5
+"""The same guard, re-derived for the runtime SPEC amendment 3.11 (1) actually ships on.
+
+On a **pod** the derived rate does not sit above the pod rate — it sits *at* it, so the
+serverless inequality would fire on rounding, on a minute of boot the guard's balance delta
+covers and the wall clock does not, or on the volume's own daily charge landing inside the
+reading. Firing there would stop a run for being priced correctly. What the check still has
+to catch is the unsettled balance, and that reads as **~0**, not as "a bit low". Half the
+machine's posted rate separates those two cases and nothing else does.
+"""
+
+
+def cli(*args):
+    out = subprocess.run(
+        ["runpodctl", *args, "--output", "json"], capture_output=True, text=True, check=True
+    )
+    return json.loads(out.stdout)
+
+
+def pod_deployment(pod_id: str) -> dict:
+    """What RunPod says the **pod** is — image, GPU, volume, hourly price.
+
+    Its own function because the smoke that measures a pod runs *on* that pod, where
+    `runpodctl` does not exist and no API key is staged. So the record leaves the field
+    pending and the Mac stamps it in afterwards — the shape `--stamp-cost` already
+    established for the one number a run cannot know about itself.
+    """
+    try:
+        pod = cli("pod", "get", pod_id)
+    except (OSError, subprocess.CalledProcessError, ValueError, KeyError) as err:
+        return {"unreadable": f"{type(err).__name__}: {err}"}
+    if isinstance(pod, list):  # `pod get` answers with a one-row list
+        pod = pod[0] if pod else {}
+    return {"runtime": "pod", "pod": pod}
+
 
 def deployment(endpoint_id: str) -> dict:
     """What RunPod itself says is deployed — image, start command, env, GPU, limits.
@@ -116,13 +151,6 @@ def deployment(endpoint_id: str) -> dict:
     Deliverable 1 asks the record to name the image and the batch, and an image
     named from memory describes what was intended, not what is serving.
     """
-
-    def cli(*args):
-        out = subprocess.run(
-            ["runpodctl", *args, "--output", "json"], capture_output=True, text=True, check=True
-        )
-        return json.loads(out.stdout)
-
     try:
         endpoint = cli("serverless", "get", endpoint_id)
         template = cli("template", "get", endpoint["templateId"])
@@ -187,7 +215,7 @@ def ask(client, rows: list[dict]) -> list[dict]:
     return out
 
 
-def stamp_cost(path: Path, usd: float) -> dict:
+def stamp_cost(path: Path, usd: float, pod_usd_per_hour: float = 0.0, pod_id: str = "") -> dict:
     """The dollars the guard measured, written into the record after the fact.
 
     A run cannot know what it cost while it is running — RunPod settles the charge
@@ -202,23 +230,37 @@ def stamp_cost(path: Path, usd: float) -> dict:
     if not wall:
         raise SystemExit(f"{path} holds no wall_seconds — there is nothing to divide")
     rate = usd / wall
+    floor = (
+        POD_USD_PER_SECOND if not pod_usd_per_hour else pod_usd_per_hour / 3600 * POD_FLOOR_SHARE
+    )
     record["cost"] = {
         "usd": round(usd, 4),
         "wall_seconds": wall,
         "usd_per_second": rate,
         "source": "results/spend_5b.json balance delta across this smoke, via runpod_guard.py",
         "stamped_at": datetime.now(UTC).isoformat(timespec="seconds"),
-        "floor_usd_per_second": POD_USD_PER_SECOND,
-        "above_pod_floor": rate >= POD_USD_PER_SECOND,
+        "floor_usd_per_second": floor,
+        "floor_basis": (
+            f"{POD_FLOOR_SHARE} x the pod's posted ${pod_usd_per_hour}/h — on a pod the derived"
+            " rate lands AT the machine's rate, so the guard catches an unsettled balance (~0),"
+            " not a rate that is merely lower than serverless would be"
+            if pod_usd_per_hour
+            else "the A6000 pod rate, which serverless cannot bill under"
+        ),
+        "above_pod_floor": rate >= floor,
     }
+    if pod_id:
+        record["deployment"] = pod_deployment(pod_id)
     path.write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"usd            ${usd:.4f} over {wall}s wall")
-    print(f"usd_per_second {rate:.8f}  (A6000 pod floor {POD_USD_PER_SECOND:.8f})")
-    if rate < POD_USD_PER_SECOND:
+    print(f"usd_per_second {rate:.8f}  (floor {floor:.8f})")
+    if pod_id:
+        print(f"deployment     stamped from runpodctl pod get {pod_id}")
+    if rate < floor:
         print(
-            "\nSTOP AND REPORT: the derived rate is BELOW the pod floor, which serverless"
-            " cannot be. The balance has not settled — re-read the guard and stamp again"
-            " rather than projecting on this number.",
+            "\nSTOP AND REPORT: the derived rate is BELOW the floor. The balance has not"
+            " settled — re-read the guard and stamp again rather than projecting on this"
+            " number.",
         )
         return 3
     return 0
@@ -227,6 +269,13 @@ def stamp_cost(path: Path, usd: float) -> dict:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--endpoint-id", default="", help="not needed with --stamp-cost")
+    parser.add_argument(
+        "--endpoint-url",
+        default="",
+        help="the pod runtime of SPEC amendment 3.11 (1): the worker's own server, e.g."
+        f" {serving.POD_BASE_URL}. Without it the client talks to RunPod's serverless API,"
+        " and --endpoint-id is the label the record carries either way",
+    )
     parser.add_argument("--serving-config", choices=("A", "B"), default="")
     parser.add_argument("--adapter", type=Path, default=ADAPTER)
     parser.add_argument("--merged-sidecar", type=Path, help="config B: the merge sidecar")
@@ -240,10 +289,23 @@ def main(argv: list[str] | None = None) -> int:
         help="write the guard's measured spend into an existing record and derive $/s;"
         " scores nothing and sends no request",
     )
+    parser.add_argument(
+        "--pod-usd-per-hour",
+        type=float,
+        default=0.0,
+        help="--stamp-cost on a pod: the machine's posted rate, which moves the floor off the"
+        " serverless inequality onto one a correctly-priced pod run can pass",
+    )
+    parser.add_argument(
+        "--pod-id",
+        default="",
+        help="--stamp-cost on a pod: fill the record's deployment block from runpodctl, which"
+        " the pod-side run could not read for itself",
+    )
     args = parser.parse_args(argv)
 
     if args.stamp_cost is not None:
-        return stamp_cost(args.record, args.stamp_cost)
+        return stamp_cost(args.record, args.stamp_cost, args.pod_usd_per_hour, args.pod_id)
     if not (args.endpoint_id and args.serving_config):
         parser.error("--endpoint-id and --serving-config are required for a smoke run")
 
@@ -272,7 +334,10 @@ def main(argv: list[str] | None = None) -> int:
     # eval_zero_shot's own key, so a script that imports it here needs no second copy
     from eval_zero_shot import arm_runtime, runpod_api_key  # noqa: PLC0415
 
-    client = serving.EndpointClient(args.endpoint_id, runpod_api_key())
+    # A pod's own server authenticates nothing and is reached over loopback; asking for the
+    # Mac's API key there would refuse a run for want of a credential it never sends.
+    key = "" if args.endpoint_url else runpod_api_key()
+    client = serving.EndpointClient(args.endpoint_id, key, base_url=args.endpoint_url or None)
     info = serving.assert_serving(client.info(), expected)
     serving.assert_runtime_matches(info.get("runtime") or {}, arm_runtime())
     handshake = client.timing()
@@ -293,7 +358,13 @@ def main(argv: list[str] | None = None) -> int:
         "endpoint_id": args.endpoint_id,
         "serving_config": args.serving_config,
         "batch_size": 1,
-        "deployment": deployment(args.endpoint_id),
+        "transport": "pod-loopback" if args.endpoint_url else "serverless-api",
+        "endpoint_url": args.endpoint_url or serving.BASE_URL,
+        "deployment": (
+            {"pending": "runpodctl does not run on the pod — stamp with --stamp-cost --pod-id"}
+            if args.endpoint_url
+            else deployment(args.endpoint_id)
+        ),
         "worker": info,
         "carve": {"sha256": carve_sha, "n": carve_n, "asked": len(rows)},
         "rows": scored,
@@ -308,6 +379,9 @@ def main(argv: list[str] | None = None) -> int:
             " data — so nothing here is a gate number and no frozen test file was opened."
             " seconds_per_row_wall excludes the cold start, which is reported separately"
             " because the projection scales the two differently."
+            " On the pod transport timing.worker_seconds is 0 BY CONSTRUCTION: the worker's own"
+            " server reports no executionTime, so seconds_per_call reads 0 and idle_share null."
+            " wall_seconds is the measurement, and on a pod it is also the billed quantity."
         ),
     }
     args.record.parent.mkdir(parents=True, exist_ok=True)

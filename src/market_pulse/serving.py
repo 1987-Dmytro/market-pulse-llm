@@ -34,6 +34,20 @@ from market_pulse.zero_shot import RETRYABLE, ApiError
 
 BASE_URL = "https://api.runpod.ai/v2"
 
+POD_BASE_URL = "http://127.0.0.1:8000"
+"""Where the same worker answers when it runs on a pod (SPEC amendment 3.11 (1), 2026-08-06).
+
+The runtime ruling moved production off serverless and onto a stop-after pod, and the RunPod
+SDK serves the *same* handler over HTTP with ``--rp_serve_api``: `POST /runsync` and
+`POST /status/<id>`, the identical job envelope, one process further down the same
+``start.sh → serve_handler → local_llm`` stack. So the runtime moved and the client did not —
+which is the only reason a number produced through it is comparable to 4.5h2's at all.
+
+Loopback on purpose: the driver runs on the pod beside the worker. A pod's HTTP port is
+reachable through RunPod's public proxy, and an unauthenticated model server on it is not
+something this phase needs.
+"""
+
 DEFAULT_TIMEOUT = 300.0
 """One row, batch 1, greedy, 256 new tokens: ~3 s warm on the 4.5h2 pod. A per-row budget."""
 
@@ -94,11 +108,16 @@ class EndpointClient:
         endpoint_id: str,
         api_key: str,
         *,
+        base_url: str | None = None,
         timeout: float = DEFAULT_TIMEOUT,
         handshake_timeout: float = HANDSHAKE_TIMEOUT,
         retries: int = 0,
     ) -> None:
         self.endpoint_id, self.api_key = endpoint_id, api_key
+        # None means RunPod's own API, which keys the endpoint in the path. A base URL
+        # means the worker's own server on a pod, where there is no endpoint to key by and
+        # `endpoint_id` is a label for the record — the pod id, not a routable thing.
+        self.base_url = base_url.rstrip("/") if base_url else None
         self.timeout, self.handshake_timeout = timeout, handshake_timeout
         self.retries = retries
         self.usage = Counter()
@@ -111,6 +130,14 @@ class EndpointClient:
 
     # -- the transport -----------------------------------------------------
 
+    def url(self, path: str) -> str:
+        """Where this client's jobs go. Two runtimes, one job envelope."""
+        return (
+            endpoint_url(self.endpoint_id, path)
+            if self.base_url is None
+            else f"{self.base_url}/{path}"
+        )
+
     def _run(self, payload: dict, timeout: float | None = None) -> dict:
         """One ``/runsync`` job, polled through ``/status`` if it outlives the call.
 
@@ -121,7 +148,7 @@ class EndpointClient:
         timeout = self.timeout if timeout is None else timeout
         if self.started_at is None:
             self.started_at = time.monotonic()
-        job = _post(endpoint_url(self.endpoint_id, "runsync"), self.api_key, payload, timeout)
+        job = _post(self.url("runsync"), self.api_key, payload, timeout)
         deadline = time.monotonic() + timeout
         while job.get("status") not in TERMINAL:
             if "id" not in job:
@@ -129,9 +156,11 @@ class EndpointClient:
             if time.monotonic() > deadline:
                 raise ApiError(408, f"job {job['id']} still {job.get('status')} after the timeout")
             time.sleep(POLL_SECONDS)
-            job = _post(
-                endpoint_url(self.endpoint_id, f"status/{job['id']}"), self.api_key, None, 60.0
-            )
+            # RunPod's API answers `/status` on GET; the SDK's own server registers it POST-only.
+            # A pod's `runsync` returns terminal, so this loop should never run there — and if it
+            # ever does, it must fail on the job, not on a 405 that reads like a dead worker.
+            status_payload = None if self.base_url is None else {}
+            job = _post(self.url(f"status/{job['id']}"), self.api_key, status_payload, 60.0)
         self.calls += 1
         self.finished_at = time.monotonic()
         self.worker_seconds += float(job.get("executionTime") or 0) / 1000.0

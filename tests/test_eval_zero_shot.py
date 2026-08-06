@@ -1068,7 +1068,7 @@ class TimedClient:
 
 
 def serving_args(config, **kwargs):
-    defaults = {"endpoint_id": "ep-9", "serving_config": config}
+    defaults = {"endpoint_id": "ep-9", "serving_config": config, "endpoint_url": ""}
     return type("Args", (), defaults | kwargs)
 
 
@@ -1125,3 +1125,27 @@ def test_the_serving_block_carries_the_endpoint_the_worker_and_the_billed_second
     # `local_config` already stores under its own key
     assert "runtime" not in config["serving"]["worker"]
     assert config["serving"]["worker"]["adapter_sha256"] == "b3ca6308"
+    assert config["serving"]["transport"] == "serverless-api"
+
+
+def test_the_record_names_the_runtime_that_produced_it():
+    """SPEC amendment 3.11 (1) moved production onto a pod; the number has to say so.
+
+    Two runs of the same config on two runtimes are the one comparison this phase exists
+    to make, and a record that leaves the runtime to be inferred from an endpoint id has
+    lost the only field that distinguishes them.
+    """
+    base = {"train_sources": {}, "testset_version": "v4"}
+    info = {"merge_state": "unmerged-adapter"}
+    served = runner.serving_config(
+        base, serving_args("A", endpoint_url="http://127.0.0.1:8000"), info, None, TimedClient()
+    )
+    assert served["serving"]["transport"] == "pod-loopback"
+    assert served["serving"]["endpoint_url"] == "http://127.0.0.1:8000"
+    assert "pod runtime" in served["determinism_note"]
+    assert (
+        "serverless"
+        in runner.serving_config(base, serving_args("A"), info, None, TimedClient())[
+            "determinism_note"
+        ]
+    )

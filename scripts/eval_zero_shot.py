@@ -671,6 +671,11 @@ def serving_config(config: dict, args, info: dict, merged: dict | None, client) 
         "serving": {
             "endpoint_id": args.endpoint_id,
             "config": args.serving_config,
+            # Which runtime produced the number, in the record rather than in a runbook:
+            # SPEC amendment 3.11 (1) moved production onto a pod, and a serving-parity
+            # record whose runtime has to be inferred from the endpoint id is not one.
+            "transport": "pod-loopback" if args.endpoint_url else "serverless-api",
+            "endpoint_url": args.endpoint_url or serving.BASE_URL,
             "merge_state": info.get("merge_state"),
             "worker": {k: v for k, v in info.items() if k != "runtime"},
             "timing": client.timing(),
@@ -678,7 +683,8 @@ def serving_config(config: dict, args, info: dict, merged: dict | None, client) 
         },
         "spend_ledger": "results/spend_5b.json",
         "determinism_note": (
-            "the production serverless runtime, running this repo's scripts/serve_handler.py:"
+            f"the production {'pod' if args.endpoint_url else 'serverless'} runtime, running"
+            " this repo's scripts/serve_handler.py:"
             " the chat template, add_special_tokens=False, greedy generate and the reply shape"
             " are market_pulse.local_llm's, byte-identical to the 4.5h2 pod run. What differs"
             " is where the process runs and, for config B, whether the adapter is merged —"
@@ -1144,6 +1150,14 @@ def main(argv: list[str] | None = None) -> int:
         " the delta SPEC amendment 3.11 (2) pre-registers.",
     )
     parser.add_argument(
+        "--endpoint-url",
+        metavar="URL",
+        default="",
+        help="the pod runtime of SPEC amendment 3.11 (1): the same worker, served over HTTP by"
+        f" the RunPod SDK on the pod itself ({serving.POD_BASE_URL}). Without it the client"
+        " talks to RunPod's serverless API. --endpoint-id stays the label the record carries.",
+    )
+    parser.add_argument(
         "--serving-config",
         choices=("A", "B"),
         help="--endpoint-id: which half of the 5b pair this endpoint serves. Checked against"
@@ -1228,6 +1242,8 @@ def main(argv: list[str] | None = None) -> int:
         parser.error("--backend endpoint needs --serving-config: an unnamed half is not a pair")
     if args.endpoint_id and not served:
         parser.error("--endpoint-id is a serving run: pass --backend endpoint")
+    if args.endpoint_url and not served:
+        parser.error("--endpoint-url is a serving run: pass --backend endpoint")
     if served and args.batch_size != 1:
         raise SystemExit(
             f"the 5b pair is scored at batch 1, not {args.batch_size}: greedy decoding is not"
@@ -1319,7 +1335,14 @@ def main(argv: list[str] | None = None) -> int:
             runtime = {"smoke": "no weights were loaded"}
     elif served:
         budget = None
-        client = serving.EndpointClient(args.endpoint_id, runpod_api_key())
+        # A pod's own server is loopback and unauthenticated; the API key is a serverless
+        # credential and asking for one on the pod would refuse the run for want of a
+        # secret it never sends (SPEC amendment 3.11 (1), the pod runtime ruling).
+        client = serving.EndpointClient(
+            args.endpoint_id,
+            "" if args.endpoint_url else runpod_api_key(),
+            base_url=args.endpoint_url or None,
+        )
         # Before the first paid row: the worker has to say what it loaded, and it has to be
         # the half of the pair this invocation claims. An endpoint is updatable and its name
         # is not a checksum — the adapter sha is (SPEC amendment 3.11 (2)).

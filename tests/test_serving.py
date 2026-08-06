@@ -229,6 +229,41 @@ def test_endpoint_url_is_the_runpod_v2_shape():
     assert serving.endpoint_url("ep-1", "runsync") == "https://api.runpod.ai/v2/ep-1/runsync"
 
 
+def test_a_pod_serves_the_same_job_at_the_root(client):
+    """SPEC amendment 3.11 (1): the worker moved to a pod and the client did not.
+
+    RunPod's API keys the endpoint in the path; the SDK's own server on the pod serves
+    `/runsync` at the root and has no endpoint to key by. `endpoint_id` stays the label
+    the record carries — the pod id — and must not leak into the URL.
+    """
+    pod = client(job({"replies": [reply()], "n": 1}), base_url="http://127.0.0.1:8000/")
+    assert pod.url("runsync") == "http://127.0.0.1:8000/runsync"
+    pod.batch("T1", ["a"])
+    assert pod.transport.seen[0][0] == "http://127.0.0.1:8000/runsync"
+
+
+def test_a_pod_polls_status_with_a_body_because_that_route_is_post_only(client, monkeypatch):
+    """The one shape difference between the two servers, and it must fail on the job.
+
+    RunPod answers `/status` on GET; the SDK registers it POST-only, so a GET there is a
+    405 that reads like a dead worker rather than like a job that is still running.
+    """
+    monkeypatch.setattr(serving.time, "sleep", lambda _s: None)
+    pod = client(
+        {"id": "j-1", "status": "IN_PROGRESS"},
+        job({"replies": [reply()], "n": 1}),
+        base_url="http://127.0.0.1:8000",
+    )
+    pod.batch("T1", ["a"])
+    url, payload = pod.transport.seen[1]
+    assert url == "http://127.0.0.1:8000/status/j-1"
+    assert payload == {}  # a body, so `_post` sends POST
+    assert (
+        client({"id": "j-1", "status": "IN_PROGRESS"}, job({"replies": [reply()], "n": 1})).base_url
+        is None
+    )
+
+
 # --- the unit the bill is in -------------------------------------------------
 
 
