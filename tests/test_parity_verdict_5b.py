@@ -405,3 +405,214 @@ def test_an_over_cap_single_run_writes_its_abort_where_it_is_told(paths, capsys)
     assert verdict.run_projection(args(runs=1, seconds_per_row=12.0, verdict_out=elsewhere)) == 0
     assert json.loads(elsewhere.read_text(encoding="utf-8"))["outcome"] == "aborted-over-cap"
     assert not verdict.VERDICT.exists()
+
+
+# --- the batch measurement (5b.2) -------------------------------------------
+
+
+def served_record(values: dict, batch_size: int, solo=(), lost=0) -> dict:
+    """A paid run's record with the two fields the batch rule reads beyond the gates."""
+    record = pod_record(values)
+    record["config"]["generation"] = {"greedy": True, "batch_size": batch_size}
+    record["config"]["serving"]["timing"] = {"calls": 97, "wall_seconds": 800.0}
+    record["diagnostics"] = {
+        "failures": [
+            {
+                "input": "comments_test",
+                "rows": 400,
+                "scored": 400 - lost,
+                "solo_retried": list(solo),
+            },
+            {"input": "posts_test", "rows": 250, "scored": 250, "solo_retried": []},
+            {"input": "sarcasm_holdout", "rows": 108, "scored": 108, "solo_retried": []},
+        ]
+    }
+    return record
+
+
+def batch_args(paths, tmp_path, **kwargs):
+    defaults = {
+        "parity_record": tmp_path / "parity_5b2.json",
+        "baseline_record": paths["A"],
+        "batch_dump": None,
+        "baseline_dump": None,
+        "serving_record": None,
+        "usd_per_hour": 0.53,
+    }
+    return type("Args", (), defaults | kwargs)
+
+
+def test_a_batch_that_changes_nothing_is_adopted(paths, tmp_path, capsys):
+    write(paths["A"], served_record(ARM_A, 1))
+    write(tmp_path / "parity_5b2.json", served_record(ARM_A, 8))
+    assert verdict.run_batch(batch_args(paths, tmp_path)) == 0
+    stamped = json.loads((tmp_path / "parity_5b2.json").read_text(encoding="utf-8"))["parity"]
+    assert stamped["adopted"] is True
+    assert stamped["adopted_batch_size"] == 8
+    assert stamped["decision"]["selected"] == "batch-8"
+    assert stamped["deltas_vs_batch_1"] == {head: 0.0 for head in verdict.HEADS}
+    assert stamped["required_gates"] == ["G1b", "G1d", "G1e"]
+    assert "batch 1" in stamped["on_failure"]
+    assert "ADOPTED" in capsys.readouterr().out
+
+
+def test_a_head_that_drops_past_the_tolerance_keeps_batch_one(paths, tmp_path, capsys):
+    """0.005 is the pre-registered tolerance, and it is the rule's second half — the run
+    can hold every bar and still not be adopted."""
+    write(paths["A"], served_record(ARM_A, 1))
+    write(tmp_path / "parity_5b2.json", served_record(ARM_A | {"G1e": 0.9510}, 8))
+    assert verdict.run_batch(batch_args(paths, tmp_path)) == 0
+    stamped = json.loads((tmp_path / "parity_5b2.json").read_text(encoding="utf-8"))["parity"]
+    assert stamped["adopted"] is False
+    assert stamped["adopted_batch_size"] == 1
+    assert "G1e" in stamped["decision"]["drops"]
+    assert stamped["under_bar"] == [], "it can hold every bar and still not be adopted"
+    assert "NOT ADOPTED" in capsys.readouterr().out
+
+
+def test_a_lost_required_gate_keeps_batch_one(paths, tmp_path):
+    write(paths["A"], served_record(ARM_A, 1))
+    write(tmp_path / "parity_5b2.json", served_record(ARM_A | {"G1d": 0.80}, 8))
+    assert verdict.run_batch(batch_args(paths, tmp_path)) == 0
+    stamped = json.loads((tmp_path / "parity_5b2.json").read_text(encoding="utf-8"))["parity"]
+    assert stamped["adopted"] is False
+    assert stamped["decision"]["gates_lost"] == ["G1d"]
+    assert stamped["under_bar"] == ["G1d"]
+
+
+def test_a_run_that_lost_rows_is_a_failed_attempt_not_a_lower_number(paths, tmp_path):
+    write(paths["A"], served_record(ARM_A, 1))
+    write(tmp_path / "parity_5b2.json", served_record(ARM_A, 8, lost=3))
+    with pytest.raises(SystemExit, match="failed attempt"):
+        verdict.run_batch(batch_args(paths, tmp_path))
+
+
+def test_rows_the_fallback_regenerated_alone_make_the_measurement_mixed(paths, tmp_path, capsys):
+    """The record says batch 8; these rows were generated at batch 1. Reported, never
+    averaged away — a mixed measurement that reads as clean is the failure this catches."""
+    write(paths["A"], served_record(ARM_A, 1))
+    write(tmp_path / "parity_5b2.json", served_record(ARM_A, 8, solo=["@ch:1", "@ch:2"]))
+    assert verdict.run_batch(batch_args(paths, tmp_path)) == 0
+    stamped = json.loads((tmp_path / "parity_5b2.json").read_text(encoding="utf-8"))["parity"]
+    assert stamped["solo_retried"] == ["@ch:1", "@ch:2"]
+    assert "MIXED BATCH" in capsys.readouterr().out
+
+
+def test_a_comparison_of_two_batch_ones_is_refused(paths, tmp_path):
+    """Whatever is in the files, it is not a batch measurement — and mislabelling it
+    would put a number under a heading that decides the run rate."""
+    write(paths["A"], served_record(ARM_A, 1))
+    write(tmp_path / "parity_5b2.json", served_record(ARM_A, 1))
+    with pytest.raises(SystemExit, match="only a batch measurement"):
+        verdict.run_batch(batch_args(paths, tmp_path))
+
+
+def dump(path: Path, rows: list[tuple[str, str, dict]]) -> Path:
+    path.write_text(
+        "".join(
+            json.dumps({"input": name, "id": row_id, "pred": pred}, sort_keys=True) + "\n"
+            for name, row_id, pred in rows
+        ),
+        encoding="utf-8",
+    )
+    return path
+
+
+def test_row_agreement_is_reported_per_input_and_gates_nothing(paths, tmp_path, capsys):
+    write(paths["A"], served_record(ARM_A, 1))
+    write(tmp_path / "parity_5b2.json", served_record(ARM_A, 8))
+    base = dump(
+        tmp_path / "base.jsonl",
+        [("comments_test", "@ch:1", {"s": "neutral"}), ("posts_test", "@ch:2", {"s": "promo"})],
+    )
+    batched = dump(
+        tmp_path / "batched.jsonl",
+        [("comments_test", "@ch:1", {"s": "negative"}), ("posts_test", "@ch:2", {"s": "promo"})],
+    )
+    args_ = batch_args(paths, tmp_path, batch_dump=batched, baseline_dump=base)
+    assert verdict.run_batch(args_) == 0
+    stamped = json.loads((tmp_path / "parity_5b2.json").read_text(encoding="utf-8"))["parity"]
+    agreement = stamped["row_agreement"]
+    assert agreement["compared"] == 2
+    assert agreement["agree"] == 1
+    assert agreement["rate"] == 0.5
+    assert agreement["per_input"]["comments_test"]["rate"] == 0.0
+    assert agreement["disagreeing_ids"] == ["comments_test:@ch:1"]
+    # a 50% agreement rate and every head identical: the rule still adopts
+    assert stamped["adopted"] is True
+    assert "never this" in agreement["not_a_gate"]
+
+
+def test_a_dump_with_a_row_twice_is_refused(tmp_path):
+    """Keyed by (input, id), and a dict built from duplicates is last-wins — a decision
+    no reader would see."""
+    path = dump(
+        tmp_path / "twice.jsonl",
+        [("comments_test", "@ch:1", {"s": "a"}), ("comments_test", "@ch:1", {"s": "b"})],
+    )
+    with pytest.raises(SystemExit, match="twice"):
+        verdict.predictions(path)
+
+
+def test_what_5c_reads_is_stamped_beside_the_smoke_not_over_it(paths, tmp_path):
+    """`results/serving_5b.json` holds the 5b.1 smoke and the cost block --project reads.
+    The adopted batch is a new answer to a new question, not a reason to lose the old one."""
+    write(paths["A"], served_record(ARM_A, 1))
+    write(tmp_path / "parity_5b2.json", served_record(ARM_A, 8))
+    serving_record = tmp_path / "serving_5b.json"
+    write(serving_record, {"step": "5b smoke", "cost": {"usd": 0.0226}})
+    args_ = batch_args(paths, tmp_path, serving_record=serving_record, usd_per_hour=0.53)
+    assert verdict.run_batch(args_) == 0
+    served = json.loads(serving_record.read_text(encoding="utf-8"))
+    assert served["cost"] == {"usd": 0.0226}, "the smoke's own record survives"
+    assert served["step"] == "5b smoke"
+    assert served["adopted"]["batch_size"] == 8
+    assert served["adopted"]["rows"] == 758
+    assert served["adopted"]["seconds_per_row"] == pytest.approx(800.0 / 758, abs=1e-3)
+    assert served["adopted"]["usd_per_1000_rows"] == pytest.approx(
+        800.0 / 758 * 0.53 / 3600 * 1000, abs=1e-4
+    )
+
+
+def test_a_failed_measurement_stamps_batch_one_as_what_5c_reads(paths, tmp_path):
+    write(paths["A"], served_record(ARM_A, 1))
+    write(tmp_path / "parity_5b2.json", served_record(ARM_A | {"G1d": 0.80}, 8))
+    serving_record = tmp_path / "serving_5b.json"
+    write(serving_record, {"step": "5b smoke"})
+    args_ = batch_args(paths, tmp_path, serving_record=serving_record)
+    assert verdict.run_batch(args_) == 0
+    served = json.loads(serving_record.read_text(encoding="utf-8"))
+    assert served["adopted"]["batch_size"] == 1
+    assert served["adopted"]["measured_at_batch_size"] == 8
+    assert served["adopted"]["adopted"] is False
+
+
+def test_the_projection_can_read_a_ladder_arm_instead_of_a_smoke(tmp_path):
+    """The candidate arm's per-row wall, re-weighted to the paid run's 508:250 mix."""
+    ladder = tmp_path / "batch_ladder_5b2.json"
+    write(
+        ladder,
+        {
+            "arms": {
+                "8": {
+                    "failed": None,
+                    "rows": [
+                        {"task": "T1v2_with_post", "wall_seconds": 1.0},
+                        {"task": "T2", "wall_seconds": 0.5},
+                    ],
+                }
+            }
+        },
+    )
+    mix = verdict.task_mix()
+    expected = (mix["T1v2_with_post"] * 1.0 + mix["T2"] * 0.5) / sum(mix.values())
+    assert verdict.from_ladder(ladder, "8")["seconds_per_row"] == pytest.approx(expected, abs=1e-3)
+    with pytest.raises(SystemExit, match="not '16'"):
+        verdict.from_ladder(ladder, "16")
+
+
+def test_a_ladder_arm_that_died_timed_nothing(tmp_path):
+    ladder = tmp_path / "batch_ladder_5b2.json"
+    write(ladder, {"arms": {"16": {"failed": "chunk 0: OutOfMemoryError", "rows": []}}})
+    with pytest.raises(SystemExit, match="timed nothing"):
+        verdict.from_ladder(ladder, "16")

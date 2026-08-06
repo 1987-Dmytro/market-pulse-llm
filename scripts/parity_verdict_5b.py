@@ -193,6 +193,24 @@ def from_smoke(path: Path) -> dict:
     }
 
 
+def from_ladder(path: Path, arm: str) -> dict:
+    """One ladder arm's seconds-per-row, re-weighted to the paid run's task mix.
+
+    The ladder measures the candidate N on 24 carve rows; the paid run sends 758 test
+    rows in a mix the carve does not share (19:5 there, 508:250 here). Weighting is the
+    same arithmetic `from_smoke` does — and the same refusal if an arm never timed one of
+    the two renderings. No cost is read: a ladder arm is billed inside the same pod-hour
+    as everything else, and the rate comes from the machine, not from an arm.
+    """
+    record = json.loads(path.read_text(encoding="utf-8"))
+    arms = record.get("arms") or {}
+    if arm not in arms:
+        raise SystemExit(f"{path} holds arms {sorted(arms)}, not {arm!r}")
+    if arms[arm].get("failed"):
+        raise SystemExit(f"{path} arm {arm} failed ({arms[arm]['failed']}) — it timed nothing")
+    return {"seconds_per_row": weighted_seconds_per_row(arms[arm]["rows"], task_mix())}
+
+
 def project(args) -> dict:
     """The abort rule's arithmetic, from what the smoke measured.
 
@@ -416,6 +434,247 @@ def run_single(args) -> int:
     return 0
 
 
+def predictions(path: Path) -> dict:
+    """A prediction dump as ``(input, id) -> pred``, refusing a duplicated row.
+
+    Keyed rather than zipped, because the two runs' dumps are both sorted by
+    ``(input, id)`` and a comparison that trusted the order would silently pair the
+    wrong rows if either lost one. A dict built from duplicates is last-wins, which is
+    a decision no reader would see — so a repeated key stops instead.
+    """
+    out = {}
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if not line.strip():
+            continue
+        row = json.loads(line)
+        key = (row["input"], row["id"])
+        if key in out:
+            raise SystemExit(f"{path} holds {key} twice — a dump with duplicate rows is not one")
+        out[key] = row["pred"]
+    return out
+
+
+def row_agreement(batch_dump: Path, anchor_dump: Path) -> dict:
+    """How often the batched run labelled a row exactly as the batch-1 run did.
+
+    **Description, never a gate** — SPEC amendment 3.11 (2) is explicit: the adoption rule
+    is the gate heads, and row-level agreement is reported beside them. It is here because
+    5b.1 could not report it at all (arm A's 4.5h2 dump was lost on 04.08,
+    `results/predictions/LOST.md`) and this is the first comparison in this project that
+    has both dumps.
+    """
+    batched, base = predictions(batch_dump), predictions(anchor_dump)
+    shared = sorted(set(batched) & set(base))
+    agree = [key for key in shared if batched[key] == base[key]]
+    disagree = [key for key in shared if batched[key] != base[key]]
+    per_input = {}
+    for name, row_id in shared:
+        seen = per_input.setdefault(name, {"rows": 0, "agree": 0})
+        seen["rows"] += 1
+        seen["agree"] += batched[(name, row_id)] == base[(name, row_id)]
+    return {
+        "compared": len(shared),
+        "in_batch_only": sorted(f"{n}:{i}" for n, i in set(batched) - set(base)),
+        "in_batch_1_only": sorted(f"{n}:{i}" for n, i in set(base) - set(batched)),
+        "agree": len(agree),
+        "rate": round(len(agree) / len(shared), 6) if shared else None,
+        "per_input": {
+            name: seen | {"rate": round(seen["agree"] / seen["rows"], 6)}
+            for name, seen in sorted(per_input.items())
+        },
+        "disagreeing_ids": [f"{n}:{i}" for n, i in disagree][:40],
+        "not_a_gate": (
+            "reported as description. The adoption rule reads the gate heads and the bars,"
+            " never this number (SPEC amendment 3.11 (2))."
+        ),
+    }
+
+
+def scored_every_row(record: dict, path: Path) -> dict:
+    """Refuse a partial run before it is compared to anything.
+
+    `read_parity` checks the record claims config A and nothing else. A run that lost rows
+    to an `ApiError` is a **failed attempt** under SPEC amendment 3.11 (2) — "one attempt,
+    no retry" — not a lower number to compare, and `solo_retried` names the rows the
+    per-row fallback re-generated at batch 1 while the record still says N.
+    """
+    blocks = record["diagnostics"]["failures"]
+    lost = [b for b in blocks if b["scored"] != b["rows"]]
+    if lost:
+        raise SystemExit(
+            f"{path}: {[(b['input'], b['scored'], b['rows']) for b in lost]} — rows were not"
+            " scored. Under SPEC amendment 3.11 (2) that is a failed attempt, not a result."
+        )
+    solo = sorted(row_id for block in blocks for row_id in block.get("solo_retried", []))
+    return {"rows": sum(b["rows"] for b in blocks), "solo_retried": solo}
+
+
+def batch_size_of(record: dict) -> int:
+    return record["config"]["generation"]["batch_size"]
+
+
+def run_batch(args) -> int:
+    """SPEC amendment 3.11 (2)'s batch measurement: N against batch 1, and the rule applied.
+
+    Three columns, not two. The rule reads the batch-1 record — that is what production
+    already does and what the change is charged against — but the 4.5h2 anchors stay in the
+    table because they are what the gates were written on, and a reader six weeks out must
+    be able to see both distances at once.
+
+    The verdict is `scorer.select_serving_config`, unforked: the shape is identical (does
+    every required gate still pass, did any head drop more than the tolerance) and forking
+    it to say "batch" instead of "config" would be a second copy of the one rule this
+    project has for questions of this form.
+    """
+    bars, recorded = bars_from_anchor()
+    required = passed_at_45h2(recorded)
+    anchor = anchor_values(recorded)
+    base_record = read_parity(args.baseline_record, "A")
+    batch_record = read_parity(args.parity_record, "A")
+    base_n, batch_n = batch_size_of(base_record), batch_size_of(batch_record)
+    if base_n != 1 or batch_n <= 1:
+        raise SystemExit(
+            f"the baseline was scored at batch {base_n} and the candidate at batch {batch_n}."
+            " This comparison is only a batch measurement if the first is 1 and the second is"
+            " above it — stop and report rather than labelling whatever is in the files."
+        )
+    integrity = scored_every_row(batch_record, args.parity_record)
+
+    base_values, batch_values = records.arm_values(base_record), records.arm_values(batch_record)
+    base_flat, batch_flat = flat(base_values), flat(batch_values)
+    verdicts = scorer.gate_verdicts(
+        {
+            "G1a": batch_values["G1a"],
+            "G1b": {
+                "fixed": batch_values["G1b"]["fixed"],
+                "guard_delta": batch_values["G1b"]["guard_delta"],
+            },
+            **{gate: batch_values[gate] for gate in ("G1c", "G1d", "G1e")},
+        },
+        bars,
+    )
+    decision = scorer.select_serving_config(
+        base_flat,
+        batch_flat,
+        must_stay_passing={gate: verdicts[gate]["pass"] for gate in required},
+        rule=scorer.BATCH_SELECTION_RULE,
+        tolerance=scorer.SYNTHETIC_HEAD_TOLERANCE,
+        names=("batch-1", f"batch-{batch_n}"),
+    )
+    deltas_vs_anchor = {
+        head: round(head_value(batch_flat[head]) - head_value(anchor[head]), 6) for head in HEADS
+    }
+    agreement = (
+        row_agreement(args.batch_dump, args.baseline_dump)
+        if args.batch_dump and args.baseline_dump
+        else None
+    )
+
+    print(f"anchor: {recorded['anchor']['model']} @ {recorded['anchor']['timestamp']} — {VERSION}")
+    print(f"4.5h2 shipped arm: {recorded['decision']['selected']}, gates passed {required}")
+    print(f"batch {batch_n} vs batch 1 · {integrity['rows']} rows scored, none lost")
+    print(f"\n{'':22}{'batch ' + str(batch_n):>12}{'batch 1':>12}{'4.5h2':>12}", end="")
+    print(f"{'Δ vs 1':>11}{'bar':>12}{'pass':>7}")
+    for head in HEADS:
+        bar = bars[head].get("min", bars[head].get("min_fixed"))
+        print(
+            f"{head:22}{head_value(batch_flat[head]):>12.4f}{head_value(base_flat[head]):>12.4f}"
+            f"{head_value(anchor[head]):>12.4f}{decision['head_deltas'][head]:>+11.4f}"
+            f"{bar:>12.4f}{str(verdicts[head]['pass']):>7}"
+        )
+    for language in scorer.GATED_LANGUAGES:
+        now, was = batch_values["G1a"][language], base_values["G1a"][language]
+        print(f"{'  G1a ' + language:22}{now:>12.4f}{was:>12.4f}{'':>12}{now - was:>+11.4f}")
+    if agreement:
+        print(f"\nrow agreement vs the batch-1 dump: {agreement['agree']}/{agreement['compared']}")
+        for name, seen in agreement["per_input"].items():
+            print(f"  {name:<18} {seen['agree']:>4}/{seen['rows']:<5} {seen['rate']:.4f}")
+        print("  (description — the rule reads the heads and the bars, never this)")
+    if integrity["solo_retried"]:
+        print(
+            f"\nMIXED BATCH: {len(integrity['solo_retried'])} rows were re-generated at batch 1"
+            f" by the fallback — {integrity['solo_retried'][:8]}. The number above is not a"
+            f" measurement of batch {batch_n} alone; report it as mixed, never averaged away."
+        )
+    print(f"\nrule: {decision['why']}")
+    print(
+        f"ADOPTED: {decision['selected']}" if decision["adopt_b"] else "NOT ADOPTED: batch 1 stays"
+    )
+
+    payload = stamp(
+        {
+            "outcome": "batch-measured",
+            "candidate_batch_size": batch_n,
+            "baseline": {
+                "record": str(shown(args.baseline_record)),
+                "batch_size": base_n,
+                "values": base_flat,
+            },
+            "adopted": decision["adopt_b"],
+            "adopted_batch_size": batch_n if decision["adopt_b"] else 1,
+            "decision": decision,
+            "required_gates": required,
+            "bars": bars,
+            "anchor": recorded["anchor"],
+            "anchor_values_45h2": anchor,
+            "values": batch_values,
+            "deltas_vs_batch_1": decision["head_deltas"],
+            "deltas_vs_45h2": deltas_vs_anchor,
+            "verdicts": verdicts,
+            "passed": sum(1 for v in verdicts.values() if v["pass"]),
+            "under_bar": sorted(gate for gate in required if not verdicts[gate]["pass"]),
+            "rows_scored": integrity["rows"],
+            "solo_retried": integrity["solo_retried"],
+            "row_agreement": agreement,
+            "on_failure": (
+                "SPEC amendment 3.11 (2): a failed measurement fixes serving at batch 1"
+                " permanently and returns the money question to the operator. One attempt,"
+                " no retry at another N."
+            ),
+        }
+    )
+    write(args.parity_record, batch_record | {"parity": payload})
+    if args.serving_record:
+        stamp_adopted(args.serving_record, payload, batch_record, args.usd_per_hour)
+    return 0
+
+
+def stamp_adopted(path: Path, payload: dict, record: dict, usd_per_hour: float) -> None:
+    """What 5c reads: the adopted batch, and what a row costs at it.
+
+    Added to `results/serving_5b.json` rather than written over it — that file is the 5b.1
+    smoke plus the cost block stamped into it after the fact, which `--project` still reads
+    and the 5b.1 projection was derived from. A new key answers the new question without
+    destroying the old answer.
+    """
+    timing = record["config"]["serving"]["timing"]
+    rows = payload["rows_scored"]
+    seconds_per_row = round(timing["wall_seconds"] / rows, 3)
+    served = json.loads(path.read_text(encoding="utf-8"))
+    served["adopted"] = {
+        "decided_at": payload["written_at"],
+        "batch_size": payload["adopted_batch_size"],
+        "measured_at_batch_size": payload["candidate_batch_size"],
+        "adopted": payload["adopted"],
+        "why": payload["decision"]["why"],
+        "rows": rows,
+        "wall_seconds": timing["wall_seconds"],
+        "seconds_per_row": seconds_per_row,
+        "usd_per_hour": usd_per_hour,
+        "usd_per_1000_rows": round(seconds_per_row * usd_per_hour / 3600 * 1000, 4),
+        "source": str(shown(REPO_ROOT / "results" / "parity_5b2.json")),
+        "note": (
+            "seconds_per_row is the paid run's whole wall over its rows, so it carries the"
+            " handshake call on an already-warm worker and no cold start — a per-pass model"
+            " adds the cold start separately (53.0 s measured 2026-08-06 on local NVMe)."
+            " If `adopted` is false the batch_size here is 1: SPEC amendment 3.11 (2) fixes"
+            " serving at batch 1 permanently on a failed measurement."
+        ),
+    }
+    path.write_text(json.dumps(served, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(f"record: {shown(path)} — adopted batch {served['adopted']['batch_size']}")
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project", action="store_true", help="the abort rule, before the pair")
@@ -426,7 +685,42 @@ def main(argv: list[str] | None = None) -> int:
         " anchors, deltas reported and no bar moved. Stamps the comparison into the parity"
         " record; the aborted pair's verdict is not touched.",
     )
+    parser.add_argument(
+        "--batch",
+        action="store_true",
+        help="SPEC amendment 3.11 (2)'s batch measurement: the candidate N against the batch-1"
+        " record and the 4.5h2 anchors, the adoption rule applied as code",
+    )
     parser.add_argument("--parity-record", type=Path, default=PARITY["A"])
+    parser.add_argument(
+        "--baseline-record",
+        type=Path,
+        default=PARITY["A"],
+        help="--batch: the batch-1 record the rule charges the change against",
+    )
+    parser.add_argument("--batch-dump", type=Path, help="--batch: the candidate's per-row dump")
+    parser.add_argument(
+        "--baseline-dump", type=Path, help="--batch: the batch-1 per-row dump to agree with"
+    )
+    parser.add_argument(
+        "--serving-record",
+        type=Path,
+        help="--batch: stamp the adopted batch and its $/1000 rows into results/serving_5b.json,"
+        " which is what 5c reads",
+    )
+    parser.add_argument(
+        "--usd-per-hour",
+        type=float,
+        default=0.0,
+        help="--batch: the pod's posted rate, for the adopted config's $/1000 rows",
+    )
+    parser.add_argument(
+        "--ladder-record",
+        type=Path,
+        help="--project: derive seconds-per-row from a batch_ladder_5b2.json arm instead of"
+        " typing it. Use with --ladder-arm.",
+    )
+    parser.add_argument("--ladder-arm", default="", help="--project: which arm, e.g. 8")
     parser.add_argument(
         "--runs",
         type=int,
@@ -473,6 +767,13 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.single:
         return run_single(args)
+    if args.batch:
+        if args.serving_record and not args.usd_per_hour:
+            parser.error(
+                "--serving-record needs --usd-per-hour: what 5c reads is a price per thousand"
+                " rows, and a price with no rate behind it is a guess in a record"
+            )
+        return run_batch(args)
     if args.abort:
         if not (args.blocker and args.evidence):
             parser.error(
@@ -483,6 +784,12 @@ def main(argv: list[str] | None = None) -> int:
     if args.project:
         if args.smoke_record:
             for field, value in from_smoke(args.smoke_record).items():
+                if getattr(args, field) in (None, 0):
+                    setattr(args, field, value)
+        if args.ladder_record:
+            if not args.ladder_arm:
+                parser.error("--ladder-record needs --ladder-arm: a ladder holds several")
+            for field, value in from_ladder(args.ladder_record, args.ladder_arm).items():
                 if getattr(args, field) in (None, 0):
                     setattr(args, field, value)
         missing = [

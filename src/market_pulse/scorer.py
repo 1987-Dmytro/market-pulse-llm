@@ -414,6 +414,16 @@ SERVING_SELECTION_RULE = (
     " 3.11 (2), operator 2026-08-06, committed before either config was scored)"
 )
 
+BATCH_SELECTION_RULE = (
+    "batch N is adopted only if every 4.5h2-passed gate stays passing at N and no gate head"
+    " drops more than 0.005 vs results/parity_5b_a.json, the batch-1 record; a failed"
+    " measurement fixes serving at batch 1 permanently and returns the money question to the"
+    " operator (SPEC amendment 3.11 (2), operator 2026-08-06, committed before the ladder ran)"
+)
+"""5b.2's rule. Same shape as the merge rule above, same function applies it, one thing moved:
+the baseline is the batch-1 *serving* record rather than config A, because batch 1 is what
+production already does and the question is what changing it costs."""
+
 
 def select_serving_config(
     a: dict,
