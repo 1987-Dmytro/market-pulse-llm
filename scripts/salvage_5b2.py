@@ -42,6 +42,7 @@ VERDICT = RESULTS / "batch_5b2_verdict.json"
 CHECKPOINT = RESULTS / "batch_5b2_checkpoint.jsonl"
 BATCH_1_DUMP = RESULTS / "predictions" / "google-gemma-4-31b-it--20260806T154612Z.jsonl"
 BASELINE = RESULTS / "parity_5b_a.json"
+LADDER = RESULTS / "batch_ladder_5b2.json"
 
 COMPLETE = ("comments_test", "posts_test")
 """The two inputs the run finished. Named, because "the heads we could compute" is not a
@@ -216,6 +217,7 @@ def main(argv: list[str] | None = None) -> int:
         help="measured this session; a stop-after pod pays it once per pass",
     )
     parser.add_argument("--baseline-record", type=Path, default=BASELINE)
+    parser.add_argument("--ladder-record", type=Path, default=LADDER)
     parser.add_argument("--baseline-dump", type=Path, default=BATCH_1_DUMP)
     parser.add_argument("--verdict-out", type=Path, default=VERDICT)
     parser.add_argument("--blocker", required=True, help="one line: what ended the run")
@@ -230,6 +232,14 @@ def main(argv: list[str] | None = None) -> int:
     aliases = runner.watchlist_aliases(
         runner.load_registry(REPO_ROOT / "config" / "registry.yaml").watchlist
     )
+
+    ladder = json.loads(args.ladder_record.read_text(encoding="utf-8"))
+    worker_commit = (ladder.get("worker") or {}).get("repo_commit")
+    if not worker_commit:
+        raise SystemExit(
+            f"{args.ladder_record} names no worker.repo_commit — the record could not then say"
+            " which checkout produced its rows, and a verdict that cannot is not one"
+        )
 
     bars, recorded = pv.bars_from_anchor()
     anchor = pv.anchor_values(recorded)
@@ -272,6 +282,12 @@ def main(argv: list[str] | None = None) -> int:
             " passing one. A failed measurement fixes serving at batch 1 permanently and"
             " returns the money question to the operator. One attempt, no retry, no second N."
         ),
+        # Two commits, because they are two different things. `git` is this machine when the
+        # salvage ran; `worker_repo_commit` is the pod's own checkout, which is what actually
+        # generated the rows — read off the ladder record's `worker` block, where the worker
+        # answered for itself ([[provenance_cannot_name_itself]]).
+        "git": runner.git_state(),
+        "worker_repo_commit": worker_commit,
         "attempt": {
             "batch_size": header.get("batch_size"),
             "adapter_sha256": header.get("adapter_sha256"),

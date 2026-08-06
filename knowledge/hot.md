@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-06 19:34:27 (every SessionStart)
+**Auto-refreshed:** 2026-08-06 19:38:12 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+2f350f4 docs(vault): 5b.2 at the checkpoint — batch closed by rule, run-rate back to the operator
 cb41ae3 docs(5b2): the ADR with its numbers, and twelve deviations
 9295e3c feat(5b2): the ladder says every N is identical; the paid run at 16 dies on memory
 0a0e09c docs(5b2): check the stack string before the 59 GB, not after it
 00b82ac feat(5b2): regress batch 1 against the 5b.1 smoke, and the runbook's pre-registered rulings
-db23ee6 feat(5b2): the carve ladder, and the adoption rule as code
 ```
 
 ## 📋 Recent decisions
@@ -220,7 +220,9 @@ future corrected-gold comparison of the two arms is **unpaired and must say so**
    pre-registered measurement may move it. What that leaves on the table, all of it the operator's
    call and none of it started here: **(a)** authorise a fresh batch measurement at **N=8** with a
    memory term in the rule and `expandable_segments:True` — projected **$10.39/mo**, inside the
-   ceiling, and 660/666 row agreement says the answers survive batching; **(b)** fewer passes a day
+   ceiling, and 660/666 row agreement says the answers survive batching — but whether 8 FITS is
+   an INFERENCE from the batch-16 OOM, not a measurement, and this phase's finding is that a
+   24-row ladder underestimates the population; **(b)** fewer passes a day
    (the cadence is a recorded knob, not a constant); **(c)** a smaller v4 slice per pass;
    **(d)** delete or resize the CA-MTL-3 volume, which bills **~$7.20/mo attached to nothing** and
    is the single biggest line against a $9–12 ceiling. Today: batch 1 = **$27.67/mo**.

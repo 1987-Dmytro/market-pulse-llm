@@ -22,5 +22,6 @@
   "step": "5b serving parity",
   "testset_version": "v4",
   "cap_usd": 4.0,
-  "written_at": "2026-08-06T17:30:23+00:00"
+  "written_at": "2026-08-06T17:30:23+00:00",
+  "not_authorised": "This prices an option, not a run. Batch 8 was NEVER scored: SPEC amendment 3.11 (2) gave the phase one attempt, it was spent at batch 16, and a failed measurement fixes serving at batch 1 permanently. 'clears' below means only that the arithmetic fits the remaining headroom — it authorises nothing. seconds_per_row comes from the ladder's batch-8 arm on 24 carve rows, and whether batch 8 fits in GPU memory on 758 test rows is an INFERENCE from the batch-16 OOM (~20 GiB model + about half of a ~22 GiB working set), not a measurement — the phase's own finding is that the 24-row ladder underestimates the population."
 }

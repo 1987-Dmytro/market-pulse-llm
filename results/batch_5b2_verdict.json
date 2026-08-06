@@ -3,7 +3,7 @@
   "step": "5b.2 batch measurement",
   "testset_version": "v4",
   "cap_usd": 4.0,
-  "written_at": "2026-08-06T17:29:39+00:00",
+  "written_at": "2026-08-06T17:37:50+00:00",
   "adopted_batch_size": 1,
   "blocker": "torch.OutOfMemoryError on the worker at the second sarcasm_holdout batch of 16: 1.85 GiB requested, 432 MiB free, 42.14 GiB allocated by PyTorch against a ~20 GiB model at rest",
   "evidence": [
@@ -13,6 +13,13 @@
     "pod 5pjikuu7rgitor deleted and verified by runpodctl pod list -a returning []"
   ],
   "rule_could_not_run": "SPEC amendment 3.11 (2) adopts N only if every 4.5h2-passed gate stays passing. Those are G1b, G1d, G1e. G1b is the sarcasm_holdout slice and this run scored 16 of 108 rows, so the rule has no input for it — an unmeasured gate is not a passing one. A failed measurement fixes serving at batch 1 permanently and returns the money question to the operator. One attempt, no retry, no second N.",
+  "git": {
+    "commit": "2f350f4f8ec0f51031b685716e8669e7ad81785e",
+    "dirty": [
+      "scripts/salvage_5b2.py"
+    ]
+  },
+  "worker_repo_commit": "0a0e09c7accb6d33dc21abdc3e83b11e0e206359",
   "attempt": {
     "batch_size": 16,
     "adapter_sha256": "b3ca630846c7e75c5e7058ce45804c45a6bff5c49dcf2389cb8cdda0b7a68a6c",

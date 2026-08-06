@@ -440,7 +440,7 @@
     "above_pod_floor": true
   },
   "adopted": {
-    "decided_at": "2026-08-06T17:29:39+00:00",
+    "decided_at": "2026-08-06T17:37:50+00:00",
     "batch_size": 1,
     "measured_at_batch_size": 16,
     "adopted": false,
