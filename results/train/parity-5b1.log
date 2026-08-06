@@ -1,0 +1,42 @@
+model google/gemma-4-31b-it · backend endpoint · quantization {'load_in_4bit': True, 'bnb_4bit_quant_type': 'nf4', 'bnb_4bit_use_double_quant': True, 'bnb_4bit_compute_dtype': 'bfloat16'}
+greedy · max_new_tokens 256 · seed 42
+prompt SHA256 equal to the recorded google/gemma-4-31b-it run: yes
+arm without-plast · adapter sha256 b3ca630846c7e75c5e7058ce45804c45a6bff5c49dcf2389cb8cdda0b7a68a6c
+  dataset sha256 ba368273cc4debb657500256d0d8abe2621aee06cdc4b49fcaea8b85e4bfd1f9 (2171 rows)
+  G1b slice 38 ids, sha256 verified against the anchor
+  guard anchor (G1a overall) 0.8970
+prompt T1 sha256 9b2a021783212022bb335d7a32a365d532ff94c7da92336bf054d8709c0de355
+prompt T2 sha256 6a7e66efb3eb4091b8d787e38213f3b1b0c9115e78d2b41fb9cc6bcaab3a54b4
+test set v4 · rendering {'T1': 'T1v2_with_post', 'T2': 'T2'}
+  comments_test    comments_test_v4.jsonl     T1v2_with_post · 400 parent posts
+  posts_test       posts_test_v4.jsonl        T2
+  sarcasm_holdout  sarcasm_holdout_v4.jsonl   T1v2_with_post · 108 parent posts
+endpoint 9h7ng0ba6tv8b1 · config A
+  merge_state          unmerged-adapter
+  adapter_sha256       b3ca630846c7e75c5e7058ce45804c45a6bff5c49dcf2389cb8cdda0b7a68a6c
+  merged_sha256        None
+  weights_dir          google/gemma-4-31b-it
+  gpu                  NVIDIA RTX A6000
+  gpu_count            1
+  gpu_memory_total     49140 MiB
+  driver               550.127.08
+  cuda_runtime         12.8
+  torch                2.8.0+cu128
+  transformers         5.14.1
+  bitsandbytes         0.50.0
+  pod_id               9h7ng0ba6tv8b1
+  weights_requested    google/gemma-4-31b-it
+  revision_requested   842da3794eaa0b77d5f08bae87a17459d91ff475
+  model_revision       842da3794eaa0b77d5f08bae87a17459d91ff475
+
+checkpoint /workspace/out/parity-5b1.jsonl — 0 rows already scored
+
+comments_test: scored 400/400 · parse 0 · api 0 · generation 0 · truncated 0
+
+posts_test: scored 250/250 · parse 0 · api 0 · generation 0 · truncated 0
+
+sarcasm_holdout: scored 108/108 · parse 0 · api 0 · generation 0 · truncated 0
+
+wrote /workspace/out/parity_5b_a.json — append it with --append-record, nothing appended here
+tokens {'prompt_tokens': 513148, 'completion_tokens': 14955}
+wrote results/predictions/google-gemma-4-31b-it--20260806T154612Z.jsonl — 758 rows

@@ -80,6 +80,13 @@
       "spent_usd": 17.3189,
       "remaining_usd": 7.6811,
       "note": "5b.1 fresh staging on a US-TX-1 A6000 (no volume: 59 GB weights re-downloaded, venv pinned) + the 24-row carve smoke"
+    },
+    {
+      "at": "2026-08-06T15:48:36+00:00",
+      "balance": 17.1656462108,
+      "spent_usd": 17.8344,
+      "remaining_usd": 7.1656,
+      "note": "5b.1: config A scored once on the US-TX-1 A6000 pod, 758/758 rows, pod deleted and verified by listing"
     }
   ]
 }

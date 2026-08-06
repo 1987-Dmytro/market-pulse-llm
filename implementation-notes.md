@@ -2778,3 +2778,132 @@ gives the projection a per-rendering mean over more than four rows a side.
 
 $3.47 was the brief's stop and $4.00 the SPEC cap with `spent_usd` beside it — the same
 inequality read from the two ends. It clears with $2.82 to spare, so the paid run went.
+
+## The paid run — and it reproduced the anchor exactly
+
+`results/parity_5b_a.json`, one attempt, batch 1, greedy, no retry. **758 of 758 rows scored:
+400 + 250 + 108, with parse, api, generation and truncation failures all at zero.** Then
+`parity_verdict_5b.py --single`, which re-derives the v4 bars from the anchor and asserts them
+equal to the ones `verdict_45h2.json` recorded before it compares anything:
+
+| head | A on the pod | 4.5h2 pod | delta | bar | pass |
+|---|---|---|---|---|---|
+| G1a | 0.9214 | 0.9214 | **+0.0000** | 0.9470 | no |
+| G1b | 0.6053 (23/38) | 0.6053 | **+0.0000** | 23 fixed | **yes** |
+| G1c | 0.8478 | 0.8478 | **+0.0000** | 0.8483 | no |
+| G1d | 0.9586 | 0.9586 | **+0.0000** | 0.9090 | **yes** |
+| G1e | 0.9610 | 0.9610 | **+0.0000** | 0.9283 | **yes** |
+| G1a ua / ru | 0.9306 / 0.8697 | 0.9306 / 0.8697 | **+0.0000** | — | — |
+
+**Every head is bit-identical to the anchor.** Not "within tolerance" — the same float. 3 of 5
+gates pass, the same three, and `under_bar` is empty: no 4.5h2-passed head landed under its bar,
+so there is no loud finding and nothing for an operator briefing to rule on. G1c is still the
+interesting number for a reader — it missed by 0.0005 at 4.5h2 and misses by 0.0005 here — but
+this phase moves no bar and rules on nothing.
+
+That the deltas are exactly zero is a statement about the *stack*, not luck: greedy decoding at
+batch 1 on the same card, driver, CUDA, torch, transformers and bitsandbytes, with the same
+prompt revisions (`495b43d1…`, `6a7e66ef…`), the same frozen input hashes and the same G1b slice
+(`6dc6be01…`). ADR `phase4-own-pod-anchor` §(c) records that greedy is *not* batch-invariant on
+this stack; batch 1 on both sides is why this comparison could come out identical at all.
+
+**The delta SPEC amendment 3.11 (2) exists to report is zero.** Serving through
+`serve_handler` over HTTP on a booted-per-pass pod costs the gate numbers nothing.
+
+What 5c needs from the same record:
+
+| | |
+|---|---|
+| cold start (local NVMe) | **53.0 s** — 278.9 s off a network volume |
+| per row, batch 1, v4 mix | **4.065 s** (`wall_per_call`, 759 calls) |
+| the run | **3085.4 s** wall for 758 rows |
+| projected beforehand | 3163.1 s — **−2.5%**, so the task-mix weighting holds |
+| $/1000 rows at $0.53/h | **$0.60** |
+| the pod's whole life | 14:30:22 → 15:48:29 UTC, 4 687 s, $0.69 |
+
+## Spend
+
+| | |
+|---|---|
+| 5b before this phase | $0.5324 |
+| 5b.1 staging + smoke | $0.1845 |
+| the paid run + teardown | $0.5155 |
+| **5b total** | **$1.2324 of the $4.00 stop** |
+| unspent | $2.7676 |
+| Phase 4 cap | $17.8344 of $25.00, $7.1656 left |
+
+No pod, endpoint or template is left running — `pod list -a` → `[]`, `serverless list` → `[]`,
+and `network-volume list` shows only `gfwa2an8fn`, the one SPEC 3.11 (6) says to keep.
+
+## Deviations
+
+**D1 — the driver runs on the pod, not on the Mac.** The 5b instrument was built for a Mac
+talking to RunPod's API. A 51-minute single-attempt run behind an SSH tunnel makes a laptop's
+network a way to lose test v4's one authorised exposure, so both the smoke and the scored run
+ran on the pod against `127.0.0.1:8000` under `setsid nohup`, and everything was fetched before
+the pod was deleted.
+
+**D2 — the smoke is 24 rows, not eight.** SPEC names "the 24-row arm-A carve"; PROMPT-5b said
+eight. 24 is a superset of that reading, costs about a cent, and gives the projection a
+per-rendering mean over more than four rows a side.
+
+**D3 — cost is attributed on a pod, not derived from a balance delta.** A pod bills
+continuously, so the guard's delta across the smoke covers boot and two downloads as well;
+dividing it by the smoke's 153 s would have priced the smoke at ten machines. The record carries
+the posted rate times the seconds held, and the rate is checked against the guard (89% settled
+over the pod's uptime — settlement lag, not a cheap machine). The floor moved with it: half the
+posted rate, because the serverless "never below the pod class" inequality fires on a pod priced
+correctly, and what still has to be caught is an unsettled balance reading ~0.
+
+**D4 — 5b.1's projection and any abort get their own paths.** `--projection-out` /
+`--verdict-out`, because `results/parity_verdict_5b.json` is the committed verdict of the
+aborted pair. It is untouched: still `aborted-runtime-unreachable`, still written 13:17:37Z.
+
+**D5 — the pod's serving front end is the RunPod SDK's `--rp_serve_api` server.** It is
+documented as a development server; it is also the only thing that serves *this* handler
+unchanged, which is the property the measurement needs. `start.sh` forwards argv, so serverless
+and pod share one entrypoint.
+
+**D6 — the A6000 stock-out, and 30 refused creates.** `runpodctl gpu list` reports availability
+per datacenter and said `none` for CA-MTL-3 the whole time; I read `datacenter list` (which
+prints `""` for everything) and trusted 5b's note that the stock field is not a refusal. The
+operator's capacity clause resolved it and the ladder took A6000 in US-TX-1. Cost of the
+stock-out: $0 and 45 minutes.
+
+**D7 — fresh staging off the network volume.** No volume outside CA-MTL-3, so 59 GB of weights
+and the venv were rebuilt, with the 4.5h2 versions **pinned by hand** rather than resolved.
+`assert_runtime_matches` is the gate that says the rebuild is the same instrument, and it passed
+before the first scored row. peft came out 0.20.0 and is recorded, not asserted — it is not one
+of the three libraries the anchor pins.
+
+**D8 — the worker's configuration has no template on a pod.** `SERVING_CONFIG` and friends were
+the serverless template's `--env`. The first start refused, for free, because `Worker` loads
+lazily. 5c's pod launcher now owns that env.
+
+**D9 — the record's `repo_commit` is `b2eb28e`, not the Mac's HEAD.** The bundle was cut before
+the SPEC capacity clause and the runbook fixes landed; every commit after it is documentation.
+The worker answers for the code it actually ran, which is the point of the field.
+
+**D10 — the comparison is stamped into `results/parity_5b_a.json`.** The brief asks for the
+per-head numbers "BESIDE the 4.5h2 anchors with explicit deltas", and a number whose baseline
+lives in another file gets compared by hand exactly once.
+
+**D11 — nothing was appended to `results/baselines.json`.** A serving row is not a gate anchor.
+`records.anchor` narrows on `backend == "local"` so it could never be selected as one, but the
+run does not offer it either.
+
+## What the operator gets to decide next
+
+1. **5c can size itself off real numbers now.** 53 s of cold start and 4.065 s per row at batch 1
+   means a 758-row pass is ~52 minutes of A6000, ~$0.46, and two passes a day is ~$28/month of
+   GPU — against SPEC 3.11 (6)'s ~$9–12/month run-rate ceiling. **That gap is the next decision,
+   and it is a real one:** the ceiling was written when inference was serverless and billed by
+   the second. Batch >1 is the obvious lever and it is closed by contract, because greedy is not
+   batch-invariant on this stack — reopening it needs its own measurement.
+2. **The network volume is now optional and it bills ~$0.24/day.** Fresh staging cost 4 m 15 s of
+   download and produced a *faster* cold start than the volume did. Keeping `gfwa2an8fn` buys
+   convenience in one datacenter that had no A6000 capacity today; SPEC 3.11 (6) already flags
+   the run-rate.
+3. **The serverless ticket is still worth filing at zero cost.** Nothing depends on it now — the
+   pod runtime is measured and reproduces the anchor exactly — but if serverless comes back it
+   needs a fresh §(2) measurement, and this record is what that would be compared against.
