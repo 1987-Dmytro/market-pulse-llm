@@ -32,6 +32,7 @@ misconfigured worker reports the refusal instead of the container dying before i
 
 import json
 import os
+import subprocess
 import sys
 from pathlib import Path
 
@@ -69,6 +70,28 @@ def settings(env: dict) -> dict:
     }
 
 
+def repo_commit() -> str | None:
+    """The commit the worker is actually serving, as its own checkout reports it.
+
+    The record's `git_state()` names the *Mac's* HEAD, and the worker runs whatever
+    was staged to the volume — two different things the moment either moves. A
+    provenance block that describes code which did not serve is not provenance
+    ([[provenance_cannot_name_itself]] one hop out), so the worker answers for itself.
+    ``None`` off a checkout rather than a raise: an unknown commit must be visible in
+    the record, not fatal to a run that is otherwise fine.
+    """
+    try:
+        out = subprocess.run(
+            ["git", "-C", str(REPO_ROOT), "rev-parse", "HEAD"],
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+    except (OSError, subprocess.CalledProcessError):
+        return None
+    return out.stdout.strip() or None
+
+
 def describe(config: dict, runtime: dict, artifact_sha: str, merged_provenance: dict) -> dict:
     """What ``info`` answers — every field `serving.assert_serving` can be asked to check.
 
@@ -87,6 +110,7 @@ def describe(config: dict, runtime: dict, artifact_sha: str, merged_provenance: 
         "chat_template": local_llm.CHAT_TEMPLATE,
         "max_new_tokens": local_llm.MAX_NEW_TOKENS,
         "model": local_llm.MODEL_ID,
+        "repo_commit": repo_commit(),
         "weights_dir": config["weights_dir"],
         "adapter_dir": config["adapter_dir"],
         "revision_requested": config["revision"],

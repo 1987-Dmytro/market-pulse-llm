@@ -36,6 +36,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))  # the package is not pip-installed
+sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 from market_pulse import records, scorer, serving  # noqa: E402
 
@@ -123,6 +124,66 @@ def column(label: str, a, b, anchor, precision: str = ".4f") -> str:
         f"{label:26}{a:>12{precision}}{b:>12{precision}}{anchor:>14{precision}}"
         f"{b - a:>+11{precision}}{a - anchor:>+13{precision}}"
     )
+
+
+def task_mix(version: str = VERSION) -> dict:
+    """How many rows of test ``version`` each rendering carries. Counted, not typed.
+
+    Test v4 is 508 rows of `T1v2_with_post` and 250 of `T2`, and the two are not
+    interchangeable: the with-post rendering carries the parent and runs to 1 388
+    tokens, so it is the slower one. A smoke drawn evenly across the two tasks
+    therefore *under*-predicts a run that is two-thirds the slow kind, and a flat
+    mean of the smoke's per-row seconds is a projection biased toward spending.
+    """
+    import eval_zero_shot as runner  # noqa: PLC0415 — a script, imported for its inputs
+
+    mix = {}
+    for _name, rendering, filename in runner.inputs_for(version):
+        # `inputs_for` already resolves the version's rendering, so this counts the
+        # renderings the paid run will actually send — not the task ids they came from.
+        mix[rendering] = mix.get(rendering, 0) + len(runner.load(runner.FROZEN / filename))
+    return mix
+
+
+def weighted_seconds_per_row(rows: list[dict], mix: dict) -> float:
+    """The smoke's per-row seconds, re-weighted to the paid run's task mix."""
+    total = sum(mix.values())
+    weighted, covered = 0.0, 0
+    for rendering, count in mix.items():
+        seen = [row["wall_seconds"] for row in rows if row["task"] == rendering]
+        if not seen:
+            continue
+        weighted += (count / total) * (sum(seen) / len(seen))
+        covered += count
+    if covered != total:
+        raise SystemExit(
+            f"the smoke covered {covered} of {total} rows' worth of renderings"
+            f" ({sorted({row['task'] for row in rows})} vs {sorted(mix)}) — a projection that"
+            " weights a rendering it never timed is a guess. Re-run the smoke over both."
+        )
+    return round(weighted, 3)
+
+
+def from_smoke(path: Path) -> dict:
+    """seconds-per-row, cold start and $/s, all read off the smoke's own artifact."""
+    record = json.loads(path.read_text(encoding="utf-8"))
+    cost = record.get("cost")
+    if not cost:
+        raise SystemExit(
+            f"{path} carries no cost block — stamp the guard's measured spend into it first"
+            " (scripts/smoke_5b.py --stamp-cost <USD>). A projection needs dollars."
+        )
+    if not cost.get("above_pod_floor"):
+        raise SystemExit(
+            f"{path}'s derived rate {cost['usd_per_second']} is below the A6000 pod floor"
+            f" {cost['floor_usd_per_second']}. Serverless does not bill under the pod class it"
+            " runs on — the balance had not settled. Re-read the guard and stamp again."
+        )
+    return {
+        "seconds_per_row": weighted_seconds_per_row(record["rows"], task_mix()),
+        "usd_per_second": cost["usd_per_second"],
+        "cold_start_seconds": record["cold_start"]["wall_seconds"],
+    }
 
 
 def project(args) -> dict:
@@ -213,10 +274,20 @@ def main(argv: list[str] | None = None) -> int:
         " the phase, so a projection that ignores it authorises a run the phase cannot afford.",
     )
     parser.add_argument("--rows", type=int, default=TEST_V4_ROWS)
+    parser.add_argument(
+        "--smoke-record",
+        type=Path,
+        help="--project: derive seconds-per-row, cold start and $/s from results/serving_5b.json"
+        " instead of typing them. Explicit flags override.",
+    )
     parser.add_argument("--record", type=Path, help="persist the verdict as well as printing it")
     args = parser.parse_args(argv)
 
     if args.project:
+        if args.smoke_record:
+            for field, value in from_smoke(args.smoke_record).items():
+                if getattr(args, field) in (None, 0):
+                    setattr(args, field, value)
         missing = [
             name
             for name in ("seconds_per_row", "usd_per_second")

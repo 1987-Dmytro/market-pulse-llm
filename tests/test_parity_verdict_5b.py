@@ -217,3 +217,77 @@ def test_a_pod_record_is_not_a_serving_record(paths):
     write(paths["B"], pod)
     with pytest.raises(SystemExit, match="carries no serving block"):
         verdict.main([])
+
+
+# --- the projection's inputs, read off the smoke rather than typed -----------
+#
+#   test v4 is 508 rows of T1v2_with_post + 250 of T2. The with-post rendering carries
+#   the parent and is the slower one, so a smoke drawn evenly across the two tasks
+#   under-predicts a run that is two-thirds the slow kind:
+#     flat mean of 4.0 and 2.0                       = 3.00 s/row
+#     weighted 508/758 x 4.0 + 250/758 x 2.0         = 3.34 s/row
+def test_the_task_mix_is_counted_off_the_frozen_files():
+    assert verdict.task_mix() == {"T1v2_with_post": 508, "T2": 250}
+
+
+def test_seconds_per_row_is_weighted_to_the_paid_runs_mix():
+    rows = [
+        {"task": "T1v2_with_post", "wall_seconds": 4.0},
+        {"task": "T2", "wall_seconds": 2.0},
+    ]
+    assert verdict.weighted_seconds_per_row(rows, verdict.task_mix()) == pytest.approx(
+        3.34, abs=5e-3
+    )
+
+
+def test_a_smoke_that_never_timed_a_rendering_cannot_weight_it():
+    """The T2-only smoke would project the whole run at T2 speed and clear too easily."""
+    with pytest.raises(SystemExit, match="a projection that weights a rendering it never timed"):
+        verdict.weighted_seconds_per_row([{"task": "T2", "wall_seconds": 2.0}], verdict.task_mix())
+
+
+def smoke_record(**cost) -> dict:
+    return {
+        "rows": [
+            {"task": "T1v2_with_post", "wall_seconds": 4.0},
+            {"task": "T2", "wall_seconds": 2.0},
+        ],
+        "cold_start": {"wall_seconds": 300.0},
+        "timing": {"wall_seconds": 330.0},
+        "cost": {
+            "usd": 0.20,
+            "usd_per_second": 0.0006,
+            "floor_usd_per_second": 0.53 / 3600,
+            "above_pod_floor": True,
+        }
+        | cost,
+    }
+
+
+def test_the_projection_reads_its_inputs_from_the_smoke_artifact(tmp_path):
+    path = tmp_path / "serving_5b.json"
+    path.write_text(json.dumps(smoke_record()), encoding="utf-8")
+    derived = verdict.from_smoke(path)
+    assert derived["seconds_per_row"] == pytest.approx(3.34, abs=5e-3)
+    assert derived["usd_per_second"] == 0.0006
+    assert derived["cold_start_seconds"] == 300.0
+
+
+def test_a_rate_below_the_pod_floor_is_a_stale_balance_not_a_cheap_run(tmp_path):
+    """Serverless never bills under the pod class it runs on; a near-zero rate would
+    make the projection clear trivially and authorise a pair the phase cannot afford."""
+    path = tmp_path / "serving_5b.json"
+    path.write_text(
+        json.dumps(smoke_record(usd_per_second=0.000001, above_pod_floor=False)), encoding="utf-8"
+    )
+    with pytest.raises(SystemExit, match="below the A6000 pod floor"):
+        verdict.from_smoke(path)
+
+
+def test_a_smoke_with_no_dollars_cannot_be_projected_from(tmp_path):
+    path = tmp_path / "serving_5b.json"
+    record = smoke_record()
+    del record["cost"]
+    path.write_text(json.dumps(record), encoding="utf-8")
+    with pytest.raises(SystemExit, match="carries no cost block"):
+        verdict.from_smoke(path)

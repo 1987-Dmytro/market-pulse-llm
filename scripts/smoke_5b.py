@@ -29,12 +29,15 @@ carve is training data; a number from it measures the path, never the model.
 import argparse
 import importlib.util
 import json
+import subprocess
 import sys
+import time
 from datetime import UTC, datetime
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))  # the package is not pip-installed
+sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 from market_pulse import prompts, records, serving  # noqa: E402
 
@@ -95,6 +98,58 @@ def balanced(carve: list[dict], n: int) -> list[dict]:
     return picked
 
 
+POD_USD_PER_SECOND = 0.53 / 3600
+"""What an A6000 **pod** costs, and therefore a floor no serverless rate can be under.
+
+The derived dollars-per-second is `balance spent / wall seconds held`, and a balance
+RunPod has not settled yet reads as almost no spend at all — which would make the
+projection clear trivially and authorise a pair the phase cannot afford. Serverless
+bills at a premium over the pod class it runs on, never below it, so a derived rate
+under this floor means the reading is stale, not that the run was cheap.
+"""
+
+
+def deployment(endpoint_id: str) -> dict:
+    """What RunPod itself says is deployed — image, start command, env, GPU, limits.
+
+    Read back from the API rather than repeated from the create call: PROMPT-5b
+    Deliverable 1 asks the record to name the image and the batch, and an image
+    named from memory describes what was intended, not what is serving.
+    """
+
+    def cli(*args):
+        out = subprocess.run(
+            ["runpodctl", *args, "--output", "json"], capture_output=True, text=True, check=True
+        )
+        return json.loads(out.stdout)
+
+    try:
+        endpoint = cli("serverless", "get", endpoint_id)
+        template = cli("template", "get", endpoint["templateId"])
+    except (OSError, subprocess.CalledProcessError, ValueError, KeyError) as err:
+        return {"unreadable": f"{type(err).__name__}: {err}"}
+    return {
+        "endpoint": {
+            key: endpoint.get(key)
+            for key in (
+                "id",
+                "name",
+                "gpuIds",
+                "locations",
+                "workersMax",
+                "idleTimeout",
+                "executionTimeoutMs",
+                "networkVolumeId",
+                "templateId",
+            )
+        },
+        "template": {
+            key: template.get(key)
+            for key in ("id", "imageName", "dockerStartCmd", "env", "containerDiskInGb")
+        },
+    }
+
+
 def rendering(task: str) -> str:
     """The carve rows carry `T1`/`T2`; the endpoint renders the v4 revision of them."""
     return trainer().rendering(task)
@@ -106,7 +161,9 @@ def ask(client, rows: list[dict]) -> list[dict]:
     for row in rows:
         task = rendering(row["task"])
         before = client.timing()
+        started = time.monotonic()
         reply = client.batch(task, [row["text"]], [row["post"]] if row.get("post") else None)[0]
+        wall = time.monotonic() - started
         after = client.timing()
         parsed, failure = None, None
         try:
@@ -123,22 +180,72 @@ def ask(client, rows: list[dict]) -> list[dict]:
                 "worker_seconds": round(
                     after["worker_seconds"] - (before["worker_seconds"] or 0), 3
                 ),
+                "wall_seconds": round(wall, 3),
                 "usage": reply.get("usage"),
             }
         )
     return out
 
 
+def stamp_cost(path: Path, usd: float) -> dict:
+    """The dollars the guard measured, written into the record after the fact.
+
+    A run cannot know what it cost while it is running — RunPod settles the charge
+    against the account balance, and `runpod_guard.py` is the only reader of that.
+    So the same shape `poll_census.py --stamp-sidecar-sha` established: the record is
+    written by the run, and the number that can only be known afterwards is stamped
+    in, named, and timestamped. ``usd_per_second`` is that spend over the **wall**
+    seconds the endpoint was held, which is what serverless bills.
+    """
+    record = json.loads(path.read_text(encoding="utf-8"))
+    wall = record["timing"]["wall_seconds"]
+    if not wall:
+        raise SystemExit(f"{path} holds no wall_seconds — there is nothing to divide")
+    rate = usd / wall
+    record["cost"] = {
+        "usd": round(usd, 4),
+        "wall_seconds": wall,
+        "usd_per_second": rate,
+        "source": "results/spend_5b.json balance delta across this smoke, via runpod_guard.py",
+        "stamped_at": datetime.now(UTC).isoformat(timespec="seconds"),
+        "floor_usd_per_second": POD_USD_PER_SECOND,
+        "above_pod_floor": rate >= POD_USD_PER_SECOND,
+    }
+    path.write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(f"usd            ${usd:.4f} over {wall}s wall")
+    print(f"usd_per_second {rate:.8f}  (A6000 pod floor {POD_USD_PER_SECOND:.8f})")
+    if rate < POD_USD_PER_SECOND:
+        print(
+            "\nSTOP AND REPORT: the derived rate is BELOW the pod floor, which serverless"
+            " cannot be. The balance has not settled — re-read the guard and stamp again"
+            " rather than projecting on this number.",
+        )
+        return 3
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--endpoint-id", required=True)
-    parser.add_argument("--serving-config", choices=("A", "B"), required=True)
+    parser.add_argument("--endpoint-id", default="", help="not needed with --stamp-cost")
+    parser.add_argument("--serving-config", choices=("A", "B"), default="")
     parser.add_argument("--adapter", type=Path, default=ADAPTER)
     parser.add_argument("--merged-sidecar", type=Path, help="config B: the merge sidecar")
     parser.add_argument("--rows", type=int, default=SMOKE_ROWS)
     parser.add_argument("--record", type=Path, default=RECORD)
     parser.add_argument("--carve-only", action="store_true", help="rebuild and check, no network")
+    parser.add_argument(
+        "--stamp-cost",
+        type=float,
+        metavar="USD",
+        help="write the guard's measured spend into an existing record and derive $/s;"
+        " scores nothing and sends no request",
+    )
     args = parser.parse_args(argv)
+
+    if args.stamp_cost is not None:
+        return stamp_cost(args.record, args.stamp_cost)
+    if not (args.endpoint_id and args.serving_config):
+        parser.error("--endpoint-id and --serving-config are required for a smoke run")
 
     provenance = json.loads((args.adapter.parent / "provenance.json").read_text(encoding="utf-8"))
     rows, carve_sha, carve_n = carve_rows(provenance["carve_sha256"], args.rows)
@@ -184,6 +291,8 @@ def main(argv: list[str] | None = None) -> int:
         "written_at": datetime.now(UTC).isoformat(timespec="seconds"),
         "endpoint_id": args.endpoint_id,
         "serving_config": args.serving_config,
+        "batch_size": 1,
+        "deployment": deployment(args.endpoint_id),
         "worker": info,
         "carve": {"sha256": carve_sha, "n": carve_n, "asked": len(rows)},
         "rows": scored,

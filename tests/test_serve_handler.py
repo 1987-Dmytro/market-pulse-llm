@@ -160,3 +160,16 @@ def test_a_misconfigured_worker_reports_instead_of_dying_at_import():
     worker = handler.Worker(env={"SERVING_CONFIG": "A"}, loader=lambda _c: (None, None))
     with pytest.raises(ValueError, match="config A needs ADAPTER_DIR"):
         worker({"input": {"op": "info"}})
+
+
+def test_info_names_the_commit_the_worker_is_serving():
+    """`git_state()` in the record names the Mac's HEAD; the worker runs the volume's
+    checkout. A record that describes code which did not serve is not provenance."""
+    info = handler.describe(handler.settings(ENV_A), {}, "b3ca6308", {})
+    assert "repo_commit" in info
+    assert info["repo_commit"] == handler.repo_commit()
+
+
+def test_the_commit_is_absent_rather_than_fatal_off_a_checkout(monkeypatch):
+    monkeypatch.setattr(handler, "REPO_ROOT", Path("/nonexistent-checkout"))
+    assert handler.repo_commit() is None
