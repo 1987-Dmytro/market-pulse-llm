@@ -200,7 +200,16 @@ account — no endpoint, including RunPod's own hub worker, consumes a job
 (evidence: results/parity_verdict_5b.json). Production runtime = a
 stop-after POD on AMPERE_48 (A6000 — the same card the 4.5h2 anchors were
 measured on), booted per pass; serverless may return later ONLY through a
-fresh §(2) measurement. A support ticket runs in parallel at zero cost.]**
+fresh §(2) measurement. A support ticket runs in parallel at zero cost.
+Capacity clause (team-lead ruling 2026-08-06 evening, on the A6000
+stock-out in CA-MTL-3): the CLASS is the contract, the datacenter is not
+— the volume is a convenience. A6000 in any datacenter is the primary
+path (fresh staging must pass assert_runtime_matches before any scored
+row); A40 is an authorised in-class fallback when A6000 is out
+everywhere, with the exact card recorded in the run's provenance.
+AMPERE_80/A100 is NOT authorised — the GPU class is the variable §(2)
+measures. The 5c loop keeps a per-pass allocation-latency ledger; the
+second-volume question is decided on that data, not on fear.]**
 (brand × intent × sentiment × time × category), a **14-day first reporting
 cycle** + alerts v0 on spikes of both polarities, own and competitors
 (PRODUCT.md §6; alert latency = collection interval).
