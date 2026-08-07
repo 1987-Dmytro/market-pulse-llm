@@ -3808,3 +3808,25 @@ title ruling that removed the others does not reach it, and the canon says the l
 waits for posts if it wakes up. Recorded here because six weeks from now the registry will show
 six channels removed for a property the seventh visibly shares, and the distinguishing fact lives
 in the canon rather than in the data.
+
+**D63 — two of the authorised commits could not run their own test suite, and the check that
+found it was worth more than the commits.** The session's work was committed in the operator's
+authorised order — pre-registration alone, then the census, then wave 3, then the rest — and then
+each commit was checked out into a worktree and `make check` run against it. Two failed at
+COLLECTION: `tests/test_gate_rulings_5c1.py` imports `canon_retail_5` from
+`tests/test_entry_gate_5c1.py`, which was in a later commit, and both parse
+`docs/CHANNELS-launch.md`, which was in the last one. A test module that imports another test
+module cannot stand up alone, and a suite that parses the canon needs the canon in the same
+commit as the ruling it tests.
+
+Fixed by redoing the three commits (nothing was pushed — the repo has no remote): the canon rides
+with wave 3, where the ruling it records belongs, and the retail parser is five duplicated lines
+in each test file instead of a cross-module import. The same trade `canon_audience` and
+`canon_city_feeds` already make.
+
+The verification instrument has a known bias worth writing down: a worktree gets `data/` by
+symlink because the store is gitignored, so five tests that resolve real paths or read frozen
+artefacts fail there for environmental reasons. **The control is the parent commit** — 2fc784a,
+before any of this session's work, fails the same five in the same worktree — so the five are the
+instrument, and the number that moves (1132 → 1142 → 1148 → 1159) is the work. In the real
+checkout HEAD is 1164 passed, formatter clean.
