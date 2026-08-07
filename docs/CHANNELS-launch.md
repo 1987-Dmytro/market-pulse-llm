@@ -178,3 +178,78 @@ source_type при записи в реестр (рулинг тимлида): a
 входят **posts-only** до решения 5c2 «комменты только к категорийно-
 релевантным тредам» — без этого фильтра их чат-шум целиком уходит в
 платную очередь инференса.
+
+## Рулинги, волна 2 (2026-08-07 вечер — слово оператора в терминале исполнителя; ратифицировано тимлидом 08.08 + два новых рулинга)
+
+Основание — тематический скрин собранного окна
+(`results/theme_screen_5c1.json`, лексикон draft-not-law, SCREEN не закон:
+44 измеримых канала, 15 без единого food-поста, 23 без молочки).
+
+| Канал | Рулинг | Мотив |
+|---|---|---|
+| @znishkom | ИСКЛЮЧЁН | 191 пост — Steam-скидки; класс Steam_free_1/Steam_Sale_Ua (искл. 06.08) |
+| @whitecode_zny | ИСКЛЮЧЁН | обувной ресейл, 25 постов, ноль food |
+| @offspringrus | ИСКЛЮЧЁН | RU-магазин детских товаров (Москва) — вне рынка |
+| @ATB_FANatik | ИСКЛЮЧЁН | text-free: «АНОНС АКЦІЙ… Частина N», товары в картинках |
+| @discountua1 | ИСКЛЮЧЁН — РЕВЕРС утреннего KEPT | новые данные окна: 19 постов-повторов без текста; ценность была бы в комментах, их 0/7 |
+| @uasaler | ИСКЛЮЧЁН ПОЛНОСТЬЮ (рулинг 08.08) | чат удалён словом оператора 07.08; канал — 30 постов, ноль food, промокоды AliExpress |
+| 10 оставшихся joins | ДЖОЙНИТЬ ВСЕ (рулинг 08.08) | ноль на 1–4 постах — шум, не вердикт; демоции — ревью цикла-1 |
+
+**Сводка: запуск 42** (реестр 4 + 21 комментный + 17 постовых) · watch 14
+· **реестр 56**. Джойны: 11 валидных + 10 в очереди за стеной FloodWait
+(аккаунт-wide, 20 ч, до 08.08 10:02 UTC — резолвы юзернеймов).
+
+Дозаявка №2, исходы: @akcii_skidki_plt — МЁРТВ на гейте; канала
+«Хвилинки» в Telegram НЕТ (закрыто записью); скан городов Полтавщины —
+119 кандидатов в `results/discovery_5c1_poltava.json`, ревью оператора
+предстоит (вход — только через гейт, городские — posts-only до решения
+5c2 о фильтре тредов).
+
+Урок процесса (без исключений впредь): рулинг, данный исполнителю в
+терминале, доносится тимлиду в ту же сессию — иначе канон стареет молча;
+этот раздел написан пост-фактум.
+
+## Дозаявка №3 (2026-08-08 — рулинг оператора: городские ленты Полтавщины)
+
+Источник — скан `results/discovery_5c1_poltava.json` (119 кандидатов, 85
+живых, 41 с группами); отсев тимлида: барахолки, сирены/тревоги, обмен
+валют, секонд-хенд, нерелевантные совпадения. Вход **posts-only** по
+стоячему решению (городские — без вступлений в группы до решения 5c2 о
+фильтре тредов). Только хендлы; числа заполняет гейт.
+
+16 хендлов на гейт: @mo3ambik · @poltava_informue · @poltava_misto ·
+@suspilnepoltava · @telegraf_kremenchuk · @kremenchug_live ·
+@gorishnie_plavni1 · @myrhorodtown · @Hadiach_telegram · @globine1 ·
+@piryatingromada · @Karlivka_live · @PirOperative · @dikankaa ·
+@zinkivnews · @LHVC_info
+
+## Сегментация источников — audience (ратифицировано оператором 2026-08-08)
+
+Третье измерение реестра: «чью аудиторию слушаем» (рядом с source_type
+«кто ведёт» и продуктовой таксономией «что обсуждают»). Хранится
+детально — 8 сегментов; в отчётах/дашборде сворачивается в любые крупные
+группы (ритейл = official+deals; мамы = mothers+baby). Поле `audience` в
+реестре, закрытый список, применяет исполнитель по этой таблице.
+
+- **retail_official (5):** @silposilpo @atb_market_official
+  @VARUS_channel @marketopt_promo @epicentrk_sale
+- **supermarket_deals (4):** @msuaaaa @kopiyochka1 @maudau @atb_aktsiyi
+- **cooking_recipes (13):** @klopotenkofood @retsepty @rezeptmoi @recepti
+  @mameni_recepti @retsepty4 @konservacia_kulinaria @retsepty5
+  @vylkachannel @korolevakuchni + watch: @netainaya_vecherya @retsepty10
+  @chekh_yevheniia1982
+- **mothers_kids (9):** @tretyakovaele @katyal55 @kuksa2022
+  @Pro_Detyintumama @intensiv_Mamiev + watch: @itsmamix
+  @regina_tatlybaeva @prostetsofa @cozymotherhood
+- **baby_food (7):** @tarilka_malyuka @ya_Nenka @baby_broccoli_club
+  @blwbabies + watch: @dutyache_menu @polinalykovagv
+  @Evgenija_dutjache_menu
+- **health_fitness (17):** @smirnov108 @kkondr_fit @polyakova_fitness
+  @HealthPsycholog @sashafitnesslife @chifit_family
+  @useful_healthy_fitness_menu @olgaa_trainer @denisovapro @eftforhealth
+  @gaid_skobioale @Wellosophy_Lesya @anastasiiadavydiukfitness + watch:
+  @skhudnennya @viktoria_sshh @hydnem_prosto @dimakaminskyifit
+- **food_quality_gov (1):** @dpssgovua
+- **regional (по прохождении гейта):** 16 хендлов дозаявки №3
+
+Сверка: 5+4+13+9+7+17+1 = 56 — покрытие без остатка и без пересечений.

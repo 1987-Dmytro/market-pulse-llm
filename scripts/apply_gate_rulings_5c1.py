@@ -34,7 +34,7 @@ from market_pulse.registry import SOURCE_TYPES, load_registry  # noqa: E402
 
 REGISTRY = REPO_ROOT / "config" / "registry.yaml"
 GATE_RECORD = REPO_ROOT / "results" / "entry_gate_5c1.json"
-CANON = "docs/CHANNELS-launch.md, section 'Рулинги гейта 5c1 (2026-08-07)'"
+CANON = "docs/CHANNELS-launch.md, sections 'Рулинги гейта 5c1 (2026-08-07)' and 'Рулинги, волна 2'"
 
 EXCLUDED = {
     "@kolyastravinsky": "theme: a personal RU-language blog (Samara restaurants, ballet) — the"
@@ -67,6 +67,12 @@ EXCLUDED = {
     " for is what measured it, and the gate's 0-of-7 comment share is the other half",
     "@ATB_FANatik": "EXCLUDED as text-free: 18 posts of «АНОНС АКЦІЙ АТБ … Частина N», products"
     " in the images, 2 of 7 sampled posts carrying comments",
+    # --- wave 2 ratified, one ruling added (operator via the team lead, 2026-08-08) -----------
+    "@uasaler": "EXCLUDED ENTIRELY (ruling 08.08, canon 'Рулинги, волна 2'): the 07.08 demotion"
+    " left the channel in posts-only because the operator's word that day had named the CHAT («Чат"
+    " Аліекспрес ( AliExpert )»), which was left. This ruling names the CHANNEL. Its 30 posts"
+    " in the window carry zero food terms on the same theme screen that excluded the five"
+    " above — AliExpress promo codes, not the tracked category",
 }
 """Ruled out of the composition. Their gate rows stay in the record, carrying this text."""
 
@@ -76,23 +82,59 @@ MOVED = {
         "moved to posts-only: the linked group bans everyone from sending, so 0 of 50 sampled"
         " posts carry comments and a join buys nothing. comments_enabled false, NO join",
     ),
-    "@uasaler": (
-        "posts",
-        "moved to posts-only: the operator ruled its discussion group out on 2026-08-07 («Чат"
-        " Аліекспрес ( AliExpert )») and it was left, so `comments_enabled: true` would promise"
-        " rows no membership can fetch. The instruction named the CHAT, not the channel, so the"
-        " channel stays — but its 30 posts in the window carry zero food terms on the same theme"
-        " screen that excluded the five below, and whether it stays at all is an open question"
-        " for the operator",
-    ),
 }
+
+PRIOR_RULINGS = {
+    # @discountua1 was KEPT in the morning and EXCLUDED that evening, and the second write
+    # overwrote the first: the record then read as if the reversal had never happened, and only
+    # `git show` could say otherwise. Recovered verbatim from the record's own history and
+    # seeded once — the guard is `replaced` already being non-empty.
+    "@discountua1": {
+        "at": "2026-08-07T11:14:29+00:00",
+        "ruling": "KEPT — kept in the comments bucket WITH a join: 0 of 7 sampled posts is a"
+        " thin denominator, and the 28-day window measures the real flow. Demotion is a"
+        " cycle-1 review question, not this phase's",
+        "recovered_from": "git 2970b71:results/entry_gate_5c1.json",
+    },
+}
+"""Rulings overwritten in place before `replaced` existed, put back where they belong."""
 
 KEPT = {
     # @discountua1's 06.08 "keep it, the window will measure it" ruling was superseded on 07.08
-    # by what the window measured. Its history lives in the EXCLUDED text, not as dead code here.
+    # by what the window measured. It is not dead code here and it is not lost either: the
+    # superseded text lives in that row's `replaced`, seeded from PRIOR_RULINGS above.
     "@prostetsofa": "stays in watch, recorded: its group admits by approval only. No watch join"
     " happens in this phase; this surfaces when the channel wakes up",
 }
+
+CITY_FEEDS = (
+    "@mo3ambik",
+    "@poltava_informue",
+    "@poltava_misto",
+    "@suspilnepoltava",
+    "@telegraf_kremenchuk",
+    "@kremenchug_live",
+    "@gorishnie_plavni1",
+    "@myrhorodtown",
+    "@Hadiach_telegram",
+    "@globine1",
+    "@piryatingromada",
+    "@Karlivka_live",
+    "@PirOperative",
+    "@dikankaa",
+    "@zinkivnews",
+    "@LHVC_info",
+)
+CITY_RULE = (
+    "POSTS-ONLY by the standing ruling (canon 'Дозаявка №3', operator 2026-08-08): a city feed"
+    " enters posts-only, comments_enabled false, and its discussion group is NOT joined until"
+    " 5c2 rules on a category filter for threads — without one a city chat's whole traffic lands"
+    " in a paid inference queue. 11 of the 16 do have a group; that is why the gate holds them in"
+    " the `city` bucket, which measures a group without asserting one either way."
+)
+"""The bucket a city feed enters is a ruling, not a gate finding. It is applied after the gate so
+the record still says what was measured, and it covers the whole batch: a `city` row this tuple
+does not name has no ruling behind it and `final_bucket` refuses it."""
 
 GATED_LATE = {
     "@marketopt_promo": "replaces the withdrawn late addition (operator, 2026-08-07)",
@@ -119,7 +161,83 @@ SOURCE_TYPE_RULING = {
 }
 """Team-lead ruling 2026-08-07; everything else is `community`, the ruling's own default."""
 
-UPDATABLE = ("comments_enabled", "watch", "source_type", "name")
+AUDIENCE = {
+    # Operator ruling 2026-08-08, canon "Сегментация источников — audience". Transcribed from
+    # that table and held to it by tests/test_gate_rulings_5c1.py — the table is the law and
+    # nothing here is derived from what a channel looks like. Keyed by HANDLE, not by source id:
+    # the four originals predate `source_entry` and their ids do not follow from their handles
+    # (@VARUS_channel is `varus`, @silposilpo is `silpo`).
+    # retail_official (5)
+    "@silposilpo": "retail_official",
+    "@atb_market_official": "retail_official",
+    "@VARUS_channel": "retail_official",
+    "@marketopt_promo": "retail_official",
+    "@epicentrk_sale": "retail_official",
+    # supermarket_deals (4)
+    "@msuaaaa": "supermarket_deals",
+    "@kopiyochka1": "supermarket_deals",
+    "@maudau": "supermarket_deals",
+    "@atb_aktsiyi": "supermarket_deals",
+    # cooking_recipes (13)
+    "@klopotenkofood": "cooking_recipes",
+    "@retsepty": "cooking_recipes",
+    "@rezeptmoi": "cooking_recipes",
+    "@recepti": "cooking_recipes",
+    "@mameni_recepti": "cooking_recipes",
+    "@retsepty4": "cooking_recipes",
+    "@konservacia_kulinaria": "cooking_recipes",
+    "@retsepty5": "cooking_recipes",
+    "@vylkachannel": "cooking_recipes",
+    "@korolevakuchni": "cooking_recipes",
+    "@netainaya_vecherya": "cooking_recipes",
+    "@retsepty10": "cooking_recipes",
+    "@chekh_yevheniia1982": "cooking_recipes",
+    # mothers_kids (9)
+    "@tretyakovaele": "mothers_kids",
+    "@katyal55": "mothers_kids",
+    "@kuksa2022": "mothers_kids",
+    "@Pro_Detyintumama": "mothers_kids",
+    "@intensiv_Mamiev": "mothers_kids",
+    "@itsmamix": "mothers_kids",
+    "@regina_tatlybaeva": "mothers_kids",
+    "@prostetsofa": "mothers_kids",
+    "@cozymotherhood": "mothers_kids",
+    # baby_food (7)
+    "@tarilka_malyuka": "baby_food",
+    "@ya_Nenka": "baby_food",
+    "@baby_broccoli_club": "baby_food",
+    "@blwbabies": "baby_food",
+    "@dutyache_menu": "baby_food",
+    "@polinalykovagv": "baby_food",
+    "@Evgenija_dutjache_menu": "baby_food",
+    # health_fitness (17)
+    "@smirnov108": "health_fitness",
+    "@kkondr_fit": "health_fitness",
+    "@polyakova_fitness": "health_fitness",
+    "@HealthPsycholog": "health_fitness",
+    "@sashafitnesslife": "health_fitness",
+    "@chifit_family": "health_fitness",
+    "@useful_healthy_fitness_menu": "health_fitness",
+    "@olgaa_trainer": "health_fitness",
+    "@denisovapro": "health_fitness",
+    "@eftforhealth": "health_fitness",
+    "@gaid_skobioale": "health_fitness",
+    "@Wellosophy_Lesya": "health_fitness",
+    "@anastasiiadavydiukfitness": "health_fitness",
+    "@skhudnennya": "health_fitness",
+    "@viktoria_sshh": "health_fitness",
+    "@hydnem_prosto": "health_fitness",
+    "@dimakaminskyifit": "health_fitness",
+    # food_quality_gov (1)
+    "@dpssgovua": "food_quality_gov",
+    # regional — the canon's own words: "по прохождении гейта: 16 хендлов дозаявки №3", so the
+    # value is written from the same tuple the gate reads, as each of them passes.
+    **dict.fromkeys(CITY_FEEDS, "regional"),
+}
+"""Handle → audience segment. The canon's table, and the whole of it: `main` refuses a registry
+source this dict does not name rather than shipping one with a null audience."""
+
+UPDATABLE = ("comments_enabled", "watch", "source_type", "name", "audience")
 """Fields a later ruling may legitimately move on a source already written. A difference in
 anything else is unexplained and stops the run — that is what the drift check is for."""
 
@@ -153,7 +271,27 @@ def final_bucket(row: dict) -> tuple[str | None, str | None]:
         return row["bucket"], f"KEPT — {KEPT[handle]}"
     if verdict != "PASS":
         raise SystemExit(f"{handle} is {verdict} and no ruling covers it — refusing to guess")
+    if handle in CITY_FEEDS:
+        return "posts", f"CITY FEED — {CITY_RULE}"
+    if row["bucket"] == "city":
+        raise SystemExit(
+            f"{handle} was gated as a city feed but CITY_FEEDS does not name it — the bucket is a"
+            " ruling, and entering it on the strength of the gate's own label is guessing"
+        )
     return row["bucket"], None
+
+
+def record_reversal(row: dict, ruling: str | None, at: str) -> None:
+    """A ruling that replaces an earlier one carries what it replaced, inside the row.
+
+    `replaced` is `merge_sitting_returns`'s word for the value actually overwritten. It is
+    appended to and never rewritten, so a re-run that changes no ruling adds nothing — which is
+    the only way the record can be re-derived without losing what a reversal reversed.
+    """
+    if (seed := PRIOR_RULINGS.get(row["handle"])) and not row.get("replaced"):
+        row["replaced"] = [seed]
+    if (previous := row.get("ruling")) and previous != ruling:
+        row.setdefault("replaced", []).append({"at": at, "ruling": previous})
 
 
 def source_entry(row: dict, bucket: str) -> dict:
@@ -174,7 +312,18 @@ def source_entry(row: dict, bucket: str) -> dict:
         # The gate's group finding, except where a ruling overrode it (@maudau).
         "comments_enabled": bucket != "posts" and bool(row["checks"].get("discussion_group")),
         "watch": bucket == "watch",
+        "audience": audience_of(handle),
     }
+
+
+def audience_of(handle: str) -> str:
+    """The canon's segment for a channel, or a refusal. Never a guess from the channel itself."""
+    if handle not in AUDIENCE:
+        raise SystemExit(
+            f"{handle} has no row in the audience table — the canon's"
+            " «Сегментация источников» is the law and it does not name this channel"
+        )
+    return AUDIENCE[handle]
 
 
 def render(entry: dict) -> str:
@@ -190,6 +339,7 @@ def render(entry: dict) -> str:
     ]
     if entry["watch"]:
         lines.append("    watch: true")
+    lines.append(f"    audience: {entry['audience']}")
     return "\n".join(lines)
 
 
@@ -238,19 +388,33 @@ def update_sources(text: str, changes: dict[str, dict]) -> str:
             out.extend(block)
             continue
         seen.add(sid)
+        rendered, written = [], set()
         for line in block:
             key = line.strip().split(":", 1)[0]
             if line.startswith("    ") and key in changes[sid]:
-                value = changes[sid][key]
-                out.append(
-                    f"    {key}: {str(value).lower() if isinstance(value, bool) else value}\n"
-                )
+                written.add(key)
+                rendered.append(f"    {key}: {_scalar(changes[sid][key])}\n")
             else:
-                out.append(line)
+                rendered.append(line)
+        for key, value in changes[sid].items():
+            if key in written:
+                continue
+            # A field the block does not have yet — `audience`, added to the whole registry on
+            # 2026-08-08. It goes after the block's LAST indented line, not at the block's end:
+            # `_blocks` sweeps the removal comments that follow a source into the preceding
+            # block, and a field appended after those would sit outside the entry it belongs to.
+            last = max(i for i, line in enumerate(rendered) if line.startswith("    "))
+            rendered.insert(last + 1, f"    {key}: {_scalar(value)}\n")
+        out.extend(rendered)
     missing = set(changes) - seen
     if missing:
         raise SystemExit(f"{REGISTRY}: asked to update {sorted(missing)}, which is not in it")
     return "".join(out) + marker + tail
+
+
+def _scalar(value) -> str:
+    """YAML for a scalar field value. `True` renders `true`, not `True`."""
+    return str(value).lower() if isinstance(value, bool) else str(value)
 
 
 def remove_sources(text: str, ids: dict[str, str]) -> str:
@@ -319,11 +483,13 @@ def main(argv: list[str] | None = None) -> int:
     record = json.loads(GATE_RECORD.read_text(encoding="utf-8"))
     before = load_registry(REGISTRY)
     held = {handle: source for source in before.sources for handle in source.telegram_channels}
+    applied_at = datetime.now(UTC).isoformat(timespec="seconds")
 
     entries, updates = [], {}
     buckets = {"comments": [], "posts": [], "watch": [], "excluded": []}
     for row in record["candidates"]:
         bucket, ruling = final_bucket(row)
+        record_reversal(row, ruling, applied_at)
         row["ruling"] = ruling
         if bucket is None:
             buckets["excluded"].append(row["handle"])
@@ -351,12 +517,37 @@ def main(argv: list[str] | None = None) -> int:
             continue
         entries.append(expected)
 
+    # A channel the rulings excluded AFTER it was written has to come back out again.
+    stale = {
+        source.id: EXCLUDED[handle]
+        for source in before.sources
+        for handle in source.telegram_channels
+        if handle in EXCLUDED
+    }
+
+    # The audience ruling covers all 56 sources, and the four originals predate the gate — the
+    # candidate loop above never reaches them. Read off the canon's table by HANDLE: their ids do
+    # not follow from their handles, so a source-id lookup would miss them silently.
+    for handle, existing in held.items():
+        if existing.id in stale:
+            continue
+        want = audience_of(handle)
+        if existing.audience != want:
+            updates.setdefault(existing.id, {})["audience"] = want
+
     for bucket, handles in buckets.items():
         print(f"{bucket:<10}{len(handles):>3}  {' '.join(handles)}")
     # `before.sources` already holds everything an earlier run wrote, so the four originals are
     # what is left once this composition is taken out of it — otherwise a re-run double-counts.
+    # `stale` comes out too: on the run that performs a removal the channel is still in
+    # `before.sources` and no longer in any bucket, and counting it as an original is how this
+    # line printed `launch 43 = registry 5 + ...` on the run that excluded five channels.
     entered = set(buckets["comments"]) | set(buckets["posts"]) | set(buckets["watch"])
-    originals = sum(1 for src in before.sources if not entered & set(src.telegram_channels))
+    originals = sum(
+        1
+        for src in before.sources
+        if not entered & set(src.telegram_channels) and src.id not in stale
+    )
     print(
         f"\nlaunch {originals + len(buckets['comments']) + len(buckets['posts'])}"
         f" = registry {originals} + comments {len(buckets['comments'])}"
@@ -368,13 +559,6 @@ def main(argv: list[str] | None = None) -> int:
     if args.plan:
         return 0
 
-    # A channel the rulings excluded AFTER it was written has to come back out again.
-    stale = {
-        source.id: EXCLUDED[handle]
-        for source in before.sources
-        for handle in source.telegram_channels
-        if handle in EXCLUDED
-    }
     if stale:
         print(f"\nremoving {len(stale)} source(s) the rulings excluded after the write:")
         for sid in stale:
@@ -410,7 +594,7 @@ def main(argv: list[str] | None = None) -> int:
 
     record["registry_written"] = True
     record["rulings"] = {
-        "applied_at": datetime.now(UTC).isoformat(timespec="seconds"),
+        "applied_at": applied_at,
         "canon": CANON,
         "composition": {name: sorted(handles) for name, handles in buckets.items()},
         "counts": {

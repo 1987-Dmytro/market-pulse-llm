@@ -81,6 +81,30 @@ def test_a_watch_channel_is_never_joinable_even_though_it_has_a_group():
     assert [handle for _, handle in collect.joinable(registry, gate)] == ["@live"]
 
 
+def test_a_city_feed_is_collected_and_never_joined():
+    """ "Дозаявка №3": posts-only until 5c2 rules on a category filter for threads, because
+    without one a city chat's whole traffic lands in a paid inference queue. 11 of the 16 have a
+    group, so this cannot rest on their not having one — it rests on `comments_enabled: false`,
+    and both derivations of the join set have to agree that they are out."""
+    registry = registry_of(source("@live", comments=True), source("@poltava_misto"))
+    gate = gate_of({"comments": ["@live"], "posts": ["@poltava_misto"]}, ["@live"])
+    assert [handle for _, handle in collect.collectable(registry, gate)] == [
+        "@live",
+        "@poltava_misto",
+    ]
+    assert [handle for _, handle in collect.joinable(registry, gate)] == ["@live"]
+
+
+def test_only_narrows_the_fetch_loop_and_refuses_a_handle_it_does_not_collect():
+    """The resolve budget is what this is for — 16 new city feeds must not cost 68 resolves. It
+    narrows the LOOP; `channel_row` reads the store, so the record still covers every channel."""
+    channels = [(source("@a"), "@a"), (source("@b"), "@b"), (source("@c"), "@c")]
+    assert [h for _, h in collect.narrowed(channels, None)] == ["@a", "@b", "@c"]
+    assert [h for _, h in collect.narrowed(channels, ["@b", "@c"])] == ["@b", "@c"]
+    with pytest.raises(SystemExit, match="does not collect"):
+        collect.narrowed(channels, ["@b", "@nope"])
+
+
 def test_the_registry_and_the_rulings_must_agree_about_the_join_list():
     """Two independent derivations of the same set. Disagreement means something moved between
     the ruling and the registry write, and the answer is to stop, not to pick one."""

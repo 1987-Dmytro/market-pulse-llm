@@ -3,7 +3,7 @@
 from pathlib import Path
 
 import pytest
-from market_pulse.registry import load_registry
+from market_pulse.registry import AUDIENCES, load_registry
 
 REGISTRY = Path(__file__).resolve().parents[1] / "config" / "registry.yaml"
 
@@ -53,6 +53,27 @@ def test_watch_is_read_and_must_be_a_boolean(tmp_path):
     bad = SOURCES.replace("['@chan_one']\n", "['@chan_one']\n    watch: 'no'\n")
     with pytest.raises(ValueError, match="non-boolean watch"):
         load_registry(write(tmp_path, bad + TAXONOMY))
+
+
+def test_audience_defaults_to_none_and_is_a_closed_list(tmp_path):
+    """The eight segments are the canon's; a ninth would silently make its own bucket in every
+    aggregate 5c2 keys on this field and read as an audience nobody chose."""
+    registry = load_registry(write(tmp_path, SOURCES + TAXONOMY))
+    assert registry.sources[0].audience is None
+
+    good = SOURCES.replace("['@chan_one']\n", "['@chan_one']\n    audience: baby_food\n")
+    assert load_registry(write(tmp_path, good + TAXONOMY)).sources[0].audience == "baby_food"
+
+    bad = SOURCES.replace("['@chan_one']\n", "['@chan_one']\n    audience: mums\n")
+    with pytest.raises(ValueError, match="unknown audience"):
+        load_registry(write(tmp_path, bad + TAXONOMY))
+
+
+def test_every_shipped_source_carries_an_audience():
+    """The 08.08 ruling covers all 56, so a null here is a source no aggregate can attribute."""
+    sources = load_registry(REGISTRY).sources
+    assert [s.id for s in sources if s.audience is None] == []
+    assert set(AUDIENCES) >= {s.audience for s in sources}
 
 
 def test_government_is_a_source_type(tmp_path):

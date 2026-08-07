@@ -16,7 +16,7 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 import apply_gate_rulings_5c1 as apply  # noqa: E402
 
-from market_pulse.registry import load_registry  # noqa: E402
+from market_pulse.registry import AUDIENCES, load_registry  # noqa: E402
 
 CANON = REPO_ROOT / "docs" / "CHANNELS-launch.md"
 
@@ -88,6 +88,183 @@ def test_discountua1_was_kept_to_be_measured_and_the_measurement_excluded_it():
     assert "@discountua1" not in apply.KEPT
 
 
+def test_uasaler_leaves_the_composition_entirely():
+    """Wave 2: the 07.08 word named the CHAT and demoted the channel; the 08.08 ruling names the
+    CHANNEL. It is out of the registry, not sitting in posts-only."""
+    bucket, ruling = apply.final_bucket(row("@uasaler", "comments"))
+    assert bucket is None
+    assert "EXCLUDED ENTIRELY" in ruling
+    assert "@uasaler" not in apply.MOVED
+
+
+def test_a_city_feed_enters_posts_only_and_buys_no_join():
+    """ "Дозаявка №3": PASS → registry bucket posts, comments_enabled false, watch false. The
+    group it may have does not move any of the three — that is the whole ruling."""
+    gated = row("@poltava_misto", "city", group=True, open_group=True)
+    bucket, ruling = apply.final_bucket(gated)
+    assert bucket == "posts"
+    assert "POSTS-ONLY" in ruling and "5c2" in ruling
+    entry = apply.source_entry(gated, bucket)
+    assert entry["comments_enabled"] is False
+    assert entry["watch"] is False
+    assert entry["source_type"] == "community"
+
+
+def test_a_city_feed_that_did_not_pass_is_not_routed_by_its_bucket():
+    """ "FAIL or FLAG → report with evidence, do not resolve yourself" — the refusal is what
+    enforces it, and a city row must not slip past on the strength of the ruling."""
+    for verdict in ("FAIL", "FLAG"):
+        with pytest.raises(SystemExit, match="no ruling covers it"):
+            apply.final_bucket(row("@poltava_misto", "city", verdict=verdict))
+
+
+def test_a_city_row_the_ruling_does_not_name_refuses_to_enter():
+    """The bucket is a label the gate wrote; the ruling is what authorises an entry. A 17th city
+    handle appearing in the gate must not enter on the label alone."""
+    with pytest.raises(SystemExit, match="CITY_FEEDS does not name it"):
+        apply.final_bucket(row("@some_new_town", "city"))
+
+
+# --- audience is the canon's table, not a reading of the channels --------------------------------
+
+
+def canon_audience() -> dict[str, str]:
+    """The "Сегментация источников" table as handle → segment, parsed rather than retyped.
+
+    The section writes each segment as a bullet whose handles run across wrapped lines, with the
+    watch channels after a `+ watch:` inside the same bullet — they belong to the segment, and
+    the canon's own per-segment count includes them. `regional` names no handles: its row says
+    "по прохождении гейта: 16 хендлов дозаявки №3", so its members are that list.
+    """
+    import re
+
+    text = CANON.read_text(encoding="utf-8")
+    block = text[text.index("## Сегментация источников") :]
+    block = block[: block.index("Сверка:")]
+
+    table = {}
+    for chunk in re.split(r"\n- \*\*", block)[1:]:
+        segment = chunk.split("(", 1)[0].strip()
+        for handle in re.findall(r"@[A-Za-z0-9_]+", chunk):
+            table[handle] = segment
+    return table
+
+
+def test_the_audience_table_is_the_canons_own():
+    """A hand-copied 56-row table is a table that stops matching the file it came from. The
+    counts are checked against the canon's own «Сверка» line, which is its claim about itself."""
+    canon = canon_audience()
+    assert len(canon) == 56
+    assert {handle: apply.AUDIENCE[handle] for handle in canon} == canon
+    # Everything the script holds beyond the table is the regional row, spelled out.
+    assert set(apply.AUDIENCE) - set(canon) == set(apply.CITY_FEEDS)
+    assert {apply.AUDIENCE[handle] for handle in apply.CITY_FEEDS} == {"regional"}
+
+    text = CANON.read_text(encoding="utf-8")
+    assert "5+4+13+9+7+17+1 = 56" in " ".join(text[text.index("Сверка:") :][:120].split())
+    sizes = {}
+    for segment in canon.values():
+        sizes[segment] = sizes.get(segment, 0) + 1
+    assert sizes == {
+        "retail_official": 5,
+        "supermarket_deals": 4,
+        "cooking_recipes": 13,
+        "mothers_kids": 9,
+        "baby_food": 7,
+        "health_fitness": 17,
+        "food_quality_gov": 1,
+    }
+
+
+def test_every_audience_value_is_one_of_the_eight():
+    assert set(apply.AUDIENCE.values()) == set(AUDIENCES)
+
+
+def test_a_channel_the_table_does_not_name_gets_no_audience_guessed_for_it():
+    """ "The table is the law, no self-derived assignments" — so an unlisted channel stops the
+    run rather than being sorted by what its name looks like."""
+    with pytest.raises(SystemExit, match="no row in the audience table"):
+        apply.audience_of("@some_new_channel")
+
+
+def test_the_shipped_registry_carries_the_canons_audience_for_every_source():
+    """Read by HANDLE: the four originals predate `source_entry` and their ids do not follow
+    from their handles (@VARUS_channel is `varus`), so an id-keyed check would miss them."""
+    sources = load_registry(REPO_ROOT / "config" / "registry.yaml").sources
+    assert len(sources) == 56
+    for src in sources:
+        for handle in src.telegram_channels:
+            assert src.audience == apply.AUDIENCE[handle], handle
+
+
+def test_a_field_the_block_does_not_have_yet_is_inserted_inside_it(tmp_path):
+    """`audience` had to reach 56 entries that had no such line. `_blocks` sweeps the removal
+    comments that follow a source into the preceding block, so appending at the block's end would
+    put the new field after a `# … removed …` comment — outside the entry it belongs to. The
+    shipped file has that shape right after `maudau`."""
+    original = (REPO_ROOT / "config" / "registry.yaml").read_text(encoding="utf-8")
+    stripped = "\n".join(
+        line for line in original.splitlines() if not line.startswith("    audience:")
+    )
+    assert "# uasaler removed" in stripped, "the case this test exists for is not in the file"
+
+    written = apply.update_sources(stripped + "\n", {"maudau": {"audience": "supermarket_deals"}})
+    block = written[written.index("  - id: maudau") : written.index("# uasaler removed")]
+    assert "    audience: supermarket_deals\n" in block
+    path = tmp_path / "registry.yaml"
+    path.write_text(written, encoding="utf-8")
+    by_id = {s.id: s for s in load_registry(path).sources}
+    assert by_id["maudau"].audience == "supermarket_deals"
+    assert by_id["retsepty"].audience is None, "the neighbour was not touched"
+
+
+# --- a reversal says what it reversed ------------------------------------------------------------
+
+
+def test_a_reversed_ruling_carries_what_it_replaced():
+    """The record-integrity fix: overwriting `ruling` in place left the record reading as if the
+    reversal had never happened, and only `git show` could say otherwise."""
+    reversed_row = {**row("@somebody", "comments"), "ruling": "KEPT — measured next window"}
+    apply.record_reversal(reversed_row, "EXCLUDED — off theme", "2026-08-08T10:00:00+00:00")
+    assert reversed_row["replaced"] == [
+        {"at": "2026-08-08T10:00:00+00:00", "ruling": "KEPT — measured next window"}
+    ]
+
+
+def test_an_unchanged_ruling_replaces_nothing():
+    """Re-deriving the record is how it is verified, so a run that changes no ruling must add
+    no history — otherwise `replaced` grows by one every verification."""
+    same = {**row("@somebody", "posts"), "ruling": "KEPT — unchanged"}
+    for _ in range(3):
+        apply.record_reversal(same, "KEPT — unchanged", "2026-08-08T10:00:00+00:00")
+    assert "replaced" not in same
+
+
+def test_the_seed_puts_back_a_ruling_overwritten_before_replaced_existed_and_lands_once():
+    """@discountua1's KEPT text was overwritten at 13b04e6. It is recovered from the record's own
+    history — and the seed is a second write path, so it needs its own idempotence."""
+    seeded = {**row("@discountua1", "comments"), "ruling": "EXCLUDED — text-free"}
+    for _ in range(3):
+        apply.record_reversal(seeded, "EXCLUDED — text-free", "2026-08-08T10:00:00+00:00")
+    assert seeded["replaced"] == [apply.PRIOR_RULINGS["@discountua1"]]
+    assert seeded["replaced"][0]["ruling"].startswith("KEPT — kept in the comments bucket")
+
+
+def test_every_reversal_in_the_shipped_record_says_what_it_replaced():
+    """The claim the operator asked for, checked against the artifact rather than the code: a row
+    whose ruling reverses an earlier one carries that earlier one."""
+    record = json.loads((REPO_ROOT / "results" / "entry_gate_5c1.json").read_text(encoding="utf-8"))
+    reversed_rows = {
+        candidate["handle"]: candidate["replaced"]
+        for candidate in record["candidates"]
+        if candidate.get("replaced")
+    }
+    assert set(reversed_rows) == {"@discountua1", "@uasaler"}
+    for handle, history in reversed_rows.items():
+        assert len(history) == 1, handle
+        assert history[0]["ruling"].startswith("KEPT"), handle
+
+
 def test_the_replacement_lands_by_the_rule_the_operator_wrote_in_advance():
     """Ruling 4, both branches — the gate's finding picks the bucket, not a later judgement."""
     with_group = row("@marketopt_promo", "late", group=True, open_group=True)
@@ -121,24 +298,24 @@ def test_watch_entries_carry_the_marker_and_keep_the_group_they_may_not_join():
 def test_the_source_type_ruling_is_applied_and_defaults_to_community():
     assert apply.source_entry(row("@dpssgovua", "posts"), "posts")["source_type"] == "government"
     assert (
-        apply.source_entry(row("@uasaler", "comments"), "comments")["source_type"] == "aggregator"
-    )
-    assert (
         apply.source_entry(row("@epicentrk_sale", "posts"), "posts")["source_type"]
         == "official_retail"
     )
     assert (
         apply.source_entry(row("@retsepty", "comments"), "comments")["source_type"] == "community"
     )
+    # @uasaler is excluded, so nothing builds an entry for it any more — its ruling stays in the
+    # table as history, which is a claim about the dict rather than about the write.
+    assert apply.SOURCE_TYPE_RULING["@uasaler"] == "aggregator"
 
 
 def test_names_come_from_the_gate_record_not_from_the_canon_table():
     """The canon's table truncates its title cells; the record holds what Telegram returned."""
     entry = apply.source_entry(
-        row("@x", "posts", title="Третьякова Елена Блогер 👧 Материнство"), "posts"
+        row("@poltava_misto", "city", title="Полтава Місто 👧 Новини"), "posts"
     )
-    assert entry["name"] == "Третьякова Елена Блогер 👧 Материнство"
-    assert entry["id"] == "x"
+    assert entry["name"] == "Полтава Місто 👧 Новини"
+    assert entry["id"] == "poltava_misto"
 
 
 # --- the write is additive ----------------------------------------------------------------------
@@ -150,16 +327,19 @@ def test_the_write_appends_sources_and_leaves_taxonomy_byte_identical(tmp_path, 
     path.write_text(original, encoding="utf-8")
     monkeypatch.setattr(apply, "REGISTRY", path)
 
-    entries = [apply.source_entry(row("@newchan", "comments", title="New 🥛"), "comments")]
+    # A city feed: named by the canon's regional row and not in the registry yet, so this is also
+    # a rehearsal of the block "Дозаявка №3" will append once the gate has run.
+    entries = [apply.source_entry(row("@kremenchug_live", "city", title="New 🥛"), "posts")]
     path.write_text(apply.insert_sources(original, entries), encoding="utf-8")
 
     written = path.read_text(encoding="utf-8")
     assert written.split("\ntaxonomy:\n", 1)[1] == original.split("\ntaxonomy:\n", 1)[1]
     after = load_registry(path)
     assert [s.id for s in after.sources[:4]] == [s.id for s in load_registry_text(original)][:4]
-    assert after.sources[-1].id == "newchan"
+    assert after.sources[-1].id == "kremenchug_live"
     assert after.sources[-1].name == "New 🥛"
-    assert after.sources[-1].comments_enabled is True
+    assert after.sources[-1].comments_enabled is False, "a city feed is posts-only"
+    assert after.sources[-1].audience == "regional"
 
 
 def load_registry_text(text: str):
@@ -169,6 +349,29 @@ def load_registry_text(text: str):
     with tempfile.NamedTemporaryFile("w", suffix=".yaml", delete=False, encoding="utf-8") as handle:
         handle.write(text)
     return load_registry(handle.name).sources
+
+
+def test_a_removal_leaves_a_line_saying_why_and_cannot_reach_past_the_sources():
+    """The draft of this function delimited a block by "the next `  - id:` line", which makes the
+    LAST source's block run to the end of the file — taxonomy and watchlist included. It is
+    bounded by the `taxonomy:` marker instead, and that is what this checks."""
+    original = (REPO_ROOT / "config" / "registry.yaml").read_text(encoding="utf-8")
+    last = load_registry(REPO_ROOT / "config" / "registry.yaml").sources[-1].id
+
+    trimmed = apply.remove_sources(original, {last: "ruled out"})
+    assert trimmed.split("\ntaxonomy:\n", 1)[1] == original.split("\ntaxonomy:\n", 1)[1]
+    assert f"  # {last} removed 2026-08-07: ruled out\n" in trimmed
+    after = load_registry_text(trimmed)
+    assert last not in {s.id for s in after}
+    assert len(after) == len(load_registry(REPO_ROOT / "config" / "registry.yaml").sources) - 1
+
+
+def test_removing_a_source_that_is_not_there_stops_the_run():
+    """A typo'd id must not pass for a removal that happened."""
+    original = (REPO_ROOT / "config" / "registry.yaml").read_text(encoding="utf-8")
+    with pytest.raises(SystemExit, match="which is not in it"):
+        apply.remove_sources(original, {"nosuchsource": "ruled out"})
+    assert apply.remove_sources(original, {}) == original
 
 
 def test_a_run_with_nothing_new_leaves_the_file_byte_identical():
@@ -182,7 +385,7 @@ def test_a_run_with_nothing_new_leaves_the_file_byte_identical():
 def test_an_emoji_title_survives_the_yaml_round_trip(tmp_path):
     """Titles carry emoji, colons and quotes; a hand-rolled YAML writer is where those break."""
     nasty = 'Знижки: "супер" 💛 | все'
-    entries = [apply.source_entry(row("@tricky", "posts", title=nasty, group=False), "posts")]
+    entries = [apply.source_entry(row("@zinkivnews", "city", title=nasty, group=False), "posts")]
     original = (REPO_ROOT / "config" / "registry.yaml").read_text(encoding="utf-8")
     path = tmp_path / "registry.yaml"
     path.write_text(apply.insert_sources(original, entries), encoding="utf-8")
@@ -218,7 +421,7 @@ def test_the_shipped_registry_is_re_derivable_from_the_gate_record():
             expected["watch"],
         ), candidate["handle"]
         checked += 1
-    assert checked == 53
+    assert checked == 52
 
 
 def test_the_composition_matches_the_canons_own_summary():
@@ -226,11 +429,18 @@ def test_the_composition_matches_the_canons_own_summary():
     canon disagree about how many channels launch, the script is wrong by definition."""
     text = CANON.read_text(encoding="utf-8")
     # The canon hard-wraps its prose; the claim is about the numbers, not the line breaks.
-    summary = " ".join(text[text.index("**Сводка после рулингов") :][:400].split())
-    assert "запуск 47" in summary
-    assert "реестр 4 + 26 комментных + 17 постовых" in summary
-    assert "watch 14" in summary
-    assert "+ 1 на гейте** (@marketopt_promo)" in summary
+
+    # Wave 1, kept because the canon keeps it: the composition as it stood on 07.08 midday.
+    wave1 = " ".join(text[text.index("**Сводка после рулингов") :][:400].split())
+    assert "запуск 47" in wave1
+    assert "реестр 4 + 26 комментных + 17 постовых" in wave1
+    assert "+ 1 на гейте** (@marketopt_promo)" in wave1
+
+    # Wave 2 — the summary the registry now has to match.
+    wave2 = " ".join(text[text.index("**Сводка: запуск 42**") :][:300].split())
+    assert "**Сводка: запуск 42** (реестр 4 + 21 комментный + 17 постовых)" in wave2
+    assert "watch 14" in wave2
+    assert "**реестр 56**" in wave2
 
     record = json.loads((REPO_ROOT / "results" / "entry_gate_5c1.json").read_text(encoding="utf-8"))
     buckets = {"comments": 0, "posts": 0, "watch": 0, "excluded": 0}
@@ -238,9 +448,9 @@ def test_the_composition_matches_the_canons_own_summary():
         buckets["excluded" if bucket is None else bucket] += 1
     assert buckets["comments"] == 21
     assert buckets["watch"] == 14
-    # 17 in the canon's summary plus @marketopt_promo, which the summary counts separately as
-    # "+1 на гейте" because its bucket was still pending when the operator wrote it.
-    assert buckets["posts"] == 18
-    # Six by 07.08 midday, plus the five the theme screen caught that evening: @znishkom,
-    # @whitecode_zny, @offspringrus (off-topic) and @discountua1, @ATB_FANatik (text-free).
-    assert buckets["excluded"] == 11
+    assert buckets["posts"] == 17
+    # Six by 07.08 midday, the five the theme screen caught that evening (@znishkom,
+    # @whitecode_zny, @offspringrus off-topic; @discountua1, @ATB_FANatik text-free), and
+    # @uasaler, demoted on 07.08 and excluded outright by the wave-2 ruling.
+    assert buckets["excluded"] == 12
+    assert 4 + buckets["comments"] + buckets["posts"] == 42

@@ -438,9 +438,15 @@
       "verdict": "PASS",
       "fails": [],
       "flags": [],
-      "ruling": "KEPT, bucket changed — moved to posts-only: the operator ruled its discussion group out on 2026-08-07 («Чат Аліекспрес ( AliExpert )») and it was left, so `comments_enabled: true` would promise rows no membership can fetch. The instruction named the CHAT, not the channel, so the channel stays — but its 30 posts in the window carry zero food terms on the same theme screen that excluded the five below, and whether it stays at all is an open question for the operator",
+      "ruling": "EXCLUDED — EXCLUDED ENTIRELY (ruling 08.08, canon 'Рулинги, волна 2'): the 07.08 demotion left the channel in posts-only because the operator's word that day had named the CHAT («Чат Аліекспрес ( AliExpert )»), which was left. This ruling names the CHANNEL. Its 30 posts in the window carry zero food terms on the same theme screen that excluded the five above — AliExpress promo codes, not the tracked category",
       "error": null,
-      "suggestions": null
+      "suggestions": null,
+      "replaced": [
+        {
+          "at": "2026-08-07T14:15:45+00:00",
+          "ruling": "KEPT, bucket changed — moved to posts-only: the operator ruled its discussion group out on 2026-08-07 («Чат Аліекспрес ( AliExpert )») and it was left, so `comments_enabled: true` would promise rows no membership can fetch. The instruction named the CHAT, not the channel, so the channel stays — but its 30 posts in the window carry zero food terms on the same theme screen that excluded the five below, and whether it stays at all is an open question for the operator"
+        }
+      ]
     },
     {
       "handle": "@retsepty",
@@ -2186,7 +2192,14 @@
       ],
       "ruling": "EXCLUDED — EXCLUDED as text-free: on topic and unreadable. Its 19 posts repeat one line, «Знижки в АТБ … Вигода до -56%», with the products inside the images — nothing for the category filter or brand extraction to read. The 28-day window the 06.08 ruling asked for is what measured it, and the gate's 0-of-7 comment share is the other half",
       "error": null,
-      "suggestions": null
+      "suggestions": null,
+      "replaced": [
+        {
+          "at": "2026-08-07T11:14:29+00:00",
+          "ruling": "KEPT — kept in the comments bucket WITH a join: 0 of 7 sampled posts is a thin denominator, and the 28-day window measures the real flow. Demotion is a cycle-1 review question, not this phase's",
+          "recovered_from": "git 2970b71:results/entry_gate_5c1.json"
+        }
+      ]
     },
     {
       "handle": "@recepti",
@@ -4379,12 +4392,24 @@
   "registry_written": true,
   "note": "PROMPT-5c1 D1 stops here: every FAIL and FLAG goes to the operator, who rules in chat; the rulings land in each row's `ruling`, and only then is config/registry.yaml written. data/entry_check_report.json (the 2026-07-27 run) is untouched, and the four registry channels are out of this gate's scope.",
   "git": {
-    "commit": "a1b7ee02762c9173a5ef341a6bf2b67d2b95ff1d",
+    "commit": "13b04e61af0dd2fbbc5334111994388c1b1e6511",
     "dirty": [
       "config/registry.yaml",
+      "docs/CHANNELS-launch.md",
+      "docs/STATUS.md",
+      "implementation-notes.md",
       "knowledge/daily_logs/2026-08-07.md",
+      "knowledge/hot.md",
       "knowledge/index.md",
-      "scripts/apply_gate_rulings_5c1.py"
+      "scripts/apply_gate_rulings_5c1.py",
+      "scripts/collect_5c1.py",
+      "scripts/entry_check.py",
+      "src/market_pulse/entry_check.py",
+      "src/market_pulse/registry.py",
+      "tests/test_collect_5c1.py",
+      "tests/test_entry_gate_5c1.py",
+      "tests/test_gate_rulings_5c1.py",
+      "tests/test_registry.py"
     ]
   },
   "notes": {
@@ -4568,8 +4593,8 @@
     }
   },
   "rulings": {
-    "applied_at": "2026-08-07T13:55:01+00:00",
-    "canon": "docs/CHANNELS-launch.md, section 'Рулинги гейта 5c1 (2026-08-07)'",
+    "applied_at": "2026-08-07T14:45:10+00:00",
+    "canon": "docs/CHANNELS-launch.md, sections 'Рулинги гейта 5c1 (2026-08-07)' and 'Рулинги, волна 2'",
     "composition": {
       "comments": [
         "@HealthPsycholog",
@@ -4611,7 +4636,6 @@
         "@recepti",
         "@retsepty4",
         "@retsepty5",
-        "@uasaler",
         "@vylkachannel"
       ],
       "watch": [
@@ -4639,18 +4663,19 @@
         "@kulinariya_chat_a",
         "@marketopt_official",
         "@offspringrus",
+        "@uasaler",
         "@whitecode_zny",
         "@whowears",
         "@znishkom"
       ]
     },
     "counts": {
-      "registry_before": 62,
+      "registry_before": 56,
       "comments": 21,
-      "posts": 18,
+      "posts": 17,
       "watch": 14,
-      "excluded": 11,
-      "sources_after": 57
+      "excluded": 12,
+      "sources_after": 56
     },
     "joins_authorised": [
       "@HealthPsycholog",

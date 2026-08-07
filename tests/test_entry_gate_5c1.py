@@ -76,6 +76,36 @@ def canon_sent_to_the_gate() -> list[str]:
     return found
 
 
+def canon_city_feeds() -> list[str]:
+    """The city feeds "Дозаявка №3" sends to the gate, read out of its prose list.
+
+    That section writes its picks as a sentence — «16 хендлов на гейт: @a · @b · …» — not as a
+    table, so `canon_sent_to_the_gate` above cannot see them. Parsing the prose rather than
+    retyping the handles is the point: a hardcoded list here would pass while the canon said
+    something else, which is the failure this whole derivation exists to prevent.
+    """
+    text = CANON.read_text(encoding="utf-8")
+    section = text[text.index("## Дозаявка №3") :]
+    listing = section[section.index("хендлов на гейт:") :]
+    return re.findall(r"@[A-Za-z0-9_]+", listing.split("\n\n")[0])
+
+
+def test_the_city_feeds_are_the_canons_own_and_all_of_them():
+    """The canon states its own count in the same sentence; if the two disagree the canon is
+    wrong about itself and nothing should be gated on it."""
+    picks = canon_city_feeds()
+    assert len(picks) == 16, picks
+    assert len(set(picks)) == 16, "a handle is listed twice"
+    assert list(picks) == list(apply_rulings_city_feeds()), "the routing table drifted"
+
+
+def apply_rulings_city_feeds():
+    """`CITY_FEEDS` decides the registry bucket, so it has to be the same 16 in the same order."""
+    import apply_gate_rulings_5c1 as apply
+
+    return apply.CITY_FEEDS
+
+
 def test_the_candidate_list_is_the_canons_own():
     """A hand-copied handle list is a list that silently stops matching the file it came from.
 
@@ -85,17 +115,19 @@ def test_the_candidate_list_is_the_canons_own():
     deleting its row would rewrite what the pass found.
     """
     late = [(handle, "late") for handle in canon_sent_to_the_gate()]
-    assert list(gate.CANDIDATES) == canon_buckets() + late
+    city = [(handle, "city") for handle in canon_city_feeds()]
+    assert list(gate.CANDIDATES) == canon_buckets() + late + city
 
 
 def test_the_composition_is_the_62_plus_what_the_rulings_added():
     counts = {
         b: sum(1 for _, bucket in gate.CANDIDATES if bucket == b)
-        for b in ("comments", "posts", "watch", "late")
+        for b in ("comments", "posts", "watch", "late", "city")
     }
     late = len(canon_sent_to_the_gate()) + 1  # + the withdrawn "Дозаявка оператора" row
-    assert counts == {"comments": 29, "posts": 18, "watch": 14, "late": late}
-    assert len(gate.CANDIDATES) == 62 + len(canon_sent_to_the_gate())
+    city = len(canon_city_feeds())
+    assert counts == {"comments": 29, "posts": 18, "watch": 14, "late": late, "city": city}
+    assert len(gate.CANDIDATES) == 62 + len(canon_sent_to_the_gate()) + city
     assert len({handle for handle, _ in gate.CANDIDATES}) == len(gate.CANDIDATES)
 
 
@@ -157,6 +189,40 @@ def verdict_of(handle="@x", bucket="comments", *, record=None, posts=20, texts=N
         window=window(posts),
         script=script_mix(texts),
     )
+
+
+# --- the city bucket measures a group without asserting one -------------------------------------
+
+
+def test_a_city_feed_is_not_flagged_for_the_group_the_ruling_already_accounted_for():
+    """11 of the 16 picks carry a linked group, and the standing ruling puts them in posts-only
+    anyway — the join is what 5c2 defers, not the group's existence. Held to `posts` the gate
+    would raise that flag against 11 channels; the negative control is the same record in the
+    `posts` bucket, which must still raise it, or this proves nothing about the bucket."""
+    city = verdict_of(bucket="city", record=channel(group=True))
+    assert city["verdict"] == "PASS"
+    assert not any("posts-only bucket" in flag for flag in city["flags"])
+
+    posts = verdict_of(bucket="posts", record=channel(group=True))
+    assert any("posts-only bucket" in flag for flag in posts["flags"]), "the control does not fire"
+
+
+def test_a_city_feed_still_answers_every_other_check():
+    """ "Same checks" is the operator's instruction: only the bucket's group expectation moves."""
+    assert verdict_of(bucket="city", record={"resolved": False, "error": "x"})["verdict"] == "FAIL"
+    assert verdict_of(bucket="city", record=channel(scam=True))["verdict"] == "FAIL"
+    assert verdict_of(bucket="city", posts=0, record=channel(group=False))["verdict"] == "FAIL"
+    latin = verdict_of(bucket="city", texts=["Guten Morgen"] * 20)
+    assert latin["verdict"] == "FAIL"
+
+
+def test_a_silent_city_feed_with_a_group_takes_the_watch_shape_flag():
+    """@LHVC_info's shape: 0.2 posts/week and last seen 2026-07-20, so a 28-day window opened on
+    08.08 can hold zero of its posts. With a group that is a FLAG, not a FAIL, and it is a finding
+    about the channel — the operator's "FLAG → report with evidence" covers it."""
+    out = verdict_of(bucket="city", posts=0, record=channel(group=True))
+    assert out["verdict"] == "FLAG"
+    assert any("watch shape" in flag for flag in out["flags"])
 
 
 # --- FAIL is a closed list ---------------------------------------------------------------------
@@ -474,6 +540,38 @@ def test_gating_a_later_candidate_does_not_un_say_the_rulings(monkeypatch, tmp_p
     assert after["registry_written"] is True
     assert after["rulings"] == {"counts": {"comments": 1}}
     assert after["notes"] == {"hvylynka_search": {"closed": True}}
+
+
+def test_a_batch_of_new_candidates_leaves_every_earlier_rows_ruling_alone(monkeypatch, tmp_path):
+    """ "Дозаявка №3" appends 16 rows at once, and the carry-forward has only ever been exercised
+    on one. A row's `ruling` and its `replaced` history are written by a later stage, so the
+    rebuild must return them untouched — a reversal that a re-gate erased would be unrecoverable
+    from anything but git."""
+    held = [("@a", "comments"), ("@b", "posts")]
+    _, first, _ = drive(monkeypatch, tmp_path, held)
+
+    annotated = {**first, "registry_written": True}
+    annotated["candidates"][0]["ruling"] = "EXCLUDED — off theme"
+    annotated["candidates"][0]["replaced"] = [{"at": "2026-08-07T11:14:29+00:00", "ruling": "KEPT"}]
+    annotated["candidates"][1]["ruling"] = "KEPT — measured"
+    (tmp_path / "entry_gate_5c1.json").write_text(
+        json.dumps(annotated, ensure_ascii=False), encoding="utf-8"
+    )
+
+    city = [(f"@city{i}", "city") for i in range(16)]
+    _, after, checked = drive(monkeypatch, tmp_path, held + city)
+
+    assert checked == [handle for handle, _ in city], "an earlier row was re-resolved"
+    assert len(after["candidates"]) == 18
+    kept = {row["handle"]: row for row in after["candidates"]}
+    assert kept["@a"]["ruling"] == "EXCLUDED — off theme"
+    assert kept["@a"]["replaced"] == [{"at": "2026-08-07T11:14:29+00:00", "ruling": "KEPT"}]
+    assert kept["@b"]["ruling"] == "KEPT — measured"
+    assert after["registry_written"] is True
+    assert {row["bucket"] for row in after["candidates"] if row["handle"].startswith("@city")} == {
+        "city"
+    }
+    assert after["summary"]["by_bucket"]["city"]["n"] == 16
 
 
 def test_an_ordinary_failure_is_one_retryable_row_and_not_an_abort(monkeypatch, tmp_path):

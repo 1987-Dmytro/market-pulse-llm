@@ -147,6 +147,23 @@ def joinable(registry, gate: dict) -> list[tuple]:
     return [(source, handle) for source, handle in fresh if handle in authorised]
 
 
+def narrowed(channels: list[tuple], only: list[str] | None) -> list[tuple]:
+    """The channels this invocation TALKS TO — the record is still written over all of them.
+
+    Every channel in the fetch loop costs a `ResolveUsernameRequest`, the account-wide limit that
+    cost 20 hours on 2026-08-07, so a run that needs 16 new city feeds must not re-resolve the 52
+    already collected. The split matters: narrow the loop, never the record. `channel_row` reads
+    the store rather than the run, so a scoped invocation still reports every channel's totals —
+    narrowing the record instead would make a cheap run look like a shrunken corpus.
+    """
+    if not only:
+        return channels
+    wanted = set(only)
+    if missing := wanted - {handle for _, handle in channels}:
+        raise SystemExit(f"--only names channels this phase does not collect: {sorted(missing)}")
+    return [(source, handle) for source, handle in channels if handle in wanted]
+
+
 def join_state() -> dict:
     """What `results/joins_5c1.jsonl` already records, newest attempt per channel."""
     if not JOIN_LOG.exists():
@@ -442,7 +459,7 @@ async def run(args, registry, gate) -> dict:
                 for handle, row in join_state().items()
                 if row["outcome"] in ("joined", "already_member")
             }
-            for source, handle in channels:
+            for source, handle in narrowed(channels, args.only):
                 print(f"{handle} ({source.id})", flush=True)
                 entity = await client.get_entity(handle)
                 provenance = make_provenance(source, session)
@@ -481,6 +498,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--max", type=int, help="cap the joins attempted in this invocation")
     parser.add_argument(
         "--leave", metavar="HANDLE", nargs="+", help="leave these channels' discussion groups"
+    )
+    parser.add_argument(
+        "--only",
+        metavar="HANDLE",
+        nargs="+",
+        help="restrict the fetch loop to these channels (the record still covers all of them)",
     )
     parser.add_argument("--plan", action="store_true", help="print the scope and stop, no client")
     args = parser.parse_args(argv)
@@ -524,7 +547,12 @@ def main(argv: list[str] | None = None) -> int:
             for h in (h for _, h in joins)
             if state.get(h, {}).get("outcome") in ("joined", "already_member")
         )
+        loop_scope = narrowed(channels, args.only)
         print(f"collect: {len(channels)} channels ({sum(1 for s, _ in channels if s.watch)} watch)")
+        if args.only:
+            print(
+                f"  --only: {len(loop_scope)} of them are resolved this run, the record covers all"
+            )
         print(f"joins:   {len(joins)} authorised, {landed} landed, {len(joins) - landed} to go")
         print(f"window:  {WINDOW_DAYS} days · pace {JOIN_PAUSE:.0f}s between joins")
         print(f"protected: {len(protected())} raw v1 files, refused at channel level")

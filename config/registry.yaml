@@ -18,6 +18,7 @@ sources:
       - "@silposilpo"
     verified: true
     comments_enabled: false
+    audience: retail_official
 
   - id: atb
     name: АТБ
@@ -26,6 +27,7 @@ sources:
       - "@atb_market_official"
     verified: true
     comments_enabled: false
+    audience: retail_official
 
   - id: varus
     name: Varus
@@ -34,6 +36,7 @@ sources:
       - "@VARUS_channel"
     verified: true
     comments_enabled: true
+    audience: retail_official
 
   - id: msuaaaa
     name: MSUa Акції та знижки
@@ -42,6 +45,7 @@ sources:
       - "@msuaaaa"
     verified: true
     comments_enabled: true
+    audience: supermarket_deals
 
   # znizhki-ua (@znizhki_ua) removed 2026-07-27: channel dead since 2024-03,
   # zero records inside the backfill window (see data/entry_check_report.json).
@@ -60,6 +64,7 @@ sources:
       - "@tretyakovaele"
     verified: true
     comments_enabled: true
+    audience: mothers_kids
   - id: kopiyochka1
     name: "Копійочка 🫶🏻"
     source_type: community
@@ -67,6 +72,7 @@ sources:
       - "@kopiyochka1"
     verified: true
     comments_enabled: true
+    audience: supermarket_deals
   - id: klopotenkofood
     name: "Гастровсесвіт Клопотенка"
     source_type: community
@@ -74,6 +80,7 @@ sources:
       - "@klopotenkofood"
     verified: true
     comments_enabled: true
+    audience: cooking_recipes
   - id: maudau
     name: "MAUDAU: канал цікавих штук"
     source_type: community
@@ -81,13 +88,8 @@ sources:
       - "@maudau"
     verified: true
     comments_enabled: false
-  - id: uasaler
-    name: "Аліексперт 🇺🇦 промокоди, знижки, новини"
-    source_type: aggregator
-    telegram_channels:
-      - "@uasaler"
-    verified: true
-    comments_enabled: false
+    audience: supermarket_deals
+  # uasaler removed 2026-08-07: EXCLUDED ENTIRELY (ruling 08.08, canon 'Рулинги, волна 2'): the 07.08 demotion left the channel in posts-only because the operator's word that day had named the CHAT («Чат Аліекспрес ( AliExpert )»), which was left. This ruling names the CHANNEL. Its 30 posts in the window carry zero food terms on the same theme screen that excluded the five above — AliExpress promo codes, not the tracked category
   - id: retsepty
     name: "Кулінарні рецепти"
     source_type: community
@@ -95,6 +97,7 @@ sources:
       - "@retsepty"
     verified: true
     comments_enabled: true
+    audience: cooking_recipes
   - id: katyal55
     name: "Материнство в кадре"
     source_type: community
@@ -102,6 +105,7 @@ sources:
       - "@katyal55"
     verified: true
     comments_enabled: true
+    audience: mothers_kids
   - id: smirnov108
     name: "Smirnovy.com – здоров'я та розвиток"
     source_type: community
@@ -109,6 +113,7 @@ sources:
       - "@smirnov108"
     verified: true
     comments_enabled: true
+    audience: health_fitness
   - id: tarilka_malyuka
     name: "Тарілка Малюка • Прикорм"
     source_type: community
@@ -116,6 +121,7 @@ sources:
       - "@tarilka_malyuka"
     verified: true
     comments_enabled: true
+    audience: baby_food
   - id: kkondr_fit
     name: "Kkondratyuchka тренування"
     source_type: community
@@ -123,6 +129,7 @@ sources:
       - "@kkondr_fit"
     verified: true
     comments_enabled: true
+    audience: health_fitness
   - id: polyakova_fitness
     name: "Тренування з Олею Поляковою та Сергієм Шеремета"
     source_type: community
@@ -130,6 +137,7 @@ sources:
       - "@polyakova_fitness"
     verified: true
     comments_enabled: true
+    audience: health_fitness
   # znishkom removed 2026-08-07: EXCLUDED on the theme screen: 191 posts in the window and not one food term — it is Steam game discounts (STAR WARS Jedi, NieR:Automata, Disco Elysium). The same class as @Steam_free_1 and @Steam_Sale_Ua, excluded 06.08, and the biggest poster in the whole composition after the recipe feeds
   - id: kuksa2022
     name: "Екатерина Кукса. Материнство в радость"
@@ -138,6 +146,7 @@ sources:
       - "@kuksa2022"
     verified: true
     comments_enabled: true
+    audience: mothers_kids
   - id: healthpsycholog
     name: "Психологія здоров’я Health Psychology"
     source_type: community
@@ -145,6 +154,7 @@ sources:
       - "@HealthPsycholog"
     verified: true
     comments_enabled: true
+    audience: health_fitness
   # atb_fanatik removed 2026-08-07: EXCLUDED as text-free: 18 posts of «АНОНС АКЦІЙ АТБ … Частина N», products in the images, 2 of 7 sampled posts carrying comments
   # offspringrus removed 2026-08-07: EXCLUDED on the theme screen: 16 posts, zero food terms — a RUSSIAN baby-goods shop (Moscow exhibitions, offspring24.ru), so off-category and off-market
   - id: sashafitnesslife
@@ -154,6 +164,7 @@ sources:
       - "@sashafitnesslife"
     verified: true
     comments_enabled: true
+    audience: health_fitness
   - id: pro_detyintumama
     name: "Интуитивное Материнство"
     source_type: community
@@ -161,6 +172,7 @@ sources:
       - "@Pro_Detyintumama"
     verified: true
     comments_enabled: true
+    audience: mothers_kids
   - id: chifit_family
     name: "Оля CHIFIT| тренування і харчування🔥"
     source_type: community
@@ -168,6 +180,7 @@ sources:
       - "@chifit_family"
     verified: true
     comments_enabled: true
+    audience: health_fitness
   - id: ya_nenka
     name: "Катерина Ненька — грудне вигодовування та дитяче харчування | сон"
     source_type: community
@@ -175,6 +188,7 @@ sources:
       - "@ya_Nenka"
     verified: true
     comments_enabled: true
+    audience: baby_food
   - id: baby_broccoli_club
     name: "Брокколи клуб | прикорм | развитие"
     source_type: community
@@ -182,6 +196,7 @@ sources:
       - "@baby_broccoli_club"
     verified: true
     comments_enabled: true
+    audience: baby_food
   - id: useful_healthy_fitness_menu
     name: "Здорове харчування| Софія Ігорівна"
     source_type: community
@@ -189,6 +204,7 @@ sources:
       - "@useful_healthy_fitness_menu"
     verified: true
     comments_enabled: true
+    audience: health_fitness
   - id: olgaa_trainer
     name: "Оля | розумний фітнес 💪"
     source_type: community
@@ -196,6 +212,7 @@ sources:
       - "@olgaa_trainer"
     verified: true
     comments_enabled: true
+    audience: health_fitness
   - id: denisovapro
     name: "Нутриціологія | Молодість | ЖИТТЯ"
     source_type: community
@@ -203,6 +220,7 @@ sources:
       - "@denisovapro"
     verified: true
     comments_enabled: true
+    audience: health_fitness
   - id: eftforhealth
     name: "Я ЗДОРОВА"
     source_type: community
@@ -210,6 +228,7 @@ sources:
       - "@eftforhealth"
     verified: true
     comments_enabled: true
+    audience: health_fitness
   - id: rezeptmoi
     name: "Мои рецептики (Илона)🤍"
     source_type: community
@@ -217,6 +236,7 @@ sources:
       - "@rezeptmoi"
     verified: true
     comments_enabled: true
+    audience: cooking_recipes
   # discountua1 removed 2026-08-07: EXCLUDED as text-free: on topic and unreadable. Its 19 posts repeat one line, «Знижки в АТБ … Вигода до -56%», with the products inside the images — nothing for the category filter or brand extraction to read. The 28-day window the 06.08 ruling asked for is what measured it, and the gate's 0-of-7 comment share is the other half
   - id: recepti
     name: "Кулінарні рецепти"
@@ -225,6 +245,7 @@ sources:
       - "@recepti"
     verified: true
     comments_enabled: false
+    audience: cooking_recipes
   - id: mameni_recepti
     name: "Мамині Рецепти"
     source_type: community
@@ -232,6 +253,7 @@ sources:
       - "@mameni_recepti"
     verified: true
     comments_enabled: false
+    audience: cooking_recipes
   - id: retsepty4
     name: "Ложка - Рецепты"
     source_type: community
@@ -239,6 +261,7 @@ sources:
       - "@retsepty4"
     verified: true
     comments_enabled: false
+    audience: cooking_recipes
   - id: epicentrk_sale
     name: "ЕПІЦЕНТР"
     source_type: official_retail
@@ -246,6 +269,7 @@ sources:
       - "@epicentrk_sale"
     verified: true
     comments_enabled: false
+    audience: retail_official
   - id: konservacia_kulinaria
     name: "Консервація та кулінарія"
     source_type: community
@@ -253,6 +277,7 @@ sources:
       - "@konservacia_kulinaria"
     verified: true
     comments_enabled: false
+    audience: cooking_recipes
   - id: intensiv_mamiev
     name: "Алан Мамиев ИНТЕНСИВ"
     source_type: community
@@ -260,6 +285,7 @@ sources:
       - "@intensiv_Mamiev"
     verified: true
     comments_enabled: false
+    audience: mothers_kids
   - id: retsepty5
     name: "Рецепты, Готовим Дома"
     source_type: community
@@ -267,6 +293,7 @@ sources:
       - "@retsepty5"
     verified: true
     comments_enabled: false
+    audience: cooking_recipes
   - id: blwbabies
     name: "BLW.BABIES 🥦🍓 СМАЧНИЙ ПРИКОРМ 🥑 BLW 🥑 САМОПРИКОРМ 🥑 ДИТЯЧЕ МЕНЮ 🥑 РЕЦЕПТИ"
     source_type: community
@@ -274,6 +301,7 @@ sources:
       - "@blwbabies"
     verified: true
     comments_enabled: false
+    audience: baby_food
   - id: vylkachannel
     name: "the VYLKA (рецепти)"
     source_type: community
@@ -281,6 +309,7 @@ sources:
       - "@vylkachannel"
     verified: true
     comments_enabled: false
+    audience: cooking_recipes
   # whitecode_zny removed 2026-08-07: EXCLUDED on the theme screen: 25 posts, zero food terms — footwear resale («стара ціна 3099 ♡ НОВА 1499 ♡ розмір 37 ♡ дефект на фото»)
   - id: gaid_skobioale
     name: "Відгуки гайд схуднення"
@@ -289,6 +318,7 @@ sources:
       - "@gaid_skobioale"
     verified: true
     comments_enabled: false
+    audience: health_fitness
   - id: dpssgovua
     name: "Держпродспоживслужба"
     source_type: government
@@ -296,6 +326,7 @@ sources:
       - "@dpssgovua"
     verified: true
     comments_enabled: false
+    audience: food_quality_gov
   - id: wellosophy_lesya
     name: "ПХ та схуднення 🍀"
     source_type: community
@@ -303,6 +334,7 @@ sources:
       - "@Wellosophy_Lesya"
     verified: true
     comments_enabled: false
+    audience: health_fitness
   - id: atb_aktsiyi
     name: "АТБ Акції"
     source_type: aggregator
@@ -310,6 +342,7 @@ sources:
       - "@atb_aktsiyi"
     verified: true
     comments_enabled: false
+    audience: supermarket_deals
   - id: anastasiiadavydiukfitness
     name: "Онлайн-тренування з Анастасією Давидюк"
     source_type: community
@@ -317,6 +350,7 @@ sources:
       - "@anastasiiadavydiukfitness"
     verified: true
     comments_enabled: false
+    audience: health_fitness
   - id: korolevakuchni
     name: "Королева Кухні 👑 (Кулінарія та рецепти)"
     source_type: community
@@ -324,6 +358,7 @@ sources:
       - "@korolevakuchni"
     verified: true
     comments_enabled: false
+    audience: cooking_recipes
   - id: itsmamix
     name: "Mamix🥼"
     source_type: community
@@ -332,6 +367,7 @@ sources:
     verified: true
     comments_enabled: true
     watch: true
+    audience: mothers_kids
   - id: regina_tatlybaeva
     name: "Регинаграмм | Материнство , путешествия"
     source_type: community
@@ -340,6 +376,7 @@ sources:
     verified: true
     comments_enabled: true
     watch: true
+    audience: mothers_kids
   - id: netainaya_vecherya
     name: "нетайная вечеря"
     source_type: community
@@ -348,6 +385,7 @@ sources:
     verified: true
     comments_enabled: true
     watch: true
+    audience: cooking_recipes
   - id: retsepty10
     name: "Рецепты | Полезное питание"
     source_type: community
@@ -356,6 +394,7 @@ sources:
     verified: true
     comments_enabled: true
     watch: true
+    audience: cooking_recipes
   - id: skhudnennya
     name: "ЗДОРОВЕ СХУДНЕННЯ"
     source_type: community
@@ -364,6 +403,7 @@ sources:
     verified: true
     comments_enabled: true
     watch: true
+    audience: health_fitness
   - id: prostetsofa
     name: "София Стец | про материнство"
     source_type: community
@@ -372,6 +412,7 @@ sources:
     verified: true
     comments_enabled: true
     watch: true
+    audience: mothers_kids
   - id: viktoria_sshh
     name: "Я выбираю быть здоровой💚✨"
     source_type: community
@@ -380,6 +421,7 @@ sources:
     verified: true
     comments_enabled: true
     watch: true
+    audience: health_fitness
   - id: hydnem_prosto
     name: "Марафон схуднення онлайн"
     source_type: community
@@ -388,6 +430,7 @@ sources:
     verified: true
     comments_enabled: true
     watch: true
+    audience: health_fitness
   - id: dimakaminskyifit
     name: "Дмитро Камінський | Фітнес та Саморозвиток"
     source_type: community
@@ -396,6 +439,7 @@ sources:
     verified: true
     comments_enabled: true
     watch: true
+    audience: health_fitness
   - id: dutyache_menu
     name: "Дитяче меню"
     source_type: community
@@ -404,6 +448,7 @@ sources:
     verified: true
     comments_enabled: true
     watch: true
+    audience: baby_food
   - id: polinalykovagv
     name: "ГВ/прикорм/сон с Полиной Лыковой 🤱🏻"
     source_type: community
@@ -412,6 +457,7 @@ sources:
     verified: true
     comments_enabled: true
     watch: true
+    audience: baby_food
   - id: evgenija_dutjache_menu
     name: "Євгенія_Дитяче меню"
     source_type: community
@@ -420,6 +466,7 @@ sources:
     verified: true
     comments_enabled: true
     watch: true
+    audience: baby_food
   - id: chekh_yevheniia1982
     name: "Рецептишки Евгении Чех"
     source_type: community
@@ -428,6 +475,7 @@ sources:
     verified: true
     comments_enabled: true
     watch: true
+    audience: cooking_recipes
   - id: cozymotherhood
     name: "Уютное материнство"
     source_type: community
@@ -436,6 +484,7 @@ sources:
     verified: true
     comments_enabled: true
     watch: true
+    audience: mothers_kids
   - id: marketopt_promo
     name: "Маркетопт (Толока) м.Кременчук"
     # official_retail by operator amendment 2026-08-07: the source_type ruling's "community —
@@ -446,6 +495,7 @@ sources:
       - "@marketopt_promo"
     verified: true
     comments_enabled: false
+    audience: retail_official
 
 taxonomy:
   # Keys are kebab-case and stable (they end up in result files); values are the

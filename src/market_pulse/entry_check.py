@@ -134,6 +134,13 @@ BUCKETS = {
     "watch": {"posts_expected": False, "group_expected": True},
     # The late addition enters to have its class decided, so neither is asserted.
     "late": {"posts_expected": True, "group_expected": None},
+    # A Poltava-oblast city feed ("Дозаявка №3"). Its class is not the gate's to decide either,
+    # but for the opposite reason: the standing ruling already fixed it as posts-only because the
+    # 5c2 thread filter does not exist yet, NOT because these channels lack groups — 11 of the 16
+    # have one. Holding them to `posts` would raise "a discussion group is linked" against 11
+    # channels whose linked group the ruling that placed them already accounted for. The group is
+    # still measured and recorded; it is only not turned into a verdict.
+    "city": {"posts_expected": True, "group_expected": None},
 }
 
 PRE_REGISTERED_FLAGS = {

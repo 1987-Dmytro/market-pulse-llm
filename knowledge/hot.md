@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-07 10:38:48 (every SessionStart)
+**Auto-refreshed:** 2026-08-07 16:45:38 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-9be36e4 fix(5b2): the verdict names the commit that produced its rows
-2f350f4 docs(vault): 5b.2 at the checkpoint — batch closed by rule, run-rate back to the operator
-cb41ae3 docs(5b2): the ADR with its numbers, and twelve deviations
-9295e3c feat(5b2): the ladder says every N is identical; the paid run at 16 dies on memory
-0a0e09c docs(5b2): check the stack string before the 59 GB, not after it
+13b04e6 feat(5c1): five channels out of the registry, and a 20-hour wall on username resolution
+a1b7ee0 feat(5c1): the theme gap, measured — 15 launch channels post no food at all
+c6cd44d fix(5c1): gating one late candidate silently stopped the live collection
+2970b71 feat(5c1): the second late batch ruled, the city scan landed, the volume is gone
+4cd9ab4 docs: the volume ruling — option (b), the CA-MTL-3 volume is deleted
 ```
 
 ## 📋 Recent decisions
@@ -31,118 +31,154 @@ cb41ae3 docs(5b2): the ADR with its numbers, and twelve deviations
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-07 10:38 (`/close` of a day in which **nothing was executed** — zero
-commits, zero files touched, zero spend; the tree carries **six** uncommitted paths — the 06.08
-close's five plus this day's own log — and the next step is still the **5c contract briefing**. Everything below is unchanged
-from that close and still current. Previously, 2026-08-06 19:57: **the serving-parity programme is
-CLOSED — 5a → 5a.1
-→ 5b → 5b.1 → 5b.2 in one day, $1.7069 of the $4.00 stop, 40 commits `f650ce1` → `9be36e4`,
-`make check` 814 → 1028 passed.** The runtime is a stop-after A6000 pod and it costs the gate
-numbers **nothing** (Δ 0.0000, 758/758); batch > 1 was authorised, measured and **failed by its own
-rule**, so serving is batch 1 **permanently**; and the operator ruled the cycle-1 economics the
-same evening, so the money question is **answered, not open**. Next session is the **5c contract
-briefing** — see ⏭️ Next 1. This block is hand-edited; the section above it is auto-generated, do
-NOT touch the marker.)
+**Last update:** 2026-08-07 17:55 (wave 2 · "Дозаявка №3" wired · `audience` filled for all 56).
+**5c1 is executed except the tail of the joins.** The morning's "nothing was executed" is gone: 16
+commits from `82ddfe1` plus this one, `make check` 1028 → **1135 passed**, **$0** spent, and the
+CA-MTL-3 volume is **deleted** so its
+~$0.24/day has stopped. The launch composition was rebuilt four times in one day — 51 → 48
+(rulings) → 43 (theme screen) → **42** (wave 2: @uasaler out entirely) — and the day ended against
+an **account-wide FloodWait of 20 hours** on username resolution, clearing **2026-08-08 10:02
+UTC**. This block is hand-edited; the section above it is auto-generated, do NOT touch the marker.
 
 ## 🔥 What's Hot
 
+**THE GATE GRADES CAPABILITY, NOT THEME — AND THAT GAP COST FIVE CHANNELS.** The 5c1 track-R gate
+checks resolve, liveness, language, discussion group and comment flow. It never checked what a
+channel is ABOUT, except the two the operator pre-registered by name. The composition's themes came
+from 5a1 discovery TAGS, and a tag says what a search query matched. The operator saw «Чат
+Аліекспрес» in their own client and the hole opened. `results/theme_screen_5c1.json` put a number on
+it from the window already collected — $0, offline, on `measure_categories.py`'s own lexicon:
+**of 44 measurable launch channels, 23 have zero dairy posts and 15 have zero food posts of any
+kind.** Two distinct failures: OFF-TOPIC (@znishkom = 191 posts of Steam game discounts,
+@whitecode_zny = footwear, @offspringrus = a Russian baby-goods shop) and TEXT-FREE (@discountua1,
+@ATB_FANatik — flyer reposts with the products inside the images). **Any future entry gate must
+screen theme, or it admits the same class again.**
+
+**AN ACCOUNT-WIDE FLOODWAIT OF 20 HOURS, CLEARING 2026-08-08 10:02 UTC.** 72,312 s on
+`ResolveUsernameRequest` — the request every join, every comment fetch and every gate check starts
+with, so it closes ALL of them, not one channel. The bill is cumulative: 63 gate rows + 119
+discovery candidates + three searches + 13 joins in one day. It is written into
+`results/joins_5c1.jsonl` with its expiry and `scripts/collect_5c1.py` **refuses to start** until it
+passes. **Do not retry inside the window** — that is how 20 hours becomes longer.
+
+**THE LAUNCH SET IS 42, NOT 51.** `config/registry.yaml` holds **56 sources** = 4 registry + 21
+comment-capable + 17 posts-only + 14 watch. `docs/CHANNELS-launch.md` still says «запуск 51» in its
+tables; its two rulings sections amend them, and the registry is what the loop reads. Excluded:
+**12** (4 flagged 07.08 + the withdrawn late addition + @akcii_skidki_plt + the theme screen's 5 +
+@uasaler). The wave-2 ruling closed the last open composition question: the 07.08 word named the
+CHAT, the 08.08 ruling names the CHANNEL, so it left the registry entirely. **Removing a source
+does not retract its rows** — its 30 posts are still in the raw store, which is why collection
+totals carry a basis.
+
+**THE WINDOW IS COLLECTED AND THE COMMENTS ARE NOT.** `results/collect_5c1.json`: **2,132 posts**
+over 58 channels, window fixed at `since 2026-07-10T10:33:14Z`, 0 damaged lines, `shasum -c` **6/6**
+after the run. Comments: **106 rows, one channel** (@tretyakovaele) — the write path is proven on a
+real thread, the rest waits on joins. **11 of 21 authorised joins have landed**; two joined groups
+were later thrown out (@uasaler, @znishkom) and the operator had already deleted those chats in
+their own client.
+
+**THE DRY-RUN'S `rows_to_inference` IS NOT THE WINDOW QUEUE.** `queue_depth` counts every stored
+comment above the inference watermark, and that watermark has never moved — so the number is the
+full v1 history of the four original channels, exactly the backlog ruling 22 DEFERRED. It now reads
+**11,444**, which is 5a's 11,338 plus the **106** comments this phase collected: the delta is the
+whole of 5c1's contribution, and the 2,132 posts contribute nothing because the queue counts comment
+rows. The window's comment queue is what 5c2 prices and it barely exists yet. The watermark is an
+id, the window is a date; the dry run as written cannot show it.
+
+**THE VOLUME IS GONE.** Operator ruling on `results/volume_calc_5c1.json`: option (b). `runpodctl
+network-volume list` returned one volume before and **`[]` after** — proven by listing, never by an
+exit code. Storage+boot per month: keep $9.66 · delete-and-restage **$2.53** · stopped pod $7.61.
+The decisive argument was the **datacenter unpin**, not the $7.14. The arm-A adapter was verified to
+have a second local copy (`b3ca6308…`, directory hash) BEFORE the delete. The ~2026-09-05 review is
+closed.
+
 **WHAT 5c READS, AND IT SAYS BATCH 1.** `results/serving_5b.json` → `adopted`: `batch_size: 1`,
 `adopted: false`, `measured_at_batch_size: 16`, **$0.5993/1000 rows**, **$0.4611/pass**,
-**4.065 s/row**, cold start **46.2 s** off local NVMe (278.9 s off the network volume). Beside it,
-`results/parity_5b_a.json` → `parity`: config A on a booted-per-pass A6000 pod, **758/758 rows**,
-zero failures of any kind, and **every reported number identical to the 4.5h2 anchor** — G1a
-0.9214, G1b 0.6053, G1c 0.8478, G1d 0.9586, G1e 0.9610, `under_bar` empty, the same 3 of 5 gates.
-SPEC §3.11 (2)'s "the delta is reported, never averaged away" has a number: **+0.0000**.
-What cannot be claimed is a **per-row** identity — arm A's dump was lost 04.08 (D12).
+**4.065 s/row**, cold start **46.2 s** off local NVMe (278.9 s off the network volume — that figure
+lives in `scripts/runbook_5b.md`, NOT in serving_5b.json). Beside it, `results/parity_5b_a.json`:
+config A on a booted-per-pass A6000 pod, **758/758 rows**, every reported number identical to the
+4.5h2 anchor, delta **+0.0000**. A per-row identity cannot be claimed — arm A's dump was lost 04.08.
 
 **BATCH IS CLOSED BY THE RULE, NOT BY THE NUMBERS.** `results/batch_5b2_verdict.json` →
-`outcome: failed-measurement-oom`. The paid run at 16 scored 666 of 758 rows and the card ran out
-of memory; the adoption rule needs every 4.5h2-passed gate to stay passing, G1b is the sarcasm
-holdout, and 16 of its 108 rows were scored. An unmeasured gate is not a passing one, so the rule
-has no input. **Batch 1, permanently** — only a NEW pre-registration can move it, carrying N=8, a
-**memory term** in the rule and `expandable_segments:True`, **and the team lead does not recommend
-it**. [[5b2-batch-measurement]]
-
-**THE PRE-FILTER SAID IDENTICAL AND THE TEST SET SAID 1%.** All four ladder arms came back
-byte-identical to batch 1 over 24 carve rows; on the test set **660 of 666 agree**. Six rows moved
-that the carve swore could not, and a discriminator everything passes had quietly become "take the
-maximum" — with no memory term in it. That is the phase's real finding, and it is a lesson about
-pre-filters, not about batching.
-
-**THE MONEY QUESTION IS ANSWERED** (operator 06.08, SPEC §3.11 (6), STATUS decision 22): the
-inference backlog is scored as a **WINDOW** — the most recent ~4 weeks (**~$2–2.5**) at the 5c
-start, the full 11,338-row history a **visibly deferred** decision taken only if a use-case demands
-it; cycle 1 runs **2×/day**; the **permanent** ceiling is set AFTER cycle 1 on its measured daily
-row flow (**the $9–12 figure was written for per-second serverless and is not the ruling**); and
-volume-vs-redownload-vs-stopped-pod is a **$0 step-0 calculation of 5c** that also decides the
-CA-MTL-3 volume's fate, advancing the ~2026-09-05 review.
-
-**THE LAUNCH SET IS FIXED AT 51 CHANNELS + 14 WATCH.** `docs/CHANNELS-launch.md` is authoritative:
-registry 4 + 29 comment-capable + 18 posts-only, **1,199,519 subscribers**; the 14 watch channels
-have a group but are silent — track-R passed, posts collected, **no group joins until the channel
-posts again**. The **≥10 M target STANDS as aspirational** and the ledger keeps reporting the
-honest gap: 180 candidates closed **14.5%** of it, and the team lead's own survey puts the whole
-segment at **~4–5 M**, so the target is about six times what any scan can reach. Every entry still
-goes through the track-R gate.
+`outcome: failed-measurement-oom`. **Batch 1, permanently** — only a NEW pre-registration can move
+it, and the team lead does not recommend it. [[5b2-batch-measurement]]
 
 **THE ARTIFACT PHASE 5 SERVES IS THE NF4 BASE PLUS THE UNMERGED ARM-A ADAPTER** (`b3ca6308…`,
-dataset `ba368273cc4d…`, 2 171 rows, rendering `T1v2_with_post`, every eval at batch 1).
-**Merging stays forbidden** — SPEC §3.11 (2) adopts it only if a measurement selects it, and 5b's
+2 171 rows, rendering `T1v2_with_post`, every eval at batch 1). **Merging stays forbidden** — 5b's
 pair aborted, which closes the question in favour of A. [[5b-parity-abort-and-pod-runtime]]
 
-**THE GATES ARE 3 of 5 and CLOSED, not pending** — G1a FAIL (0.9214 / bar 0.9470, ru floor too),
-G1b PASS 23/38 exactly on the bar, **G1c FAIL by 0.0005**, G1d and G1e PASS. No bar moves and
-nothing is re-run: a failed gate closes its question. [[45h2-ablation-verdict]]
+**THE GATES ARE 3 of 5 and CLOSED, not pending** — G1a FAIL (0.9214 / bar 0.9470), G1b PASS 23/38
+exactly on the bar, **G1c FAIL by 0.0005**, G1d and G1e PASS. No bar moves and nothing is re-run.
+[[45h2-ablation-verdict]]
 
-**ARM A'S PER-ROW DUMP IS LOST** — `results/predictions/LOST.md`. No gate number moves and
-`scored_ids_sha256` still proves which rows were scored; what is gone is the **re-score**, so a
-future corrected-gold comparison of the two arms is **unpaired and must say so**. 5b.1's own
-758-row dump is committed — the next runtime comparison will not have this hole.
+**ARM A'S PER-ROW DUMP IS LOST** — `results/predictions/LOST.md`. No gate number moves; what is gone
+is the **re-score**, so a future corrected-gold comparison of the two arms is **unpaired and must
+say so**.
 
-**THE COLLECTOR WRITES TEN KEYS, AND TWO LAUNCH SIGNALS ARE NOT AMONG THEM.**
-`docs/CHANNELS-launch.md` counts **views and reactions** and stars both; a v1 post record carries
-neither, and neither does a poll payload. The proven pattern is a retrospective refetch like the
-5a poll census — **$0**, sidecar v2 **beside** raw v1, never into the v1 stores. 5c3 inherits it.
+**THE COLLECTOR WRITES TEN KEYS, AND TWO LAUNCH SIGNALS ARE NOT AMONG THEM.** Views and reactions
+are absent from a v1 post record and from a poll payload. The proven pattern is a retrospective
+refetch like the 5a poll census — **$0**, sidecar v2 **beside** raw v1, never into the v1 stores.
+5c3 inherits it.
 
 ## ⏭️ Next
 
-1. **THE 5c CONTRACT BRIEFING IS THE NEXT SESSION.** The team lead's proposed split, to be
-   confirmed there: **5c1** — entry gates for the launch set (batched, the operator's own hours,
-   ~1–2 evenings) + collector on the new set + the volume calculation, all $0. **A count to
-   reconcile at the briefing:** `docs/CHANNELS-launch.md` says «запуск **51** · watch 14» and the
-   STATUS sketch of 5c1 says **52 каналов**. The document is authoritative; do not edit STATUS,
-   name the gap. Fifth instance of brief-count-vs-document in this project;
-   **5c2** — the loop core (a pod runner in place of `run_loop.ENDPOINT`, still `None`) + the
-   ~4-week backlog window (~$2–2.5, one paid event) + SQLite aggregates; **5c3** — the category
-   layer (**the operator's taxonomy BEFORE any labeling**) + sidecar v2 + alerts v0 on spikes of
-   both polarities. Then **5d**: the first 14-day reporting cycle.
-2. **Two operator actions, both $0 and blocking nothing:** the RunPod serverless ticket (still not
-   filed — the hub-worker observation is a ready-made ticket) and pre-thinking the dairy /
-   ice-cream category taxonomy needed in 5c3.
-3. **The tree starts with SIX uncommitted paths** — `docs/SPEC.md` and `docs/STATUS.md` (the team
-   lead's tail), plus `knowledge/hot.md`, `knowledge/daily_logs/2026-08-06.md`,
-   `knowledge/daily_logs/2026-08-07.md` (untracked) and `knowledge/index.md`, which are the two
-   `/close` runs' own output. A step 0 that names fewer paths should **commit them, not stop** —
-   this has fired at every phase boundary since 5a. Stage by path, never `git add -A`.
-4. **G1a and G1c stay DEFERRED** until the loop's first reporting cycle, on its fresh data — also
-   the only new source of ru rows for G1a and of sarcasm for G1b, the old corpus having been
-   exhausted at 4.5d. Whatever is decided then starts a **new** pre-registration.
-5. **Phase 5 budgets: $8 GPU + $1 OpenRouter**, of which **$1.7069 GPU is spent** ($6.29 left,
-   $0 OpenRouter). Spend anchors are written before the first spend and never regenerated.
+**AFTER 2026-08-08 10:02 UTC, IN THIS ORDER — the whole sequence is wired and tested, ~63
+resolves.** Everything below is offline-ready; the wall is the only thing missing.
+
+1. `scripts/collect_5c1.py --join` — 10 of 21 left. The log is both cursor and pace, so it
+   continues rather than re-joining. **10 resolves.**
+2. `scripts/entry_check.py --gate-5c1` — appends the 16 "Дозаявка №3" city rows; the 64 existing
+   rows keep their `ruling` and `replaced`. Then `scripts/apply_gate_rulings_5c1.py`: PASS → posts
+   only, `comments_enabled: false`, no join. **16 resolves.** Expect registry 56 + up to 16.
+3. `--posts --only <the passes>` then `--comments --only <the joined>`. `--only` narrows the LOOP,
+   not the record — without it each pass re-resolves all 68. **16 + 21 resolves.** Both lists are
+   DERIVED, never retyped: passes from the gate record (`bucket == "city" and verdict == "PASS"`),
+   joined from `joins_5c1.jsonl` (`outcome in ("joined", "already_member")`).
+4. `shasum -c` 6/6, `run_loop.py --once --dry-run`, final Deliverable-2 report.
+
+**`make check` WILL GO RED between steps 2 and 3, and that is the gate reporting.** A city row that
+FAILs or FLAGs makes `final_bucket` raise — the STOP working — and it lands in
+`AWAITING_A_RULING` (empty today) with its evidence. `checked == 52` and the bucket counts move
+with the passes too. Read the red, do not loosen the assertion. Expected after clean passes:
+registry **up to 72**, launch **up to 58** (4 + 21 + up to 33), watch 14.
+
+**@LHVC_info will probably FLAG on its own merits** (0.2 posts/week, last post 2026-07-20 — a
+window opened on 08.08 can hold zero of its posts, and it has a group → "watch shape").
+@zinkivnews is next closest. Those go to the operator; they are findings, not bucket artifacts.
+
+5. **5c2** — the loop core (a pod runner in place of `run_loop.ENDPOINT`, still `None`) + the
+   ~4-week backlog window (one paid event) + SQLite aggregates. The queue it prices is the
+   WINDOW's comments, which do not exist yet.
+6. **`audience` IS DONE (D38) — 5c2 keys aggregates on it.** Closed list of 8 in
+   `market_pulse.registry.AUDIENCES`, filled for all **56** sources from the canon's table:
+   retail_official 5 · supermarket_deals 4 · cooking_recipes 13 · mothers_kids 9 · baby_food 7 ·
+   health_fitness 17 · food_quality_gov 1 · **regional 0** until the 16 pass the gate. Keyed by
+   HANDLE, never by id — `@VARUS_channel` is `varus`. Folding is the report's job (retail =
+   official + deals, mothers = mothers_kids + baby_food); the registry stays granular.
+5. **The chat-mining track is DEFERRED, not dropped** — @Mambabyua and @kulinariya_chat_a were
+   excluded as supergroups whose "posts" are member chat. Build nothing for it.
 
 ## 🚧 Blockers
 
-**NOTHING IS OPEN.** The one external fault is routed around rather than fixed: no RunPod
-serverless endpoint on this account reaches a job-consuming worker — proven not to be ours by
-**RunPod's own hub vLLM worker** failing the same way, and proven not to be the artifact by the
-same code answering correctly on a pod. Production moved to a stop-after pod, 5b.1 scored config A
-there, and serverless can only return through a fresh §3.11 (2) measurement. The money question
-that was open at the 19:43 checkpoint was ruled the same evening (decision 22). What is left before
-5c is a **briefing**, not a decision.
+**ONE, AND IT IS A CLOCK: the account-wide FloodWait clears 2026-08-08 10:02 UTC.** Nothing
+Telegram-side runs before then — joins, comment collection and any gate check all begin with
+`ResolveUsernameRequest`, which is what was rate-limited. Not a fault to fix and not something to
+work around: `scripts/collect_5c1.py` refuses until the time passes, and retrying inside the window
+extends it. Everything offline is unaffected.
 
-**Two things recorded rather than open:** the 100 GB CA-MTL-3 volume bills **~$0.24/day attached to
-nothing** (its fate is 5c's $0 step-0 calculation), and arm A's per-row dump is permanently lost.
-No pod, endpoint or template exists — `runpodctl pod list -a` and `serverless list` both `[]`.
+**NO COMPOSITION DECISION IS OUTSTANDING.** The @uasaler question is closed by the wave-2 ruling
+(out entirely), and wave 2 also ratified the five theme removals and the @discountua1 reversal. The
+next operator decision is the Poltava ledger's picks, and that one is not blocking.
+
+**The external fault is still routed around rather than fixed:** no RunPod serverless endpoint on
+this account reaches a job-consuming worker — proven not to be ours by **RunPod's own hub vLLM
+worker** failing the same way, and proven not to be the artifact by the same code answering
+correctly on a pod. Production is a stop-after pod; serverless can only return through a fresh
+§3.11 (2) measurement.
+
+**Recorded rather than open:** the CA-MTL-3 volume is **deleted** (07.08, proven by listing), so
+its ~$0.24/day has stopped and the ~2026-09-05 review is closed. Arm A's per-row dump is
+permanently lost. No pod, endpoint or template exists.
 
 ## ⚠️ Footguns for the next run
 

@@ -146,6 +146,25 @@ CANDIDATES = (
     # Late addition #2 (canon "Дозаявка №2", operator 2026-08-07 evening): a Poltava deals
     # aggregator, sent to this gate on the same terms.
     ("@akcii_skidki_plt", "late"),
+    # "Дозаявка №3" (operator 2026-08-08): the city feeds picked out of the 119-candidate Poltava
+    # scan. The canon lists them in prose rather than a table, and the derivation in
+    # tests/test_entry_gate_5c1.py reads that list, so this stays the canon's own order.
+    ("@mo3ambik", "city"),
+    ("@poltava_informue", "city"),
+    ("@poltava_misto", "city"),
+    ("@suspilnepoltava", "city"),
+    ("@telegraf_kremenchuk", "city"),
+    ("@kremenchug_live", "city"),
+    ("@gorishnie_plavni1", "city"),
+    ("@myrhorodtown", "city"),
+    ("@Hadiach_telegram", "city"),
+    ("@globine1", "city"),
+    ("@piryatingromada", "city"),
+    ("@Karlivka_live", "city"),
+    ("@PirOperative", "city"),
+    ("@dikankaa", "city"),
+    ("@zinkivnews", "city"),
+    ("@LHVC_info", "city"),
 )
 
 

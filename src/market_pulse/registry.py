@@ -19,6 +19,22 @@ SOURCE_TYPES = ("official_retail", "aggregator", "community", "government")
 composition carries @dpssgovua, Держпродспоживслужба, and a state food-safety inspectorate is
 none of the other three. It is the falsification-watch source SPEC 3.11 (4) authorised."""
 
+AUDIENCES = (
+    "retail_official",
+    "supermarket_deals",
+    "cooking_recipes",
+    "mothers_kids",
+    "baby_food",
+    "health_fitness",
+    "food_quality_gov",
+    "regional",
+)
+"""Whose audience a source speaks to — operator ruling 2026-08-08, canon
+`docs/CHANNELS-launch.md`, "Сегментация источников — audience". A closed list of exactly eight,
+kept at this granularity so a report can fold them into whatever coarse grouping it needs (retail
+= official + deals, mothers = mothers_kids + baby_food) — folding is reversible, a coarse field
+is not. Which source carries which value is the canon's table, never derived here."""
+
 
 @dataclass(frozen=True)
 class Source:
@@ -34,6 +50,10 @@ class Source:
     # channel posts again (SPEC 3.11 (4), operator 2026-08-06). A silent channel keeps its
     # group, so `comments_enabled` alone cannot say "do not join" — this flag does.
     watch: bool = False
+    # The third registry dimension, beside source_type ("who runs it") and the product taxonomy
+    # ("what is discussed"): whose audience this source speaks to. 5c2 keys aggregates on it, so
+    # a report can say "mothers think X, the regions think Y" with the sources behind it.
+    audience: str | None = None
 
 
 @dataclass(frozen=True)
@@ -103,6 +123,14 @@ def _sources(path: str | Path, entries) -> tuple[Source, ...]:
             # Strict where it is load-bearing: `watch: "no"` is truthy, and a watch channel read
             # as a launch channel is a group join the operator forbade.
             raise ValueError(f"{path}: source {sid!r} has a non-boolean watch {watch!r}")
+        audience = entry.get("audience")
+        if audience is not None and audience not in AUDIENCES:
+            # A closed list: a typo'd segment would silently make its own bucket in every
+            # aggregate 5c2 keys on this field, and read as a real audience nobody chose.
+            raise ValueError(
+                f"{path}: source {sid!r} has unknown audience {audience!r}, "
+                f"expected one of {', '.join(AUDIENCES)}"
+            )
         sources.append(
             Source(
                 sid,
@@ -112,6 +140,7 @@ def _sources(path: str | Path, entries) -> tuple[Source, ...]:
                 bool(entry.get("verified")),
                 bool(entry.get("comments_enabled")),
                 watch,
+                audience,
             )
         )
     return tuple(sources)

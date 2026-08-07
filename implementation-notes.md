@@ -3387,3 +3387,137 @@ error is a poor discriminator — it cannot tell "already gone" from "wrong enti
 `leave_group` now reads the membership flag first and records `not_a_member`, and when it does
 leave it re-reads the flag afterwards, because leaving is not proven by a request that did not
 raise.
+
+**D29 — @uasaler is out of the registry, and the open question D26 left is closed by ruling.**
+Wave 2 (canon `docs/CHANNELS-launch.md`, "Рулинги, волна 2") answers it: the 07.08 word named the
+CHAT, this one names the CHANNEL. `remove_sources` took the block out and left the line the
+registry has used since @znizhki_ua on 2026-07-27 — a silently shorter file cannot be told from
+one that never had the channel. Registry 57 → 56, posts 18 → 17, excluded 11 → 12, launch 42.
+Its 30 collected posts are **not** retracted: removing a source stops future collection and does
+not unsay what is already in the raw store. So the totals need a basis, and here are both, split
+now rather than after the next run: **as collected** 2,132 posts / 106 comments over the 58
+channels `results/collect_5c1.json` holds; of those, **1,830 posts and all 106 comments** belong to
+the 38 gated channels still in the launch set, **302 posts** to the 12 since-excluded ones, and
+**0** to the 14 watch channels, which is why they are watch. The next `--comments` pass regenerates
+that record over the **52** channels the 56-source registry now yields, so `totals.posts_stored`
+will fall from 2,132 to ~1,830 on a run that only ADDED comments. That is the removal being
+reflected, not data loss — the split above is what the drop is made of.
+
+**D30 — a reversed ruling now carries what it replaced, and the first one had to be dug out of
+git.** @discountua1 was KEPT at 11:14 and EXCLUDED at 13:55, and the second write overwrote the
+first in place: the record read as if the reversal had never happened, and only
+`git show 2970b71:results/entry_gate_5c1.json` could say otherwise. `record_reversal` appends the
+overwritten text to the row's `replaced` — `merge_sitting_returns`'s word for the value actually
+overwritten — and never rewrites it, so re-deriving the record adds no history (proved by running
+twice: identical apart from `applied_at` and the git stamp). The @discountua1 entry is seeded from
+`PRIOR_RULINGS`, recovered verbatim and checked by string equality against that commit, not by
+eye; the seed has its own idempotence guard because the live append cannot fire for a reversal
+that already happened. @uasaler's reversal was recorded by the mechanism as it ran.
+
+**D31 — the plan line was printing `launch 43` on a run that produced 42, and the script was
+wrong, not the canon.** `originals` counted every source in `before.sources` outside the new
+buckets, which on a run that *performs* a removal includes the source being removed — so the five
+theme exclusions printed `registry 9` instead of `registry 4`. The authoritative numbers were
+always `counts.sources_after` (read back after the write) and the bucket lengths; the print is now
+consistent with them. `remove_sources` had no test at all until now, which is uncomfortable for
+the one function in this script whose draft version would have deleted the taxonomy and the
+watchlist — two tests added, one of them removing the LAST source, which is the case that draft
+got wrong.
+
+**D32 — rulings 2 and 4 are queued behind the clock, not skipped.** At 14:19 UTC the wall from
+D27 clears at 2026-08-08 10:02 UTC, 19.7 hours out. The ruling is phrased for when it clears, so
+not running is following it; nothing Telegram-side was issued to test whether it really cleared,
+because a request inside the window lengthens it. `--plan` is offline and confirms the queue:
+21 authorised, 11 landed, 10 to go — @Pro_Detyintumama, @baby_broccoli_club, @chifit_family,
+@denisovapro, @eftforhealth, @olgaa_trainer, @rezeptmoi, @sashafitnesslife,
+@useful_healthy_fitness_menu, @ya_Nenka. @uasaler sat in posts, so ruling 1 does not touch the
+join set.
+
+**D33 — two more tasks are addressed to the executor in team-lead files, and neither is in the
+wave-2 rulings. Flagged, not started.** `docs/STATUS.md` gained an 08.08 paragraph assigning the
+`audience` field to the executor, and `docs/CHANNELS-launch.md` gained "Дозаявка №3" (16 Poltava
+city handles to gate, posts-only) and the "Сегментация источников — audience" table. The wave-2
+message lists four items and neither of these is among them, so under "execute the given scope
+exactly" they wait for the operator's word. What was done is the arithmetic, which is free: the
+segmentation table's 5+4+13+9+7+17+1 = 56 handles are **exactly** the 56 channels in
+`config/registry.yaml` — no channel listed twice, none in the canon that is not in the registry,
+none in the registry that the canon leaves out. Its own «Сверка» line is correct, so applying it
+would be mechanical. Дозаявка №3 needs the gate, which needs the wall from D27 to clear.
+
+**D34 — the city feeds get their own gate bucket, because `posts` would have flagged 11 of 16 for
+a group the ruling already accounted for.** "Дозаявка №3" enters posts-only under the STANDING
+ruling — city feeds are not joined until 5c2 has a category filter for threads, since without one
+a city chat's whole traffic lands in a paid inference queue. That is a decision about the JOIN,
+not a claim that these channels have no group: the scan ledger says **11 of the 16 do**
+(@mo3ambik, @telegraf_kremenchuk, @gorishnie_plavni1, @myrhorodtown, @Hadiach_telegram,
+@globine1, @Karlivka_live, @PirOperative, @dikankaa, @zinkivnews, @LHVC_info). The `posts` bucket
+asserts `group_expected: False`, so all eleven would have come back FLAGged on "posts-only
+bucket, but a discussion group is linked" — the bucket's expectation contradicting the ruling that
+placed them, sent back for a ruling that already exists in writing. The new `city` bucket asserts
+neither (`group_expected: None`, like `late`), so the group is measured and recorded without being
+turned into a verdict; every other check is unchanged and tested to be. The operator's
+parenthetical "(bucket posts, comments_enabled: false, watch: false)" describes the REGISTRY
+entry, and `CITY_FEEDS` in the ruling script delivers exactly that. A `city` row the ruling table
+does not name refuses to enter rather than falling through on its label. **Reversing this takes
+two edits:** `("@x", "city")` → `("@x", "posts")` for the 16 rows in `scripts/entry_check.py`'s
+`CANDIDATES`, and dropping the `if handle in CITY_FEEDS` branch in `final_bucket`; the `city`
+entry in `BUCKETS` can then go too.
+
+**D35 — one channel will FLAG on its own merits, and it is worth saying before the run.**
+@LHVC_info: 0.2 posts/week, last post 2026-07-20. A 28-day window opened on 08.08 can hold zero of
+its posts, and with a linked group that is the "silent in the window but the group is present —
+watch shape" FLAG. @zinkivnews (2.2/week, last 2026-07-31) is the next closest. Those are findings
+about the channels and go to the operator as flags, unlike D34's.
+
+**D36 — `--only`, because the fetch loop was going to cost 68 resolves to collect 16 channels.**
+The operator asked for resolve-budget awareness and `scripts/collect_5c1.py` had no way to scope a
+pass: `--posts` and `--comments` walk every collectable channel and `get_entity` runs before the
+per-phase checks, so each pass resolved all of them. `narrowed()` restricts the LOOP and never the
+record — `channel_row` reads the store rather than the run, so a scoped invocation still reports
+every channel's totals; narrowing the record would make a cheap run look like a shrunken corpus.
+The sequence then costs about **63 resolves**: 10 joins + 16 gate rows + 16 posts + 21 comments,
+against **~162** unscoped, and against the several hundred that bought the 20-hour wall. Both
+`--only` lists are DERIVED at the time, never retyped — the passes from the gate record
+(`bucket == "city" and verdict == "PASS"`) and the joined set from `results/joins_5c1.jsonl`
+(`outcome in ("joined", "already_member")`), which is the same list `run()` already reads.
+
+**D37 — `make check` is expected to go RED between step 2 and step 3, and that is the gate
+reporting, not breakage.** Four assertions are pinned to today's composition and move when the
+city feeds enter: `AWAITING_A_RULING` is an empty set, and a city row that comes back FAIL or FLAG
+(D35 predicts @LHVC_info) makes `final_bucket` raise, which is exactly what
+"FAIL or FLAG → report with evidence, do not resolve yourself" asks for — the handle goes into
+that set with its evidence, the way @akcii_skidki_plt did. `checked == 52`, the bucket counts
+(`posts == 17`, `excluded == 12`) and `4 + comments + posts == 42` all move with the passes, and
+`test_the_composition_matches_the_canons_own_summary` needs whatever summary the canon carries by
+then. Expected shape after clean passes: registry **56 + up to 16 = up to 72**, launch **42 + up
+to 16 = up to 58** (4 + 21 comments + up to 33 posts), watch 14 unchanged. A red suite here is
+read, not fixed by loosening the assertion.
+
+**D38 — `audience` is keyed by HANDLE, because the four originals' ids do not follow from their
+handles.** `@VARUS_channel` is `varus`, `@silposilpo` is `silpo`, `@atb_market_official` is `atb`
+— they were hand-written long before `source_entry` existed. An id-keyed table would have looked
+complete and shipped three sources with `audience: null`, which no aggregate can attribute. The
+table is transcribed into `apply_gate_rulings_5c1.AUDIENCE` and held to the canon by a test that
+parses the section, so "the table is the law" is checked rather than asserted; it was generated
+from the canon in the first place rather than retyped. `audience_of` refuses a channel the table
+does not name instead of sorting it by what its name looks like.
+
+Two things this needed beyond the field itself. **`update_sources` could only rewrite a line that
+already existed**, and all 56 entries lacked one — it now inserts a missing key after the block's
+last indented line, NOT at the block's end, because `_blocks` sweeps the removal comments that
+follow a source into the preceding block; appending at the end would have put
+`audience: supermarket_deals` after `# uasaler removed 2026-08-07: …`, outside the entry it
+belongs to. That exact shape is in the shipped file after `maudau` and the test uses it. And **the
+candidate loop never reaches the four originals**, so a second pass over the registry by handle
+covers them; a re-run then changes nothing (`shasum -c` OK).
+
+Four older tests broke and the break was correct: they built entries for invented handles
+(`@newchan`, `@tricky`, `@x`) that the table does not name. They now use real city feeds — named
+by the canon's regional row, not yet in the registry — which makes them a rehearsal of the block
+"Дозаявка №3" will append. `@uasaler`'s source_type assertion moved from `source_entry` to the
+dict, since nothing builds an entry for an excluded channel any more.
+
+Counts, re-derived from the shipped file: retail_official 5 · supermarket_deals 4 ·
+cooking_recipes 13 · mothers_kids 9 · baby_food 7 · health_fitness 17 · food_quality_gov 1 ·
+regional 0 = **56**, no source without a value, none outside the eight. `regional` stays empty
+until the 16 pass the gate — the canon's own «по прохождении гейта».
