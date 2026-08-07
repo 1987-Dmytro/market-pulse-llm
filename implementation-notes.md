@@ -3521,3 +3521,290 @@ Counts, re-derived from the shipped file: retail_official 5 · supermarket_deals
 cooking_recipes 13 · mothers_kids 9 · baby_food 7 · health_fitness 17 · food_quality_gov 1 ·
 regional 0 = **56**, no source without a value, none outside the eight. `regional` stays empty
 until the 16 pass the gate — the canon's own «по прохождении гейта».
+
+**D39 — the three national chains enter as `late`, and no new bucket was written for them.** The
+operator's word for "Дозаявка №5" is «comments per the group finding», and that sentence already
+exists in the code: `LATE_RULE` reads "PASS with an open discussion group → comments bucket and
+the joins list; PASS without one → posts-only; FAIL or FLAG → stop and report". So @forainfo,
+@ekomarket_shop and @tadaua go into the `late` bucket (`posts_expected: True`,
+`group_expected: None`) and into `GATED_LATE`, which routes them by what the gate measures. The
+contrast with "Дозаявка №3" is the point: the city feeds needed a NEW bucket because a standing
+ruling had already fixed their class against the finding, and these three have no such ruling —
+their class is exactly what the gate is being asked. `audience: retail_official` comes from the
+brief, spelled out one row per chain with the master list's own words beside it and a test that
+greps each comment back to the canon (proven by breaking it: «ЕКО Маркет» → «ЕКО Маркет Полтава»
+reddens `test_the_words_beside_the_retail_rows_are_the_canons_own`).
+
+**D40 — `--only` on the gate, because two batches gated together are two batches ruled together.**
+`run_gate` walks every candidate not already in the record, so adding three rows today would have
+put them in the same pass as the 16 city feeds — which the operator sequenced apart. The merge
+would not have been merely cosmetic: `final_bucket` raises `SystemExit` on the first unruled
+non-PASS row, so ONE flag anywhere in a pass blocks the registry write for EVERY row in it. With
+@LHVC_info predicted to FLAG on merits (D35), a joint pass would hold the three chains hostage to
+a verdict sitting about a Lokhvytsia city feed. `gate_todo` narrows the loop and never the record
+— `complete` still compares against all of `CANDIDATES`, so a scoped pass reads as incomplete
+because it is.
+
+**D41 — the market screen refuses to overwrite its own pass-1 record.** `results/theme_screen_5c1.json`
+is the evidence behind five theme exclusions, and it CANNOT be re-derived: it was measured over a
+composition that no longer exists, so a re-run writes a table that cannot contain the rows the
+ruling cites (@znishkom, @whitecode_zny, @offspringrus, @ATB_FANatik, @uasaler all left the
+registry on the strength of it). The default path now raises and names why; a later pass takes
+`--out`. Checked both ways in `tests/test_theme_screen_5c1.py`, and the pass-1 file's sha256 is
+unchanged by the test that runs the screen for real (`f1286943…`).
+
+**D42 — the canon's audience table is stale by three, and that is named rather than fixed.** The
+segmentation section says «retail_official (5)» and carries its own checksum «5+4+13+9+7+17+1 =
+56». The three chains of "Дозаявка №5" are placed in retail_official by the brief and by the
+master list, not by that table, so after they pass the table reads 5 where the registry holds 8,
+and the checksum line reads 56 against 59 (+16 regional = up to 75). `docs/CHANNELS-launch.md` is
+the operator's file; the mismatch is reported, and `test_the_audience_table_is_the_canons_own`
+carries the exception explicitly instead of silently widening.
+
+**D43 — five chains asked in one pass are five findings, and two of them will not close
+themselves.** The Telegram-side check of Novus, Velmart, Fozzy C&C, Auchan and METRO writes ONE
+note per chain into the gate record's `notes`, on the `hvylynka_search` convention: a search that
+matches nothing closes itself with a negative finding, a search that matches anything stays OPEN
+for a human read. Novus will match @NovusNews and Auchan will match its support bot — both are
+already named in the canon as NOT the consumer channel, so both notes will come back "MATCHES
+FOUND, not closed" and get their judgement written afterwards, from the rows, not from the canon's
+prediction. Nothing is pre-judged today. The pass stops on a FloodWait and keeps what it answered
+(`test_the_search_pass_stops_on_a_flood_wait_and_keeps_what_it_answered` drives `main` with a
+stub client through the refusal).
+
+**D44 — the brief numbering and the canon numbering are two different sequences, and no work is
+missing.** This brief is "addendum 7"; the executor's stream holds 3 (city feeds) and 4
+(audience), and the canon numbers its own additions 1–5. The two sections written between them —
+«Правило замены + резерв украиноязычных топов» with its "Дозаявка №4" (12 cooking_recipes reserve
+handles) and the master list itself — are plausibly briefs 5 and 6. Дозаявка №4 is authorised but
+NOT triggered: the canon defers it in its own words, «Активация замен — на вердикт-сессии
+оператора по market-скрину». Nothing from it is gated, and nothing from it is in `CANDIDATES`.
+
+**D45 — «market screen» has two possible referents, and the second one arrived while this was
+being wired.** Between the start of this task and its verifier run, `docs/SPEC.md` §3.11 (4) and
+`docs/CHANNELS-launch.md` grew two operator rulings dated 2026-08-08 that no brief in the
+executor's stream carries:
+
+- **Market-origin screen** — «the gate REQUIRES UA-market evidence and excludes RF-market channels
+  regardless of language», with market facts as discriminators (грн vs ₽, АТБ/Сільпо/Varus vs
+  Пятёрочка/Магніт, locations, domains, «запрещён на территории РФ»), ambiguity → FLAG, «applied
+  retroactively to every current source».
+- **Language policy** — UA-dominant posts as an entry requirement, retroactive; per-source UA/RU
+  shares computed OFFLINE from the collected window; RU-dominant → out with a group exit verified
+  by the membership flag; mixed → FLAG; every exclusion triggers the replacement rule.
+
+The brief for this addendum says «market screen included». Read against the repo alone that is
+`scripts/theme_screen_5c1.py`, which measures the tracked category over a collected window and is
+what the 07.08 exclusions used. Read against the SPEC as it now stands it is the market-ORIGIN
+screen, which does not exist in the code. The two ask different questions — "is this channel about
+food" versus "is this channel selling into the Ukrainian market" — and only the first is built.
+NEITHER is applied to the three chains today, because the gate has not run; the ambiguity is
+reported and not resolved here. Nothing retroactive was started: a language pass over 56 sources
+and an origin screen over the same is a deliverable with numbers, a FLAG path to the operator and
+a group-exit mechanism, and no brief covers it.
+
+Two knock-ons worth stating before they are discovered mid-run. The gate's language check keys on
+CYRILLIC PRESENCE, not on UA dominance (`script_mix`, and deliberately so — `langid`'s `other`
+bucket mixes "no letters" with "ua and ru tied"), so a channel can PASS the gate and still fail
+the new policy: the gate is not the instrument that answers it. And the shipped `audience` counts
+move if the policy is applied — the canon's own first read is that mothers_kids «опустошается
+почти целиком», which is 9 of the 56 rows in `AUDIENCE` plus the replacement rule firing per
+exclusion.
+
+**D46 — the source_type check was reading back its own constant, and is now a guard.** The first
+version asserted that every retail_official handle appears in `SOURCE_TYPE_RULING` with
+`official_retail` — which is the dict the same commit had just edited, so it could not fail. The
+invariant is now enforced where it matters: `source_type_of` raises when a channel the canon
+segments as `retail_official` would take the `community` default, since that segment IS "the
+chain's own channel" and the default would be speaking where a fact is known. The test drives the
+refusal with the ruling row removed, and a positive control beside it (@kopiyochka1,
+supermarket_deals, no ruling row → `community`) proves the guard discriminates instead of firing
+on everything. Verified by breaking: deleting `"@forainfo": "official_retail"` reddens it, and the
+file was restored from a copy — a `git checkout` used for the same purpose earlier in this session
+reverted the whole day's edits to that script, which is a warning worth writing down.
+
+**D47 — the threshold is a file with its own timestamp, not a constant with a comment.** The brief
+says to fix the bar BEFORE computing and log it in the record. A constant inside a script that was
+run before anyone read it proves nothing about the order, so
+`results/language_census_5c1.preregistration.json` was written first — dominance **0.70**,
+min_decidable **10**, the five verdict names, the denominator rule, the two controls with their
+expected directions, and the reasons for each number — and `language_census_5c1.py` refuses to run
+unless its own constants equal that file's. The census record cites the file's
+**sha256 59da1abb…**, so "fixed beforehand" is checkable from the record alone. A sensitivity
+table (what 0.6/0.8/0.9 would have said) rides in the record as DESCRIPTION and is not a reason to
+move anything: `sensitivity_description_only`.
+
+**D48 — the brief names three verdicts and the corpus needs five.** UA_DOMINANT / RU_DOMINANT /
+MIXED cannot absorb the two states that are not opinions about a language: **NO_POSTS_IN_WINDOW
+(14)** — every watch source, which collected nothing at all — and **TOO_FEW_DECIDABLE (18)** —
+sources with posts but fewer than ten decidable ones. They are different problems with different
+fixes, so one name for both would hide which one a row is. Neither carries a share: a share
+computed on two posts reads like a measurement.
+
+**D49 — the census answers for 24 of 56 sources, and that is the finding.** UA_DOMINANT **21** ·
+RU_DOMINANT **3** · MIXED **0** · TOO_FEW_DECIDABLE **18** · NO_POSTS_IN_WINDOW **14**. Two
+consequences the operator needs before ruling:
+
+- **It cannot support the exit of the three held channels.** @Pro_Detyintumama has 4 posts in the
+  window, @rezeptmoi 2, @baby_broccoli_club 1 — TOO_FEW_DECIDABLE, all three. Holding them out of
+  tomorrow's joins is right anyway (cheap, reversible), but an exit would rest on the title read,
+  not on this census.
+- **Watch cannot be measured from posts at all, and no cheap pass fixes it.** All 14 watch sources
+  are at zero, and that zero is the channels' own silence measured twice: the 5c1 gate recorded
+  `posts_per_week: 0.0` and `last_post_at: null` for every one of them on 07.08, and the collector
+  found nothing on the same window. A posts pass over the 14 would spend ~14 resolves to buy 14
+  zeros. Their language needs a different instrument (title/description, or the group), not a
+  bigger sample.
+
+**D50 — the detector sat two exams before its verdicts were read, and a third by accident.**
+Pre-registered controls: @dpssgovua (the state food-safety service) must read UA — measured
+**1.0 over 79 posts**; @offspringrus (excluded 07.08 as a Russian shop, its rows still in the
+store, which is what makes it usable as a negative control) must read RU — measured **1.0 over 16**.
+Beside that, the census verdict direction agrees with the 5c1 gate's own `detect_mix` — the same
+detector over a DIFFERENT sample, taken a day earlier — on **21 of 21** channels where both exist.
+The four originals are not in the gate record (out of its scope), so they have no cross-check.
+
+The result is bimodal to a degree worth stating: **every measurable source is at exactly 0.000 or
+1.000** — not one of the 24 has a single post in the other language, which is why MIXED is empty.
+That is a property of the corpus (single-language feeds, and UA/RU alphabets that are nearly
+disjoint in any sentence-length text), not of rounding: the shares are stored to three decimals
+and were searched for strict intermediates, of which there are none.
+
+**D51 — three joins are held, and the record says so because the log cannot.**
+@Pro_Detyintumama, @rezeptmoi and @baby_broccoli_club are subtracted from tomorrow's join list
+AFTER `joinable`'s two-derivation cross-check, so the drift guard still compares the full
+authorised set. A held channel writes no line into `results/joins_5c1.jsonl` — the log only has
+lines for attempts — so `HELD_FOR_CENSUS` rides in the run record's `joins.held` with its reason,
+and `--plan` now prints `21 authorised, 11 landed, 7 to go, 3 held for the language census`. The
+"a held handle must be one the rulings authorised" check is a TEST against the shipped gate
+record, not a runtime guard: a synthetic record built by a test of something else has no reason to
+carry today's hold, and a guard that fired on it would only teach the fixtures to recite this
+constant.
+
+**D52 — the census cannot confirm "List A (7 UA)" either, and saying only the exit-side gap would
+have read as an endorsement.** The brief holds three joins because they are RU-titled and lets
+seven through as UA. Measured, the seven split the same way the three do: **UA_DOMINANT 3** —
+@sashafitnesslife (20 decidable), @denisovapro (17), @ya_Nenka (10, exactly at the bar) —
+**TOO_FEW_DECIDABLE 4** — @useful_healthy_fitness_menu (9), @olgaa_trainer (6), @chifit_family (4),
+@eftforhealth (1). So four of the seven are a title read, the same kind of read that produced
+"exit expected" for the held three. The action does not change (joining is authorised, cheap and
+reversible; the hold is cheap and reversible) — only the claim does.
+
+**D53 — one of the three RU rows fails a SECOND ruling, on its own quoted evidence.** @retsepty5's
+third recorded example is a courier-recruitment ad for «доставка заказов Яндекс Еды и Яндекс
+Лавки… доход до 8 500 ₽» — rubles and a Russian delivery platform, which is exactly what SPEC
+§3.11 (4)'s market-origin screen names as a discriminator («currency in price posts (грн vs ₽)»).
+That makes it the strongest of the three exits: RU-dominant by this census AND RF-market by the
+ruling whose instrument does not exist yet (D45). It is also the first concrete evidence that the
+unbuilt screen would have something to find, and the evidence was already in the record — it only
+needed reading as a market fact rather than as a language row.
+
+**D54 — the sensitivity table moves the bar that decides nothing and is silent on the bar that
+decides 18 rows.** `dominance` at 0.6/0.7/0.8/0.9 gives 21/3/0 every time — the verdicts do not
+rest on where it was put. `min_decidable` is a different matter and it is NOT swept, because
+sweeping the bar that would hand out 18 more verdicts is the tuning move the pre-registration
+exists to prevent. What is reported instead is where the excluded rows actually sit, which prices
+the bar without moving it: **@useful_healthy_fitness_menu is one decidable post short (9)**,
+@marketopt_promo has 8, @olgaa_trainer and @atb_aktsiyi 6 each. @atb_aktsiyi is the instructive
+one: 53 posts in the window and only 6 decidable, because it posts flyer images — the same
+text-free shape that excluded @ATB_FANatik on the theme screen.
+
+**D55 — addendum 9 names a segment the closed list does not have, and both guards already refuse
+it.** The brief routes a found candidate to «segment food_quality». `market_pulse.registry.AUDIENCES`
+holds eight values and the nearest is **`food_quality_gov`**, which is the STATE food-safety
+service (@dpssgovua, its only member). The Consumer Union of Ukraine is an NGO running its own lab
+checks, so `food_quality_gov` would be factually wrong about who runs it, and `food_quality` does
+not exist. Nothing was invented: the value is the canon's table to change, not this script's.
+
+Checked rather than assumed, both directions:
+
+- the loader refuses the value — `source 'dpssgovua' has unknown audience 'food_quality', expected
+  one of retail_official, …` on a copy of the registry with the word swapped;
+- `audience_of` refuses an unnamed handle — `@… has no row in the audience table — the canon's
+  «Сегментация источников» is the law and it does not name this channel`.
+
+So if the search finds something, the gate runs and the registry write STOPS with a message naming
+the missing ruling. That is the intended shape and no code change is needed today; what the
+operator owes is one word — extend the closed list with `food_quality` (additive, same shape as
+`audience` itself: a value, a canon row, a test) or place the channel in `food_quality_gov` and
+accept that the name then means "food quality, whoever runs it".
+
+The search itself is wired as ONE note (`food_quality_search`, five queries), not five: addendum 9
+asks whether a single channel exists under any of five names, unlike "Дозаявка №5" where five
+chains were five independent questions. «фальсифікат» is deliberately a topic marker rather than a
+name — a counterfeit-food channel that is not this one is still worth a human look, and any match
+keeps the note open for that look instead of auto-closing it.
+
+**D56 — wave 3 applied: registry 56 → 41, and every exit carries its own numbers.** The canon's
+table is the law and the arithmetic agrees with it to the row: **launch 33 = 4 originals + 15
+comment-capable + 14 posts-only · watch 8 · excluded 27 · registry 41**. Fifteen exits, four
+reasons: 3 on the census (@retsepty5 ru 1.00/139, @retsepty4 1.00/115, @katyal55 1.00/36), 1 on
+market-origin evidence (@tretyakovaele), 5 RU-title TOO_FEW, 6 RU-title watch. Each removal left
+its line in `config/registry.yaml` on the znizhki-ua convention, carrying the reason AND the
+numbers, because a silently shorter file cannot be told from one that never had the channel.
+`taxonomy:` and `watchlist:` are byte-identical after the write.
+
+**The market-origin evidence for @tretyakovaele is in our own store, not only in the sitting.**
+Its single post in the window reads «Мы с Миланой прилетели в **Сочи**, на Красную Поляну» — a
+Russian-language post about travel into the RF, which is what SPEC §3.11 (4)'s screen excludes
+regardless of language. That is the one exit the census could not have produced: 1 decidable post
+is TOO_FEW by the pre-registered bar, so the language instrument was silent and the market one
+spoke. Cost, named because it is the largest in this ruling: 244,527 subscribers, the only channel
+with collected comments (106 rows) and the biggest comment source in the composition.
+
+A caution from finding it: `grep -ril "сочи"` matches four more channels, and all of them are
+false — «сочився» (Ukrainian for *oozed*) in three recipe feeds and «сочиняют» in a comment. The
+same shape as the lexicon's known `сир`+`ий` collision. The evidence is the row, never the count.
+
+**D57 — `joins_authorised` is history, so the live join set is derived rather than rewritten.**
+Wave 3 excluded six channels whose joins had already been authorised — three of them members —
+which made `joinable`'s two-derivation cross-check raise: the registry no longer had them, the
+rulings' frozen list still did. Rewriting `joins_authorised` would have un-said what was
+authorised on 07.08, so the fix subtracts the composition's own `excluded` from it instead. After
+that the two derivations agree again at **15 authorised = 8 members + 7 List A**, exactly the
+canon's own count. `HELD_FOR_CENSUS` and its plumbing are gone: wave 3 superseded the hold by
+removing all three channels outright, and a constant that holds nothing is worse than no constant.
+
+**D58 — `--leave` could fire inside the FloodWait window, and now cannot.** `leave_group` starts
+with `get_entity`, which IS a `ResolveUsernameRequest` — the request the wall is on — so a leave
+attempted today would not leave anything and would lengthen the window. The guard was reachable
+only by `--join`/`--posts`/`--comments`; it is now one helper called by both it and `--leave`,
+while `--plan` stays usable because it talks to nobody. Checked both ways, with a negative control
+for the expired window. **So the three group exits (@katyal55, @tretyakovaele, @kuksa2022) are
+QUEUED, not done**: 3 resolves, first thing after 10:02 UTC, membership flag re-read after each
+(D28), and the report says unconfirmed rather than implying otherwise.
+
+**D59 — the audience rename needed a hand edit, because the loader is strict by design.** The
+migration `food_quality_gov` → `food_quality` could not be done by the script that owns the field:
+`load_registry` refuses an unknown audience, so `apply_gate_rulings_5c1.py` could not even read
+the file it was supposed to migrate. One line in `config/registry.yaml` (verified as exactly one
+occurrence before the write, and by `diff` after), then the script agreed with it and changed
+nothing further. The canon's own segmentation table still spells the old value in its older
+section, so `canon_audience()` now applies the renames the canon declares elsewhere — parsed from
+the file with `` `x` переименован в `y` ``, never typed here — which keeps "the table is the law"
+true of the whole document instead of its oldest section.
+
+**D60 — the ledger delta, and what it is a floor of.** Leaving: **423,072 subscribers** across the
+15 (largest @tretyakovaele 244,527, then @retsepty4 85,593 and @intensiv_Mamiev 29,683). Remaining:
+**852,254** across the 37 sources that have a gate-measured count. Both figures EXCLUDE the four
+originals — @silposilpo, @atb_market_official, @VARUS_channel, @msuaaaa are out of the gate's scope
+and carry no subscriber row in `results/discovery_5a1.json` either — so the totals are floors while
+the delta is exact. Against SPEC §3.11 (4)'s 10,000,000 coverage target the portfolio is far short
+either way, and mothers_kids is now **0 launch sources, 1 watch** (@itsmamix): the harvest is the
+only path back into that segment, which is why the canon calls it obligatory rather than optional.
+
+**D61 — the exits are unreachable by collection before their groups are left, and that is checked
+rather than assumed.** `--posts` and `--comments` iterate `collectable(registry, gate)`, which is
+registry-derived, so all fifteen dropped out of the loop the moment the registry was written:
+37 channels, `chans ∩ exits = ∅`. The join log's `left` row (D28) is what stops the CURSOR from
+counting a group as joined, but it is the second line of defence here, not the first — so if
+tomorrow's step 0 errors on one of the three, the failure is contained to "we are still in a group
+we should not be in", never to "we collected from a source the operator removed".
+
+**D62 — @itsmamix has the same measured property as the six watch exits and stays.** All seven
+watch channels the census touched are `NO_POSTS_IN_WINDOW`, and the removal comments say exactly
+that for the six. What separates the seventh is not in any measurement: its title is Latin, so the
+title ruling that removed the others does not reach it, and the canon says the language question
+waits for posts if it wakes up. Recorded here because six weeks from now the registry will show
+six channels removed for a property the seventh visibly shares, and the distinguishing fact lives
+in the canon rather than in the data.

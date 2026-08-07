@@ -277,7 +277,28 @@ the team-lead recommendation, the ledger prices it — + food-quality /
 falsification watch, + direct seed-handle checks from the research
 note) produces candidates only, and every new channel
 enters through the track-R entry gate before its rows reach train or
-production aggregates. **Coverage target (operator, 2026-08-05): the
+production aggregates. **Market-origin screen (operator ruling,
+2026-08-08, wartime-principled and data-quality-motivated): the gate
+REQUIRES UA-market evidence and excludes RF-market channels regardless
+of language — RU-language is not RF (Ukrainian consumers write in
+Russian), so the discriminators are market facts: currency in price
+posts (грн vs ₽), retailer names (АТБ/Сільпо/Varus vs Пятёрочка/
+Магнит/Перекрёсток), locations, domains, «запрещён на территории РФ»
+disclaimers. Ambiguity → FLAG to the operator, never a silent pass.
+Applied retroactively to every current source and standing for every
+future candidate.**
+**Language policy (operator ruling, 2026-08-08, against the team lead's
+softer recommendation — recorded, not smoothed): the composition takes
+UKRAINIAN-language channels only — channel-level UA dominance of posts
+is an entry requirement, applied retroactively. The operator's market
+read: by 2026 posts and comments run Ukrainian across Ukraine, with
+occasional RU comments (Дніпропетровщина most of all); the model KEEPS
+its RU capability for stray comments inside UA channels — the bilingual
+training is insurance, not an invitation. Mechanics: per-source UA/RU
+post shares computed OFFLINE from the collected window; RU-dominant →
+out (members leave, verified by membership flag); mixed → FLAG to the
+operator. Every exclusion triggers the replacement rule (same segment,
+UA, max audience).** **Coverage target (operator, 2026-08-05): the
 monitored portfolio aims at ≥10,000,000 summed subscribers.** Discovery
 keeps a coverage ledger: per-candidate subscriber counts, the current
 four's sum, and the gap to target — with two caveats printed beside the

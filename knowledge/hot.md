@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-07 16:45:38 (every SessionStart)
+**Auto-refreshed:** 2026-08-07 19:33:39 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+2fc784a docs(5c1): the sixteen regional rows say where each one came from
+9cb2eb8 feat(5c1): the registry gains audience, and the segment is the canon's word
 13b04e6 feat(5c1): five channels out of the registry, and a 20-hour wall on username resolution
 a1b7ee0 feat(5c1): the theme gap, measured — 15 launch channels post no food at all
 c6cd44d fix(5c1): gating one late candidate silently stopped the live collection
-2970b71 feat(5c1): the second late batch ruled, the city scan landed, the volume is gone
-4cd9ab4 docs: the volume ruling — option (b), the CA-MTL-3 volume is deleted
 ```
 
 ## 📋 Recent decisions
@@ -31,10 +31,13 @@ c6cd44d fix(5c1): gating one late candidate silently stopped the live collection
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-07 17:55 (wave 2 · "Дозаявка №3" wired · `audience` filled for all 56).
-**5c1 is executed except the tail of the joins.** The morning's "nothing was executed" is gone: 16
-commits from `82ddfe1` plus this one, `make check` 1028 → **1135 passed**, **$0** spent, and the
-CA-MTL-3 volume is **deleted** so its
+**Last update:** 2026-08-07 21:00 (**wave 3 applied — registry 56 → 41**, `food_quality` renamed,
+three group exits queued. Before it, 20:05: addendum 9's search wired; 19:40: the census computed — 21 UA · 3 RU · 36 without a
+verdict — and three joins held pending the operator's word. Before it, 18:52: "Дозаявка №5" wired
+and queued; 16:52: wave 2 · "Дозаявка №3" · `audience`).
+**5c1 is executed except the tail of the joins.** The morning's "nothing was executed" is gone: 18
+commits `82ddfe1` → `2fc784a`, `make check` 1028 → **1137 passed**, **$0** spent, and the CA-MTL-3
+volume is **deleted** so its
 ~$0.24/day has stopped. The launch composition was rebuilt four times in one day — 51 → 48
 (rulings) → 43 (theme screen) → **42** (wave 2: @uasaler out entirely) — and the day ended against
 an **account-wide FloodWait of 20 hours** on username resolution, clearing **2026-08-08 10:02
@@ -69,6 +72,16 @@ tables; its two rulings sections amend them, and the registry is what the loop r
 CHAT, the 08.08 ruling names the CHANNEL, so it left the registry entirely. **Removing a source
 does not retract its rows** — its 30 posts are still in the raw store, which is why collection
 totals carry a basis.
+
+**THE REGISTRY HAS A THIRD DIMENSION: `audience`, FILLED FOR ALL 56.** Beside `source_type` (who
+runs it) and the taxonomy (what is discussed) — whose audience a source speaks to. Closed list of
+eight in `market_pulse.registry.AUDIENCES`: retail_official 5 · supermarket_deals 4 ·
+cooking_recipes 13 · mothers_kids 9 · baby_food 7 · health_fitness 17 · food_quality_gov 1 ·
+**regional 0** until the 16 city feeds pass the gate. **Keyed by HANDLE, never by source id** —
+`@VARUS_channel` is `varus`, `@silposilpo` is `silpo`, so an id-keyed table looks complete and
+ships nulls. The assignment is the canon's table, held to it by a test that parses the section;
+5c2 keys aggregates on it and folding (retail = official + deals) is the report's job, so the
+registry stays granular.
 
 **THE WINDOW IS COLLECTED AND THE COMMENTS ARE NOT.** `results/collect_5c1.json`: **2,132 posts**
 over 58 channels, window fixed at `since 2026-07-10T10:33:14Z`, 0 damaged lines, `shasum -c` **6/6**
@@ -125,37 +138,55 @@ refetch like the 5a poll census — **$0**, sidecar v2 **beside** raw v1, never 
 **AFTER 2026-08-08 10:02 UTC, IN THIS ORDER — the whole sequence is wired and tested, ~63
 resolves.** Everything below is offline-ready; the wall is the only thing missing.
 
-1. `scripts/collect_5c1.py --join` — 10 of 21 left. The log is both cursor and pace, so it
-   continues rather than re-joining. **10 resolves.**
-2. `scripts/entry_check.py --gate-5c1` — appends the 16 "Дозаявка №3" city rows; the 64 existing
-   rows keep their `ruling` and `replaced`. Then `scripts/apply_gate_rulings_5c1.py`: PASS → posts
-   only, `comments_enabled: false`, no join. **16 resolves.** Expect registry 56 + up to 16.
+0. **`--leave @katyal55 @tretyakovaele @kuksa2022`** — wave 3's three member exits, FIRST because
+   they are the only actions that undo something already done. **3 resolves**, the flag re-read
+   after each (D28: leaving is not proven by a request that did not raise).
+1. `scripts/collect_5c1.py --join` — **7 left (List A), all authorised**; the six wave-3 exits
+   dropped out of the authorised set by derivation, not by rewriting `joins_authorised`. The log
+   is both cursor and pace. **7 resolves.** Only 3 of the 7 are measured UA (@sashafitnesslife,
+   @denisovapro, @ya_Nenka); the other 4 are a title read, same as the exits were.
+2. `scripts/entry_check.py --gate-5c1` — the 16 "Дозаявка №3" city rows; the existing rows keep
+   their `ruling` and `replaced`. Then `scripts/apply_gate_rulings_5c1.py`: PASS → posts only,
+   `comments_enabled: false`, no join. **16 resolves.** Expect registry 41 + up to 16.
 3. `--posts --only <the passes>` then `--comments --only <the joined>`. `--only` narrows the LOOP,
-   not the record — without it each pass re-resolves all 68. **16 + 21 resolves.** Both lists are
-   DERIVED, never retyped: passes from the gate record (`bucket == "city" and verdict == "PASS"`),
-   joined from `joins_5c1.jsonl` (`outcome in ("joined", "already_member")`).
+   not the record. **16 + 15 resolves.** Both lists are DERIVED, never retyped: passes from the
+   gate record (`bucket == "city" and verdict == "PASS"`), joined from `joins_5c1.jsonl`
+   (`outcome in ("joined", "already_member")`, minus anything since left).
 4. `shasum -c` 6/6, `run_loop.py --once --dry-run`, final Deliverable-2 report.
+5. **"Дозаявка №5" — three national chains, wired 07.08 and queued BEHIND the four steps above**
+   (operator: "after the phase-close queue"). `--gate-5c1 --only @forainfo @ekomarket_shop
+   @tadaua` — the gate now takes `--only` for the same reason the collector does, and here it also
+   keeps two batches' RULINGS apart: `final_bucket` refuses the whole apply run over one unruled
+   FLAG, so a joint pass would hold these three hostage to a verdict about @LHVC_info. Bucket
+   `late` → comments or posts by the group finding, `audience: retail_official`,
+   `source_type: official_retail`. **3 resolves**, then `late_batch_5c1.py --search-retail` for
+   the five chains the web pass missed (**10 searches, not resolves**; one note per chain, Novus
+   and Auchan will come back "MATCHES FOUND, not closed" and need a written judgement), and
+   `--search-food-quality` for the Consumer Union of Ukraine's counterfeit-dairy channel
+   (addendum 9: **5 searches**, ONE note — one channel asked about under five names). If it is
+   found, the gate runs and the registry write will STOP: the brief's segment «food_quality» is
+   not in the closed list of eight and `food_quality_gov` means the STATE service. That is the
+   operator's word, and both guards already refuse to guess it (D55).
+6. **mothers-UA harvest (addendum 8 item 4, REQUIRED not optional)** — similar-channels from
+   @ya_Nenka, @tarilka_malyuka, @blwbabies + @TGStat_Bot lookups → `results/harvest_mothers_ua.json`
+   as a ledger for the operator's picks. Nothing enters from it without the gate. Resolve-budget
+   aware, and on any FloodWait: stop and record. Note what the census actually says about the
+   premise — the segment's emptying is predicted, not yet measured (see Blockers).
 
 **`make check` WILL GO RED between steps 2 and 3, and that is the gate reporting.** A city row that
 FAILs or FLAGs makes `final_bucket` raise — the STOP working — and it lands in
 `AWAITING_A_RULING` (empty today) with its evidence. `checked == 52` and the bucket counts move
 with the passes too. Read the red, do not loosen the assertion. Expected after clean passes:
-registry **up to 72**, launch **up to 58** (4 + 21 + up to 33), watch 14.
+registry **up to 57** (41 + 16), launch **up to 49** (33 + 16), watch 8.
 
 **@LHVC_info will probably FLAG on its own merits** (0.2 posts/week, last post 2026-07-20 — a
 window opened on 08.08 can hold zero of its posts, and it has a group → "watch shape").
 @zinkivnews is next closest. Those go to the operator; they are findings, not bucket artifacts.
 
 5. **5c2** — the loop core (a pod runner in place of `run_loop.ENDPOINT`, still `None`) + the
-   ~4-week backlog window (one paid event) + SQLite aggregates. The queue it prices is the
-   WINDOW's comments, which do not exist yet.
-6. **`audience` IS DONE (D38) — 5c2 keys aggregates on it.** Closed list of 8 in
-   `market_pulse.registry.AUDIENCES`, filled for all **56** sources from the canon's table:
-   retail_official 5 · supermarket_deals 4 · cooking_recipes 13 · mothers_kids 9 · baby_food 7 ·
-   health_fitness 17 · food_quality_gov 1 · **regional 0** until the 16 pass the gate. Keyed by
-   HANDLE, never by id — `@VARUS_channel` is `varus`. Folding is the report's job (retail =
-   official + deals, mothers = mothers_kids + baby_food); the registry stays granular.
-5. **The chat-mining track is DEFERRED, not dropped** — @Mambabyua and @kulinariya_chat_a were
+   ~4-week backlog window (one paid event) + SQLite aggregates, **keyed by `audience`**. The queue
+   it prices is the WINDOW's comments, which do not exist yet.
+6. **The chat-mining track is DEFERRED, not dropped** — @Mambabyua and @kulinariya_chat_a were
    excluded as supergroups whose "posts" are member chat. Build nothing for it.
 
 ## 🚧 Blockers
@@ -166,9 +197,45 @@ Telegram-side runs before then — joins, comment collection and any gate check 
 work around: `scripts/collect_5c1.py` refuses until the time passes, and retrying inside the window
 extends it. Everything offline is unaffected.
 
-**NO COMPOSITION DECISION IS OUTSTANDING.** The @uasaler question is closed by the wave-2 ruling
-(out entirely), and wave 2 also ratified the five theme removals and the @discountua1 reversal. The
-next operator decision is the Poltava ledger's picks, and that one is not blocking.
+**WAVE 3 IS APPLIED: THE REGISTRY IS 41, AND THE LAUNCH MOTHERS SEGMENT IS EMPTY.**
+56 → **41** = launch 33 (4 originals + 15 comment-capable + 14 posts-only) + watch 8, matching the
+canon's table row for row. Fifteen exits with four reasons: 3 on the census (@retsepty5 ru 1.00 over
+139 posts · @retsepty4 1.00/115 · @katyal55 1.00/36), **1 on market-origin evidence**
+(@tretyakovaele — its one windowed post is «прилетели в Сочи, на Красную Поляну», a flight into the
+RF; 244k subscribers and the only channel with collected comments, the costliest row in the
+ruling), 5 RU-title TOO_FEW and 6 RU-title watch. Every removal left its line with its numbers;
+`taxonomy:`/`watchlist:` byte-identical. Ledger: **−423,072 subscribers**, 852,254 remain — both
+floors, the four originals carry no measured count anywhere. `audience.food_quality_gov` →
+**`food_quality`** (wave-3 ruling; who runs it is `source_type`'s question). **mothers_kids: 0
+launch, 1 watch (@itsmamix)** — the harvest is the only way back into the segment.
+
+**THREE GROUP EXITS ARE QUEUED, NOT DONE.** @katyal55, @tretyakovaele and @kuksa2022 are out of the
+registry, but leaving their groups is Telegram-side: `leave_group` starts with `get_entity`, which
+IS the resolve the wall is on, so a leave fired today would lengthen the window instead of leaving
+anything. `--leave` is now behind the same guard as `--join` (it was not), and the three go first
+after 10:02 UTC — **3 resolves**, membership flag re-read after each.
+
+**THE MARKET-ORIGIN SCREEN STILL DOES NOT EXIST** (SPEC §3.11 (4), operator 08.08): UA-market
+evidence required, RF-market channels excluded regardless of language, retroactive to every source.
+No brief has ordered it built, and it makes «market screen» in the "Дозаявка №5" brief ambiguous —
+the repo's `theme_screen_5c1.py` answers "is this about food", the new ruling asks "is this selling
+into the Ukrainian market". See D45.
+
+**ONE COMPOSITION DECISION IS WAITING ON THE OPERATOR AND NOTHING MOVES WITHOUT IT:** the census
+list. Note both halves of what it cannot see — of tomorrow's 7 joins only 3 are measured UA
+(@sashafitnesslife, @denisovapro, @ya_Nenka), the other 4 are a title read exactly like the 3 held.
+ Three sources are RU_DOMINANT with their numbers and their own posts quoted in the record;
+36 more carry no verdict and the two reasons are named separately. Two things the census CANNOT
+do, so they are decisions and not tasks: it cannot support the exit of the three held joins
+(4, 2 and 1 posts each — the hold itself is right and reversible), and it cannot see the watch
+bucket at all, whose 14 zeros are the channels' own silence measured twice (the gate recorded
+`posts_per_week: 0.0` and `last_post_at: null` for every one on 07.08). A posts pass over watch
+would spend ~14 resolves to buy 14 zeros.
+
+**NO OTHER COMPOSITION DECISION IS OUTSTANDING.** @uasaler is closed by the wave-2 ruling (out
+entirely), wave 2 ratified the five theme removals and the @discountua1 reversal, and the Poltava
+ledger's picks are made — "Дозаявка №3", 16 handles, waiting on the gate rather than on a person.
+The next decision comes back only if a city feed FAILs or FLAGs, which is what the STOP is for.
 
 **The external fault is still routed around rather than fixed:** no RunPod serverless endpoint on
 this account reaches a job-consuming worker — proven not to be ours by **RunPod's own hub vLLM
