@@ -163,6 +163,36 @@ def test_an_emoji_title_survives_the_yaml_round_trip(tmp_path):
 # --- the counts are the canon's, not the script's -----------------------------------------------
 
 
+def test_the_shipped_registry_is_re_derivable_from_the_gate_record():
+    """The registry was written by this script, then amended by hand once (@marketopt_promo's
+    source_type). A hand edit is exactly how a generated file and its generator start disagreeing
+    in silence, so every entered channel is re-derived here and compared field by field.
+    """
+    record = json.loads((REPO_ROOT / "results" / "entry_gate_5c1.json").read_text(encoding="utf-8"))
+    shipped = {
+        handle: src
+        for src in load_registry(REPO_ROOT / "config" / "registry.yaml").sources
+        for handle in src.telegram_channels
+    }
+    checked = 0
+    for candidate in record["candidates"]:
+        bucket, _ = apply.final_bucket(candidate)
+        if bucket is None:
+            assert candidate["handle"] not in shipped, "an excluded channel is in the registry"
+            continue
+        expected = apply.source_entry(candidate, bucket)
+        got = shipped[candidate["handle"]]
+        assert (got.id, got.name, got.source_type, got.comments_enabled, got.watch) == (
+            expected["id"],
+            expected["name"],
+            expected["source_type"],
+            expected["comments_enabled"],
+            expected["watch"],
+        ), candidate["handle"]
+        checked += 1
+    assert checked == 58
+
+
 def test_the_composition_matches_the_canons_own_summary():
     """`docs/CHANNELS-launch.md` states the post-ruling summary in prose. If the script and the
     canon disagree about how many channels launch, the script is wrong by definition."""

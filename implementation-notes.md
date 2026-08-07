@@ -3258,3 +3258,12 @@ moved.
 × 60 = $27.67/mo is identical in all three options and would swamp the difference being decided;
 worse, its row count is test v4's 758, not a measured production flow. It is printed once, beside
 the table, with that assumption named.
+
+**D17 — @marketopt_promo is `official_retail` by operator amendment, and the drift it could have
+caused is now tested away.** The source_type ruling's "community — the rest" was applied
+literally at the registry write and flagged in the report; the operator amended it the same
+session. The value is changed in two places — the generator's ruling table and the generated
+file — which is exactly how a generated file and its generator start disagreeing in silence, so
+`test_the_shipped_registry_is_re_derivable_from_the_gate_record` now re-derives all 58 entered
+sources from `results/entry_gate_5c1.json` and compares id, name, source_type, comments_enabled
+and watch field by field. It also asserts that no excluded channel is in the registry at all.

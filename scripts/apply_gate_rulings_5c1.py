@@ -79,13 +79,12 @@ SOURCE_TYPE_RULING = {
     "@ATB_FANatik": "aggregator",
     "@epicentrk_sale": "official_retail",
     "@dpssgovua": "government",
+    # Operator amendment 2026-08-07, after the write: the ruling's "community — the rest" was
+    # written while this channel was still at the gate, and it is the promo channel of the
+    # Poltava/Kremenchuk chain whose official page the same ruling put in official_retail.
+    "@marketopt_promo": "official_retail",
 }
-"""Team-lead ruling 2026-08-07; everything else is `community`, the ruling's own default.
-
-@marketopt_promo takes that default and is flagged in the task report rather than promoted here:
-it is the promo channel of the chain whose official page the operator had assigned
-`official_retail`, so `community` may want a one-word amendment — but the ruling was written
-knowing this channel was still at the gate, and its word is what gets applied."""
+"""Team-lead ruling 2026-08-07; everything else is `community`, the ruling's own default."""
 
 
 def final_bucket(row: dict) -> tuple[str | None, str | None]:

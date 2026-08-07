@@ -468,7 +468,10 @@ sources:
     watch: true
   - id: marketopt_promo
     name: "Маркетопт (Толока) м.Кременчук"
-    source_type: community
+    # official_retail by operator amendment 2026-08-07: the source_type ruling's "community —
+    # the rest" was written while this channel was still at the gate, and it is the promo
+    # channel of the chain whose official page that same ruling put in official_retail.
+    source_type: official_retail
     telegram_channels:
       - "@marketopt_promo"
     verified: true
