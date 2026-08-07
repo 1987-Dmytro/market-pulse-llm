@@ -3212,3 +3212,49 @@ Russian-language blogs (restaurants in Samara, ballet, South Park; fashion, boto
 posts/week — are member chat traffic, not channel posts, which is ~1,120 and ~1,200 messages
 inside a 28-day window each. Flagged rather than decided: it changes what Deliverable 2 collects
 and what 5c2 prices.
+
+### Continuation: the rulings, the registry, and Deliverables 2-3
+
+**D10 — @marketopt_promo landed in posts-only, so the launch count is 48, not the brief's 47.**
+The operator's expected counts were "47 = 4 + 26 + 17 (+1 pending promo)". The pending one gated
+PASS — alive (12 posts in the window, the last one the same day), UA, and with NO discussion
+group — so the operator's own advance rule ("PASS without an open group → posts-only") puts it in
+the posts bucket: 48 = 4 + 26 + 18, watch 14. Not a mismatch; the resolution of the item the
+summary counted separately.
+
+**D11 — @marketopt_promo takes `community`, and that may want a one-word amendment.** The
+source_type ruling ends "community — the rest", and the ruling was written while this channel was
+still at the gate, so its word is what was applied. It is the promo channel of the chain whose
+official page the operator had assigned `official_retail`. Flagged, not overridden.
+
+**D12 — watch entries keep `comments_enabled: true`.** The brief says the flag comes from the
+gate's group finding, and all fourteen have a group. What stops the join is `watch: true`. Two
+consumers now honour it rather than reading `comments_enabled` alone: the collector, which never
+joins a watch group, and `loop.plan_channel`, which no longer plans threads for one — planning
+them would put rows nobody can fetch into the queue 5c2 prices. `render_plan`'s comments column
+prints "watch" for those rows for the same reason.
+
+**D13 — the dry-run's `rows_to_inference` (11,338) is not the window queue.** `queue_depth`
+counts every stored comment above the inference watermark, and that watermark has never moved, so
+the number is the full v1 history of the four original channels — exactly the backlog SPEC §3.11
+(6) ruling 22 deferred. The window's comment rows are 0 so far because the joins are still
+landing. What 5c2 prices is the window, and the dry-run as written cannot show it: the watermark
+is an id, the window is a date. Reported rather than patched — changing `queue_depth` is a
+decision about what the loop means by "queued", not a fix.
+
+**D14 — the joins are paced at four an hour and will not finish inside one session.** 26 joins at
+one per 15 minutes is ~6.5 h; the brief says spreading them over 2-3 days is expected. The log is
+the cursor, so a resume continues rather than re-attempting, and comments are collected per
+channel once its join has landed.
+
+**D15 — PROMPT-5c1 attributes the 278.9 s cold start to `results/serving_5b.json`; it is not in
+that file.** That record holds 46.229 s (`adopted.cold_start_seconds`, local NVMe) and 53.016 s
+(the 5b smoke's). The 278.9 s network-volume figure is in `scripts/runbook_5b.md` §2 and in
+`results/spend_5b.json`'s first session note, and is taken from there. The volume calculator
+greps every prose-sourced number back to its file before using it and refuses to print if one has
+moved.
+
+**D16 — the volume calculation leaves the compute term out of its rows on purpose.** $0.4611/pass
+× 60 = $27.67/mo is identical in all three options and would swamp the difference being decided;
+worse, its row count is test v4's 758, not a measured production flow. It is printed once, beside
+the table, with that assumption named.

@@ -1,0 +1,224 @@
+{
+  "generated_at": "2026-08-07T10:37:14+00:00",
+  "phase": "5c1",
+  "deliverable": "3 — the volume decision input",
+  "contract": "docs/SPEC.md §3.11 (6) cycle-1 economics ruling; docs/PROMPT-5c1.md D3",
+  "cadence": {
+    "passes_per_day": 2,
+    "days": 30,
+    "passes": 60
+  },
+  "inputs": {
+    "usd_per_hour": {
+      "value": 0.53,
+      "unit": "USD/h",
+      "source": "results/serving_5b.json :: adopted.usd_per_hour",
+      "what": "the A6000 pod's posted rate, the runtime SPEC 3.11 (1) fixed production on"
+    },
+    "cold_start_local_s": {
+      "value": 46.229,
+      "unit": "s",
+      "source": "results/serving_5b.json :: adopted.cold_start_seconds",
+      "what": "cold start with the weights already on the pod's local NVMe"
+    },
+    "cold_start_volume_s": {
+      "value": 278.9,
+      "unit": "s",
+      "source": "scripts/runbook_5b.md §2 (corroborated in results/spend_5b.json's first session note)",
+      "what": "cold start with the weights on the CA-MTL-3 network volume",
+      "note": "PROMPT-5c1 attributes this number to results/serving_5b.json; it is not in that file. It is in the 5b runbook and in the spend record's session note, and is taken from there."
+    },
+    "stage_minutes": {
+      "value": 4.0,
+      "unit": "min",
+      "source": "scripts/runbook_5b2.md §'Fresh staging'",
+      "what": "downloading the 59 GB pinned revision onto a fresh pod's local NVMe",
+      "note": "one measurement, not a distribution — a slow day costs pod minutes"
+    },
+    "weights_gb": {
+      "value": 59,
+      "unit": "GB",
+      "source": "scripts/runbook_5b.md §the staging pod",
+      "what": "the pinned-revision weight payload"
+    },
+    "volume_usd_per_day": {
+      "value": 0.24,
+      "unit": "USD/day",
+      "source": "knowledge/hot.md (observed, attached to nothing)",
+      "what": "the 100 GB CA-MTL-3 network volume's idle billing"
+    },
+    "volume_usd_per_month": {
+      "value": 7.2,
+      "unit": "USD/month",
+      "source": "knowledge/decisions/5b2-batch-measurement.md, the run-rate table",
+      "what": "the same volume as a monthly line item"
+    },
+    "usd_per_pass": {
+      "value": 0.4611,
+      "unit": "USD/pass",
+      "source": "results/serving_5b.json :: adopted.usd_per_pass",
+      "what": "one 758-row pass INCLUDING one local-NVMe cold start. 758 is test v4's row count, not a measured production flow — the real per-pass row count is what 5c2 prices off the collection this phase just made"
+    },
+    "rows_per_pass_assumed": {
+      "value": 758,
+      "unit": "rows",
+      "source": "results/serving_5b.json :: adopted.rows",
+      "what": "the row count behind usd_per_pass — an assumption here, not a measurement"
+    },
+    "container_disk_note": {
+      "value": "80 GB ≈ the 100 GB volume's monthly cost",
+      "unit": "—",
+      "source": "knowledge/hot.md, footguns",
+      "what": "a stopped pod still bills its container disk, and 59 GB + ~20 GB venv needs ~80 GB"
+    }
+  },
+  "idle_rate_corroboration": {
+    "source": "results/spend_phase4.json :: sessions (account-balance deltas)",
+    "quietest_interval": {
+      "hours": 10.67,
+      "spent_usd": 0.1124,
+      "usd_per_day": 0.2528,
+      "note": "phase 4 close-out: stale 4a pod gxkdecf3g7k3y7 deleted, no pods remain; the 100 "
+    },
+    "reading": "the quietest 10.67 h between two spend sessions implies $0.2528/day, and that interval still contains the pod work its own note describes. So it is an upper bound on the volume's idle rate, and knowledge/hot.md's ~$0.24/day sits under it — corroborated, not re-derived.",
+    "intervals": [
+      {
+        "hours": 1.96,
+        "spent_usd": 0.5,
+        "usd_per_day": 6.1359,
+        "note": "4b training smoke: 50 steps real-only, US-TX-1 volume-less A6000"
+      },
+      {
+        "hours": 6.9,
+        "spent_usd": 2.8311,
+        "usd_per_day": 9.8458,
+        "note": "4c arm A: resume proof + 270 steps + 758-row gate eval"
+      },
+      {
+        "hours": 5.27,
+        "spent_usd": 2.9265,
+        "usd_per_day": 13.3191,
+        "note": "4c arm B: 346 steps + 758-row gate eval"
+      },
+      {
+        "hours": 10.67,
+        "spent_usd": 0.1124,
+        "usd_per_day": 0.2528,
+        "note": "phase 4 close-out: stale 4a pod gxkdecf3g7k3y7 deleted, no pods remain; the 100 "
+      },
+      {
+        "hours": 49.87,
+        "spent_usd": 0.8968,
+        "usd_per_day": 0.4316,
+        "note": "45h2 anchor: 758 v4 rows, 0 failures"
+      },
+      {
+        "hours": 6.39,
+        "spent_usd": 3.5255,
+        "usd_per_day": 13.2407,
+        "note": "45h2 arm A: 270 steps 4.58 h, eval 758 rows 0 failures"
+      },
+      {
+        "hours": 11.77,
+        "spent_usd": 4.8828,
+        "usd_per_day": 9.9555,
+        "note": "45h2 arm B: 432 steps 7.51 h, eval 758 rows 0 failures"
+      },
+      {
+        "hours": 29.57,
+        "spent_usd": 0.4774,
+        "usd_per_day": 0.3876,
+        "note": "5b staging: repo+adapter+peft on the volume, cold start 278.9s proven on an A600"
+      },
+      {
+        "hours": 1.01,
+        "spent_usd": 0.3616,
+        "usd_per_day": 8.601,
+        "note": "5b: serverless blocked — no endpoint on this account reaches a job-consuming wor"
+      },
+      {
+        "hours": 1.62,
+        "spent_usd": 0.1845,
+        "usd_per_day": 2.7359,
+        "note": "5b.1 fresh staging on a US-TX-1 A6000 (no volume: 59 GB weights re-downloaded, v"
+      },
+      {
+        "hours": 0.91,
+        "spent_usd": 0.5155,
+        "usd_per_day": 13.553,
+        "note": "5b.1: config A scored once on the US-TX-1 A6000 pod, 758/758 rows, pod deleted a"
+      },
+      {
+        "hours": 1.19,
+        "spent_usd": 0.2347,
+        "usd_per_day": 4.7232,
+        "note": "5b.2 staging + carve ladder (4 arms + repeat control)"
+      },
+      {
+        "hours": 0.43,
+        "spent_usd": 0.2398,
+        "usd_per_day": 13.4613,
+        "note": "5b.2: test v4 at batch 16 — OOM on sarcasm_holdout after 666/758 rows, measureme"
+      }
+    ]
+  },
+  "options": [
+    {
+      "option": "a",
+      "label": "keep the CA-MTL-3 network volume",
+      "storage_usd_per_month": 7.2,
+      "storage_basis": "the 100 GB volume at $0.24/day, idle or not",
+      "boot_seconds_per_pass": 278.9,
+      "boot_hours_per_month": 4.6483,
+      "boot_usd_per_month": 2.4636,
+      "boot_basis": "278.9 s off the volume, every pass",
+      "total_usd_per_month": 9.6636,
+      "risk": "the volume pins the datacenter. SPEC 3.11 (1)'s capacity clause makes the GPU CLASS the contract and the datacenter a convenience — and on 2026-08-06 an A6000 stock-out in CA-MTL-3 blocked the run while the volume kept billing."
+    },
+    {
+      "option": "b",
+      "label": "delete it, re-stage the 59 GB per pass onto pod NVMe",
+      "storage_usd_per_month": 0.0,
+      "storage_basis": "no volume, and a running pod's container disk is inside its hourly rate",
+      "boot_seconds_per_pass": 286.229,
+      "boot_hours_per_month": 4.7705,
+      "boot_usd_per_month": 2.5284,
+      "boot_basis": "240 s staging + 46.229 s cold start (the faster cold start, after the download that buys it)",
+      "total_usd_per_month": 2.5284,
+      "risk": "every pass depends on the download completing; ~4 min is one measurement, not a distribution. In exchange there is no datacenter pin: A6000 in any region."
+    },
+    {
+      "option": "c",
+      "label": "stopped pod with the weights on its container disk",
+      "storage_usd_per_month": 7.2,
+      "storage_basis": "~80 GB of container disk billing while stopped, about what the 100 GB volume costs per month (knowledge/hot.md) — an approximation, not a posted price",
+      "boot_seconds_per_pass": 46.229,
+      "boot_hours_per_month": 0.7705,
+      "boot_usd_per_month": 0.4084,
+      "boot_basis": "46.229 s, the weights are already on local disk",
+      "total_usd_per_month": 7.6084,
+      "risk": "resume is NOT guaranteed. The capacity clause pins the GPU class, never one pod, and a stopped pod's host can be reclaimed; `runpodctl pod list` shows running pods only, so an unavailable one does not announce itself."
+    }
+  ],
+  "common_to_all_options": {
+    "usd_per_pass": 0.4611,
+    "rows_per_pass_assumed": 758,
+    "usd_per_month": 27.666,
+    "note": "the inference compute itself. It is the same in all three options, and its size is an ASSUMPTION here — 758 rows is test v4's count, and what a production pass actually carries is what 5c2 prices off this phase's collection."
+  },
+  "recommendation": "RECOMMENDATION: (b) delete it, re-stage the 59 GB per pass onto pod NVMe — $2.53/mo against $9.66 for keeping the volume, $7.14/mo saved, and the boot it costs (286 s) is within 7 s of what the volume already charges for. The saving is the smaller half of the argument: deleting the volume also removes the datacenter pin that blocked 5b, which is the failure this project has actually had. The DECISION is the operator's at acceptance.",
+  "decision": "OPEN — the volume's fate is the operator's at acceptance. SPEC §3.11 (6) says this calculation advances the ~2026-09-05 review; it does not take it.",
+  "spend": "$0 — this script reads artifacts and talks to nothing.",
+  "git": {
+    "commit": "ccad016918ac3aa1ed2a5ea9206ebe34881498f1",
+    "dirty": [
+      "docs/CHANNELS-launch.md",
+      "docs/STATUS.md",
+      "knowledge/daily_logs/2026-08-07.md",
+      "knowledge/index.md",
+      "results/collect_5c1.json",
+      "results/joins_5c1.jsonl",
+      "scripts/volume_calc_5c1.py"
+    ]
+  }
+}

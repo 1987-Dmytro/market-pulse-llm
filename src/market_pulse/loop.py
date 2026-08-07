@@ -120,7 +120,10 @@ def render_plan(rows: list[dict]) -> str:
         lines.append(
             f"{row['channel'][:23]:<24}{row['posts_stored']:>8}{row['comments_stored']:>10}"
             f"{(row['fetch_posts_newer_than'] or '—'):>10}{row['threads_to_fetch']:>9}"
-            f"{row['rows_to_inference']:>10}  {'yes' if row['comments_enabled'] else 'no'}"
+            # "watch" rather than "yes": the group is there and is deliberately not joined, and a
+            # column that said yes would describe a collection this pass will not do.
+            f"{row['rows_to_inference']:>10}  "
+            f"{'watch' if row.get('watch') else 'yes' if row['comments_enabled'] else 'no'}"
         )
     lines.append("")
     lines.append(
