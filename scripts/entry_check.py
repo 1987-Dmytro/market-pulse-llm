@@ -25,6 +25,7 @@ no joins, no member lists. FloodWait aborts the run but keeps what was collected
     python3.11 scripts/entry_check.py
     python3.11 scripts/entry_check.py --discover "молочні продукти"
     PYTHONPATH=src python3 scripts/entry_check.py --gate-5c1
+    PYTHONPATH=src python3 scripts/entry_check.py --gate-5c1 --only @forainfo @tadaua
 """
 
 import argparse
@@ -165,6 +166,13 @@ CANDIDATES = (
     ("@dikankaa", "city"),
     ("@zinkivnews", "city"),
     ("@LHVC_info", "city"),
+    # "Дозаявка №5" (canon "МАСТЕР-ЛИСТ", operator 2026-08-08): the national chains the
+    # retail_official segment is still missing. `late`, not `posts`, because their class is not
+    # settled in advance — the operator's word is "comments per the group finding", which is what
+    # the late-addition rule already says: PASS with an open group → comments, PASS without → posts.
+    ("@forainfo", "late"),
+    ("@ekomarket_shop", "late"),
+    ("@tadaua", "late"),
 )
 
 
@@ -638,7 +646,24 @@ def gate_rules() -> dict:
     }
 
 
-async def run_gate() -> int:
+def gate_todo(pending: list[tuple[str, str]], only: list[str] | None) -> list[tuple[str, str]]:
+    """The candidates this invocation TALKS TO — the record still covers every candidate.
+
+    Same split as `collect_5c1.narrowed`, and for the same limit: every handle in the loop costs a
+    `ResolveUsernameRequest`. It exists because the operator sequences batches — the 16 city feeds
+    first, the retail addition after — and one gate pass over both would merge them, which also
+    merges their rulings: `apply_gate_rulings_5c1.final_bucket` refuses the WHOLE run on a single
+    unruled FLAG, so a flag in one batch would hold the other batch's registry write hostage.
+    """
+    if not only:
+        return pending
+    wanted = set(only)
+    if missing := wanted - {handle for handle, _ in CANDIDATES}:
+        raise SystemExit(f"--only names handles this gate does not carry: {sorted(missing)}")
+    return [(handle, bucket) for handle, bucket in pending if handle in wanted]
+
+
+async def run_gate(only: list[str] | None = None) -> int:
     """Deliverable 1 of PROMPT-5c1: the gate over the 62, up to the report. Writes no registry."""
     from build_audit_pack import git_state  # deferred: only the gate path needs it
     from discover_channels import WINDOW_DAYS, WINDOW_LIMIT
@@ -655,8 +680,12 @@ async def run_gate() -> int:
     }
     done = {row["handle"] for row in held if row["verdict"] in ("PASS", "FAIL", "FLAG")}
     rows = [row for row in held if row["handle"] in done]
-    todo = [(handle, bucket) for handle, bucket in CANDIDATES if handle not in done]
-    print(f"{len(CANDIDATES)} candidates: {len(rows)} already recorded, {len(todo)} to check")
+    pending = [(handle, bucket) for handle, bucket in CANDIDATES if handle not in done]
+    todo = gate_todo(pending, only)
+    scoped = "" if len(todo) == len(pending) else f" ({len(pending) - len(todo)} held by --only)"
+    print(
+        f"{len(CANDIDATES)} candidates: {len(rows)} already recorded, {len(todo)} to check{scoped}"
+    )
     if not prior:
         print(f"warning: {PRIOR_SCAN} missing — rows carry no prior measurement")
 
@@ -749,10 +778,16 @@ async def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="run the track-R entry gate over the 62 launch candidates (PROMPT-5c1 D1)",
     )
+    parser.add_argument(
+        "--only",
+        metavar="HANDLE",
+        nargs="+",
+        help="gate only these candidates (the record still covers all of them)",
+    )
     args = parser.parse_args(argv)
 
     if args.gate_5c1:
-        return await run_gate()
+        return await run_gate(args.only)
 
     records: list[dict] = []
     flood_wait = None

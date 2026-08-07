@@ -95,7 +95,23 @@ def screen(handle: str, compiled: dict, aliases: dict) -> dict:
 
 
 def main(argv: list[str] | None = None) -> int:
-    argparse.ArgumentParser(description=__doc__).parse_args(argv)
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--out",
+        type=Path,
+        default=RECORD,
+        help="where to write the record (a second pass must not overwrite the first)",
+    )
+    args = parser.parse_args(argv)
+    if args.out == RECORD and RECORD.exists():
+        raise SystemExit(
+            f"{RECORD.relative_to(REPO_ROOT)} already exists and is the evidence behind the five"
+            " theme exclusions of 2026-08-07. It cannot be re-derived: it was measured over a"
+            " composition that no longer exists — @znishkom, @whitecode_zny, @offspringrus,"
+            " @ATB_FANatik and @uasaler left the registry on the strength of it, so a re-run"
+            " writes a table that cannot contain the rows the ruling cites. Pass --out with"
+            " another path for a later pass."
+        )
 
     registry = load_registry(REGISTRY)
     gate = json.loads(GATE_RECORD.read_text(encoding="utf-8"))
@@ -154,10 +170,11 @@ def main(argv: list[str] | None = None) -> int:
             " comments are not collected yet",
         ],
         "channels": rows,
-        "git": git_state(RECORD),
+        "git": git_state(args.out),
     }
-    RECORD.write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(f"\nwrote {RECORD.relative_to(REPO_ROOT)}")
+    args.out.write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    shown = args.out.relative_to(REPO_ROOT) if args.out.is_relative_to(REPO_ROOT) else args.out
+    print(f"\nwrote {shown}")
     return 0
 
 

@@ -15,6 +15,7 @@ import sys
 from pathlib import Path
 from types import SimpleNamespace
 
+import pytest
 from telethon.errors import FloodWaitError
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -90,6 +91,49 @@ def canon_city_feeds() -> list[str]:
     return re.findall(r"@[A-Za-z0-9_]+", listing.split("\n\n")[0])
 
 
+def canon_retail_5() -> list[str]:
+    """The national chains "Дозаявка №5" sends to the gate, read out of the master list.
+
+    Its paragraph runs straight into the next bold heading with no blank line between, so the
+    listing ends at the next `**` and NOT at the next empty line: cutting on the blank line
+    swallows the following sentence, whose @NovusNews is a channel the canon explicitly does not
+    send to the gate.
+    """
+    text = CANON.read_text(encoding="utf-8")
+    section = text[text.index("## МАСТЕР-ЛИСТ") :]
+    listing = section[section.index("Дозаявка №5 на гейт:") :]
+    return re.findall(r"@[A-Za-z0-9_]+", listing[: listing.index("\n**")])
+
+
+def test_the_retail_addition_is_the_canons_own_and_carries_no_more_than_it_says():
+    """Three handles, and the corporate channel named in the very next sentence is not one."""
+    picks = canon_retail_5()
+    assert picks == ["@forainfo", "@ekomarket_shop", "@tadaua"], picks
+    assert "@NovusNews" not in picks
+    assert [handle for handle, _ in gate.CANDIDATES[-3:]] == picks
+
+
+def test_the_retail_addition_is_gated_late_not_posts():
+    """The operator's word is "comments per the group finding" — `late` is the bucket that asserts
+    neither, and `posts` would flag any of the three that turns out to have a group."""
+    buckets = {handle: bucket for handle, bucket in gate.CANDIDATES}
+    assert {buckets[handle] for handle in canon_retail_5()} == {"late"}
+    assert gate.BUCKETS["late"]["group_expected"] is None
+
+
+def test_only_narrows_the_loop_and_refuses_a_handle_the_gate_does_not_carry():
+    """The batches are sequenced by the operator, and one gate pass over two of them merges their
+    rulings: `final_bucket` refuses the whole apply run over a single unruled FLAG."""
+    pending = [(handle, bucket) for handle, bucket in gate.CANDIDATES]
+    assert gate.gate_todo(pending, None) == pending
+    assert gate.gate_todo(pending, ["@forainfo", "@tadaua"]) == [
+        ("@forainfo", "late"),
+        ("@tadaua", "late"),
+    ]
+    with pytest.raises(SystemExit, match="@nosuchchannel"):
+        gate.gate_todo(pending, ["@nosuchchannel"])
+
+
 def test_the_city_feeds_are_the_canons_own_and_all_of_them():
     """The canon states its own count in the same sentence; if the two disagree the canon is
     wrong about itself and nothing should be gated on it."""
@@ -116,7 +160,8 @@ def test_the_candidate_list_is_the_canons_own():
     """
     late = [(handle, "late") for handle in canon_sent_to_the_gate()]
     city = [(handle, "city") for handle in canon_city_feeds()]
-    assert list(gate.CANDIDATES) == canon_buckets() + late + city
+    retail = [(handle, "late") for handle in canon_retail_5()]
+    assert list(gate.CANDIDATES) == canon_buckets() + late + city + retail
 
 
 def test_the_composition_is_the_62_plus_what_the_rulings_added():
@@ -124,10 +169,11 @@ def test_the_composition_is_the_62_plus_what_the_rulings_added():
         b: sum(1 for _, bucket in gate.CANDIDATES if bucket == b)
         for b in ("comments", "posts", "watch", "late", "city")
     }
-    late = len(canon_sent_to_the_gate()) + 1  # + the withdrawn "Дозаявка оператора" row
+    # + the withdrawn "Дозаявка оператора" row, + the three national chains of "Дозаявка №5"
+    late = len(canon_sent_to_the_gate()) + 1 + len(canon_retail_5())
     city = len(canon_city_feeds())
     assert counts == {"comments": 29, "posts": 18, "watch": 14, "late": late, "city": city}
-    assert len(gate.CANDIDATES) == 62 + len(canon_sent_to_the_gate()) + city
+    assert len(gate.CANDIDATES) == 62 + len(canon_sent_to_the_gate()) + city + len(canon_retail_5())
     assert len({handle for handle, _ in gate.CANDIDATES}) == len(gate.CANDIDATES)
 
 

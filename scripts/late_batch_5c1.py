@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
-"""5c1 addendum: the Хвилинка search and the Poltava-cities discovery scan ($0, read-only).
+"""5c1 addenda: the "does this chain have a channel at all" searches and the Poltava-cities
+discovery scan ($0, read-only).
 
-Canon: `docs/CHANNELS-launch.md`, section "Дозаявка №2" (operator, 2026-08-07 evening). Two
-questions, neither of which is a registry write:
+Canon: `docs/CHANNELS-launch.md`, section "Дозаявка №2" (operator, 2026-08-07 evening) and the
+"МАСТЕР-ЛИСТ" of 2026-08-08, plus addendum 9 of the same day. Four questions, none of which is a
+registry write:
 
 ``--search``
     Does the Хвилинка chain (Lubny, Myrhorod, Lokhvytsia, Pyriatyn, Hrebinka) have a Telegram
@@ -11,6 +13,19 @@ questions, neither of which is a registry write:
     records what the search returned and whether any row's title even contains the name. A
     negative finding is written into the gate record's notes, because "we looked and found
     nothing" is a result that has to survive, and an absent note reads like an unasked question.
+
+``--search-retail``
+    The same instrument over the five national chains whose CONSUMER channel the web pass could
+    not find — Novus, Velmart, Fozzy C&C, Auchan, METRO Ukraine (canon "МАСТЕР-ЛИСТ"). One note
+    per chain, because five questions asked in one pass are five findings: a chain that turns up
+    goes to the gate, and a chain that does not is closed by its own negative record.
+
+``--search-food-quality``
+    Does the Consumer Union of Ukraine's counterfeit-dairy channel exist (addendum 9)? Five
+    queries, ONE note: unlike the retail five this is a single channel asked about five ways, so
+    five empty queries are one negative and any match keeps one question open. A convincing match
+    goes to the gate like everything else — and its `audience` has no value in the closed list
+    yet, which is the operator's to rule, not this script's to invent.
 
 ``--poltava``
     The discovery scan for the new `poltava_cities` theme, in `scripts/discover_channels.py`'s
@@ -21,6 +36,8 @@ questions, neither of which is a registry write:
     that filter a city chat's whole traffic lands in a paid inference queue.
 
     PYTHONPATH=src python3 scripts/late_batch_5c1.py --search
+    PYTHONPATH=src python3 scripts/late_batch_5c1.py --search-retail
+    PYTHONPATH=src python3 scripts/late_batch_5c1.py --search-food-quality
     PYTHONPATH=src python3 scripts/late_batch_5c1.py --poltava
 """
 
@@ -51,6 +68,120 @@ HVYLYNKA_QUERIES = ("Хвилинка", "Хвилинка Лубни", "hvylynka
 HVYLYNKA_MARKERS = ("хвилинк", "hvylynk", "хвилинка")
 """What a title has to contain to be worth a human look. Deliberately loose — the judgement is
 reported, not automated, and a marker that matched nothing is itself the finding."""
+
+SEARCH_BOUND = (
+    "Bounded, not proven — contacts.SearchRequest ranks by its own relevance and returns at most"
+    " ten rows per query, so this says there is no FINDABLE public channel under the names"
+    " searched, not that none exists."
+)
+
+SEARCHES = {
+    "hvylynka_search": {
+        "subject": "the Хвилинка chain",
+        "asked": (
+            "does the Хвилинка chain (Lubny, Myrhorod, Lokhvytsia, Pyriatyn, Hrebinka) have a"
+            " Telegram channel? canon docs/CHANNELS-launch.md 'Дозаявка №2'"
+        ),
+        "queries": HVYLYNKA_QUERIES,
+        "markers": HVYLYNKA_MARKERS,
+        "also": "The site hvylya.net.ua carries no Telegram link either.",
+    },
+}
+"""One entry per question the search answers, so the note it writes is per question too.
+
+A search is not a verdict here: it records what came back and whether any row's title even carries
+the name. The negative is the finding worth keeping — "we looked and found nothing" has to survive,
+because an absent note reads like an unasked question — and a search that DID match anything stays
+open for a human read (`--close-*`), because deciding what is convincing is not a script's call."""
+
+CANON_MASTER_LIST = (
+    "canon docs/CHANNELS-launch.md 'МАСТЕР-ЛИСТ', the line «Проверить внутри Telegram (вебом не"
+    " найдено)» — the Telegram-side half of «Дозаявка №5»"
+)
+
+RETAIL_SEARCHES = {
+    # Written out one per brand, each carrying what the web pass found, because a reader deciding
+    # whether a chain is really absent needs to see the question and its evidence in one place.
+    # The five brands and their order are the canon's; a test parses that line to hold this table.
+    "novus_consumer_search": {
+        "subject": "Novus's consumer channel",
+        "asked": f"does Novus have a consumer Telegram channel? {CANON_MASTER_LIST}",
+        "queries": ("Novus", "Новус"),
+        "markers": ("novus", "новус"),
+        "also": "On the web only the corporate @NovusNews was found, a channel for staff.",
+    },
+    "velmart_consumer_search": {
+        "subject": "Velmart's consumer channel",
+        "asked": f"does Velmart have a consumer Telegram channel? {CANON_MASTER_LIST}",
+        "queries": ("Velmart", "Вельмарт"),
+        "markers": ("velmart", "вельмарт"),
+        "also": "The web pass found no channel for this chain at all.",
+    },
+    "fozzy_consumer_search": {
+        "subject": "Fozzy C&C's consumer channel",
+        "asked": f"does Fozzy C&C have a consumer Telegram channel? {CANON_MASTER_LIST}",
+        "queries": ("Fozzy", "Фоззі"),
+        "markers": ("fozzy", "фоззі", "фоззи"),
+        "also": (
+            "The web pass found nothing for the cash-and-carry format. The group's retail brands"
+            " are already in the registry (@silposilpo, and @forainfo is on this gate)."
+        ),
+    },
+    "auchan_consumer_search": {
+        "subject": "Auchan's consumer channel",
+        "asked": f"does Auchan have a consumer Telegram channel? {CANON_MASTER_LIST}",
+        "queries": ("Auchan", "Ашан"),
+        "markers": ("auchan", "ашан"),
+        "also": "On the web only a support bot was found, which collects nothing.",
+    },
+    "metro_consumer_search": {
+        "subject": "METRO Ukraine's consumer channel",
+        "asked": f"does METRO Ukraine have a consumer Telegram channel? {CANON_MASTER_LIST}",
+        "queries": ("METRO Україна", "Метро Кеш енд Кері"),
+        "markers": ("metro", "метро"),
+        "also": "The web pass found no consumer channel for the Ukrainian arm.",
+    },
+}
+
+SEARCHES.update(RETAIL_SEARCHES)
+
+FOOD_QUALITY_SEARCH = {
+    "food_quality_search": {
+        "subject": "the Consumer Union of Ukraine's counterfeit-dairy channel",
+        "asked": (
+            "does Maksym Nesmiyanov / the Союз споживачів України have a Telegram channel? The"
+            " operator remembers independent lab checks on counterfeit dairy published near this"
+            " project's category — canon: operator brief, 5c1 addendum 9 (2026-08-08)"
+        ),
+        # One question asked five ways, so ONE note: the retail five were five chains and five
+        # findings, this is a single channel that may or may not exist under any of these names.
+        "queries": (
+            "Макс Контроль",
+            "MaxControl",
+            "Несміянов",
+            "Союз споживачів України",
+            "фальсифікат",
+        ),
+        # Deliberately loose, and the last one is a TOPIC word rather than a name: a channel about
+        # фальсифікат that is not this one is still worth a human look, and a marker matching
+        # nothing is itself the finding. Anything matched keeps the note open for that look.
+        "markers": (
+            "макс контроль",
+            "maxcontrol",
+            "несміянов",
+            "несмиянов",
+            "союз споживачів",
+            "союз потребителей",
+            "фальсифікат",
+        ),
+        "also": (
+            "The operator's own recollection is the only prior evidence — no web pass was run for"
+            " this one, so a negative here is bounded by Telegram's search alone."
+        ),
+    },
+}
+
+SEARCHES.update(FOOD_QUALITY_SEARCH)
 
 HVYLYNKA_JUDGEMENT = {
     "judged_by": "executor, 2026-08-07",
@@ -121,10 +252,10 @@ def known_handles() -> dict:
     return {**gated, **registry}
 
 
-async def run_search(client) -> dict:
-    """Telegram's global search for the chain, one row per result. Judges nothing."""
+async def run_search(client, spec: dict) -> dict:
+    """Telegram's global search for one subject, one row per result. Judges nothing."""
     results = {}
-    for query in HVYLYNKA_QUERIES:
+    for query in spec["queries"]:
         print(f"searching {query!r}...", flush=True)
         results[query] = await entry_check.suggest(client, query)
         for row in results[query]:
@@ -138,37 +269,38 @@ async def run_search(client) -> dict:
             title = (row["title"] or "").casefold()
             handle = (row["username"] or "").casefold()
             if row["username"] not in seen and any(
-                marker in title or marker in handle for marker in HVYLYNKA_MARKERS
+                marker in title or marker in handle for marker in spec["markers"]
             ):
                 seen.add(row["username"])
                 matches.append(row)
-    return {"queries": list(HVYLYNKA_QUERIES), "results": results, "name_matches": matches}
+    return {"queries": list(spec["queries"]), "results": results, "name_matches": matches}
 
 
 def matched_handles(note: dict) -> list[str]:
     return sorted(row["username"] for row in note.get("name_matches", []) if row.get("username"))
 
 
-def record_search(found: dict) -> dict:
+def record_search(key: str, found: dict) -> dict:
     """Write the search into the gate record's notes — closed only if it found nothing.
 
     A judgement already recorded is carried forward rather than overwritten: re-running the
     search would otherwise reopen a question a human had closed, silently. It is carried only
     while it still applies — if this search matched a different set of handles, the judgement is
     about rows that are no longer the rows, and the note says so instead of standing.
+
+    One note per question, keyed by `SEARCHES`: five chains asked in one pass are five findings,
+    and one of them coming back positive must not close or reopen the other four.
     """
+    spec = SEARCHES[key]
     record = json.loads(GATE_RECORD.read_text(encoding="utf-8"))
     closed = not found["name_matches"]
-    held = record.get("notes", {}).get("hvylynka_search", {})
+    held = record.get("notes", {}).get(key, {})
     judgement, stale = held.get("judgement"), None
     if judgement is not None:
         stale = matched_handles(held) != matched_handles(found)
         closed = not stale
     note = {
-        "asked": (
-            "does the Хвилинка chain (Lubny, Myrhorod, Lokhvytsia, Pyriatyn, Hrebinka) have a"
-            " Telegram channel? canon docs/CHANNELS-launch.md 'Дозаявка №2'"
-        ),
+        "asked": spec["asked"],
         "searched_at": datetime.now(UTC).isoformat(timespec="seconds"),
         "queries": found["queries"],
         "results_per_query": {query: len(rows) for query, rows in found["results"].items()},
@@ -183,17 +315,15 @@ def record_search(found: dict) -> dict:
             else "REOPENED — a recorded judgement is about a different set of matches than this"
             " search returned. Re-read the rows before closing it again."
             if judgement is not None
-            else "NEGATIVE — Telegram's global search returns no channel whose title or handle carries"
-            " the chain's name under any of the three queries. The question is closed by record:"
-            " the site hvylya.net.ua carries no Telegram link either. Bounded, not proven —"
-            " contacts.SearchRequest ranks by its own relevance and returns at most ten rows per"
-            " query, so this says the chain has no findable public channel, not that none exists."
+            else f"NEGATIVE — Telegram's global search returns no channel whose title or handle"
+            f" carries the name of {spec['subject']} under any of the {len(found['queries'])}"
+            f" queries. The question is closed by record: {spec['also']} {SEARCH_BOUND}"
             if closed
             else "MATCHES FOUND — not closed. The rows above need a human look before any of them"
             " goes to the gate; this script does not decide what is convincing."
         ),
     }
-    record.setdefault("notes", {})["hvylynka_search"] = note
+    record.setdefault("notes", {})[key] = note
     record["git"] = git_state(GATE_RECORD)
     GATE_RECORD.write_text(
         json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
@@ -270,6 +400,16 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="5c1 addendum: the Хвилинка search and the scan.")
     parser.add_argument("--search", action="store_true", help="Telegram search for the chain")
     parser.add_argument(
+        "--search-retail",
+        action="store_true",
+        help="Telegram search for the consumer channels of the five chains the web pass missed",
+    )
+    parser.add_argument(
+        "--search-food-quality",
+        action="store_true",
+        help="Telegram search for the Consumer Union of Ukraine's counterfeit-dairy channel",
+    )
+    parser.add_argument(
         "--close-hvylynka",
         action="store_true",
         help="write the executor's read of the search into the note (no API, no new search)",
@@ -297,8 +437,13 @@ def main(argv: list[str] | None = None) -> int:
         print(f"\nclosed in {GATE_RECORD.relative_to(REPO_ROOT)} :: notes.hvylynka_search")
         return 0
 
-    if args.plan or not (args.search or args.poltava):
-        print(f"search  : {', '.join(HVYLYNKA_QUERIES)}")
+    keys = ["hvylynka_search"] if args.search else []
+    keys += list(RETAIL_SEARCHES) if args.search_retail else []
+    keys += list(FOOD_QUALITY_SEARCH) if args.search_food_quality else []
+
+    if args.plan or not (keys or args.poltava):
+        for key in keys or SEARCHES:
+            print(f"search  : {key:<24}{', '.join(SEARCHES[key]['queries'])}")
         print(f"{THEME}: {len(CITIES)} towns — {', '.join(CITIES)}")
         print(f"limit   : {entry_check.DISCOVER_LIMIT}/query · window {discovery.WINDOW_DAYS} d")
         print(f"known   : {len(known_handles())} handles already spoken for, not re-measured")
@@ -315,10 +460,19 @@ def main(argv: list[str] | None = None) -> int:
         try:
             if not await client.is_user_authorized():
                 raise SystemExit("No Telegram session. Run: python3 scripts/tg_login.py")
-            out = {}
-            if args.search:
-                out["search"] = await run_search(client)
-            if args.poltava:
+            out = {"searches": {}}
+            for key in keys:
+                try:
+                    out["searches"][key] = await run_search(client, SEARCHES[key])
+                except FloodWaitError as exc:
+                    # Ten queries is the longest search pass this phase runs, and the account
+                    # already lost 20 hours to one wall. Stop on the first refusal and keep what
+                    # was answered: a retry inside the window lengthens it.
+                    out["flood_wait_seconds"] = exc.seconds
+                    done = len(out["searches"])
+                    print(f"FloodWait {exc.seconds}s on {key} — stopping, {done}/{len(keys)} done")
+                    break
+            if args.poltava and "flood_wait_seconds" not in out:
                 out["scan"] = await run_scan(client, known, carried)
             return out
         finally:
@@ -326,10 +480,10 @@ def main(argv: list[str] | None = None) -> int:
 
     out = asyncio.run(run())
 
-    if "search" in out:
-        note = record_search(out["search"])
+    for key, found in out.get("searches", {}).items():
+        note = record_search(key, found)
         print(f"\n{note['finding']}")
-        print(f"recorded in {GATE_RECORD.relative_to(REPO_ROOT)} :: notes.hvylynka_search")
+        print(f"recorded in {GATE_RECORD.relative_to(REPO_ROOT)} :: notes.{key}")
 
     if "scan" in out:
         scan = out["scan"]
@@ -370,6 +524,11 @@ def main(argv: list[str] | None = None) -> int:
         for caveat in led["caveats"]:
             print(f"  caveat: {caveat}")
         print(f"\nwrote {RECORD.relative_to(REPO_ROOT)}")
+
+    if (wait := out.get("flood_wait_seconds")) is not None:
+        asked = set(out.get("searches", {}))
+        print(f"\nFloodWait {wait}s — not asked: {', '.join(k for k in keys if k not in asked)}")
+        return 1
     return 0
 
 
