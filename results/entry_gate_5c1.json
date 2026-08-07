@@ -4284,7 +4284,7 @@
       "verdict": "PASS",
       "fails": [],
       "flags": [],
-      "ruling": "GATED REPLACEMENT — PASS with no discussion group → posts. replaces the withdrawn late addition. PASS with an open discussion group → comments bucket and the joins list; PASS without one → posts-only; FAIL or FLAG → stop and report.",
+      "ruling": "LATE ADDITION — replaces the withdrawn late addition (operator, 2026-08-07); PASS with no discussion group → posts. PASS with an open discussion group → comments bucket and the joins list; PASS without one → posts-only; FAIL or FLAG → stop and report before any further action on it.",
       "error": null,
       "suggestions": null
     },
@@ -4334,7 +4334,7 @@
         "dead against its bucket — no posts in 28 days and no discussion group"
       ],
       "flags": [],
-      "ruling": null,
+      "ruling": "EXCLUDED — late addition #2 EXCLUDED (operator, 2026-08-07 on the gate report): dead by canon's own conjunction — its ten sampled posts run 2024-04-19 to 2024-06-06, so 26 months of silence, and there is no discussion group. Same class as the six the operator excluded on 06.08",
       "error": null,
       "suggestions": null
     }
@@ -4376,18 +4376,18 @@
       }
     }
   },
-  "registry_written": false,
+  "registry_written": true,
   "note": "PROMPT-5c1 D1 stops here: every FAIL and FLAG goes to the operator, who rules in chat; the rulings land in each row's `ruling`, and only then is config/registry.yaml written. data/entry_check_report.json (the 2026-07-27 run) is untouched, and the four registry channels are out of this gate's scope.",
   "git": {
-    "commit": "0753d5e3ed2b31a3f2f690dd27081063584d89b4",
+    "commit": "4cd9ab4cf948afec3d81b4e4d4fe54c7d67a2529",
     "dirty": [
-      "docs/SPEC.md",
-      "docs/STATUS.md",
       "knowledge/daily_logs/2026-08-07.md",
       "knowledge/index.md",
       "results/joins_5c1.jsonl",
-      "scripts/entry_check.py",
-      "scripts/late_batch_5c1.py"
+      "results/volume_calc_5c1.json",
+      "scripts/apply_gate_rulings_5c1.py",
+      "tests/test_gate_rulings_5c1.py",
+      "results/discovery_5c1_poltava.json"
     ]
   },
   "notes": {
@@ -4569,5 +4569,130 @@
         "bound": "This closes the question by record, it does not prove absence: contacts.SearchRequest ranks by its own relevance and returns at most ten rows per query. The finding is that the chain has no FINDABLE public channel under its own name — consistent with hvylya.net.ua carrying no Telegram link."
       }
     }
+  },
+  "rulings": {
+    "applied_at": "2026-08-07T11:14:29+00:00",
+    "canon": "docs/CHANNELS-launch.md, section 'Рулинги гейта 5c1 (2026-08-07)'",
+    "composition": {
+      "comments": [
+        "@ATB_FANatik",
+        "@HealthPsycholog",
+        "@Pro_Detyintumama",
+        "@baby_broccoli_club",
+        "@chifit_family",
+        "@denisovapro",
+        "@discountua1",
+        "@eftforhealth",
+        "@katyal55",
+        "@kkondr_fit",
+        "@klopotenkofood",
+        "@kopiyochka1",
+        "@kuksa2022",
+        "@offspringrus",
+        "@olgaa_trainer",
+        "@polyakova_fitness",
+        "@retsepty",
+        "@rezeptmoi",
+        "@sashafitnesslife",
+        "@smirnov108",
+        "@tarilka_malyuka",
+        "@tretyakovaele",
+        "@uasaler",
+        "@useful_healthy_fitness_menu",
+        "@ya_Nenka",
+        "@znishkom"
+      ],
+      "posts": [
+        "@Wellosophy_Lesya",
+        "@anastasiiadavydiukfitness",
+        "@atb_aktsiyi",
+        "@blwbabies",
+        "@dpssgovua",
+        "@epicentrk_sale",
+        "@gaid_skobioale",
+        "@intensiv_Mamiev",
+        "@konservacia_kulinaria",
+        "@korolevakuchni",
+        "@mameni_recepti",
+        "@marketopt_promo",
+        "@maudau",
+        "@recepti",
+        "@retsepty4",
+        "@retsepty5",
+        "@vylkachannel",
+        "@whitecode_zny"
+      ],
+      "watch": [
+        "@Evgenija_dutjache_menu",
+        "@chekh_yevheniia1982",
+        "@cozymotherhood",
+        "@dimakaminskyifit",
+        "@dutyache_menu",
+        "@hydnem_prosto",
+        "@itsmamix",
+        "@netainaya_vecherya",
+        "@polinalykovagv",
+        "@prostetsofa",
+        "@regina_tatlybaeva",
+        "@retsepty10",
+        "@skhudnennya",
+        "@viktoria_sshh"
+      ],
+      "excluded": [
+        "@Mambabyua",
+        "@akcii_skidki_plt",
+        "@kolyastravinsky",
+        "@kulinariya_chat_a",
+        "@marketopt_official",
+        "@whowears"
+      ]
+    },
+    "counts": {
+      "registry_before": 62,
+      "comments": 26,
+      "posts": 18,
+      "watch": 14,
+      "excluded": 6,
+      "sources_after": 62
+    },
+    "joins_authorised": [
+      "@ATB_FANatik",
+      "@HealthPsycholog",
+      "@Pro_Detyintumama",
+      "@baby_broccoli_club",
+      "@chifit_family",
+      "@denisovapro",
+      "@discountua1",
+      "@eftforhealth",
+      "@katyal55",
+      "@kkondr_fit",
+      "@klopotenkofood",
+      "@kopiyochka1",
+      "@kuksa2022",
+      "@offspringrus",
+      "@olgaa_trainer",
+      "@polyakova_fitness",
+      "@retsepty",
+      "@rezeptmoi",
+      "@sashafitnesslife",
+      "@smirnov108",
+      "@tarilka_malyuka",
+      "@tretyakovaele",
+      "@uasaler",
+      "@useful_healthy_fitness_menu",
+      "@ya_Nenka",
+      "@znishkom"
+    ],
+    "source_type_ruling": {
+      "@uasaler": "aggregator",
+      "@znishkom": "aggregator",
+      "@whitecode_zny": "aggregator",
+      "@atb_aktsiyi": "aggregator",
+      "@ATB_FANatik": "aggregator",
+      "@epicentrk_sale": "official_retail",
+      "@dpssgovua": "government",
+      "@marketopt_promo": "official_retail"
+    },
+    "note": "The gate's rows are unchanged: an excluded channel was still measured, and its `ruling` is what says it is out. Registry names and comments_enabled are read off this record, not typed."
   }
 }

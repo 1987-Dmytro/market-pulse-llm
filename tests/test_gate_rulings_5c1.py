@@ -20,12 +20,13 @@ from market_pulse.registry import load_registry  # noqa: E402
 
 CANON = REPO_ROOT / "docs" / "CHANNELS-launch.md"
 
-AWAITING_A_RULING = {"@akcii_skidki_plt"}
+AWAITING_A_RULING = set()
 """Gated, not PASS, and no ruling covers it yet — the operator's rule is to stop and report.
 
 Named rather than skipped by accident: `final_bucket` refuses to guess, so every candidate in
 this set raises, and a NEW unruled non-PASS row makes the tests below fail loudly instead of
-quietly entering the registry on the strength of its bucket. Empties when the operator rules."""
+quietly entering the registry on the strength of its bucket. Empty right now: every gated
+candidate has a resolution, @akcii_skidki_plt having been excluded on 2026-08-07."""
 
 
 def resolved(record: dict):
@@ -169,6 +170,14 @@ def load_registry_text(text: str):
     return load_registry(handle.name).sources
 
 
+def test_a_run_with_nothing_new_leaves_the_file_byte_identical():
+    """The re-run bug this exists for: with every channel already written the script had nothing
+    to add and appended the section's comment header anyway, dirtying the registry by nine lines
+    on a run whose whole job was to change nothing."""
+    original = (REPO_ROOT / "config" / "registry.yaml").read_text(encoding="utf-8")
+    assert apply.insert_sources(original, []) == original
+
+
 def test_an_emoji_title_survives_the_yaml_round_trip(tmp_path):
     """Titles carry emoji, colons and quotes; a hand-rolled YAML writer is where those break."""
     nasty = 'Знижки: "супер" 💛 | все'
@@ -231,4 +240,6 @@ def test_the_composition_matches_the_canons_own_summary():
     # 17 in the canon's summary plus @marketopt_promo, which the summary counts separately as
     # "+1 на гейте" because its bucket was still pending when the operator wrote it.
     assert buckets["posts"] == 18
-    assert buckets["excluded"] == 5
+    # Five from the 06.08 rulings plus @akcii_skidki_plt, the second late addition, excluded
+    # 2026-08-07 for 26 months of silence with no group.
+    assert buckets["excluded"] == 6

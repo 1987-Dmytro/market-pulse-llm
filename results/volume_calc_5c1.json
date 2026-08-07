@@ -207,18 +207,37 @@
     "note": "the inference compute itself. It is the same in all three options, and its size is an ASSUMPTION here — 758 rows is test v4's count, and what a production pass actually carries is what 5c2 prices off this phase's collection."
   },
   "recommendation": "RECOMMENDATION: (b) delete it, re-stage the 59 GB per pass onto pod NVMe — $2.53/mo against $9.66 for keeping the volume, $7.14/mo saved, and the boot it costs (286 s) is within 7 s of what the volume already charges for. The saving is the smaller half of the argument: deleting the volume also removes the datacenter pin that blocked 5b, which is the failure this project has actually had. The DECISION is the operator's at acceptance.",
-  "decision": "OPEN — the volume's fate is the operator's at acceptance. SPEC §3.11 (6) says this calculation advances the ~2026-09-05 review; it does not take it.",
+  "decision": "RULED AND EXECUTED — operator 2026-08-07, SPEC §3.11: option (b). The CA-MTL-3 network volume is deleted; every 5c2+ pass re-stages the 59 GB pinned revision onto pod NVMe. The ~2026-09-05 volume review is closed by this ruling.",
   "spend": "$0 — this script reads artifacts and talks to nothing.",
   "git": {
-    "commit": "ccad016918ac3aa1ed2a5ea9206ebe34881498f1",
+    "commit": "4cd9ab4cf948afec3d81b4e4d4fe54c7d67a2529",
     "dirty": [
-      "docs/CHANNELS-launch.md",
-      "docs/STATUS.md",
       "knowledge/daily_logs/2026-08-07.md",
       "knowledge/index.md",
-      "results/collect_5c1.json",
       "results/joins_5c1.jsonl",
-      "scripts/volume_calc_5c1.py"
+      "results/discovery_5c1_poltava.json"
     ]
+  },
+  "executed": {
+    "at": "2026-08-07T11:13:35+00:00",
+    "volume": {
+      "id": "gfwa2an8fn",
+      "name": "market-pulse-phase4",
+      "size_gb": 100,
+      "datacenter": "CA-MTL-3"
+    },
+    "listing_before": [
+      {
+        "dataCenterId": "CA-MTL-3",
+        "id": "gfwa2an8fn",
+        "name": "market-pulse-phase4",
+        "size": 100
+      }
+    ],
+    "listing_after": [],
+    "proof": "the LISTING is the proof, not the exit code (SPEC's own wording): `runpodctl network-volume list` returned one volume before and [] after. `pod list -a` and `serverless list` were both [] beforehand, so nothing was attached to it.",
+    "what_was_on_it": "the repo checkout, the 59 GB pinned-revision weights and the arm-A adapter. The weights are re-downloadable at revision 842da3794eaa0b77d5f08bae87a17459d91ff475 — that is what option (b) IS. The adapter was checked to have a verified second copy BEFORE the delete: results/train/45h2-arm-a/adapter hashes to b3ca630846c7e75c5e7058ce45804c45a6bff5c49dcf2389cb8cdda0b7a68a6c under market_pulse.records.artifact_sha256, which is exactly the adapter_sha256 results/serving_5b.json pins as what the production worker loaded.",
+    "balance_at_deletion_usd": 16.5032987197,
+    "saving": "the ~$0.24/day idle billing stops from this date; ~$7.20/mo off the run rate."
   }
 }

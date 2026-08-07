@@ -3267,3 +3267,47 @@ file — which is exactly how a generated file and its generator start disagreei
 `test_the_shipped_registry_is_re_derivable_from_the_gate_record` now re-derives all 58 entered
 sources from `results/entry_gate_5c1.json` and compares id, name, source_type, comments_enabled
 and watch field by field. It also asserts that no excluded channel is in the registry at all.
+
+### Addendum: the second late batch, the Хвилинка search, the city scan, the volume deletion
+
+**D18 — @akcii_skidki_plt is dead by the same conjunction, and the first verdict had no date.**
+The gate returned FAIL: 0 posts in the 28-day window and no discussion group. Its first row said
+only that — the bare "dead" I had refused to hand over for @marketopt_official. So `gate_row` now
+carries the 50-post sample's first and last dates, and the row was re-measured to fill them:
+ten posts between 2024-04-19 and 2024-06-06, 26 months of silence. Operator ruling on that
+evidence: EXCLUDED. Nothing else about the row moved, and its gate row stays in the record.
+
+**D19 — the Хвилинка question closes NEGATIVE, and the judgement is code, not a typed field.**
+`--search` records what Telegram returned and whether any title carries the name; it decides
+nothing. The name markers matched twelve channels because «хвилинка» is an ordinary word, and
+every one is something else — a Zhytomyr freight company, an English-lesson channel, a
+dementia-awareness channel. @khvylynka, the only plausible one, was probed read-only and is a
+private classified-ads board. The executor's read lives in `HVYLYNKA_JUDGEMENT` and is applied by
+`--close-hvylynka` without touching Telegram; a re-run of `--search` carries a recorded judgement
+forward instead of silently reopening a closed question, and only while it is about the same
+matched handles. Bounded, not proven: search returns at most ten rows by its own relevance.
+
+**D20 — the city scan found 119 candidates and the ledger is a pick list, not a coverage number.**
+`discover_channels.build_ledger` measures the portfolio against the 10,000,000 target and would
+need the registry's own subscriber sum re-measured to say anything true, so this scan ranks by
+subscribers with a running total instead and points at `results/discovery_5a1.json` for the
+portfolio figure. Both caveats ride with it verbatim. Nothing entered anything: no registry row,
+no join, no verdict.
+
+**D21 — a re-run of the ruling script dirtied the registry by nine lines, and now cannot.**
+With every channel already written there was nothing to add, and `insert_sources` appended the
+section's comment header anyway. Caught by `git diff` on a run whose whole job was to change
+nothing, reverted, and fixed: an empty entry list returns the file unchanged, with a test that
+asserts byte-identity. The same run's "launch N" line double-counted the already-written sources;
+it now subtracts the composition from the registry to find the four originals.
+
+**D22 — the volume is deleted, and the adapter was checked to survive it first.** SPEC's ruling
+(operator, on `results/volume_calc_5c1.json`) is option (b), and it says the deletion is proven
+BY LISTING. `runpodctl network-volume list` returned one volume before and `[]` after;
+`pod list -a` and `serverless list` were both `[]`, so nothing was attached. Before the delete:
+the volume held the 59 GB weights (re-downloadable at the pinned revision — that is what option
+(b) IS) and the arm-A adapter, and the adapter's local copy was hashed with
+`market_pulse.records.artifact_sha256` and matched `results/serving_5b.json`'s pinned
+`adapter_sha256` exactly. The first check used the wrong instrument — a single file's sha256
+against a DIRECTORY hash — and disagreed; the number was produced by a directory hasher, and
+that is what re-derived it. Nothing was deleted until the copy was proven.

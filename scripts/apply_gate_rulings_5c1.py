@@ -46,6 +46,10 @@ EXCLUDED = {
     " chat-mining track",
     "@marketopt_official": "late addition WITHDRAWN — the handle resolves to a dead"
     " 132-subscriber channel, and the canon's '41,518' had no source artifact behind it",
+    "@akcii_skidki_plt": "late addition #2 EXCLUDED (operator, 2026-08-07 on the gate report):"
+    " dead by canon's own conjunction — its ten sampled posts run 2024-04-19 to 2024-06-06, so"
+    " 26 months of silence, and there is no discussion group. Same class as the six the operator"
+    " excluded on 06.08",
 }
 """Ruled out of the composition. Their gate rows stay in the record, carrying this text."""
 
@@ -161,7 +165,14 @@ def render(entry: dict) -> str:
 
 
 def insert_sources(text: str, entries: list[dict]) -> str:
-    """Put the new sources at the end of the `sources:` block and touch nothing else."""
+    """Put the new sources at the end of the `sources:` block and touch nothing else.
+
+    Nothing to add means the file is already right, and returning it unchanged is the whole
+    answer: an earlier version appended the section header anyway, so a re-run that added no
+    source still dirtied the registry with a duplicate comment block.
+    """
+    if not entries:
+        return text
     marker = "\ntaxonomy:\n"
     if marker not in text:
         raise SystemExit(f"{REGISTRY}: no `taxonomy:` block — refusing to guess where sources end")
@@ -215,9 +226,13 @@ def main(argv: list[str] | None = None) -> int:
 
     for bucket, handles in buckets.items():
         print(f"{bucket:<10}{len(handles):>3}  {' '.join(handles)}")
+    # `before.sources` already holds everything an earlier run wrote, so the four originals are
+    # what is left once this composition is taken out of it — otherwise a re-run double-counts.
+    entered = set(buckets["comments"]) | set(buckets["posts"]) | set(buckets["watch"])
+    originals = sum(1 for src in before.sources if not entered & set(src.telegram_channels))
     print(
-        f"\nlaunch {len(before.sources) + len(buckets['comments']) + len(buckets['posts'])}"
-        f" = registry {len(before.sources)} + comments {len(buckets['comments'])}"
+        f"\nlaunch {originals + len(buckets['comments']) + len(buckets['posts'])}"
+        f" = registry {originals} + comments {len(buckets['comments'])}"
         f" + posts {len(buckets['posts'])} · watch {len(buckets['watch'])}"
         f" · excluded {len(buckets['excluded'])}"
     )
