@@ -183,6 +183,26 @@ async def join_group(client, handle: str) -> dict:
     return row | {"outcome": "joined"}
 
 
+async def leave_group(client, handle: str) -> dict:
+    """Leave one channel's discussion group. The reverse of `join_group`, logged the same way.
+
+    Logged rather than done by hand: `results/joins_5c1.jsonl` is the record of what this account
+    is a member of, and a membership that ended outside it would make the log a lie. The `left`
+    row is also what stops `--comments` collecting from a group the operator threw out — the
+    cursor reads the LAST row per channel.
+    """
+    row = {"at": datetime.now(UTC).isoformat(timespec="seconds"), "channel": handle}
+    entity = await client.get_entity(handle)
+    full = await client(functions.channels.GetFullChannelRequest(channel=entity))
+    linked = full.full_chat.linked_chat_id
+    chat = next((c for c in full.chats if getattr(c, "id", None) == linked), None)
+    if chat is None:
+        return row | {"outcome": "no group", "group_id": linked}
+    row |= {"group_id": linked, "group_title": getattr(chat, "title", None)}
+    await client(functions.channels.LeaveChannelRequest(channel=chat))
+    return row | {"outcome": "left"}
+
+
 def seconds_until_next_join(state: dict, now: datetime) -> float:
     """How long to wait before the next join, measured from the last one the LOG records.
 
@@ -392,6 +412,7 @@ async def run(args, registry, gate) -> dict:
             extra["phases_run"].append("join")
 
         if args.posts or args.comments:
+            # The LAST row per channel wins, so a `left` row takes a group back out of scope.
             joined = {
                 handle
                 for handle, row in join_state().items()
@@ -434,6 +455,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--posts", action="store_true", help="collect the posts window")
     parser.add_argument("--comments", action="store_true", help="collect threads in joined groups")
     parser.add_argument("--max", type=int, help="cap the joins attempted in this invocation")
+    parser.add_argument(
+        "--leave", metavar="HANDLE", nargs="+", help="leave these channels' discussion groups"
+    )
     parser.add_argument("--plan", action="store_true", help="print the scope and stop, no client")
     args = parser.parse_args(argv)
 
@@ -444,6 +468,29 @@ def main(argv: list[str] | None = None) -> int:
 
     channels = collectable(registry, gate)
     joins = joinable(registry, gate)
+    if args.leave:
+        authorised = {handle for _, handle in joins}
+        unknown = set(args.leave) - authorised
+        if unknown:
+            raise SystemExit(f"not groups this phase ever joined: {sorted(unknown)}")
+
+        async def run_leave():
+            client = build_client()
+            await client.connect()
+            try:
+                if not await client.is_user_authorized():
+                    raise SystemExit("No Telegram session. Run: python3 scripts/tg_login.py")
+                for handle in args.leave:
+                    row = await leave_group(client, handle)
+                    log_join(row)
+                    print(f"  {handle}: {row['outcome']} — {row.get('group_title')}")
+            finally:
+                await client.disconnect()
+
+        asyncio.run(run_leave())
+        print(f"\nlogged in {JOIN_LOG.relative_to(REPO_ROOT)}; --comments will skip these now")
+        return 0
+
     if args.plan or not (args.join or args.posts or args.comments):
         state = join_state()
         landed = sum(

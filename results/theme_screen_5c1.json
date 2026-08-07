@@ -1,0 +1,1391 @@
+{
+  "generated_at": "2026-08-07T13:47:25+00:00",
+  "phase": "5c1",
+  "asks": "how much of each launch channel's own 28-day window touches the tracked category. The gate never measured theme; @uasaler is why that gap is worth a number.",
+  "lexicon": {
+    "status": "draft-not-law",
+    "note": "A DRAFT keyword lexicon built for one measurement (docs/PROMPT-4.5h.md Step 2). The tracked half is seeded from config/registry.yaml tracked_groups display names and every stem is asserted to be a prefix of one; the rest are draft families seen in the posts. This is not the taxonomy — the taxonomy is the operator's word later, and nothing reads this file except scripts/measure_categories.py.",
+    "matcher": "stem + one of `endings`, bounded by non-word characters on both sides",
+    "endings": [
+      "",
+      "а",
+      "у",
+      "и",
+      "і",
+      "е",
+      "о",
+      "я",
+      "ю",
+      "ї",
+      "й",
+      "ы",
+      "ів",
+      "ой",
+      "ою",
+      "ом",
+      "ем",
+      "ім",
+      "ам",
+      "ям",
+      "ах",
+      "ях",
+      "ей",
+      "ов",
+      "ий",
+      "их",
+      "ій",
+      "ої",
+      "не",
+      "на",
+      "ні",
+      "ами",
+      "ями",
+      "ими",
+      "ого",
+      "ому"
+    ],
+    "known_collision": "сир + ий matches `креветка сира` (raw shrimp) on 11 posts",
+    "tracked": {
+      "dairy": [
+        "аналог",
+        "десерт",
+        "йогурт",
+        "кефир",
+        "кефір",
+        "масл",
+        "молок",
+        "молочн",
+        "рослинн",
+        "ряжанк",
+        "сир",
+        "сирк",
+        "сметан",
+        "творог"
+      ],
+      "ice-cream": [
+        "морожен",
+        "морозив"
+      ]
+    },
+    "draft": {
+      "bakery": [
+        "багет",
+        "булоч",
+        "випічк",
+        "круасан",
+        "хліб"
+      ],
+      "confectionery": [
+        "вафл",
+        "конфет",
+        "пастил",
+        "печив",
+        "торт",
+        "цукерк",
+        "шокола"
+      ],
+      "drinks": [
+        "вино",
+        "виски",
+        "віскі",
+        "кав",
+        "напит",
+        "напій",
+        "пиво",
+        "сок",
+        "сік",
+        "чай"
+      ],
+      "eggs": [
+        "яйц"
+      ],
+      "grocery": [
+        "борошн",
+        "гречк",
+        "крупа",
+        "макарон",
+        "олі",
+        "рис",
+        "сіль",
+        "цукор"
+      ],
+      "meat": [
+        "ковбас",
+        "куриц",
+        "курк",
+        "м'яс",
+        "мясо",
+        "сосиск",
+        "шинк"
+      ],
+      "preserved": [
+        "заморож",
+        "консерв"
+      ],
+      "produce": [
+        "банан",
+        "капуст",
+        "картопл",
+        "моркв",
+        "овоч",
+        "овощ",
+        "огірк",
+        "помідор",
+        "фрукт",
+        "цибул",
+        "яблук",
+        "ягод"
+      ],
+      "ready-meals": [
+        "борщ",
+        "вареник",
+        "готов",
+        "кимч",
+        "кімч",
+        "млинц",
+        "пельмен",
+        "пицц",
+        "піц",
+        "салат",
+        "сирни",
+        "суп",
+        "суші"
+      ],
+      "sauces": [
+        "гірчиц",
+        "кетчуп",
+        "майонез",
+        "соус"
+      ],
+      "seafood": [
+        "креветк",
+        "лосос",
+        "мідії",
+        "оселедц",
+        "риб"
+      ],
+      "snacks": [
+        "горіх",
+        "снек",
+        "сухарик",
+        "чипс",
+        "чіпс"
+      ]
+    }
+  },
+  "tracked_groups": [
+    "dairy",
+    "ice-cream"
+  ],
+  "source": "data/raw/posts/ — the window collected by scripts/collect_5c1.py --posts",
+  "caveats": [
+    "a SCREEN, not a verdict: the lexicon calls itself draft-not-law and has a known collision (сир + ий matches «креветка сира»)",
+    "a low share is not automatically bad — one dairy post in forty can still carry the comments worth reading; what this catches is a channel not about food at all",
+    "post text only. Comments are where the model's rows come from and most channels' comments are not collected yet"
+  ],
+  "channels": [
+    {
+      "channel": "@ATB_FANatik",
+      "posts_in_window": 18,
+      "posts_with_text": 18,
+      "tracked_posts": 1,
+      "tracked_share": 0.056,
+      "any_food_posts": 1,
+      "any_food_share": 0.056,
+      "watchlist_hits": {
+        "svoia-liniia": 1
+      },
+      "examples": [
+        {
+          "terms": {
+            "dairy": [
+              "молочна"
+            ]
+          },
+          "text": "🥩 Акція «Економія» в АТБ\n\n1) Ковбаса 0,55 кг М'ясна лавка/Своя лінія Молочна ДСТУ вар вектор\n\nЗнижка -38%\n\nСтара ціна: 179.90грн.\nНова ціна:"
+        }
+      ],
+      "bucket": "comments"
+    },
+    {
+      "channel": "@HealthPsycholog",
+      "posts_in_window": 17,
+      "posts_with_text": 17,
+      "tracked_posts": 0,
+      "tracked_share": 0.0,
+      "any_food_posts": 1,
+      "any_food_share": 0.059,
+      "watchlist_hits": {},
+      "examples": [],
+      "bucket": "comments"
+    },
+    {
+      "channel": "@Pro_Detyintumama",
+      "posts_in_window": 4,
+      "posts_with_text": 3,
+      "tracked_posts": 0,
+      "tracked_share": 0.0,
+      "any_food_posts": 0,
+      "any_food_share": 0.0,
+      "watchlist_hits": {},
+      "examples": [],
+      "bucket": "comments"
+    },
+    {
+      "channel": "@baby_broccoli_club",
+      "posts_in_window": 1,
+      "posts_with_text": 1,
+      "tracked_posts": 0,
+      "tracked_share": 0.0,
+      "any_food_posts": 0,
+      "any_food_share": 0.0,
+      "watchlist_hits": {},
+      "examples": [],
+      "bucket": "comments"
+    },
+    {
+      "channel": "@chifit_family",
+      "posts_in_window": 4,
+      "posts_with_text": 4,
+      "tracked_posts": 0,
+      "tracked_share": 0.0,
+      "any_food_posts": 0,
+      "any_food_share": 0.0,
+      "watchlist_hits": {},
+      "examples": [],
+      "bucket": "comments"
+    },
+    {
+      "channel": "@denisovapro",
+      "posts_in_window": 22,
+      "posts_with_text": 18,
+      "tracked_posts": 0,
+      "tracked_share": 0.0,
+      "any_food_posts": 3,
+      "any_food_share": 0.167,
+      "watchlist_hits": {},
+      "examples": [],
+      "bucket": "comments"
+    },
+    {
+      "channel": "@discountua1",
+      "posts_in_window": 19,
+      "posts_with_text": 19,
+      "tracked_posts": 0,
+      "tracked_share": 0.0,
+      "any_food_posts": 0,
+      "any_food_share": 0.0,
+      "watchlist_hits": {},
+      "examples": [],
+      "bucket": "comments"
+    },
+    {
+      "channel": "@eftforhealth",
+      "posts_in_window": 1,
+      "posts_with_text": 1,
+      "tracked_posts": 0,
+      "tracked_share": 0.0,
+      "any_food_posts": 0,
+      "any_food_share": 0.0,
+      "watchlist_hits": {},
+      "examples": [],
+      "bucket": "comments"
+    },
+    {
+      "channel": "@katyal55",
+      "posts_in_window": 38,
+      "posts_with_text": 36,
+      "tracked_posts": 0,
+      "tracked_share": 0.0,
+      "any_food_posts": 4,
+      "any_food_share": 0.111,
+      "watchlist_hits": {},
+      "examples": [],
+      "bucket": "comments"
+    },
+    {
+      "channel": "@kkondr_fit",
+      "posts_in_window": 2,
+      "posts_with_text": 2,
+      "tracked_posts": 0,
+      "tracked_share": 0.0,
+      "any_food_posts": 0,
+      "any_food_share": 0.0,
+      "watchlist_hits": {},
+      "examples": [],
+      "bucket": "comments"
+    },
+    {
+      "channel": "@klopotenkofood",
+      "posts_in_window": 40,
+      "posts_with_text": 33,
+      "tracked_posts": 4,
+      "tracked_share": 0.121,
+      "any_food_posts": 16,
+      "any_food_share": 0.485,
+      "watchlist_hits": {
+        "varto": 2
+      },
+      "examples": [
+        {
+          "terms": {
+            "dairy": [
+              "молочна"
+            ]
+          },
+          "text": "3 НЕОЧЕВИДНІ ПОМИЛКИ ПРИ ГОТУВАННІ БАНОШУ\n#кулінарнілайфхаки \nЯкщо захотілось домашнього баношу — рецепт і помилки\n\n1️⃣Не промивайте кукуруд"
+        },
+        {
+          "terms": {
+            "dairy": [
+              "сирна",
+              "сирні",
+              "сиром"
+            ]
+          },
+          "text": "НАЙКРАЩІ ЗАПІКАНКИ (солоні, сирні, солодкі)\n\nЯ взагалі вважаю, що це універсальна страва, бо в неї можна додати майже все, просто запекти з "
+        },
+        {
+          "terms": {
+            "dairy": [
+              "сир",
+              "сирні"
+            ]
+          },
+          "text": "СНЕКИ ПІД ФУТБОЛ ЧИ ФІЛЬМ\n#добіркарецептів \nХто сьогодні як я, приєднуйтесь до перегляду) \n\nІ смачне прихопіть, можете своїми руками швидко "
+        }
+      ],
+      "bucket": "comments"
+    },
+    {
+      "channel": "@kopiyochka1",
+      "posts_in_window": 52,
+      "posts_with_text": 49,
+      "tracked_posts": 1,
+      "tracked_share": 0.02,
+      "any_food_posts": 4,
+      "any_food_share": 0.082,
+      "watchlist_hits": {},
+      "examples": [
+        {
+          "terms": {
+            "ice-cream": [
+              "морозива"
+            ]
+          },
+          "text": "Ой, а цього разу ми наміксували справжній настрій для святкового столу 🤭🍉\n\nЯскравий посуд, графини, чашки і дрібнички для прохолодних напоїв"
+        }
+      ],
+      "bucket": "comments"
+    },
+    {
+      "channel": "@kuksa2022",
+      "posts_in_window": 2,
+      "posts_with_text": 2,
+      "tracked_posts": 0,
+      "tracked_share": 0.0,
+      "any_food_posts": 0,
+      "any_food_share": 0.0,
+      "watchlist_hits": {},
+      "examples": [],
+      "bucket": "comments"
+    },
+    {
+      "channel": "@offspringrus",
+      "posts_in_window": 17,
+      "posts_with_text": 16,
+      "tracked_posts": 0,
+      "tracked_share": 0.0,
+      "any_food_posts": 0,
+      "any_food_share": 0.0,
+      "watchlist_hits": {},
+      "examples": [],
+      "bucket": "comments"
+    },
+    {
+      "channel": "@olgaa_trainer",
+      "posts_in_window": 8,
+      "posts_with_text": 6,
+      "tracked_posts": 0,
+      "tracked_share": 0.0,
+      "any_food_posts": 1,
+      "any_food_share": 0.167,
+      "watchlist_hits": {},
+      "examples": [],
+      "bucket": "comments"
+    },
+    {
+      "channel": "@polyakova_fitness",
+      "posts_in_window": 53,
+      "posts_with_text": 35,
+      "tracked_posts": 1,
+      "tracked_share": 0.029,
+      "any_food_posts": 10,
+      "any_food_share": 0.286,
+      "watchlist_hits": {
+        "varto": 3,
+        "garmonija": 1
+      },
+      "examples": [
+        {
+          "terms": {
+            "dairy": [
+              "сир",
+              "сметаною",
+              "сметану"
+            ]
+          },
+          "text": "🥬 Думаєте, на здоровому харчуванні доведеться відмовитися від улюблених страв?\n\nЗовсім ні. 💛\n\nУ Королівському марафоні ми не змушуємо учасни"
+        }
+      ],
+      "bucket": "comments"
+    },
+    {
+      "channel": "@retsepty",
+      "posts_in_window": 91,
+      "posts_with_text": 74,
+      "tracked_posts": 58,
+      "tracked_share": 0.784,
+      "any_food_posts": 72,
+      "any_food_share": 0.973,
+      "watchlist_hits": {},
+      "examples": [
+        {
+          "terms": {
+            "dairy": [
+              "сир"
+            ]
+          },
+          "text": "Рибний вершковий суп 🍲 \n\n🔸Цибуля \n🔸морква \n🔸картопля \n🔸крем сир \n🔸риба (філе форелі або хребти)\n🔸сіль, спеції \n🔸петрушка \n\nTikTok автор: nis"
+        },
+        {
+          "terms": {
+            "dairy": [
+              "сир"
+            ]
+          },
+          "text": "Літній сніданок ☀️\n\n🔸кабачок\n🔸3 яйця\n🔸сіль, перець\n🔸твердий сир\n🔸шинка\n🔸помідор\n🔸зелень\n\n📌 Кабачок нарізаємо тонкими слайсами за допомогою о"
+        },
+        {
+          "terms": {
+            "dairy": [
+              "сиру",
+              "сметани"
+            ]
+          },
+          "text": "Кабачкова запіканка 🥒\n\n🔸1 кабачок\n🔸2 яйця\n🔸2 ст. л. сметани\n🔸120 г твердого сиру\n🔸350 г курячого філе\n🔸1 цибулина\n🔸🔸1 помідор\n🔸Кріп\n🔸Сіль, п"
+        }
+      ],
+      "bucket": "comments"
+    },
+    {
+      "channel": "@rezeptmoi",
+      "posts_in_window": 2,
+      "posts_with_text": 2,
+      "tracked_posts": 0,
+      "tracked_share": 0.0,
+      "any_food_posts": 1,
+      "any_food_share": 0.5,
+      "watchlist_hits": {},
+      "examples": [],
+      "bucket": "comments"
+    },
+    {
+      "channel": "@sashafitnesslife",
+      "posts_in_window": 20,
+      "posts_with_text": 20,
+      "tracked_posts": 0,
+      "tracked_share": 0.0,
+      "any_food_posts": 1,
+      "any_food_share": 0.05,
+      "watchlist_hits": {
+        "varto": 1
+      },
+      "examples": [],
+      "bucket": "comments"
+    },
+    {
+      "channel": "@smirnov108",
+      "posts_in_window": 28,
+      "posts_with_text": 28,
+      "tracked_posts": 0,
+      "tracked_share": 0.0,
+      "any_food_posts": 4,
+      "any_food_share": 0.143,
+      "watchlist_hits": {
+        "varto": 1
+      },
+      "examples": [],
+      "bucket": "comments"
+    },
+    {
+      "channel": "@tarilka_malyuka",
+      "posts_in_window": 82,
+      "posts_with_text": 81,
+      "tracked_posts": 53,
+      "tracked_share": 0.654,
+      "any_food_posts": 74,
+      "any_food_share": 0.914,
+      "watchlist_hits": {
+        "yagotynske": 2,
+        "varto": 1
+      },
+      "examples": [
+        {
+          "terms": {
+            "ice-cream": [
+              "морозиво"
+            ]
+          },
+          "text": "Перекус 🍧\n\nМангове морозиво 🍨🍦🥭\n\n- Манго 1 шт🥭 \n- Вершки 30-50 мл (за бажанням) 🥛\n\nМанго нарізати й заморозити. Після заморозки манго  перек"
+        },
+        {
+          "terms": {
+            "dairy": [
+              "йогуртом",
+              "сир",
+              "сметаною"
+            ]
+          },
+          "text": "Обід 🥞\n\nТрендові міні сирники 🫐\n\n- Кисломолочний сир 150 г\n- Яйце 1 шт\n- Борошно 1 ст. л.\n- Мак (трішечки)\n\nКисломолочний сир переблендерити"
+        },
+        {
+          "terms": {
+            "ice-cream": [
+              "морозиво"
+            ]
+          },
+          "text": "Перекус 🍓🍌🍨🍦\n\nПолунично-бананове морозиво 🍧 \n\n- Банан 1 шт. 🍌\n- Полуниця 100 г 🍓\n- Вершки 30-50 мл (за бажанням) 🥛\n\nБанан та полуницю наріза"
+        }
+      ],
+      "bucket": "comments"
+    },
+    {
+      "channel": "@tretyakovaele",
+      "posts_in_window": 1,
+      "posts_with_text": 1,
+      "tracked_posts": 0,
+      "tracked_share": 0.0,
+      "any_food_posts": 0,
+      "any_food_share": 0.0,
+      "watchlist_hits": {},
+      "examples": [],
+      "bucket": "comments"
+    },
+    {
+      "channel": "@uasaler",
+      "posts_in_window": 30,
+      "posts_with_text": 30,
+      "tracked_posts": 0,
+      "tracked_share": 0.0,
+      "any_food_posts": 0,
+      "any_food_share": 0.0,
+      "watchlist_hits": {
+        "varto": 2
+      },
+      "examples": [],
+      "bucket": "comments"
+    },
+    {
+      "channel": "@useful_healthy_fitness_menu",
+      "posts_in_window": 17,
+      "posts_with_text": 9,
+      "tracked_posts": 2,
+      "tracked_share": 0.222,
+      "any_food_posts": 4,
+      "any_food_share": 0.444,
+      "watchlist_hits": {
+        "varto": 1
+      },
+      "examples": [
+        {
+          "terms": {
+            "dairy": [
+              "йогурт"
+            ]
+          },
+          "text": "🌿 Ви теж використовуєте м'яту лише для чаю? А дарма!\n\nСвіжа м'ята - це простий спосіб зробити звичні страви та напої більш ароматними й різн"
+        },
+        {
+          "terms": {
+            "dairy": [
+              "йогурт",
+              "сир"
+            ]
+          },
+          "text": "🥗 Літній салат із соусом з авокадо\n\n🍲 Інгредієнти:\n▫️салат листя 300 г\n▫️редиска 6 шт.\n▫️огірки 1 шт.\n▫️сир фета 180 г\n\n🫗 Для соусу:\n▫️авока"
+        }
+      ],
+      "bucket": "comments"
+    },
+    {
+      "channel": "@ya_Nenka",
+      "posts_in_window": 10,
+      "posts_with_text": 10,
+      "tracked_posts": 6,
+      "tracked_share": 0.6,
+      "any_food_posts": 7,
+      "any_food_share": 0.7,
+      "watchlist_hits": {
+        "varto": 7
+      },
+      "examples": [
+        {
+          "terms": {
+            "dairy": [
+              "молока",
+              "молоко"
+            ]
+          },
+          "text": "«ХОЧУ ЗАВЕРШИТИ ГВ. ЯКА КОНСУЛЬТАЦІЯ МЕНІ ПОТРІБНА?»\n\nЗдається, відповідь очевидна: консультація щодо завершення грудного вигодовування 😊 Ал"
+        },
+        {
+          "terms": {
+            "dairy": [
+              "молока",
+              "молоко",
+              "молоком"
+            ]
+          },
+          "text": "...завершення допису про годування на ніч та якість сну дитини ↖️↖️↖️\n\nКрім харчової цінності, має значення й сам процес навчання їсти. Дити"
+        },
+        {
+          "terms": {
+            "dairy": [
+              "молоко",
+              "молочний",
+              "молочного"
+            ]
+          },
+          "text": "...продовження допису про суміш / кашу на ніч ↖️↖️↖️\n\nЩо взагалі показують дослідження прикорму і сну?\n\nРезультати тут неоднозначні. Загалом"
+        }
+      ],
+      "bucket": "comments"
+    },
+    {
+      "channel": "@znishkom",
+      "posts_in_window": 193,
+      "posts_with_text": 191,
+      "tracked_posts": 0,
+      "tracked_share": 0.0,
+      "any_food_posts": 0,
+      "any_food_share": 0.0,
+      "watchlist_hits": {},
+      "examples": [],
+      "bucket": "comments"
+    },
+    {
+      "channel": "@Wellosophy_Lesya",
+      "posts_in_window": 8,
+      "posts_with_text": 6,
+      "tracked_posts": 0,
+      "tracked_share": 0.0,
+      "any_food_posts": 1,
+      "any_food_share": 0.167,
+      "watchlist_hits": {},
+      "examples": [],
+      "bucket": "posts"
+    },
+    {
+      "channel": "@anastasiiadavydiukfitness",
+      "posts_in_window": 1,
+      "posts_with_text": 1,
+      "tracked_posts": 0,
+      "tracked_share": 0.0,
+      "any_food_posts": 0,
+      "any_food_share": 0.0,
+      "watchlist_hits": {},
+      "examples": [],
+      "bucket": "posts"
+    },
+    {
+      "channel": "@atb_aktsiyi",
+      "posts_in_window": 53,
+      "posts_with_text": 7,
+      "tracked_posts": 1,
+      "tracked_share": 0.143,
+      "any_food_posts": 1,
+      "any_food_share": 0.143,
+      "watchlist_hits": {
+        "svoia-liniia": 1
+      },
+      "examples": [
+        {
+          "terms": {
+            "dairy": [
+              "сир"
+            ]
+          },
+          "text": "Що купити в АТБ на сніданок👇🏼\n\n- Консерви De Luxe Foods & Goods Selected Тунець шматочками в олії\n- Сир м’який De Luxe Foods & Goods Selecte"
+        }
+      ],
+      "bucket": "posts"
+    },
+    {
+      "channel": "@blwbabies",
+      "posts_in_window": 4,
+      "posts_with_text": 4,
+      "tracked_posts": 1,
+      "tracked_share": 0.25,
+      "any_food_posts": 1,
+      "any_food_share": 0.25,
+      "watchlist_hits": {},
+      "examples": [
+        {
+          "terms": {
+            "dairy": [
+              "йогурт",
+              "йогуртом",
+              "йогурту"
+            ]
+          },
+          "text": "Збалансовані тарілочки для прикорму малюків від 6 місяців\n\n1️⃣ Тарілочка 1:\n1. Помідор. Нарізати дольками-четвертинками.Найкраще підійде мʼя"
+        }
+      ],
+      "bucket": "posts"
+    },
+    {
+      "channel": "@dpssgovua",
+      "posts_in_window": 79,
+      "posts_with_text": 79,
+      "tracked_posts": 15,
+      "tracked_share": 0.19,
+      "any_food_posts": 19,
+      "any_food_share": 0.241,
+      "watchlist_hits": {
+        "varto": 6,
+        "president": 1
+      },
+      "examples": [
+        {
+          "terms": {
+            "dairy": [
+              "рослинного"
+            ]
+          },
+          "text": "​#фітосанітарна_безпека \n\n🌿 Щоденно фахівці Держпродспоживслужби в областях та в місті Києві проводять фітосанітарні процедури з метою захис"
+        },
+        {
+          "terms": {
+            "dairy": [
+              "молочні",
+              "сире",
+              "сирою",
+              "сирі"
+            ]
+          },
+          "text": "​☀️ Спека і харчові продукти: прості правила безпечного зберігання\n\n🌡️ У літню спеку ризик псування харчових продуктів значно зростає. Висок"
+        },
+        {
+          "terms": {
+            "dairy": [
+              "рослинного"
+            ]
+          },
+          "text": "​#безпечність_харчових_продуктів \n\n🥗 Здоровий спосіб життя починається зі здорового харчування. Саме тому багато українців уважно обирають п"
+        }
+      ],
+      "bucket": "posts"
+    },
+    {
+      "channel": "@epicentrk_sale",
+      "posts_in_window": 141,
+      "posts_with_text": 140,
+      "tracked_posts": 8,
+      "tracked_share": 0.057,
+      "any_food_posts": 33,
+      "any_food_share": 0.236,
+      "watchlist_hits": {
+        "varto": 2
+      },
+      "examples": [
+        {
+          "terms": {
+            "dairy": [
+              "молоко"
+            ]
+          },
+          "text": "🕐🕑🕒🕓🕔\n\n1️⃣ Лимонадниця Yorkshire 5 л з пластиковим краном\n➖2️⃣5️⃣🔤\n💰 503,30 ₴  678,60 ₴\n\n2️⃣ Олівці кольорові пластик 24 шт. Nota Bene\n➖2️⃣0"
+        },
+        {
+          "terms": {
+            "dairy": [
+              "молока"
+            ]
+          },
+          "text": "💧 Запас води влітку — завжди доречний\nДля поливу, господарських потреб або зберігання дощової води обирайте зручні ємності для води: каністр"
+        },
+        {
+          "terms": {
+            "dairy": [
+              "масло"
+            ],
+            "ice-cream": [
+              "морозиво"
+            ]
+          },
+          "text": "🍯 Суботній рецепт від Епіцентру — солона карамель 😋\nВона чудово доповнить млинці, морозиво, сирники, торти або ранкові тости.\n📎 Інгредієнти:"
+        }
+      ],
+      "bucket": "posts"
+    },
+    {
+      "channel": "@gaid_skobioale",
+      "posts_in_window": 18,
+      "posts_with_text": 1,
+      "tracked_posts": 0,
+      "tracked_share": 0.0,
+      "any_food_posts": 0,
+      "any_food_share": 0.0,
+      "watchlist_hits": {},
+      "examples": [],
+      "bucket": "posts"
+    },
+    {
+      "channel": "@intensiv_Mamiev",
+      "posts_in_window": 1,
+      "posts_with_text": 1,
+      "tracked_posts": 0,
+      "tracked_share": 0.0,
+      "any_food_posts": 0,
+      "any_food_share": 0.0,
+      "watchlist_hits": {},
+      "examples": [],
+      "bucket": "posts"
+    },
+    {
+      "channel": "@konservacia_kulinaria",
+      "posts_in_window": 92,
+      "posts_with_text": 92,
+      "tracked_posts": 25,
+      "tracked_share": 0.272,
+      "any_food_posts": 85,
+      "any_food_share": 0.924,
+      "watchlist_hits": {},
+      "examples": [
+        {
+          "terms": {
+            "dairy": [
+              "сиром",
+              "сиру",
+              "сметани"
+            ]
+          },
+          "text": "Запечені яблука з кисломолочним сиром і шоколадом 🍏\n\nВсе дуже просто: 2 великих яблука миємо, вирізаємо серединки. У блендері (якщо є) змішу"
+        },
+        {
+          "terms": {
+            "dairy": [
+              "рослинної"
+            ]
+          },
+          "text": "📌 Зелена аджика – ароматна приправа до улюблених страв!\n\n‼️Це смачна приправа до багатьох страв: до м'яса, до картоплі, вона дуже корисна дл"
+        },
+        {
+          "terms": {
+            "dairy": [
+              "рослинної"
+            ]
+          },
+          "text": "Баклажанна ікра 🍆🥕🌶️\n\nІнгредієнти:\n4 баклажани\n4 червоні болгарські перці\n2 цибулини\n2 моркви\n3 помідори\n3–4 зубчики часнику\nсіль, перець за"
+        }
+      ],
+      "bucket": "posts"
+    },
+    {
+      "channel": "@korolevakuchni",
+      "posts_in_window": 126,
+      "posts_with_text": 126,
+      "tracked_posts": 72,
+      "tracked_share": 0.571,
+      "any_food_posts": 125,
+      "any_food_share": 0.992,
+      "watchlist_hits": {},
+      "examples": [
+        {
+          "terms": {
+            "dairy": [
+              "десерт",
+              "масло"
+            ]
+          },
+          "text": "ШОКОЛАД\n\nІнгредієнти:\nкакао — 100 г\nвершки — 50 мл\nцукрова пудра — 2 ст. л.\nвершкове масло — 50 г\nваніль, кориця, горіхи, курага та родзинки"
+        },
+        {
+          "terms": {
+            "dairy": [
+              "сир",
+              "сиром",
+              "сиру"
+            ]
+          },
+          "text": "Корзинки з сиром та червоною рибою\n\nІнгредієнти:\n150 г пастоподібного сиру кисломолочного \n100 г слабосолоної червоної риби\nкріп\n\nПриготуван"
+        },
+        {
+          "terms": {
+            "dairy": [
+              "сир",
+              "сиром"
+            ]
+          },
+          "text": "Лінива гречка з сиром, яблуками та корицею\n\nІнгредієнти:\nГречана крупа - 50 г\nЯблуко - 1 шт.\nСир кисломолочний - 1 ст. л.\nЦукор - 2 ч. л.\nМе"
+        }
+      ],
+      "bucket": "posts"
+    },
+    {
+      "channel": "@mameni_recepti",
+      "posts_in_window": 253,
+      "posts_with_text": 253,
+      "tracked_posts": 118,
+      "tracked_share": 0.466,
+      "any_food_posts": 175,
+      "any_food_share": 0.692,
+      "watchlist_hits": {},
+      "examples": [
+        {
+          "terms": {
+            "dairy": [
+              "сметана",
+              "сметани"
+            ]
+          },
+          "text": "Кабачкова паста з куркою та чері 💙💛\n\nСкладові:\n✔️Кабачок середній - 2 шт \n✔️Філе курки - 1 шт \n✔️Чері - 200 г \n✔️Сметана - 2 ст.л \n✔️Сіль, с"
+        },
+        {
+          "terms": {
+            "dairy": [
+              "масла"
+            ]
+          },
+          "text": "Кабачкові котлетки 💙💛\n\nСкладові:\n✔️700 г фаршу індички\n✔️2 кабачки\n✔️1 морква\n✔️1 цибулина\n✔️1 яйце\n✔️80 г вівсяних пластівців \n✔️30–40 г ве"
+        },
+        {
+          "terms": {
+            "dairy": [
+              "масло",
+              "молока",
+              "молоко",
+              "молоком"
+            ]
+          },
+          "text": "М’який, ароматний і дуже смачний маковий рулет 💙💛\n\nСкладові:\nТісто:\n✔️Тепле молоко — 125 мл\n✔️Живі дріжджі — 15 г\n✔️Яйце — 1 шт.\n✔️Вершкове "
+        }
+      ],
+      "bucket": "posts"
+    },
+    {
+      "channel": "@marketopt_promo",
+      "posts_in_window": 12,
+      "posts_with_text": 8,
+      "tracked_posts": 3,
+      "tracked_share": 0.375,
+      "any_food_posts": 4,
+      "any_food_share": 0.5,
+      "watchlist_hits": {
+        "ferma": 2
+      },
+      "examples": [
+        {
+          "terms": {
+            "dairy": [
+              "сир"
+            ]
+          },
+          "text": "Переможці Розіграшу🙂\n\n⭐️@AminaDii🔸Аміна\n⭐️Башарімова🔸Катерина\n⭐️ @evgenij_bludov_vfr🔸Євгеній\n⭐️сергей🔸Сергій\n⭐️@Katerina_Khorevko🔸Катерина\n\n"
+        },
+        {
+          "terms": {
+            "dairy": [
+              "сир"
+            ]
+          },
+          "text": "Переможці Розіграшу🙂\n\n⭐️@Dreamer3377🔸Сергій\n⭐️Татьчна Савчук🔸Савчук Тєтяна\n⭐️Марина🔸Марина\n⭐️Таня🔸Таня\n⭐️Вадим🔸Вадим\n\nНа цьому тижні 5 перем"
+        },
+        {
+          "terms": {
+            "dairy": [
+              "сметана"
+            ]
+          },
+          "text": "Переможці Розіграшу🙂\n\n⭐️Даша🙃🔸Даша\n⭐️Наталия🔸Наталия\n⭐️Natalia Bojko🔸Наталя\n⭐️Таня🔸Тетяна\n⭐️@natalybal🔸Наталя\n\nНа цьому тижні 5 переможців р"
+        }
+      ],
+      "bucket": "posts"
+    },
+    {
+      "channel": "@maudau",
+      "posts_in_window": 64,
+      "posts_with_text": 60,
+      "tracked_posts": 1,
+      "tracked_share": 0.017,
+      "any_food_posts": 11,
+      "any_food_share": 0.183,
+      "watchlist_hits": {
+        "varto": 1
+      },
+      "examples": [
+        {
+          "terms": {
+            "dairy": [
+              "десерти"
+            ]
+          },
+          "text": "Що може бути солодшим за десерти? Знижки до -45% на них 🍬\n\nЗамовляй смаколики просто зараз, щоб було чим похрумтіти під серіал."
+        }
+      ],
+      "bucket": "posts"
+    },
+    {
+      "channel": "@recepti",
+      "posts_in_window": 201,
+      "posts_with_text": 201,
+      "tracked_posts": 122,
+      "tracked_share": 0.607,
+      "any_food_posts": 166,
+      "any_food_share": 0.826,
+      "watchlist_hits": {
+        "varto": 2
+      },
+      "examples": [
+        {
+          "terms": {
+            "dairy": [
+              "йогурт",
+              "масло",
+              "маслом",
+              "молоко",
+              "молоком"
+            ]
+          },
+          "text": "Йогуртовий чизкейк з вишнями без випікання 🍒\nна форму 20 см:\nПісочне печиво - 180 г + розтоплене вершкове масло - 70 г\nЙогурт грецький - 600"
+        },
+        {
+          "terms": {
+            "dairy": [
+              "молока",
+              "сир"
+            ]
+          },
+          "text": "Сніданок за 10 хвилин 🥪\n✔️тортилья міні\n✔️1 яйце \n✔️трішки молока для омлету. \n✔️сир сулугуні \n✔️ковбаса або шинка \n✔️зелень \n\nTikTok автор:"
+        },
+        {
+          "terms": {
+            "dairy": [
+              "сир"
+            ]
+          },
+          "text": "Зберігайте ідею красивого та смачного святкового салату 🥗\nКурячий рулет або куряче копчене філе - 300 г\nЯйця - 3 шт.\nПомідори (видалити сере"
+        }
+      ],
+      "bucket": "posts"
+    },
+    {
+      "channel": "@retsepty4",
+      "posts_in_window": 115,
+      "posts_with_text": 115,
+      "tracked_posts": 92,
+      "tracked_share": 0.8,
+      "any_food_posts": 107,
+      "any_food_share": 0.93,
+      "watchlist_hits": {},
+      "examples": [
+        {
+          "terms": {
+            "dairy": [
+              "йогурт",
+              "сметана"
+            ]
+          },
+          "text": "🥙 Белковый салат\n\n🗒 Ингредиенты:\n‣ яйца – 4 шт\n‣ тунец в собственном соку – 2 банки\n‣ огурцы маринованные – 3-4 шт\n‣ кукуруза – 150 г\n‣ лук "
+        },
+        {
+          "terms": {
+            "dairy": [
+              "десерты",
+              "масло"
+            ]
+          },
+          "text": "🥕 Морковный кекс\n\n🗒 Ингредиенты:\n‣ яйца – 3 шт\n‣ сахар – 150 г\n‣ масло сливочное – 80 г\n‣ морковь – 200 г (3-4 небольших)\n‣ грецкие орехи – "
+        },
+        {
+          "terms": {
+            "dairy": [
+              "масле",
+              "масло"
+            ]
+          },
+          "text": "🍆 Салат с баклажанами и ореховым соусом\n\n🗒 Ингредиенты:\n‣ баклажаны – 2 шт\n‣ базилик, кинза, зелёный лук – по вкусу\n‣ чеснок – 2 зубчика\n‣ г"
+        }
+      ],
+      "bucket": "posts"
+    },
+    {
+      "channel": "@retsepty5",
+      "posts_in_window": 140,
+      "posts_with_text": 139,
+      "tracked_posts": 116,
+      "tracked_share": 0.835,
+      "any_food_posts": 132,
+      "any_food_share": 0.95,
+      "watchlist_hits": {},
+      "examples": [
+        {
+          "terms": {
+            "dairy": [
+              "масло"
+            ]
+          },
+          "text": "Рис с курицей горшочках\nок 155 ккал/100 гр\n\nИнгредиенты:\nОкорочок куриный — 1 шт,\nМорковь — 1 шт,\nЛук репчатый — 1 шт,\nРис — 6 ст. л.,\nСоль "
+        },
+        {
+          "terms": {
+            "dairy": [
+              "масло"
+            ]
+          },
+          "text": "Кабачковые корзинки - очень простое и невероятно вкусное диетическое блюдо!\n🔸на 100грамм - 79.81 ккал🔸Б/Ж/У - 8.66/3.47/2.88🔸\n\nИнгредиенты:\n"
+        },
+        {
+          "terms": {
+            "dairy": [
+              "йогурт"
+            ]
+          },
+          "text": "Куриные наггетсы: полезный фастфуд! \n🔸на 100грамм - 111.7 ккал🔸Б/Ж/У - 17.79/2.73/2.97🔸 \n \nИнгредиенты: \nКуриное филе - 600 г \nЙогурт натура"
+        }
+      ],
+      "bucket": "posts"
+    },
+    {
+      "channel": "@vylkachannel",
+      "posts_in_window": 27,
+      "posts_with_text": 27,
+      "tracked_posts": 16,
+      "tracked_share": 0.593,
+      "any_food_posts": 26,
+      "any_food_share": 0.963,
+      "watchlist_hits": {},
+      "examples": [
+        {
+          "terms": {
+            "dairy": [
+              "сир",
+              "сиром"
+            ]
+          },
+          "text": "Хрусткі кошики з курячою начинкою 🌮🧺✨\n\n📖 Інгредієнти:\n\nДля кошиків:\n- 🌮 Великі тортильї - 4 шт.\n- 🫒 Олія - для змащування\n\nДля начинки:\n- 🍗 "
+        },
+        {
+          "terms": {
+            "dairy": [
+              "йогурт",
+              "масло",
+              "маслом"
+            ]
+          },
+          "text": "Пиріг із тіста філо з бананом та лохиною 🍌🫐✨\n\n📖 Інгредієнти:\n\n- 🍌 Банани - 3 шт.\n- 🫐 Лохина - 120 г\n- 🫓 Тісто філо - 5 листів\n- 🧈 Вершкове м"
+        },
+        {
+          "terms": {
+            "dairy": [
+              "сир"
+            ]
+          },
+          "text": "Лаваш з куркою та овочами 🌯🧀✨\n\n📖 Інгредієнти:\n\n- 🍗 Куряче філе\n- 🫑 Солодкий перець\n- 🧅 Синя цибуля\n- 🫓 Круглий лаваш (або тортилья)\n- 🧀 Твер"
+        }
+      ],
+      "bucket": "posts"
+    },
+    {
+      "channel": "@whitecode_zny",
+      "posts_in_window": 25,
+      "posts_with_text": 25,
+      "tracked_posts": 0,
+      "tracked_share": 0.0,
+      "any_food_posts": 0,
+      "any_food_share": 0.0,
+      "watchlist_hits": {},
+      "examples": [],
+      "bucket": "posts"
+    },
+    {
+      "channel": "@Evgenija_dutjache_menu",
+      "posts_in_window": 0,
+      "posts_with_text": 0,
+      "tracked_posts": 0,
+      "tracked_share": null,
+      "any_food_posts": 0,
+      "any_food_share": null,
+      "watchlist_hits": {},
+      "examples": [],
+      "bucket": "watch"
+    },
+    {
+      "channel": "@chekh_yevheniia1982",
+      "posts_in_window": 0,
+      "posts_with_text": 0,
+      "tracked_posts": 0,
+      "tracked_share": null,
+      "any_food_posts": 0,
+      "any_food_share": null,
+      "watchlist_hits": {},
+      "examples": [],
+      "bucket": "watch"
+    },
+    {
+      "channel": "@cozymotherhood",
+      "posts_in_window": 0,
+      "posts_with_text": 0,
+      "tracked_posts": 0,
+      "tracked_share": null,
+      "any_food_posts": 0,
+      "any_food_share": null,
+      "watchlist_hits": {},
+      "examples": [],
+      "bucket": "watch"
+    },
+    {
+      "channel": "@dimakaminskyifit",
+      "posts_in_window": 0,
+      "posts_with_text": 0,
+      "tracked_posts": 0,
+      "tracked_share": null,
+      "any_food_posts": 0,
+      "any_food_share": null,
+      "watchlist_hits": {},
+      "examples": [],
+      "bucket": "watch"
+    },
+    {
+      "channel": "@dutyache_menu",
+      "posts_in_window": 0,
+      "posts_with_text": 0,
+      "tracked_posts": 0,
+      "tracked_share": null,
+      "any_food_posts": 0,
+      "any_food_share": null,
+      "watchlist_hits": {},
+      "examples": [],
+      "bucket": "watch"
+    },
+    {
+      "channel": "@hydnem_prosto",
+      "posts_in_window": 0,
+      "posts_with_text": 0,
+      "tracked_posts": 0,
+      "tracked_share": null,
+      "any_food_posts": 0,
+      "any_food_share": null,
+      "watchlist_hits": {},
+      "examples": [],
+      "bucket": "watch"
+    },
+    {
+      "channel": "@itsmamix",
+      "posts_in_window": 0,
+      "posts_with_text": 0,
+      "tracked_posts": 0,
+      "tracked_share": null,
+      "any_food_posts": 0,
+      "any_food_share": null,
+      "watchlist_hits": {},
+      "examples": [],
+      "bucket": "watch"
+    },
+    {
+      "channel": "@netainaya_vecherya",
+      "posts_in_window": 0,
+      "posts_with_text": 0,
+      "tracked_posts": 0,
+      "tracked_share": null,
+      "any_food_posts": 0,
+      "any_food_share": null,
+      "watchlist_hits": {},
+      "examples": [],
+      "bucket": "watch"
+    },
+    {
+      "channel": "@polinalykovagv",
+      "posts_in_window": 0,
+      "posts_with_text": 0,
+      "tracked_posts": 0,
+      "tracked_share": null,
+      "any_food_posts": 0,
+      "any_food_share": null,
+      "watchlist_hits": {},
+      "examples": [],
+      "bucket": "watch"
+    },
+    {
+      "channel": "@prostetsofa",
+      "posts_in_window": 0,
+      "posts_with_text": 0,
+      "tracked_posts": 0,
+      "tracked_share": null,
+      "any_food_posts": 0,
+      "any_food_share": null,
+      "watchlist_hits": {},
+      "examples": [],
+      "bucket": "watch"
+    },
+    {
+      "channel": "@regina_tatlybaeva",
+      "posts_in_window": 0,
+      "posts_with_text": 0,
+      "tracked_posts": 0,
+      "tracked_share": null,
+      "any_food_posts": 0,
+      "any_food_share": null,
+      "watchlist_hits": {},
+      "examples": [],
+      "bucket": "watch"
+    },
+    {
+      "channel": "@retsepty10",
+      "posts_in_window": 0,
+      "posts_with_text": 0,
+      "tracked_posts": 0,
+      "tracked_share": null,
+      "any_food_posts": 0,
+      "any_food_share": null,
+      "watchlist_hits": {},
+      "examples": [],
+      "bucket": "watch"
+    },
+    {
+      "channel": "@skhudnennya",
+      "posts_in_window": 0,
+      "posts_with_text": 0,
+      "tracked_posts": 0,
+      "tracked_share": null,
+      "any_food_posts": 0,
+      "any_food_share": null,
+      "watchlist_hits": {},
+      "examples": [],
+      "bucket": "watch"
+    },
+    {
+      "channel": "@viktoria_sshh",
+      "posts_in_window": 0,
+      "posts_with_text": 0,
+      "tracked_posts": 0,
+      "tracked_share": null,
+      "any_food_posts": 0,
+      "any_food_share": null,
+      "watchlist_hits": {},
+      "examples": [],
+      "bucket": "watch"
+    }
+  ],
+  "git": {
+    "commit": "c6cd44dc7508dde4a49eedf8651b80804cea74ed",
+    "dirty": [
+      "knowledge/daily_logs/2026-08-07.md",
+      "knowledge/index.md",
+      "results/joins_5c1.jsonl",
+      "scripts/collect_5c1.py",
+      "scripts/theme_screen_5c1.py"
+    ]
+  }
+}

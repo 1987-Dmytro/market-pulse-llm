@@ -3322,3 +3322,33 @@ notes were rewritten the same way and had to be re-applied. Fixed by carrying th
 does not own — `registry_written`, `rulings`, `notes` — across a re-run, with a test that drives
 the whole path. Found because the joiner was watched as a process, not read as a log: the log's
 last line said joins had resumed.
+
+**D24 — the gate never measured theme, and the operator found the hole by eye.** @uasaler
+("Аліексперт 🇺🇦 промокоди, знижки") entered on the 5a1 discovery tag `supermarket_deals:знижки`.
+Its discussion group is «Чат Аліекспрес ( AliExpert )» and its 30 posts in the window contain no
+food term at all: it is an AliExpress affiliate feed. The operator saw the chat in their client
+and ruled it out; the group was left, logged as a `left` row in `results/joins_5c1.jsonl` so the
+log stays the record of what this account is a member of, and `--comments` reads the LAST row per
+channel and therefore skips it.
+
+That is a gap in the gate, not a bad pick: the gate grades capability — resolves, alive, UA/RU,
+group open, comments flowing — and theme only for the two channels the operator pre-registered by
+name. A discovery tag says what a search query matched, not what a channel is about.
+
+`scripts/theme_screen_5c1.py` puts a number on it from the window already collected: $0, offline,
+and reusing `measure_categories.py`'s own lexicon rather than a second one — that lexicon calls
+itself `draft-not-law` and carries a known collision, so this is a SCREEN and the record says so
+three times. 44 channels measurable, 23 with zero dairy/ice-cream posts, 15 with zero food posts
+of ANY kind. It found two distinct failures, and only the first is @uasaler's:
+
+- OFF-TOPIC: @znishkom is 191 posts of Steam game discounts (the operator excluded @Steam_free_1
+  and @Steam_Sale_Ua on 06.08 for exactly that, and this one posts more than any channel in the
+  composition bar the recipe feeds); @whitecode_zny is 25 posts of footwear resale;
+  @offspringrus is a Russian baby-goods shop posting Moscow exhibitions.
+- TEXT-FREE: @discountua1 and @ATB_FANatik are on topic and carry nothing to read — 19 and 18
+  posts that repeat "Знижки в АТБ" and "АНОНС АКЦІЙ АТБ Частина N", with the products in the
+  images. Their whole value would be in comments, and the gate measured 0 of 7 and 2 of 7 posts
+  carrying any.
+
+Joins are PAUSED at 13 of 26 rather than resumed: three of the thirteen still to go are in the
+lists above, and joining a group the operator is about to drop spends the pace on it.
