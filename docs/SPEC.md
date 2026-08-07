@@ -315,6 +315,19 @@ spend anchors `results/spend_*.json`, and the CA-MTL-3 volume bills
 + **$1 OpenRouter**; post-launch run-rate ceiling ~$9–12/month
 (serverless + the CA-MTL-3 volume, kept — review ~2026-09-05 if no GPU
 work has started). Spend anchors are written before the first spend.
+**Cycle-1 economics ruling (operator, 2026-08-06, on the measured
+batch-1 prices — $0.4611/pass, $0.5993/1000 rows):** the inference
+backlog is scored as a WINDOW — the most recent ~4 weeks of stored
+comments (~$2–2.5) at the 5c start; the full 11,338-row history is a
+separate, visibly deferred decision taken only if a use-case demands
+it. Reporting cycle 1 runs at 2 passes/day; the PERMANENT run-rate
+ceiling is set AFTER cycle 1 on its measured daily row flow — the
+$9–12 figure was written for per-second serverless and is not the
+ruling. The volume-vs-redownload-vs-stopped-pod economics is a
+zero-cost step-0 task of 5c (using the measured staging costs and
+RunPod's price list); the CA-MTL-3 volume's fate — it idles at
+~$0.24/day and local-NVMe staging is faster (46 s vs 279 s) — is
+decided on those numbers, advancing the ~2026-09-05 review.
 (7) **Out of scope:** any retrain; dashboard UI (Phase 6); a VPS; merging
 without the (2) measurement; new-domain rows in aggregates before their
 entry gate. Raw v1 stores stay byte-untouched — derived columns land
