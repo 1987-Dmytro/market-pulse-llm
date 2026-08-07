@@ -1,0 +1,44 @@
+{
+  "written_at": "2026-08-07T19:12:00+00:00",
+  "phase": "5c1 addendum 8",
+  "contract": "docs/SPEC.md §3.11 (4) 'Language policy' (operator ruling 2026-08-08): the composition takes Ukrainian-language channels only, channel-level UA dominance of posts is an entry requirement, per-source UA/RU post shares computed offline from the collected window.",
+  "why_this_file_exists": "The brief says to fix the threshold BEFORE computing and log it in the record. A constant inside a script that was run before anyone read it proves nothing about the order, so the bars are written here first, with their reasons, and scripts/language_census_5c1.py refuses to run unless its own constants match this file. The census record cites this file's sha256. Moving a bar afterwards is allowed only by writing the move down here beside the original.",
+  "rule": {
+    "dominance": 0.7,
+    "min_decidable": 10,
+    "denominator": "posts whose detected language is `ua` or `ru`. `en` and `other` are counted and reported but never in the denominator: `other` mixes 'no letters at all' (an image caption) with 'Cyrillic, no distinctive marker', and neither is evidence for either language.",
+    "verdicts": {
+      "UA_DOMINANT": "ua_share >= 0.70",
+      "RU_DOMINANT": "ru_share >= 0.70",
+      "MIXED": "neither share reaches 0.70 — the band 0.30..0.70, which goes to the operator rather than passing silently",
+      "TOO_FEW_DECIDABLE": "the source has posts in the window but fewer than 10 of them are decidable — no verdict, and NOT a synonym for MIXED",
+      "NO_POSTS_IN_WINDOW": "the source collected no posts at all — a different question with a different fix, so it gets a different name"
+    }
+  },
+  "why_these_numbers": {
+    "dominance_0.70": "The operator's own model of the market is a Ukrainian channel with occasional Russian in it ('occasional RU comments, Дніпропетровщина most of all'), so the bar has to tolerate a minority without admitting a half-Russian feed. 0.70 leaves 30% for quotes, reposts and bilingual promos. The bar is symmetric so that MIXED is an explicit band a human rules on, not a rounding artefact: a source at 0.55 RU is not 'basically Ukrainian'.",
+    "min_decidable_10": "Below ten decidable posts one post moves the share by at least 10 pp, so a 0.70 claim would rest on two posts. Ten is the smallest sample where the bar sits a clear two posts away from the 0.50 midpoint. Sources under it are reported with their counts and no verdict — the count is the finding.",
+    "not_tuned": "Both numbers were fixed before any share was computed. If the resulting classification leaves many sources without a verdict, that is a finding about the corpus and it is reported as one; a sensitivity table may describe what other bars would have done, and may not be a reason to move these."
+  },
+  "detector": {
+    "module": "market_pulse.langid.detect",
+    "known_limits": "A deliberate heuristic built for stratifying COMMENTS: alphabet markers (і/ї/є/ґ against ы/э/ъ/ё) plus a small list of frequent words that differ between the languages ('дякую'/'спасибо'). This is the first time it is pointed at posts, which are longer, more promotional and full of product names, so it is validated against two controls before any verdict is written.",
+    "controls": {
+      "@dpssgovua": {
+        "expected": "ua",
+        "why": "the Ukrainian state food-safety service; a government channel that must read Ukrainian"
+      },
+      "@offspringrus": {
+        "expected": "ru",
+        "why": "excluded from the registry on 2026-08-07 as a Russian baby-goods shop (Moscow exhibitions, offspring24.ru) — it is read from the store as a control, not as a census row"
+      }
+    },
+    "control_rule": "If either control comes back against its expectation, the verdict column is not reportable: the record is still written with every count, `verdicts_reportable` is false, and the run exits non-zero. A detector that fails a known case cannot rule on unknown ones."
+  },
+  "scope": {
+    "population": "every source in config/registry.yaml, all 56",
+    "posts": "data/raw/posts/<handle>.jsonl, restricted to the collected window of results/collect_5c1.json (`since 2026-07-10T10:33:14+00:00`)",
+    "read_only": "this census writes nothing but its own record: no registry edit, no store write, no exclusion, no Telegram."
+  },
+  "excludes_nothing": "Item 1 of the brief: the operator confirms the computed list before anything leaves the registry."
+}
