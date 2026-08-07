@@ -3115,3 +3115,100 @@ committed as `results/batch_5b2_checkpoint.jsonl` rather than left in `/tmp`.
 sends one argument. I wrote the warning into this phase's own runbook and then did it anyway,
 mid-teardown. Nothing was lost (the fetch was retried), but a note to myself has now failed
 three times and the memory entry says to use a shell function instead.
+
+## Phase 5c.1 — the entry gate over the launch composition (Deliverable 1, up to the STOP)
+
+`docs/PROMPT-5c1.md`, contract `docs/SPEC.md` §3.11 (4). $0 phase: Telegram API only, no pods,
+no endpoints, no OpenRouter. This section covers Deliverable 1 up to its gate-report STOP;
+Deliverables 2 and 3 wait on the operator's rulings.
+
+### Step 0 — the tail, and it matched
+
+`git status --short` showed exactly the seven paths the brief predicts, so the step-0 STOP did
+not fire. Two commits, staged by path: `82ddfe1` the three team-lead files (SPEC's cycle-1
+economics ruling, STATUS's 07.08 decisions, this brief), `f5991c8` the four knowledge/ paths.
+
+### The composition was checked against canon before anything was measured
+
+The brief lists 62 handles and names `docs/CHANNELS-launch.md` as canon, with a STOP on any
+mismatch. Set, order and bucket are identical across all four buckets (29 / 18 / 14 / 1); no
+handle appears twice, none overlaps the four registry channels or the twelve the operator
+excluded. The check is now `tests/test_entry_gate_5c1.py::test_the_candidate_list_is_the_canons_own`
+rather than a one-off, because a hand-copied list stops matching its source silently.
+
+### Assumptions stated before the code was written
+
+1. **The gate verifies, it does not re-choose.** The composition is the operator's verdict of
+   06.08. Every rule below therefore ends in a FLAG the operator rules on, except the three FAILs
+   the brief closed the list at.
+2. **The four registry channels are out of scope** (brief, D1) and `data/entry_check_report.json`
+   is not touched.
+3. **Group "open" means the join Deliverable 2 would make can land and produce comments** —
+   approval-gated, Telegram-restricted, or everyone-banned-from-sending are all closed for that
+   purpose. Read off the linked chat `GetFullChannelRequest` already returns; no join, no
+   member list.
+
+### Deviations
+
+**D1 — "dead against its bucket's expectation" is named in the brief; the operational rule is
+mine, and it is canon's own.** `docs/CHANNELS-launch.md` excluded six channels as *"мёртв: ни
+постов за 28 дней, ни группы"* — a conjunction — and put fourteen equally silent channels WITH a
+group into the watch bucket. Verified on both halves against `results/discovery_5a1.json`: 6/6
+and 14/14. So no posts in the window AND no group is a FAIL; no posts with a group present is a
+FLAG. The alternative reading — a posting-rate test — would have FAILed eight channels the
+operator chose: five sit at canon 0.2/week, which is ONE post inside the 28-day window of 06.08,
+and one day later that post can age out of it.
+
+**D2 — the language check does not use `langid.detect`, which is the repo's language-mix
+function.** `detect()`'s `other` bucket holds two different states — "no letters at all" and
+"Cyrillic with no letter that separates ua from ru" — so it cannot answer "is this a UA/RU
+channel". On the 06.08 scan it put @Wellosophy_Lesya, an operator pick, at a detect ua+ru share
+of 0.5 on six texts. The decisive number is Cyrillic presence over the posts that carry any
+letter; `detect()`'s mix is recorded beside it as description. Thresholds (share < 0.5 FAILs,
+under ten lettered posts it can only FLAG) were fixed before the pass, on the prior scan's
+controls, not on this run's distribution.
+
+**D3 — the one true language control is @MAMIPEKER1, not the two I expected.** The 06.08 scan
+reads @berlin_food — excluded by the operator — at ua+ru 0.83: it is a Ukrainian-language channel
+about Berlin restaurants, excluded for its TOPIC. Language and theme are separate findings and
+only the first is mechanical; the gate does not attempt theme, which is why @kolyastravinsky and
+@whowears are pre-registered FLAGs.
+
+**D4 — Telegram's scam/fake mark is mapped onto FAIL, outside the brief's closed list of three.**
+A channel Telegram flags may not enter the registry by silence. The mapping is named in the
+record's `rules` block rather than left as an unhandled branch.
+
+**D5 — more of the pure core is reused than the brief names.** The brief names `collapse_albums`,
+`traffic_stats`, `build_verdict`. The four-week window and the language mix already exist in
+`scripts/discover_channels.py` — they are what produced the canon's п/нед column — so the gate
+imports them (deferred, because that module imports this one) instead of writing a second
+implementation whose numbers would not be comparable to the canon's.
+
+**D6 — `check_channel` gained a `discussion_group` block.** An additive key on a function the
+27.07 path and the 5a scan also call; both read named keys, so neither sees it. It costs no extra
+request: `GetFullChannelRequest` already returns the linked chat.
+
+**D7 — @marketopt_official resolves to a channel that is not the one the canon describes.** The
+handle is live: "Маркетопт - Інформаційна", 132 subscribers, not verified, one post in the whole
+50-message sample and none inside the 28-day window, no discussion group. The canon says
+"Маркетопт 🔆 Офіційна сторінка", 41,518 subscribers, verified, ~5 posts/week, promos throughout.
+The mechanical verdict on what the handle points at is FAIL (dead: no posts, no group), and it is
+recorded as such — but the finding is a handle mismatch, not a dead channel, and the brief's rule
+for a canon mismatch is to name it and not resolve it. One read-only global search was run to arm
+the operator's ruling: it returns the cluster the canon's own note lists (@rozlyvne 7,219,
+@marketoptwork 3,257, @marketopt_promo 2,914) and nothing anywhere near 41,518 subscribers.
+Telegram's search returns at most ten rows by its own relevance, so this bounds the finding, it
+does not close it.
+
+**D8 — post snippets were fetched for the two pre-registered THEME flags.** The gate measures
+resolve, liveness, language, group and comment flow; it does not measure theme, so
+@kolyastravinsky and @whowears would have reached the operator as a bare "pre-registered flag".
+Six recent posts each, read-only, $0 — evidence for the ruling, not a verdict. Both are personal
+Russian-language blogs (restaurants in Samara, ballet, South Park; fashion, botox, a
+"*запрещен на территории РФ" disclaimer), neither about the tracked category.
+
+**D9 — two channels in the posts-only bucket are supergroups, not broadcast channels.**
+@Mambabyua and @kulinariya_chat_a resolve as megagroups. Their canon rates — 280.75 and 300
+posts/week — are member chat traffic, not channel posts, which is ~1,120 and ~1,200 messages
+inside a 28-day window each. Flagged rather than decided: it changes what Deliverable 2 collects
+and what 5c2 prices.

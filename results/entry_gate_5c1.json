@@ -1,0 +1,4289 @@
+{
+  "generated_at": "2026-08-07T10:05:25+00:00",
+  "phase": "5c1",
+  "deliverable": "1 — the track-R entry gate over the launch composition",
+  "contract": "docs/SPEC.md §3.11 (4); docs/PROMPT-5c1.md Deliverable 1",
+  "canon": "docs/CHANNELS-launch.md — operator verdict 2026-08-06 plus that evening's addition. The composition is the operator's choice; this gate verifies each entry against the bucket it was chosen into.",
+  "complete": true,
+  "flood_wait_seconds": null,
+  "read_only": "no group joins, no store writes, no registry edit in this pass",
+  "post_sample": 50,
+  "window_days": 28,
+  "window_limit": 1200,
+  "rules": {
+    "verdicts": [
+      "PASS",
+      "FAIL",
+      "FLAG"
+    ],
+    "fail_is_a_closed_list": [
+      "does not resolve",
+      "dead against its bucket's expectation",
+      "non-UA/RU dominant"
+    ],
+    "scam_or_fake_mapping": "Telegram's scam/fake mark is mapped onto FAIL. It is outside the brief's three, and named here rather than left as an unhandled path: a channel Telegram flags may not enter the registry by silence.",
+    "dead": "canon's own conjunction — docs/CHANNELS-launch.md excluded six channels as 'мёртв: ни постов за 28 дней, ни группы' (0 posts AND no group, 6/6) and put fourteen equally silent ones WITH a group into the watch bucket (14/14). So: no posts in the window and no group = FAIL; no posts and a group present = FLAG (watch shape). Not a rate test: eight launch channels sit at a canon rate of 0.2-0.5 posts/week, where zero posts in 28 days is the expected reading.",
+    "language": {
+      "decisive_signal": "cyrillic_share — posts carrying Cyrillic over posts carrying any letter; langid.detect's mix rides beside it as description only",
+      "why_not_detect": "detect()'s 'other' holds both 'no letters' and 'Cyrillic, ua/ru tied', and on the 06.08 scan that put operator-chosen channels at ua+ru 0.5",
+      "min_lettered_texts": 10,
+      "fail_below": 0.5,
+      "under_the_minimum": "described and FLAGged, never a FAIL",
+      "controls": "@MAMIPEKER1 (Turkish, excluded) 150 texts at cyrillic_share 0 → FAIL; @berlin_food, excluded for its TOPIC, writes Ukrainian → language and theme are separate findings and only the first is mechanical"
+    },
+    "flag": [
+      "evidence contradicts the bucket: a comments-bucket channel with no group, a posts-only channel that has one, a watch channel that posts again or has no group",
+      "a discussion group that is not open (approval-gated, restricted, send-banned)",
+      "a comments-bucket channel whose sampled posts carry no comments at all",
+      "a supergroup where a broadcast channel was expected",
+      "a language share under the minimum sample"
+    ],
+    "pre_registered_flags": {
+      "@kolyastravinsky": "theme check (PROMPT-5c1 D1)",
+      "@whowears": "theme check (PROMPT-5c1 D1)",
+      "@marketopt_official": "class + comments confirm (PROMPT-5c1 D1)"
+    },
+    "buckets": {
+      "comments": {
+        "posts_expected": true,
+        "group_expected": true
+      },
+      "posts": {
+        "posts_expected": true,
+        "group_expected": false
+      },
+      "watch": {
+        "posts_expected": false,
+        "group_expected": true
+      },
+      "late": {
+        "posts_expected": true,
+        "group_expected": null
+      }
+    }
+  },
+  "prior_scan": {
+    "path": "results/discovery_5a1.json",
+    "generated_at": "2026-08-06T10:08:51+00:00",
+    "role": "description only — never a gate input; the verdict is on this pass",
+    "handles_without_a_prior_row": [
+      "@marketopt_official"
+    ]
+  },
+  "candidates": [
+    {
+      "handle": "@tretyakovaele",
+      "bucket": "comments",
+      "checked_at": "2026-08-07T10:01:49+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Третьякова Елена Блогер 👧 Материнство-Lifestyle-Beauty",
+        "username": "tretyakovaele",
+        "subscribers": 244527,
+        "telegram_verified": true,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 1,
+          "posts_per_week": 0.25,
+          "last_post": "2026-07-16T13:52:03+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 1,
+          "n_with_letters": 1,
+          "n_cyrillic": 1,
+          "cyrillic_share": 1.0,
+          "decisive": false,
+          "detect_mix": {
+            "ru": 1.0
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 1572331072,
+          "title": "Третьякова Елена Chat",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 48,
+          "share_with_comments": 1.0,
+          "median_comments": 104.0
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 0.25,
+        "discussion_group": true,
+        "language_mix": {
+          "ru": 1.0
+        },
+        "subscribers": 244639,
+        "verdict": "usable"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@kopiyochka1",
+      "bucket": "comments",
+      "checked_at": "2026-08-07T10:01:56+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Копійочка 🫶🏻",
+        "username": "kopiyochka1",
+        "subscribers": 77638,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 52,
+          "posts_per_week": 13.0,
+          "last_post": "2026-08-07T09:01:23+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 49,
+          "n_with_letters": 49,
+          "n_cyrillic": 49,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 1649559179,
+          "title": "Копійочка Chat! 🧡",
+          "username": "kop1chat",
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": true,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 6,
+          "share_with_comments": 0.67,
+          "median_comments": 2
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 13.0,
+        "discussion_group": true,
+        "language_mix": {
+          "ua": 1.0
+        },
+        "subscribers": 77436,
+        "verdict": "usable"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@klopotenkofood",
+      "bucket": "comments",
+      "checked_at": "2026-08-07T10:01:58+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Гастровсесвіт Клопотенка",
+        "username": "klopotenkofood",
+        "subscribers": 36098,
+        "telegram_verified": true,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 40,
+          "posts_per_week": 10.0,
+          "last_post": "2026-08-06T15:04:04+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 33,
+          "n_with_letters": 33,
+          "n_cyrillic": 33,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "other": 0.03,
+            "ua": 0.97
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 2241479209,
+          "title": "Чат Гастровсесвіту Клопотенка",
+          "username": "klopotenkochat",
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 34,
+          "share_with_comments": 0.71,
+          "median_comments": 2
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 10.0,
+        "discussion_group": true,
+        "language_mix": {
+          "other": 0.03,
+          "ua": 0.97
+        },
+        "subscribers": 36088,
+        "verdict": "usable"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@maudau",
+      "bucket": "comments",
+      "checked_at": "2026-08-07T10:02:01+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "MAUDAU: канал цікавих штук",
+        "username": "maudau",
+        "subscribers": 29542,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 64,
+          "posts_per_week": 16.0,
+          "last_post": "2026-08-07T06:59:27+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 60,
+          "n_with_letters": 60,
+          "n_cyrillic": 60,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "other": 0.02,
+            "ua": 0.98
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 1627825924,
+          "title": "MAUDAU Chat",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": false,
+          "closed_because": [
+            "everyone banned from sending"
+          ]
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 50,
+          "share_with_comments": 0.0,
+          "median_comments": 0
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 16.25,
+        "discussion_group": true,
+        "language_mix": {
+          "other": 0.02,
+          "ua": 0.98
+        },
+        "subscribers": 29043,
+        "verdict": "usable"
+      },
+      "verdict": "FLAG",
+      "fails": [],
+      "flags": [
+        "discussion group is not open — everyone banned from sending",
+        "group present but no comments on any of the sampled posts"
+      ],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@uasaler",
+      "bucket": "comments",
+      "checked_at": "2026-08-07T10:02:04+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Аліексперт 🇺🇦 промокоди, знижки, новини",
+        "username": "uasaler",
+        "subscribers": 25799,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 30,
+          "posts_per_week": 7.5,
+          "last_post": "2026-08-07T09:51:52+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 30,
+          "n_with_letters": 30,
+          "n_cyrillic": 30,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 1579882044,
+          "title": "Чат Аліекспрес ( AliExpert )",
+          "username": "chat_aliexpress",
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": true,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 35,
+          "share_with_comments": 0.94,
+          "median_comments": 13
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 7.25,
+        "discussion_group": true,
+        "language_mix": {
+          "ua": 1.0
+        },
+        "subscribers": 25791,
+        "verdict": "usable"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@retsepty",
+      "bucket": "comments",
+      "checked_at": "2026-08-07T10:02:08+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Кулінарні рецепти",
+        "username": "retsepty",
+        "subscribers": 23954,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 92,
+          "posts_per_week": 23.0,
+          "last_post": "2026-08-07T10:00:36+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 75,
+          "n_with_letters": 75,
+          "n_cyrillic": 74,
+          "cyrillic_share": 0.99,
+          "decisive": true,
+          "detect_mix": {
+            "en": 0.01,
+            "ua": 0.99
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 1296069375,
+          "title": "Кулінарні рецепти ЧАТ",
+          "username": "retseptyChat",
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 49,
+          "share_with_comments": 0.67,
+          "median_comments": 1
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 22.75,
+        "discussion_group": true,
+        "language_mix": {
+          "en": 0.01,
+          "ua": 0.99
+        },
+        "subscribers": 23948,
+        "verdict": "usable"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@katyal55",
+      "bucket": "comments",
+      "checked_at": "2026-08-07T10:02:11+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Материнство в кадре",
+        "username": "katyal55",
+        "subscribers": 14968,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 38,
+          "posts_per_week": 9.5,
+          "last_post": "2026-08-07T07:22:33+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 36,
+          "n_with_letters": 36,
+          "n_cyrillic": 36,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "ru": 1.0
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 1984119253,
+          "title": "Катюшка-видеоблог💗 Chat",
+          "username": "katyal555",
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 13,
+          "share_with_comments": 1.0,
+          "median_comments": 22
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 9.25,
+        "discussion_group": true,
+        "language_mix": {
+          "ru": 1.0
+        },
+        "subscribers": 15025,
+        "verdict": "usable"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@smirnov108",
+      "bucket": "comments",
+      "checked_at": "2026-08-07T10:02:14+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Smirnovy.com – здоров'я та розвиток",
+        "username": "smirnov108",
+        "subscribers": 14820,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 28,
+          "posts_per_week": 7.0,
+          "last_post": "2026-08-06T07:06:12+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 28,
+          "n_with_letters": 28,
+          "n_cyrillic": 28,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 1711125138,
+          "title": "Smirnovy.com – здоров'я та розвиток. Chat",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 42,
+          "share_with_comments": 0.64,
+          "median_comments": 1.0
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 7.0,
+        "discussion_group": true,
+        "language_mix": {
+          "ua": 1.0
+        },
+        "subscribers": 14789,
+        "verdict": "usable"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@tarilka_malyuka",
+      "bucket": "comments",
+      "checked_at": "2026-08-07T10:02:18+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Тарілка Малюка • Прикорм",
+        "username": "tarilka_malyuka",
+        "subscribers": 10420,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 82,
+          "posts_per_week": 20.5,
+          "last_post": "2026-08-06T13:40:54+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 81,
+          "n_with_letters": 81,
+          "n_cyrillic": 81,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "other": 0.01,
+            "ua": 0.99
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 4439033290,
+          "title": "Тарілка Малюка Chat",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 42,
+          "share_with_comments": 0.17,
+          "median_comments": 0.0
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 20.0,
+        "discussion_group": true,
+        "language_mix": {
+          "other": 0.01,
+          "ua": 0.99
+        },
+        "subscribers": 10446,
+        "verdict": "usable"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@kkondr_fit",
+      "bucket": "comments",
+      "checked_at": "2026-08-07T10:02:21+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Kkondratyuchka тренування",
+        "username": "kkondr_fit",
+        "subscribers": 9276,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 2,
+          "posts_per_week": 0.5,
+          "last_post": "2026-08-03T14:19:55+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 2,
+          "n_with_letters": 2,
+          "n_cyrillic": 2,
+          "cyrillic_share": 1.0,
+          "decisive": false,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 2455634114,
+          "title": "Kkondratyuchka тренування Chat",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 12,
+          "share_with_comments": 0.75,
+          "median_comments": 2.0
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 0.5,
+        "discussion_group": true,
+        "language_mix": {
+          "ua": 1.0
+        },
+        "subscribers": 9280,
+        "verdict": "usable"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@polyakova_fitness",
+      "bucket": "comments",
+      "checked_at": "2026-08-07T10:02:24+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Тренування з Олею Поляковою та Сергієм Шеремета",
+        "username": "polyakova_fitness",
+        "subscribers": 9078,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 53,
+          "posts_per_week": 13.25,
+          "last_post": "2026-08-05T16:05:02+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 35,
+          "n_with_letters": 35,
+          "n_cyrillic": 35,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 2714354549,
+          "title": "Чат \"Тренування з Олею Поляковою та Сергієм Шеремета\"",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 33,
+          "share_with_comments": 0.15,
+          "median_comments": 0
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 13.25,
+        "discussion_group": true,
+        "language_mix": {
+          "ua": 1.0
+        },
+        "subscribers": 9092,
+        "verdict": "usable"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@znishkom",
+      "bucket": "comments",
+      "checked_at": "2026-08-07T10:02:29+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "ЗнижКом | Ігрові Знижки 🇺🇦",
+        "username": "znishkom",
+        "subscribers": 7251,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 194,
+          "posts_per_week": 48.5,
+          "last_post": "2026-08-06T19:03:14+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 192,
+          "n_with_letters": 191,
+          "n_cyrillic": 191,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "other": 0.01,
+            "ua": 0.99
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 2160355291,
+          "title": "ЗнижКом | Чат",
+          "username": "znishhhkom",
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 42,
+          "share_with_comments": 0.93,
+          "median_comments": 4
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 49.5,
+        "discussion_group": true,
+        "language_mix": {
+          "other": 0.01,
+          "ua": 0.99
+        },
+        "subscribers": 7247,
+        "verdict": "usable"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@kuksa2022",
+      "bucket": "comments",
+      "checked_at": "2026-08-07T10:02:32+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Екатерина Кукса. Материнство в радость",
+        "username": "kuksa2022",
+        "subscribers": 7068,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 2,
+          "posts_per_week": 0.5,
+          "last_post": "2026-08-05T10:30:45+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 2,
+          "n_with_letters": 2,
+          "n_cyrillic": 2,
+          "cyrillic_share": 1.0,
+          "decisive": false,
+          "detect_mix": {
+            "ru": 1.0
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 1894042568,
+          "title": "Чат/Екатерина Кукса",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 38,
+          "share_with_comments": 0.66,
+          "median_comments": 2.0
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 0.5,
+        "discussion_group": true,
+        "language_mix": {
+          "ru": 1.0
+        },
+        "subscribers": 7075,
+        "verdict": "usable"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@HealthPsycholog",
+      "bucket": "comments",
+      "checked_at": "2026-08-07T10:02:35+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Психологія здоров’я Health Psychology",
+        "username": "HealthPsycholog",
+        "subscribers": 6617,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 17,
+          "posts_per_week": 4.25,
+          "last_post": "2026-08-06T09:01:27+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 17,
+          "n_with_letters": 17,
+          "n_cyrillic": 17,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 2378364478,
+          "title": "Психологія здоров’я Health Psychology Chat",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 50,
+          "share_with_comments": 0.64,
+          "median_comments": 2.0
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 4.5,
+        "discussion_group": true,
+        "language_mix": {
+          "ua": 1.0
+        },
+        "subscribers": 6610,
+        "verdict": "usable"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@ATB_FANatik",
+      "bucket": "comments",
+      "checked_at": "2026-08-07T10:02:39+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "ФАНАТИК АТБ | АКЦІЇ",
+        "username": "ATB_FANatik",
+        "subscribers": 3357,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 18,
+          "posts_per_week": 4.5,
+          "last_post": "2026-08-04T19:23:02+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 18,
+          "n_with_letters": 18,
+          "n_cyrillic": 18,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 1925810730,
+          "title": "АТБ / ЗНИЖКИ",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 7,
+          "share_with_comments": 0.29,
+          "median_comments": 0.0
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 4.75,
+        "discussion_group": true,
+        "language_mix": {
+          "ua": 1.0
+        },
+        "subscribers": 3352,
+        "verdict": "usable"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@offspringrus",
+      "bucket": "comments",
+      "checked_at": "2026-08-07T10:02:42+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Ребёнок маминой подруги!",
+        "username": "offspringrus",
+        "subscribers": 3270,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 17,
+          "posts_per_week": 4.25,
+          "last_post": "2026-08-05T11:29:02+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 16,
+          "n_with_letters": 16,
+          "n_cyrillic": 16,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "ru": 1.0
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 2254319971,
+          "title": "Ребёнок маминой подруги! Chat",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 25,
+          "share_with_comments": 0.68,
+          "median_comments": 1
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 4.25,
+        "discussion_group": true,
+        "language_mix": {
+          "ru": 1.0
+        },
+        "subscribers": 3276,
+        "verdict": "usable"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@sashafitnesslife",
+      "bucket": "comments",
+      "checked_at": "2026-08-07T10:02:44+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Розумний ФІТНЕС з Sashafitnesslife ❤️",
+        "username": "sashafitnesslife",
+        "subscribers": 3180,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 20,
+          "posts_per_week": 5.0,
+          "last_post": "2026-08-06T14:40:20+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 20,
+          "n_with_letters": 20,
+          "n_cyrillic": 20,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 1688518573,
+          "title": "SFL Обговорення",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": true,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 23,
+          "share_with_comments": 0.39,
+          "median_comments": 0.0
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 5.0,
+        "discussion_group": true,
+        "language_mix": {
+          "ua": 1.0
+        },
+        "subscribers": 3185,
+        "verdict": "usable"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@Pro_Detyintumama",
+      "bucket": "comments",
+      "checked_at": "2026-08-07T10:02:47+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Интуитивное Материнство",
+        "username": "Pro_Detyintumama",
+        "subscribers": 2665,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 4,
+          "posts_per_week": 1.0,
+          "last_post": "2026-08-05T12:07:57+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 3,
+          "n_with_letters": 3,
+          "n_cyrillic": 3,
+          "cyrillic_share": 1.0,
+          "decisive": false,
+          "detect_mix": {
+            "ru": 1.0
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 1796196830,
+          "title": "Интуитивное Материнство| Chat",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 45,
+          "share_with_comments": 0.27,
+          "median_comments": 0
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 1.0,
+        "discussion_group": true,
+        "language_mix": {
+          "ru": 1.0
+        },
+        "subscribers": 2664,
+        "verdict": "usable"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@chifit_family",
+      "bucket": "comments",
+      "checked_at": "2026-08-07T10:02:50+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Оля CHIFIT| тренування і харчування🔥",
+        "username": "chifit_family",
+        "subscribers": 2634,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 4,
+          "posts_per_week": 1.0,
+          "last_post": "2026-08-05T12:31:39+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 4,
+          "n_with_letters": 4,
+          "n_cyrillic": 4,
+          "cyrillic_share": 1.0,
+          "decisive": false,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 2261893839,
+          "title": "Ольга CHIFIT",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 33,
+          "share_with_comments": 0.18,
+          "median_comments": 0
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 1.0,
+        "discussion_group": true,
+        "language_mix": {
+          "ua": 1.0
+        },
+        "subscribers": 2627,
+        "verdict": "usable"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@ya_Nenka",
+      "bucket": "comments",
+      "checked_at": "2026-08-07T10:02:53+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Катерина Ненька — грудне вигодовування та дитяче харчування | сон",
+        "username": "ya_Nenka",
+        "subscribers": 2369,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 10,
+          "posts_per_week": 2.5,
+          "last_post": "2026-08-06T11:15:28+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 10,
+          "n_with_letters": 10,
+          "n_cyrillic": 10,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 1575053567,
+          "title": "Чат Катерини Неньки",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 35,
+          "share_with_comments": 0.49,
+          "median_comments": 0
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 2.25,
+        "discussion_group": true,
+        "language_mix": {
+          "ua": 1.0
+        },
+        "subscribers": 2367,
+        "verdict": "usable"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@baby_broccoli_club",
+      "bucket": "comments",
+      "checked_at": "2026-08-07T10:02:56+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Брокколи клуб | прикорм | развитие",
+        "username": "baby_broccoli_club",
+        "subscribers": 1496,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 1,
+          "posts_per_week": 0.25,
+          "last_post": "2026-07-17T16:19:54+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 1,
+          "n_with_letters": 1,
+          "n_cyrillic": 1,
+          "cyrillic_share": 1.0,
+          "decisive": false,
+          "detect_mix": {
+            "ru": 1.0
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 2666421743,
+          "title": "Baby broccoly club | прикорм | рецепты | дневник Chat",
+          "username": "babybroccoly",
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 21,
+          "share_with_comments": 0.76,
+          "median_comments": 3.0
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 0.25,
+        "discussion_group": true,
+        "language_mix": {
+          "ru": 1.0
+        },
+        "subscribers": 1499,
+        "verdict": "usable"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@useful_healthy_fitness_menu",
+      "bucket": "comments",
+      "checked_at": "2026-08-07T10:02:58+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Здорове харчування| Софія Ігорівна",
+        "username": "useful_healthy_fitness_menu",
+        "subscribers": 1426,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 17,
+          "posts_per_week": 4.25,
+          "last_post": "2026-08-06T11:15:10+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 9,
+          "n_with_letters": 9,
+          "n_cyrillic": 9,
+          "cyrillic_share": 1.0,
+          "decisive": false,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 2102305707,
+          "title": "Чат здорового харчування з лікарем-терапевтом, дієтологом Софією Ігорівною 👩🏼‍⚕️",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": true,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 33,
+          "share_with_comments": 0.03,
+          "median_comments": 0.0
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 3.75,
+        "discussion_group": true,
+        "language_mix": {
+          "ua": 1.0
+        },
+        "subscribers": 1430,
+        "verdict": "usable"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@olgaa_trainer",
+      "bucket": "comments",
+      "checked_at": "2026-08-07T10:03:01+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Оля | розумний фітнес 💪",
+        "username": "olgaa_trainer",
+        "subscribers": 1421,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 8,
+          "posts_per_week": 2.0,
+          "last_post": "2026-08-05T12:23:56+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 6,
+          "n_with_letters": 6,
+          "n_cyrillic": 6,
+          "cyrillic_share": 1.0,
+          "decisive": false,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 2363078375,
+          "title": "Оля | розумний фітнес 💪 Chat",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 29,
+          "share_with_comments": 0.24,
+          "median_comments": 0.0
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 2.0,
+        "discussion_group": true,
+        "language_mix": {
+          "ua": 1.0
+        },
+        "subscribers": 1422,
+        "verdict": "usable"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@kolyastravinsky",
+      "bucket": "comments",
+      "checked_at": "2026-08-07T10:03:04+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Коля Стравинский",
+        "username": "kolyastravinsky",
+        "subscribers": 1327,
+        "telegram_verified": true,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 16,
+          "posts_per_week": 4.0,
+          "last_post": "2026-08-06T13:59:00+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 10,
+          "n_with_letters": 9,
+          "n_cyrillic": 9,
+          "cyrillic_share": 1.0,
+          "decisive": false,
+          "detect_mix": {
+            "other": 0.5,
+            "ru": 0.5
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 4334589209,
+          "title": "Коля Стравинский Chat",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 38,
+          "share_with_comments": 0.66,
+          "median_comments": 4.0
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 3.75,
+        "discussion_group": true,
+        "language_mix": {
+          "other": 0.44,
+          "ru": 0.56
+        },
+        "subscribers": 1329,
+        "verdict": "usable"
+      },
+      "verdict": "FLAG",
+      "fails": [],
+      "flags": [
+        "pre-registered: theme check (PROMPT-5c1 D1)"
+      ],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@whowears",
+      "bucket": "comments",
+      "checked_at": "2026-08-07T10:03:07+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Морж Стравинский",
+        "username": "whowears",
+        "subscribers": 1185,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 30,
+          "posts_per_week": 7.5,
+          "last_post": "2026-08-07T07:52:36+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 30,
+          "n_with_letters": 30,
+          "n_cyrillic": 30,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "other": 0.17,
+            "ru": 0.83
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 1960381728,
+          "title": "I Am the Walrus",
+          "username": "morzhstravinsky",
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 18,
+          "share_with_comments": 0.67,
+          "median_comments": 3
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 7.25,
+        "discussion_group": true,
+        "language_mix": {
+          "other": 0.17,
+          "ru": 0.83
+        },
+        "subscribers": 1186,
+        "verdict": "usable"
+      },
+      "verdict": "FLAG",
+      "fails": [],
+      "flags": [
+        "pre-registered: theme check (PROMPT-5c1 D1)"
+      ],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@denisovapro",
+      "bucket": "comments",
+      "checked_at": "2026-08-07T10:03:09+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Нутриціологія | Молодість | ЖИТТЯ",
+        "username": "denisovapro",
+        "subscribers": 1087,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 22,
+          "posts_per_week": 5.5,
+          "last_post": "2026-08-06T19:11:57+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 18,
+          "n_with_letters": 18,
+          "n_cyrillic": 17,
+          "cyrillic_share": 0.94,
+          "decisive": true,
+          "detect_mix": {
+            "en": 0.06,
+            "ua": 0.94
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 1518171424,
+          "title": "Нутрициология ☘️ @denisovapro Chat",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 46,
+          "share_with_comments": 0.22,
+          "median_comments": 0
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 4.5,
+        "discussion_group": true,
+        "language_mix": {
+          "en": 0.06,
+          "ua": 0.94
+        },
+        "subscribers": 1086,
+        "verdict": "usable"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@eftforhealth",
+      "bucket": "comments",
+      "checked_at": "2026-08-07T10:03:12+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Я ЗДОРОВА",
+        "username": "eftforhealth",
+        "subscribers": 1067,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 1,
+          "posts_per_week": 0.25,
+          "last_post": "2026-07-10T10:41:24+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 1,
+          "n_with_letters": 1,
+          "n_cyrillic": 1,
+          "cyrillic_share": 1.0,
+          "decisive": false,
+          "detect_mix": {
+            "ru": 1.0
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 2035173427,
+          "title": "чат Я ЗДОРОВА",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 24,
+          "share_with_comments": 0.67,
+          "median_comments": 4
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 0.25,
+        "discussion_group": true,
+        "language_mix": {
+          "ru": 1.0
+        },
+        "subscribers": 1067,
+        "verdict": "usable"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@rezeptmoi",
+      "bucket": "comments",
+      "checked_at": "2026-08-07T10:03:15+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Мои рецептики (Илона)🤍",
+        "username": "rezeptmoi",
+        "subscribers": 1024,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 2,
+          "posts_per_week": 0.5,
+          "last_post": "2026-07-20T12:37:59+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 2,
+          "n_with_letters": 2,
+          "n_cyrillic": 2,
+          "cyrillic_share": 1.0,
+          "decisive": false,
+          "detect_mix": {
+            "ru": 1.0
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 1748757995,
+          "title": "Рецептики",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 49,
+          "share_with_comments": 0.76,
+          "median_comments": 3
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 0.5,
+        "discussion_group": true,
+        "language_mix": {
+          "ru": 1.0
+        },
+        "subscribers": 1023,
+        "verdict": "usable"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@discountua1",
+      "bucket": "comments",
+      "checked_at": "2026-08-07T10:03:19+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "💛Знижки супермаркетів💙",
+        "username": "discountua1",
+        "subscribers": 1021,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 19,
+          "posts_per_week": 4.75,
+          "last_post": "2026-07-29T06:48:33+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 19,
+          "n_with_letters": 19,
+          "n_cyrillic": 19,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 2051194991,
+          "title": "Чат 💛Знижки супермаркетів💙",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 7,
+          "share_with_comments": 0.0,
+          "median_comments": 0
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 4.75,
+        "discussion_group": true,
+        "language_mix": {
+          "ua": 1.0
+        },
+        "subscribers": 1022,
+        "verdict": "usable"
+      },
+      "verdict": "FLAG",
+      "fails": [],
+      "flags": [
+        "group present but no comments on any of the sampled posts"
+      ],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@recepti",
+      "bucket": "posts",
+      "checked_at": "2026-08-07T10:03:24+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Кулінарні рецепти",
+        "username": null,
+        "subscribers": 115746,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 201,
+          "posts_per_week": 50.25,
+          "last_post": "2026-08-07T09:00:01+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 201,
+          "n_with_letters": 201,
+          "n_cyrillic": 201,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": null,
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 50,
+          "share_with_comments": 0.0,
+          "median_comments": 0
+        },
+        "capability_verdict": "posts-only"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 50.25,
+        "discussion_group": false,
+        "language_mix": {
+          "ua": 1.0
+        },
+        "subscribers": 115783,
+        "verdict": "posts-only"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@mameni_recepti",
+      "bucket": "posts",
+      "checked_at": "2026-08-07T10:03:29+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Мамині Рецепти",
+        "username": "mameni_recepti",
+        "subscribers": 90429,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 253,
+          "posts_per_week": 63.25,
+          "last_post": "2026-08-07T08:50:13+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 253,
+          "n_with_letters": 253,
+          "n_cyrillic": 253,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": null,
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 50,
+          "share_with_comments": 0.0,
+          "median_comments": 0
+        },
+        "capability_verdict": "posts-only"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 63.25,
+        "discussion_group": false,
+        "language_mix": {
+          "ua": 1.0
+        },
+        "subscribers": 90463,
+        "verdict": "posts-only"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@retsepty4",
+      "bucket": "posts",
+      "checked_at": "2026-08-07T10:03:33+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Ложка - Рецепты",
+        "username": "retsepty4",
+        "subscribers": 85593,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 115,
+          "posts_per_week": 28.75,
+          "last_post": "2026-08-07T08:51:26+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 115,
+          "n_with_letters": 115,
+          "n_cyrillic": 115,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "ru": 1.0
+          }
+        },
+        "discussion_group": null,
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 42,
+          "share_with_comments": 0.0,
+          "median_comments": 0
+        },
+        "capability_verdict": "posts-only"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 29.25,
+        "discussion_group": false,
+        "language_mix": {
+          "ru": 1.0
+        },
+        "subscribers": 85630,
+        "verdict": "posts-only"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@epicentrk_sale",
+      "bucket": "posts",
+      "checked_at": "2026-08-07T10:03:37+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "ЕПІЦЕНТР",
+        "username": "epicentrk_sale",
+        "subscribers": 52501,
+        "telegram_verified": true,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 141,
+          "posts_per_week": 35.25,
+          "last_post": "2026-08-07T07:35:29+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 140,
+          "n_with_letters": 140,
+          "n_cyrillic": 140,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": null,
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 45,
+          "share_with_comments": 0.0,
+          "median_comments": 0
+        },
+        "capability_verdict": "posts-only"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 36.0,
+        "discussion_group": false,
+        "language_mix": {
+          "ua": 1.0
+        },
+        "subscribers": 52534,
+        "verdict": "posts-only"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@konservacia_kulinaria",
+      "bucket": "posts",
+      "checked_at": "2026-08-07T10:03:40+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Консервація та кулінарія",
+        "username": "konservacia_kulinaria",
+        "subscribers": 33970,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 92,
+          "posts_per_week": 23.0,
+          "last_post": "2026-08-07T06:35:09+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 92,
+          "n_with_letters": 92,
+          "n_cyrillic": 92,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": null,
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 50,
+          "share_with_comments": 0.0,
+          "median_comments": 0
+        },
+        "capability_verdict": "posts-only"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 23.5,
+        "discussion_group": false,
+        "language_mix": {
+          "ua": 1.0
+        },
+        "subscribers": 33974,
+        "verdict": "posts-only"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@intensiv_Mamiev",
+      "bucket": "posts",
+      "checked_at": "2026-08-07T10:03:43+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Алан Мамиев ИНТЕНСИВ",
+        "username": "intensiv_Mamiev",
+        "subscribers": 29683,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 1,
+          "posts_per_week": 0.25,
+          "last_post": "2026-07-24T07:12:46+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 1,
+          "n_with_letters": 1,
+          "n_cyrillic": 1,
+          "cyrillic_share": 1.0,
+          "decisive": false,
+          "detect_mix": {
+            "ru": 1.0
+          }
+        },
+        "discussion_group": null,
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 1,
+          "share_with_comments": 0.0,
+          "median_comments": 0
+        },
+        "capability_verdict": "posts-only"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 0.25,
+        "discussion_group": false,
+        "language_mix": {
+          "ru": 1.0
+        },
+        "subscribers": 29623,
+        "verdict": "posts-only"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@Mambabyua",
+      "bucket": "posts",
+      "checked_at": "2026-08-07T10:03:57+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "🇺🇦Мами з малюками🇺🇦",
+        "username": "Mambabyua",
+        "subscribers": 19429,
+        "telegram_verified": false,
+        "broadcast": false,
+        "megagroup": true,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 1118,
+          "posts_per_week": 279.5,
+          "last_post": "2026-08-07T09:32:25+00:00",
+          "window_days": 28,
+          "window_truncated": true
+        },
+        "language": {
+          "n_texts": 1108,
+          "n_with_letters": 1104,
+          "n_cyrillic": 1080,
+          "cyrillic_share": 0.98,
+          "decisive": true,
+          "detect_mix": {
+            "en": 0.02,
+            "other": 0.04,
+            "ru": 0.02,
+            "ua": 0.92
+          }
+        },
+        "discussion_group": null,
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 44,
+          "share_with_comments": 0.16,
+          "median_comments": 0.0
+        },
+        "capability_verdict": "posts-only"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 280.75,
+        "discussion_group": false,
+        "language_mix": {
+          "en": 0.02,
+          "other": 0.04,
+          "ru": 0.02,
+          "ua": 0.92
+        },
+        "subscribers": 19434,
+        "verdict": "posts-only"
+      },
+      "verdict": "FLAG",
+      "fails": [],
+      "flags": [
+        "supergroup, not a broadcast channel"
+      ],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@retsepty5",
+      "bucket": "posts",
+      "checked_at": "2026-08-07T10:04:01+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Рецепты, Готовим Дома",
+        "username": "retsepty5",
+        "subscribers": 13153,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 140,
+          "posts_per_week": 35.0,
+          "last_post": "2026-08-07T09:13:50+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 139,
+          "n_with_letters": 139,
+          "n_cyrillic": 139,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "ru": 1.0
+          }
+        },
+        "discussion_group": null,
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 50,
+          "share_with_comments": 0.0,
+          "median_comments": 0
+        },
+        "capability_verdict": "posts-only"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 35.75,
+        "discussion_group": false,
+        "language_mix": {
+          "ru": 1.0
+        },
+        "subscribers": 13149,
+        "verdict": "posts-only"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@blwbabies",
+      "bucket": "posts",
+      "checked_at": "2026-08-07T10:04:03+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "BLW.BABIES 🥦🍓 СМАЧНИЙ ПРИКОРМ 🥑 BLW 🥑 САМОПРИКОРМ 🥑 ДИТЯЧЕ МЕНЮ 🥑 РЕЦЕПТИ",
+        "username": "blwbabies",
+        "subscribers": 10054,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 4,
+          "posts_per_week": 1.0,
+          "last_post": "2026-07-31T07:06:03+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 4,
+          "n_with_letters": 4,
+          "n_cyrillic": 4,
+          "cyrillic_share": 1.0,
+          "decisive": false,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": null,
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 17,
+          "share_with_comments": 0.0,
+          "median_comments": 0
+        },
+        "capability_verdict": "posts-only"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 1.0,
+        "discussion_group": false,
+        "language_mix": {
+          "ua": 1.0
+        },
+        "subscribers": 10052,
+        "verdict": "posts-only"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@vylkachannel",
+      "bucket": "posts",
+      "checked_at": "2026-08-07T10:04:06+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "the VYLKA (рецепти)",
+        "username": "vylkachannel",
+        "subscribers": 8890,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 27,
+          "posts_per_week": 6.75,
+          "last_post": "2026-08-05T17:39:01+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 27,
+          "n_with_letters": 27,
+          "n_cyrillic": 27,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": null,
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 50,
+          "share_with_comments": 0.0,
+          "median_comments": 0
+        },
+        "capability_verdict": "posts-only"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 7.25,
+        "discussion_group": false,
+        "language_mix": {
+          "ua": 1.0
+        },
+        "subscribers": 8890,
+        "verdict": "posts-only"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@whitecode_zny",
+      "bucket": "posts",
+      "checked_at": "2026-08-07T10:04:09+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "WHITECODE ЗНИЖКИ | УЦІНКИ",
+        "username": "whitecode_zny",
+        "subscribers": 3857,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 25,
+          "posts_per_week": 6.25,
+          "last_post": "2026-08-06T09:33:14+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 25,
+          "n_with_letters": 25,
+          "n_cyrillic": 25,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": null,
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 22,
+          "share_with_comments": 0.0,
+          "median_comments": 0
+        },
+        "capability_verdict": "posts-only"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 6.25,
+        "discussion_group": false,
+        "language_mix": {
+          "ua": 1.0
+        },
+        "subscribers": 3858,
+        "verdict": "posts-only"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@gaid_skobioale",
+      "bucket": "posts",
+      "checked_at": "2026-08-07T10:04:11+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Відгуки гайд схуднення",
+        "username": "gaid_skobioale",
+        "subscribers": 2772,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 18,
+          "posts_per_week": 4.5,
+          "last_post": "2026-08-07T09:47:41+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 1,
+          "n_with_letters": 1,
+          "n_cyrillic": 1,
+          "cyrillic_share": 1.0,
+          "decisive": false,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": null,
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 48,
+          "share_with_comments": 0.0,
+          "median_comments": 0
+        },
+        "capability_verdict": "posts-only"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 4.5,
+        "discussion_group": false,
+        "language_mix": {
+          "ua": 1.0
+        },
+        "subscribers": 2771,
+        "verdict": "posts-only"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@dpssgovua",
+      "bucket": "posts",
+      "checked_at": "2026-08-07T10:04:15+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Держпродспоживслужба",
+        "username": "dpssgovua",
+        "subscribers": 2619,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 79,
+          "posts_per_week": 19.75,
+          "last_post": "2026-08-07T06:07:00+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 79,
+          "n_with_letters": 79,
+          "n_cyrillic": 79,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": null,
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 33,
+          "share_with_comments": 0.0,
+          "median_comments": 0
+        },
+        "capability_verdict": "posts-only"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 20.0,
+        "discussion_group": false,
+        "language_mix": {
+          "ua": 1.0
+        },
+        "subscribers": 2619,
+        "verdict": "posts-only"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@kulinariya_chat_a",
+      "bucket": "posts",
+      "checked_at": "2026-08-07T10:04:28+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Кулінарія Рецепти ЧАТ",
+        "username": "kulinariya_chat_a",
+        "subscribers": 1789,
+        "telegram_verified": false,
+        "broadcast": false,
+        "megagroup": true,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 1200,
+          "posts_per_week": 300.0,
+          "last_post": "2026-08-07T09:30:00+00:00",
+          "window_days": 28,
+          "window_truncated": true
+        },
+        "language": {
+          "n_texts": 1189,
+          "n_with_letters": 1189,
+          "n_cyrillic": 1098,
+          "cyrillic_share": 0.92,
+          "decisive": true,
+          "detect_mix": {
+            "en": 0.06,
+            "other": 0.05,
+            "ru": 0.83,
+            "ua": 0.06
+          }
+        },
+        "discussion_group": null,
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 50,
+          "share_with_comments": 0.0,
+          "median_comments": 0.0
+        },
+        "capability_verdict": "posts-only"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 300.0,
+        "discussion_group": false,
+        "language_mix": {
+          "en": 0.03,
+          "other": 0.03,
+          "ru": 0.87,
+          "ua": 0.06
+        },
+        "subscribers": 1788,
+        "verdict": "posts-only"
+      },
+      "verdict": "FLAG",
+      "fails": [],
+      "flags": [
+        "supergroup, not a broadcast channel"
+      ],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@Wellosophy_Lesya",
+      "bucket": "posts",
+      "checked_at": "2026-08-07T10:04:31+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "ПХ та схуднення 🍀",
+        "username": "Wellosophy_Lesya",
+        "subscribers": 1609,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 8,
+          "posts_per_week": 2.0,
+          "last_post": "2026-07-13T14:43:05+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 6,
+          "n_with_letters": 6,
+          "n_cyrillic": 6,
+          "cyrillic_share": 1.0,
+          "decisive": false,
+          "detect_mix": {
+            "other": 0.5,
+            "ua": 0.5
+          }
+        },
+        "discussion_group": null,
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 29,
+          "share_with_comments": 0.0,
+          "median_comments": 0
+        },
+        "capability_verdict": "posts-only"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 2.0,
+        "discussion_group": false,
+        "language_mix": {
+          "other": 0.5,
+          "ua": 0.5
+        },
+        "subscribers": 1610,
+        "verdict": "posts-only"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@atb_aktsiyi",
+      "bucket": "posts",
+      "checked_at": "2026-08-07T10:04:36+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "АТБ Акції",
+        "username": "atb_aktsiyi",
+        "subscribers": 1507,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 53,
+          "posts_per_week": 13.25,
+          "last_post": "2026-08-06T15:39:28+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 7,
+          "n_with_letters": 7,
+          "n_cyrillic": 6,
+          "cyrillic_share": 0.86,
+          "decisive": false,
+          "detect_mix": {
+            "en": 0.14,
+            "ua": 0.86
+          }
+        },
+        "discussion_group": null,
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 8,
+          "share_with_comments": 0.0,
+          "median_comments": 0
+        },
+        "capability_verdict": "posts-only"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 13.0,
+        "discussion_group": false,
+        "language_mix": {
+          "en": 0.14,
+          "ua": 0.86
+        },
+        "subscribers": 1507,
+        "verdict": "posts-only"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@anastasiiadavydiukfitness",
+      "bucket": "posts",
+      "checked_at": "2026-08-07T10:04:38+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Онлайн-тренування з Анастасією Давидюк",
+        "username": "anastasiiadavydiukfitness",
+        "subscribers": 1320,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 1,
+          "posts_per_week": 0.25,
+          "last_post": "2026-07-26T09:50:18+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 1,
+          "n_with_letters": 1,
+          "n_cyrillic": 1,
+          "cyrillic_share": 1.0,
+          "decisive": false,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": null,
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 2,
+          "share_with_comments": 0.0,
+          "median_comments": 0
+        },
+        "capability_verdict": "posts-only"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 0.25,
+        "discussion_group": false,
+        "language_mix": {
+          "ua": 1.0
+        },
+        "subscribers": 1320,
+        "verdict": "posts-only"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@korolevakuchni",
+      "bucket": "posts",
+      "checked_at": "2026-08-07T10:04:42+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Королева Кухні 👑 (Кулінарія та рецепти)",
+        "username": "korolevakuchni",
+        "subscribers": 1196,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 126,
+          "posts_per_week": 31.5,
+          "last_post": "2026-08-07T03:41:57+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 126,
+          "n_with_letters": 126,
+          "n_cyrillic": 126,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": null,
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 48,
+          "share_with_comments": 0.0,
+          "median_comments": 0
+        },
+        "capability_verdict": "posts-only"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 31.5,
+        "discussion_group": false,
+        "language_mix": {
+          "ua": 1.0
+        },
+        "subscribers": 1196,
+        "verdict": "posts-only"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@itsmamix",
+      "bucket": "watch",
+      "checked_at": "2026-08-07T10:04:45+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Mamix🥼",
+        "username": "itsmamix",
+        "subscribers": 280731,
+        "telegram_verified": true,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 0,
+          "n_with_letters": 0,
+          "n_cyrillic": 0,
+          "cyrillic_share": null,
+          "decisive": false,
+          "detect_mix": {}
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 2365377305,
+          "title": "Mamix🥼 Chat",
+          "username": "itsmamix_chat",
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 32,
+          "share_with_comments": 0.94,
+          "median_comments": 248.5
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 0.0,
+        "discussion_group": true,
+        "language_mix": {},
+        "subscribers": 280895,
+        "verdict": "usable"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@regina_tatlybaeva",
+      "bucket": "watch",
+      "checked_at": "2026-08-07T10:04:48+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Регинаграмм | Материнство , путешествия",
+        "username": "regina_tatlybaeva",
+        "subscribers": 5385,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 0,
+          "n_with_letters": 0,
+          "n_cyrillic": 0,
+          "cyrillic_share": null,
+          "decisive": false,
+          "detect_mix": {}
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 1980350552,
+          "title": "ЧАТ | Регинаграмм",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 48,
+          "share_with_comments": 0.79,
+          "median_comments": 4.5
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 0.0,
+        "discussion_group": true,
+        "language_mix": {},
+        "subscribers": 5389,
+        "verdict": "usable"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@netainaya_vecherya",
+      "bucket": "watch",
+      "checked_at": "2026-08-07T10:04:50+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "нетайная вечеря",
+        "username": "netainaya_vecherya",
+        "subscribers": 5284,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 0,
+          "n_with_letters": 0,
+          "n_cyrillic": 0,
+          "cyrillic_share": null,
+          "decisive": false,
+          "detect_mix": {}
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 2231851853,
+          "title": "беседа нетайной вечери",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 17,
+          "share_with_comments": 0.71,
+          "median_comments": 1.0
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 0.0,
+        "discussion_group": true,
+        "language_mix": {},
+        "subscribers": 5286,
+        "verdict": "usable"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@retsepty10",
+      "bucket": "watch",
+      "checked_at": "2026-08-07T10:04:53+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Рецепты | Полезное питание",
+        "username": "retsepty10",
+        "subscribers": 4065,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 0,
+          "n_with_letters": 0,
+          "n_cyrillic": 0,
+          "cyrillic_share": null,
+          "decisive": false,
+          "detect_mix": {}
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 1450824123,
+          "title": "Рецепты | Полезное питание Chat",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 43,
+          "share_with_comments": 0.88,
+          "median_comments": 2.0
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 0.0,
+        "discussion_group": true,
+        "language_mix": {},
+        "subscribers": 4068,
+        "verdict": "usable"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@skhudnennya",
+      "bucket": "watch",
+      "checked_at": "2026-08-07T10:04:56+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "ЗДОРОВЕ СХУДНЕННЯ",
+        "username": "skhudnennya",
+        "subscribers": 3895,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 0,
+          "n_with_letters": 0,
+          "n_cyrillic": 0,
+          "cyrillic_share": null,
+          "decisive": false,
+          "detect_mix": {}
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 1580075878,
+          "title": "ЗДОРОВЕ СХУДНЕННЯ Chat",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 39,
+          "share_with_comments": 0.15,
+          "median_comments": 0
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 0.0,
+        "discussion_group": true,
+        "language_mix": {},
+        "subscribers": 3897,
+        "verdict": "usable"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@prostetsofa",
+      "bucket": "watch",
+      "checked_at": "2026-08-07T10:04:58+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "София Стец | про материнство",
+        "username": "prostetsofa",
+        "subscribers": 3424,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 0,
+          "n_with_letters": 0,
+          "n_cyrillic": 0,
+          "cyrillic_share": null,
+          "decisive": false,
+          "detect_mix": {}
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 1587865639,
+          "title": "МамаПапиЯ🕊️",
+          "username": "mamapapiya",
+          "megagroup": true,
+          "min": false,
+          "join_request": true,
+          "join_to_send": true,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": false,
+          "closed_because": [
+            "join needs admin approval"
+          ]
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 22,
+          "share_with_comments": 0.5,
+          "median_comments": 1
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 0.0,
+        "discussion_group": true,
+        "language_mix": {},
+        "subscribers": 3432,
+        "verdict": "usable"
+      },
+      "verdict": "FLAG",
+      "fails": [],
+      "flags": [
+        "discussion group is not open — join needs admin approval"
+      ],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@viktoria_sshh",
+      "bucket": "watch",
+      "checked_at": "2026-08-07T10:05:01+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Я выбираю быть здоровой💚✨",
+        "username": "viktoria_sshh",
+        "subscribers": 3302,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 0,
+          "n_with_letters": 0,
+          "n_cyrillic": 0,
+          "cyrillic_share": null,
+          "decisive": false,
+          "detect_mix": {}
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 2026393258,
+          "title": "Я выбираю быть здоровой✨ Chat",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 31,
+          "share_with_comments": 0.45,
+          "median_comments": 0
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 0.0,
+        "discussion_group": true,
+        "language_mix": {},
+        "subscribers": 3303,
+        "verdict": "usable"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@hydnem_prosto",
+      "bucket": "watch",
+      "checked_at": "2026-08-07T10:05:04+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Марафон схуднення онлайн",
+        "username": "hydnem_prosto",
+        "subscribers": 3108,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 0,
+          "n_with_letters": 0,
+          "n_cyrillic": 0,
+          "cyrillic_share": null,
+          "decisive": false,
+          "detect_mix": {}
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 3669066319,
+          "title": "Худнемо разом",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 48,
+          "share_with_comments": 0.44,
+          "median_comments": 0
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 0.0,
+        "discussion_group": true,
+        "language_mix": {},
+        "subscribers": 3110,
+        "verdict": "usable"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@dimakaminskyifit",
+      "bucket": "watch",
+      "checked_at": "2026-08-07T10:05:07+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Дмитро Камінський | Фітнес та Саморозвиток",
+        "username": "dimakaminskyifit",
+        "subscribers": 2173,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 0,
+          "n_with_letters": 0,
+          "n_cyrillic": 0,
+          "cyrillic_share": null,
+          "decisive": false,
+          "detect_mix": {}
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 2540979461,
+          "title": "Дмитро Камінський | Фітнес та Саморозвиток Chat",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 19,
+          "share_with_comments": 0.74,
+          "median_comments": 7.0
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 0.0,
+        "discussion_group": true,
+        "language_mix": {},
+        "subscribers": 2174,
+        "verdict": "usable"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@dutyache_menu",
+      "bucket": "watch",
+      "checked_at": "2026-08-07T10:05:10+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Дитяче меню",
+        "username": "dutyache_menu",
+        "subscribers": 1635,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 0,
+          "n_with_letters": 0,
+          "n_cyrillic": 0,
+          "cyrillic_share": null,
+          "decisive": false,
+          "detect_mix": {}
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 1856128702,
+          "title": "Дитяче меню Chat",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 8,
+          "share_with_comments": 0.88,
+          "median_comments": 5.5
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 0.0,
+        "discussion_group": true,
+        "language_mix": {},
+        "subscribers": 1637,
+        "verdict": "usable"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@polinalykovagv",
+      "bucket": "watch",
+      "checked_at": "2026-08-07T10:05:12+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "ГВ/прикорм/сон с Полиной Лыковой 🤱🏻",
+        "username": "polinalykovagv",
+        "subscribers": 1570,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 0,
+          "n_with_letters": 0,
+          "n_cyrillic": 0,
+          "cyrillic_share": null,
+          "decisive": false,
+          "detect_mix": {}
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 1531887375,
+          "title": "Полина Лыкова 🤱🏻 Chat",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 46,
+          "share_with_comments": 0.76,
+          "median_comments": 2.0
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 0.0,
+        "discussion_group": true,
+        "language_mix": {},
+        "subscribers": 1570,
+        "verdict": "usable"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@Evgenija_dutjache_menu",
+      "bucket": "watch",
+      "checked_at": "2026-08-07T10:05:15+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Євгенія_Дитяче меню",
+        "username": "Evgenija_dutjache_menu",
+        "subscribers": 1534,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 0,
+          "n_with_letters": 0,
+          "n_cyrillic": 0,
+          "cyrillic_share": null,
+          "decisive": false,
+          "detect_mix": {}
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 1281641204,
+          "title": "Дитяче меню Chat",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 50,
+          "share_with_comments": 0.3,
+          "median_comments": 0
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 0.0,
+        "discussion_group": true,
+        "language_mix": {},
+        "subscribers": 1535,
+        "verdict": "usable"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@chekh_yevheniia1982",
+      "bucket": "watch",
+      "checked_at": "2026-08-07T10:05:18+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Рецептишки Евгении Чех",
+        "username": "chekh_yevheniia1982",
+        "subscribers": 1454,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 0,
+          "n_with_letters": 0,
+          "n_cyrillic": 0,
+          "cyrillic_share": null,
+          "decisive": false,
+          "detect_mix": {}
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 1601660092,
+          "title": "Блог Евгении Чех Chat",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 25,
+          "share_with_comments": 0.68,
+          "median_comments": 2
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 0.0,
+        "discussion_group": true,
+        "language_mix": {},
+        "subscribers": 1455,
+        "verdict": "usable"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@cozymotherhood",
+      "bucket": "watch",
+      "checked_at": "2026-08-07T10:05:21+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Уютное материнство",
+        "username": "cozymotherhood",
+        "subscribers": 1435,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 0,
+          "n_with_letters": 0,
+          "n_cyrillic": 0,
+          "cyrillic_share": null,
+          "decisive": false,
+          "detect_mix": {}
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 2068224732,
+          "title": "Уютное материнство Chat",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 8,
+          "share_with_comments": 0.88,
+          "median_comments": 26
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": {
+        "generated_at": "2026-08-06T10:08:51+00:00",
+        "posts_per_week": 0.0,
+        "discussion_group": true,
+        "language_mix": {},
+        "subscribers": 1440,
+        "verdict": "usable"
+      },
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@marketopt_official",
+      "bucket": "late",
+      "checked_at": "2026-08-07T10:05:23+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Маркетопт - Інформаційна",
+        "username": "marketopt_official",
+        "subscribers": 132,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 0,
+          "n_with_letters": 0,
+          "n_cyrillic": 0,
+          "cyrillic_share": null,
+          "decisive": false,
+          "detect_mix": {}
+        },
+        "discussion_group": null,
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 1,
+          "share_with_comments": 0.0,
+          "median_comments": 0
+        },
+        "capability_verdict": "posts-only"
+      },
+      "prior_5a1": null,
+      "verdict": "FAIL",
+      "fails": [
+        "dead against its bucket — no posts in 28 days and no discussion group"
+      ],
+      "flags": [
+        "pre-registered: class + comments confirm (PROMPT-5c1 D1)"
+      ],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
+    }
+  ],
+  "summary": {
+    "n": 62,
+    "PASS": 54,
+    "FAIL": 1,
+    "FLAG": 7,
+    "ERROR": 0,
+    "by_bucket": {
+      "comments": {
+        "n": 29,
+        "PASS": 25,
+        "FAIL": 0,
+        "FLAG": 4,
+        "ERROR": 0
+      },
+      "posts": {
+        "n": 18,
+        "PASS": 16,
+        "FAIL": 0,
+        "FLAG": 2,
+        "ERROR": 0
+      },
+      "watch": {
+        "n": 14,
+        "PASS": 13,
+        "FAIL": 0,
+        "FLAG": 1,
+        "ERROR": 0
+      },
+      "late": {
+        "n": 1,
+        "PASS": 0,
+        "FAIL": 1,
+        "FLAG": 0,
+        "ERROR": 0
+      }
+    }
+  },
+  "registry_written": false,
+  "note": "PROMPT-5c1 D1 stops here: every FAIL and FLAG goes to the operator, who rules in chat; the rulings land in each row's `ruling`, and only then is config/registry.yaml written. data/entry_check_report.json (the 2026-07-27 run) is untouched, and the four registry channels are out of this gate's scope.",
+  "git": {
+    "commit": "dc73b4576581fb8651f5e76b4247cf02ac0ae7ca",
+    "dirty": [
+      "implementation-notes.md",
+      "knowledge/daily_logs/2026-08-07.md",
+      "knowledge/index.md"
+    ]
+  }
+}
