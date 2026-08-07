@@ -3830,3 +3830,70 @@ artefacts fail there for environmental reasons. **The control is the parent comm
 before any of this session's work, fails the same five in the same worktree — so the five are the
 instrument, and the number that moves (1132 → 1142 → 1148 → 1159) is the work. In the real
 checkout HEAD is 1164 passed, formatter clean.
+
+**D64 — I ran the gate inside the FloodWait window. Nothing was lost, the gap is closed, and the
+sequence is worth writing down.** Checking the six new candidates were wired, I ran
+`--gate-5c1 --only @mandziak` — a read-only-looking command that begins, like everything else,
+with a `ResolveUsernameRequest`. It reached Telegram and came back with **55,779 s**.
+
+Damage, measured rather than assumed:
+
+- **The window was not extended.** 18:31:48 UTC + 55,779 s = **10:01:27**, against the standing
+  wall's recorded 10:02 — Telegram returned the REMAINING time on the same account-wide limit.
+- **The record lost nothing.** Against `git show HEAD:results/entry_gate_5c1.json`: all 64 rows
+  byte-identical, `rulings` identical, `notes` identical, `registry_written` still true. Two
+  fields moved and both now say something true: `flood_wait_seconds` 55,779, and `complete` False
+  — the record covers 64 of 89 candidates, which it does.
+
+The cause is the gap I named for `--leave` and did not close here: `collect_5c1.py` has refused to
+start inside the window since 07.08, `entry_check.py --gate-5c1` never did. Two fixes, both in
+this commit: the gate calls the same `refuse_inside_flood_wait` before it builds a client, and a
+FloodWait the GATE hits is now written into `results/joins_5c1.jsonl` as well as into its own
+record — the join log is where every phase reads "is the account walled" from, and a wall found by
+one path and recorded only in that path's own file is a wall the next path walks into.
+
+Two test consequences, both kept rather than papered over: an autouse fixture points the gate
+tests at an empty join log, because otherwise every one of them depends on whether the account
+happens to be walled today; and the resume test now asserts that a re-run IS refused until the
+window passes, then moves the recorded window into the past to test the resume itself. That
+refusal is the rule, not a nuisance.
+
+**D65 — the six of "Дозаявка №8" are wired in the CANON's order, which is not the brief's.**
+PROMPT-5c1-day2 groups them by expected segment (@tvorcha_matusyua @pavlushaiyava @mamaiagolodniy
+→ baby_food …), the canon lists them as the operator found them, and the list is the canon's:
+@tvorcha_matusyua · @mamaiagolodniy · @educationwithloven · @pavlushaiyava · @lab_of_childhood ·
+@mandziak. Bucket `late` for all six — their class is the gate's to find. The segments from the
+brief are transcribed WITH the canon's own words beside each row, and two of them are marked as
+what they are: «тематику решит гейт» (@pavlushaiyava) and «тематику/язык решат гейт и перепись»
+(@mandziak) — expectations the gate may contradict, and a test holds those two comments to the
+canon's phrasing. The canon's five handle-less titles are correctly NOT gate rows: they are step
+7's search task.
+
+While fixing this, a positional assertion broke: `test_the_retail_addition…` compared
+`CANDIDATES[-3:]`, which stopped being the retail three the moment six rows were appended after
+them. It now locates them by handle, in canon order. A tail slice is a test that breaks on an
+addition it has nothing to do with.
+
+**D66 — the market-origin screen exists, and on the live 39 it flags nothing.**
+`scripts/market_screen_5c1.py` (SPEC §3.11 (4)) reads the same window as the census and answers a
+different question — what you pay with, where you shop, where you are, what you link, and the RF
+legal-regime disclaimers. Verdicts UA_EVIDENCE / NO_EVIDENCE / RF_FLAG, **report-only**: it never
+removes a source.
+
+Result over the 39: **UA_EVIDENCE 19 · NO_EVIDENCE 20 · RF_FLAG 0**. The zero is only readable
+because the controls fire — a screen that flags nothing and has no working control is
+indistinguishable from a broken one. All four pre-registered controls behaved, plus the negative
+one: @offspringrus → RF_FLAG, @dpssgovua → UA_EVIDENCE, the @tretyakovaele «Сочи» row and the
+@retsepty5 «₽ / Яндекс Еды» row both flag on their own text, and the line «щоб добре просочився»
+— verbatim from a Ukrainian recipe — produces no RF hit at all. A failed control sets
+`verdicts_reportable: false` and returns 1.
+
+Two design decisions the operator should see. **The country's own name and a bare «РФ» are
+deliberately not signals**: a Ukrainian channel writes both constantly, about the war rather than
+about a market, and flagging those answers a different question than SPEC asks. `Лента` is out of
+the retailer list for the same reason in miniature — it is an ordinary word in a recipe. And
+**NO_EVIDENCE is half the registry**: twenty sources never quote a price, a shop or a place, so if
+"REQUIRES UA-market evidence" is ever applied as a hard gate rather than a screen, it excludes
+twenty channels for not being about shopping. That is the operator's call and the record names it.
+Every hit carries its quoted line and the term that matched — the «сочився» lesson, enforced by a
+test that would redden if the boundary were dropped.

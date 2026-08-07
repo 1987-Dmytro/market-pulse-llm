@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-07 19:33:39 (every SessionStart)
+**Auto-refreshed:** 2026-08-07 20:36:01 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-2fc784a docs(5c1): the sixteen regional rows say where each one came from
-9cb2eb8 feat(5c1): the registry gains audience, and the segment is the canon's word
-13b04e6 feat(5c1): five channels out of the registry, and a 20-hour wall on username resolution
-a1b7ee0 feat(5c1): the theme gap, measured — 15 launch channels post no food at all
-c6cd44d fix(5c1): gating one late candidate silently stopped the live collection
+789c352 docs(5c1): D63 — every commit now runs its own suite, and the checker has a bias
+fdf4115 docs(5c1): the SPEC's two new rulings, and D45-D62
+bad3ee7 feat(5c1): the retail addition, the chain searches, and a screen that stops overwriting its own evidence
+8c64103 feat(5c1): wave 3 — seventeen exits, registry 56 to 39
+b90c2e0 feat(5c1): the language census — 21 UA, 3 RU, and 36 sources it cannot rule on
 ```
 
 ## 📋 Recent decisions
@@ -31,8 +31,9 @@ c6cd44d fix(5c1): gating one late candidate silently stopped the live collection
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-07 21:00 (**wave 3 applied — registry 56 → 41**, `food_quality` renamed,
-three group exits queued. Before it, 20:05: addendum 9's search wired; 19:40: the census computed — 21 UA · 3 RU · 36 without a
+**Last update:** 2026-08-07 22:15 (day-2 pre-flight: **the market screen exists** and flags nothing
+on the live 39, «Дозаявка №8»'s six are wired, and the gate now refuses inside the wall — it did
+not, and I walked into it. Before: 21:00 wave 3 → registry 39; 20:05 addendum 9; 19:40 the census — 21 UA · 3 RU · 36 without a
 verdict — and three joins held pending the operator's word. Before it, 18:52: "Дозаявка №5" wired
 and queued; 16:52: wave 2 · "Дозаявка №3" · `audience`).
 **5c1 is executed except the tail of the joins.** The morning's "nothing was executed" is gone: 18
@@ -215,11 +216,16 @@ IS the resolve the wall is on, so a leave fired today would lengthen the window 
 anything. `--leave` is now behind the same guard as `--join` (it was not), and the three go first
 after 10:02 UTC — **3 resolves**, membership flag re-read after each.
 
-**THE MARKET-ORIGIN SCREEN STILL DOES NOT EXIST** (SPEC §3.11 (4), operator 08.08): UA-market
-evidence required, RF-market channels excluded regardless of language, retroactive to every source.
-No brief has ordered it built, and it makes «market screen» in the "Дозаявка №5" brief ambiguous —
-the repo's `theme_screen_5c1.py` answers "is this about food", the new ruling asks "is this selling
-into the Ukrainian market". See D45.
+**THE MARKET-ORIGIN SCREEN EXISTS AND CLOSES D45.** `scripts/market_screen_5c1.py` (SPEC §3.11
+(4)): what you pay with, where you shop, where you are, what domain you link, and the RF
+legal-regime disclaimers — never the alphabet. **Report-only**, it never removes a source. Over the
+live 39: **UA_EVIDENCE 19 · NO_EVIDENCE 20 · RF_FLAG 0**, and the zero is readable only because the
+controls fire: @offspringrus → RF_FLAG, @dpssgovua → UA_EVIDENCE, the «Сочи» and «₽/Яндекс Еды»
+rows flag on their own text, and «щоб добре просочився» produces nothing. Two calls to know about:
+the bare «РФ»/«Росія» is NOT a signal (a UA channel writes it about the war), and **NO_EVIDENCE is
+half the registry** — twenty sources never quote a price or a shop, so a hard "REQUIRES UA
+evidence" gate would exclude them for not being about shopping. Operator's call; the record names
+it. Every hit carries its quoted line.
 
 **ONE COMPOSITION DECISION IS WAITING ON THE OPERATOR AND NOTHING MOVES WITHOUT IT:** the census
 list. Note both halves of what it cannot see — of tomorrow's 7 joins only 3 are measured UA
