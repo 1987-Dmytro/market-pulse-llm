@@ -391,6 +391,11 @@ def gate_row(
                 "n_posts_sampled": traffic.get("n_posts"),
                 "share_with_comments": traffic.get("share_with_comments"),
                 "median_comments": traffic.get("median_comments"),
+                # The sample reaches back as far as POST_SAMPLE posts take it, so for a channel
+                # the 28-day window finds empty these two dates are the only evidence of WHEN it
+                # went quiet — and "dead" without a date is a verdict the operator cannot check.
+                "sample_first_post": traffic.get("first_post"),
+                "sample_last_post": traffic.get("last_post"),
             },
             # build_verdict's word on CAPABILITY, kept beside the gate's word on ENTRY.
             "capability_verdict": record.get("verdict"),

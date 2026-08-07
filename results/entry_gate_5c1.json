@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-07T10:22:26+00:00",
+  "generated_at": "2026-08-07T11:03:25+00:00",
   "phase": "5c1",
   "deliverable": "1 — the track-R entry gate over the launch composition",
   "contract": "docs/SPEC.md §3.11 (4); docs/PROMPT-5c1.md Deliverable 1",
@@ -68,7 +68,8 @@
     "role": "description only — never a gate input; the verdict is on this pass",
     "handles_without_a_prior_row": [
       "@marketopt_official",
-      "@marketopt_promo"
+      "@marketopt_promo",
+      "@akcii_skidki_plt"
     ]
   },
   "candidates": [
@@ -4286,12 +4287,62 @@
       "ruling": "GATED REPLACEMENT — PASS with no discussion group → posts. replaces the withdrawn late addition. PASS with an open discussion group → comments bucket and the joins list; PASS without one → posts-only; FAIL or FLAG → stop and report.",
       "error": null,
       "suggestions": null
+    },
+    {
+      "handle": "@akcii_skidki_plt",
+      "bucket": "late",
+      "checked_at": "2026-08-07T11:03:23+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Акції I Знижки Poltava",
+        "username": "akcii_skidki_plt",
+        "subscribers": 777,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 0,
+          "n_with_letters": 0,
+          "n_cyrillic": 0,
+          "cyrillic_share": null,
+          "decisive": false,
+          "detect_mix": {}
+        },
+        "discussion_group": null,
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 10,
+          "share_with_comments": 0.0,
+          "median_comments": 0,
+          "sample_first_post": "2024-04-19T15:02:08+00:00",
+          "sample_last_post": "2024-06-06T07:00:58+00:00"
+        },
+        "capability_verdict": "posts-only"
+      },
+      "prior_5a1": null,
+      "verdict": "FAIL",
+      "fails": [
+        "dead against its bucket — no posts in 28 days and no discussion group"
+      ],
+      "flags": [],
+      "ruling": null,
+      "error": null,
+      "suggestions": null
     }
   ],
   "summary": {
-    "n": 63,
+    "n": 64,
     "PASS": 55,
-    "FAIL": 1,
+    "FAIL": 2,
     "FLAG": 7,
     "ERROR": 0,
     "by_bucket": {
@@ -4317,154 +4368,206 @@
         "ERROR": 0
       },
       "late": {
-        "n": 2,
+        "n": 3,
         "PASS": 1,
-        "FAIL": 1,
+        "FAIL": 2,
         "FLAG": 0,
         "ERROR": 0
       }
     }
   },
-  "registry_written": true,
+  "registry_written": false,
   "note": "PROMPT-5c1 D1 stops here: every FAIL and FLAG goes to the operator, who rules in chat; the rulings land in each row's `ruling`, and only then is config/registry.yaml written. data/entry_check_report.json (the 2026-07-27 run) is untouched, and the four registry channels are out of this gate's scope.",
   "git": {
-    "commit": "9272e561ff6f08d753628c4cb0cb46279a203351",
+    "commit": "0753d5e3ed2b31a3f2f690dd27081063584d89b4",
     "dirty": [
-      "config/registry.yaml",
-      "docs/CHANNELS-launch.md",
+      "docs/SPEC.md",
       "docs/STATUS.md",
       "knowledge/daily_logs/2026-08-07.md",
       "knowledge/index.md",
+      "results/joins_5c1.jsonl",
       "scripts/entry_check.py",
-      "src/market_pulse/loop.py",
-      "src/market_pulse/registry.py",
-      "tests/test_entry_gate_5c1.py",
-      "tests/test_registry.py",
-      "scripts/apply_gate_rulings_5c1.py",
-      "tests/test_gate_rulings_5c1.py"
+      "scripts/late_batch_5c1.py"
     ]
   },
-  "rulings": {
-    "applied_at": "2026-08-07T10:27:35+00:00",
-    "canon": "docs/CHANNELS-launch.md, section 'Рулинги гейта 5c1 (2026-08-07)'",
-    "composition": {
-      "comments": [
-        "@ATB_FANatik",
-        "@HealthPsycholog",
-        "@Pro_Detyintumama",
-        "@baby_broccoli_club",
-        "@chifit_family",
-        "@denisovapro",
-        "@discountua1",
-        "@eftforhealth",
-        "@katyal55",
-        "@kkondr_fit",
-        "@klopotenkofood",
-        "@kopiyochka1",
-        "@kuksa2022",
-        "@offspringrus",
-        "@olgaa_trainer",
-        "@polyakova_fitness",
-        "@retsepty",
-        "@rezeptmoi",
-        "@sashafitnesslife",
-        "@smirnov108",
-        "@tarilka_malyuka",
-        "@tretyakovaele",
-        "@uasaler",
-        "@useful_healthy_fitness_menu",
-        "@ya_Nenka",
-        "@znishkom"
+  "notes": {
+    "hvylynka_search": {
+      "asked": "does the Хвилинка chain (Lubny, Myrhorod, Lokhvytsia, Pyriatyn, Hrebinka) have a Telegram channel? canon docs/CHANNELS-launch.md 'Дозаявка №2'",
+      "searched_at": "2026-08-07T11:03:49+00:00",
+      "queries": [
+        "Хвилинка",
+        "Хвилинка Лубни",
+        "hvylynka"
       ],
-      "posts": [
-        "@Wellosophy_Lesya",
-        "@anastasiiadavydiukfitness",
-        "@atb_aktsiyi",
-        "@blwbabies",
-        "@dpssgovua",
-        "@epicentrk_sale",
-        "@gaid_skobioale",
-        "@intensiv_Mamiev",
-        "@konservacia_kulinaria",
-        "@korolevakuchni",
-        "@mameni_recepti",
-        "@marketopt_promo",
-        "@maudau",
-        "@recepti",
-        "@retsepty4",
-        "@retsepty5",
-        "@vylkachannel",
-        "@whitecode_zny"
+      "results_per_query": {
+        "Хвилинка": 7,
+        "Хвилинка Лубни": 0,
+        "hvylynka": 5
+      },
+      "name_matches": [
+        {
+          "title": "Хвилинка-цікавинка про літературу та книжкові новини",
+          "username": "oneminute_literature",
+          "telegram_verified": false,
+          "subscribers": 44
+        },
+        {
+          "title": "Вантажна фірма Хвилинка 🚚 (Житомир)",
+          "username": "hwylynkazt",
+          "telegram_verified": false,
+          "subscribers": 637
+        },
+        {
+          "title": "🇬🇧Хвилинка АНГЛІЙСЬКОЇ🇬🇧",
+          "username": "englishbrend",
+          "telegram_verified": false,
+          "subscribers": 759
+        },
+        {
+          "title": "Хвилинка - цікавинка 🎶",
+          "username": "tsikavy_voice",
+          "telegram_verified": false,
+          "subscribers": 238
+        },
+        {
+          "title": "Хвилинка",
+          "username": "khvylynka",
+          "telegram_verified": false,
+          "subscribers": 2321
+        },
+        {
+          "title": "чат - Хвилинка",
+          "username": "khvylynkachat",
+          "telegram_verified": false,
+          "subscribers": 1502
+        },
+        {
+          "title": "Хвилинка деменції",
+          "username": "demenutiv",
+          "telegram_verified": false,
+          "subscribers": 85
+        },
+        {
+          "title": "Хвилинка Сміху😁",
+          "username": "hvylynka_smihu",
+          "telegram_verified": false,
+          "subscribers": 14
+        },
+        {
+          "title": "Вибач, є хвилинка?",
+          "username": "vybach_ye_hvylynka",
+          "telegram_verified": false,
+          "subscribers": 12
+        },
+        {
+          "title": "5 Хвилин на СЕБЕ",
+          "username": "hvylynka_na_sebe",
+          "telegram_verified": false,
+          "subscribers": 1
+        },
+        {
+          "title": "Хвилинка про Україну",
+          "username": "HvylynkaUA",
+          "telegram_verified": false,
+          "subscribers": 1
+        },
+        {
+          "title": "Чат сміху",
+          "username": "hvylynka_smihu_chat",
+          "telegram_verified": false,
+          "subscribers": 1
+        }
       ],
-      "watch": [
-        "@Evgenija_dutjache_menu",
-        "@chekh_yevheniia1982",
-        "@cozymotherhood",
-        "@dimakaminskyifit",
-        "@dutyache_menu",
-        "@hydnem_prosto",
-        "@itsmamix",
-        "@netainaya_vecherya",
-        "@polinalykovagv",
-        "@prostetsofa",
-        "@regina_tatlybaeva",
-        "@retsepty10",
-        "@skhudnennya",
-        "@viktoria_sshh"
-      ],
-      "excluded": [
-        "@Mambabyua",
-        "@kolyastravinsky",
-        "@kulinariya_chat_a",
-        "@marketopt_official",
-        "@whowears"
-      ]
-    },
-    "counts": {
-      "registry_before": 4,
-      "comments": 26,
-      "posts": 18,
-      "watch": 14,
-      "excluded": 5,
-      "sources_after": 62
-    },
-    "joins_authorised": [
-      "@ATB_FANatik",
-      "@HealthPsycholog",
-      "@Pro_Detyintumama",
-      "@baby_broccoli_club",
-      "@chifit_family",
-      "@denisovapro",
-      "@discountua1",
-      "@eftforhealth",
-      "@katyal55",
-      "@kkondr_fit",
-      "@klopotenkofood",
-      "@kopiyochka1",
-      "@kuksa2022",
-      "@offspringrus",
-      "@olgaa_trainer",
-      "@polyakova_fitness",
-      "@retsepty",
-      "@rezeptmoi",
-      "@sashafitnesslife",
-      "@smirnov108",
-      "@tarilka_malyuka",
-      "@tretyakovaele",
-      "@uasaler",
-      "@useful_healthy_fitness_menu",
-      "@ya_Nenka",
-      "@znishkom"
-    ],
-    "source_type_ruling": {
-      "@uasaler": "aggregator",
-      "@znishkom": "aggregator",
-      "@whitecode_zny": "aggregator",
-      "@atb_aktsiyi": "aggregator",
-      "@ATB_FANatik": "aggregator",
-      "@epicentrk_sale": "official_retail",
-      "@dpssgovua": "government"
-    },
-    "note": "The gate's rows are unchanged: an excluded channel was still measured, and its `ruling` is what says it is out. Registry names and comments_enabled are read off this record, not typed."
+      "rows": {
+        "Хвилинка": [
+          {
+            "title": "Хвилинка-цікавинка про літературу та книжкові новини",
+            "username": "oneminute_literature",
+            "telegram_verified": false,
+            "subscribers": 44
+          },
+          {
+            "title": "Вантажна фірма Хвилинка 🚚 (Житомир)",
+            "username": "hwylynkazt",
+            "telegram_verified": false,
+            "subscribers": 637
+          },
+          {
+            "title": "🇬🇧Хвилинка АНГЛІЙСЬКОЇ🇬🇧",
+            "username": "englishbrend",
+            "telegram_verified": false,
+            "subscribers": 759
+          },
+          {
+            "title": "Хвилинка - цікавинка 🎶",
+            "username": "tsikavy_voice",
+            "telegram_verified": false,
+            "subscribers": 238
+          },
+          {
+            "title": "Хвилинка",
+            "username": "khvylynka",
+            "telegram_verified": false,
+            "subscribers": 2321
+          },
+          {
+            "title": "чат - Хвилинка",
+            "username": "khvylynkachat",
+            "telegram_verified": false,
+            "subscribers": 1502
+          },
+          {
+            "title": "Хвилинка деменції",
+            "username": "demenutiv",
+            "telegram_verified": false,
+            "subscribers": 85
+          }
+        ],
+        "Хвилинка Лубни": [],
+        "hvylynka": [
+          {
+            "title": "Хвилинка Сміху😁",
+            "username": "hvylynka_smihu",
+            "telegram_verified": false,
+            "subscribers": 14
+          },
+          {
+            "title": "Вибач, є хвилинка?",
+            "username": "vybach_ye_hvylynka",
+            "telegram_verified": false,
+            "subscribers": 12
+          },
+          {
+            "title": "5 Хвилин на СЕБЕ",
+            "username": "hvylynka_na_sebe",
+            "telegram_verified": false,
+            "subscribers": 1
+          },
+          {
+            "title": "Хвилинка про Україну",
+            "username": "HvylynkaUA",
+            "telegram_verified": false,
+            "subscribers": 1
+          },
+          {
+            "title": "Чат сміху",
+            "username": "hvylynka_smihu_chat",
+            "telegram_verified": false,
+            "subscribers": 1
+          }
+        ]
+      },
+      "closed": true,
+      "finding": "NEGATIVE — none of the name matches is the retail chain. «хвилинка» is an ordinary Ukrainian word (a minute), so the marker matches a lot of unrelated channels. Every row was read: a Zhytomyr freight company (@hwylynkazt), an English-lesson channel (@englishbrend), a literature digest, a music channel, a dementia-awareness channel and several joke channels. The only plausible pair — @khvylynka (2,321) and its @khvylynkachat — was probed read-only and is a private classified-ads board: its own description reads «Приватні оголошення приймаються безкоштовно», and its recent posts are giveaways and a counterfeit-spotting poll, not a retail chain's promos. The query 'Хвилинка Лубни', which pairs the name with the chain's home town, returned nothing at all. This closes the question by record, it does not prove absence: contacts.SearchRequest ranks by its own relevance and returns at most ten rows per query. The finding is that the chain has no FINDABLE public channel under its own name — consistent with hvylya.net.ua carrying no Telegram link.",
+      "judgement": {
+        "judged_by": "executor, 2026-08-07",
+        "verdict": "NEGATIVE — none of the name matches is the retail chain",
+        "why": "«хвилинка» is an ordinary Ukrainian word (a minute), so the marker matches a lot of unrelated channels. Every row was read: a Zhytomyr freight company (@hwylynkazt), an English-lesson channel (@englishbrend), a literature digest, a music channel, a dementia-awareness channel and several joke channels. The only plausible pair — @khvylynka (2,321) and its @khvylynkachat — was probed read-only and is a private classified-ads board: its own description reads «Приватні оголошення приймаються безкоштовно», and its recent posts are giveaways and a counterfeit-spotting poll, not a retail chain's promos. The query 'Хвилинка Лубни', which pairs the name with the chain's home town, returned nothing at all.",
+        "probed": [
+          "@khvylynka"
+        ],
+        "bound": "This closes the question by record, it does not prove absence: contacts.SearchRequest ranks by its own relevance and returns at most ten rows per query. The finding is that the chain has no FINDABLE public channel under its own name — consistent with hvylya.net.ua carrying no Telegram link."
+      }
+    }
   }
 }

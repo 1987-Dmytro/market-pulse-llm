@@ -52,6 +52,34 @@ HVYLYNKA_MARKERS = ("хвилинк", "hvylynk", "хвилинка")
 """What a title has to contain to be worth a human look. Deliberately loose — the judgement is
 reported, not automated, and a marker that matched nothing is itself the finding."""
 
+HVYLYNKA_JUDGEMENT = {
+    "judged_by": "executor, 2026-08-07",
+    "verdict": "NEGATIVE — none of the name matches is the retail chain",
+    "why": (
+        "«хвилинка» is an ordinary Ukrainian word (a minute), so the marker matches a lot of"
+        " unrelated channels. Every row was read: a Zhytomyr freight company (@hwylynkazt), an"
+        " English-lesson channel (@englishbrend), a literature digest, a music channel, a"
+        " dementia-awareness channel and several joke channels. The only plausible pair —"
+        " @khvylynka (2,321) and its @khvylynkachat — was probed read-only and is a private"
+        " classified-ads board: its own description reads «Приватні оголошення приймаються"
+        " безкоштовно», and its recent posts are giveaways and a counterfeit-spotting poll, not"
+        " a retail chain's promos. The query 'Хвилинка Лубни', which pairs the name with the"
+        " chain's home town, returned nothing at all."
+    ),
+    "probed": ["@khvylynka"],
+    "bound": (
+        "This closes the question by record, it does not prove absence: contacts.SearchRequest"
+        " ranks by its own relevance and returns at most ten rows per query. The finding is that"
+        " the chain has no FINDABLE public channel under its own name — consistent with"
+        " hvylya.net.ua carrying no Telegram link."
+    ),
+}
+"""The executor's read of the search, kept in the repo rather than typed into the record once.
+
+`--search` deliberately judges nothing: it records what came back and whether any title even
+carries the name. Deciding which match is convincing is a human call, and this is that call with
+its reasons, applied by `--close-hvylynka` without touching Telegram."""
+
 THEME = "poltava_cities"
 CITIES = (
     "Полтава",
@@ -117,10 +145,25 @@ async def run_search(client) -> dict:
     return {"queries": list(HVYLYNKA_QUERIES), "results": results, "name_matches": matches}
 
 
+def matched_handles(note: dict) -> list[str]:
+    return sorted(row["username"] for row in note.get("name_matches", []) if row.get("username"))
+
+
 def record_search(found: dict) -> dict:
-    """Write the search into the gate record's notes — closed only if it found nothing."""
+    """Write the search into the gate record's notes — closed only if it found nothing.
+
+    A judgement already recorded is carried forward rather than overwritten: re-running the
+    search would otherwise reopen a question a human had closed, silently. It is carried only
+    while it still applies — if this search matched a different set of handles, the judgement is
+    about rows that are no longer the rows, and the note says so instead of standing.
+    """
     record = json.loads(GATE_RECORD.read_text(encoding="utf-8"))
     closed = not found["name_matches"]
+    held = record.get("notes", {}).get("hvylynka_search", {})
+    judgement, stale = held.get("judgement"), None
+    if judgement is not None:
+        stale = matched_handles(held) != matched_handles(found)
+        closed = not stale
     note = {
         "asked": (
             "does the Хвилинка chain (Lubny, Myrhorod, Lokhvytsia, Pyriatyn, Hrebinka) have a"
@@ -132,8 +175,15 @@ def record_search(found: dict) -> dict:
         "name_matches": found["name_matches"],
         "rows": found["results"],
         "closed": closed,
+        "judgement": judgement,
+        "judgement_stale": stale,
         "finding": (
-            "NEGATIVE — Telegram's global search returns no channel whose title or handle carries"
+            f"{judgement['verdict']}. {judgement['why']} {judgement['bound']}"
+            if judgement is not None and not stale
+            else "REOPENED — a recorded judgement is about a different set of matches than this"
+            " search returned. Re-read the rows before closing it again."
+            if judgement is not None
+            else "NEGATIVE — Telegram's global search returns no channel whose title or handle carries"
             " the chain's name under any of the three queries. The question is closed by record:"
             " the site hvylya.net.ua carries no Telegram link either. Bounded, not proven —"
             " contacts.SearchRequest ranks by its own relevance and returns at most ten rows per"
@@ -219,9 +269,33 @@ def ledger(candidates: list[dict]) -> dict:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="5c1 addendum: the Хвилинка search and the scan.")
     parser.add_argument("--search", action="store_true", help="Telegram search for the chain")
+    parser.add_argument(
+        "--close-hvylynka",
+        action="store_true",
+        help="write the executor's read of the search into the note (no API, no new search)",
+    )
     parser.add_argument("--poltava", action="store_true", help="the poltava_cities discovery scan")
     parser.add_argument("--plan", action="store_true", help="print the queries and stop, no API")
     args = parser.parse_args(argv)
+
+    if args.close_hvylynka:
+        record = json.loads(GATE_RECORD.read_text(encoding="utf-8"))
+        note = record.get("notes", {}).get("hvylynka_search")
+        if note is None:
+            raise SystemExit("run --search first: there is no search to judge")
+        note["judgement"] = HVYLYNKA_JUDGEMENT
+        note["closed"] = True
+        note["finding"] = (
+            f"{HVYLYNKA_JUDGEMENT['verdict']}. {HVYLYNKA_JUDGEMENT['why']}"
+            f" {HVYLYNKA_JUDGEMENT['bound']}"
+        )
+        record["git"] = git_state(GATE_RECORD)
+        GATE_RECORD.write_text(
+            json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        )
+        print(note["finding"])
+        print(f"\nclosed in {GATE_RECORD.relative_to(REPO_ROOT)} :: notes.hvylynka_search")
+        return 0
 
     if args.plan or not (args.search or args.poltava):
         print(f"search  : {', '.join(HVYLYNKA_QUERIES)}")

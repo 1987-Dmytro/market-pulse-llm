@@ -20,6 +20,25 @@ from market_pulse.registry import load_registry  # noqa: E402
 
 CANON = REPO_ROOT / "docs" / "CHANNELS-launch.md"
 
+AWAITING_A_RULING = {"@akcii_skidki_plt"}
+"""Gated, not PASS, and no ruling covers it yet — the operator's rule is to stop and report.
+
+Named rather than skipped by accident: `final_bucket` refuses to guess, so every candidate in
+this set raises, and a NEW unruled non-PASS row makes the tests below fail loudly instead of
+quietly entering the registry on the strength of its bucket. Empties when the operator rules."""
+
+
+def resolved(record: dict):
+    """Every candidate that has a resolution, with the pending ones checked to still be pending."""
+    pending, rows = set(), []
+    for candidate in record["candidates"]:
+        try:
+            rows.append((candidate, apply.final_bucket(candidate)[0]))
+        except SystemExit:
+            pending.add(candidate["handle"])
+    assert pending == AWAITING_A_RULING, f"unruled rows changed: {pending}"
+    return rows
+
 
 def row(handle, bucket, *, verdict="PASS", group=True, open_group=True, title="T"):
     return {
@@ -175,8 +194,7 @@ def test_the_shipped_registry_is_re_derivable_from_the_gate_record():
         for handle in src.telegram_channels
     }
     checked = 0
-    for candidate in record["candidates"]:
-        bucket, _ = apply.final_bucket(candidate)
+    for candidate, bucket in resolved(record):
         if bucket is None:
             assert candidate["handle"] not in shipped, "an excluded channel is in the registry"
             continue
@@ -206,8 +224,7 @@ def test_the_composition_matches_the_canons_own_summary():
 
     record = json.loads((REPO_ROOT / "results" / "entry_gate_5c1.json").read_text(encoding="utf-8"))
     buckets = {"comments": 0, "posts": 0, "watch": 0, "excluded": 0}
-    for candidate in record["candidates"]:
-        bucket, _ = apply.final_bucket(candidate)
+    for _, bucket in resolved(record):
         buckets["excluded" if bucket is None else bucket] += 1
     assert buckets["comments"] == 26
     assert buckets["watch"] == 14
