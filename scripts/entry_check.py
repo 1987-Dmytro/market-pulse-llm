@@ -625,11 +625,15 @@ async def run_gate() -> int:
     from discover_channels import WINDOW_DAYS, WINDOW_LIMIT
 
     prior = prior_rows(PRIOR_SCAN)
-    held = (
-        json.loads(GATE_RECORD.read_text(encoding="utf-8"))["candidates"]
-        if GATE_RECORD.exists()
-        else []
+    held_record = (
+        json.loads(GATE_RECORD.read_text(encoding="utf-8")) if GATE_RECORD.exists() else {}
     )
+    held = held_record.get("candidates", [])
+    held_state = {
+        key: held_record[key]
+        for key in ("registry_written", "rulings", "notes")
+        if key in held_record
+    }
     done = {row["handle"] for row in held if row["verdict"] in ("PASS", "FAIL", "FLAG")}
     rows = [row for row in held if row["handle"] in done]
     todo = [(handle, bucket) for handle, bucket in CANDIDATES if handle not in done]
@@ -679,13 +683,18 @@ async def run_gate() -> int:
         },
         "candidates": rows,
         "summary": summary,
-        "registry_written": False,
+        # Carried, not reset. Gating a LATER candidate must not un-say what the rulings already
+        # decided about the earlier ones: a fresh `False` here silently told the 5c1 collector
+        # the registry had never been written, and it refused to collect — correctly, on a fact
+        # that had stopped being true. `rulings` and `notes` ride along for the same reason.
+        "registry_written": held_state.get("registry_written", False),
         "note": (
             "PROMPT-5c1 D1 stops here: every FAIL and FLAG goes to the operator, who rules in"
             " chat; the rulings land in each row's `ruling`, and only then is"
             " config/registry.yaml written. data/entry_check_report.json (the 2026-07-27 run) is"
             " untouched, and the four registry channels are out of this gate's scope."
         ),
+        **{key: value for key, value in held_state.items() if key != "registry_written"},
         "git": git_state(GATE_RECORD),
     }
     GATE_RECORD.parent.mkdir(parents=True, exist_ok=True)

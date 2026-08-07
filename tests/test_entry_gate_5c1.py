@@ -450,6 +450,32 @@ def test_a_floodwait_stops_the_gate_and_the_re_run_resumes(monkeypatch, tmp_path
     assert resumed["complete"] is True
 
 
+def test_gating_a_later_candidate_does_not_un_say_the_rulings(monkeypatch, tmp_path):
+    """The interaction that stopped a live collection. Adding one late candidate re-ran the gate,
+    which rewrote the record with a fresh `registry_written: false` — so the collector refused to
+    collect, correctly, on a fact that had stopped being true. The rulings and the search notes
+    went the same way. State the gate does not own is carried, not reset.
+    """
+    handles = [("@a", "comments")]
+    _, first, _ = drive(monkeypatch, tmp_path, handles)
+    assert first["registry_written"] is False, "a first gate run has none of this yet"
+
+    record_path = tmp_path / "entry_gate_5c1.json"
+    ruled = {
+        **first,
+        "registry_written": True,
+        "rulings": {"counts": {"comments": 1}},
+        "notes": {"hvylynka_search": {"closed": True}},
+    }
+    record_path.write_text(json.dumps(ruled, ensure_ascii=False), encoding="utf-8")
+
+    _, after, checked = drive(monkeypatch, tmp_path, [*handles, ("@b", "comments")])
+    assert checked == ["@b"], "the resume still only measures what is new"
+    assert after["registry_written"] is True
+    assert after["rulings"] == {"counts": {"comments": 1}}
+    assert after["notes"] == {"hvylynka_search": {"closed": True}}
+
+
 def test_an_ordinary_failure_is_one_retryable_row_and_not_an_abort(monkeypatch, tmp_path):
     """The negative control for the FloodWait branch: only a rate limit stops the pass, and an
     ERROR row is not a verdict — the resume picks it up again."""

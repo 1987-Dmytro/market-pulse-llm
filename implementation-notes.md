@@ -3311,3 +3311,14 @@ the volume held the 59 GB weights (re-downloadable at the pinned revision — th
 `adapter_sha256` exactly. The first check used the wrong instrument — a single file's sha256
 against a DIRECTORY hash — and disagreed; the number was produced by a directory hasher, and
 that is what re-derived it. Nothing was deleted until the copy was proven.
+
+**D23 — gating one late candidate silently stopped the live collection.** The chained run went
+"scan finishes → joins resume", and the joins died on the first line: *"the rulings have not been
+applied yet"*. The cause is an interaction, not a bug in either half. `--gate-5c1` rewrites the
+whole record, including a fresh `registry_written: false`; gating @akcii_skidki_plt therefore
+un-said what the rulings had already decided about the other 63, and the collector's guard
+refused to collect — correctly, on a fact that had stopped being true. `rulings` and the search
+notes were rewritten the same way and had to be re-applied. Fixed by carrying the state the gate
+does not own — `registry_written`, `rulings`, `notes` — across a re-run, with a test that drives
+the whole path. Found because the joiner was watched as a process, not read as a log: the log's
+last line said joins had resumed.
