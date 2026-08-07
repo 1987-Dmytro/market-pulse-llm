@@ -11,12 +11,20 @@ edits the registry itself.
 the registry: SPEC §9 falls back to aggregator and community channels wherever a
 chain has comments disabled, and this is how those candidates are found.
 
+`--gate-5c1` runs the track-R entry gate over the 62 candidates of the operator's
+launch composition (`docs/CHANNELS-launch.md`, verdict 2026-08-06) and writes
+`results/entry_gate_5c1.json`. The composition choice is already made; the gate
+VERIFIES each entry against the bucket it was chosen into, before any of it
+reaches `config/registry.yaml`. Read-only like the rest of this file: no joins,
+no store writes, and the registry is not edited here either.
+
 Read-only and deliberately slow: one channel at a time, a pause between channels,
 no joins, no member lists. FloodWait aborts the run but keeps what was collected.
 
     python3.11 scripts/tg_login.py     # once, to create the session
     python3.11 scripts/entry_check.py
     python3.11 scripts/entry_check.py --discover "молочні продукти"
+    PYTHONPATH=src python3 scripts/entry_check.py --gate-5c1
 """
 
 import argparse
@@ -29,6 +37,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))  # the package is not pip-installed
+sys.path.insert(0, str(Path(__file__).resolve().parent))  # sibling scripts, imported deferred
 
 from telethon import functions, types
 from telethon.errors import (
@@ -38,16 +47,98 @@ from telethon.errors import (
     UsernameNotOccupiedError,
 )
 
-from market_pulse.entry_check import build_verdict, collapse_albums, traffic_stats
+from market_pulse.entry_check import (
+    BUCKETS,
+    GATE_CYRILLIC_MIN,
+    GATE_MIN_LETTERED_TEXTS,
+    PRE_REGISTERED_FLAGS,
+    build_verdict,
+    collapse_albums,
+    gate_verdict,
+    script_mix,
+    traffic_stats,
+)
 from market_pulse.registry import Source, load_registry
 from market_pulse.telegram_client import build_client
 
 REGISTRY = REPO_ROOT / "config" / "registry.yaml"
 DATA_DIR = REPO_ROOT / "data"
+RESULTS_DIR = REPO_ROOT / "results"
+GATE_RECORD = RESULTS_DIR / "entry_gate_5c1.json"
+PRIOR_SCAN = RESULTS_DIR / "discovery_5a1.json"
 POST_SAMPLE = 50
 PAUSE_SECONDS = 2.0
 DISCOVER_LIMIT = 15
 RESOLVE_ERRORS = (UsernameNotOccupiedError, UsernameInvalidError, ChannelPrivateError, ValueError)
+
+CANDIDATES = (
+    # docs/CHANNELS-launch.md — the operator's verdict of 2026-08-06 plus the same evening's
+    # addition, copied handle for handle and held to it by tests/test_entry_gate_5c1.py: this
+    # tuple and the canon's tables must name the same channels in the same buckets, or the run
+    # is gating a composition nobody chose.
+    ("@tretyakovaele", "comments"),
+    ("@kopiyochka1", "comments"),
+    ("@klopotenkofood", "comments"),
+    ("@maudau", "comments"),
+    ("@uasaler", "comments"),
+    ("@retsepty", "comments"),
+    ("@katyal55", "comments"),
+    ("@smirnov108", "comments"),
+    ("@tarilka_malyuka", "comments"),
+    ("@kkondr_fit", "comments"),
+    ("@polyakova_fitness", "comments"),
+    ("@znishkom", "comments"),
+    ("@kuksa2022", "comments"),
+    ("@HealthPsycholog", "comments"),
+    ("@ATB_FANatik", "comments"),
+    ("@offspringrus", "comments"),
+    ("@sashafitnesslife", "comments"),
+    ("@Pro_Detyintumama", "comments"),
+    ("@chifit_family", "comments"),
+    ("@ya_Nenka", "comments"),
+    ("@baby_broccoli_club", "comments"),
+    ("@useful_healthy_fitness_menu", "comments"),
+    ("@olgaa_trainer", "comments"),
+    ("@kolyastravinsky", "comments"),
+    ("@whowears", "comments"),
+    ("@denisovapro", "comments"),
+    ("@eftforhealth", "comments"),
+    ("@rezeptmoi", "comments"),
+    ("@discountua1", "comments"),
+    ("@recepti", "posts"),
+    ("@mameni_recepti", "posts"),
+    ("@retsepty4", "posts"),
+    ("@epicentrk_sale", "posts"),
+    ("@konservacia_kulinaria", "posts"),
+    ("@intensiv_Mamiev", "posts"),
+    ("@Mambabyua", "posts"),
+    ("@retsepty5", "posts"),
+    ("@blwbabies", "posts"),
+    ("@vylkachannel", "posts"),
+    ("@whitecode_zny", "posts"),
+    ("@gaid_skobioale", "posts"),
+    ("@dpssgovua", "posts"),
+    ("@kulinariya_chat_a", "posts"),
+    ("@Wellosophy_Lesya", "posts"),
+    ("@atb_aktsiyi", "posts"),
+    ("@anastasiiadavydiukfitness", "posts"),
+    ("@korolevakuchni", "posts"),
+    ("@itsmamix", "watch"),
+    ("@regina_tatlybaeva", "watch"),
+    ("@netainaya_vecherya", "watch"),
+    ("@retsepty10", "watch"),
+    ("@skhudnennya", "watch"),
+    ("@prostetsofa", "watch"),
+    ("@viktoria_sshh", "watch"),
+    ("@hydnem_prosto", "watch"),
+    ("@dimakaminskyifit", "watch"),
+    ("@dutyache_menu", "watch"),
+    ("@polinalykovagv", "watch"),
+    ("@Evgenija_dutjache_menu", "watch"),
+    ("@chekh_yevheniia1982", "watch"),
+    ("@cozymotherhood", "watch"),
+    ("@marketopt_official", "late"),
+)
 
 
 async def suggest(client, name: str) -> list[dict]:
@@ -87,6 +178,46 @@ async def sample_traffic(client, entity) -> dict:
     return traffic_stats(collapse_albums(samples))
 
 
+def group_facts(chats, linked_chat_id: int) -> dict:
+    """What the linked discussion group looks like from outside, without joining it.
+
+    `GetFullChannelRequest` already returns the linked chat in its `chats` list, so this costs
+    no extra request and no membership. "Open" is about whether the join Deliverable 2 would
+    make can land and produce comments: approval-gated, Telegram-restricted, or a group where
+    everyone is banned from sending are all closed for that purpose. A `min` object carries
+    flags Telegram did not fill in — recorded rather than read as False.
+    """
+    chat = next((c for c in chats if getattr(c, "id", None) == linked_chat_id), None)
+    if chat is None:
+        return {"present": True, "read": False, "open": None, "closed_because": ["not returned"]}
+
+    banned = getattr(chat, "default_banned_rights", None)
+    closed = []
+    if getattr(chat, "join_request", False):
+        closed.append("join needs admin approval")
+    if getattr(chat, "restricted", False):
+        closed.append("Telegram-restricted")
+    if banned is not None and getattr(banned, "send_messages", False):
+        closed.append("everyone banned from sending")
+    return {
+        "present": True,
+        "read": True,
+        "id": chat.id,
+        "title": getattr(chat, "title", None),
+        "username": getattr(chat, "username", None),
+        "megagroup": bool(getattr(chat, "megagroup", False)),
+        "min": bool(getattr(chat, "min", False)),
+        "join_request": bool(getattr(chat, "join_request", False)),
+        "join_to_send": bool(getattr(chat, "join_to_send", False)),
+        "restricted": bool(getattr(chat, "restricted", False)),
+        # `left` is about the collector account: a group it is already in needs no join.
+        "already_member": not getattr(chat, "left", True),
+        "participants_count": getattr(chat, "participants_count", None),
+        "open": not closed,
+        "closed_because": closed,
+    }
+
+
 async def check_channel(client, source, handle: str) -> dict:
     record = {
         "source_id": source.id,
@@ -116,7 +247,8 @@ async def check_channel(client, source, handle: str) -> dict:
         record["suggestions"] = await suggest(client, source.name)
         return record | {"verdict": "rejected", "reasons": [record["error"]]}
 
-    full = (await client(functions.channels.GetFullChannelRequest(channel=entity))).full_chat
+    result = await client(functions.channels.GetFullChannelRequest(channel=entity))
+    full = result.full_chat
     stats = await sample_traffic(client, entity)
     record |= {
         "resolved": True,
@@ -131,6 +263,9 @@ async def check_channel(client, source, handle: str) -> dict:
         "subscribers": full.participants_count,
         "discussion_group_id": full.linked_chat_id,
         "comments_enabled": full.linked_chat_id is not None,
+        "discussion_group": (
+            group_facts(result.chats, full.linked_chat_id) if full.linked_chat_id else None
+        ),
         "traffic": stats,
     }
     return record | build_verdict(
@@ -204,6 +339,187 @@ async def collect(client, candidates: list[tuple[Source, str]], records: list[di
     return None
 
 
+def stamp() -> str:
+    return datetime.now(timezone.utc).isoformat(timespec="seconds")
+
+
+def rel(path: Path) -> str:
+    return str(path.relative_to(REPO_ROOT)) if path.is_relative_to(REPO_ROOT) else str(path)
+
+
+def gate_row(
+    handle: str, bucket: str, record: dict, window: dict, script: dict, prior: dict
+) -> dict:
+    """One candidate's row: what was measured, what the bucket expected, and the verdict."""
+    traffic = record.get("traffic") or {}
+    verdict = gate_verdict(
+        handle=handle, bucket=bucket, record=record, window=window, script=script
+    )
+    return {
+        "handle": handle,
+        "bucket": bucket,
+        "checked_at": stamp(),
+        "checks": {
+            "resolved": bool(record.get("resolved")),
+            "title": record.get("title"),
+            "username": record.get("username"),
+            "subscribers": record.get("subscribers"),
+            "telegram_verified": record.get("telegram_verified"),
+            "broadcast": record.get("broadcast"),
+            "megagroup": record.get("megagroup"),
+            "scam": record.get("scam"),
+            "fake": record.get("fake"),
+            "liveness": {
+                "n_posts": window.get("n_posts"),
+                "posts_per_week": window.get("posts_per_week"),
+                "last_post": window.get("last_post"),
+                "window_days": window.get("window_days"),
+                "window_truncated": window.get("window_truncated"),
+            },
+            "language": {**script, "detect_mix": window.get("language_mix")},
+            "discussion_group": record.get("discussion_group"),
+            "comments": {
+                "post_sample": POST_SAMPLE,
+                "n_posts_sampled": traffic.get("n_posts"),
+                "share_with_comments": traffic.get("share_with_comments"),
+                "median_comments": traffic.get("median_comments"),
+            },
+            # build_verdict's word on CAPABILITY, kept beside the gate's word on ENTRY.
+            "capability_verdict": record.get("verdict"),
+        },
+        "prior_5a1": prior.get(handle.lower()),
+        "verdict": verdict["verdict"],
+        "fails": verdict["fails"],
+        "flags": verdict["flags"],
+        # Filled from the operator's dictated verdicts after the gate-report STOP.
+        "ruling": None,
+        "error": record.get("error"),
+        "suggestions": record.get("suggestions") or None,
+    }
+
+
+async def gate_batch(client, candidates, prior: dict, records: list[dict]) -> int | None:
+    """Run the track-R gate over a bucketed handle list. Returns FloodWait seconds.
+
+    Read-only throughout: resolve, one full-channel request, the 50-post traffic sample and the
+    four-week history window. No join, no member list, no store write, no registry edit.
+    """
+    # Deferred on purpose: discover_channels imports THIS module at its top, and the four-week
+    # window belongs to it — the gate's posts/week is the same function that produced the
+    # canon's п/нед column, not a second implementation of it.
+    import discover_channels as discovery
+
+    now = datetime.now(timezone.utc)
+    for handle, bucket in candidates:
+        print(f"gate {handle} ({bucket})...", flush=True)
+        source = Source(bucket, handle, "community", (handle,))
+        try:
+            record = await check_channel(client, source, handle)
+            samples, texts, truncated = [], [], False
+            if record.get("resolved"):
+                entity = await client.get_entity(handle)
+                samples, texts, truncated = await discovery.window_sample(client, entity, now)
+        except FloodWaitError as exc:
+            # Before the generic handler: swallowed there, a rate-limited channel is written
+            # down as a verdict, which is a permanent judgement on a temporary state.
+            return exc.seconds
+        except Exception as exc:
+            records.append(
+                {
+                    "handle": handle,
+                    "bucket": bucket,
+                    "checked_at": stamp(),
+                    "checks": {},
+                    "prior_5a1": prior.get(handle.lower()),
+                    "verdict": "ERROR",
+                    "fails": [],
+                    "flags": [],
+                    "ruling": None,
+                    "error": f"{type(exc).__name__}: {exc}",
+                    "suggestions": None,
+                }
+            )
+            await asyncio.sleep(PAUSE_SECONDS)
+            continue
+        window = discovery.window_stats(samples, texts, truncated)
+        records.append(gate_row(handle, bucket, record, window, script_mix(texts), prior))
+        await asyncio.sleep(PAUSE_SECONDS)
+    return None
+
+
+def prior_rows(path: Path) -> dict:
+    """The 2026-08-06 scan's row per handle — the measurement the composition was chosen on.
+
+    Description, never a gate input: the verdict is on what today's pass measured. What it buys
+    is the delta, which is what a one-line FLAG evidence needs ("canon 13.0/wk, now 0.0").
+    """
+    if not path.exists():
+        return {}
+    scan = json.loads(path.read_text(encoding="utf-8"))
+    return {
+        row["handle"].lower(): {
+            "generated_at": scan["generated_at"],
+            "posts_per_week": row["posts_per_week"],
+            "discussion_group": row["discussion_group"],
+            "language_mix": row["language_mix"],
+            "subscribers": row["subscribers"],
+            "verdict": row["verdict"],
+        }
+        for row in scan["candidates"]
+    }
+
+
+def gate_summary(rows: list[dict]) -> dict:
+    counts = {
+        v: sum(1 for r in rows if r["verdict"] == v) for v in ("PASS", "FAIL", "FLAG", "ERROR")
+    }
+    by_bucket = {}
+    for bucket in dict.fromkeys(b for _, b in CANDIDATES):
+        picked = [r for r in rows if r["bucket"] == bucket]
+        by_bucket[bucket] = {
+            "n": len(picked),
+            **{
+                v: sum(1 for r in picked if r["verdict"] == v)
+                for v in ("PASS", "FAIL", "FLAG", "ERROR")
+            },
+        }
+    return {"n": len(rows), **counts, "by_bucket": by_bucket}
+
+
+def print_gate_report(rows: list[dict]) -> None:
+    header = (
+        f"{'handle':<29}{'bucket':<9}{'subs':>9}{'p/wk':>7}{'prior':>7}"
+        f"{'grp':>5}{'open':>6}{'%comm':>7}{'cyr':>6}  verdict"
+    )
+    print(f"\n{header}\n{'-' * len(header)}")
+    for row in rows:
+        checks, group = row["checks"], (row["checks"].get("discussion_group") or {})
+        prior = row.get("prior_5a1") or {}
+        live, lang = checks.get("liveness") or {}, checks.get("language") or {}
+        comments = checks.get("comments") or {}
+        print(
+            f"{row['handle'][:28]:<29}{row['bucket']:<9}"
+            f"{(checks.get('subscribers') or 0):>9}"
+            f"{(live.get('posts_per_week') if live.get('posts_per_week') is not None else '—'):>7}"
+            f"{(prior.get('posts_per_week') if prior else '—'):>7}"
+            f"{('yes' if group.get('present') else 'no'):>5}"
+            f"{('—' if not group.get('present') else 'yes' if group.get('open') else 'NO'):>6}"
+            f"{(comments.get('share_with_comments') if comments.get('share_with_comments') is not None else '—'):>7}"
+            f"{(lang.get('cyrillic_share') if lang.get('cyrillic_share') is not None else '—'):>6}"
+            f"  {row['verdict']}"
+        )
+    for verdict in ("FAIL", "FLAG", "ERROR"):
+        picked = [r for r in rows if r["verdict"] == verdict]
+        if not picked:
+            continue
+        print(f"\n--- {verdict} ({len(picked)}) ---")
+        for row in picked:
+            prior = row.get("prior_5a1") or {}
+            was = f" [5a1 06.08: {prior.get('posts_per_week')}/wk]" if prior else " [no prior scan]"
+            for reason in row["fails"] + row["flags"] or [row.get("error") or ""]:
+                print(f"  {row['handle']:<29}{row['bucket']:<9}{reason}{was}")
+
+
 async def search_channels(client, query: str) -> list[tuple[Source, str]]:
     """Top public channels for a query, as candidates for the same per-channel check.
 
@@ -239,6 +555,147 @@ def rank(record: dict) -> tuple:
     )
 
 
+def gate_rules() -> dict:
+    """The verdict rules, written into the record so a reader checks them instead of trusting.
+
+    Pre-registered before the pass: the thresholds were picked on the 2026-08-06 scan's
+    controls (`results/discovery_5a1.json`), not on this run's distribution.
+    """
+    return {
+        "verdicts": ["PASS", "FAIL", "FLAG"],
+        "fail_is_a_closed_list": [
+            "does not resolve",
+            "dead against its bucket's expectation",
+            "non-UA/RU dominant",
+        ],
+        "scam_or_fake_mapping": (
+            "Telegram's scam/fake mark is mapped onto FAIL. It is outside the brief's three, and"
+            " named here rather than left as an unhandled path: a channel Telegram flags may not"
+            " enter the registry by silence."
+        ),
+        "dead": (
+            "canon's own conjunction — docs/CHANNELS-launch.md excluded six channels as 'мёртв:"
+            " ни постов за 28 дней, ни группы' (0 posts AND no group, 6/6) and put fourteen"
+            " equally silent ones WITH a group into the watch bucket (14/14). So: no posts in the"
+            " window and no group = FAIL; no posts and a group present = FLAG (watch shape)."
+            " Not a rate test: eight launch channels sit at a canon rate of 0.2-0.5 posts/week,"
+            " where zero posts in 28 days is the expected reading."
+        ),
+        "language": {
+            "decisive_signal": "cyrillic_share — posts carrying Cyrillic over posts carrying"
+            " any letter; langid.detect's mix rides beside it as description only",
+            "why_not_detect": "detect()'s 'other' holds both 'no letters' and 'Cyrillic, ua/ru"
+            " tied', and on the 06.08 scan that put operator-chosen channels at ua+ru 0.5",
+            "min_lettered_texts": GATE_MIN_LETTERED_TEXTS,
+            "fail_below": GATE_CYRILLIC_MIN,
+            "under_the_minimum": "described and FLAGged, never a FAIL",
+            "controls": "@MAMIPEKER1 (Turkish, excluded) 150 texts at cyrillic_share 0 → FAIL;"
+            " @berlin_food, excluded for its TOPIC, writes Ukrainian → language and theme are"
+            " separate findings and only the first is mechanical",
+        },
+        "flag": [
+            "evidence contradicts the bucket: a comments-bucket channel with no group, a"
+            " posts-only channel that has one, a watch channel that posts again or has no group",
+            "a discussion group that is not open (approval-gated, restricted, send-banned)",
+            "a comments-bucket channel whose sampled posts carry no comments at all",
+            "a supergroup where a broadcast channel was expected",
+            "a language share under the minimum sample",
+        ],
+        "pre_registered_flags": dict(PRE_REGISTERED_FLAGS),
+        "buckets": {name: dict(spec) for name, spec in BUCKETS.items()},
+    }
+
+
+async def run_gate() -> int:
+    """Deliverable 1 of PROMPT-5c1: the gate over the 62, up to the report. Writes no registry."""
+    from build_audit_pack import git_state  # deferred: only the gate path needs it
+    from discover_channels import WINDOW_DAYS, WINDOW_LIMIT
+
+    prior = prior_rows(PRIOR_SCAN)
+    held = (
+        json.loads(GATE_RECORD.read_text(encoding="utf-8"))["candidates"]
+        if GATE_RECORD.exists()
+        else []
+    )
+    done = {row["handle"] for row in held if row["verdict"] in ("PASS", "FAIL", "FLAG")}
+    rows = [row for row in held if row["handle"] in done]
+    todo = [(handle, bucket) for handle, bucket in CANDIDATES if handle not in done]
+    print(f"{len(CANDIDATES)} candidates: {len(rows)} already recorded, {len(todo)} to check")
+    if not prior:
+        print(f"warning: {PRIOR_SCAN} missing — rows carry no prior measurement")
+
+    flood_wait = None
+    if todo:
+        client = build_client()
+        await client.connect()
+        try:
+            if not await client.is_user_authorized():
+                print("No Telegram session. Run: python3 scripts/tg_login.py")
+                return 2
+            flood_wait = await gate_batch(client, todo, prior, rows)
+        finally:
+            await client.disconnect()
+        if flood_wait is not None:
+            print(f"FloodWait: Telegram asks for {flood_wait}s — stopped early, re-run after that.")
+
+    order = {handle: i for i, (handle, _) in enumerate(CANDIDATES)}
+    rows.sort(key=lambda row: order[row["handle"]])
+    summary = gate_summary(rows)
+    record = {
+        "generated_at": stamp(),
+        "phase": "5c1",
+        "deliverable": "1 — the track-R entry gate over the launch composition",
+        "contract": "docs/SPEC.md §3.11 (4); docs/PROMPT-5c1.md Deliverable 1",
+        "canon": (
+            "docs/CHANNELS-launch.md — operator verdict 2026-08-06 plus that evening's addition."
+            " The composition is the operator's choice; this gate verifies each entry against"
+            " the bucket it was chosen into."
+        ),
+        "complete": len(rows) == len(CANDIDATES) and summary["ERROR"] == 0,
+        "flood_wait_seconds": flood_wait,
+        "read_only": "no group joins, no store writes, no registry edit in this pass",
+        "post_sample": POST_SAMPLE,
+        "window_days": WINDOW_DAYS,
+        "window_limit": WINDOW_LIMIT,
+        "rules": gate_rules(),
+        "prior_scan": {
+            "path": rel(PRIOR_SCAN),
+            "generated_at": next(iter(prior.values()), {}).get("generated_at"),
+            "role": "description only — never a gate input; the verdict is on this pass",
+            "handles_without_a_prior_row": [h for h, _ in CANDIDATES if h.lower() not in prior],
+        },
+        "candidates": rows,
+        "summary": summary,
+        "registry_written": False,
+        "note": (
+            "PROMPT-5c1 D1 stops here: every FAIL and FLAG goes to the operator, who rules in"
+            " chat; the rulings land in each row's `ruling`, and only then is"
+            " config/registry.yaml written. data/entry_check_report.json (the 2026-07-27 run) is"
+            " untouched, and the four registry channels are out of this gate's scope."
+        ),
+        "git": git_state(GATE_RECORD),
+    }
+    GATE_RECORD.parent.mkdir(parents=True, exist_ok=True)
+    GATE_RECORD.write_text(
+        json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+
+    print_gate_report(rows)
+    print(
+        f"\n{summary['n']} of {len(CANDIDATES)} checked — "
+        f"PASS {summary['PASS']} · FAIL {summary['FAIL']} · FLAG {summary['FLAG']}"
+        f" · ERROR {summary['ERROR']}"
+    )
+    for bucket, counts in summary["by_bucket"].items():
+        print(
+            f"  {bucket:<10}n={counts['n']:<4}PASS {counts['PASS']:<4}FAIL {counts['FAIL']:<4}"
+            f"FLAG {counts['FLAG']:<4}ERROR {counts['ERROR']}"
+        )
+    print(f"\nrecord: {rel(GATE_RECORD)}")
+    print("STOP: the registry is not written until the operator rules on the FAILs and FLAGs.")
+    return 1 if flood_wait is not None else 0
+
+
 async def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Telegram channel entry check.")
     parser.add_argument(
@@ -246,7 +703,15 @@ async def main(argv: list[str] | None = None) -> int:
         metavar="QUERY",
         help="check the top public channels Telegram returns for QUERY instead of the registry",
     )
+    parser.add_argument(
+        "--gate-5c1",
+        action="store_true",
+        help="run the track-R entry gate over the 62 launch candidates (PROMPT-5c1 D1)",
+    )
     args = parser.parse_args(argv)
+
+    if args.gate_5c1:
+        return await run_gate()
 
     records: list[dict] = []
     flood_wait = None

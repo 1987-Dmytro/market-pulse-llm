@@ -5,6 +5,7 @@ into the numbers and the verdict the operator reviews. The network half lives in
 ``scripts/entry_check.py`` so this module stays testable without a session.
 """
 
+import re
 from datetime import datetime
 from statistics import median
 
@@ -103,3 +104,131 @@ def build_verdict(
     if stats.get("share_with_comments") == 0:
         reasons.append("linked group present but no comments on the sampled posts")
     return {"verdict": "usable", "reasons": reasons}
+
+
+# --- Phase-5c1: the track-R entry gate over the launch composition -------------------------
+#
+# `build_verdict` above grades CAPABILITY (can this channel be collected from at all). The
+# gate below grades ENTRY: the operator has already chosen the composition
+# (docs/CHANNELS-launch.md, verdict 2026-08-06), and each channel is verified against the
+# bucket it was chosen into before it reaches config/registry.yaml.
+
+_CYRILLIC = re.compile(r"[Ѐ-ӿ]")
+_LETTER = re.compile(r"[^\W\d_]")
+
+GATE_MIN_LETTERED_TEXTS = 10
+GATE_CYRILLIC_MIN = 0.5
+"""Pre-registered before the run (PROMPT-5c1 D1: FAIL on "non-UA/RU dominant").
+
+Below GATE_MIN_LETTERED_TEXTS the share is described and never decisive — five short posts
+cannot carry a verdict. The controls the thresholds were picked on are in
+`results/discovery_5a1.json`, the 2026-08-06 scan of the same candidates: @MAMIPEKER1 (Turkish,
+excluded) reads 150 texts at cyrillic_share 0, while @berlin_food — excluded for its TOPIC —
+writes Ukrainian, so language and theme are separate findings and only the first is mechanical.
+"""
+
+BUCKETS = {
+    # posts_expected: canon lists a positive posting rate. group_expected: canon's class.
+    "comments": {"posts_expected": True, "group_expected": True},
+    "posts": {"posts_expected": True, "group_expected": False},
+    "watch": {"posts_expected": False, "group_expected": True},
+    # The late addition enters to have its class decided, so neither is asserted.
+    "late": {"posts_expected": True, "group_expected": None},
+}
+
+PRE_REGISTERED_FLAGS = {
+    "@kolyastravinsky": "theme check (PROMPT-5c1 D1)",
+    "@whowears": "theme check (PROMPT-5c1 D1)",
+    "@marketopt_official": "class + comments confirm (PROMPT-5c1 D1)",
+}
+"""Flagged whatever the measurement says — the operator asked for these three by name."""
+
+
+def script_mix(texts: list[str]) -> dict:
+    """Share of the posts written in Cyrillic, over the posts that carry any letter at all.
+
+    `langid.detect` cannot answer "is this a UA/RU channel": its ``other`` bucket holds both
+    "no letters" (an emoji caption) and "Cyrillic, ua and ru tied" (any short comment), and on
+    the 2026-08-06 scan that put channels the operator chose — @Wellosophy_Lesya, six texts —
+    at a detect ua+ru share of 0.5. Script presence separates the actual failure mode (a
+    Turkish or German channel) from the ambiguity, and the finer ua/ru/en mix stays beside it
+    as description.
+    """
+    lettered = [text for text in texts if _LETTER.search(text)]
+    cyrillic = [text for text in lettered if _CYRILLIC.search(text)]
+    return {
+        "n_texts": len(texts),
+        "n_with_letters": len(lettered),
+        "n_cyrillic": len(cyrillic),
+        "cyrillic_share": round(len(cyrillic) / len(lettered), 2) if lettered else None,
+        "decisive": len(lettered) >= GATE_MIN_LETTERED_TEXTS,
+    }
+
+
+def gate_verdict(*, handle: str, bucket: str, record: dict, window: dict, script: dict) -> dict:
+    """PASS / FAIL / FLAG for one candidate, against the bucket the operator chose it into.
+
+    FAIL is a closed list (PROMPT-5c1 D1): does not resolve · dead against its bucket's
+    expectation · non-UA/RU dominant. Telegram's own scam/fake mark is mapped onto it — a
+    channel Telegram flags may not enter a registry by silence — and the mapping is named in
+    the record rather than left as an unhandled path.
+
+    "Dead" is canon's own conjunction, not a rate test. `docs/CHANNELS-launch.md` excluded six
+    channels as *"мёртв: ни постов за 28 дней, ни группы"* and put fourteen equally silent ones
+    with a group into the watch bucket. Eight launch channels sit at a canon rate of 0.2-0.5
+    posts/week, where zero posts in a 28-day window is the expected reading — a rate test would
+    FAIL the operator's own picks on noise. Silence with a group present is a FLAG: the shape
+    of a watch channel, and a bucket change is the operator's call.
+    """
+    if not record.get("resolved"):
+        reason = record.get("error") or "handle does not resolve"
+        return {"verdict": "FAIL", "fails": [f"does not resolve — {reason}"], "flags": []}
+
+    fails, flags = [], []
+    if record.get("scam") or record.get("fake"):
+        mark = "scam" if record.get("scam") else "fake"
+        fails.append(f"Telegram flags this channel as {mark}")
+
+    share = script.get("cyrillic_share")
+    if share is not None and share < GATE_CYRILLIC_MIN:
+        text = f"non-UA/RU dominant — cyrillic_share {share} over {script['n_with_letters']} posts"
+        (fails if script["decisive"] else flags).append(
+            text
+            if script["decisive"]
+            else f"{text} (under {GATE_MIN_LETTERED_TEXTS}, not decisive)"
+        )
+
+    expectation = BUCKETS[bucket]
+    group = record.get("discussion_group") or {}
+    has_group = bool(record.get("comments_enabled"))
+    posts = window.get("n_posts", 0)
+
+    if expectation["posts_expected"] and posts == 0:
+        if has_group:
+            flags.append("silent in the 28-day window but the group is present — watch shape")
+        else:
+            fails.append("dead against its bucket — no posts in 28 days and no discussion group")
+    if not expectation["posts_expected"] and posts:
+        flags.append(f"watch bucket expects silence, {posts} posts in the 28-day window")
+
+    if expectation["group_expected"] is True and not has_group:
+        flags.append("bucket expects a discussion group, none is linked")
+    if expectation["group_expected"] is False and has_group:
+        flags.append("posts-only bucket, but a discussion group is linked")
+    if has_group and not group.get("open"):
+        flags.append(f"discussion group is not open — {', '.join(group.get('closed_because', []))}")
+    if has_group and group.get("min"):
+        flags.append("discussion group came back as a min object — its flags are not reliable")
+    # The comment counters are the 50-post sample's, not the window's: they are read off each
+    # post's reply counter (scripts/entry_check.py:70), and the window sample does not keep them.
+    traffic = record.get("traffic") or {}
+    if bucket == "comments" and has_group and traffic.get("share_with_comments") == 0:
+        flags.append("group present but no comments on any of the sampled posts")
+
+    if not record.get("broadcast", True):
+        flags.append("supergroup, not a broadcast channel")
+    if handle in PRE_REGISTERED_FLAGS:
+        flags.append(f"pre-registered: {PRE_REGISTERED_FLAGS[handle]}")
+
+    verdict = "FAIL" if fails else ("FLAG" if flags else "PASS")
+    return {"verdict": verdict, "fails": fails, "flags": flags}
