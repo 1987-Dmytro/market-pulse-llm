@@ -87,7 +87,7 @@ sources:
     telegram_channels:
       - "@uasaler"
     verified: true
-    comments_enabled: true
+    comments_enabled: false
   - id: retsepty
     name: "Кулінарні рецепти"
     source_type: community
@@ -130,13 +130,7 @@ sources:
       - "@polyakova_fitness"
     verified: true
     comments_enabled: true
-  - id: znishkom
-    name: "ЗнижКом | Ігрові Знижки 🇺🇦"
-    source_type: aggregator
-    telegram_channels:
-      - "@znishkom"
-    verified: true
-    comments_enabled: true
+  # znishkom removed 2026-08-07: EXCLUDED on the theme screen: 191 posts in the window and not one food term — it is Steam game discounts (STAR WARS Jedi, NieR:Automata, Disco Elysium). The same class as @Steam_free_1 and @Steam_Sale_Ua, excluded 06.08, and the biggest poster in the whole composition after the recipe feeds
   - id: kuksa2022
     name: "Екатерина Кукса. Материнство в радость"
     source_type: community
@@ -151,20 +145,8 @@ sources:
       - "@HealthPsycholog"
     verified: true
     comments_enabled: true
-  - id: atb_fanatik
-    name: "ФАНАТИК АТБ | АКЦІЇ"
-    source_type: aggregator
-    telegram_channels:
-      - "@ATB_FANatik"
-    verified: true
-    comments_enabled: true
-  - id: offspringrus
-    name: "Ребёнок маминой подруги!"
-    source_type: community
-    telegram_channels:
-      - "@offspringrus"
-    verified: true
-    comments_enabled: true
+  # atb_fanatik removed 2026-08-07: EXCLUDED as text-free: 18 posts of «АНОНС АКЦІЙ АТБ … Частина N», products in the images, 2 of 7 sampled posts carrying comments
+  # offspringrus removed 2026-08-07: EXCLUDED on the theme screen: 16 posts, zero food terms — a RUSSIAN baby-goods shop (Moscow exhibitions, offspring24.ru), so off-category and off-market
   - id: sashafitnesslife
     name: "Розумний ФІТНЕС з Sashafitnesslife ❤️"
     source_type: community
@@ -235,13 +217,7 @@ sources:
       - "@rezeptmoi"
     verified: true
     comments_enabled: true
-  - id: discountua1
-    name: "💛Знижки супермаркетів💙"
-    source_type: community
-    telegram_channels:
-      - "@discountua1"
-    verified: true
-    comments_enabled: true
+  # discountua1 removed 2026-08-07: EXCLUDED as text-free: on topic and unreadable. Its 19 posts repeat one line, «Знижки в АТБ … Вигода до -56%», with the products inside the images — nothing for the category filter or brand extraction to read. The 28-day window the 06.08 ruling asked for is what measured it, and the gate's 0-of-7 comment share is the other half
   - id: recepti
     name: "Кулінарні рецепти"
     source_type: community
@@ -305,13 +281,7 @@ sources:
       - "@vylkachannel"
     verified: true
     comments_enabled: false
-  - id: whitecode_zny
-    name: "WHITECODE ЗНИЖКИ | УЦІНКИ"
-    source_type: aggregator
-    telegram_channels:
-      - "@whitecode_zny"
-    verified: true
-    comments_enabled: false
+  # whitecode_zny removed 2026-08-07: EXCLUDED on the theme screen: 25 posts, zero food terms — footwear resale («стара ціна 3099 ♡ НОВА 1499 ♡ розмір 37 ♡ дефект на фото»)
   - id: gaid_skobioale
     name: "Відгуки гайд схуднення"
     source_type: community

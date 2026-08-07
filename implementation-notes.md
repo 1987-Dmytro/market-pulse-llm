@@ -3352,3 +3352,38 @@ of ANY kind. It found two distinct failures, and only the first is @uasaler's:
 
 Joins are PAUSED at 13 of 26 rather than resumed: three of the thirteen still to go are in the
 lists above, and joining a group the operator is about to drop spends the pace on it.
+
+**D25 — five channels came back OUT of the registry, which the ruling script had never done.**
+The operator excluded @znishkom, @whitecode_zny, @offspringrus, @discountua1 and @ATB_FANatik on
+the theme screen, and all five were already written. `apply_gate_rulings_5c1.py` could only
+append, so it gained two operations. `remove_sources` takes a block out and leaves a comment
+where it was — the convention `config/registry.yaml` already uses for @znizhki_ua, removed
+2026-07-27, because a silently shorter file cannot be told from one that never had the channel.
+`update_sources` rewrites named fields of a block already there, which is what a ruling that
+MOVED needs: without it the drift check could only refuse, and refusing is right for an
+unexplained difference and useless for an intended one. Both are bounded by the `taxonomy:`
+marker — an earlier draft of the remover ran a block "to the next id line", which would have
+swallowed taxonomy and watchlist whole the moment the LAST source was the one being removed.
+Result: 62 → 57 sources, 6 insertions and 36 deletions, taxonomy/watchlist byte-identical.
+
+**D26 — @uasaler was demoted, not excluded, and the difference is the operator's word.** The
+instruction was «чат али екрспрес удаляй» — the CHAT. Its group is left, so `comments_enabled`
+became false because a true there would promise rows no membership can fetch. Its 30 posts carry
+zero food terms on the same screen that excluded the five, so whether the channel itself stays is
+an open question, stated in its ruling text rather than decided here.
+
+**D27 — an account-wide FloodWait of 20 HOURS, on resolving usernames.** It landed on a
+membership probe and it is not that probe's fault: `ResolveUsernameRequest` is what every join,
+every comment fetch and every gate check begins with, and today spent several hundred of them —
+63 gate rows, 119 discovery candidates, three searches, 13 joins. Telegram asked for 72,312 s,
+clearing 2026-08-08 10:02 UTC. Joins are stopped, not paused-and-retried: retrying inside the
+window is how a 20-hour wait becomes a longer one. The wait is written into
+`results/joins_5c1.jsonl` with its expiry, and `--join`/`--posts`/`--comments` now refuse until
+it passes rather than discovering it again the hard way.
+
+**D28 — two groups were already left before the script got to them.** `--leave @znishkom` raised
+`UserNotParticipantError`: the operator had deleted those chats in their own client. The request's
+error is a poor discriminator — it cannot tell "already gone" from "wrong entity" — so
+`leave_group` now reads the membership flag first and records `not_a_member`, and when it does
+leave it re-reads the flag afterwards, because leaving is not proven by a request that did not
+raise.

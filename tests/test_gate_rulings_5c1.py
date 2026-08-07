@@ -78,13 +78,14 @@ def test_maudau_moves_to_posts_and_loses_its_comments_flag():
     assert "NO join" in ruling
 
 
-def test_discountua1_keeps_its_bucket_and_its_join():
-    """Ruling 3: 0 of 7 sampled posts is a thin denominator, not a verdict. The window measures
-    it; demotion is a cycle-1 question."""
+def test_discountua1_was_kept_to_be_measured_and_the_measurement_excluded_it():
+    """Ruling 3 of 06.08 kept it so the 28-day window could measure its real flow. The window
+    measured: 19 posts repeating one line with the products inside the images. The later ruling
+    wins, and the earlier one is not silently still in the code."""
     bucket, ruling = apply.final_bucket(row("@discountua1", "comments"))
-    assert bucket == "comments"
-    assert apply.source_entry(row("@discountua1", "comments"), bucket)["comments_enabled"] is True
-    assert "cycle-1" in ruling
+    assert bucket is None
+    assert "text-free" in ruling
+    assert "@discountua1" not in apply.KEPT
 
 
 def test_the_replacement_lands_by_the_rule_the_operator_wrote_in_advance():
@@ -217,7 +218,7 @@ def test_the_shipped_registry_is_re_derivable_from_the_gate_record():
             expected["watch"],
         ), candidate["handle"]
         checked += 1
-    assert checked == 58
+    assert checked == 53
 
 
 def test_the_composition_matches_the_canons_own_summary():
@@ -235,11 +236,11 @@ def test_the_composition_matches_the_canons_own_summary():
     buckets = {"comments": 0, "posts": 0, "watch": 0, "excluded": 0}
     for _, bucket in resolved(record):
         buckets["excluded" if bucket is None else bucket] += 1
-    assert buckets["comments"] == 26
+    assert buckets["comments"] == 21
     assert buckets["watch"] == 14
     # 17 in the canon's summary plus @marketopt_promo, which the summary counts separately as
     # "+1 на гейте" because its bucket was still pending when the operator wrote it.
     assert buckets["posts"] == 18
-    # Five from the 06.08 rulings plus @akcii_skidki_plt, the second late addition, excluded
-    # 2026-08-07 for 26 months of silence with no group.
-    assert buckets["excluded"] == 6
+    # Six by 07.08 midday, plus the five the theme screen caught that evening: @znishkom,
+    # @whitecode_zny, @offspringrus (off-topic) and @discountua1, @ATB_FANatik (text-free).
+    assert buckets["excluded"] == 11

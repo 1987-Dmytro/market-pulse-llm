@@ -50,6 +50,23 @@ EXCLUDED = {
     " dead by canon's own conjunction — its ten sampled posts run 2024-04-19 to 2024-06-06, so"
     " 26 months of silence, and there is no discussion group. Same class as the six the operator"
     " excluded on 06.08",
+    # --- the theme screen, operator ruling 2026-08-07 evening -------------------------------
+    # results/theme_screen_5c1.json over the 28-day window each channel had already produced.
+    # The gate grades capability and never graded theme; these five are what that gap admitted.
+    "@znishkom": "EXCLUDED on the theme screen: 191 posts in the window and not one food term —"
+    " it is Steam game discounts (STAR WARS Jedi, NieR:Automata, Disco Elysium). The same class"
+    " as @Steam_free_1 and @Steam_Sale_Ua, excluded 06.08, and the biggest poster in the whole"
+    " composition after the recipe feeds",
+    "@whitecode_zny": "EXCLUDED on the theme screen: 25 posts, zero food terms — footwear resale"
+    " («стара ціна 3099 ♡ НОВА 1499 ♡ розмір 37 ♡ дефект на фото»)",
+    "@offspringrus": "EXCLUDED on the theme screen: 16 posts, zero food terms — a RUSSIAN"
+    " baby-goods shop (Moscow exhibitions, offspring24.ru), so off-category and off-market",
+    "@discountua1": "EXCLUDED as text-free: on topic and unreadable. Its 19 posts repeat one"
+    " line, «Знижки в АТБ … Вигода до -56%», with the products inside the images — nothing for"
+    " the category filter or brand extraction to read. The 28-day window the 06.08 ruling asked"
+    " for is what measured it, and the gate's 0-of-7 comment share is the other half",
+    "@ATB_FANatik": "EXCLUDED as text-free: 18 posts of «АНОНС АКЦІЙ АТБ … Частина N», products"
+    " in the images, 2 of 7 sampled posts carrying comments",
 }
 """Ruled out of the composition. Their gate rows stay in the record, carrying this text."""
 
@@ -59,12 +76,20 @@ MOVED = {
         "moved to posts-only: the linked group bans everyone from sending, so 0 of 50 sampled"
         " posts carry comments and a join buys nothing. comments_enabled false, NO join",
     ),
+    "@uasaler": (
+        "posts",
+        "moved to posts-only: the operator ruled its discussion group out on 2026-08-07 («Чат"
+        " Аліекспрес ( AliExpert )») and it was left, so `comments_enabled: true` would promise"
+        " rows no membership can fetch. The instruction named the CHAT, not the channel, so the"
+        " channel stays — but its 30 posts in the window carry zero food terms on the same theme"
+        " screen that excluded the five below, and whether it stays at all is an open question"
+        " for the operator",
+    ),
 }
 
 KEPT = {
-    "@discountua1": "kept in the comments bucket WITH a join: 0 of 7 sampled posts is a thin"
-    " denominator, and the 28-day window measures the real flow. Demotion is a cycle-1 review"
-    " question, not this phase's",
+    # @discountua1's 06.08 "keep it, the window will measure it" ruling was superseded on 07.08
+    # by what the window measured. Its history lives in the EXCLUDED text, not as dead code here.
     "@prostetsofa": "stays in watch, recorded: its group admits by approval only. No watch join"
     " happens in this phase; this surfaces when the channel wakes up",
 }
@@ -93,6 +118,10 @@ SOURCE_TYPE_RULING = {
     "@marketopt_promo": "official_retail",
 }
 """Team-lead ruling 2026-08-07; everything else is `community`, the ruling's own default."""
+
+UPDATABLE = ("comments_enabled", "watch", "source_type", "name")
+"""Fields a later ruling may legitimately move on a source already written. A difference in
+anything else is unexplained and stops the run — that is what the drift check is for."""
 
 
 def final_bucket(row: dict) -> tuple[str | None, str | None]:
@@ -164,6 +193,98 @@ def render(entry: dict) -> str:
     return "\n".join(lines)
 
 
+def _sources_half(text: str) -> tuple[str, str, str]:
+    """The file split at `taxonomy:`. Bounding every edit by this marker is what keeps the
+    taxonomy and the watchlist unreachable from anything below."""
+    marker = "\ntaxonomy:\n"
+    if marker not in text:
+        raise SystemExit(f"{REGISTRY}: no `taxonomy:` block — refusing to guess where sources end")
+    head, tail = text.split(marker, 1)
+    return head, marker, tail
+
+
+def _blocks(head: str) -> list[list[str]]:
+    """The sources half as blocks, each starting at a `  - id:` line (the first holds the header)."""
+    blocks, current = [], []
+    for line in head.splitlines(keepends=True):
+        if line.startswith("  - id: "):
+            blocks.append(current)
+            current = [line]
+        else:
+            current.append(line)
+    blocks.append(current)
+    return blocks
+
+
+def _block_id(block: list[str]) -> str | None:
+    return block[0].removeprefix("  - id: ").strip() if block[0].startswith("  - id: ") else None
+
+
+def update_sources(text: str, changes: dict[str, dict]) -> str:
+    """Rewrite named scalar fields of sources already in the file.
+
+    A ruling that changes after the write — @uasaler losing its group, so `comments_enabled`
+    going false — has to be able to reach the file. Without this the drift check could only
+    refuse, which is right for an unexplained difference and useless for an intended one. Only
+    the named fields of the named blocks are touched; anything else is copied through.
+    """
+    if not changes:
+        return text
+    head, marker, tail = _sources_half(text)
+    out, seen = [], set()
+    for block in _blocks(head):
+        sid = _block_id(block)
+        if sid not in changes:
+            out.extend(block)
+            continue
+        seen.add(sid)
+        for line in block:
+            key = line.strip().split(":", 1)[0]
+            if line.startswith("    ") and key in changes[sid]:
+                value = changes[sid][key]
+                out.append(
+                    f"    {key}: {str(value).lower() if isinstance(value, bool) else value}\n"
+                )
+            else:
+                out.append(line)
+    missing = set(changes) - seen
+    if missing:
+        raise SystemExit(f"{REGISTRY}: asked to update {sorted(missing)}, which is not in it")
+    return "".join(out) + marker + tail
+
+
+def remove_sources(text: str, ids: dict[str, str]) -> str:
+    """Take the named source blocks out, leaving a comment where each one was.
+
+    The convention `config/registry.yaml` already uses for @znizhki_ua, removed 2026-07-27: a
+    source that leaves the registry leaves a line saying so. A silently shorter file cannot be
+    told from one that never had the channel, and "why is this not collected any more" is the
+    question a reader asks six weeks later.
+
+    Blocks are found by their `  - id:` line and end at the next one (or at the block's end), so
+    nothing outside `sources:` is reachable from here.
+    """
+    if not ids:
+        return text
+    head, marker, tail = _sources_half(text)
+
+    blocks = _blocks(head)
+
+    out, removed = [], set()
+    for block in blocks:
+        sid = block[0].removeprefix("  - id: ").strip() if block[0].startswith("  - id: ") else None
+        if sid in ids:
+            removed.add(sid)
+            out.append(f"  # {sid} removed 2026-08-07: {ids[sid]}\n")
+            continue
+        out.extend(block)
+
+    missing = set(ids) - removed
+    if missing:
+        raise SystemExit(f"{REGISTRY}: asked to remove {sorted(missing)}, which is not in it")
+    return "".join(out) + marker + tail
+
+
 def insert_sources(text: str, entries: list[dict]) -> str:
     """Put the new sources at the end of the `sources:` block and touch nothing else.
 
@@ -199,7 +320,8 @@ def main(argv: list[str] | None = None) -> int:
     before = load_registry(REGISTRY)
     held = {handle: source for source in before.sources for handle in source.telegram_channels}
 
-    entries, buckets = [], {"comments": [], "posts": [], "watch": [], "excluded": []}
+    entries, updates = [], {}
+    buckets = {"comments": [], "posts": [], "watch": [], "excluded": []}
     for row in record["candidates"]:
         bucket, ruling = final_bucket(row)
         row["ruling"] = ruling
@@ -218,9 +340,14 @@ def main(argv: list[str] | None = None) -> int:
                 if getattr(existing, field) != expected[field]
             }
             if drift:
-                raise SystemExit(
-                    f"{row['handle']} is in the registry with different fields: {drift}"
-                )
+                # An intended change — a ruling that moved — is applied. The raise stays for the
+                # case this check exists for: a difference nothing in the rulings explains.
+                unexplained = {k: v for k, v in drift.items() if k not in UPDATABLE}
+                if unexplained:
+                    raise SystemExit(
+                        f"{row['handle']} is in the registry with unexplained fields: {unexplained}"
+                    )
+                updates[existing.id] = {field: expected[field] for field in drift}
             continue
         entries.append(expected)
 
@@ -241,18 +368,42 @@ def main(argv: list[str] | None = None) -> int:
     if args.plan:
         return 0
 
+    # A channel the rulings excluded AFTER it was written has to come back out again.
+    stale = {
+        source.id: EXCLUDED[handle]
+        for source in before.sources
+        for handle in source.telegram_channels
+        if handle in EXCLUDED
+    }
+    if stale:
+        print(f"\nremoving {len(stale)} source(s) the rulings excluded after the write:")
+        for sid in stale:
+            print(f"  - {sid}")
+
+    if updates:
+        print(f"updating {len(updates)} source(s) whose ruling moved: {sorted(updates)}")
+
     text = REGISTRY.read_text(encoding="utf-8")
     tail = text.split("\ntaxonomy:\n", 1)[1]
-    REGISTRY.write_text(insert_sources(text, entries), encoding="utf-8")
+    REGISTRY.write_text(
+        insert_sources(update_sources(remove_sources(text, stale), updates), entries),
+        encoding="utf-8",
+    )
     written = REGISTRY.read_text(encoding="utf-8")
     if written.split("\ntaxonomy:\n", 1)[1] != tail:
         raise SystemExit("taxonomy/watchlist changed — the write was supposed to be additive")
 
     after = load_registry(REGISTRY)
-    if [s.id for s in after.sources][: len(before.sources)] != [s.id for s in before.sources]:
-        raise SystemExit("the four existing sources moved or changed — refusing this write")
-    if len(after.sources) != len(before.sources) + len(entries):
+    kept = [source.id for source in before.sources if source.id not in stale]
+    if [s.id for s in after.sources][: len(kept)] != kept:
+        raise SystemExit("the sources that were kept moved or changed — refusing this write")
+    if len(after.sources) != len(kept) + len(entries):
         raise SystemExit("source count does not match what was rendered")
+    still_there = {handle for source in after.sources for handle in source.telegram_channels} & set(
+        EXCLUDED
+    )
+    if still_there:
+        raise SystemExit(f"excluded channels are still in the registry: {sorted(still_there)}")
     unknown = {s.source_type for s in after.sources} - set(SOURCE_TYPES)
     if unknown:
         raise SystemExit(f"unknown source_type written: {unknown}")

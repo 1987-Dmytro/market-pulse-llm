@@ -177,6 +177,23 @@ def test_a_floodwait_stops_the_joins_and_writes_the_wait_down(monkeypatch, tmp_p
     assert rows[-1]["outcome"] == "floodwait"
 
 
+def test_an_account_wide_floodwait_is_read_back_from_the_log(monkeypatch, tmp_path):
+    """The 2026-08-07 wall: Telegram asked for 20 HOURS on ResolveUsernameRequest, which every
+    join and every comment fetch starts with. Retrying inside that window is how a 20-hour wait
+    becomes a longer one, so the log carries the expiry and the run refuses until it passes."""
+    later = (NOW + timedelta(hours=20)).isoformat()
+    state = {
+        "*": {"outcome": "floodwait", "seconds": 72312, "clears_at": later, "at": NOW.isoformat()}
+    }
+    assert collect.flood_wait_until(state, NOW) == datetime.fromisoformat(later)
+    assert collect.flood_wait_until(state, NOW + timedelta(hours=21)) is None
+    assert collect.flood_wait_until({}, NOW) is None
+
+    # A per-channel floodwait row without an expiry is a retryable attempt, not a global wall.
+    old = {"@a": {"outcome": "floodwait", "seconds": 60, "at": NOW.isoformat()}}
+    assert collect.flood_wait_until(old, NOW) is None
+
+
 def test_the_pace_is_measured_from_the_log_not_from_this_process(monkeypatch, tmp_path):
     """A run stopped for other work and resumed would otherwise fire its next join seconds after
     the previous one — the burst the pace exists to avoid. The log is the cursor; it is the clock

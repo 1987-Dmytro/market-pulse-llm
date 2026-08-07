@@ -438,7 +438,7 @@
       "verdict": "PASS",
       "fails": [],
       "flags": [],
-      "ruling": null,
+      "ruling": "KEPT, bucket changed — moved to posts-only: the operator ruled its discussion group out on 2026-08-07 («Чат Аліекспрес ( AliExpert )») and it was left, so `comments_enabled: true` would promise rows no membership can fetch. The instruction named the CHAT, not the channel, so the channel stays — but its 30 posts in the window carry zero food terms on the same theme screen that excluded the five below, and whether it stays at all is an open question for the operator",
       "error": null,
       "suggestions": null
     },
@@ -948,7 +948,7 @@
       "verdict": "PASS",
       "fails": [],
       "flags": [],
-      "ruling": null,
+      "ruling": "EXCLUDED — EXCLUDED on the theme screen: 191 posts in the window and not one food term — it is Steam game discounts (STAR WARS Jedi, NieR:Automata, Disco Elysium). The same class as @Steam_free_1 and @Steam_Sale_Ua, excluded 06.08, and the biggest poster in the whole composition after the recipe feeds",
       "error": null,
       "suggestions": null
     },
@@ -1164,7 +1164,7 @@
       "verdict": "PASS",
       "fails": [],
       "flags": [],
-      "ruling": null,
+      "ruling": "EXCLUDED — EXCLUDED as text-free: 18 posts of «АНОНС АКЦІЙ АТБ … Частина N», products in the images, 2 of 7 sampled posts carrying comments",
       "error": null,
       "suggestions": null
     },
@@ -1236,7 +1236,7 @@
       "verdict": "PASS",
       "fails": [],
       "flags": [],
-      "ruling": null,
+      "ruling": "EXCLUDED — EXCLUDED on the theme screen: 16 posts, zero food terms — a RUSSIAN baby-goods shop (Moscow exhibitions, offspring24.ru), so off-category and off-market",
       "error": null,
       "suggestions": null
     },
@@ -2184,7 +2184,7 @@
       "flags": [
         "group present but no comments on any of the sampled posts"
       ],
-      "ruling": "KEPT — kept in the comments bucket WITH a join: 0 of 7 sampled posts is a thin denominator, and the 28-day window measures the real flow. Demotion is a cycle-1 review question, not this phase's",
+      "ruling": "EXCLUDED — EXCLUDED as text-free: on topic and unreadable. Its 19 posts repeat one line, «Знижки в АТБ … Вигода до -56%», with the products inside the images — nothing for the category filter or brand extraction to read. The 28-day window the 06.08 ruling asked for is what measured it, and the gate's 0-of-7 comment share is the other half",
       "error": null,
       "suggestions": null
     },
@@ -2819,7 +2819,7 @@
       "verdict": "PASS",
       "fails": [],
       "flags": [],
-      "ruling": null,
+      "ruling": "EXCLUDED — EXCLUDED on the theme screen: 25 posts, zero food terms — footwear resale («стара ціна 3099 ♡ НОВА 1499 ♡ розмір 37 ♡ дефект на фото»)",
       "error": null,
       "suggestions": null
     },
@@ -4379,15 +4379,12 @@
   "registry_written": true,
   "note": "PROMPT-5c1 D1 stops here: every FAIL and FLAG goes to the operator, who rules in chat; the rulings land in each row's `ruling`, and only then is config/registry.yaml written. data/entry_check_report.json (the 2026-07-27 run) is untouched, and the four registry channels are out of this gate's scope.",
   "git": {
-    "commit": "4cd9ab4cf948afec3d81b4e4d4fe54c7d67a2529",
+    "commit": "a1b7ee02762c9173a5ef341a6bf2b67d2b95ff1d",
     "dirty": [
+      "config/registry.yaml",
       "knowledge/daily_logs/2026-08-07.md",
       "knowledge/index.md",
-      "results/joins_5c1.jsonl",
-      "results/volume_calc_5c1.json",
-      "scripts/apply_gate_rulings_5c1.py",
-      "tests/test_gate_rulings_5c1.py",
-      "results/discovery_5c1_poltava.json"
+      "scripts/apply_gate_rulings_5c1.py"
     ]
   },
   "notes": {
@@ -4571,24 +4568,21 @@
     }
   },
   "rulings": {
-    "applied_at": "2026-08-07T11:14:29+00:00",
+    "applied_at": "2026-08-07T13:55:01+00:00",
     "canon": "docs/CHANNELS-launch.md, section 'Рулинги гейта 5c1 (2026-08-07)'",
     "composition": {
       "comments": [
-        "@ATB_FANatik",
         "@HealthPsycholog",
         "@Pro_Detyintumama",
         "@baby_broccoli_club",
         "@chifit_family",
         "@denisovapro",
-        "@discountua1",
         "@eftforhealth",
         "@katyal55",
         "@kkondr_fit",
         "@klopotenkofood",
         "@kopiyochka1",
         "@kuksa2022",
-        "@offspringrus",
         "@olgaa_trainer",
         "@polyakova_fitness",
         "@retsepty",
@@ -4597,10 +4591,8 @@
         "@smirnov108",
         "@tarilka_malyuka",
         "@tretyakovaele",
-        "@uasaler",
         "@useful_healthy_fitness_menu",
-        "@ya_Nenka",
-        "@znishkom"
+        "@ya_Nenka"
       ],
       "posts": [
         "@Wellosophy_Lesya",
@@ -4619,8 +4611,8 @@
         "@recepti",
         "@retsepty4",
         "@retsepty5",
-        "@vylkachannel",
-        "@whitecode_zny"
+        "@uasaler",
+        "@vylkachannel"
       ],
       "watch": [
         "@Evgenija_dutjache_menu",
@@ -4639,37 +4631,39 @@
         "@viktoria_sshh"
       ],
       "excluded": [
+        "@ATB_FANatik",
         "@Mambabyua",
         "@akcii_skidki_plt",
+        "@discountua1",
         "@kolyastravinsky",
         "@kulinariya_chat_a",
         "@marketopt_official",
-        "@whowears"
+        "@offspringrus",
+        "@whitecode_zny",
+        "@whowears",
+        "@znishkom"
       ]
     },
     "counts": {
       "registry_before": 62,
-      "comments": 26,
+      "comments": 21,
       "posts": 18,
       "watch": 14,
-      "excluded": 6,
-      "sources_after": 62
+      "excluded": 11,
+      "sources_after": 57
     },
     "joins_authorised": [
-      "@ATB_FANatik",
       "@HealthPsycholog",
       "@Pro_Detyintumama",
       "@baby_broccoli_club",
       "@chifit_family",
       "@denisovapro",
-      "@discountua1",
       "@eftforhealth",
       "@katyal55",
       "@kkondr_fit",
       "@klopotenkofood",
       "@kopiyochka1",
       "@kuksa2022",
-      "@offspringrus",
       "@olgaa_trainer",
       "@polyakova_fitness",
       "@retsepty",
@@ -4678,10 +4672,8 @@
       "@smirnov108",
       "@tarilka_malyuka",
       "@tretyakovaele",
-      "@uasaler",
       "@useful_healthy_fitness_menu",
-      "@ya_Nenka",
-      "@znishkom"
+      "@ya_Nenka"
     ],
     "source_type_ruling": {
       "@uasaler": "aggregator",

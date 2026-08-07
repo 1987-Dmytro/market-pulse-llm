@@ -199,8 +199,32 @@ async def leave_group(client, handle: str) -> dict:
     if chat is None:
         return row | {"outcome": "no group", "group_id": linked}
     row |= {"group_id": linked, "group_title": getattr(chat, "title", None)}
+    if getattr(chat, "left", True):
+        # Already out — the operator can leave a chat in their own client, and a script that
+        # sent the request anyway would get UserNotParticipantError and have to guess whether
+        # that meant "already gone" or "wrong entity". The membership flag answers it directly.
+        return row | {"outcome": "not_a_member", "note": "already out before this run"}
     await client(functions.channels.LeaveChannelRequest(channel=chat))
-    return row | {"outcome": "left"}
+    left = await client(functions.channels.GetFullChannelRequest(channel=entity))
+    after = next((c for c in left.chats if getattr(c, "id", None) == linked), None)
+    # Re-read rather than trust the call: leaving is not proven by a request that did not raise.
+    return row | {"outcome": "left", "verified_left": bool(getattr(after, "left", True))}
+
+
+def flood_wait_until(state: dict, now: datetime) -> datetime | None:
+    """When an account-wide rate limit recorded in the log expires, or ``None`` if it has.
+
+    A FloodWait on `ResolveUsernameRequest` is not per channel: every join, every comment fetch
+    and every gate check starts by resolving a handle, so one row closes all of them. Measured in
+    HOURS — the 2026-08-07 one asked for 20 — and retrying inside the window is how a 20-hour
+    wait becomes a longer one. The log carries it, and this is what reads it back.
+    """
+    latest = None
+    for row in state.values():
+        if row.get("outcome") == "floodwait" and row.get("clears_at"):
+            clears = datetime.fromisoformat(row["clears_at"])
+            latest = max(latest, clears) if latest else clears
+    return latest if latest and latest > now else None
 
 
 def seconds_until_next_join(state: dict, now: datetime) -> float:
@@ -469,10 +493,12 @@ def main(argv: list[str] | None = None) -> int:
     channels = collectable(registry, gate)
     joins = joinable(registry, gate)
     if args.leave:
-        authorised = {handle for _, handle in joins}
-        unknown = set(args.leave) - authorised
+        # The authorised list AND the join log: the case that matters is a channel the rulings
+        # have since EXCLUDED, which is no longer authorised and is exactly what has to be left.
+        known = {handle for _, handle in joins} | set(join_state())
+        unknown = set(args.leave) - known
         if unknown:
-            raise SystemExit(f"not groups this phase ever joined: {sorted(unknown)}")
+            raise SystemExit(f"not groups this phase ever joined or authorised: {sorted(unknown)}")
 
         async def run_leave():
             client = build_client()
@@ -503,6 +529,14 @@ def main(argv: list[str] | None = None) -> int:
         print(f"window:  {WINDOW_DAYS} days · pace {JOIN_PAUSE:.0f}s between joins")
         print(f"protected: {len(protected())} raw v1 files, refused at channel level")
         return 0
+
+    if (until := flood_wait_until(join_state(), datetime.now(UTC))) is not None:
+        left = (until - datetime.now(UTC)).total_seconds() / 3600
+        raise SystemExit(
+            f"an account-wide FloodWait is recorded until {until:%Y-%m-%d %H:%M UTC} ({left:.1f} h"
+            " away). It is on resolving usernames, which every join and every comment fetch starts"
+            " with, so retrying inside the window only makes it longer. Re-run after that time."
+        )
 
     record = asyncio.run(run(args, registry, gate))
     print()

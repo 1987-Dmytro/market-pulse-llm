@@ -12,3 +12,6 @@
 {"at": "2026-08-07T13:17:57+00:00", "channel": "@kuksa2022", "group_id": 1894042568, "group_title": "Чат/Екатерина Кукса", "outcome": "joined"}
 {"at": "2026-08-07T13:32:56+00:00", "channel": "@HealthPsycholog", "group_id": 2378364478, "group_title": "Психологія здоров’я Health Psychology Chat", "outcome": "joined"}
 {"at": "2026-08-07T13:46:06+00:00", "channel": "@uasaler", "group_id": 1579882044, "group_title": "Чат Аліекспрес ( AliExpert )", "outcome": "left"}
+{"at": "2026-08-07T13:56:05+00:00", "channel": "@znishkom", "group_id": 2160355291, "group_title": "ЗнижКом | Чат", "outcome": "not_a_member", "note": "already out before this run"}
+{"at": "2026-08-07T13:56:05+00:00", "channel": "@uasaler", "group_id": 1579882044, "group_title": "Чат Аліекспрес ( AliExpert )", "outcome": "not_a_member", "note": "already out before this run"}
+{"at": "2026-08-07T13:56:53+00:00", "channel": "*", "outcome": "floodwait", "seconds": 72312, "clears_at": "2026-08-08T10:02:05+00:00", "request": "ResolveUsernameRequest", "note": "ACCOUNT-WIDE, not per channel: the limit is on resolving usernames, which every join, every comment fetch and every gate check starts with. Today resolved several hundred (63 gate rows + 119 discovery candidates + searches + 13 joins + a membership probe), and this is the cumulative bill. Nothing Telegram-side can run until it clears."}
