@@ -328,6 +328,16 @@ zero-cost step-0 task of 5c (using the measured staging costs and
 RunPod's price list); the CA-MTL-3 volume's fate — it idles at
 ~$0.24/day and local-NVMe staging is faster (46 s vs 279 s) — is
 decided on those numbers, advancing the ~2026-09-05 review.
+**Volume ruling (operator, 2026-08-07, on `results/volume_calc_5c1.json`):**
+option (b) — the CA-MTL-3 network volume is DELETED; every 5c2+ pass
+re-stages the 59 GB pinned-revision weights onto pod NVMe (measured:
+$2.53/mo against $9.66 for keeping the volume, at 60 passes/mo; boot
+286.2 s against 278.9 s). The decisive argument is the datacenter
+unpin, not the $7: §(1)'s capacity clause becomes fully symmetric —
+A6000 in ANY datacenter, nothing pinning CA-MTL-3 (its stock-out
+already bit on 2026-08-06). Deletion is executed by the executor and
+proven BY LISTING (deletion is never proven by an exit code); the
+~2026-09-05 volume review is closed by this ruling.
 (7) **Out of scope:** any retrain; dashboard UI (Phase 6); a VPS; merging
 without the (2) measurement; new-domain rows in aggregates before their
 entry gate. Raw v1 stores stay byte-untouched — derived columns land
