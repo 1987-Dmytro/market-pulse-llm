@@ -143,6 +143,9 @@ CANDIDATES = (
     # list is the gate's INPUT and only grows: what the operator ruled afterwards is
     # scripts/apply_gate_rulings_5c1.py's business, not a rewrite of what was measured.
     ("@marketopt_promo", "late"),
+    # Late addition #2 (canon "Дозаявка №2", operator 2026-08-07 evening): a Poltava deals
+    # aggregator, sent to this gate on the same terms.
+    ("@akcii_skidki_plt", "late"),
 )
 
 

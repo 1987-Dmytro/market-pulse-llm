@@ -177,6 +177,23 @@ def test_a_floodwait_stops_the_joins_and_writes_the_wait_down(monkeypatch, tmp_p
     assert rows[-1]["outcome"] == "floodwait"
 
 
+def test_the_pace_is_measured_from_the_log_not_from_this_process(monkeypatch, tmp_path):
+    """A run stopped for other work and resumed would otherwise fire its next join seconds after
+    the previous one — the burst the pace exists to avoid. The log is the cursor; it is the clock
+    too. A failed attempt still counts: it made requests."""
+    monkeypatch.setattr(collect, "JOIN_PAUSE", 900.0)
+    assert collect.seconds_until_next_join({}, NOW) == 0.0, "a first join waits for nothing"
+
+    state = {"@a": {"at": (NOW - timedelta(seconds=100)).isoformat(), "outcome": "joined"}}
+    assert collect.seconds_until_next_join(state, NOW) == 800.0
+
+    state["@b"] = {"at": (NOW - timedelta(seconds=2000)).isoformat(), "outcome": "error"}
+    assert collect.seconds_until_next_join(state, NOW) == 800.0, "the LAST attempt sets the clock"
+
+    old = {"@a": {"at": (NOW - timedelta(hours=3)).isoformat(), "outcome": "joined"}}
+    assert collect.seconds_until_next_join(old, NOW) == 0.0, "a long gap owes no extra wait"
+
+
 def test_a_floodwait_row_is_not_a_landed_join(monkeypatch, tmp_path):
     """The negative control for the cursor: a wait must be retried, a join must not."""
     (tmp_path / "joins.jsonl").write_text(

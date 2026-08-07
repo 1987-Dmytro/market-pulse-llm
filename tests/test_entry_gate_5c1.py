@@ -53,19 +53,27 @@ def canon_buckets() -> list[tuple[str, str]]:
 
 
 def canon_sent_to_the_gate() -> list[str]:
-    """Handles the rulings table sends to the gate after the original tables were written.
+    """Handles the canon sends to the gate in sections written after the four bucket tables.
 
-    The operator amended `docs/CHANNELS-launch.md` rather than rewriting it: the four bucket
-    tables still hold all 62, and the 2026-08-07 section rules on them. A handle marked
-    "НА ГЕЙТ" there is a candidate the tables never carried.
+    The operator amends `docs/CHANNELS-launch.md` rather than rewriting it: the tables still hold
+    all 62, and each later section rules on them or adds to them. A row whose first cell is a
+    handle and whose action says "на гейт" is a candidate the tables never carried — the
+    replacement of 2026-08-07 and the second late batch of that evening both arrive this way.
+
+    Matched case-insensitively and in document order, so a new section needs no code change. The
+    Хвилинка row of "Дозаявка №2" also says "на гейт" and is correctly not matched: its first
+    cell is a chain's name, not a handle, because nobody knew a handle to write.
     """
     text = CANON.read_text(encoding="utf-8")
     section = text[text.index("## Рулинги гейта 5c1") :]
-    return [
-        line.split("|")[1].strip()
-        for line in section.splitlines()
-        if line.startswith("|") and "НА ГЕЙТ" in line
-    ]
+    found = []
+    for line in section.splitlines():
+        if not line.startswith("|") or "на гейт" not in line.casefold():
+            continue
+        first = line.split("|")[1].strip()
+        if re.fullmatch(r"@[A-Za-z0-9_]+", first):
+            found.append(first)
+    return found
 
 
 def test_the_candidate_list_is_the_canons_own():
@@ -85,9 +93,10 @@ def test_the_composition_is_the_62_plus_what_the_rulings_added():
         b: sum(1 for _, bucket in gate.CANDIDATES if bucket == b)
         for b in ("comments", "posts", "watch", "late")
     }
-    assert counts == {"comments": 29, "posts": 18, "watch": 14, "late": 2}
-    assert len(gate.CANDIDATES) == 63
-    assert len({handle for handle, _ in gate.CANDIDATES}) == 63
+    late = len(canon_sent_to_the_gate()) + 1  # + the withdrawn "Дозаявка оператора" row
+    assert counts == {"comments": 29, "posts": 18, "watch": 14, "late": late}
+    assert len(gate.CANDIDATES) == 62 + len(canon_sent_to_the_gate())
+    assert len({handle for handle, _ in gate.CANDIDATES}) == len(gate.CANDIDATES)
 
 
 def test_the_gate_never_re_checks_a_registry_channel_or_an_excluded_one():

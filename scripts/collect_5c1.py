@@ -183,6 +183,20 @@ async def join_group(client, handle: str) -> dict:
     return row | {"outcome": "joined"}
 
 
+def seconds_until_next_join(state: dict, now: datetime) -> float:
+    """How long to wait before the next join, measured from the last one the LOG records.
+
+    Wall-clock, not process-local. The log is already the cursor; an in-process timer would be
+    reset by every restart, and a run stopped and resumed for other work would fire its next join
+    seconds after the previous one — exactly the burst the pace exists to avoid. A failed attempt
+    counts too: it still made requests.
+    """
+    stamps = [datetime.fromisoformat(row["at"]) for row in state.values() if row.get("at")]
+    if not stamps:
+        return 0.0
+    return max(0.0, JOIN_PAUSE - (now - max(stamps)).total_seconds())
+
+
 async def run_joins(client, channels: list[tuple], limit: int | None) -> dict:
     state = join_state()
     todo = [
@@ -197,10 +211,11 @@ async def run_joins(client, channels: list[tuple], limit: int | None) -> dict:
     )
 
     done = 0
-    for index, (_, handle) in enumerate(todo):
-        if index:
-            print(f"  pacing {JOIN_PAUSE:.0f}s before {handle}...", flush=True)
-            await asyncio.sleep(JOIN_PAUSE)
+    for _, handle in todo:
+        wait = seconds_until_next_join(join_state(), datetime.now(UTC))
+        if wait:
+            print(f"  pacing {wait:.0f}s before {handle}...", flush=True)
+            await asyncio.sleep(wait)
         try:
             row = await join_group(client, handle)
         except FloodWaitError as exc:
@@ -213,7 +228,7 @@ async def run_joins(client, channels: list[tuple], limit: int | None) -> dict:
                 }
             )
             print(f"  FloodWait {exc.seconds}s at {handle} — stopping, the log is the cursor")
-            return {"attempted": index + 1, "landed": done, "flood_wait_seconds": exc.seconds}
+            return {"attempted": done + 1, "landed": done, "flood_wait_seconds": exc.seconds}
         except Exception as exc:
             row = {
                 "at": datetime.now(UTC).isoformat(timespec="seconds"),

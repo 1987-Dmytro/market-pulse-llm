@@ -65,11 +65,15 @@ KEPT = {
     " happens in this phase; this surfaces when the channel wakes up",
 }
 
-REPLACEMENT = "@marketopt_promo"
-REPLACEMENT_RULE = (
-    "replaces the withdrawn late addition. PASS with an open discussion group → comments bucket"
-    " and the joins list; PASS without one → posts-only; FAIL or FLAG → stop and report."
+GATED_LATE = {
+    "@marketopt_promo": "replaces the withdrawn late addition (operator, 2026-08-07)",
+    "@akcii_skidki_plt": "late addition #2, a Poltava deals aggregator (canon 'Дозаявка №2')",
+}
+LATE_RULE = (
+    "PASS with an open discussion group → comments bucket and the joins list; PASS without one →"
+    " posts-only; FAIL or FLAG → stop and report before any further action on it."
 )
+"""The operator's routing rule for a late addition, written before its gate and applied after."""
 
 SOURCE_TYPE_RULING = {
     "@uasaler": "aggregator",
@@ -99,16 +103,19 @@ def final_bucket(row: dict) -> tuple[str | None, str | None]:
     if handle in MOVED:
         bucket, text = MOVED[handle]
         return bucket, f"KEPT, bucket changed — {text}"
-    if handle == REPLACEMENT:
+    if handle in GATED_LATE:
         if verdict != "PASS":
             raise SystemExit(
                 f"{handle} came back {verdict}, and the operator's rule is to stop and report"
-                f" before any further action on it. {REPLACEMENT_RULE}"
+                f" before any further action on it. {LATE_RULE}"
             )
         group = row["checks"].get("discussion_group") or {}
         bucket = "comments" if group.get("open") else "posts"
         why = "an open discussion group" if group.get("open") else "no discussion group"
-        return bucket, f"GATED REPLACEMENT — PASS with {why} → {bucket}. {REPLACEMENT_RULE}"
+        return (
+            bucket,
+            f"LATE ADDITION — {GATED_LATE[handle]}; PASS with {why} → {bucket}. {LATE_RULE}",
+        )
     if handle in KEPT:
         return row["bucket"], f"KEPT — {KEPT[handle]}"
     if verdict != "PASS":
@@ -179,7 +186,7 @@ def main(argv: list[str] | None = None) -> int:
 
     record = json.loads(GATE_RECORD.read_text(encoding="utf-8"))
     before = load_registry(REGISTRY)
-    held = {handle for source in before.sources for handle in source.telegram_channels}
+    held = {handle: source for source in before.sources for handle in source.telegram_channels}
 
     entries, buckets = [], {"comments": [], "posts": [], "watch": [], "excluded": []}
     for row in record["candidates"]:
@@ -188,10 +195,23 @@ def main(argv: list[str] | None = None) -> int:
         if bucket is None:
             buckets["excluded"].append(row["handle"])
             continue
-        if row["handle"] in held:
-            raise SystemExit(f"{row['handle']} is already a registry source — refusing to add it")
         buckets[bucket].append(row["handle"])
-        entries.append(source_entry(row, bucket))
+        expected = source_entry(row, bucket)
+        if (existing := held.get(row["handle"])) is not None:
+            # Written by an earlier run of this script. Re-derived and compared rather than
+            # skipped on trust: if a ruling has changed since, the file is now wrong and saying
+            # so is the whole point of running this again.
+            drift = {
+                field: (getattr(existing, field), expected[field])
+                for field in ("name", "source_type", "comments_enabled", "watch")
+                if getattr(existing, field) != expected[field]
+            }
+            if drift:
+                raise SystemExit(
+                    f"{row['handle']} is in the registry with different fields: {drift}"
+                )
+            continue
+        entries.append(expected)
 
     for bucket, handles in buckets.items():
         print(f"{bucket:<10}{len(handles):>3}  {' '.join(handles)}")
@@ -201,11 +221,7 @@ def main(argv: list[str] | None = None) -> int:
         f" + posts {len(buckets['posts'])} · watch {len(buckets['watch'])}"
         f" · excluded {len(buckets['excluded'])}"
     )
-    joins = [
-        entry["telegram_channels"][0]
-        for entry in entries
-        if entry["comments_enabled"] and not entry["watch"]
-    ]
+    joins = buckets["comments"]
     print(f"joins Deliverable 2 may make: {len(joins)}")
     if args.plan:
         return 0
