@@ -267,7 +267,8 @@ async def fetch_threads(client, entity, source, handle, store, salt, provenance)
             print(f"    thread {parent}: {type(exc).__name__}: {exc}", flush=True)
         if done % PROGRESS_EVERY == 0:
             print(f"    {done}/{len(todo)} threads, {stored} comments", flush=True)
-        await asyncio.sleep(THREAD_PAUSE)
+        if THREAD_PAUSE:
+            await asyncio.sleep(THREAD_PAUSE)
     return {"threads": len(todo), "comments_stored": stored, "threads_failed": failed}
 
 

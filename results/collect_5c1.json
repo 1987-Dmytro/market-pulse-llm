@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-07T10:35:53+00:00",
+  "generated_at": "2026-08-07T10:43:39+00:00",
   "phase": "5c1",
   "deliverable": "2 — joins and the four-week collection window",
   "contract": "docs/SPEC.md §3.11 (6) ruling 22; docs/PROMPT-5c1.md Deliverable 2",
@@ -19,8 +19,8 @@
       "posts_stored": 1,
       "posts_first": "2026-07-16T13:52:03+00:00",
       "posts_last": "2026-07-16T13:52:03+00:00",
-      "comments_stored": 0,
-      "threads_with_comments": 0,
+      "comments_stored": 106,
+      "threads_with_comments": 1,
       "damaged_lines": 0
     },
     {
@@ -768,13 +768,14 @@
   "totals": {
     "channels": 58,
     "posts_stored": 2132,
-    "comments_stored": 0,
+    "comments_stored": 106,
     "damaged_lines": 0,
     "channels_with_posts": 44,
-    "channels_with_comments": 0
+    "channels_with_comments": 1
   },
   "joins": {},
   "phases_run": [
+    "comments",
     "posts"
   ],
   "protected": {
@@ -782,10 +783,8 @@
     "note": "The four original registry channels are out of the gate's scope and their six raw v1 files are refused at channel level, before a record is built."
   },
   "git": {
-    "commit": "ccad016918ac3aa1ed2a5ea9206ebe34881498f1",
+    "commit": "f104f91e5b9092e0156db47f1d86514bfca783ce",
     "dirty": [
-      "docs/CHANNELS-launch.md",
-      "docs/STATUS.md",
       "knowledge/daily_logs/2026-08-07.md",
       "knowledge/index.md"
     ]

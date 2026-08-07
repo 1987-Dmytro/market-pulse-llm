@@ -205,6 +205,101 @@ def test_the_window_since_is_fixed_by_the_first_run_and_read_back_after(tmp_path
     assert collect.held(None, "window", {}) == {}, "a first run has nothing to read back"
 
 
+# --- the comment write path ------------------------------------------------------------------------
+
+
+class ThreadClient:
+    """A client that answers `iter_messages(entity, reply_to=parent)` with a thread."""
+
+    def __init__(self, thread):
+        self.thread, self.asked = thread, []
+
+    def iter_messages(self, entity, reply_to=None, **kwargs):
+        self.asked.append(reply_to)
+
+        async def gen():
+            for message in self.thread:
+                yield message
+
+        return gen()
+
+
+def message(msg_id, *, reply_to=None, text="ок", action=None):
+    return SimpleNamespace(
+        id=msg_id,
+        reply_to_msg_id=reply_to,
+        date=NOW,
+        raw_text=text,
+        sender_id=42,
+        action=action,
+        media=None,
+        grouped_id=None,
+        replies=None,
+    )
+
+
+def store_with_a_post(tmp_path, handle, src):
+    from market_pulse.raw_store import RawStore, post_record
+
+    store = RawStore(tmp_path / "raw")
+    post = SimpleNamespace(
+        id=832,
+        date=NOW,
+        raw_text="post",
+        media=None,
+        grouped_id=None,
+        replies=SimpleNamespace(replies=3),
+    )
+    store.append([post_record(post, src, handle, {"session": "t"})])
+    return store
+
+
+def test_a_thread_lands_in_a_new_comment_file_and_a_re_run_stores_nothing(tmp_path, monkeypatch):
+    """The only path that writes comments. `--posts` stops before it, so an untested `--comments`
+    is a write path proved by nothing — and the dedup that makes a resume safe is RawStore's,
+    which means the second run must store zero, not "skip".
+    """
+    src = source("@chan", comments=True)
+    store = store_with_a_post(tmp_path, "@chan", src)
+    client = ThreadClient(
+        [message(11, reply_to=5), message(12, reply_to=11), message(13, action="x")]
+    )
+
+    got = asyncio.run(
+        collect.fetch_threads(client, object(), src, "@chan", store, "salt", {"session": "t"})
+    )
+    assert got == {"threads": 1, "comments_stored": 2, "threads_failed": 0}
+    assert client.asked == [832], "the thread is fetched by its parent post id"
+
+    written = (
+        (tmp_path / "raw" / "comments" / "chan.jsonl").read_text(encoding="utf-8").splitlines()
+    )
+    assert len(written) == 2, "the service message is not a comment"
+    row = json.loads(written[0])
+    assert row["parent_msg_id"] == 832 and row["reply_to_msg_id"] == 5
+    assert len(row["sender_anon_id"]) == 64, "the salt reached the record"
+
+    again = asyncio.run(
+        collect.fetch_threads(client, object(), src, "@chan", store, "salt", {"session": "t"})
+    )
+    assert again["comments_stored"] == 0 and again["threads"] == 0
+
+
+def test_one_unreadable_thread_is_counted_and_does_not_end_the_channel(tmp_path):
+    """Posts older than the discussion group have no thread to read; the count is the finding."""
+    src = source("@chan", comments=True)
+    store = store_with_a_post(tmp_path, "@chan", src)
+
+    class Broken(ThreadClient):
+        def iter_messages(self, entity, reply_to=None, **kwargs):
+            raise RuntimeError("no thread")
+
+    got = asyncio.run(
+        collect.fetch_threads(Broken([]), object(), src, "@chan", store, "salt", {"session": "t"})
+    )
+    assert got == {"threads": 1, "comments_stored": 0, "threads_failed": 1}
+
+
 def test_the_record_totals_are_summed_from_the_rows(tmp_path, monkeypatch):
     monkeypatch.setattr(collect, "RECORD", tmp_path / "collect.json")
     rows = [
