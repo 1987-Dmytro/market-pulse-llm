@@ -141,7 +141,7 @@
       "verdict": "PASS",
       "fails": [],
       "flags": [],
-      "ruling": null,
+      "ruling": "EXCLUDED — EXCLUDED on market-origin evidence (wave 3): its single post in the window is a Russian-language travel post — «Мы с Миланой прилетели в Сочи, на Красную Поляну» — a flight into the RF, which is what SPEC §3.11 (4)'s market screen excludes regardless of language. A MEMBER (group left, flag re-read) and the costliest row in this ruling: 244k subscribers, the only channel with collected comments (106) and the biggest comment source in the composition. The operator named that cost at the sitting",
       "error": null,
       "suggestions": null
     },
@@ -590,7 +590,7 @@
       "verdict": "PASS",
       "fails": [],
       "flags": [],
-      "ruling": null,
+      "ruling": "EXCLUDED — EXCLUDED on the language census (wave 3): ru 1.00 over 36 decidable posts, ua 0. A MEMBER — its discussion group is left, and the membership flag is re-read afterwards",
       "error": null,
       "suggestions": null
     },
@@ -1026,7 +1026,7 @@
       "verdict": "PASS",
       "fails": [],
       "flags": [],
-      "ruling": null,
+      "ruling": "EXCLUDED — EXCLUDED on RU title (wave 3): census TOO_FEW_DECIDABLE, 2 decidable posts. A MEMBER — its discussion group is left, and the membership flag is re-read afterwards",
       "error": null,
       "suggestions": null
     },
@@ -1386,7 +1386,7 @@
       "verdict": "PASS",
       "fails": [],
       "flags": [],
-      "ruling": null,
+      "ruling": "EXCLUDED — EXCLUDED on RU title (wave 3): the census could not rule — 3 decidable posts in the window — and the operator ruled by title now rather than wait for a wider one",
       "error": null,
       "suggestions": null
     },
@@ -1602,7 +1602,7 @@
       "verdict": "PASS",
       "fails": [],
       "flags": [],
-      "ruling": null,
+      "ruling": "EXCLUDED — EXCLUDED on RU title (wave 3): census TOO_FEW_DECIDABLE, 1 decidable post",
       "error": null,
       "suggestions": null
     },
@@ -2116,7 +2116,7 @@
       "verdict": "PASS",
       "fails": [],
       "flags": [],
-      "ruling": null,
+      "ruling": "EXCLUDED — EXCLUDED on RU title (wave 3): census TOO_FEW_DECIDABLE, 2 decidable posts",
       "error": null,
       "suggestions": null
     },
@@ -2368,7 +2368,7 @@
       "verdict": "PASS",
       "fails": [],
       "flags": [],
-      "ruling": null,
+      "ruling": "EXCLUDED — EXCLUDED on the language census (wave 3): ru 1.00 over 115 decidable posts, ua 0",
       "error": null,
       "suggestions": null
     },
@@ -2539,7 +2539,7 @@
       "verdict": "PASS",
       "fails": [],
       "flags": [],
-      "ruling": null,
+      "ruling": "EXCLUDED — EXCLUDED on RU title (wave 3): census TOO_FEW_DECIDABLE, 1 decidable post",
       "error": null,
       "suggestions": null
     },
@@ -2661,7 +2661,7 @@
       "verdict": "PASS",
       "fails": [],
       "flags": [],
-      "ruling": null,
+      "ruling": "EXCLUDED — EXCLUDED on the language census (wave 3): ru 1.00 over 139 decidable posts in the window, ua 0. It also fails the market-origin ruling on its own recorded evidence — one of its posts recruits couriers for «доставка заказов Яндекс Еды и Яндекс Лавки», «доход до 8 500 ₽» — so it is out on two rulings, not one",
       "error": null,
       "suggestions": null
     },
@@ -3379,7 +3379,7 @@
       "verdict": "PASS",
       "fails": [],
       "flags": [],
-      "ruling": null,
+      "ruling": "EXCLUDED — EXCLUDED on RU title (wave 3, watch): silent in the window, so the census has no posts to read — 0 collected, gate posts_per_week 0.0",
       "error": null,
       "suggestions": null
     },
@@ -3447,7 +3447,7 @@
       "verdict": "PASS",
       "fails": [],
       "flags": [],
-      "ruling": null,
+      "ruling": "EXCLUDED — EXCLUDED on RU title (wave 3, watch): silent in the window, 0 posts",
       "error": null,
       "suggestions": null
     },
@@ -3515,7 +3515,7 @@
       "verdict": "PASS",
       "fails": [],
       "flags": [],
-      "ruling": null,
+      "ruling": "EXCLUDED — EXCLUDED on RU title (wave 3, watch): silent in the window, 0 posts",
       "error": null,
       "suggestions": null
     },
@@ -3655,9 +3655,15 @@
       "flags": [
         "discussion group is not open — join needs admin approval"
       ],
-      "ruling": "KEPT — stays in watch, recorded: its group admits by approval only. No watch join happens in this phase; this surfaces when the channel wakes up",
+      "ruling": "EXCLUDED — EXCLUDED on RU title (wave 3, watch): silent in the window, 0 posts. Its earlier KEPT ruling — approval-only group, revisited when it wakes up — is superseded here",
       "error": null,
-      "suggestions": null
+      "suggestions": null,
+      "replaced": [
+        {
+          "at": "2026-08-07T17:25:45+00:00",
+          "ruling": "KEPT — stays in watch, recorded: its group admits by approval only. No watch join happens in this phase; this surfaces when the channel wakes up"
+        }
+      ]
     },
     {
       "handle": "@viktoria_sshh",
@@ -3723,7 +3729,7 @@
       "verdict": "PASS",
       "fails": [],
       "flags": [],
-      "ruling": null,
+      "ruling": "EXCLUDED — EXCLUDED on RU title (wave 3, watch): silent in the window, 0 posts",
       "error": null,
       "suggestions": null
     },
@@ -3995,7 +4001,7 @@
       "verdict": "PASS",
       "fails": [],
       "flags": [],
-      "ruling": null,
+      "ruling": "EXCLUDED — EXCLUDED on RU title (wave 3 top-up, watch): «ГВ/прикорм/сон с Полиной Лыковой» — silent in the window, 0 posts",
       "error": null,
       "suggestions": null
     },
@@ -4131,7 +4137,7 @@
       "verdict": "PASS",
       "fails": [],
       "flags": [],
-      "ruling": null,
+      "ruling": "EXCLUDED — EXCLUDED on RU title (wave 3 top-up, watch): «Рецептишки Евгении Чех» — silent in the window, 0 posts, so the census has nothing to read either",
       "error": null,
       "suggestions": null
     },
@@ -4199,7 +4205,7 @@
       "verdict": "PASS",
       "fails": [],
       "flags": [],
-      "ruling": null,
+      "ruling": "EXCLUDED — EXCLUDED on RU title (wave 3, watch): silent in the window, 0 posts",
       "error": null,
       "suggestions": null
     },
@@ -4392,12 +4398,30 @@
   "registry_written": true,
   "note": "PROMPT-5c1 D1 stops here: every FAIL and FLAG goes to the operator, who rules in chat; the rulings land in each row's `ruling`, and only then is config/registry.yaml written. data/entry_check_report.json (the 2026-07-27 run) is untouched, and the four registry channels are out of this gate's scope.",
   "git": {
-    "commit": "9cb2eb80d40337bf2f030b20df546e630e5342f4",
+    "commit": "2fc784a673ddb2015e0c67307fa6616e0497b6e6",
     "dirty": [
+      "config/registry.yaml",
+      "docs/CHANNELS-launch.md",
+      "docs/SPEC.md",
+      "implementation-notes.md",
       "knowledge/daily_logs/2026-08-07.md",
+      "knowledge/hot.md",
       "knowledge/index.md",
       "scripts/apply_gate_rulings_5c1.py",
-      "tests/test_gate_rulings_5c1.py"
+      "scripts/collect_5c1.py",
+      "scripts/entry_check.py",
+      "scripts/late_batch_5c1.py",
+      "scripts/theme_screen_5c1.py",
+      "src/market_pulse/registry.py",
+      "tests/test_collect_5c1.py",
+      "tests/test_entry_gate_5c1.py",
+      "tests/test_gate_rulings_5c1.py",
+      "tests/test_late_batch_5c1.py",
+      "results/language_census_5c1.json",
+      "results/language_census_5c1.preregistration.json",
+      "scripts/language_census_5c1.py",
+      "tests/test_language_census_5c1.py",
+      "tests/test_theme_screen_5c1.py"
     ]
   },
   "notes": {
@@ -4581,29 +4605,23 @@
     }
   },
   "rulings": {
-    "applied_at": "2026-08-07T14:50:14+00:00",
+    "applied_at": "2026-08-07T17:41:06+00:00",
     "canon": "docs/CHANNELS-launch.md, sections 'Рулинги гейта 5c1 (2026-08-07)' and 'Рулинги, волна 2'",
     "composition": {
       "comments": [
         "@HealthPsycholog",
-        "@Pro_Detyintumama",
-        "@baby_broccoli_club",
         "@chifit_family",
         "@denisovapro",
         "@eftforhealth",
-        "@katyal55",
         "@kkondr_fit",
         "@klopotenkofood",
         "@kopiyochka1",
-        "@kuksa2022",
         "@olgaa_trainer",
         "@polyakova_fitness",
         "@retsepty",
-        "@rezeptmoi",
         "@sashafitnesslife",
         "@smirnov108",
         "@tarilka_malyuka",
-        "@tretyakovaele",
         "@useful_healthy_fitness_menu",
         "@ya_Nenka"
       ],
@@ -4615,76 +4633,76 @@
         "@dpssgovua",
         "@epicentrk_sale",
         "@gaid_skobioale",
-        "@intensiv_Mamiev",
         "@konservacia_kulinaria",
         "@korolevakuchni",
         "@mameni_recepti",
         "@marketopt_promo",
         "@maudau",
         "@recepti",
-        "@retsepty4",
-        "@retsepty5",
         "@vylkachannel"
       ],
       "watch": [
         "@Evgenija_dutjache_menu",
-        "@chekh_yevheniia1982",
-        "@cozymotherhood",
         "@dimakaminskyifit",
         "@dutyache_menu",
         "@hydnem_prosto",
         "@itsmamix",
-        "@netainaya_vecherya",
-        "@polinalykovagv",
-        "@prostetsofa",
-        "@regina_tatlybaeva",
-        "@retsepty10",
-        "@skhudnennya",
-        "@viktoria_sshh"
+        "@skhudnennya"
       ],
       "excluded": [
         "@ATB_FANatik",
         "@Mambabyua",
+        "@Pro_Detyintumama",
         "@akcii_skidki_plt",
+        "@baby_broccoli_club",
+        "@chekh_yevheniia1982",
+        "@cozymotherhood",
         "@discountua1",
+        "@intensiv_Mamiev",
+        "@katyal55",
         "@kolyastravinsky",
+        "@kuksa2022",
         "@kulinariya_chat_a",
         "@marketopt_official",
+        "@netainaya_vecherya",
         "@offspringrus",
+        "@polinalykovagv",
+        "@prostetsofa",
+        "@regina_tatlybaeva",
+        "@retsepty10",
+        "@retsepty4",
+        "@retsepty5",
+        "@rezeptmoi",
+        "@tretyakovaele",
         "@uasaler",
+        "@viktoria_sshh",
         "@whitecode_zny",
         "@whowears",
         "@znishkom"
       ]
     },
     "counts": {
-      "registry_before": 56,
-      "comments": 21,
-      "posts": 17,
-      "watch": 14,
-      "excluded": 12,
-      "sources_after": 56
+      "registry_before": 41,
+      "comments": 15,
+      "posts": 14,
+      "watch": 6,
+      "excluded": 29,
+      "sources_after": 39
     },
     "joins_authorised": [
       "@HealthPsycholog",
-      "@Pro_Detyintumama",
-      "@baby_broccoli_club",
       "@chifit_family",
       "@denisovapro",
       "@eftforhealth",
-      "@katyal55",
       "@kkondr_fit",
       "@klopotenkofood",
       "@kopiyochka1",
-      "@kuksa2022",
       "@olgaa_trainer",
       "@polyakova_fitness",
       "@retsepty",
-      "@rezeptmoi",
       "@sashafitnesslife",
       "@smirnov108",
       "@tarilka_malyuka",
-      "@tretyakovaele",
       "@useful_healthy_fitness_menu",
       "@ya_Nenka"
     ],
@@ -4696,7 +4714,10 @@
       "@ATB_FANatik": "aggregator",
       "@epicentrk_sale": "official_retail",
       "@dpssgovua": "government",
-      "@marketopt_promo": "official_retail"
+      "@marketopt_promo": "official_retail",
+      "@forainfo": "official_retail",
+      "@ekomarket_shop": "official_retail",
+      "@tadaua": "official_retail"
     },
     "note": "The gate's rows are unchanged: an excluded channel was still measured, and its `ruling` is what says it is out. Registry names and comments_enabled are read off this record, not typed."
   }

@@ -20,6 +20,26 @@ from market_pulse.registry import AUDIENCES, load_registry  # noqa: E402
 
 CANON = REPO_ROOT / "docs" / "CHANNELS-launch.md"
 
+
+def canon_retail_5() -> list[str]:
+    """The three national chains "Дозаявка №5" sends to the gate, read out of the master list.
+
+    Parsed here rather than imported from tests/test_entry_gate_5c1.py, which has the same
+    reader: a test module that imports another test module cannot be checked out on its own, and
+    the commit that introduced this file could not run its own suite because of it. Five lines of
+    duplication buy a file that stands up alone — the same trade `canon_audience` below makes.
+    """
+    import re
+
+    text = CANON.read_text(encoding="utf-8")
+    section = text[text.index("## МАСТЕР-ЛИСТ") :]
+    listing = section[section.index("Дозаявка №5 на гейт:") :]
+    return re.findall(r"@[A-Za-z0-9_]+", listing[: listing.index("\n**")])
+
+
+RETAIL_5 = canon_retail_5()
+"""The three national chains of "Дозаявка №5", parsed from the canon rather than retyped."""
+
 AWAITING_A_RULING = set()
 """Gated, not PASS, and no ruling covers it yet — the operator's rule is to stop and report.
 
@@ -147,6 +167,12 @@ def canon_audience() -> dict[str, str]:
         segment = chunk.split("(", 1)[0].strip()
         for handle in re.findall(r"@[A-Za-z0-9_]+", chunk):
             table[handle] = segment
+    # The canon amends rather than rewrites: wave 3 renamed a segment in its own section while
+    # the table above still spells the old value. Applying the rename here — parsed from the
+    # canon too, never typed — keeps "the table is the law" true of the whole file rather than
+    # of its oldest section.
+    for old, new in re.findall(r"`([a-z_]+)` переименован в `([a-z_]+)`", text):
+        table = {handle: (new if segment == old else segment) for handle, segment in table.items()}
     return table
 
 
@@ -156,9 +182,13 @@ def test_the_audience_table_is_the_canons_own():
     canon = canon_audience()
     assert len(canon) == 56
     assert {handle: apply.AUDIENCE[handle] for handle in canon} == canon
-    # Everything the script holds beyond the table is the regional row, spelled out.
-    assert set(apply.AUDIENCE) - set(canon) == set(apply.CITY_FEEDS)
+    # Beyond the table: the regional row spelled out, and the three chains of "Дозаявка №5" —
+    # which the table does NOT name, because it was written before them. Their segment comes from
+    # the operator's brief and the master list, and the count line below is stale by three the
+    # moment they pass; that is a mismatch for the canon's author, not for this script.
+    assert set(apply.AUDIENCE) - set(canon) == set(apply.CITY_FEEDS) | set(RETAIL_5)
     assert {apply.AUDIENCE[handle] for handle in apply.CITY_FEEDS} == {"regional"}
+    assert {apply.AUDIENCE[handle] for handle in RETAIL_5} == {"retail_official"}
 
     text = CANON.read_text(encoding="utf-8")
     assert "5+4+13+9+7+17+1 = 56" in " ".join(text[text.index("Сверка:") :][:120].split())
@@ -172,7 +202,7 @@ def test_the_audience_table_is_the_canons_own():
         "mothers_kids": 9,
         "baby_food": 7,
         "health_fitness": 17,
-        "food_quality_gov": 1,
+        "food_quality": 1,
     }
 
 
@@ -203,6 +233,22 @@ def test_the_titles_beside_the_city_rows_are_the_scans_own():
         assert comment == titles[handle], handle
 
 
+def test_the_words_beside_the_retail_rows_are_the_canons_own():
+    """Same instrument as the city rows, a different source: these three came from the master
+    list, so each comment is grepped back to it. Only the segment comes from elsewhere — the
+    segmentation table predates them and still counts retail_official as five."""
+    import re
+
+    source = (REPO_ROOT / "scripts" / "apply_gate_rulings_5c1.py").read_text(encoding="utf-8")
+    annotated = dict(re.findall(r'"(@[A-Za-z0-9_]+)": "retail_official",[ \t]+# (.+)', source))
+    assert set(annotated) == set(RETAIL_5), "a retail row lost its provenance comment"
+
+    text = CANON.read_text(encoding="utf-8")
+    master = " ".join(text[text.index("## МАСТЕР-ЛИСТ") :].split())
+    for handle, comment in annotated.items():
+        assert " ".join(comment.split()) in master, handle
+
+
 def test_every_audience_value_is_one_of_the_eight():
     assert set(apply.AUDIENCE.values()) == set(AUDIENCES)
 
@@ -218,7 +264,7 @@ def test_the_shipped_registry_carries_the_canons_audience_for_every_source():
     """Read by HANDLE: the four originals predate `source_entry` and their ids do not follow
     from their handles (@VARUS_channel is `varus`), so an id-keyed check would miss them."""
     sources = load_registry(REPO_ROOT / "config" / "registry.yaml").sources
-    assert len(sources) == 56
+    assert len(sources) == 39
     for src in sources:
         for handle in src.telegram_channels:
             assert src.audience == apply.AUDIENCE[handle], handle
@@ -286,7 +332,7 @@ def test_every_reversal_in_the_shipped_record_says_what_it_replaced():
         for candidate in record["candidates"]
         if candidate.get("replaced")
     }
-    assert set(reversed_rows) == {"@discountua1", "@uasaler"}
+    assert set(reversed_rows) == {"@discountua1", "@uasaler", "@prostetsofa"}
     for handle, history in reversed_rows.items():
         assert len(history) == 1, handle
         assert history[0]["ruling"].startswith("KEPT"), handle
@@ -299,6 +345,55 @@ def test_the_replacement_lands_by_the_rule_the_operator_wrote_in_advance():
     without = row("@marketopt_promo", "late", group=False)
     assert apply.final_bucket(without)[0] == "posts"
     assert apply.source_entry(without, "posts")["comments_enabled"] is False
+
+
+def test_a_national_chain_routes_by_the_group_finding_like_any_late_addition():
+    """ "Comments per the group finding" (operator, «Дозаявка №5») is the late-addition rule that
+    was already written, so the three chains enter through it rather than through a new one."""
+    assert set(RETAIL_5) <= set(apply.GATED_LATE)
+    for handle in RETAIL_5:
+        with_group = row(handle, "late", group=True, open_group=True)
+        assert apply.final_bucket(with_group)[0] == "comments"
+        assert apply.final_bucket(row(handle, "late", group=False))[0] == "posts"
+        with pytest.raises(SystemExit, match="stop and report"):
+            apply.final_bucket(row(handle, "late", verdict="FLAG"))
+
+
+def test_no_retail_official_source_enters_as_a_community_channel():
+    """Audience and source_type answer different questions — «whose audience» and «who runs it» —
+    but every source the canon segments as retail_official is a chain's own channel, and the
+    shipped file has `official_retail` on all five. A sixth entering as `community` would be the
+    default speaking where a fact was known; @marketopt_promo needed exactly that amendment after
+    its write, and this is the same amendment made before one."""
+    retail = [h for h, segment in apply.AUDIENCE.items() if segment == "retail_official"]
+    assert len(retail) == 8, retail
+    for handle in ("@forainfo", "@ekomarket_shop", "@tadaua"):
+        assert apply.source_type_of(handle) == "official_retail", handle
+
+    # The negative control, without which the loop above only reads back the dict it is checking:
+    # the same handle with its ruling row removed must STOP the run, not fall back to the default.
+    without = {k: v for k, v in apply.SOURCE_TYPE_RULING.items() if k != "@forainfo"}
+    monkeypatch = pytest.MonkeyPatch()
+    monkeypatch.setattr(apply, "SOURCE_TYPE_RULING", without)
+    try:
+        with pytest.raises(SystemExit, match="would enter as `community`"):
+            apply.source_type_of("@forainfo")
+        # And the guard is about the segment, not about the handle: a source outside
+        # retail_official still takes the ruling's own default.
+        assert apply.source_type_of("@kopiyochka1") == "community"
+    finally:
+        monkeypatch.undo()
+
+    shipped = {
+        channel: source.source_type
+        for source in load_registry(REPO_ROOT / "config" / "registry.yaml").sources
+        for channel in source.telegram_channels
+    }
+    for handle in retail:
+        if handle in shipped:
+            # Including the three originals hand-written before this script existed, which never
+            # pass through `source_entry` and so carry no ruling row.
+            assert shipped[handle] == "official_retail", handle
 
 
 def test_a_replacement_that_did_not_pass_stops_the_run():
@@ -448,7 +543,7 @@ def test_the_shipped_registry_is_re_derivable_from_the_gate_record():
             expected["watch"],
         ), candidate["handle"]
         checked += 1
-    assert checked == 52
+    assert checked == 35
 
 
 def test_the_composition_matches_the_canons_own_summary():
@@ -469,15 +564,30 @@ def test_the_composition_matches_the_canons_own_summary():
     assert "watch 14" in wave2
     assert "**реестр 56**" in wave2
 
+    # Wave 3 — the summary the registry has to match NOW. The wave-2 numbers above are kept
+    # because the canon keeps them: an amended file is a history, not a latest-value store.
+    wave3 = " ".join(text[text.index("**Сводка после волны 3") :][:300].split())
+    assert "**Сводка после волны 3: реестр 41 = запуск 33 + watch 8.**" in wave3
+    assert "боевых **0**" in wave3, "the launch mothers segment is empty and the canon says so"
+
+    # The top-up amends that summary in its own section — two RU-titled watch channels the team
+    # lead's table had missed. The wave-3 line above is kept because the canon keeps it.
+    topup = " ".join(text[text.index("**Волна 3, добор") :][:400].split())
+    assert "**реестр 39 = запуск 33 + watch 6**" in topup
+    assert "исключено за фазу 29" in topup
+
     record = json.loads((REPO_ROOT / "results" / "entry_gate_5c1.json").read_text(encoding="utf-8"))
     buckets = {"comments": 0, "posts": 0, "watch": 0, "excluded": 0}
     for _, bucket in resolved(record):
         buckets["excluded" if bucket is None else bucket] += 1
-    assert buckets["comments"] == 21
-    assert buckets["watch"] == 14
-    assert buckets["posts"] == 17
+    assert buckets["comments"] == 15
+    assert buckets["watch"] == 6
+    assert buckets["posts"] == 14
     # Six by 07.08 midday, the five the theme screen caught that evening (@znishkom,
-    # @whitecode_zny, @offspringrus off-topic; @discountua1, @ATB_FANatik text-free), and
-    # @uasaler, demoted on 07.08 and excluded outright by the wave-2 ruling.
-    assert buckets["excluded"] == 12
-    assert 4 + buckets["comments"] + buckets["posts"] == 42
+    # @whitecode_zny, @offspringrus off-topic; @discountua1, @ATB_FANatik text-free), @uasaler by
+    # wave 2, and wave 3's fifteen — 3 on the census, 1 on market-origin evidence, 11 on RU titles.
+    assert buckets["excluded"] == 29
+    # The four originals are out of the gate's scope, so they are added here rather than counted.
+    # None of the fifteen was one of them: @tretyakovaele was gated in 5c1 like the rest.
+    assert 4 + buckets["comments"] + buckets["posts"] == 33
+    assert 4 + buckets["comments"] + buckets["posts"] + buckets["watch"] == 39

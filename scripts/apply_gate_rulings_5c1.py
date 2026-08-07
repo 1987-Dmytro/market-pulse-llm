@@ -73,6 +73,51 @@ EXCLUDED = {
     " Аліекспрес ( AliExpert )»), which was left. This ruling names the CHANNEL. Its 30 posts"
     " in the window carry zero food terms on the same theme screen that excluded the five"
     " above — AliExpress promo codes, not the tracked category",
+    # --- wave 3, the operator's verdict sitting on the census (2026-08-08) --------------------
+    # Fifteen exits, each with the reason the canon's table gives it. The numbers are
+    # results/language_census_5c1.json's, computed under the bars pre-registered before it ran.
+    "@retsepty5": "EXCLUDED on the language census (wave 3): ru 1.00 over 139 decidable posts in"
+    " the window, ua 0. It also fails the market-origin ruling on its own recorded evidence — one"
+    " of its posts recruits couriers for «доставка заказов Яндекс Еды и Яндекс Лавки», «доход до"
+    " 8 500 ₽» — so it is out on two rulings, not one",
+    "@retsepty4": "EXCLUDED on the language census (wave 3): ru 1.00 over 115 decidable posts, ua 0",
+    "@katyal55": "EXCLUDED on the language census (wave 3): ru 1.00 over 36 decidable posts, ua 0."
+    " A MEMBER — its discussion group is left, and the membership flag is re-read afterwards",
+    "@tretyakovaele": "EXCLUDED on market-origin evidence (wave 3): its single post in the window"
+    " is a Russian-language travel post — «Мы с Миланой прилетели в Сочи, на Красную Поляну» — a"
+    " flight into the RF, which is what SPEC §3.11 (4)'s market screen excludes regardless of"
+    " language. A MEMBER (group left, flag re-read) and the costliest row in this ruling: 244k"
+    " subscribers, the only channel with collected comments (106) and the biggest comment source"
+    " in the composition. The operator named that cost at the sitting",
+    # The five below were TOO_FEW_DECIDABLE in the census — 3, 2, 1, 1 and 2 decidable posts. The
+    # operator ruled them out on their TITLES now, against the team lead's recommendation to read
+    # more history first. Recorded as what it is: a ruling made on thinner evidence on purpose.
+    "@Pro_Detyintumama": "EXCLUDED on RU title (wave 3): the census could not rule — 3 decidable"
+    " posts in the window — and the operator ruled by title now rather than wait for a wider one",
+    "@rezeptmoi": "EXCLUDED on RU title (wave 3): census TOO_FEW_DECIDABLE, 2 decidable posts",
+    "@baby_broccoli_club": "EXCLUDED on RU title (wave 3): census TOO_FEW_DECIDABLE, 1 decidable"
+    " post",
+    "@intensiv_Mamiev": "EXCLUDED on RU title (wave 3): census TOO_FEW_DECIDABLE, 1 decidable post",
+    "@kuksa2022": "EXCLUDED on RU title (wave 3): census TOO_FEW_DECIDABLE, 2 decidable posts. A"
+    " MEMBER — its discussion group is left, and the membership flag is re-read afterwards",
+    # The six watch channels below are NO_POSTS_IN_WINDOW: the census cannot see them at all, and
+    # that zero is their own silence, measured twice (the gate recorded posts_per_week 0.0 and
+    # last_post_at null for every one of them on 07.08). Same title ruling, same sitting.
+    "@regina_tatlybaeva": "EXCLUDED on RU title (wave 3, watch): silent in the window, so the"
+    " census has no posts to read — 0 collected, gate posts_per_week 0.0",
+    "@cozymotherhood": "EXCLUDED on RU title (wave 3, watch): silent in the window, 0 posts",
+    "@netainaya_vecherya": "EXCLUDED on RU title (wave 3, watch): silent in the window, 0 posts",
+    "@retsepty10": "EXCLUDED on RU title (wave 3, watch): silent in the window, 0 posts",
+    "@viktoria_sshh": "EXCLUDED on RU title (wave 3, watch): silent in the window, 0 posts",
+    "@prostetsofa": "EXCLUDED on RU title (wave 3, watch): silent in the window, 0 posts. Its"
+    " earlier KEPT ruling — approval-only group, revisited when it wakes up — is superseded here",
+    # Wave 3 top-up (canon "Волна 3, добор", 2026-08-08 evening): the team lead's own check at
+    # acceptance found two RU-titled watch channels missing from their table. Same rule, same
+    # sitting, applied here rather than argued: neither was ever joined, so no group is left.
+    "@chekh_yevheniia1982": "EXCLUDED on RU title (wave 3 top-up, watch): «Рецептишки Евгении"
+    " Чех» — silent in the window, 0 posts, so the census has nothing to read either",
+    "@polinalykovagv": "EXCLUDED on RU title (wave 3 top-up, watch): «ГВ/прикорм/сон с Полиной"
+    " Лыковой» — silent in the window, 0 posts",
 }
 """Ruled out of the composition. Their gate rows stay in the record, carrying this text."""
 
@@ -139,6 +184,12 @@ does not name has no ruling behind it and `final_bucket` refuses it."""
 GATED_LATE = {
     "@marketopt_promo": "replaces the withdrawn late addition (operator, 2026-08-07)",
     "@akcii_skidki_plt": "late addition #2, a Poltava deals aggregator (canon 'Дозаявка №2')",
+    # "Дозаявка №5" (canon "МАСТЕР-ЛИСТ", 2026-08-08): the national chains missing from
+    # retail_official. The operator's word is "comments per the group finding" — LATE_RULE below
+    # already reads exactly that, so these enter the same routing rather than a new one.
+    "@forainfo": "national chain Фора (Fozzy Group), retail_official (canon 'Дозаявка №5')",
+    "@ekomarket_shop": "national chain ЕКО Маркет, retail_official (canon 'Дозаявка №5')",
+    "@tadaua": "discounter TA-DA!, retail_official (canon 'Дозаявка №5')",
 }
 LATE_RULE = (
     "PASS with an open discussion group → comments bucket and the joins list; PASS without one →"
@@ -158,6 +209,15 @@ SOURCE_TYPE_RULING = {
     # written while this channel was still at the gate, and it is the promo channel of the
     # Poltava/Kremenchuk chain whose official page the same ruling put in official_retail.
     "@marketopt_promo": "official_retail",
+    # The same amendment applied ahead of the write instead of after it: "Дозаявка №5" sends three
+    # chains' own channels, and every source the canon puts in the retail_official segment carries
+    # `official_retail` in the shipped file — @silposilpo, @atb_market_official, @VARUS_channel,
+    # @epicentrk_sale, @marketopt_promo, five for five. Left to the default they would enter as
+    # `community`, which says a community runs a chain's channel. This is an inference from the
+    # operator's own two rulings, not a ruling, and it is reported as one: one word reverses it.
+    "@forainfo": "official_retail",
+    "@ekomarket_shop": "official_retail",
+    "@tadaua": "official_retail",
 }
 """Team-lead ruling 2026-08-07; everything else is `community`, the ruling's own default."""
 
@@ -173,6 +233,11 @@ AUDIENCE = {
     "@VARUS_channel": "retail_official",
     "@marketopt_promo": "retail_official",
     "@epicentrk_sale": "retail_official",
+    # "Дозаявка №5" (canon "МАСТЕР-ЛИСТ", operator 2026-08-08, segment named in the brief): three
+    # national chains the table above predates, written out with the master list's own words.
+    "@forainfo": "retail_official",  # Фора, Fozzy Group
+    "@ekomarket_shop": "retail_official",  # ЕКО Маркет
+    "@tadaua": "retail_official",  # TA-DA! — дискаунтер с продуктами, есть в Лубнах
     # supermarket_deals (4)
     "@msuaaaa": "supermarket_deals",
     "@kopiyochka1": "supermarket_deals",
@@ -228,8 +293,8 @@ AUDIENCE = {
     "@viktoria_sshh": "health_fitness",
     "@hydnem_prosto": "health_fitness",
     "@dimakaminskyifit": "health_fitness",
-    # food_quality_gov (1)
-    "@dpssgovua": "food_quality_gov",
+    # food_quality (1) — renamed from food_quality_gov by the wave-3 ruling of 08.08
+    "@dpssgovua": "food_quality",
     # regional (16) — canon "Дозаявка №3" (operator 2026-08-08): "по прохождении гейта: 16
     # хендлов дозаявки №3". Written out one per line rather than folded into the CITY_FEEDS
     # tuple, on the operator's instruction: a reader six weeks from now has to see WHERE each
@@ -326,7 +391,7 @@ def source_entry(row: dict, bucket: str) -> dict:
     return {
         "id": handle[1:].lower(),
         "name": row["checks"]["title"],
-        "source_type": SOURCE_TYPE_RULING.get(handle, "community"),
+        "source_type": source_type_of(handle),
         "telegram_channels": [handle],
         "verified": True,
         # The gate's group finding, except where a ruling overrode it (@maudau).
@@ -334,6 +399,27 @@ def source_entry(row: dict, bucket: str) -> dict:
         "watch": bucket == "watch",
         "audience": audience_of(handle),
     }
+
+
+def source_type_of(handle: str) -> str:
+    """The ruling's source_type, with the one combination that cannot be true refused.
+
+    `audience` says whose audience a source speaks to, `source_type` says who runs it — different
+    questions, except at one value: the canon's `retail_official` segment IS "the chain's own
+    channel", so `community` there is the default speaking where a fact was known. That already
+    happened once — @marketopt_promo entered as `community` and needed an operator amendment after
+    the write — and the shipped file now carries `official_retail` on every retail_official source.
+    A new one arriving without a ruling row stops the run instead of inheriting the default.
+    """
+    ruled = SOURCE_TYPE_RULING.get(handle, "community")
+    if AUDIENCE.get(handle) == "retail_official" and ruled == "community":
+        raise SystemExit(
+            f"{handle} is segmented retail_official — a chain's own channel — but no source_type"
+            " ruling names it, so it would enter as `community`, which says a community runs it."
+            " Add it to SOURCE_TYPE_RULING (or move it out of the segment) rather than shipping"
+            " the default."
+        )
+    return ruled
 
 
 def audience_of(handle: str) -> str:

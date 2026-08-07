@@ -26,14 +26,18 @@ AUDIENCES = (
     "mothers_kids",
     "baby_food",
     "health_fitness",
-    "food_quality_gov",
+    "food_quality",
     "regional",
 )
 """Whose audience a source speaks to — operator ruling 2026-08-08, canon
 `docs/CHANNELS-launch.md`, "Сегментация источников — audience". A closed list of exactly eight,
 kept at this granularity so a report can fold them into whatever coarse grouping it needs (retail
 = official + deals, mothers = mothers_kids + baby_food) — folding is reversible, a coarse field
-is not. Which source carries which value is the canon's table, never derived here."""
+is not. Which source carries which value is the canon's table, never derived here.
+
+`food_quality` was `food_quality_gov` until the operator's wave-3 ruling of 2026-08-08: who runs a
+source is what `source_type` answers, so the segment carries no `_gov` — an NGO running its own lab
+checks on counterfeit dairy speaks to the same audience as the state service does."""
 
 
 @dataclass(frozen=True)

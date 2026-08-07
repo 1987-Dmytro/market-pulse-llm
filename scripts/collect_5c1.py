@@ -132,6 +132,11 @@ def joinable(registry, gate: dict) -> list[tuple]:
     ruling and the registry write, and the answer is to stop rather than to pick one.
     """
     authorised = set(gate["rulings"]["joins_authorised"])
+    # A later ruling can take a channel out of the composition after its join was authorised —
+    # wave 3 did exactly that to six of these 21, three of them already members. That list is
+    # HISTORY and is not rewritten (rewriting it would un-say what was authorised on 07.08), so
+    # the live set is derived by subtracting what the same record now excludes.
+    authorised -= set(gate["rulings"]["composition"].get("excluded", []))
     fresh = collectable(registry, gate)
     # The four original channels are already joined and out of the gate's scope, so the registry
     # side is read over the newly entered channels only.
@@ -490,6 +495,23 @@ async def run(args, registry, gate) -> dict:
     return write_record(registry, gate, rows, since, first_run, extra)
 
 
+def refuse_inside_flood_wait(now: datetime | None = None) -> None:
+    """Every phase here starts by resolving a handle — including `--leave`, whose `get_entity`
+    is the same request the wall is on. A refusal that names the hour beats a request that
+    lengthens the window."""
+    now = now or datetime.now(UTC)
+    until = flood_wait_until(join_state(), now)
+    if until is None:
+        return
+    left = (until - now).total_seconds() / 3600
+    raise SystemExit(
+        f"an account-wide FloodWait is recorded until {until:%Y-%m-%d %H:%M UTC} ({left:.1f} h"
+        " away). It is on resolving usernames, which every join, every leave and every comment"
+        " fetch starts with, so retrying inside the window only makes it longer. Re-run after"
+        " that time."
+    )
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="5c1 Deliverable 2: joins and the 28-day window.")
     parser.add_argument("--join", action="store_true", help="join the authorised groups, paced")
@@ -516,6 +538,7 @@ def main(argv: list[str] | None = None) -> int:
     channels = collectable(registry, gate)
     joins = joinable(registry, gate)
     if args.leave:
+        refuse_inside_flood_wait()
         # The authorised list AND the join log: the case that matters is a channel the rulings
         # have since EXCLUDED, which is no longer authorised and is exactly what has to be left.
         known = {handle for _, handle in joins} | set(join_state())
@@ -558,13 +581,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"protected: {len(protected())} raw v1 files, refused at channel level")
         return 0
 
-    if (until := flood_wait_until(join_state(), datetime.now(UTC))) is not None:
-        left = (until - datetime.now(UTC)).total_seconds() / 3600
-        raise SystemExit(
-            f"an account-wide FloodWait is recorded until {until:%Y-%m-%d %H:%M UTC} ({left:.1f} h"
-            " away). It is on resolving usernames, which every join and every comment fetch starts"
-            " with, so retrying inside the window only makes it longer. Re-run after that time."
-        )
+    refuse_inside_flood_wait()
 
     record = asyncio.run(run(args, registry, gate))
     print()

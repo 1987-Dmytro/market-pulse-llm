@@ -375,3 +375,58 @@ def test_the_record_totals_are_summed_from_the_rows(tmp_path, monkeypatch):
     }
     assert record["window"]["since"] == NOW.isoformat()
     assert record["git"]["commit"]
+
+
+def test_a_ruling_that_excludes_an_authorised_channel_does_not_break_the_cross_check():
+    """Wave 3 excluded six channels whose joins had already been authorised, three of them
+    members. `joins_authorised` is history and is not rewritten, so the live set is derived by
+    subtracting the composition's own `excluded` — and the two derivations must still agree."""
+    registry = registry_of(source("@live", comments=True))
+    gate = gate_of({"comments": ["@live"], "excluded": ["@gone"]}, ["@live", "@gone"])
+    assert [handle for _, handle in collect.joinable(registry, gate)] == ["@live"]
+
+
+def test_the_shipped_record_still_agrees_with_the_shipped_registry():
+    """The check that actually fires tomorrow: the live registry and the live rulings, not a
+    fixture. After wave 3 this is 15 authorised, not 21."""
+    import sys as _sys
+
+    _sys.path.insert(0, str(REPO_ROOT / "src"))
+    from market_pulse.registry import load_registry as _load
+
+    record = json.loads((REPO_ROOT / "results" / "entry_gate_5c1.json").read_text(encoding="utf-8"))
+    joins = collect.joinable(_load(REPO_ROOT / "config" / "registry.yaml"), record)
+    assert len(joins) == 15, [h for _, h in joins]
+
+
+def test_leaving_a_group_is_refused_inside_the_flood_wait_window(monkeypatch, tmp_path):
+    """`leave_group` starts with `get_entity`, which is the very request the wall is on — so a
+    leave fired inside the window does not leave anything, it lengthens the window. The refusal
+    names the hour instead. `--plan` stays usable: it talks to nobody."""
+    log = tmp_path / "joins.jsonl"
+    clears = (NOW + timedelta(hours=4)).isoformat()
+    log.write_text(
+        json.dumps(
+            {"at": NOW.isoformat(), "channel": "@a", "outcome": "floodwait", "clears_at": clears}
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(collect, "JOIN_LOG", log)
+    with pytest.raises(SystemExit, match="every leave"):
+        collect.refuse_inside_flood_wait(NOW)
+
+    # The negative control: with the window past, the same call is silent.
+    log.write_text(
+        json.dumps(
+            {
+                "at": NOW.isoformat(),
+                "channel": "@a",
+                "outcome": "floodwait",
+                "clears_at": (NOW - timedelta(hours=1)).isoformat(),
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    assert collect.refuse_inside_flood_wait(NOW) is None
