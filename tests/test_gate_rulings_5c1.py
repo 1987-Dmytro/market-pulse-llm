@@ -176,6 +176,33 @@ def test_the_audience_table_is_the_canons_own():
     }
 
 
+def test_the_city_rows_of_the_audience_table_are_the_gates_own():
+    """The 16 regional rows are written out one per line so a reader sees where each came from.
+    Spelling them out means the same handles now live in two places, so this is what keeps them
+    from drifting: same handles, same order, and `regional` for every one of them."""
+    regional = [handle for handle, segment in apply.AUDIENCE.items() if segment == "regional"]
+    assert regional == list(apply.CITY_FEEDS)
+    assert len(regional) == 16
+
+
+def test_the_titles_beside_the_city_rows_are_the_scans_own():
+    """Provenance is the reason those comments exist, so it is checked rather than trusted: each
+    title is compared against `results/discovery_5c1_poltava.json`, the record the operator
+    picked from. A title typed from memory is a comment that quietly stops being true."""
+    import re
+
+    ledger = json.loads(
+        (REPO_ROOT / "results" / "discovery_5c1_poltava.json").read_text(encoding="utf-8")
+    )
+    titles = {row["handle"]: row["title"] for row in ledger["candidates"]}
+
+    source = (REPO_ROOT / "scripts" / "apply_gate_rulings_5c1.py").read_text(encoding="utf-8")
+    annotated = dict(re.findall(r'"(@[A-Za-z0-9_]+)": "regional",\s+# (.+)', source))
+    assert set(annotated) == set(apply.CITY_FEEDS), "a city row lost its provenance comment"
+    for handle, comment in annotated.items():
+        assert comment == titles[handle], handle
+
+
 def test_every_audience_value_is_one_of_the_eight():
     assert set(apply.AUDIENCE.values()) == set(AUDIENCES)
 

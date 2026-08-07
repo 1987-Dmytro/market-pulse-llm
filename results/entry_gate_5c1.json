@@ -4392,24 +4392,12 @@
   "registry_written": true,
   "note": "PROMPT-5c1 D1 stops here: every FAIL and FLAG goes to the operator, who rules in chat; the rulings land in each row's `ruling`, and only then is config/registry.yaml written. data/entry_check_report.json (the 2026-07-27 run) is untouched, and the four registry channels are out of this gate's scope.",
   "git": {
-    "commit": "13b04e61af0dd2fbbc5334111994388c1b1e6511",
+    "commit": "9cb2eb80d40337bf2f030b20df546e630e5342f4",
     "dirty": [
-      "config/registry.yaml",
-      "docs/CHANNELS-launch.md",
-      "docs/STATUS.md",
-      "implementation-notes.md",
       "knowledge/daily_logs/2026-08-07.md",
-      "knowledge/hot.md",
       "knowledge/index.md",
       "scripts/apply_gate_rulings_5c1.py",
-      "scripts/collect_5c1.py",
-      "scripts/entry_check.py",
-      "src/market_pulse/entry_check.py",
-      "src/market_pulse/registry.py",
-      "tests/test_collect_5c1.py",
-      "tests/test_entry_gate_5c1.py",
-      "tests/test_gate_rulings_5c1.py",
-      "tests/test_registry.py"
+      "tests/test_gate_rulings_5c1.py"
     ]
   },
   "notes": {
@@ -4593,7 +4581,7 @@
     }
   },
   "rulings": {
-    "applied_at": "2026-08-07T14:45:10+00:00",
+    "applied_at": "2026-08-07T14:50:14+00:00",
     "canon": "docs/CHANNELS-launch.md, sections 'Рулинги гейта 5c1 (2026-08-07)' and 'Рулинги, волна 2'",
     "composition": {
       "comments": [

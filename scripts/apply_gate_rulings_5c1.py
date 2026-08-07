@@ -230,9 +230,29 @@ AUDIENCE = {
     "@dimakaminskyifit": "health_fitness",
     # food_quality_gov (1)
     "@dpssgovua": "food_quality_gov",
-    # regional — the canon's own words: "по прохождении гейта: 16 хендлов дозаявки №3", so the
-    # value is written from the same tuple the gate reads, as each of them passes.
-    **dict.fromkeys(CITY_FEEDS, "regional"),
+    # regional (16) — canon "Дозаявка №3" (operator 2026-08-08): "по прохождении гейта: 16
+    # хендлов дозаявки №3". Written out one per line rather than folded into the CITY_FEEDS
+    # tuple, on the operator's instruction: a reader six weeks from now has to see WHERE each
+    # row came from without opening another file. The titles are the scan's own
+    # (`results/discovery_5c1_poltava.json`), copied from that record, not described from
+    # memory. `test_the_city_rows_of_the_audience_table_are_the_gates_own` holds this list to
+    # CITY_FEEDS handle for handle, so the two cannot drift apart.
+    "@mo3ambik": "regional",  # МОЗАМБІК.МЕДІА: Лубни, Пирятин, Хорол, Гребінка, Оржиця
+    "@poltava_informue": "regional",  # Полтава Інформує
+    "@poltava_misto": "regional",  # Полтава Інфо🗞⌚️☕️
+    "@suspilnepoltava": "regional",  # Суспільне Полтава
+    "@telegraf_kremenchuk": "regional",  # Кременчуцький Телеграф
+    "@kremenchug_live": "regional",  # Кременчук LiFE🗞⌚️🏘☕️🌤
+    "@gorishnie_plavni1": "regional",  # Горішні Плавні 🇺🇦
+    "@myrhorodtown": "regional",  # Mirgorodtown
+    "@Hadiach_telegram": "regional",  # Гадяч
+    "@globine1": "regional",  # Х Глобине
+    "@piryatingromada": "regional",  # Пирятинська громада
+    "@Karlivka_live": "regional",  # Карлівка Live 🇺🇦
+    "@PirOperative": "regional",  # 🔻Пирятин Оперативний
+    "@dikankaa": "regional",  # диканка :]
+    "@zinkivnews": "regional",  # Зіньків Новини
+    "@LHVC_info": "regional",  # Лохвиця.info
 }
 """Handle → audience segment. The canon's table, and the whole of it: `main` refuses a registry
 source this dict does not name rather than shipping one with a null audience."""
