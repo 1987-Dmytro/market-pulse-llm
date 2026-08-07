@@ -82,11 +82,16 @@ def plan_channel(store, source, handle: str, state: dict) -> dict:
     """
     posts = store.index("post", handle)
     comments = store.index("comment", handle)
-    threads = posts.with_replies - comments.parents if source.comments_enabled else set()
+    # `watch` is why this is not `comments_enabled` alone (5c1): a watch channel keeps its
+    # discussion group and is deliberately never joined, so its threads are unreadable. Planning
+    # them would put rows nobody can fetch into the queue 5c2 prices.
+    collects_comments = source.comments_enabled and not source.watch
+    threads = posts.with_replies - comments.parents if collects_comments else set()
     return {
         "channel": handle,
         "source_id": source.id,
         "comments_enabled": source.comments_enabled,
+        "watch": source.watch,
         "posts_stored": posts.count,
         "comments_stored": comments.count,
         "fetch_posts_newer_than": state.get(POSTS),

@@ -46,6 +46,434 @@ sources:
   # znizhki-ua (@znizhki_ua) removed 2026-07-27: channel dead since 2024-03,
   # zero records inside the backfill window (see data/entry_check_report.json).
 
+  # --- Phase 5c1 launch composition (operator verdict 2026-08-06, rulings 2026-08-07) ---
+  # Every channel below entered through the track-R gate: results/entry_gate_5c1.json holds one
+  # row per candidate with its checks, verdict and the ruling that placed it. Names and
+  # comments_enabled come from that record, never typed here. `watch: true` = posts are
+  # collected and the discussion group is NEVER joined until the channel posts again and the
+  # operator says so (SPEC 3.11 (4)); those channels keep comments_enabled because the group
+  # exists — the join is what they do not have.
+  - id: tretyakovaele
+    name: "Третьякова Елена Блогер 👧 Материнство-Lifestyle-Beauty"
+    source_type: community
+    telegram_channels:
+      - "@tretyakovaele"
+    verified: true
+    comments_enabled: true
+  - id: kopiyochka1
+    name: "Копійочка 🫶🏻"
+    source_type: community
+    telegram_channels:
+      - "@kopiyochka1"
+    verified: true
+    comments_enabled: true
+  - id: klopotenkofood
+    name: "Гастровсесвіт Клопотенка"
+    source_type: community
+    telegram_channels:
+      - "@klopotenkofood"
+    verified: true
+    comments_enabled: true
+  - id: maudau
+    name: "MAUDAU: канал цікавих штук"
+    source_type: community
+    telegram_channels:
+      - "@maudau"
+    verified: true
+    comments_enabled: false
+  - id: uasaler
+    name: "Аліексперт 🇺🇦 промокоди, знижки, новини"
+    source_type: aggregator
+    telegram_channels:
+      - "@uasaler"
+    verified: true
+    comments_enabled: true
+  - id: retsepty
+    name: "Кулінарні рецепти"
+    source_type: community
+    telegram_channels:
+      - "@retsepty"
+    verified: true
+    comments_enabled: true
+  - id: katyal55
+    name: "Материнство в кадре"
+    source_type: community
+    telegram_channels:
+      - "@katyal55"
+    verified: true
+    comments_enabled: true
+  - id: smirnov108
+    name: "Smirnovy.com – здоров'я та розвиток"
+    source_type: community
+    telegram_channels:
+      - "@smirnov108"
+    verified: true
+    comments_enabled: true
+  - id: tarilka_malyuka
+    name: "Тарілка Малюка • Прикорм"
+    source_type: community
+    telegram_channels:
+      - "@tarilka_malyuka"
+    verified: true
+    comments_enabled: true
+  - id: kkondr_fit
+    name: "Kkondratyuchka тренування"
+    source_type: community
+    telegram_channels:
+      - "@kkondr_fit"
+    verified: true
+    comments_enabled: true
+  - id: polyakova_fitness
+    name: "Тренування з Олею Поляковою та Сергієм Шеремета"
+    source_type: community
+    telegram_channels:
+      - "@polyakova_fitness"
+    verified: true
+    comments_enabled: true
+  - id: znishkom
+    name: "ЗнижКом | Ігрові Знижки 🇺🇦"
+    source_type: aggregator
+    telegram_channels:
+      - "@znishkom"
+    verified: true
+    comments_enabled: true
+  - id: kuksa2022
+    name: "Екатерина Кукса. Материнство в радость"
+    source_type: community
+    telegram_channels:
+      - "@kuksa2022"
+    verified: true
+    comments_enabled: true
+  - id: healthpsycholog
+    name: "Психологія здоров’я Health Psychology"
+    source_type: community
+    telegram_channels:
+      - "@HealthPsycholog"
+    verified: true
+    comments_enabled: true
+  - id: atb_fanatik
+    name: "ФАНАТИК АТБ | АКЦІЇ"
+    source_type: aggregator
+    telegram_channels:
+      - "@ATB_FANatik"
+    verified: true
+    comments_enabled: true
+  - id: offspringrus
+    name: "Ребёнок маминой подруги!"
+    source_type: community
+    telegram_channels:
+      - "@offspringrus"
+    verified: true
+    comments_enabled: true
+  - id: sashafitnesslife
+    name: "Розумний ФІТНЕС з Sashafitnesslife ❤️"
+    source_type: community
+    telegram_channels:
+      - "@sashafitnesslife"
+    verified: true
+    comments_enabled: true
+  - id: pro_detyintumama
+    name: "Интуитивное Материнство"
+    source_type: community
+    telegram_channels:
+      - "@Pro_Detyintumama"
+    verified: true
+    comments_enabled: true
+  - id: chifit_family
+    name: "Оля CHIFIT| тренування і харчування🔥"
+    source_type: community
+    telegram_channels:
+      - "@chifit_family"
+    verified: true
+    comments_enabled: true
+  - id: ya_nenka
+    name: "Катерина Ненька — грудне вигодовування та дитяче харчування | сон"
+    source_type: community
+    telegram_channels:
+      - "@ya_Nenka"
+    verified: true
+    comments_enabled: true
+  - id: baby_broccoli_club
+    name: "Брокколи клуб | прикорм | развитие"
+    source_type: community
+    telegram_channels:
+      - "@baby_broccoli_club"
+    verified: true
+    comments_enabled: true
+  - id: useful_healthy_fitness_menu
+    name: "Здорове харчування| Софія Ігорівна"
+    source_type: community
+    telegram_channels:
+      - "@useful_healthy_fitness_menu"
+    verified: true
+    comments_enabled: true
+  - id: olgaa_trainer
+    name: "Оля | розумний фітнес 💪"
+    source_type: community
+    telegram_channels:
+      - "@olgaa_trainer"
+    verified: true
+    comments_enabled: true
+  - id: denisovapro
+    name: "Нутриціологія | Молодість | ЖИТТЯ"
+    source_type: community
+    telegram_channels:
+      - "@denisovapro"
+    verified: true
+    comments_enabled: true
+  - id: eftforhealth
+    name: "Я ЗДОРОВА"
+    source_type: community
+    telegram_channels:
+      - "@eftforhealth"
+    verified: true
+    comments_enabled: true
+  - id: rezeptmoi
+    name: "Мои рецептики (Илона)🤍"
+    source_type: community
+    telegram_channels:
+      - "@rezeptmoi"
+    verified: true
+    comments_enabled: true
+  - id: discountua1
+    name: "💛Знижки супермаркетів💙"
+    source_type: community
+    telegram_channels:
+      - "@discountua1"
+    verified: true
+    comments_enabled: true
+  - id: recepti
+    name: "Кулінарні рецепти"
+    source_type: community
+    telegram_channels:
+      - "@recepti"
+    verified: true
+    comments_enabled: false
+  - id: mameni_recepti
+    name: "Мамині Рецепти"
+    source_type: community
+    telegram_channels:
+      - "@mameni_recepti"
+    verified: true
+    comments_enabled: false
+  - id: retsepty4
+    name: "Ложка - Рецепты"
+    source_type: community
+    telegram_channels:
+      - "@retsepty4"
+    verified: true
+    comments_enabled: false
+  - id: epicentrk_sale
+    name: "ЕПІЦЕНТР"
+    source_type: official_retail
+    telegram_channels:
+      - "@epicentrk_sale"
+    verified: true
+    comments_enabled: false
+  - id: konservacia_kulinaria
+    name: "Консервація та кулінарія"
+    source_type: community
+    telegram_channels:
+      - "@konservacia_kulinaria"
+    verified: true
+    comments_enabled: false
+  - id: intensiv_mamiev
+    name: "Алан Мамиев ИНТЕНСИВ"
+    source_type: community
+    telegram_channels:
+      - "@intensiv_Mamiev"
+    verified: true
+    comments_enabled: false
+  - id: retsepty5
+    name: "Рецепты, Готовим Дома"
+    source_type: community
+    telegram_channels:
+      - "@retsepty5"
+    verified: true
+    comments_enabled: false
+  - id: blwbabies
+    name: "BLW.BABIES 🥦🍓 СМАЧНИЙ ПРИКОРМ 🥑 BLW 🥑 САМОПРИКОРМ 🥑 ДИТЯЧЕ МЕНЮ 🥑 РЕЦЕПТИ"
+    source_type: community
+    telegram_channels:
+      - "@blwbabies"
+    verified: true
+    comments_enabled: false
+  - id: vylkachannel
+    name: "the VYLKA (рецепти)"
+    source_type: community
+    telegram_channels:
+      - "@vylkachannel"
+    verified: true
+    comments_enabled: false
+  - id: whitecode_zny
+    name: "WHITECODE ЗНИЖКИ | УЦІНКИ"
+    source_type: aggregator
+    telegram_channels:
+      - "@whitecode_zny"
+    verified: true
+    comments_enabled: false
+  - id: gaid_skobioale
+    name: "Відгуки гайд схуднення"
+    source_type: community
+    telegram_channels:
+      - "@gaid_skobioale"
+    verified: true
+    comments_enabled: false
+  - id: dpssgovua
+    name: "Держпродспоживслужба"
+    source_type: government
+    telegram_channels:
+      - "@dpssgovua"
+    verified: true
+    comments_enabled: false
+  - id: wellosophy_lesya
+    name: "ПХ та схуднення 🍀"
+    source_type: community
+    telegram_channels:
+      - "@Wellosophy_Lesya"
+    verified: true
+    comments_enabled: false
+  - id: atb_aktsiyi
+    name: "АТБ Акції"
+    source_type: aggregator
+    telegram_channels:
+      - "@atb_aktsiyi"
+    verified: true
+    comments_enabled: false
+  - id: anastasiiadavydiukfitness
+    name: "Онлайн-тренування з Анастасією Давидюк"
+    source_type: community
+    telegram_channels:
+      - "@anastasiiadavydiukfitness"
+    verified: true
+    comments_enabled: false
+  - id: korolevakuchni
+    name: "Королева Кухні 👑 (Кулінарія та рецепти)"
+    source_type: community
+    telegram_channels:
+      - "@korolevakuchni"
+    verified: true
+    comments_enabled: false
+  - id: itsmamix
+    name: "Mamix🥼"
+    source_type: community
+    telegram_channels:
+      - "@itsmamix"
+    verified: true
+    comments_enabled: true
+    watch: true
+  - id: regina_tatlybaeva
+    name: "Регинаграмм | Материнство , путешествия"
+    source_type: community
+    telegram_channels:
+      - "@regina_tatlybaeva"
+    verified: true
+    comments_enabled: true
+    watch: true
+  - id: netainaya_vecherya
+    name: "нетайная вечеря"
+    source_type: community
+    telegram_channels:
+      - "@netainaya_vecherya"
+    verified: true
+    comments_enabled: true
+    watch: true
+  - id: retsepty10
+    name: "Рецепты | Полезное питание"
+    source_type: community
+    telegram_channels:
+      - "@retsepty10"
+    verified: true
+    comments_enabled: true
+    watch: true
+  - id: skhudnennya
+    name: "ЗДОРОВЕ СХУДНЕННЯ"
+    source_type: community
+    telegram_channels:
+      - "@skhudnennya"
+    verified: true
+    comments_enabled: true
+    watch: true
+  - id: prostetsofa
+    name: "София Стец | про материнство"
+    source_type: community
+    telegram_channels:
+      - "@prostetsofa"
+    verified: true
+    comments_enabled: true
+    watch: true
+  - id: viktoria_sshh
+    name: "Я выбираю быть здоровой💚✨"
+    source_type: community
+    telegram_channels:
+      - "@viktoria_sshh"
+    verified: true
+    comments_enabled: true
+    watch: true
+  - id: hydnem_prosto
+    name: "Марафон схуднення онлайн"
+    source_type: community
+    telegram_channels:
+      - "@hydnem_prosto"
+    verified: true
+    comments_enabled: true
+    watch: true
+  - id: dimakaminskyifit
+    name: "Дмитро Камінський | Фітнес та Саморозвиток"
+    source_type: community
+    telegram_channels:
+      - "@dimakaminskyifit"
+    verified: true
+    comments_enabled: true
+    watch: true
+  - id: dutyache_menu
+    name: "Дитяче меню"
+    source_type: community
+    telegram_channels:
+      - "@dutyache_menu"
+    verified: true
+    comments_enabled: true
+    watch: true
+  - id: polinalykovagv
+    name: "ГВ/прикорм/сон с Полиной Лыковой 🤱🏻"
+    source_type: community
+    telegram_channels:
+      - "@polinalykovagv"
+    verified: true
+    comments_enabled: true
+    watch: true
+  - id: evgenija_dutjache_menu
+    name: "Євгенія_Дитяче меню"
+    source_type: community
+    telegram_channels:
+      - "@Evgenija_dutjache_menu"
+    verified: true
+    comments_enabled: true
+    watch: true
+  - id: chekh_yevheniia1982
+    name: "Рецептишки Евгении Чех"
+    source_type: community
+    telegram_channels:
+      - "@chekh_yevheniia1982"
+    verified: true
+    comments_enabled: true
+    watch: true
+  - id: cozymotherhood
+    name: "Уютное материнство"
+    source_type: community
+    telegram_channels:
+      - "@cozymotherhood"
+    verified: true
+    comments_enabled: true
+    watch: true
+  - id: marketopt_promo
+    name: "Маркетопт (Толока) м.Кременчук"
+    source_type: community
+    telegram_channels:
+      - "@marketopt_promo"
+    verified: true
+    comments_enabled: false
+
 taxonomy:
   # Keys are kebab-case and stable (they end up in result files); values are the
   # UA display names used by the dashboard.

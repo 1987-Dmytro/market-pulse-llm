@@ -14,7 +14,10 @@ import yaml
 # Telegram public username: 5-32 chars, starts with a letter, letters/digits/underscore.
 _HANDLE = re.compile(r"^@[A-Za-z][A-Za-z0-9_]{4,31}$")
 
-SOURCE_TYPES = ("official_retail", "aggregator", "community")
+SOURCE_TYPES = ("official_retail", "aggregator", "community", "government")
+"""``government`` was added at the 5c1 registry write (team-lead ruling 2026-08-07): the launch
+composition carries @dpssgovua, Держпродспоживслужба, and a state food-safety inspectorate is
+none of the other three. It is the falsification-watch source SPEC 3.11 (4) authorised."""
 
 
 @dataclass(frozen=True)
@@ -27,6 +30,10 @@ class Source:
     # Set from the entry check. False means the source carries launches but no
     # reactions — those come from another source (SPEC §9 fallback).
     comments_enabled: bool = False
+    # 5c1 watch bucket: posts are collected, the discussion group is NEVER joined until the
+    # channel posts again (SPEC 3.11 (4), operator 2026-08-06). A silent channel keeps its
+    # group, so `comments_enabled` alone cannot say "do not join" — this flag does.
+    watch: bool = False
 
 
 @dataclass(frozen=True)
@@ -91,6 +98,11 @@ def _sources(path: str | Path, entries) -> tuple[Source, ...]:
         for channel in channels:
             if not isinstance(channel, str) or not _HANDLE.match(channel):
                 raise ValueError(f"{path}: source {sid!r} has a malformed handle {channel!r}")
+        watch = entry.get("watch", False)
+        if not isinstance(watch, bool):
+            # Strict where it is load-bearing: `watch: "no"` is truthy, and a watch channel read
+            # as a launch channel is a group join the operator forbade.
+            raise ValueError(f"{path}: source {sid!r} has a non-boolean watch {watch!r}")
         sources.append(
             Source(
                 sid,
@@ -99,6 +111,7 @@ def _sources(path: str | Path, entries) -> tuple[Source, ...]:
                 tuple(channels),
                 bool(entry.get("verified")),
                 bool(entry.get("comments_enabled")),
+                watch,
             )
         )
     return tuple(sources)

@@ -52,23 +52,42 @@ def canon_buckets() -> list[tuple[str, str]]:
     return rows
 
 
+def canon_sent_to_the_gate() -> list[str]:
+    """Handles the rulings table sends to the gate after the original tables were written.
+
+    The operator amended `docs/CHANNELS-launch.md` rather than rewriting it: the four bucket
+    tables still hold all 62, and the 2026-08-07 section rules on them. A handle marked
+    "НА ГЕЙТ" there is a candidate the tables never carried.
+    """
+    text = CANON.read_text(encoding="utf-8")
+    section = text[text.index("## Рулинги гейта 5c1") :]
+    return [
+        line.split("|")[1].strip()
+        for line in section.splitlines()
+        if line.startswith("|") and "НА ГЕЙТ" in line
+    ]
+
+
 def test_the_candidate_list_is_the_canons_own():
     """A hand-copied handle list is a list that silently stops matching the file it came from.
 
     Not a set comparison: the bucket is what the gate holds each channel to, so a channel in the
-    right list and the wrong bucket would be verified against expectations nobody chose.
+    right list and the wrong bucket would be verified against expectations nobody chose. The
+    gate's input only grows — a channel the operator later excluded was still measured, and
+    deleting its row would rewrite what the pass found.
     """
-    assert list(gate.CANDIDATES) == canon_buckets()
+    late = [(handle, "late") for handle in canon_sent_to_the_gate()]
+    assert list(gate.CANDIDATES) == canon_buckets() + late
 
 
-def test_the_composition_is_62_channels_in_four_buckets():
+def test_the_composition_is_the_62_plus_what_the_rulings_added():
     counts = {
         b: sum(1 for _, bucket in gate.CANDIDATES if bucket == b)
         for b in ("comments", "posts", "watch", "late")
     }
-    assert counts == {"comments": 29, "posts": 18, "watch": 14, "late": 1}
-    assert len(gate.CANDIDATES) == 62
-    assert len({handle for handle, _ in gate.CANDIDATES}) == 62
+    assert counts == {"comments": 29, "posts": 18, "watch": 14, "late": 2}
+    assert len(gate.CANDIDATES) == 63
+    assert len({handle for handle, _ in gate.CANDIDATES}) == 63
 
 
 def test_the_gate_never_re_checks_a_registry_channel_or_an_excluded_one():

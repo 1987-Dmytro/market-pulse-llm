@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-07T10:05:25+00:00",
+  "generated_at": "2026-08-07T10:22:26+00:00",
   "phase": "5c1",
   "deliverable": "1 — the track-R entry gate over the launch composition",
   "contract": "docs/SPEC.md §3.11 (4); docs/PROMPT-5c1.md Deliverable 1",
@@ -67,7 +67,8 @@
     "generated_at": "2026-08-06T10:08:51+00:00",
     "role": "description only — never a gate input; the verdict is on this pass",
     "handles_without_a_prior_row": [
-      "@marketopt_official"
+      "@marketopt_official",
+      "@marketopt_promo"
     ]
   },
   "candidates": [
@@ -364,7 +365,7 @@
         "discussion group is not open — everyone banned from sending",
         "group present but no comments on any of the sampled posts"
       ],
-      "ruling": null,
+      "ruling": "KEPT, bucket changed — moved to posts-only: the linked group bans everyone from sending, so 0 of 50 sampled posts carry comments and a join buys nothing. comments_enabled false, NO join",
       "error": null,
       "suggestions": null
     },
@@ -1814,7 +1815,7 @@
       "flags": [
         "pre-registered: theme check (PROMPT-5c1 D1)"
       ],
-      "ruling": null,
+      "ruling": "EXCLUDED — theme: a personal RU-language blog (Samara restaurants, ballet) — the pre-registered theme flag is confirmed",
       "error": null,
       "suggestions": null
     },
@@ -1890,7 +1891,7 @@
       "flags": [
         "pre-registered: theme check (PROMPT-5c1 D1)"
       ],
-      "ruling": null,
+      "ruling": "EXCLUDED — theme: RU fashion and lifestyle, nothing in the tracked category",
       "error": null,
       "suggestions": null
     },
@@ -2182,7 +2183,7 @@
       "flags": [
         "group present but no comments on any of the sampled posts"
       ],
-      "ruling": null,
+      "ruling": "KEPT — kept in the comments bucket WITH a join: 0 of 7 sampled posts is a thin denominator, and the 28-day window measures the real flow. Demotion is a cycle-1 review question, not this phase's",
       "error": null,
       "suggestions": null
     },
@@ -2589,7 +2590,7 @@
       "flags": [
         "supergroup, not a broadcast channel"
       ],
-      "ruling": null,
+      "ruling": "EXCLUDED — a supergroup, not a channel: its 280.75/week is member chat traffic. The chat-mining track is recorded as DEFERRED — nothing is built for it here",
       "error": null,
       "suggestions": null
     },
@@ -2996,7 +2997,7 @@
       "flags": [
         "supergroup, not a broadcast channel"
       ],
-      "ruling": null,
+      "ruling": "EXCLUDED — a supergroup, not a channel: 300/week of chat messages. Same deferred chat-mining track",
       "error": null,
       "suggestions": null
     },
@@ -3640,7 +3641,7 @@
       "flags": [
         "discussion group is not open — join needs admin approval"
       ],
-      "ruling": null,
+      "ruling": "KEPT — stays in watch, recorded: its group admits by approval only. No watch join happens in this phase; this surfaces when the channel wakes up",
       "error": null,
       "suggestions": null
     },
@@ -4234,14 +4235,62 @@
       "flags": [
         "pre-registered: class + comments confirm (PROMPT-5c1 D1)"
       ],
-      "ruling": null,
+      "ruling": "EXCLUDED — late addition WITHDRAWN — the handle resolves to a dead 132-subscriber channel, and the canon's '41,518' had no source artifact behind it",
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@marketopt_promo",
+      "bucket": "late",
+      "checked_at": "2026-08-07T10:22:24+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Маркетопт (Толока) м.Кременчук",
+        "username": "marketopt_promo",
+        "subscribers": 2914,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 12,
+          "posts_per_week": 3.0,
+          "last_post": "2026-08-07T08:06:42+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 8,
+          "n_with_letters": 8,
+          "n_cyrillic": 8,
+          "cyrillic_share": 1.0,
+          "decisive": false,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": null,
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 11,
+          "share_with_comments": 0.0,
+          "median_comments": 0
+        },
+        "capability_verdict": "posts-only"
+      },
+      "prior_5a1": null,
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": "GATED REPLACEMENT — PASS with no discussion group → posts. replaces the withdrawn late addition. PASS with an open discussion group → comments bucket and the joins list; PASS without one → posts-only; FAIL or FLAG → stop and report.",
       "error": null,
       "suggestions": null
     }
   ],
   "summary": {
-    "n": 62,
-    "PASS": 54,
+    "n": 63,
+    "PASS": 55,
     "FAIL": 1,
     "FLAG": 7,
     "ERROR": 0,
@@ -4268,22 +4317,154 @@
         "ERROR": 0
       },
       "late": {
-        "n": 1,
-        "PASS": 0,
+        "n": 2,
+        "PASS": 1,
         "FAIL": 1,
         "FLAG": 0,
         "ERROR": 0
       }
     }
   },
-  "registry_written": false,
+  "registry_written": true,
   "note": "PROMPT-5c1 D1 stops here: every FAIL and FLAG goes to the operator, who rules in chat; the rulings land in each row's `ruling`, and only then is config/registry.yaml written. data/entry_check_report.json (the 2026-07-27 run) is untouched, and the four registry channels are out of this gate's scope.",
   "git": {
-    "commit": "dc73b4576581fb8651f5e76b4247cf02ac0ae7ca",
+    "commit": "9272e561ff6f08d753628c4cb0cb46279a203351",
     "dirty": [
-      "implementation-notes.md",
+      "config/registry.yaml",
+      "docs/CHANNELS-launch.md",
+      "docs/STATUS.md",
       "knowledge/daily_logs/2026-08-07.md",
-      "knowledge/index.md"
+      "knowledge/index.md",
+      "scripts/entry_check.py",
+      "src/market_pulse/loop.py",
+      "src/market_pulse/registry.py",
+      "tests/test_entry_gate_5c1.py",
+      "tests/test_registry.py",
+      "scripts/apply_gate_rulings_5c1.py",
+      "tests/test_gate_rulings_5c1.py"
     ]
+  },
+  "rulings": {
+    "applied_at": "2026-08-07T10:27:35+00:00",
+    "canon": "docs/CHANNELS-launch.md, section 'Рулинги гейта 5c1 (2026-08-07)'",
+    "composition": {
+      "comments": [
+        "@ATB_FANatik",
+        "@HealthPsycholog",
+        "@Pro_Detyintumama",
+        "@baby_broccoli_club",
+        "@chifit_family",
+        "@denisovapro",
+        "@discountua1",
+        "@eftforhealth",
+        "@katyal55",
+        "@kkondr_fit",
+        "@klopotenkofood",
+        "@kopiyochka1",
+        "@kuksa2022",
+        "@offspringrus",
+        "@olgaa_trainer",
+        "@polyakova_fitness",
+        "@retsepty",
+        "@rezeptmoi",
+        "@sashafitnesslife",
+        "@smirnov108",
+        "@tarilka_malyuka",
+        "@tretyakovaele",
+        "@uasaler",
+        "@useful_healthy_fitness_menu",
+        "@ya_Nenka",
+        "@znishkom"
+      ],
+      "posts": [
+        "@Wellosophy_Lesya",
+        "@anastasiiadavydiukfitness",
+        "@atb_aktsiyi",
+        "@blwbabies",
+        "@dpssgovua",
+        "@epicentrk_sale",
+        "@gaid_skobioale",
+        "@intensiv_Mamiev",
+        "@konservacia_kulinaria",
+        "@korolevakuchni",
+        "@mameni_recepti",
+        "@marketopt_promo",
+        "@maudau",
+        "@recepti",
+        "@retsepty4",
+        "@retsepty5",
+        "@vylkachannel",
+        "@whitecode_zny"
+      ],
+      "watch": [
+        "@Evgenija_dutjache_menu",
+        "@chekh_yevheniia1982",
+        "@cozymotherhood",
+        "@dimakaminskyifit",
+        "@dutyache_menu",
+        "@hydnem_prosto",
+        "@itsmamix",
+        "@netainaya_vecherya",
+        "@polinalykovagv",
+        "@prostetsofa",
+        "@regina_tatlybaeva",
+        "@retsepty10",
+        "@skhudnennya",
+        "@viktoria_sshh"
+      ],
+      "excluded": [
+        "@Mambabyua",
+        "@kolyastravinsky",
+        "@kulinariya_chat_a",
+        "@marketopt_official",
+        "@whowears"
+      ]
+    },
+    "counts": {
+      "registry_before": 4,
+      "comments": 26,
+      "posts": 18,
+      "watch": 14,
+      "excluded": 5,
+      "sources_after": 62
+    },
+    "joins_authorised": [
+      "@ATB_FANatik",
+      "@HealthPsycholog",
+      "@Pro_Detyintumama",
+      "@baby_broccoli_club",
+      "@chifit_family",
+      "@denisovapro",
+      "@discountua1",
+      "@eftforhealth",
+      "@katyal55",
+      "@kkondr_fit",
+      "@klopotenkofood",
+      "@kopiyochka1",
+      "@kuksa2022",
+      "@offspringrus",
+      "@olgaa_trainer",
+      "@polyakova_fitness",
+      "@retsepty",
+      "@rezeptmoi",
+      "@sashafitnesslife",
+      "@smirnov108",
+      "@tarilka_malyuka",
+      "@tretyakovaele",
+      "@uasaler",
+      "@useful_healthy_fitness_menu",
+      "@ya_Nenka",
+      "@znishkom"
+    ],
+    "source_type_ruling": {
+      "@uasaler": "aggregator",
+      "@znishkom": "aggregator",
+      "@whitecode_zny": "aggregator",
+      "@atb_aktsiyi": "aggregator",
+      "@ATB_FANatik": "aggregator",
+      "@epicentrk_sale": "official_retail",
+      "@dpssgovua": "government"
+    },
+    "note": "The gate's rows are unchanged: an excluded channel was still measured, and its `ruling` is what says it is out. Registry names and comments_enabled are read off this record, not typed."
   }
 }

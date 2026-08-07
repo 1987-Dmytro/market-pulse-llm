@@ -138,6 +138,11 @@ CANDIDATES = (
     ("@chekh_yevheniia1982", "watch"),
     ("@cozymotherhood", "watch"),
     ("@marketopt_official", "late"),
+    # Ruling 2026-08-07: the late addition was withdrawn — @marketopt_official's handle resolves
+    # to a dead 132-subscriber channel — and @marketopt_promo replaces it on the same gate. This
+    # list is the gate's INPUT and only grows: what the operator ruled afterwards is
+    # scripts/apply_gate_rulings_5c1.py's business, not a rewrite of what was measured.
+    ("@marketopt_promo", "late"),
 )
 
 

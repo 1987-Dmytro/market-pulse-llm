@@ -38,6 +38,30 @@ def test_comments_enabled_defaults_to_false(tmp_path):
     assert registry.sources[0].comments_enabled is False
 
 
+def test_watch_defaults_to_false(tmp_path):
+    # The default has to be "collect normally": a launch channel that silently read as watch
+    # would be dropped from the joins with nothing to see it.
+    registry = load_registry(write(tmp_path, SOURCES + TAXONOMY))
+    assert registry.sources[0].watch is False
+
+
+def test_watch_is_read_and_must_be_a_boolean(tmp_path):
+    """`watch: "no"` is truthy in Python, and a launch channel read as watch loses its join."""
+    body = SOURCES.replace("['@chan_one']\n", "['@chan_one']\n    watch: true\n")
+    assert load_registry(write(tmp_path, body + TAXONOMY)).sources[0].watch is True
+
+    bad = SOURCES.replace("['@chan_one']\n", "['@chan_one']\n    watch: 'no'\n")
+    with pytest.raises(ValueError, match="non-boolean watch"):
+        load_registry(write(tmp_path, bad + TAXONOMY))
+
+
+def test_government_is_a_source_type(tmp_path):
+    """@dpssgovua, Держпродспоживслужба — a state inspectorate is neither retail, aggregator
+    nor community, and the 5c1 registry write needed a fourth value (team-lead, 2026-08-07)."""
+    body = SOURCES.replace("source_type: official_retail", "source_type: government")
+    assert load_registry(write(tmp_path, body + TAXONOMY)).sources[0].source_type == "government"
+
+
 def test_duplicate_source_id_rejected(tmp_path):
     path = write(
         tmp_path,
