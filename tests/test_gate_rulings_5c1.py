@@ -40,6 +40,18 @@ def canon_retail_5() -> list[str]:
 RETAIL_5 = canon_retail_5()
 """The three national chains of "Дозаявка №5", parsed from the canon rather than retyped."""
 
+
+def canon_harvest_6() -> list[str]:
+    """The six public candidates of "Дозаявка №8", cut at the deferred privates track."""
+    import re
+
+    text = CANON.read_text(encoding="utf-8")
+    section = text[text.index("## Дозаявка №8") :]
+    return re.findall(r"@[A-Za-z0-9_]+", section[: section.index("Приватные гиганты")])
+
+
+HARVEST_6 = canon_harvest_6()
+
 AWAITING_A_RULING = set()
 """Gated, not PASS, and no ruling covers it yet — the operator's rule is to stop and report.
 
@@ -186,9 +198,18 @@ def test_the_audience_table_is_the_canons_own():
     # which the table does NOT name, because it was written before them. Their segment comes from
     # the operator's brief and the master list, and the count line below is stale by three the
     # moment they pass; that is a mismatch for the canon's author, not for this script.
-    assert set(apply.AUDIENCE) - set(canon) == set(apply.CITY_FEEDS) | set(RETAIL_5)
+    assert set(apply.AUDIENCE) - set(canon) == set(apply.CITY_FEEDS) | set(RETAIL_5) | set(
+        HARVEST_6
+    )
     assert {apply.AUDIENCE[handle] for handle in apply.CITY_FEEDS} == {"regional"}
     assert {apply.AUDIENCE[handle] for handle in RETAIL_5} == {"retail_official"}
+    # The harvest six carry the segments PROMPT-5c1-day2 assigns; two of them are expectations
+    # the canon leaves to the gate, which is why they are here and not in the segmentation table.
+    assert {apply.AUDIENCE[handle] for handle in HARVEST_6} == {
+        "baby_food",
+        "mothers_kids",
+        "health_fitness",
+    }
 
     text = CANON.read_text(encoding="utf-8")
     assert "5+4+13+9+7+17+1 = 56" in " ".join(text[text.index("Сверка:") :][:120].split())

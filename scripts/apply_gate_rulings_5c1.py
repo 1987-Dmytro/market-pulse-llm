@@ -190,6 +190,13 @@ GATED_LATE = {
     "@forainfo": "national chain Фора (Fozzy Group), retail_official (canon 'Дозаявка №5')",
     "@ekomarket_shop": "national chain ЕКО Маркет, retail_official (canon 'Дозаявка №5')",
     "@tadaua": "discounter TA-DA!, retail_official (canon 'Дозаявка №5')",
+    # "Дозаявка №8" (canon, 2026-08-08 evening): the harvest six, on the same routing rule.
+    "@tvorcha_matusyua": "harvest candidate Творча Матуся (canon 'Дозаявка №8', ~45.4k)",
+    "@pavlushaiyava": "harvest candidate Павлуша і Ява (canon 'Дозаявка №8', ~45.8k)",
+    "@mamaiagolodniy": "harvest candidate «Мама, я Голодний» (canon 'Дозаявка №8', ~35.8k)",
+    "@educationwithloven": "harvest candidate Виховання з любов'ю (canon 'Дозаявка №8', ~31.5k)",
+    "@lab_of_childhood": "harvest candidate Lab of Childhood (canon 'Дозаявка №8', ~2.5k)",
+    "@mandziak": "harvest candidate Мандзяк Віктор (canon 'Дозаявка №8', ~123.9k)",
 }
 LATE_RULE = (
     "PASS with an open discussion group → comments bucket and the joins list; PASS without one →"
@@ -238,6 +245,15 @@ AUDIENCE = {
     "@forainfo": "retail_official",  # Фора, Fozzy Group
     "@ekomarket_shop": "retail_official",  # ЕКО Маркет
     "@tadaua": "retail_official",  # TA-DA! — дискаунтер с продуктами, есть в Лубнах
+    # "Дозаявка №8" — the segments PROMPT-5c1-day2 assigns, with the canon's own words beside
+    # each. Two are EXPECTATIONS the gate may contradict, and the canon says so itself; if it
+    # does, the row is reported rather than quietly kept.
+    "@tvorcha_matusyua": "baby_food",  # Творча Матуся, ~45,4k
+    "@pavlushaiyava": "baby_food",  # Павлуша і Ява, ~45,8k — детский развлекательный, тематику решит гейт
+    "@mamaiagolodniy": "baby_food",  # «Мама, я Голодний» — спільний стіл, ~35,8k, кандидат прямо в baby_food
+    "@educationwithloven": "mothers_kids",  # Виховання з любов'ю, ~31,5k
+    "@lab_of_childhood": "mothers_kids",  # ~2,5k
+    "@mandziak": "health_fitness",  # Мандзяк Віктор, ~123,9k — тематику/язык решат гейт и перепись
     # supermarket_deals (4)
     "@msuaaaa": "supermarket_deals",
     "@kopiyochka1": "supermarket_deals",

@@ -33,7 +33,7 @@ import asyncio
 import json
 import re
 import sys
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -173,6 +173,19 @@ CANDIDATES = (
     ("@forainfo", "late"),
     ("@ekomarket_shop", "late"),
     ("@tadaua", "late"),
+    # "Дозаявка №8" (canon, 2026-08-08 evening — the operator's own TGStat pass in Chrome). Six
+    # public UA candidates, `late` for the same reason as the three above: their class is not
+    # settled in advance. Two of them arrive with the canon saying the THEME is the gate's to
+    # decide («тематику решит гейт» for @pavlushaiyava, «тематику/язык решат гейт и перепись» for
+    # @mandziak), so the segments in PROMPT-5c1-day2 are expectations, not findings.
+    # In the CANON's order, which is not the brief's: PROMPT-5c1-day2 groups them by expected
+    # segment, the canon lists them as it found them, and the list is the canon's.
+    ("@tvorcha_matusyua", "late"),
+    ("@mamaiagolodniy", "late"),
+    ("@educationwithloven", "late"),
+    ("@pavlushaiyava", "late"),
+    ("@lab_of_childhood", "late"),
+    ("@mandziak", "late"),
 )
 
 
@@ -666,7 +679,16 @@ def gate_todo(pending: list[tuple[str, str]], only: list[str] | None) -> list[tu
 async def run_gate(only: list[str] | None = None) -> int:
     """Deliverable 1 of PROMPT-5c1: the gate over the 62, up to the report. Writes no registry."""
     from build_audit_pack import git_state  # deferred: only the gate path needs it
+    from collect_5c1 import log_join, refuse_inside_flood_wait
     from discover_channels import WINDOW_DAYS, WINDOW_LIMIT
+
+    # Every gated candidate starts with a ResolveUsernameRequest, which is what an account-wide
+    # FloodWait is on. `collect_5c1.py` has refused to start inside that window since 07.08; this
+    # path did not, and on 2026-08-07 a single `--gate-5c1 --only` run walked straight into the
+    # wall and came back with 55,779 s. It cost nothing — Telegram returned the REMAINING time on
+    # the standing limit, clearing 10:01:27 against the recorded 10:02, so the window was not
+    # extended — but the refusal belongs here too, and it reads the same log the collector does.
+    refuse_inside_flood_wait()
 
     prior = prior_rows(PRIOR_SCAN)
     held_record = (
@@ -701,6 +723,21 @@ async def run_gate(only: list[str] | None = None) -> int:
         finally:
             await client.disconnect()
         if flood_wait is not None:
+            # Into the JOIN LOG, not only into this record: the log is where every phase reads
+            # "is the account walled" from, and a wall this path found but did not write there is
+            # a wall the collector walks into tomorrow.
+            log_join(
+                {
+                    "at": stamp(),
+                    "channel": "(gate)",
+                    "outcome": "floodwait",
+                    "seconds": flood_wait,
+                    "clears_at": (
+                        datetime.now(timezone.utc) + timedelta(seconds=flood_wait)
+                    ).isoformat(timespec="seconds"),
+                    "note": "hit by scripts/entry_check.py --gate-5c1",
+                }
+            )
             print(f"FloodWait: Telegram asks for {flood_wait}s — stopped early, re-run after that.")
 
     order = {handle: i for i, (handle, _) in enumerate(CANDIDATES)}

@@ -28,6 +28,17 @@ from market_pulse.entry_check import gate_verdict, script_mix  # noqa: E402
 CANON = REPO_ROOT / "docs" / "CHANNELS-launch.md"
 
 
+@pytest.fixture(autouse=True)
+def no_standing_wall(tmp_path, monkeypatch):
+    """The gate refuses to resolve inside a recorded FloodWait, and the record it reads is the
+    real `results/joins_5c1.jsonl`. Every test that drives the gate would otherwise depend on
+    whether the account happens to be walled today — so they get an empty log, and the one test
+    that is ABOUT the wall writes its own into the same path."""
+    import collect_5c1
+
+    monkeypatch.setattr(collect_5c1, "JOIN_LOG", tmp_path / "joins.jsonl")
+
+
 # --- the composition is the operator's, not the script's ---------------------------------------
 
 
@@ -110,7 +121,10 @@ def test_the_retail_addition_is_the_canons_own_and_carries_no_more_than_it_says(
     picks = canon_retail_5()
     assert picks == ["@forainfo", "@ekomarket_shop", "@tadaua"], picks
     assert "@NovusNews" not in picks
-    assert [handle for handle, _ in gate.CANDIDATES[-3:]] == picks
+    # Located by handle, not by tail position: "Дозаявка №8" appended six rows after these and a
+    # slice-based assertion would have broken on an addition it has nothing to do with.
+    order = [handle for handle, _ in gate.CANDIDATES]
+    assert [handle for handle in order if handle in set(picks)] == picks
 
 
 def test_the_retail_addition_is_gated_late_not_posts():
@@ -132,6 +146,53 @@ def test_only_narrows_the_loop_and_refuses_a_handle_the_gate_does_not_carry():
     ]
     with pytest.raises(SystemExit, match="@nosuchchannel"):
         gate.gate_todo(pending, ["@nosuchchannel"])
+
+
+def canon_harvest_6() -> list[str]:
+    """The six public candidates "Дозаявка №8" sends to the gate, read out of its own section.
+
+    The section runs over two bold sub-headings and ends at the privates track, so the listing is
+    cut at «Приватные гиганты» — everything after it is the deferred invite-link ledger, which
+    this phase does not touch. The five handle-less titles («Матусі України» and the rest) are not
+    matched by the handle regex, which is correct: they are a search task, not gate rows yet.
+    """
+    text = CANON.read_text(encoding="utf-8")
+    section = text[text.index("## Дозаявка №8") :]
+    return re.findall(r"@[A-Za-z0-9_]+", section[: section.index("Приватные гиганты")])
+
+
+def test_the_harvest_six_are_the_canons_own_and_stop_at_the_privates_track():
+    picks = canon_harvest_6()
+    assert picks == [
+        "@tvorcha_matusyua",
+        "@mamaiagolodniy",
+        "@educationwithloven",
+        "@pavlushaiyava",
+        "@lab_of_childhood",
+        "@mandziak",
+    ], picks
+    buckets = {handle: bucket for handle, bucket in gate.CANDIDATES}
+    assert set(picks) <= set(buckets), "a canon handle never reached the gate list"
+    assert {buckets[handle] for handle in picks} == {"late"}
+
+
+def test_the_two_expected_segments_the_canon_leaves_to_the_gate_are_marked_as_expectations():
+    """The canon says the THEME of @pavlushaiyava and @mandziak is the gate's to decide, and
+    PROMPT-5c1-day2 still assigns them a segment. Both are true and the tension is the point: the
+    segment is an expectation, and the comment beside each row in the script says so."""
+    import re as _re
+
+    text = CANON.read_text(encoding="utf-8")
+    section = text[text.index("## Дозаявка №8") :]
+    assert "тематику решит гейт" in " ".join(section.split())
+    assert "тематику/язык решат гейт и перепись" in " ".join(section.split())
+
+    source = (REPO_ROOT / "scripts" / "apply_gate_rulings_5c1.py").read_text(encoding="utf-8")
+    annotated = dict(
+        _re.findall(r'"(@[A-Za-z0-9_]+)": "(?:baby_food|health_fitness)",[ \t]+# (.+)', source)
+    )
+    assert "тематику решит гейт" in annotated["@pavlushaiyava"]
+    assert "тематику/язык решат гейт и перепись" in annotated["@mandziak"]
 
 
 def test_the_city_feeds_are_the_canons_own_and_all_of_them():
@@ -161,7 +222,8 @@ def test_the_candidate_list_is_the_canons_own():
     late = [(handle, "late") for handle in canon_sent_to_the_gate()]
     city = [(handle, "city") for handle in canon_city_feeds()]
     retail = [(handle, "late") for handle in canon_retail_5()]
-    assert list(gate.CANDIDATES) == canon_buckets() + late + city + retail
+    harvest = [(handle, "late") for handle in canon_harvest_6()]
+    assert list(gate.CANDIDATES) == canon_buckets() + late + city + retail + harvest
 
 
 def test_the_composition_is_the_62_plus_what_the_rulings_added():
@@ -169,11 +231,13 @@ def test_the_composition_is_the_62_plus_what_the_rulings_added():
         b: sum(1 for _, bucket in gate.CANDIDATES if bucket == b)
         for b in ("comments", "posts", "watch", "late", "city")
     }
-    # + the withdrawn "Дозаявка оператора" row, + the three national chains of "Дозаявка №5"
-    late = len(canon_sent_to_the_gate()) + 1 + len(canon_retail_5())
+    # + the withdrawn "Дозаявка оператора" row, + "Дозаявка №5"'s three chains, + №8's six
+    late = len(canon_sent_to_the_gate()) + 1 + len(canon_retail_5()) + len(canon_harvest_6())
     city = len(canon_city_feeds())
     assert counts == {"comments": 29, "posts": 18, "watch": 14, "late": late, "city": city}
-    assert len(gate.CANDIDATES) == 62 + len(canon_sent_to_the_gate()) + city + len(canon_retail_5())
+    assert len(gate.CANDIDATES) == (
+        62 + len(canon_sent_to_the_gate()) + city + len(canon_retail_5()) + len(canon_harvest_6())
+    )
     assert len({handle for handle, _ in gate.CANDIDATES}) == len(gate.CANDIDATES)
 
 
@@ -556,6 +620,19 @@ def test_a_floodwait_stops_the_gate_and_the_re_run_resumes(monkeypatch, tmp_path
     assert [row["handle"] for row in record["candidates"]] == ["@a"]
     assert checked == ["@a", "@b"], "the gate kept hammering after the wait"
 
+    # The gate now writes the wall into the join log, so the resume below is refused until the
+    # window passes — which is the rule, not a nuisance. Waiting it out is what the operator does;
+    # here the recorded window is simply moved into the past.
+    import collect_5c1
+
+    with pytest.raises(SystemExit, match="FloodWait is recorded until"):
+        drive(monkeypatch, tmp_path, handles)
+    rows = [json.loads(line) for line in collect_5c1.JOIN_LOG.read_text().splitlines() if line]
+    assert rows[-1]["outcome"] == "floodwait" and rows[-1]["seconds"] == 42
+    collect_5c1.JOIN_LOG.write_text(
+        json.dumps({**rows[-1], "clears_at": "2020-01-01T00:00:00+00:00"}) + "\n", encoding="utf-8"
+    )
+
     _, resumed, checked_again = drive(monkeypatch, tmp_path, handles)
     assert checked_again == ["@b", "@c"], "a resume must not re-resolve what is already recorded"
     assert [row["handle"] for row in resumed["candidates"]] == ["@a", "@b", "@c"]
@@ -636,3 +713,26 @@ def test_an_ordinary_failure_is_one_retryable_row_and_not_an_abort(monkeypatch, 
     _, resumed, checked_again = drive(monkeypatch, tmp_path, handles)
     assert checked_again == ["@b"]
     assert [row["verdict"] for row in resumed["candidates"]] == ["PASS", "PASS"]
+
+
+def test_the_gate_refuses_to_resolve_inside_a_flood_wait_window(monkeypatch, tmp_path):
+    """The incident this exists for: on 2026-08-07 a `--gate-5c1 --only` run walked into the
+    standing wall because only the collector refused. Every gated candidate begins with a
+    ResolveUsernameRequest, so the gate belongs behind the same guard, reading the same log."""
+    import collect_5c1
+
+    log = collect_5c1.JOIN_LOG
+    log.write_text(
+        json.dumps(
+            {
+                "at": "2026-08-07T14:00:00+00:00",
+                "channel": "@a",
+                "outcome": "floodwait",
+                "clears_at": "2099-01-01T00:00:00+00:00",
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    with pytest.raises(SystemExit, match="FloodWait is recorded until"):
+        asyncio.run(gate.run_gate(["@mandziak"]))

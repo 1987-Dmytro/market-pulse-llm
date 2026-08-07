@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-07T11:03:25+00:00",
+  "generated_at": "2026-08-07T18:31:48+00:00",
   "phase": "5c1",
   "deliverable": "1 — the track-R entry gate over the launch composition",
   "contract": "docs/SPEC.md §3.11 (4); docs/PROMPT-5c1.md Deliverable 1",
   "canon": "docs/CHANNELS-launch.md — operator verdict 2026-08-06 plus that evening's addition. The composition is the operator's choice; this gate verifies each entry against the bucket it was chosen into.",
-  "complete": true,
-  "flood_wait_seconds": null,
+  "complete": false,
+  "flood_wait_seconds": 55779,
   "read_only": "no group joins, no store writes, no registry edit in this pass",
   "post_sample": 50,
   "window_days": 28,
@@ -59,6 +59,10 @@
       "late": {
         "posts_expected": true,
         "group_expected": null
+      },
+      "city": {
+        "posts_expected": true,
+        "group_expected": null
       }
     }
   },
@@ -69,7 +73,32 @@
     "handles_without_a_prior_row": [
       "@marketopt_official",
       "@marketopt_promo",
-      "@akcii_skidki_plt"
+      "@akcii_skidki_plt",
+      "@mo3ambik",
+      "@poltava_informue",
+      "@poltava_misto",
+      "@suspilnepoltava",
+      "@telegraf_kremenchuk",
+      "@kremenchug_live",
+      "@gorishnie_plavni1",
+      "@myrhorodtown",
+      "@Hadiach_telegram",
+      "@globine1",
+      "@piryatingromada",
+      "@Karlivka_live",
+      "@PirOperative",
+      "@dikankaa",
+      "@zinkivnews",
+      "@LHVC_info",
+      "@forainfo",
+      "@ekomarket_shop",
+      "@tadaua",
+      "@tvorcha_matusyua",
+      "@mamaiagolodniy",
+      "@educationwithloven",
+      "@pavlushaiyava",
+      "@lab_of_childhood",
+      "@mandziak"
     ]
   },
   "candidates": [
@@ -4392,37 +4421,134 @@
         "FAIL": 2,
         "FLAG": 0,
         "ERROR": 0
+      },
+      "city": {
+        "n": 0,
+        "PASS": 0,
+        "FAIL": 0,
+        "FLAG": 0,
+        "ERROR": 0
       }
     }
   },
   "registry_written": true,
   "note": "PROMPT-5c1 D1 stops here: every FAIL and FLAG goes to the operator, who rules in chat; the rulings land in each row's `ruling`, and only then is config/registry.yaml written. data/entry_check_report.json (the 2026-07-27 run) is untouched, and the four registry channels are out of this gate's scope.",
-  "git": {
-    "commit": "2fc784a673ddb2015e0c67307fa6616e0497b6e6",
-    "dirty": [
-      "config/registry.yaml",
-      "docs/CHANNELS-launch.md",
-      "docs/SPEC.md",
-      "implementation-notes.md",
-      "knowledge/daily_logs/2026-08-07.md",
-      "knowledge/hot.md",
-      "knowledge/index.md",
-      "scripts/apply_gate_rulings_5c1.py",
-      "scripts/collect_5c1.py",
-      "scripts/entry_check.py",
-      "scripts/late_batch_5c1.py",
-      "scripts/theme_screen_5c1.py",
-      "src/market_pulse/registry.py",
-      "tests/test_collect_5c1.py",
-      "tests/test_entry_gate_5c1.py",
-      "tests/test_gate_rulings_5c1.py",
-      "tests/test_late_batch_5c1.py",
-      "results/language_census_5c1.json",
-      "results/language_census_5c1.preregistration.json",
-      "scripts/language_census_5c1.py",
-      "tests/test_language_census_5c1.py",
-      "tests/test_theme_screen_5c1.py"
-    ]
+  "rulings": {
+    "applied_at": "2026-08-07T17:41:06+00:00",
+    "canon": "docs/CHANNELS-launch.md, sections 'Рулинги гейта 5c1 (2026-08-07)' and 'Рулинги, волна 2'",
+    "composition": {
+      "comments": [
+        "@HealthPsycholog",
+        "@chifit_family",
+        "@denisovapro",
+        "@eftforhealth",
+        "@kkondr_fit",
+        "@klopotenkofood",
+        "@kopiyochka1",
+        "@olgaa_trainer",
+        "@polyakova_fitness",
+        "@retsepty",
+        "@sashafitnesslife",
+        "@smirnov108",
+        "@tarilka_malyuka",
+        "@useful_healthy_fitness_menu",
+        "@ya_Nenka"
+      ],
+      "posts": [
+        "@Wellosophy_Lesya",
+        "@anastasiiadavydiukfitness",
+        "@atb_aktsiyi",
+        "@blwbabies",
+        "@dpssgovua",
+        "@epicentrk_sale",
+        "@gaid_skobioale",
+        "@konservacia_kulinaria",
+        "@korolevakuchni",
+        "@mameni_recepti",
+        "@marketopt_promo",
+        "@maudau",
+        "@recepti",
+        "@vylkachannel"
+      ],
+      "watch": [
+        "@Evgenija_dutjache_menu",
+        "@dimakaminskyifit",
+        "@dutyache_menu",
+        "@hydnem_prosto",
+        "@itsmamix",
+        "@skhudnennya"
+      ],
+      "excluded": [
+        "@ATB_FANatik",
+        "@Mambabyua",
+        "@Pro_Detyintumama",
+        "@akcii_skidki_plt",
+        "@baby_broccoli_club",
+        "@chekh_yevheniia1982",
+        "@cozymotherhood",
+        "@discountua1",
+        "@intensiv_Mamiev",
+        "@katyal55",
+        "@kolyastravinsky",
+        "@kuksa2022",
+        "@kulinariya_chat_a",
+        "@marketopt_official",
+        "@netainaya_vecherya",
+        "@offspringrus",
+        "@polinalykovagv",
+        "@prostetsofa",
+        "@regina_tatlybaeva",
+        "@retsepty10",
+        "@retsepty4",
+        "@retsepty5",
+        "@rezeptmoi",
+        "@tretyakovaele",
+        "@uasaler",
+        "@viktoria_sshh",
+        "@whitecode_zny",
+        "@whowears",
+        "@znishkom"
+      ]
+    },
+    "counts": {
+      "registry_before": 41,
+      "comments": 15,
+      "posts": 14,
+      "watch": 6,
+      "excluded": 29,
+      "sources_after": 39
+    },
+    "joins_authorised": [
+      "@HealthPsycholog",
+      "@chifit_family",
+      "@denisovapro",
+      "@eftforhealth",
+      "@kkondr_fit",
+      "@klopotenkofood",
+      "@kopiyochka1",
+      "@olgaa_trainer",
+      "@polyakova_fitness",
+      "@retsepty",
+      "@sashafitnesslife",
+      "@smirnov108",
+      "@tarilka_malyuka",
+      "@useful_healthy_fitness_menu",
+      "@ya_Nenka"
+    ],
+    "source_type_ruling": {
+      "@uasaler": "aggregator",
+      "@znishkom": "aggregator",
+      "@whitecode_zny": "aggregator",
+      "@atb_aktsiyi": "aggregator",
+      "@ATB_FANatik": "aggregator",
+      "@epicentrk_sale": "official_retail",
+      "@dpssgovua": "government",
+      "@marketopt_promo": "official_retail",
+      "@forainfo": "official_retail",
+      "@ekomarket_shop": "official_retail",
+      "@tadaua": "official_retail"
+    },
+    "note": "The gate's rows are unchanged: an excluded channel was still measured, and its `ruling` is what says it is out. Registry names and comments_enabled are read off this record, not typed."
   },
   "notes": {
     "hvylynka_search": {
@@ -4604,121 +4730,21 @@
       }
     }
   },
-  "rulings": {
-    "applied_at": "2026-08-07T17:41:06+00:00",
-    "canon": "docs/CHANNELS-launch.md, sections 'Рулинги гейта 5c1 (2026-08-07)' and 'Рулинги, волна 2'",
-    "composition": {
-      "comments": [
-        "@HealthPsycholog",
-        "@chifit_family",
-        "@denisovapro",
-        "@eftforhealth",
-        "@kkondr_fit",
-        "@klopotenkofood",
-        "@kopiyochka1",
-        "@olgaa_trainer",
-        "@polyakova_fitness",
-        "@retsepty",
-        "@sashafitnesslife",
-        "@smirnov108",
-        "@tarilka_malyuka",
-        "@useful_healthy_fitness_menu",
-        "@ya_Nenka"
-      ],
-      "posts": [
-        "@Wellosophy_Lesya",
-        "@anastasiiadavydiukfitness",
-        "@atb_aktsiyi",
-        "@blwbabies",
-        "@dpssgovua",
-        "@epicentrk_sale",
-        "@gaid_skobioale",
-        "@konservacia_kulinaria",
-        "@korolevakuchni",
-        "@mameni_recepti",
-        "@marketopt_promo",
-        "@maudau",
-        "@recepti",
-        "@vylkachannel"
-      ],
-      "watch": [
-        "@Evgenija_dutjache_menu",
-        "@dimakaminskyifit",
-        "@dutyache_menu",
-        "@hydnem_prosto",
-        "@itsmamix",
-        "@skhudnennya"
-      ],
-      "excluded": [
-        "@ATB_FANatik",
-        "@Mambabyua",
-        "@Pro_Detyintumama",
-        "@akcii_skidki_plt",
-        "@baby_broccoli_club",
-        "@chekh_yevheniia1982",
-        "@cozymotherhood",
-        "@discountua1",
-        "@intensiv_Mamiev",
-        "@katyal55",
-        "@kolyastravinsky",
-        "@kuksa2022",
-        "@kulinariya_chat_a",
-        "@marketopt_official",
-        "@netainaya_vecherya",
-        "@offspringrus",
-        "@polinalykovagv",
-        "@prostetsofa",
-        "@regina_tatlybaeva",
-        "@retsepty10",
-        "@retsepty4",
-        "@retsepty5",
-        "@rezeptmoi",
-        "@tretyakovaele",
-        "@uasaler",
-        "@viktoria_sshh",
-        "@whitecode_zny",
-        "@whowears",
-        "@znishkom"
-      ]
-    },
-    "counts": {
-      "registry_before": 41,
-      "comments": 15,
-      "posts": 14,
-      "watch": 6,
-      "excluded": 29,
-      "sources_after": 39
-    },
-    "joins_authorised": [
-      "@HealthPsycholog",
-      "@chifit_family",
-      "@denisovapro",
-      "@eftforhealth",
-      "@kkondr_fit",
-      "@klopotenkofood",
-      "@kopiyochka1",
-      "@olgaa_trainer",
-      "@polyakova_fitness",
-      "@retsepty",
-      "@sashafitnesslife",
-      "@smirnov108",
-      "@tarilka_malyuka",
-      "@useful_healthy_fitness_menu",
-      "@ya_Nenka"
-    ],
-    "source_type_ruling": {
-      "@uasaler": "aggregator",
-      "@znishkom": "aggregator",
-      "@whitecode_zny": "aggregator",
-      "@atb_aktsiyi": "aggregator",
-      "@ATB_FANatik": "aggregator",
-      "@epicentrk_sale": "official_retail",
-      "@dpssgovua": "government",
-      "@marketopt_promo": "official_retail",
-      "@forainfo": "official_retail",
-      "@ekomarket_shop": "official_retail",
-      "@tadaua": "official_retail"
-    },
-    "note": "The gate's rows are unchanged: an excluded channel was still measured, and its `ruling` is what says it is out. Registry names and comments_enabled are read off this record, not typed."
+  "git": {
+    "commit": "789c3522c59a6b6083629bed759c46af003e3dfa",
+    "dirty": [
+      "docs/CHANNELS-launch.md",
+      "docs/STATUS.md",
+      "knowledge/daily_logs/2026-08-07.md",
+      "knowledge/index.md",
+      "scripts/apply_gate_rulings_5c1.py",
+      "scripts/entry_check.py",
+      "tests/test_entry_gate_5c1.py",
+      "tests/test_gate_rulings_5c1.py",
+      "docs/PROMPT-5c1-day2.md",
+      "results/market_screen_5c1.json",
+      "scripts/market_screen_5c1.py",
+      "tests/test_market_screen_5c1.py"
+    ]
   }
 }
