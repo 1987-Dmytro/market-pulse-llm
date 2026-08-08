@@ -282,9 +282,13 @@ cd /workspace/repo && PYTHONPATH=src /workspace/venv/bin/python -c "
 from pathlib import Path; import sys; sys.path.insert(0,'src')
 from market_pulse import records
 print(records.artifact_sha256(Path('results/train/45h2-arm-a/adapter')))"   # b3ca630846c7…
-HF_HOME=/workspace/hf /workspace/venv/bin/python -c "
-from huggingface_hub import snapshot_download
-snapshot_download('google/gemma-4-31b-it', revision='842da3794eaa0b77d5f08bae87a17459d91ff475')"
+export HF_HOME=/workspace/hf && mkdir -p /workspace/hf
+# Phase 4a's own command, unchanged. Resumable, and it lands on the volume, not the
+# container disk. 4a's comment beside it says 62 GB; volume_calc_5c1 records 59 —
+# budget for the larger of the two readings.
+/workspace/venv/bin/hf download google/gemma-4-31b-it \
+  --revision 842da3794eaa0b77d5f08bae87a17459d91ff475
+du -sh /workspace/hf
 cp scripts/start_5b_worker.sh /workspace/start.sh && chmod +x /workspace/start.sh
 ```
 
@@ -292,6 +296,8 @@ Then **prove the cold start here, on the ~$0.53/h pod, before a serverless secon
 the 5b.1 pattern: launch the worker under the §A.1 environment with `/workspace` paths, watch
 the *process* and not the log (`pgrep -af`), and require three things of it: `info` names
 `adapter_sha256 b3ca630846c7…`, the three pinned libraries match, and a T2 row parses.
+`export RUNPOD_POD_ID=<POD_ID>` first: it is set for the container's main process and **not**
+for an ssh session, so without it the proof's `runtime.pod_id` is `None` (4a §5).
 
 ```bash
 runpodctl pod delete <POD_ID>
@@ -398,20 +404,23 @@ What it is compared against, all from committed records:
 | cold start | 46.2 s off local NVMe · **278.9 s off a network volume** |
 | $/pass (758 rows + one cold start) | **0.4611** |
 
-Pre-registered arithmetic, so the answer is not argued for after the number lands:
+Pre-registered arithmetic, so the answer is not argued for after the number lands. **Both
+inputs are this run's own measurements** — the s/row below is the one the endpoint measures,
+never the pod's:
 
-- serverless per pass = `(cold_start_s + 3085.4) × usd_per_second`
-- it beats the pod's $0.4611/pass only if the offered class bills under **$0.000137/s
-  (≈ $0.49/h)** — derived as `0.4611 / (278.9 + 3085.4)`
-- at the probe's observed **$0.00016/s** (`docs/probe-serverless-20260808.md`, a 16 GB flex
-  class — a **prior**, and not the class this endpoint will run on), a pass is **$0.538**, i.e.
-  **17% more than the pod**, of which **$0.045 is the boot alone** — 10% of a whole pod pass
-  spent before a single row.
+- serverless per pass = `(measured_cold_start_s + 758 × measured_seconds_per_row) × measured_usd_per_second`
+- it beats the pod's **$0.4611/pass** when that product is smaller. Solve it for the rate the
+  offered class may bill and report the margin either way.
 
-So the honest prior is that serverless may well be *dearer per row* than the stop-after pod,
-and its case rests on what the pod path costs in allocation latency and staging minutes rather
-than on $/row. Report the measured number against $0.5993/1000 and let the operator decide;
-do not present a saving that the arithmetic above does not show.
+**The prior, and exactly how far it can be trusted.** Filling the formula with the numbers
+that exist today — 4.071 s/row and a 278.9 s volume cold start, both measured on an **A6000**,
+and the probe's observed **$0.00016/s** on a **16 GB flex class** — gives $0.538 a pass, 17%
+dearer than the pod, $0.045 of it the boot alone. **Every one of those three numbers comes off
+hardware this endpoint will probably not run on.** A 4090 is different silicon: at 3.0 s/row
+the same pass is ~$0.41 and serverless wins instead. So the prior says "not obviously cheaper",
+which is a reason to measure rather than a result — quote it as a prior, and report the
+measured pass against $0.5993/1000 and $0.4611/pass without narrating a saving the run's own
+numbers do not show.
 
 ### C.9 Close the session
 

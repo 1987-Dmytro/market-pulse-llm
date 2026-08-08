@@ -4240,15 +4240,18 @@ this session cannot test one. Inventing `--workers-min 0` would put an unverifie
 copy-paste runbook; the runbook states the requirement and tells srv-2b to confirm it in the
 console before the smoke.
 
-**Dv6 — the cost comparison is pre-registered as arithmetic, and it does not favour serverless.**
-Derived from committed numbers only: the pod is $0.4611 per 758-row pass and $0.5993/1000 rows
-(`results/serving_5b.json :: adopted`) at 4.071 s/row; a serverless pass is
-`(cold_start + 3085.4 s) × usd_per_second`, so it beats the pod only under **$0.000137/s
-(≈$0.49/h)**. At the probe's observed $0.00016/s — a **prior**, on a 16 GB flex class that is not
-the class this endpoint will run on — a pass is **$0.538, 17% dearer**, of which **$0.045 is the
-278.9 s volume cold start alone**. Written before the run rather than after it, so the reading
-cannot be narrated into a saving. The case for serverless may still be sound; it just does not
-rest on $/row, and the runbook says so.
+**Dv6 — the cost comparison is pre-registered as arithmetic, and its prior is weaker than it
+first looked.** The pod side is committed and solid: $0.4611 per 758-row pass, $0.5993/1000 rows
+(`results/serving_5b.json :: adopted`), 4.071 s/row. The serverless side is
+`(measured_cold_start + 758 × measured_seconds_per_row) × measured_usd_per_second` — and the
+first draft of this runbook wrote 3085.4 s into that formula as a constant, which is 758 × 4.071
+**on an A6000**. D7 says the card srv-2b most likely gets is a 4090. Different silicon, different
+s/row, and the whole conclusion moves with it: at the probe's $0.00016/s the A6000 numbers give
+$0.538 a pass (17% dearer, $0.045 of it the 278.9 s volume boot), while the same rate at 3.0 s/row
+gives ~$0.41 and serverless wins. All three inputs to that prior — the rate, the s/row and the
+cold start — were measured on hardware this endpoint will probably not run on. So the formula now
+takes the run's OWN measurements and the $0.538 is labelled a prior, not a finding. Caught in
+review before the report quoted the 17% as a result.
 
 **Dv7 — the 24 GB fit is a measurement with an abort rung, not an assumption.** D7 measured that
 only `ADA_24` allocated with a volume attached, and this contract authorises 24 GB when no 48 GB
@@ -4265,3 +4268,20 @@ runtime and that `assert_runtime_matches` omits the GPU on purpose.
 `handler.settings`, `local_llm.CHAT_TEMPLATE`, `local_llm.QUANTIZATION` and the records the pins
 come from. A `results/*.json` config file would have been a measurement record with no
 measurement behind it — a new genre for no reader, and a second place for the pins to drift.
+
+**Dv9 — the 59 GB download is Phase 4a's recorded command, not a fresh one.** A first draft wrote
+a `snapshot_download(...)` call that has never run in this project, for the longest and most
+expensive-to-get-wrong step in staging, against a gated repo. `scripts/runbook_4a.md` §4 has the
+command that actually did this download — `hf download google/gemma-4-31b-it --revision <SHA>`
+under an exported `HF_HOME`, resumable and landing on the volume — and that is what §C.3 now
+prints. Two size readings ride along and the runbook says to budget the larger: 4a's own comment
+says 62 GB, `volume_calc_5c1.json` records 59. 4a's §5 note about `RUNPOD_POD_ID` not being
+inherited over ssh is carried into the cold-start proof for the same reason.
+
+**Dv10 — `smoke_5b.py`'s serverless branch was checked and needs no fix.** The concern was real:
+`deployment(endpoint_id)` runs on the serverless path only, that path never executed (5b aborted
+first, and `results/serving_5b.json` carries the pod-loopback shape), and it runs AFTER the eight
+rows are scored — so a raise there would lose a record whose cold start and rows were already
+billed. It cannot raise: the two `cli()` calls sit inside a `try` that catches `OSError`,
+`CalledProcessError`, `ValueError` and `KeyError` and returns `{"unreadable": …}`. Recorded rather
+than left silent, because "checked and clear" is a different statement from "not looked at".
