@@ -1,7 +1,7 @@
 {
   "step": "srv-2c",
   "contract": "docs/PROMPT-srv-2c.md",
-  "written_at": "2026-08-08T19:45:28+00:00",
+  "written_at": "2026-08-08T19:49:10+00:00",
   "outcome": "answered-and-the-answer-is-that-it-works",
   "the_one_question": "Does `bash /runpod-volume/start.sh` execute as the worker's main process, and if yes, where does it stop before its first print?",
   "the_answer": "It executes, and it does not stop. The wrapped start command produced a 20,827-byte log on the volume showing the RunPod SDK's serverless job loop booting, passing its seven fitness checks, taking the queued job, loading 1,188 weight shards and finishing. The job returned COMPLETED with the full `info` payload. The serverless job-loop branch of scripts/start_5b_worker.sh -- which had never executed in this project before today -- works end to end on the staged volume.",
@@ -204,7 +204,7 @@
     "anchor_file": "results/spend_srv2c.json",
     "anchor_balance": 15.4915993671,
     "committed_before_the_first_billable_action": "commit fc9cf02",
-    "step_spent_usd_at_close": 0.0506,
+    "step_spent_usd_at_close": 0.0654,
     "reading": "balance delta, the binding one; billing rows for today's own resources have not settled",
     "what_was_bought": [
       "one serverless job: delay 15.864 s + execution 158.424 s at $0.000307/s",
@@ -213,9 +213,9 @@
     ],
     "settlement_lag_note": "neither today's endpoint nor today's pod has a billing row yet, so the final figure will rise above the $0.0506 the delta shows. The projection from the measured rates is about $0.10-0.11.",
     "phase4": {
-      "spent_usd": 19.559,
+      "spent_usd": 19.5738,
       "cap_usd": 25.0,
-      "remaining_usd": 5.441
+      "remaining_usd": 5.4262
     }
   },
   "the_guard_fix": {
@@ -257,11 +257,8 @@
     "pod": "xd5stdxro9cal1, {'deleted': true}"
   },
   "git": {
-    "commit_this_record_was_written_on": "cf4cf71812ac2e1afe72de531215c0a2ec1c8316",
-    "dirty": [
-      " M results/spend_phase4.json",
-      " M results/spend_srv2c.json"
-    ],
+    "commit_this_record_was_written_on": "b30652d710b0ba4953996844d31ab028df31f836",
+    "dirty": [],
     "note": "a record cannot name the commit that adds it; this is HEAD at the moment of writing, and the commit that carries the file is its child."
   }
 }
