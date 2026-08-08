@@ -13,6 +13,12 @@
       "balance": 15.44101743,
       "step_spent_usd": 0.0506,
       "note": "srv-2c step 3: boot log read from the volume, repo refreshed to cf4cf71, pod deleted"
+    },
+    {
+      "at": "2026-08-08T20:17:40+00:00",
+      "balance": 15.3910289189,
+      "step_spent_usd": 0.1006,
+      "note": "srv-2c control: the UNWRAPPED start command COMPLETED -- the wrapper was not the cause"
     }
   ],
   "gpu_note": "RunPod account balance read before the first pod of srv2c. Step spend = this anchor minus the balance now, enforced against $0.75. The SPEC amendment 3.4 (4) phase cap is enforced separately, against results/spend_phase4.json, and neither anchor may be regenerated."

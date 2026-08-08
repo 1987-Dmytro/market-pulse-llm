@@ -4674,3 +4674,35 @@ codebase. It cannot exclude a fault that comes and goes on a timescale of minute
 time, about $0.054. A hang pays for the whole observation window instead, so the window is cut to
 **300 s** (`--execution-timeout 300`) rather than the contract's 600: the wrapped job was picked up
 in 15.9 s and finished at 174 s, so 300 s is a generous margin and caps the downside near $0.10.
+
+**Result: the unwrapped command COMPLETED, so the wrapper was not the cause.** Endpoint
+`0nfuzwkyd9tp39`, template `pzay2h6m5j` with argv exactly `["bash","/runpod-volume/start.sh"]`.
+Job `2df84a0e-…-e2`: **`delayTime 26 875 ms`, `executionTime 212 041 ms`, COMPLETED**, same `info`
+payload, `adapter b3ca6308…`, `peft 0.20.0`, RTX 4090. The pre-registered reading applies without
+interpretation: **srv-2b's hang was the platform on the evening of 08-08, not our container and not
+our start command.** Hypothesis 2 is promoted to rank 1 in the record; hypothesis 1 (a blocked
+stdout write) is demoted — it may still describe what happened *then*, if the log plane was
+degraded, but it is not a standing property of running without the redirect.
+
+**The control is clean on the code axis, which was worth checking.** The volume's `repo/` was
+refreshed to `cf4cf71` between the two runs, so the control ran a newer checkout than the wrapped
+run's `48948d7a`. `git diff 48948d7a..cf4cf71 -- scripts/serve_handler.py scripts/start_5b_worker.sh
+src/market_pulse/` is **empty**: not one line of what the worker executes moved. The only difference
+between the two runs is the start command.
+
+**One observation, deliberately not called a finding.** The unwrapped run executed in 212.0 s
+against the wrapped run's 158.4 s — 34% longer. That is directionally consistent with stdout costing
+something (the weight loader emits ~1 188 tqdm updates, into a file when wrapped and into the
+container's log pipe when not), but it is n=1 against n=1 on different workers, and the delay times
+differ too (26.9 s vs 15.9 s). It would take a handful of paired runs to be a number.
+
+**Dv32 — the control's price was under its own projection.** Projected $0.054 for a completing run
+with a ceiling near $0.10; the delta reads **$0.1006 − $0.0751 = $0.0255** so far and is still
+settling. Both endpoints and templates deleted at 20:17:27, `pod list -a` → `[]`, `serverless list`
+→ `[]`, volume alone. **srv-2c closes at $0.1006 of its $0.75 cap.**
+
+**What this changes about srv-2b's record.** `results/d7_reread_srv2b.json` says the fault "is
+ours". That sentence is now wrong and the correction lives here and in `results/srv2c_bootlog.json`
+rather than in that file — a record of what a session observed is not rewritten by a later one.
+What srv-2b actually established stands: the class allocates with a volume, the model fits, the
+stack matches, `workersMin 0` is real. What it inferred about our container does not.

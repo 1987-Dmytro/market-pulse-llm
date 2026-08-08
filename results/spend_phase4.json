@@ -136,6 +136,13 @@
       "spent_usd": 19.559,
       "remaining_usd": 5.441,
       "note": "srv-2c step 3: boot log read from the volume, repo refreshed to cf4cf71, pod deleted"
+    },
+    {
+      "at": "2026-08-08T20:17:40+00:00",
+      "balance": 15.3910289189,
+      "spent_usd": 19.609,
+      "remaining_usd": 5.391,
+      "note": "srv-2c control: the UNWRAPPED start command COMPLETED -- the wrapper was not the cause"
     }
   ]
 }

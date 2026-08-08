@@ -168,18 +168,20 @@
   },
   "ranked_hypotheses_for_srv2b": [
     {
-      "rank": 1,
-      "hypothesis": "a blocked write to an undrained stdout pipe. start.sh execs `python -u`, so every print goes straight to fd 1; if RunPod's log collector stopped draining the container's pipe, the first write past the 64 KB buffer blocks forever.",
-      "fits": "zero console lines at any level; a worker 'running' with a job it never took; the console not rendering for either side; and a redirect to a file curing it.",
-      "against": "the vendor mock-worker on the same volume/DC/class completed that evening -- though it prints far less and its job took 144 ms.",
-      "testable_for": "~$0.06, by re-running the unwrapped command"
-    },
-    {
       "rank": 2,
       "hypothesis": "a transient platform fault in EU-RO-1's serverless plane on 08-08",
       "fits": "everything srv-2b saw, and the fact that nothing was changed on the volume",
       "against": "the mock-worker control completed on the same class the same evening",
-      "testable_for": "the same $0.06 -- the two hypotheses share one experiment"
+      "testable_for": "the same $0.06 -- the two hypotheses share one experiment",
+      "verdict_after_the_control": "PROMOTED to rank 1. Two runs twenty minutes apart, one wrapped and one not, both answered on the same volume, datacenter and class. What changed since srv-2b is the platform, not our start command."
+    },
+    {
+      "rank": 1,
+      "hypothesis": "a blocked write to an undrained stdout pipe. start.sh execs `python -u`, so every print goes straight to fd 1; if RunPod's log collector stopped draining the container's pipe, the first write past the 64 KB buffer blocks forever.",
+      "fits": "zero console lines at any level; a worker 'running' with a job it never took; the console not rendering for either side; and a redirect to a file curing it.",
+      "against": "the vendor mock-worker on the same volume/DC/class completed that evening -- though it prints far less and its job took 144 ms.",
+      "testable_for": "~$0.06, by re-running the unwrapped command",
+      "verdict_after_the_control": "DEMOTED. The unwrapped command COMPLETED, so a blocked stdout write is not a standing property of running our container without the redirect. It could still describe what happened on 08-08 if the log plane was degraded THEN, but it is no longer the hypothesis the evidence points at."
     },
     {
       "rank": 3,
@@ -259,6 +261,90 @@
   "git": {
     "commit_this_record_was_written_on": "b30652d710b0ba4953996844d31ab028df31f836",
     "dirty": [],
-    "note": "a record cannot name the commit that adds it; this is HEAD at the moment of writing, and the commit that carries the file is its child."
+    "note": "a record cannot name the commit that adds it; this is HEAD at the moment of writing, and the commit that carries the file is its child.",
+    "commit_the_control_was_written_on": "d1c3aaf5d78846b391017b33c9381ba09cb29918"
+  },
+  "unwrapped_control": {
+    "why": "The operator authorised it on the srv-2c report at ~$0.06. srv-2c answered its own question but could not say why srv-2b hung, because two things differed: the wrapper and a day of platform time. This holds the platform fixed -- same evening, same volume, same datacenter, same class, twenty minutes apart -- and moves only the start command back to srv-2b's.",
+    "authorised_at": "2026-08-08, operator, in chat",
+    "registered_before_the_spend": "implementation-notes.md at commit d1c3aaf",
+    "outcome": "the-platform-not-the-wrapper",
+    "verdict": "The unwrapped command -- srv-2b's exact argv ['bash','/runpod-volume/start.sh'] -- was picked up and answered. The wrapper was NOT what fixed srv-2c, so the wrapper was not what broke srv-2b. Pre-registered reading: srv-2b's hang was the platform on the evening of 08-08, not our container and not our start command.",
+    "written_at": "2026-08-08T20:18:04+00:00",
+    "template_id": "pzay2h6m5j",
+    "docker_start_cmd": [
+      "bash",
+      "/runpod-volume/start.sh"
+    ],
+    "identical_to_srv2b_argv": true,
+    "endpoint_id": "0nfuzwkyd9tp39",
+    "endpoint_created_at": "2026-08-08T20:12:57Z",
+    "execution_timeout_ms": 300000,
+    "why_300_not_600": "a hang pays for the observation window, not for work. The wrapped job was picked up in 15.9 s and finished at 174 s, so 300 s is a generous margin that caps the downside near $0.10 instead of $0.18.",
+    "submitted_at": "2026-08-08T20:13:05Z",
+    "job_id": "2df84a0e-4cf3-44f2-972f-548210e967af-e2",
+    "status": "COMPLETED",
+    "delay_time_ms": 26875,
+    "execution_time_ms": 212041,
+    "worker_id": "a9c0t6ib90uiru",
+    "output": {
+      "adapter_dir": "/runpod-volume/repo/results/train/45h2-arm-a/adapter",
+      "adapter_sha256": "b3ca630846c7e75c5e7058ce45804c45a6bff5c49dcf2389cb8cdda0b7a68a6c",
+      "chat_template": {
+        "add_generation_prompt": true,
+        "enable_thinking": false
+      },
+      "max_new_tokens": 256,
+      "merge_state": "unmerged-adapter",
+      "merged_provenance": null,
+      "merged_sha256": null,
+      "model": "google/gemma-4-31b-it",
+      "quantization": {
+        "bnb_4bit_compute_dtype": "bfloat16",
+        "bnb_4bit_quant_type": "nf4",
+        "bnb_4bit_use_double_quant": true,
+        "load_in_4bit": true
+      },
+      "repo_commit": "cf4cf71812ac2e1afe72de531215c0a2ec1c8316",
+      "revision_requested": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+      "runtime": {
+        "accelerate": "1.14.0",
+        "bitsandbytes": "0.50.0",
+        "cuda_runtime": "12.8",
+        "driver": "580.173.02",
+        "gpu": "NVIDIA GeForce RTX 4090",
+        "gpu_count": 1,
+        "gpu_memory_total": "24564 MiB",
+        "model_revision": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+        "peft": "0.20.0",
+        "pod_id": "a9c0t6ib90uiru",
+        "revision_requested": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+        "runpod": "1.11.0",
+        "torch": "2.8.0+cu128",
+        "transformers": "5.14.1",
+        "weights_requested": "google/gemma-4-31b-it"
+      },
+      "serving_config": "A",
+      "weights_dir": "google/gemma-4-31b-it"
+    },
+    "poll_transcript": "[t+0s] 20:13:14 health={\"jobs\":{\"completed\":0,\"failed\":0,\"inProgress\":0,\"inQueue\":1,\"retried\":0},\"workers\":{\"idle\":1,\"initializing\":0,\"ready\":1,\"running\":0,\"throttled\":0,\"unhealthy\":0}}\n        status={\"id\":\"2df84a0e-4cf3-44f2-972f-548210e967af-e2\",\"status\":\"IN_QUEUE\"}\n[t+20s] 20:13:35 health={\"jobs\":{\"completed\":0,\"failed\":0,\"inProgress\":1,\"inQueue\":0,\"retried\":0},\"workers\":{\"idle\":1,\"initializing\":0,\"ready\":1,\"running\":0,\"throttled\":0,\"unhealthy\":0}}\n        status={\"delayTime\":26875,\"id\":\"2df84a0e-4cf3-44f2-972f-548210e967af-e2\",\"status\":\"IN_PROGRESS\",\"workerId\":\"a9c0t6ib90uiru\"}\n[t+41s] 20:13:55 health={\"jobs\":{\"completed\":0,\"failed\":0,\"inProgress\":1,\"inQueue\":0,\"retried\":0},\"workers\":{\"idle\":0,\"initializing\":0,\"ready\":0,\"running\":1,\"throttled\":0,\"unhealthy\":0}}\n        status={\"delayTime\":26875,\"id\":\"2df84a0e-4cf3-44f2-972f-548210e967af-e2\",\"status\":\"IN_PROGRESS\",\"workerId\":\"a9c0t6ib90uiru\"}\n[t+61s] 20:14:15 health={\"jobs\":{\"completed\":0,\"failed\":0,\"inProgress\":1,\"inQueue\":0,\"retried\":0},\"workers\":{\"idle\":0,\"initializing\":0,\"ready\":0,\"running\":1,\"throttled\":0,\"unhealthy\":0}}\n        status={\"delayTime\":26875,\"id\":\"2df84a0e-4cf3-44f2-972f-548210e967af-e2\",\"status\":\"IN_PROGRESS\",\"workerId\":\"a9c0t6ib90uiru\"}\n[t+81s] 20:14:36 health={\"jobs\":{\"completed\":0,\"failed\":0,\"inProgress\":1,\"inQueue\":0,\"retried\":0},\"workers\":{\"idle\":0,\"initializing\":0,\"ready\":0,\"running\":1,\"throttled\":0,\"unhealthy\":0}}\n        status={\"delayTime\":26875,\"id\":\"2df84a0e-4cf3-44f2-972f-548210e967af-e2\",\"status\":\"IN_PROGRESS\",\"workerId\":\"a9c0t6ib90uiru\"}\n[t+102s] 20:14:56 health={\"jobs\":{\"completed\":0,\"failed\":0,\"inProgress\":1,\"inQueue\":0,\"retried\":0},\"workers\":{\"idle\":0,\"initializing\":0,\"ready\":0,\"running\":1,\"throttled\":0,\"unhealthy\":0}}\n        status={\"delayTime\":26875,\"id\":\"2df84a0e-4cf3-44f2-972f-548210e967af-e2\",\"status\":\"IN_PROGRESS\",\"workerId\":\"a9c0t6ib90uiru\"}\n[t+122s] 20:15:16 health={\"jobs\":{\"completed\":0,\"failed\":0,\"inProgress\":1,\"inQueue\":0,\"retried\":0},\"workers\":{\"idle\":0,\"initializing\":0,\"ready\":0,\"running\":1,\"throttled\":0,\"unhealthy\":0}}\n        status={\"delayTime\":26875,\"id\":\"2df84a0e-4cf3-44f2-972f-548210e967af-e2\",\"status\":\"IN_PROGRESS\",\"workerId\":\"a9c0t6ib90uiru\"}\n[t+142s] 20:15:37 health={\"jobs\":{\"completed\":0,\"failed\":0,\"inProgress\":1,\"inQueue\":0,\"retried\":0},\"workers\":{\"idle\":0,\"initializing\":0,\"ready\":0,\"running\":1,\"throttled\":0,\"unhealthy\":0}}\n        status={\"delayTime\":26875,\"id\":\"2df84a0e-4cf3-44f2-972f-548210e967af-e2\",\"status\":\"IN_PROGRESS\",\"workerId\":\"a9c0t6ib90uiru\"}\n[t+163s] 20:15:57 health={\"jobs\":{\"completed\":0,\"failed\":0,\"inProgress\":1,\"inQueue\":0,\"retried\":0},\"workers\":{\"idle\":0,\"initializing\":0,\"ready\":0,\"running\":1,\"throttled\":0,\"unhealthy\":0}}\n        status={\"delayTime\":26875,\"id\":\"2df84a0e-4cf3-44f2-972f-548210e967af-e2\",\"status\":\"IN_PROGRESS\",\"workerId\":\"a9c0t6ib90uiru\"}\n[t+183s] 20:16:18 health={\"jobs\":{\"completed\":0,\"failed\":0,\"inProgress\":1,\"inQueue\":0,\"retried\":0},\"workers\":{\"idle\":0,\"initializing\":0,\"ready\":0,\"running\":1,\"throttled\":0,\"unhealthy\":0}}\n        status={\"delayTime\":26875,\"id\":\"2df84a0e-4cf3-44f2-972f-548210e967af-e2\",\"status\":\"IN_PROGRESS\",\"workerId\":\"a9c0t6ib90uiru\"}\n[t+204s] 20:16:38 health={\"jobs\":{\"completed\":0,\"failed\":0,\"inProgress\":1,\"inQueue\":0,\"retried\":0},\"workers\":{\"idle\":0,\"initializing\":0,\"ready\":0,\"running\":1,\"throttled\":0,\"unhealthy\":0}}\n        status={\"delayTime\":26875,\"id\":\"2df84a0e-4cf3-44f2-972f-548210e967af-e2\",\"status\":\"IN_PROGRESS\",\"workerId\":\"a9c0t6ib90uiru\"}\n[t+224s] 20:16:58 health={\"jobs\":{\"completed\":0,\"failed\":0,\"inProgress\":1,\"inQueue\":0,\"retried\":0},\"workers\":{\"idle\":0,\"initializing\":0,\"ready\":0,\"running\":1,\"throttled\":0,\"unhealthy\":0}}\n        status={\"delayTime\":26875,\"id\":\"2df84a0e-4cf3-44f2-972f-548210e967af-e2\",\"status\":\"IN_PROGRESS\",\"workerId\":\"a9c0t6ib90uiru\"}\n[t+244s] 20:17:19 health={\"jobs\":{\"completed\":1,\"failed\":0,\"inProgress\":0,\"inQueue\":0,\"retried\":0},\"workers\":{\"idle\":0,\"initializing\":0,\"ready\":0,\"running\":1,\"throttled\":0,\"unhealthy\":0}}\n        status={\"delayTime\":26875,\"executionTime\":212041,\"id\":\"2df84a0e-4cf3-44f2-972f-548210e967af-e2\",\"output\":{\"adapter_dir\":\"/runpod-volume/repo/results/train/45h2-arm-a/adapter\",\"adapter_sha256\":\"b3ca630846c7e7\nTERMINAL at t+244s\n",
+    "srv2b_side_by_side": {
+      "srv-2b, 2026-08-08 ~18:00, unwrapped": "IN_QUEUE for the full 1800 s, worker restarted at 26 min, zero console lines",
+      "srv-2c, 2026-08-08 19:33, wrapped": "picked up in 15.9 s, COMPLETED in 158.4 s",
+      "srv-2c control, 2026-08-08 20:13, unwrapped": "picked up in 26.9 s, COMPLETED"
+    },
+    "what_it_cannot_exclude": "n=1 against n=1. A fault that comes and goes on a timescale of minutes would produce this too. What it does exclude is a standing defect in the unwrapped start command, which is what srv-2b's record blamed.",
+    "dv27_reproduced": "health read {idle:1, ready:1} eight seconds after `serverless create` and before the job was submitted -- the same as srv-2c. A worker boots at endpoint creation."
+  },
+  "the_execution_time_gap": {
+    "wrapped": {
+      "delay_ms": 15864,
+      "execution_ms": 158424
+    },
+    "unwrapped": {
+      "delay_ms": 26875,
+      "execution_ms": 212041
+    },
+    "observation": "the unwrapped run took 34% longer to execute. Directionally consistent with stdout costing something -- the weight loader writes ~1,188 tqdm updates, to a file when wrapped and to the container's log pipe when not -- but it is n=1 against n=1 on different workers, so it is an observation and not a finding. It would take a handful of paired runs to become one."
   }
 }
