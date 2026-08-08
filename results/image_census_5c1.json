@@ -1,0 +1,1678 @@
+{
+  "generated_at": "2026-08-08T15:27:48+00:00",
+  "phase": "5c1 — the image census",
+  "asks": "how many posts of each channel's collected window carry no readable text",
+  "contract": "docs/PROMPT-5c1-captions-pilot.md step 1",
+  "states": {
+    "source": "market_pulse.parents.context — the one rule the labelling passes use",
+    "post_text": "the post has text of its own",
+    "image_caption": "no text; a vision model's description stands in for it",
+    "poll_text": "no text; Telegram's own poll question and options stand in for it",
+    "no_text_and_no_caption": "no text and nothing standing in for it — unreadable today"
+  },
+  "captions_read": {
+    "path": "data/annotation/post_captions.jsonl",
+    "sha256": "4c1f28071c6d270184d6d490833105ee71506c4399ed974bac89f17869b7e90c",
+    "rows": 37,
+    "rows_inside_a_censused_window": 0,
+    "note": "4.5g2's captions, read-only. They are the only reason two of the four states can occur at all — and they land on none of these windows: all 37 are @VARUS_channel parents of labelled comments, dated 2025-06-17…2026-06-22, and every window censused here starts later. So `image_caption` and `poll_text` read 0 because the corpus has no captions in these 28 days, not because the file went unread"
+  },
+  "window": {
+    "days": 28,
+    "shared": {
+      "since": "2026-07-10T10:33:14+00:00",
+      "until": "2026-08-07T10:33:14+00:00"
+    },
+    "rule": "screen.window_for — the yield screen's own, raw-v1 originals included"
+  },
+  "reconciled_with": {
+    "path": "results/yield_screen_5c1.json",
+    "sha256": "00d98ab2a4232104b8e78117d33581fb65aadf2f7ff9c79ba544545928ab99f6",
+    "check": "per channel: posts_in_window, post_text == screen.posts.with_text, and the sum of the other three states == screen.posts.without_text. A mismatch stops the run"
+  },
+  "totals": {
+    "post_text": 9082,
+    "image_caption": 0,
+    "poll_text": 0,
+    "no_text_and_no_caption": 261,
+    "posts_in_window": 9343
+  },
+  "projection": {
+    "captionable_posts_upper_bound": 250,
+    "usd_upper_bound": 0.1207,
+    "expected_image_share": 0.512,
+    "expected_captions": 128.0,
+    "usd_expected": 0.0618,
+    "posts_with_nothing_to_caption": 11,
+    "rate": {
+      "source": "results/captions_45g2.json",
+      "model": "qwen/qwen3.5-flash-02-23",
+      "posts_captioned": 21,
+      "usd_total": 0.01013467,
+      "usd_per_post": 0.0004826,
+      "images_sent": 112,
+      "images_per_post": 5.33,
+      "usd_per_image_sent": 9.049e-05,
+      "note": "one request per post, the whole album in it, capped at 6 images. A channel that posts albums sits at or above this average rather than below it"
+    },
+    "split_45g2": {
+      "image": 21,
+      "poll": 16,
+      "nothing": 4
+    },
+    "reading": "upper bound = every silent post with media, priced as if all of them were photos. The expected figure discounts it by the split 4.5g2 measured when it asked Telegram what those posts were: 21 photos, 16 polls (transcribed free, no model) and 4 with nothing any model could read, of 41. Both are per ONE pass over the current windows"
+  },
+  "by_audience": {
+    "baby_food": {
+      "n": 8,
+      "posts": 321,
+      "post_text": 320,
+      "image_caption": 0,
+      "poll_text": 0,
+      "no_text_and_no_caption": 1
+    },
+    "cooking_recipes": {
+      "n": 7,
+      "posts": 830,
+      "post_text": 806,
+      "image_caption": 0,
+      "poll_text": 0,
+      "no_text_and_no_caption": 24
+    },
+    "food_quality": {
+      "n": 1,
+      "posts": 79,
+      "post_text": 79,
+      "image_caption": 0,
+      "poll_text": 0,
+      "no_text_and_no_caption": 0
+    },
+    "health_fitness": {
+      "n": 17,
+      "posts": 320,
+      "post_text": 268,
+      "image_caption": 0,
+      "poll_text": 0,
+      "no_text_and_no_caption": 52
+    },
+    "mothers_kids": {
+      "n": 5,
+      "posts": 678,
+      "post_text": 633,
+      "image_caption": 0,
+      "poll_text": 0,
+      "no_text_and_no_caption": 45
+    },
+    "regional": {
+      "n": 17,
+      "posts": 6505,
+      "post_text": 6475,
+      "image_caption": 0,
+      "poll_text": 0,
+      "no_text_and_no_caption": 30
+    },
+    "retail_official": {
+      "n": 7,
+      "posts": 375,
+      "post_text": 319,
+      "image_caption": 0,
+      "poll_text": 0,
+      "no_text_and_no_caption": 56
+    },
+    "supermarket_deals": {
+      "n": 4,
+      "posts": 235,
+      "post_text": 182,
+      "image_caption": 0,
+      "poll_text": 0,
+      "no_text_and_no_caption": 53
+    }
+  },
+  "sources": [
+    {
+      "handle": "@blwbabies",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 4,
+      "states": {
+        "post_text": 4,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 0
+      },
+      "uncaptioned_with_media": 0,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [],
+      "audience": "baby_food"
+    },
+    {
+      "handle": "@dutyache_menu",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 0,
+      "states": {
+        "post_text": 0,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 0
+      },
+      "uncaptioned_with_media": 0,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [],
+      "audience": "baby_food"
+    },
+    {
+      "handle": "@Evgenija_dutjache_menu",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 0,
+      "states": {
+        "post_text": 0,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 0
+      },
+      "uncaptioned_with_media": 0,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [],
+      "audience": "baby_food"
+    },
+    {
+      "handle": "@mamaiagolodniy",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 5,
+      "states": {
+        "post_text": 5,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 0
+      },
+      "uncaptioned_with_media": 0,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [],
+      "audience": "baby_food"
+    },
+    {
+      "handle": "@pavlushaiyava",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 111,
+      "states": {
+        "post_text": 111,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 0
+      },
+      "uncaptioned_with_media": 0,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [],
+      "audience": "baby_food"
+    },
+    {
+      "handle": "@tarilka_malyuka",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 82,
+      "states": {
+        "post_text": 81,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 1
+      },
+      "uncaptioned_with_media": 1,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [
+        700
+      ],
+      "audience": "baby_food"
+    },
+    {
+      "handle": "@tvorcha_matusyua",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 109,
+      "states": {
+        "post_text": 109,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 0
+      },
+      "uncaptioned_with_media": 0,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [],
+      "audience": "baby_food"
+    },
+    {
+      "handle": "@ya_Nenka",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 10,
+      "states": {
+        "post_text": 10,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 0
+      },
+      "uncaptioned_with_media": 0,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [],
+      "audience": "baby_food"
+    },
+    {
+      "handle": "@klopotenkofood",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 40,
+      "states": {
+        "post_text": 33,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 7
+      },
+      "uncaptioned_with_media": 5,
+      "uncaptioned_without_media": 2,
+      "uncaptioned_msg_ids": [
+        6016,
+        6022,
+        6051,
+        6069,
+        6071
+      ],
+      "audience": "cooking_recipes"
+    },
+    {
+      "handle": "@konservacia_kulinaria",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 92,
+      "states": {
+        "post_text": 92,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 0
+      },
+      "uncaptioned_with_media": 0,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [],
+      "audience": "cooking_recipes"
+    },
+    {
+      "handle": "@korolevakuchni",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 126,
+      "states": {
+        "post_text": 126,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 0
+      },
+      "uncaptioned_with_media": 0,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [],
+      "audience": "cooking_recipes"
+    },
+    {
+      "handle": "@mameni_recepti",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 253,
+      "states": {
+        "post_text": 253,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 0
+      },
+      "uncaptioned_with_media": 0,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [],
+      "audience": "cooking_recipes"
+    },
+    {
+      "handle": "@recepti",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 201,
+      "states": {
+        "post_text": 201,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 0
+      },
+      "uncaptioned_with_media": 0,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [],
+      "audience": "cooking_recipes"
+    },
+    {
+      "handle": "@retsepty",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 91,
+      "states": {
+        "post_text": 74,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 17
+      },
+      "uncaptioned_with_media": 17,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [
+        7271,
+        7275,
+        7279,
+        7283,
+        7287,
+        7291,
+        7295,
+        7299,
+        7303,
+        7307,
+        7311,
+        7332,
+        7336,
+        7347,
+        7351,
+        7355,
+        7359
+      ],
+      "audience": "cooking_recipes"
+    },
+    {
+      "handle": "@vylkachannel",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 27,
+      "states": {
+        "post_text": 27,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 0
+      },
+      "uncaptioned_with_media": 0,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [],
+      "audience": "cooking_recipes"
+    },
+    {
+      "handle": "@dpssgovua",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 79,
+      "states": {
+        "post_text": 79,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 0
+      },
+      "uncaptioned_with_media": 0,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [],
+      "audience": "food_quality"
+    },
+    {
+      "handle": "@anastasiiadavydiukfitness",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 1,
+      "states": {
+        "post_text": 1,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 0
+      },
+      "uncaptioned_with_media": 0,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [],
+      "audience": "health_fitness"
+    },
+    {
+      "handle": "@chifit_family",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 4,
+      "states": {
+        "post_text": 4,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 0
+      },
+      "uncaptioned_with_media": 0,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [],
+      "audience": "health_fitness"
+    },
+    {
+      "handle": "@denisovapro",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 22,
+      "states": {
+        "post_text": 18,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 4
+      },
+      "uncaptioned_with_media": 4,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [
+        845,
+        849,
+        859,
+        860
+      ],
+      "audience": "health_fitness"
+    },
+    {
+      "handle": "@dimakaminskyifit",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 0,
+      "states": {
+        "post_text": 0,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 0
+      },
+      "uncaptioned_with_media": 0,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [],
+      "audience": "health_fitness"
+    },
+    {
+      "handle": "@eftforhealth",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 1,
+      "states": {
+        "post_text": 1,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 0
+      },
+      "uncaptioned_with_media": 0,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [],
+      "audience": "health_fitness"
+    },
+    {
+      "handle": "@gaid_skobioale",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 18,
+      "states": {
+        "post_text": 1,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 17
+      },
+      "uncaptioned_with_media": 17,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [
+        1284,
+        1285,
+        1286,
+        1288,
+        1289,
+        1290,
+        1292,
+        1293,
+        1294,
+        1296,
+        1298,
+        1299,
+        1300,
+        1301,
+        1302,
+        1303,
+        1304
+      ],
+      "audience": "health_fitness"
+    },
+    {
+      "handle": "@HealthPsycholog",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 17,
+      "states": {
+        "post_text": 17,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 0
+      },
+      "uncaptioned_with_media": 0,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [],
+      "audience": "health_fitness"
+    },
+    {
+      "handle": "@hydnem_prosto",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 0,
+      "states": {
+        "post_text": 0,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 0
+      },
+      "uncaptioned_with_media": 0,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [],
+      "audience": "health_fitness"
+    },
+    {
+      "handle": "@kkondr_fit",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 2,
+      "states": {
+        "post_text": 2,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 0
+      },
+      "uncaptioned_with_media": 0,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [],
+      "audience": "health_fitness"
+    },
+    {
+      "handle": "@mandziak",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 121,
+      "states": {
+        "post_text": 120,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 1
+      },
+      "uncaptioned_with_media": 1,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [
+        3778
+      ],
+      "audience": "health_fitness"
+    },
+    {
+      "handle": "@olgaa_trainer",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 8,
+      "states": {
+        "post_text": 6,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 2
+      },
+      "uncaptioned_with_media": 2,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [
+        301,
+        303
+      ],
+      "audience": "health_fitness"
+    },
+    {
+      "handle": "@polyakova_fitness",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 53,
+      "states": {
+        "post_text": 35,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 18
+      },
+      "uncaptioned_with_media": 18,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [
+        1119,
+        1121,
+        1122,
+        1123,
+        1126,
+        1128,
+        1131,
+        1144,
+        1146,
+        1153,
+        1154,
+        1155,
+        1157,
+        1161,
+        1162,
+        1174,
+        1177,
+        1192
+      ],
+      "audience": "health_fitness"
+    },
+    {
+      "handle": "@sashafitnesslife",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 20,
+      "states": {
+        "post_text": 20,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 0
+      },
+      "uncaptioned_with_media": 0,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [],
+      "audience": "health_fitness"
+    },
+    {
+      "handle": "@skhudnennya",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 0,
+      "states": {
+        "post_text": 0,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 0
+      },
+      "uncaptioned_with_media": 0,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [],
+      "audience": "health_fitness"
+    },
+    {
+      "handle": "@smirnov108",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 28,
+      "states": {
+        "post_text": 28,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 0
+      },
+      "uncaptioned_with_media": 0,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [],
+      "audience": "health_fitness"
+    },
+    {
+      "handle": "@useful_healthy_fitness_menu",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 17,
+      "states": {
+        "post_text": 9,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 8
+      },
+      "uncaptioned_with_media": 8,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [
+        3096,
+        3097,
+        3098,
+        3110,
+        3112,
+        3114,
+        3116,
+        3119
+      ],
+      "audience": "health_fitness"
+    },
+    {
+      "handle": "@Wellosophy_Lesya",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 8,
+      "states": {
+        "post_text": 6,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 2
+      },
+      "uncaptioned_with_media": 2,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [
+        6135,
+        6142
+      ],
+      "audience": "health_fitness"
+    },
+    {
+      "handle": "@educationwithloven",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 403,
+      "states": {
+        "post_text": 381,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 22
+      },
+      "uncaptioned_with_media": 22,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [
+        103961,
+        104051,
+        104088,
+        104363,
+        104474,
+        104591,
+        104827,
+        104922,
+        105011,
+        105178,
+        105263,
+        105368,
+        105392,
+        105470,
+        105530,
+        105569,
+        105614,
+        105639,
+        105724,
+        105749,
+        105771,
+        105905
+      ],
+      "audience": "mothers_kids"
+    },
+    {
+      "handle": "@itsmamix",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 0,
+      "states": {
+        "post_text": 0,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 0
+      },
+      "uncaptioned_with_media": 0,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [],
+      "audience": "mothers_kids"
+    },
+    {
+      "handle": "@lab_of_childhood",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 0,
+      "states": {
+        "post_text": 0,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 0
+      },
+      "uncaptioned_with_media": 0,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [],
+      "audience": "mothers_kids"
+    },
+    {
+      "handle": "@mamo_nepsichuy",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 46,
+      "states": {
+        "post_text": 46,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 0
+      },
+      "uncaptioned_with_media": 0,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [],
+      "audience": "mothers_kids"
+    },
+    {
+      "handle": "@matusi_ukr",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 229,
+      "states": {
+        "post_text": 206,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 23
+      },
+      "uncaptioned_with_media": 23,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [
+        22036,
+        22037,
+        22038,
+        22040,
+        22042,
+        22079,
+        22080,
+        22081,
+        22090,
+        22091,
+        22092,
+        22105,
+        22106,
+        22107,
+        22108,
+        22213,
+        22226,
+        22227,
+        22228,
+        22229,
+        22274,
+        22275,
+        22276
+      ],
+      "audience": "mothers_kids"
+    },
+    {
+      "handle": "@globine1",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 102,
+      "states": {
+        "post_text": 99,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 3
+      },
+      "uncaptioned_with_media": 3,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [
+        9888,
+        9917,
+        9986
+      ],
+      "audience": "regional"
+    },
+    {
+      "handle": "@gorishnie_plavni1",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 547,
+      "states": {
+        "post_text": 547,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 0
+      },
+      "uncaptioned_with_media": 0,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [],
+      "audience": "regional"
+    },
+    {
+      "handle": "@h_kremenchug",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 443,
+      "states": {
+        "post_text": 443,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 0
+      },
+      "uncaptioned_with_media": 0,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [],
+      "audience": "regional"
+    },
+    {
+      "handle": "@Hadiach_telegram",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 140,
+      "states": {
+        "post_text": 140,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 0
+      },
+      "uncaptioned_with_media": 0,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [],
+      "audience": "regional"
+    },
+    {
+      "handle": "@KarlivkaLive",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 11,
+      "states": {
+        "post_text": 9,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 2
+      },
+      "uncaptioned_with_media": 2,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [
+        5318,
+        5321
+      ],
+      "audience": "regional"
+    },
+    {
+      "handle": "@kremen_news",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 338,
+      "states": {
+        "post_text": 338,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 0
+      },
+      "uncaptioned_with_media": 0,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [],
+      "audience": "regional"
+    },
+    {
+      "handle": "@LHVC_info",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 1,
+      "states": {
+        "post_text": 1,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 0
+      },
+      "uncaptioned_with_media": 0,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [],
+      "audience": "regional"
+    },
+    {
+      "handle": "@mo3ambik",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 189,
+      "states": {
+        "post_text": 184,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 5
+      },
+      "uncaptioned_with_media": 5,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [
+        38258,
+        38324,
+        38418,
+        38496,
+        38584
+      ],
+      "audience": "regional"
+    },
+    {
+      "handle": "@myrhorodtown",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 260,
+      "states": {
+        "post_text": 260,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 0
+      },
+      "uncaptioned_with_media": 0,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [],
+      "audience": "regional"
+    },
+    {
+      "handle": "@PirOperative",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 99,
+      "states": {
+        "post_text": 97,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 2
+      },
+      "uncaptioned_with_media": 1,
+      "uncaptioned_without_media": 1,
+      "uncaptioned_msg_ids": [
+        29223
+      ],
+      "audience": "regional"
+    },
+    {
+      "handle": "@piryatingromada",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 66,
+      "states": {
+        "post_text": 58,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 8
+      },
+      "uncaptioned_with_media": 8,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [
+        23796,
+        23820,
+        23869,
+        23882,
+        23936,
+        23972,
+        24023,
+        24048
+      ],
+      "audience": "regional"
+    },
+    {
+      "handle": "@poltava20",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 1484,
+      "states": {
+        "post_text": 1483,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 1
+      },
+      "uncaptioned_with_media": 0,
+      "uncaptioned_without_media": 1,
+      "uncaptioned_msg_ids": [],
+      "audience": "regional"
+    },
+    {
+      "handle": "@poltava_informue",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 1273,
+      "states": {
+        "post_text": 1272,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 1
+      },
+      "uncaptioned_with_media": 1,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [
+        35541
+      ],
+      "audience": "regional"
+    },
+    {
+      "handle": "@poltava_pvp",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 412,
+      "states": {
+        "post_text": 412,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 0
+      },
+      "uncaptioned_with_media": 0,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [],
+      "audience": "regional"
+    },
+    {
+      "handle": "@suspilnepoltava",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 514,
+      "states": {
+        "post_text": 513,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 1
+      },
+      "uncaptioned_with_media": 1,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [
+        48135
+      ],
+      "audience": "regional"
+    },
+    {
+      "handle": "@telegraf_kremenchuk",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 617,
+      "states": {
+        "post_text": 610,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 7
+      },
+      "uncaptioned_with_media": 0,
+      "uncaptioned_without_media": 7,
+      "uncaptioned_msg_ids": [],
+      "audience": "regional"
+    },
+    {
+      "handle": "@zinkivnews",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 9,
+      "states": {
+        "post_text": 9,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 0
+      },
+      "uncaptioned_with_media": 0,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [],
+      "audience": "regional"
+    },
+    {
+      "handle": "@atb_market_official",
+      "window": {
+        "since": "2026-06-26T00:00:00+00:00",
+        "until": "2026-07-24T00:00:00+00:00",
+        "source": "raw_v1_own_last_28d"
+      },
+      "posts_in_window": 25,
+      "states": {
+        "post_text": 6,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 19
+      },
+      "uncaptioned_with_media": 19,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [
+        4340,
+        4350,
+        4360,
+        4370,
+        4377,
+        4381,
+        4391,
+        4401,
+        4411,
+        4415,
+        4421,
+        4426,
+        4436,
+        4446,
+        4455,
+        4467,
+        4498,
+        4508,
+        4519
+      ],
+      "audience": "retail_official"
+    },
+    {
+      "handle": "@ekomarket_shop",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 12,
+      "states": {
+        "post_text": 12,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 0
+      },
+      "uncaptioned_with_media": 0,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [],
+      "audience": "retail_official"
+    },
+    {
+      "handle": "@epicentrk_sale",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 141,
+      "states": {
+        "post_text": 140,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 1
+      },
+      "uncaptioned_with_media": 1,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [
+        6212
+      ],
+      "audience": "retail_official"
+    },
+    {
+      "handle": "@forainfo",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 14,
+      "states": {
+        "post_text": 14,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 0
+      },
+      "uncaptioned_with_media": 0,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [],
+      "audience": "retail_official"
+    },
+    {
+      "handle": "@marketopt_promo",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 12,
+      "states": {
+        "post_text": 8,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 4
+      },
+      "uncaptioned_with_media": 4,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [
+        2872,
+        2885,
+        2898,
+        2911
+      ],
+      "audience": "retail_official"
+    },
+    {
+      "handle": "@silposilpo",
+      "window": {
+        "since": "2026-06-30T00:00:00+00:00",
+        "until": "2026-07-28T00:00:00+00:00",
+        "source": "raw_v1_own_last_28d"
+      },
+      "posts_in_window": 36,
+      "states": {
+        "post_text": 36,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 0
+      },
+      "uncaptioned_with_media": 0,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [],
+      "audience": "retail_official"
+    },
+    {
+      "handle": "@VARUS_channel",
+      "window": {
+        "since": "2026-06-29T00:00:00+00:00",
+        "until": "2026-07-27T00:00:00+00:00",
+        "source": "raw_v1_own_last_28d"
+      },
+      "posts_in_window": 135,
+      "states": {
+        "post_text": 103,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 32
+      },
+      "uncaptioned_with_media": 32,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [
+        10115,
+        10138,
+        10148,
+        10158,
+        10168,
+        10178,
+        10222,
+        10232,
+        10253,
+        10263,
+        10273,
+        10283,
+        10293,
+        10303,
+        10320,
+        10321,
+        10347,
+        10365,
+        10390,
+        10400,
+        10410,
+        10420,
+        10430,
+        10440,
+        10510,
+        10520,
+        10542,
+        10552,
+        10562,
+        10572,
+        10582,
+        10592
+      ],
+      "audience": "retail_official"
+    },
+    {
+      "handle": "@atb_aktsiyi",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 53,
+      "states": {
+        "post_text": 7,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 46
+      },
+      "uncaptioned_with_media": 46,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [
+        2994,
+        2995,
+        2999,
+        3006,
+        3016,
+        3026,
+        3036,
+        3040,
+        3041,
+        3042,
+        3043,
+        3047,
+        3054,
+        3056,
+        3060,
+        3067,
+        3077,
+        3087,
+        3097,
+        3108,
+        3112,
+        3113,
+        3121,
+        3123,
+        3130,
+        3134,
+        3144,
+        3154,
+        3164,
+        3174,
+        3177,
+        3179,
+        3183,
+        3185,
+        3194,
+        3195,
+        3196,
+        3197,
+        3204,
+        3208,
+        3210,
+        3220,
+        3230,
+        3240,
+        3247,
+        3248
+      ],
+      "audience": "supermarket_deals"
+    },
+    {
+      "handle": "@kopiyochka1",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 52,
+      "states": {
+        "post_text": 49,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 3
+      },
+      "uncaptioned_with_media": 3,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [
+        21878,
+        21886,
+        21894
+      ],
+      "audience": "supermarket_deals"
+    },
+    {
+      "handle": "@maudau",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1"
+      },
+      "posts_in_window": 64,
+      "states": {
+        "post_text": 60,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 4
+      },
+      "uncaptioned_with_media": 4,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [
+        2812,
+        2830,
+        2834,
+        2840
+      ],
+      "audience": "supermarket_deals"
+    },
+    {
+      "handle": "@msuaaaa",
+      "window": {
+        "since": "2026-06-30T00:00:00+00:00",
+        "until": "2026-07-28T00:00:00+00:00",
+        "source": "raw_v1_own_last_28d"
+      },
+      "posts_in_window": 66,
+      "states": {
+        "post_text": 66,
+        "image_caption": 0,
+        "poll_text": 0,
+        "no_text_and_no_caption": 0
+      },
+      "uncaptioned_with_media": 0,
+      "uncaptioned_without_media": 0,
+      "uncaptioned_msg_ids": [],
+      "audience": "supermarket_deals"
+    }
+  ],
+  "git": {
+    "commit": "76cf382ebc69008c834400deac46714b8a206e6f",
+    "dirty": [
+      "docs/STATUS.md",
+      "knowledge/daily_logs/2026-08-08.md",
+      "knowledge/hot.md",
+      "knowledge/index.md",
+      "results/yield_screen_5c1.json",
+      "scripts/yield_screen_5c1.py",
+      "tests/test_yield_screen_5c1.py",
+      "docs/PROMPT-5c1-captions-pilot.md",
+      "scripts/image_census_5c1.py",
+      "tests/test_image_census_5c1.py"
+    ]
+  }
+}

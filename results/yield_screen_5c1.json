@@ -698,7 +698,11 @@
         "below_both": 3,
         "below_both_gradeable": 3
       }
-    }
+    },
+    "pass_A_ruled_below_bar_A": [
+      "@myrhorodtown",
+      "@polyakova_fitness"
+    ]
   },
   "sources": [
     {
@@ -2062,7 +2066,8 @@
       },
       "audience": "health_fitness",
       "source_type": "community",
-      "watch": false
+      "watch": false,
+      "ruling": "COUNTS AS BELOW bar A — the pass hangs on `brand:varto` alone, the ordinary word. Matcher guard for «Варто» deferred to the 5c3 lexicon session"
     },
     {
       "handle": "@sashafitnesslife",
@@ -3018,7 +3023,8 @@
       },
       "audience": "regional",
       "source_type": "community",
-      "watch": false
+      "watch": false,
+      "ruling": "COUNTS AS BELOW bar A — the pass hangs on `brand:president` alone, the head of state. Matcher guard for «Президент» deferred to the 5c3 lexicon session"
     },
     {
       "handle": "@PirOperative",
@@ -4082,5 +4088,23 @@
       "src/market_pulse/yield_screen.py",
       "tests/test_yield_screen_5c1.py"
     ]
+  },
+  "rulings": {
+    "applied_at": "2026-08-08T15:25:23+00:00",
+    "by": "operator 2026-08-08, yield-screen acceptance",
+    "contract": "docs/PROMPT-5c1-captions-pilot.md step 0",
+    "note": "read onto rows that were already measured; no re-screen, no evidence re-derived. `bar_A` stays PASS — it is what the instrument found — and the ruling beside it is what the operator decided that pass is worth. Matcher guards for «Варто» and «Президент» are deferred to the 5c3 lexicon session and are not applied here",
+    "git": {
+      "commit": "76cf382ebc69008c834400deac46714b8a206e6f",
+      "dirty": [
+        "docs/STATUS.md",
+        "knowledge/daily_logs/2026-08-08.md",
+        "knowledge/hot.md",
+        "knowledge/index.md",
+        "scripts/yield_screen_5c1.py",
+        "tests/test_yield_screen_5c1.py",
+        "docs/PROMPT-5c1-captions-pilot.md"
+      ]
+    }
   }
 }

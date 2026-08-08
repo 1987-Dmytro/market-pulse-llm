@@ -299,6 +299,64 @@ def run_controls(rows: dict[str, dict], compiled: dict, aliases: list) -> dict:
     return out
 
 
+RULINGS = {
+    # Operator, yield-screen acceptance 2026-08-08. Both rows cleared bar A, and the screen's own
+    # `bar_A_sole_carriers` says each of them clears it on ONE term that is an ordinary word:
+    # «варто» is an АТБ private label and the Ukrainian for "it is worth"; «Президент» is a cheese
+    # brand and a head of state. The ruling is about these two rows, not about the terms — the
+    # lexicon says `draft-not-law` and the matcher guards are 5c3's work, so nothing is patched.
+    "@polyakova_fitness": (
+        "COUNTS AS BELOW bar A — the pass hangs on `brand:varto` alone, the ordinary word."
+        " Matcher guard for «Варто» deferred to the 5c3 lexicon session"
+    ),
+    "@myrhorodtown": (
+        "COUNTS AS BELOW bar A — the pass hangs on `brand:president` alone, the head of state."
+        " Matcher guard for «Президент» deferred to the 5c3 lexicon session"
+    ),
+}
+"""Operator rulings over rows this screen already measured, applied by `--close` and never by a
+re-screen. The market screen's division of labour: the screen records what it found, a human
+decides what it means, and the reading goes into the record beside the evidence."""
+
+
+def close_rulings(out: Path) -> int:
+    """Write the rulings onto their rows. No re-measurement, and the measurement's own git stays.
+
+    Two things this deliberately does not do. It does not flip `bar_A`: PASS is what the
+    instrument measured, BELOW is what the operator ruled, and a record that showed only the
+    second could never be re-read as evidence about the first. And it does not touch the
+    top-level `git` block — that is the provenance of the screen the operator signed against, not
+    of a ruling pass; the ruling carries its own.
+    """
+    record = json.loads(out.read_text(encoding="utf-8"))
+    rows = {row["handle"]: row for row in record["sources"]}
+    if missing := sorted(set(RULINGS) - set(rows)):
+        raise SystemExit(
+            f"{out.name} has no rows for {missing} — refusing to write a ruling to no one"
+        )
+    for handle, ruling in RULINGS.items():
+        rows[handle]["ruling"] = ruling
+        print(f"{handle:<24}{rows[handle]['bar_A']:<6}{rows[handle]['bar_A_sole_carriers']}")
+    # The pass list is 29 rows and two of them are now ruled below the bar. Said in the summary
+    # because that is where a reader counts, and `pass_A` itself is the measurement and stands.
+    record["summary"]["pass_A_ruled_below_bar_A"] = sorted(RULINGS)
+    record["rulings"] = {
+        "applied_at": datetime.now(UTC).isoformat(timespec="seconds"),
+        "by": "operator 2026-08-08, yield-screen acceptance",
+        "contract": "docs/PROMPT-5c1-captions-pilot.md step 0",
+        "note": (
+            "read onto rows that were already measured; no re-screen, no evidence re-derived."
+            " `bar_A` stays PASS — it is what the instrument found — and the ruling beside it is"
+            " what the operator decided that pass is worth. Matcher guards for «Варто» and"
+            " «Президент» are deferred to the 5c3 lexicon session and are not applied here"
+        ),
+        "git": git_state(out),
+    }
+    out.write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(f"\nwrote {len(RULINGS)} ruling(s) into {out.name}")
+    return 0
+
+
 def refuse_to_overwrite(out: Path) -> None:
     """A screen is a measurement of a composition, and the composition moves.
 
@@ -333,7 +391,14 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", type=Path, default=RECORD, help="where to write the record")
     parser.add_argument("--only", metavar="HANDLE", nargs="+", help="screen only these handles")
+    parser.add_argument(
+        "--close",
+        action="store_true",
+        help="write the operator's rulings onto an existing record; measures nothing",
+    )
     args = parser.parse_args(argv)
+    if args.close:
+        return close_rulings(args.out)
     refuse_to_overwrite(args.out)
 
     prereg_sha, bars = check_preregistration()

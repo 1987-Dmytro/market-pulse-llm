@@ -374,3 +374,56 @@ def test_the_whole_watch_bucket_is_below_both_and_none_of_it_is_a_content_findin
         24,
         12,
     )
+
+
+# --- the rulings, written onto rows the screen already measured -----------------------------------
+
+
+def test_close_rules_two_rows_below_the_bar_without_moving_what_was_measured(tmp_path):
+    """The operator's read of a pass belongs beside the pass, and only beside it.
+
+    The two rows cleared bar A on one ordinary word each, and the ruling says that does not count.
+    What it must NOT do is rewrite `bar_A`: PASS is what the instrument found, and a record
+    showing only the ruling could never be re-read as evidence about the instrument. The copy is
+    made from the shipped record rather than a fixture, so the test sees the writer move.
+    """
+    out = tmp_path / "screen.json"
+    out.write_text(
+        (REPO_ROOT / "results" / "yield_screen_5c1.json").read_text(encoding="utf-8"),
+        encoding="utf-8",
+    )
+    before = json.loads(out.read_text(encoding="utf-8"))
+
+    assert screen.main(["--out", str(out), "--close"]) == 0
+    after = json.loads(out.read_text(encoding="utf-8"))
+
+    ruled = {row["handle"]: row for row in after["sources"] if "ruling" in row}
+    assert set(ruled) == set(screen.RULINGS) == {"@polyakova_fitness", "@myrhorodtown"}
+    for handle, row in ruled.items():
+        assert row["bar_A"] == "PASS", handle
+        assert len(row["bar_A_sole_carriers"]) == 1, handle
+        assert "COUNTS AS BELOW bar A" in row["ruling"]
+
+    def without_rulings(rows: list[dict]) -> list[dict]:
+        return [{k: v for k, v in row.items() if k != "ruling"} for row in rows]
+
+    assert without_rulings(after["sources"]) == without_rulings(before["sources"])
+    # The measurement's provenance is not the ruling's. Overwriting the git block would replace
+    # the commit the operator signed against with the commit of a pass that measured nothing.
+    assert after["git"] == before["git"]
+    assert after["rulings"]["git"]["commit"]
+    assert after["summary"]["pass_A_ruled_below_bar_A"] == sorted(screen.RULINGS)
+    assert after["summary"]["pass_A"] == before["summary"]["pass_A"]
+
+
+def test_close_refuses_when_a_ruling_names_a_row_the_record_does_not_carry(tmp_path):
+    """The negative control: without it, closing against a record that lacks the rows writes
+    nothing at all and looks exactly like success."""
+    record = json.loads(
+        (REPO_ROOT / "results" / "yield_screen_5c1.json").read_text(encoding="utf-8")
+    )
+    record["sources"] = [row for row in record["sources"] if row["handle"] not in screen.RULINGS]
+    out = tmp_path / "thinned.json"
+    out.write_text(json.dumps(record, ensure_ascii=False), encoding="utf-8")
+    with pytest.raises(SystemExit, match="refusing to write a ruling to no one"):
+        screen.main(["--out", str(out), "--close"])
