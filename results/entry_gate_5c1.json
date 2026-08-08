@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-08T10:48:08+00:00",
+  "generated_at": "2026-08-08T11:18:53+00:00",
   "phase": "5c1",
   "deliverable": "1 — the track-R entry gate over the launch composition",
   "contract": "docs/SPEC.md §3.11 (4); docs/PROMPT-5c1.md Deliverable 1",
@@ -99,7 +99,13 @@
       "@pavlushaiyava",
       "@lab_of_childhood",
       "@mandziak",
-      "@KarlivkaLive"
+      "@KarlivkaLive",
+      "@poltava_pvp",
+      "@poltava20",
+      "@h_kremenchug",
+      "@kremen_news",
+      "@matusi_ukr",
+      "@mamo_nepsichuy"
     ]
   },
   "candidates": [
@@ -5950,11 +5956,389 @@
       "ruling": "CITY FEED — POSTS-ONLY by the standing ruling (canon 'Дозаявка №3', operator 2026-08-08): a city feed enters posts-only, comments_enabled false, and its discussion group is NOT joined until 5c2 rules on a category filter for threads — without one a city chat's whole traffic lands in a paid inference queue. 11 of the 16 do have a group; that is why the gate holds them in the `city` bucket, which measures a group without asserting one either way. FLAG CLEARED — same shape as the two city feeds above, and its closed group IS the excluded @Karlivka_live supergroup — so the flag is raised by the very thing the ruling threw out. Live and Ukrainian: 3.0 posts/week, last post 2026-08-08, ua 1.00. The cost of the swap is recorded with it rather than after it: 539 subscribers against the chat's 8,045, so the town's audience stayed in the chat and this covers about a fifteenth of what left. «Карлівка покрыта» must not be read off this row",
       "error": null,
       "suggestions": null
+    },
+    {
+      "handle": "@poltava_pvp",
+      "bucket": "city",
+      "checked_at": "2026-08-08T11:18:15+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "PVP.POLTAVA",
+        "username": "poltava_pvp",
+        "subscribers": 106758,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 409,
+          "posts_per_week": 102.25,
+          "last_post": "2026-08-08T11:07:01+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 409,
+          "n_with_letters": 409,
+          "n_cyrillic": 409,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 1248429951,
+          "title": "Чат PVP.POLTAVA",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 44,
+          "share_with_comments": 0.61,
+          "median_comments": 4.5,
+          "sample_first_post": "2026-08-05T07:59:46+00:00",
+          "sample_last_post": "2026-08-08T11:07:01+00:00"
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": null,
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": "CITY FEED — POSTS-ONLY by the standing ruling (canon 'Дозаявка №3', operator 2026-08-08): a city feed enters posts-only, comments_enabled false, and its discussion group is NOT joined until 5c2 rules on a category filter for threads — without one a city chat's whole traffic lands in a paid inference queue. 11 of the 16 do have a group; that is why the gate holds them in the `city` bucket, which measures a group without asserting one either way.",
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@poltava20",
+      "bucket": "city",
+      "checked_at": "2026-08-08T11:18:28+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Полтава ІНФО | Новини Світло",
+        "username": "poltava20",
+        "subscribers": 43486,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 1151,
+          "posts_per_week": 287.75,
+          "last_post": "2026-08-08T11:09:53+00:00",
+          "window_days": 28,
+          "window_truncated": true
+        },
+        "language": {
+          "n_texts": 1151,
+          "n_with_letters": 1151,
+          "n_cyrillic": 1151,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "other": 0.12,
+            "ua": 0.88
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 3972660565,
+          "title": "Полтава ІНФО | Новини Світло Chat",
+          "username": "poltava_lux",
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": true,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 49,
+          "share_with_comments": 0.2,
+          "median_comments": 0,
+          "sample_first_post": "2026-08-07T11:16:58+00:00",
+          "sample_last_post": "2026-08-08T11:09:53+00:00"
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": null,
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": "CITY FEED — POSTS-ONLY by the standing ruling (canon 'Дозаявка №3', operator 2026-08-08): a city feed enters posts-only, comments_enabled false, and its discussion group is NOT joined until 5c2 rules on a category filter for threads — without one a city chat's whole traffic lands in a paid inference queue. 11 of the 16 do have a group; that is why the gate holds them in the `city` bucket, which measures a group without asserting one either way.",
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@h_kremenchug",
+      "bucket": "city",
+      "checked_at": "2026-08-08T11:18:36+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Х Кременчук",
+        "username": "h_kremenchug",
+        "subscribers": 137222,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 449,
+          "posts_per_week": 112.25,
+          "last_post": "2026-08-08T10:34:03+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 449,
+          "n_with_letters": 449,
+          "n_cyrillic": 449,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 1407939068,
+          "title": "Коментарі ХК",
+          "username": "h_kremenchat",
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 46,
+          "share_with_comments": 0.48,
+          "median_comments": 0.0,
+          "sample_first_post": "2026-08-05T10:39:37+00:00",
+          "sample_last_post": "2026-08-08T10:34:03+00:00"
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": null,
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": "CITY FEED — POSTS-ONLY by the standing ruling (canon 'Дозаявка №3', operator 2026-08-08): a city feed enters posts-only, comments_enabled false, and its discussion group is NOT joined until 5c2 rules on a category filter for threads — without one a city chat's whole traffic lands in a paid inference queue. 11 of the 16 do have a group; that is why the gate holds them in the `city` bucket, which measures a group without asserting one either way.",
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@kremen_news",
+      "bucket": "city",
+      "checked_at": "2026-08-08T11:18:42+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "КРЕМІНЬ | НОВИНИ | КРЕМЕНЧУК",
+        "username": "kremen_news",
+        "subscribers": 28286,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 345,
+          "posts_per_week": 86.25,
+          "last_post": "2026-08-08T11:01:05+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 345,
+          "n_with_letters": 345,
+          "n_cyrillic": 345,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": null,
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 44,
+          "share_with_comments": 0.0,
+          "median_comments": 0,
+          "sample_first_post": "2026-08-05T12:20:30+00:00",
+          "sample_last_post": "2026-08-08T11:01:05+00:00"
+        },
+        "capability_verdict": "posts-only"
+      },
+      "prior_5a1": null,
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": "CITY FEED — POSTS-ONLY by the standing ruling (canon 'Дозаявка №3', operator 2026-08-08): a city feed enters posts-only, comments_enabled false, and its discussion group is NOT joined until 5c2 rules on a category filter for threads — without one a city chat's whole traffic lands in a paid inference queue. 11 of the 16 do have a group; that is why the gate holds them in the `city` bucket, which measures a group without asserting one either way.",
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@matusi_ukr",
+      "bucket": "late",
+      "checked_at": "2026-08-08T11:18:48+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Матусі України",
+        "username": "matusi_ukr",
+        "subscribers": 19278,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 228,
+          "posts_per_week": 57.0,
+          "last_post": "2026-08-08T11:01:27+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 205,
+          "n_with_letters": 205,
+          "n_cyrillic": 205,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "other": 0.01,
+            "ru": 0.06,
+            "ua": 0.93
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 1564481268,
+          "title": "Чат Матусі України",
+          "username": "chat_matusi",
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 44,
+          "share_with_comments": 0.59,
+          "median_comments": 2,
+          "sample_first_post": "2026-08-02T17:00:42+00:00",
+          "sample_last_post": "2026-08-08T11:01:27+00:00"
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": null,
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": "LATE ADDITION — handle top-up Матусі України (canon 'Дозаявка №10', 19,278); PASS with an open discussion group → comments. PASS with an open discussion group → comments bucket and the joins list; PASS without one → posts-only; FAIL or FLAG → stop and report before any further action on it.",
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@mamo_nepsichuy",
+      "bucket": "late",
+      "checked_at": "2026-08-08T11:18:51+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Мамо, не псіхуй!👌",
+        "username": "mamo_nepsichuy",
+        "subscribers": 13781,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 44,
+          "posts_per_week": 11.0,
+          "last_post": "2026-08-08T07:02:05+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 44,
+          "n_with_letters": 44,
+          "n_cyrillic": 44,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 1884244050,
+          "title": "Мамо, не псіхуй!👌 Chat",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 43,
+          "share_with_comments": 0.19,
+          "median_comments": 0,
+          "sample_first_post": "2026-07-13T13:02:28+00:00",
+          "sample_last_post": "2026-08-08T07:02:05+00:00"
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": null,
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": "LATE ADDITION — handle top-up «Мамо, не псіхуй!» (canon 'Дозаявка №10', 13,781); PASS with an open discussion group → comments. PASS with an open discussion group → comments bucket and the joins list; PASS without one → posts-only; FAIL or FLAG → stop and report before any further action on it.",
+      "error": null,
+      "suggestions": null
     }
   ],
   "summary": {
-    "n": 90,
-    "PASS": 71,
+    "n": 96,
+    "PASS": 77,
     "FAIL": 4,
     "FLAG": 15,
     "ERROR": 0,
@@ -5981,15 +6365,15 @@
         "ERROR": 0
       },
       "late": {
-        "n": 12,
-        "PASS": 6,
+        "n": 14,
+        "PASS": 8,
         "FAIL": 4,
         "FLAG": 2,
         "ERROR": 0
       },
       "city": {
-        "n": 17,
-        "PASS": 11,
+        "n": 21,
+        "PASS": 15,
         "FAIL": 0,
         "FLAG": 6,
         "ERROR": 0
@@ -5999,7 +6383,7 @@
   "registry_written": true,
   "note": "PROMPT-5c1 D1 stops here: every FAIL and FLAG goes to the operator, who rules in chat; the rulings land in each row's `ruling`, and only then is config/registry.yaml written. data/entry_check_report.json (the 2026-07-27 run) is untouched, and the four registry channels are out of this gate's scope.",
   "rulings": {
-    "applied_at": "2026-08-08T10:50:16+00:00",
+    "applied_at": "2026-08-08T11:19:05+00:00",
     "canon": "docs/CHANNELS-launch.md, sections 'Рулинги гейта 5c1 (2026-08-07)' and 'Рулинги, волна 2'",
     "composition": {
       "comments": [
@@ -6010,7 +6394,9 @@
         "@kkondr_fit",
         "@klopotenkofood",
         "@kopiyochka1",
+        "@mamo_nepsichuy",
         "@mandziak",
+        "@matusi_ukr",
         "@olgaa_trainer",
         "@polyakova_fitness",
         "@retsepty",
@@ -6038,8 +6424,10 @@
         "@gaid_skobioale",
         "@globine1",
         "@gorishnie_plavni1",
+        "@h_kremenchug",
         "@konservacia_kulinaria",
         "@korolevakuchni",
+        "@kremen_news",
         "@mamaiagolodniy",
         "@mameni_recepti",
         "@marketopt_promo",
@@ -6048,7 +6436,9 @@
         "@myrhorodtown",
         "@pavlushaiyava",
         "@piryatingromada",
+        "@poltava20",
         "@poltava_informue",
+        "@poltava_pvp",
         "@recepti",
         "@suspilnepoltava",
         "@telegraf_kremenchuk",
@@ -6102,12 +6492,12 @@
       ]
     },
     "counts": {
-      "registry_before": 39,
-      "comments": 16,
-      "posts": 34,
+      "registry_before": 61,
+      "comments": 18,
+      "posts": 38,
       "watch": 7,
       "excluded": 33,
-      "sources_after": 61
+      "sources_after": 67
     },
     "joins_authorised": [
       "@HealthPsycholog",
@@ -6117,7 +6507,9 @@
       "@kkondr_fit",
       "@klopotenkofood",
       "@kopiyochka1",
+      "@mamo_nepsichuy",
       "@mandziak",
+      "@matusi_ukr",
       "@olgaa_trainer",
       "@polyakova_fitness",
       "@retsepty",
@@ -6320,10 +6712,2241 @@
         ],
         "bound": "This closes the question by record, it does not prove absence: contacts.SearchRequest ranks by its own relevance and returns at most ten rows per query. The finding is that the chain has no FINDABLE public channel under its own name — consistent with hvylya.net.ua carrying no Telegram link."
       }
+    },
+    "novus_consumer_search": {
+      "asked": "does Novus have a consumer Telegram channel? canon docs/CHANNELS-launch.md 'МАСТЕР-ЛИСТ', the line «Проверить внутри Telegram (вебом не найдено)» — the Telegram-side half of «Дозаявка №5»",
+      "searched_at": "2026-08-08T11:09:33+00:00",
+      "queries": [
+        "Novus",
+        "Новус"
+      ],
+      "results_per_query": {
+        "Novus": 6,
+        "Новус": 6
+      },
+      "name_matches": [
+        {
+          "title": "NOVUS ORDO SECLORUM",
+          "username": "newworldra",
+          "telegram_verified": false,
+          "subscribers": 1568,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "СОПРОТИВЛЕНИЕ ⭕",
+          "username": "novus_ordo",
+          "telegram_verified": false,
+          "subscribers": 247,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Новый порядок на века",
+          "username": "novus_ordum",
+          "telegram_verified": false,
+          "subscribers": 204,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Americana2001 (\"Novus ordo seclorum\" )",
+          "username": "Americana2001",
+          "telegram_verified": false,
+          "subscribers": 31,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Novusy.cc",
+          "username": "novusycc",
+          "telegram_verified": false,
+          "subscribers": 11,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "ДК | Novus | г. Тобыл |",
+          "username": "dc_novus",
+          "telegram_verified": false,
+          "subscribers": 81,
+          "broadcast": true,
+          "megagroup": false
+        }
+      ],
+      "rows": {
+        "Novus": [
+          {
+            "title": "NOVUS ORDO SECLORUM",
+            "username": "newworldra",
+            "telegram_verified": false,
+            "subscribers": 1568,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "СОПРОТИВЛЕНИЕ ⭕",
+            "username": "novus_ordo",
+            "telegram_verified": false,
+            "subscribers": 247,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Новый порядок на века",
+            "username": "novus_ordum",
+            "telegram_verified": false,
+            "subscribers": 204,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Americana2001 (\"Novus ordo seclorum\" )",
+            "username": "Americana2001",
+            "telegram_verified": false,
+            "subscribers": 31,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Novusy.cc",
+            "username": "novusycc",
+            "telegram_verified": false,
+            "subscribers": 11,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "ДК | Novus | г. Тобыл |",
+            "username": "dc_novus",
+            "telegram_verified": false,
+            "subscribers": 81,
+            "broadcast": true,
+            "megagroup": false
+          }
+        ],
+        "Новус": [
+          {
+            "title": "NOVUS ORDO SECLORUM",
+            "username": "newworldra",
+            "telegram_verified": false,
+            "subscribers": 1568,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "СОПРОТИВЛЕНИЕ ⭕",
+            "username": "novus_ordo",
+            "telegram_verified": false,
+            "subscribers": 247,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Новый порядок на века",
+            "username": "novus_ordum",
+            "telegram_verified": false,
+            "subscribers": 204,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Americana2001 (\"Novus ordo seclorum\" )",
+            "username": "Americana2001",
+            "telegram_verified": false,
+            "subscribers": 31,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Novusy.cc",
+            "username": "novusycc",
+            "telegram_verified": false,
+            "subscribers": 11,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "ДК | Novus | г. Тобыл |",
+            "username": "dc_novus",
+            "telegram_verified": false,
+            "subscribers": 81,
+            "broadcast": true,
+            "megagroup": false
+          }
+        ]
+      },
+      "closed": false,
+      "judgement": null,
+      "judgement_stale": null,
+      "finding": "MATCHES FOUND — not closed. The rows above need a human look before any of them goes to the gate; this script does not decide what is convincing."
+    },
+    "velmart_consumer_search": {
+      "asked": "does Velmart have a consumer Telegram channel? canon docs/CHANNELS-launch.md 'МАСТЕР-ЛИСТ', the line «Проверить внутри Telegram (вебом не найдено)» — the Telegram-side half of «Дозаявка №5»",
+      "searched_at": "2026-08-08T11:09:33+00:00",
+      "queries": [
+        "Velmart",
+        "Вельмарт"
+      ],
+      "results_per_query": {
+        "Velmart": 4,
+        "Вельмарт": 3
+      },
+      "name_matches": [
+        {
+          "title": "Velmartyr: DISBAND.",
+          "username": "velmartyr",
+          "telegram_verified": false,
+          "subscribers": 755,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Velmart Channel",
+          "username": "velmart",
+          "telegram_verified": false,
+          "subscribers": 3,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Vel_Martinys",
+          "username": "velmartinus",
+          "telegram_verified": false,
+          "subscribers": 565,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "ВЕЛМАРТ",
+          "username": "velmart1",
+          "telegram_verified": false,
+          "subscribers": 3,
+          "broadcast": false,
+          "megagroup": true
+        }
+      ],
+      "rows": {
+        "Velmart": [
+          {
+            "title": "Velmartyr: DISBAND.",
+            "username": "velmartyr",
+            "telegram_verified": false,
+            "subscribers": 755,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Velmart Channel",
+            "username": "velmart",
+            "telegram_verified": false,
+            "subscribers": 3,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Vel_Martinys",
+            "username": "velmartinus",
+            "telegram_verified": false,
+            "subscribers": 565,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "ВЕЛМАРТ",
+            "username": "velmart1",
+            "telegram_verified": false,
+            "subscribers": 3,
+            "broadcast": false,
+            "megagroup": true
+          }
+        ],
+        "Вельмарт": [
+          {
+            "title": "Velmartyr: DISBAND.",
+            "username": "velmartyr",
+            "telegram_verified": false,
+            "subscribers": 755,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Vel_Martinys",
+            "username": "velmartinus",
+            "telegram_verified": false,
+            "subscribers": 565,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "ВЕЛМАРТ",
+            "username": "velmart1",
+            "telegram_verified": false,
+            "subscribers": 3,
+            "broadcast": false,
+            "megagroup": true
+          }
+        ]
+      },
+      "closed": false,
+      "judgement": null,
+      "judgement_stale": null,
+      "finding": "MATCHES FOUND — not closed. The rows above need a human look before any of them goes to the gate; this script does not decide what is convincing."
+    },
+    "fozzy_consumer_search": {
+      "asked": "does Fozzy C&C have a consumer Telegram channel? canon docs/CHANNELS-launch.md 'МАСТЕР-ЛИСТ', the line «Проверить внутри Telegram (вебом не найдено)» — the Telegram-side half of «Дозаявка №5»",
+      "searched_at": "2026-08-08T11:09:33+00:00",
+      "queries": [
+        "Fozzy",
+        "Фоззі"
+      ],
+      "results_per_query": {
+        "Fozzy": 6,
+        "Фоззі": 3
+      },
+      "name_matches": [
+        {
+          "title": "...",
+          "username": "FozzyshasenBau",
+          "telegram_verified": false,
+          "subscribers": 10,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Fozzy Exchanges",
+          "username": "FozzyExchange",
+          "telegram_verified": false,
+          "subscribers": 18,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Fozzy Calls",
+          "username": "FozzyCalls",
+          "telegram_verified": false,
+          "subscribers": 5,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Fozzy Експериментаріум",
+          "username": "fozzy_experimentanium",
+          "telegram_verified": false,
+          "subscribers": 1227,
+          "broadcast": false,
+          "megagroup": true
+        },
+        {
+          "title": "FOZZY minds",
+          "username": "fozzyminds",
+          "telegram_verified": false,
+          "subscribers": 548,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "фоззя",
+          "username": "fozzyx",
+          "telegram_verified": false,
+          "subscribers": 125,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Обмін валют, м-н Фоззі, Проліски",
+          "username": "obminfozzy",
+          "telegram_verified": false,
+          "subscribers": 55,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Тест фоззі",
+          "username": "fozz_test",
+          "telegram_verified": false,
+          "subscribers": 4,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Робота ФОЗЗІ Почайна",
+          "username": "robotafozzipochayna",
+          "telegram_verified": false,
+          "subscribers": 3,
+          "broadcast": true,
+          "megagroup": false
+        }
+      ],
+      "rows": {
+        "Fozzy": [
+          {
+            "title": "...",
+            "username": "FozzyshasenBau",
+            "telegram_verified": false,
+            "subscribers": 10,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Fozzy Exchanges",
+            "username": "FozzyExchange",
+            "telegram_verified": false,
+            "subscribers": 18,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Fozzy Calls",
+            "username": "FozzyCalls",
+            "telegram_verified": false,
+            "subscribers": 5,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Fozzy Експериментаріум",
+            "username": "fozzy_experimentanium",
+            "telegram_verified": false,
+            "subscribers": 1227,
+            "broadcast": false,
+            "megagroup": true
+          },
+          {
+            "title": "FOZZY minds",
+            "username": "fozzyminds",
+            "telegram_verified": false,
+            "subscribers": 548,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "фоззя",
+            "username": "fozzyx",
+            "telegram_verified": false,
+            "subscribers": 125,
+            "broadcast": true,
+            "megagroup": false
+          }
+        ],
+        "Фоззі": [
+          {
+            "title": "Обмін валют, м-н Фоззі, Проліски",
+            "username": "obminfozzy",
+            "telegram_verified": false,
+            "subscribers": 55,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Тест фоззі",
+            "username": "fozz_test",
+            "telegram_verified": false,
+            "subscribers": 4,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Робота ФОЗЗІ Почайна",
+            "username": "robotafozzipochayna",
+            "telegram_verified": false,
+            "subscribers": 3,
+            "broadcast": true,
+            "megagroup": false
+          }
+        ]
+      },
+      "closed": false,
+      "judgement": null,
+      "judgement_stale": null,
+      "finding": "MATCHES FOUND — not closed. The rows above need a human look before any of them goes to the gate; this script does not decide what is convincing."
+    },
+    "auchan_consumer_search": {
+      "asked": "does Auchan have a consumer Telegram channel? canon docs/CHANNELS-launch.md 'МАСТЕР-ЛИСТ', the line «Проверить внутри Telegram (вебом не найдено)» — the Telegram-side half of «Дозаявка №5»",
+      "searched_at": "2026-08-08T11:09:33+00:00",
+      "queries": [
+        "Auchan",
+        "Ашан"
+      ],
+      "results_per_query": {
+        "Auchan": 5,
+        "Ашан": 7
+      },
+      "name_matches": [
+        {
+          "title": "АШАН Россия",
+          "username": "auchanrus",
+          "telegram_verified": true,
+          "subscribers": 82813,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Велика Ашанська Імперія",
+          "username": "auchanempire",
+          "telegram_verified": false,
+          "subscribers": 2,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Работа в АШАН",
+          "username": "auchanjob",
+          "telegram_verified": false,
+          "subscribers": 1762,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "АШАН Ритейл Россия",
+          "username": "auchan_retail_russia",
+          "telegram_verified": false,
+          "subscribers": 1435,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Промокоды АШАН 2026",
+          "username": "auchan_promokod",
+          "telegram_verified": false,
+          "subscribers": 595,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Продажи по системе с Татьяной Ашанин",
+          "username": "Prosmm_izapuski",
+          "telegram_verified": false,
+          "subscribers": 675,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Фонд \"Ашана\"",
+          "username": "fondashana",
+          "telegram_verified": false,
+          "subscribers": 472,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Заметки осмысленности | Вениамин Ашанин",
+          "username": "benjash_tweets",
+          "telegram_verified": false,
+          "subscribers": 233,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Ашан",
+          "username": "creativefogg",
+          "telegram_verified": false,
+          "subscribers": 25,
+          "broadcast": true,
+          "megagroup": false
+        }
+      ],
+      "rows": {
+        "Auchan": [
+          {
+            "title": "АШАН Россия",
+            "username": "auchanrus",
+            "telegram_verified": true,
+            "subscribers": 82813,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Велика Ашанська Імперія",
+            "username": "auchanempire",
+            "telegram_verified": false,
+            "subscribers": 2,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Работа в АШАН",
+            "username": "auchanjob",
+            "telegram_verified": false,
+            "subscribers": 1762,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "АШАН Ритейл Россия",
+            "username": "auchan_retail_russia",
+            "telegram_verified": false,
+            "subscribers": 1435,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Промокоды АШАН 2026",
+            "username": "auchan_promokod",
+            "telegram_verified": false,
+            "subscribers": 595,
+            "broadcast": true,
+            "megagroup": false
+          }
+        ],
+        "Ашан": [
+          {
+            "title": "АШАН Россия",
+            "username": "auchanrus",
+            "telegram_verified": true,
+            "subscribers": 82813,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Art of Ashanti",
+            "username": "Art_Shanti",
+            "telegram_verified": false,
+            "subscribers": 209,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Продажи по системе с Татьяной Ашанин",
+            "username": "Prosmm_izapuski",
+            "telegram_verified": false,
+            "subscribers": 675,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Фонд \"Ашана\"",
+            "username": "fondashana",
+            "telegram_verified": false,
+            "subscribers": 472,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "cero & dara",
+            "username": "dara_ashanti",
+            "telegram_verified": false,
+            "subscribers": 225,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Заметки осмысленности | Вениамин Ашанин",
+            "username": "benjash_tweets",
+            "telegram_verified": false,
+            "subscribers": 233,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Ашан",
+            "username": "creativefogg",
+            "telegram_verified": false,
+            "subscribers": 25,
+            "broadcast": true,
+            "megagroup": false
+          }
+        ]
+      },
+      "closed": false,
+      "judgement": null,
+      "judgement_stale": null,
+      "finding": "MATCHES FOUND — not closed. The rows above need a human look before any of them goes to the gate; this script does not decide what is convincing."
+    },
+    "metro_consumer_search": {
+      "asked": "does METRO Ukraine have a consumer Telegram channel? canon docs/CHANNELS-launch.md 'МАСТЕР-ЛИСТ', the line «Проверить внутри Telegram (вебом не найдено)» — the Telegram-side half of «Дозаявка №5»",
+      "searched_at": "2026-08-08T11:09:33+00:00",
+      "queries": [
+        "METRO Україна",
+        "Метро Кеш енд Кері"
+      ],
+      "results_per_query": {
+        "METRO Україна": 6,
+        "Метро Кеш енд Кері": 0
+      },
+      "name_matches": [
+        {
+          "title": "Метро шоп Україна",
+          "username": "metroShopikN1S",
+          "telegram_verified": false,
+          "subscribers": 13,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Курси валют ПУМБ метро Палац Україна",
+          "username": "kyrsvalyutpumbpalatsukraina",
+          "telegram_verified": false,
+          "subscribers": 99,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Метро Україна🇺🇦😎💪",
+          "username": "fjzsyu",
+          "telegram_verified": false,
+          "subscribers": 11,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Metroshop Україна низькі ціни",
+          "username": "metroshopkaktys",
+          "telegram_verified": false,
+          "subscribers": 3,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Метро шоп Україна",
+          "username": "ddhdhfhrg",
+          "telegram_verified": false,
+          "subscribers": 2,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "МЕТРО ШОП УКРАЇНА",
+          "username": "metro11143",
+          "telegram_verified": false,
+          "subscribers": 2,
+          "broadcast": true,
+          "megagroup": false
+        }
+      ],
+      "rows": {
+        "METRO Україна": [
+          {
+            "title": "Метро шоп Україна",
+            "username": "metroShopikN1S",
+            "telegram_verified": false,
+            "subscribers": 13,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Курси валют ПУМБ метро Палац Україна",
+            "username": "kyrsvalyutpumbpalatsukraina",
+            "telegram_verified": false,
+            "subscribers": 99,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Метро Україна🇺🇦😎💪",
+            "username": "fjzsyu",
+            "telegram_verified": false,
+            "subscribers": 11,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Metroshop Україна низькі ціни",
+            "username": "metroshopkaktys",
+            "telegram_verified": false,
+            "subscribers": 3,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Метро шоп Україна",
+            "username": "ddhdhfhrg",
+            "telegram_verified": false,
+            "subscribers": 2,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "МЕТРО ШОП УКРАЇНА",
+            "username": "metro11143",
+            "telegram_verified": false,
+            "subscribers": 2,
+            "broadcast": true,
+            "megagroup": false
+          }
+        ],
+        "Метро Кеш енд Кері": []
+      },
+      "closed": false,
+      "judgement": null,
+      "judgement_stale": null,
+      "finding": "MATCHES FOUND — not closed. The rows above need a human look before any of them goes to the gate; this script does not decide what is convincing."
+    },
+    "food_quality_search": {
+      "asked": "does Maksym Nesmiyanov / the Союз споживачів України have a Telegram channel? The operator remembers independent lab checks on counterfeit dairy published near this project's category — canon: operator brief, 5c1 addendum 9 (2026-08-08)",
+      "searched_at": "2026-08-08T11:09:33+00:00",
+      "queries": [
+        "Макс Контроль",
+        "MaxControl",
+        "Несміянов",
+        "Союз споживачів України",
+        "фальсифікат"
+      ],
+      "results_per_query": {
+        "Макс Контроль": 7,
+        "MaxControl": 1,
+        "Несміянов": 0,
+        "Союз споживачів України": 0,
+        "фальсифікат": 1
+      },
+      "name_matches": [
+        {
+          "title": "MaxControl",
+          "username": "maxcontrol",
+          "telegram_verified": false,
+          "subscribers": 2,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "комірка фальсифікатора",
+          "username": "lukashukpidoras",
+          "telegram_verified": false,
+          "subscribers": 98,
+          "broadcast": true,
+          "megagroup": false
+        }
+      ],
+      "rows": {
+        "Макс Контроль": [
+          {
+            "title": "MAX Контроль",
+            "username": "maxkontrol",
+            "telegram_verified": false,
+            "subscribers": 1369,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Максим / Гражданский контроль",
+            "username": "Kimry_V",
+            "telegram_verified": false,
+            "subscribers": 218,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "МАКСИМ КОНТРОЛЬ",
+            "username": "maximdmd",
+            "telegram_verified": false,
+            "subscribers": 24,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "BTK Site Kontrol",
+            "username": "maxroyalcasino_tib",
+            "telegram_verified": false,
+            "subscribers": 1,
+            "broadcast": false,
+            "megagroup": true
+          },
+          {
+            "title": "MAXEN магазин контрольных услуг",
+            "username": "maxenrus",
+            "telegram_verified": false,
+            "subscribers": 1,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "MAXEN контрольные услуги руководителю",
+            "username": "maxen_ru",
+            "telegram_verified": false,
+            "subscribers": 3,
+            "broadcast": false,
+            "megagroup": true
+          },
+          {
+            "title": "Контроль персонал",
+            "username": "maxfiy_nikto_neznayet",
+            "telegram_verified": false,
+            "subscribers": 4,
+            "broadcast": false,
+            "megagroup": true
+          }
+        ],
+        "MaxControl": [
+          {
+            "title": "MaxControl",
+            "username": "maxcontrol",
+            "telegram_verified": false,
+            "subscribers": 2,
+            "broadcast": true,
+            "megagroup": false
+          }
+        ],
+        "Несміянов": [],
+        "Союз споживачів України": [],
+        "фальсифікат": [
+          {
+            "title": "комірка фальсифікатора",
+            "username": "lukashukpidoras",
+            "telegram_verified": false,
+            "subscribers": 98,
+            "broadcast": true,
+            "megagroup": false
+          }
+        ]
+      },
+      "closed": false,
+      "judgement": null,
+      "judgement_stale": null,
+      "finding": "MATCHES FOUND — not closed. The rows above need a human look before any of them goes to the gate; this script does not decide what is convincing."
+    },
+    "matusi_ukrainy_title": {
+      "asked": "what is the handle of «Матусі України»? canon docs/CHANNELS-launch.md 'Дозаявка №8', the line «Хендлы добрать завтра ботом/поиском»",
+      "searched_at": "2026-08-08T11:09:33+00:00",
+      "queries": [
+        "Матусі України",
+        "Матусі"
+      ],
+      "results_per_query": {
+        "Матусі України": 7,
+        "Матусі": 7
+      },
+      "name_matches": [
+        {
+          "title": "🌿 Вагітні та Матусі України 🇺🇦 🌿",
+          "username": "MamaClubUkraine",
+          "telegram_verified": false,
+          "subscribers": 1009,
+          "broadcast": false,
+          "megagroup": true
+        },
+        {
+          "title": "Матусі України",
+          "username": "matusi_ukr",
+          "telegram_verified": false,
+          "subscribers": 19278,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Матусі України💛",
+          "username": "rodytely_dety",
+          "telegram_verified": false,
+          "subscribers": 1223,
+          "broadcast": false,
+          "megagroup": true
+        },
+        {
+          "title": "Чат Матусі України",
+          "username": "chat_matusi",
+          "telegram_verified": false,
+          "subscribers": 1076,
+          "broadcast": false,
+          "megagroup": true
+        },
+        {
+          "title": "Матусі України",
+          "username": "mamy_ukraine_today",
+          "telegram_verified": false,
+          "subscribers": 872,
+          "broadcast": false,
+          "megagroup": true
+        },
+        {
+          "title": "Матусі України",
+          "username": "ukr_moms",
+          "telegram_verified": false,
+          "subscribers": 742,
+          "broadcast": false,
+          "megagroup": true
+        },
+        {
+          "title": "🇺🇦 КРЕЙЗІ МАТУСІ УКРАЇНИ🇺🇦",
+          "username": "dbailuva",
+          "telegram_verified": false,
+          "subscribers": 753,
+          "broadcast": false,
+          "megagroup": true
+        },
+        {
+          "title": "Матусі Житомира",
+          "username": "MatysiZT",
+          "telegram_verified": false,
+          "subscribers": 3133,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "МАТУСІ NRW",
+          "username": "matusinrw",
+          "telegram_verified": false,
+          "subscribers": 640,
+          "broadcast": false,
+          "megagroup": true
+        },
+        {
+          "title": "🇺🇦 МАТУСІ У НІМЕЧЧИНІ",
+          "username": "MatusivNimechini",
+          "telegram_verified": false,
+          "subscribers": 1829,
+          "broadcast": false,
+          "megagroup": true
+        },
+        {
+          "title": "Матусі Чернігова",
+          "username": "matusi_che",
+          "telegram_verified": false,
+          "subscribers": 1664,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "✨Звіт для матусі✨",
+          "username": "yarrrras",
+          "telegram_verified": false,
+          "subscribers": 439,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Матусі національного відродження",
+          "username": "nationalmothers",
+          "telegram_verified": false,
+          "subscribers": 280,
+          "broadcast": true,
+          "megagroup": false
+        }
+      ],
+      "rows": {
+        "Матусі України": [
+          {
+            "title": "🌿 Вагітні та Матусі України 🇺🇦 🌿",
+            "username": "MamaClubUkraine",
+            "telegram_verified": false,
+            "subscribers": 1009,
+            "broadcast": false,
+            "megagroup": true
+          },
+          {
+            "title": "Матусі України",
+            "username": "matusi_ukr",
+            "telegram_verified": false,
+            "subscribers": 19278,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Матусі України💛",
+            "username": "rodytely_dety",
+            "telegram_verified": false,
+            "subscribers": 1223,
+            "broadcast": false,
+            "megagroup": true
+          },
+          {
+            "title": "Чат Матусі України",
+            "username": "chat_matusi",
+            "telegram_verified": false,
+            "subscribers": 1076,
+            "broadcast": false,
+            "megagroup": true
+          },
+          {
+            "title": "Матусі України",
+            "username": "mamy_ukraine_today",
+            "telegram_verified": false,
+            "subscribers": 872,
+            "broadcast": false,
+            "megagroup": true
+          },
+          {
+            "title": "Матусі України",
+            "username": "ukr_moms",
+            "telegram_verified": false,
+            "subscribers": 742,
+            "broadcast": false,
+            "megagroup": true
+          },
+          {
+            "title": "🇺🇦 КРЕЙЗІ МАТУСІ УКРАЇНИ🇺🇦",
+            "username": "dbailuva",
+            "telegram_verified": false,
+            "subscribers": 753,
+            "broadcast": false,
+            "megagroup": true
+          }
+        ],
+        "Матусі": [
+          {
+            "title": "Матусі Житомира",
+            "username": "MatysiZT",
+            "telegram_verified": false,
+            "subscribers": 3133,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "МАТУСІ NRW",
+            "username": "matusinrw",
+            "telegram_verified": false,
+            "subscribers": 640,
+            "broadcast": false,
+            "megagroup": true
+          },
+          {
+            "title": "🇺🇦 МАТУСІ У НІМЕЧЧИНІ",
+            "username": "MatusivNimechini",
+            "telegram_verified": false,
+            "subscribers": 1829,
+            "broadcast": false,
+            "megagroup": true
+          },
+          {
+            "title": "🌿 Вагітні та Матусі України 🇺🇦 🌿",
+            "username": "MamaClubUkraine",
+            "telegram_verified": false,
+            "subscribers": 1009,
+            "broadcast": false,
+            "megagroup": true
+          },
+          {
+            "title": "Матусі Чернігова",
+            "username": "matusi_che",
+            "telegram_verified": false,
+            "subscribers": 1664,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "✨Звіт для матусі✨",
+            "username": "yarrrras",
+            "telegram_verified": false,
+            "subscribers": 439,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Матусі національного відродження",
+            "username": "nationalmothers",
+            "telegram_verified": false,
+            "subscribers": 280,
+            "broadcast": true,
+            "megagroup": false
+          }
+        ]
+      },
+      "closed": false,
+      "judgement": null,
+      "judgement_stale": null,
+      "finding": "MATCHES FOUND — not closed. The rows above need a human look before any of them goes to the gate; this script does not decide what is convincing."
+    },
+    "mamo_ne_psihuy_title": {
+      "asked": "what is the handle of «Мамо, не псіхуй!»? canon docs/CHANNELS-launch.md 'Дозаявка №8', the line «Хендлы добрать завтра ботом/поиском»",
+      "searched_at": "2026-08-08T11:09:33+00:00",
+      "queries": [
+        "Мамо, не псіхуй",
+        "не псіхуй"
+      ],
+      "results_per_query": {
+        "Мамо, не псіхуй": 1,
+        "не псіхуй": 2
+      },
+      "name_matches": [
+        {
+          "title": "Мамо, не псіхуй!👌",
+          "username": "mamo_nepsichuy",
+          "telegram_verified": false,
+          "subscribers": 13781,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Малюй і не псіхуй",
+          "username": "maluvana2024",
+          "telegram_verified": false,
+          "subscribers": 4,
+          "broadcast": true,
+          "megagroup": false
+        }
+      ],
+      "rows": {
+        "Мамо, не псіхуй": [
+          {
+            "title": "Мамо, не псіхуй!👌",
+            "username": "mamo_nepsichuy",
+            "telegram_verified": false,
+            "subscribers": 13781,
+            "broadcast": true,
+            "megagroup": false
+          }
+        ],
+        "не псіхуй": [
+          {
+            "title": "Мамо, не псіхуй!👌",
+            "username": "mamo_nepsichuy",
+            "telegram_verified": false,
+            "subscribers": 13781,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Малюй і не псіхуй",
+            "username": "maluvana2024",
+            "telegram_verified": false,
+            "subscribers": 4,
+            "broadcast": true,
+            "megagroup": false
+          }
+        ]
+      },
+      "closed": false,
+      "judgement": null,
+      "judgement_stale": null,
+      "finding": "MATCHES FOUND — not closed. The rows above need a human look before any of them goes to the gate; this script does not decide what is convincing."
+    },
+    "dytiache_kharchuvannia_title": {
+      "asked": "what is the handle of «Дитяче харчування»? canon docs/CHANNELS-launch.md 'Дозаявка №8', the line «Хендлы добрать завтра ботом/поиском»",
+      "searched_at": "2026-08-08T11:09:33+00:00",
+      "queries": [
+        "Дитяче харчування",
+        "дитяче харчування прикорм"
+      ],
+      "results_per_query": {
+        "Дитяче харчування": 4,
+        "дитяче харчування прикорм": 0
+      },
+      "name_matches": [
+        {
+          "title": "Катерина Ненька — грудне вигодовування та дитяче харчування | сон",
+          "username": "ya_Nenka",
+          "telegram_verified": false,
+          "subscribers": 2370,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "ДИТЯЧЕ ХАРЧУВАННЯ (ДОБРОБУТ)",
+          "username": "dobrobutPoltava",
+          "telegram_verified": false,
+          "subscribers": 439,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Babyshop -дитяче харчування",
+          "username": "babyshopuz16",
+          "telegram_verified": false,
+          "subscribers": 28,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "TOWERMARKET дитяче харчування",
+          "username": "towermarket_lviv_baby",
+          "telegram_verified": false,
+          "subscribers": 4,
+          "broadcast": true,
+          "megagroup": false
+        }
+      ],
+      "rows": {
+        "Дитяче харчування": [
+          {
+            "title": "Катерина Ненька — грудне вигодовування та дитяче харчування | сон",
+            "username": "ya_Nenka",
+            "telegram_verified": false,
+            "subscribers": 2370,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "ДИТЯЧЕ ХАРЧУВАННЯ (ДОБРОБУТ)",
+            "username": "dobrobutPoltava",
+            "telegram_verified": false,
+            "subscribers": 439,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Babyshop -дитяче харчування",
+            "username": "babyshopuz16",
+            "telegram_verified": false,
+            "subscribers": 28,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "TOWERMARKET дитяче харчування",
+            "username": "towermarket_lviv_baby",
+            "telegram_verified": false,
+            "subscribers": 4,
+            "broadcast": true,
+            "megagroup": false
+          }
+        ],
+        "дитяче харчування прикорм": []
+      },
+      "closed": false,
+      "judgement": null,
+      "judgement_stale": null,
+      "finding": "MATCHES FOUND — not closed. The rows above need a human look before any of them goes to the gate; this script does not decide what is convincing."
+    },
+    "vse_pro_ditey_title": {
+      "asked": "what is the handle of «Все про дітей | Виховання | Психологія»? canon docs/CHANNELS-launch.md 'Дозаявка №8', the line «Хендлы добрать завтра ботом/поиском»",
+      "searched_at": "2026-08-08T11:09:34+00:00",
+      "queries": [
+        "Все про дітей",
+        "Все про дітей Виховання Психологія"
+      ],
+      "results_per_query": {
+        "Все про дітей": 7,
+        "Все про дітей Виховання Психологія": 2
+      },
+      "name_matches": [
+        {
+          "title": "Леся Коноба ||| все про дітей🌸",
+          "username": "bgiAadlhqqAxNzYy",
+          "telegram_verified": false,
+          "subscribers": 205,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Все про дітей | Виховання | Психологія",
+          "username": "children45",
+          "telegram_verified": false,
+          "subscribers": 277,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Супермама💚все про дітей",
+          "username": "supermama_ukraine",
+          "telegram_verified": false,
+          "subscribers": 6,
+          "broadcast": true,
+          "megagroup": false
+        }
+      ],
+      "rows": {
+        "Все про дітей": [
+          {
+            "title": "Дитяча психологія - все про розвиток та виховання дітей",
+            "username": "svitlanaromanivna",
+            "telegram_verified": false,
+            "subscribers": 917,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Леся Коноба ||| все про дітей🌸",
+            "username": "bgiAadlhqqAxNzYy",
+            "telegram_verified": false,
+            "subscribers": 205,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Все про дітей | Виховання | Психологія",
+            "username": "children45",
+            "telegram_verified": false,
+            "subscribers": 277,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "«Віллі Вонка у всесвіті Minecraft» | Програмування для дітей",
+            "username": "naurok_minecraft_wonka",
+            "telegram_verified": false,
+            "subscribers": 84,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "«Кунгфу Панда у всесвіті Minecraft» | Програмування з «На Урок» для дітей 7-9 років",
+            "username": "naurokua_dragon_warrior",
+            "telegram_verified": false,
+            "subscribers": 112,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Супермама💚все про дітей",
+            "username": "supermama_ukraine",
+            "telegram_verified": false,
+            "subscribers": 6,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Все про виховання та розвиток дітей",
+            "username": "child_rearing2",
+            "telegram_verified": false,
+            "subscribers": 1,
+            "broadcast": true,
+            "megagroup": false
+          }
+        ],
+        "Все про дітей Виховання Психологія": [
+          {
+            "title": "Дитяча психологія - все про розвиток та виховання дітей",
+            "username": "svitlanaromanivna",
+            "telegram_verified": false,
+            "subscribers": 917,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Все про дітей | Виховання | Психологія",
+            "username": "children45",
+            "telegram_verified": false,
+            "subscribers": 277,
+            "broadcast": true,
+            "megagroup": false
+          }
+        ]
+      },
+      "closed": false,
+      "judgement": null,
+      "judgement_stale": null,
+      "finding": "MATCHES FOUND — not closed. The rows above need a human look before any of them goes to the gate; this script does not decide what is convincing."
+    },
+    "suchasni_batky_title": {
+      "asked": "what is the handle of «Сучасні батьки | Виховання»? canon docs/CHANNELS-launch.md 'Дозаявка №8', the line «Хендлы добрать завтра ботом/поиском»",
+      "searched_at": "2026-08-08T11:09:34+00:00",
+      "queries": [
+        "Сучасні батьки",
+        "Сучасні батьки Виховання"
+      ],
+      "results_per_query": {
+        "Сучасні батьки": 1,
+        "Сучасні батьки Виховання": 0
+      },
+      "name_matches": [
+        {
+          "title": "Сучасні батьки",
+          "username": "suchasnibatki",
+          "telegram_verified": false,
+          "subscribers": 10,
+          "broadcast": true,
+          "megagroup": false
+        }
+      ],
+      "rows": {
+        "Сучасні батьки": [
+          {
+            "title": "Сучасні батьки",
+            "username": "suchasnibatki",
+            "telegram_verified": false,
+            "subscribers": 10,
+            "broadcast": true,
+            "megagroup": false
+          }
+        ],
+        "Сучасні батьки Виховання": []
+      },
+      "closed": false,
+      "judgement": null,
+      "judgement_stale": null,
+      "finding": "MATCHES FOUND — not closed. The rows above need a human look before any of them goes to the gate; this script does not decide what is convincing."
+    },
+    "poltava_broadcast_analogue": {
+      "asked": "which PUBLIC BROADCAST channels of Poltava does Telegram's own search return? canon docs/CHANNELS-launch.md 'Рулинги гейта дня 2', ruling (6) — the operator's addition during the session: find broadcast analogues for the two towns whose handles left as supergroups",
+      "searched_at": "2026-08-08T11:09:34+00:00",
+      "queries": [
+        "Полтава новини",
+        "Полтава",
+        "Poltava"
+      ],
+      "results_per_query": {
+        "Полтава новини": 7,
+        "Полтава": 10,
+        "Poltava": 10
+      },
+      "name_matches": [
+        {
+          "title": "ПОЛТАВА НОВИНИ | СИРЕНА",
+          "username": "region_poltava_syrena",
+          "telegram_verified": false,
+          "subscribers": 195553,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Полтава ІНФО | Новини Світло",
+          "username": "poltava20",
+          "telegram_verified": false,
+          "subscribers": 43486,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Полтава ⚡️Новини",
+          "username": "poltava_insider",
+          "telegram_verified": false,
+          "subscribers": 22831,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Новини Полтава Події Полтаві",
+          "username": "trukha_ua9",
+          "telegram_verified": false,
+          "subscribers": 9838,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "ТРИВОГА ПОЛТАВА",
+          "username": "novosti_karta_novinyy",
+          "telegram_verified": false,
+          "subscribers": 3487,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Новини|Полтавщина",
+          "username": "poltava_novini",
+          "telegram_verified": false,
+          "subscribers": 5,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Новини Poltava",
+          "username": "novini_poltava",
+          "telegram_verified": false,
+          "subscribers": 3,
+          "broadcast": false,
+          "megagroup": true
+        },
+        {
+          "title": "FC Vorskla Poltava",
+          "username": "fcvorsklapoltava",
+          "telegram_verified": true,
+          "subscribers": 1826,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Суспільне Полтава",
+          "username": "suspilnepoltava",
+          "telegram_verified": true,
+          "subscribers": 56258,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "PVP.POLTAVA",
+          "username": "poltava_pvp",
+          "telegram_verified": false,
+          "subscribers": 106761,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "ONEstore 📱💻⌚️",
+          "username": "apple_iphone_poltava1",
+          "telegram_verified": false,
+          "subscribers": 10686,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Полтава Інформує",
+          "username": "poltava_informue",
+          "telegram_verified": false,
+          "subscribers": 66471,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "ПОВІТРЯНА ТРИВОГА ПОЛТАВА",
+          "username": "trevoga_karta",
+          "telegram_verified": false,
+          "subscribers": 11995,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Полтава Інфо🗞⌚️☕️",
+          "username": "poltava_misto",
+          "telegram_verified": false,
+          "subscribers": 60017,
+          "broadcast": false,
+          "megagroup": true
+        },
+        {
+          "title": "ПОЛТАВА 🇺🇦",
+          "username": "poltava",
+          "telegram_verified": false,
+          "subscribers": 2542,
+          "broadcast": false,
+          "megagroup": true
+        },
+        {
+          "title": "Полтава Моя",
+          "username": "poltava7",
+          "telegram_verified": false,
+          "subscribers": 2546,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Полтава 🇺🇦 і Полтавщина",
+          "username": "poltavai",
+          "telegram_verified": false,
+          "subscribers": 1475,
+          "broadcast": false,
+          "megagroup": true
+        },
+        {
+          "title": "HUMANA Kharkiv-Poltava-Kremenchuk",
+          "username": "humanakha",
+          "telegram_verified": false,
+          "subscribers": 18346,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Оренда АН ESTATE POLTAVA",
+          "username": "estate_poltava",
+          "telegram_verified": false,
+          "subscribers": 3447,
+          "broadcast": true,
+          "megagroup": false
+        }
+      ],
+      "rows": {
+        "Полтава новини": [
+          {
+            "title": "ПОЛТАВА НОВИНИ | СИРЕНА",
+            "username": "region_poltava_syrena",
+            "telegram_verified": false,
+            "subscribers": 195553,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Полтава ІНФО | Новини Світло",
+            "username": "poltava20",
+            "telegram_verified": false,
+            "subscribers": 43486,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Полтава ⚡️Новини",
+            "username": "poltava_insider",
+            "telegram_verified": false,
+            "subscribers": 22831,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Новини Полтава Події Полтаві",
+            "username": "trukha_ua9",
+            "telegram_verified": false,
+            "subscribers": 9838,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "ТРИВОГА ПОЛТАВА",
+            "username": "novosti_karta_novinyy",
+            "telegram_verified": false,
+            "subscribers": 3487,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Новини|Полтавщина",
+            "username": "poltava_novini",
+            "telegram_verified": false,
+            "subscribers": 5,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Новини Poltava",
+            "username": "novini_poltava",
+            "telegram_verified": false,
+            "subscribers": 3,
+            "broadcast": false,
+            "megagroup": true
+          }
+        ],
+        "Полтава": [
+          {
+            "title": "FC Vorskla Poltava",
+            "username": "fcvorsklapoltava",
+            "telegram_verified": true,
+            "subscribers": 1826,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Суспільне Полтава",
+            "username": "suspilnepoltava",
+            "telegram_verified": true,
+            "subscribers": 56258,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "PVP.POLTAVA",
+            "username": "poltava_pvp",
+            "telegram_verified": false,
+            "subscribers": 106761,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "ONEstore 📱💻⌚️",
+            "username": "apple_iphone_poltava1",
+            "telegram_verified": false,
+            "subscribers": 10686,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Полтава Інформує",
+            "username": "poltava_informue",
+            "telegram_verified": false,
+            "subscribers": 66471,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "ПОВІТРЯНА ТРИВОГА ПОЛТАВА",
+            "username": "trevoga_karta",
+            "telegram_verified": false,
+            "subscribers": 11995,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Полтава Інфо🗞⌚️☕️",
+            "username": "poltava_misto",
+            "telegram_verified": false,
+            "subscribers": 60017,
+            "broadcast": false,
+            "megagroup": true
+          },
+          {
+            "title": "ПОЛТАВА 🇺🇦",
+            "username": "poltava",
+            "telegram_verified": false,
+            "subscribers": 2542,
+            "broadcast": false,
+            "megagroup": true
+          },
+          {
+            "title": "Полтава Моя",
+            "username": "poltava7",
+            "telegram_verified": false,
+            "subscribers": 2546,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Полтава 🇺🇦 і Полтавщина",
+            "username": "poltavai",
+            "telegram_verified": false,
+            "subscribers": 1475,
+            "broadcast": false,
+            "megagroup": true
+          }
+        ],
+        "Poltava": [
+          {
+            "title": "FC Vorskla Poltava",
+            "username": "fcvorsklapoltava",
+            "telegram_verified": true,
+            "subscribers": 1826,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "PVP.POLTAVA",
+            "username": "poltava_pvp",
+            "telegram_verified": false,
+            "subscribers": 106761,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "ПОЛТАВА 🇺🇦",
+            "username": "poltava",
+            "telegram_verified": false,
+            "subscribers": 2542,
+            "broadcast": false,
+            "megagroup": true
+          },
+          {
+            "title": "ONEstore 📱💻⌚️",
+            "username": "apple_iphone_poltava1",
+            "telegram_verified": false,
+            "subscribers": 10686,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Полтава Інформує",
+            "username": "poltava_informue",
+            "telegram_verified": false,
+            "subscribers": 66471,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Полтава Інфо🗞⌚️☕️",
+            "username": "poltava_misto",
+            "telegram_verified": false,
+            "subscribers": 60017,
+            "broadcast": false,
+            "megagroup": true
+          },
+          {
+            "title": "HUMANA Kharkiv-Poltava-Kremenchuk",
+            "username": "humanakha",
+            "telegram_verified": false,
+            "subscribers": 18346,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Оренда АН ESTATE POLTAVA",
+            "username": "estate_poltava",
+            "telegram_verified": false,
+            "subscribers": 3447,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Полтава Моя",
+            "username": "poltava7",
+            "telegram_verified": false,
+            "subscribers": 2546,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Полтава 🇺🇦 і Полтавщина",
+            "username": "poltavai",
+            "telegram_verified": false,
+            "subscribers": 1475,
+            "broadcast": false,
+            "megagroup": true
+          }
+        ]
+      },
+      "closed": false,
+      "judgement": null,
+      "judgement_stale": null,
+      "finding": "MATCHES FOUND — not closed. The rows above need a human look before any of them goes to the gate; this script does not decide what is convincing."
+    },
+    "kremenchuk_broadcast_analogue": {
+      "asked": "which PUBLIC BROADCAST channels of Kremenchuk does Telegram's own search return? canon docs/CHANNELS-launch.md 'Рулинги гейта дня 2', ruling (6) — the operator's addition during the session: find broadcast analogues for the two towns whose handles left as supergroups",
+      "searched_at": "2026-08-08T11:09:34+00:00",
+      "queries": [
+        "Кременчук новини",
+        "Кременчук",
+        "Кременчуг"
+      ],
+      "results_per_query": {
+        "Кременчук новини": 6,
+        "Кременчук": 10,
+        "Кременчуг": 9
+      },
+      "name_matches": [
+        {
+          "title": "Кременчук ⚡️ Новини",
+          "username": "kremenchuk_insider",
+          "telegram_verified": false,
+          "subscribers": 11563,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "НеТруха⚡️ Кременчук| Новини війни.",
+          "username": "treeshkremik",
+          "telegram_verified": false,
+          "subscribers": 49521,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Новини Кременчука та Світу",
+          "username": "kremen_world",
+          "telegram_verified": false,
+          "subscribers": 81,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "КРЕМІНЬ | НОВИНИ | КРЕМЕНЧУК",
+          "username": "kremen_news",
+          "telegram_verified": false,
+          "subscribers": 28286,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Кременчук Новини (Кременчуг Новости)",
+          "username": "krementoday",
+          "telegram_verified": false,
+          "subscribers": 1984,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Кременчук|новини країни",
+          "username": "kremenchuk_novini",
+          "telegram_verified": false,
+          "subscribers": 4,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "СИРЕНА Кременчук",
+          "username": "sirena_kremenchuk",
+          "telegram_verified": false,
+          "subscribers": 72660,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Кременчуцький Телеграф",
+          "username": "telegraf_kremenchuk",
+          "telegram_verified": false,
+          "subscribers": 32827,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Кулуары Кременчук",
+          "username": "kuluarykremenchuk",
+          "telegram_verified": false,
+          "subscribers": 2709,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "💵ОБМІН ВАЛЮТ | КРЕМЕНЧУК",
+          "username": "obminkremenchuk",
+          "telegram_verified": false,
+          "subscribers": 3919,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Кременчук ппо & світло",
+          "username": "realkremen",
+          "telegram_verified": false,
+          "subscribers": 6443,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Кременчук LiFE🗞⌚️🏘☕️🌤",
+          "username": "kremenchug_live",
+          "telegram_verified": false,
+          "subscribers": 16056,
+          "broadcast": false,
+          "megagroup": true
+        },
+        {
+          "title": "Робота барахолка Кременчук група",
+          "username": "kremenchukk",
+          "telegram_verified": false,
+          "subscribers": 4133,
+          "broadcast": false,
+          "megagroup": true
+        },
+        {
+          "title": "🥸Кременчуг👺",
+          "username": "kremenchukD",
+          "telegram_verified": false,
+          "subscribers": 60,
+          "broadcast": false,
+          "megagroup": true
+        },
+        {
+          "title": "Блядушник Кременчуга❤️❤️",
+          "username": "tvoumatblat",
+          "telegram_verified": false,
+          "subscribers": 163,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Сущность Кременчуг",
+          "username": "onlykremen",
+          "telegram_verified": false,
+          "subscribers": 35,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Х Кременчук",
+          "username": "h_kremenchug",
+          "telegram_verified": false,
+          "subscribers": 137221,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Кременчуг и окрестности что, где, когда...",
+          "username": "kremenchug_chto_gde_kogda",
+          "telegram_verified": false,
+          "subscribers": 5269,
+          "broadcast": false,
+          "megagroup": true
+        },
+        {
+          "title": "Кременчук Робота",
+          "username": "Kremenchug_rabota_vakansiiq",
+          "telegram_verified": false,
+          "subscribers": 20966,
+          "broadcast": false,
+          "megagroup": true
+        },
+        {
+          "title": "Кременчуг",
+          "username": "Kremenchugg",
+          "telegram_verified": false,
+          "subscribers": 32,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "🇺🇦 Познакомиться в Кременчуке",
+          "username": "Kremenchuge",
+          "telegram_verified": false,
+          "subscribers": 15,
+          "broadcast": true,
+          "megagroup": false
+        },
+        {
+          "title": "Кременчук",
+          "username": "kremenchugq",
+          "telegram_verified": false,
+          "subscribers": 4,
+          "broadcast": true,
+          "megagroup": false
+        }
+      ],
+      "rows": {
+        "Кременчук новини": [
+          {
+            "title": "Кременчук ⚡️ Новини",
+            "username": "kremenchuk_insider",
+            "telegram_verified": false,
+            "subscribers": 11563,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "НеТруха⚡️ Кременчук| Новини війни.",
+            "username": "treeshkremik",
+            "telegram_verified": false,
+            "subscribers": 49521,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Новини Кременчука та Світу",
+            "username": "kremen_world",
+            "telegram_verified": false,
+            "subscribers": 81,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "КРЕМІНЬ | НОВИНИ | КРЕМЕНЧУК",
+            "username": "kremen_news",
+            "telegram_verified": false,
+            "subscribers": 28286,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Кременчук Новини (Кременчуг Новости)",
+            "username": "krementoday",
+            "telegram_verified": false,
+            "subscribers": 1984,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Кременчук|новини країни",
+            "username": "kremenchuk_novini",
+            "telegram_verified": false,
+            "subscribers": 4,
+            "broadcast": true,
+            "megagroup": false
+          }
+        ],
+        "Кременчук": [
+          {
+            "title": "СИРЕНА Кременчук",
+            "username": "sirena_kremenchuk",
+            "telegram_verified": false,
+            "subscribers": 72660,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Кременчуцький Телеграф",
+            "username": "telegraf_kremenchuk",
+            "telegram_verified": false,
+            "subscribers": 32827,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Кулуары Кременчук",
+            "username": "kuluarykremenchuk",
+            "telegram_verified": false,
+            "subscribers": 2709,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "HUMANA Kharkiv-Poltava-Kremenchuk",
+            "username": "humanakha",
+            "telegram_verified": false,
+            "subscribers": 18346,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "💵ОБМІН ВАЛЮТ | КРЕМЕНЧУК",
+            "username": "obminkremenchuk",
+            "telegram_verified": false,
+            "subscribers": 3919,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Кременчук ппо & світло",
+            "username": "realkremen",
+            "telegram_verified": false,
+            "subscribers": 6443,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Кременчук LiFE🗞⌚️🏘☕️🌤",
+            "username": "kremenchug_live",
+            "telegram_verified": false,
+            "subscribers": 16056,
+            "broadcast": false,
+            "megagroup": true
+          },
+          {
+            "title": "Робота барахолка Кременчук група",
+            "username": "kremenchukk",
+            "telegram_verified": false,
+            "subscribers": 4133,
+            "broadcast": false,
+            "megagroup": true
+          },
+          {
+            "title": "ЧАТ ОБЩЕНИЯ ЗНАКОМСТВА",
+            "username": "Kremenchuki",
+            "telegram_verified": false,
+            "subscribers": 309,
+            "broadcast": false,
+            "megagroup": true
+          },
+          {
+            "title": "🥸Кременчуг👺",
+            "username": "kremenchukD",
+            "telegram_verified": false,
+            "subscribers": 60,
+            "broadcast": false,
+            "megagroup": true
+          }
+        ],
+        "Кременчуг": [
+          {
+            "title": "Кременчук LiFE🗞⌚️🏘☕️🌤",
+            "username": "kremenchug_live",
+            "telegram_verified": false,
+            "subscribers": 16056,
+            "broadcast": false,
+            "megagroup": true
+          },
+          {
+            "title": "Блядушник Кременчуга❤️❤️",
+            "username": "tvoumatblat",
+            "telegram_verified": false,
+            "subscribers": 163,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Сущность Кременчуг",
+            "username": "onlykremen",
+            "telegram_verified": false,
+            "subscribers": 35,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Х Кременчук",
+            "username": "h_kremenchug",
+            "telegram_verified": false,
+            "subscribers": 137221,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Кременчуг и окрестности что, где, когда...",
+            "username": "kremenchug_chto_gde_kogda",
+            "telegram_verified": false,
+            "subscribers": 5269,
+            "broadcast": false,
+            "megagroup": true
+          },
+          {
+            "title": "Кременчук Робота",
+            "username": "Kremenchug_rabota_vakansiiq",
+            "telegram_verified": false,
+            "subscribers": 20966,
+            "broadcast": false,
+            "megagroup": true
+          },
+          {
+            "title": "Кременчуг",
+            "username": "Kremenchugg",
+            "telegram_verified": false,
+            "subscribers": 32,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "🇺🇦 Познакомиться в Кременчуке",
+            "username": "Kremenchuge",
+            "telegram_verified": false,
+            "subscribers": 15,
+            "broadcast": true,
+            "megagroup": false
+          },
+          {
+            "title": "Кременчук",
+            "username": "kremenchugq",
+            "telegram_verified": false,
+            "subscribers": 4,
+            "broadcast": true,
+            "megagroup": false
+          }
+        ]
+      },
+      "closed": false,
+      "judgement": null,
+      "judgement_stale": null,
+      "finding": "MATCHES FOUND — not closed. The rows above need a human look before any of them goes to the gate; this script does not decide what is convincing."
     }
   },
   "git": {
-    "commit": "cfb3eec3b834e82ddb49721619d739327a33cf94",
+    "commit": "0eb12d5df81ff8f27c43f7c4895e9563d4f1c26e",
     "dirty": [
       "config/registry.yaml",
       "docs/CHANNELS-launch.md",
@@ -6335,6 +8958,7 @@
       "tests/test_entry_gate_5c1.py",
       "tests/test_gate_rulings_5c1.py",
       "tests/test_late_batch_5c1.py",
+      "results/harvest_mothers_ua.json",
       "scripts/harvest_similar_5c1.py",
       "tests/test_harvest_similar_5c1.py"
     ]

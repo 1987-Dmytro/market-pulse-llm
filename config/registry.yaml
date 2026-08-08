@@ -553,6 +553,62 @@ sources:
     comments_enabled: false
     audience: regional
 
+  # --- Phase 5c1 launch composition (operator verdict 2026-08-06, rulings 2026-08-07) ---
+  # Every channel below entered through the track-R gate: results/entry_gate_5c1.json holds one
+  # row per candidate with its checks, verdict and the ruling that placed it. Names and
+  # comments_enabled come from that record, never typed here. `watch: true` = posts are
+  # collected and the discussion group is NEVER joined until the channel posts again and the
+  # operator says so (SPEC 3.11 (4)); those channels keep comments_enabled because the group
+  # exists — the join is what they do not have.
+  - id: poltava_pvp
+    name: "PVP.POLTAVA"
+    source_type: community
+    telegram_channels:
+      - "@poltava_pvp"
+    verified: true
+    comments_enabled: false
+    audience: regional
+  - id: poltava20
+    name: "Полтава ІНФО | Новини Світло"
+    source_type: community
+    telegram_channels:
+      - "@poltava20"
+    verified: true
+    comments_enabled: false
+    audience: regional
+  - id: h_kremenchug
+    name: "Х Кременчук"
+    source_type: community
+    telegram_channels:
+      - "@h_kremenchug"
+    verified: true
+    comments_enabled: false
+    audience: regional
+  - id: kremen_news
+    name: "КРЕМІНЬ | НОВИНИ | КРЕМЕНЧУК"
+    source_type: community
+    telegram_channels:
+      - "@kremen_news"
+    verified: true
+    comments_enabled: false
+    audience: regional
+  - id: matusi_ukr
+    name: "Матусі України"
+    source_type: community
+    telegram_channels:
+      - "@matusi_ukr"
+    verified: true
+    comments_enabled: true
+    audience: mothers_kids
+  - id: mamo_nepsichuy
+    name: "Мамо, не псіхуй!👌"
+    source_type: community
+    telegram_channels:
+      - "@mamo_nepsichuy"
+    verified: true
+    comments_enabled: true
+    audience: mothers_kids
+
 taxonomy:
   # Keys are kebab-case and stable (they end up in result files); values are the
   # UA display names used by the dashboard.

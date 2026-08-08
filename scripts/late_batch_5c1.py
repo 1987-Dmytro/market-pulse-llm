@@ -27,6 +27,18 @@ registry write:
     goes to the gate like everything else — and its `audience` has no value in the closed list
     yet, which is the operator's to rule, not this script's to invent.
 
+``--search-titles``
+    The five channels the operator's TGStat pass saw by TITLE only (canon "Дозаявка №8":
+    «Хендлы добрать завтра ботом/поиском»). Five questions, five notes — TGStat shows a name and
+    not a handle, so the search is the only way from one to the other, and a match still needs a
+    human read before it reaches the gate.
+
+``--search-city-analogues``
+    Two towns lost their handle at the day-2 sitting because it turned out to be a chat
+    (@poltava_misto, @kremenchug_live). This asks Telegram which BROADCAST channels those towns
+    have — the rows now carry `broadcast` and `megagroup`, so a reader can tell a feed from
+    another chat without opening each one.
+
 ``--poltava``
     The discovery scan for the new `poltava_cities` theme, in `scripts/discover_channels.py`'s
     pattern and reusing its machinery — same per-channel check, same four-week window, same
@@ -182,6 +194,103 @@ FOOD_QUALITY_SEARCH = {
 }
 
 SEARCHES.update(FOOD_QUALITY_SEARCH)
+
+CANON_HARVEST = (
+    "canon docs/CHANNELS-launch.md 'Дозаявка №8', the line «Хендлы добрать завтра ботом/поиском»"
+)
+
+TITLE_SEARCHES = {
+    # Five channels the operator's TGStat pass saw by TITLE only — TGStat shows the name, not the
+    # handle. One note each: five different channels, so a hit on one closes nothing about the
+    # other four. The subscriber counts are TGStat's and are carried so a match can be sanity
+    # checked against the size the operator saw, not just against the name.
+    "matusi_ukrainy_title": {
+        "subject": "«Матусі України» (~19.3k, TGStat)",
+        "asked": f"what is the handle of «Матусі України»? {CANON_HARVEST}",
+        "queries": ("Матусі України", "Матусі"),
+        # The bare «матусі» is here because the second query is bare too, and a marker that does
+        # not catch its own query turns every hit into a clean negative. It is loose on purpose:
+        # what it costs is a human read, and what the precise one costs is a missed channel.
+        "markers": ("матусі україн", "матусі"),
+        "also": "TGStat showed ~19.3k subscribers and no handle.",
+    },
+    "mamo_ne_psihuy_title": {
+        "subject": "«Мамо, не псіхуй!» (~13.8k, TGStat)",
+        "asked": f"what is the handle of «Мамо, не псіхуй!»? {CANON_HARVEST}",
+        "queries": ("Мамо, не псіхуй", "не псіхуй"),
+        "markers": ("не псіхуй", "не психуй"),
+        "also": "TGStat showed ~13.8k subscribers and no handle.",
+    },
+    "dytiache_kharchuvannia_title": {
+        "subject": "«Дитяче харчування» (~7.9k, TGStat)",
+        "asked": f"what is the handle of «Дитяче харчування»? {CANON_HARVEST}",
+        "queries": ("Дитяче харчування", "дитяче харчування прикорм"),
+        "markers": ("дитяче харчуван",),
+        "also": (
+            "TGStat showed ~7.9k subscribers and no handle. The name is also an ordinary phrase"
+            " («baby food»), so several unrelated channels can carry it — the rows need a read."
+        ),
+    },
+    "vse_pro_ditey_title": {
+        "subject": "«Все про дітей | Виховання | Психологія» (~23.7k, TGStat)",
+        "asked": f"what is the handle of «Все про дітей | Виховання | Психологія»? {CANON_HARVEST}",
+        "queries": ("Все про дітей", "Все про дітей Виховання Психологія"),
+        "markers": ("все про діт",),
+        "also": "TGStat showed ~23.7k subscribers and no handle.",
+    },
+    "suchasni_batky_title": {
+        "subject": "«Сучасні батьки | Виховання» (~36.4k, TGStat)",
+        "asked": f"what is the handle of «Сучасні батьки | Виховання»? {CANON_HARVEST}",
+        "queries": ("Сучасні батьки", "Сучасні батьки Виховання"),
+        "markers": ("сучасні батьк",),
+        "also": (
+            "TGStat showed ~36.4k subscribers and no handle, and the canon flags it «возможно"
+            " приватный» — a search that finds nothing is consistent with a private channel and"
+            " does not distinguish the two. That belongs to the deferred privates track."
+        ),
+    },
+}
+
+SEARCHES.update(TITLE_SEARCHES)
+
+CANON_CITY_ANALOGUES = (
+    "canon docs/CHANNELS-launch.md 'Рулинги гейта дня 2', ruling (6) — the operator's addition"
+    " during the session: find broadcast analogues for the two towns whose handles left as"
+    " supergroups"
+)
+
+CITY_ANALOGUE_SEARCHES = {
+    # Poltava and Kremenchuk lost a handle each to ruling (1), which excluded three chats. The
+    # question is not "does the town have a channel" — both already have one in the composition —
+    # but "is there a BROADCAST feed of the size that left". `entry_check.suggest` now carries
+    # `broadcast` and `megagroup` per row precisely so this search can tell them apart; the
+    # marker is only the town name, because a filter on the answer is what the human look is for.
+    "poltava_broadcast_analogue": {
+        "subject": "a broadcast news feed of Poltava to replace @poltava_misto (60,028, a chat)",
+        "asked": (
+            "which PUBLIC BROADCAST channels of Poltava does Telegram's own search return?"
+            f" {CANON_CITY_ANALOGUES}"
+        ),
+        "queries": ("Полтава новини", "Полтава", "Poltava"),
+        "markers": ("полтав", "poltav"),
+        "also": (
+            "@poltava_informue and @suspilnepoltava already entered from the same town, so a row"
+            " that is one of them is coverage already held, not a find."
+        ),
+    },
+    "kremenchuk_broadcast_analogue": {
+        "subject": "a broadcast news feed of Kremenchuk to replace @kremenchug_live (16,056, a chat)",
+        "asked": (
+            "which PUBLIC BROADCAST channels of Kremenchuk does Telegram's own search return?"
+            f" {CANON_CITY_ANALOGUES}"
+        ),
+        "queries": ("Кременчук новини", "Кременчук", "Кременчуг"),
+        "markers": ("кременчу",),
+        "also": "@telegraf_kremenchuk already entered from the same town.",
+    },
+}
+
+SEARCHES.update(CITY_ANALOGUE_SEARCHES)
 
 HVYLYNKA_JUDGEMENT = {
     "judged_by": "executor, 2026-08-07",
@@ -410,6 +519,16 @@ def main(argv: list[str] | None = None) -> int:
         help="Telegram search for the Consumer Union of Ukraine's counterfeit-dairy channel",
     )
     parser.add_argument(
+        "--search-titles",
+        action="store_true",
+        help="Telegram search for the handles of the five channels «Дозаявка №8» saw by title",
+    )
+    parser.add_argument(
+        "--search-city-analogues",
+        action="store_true",
+        help="Telegram search for broadcast feeds of Poltava and Kremenchuk (day-2 ruling 6)",
+    )
+    parser.add_argument(
         "--close-hvylynka",
         action="store_true",
         help="write the executor's read of the search into the note (no API, no new search)",
@@ -440,6 +559,8 @@ def main(argv: list[str] | None = None) -> int:
     keys = ["hvylynka_search"] if args.search else []
     keys += list(RETAIL_SEARCHES) if args.search_retail else []
     keys += list(FOOD_QUALITY_SEARCH) if args.search_food_quality else []
+    keys += list(TITLE_SEARCHES) if args.search_titles else []
+    keys += list(CITY_ANALOGUE_SEARCHES) if args.search_city_analogues else []
 
     if args.plan or not (keys or args.poltava):
         for key in keys or SEARCHES:

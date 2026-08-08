@@ -112,6 +112,24 @@ def canon_city_topup() -> list[str]:
     return re.findall(r"@[A-Za-z0-9_]+", listing.split("\n\n")[0])
 
 
+def canon_city_analogues() -> list[str]:
+    """ "Дозаявка №10"'s four broadcast city feeds — what step 7's search found for the two towns
+    whose handle left as a chat. The singular «хендл на гейт» of №9 and the plural «хендла на
+    гейт» here are what keep the three prose listings from reading each other."""
+    text = CANON.read_text(encoding="utf-8")
+    section = text[text.index("## Дозаявка №10") :]
+    listing = section[section.index("городских хендла на гейт:") :]
+    return re.findall(r"@[A-Za-z0-9_]+", listing.split("\n\n")[0])
+
+
+def canon_mothers_topup() -> list[str]:
+    """ "Дозаявка №10"'s two handles, resolved from TGStat titles by the step-7 search."""
+    text = CANON.read_text(encoding="utf-8")
+    section = text[text.index("## Дозаявка №10") :]
+    listing = section[section.index("хендла матерей на гейт:") :]
+    return re.findall(r"@[A-Za-z0-9_]+", listing.split("\n\n")[0])
+
+
 def canon_retail_5() -> list[str]:
     """The national chains "Дозаявка №5" sends to the gate, read out of the master list.
 
@@ -213,7 +231,9 @@ def test_the_city_feeds_are_the_canons_own_and_all_of_them():
     assert len(set(picks)) == 16, "a handle is listed twice"
     # The routing table also carries "Дозаявка №9"'s one replacement, appended after the sixteen:
     # same rule, same tuple, so the derivation is the two sections rather than one.
-    assert list(picks) + canon_city_topup() == list(apply_rulings_city_feeds())
+    assert (list(picks) + canon_city_topup() + canon_city_analogues()) == list(
+        apply_rulings_city_feeds()
+    )
 
 
 def test_the_city_topup_is_one_broadcast_channel_and_not_the_supergroup_it_replaces():
@@ -251,7 +271,11 @@ def test_the_candidate_list_is_the_canons_own():
     retail = [(handle, "late") for handle in canon_retail_5()]
     harvest = [(handle, "late") for handle in canon_harvest_6()]
     topup = [(handle, "city") for handle in canon_city_topup()]
-    assert list(gate.CANDIDATES) == canon_buckets() + late + city + retail + harvest + topup
+    analogues = [(handle, "city") for handle in canon_city_analogues()]
+    mothers = [(handle, "late") for handle in canon_mothers_topup()]
+    assert list(gate.CANDIDATES) == (
+        canon_buckets() + late + city + retail + harvest + topup + analogues + mothers
+    )
 
 
 def test_the_composition_is_the_62_plus_what_the_rulings_added():
@@ -260,11 +284,22 @@ def test_the_composition_is_the_62_plus_what_the_rulings_added():
         for b in ("comments", "posts", "watch", "late", "city")
     }
     # + the withdrawn "Дозаявка оператора" row, + "Дозаявка №5"'s three chains, + №8's six
-    late = len(canon_sent_to_the_gate()) + 1 + len(canon_retail_5()) + len(canon_harvest_6())
-    city = len(canon_city_feeds()) + len(canon_city_topup())
+    late = (
+        len(canon_sent_to_the_gate())
+        + 1
+        + len(canon_retail_5())
+        + len(canon_harvest_6())
+        + len(canon_mothers_topup())
+    )
+    city = len(canon_city_feeds()) + len(canon_city_topup()) + len(canon_city_analogues())
     assert counts == {"comments": 29, "posts": 18, "watch": 14, "late": late, "city": city}
     assert len(gate.CANDIDATES) == (
-        62 + len(canon_sent_to_the_gate()) + city + len(canon_retail_5()) + len(canon_harvest_6())
+        62
+        + len(canon_sent_to_the_gate())
+        + city
+        + len(canon_retail_5())
+        + len(canon_harvest_6())
+        + len(canon_mothers_topup())
     )
     assert len({handle for handle, _ in gate.CANDIDATES}) == len(gate.CANDIDATES)
 

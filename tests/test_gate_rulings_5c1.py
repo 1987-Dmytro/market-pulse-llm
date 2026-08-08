@@ -65,6 +65,30 @@ def canon_city_topup() -> list[str]:
 
 CITY_TOPUP = canon_city_topup()
 
+
+def canon_city_analogues() -> list[str]:
+    """ "Дозаявка №10"'s four broadcast city feeds, parsed here too rather than imported."""
+    import re
+
+    text = CANON.read_text(encoding="utf-8")
+    section = text[text.index("## Дозаявка №10") :]
+    listing = section[section.index("городских хендла на гейт:") :]
+    return re.findall(r"@[A-Za-z0-9_]+", listing.split("\n\n")[0])
+
+
+def canon_mothers_topup() -> list[str]:
+    """ "Дозаявка №10"'s two handle top-ups, resolved from TGStat titles by the step-7 search."""
+    import re
+
+    text = CANON.read_text(encoding="utf-8")
+    section = text[text.index("## Дозаявка №10") :]
+    listing = section[section.index("хендла матерей на гейт:") :]
+    return re.findall(r"@[A-Za-z0-9_]+", listing.split("\n\n")[0])
+
+
+CITY_ANALOGUES = canon_city_analogues()
+MOTHERS_TOPUP = canon_mothers_topup()
+
 AWAITING_A_RULING = set()
 """Gated, not PASS, and no ruling covers it yet — the operator's rule is to stop and report.
 
@@ -288,7 +312,7 @@ def test_the_audience_table_is_the_canons_own():
     # moment they pass; that is a mismatch for the canon's author, not for this script.
     assert set(apply.AUDIENCE) - set(canon) == set(apply.CITY_FEEDS) | set(RETAIL_5) | set(
         HARVEST_6
-    )
+    ) | set(MOTHERS_TOPUP)
     assert {apply.AUDIENCE[handle] for handle in apply.CITY_FEEDS} == {"regional"}
     assert {apply.AUDIENCE[handle] for handle in RETAIL_5} == {"retail_official"}
     # The harvest six carry the segments PROMPT-5c1-day2 assigns; two of them are expectations
@@ -321,7 +345,7 @@ def test_the_city_rows_of_the_audience_table_are_the_gates_own():
     from drifting: same handles, same order, and `regional` for every one of them."""
     regional = [handle for handle, segment in apply.AUDIENCE.items() if segment == "regional"]
     assert regional == list(apply.CITY_FEEDS)
-    assert len(regional) == 16 + len(CITY_TOPUP)
+    assert len(regional) == 16 + len(CITY_TOPUP) + len(CITY_ANALOGUES)
 
 
 def test_the_titles_beside_the_city_rows_are_the_scans_own():
@@ -342,6 +366,22 @@ def test_the_titles_beside_the_city_rows_are_the_scans_own():
     replaced = next(r for r in record["candidates"] if r["handle"] == "@Karlivka_live")
     titles["@KarlivkaLive"] = replaced["checks"]["discussion_group"]["title"]
     assert "@KarlivkaLive" not in {row["handle"] for row in ledger["candidates"]}
+
+    # "Дозаявка №10"'s four came from step 7's searches, a third record again. Each source is
+    # named rather than merged into one pool: "where did this title come from" is the question,
+    # and a row whose provenance is nowhere must not borrow another row's.
+    for key in ("poltava_broadcast_analogue", "kremenchuk_broadcast_analogue"):
+        for match in record["notes"][key]["name_matches"]:
+            titles.setdefault(f"@{match['username']}", match["title"])
+    # Three of the four were NOT in the 119-candidate town-name scan at all — @h_kremenchug is
+    # 137,221 subscribers and the scan never returned it. Worth pinning rather than passing over:
+    # it is the measured reason the operator's step-7 addition was not a duplicate of the scan.
+    scanned = {row["handle"] for row in ledger["candidates"]}
+    assert sorted(set(CITY_ANALOGUES) - scanned) == [
+        "@h_kremenchug",
+        "@kremen_news",
+        "@poltava20",
+    ]
 
     source = (REPO_ROOT / "scripts" / "apply_gate_rulings_5c1.py").read_text(encoding="utf-8")
     annotated = dict(re.findall(r'"(@[A-Za-z0-9_]+)": "regional",\s+# (.+)', source))
@@ -381,7 +421,7 @@ def test_the_shipped_registry_carries_the_canons_audience_for_every_source():
     """Read by HANDLE: the four originals predate `source_entry` and their ids do not follow
     from their handles (@VARUS_channel is `varus`), so an id-keyed check would miss them."""
     sources = load_registry(REPO_ROOT / "config" / "registry.yaml").sources
-    assert len(sources) == 61
+    assert len(sources) == 67
     for src in sources:
         for handle in src.telegram_channels:
             assert src.audience == apply.AUDIENCE[handle], handle
@@ -671,7 +711,7 @@ def test_the_shipped_registry_is_re_derivable_from_the_gate_record():
             expected["watch"],
         ), candidate["handle"]
         checked += 1
-    assert checked == 57
+    assert checked == 63
 
 
 def test_the_composition_matches_the_canons_own_summary():
@@ -714,13 +754,19 @@ def test_the_composition_matches_the_canons_own_summary():
     assert "**Сводка после дня 2: реестр 61 = запуск 54 + watch 7.**" in day2
     assert "комментных 16, постовых 34" in day2
     assert "Исключено за фазу **33**" in day2
+    # And what step 7's own findings then added on top of it, in its own section for the same
+    # reason every wave has one: the canon amends, it does not restate.
+    ten = " ".join(text[text.index("**Сводка после дозаявки №10") :][:400].split())
+    assert "Сводка после дозаявки №10: реестр 67 = запуск 60 + watch 7." in ten
+    assert "Комментных 18" in ten and "постовых 38" in ten
+    assert "боевых mothers_kids 3" in ten
     assert "боевой **1** (@educationwithloven)" in day2, "the mothers segment stopped being empty"
     provisional = " ".join(text[text.index("**Весь дифф реестра дня 2") :][:400].split())
     assert "PROVISIONAL pending yield screen" in provisional
 
-    assert buckets["comments"] == 16
+    assert buckets["comments"] == 18
     assert buckets["watch"] == 7
-    assert buckets["posts"] == 34
+    assert buckets["posts"] == 38
     # Six by 07.08 midday, the five the theme screen caught that evening (@znishkom,
     # @whitecode_zny, @offspringrus off-topic; @discountua1, @ATB_FANatik text-free), @uasaler by
     # wave 2, wave 3's fifteen — 3 on the census, 1 on market-origin evidence, 11 on RU titles —
@@ -728,5 +774,5 @@ def test_the_composition_matches_the_canons_own_summary():
     assert buckets["excluded"] == 33
     # The four originals are out of the gate's scope, so they are added here rather than counted.
     # None of the fifteen was one of them: @tretyakovaele was gated in 5c1 like the rest.
-    assert 4 + buckets["comments"] + buckets["posts"] == 54
-    assert 4 + buckets["comments"] + buckets["posts"] + buckets["watch"] == 61
+    assert 4 + buckets["comments"] + buckets["posts"] == 60
+    assert 4 + buckets["comments"] + buckets["posts"] + buckets["watch"] == 67

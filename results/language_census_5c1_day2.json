@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-08T10:56:39+00:00",
+  "generated_at": "2026-08-08T11:20:18+00:00",
   "phase": "5c1 addendum 8",
   "asks": "per registry source, the UA and RU shares of its own posts in the collected window, and the pre-registered verdict on them",
   "contract": "docs/SPEC.md §3.11 (4) 'Language policy' (operator ruling 2026-08-08)",
@@ -46,9 +46,9 @@
   },
   "verdicts_reportable": true,
   "summary": {
-    "n": 61,
+    "n": 67,
     "by_verdict": {
-      "UA_DOMINANT": 37,
+      "UA_DOMINANT": 43,
       "TOO_FEW_DECIDABLE": 16,
       "NO_POSTS_IN_WINDOW": 7,
       "RU_DOMINANT": 1
@@ -80,10 +80,10 @@
       },
       "mothers_kids": {
         "NO_POSTS_IN_WINDOW": 2,
-        "UA_DOMINANT": 1
+        "UA_DOMINANT": 3
       },
       "regional": {
-        "UA_DOMINANT": 10,
+        "UA_DOMINANT": 14,
         "RU_DOMINANT": 1,
         "TOO_FEW_DECIDABLE": 3
       }
@@ -91,22 +91,22 @@
   },
   "sensitivity_description_only": {
     "dominance_0.6": {
-      "UA_DOMINANT": 37,
+      "UA_DOMINANT": 43,
       "RU_DOMINANT": 1,
       "MIXED": 0
     },
     "dominance_0.7": {
-      "UA_DOMINANT": 37,
+      "UA_DOMINANT": 43,
       "RU_DOMINANT": 1,
       "MIXED": 0
     },
     "dominance_0.8": {
-      "UA_DOMINANT": 37,
+      "UA_DOMINANT": 43,
       "RU_DOMINANT": 1,
       "MIXED": 0
     },
     "dominance_0.9": {
-      "UA_DOMINANT": 37,
+      "UA_DOMINANT": 43,
       "RU_DOMINANT": 1,
       "MIXED": 0
     }
@@ -135,6 +135,34 @@
         "ПРОШУ О МАКСИМАЛЬНОМ РАСПРОСТРАНЕНИИ ПОСТА‼️‼️‼️‼️‼️‼️‼️‼️‼️‼️‼️ ОТДАЕМ ЩЕНКА В ДОБРЫЕ РУКИ!!!!!!!! По Волгоградской области ( Энгельс, Саратов тоже можем ), ПР"
       ],
       "ua_examples": []
+    },
+    {
+      "handle": "@matusi_ukr",
+      "source_id": "matusi_ukr",
+      "audience": "mothers_kids",
+      "bucket": "comments",
+      "posts_in_window": 237,
+      "decidable": 212,
+      "counts": {
+        "ua": 197,
+        "ru": 15,
+        "en": 0,
+        "other": 25
+      },
+      "undecidable_share": 0.105,
+      "ua_share": 0.929,
+      "ru_share": 0.071,
+      "verdict": "UA_DOMINANT",
+      "ru_examples": [
+        "Привет девочки кто на холодной горе (только здесь,другие районы не интересуют) водит детей в частную школу?посоветуйте пожалуйста и сколько платите в месяц с пи",
+        "Добрый день кто подавал в том году документы на Пакунок школяра в пенсионный фонд не через Дию,какие необходимы документы, заранее спасибо. ▫️ «Матусі України» ",
+        "Всем привет) Хочу поднять тему прививок , очень переживаю на эту тему . В семье были случаи последствий после прививок и до 5 лет ничего не делали , а сейчас по"
+      ],
+      "ua_examples": [
+        "🌮 Ліниві чебуреки з мінілаваша 😍 Дуже соковиті, хрусткі та готуються всього за кілька хвилин! Ідеальний варіант для швидкого обіду або вечері. Зберігайте рецепт",
+        "1)Добрий день. Дитині потрібно виміряти внутрішньо черепний тиск та узд сердце в м. Харкові. Є електронні направлення до невропатолога та кардіолога. Підкажіть,",
+        "Як розгадати код характеру дитини та підібрати до неї ідеальний підхід? Кожна дитина народжується з унікальною нервовою системою. Те, що працює з одним малюком,"
+      ]
     },
     {
       "handle": "@PirOperative",
@@ -186,6 +214,30 @@
         "У Кременчуцькому районі посилюють контроль за перевізниками У Глобиному інспектори перевіряють водіїв, які здійснюють пасажирські та вантажні рейси. Особливу ув",
         "Продам культиватор навісний,або обміняю на оприскувач або другий інвентар.Всі пропозиції 👉 @Vtfghhujn",
         "В серпні минулого року лежала в пульмонології в Полтаві. Лікування коштувало 360 грн. А в грудні в терапії в Глобине обійшлося в 11000 грн. Відразу дають підпис"
+      ]
+    },
+    {
+      "handle": "@poltava20",
+      "source_id": "poltava20",
+      "audience": "regional",
+      "bucket": "posts",
+      "posts_in_window": 1535,
+      "decidable": 1356,
+      "counts": {
+        "ua": 1356,
+        "ru": 0,
+        "en": 0,
+        "other": 179
+      },
+      "undecidable_share": 0.117,
+      "ua_share": 1.0,
+      "ru_share": 0.0,
+      "verdict": "UA_DOMINANT",
+      "ru_examples": [],
+      "ua_examples": [
+        "⚠️❗️ ПОВІТРЯНА ТРИВОГА, ВСІ В УКРИТТЯ🙏",
+        "Полтавець отримав штраф за незаконне зберігання багнета до автомата Калашникова Чоловік знайшов зброю біля ставка у Новооржицькому влітку 2025 року, але не пові",
+        "🟢 ВІДБІЙ ПОВІТРЯНОЇ ТРИВОГИ!"
       ]
     },
     {
@@ -285,6 +337,30 @@
       ]
     },
     {
+      "handle": "@h_kremenchug",
+      "source_id": "h_kremenchug",
+      "audience": "regional",
+      "bucket": "posts",
+      "posts_in_window": 459,
+      "decidable": 459,
+      "counts": {
+        "ua": 459,
+        "ru": 0,
+        "en": 0,
+        "other": 0
+      },
+      "undecidable_share": 0.0,
+      "ua_share": 1.0,
+      "ru_share": 0.0,
+      "verdict": "UA_DOMINANT",
+      "ru_examples": [],
+      "ua_examples": [
+        "🟢 Відбій повітряної тривоги!",
+        "🔴Повітряна тривога!",
+        "У кожного бувають помилки 🙈 Але не замовити «Оптіму» за 595 грн — одна з найдорожчих (знижка 175 грн)💥. 🍣 40 шматочків 🥢 5 ролів ⚖️ 1,3 кг (Тільки 08-09.08.26 р"
+      ]
+    },
+    {
       "handle": "@educationwithloven",
       "source_id": "educationwithloven",
       "audience": "mothers_kids",
@@ -306,6 +382,54 @@
         "Вихователі України - ми всі різні.😉 Хтось говорить українською з особливим місцевим звучанням, хтось має свій діалект, свої традиції, свої слова й звички.💛 Ми з",
         "✨✨✨✨✨ ✨✨✨✨✨✨ ✨✨✨✨✨✨✨💖 Дитячі істерики - це не «погана поведінка», а сигнал про те, що дитині складно впоратися з емоціями. Підготувала добрі поради, які батьків",
         "⭐ ЧУДОВА ЗАРЯДКА ДЛЯ РОЗУМУ - перевірте і себе разом із дітками,🤓 як у вас справи з зоровою увагою: 👀 Потрібно знайти - всі приховані предмети на картинці. 🙎‍♀️"
+      ]
+    },
+    {
+      "handle": "@poltava_pvp",
+      "source_id": "poltava_pvp",
+      "audience": "regional",
+      "bucket": "posts",
+      "posts_in_window": 423,
+      "decidable": 423,
+      "counts": {
+        "ua": 423,
+        "ru": 0,
+        "en": 0,
+        "other": 0
+      },
+      "undecidable_share": 0.0,
+      "ua_share": 1.0,
+      "ru_share": 0.0,
+      "verdict": "UA_DOMINANT",
+      "ru_examples": [],
+      "ua_examples": [
+        "‼️У ПОЛТАВІ ПОВІТРЯНА ТРИВОГА - 14:06‼ Просимо всіх терміново прослідувати в укриття цивільного захисту⚡ ATTENTION! Air raid sirens in Poltava! Please proceed t",
+        "✅ ВІДБІЙ ПОВІТРЯНОЇ ТРИВОГИ - 13:33✅",
+        "‼️У ПОЛТАВІ ПОВІТРЯНА ТРИВОГА - 13:09‼ Просимо всіх терміново прослідувати в укриття цивільного захисту⚡ ATTENTION! Air raid sirens in Poltava! Please proceed t"
+      ]
+    },
+    {
+      "handle": "@kremen_news",
+      "source_id": "kremen_news",
+      "audience": "regional",
+      "bucket": "posts",
+      "posts_in_window": 354,
+      "decidable": 354,
+      "counts": {
+        "ua": 354,
+        "ru": 0,
+        "en": 0,
+        "other": 0
+      },
+      "undecidable_share": 0.0,
+      "ua_share": 1.0,
+      "ru_share": 0.0,
+      "verdict": "UA_DOMINANT",
+      "ru_examples": [],
+      "ua_examples": [
+        "ШУКАЄМО АДМІНІСТРАТОРА В ГРУМІНГ САЛОН Тел: 0962172444",
+        "🟢 ВІДБІЙ ПОВІТРЯНОЇ ТРИВОГИ! 🟢",
+        "🔴 ПОВІТРЯНА ТРИВОГА! 🔴"
       ]
     },
     {
@@ -762,6 +886,30 @@
         "В таку спеку рятує лише відчинене вікно 🔥 Але комарі, здається, теж так думають і тільки й чекають, щоб залетіти в оселю 🦟 А щоб шкідники не докучали, радимо за",
         "А ми тут наміксували ЩЕ БІЛЬШЕ ЗНИЖОК! 😍 Тож лови добірку, у якій знайдеш дуже ощадливі ціни на такі потрібні товари ✅ З турботою, Копійочка 🧡",
         "На вулиці така спека, що тануть навіть ціниии 😵‍💫 Знижки на улюблені літні товари вже чекають на тебе у Копійочка 🤩 Тож не барися: забігай на літній розпродаж ✅"
+      ]
+    },
+    {
+      "handle": "@mamo_nepsichuy",
+      "source_id": "mamo_nepsichuy",
+      "audience": "mothers_kids",
+      "bucket": "comments",
+      "posts_in_window": 48,
+      "decidable": 48,
+      "counts": {
+        "ua": 48,
+        "ru": 0,
+        "en": 0,
+        "other": 0
+      },
+      "undecidable_share": 0.0,
+      "ua_share": 1.0,
+      "ru_share": 0.0,
+      "verdict": "UA_DOMINANT",
+      "ru_examples": [],
+      "ua_examples": [
+        "Універсальна мамина фраза після кожного походу кудись із дітьми ✅ Відео :diana_imam (Інстаграм) Мамо, не псіхуй!👌",
+        "Насправді саме такі маленькі дії закладають фундамент для майбутнього розвитку Під час цієї простої вправи дитина тренує координацію двох рук, розвиває взаємоді",
+        "Вважаємо це генеральною репетицією батьківства😂👶 Відео :tanya.denysiuk(Інстаграм) Мамо, не псіхуй!👌"
       ]
     },
     {
@@ -1545,7 +1693,7 @@
     }
   ],
   "git": {
-    "commit": "cfb3eec3b834e82ddb49721619d739327a33cf94",
+    "commit": "0eb12d5df81ff8f27c43f7c4895e9563d4f1c26e",
     "dirty": [
       "config/registry.yaml",
       "docs/CHANNELS-launch.md",
@@ -1555,10 +1703,10 @@
       "scripts/apply_gate_rulings_5c1.py",
       "scripts/entry_check.py",
       "scripts/late_batch_5c1.py",
-      "tests/test_collect_5c1.py",
       "tests/test_entry_gate_5c1.py",
       "tests/test_gate_rulings_5c1.py",
       "tests/test_late_batch_5c1.py",
+      "results/harvest_mothers_ua.json",
       "scripts/harvest_similar_5c1.py",
       "tests/test_harvest_similar_5c1.py"
     ]

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-08T10:57:00+00:00",
+  "generated_at": "2026-08-08T11:20:21+00:00",
   "phase": "5c1 day-2 pre-flight",
   "asks": "which market does each source sell into — a question about facts, not language",
   "contract": "docs/SPEC.md §3.11 (4), 'Market-origin screen' (operator ruling 2026-08-08)",
@@ -132,11 +132,11 @@
   },
   "verdicts_reportable": true,
   "summary": {
-    "n": 61,
+    "n": 67,
     "by_verdict": {
-      "RF_FLAG": 2,
-      "NO_EVIDENCE": 23,
-      "UA_EVIDENCE": 36
+      "RF_FLAG": 3,
+      "NO_EVIDENCE": 24,
+      "UA_EVIDENCE": 40
     }
   },
   "sources": [
@@ -248,6 +248,58 @@
           "line": "😞 Біля Кременчука дуже сильно зацвіла вода",
           "msg_id": 37110,
           "date": "2026-08-05T17:46:07+00:00"
+        }
+      ],
+      "audience": "regional"
+    },
+    {
+      "handle": "@poltava20",
+      "posts_in_window": 1535,
+      "posts_with_rf_evidence": 1,
+      "posts_with_ua_evidence": 688,
+      "verdict": "RF_FLAG",
+      "rf_evidence": [
+        {
+          "signal": "retailer",
+          "term": "Wildberries",
+          "matched": "Wildberries",
+          "line": "❗️Українські БПЛА рознесли один із найбільших логістичних хабів російського маркетплейсу Wildberries в Електросталі, — росЗМІ",
+          "msg_id": 42450,
+          "date": "2026-07-18T05:47:01+00:00"
+        }
+      ],
+      "ua_evidence": [
+        {
+          "signal": "currency",
+          "term": "гривня",
+          "matched": "гривень",
+          "line": "Суд призначив йому штраф 17 тисяч гривень та зобов’язав сплатити витрати за експертизу. Вилучену зброю мають знищити.",
+          "msg_id": 43729,
+          "date": "2026-08-08T10:45:34+00:00"
+        },
+        {
+          "signal": "location",
+          "term": "Полтава",
+          "matched": "Полтавець",
+          "line": "Полтавець отримав штраф за незаконне зберігання багнета до автомата Калашникова",
+          "msg_id": 43729,
+          "date": "2026-08-08T10:45:34+00:00"
+        },
+        {
+          "signal": "location",
+          "term": "Київ",
+          "matched": "Київ",
+          "line": "‼️Загроза БАЛІСТИКИ. Є пуски на Київ",
+          "msg_id": 43713,
+          "date": "2026-08-08T00:02:26+00:00"
+        },
+        {
+          "signal": "currency",
+          "term": "грн",
+          "matched": "грн",
+          "line": "💰 На Полтавщині директора підприємства підозрюють в ухиленні від сплати понад 8,6 млн грн податків",
+          "msg_id": 43707,
+          "date": "2026-08-07T18:57:01+00:00"
         }
       ],
       "audience": "regional"
@@ -475,6 +527,16 @@
     {
       "handle": "@lab_of_childhood",
       "posts_in_window": 0,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 0,
+      "verdict": "NO_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [],
+      "audience": "mothers_kids"
+    },
+    {
+      "handle": "@mamo_nepsichuy",
+      "posts_in_window": 48,
       "posts_with_rf_evidence": 0,
       "posts_with_ua_evidence": 0,
       "verdict": "NO_EVIDENCE",
@@ -1637,24 +1699,196 @@
         }
       ],
       "audience": "regional"
+    },
+    {
+      "handle": "@poltava_pvp",
+      "posts_in_window": 423,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 323,
+      "verdict": "UA_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [
+        {
+          "signal": "location",
+          "term": "Полтава",
+          "matched": "Полтаві",
+          "line": "📑У Полтаві затвердять нові правила поведінки на Алеї Героїв",
+          "msg_id": 54838,
+          "date": "2026-08-08T08:41:35+00:00"
+        },
+        {
+          "signal": "currency",
+          "term": "грн",
+          "matched": "грн.",
+          "line": "У липні він погодився надіслати фотографії розташування підрозділів своєї військової частини та приміщень, де зберігалася військова техніка. Це за грошову винагороду в 1500 грн. Фо",
+          "msg_id": 54819,
+          "date": "2026-08-07T12:01:01+00:00"
+        },
+        {
+          "signal": "domain",
+          "term": "*.ua",
+          "matched": "prostor.ua",
+          "line": "❤️‍🔥 Твій скарб вже на prostor.ua та в магазинах!",
+          "msg_id": 54817,
+          "date": "2026-08-07T11:00:01+00:00"
+        },
+        {
+          "signal": "location",
+          "term": "Київ",
+          "matched": "Київському",
+          "line": "🚧 У Полтаві за майже 20 млн грн реконструюють аварійний колектор на Київському шосе, щоб ліквідувати каскад провалів",
+          "msg_id": 54812,
+          "date": "2026-08-07T09:00:52+00:00"
+        }
+      ],
+      "audience": "regional"
+    },
+    {
+      "handle": "@h_kremenchug",
+      "posts_in_window": 459,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 80,
+      "verdict": "UA_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [
+        {
+          "signal": "currency",
+          "term": "грн",
+          "matched": "грн",
+          "line": "Але не замовити «Оптіму» за 595 грн — одна з найдорожчих (знижка 175 грн)💥.",
+          "msg_id": 100756,
+          "date": "2026-08-08T08:00:32+00:00"
+        },
+        {
+          "signal": "domain",
+          "term": "*.ua",
+          "matched": "com.ua",
+          "line": "👉 https://rassushus.com.ua/",
+          "msg_id": 100756,
+          "date": "2026-08-08T08:00:32+00:00"
+        },
+        {
+          "signal": "location",
+          "term": "Полтава",
+          "matched": "Полтавщини",
+          "line": "Келих Полтавщини - 36,00",
+          "msg_id": 100746,
+          "date": "2026-08-07T12:59:37+00:00"
+        },
+        {
+          "signal": "location",
+          "term": "Київ",
+          "matched": "Київстар",
+          "line": "Під час слідчих дій правоохоронці вилучили десятки стартових пакетів мобільних операторів «ВФ Україна», «Київстар» та «Лайфсел», ноутбуки Acer та Asus, системні блоки, роутер, вебк",
+          "msg_id": 100744,
+          "date": "2026-08-07T12:50:14+00:00"
+        }
+      ],
+      "audience": "regional"
+    },
+    {
+      "handle": "@kremen_news",
+      "posts_in_window": 354,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 145,
+      "verdict": "UA_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [
+        {
+          "signal": "currency",
+          "term": "грн",
+          "matched": "грн",
+          "line": "Вхід до 21 року — 250 грн",
+          "msg_id": 50513,
+          "date": "2026-08-08T07:58:49+00:00"
+        },
+        {
+          "signal": "location",
+          "term": "Дніпро",
+          "matched": "Дніпра",
+          "line": "🎧 Спеціальний гість з Дніпра — DJ MALOYA",
+          "msg_id": 50513,
+          "date": "2026-08-08T07:58:49+00:00"
+        },
+        {
+          "signal": "location",
+          "term": "Кременчук",
+          "matched": "Кременчук",
+          "line": "📍 Кременчук, проїзд Григорія Гамалії, 42",
+          "msg_id": 50506,
+          "date": "2026-08-07T15:12:26+00:00"
+        },
+        {
+          "signal": "location",
+          "term": "Полтава",
+          "matched": "Полтавської",
+          "line": "Таке рішення ухвалив Господарський суд Полтавської області.",
+          "msg_id": 50500,
+          "date": "2026-08-07T13:40:23+00:00"
+        }
+      ],
+      "audience": "regional"
+    },
+    {
+      "handle": "@matusi_ukr",
+      "posts_in_window": 237,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 46,
+      "verdict": "UA_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [
+        {
+          "signal": "location",
+          "term": "Харків",
+          "matched": "Харків",
+          "line": "1)Добрий день. Опублікуйте будь ласка питання. Харків. Потрібно перелікувати канали зуба. Порекомендуйте з власного досвіду лікаря з мікроскопом, який зробить ідеально. Так, щоб по",
+          "msg_id": 22329,
+          "date": "2026-08-07T13:04:43+00:00"
+        },
+        {
+          "signal": "location",
+          "term": "Київ",
+          "matched": "Київ",
+          "line": "м.Київ, правий берег.",
+          "msg_id": 22315,
+          "date": "2026-08-06T09:01:25+00:00"
+        },
+        {
+          "signal": "retailer",
+          "term": "Сільпо",
+          "matched": "Сільпо",
+          "line": "▪️ Сільпо Фуд",
+          "msg_id": 22311,
+          "date": "2026-08-05T13:01:35+00:00"
+        },
+        {
+          "signal": "retailer",
+          "term": "Епіцентр",
+          "matched": "Епіцентр",
+          "line": "▪️ Епіцентр-К",
+          "msg_id": 22311,
+          "date": "2026-08-05T13:01:35+00:00"
+        }
+      ],
+      "audience": "mothers_kids"
     }
   ],
   "git": {
-    "commit": "cfb3eec3b834e82ddb49721619d739327a33cf94",
+    "commit": "0eb12d5df81ff8f27c43f7c4895e9563d4f1c26e",
     "dirty": [
       "config/registry.yaml",
       "docs/CHANNELS-launch.md",
       "results/collect_5c1.json",
       "results/entry_gate_5c1.json",
       "results/joins_5c1.jsonl",
+      "results/language_census_5c1_day2.json",
       "scripts/apply_gate_rulings_5c1.py",
       "scripts/entry_check.py",
       "scripts/late_batch_5c1.py",
-      "tests/test_collect_5c1.py",
       "tests/test_entry_gate_5c1.py",
       "tests/test_gate_rulings_5c1.py",
       "tests/test_late_batch_5c1.py",
-      "results/language_census_5c1_day2.json",
+      "results/harvest_mothers_ua.json",
       "scripts/harvest_similar_5c1.py",
       "tests/test_harvest_similar_5c1.py"
     ]

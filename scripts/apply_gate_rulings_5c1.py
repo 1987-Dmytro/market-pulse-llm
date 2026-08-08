@@ -226,6 +226,12 @@ CITY_FEEDS = (
     # "Дозаявка №9" (day-2 sitting): the broadcast channel behind the excluded @Karlivka_live
     # supergroup. Same town, same rule, so it joins this tuple rather than getting one of its own.
     "@KarlivkaLive",
+    # "Дозаявка №10": step 7's broadcast analogues for the two towns that lost a handle to the
+    # supergroup ruling. Same posts-only rule again — a city feed's group waits for 5c2.
+    "@poltava_pvp",
+    "@poltava20",
+    "@h_kremenchug",
+    "@kremen_news",
 )
 CITY_RULE = (
     "POSTS-ONLY by the standing ruling (canon 'Дозаявка №3', operator 2026-08-08): a city feed"
@@ -254,6 +260,11 @@ GATED_LATE = {
     "@educationwithloven": "harvest candidate Виховання з любов'ю (canon 'Дозаявка №8', ~31.5k)",
     "@lab_of_childhood": "harvest candidate Lab of Childhood (canon 'Дозаявка №8', ~2.5k)",
     "@mandziak": "harvest candidate Мандзяк Віктор (canon 'Дозаявка №8', ~123.9k)",
+    # "Дозаявка №10": the handle top-up of step 7. Both were found by TITLE and confirmed by
+    # SIZE — 19,278 against TGStat's ~19.3k, 13,781 against ~13.8k — which is what separates them
+    # from the two titles that matched a 277-subscriber and a 10-subscriber namesake.
+    "@matusi_ukr": "handle top-up Матусі України (canon 'Дозаявка №10', 19,278)",
+    "@mamo_nepsichuy": "handle top-up «Мамо, не псіхуй!» (canon 'Дозаявка №10', 13,781)",
 }
 LATE_RULE = (
     "PASS with an open discussion group → comments bucket and the joins list; PASS without one →"
@@ -395,6 +406,16 @@ AUDIENCE = {
     # never returned it. It came out of the gate's own group finding on @Karlivka_live, and the
     # title below is that finding's, not a scan row's.
     "@KarlivkaLive": "regional",  # Оголошення. Karlivka Live🇺🇦
+    # "Дозаявка №10": provenance is the step-7 search note, not the Poltava scan — these handles
+    # were never in it. The titles below are those notes' own rows.
+    "@poltava_pvp": "regional",  # PVP.POLTAVA
+    "@poltava20": "regional",  # Полтава ІНФО | Новини Світло
+    "@h_kremenchug": "regional",  # Х Кременчук
+    "@kremen_news": "regional",  # КРЕМІНЬ | НОВИНИ | КРЕМЕНЧУК
+    # The two titles the top-up resolved into handles. mothers_kids is the segment the canon put
+    # both titles in, and it is the segment the whole harvest exists for.
+    "@matusi_ukr": "mothers_kids",  # Матусі України, 19,278 against TGStat's ~19.3k
+    "@mamo_nepsichuy": "mothers_kids",  # Мамо, не псіхуй!👌, 13,781 against ~13.8k
 }
 """Handle → audience segment. The canon's table, and the whole of it: `main` refuses a registry
 source this dict does not name rather than shipping one with a null audience."""

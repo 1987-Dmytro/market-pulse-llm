@@ -134,22 +134,32 @@ def test_the_day_2_record_covers_the_live_registry_and_the_two_flags_are_war_rep
     assert record["verdicts_reportable"] is True
 
     flagged = {row["handle"]: row for row in record["sources"] if row["verdict"] == "RF_FLAG"}
-    assert set(flagged) == {"@myrhorodtown", "@poltava_informue"}, sorted(flagged)
+    assert set(flagged) == {"@myrhorodtown", "@poltava_informue", "@poltava20"}, sorted(flagged)
     # The record is a dated artifact, so the counts are pinned rather than bounded: this is what
     # was measured, and a reader six weeks from now should not have to recompute it to believe it.
-    assert (flagged["@myrhorodtown"]["posts_with_rf_evidence"], 273) == (2, 273)
-    assert flagged["@myrhorodtown"]["posts_with_ua_evidence"] == 50
-    assert (flagged["@poltava_informue"]["posts_with_rf_evidence"], 1316) == (1, 1316)
-    assert flagged["@poltava_informue"]["posts_with_ua_evidence"] == 947
+    measured = {
+        handle: (
+            row["posts_with_rf_evidence"],
+            row["posts_with_ua_evidence"],
+            row["posts_in_window"],
+        )
+        for handle, row in flagged.items()
+    }
+    assert measured == {
+        "@myrhorodtown": (2, 50, 273),
+        "@poltava_informue": (1, 947, 1316),
+        "@poltava20": (1, 688, 1535),
+    }
     for handle, row in flagged.items():
         assert row["audience"] == "regional", handle
-        # Every sampled RF signal sits in a Ukrainian sentence about an RF target being hit. The
-        # sample is deduplicated by term, so it need not cover every flagged post — which is
-        # itself why the ratio above is quoted beside it rather than left to the examples.
+        # Three for three, the same sentence shape: a Ukrainian city feed reporting a strike on a
+        # Wildberries warehouse. The sample is deduplicated by term, so it need not cover every
+        # flagged post — which is why the ratios above are quoted beside it, not left to examples.
         assert all("Wildberries" in ev["line"] for ev in row["rf_evidence"]), handle
         assert all(
-            "розбомбили" in ev["line"] or "пожежі" in ev["line"] for ev in row["rf_evidence"]
-        )
+            any(word in ev["line"] for word in ("розбомбили", "пожежі", "рознесли"))
+            for ev in row["rf_evidence"]
+        ), handle
 
 
 def test_the_screen_refuses_to_overwrite_the_dated_pass(tmp_path):

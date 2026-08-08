@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-08T10:55:02+00:00",
+  "generated_at": "2026-08-08T11:20:02+00:00",
   "phase": "5c1",
   "deliverable": "2 — joins and the four-week collection window",
   "contract": "docs/SPEC.md §3.11 (6) ruling 22; docs/PROMPT-5c1.md Deliverable 2",
@@ -750,14 +750,92 @@
       "comments_stored": 0,
       "threads_with_comments": 0,
       "damaged_lines": 0
+    },
+    {
+      "channel": "@poltava_pvp",
+      "source_id": "poltava_pvp",
+      "source_type": "community",
+      "watch": false,
+      "comments_enabled": false,
+      "posts_stored": 423,
+      "posts_first": "2026-07-10T11:00:02+00:00",
+      "posts_last": "2026-08-08T11:07:01+00:00",
+      "comments_stored": 0,
+      "threads_with_comments": 0,
+      "damaged_lines": 0
+    },
+    {
+      "channel": "@poltava20",
+      "source_id": "poltava20",
+      "source_type": "community",
+      "watch": false,
+      "comments_enabled": false,
+      "posts_stored": 1535,
+      "posts_first": "2026-07-10T10:36:01+00:00",
+      "posts_last": "2026-08-08T11:09:53+00:00",
+      "comments_stored": 0,
+      "threads_with_comments": 0,
+      "damaged_lines": 0
+    },
+    {
+      "channel": "@h_kremenchug",
+      "source_id": "h_kremenchug",
+      "source_type": "community",
+      "watch": false,
+      "comments_enabled": false,
+      "posts_stored": 459,
+      "posts_first": "2026-07-10T11:36:13+00:00",
+      "posts_last": "2026-08-08T10:34:03+00:00",
+      "comments_stored": 0,
+      "threads_with_comments": 0,
+      "damaged_lines": 0
+    },
+    {
+      "channel": "@kremen_news",
+      "source_id": "kremen_news",
+      "source_type": "community",
+      "watch": false,
+      "comments_enabled": false,
+      "posts_stored": 354,
+      "posts_first": "2026-07-10T10:40:25+00:00",
+      "posts_last": "2026-08-08T11:01:05+00:00",
+      "comments_stored": 0,
+      "threads_with_comments": 0,
+      "damaged_lines": 0
+    },
+    {
+      "channel": "@matusi_ukr",
+      "source_id": "matusi_ukr",
+      "source_type": "community",
+      "watch": false,
+      "comments_enabled": true,
+      "posts_stored": 237,
+      "posts_first": "2026-07-10T11:03:36+00:00",
+      "posts_last": "2026-08-08T11:01:27+00:00",
+      "comments_stored": 0,
+      "threads_with_comments": 0,
+      "damaged_lines": 0
+    },
+    {
+      "channel": "@mamo_nepsichuy",
+      "source_id": "mamo_nepsichuy",
+      "source_type": "community",
+      "watch": false,
+      "comments_enabled": true,
+      "posts_stored": 48,
+      "posts_first": "2026-07-10T13:00:47+00:00",
+      "posts_last": "2026-08-08T07:02:05+00:00",
+      "comments_stored": 0,
+      "threads_with_comments": 0,
+      "damaged_lines": 0
     }
   ],
   "totals": {
-    "channels": 57,
-    "posts_stored": 6337,
+    "channels": 63,
+    "posts_stored": 9393,
     "comments_stored": 0,
     "damaged_lines": 0,
-    "channels_with_posts": 50,
+    "channels_with_posts": 56,
     "channels_with_comments": 0
   },
   "joins": {
@@ -775,7 +853,7 @@
     "note": "The four original registry channels are out of the gate's scope and their six raw v1 files are refused at channel level, before a record is built."
   },
   "git": {
-    "commit": "cfb3eec3b834e82ddb49721619d739327a33cf94",
+    "commit": "0eb12d5df81ff8f27c43f7c4895e9563d4f1c26e",
     "dirty": [
       "config/registry.yaml",
       "docs/CHANNELS-launch.md",
@@ -787,6 +865,7 @@
       "tests/test_entry_gate_5c1.py",
       "tests/test_gate_rulings_5c1.py",
       "tests/test_late_batch_5c1.py",
+      "results/harvest_mothers_ua.json",
       "scripts/harvest_similar_5c1.py",
       "tests/test_harvest_similar_5c1.py"
     ]

@@ -191,6 +191,17 @@ CANDIDATES = (
     # of the same town: the canon had taken the chat's handle. `city`, like the sixteen, because
     # it enters under the same posts-only city rule.
     ("@KarlivkaLive", "city"),
+    # "Дозаявка №10" (canon, 2026-08-08): what step 7's searches found and the operator ruled on.
+    # Four broadcast city feeds for the two towns whose handles left as chats — the alert and
+    # war-digest channels are deliberately NOT among them.
+    ("@poltava_pvp", "city"),
+    ("@poltava20", "city"),
+    ("@h_kremenchug", "city"),
+    ("@kremen_news", "city"),
+    # And the two titles the handle top-up resolved, confirmed by subscriber count and not just by
+    # name. `late`, like every addition whose class the group finding decides.
+    ("@matusi_ukr", "late"),
+    ("@mamo_nepsichuy", "late"),
 )
 
 

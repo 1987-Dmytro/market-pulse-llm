@@ -1,0 +1,763 @@
+{
+  "generated_at": "2026-08-08T11:09:50+00:00",
+  "phase": "5c1",
+  "step": "day-2 step 9 — harvest similar-channels (mothers UA)",
+  "contract": "docs/PROMPT-5c1-day2.md step 9; canon docs/CHANNELS-launch.md «Дозаявка №8» — «открытый веб не отдаёт топы UA-ниш Telegram — их отдают только инструменты внутри Telegram»",
+  "instrument": "channels.getChannelRecommendations (free; SPEC §3.11 amendment 3.12 (2))",
+  "status": "CANDIDATES ONLY. Nothing here enters config/registry.yaml from this file: a row reaches the registry through the track-R gate PLUS the 3.12 yield floor, and the operator signs the launch verdict after that. No join, no verdict, no write.",
+  "seeds": [
+    {
+      "seed": "@ya_Nenka",
+      "asked_at": "2026-08-08T11:09:43+00:00",
+      "returned": 0,
+      "count_upstream": null,
+      "rows": []
+    },
+    {
+      "seed": "@tarilka_malyuka",
+      "asked_at": "2026-08-08T11:09:46+00:00",
+      "returned": 36,
+      "count_upstream": null,
+      "rows": [
+        {
+          "handle": "@sofi_berezhna",
+          "title": "Від себе до себе 🪷",
+          "subscribers": 332,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@Impulse_011",
+          "title": "IMPULSE",
+          "subscribers": 57553,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@vadimoroz10",
+          "title": "Vadim Moroz / Rivne",
+          "subscribers": 206,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@shonetak_fashion",
+          "title": "що не так зі сталим фешн?",
+          "subscribers": 371,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@fimchnu",
+          "title": "Факультет іноземних мов ЧНУ",
+          "subscribers": 403,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@martinakaay",
+          "title": "MARTINA",
+          "subscribers": 458,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@nyinacho",
+          "title": "Що знайшла те й українізувала",
+          "subscribers": 563,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@trend_surf",
+          "title": "Trend Surfers: маркетинг новой волны",
+          "subscribers": 1058,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@yourcomfortenglish",
+          "title": "Your comfort English",
+          "subscribers": 2368,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@ukrainian_zdybanky_in_israel",
+          "title": "Українські Здибанки в Ізраїлі/ Ukrainian Zdubanky in Israel",
+          "subscribers": 623,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@annnemyy",
+          "title": "Annnemy",
+          "subscribers": 1848,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@mezencevanna",
+          "title": "Mezenceva FM🖤 Аня/Анна/Anya/",
+          "subscribers": 348,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@voznesenskayaSchool4",
+          "title": "ГБУ ОО ЗО \"Вознесенская средняя общеобразовательная школа №4\" г.о. Мелитополь",
+          "subscribers": 389,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@lokatormedia",
+          "title": "Локатор-Медіа",
+          "subscribers": 995,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@animator_bomba",
+          "title": "БОМБОвские аниматоры 🥳💣",
+          "subscribers": 164,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@alenademotko",
+          "title": "Алена, расскажи!",
+          "subscribers": 4059,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@rinaenobiplants",
+          "title": "Rina Enobi 🌿 plants, home, cat",
+          "subscribers": 1041,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@pracawars",
+          "title": "Работа Польша Европа бесплатные вакансии",
+          "subscribers": 472,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@s_psychologist",
+          "title": "Константин Паршиков | Системный психолог",
+          "subscribers": 333,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@fitness_eda_da",
+          "title": "Фітнес меню🥗 Пп рецепты🍲Струнке тіло",
+          "subscribers": 659,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@zelenskaya_life",
+          "title": "Анна Зеленская | PROнедвижимость",
+          "subscribers": 603,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@Artkontora",
+          "title": "Арт-пространство \"Контора\"",
+          "subscribers": 252,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@foreigner_notes",
+          "title": "Заметки Иностранца | Южная Корея",
+          "subscribers": 197,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@DreamYachtCharterRu",
+          "title": "Dream Yacht Charter Russia",
+          "subscribers": 416,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@cubamia_excursions",
+          "title": "Куба • Экскурсии на Кубе • Гид на Кубе",
+          "subscribers": 965,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@kpiano_class",
+          "title": "budemohraty_piano",
+          "subscribers": 1171,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@guz_mpu_2",
+          "title": "📚Мелитопольский индустриальный колледж",
+          "subscribers": 829,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@goodjobfrends",
+          "title": "Отдал-закрылся | Ли-си-цын",
+          "subscribers": 297,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@tutdianawal",
+          "title": "Insta шпаргалка от dianawal__",
+          "subscribers": 1433,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@formuladetbrd",
+          "title": "Формула Детства Бердянск",
+          "subscribers": 943,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@BusUrlaub",
+          "title": "Weltreise Недорогі подорожі з Німеччини. Твій незабутній Urlaub",
+          "subscribers": 668,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@training_gamification",
+          "title": "Геймификация обучения | Все хотят игры от Анастасии Высоцкой",
+          "subscribers": 1285,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@stanislavsky_kolomyia",
+          "title": "Богдан Станіславський",
+          "subscribers": 1390,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@harrystylessongsofficial",
+          "title": "Harry Styles Songs 🔖",
+          "subscribers": 737,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@ivrita",
+          "title": "🇮🇱 Иврит עִברִית @ivrita",
+          "subscribers": 1034,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@melitopol",
+          "title": "Мелитополь. Отзывы о заведениях.",
+          "subscribers": 22955,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        }
+      ]
+    },
+    {
+      "seed": "@blwbabies",
+      "asked_at": "2026-08-08T11:09:48+00:00",
+      "returned": 43,
+      "count_upstream": null,
+      "rows": [
+        {
+          "handle": "@energy_boost22",
+          "title": "Альона. Про самореалізацію для мам",
+          "subscribers": 191,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@rozvivashka_kids",
+          "title": "Розвиваючі завдання для дітей",
+          "subscribers": 6675,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@prikorm_kids_menu",
+          "title": "Дитяче меню🥕Прикорм🥕Рецепти",
+          "subscribers": 6396,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@Impulse_011",
+          "title": "IMPULSE",
+          "subscribers": 57553,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@tutti_frutti90",
+          "title": "ПРИКОРМ | МАТЕРИНСТВО",
+          "subscribers": 10562,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@drshakotko",
+          "title": "тобі пише Шакотько..",
+          "subscribers": 23190,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@veremlena",
+          "title": "Mama Lena",
+          "subscribers": 146,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@knowblogger",
+          "title": "ЗНАЮ БЛОГЕРА",
+          "subscribers": 14077,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@Evgenija_dutjache_menu",
+          "title": "Євгенія_Дитяче меню",
+          "subscribers": 1533,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": "registry"
+        },
+        {
+          "handle": "@nodietschoolblog",
+          "title": "NODIET BLOG",
+          "subscribers": 1742,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@wlad_loosh",
+          "title": "ЛУШ",
+          "subscribers": 1540,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@maxkprikorm",
+          "title": "Прикорм",
+          "subscribers": 158,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@MilkBlogger",
+          "title": "MilkBlogger",
+          "subscribers": 3766,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@isidaclinicua",
+          "title": "ІSIDA",
+          "subscribers": 472,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@svitdlyatebee",
+          "title": "Світ для тебе 💛💙",
+          "subscribers": 211,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@lachentyt",
+          "title": "Лачен пише",
+          "subscribers": 1567090,
+          "telegram_verified": true,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@vanek_nikolaev",
+          "title": "Николаевский Ванёк",
+          "subscribers": 2671161,
+          "telegram_verified": true,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": null,
+          "title": "Реальний Київ | Украина",
+          "subscribers": 1535103,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@createthispls",
+          "title": "кріейт зіс пліз by @grechka.blog",
+          "subscribers": 1832,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@zhyrviktoriia",
+          "title": "ZHYR",
+          "subscribers": 10750,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@boomtournews",
+          "title": "🔆Boom Tour",
+          "subscribers": 518,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@moviesaddicted",
+          "title": "Moviesaddicted",
+          "subscribers": 4034,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@unicornclay",
+          "title": "Daria.Trohimchuk",
+          "subscribers": 400,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@rmayetok",
+          "title": "ЖК Родинний маєток - Вінниця",
+          "subscribers": 244,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@rtbtrader",
+          "title": "RTB Trader",
+          "subscribers": 282,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@FashionpressW",
+          "title": "Fashion press",
+          "subscribers": 2568,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@NeuroGrow",
+          "title": "Розвиток дітей. Супровід батьків",
+          "subscribers": 390,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@espanach",
+          "title": "Испанач (live)",
+          "subscribers": 236,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@uhnenko",
+          "title": "ТЕКСТЫ С ТРЕНЕРОМ!",
+          "subscribers": 253,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@marytale",
+          "title": "Мерітейл: Казки на Ніч ✨",
+          "subscribers": 6890,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@instafay",
+          "title": "Меми | футажі & мобільний монтаж",
+          "subscribers": 6717,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@lkvartalosbb",
+          "title": "ОСББ ЛКвартал",
+          "subscribers": 530,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@books_and_donates",
+          "title": "Read • Donate • Repeat",
+          "subscribers": 473,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@blond_marii",
+          "title": "Шизотерический кружок",
+          "subscribers": 327,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@cartoonvideosforkids",
+          "title": "З любов'ю до дітей - Дитячі пісні",
+          "subscribers": 782,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@bb_marisha",
+          "title": "Babych ✨",
+          "subscribers": 125,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@paniKalyna",
+          "title": "Пані Калина",
+          "subscribers": 6930,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@medycyna_ukr",
+          "title": "Польська медична література🇵🇱",
+          "subscribers": 2564,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@babymamakat",
+          "title": "✨ПОЛЕЗНОСТИ✨",
+          "subscribers": 2692,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@cloudsofthoughts",
+          "title": "Хмари думок",
+          "subscribers": 470,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@buyerparndorf",
+          "title": "buyer.parndorf",
+          "subscribers": 3740,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@elleUkraine",
+          "title": "ELLE Ukraine",
+          "subscribers": 8183,
+          "telegram_verified": true,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        },
+        {
+          "handle": "@tata_beauty_ua",
+          "title": "Tata_beauty_club",
+          "subscribers": 272,
+          "telegram_verified": false,
+          "broadcast": true,
+          "megagroup": false,
+          "known": null
+        }
+      ]
+    }
+  ],
+  "flood_wait_seconds": null,
+  "summary": {
+    "seeds_asked": 3,
+    "rows_returned": 79,
+    "distinct_not_already_ours": 77,
+    "broadcast_channels_among_them": 77
+  },
+  "git": {
+    "commit": "0eb12d5df81ff8f27c43f7c4895e9563d4f1c26e",
+    "dirty": [
+      "results/collect_5c1.json",
+      "results/entry_gate_5c1.json",
+      "results/joins_5c1.jsonl",
+      "scripts/late_batch_5c1.py",
+      "tests/test_late_batch_5c1.py",
+      "scripts/harvest_similar_5c1.py",
+      "tests/test_harvest_similar_5c1.py"
+    ]
+  }
+}

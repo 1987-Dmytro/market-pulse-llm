@@ -294,3 +294,72 @@ def test_the_topic_marker_is_loose_on_purpose_and_the_name_markers_are_not():
     assert "фальсифікат" in markers
     assert {"несміянов", "несмиянов"} <= set(markers)
     assert "макс контроль" in markers and "maxcontrol" in markers
+
+
+# --- the day-2 additions: the five titles and the two towns ------------------------------------
+
+
+def canon_titles() -> list[str]:
+    """The five channels "Дозаявка №8" saw by title only, read out of the canon's own sentence.
+
+    «Хендлы добрать завтра ботом/поиском: «Матусі України» (~19,3k), …» — the titles are inside
+    guillemets and the sizes are in parentheses beside them, so the quotes are what is parsed and
+    the numbers are left where they are.
+    """
+    import re
+
+    text = CANON.read_text(encoding="utf-8")
+    block = text[text.index("Хендлы добрать завтра") :]
+    block = " ".join(block[: block.index("\n\n")].split())
+    return re.findall(r"«([^»]+)»", block)
+
+
+def test_the_five_titles_are_the_canons_own_in_its_own_order():
+    """Five names, five notes — one channel found does not answer for the other four. The canon
+    writes short forms of two of them, so the subject line has to START with the canon's words."""
+    titles = canon_titles()
+    assert titles == [
+        "Матусі України",
+        "Мамо, не псіхуй!",
+        "Дитяче харчування",
+        "Все про дітей",
+        "Сучасні батьки",
+    ], titles
+    subjects = [spec["subject"] for spec in late.TITLE_SEARCHES.values()]
+    assert len(subjects) == len(titles)
+    for subject, title in zip(subjects, titles, strict=True):
+        assert subject.startswith(f"«{title}"), (subject, title)
+
+
+def test_a_title_search_asks_for_a_handle_and_carries_the_size_the_operator_saw():
+    """TGStat showed a name and a subscriber count and no handle. Carrying the count is what lets
+    a match be checked against the channel the operator actually saw, not just against a name."""
+    for key, spec in late.TITLE_SEARCHES.items():
+        assert "handle of" in spec["asked"], key
+        assert "TGStat" in spec["also"], key
+        assert "k, TGStat)" in spec["subject"], key
+
+
+def test_the_two_towns_searched_for_a_broadcast_feed_are_the_ones_that_lost_a_handle():
+    """Ruling (1) of the day-2 sitting excluded three supergroups; ruling (6) asks for broadcast
+    analogues of two of them. Karlivka is NOT among them — its replacement was found inside the
+    gate record itself, which is why it went straight to the gate as «Дозаявка №9»."""
+    import apply_gate_rulings_5c1 as apply
+
+    subjects = " ".join(spec["subject"] for spec in late.CITY_ANALOGUE_SEARCHES.values())
+    assert "@poltava_misto" in subjects and "@kremenchug_live" in subjects
+    assert "@Karlivka_live" not in subjects
+    for handle in ("@poltava_misto", "@kremenchug_live"):
+        assert "supergroup" in apply.EXCLUDED[handle], handle
+    assert len(late.CITY_ANALOGUE_SEARCHES) == 2
+
+
+def test_a_search_row_says_whether_it_is_a_channel_or_a_chat():
+    """The whole point of ruling (6) is to find a BROADCAST feed. `suggest` carries the two flags
+    so a reader is not left inferring it from a title — and the reader here is the operator."""
+    import entry_check
+
+    source = (REPO_ROOT / "scripts" / "entry_check.py").read_text(encoding="utf-8")
+    body = source[source.index("async def suggest") : source.index("async def sample_traffic")]
+    assert '"broadcast"' in body and '"megagroup"' in body
+    assert entry_check.suggest.__doc__
