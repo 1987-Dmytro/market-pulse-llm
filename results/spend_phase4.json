@@ -143,6 +143,34 @@
       "spent_usd": 19.609,
       "remaining_usd": 5.391,
       "note": "srv-2c control: the UNWRAPPED start command COMPLETED -- the wrapper was not the cause"
+    },
+    {
+      "at": "2026-08-08T21:00:57+00:00",
+      "balance": 15.3434597244,
+      "spent_usd": 19.6565,
+      "remaining_usd": 5.3435,
+      "note": "srv-2d staging pod: volume repo/ refreshed to ed9c0c9, proven by hash"
+    },
+    {
+      "at": "2026-08-08T21:09:07+00:00",
+      "balance": 15.2884715966,
+      "spent_usd": 19.7115,
+      "remaining_usd": 5.2885,
+      "note": "srv-2d smoke: 8/8 parsed, one-job control 8/8 identical"
+    },
+    {
+      "at": "2026-08-08T22:10:29+00:00",
+      "balance": 14.1207219299,
+      "spent_usd": 20.8793,
+      "remaining_usd": 4.1207,
+      "note": "srv-2d parity COMPLETED: 758/758 scored, 0 failures"
+    },
+    {
+      "at": "2026-08-08T22:13:58+00:00",
+      "balance": 14.1207219299,
+      "spent_usd": 20.8793,
+      "remaining_usd": 4.1207,
+      "note": "srv-2d closed: endpoint, template and both pods deleted, listings empty"
     }
   ]
 }

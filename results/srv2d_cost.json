@@ -1,0 +1,61 @@
+{
+  "step": "srv-2d",
+  "written_at": "2026-08-08T22:29:07+00:00",
+  "inputs": {
+    "rows_scored": 758,
+    "calls": 4,
+    "parity_wall_seconds": 3469.626,
+    "smoke_wall_seconds": 323.415,
+    "worker_seconds": 3438.144,
+    "queue_seconds": 18.392,
+    "idle_share": 0.0091,
+    "idle_timeout_s": 60.0,
+    "parity_billed_seconds": 3529.626,
+    "cold_start_seconds_measured_on_this_endpoint": 239.022,
+    "weight_load_seconds_from_the_boot_log": 127.0,
+    "sources": {
+      "timing": "results/parity_srv2.json :: config.serving.timing",
+      "cold_start": "results/serving_srv2d_smoke.json :: cold_start.wall_seconds",
+      "rate": "runpodctl billing serverless, endpointId hbq25reui1tpj6",
+      "total": "results/spend_srv2d.json via scripts/runpod_guard.py, balance delta",
+      "pod": "results/serving_5b.json :: adopted",
+      "boot_log": "results/predictions/srv2d-volume-rowdump--*.jsonl came off the same volume read; the boot log's weight-loader bar ends at 2:07"
+    }
+  },
+  "rate": {
+    "usd_per_second": 0.00030669,
+    "settled_usd": 0.471866,
+    "settled_seconds": 1538.6,
+    "share_of_the_session_settled": 0.4056,
+    "corroboration": "five serverless endpoints billed on 2026-08-08 all read within 1% of $0.000307/s, srv-2c's included — the rate is settled even where the totals are not"
+  },
+  "measured": {
+    "parity_usd": 1.0825,
+    "usd_per_1000_rows": 1.4281,
+    "usd_per_pass_758_rows": 1.0825,
+    "wall_per_row_incl_cold_start": 4.577,
+    "like_for_like_seconds_per_row": 4.262,
+    "formula": "parity_usd = rate x (the client's wall clock, submission of the info handshake to the last reply, so every queue delay is inside it, PLUS the 60 s idle timeout the worker bills after the last reply). usd_per_1000_rows = parity_usd / rows x 1000."
+  },
+  "cross_check_against_the_balance": {
+    "step_spend_usd": 1.2383,
+    "spend_read_at": "2026-08-08T22:27:29Z",
+    "pods_usd": 0.036307,
+    "volume_run_rate_usd_in_window": 0.01232,
+    "rate_derived_total_usd": 1.2487,
+    "agreement": 1.0084,
+    "note": "two independent readings of the same session: a settled per-second rate applied to measured seconds, and the account balance. They agree to about 1%."
+  },
+  "pod_comparison": {
+    "pod_usd_per_1000_rows": 0.5993,
+    "pod_usd_per_pass": 0.4611,
+    "pod_seconds_per_row": 4.071,
+    "pod_usd_per_hour": 0.53,
+    "pod_source": "results/serving_5b.json :: adopted — an A6000 pod, measured at 5b.1",
+    "ratio_per_1000_serverless_over_pod": 2.383,
+    "ratio_seconds_per_row_serverless_over_pod": 1.047,
+    "serverless_usd_per_hour_equivalent": 1.1041,
+    "reading": "the gap is the machine's price, not the model's speed: the RTX 4090 worker generates within a few percent of the A6000's per-row time, and bills about twice the pod's hourly rate"
+  },
+  "caveat_dv33": "the RunPod balance delta lags the resource by minutes and the itemised ledger by hours (this endpoint's row had settled 1 538 s of 3 793 s when the session closed). Every figure here is a FLOOR, so the ratio against the pod is a lower bound."
+}

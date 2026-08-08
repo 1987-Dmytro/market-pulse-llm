@@ -1,6 +1,31 @@
 {
   "runpod_balance_at_srv2d_start": 15.3538770133,
   "srv2d_gpu_cap_usd": 2.0,
-  "gpu_sessions": [],
+  "gpu_sessions": [
+    {
+      "at": "2026-08-08T21:00:57+00:00",
+      "balance": 15.3434597244,
+      "step_spent_usd": 0.0104,
+      "note": "srv-2d staging pod: volume repo/ refreshed to ed9c0c9, proven by hash"
+    },
+    {
+      "at": "2026-08-08T21:09:07+00:00",
+      "balance": 15.2884715966,
+      "step_spent_usd": 0.0654,
+      "note": "srv-2d smoke: 8/8 parsed, one-job control 8/8 identical"
+    },
+    {
+      "at": "2026-08-08T22:10:29+00:00",
+      "balance": 14.1207219299,
+      "step_spent_usd": 1.2332,
+      "note": "srv-2d parity COMPLETED: 758/758 scored, 0 failures"
+    },
+    {
+      "at": "2026-08-08T22:13:58+00:00",
+      "balance": 14.1207219299,
+      "step_spent_usd": 1.2332,
+      "note": "srv-2d closed: endpoint, template and both pods deleted, listings empty"
+    }
+  ],
   "gpu_note": "RunPod account balance read before the first pod of srv2d. Step spend = this anchor minus the balance now, enforced against $2.00. The SPEC amendment 3.4 (4) phase cap is enforced separately, against results/spend_phase4.json, and neither anchor may be regenerated."
 }

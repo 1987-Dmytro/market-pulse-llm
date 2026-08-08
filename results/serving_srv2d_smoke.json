@@ -1,0 +1,282 @@
+{
+  "step": "5b smoke",
+  "written_at": "2026-08-08T21:07:41+00:00",
+  "endpoint_id": "hbq25reui1tpj6",
+  "serving_config": "A",
+  "batch_size": 1,
+  "transport": "serverless-api",
+  "endpoint_url": "https://api.runpod.ai/v2",
+  "deployment": {
+    "endpoint": {
+      "id": "hbq25reui1tpj6",
+      "name": "market-pulse-srv2d-a",
+      "gpuIds": null,
+      "locations": null,
+      "workersMax": 1,
+      "idleTimeout": 60,
+      "executionTimeoutMs": 3600000,
+      "networkVolumeId": "qw4nwleanc",
+      "templateId": "5hlb5j13h4"
+    },
+    "template": {
+      "id": "5hlb5j13h4",
+      "imageName": "runpod/pytorch:1.0.2-cu1281-torch280-ubuntu2404",
+      "dockerStartCmd": [
+        "bash",
+        "-c",
+        "exec bash /runpod-volume/start.sh > /runpod-volume/worker-boot.log 2>&1"
+      ],
+      "env": {
+        "ADAPTER_DIR": "/runpod-volume/repo/results/train/45h2-arm-a/adapter",
+        "BASE_WEIGHTS": "google/gemma-4-31b-it",
+        "MODEL_REVISION": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+        "SERVING_CONFIG": "A"
+      },
+      "containerDiskInGb": 30
+    }
+  },
+  "worker": {
+    "adapter_dir": "/runpod-volume/repo/results/train/45h2-arm-a/adapter",
+    "adapter_sha256": "b3ca630846c7e75c5e7058ce45804c45a6bff5c49dcf2389cb8cdda0b7a68a6c",
+    "chat_template": {
+      "add_generation_prompt": true,
+      "enable_thinking": false
+    },
+    "max_new_tokens": 256,
+    "merge_state": "unmerged-adapter",
+    "merged_provenance": null,
+    "merged_sha256": null,
+    "model": "google/gemma-4-31b-it",
+    "quantization": {
+      "bnb_4bit_compute_dtype": "bfloat16",
+      "bnb_4bit_quant_type": "nf4",
+      "bnb_4bit_use_double_quant": true,
+      "load_in_4bit": true
+    },
+    "repo_commit": "ed9c0c9aecf8e8d846e70aa80428cfd5af957708",
+    "revision_requested": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+    "runtime": {
+      "accelerate": "1.14.0",
+      "bitsandbytes": "0.50.0",
+      "cuda_runtime": "12.8",
+      "driver": "570.195.03",
+      "gpu": "NVIDIA GeForce RTX 4090",
+      "gpu_count": 1,
+      "gpu_memory_total": "24564 MiB",
+      "model_revision": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+      "peft": "0.20.0",
+      "pod_id": "fznmh3vtj8cimk",
+      "revision_requested": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+      "runpod": "1.11.0",
+      "torch": "2.8.0+cu128",
+      "transformers": "5.14.1",
+      "weights_requested": "google/gemma-4-31b-it"
+    },
+    "serving_config": "A",
+    "weights_dir": "google/gemma-4-31b-it"
+  },
+  "carve": {
+    "sha256": "8347abd74ae91f49161bdffdd907e2428ea862f02f1f103e543e63ac27a547fa",
+    "n": 24,
+    "asked": 8
+  },
+  "rows": [
+    {
+      "id": "@VARUS_channel:10231",
+      "task": "T1v2_with_post",
+      "text": "Онлайн заказ самовывоз стоять ждать 20 минут!)) Я бы за это время сама скупилась и оплатила, смысл онлайн замовлення НЕЧІКАТИ!!!",
+      "content": "{\"sentiment\": \"negative\", \"sarcasm\": true, \"intents\": [\"service\"]}",
+      "finish_reason": "stop",
+      "parsed": true,
+      "parse_failure": null,
+      "worker_seconds": 5.176,
+      "wall_seconds": 5.531,
+      "usage": {
+        "completion_tokens": 20,
+        "prompt_tokens": 772
+      }
+    },
+    {
+      "id": "@atb_market_official:1657",
+      "task": "T2",
+      "text": "Новорічні ЗНИЖКИ в АТБ 🤗🎄\nГортайте онлайн-газету та збирайте кошик за найвигіднішими цінами 🤌🏼\n\nЗнижка діятиме з 18.12.24 по 24.12.24 в магазинах АТБ і на сайті, за умови наявності акційного товару. \n\nЗамовити зручну доставку прямо додому можна 👉🏼 ось тут 👈🏼",
+      "content": "{\"relevant\": false, \"post_type\": \"promo\", \"brands\": []}",
+      "finish_reason": "stop",
+      "parsed": true,
+      "parse_failure": null,
+      "worker_seconds": 3.978,
+      "wall_seconds": 5.136,
+      "usage": {
+        "completion_tokens": 18,
+        "prompt_tokens": 602
+      }
+    },
+    {
+      "id": "@VARUS_channel:11879",
+      "task": "T1v2_with_post",
+      "text": "хіба цей чат для вашої реклами???",
+      "content": "{\"sentiment\": \"negative\", \"sarcasm\": false, \"intents\": []}",
+      "finish_reason": "stop",
+      "parsed": true,
+      "parse_failure": null,
+      "worker_seconds": 4.319,
+      "wall_seconds": 5.572,
+      "usage": {
+        "completion_tokens": 19,
+        "prompt_tokens": 705
+      }
+    },
+    {
+      "id": "@atb_market_official:2429",
+      "task": "T2",
+      "text": "і передати іншим каву 👀☕️",
+      "content": "{\"relevant\": false, \"post_type\": \"other\", \"brands\": []}",
+      "finish_reason": "stop",
+      "parsed": true,
+      "parse_failure": null,
+      "worker_seconds": 3.903,
+      "wall_seconds": 5.073,
+      "usage": {
+        "completion_tokens": 18,
+        "prompt_tokens": 501
+      }
+    },
+    {
+      "id": "@VARUS_channel:11892",
+      "task": "T1v2_with_post",
+      "text": "Пустые полки",
+      "content": "{\"sentiment\": \"negative\", \"sarcasm\": false, \"intents\": [\"availability\"]}",
+      "finish_reason": "stop",
+      "parsed": true,
+      "parse_failure": null,
+      "worker_seconds": 4.368,
+      "wall_seconds": 5.563,
+      "usage": {
+        "completion_tokens": 20,
+        "prompt_tokens": 634
+      }
+    },
+    {
+      "id": "@atb_market_official:2558",
+      "task": "T2",
+      "text": "Знайшли себе?",
+      "content": "{\"relevant\": false, \"post_type\": \"other\", \"brands\": []}",
+      "finish_reason": "stop",
+      "parsed": true,
+      "parse_failure": null,
+      "worker_seconds": 3.991,
+      "wall_seconds": 5.217,
+      "usage": {
+        "completion_tokens": 18,
+        "prompt_tokens": 496
+      }
+    },
+    {
+      "id": "@VARUS_channel:11972",
+      "task": "T1v2_with_post",
+      "text": "Картопля з печінкою",
+      "content": "{\"sentiment\": \"neutral\", \"sarcasm\": false, \"intents\": [\"taste\"]}",
+      "finish_reason": "stop",
+      "parsed": true,
+      "parse_failure": null,
+      "worker_seconds": 4.408,
+      "wall_seconds": 5.633,
+      "usage": {
+        "completion_tokens": 20,
+        "prompt_tokens": 681
+      }
+    },
+    {
+      "id": "@msuaaaa:4276",
+      "task": "T2",
+      "text": "Цінотижики в Сільпо 🥲😊\nЗнижки до -67%\nДіють до 07.05.25\n\nБільше знижок у коментарях",
+      "content": "{\"relevant\": false, \"post_type\": \"promo\", \"brands\": []}",
+      "finish_reason": "stop",
+      "parsed": true,
+      "parse_failure": null,
+      "worker_seconds": 3.958,
+      "wall_seconds": 5.235,
+      "usage": {
+        "completion_tokens": 18,
+        "prompt_tokens": 537
+      }
+    }
+  ],
+  "parsed": 8,
+  "of": 8,
+  "timing": {
+    "calls": 9,
+    "rows": 8,
+    "worker_seconds": 248.253,
+    "queue_seconds": 28.582,
+    "wall_seconds": 282.006,
+    "seconds_per_call": 27.584,
+    "wall_per_call": 31.334,
+    "wall_per_row": 35.251,
+    "seconds_per_row": 31.032,
+    "idle_share": 0.1197,
+    "worker_ids": [
+      "fznmh3vtj8cimk"
+    ]
+  },
+  "cold_start": {
+    "calls": 1,
+    "rows": 0,
+    "worker_seconds": 214.152,
+    "queue_seconds": 21.019,
+    "wall_seconds": 239.022,
+    "seconds_per_call": 214.152,
+    "wall_per_call": 239.022,
+    "wall_per_row": null,
+    "seconds_per_row": null,
+    "idle_share": 0.104,
+    "worker_ids": [
+      "fznmh3vtj8cimk"
+    ]
+  },
+  "seconds_per_row_wall": 5.373,
+  "one_job_control": {
+    "why": "srv-2d's parity pass sends one job per input and lets the WORKER walk the rows at batch 1. This is the same code path on the arm's own carve, and the replies are compared byte for byte against the per-row pass above.",
+    "route": "run",
+    "policy_ms": {
+      "executionTimeout": 600000,
+      "ttl": 1200000
+    },
+    "forward_batch_size": 1,
+    "dump_path": "/runpod-volume/smoke_srv2d_T2.jsonl",
+    "groups": [
+      {
+        "task": "T1v2_with_post",
+        "with_post": true,
+        "rows": 4
+      },
+      {
+        "task": "T2",
+        "with_post": false,
+        "rows": 4
+      }
+    ],
+    "identical": true,
+    "mismatches": [],
+    "timing": {
+      "calls": 2,
+      "rows": 8,
+      "worker_seconds": 32.822,
+      "queue_seconds": 1.098,
+      "wall_seconds": 41.409,
+      "seconds_per_call": 16.411,
+      "wall_per_call": 20.704,
+      "wall_per_row": 5.176,
+      "seconds_per_row": 4.103,
+      "idle_share": 0.2074,
+      "worker_ids": [
+        "fznmh3vtj8cimk"
+      ]
+    }
+  },
+  "prompt_sha256": {
+    "T1": "9b2a021783212022bb335d7a32a365d532ff94c7da92336bf054d8709c0de355",
+    "T2": "6a7e66efb3eb4091b8d787e38213f3b1b0c9115e78d2b41fb9cc6bcaab3a54b4"
+  },
+  "note": "MECHANICS AND LATENCY ONLY. The rows are the arm's own held-out carve — training data — so nothing here is a gate number and no frozen test file was opened. seconds_per_row_wall excludes the cold start, which is reported separately because the projection scales the two differently. On the pod transport timing.worker_seconds is 0 BY CONSTRUCTION: the worker's own server reports no executionTime, so seconds_per_call reads 0 and idle_share null. wall_seconds is the measurement, and on a pod it is also the billed quantity."
+}

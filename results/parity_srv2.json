@@ -1,0 +1,509 @@
+{
+  "model": "google/gemma-4-31b-it",
+  "timestamp": "2026-08-08T22:07:54+00:00",
+  "reference_only": false,
+  "git": {
+    "commit": "76a1b3156e65fd4a7662707216d473525b06f880",
+    "dirty": [
+      "results/predictions/google-gemma-4-31b-it--20260808T220754Z.jsonl",
+      "results/serving_srv2d_smoke.json",
+      "results/spend_phase4.json",
+      "results/spend_srv2d.json"
+    ]
+  },
+  "config": {
+    "seed": 42,
+    "temperature": 0.0,
+    "prompt_sha256": {
+      "T1": "9b2a021783212022bb335d7a32a365d532ff94c7da92336bf054d8709c0de355",
+      "T2": "6a7e66efb3eb4091b8d787e38213f3b1b0c9115e78d2b41fb9cc6bcaab3a54b4"
+    },
+    "testset_version": "v4",
+    "prompt_revision": {
+      "T1": "T1v2_with_post",
+      "T2": "T2"
+    },
+    "prompt_revision_sha256": {
+      "T1": "495b43d1361d0e4f5f7a186eebb971f4dc3ed9f8afd128f539ba0f6a8ffc2a19",
+      "T2": "6a7e66efb3eb4091b8d787e38213f3b1b0c9115e78d2b41fb9cc6bcaab3a54b4"
+    },
+    "inputs": {
+      "comments_test": {
+        "file": "comments_test_v4.jsonl",
+        "sha256": "43fc38e116785b3db365d64905adc1045fafc36752933ecd472df9a9b9f9d7be"
+      },
+      "posts_test": {
+        "file": "posts_test_v4.jsonl",
+        "sha256": "a476414e26c410c12a56596edab2ff362989a67193dd0d93e3794eb2c073770d"
+      },
+      "sarcasm_holdout": {
+        "file": "sarcasm_holdout_v4.jsonl",
+        "sha256": "954e46a6be5ddc7550d542cd147bf809aca687823ff0cf0fcefe60de84482d0a"
+      }
+    },
+    "heads": {
+      "T1": "without-plast fine-tune · sentiment 3-class · sarcasm binary · intents multi-label",
+      "T2": "without-plast fine-tune · relevance binary · post_type 3-class · brands free-text"
+    },
+    "train_sources": {
+      "comments_train_tax2.jsonl": 895,
+      "posts_train.jsonl": 744,
+      "sarcasm_candidates_tax2.jsonl": 532
+    },
+    "scored_ids_sha256": {
+      "comments_test": "066ed97e3098b02d2dd7df9430a0f7f36eb9589caf24704e4cfe883e1696de83",
+      "posts_test": "b8265e227e25ea638a8e9dcd0c5fd86245f60f2ac091657cc7a8002a5ef91c42",
+      "sarcasm_holdout": "7d43578e7314273de7e931e35c6068a39fcedb85a2194497b261674f05a15707"
+    },
+    "predictions_path": "results/predictions/google-gemma-4-31b-it--20260808T220754Z.jsonl",
+    "predictions_sha256": "b19fb9b8b04c1def3ddbd4c8b46a14bb1eb0ec3d14c7066fbc72797d03712982",
+    "tokens": {
+      "prompt_tokens": 513148,
+      "completion_tokens": 14959
+    },
+    "backend": "endpoint",
+    "max_tokens": 256,
+    "quantization": {
+      "load_in_4bit": true,
+      "bnb_4bit_quant_type": "nf4",
+      "bnb_4bit_use_double_quant": true,
+      "bnb_4bit_compute_dtype": "bfloat16"
+    },
+    "generation": {
+      "greedy": true,
+      "do_sample": false,
+      "batch_size": 1,
+      "chat_template": {
+        "add_generation_prompt": true,
+        "enable_thinking": false
+      }
+    },
+    "runtime": {
+      "accelerate": "1.14.0",
+      "bitsandbytes": "0.50.0",
+      "cuda_runtime": "12.8",
+      "driver": "570.195.03",
+      "gpu": "NVIDIA GeForce RTX 4090",
+      "gpu_count": 1,
+      "gpu_memory_total": "24564 MiB",
+      "model_revision": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+      "peft": "0.20.0",
+      "pod_id": "fznmh3vtj8cimk",
+      "revision_requested": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+      "runpod": "1.11.0",
+      "torch": "2.8.0+cu128",
+      "transformers": "5.14.1",
+      "weights_requested": "google/gemma-4-31b-it"
+    },
+    "spend_ledger": "results/spend_5b.json",
+    "determinism_note": "the production serverless runtime, running this repo's scripts/serve_handler.py: the chat template, add_special_tokens=False, greedy generate and the reply shape are market_pulse.local_llm's, byte-identical to the 4.5h2 pod run. What differs is where the process runs and, for config B, whether the adapter is merged — which is the delta SPEC amendment 3.11 (2) pre-registers and reports, never averages away. The worker's own account of what it loaded is in `serving.worker` and was asserted before the first scored row.",
+    "fine_tune": {
+      "arm": "without-plast",
+      "adapter_path": "results/train/45h2-arm-a/adapter",
+      "adapter_sha256": "b3ca630846c7e75c5e7058ce45804c45a6bff5c49dcf2389cb8cdda0b7a68a6c",
+      "train_sha256": "ba368273cc4debb657500256d0d8abe2621aee06cdc4b49fcaea8b85e4bfd1f9",
+      "carve_sha256": "8347abd74ae91f49161bdffdd907e2428ea862f02f1f103e543e63ac27a547fa",
+      "n_train": 2171,
+      "rows_per_source": {
+        "comments_train_tax2.jsonl": 895,
+        "posts_train.jsonl": 744,
+        "sarcasm_candidates_tax2.jsonl": 532
+      },
+      "added_source": null,
+      "added_ids": 1286,
+      "training_run": {
+        "adapter": "/workspace/out/arm-a/adapter",
+        "gpu_gb_peak": 33.13,
+        "grad_accum_final": 8,
+        "micro_batch_final": 2,
+        "seconds": 16482.8,
+        "seconds_per_step": 61.047,
+        "steps": 270,
+        "steps_per_epoch": 136
+      },
+      "prompt_revision_sha256": {
+        "T1": "495b43d1361d0e4f5f7a186eebb971f4dc3ed9f8afd128f539ba0f6a8ffc2a19",
+        "T2": "6a7e66efb3eb4091b8d787e38213f3b1b0c9115e78d2b41fb9cc6bcaab3a54b4"
+      },
+      "anchor": {
+        "model": "google/gemma-4-31b-it",
+        "timestamp": "2026-08-04T12:26:38+00:00"
+      }
+    },
+    "g1b_slice_path": "results/g1b_slice_v4.json",
+    "g1b_slice_sha256": "6dc6be0132c12f568d90bbe8c59cf03dcb23a9b8c86ef884824379984cc1b67a",
+    "serving": {
+      "endpoint_id": "hbq25reui1tpj6",
+      "config": "A",
+      "transport": "serverless-api",
+      "endpoint_url": "https://api.runpod.ai/v2",
+      "job_shape": {
+        "route": "run",
+        "rows_per_job": "one input slice",
+        "forward_batch_size": 1,
+        "policy_ms": {
+          "executionTimeout": 3600000,
+          "ttl": 7200000
+        },
+        "row_dump": "/runpod-volume/parity_srv2_sarcasm_holdout.jsonl"
+      },
+      "merge_state": "unmerged-adapter",
+      "worker": {
+        "adapter_dir": "/runpod-volume/repo/results/train/45h2-arm-a/adapter",
+        "adapter_sha256": "b3ca630846c7e75c5e7058ce45804c45a6bff5c49dcf2389cb8cdda0b7a68a6c",
+        "chat_template": {
+          "add_generation_prompt": true,
+          "enable_thinking": false
+        },
+        "max_new_tokens": 256,
+        "merge_state": "unmerged-adapter",
+        "merged_provenance": null,
+        "merged_sha256": null,
+        "model": "google/gemma-4-31b-it",
+        "quantization": {
+          "bnb_4bit_compute_dtype": "bfloat16",
+          "bnb_4bit_quant_type": "nf4",
+          "bnb_4bit_use_double_quant": true,
+          "load_in_4bit": true
+        },
+        "repo_commit": "ed9c0c9aecf8e8d846e70aa80428cfd5af957708",
+        "revision_requested": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+        "serving_config": "A",
+        "weights_dir": "google/gemma-4-31b-it"
+      },
+      "timing": {
+        "calls": 4,
+        "rows": 758,
+        "worker_seconds": 3438.144,
+        "queue_seconds": 18.392,
+        "wall_seconds": 3469.626,
+        "seconds_per_call": 859.536,
+        "wall_per_call": 867.407,
+        "wall_per_row": 4.577,
+        "seconds_per_row": 4.536,
+        "idle_share": 0.0091,
+        "worker_ids": [
+          "fznmh3vtj8cimk"
+        ]
+      },
+      "spend_ledger": "results/spend_5b.json"
+    }
+  },
+  "gates": [
+    {
+      "gate": "G1a",
+      "metric": "sentiment macro-F1 (comments_test)",
+      "values": {
+        "overall": 0.9214075146604309,
+        "other": 0.9368186423505572,
+        "ru": 0.8697089947089948,
+        "ua": 0.9306036598902107
+      },
+      "n": {
+        "overall": 400,
+        "ua": 248,
+        "other": 66,
+        "ru": 86
+      },
+      "gated_languages": [
+        "ua",
+        "ru"
+      ]
+    },
+    {
+      "gate": "G1b",
+      "metric": "sarcasm slice fix-rate (sarcasm_holdout)",
+      "value": 0.6052631578947368,
+      "fixed": 23,
+      "n": {
+        "slice": 38,
+        "holdout_scored": 108
+      },
+      "guard": {
+        "metric": "sentiment macro-F1 overall (comments_test)",
+        "anchor": 0.8970086900307784,
+        "value": 0.9214075146604309,
+        "delta": 0.024398824629652482,
+        "max_drop": 0.02
+      },
+      "note": "FIXED means the row leaves the union of sentiment and sarcasm errors — correct on BOTH labels (amendment 3.5 (3)). n is the pre-registered denominator and travels with the verdict (amendment 3.2's fallback)."
+    },
+    {
+      "gate": "G1c",
+      "metric": "intents micro-F1 (comments_test)",
+      "value": 0.8496124031007752,
+      "n": {
+        "overall": 400
+      }
+    },
+    {
+      "gate": "G1d",
+      "metric": "post_type macro-F1 (posts_test)",
+      "value": 0.9585858585858587,
+      "n": {
+        "overall": 250,
+        "promo": 175,
+        "launch": 31,
+        "other": 44
+      }
+    },
+    {
+      "gate": "G1d",
+      "metric": "relevance macro-F1 (posts_test)",
+      "value": 1.0,
+      "n": {
+        "overall": 250,
+        "relevant": 26
+      },
+      "note": "second head of G1d; reported beside it and not gated (amendment 3.3)"
+    },
+    {
+      "gate": "G1e",
+      "metric": "brand extraction F1 (posts_test)",
+      "value": 0.9743589743589743,
+      "n": {
+        "overall": 250,
+        "posts_with_brands": 24,
+        "gold_entities": 39,
+        "predicted_entities": 39
+      }
+    }
+  ],
+  "diagnostics": {
+    "sarcasm_binary_macro_f1_comments_test": 0.8333333333333333,
+    "holdout_sentiment_macro_f1": {
+      "overall": 0.49111111111111105,
+      "other": 0.5333333333333333,
+      "ru": 0.8242424242424242,
+      "ua": 0.9606299212598425
+    },
+    "holdout_sarcasm_macro_f1": 0.7037037037037037,
+    "holdout_sarcasm_detected": 69,
+    "failures": [
+      {
+        "input": "comments_test",
+        "rows": 400,
+        "scored": 400,
+        "parse_failures": 0,
+        "api_failures": 0,
+        "generation_failures": 0,
+        "truncated": 0,
+        "solo_retried": [],
+        "reasons": {},
+        "failed_ids": []
+      },
+      {
+        "input": "posts_test",
+        "rows": 250,
+        "scored": 250,
+        "parse_failures": 0,
+        "api_failures": 0,
+        "generation_failures": 0,
+        "truncated": 0,
+        "solo_retried": [],
+        "reasons": {},
+        "failed_ids": []
+      },
+      {
+        "input": "sarcasm_holdout",
+        "rows": 108,
+        "scored": 108,
+        "parse_failures": 0,
+        "api_failures": 0,
+        "generation_failures": 0,
+        "truncated": 0,
+        "solo_retried": [],
+        "reasons": {},
+        "failed_ids": []
+      }
+    ],
+    "gate_anchor_valid": true,
+    "note": "diagnostics, not gates. G1b is the fix-rate over the anchor's pre-registered slice; no base_errs_* appear, because on a fine-tuned run they would be this model's errors under a name that says base."
+  },
+  "parity": {
+    "outcome": "single-config-scored",
+    "config": "A",
+    "runtime": "serverless-api",
+    "not_a_gate": "SPEC amendment 3.11 (2): the deltas are reported, never averaged away, and no bar moves. A 4.5h2-passed head under its bar here is a finding for an operator briefing, not a verdict of this phase.",
+    "pair_status": "closed — results/parity_verdict_5b.json, aborted-runtime-unreachable, A ships and merging stays forbidden. Config B was never built.",
+    "anchor": {
+      "model": "google/gemma-4-31b-it",
+      "timestamp": "2026-08-04T12:26:38+00:00",
+      "g1b_slice_path": "results/g1b_slice_v4.json",
+      "g1b_slice_sha256": "6dc6be0132c12f568d90bbe8c59cf03dcb23a9b8c86ef884824379984cc1b67a",
+      "prompt_revision_sha256": {
+        "T1": "495b43d1361d0e4f5f7a186eebb971f4dc3ed9f8afd128f539ba0f6a8ffc2a19",
+        "T2": "6a7e66efb3eb4091b8d787e38213f3b1b0c9115e78d2b41fb9cc6bcaab3a54b4"
+      }
+    },
+    "bars": {
+      "G1a": {
+        "min": 0.94700869,
+        "floors": {
+          "ua": 0.8763700877,
+          "ru": 0.8839501502
+        }
+      },
+      "G1b": {
+        "min_fixed": 23,
+        "n": 38,
+        "max_macro_f1_drop": 0.02
+      },
+      "G1c": {
+        "min": 0.8482954545
+      },
+      "G1d": {
+        "min": 0.9090105074
+      },
+      "G1e": {
+        "min": 0.9282716049
+      }
+    },
+    "required_gates": [
+      "G1b",
+      "G1d",
+      "G1e"
+    ],
+    "anchor_values_45h2": {
+      "G1a": {
+        "overall": 0.9214075146604309,
+        "other": 0.9368186423505572,
+        "ru": 0.8697089947089948,
+        "ua": 0.9306036598902109
+      },
+      "G1c": 0.8478260869565217,
+      "G1d": 0.9585858585858587,
+      "G1e": 0.961038961038961,
+      "G1b": 0.6052631578947368
+    },
+    "values": {
+      "G1a": {
+        "overall": 0.9214075146604309,
+        "other": 0.9368186423505572,
+        "ru": 0.8697089947089948,
+        "ua": 0.9306036598902107
+      },
+      "G1c": 0.8496124031007752,
+      "G1d": 0.9585858585858587,
+      "G1e": 0.9743589743589743,
+      "G1b": {
+        "rate": 0.6052631578947368,
+        "fixed": 23,
+        "n": 38,
+        "guard_delta": 0.024398824629652482
+      }
+    },
+    "deltas_vs_45h2": {
+      "G1a": 0.0,
+      "G1b": 0.0,
+      "G1c": 0.001786,
+      "G1d": 0.0,
+      "G1e": 0.01332
+    },
+    "verdicts": {
+      "G1a": {
+        "pass": false,
+        "checks": [
+          {
+            "what": "overall",
+            "value": 0.9214075146604309,
+            "bar": 0.94700869,
+            "pass": false
+          },
+          {
+            "what": "ua",
+            "value": 0.9306036598902107,
+            "bar": 0.8763700877,
+            "pass": true
+          },
+          {
+            "what": "ru",
+            "value": 0.8697089947089948,
+            "bar": 0.8839501502,
+            "pass": false
+          }
+        ]
+      },
+      "G1b": {
+        "pass": true,
+        "n": 38,
+        "checks": [
+          {
+            "what": "fixed",
+            "value": 23,
+            "bar": 23,
+            "pass": true
+          },
+          {
+            "what": "guard delta",
+            "value": 0.024398824629652482,
+            "bar": -0.02,
+            "pass": true
+          }
+        ]
+      },
+      "G1c": {
+        "pass": true,
+        "checks": [
+          {
+            "what": "G1c",
+            "value": 0.8496124031007752,
+            "bar": 0.8482954545,
+            "pass": true
+          }
+        ]
+      },
+      "G1d": {
+        "pass": true,
+        "checks": [
+          {
+            "what": "G1d",
+            "value": 0.9585858585858587,
+            "bar": 0.9090105074,
+            "pass": true
+          }
+        ]
+      },
+      "G1e": {
+        "pass": true,
+        "checks": [
+          {
+            "what": "G1e",
+            "value": 0.9743589743589743,
+            "bar": 0.9282716049,
+            "pass": true
+          }
+        ]
+      }
+    },
+    "passed": 4,
+    "under_bar": [],
+    "drop_rule": {
+      "baseline_record": "results/parity_5b_a.json",
+      "baseline_runtime": "pod-loopback",
+      "baseline_written_at": "2026-08-06T15:48:40+00:00",
+      "baseline_values": {
+        "G1a": 0.9214075146604309,
+        "G1b": 0.6052631578947368,
+        "G1c": 0.8478260869565217,
+        "G1d": 0.9585858585858587,
+        "G1e": 0.961038961038961
+      },
+      "limit": 0.005,
+      "deltas": {
+        "G1a": 0.0,
+        "G1b": 0.0,
+        "G1c": 0.001786,
+        "G1d": 0.0,
+        "G1e": 0.01332
+      },
+      "worst_drop": 0.0,
+      "heads_over_limit": [],
+      "holds": true
+    },
+    "step": "5b serving parity",
+    "testset_version": "v4",
+    "cap_usd": 4.0,
+    "written_at": "2026-08-08T22:09:45+00:00"
+  }
+}
