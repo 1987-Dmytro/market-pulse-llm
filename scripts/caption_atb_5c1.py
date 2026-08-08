@@ -147,6 +147,11 @@ def main(argv: list[str] | None = None, asker=None) -> int:
     parser.add_argument("--smoke", action="store_true", help="fake client, no network, no spend")
     parser.add_argument("--dry-run", action="store_true", help="the population, then stop")
     args = parser.parse_args(argv)
+    if args.smoke and (args.out, args.record) == (CAPTIONS, RECORD):
+        # A smoke run on the real paths would fill the paid artifacts with fake captions and then
+        # make the real run refuse to overwrite them. 4.5g2's redirect, for the same reason.
+        smoke = REPO_ROOT / "results" / "smoke"
+        args.out, args.record = smoke / args.out.name, smoke / args.record.name
     refuse_to_overwrite(args.out, args.record)
 
     manifest = json.loads(args.manifest.read_text(encoding="utf-8"))
@@ -277,7 +282,10 @@ def main(argv: list[str] | None = None, asker=None) -> int:
                 "timestamp": datetime.now(UTC).isoformat(timespec="seconds"),
                 "usd": budget.run_spend,
                 "requests": len(images),
-                "note": f"5c1 caption pilot: {len(images)} media-only ATB posts captioned",
+                "note": (
+                    f"5c1 caption pilot: {record['population']['captioned']} of {len(images)}"
+                    " media-only ATB posts captioned; every one of them was asked for and billed"
+                ),
             }
         )
         args.ledger.write_text(

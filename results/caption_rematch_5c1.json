@@ -1,0 +1,431 @@
+{
+  "generated_at": "2026-08-08T15:39:19+00:00",
+  "phase": "5c1 — the ATB caption pilot",
+  "contract": "docs/PROMPT-5c1-captions-pilot.md step 4",
+  "channel": "@atb_market_official",
+  "window": {
+    "since": "2026-06-26T00:00:00+00:00",
+    "until": "2026-07-24T00:00:00+00:00",
+    "source": "raw_v1_own_last_28d"
+  },
+  "instrument": {
+    "matcher": "market_pulse.yield_screen — the yield screen's own, imported",
+    "lexicon": {
+      "path": "data/category_lexicon_draft.json",
+      "sha256": "1225ad7597f3328f2c725afba0d92458d18b95924438575bc2d46131371dd2b3",
+      "status": "draft-not-law"
+    },
+    "registry": {
+      "path": "config/registry.yaml",
+      "sha256": "c82d0cff1ee7d1bbf7c40d46bbcb02662f44898e4bc6980a2d75ced9cce46a2e"
+    },
+    "preregistration": {
+      "path": "results/yield_bars_5c1.preregistration.json",
+      "sha256": "1aa898180b01762d909e29997db659d2dc70931816855f4c0325b1ea1c892f2b",
+      "bar_A_relevant_posts_28d": 4,
+      "bar_B_comments_under_relevant_28d": 10,
+      "ruled_by": "operator 2026-08-08",
+      "currencies": "posts and comments are separate; never blended"
+    },
+    "captions": {
+      "path": "data/annotation/captions_5c1/atb_captions.jsonl",
+      "sha256": "6c9b8689e98596d97b74d4e654f150410f1d185602777306bc91ad49e00f24fa",
+      "record": "results/captions_5c1.json",
+      "rows": 18
+    },
+    "note": "the bars are not touched here; this reports which side of bar A each reading lands on"
+  },
+  "controls": {
+    "reproduces the signed screen": {
+      "expected": "0 relevant posts on text alone",
+      "measured": 0,
+      "ok": true
+    },
+    "same window as the signed screen": {
+      "expected": 25,
+      "measured": 25,
+      "ok": true
+    },
+    "negative control :: a fitness post with no taxonomy": {
+      "expected": "no category and no brand — the yield screen's own control line",
+      "measured": [],
+      "ok": true
+    }
+  },
+  "verdicts_reportable": true,
+  "posts_in_window": 25,
+  "before": {
+    "reading": "the posts' own text, exactly what the yield screen read",
+    "relevant_posts": 0,
+    "bar_A": "FAIL",
+    "by_term": {}
+  },
+  "after": {
+    "reading": "the posts' own text plus the caption written for the silent ones",
+    "relevant_posts": 13,
+    "bar_A": "PASS",
+    "relevant_on_category_alone": 10,
+    "bar_A_on_category_alone": "PASS",
+    "by_term": {
+      "brand:svoia-liniia": 12,
+      "ice-cream:морозив": 7,
+      "brand:rud": 4,
+      "brand:limo": 3,
+      "brand:try-vedmedi": 3,
+      "dairy:молок": 2,
+      "dairy:молочн": 2,
+      "dairy:сир": 2,
+      "dairy:сметан": 2,
+      "brand:lasunka": 1,
+      "ice-cream:морожен": 1
+    },
+    "bar_A_sole_carriers": []
+  },
+  "captioned_posts": {
+    "n": 18,
+    "relevant": 13,
+    "misses": {
+      "definition": "a post whose surrogate text the matcher still reads as carrying none of the taxonomy",
+      "n": 5,
+      "msg_ids": [
+        4370,
+        4391,
+        4415,
+        4455,
+        4519
+      ]
+    }
+  },
+  "posts": [
+    {
+      "msg_id": 4332,
+      "date": "2026-06-30T11:39:04+00:00",
+      "has_own_text": true,
+      "captioned": false,
+      "terms": [],
+      "evidence": null
+    },
+    {
+      "msg_id": 4333,
+      "date": "2026-06-30T11:39:48+00:00",
+      "has_own_text": true,
+      "captioned": false,
+      "terms": [],
+      "evidence": null
+    },
+    {
+      "msg_id": 4340,
+      "date": "2026-07-01T17:53:57+00:00",
+      "has_own_text": false,
+      "captioned": true,
+      "terms": [
+        "brand:rud",
+        "brand:svoia-liniia",
+        "brand:try-vedmedi",
+        "dairy:молок",
+        "dairy:молочн",
+        "ice-cream:морозив"
+      ],
+      "evidence": {
+        "kind": "category",
+        "name": "dairy:молок",
+        "matched": "молоком",
+        "line": "АТБ з 01.07.2026 по 07.07.2026 ЗНИЖКИ до -51%* Шоколад молочний, з начинкою зі смаком карамелі, арахісу та повітряного рису, 276 г/ «Nussini» з начинкою із додаванням горіхової пас…"
+      }
+    },
+    {
+      "msg_id": 4350,
+      "date": "2026-07-01T17:54:06+00:00",
+      "has_own_text": false,
+      "captioned": false,
+      "terms": [],
+      "evidence": null
+    },
+    {
+      "msg_id": 4360,
+      "date": "2026-07-01T17:54:14+00:00",
+      "has_own_text": false,
+      "captioned": true,
+      "terms": [
+        "brand:limo",
+        "brand:svoia-liniia",
+        "ice-cream:морозив"
+      ],
+      "evidence": {
+        "kind": "category",
+        "name": "ice-cream:морозив",
+        "matched": "морозиво",
+        "line": "Морозиво пломбір, у вафельному стаканчику, 80 г ТМ «Київський Пломбір» — 21.90 грн замість 40.00 грн (-46%)* Морозиво «Солона карамель» в кондитерській глазурі/ «Полунничний» в біл…"
+      }
+    },
+    {
+      "msg_id": 4370,
+      "date": "2026-07-01T17:54:20+00:00",
+      "has_own_text": false,
+      "captioned": true,
+      "terms": [],
+      "evidence": null
+    },
+    {
+      "msg_id": 4377,
+      "date": "2026-07-08T11:10:00+00:00",
+      "has_own_text": false,
+      "captioned": true,
+      "terms": [
+        "brand:svoia-liniia"
+      ],
+      "evidence": {
+        "kind": "brand",
+        "name": "svoia-liniia",
+        "matched": "своя лінія",
+        "line": "ВЛАСНІ ТОРГОВІ МАРКИ АТБ – ПЕРЕВІРЕНА ЯКІСТЬ ТА ВИГІДНА ЦІНА з 08.07.26 по 14.07.26 Ковбаса сирокопчена «Салямі Фірмова», 1 кг ТМ «М'ЯСНА ЛАВКА/ СВОЯ ЛІНІЯ» -40%* 489.80 грн 292.89…"
+      }
+    },
+    {
+      "msg_id": 4381,
+      "date": "2026-07-08T11:11:35+00:00",
+      "has_own_text": false,
+      "captioned": true,
+      "terms": [
+        "ice-cream:морозив"
+      ],
+      "evidence": {
+        "kind": "category",
+        "name": "ice-cream:морозив",
+        "matched": "морозиво",
+        "line": "Сильна країна — вигідні покупки ЗНИЖКИ В АТБ до 50%* з 08.07.26 по 14.07.26 Морозиво «Maximuse», в асортименті, 300 г/ 500 г ТМ «Laska» -50%* 74.50 грн 149.50 грн -50%* 99.50 грн 1…"
+      }
+    },
+    {
+      "msg_id": 4391,
+      "date": "2026-07-08T11:11:49+00:00",
+      "has_own_text": false,
+      "captioned": true,
+      "terms": [],
+      "evidence": null
+    },
+    {
+      "msg_id": 4401,
+      "date": "2026-07-08T11:12:03+00:00",
+      "has_own_text": false,
+      "captioned": true,
+      "terms": [
+        "brand:svoia-liniia"
+      ],
+      "evidence": {
+        "kind": "brand",
+        "name": "svoia-liniia",
+        "matched": "своя лінія",
+        "line": "Підгузки-трусики/ Підгузки дитячі «MiniBee», в асортименті, 25 шт/28 шт/ 40 шт/ 44 шт ТМ «Своя Лінія» -28%* 249.00 грн 349.00 грн maxi 7-18 кг (кг) 5 junior 11-25 кг (кг) до 12 год…"
+      }
+    },
+    {
+      "msg_id": 4411,
+      "date": "2026-07-08T11:12:09+00:00",
+      "has_own_text": false,
+      "captioned": true,
+      "terms": [
+        "brand:svoia-liniia",
+        "dairy:сир",
+        "dairy:сметан"
+      ],
+      "evidence": {
+        "kind": "category",
+        "name": "dairy:сир",
+        "matched": "сиру",
+        "line": "Олія соняшникова «Традиційна» рафінована, 850 мл ТМ «Олейна» Загущувач харчовий, желатин швидкорозчинний, 25 г/агар-агар, 8 г ТМ «Своя Лінія» Часник гранульований, 20 г ТМ «Своя Лі…"
+      }
+    },
+    {
+      "msg_id": 4415,
+      "date": "2026-07-09T12:46:55+00:00",
+      "has_own_text": false,
+      "captioned": true,
+      "terms": [],
+      "evidence": null
+    },
+    {
+      "msg_id": 4421,
+      "date": "2026-07-14T09:04:58+00:00",
+      "has_own_text": false,
+      "captioned": true,
+      "terms": [
+        "brand:svoia-liniia",
+        "dairy:сметан"
+      ],
+      "evidence": {
+        "kind": "category",
+        "name": "dairy:сметан",
+        "matched": "сметани",
+        "line": "ВЛАСНІ ТОРГОВІ МАРКИ АТБ – ПЕРЕВІРЕНА ЯКІСТЬ ТА ВИГІДНА ЦІНА з 15.07.26 по 21.07.26 Ковбаса напівкопчена «Губернська», 420 г/ сирокопчена «Салямі Італійска», 1 кг ТМ «М'ЯСНА ЛАВКА/…"
+      }
+    },
+    {
+      "msg_id": 4425,
+      "date": "2026-07-14T13:15:07+00:00",
+      "has_own_text": true,
+      "captioned": false,
+      "terms": [],
+      "evidence": null
+    },
+    {
+      "msg_id": 4426,
+      "date": "2026-07-15T06:25:20+00:00",
+      "has_own_text": false,
+      "captioned": true,
+      "terms": [
+        "brand:svoia-liniia",
+        "ice-cream:морозив"
+      ],
+      "evidence": {
+        "kind": "category",
+        "name": "ice-cream:морозив",
+        "matched": "морозиво",
+        "line": "Сильна країна — вигідні покупки ЗНИЖКИ В АТБ до 55%* з 15.07.26 по 21.07.26 Морозиво «Лісовий горіх»/ «Малиновий чизкейк»/ «Манго-апельсин», 500 г ТМ «Magnat» -55%* 103 90 грн 230 …"
+      }
+    },
+    {
+      "msg_id": 4436,
+      "date": "2026-07-15T06:27:47+00:00",
+      "has_own_text": false,
+      "captioned": true,
+      "terms": [
+        "brand:svoia-liniia",
+        "dairy:сир"
+      ],
+      "evidence": {
+        "kind": "category",
+        "name": "dairy:сир",
+        "matched": "сир",
+        "line": "Кетчуп «До Шашлику»/«Лагідний»/«Чилі», 380 г ТМ «Торчин». Соус/Гірчиця майонезний «Делікатесний», 28%, 500 г/«Діжонська», 230 г ТМ «Торчин». Майонез «Європейський», 72%/«Домашній»,…"
+      }
+    },
+    {
+      "msg_id": 4446,
+      "date": "2026-07-15T06:28:06+00:00",
+      "has_own_text": false,
+      "captioned": true,
+      "terms": [
+        "brand:limo",
+        "brand:rud",
+        "brand:svoia-liniia",
+        "brand:try-vedmedi",
+        "ice-cream:морозив"
+      ],
+      "evidence": {
+        "kind": "category",
+        "name": "ice-cream:морозив",
+        "matched": "морозиво",
+        "line": "Морозиво «Monaco» двощарове, в асортименті, 100 г ТМ «Три Ведмеді», -46%*, 36.90 грн Морозиво біле, в асортименті, «Сиркове 1965», 65 г ТМ «Лімо», -46%*, 24.90 грн Морозиво «Пломбі…"
+      }
+    },
+    {
+      "msg_id": 4455,
+      "date": "2026-07-17T15:03:12+00:00",
+      "has_own_text": false,
+      "captioned": true,
+      "terms": [],
+      "evidence": null
+    },
+    {
+      "msg_id": 4462,
+      "date": "2026-07-22T06:32:28+00:00",
+      "has_own_text": true,
+      "captioned": false,
+      "terms": [],
+      "evidence": null
+    },
+    {
+      "msg_id": 4463,
+      "date": "2026-07-22T06:33:07+00:00",
+      "has_own_text": true,
+      "captioned": false,
+      "terms": [],
+      "evidence": null
+    },
+    {
+      "msg_id": 4467,
+      "date": "2026-07-22T07:27:14+00:00",
+      "has_own_text": false,
+      "captioned": true,
+      "terms": [
+        "brand:rud",
+        "brand:svoia-liniia",
+        "dairy:молок",
+        "dairy:молочн",
+        "ice-cream:морозив"
+      ],
+      "evidence": {
+        "kind": "category",
+        "name": "dairy:молок",
+        "matched": "молоком",
+        "line": "АТБ з 22.07.2026 по 28.07.2026 ЗНИЖКИ до -55%* Морозиво «100% морозиво»/ «Чорниця-ожина», 500 г ТМ «Рудь» Морозиво «Класичний» у вафельному стаканчику/ без цукру, ескімо в глазурі,…"
+      }
+    },
+    {
+      "msg_id": 4498,
+      "date": "2026-07-22T07:37:06+00:00",
+      "has_own_text": false,
+      "captioned": true,
+      "terms": [
+        "brand:svoia-liniia"
+      ],
+      "evidence": {
+        "kind": "brand",
+        "name": "svoia-liniia",
+        "matched": "своя лінія",
+        "line": "Форель слабосолона, скибочки без шкіри, 100 г ТМ «Своя Лінія» 99.90 грн -33%* Сьомга слабосолена, філе-шматок на шкірі, 1 ґатунок, 180 г ТМ «Своя Лінія» 205.90 грн -25%* Пресерви о…"
+      }
+    },
+    {
+      "msg_id": 4508,
+      "date": "2026-07-22T07:37:07+00:00",
+      "has_own_text": false,
+      "captioned": true,
+      "terms": [
+        "brand:lasunka",
+        "brand:limo",
+        "brand:rud",
+        "brand:svoia-liniia",
+        "brand:try-vedmedi",
+        "ice-cream:морожен",
+        "ice-cream:морозив"
+      ],
+      "evidence": {
+        "kind": "category",
+        "name": "ice-cream:морожен",
+        "matched": "морожене",
+        "line": "Морозиво «Стоп-наркотик» крем-брюле з маком у глазурі, ескімо, 85 г ТМ «Ласунка», 29.90 грн Морозиво «Donut» зі смаком «Ваніль-полуниця»/«Банан-шоколад», ескімо, 70 г ТМ «Рудь», 21…"
+      }
+    },
+    {
+      "msg_id": 4518,
+      "date": "2026-07-22T07:38:19+00:00",
+      "has_own_text": true,
+      "captioned": false,
+      "terms": [],
+      "evidence": null
+    },
+    {
+      "msg_id": 4519,
+      "date": "2026-07-23T06:35:09+00:00",
+      "has_own_text": false,
+      "captioned": true,
+      "terms": [],
+      "evidence": null
+    }
+  ],
+  "git": {
+    "commit": "f67cf04311c98e1fee8eef3a65dc8bbd83e3ce91",
+    "dirty": [
+      "knowledge/daily_logs/2026-08-08.md",
+      "knowledge/hot.md",
+      "knowledge/index.md",
+      "scripts/caption_atb_5c1.py",
+      "tests/test_captions_pilot_5c1.py",
+      "results/captions_5c1.json",
+      "results/spend_5c1_captions.json",
+      "scripts/rematch_with_captions_5c1.py"
+    ]
+  }
+}

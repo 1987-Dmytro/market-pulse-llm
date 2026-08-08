@@ -201,3 +201,91 @@ def test_the_pilot_writes_captions_and_a_record_without_touching_the_network(tmp
     assert written["smoke"] is True
     assert written["cost"]["cap_usd"] == captioner.CAP_USD
     assert written["prompt_sha256"][captioner.TASK]
+
+
+def test_a_smoke_run_on_the_default_paths_lands_in_the_smoke_directory(tmp_path, monkeypatch):
+    """Otherwise the rehearsal fills the paid artifacts with fake captions, and the real run then
+    refuses to overwrite the fake ones — the pilot buys nothing and the file looks bought."""
+    captured = {}
+    monkeypatch.setattr(
+        captioner, "refuse_to_overwrite", lambda out, record: captured.update(out=out, rec=record)
+    )
+    manifest = tmp_path / "manifest.json"
+    manifest.write_text(json.dumps({"entries": {}}), encoding="utf-8")
+    assert captioner.main(["--manifest", str(manifest), "--smoke", "--dry-run"]) == 0
+    assert captured["out"].parent.name == "smoke"
+    assert captured["rec"].parent.name == "smoke"
+
+
+# --- step 4: the matcher over the captions --------------------------------------------------------
+
+
+REMATCH = json.loads((REPO_ROOT / "results" / "caption_rematch_5c1.json").read_text("utf-8"))
+
+
+def test_the_rematch_reproduces_the_signed_screens_zero_before_reporting_an_after():
+    """The before is a control, not a quote. If this file cannot re-derive the zero the operator
+    signed against, its after is a number about a different instrument."""
+    screen = json.loads((REPO_ROOT / "results" / "yield_screen_5c1.json").read_text("utf-8"))
+    atb = next(row for row in screen["sources"] if row["handle"] == "@atb_market_official")
+    assert REMATCH["verdicts_reportable"] is True
+    assert all(control["ok"] for control in REMATCH["controls"].values())
+    assert REMATCH["before"]["relevant_posts"] == atb["relevant_posts"] == 0
+    assert REMATCH["posts_in_window"] == atb["posts"]["in_window"] == 25
+    assert REMATCH["window"]["source"] == atb["window"]["source"]
+
+
+def test_reading_the_images_turns_the_failed_control_into_a_pass():
+    """The pilot's whole question. 0 → 13 of 25, against a bar of 4."""
+    bars = json.loads(
+        (REPO_ROOT / "results" / "yield_bars_5c1.preregistration.json").read_text("utf-8")
+    )
+    assert REMATCH["instrument"]["preregistration"]["bar_A_relevant_posts_28d"] == 4
+    assert bars["bar_A_relevant_posts_28d"] == 4, "the bars did not move for this reading"
+    assert REMATCH["before"]["bar_A"] == "FAIL"
+    assert REMATCH["after"]["bar_A"] == "PASS"
+    assert REMATCH["after"]["relevant_posts"] == 13
+
+
+def test_the_pass_does_not_hang_on_the_private_label_or_on_any_single_term():
+    """«Своя Лінія» is ATB's own label and is printed on a leaflet's diapers as readily as on its
+    cheese. A pass that needed it would be a pass about the leaflet's header, so the strict
+    category-only reading is published beside the headline and clears the bar on its own."""
+    assert REMATCH["after"]["by_term"]["brand:svoia-liniia"] == 12
+    assert REMATCH["after"]["relevant_on_category_alone"] == 10
+    assert REMATCH["after"]["bar_A_on_category_alone"] == "PASS"
+    assert REMATCH["after"]["bar_A_sole_carriers"] == []
+
+
+def test_every_miss_is_named_and_the_word_is_defined():
+    """«Промах» has two readings and only one of them is a count; the other is a judgement about a
+    quoted line, so every post in the record carries its evidence."""
+    assert REMATCH["captioned_posts"]["misses"]["definition"].startswith("a post whose surrogate")
+    assert REMATCH["captioned_posts"]["misses"]["msg_ids"] == [4370, 4391, 4415, 4455, 4519]
+    assert REMATCH["captioned_posts"]["n"] == 18
+    for post in REMATCH["posts"]:
+        assert bool(post["terms"]) == bool(post["evidence"]), post["msg_id"]
+
+
+def test_the_quoted_captions_are_in_the_file_they_are_quoted_from():
+    """The three captions the report shows the operator, grepped back to the paid artifact."""
+    captions = (
+        REPO_ROOT / "data" / "annotation" / "captions_5c1" / "atb_captions.jsonl"
+    ).read_text("utf-8")
+    for quote in (
+        "Морозиво пломбір, у вафельному стаканчику, 80 г ТМ «Київський Пломбір» — 21.90 грн",
+        "Підгузки-трусики/ Підгузки дитячі «MiniBee», в асортименті, 25 шт/28 шт/ 40 шт/ 44 шт",
+        "АТБ з 23.07.26 по 29.07.26 АКЦІЯ «7 ДНІВ» до -43%* Літак-планер",
+    ):
+        assert captions.count(quote) == 1, quote
+
+
+def test_the_paid_record_and_the_rematch_read_the_same_captions():
+    """One caption file, two readers. A rematch over a different set would be unprovable later."""
+    import hashlib
+
+    paid = json.loads((REPO_ROOT / "results" / "captions_5c1.json").read_text("utf-8"))
+    path = REPO_ROOT / paid["out"]
+    assert hashlib.sha256(path.read_bytes()).hexdigest() == paid["out_sha256"]
+    assert REMATCH["instrument"]["captions"]["sha256"] == paid["out_sha256"]
+    assert REMATCH["instrument"]["captions"]["rows"] == paid["population"]["captioned"] == 18

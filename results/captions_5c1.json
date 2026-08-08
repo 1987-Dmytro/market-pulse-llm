@@ -1,0 +1,73 @@
+{
+  "timestamp": "2026-08-08T15:35:45+00:00",
+  "phase": "5c1 — the ATB caption pilot",
+  "contract": "docs/PROMPT-5c1-captions-pilot.md step 3",
+  "task": "caption_post",
+  "model": "qwen/qwen3.5-flash-02-23",
+  "endpoint": {
+    "tag": "alibaba/fp8",
+    "quantization": "fp8",
+    "served_quantization": "fp8",
+    "status": 0
+  },
+  "smoke": false,
+  "attempts_per_post": 1,
+  "prompt_sha256": {
+    "caption_post": "5dd76ab27fe574a7cf345d82c13f9e69e1683a385c2a9241172b214ea6366193"
+  },
+  "source": "results/post_media_5c1.json",
+  "population": {
+    "media_only_posts": 19,
+    "captioned": 18,
+    "transcribed_polls": 0,
+    "unusable": [
+      "@atb_market_official:4350"
+    ],
+    "no_surrogate_at_all": []
+  },
+  "images": {
+    "sent": 102,
+    "available": 159,
+    "max_per_request": 6,
+    "posts_truncated": [
+      "@atb_market_official:4340",
+      "@atb_market_official:4360",
+      "@atb_market_official:4370",
+      "@atb_market_official:4381",
+      "@atb_market_official:4391",
+      "@atb_market_official:4401",
+      "@atb_market_official:4426",
+      "@atb_market_official:4436",
+      "@atb_market_official:4446",
+      "@atb_market_official:4455",
+      "@atb_market_official:4467",
+      "@atb_market_official:4498",
+      "@atb_market_official:4508",
+      "@atb_market_official:4519"
+    ]
+  },
+  "kinds": {
+    "image": 18
+  },
+  "out": "data/annotation/captions_5c1/atb_captions.jsonl",
+  "out_sha256": "6c9b8689e98596d97b74d4e654f150410f1d185602777306bc91ad49e00f24fa",
+  "cost": {
+    "requests": 19,
+    "usd": 0.01801202,
+    "phase_spend_usd": 0.01801202,
+    "cap_usd": 0.1,
+    "anchor": "results/spend_5c1_captions.json"
+  },
+  "git": {
+    "commit": "f67cf04311c98e1fee8eef3a65dc8bbd83e3ce91",
+    "dirty": [
+      "knowledge/daily_logs/2026-08-08.md",
+      "knowledge/hot.md",
+      "knowledge/index.md",
+      "scripts/caption_atb_5c1.py",
+      "tests/test_captions_pilot_5c1.py",
+      "results/spend_5c1_captions.json"
+    ]
+  },
+  "note": "the 19 posts of @atb_market_official's screen window that carry no text. Same model, endpoint and registered prompt as 4.5g2 so that step 4's before/after compares one instrument with itself; the budget is this pilot's own and is anchored in its own ledger. One attempt per post — a failed call is named, never re-asked."
+}

@@ -4107,3 +4107,69 @@ which was checked by diff rather than asserted. `refuse_to_overwrite` was cleare
 it protects a record a signature cites, and no signature exists while `verdicts_reportable` is
 false. The per-audience headline moved with it in all three files that carried it: health_fitness
 is 7 of 17 measured empty, not 14, and mothers_kids 1 of 5, not 3.
+
+## Deviations — PROMPT-5c1-captions-pilot (the image census and the ATB captions)
+
+**Dv1 — `--close` writes the ruling beside the measurement and never over it.** The market
+screen's `--close` replaces the record's top-level `git` block; doing that here would swap the
+provenance of the screen the operator signed against for the provenance of a pass that measured
+nothing, so the ruling carries its own `git` and the measurement's stays. `bar_A` also stays
+`PASS` for both ruled rows: PASS is what the instrument found, BELOW is what the operator decided
+it is worth, and a record showing only the second could never be re-read as evidence about the
+first. The consequence is said where a reader counts — `summary.pass_A_ruled_below_bar_A`.
+
+**Dv2 — the census reads the real 4.5g2 caption file, and two of its four states still report
+0.** `market_pulse.parents.context` is the only rule in the repo that decides what stands in for a
+post's missing text, so the census calls it rather than restating it — which means it must be
+handed a caption file or `image_caption` and `poll_text` could not occur at all. All 37 caption
+rows are @VARUS_channel parents dated 2025-06-17…2026-06-22 and every censused window starts
+later, so the two states are genuinely empty. "Loaded and empty" and "never loaded" look identical
+in a record, so the record says which one it is and a test injects a caption for a real windowed
+post (@atb_market_official:4519) and watches the state flip.
+
+**Dv3 — the price projection is two numbers, because offline nothing here can tell a poll from a
+photo.** `has_media` is true for both and `raw_store.post_record` stores `message.raw_text`, which
+a poll leaves empty. So the record publishes an upper bound (every silent post with media, priced
+as a photo: 250 posts, $0.12) and the same bound discounted by the split 4.5g2 measured when it
+asked Telegram what such posts actually were — 21 photos, 16 polls, 4 unreadable of 41 — giving
+$0.06. Both are labelled, and the rate is read out of `results/captions_45g2.json`, not restated.
+
+**Dv4 — the fetch does not sleep a FloodWait out.** `fetch_post_media.fetch_channel` sleeps
+`exc.seconds` in full; this account met a 20-hour wall in this phase, so a wait over 300s stops
+the run and leaves the owed ids in `still_owed` with a non-zero exit. It did not fire: 19 posts,
+159 images, nothing owed. `data/raw/**` was verified byte-identical before and after with
+`shasum -c results/raw_v1_baseline.sha256` — `data/` is gitignored, so `git status` proves nothing
+in either direction.
+
+**Dv5 — one attempt per post, and one post came back empty.** 4.5g2's `Asker` wraps every call in
+`call_with_retry(attempts=6)`, which inside a $0.10 cap is a six-fold re-bill of exactly the
+requests that are already failing, so the pilot declares `ATTEMPTS = 1` and a test pins it.
+@atb_market_official:4350 failed on a provider-side `HTTP 400: Download multimodal file timed out`
+and was NOT re-asked: it is named in `population.unusable` and counted as a request, because it
+was billed. 18 of 19 captioned for $0.0180 of the $0.10 cap. A full run should price a retry or
+accept ~5% attrition; that is the operator's call, not this pilot's.
+
+**Dv6 — the pilot writes its own ledger rather than calling `relabel.read_ledger`.** That helper
+renders `f"docs/PROMPT-{phase[0]}.{phase[1:]}.md"` into the anchor's note, which for any 5c1 phase
+string produces a path that does not exist — a wrong provenance string inside a money record. The
+three constants (`PHASE`, `CAP_USD`, `LEDGER`) are declared in `scripts/caption_atb_5c1.py` and
+imported from nowhere; a test asserts each differs from 4.5g2's, whose cap is $0.75 and whose
+caption file is a committed labelling input.
+
+**Dv7 — one prose field of the spend ledger was corrected by hand after the run.** The run note
+read «19 media-only ATB posts captioned» when 18 were captioned and 19 were billed. The `usd` and
+the anchor were not touched, the record `results/captions_5c1.json` always carried the exact
+population, and the script now derives the sentence from the outcome instead of the request count.
+
+**Dv8 — step 4 is its own script, not `yield_screen_5c1 --only`.** That path would have been the
+smaller diff, but `run_controls` looks up all four positive controls and would report three of
+them missing on a one-channel run — a refusal about the invocation rather than about the data. The
+rematch imports the screen's matcher, window rule and negative control instead, and re-derives the
+signed zero as a control before reporting any after.
+
+**Dv9 — `relevant_on_category_alone` was added after the first reading and the record
+regenerated.** «Своя Лінія» is ATB's own label and fires on 12 of the 13 relevant posts, including
+a diaper leaflet and a salmon one, so the headline needed the reading with every brand alias
+struck out: 10 posts, still over the bar. `bar_A_sole_carriers` is empty — the pass hangs on no
+single term. Nothing paid was re-derived; the captions file and its record are untouched and the
+rematch cites its sha256.
