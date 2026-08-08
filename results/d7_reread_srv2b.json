@@ -61,7 +61,8 @@
       "console_logs": "empty — 'No logs yet' after 35 minutes, zero lines at any level",
       "client_refusal": "market_pulse.zero_shot.ApiError: HTTP 408: job sync-45b64d75-2460-440a-ba2e-b952e355ae34-e1 still IN_QUEUE after the timeout (1800 s handshake)"
     },
-    "diagnosis": "NOT the platform and NOT the volume: the vendor control above completed on the same volume, the same datacenter and the same GPU class. The container never produced a single log line, so the failure is before serve_handler.py's first print — the SDK banner '--- Starting Serverless Worker ---' that the pod proof emitted never appeared. The serverless job-loop path (runpod.serverless.start with no --rp_serve_api) has NEVER executed in this project: 5b aborted before any worker ran, and srv-2a's pod proof exercised the HTTP-server mode of the same file. The suspect is therefore the one thing the pod proof cannot cover — whether `--docker-start-cmd bash,/runpod-volume/start.sh` actually becomes the worker's main process under the stock runpod/pytorch image, whose own entrypoint may take precedence. UNPROVEN: no log line exists to confirm it."
+    "diagnosis": "NOT the platform and NOT the volume: the vendor control above completed on the same volume, the same datacenter and the same GPU class. The container never produced a single log line, so the failure is before serve_handler.py's first print — the SDK banner '--- Starting Serverless Worker ---' that the pod proof emitted never appeared. The serverless job-loop path (runpod.serverless.start with no --rp_serve_api) has NEVER executed in this project: 5b aborted before any worker ran, and srv-2a's pod proof exercised the HTTP-server mode of the same file. The suspect is therefore the one thing the pod proof cannot cover — whether `--docker-start-cmd bash,/runpod-volume/start.sh` actually becomes the worker's main process under the stock runpod/pytorch image, whose own entrypoint may take precedence. UNPROVEN: no log line exists to confirm it.",
+    "the_rungs_own_explanation_was_wrong": "the runbook's handshake-timeout row attributes the trigger to 'the weights are not where HF_HOME says'. They were: the pod loaded them off this same volume minutes earlier, and the container emitted zero lines so it never reached a load at all. The trigger condition was right and its attributed cause was not. A next runbook's row should read 'the container may not be starting at all — run the vendor control first'."
   },
   "pod_control_the_same_evening": {
     "why_it_matters": "the identical artifact answers on a pod, which is what makes the failure specific to the serverless container start",
@@ -84,7 +85,8 @@
     "step_cap_usd": 4.0,
     "step_spent_usd": 0.9999,
     "anchor": "results/spend_srv2b.json, written before the first billable action",
-    "breakdown_note": "staging pod ~$0.37 (billing pods reports $0.29799634497612715 over 1441266 ms) and ~$0.55 of serverless worker time that consumed no job — a crash-looping worker bills at the flex rate exactly like a working one."
+    "breakdown_note": "staging pod ~$0.37 (billing pods reports $0.29799634497612715 over 1441266 ms) and ~$0.55 of serverless worker time that consumed no job — a crash-looping worker bills at the flex rate exactly like a working one.",
+    "guard_billing_blind_spot": "runpod_guard's corroborating reading walks `billing pods` and `billing network-volume` only. The serverless worker's ~$0.55 appears in neither, so the guard printed $18.6344 of billing against a $19.4987 balance delta — an $0.86 under-count. On a serverless step only the balance delta binds, which is why `spend()` takes the max of the two. Worth knowing when the cap is $4.00 and a crash-looping worker can eat 14% of it without showing up in the check SPEC 3.4 (4) names."
   },
   "volume": {
     "id": "qw4nwleanc",
@@ -93,7 +95,17 @@
     "data_center": "EU-RO-1",
     "kept": true,
     "price_usd_per_month": null,
-    "price_reading": "NOT READ. runpodctl network-volume create/get carry no price field, the GraphQL NetworkVolume type has neither costPerMonth nor storageCost, and `runpodctl billing network-volume` was still empty 1.5 h after creation. The runbook assumed a console creation, which prints it. Read it at the next settlement or by eye."
+    "price_reading": "NOT READ. runpodctl network-volume create/get carry no price field, the GraphQL NetworkVolume type has neither costPerMonth nor storageCost, and `runpodctl billing network-volume` was still empty 1.5 h after creation. The runbook assumed a console creation, which prints it. Read it at the next settlement or by eye.",
+    "contents_manifest": {
+      "why_here": "the volume is the only thing srv-2b created that outlives the session, and a $7/month asset whose contents are not written down is a $7/month unknown — the next session would either re-stage 59 GB or run a checkout it believes is current",
+      "hf/": "google/gemma-4-31b-it at revision 842da3794eaa0b77d5f08bae87a17459d91ff475, 59 GB, no .incomplete blobs",
+      "venv/": "python3 -m venv --system-site-packages over the image's torch 2.8.0+cu128; transformers 5.14.1, bitsandbytes 0.50.0, peft 0.20.0, accelerate 1.14.0, runpod 1.11.0, pyyaml",
+      "repo/": "checkout at 48948d7a8bb7090f21c89ff6506815d709ff306d — STALE as of this record: it predates the smoke_5b.py fix and everything committed after it",
+      "repo/results/train/45h2-arm-a/adapter/": "directory sha256 b3ca630846c7e75c5e7058ce45804c45a6bff5c49dcf2389cb8cdda0b7a68a6c, re-derived on the volume",
+      "start.sh": "a copy of scripts/start_5b_worker.sh",
+      "worker.log · hf-download.log": "the staging pod's own output; copies were fetched to the Mac before the pod was deleted",
+      "the_adapter_now_has_two_copies": "runbook §B.1 called it 'the one item with a single copy'. It is on this volume as well as the Mac now, and both hash to b3ca630846c7…"
+    }
   },
   "deletions_proven_by_listing": {
     "pod list -a": [],
@@ -108,10 +120,14 @@
     ]
   },
   "git": {
-    "commit": "81f35f98f2df4c18abca10676a97b277988129e4",
-    "dirty": [
-      "results/spend_phase4.json",
-      "results/spend_srv2b.json"
-    ]
+    "commit": "e027aee095002b702f1c8aa2eab067fc20917586",
+    "dirty": []
+  },
+  "parity_3_11_2": {
+    "run": false,
+    "artifact_that_would_have_held_it": "results/parity_srv2.json",
+    "exists": false,
+    "per_head_verdicts": null,
+    "reading": "§C.7 was never reached: the smoke's handshake never completed, so no row of test v4 was scored, no head has a verdict, and NO serving number reaches any aggregate. SPEC 3.11 (2) remains unsatisfied and mandatory. The single attempt it grants was NOT spent — the run that failed is the smoke, on the arm's own training carve, and test v4 was never opened."
   }
 }

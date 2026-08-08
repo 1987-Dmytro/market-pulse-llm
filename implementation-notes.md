@@ -4465,3 +4465,32 @@ not apply to a worker that never reports itself idle, and `serverless update --w
 returned success while the API still read `workersMax 1`. The thing that stopped the meter was
 deleting the endpoint. Worth a line in any future runbook: **watch the first job's status, not the
 worker's, and delete on the first restart.**
+
+**Dv19 — what is on the volume, since it is the only thing that outlived the session.** `qw4nwleanc`
+holds `hf/` at revision `842da379…` (59 GB, no `.incomplete` blobs), `venv/` with the pinned stack
+over the image's torch, `repo/` **checked out at `48948d7a8bb7090f21c89ff6506815d709ff306d`** —
+already stale, it predates the `smoke_5b.py` fix — the adapter inside it hashing to
+`b3ca630846c7…`, `start.sh`, and the staging pod's two logs. Written down because a $7/month asset
+whose contents are not recorded is a $7/month unknown: the next session would either re-stage 59 GB
+or run a checkout it believes is current. Note also that §B.1's "the adapter is the one item with a
+single copy" is no longer true — it is on the volume as well as the Mac, both at the same hash.
+
+**Dv20 — the guard's corroborating reading is blind on a serverless step.** `billing_since` walks
+`billing pods` and `billing network-volume` only, so the serverless worker's ~$0.55 landed in
+neither: the guard printed $18.6344 of billing against a $19.4987 balance delta, an $0.86
+under-count. `spend()` takes the max of the two so the cap still held, but the reading SPEC 3.4 (4)
+actually names cannot see serverless spend at all. On a $4.00 cap a crash-looping worker can eat
+14% of it invisibly.
+
+**Dv21 — the rung's own explanation does not fit this failure.** The runbook's handshake-timeout row
+says "the weights are not where `HF_HOME` says. Check that on a pod, not by re-running the
+endpoint." They were where it says — the pod had loaded them off this same volume minutes earlier —
+and the container emitted zero lines, so it never reached a load. The trigger fired correctly and
+its attributed cause was wrong. A next runbook's row should read: **"the container may not be
+starting at all — run the vendor control first."**
+
+**§C.9's report line, stated rather than left missing.** Step 6 of the contract asks for per-head
+verdicts read from the result artifacts. **`results/parity_srv2.json` does not exist**: §C.7 was
+never reached, no row of test v4 was scored, no head has a verdict, and no serving number reaches
+any aggregate. SPEC 3.11 (2)'s single attempt was **not** spent — the run that failed is the smoke,
+on the arm's own training carve, and test v4 was never opened.
