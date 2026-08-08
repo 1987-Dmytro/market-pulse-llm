@@ -629,6 +629,25 @@ def test_the_write_appends_sources_and_leaves_taxonomy_byte_identical(tmp_path, 
     assert after.sources[-1].audience == "regional"
 
 
+def test_a_second_apply_run_does_not_write_a_second_section_header():
+    """Three runs on 2026-08-08 left three identical banners in `config/registry.yaml`, each
+    dated for a sitting that was not the one below it. The rows were right and the caption was
+    not — and a caption that describes the wrong sitting is worse than none, because a reader
+    six weeks from now takes it for provenance."""
+    shipped = (REPO_ROOT / "config" / "registry.yaml").read_text(encoding="utf-8")
+    banner = apply.HEADER.splitlines()[0]
+    assert shipped.count(banner) == 1, "the shipped file carries the banner more than once"
+
+    entries = [apply.source_entry(row("@poltava_misto", "city", title="X", group=False), "posts")]
+    assert apply.insert_sources(shipped, entries).count(banner) == 1
+
+    # The negative control, without which this only proves the banner is never written: a file
+    # that does not carry it yet gets exactly one.
+    fresh = shipped.replace(apply.HEADER + "\n", "")
+    assert banner not in fresh
+    assert apply.insert_sources(fresh, entries).count(banner) == 1
+
+
 def load_registry_text(text: str):
     """`load_registry` needs a path; the four ids are what this comparison is about."""
     import tempfile

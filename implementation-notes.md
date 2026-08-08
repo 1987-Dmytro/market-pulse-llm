@@ -3908,3 +3908,105 @@ Restored inside a sentence that is still true after the delete — the rate is w
 note in the file saying the literal is load-bearing, so the next rewrite does not repeat it. The
 second literal the calculator reads, «80 GB is about what the» in the footguns, survived because
 that section was kept whole.
+
+**D68 — a screen that can be re-run over a moved composition is a screen that can delete its own
+evidence.** `results/language_census_5c1.json` is what wave 3 cites: @retsepty5's ru 1.00 over 139
+posts, @retsepty4's 115, @katyal55's 36, and @tretyakovaele's Сочи row. All four channels left the
+registry ON THE STRENGTH of those rows, so a re-run over today's composition writes a table that
+CANNOT contain them — the census re-derives from the collected windows, but only for sources still
+in the registry, which is exactly the half a ruling never cites. The theme screen already carried a
+refusal for a harder version of this (its rows cannot be re-derived at all); the census and the
+market screen carried none, and the day-2 pass was one `--out` away from destroying wave 3's
+evidence. Both now refuse their default path and name what the file is. The day-2 passes went to
+`results/language_census_5c1_day2.json` and `results/market_screen_5c1_day2.json`, and the tests
+were split to match: the old records are checked for the rows their rulings quote, the new ones
+against the live registry. Note what makes this different from `--force`: nothing here was
+destructive by intent, the flag was just the default.
+
+**D69 — the market screen's first false positive is a Ukrainian channel reporting a Russian
+warehouse being hit.** The `regional` segment brought a genre the screen was never asked about.
+All three RF_FLAGs over the 67 are city feeds and all three are the same sentence: «склади
+Wildberries розбомбили під Санкт-Петербургом» (@myrhorodtown), «пожежі на складах Wildberries»
+(@poltava_informue), «Українські БПЛА рознесли … хабів російського маркетплейсу Wildberries в
+Електросталі» (@poltava20). The retailer term and the RF city are both there, in Ukrainian, about
+a target rather than about a market. The ratio is what reads the row: 947 UA-evidence posts against
+one mention. The screen already refuses to treat «РФ» and «Росія» as signals for this exact reason
+— the fix is not another stop-word, because *Wildberries* IS an RF retailer and naming it IS what
+the screen is for. Reported, pinned in a test with its counts, and left to the operator: the screen
+is report-only by design and this is the shape that makes that design correct.
+
+**D70 — the census and the market screen disagreed about the same channel, and both were right.**
+@dikankaa (a Poltava-region city feed) is the day's only RU_DOMINANT — ru 1.00 over 20 decidable
+posts — and its own text covers «По Волгоградской области ( Энгельс, Саратов тоже можем )». The
+market screen calls it NO_EVIDENCE: those oblast names are not in its location table, which holds
+the places a MARKET is in. So a channel whose posts are Russian and whose subject matter is
+Russian-regional passes the market screen and fails the census, while three Ukrainian channels pass
+the census and fail the market screen. Neither instrument subsumes the other and neither is broken;
+the composition needs both read side by side, which is what the day-2 report does.
+
+**D71 — a candidate list has to know what was already thrown away, not just what was already
+taken.** `late_batch_5c1.known_handles()` marks a row as spoken-for if it is in the registry or in
+the 5c1 gate record. The harvest of step 9 came back with @prikorm_kids_menu (6,396) unmarked —
+and that channel is in the canon's «Исключены — 12» table, dead since 06.08 with neither posts nor
+a group. It was never gated, so the gate record does not know it. The cost is small and entirely
+the operator's time: a sitting spends attention on a channel already refused. Recorded rather than
+patched today, because the fix belongs with the yield screen's own candidate ledger — the next
+session's contract — and a change to `known_handles` also moves what the Poltava scan's ledger
+counts as new.
+
+**D72 — the operator's one-line addition to a step outperformed the step.** Ruling (6) of the day-2
+sitting asked for broadcast analogues of the two towns whose handles had just left as supergroups.
+Three of the four picks were NOT in the 119-candidate town-name discovery scan at all —
+@h_kremenchug has 137,221 subscribers and the scan never returned it, against the 16,056-subscriber
+chat it replaces. The instruments differ in what they ask: `discover_channels` walks a list of TOWN
+NAMES, `contacts.SearchRequest` ranks by Telegram's own relevance over the same words, and the
+second reached the town's largest feed while the first did not. Worth remembering before the next
+discovery pass is priced: SPEC 3.12 authorises `channels.searchPosts` as the content-first
+instrument, and this is a free, measured argument that name-based scanning under-covers.
+
+## Deviations — PROMPT-5c1-day2 (the day-2 order)
+
+**Dv1 — the ten steps did not run in the brief's numeric order, and step 1 in particular is
+spread across the day.** Joins are paced at one per fifteen minutes off `results/joins_5c1.jsonl`,
+which is wall-clock and not process-local, and every other Telegram phase opens the SAME
+`marketpulse.session` SQLite file. Running step 1 to completion first would have idled the account
+for ninety minutes; running a join process alongside the gates would have put two Telethon clients
+on one session file. So joins went out one at a time in the gaps between the other phases, then as
+one background pass once the resolve-hungry work was done. The pacing rule is unchanged and every
+attempt is logged; only the order of the STEPS moved.
+
+**Dv2 — the language census and the market screen were written to new paths, and both scripts
+gained a refusal.** Adding the refusal is scope the brief did not ask for. It is written down as
+D68: the census record IS wave 3's evidence, the day-2 pass was one default `--out` away from
+overwriting it, and the guard is eight lines with a negative control in each test. If the operator
+would rather not carry the guards, deleting them costs one revert and the two `_day2.json` records
+stand on their own.
+
+**Dv3 — seven candidates were gated beyond the brief's twenty-five, on operator rulings taken
+during the session.** «Дозаявка №9» (@KarlivkaLive) came out of the gate's own finding on an
+excluded supergroup; «Дозаявка №10» (@poltava_pvp, @poltava20, @h_kremenchug, @kremen_news,
+@matusi_ukr, @mamo_nepsichuy) came out of step 7's searches under the operator's mid-session
+addition to that step. Each ruling is in the canon with its numbers, and none of the seven entered
+on anything but a gate pass.
+
+**Dv4 — the theme of @pavlushaiyava and @mandziak is still not measured, by ruling.** The canon
+says «тематику решит гейт» for one and «тематику/язык решат гейт и перепись» for the other, and
+neither instrument measures theme: `entry_check` grades capability, liveness, language and group,
+and the census grades language. The operator ruled both in with the theme deferred to the 3.12
+yield screen. Their `audience` values (baby_food, health_fitness) are EXPECTATIONS and the code
+comments beside them say so; a test holds those comments to the canon's own words.
+
+**Dv5 — @dikankaa and the three RF_FLAGs are reported, not acted on.** The brief says RU_DOMINANT
+on a fresh entry is REPORT ONLY and the operator rules it. @dikankaa is that row; the three
+RF_FLAGs are report-only by the screen's own design. Neither changed the registry today. Both are
+in the acceptance package as questions.
+
+**Dv6 — the harvest's «already ours» marker is known-incomplete and was not patched.** D71:
+`known_handles()` knows the registry and the gate record, not the canon's «Исключены — 12» table,
+so `results/harvest_mothers_ua.json` offers @prikorm_kids_menu back. Recorded rather than fixed,
+because the fix belongs with the yield screen's candidate ledger and would also move what the
+Poltava scan's ledger counts as new.
+
+**Dv7 — the registry diff of this whole session is PROVISIONAL.** Amendment 3.12's rider, clause 2:
+the yield screen runs before the operator signs any launch verdict, and no loop run consumes the
+new composition until then. Nothing here treats 67 as a settled launch set.

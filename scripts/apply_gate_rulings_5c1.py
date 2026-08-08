@@ -682,10 +682,14 @@ def insert_sources(text: str, entries: list[dict]) -> str:
         raise SystemExit(f"{REGISTRY}: no `taxonomy:` block — refusing to guess where sources end")
     head, tail = text.split(marker, 1)
     block = "\n".join(render(entry) for entry in entries)
-    return f"{head.rstrip()}\n\n{HEADER}\n{block}\n{marker}{tail}"
+    # The header describes the 5c1 section, not one batch of it, so a second apply run must not
+    # write a second copy. Three runs on 2026-08-08 produced three identical blocks, each dated
+    # for a sitting that was not the one below it — the rows are right and the caption was not.
+    banner = "" if HEADER.splitlines()[0] in head else f"{HEADER}\n"
+    return f"{head.rstrip()}\n\n{banner}{block}\n{marker}{tail}"
 
 
-HEADER = """  # --- Phase 5c1 launch composition (operator verdict 2026-08-06, rulings 2026-08-07) ---
+HEADER = """  # --- Phase 5c1 launch composition (operator verdicts 2026-08-06 … 2026-08-08) ---
   # Every channel below entered through the track-R gate: results/entry_gate_5c1.json holds one
   # row per candidate with its checks, verdict and the ruling that placed it. Names and
   # comments_enabled come from that record, never typed here. `watch: true` = posts are
