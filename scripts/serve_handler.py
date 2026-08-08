@@ -30,6 +30,7 @@ The model loads once per cold start, at the first job — not at import, so that
 misconfigured worker reports the refusal instead of the container dying before it can.
 """
 
+import importlib.metadata
 import json
 import os
 import subprocess
@@ -42,6 +43,22 @@ sys.path.insert(0, str(REPO_ROOT / "src"))  # the package is not pip-installed
 from market_pulse import local_llm, records  # noqa: E402
 
 CONFIGS = ("A", "B")
+
+REPORTED_LIBRARIES = ("peft", "accelerate", "runpod")
+"""Recorded, never asserted — the wheels `local_llm.environment` does not name.
+
+`serving.RUNTIME_LIBRARIES` pins torch, transformers and bitsandbytes because the 4.5h2
+anchor records those three, and `assert_runtime_matches` compares against that anchor. It
+cannot grow: an anchor that carries no `peft` field would make a fourth entry a guard that
+never fires. But config A *is* `peft` applying a LoRA to an NF4 base, and until now a parity
+record could not say which peft did it — the staging instructions of two runbooks disagree
+(`scripts/runbook_5b2.md` §fresh staging pins `peft==0.18.0`; the run it describes reports
+0.20.0 in implementation-notes D7). Reporting is the cheap half of the fix; the pin is the
+other half and lives in `scripts/runbook_srv2b.md`.
+
+`runpod` rides along because the 5b wall was a delivery-path failure with no version of the
+SDK written down anywhere, and the next post-mortem should not start from that.
+"""
 
 
 def settings(env: dict) -> dict:
@@ -92,6 +109,22 @@ def repo_commit() -> str | None:
     return out.stdout.strip() or None
 
 
+def library_versions(names: tuple[str, ...] = REPORTED_LIBRARIES) -> dict:
+    """Installed versions from the metadata database, ``None`` for what is absent.
+
+    Read rather than imported: `peft` costs seconds and RAM to import, and config B
+    does not load it at all. ``None`` is a fact and not a hole — the question asked
+    here is "is this distribution installed", which has exactly two answers.
+    """
+    versions = {}
+    for name in names:
+        try:
+            versions[name] = importlib.metadata.version(name)
+        except importlib.metadata.PackageNotFoundError:
+            versions[name] = None
+    return versions
+
+
 def describe(config: dict, runtime: dict, artifact_sha: str, merged_provenance: dict) -> dict:
     """What ``info`` answers — every field `serving.assert_serving` can be asked to check.
 
@@ -115,7 +148,11 @@ def describe(config: dict, runtime: dict, artifact_sha: str, merged_provenance: 
         "adapter_dir": config["adapter_dir"],
         "revision_requested": config["revision"],
         "merged_provenance": merged_provenance or None,
-        "runtime": runtime,
+        # Merged INTO runtime rather than added beside it: `assert_serving` compares the
+        # top-level fields the phase registered, and 5b's request/response schema is one of
+        # the few things srv-2 must not move. `runtime` is free-form provenance — the guard
+        # that reads it, `assert_runtime_matches`, walks a fixed list of three keys.
+        "runtime": runtime | library_versions(),
     }
 
 

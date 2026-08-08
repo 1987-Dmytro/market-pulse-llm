@@ -4187,3 +4187,81 @@ uncaptioned (the 18 are bought; 4350 is billed and unusable, so it stays on the 
 came out 19 photos of 19, so for retail-leaflet channels the true figure sits nearer the upper
 bound than the discounted one. Both readings belong in front of the operator: the census's number
 is the one that pre-dates the result, and this one is the one the result supports.
+
+## Deviations — PROMPT-srv-2a (the serverless worker config, the volume plan, the runbook)
+
+$0 session: nothing was created, nothing downloaded, no `runpodctl` call of any kind. The two
+facts srv-2b must read live — the volume's console price and which GPU class the account is
+offered with a volume attached — were already deferred to it by the contract, so a listing
+would have bought a fact this session does not need and spent the "zero cloud calls" claim.
+
+**Dv1 — the verification demanded exactly one code fix, and it is a reporting field.** Config A
+is `peft` applying a LoRA to an NF4 base, so peft moves generated tokens — and no record in this
+repository names the peft that served. `serving.RUNTIME_LIBRARIES` pins torch, transformers and
+bitsandbytes because the 4.5h2 anchor carries those three; a fourth entry would be a guard that
+never fires, since `assert_runtime_matches` skips any library the anchor does not name and that
+anchor is frozen. So the fix is `serve_handler.library_versions()`, reporting peft, accelerate
+and runpod, merged **into the `runtime` block** rather than beside it: `assert_serving` compares
+the top-level fields, and 5b's request/response schema is one of the few things srv-2 must not
+move. `tests/test_srv2a_worker.py` asserts the top level is set-identical to
+`results/serving_5b.json :: worker` and that the runtime block's added keys are exactly the three.
+`runpod` rides along because the 5b wall was a delivery-path failure with no SDK version written
+down anywhere.
+
+**Dv2 — two runbooks disagree about peft and the new one takes the adapter's side.**
+`scripts/runbook_5b2.md` §fresh staging pins `peft==0.18.0`; implementation-notes D7, describing
+that same run, records that peft came out **0.20.0**. The adapter settles it: its own
+`adapter_config.json` says `peft_version: 0.20.0`, and that file sits inside the directory whose
+sha256 `b3ca630846c7…` the guard already checks. `runbook_srv2b.md` pins 0.20.0 and prints the
+warning not to copy the 5b2 line. The 5b2 runbook is **not edited** — it is the honest record of
+a session that happened, and a correction that rewrites history leaves nothing to correct
+against. A test asserts both strings are present, so the correction cannot be quietly dropped.
+
+**Dv3 — the contract's "3-row T2 batch" cannot be re-run, and the substitute is named.** Those
+three rows proved the `start.sh → serve_handler → runpod.serverless.start` path on the pod on
+2026-08-06, but only their labels were ever written down («Рудь … знижка 20%» → `launch`,
+«Акція на молоко Яготинське» → `promo`, «Графік роботи магазинів» → `relevant: false, other`) —
+the input strings exist in no file. The runbook's smoke is therefore `scripts/smoke_5b.py`'s
+eight-row train carve, which is the reproducible superset: hash-pinned to `8347abd7…`, T2 rows
+included, opening no frozen test file. The runbook instructs srv-2b to write the three T2 rows'
+text and replies into its record, so the next session inherits what this one could not.
+
+**Dv4 — `HF_HOME` is dropped from the template's `--env`, and that is a documentation change,
+not a code one.** `start_5b_worker.sh` exports it unconditionally, so the 5b template's value was
+overridden the moment the entrypoint ran — an editable field with no effect. The entrypoint keeps
+authority over the four process variables it owns (`HF_HOME`, `HF_HUB_OFFLINE`, `PYTHONPATH`,
+`TOKENIZERS_PARALLELISM`) and the template carries only the four `settings()` reads. The test
+parses the runbook's `--env` JSON and feeds it to `settings()`, so document and worker cannot
+drift apart in silence.
+
+**Dv5 — scale-to-zero is written as a requirement to confirm, not as a flag to trust.** SPEC
+3.14 rests on workers scaling to zero, but the 5b create call never passed a min-workers flag and
+this session cannot test one. Inventing `--workers-min 0` would put an unverified CLI string in a
+copy-paste runbook; the runbook states the requirement and tells srv-2b to confirm it in the
+console before the smoke.
+
+**Dv6 — the cost comparison is pre-registered as arithmetic, and it does not favour serverless.**
+Derived from committed numbers only: the pod is $0.4611 per 758-row pass and $0.5993/1000 rows
+(`results/serving_5b.json :: adopted`) at 4.071 s/row; a serverless pass is
+`(cold_start + 3085.4 s) × usd_per_second`, so it beats the pod only under **$0.000137/s
+(≈$0.49/h)**. At the probe's observed $0.00016/s — a **prior**, on a 16 GB flex class that is not
+the class this endpoint will run on — a pass is **$0.538, 17% dearer**, of which **$0.045 is the
+278.9 s volume cold start alone**. Written before the run rather than after it, so the reading
+cannot be narrated into a saving. The case for serverless may still be sound; it just does not
+rest on $/row, and the runbook says so.
+
+**Dv7 — the 24 GB fit is a measurement with an abort rung, not an assumption.** D7 measured that
+only `ADA_24` allocated with a volume attached, and this contract authorises 24 GB when no 48 GB
+class is offered. The model sits at **~20 GiB at rest** (the 5b.2 OOM analysis; 4a's inference
+figure was 18.9 GB), which leaves ~4 GB on a 4090 for KV cache and activations at ~772 prompt +
+256 new tokens. **No record in this repository carries a peak-VRAM figure for batch-1 inference**
+— the batch ladder measured seconds per row and never memory — so the runbook makes OOM a named
+rung rather than pretending the arithmetic clears. The authorisation chain is spelled out beside
+it, because a 4090 reads like a violation of 3.11 (1) until you see that 3.14 replaced the
+runtime and that `assert_runtime_matches` omits the GPU on purpose.
+
+**Dv8 — no third artifact was minted for the config contract.** The contract asked for it
+"written"; it is §A of `scripts/runbook_srv2b.md`, with the tests holding the same facts against
+`handler.settings`, `local_llm.CHAT_TEMPLATE`, `local_llm.QUANTIZATION` and the records the pins
+come from. A `results/*.json` config file would have been a measurement record with no
+measurement behind it — a new genre for no reader, and a second place for the pins to drift.
