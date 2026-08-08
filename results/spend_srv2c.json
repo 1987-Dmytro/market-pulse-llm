@@ -1,6 +1,19 @@
 {
   "runpod_balance_at_srv2c_start": 15.4915993671,
   "srv2c_gpu_cap_usd": 0.75,
-  "gpu_sessions": [],
+  "gpu_sessions": [
+    {
+      "at": "2026-08-08T19:37:18+00:00",
+      "balance": 15.4793697004,
+      "step_spent_usd": 0.0122,
+      "note": "srv-2c step 2: one job on the wrapped start command -- COMPLETED, endpoint+template deleted"
+    },
+    {
+      "at": "2026-08-08T19:43:18+00:00",
+      "balance": 15.44101743,
+      "step_spent_usd": 0.0506,
+      "note": "srv-2c step 3: boot log read from the volume, repo refreshed to cf4cf71, pod deleted"
+    }
+  ],
   "gpu_note": "RunPod account balance read before the first pod of srv2c. Step spend = this anchor minus the balance now, enforced against $0.75. The SPEC amendment 3.4 (4) phase cap is enforced separately, against results/spend_phase4.json, and neither anchor may be regenerated."
 }

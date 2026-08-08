@@ -122,6 +122,20 @@
       "spent_usd": 19.4987,
       "remaining_usd": 5.5013,
       "note": "srv-2b ABORT at the handshake-timeout rung: our worker never consumed a job; vendor mock-worker control on the same volume/DC/class COMPLETED; both endpoints and templates deleted, volume kept"
+    },
+    {
+      "at": "2026-08-08T19:37:18+00:00",
+      "balance": 15.4793697004,
+      "spent_usd": 19.5206,
+      "remaining_usd": 5.4794,
+      "note": "srv-2c step 2: one job on the wrapped start command -- COMPLETED, endpoint+template deleted"
+    },
+    {
+      "at": "2026-08-08T19:43:18+00:00",
+      "balance": 15.44101743,
+      "spent_usd": 19.559,
+      "remaining_usd": 5.441,
+      "note": "srv-2c step 3: boot log read from the volume, repo refreshed to cf4cf71, pod deleted"
     }
   ]
 }

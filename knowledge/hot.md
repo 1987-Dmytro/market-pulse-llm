@@ -234,25 +234,37 @@ volume ended up pinning CA-MTL-3 where no 48 GB class allocated. And **Dv3 caugh
 error**: the contract cited its smoke from prose rather than from an artifact, and those three T2
 rows exist in no file. Ten deviations against a norm of 0–4, charged to an overloaded contract.
 
-**srv-2b's ABORT IS ACCEPTED AND srv-2c IS BRIEFED AT $0.75 — `docs/PROMPT-srv-2c.md`.** The team
-lead verified the abort against the artifacts and the listings: the rung stands, the diagnosis
-(ours, before the first print; the job-loop mode has never executed in this project) is accepted,
-and **the parity attempt is counted as unspent** — test v4 was never opened. The next step is the
-boot-log diagnostic this session proposed: the worker's start command tees its output onto the
-volume, one job, ≤ 10 minutes, and a pod reads the file back verbatim into an artifact. The
-disjunction is clean — **no file** means the start command never runs under the stock image (a
-custom image then becomes its own briefing); **a file** says where it died. The guard's
-serverless-billing blindness is fixed there too, and the console failed to render for the team lead
-as well, so the three listings get a free re-check at srv-2c's start.
+**srv-2c IS DONE AND THE ANSWER IS THAT IT WORKS — $0.0506 of its $0.75 cap.** The boot log exists:
+20 827 bytes on the volume, sha `4a48f32a…`, and it holds the SDK's own start — `Starting Serverless
+Worker | Version 1.11.0`, seven fitness checks in 3 993 ms, `Jobs in queue: 1`, `Started.`, 1 188
+weight shards in 93 s, `Finished.` The job returned **COMPLETED** (`delay 15.9 s · exec 158.4 s`)
+with the full `info` payload, and that payload PASSED `assert_serving` and `assert_runtime_matches`
+against the 5b records with a negative control. **The serverless job loop of
+`scripts/start_5b_worker.sh` runs.** Two srv-2b hypotheses died for free on the same pod:
+`/runpod-volume/start.sh` is byte-identical to the repo copy (`5b3bcbb2…`, mode `-rwxrwxrwx`, 0
+CRLF), and the image's `Entrypoint nvidia_entrypoint.sh` does exec its CMD. The record is
+`results/srv2c_bootlog.json`, log untrimmed. The team lead's acceptance of the srv-2b abort stands
+and **the parity attempt is still unspent** — test v4 was never opened.
+
+**WHAT srv-2c DID NOT ANSWER: why srv-2b hung.** Two things differed, not one — the wrapper *and* a
+day of platform time. Top hypothesis: a blocked write to an undrained stdout pipe (`python -u`
+writes straight to fd 1, and the console was not rendering for either side that evening). The
+experiment that separates it from "the platform was broken on 08-08" is **one endpoint with the
+unwrapped start command and one job, ≈ $0.06** — not bought, it is the operator's call. Either way
+the redirect should be permanent: RunPod has **no worker-log channel outside the console** (no
+`logs` verb in the CLI, 400 from every `rest.runpod.io` worker path), so the volume is the only
+durable place our worker's output can go.
 
 **THE VOLUME PERSISTS AND ITS CONTENTS ARE WRITTEN DOWN.** `qw4nwleanc` holds `hf/` at revision
 `842da379…` (59 GB, no `.incomplete` blobs), `venv/` with the pinned stack over the image's torch,
 `repo/` at **`48948d7a` — already stale**, the adapter inside it at `b3ca6308…`, `start.sh`, and
 the staging pod's logs. A next session should re-clone the repo, **not** re-stage the weights. Two
 notes ride along: runbook §B.1's "the adapter is the one item with a single copy" is no longer
-true, and **the volume's price was never read** — `network-volume create`/`get` carry no price
-field, the GraphQL `NetworkVolume` type rejects `costPerMonth`, and `billing network-volume` was
-still `[]` 1.5 h in. $7.20/month stays a **prior**.
+true, and `repo/` was refreshed to **`cf4cf71`** at srv-2c (incremental bundle, tree clean).
+**The volume's price IS now read** — `billing network-volume` settled one row at srv-2c:
+**$0.009722222574 for 100 GB = exactly $7.00/720 h**, i.e. **$0.07/GB/month, $0.2333/day,
+$7.00/month**. That closes srv-2b's Dv13. The old $7.20/month figure was a prior and was 3% high;
+the frozen `results/volume_calc_5c1.json` derivation is deliberately **not** edited to match.
 
 **THE CAPTION PROGRAM WAS RE-ROUTED BEFORE IT SPENT ANYTHING (SPEC 3.13).**
 `docs/PROMPT-5c1-captions-full.md` is **VOID, never executed** — its $0.35 OpenRouter cap was
@@ -294,11 +306,11 @@ FloodWait**; raw v1 is byte-identical before and after, `shasum -c results/raw_v
 6/6. The money sits on the pilot's OWN anchor, `results/spend_5c1_captions.json` — $0.0180 against
 its $0.10 cap, and 4.5g2's $0.75 balance was never touched.
 
-**OUR SERVERLESS CONTAINER DOES NOT START, AND THAT IS THE ONE OPEN BLOCKER.** Everything else on
-the serverless track now works: the class allocates with a volume, the model fits the card, the
-stack matches the anchor. `zbptdon5jvfteu` emitted **zero log lines in 35 minutes** and never took
-its job, while the vendor's own worker took one on identical infrastructure. Until that is
-diagnosed, **production stays a stop-after pod** and no serving number exists.
+**~~OUR SERVERLESS CONTAINER DOES NOT START~~ — CLEARED BY srv-2c ON 08-08.** It starts, it takes
+jobs and it answers; the boot log and a COMPLETED job say so (`results/srv2c_bootlog.json`). What
+is left is not a blocker but an unpriced curiosity — *why* srv-2b hung — and one ≈$0.06 experiment
+would settle it. **No serving number exists yet** all the same: SPEC 3.11 (2) parity has not been
+run and its single attempt is unspent, so production has no measured serving verdict either way.
 
 **Recorded rather than open:** the CA-MTL-3 volume is deleted, so its **~$0.24/day** idle billing
 has stopped — that literal is load-bearing, not decoration: `scripts/volume_calc_5c1.py` greps it

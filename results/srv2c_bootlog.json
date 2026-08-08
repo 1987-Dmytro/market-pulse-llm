@@ -1,0 +1,267 @@
+{
+  "step": "srv-2c",
+  "contract": "docs/PROMPT-srv-2c.md",
+  "written_at": "2026-08-08T19:45:28+00:00",
+  "outcome": "answered-and-the-answer-is-that-it-works",
+  "the_one_question": "Does `bash /runpod-volume/start.sh` execute as the worker's main process, and if yes, where does it stop before its first print?",
+  "the_answer": "It executes, and it does not stop. The wrapped start command produced a 20,827-byte log on the volume showing the RunPod SDK's serverless job loop booting, passing its seven fitness checks, taking the queued job, loading 1,188 weight shards and finishing. The job returned COMPLETED with the full `info` payload. The serverless job-loop branch of scripts/start_5b_worker.sh -- which had never executed in this project before today -- works end to end on the staged volume.",
+  "pre_registered_outcomes": {
+    "registered_in": "implementation-notes.md, committed at cf4cf71 before the first spend",
+    "no_file": "either bash -c never ran, or /runpod-volume was not mounted/writable",
+    "file_empty": "the redirect worked; start.sh died before its first output",
+    "file_with_lines": "it says where it died",
+    "which_landed": "file_with_lines -- and the lines say it did not die"
+  },
+  "worker_boot_log": {
+    "path_on_volume": "/runpod-volume/worker-boot.log (mounted /workspace on a pod)",
+    "bytes": 20827,
+    "sha256_on_the_volume": "4a48f32a4f07861d8f569816bbc4415bddf759924af463234ca9f359563ebdf1",
+    "sha256_as_fetched": "4a48f32a4f07861d8f569816bbc4415bddf759924af463234ca9f359563ebdf1",
+    "note": "`>` truncates on every exec, so this file is the LAST boot's output, not a history. Health reported one ready worker before the job was submitted, so at least one boot preceded the one recorded here.",
+    "verbatim": "--- Starting Serverless Worker |  Version 1.11.0 ---\n{\"requestId\": null, \"message\": \"Running 7 fitness check(s)...\", \"level\": \"INFO\"}\n{\"requestId\": null, \"message\": \"GPU binary test passed: 1 GPU(s) healthy (CUDA 13.0)\", \"level\": \"INFO\"}\n{\"requestId\": null, \"message\": \"Memory check passed: 104.54GB available (of 187.85GB total)\", \"level\": \"INFO\"}\n{\"requestId\": null, \"message\": \"Disk space check passed: 29.98GB free (99.9% available)\", \"level\": \"INFO\"}\n{\"requestId\": null, \"message\": \"Network connectivity passed: Connected to 8.8.8.8 (22ms)\", \"level\": \"INFO\"}\n{\"requestId\": null, \"message\": \"CUDA version check passed: 12.8 (minimum: 11.8)\", \"level\": \"INFO\"}\n{\"requestId\": null, \"message\": \"CUDA initialization passed: 1 device(s) initialized successfully\", \"level\": \"INFO\"}\n{\"requestId\": null, \"message\": \"GPU compute benchmark passed: Matrix multiply completed in 54ms\", \"level\": \"INFO\"}\n{\"requestId\": null, \"message\": \"All fitness checks passed. (3993.55ms)\", \"level\": \"INFO\"}\n{\"requestId\": null, \"message\": \"Jobs in queue: 1\", \"level\": \"INFO\"}\n{\"requestId\": null, \"message\": \"Jobs in progress: 1\", \"level\": \"INFO\"}\n{\"requestId\": \"48a3c742-7a85-46ab-b34a-0fc8131a1c5c-e1\", \"message\": \"Started.\", \"level\": \"INFO\"}\n\rLoading weights:   0%|          | 0/1188 [00:00<?, ?it/s]\rLoading weights:   0%|          | 1/1188 [00:00<04:01,  4.91it/s]\rLoading weights:   0%|          | 2/1188 [00:03<39:25,  1.99s/it]\rLoading weights:   0%|          | 5/1188 [00:03<12:27,  1.58it/s]\rLoading weights:   1%|          | 6/1188 [00:04<10:46,  1.83it/s]\rLoading weights:   1%|          | 7/1188 [00:04<08:48,  2.23it/s]\rLoading weights:   1%|          | 12/1188 [00:04<03:23,  5.79it/s]\rLoading weights:   1%|▏         | 15/1188 [00:04<02:36,  7.50it/s]\rLoading weights:   2%|▏         | 19/1188 [00:04<02:01,  9.63it/s]\rLoading weights:   2%|▏         | 21/1188 [00:05<02:45,  7.05it/s]\rLoading weights:   2%|▏         | 26/1188 [00:05<01:45, 11.06it/s]\rLoading weights:   2%|▏         | 29/1188 [00:05<01:39, 11.67it/s]\rLoading weights:   3%|▎         | 33/1188 [00:06<01:57,  9.84it/s]\rLoading weights:   3%|▎         | 35/1188 [00:06<02:37,  7.33it/s]\rLoading weights:   3%|▎         | 40/1188 [00:06<01:45, 10.91it/s]\rLoading weights:   4%|▎         | 43/1188 [00:07<01:31, 12.45it/s]\rLoading weights:   4%|▍         | 47/1188 [00:07<02:11,  8.70it/s]\rLoading weights:   4%|▍         | 49/1188 [00:08<02:43,  6.97it/s]\rLoading weights:   5%|▍         | 55/1188 [00:08<01:39, 11.41it/s]\rLoading weights:   5%|▍         | 58/1188 [00:08<01:28, 12.84it/s]\rLoading weights:   5%|▌         | 61/1188 [00:08<01:33, 12.08it/s]\rLoading weights:   5%|▌         | 63/1188 [00:09<02:23,  7.86it/s]\rLoading weights:   6%|▌         | 69/1188 [00:09<01:32, 12.10it/s]\rLoading weights:   6%|▌         | 72/1188 [00:09<01:23, 13.31it/s]\rLoading weights:   6%|▋         | 75/1188 [00:10<02:15,  8.23it/s]\rLoading weights:   6%|▋         | 77/1188 [00:11<04:01,  4.60it/s]\rLoading weights:   7%|▋         | 83/1188 [00:12<02:56,  6.28it/s]\rLoading weights:   7%|▋         | 85/1188 [00:12<03:15,  5.65it/s]\rLoading weights:   7%|▋         | 88/1188 [00:13<03:01,  6.05it/s]\rLoading weights:   7%|▋         | 89/1188 [00:13<03:11,  5.74it/s]\rLoading weights:   8%|▊         | 90/1188 [00:13<03:36,  5.06it/s]\rLoading weights:   8%|▊         | 96/1188 [00:14<01:55,  9.43it/s]\rLoading weights:   8%|▊         | 99/1188 [00:14<01:36, 11.23it/s]\rLoading weights:   9%|▊         | 102/1188 [00:14<01:29, 12.13it/s]\rLoading weights:   9%|▉         | 104/1188 [00:14<02:13,  8.10it/s]\rLoading weights:   9%|▉         | 110/1188 [00:14<01:18, 13.78it/s]\rLoading weights:  10%|▉         | 113/1188 [00:15<01:14, 14.47it/s]\rLoading weights:  10%|▉         | 116/1188 [00:15<01:13, 14.64it/s]\rLoading weights:  10%|█         | 119/1188 [00:15<01:46, 10.04it/s]\rLoading weights:  10%|█         | 124/1188 [00:16<01:22, 12.95it/s]\rLoading weights:  11%|█         | 130/1188 [00:16<01:26, 12.27it/s]\rLoading weights:  11%|█         | 132/1188 [00:17<01:46,  9.89it/s]\rLoading weights:  12%|█▏        | 140/1188 [00:17<01:11, 14.65it/s]\rLoading weights:  12%|█▏        | 144/1188 [00:17<01:32, 11.30it/s]\rLoading weights:  12%|█▏        | 146/1188 [00:18<02:03,  8.44it/s]\rLoading weights:  13%|█▎        | 152/1188 [00:18<01:24, 12.28it/s]\rLoading weights:  13%|█▎        | 155/1188 [00:18<01:17, 13.39it/s]\rLoading weights:  13%|█▎        | 158/1188 [00:19<01:49,  9.37it/s]\rLoading weights:  13%|█▎        | 160/1188 [00:20<03:29,  4.90it/s]\rLoading weights:  14%|█▍        | 166/1188 [00:21<02:38,  6.44it/s]\rLoading weights:  14%|█▍        | 168/1188 [00:21<02:48,  6.04it/s]\rLoading weights:  14%|█▍        | 171/1188 [00:21<02:26,  6.92it/s]\rLoading weights:  14%|█▍        | 172/1188 [00:22<02:35,  6.54it/s]\rLoading weights:  15%|█▍        | 173/1188 [00:22<03:03,  5.54it/s]\rLoading weights:  15%|█▌        | 179/1188 [00:22<01:37, 10.35it/s]\rLoading weights:  15%|█▌        | 181/1188 [00:22<01:33, 10.81it/s]\rLoading weights:  16%|█▌        | 185/1188 [00:23<01:26, 11.59it/s]\rLoading weights:  16%|█▌        | 187/1188 [00:23<02:04,  8.07it/s]\rLoading weights:  16%|█▌        | 193/1188 [00:23<01:19, 12.50it/s]\rLoading weights:  17%|█▋        | 199/1188 [00:24<01:15, 13.09it/s]\rLoading weights:  17%|█▋        | 201/1188 [00:24<01:38, 10.05it/s]\rLoading weights:  18%|█▊        | 209/1188 [00:24<01:02, 15.76it/s]\rLoading weights:  18%|█▊        | 213/1188 [00:25<01:04, 15.00it/s]\rLoading weights:  18%|█▊        | 215/1188 [00:25<01:24, 11.53it/s]\rLoading weights:  19%|█▊        | 221/1188 [00:25<01:01, 15.71it/s]\rLoading weights:  19%|█▉        | 227/1188 [00:26<01:05, 14.58it/s]\rLoading weights:  19%|█▉        | 229/1188 [00:26<01:33, 10.28it/s]\rLoading weights:  20%|█▉        | 235/1188 [00:26<01:03, 14.92it/s]\rLoading weights:  20%|██        | 238/1188 [00:27<01:01, 15.37it/s]\rLoading weights:  20%|██        | 241/1188 [00:27<01:35,  9.91it/s]\rLoading weights:  20%|██        | 243/1188 [00:28<03:07,  5.03it/s]\rLoading weights:  21%|██        | 249/1188 [00:29<02:20,  6.68it/s]\rLoading weights:  21%|██        | 251/1188 [00:29<02:32,  6.15it/s]\rLoading weights:  21%|██▏       | 254/1188 [00:30<02:09,  7.22it/s]\rLoading weights:  22%|██▏       | 256/1188 [00:30<02:38,  5.87it/s]\rLoading weights:  22%|██▏       | 262/1188 [00:30<01:35,  9.72it/s]\rLoading weights:  22%|██▏       | 264/1188 [00:31<01:30, 10.26it/s]\rLoading weights:  23%|██▎       | 268/1188 [00:31<01:28, 10.45it/s]\rLoading weights:  23%|██▎       | 270/1188 [00:31<01:56,  7.88it/s]\rLoading weights:  23%|██▎       | 276/1188 [00:32<01:15, 12.07it/s]\rLoading weights:  23%|██▎       | 278/1188 [00:32<01:12, 12.50it/s]\rLoading weights:  24%|██▎       | 282/1188 [00:32<01:16, 11.78it/s]\rLoading weights:  24%|██▍       | 284/1188 [00:33<01:48,  8.33it/s]\rLoading weights:  24%|██▍       | 289/1188 [00:33<01:11, 12.50it/s]\rLoading weights:  25%|██▍       | 292/1188 [00:33<01:02, 14.25it/s]\rLoading weights:  25%|██▍       | 296/1188 [00:33<01:07, 13.31it/s]\rLoading weights:  25%|██▌       | 298/1188 [00:34<01:27, 10.14it/s]\rLoading weights:  26%|██▌       | 303/1188 [00:34<01:01, 14.33it/s]\rLoading weights:  26%|██▌       | 306/1188 [00:34<00:54, 16.24it/s]\rLoading weights:  26%|██▌       | 310/1188 [00:34<01:05, 13.47it/s]\rLoading weights:  26%|██▋       | 312/1188 [00:35<01:37,  8.98it/s]\rLoading weights:  27%|██▋       | 318/1188 [00:35<01:00, 14.27it/s]\rLoading weights:  27%|██▋       | 321/1188 [00:35<00:57, 15.20it/s]\rLoading weights:  27%|██▋       | 324/1188 [00:36<01:23, 10.40it/s]\rLoading weights:  27%|██▋       | 326/1188 [00:37<03:01,  4.74it/s]\rLoading weights:  28%|██▊       | 332/1188 [00:38<02:13,  6.43it/s]\rLoading weights:  28%|██▊       | 334/1188 [00:38<02:27,  5.80it/s]\rLoading weights:  28%|██▊       | 337/1188 [00:38<02:10,  6.51it/s]\rLoading weights:  28%|██▊       | 338/1188 [00:39<02:13,  6.37it/s]\rLoading weights:  29%|██▊       | 339/1188 [00:39<02:23,  5.93it/s]\rLoading weights:  29%|██▉       | 345/1188 [00:39<01:12, 11.66it/s]\rLoading weights:  29%|██▉       | 348/1188 [00:39<01:01, 13.56it/s]\rLoading weights:  30%|██▉       | 351/1188 [00:39<01:08, 12.15it/s]\rLoading weights:  30%|██▉       | 353/1188 [00:40<01:33,  8.92it/s]\rLoading weights:  30%|███       | 359/1188 [00:40<01:03, 13.14it/s]\rLoading weights:  31%|███       | 365/1188 [00:40<00:56, 14.68it/s]\rLoading weights:  31%|███       | 367/1188 [00:41<01:20, 10.19it/s]\rLoading weights:  31%|███▏      | 373/1188 [00:41<00:53, 15.12it/s]\rLoading weights:  32%|███▏      | 376/1188 [00:41<00:55, 14.74it/s]\rLoading weights:  32%|███▏      | 379/1188 [00:41<00:55, 14.65it/s]\rLoading weights:  32%|███▏      | 381/1188 [00:42<01:22,  9.73it/s]\rLoading weights:  33%|███▎      | 387/1188 [00:42<00:53, 14.88it/s]\rLoading weights:  33%|███▎      | 393/1188 [00:42<00:51, 15.56it/s]\rLoading weights:  33%|███▎      | 396/1188 [00:43<01:13, 10.79it/s]\rLoading weights:  34%|███▍      | 401/1188 [00:43<00:56, 13.97it/s]\rLoading weights:  34%|███▍      | 404/1188 [00:43<00:52, 15.05it/s]\rLoading weights:  34%|███▍      | 407/1188 [00:44<01:17, 10.13it/s]\rLoading weights:  34%|███▍      | 409/1188 [00:45<02:34,  5.05it/s]\rLoading weights:  35%|███▍      | 415/1188 [00:46<01:55,  6.69it/s]\rLoading weights:  35%|███▌      | 417/1188 [00:46<02:10,  5.90it/s]\rLoading weights:  35%|███▌      | 420/1188 [00:47<02:11,  5.86it/s]\rLoading weights:  35%|███▌      | 421/1188 [00:47<02:18,  5.52it/s]\rLoading weights:  36%|███▌      | 422/1188 [00:47<02:23,  5.33it/s]\rLoading weights:  36%|███▌      | 428/1188 [00:47<01:14, 10.13it/s]\rLoading weights:  36%|███▌      | 430/1188 [00:47<01:12, 10.47it/s]\rLoading weights:  37%|███▋      | 434/1188 [00:48<01:07, 11.17it/s]\rLoading weights:  37%|███▋      | 436/1188 [00:48<01:26,  8.69it/s]\rLoading weights:  37%|███▋      | 441/1188 [00:48<00:59, 12.50it/s]\rLoading weights:  37%|███▋      | 444/1188 [00:49<00:51, 14.34it/s]\rLoading weights:  38%|███▊      | 448/1188 [00:49<00:52, 14.04it/s]\rLoading weights:  38%|███▊      | 450/1188 [00:49<01:25,  8.64it/s]\rLoading weights:  38%|███▊      | 455/1188 [00:50<00:57, 12.81it/s]\rLoading weights:  39%|███▊      | 458/1188 [00:50<00:54, 13.33it/s]\rLoading weights:  39%|███▉      | 462/1188 [00:50<00:53, 13.46it/s]\rLoading weights:  39%|███▉      | 464/1188 [00:51<01:27,  8.25it/s]\rLoading weights:  40%|███▉      | 470/1188 [00:51<00:54, 13.11it/s]\rLoading weights:  40%|████      | 476/1188 [00:51<00:48, 14.56it/s]\rLoading weights:  40%|████      | 479/1188 [00:52<01:03, 11.21it/s]\rLoading weights:  41%|████      | 486/1188 [00:52<00:47, 14.88it/s]\rLoading weights:  41%|████      | 490/1188 [00:53<01:02, 11.11it/s]\rLoading weights:  41%|████▏     | 492/1188 [00:54<01:57,  5.93it/s]\rLoading weights:  42%|████▏     | 498/1188 [00:54<01:35,  7.19it/s]\rLoading weights:  42%|████▏     | 500/1188 [00:55<01:46,  6.48it/s]\rLoading weights:  42%|████▏     | 503/1188 [00:55<01:37,  7.00it/s]\rLoading weights:  42%|████▏     | 504/1188 [00:55<01:41,  6.75it/s]\rLoading weights:  43%|████▎     | 505/1188 [00:56<01:55,  5.93it/s]\rLoading weights:  43%|████▎     | 511/1188 [00:56<01:02, 10.76it/s]\rLoading weights:  43%|████▎     | 513/1188 [00:56<00:59, 11.34it/s]\rLoading weights:  44%|████▎     | 517/1188 [00:56<01:00, 11.01it/s]\rLoading weights:  44%|████▎     | 519/1188 [00:57<01:29,  7.47it/s]\rLoading weights:  44%|████▍     | 524/1188 [00:57<00:58, 11.30it/s]\rLoading weights:  44%|████▍     | 527/1188 [00:57<00:50, 13.03it/s]\rLoading weights:  45%|████▍     | 531/1188 [00:57<00:46, 14.00it/s]\rLoading weights:  45%|████▍     | 533/1188 [00:58<01:11,  9.13it/s]\rLoading weights:  45%|████▌     | 539/1188 [00:58<00:45, 14.38it/s]\rLoading weights:  46%|████▌     | 542/1188 [00:58<00:42, 15.32it/s]\rLoading weights:  46%|████▌     | 545/1188 [00:59<00:49, 13.09it/s]\rLoading weights:  46%|████▌     | 547/1188 [00:59<01:02, 10.20it/s]\rLoading weights:  46%|████▋     | 552/1188 [00:59<00:44, 14.43it/s]\rLoading weights:  47%|████▋     | 555/1188 [00:59<00:42, 14.97it/s]\rLoading weights:  47%|████▋     | 559/1188 [01:00<00:46, 13.45it/s]\rLoading weights:  47%|████▋     | 561/1188 [01:00<01:10,  8.90it/s]\rLoading weights:  48%|████▊     | 567/1188 [01:00<00:48, 12.93it/s]\rLoading weights:  48%|████▊     | 573/1188 [01:01<00:48, 12.80it/s]\rLoading weights:  48%|████▊     | 575/1188 [01:02<01:20,  7.60it/s]\rLoading weights:  49%|████▉     | 581/1188 [01:02<01:01,  9.90it/s]\rLoading weights:  49%|████▉     | 583/1188 [01:03<01:28,  6.83it/s]\rLoading weights:  49%|████▉     | 586/1188 [01:03<01:19,  7.54it/s]\rLoading weights:  49%|████▉     | 588/1188 [01:04<01:35,  6.26it/s]\rLoading weights:  50%|█████     | 594/1188 [01:04<00:56, 10.56it/s]\rLoading weights:  50%|█████     | 597/1188 [01:04<00:50, 11.81it/s]\rLoading weights:  51%|█████     | 600/1188 [01:04<00:49, 11.76it/s]\rLoading weights:  51%|█████     | 602/1188 [01:05<01:09,  8.38it/s]\rLoading weights:  51%|█████     | 608/1188 [01:05<00:47, 12.23it/s]\rLoading weights:  51%|█████▏    | 610/1188 [01:05<00:45, 12.70it/s]\rLoading weights:  52%|█████▏    | 614/1188 [01:05<00:46, 12.44it/s]\rLoading weights:  52%|█████▏    | 616/1188 [01:06<01:03,  9.01it/s]\rLoading weights:  52%|█████▏    | 622/1188 [01:06<00:40, 14.06it/s]\rLoading weights:  53%|█████▎    | 625/1188 [01:06<00:40, 13.88it/s]\rLoading weights:  53%|█████▎    | 628/1188 [01:07<00:50, 11.16it/s]\rLoading weights:  53%|█████▎    | 630/1188 [01:07<01:05,  8.52it/s]\rLoading weights:  54%|█████▎    | 636/1188 [01:07<00:44, 12.27it/s]\rLoading weights:  54%|█████▍    | 642/1188 [01:08<00:40, 13.54it/s]\rLoading weights:  54%|█████▍    | 644/1188 [01:08<01:10,  7.68it/s]\rLoading weights:  55%|█████▍    | 649/1188 [01:09<00:48, 11.05it/s]\rLoading weights:  55%|█████▍    | 652/1188 [01:09<00:49, 10.76it/s]\rLoading weights:  55%|█████▌    | 656/1188 [01:09<00:47, 11.12it/s]\rLoading weights:  55%|█████▌    | 658/1188 [01:10<01:09,  7.60it/s]\rLoading weights:  56%|█████▌    | 664/1188 [01:10<00:44, 11.71it/s]\rLoading weights:  56%|█████▌    | 667/1188 [01:10<00:40, 12.94it/s]\rLoading weights:  56%|█████▋    | 670/1188 [01:11<01:03,  8.12it/s]\rLoading weights:  57%|█████▋    | 672/1188 [01:11<01:19,  6.52it/s]\rLoading weights:  57%|█████▋    | 677/1188 [01:12<00:56,  8.98it/s]\rLoading weights:  57%|█████▋    | 679/1188 [01:12<00:54,  9.26it/s]\rLoading weights:  57%|█████▋    | 683/1188 [01:12<00:56,  8.98it/s]\rLoading weights:  58%|█████▊    | 685/1188 [01:13<01:27,  5.74it/s]\rLoading weights:  58%|█████▊    | 691/1188 [01:14<00:57,  8.70it/s]\rLoading weights:  58%|█████▊    | 693/1188 [01:14<00:55,  8.97it/s]\rLoading weights:  59%|█████▊    | 695/1188 [01:14<00:56,  8.68it/s]\rLoading weights:  59%|█████▊    | 697/1188 [01:14<01:12,  6.80it/s]\rLoading weights:  59%|█████▉    | 698/1188 [01:15<01:28,  5.55it/s]\rLoading weights:  59%|█████▉    | 699/1188 [01:15<01:50,  4.44it/s]\rLoading weights:  59%|█████▉    | 704/1188 [01:15<00:55,  8.65it/s]\rLoading weights:  59%|█████▉    | 706/1188 [01:16<00:53,  9.04it/s]\rLoading weights:  60%|█████▉    | 708/1188 [01:16<00:54,  8.85it/s]\rLoading weights:  60%|█████▉    | 711/1188 [01:16<01:01,  7.74it/s]\rLoading weights:  60%|██████    | 713/1188 [01:17<01:36,  4.95it/s]\rLoading weights:  61%|██████    | 719/1188 [01:17<00:55,  8.48it/s]\rLoading weights:  61%|██████    | 721/1188 [01:18<00:49,  9.37it/s]\rLoading weights:  61%|██████    | 725/1188 [01:18<00:49,  9.43it/s]\rLoading weights:  61%|██████    | 727/1188 [01:19<01:13,  6.24it/s]\rLoading weights:  62%|██████▏   | 733/1188 [01:19<00:46,  9.78it/s]\rLoading weights:  62%|██████▏   | 735/1188 [01:19<00:42, 10.55it/s]\rLoading weights:  62%|██████▏   | 739/1188 [01:19<00:43, 10.40it/s]\rLoading weights:  62%|██████▏   | 741/1188 [01:20<01:05,  6.85it/s]\rLoading weights:  63%|██████▎   | 747/1188 [01:20<00:44,  9.81it/s]\rLoading weights:  63%|██████▎   | 749/1188 [01:21<00:48,  9.03it/s]\rLoading weights:  63%|██████▎   | 752/1188 [01:21<00:45,  9.58it/s]\rLoading weights:  63%|██████▎   | 754/1188 [01:22<01:16,  5.64it/s]\rLoading weights:  64%|██████▍   | 760/1188 [01:22<00:49,  8.67it/s]\rLoading weights:  64%|██████▍   | 763/1188 [01:22<00:42,  9.91it/s]\rLoading weights:  64%|██████▍   | 766/1188 [01:23<00:45,  9.27it/s]\rLoading weights:  65%|██████▍   | 768/1188 [01:23<01:08,  6.14it/s]\rLoading weights:  65%|██████▌   | 774/1188 [01:24<00:41,  9.96it/s]\rLoading weights:  65%|██████▌   | 776/1188 [01:24<00:39, 10.40it/s]\rLoading weights:  66%|██████▌   | 780/1188 [01:24<00:40, 10.00it/s]\rLoading weights:  66%|██████▌   | 782/1188 [01:25<01:01,  6.61it/s]\rLoading weights:  66%|██████▋   | 788/1188 [01:25<00:39, 10.05it/s]\rLoading weights:  66%|██████▋   | 790/1188 [01:25<00:37, 10.58it/s]\rLoading weights:  67%|██████▋   | 794/1188 [01:26<00:39, 10.03it/s]\rLoading weights:  67%|██████▋   | 796/1188 [01:27<00:59,  6.61it/s]\rLoading weights:  67%|██████▋   | 801/1188 [01:27<00:38, 10.16it/s]\rLoading weights:  68%|██████▊   | 804/1188 [01:27<00:36, 10.49it/s]\rLoading weights:  68%|██████▊   | 808/1188 [01:27<00:34, 11.10it/s]\rLoading weights:  68%|██████▊   | 810/1188 [01:28<00:47,  8.00it/s]\rLoading weights:  69%|██████▊   | 816/1188 [01:28<00:30, 12.01it/s]\rLoading weights:  69%|██████▉   | 819/1188 [01:28<00:26, 13.85it/s]\rLoading weights:  69%|██████▉   | 822/1188 [01:29<00:38,  9.40it/s]\rLoading weights:  69%|██████▉   | 824/1188 [01:30<01:16,  4.78it/s]\rLoading weights:  70%|██████▉   | 830/1188 [01:31<00:57,  6.23it/s]\rLoading weights:  70%|███████   | 832/1188 [01:31<01:02,  5.72it/s]\rLoading weights:  70%|███████   | 836/1188 [01:31<00:45,  7.80it/s]\rLoading weights:  72%|███████▏  | 858/1188 [01:31<00:12, 26.08it/s]\rLoading weights:  73%|███████▎  | 869/1188 [01:31<00:09, 35.27it/s]\rLoading weights:  74%|███████▍  | 885/1188 [01:31<00:05, 51.02it/s]\rLoading weights:  75%|███████▌  | 896/1188 [01:32<00:05, 58.25it/s]\rLoading weights:  79%|███████▉  | 939/1188 [01:32<00:02, 118.20it/s]\rLoading weights:  81%|████████  | 960/1188 [01:32<00:01, 122.20it/s]\rLoading weights:  83%|████████▎ | 989/1188 [01:32<00:01, 143.08it/s]\rLoading weights:  86%|████████▋ | 1025/1188 [01:32<00:01, 162.94it/s]\rLoading weights:  90%|████████▉ | 1069/1188 [01:32<00:00, 176.45it/s]\rLoading weights:  92%|█████████▏| 1097/1188 [01:33<00:00, 183.90it/s]\rLoading weights:  94%|█████████▍| 1121/1188 [01:33<00:00, 177.25it/s]\rLoading weights:  96%|█████████▌| 1142/1188 [01:33<00:00, 159.59it/s]\rLoading weights: 100%|█████████▉| 1186/1188 [01:33<00:00, 157.55it/s]\rLoading weights: 100%|██████████| 1188/1188 [01:33<00:00, 12.68it/s] \n{\"requestId\": \"48a3c742-7a85-46ab-b34a-0fc8131a1c5c-e1\", \"message\": \"Finished.\", \"level\": \"INFO\"}\n"
+  },
+  "the_job": {
+    "endpoint_id": "6c7knbxf23llfe",
+    "template_id": "w4vcbghsz3",
+    "docker_start_cmd": [
+      "bash",
+      "-c",
+      "exec bash /runpod-volume/start.sh > /runpod-volume/worker-boot.log 2>&1"
+    ],
+    "the_one_change_from_runbook_C4": "the start command is wrapped so its own output lands on the volume; every other flag is the runbook's, except --execution-timeout 600 (the contract's 10 minutes)",
+    "gpu_class": "ADA_24",
+    "datacenter": "EU-RO-1",
+    "network_volume_id": "qw4nwleanc",
+    "workers_max": 1,
+    "workers_min_read_by_listing": 0,
+    "idle_timeout_s": 60,
+    "execution_timeout_ms": 600000,
+    "submitted_at": "2026-08-08T19:33:47Z",
+    "id": "48a3c742-7a85-46ab-b34a-0fc8131a1c5c-e1",
+    "status": "COMPLETED",
+    "delay_time_ms": 15864,
+    "execution_time_ms": 158424,
+    "worker_id": "eankeaydejb6fa",
+    "weight_load_seconds_from_the_log": 93.0,
+    "srv2b_comparison": "srv-2b's job sat IN_QUEUE for the full 1800 s handshake and never reached a worker's job loop; this one was picked up in 15.9 s and answered in 158.4 s."
+  },
+  "worker_info": {
+    "adapter_dir": "/runpod-volume/repo/results/train/45h2-arm-a/adapter",
+    "adapter_sha256": "b3ca630846c7e75c5e7058ce45804c45a6bff5c49dcf2389cb8cdda0b7a68a6c",
+    "chat_template": {
+      "add_generation_prompt": true,
+      "enable_thinking": false
+    },
+    "max_new_tokens": 256,
+    "merge_state": "unmerged-adapter",
+    "merged_provenance": null,
+    "merged_sha256": null,
+    "model": "google/gemma-4-31b-it",
+    "quantization": {
+      "bnb_4bit_compute_dtype": "bfloat16",
+      "bnb_4bit_quant_type": "nf4",
+      "bnb_4bit_use_double_quant": true,
+      "load_in_4bit": true
+    },
+    "repo_commit": "48948d7a8bb7090f21c89ff6506815d709ff306d",
+    "revision_requested": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+    "runtime": {
+      "accelerate": "1.14.0",
+      "bitsandbytes": "0.50.0",
+      "cuda_runtime": "12.8",
+      "driver": "580.159.04",
+      "gpu": "NVIDIA GeForce RTX 4090",
+      "gpu_count": 1,
+      "gpu_memory_total": "24564 MiB",
+      "model_revision": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+      "peft": "0.20.0",
+      "pod_id": "eankeaydejb6fa",
+      "revision_requested": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+      "runpod": "1.11.0",
+      "torch": "2.8.0+cu128",
+      "transformers": "5.14.1",
+      "weights_requested": "google/gemma-4-31b-it"
+    },
+    "serving_config": "A",
+    "weights_dir": "google/gemma-4-31b-it"
+  },
+  "asserts_run_on_the_reply": {
+    "where": "market_pulse.serving, on the Mac, against the committed 5b records",
+    "assert_serving": {
+      "verdict": "PASSED",
+      "fields": [
+        "adapter_sha256",
+        "merge_state",
+        "quantization",
+        "serving_config",
+        "revision_requested"
+      ],
+      "expected_from": [
+        "results/serving_5b.json",
+        "results/parity_5b_a.json"
+      ]
+    },
+    "assert_runtime_matches": {
+      "verdict": "PASSED",
+      "libraries": {
+        "torch": "2.8.0+cu128",
+        "transformers": "5.14.1",
+        "bitsandbytes": "0.50.0"
+      },
+      "anchor": "results/parity_5b_a.json config.runtime (the 4.5h2 arm)"
+    },
+    "response_schema": "identical key set to results/serving_5b.json worker block",
+    "negative_control": "the same payload with one character of adapter_sha256 bent was REFUSED, so the pass is a check and not a no-op"
+  },
+  "volume": {
+    "id": "qw4nwleanc",
+    "read_from": "pod xd5stdxro9cal1, RTX 2000 Ada, $0.24/h, EU-RO-1, 19:38:01-19:43:05 UTC",
+    "root_listing_verbatim": "total 492253\ndrwxrwxrwx  5 root root   3005960 Aug  8 19:41 .\ndrwxr-xr-x  1 root root        86 Aug  8 19:38 ..\n-rw-rw-rw-  1 root root 489840816 Aug  8 17:38 adapter_model.safetensors\ndrwxrwxrwx  4 root root   3005828 Aug  8 17:48 hf\n-rw-rw-rw-  1 root root       954 Aug  8 17:50 hf-download.log\n-rw-rw-rw-  1 root root   4036401 Aug  8 17:36 market-pulse-srv2.bundle\n-rw-rw-rw-  1 root root      2345 Aug  8 19:41 read_volume.sh\ndrwxrwxrwx 12 root root   2048851 Aug  8 17:44 repo\n-rw-rw-rw-  1 root root     33504 Aug  8 19:41 srv2c.bundle\n-rwxrwxrwx  1 root root      1387 Aug  8 17:44 start.sh\ndrwxrwxrwx  5 root root   2039132 Aug  8 17:36 venv\n-rw-rw-rw-  1 root root     20827 Aug  8 19:36 worker-boot.log\n-rw-rw-rw-  1 root root     27657 Aug  8 18:04 worker.log",
+    "start_sh": {
+      "facts_verbatim": "/workspace/start.sh mode=-rwxrwxrwx uid=0 gid=0 size=1387 mtime=2026-08-08 17:44:07.000000000 +0000\n/workspace/start.sh: Bourne-Again shell script, Unicode text, UTF-8 text executable\n5b3bcbb2f59372f4cb3ee940caad5b5b4b90bb22adeff1f783f8c8301474b46c  /workspace/start.sh\n--- head -1 (shebang), od of the first line ending ---\n#!/usr/bin/env bash\n0000020   a   s   h  \\n\n0000024\n--- CRLF count in file ---\n0",
+      "sha256": "5b3bcbb2f59372f4cb3ee940caad5b5b4b90bb22adeff1f783f8c8301474b46c",
+      "identical_to_repo_copy": true,
+      "repo_copy": "scripts/start_5b_worker.sh, same sha256 on the Mac and on the volume",
+      "mode": "-rwxrwxrwx",
+      "shebang": "#!/usr/bin/env bash",
+      "crlf_lines": 0,
+      "why_checked": "Dv19 records the volume's root start.sh and repo/scripts/start_5b_worker.sh as SEPARATE artifacts, so refreshing repo/ does not refresh the file the template invokes. A stale, non-executable or CRLF copy was a live hypothesis; it is not the answer -- the two are byte-identical."
+    },
+    "venv_verbatim": "lrwxrwxrwx 1 root root  7 Aug  8 17:36 /workspace/venv/bin/python -> python3\nlrwxrwxrwx 1 root root 16 Aug  8 17:36 /workspace/venv/bin/python3 -> /usr/bin/python3\nlrwxrwxrwx 1 root root  7 Aug  8 17:36 /workspace/venv/bin/python3.12 -> python3\nPython 3.12.3",
+    "repo_checkout": {
+      "before": "48948d7a8bb7090f21c89ff6506815d709ff306d (what the worker that answered ran)",
+      "after": "cf4cf71",
+      "refreshed_by": "an incremental git bundle, sha256 9f6614a5a25129468e3f0d570855da03659d97a7ca64bd14b187fccdb4f89802, verified equal on both sides",
+      "status_after": "clean",
+      "note": "The measurement's provenance is the BEFORE commit. The refresh is housekeeping for the next session and must not retroactively become what answered."
+    },
+    "manifest_verbatim": "===== manifest =====\nFilesystem                Size  Used Avail Use% Mounted on\nmfs#euro.runpod.net:9421  2.3P  1.6P  683T  71% /workspace\n59G\t/workspace/hf\n538M\t/workspace/repo\n3.2G\t/workspace/venv\n--- adapter files + hashes ---\n31623e74270c800f66c4b228d78e37298bb36dd3a2874edbab7f16d2abfb50c2  /workspace/repo/results/train/45h2-arm-a/adapter/README.md\n47dc20f24ff7c02b08b738057756c6cd4b328fc3f40056a4bc582cf415b7c6a7  /workspace/repo/results/train/45h2-arm-a/adapter/adapter_config.json\n31714dec36cc70d19dda4c1f482513ddaa2eed0b37ab5ab6c2b49e8a96d11a8d  /workspace/repo/results/train/45h2-arm-a/adapter/adapter_model.safetensors\n--- hf hub + incomplete blobs ---\nCACHEDIR.TAG\nmodels--google--gemma-4-31b-it\n--- root files ---\n      2345  2026-08-08 19:41  /workspace/read_volume.sh\n     33504  2026-08-08 19:41  /workspace/srv2c.bundle\n     20827  2026-08-08 19:36  /workspace/worker-boot.log\n     27657  2026-08-08 18:04  /workspace/worker.log\n       954  2026-08-08 17:50  /workspace/hf-download.log\n      1387  2026-08-08 17:44  /workspace/start.sh\n 489840816  2026-08-08 17:38  /workspace/adapter_model.safetensors\n   4036401  2026-08-08 17:36  /workspace/market-pulse-srv2.bundle\n",
+    "manifest_summary": {
+      "hf": "59G, revision 842da379..., no .incomplete blobs",
+      "repo": "538M, at cf4cf71 after the refresh",
+      "venv": "3.2G",
+      "root_files": [
+        "worker-boot.log (20,827 B, this session)",
+        "worker.log (27,657 B, 18:04 -- the srv-2b staging pod's --rp_serve_api run)",
+        "hf-download.log (954 B)",
+        "start.sh (1,387 B)",
+        "adapter_model.safetensors (489,840,816 B)",
+        "market-pulse-srv2.bundle (4,036,401 B)"
+      ],
+      "removed_by_this_session": [
+        "read_volume.sh and srv2c.bundle, both written by srv-2c and both deleted after use"
+      ]
+    },
+    "price_now_read": {
+      "settled_row": 0.009722222574055195,
+      "disk_space_billed_gb": 100,
+      "arithmetic": "0.009722222574 x 720 h = $7.0000/month exactly, i.e. $0.07/GB/month",
+      "per_day": 0.2333,
+      "how": "runpodctl billing network-volume, which was still [] at srv-2b close (Dv13). The row's own `time` field is empty, so the period is inferred from the arithmetic AND from the row equalling the balance drop across a 28-minute window in which nothing but the volume existed.",
+      "against_the_prior": "the repo's ~$0.24/day / $7.20/month prior was 3% high"
+    }
+  },
+  "what_this_did_not_establish": {
+    "why_srv2b_hung": "Two things differ between srv-2b and srv-2c, not one: the wrapper AND a day of platform time. The console would not render for either side that evening, which is itself evidence of a log-plane incident -- and that is exactly the condition under which an unbuffered write to an undrained stdout pipe blocks forever. Nothing in hand separates 'the redirect fixed it' from 'the platform was broken on 08-08'.",
+    "the_measurement_that_would": "one endpoint with the UNWRAPPED `bash,/runpod-volume/start.sh`, one job. Today's reading prices it at about $0.06. It is NOT bought here: step 4 forbids fixes beyond the guard, and the briefing is the operator's.",
+    "parity_3_11_2": "untouched. No row of test v4 was opened, no head has a verdict, and the single attempt SPEC 3.11 (2) grants is still unspent."
+  },
+  "ranked_hypotheses_for_srv2b": [
+    {
+      "rank": 1,
+      "hypothesis": "a blocked write to an undrained stdout pipe. start.sh execs `python -u`, so every print goes straight to fd 1; if RunPod's log collector stopped draining the container's pipe, the first write past the 64 KB buffer blocks forever.",
+      "fits": "zero console lines at any level; a worker 'running' with a job it never took; the console not rendering for either side; and a redirect to a file curing it.",
+      "against": "the vendor mock-worker on the same volume/DC/class completed that evening -- though it prints far less and its job took 144 ms.",
+      "testable_for": "~$0.06, by re-running the unwrapped command"
+    },
+    {
+      "rank": 2,
+      "hypothesis": "a transient platform fault in EU-RO-1's serverless plane on 08-08",
+      "fits": "everything srv-2b saw, and the fact that nothing was changed on the volume",
+      "against": "the mock-worker control completed on the same class the same evening",
+      "testable_for": "the same $0.06 -- the two hypotheses share one experiment"
+    },
+    {
+      "rank": 3,
+      "hypothesis": "the start command is not what the worker runs under the stock image",
+      "verdict": "DISPROVEN today",
+      "why": "the image declares Entrypoint /opt/nvidia/nvidia_entrypoint.sh with CMD /start.sh; --docker-start-cmd replaces the CMD and the entrypoint execs it. The boot log exists and is the SDK's own output, so the command ran."
+    },
+    {
+      "rank": 4,
+      "hypothesis": "a stale, non-executable or CRLF /runpod-volume/start.sh",
+      "verdict": "DISPROVEN today",
+      "why": "mode -rwxrwxrwx, 0 CRLF, and byte-identical to scripts/start_5b_worker.sh"
+    }
+  ],
+  "observations_worth_a_runbook_line": {
+    "a_worker_is_ready_before_the_first_job": "health read {idle:1, ready:1} seconds after `serverless create` and before any job was submitted. The runbook's 'creation is free; workers bill only on a request' is not what the platform does -- something boots at creation.",
+    "no_log_channel_outside_the_console": "runpodctl has no `logs` verb for serverless, and rest.runpod.io returns 400 on /endpoints/{id}/workers, /endpoints/{id}/logs and /workers?endpointId=. Worker output is console-only, which is why redirecting it to the volume is the only durable channel this project has.",
+    "fitness_checks_are_free_diagnostics": "the SDK runs seven of them before the first job -- GPU binary, memory, disk, network, CUDA version, CUDA init, matmul benchmark -- and prints the results. They took 3,993.55 ms and every one passed."
+  },
+  "spend": {
+    "cap_usd": 0.75,
+    "anchor_file": "results/spend_srv2c.json",
+    "anchor_balance": 15.4915993671,
+    "committed_before_the_first_billable_action": "commit fc9cf02",
+    "step_spent_usd_at_close": 0.0506,
+    "reading": "balance delta, the binding one; billing rows for today's own resources have not settled",
+    "what_was_bought": [
+      "one serverless job: delay 15.864 s + execution 158.424 s at $0.000307/s",
+      "one pod: RTX 2000 Ada, $0.24/h, 19:38:01-19:43:05 UTC = 304 s = $0.0203",
+      "the volume's run-rate line, $0.009722/h, which is not session spend"
+    ],
+    "settlement_lag_note": "neither today's endpoint nor today's pod has a billing row yet, so the final figure will rise above the $0.0506 the delta shows. The projection from the measured rates is about $0.10-0.11.",
+    "phase4": {
+      "spent_usd": 19.559,
+      "cap_usd": 25.0,
+      "remaining_usd": 5.441
+    }
+  },
+  "the_guard_fix": {
+    "what": "billing_since now walks pods, network-volume AND serverless",
+    "commit": "37720fc",
+    "test": "tests/test_runpod_guard.py::test_the_billing_walk_asks_for_serverless_too",
+    "negative_control": "dropping the kind reddens that test; verified by reverting it once",
+    "scope_honestly_stated": "this closes the blind spot for SETTLED rows only. Serverless rows settle late -- srv-2b's endpoint read $0.0895/292 s at 19:32 and $0.3518/1,147 s at 19:45, still climbing -- so the corroborating reading still cannot see within-session spend. Both caps are enforced on the balance delta, which sees it immediately."
+  },
+  "dv18_corrected": {
+    "the_claim": "srv-2b Dv18: '$0.55 of the session's $0.9999 bought nothing'",
+    "what_the_ledger_says_now": {
+      "endpoint": "zbptdon5jvfteu",
+      "amount_usd": 0.3518284186720848,
+      "time_billed_ms": 1146893,
+      "implied_rate_usd_per_s": 0.0003068
+    },
+    "verdict": "the RATE is confirmed twice over ($0.000307/s, against the console's $0.00031). The $0.55 came from balance-delta reasoning over 31 observed minutes; the ledger so far reads $0.3518 for 19.1 minutes and is still settling. Reported as 'at least $0.35, and the figure is not final' rather than left standing."
+  },
+  "unexplained_row_from_srv2b": {
+    "gpu": "NVIDIA RTX A4500",
+    "time_billed_ms": 29979,
+    "amount_usd": 0.002081874990835786,
+    "note": "a 30-second pod on 2026-08-08 that srv-2b's record does not name. $0.25/h x 30 s reproduces the amount exactly. `pod list -a` is [] so nothing survives it; noted because a billed row nobody claims is worth one line."
+  },
+  "deletions_proven_by_listing": {
+    "at": "2026-08-08T19:43:05Z and after",
+    "runpodctl pod list -a": [],
+    "runpodctl serverless list": [],
+    "runpodctl network-volume list": [
+      {
+        "dataCenterId": "EU-RO-1",
+        "id": "qw4nwleanc",
+        "name": "mp-srv2",
+        "size": 100
+      }
+    ],
+    "endpoint_and_template": "6c7knbxf23llfe and w4vcbghsz3, both {'deleted': true}",
+    "pod": "xd5stdxro9cal1, {'deleted': true}"
+  },
+  "git": {
+    "commit_this_record_was_written_on": "cf4cf71812ac2e1afe72de531215c0a2ec1c8316",
+    "dirty": [
+      " M results/spend_phase4.json",
+      " M results/spend_srv2c.json"
+    ],
+    "note": "a record cannot name the commit that adds it; this is HEAD at the moment of writing, and the commit that carries the file is its child."
+  }
+}

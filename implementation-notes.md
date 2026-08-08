@@ -4528,3 +4528,105 @@ would not render for either side that evening. Recorded as a reading, not a conc
 **No CLI path to worker logs exists.** `runpodctl serverless` offers create/delete/get/list/update
 and nothing else; there is no `logs` verb anywhere in the tool. Whatever this session says about the
 worker's own log channel is therefore either from a REST call that is named, or is not said.
+
+### What the session bought, and what it found
+
+**Step 0, all free.** The pending tail committed (`2898e14`, team-lead files unedited), the guard's
+serverless blindness fixed (`37720fc`) with a test whose negative control was run — reverting the
+kind reddens it. Re-listing with no console at all: `pod list -a` → `[]`, `serverless list` → `[]`,
+`network-volume list` → the volume alone. The cap and its anchor landed at `fc9cf02`, balance
+**$15.4916**, before anything was created.
+
+**§1 the endpoint, $0 to create.** Template `w4vcbghsz3` with one change against runbook §C.4 — the
+start command wrapped as `["bash","-c","exec bash /runpod-volume/start.sh > /runpod-volume/worker-boot.log 2>&1"]`,
+read back from the API to confirm the argv survived the comma split. Endpoint `6c7knbxf23llfe`,
+`ADA_24`, EU-RO-1, volume attached, `workersMax 1`, `idleTimeout 60`, `executionTimeoutMs 600000`,
+`workersMin 0` confirmed over GraphQL rather than a console.
+
+**§2 one job — and it COMPLETED.** `48a3c742-…-e1`: `delayTime 15 864 ms`, `executionTime
+158 424 ms`, the full `info` payload returned. srv-2b's job sat `IN_QUEUE` for 1 800 s and never
+reached a job loop; this one was picked up in 15.9 s. Endpoint and template deleted at 19:37:04,
+proven by listing.
+
+**The reply was run through the real checks, not eyeballed.** `serving.assert_serving` PASSED on
+five fields against `results/serving_5b.json` / `parity_5b_a.json`; `assert_runtime_matches` PASSED
+on `torch 2.8.0+cu128 · transformers 5.14.1 · bitsandbytes 0.50.0`; the response key set is
+identical to the 5b record's; and the same payload with one character of `adapter_sha256` bent was
+refused, so the pass is a check. That is ladder rung 6, cleared on a live serverless worker.
+
+**§3 the log, read off the volume.** Pod `xd5stdxro9cal1`, RTX 2000 Ada at $0.24/h — the cheapest
+class in stock in EU-RO-1 — alive 19:38:01–19:43:05 UTC with `--terminate-after` set as a net.
+`/workspace/worker-boot.log`: **20 827 bytes**, sha256 `4a48f32a…`, and the file fetched to the Mac
+re-hashes to the same value. It contains the SDK's own boot: `--- Starting Serverless Worker |
+Version 1.11.0 ---`, seven fitness checks passed in 3 993.55 ms, `Jobs in queue: 1`, `Started.`,
+1 188 weight shards loaded in 93 s, `Finished.` The full text is in `results/srv2c_bootlog.json`
+untrimmed.
+
+**Two hypotheses died on that pod, for free.** `/workspace/start.sh` is mode `-rwxrwxrwx`, has a
+proper shebang, zero CRLF, and sha256 `5b3bcbb2…` — **byte-identical** to
+`scripts/start_5b_worker.sh` on the Mac and to the copy inside `repo/`. And the image's declared
+`Entrypoint /opt/nvidia/nvidia_entrypoint.sh` with `Cmd ["/start.sh"]` does exec its CMD: the log
+exists, so the start command runs. The volume's checkout was refreshed `48948d7a` → `cf4cf71` by an
+incremental bundle verified equal on both sides, working tree clean.
+
+**What the session did NOT establish: why srv-2b hung.** Two things differ, not one — the wrapper
+*and* a day of platform time. The ranked hypotheses are in the record; the top one is a blocked
+write to an undrained stdout pipe (`python -u`, so every print goes straight to fd 1, and the
+console was not rendering for either side that evening), and the experiment that separates it from
+"the platform was broken" is one endpoint with the **unwrapped** command and one job, priced at
+about **$0.06** from today's measured rate. Not bought: the contract forbids fixes beyond the guard
+and the briefing is the operator's.
+
+### Deviations — PROMPT-srv-2c
+
+**Dv22 — the contract's two-way disjunction is three-way, and it was widened before the spend.**
+"No file = the command never runs" merges two causes: `bash -c` not running, and `/runpod-volume`
+not being writable when it did — a failed redirect writes to the *unredirected* stderr and leaves no
+file either. Registered in this file and committed at `cf4cf71` before a dollar moved, so the
+widening cannot be a post-hoc reading. The branch that landed was neither.
+
+**Dv23 — `--execution-timeout 600` instead of the runbook's 900.** The contract fixes the
+observation window at ≤10 minutes and the flag is the only thing that enforces it on the platform's
+side. `--idle-timeout` was left at the runbook's 60 deliberately: `>` truncates on every exec, so a
+short idle timeout only buys more chances to overwrite the log with a later boot.
+
+**Dv24 — the volume's price is now read, closing Dv13.** `runpodctl billing network-volume` was `[]`
+at srv-2b close and now carries one row: **$0.009722222574 for 100 GB**, which is exactly
+$7.00/720 h — **$0.07/GB/month, $0.2333/day, $7.00/month**. Its own `time` field is empty, so the
+period is inferred twice: from the arithmetic, and from the row equalling the balance drop across a
+28-minute window in which nothing but the volume existed. The repo's `~$0.24/day` prior was 3%
+high. **The frozen derivation in `results/volume_calc_5c1.json` and the hot.md literal that
+`scripts/volume_calc_5c1.py` greps are left untouched** — Dv16 is the lesson: a measurement is a new
+fact in a new artifact, not an edit to someone else's frozen number.
+
+**Dv25 — Dv18's "$0.55 bought nothing" is corrected in the open.** The settled row for
+`zbptdon5jvfteu` read $0.0895 / 291 834 ms at 19:32 and $0.3518 / 1 146 893 ms at 19:45 — still
+climbing. The **rate** is confirmed twice ($0.000307/s, against the console's $0.00031); the
+**duration** figure was balance-delta reasoning over 31 observed minutes. The honest statement is
+"at least $0.35, and the ledger is not finished settling", not $0.55.
+
+**Dv26 — the guard fix covers settled rows only, and says so.** Neither today's endpoint nor
+today's pod has a billing row yet. `billing_since` now walks all three kinds the CLI offers, which
+removes a whole invisible class from the corroborating reading, but it still cannot see
+within-session serverless spend. Both caps are enforced on the balance delta, which can.
+
+**Dv27 — a worker is ready before the first job.** `health` read `{idle: 1, ready: 1}` seconds after
+`serverless create` and before anything was submitted. The runbook's "creation is free; workers bill
+only on a request" is not what the platform did. It did not cost much here — the session closed at
+$0.0506 of $0.75 — but a runbook line that says creation is free is a line that invites leaving an
+endpoint up.
+
+**Dv28 — there is no log channel outside the console.** `runpodctl` has no `logs` verb for
+serverless, and `rest.runpod.io` returns 400 on `/endpoints/{id}/workers`, `/endpoints/{id}/logs`
+and `/workers?endpointId=`. This is why srv-2b's "zero lines at any level" is evidence about the
+console as much as about our container, and why redirecting the worker's own output to the volume is
+the only durable channel this project has. It should be permanent, not a diagnostic.
+
+**Dv29 — one billed row from srv-2b that no record names.** `NVIDIA RTX A4500`, 29 979 ms,
+$0.002081874990835786 — and $0.25/h × 30 s reproduces the amount exactly. `pod list -a` is `[]`, so
+nothing survives it. Written down because a billed row nobody claims is worth a line.
+
+**Dv30 — one earlier boot exists that no artifact holds.** `>` truncates, so `worker-boot.log` is
+the *last* boot's output. Health showed a ready worker before the job was submitted, so at least one
+boot preceded the one recorded. `>>` would have kept both; the contract specified `>` and it was
+followed. Named so the record is not read as a complete history of the endpoint's life.
