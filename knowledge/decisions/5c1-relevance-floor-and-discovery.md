@@ -49,16 +49,37 @@ rescue the control.
 |---|---|
 | cleared bar A | 29 |
 | cleared bar B | 8 |
-| below both | 36 |
+| below both | 36 — of which **24 gradeable**, 12 the window could not grade |
 | `verdicts_reportable` | **false** |
 
-Per audience, `below_both` against `n`: health_fitness **14 / 17** · regional 9 / 17 · baby_food
-6 / 8 · supermarket_deals 3 / 4 · mothers_kids 3 / 5 · retail_official 1 / 7 · cooking_recipes
-**0 / 7** · food_quality 0 / 1.
+**A third of the removal list is not a content finding.** Bar A is an absolute count over a
+denominator that runs from 0 to 1,535 posts across this registry, so a channel with fewer readable
+posts than the bar fails it by arithmetic whatever it publishes. Twelve rows are in that state —
+nine with **0 posts in the window**, three with fewer texted posts than the bar — and the seven of
+them that are the ENTIRE `watch` bucket were already ruled onto a waiting list for that same
+silence («posts collected, the group NEVER joined, revisited when it speaks again»). Re-failing
+them here would re-decide a decision on evidence that measures nothing. So `below_both` keeps its
+pre-registered meaning and the record splits it: `below_both_gradeable` (24) and
+`below_both_not_gradeable` (12, each with `NO_POSTS_IN_WINDOW` or `TOO_FEW_TEXTED_POSTS`). The
+census draws the same line with the same kind of word, and this screen had to be taught it.
 
-The shape of that table is the finding. The segments the composition spent the whole phase
-recruiting — health_fitness (17 channels) and the mothers/baby pair (13) — are where the taxonomy
-is thinnest, and the recipe feeds nobody argued about clear bar A seven for seven.
+Per audience, `below_both` / of which gradeable / `n`:
+
+| audience | below both | gradeable | n |
+|---|---|---|---|
+| health_fitness | 14 | **7** | 17 |
+| regional | 9 | 8 | 17 |
+| baby_food | 6 | 4 | 8 |
+| supermarket_deals | 3 | 3 | 4 |
+| mothers_kids | 3 | **1** | 5 |
+| retail_official | 1 | 1 | 7 |
+| cooking_recipes | 0 | 0 | 7 |
+| food_quality | 0 | 0 | 1 |
+
+The finding survives the correction and shrinks with it: health_fitness is **7 of 17 measured
+empty**, not 14, and mothers_kids is 1 of 5 rather than 3. Read the gradeable column — the segments
+the composition spent the whole phase recruiting are still where the taxonomy is thinnest, and the
+recipe feeds nobody argued about clear bar A seven for seven.
 
 ## (3) The screen refuses to report, and the reason is a real measurement
 
@@ -180,9 +201,12 @@ spends a Star.
 ## What this does not decide
 
 Nothing entered or left the registry on the yield screen. Zero-yield members are surfaced with
-their numbers; removal is an operator ruling. The registry diff of day 2 stays **PROVISIONAL**
+their numbers; removal is an operator ruling, and the list to rule from is
+`summary.below_both_gradeable` — 24 rows, not 36. The registry diff of day 2 stays **PROVISIONAL**
 until the operator reads `results/yield_screen_5c1.json` and signs — and the screen says
 `verdicts_reportable: false`, so the first thing to rule on is whether an anchor channel that
-publishes in images invalidates the exam, or is the exam working.
+publishes in images invalidates the exam, or is the exam working. The arithmetic that question
+turns on: @atb_market_official has six readable posts in its window against a bar of four, so
+clearing it demands a 67% hit rate, where a channel with two hundred needs 2%.
 
 Related: [[5c1-day2-composition-and-search]]

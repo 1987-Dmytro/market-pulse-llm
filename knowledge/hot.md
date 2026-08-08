@@ -49,10 +49,15 @@ and the run exits 1; the numbers are all there, what the refusal withholds is th
 the verdict column as a verdict. **The operator's first ruling is on the exam itself**: does an
 anchor channel that publishes inside images invalidate it, or is it working.
 
-**66 SOURCES: BAR A 29 · BAR B 8 · BELOW BOTH 36.** The shape is the finding — health_fitness
-**14 of 17** below both, baby_food 6 of 8, regional 9 of 17, while the recipe feeds nobody argued
-about take bar A seven for seven. The segments the whole phase recruited are where the taxonomy is
-thinnest. Nothing entered or left on this: removal is an operator ruling, never automatic.
+**66 SOURCES: BAR A 29 · BAR B 8 · BELOW BOTH 36 — BUT ONLY 24 OF THOSE ARE A CONTENT FINDING.**
+Twelve rows could not be graded at all: nine have **0 posts in the window** and three have fewer
+readable posts than the bar is high, so they fail bar A by arithmetic. Seven of the twelve are the
+ENTIRE `watch` bucket, already ruled onto a waiting list for that same silence — re-failing them
+would re-decide a decision on evidence that measures nothing. `summary.below_both_gradeable` (24)
+is the list to act from; `below_both_not_gradeable` (12) says why each one is not on it.
+Gradeable-empty by segment: health_fitness **7 of 17** · regional 8 of 17 · baby_food 4 of 8 ·
+supermarket_deals 3 of 4 · mothers_kids 1 of 5 · retail_official 1 of 7 · cooking_recipes **0 of
+7**. Nothing entered or left on this: removal is an operator ruling, never automatic.
 
 **«ВАРТО» OUTFIRES EVERY REAL BRAND.** It is АТБ's private label AND the ordinary Ukrainian word
 for "it is worth": **89 posts across 24 channels**, more than any other brand on the list.
@@ -120,9 +125,10 @@ one, because the gate stores a title and never a bio.
 **THE OPERATOR'S SIGNATURE IS THE ONLY THING BLOCKING 5c2**, and it now has two questions in front
 of it, not one. First: the yield screen's own exam failed on @atb_market_official — rule whether
 an anchor channel that publishes inside images invalidates the control or is a finding about ATB.
-Second, once the column is readable: **36 channels below both bars**, `results/yield_screen_5c1.json
-:: summary.below_both`, with `bar_A_sole_carriers` beside every pass so a row carried by «варто»
-does not read like a row carried by «сир». Removal is the operator's word; nothing is automatic.
+Second, once the column is readable: **24 channels below both bars on a window that could grade
+them**, `results/yield_screen_5c1.json :: summary.below_both_gradeable` — with the twelve the
+window could not grade listed separately, and `bar_A_sole_carriers` beside every pass so a row
+carried by «варто» does not read like a row carried by «сир». Removal is the operator's word; nothing is automatic.
 
 **A term ruling is available and was deliberately not taken.** «варто», «Президент» and «Ферма» are
 watchlist display names that are also ordinary Ukrainian words. The screen measures their leverage

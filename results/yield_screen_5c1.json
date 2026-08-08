@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-08T14:09:38+00:00",
+  "generated_at": "2026-08-08T14:30:31+00:00",
   "phase": "5c1 — the relevance floor",
   "asks": "how much of the tracked taxonomy is in each channel's collected 28-day window",
   "contract": "docs/SPEC.md amendment 3.12 (1); docs/PROMPT-5c1-yield.md step 4",
@@ -32,7 +32,7 @@
       "since": "2026-07-10T10:33:14+00:00",
       "until": "2026-08-07T10:33:14+00:00"
     },
-    "rule": "since <= date < until, half-open, so the bar counts exactly 28 days. Channels collected after the window's end contribute nothing past it",
+    "rule": "since <= date < until, half-open, so the bar counts exactly 28 days. This is STRICTER than the census and the market screen, which filter `date >= since` only: @myrhorodtown reads 273 posts there and 260 here, and the difference is the overhang of channels collected on 08.08, not a disagreement",
     "raw_v1": "the four original channels are screened over their own last 28 days: their store is the pinned raw v1 corpus, collected before this window's `since` existed. The shared-window reading is published beside them under `alternative_window`"
   },
   "rules": {
@@ -45,6 +45,7 @@
     "matching": "casefold; categories by the lexicon's own matcher and endings as shipped; brands by the display name exactly as written, the matcher G1e is scored against. A hit counts once per post",
     "nested_aliases": "«Яготинське для дітей» contains «Яготинське» and the operator tracks them separately, so the longer span wins and the shorter one inside it is dropped",
     "below_both": "cleared neither bar — bar A FAIL and bar B not PASS",
+    "bar_A_reach": "whether bar A was reachable at all: NO_POSTS_IN_WINDOW, or TOO_FEW_TEXTED_POSTS when the channel has fewer readable posts than the bar is high. A refusal to rule, not a verdict — the census answers the same way, and the whole `watch` bucket is silent by definition",
     "evidence": "a quoted line with the term that matched it, never a counter"
   },
   "controls": {
@@ -600,54 +601,102 @@
       "@kopiyochka1",
       "@maudau"
     ],
+    "below_both_gradeable": [
+      "@blwbabies",
+      "@mamaiagolodniy",
+      "@pavlushaiyava",
+      "@tvorcha_matusyua",
+      "@chifit_family",
+      "@denisovapro",
+      "@HealthPsycholog",
+      "@olgaa_trainer",
+      "@smirnov108",
+      "@useful_healthy_fitness_menu",
+      "@Wellosophy_Lesya",
+      "@mamo_nepsichuy",
+      "@globine1",
+      "@Hadiach_telegram",
+      "@KarlivkaLive",
+      "@kremen_news",
+      "@mo3ambik",
+      "@PirOperative",
+      "@piryatingromada",
+      "@zinkivnews",
+      "@atb_market_official",
+      "@atb_aktsiyi",
+      "@kopiyochka1",
+      "@maudau"
+    ],
+    "below_both_not_gradeable": {
+      "@dutyache_menu": "NO_POSTS_IN_WINDOW",
+      "@Evgenija_dutjache_menu": "NO_POSTS_IN_WINDOW",
+      "@anastasiiadavydiukfitness": "TOO_FEW_TEXTED_POSTS",
+      "@dimakaminskyifit": "NO_POSTS_IN_WINDOW",
+      "@eftforhealth": "TOO_FEW_TEXTED_POSTS",
+      "@gaid_skobioale": "TOO_FEW_TEXTED_POSTS",
+      "@hydnem_prosto": "NO_POSTS_IN_WINDOW",
+      "@kkondr_fit": "TOO_FEW_TEXTED_POSTS",
+      "@skhudnennya": "NO_POSTS_IN_WINDOW",
+      "@itsmamix": "NO_POSTS_IN_WINDOW",
+      "@lab_of_childhood": "NO_POSTS_IN_WINDOW",
+      "@LHVC_info": "TOO_FEW_TEXTED_POSTS"
+    },
     "by_audience": {
       "baby_food": {
         "n": 8,
         "pass_A": 2,
         "pass_B": 2,
-        "below_both": 6
+        "below_both": 6,
+        "below_both_gradeable": 4
       },
       "cooking_recipes": {
         "n": 7,
         "pass_A": 7,
         "pass_B": 1,
-        "below_both": 0
+        "below_both": 0,
+        "below_both_gradeable": 0
       },
       "food_quality": {
         "n": 1,
         "pass_A": 1,
         "pass_B": 0,
-        "below_both": 0
+        "below_both": 0,
+        "below_both_gradeable": 0
       },
       "health_fitness": {
         "n": 17,
         "pass_A": 2,
         "pass_B": 2,
-        "below_both": 14
+        "below_both": 14,
+        "below_both_gradeable": 7
       },
       "mothers_kids": {
         "n": 5,
         "pass_A": 2,
         "pass_B": 1,
-        "below_both": 3
+        "below_both": 3,
+        "below_both_gradeable": 1
       },
       "regional": {
         "n": 17,
         "pass_A": 8,
         "pass_B": 0,
-        "below_both": 9
+        "below_both": 9,
+        "below_both_gradeable": 8
       },
       "retail_official": {
         "n": 7,
         "pass_A": 6,
         "pass_B": 1,
-        "below_both": 1
+        "below_both": 1,
+        "below_both_gradeable": 1
       },
       "supermarket_deals": {
         "n": 4,
         "pass_A": 1,
         "pass_B": 1,
-        "below_both": 3
+        "below_both": 3,
+        "below_both_gradeable": 3
       }
     }
   },
@@ -690,6 +739,7 @@
       "bar_A": "FAIL",
       "bar_B": "N/A",
       "below_both": true,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": {
         "kind": "category",
@@ -739,6 +789,7 @@
       "bar_A": "FAIL",
       "bar_B": "N/A",
       "below_both": true,
+      "bar_A_reach": "NO_POSTS_IN_WINDOW",
       "bar_A_sole_carriers": [],
       "evidence": null,
       "audience": "baby_food",
@@ -781,6 +832,7 @@
       "bar_A": "FAIL",
       "bar_B": "N/A",
       "below_both": true,
+      "bar_A_reach": "NO_POSTS_IN_WINDOW",
       "bar_A_sole_carriers": [],
       "evidence": null,
       "audience": "baby_food",
@@ -823,6 +875,7 @@
       "bar_A": "FAIL",
       "bar_B": "N/A",
       "below_both": true,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": null,
       "audience": "baby_food",
@@ -867,6 +920,7 @@
       "bar_A": "FAIL",
       "bar_B": "N/A",
       "below_both": true,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": {
         "kind": "brand",
@@ -922,6 +976,7 @@
       "bar_A": "PASS",
       "bar_B": "PASS",
       "below_both": false,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": {
         "kind": "category",
@@ -973,6 +1028,7 @@
       "bar_A": "FAIL",
       "bar_B": "N/A",
       "below_both": true,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": {
         "kind": "category",
@@ -1026,6 +1082,7 @@
       "bar_A": "PASS",
       "bar_B": "PASS",
       "below_both": false,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": {
         "kind": "brand",
@@ -1079,6 +1136,7 @@
       "bar_A": "PASS",
       "bar_B": "FAIL",
       "below_both": false,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": {
         "kind": "category",
@@ -1130,6 +1188,7 @@
       "bar_A": "PASS",
       "bar_B": "N/A",
       "below_both": false,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": {
         "kind": "category",
@@ -1182,6 +1241,7 @@
       "bar_A": "PASS",
       "bar_B": "N/A",
       "below_both": false,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": {
         "kind": "category",
@@ -1234,6 +1294,7 @@
       "bar_A": "PASS",
       "bar_B": "N/A",
       "below_both": false,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": {
         "kind": "category",
@@ -1288,6 +1349,7 @@
       "bar_A": "PASS",
       "bar_B": "N/A",
       "below_both": false,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": {
         "kind": "category",
@@ -1340,6 +1402,7 @@
       "bar_A": "PASS",
       "bar_B": "PASS",
       "below_both": false,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": {
         "kind": "category",
@@ -1391,6 +1454,7 @@
       "bar_A": "PASS",
       "bar_B": "N/A",
       "below_both": false,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": {
         "kind": "category",
@@ -1445,6 +1509,7 @@
       "bar_A": "PASS",
       "bar_B": "N/A",
       "below_both": false,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": {
         "kind": "category",
@@ -1494,6 +1559,7 @@
       "bar_A": "FAIL",
       "bar_B": "N/A",
       "below_both": true,
+      "bar_A_reach": "TOO_FEW_TEXTED_POSTS",
       "bar_A_sole_carriers": [],
       "evidence": null,
       "audience": "health_fitness",
@@ -1536,6 +1602,7 @@
       "bar_A": "FAIL",
       "bar_B": "FAIL",
       "below_both": true,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": null,
       "audience": "health_fitness",
@@ -1578,6 +1645,7 @@
       "bar_A": "FAIL",
       "bar_B": "FAIL",
       "below_both": true,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": null,
       "audience": "health_fitness",
@@ -1620,6 +1688,7 @@
       "bar_A": "FAIL",
       "bar_B": "N/A",
       "below_both": true,
+      "bar_A_reach": "NO_POSTS_IN_WINDOW",
       "bar_A_sole_carriers": [],
       "evidence": null,
       "audience": "health_fitness",
@@ -1662,6 +1731,7 @@
       "bar_A": "FAIL",
       "bar_B": "N/A",
       "below_both": true,
+      "bar_A_reach": "TOO_FEW_TEXTED_POSTS",
       "bar_A_sole_carriers": [],
       "evidence": null,
       "audience": "health_fitness",
@@ -1704,6 +1774,7 @@
       "bar_A": "FAIL",
       "bar_B": "N/A",
       "below_both": true,
+      "bar_A_reach": "TOO_FEW_TEXTED_POSTS",
       "bar_A_sole_carriers": [],
       "evidence": null,
       "audience": "health_fitness",
@@ -1746,6 +1817,7 @@
       "bar_A": "FAIL",
       "bar_B": "FAIL",
       "below_both": true,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": null,
       "audience": "health_fitness",
@@ -1788,6 +1860,7 @@
       "bar_A": "FAIL",
       "bar_B": "N/A",
       "below_both": true,
+      "bar_A_reach": "NO_POSTS_IN_WINDOW",
       "bar_A_sole_carriers": [],
       "evidence": null,
       "audience": "health_fitness",
@@ -1830,6 +1903,7 @@
       "bar_A": "FAIL",
       "bar_B": "FAIL",
       "below_both": true,
+      "bar_A_reach": "TOO_FEW_TEXTED_POSTS",
       "bar_A_sole_carriers": [],
       "evidence": null,
       "audience": "health_fitness",
@@ -1876,6 +1950,7 @@
       "bar_A": "PASS",
       "bar_B": "PASS",
       "below_both": false,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": {
         "kind": "category",
@@ -1925,6 +2000,7 @@
       "bar_A": "FAIL",
       "bar_B": "FAIL",
       "below_both": true,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": null,
       "audience": "health_fitness",
@@ -1972,6 +2048,7 @@
       "bar_A": "PASS",
       "bar_B": "FAIL",
       "below_both": false,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [
         "brand:varto"
       ],
@@ -2025,6 +2102,7 @@
       "bar_A": "FAIL",
       "bar_B": "PASS",
       "below_both": false,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": {
         "kind": "brand",
@@ -2074,6 +2152,7 @@
       "bar_A": "FAIL",
       "bar_B": "N/A",
       "below_both": true,
+      "bar_A_reach": "NO_POSTS_IN_WINDOW",
       "bar_A_sole_carriers": [],
       "evidence": null,
       "audience": "health_fitness",
@@ -2118,6 +2197,7 @@
       "bar_A": "FAIL",
       "bar_B": "FAIL",
       "below_both": true,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": {
         "kind": "brand",
@@ -2171,6 +2251,7 @@
       "bar_A": "FAIL",
       "bar_B": "FAIL",
       "below_both": true,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": {
         "kind": "category",
@@ -2220,6 +2301,7 @@
       "bar_A": "FAIL",
       "bar_B": "N/A",
       "below_both": true,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": null,
       "audience": "health_fitness",
@@ -2268,6 +2350,7 @@
       "bar_A": "PASS",
       "bar_B": "N/A",
       "below_both": false,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": {
         "kind": "brand",
@@ -2317,6 +2400,7 @@
       "bar_A": "FAIL",
       "bar_B": "N/A",
       "below_both": true,
+      "bar_A_reach": "NO_POSTS_IN_WINDOW",
       "bar_A_sole_carriers": [],
       "evidence": null,
       "audience": "mothers_kids",
@@ -2359,6 +2443,7 @@
       "bar_A": "FAIL",
       "bar_B": "N/A",
       "below_both": true,
+      "bar_A_reach": "NO_POSTS_IN_WINDOW",
       "bar_A_sole_carriers": [],
       "evidence": null,
       "audience": "mothers_kids",
@@ -2405,6 +2490,7 @@
       "bar_A": "FAIL",
       "bar_B": "FAIL",
       "below_both": true,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": {
         "kind": "brand",
@@ -2460,6 +2546,7 @@
       "bar_A": "PASS",
       "bar_B": "PASS",
       "below_both": false,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": {
         "kind": "category",
@@ -2511,6 +2598,7 @@
       "bar_A": "FAIL",
       "bar_B": "N/A",
       "below_both": true,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": {
         "kind": "category",
@@ -2562,6 +2650,7 @@
       "bar_A": "PASS",
       "bar_B": "N/A",
       "below_both": false,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": {
         "kind": "category",
@@ -2616,6 +2705,7 @@
       "bar_A": "PASS",
       "bar_B": "N/A",
       "below_both": false,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": {
         "kind": "category",
@@ -2667,6 +2757,7 @@
       "bar_A": "FAIL",
       "bar_B": "N/A",
       "below_both": true,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": {
         "kind": "category",
@@ -2716,6 +2807,7 @@
       "bar_A": "FAIL",
       "bar_B": "N/A",
       "below_both": true,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": null,
       "audience": "regional",
@@ -2760,6 +2852,7 @@
       "bar_A": "FAIL",
       "bar_B": "N/A",
       "below_both": true,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": {
         "kind": "category",
@@ -2809,6 +2902,7 @@
       "bar_A": "FAIL",
       "bar_B": "N/A",
       "below_both": true,
+      "bar_A_reach": "TOO_FEW_TEXTED_POSTS",
       "bar_A_sole_carriers": [],
       "evidence": null,
       "audience": "regional",
@@ -2856,6 +2950,7 @@
       "bar_A": "FAIL",
       "bar_B": "N/A",
       "below_both": true,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": {
         "kind": "category",
@@ -2909,6 +3004,7 @@
       "bar_A": "PASS",
       "bar_B": "N/A",
       "below_both": false,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [
         "brand:president"
       ],
@@ -2960,6 +3056,7 @@
       "bar_A": "FAIL",
       "bar_B": "N/A",
       "below_both": true,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": null,
       "audience": "regional",
@@ -3002,6 +3099,7 @@
       "bar_A": "FAIL",
       "bar_B": "N/A",
       "below_both": true,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": null,
       "audience": "regional",
@@ -3050,6 +3148,7 @@
       "bar_A": "PASS",
       "bar_B": "N/A",
       "below_both": false,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": {
         "kind": "brand",
@@ -3104,6 +3203,7 @@
       "bar_A": "PASS",
       "bar_B": "N/A",
       "below_both": false,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": {
         "kind": "brand",
@@ -3159,6 +3259,7 @@
       "bar_A": "PASS",
       "bar_B": "N/A",
       "below_both": false,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": {
         "kind": "brand",
@@ -3215,6 +3316,7 @@
       "bar_A": "PASS",
       "bar_B": "N/A",
       "below_both": false,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": {
         "kind": "brand",
@@ -3274,6 +3376,7 @@
       "bar_A": "PASS",
       "bar_B": "N/A",
       "below_both": false,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": {
         "kind": "category",
@@ -3323,6 +3426,7 @@
       "bar_A": "FAIL",
       "bar_B": "N/A",
       "below_both": true,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": null,
       "audience": "regional",
@@ -3365,6 +3469,7 @@
       "bar_A": "FAIL",
       "bar_B": "N/A",
       "below_both": true,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": null,
       "audience": "retail_official",
@@ -3421,6 +3526,7 @@
       "bar_A": "PASS",
       "bar_B": "N/A",
       "below_both": false,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": {
         "kind": "category",
@@ -3475,6 +3581,7 @@
       "bar_A": "PASS",
       "bar_B": "N/A",
       "below_both": false,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": {
         "kind": "category",
@@ -3531,6 +3638,7 @@
       "bar_A": "PASS",
       "bar_B": "N/A",
       "below_both": false,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [
         "dairy:десерт",
         "dairy:сир"
@@ -3587,6 +3695,7 @@
       "bar_A": "PASS",
       "bar_B": "N/A",
       "below_both": false,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [
         "brand:ferma",
         "dairy:сир",
@@ -3647,6 +3756,7 @@
       "bar_A": "PASS",
       "bar_B": "N/A",
       "below_both": false,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": {
         "kind": "category",
@@ -3714,6 +3824,7 @@
       "bar_A": "PASS",
       "bar_B": "PASS",
       "below_both": false,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": {
         "kind": "brand",
@@ -3774,6 +3885,7 @@
       "bar_A": "FAIL",
       "bar_B": "N/A",
       "below_both": true,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": {
         "kind": "category",
@@ -3825,6 +3937,7 @@
       "bar_A": "FAIL",
       "bar_B": "FAIL",
       "below_both": true,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": {
         "kind": "category",
@@ -3878,6 +3991,7 @@
       "bar_A": "FAIL",
       "bar_B": "N/A",
       "below_both": true,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": {
         "kind": "category",
@@ -3935,6 +4049,7 @@
       "bar_A": "PASS",
       "bar_B": "PASS",
       "below_both": false,
+      "bar_A_reach": "gradeable",
       "bar_A_sole_carriers": [],
       "evidence": {
         "kind": "brand",
@@ -3957,8 +4072,12 @@
     }
   ],
   "git": {
-    "commit": "025993928b56e44c44da28cd51a9ea2dba3f4ca4",
+    "commit": "cc3ca53cd79140cda9058fd189c62bf674e6b6c2",
     "dirty": [
+      "implementation-notes.md",
+      "knowledge/daily_logs/2026-08-08.md",
+      "knowledge/decisions/5c1-relevance-floor-and-discovery.md",
+      "knowledge/hot.md",
       "scripts/yield_screen_5c1.py",
       "src/market_pulse/yield_screen.py",
       "tests/test_yield_screen_5c1.py"

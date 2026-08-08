@@ -4091,3 +4091,19 @@ tolerating as drift.
 D73 into this file and left it uncommitted. It was re-derived rather than trusted — the extra
 `grep -c 2026-08-08` match is 07.08's FloodWait row carrying `clears_at: 2026-08-08T10:02:05` —
 and committed unchanged.
+
+**Dv9 — the removal list was corrected after it was first committed, and the record was
+regenerated to carry the correction.** The first pass put all 36 `below_both` rows on one list,
+and twelve of them cannot fail bar A on content: nine have 0 posts in the window and three have
+fewer readable posts than the bar is high. Seven of those twelve are the ENTIRE `watch` bucket,
+whose registry ruling already says what their zero means — «posts collected, the group NEVER
+joined, revisited when it speaks again» — so the screen was re-failing channels on the very
+silence they had been ruled onto a waiting list for. `bar_A_reach` now answers
+`NO_POSTS_IN_WINDOW` / `TOO_FEW_TEXTED_POSTS` / `gradeable`, the way `language_census_5c1` already
+answers, and `summary` splits the flag into `below_both_gradeable` (24) and
+`below_both_not_gradeable` (12). No bar moved and no verdict changed: the regenerated record is
+field-for-field identical to the committed one except the new fields, `generated_at` and `git`,
+which was checked by diff rather than asserted. `refuse_to_overwrite` was cleared deliberately —
+it protects a record a signature cites, and no signature exists while `verdicts_reportable` is
+false. The per-audience headline moved with it in all three files that carried it: health_fitness
+is 7 of 17 measured empty, not 14, and mothers_kids 1 of 5, not 3.

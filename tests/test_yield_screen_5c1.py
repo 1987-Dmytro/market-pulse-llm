@@ -339,3 +339,38 @@ def test_the_shipped_record_publishes_the_originals_second_window_reading():
     msuaaaa = next(row for row in record["sources"] if row["handle"] == "@msuaaaa")
     assert msuaaaa["bar_A"] == "PASS"
     assert alternatives["@atb_market_official"]["relevant_posts"] == 0, "zero under both rules"
+
+
+def test_a_bar_of_four_cannot_be_read_as_a_verdict_on_three_readable_posts():
+    """A refusal to rule, not a verdict. Bar A is an absolute count over a denominator that runs
+    from 0 to 1,535 across this registry, so a channel with fewer readable posts than the bar
+    fails it by arithmetic whatever it publishes — and the census draws exactly this line with
+    NO_POSTS_IN_WINDOW and TOO_FEW_DECIDABLE."""
+    assert core.bar_A_reach(0, 0, 4) == "NO_POSTS_IN_WINDOW"
+    assert core.bar_A_reach(9, 3, 4) == "TOO_FEW_TEXTED_POSTS"
+    assert core.bar_A_reach(4, 4, 4) == "gradeable"
+
+
+def test_the_whole_watch_bucket_is_below_both_and_none_of_it_is_a_content_finding():
+    """The bug this split exists for. `watch` means "silent, posts collected, the group NEVER
+    joined, revisited when it speaks again" — the operator ruled that ONCE, on the same zero. All
+    seven are below both bars on 0 posts in the window, and putting them on a removal list would
+    re-decide a decision on evidence that measures nothing."""
+    record = json.loads((REPO_ROOT / "results" / "yield_screen_5c1.json").read_text("utf-8"))
+    watch = {
+        handle for source in REGISTRY.sources if source.watch for handle in source.telegram_channels
+    }
+    assert len(watch) == 7
+    summary = record["summary"]
+    assert watch <= set(summary["below_both"])
+    assert watch <= set(summary["below_both_not_gradeable"])
+    assert all(summary["below_both_not_gradeable"][h] == "NO_POSTS_IN_WINDOW" for h in watch)
+    # The split covers the flag exactly — no row is in both halves and none is in neither.
+    assert set(summary["below_both"]) == set(summary["below_both_gradeable"]) | set(
+        summary["below_both_not_gradeable"]
+    )
+    assert not set(summary["below_both_gradeable"]) & set(summary["below_both_not_gradeable"])
+    assert (len(summary["below_both_gradeable"]), len(summary["below_both_not_gradeable"])) == (
+        24,
+        12,
+    )

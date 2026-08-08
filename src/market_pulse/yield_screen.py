@@ -165,6 +165,26 @@ def sole_carriers(relevant: list[set[str]], bar: int) -> list[str]:
     return sorted(term for term in every if sum(1 for terms in relevant if terms - {term}) < bar)
 
 
+def bar_A_reach(posts_in_window: int, posts_with_text: int, bar: int) -> str:
+    """Could this channel have cleared bar A at all? A refusal to rule, not a verdict.
+
+    Bar A is an absolute count over a denominator that runs from 0 to 1,535 across the registry, so
+    a channel with fewer readable posts than the bar fails it by arithmetic whatever it publishes.
+    The sibling instrument already draws this line — `language_census_5c1` answers
+    `NO_POSTS_IN_WINDOW` and `TOO_FEW_DECIDABLE` instead of a verdict — and it matters most for the
+    `watch` bucket, whose whole definition is "silent, collected, revisited when it speaks again":
+    re-failing those on their own silence would put them on a removal list they were already ruled
+    onto a waiting list for.
+
+    The bar itself is untouched. This says whether the row's FAIL is about content.
+    """
+    if posts_in_window == 0:
+        return "NO_POSTS_IN_WINDOW"
+    if posts_with_text < bar:
+        return "TOO_FEW_TEXTED_POSTS"
+    return "gradeable"
+
+
 def bar_verdicts(relevant_posts: int, comments: int, has_comment_source: bool, bars: dict) -> dict:
     """The two bars, kept in their own currencies, and the flag that reads both at once.
 

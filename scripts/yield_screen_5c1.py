@@ -224,6 +224,10 @@ def screen_channel(handle: str, window: dict, compiled: dict, aliases: list, bar
             "relevant_threads_with_comments": len(threads),
         },
         **core.bar_verdicts(len(relevant), len(under_relevant), has_comment_source, bars),
+        # Whether a FAIL on bar A is about content at all. A channel with fewer readable posts
+        # than the bar cannot clear it whatever it publishes — and the whole `watch` bucket is
+        # silent by definition, which the operator already ruled on once.
+        "bar_A_reach": core.bar_A_reach(len(posts), len(texted), bars["bar_A_relevant_posts_28d"]),
         # Which terms this row's bar-A pass hangs on. Measured, not judged: a row carried by
         # «сир» and a row carried by «варто» read identically in the counts above.
         "bar_A_sole_carriers": core.sole_carriers(carried, bars["bar_A_relevant_posts_28d"]),
@@ -393,12 +397,14 @@ def main(argv: list[str] | None = None) -> int:
     by_audience: dict[str, dict] = {}
     for row in rows:
         bucket = by_audience.setdefault(
-            row["audience"] or "unassigned", {"n": 0, "pass_A": 0, "pass_B": 0, "below_both": 0}
+            row["audience"] or "unassigned",
+            {"n": 0, "pass_A": 0, "pass_B": 0, "below_both": 0, "below_both_gradeable": 0},
         )
         bucket["n"] += 1
         bucket["pass_A"] += row["bar_A"] == "PASS"
         bucket["pass_B"] += row["bar_B"] == "PASS"
         bucket["below_both"] += row["below_both"]
+        bucket["below_both_gradeable"] += row["below_both"] and row["bar_A_reach"] == "gradeable"
 
     record = {
         "generated_at": datetime.now(UTC).isoformat(timespec="seconds"),
@@ -436,8 +442,10 @@ def main(argv: list[str] | None = None) -> int:
             "days": WINDOW_DAYS,
             "shared": {"since": shared[0], "until": shared[1]},
             "rule": (
-                "since <= date < until, half-open, so the bar counts exactly 28 days. Channels"
-                " collected after the window's end contribute nothing past it"
+                "since <= date < until, half-open, so the bar counts exactly 28 days. This is"
+                " STRICTER than the census and the market screen, which filter `date >= since`"
+                " only: @myrhorodtown reads 273 posts there and 260 here, and the difference is"
+                " the overhang of channels collected on 08.08, not a disagreement"
             ),
             "raw_v1": (
                 "the four original channels are screened over their own last 28 days: their store"
@@ -468,6 +476,12 @@ def main(argv: list[str] | None = None) -> int:
                 " separately, so the longer span wins and the shorter one inside it is dropped"
             ),
             "below_both": "cleared neither bar — bar A FAIL and bar B not PASS",
+            "bar_A_reach": (
+                "whether bar A was reachable at all: NO_POSTS_IN_WINDOW, or TOO_FEW_TEXTED_POSTS"
+                " when the channel has fewer readable posts than the bar is high. A refusal to"
+                " rule, not a verdict — the census answers the same way, and the whole `watch`"
+                " bucket is silent by definition"
+            ),
             "evidence": "a quoted line with the term that matched it, never a counter",
         },
         "controls": controls,
@@ -478,6 +492,19 @@ def main(argv: list[str] | None = None) -> int:
             "pass_A": [row["handle"] for row in rows if row["bar_A"] == "PASS"],
             "pass_B": [row["handle"] for row in rows if row["bar_B"] == "PASS"],
             "below_both": [row["handle"] for row in rows if row["below_both"]],
+            # The same list split by whether the bar was reachable. `below_both` is the
+            # pre-registered flag and is not touched; this says which of its rows are a finding
+            # about CONTENT and which are a channel the window could not grade at all.
+            "below_both_gradeable": [
+                row["handle"]
+                for row in rows
+                if row["below_both"] and row["bar_A_reach"] == "gradeable"
+            ],
+            "below_both_not_gradeable": {
+                row["handle"]: row["bar_A_reach"]
+                for row in rows
+                if row["below_both"] and row["bar_A_reach"] != "gradeable"
+            },
             "by_audience": dict(sorted(by_audience.items())),
         },
         "sources": rows,
