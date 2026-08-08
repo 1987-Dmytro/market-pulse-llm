@@ -115,6 +115,13 @@
       "spent_usd": 18.8686,
       "remaining_usd": 6.1314,
       "note": "srv-2b staging + cold-start proof on a 4090 pod: 59 GB staged, 8/8 rows parsed, no OOM (19874 of 24564 MiB), 175.8 s cold start, 2.198 s/row"
+    },
+    {
+      "at": "2026-08-08T18:59:30+00:00",
+      "balance": 15.5013215893,
+      "spent_usd": 19.4987,
+      "remaining_usd": 5.5013,
+      "note": "srv-2b ABORT at the handshake-timeout rung: our worker never consumed a job; vendor mock-worker control on the same volume/DC/class COMPLETED; both endpoints and templates deleted, volume kept"
     }
   ]
 }

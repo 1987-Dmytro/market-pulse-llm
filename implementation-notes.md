@@ -4349,3 +4349,119 @@ Projection before spending, so the report can be checked against it: volume 100 
 price read at creation) · staging pod 4090 $0.74/h for ~40 min ≈ $0.50 · smoke ≈ $0.05–0.10 ·
 parity 758 rows ≈ 3 300 s of worker time, $0.6–1.1 depending on the offered class's per-second
 rate. Total ≈ $1.2–1.7 of the $4.00 cap.
+
+### §C.2–C.9 — what was bought, what it proved, and the rung that stopped it
+
+**§C.2 the volume.** `qw4nwleanc`, `mp-srv2`, 100 GB, EU-RO-1, created 17:35:05 UTC. **Its price
+was not read**, and that is a deviation with a named cause rather than an omission — see Dv13.
+
+**§C.3 staging, on the serving class.** Pod `6hvlyx2hm7w7d1`, RTX 4090, $0.74/h, the volume
+mounted at `/workspace` (`mfs#euro.runpod.net:9421`). The repo came over as a `git bundle` and
+cloned to HEAD `48948d7a8bb7090f21c89ff6506815d709ff306d`, equal to the Mac's, `git status`
+empty. The venv over the image's torch gave `torch 2.8.0+cu128 · transformers 5.14.1 ·
+bitsandbytes 0.50.0` — `assert_runtime_matches` accepted them against the 4.5h2 anchor — plus
+`peft 0.20.0 · accelerate 1.14.0 · runpod 1.11.0` reported, and peft came out at exactly the
+version srv-2a predicted from `adapter_config.json`. The adapter's **directory** hash re-derived
+`b3ca630846c7e75c5e7058ce45804c45a6bff5c49dcf2389cb8cdda0b7a68a6c`. The 59 GB landed in about two
+minutes, no `.incomplete` blobs.
+
+**The cold-start proof answered the OOM rung, and answered it well.** `results/smoke_srv2b_pod.json`:
+8/8 carve rows parsed, cold start **175.791 s** wall off the network volume, **2.198 s/row**, and
+`nvidia-smi` during the run read **19 874 of 24 564 MiB**. GM4 NF4 config A fits a 24 GB card at
+batch 1 with ~4.6 GB to spare and runs **1.85× faster than the A6000's 4.071 s/row**. No record in
+this repository carried a peak-VRAM figure for batch-1 inference before this one.
+
+**§C.4 the endpoint.** `zbptdon5jvfteu`, class `ADA_24`, EU-RO-1, volume attached, `workersMax 1`,
+`idleTimeout 60`, `executionTimeoutMs 900000` — the flag took seconds and stored milliseconds
+exactly as the runbook warned. `workersMin 0` was **confirmed by a listing, not a console**: it is
+absent from `runpodctl serverless get` but present in `myself { endpoints { workersMin } }` over
+GraphQL. That closes srv-2a's Dv5.
+
+**§C.5 the smoke — the rung.** The job `sync-45b64d75-…-e1` stayed `IN_QUEUE` for the full 1800 s
+handshake while health reported one *running* worker and zero jobs in progress, and the client
+refused with `ApiError: HTTP 408: job … still IN_QUEUE after the timeout`. Worker
+`erzlen0ragp1zk` restarted 26 minutes in, and the console's Logs tab held **zero lines at any
+level** after 35 minutes.
+
+**The control is what makes that a diagnosis instead of a guess.** A second endpoint on RunPod's
+own `runpod/mock-worker:dev`, with **the same volume, the same datacenter and the same GPU class**,
+completed its job in `delayTime 6 477 ms · executionTime 144 ms`. So the 5b wall is **not** back —
+and this is new beyond the team lead's probe, which carried no volume and pre-registered exactly
+this gap. The fault is ours: our container never emitted a single line, so it dies before
+`serve_handler.py`'s first output, and the serverless job-loop path (`runpod.serverless.start`
+with no `--rp_serve_api`) has **never executed in this project** — 5b aborted before any worker
+ran and srv-2a's pod proof exercised the same file's HTTP-server mode. The suspect is the one
+thing a pod cannot cover: whether `--docker-start-cmd bash,/runpod-volume/start.sh` becomes the
+worker's main process under the stock image. **Unproven — no log line exists to confirm it.**
+
+**§C.9 close.** Both endpoints and both templates deleted; `pod list -a` → `[]`,
+`serverless list` → `[]`, `network-volume list` → the volume alone. Spend **$0.9999 of $4.00**.
+The full record is `results/d7_reread_srv2b.json`.
+
+### Deviations — PROMPT-srv-2b
+
+**Dv11 — §C.1 delivered a datacenter, not an allocation.** The runbook says to probe by creating
+one endpoint at a time; that instruction only has meaning once a volume exists, because the
+question is what serverless offers *with a volume attached*. Endpoints created before §C.2 would
+have re-bought the probe's n=2. So §C.1 produced the region from free readings — GraphQL
+`dataCenters{storageSupport}` returns **exactly 18 of 49**, which re-derives the runbook's own
+figure — and the allocation fact was recorded after §C.5, as the runbook itself directs.
+
+**Dv12 — the 48 GB preference resolved to 24 GB on a reading, and then on a measurement.** The
+contract prefers a 48 GB class "if it is offered with a volume". In EU-RO-1 the only 48 GB card in
+the catalogue is the A6000 at stock `none`; US-NC-1 and US-TX-3 had L40S at `Low` but a 4090 at
+`none`, so an L40S refusal there would strand the volume in a region with nothing behind it —
+the 5b wall repeated. EU-RO-1 was chosen because its *fallback* had the only `Medium` 4090 among
+all eighteen. The pod proof then made 24 GB the better answer rather than a concession: it fits
+with 4.6 GB spare and is 1.85× faster. **No paid allocation attempt was spent proving that a
+`none` is a `none`.**
+
+**Dv13 — the volume's price was not read, and no path this session had could read it.**
+`network-volume create` and `get` return four fields and no price; the GraphQL `NetworkVolume`
+type rejects both `costPerMonth` and `storageCost`; `runpodctl billing network-volume` was still
+`[]` an hour and a half after creation. The console prints it at creation, but the volume was
+created from the CLI, and a later attempt to read the Storage page rendered blank three times, at
+which point I stopped rather than keep driving the operator's browser. The repo's $7.20/month and
+~$0.24/day remain **priors**, still labelled as such. It will appear in
+`runpodctl billing network-volume` at the next settlement, which the guard already reads.
+
+**Dv14 — one control endpoint was created that the runbook does not list.** `runpod/mock-worker:dev`
+on the same volume, datacenter and class, one job, deleted immediately. It cost cents and it is
+the only thing that separates "the 5b wall is back" (rung 1: stop, the track is dead) from "our
+container is broken" (a staging fault). Reporting the first without running the second would have
+been a verdict the evidence did not support.
+
+**Dv15 — `smoke_5b.py` crashed after writing its record.** `args.record.relative_to(REPO_ROOT)`
+refuses a relative `--record`, and the traceback lands *after* the file is written, so it reads
+like a lost smoke and is not one. Fixed with the guarded form `batch_ladder_5b2` already used.
+`eval_zero_shot.py` was checked for the same pattern before §C.7 would have run it: its
+`relative_to` calls are all on module constants derived from `REPO_ROOT`, and `--record-out` is
+printed raw, so it carries no such landmine.
+
+**Dv16 — `volume_calc_5c1.idle_rate_bound` was walking a live ledger.** srv-2b's first two guard
+notes straddled the deletion of the volume that calculation bounds, making the quietest interval a
+two-day stretch with **no volume attached at all** at $0.0947/day — a tighter bound on nothing.
+The walk now stops at the record's own `generated_at` and re-derives the $0.2528/day the record
+froze. This is not srv-2b's scope; it is srv-2b's guard notes breaking someone else's derivation,
+and `make check` has to be green.
+
+**Dv17 — the T2 rows are recorded as inputs only.** §C.5 asks for "the three T2 rows' text and
+replies". `smoke_5b.py` persists neither: its rows carry `id`, `task`, `parsed`, `finish_reason`
+and token counts. The inputs are free to rebuild and are below; the replies are not, and editing
+the scoring script mid-paid-session to capture them would have been a worse trade. The carve's
+four T2 rows, from the rebuild that hashes to `8347abd7…`:
+
+| id | text | gold |
+|---|---|---|
+| `@atb_market_official:1657` | «Новорічні ЗНИЖКИ в АТБ 🤗🎄 / Гортайте онлайн-газету та збирайте кошик за найвигіднішими цінами 🤌🏼 …» | `relevant: false · promo · brands []` |
+| `@atb_market_official:2429` | «і передати іншим каву 👀☕️» | `relevant: false · other · brands []` |
+| `@atb_market_official:2558` | «Знайшли себе?» | `relevant: false · other · brands []` |
+| `@msuaaaa:4276` | «Цінотижики в Сільпо 🥲😊 / Знижки до -67% / Діють до 07.05.25 …» | `relevant: false · promo · brands []` |
+
+**Dv18 — a crash-looping worker bills like a working one.** The endpoint's flex rate is
+**$0.00031/s** (read from the console header), and the worker was `running` for 31 minutes while
+its job sat in the queue: $0.55 of the session's $0.9999 bought nothing. `--idle-timeout 60` does
+not apply to a worker that never reports itself idle, and `serverless update --workers-max 0`
+returned success while the API still read `workersMax 1`. The thing that stopped the meter was
+deleting the endpoint. Worth a line in any future runbook: **watch the first job's status, not the
+worker's, and delete on the first restart.**

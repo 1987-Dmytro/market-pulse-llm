@@ -1,0 +1,117 @@
+{
+  "step": "srv-2b §C.6 — the D7 re-read",
+  "contract": "docs/PROMPT-srv-2b.md · scripts/runbook_srv2b.md §C.1/§C.6 · SPEC 3.14 (3)",
+  "written_at": "2026-08-08T19:05:00+00:00",
+  "outcome": "aborted-handshake-timeout",
+  "what_d7_asked": "D7 (2026-08-06, CA-MTL-3) found that with a volume attached serverless allocated a worker only on ADA_24; AMPERE_48, ADA_48_PRO and AMPERE_80 produced none. SPEC 3.14 (3) pre-registered a re-read because the probe of 2026-08-08 carried NO volume.",
+  "datacenter": {
+    "chosen": "EU-RO-1",
+    "how": "free readings only: GraphQL dataCenters{storageSupport} returns 18 of 49 volume-capable datacenters, crossed with runpodctl gpu list per-datacenter stock. EU-RO-1 is the only volume-capable datacenter whose FALLBACK class (RTX 4090, ADA_24) had real stock (Medium); US-NC-1 and US-TX-3 had L40S at Low but a 4090 at none, which would strand the volume if the 48 GB class declined.",
+    "note": "these are pod (secure-cloud) readings; no free reading of the serverless pool exists"
+  },
+  "classes_exercised_with_a_volume_attached": [
+    {
+      "class": "ADA_24",
+      "gpu": "NVIDIA GeForce RTX 4090",
+      "allocates_a_worker": true,
+      "consumes_a_job": true,
+      "evidence": "control endpoint lpba3qzdr2yeaa, image runpod/mock-worker:dev, network volume qw4nwleanc attached, EU-RO-1, workers-max 1: job 728cfb33-bbeb-451e-b91e-05e7773684dd-e2 COMPLETED, delayTime 6477 ms, executionTime 144 ms, worker yvlsgzrgsqi9t9, output \"Hello World!\"",
+      "rate_usd_per_second": 0.00031,
+      "rate_source": "RunPod console, endpoint header, read 2026-08-08"
+    }
+  ],
+  "classes_not_exercised": {
+    "AMPERE_48": "not catalogued with stock in EU-RO-1 (RTX A6000 present, stockStatus none)",
+    "ADA_48_PRO": "not catalogued in EU-RO-1 at all",
+    "AMPERE_80": "not authorised for this contract",
+    "reading": "the 48 GB half of D7 is UNTESTED today. This record must not be read as 'a 48 GB class does not allocate with a volume' — it was never asked."
+  },
+  "the_5b_wall": {
+    "held_on_2026_08_06": "no serverless endpoint on this account reached a job-consuming worker, 7 observations including RunPod's own hub worker (results/parity_verdict_5b.json)",
+    "today": "DISPROVEN for a volume-attached endpoint",
+    "why_this_is_new_beyond_the_probe": "docs/probe-serverless-20260808.md ran with NO volume and pre-registered exactly this gap. The control above is the same test WITH a 100 GB network volume attached, in a volume-pinned datacenter, and it completed."
+  },
+  "our_worker": {
+    "endpoint": "zbptdon5jvfteu",
+    "template": "1w0i49fdzh",
+    "image": "runpod/pytorch:1.0.2-cu1281-torch280-ubuntu2404",
+    "docker_start_cmd": [
+      "bash",
+      "/runpod-volume/start.sh"
+    ],
+    "settings_read_back": {
+      "gpuIds": "ADA_24",
+      "locations": "EU-RO-1",
+      "networkVolumeId": "qw4nwleanc",
+      "workersMax": 1,
+      "workersMin": 0,
+      "idleTimeout": 60,
+      "executionTimeoutMs": 900000,
+      "flashboot": true,
+      "scalerType": "QUEUE_DELAY",
+      "scalerValue": 4
+    },
+    "workers_min_source": "GraphQL myself{endpoints{workersMin}} — `runpodctl serverless get` does not carry the field, so srv-2a's Dv5 is closed by a listing rather than by a console screenshot",
+    "observed": {
+      "job": "sync-45b64d75-2460-440a-ba2e-b952e355ae34-e1",
+      "status_throughout": "IN_QUEUE",
+      "delay_time_ms_at_last_read": 1326343,
+      "worker_states": "health reported 1 running worker for 31 minutes with 0 jobs in progress",
+      "worker_restarted_at": "worker erzlen0ragp1zk, uptime 7m36s at 18:58 UTC — i.e. it (re)started at 18:51:03 UTC, ~26 min after the endpoint was created",
+      "console_logs": "empty — 'No logs yet' after 35 minutes, zero lines at any level",
+      "client_refusal": "market_pulse.zero_shot.ApiError: HTTP 408: job sync-45b64d75-2460-440a-ba2e-b952e355ae34-e1 still IN_QUEUE after the timeout (1800 s handshake)"
+    },
+    "diagnosis": "NOT the platform and NOT the volume: the vendor control above completed on the same volume, the same datacenter and the same GPU class. The container never produced a single log line, so the failure is before serve_handler.py's first print — the SDK banner '--- Starting Serverless Worker ---' that the pod proof emitted never appeared. The serverless job-loop path (runpod.serverless.start with no --rp_serve_api) has NEVER executed in this project: 5b aborted before any worker ran, and srv-2a's pod proof exercised the HTTP-server mode of the same file. The suspect is therefore the one thing the pod proof cannot cover — whether `--docker-start-cmd bash,/runpod-volume/start.sh` actually becomes the worker's main process under the stock runpod/pytorch image, whose own entrypoint may take precedence. UNPROVEN: no log line exists to confirm it."
+  },
+  "pod_control_the_same_evening": {
+    "why_it_matters": "the identical artifact answers on a pod, which is what makes the failure specific to the serverless container start",
+    "record": "results/smoke_srv2b_pod.json",
+    "pod": "6hvlyx2hm7w7d1, RTX 4090, EU-RO-1, $0.74/h, volume mounted at /workspace",
+    "rows_parsed": "8/8",
+    "cold_start_s_wall": 175.791,
+    "seconds_per_row_wall": 2.198,
+    "vram_used_mib": 19874,
+    "vram_total_mib": 24564,
+    "reading": "GM4 NF4 config A FITS a 24 GB card at batch 1 with ~4.6 GB to spare, and runs at 2.198 s/row against the A6000's 4.071 (results/serving_5b.json :: adopted.seconds_per_row). No record in this repository carried a peak-VRAM figure for batch-1 inference before this one, so SPEC 3.14 (3)'s second pre-registered unknown is ANSWERED — on a pod."
+  },
+  "still_unproven": [
+    "SPEC 3.11 (2) parity: 758 rows were never scored. No serving number reaches any aggregate.",
+    "cost per row on serverless: the endpoint never completed a row, so §C.8's formula has no measured_seconds_per_row of its own. The $0.00031/s rate is read, the row count is not.",
+    "byte-stability of batch 1 on the offered GPU, which needed the parity run to observe.",
+    "the 48 GB half of the D7 re-read, as above."
+  ],
+  "spend": {
+    "step_cap_usd": 4.0,
+    "step_spent_usd": 0.9999,
+    "anchor": "results/spend_srv2b.json, written before the first billable action",
+    "breakdown_note": "staging pod ~$0.37 (billing pods reports $0.29799634497612715 over 1441266 ms) and ~$0.55 of serverless worker time that consumed no job — a crash-looping worker bills at the flex rate exactly like a working one."
+  },
+  "volume": {
+    "id": "qw4nwleanc",
+    "name": "mp-srv2",
+    "size_gb": 100,
+    "data_center": "EU-RO-1",
+    "kept": true,
+    "price_usd_per_month": null,
+    "price_reading": "NOT READ. runpodctl network-volume create/get carry no price field, the GraphQL NetworkVolume type has neither costPerMonth nor storageCost, and `runpodctl billing network-volume` was still empty 1.5 h after creation. The runbook assumed a console creation, which prints it. Read it at the next settlement or by eye."
+  },
+  "deletions_proven_by_listing": {
+    "pod list -a": [],
+    "serverless list": [],
+    "network-volume list": [
+      {
+        "id": "qw4nwleanc",
+        "name": "mp-srv2",
+        "size": 100,
+        "dataCenterId": "EU-RO-1"
+      }
+    ]
+  },
+  "git": {
+    "commit": "81f35f98f2df4c18abca10676a97b277988129e4",
+    "dirty": [
+      "results/spend_phase4.json",
+      "results/spend_srv2b.json"
+    ]
+  }
+}
