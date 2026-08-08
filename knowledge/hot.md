@@ -2,24 +2,24 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-08 19:22:30 (every SessionStart)
+**Auto-refreshed:** 2026-08-08 21:24:08 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-6388229 fix(srv-2a): the pass formula was borrowing an A6000's seconds per row
-f798053 feat(srv-2a): the worker is a serverless config already, minus the peft it could not name
-2d2a8e8 docs(5c1): the /save checkpoint -- the pilot's numbers and the private-label correction
-74a5adb docs(srv-2): the serverless wall came down and the runtime target moved back
-6b15ebf docs(5c1): the pilot billed twice the projected rate — both numbers, both reasons
+86eb0b7 docs(srv-2b): the volume's manifest, the artifact that does not exist, and a blind guard
+e027aee feat(srv-2b): the wall is down with a volume too -- and our own container is what stopped us
+81f35f9 fix(srv-2b): the pod proof fits 24 GB, and two records stopped drifting
+48948d7 docs(srv-2b): the datacenter is picked from free readings, before a dollar moves
+1e42316 chore(srv-2b): the cap and its anchor land before the first billable second
 ```
 
 ## 📋 Recent decisions
 
-- `5c1-relevance-floor-and-discovery.md` — 5c1 — the relevance floor: 66 channels were admitted without anyone measuring the category
 - `INDEX.md` — Decision records
-- `5c1-day2-composition-and-search.md` — 5c1 day 2 — three "city feeds" were chats, and the search for replacements outperformed the scan
+- `srv2-serverless-runtime-target.md` — The 5b wall did not reproduce, and the production runtime target moves back to serverless
+- `5c1-relevance-floor-and-discovery.md` — 5c1 — the relevance floor: 66 channels were admitted without anyone measuring the category
 
 ## 📅 Recent daily logs
 
@@ -31,16 +31,54 @@ f798053 feat(srv-2a): the worker is a serverless config already, minus the peft 
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-08 19:16 (`/save`). `docs/PROMPT-srv-2a.md` executed — **$0, no
-`runpodctl` call, nothing created**: the pending team-lead tail committed unedited, the 5b worker
-verified as a serverless config, the volume plan and `scripts/runbook_srv2b.md` written, 13 tests
-added. `make check` **1,270 passed** (1,257 → 1,270). Four commits (`74a5adb` → `6388229`).
-Earlier the same evening: the caption pilot, all five steps, **$0.0180 of its $0.10 cap**. The
-yield half is [[5c1-relevance-floor-and-discovery]]; the day-2 half is
-[[5c1-day2-composition-and-search]]. This block is hand-edited; the section above it is
-auto-generated — do NOT touch the marker.
+**Last update:** 2026-08-08 21:17 (`/save`). `docs/PROMPT-srv-2b.md` executed — the first paid
+session of the serverless track. **ABORTED at the handshake-timeout rung, $0.9999 of its $4.00
+cap.** The volume `qw4nwleanc` (100 GB, EU-RO-1) is the only thing that outlived it; everything
+else deleted and proven deleted by listing. Five commits (`066c282` → `86eb0b7`), `make check`
+**1,270 passed**. Earlier the same evening: srv-2a accepted, and the caption pilot at **$0.0180 of
+its $0.10 cap**. The runtime ADR is [[srv2-serverless-runtime-target]]; the yield half is
+[[5c1-relevance-floor-and-discovery]]; the day-2 half is [[5c1-day2-composition-and-search]]. This
+block is hand-edited; the section above it is auto-generated — do NOT touch the marker.
 
 ## 🔥 What's Hot
+
+**THE WALL IS DOWN WITH A VOLUME ATTACHED TOO — AND WHAT STOPPED US IS OUR OWN CONTAINER.**
+srv-2b's control settles the question the team-lead probe left open: RunPod's own
+`runpod/mock-worker:dev`, on **the same volume `qw4nwleanc`, the same EU-RO-1, the same `ADA_24`
+class**, completed its job in `delayTime 6 477 ms · executionTime 144 ms`. The probe carried no
+volume and pre-registered exactly this gap. Our endpoint `zbptdon5jvfteu` did not: the job sat
+`IN_QUEUE` through the full **1800 s** handshake while health reported one *running* worker and
+zero jobs in progress, the worker restarted 26 minutes in, and the console's Logs tab held **zero
+lines at any level after 35 minutes**. Zero lines means the failure is **before
+`serve_handler.py`'s first print** — and the serverless job-loop path
+(`runpod.serverless.start` with no `--rp_serve_api`) **has never executed in this project**: 5b
+aborted before a worker ran, and srv-2a's pod proof exercised the same file's HTTP-server mode.
+The suspect is the one thing a pod cannot cover — whether `--docker-start-cmd
+bash,/runpod-volume/start.sh` becomes the worker's main process under the stock image. **Unproven;
+no log line exists to confirm it.** Full record: `results/d7_reread_srv2b.json`.
+
+**THE 24 GB FIT IS ANSWERED, AND THE ANSWER IS BETTER THAN THE PREFERENCE.** The staging pod was
+deliberately taken on the *serving* class (RTX 4090, $0.74/h) so the OOM rung would be measured at
+a third of the serverless rate instead of discovered on a billed worker with no second attempt.
+`results/smoke_srv2b_pod.json`: **8/8 carve rows parsed · 19 874 of 24 564 MiB · cold start
+175.791 s off the network volume · 2.198 s/row** against the A6000's 4.071
+(`serving_5b.json :: adopted.seconds_per_row`). GM4 NF4 config A fits a 24 GB card at batch 1 with
+~4.6 GB to spare and runs **1.85× faster**. No record in this repository carried a peak-VRAM figure
+for batch-1 inference before this one.
+
+**PARITY WAS NOT RUN AND ITS SINGLE ATTEMPT IS NOT SPENT.** `results/parity_srv2.json` **does not
+exist**; §C.7 was never reached, test v4 was never opened, no head has a verdict and **no serving
+number reaches any aggregate**. What failed is the smoke, on the arm's own training carve. SPEC
+3.11 (2) remains unsatisfied and mandatory.
+
+**THE D7 RE-READ, HONESTLY BOUNDED.** `ADA_24` with a volume attached: **allocates and consumes**.
+The **48 GB half was never asked** — EU-RO-1 catalogues only the A6000 at stock `none` — and the
+record says so rather than reading its silence as a negative. The datacenter itself came from free
+readings: GraphQL `dataCenters{storageSupport}` returns **exactly 18 of 49**, re-deriving the
+runbook's own figure, and EU-RO-1 was picked because it is the only volume-capable region whose
+*fallback* class has real stock (the only `Medium` 4090 of the eighteen) — US-NC-1 and US-TX-3 had
+L40S at `Low` but a 4090 at `none`, which would strand the volume exactly as 5b stranded one in
+CA-MTL-3.
 
 **THE SERVERLESS WALL IS DOWN AND THE RUNTIME TARGET MOVED BACK (SPEC 3.14).** A team-lead probe
 in the operator's own console, the same evening: `runpod/mock-worker:dev` on endpoint
@@ -56,7 +94,9 @@ on whatever card is offered, and cost per row against the pod's $0.5993/1000.
 **srv-2a IS DONE AND THE WORKER WAS ALREADY A SERVERLESS CONFIG — MINUS THE peft IT COULD NOT
 NAME.** No `/workspace` is baked into `serve_handler.py` or `start_5b_worker.sh`; the template env
 and `settings()` agree field for field; `runpod.serverless.start` with a callable handler is
-proven on the pod (06.08, the three-row T2 batch), not assumed. The one thing verification
+proven on the pod (06.08, the three-row T2 batch), not assumed. **CORRECTED BY srv-2b: what that
+proved is the `--rp_serve_api` HTTP mode of the file, not the job loop a real worker runs — the
+sibling branch of the same entrypoint, and it is the branch that failed.** The one thing verification
 demanded: **config A is `peft` applying a LoRA to an NF4 base and no record named the peft that
 served.** `RUNTIME_LIBRARIES` cannot grow — the 4.5h2 anchor carries three libraries and a fourth
 entry would be a guard that never fires — so `library_versions()` now **reports** peft, accelerate
@@ -73,6 +113,12 @@ numbers, not the pod's.** Filling it with what exists today (A6000 seconds, the 
 $0.00016/s on a 16 GB class) gives $0.538 a pass, 17% dearer, $0.045 of it the boot alone — but
 all three inputs come off hardware this endpoint will probably not run on, and at 3.0 s/row on a
 4090 serverless wins instead. Quoted as a prior, never as a finding.
+**srv-2b bought two of the three inputs and they cut opposite ways:** the 4090 does **2.198 s/row**
+(better than the 3.0 the prior guessed at) but the endpoint's flex rate read **$0.00031/s** off the
+console header, ~2× the probe's 16 GB class. Product: `(cold_start + 758 × 2.198) × 0.00031` ≈
+**$0.57 a pass** against the pod's $0.4611 — still a prior, because the endpoint never completed a
+row and its own s/row is unmeasured. **A crash-looping worker bills at that rate too:** $0.55 of
+srv-2b's $0.9999 bought nothing at all.
 
 **THE FAILED CONTROL WAS ABOUT MODALITY, AND READING THE IMAGES ANSWERS IT: ATB GOES 0 → 13.**
 Same window, same matcher, same lexicon, same pre-registered bar (`1aa89818…`, unmoved) — the only
@@ -188,16 +234,25 @@ volume ended up pinning CA-MTL-3 where no 48 GB class allocated. And **Dv3 caugh
 error**: the contract cited its smoke from prose rather than from an artifact, and those three T2
 rows exist in no file. Ten deviations against a norm of 0–4, charged to an overloaded contract.
 
-**NEXT IS srv-2b, AND ITS CAP IS SET AT ITS OWN BRIEFING — NOT HERE.**
-`scripts/runbook_srv2b.md` is written and unexecuted: create the volume → stage → endpoint
-(queue mode, max workers 1, scale-to-zero **confirmed in the console**, 48 GB class first if
-offered with a volume, else 24 GB) → smoke on the hash-pinned 8-row carve → record the **D7
-re-read** → **parity, 758 rows, batch 1**, against `results/parity_5b_a.json` under the rule of
-3.11 (2): every 4.5h2-passed gate stays passing, no head drops > 0.005. Its own spend anchor,
-`results/spend_srv2b.json`. The abort ladder is written down: no GPU with the volume · OOM ·
-gate drop · over cap → STOP and report, no retry without a new briefing. **The 24 GB fit is
-unproven** — the model sits at ~20 GiB at rest and no record carries a peak-VRAM figure for
-batch-1 inference, so OOM is a named rung, not an assumption.
+**srv-2b's ABORT IS ACCEPTED AND srv-2c IS BRIEFED AT $0.75 — `docs/PROMPT-srv-2c.md`.** The team
+lead verified the abort against the artifacts and the listings: the rung stands, the diagnosis
+(ours, before the first print; the job-loop mode has never executed in this project) is accepted,
+and **the parity attempt is counted as unspent** — test v4 was never opened. The next step is the
+boot-log diagnostic this session proposed: the worker's start command tees its output onto the
+volume, one job, ≤ 10 minutes, and a pod reads the file back verbatim into an artifact. The
+disjunction is clean — **no file** means the start command never runs under the stock image (a
+custom image then becomes its own briefing); **a file** says where it died. The guard's
+serverless-billing blindness is fixed there too, and the console failed to render for the team lead
+as well, so the three listings get a free re-check at srv-2c's start.
+
+**THE VOLUME PERSISTS AND ITS CONTENTS ARE WRITTEN DOWN.** `qw4nwleanc` holds `hf/` at revision
+`842da379…` (59 GB, no `.incomplete` blobs), `venv/` with the pinned stack over the image's torch,
+`repo/` at **`48948d7a` — already stale**, the adapter inside it at `b3ca6308…`, `start.sh`, and
+the staging pod's logs. A next session should re-clone the repo, **not** re-stage the weights. Two
+notes ride along: runbook §B.1's "the adapter is the one item with a single copy" is no longer
+true, and **the volume's price was never read** — `network-volume create`/`get` carry no price
+field, the GraphQL `NetworkVolume` type rejects `costPerMonth`, and `billing network-volume` was
+still `[]` 1.5 h in. $7.20/month stays a **prior**.
 
 **THE CAPTION PROGRAM WAS RE-ROUTED BEFORE IT SPENT ANYTHING (SPEC 3.13).**
 `docs/PROMPT-5c1-captions-full.md` is **VOID, never executed** — its $0.35 OpenRouter cap was
@@ -239,21 +294,40 @@ FloodWait**; raw v1 is byte-identical before and after, `shasum -c results/raw_v
 6/6. The money sits on the pilot's OWN anchor, `results/spend_5c1_captions.json` — $0.0180 against
 its $0.10 cap, and 4.5g2's $0.75 balance was never touched.
 
+**OUR SERVERLESS CONTAINER DOES NOT START, AND THAT IS THE ONE OPEN BLOCKER.** Everything else on
+the serverless track now works: the class allocates with a volume, the model fits the card, the
+stack matches the anchor. `zbptdon5jvfteu` emitted **zero log lines in 35 minutes** and never took
+its job, while the vendor's own worker took one on identical infrastructure. Until that is
+diagnosed, **production stays a stop-after pod** and no serving number exists.
+
 **Recorded rather than open:** the CA-MTL-3 volume is deleted, so its **~$0.24/day** idle billing
 has stopped — that literal is load-bearing, not decoration: `scripts/volume_calc_5c1.py` greps it
-out of THIS file as a priced input, and a rewrite that drops it reddens nine tests. The account is
-**empty**: no pod, no endpoint, no template, no volume, and srv-2a created none — which is what
-makes the same three listings at the end of srv-2b a deletion proof rather than a hope. Arm A's
+out of THIS file as a priced input, and a rewrite that drops it reddens nine tests. **The account is
+no longer empty:** srv-2b's volume `qw4nwleanc` (100 GB, EU-RO-1) persists as a run-rate line, and
+that is the only thing it left — `pod list -a` → `[]`, `serverless list` → `[]` at close. Arm A's
 per-row dump is permanently lost.
 
 **SUPERSEDED, kept so the old line is not re-read as current:** "no serverless endpoint on this
 account reaches a job-consuming worker" was true on **2026-08-06** and is the honest content of
 `results/parity_verdict_5b.json`. The probe of **2026-08-08** overturned it (SPEC 3.14) — but on
 `n=2`, one evening, **no volume attached**. "The wall is down today" is not "it can never return",
-and the volume is exactly the variable the probe left out. Production stays a stop-after pod until
-srv-2b's parity says otherwise.
+and the volume is exactly the variable the probe left out. **srv-2b closed that variable on
+2026-08-08: a volume-attached `ADA_24` endpoint in EU-RO-1 consumed and completed a job.**
+Production still stays a stop-after pod — not because of the wall, but because our own worker does
+not start and parity has never been measured.
 
 ## ⚠️ Footguns for the next run
+
+**A failing serverless worker bills exactly like a working one, and only DELETE stops it.** srv-2b's
+worker was `running` for 31 minutes at **$0.00031/s** with its job stuck in the queue — $0.55 for
+nothing. `--idle-timeout 60` does not apply to a worker that never reports itself idle, and
+`runpodctl serverless update <id> --workers-max 0` returned a success payload while the REST API
+still read `workersMax 1`. Watch **the first job's status**, not the worker's health, and delete
+the endpoint on the first worker restart. Two more from the same session: `runpod_guard`'s billing
+corroboration walks `billing pods` and `billing network-volume` only, so **serverless spend is
+invisible to it** (an $0.86 under-count here — only the balance delta binds); and a remote
+`pgrep -f "hf download"` inside an ssh command **matches its own shell**, so a download-finished
+poll reported `alive=yes` for eight minutes after the file was complete.
 
 **`assert_runtime_matches` pins three libraries and cannot be taught a fourth.** It walks
 `serving.RUNTIME_LIBRARIES` and **skips any library the anchor does not carry** — and the anchor
