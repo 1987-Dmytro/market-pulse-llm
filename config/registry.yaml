@@ -682,3 +682,28 @@ watchlist:
     # Exact dairy private-label naming verified at the 2b entry check.
     display_names: ["VARUS"]
     own: false
+
+  # --- operator addition 2026-08-08 (day-2 acceptance, +3) ---
+  # UA spelling is the canon everywhere operator-facing; the RU spellings beside it are matching
+  # aliases only. `notes` and `regional` are documentation IN this file — market_pulse.registry
+  # reads brand_id, display_names and own, and ignores the rest.
+  # G1e history is never re-scored against this revision: any future run's provenance names the
+  # watchlist it read.
+  - brand_id: zarih
+    display_names: ["Заріг", "Зарог"]
+    own: false
+    notes: local Poltava-oblast competitor (Orzhytsia raion)
+    regional: poltava
+  - brand_id: myrhorodska-korivka
+    display_names: ["Миргородська корівка", "Миргородская коровка"]
+    own: false
+    notes: local Poltava-oblast competitor
+    regional: poltava
+  - brand_id: yahotynske-dlia-ditei
+    # Tracked SEPARATELY from `yagotynske` — the Мгарське pattern: a sub-brand with its own
+    # launches is its own row, not a spelling of its parent. Its display name CONTAINS the
+    # parent's, so any matcher over this list has to resolve the nesting rather than let one post
+    # count for both.
+    display_names: ["Яготинське для дітей", "Яготинское для детей"]
+    own: false
+    notes: Molochnyi Alians baby-food line; primary baby_food competitor

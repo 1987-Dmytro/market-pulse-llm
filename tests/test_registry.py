@@ -141,3 +141,35 @@ def test_duplicate_brand_id_rejected(tmp_path):
     )
     with pytest.raises(ValueError, match="duplicate brand_id"):
         load_registry(path)
+
+
+def test_the_operators_watchlist_addition_is_in_both_files_and_says_the_same_thing():
+    """The +3 of 2026-08-08. `docs/WATCHLIST.md` is the operator-facing list and the registry is
+    what code reads; a brand that lives in one of them is a brand half the project cannot see.
+
+    UA canon, RU as a matching alias — checked as an ORDER, because "Заріг, Зарог" and "Зарог,
+    Заріг" are the same set and only one of them is the ruling.
+    """
+    doc = (REGISTRY.parent.parent / "docs" / "WATCHLIST.md").read_text(encoding="utf-8")
+    brands = {b.brand_id: b for b in load_registry(REGISTRY).watchlist}
+    added = {
+        "zarih": ("Заріг", "Зарог"),
+        "myrhorodska-korivka": ("Миргородська корівка", "Миргородская коровка"),
+        "yahotynske-dlia-ditei": ("Яготинське для дітей", "Яготинское для детей"),
+    }
+    for brand_id, names in added.items():
+        assert brands[brand_id].display_names == names, brand_id
+        assert brands[brand_id].own is False, brand_id
+        assert f"| {brand_id} | {names[0]}, {names[1]} |" in doc, brand_id
+
+
+def test_the_baby_food_line_is_a_row_of_its_own_and_its_name_nests_in_its_parents():
+    """«Яготинське для дітей» is tracked separately from «Яготинське» — the Мгарське pattern, and
+    the operator's own words. The trap that comes with it: the child's display name CONTAINS the
+    parent's, so a post naming the child matches both aliases. Pinned here so any matcher over
+    this list has to answer for it rather than double-count in silence."""
+    brands = {b.brand_id: b for b in load_registry(REGISTRY).watchlist}
+    assert "yagotynske" in brands and "yahotynske-dlia-ditei" in brands
+    parent = brands["yagotynske"].display_names
+    child = brands["yahotynske-dlia-ditei"].display_names
+    assert any(p in c for p in parent for c in child), "the nesting this test exists for is gone"
