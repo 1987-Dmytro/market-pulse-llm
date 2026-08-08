@@ -4173,3 +4173,17 @@ a diaper leaflet and a salmon one, so the headline needed the reading with every
 struck out: 10 posts, still over the bar. `bar_A_sole_carriers` is empty — the pass hangs on no
 single term. Nothing paid was re-derived; the captions file and its record are untouched and the
 rematch cites its sha256.
+
+**Dv10 — the pilot measured a rate twice the one it was told to project with, and the census
+stands as committed.** Step 1's projection had to use 4.5g2's rate ($0.000483/post,
+`results/captions_45g2.json`) — the brief says so and the file was committed before the pilot
+spent anything, which is what makes it a projection rather than a retrofit. The pilot then billed
+$0.0180 for 19 requests: **$0.000948 per post asked, $0.001001 per usable caption, 1.96× the
+projected rate.** Album size does not explain it — 102 images sent over 19 posts is 5.37 per post
+against 4.5g2's 5.33. Repriced on what was actually measured, one full pass over the 250
+captionable posts is **$0.24 upper bound / $0.12 discounted**, and the 232 that are still
+uncaptioned (the 18 are bought; 4350 is billed and unusable, so it stays on the list) are
+**$0.22 / $0.11**. The 0.512 discount is 4.5g2's population split; this pilot's own population
+came out 19 photos of 19, so for retail-leaflet channels the true figure sits nearer the upper
+bound than the discounted one. Both readings belong in front of the operator: the census's number
+is the one that pre-dates the result, and this one is the one the result supports.
