@@ -2,10 +2,31 @@
 
 **Contract:** `docs/PROMPT-5c1.md` remains the phase brief; THIS file
 consolidates and SUPERSEDES the queued addenda 3–10 as the single day-2
-execution order. The operator approved the full composition on 08.08
+execution order. The operator approved the full composition on 07.08
 evening (canon: `docs/CHANNELS-launch.md` — МАСТЕР-ЛИСТ, Рулинги волна
 3 + добор, Дозаявки №3/№5/№8). $0; Telegram API only; the FloodWait
 wall clears **2026-08-08 10:02 UTC** — nothing network-side before it.
+
+## Amendment 3.12 rider (added 08.08 morning, operator rulings)
+SPEC is **rev 3.12** now (relevance floor of the entry gate +
+content-first discovery). This order predates it and stays valid with
+three clarifications — none change the execution steps below:
+
+1. **First commit of the session:** stage BY PATH and commit the
+   team-lead edits already sitting in the working tree —
+   `docs/SPEC.md` (rev 3.12), `docs/STATUS.md`, and this file —
+   message `docs(5c1): amendment 3.12 — relevance floor + discovery`.
+   Commit, never edit (ownership rules unchanged).
+2. **Every registry entry today's passes create is PROVISIONAL.** The
+   yield screen (taxonomy hit-rate over the collected windows — the
+   NEXT session's contract, not today's scope) runs before the
+   operator signs any launch verdict. The acceptance package labels
+   the registry diff "provisional pending yield screen", and no loop
+   run consumes the new composition before that signing. Gate rows,
+   buckets and collection proceed exactly as written.
+3. **Step 9's harvest output is candidates only** — its entries reach
+   the registry, as every candidate now does, only through the gate
+   PLUS the 3.12 yield floor.
 
 ## Order of execution
 Resolve-budget aware; on any FloodWait: stop, record its expiry,

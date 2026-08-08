@@ -1,10 +1,12 @@
-# market-pulse-llm — Project Specification (rev. 3.11)
+# market-pulse-llm — Project Specification (rev. 3.12)
 
 **Status:** APPROVED rev. 3 (2026-07-26); amendment 3.1 approved 2026-07-27;
 amendments 3.2 and 3.3 approved 2026-07-28; amendments 3.4–3.6 approved
 2026-08-01; amendments 3.7 and 3.8 approved 2026-08-02; amendment 3.9 approved
 2026-08-03; amendment 3.10 authorised 2026-08-04, recorded 2026-08-05;
-amendment 3.11 (Phase 5 contract) approved at the briefing 2026-08-05.
+amendment 3.11 (Phase 5 contract) approved at the briefing 2026-08-05;
+amendment 3.12 (relevance floor of the entry gate + content-first discovery)
+approved 2026-08-08.
 **Amendment 3.1:** EN removed from per-language gates — the collected corpus
 contains 8 EN comments out of 2,000 sampled (retail channels post in UA); a
 per-language metric over n=8 is meaningless. Gates run on UA and RU. The model
@@ -367,6 +369,42 @@ Sub-phases, each with its own verify-gate: **5a** loop skeleton + poll
 census + discovery → **5b** serving parity → **5c** loop core + aggregates
 + category layer → **5d** first reporting cycle + alerts v0 → the G1a/G1c
 decision briefing.
+**Amendment 3.12 (operator rulings 2026-08-08: relevance floor + content-first
+discovery):**
+(1) **The track-R entry gate gains a mandatory relevance floor — the yield
+screen.** The existing screens grade capability, language, market origin and
+"about food" theme; none measured whether a channel contains OUR taxonomy. The
+yield screen runs the brand watchlist display_names (`docs/WATCHLIST.md`, folded
+into the registry) plus the category lexicon over a channel's collected 28-day
+window and reports per channel: brand hits/week, category hits/week, share of
+taxonomy-relevant posts, and comment flow on relevant posts. Posts and comments
+are separate currencies — retail_official earns on posts, audience segments earn
+on comments — so the screen never blends them into one number. Thresholds are
+PRE-REGISTERED by the operator before any number is seen (the language-census
+discipline). The screen also runs retroactively over the whole current registry;
+zero-yield members are surfaced to the operator with their numbers — removal is
+an operator ruling, never automatic. Launch verdicts for the day-2 candidates
+are signed only AFTER their yield numbers exist; day-2 collection and joins
+proceed as queued, since they produce the very windows the screen reads.
+(2) **Content-first discovery is authorised.** Telegram's global full-text post
+search over all public channels (`channels.searchPosts`, live since 2025-07-31)
+becomes the primary discovery instrument: queries drawn from the watchlist and
+the category lexicon return the channels where the taxonomy actually lives,
+replacing name-based guessing. Costs: Telegram Premium on the collection account
+(€5.99/month, operator's purchase screen 2026-08-08; the subscription must sit
+on the ACCOUNT BEHIND `marketpulse.session`, since the search is called from
+it) + Stars above the free daily quota; the exact
+per-query price and remaining quota are returned by the API itself
+(`searchPostsFlood`) and are read before the first paid query. Free instruments
+beside it: `channels.getChannelRecommendations` seeded from channels that PASSED
+the yield screen, and the forward graph of already-collected windows (whether
+forward metadata exists in raw v1 records is verified by opening one record,
+never assumed). **TGStat is ruled OUT** (RF service, RUB payment); Telemetr.io's
+free tier is the permitted catalog fallback.
+(3) **Money:** a separate discovery budget line beside the $8 GPU + $1
+OpenRouter caps — the Premium subscription + **≤$5 in Stars per discovery
+session**, each session individually authorised by the operator and
+spend-anchored like every other paid instrument.
 **Date:** 2026-07-26 · **Team lead:** Fable session · **Executor:** Claude Code
 **Repo folder:** `/Users/hdv_1987/Desktop/Projects/market-pulse-llm`
 **rev. 3 change (operator decision):** producers in Ukraine barely use Telegram for
