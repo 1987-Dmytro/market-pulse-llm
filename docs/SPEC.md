@@ -1,4 +1,4 @@
-# market-pulse-llm — Project Specification (rev. 3.12)
+# market-pulse-llm — Project Specification (rev. 3.14)
 
 **Status:** APPROVED rev. 3 (2026-07-26); amendment 3.1 approved 2026-07-27;
 amendments 3.2 and 3.3 approved 2026-07-28; amendments 3.4–3.6 approved
@@ -6,7 +6,11 @@ amendments 3.2 and 3.3 approved 2026-07-28; amendments 3.4–3.6 approved
 2026-08-03; amendment 3.10 authorised 2026-08-04, recorded 2026-08-05;
 amendment 3.11 (Phase 5 contract) approved at the briefing 2026-08-05;
 amendment 3.12 (relevance floor of the entry gate + content-first discovery)
-approved 2026-08-08.
+approved 2026-08-08; amendment 3.13 (captions move to the project's own
+Gemma-4 vision path; API caption instrument retired) ruled by the operator
+2026-08-08, recorded the same session; amendment 3.14 (target runtime =
+serverless; same-evening probe overturns the 5b wall) ruled and recorded
+2026-08-08 late evening.
 **Amendment 3.1:** EN removed from per-language gates — the collected corpus
 contains 8 EN comments out of 2,000 sampled (retail channels post in UA); a
 per-language metric over n=8 is meaningless. Gates run on UA and RU. The model
@@ -405,6 +409,74 @@ free tier is the permitted catalog fallback.
 OpenRouter caps — the Premium subscription + **≤$5 in Stars per discovery
 session**, each session individually authorised by the operator and
 spend-anchored like every other paid instrument.
+**Amendment 3.13 (operator ruling 2026-08-08, second evening session: captions
+move to the project's own Gemma-4; the paid-API caption instrument is
+retired):**
+(1) **The ruling.** The operator does not accept a paid external API as the
+caption instrument for the loop; captions run on the project's own Gemma-4.
+This supersedes the late-08.08 closing ruling "captions stay on the cheap API
+path" and VOIDS `docs/PROMPT-5c1-captions-full.md` before execution — its
+$0.35 OpenRouter cap was never touched. Recorded price of the ruling, stated
+at decision time: the spend moves to the GPU meter and grows (build + smoke +
+re-pilot + full run ≈ $1–2.5 GPU against $0.22 API); the caption instrument
+changes, so a comparability seam is created and documented (below).
+(2) **Feasibility, verified on disk before this amendment ($0, team-lead
+reads):** the pinned base revision `842da3794eaa…` is a
+`Gemma4ForConditionalGeneration` image-text model; `local_llm.py` already
+loads via `AutoModelForImageTextToText`; the QLoRA adapter explicitly
+excludes `vision_tower` / `multi_modal_projector` (config/qlora.yaml).
+Missing and to be built: the AutoProcessor image path, a caption task and
+runner, tests, and a pod runbook.
+(3) **The instrument.** Captions come from the NF4 BASE at the pinned
+revision with the ADAPTER OFF (the adapter is classification-tuned; captions
+through it would be a third instrument), greedy, batch 1, its own registered
+caption prompt (new sha, registered before any result exists). Provenance
+gains `caption_source` (`qwen-4.5g2` | `gm4-nf4-base`): every
+caption-carrying record and every screen or gate number names its caption
+instrument, and numbers with different caption sources are never compared
+without saying so. The 4.5g2 API instrument is retired for new data from this
+date; its bought captions stand as history.
+(4) **Program and gates.** **vis-a** (executor, $0, local): processor path +
+caption task + tests + runbook; no model download, no pod. **vis-b** (one pod
+session, cap $1.00 GPU): load smoke → measured rate ($/post, s/post) →
+re-pilot of the SAME 19 ATB media-only posts → bridge table GM4-vs-qwen on
+identical posts (qwen captions already bought and committed) → screen-pilot
+check against the UNTOUCHED prereg sha `1aa89818…`. Pre-registered
+instrument-failure rule: if ATB with GM4 captions fails bar A where qwen's
+PASS stands, the instrument failed — STOP, the fork returns to the operator
+with the bridge table. **vis-c** (one pod session, cap $1.50 GPU): the
+remaining 232 posts + yield screen v2, prereg unchanged. Launch signing stays
+frozen until v2 (the operator's freeze stands). Caps come from the $8 GPU
+line (headroom $6.29 after the parity program's $1.71); one attempt each,
+STOP over cap, a partial run reports what it bought.
+**Amendment 3.14 (operator ruling 2026-08-08 late evening: the target
+runtime is serverless; a same-evening probe overturns the 5b wall):**
+(1) **The ruling.** The production runtime target moves back to SERVERLESS
+(model resident on a network volume, workers scale to zero) — supersedes
+decision 20's pod-stop-after as the TARGET; pods remain the measured,
+proven fallback. All paid 5c1 steps and the launch signing are HELD by the
+operator's word until the serverless track proves out.
+(2) **The probe** (team lead, live in the operator's console, same evening;
+record: `docs/probe-serverless-20260808.md`): endpoint `8mkl2lbxho3bfa`,
+`runpod/mock-worker:dev`, 16 GB flex, queue mode, no volume, no DC pin.
+Two jobs consumed and COMPLETED (delay 10 964 / 6 800 ms, execution
+142/144 ms, worker `pri0muyf75j143`). The 5b blocker did NOT reproduce.
+The vendor ticket is unnecessary — closed unfiled; the operator's "we wait
+for no one" was the correct call, over the team lead's records-first
+recommendation. Endpoint deleted after answering; deletion proven by the
+zero-endpoint listing. `results/parity_verdict_5b.json` stands untouched as
+the honest record of 2026-08-06.
+(3) **Not proven by the probe, pre-registered before srv-2:** the
+volume-attached GPU offering today (D7 re-read required); GM4 NF4 fit and
+batch-1 byte-stability on the offered GPU; cost per row vs the pod's
+$0.60/1000. SPEC 3.11 (2) parity (758 rows vs the 4.5h2 anchors, batch 1)
+remains mandatory before any production number.
+(4) **Program:** srv-2a (executor, $0, local): serverless worker config
+reusing the 5b entrypoint proven on the pod (`scripts/serve_handler.py` +
+`scripts/start_5b_worker.sh`), volume re-creation plan, runbook. srv-2b
+(one paid session, cap set at its briefing): volume + weights + endpoint +
+smoke + D7 re-read + parity. The caption instrument of amendment 3.13 is
+unchanged; vis-a code is runtime-agnostic and rides along.
 **Date:** 2026-07-26 · **Team lead:** Fable session · **Executor:** Claude Code
 **Repo folder:** `/Users/hdv_1987/Desktop/Projects/market-pulse-llm`
 **rev. 3 change (operator decision):** producers in Ukraine barely use Telegram for
