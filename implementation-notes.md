@@ -4714,3 +4714,56 @@ running in between. The delta lags the resource, so a figure read the instant a 
 not a total. Every past "spent $X at close" in this repository carries that caveat; from here they
 carry it explicitly. **srv-2c closes at $0.1377 of its $0.75 cap** — the wrapped run, the pod, and
 the operator's control together.
+
+## srv-2d — parity on the live endpoint, THE one attempt (2026-08-08 night)
+
+Contract `docs/PROMPT-srv-2d.md`, cap **$2.00**, anchor `results/spend_srv2d.json`. This session
+spends the single SPEC 3.11 (2) parity attempt: no retry under any outcome, and a failed gate is a
+finding reported with both readings, never a re-run. Abort ladder of `scripts/runbook_srv2b.md` in
+force; the srv-2d amendments are §D of the same file.
+
+### Pre-registered before the first billable action
+
+**The measurement.** Test v4, 758 rows, config A (NF4 base + unmerged arm-A adapter), **forward
+batch 1**, on the serverless endpoint. Scored against `results/parity_5b_a.json` (the pod reading of
+the identical config) and the bars in `results/verdict_45h2.json`. The rule, from 3.11 (2): every
+gate that passed at 4.5h2 stays passing, and **no gate head drops more than 0.005**. Deltas are
+reported, never averaged away. A 4.5h2-passed head landing under its bar is a finding for an
+operator briefing, not a verdict this session may issue.
+
+**The transport, and why it is not the instrument.** 5b sent one job per forward — 758 jobs. srv-2d
+sends **one asynchronous `/run` job per input**, three for the pass, and the worker walks the rows
+inside it at batch 1. The claim that this cannot move a token is that each `generate` call still
+receives a one-element list, which is the identical call the 8-row smoke and `_one_row` make. That
+claim is **checked before it is relied on**: `smoke_5b.py --one-job-check` asks the same eight carve
+rows through both transports and refuses the run unless the replies are byte-identical. Training
+rows, so the check costs no test exposure.
+
+**The timeout-fit rule, written before the smoke measures anything.** The largest single job is
+comments_test, 400 rows, and it also carries the cold start. The execution budget is 3 600 s.
+**If `measured_cold_start_s + 400 × measured_seconds_per_row > 2 700 s` (0.75 of the budget), STOP
+and report — do not submit.** A job killed at its own timeout spends the attempt and returns
+nothing but a bill. The fraction is 0.75 and it is fixed here, before the number that tests it
+exists. The prior it will be tested against: 4.071 s/row measured on an **A6000 pod**, 158 s cold
+start measured on **this** volume and class at srv-2c → 1 786 s, which fits. The prior is not the
+reading.
+
+**The cost rule.** Projected parity dollars = measured wall seconds × measured $/s, added to what
+the step has already spent. **If that total exceeds the $2.00 cap, STOP** — a cap is not raised to
+finish a run. The comparison the run is for, both figures from committed records: the pod's
+**$0.5993/1000 rows** and **$0.4611/pass** (`results/serving_5b.json :: adopted`).
+
+**The three outcomes, so none of them can be read into the record afterwards.**
+1. *Parity holds* — every 4.5h2-passed gate still passes and no head drops more than 0.005:
+   serverless is authorised as the production runtime by this measurement, and the cost reading
+   decides nothing about that, only about the economics 3.14 rests on.
+2. *A head drops more than 0.005, or a passed gate fails* — the runtime changed the answers. That is
+   a finding, reported with both readings side by side. It does not authorise a re-run, a re-tune or
+   a bar edit, and it does not by itself close the serverless question; it goes to the operator.
+3. *The run does not complete* — timeout, a failed job, a worker that never answers. The attempt is
+   spent. Whatever rows the volume dump holds are fetched and reported as a partial reading that is
+   NOT a parity number, and the abort ladder's rung is named.
+
+**What is not touched:** bars, the adapter, the gold set, test v4's contents, the team-lead files.
+The frozen v4 files are opened by the parity pass and by nothing else in this session — the smoke is
+the arm's own train carve, hash-pinned to `8347abd7…`.
