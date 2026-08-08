@@ -3897,3 +3897,14 @@ the retailer list for the same reason in miniature — it is an ordinary word in
 twenty channels for not being about shopping. That is the operator's call and the record names it.
 Every hit carries its quoted line and the term that matched — the «сочився» lesson, enforced by a
 test that would redden if the boundary were dropped.
+
+**D67 — a curated rewrite dropped a number another artifact prices off, and the suite caught it.**
+`/close` rewrites `knowledge/hot.md` for the next morning, and the rewrite removed the paragraph
+carrying **~$0.24/day** — the CA-MTL-3 volume's idle rate. That string is not prose:
+`scripts/volume_calc_5c1.py` greps it out of hot.md as one of its priced inputs, exactly so that
+"the volume costs about a quarter a day" is a quoted fact rather than a remembered one. Nine tests
+went red on `knowledge/hot.md: '~$0.24/day' is not in the file`, which is the guard doing its job.
+Restored inside a sentence that is still true after the delete — the rate is what STOPPED — with a
+note in the file saying the literal is load-bearing, so the next rewrite does not repeat it. The
+second literal the calculator reads, «80 GB is about what the» in the footguns, survived because
+that section was kept whole.
