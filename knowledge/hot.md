@@ -31,19 +31,42 @@ a61eccb docs(5c1): the operator's watchlist +3, committed unedited
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-08 (`/close`). `docs/PROMPT-5c1-day2.md` executed end to end: ten steps,
-plus two дозаявки the operator ruled mid-session. Registry **39 → 67**; **10 joins and 3 exits**
-(the join log has 13 rows today and three of them are exits); zero FloodWait; **$0**. Nine commits
-(`82cf2a1` → the close), `make check` **1,201 passed**. Long form with the numbers:
+**Last update:** 2026-08-08 (evening). `docs/PROMPT-5c1-yield.md` executed: the acceptance rulings
+on record, the bars pre-registered, the yield screen over all 66. **Telegram was not touched once
+— 0 of the 1 authorised resolve, $0.** Six commits (`e6926ca` → `c734003`), `make check` **1,229
+passed**. Long form: [[5c1-relevance-floor-and-discovery]]; the day-2 half is
 [[5c1-day2-composition-and-search]]. This block is hand-edited; the section above it is
 auto-generated — do NOT touch the marker.
 
 ## 🔥 What's Hot
 
-**THE REGISTRY IS 67 = launch 60 + watch 7**, and every row of today's diff is **PROVISIONAL
-pending the yield screen** (amendment 3.12's rider, clause 2): the operator signs no launch
-verdict and no loop run consumes this composition until the yield numbers exist. Excluded across
-the phase: **33**. Audience: regional 18 · health_fitness 17 · baby_food 8 · retail_official 7 ·
+**THE YIELD SCREEN REFUSES TO REPORT, AND THE REASON IS @atb_market_official.** The pre-registered
+positive control failed: in its own 28 days the project's anchor retail channel posted 25 times,
+**19 of them image-only**, and not one of the six texted posts names dairy, ice cream or a
+watchlist brand. Not the matcher — over the channel's whole 777-post store the same instrument
+finds the category 34 times. `results/yield_screen_5c1.json` says `verdicts_reportable: false`
+and the run exits 1; the numbers are all there, what the refusal withholds is the right to read
+the verdict column as a verdict. **The operator's first ruling is on the exam itself**: does an
+anchor channel that publishes inside images invalidate it, or is it working.
+
+**66 SOURCES: BAR A 29 · BAR B 8 · BELOW BOTH 36.** The shape is the finding — health_fitness
+**14 of 17** below both, baby_food 6 of 8, regional 9 of 17, while the recipe feeds nobody argued
+about take bar A seven for seven. The segments the whole phase recruited are where the taxonomy is
+thinnest. Nothing entered or left on this: removal is an operator ruling, never automatic.
+
+**«ВАРТО» OUTFIRES EVERY REAL BRAND.** It is АТБ's private label AND the ordinary Ukrainian word
+for "it is worth": **89 posts across 24 channels**, more than any other brand on the list.
+«Президент» is 33 posts, mostly Zelensky; «масл» + the lexicon's `ов` ending is the justice
+minister Маслов. Nothing was patched — the lexicon says `draft-not-law` and the watchlist is the
+operator's — but every count now breaks down to the term that made it with one quoted line, and
+each row carries `bar_A_sole_carriers`: **@polyakova_fitness clears bar A on «варто» alone,
+@myrhorodtown on «Президент» alone.** The pass list of 29 must not be read as 29 channels that
+carry the category.
+
+**THE REGISTRY IS 66 = launch 59 + watch 7**, @dikankaa excluded on the acceptance (ru 1.00 over
+20 decidable posts). Still **PROVISIONAL pending the operator's signature** — amendment 3.12's
+rider: the screen has run, and the signature waits on a ruling about a failed control. Excluded
+across the phase: **34**. Audience: regional 17 · health_fitness 17 · baby_food 8 · retail_official 7 ·
 cooking_recipes 7 · mothers_kids 5 · supermarket_deals 4 · food_quality 1. **mothers_kids stopped
 being an empty launch segment** — 3 live (@educationwithloven, @matusi_ukr, @mamo_nepsichuy)
 against 0 yesterday, which is what the whole harvest track existed for. Subscribers **+924,347**
@@ -85,49 +108,43 @@ threads** and @mandziak 1,048 over 104 — between them 81% of everything the wi
 The queue is 11,338 of 5a's v1 backlog plus these 4,880; `results/collect_5c1.json` carries the
 per-channel table and `run_loop.py --once --dry-run` renders the total.
 
-**AND THE TWO SCREENS DISAGREE ABOUT @dikankaa, BOTH RIGHT.** Census: RU_DOMINANT, ru 1.00 over 20
+**AND THE TWO SCREENS DISAGREED ABOUT @dikankaa, BOTH RIGHT.** Census: RU_DOMINANT, ru 1.00 over 20
 decidable posts, its own text covering «Волгоградской области ( Энгельс, Саратов )». Market screen:
 NO_EVIDENCE — those oblasts are not in a table of places a MARKET is in. Neither instrument
-subsumes the other. RU_DOMINANT on a fresh entry is REPORT ONLY by the brief; it is an open
-operator question.
+subsumes the other. RULED on the acceptance: EXCLUDED on the census, and the removal comment says
+which half of the operator's reason this repo holds an artifact for — the description is not in
+one, because the gate stores a title and never a bio.
 
 ## ⏭️ Next
 
-**`docs/PROMPT-5c1-yield.md` is tomorrow's order** — 113 lines, $0, offline except ONE resolve.
-It lands the acceptance rulings on record, pre-registers the bars, and runs the yield screen of
-SPEC amendment 3.12 (1): watchlist display_names + the category lexicon over each channel's
-collected 28-day window, posts and comments as SEPARATE currencies, thresholds fixed BEFORE any
-number is seen, over the whole registry. The registry diff stays PROVISIONAL until the operator
-reads `results/yield_screen_5c1.json` and signs.
+**THE OPERATOR'S SIGNATURE IS THE ONLY THING BLOCKING 5c2**, and it now has two questions in front
+of it, not one. First: the yield screen's own exam failed on @atb_market_official — rule whether
+an anchor channel that publishes inside images invalidates the control or is a finding about ATB.
+Second, once the column is readable: **36 channels below both bars**, `results/yield_screen_5c1.json
+:: summary.below_both`, with `bar_A_sole_carriers` beside every pass so a row carried by «варто»
+does not read like a row carried by «сир». Removal is the operator's word; nothing is automatic.
 
-**Day 2 was accepted the same evening and the four open questions came back answered** (STATUS,
-«Day-2 ИСПОЛНЕН И ПРИНЯТ»): **@dikankaa is EXCLUDED** — ru 1.00 plus RF oblasts in the channel's
-own description against the UA-only policy, so the registry becomes **66**; the **three RF_FLAGs
-are KEPT** with a per-row `war-news-explained` ruling, recorded through the `--close` pattern so
-the zero does not rot; the four closed-group flags are recorded as "the flag concerns a capability
-the assigned bucket does not use"; @KarlivkaLive confirmed. The theme of @pavlushaiyava and
-@mandziak goes to the yield screen with the watchlist +3 (Заріг · Миргородська корівка ·
-Яготинське для дітей — UA canon, RU spellings are matching aliases only).
+**A term ruling is available and was deliberately not taken.** «варто», «Президент» and «Ферма» are
+watchlist display names that are also ordinary Ukrainian words. The screen measures their leverage
+and patches nothing — the watchlist is the operator's list, and a stop-list written by the executor
+is where a screening instrument starts pretending to be law.
 
-Candidate stock for the next sitting, none of it actioned: `results/harvest_mothers_ua.json` — 79
-recommendations from three seeds, **77 not already ours, all broadcast**. Five city analogues the
-operator did NOT take (СИРЕНА 195,553, @poltava_insider 22,831, @sirena_kremenchuk 72,660,
-@treeshkremik 49,521, @kremenchuk_insider 11,563) are in
-`results/entry_gate_5c1.json :: notes.*_broadcast_analogue`. Reserve №4 (12 cooking handles) and
-the privates ledger stay RECORDED, not actioned.
+**The discovery session is the next contract** (amendment 3.12 (2)), priced and unspent: Premium
+€5.99/mo is ALREADY active on the collector account, **10 free full-text queries a day**, 10 Stars
+≈ €0.20 beyond it. A pass of the brand lexicon (~20–25 queries, +3 for the new brands) is $0 over
+two to three days or ~€2–3 in one. TGStat is out (RF service); Telemetr.io free is the fallback.
 
 ## 🚧 Blockers
 
 **None.** The 2026-08-07 wall cleared at 10:02:05 UTC and today's ~100 resolves drew no new one —
 because every collection run was scoped with `--only`. That is the discipline, not luck:
-`collectable()` returns the whole registry and a bare `--posts` over 67 sources is sixty-seven
-`ResolveUsernameRequest`s for the work of six. Tomorrow's order spends exactly one resolve and
-the same discipline applies to it.
+`collectable()` returns the whole registry and a bare `--posts` over 66 sources is sixty-six
+`ResolveUsernameRequest`s for the work of six.
 
-**One count to reconcile before anything else** (step 0 of the queued order, already measured
-here): the join log has **13 rows by their own `at`** on 08.08 — 10 `joined`, 2 `left`, 1
-`not_a_member` — while `grep -c 2026-08-08` returns **14**, because 07.08's FloodWait row carries
-`clears_at: 2026-08-08T10:02:05`. Three true numbers, three different questions. D73.
+**Nothing was spent and nothing is queued Telegram-side.** The yield session touched Telegram zero
+times: step 5's one authorised resolve was never needed, because @KarlivkaLive had already been
+gated on day 2 («Дозаявка №9», 08.08 10:48) and its window collected. The brief's «66 → 67» is one
+step off — the registry was 67 with it, minus @dikankaa is **66**, and there is no 67th to reach.
 
 **Recorded rather than open:** the CA-MTL-3 volume is deleted, so its **~$0.24/day** idle billing
 has stopped — that literal is load-bearing, not decoration: `scripts/volume_calc_5c1.py` greps it
