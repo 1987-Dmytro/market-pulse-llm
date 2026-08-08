@@ -343,7 +343,12 @@ def test_an_abort_with_no_evidence_is_refused(paths):
 
 
 def single_args(paths, **kwargs):
-    defaults = {"parity_record": paths["A"], "verdict_out": verdict.VERDICT}
+    defaults = {
+        "parity_record": paths["A"],
+        "verdict_out": verdict.VERDICT,
+        "vs_pod": None,
+        "drop_limit": verdict.DROP_LIMIT,
+    }
     return type("Args", (), defaults | kwargs)
 
 
@@ -616,3 +621,78 @@ def test_a_ladder_arm_that_died_timed_nothing(tmp_path):
     write(ladder, {"arms": {"16": {"failed": "chunk 0: OutOfMemoryError", "rows": []}}})
     with pytest.raises(SystemExit, match="timed nothing"):
         verdict.from_ladder(ladder, "16")
+
+
+# --- srv-2d: the 0.005 clause, against the same config on the other runtime ---
+
+
+def baseline_with_parity(tmp_path: Path, values: dict) -> Path:
+    """A parity record that has already been scored — i.e. one carrying a stamped block."""
+    path = tmp_path / "parity_5b_a.json"
+    write(
+        path,
+        parity_record("A", values)
+        | {
+            "parity": {
+                "runtime": "pod-loopback",
+                "values": {
+                    "G1a": values["G1a"],
+                    "G1b": {"rate": values["G1b"]["value"], "fixed": values["G1b"]["fixed"]},
+                    "G1c": values["G1c"],
+                    "G1d": values["G1d"],
+                    "G1e": values["G1e"],
+                },
+                "written_at": "2026-08-06T18:00:00+00:00",
+            }
+        },
+    )
+    return path
+
+
+def scored_values(values: dict) -> dict:
+    """`records.arm_values`' shape, which is what the rule is handed."""
+    return {
+        "G1a": values["G1a"],
+        "G1b": {"rate": values["G1b"]["value"], "fixed": values["G1b"]["fixed"]},
+        "G1c": values["G1c"],
+        "G1d": values["G1d"],
+        "G1e": values["G1e"],
+    }
+
+
+def test_an_identical_runtime_drops_nothing(tmp_path):
+    base = baseline_with_parity(tmp_path, ARM_A)
+    rule = verdict.drops_against(scored_values(ARM_A), base)
+    assert rule["deltas"] == {"G1a": 0.0, "G1b": 0.0, "G1c": 0.0, "G1d": 0.0, "G1e": 0.0}
+    assert rule["holds"] and rule["heads_over_limit"] == []
+
+
+def test_a_head_that_drops_past_the_limit_is_named(tmp_path):
+    base = baseline_with_parity(tmp_path, ARM_A)
+    moved = dict(ARM_A, G1d=ARM_A["G1d"] - 0.006, G1e=ARM_A["G1e"] - 0.004)
+    rule = verdict.drops_against(scored_values(moved), base)
+    assert rule["heads_over_limit"] == ["G1d"], "0.004 is inside the clause and 0.006 is not"
+    assert rule["holds"] is False
+    assert rule["worst_drop"] == pytest.approx(-0.006)
+
+
+def test_a_head_that_rose_is_reported_and_is_never_a_failure(tmp_path):
+    """The amendment asks for the delta, not its absolute value: a runtime that scored
+    higher still moved, and the record has to show it."""
+    base = baseline_with_parity(tmp_path, ARM_A)
+    rule = verdict.drops_against(scored_values(dict(ARM_A, G1c=ARM_A["G1c"] + 0.05)), base)
+    assert rule["deltas"]["G1c"] == pytest.approx(0.05)
+    assert rule["holds"]
+
+
+def test_the_limit_is_the_amendments_own_number():
+    assert verdict.DROP_LIMIT == 0.005
+
+
+def test_an_unscored_baseline_is_refused_rather_than_compared_to_nothing(tmp_path):
+    """An eval record without a stamped parity block was never compared to the anchor;
+    reading its gates as if they were a baseline would invent one."""
+    path = tmp_path / "unscored.json"
+    write(path, parity_record("A", ARM_A))
+    with pytest.raises(SystemExit, match="no stamped"):
+        verdict.drops_against(scored_values(ARM_A), path)

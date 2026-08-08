@@ -108,6 +108,55 @@ def anchor_values(recorded: dict) -> dict:
     return flat(recorded["arms"][recorded["decision"]["selected"]]["values"])
 
 
+DROP_LIMIT = 0.005
+"""SPEC amendment 3.11 (2)'s second clause, as a number: "no gate head drops more than 0.005".
+
+The first clause — every 4.5h2-passed gate stays passing — is `verdicts` plus `under_bar`
+and was already code. This one was prose in three briefings and got compared by eye, so it
+is code now: srv-2d measures the same config A on a *different* runtime, and the baseline
+the clause names is the pod reading of that identical config, not the 4.5h2 anchor. On the
+records this repository holds those two happen to be the same numbers to the last digit
+(`results/parity_5b_a.json :: parity.deltas_vs_45h2` is 0.0 across all five heads), which
+is a fact worth stating and not a reason to conflate them.
+"""
+
+
+def drops_against(values: dict, baseline_record: Path, limit: float = DROP_LIMIT) -> dict:
+    """Per-head deltas against another parity record's stamped values, and what fails.
+
+    A drop is negative by construction here: `delta = this run − the baseline`, so the rule
+    reads "no delta below −limit". Rises are reported with the same sign convention and are
+    never a failure — a runtime that scored *higher* is still a runtime that moved, and the
+    amendment asks for the delta, not for its absolute value.
+    """
+    if not baseline_record.exists():
+        raise SystemExit(f"{baseline_record} is missing — there is no baseline to compare against")
+    recorded = json.loads(baseline_record.read_text(encoding="utf-8"))
+    block = recorded.get("parity")
+    if not block or "values" not in block:
+        raise SystemExit(
+            f"{baseline_record} carries no stamped `parity.values` — an eval record that was"
+            " never scored against the anchor is not a parity baseline"
+        )
+    baseline = flat(block["values"])
+    deltas = {
+        head: round(head_value(flat(values)[head]) - head_value(baseline[head]), 6)
+        for head in HEADS
+    }
+    over = sorted(head for head, delta in deltas.items() if delta < -limit)
+    return {
+        "baseline_record": str(baseline_record),
+        "baseline_runtime": block.get("runtime"),
+        "baseline_written_at": block.get("written_at"),
+        "baseline_values": {head: head_value(baseline[head]) for head in HEADS},
+        "limit": limit,
+        "deltas": deltas,
+        "worst_drop": min(deltas.values()),
+        "heads_over_limit": over,
+        "holds": not over,
+    }
+
+
 def read_parity(path: Path, config: str) -> dict:
     """One config's eval record, refusing anything that is not the half it claims."""
     if not path.exists():
@@ -398,7 +447,25 @@ def run_single(args) -> int:
         was = recorded["arms"][recorded["decision"]["selected"]]["values"]["G1a"][language]
         print(f"{'  G1a ' + language:26}{pod_value:>12.4f}{was:>14.4f}{pod_value - was:>+12.4f}")
 
+    drop_rule = None
+    if args.vs_pod:
+        drop_rule = drops_against(values, args.vs_pod, args.drop_limit)
+        print(
+            f"\n--- the 0.005 clause, against {args.vs_pod} ({drop_rule['baseline_runtime']}) ---"
+        )
+        for head in HEADS:
+            delta = drop_rule["deltas"][head]
+            flag = "OVER" if head in drop_rule["heads_over_limit"] else ""
+            print(f"{head:26}{drop_rule['baseline_values'][head]:>12.4f}{delta:>+12.4f}  {flag}")
+        print(f"worst drop {drop_rule['worst_drop']:+.4f} against a limit of {drop_rule['limit']}")
+
     print(f"\npassed {sum(1 for v in verdicts.values() if v['pass'])} of {len(HEADS)}")
+    if drop_rule and not drop_rule["holds"]:
+        print(
+            f"\nLOUD FINDING: {drop_rule['heads_over_limit']} dropped more than"
+            f" {drop_rule['limit']} against the same config on the other runtime. Reported with"
+            " both readings; it authorises no re-run, no re-tune and no bar edit."
+        )
     if under_bar:
         print(
             f"\nLOUD FINDING: {under_bar} passed at 4.5h2 and land UNDER the bar on the"
@@ -428,6 +495,7 @@ def run_single(args) -> int:
             "verdicts": verdicts,
             "passed": sum(1 for v in verdicts.values() if v["pass"]),
             "under_bar": under_bar,
+            "drop_rule": drop_rule,
         }
     )
     write(args.parity_record, record | {"parity": payload})
@@ -692,6 +760,19 @@ def main(argv: list[str] | None = None) -> int:
         " record and the 4.5h2 anchors, the adoption rule applied as code",
     )
     parser.add_argument("--parity-record", type=Path, default=PARITY["A"])
+    parser.add_argument(
+        "--vs-pod",
+        type=Path,
+        help="--single: also apply amendment 3.11 (2)'s 0.005 clause against another parity"
+        " record's stamped values — for srv-2d, the pod reading of the identical config A."
+        " The result is stamped into the record as `parity.drop_rule`.",
+    )
+    parser.add_argument(
+        "--drop-limit",
+        type=float,
+        default=DROP_LIMIT,
+        help="--vs-pod: the clause's threshold. It is 0.005 and it is not moved to fit a run.",
+    )
     parser.add_argument(
         "--baseline-record",
         type=Path,
