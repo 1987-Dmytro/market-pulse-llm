@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-08 21:52:44 (every SessionStart)
+**Auto-refreshed:** 2026-08-08 22:19:45 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+84696d6 feat(srv-2c): the unwrapped control answers too -- the wrapper was never the cause
+d1c3aaf docs(srv-2c): the unwrapped control's outcomes, registered before it is bought
+64bbd1a docs(srv-2c): the day's log, and the live state stops asserting a cleared blocker
 475cc73 chore(srv-2c): the spend figure in the record, re-read after settlement
 b30652d feat(srv-2c): the boot log exists, and it says the worker starts and answers
-cf4cf71 docs(srv-2c): the outcome space and the rungs, pre-registered before the spend
-fc9cf02 chore(srv-2c): the $0.75 cap and its anchor land before the first billable second
-37720fc fix(srv-2c): the spend guard could not see a serverless bill
 ```
 
 ## 📋 Recent decisions
@@ -31,11 +31,13 @@ fc9cf02 chore(srv-2c): the $0.75 cap and its anchor land before the first billab
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-08 21:55 (srv-2c close). `docs/PROMPT-srv-2c.md` executed — **the boot log
-exists and our serverless worker answers**, $0.0654 of its $0.75 cap, record
-`results/srv2c_bootlog.json`. Earlier the same evening `docs/PROMPT-srv-2b.md` ran and **ABORTED at
+**Last update:** 2026-08-08 22:20 (srv-2c close, control included). `docs/PROMPT-srv-2c.md`
+executed — **the boot log exists, our serverless worker answers, and the operator-bought control
+shows the unwrapped command answers too**: srv-2b's hang was the platform, not us. **$0.1006** of
+its $0.75 cap, record `results/srv2c_bootlog.json`. Earlier the same evening `docs/PROMPT-srv-2b.md` ran and **ABORTED at
 the handshake-timeout rung, $0.9999 of its $4.00 cap** — that abort is accepted, and srv-2c has now
-falsified the diagnosis it carried. The volume `qw4nwleanc` (100 GB, EU-RO-1) is the only thing
+falsified the diagnosis it carried — twice over, the second time with a control the operator paid
+for. The volume `qw4nwleanc` (100 GB, EU-RO-1) is the only thing
 either session left standing; every endpoint, template and pod is deleted and proven deleted by
 listing. Eleven commits across the two (`066c282` → `475cc73`), `make check` **1,271 passed**.
 Earlier the same evening: srv-2a accepted, and the caption pilot at **$0.0180 of its $0.10 cap**. The runtime ADR is [[srv2-serverless-runtime-target]]; the yield half is
@@ -252,13 +254,18 @@ CRLF), and the image's `Entrypoint nvidia_entrypoint.sh` does exec its CMD. The 
 `results/srv2c_bootlog.json`, log untrimmed. The team lead's acceptance of the srv-2b abort stands
 and **the parity attempt is still unspent** — test v4 was never opened.
 
-**WHAT srv-2c DID NOT ANSWER: why srv-2b hung.** Two things differed, not one — the wrapper *and* a
-day of platform time. Top hypothesis: a blocked write to an undrained stdout pipe (`python -u`
-writes straight to fd 1, and the console was not rendering for either side that evening). The
-experiment that separates it from "the platform was broken on 08-08" is **one endpoint with the
-unwrapped start command and one job, ≈ $0.06** — not bought, it is the operator's call. Either way
-the redirect should be permanent: RunPod has **no worker-log channel outside the console** (no
-`logs` verb in the CLI, 400 from every `rest.runpod.io` worker path), so the volume is the only
+**AND THE CONTROL SAYS srv-2b'S HANG WAS THE PLATFORM, NOT US.** The operator bought the separating
+experiment on the report: srv-2b's **exact** argv `["bash","/runpod-volume/start.sh"]`, one job,
+twenty minutes after the wrapped run on the same volume, datacenter and class —
+**COMPLETED**, `delay 26.9 s · exec 212.0 s`, same `info` payload. So the wrapper was never the
+cause, and the blocked-stdout hypothesis is demoted: it may describe 08-08 if the log plane was
+degraded then, but it is not a standing property of running without the redirect. **The fault
+srv-2b charged to our container was not ours.** The control is clean on the code axis — the
+volume's checkout moved `48948d7a` → `cf4cf71` between the runs and the diff over
+`serve_handler.py`, `start_5b_worker.sh` and `src/market_pulse/` is empty. Recorded but NOT called
+a finding: unwrapped executed 34% slower (212.0 s vs 158.4 s), n=1 against n=1 on different
+workers. **Keep the redirect anyway** — RunPod has **no worker-log channel outside the console**
+(no `logs` verb in the CLI, 400 from every `rest.runpod.io` worker path), so the volume is the only
 durable place our worker's output can go.
 
 **THE VOLUME PERSISTS AND ITS CONTENTS ARE WRITTEN DOWN.** `qw4nwleanc` holds `hf/` at revision
