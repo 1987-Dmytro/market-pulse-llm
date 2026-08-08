@@ -2,24 +2,24 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-08 15:39:06 (every SessionStart)
+**Auto-refreshed:** 2026-08-08 18:07:42 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-3f80298 fix(5c1): the searches' verdicts reach the record, and 13 log rows are not 13 joins
-a61eccb docs(5c1): the operator's watchlist +3, committed unedited
-3b0b550 feat(5c1): the window closes — 4,880 comments, and the two handles step 7 found carry 81% of them
-240edac fix(5c1): one section banner, not three — and the day's notes
-9c832ef feat(5c1): step 7 found what the town-name scan missed — registry 61 to 67
+6b15ebf docs(5c1): the pilot billed twice the projected rate — both numbers, both reasons
+957767f feat(5c1): the images were the assortment — ATB goes 0 to 13 for $0.018
+f67cf04 feat(5c1): ATB's 19 silent posts fetched — 159 images, no wall
+f2af877 feat(5c1): the image census — one full pass of captions costs $0.12
+76cf382 fix(5c1): a third of the removal list was silence, not emptiness
 ```
 
 ## 📋 Recent decisions
 
+- `5c1-relevance-floor-and-discovery.md` — 5c1 — the relevance floor: 66 channels were admitted without anyone measuring the category
 - `INDEX.md` — Decision records
 - `5c1-day2-composition-and-search.md` — 5c1 day 2 — three "city feeds" were chats, and the search for replacements outperformed the scan
-- `5b2-batch-measurement.md` — 5b.2 — the batch measurement failed on memory, and serving is fixed at batch 1
 
 ## 📅 Recent daily logs
 
@@ -31,23 +31,48 @@ a61eccb docs(5c1): the operator's watchlist +3, committed unedited
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-08 (evening). `docs/PROMPT-5c1-yield.md` executed: the acceptance rulings
-on record, the bars pre-registered, the yield screen over all 66. **Telegram was not touched once
-— 0 of the 1 authorised resolve, $0.** Six commits (`e6926ca` → `c734003`), `make check` **1,229
-passed**. Long form: [[5c1-relevance-floor-and-discovery]]; the day-2 half is
+**Last update:** 2026-08-08 18:05 (`/save`). `docs/PROMPT-5c1-captions-pilot.md` executed, all five
+steps: the two noise rulings on record, the image census over all 66 with its price projection,
+ATB's 19 silent posts fetched and 18 captioned, the matcher re-run over text+captions. **$0.0180 of
+the $0.10 cap.** Four commits (`f2af877` → `6b15ebf`), `make check` **1,257 passed** (1,241 →
+1,257). The yield half is [[5c1-relevance-floor-and-discovery]]; the day-2 half is
 [[5c1-day2-composition-and-search]]. This block is hand-edited; the section above it is
 auto-generated — do NOT touch the marker.
 
 ## 🔥 What's Hot
 
-**THE YIELD SCREEN REFUSES TO REPORT, AND THE REASON IS @atb_market_official.** The pre-registered
-positive control failed: in its own 28 days the project's anchor retail channel posted 25 times,
-**19 of them image-only**, and not one of the six texted posts names dairy, ice cream or a
-watchlist brand. Not the matcher — over the channel's whole 777-post store the same instrument
-finds the category 34 times. `results/yield_screen_5c1.json` says `verdicts_reportable: false`
-and the run exits 1; the numbers are all there, what the refusal withholds is the right to read
-the verdict column as a verdict. **The operator's first ruling is on the exam itself**: does an
-anchor channel that publishes inside images invalidate it, or is it working.
+**THE FAILED CONTROL WAS ABOUT MODALITY, AND READING THE IMAGES ANSWERS IT: ATB GOES 0 → 13.**
+Same window, same matcher, same lexicon, same pre-registered bar (`1aa89818…`, unmoved) — the only
+thing added is a caption for each silent post. `results/caption_rematch_5c1.json`: **before 0 of 25
+relevant, bar A FAIL** (re-derived here as a control, and it reproduces the signed screen exactly)
+→ **after 13 of 25, bar A PASS**. It survives brand ablation: strike every brand alias, including
+ATB's own «Своя Лінія» (12 of the 13 hits), and **10 posts still carry dairy or ice-cream**;
+`bar_A_sole_carriers` is **empty** — the pass hangs on no single term. Five captioned posts are
+honest misses: the «7 ДНІВ» leaflets sell bags, toys and a metal glider, and the matcher fires on
+nothing. **RULED on acceptance: a private label IS a full brand hit**, not the executor's «miss of
+the second kind» — a chain's own label inside its own channel is the most valuable class of hit
+there is, so v2 carries a `private_label` flag from the registry and counts those hits in full;
+the ablation is a side metric that demotes nothing. This does NOT lift `verdicts_reportable:
+false` on the yield screen — that is screen v2's job.
+
+**THE BLINDNESS IS 2.8% OF THE CORPUS AND IT IS NOT EVENLY SPREAD.** `results/image_census_5c1.json`
+over 66 channels and 9,343 windowed posts, counted by `parents.context` state: **261 unreadable
+today**, 250 of them carrying media, 11 carrying nothing at all. By segment — supermarket_deals
+**22.6%** · health_fitness **16.2%** · retail_official **14.9%** against regional **0.5%**. The two
+segments the screen just failed on content are the two that publish in pictures. Worst rows:
+@atb_aktsiyi 46 of 53 · @VARUS_channel 32 of 135 · @matusi_ukr 23 · @educationwithloven 22 ·
+@atb_market_official 19 of 25. Every channel's split is reconciled against the signed screen and a
+mismatch stops the run.
+
+**THE PILOT BILLED TWICE THE PROJECTED RATE, AND BOTH NUMBERS ARE THE OPERATOR'S TO READ.** The
+census had to project at 4.5g2's $0.000483/post — the brief said so and the file was committed
+before a cent was spent, which is what makes it a projection. The pilot then billed **$0.000948
+per post asked** ($0.001001 per usable caption), 1.96×, and album size does not explain it (5.37
+images/post against 4.5g2's 5.33). One full pass over the 250 captionable posts: **$0.12 upper /
+$0.06 discounted at the projected rate, $0.24 / $0.12 at the measured one**; the **232 still
+uncaptioned** (the 18 are bought, 4350 is billed-and-unusable) are $0.22 / $0.11. The 0.512
+discount is 4.5g2's photo/poll/unreadable split — this pilot's own population came out **19 photos
+of 19**, so a retail-leaflet run sits nearer the upper bound.
 
 **66 SOURCES: BAR A 29 · BAR B 8 · BELOW BOTH 36 — BUT ONLY 24 OF THOSE ARE A CONTENT FINDING.**
 Twelve rows could not be graded at all: nine have **0 posts in the window** and three have fewer
@@ -70,7 +95,7 @@ carry the category.
 
 **THE REGISTRY IS 66 = launch 59 + watch 7**, @dikankaa excluded on the acceptance (ru 1.00 over
 20 decidable posts). Still **PROVISIONAL pending the operator's signature** — amendment 3.12's
-rider: the screen has run, and the signature waits on a ruling about a failed control. Excluded
+rider: the failed control has been ruled on, and the signature now waits on screen v2. Excluded
 across the phase: **34**. Audience: regional 17 · health_fitness 17 · baby_food 8 · retail_official 7 ·
 cooking_recipes 7 · mothers_kids 5 · supermarket_deals 4 · food_quality 1. **mothers_kids stopped
 being an empty launch segment** — 3 live (@educationwithloven, @matusi_ukr, @mamo_nepsichuy)
@@ -122,23 +147,36 @@ one, because the gate stores a title and never a bio.
 
 ## ⏭️ Next
 
-**THE OPERATOR'S SIGNATURE IS THE ONLY THING BLOCKING 5c2**, and it now has two questions in front
-of it, not one. First: the yield screen's own exam failed on @atb_market_official — rule whether
-an anchor channel that publishes inside images invalidates the control or is a finding about ATB.
-Second, once the column is readable: **24 channels below both bars on a window that could grade
-them**, `results/yield_screen_5c1.json :: summary.below_both_gradeable` — with the twelve the
-window could not grade listed separately, and `bar_A_sole_carriers` beside every pass so a row
-carried by «варто» does not read like a row carried by «сир». Removal is the operator's word; nothing is automatic.
+**THE FULL RUN IS AUTHORISED AND QUEUED: `docs/PROMPT-5c1-captions-full.md`.** The pilot was
+accepted the same evening (STATUS, «Пилот ИСПОЛНЕН И ПРИНЯТ: модальность, не матчер») and the
+team lead signed off on both terms it measured. Two steps, **one paid, cap $0.35** out of the
+untouched $1 OpenRouter balance: caption the **232 remaining** no-text media posts named by
+`results/image_census_5c1.json` at the pilot's measured $0.000948 (≈$0.22 + margin), own anchor,
+one attempt, STOP over cap and report what was bought — then **yield screen v2** over
+text+captions across the whole registry into `results/yield_screen_5c1_v2.json`, bars UNCHANGED
+(`1aa89818…` cited), v1's record untouched, ATB's window control expected to pass this time. The
+report is the v1 → v2 movement per audience plus one quoted line per newly-passing channel. NOT
+started here — `/save` is a checkpoint.
 
-**A term ruling is available and was deliberately not taken.** «варто», «Президент» and «Ферма» are
-watchlist display names that are also ordinary Ukrainian words. The screen measures their leverage
-and patches nothing — the watchlist is the operator's list, and a stop-list written by the executor
-is where a screening instrument starts pretending to be law.
+**Also ruled on acceptance: the captions stay on the cheap API path.** A chat session as a data
+source is forbidden (numbers with no model pin and no price), and a self-hosted Gemma on a pod
+costs $0.5+ out of the GPU cap and is not comparable with the captions already bought. $0.22 a
+batch is the cheapest honest route.
 
-**The discovery session is the next contract** (amendment 3.12 (2)), priced and unspent: Premium
-€5.99/mo is ALREADY active on the collector account, **10 free full-text queries a day**, 10 Stars
-≈ €0.20 beyond it. A pass of the brand lexicon (~20–25 queries, +3 for the new brands) is $0 over
-two to three days or ~€2–3 in one. TGStat is out (RF service); Telemetr.io free is the fallback.
+**THE LAUNCH SIGNATURE IS STILL FROZEN — it is the operator's, next session, on the v2 numbers.**
+`results/yield_screen_5c1.json` still reads `verdicts_reportable: false` and **the pilot does not
+lift it** — lifting it is screen v2's job, and every registry action waits behind it.
+The operator's v1 readings stand: a text-only screen is systematically blind to image-first
+segments, so nothing is cut from those on v1 numbers; the two rows that held bar A on noise
+(@polyakova_fitness on «варто», @myrhorodtown on «Президент») **count as BELOW bar A** and now
+carry that ruling in the record itself (`--close`, `summary.pass_A_ruled_below_bar_A`); matcher
+guards for «Варто»/«Президент» are deferred to the 5c3 lexicon session.
+
+**The discovery session is still a separate future contract** (amendment 3.12 (2)), priced and
+unspent: Premium €5.99/mo ALREADY active on the collector account, **10 free full-text queries a
+day**, 10 Stars ≈ €0.20 beyond it — a brand-lexicon pass (~20–25 queries, +3 for the new brands) is
+$0 over two to three days or ~€2–3 in one. TGStat is out (RF service); Telemetr.io free is the
+fallback.
 
 ## 🚧 Blockers
 
@@ -147,10 +185,13 @@ because every collection run was scoped with `--only`. That is the discipline, n
 `collectable()` returns the whole registry and a bare `--posts` over 66 sources is sixty-six
 `ResolveUsernameRequest`s for the work of six.
 
-**Nothing was spent and nothing is queued Telegram-side.** The yield session touched Telegram zero
-times: step 5's one authorised resolve was never needed, because @KarlivkaLive had already been
-gated on day 2 («Дозаявка №9», 08.08 10:48) and its window collected. The brief's «66 → 67» is one
-step off — the registry was 67 with it, minus @dikankaa is **66**, and there is no 67th to reach.
+**$0.0180 spent today, all of it on the caption pilot, and the account is idle again.** The yield
+session touched Telegram zero times (step 5's one authorised resolve was never needed —
+@KarlivkaLive had been gated on day 2 at 10:48, so the brief's «66 → 67» was one step behind the
+registry). The pilot's fetch brought the account back for 19 posts and 159 images and drew **no
+FloodWait**; raw v1 is byte-identical before and after, `shasum -c results/raw_v1_baseline.sha256`
+6/6. The money sits on the pilot's OWN anchor, `results/spend_5c1_captions.json` — $0.0180 against
+its $0.10 cap, and 4.5g2's $0.75 balance was never touched.
 
 **Recorded rather than open:** the CA-MTL-3 volume is deleted, so its **~$0.24/day** idle billing
 has stopped — that literal is load-bearing, not decoration: `scripts/volume_calc_5c1.py` greps it
@@ -160,6 +201,16 @@ ours by RunPod's own hub worker failing identically. Production is a stop-after 
 per-row dump is permanently lost; no pod, endpoint or template exists.
 
 ## ⚠️ Footguns for the next run
+
+**`relabel.read_ledger` writes a provenance string that is wrong for anything past phase 4.** Its
+note renders `f"docs/PROMPT-{phase[0]}.{phase[1:]}.md"` — fine for `45g2`, and for any 5c1 phase
+name it produces `docs/PROMPT-5.c1captions.md`, a path that does not exist, INSIDE a money record.
+`scripts/caption_atb_5c1.py` writes its own three-key anchor instead. Copy that, not the helper.
+
+**A caption's price is not stable across phases: 4.5g2 measured $0.000483/post, this pilot paid
+$0.000948.** Same model, same pinned endpoint, same prompt, same ~5.35 images per request — the
+rate still doubled. Any projection quoted from an old record is an estimate with a factor-of-two
+error bar; say so, and reprice from the most recent run that actually paid.
 
 **Two Telethon clients must never share `marketpulse.session`, and the join pace makes that easy
 to forget.** `seconds_until_next_join` reads the LAST timestamp in `results/joins_5c1.jsonl`, so
