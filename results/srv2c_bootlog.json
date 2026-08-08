@@ -206,18 +206,25 @@
     "anchor_file": "results/spend_srv2c.json",
     "anchor_balance": 15.4915993671,
     "committed_before_the_first_billable_action": "commit fc9cf02",
-    "step_spent_usd_at_close": 0.0654,
+    "step_spent_usd_at_close": 0.1377,
     "reading": "balance delta, the binding one; billing rows for today's own resources have not settled",
     "what_was_bought": [
       "one serverless job: delay 15.864 s + execution 158.424 s at $0.000307/s",
       "one pod: RTX 2000 Ada, $0.24/h, 19:38:01-19:43:05 UTC = 304 s = $0.0203",
-      "the volume's run-rate line, $0.009722/h, which is not session spend"
+      "the volume's run-rate line, $0.009722/h, which is not session spend",
+      "the unwrapped control: endpoint 20:12:57-20:17:27, one job, delay 26.9 s + execution 212.0 s"
     ],
     "settlement_lag_note": "neither today's endpoint nor today's pod has a billing row yet, so the final figure will rise above the $0.0506 the delta shows. The projection from the measured rates is about $0.10-0.11.",
     "phase4": {
-      "spent_usd": 19.5738,
+      "spent_usd": 19.6461,
       "cap_usd": 25.0,
-      "remaining_usd": 5.4262
+      "remaining_usd": 5.3539
+    },
+    "the_delta_keeps_rising_after_deletion": {
+      "20:12 (before the control was created)": 0.0751,
+      "20:17 (minutes after every resource was deleted)": 0.1006,
+      "20:22 (five minutes later, nothing running)": 0.1377,
+      "what_it_means": "the balance delta lags the resource by minutes, so a figure read the instant a run ends is a floor and not a total. Nothing was running after 20:17:27 -- pod list -a, serverless list and the console-free listings all say so -- and the number still rose $0.037. Any 'spend at close' needs a settling period or an explicit 'still rising' beside it."
     }
   },
   "the_guard_fix": {

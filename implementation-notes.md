@@ -4706,3 +4706,11 @@ ours". That sentence is now wrong and the correction lives here and in `results/
 rather than in that file — a record of what a session observed is not rewritten by a later one.
 What srv-2b actually established stands: the class allocates with a volume, the model fits, the
 stack matches, `workersMin 0` is real. What it inferred about our container does not.
+
+**Dv33 — the balance delta keeps rising after everything is deleted.** srv-2c's step spend read
+$0.1006 minutes after the last resource was destroyed at 20:17:27 and **$0.1377** five minutes
+later, with `pod list -a`, `serverless list` and the volume listing all confirming nothing was
+running in between. The delta lags the resource, so a figure read the instant a run ends is a floor,
+not a total. Every past "spent $X at close" in this repository carries that caveat; from here they
+carry it explicitly. **srv-2c closes at $0.1377 of its $0.75 cap** — the wrapped run, the pod, and
+the operator's control together.
