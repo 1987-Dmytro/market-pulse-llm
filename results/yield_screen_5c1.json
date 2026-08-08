@@ -1,0 +1,3967 @@
+{
+  "generated_at": "2026-08-08T14:09:38+00:00",
+  "phase": "5c1 — the relevance floor",
+  "asks": "how much of the tracked taxonomy is in each channel's collected 28-day window",
+  "contract": "docs/SPEC.md amendment 3.12 (1); docs/PROMPT-5c1-yield.md step 4",
+  "report_only": "nothing enters or leaves the registry on this screen. Zero-yield members are surfaced with their numbers; removal is an operator ruling, never automatic",
+  "preregistration": {
+    "path": "results/yield_bars_5c1.preregistration.json",
+    "sha256": "1aa898180b01762d909e29997db659d2dc70931816855f4c0325b1ea1c892f2b",
+    "bar_A_relevant_posts_28d": 4,
+    "bar_B_comments_under_relevant_28d": 10,
+    "ruled_by": "operator 2026-08-08",
+    "currencies": "posts and comments are separate; never blended"
+  },
+  "lexicon": {
+    "path": "data/category_lexicon_draft.json",
+    "sha256": "1225ad7597f3328f2c725afba0d92458d18b95924438575bc2d46131371dd2b3",
+    "status": "draft-not-law",
+    "role": "a screening instrument, never the category law — 5c3 owns the law. Only the `tracked` half is read: dairy and ice-cream are the taxonomy, the `draft` families beside them are other people's categories",
+    "known_collision": "сир + ий matches `креветка сира` (raw shrimp) on 11 posts"
+  },
+  "registry": {
+    "path": "config/registry.yaml",
+    "sha256": "c82d0cff1ee7d1bbf7c40d46bbcb02662f44898e4bc6980a2d75ced9cce46a2e",
+    "sources": 66,
+    "watchlist_brands": 23,
+    "note": "the watchlist revision this run read — G1e history is never re-scored on it"
+  },
+  "window": {
+    "days": 28,
+    "shared": {
+      "since": "2026-07-10T10:33:14+00:00",
+      "until": "2026-08-07T10:33:14+00:00"
+    },
+    "rule": "since <= date < until, half-open, so the bar counts exactly 28 days. Channels collected after the window's end contribute nothing past it",
+    "raw_v1": "the four original channels are screened over their own last 28 days: their store is the pinned raw v1 corpus, collected before this window's `since` existed. The shared-window reading is published beside them under `alternative_window`"
+  },
+  "rules": {
+    "currencies": "posts and comments are separate; never blended",
+    "bar_A": "relevant posts in the window >= 4",
+    "bar_B": "comments under relevant posts >= 10",
+    "bar_B_na": "no readable comment source — no comments file for the channel. A group that WAS read and produced nothing scores a measured zero, which is a FAIL",
+    "relevant_post": "a post whose text names a tracked category group or a watchlist brand",
+    "comment_join": "comment.parent_msg_id == post.msg_id — the CHANNEL post id. It is never compared to reply_to_msg_id, which lives in the discussion group's own id space",
+    "matching": "casefold; categories by the lexicon's own matcher and endings as shipped; brands by the display name exactly as written, the matcher G1e is scored against. A hit counts once per post",
+    "nested_aliases": "«Яготинське для дітей» contains «Яготинське» and the operator tracks them separately, so the longer span wins and the shorter one inside it is dropped",
+    "below_both": "cleared neither bar — bar A FAIL and bar B not PASS",
+    "evidence": "a quoted line with the term that matched it, never a counter"
+  },
+  "controls": {
+    "@atb_market_official": {
+      "kind": "positive",
+      "expected": "clears bar A (4 relevant posts) on its own window",
+      "window_source": "raw_v1_own_last_28d",
+      "relevant_posts": 0,
+      "measured": "FAIL",
+      "evidence": null,
+      "ok": false
+    },
+    "@silposilpo": {
+      "kind": "positive",
+      "expected": "clears bar A (4 relevant posts) on its own window",
+      "window_source": "raw_v1_own_last_28d",
+      "relevant_posts": 11,
+      "measured": "PASS",
+      "evidence": {
+        "kind": "category",
+        "name": "dairy:сир",
+        "matched": "сир",
+        "line": "🧀Сир кисломолочний «Біло» 5%, 1000 г зі знижкою 39% – 169 грн",
+        "msg_id": 3776,
+        "date": "2026-07-04T06:52:36+00:00"
+      },
+      "ok": true
+    },
+    "@VARUS_channel": {
+      "kind": "positive",
+      "expected": "clears bar A (4 relevant posts) on its own window",
+      "window_source": "raw_v1_own_last_28d",
+      "relevant_posts": 65,
+      "measured": "PASS",
+      "evidence": {
+        "kind": "brand",
+        "name": "varus-pl",
+        "matched": "varus",
+        "line": "Вмикайте трансляцію, обирайте свого фаворита та насолоджуйтеся грою. А про смак футбольного вечора подбає VARUS! 🧡",
+        "msg_id": 10110,
+        "date": "2026-06-29T13:37:43+00:00"
+      },
+      "ok": true
+    },
+    "@msuaaaa": {
+      "kind": "positive",
+      "expected": "clears bar A (4 relevant posts) on its own window",
+      "window_source": "raw_v1_own_last_28d",
+      "relevant_posts": 6,
+      "measured": "PASS",
+      "evidence": {
+        "kind": "brand",
+        "name": "varto",
+        "matched": "варто",
+        "line": "Зараз варто так само підтримати Сніжну Панду 🧻",
+        "msg_id": 10412,
+        "date": "2026-07-01T15:42:40+00:00"
+      },
+      "ok": true
+    },
+    "negative control :: a fitness post with no taxonomy": {
+      "kind": "negative",
+      "expected": "no category and no brand — a discount and a percentage are not the category",
+      "line": "Розклад тренувань на тиждень: понеділок — ноги, середа — спина, п'ятниця — руки. Реєстрація за посиланням, знижка 20% до кінця місяця.",
+      "measured": [],
+      "ok": true
+    }
+  },
+  "verdicts_reportable": false,
+  "term_evidence": {
+    "dairy:сир": {
+      "posts": 318,
+      "channels": 27,
+      "sole_carrier_for": [
+        "@marketopt_promo",
+        "@forainfo"
+      ],
+      "example": {
+        "handle": "@silposilpo",
+        "msg_id": 3802,
+        "kind": "category",
+        "name": "dairy:сир",
+        "matched": "сири",
+        "line": "🧀м’які сири"
+      }
+    },
+    "dairy:масл": {
+      "posts": 138,
+      "channels": 20,
+      "sole_carrier_for": [],
+      "example": {
+        "handle": "@silposilpo",
+        "msg_id": 3805,
+        "kind": "category",
+        "name": "dairy:масл",
+        "matched": "масло",
+        "line": "🧈Масло солодковершкове «Ферма» «Екстра» 82%, 180 г зі знижкою 57% – 69,99 грн"
+      }
+    },
+    "dairy:молок": {
+      "posts": 127,
+      "channels": 22,
+      "sole_carrier_for": [],
+      "example": {
+        "handle": "@VARUS_channel",
+        "msg_id": 10620,
+        "kind": "category",
+        "name": "dairy:молок",
+        "matched": "молоко",
+        "line": "🔸Молоко безлактозне ТМ На Здоровʼя"
+      }
+    },
+    "dairy:сметан": {
+      "posts": 115,
+      "channels": 19,
+      "sole_carrier_for": [
+        "@marketopt_promo"
+      ],
+      "example": {
+        "handle": "@silposilpo",
+        "msg_id": 3805,
+        "kind": "category",
+        "name": "dairy:сметан",
+        "matched": "сметана",
+        "line": "🥛Сметана «Яготинська» 15%, 300 г зі знижкою 40% – 34,99 грн"
+      }
+    },
+    "brand:varto": {
+      "posts": 89,
+      "channels": 24,
+      "sole_carrier_for": [
+        "@polyakova_fitness"
+      ],
+      "example": {
+        "handle": "@silposilpo",
+        "msg_id": 3809,
+        "kind": "brand",
+        "name": "varto",
+        "matched": "варто",
+        "line": "Про що варто пам’ятати:"
+      }
+    },
+    "brand:varus-pl": {
+      "posts": 56,
+      "channels": 1,
+      "sole_carrier_for": [],
+      "example": {
+        "handle": "@VARUS_channel",
+        "msg_id": 10628,
+        "kind": "brand",
+        "name": "varus-pl",
+        "matched": "varus",
+        "line": "Обирайте у VARUS товари з позначкою @carforheroua — частина коштів від їх продажу спрямовується на придбання автомобілів для наших захисників і захисниць🚙"
+      }
+    },
+    "dairy:йогурт": {
+      "posts": 55,
+      "channels": 13,
+      "sole_carrier_for": [],
+      "example": {
+        "handle": "@silposilpo",
+        "msg_id": 3783,
+        "kind": "category",
+        "name": "dairy:йогурт",
+        "matched": "йогурту",
+        "line": "🍟Чипси Lay's Oven Baked зі смаком овочів гриль, або зі смаком йогурту з травами, або зі смаком лисичок у сметані, 110 г зі знижкою 37% – 56,99 грн"
+      }
+    },
+    "ice-cream:морозив": {
+      "posts": 55,
+      "channels": 21,
+      "sole_carrier_for": [],
+      "example": {
+        "handle": "@silposilpo",
+        "msg_id": 3791,
+        "kind": "category",
+        "name": "ice-cream:морозив",
+        "matched": "морозиво",
+        "line": "Таке вже морозиво-ріжок PREMIA. Хрусткий вафельний стаканчик – мастхев. А от смак під ваш настрій:"
+      }
+    },
+    "dairy:рослинн": {
+      "posts": 44,
+      "channels": 12,
+      "sole_carrier_for": [],
+      "example": {
+        "handle": "@VARUS_channel",
+        "msg_id": 10593,
+        "kind": "category",
+        "name": "dairy:рослинн",
+        "matched": "рослинного",
+        "line": "Лови знижку 25% на чеки від 1000 грн із промокодом MILKY25 на замовлення: рослинного молока, морозива, йогуртів і сирів."
+      }
+    },
+    "brand:president": {
+      "posts": 33,
+      "channels": 8,
+      "sole_carrier_for": [
+        "@myrhorodtown"
+      ],
+      "example": {
+        "handle": "@dpssgovua",
+        "msg_id": 5921,
+        "kind": "brand",
+        "name": "president",
+        "matched": "президент",
+        "line": "Президент України Володимир Зеленський підписав Закон України «Про державне регулювання органічного виробництва, обігу та маркування органічної продукції»."
+      }
+    },
+    "dairy:десерт": {
+      "posts": 33,
+      "channels": 15,
+      "sole_carrier_for": [
+        "@forainfo"
+      ],
+      "example": {
+        "handle": "@silposilpo",
+        "msg_id": 3799,
+        "kind": "category",
+        "name": "dairy:десерт",
+        "matched": "десерту",
+        "line": "🍉Але літні бажання мінливі. Сьогодні хочеться манго, завтра – стиглого кавуна, оксамитових персиків чи улюбленого десерту до кави."
+      }
+    },
+    "dairy:молочн": {
+      "posts": 27,
+      "channels": 15,
+      "sole_carrier_for": [],
+      "example": {
+        "handle": "@VARUS_channel",
+        "msg_id": 10593,
+        "kind": "category",
+        "name": "dairy:молочн",
+        "matched": "молочні",
+        "line": "Молочні улюбленці стали ще вигіднішими! 🥛"
+      }
+    },
+    "dairy:кефір": {
+      "posts": 24,
+      "channels": 7,
+      "sole_carrier_for": [],
+      "example": {
+        "handle": "@retsepty",
+        "msg_id": 7330,
+        "kind": "category",
+        "name": "dairy:кефір",
+        "matched": "кефір",
+        "line": "🔸Кефір -400 мл;"
+      }
+    },
+    "brand:rud": {
+      "posts": 10,
+      "channels": 4,
+      "sole_carrier_for": [],
+      "example": {
+        "handle": "@VARUS_channel",
+        "msg_id": 10613,
+        "kind": "brand",
+        "name": "rud",
+        "matched": "рудь",
+        "line": "🔸Морозиво ванільне без цукру ТМ Рудь"
+      }
+    },
+    "brand:ferma": {
+      "posts": 8,
+      "channels": 6,
+      "sole_carrier_for": [
+        "@marketopt_promo"
+      ],
+      "example": {
+        "handle": "@silposilpo",
+        "msg_id": 3805,
+        "kind": "brand",
+        "name": "ferma",
+        "matched": "ферма",
+        "line": "🧈Масло солодковершкове «Ферма» «Екстра» 82%, 180 г зі знижкою 57% – 69,99 грн"
+      }
+    },
+    "brand:selianske": {
+      "posts": 8,
+      "channels": 5,
+      "sole_carrier_for": [],
+      "example": {
+        "handle": "@VARUS_channel",
+        "msg_id": 10594,
+        "kind": "brand",
+        "name": "selianske",
+        "matched": "селянське",
+        "line": "🔸Морозиво Селянське ТМ Рудь"
+      }
+    },
+    "dairy:сирк": {
+      "posts": 7,
+      "channels": 2,
+      "sole_carrier_for": [],
+      "example": {
+        "handle": "@recepti",
+        "msg_id": 11781,
+        "kind": "category",
+        "name": "dairy:сирк",
+        "matched": "сирки",
+        "line": "Плавлені сирки - 2 шт;"
+      }
+    },
+    "dairy:ряжанк": {
+      "posts": 3,
+      "channels": 3,
+      "sole_carrier_for": [],
+      "example": {
+        "handle": "@retsepty",
+        "msg_id": 7308,
+        "kind": "category",
+        "name": "dairy:ряжанк",
+        "matched": "ряжанка",
+        "line": "🔸ряжанка - 800 мл;"
+      }
+    },
+    "brand:garmonija": {
+      "posts": 2,
+      "channels": 2,
+      "sole_carrier_for": [],
+      "example": {
+        "handle": "@polyakova_fitness",
+        "msg_id": 1141,
+        "kind": "brand",
+        "name": "garmonija",
+        "matched": "гармонія",
+        "line": "🌹 Ось один зі слайдів із нашої презентації 👉 (додаємо скрін). Подивіться, як чітко видно, що система — це не хаос, а гармонія, яка запускає молодість і енергію."
+      }
+    },
+    "brand:lasunka": {
+      "posts": 2,
+      "channels": 2,
+      "sole_carrier_for": [],
+      "example": {
+        "handle": "@telegraf_kremenchuk",
+        "msg_id": 71024,
+        "kind": "brand",
+        "name": "lasunka",
+        "matched": "ласунка",
+        "line": "🍨Морозиво пломбір Стакан Великан 15%, Ласунка, 95 г, зі знижкою 48% – 24,99 грн"
+      }
+    },
+    "brand:limo": {
+      "posts": 2,
+      "channels": 2,
+      "sole_carrier_for": [],
+      "example": {
+        "handle": "@VARUS_channel",
+        "msg_id": 10613,
+        "kind": "brand",
+        "name": "limo",
+        "matched": "лімо",
+        "line": "🔸Морозиво йогурт-малина-лимон з вибуховою карамеллю ТМ Лімо"
+      }
+    },
+    "brand:premia": {
+      "posts": 2,
+      "channels": 2,
+      "sole_carrier_for": [],
+      "example": {
+        "handle": "@silposilpo",
+        "msg_id": 3790,
+        "kind": "brand",
+        "name": "premia",
+        "matched": "премія",
+        "line": "Сьогодні, 14.07, з 11:00 до 14:00 ловіть печінку тріски «Премія»® за 95,99 грн від 3-х шт.🐟"
+      }
+    },
+    "brand:try-vedmedi": {
+      "posts": 2,
+      "channels": 1,
+      "sole_carrier_for": [],
+      "example": {
+        "handle": "@VARUS_channel",
+        "msg_id": 10613,
+        "kind": "brand",
+        "name": "try-vedmedi",
+        "matched": "три ведмеді",
+        "line": "🔸Морозиво ТМ Три Ведмеді"
+      }
+    },
+    "brand:yahotynske-dlia-ditei": {
+      "posts": 2,
+      "channels": 1,
+      "sole_carrier_for": [],
+      "example": {
+        "handle": "@tarilka_malyuka",
+        "msg_id": 822,
+        "kind": "brand",
+        "name": "yahotynske-dlia-ditei",
+        "matched": "яготинське для дітей",
+        "line": "Яготинське для дітей відновили своє виробництво🥛"
+      }
+    },
+    "dairy:аналог": {
+      "posts": 2,
+      "channels": 2,
+      "sole_carrier_for": [],
+      "example": {
+        "handle": "@suspilnepoltava",
+        "msg_id": 48435,
+        "kind": "category",
+        "name": "dairy:аналог",
+        "matched": "аналогів",
+        "line": "У Полтавському музеї важкої бомбардувальної авіації завершують монтаж експозиції з винищувачем МіГ-23, який встановили у положенні польоту. Реставрація літака тривала понад рік, а …"
+      }
+    },
+    "dairy:творог": {
+      "posts": 2,
+      "channels": 2,
+      "sole_carrier_for": [],
+      "example": {
+        "handle": "@tarilka_malyuka",
+        "msg_id": 733,
+        "kind": "category",
+        "name": "dairy:творог",
+        "matched": "творог",
+        "line": "• Зернистий творог"
+      }
+    },
+    "brand:halychyna": {
+      "posts": 1,
+      "channels": 1,
+      "sole_carrier_for": [],
+      "example": {
+        "handle": "@telegraf_kremenchuk",
+        "msg_id": 70827,
+        "kind": "brand",
+        "name": "halychyna",
+        "matched": "галичина",
+        "line": "🧈Масло солодковершкове Екстра 82,5%, Галичина, 180 г, зі знижкою 40% – 74,99 грн"
+      }
+    },
+    "brand:molokija": {
+      "posts": 1,
+      "channels": 1,
+      "sole_carrier_for": [],
+      "example": {
+        "handle": "@msuaaaa",
+        "msg_id": 10656,
+        "kind": "brand",
+        "name": "molokija",
+        "matched": "молокія",
+        "line": "🔣Масло Молокія лише 59 грн від 2 штук"
+      }
+    },
+    "brand:svoia-liniia": {
+      "posts": 1,
+      "channels": 1,
+      "sole_carrier_for": [],
+      "example": {
+        "handle": "@atb_aktsiyi",
+        "msg_id": 3209,
+        "kind": "brand",
+        "name": "svoia-liniia",
+        "matched": "своя лінія",
+        "line": "- Приправа Своя лінія Сушені томати з часником і базиліком"
+      }
+    },
+    "brand:yagotynske": {
+      "posts": 1,
+      "channels": 1,
+      "sole_carrier_for": [],
+      "example": {
+        "handle": "@VARUS_channel",
+        "msg_id": 10336,
+        "kind": "brand",
+        "name": "yagotynske",
+        "matched": "яготинське",
+        "line": "🔸Масло безлактозне ТМ Яготинське"
+      }
+    }
+  },
+  "summary": {
+    "n": 66,
+    "pass_A": [
+      "@tarilka_malyuka",
+      "@ya_Nenka",
+      "@klopotenkofood",
+      "@konservacia_kulinaria",
+      "@korolevakuchni",
+      "@mameni_recepti",
+      "@recepti",
+      "@retsepty",
+      "@vylkachannel",
+      "@dpssgovua",
+      "@mandziak",
+      "@polyakova_fitness",
+      "@educationwithloven",
+      "@matusi_ukr",
+      "@gorishnie_plavni1",
+      "@h_kremenchug",
+      "@myrhorodtown",
+      "@poltava20",
+      "@poltava_informue",
+      "@poltava_pvp",
+      "@suspilnepoltava",
+      "@telegraf_kremenchuk",
+      "@ekomarket_shop",
+      "@epicentrk_sale",
+      "@forainfo",
+      "@marketopt_promo",
+      "@silposilpo",
+      "@VARUS_channel",
+      "@msuaaaa"
+    ],
+    "pass_B": [
+      "@tarilka_malyuka",
+      "@ya_Nenka",
+      "@retsepty",
+      "@mandziak",
+      "@sashafitnesslife",
+      "@matusi_ukr",
+      "@VARUS_channel",
+      "@msuaaaa"
+    ],
+    "below_both": [
+      "@blwbabies",
+      "@dutyache_menu",
+      "@Evgenija_dutjache_menu",
+      "@mamaiagolodniy",
+      "@pavlushaiyava",
+      "@tvorcha_matusyua",
+      "@anastasiiadavydiukfitness",
+      "@chifit_family",
+      "@denisovapro",
+      "@dimakaminskyifit",
+      "@eftforhealth",
+      "@gaid_skobioale",
+      "@HealthPsycholog",
+      "@hydnem_prosto",
+      "@kkondr_fit",
+      "@olgaa_trainer",
+      "@skhudnennya",
+      "@smirnov108",
+      "@useful_healthy_fitness_menu",
+      "@Wellosophy_Lesya",
+      "@itsmamix",
+      "@lab_of_childhood",
+      "@mamo_nepsichuy",
+      "@globine1",
+      "@Hadiach_telegram",
+      "@KarlivkaLive",
+      "@kremen_news",
+      "@LHVC_info",
+      "@mo3ambik",
+      "@PirOperative",
+      "@piryatingromada",
+      "@zinkivnews",
+      "@atb_market_official",
+      "@atb_aktsiyi",
+      "@kopiyochka1",
+      "@maudau"
+    ],
+    "by_audience": {
+      "baby_food": {
+        "n": 8,
+        "pass_A": 2,
+        "pass_B": 2,
+        "below_both": 6
+      },
+      "cooking_recipes": {
+        "n": 7,
+        "pass_A": 7,
+        "pass_B": 1,
+        "below_both": 0
+      },
+      "food_quality": {
+        "n": 1,
+        "pass_A": 1,
+        "pass_B": 0,
+        "below_both": 0
+      },
+      "health_fitness": {
+        "n": 17,
+        "pass_A": 2,
+        "pass_B": 2,
+        "below_both": 14
+      },
+      "mothers_kids": {
+        "n": 5,
+        "pass_A": 2,
+        "pass_B": 1,
+        "below_both": 3
+      },
+      "regional": {
+        "n": 17,
+        "pass_A": 8,
+        "pass_B": 0,
+        "below_both": 9
+      },
+      "retail_official": {
+        "n": 7,
+        "pass_A": 6,
+        "pass_B": 1,
+        "below_both": 1
+      },
+      "supermarket_deals": {
+        "n": 4,
+        "pass_A": 1,
+        "pass_B": 1,
+        "below_both": 3
+      }
+    }
+  },
+  "sources": [
+    {
+      "handle": "@blwbabies",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-07-31T07:06:03+00:00"
+      },
+      "posts": {
+        "in_window": 4,
+        "with_text": 4,
+        "without_text": 0
+      },
+      "relevant_posts": 1,
+      "relevant_per_week": 0.25,
+      "relevant_share_of_window": 0.25,
+      "relevant_share_of_texted": 0.25,
+      "brand_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_brand": {}
+      },
+      "category_hits": {
+        "posts": 1,
+        "per_week": 0.25,
+        "by_group": {
+          "dairy": 1
+        }
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "FAIL",
+      "bar_B": "N/A",
+      "below_both": true,
+      "bar_A_sole_carriers": [],
+      "evidence": {
+        "kind": "category",
+        "name": "dairy:йогурт",
+        "matched": "йогурт",
+        "line": "1. Грецький йогурт. 2 ст.л.грецького йогурту 8% змішала з горіховою пастою кешʼю.Змішати ретельно,щоб паста не була цілим комочком.Треба,щоб вона повністю перемішалася із йогуртом.…",
+        "msg_id": 401,
+        "date": "2026-07-27T09:43:12+00:00"
+      },
+      "audience": "baby_food",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@dutyache_menu",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": null
+      },
+      "posts": {
+        "in_window": 0,
+        "with_text": 0,
+        "without_text": 0
+      },
+      "relevant_posts": 0,
+      "relevant_per_week": 0.0,
+      "relevant_share_of_window": 0.0,
+      "relevant_share_of_texted": 0.0,
+      "brand_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_brand": {}
+      },
+      "category_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_group": {}
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "FAIL",
+      "bar_B": "N/A",
+      "below_both": true,
+      "bar_A_sole_carriers": [],
+      "evidence": null,
+      "audience": "baby_food",
+      "source_type": "community",
+      "watch": true
+    },
+    {
+      "handle": "@Evgenija_dutjache_menu",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": null
+      },
+      "posts": {
+        "in_window": 0,
+        "with_text": 0,
+        "without_text": 0
+      },
+      "relevant_posts": 0,
+      "relevant_per_week": 0.0,
+      "relevant_share_of_window": 0.0,
+      "relevant_share_of_texted": 0.0,
+      "brand_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_brand": {}
+      },
+      "category_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_group": {}
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "FAIL",
+      "bar_B": "N/A",
+      "below_both": true,
+      "bar_A_sole_carriers": [],
+      "evidence": null,
+      "audience": "baby_food",
+      "source_type": "community",
+      "watch": true
+    },
+    {
+      "handle": "@mamaiagolodniy",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-01T08:22:22+00:00"
+      },
+      "posts": {
+        "in_window": 5,
+        "with_text": 5,
+        "without_text": 0
+      },
+      "relevant_posts": 0,
+      "relevant_per_week": 0.0,
+      "relevant_share_of_window": 0.0,
+      "relevant_share_of_texted": 0.0,
+      "brand_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_brand": {}
+      },
+      "category_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_group": {}
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "FAIL",
+      "bar_B": "N/A",
+      "below_both": true,
+      "bar_A_sole_carriers": [],
+      "evidence": null,
+      "audience": "baby_food",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@pavlushaiyava",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-06T17:05:30+00:00"
+      },
+      "posts": {
+        "in_window": 111,
+        "with_text": 111,
+        "without_text": 0
+      },
+      "relevant_posts": 1,
+      "relevant_per_week": 0.25,
+      "relevant_share_of_window": 0.009,
+      "relevant_share_of_texted": 0.009,
+      "brand_hits": {
+        "posts": 1,
+        "per_week": 0.25,
+        "by_brand": {
+          "ferma": 1
+        }
+      },
+      "category_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_group": {}
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "FAIL",
+      "bar_B": "N/A",
+      "below_both": true,
+      "bar_A_sole_carriers": [],
+      "evidence": {
+        "kind": "brand",
+        "name": "ferma",
+        "matched": "ферма",
+        "line": "«Русалочка Сьюзі і ферма морських коників» (#від3років)",
+        "msg_id": 24071,
+        "date": "2026-07-13T11:02:20+00:00"
+      },
+      "audience": "baby_food",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@tarilka_malyuka",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-06T13:40:54+00:00"
+      },
+      "posts": {
+        "in_window": 82,
+        "with_text": 81,
+        "without_text": 1
+      },
+      "relevant_posts": 54,
+      "relevant_per_week": 13.5,
+      "relevant_share_of_window": 0.659,
+      "relevant_share_of_texted": 0.667,
+      "brand_hits": {
+        "posts": 3,
+        "per_week": 0.75,
+        "by_brand": {
+          "varto": 1,
+          "yahotynske-dlia-ditei": 2
+        }
+      },
+      "category_hits": {
+        "posts": 53,
+        "per_week": 13.25,
+        "by_group": {
+          "dairy": 51,
+          "ice-cream": 2
+        }
+      },
+      "comments": {
+        "source": "collected",
+        "in_store": 45,
+        "under_relevant": 29,
+        "relevant_threads_with_comments": 7
+      },
+      "bar_A": "PASS",
+      "bar_B": "PASS",
+      "below_both": false,
+      "bar_A_sole_carriers": [],
+      "evidence": {
+        "kind": "category",
+        "name": "dairy:молок",
+        "matched": "молока",
+        "line": "Не потрібно поспішати чи змушувати дитину доїдати. Перші тижні прикорму це насамперед знайомство з новими смаками, запахами та текстурами, а не заміна грудного молока чи суміші 🍼🥛",
+        "msg_id": 695,
+        "date": "2026-07-17T19:14:34+00:00"
+      },
+      "audience": "baby_food",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@tvorcha_matusyua",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-07T08:07:10+00:00"
+      },
+      "posts": {
+        "in_window": 109,
+        "with_text": 109,
+        "without_text": 0
+      },
+      "relevant_posts": 2,
+      "relevant_per_week": 0.5,
+      "relevant_share_of_window": 0.018,
+      "relevant_share_of_texted": 0.018,
+      "brand_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_brand": {}
+      },
+      "category_hits": {
+        "posts": 2,
+        "per_week": 0.5,
+        "by_group": {
+          "ice-cream": 2
+        }
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "FAIL",
+      "bar_B": "N/A",
+      "below_both": true,
+      "bar_A_sole_carriers": [],
+      "evidence": {
+        "kind": "category",
+        "name": "ice-cream:морозив",
+        "matched": "морозиво",
+        "line": "🍦Яскраве пластилінове морозиво: проста та весела саморобка для дітей",
+        "msg_id": 12549,
+        "date": "2026-07-15T09:03:13+00:00"
+      },
+      "audience": "baby_food",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@ya_Nenka",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-06T11:15:28+00:00"
+      },
+      "posts": {
+        "in_window": 10,
+        "with_text": 10,
+        "without_text": 0
+      },
+      "relevant_posts": 8,
+      "relevant_per_week": 2.0,
+      "relevant_share_of_window": 0.8,
+      "relevant_share_of_texted": 0.8,
+      "brand_hits": {
+        "posts": 7,
+        "per_week": 1.75,
+        "by_brand": {
+          "varto": 7
+        }
+      },
+      "category_hits": {
+        "posts": 6,
+        "per_week": 1.5,
+        "by_group": {
+          "dairy": 6
+        }
+      },
+      "comments": {
+        "source": "collected",
+        "in_store": 16,
+        "under_relevant": 13,
+        "relevant_threads_with_comments": 4
+      },
+      "bar_A": "PASS",
+      "bar_B": "PASS",
+      "below_both": false,
+      "bar_A_sole_carriers": [],
+      "evidence": {
+        "kind": "brand",
+        "name": "varto",
+        "matched": "варто",
+        "line": "Ми всі маємо свої слабкості, залежності, обмеження, страхи й рішення, якими не пишаємося. Просто не всі вони однаково помітні оточенню. І навряд чи варто з’ясовувати, чия слабкість…",
+        "msg_id": 834,
+        "date": "2026-07-22T19:42:40+00:00"
+      },
+      "audience": "baby_food",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@klopotenkofood",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-06T15:04:04+00:00"
+      },
+      "posts": {
+        "in_window": 40,
+        "with_text": 33,
+        "without_text": 7
+      },
+      "relevant_posts": 6,
+      "relevant_per_week": 1.5,
+      "relevant_share_of_window": 0.15,
+      "relevant_share_of_texted": 0.182,
+      "brand_hits": {
+        "posts": 2,
+        "per_week": 0.5,
+        "by_brand": {
+          "varto": 2
+        }
+      },
+      "category_hits": {
+        "posts": 4,
+        "per_week": 1.0,
+        "by_group": {
+          "dairy": 4
+        }
+      },
+      "comments": {
+        "source": "collected",
+        "in_store": 232,
+        "under_relevant": 5,
+        "relevant_threads_with_comments": 3
+      },
+      "bar_A": "PASS",
+      "bar_B": "FAIL",
+      "below_both": false,
+      "bar_A_sole_carriers": [],
+      "evidence": {
+        "kind": "category",
+        "name": "dairy:десерт",
+        "matched": "десерту",
+        "line": "3. Найзручніше брати розʼємну металеву форму, щоб вона гарно створила каркас десерту, а потім зручно знялася. Форму по дну краще простелити пергаментом",
+        "msg_id": 6015,
+        "date": "2026-07-13T11:00:51+00:00"
+      },
+      "audience": "cooking_recipes",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@konservacia_kulinaria",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-07T06:35:09+00:00"
+      },
+      "posts": {
+        "in_window": 92,
+        "with_text": 92,
+        "without_text": 0
+      },
+      "relevant_posts": 25,
+      "relevant_per_week": 6.25,
+      "relevant_share_of_window": 0.272,
+      "relevant_share_of_texted": 0.272,
+      "brand_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_brand": {}
+      },
+      "category_hits": {
+        "posts": 25,
+        "per_week": 6.25,
+        "by_group": {
+          "dairy": 25
+        }
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "PASS",
+      "bar_B": "N/A",
+      "below_both": false,
+      "bar_A_sole_carriers": [],
+      "evidence": {
+        "kind": "category",
+        "name": "dairy:рослинн",
+        "matched": "рослинна",
+        "line": "Рослинна олія 0,5 склянки ;",
+        "msg_id": 6841,
+        "date": "2026-07-10T18:35:17+00:00"
+      },
+      "audience": "cooking_recipes",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@korolevakuchni",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-07T03:41:57+00:00"
+      },
+      "posts": {
+        "in_window": 126,
+        "with_text": 126,
+        "without_text": 0
+      },
+      "relevant_posts": 72,
+      "relevant_per_week": 18.0,
+      "relevant_share_of_window": 0.571,
+      "relevant_share_of_texted": 0.571,
+      "brand_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_brand": {}
+      },
+      "category_hits": {
+        "posts": 72,
+        "per_week": 18.0,
+        "by_group": {
+          "dairy": 72,
+          "ice-cream": 5
+        }
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "PASS",
+      "bar_B": "N/A",
+      "below_both": false,
+      "bar_A_sole_carriers": [],
+      "evidence": {
+        "kind": "category",
+        "name": "dairy:сметан",
+        "matched": "сметани",
+        "line": "2 ст.л. сметани",
+        "msg_id": 10348,
+        "date": "2026-07-11T03:31:03+00:00"
+      },
+      "audience": "cooking_recipes",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@mameni_recepti",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-07T08:50:13+00:00"
+      },
+      "posts": {
+        "in_window": 253,
+        "with_text": 253,
+        "without_text": 0
+      },
+      "relevant_posts": 118,
+      "relevant_per_week": 29.5,
+      "relevant_share_of_window": 0.466,
+      "relevant_share_of_texted": 0.466,
+      "brand_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_brand": {}
+      },
+      "category_hits": {
+        "posts": 118,
+        "per_week": 29.5,
+        "by_group": {
+          "dairy": 116,
+          "ice-cream": 4
+        }
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "PASS",
+      "bar_B": "N/A",
+      "below_both": false,
+      "bar_A_sole_carriers": [],
+      "evidence": {
+        "kind": "category",
+        "name": "dairy:сир",
+        "matched": "сиру",
+        "line": "✔️1/2 упаковки сиру фета",
+        "msg_id": 12467,
+        "date": "2026-07-10T12:50:00+00:00"
+      },
+      "audience": "cooking_recipes",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@recepti",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-07T09:00:01+00:00"
+      },
+      "posts": {
+        "in_window": 201,
+        "with_text": 201,
+        "without_text": 0
+      },
+      "relevant_posts": 122,
+      "relevant_per_week": 30.5,
+      "relevant_share_of_window": 0.607,
+      "relevant_share_of_texted": 0.607,
+      "brand_hits": {
+        "posts": 2,
+        "per_week": 0.5,
+        "by_brand": {
+          "varto": 2
+        }
+      },
+      "category_hits": {
+        "posts": 122,
+        "per_week": 30.5,
+        "by_group": {
+          "dairy": 121,
+          "ice-cream": 4
+        }
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "PASS",
+      "bar_B": "N/A",
+      "below_both": false,
+      "bar_A_sole_carriers": [],
+      "evidence": {
+        "kind": "category",
+        "name": "dairy:десерт",
+        "matched": "десерт",
+        "line": "Найсмачніший десерт - ПРОФІТРОЛІ ❤️",
+        "msg_id": 11675,
+        "date": "2026-07-10T12:00:03+00:00"
+      },
+      "audience": "cooking_recipes",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@retsepty",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-07T10:00:36+00:00"
+      },
+      "posts": {
+        "in_window": 91,
+        "with_text": 74,
+        "without_text": 17
+      },
+      "relevant_posts": 58,
+      "relevant_per_week": 14.5,
+      "relevant_share_of_window": 0.637,
+      "relevant_share_of_texted": 0.784,
+      "brand_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_brand": {}
+      },
+      "category_hits": {
+        "posts": 58,
+        "per_week": 14.5,
+        "by_group": {
+          "dairy": 58,
+          "ice-cream": 1
+        }
+      },
+      "comments": {
+        "source": "collected",
+        "in_store": 105,
+        "under_relevant": 65,
+        "relevant_threads_with_comments": 37
+      },
+      "bar_A": "PASS",
+      "bar_B": "PASS",
+      "below_both": false,
+      "bar_A_sole_carriers": [],
+      "evidence": {
+        "kind": "category",
+        "name": "dairy:молок",
+        "matched": "молоко",
+        "line": "🔸Згущене молоко варене 150 г.",
+        "msg_id": 7272,
+        "date": "2026-07-11T05:10:09+00:00"
+      },
+      "audience": "cooking_recipes",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@vylkachannel",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-05T17:39:01+00:00"
+      },
+      "posts": {
+        "in_window": 27,
+        "with_text": 27,
+        "without_text": 0
+      },
+      "relevant_posts": 16,
+      "relevant_per_week": 4.0,
+      "relevant_share_of_window": 0.593,
+      "relevant_share_of_texted": 0.593,
+      "brand_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_brand": {}
+      },
+      "category_hits": {
+        "posts": 16,
+        "per_week": 4.0,
+        "by_group": {
+          "dairy": 16
+        }
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "PASS",
+      "bar_B": "N/A",
+      "below_both": false,
+      "bar_A_sole_carriers": [],
+      "evidence": {
+        "kind": "category",
+        "name": "dairy:сир",
+        "matched": "сиром",
+        "line": "Мексиканські тако з куркою та сиром 🌮🍗✨",
+        "msg_id": 1637,
+        "date": "2026-07-11T16:08:01+00:00"
+      },
+      "audience": "cooking_recipes",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@dpssgovua",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-07T06:07:00+00:00"
+      },
+      "posts": {
+        "in_window": 79,
+        "with_text": 79,
+        "without_text": 0
+      },
+      "relevant_posts": 22,
+      "relevant_per_week": 5.5,
+      "relevant_share_of_window": 0.278,
+      "relevant_share_of_texted": 0.278,
+      "brand_hits": {
+        "posts": 7,
+        "per_week": 1.75,
+        "by_brand": {
+          "president": 1,
+          "varto": 6
+        }
+      },
+      "category_hits": {
+        "posts": 15,
+        "per_week": 3.75,
+        "by_group": {
+          "dairy": 15
+        }
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "PASS",
+      "bar_B": "N/A",
+      "below_both": false,
+      "bar_A_sole_carriers": [],
+      "evidence": {
+        "kind": "category",
+        "name": "dairy:рослинн",
+        "matched": "рослинна",
+        "line": "​Лісові ягоди, гриби, лікарська рослинна сировина. Саме ці продукти можуть накопичувати радіонукліди більше за інші, якщо походять із забруднених територій.",
+        "msg_id": 5881,
+        "date": "2026-07-14T13:25:14+00:00"
+      },
+      "audience": "food_quality",
+      "source_type": "government",
+      "watch": false
+    },
+    {
+      "handle": "@anastasiiadavydiukfitness",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-07-26T09:50:18+00:00"
+      },
+      "posts": {
+        "in_window": 1,
+        "with_text": 1,
+        "without_text": 0
+      },
+      "relevant_posts": 0,
+      "relevant_per_week": 0.0,
+      "relevant_share_of_window": 0.0,
+      "relevant_share_of_texted": 0.0,
+      "brand_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_brand": {}
+      },
+      "category_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_group": {}
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "FAIL",
+      "bar_B": "N/A",
+      "below_both": true,
+      "bar_A_sole_carriers": [],
+      "evidence": null,
+      "audience": "health_fitness",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@chifit_family",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-05T12:31:39+00:00"
+      },
+      "posts": {
+        "in_window": 4,
+        "with_text": 4,
+        "without_text": 0
+      },
+      "relevant_posts": 0,
+      "relevant_per_week": 0.0,
+      "relevant_share_of_window": 0.0,
+      "relevant_share_of_texted": 0.0,
+      "brand_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_brand": {}
+      },
+      "category_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_group": {}
+      },
+      "comments": {
+        "source": "collected",
+        "in_store": 4,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "FAIL",
+      "bar_B": "FAIL",
+      "below_both": true,
+      "bar_A_sole_carriers": [],
+      "evidence": null,
+      "audience": "health_fitness",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@denisovapro",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-06T19:11:57+00:00"
+      },
+      "posts": {
+        "in_window": 22,
+        "with_text": 18,
+        "without_text": 4
+      },
+      "relevant_posts": 0,
+      "relevant_per_week": 0.0,
+      "relevant_share_of_window": 0.0,
+      "relevant_share_of_texted": 0.0,
+      "brand_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_brand": {}
+      },
+      "category_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_group": {}
+      },
+      "comments": {
+        "source": "collected",
+        "in_store": 6,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "FAIL",
+      "bar_B": "FAIL",
+      "below_both": true,
+      "bar_A_sole_carriers": [],
+      "evidence": null,
+      "audience": "health_fitness",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@dimakaminskyifit",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": null
+      },
+      "posts": {
+        "in_window": 0,
+        "with_text": 0,
+        "without_text": 0
+      },
+      "relevant_posts": 0,
+      "relevant_per_week": 0.0,
+      "relevant_share_of_window": 0.0,
+      "relevant_share_of_texted": 0.0,
+      "brand_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_brand": {}
+      },
+      "category_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_group": {}
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "FAIL",
+      "bar_B": "N/A",
+      "below_both": true,
+      "bar_A_sole_carriers": [],
+      "evidence": null,
+      "audience": "health_fitness",
+      "source_type": "community",
+      "watch": true
+    },
+    {
+      "handle": "@eftforhealth",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-07-10T10:41:24+00:00"
+      },
+      "posts": {
+        "in_window": 1,
+        "with_text": 1,
+        "without_text": 0
+      },
+      "relevant_posts": 0,
+      "relevant_per_week": 0.0,
+      "relevant_share_of_window": 0.0,
+      "relevant_share_of_texted": 0.0,
+      "brand_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_brand": {}
+      },
+      "category_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_group": {}
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "FAIL",
+      "bar_B": "N/A",
+      "below_both": true,
+      "bar_A_sole_carriers": [],
+      "evidence": null,
+      "audience": "health_fitness",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@gaid_skobioale",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-07T09:47:41+00:00"
+      },
+      "posts": {
+        "in_window": 18,
+        "with_text": 1,
+        "without_text": 17
+      },
+      "relevant_posts": 0,
+      "relevant_per_week": 0.0,
+      "relevant_share_of_window": 0.0,
+      "relevant_share_of_texted": 0.0,
+      "brand_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_brand": {}
+      },
+      "category_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_group": {}
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "FAIL",
+      "bar_B": "N/A",
+      "below_both": true,
+      "bar_A_sole_carriers": [],
+      "evidence": null,
+      "audience": "health_fitness",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@HealthPsycholog",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-06T09:01:27+00:00"
+      },
+      "posts": {
+        "in_window": 17,
+        "with_text": 17,
+        "without_text": 0
+      },
+      "relevant_posts": 0,
+      "relevant_per_week": 0.0,
+      "relevant_share_of_window": 0.0,
+      "relevant_share_of_texted": 0.0,
+      "brand_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_brand": {}
+      },
+      "category_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_group": {}
+      },
+      "comments": {
+        "source": "collected",
+        "in_store": 97,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "FAIL",
+      "bar_B": "FAIL",
+      "below_both": true,
+      "bar_A_sole_carriers": [],
+      "evidence": null,
+      "audience": "health_fitness",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@hydnem_prosto",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": null
+      },
+      "posts": {
+        "in_window": 0,
+        "with_text": 0,
+        "without_text": 0
+      },
+      "relevant_posts": 0,
+      "relevant_per_week": 0.0,
+      "relevant_share_of_window": 0.0,
+      "relevant_share_of_texted": 0.0,
+      "brand_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_brand": {}
+      },
+      "category_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_group": {}
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "FAIL",
+      "bar_B": "N/A",
+      "below_both": true,
+      "bar_A_sole_carriers": [],
+      "evidence": null,
+      "audience": "health_fitness",
+      "source_type": "community",
+      "watch": true
+    },
+    {
+      "handle": "@kkondr_fit",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-03T14:19:55+00:00"
+      },
+      "posts": {
+        "in_window": 2,
+        "with_text": 2,
+        "without_text": 0
+      },
+      "relevant_posts": 0,
+      "relevant_per_week": 0.0,
+      "relevant_share_of_window": 0.0,
+      "relevant_share_of_texted": 0.0,
+      "brand_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_brand": {}
+      },
+      "category_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_group": {}
+      },
+      "comments": {
+        "source": "collected",
+        "in_store": 4,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "FAIL",
+      "bar_B": "FAIL",
+      "below_both": true,
+      "bar_A_sole_carriers": [],
+      "evidence": null,
+      "audience": "health_fitness",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@mandziak",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-07T09:01:20+00:00"
+      },
+      "posts": {
+        "in_window": 121,
+        "with_text": 120,
+        "without_text": 1
+      },
+      "relevant_posts": 16,
+      "relevant_per_week": 4.0,
+      "relevant_share_of_window": 0.132,
+      "relevant_share_of_texted": 0.133,
+      "brand_hits": {
+        "posts": 6,
+        "per_week": 1.5,
+        "by_brand": {
+          "varto": 6
+        }
+      },
+      "category_hits": {
+        "posts": 11,
+        "per_week": 2.75,
+        "by_group": {
+          "dairy": 11
+        }
+      },
+      "comments": {
+        "source": "collected",
+        "in_store": 1048,
+        "under_relevant": 59,
+        "relevant_threads_with_comments": 10
+      },
+      "bar_A": "PASS",
+      "bar_B": "PASS",
+      "below_both": false,
+      "bar_A_sole_carriers": [],
+      "evidence": {
+        "kind": "category",
+        "name": "dairy:молок",
+        "matched": "молоко",
+        "line": "ЛАЙФХАК 1: ЖИРНЕ МОЛОКО ЗАМІНИМО НА НЕЖИРНЕ",
+        "msg_id": 3666,
+        "date": "2026-07-11T13:01:01+00:00"
+      },
+      "audience": "health_fitness",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@olgaa_trainer",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-05T12:23:56+00:00"
+      },
+      "posts": {
+        "in_window": 8,
+        "with_text": 6,
+        "without_text": 2
+      },
+      "relevant_posts": 0,
+      "relevant_per_week": 0.0,
+      "relevant_share_of_window": 0.0,
+      "relevant_share_of_texted": 0.0,
+      "brand_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_brand": {}
+      },
+      "category_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_group": {}
+      },
+      "comments": {
+        "source": "collected",
+        "in_store": 4,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "FAIL",
+      "bar_B": "FAIL",
+      "below_both": true,
+      "bar_A_sole_carriers": [],
+      "evidence": null,
+      "audience": "health_fitness",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@polyakova_fitness",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-05T16:05:02+00:00"
+      },
+      "posts": {
+        "in_window": 53,
+        "with_text": 35,
+        "without_text": 18
+      },
+      "relevant_posts": 5,
+      "relevant_per_week": 1.25,
+      "relevant_share_of_window": 0.094,
+      "relevant_share_of_texted": 0.143,
+      "brand_hits": {
+        "posts": 4,
+        "per_week": 1.0,
+        "by_brand": {
+          "garmonija": 1,
+          "varto": 3
+        }
+      },
+      "category_hits": {
+        "posts": 1,
+        "per_week": 0.25,
+        "by_group": {
+          "dairy": 1
+        }
+      },
+      "comments": {
+        "source": "collected",
+        "in_store": 8,
+        "under_relevant": 1,
+        "relevant_threads_with_comments": 1
+      },
+      "bar_A": "PASS",
+      "bar_B": "FAIL",
+      "below_both": false,
+      "bar_A_sole_carriers": [
+        "brand:varto"
+      ],
+      "evidence": {
+        "kind": "category",
+        "name": "dairy:сир",
+        "matched": "сир",
+        "line": "4️⃣ Додайте до фаршу обсмажені овочі, кисломолочний сир, зелень, нарізані помідори та спеції. Готуйте ще 3 хвилини, добре перемішуючи.",
+        "msg_id": 1118,
+        "date": "2026-07-11T13:05:05+00:00"
+      },
+      "audience": "health_fitness",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@sashafitnesslife",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-06T14:40:20+00:00"
+      },
+      "posts": {
+        "in_window": 20,
+        "with_text": 20,
+        "without_text": 0
+      },
+      "relevant_posts": 1,
+      "relevant_per_week": 0.25,
+      "relevant_share_of_window": 0.05,
+      "relevant_share_of_texted": 0.05,
+      "brand_hits": {
+        "posts": 1,
+        "per_week": 0.25,
+        "by_brand": {
+          "varto": 1
+        }
+      },
+      "category_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_group": {}
+      },
+      "comments": {
+        "source": "collected",
+        "in_store": 83,
+        "under_relevant": 29,
+        "relevant_threads_with_comments": 1
+      },
+      "bar_A": "FAIL",
+      "bar_B": "PASS",
+      "below_both": false,
+      "bar_A_sole_carriers": [],
+      "evidence": {
+        "kind": "brand",
+        "name": "varto",
+        "matched": "варто",
+        "line": "Воно допоможе визначити, на якому рівні зараз перебуває ваше тіло та з яких тренувань варто почати саме вам. 👇",
+        "msg_id": 3939,
+        "date": "2026-08-05T14:10:16+00:00"
+      },
+      "audience": "health_fitness",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@skhudnennya",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": null
+      },
+      "posts": {
+        "in_window": 0,
+        "with_text": 0,
+        "without_text": 0
+      },
+      "relevant_posts": 0,
+      "relevant_per_week": 0.0,
+      "relevant_share_of_window": 0.0,
+      "relevant_share_of_texted": 0.0,
+      "brand_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_brand": {}
+      },
+      "category_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_group": {}
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "FAIL",
+      "bar_B": "N/A",
+      "below_both": true,
+      "bar_A_sole_carriers": [],
+      "evidence": null,
+      "audience": "health_fitness",
+      "source_type": "community",
+      "watch": true
+    },
+    {
+      "handle": "@smirnov108",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-06T07:06:12+00:00"
+      },
+      "posts": {
+        "in_window": 28,
+        "with_text": 28,
+        "without_text": 0
+      },
+      "relevant_posts": 1,
+      "relevant_per_week": 0.25,
+      "relevant_share_of_window": 0.036,
+      "relevant_share_of_texted": 0.036,
+      "brand_hits": {
+        "posts": 1,
+        "per_week": 0.25,
+        "by_brand": {
+          "varto": 1
+        }
+      },
+      "category_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_group": {}
+      },
+      "comments": {
+        "source": "collected",
+        "in_store": 101,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "FAIL",
+      "bar_B": "FAIL",
+      "below_both": true,
+      "bar_A_sole_carriers": [],
+      "evidence": {
+        "kind": "brand",
+        "name": "varto",
+        "matched": "варто",
+        "line": "Тому варто поступово додавати у своє життя те, що допомагає природним шляхом підтримувати гарний стан.",
+        "msg_id": 3180,
+        "date": "2026-07-16T07:30:11+00:00"
+      },
+      "audience": "health_fitness",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@useful_healthy_fitness_menu",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-06T11:15:10+00:00"
+      },
+      "posts": {
+        "in_window": 17,
+        "with_text": 9,
+        "without_text": 8
+      },
+      "relevant_posts": 3,
+      "relevant_per_week": 0.75,
+      "relevant_share_of_window": 0.176,
+      "relevant_share_of_texted": 0.333,
+      "brand_hits": {
+        "posts": 1,
+        "per_week": 0.25,
+        "by_brand": {
+          "varto": 1
+        }
+      },
+      "category_hits": {
+        "posts": 2,
+        "per_week": 0.5,
+        "by_group": {
+          "dairy": 2
+        }
+      },
+      "comments": {
+        "source": "collected",
+        "in_store": 4,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "FAIL",
+      "bar_B": "FAIL",
+      "below_both": true,
+      "bar_A_sole_carriers": [],
+      "evidence": {
+        "kind": "category",
+        "name": "dairy:сир",
+        "matched": "сир",
+        "line": "▫️сир фета 180 г",
+        "msg_id": 3093,
+        "date": "2026-07-20T11:44:43+00:00"
+      },
+      "audience": "health_fitness",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@Wellosophy_Lesya",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-07-13T14:43:05+00:00"
+      },
+      "posts": {
+        "in_window": 8,
+        "with_text": 6,
+        "without_text": 2
+      },
+      "relevant_posts": 0,
+      "relevant_per_week": 0.0,
+      "relevant_share_of_window": 0.0,
+      "relevant_share_of_texted": 0.0,
+      "brand_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_brand": {}
+      },
+      "category_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_group": {}
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "FAIL",
+      "bar_B": "N/A",
+      "below_both": true,
+      "bar_A_sole_carriers": [],
+      "evidence": null,
+      "audience": "health_fitness",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@educationwithloven",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-07T09:41:00+00:00"
+      },
+      "posts": {
+        "in_window": 403,
+        "with_text": 381,
+        "without_text": 22
+      },
+      "relevant_posts": 17,
+      "relevant_per_week": 4.25,
+      "relevant_share_of_window": 0.042,
+      "relevant_share_of_texted": 0.045,
+      "brand_hits": {
+        "posts": 14,
+        "per_week": 3.5,
+        "by_brand": {
+          "garmonija": 1,
+          "varto": 13
+        }
+      },
+      "category_hits": {
+        "posts": 3,
+        "per_week": 0.75,
+        "by_group": {
+          "dairy": 1,
+          "ice-cream": 2
+        }
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "PASS",
+      "bar_B": "N/A",
+      "below_both": false,
+      "bar_A_sole_carriers": [],
+      "evidence": {
+        "kind": "brand",
+        "name": "varto",
+        "matched": "варто",
+        "line": "🔸 Завантажити і роздрукувати лабіринти для дітей з буквами українського алфавіту, а потім разом з дітками, граючи, вивчайте алфавіт. Це завдання варто виконувати по одній букві в д…",
+        "msg_id": 104044,
+        "date": "2026-07-15T10:41:33+00:00"
+      },
+      "audience": "mothers_kids",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@itsmamix",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": null
+      },
+      "posts": {
+        "in_window": 0,
+        "with_text": 0,
+        "without_text": 0
+      },
+      "relevant_posts": 0,
+      "relevant_per_week": 0.0,
+      "relevant_share_of_window": 0.0,
+      "relevant_share_of_texted": 0.0,
+      "brand_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_brand": {}
+      },
+      "category_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_group": {}
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "FAIL",
+      "bar_B": "N/A",
+      "below_both": true,
+      "bar_A_sole_carriers": [],
+      "evidence": null,
+      "audience": "mothers_kids",
+      "source_type": "community",
+      "watch": true
+    },
+    {
+      "handle": "@lab_of_childhood",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": null
+      },
+      "posts": {
+        "in_window": 0,
+        "with_text": 0,
+        "without_text": 0
+      },
+      "relevant_posts": 0,
+      "relevant_per_week": 0.0,
+      "relevant_share_of_window": 0.0,
+      "relevant_share_of_texted": 0.0,
+      "brand_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_brand": {}
+      },
+      "category_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_group": {}
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "FAIL",
+      "bar_B": "N/A",
+      "below_both": true,
+      "bar_A_sole_carriers": [],
+      "evidence": null,
+      "audience": "mothers_kids",
+      "source_type": "community",
+      "watch": true
+    },
+    {
+      "handle": "@mamo_nepsichuy",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-07T06:31:00+00:00"
+      },
+      "posts": {
+        "in_window": 46,
+        "with_text": 46,
+        "without_text": 0
+      },
+      "relevant_posts": 2,
+      "relevant_per_week": 0.5,
+      "relevant_share_of_window": 0.043,
+      "relevant_share_of_texted": 0.043,
+      "brand_hits": {
+        "posts": 1,
+        "per_week": 0.25,
+        "by_brand": {
+          "varto": 1
+        }
+      },
+      "category_hits": {
+        "posts": 1,
+        "per_week": 0.25,
+        "by_group": {
+          "dairy": 1
+        }
+      },
+      "comments": {
+        "source": "collected",
+        "in_store": 10,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "FAIL",
+      "bar_B": "FAIL",
+      "below_both": true,
+      "bar_A_sole_carriers": [],
+      "evidence": {
+        "kind": "brand",
+        "name": "varto",
+        "matched": "варто",
+        "line": "Але пам'ятаємо: перед дітьми вживати алкоголь і курити - не варто.",
+        "msg_id": 8056,
+        "date": "2026-07-22T06:56:24+00:00"
+      },
+      "audience": "mothers_kids",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@matusi_ukr",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-07T09:00:44+00:00"
+      },
+      "posts": {
+        "in_window": 229,
+        "with_text": 206,
+        "without_text": 23
+      },
+      "relevant_posts": 20,
+      "relevant_per_week": 5.0,
+      "relevant_share_of_window": 0.087,
+      "relevant_share_of_texted": 0.097,
+      "brand_hits": {
+        "posts": 8,
+        "per_week": 2.0,
+        "by_brand": {
+          "lasunka": 1,
+          "varto": 8
+        }
+      },
+      "category_hits": {
+        "posts": 13,
+        "per_week": 3.25,
+        "by_group": {
+          "dairy": 11,
+          "ice-cream": 2
+        }
+      },
+      "comments": {
+        "source": "collected",
+        "in_store": 2890,
+        "under_relevant": 65,
+        "relevant_threads_with_comments": 8
+      },
+      "bar_A": "PASS",
+      "bar_B": "PASS",
+      "below_both": false,
+      "bar_A_sole_carriers": [],
+      "evidence": {
+        "kind": "category",
+        "name": "dairy:сир",
+        "matched": "сир",
+        "line": "• 🧀 Твердий сир — 30 г",
+        "msg_id": 22025,
+        "date": "2026-07-11T12:01:57+00:00"
+      },
+      "audience": "mothers_kids",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@globine1",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-07T10:10:25+00:00"
+      },
+      "posts": {
+        "in_window": 102,
+        "with_text": 99,
+        "without_text": 3
+      },
+      "relevant_posts": 2,
+      "relevant_per_week": 0.5,
+      "relevant_share_of_window": 0.02,
+      "relevant_share_of_texted": 0.02,
+      "brand_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_brand": {}
+      },
+      "category_hits": {
+        "posts": 2,
+        "per_week": 0.5,
+        "by_group": {
+          "dairy": 2
+        }
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "FAIL",
+      "bar_B": "N/A",
+      "below_both": true,
+      "bar_A_sole_carriers": [],
+      "evidence": {
+        "kind": "category",
+        "name": "dairy:десерт",
+        "matched": "десерти",
+        "line": "🍰 десерти власного виробництва;",
+        "msg_id": 9871,
+        "date": "2026-07-12T08:54:36+00:00"
+      },
+      "audience": "regional",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@gorishnie_plavni1",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-07T09:15:01+00:00"
+      },
+      "posts": {
+        "in_window": 547,
+        "with_text": 547,
+        "without_text": 0
+      },
+      "relevant_posts": 7,
+      "relevant_per_week": 1.75,
+      "relevant_share_of_window": 0.013,
+      "relevant_share_of_texted": 0.013,
+      "brand_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_brand": {}
+      },
+      "category_hits": {
+        "posts": 7,
+        "per_week": 1.75,
+        "by_group": {
+          "dairy": 7
+        }
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "PASS",
+      "bar_B": "N/A",
+      "below_both": false,
+      "bar_A_sole_carriers": [],
+      "evidence": {
+        "kind": "category",
+        "name": "dairy:сир",
+        "matched": "сиру",
+        "line": "🥑 Філа Класік (0.5) — незмінна ніжність вершкового сиру та лосося.",
+        "msg_id": 30792,
+        "date": "2026-07-12T06:34:14+00:00"
+      },
+      "audience": "regional",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@h_kremenchug",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-07T06:52:15+00:00"
+      },
+      "posts": {
+        "in_window": 443,
+        "with_text": 443,
+        "without_text": 0
+      },
+      "relevant_posts": 11,
+      "relevant_per_week": 2.75,
+      "relevant_share_of_window": 0.025,
+      "relevant_share_of_texted": 0.025,
+      "brand_hits": {
+        "posts": 1,
+        "per_week": 0.25,
+        "by_brand": {
+          "president": 1
+        }
+      },
+      "category_hits": {
+        "posts": 10,
+        "per_week": 2.5,
+        "by_group": {
+          "dairy": 9,
+          "ice-cream": 8
+        }
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "PASS",
+      "bar_B": "N/A",
+      "below_both": false,
+      "bar_A_sole_carriers": [],
+      "evidence": {
+        "kind": "category",
+        "name": "ice-cream:морозив",
+        "matched": "морозиво",
+        "line": "Морозиво, тостовий хліб, сулугуні, лікарська ковбаса, вафлі, напій Бон Буассон, гель для прання, паперові рушники і не тільки…",
+        "msg_id": 100235,
+        "date": "2026-07-14T05:19:59+00:00"
+      },
+      "audience": "regional",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@Hadiach_telegram",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-07T07:20:23+00:00"
+      },
+      "posts": {
+        "in_window": 140,
+        "with_text": 140,
+        "without_text": 0
+      },
+      "relevant_posts": 1,
+      "relevant_per_week": 0.25,
+      "relevant_share_of_window": 0.007,
+      "relevant_share_of_texted": 0.007,
+      "brand_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_brand": {}
+      },
+      "category_hits": {
+        "posts": 1,
+        "per_week": 0.25,
+        "by_group": {
+          "ice-cream": 1
+        }
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "FAIL",
+      "bar_B": "N/A",
+      "below_both": true,
+      "bar_A_sole_carriers": [],
+      "evidence": {
+        "kind": "category",
+        "name": "ice-cream:морозив",
+        "matched": "морозиво",
+        "line": "⏺️подарунки, морозиво та сюрпризи від організаторів 🍦🎁",
+        "msg_id": 12835,
+        "date": "2026-07-30T07:20:01+00:00"
+      },
+      "audience": "regional",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@KarlivkaLive",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-03T16:17:25+00:00"
+      },
+      "posts": {
+        "in_window": 11,
+        "with_text": 9,
+        "without_text": 2
+      },
+      "relevant_posts": 0,
+      "relevant_per_week": 0.0,
+      "relevant_share_of_window": 0.0,
+      "relevant_share_of_texted": 0.0,
+      "brand_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_brand": {}
+      },
+      "category_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_group": {}
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "FAIL",
+      "bar_B": "N/A",
+      "below_both": true,
+      "bar_A_sole_carriers": [],
+      "evidence": null,
+      "audience": "regional",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@kremen_news",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-07T09:40:26+00:00"
+      },
+      "posts": {
+        "in_window": 338,
+        "with_text": 338,
+        "without_text": 0
+      },
+      "relevant_posts": 1,
+      "relevant_per_week": 0.25,
+      "relevant_share_of_window": 0.003,
+      "relevant_share_of_texted": 0.003,
+      "brand_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_brand": {}
+      },
+      "category_hits": {
+        "posts": 1,
+        "per_week": 0.25,
+        "by_group": {
+          "dairy": 1
+        }
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "FAIL",
+      "bar_B": "N/A",
+      "below_both": true,
+      "bar_A_sole_carriers": [],
+      "evidence": {
+        "kind": "category",
+        "name": "dairy:масл",
+        "matched": "масло",
+        "line": "Станом на 16 липня найбільше подорожчала молода морква — до 37,87 грн/кг (+8 грн). Також зросли ціни на молоду капусту, гречку, сметану, соняшникову олію, молоко, буряк і бензин. В…",
+        "msg_id": 50043,
+        "date": "2026-07-20T10:20:20+00:00"
+      },
+      "audience": "regional",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@LHVC_info",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-07-20T10:17:18+00:00"
+      },
+      "posts": {
+        "in_window": 1,
+        "with_text": 1,
+        "without_text": 0
+      },
+      "relevant_posts": 0,
+      "relevant_per_week": 0.0,
+      "relevant_share_of_window": 0.0,
+      "relevant_share_of_texted": 0.0,
+      "brand_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_brand": {}
+      },
+      "category_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_group": {}
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "FAIL",
+      "bar_B": "N/A",
+      "below_both": true,
+      "bar_A_sole_carriers": [],
+      "evidence": null,
+      "audience": "regional",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@mo3ambik",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-07T10:29:40+00:00"
+      },
+      "posts": {
+        "in_window": 189,
+        "with_text": 184,
+        "without_text": 5
+      },
+      "relevant_posts": 3,
+      "relevant_per_week": 0.75,
+      "relevant_share_of_window": 0.016,
+      "relevant_share_of_texted": 0.016,
+      "brand_hits": {
+        "posts": 1,
+        "per_week": 0.25,
+        "by_brand": {
+          "varto": 1
+        }
+      },
+      "category_hits": {
+        "posts": 2,
+        "per_week": 0.5,
+        "by_group": {
+          "dairy": 1,
+          "ice-cream": 1
+        }
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "FAIL",
+      "bar_B": "N/A",
+      "below_both": true,
+      "bar_A_sole_carriers": [],
+      "evidence": {
+        "kind": "category",
+        "name": "ice-cream:морозив",
+        "matched": "морозиво",
+        "line": "🍦 Морозиво",
+        "msg_id": 38210,
+        "date": "2026-07-15T10:01:21+00:00"
+      },
+      "audience": "regional",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@myrhorodtown",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-07T09:20:01+00:00"
+      },
+      "posts": {
+        "in_window": 260,
+        "with_text": 260,
+        "without_text": 0
+      },
+      "relevant_posts": 7,
+      "relevant_per_week": 1.75,
+      "relevant_share_of_window": 0.027,
+      "relevant_share_of_texted": 0.027,
+      "brand_hits": {
+        "posts": 4,
+        "per_week": 1.0,
+        "by_brand": {
+          "president": 4
+        }
+      },
+      "category_hits": {
+        "posts": 3,
+        "per_week": 0.75,
+        "by_group": {
+          "dairy": 3
+        }
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "PASS",
+      "bar_B": "N/A",
+      "below_both": false,
+      "bar_A_sole_carriers": [
+        "brand:president"
+      ],
+      "evidence": {
+        "kind": "category",
+        "name": "dairy:масл",
+        "matched": "маслов",
+        "line": "🔹Денис Маслов — міністр юстиції;",
+        "msg_id": 19648,
+        "date": "2026-07-15T18:10:26+00:00"
+      },
+      "audience": "regional",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@PirOperative",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-06T12:12:30+00:00"
+      },
+      "posts": {
+        "in_window": 99,
+        "with_text": 97,
+        "without_text": 2
+      },
+      "relevant_posts": 0,
+      "relevant_per_week": 0.0,
+      "relevant_share_of_window": 0.0,
+      "relevant_share_of_texted": 0.0,
+      "brand_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_brand": {}
+      },
+      "category_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_group": {}
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "FAIL",
+      "bar_B": "N/A",
+      "below_both": true,
+      "bar_A_sole_carriers": [],
+      "evidence": null,
+      "audience": "regional",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@piryatingromada",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-07T06:22:29+00:00"
+      },
+      "posts": {
+        "in_window": 66,
+        "with_text": 58,
+        "without_text": 8
+      },
+      "relevant_posts": 0,
+      "relevant_per_week": 0.0,
+      "relevant_share_of_window": 0.0,
+      "relevant_share_of_texted": 0.0,
+      "brand_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_brand": {}
+      },
+      "category_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_group": {}
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "FAIL",
+      "bar_B": "N/A",
+      "below_both": true,
+      "bar_A_sole_carriers": [],
+      "evidence": null,
+      "audience": "regional",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@poltava20",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-07T09:28:27+00:00"
+      },
+      "posts": {
+        "in_window": 1484,
+        "with_text": 1483,
+        "without_text": 1
+      },
+      "relevant_posts": 6,
+      "relevant_per_week": 1.5,
+      "relevant_share_of_window": 0.004,
+      "relevant_share_of_texted": 0.004,
+      "brand_hits": {
+        "posts": 3,
+        "per_week": 0.75,
+        "by_brand": {
+          "president": 1,
+          "varto": 2
+        }
+      },
+      "category_hits": {
+        "posts": 3,
+        "per_week": 0.75,
+        "by_group": {
+          "dairy": 2,
+          "ice-cream": 1
+        }
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "PASS",
+      "bar_B": "N/A",
+      "below_both": false,
+      "bar_A_sole_carriers": [],
+      "evidence": {
+        "kind": "brand",
+        "name": "varto",
+        "matched": "варто",
+        "line": "На переконання Бориса Знатковського, за нинішніх обставин Покладу варто було б зосередитися на наслідках цієї історії для себе, СБУ та репутації України, а не на подальшому розшире…",
+        "msg_id": 42162,
+        "date": "2026-07-12T13:14:25+00:00"
+      },
+      "audience": "regional",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@poltava_informue",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-07T10:23:42+00:00"
+      },
+      "posts": {
+        "in_window": 1273,
+        "with_text": 1272,
+        "without_text": 1
+      },
+      "relevant_posts": 8,
+      "relevant_per_week": 2.0,
+      "relevant_share_of_window": 0.006,
+      "relevant_share_of_texted": 0.006,
+      "brand_hits": {
+        "posts": 7,
+        "per_week": 1.75,
+        "by_brand": {
+          "president": 4,
+          "varto": 3
+        }
+      },
+      "category_hits": {
+        "posts": 1,
+        "per_week": 0.25,
+        "by_group": {
+          "dairy": 1
+        }
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "PASS",
+      "bar_B": "N/A",
+      "below_both": false,
+      "bar_A_sole_carriers": [],
+      "evidence": {
+        "kind": "brand",
+        "name": "varto",
+        "matched": "варто",
+        "line": "Ти вже знаєш, кому варто про це нагадати!",
+        "msg_id": 35167,
+        "date": "2026-07-11T07:17:07+00:00"
+      },
+      "audience": "regional",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@poltava_pvp",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-07T09:00:52+00:00"
+      },
+      "posts": {
+        "in_window": 412,
+        "with_text": 412,
+        "without_text": 0
+      },
+      "relevant_posts": 6,
+      "relevant_per_week": 1.5,
+      "relevant_share_of_window": 0.015,
+      "relevant_share_of_texted": 0.015,
+      "brand_hits": {
+        "posts": 5,
+        "per_week": 1.25,
+        "by_brand": {
+          "ferma": 1,
+          "president": 2,
+          "varto": 2
+        }
+      },
+      "category_hits": {
+        "posts": 1,
+        "per_week": 0.25,
+        "by_group": {
+          "dairy": 1
+        }
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "PASS",
+      "bar_B": "N/A",
+      "below_both": false,
+      "bar_A_sole_carriers": [],
+      "evidence": {
+        "kind": "brand",
+        "name": "ferma",
+        "matched": "ферма",
+        "line": "🚚 Доставка в будь-який куточок України, де працює Нова Пошта. Жодних посередників — лише ферма та ваша кухня.",
+        "msg_id": 53866,
+        "date": "2026-07-10T17:00:03+00:00"
+      },
+      "audience": "regional",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@suspilnepoltava",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-07T09:58:45+00:00"
+      },
+      "posts": {
+        "in_window": 514,
+        "with_text": 513,
+        "without_text": 1
+      },
+      "relevant_posts": 20,
+      "relevant_per_week": 5.0,
+      "relevant_share_of_window": 0.039,
+      "relevant_share_of_texted": 0.039,
+      "brand_hits": {
+        "posts": 17,
+        "per_week": 4.25,
+        "by_brand": {
+          "premia": 1,
+          "president": 12,
+          "varto": 4
+        }
+      },
+      "category_hits": {
+        "posts": 3,
+        "per_week": 0.75,
+        "by_group": {
+          "dairy": 3,
+          "ice-cream": 1
+        }
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "PASS",
+      "bar_B": "N/A",
+      "below_both": false,
+      "bar_A_sole_carriers": [],
+      "evidence": {
+        "kind": "brand",
+        "name": "president",
+        "matched": "президент",
+        "line": "Президент Зеленський підписав укази про створення у складі ЗСУ нового командування далекобійного впливу на Росію та Об’єднаних сил швидкого реагування. Командувачем Об’єднаних сил …",
+        "msg_id": 46771,
+        "date": "2026-07-10T17:51:07+00:00"
+      },
+      "audience": "regional",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@telegraf_kremenchuk",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-07T10:14:55+00:00"
+      },
+      "posts": {
+        "in_window": 617,
+        "with_text": 610,
+        "without_text": 7
+      },
+      "relevant_posts": 30,
+      "relevant_per_week": 7.5,
+      "relevant_share_of_window": 0.049,
+      "relevant_share_of_texted": 0.049,
+      "brand_hits": {
+        "posts": 26,
+        "per_week": 6.5,
+        "by_brand": {
+          "ferma": 2,
+          "halychyna": 1,
+          "lasunka": 1,
+          "president": 8,
+          "selianske": 2,
+          "varto": 15
+        }
+      },
+      "category_hits": {
+        "posts": 10,
+        "per_week": 2.5,
+        "by_group": {
+          "dairy": 10,
+          "ice-cream": 2
+        }
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "PASS",
+      "bar_B": "N/A",
+      "below_both": false,
+      "bar_A_sole_carriers": [],
+      "evidence": {
+        "kind": "category",
+        "name": "dairy:сир",
+        "matched": "сир",
+        "line": "🧀Сир Гауда 48%, 100 г, зі знижкою 55% – 26,90 грн",
+        "msg_id": 70595,
+        "date": "2026-07-10T12:01:44+00:00"
+      },
+      "audience": "regional",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@zinkivnews",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-07-31T07:20:01+00:00"
+      },
+      "posts": {
+        "in_window": 9,
+        "with_text": 9,
+        "without_text": 0
+      },
+      "relevant_posts": 0,
+      "relevant_per_week": 0.0,
+      "relevant_share_of_window": 0.0,
+      "relevant_share_of_texted": 0.0,
+      "brand_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_brand": {}
+      },
+      "category_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_group": {}
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "FAIL",
+      "bar_B": "N/A",
+      "below_both": true,
+      "bar_A_sole_carriers": [],
+      "evidence": null,
+      "audience": "regional",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@atb_market_official",
+      "window": {
+        "since": "2026-06-26T00:00:00+00:00",
+        "until": "2026-07-24T00:00:00+00:00",
+        "source": "raw_v1_own_last_28d",
+        "last_post": "2026-07-23T06:35:09+00:00"
+      },
+      "posts": {
+        "in_window": 25,
+        "with_text": 6,
+        "without_text": 19
+      },
+      "relevant_posts": 0,
+      "relevant_per_week": 0.0,
+      "relevant_share_of_window": 0.0,
+      "relevant_share_of_texted": 0.0,
+      "brand_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_brand": {}
+      },
+      "category_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_group": {}
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "FAIL",
+      "bar_B": "N/A",
+      "below_both": true,
+      "bar_A_sole_carriers": [],
+      "evidence": null,
+      "audience": "retail_official",
+      "source_type": "official_retail",
+      "watch": false,
+      "alternative_window": {
+        "source": "collect_5c1",
+        "posts_in_window": 13,
+        "relevant_posts": 0,
+        "bar_A": "FAIL",
+        "note": "reported, not scored: the store ends before this window does"
+      }
+    },
+    {
+      "handle": "@ekomarket_shop",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-07T07:18:50+00:00"
+      },
+      "posts": {
+        "in_window": 12,
+        "with_text": 12,
+        "without_text": 0
+      },
+      "relevant_posts": 5,
+      "relevant_per_week": 1.25,
+      "relevant_share_of_window": 0.417,
+      "relevant_share_of_texted": 0.417,
+      "brand_hits": {
+        "posts": 4,
+        "per_week": 1.0,
+        "by_brand": {
+          "ferma": 1,
+          "rud": 3,
+          "selianske": 2
+        }
+      },
+      "category_hits": {
+        "posts": 5,
+        "per_week": 1.25,
+        "by_group": {
+          "dairy": 5,
+          "ice-cream": 2
+        }
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "PASS",
+      "bar_B": "N/A",
+      "below_both": false,
+      "bar_A_sole_carriers": [],
+      "evidence": {
+        "kind": "category",
+        "name": "dairy:молочн",
+        "matched": "молочна",
+        "line": "🥓 -31% - Ковбаса варена \"Молочна\" ТМ \"Зоря Дніпра\", 400г - 103,9грн",
+        "msg_id": 1445,
+        "date": "2026-07-22T09:04:04+00:00"
+      },
+      "audience": "retail_official",
+      "source_type": "official_retail",
+      "watch": false
+    },
+    {
+      "handle": "@epicentrk_sale",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-07T07:35:29+00:00"
+      },
+      "posts": {
+        "in_window": 141,
+        "with_text": 140,
+        "without_text": 1
+      },
+      "relevant_posts": 9,
+      "relevant_per_week": 2.25,
+      "relevant_share_of_window": 0.064,
+      "relevant_share_of_texted": 0.064,
+      "brand_hits": {
+        "posts": 2,
+        "per_week": 0.5,
+        "by_brand": {
+          "varto": 2
+        }
+      },
+      "category_hits": {
+        "posts": 8,
+        "per_week": 2.0,
+        "by_group": {
+          "dairy": 7,
+          "ice-cream": 2
+        }
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "PASS",
+      "bar_B": "N/A",
+      "below_both": false,
+      "bar_A_sole_carriers": [],
+      "evidence": {
+        "kind": "category",
+        "name": "dairy:сир",
+        "matched": "сир",
+        "line": "🧀 Пармезан або інший твердий сир — 50 г",
+        "msg_id": 6107,
+        "date": "2026-07-11T07:11:00+00:00"
+      },
+      "audience": "retail_official",
+      "source_type": "official_retail",
+      "watch": false
+    },
+    {
+      "handle": "@forainfo",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-07T06:04:01+00:00"
+      },
+      "posts": {
+        "in_window": 14,
+        "with_text": 14,
+        "without_text": 0
+      },
+      "relevant_posts": 4,
+      "relevant_per_week": 1.0,
+      "relevant_share_of_window": 0.286,
+      "relevant_share_of_texted": 0.286,
+      "brand_hits": {
+        "posts": 2,
+        "per_week": 0.5,
+        "by_brand": {
+          "limo": 1,
+          "rud": 1,
+          "selianske": 1
+        }
+      },
+      "category_hits": {
+        "posts": 4,
+        "per_week": 1.0,
+        "by_group": {
+          "dairy": 4,
+          "ice-cream": 2
+        }
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "PASS",
+      "bar_B": "N/A",
+      "below_both": false,
+      "bar_A_sole_carriers": [
+        "dairy:десерт",
+        "dairy:сир"
+      ],
+      "evidence": {
+        "kind": "category",
+        "name": "dairy:десерт",
+        "matched": "десертом",
+        "line": "Потіште себе улюбленим десертом за ще вигіднішою ціною💚",
+        "msg_id": 6029,
+        "date": "2026-07-13T06:44:23+00:00"
+      },
+      "audience": "retail_official",
+      "source_type": "official_retail",
+      "watch": false
+    },
+    {
+      "handle": "@marketopt_promo",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-07T08:06:42+00:00"
+      },
+      "posts": {
+        "in_window": 12,
+        "with_text": 8,
+        "without_text": 4
+      },
+      "relevant_posts": 4,
+      "relevant_per_week": 1.0,
+      "relevant_share_of_window": 0.333,
+      "relevant_share_of_texted": 0.5,
+      "brand_hits": {
+        "posts": 2,
+        "per_week": 0.5,
+        "by_brand": {
+          "ferma": 2
+        }
+      },
+      "category_hits": {
+        "posts": 3,
+        "per_week": 0.75,
+        "by_group": {
+          "dairy": 3
+        }
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "PASS",
+      "bar_B": "N/A",
+      "below_both": false,
+      "bar_A_sole_carriers": [
+        "brand:ferma",
+        "dairy:сир",
+        "dairy:сметан"
+      ],
+      "evidence": {
+        "kind": "category",
+        "name": "dairy:сметан",
+        "matched": "сметана",
+        "line": "1. Сметана 15% Простонаше 300г",
+        "msg_id": 2871,
+        "date": "2026-07-17T06:36:06+00:00"
+      },
+      "audience": "retail_official",
+      "source_type": "official_retail",
+      "watch": false
+    },
+    {
+      "handle": "@silposilpo",
+      "window": {
+        "since": "2026-06-30T00:00:00+00:00",
+        "until": "2026-07-28T00:00:00+00:00",
+        "source": "raw_v1_own_last_28d",
+        "last_post": "2026-07-27T08:00:12+00:00"
+      },
+      "posts": {
+        "in_window": 36,
+        "with_text": 36,
+        "without_text": 0
+      },
+      "relevant_posts": 11,
+      "relevant_per_week": 2.75,
+      "relevant_share_of_window": 0.306,
+      "relevant_share_of_texted": 0.306,
+      "brand_hits": {
+        "posts": 3,
+        "per_week": 0.75,
+        "by_brand": {
+          "ferma": 1,
+          "premia": 1,
+          "varto": 1
+        }
+      },
+      "category_hits": {
+        "posts": 9,
+        "per_week": 2.25,
+        "by_group": {
+          "dairy": 6,
+          "ice-cream": 4
+        }
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "PASS",
+      "bar_B": "N/A",
+      "below_both": false,
+      "bar_A_sole_carriers": [],
+      "evidence": {
+        "kind": "category",
+        "name": "dairy:сир",
+        "matched": "сир",
+        "line": "🧀Сир кисломолочний «Біло» 5%, 1000 г зі знижкою 39% – 169 грн",
+        "msg_id": 3776,
+        "date": "2026-07-04T06:52:36+00:00"
+      },
+      "audience": "retail_official",
+      "source_type": "official_retail",
+      "watch": false,
+      "alternative_window": {
+        "source": "collect_5c1",
+        "posts_in_window": 23,
+        "relevant_posts": 7,
+        "bar_A": "PASS",
+        "note": "reported, not scored: the store ends before this window does"
+      }
+    },
+    {
+      "handle": "@VARUS_channel",
+      "window": {
+        "since": "2026-06-29T00:00:00+00:00",
+        "until": "2026-07-27T00:00:00+00:00",
+        "source": "raw_v1_own_last_28d",
+        "last_post": "2026-07-26T16:24:46+00:00"
+      },
+      "posts": {
+        "in_window": 135,
+        "with_text": 103,
+        "without_text": 32
+      },
+      "relevant_posts": 65,
+      "relevant_per_week": 16.25,
+      "relevant_share_of_window": 0.481,
+      "relevant_share_of_texted": 0.631,
+      "brand_hits": {
+        "posts": 60,
+        "per_week": 15.0,
+        "by_brand": {
+          "limo": 1,
+          "rud": 5,
+          "selianske": 2,
+          "try-vedmedi": 2,
+          "varto": 5,
+          "varus-pl": 56,
+          "yagotynske": 1
+        }
+      },
+      "category_hits": {
+        "posts": 20,
+        "per_week": 5.0,
+        "by_group": {
+          "dairy": 17,
+          "ice-cream": 5
+        }
+      },
+      "comments": {
+        "source": "collected",
+        "in_store": 6410,
+        "under_relevant": 257,
+        "relevant_threads_with_comments": 33
+      },
+      "bar_A": "PASS",
+      "bar_B": "PASS",
+      "below_both": false,
+      "bar_A_sole_carriers": [],
+      "evidence": {
+        "kind": "brand",
+        "name": "varus-pl",
+        "matched": "varus",
+        "line": "Вмикайте трансляцію, обирайте свого фаворита та насолоджуйтеся грою. А про смак футбольного вечора подбає VARUS! 🧡",
+        "msg_id": 10110,
+        "date": "2026-06-29T13:37:43+00:00"
+      },
+      "audience": "retail_official",
+      "source_type": "official_retail",
+      "watch": false,
+      "alternative_window": {
+        "source": "collect_5c1",
+        "posts_in_window": 87,
+        "relevant_posts": 41,
+        "bar_A": "PASS",
+        "note": "reported, not scored: the store ends before this window does"
+      }
+    },
+    {
+      "handle": "@atb_aktsiyi",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-06T15:39:28+00:00"
+      },
+      "posts": {
+        "in_window": 53,
+        "with_text": 7,
+        "without_text": 46
+      },
+      "relevant_posts": 1,
+      "relevant_per_week": 0.25,
+      "relevant_share_of_window": 0.019,
+      "relevant_share_of_texted": 0.143,
+      "brand_hits": {
+        "posts": 1,
+        "per_week": 0.25,
+        "by_brand": {
+          "svoia-liniia": 1
+        }
+      },
+      "category_hits": {
+        "posts": 1,
+        "per_week": 0.25,
+        "by_group": {
+          "dairy": 1
+        }
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "FAIL",
+      "bar_B": "N/A",
+      "below_both": true,
+      "bar_A_sole_carriers": [],
+      "evidence": {
+        "kind": "category",
+        "name": "dairy:сир",
+        "matched": "сир",
+        "line": "- Сир м’який De Luxe Foods & Goods Selected",
+        "msg_id": 3209,
+        "date": "2026-08-04T13:54:53+00:00"
+      },
+      "audience": "supermarket_deals",
+      "source_type": "aggregator",
+      "watch": false
+    },
+    {
+      "handle": "@kopiyochka1",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-07T09:01:23+00:00"
+      },
+      "posts": {
+        "in_window": 52,
+        "with_text": 49,
+        "without_text": 3
+      },
+      "relevant_posts": 1,
+      "relevant_per_week": 0.25,
+      "relevant_share_of_window": 0.019,
+      "relevant_share_of_texted": 0.02,
+      "brand_hits": {
+        "posts": 0,
+        "per_week": 0.0,
+        "by_brand": {}
+      },
+      "category_hits": {
+        "posts": 1,
+        "per_week": 0.25,
+        "by_group": {
+          "ice-cream": 1
+        }
+      },
+      "comments": {
+        "source": "collected",
+        "in_store": 223,
+        "under_relevant": 1,
+        "relevant_threads_with_comments": 1
+      },
+      "bar_A": "FAIL",
+      "bar_B": "FAIL",
+      "below_both": true,
+      "bar_A_sole_carriers": [],
+      "evidence": {
+        "kind": "category",
+        "name": "ice-cream:морозив",
+        "matched": "морозива",
+        "line": "Яскравий посуд, графини, чашки і дрібнички для прохолодних напоїв та домашнього морозива вже чекають у добірці 😍",
+        "msg_id": 21672,
+        "date": "2026-07-16T14:50:05+00:00"
+      },
+      "audience": "supermarket_deals",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@maudau",
+      "window": {
+        "since": "2026-07-10T10:33:14+00:00",
+        "until": "2026-08-07T10:33:14+00:00",
+        "source": "collect_5c1",
+        "last_post": "2026-08-07T06:59:27+00:00"
+      },
+      "posts": {
+        "in_window": 64,
+        "with_text": 60,
+        "without_text": 4
+      },
+      "relevant_posts": 2,
+      "relevant_per_week": 0.5,
+      "relevant_share_of_window": 0.031,
+      "relevant_share_of_texted": 0.033,
+      "brand_hits": {
+        "posts": 1,
+        "per_week": 0.25,
+        "by_brand": {
+          "varto": 1
+        }
+      },
+      "category_hits": {
+        "posts": 1,
+        "per_week": 0.25,
+        "by_group": {
+          "dairy": 1
+        }
+      },
+      "comments": {
+        "source": "none",
+        "in_store": 0,
+        "under_relevant": 0,
+        "relevant_threads_with_comments": 0
+      },
+      "bar_A": "FAIL",
+      "bar_B": "N/A",
+      "below_both": true,
+      "bar_A_sole_carriers": [],
+      "evidence": {
+        "kind": "category",
+        "name": "dairy:десерт",
+        "matched": "десерти",
+        "line": "Що може бути солодшим за десерти? Знижки до -45% на них 🍬",
+        "msg_id": 2800,
+        "date": "2026-07-18T15:13:02+00:00"
+      },
+      "audience": "supermarket_deals",
+      "source_type": "community",
+      "watch": false
+    },
+    {
+      "handle": "@msuaaaa",
+      "window": {
+        "since": "2026-06-30T00:00:00+00:00",
+        "until": "2026-07-28T00:00:00+00:00",
+        "source": "raw_v1_own_last_28d",
+        "last_post": "2026-07-27T08:17:50+00:00"
+      },
+      "posts": {
+        "in_window": 66,
+        "with_text": 66,
+        "without_text": 0
+      },
+      "relevant_posts": 6,
+      "relevant_per_week": 1.5,
+      "relevant_share_of_window": 0.091,
+      "relevant_share_of_texted": 0.091,
+      "brand_hits": {
+        "posts": 3,
+        "per_week": 0.75,
+        "by_brand": {
+          "molokija": 1,
+          "rud": 1,
+          "selianske": 1,
+          "varto": 1
+        }
+      },
+      "category_hits": {
+        "posts": 5,
+        "per_week": 1.25,
+        "by_group": {
+          "dairy": 3,
+          "ice-cream": 3
+        }
+      },
+      "comments": {
+        "source": "collected",
+        "in_store": 4928,
+        "under_relevant": 13,
+        "relevant_threads_with_comments": 5
+      },
+      "bar_A": "PASS",
+      "bar_B": "PASS",
+      "below_both": false,
+      "bar_A_sole_carriers": [],
+      "evidence": {
+        "kind": "brand",
+        "name": "varto",
+        "matched": "варто",
+        "line": "Зараз варто так само підтримати Сніжну Панду 🧻",
+        "msg_id": 10412,
+        "date": "2026-07-01T15:42:40+00:00"
+      },
+      "audience": "supermarket_deals",
+      "source_type": "aggregator",
+      "watch": false,
+      "alternative_window": {
+        "source": "collect_5c1",
+        "posts_in_window": 36,
+        "relevant_posts": 3,
+        "bar_A": "FAIL",
+        "note": "reported, not scored: the store ends before this window does"
+      }
+    }
+  ],
+  "git": {
+    "commit": "025993928b56e44c44da28cd51a9ea2dba3f4ca4",
+    "dirty": [
+      "scripts/yield_screen_5c1.py",
+      "src/market_pulse/yield_screen.py",
+      "tests/test_yield_screen_5c1.py"
+    ]
+  }
+}
