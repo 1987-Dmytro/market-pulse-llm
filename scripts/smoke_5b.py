@@ -394,7 +394,13 @@ def main(argv: list[str] | None = None) -> int:
     print(f"\nparsed         {parsed}/{len(scored)}")
     print(f"per row        {per_row}s wall (cold start excluded)")
     print(f"held           {timing['wall_seconds']}s wall, {timing['worker_seconds']}s executed")
-    print(f"record         {args.record.relative_to(REPO_ROOT)}")
+    # `--record results/x.json` is a relative path and `relative_to` refuses it, which crashed a
+    # run at srv-2b AFTER the record was written — a traceback that reads like a lost smoke and is
+    # not one. `batch_ladder_5b2` already carries the guarded form; this is the same one.
+    where = args.record.resolve()
+    print(
+        f"record         {where.relative_to(REPO_ROOT) if where.is_relative_to(REPO_ROOT) else where}"
+    )
     if parsed != len(scored):
         print("\nSTOP AND REPORT: a carve row did not parse. The path is not proven.")
         return 3

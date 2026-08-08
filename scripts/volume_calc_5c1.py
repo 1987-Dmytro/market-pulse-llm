@@ -148,8 +148,22 @@ def idle_rate_bound() -> dict:
     They bound it, they do not isolate it: every interval between two spend sessions contains
     whatever ran inside it, so the quietest one is an UPPER bound on what the volume alone costs.
     Reported as an inequality rather than as a second estimate of the same number.
+
+    **The walk stops where this calculation was written.** `results/spend_phase4.json` is a live
+    ledger and keeps growing; the volume it bounds — `gfwa2an8fn` — was deleted after this record
+    was generated. srv-2b's first two guard notes straddled that deletion and made the quietest
+    interval a two-day stretch with **no volume attached at all**, implying $0.0947/day. That is a
+    smaller number and a meaningless one: an interval that held no volume cannot cap a volume's
+    idle rate, and the bound would have quietly tightened on nothing. Cutting at the record's own
+    `generated_at` keeps the walk over the window the reading was taken in, and has the property a
+    derived number should have — it re-derives what the record froze instead of drifting under it.
     """
-    sessions = json.loads(SPEND_P4.read_text(encoding="utf-8"))["sessions"]
+    until = datetime.fromisoformat(json.loads(RECORD.read_text(encoding="utf-8"))["generated_at"])
+    sessions = [
+        row
+        for row in json.loads(SPEND_P4.read_text(encoding="utf-8"))["sessions"]
+        if datetime.fromisoformat(row["at"]) <= until
+    ]
     intervals = []
     for prev, row in zip(sessions, sessions[1:]):
         hours = (

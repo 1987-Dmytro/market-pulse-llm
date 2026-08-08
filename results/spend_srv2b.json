@@ -1,6 +1,19 @@
 {
   "runpod_balance_at_srv2b_start": 16.5012168447,
   "srv2b_gpu_cap_usd": 4.0,
-  "gpu_sessions": [],
+  "gpu_sessions": [
+    {
+      "at": "2026-08-08T17:35:05+00:00",
+      "balance": 16.5012168447,
+      "step_spent_usd": 0.0,
+      "note": "srv-2b volume qw4nwleanc created, 100 GB, EU-RO-1; console price NOT readable from CLI/API — measured from billing accrual at C.9"
+    },
+    {
+      "at": "2026-08-08T18:06:16+00:00",
+      "balance": 16.1313624948,
+      "step_spent_usd": 0.3699,
+      "note": "srv-2b staging + cold-start proof on a 4090 pod: 59 GB staged, 8/8 rows parsed, no OOM (19874 of 24564 MiB), 175.8 s cold start, 2.198 s/row"
+    }
+  ],
   "gpu_note": "RunPod account balance read before the first pod of srv2b. Step spend = this anchor minus the balance now, enforced against $4.00. The SPEC amendment 3.4 (4) phase cap is enforced separately, against results/spend_phase4.json, and neither anchor may be regenerated."
 }

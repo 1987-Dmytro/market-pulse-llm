@@ -101,6 +101,20 @@
       "spent_usd": 18.3089,
       "remaining_usd": 6.6911,
       "note": "5b.2: test v4 at batch 16 — OOM on sarcasm_holdout after 666/758 rows, measurement failed, pod deleted and verified by listing"
+    },
+    {
+      "at": "2026-08-08T17:35:05+00:00",
+      "balance": 16.5012168447,
+      "spent_usd": 18.4988,
+      "remaining_usd": 6.5012,
+      "note": "srv-2b volume qw4nwleanc created, 100 GB, EU-RO-1; console price NOT readable from CLI/API — measured from billing accrual at C.9"
+    },
+    {
+      "at": "2026-08-08T18:06:16+00:00",
+      "balance": 16.1313624948,
+      "spent_usd": 18.8686,
+      "remaining_usd": 6.1314,
+      "note": "srv-2b staging + cold-start proof on a 4090 pod: 59 GB staged, 8/8 rows parsed, no OOM (19874 of 24564 MiB), 175.8 s cold start, 2.198 s/row"
     }
   ]
 }
