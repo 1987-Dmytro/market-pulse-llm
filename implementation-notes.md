@@ -4023,3 +4023,71 @@ first was calling thirteen rows thirteen joins, the second was `grep -c` standin
 enumeration. A log line is a record of an event, and the fields in it may name any number of other
 moments; `json.loads` and a filter on the field you mean cost one line more than a grep and cannot
 be read wrong.
+
+## Deviations — PROMPT-5c1-yield (the relevance floor)
+
+**Dv1 — step 5 was already executed on day 2, so no resolve was spent and the registry does not
+reach 67.** The brief queues @KarlivkaLive for the track-R gate with ONE wall-guarded resolve, and
+says the registry goes 66 → 67 on a PASS. It was gated on 2026-08-08 at 10:48 as «Дозаявка №9»:
+`results/entry_gate_5c1.json` carries its row (verdict FLAG, flag cleared by the operator's own
+ruling — the closed group it names IS the excluded @Karlivka_live supergroup), the registry has
+carried it since (`config/registry.yaml`), and `results/collect_5c1.json` records its 28-day
+window at 12 posts. So the arithmetic is one step off: the registry was 67 including
+@KarlivkaLive, @dikankaa's exclusion takes it to **66**, and there is no 67th to reach. The
+brief's "on FAIL/FLAG record and stop" branch was discharged by the operator's clearance on the
+day. Consequence: **this whole session touched Telegram zero times** — 0 resolves against the
+one authorised, $0. @KarlivkaLive is in the step-4 run as the brief intended; its yield row is 11
+posts in window, 0 relevant, below both bars.
+
+**Dv2 — the pre-registered positive control FAILED, so the screen's verdict columns are not
+reportable.** `results/yield_screen_5c1.json` says `verdicts_reportable: false` and the run exits
+1. @atb_market_official has 0 relevant posts in its own 28 days: 25 posts, 19 of them image-only,
+and the six texted ones are Fairy dish soap and card-holder discounts. Not an instrument fault —
+over the channel's whole 777-post store the same matcher finds the tracked category 34 times. The
+record is complete and every number in it is written down; what the refusal withholds is the
+right to READ the verdict column as a verdict, which is exactly what a pre-registered control is
+for.
+
+**Dv3 — two blocks in the record the brief did not ask for: `term_evidence` and
+`bar_A_sole_carriers`.** Without them the pass list of 29 reads as 29 channels that carry the
+category, and two of them do not: @polyakova_fitness clears bar A on «варто» alone — АТБ's private
+label and the ordinary Ukrainian word for "it is worth", firing on 89 posts across 24 channels —
+and @myrhorodtown on «Президент», which is 33 posts of Zelensky. Both blocks are measurement, not
+judgement: no term was struck, no bar moved, the lexicon still says `draft-not-law`. Deleting them
+costs one revert and the row counts stand unchanged.
+
+**Dv4 — the four originals are screened over their own last 28 days, and the alternative reading
+is published beside them.** Amendment 3.12 says "a channel's collected 28-day window" and the
+brief's control says "on ITS window"; the raw v1 store was pinned before `collect_5c1.json`'s
+`since` existed and ends 2026-07-23…27, so the shared window would give these four 13–17 days
+against everyone else's 28 while bar A counts absolutely. The rule is favourable to them —
+@msuaaaa clears bar A on its own window (6) and would not on the shared one (3) — so each row
+carries `alternative_window` rather than a sentence in prose. Ordering recorded: the executor
+probed those four BEFORE committing the pre-registration, to find out whether the control was
+measurable at all, and the probe's answer was that @atb_market_official reads 0 under both
+candidate rules. The bars are the operator's and did not move; the window rule was chosen after
+seeing numbers that no choice of window could improve.
+
+**Dv5 — the brief's step-1 evidence line for @dikankaa names something no artifact here holds.**
+`RF oblasts in the channel's own description` is the operator's own reading of the channel in
+Telegram; `entry_check` stores a title, never a bio. The ruling is transcribed as given and the
+removal comment says which half is checkable (the census: ua 0 / ru 20 of 30 posts) and which is
+not.
+
+**Dv6 — STATUS names a third file for the watchlist +3 that has nothing to receive them.** The
+amendment block says «WATCHLIST → реестр → лексикон»; the brief's step 2 names two files, and
+`data/category_lexicon_draft.json` has no brand section at all — its `tracked` half is category
+stems seeded from the taxonomy's display names. The two files the brief names are written; the
+lexicon is untouched and this is flagged rather than guessed at.
+
+**Dv7 — the day-2 canon gained an acceptance section, and three test modules moved with the
+composition.** `docs/CHANNELS-launch.md` claimed «реестр 67» while the registry became 66; the
+canon amends rather than restates, so «Сводка после приёмки дня 2: реестр 66» was appended and the
+composition test holds it. The day-2 census and market-screen records are now one row wider than
+the live registry, which their tests name (`measured - live == {"@dikankaa"}`) instead of
+tolerating as drift.
+
+**Dv8 — step 0's reconciliation was already on disk.** The `/close` session of 08.08 had written
+D73 into this file and left it uncommitted. It was re-derived rather than trusted — the extra
+`grep -c 2026-08-08` match is 07.08's FloodWait row carrying `clears_at: 2026-08-08T10:02:05` —
+and committed unchanged.
