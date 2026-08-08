@@ -421,7 +421,7 @@ def test_the_shipped_registry_carries_the_canons_audience_for_every_source():
     """Read by HANDLE: the four originals predate `source_entry` and their ids do not follow
     from their handles (@VARUS_channel is `varus`), so an id-keyed check would miss them."""
     sources = load_registry(REPO_ROOT / "config" / "registry.yaml").sources
-    assert len(sources) == 67
+    assert len(sources) == 66
     for src in sources:
         for handle in src.telegram_channels:
             assert src.audience == apply.AUDIENCE[handle], handle
@@ -489,10 +489,21 @@ def test_every_reversal_in_the_shipped_record_says_what_it_replaced():
         for candidate in record["candidates"]
         if candidate.get("replaced")
     }
-    assert set(reversed_rows) == {"@discountua1", "@uasaler", "@prostetsofa"}
+    assert set(reversed_rows) == {"@discountua1", "@uasaler", "@prostetsofa", "@dikankaa"}
     for handle, history in reversed_rows.items():
         assert len(history) == 1, handle
-        assert history[0]["ruling"].startswith("KEPT"), handle
+    # Three of the four reversed a KEPT. @dikankaa reversed a PLACEMENT — it had already entered
+    # as a city feed when the day-2 acceptance ruled it out on the census — and pinning the shape
+    # is what keeps "a reversal is always a kept channel losing its keep" from being read into a
+    # test that never said it.
+    assert {
+        handle: history[0]["ruling"].split(" ")[0] for handle, history in reversed_rows.items()
+    } == {
+        "@uasaler": "KEPT,",
+        "@discountua1": "KEPT",
+        "@prostetsofa": "KEPT",
+        "@dikankaa": "CITY",
+    }
 
 
 def test_the_replacement_lands_by_the_rule_the_operator_wrote_in_advance():
@@ -730,7 +741,7 @@ def test_the_shipped_registry_is_re_derivable_from_the_gate_record():
             expected["watch"],
         ), candidate["handle"]
         checked += 1
-    assert checked == 63
+    assert checked == 62
 
 
 def test_the_composition_matches_the_canons_own_summary():
@@ -778,6 +789,11 @@ def test_the_composition_matches_the_canons_own_summary():
     ten = " ".join(text[text.index("**Сводка после дозаявки №10") :][:400].split())
     assert "Сводка после дозаявки №10: реестр 67 = запуск 60 + watch 7." in ten
     assert "Комментных 18" in ten and "постовых 38" in ten
+    # And the acceptance that closed the day: one exclusion on the census, so the composition the
+    # registry has to match now is 66. Same amend-never-restate rule as every wave above.
+    accepted = " ".join(text[text.index("**Сводка после приёмки дня 2") :][:300].split())
+    assert "**Сводка после приёмки дня 2: реестр 66 = запуск 59 + watch 7.**" in accepted
+    assert "исключено за фазу **34**" in accepted
     assert "боевых mothers_kids 3" in ten
     assert "боевой **1** (@educationwithloven)" in day2, "the mothers segment stopped being empty"
     provisional = " ".join(text[text.index("**Весь дифф реестра дня 2") :][:400].split())
@@ -785,13 +801,72 @@ def test_the_composition_matches_the_canons_own_summary():
 
     assert buckets["comments"] == 18
     assert buckets["watch"] == 7
-    assert buckets["posts"] == 38
+    assert buckets["posts"] == 37
     # Six by 07.08 midday, the five the theme screen caught that evening (@znishkom,
     # @whitecode_zny, @offspringrus off-topic; @discountua1, @ATB_FANatik text-free), @uasaler by
     # wave 2, wave 3's fifteen — 3 on the census, 1 on market-origin evidence, 11 on RU titles —
-    # and the day-2 four: three supergroups and one dead chain.
-    assert buckets["excluded"] == 33
+    # the day-2 four (three supergroups and one dead chain), and @dikankaa on the acceptance.
+    assert buckets["excluded"] == 34
     # The four originals are out of the gate's scope, so they are added here rather than counted.
     # None of the fifteen was one of them: @tretyakovaele was gated in 5c1 like the rest.
-    assert 4 + buckets["comments"] + buckets["posts"] == 60
-    assert 4 + buckets["comments"] + buckets["posts"] + buckets["watch"] == 67
+    assert 4 + buckets["comments"] + buckets["posts"] == 59
+    assert 4 + buckets["comments"] + buckets["posts"] + buckets["watch"] == 66
+
+
+# --- the day-2 acceptance (operator, 2026-08-08 evening) ------------------------------------------
+
+
+def test_dikankaa_leaves_on_the_census_and_its_evidence_leaves_with_it():
+    """House style: a silently shorter registry cannot be told from one that never had the
+    channel. So the exclusion carries the operator's own words AND the artifact that holds half
+    of them — the census reading — into the comment the removal leaves behind."""
+    bucket, ruling = apply.final_bucket(row("@dikankaa", "city"))
+    assert bucket is None
+    assert "ru 1.00 on 20 decidable posts" in ruling
+    assert "UA-only policy" in ruling
+
+    text = (REPO_ROOT / "config" / "registry.yaml").read_text(encoding="utf-8")
+    assert "\n  - id: dikankaa\n" not in text
+    line = next(ln for ln in text.splitlines() if ln.startswith("  # dikankaa removed"))
+    assert "2026-08-08" in line
+    assert "language_census_5c1_day2.json" in line
+    # The half the operator saw and no artifact here holds — said out loud rather than dropped.
+    assert "the gate stores title, not bio" in line
+
+
+def test_the_closed_group_ruling_covers_the_class_and_names_only_its_four():
+    """Option 1 of the menu: the flag concerns a capability the assigned bucket does not use.
+
+    A ruling about a CLASS has to be checkable against the rows in it, or the next channel of the
+    same shape is cleared by resemblance. @KarlivkaLive carries the identical flag and is out of
+    the tuple on purpose — it was ruled separately as «Дозаявка №9», and folding it in would make
+    one ruling look like it had covered five.
+    """
+    record = json.loads((REPO_ROOT / "results" / "entry_gate_5c1.json").read_text(encoding="utf-8"))
+    rows = {candidate["handle"]: candidate for candidate in record["candidates"]}
+    for handle in apply.CLOSED_GROUP_FLAG["channels"]:
+        assert handle in apply.CLEARED, handle
+        assert rows[handle]["verdict"] == "FLAG", handle
+        assert rows[handle]["flags"] == ["discussion group is not open — join needs admin approval"]
+    assert "@KarlivkaLive" not in apply.CLOSED_GROUP_FLAG["channels"]
+    assert rows["@KarlivkaLive"]["flags"] == rows["@zinkivnews"]["flags"]
+    assert record["rulings"]["closed_group_flag"]["reading"].startswith("the flag concerns")
+
+
+def test_the_three_rf_flags_are_kept_with_their_reading_on_the_row():
+    """«RF 0 on the live 39» is quoted in STATUS; three flags arrived on 08.08 and all three are
+    one war report. The ruling lives on the rows, so the zero cannot rot into a number whose
+    explanation is only in prose somewhere."""
+    screen = json.loads(
+        (REPO_ROOT / "results" / "market_screen_5c1_day2.json").read_text(encoding="utf-8")
+    )
+    ruled = {row["handle"]: row["ruling"] for row in screen["sources"] if row.get("ruling")}
+    assert set(ruled) == {"@myrhorodtown", "@poltava_informue", "@poltava20"}
+    live = {
+        handle
+        for source in load_registry(REPO_ROOT / "config" / "registry.yaml").sources
+        for handle in source.telegram_channels
+    }
+    for handle, ruling in ruled.items():
+        assert ruling.startswith("KEPT — war-news-explained")
+        assert handle in live, f"{handle} was ruled KEPT and is not in the registry"

@@ -35,6 +35,9 @@ from market_pulse.registry import SOURCE_TYPES, load_registry  # noqa: E402
 REGISTRY = REPO_ROOT / "config" / "registry.yaml"
 GATE_RECORD = REPO_ROOT / "results" / "entry_gate_5c1.json"
 CANON = "docs/CHANNELS-launch.md, sections 'Рулинги гейта 5c1 (2026-08-07)' and 'Рулинги, волна 2'"
+REMOVED_ON = "2026-08-08"
+"""The date a removal performed by THIS run is stamped with. The comments already in the file
+carry the date of the run that wrote them and are not re-dated by a later pass."""
 
 EXCLUDED = {
     "@kolyastravinsky": "theme: a personal RU-language blog (Samara restaurants, ballet) — the"
@@ -135,6 +138,16 @@ EXCLUDED = {
     " history, the last 2025-01-02 — nineteen months of silence, and no discussion group. Same"
     " class as @akcii_skidki_plt, excluded 07.08. It was the team lead's own suggestion in"
     " «Дозаявка №5», and the gate is what measured it",
+    # --- the day-2 acceptance (operator, 2026-08-08 evening) ----------------------------------
+    # The one RU_DOMINANT row the day-2 market screen and census left open. REPORT ONLY was the
+    # rule while it was a finding; this is the ruling that follows it.
+    "@dikankaa": "EXCLUDED on the language census (day-2 acceptance): ru 1.00 on 20 decidable"
+    " posts + RF oblasts in the channel's own description; UA-only policy (2026-07 census"
+    " discipline). The operator's words, and the half of them this repo holds an artifact for:"
+    " results/language_census_5c1_day2.json reads ua 0 / ru 20 of 30 posts in the window, and the"
+    " RF geography is in the window too — «ОТДАЕМ ЩЕНКА В ДОБРЫЕ РУКИ … По Волгоградской области"
+    " ( Энгельс, Саратов тоже можем )», 2026-08-01. The channel's own description is not in any"
+    " artifact here: the gate stores title, not bio",
 }
 """Ruled out of the composition. Their gate rows stay in the record, carrying this text."""
 
@@ -176,6 +189,24 @@ KEPT = {
     "@prostetsofa": "stays in watch, recorded: its group admits by approval only. No watch join"
     " happens in this phase; this surfaces when the channel wakes up",
 }
+
+CLOSED_GROUP_FLAG = {
+    "ruled": "operator 2026-08-08, day-2 acceptance — option 1 of the menu the executor put up",
+    "reading": "the flag concerns a capability the assigned bucket does not use",
+    "channels": (
+        "@gorishnie_plavni1",
+        "@zinkivnews",
+        "@tvorcha_matusyua",
+        "@educationwithloven",
+    ),
+}
+"""The general form of four clearances already written per channel in `CLEARED` below.
+
+The per-channel texts say why each flag does not bite; this says what the operator ruled about the
+CLASS, which is the thing a fifth channel of the same shape has to be measured against. It goes
+into the record's `rulings` block rather than into a row, because it is not about a row.
+@KarlivkaLive carries the same flag and is deliberately not in this tuple: it was ruled separately,
+as «Дозаявка №9», and folding it in here would make one ruling look like it covered five."""
 
 CLEARED = {
     # Day-2 sitting, 2026-08-08. Four PASS-shaped channels the gate FLAGged for a property of a
@@ -636,7 +667,7 @@ def _scalar(value) -> str:
     return str(value).lower() if isinstance(value, bool) else str(value)
 
 
-def remove_sources(text: str, ids: dict[str, str]) -> str:
+def remove_sources(text: str, ids: dict[str, str], date: str = "2026-08-07") -> str:
     """Take the named source blocks out, leaving a comment where each one was.
 
     The convention `config/registry.yaml` already uses for @znizhki_ua, removed 2026-07-27: a
@@ -658,7 +689,7 @@ def remove_sources(text: str, ids: dict[str, str]) -> str:
         sid = block[0].removeprefix("  - id: ").strip() if block[0].startswith("  - id: ") else None
         if sid in ids:
             removed.add(sid)
-            out.append(f"  # {sid} removed 2026-08-07: {ids[sid]}\n")
+            out.append(f"  # {sid} removed {date}: {ids[sid]}\n")
             continue
         out.extend(block)
 
@@ -793,7 +824,7 @@ def main(argv: list[str] | None = None) -> int:
     text = REGISTRY.read_text(encoding="utf-8")
     tail = text.split("\ntaxonomy:\n", 1)[1]
     REGISTRY.write_text(
-        insert_sources(update_sources(remove_sources(text, stale), updates), entries),
+        insert_sources(update_sources(remove_sources(text, stale, REMOVED_ON), updates), entries),
         encoding="utf-8",
     )
     written = REGISTRY.read_text(encoding="utf-8")
@@ -830,6 +861,7 @@ def main(argv: list[str] | None = None) -> int:
         },
         "joins_authorised": sorted(joins),
         "source_type_ruling": dict(SOURCE_TYPE_RULING),
+        "closed_group_flag": {**CLOSED_GROUP_FLAG, "channels": list(CLOSED_GROUP_FLAG["channels"])},
         "note": (
             "The gate's rows are unchanged: an excluded channel was still measured, and its"
             " `ruling` is what says it is out. Registry names and comments_enabled are read off"

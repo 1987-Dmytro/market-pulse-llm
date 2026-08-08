@@ -198,7 +198,8 @@
           "date": "2026-08-01T06:55:26+00:00"
         }
       ],
-      "audience": "regional"
+      "audience": "regional",
+      "ruling": "KEPT — war-news-explained (Wildberries warehouse strike report)"
     },
     {
       "handle": "@poltava_informue",
@@ -250,7 +251,8 @@
           "date": "2026-08-05T17:46:07+00:00"
         }
       ],
-      "audience": "regional"
+      "audience": "regional",
+      "ruling": "KEPT — war-news-explained (Wildberries warehouse strike report)"
     },
     {
       "handle": "@poltava20",
@@ -302,7 +304,8 @@
           "date": "2026-08-07T18:57:01+00:00"
         }
       ],
-      "audience": "regional"
+      "audience": "regional",
+      "ruling": "KEPT — war-news-explained (Wildberries warehouse strike report)"
     },
     {
       "handle": "@retsepty",
@@ -1874,23 +1877,18 @@
     }
   ],
   "git": {
-    "commit": "0eb12d5df81ff8f27c43f7c4895e9563d4f1c26e",
+    "commit": "e6926ca0d4e19a236556f7c3a836735866317510",
     "dirty": [
       "config/registry.yaml",
-      "docs/CHANNELS-launch.md",
-      "results/collect_5c1.json",
       "results/entry_gate_5c1.json",
-      "results/joins_5c1.jsonl",
-      "results/language_census_5c1_day2.json",
       "scripts/apply_gate_rulings_5c1.py",
-      "scripts/entry_check.py",
-      "scripts/late_batch_5c1.py",
-      "tests/test_entry_gate_5c1.py",
-      "tests/test_gate_rulings_5c1.py",
-      "tests/test_late_batch_5c1.py",
-      "results/harvest_mothers_ua.json",
-      "scripts/harvest_similar_5c1.py",
-      "tests/test_harvest_similar_5c1.py"
+      "scripts/market_screen_5c1.py",
+      "tests/test_market_screen_5c1.py"
     ]
+  },
+  "rulings": {
+    "applied_at": "2026-08-08T13:54:57+00:00",
+    "by": "operator 2026-08-08, day-2 acceptance",
+    "note": "read onto rows that were already measured; no re-screen, no evidence re-derived. The verdict column is untouched — RF_FLAG is what the screen found, and the ruling is what the operator decided about it"
   }
 }

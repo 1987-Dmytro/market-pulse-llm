@@ -143,6 +143,53 @@ COMPILED = {
     for side, signals in SIGNALS.items()
 }
 
+RULINGS = {
+    # Operator, day-2 acceptance 2026-08-08. All three RF_FLAGs of the 08.08 pass are the same
+    # story told by three Poltava feeds: Ukrainian drones hit a Wildberries logistics hub, and the
+    # screen's `retailer` and `location` patterns read a war report as a market fact. The channels
+    # stay; the flag is explained per row, which is the only form in which an explanation survives
+    # the next reader — «RF 0 on the live 39» is quoted in STATUS and a zero with no ruling beside
+    # it rots into a number nobody can re-read.
+    "@myrhorodtown": "KEPT — war-news-explained (Wildberries warehouse strike report)",
+    "@poltava_informue": "KEPT — war-news-explained (Wildberries warehouse strike report)",
+    "@poltava20": "KEPT — war-news-explained (Wildberries warehouse strike report)",
+}
+"""Operator rulings over rows this screen already measured, applied by `--close` and never by a
+re-screen. Same division of labour `late_batch_5c1.py` set: the screen records what it found, a
+human decides what it means, and the reading goes into the record beside the evidence."""
+
+
+def close_rulings(out: Path) -> int:
+    """Write the rulings onto their rows. No re-measurement — the evidence is not re-derived.
+
+    A market screen's rows cannot be rebuilt from the record: they are quoted lines chosen out of a
+    window, and re-running would re-choose them under a registry that has since moved. So this
+    touches exactly one field per named row and refuses if a ruling names a row the record does not
+    carry — a ruling written into nothing looks identical to a ruling applied.
+    """
+    record = json.loads(out.read_text(encoding="utf-8"))
+    rows = {row["handle"]: row for row in record["sources"]}
+    if missing := sorted(set(RULINGS) - set(rows)):
+        raise SystemExit(
+            f"{out.name} has no rows for {missing} — refusing to write a ruling to no one"
+        )
+    for handle, ruling in RULINGS.items():
+        rows[handle]["ruling"] = ruling
+        print(f"{handle:<24}{rows[handle]['verdict']:<12}{ruling}")
+    record["rulings"] = {
+        "applied_at": datetime.now(UTC).isoformat(timespec="seconds"),
+        "by": "operator 2026-08-08, day-2 acceptance",
+        "note": (
+            "read onto rows that were already measured; no re-screen, no evidence re-derived. The"
+            " verdict column is untouched — RF_FLAG is what the screen found, and the ruling is"
+            " what the operator decided about it"
+        ),
+    }
+    record["git"] = git_state(out)
+    out.write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(f"\nwrote {len(RULINGS)} ruling(s) into {out.name}")
+    return 0
+
 
 def hits_in(text: str) -> dict[str, list[dict]]:
     """Every market fact in one post, each carrying the line it was found in."""
@@ -271,7 +318,14 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", type=Path, default=RECORD, help="where to write the record")
     parser.add_argument("--only", metavar="HANDLE", nargs="+", help="screen only these handles")
+    parser.add_argument(
+        "--close",
+        action="store_true",
+        help="write the operator's rulings onto the rows of --out (no re-screen, no Telegram)",
+    )
     args = parser.parse_args(argv)
+    if args.close:
+        return close_rulings(args.out)
     refuse_to_overwrite(args.out)
 
     since = census.window_since()

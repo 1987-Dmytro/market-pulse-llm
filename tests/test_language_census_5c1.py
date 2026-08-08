@@ -170,7 +170,13 @@ def test_the_day_2_census_covers_the_live_registry_under_the_same_bars():
         for source in load_registry(REPO_ROOT / "config" / "registry.yaml").sources
         for handle in source.telegram_channels
     }
-    assert {row["handle"] for row in record["sources"]} == live
+    # The record is a dated pass over the 67 that stood on 08.08; @dikankaa left on the acceptance
+    # ruling that same evening, on this very census. So the covering direction is the one that
+    # matters — every live source has a language verdict — and the difference is named, not
+    # tolerated as a set that drifted.
+    measured = {row["handle"] for row in record["sources"]}
+    assert live <= measured
+    assert measured - live == {"@dikankaa"}, sorted(measured - live)
     assert (
         record["preregistration"]["sha256"]
         == hashlib.sha256(census.PREREGISTRATION.read_bytes()).hexdigest()

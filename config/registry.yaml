@@ -448,14 +448,7 @@ sources:
     verified: true
     comments_enabled: false
     audience: regional
-  - id: dikankaa
-    name: "диканка :]"
-    source_type: community
-    telegram_channels:
-      - "@dikankaa"
-    verified: true
-    comments_enabled: false
-    audience: regional
+  # dikankaa removed 2026-08-08: EXCLUDED on the language census (day-2 acceptance): ru 1.00 on 20 decidable posts + RF oblasts in the channel's own description; UA-only policy (2026-07 census discipline). The operator's words, and the half of them this repo holds an artifact for: results/language_census_5c1_day2.json reads ua 0 / ru 20 of 30 posts in the window, and the RF geography is in the window too — «ОТДАЕМ ЩЕНКА В ДОБРЫЕ РУКИ … По Волгоградской области ( Энгельс, Саратов тоже можем )», 2026-08-01. The channel's own description is not in any artifact here: the gate stores title, not bio
   - id: zinkivnews
     name: "Зіньків Новини"
     source_type: community

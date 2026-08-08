@@ -130,7 +130,12 @@ def test_the_day_2_record_covers_the_live_registry_and_the_two_flags_are_war_rep
         for s in load_registry(REPO_ROOT / "config" / "registry.yaml").sources
         for handle in s.telegram_channels
     }
-    assert {row["handle"] for row in record["sources"]} == live
+    # A dated pass over the 67 of 08.08. @dikankaa left that evening on the census ruling, so the
+    # record is one row wider than the live registry and the extra row is named rather than
+    # allowed to be any drift at all.
+    measured = {row["handle"] for row in record["sources"]}
+    assert live <= measured
+    assert measured - live == {"@dikankaa"}, sorted(measured - live)
     assert record["verdicts_reportable"] is True
 
     flagged = {row["handle"]: row for row in record["sources"] if row["verdict"] == "RF_FLAG"}
@@ -179,3 +184,49 @@ def test_only_narrows_the_sweep_and_refuses_a_handle_the_registry_lacks(tmp_path
     assert [row["handle"] for row in record["sources"]] == ["@dpssgovua"]
     with pytest.raises(SystemExit, match="does not carry"):
         screen.main(["--out", str(out), "--only", "@nosuchchannel"])
+
+
+# --- the rulings, written onto rows the screen already measured -----------------------------------
+
+
+def test_close_writes_the_ruling_onto_its_row_and_moves_no_evidence(tmp_path):
+    """The operator's read of a flag belongs beside the flag, and only beside it.
+
+    A market screen's rows cannot be re-derived — they are lines chosen out of a window under a
+    registry that has since moved — so `--close` writes one field per named row and re-measures
+    nothing. The copy is made from the shipped day-2 record rather than a hand-built fixture: a
+    fixture would pin the schema of the day the test was written.
+    """
+    live = REPO_ROOT / "results" / "market_screen_5c1_day2.json"
+    out = tmp_path / "day2.json"
+    out.write_text(live.read_text(encoding="utf-8"), encoding="utf-8")
+    before = json.loads(out.read_text(encoding="utf-8"))
+
+    assert screen.main(["--out", str(out), "--close"]) == 0
+    after = json.loads(out.read_text(encoding="utf-8"))
+
+    ruled = {row["handle"]: row for row in after["sources"] if "ruling" in row}
+    assert set(ruled) == set(screen.RULINGS)
+    for handle, row in ruled.items():
+        assert row["verdict"] == "RF_FLAG", handle
+        assert "war-news-explained" in row["ruling"]
+
+    # Everything except the ruling field is byte-identical: the verdicts and the quoted lines are
+    # the measurement, and a ruling that edits its own evidence is not a ruling.
+    def without_rulings(rows: list[dict]) -> list[dict]:
+        return [{k: v for k, v in row.items() if k != "ruling"} for row in rows]
+
+    assert without_rulings(after["sources"]) == without_rulings(before["sources"])
+    assert after["rulings"]["by"].startswith("operator 2026-08-08")
+
+
+def test_close_refuses_when_a_ruling_names_a_row_the_record_does_not_carry(tmp_path):
+    """The negative control: without it, closing against the wrong pass writes nothing and looks
+    exactly like success. @poltava20 entered on 08.08 and is not in the 07.08 screen of the 39."""
+    out = tmp_path / "old.json"
+    out.write_text(
+        (REPO_ROOT / "results" / "market_screen_5c1.json").read_text(encoding="utf-8"),
+        encoding="utf-8",
+    )
+    with pytest.raises(SystemExit, match="refusing to write a ruling to no one"):
+        screen.main(["--out", str(out), "--close"])

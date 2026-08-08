@@ -5244,9 +5244,15 @@
       "verdict": "PASS",
       "fails": [],
       "flags": [],
-      "ruling": "CITY FEED — POSTS-ONLY by the standing ruling (canon 'Дозаявка №3', operator 2026-08-08): a city feed enters posts-only, comments_enabled false, and its discussion group is NOT joined until 5c2 rules on a category filter for threads — without one a city chat's whole traffic lands in a paid inference queue. 11 of the 16 do have a group; that is why the gate holds them in the `city` bucket, which measures a group without asserting one either way.",
+      "ruling": "EXCLUDED — EXCLUDED on the language census (day-2 acceptance): ru 1.00 on 20 decidable posts + RF oblasts in the channel's own description; UA-only policy (2026-07 census discipline). The operator's words, and the half of them this repo holds an artifact for: results/language_census_5c1_day2.json reads ua 0 / ru 20 of 30 posts in the window, and the RF geography is in the window too — «ОТДАЕМ ЩЕНКА В ДОБРЫЕ РУКИ … По Волгоградской области ( Энгельс, Саратов тоже можем )», 2026-08-01. The channel's own description is not in any artifact here: the gate stores title, not bio",
       "error": null,
-      "suggestions": null
+      "suggestions": null,
+      "replaced": [
+        {
+          "at": "2026-08-08T13:54:48+00:00",
+          "ruling": "CITY FEED — POSTS-ONLY by the standing ruling (canon 'Дозаявка №3', operator 2026-08-08): a city feed enters posts-only, comments_enabled false, and its discussion group is NOT joined until 5c2 rules on a category filter for threads — without one a city chat's whole traffic lands in a paid inference queue. 11 of the 16 do have a group; that is why the gate holds them in the `city` bucket, which measures a group without asserting one either way."
+        }
+      ]
     },
     {
       "handle": "@zinkivnews",
@@ -6383,7 +6389,7 @@
   "registry_written": true,
   "note": "PROMPT-5c1 D1 stops here: every FAIL and FLAG goes to the operator, who rules in chat; the rulings land in each row's `ruling`, and only then is config/registry.yaml written. data/entry_check_report.json (the 2026-07-27 run) is untouched, and the four registry channels are out of this gate's scope.",
   "rulings": {
-    "applied_at": "2026-08-08T11:19:05+00:00",
+    "applied_at": "2026-08-08T13:54:48+00:00",
     "canon": "docs/CHANNELS-launch.md, sections 'Рулинги гейта 5c1 (2026-08-07)' and 'Рулинги, волна 2'",
     "composition": {
       "comments": [
@@ -6415,7 +6421,6 @@
         "@anastasiiadavydiukfitness",
         "@atb_aktsiyi",
         "@blwbabies",
-        "@dikankaa",
         "@dpssgovua",
         "@educationwithloven",
         "@ekomarket_shop",
@@ -6464,6 +6469,7 @@
         "@baby_broccoli_club",
         "@chekh_yevheniia1982",
         "@cozymotherhood",
+        "@dikankaa",
         "@discountua1",
         "@intensiv_Mamiev",
         "@katyal55",
@@ -6492,12 +6498,12 @@
       ]
     },
     "counts": {
-      "registry_before": 61,
+      "registry_before": 67,
       "comments": 18,
-      "posts": 38,
+      "posts": 37,
       "watch": 7,
-      "excluded": 33,
-      "sources_after": 67
+      "excluded": 34,
+      "sources_after": 66
     },
     "joins_authorised": [
       "@HealthPsycholog",
@@ -6531,6 +6537,16 @@
       "@forainfo": "official_retail",
       "@ekomarket_shop": "official_retail",
       "@tadaua": "official_retail"
+    },
+    "closed_group_flag": {
+      "ruled": "operator 2026-08-08, day-2 acceptance — option 1 of the menu the executor put up",
+      "reading": "the flag concerns a capability the assigned bucket does not use",
+      "channels": [
+        "@gorishnie_plavni1",
+        "@zinkivnews",
+        "@tvorcha_matusyua",
+        "@educationwithloven"
+      ]
     },
     "note": "The gate's rows are unchanged: an excluded channel was still measured, and its `ruling` is what says it is out. Registry names and comments_enabled are read off this record, not typed."
   },
@@ -9137,11 +9153,12 @@
     }
   },
   "git": {
-    "commit": "a61eccb7580e20583c6386fa786e5ab0ac6ac58d",
+    "commit": "e6926ca0d4e19a236556f7c3a836735866317510",
     "dirty": [
-      "knowledge/hot.md",
-      "scripts/late_batch_5c1.py",
-      "tests/test_late_batch_5c1.py"
+      "config/registry.yaml",
+      "scripts/apply_gate_rulings_5c1.py",
+      "scripts/market_screen_5c1.py",
+      "tests/test_market_screen_5c1.py"
     ]
   }
 }
