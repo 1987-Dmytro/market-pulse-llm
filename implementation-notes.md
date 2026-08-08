@@ -4767,3 +4767,134 @@ finish a run. The comparison the run is for, both figures from committed records
 **What is not touched:** bars, the adapter, the gold set, test v4's contents, the team-lead files.
 The frozen v4 files are opened by the parity pass and by nothing else in this session — the smoke is
 the arm's own train carve, hash-pinned to `8347abd7…`.
+
+### The result — the parity holds, and the cost is the finding
+
+**758/758 rows scored, zero failures of any kind** — no parse failure, no api failure, no
+generation failure, no truncation, across all three inputs. Endpoint `hbq25reui1tpj6`,
+`ADA_24` pinned, EU-RO-1, volume `qw4nwleanc`, one worker, `workersMin 0` read back from
+GraphQL. Record `results/parity_srv2.json`; the verdict is stamped into its own `parity`
+block by `scripts/parity_verdict_5b.py --single --vs-pod results/parity_5b_a.json`.
+
+| head | serverless | pod (config A) | 4.5h2 | delta vs pod | bar | pass |
+|---|---|---|---|---|---|---|
+| G1a | 0.9214 | 0.9214 | 0.9214 | +0.0000 | 0.9470 | no (and was not a required gate) |
+| G1b | 0.6053 (23/38) | 0.6053 | 0.6053 | +0.0000 | 23 fixed | **yes** |
+| G1c | 0.8496 | 0.8478 | 0.8478 | **+0.0018** | 0.8483 | yes |
+| G1d | 0.9586 | 0.9586 | 0.9586 | +0.0000 | 0.9090 | **yes** |
+| G1e | 0.9744 | 0.9610 | 0.9610 | **+0.0133** | 0.9283 | **yes** |
+
+Both clauses of 3.11 (2) hold. Every gate that passed at 4.5h2 — G1b, G1d, G1e — still
+passes (`under_bar: []`), and the worst head movement is **+0.0000**: no head dropped at
+all, two rose. G1a fails its bar exactly as it did on the pod and at 4.5h2, to the same
+sixteen digits; it is the deferred G1a/G1c question of amendment 3.11, not a new finding.
+
+**G1c is worth one line.** 0.8496 against a bar of 0.8483 — it *passes* here, and the pod
+reading of the identical config missed the same bar by 0.0005. That does not make G1c a
+passed gate: it was not one at 4.5h2, the required set is read off the record and is
+unchanged, and a gate does not become passed because a different card rounded the other way.
+
+**Row-level agreement with the pod: 751/758 = 99.08%** (comments_test 398/400, posts_test
+249/250, sarcasm_holdout 104/108; the seven disagreeing ids are in the session log).
+Description, never a gate — the amendment is explicit. Both dumps carry the same 758 ids
+with nothing missing on either side, which is what makes the comparison meaningful at all.
+
+**The cost, `results/srv2d_cost.json`.** $1.4281 per 1000 rows against the pod's committed
+$0.5993 — **2.38×** — and $1.0825 for the 758-row pass against the pod's $0.4611. The gap is
+the machine's price and not the model's speed: **4.262 s/row against the pod's 4.071**, 4.7%
+slower, at a **$1.1041/h** equivalent against the pod's **$0.53/h**. Two independent readings
+of the same session agree to 1%: this endpoint's own settled ledger rate ($0.00030668/s over
+the 1 538 s of 3 793 s that had settled) applied to measured seconds, and the account balance
+delta. Dv33 stands over both, so both are floors.
+
+**This contradicts the economic case amendment 3.14 rests on, and this session rules on
+nothing.** 3.14 moved the production runtime target to serverless partly because workers
+scale to zero between the two collection passes a day. That saving is real and is not
+measured here — what is measured is the cost of a pass, and a pass is 2.38× dearer. The
+runbook's own prior said "not obviously cheaper… a reason to measure rather than a result"
+(§C.8); the measurement has now landed on the dear side. It goes to an operator briefing the
+same way a dropped head would: reported with both readings, authorising nothing.
+
+### Evidence that the instrument was the instrument
+
+- **The one-job control, bought before the attempt.** The same eight carve rows through both
+  transports — 758-jobs-style per-row calls, then one job per task with the worker chunking
+  at batch 1 — **8/8 byte-identical replies**. Training data, no test exposure.
+  `results/serving_srv2d_smoke.json :: one_job_control`.
+- **The volume's row dumps, checked rather than trusted.** 400 / 250 / 108 lines, indices in
+  order, and **every line's recorded text hash equal to the test set's row at that index** —
+  so the pairing is proven, not assumed. Copied to `results/predictions/srv2d-volume-rowdump--*.jsonl`.
+- **The boot assert ran in production.** `results/srv2d_worker_boot.log` line 1 is
+  `runpod SDK 1.11.0`, and the log shows exactly four jobs on one worker: `sync-…-e1` (the
+  handshake) and three `…-e2` (the slices). Weight load 2:07.
+- **The worker ran the committed code.** The volume's `repo/` was refreshed to `ed9c0c9` and
+  proven by sha256 of `scripts/serve_handler.py` and `src/market_pulse/serving.py` against
+  the Mac's, on the pod, before the endpoint existed.
+
+### Deviations
+
+**Dv34 — the request policy is milliseconds, and the briefing is seconds.**
+`docs/PROMPT-srv-2d.md` names the policy as `{"executionTimeout": 3600, "ttl": 7200}`. The
+normative page it declares (`endpoint-configurations`) delegates these two fields by link to
+`send-requests#execution-policies`, which documents them in **milliseconds**: the example
+reads `"executionTimeout": 900000`, the defaults are 600 000 and 86 400 000, and the minimums
+are 5 s and 10 s. The literal from the briefing would be 3.6 s and 7.2 s — below RunPod's own
+minimum, so it is unambiguously seconds meant for a millisecond field. Sent as
+`{"executionTimeout": 3600000, "ttl": 7200000}`, and `serving.execution_policy(3600, 7200)`
+is now the single conversion point, with a test. Reading the third page was following a link
+the normative page itself provides for exactly this field.
+
+**Dv35 — three jobs, not "a single /run job".** v4 is not one slice: it is
+comments_test (400 rows, `T1v2_with_post`), posts_test (250, `T2`) and sarcasm_holdout
+(108, `T1v2_with_post`) — **three slices under two renderings**, and one job carries one
+rendering, because the worker's `batch` op takes one task. So the pass is one job per input.
+The briefing's intent — 758 jobs become one per pass, with the execution timeout raised to
+cover it — is executed exactly; the count is what the data's shape allows. It also lowered
+the risk the timeout rule was written for: the largest job is 400 rows, not 758.
+
+**Dv36 — the staging fetch silently did nothing, and only a hash caught it.** The incremental
+bundle was built with `git bundle create f.bundle cf4cf71..HEAD`, whose ref is `HEAD`; the
+staging script (copied from srv-2c, whose bundle carried `main`) fetched `main`, failed with
+`couldn't find remote ref`, and the `merge --ff-only FETCH_HEAD` on the next line then merged
+a **stale FETCH_HEAD from the previous session** and printed `Already up to date.` The volume
+stayed on `cf4cf71` with the paid run minutes away. What caught it was the script's own
+sha256 comparison against the Mac's values. Fixed by fetching the ref the bundle actually
+carries, re-proven by hash. Lesson in native memory.
+
+**Dv37 — the smoke's default record path is the pod's cost anchor.** `smoke_5b.py --record`
+defaults to `results/serving_5b.json`, which holds the `adopted` block this very session
+compares against ($0.5993/1000, $0.4611/pass). Running the srv-2d smoke without an explicit
+`--record` would have overwritten the baseline with the number under test. Passed
+`--record results/serving_srv2d_smoke.json`; noted here because the next session will meet
+the same default.
+
+**Dv38 — a 4090 pod row nobody created.** `runpodctl billing pods` for 2026-08-08 carries
+`NVIDIA GeForce RTX 4090, $0.509801, 2 470 s`. srv-2d created two pods and both were **RTX
+2000 Ada** (their row reads $0.036307 / 535.9 s, which is $0.24/h to four figures); no 4090
+pod existed in this account today. $0.509801 / 2 470 s = $0.000206/s = $0.743/h, the posted
+4090 **pod** rate. The likeliest reading is that RunPod files part of a serverless worker's
+GPU time on the pod ledger, which is the mirror image of the srv-2b hole that made the guard
+walk `serverless` in the first place. Not resolved, and it does not move any number here: the
+guard's `spend()` takes the max of the balance delta and the ledger total, and the delta
+binds ($20.8793 against $19.8675). Recorded because a billed row nobody claims is worth a
+line — srv-2c's 30-second A4500 row is the same species.
+
+**Dv39 — an instrument grew a mode mid-session.** `parity_verdict_5b.py` gained `--vs-pod`,
+which applies 3.11 (2)'s 0.005 clause against another parity record's stamped values, because
+the clause had been prose in three briefings. Committed **before** the parity job was
+submitted (`c3cc56c`, `1c25823` and the verdict commit precede the run), with its sign
+convention pinned by test — a head that ROSE is reported and is never a failure — and a
+negative control: an `abs()` rule fails that test.
+
+### Spend
+
+**$1.2383 of the $2.00 cap**, anchor `results/spend_srv2d.json` ($15.3539 balance, committed
+at `ed9c0c9` before the first billable action). Read at 22:27:29Z and **stable across two
+readings seven minutes apart**, which srv-2c's did not manage — but the itemised ledger had
+still settled only 1 538 s of the endpoint's 3 793 s, so Dv33's caveat is on it anyway. What
+it bought: two RTX 2000 Ada pods ($0.0363 settled — staging and the dump fetch), the smoke
+plus its one-job control, the 758-row parity pass, and the volume's run-rate share of the
+window ($0.0123). Phase 4 stands at **$20.8793 of $25.00**, $4.1207 remaining.
+
+Endpoint, template and both pods deleted; `pod list -a`, `serverless list` both `[]`, and the
+volume `qw4nwleanc` (100 GB, EU-RO-1) is the only thing standing, as intended.
