@@ -148,10 +148,20 @@ def test_the_runbook_names_the_adapter_and_carve_digests_and_the_image():
     assert SERVING_5B["deployment"]["pod"]["imageName"] in RUNBOOK
 
 
-def test_the_runbook_leaves_the_cap_and_the_datacenter_to_srv2b():
-    """Two things this session must not decide: the money and the region."""
-    assert "<CAP>" in RUNBOOK and "<DC>" in RUNBOOK
-    assert not re.search(r"--step-cap \d", RUNBOOK)
+def test_the_runbook_takes_its_cap_from_the_contract_and_still_defers_the_datacenter():
+    """Two things srv-2a must not decide: the money and the region.
+
+    srv-2a left both as placeholders and this test asserted they were empty. The srv-2b briefing
+    filled the money one — `docs/PROMPT-srv-2b.md` sets $4.00 and instructs the runbook be filled
+    — so "empty" is no longer the property worth pinning. What is: the runbook cannot carry a cap
+    the contract did not set. Every guard call gets it, and the region is still read, not chosen.
+    """
+    contract = (REPO_ROOT / "docs" / "PROMPT-srv-2b.md").read_text(encoding="utf-8")
+    cap = re.search(r"\*\*Cap \$(\d+\.\d\d)\*\*", contract)
+    assert cap, "the contract no longer states a cap in the form it was briefed in"
+    caps = set(re.findall(r"--step-cap (\S+)", RUNBOOK))
+    assert caps == {cap.group(1)}, f"the runbook's cap drifted from the contract's: {caps}"
+    assert "<DC>" in RUNBOOK, "the datacenter is the C.1 reading's to make, never the runbook's"
 
 
 # --- the batch-1 guard, on the command the runbook prints -------------------

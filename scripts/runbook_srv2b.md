@@ -178,10 +178,15 @@ is created *after* that reading and in the datacenter that reading selects.
 
 ## C. The procedure
 
-Copy-paste, in order. **Budget: `<CAP>` of the $8 Phase-5 GPU line, set at the srv-2b
-briefing**, with its own spend anchor written before the first spend and never regenerated.
-`--step srv2b` gives the guard its own ledger, `results/spend_srv2b.json`, anchored on the
-first call — no other phase's anchor is imported, and this one is never regenerated.
+Copy-paste, in order. **Budget: $4.00 of the $8 Phase-5 GPU line, set at the srv-2b briefing
+(`docs/PROMPT-srv-2b.md`)**, with its own spend anchor written before the first spend and never
+regenerated. `--step srv2b` gives the guard its own ledger, `results/spend_srv2b.json`, anchored on
+the first call — no other phase's anchor is imported, and this one is never regenerated.
+
+**The cap is a balance, not a subtraction.** Anchored at the $16.5012 read before the first
+billable action, the guard refuses at **≤ $12.5012**. The Phase-4 cap of SPEC 3.4 (4) — $25.00
+against the $35.00 anchor, $18.4988 already spent — refuses at ≤ $10.00, so the step cap binds
+first and is the number to watch.
 
 ### C.0 Before anything (Mac, $0)
 
@@ -190,7 +195,7 @@ cd ~/Desktop/Projects/market-pulse-llm
 git status --short                       # empty
 make check                               # green
 ruff format --check .                    # make check does not run the formatter
-python3 scripts/runpod_guard.py --step srv2b --step-cap <CAP>
+python3 scripts/runpod_guard.py --step srv2b --step-cap 4.00
 PYTHONPATH=src python3 scripts/smoke_5b.py --endpoint-id x --serving-config A --carve-only
 runpodctl pod list -a; runpodctl serverless list; runpodctl network-volume list
 ```
@@ -233,7 +238,7 @@ that reported a healthy worker and consumed nothing. Record the reading after §
 ```bash
 runpodctl network-volume create --name mp-srv2 --size 100 --data-center-id <DC>
 runpodctl network-volume list            # exactly one, and its id
-python3 scripts/runpod_guard.py --step srv2b --step-cap <CAP> --note "srv-2b volume created, console price <READ>/mo"
+python3 scripts/runpod_guard.py --step srv2b --step-cap 4.00 --note "srv-2b volume created, console price <READ>/mo"
 ```
 
 ### C.3 Stage it (a pod at a third of the serverless rate)
@@ -302,7 +307,7 @@ for an ssh session, so without it the proof's `runtime.pod_id` is `None` (4a §5
 ```bash
 runpodctl pod delete <POD_ID>
 runpodctl pod list -a                    # []
-python3 scripts/runpod_guard.py --step srv2b --step-cap <CAP> --note "srv-2b staging + cold-start proof"
+python3 scripts/runpod_guard.py --step srv2b --step-cap 4.00 --note "srv-2b staging + cold-start proof"
 ```
 
 ### C.4 The endpoint (creation is free; workers bill only on a request)
@@ -342,7 +347,7 @@ resident worker bills through the ~12 h between the two collection passes a day 
 ```bash
 PYTHONPATH=src python3 scripts/smoke_5b.py --endpoint-id <ID> --serving-config A \
     --adapter results/train/45h2-arm-a/adapter
-python3 scripts/runpod_guard.py --step srv2b --step-cap <CAP> --note "srv-2b config A smoke"
+python3 scripts/runpod_guard.py --step srv2b --step-cap 4.00 --note "srv-2b config A smoke"
 ```
 
 Eight rows of the arm's own **train carve**, rebuilt and refused unless it hashes to
@@ -428,7 +433,7 @@ numbers do not show.
 runpodctl serverless delete <ID>
 runpodctl template delete <TEMPLATE_ID>
 runpodctl pod list -a; runpodctl serverless list; runpodctl network-volume list
-python3 scripts/runpod_guard.py --step srv2b --step-cap <CAP> --note "srv-2b closed"
+python3 scripts/runpod_guard.py --step srv2b --step-cap 4.00 --note "srv-2b closed"
 ```
 
 **Verify deletions by listing, never by an exit code.** Two `probe-cls` endpoints once
