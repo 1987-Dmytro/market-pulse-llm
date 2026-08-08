@@ -57,6 +57,22 @@ def test_a_payload_with_no_cost_field_is_reported_unreadable_not_zero():
     assert (total, seen) == (0.0, False)
 
 
+def test_the_billing_walk_asks_for_serverless_too(monkeypatch):
+    """The kind srv-2b's spend hid in. A worker that crash-loops bills at the flex rate
+    while it does it, and the walk knew pods and volumes only: $0.86 of the session was
+    invisible to the reading SPEC 3.4 (4) names, with the balance delta carrying the cap
+    alone. The endpoint row is the one this asserts, so dropping the kind reddens here."""
+    asked = []
+
+    def one_reading(*args):
+        asked.append(args[1])
+        return [{"amount": 0.55, "endpointId": "zbptdon5jvfteu"}] if args[1] == "serverless" else []
+
+    monkeypatch.setattr(guard, "runpodctl", one_reading)
+    assert guard.billing_since("2026-08-08T17:00:00+00:00") == (0.55, "read")
+    assert asked == ["pods", "network-volume", "serverless"]
+
+
 def test_a_start_under_the_cap_is_allowed(ledger, monkeypatch):
     drive(monkeypatch, balance=33.20, billing=(1.80, "read"))
     assert guard.main([]) == 0

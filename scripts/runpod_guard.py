@@ -11,8 +11,9 @@ spend, and the pessimistic one wins.
   Always available, and it counts everything RunPod charges for — including a
   network volume, which bills while the pod is stopped. "Pod stopped" is not
   "spend stopped".
-- **Billing history.** `runpodctl billing pods` / `billing network-volume`
-  since the anchor timestamp. Corroboration, and the thing the amendment names.
+- **Billing history.** `runpodctl billing pods` / `billing network-volume` /
+  `billing serverless` since the anchor timestamp — all three kinds the CLI
+  offers. Corroboration, and the thing the amendment names.
   It is read defensively: an unrecognised payload is reported as unreadable and
   never silently becomes $0.00 of spend.
 
@@ -81,9 +82,15 @@ def sum_costs(payload) -> tuple[float, bool]:
 
 
 def billing_since(anchored_at: str) -> tuple[float, str]:
-    """Pods plus network volumes since the anchor: the dollars, and how they read."""
+    """Pods, network volumes and serverless since the anchor: the dollars, and how they read.
+
+    All three kinds `runpodctl billing` offers. The walk knew the first two only until
+    srv-2b, where a crash-looping worker billed ~$0.55 that this reading could not see —
+    an $0.86 under-count against the balance delta. `spend()` takes the max of the two, so
+    the cap held; the corroborating number SPEC 3.4 (4) actually names did not.
+    """
     total, readable, empty = 0.0, False, True
-    for kind in ("pods", "network-volume"):
+    for kind in ("pods", "network-volume", "serverless"):
         try:
             payload = runpodctl("billing", kind, "--start-time", anchored_at)
         except (OSError, subprocess.CalledProcessError, ValueError) as err:
