@@ -4010,3 +4010,16 @@ Poltava scan's ledger counts as new.
 **Dv7 — the registry diff of this whole session is PROVISIONAL.** Amendment 3.12's rider, clause 2:
 the yield screen runs before the operator signs any launch verdict, and no loop run consumes the
 new composition until then. Nothing here treats 67 as a settled launch set.
+
+**D73 — the date grep over-counts because a row can MENTION a date it did not happen on.** The
+day-2 report said the join log gained thirteen rows on 2026-08-08 and
+`grep -c 2026-08-08 results/joins_5c1.jsonl` returns **14**. The extra row is yesterday's:
+`{"at": "2026-08-07T13:56:53+00:00", "outcome": "floodwait", "clears_at":
+"2026-08-08T10:02:05+00:00"}` — the FloodWait that closed 07.08 carries today's date as the hour it
+EXPIRES. Counting by the row's own `at` gives 13: 10 `joined`, 2 `left`, 1 `not_a_member`. So the
+day is ten joins and three exits, thirteen rows by timestamp and fourteen by substring, and all
+three numbers are true of different questions. Third instance of the same mistake in one day — the
+first was calling thirteen rows thirteen joins, the second was `grep -c` standing in for the
+enumeration. A log line is a record of an event, and the fields in it may name any number of other
+moments; `json.loads` and a filter on the field you mean cost one line more than a grep and cannot
+be read wrong.

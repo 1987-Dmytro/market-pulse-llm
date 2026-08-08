@@ -2,24 +2,24 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-08 12:00:29 (every SessionStart)
+**Auto-refreshed:** 2026-08-08 15:39:06 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-267add0 docs(5c1): the day-2 order, D64-D66, and the pre-flight state
-c835d4a feat(5c1): «Дозаявка №8»'s six wired, and the gate now refuses inside the wall
-c316823 feat(5c1): the market-origin screen — 0 flags on the live 39, and the controls are why that reads
-789c352 docs(5c1): D63 — every commit now runs its own suite, and the checker has a bias
-fdf4115 docs(5c1): the SPEC's two new rulings, and D45-D62
+3f80298 fix(5c1): the searches' verdicts reach the record, and 13 log rows are not 13 joins
+a61eccb docs(5c1): the operator's watchlist +3, committed unedited
+3b0b550 feat(5c1): the window closes — 4,880 comments, and the two handles step 7 found carry 81% of them
+240edac fix(5c1): one section banner, not three — and the day's notes
+9c832ef feat(5c1): step 7 found what the town-name scan missed — registry 61 to 67
 ```
 
 ## 📋 Recent decisions
 
 - `INDEX.md` — Decision records
+- `5c1-day2-composition-and-search.md` — 5c1 day 2 — three "city feeds" were chats, and the search for replacements outperformed the scan
 - `5b2-batch-measurement.md` — 5b.2 — the batch measurement failed on memory, and serving is fixed at batch 1
-- `5b-parity-abort-and-pod-runtime.md` — The pair aborted on a runtime that never took a job, and production moves to a stop-after pod
 
 ## 📅 Recent daily logs
 
@@ -31,10 +31,12 @@ fdf4115 docs(5c1): the SPEC's two new rulings, and D45-D62
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-08 (day-2 run). `docs/PROMPT-5c1-day2.md` executed end to end: ten
-steps, plus two дозаявки the operator ruled mid-session. Registry **39 → 67**, **10 joins and 3
-exits** (the join log has 13 rows today and three of them are exits), zero FloodWait, **$0**. `make check` **1,198 passed**. This block is hand-edited; the section above it
-is auto-generated — do NOT touch the marker.
+**Last update:** 2026-08-08 (`/close`). `docs/PROMPT-5c1-day2.md` executed end to end: ten steps,
+plus two дозаявки the operator ruled mid-session. Registry **39 → 67**; **10 joins and 3 exits**
+(the join log has 13 rows today and three of them are exits); zero FloodWait; **$0**. Nine commits
+(`82cf2a1` → the close), `make check` **1,201 passed**. Long form with the numbers:
+[[5c1-day2-composition-and-search]]. This block is hand-edited; the section above it is
+auto-generated — do NOT touch the marker.
 
 ## 🔥 What's Hot
 
@@ -91,15 +93,21 @@ operator question.
 
 ## ⏭️ Next
 
-**The yield screen is the next session's contract** (SPEC amendment 3.12 (1)): watchlist
-display_names + the category lexicon over each channel's collected 28-day window, posts and
-comments as SEPARATE currencies, thresholds pre-registered BEFORE any number is seen, run
-retroactively over the whole registry too. Nothing enters or leaves on it automatically.
+**`docs/PROMPT-5c1-yield.md` is tomorrow's order** — 113 lines, $0, offline except ONE resolve.
+It lands the acceptance rulings on record, pre-registers the bars, and runs the yield screen of
+SPEC amendment 3.12 (1): watchlist display_names + the category lexicon over each channel's
+collected 28-day window, posts and comments as SEPARATE currencies, thresholds fixed BEFORE any
+number is seen, over the whole registry. The registry diff stays PROVISIONAL until the operator
+reads `results/yield_screen_5c1.json` and signs.
 
-Open operator questions carried forward: **@dikankaa** (RU_DOMINANT, fresh entry) · the **three
-RF_FLAGs** (war reporting, report-only) · the theme of **@pavlushaiyava** and **@mandziak**, which
-no instrument has measured — their `baby_food` / `health_fitness` rows are EXPECTATIONS and the
-code says so.
+**Day 2 was accepted the same evening and the four open questions came back answered** (STATUS,
+«Day-2 ИСПОЛНЕН И ПРИНЯТ»): **@dikankaa is EXCLUDED** — ru 1.00 plus RF oblasts in the channel's
+own description against the UA-only policy, so the registry becomes **66**; the **three RF_FLAGs
+are KEPT** with a per-row `war-news-explained` ruling, recorded through the `--close` pattern so
+the zero does not rot; the four closed-group flags are recorded as "the flag concerns a capability
+the assigned bucket does not use"; @KarlivkaLive confirmed. The theme of @pavlushaiyava and
+@mandziak goes to the yield screen with the watchlist +3 (Заріг · Миргородська корівка ·
+Яготинське для дітей — UA canon, RU spellings are matching aliases only).
 
 Candidate stock for the next sitting, none of it actioned: `results/harvest_mothers_ua.json` — 79
 recommendations from three seeds, **77 not already ours, all broadcast**. Five city analogues the
@@ -110,10 +118,16 @@ the privates ledger stay RECORDED, not actioned.
 
 ## 🚧 Blockers
 
-**None Telegram-side.** The 2026-08-07 wall cleared at 10:02:05 UTC and today's ~100 resolves
-drew no new one — because every collection run was scoped with `--only`. That is the discipline,
-not luck: `collectable()` returns the whole registry and a bare `--posts` over 67 sources is
-sixty-seven `ResolveUsernameRequest`s for the work of six.
+**None.** The 2026-08-07 wall cleared at 10:02:05 UTC and today's ~100 resolves drew no new one —
+because every collection run was scoped with `--only`. That is the discipline, not luck:
+`collectable()` returns the whole registry and a bare `--posts` over 67 sources is sixty-seven
+`ResolveUsernameRequest`s for the work of six. Tomorrow's order spends exactly one resolve and
+the same discipline applies to it.
+
+**One count to reconcile before anything else** (step 0 of the queued order, already measured
+here): the join log has **13 rows by their own `at`** on 08.08 — 10 `joined`, 2 `left`, 1
+`not_a_member` — while `grep -c 2026-08-08` returns **14**, because 07.08's FloodWait row carries
+`clears_at: 2026-08-08T10:02:05`. Three true numbers, three different questions. D73.
 
 **Recorded rather than open:** the CA-MTL-3 volume is deleted, so its **~$0.24/day** idle billing
 has stopped — that literal is load-bearing, not decoration: `scripts/volume_calc_5c1.py` greps it
