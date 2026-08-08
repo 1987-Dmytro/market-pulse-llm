@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-08 18:07:42 (every SessionStart)
+**Auto-refreshed:** 2026-08-08 19:22:30 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+6388229 fix(srv-2a): the pass formula was borrowing an A6000's seconds per row
+f798053 feat(srv-2a): the worker is a serverless config already, minus the peft it could not name
+2d2a8e8 docs(5c1): the /save checkpoint -- the pilot's numbers and the private-label correction
+74a5adb docs(srv-2): the serverless wall came down and the runtime target moved back
 6b15ebf docs(5c1): the pilot billed twice the projected rate — both numbers, both reasons
-957767f feat(5c1): the images were the assortment — ATB goes 0 to 13 for $0.018
-f67cf04 feat(5c1): ATB's 19 silent posts fetched — 159 images, no wall
-f2af877 feat(5c1): the image census — one full pass of captions costs $0.12
-76cf382 fix(5c1): a third of the removal list was silence, not emptiness
 ```
 
 ## 📋 Recent decisions
@@ -31,15 +31,48 @@ f2af877 feat(5c1): the image census — one full pass of captions costs $0.12
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-08 18:05 (`/save`). `docs/PROMPT-5c1-captions-pilot.md` executed, all five
-steps: the two noise rulings on record, the image census over all 66 with its price projection,
-ATB's 19 silent posts fetched and 18 captioned, the matcher re-run over text+captions. **$0.0180 of
-the $0.10 cap.** Four commits (`f2af877` → `6b15ebf`), `make check` **1,257 passed** (1,241 →
-1,257). The yield half is [[5c1-relevance-floor-and-discovery]]; the day-2 half is
+**Last update:** 2026-08-08 19:16 (`/save`). `docs/PROMPT-srv-2a.md` executed — **$0, no
+`runpodctl` call, nothing created**: the pending team-lead tail committed unedited, the 5b worker
+verified as a serverless config, the volume plan and `scripts/runbook_srv2b.md` written, 13 tests
+added. `make check` **1,270 passed** (1,257 → 1,270). Four commits (`74a5adb` → `6388229`).
+Earlier the same evening: the caption pilot, all five steps, **$0.0180 of its $0.10 cap**. The
+yield half is [[5c1-relevance-floor-and-discovery]]; the day-2 half is
 [[5c1-day2-composition-and-search]]. This block is hand-edited; the section above it is
 auto-generated — do NOT touch the marker.
 
 ## 🔥 What's Hot
+
+**THE SERVERLESS WALL IS DOWN AND THE RUNTIME TARGET MOVED BACK (SPEC 3.14).** A team-lead probe
+in the operator's own console, the same evening: `runpod/mock-worker:dev` on endpoint
+`8mkl2lbxho3bfa`, queue mode, 16 GB flex, no volume, no DC pin — **two jobs consumed and
+COMPLETED** (delay 10 964 / 6 800 ms, execution 142/144 ms), deleted the moment it had answered,
+deletion proven by a zero-endpoint listing. The 5b blocker did not reproduce and the vendor ticket
+was closed unfiled. `results/parity_verdict_5b.json` stands **untouched** as the honest record of
+2026-08-06. Pods remain the measured fallback; serverless is the target again, and **all paid 5c1
+steps are HELD by the operator's word until srv-2 proves out.** The probe pre-registers what it
+did NOT prove: the volume-attached GPU offering (D7 re-read), NF4 fit and batch-1 byte-stability
+on whatever card is offered, and cost per row against the pod's $0.5993/1000.
+
+**srv-2a IS DONE AND THE WORKER WAS ALREADY A SERVERLESS CONFIG — MINUS THE peft IT COULD NOT
+NAME.** No `/workspace` is baked into `serve_handler.py` or `start_5b_worker.sh`; the template env
+and `settings()` agree field for field; `runpod.serverless.start` with a callable handler is
+proven on the pod (06.08, the three-row T2 batch), not assumed. The one thing verification
+demanded: **config A is `peft` applying a LoRA to an NF4 base and no record named the peft that
+served.** `RUNTIME_LIBRARIES` cannot grow — the 4.5h2 anchor carries three libraries and a fourth
+entry would be a guard that never fires — so `library_versions()` now **reports** peft, accelerate
+and runpod inside the `runtime` block, where widening breaks no schema. The pin is **0.20.0**,
+read from the adapter's own `adapter_config.json`, i.e. from **inside the directory whose sha256
+`b3ca6308…` the guard already checks**; `runbook_5b2.md`'s `peft==0.18.0` is corrected in the open
+and that runbook is left unedited.
+
+**THE srv-2b COST ARITHMETIC IS PRE-REGISTERED AND ITS PRIOR IS WEAK ON PURPOSE.** The pod side is
+committed: **$0.4611 per 758-row pass**, $0.5993/1000 rows, 4.071 s/row, cold start 46.2 s off
+local NVMe vs **278.9 s off a network volume**. The serverless side is
+`(measured_cold_start + 758 × measured_s_per_row) × measured_usd_per_second` — **the run's own
+numbers, not the pod's.** Filling it with what exists today (A6000 seconds, the probe's
+$0.00016/s on a 16 GB class) gives $0.538 a pass, 17% dearer, $0.045 of it the boot alone — but
+all three inputs come off hardware this endpoint will probably not run on, and at 3.0 s/row on a
+4090 serverless wins instead. Quoted as a prior, never as a finding.
 
 **THE FAILED CONTROL WAS ABOUT MODALITY, AND READING THE IMAGES ANSWERS IT: ATB GOES 0 → 13.**
 Same window, same matcher, same lexicon, same pre-registered bar (`1aa89818…`, unmoved) — the only
@@ -147,21 +180,34 @@ one, because the gate stores a title and never a bio.
 
 ## ⏭️ Next
 
-**THE FULL RUN IS AUTHORISED AND QUEUED: `docs/PROMPT-5c1-captions-full.md`.** The pilot was
-accepted the same evening (STATUS, «Пилот ИСПОЛНЕН И ПРИНЯТ: модальность, не матчер») and the
-team lead signed off on both terms it measured. Two steps, **one paid, cap $0.35** out of the
-untouched $1 OpenRouter balance: caption the **232 remaining** no-text media posts named by
-`results/image_census_5c1.json` at the pilot's measured $0.000948 (≈$0.22 + margin), own anchor,
-one attempt, STOP over cap and report what was bought — then **yield screen v2** over
-text+captions across the whole registry into `results/yield_screen_5c1_v2.json`, bars UNCHANGED
-(`1aa89818…` cited), v1's record untouched, ATB's window control expected to pass this time. The
-report is the v1 → v2 movement per audience plus one quoted line per newly-passing channel. NOT
-started here — `/save` is a checkpoint.
+**srv-2a IS ACCEPTED — the team lead re-ran the suite (1,270 in 32.8 s) and verified the tail was
+committed unedited.** Two notes came back with it. The **step reordering is credited as an
+improvement**: the D7 re-read now happens **BEFORE the volume is created**, so the volume lands in
+a datacenter that actually has the GPU — 5b did it the other way round, which is exactly how the
+volume ended up pinning CA-MTL-3 where no 48 GB class allocated. And **Dv3 caught a team-lead
+error**: the contract cited its smoke from prose rather than from an artifact, and those three T2
+rows exist in no file. Ten deviations against a norm of 0–4, charged to an overloaded contract.
 
-**Also ruled on acceptance: the captions stay on the cheap API path.** A chat session as a data
-source is forbidden (numbers with no model pin and no price), and a self-hosted Gemma on a pod
-costs $0.5+ out of the GPU cap and is not comparable with the captions already bought. $0.22 a
-batch is the cheapest honest route.
+**NEXT IS srv-2b, AND ITS CAP IS SET AT ITS OWN BRIEFING — NOT HERE.**
+`scripts/runbook_srv2b.md` is written and unexecuted: create the volume → stage → endpoint
+(queue mode, max workers 1, scale-to-zero **confirmed in the console**, 48 GB class first if
+offered with a volume, else 24 GB) → smoke on the hash-pinned 8-row carve → record the **D7
+re-read** → **parity, 758 rows, batch 1**, against `results/parity_5b_a.json` under the rule of
+3.11 (2): every 4.5h2-passed gate stays passing, no head drops > 0.005. Its own spend anchor,
+`results/spend_srv2b.json`. The abort ladder is written down: no GPU with the volume · OOM ·
+gate drop · over cap → STOP and report, no retry without a new briefing. **The 24 GB fit is
+unproven** — the model sits at ~20 GiB at rest and no record carries a peak-VRAM figure for
+batch-1 inference, so OOM is a named rung, not an assumption.
+
+**THE CAPTION PROGRAM WAS RE-ROUTED BEFORE IT SPENT ANYTHING (SPEC 3.13).**
+`docs/PROMPT-5c1-captions-full.md` is **VOID, never executed** — its $0.35 OpenRouter cap was
+never touched, and it is kept only as provenance of the authorisation it recorded. Captions move
+to the project's own **Gemma-4 vision path**: NF4 base at the pinned revision, **adapter OFF**,
+greedy, batch 1, its own registered prompt with a new sha before any result, and a
+`caption_source` field (`qwen-4.5g2` | `gm4-nf4-base`) so numbers from two caption instruments
+are never compared silently. `docs/PROMPT-5c1-vis-a.md` is **ON HOLD** and will be re-issued
+against the proven runtime after srv-2b parity — the runner must target the endpoint, not a pod
+session. The 19 qwen captions already bought stay bought and become the bridge table's control.
 
 **THE LAUNCH SIGNATURE IS STILL FROZEN — it is the operator's, next session, on the v2 numbers.**
 `results/yield_screen_5c1.json` still reads `verdicts_reportable: false` and **the pilot does not
@@ -195,12 +241,27 @@ its $0.10 cap, and 4.5g2's $0.75 balance was never touched.
 
 **Recorded rather than open:** the CA-MTL-3 volume is deleted, so its **~$0.24/day** idle billing
 has stopped — that literal is load-bearing, not decoration: `scripts/volume_calc_5c1.py` greps it
-out of THIS file as a priced input, and a rewrite that drops it reddens nine tests. Beyond that:
-no RunPod serverless endpoint on this account reaches a job-consuming worker — proven not to be
-ours by RunPod's own hub worker failing identically. Production is a stop-after pod. Arm A's
-per-row dump is permanently lost; no pod, endpoint or template exists.
+out of THIS file as a priced input, and a rewrite that drops it reddens nine tests. The account is
+**empty**: no pod, no endpoint, no template, no volume, and srv-2a created none — which is what
+makes the same three listings at the end of srv-2b a deletion proof rather than a hope. Arm A's
+per-row dump is permanently lost.
+
+**SUPERSEDED, kept so the old line is not re-read as current:** "no serverless endpoint on this
+account reaches a job-consuming worker" was true on **2026-08-06** and is the honest content of
+`results/parity_verdict_5b.json`. The probe of **2026-08-08** overturned it (SPEC 3.14) — but on
+`n=2`, one evening, **no volume attached**. "The wall is down today" is not "it can never return",
+and the volume is exactly the variable the probe left out. Production stays a stop-after pod until
+srv-2b's parity says otherwise.
 
 ## ⚠️ Footguns for the next run
+
+**`assert_runtime_matches` pins three libraries and cannot be taught a fourth.** It walks
+`serving.RUNTIME_LIBRARIES` and **skips any library the anchor does not carry** — and the anchor
+is `results/verdict_45h2.json`, frozen. So adding `peft` to that tuple would compile, pass every
+test, and never fire once. peft is what applies the LoRA in config A, i.e. it moves tokens: the
+pin lives in `scripts/runbook_srv2b.md` (**0.20.0**, from the adapter's own `adapter_config.json`)
+and the version is merely REPORTED by `serve_handler.library_versions()`. Read the staged version
+out of the run's record; do not expect a refusal.
 
 **`relabel.read_ledger` writes a provenance string that is wrong for anything past phase 4.** Its
 note renders `f"docs/PROMPT-{phase[0]}.{phase[1:]}.md"` — fine for `45g2`, and for any 5c1 phase
