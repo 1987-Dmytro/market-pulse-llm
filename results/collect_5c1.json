@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-08T11:20:02+00:00",
+  "generated_at": "2026-08-08T12:58:22+00:00",
   "phase": "5c1",
   "deliverable": "2 — joins and the four-week collection window",
   "contract": "docs/SPEC.md §3.11 (6) ruling 22; docs/PROMPT-5c1.md Deliverable 2",
@@ -19,8 +19,8 @@
       "posts_stored": 52,
       "posts_first": "2026-07-11T08:05:27+00:00",
       "posts_last": "2026-08-07T09:01:23+00:00",
-      "comments_stored": 0,
-      "threads_with_comments": 0,
+      "comments_stored": 223,
+      "threads_with_comments": 37,
       "damaged_lines": 0
     },
     {
@@ -32,8 +32,8 @@
       "posts_stored": 40,
       "posts_first": "2026-07-10T12:53:35+00:00",
       "posts_last": "2026-08-06T15:04:04+00:00",
-      "comments_stored": 0,
-      "threads_with_comments": 0,
+      "comments_stored": 232,
+      "threads_with_comments": 29,
       "damaged_lines": 0
     },
     {
@@ -58,8 +58,8 @@
       "posts_stored": 91,
       "posts_first": "2026-07-11T05:02:11+00:00",
       "posts_last": "2026-08-07T10:00:36+00:00",
-      "comments_stored": 0,
-      "threads_with_comments": 0,
+      "comments_stored": 105,
+      "threads_with_comments": 57,
       "damaged_lines": 0
     },
     {
@@ -71,8 +71,8 @@
       "posts_stored": 28,
       "posts_first": "2026-07-10T11:35:49+00:00",
       "posts_last": "2026-08-06T07:06:12+00:00",
-      "comments_stored": 0,
-      "threads_with_comments": 0,
+      "comments_stored": 101,
+      "threads_with_comments": 17,
       "damaged_lines": 0
     },
     {
@@ -84,8 +84,8 @@
       "posts_stored": 82,
       "posts_first": "2026-07-17T18:38:47+00:00",
       "posts_last": "2026-08-06T13:40:54+00:00",
-      "comments_stored": 0,
-      "threads_with_comments": 0,
+      "comments_stored": 45,
+      "threads_with_comments": 14,
       "damaged_lines": 0
     },
     {
@@ -97,8 +97,8 @@
       "posts_stored": 2,
       "posts_first": "2026-07-31T17:24:36+00:00",
       "posts_last": "2026-08-03T14:19:55+00:00",
-      "comments_stored": 0,
-      "threads_with_comments": 0,
+      "comments_stored": 4,
+      "threads_with_comments": 2,
       "damaged_lines": 0
     },
     {
@@ -110,8 +110,8 @@
       "posts_stored": 53,
       "posts_first": "2026-07-10T13:43:32+00:00",
       "posts_last": "2026-08-05T16:05:02+00:00",
-      "comments_stored": 0,
-      "threads_with_comments": 0,
+      "comments_stored": 8,
+      "threads_with_comments": 7,
       "damaged_lines": 0
     },
     {
@@ -123,8 +123,8 @@
       "posts_stored": 17,
       "posts_first": "2026-07-11T08:17:44+00:00",
       "posts_last": "2026-08-06T09:01:27+00:00",
-      "comments_stored": 0,
-      "threads_with_comments": 0,
+      "comments_stored": 97,
+      "threads_with_comments": 14,
       "damaged_lines": 0
     },
     {
@@ -136,8 +136,8 @@
       "posts_stored": 20,
       "posts_first": "2026-07-11T06:15:14+00:00",
       "posts_last": "2026-08-06T14:40:20+00:00",
-      "comments_stored": 0,
-      "threads_with_comments": 0,
+      "comments_stored": 83,
+      "threads_with_comments": 9,
       "damaged_lines": 0
     },
     {
@@ -149,8 +149,8 @@
       "posts_stored": 4,
       "posts_first": "2026-07-29T09:35:28+00:00",
       "posts_last": "2026-08-05T12:31:39+00:00",
-      "comments_stored": 0,
-      "threads_with_comments": 0,
+      "comments_stored": 4,
+      "threads_with_comments": 1,
       "damaged_lines": 0
     },
     {
@@ -162,8 +162,8 @@
       "posts_stored": 10,
       "posts_first": "2026-07-22T19:42:40+00:00",
       "posts_last": "2026-08-06T11:15:28+00:00",
-      "comments_stored": 0,
-      "threads_with_comments": 0,
+      "comments_stored": 16,
+      "threads_with_comments": 5,
       "damaged_lines": 0
     },
     {
@@ -175,8 +175,8 @@
       "posts_stored": 17,
       "posts_first": "2026-07-20T11:44:43+00:00",
       "posts_last": "2026-08-06T11:15:10+00:00",
-      "comments_stored": 0,
-      "threads_with_comments": 0,
+      "comments_stored": 4,
+      "threads_with_comments": 1,
       "damaged_lines": 0
     },
     {
@@ -188,8 +188,8 @@
       "posts_stored": 8,
       "posts_first": "2026-07-14T14:29:26+00:00",
       "posts_last": "2026-08-05T12:23:56+00:00",
-      "comments_stored": 0,
-      "threads_with_comments": 0,
+      "comments_stored": 4,
+      "threads_with_comments": 1,
       "damaged_lines": 0
     },
     {
@@ -201,8 +201,8 @@
       "posts_stored": 22,
       "posts_first": "2026-07-11T14:38:09+00:00",
       "posts_last": "2026-08-06T19:11:57+00:00",
-      "comments_stored": 0,
-      "threads_with_comments": 0,
+      "comments_stored": 6,
+      "threads_with_comments": 4,
       "damaged_lines": 0
     },
     {
@@ -734,8 +734,8 @@
       "posts_stored": 123,
       "posts_first": "2026-07-10T17:59:17+00:00",
       "posts_last": "2026-08-07T21:30:33+00:00",
-      "comments_stored": 0,
-      "threads_with_comments": 0,
+      "comments_stored": 1048,
+      "threads_with_comments": 104,
       "damaged_lines": 0
     },
     {
@@ -812,8 +812,8 @@
       "posts_stored": 237,
       "posts_first": "2026-07-10T11:03:36+00:00",
       "posts_last": "2026-08-08T11:01:27+00:00",
-      "comments_stored": 0,
-      "threads_with_comments": 0,
+      "comments_stored": 2890,
+      "threads_with_comments": 156,
       "damaged_lines": 0
     },
     {
@@ -825,22 +825,22 @@
       "posts_stored": 48,
       "posts_first": "2026-07-10T13:00:47+00:00",
       "posts_last": "2026-08-08T07:02:05+00:00",
-      "comments_stored": 0,
-      "threads_with_comments": 0,
+      "comments_stored": 10,
+      "threads_with_comments": 9,
       "damaged_lines": 0
     }
   ],
   "totals": {
     "channels": 63,
     "posts_stored": 9393,
-    "comments_stored": 0,
+    "comments_stored": 4880,
     "damaged_lines": 0,
     "channels_with_posts": 56,
-    "channels_with_comments": 0
+    "channels_with_comments": 17
   },
   "joins": {
-    "attempted": 1,
-    "landed": 1,
+    "attempted": 6,
+    "landed": 6,
     "flood_wait_seconds": null
   },
   "phases_run": [
@@ -853,21 +853,10 @@
     "note": "The four original registry channels are out of the gate's scope and their six raw v1 files are refused at channel level, before a record is built."
   },
   "git": {
-    "commit": "0eb12d5df81ff8f27c43f7c4895e9563d4f1c26e",
+    "commit": "240edacb2ddc756b5878fe1dccf6ef46a10a8e67",
     "dirty": [
-      "config/registry.yaml",
-      "docs/CHANNELS-launch.md",
-      "results/entry_gate_5c1.json",
-      "results/joins_5c1.jsonl",
-      "scripts/apply_gate_rulings_5c1.py",
-      "scripts/entry_check.py",
-      "scripts/late_batch_5c1.py",
-      "tests/test_entry_gate_5c1.py",
-      "tests/test_gate_rulings_5c1.py",
-      "tests/test_late_batch_5c1.py",
-      "results/harvest_mothers_ua.json",
-      "scripts/harvest_similar_5c1.py",
-      "tests/test_harvest_similar_5c1.py"
+      "docs/STATUS.md",
+      "results/joins_5c1.jsonl"
     ]
   }
 }

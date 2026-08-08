@@ -15,3 +15,16 @@
 {"at": "2026-08-07T13:56:05+00:00", "channel": "@znishkom", "group_id": 2160355291, "group_title": "ЗнижКом | Чат", "outcome": "not_a_member", "note": "already out before this run"}
 {"at": "2026-08-07T13:56:05+00:00", "channel": "@uasaler", "group_id": 1579882044, "group_title": "Чат Аліекспрес ( AliExpert )", "outcome": "not_a_member", "note": "already out before this run"}
 {"at": "2026-08-07T13:56:53+00:00", "channel": "*", "outcome": "floodwait", "seconds": 72312, "clears_at": "2026-08-08T10:02:05+00:00", "request": "ResolveUsernameRequest", "note": "ACCOUNT-WIDE, not per channel: the limit is on resolving usernames, which every join, every comment fetch and every gate check starts with. Today resolved several hundred (63 gate rows + 119 discovery candidates + searches + 13 joins + a membership probe), and this is the cumulative bill. Nothing Telegram-side can run until it clears."}
+{"at": "2026-08-08T10:10:38+00:00", "channel": "@katyal55", "group_id": 1984119253, "group_title": "Катюшка-видеоблог💗 Chat", "outcome": "not_a_member", "note": "already out before this run"}
+{"at": "2026-08-08T10:10:38+00:00", "channel": "@tretyakovaele", "group_id": 1572331072, "group_title": "Третьякова Елена Chat", "outcome": "left", "verified_left": true}
+{"at": "2026-08-08T10:10:38+00:00", "channel": "@kuksa2022", "group_id": 1894042568, "group_title": "Чат/Екатерина Кукса", "outcome": "left", "verified_left": true}
+{"at": "2026-08-08T10:32:53+00:00", "channel": "@sashafitnesslife", "group_id": 1688518573, "group_title": "SFL Обговорення", "outcome": "joined"}
+{"at": "2026-08-08T10:47:53+00:00", "channel": "@chifit_family", "group_id": 2261893839, "group_title": "Ольга CHIFIT", "outcome": "joined"}
+{"at": "2026-08-08T11:02:52+00:00", "channel": "@ya_Nenka", "group_id": 1575053567, "group_title": "Чат Катерини Неньки", "outcome": "joined"}
+{"at": "2026-08-08T11:17:52+00:00", "channel": "@useful_healthy_fitness_menu", "group_id": 2102305707, "group_title": "Чат здорового харчування з лікарем-терапевтом, дієтологом Софією Ігорівною 👩🏼‍⚕️", "outcome": "joined"}
+{"at": "2026-08-08T11:32:52+00:00", "channel": "@olgaa_trainer", "group_id": 2363078375, "group_title": "Оля | розумний фітнес 💪 Chat", "outcome": "joined"}
+{"at": "2026-08-08T11:47:52+00:00", "channel": "@denisovapro", "group_id": 1518171424, "group_title": "Нутрициология ☘️ @denisovapro Chat", "outcome": "joined"}
+{"at": "2026-08-08T12:02:51+00:00", "channel": "@eftforhealth", "group_id": 2035173427, "group_title": "чат Я ЗДОРОВА", "outcome": "joined"}
+{"at": "2026-08-08T12:17:50+00:00", "channel": "@mandziak", "group_id": 1834041310, "group_title": "Мандзяк Віктор Chat", "outcome": "joined"}
+{"at": "2026-08-08T12:32:50+00:00", "channel": "@matusi_ukr", "group_id": 1564481268, "group_title": "Чат Матусі України", "outcome": "joined"}
+{"at": "2026-08-08T12:47:49+00:00", "channel": "@mamo_nepsichuy", "group_id": 1884244050, "group_title": "Мамо, не псіхуй!👌 Chat", "outcome": "joined"}

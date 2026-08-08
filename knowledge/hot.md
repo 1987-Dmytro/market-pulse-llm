@@ -31,104 +31,126 @@ fdf4115 docs(5c1): the SPEC's two new rulings, and D45-D62
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-07 (`/close`). 5c1 is executed except the network tail; **the whole of
-tomorrow is `docs/PROMPT-5c1-day2.md`**, ten steps, starting at **10:02:05 UTC** with three group
-exits. 28 commits today (`82ddfe1` → `267add0`), `make check` **1176 passed**, **$0** spent. This
-block is hand-edited; the section above it is auto-generated — do NOT touch the marker.
+**Last update:** 2026-08-08 (day-2 run). `docs/PROMPT-5c1-day2.md` executed end to end: ten
+steps, plus two дозаявки the operator ruled mid-session. Registry **39 → 67**, 13 joins, zero
+FloodWait, **$0**. `make check` **1,198 passed**. This block is hand-edited; the section above it
+is auto-generated — do NOT touch the marker.
 
 ## 🔥 What's Hot
 
-**THE REGISTRY IS 39 = launch 33 + watch 6**, after five rebuilds in one day (51 → 48 → 43 → 42 →
-39). `config/registry.yaml` is what the loop reads; `docs/CHANNELS-launch.md` still shows older
-totals in its older sections and amends them further down — later section wins. Excluded across the
-phase: **29**. Every removal left a comment line carrying its reason AND its numbers, because a
-silently shorter file cannot be told from one that never had the channel. Audience now:
-retail_official 5 · supermarket_deals 4 · cooking_recipes 7 · health_fitness 16 · baby_food 5 ·
-food_quality 1 · **mothers_kids 1 (watch only — the launch segment is EMPTY)**.
+**THE REGISTRY IS 67 = launch 60 + watch 7**, and every row of today's diff is **PROVISIONAL
+pending the yield screen** (amendment 3.12's rider, clause 2): the operator signs no launch
+verdict and no loop run consumes this composition until the yield numbers exist. Excluded across
+the phase: **33**. Audience: regional 18 · health_fitness 17 · baby_food 8 · retail_official 7 ·
+cooking_recipes 7 · mothers_kids 5 · supermarket_deals 4 · food_quality 1. **mothers_kids stopped
+being an empty launch segment** — 3 live (@educationwithloven, @matusi_ukr, @mamo_nepsichuy)
+against 0 yesterday, which is what the whole harvest track existed for. Subscribers 1,027,504 →
+1,951,851.
 
-**THREE INSTRUMENTS MEASURE THE COMPOSITION, AND EACH ANSWERS ONE QUESTION.** Theme
-(`theme_screen_5c1.json` — is it about food; **do not re-run it, it refuses**: it is the evidence
-behind five exclusions and cannot be re-derived, pass `--out`). Language
-(`language_census_5c1.json` — UA 21 · RU 3 · MIXED 0 · too-few 18 · silent 14; bars pre-registered
-in a separate file, sha256 cited in the record). Market origin (`market_screen_5c1.json` — UA 19 ·
-none 20 · **RF 0**, report-only). They are not interchangeable: RU-language is not RF-market, and
-the census cannot see a channel that posts nothing.
+**THREE "CITY FEEDS" WERE CHATS, AND THE FIX WAS BIGGER THAN THE HOLE.** @poltava_misto,
+@kremenchug_live and @Karlivka_live came back `broadcast=false, megagroup=true` — their 111/77/197
+posts a week is member traffic, the class @Mambabyua was excluded for on 06.08. @Karlivka_live's
+LINKED object turned out to be a broadcast channel of the same town (@KarlivkaLive), so the canon
+had taken the chat's handle; and the operator's own addition to step 7 — search for broadcast
+analogues of the two remaining towns — returned feeds LARGER than what left: @h_kremenchug 137,221
+against a 16,056 chat. **Three of the four picks were not in the 119-candidate town-name scan at
+all.** Name-scanning under-covers; `contacts.SearchRequest` over the same words did not.
 
-**A ZERO IS ONLY READABLE BECAUSE THE CONTROLS FIRE.** Both screens refuse to report if a known
-case comes back wrong (`verdicts_reportable: false`, exit 1). Market controls: @offspringrus →
-RF_FLAG, @dpssgovua → UA_EVIDENCE, the «Сочи» and «₽/Яндекс Еды» rows flag on their own text,
-and «щоб добре просочився» — a Ukrainian recipe line — produces nothing. **Evidence is a quoted
-line, never a counter.**
+**FIVE FLAGS WERE CLEARED, NOT OVERRIDDEN, AND THE ROWS STILL SAY FLAG.** Each was raised about a
+discussion group on a channel that enters posts-only and never joins one. `CLEARED` covers a FLAG
+and refuses a FAIL — a FAIL is a bucket change (`MOVED`), which is how @lab_of_childhood went to
+watch: 0 posts in the window failed it, 49 posts to 2026-06-04 is why it is not dead.
 
-**HALF THE REGISTRY CANNOT BE JUDGED BY EITHER SCREEN.** Census: 24 of 56 sources had a verdict.
-Market: 20 of 39 are NO_EVIDENCE — they never quote a price, a shop or a place. If "REQUIRES UA
-evidence" is ever applied as a hard gate rather than a screen, it excludes twenty channels for not
-being about shopping. Operator's call, named in the record.
+**THE SCREENS NOW REFUSE THEIR OWN DEFAULT PATH.** `language_census_5c1.json` IS wave 3's evidence
+— @retsepty5's 139 posts, @katyal55's 36 — and those channels have LEFT, so a re-run writes a
+table that cannot contain the rows the rulings cite. Same for the market screen's «RF 0 on the
+live 39». Today's passes are `results/language_census_5c1_day2.json` (UA_DOMINANT 43 ·
+TOO_FEW 16 · NO_POSTS 7 · **RU_DOMINANT 1**) and `results/market_screen_5c1_day2.json`
+(UA_EVIDENCE 40 · NO_EVIDENCE 24 · **RF_FLAG 3**). Both report-only, all seven controls fire.
 
-**THE WINDOW IS COLLECTED, THE COMMENTS ARE NOT.** 2,132 posts, window fixed at
-`since 2026-07-10T10:33:14Z`, 0 damaged lines, `shasum -c` 6/6. Comments: **106 rows, one channel**
-— and that channel (@tretyakovaele) has since been excluded, so tomorrow's comment collection
-starts from the 8 member groups. Removing a source never retracts its rows; collection totals carry
-a basis.
+**THE MARKET SCREEN'S FIRST FALSE POSITIVES ARE WAR REPORTING.** All three RF_FLAGs are Ukrainian
+city feeds on the same sentence: «склади Wildberries розбомбили під Санкт-Петербургом»
+(@myrhorodtown 2 of 273), «пожежі на складах Wildberries» (@poltava_informue 1 of 1,316),
+«Українські БПЛА рознесли … хабів … Wildberries в Електросталі» (@poltava20 1 of 1,535). The
+ratio reads the row — 947 UA-evidence posts against one mention. There is no stop-word fix:
+*Wildberries* IS an RF retailer and naming it IS what the screen is for.
 
-**THE DRY-RUN'S `rows_to_inference` IS NOT THE WINDOW QUEUE.** `queue_depth` counts every stored
-comment above an inference watermark that has never moved — the full v1 history of the four
-original channels, exactly the backlog ruling 22 deferred. It reads **11,444** = 5a's 11,338 + the
-106 collected here. The window's comment queue is what 5c2 prices and it barely exists yet.
+**THE WINDOW IS 9,393 POSTS AND 4,880 COMMENTS NOW, AND THE QUEUE 5c2 PRICES IS 16,218 ROWS.**
+0 damaged lines, `shasum -c` 6/6, 0 threads left to fetch. The two channels step 7's handle top-up
+found are the biggest comment sources in the composition: **@matusi_ukr 2,890 comments over 156
+threads** and @mandziak 1,048 over 104 — between them 81% of everything the window collected.
+The queue is 11,338 of 5a's v1 backlog plus these 4,880; `results/collect_5c1.json` carries the
+per-channel table and `run_loop.py --once --dry-run` renders the total.
 
-**WHAT 5c SERVES, AND IT SAYS BATCH 1.** `results/serving_5b.json`: `batch_size: 1`,
-**$0.5993/1000 rows**, **4.065 s/row**, cold start 46.2 s off local NVMe. Batch is closed by rule
-(`batch_5b2_verdict.json` → `failed-measurement-oom`) — only a new pre-registration moves it.
-[[5b2-batch-measurement]] The artifact is the NF4 base + the unmerged arm-A adapter (`b3ca6308…`);
-merging stays forbidden. [[5b-parity-abort-and-pod-runtime]]
+**AND THE TWO SCREENS DISAGREE ABOUT @dikankaa, BOTH RIGHT.** Census: RU_DOMINANT, ru 1.00 over 20
+decidable posts, its own text covering «Волгоградской области ( Энгельс, Саратов )». Market screen:
+NO_EVIDENCE — those oblasts are not in a table of places a MARKET is in. Neither instrument
+subsumes the other. RU_DOMINANT on a fresh entry is REPORT ONLY by the brief; it is an open
+operator question.
 
 ## ⏭️ Next
 
-**`docs/PROMPT-5c1-day2.md` is the single execution order — it SUPERSEDES addenda 3–10.** Ten
-steps, ≈35 resolves on 0–4, plus collection and ~20 searches. Everything offline is already wired
-and tested; nothing below needs preparation.
+**The yield screen is the next session's contract** (SPEC amendment 3.12 (1)): watchlist
+display_names + the category lexicon over each channel's collected 28-day window, posts and
+comments as SEPARATE currencies, thresholds pre-registered BEFORE any number is seen, run
+retroactively over the whole registry too. Nothing enters or leaves on it automatically.
 
-0. **`--leave @katyal55 @tretyakovaele @kuksa2022`** — first, because they are the only actions
-   that undo something already done. Flag re-read after each (D28); `not_a_member` is a record, not
-   an error. **3 resolves.**
-1. **List A joins (7)** — @ya_Nenka @useful_healthy_fitness_menu @denisovapro @sashafitnesslife
-   @olgaa_trainer @chifit_family @eftforhealth. Only 3 of the 7 are measured UA; the other 4 are a
-   title read, exactly like the exits were. **7 resolves.**
-2. **Gates in THREE SEPARATE pairs** — 16 city (`regional`) · 3 retail (`retail_official`) · 6
-   harvest (Дозаявка №8). `--only` each: `final_bucket` refuses the WHOLE apply run over one
-   unruled FLAG, so a joint pass would let @LHVC_info hold the other batches hostage. **16+3+6.**
-3. **Window collection** for every new pass + comments for the 8 member groups; `shasum -c` 6/6;
-   dry-run totals.
-4. **Census + market screen over the new windows** — RU_DOMINANT is REPORT ONLY for fresh entries.
-5. **Searches** — 5 chains · the Max Control note (5 queries) · 5 handle top-ups. Novus and Auchan
-   will come back "MATCHES FOUND, not closed" and need a written judgement.
-6. **Audience fill**, then **mothers-UA harvest — critical, the segment is empty.**
+Open operator questions carried forward: **@dikankaa** (RU_DOMINANT, fresh entry) · the **three
+RF_FLAGs** (war reporting, report-only) · the theme of **@pavlushaiyava** and **@mandziak**, which
+no instrument has measured — their `baby_food` / `health_fitness` rows are EXPECTATIONS and the
+code says so.
 
-Expect registry **39 → up to ~72** and `make check` RED between gate and apply: that is the STOP
-reporting, to be read, not loosened.
+Candidate stock for the next sitting, none of it actioned: `results/harvest_mothers_ua.json` — 79
+recommendations from three seeds, **77 not already ours, all broadcast**. Five city analogues the
+operator did NOT take (СИРЕНА 195,553, @poltava_insider 22,831, @sirena_kremenchuk 72,660,
+@treeshkremik 49,521, @kremenchuk_insider 11,563) are in
+`results/entry_gate_5c1.json :: notes.*_broadcast_analogue`. Reserve №4 (12 cooking handles) and
+the privates ledger stay RECORDED, not actioned.
 
 ## 🚧 Blockers
 
-**ONE, AND IT IS A CLOCK: FloodWait until 2026-08-08 10:02:05 UTC.** Not the record's memory —
-Telegram's own answer at 18:31:48 today: 55,779 s remaining. **The operator's client working is
-not evidence it lifted**: a client walks cached entities and never calls `ResolveUsernameRequest`,
-so "it opens for me" and "the wall stands" are compatible. Every phase now refuses inside the
-window (collector, gate and `--leave` alike) and a wall found by any path is written into
-`results/joins_5c1.jsonl`, where all of them read it.
-
-**Three questions for the operator, none blocking:** the segment for a Max Control channel if the
-search finds one (the closed list has no value for an NGO — `food_quality_gov` was renamed
-`food_quality`, but that is the state service's row); whether NO_EVIDENCE should ever gate; and
-whether the four title-read channels in List A are joined on that basis.
+**None Telegram-side.** The 2026-08-07 wall cleared at 10:02:05 UTC and today's ~100 resolves
+drew no new one — because every collection run was scoped with `--only`. That is the discipline,
+not luck: `collectable()` returns the whole registry and a bare `--posts` over 67 sources is
+sixty-seven `ResolveUsernameRequest`s for the work of six.
 
 **Recorded rather than open:** the CA-MTL-3 volume is deleted, so its **~$0.24/day** idle billing
 has stopped — that literal is load-bearing, not decoration: `scripts/volume_calc_5c1.py` greps it
 out of THIS file as a priced input, and a rewrite that drops it reddens nine tests. Beyond that:
-no RunPod serverless endpoint on this account reaches a job-consuming worker — proven not to be ours by RunPod's own hub worker failing identically.
-Production is a stop-after pod. The CA-MTL-3 volume is deleted (proven by listing); arm A's per-row
-dump is permanently lost; no pod, endpoint or template exists.
+no RunPod serverless endpoint on this account reaches a job-consuming worker — proven not to be
+ours by RunPod's own hub worker failing identically. Production is a stop-after pod. Arm A's
+per-row dump is permanently lost; no pod, endpoint or template exists.
 
 ## ⚠️ Footguns for the next run
+
+**Two Telethon clients must never share `marketpulse.session`, and the join pace makes that easy
+to forget.** `seconds_until_next_join` reads the LAST timestamp in `results/joins_5c1.jsonl`, so
+the fifteen-minute gap is wall-clock and survives a restart — which means `--join --max 1` can be
+fired between other phases at no cost, and a `--join` left running in the background while a gate
+or a collection runs puts two clients on one SQLite file. Interleave, never overlap.
+
+**A bare `--posts` or `--comments` resolves the WHOLE registry.** `collectable()` returns all 67
+sources and `run()` calls `get_entity(handle)` before it checks `comments_enabled and not watch`
+— so `--comments` without `--only` is sixty-seven `ResolveUsernameRequest`s to fetch five
+channels' threads. That request is what the 2026-08-07 wall was on. Every collection run of the
+day-2 order carried `--only` and the day drew no wall on ~100 resolves.
+
+**`language_census_5c1.py` and `market_screen_5c1.py` now refuse their own default path.** Their
+shipped records are dated measurements a ruling cites — the census holds @retsepty5's 139 posts
+and @katyal55's 36, and those channels have LEFT the registry, so a re-run cannot contain them.
+Pass `--out` with a new path; the day-2 passes are the `_day2.json` pair. `theme_screen_5c1.py`
+carried this refusal already, for a harder reason.
+
+**`apply_gate_rulings_5c1.remove_sources` stamps `removed 2026-08-07` from a hardcoded literal.**
+No removal happened on 08.08 so nothing is mislabelled yet, and a test pins the string — but the
+next channel that leaves the registry gets yesterday's date on its tombstone. Left as found: it is
+a two-line change plus a test, and it was not this order's scope.
+
+**The harvest's «already ours» marker does not know the canon's «Исключены — 12» table.**
+`late_batch_5c1.known_handles()` reads the registry and the 5c1 gate record only, so
+`results/harvest_mothers_ua.json` offers back @prikorm_kids_menu — dead by the 06.08 ruling and
+never gated. The cost is an operator's attention at a sitting.
+
 
 **A pod has no template, so it has no configuration — whatever boots it carries the worker's
 environment.** `SERVING_CONFIG`, `ADAPTER_DIR`, `BASE_WEIGHTS` and `MODEL_REVISION` were the
