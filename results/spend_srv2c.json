@@ -1,0 +1,6 @@
+{
+  "runpod_balance_at_srv2c_start": 15.4915993671,
+  "srv2c_gpu_cap_usd": 0.75,
+  "gpu_sessions": [],
+  "gpu_note": "RunPod account balance read before the first pod of srv2c. Step spend = this anchor minus the balance now, enforced against $0.75. The SPEC amendment 3.4 (4) phase cap is enforced separately, against results/spend_phase4.json, and neither anchor may be regenerated."
+}
