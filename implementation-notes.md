@@ -4285,3 +4285,67 @@ rows are scored — so a raise there would lose a record whose cold start and ro
 billed. It cannot raise: the two `cli()` calls sit inside a `try` that catches `OSError`,
 `CalledProcessError`, `ValueError` and `KeyError` and returns `{"unreadable": …}`. Recorded rather
 than left silent, because "checked and clear" is a different statement from "not looked at".
+
+## srv-2b — the paid session (PROMPT-srv-2b, cap $4.00)
+
+### §C.0 preflight, and the readings that picked the datacenter (all $0, before the first spend)
+
+The three listings that make the closing three a deletion proof: `runpodctl pod list -a` → `[]`,
+`runpodctl serverless list` → `[]`, `runpodctl network-volume list` → `[]`. The carve rebuilt to
+`8347abd74ae91f49161bdffdd907e2428ea862f02f1f103e543e63ac27a547fa` (24 rows, 8 asked), the hash
+arm A's provenance registered. `make check` 1,270 passed; `ruff format --check .` 188 files
+already formatted. The guard anchored `results/spend_srv2b.json` at balance **$16.5012** with a
+$4.00 cap and was committed before anything was created, so git history — not this session's word
+— witnesses that the cap predates the spend.
+
+**§C.1 — the D7 re-read, and why it is a reading and not a purchase.** The runbook's instruction
+is "probe by creating ONE endpoint at a time"; that instruction only has meaning *after* a volume
+exists, because the question is what serverless offers **with a volume attached**. Creating
+endpoints before §C.2 would have re-bought the probe's n=2 and answered nothing. So §C.1's
+deliverable here is the datacenter, taken from free readings, and the allocation fact is bought
+once at §C.5 exactly as the runbook says ("Record the reading after §C.5, not before").
+
+The runbook's "only 18 datacenters support network volumes at all" was re-derived rather than
+believed: `dataCenters { id storageSupport listed }` over the GraphQL API returns 49 datacenters
+of which **exactly 18** carry `storageSupport: true`. Crossed against `runpodctl gpu list`, whose
+`dataCenterAvailability` gives per-datacenter stock, the volume-capable set holds only these
+candidates for the classes this contract authorises (48 GB first, else 24 GB):
+
+| DC | AMPERE_48 | ADA_48_PRO | ADA_24 | other |
+|---|---|---|---|---|
+| CA-MTL-3 | A6000 `none` | — | 4090 `none` | A100 PCIe Low |
+| EU-RO-1 | A6000 `none` | — | 4090 **`Medium`** | 5090 32 GB Low, A100 SXM Low |
+| EUR-IS-1 | — | — | 4090 `Low` | 5090 Low |
+| US-NC-1 | — | L40S **`Low`** | 4090 `none` | — |
+| US-TX-3 | — | L40S **`Low`** | 4090 `none` | — |
+| US-IL-1 | — | L40S `none` | 4090 `none` | — |
+
+Nine of the eighteen carry no class of interest at all. **These are pod (secure-cloud) readings —
+serverless runs its own capacity pool and no free reading of it exists**, which is precisely why
+D7 is re-read by allocating a job rather than by reading a table.
+
+**Decision: EU-RO-1**, and the reasoning is about which rung it avoids. The contract prefers a
+48 GB class, and only US-NC-1 / US-TX-3 show one in stock (L40S). But in both of those the 24 GB
+fallback reads `none`, so if serverless declines to allocate an L40S the volume is pinned in a
+region with nothing behind it — rung 1, session over, no parity number. That is the 5b wall
+repeated: a volume nailed to CA-MTL-3 where no 48 GB class ever allocated. EU-RO-1 is the only
+volume-capable datacenter where the *fallback* class has real stock (the only `Medium` 4090 among
+all eighteen), while still cataloguing A6000 so the 48 GB preference can be asked for first at
+§C.4 and fall back inside the same region. It also carries a 32 GB RTX 5090 at `Low` as a middle
+rung if 24 GB proves tight.
+
+The trade is deliberate: EU-RO-1 maximises the probability that **a worker runs at all** — rung 1
+ends the session with nothing — and moves the risk onto the OOM rung, which §C.3 can measure on a
+$0.74/h pod before a single serverless second is billed. D7's own evidence points the same way:
+of the four classes it probed with a volume, `ADA_24` was the one that allocated, and a positive
+is the reading least likely to have inverted since.
+
+**Staging pod card = the serving class, on purpose.** §C.3 leaves `--gpu-id` free ("a card
+available in `<DC>`"). Taking the 4090 rather than a cheaper card turns the cold-start proof into
+the OOM measurement on the actual silicon at a third of the serverless rate, instead of
+discovering the fit at §C.5 on a billed worker with no second attempt.
+
+Projection before spending, so the report can be checked against it: volume 100 GB (run-rate line,
+price read at creation) · staging pod 4090 $0.74/h for ~40 min ≈ $0.50 · smoke ≈ $0.05–0.10 ·
+parity 758 rows ≈ 3 300 s of worker time, $0.6–1.1 depending on the offered class's per-second
+rate. Total ≈ $1.2–1.7 of the $4.00 cap.
