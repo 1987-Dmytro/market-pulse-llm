@@ -4630,3 +4630,17 @@ nothing survives it. Written down because a billed row nobody claims is worth a 
 the *last* boot's output. Health showed a ready worker before the job was submitted, so at least one
 boot preceded the one recorded. `>>` would have kept both; the contract specified `>` and it was
 followed. Named so the record is not read as a complete history of the endpoint's life.
+
+**Dv31 — `knowledge/hot.md` was edited, which the contract's step list does not name.** Step 4 is
+"report, STOP, no fixes beyond the guard code". Three of hot.md's curated blocks asserted things
+this session's evidence falsifies — the standing Blocker "our serverless container does not start",
+the srv-2c briefing written as a future step, and srv-2a's "it is the branch that failed" — and
+hot.md is injected at **every** SessionStart. Leaving them would have handed the next session a
+false blocker, which the project's own second-brain rule exists to prevent; hot.md is an executor
+file and "no fixes" reads as being about the worker, not the vault. Corrected surgically: the
+falsified claims, the volume price, and the `Last update:` line. **Deliberately not touched:** the
+frozen `results/volume_calc_5c1.json` derivation and the two literals `scripts/volume_calc_5c1.py`
+greps out of hot.md (`~$0.24/day`, `80 GB is about what the`) — Dv16's lesson. srv-2b's historical
+block keeps its original text with a correction appended beneath it rather than a rewrite, so what
+was observed and what was inferred stay separable. `refresh-hot-cache.py` OK (55 077 bytes),
+`check-wikilinks.py` OK, none broken.

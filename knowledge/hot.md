@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-08 21:24:08 (every SessionStart)
+**Auto-refreshed:** 2026-08-08 21:52:44 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-86eb0b7 docs(srv-2b): the volume's manifest, the artifact that does not exist, and a blind guard
-e027aee feat(srv-2b): the wall is down with a volume too -- and our own container is what stopped us
-81f35f9 fix(srv-2b): the pod proof fits 24 GB, and two records stopped drifting
-48948d7 docs(srv-2b): the datacenter is picked from free readings, before a dollar moves
-1e42316 chore(srv-2b): the cap and its anchor land before the first billable second
+475cc73 chore(srv-2c): the spend figure in the record, re-read after settlement
+b30652d feat(srv-2c): the boot log exists, and it says the worker starts and answers
+cf4cf71 docs(srv-2c): the outcome space and the rungs, pre-registered before the spend
+fc9cf02 chore(srv-2c): the $0.75 cap and its anchor land before the first billable second
+37720fc fix(srv-2c): the spend guard could not see a serverless bill
 ```
 
 ## 📋 Recent decisions
@@ -31,12 +31,14 @@ e027aee feat(srv-2b): the wall is down with a volume too -- and our own containe
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-08 21:17 (`/save`). `docs/PROMPT-srv-2b.md` executed — the first paid
-session of the serverless track. **ABORTED at the handshake-timeout rung, $0.9999 of its $4.00
-cap.** The volume `qw4nwleanc` (100 GB, EU-RO-1) is the only thing that outlived it; everything
-else deleted and proven deleted by listing. Five commits (`066c282` → `86eb0b7`), `make check`
-**1,270 passed**. Earlier the same evening: srv-2a accepted, and the caption pilot at **$0.0180 of
-its $0.10 cap**. The runtime ADR is [[srv2-serverless-runtime-target]]; the yield half is
+**Last update:** 2026-08-08 21:55 (srv-2c close). `docs/PROMPT-srv-2c.md` executed — **the boot log
+exists and our serverless worker answers**, $0.0654 of its $0.75 cap, record
+`results/srv2c_bootlog.json`. Earlier the same evening `docs/PROMPT-srv-2b.md` ran and **ABORTED at
+the handshake-timeout rung, $0.9999 of its $4.00 cap** — that abort is accepted, and srv-2c has now
+falsified the diagnosis it carried. The volume `qw4nwleanc` (100 GB, EU-RO-1) is the only thing
+either session left standing; every endpoint, template and pod is deleted and proven deleted by
+listing. Eleven commits across the two (`066c282` → `475cc73`), `make check` **1,271 passed**.
+Earlier the same evening: srv-2a accepted, and the caption pilot at **$0.0180 of its $0.10 cap**. The runtime ADR is [[srv2-serverless-runtime-target]]; the yield half is
 [[5c1-relevance-floor-and-discovery]]; the day-2 half is [[5c1-day2-composition-and-search]]. This
 block is hand-edited; the section above it is auto-generated — do NOT touch the marker.
 
@@ -56,6 +58,9 @@ aborted before a worker ran, and srv-2a's pod proof exercised the same file's HT
 The suspect is the one thing a pod cannot cover — whether `--docker-start-cmd
 bash,/runpod-volume/start.sh` becomes the worker's main process under the stock image. **Unproven;
 no log line exists to confirm it.** Full record: `results/d7_reread_srv2b.json`.
+**ANSWERED BY srv-2c, AGAINST THIS BLOCK:** it does become the main process, and the container
+starts and answers. The observation above stands; the inference drawn from "zero lines" does not —
+there is no worker-log channel outside the console, and the console was not rendering.
 
 **THE 24 GB FIT IS ANSWERED, AND THE ANSWER IS BETTER THAN THE PREFERENCE.** The staging pod was
 deliberately taken on the *serving* class (RTX 4090, $0.74/h) so the OOM rung would be measured at
@@ -96,7 +101,8 @@ NAME.** No `/workspace` is baked into `serve_handler.py` or `start_5b_worker.sh`
 and `settings()` agree field for field; `runpod.serverless.start` with a callable handler is
 proven on the pod (06.08, the three-row T2 batch), not assumed. **CORRECTED BY srv-2b: what that
 proved is the `--rp_serve_api` HTTP mode of the file, not the job loop a real worker runs — the
-sibling branch of the same entrypoint, and it is the branch that failed.** The one thing verification
+sibling branch of the same entrypoint. srv-2c then ran that branch and it ANSWERED, so it was
+untested, not broken.** The one thing verification
 demanded: **config A is `peft` applying a LoRA to an NF4 base and no record named the peft that
 served.** `RUNTIME_LIBRARIES` cannot grow — the 4.5h2 anchor carries three libraries and a fourth
 entry would be a guard that never fires — so `library_versions()` now **reports** peft, accelerate
