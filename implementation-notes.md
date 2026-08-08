@@ -4894,7 +4894,21 @@ readings seven minutes apart**, which srv-2c's did not manage — but the itemis
 still settled only 1 538 s of the endpoint's 3 793 s, so Dv33's caveat is on it anyway. What
 it bought: two RTX 2000 Ada pods ($0.0363 settled — staging and the dump fetch), the smoke
 plus its one-job control, the 758-row parity pass, and the volume's run-rate share of the
-window ($0.0123). Phase 4 stands at **$20.8793 of $25.00**, $4.1207 remaining.
+window ($0.0123). Phase 4 stands at **$20.8844 of $25.00**, **$4.1156 remaining**, read at
+22:34:28Z. (An earlier reading at 22:12:56Z gave $20.8793 / $4.1207 and is superseded rather
+than deleted: the step figure was already the later one, and quoting the two from different
+moments is the mistake this line is fixing. The step total did not move between them because
+the phase figure is bound by the itemised ledger, which was still settling, and the step
+figure by the balance delta, which had stopped.)
 
 Endpoint, template and both pods deleted; `pod list -a`, `serverless list` both `[]`, and the
 volume `qw4nwleanc` (100 GB, EU-RO-1) is the only thing standing, as intended.
+
+
+**One more line the record earns rather than needs.** `results/parity_srv2.json` names **two**
+commits and they are different on purpose: `config.serving.worker.repo_commit` is `ed9c0c9`, the
+checkout the worker executed off the volume, and `git.commit` is `76a1b31`, the Mac's HEAD when
+the driver scored. `git diff ed9c0c9 76a1b31 -- scripts/serve_handler.py scripts/start_5b_worker.sh
+src/market_pulse/` is **empty**: the only change between them is `parity_verdict_5b.py`'s new
+`--vs-pod` mode and its tests, so nothing the worker ran moved between staging and scoring, and the
+instrument that stamped the verdict is inside the commit the record names.

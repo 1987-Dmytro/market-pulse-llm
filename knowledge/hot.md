@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-09 00:32:30 (every SessionStart)
+**Auto-refreshed:** 2026-08-09 00:35:52 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+824f716 docs(srv-2d): the live state stops saying the attempt is unspent
 f276aaa docs(srv-2d): the report, and six deviations
 6fcfa5e feat(srv-2d): the parity attempt is spent, and it holds
 76a1b31 feat(srv-2d): the 0.005 clause stops being prose
 ed9c0c9 chore(srv-2d): the spend anchor, before the first billable action
-1c25823 docs(srv-2d): the rules, before the numbers that would test them exist
 ```
 
 ## 📋 Recent decisions
@@ -240,7 +240,7 @@ one, because the gate stores a title and never a bio.
 ## ⏭️ Next
 
 **srv-2d IS DONE — the parity attempt is spent and both clauses of 3.11 (2) hold.** $1.2383 of the
-$2.00 cap; Phase 4 stands at **$20.8793 of $25.00, $4.1207 left**. Everything created is deleted and
+$2.00 cap; Phase 4 stands at **$20.8844 of $25.00, $4.1156 left** (read 22:34:28Z). Everything created is deleted and
 proven deleted by listing; the volume `qw4nwleanc` is the only thing standing. Full report and six
 deviations (Dv34–Dv39) in `implementation-notes.md`.
 
