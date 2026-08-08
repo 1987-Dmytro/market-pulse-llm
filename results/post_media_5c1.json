@@ -1,0 +1,1261 @@
+{
+  "generated_at": "2026-08-08T15:32:24+00:00",
+  "phase": "5c1 — the ATB caption pilot",
+  "contract": "docs/PROMPT-5c1-captions-pilot.md step 2",
+  "channel": "@atb_market_official",
+  "population": {
+    "source": "results/image_census_5c1.json",
+    "asked": 19,
+    "msg_ids": [
+      4340,
+      4350,
+      4360,
+      4370,
+      4377,
+      4381,
+      4391,
+      4401,
+      4411,
+      4415,
+      4421,
+      4426,
+      4436,
+      4446,
+      4455,
+      4467,
+      4498,
+      4508,
+      4519
+    ],
+    "note": "the ids the census counted as no_text_and_no_caption in this channel's screen window — read from the record, never re-derived here"
+  },
+  "media": "data/annotation/captions_5c1/posts_media",
+  "posts": 19,
+  "images": 159,
+  "posts_with_an_image": 19,
+  "posts_without_an_image": [],
+  "polls": [],
+  "media_only_posts": [
+    "@atb_market_official:4340",
+    "@atb_market_official:4350",
+    "@atb_market_official:4360",
+    "@atb_market_official:4370",
+    "@atb_market_official:4377",
+    "@atb_market_official:4381",
+    "@atb_market_official:4391",
+    "@atb_market_official:4401",
+    "@atb_market_official:4411",
+    "@atb_market_official:4415",
+    "@atb_market_official:4421",
+    "@atb_market_official:4426",
+    "@atb_market_official:4436",
+    "@atb_market_official:4446",
+    "@atb_market_official:4455",
+    "@atb_market_official:4467",
+    "@atb_market_official:4498",
+    "@atb_market_official:4508",
+    "@atb_market_official:4519"
+  ],
+  "media_only_with_nothing_to_say": [],
+  "still_owed": [],
+  "flood_wait": {
+    "max_sleep_seconds": 300,
+    "note": "a longer wall stops the run and leaves the owed ids in `still_owed` rather than sleeping through it; this account has met a 20-hour wall on this phase"
+  },
+  "raw_store": "read-only; verify with `shasum -c results/raw_v1_baseline.sha256`",
+  "entries": {
+    "@atb_market_official:4340": {
+      "channel": "@atb_market_official",
+      "msg_id": 4340,
+      "date": "2026-07-01T17:53:57+00:00",
+      "post_has_text": false,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 4340,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4340.jpg",
+          "sha256": "7ae55c29dc8d0adce4cec35cc3d4300ec696fe9f32141d7e34f6368054ec5002",
+          "bytes": 330924
+        },
+        {
+          "msg_id": 4341,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4341.jpg",
+          "sha256": "39862ec33b1a6a87aaf4005dc4dbc187cb7461ad58aeb38c6220052a545f6dec",
+          "bytes": 289072
+        },
+        {
+          "msg_id": 4342,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4342.jpg",
+          "sha256": "3e9d93e56bf6b7c5497c7c928970039a18e6a0fca2e36d702dbb7aa86b4649b4",
+          "bytes": 297686
+        },
+        {
+          "msg_id": 4343,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4343.jpg",
+          "sha256": "5b99c3dcc141d66cc64960897c451d2996907d5bcf5bcc0c5626bd075be2f9aa",
+          "bytes": 273376
+        },
+        {
+          "msg_id": 4344,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4344.jpg",
+          "sha256": "189ce416a8da911f4e29e042b74b17fa33eca509024e6f0421dd55bef65bec77",
+          "bytes": 288211
+        },
+        {
+          "msg_id": 4345,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4345.jpg",
+          "sha256": "fd8d243b9791d37e61afef2b5e3f1776be114f03d06c734e3cbadbe07920cd54",
+          "bytes": 312535
+        },
+        {
+          "msg_id": 4346,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4346.jpg",
+          "sha256": "35f4ad5081adeb898dbc0463b3a98ae863a61ac8d873189076ff3e8ce9a3cfb9",
+          "bytes": 364480
+        },
+        {
+          "msg_id": 4347,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4347.jpg",
+          "sha256": "ba23f1c6c78c406e530e01106e1cd2fc3e2748258ed7c11b76dd789e7f6e493e",
+          "bytes": 264302
+        },
+        {
+          "msg_id": 4348,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4348.jpg",
+          "sha256": "5166e38ccb90eab0a23b4fdd3a4e4584723fae88d3b8d5eba452505a4c225748",
+          "bytes": 249454
+        },
+        {
+          "msg_id": 4349,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4349.jpg",
+          "sha256": "01963b2002840d4be7f1efa648b8b115267acf162f1f570e8d0bd451bbbe21f8",
+          "bytes": 337216
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@atb_market_official:4350": {
+      "channel": "@atb_market_official",
+      "msg_id": 4350,
+      "date": "2026-07-01T17:54:06+00:00",
+      "post_has_text": false,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 4350,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4350.jpg",
+          "sha256": "3147747cc64998593852caca3a36e115beff4b02d109ff1351206f90907b0b2f",
+          "bytes": 507045
+        },
+        {
+          "msg_id": 4351,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4351.jpg",
+          "sha256": "08db5ad39959b0e86cd97838bea33d17436b6ab2998bfee76e4b96e2c77f9b2c",
+          "bytes": 366181
+        },
+        {
+          "msg_id": 4352,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4352.jpg",
+          "sha256": "1287d91aaf74302a83ab75cd6484fc4ce8e379a1713c98ab92efa7bf4e1c4677",
+          "bytes": 375223
+        },
+        {
+          "msg_id": 4353,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4353.jpg",
+          "sha256": "4ea2a6918bfc5b0efa56c492750627c776ea249aa53c60470b8ebb47a7876058",
+          "bytes": 358933
+        },
+        {
+          "msg_id": 4354,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4354.jpg",
+          "sha256": "2d3c859e3e6f1b86930cf450fccfd3474007b86c793ca8586a86d9517bebde83",
+          "bytes": 241479
+        },
+        {
+          "msg_id": 4355,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4355.jpg",
+          "sha256": "022c64a0f006467586ebd668bdc6f94e0d673a1020f1cad23dda8db87765dfbd",
+          "bytes": 335851
+        },
+        {
+          "msg_id": 4356,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4356.jpg",
+          "sha256": "bbe872caa8ca27265a480838fd8415f484d917fe2a8348ab996e4637a07011ff",
+          "bytes": 222612
+        },
+        {
+          "msg_id": 4357,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4357.jpg",
+          "sha256": "c9a9fcebbcfb861a1be1411b5844c1ca99439e2ee616e9a369704e5053e2f305",
+          "bytes": 287925
+        },
+        {
+          "msg_id": 4358,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4358.jpg",
+          "sha256": "e56a9955f4f0bc855df8880a44213d20de0ffeefa4de4e3ab20ec46984d655cc",
+          "bytes": 389648
+        },
+        {
+          "msg_id": 4359,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4359.jpg",
+          "sha256": "2fb6324f94ba17789b4aa4cd40efe1fad2fdd7d8a9b25c119eacc4598a8ff9d8",
+          "bytes": 344730
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@atb_market_official:4360": {
+      "channel": "@atb_market_official",
+      "msg_id": 4360,
+      "date": "2026-07-01T17:54:14+00:00",
+      "post_has_text": false,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 4360,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4360.jpg",
+          "sha256": "3b417da3cb1ff445ff749ca1843ffd3cdad512590f4701c0eea75899164d4d17",
+          "bytes": 327982
+        },
+        {
+          "msg_id": 4361,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4361.jpg",
+          "sha256": "1ef0c6a1847d0a1d8f5fad590f997594648d892464201bd94d7b33daad1b14a7",
+          "bytes": 392810
+        },
+        {
+          "msg_id": 4362,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4362.jpg",
+          "sha256": "23f2914eb381ca7681802607209c4717e96a7652c0ed2218c712613bc7b86662",
+          "bytes": 370623
+        },
+        {
+          "msg_id": 4363,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4363.jpg",
+          "sha256": "120d01e56cd42c965629c570c15059b5b84259c673262270d74eea5cbae027a8",
+          "bytes": 426229
+        },
+        {
+          "msg_id": 4364,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4364.jpg",
+          "sha256": "30203fbdffe436a38b9e2aa41bfbe425ad500deb16a0b3a6acb0bf96bbc0d617",
+          "bytes": 396712
+        },
+        {
+          "msg_id": 4365,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4365.jpg",
+          "sha256": "8d9fe4cabdccfa853b446406c35272f693cc5665fc3e07153b4e2b3cfeeb558f",
+          "bytes": 391301
+        },
+        {
+          "msg_id": 4366,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4366.jpg",
+          "sha256": "c804388835466a7e3647b7c38e1e0a0557342cf36f3e66251b1af0fe6964fe7e",
+          "bytes": 328891
+        },
+        {
+          "msg_id": 4367,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4367.jpg",
+          "sha256": "58eb94bd619207f6e330008f6761591297f6610aa3a681c46512192285f894f0",
+          "bytes": 412527
+        },
+        {
+          "msg_id": 4368,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4368.jpg",
+          "sha256": "4546fb85d631f66d1d792f85af799d6137936e4ce4dfca4c81db32987c5799f9",
+          "bytes": 299371
+        },
+        {
+          "msg_id": 4369,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4369.jpg",
+          "sha256": "b68c668cd4e1872457613cf50bed1b27e9ed43944fe7e3bd5f43feb535e3a09a",
+          "bytes": 428850
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@atb_market_official:4370": {
+      "channel": "@atb_market_official",
+      "msg_id": 4370,
+      "date": "2026-07-01T17:54:20+00:00",
+      "post_has_text": false,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 4370,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4370.jpg",
+          "sha256": "73cf9509db31fb9736156cc5e93fc55e82f2da9bf3d4f7f727d006fef0ae164f",
+          "bytes": 412360
+        },
+        {
+          "msg_id": 4371,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4371.jpg",
+          "sha256": "088ebefc9831a6b6d2c81ad31b665033976ac58d5b4c813b55b172eecaaf9300",
+          "bytes": 386197
+        },
+        {
+          "msg_id": 4372,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4372.jpg",
+          "sha256": "ae6f71ddbe4244a448034655311753d71ded9e56bff429997bd1d1c9163db6ae",
+          "bytes": 346818
+        },
+        {
+          "msg_id": 4373,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4373.jpg",
+          "sha256": "e2add20f07908ceae0080a8504d95e023d02f8908fd25064c8f726ab0ca2840e",
+          "bytes": 377329
+        },
+        {
+          "msg_id": 4374,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4374.jpg",
+          "sha256": "2846f14cab7559c8363be491289e8718297b48f19f3c5cc652d1087261307e23",
+          "bytes": 335647
+        },
+        {
+          "msg_id": 4375,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4375.jpg",
+          "sha256": "f87ff18fb775ee05fdbc85612c55149ad9184d828635dcd4f715b2250c492e8b",
+          "bytes": 369869
+        },
+        {
+          "msg_id": 4376,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4376.jpg",
+          "sha256": "c913ec5e4c63b363b2c11db0739ecc86bfb70ed762e22aa9dc456c78837664b7",
+          "bytes": 396078
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@atb_market_official:4377": {
+      "channel": "@atb_market_official",
+      "msg_id": 4377,
+      "date": "2026-07-08T11:10:00+00:00",
+      "post_has_text": false,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 4377,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4377.jpg",
+          "sha256": "1093fd99ffc4b09e61bcf2b9b6aa4b1acc39afb6d89cb32b7bb5698e5ed03dcd",
+          "bytes": 199980
+        },
+        {
+          "msg_id": 4378,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4378.jpg",
+          "sha256": "c9d2345431788e0527ade2e3899754ab2238229b58d889203884e2e986a4f567",
+          "bytes": 255408
+        },
+        {
+          "msg_id": 4379,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4379.jpg",
+          "sha256": "51043b5cfe17b6de1b7dcaf4ca5f140289bc89db0443e414ef9b31eed3ea8ff5",
+          "bytes": 254904
+        },
+        {
+          "msg_id": 4380,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4380.jpg",
+          "sha256": "5cf4ed8c0c688d21b7e93dbd2c10f71443ee66fa909a420f2f77efa7dc27fa85",
+          "bytes": 243055
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@atb_market_official:4381": {
+      "channel": "@atb_market_official",
+      "msg_id": 4381,
+      "date": "2026-07-08T11:11:35+00:00",
+      "post_has_text": false,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 4381,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4381.jpg",
+          "sha256": "6d02a184e8f48ee657490d10a63d2da81e00757abbd8890fb0597ee909aa0376",
+          "bytes": 354657
+        },
+        {
+          "msg_id": 4382,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4382.jpg",
+          "sha256": "1449961dd36456d2329e7bc3645e2a203356d2db328a59b3c40bf54a79eb644e",
+          "bytes": 346196
+        },
+        {
+          "msg_id": 4383,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4383.jpg",
+          "sha256": "4418a4a0129e7e389380eabfa849fbec771b1b85d8eb3906d8fab266fb0143b2",
+          "bytes": 324449
+        },
+        {
+          "msg_id": 4384,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4384.jpg",
+          "sha256": "e4457f9a4525eb4de9b1e9f88b5e13d552cebde19ac274033bb1244ca643c6c3",
+          "bytes": 400468
+        },
+        {
+          "msg_id": 4385,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4385.jpg",
+          "sha256": "0f8ae2f9c7597d6679413696fc33018a2eb1f722165f7e65dbeed413932ce0a4",
+          "bytes": 312161
+        },
+        {
+          "msg_id": 4386,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4386.jpg",
+          "sha256": "47954a207fc9b08ef1b59dfacf594c4f25bb9588926a0a8c427a2a957a947e0b",
+          "bytes": 466041
+        },
+        {
+          "msg_id": 4387,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4387.jpg",
+          "sha256": "2bfc106db64a53eb0536370a858489a4ad94e27ae9b9415c465f57a4a8445713",
+          "bytes": 495836
+        },
+        {
+          "msg_id": 4388,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4388.jpg",
+          "sha256": "ad8a8354e953cd29878e47fb36a5024eb644c842d30029ebc071db0519344f04",
+          "bytes": 462808
+        },
+        {
+          "msg_id": 4389,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4389.jpg",
+          "sha256": "6cf40ee87c2301af8d2933a3c9929980f20c85677d3c8dfc499af6ff5c52bff9",
+          "bytes": 498213
+        },
+        {
+          "msg_id": 4390,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4390.jpg",
+          "sha256": "340e49f23f51f4932e8f99dd08535e644c5795479f3b938bc80ad66be0a4d421",
+          "bytes": 424714
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@atb_market_official:4391": {
+      "channel": "@atb_market_official",
+      "msg_id": 4391,
+      "date": "2026-07-08T11:11:49+00:00",
+      "post_has_text": false,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 4391,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4391.jpg",
+          "sha256": "b310158e7a5966cf7a7e781b057bc1c84fb546e5e33cc09ed9b684244ccadb80",
+          "bytes": 322066
+        },
+        {
+          "msg_id": 4392,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4392.jpg",
+          "sha256": "f566591d20b645dd39ed17adbbc19b09681cf1c03e4fc41335ce421986f94f7c",
+          "bytes": 268412
+        },
+        {
+          "msg_id": 4393,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4393.jpg",
+          "sha256": "ddf11445fe8f9d0460be89e23bd9a58b0b1f4e79c4fa06b1edd05171a1b270e0",
+          "bytes": 450003
+        },
+        {
+          "msg_id": 4394,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4394.jpg",
+          "sha256": "9ed5e1c9c49a19468f2c1e7d4c0d0f2ec6de21408329f200da5017431a75b1f7",
+          "bytes": 411634
+        },
+        {
+          "msg_id": 4395,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4395.jpg",
+          "sha256": "179abdd1eccc0ec71c75a69d9bd67b1293326fc203d1232d8cc16ed99ade26de",
+          "bytes": 351058
+        },
+        {
+          "msg_id": 4396,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4396.jpg",
+          "sha256": "b8923ddb55e27f2b1569e381586453dd4f24cddee640d28dd1497ceeeca4d645",
+          "bytes": 375191
+        },
+        {
+          "msg_id": 4397,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4397.jpg",
+          "sha256": "c2732ebe99be690389b9c8bc64388bd91e57896c3f94059796e00da712ca37be",
+          "bytes": 410566
+        },
+        {
+          "msg_id": 4398,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4398.jpg",
+          "sha256": "5101c6044cf12e777586a0ff0a511cb354e58c58ea84876a7c0ee0d702d94680",
+          "bytes": 510769
+        },
+        {
+          "msg_id": 4399,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4399.jpg",
+          "sha256": "1dbe5e6641032948c232f5f4b74f5fd27fd9f754aa8991018d407ed65d627aa2",
+          "bytes": 453829
+        },
+        {
+          "msg_id": 4400,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4400.jpg",
+          "sha256": "fa8cf66f462add6aa812504fc0d6f5eb942036f0e2843acd9a5d0f87d6492dda",
+          "bytes": 349035
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@atb_market_official:4401": {
+      "channel": "@atb_market_official",
+      "msg_id": 4401,
+      "date": "2026-07-08T11:12:03+00:00",
+      "post_has_text": false,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 4401,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4401.jpg",
+          "sha256": "c4f4b3c9e8041c28f881f6b44232db6cfc311bf1d0d1e3475122dd8be6af2a8c",
+          "bytes": 341976
+        },
+        {
+          "msg_id": 4402,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4402.jpg",
+          "sha256": "8859763a6f1e7be2408ed50471b2bdd7f90236eab2c33d376b85d15c9223cf9c",
+          "bytes": 298143
+        },
+        {
+          "msg_id": 4403,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4403.jpg",
+          "sha256": "eafb197478effec7fabe9559fd023ba2a05fe3f2a565e2157126c2c701606c3b",
+          "bytes": 278275
+        },
+        {
+          "msg_id": 4404,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4404.jpg",
+          "sha256": "6a90291ce4cea22742d1aea607f907de7a0946ea8ea2b8d7c9fb21931b02ffc5",
+          "bytes": 413420
+        },
+        {
+          "msg_id": 4405,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4405.jpg",
+          "sha256": "dbd22e75e69be383aa8b02431b0761a614d4ff2abec6e7912d8e804450f3dc00",
+          "bytes": 415025
+        },
+        {
+          "msg_id": 4406,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4406.jpg",
+          "sha256": "48bcd38bb044ee96ec1758909ec60e66af536d03c092667915658266a4babf4f",
+          "bytes": 366311
+        },
+        {
+          "msg_id": 4407,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4407.jpg",
+          "sha256": "6e387617a02df81983f186652649c1792a67e76714d47ed366db974d69339d97",
+          "bytes": 327024
+        },
+        {
+          "msg_id": 4408,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4408.jpg",
+          "sha256": "9894468a64ddae2faa2986dbd600e5e7536e09f20ec900e58cc63ed07c414ac2",
+          "bytes": 447323
+        },
+        {
+          "msg_id": 4409,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4409.jpg",
+          "sha256": "a5d84c471eae1a3f954f5bb0b6cc9ac00863ce68c39742bbc9fddf552f647609",
+          "bytes": 384167
+        },
+        {
+          "msg_id": 4410,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4410.jpg",
+          "sha256": "c88e64e8755d8f7ba507e505ab11dc4f63126617fe89b47fb14d386e67184a5a",
+          "bytes": 432150
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@atb_market_official:4411": {
+      "channel": "@atb_market_official",
+      "msg_id": 4411,
+      "date": "2026-07-08T11:12:09+00:00",
+      "post_has_text": false,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 4411,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4411.jpg",
+          "sha256": "edb0901b78bdb275a8dff820b95e4335c178dc4ab3ec31fc80255f35539b4bec",
+          "bytes": 372236
+        },
+        {
+          "msg_id": 4412,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4412.jpg",
+          "sha256": "042793ac6b2aba9a9147454002b9dd37a414e63aecb1878cc30d5f85c16f5eae",
+          "bytes": 393237
+        },
+        {
+          "msg_id": 4413,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4413.jpg",
+          "sha256": "127a75b9c2134e4a5c93309f4a11c27002fcf3d96a6e8ab11f46b6a3b2ffb45f",
+          "bytes": 406619
+        },
+        {
+          "msg_id": 4414,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4414.jpg",
+          "sha256": "220ee6af67f3414225cde2b270611f42fcf5733d97b9289457dd1bd0e8a9909e",
+          "bytes": 373832
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@atb_market_official:4415": {
+      "channel": "@atb_market_official",
+      "msg_id": 4415,
+      "date": "2026-07-09T12:46:55+00:00",
+      "post_has_text": false,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 4415,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4415.jpg",
+          "sha256": "3e9e8973860e47ad0da1377776fbef9f6a65b6d39b03c9c56a6babd42251a864",
+          "bytes": 399912
+        },
+        {
+          "msg_id": 4416,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4416.jpg",
+          "sha256": "5df5c2216a3895b963a170ded5b859361114049a822922cd31542cb371fefcc5",
+          "bytes": 372796
+        },
+        {
+          "msg_id": 4417,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4417.jpg",
+          "sha256": "ef21023b1e8cee8179973f8aff7a3f5a7379031f270ed3f68cb20ff7c3b09c57",
+          "bytes": 299675
+        },
+        {
+          "msg_id": 4418,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4418.jpg",
+          "sha256": "f4d7e054577044d946cebd5f1eb6c4ca208ab0828d6c70b9cc7cd59adf998728",
+          "bytes": 317240
+        },
+        {
+          "msg_id": 4419,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4419.jpg",
+          "sha256": "7d5daf5d3b127ebf41beebb3af40a760d533d1b1ff894e774b8618911286fa9a",
+          "bytes": 360846
+        },
+        {
+          "msg_id": 4420,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4420.jpg",
+          "sha256": "ef35e078adc309f74ef845d8fa3e8cb257016f2933244d84c9290fa85ee6ca08",
+          "bytes": 390032
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@atb_market_official:4421": {
+      "channel": "@atb_market_official",
+      "msg_id": 4421,
+      "date": "2026-07-14T09:04:58+00:00",
+      "post_has_text": false,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 4421,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4421.jpg",
+          "sha256": "ee4417bbd077fcc2e1001ee7d98d003a8958c78f170bd0a8883b34d1287615bd",
+          "bytes": 248195
+        },
+        {
+          "msg_id": 4422,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4422.jpg",
+          "sha256": "dcdfa1d16c2d6593f42ef5df003de1d328cb1f1362a0bbfb36620da03119e87c",
+          "bytes": 236497
+        },
+        {
+          "msg_id": 4423,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4423.jpg",
+          "sha256": "149068940c26841f8a0e7c76be0f42d07166a34953e33529a969652b15771e8e",
+          "bytes": 262509
+        },
+        {
+          "msg_id": 4424,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4424.jpg",
+          "sha256": "852f1442cadcaefcde1a63028f18ac26225cfe0d425b473e39aa4fec0ebf8bbb",
+          "bytes": 279267
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@atb_market_official:4426": {
+      "channel": "@atb_market_official",
+      "msg_id": 4426,
+      "date": "2026-07-15T06:25:20+00:00",
+      "post_has_text": false,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 4426,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4426.jpg",
+          "sha256": "01bb05510052a0084379b2f2c09fd2af273d9e9cd75869c238ca040e4fc4019c",
+          "bytes": 381890
+        },
+        {
+          "msg_id": 4427,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4427.jpg",
+          "sha256": "e6d1c59507b56fde16b3ba6d35833e50062d84e48e4f82e1d5c2dc64589d7885",
+          "bytes": 320410
+        },
+        {
+          "msg_id": 4428,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4428.jpg",
+          "sha256": "ccb5034ab8705d61de4d4bdb595a914abb3922dae952ec814880a97eaa8692e1",
+          "bytes": 319746
+        },
+        {
+          "msg_id": 4429,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4429.jpg",
+          "sha256": "c03b710fa8cb11771bc160ddc5324a35440b953649564576fec9f82079c3ef5e",
+          "bytes": 314125
+        },
+        {
+          "msg_id": 4430,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4430.jpg",
+          "sha256": "41a98b825eea851a6f4cfc9c6059c5f6db62be14ed3776ae1ff48b0a66a30fbd",
+          "bytes": 397170
+        },
+        {
+          "msg_id": 4431,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4431.jpg",
+          "sha256": "dcca9698d2b69abf32d51969a1b01df8e6ea6b3451c7764631cf9d9c4152ac37",
+          "bytes": 351050
+        },
+        {
+          "msg_id": 4432,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4432.jpg",
+          "sha256": "0235b082a6e0bf5c0efbee16dbd04a26d5c8dc7de06df6673ba0b66caa671a91",
+          "bytes": 342920
+        },
+        {
+          "msg_id": 4433,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4433.jpg",
+          "sha256": "bc55a4347b4692bd6c60ce63b95ea1cc932aaee822dad409fd48102eaad227b8",
+          "bytes": 376172
+        },
+        {
+          "msg_id": 4434,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4434.jpg",
+          "sha256": "c4a6cc05b10fbff9ae7e4b10c72f717d9b1221a9293595c0aa1920037853481e",
+          "bytes": 426689
+        },
+        {
+          "msg_id": 4435,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4435.jpg",
+          "sha256": "47fc0dcda3bab29a29ad6c49919e0eb9945d7435edf28a9ada945d178c3074b6",
+          "bytes": 426947
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@atb_market_official:4436": {
+      "channel": "@atb_market_official",
+      "msg_id": 4436,
+      "date": "2026-07-15T06:27:47+00:00",
+      "post_has_text": false,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 4436,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4436.jpg",
+          "sha256": "05bf37c885091b288b39ca31f3545a6a3827f7ba96c1b7ca5cc1051182367a15",
+          "bytes": 591739
+        },
+        {
+          "msg_id": 4437,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4437.jpg",
+          "sha256": "de6eedd7b00c89bc8d89af8624a9334ce4e5e360358d59e1424d513341a14f15",
+          "bytes": 661228
+        },
+        {
+          "msg_id": 4438,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4438.jpg",
+          "sha256": "37da97d26681c527237bf840ce893f3c6dd6650a90669ed23d24e86a8d032e47",
+          "bytes": 461079
+        },
+        {
+          "msg_id": 4439,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4439.jpg",
+          "sha256": "0deb6c3f3517e69fba0885901b9dc0cb15469b8c5f38513e096e1b80d92550e7",
+          "bytes": 384471
+        },
+        {
+          "msg_id": 4440,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4440.jpg",
+          "sha256": "0eb66b03ac36c6d2c87051b75b0b704032ad711529337beab3e0c1a717232ae7",
+          "bytes": 375672
+        },
+        {
+          "msg_id": 4441,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4441.jpg",
+          "sha256": "3380d7d0559ec9e452f201c027401f16043b24aa180df11a15062ff88395c6de",
+          "bytes": 286596
+        },
+        {
+          "msg_id": 4442,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4442.jpg",
+          "sha256": "34171c7b5154ea2239d5c1c918dad32a578b4038a12ee93a2b1a5c2e1e02da85",
+          "bytes": 389269
+        },
+        {
+          "msg_id": 4443,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4443.jpg",
+          "sha256": "48307912051a39e1b79d918c6ef3e1a23b2a024f9b532a92c442a2f9c4ef18ab",
+          "bytes": 337172
+        },
+        {
+          "msg_id": 4444,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4444.jpg",
+          "sha256": "2b93ca81bc7d934ccee3ad6a5c8687e6ac77d4417560d8f53cf5ddd2832f278b",
+          "bytes": 374271
+        },
+        {
+          "msg_id": 4445,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4445.jpg",
+          "sha256": "754f4729f0836ba84f53e790d78de8bd43e03fa64ac80385e82c4ccaf97c047a",
+          "bytes": 420795
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@atb_market_official:4446": {
+      "channel": "@atb_market_official",
+      "msg_id": 4446,
+      "date": "2026-07-15T06:28:06+00:00",
+      "post_has_text": false,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 4446,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4446.jpg",
+          "sha256": "2da2cef4f7a6a8c183d49258ddc5c1bfe4362f771d4b71fcd186f0c5c2f4e039",
+          "bytes": 365574
+        },
+        {
+          "msg_id": 4447,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4447.jpg",
+          "sha256": "09dfaf145ec2290001b628d2cdf5dfd7984ebe1fec792f087ec16c335d1a10f8",
+          "bytes": 325471
+        },
+        {
+          "msg_id": 4448,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4448.jpg",
+          "sha256": "a4141a2accd95a093f672111a999a3e05c9e7ba0ab72c484c38950ea3f5f9b2f",
+          "bytes": 409587
+        },
+        {
+          "msg_id": 4449,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4449.jpg",
+          "sha256": "27f774ded269a95d57c97507d0f6827eb4882a5cdddb9af06ee1ba440c8f4bf2",
+          "bytes": 394014
+        },
+        {
+          "msg_id": 4450,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4450.jpg",
+          "sha256": "45f965d35bb637f15359161e79f763078b3f3f546d13dcb5825986f0bd6a0fc4",
+          "bytes": 448345
+        },
+        {
+          "msg_id": 4451,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4451.jpg",
+          "sha256": "7ebea081687c9be6969eee97a77df77c9388d340575b2a128a0f77a88e2a91b7",
+          "bytes": 402137
+        },
+        {
+          "msg_id": 4452,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4452.jpg",
+          "sha256": "4f94b660808760b845c89a3e9d86298bf50b8a6c02f8130c9523a3d4581ddc3d",
+          "bytes": 412049
+        },
+        {
+          "msg_id": 4453,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4453.jpg",
+          "sha256": "0bc5c0e2328fc7e0f717334548bd02011c0ce1f914ed21108d233cec73207eff",
+          "bytes": 347980
+        },
+        {
+          "msg_id": 4454,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4454.jpg",
+          "sha256": "d1f36e2783ac1779fa66926e5c445ef698821b71825e4924c7b2a0d0d3ac9f98",
+          "bytes": 340211
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@atb_market_official:4455": {
+      "channel": "@atb_market_official",
+      "msg_id": 4455,
+      "date": "2026-07-17T15:03:12+00:00",
+      "post_has_text": false,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 4455,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4455.jpg",
+          "sha256": "6298eb1bd58c38bfafcad2edb45e0f7e8d1a7247d2ee4dfa7a46f3da8935574f",
+          "bytes": 445046
+        },
+        {
+          "msg_id": 4456,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4456.jpg",
+          "sha256": "ca7c3941e59c0fcf555828bd53680221b99fc78f40302ae5d25aadde93cc546a",
+          "bytes": 415363
+        },
+        {
+          "msg_id": 4457,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4457.jpg",
+          "sha256": "1a2efdf551eb0dc36588d98ea1b042104de0f3c35a95528f8394cb6cd661ccd5",
+          "bytes": 433807
+        },
+        {
+          "msg_id": 4458,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4458.jpg",
+          "sha256": "7fe7eecb3f4ab78725a0732678b0b2feb7076af959a64413e505bca8ab7693d3",
+          "bytes": 438120
+        },
+        {
+          "msg_id": 4459,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4459.jpg",
+          "sha256": "3e794685a9500a0e52b03e6d5960ec3252ced63a5366be33bb835931345c74af",
+          "bytes": 421439
+        },
+        {
+          "msg_id": 4460,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4460.jpg",
+          "sha256": "e411dd8272691a3e0cf9d0d6c809bd612345000bb01ca76856541277d18248b9",
+          "bytes": 444297
+        },
+        {
+          "msg_id": 4461,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4461.jpg",
+          "sha256": "6e653e997ca51e91a2759970f5cafa6ad328da1353e36b94cd3beca8c9df5bed",
+          "bytes": 465524
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@atb_market_official:4467": {
+      "channel": "@atb_market_official",
+      "msg_id": 4467,
+      "date": "2026-07-22T07:27:14+00:00",
+      "post_has_text": false,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 4467,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4467.jpg",
+          "sha256": "adae9a803f2d195890af47a5369ccb82457236604b1c8f6848aa024390272a36",
+          "bytes": 319511
+        },
+        {
+          "msg_id": 4468,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4468.jpg",
+          "sha256": "5c9b6e24e6618eded24d78fe1ab3b79a14e8a713d1d73385e418e95da17189d2",
+          "bytes": 371014
+        },
+        {
+          "msg_id": 4469,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4469.jpg",
+          "sha256": "273181ece70ac493ad7eac901efd2bf294d0532c2f6d5960fcc0e778efbc7c35",
+          "bytes": 335707
+        },
+        {
+          "msg_id": 4470,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4470.jpg",
+          "sha256": "135aa9ae4989517acdfbd9264f0748d22498234d0976cf2d9cde00c2bddae994",
+          "bytes": 271930
+        },
+        {
+          "msg_id": 4471,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4471.jpg",
+          "sha256": "4a259e35e6de2e45cc8ee7ac35202a305d806958dfcbece8010ab04825988d9f",
+          "bytes": 288126
+        },
+        {
+          "msg_id": 4472,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4472.jpg",
+          "sha256": "3083dd0ce5cc094d4a9304a56dec97bd6443bb4b7158aabc2667d85b8a54d90a",
+          "bytes": 286878
+        },
+        {
+          "msg_id": 4473,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4473.jpg",
+          "sha256": "189673ee96e52b33cb05945001a7d5a7f230173589b2accd9d5f746a2280380c",
+          "bytes": 400807
+        },
+        {
+          "msg_id": 4474,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4474.jpg",
+          "sha256": "02887f44f8b0165dd3651c007e4f69a6f51d19b1f0d575a1e6425e9739fe4320",
+          "bytes": 337205
+        },
+        {
+          "msg_id": 4475,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4475.jpg",
+          "sha256": "ca222f1b75ac69b1a6e9bd5b95bbea4b5354111e3699afb5d372bea12279261f",
+          "bytes": 479937
+        },
+        {
+          "msg_id": 4476,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4476.jpg",
+          "sha256": "5f0266242148d736a3d6e85a8d1ead1763684e698353c00f5f37f21a8d005fe3",
+          "bytes": 318212
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@atb_market_official:4498": {
+      "channel": "@atb_market_official",
+      "msg_id": 4498,
+      "date": "2026-07-22T07:37:06+00:00",
+      "post_has_text": false,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 4498,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4498.jpg",
+          "sha256": "4d22c6e04921d76d5a2e8274c437c191ec06022eb19d8984cb763021c38977b0",
+          "bytes": 334778
+        },
+        {
+          "msg_id": 4499,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4499.jpg",
+          "sha256": "f22d3efff2ca24861458eea2f669d47957184e5aa2ad36b72f6659f98e4feef4",
+          "bytes": 234365
+        },
+        {
+          "msg_id": 4500,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4500.jpg",
+          "sha256": "f1013a17006487137440f0a8472e04f0c1ab5d182341e6899d4061ce79acb5f4",
+          "bytes": 518404
+        },
+        {
+          "msg_id": 4501,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4501.jpg",
+          "sha256": "96c6511e81c34b926a5fb3d169971ebe9273103b8b1bb1398e002154433b4aba",
+          "bytes": 315672
+        },
+        {
+          "msg_id": 4502,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4502.jpg",
+          "sha256": "e8193cdad9ec445872bf1070a3b707bb94e7b4518d2b3a5849010bb493b4292c",
+          "bytes": 217144
+        },
+        {
+          "msg_id": 4503,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4503.jpg",
+          "sha256": "122da62247c283db803a19b5421e655e1d402d9fd51dacb38b5b1a03ee8b81e5",
+          "bytes": 457425
+        },
+        {
+          "msg_id": 4504,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4504.jpg",
+          "sha256": "09197cdb1f3312a2126e684e4c442f59bb09ea90df15f7f9c49bc78ce9fb51c6",
+          "bytes": 330138
+        },
+        {
+          "msg_id": 4505,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4505.jpg",
+          "sha256": "aa9203e41493818db99adc4d9b6999d517cca1e8c7d2f6b06b86e2d531549de6",
+          "bytes": 237646
+        },
+        {
+          "msg_id": 4506,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4506.jpg",
+          "sha256": "65cd0030ea959158766fdcd5a5c1c7cb595fd9ab77a3883fcaf1c65ad4143f59",
+          "bytes": 346316
+        },
+        {
+          "msg_id": 4507,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4507.jpg",
+          "sha256": "8a4d3d64c3933c98ed6e549a5981a20baaa55c6191745d84256402534518e2b6",
+          "bytes": 419727
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@atb_market_official:4508": {
+      "channel": "@atb_market_official",
+      "msg_id": 4508,
+      "date": "2026-07-22T07:37:07+00:00",
+      "post_has_text": false,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 4508,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4508.jpg",
+          "sha256": "713ceb7fa40f7cc110620aa04bdf7b8b0a49c70c6d502efad064db114b7267ea",
+          "bytes": 364379
+        },
+        {
+          "msg_id": 4509,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4509.jpg",
+          "sha256": "9547ccd8e03b7c3e02387690ac556f826d83b13d06d95b501570a8acd098e6ae",
+          "bytes": 372073
+        },
+        {
+          "msg_id": 4510,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4510.jpg",
+          "sha256": "2fbdf44b48d0f7acc5e8ee3c8e5034bed031406924beceac1cf1387e14e9ec4f",
+          "bytes": 328419
+        },
+        {
+          "msg_id": 4511,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4511.jpg",
+          "sha256": "e942a20653f862cd33bc170c17c4410ff241e71fe68f7e13ee1edb406fce863f",
+          "bytes": 388354
+        },
+        {
+          "msg_id": 4512,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4512.jpg",
+          "sha256": "50bd1532ed77e9f2407e8b228dde4ff976dfd45a55c7dcdbc71161e840782e02",
+          "bytes": 465683
+        },
+        {
+          "msg_id": 4513,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4513.jpg",
+          "sha256": "4c715e2c17a72fdcef7f329cdfed81f2d5648ff9eec36a476a6f25e8e2f3f603",
+          "bytes": 480879
+        },
+        {
+          "msg_id": 4514,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4514.jpg",
+          "sha256": "7e1867abffcea744ad935691314e17c6e2f349f7d3f562507f28be130f4819d4",
+          "bytes": 453595
+        },
+        {
+          "msg_id": 4515,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4515.jpg",
+          "sha256": "2f0f01e7a2c60abf0345a3736b36c9b2bac578f23e5fa364bea48d2c191bde33",
+          "bytes": 406905
+        },
+        {
+          "msg_id": 4516,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4516.jpg",
+          "sha256": "f585670a628ae88d9d5febf3fba611d28be9790a79a23e51959b81ebb651d164",
+          "bytes": 404871
+        },
+        {
+          "msg_id": 4517,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4517.jpg",
+          "sha256": "4c297dd91ef3fa6e67c072c52a1a64b5d326920d924410688633b140f1d4c008",
+          "bytes": 347645
+        }
+      ],
+      "poll": null,
+      "missing": []
+    },
+    "@atb_market_official:4519": {
+      "channel": "@atb_market_official",
+      "msg_id": 4519,
+      "date": "2026-07-23T06:35:09+00:00",
+      "post_has_text": false,
+      "has_media": true,
+      "album": true,
+      "images": [
+        {
+          "msg_id": 4519,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4519.jpg",
+          "sha256": "1cc2840d9aad1f8d90dbc278bcdad20cf9ef8b3b8cfb7e351d89b51f547fec0a",
+          "bytes": 442332
+        },
+        {
+          "msg_id": 4520,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4520.jpg",
+          "sha256": "d3549fc43da7c69140d804923ed63b878f219039906effa74cf6eff23c2d567b",
+          "bytes": 429467
+        },
+        {
+          "msg_id": 4521,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4521.jpg",
+          "sha256": "75ccb6f04997d98fa7104a7b672a109bb8b22a76c354e1e527eed654fd160dc6",
+          "bytes": 401665
+        },
+        {
+          "msg_id": 4522,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4522.jpg",
+          "sha256": "ce62e5d8f45589d35bda2b7e13f6268321e7a71eff2001a39d640c3fb58edfce",
+          "bytes": 428391
+        },
+        {
+          "msg_id": 4523,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4523.jpg",
+          "sha256": "b1b469c2a75001935d00799601b1164a0b94defa47ef6919b9975cf32a725926",
+          "bytes": 425595
+        },
+        {
+          "msg_id": 4524,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4524.jpg",
+          "sha256": "ac8139a2996df110db0ad0bc068af54cd8e82d128c47b0230fae47ff8ad17888",
+          "bytes": 419593
+        },
+        {
+          "msg_id": 4525,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4525.jpg",
+          "sha256": "c53592eb6080fba1efa8f3a85872ecb5ba08298458e332215ed3827fed82a128",
+          "bytes": 464412
+        },
+        {
+          "msg_id": 4526,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4526.jpg",
+          "sha256": "557bb79e34ec76c6dadda456d4ecd871a1a1d4a037481cd45f2f4c99d56eedd7",
+          "bytes": 477762
+        }
+      ],
+      "poll": null,
+      "missing": []
+    }
+  },
+  "git": {
+    "commit": "f2af8773610dd339ca8ac5bef7173d2fc06a2313",
+    "dirty": [
+      "knowledge/daily_logs/2026-08-08.md",
+      "knowledge/hot.md",
+      "knowledge/index.md",
+      "scripts/caption_atb_5c1.py",
+      "scripts/fetch_atb_media_5c1.py",
+      "tests/test_captions_pilot_5c1.py"
+    ]
+  }
+}
