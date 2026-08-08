@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-08 22:36:55 (every SessionStart)
+**Auto-refreshed:** 2026-08-09 00:32:30 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-cbeeb80 chore(srv-2c): the closing figure, and the fact that it was still rising
-a70f742 docs(srv-2c): the live state records the control, and stops blaming our container
-84696d6 feat(srv-2c): the unwrapped control answers too -- the wrapper was never the cause
-d1c3aaf docs(srv-2c): the unwrapped control's outcomes, registered before it is bought
-64bbd1a docs(srv-2c): the day's log, and the live state stops asserting a cleared blocker
+f276aaa docs(srv-2d): the report, and six deviations
+6fcfa5e feat(srv-2d): the parity attempt is spent, and it holds
+76a1b31 feat(srv-2d): the 0.005 clause stops being prose
+ed9c0c9 chore(srv-2d): the spend anchor, before the first billable action
+1c25823 docs(srv-2d): the rules, before the numbers that would test them exist
 ```
 
 ## 📋 Recent decisions
@@ -31,7 +31,7 @@ d1c3aaf docs(srv-2c): the unwrapped control's outcomes, registered before it is 
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-08 22:31 (`/save`, srv-2c + control accepted, srv-2d briefed). `docs/PROMPT-srv-2c.md`
+**Last update:** 2026-08-09 00:35 local / 2026-08-08 22:30 UTC — **`docs/PROMPT-srv-2d.md` executed: the SPEC 3.11 (2) parity attempt is SPENT and it HOLDS.** 758/758 rows, zero failures, every 4.5h2-passed gate still passing, worst head movement **+0.0000** against the pod reading of the identical config. **$1.2383 of the $2.00 cap.** Records `results/parity_srv2.json` (verdict stamped in its `parity` block) and `results/srv2d_cost.json`. **The cost is the finding: $1.4281/1000 rows against the pod's $0.5993 — 2.38x — and it is the machine's price, not the model's speed.** Earlier: `docs/PROMPT-srv-2c.md`
 executed — **the boot log exists, our serverless worker answers, and the operator-bought control
 shows the unwrapped command answers too**: srv-2b's hang was the platform, not us. **$0.1377** of
 its $0.75 cap (the delta was still settling when the run closed — Dv33), record `results/srv2c_bootlog.json`. Earlier the same evening `docs/PROMPT-srv-2b.md` ran and **ABORTED at
@@ -73,10 +73,15 @@ a third of the serverless rate instead of discovered on a billed worker with no 
 ~4.6 GB to spare and runs **1.85× faster**. No record in this repository carried a peak-VRAM figure
 for batch-1 inference before this one.
 
-**PARITY WAS NOT RUN AND ITS SINGLE ATTEMPT IS NOT SPENT.** `results/parity_srv2.json` **does not
-exist**; §C.7 was never reached, test v4 was never opened, no head has a verdict and **no serving
-number reaches any aggregate**. What failed is the smoke, on the arm's own training carve. SPEC
-3.11 (2) remains unsatisfied and mandatory — and **srv-2d is briefed to spend that one attempt** (see Next). srv-2c's live job is not parity but it is effectively the smoke that had to come first: a real worker answered with the schema and runtime asserts passing.
+**PARITY IS RUN, THE ATTEMPT IS SPENT, AND IT HOLDS.** `results/parity_srv2.json` exists:
+**758/758 rows scored, zero parse / api / generation failures**, config A on `ADA_24` in EU-RO-1
+off the volume. Both clauses of 3.11 (2) hold — G1b, G1d and G1e (everything 4.5h2 passed) still
+pass, `under_bar: []`, and the **worst head movement against `results/parity_5b_a.json` is
++0.0000**: nothing dropped, G1c rose 0.0018 and G1e rose 0.0133. G1a fails its bar exactly as it
+did on the pod and at 4.5h2, to the same sixteen digits — the deferred 3.11 question, not a new
+finding. Row-level agreement with the pod **751/758 = 99.08%** (description, gated on nothing).
+**A serving number may now reach an aggregate.** Not appended to `results/baselines.json`: a
+parity measurement is not a gate anchor, and the pod reading of 08-06 is not in there either.
 
 **THE D7 RE-READ, HONESTLY BOUNDED.** `ADA_24` with a volume attached: **allocates and consumes**.
 The **48 GB half was never asked** — EU-RO-1 catalogues only the A6000 at stock `none` — and the
@@ -234,22 +239,28 @@ one, because the gate stores a title and never a bio.
 
 ## ⏭️ Next
 
-**srv-2d IS THE NEXT STEP AND IT SPENDS THE ONE PARITY ATTEMPT — `docs/PROMPT-srv-2d.md`, cap
-$2.00 out of the ~$5.35 of GPU headroom left.** srv-2c and its control are **accepted**; the road is
-open because the smoke is effectively already green (a live worker answered with real schema and
-runtime asserts). The contract: 758 rows of test v4, **batch 1**, ONE `/run` job, `ADA_24` **pinned
-with no fallback list** — a measurement does not mix cards — request policy
-`{"executionTimeout": 3600, "ttl": 7200}`, scored against `results/parity_5b_a.json` under
-3.11 (2). **No retry under any outcome; a failed gate is a finding reported with both readings.**
+**srv-2d IS DONE — the parity attempt is spent and both clauses of 3.11 (2) hold.** $1.2383 of the
+$2.00 cap; Phase 4 stands at **$20.8793 of $25.00, $4.1207 left**. Everything created is deleted and
+proven deleted by listing; the volume `qw4nwleanc` is the only thing standing. Full report and six
+deviations (Dv34–Dv39) in `implementation-notes.md`.
 
-**Two RunPod doc pages are normative for srv-2d and must be read before anything billable** —
-`endpoint-configurations` and `troubleshooting`. Four things they carry that this project learned
-the hard way or not at all: the **TTL timer starts at SUBMISSION**, not at pickup; **async `/run`
-results are deleted after 30 minutes**, which is why the per-row dump must land on the volume and
-`/status` must be fetched the moment the job completes; there is a **network-volume job-tracking bug
-in SDK 1.7.11–1.10.0** (our volume runs `runpod 1.11.0`, i.e. outside that range — so it does not
-explain srv-2b, but the boot assert `runpod>=1.10.1` is cheap); and **"logs only appear for
-successfully initialized workers"**, which is a large part of why srv-2b's console was empty.
+**WHAT IS OPEN, AND IT IS A MONEY QUESTION FOR THE OPERATOR.** The measurement that was supposed to
+clear the runtime found the gates fine and the **cost 2.38x the pod's**: `$1.4281/1000 rows` against
+the pod's committed `$0.5993`, `$1.0825/pass` against `$0.4611`. The cause is priced, not
+mysterious — the RTX 4090 worker runs **4.262 s/row against the A6000 pod's 4.071** (4.7% slower)
+at **$1.1041/h equivalent against $0.53/h**. Two independent readings agree to 1% (this endpoint's
+own settled ledger rate x measured seconds, and the balance delta), and Dv33 makes both floors.
+**This session rules on nothing.** SPEC 3.14's economic case rests partly on scale-to-zero between
+the two collection passes a day, which is real and is NOT measured here — what is measured is the
+price of a pass. It goes to an operator briefing the way a dropped head would: both readings,
+authorising nothing. The pod runtime remains measured, proven and cheaper per pass.
+
+**Three things srv-2d built that the next session inherits.** The worker takes `batch_size` and
+`dump_path` in a job, so one job carries a whole input slice at forward batch 1 and writes every
+reply to the volume as it goes (an async result is deleted 30 min after completion).
+`serving.execution_policy(seconds, ttl)` is the single seconds->milliseconds conversion for RunPod's
+request policy. `serve_handler.assert_sdk_version` refuses to boot below `runpod 1.10.1`, and its
+first line is in the production boot log.
 
 **srv-2a IS ACCEPTED — the team lead re-ran the suite (1,270 in 32.8 s) and verified the tail was
 committed unedited.** Two notes came back with it. The **step reordering is credited as an
