@@ -4494,3 +4494,37 @@ verdicts read from the result artifacts. **`results/parity_srv2.json` does not e
 never reached, no row of test v4 was scored, no head has a verdict, and no serving number reaches
 any aggregate. SPEC 3.11 (2)'s single attempt was **not** spent — the run that failed is the smoke,
 on the arm's own training carve, and test v4 was never opened.
+
+## srv-2c — the boot-log diagnostic (PROMPT-srv-2c, cap $0.75)
+
+### Pre-registered before the first billable second
+
+**The outcome space is three-way, not two.** The contract's disjunction ("no file = the command
+never runs; a file = it says where it died") is right about the second branch and merges two causes
+in the first. `bash -c 'exec bash /runpod-volume/start.sh > /runpod-volume/worker-boot.log 2>&1'`
+sets the redirect up *before* it execs, so:
+
+| What we find | What it means |
+|---|---|
+| **no file** | either `bash -c` never ran (the start command is not what the worker executes) **or** `/runpod-volume` was not mounted/writable when it did — the redirect itself failed, and its error went to the unredirected stderr, i.e. the worker log channel |
+| **file, empty** | the redirect worked, so the command ran *and* the volume was mounted. `start.sh` died before its first output |
+| **file, lines** | it says where it died. Note that a failure to exec `start.sh` at all (missing, not executable, bad shebang) lands *in* the file, because fd 2 is already redirected — that is the wrapper's whole point |
+
+**Rungs, fixed now so the report cannot mislabel itself.** A job sitting `IN_QUEUE` for the full
+observation window is **not** a rung in this session — it is srv-2b's signature and the expected
+case; the signal is the log FILE, not the job. Only *no worker allocating at all* is rung 1 (the 5b
+wall), and the vendor control already disproved that on this volume/DC/class. Over cap and a
+refusal are rungs as always. **Success here = the log question is answered**, in either direction.
+
+**A free reading before the money moves: the image declares an ENTRYPOINT.** Pulled from the Docker
+Hub registry API ($0), `runpod/pytorch:1.0.2-cu1281-torch280-ubuntu2404` (amd64) carries
+`Entrypoint: ["/opt/nvidia/nvidia_entrypoint.sh"]` and `Cmd: ["/start.sh"]`. `--docker-start-cmd`
+replaces the **CMD**, so our command arrives as *arguments to NVIDIA's entrypoint*, which ends in
+`exec "$@"` — mechanically it should still run. But this also means the container prints NVIDIA's
+banner to stdout before our first line ever could, which makes srv-2b's "zero lines at any level"
+in the console Logs tab **evidence about the console, not only about our container** — the console
+would not render for either side that evening. Recorded as a reading, not a conclusion.
+
+**No CLI path to worker logs exists.** `runpodctl serverless` offers create/delete/get/list/update
+and nothing else; there is no `logs` verb anywhere in the tool. Whatever this session says about the
+worker's own log channel is therefore either from a REST call that is named, or is not said.
