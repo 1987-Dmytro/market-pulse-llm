@@ -6876,10 +6876,23 @@
           }
         ]
       },
-      "closed": false,
-      "judgement": null,
-      "judgement_stale": null,
-      "finding": "MATCHES FOUND — not closed. The rows above need a human look before any of them goes to the gate; this script does not decide what is convincing."
+      "closed": true,
+      "judgement": {
+        "judged_by": "executor, 2026-08-08",
+        "verdict": "NEGATIVE — Novus has no consumer channel findable in Telegram",
+        "why": "Six name matches and not one is the chain: @newworldra «NOVUS ORDO SECLORUM» (1,568), @novus_ordo, @novus_ordum, @Americana2001, @novusycc, and @dc_novus — a Kazakh house-of-culture channel in Tobyl (81). The Latin phrase is what the name collides with. The web pass had already found only the corporate @NovusNews, for staff.",
+        "bound": "Bounded the same way every search here is: contacts.SearchRequest ranks by Telegram's own relevance and returns at most ten rows per query, so this closes the question by record rather than proving absence.",
+        "judged_on_matches": [
+          "Americana2001",
+          "dc_novus",
+          "newworldra",
+          "novus_ordo",
+          "novus_ordum",
+          "novusycc"
+        ]
+      },
+      "judgement_stale": false,
+      "finding": "NEGATIVE — Novus has no consumer channel findable in Telegram. Six name matches and not one is the chain: @newworldra «NOVUS ORDO SECLORUM» (1,568), @novus_ordo, @novus_ordum, @Americana2001, @novusycc, and @dc_novus — a Kazakh house-of-culture channel in Tobyl (81). The Latin phrase is what the name collides with. The web pass had already found only the corporate @NovusNews, for staff. Bounded the same way every search here is: contacts.SearchRequest ranks by Telegram's own relevance and returns at most ten rows per query, so this closes the question by record rather than proving absence."
     },
     "velmart_consumer_search": {
       "asked": "does Velmart have a consumer Telegram channel? canon docs/CHANNELS-launch.md 'МАСТЕР-ЛИСТ', the line «Проверить внутри Telegram (вебом не найдено)» — the Telegram-side half of «Дозаявка №5»",
@@ -6988,10 +7001,21 @@
           }
         ]
       },
-      "closed": false,
-      "judgement": null,
-      "judgement_stale": null,
-      "finding": "MATCHES FOUND — not closed. The rows above need a human look before any of them goes to the gate; this script does not decide what is convincing."
+      "closed": true,
+      "judgement": {
+        "judged_by": "executor, 2026-08-08",
+        "verdict": "NEGATIVE — Velmart's Telegram presence is two empty placeholders",
+        "why": "@velmart «Velmart Channel» has THREE subscribers and @velmart1 «ВЕЛМАРТ» is a chat with three. The handles are taken and nothing is published under them; the other matches (@velmartyr, @velmartinus) are unrelated. A registered handle is not a channel, and neither of these would survive the gate's liveness check.",
+        "bound": "Bounded the same way every search here is: contacts.SearchRequest ranks by Telegram's own relevance and returns at most ten rows per query, so this closes the question by record rather than proving absence.",
+        "judged_on_matches": [
+          "velmart",
+          "velmart1",
+          "velmartinus",
+          "velmartyr"
+        ]
+      },
+      "judgement_stale": false,
+      "finding": "NEGATIVE — Velmart's Telegram presence is two empty placeholders. @velmart «Velmart Channel» has THREE subscribers and @velmart1 «ВЕЛМАРТ» is a chat with three. The handles are taken and nothing is published under them; the other matches (@velmartyr, @velmartinus) are unrelated. A registered handle is not a channel, and neither of these would survive the gate's liveness check. Bounded the same way every search here is: contacts.SearchRequest ranks by Telegram's own relevance and returns at most ten rows per query, so this closes the question by record rather than proving absence."
     },
     "fozzy_consumer_search": {
       "asked": "does Fozzy C&C have a consumer Telegram channel? canon docs/CHANNELS-launch.md 'МАСТЕР-ЛИСТ', the line «Проверить внутри Telegram (вебом не найдено)» — the Telegram-side half of «Дозаявка №5»",
@@ -7156,10 +7180,26 @@
           }
         ]
       },
-      "closed": false,
-      "judgement": null,
-      "judgement_stale": null,
-      "finding": "MATCHES FOUND — not closed. The rows above need a human look before any of them goes to the gate; this script does not decide what is convincing."
+      "closed": true,
+      "judgement": {
+        "judged_by": "executor, 2026-08-08",
+        "verdict": "NEGATIVE — no consumer channel for the cash-and-carry format",
+        "why": "Nine matches, all peripheral: a currency booth inside a Fozzy store (@obminfozzy, 55), a jobs channel (@robotafozzipochayna, 3), «Fozzy Експериментаріум» (a chat, 1,227), a test channel, and crypto/exchange channels borrowing the word. The group's retail brands are covered instead — @silposilpo is in the registry and @forainfo entered today.",
+        "bound": "Bounded the same way every search here is: contacts.SearchRequest ranks by Telegram's own relevance and returns at most ten rows per query, so this closes the question by record rather than proving absence.",
+        "judged_on_matches": [
+          "FozzyCalls",
+          "FozzyExchange",
+          "FozzyshasenBau",
+          "fozz_test",
+          "fozzy_experimentanium",
+          "fozzyminds",
+          "fozzyx",
+          "obminfozzy",
+          "robotafozzipochayna"
+        ]
+      },
+      "judgement_stale": false,
+      "finding": "NEGATIVE — no consumer channel for the cash-and-carry format. Nine matches, all peripheral: a currency booth inside a Fozzy store (@obminfozzy, 55), a jobs channel (@robotafozzipochayna, 3), «Fozzy Експериментаріум» (a chat, 1,227), a test channel, and crypto/exchange channels borrowing the word. The group's retail brands are covered instead — @silposilpo is in the registry and @forainfo entered today. Bounded the same way every search here is: contacts.SearchRequest ranks by Telegram's own relevance and returns at most ten rows per query, so this closes the question by record rather than proving absence."
     },
     "auchan_consumer_search": {
       "asked": "does Auchan have a consumer Telegram channel? canon docs/CHANNELS-launch.md 'МАСТЕР-ЛИСТ', the line «Проверить внутри Telegram (вебом не найдено)» — the Telegram-side half of «Дозаявка №5»",
@@ -7348,10 +7388,26 @@
           }
         ]
       },
-      "closed": false,
-      "judgement": null,
-      "judgement_stale": null,
-      "finding": "MATCHES FOUND — not closed. The rows above need a human look before any of them goes to the gate; this script does not decide what is convincing."
+      "closed": true,
+      "judgement": {
+        "judged_by": "executor, 2026-08-08",
+        "verdict": "NEGATIVE for Ukraine — every real Auchan channel found is Russian",
+        "why": "@auchanrus «АШАН Россия» (82,813) and @auchan_retail_russia (1,435) are the only substantial matches, and SPEC §3.11 (4) excludes RF-market sources regardless of language, so finding them is not finding a candidate. The Ukrainian side returns @auchanempire (2) and @creativefogg «Ашан» (25). The web pass had found only a support bot, which collects nothing.",
+        "bound": "Bounded the same way every search here is: contacts.SearchRequest ranks by Telegram's own relevance and returns at most ten rows per query, so this closes the question by record rather than proving absence.",
+        "judged_on_matches": [
+          "Prosmm_izapuski",
+          "auchan_promokod",
+          "auchan_retail_russia",
+          "auchanempire",
+          "auchanjob",
+          "auchanrus",
+          "benjash_tweets",
+          "creativefogg",
+          "fondashana"
+        ]
+      },
+      "judgement_stale": false,
+      "finding": "NEGATIVE for Ukraine — every real Auchan channel found is Russian. @auchanrus «АШАН Россия» (82,813) and @auchan_retail_russia (1,435) are the only substantial matches, and SPEC §3.11 (4) excludes RF-market sources regardless of language, so finding them is not finding a candidate. The Ukrainian side returns @auchanempire (2) and @creativefogg «Ашан» (25). The web pass had found only a support bot, which collects nothing. Bounded the same way every search here is: contacts.SearchRequest ranks by Telegram's own relevance and returns at most ten rows per query, so this closes the question by record rather than proving absence."
     },
     "metro_consumer_search": {
       "asked": "does METRO Ukraine have a consumer Telegram channel? canon docs/CHANNELS-launch.md 'МАСТЕР-ЛИСТ', the line «Проверить внутри Telegram (вебом не найдено)» — the Telegram-side half of «Дозаявка №5»",
@@ -7467,10 +7523,23 @@
         ],
         "Метро Кеш енд Кері": []
       },
-      "closed": false,
-      "judgement": null,
-      "judgement_stale": null,
-      "finding": "MATCHES FOUND — not closed. The rows above need a human look before any of them goes to the gate; this script does not decide what is convincing."
+      "closed": true,
+      "judgement": {
+        "judged_by": "executor, 2026-08-08",
+        "verdict": "NEGATIVE — METRO Ukraine's name is held by resellers, not by the chain",
+        "why": "Six matches and the largest is @metroShopikN1S «Метро шоп Україна» with THIRTEEN subscribers; the rest run 3, 2, 2. «Метро» also collides with the underground — @kyrsvalyutpumbpalatsukraina is an exchange rate board at a metro station. Nothing here is the wholesaler.",
+        "bound": "Bounded the same way every search here is: contacts.SearchRequest ranks by Telegram's own relevance and returns at most ten rows per query, so this closes the question by record rather than proving absence.",
+        "judged_on_matches": [
+          "ddhdhfhrg",
+          "fjzsyu",
+          "kyrsvalyutpumbpalatsukraina",
+          "metro11143",
+          "metroShopikN1S",
+          "metroshopkaktys"
+        ]
+      },
+      "judgement_stale": false,
+      "finding": "NEGATIVE — METRO Ukraine's name is held by resellers, not by the chain. Six matches and the largest is @metroShopikN1S «Метро шоп Україна» with THIRTEEN subscribers; the rest run 3, 2, 2. «Метро» also collides with the underground — @kyrsvalyutpumbpalatsukraina is an exchange rate board at a metro station. Nothing here is the wholesaler. Bounded the same way every search here is: contacts.SearchRequest ranks by Telegram's own relevance and returns at most ten rows per query, so this closes the question by record rather than proving absence."
     },
     "food_quality_search": {
       "asked": "does Maksym Nesmiyanov / the Союз споживачів України have a Telegram channel? The operator remembers independent lab checks on counterfeit dairy published near this project's category — canon: operator brief, 5c1 addendum 9 (2026-08-08)",
@@ -7589,10 +7658,19 @@
           }
         ]
       },
-      "closed": false,
-      "judgement": null,
-      "judgement_stale": null,
-      "finding": "MATCHES FOUND — not closed. The rows above need a human look before any of them goes to the gate; this script does not decide what is convincing."
+      "closed": true,
+      "judgement": {
+        "judged_by": "executor, 2026-08-08",
+        "verdict": "NEGATIVE — the Consumer Union's counterfeit-dairy channel is not in Telegram search",
+        "why": "@maxcontrol exists and has TWO subscribers, which is not the channel the operator remembers. «Несміянов» and «Союз споживачів України» return nothing at all, and the topic word «фальсифікат» returns @lukashukpidoras «комірка фальсифікатора» (98) — not an NGO. The operator's recollection is the only prior evidence and no web pass was run for it, so this negative is bounded by Telegram's search alone.",
+        "bound": "Bounded the same way every search here is: contacts.SearchRequest ranks by Telegram's own relevance and returns at most ten rows per query, so this closes the question by record rather than proving absence.",
+        "judged_on_matches": [
+          "lukashukpidoras",
+          "maxcontrol"
+        ]
+      },
+      "judgement_stale": false,
+      "finding": "NEGATIVE — the Consumer Union's counterfeit-dairy channel is not in Telegram search. @maxcontrol exists and has TWO subscribers, which is not the channel the operator remembers. «Несміянов» and «Союз споживачів України» return nothing at all, and the topic word «фальсифікат» returns @lukashukpidoras «комірка фальсифікатора» (98) — not an NGO. The operator's recollection is the only prior evidence and no web pass was run for it, so this negative is bounded by Telegram's search alone. Bounded the same way every search here is: contacts.SearchRequest ranks by Telegram's own relevance and returns at most ten rows per query, so this closes the question by record rather than proving absence."
     },
     "matusi_ukrainy_title": {
       "asked": "what is the handle of «Матусі України»? canon docs/CHANNELS-launch.md 'Дозаявка №8', the line «Хендлы добрать завтра ботом/поиском»",
@@ -7829,10 +7907,30 @@
           }
         ]
       },
-      "closed": false,
-      "judgement": null,
-      "judgement_stale": null,
-      "finding": "MATCHES FOUND — not closed. The rows above need a human look before any of them goes to the gate; this script does not decide what is convincing."
+      "closed": true,
+      "judgement": {
+        "judged_by": "executor, 2026-08-08",
+        "verdict": "FOUND — @matusi_ukr, and the subscriber count is what confirms it",
+        "why": "«Матусі України» came back at 19,278 against the ~19.3k the operator's TGStat pass showed. The name is a common one — the same search returns six chats and two other towns' «Матусі» channels — so the size is what identifies the row rather than the title. Gated the same day (PASS, ua 0.93, open group) and entered the registry.",
+        "bound": "Bounded the same way every search here is: contacts.SearchRequest ranks by Telegram's own relevance and returns at most ten rows per query, so this closes the question by record rather than proving absence.",
+        "judged_on_matches": [
+          "MamaClubUkraine",
+          "MatusivNimechini",
+          "MatysiZT",
+          "chat_matusi",
+          "dbailuva",
+          "mamy_ukraine_today",
+          "matusi_che",
+          "matusi_ukr",
+          "matusinrw",
+          "nationalmothers",
+          "rodytely_dety",
+          "ukr_moms",
+          "yarrrras"
+        ]
+      },
+      "judgement_stale": false,
+      "finding": "FOUND — @matusi_ukr, and the subscriber count is what confirms it. «Матусі України» came back at 19,278 against the ~19.3k the operator's TGStat pass showed. The name is a common one — the same search returns six chats and two other towns' «Матусі» channels — so the size is what identifies the row rather than the title. Gated the same day (PASS, ua 0.93, open group) and entered the registry. Bounded the same way every search here is: contacts.SearchRequest ranks by Telegram's own relevance and returns at most ten rows per query, so this closes the question by record rather than proving absence."
     },
     "mamo_ne_psihuy_title": {
       "asked": "what is the handle of «Мамо, не псіхуй!»? canon docs/CHANNELS-launch.md 'Дозаявка №8', the line «Хендлы добрать завтра ботом/поиском»",
@@ -7893,10 +7991,19 @@
           }
         ]
       },
-      "closed": false,
-      "judgement": null,
-      "judgement_stale": null,
-      "finding": "MATCHES FOUND — not closed. The rows above need a human look before any of them goes to the gate; this script does not decide what is convincing."
+      "closed": true,
+      "judgement": {
+        "judged_by": "executor, 2026-08-08",
+        "verdict": "FOUND — @mamo_nepsichuy, confirmed by size",
+        "why": "13,781 against TGStat's ~13.8k. The only other match is @maluvana2024 «Малюй і не псіхуй» (4), a different channel borrowing the phrase. Gated PASS, ua 1.00, open group; entered the registry and is one of the day's ten joins.",
+        "bound": "Bounded the same way every search here is: contacts.SearchRequest ranks by Telegram's own relevance and returns at most ten rows per query, so this closes the question by record rather than proving absence.",
+        "judged_on_matches": [
+          "maluvana2024",
+          "mamo_nepsichuy"
+        ]
+      },
+      "judgement_stale": false,
+      "finding": "FOUND — @mamo_nepsichuy, confirmed by size. 13,781 against TGStat's ~13.8k. The only other match is @maluvana2024 «Малюй і не псіхуй» (4), a different channel borrowing the phrase. Gated PASS, ua 1.00, open group; entered the registry and is one of the day's ten joins. Bounded the same way every search here is: contacts.SearchRequest ranks by Telegram's own relevance and returns at most ten rows per query, so this closes the question by record rather than proving absence."
     },
     "dytiache_kharchuvannia_title": {
       "asked": "what is the handle of «Дитяче харчування»? canon docs/CHANNELS-launch.md 'Дозаявка №8', the line «Хендлы добрать завтра ботом/поиском»",
@@ -7980,10 +8087,21 @@
         ],
         "дитяче харчування прикорм": []
       },
-      "closed": false,
-      "judgement": null,
-      "judgement_stale": null,
-      "finding": "MATCHES FOUND — not closed. The rows above need a human look before any of them goes to the gate; this script does not decide what is convincing."
+      "closed": true,
+      "judgement": {
+        "judged_by": "executor, 2026-08-08",
+        "verdict": "NEGATIVE — nothing of the size the operator saw carries this name",
+        "why": "TGStat showed ~7.9k. The largest match is @dobrobutPoltava «ДИТЯЧЕ ХАРЧУВАННЯ (ДОБРОБУТ)» with 439 subscribers — a clinic — then two shops on 28 and 4. The phrase is also an ordinary one («baby food»), so a name match here carries less than usual. @ya_Nenka matched too and is already ours.",
+        "bound": "Bounded the same way every search here is: contacts.SearchRequest ranks by Telegram's own relevance and returns at most ten rows per query, so this closes the question by record rather than proving absence.",
+        "judged_on_matches": [
+          "babyshopuz16",
+          "dobrobutPoltava",
+          "towermarket_lviv_baby",
+          "ya_Nenka"
+        ]
+      },
+      "judgement_stale": false,
+      "finding": "NEGATIVE — nothing of the size the operator saw carries this name. TGStat showed ~7.9k. The largest match is @dobrobutPoltava «ДИТЯЧЕ ХАРЧУВАННЯ (ДОБРОБУТ)» with 439 subscribers — a clinic — then two shops on 28 and 4. The phrase is also an ordinary one («baby food»), so a name match here carries less than usual. @ya_Nenka matched too and is already ours. Bounded the same way every search here is: contacts.SearchRequest ranks by Telegram's own relevance and returns at most ten rows per query, so this closes the question by record rather than proving absence."
     },
     "vse_pro_ditey_title": {
       "asked": "what is the handle of «Все про дітей | Виховання | Психологія»? canon docs/CHANNELS-launch.md 'Дозаявка №8', the line «Хендлы добрать завтра ботом/поиском»",
@@ -8100,10 +8218,20 @@
           }
         ]
       },
-      "closed": false,
-      "judgement": null,
-      "judgement_stale": null,
-      "finding": "MATCHES FOUND — not closed. The rows above need a human look before any of them goes to the gate; this script does not decide what is convincing."
+      "closed": true,
+      "judgement": {
+        "judged_by": "executor, 2026-08-08",
+        "verdict": "NOT THE CHANNEL — the title matches exactly and the size does not",
+        "why": "@children45 carries «Все про дітей | Виховання | Психологія» word for word and has 277 subscribers where TGStat showed ~23.7k — a factor of 85. A title is copyable and a subscriber count is not, so this is either a namesake or a public shell beside a private original. Not sent to the gate; recorded as unresolved.",
+        "bound": "Bounded the same way every search here is: contacts.SearchRequest ranks by Telegram's own relevance and returns at most ten rows per query, so this closes the question by record rather than proving absence.",
+        "judged_on_matches": [
+          "bgiAadlhqqAxNzYy",
+          "children45",
+          "supermama_ukraine"
+        ]
+      },
+      "judgement_stale": false,
+      "finding": "NOT THE CHANNEL — the title matches exactly and the size does not. @children45 carries «Все про дітей | Виховання | Психологія» word for word and has 277 subscribers where TGStat showed ~23.7k — a factor of 85. A title is copyable and a subscriber count is not, so this is either a namesake or a public shell beside a private original. Not sent to the gate; recorded as unresolved. Bounded the same way every search here is: contacts.SearchRequest ranks by Telegram's own relevance and returns at most ten rows per query, so this closes the question by record rather than proving absence."
     },
     "suchasni_batky_title": {
       "asked": "what is the handle of «Сучасні батьки | Виховання»? canon docs/CHANNELS-launch.md 'Дозаявка №8', the line «Хендлы добрать завтра ботом/поиском»",
@@ -8139,10 +8267,18 @@
         ],
         "Сучасні батьки Виховання": []
       },
-      "closed": false,
-      "judgement": null,
-      "judgement_stale": null,
-      "finding": "MATCHES FOUND — not closed. The rows above need a human look before any of them goes to the gate; this script does not decide what is convincing."
+      "closed": true,
+      "judgement": {
+        "judged_by": "executor, 2026-08-08",
+        "verdict": "NOT THE CHANNEL — same shape, and the canon predicted it",
+        "why": "@suchasnibatki «Сучасні батьки» has TEN subscribers against the ~36.4k TGStat showed — a factor of 3,600. The canon had already flagged this one «возможно приватный», and a public namesake beside a private original is exactly what that looks like from outside. It belongs to the deferred privates track, not to the gate.",
+        "bound": "Bounded the same way every search here is: contacts.SearchRequest ranks by Telegram's own relevance and returns at most ten rows per query, so this closes the question by record rather than proving absence.",
+        "judged_on_matches": [
+          "suchasnibatki"
+        ]
+      },
+      "judgement_stale": false,
+      "finding": "NOT THE CHANNEL — same shape, and the canon predicted it. @suchasnibatki «Сучасні батьки» has TEN subscribers against the ~36.4k TGStat showed — a factor of 3,600. The canon had already flagged this one «возможно приватный», and a public namesake beside a private original is exactly what that looks like from outside. It belongs to the deferred privates track, not to the gate. Bounded the same way every search here is: contacts.SearchRequest ranks by Telegram's own relevance and returns at most ten rows per query, so this closes the question by record rather than proving absence."
     },
     "poltava_broadcast_analogue": {
       "asked": "which PUBLIC BROADCAST channels of Poltava does Telegram's own search return? canon docs/CHANNELS-launch.md 'Рулинги гейта дня 2', ruling (6) — the operator's addition during the session: find broadcast analogues for the two towns whose handles left as supergroups",
@@ -8535,10 +8671,36 @@
           }
         ]
       },
-      "closed": false,
-      "judgement": null,
-      "judgement_stale": null,
-      "finding": "MATCHES FOUND — not closed. The rows above need a human look before any of them goes to the gate; this script does not decide what is convincing."
+      "closed": true,
+      "judgement": {
+        "judged_by": "executor, 2026-08-08",
+        "verdict": "FOUND — two taken, and three of the four day-2 picks were invisible to the town scan",
+        "why": "Nineteen name matches. Taken to the gate: @poltava_pvp «PVP.POLTAVA» (106,761) and @poltava20 «Полтава ІНФО | Новини Світло» (43,486), both broadcast, both PASS, both in the registry. NOT taken, by the operator's ruling: @region_poltava_syrena «ПОЛТАВА НОВИНИ | СИРЕНА» (195,553) and @trevoga_karta — alert feeds, the genre that produced all three of the composition's RF_FLAGs. @poltava_insider (22,831) is recorded as a candidate. @poltava_informue, @poltava_misto and @suspilnepoltava came back as rows and are already ours or already excluded.",
+        "bound": "Bounded the same way every search here is: contacts.SearchRequest ranks by Telegram's own relevance and returns at most ten rows per query, so this closes the question by record rather than proving absence.",
+        "judged_on_matches": [
+          "apple_iphone_poltava1",
+          "estate_poltava",
+          "fcvorsklapoltava",
+          "humanakha",
+          "novini_poltava",
+          "novosti_karta_novinyy",
+          "poltava",
+          "poltava20",
+          "poltava7",
+          "poltava_informue",
+          "poltava_insider",
+          "poltava_misto",
+          "poltava_novini",
+          "poltava_pvp",
+          "poltavai",
+          "region_poltava_syrena",
+          "suspilnepoltava",
+          "trevoga_karta",
+          "trukha_ua9"
+        ]
+      },
+      "judgement_stale": false,
+      "finding": "FOUND — two taken, and three of the four day-2 picks were invisible to the town scan. Nineteen name matches. Taken to the gate: @poltava_pvp «PVP.POLTAVA» (106,761) and @poltava20 «Полтава ІНФО | Новини Світло» (43,486), both broadcast, both PASS, both in the registry. NOT taken, by the operator's ruling: @region_poltava_syrena «ПОЛТАВА НОВИНИ | СИРЕНА» (195,553) and @trevoga_karta — alert feeds, the genre that produced all three of the composition's RF_FLAGs. @poltava_insider (22,831) is recorded as a candidate. @poltava_informue, @poltava_misto and @suspilnepoltava came back as rows and are already ours or already excluded. Bounded the same way every search here is: contacts.SearchRequest ranks by Telegram's own relevance and returns at most ten rows per query, so this closes the question by record rather than proving absence."
     },
     "kremenchuk_broadcast_analogue": {
       "asked": "which PUBLIC BROADCAST channels of Kremenchuk does Telegram's own search return? canon docs/CHANNELS-launch.md 'Рулинги гейта дня 2', ruling (6) — the operator's addition during the session: find broadcast analogues for the two towns whose handles left as supergroups",
@@ -8939,28 +9101,47 @@
           }
         ]
       },
-      "closed": false,
-      "judgement": null,
-      "judgement_stale": null,
-      "finding": "MATCHES FOUND — not closed. The rows above need a human look before any of them goes to the gate; this script does not decide what is convincing."
+      "closed": true,
+      "judgement": {
+        "judged_by": "executor, 2026-08-08",
+        "verdict": "FOUND — two taken, and the largest feed of the town was never in the scan",
+        "why": "Twenty-two name matches. Taken: @h_kremenchug «Х Кременчук» (137,221) and @kremen_news «КРЕМІНЬ | НОВИНИ | КРЕМЕНЧУК» (28,286), both broadcast, both PASS, both in the registry — against the 16,056-subscriber chat that left as a supergroup. NOT taken: @sirena_kremenchuk (72,660) and @treeshkremik «НеТруха ⚡️ Кременчук | Новини війни» (49,521), alert and war-digest feeds. @kremenchuk_insider (11,563) is recorded as a candidate. Neither of the two taken here was in the 119-candidate town-name scan — the town's largest feed was invisible to it.",
+        "bound": "Bounded the same way every search here is: contacts.SearchRequest ranks by Telegram's own relevance and returns at most ten rows per query, so this closes the question by record rather than proving absence.",
+        "judged_on_matches": [
+          "Kremenchug_rabota_vakansiiq",
+          "Kremenchuge",
+          "Kremenchugg",
+          "h_kremenchug",
+          "kremen_news",
+          "kremen_world",
+          "kremenchug_chto_gde_kogda",
+          "kremenchug_live",
+          "kremenchugq",
+          "kremenchukD",
+          "kremenchuk_insider",
+          "kremenchuk_novini",
+          "kremenchukk",
+          "krementoday",
+          "kuluarykremenchuk",
+          "obminkremenchuk",
+          "onlykremen",
+          "realkremen",
+          "sirena_kremenchuk",
+          "telegraf_kremenchuk",
+          "treeshkremik",
+          "tvoumatblat"
+        ]
+      },
+      "judgement_stale": false,
+      "finding": "FOUND — two taken, and the largest feed of the town was never in the scan. Twenty-two name matches. Taken: @h_kremenchug «Х Кременчук» (137,221) and @kremen_news «КРЕМІНЬ | НОВИНИ | КРЕМЕНЧУК» (28,286), both broadcast, both PASS, both in the registry — against the 16,056-subscriber chat that left as a supergroup. NOT taken: @sirena_kremenchuk (72,660) and @treeshkremik «НеТруха ⚡️ Кременчук | Новини війни» (49,521), alert and war-digest feeds. @kremenchuk_insider (11,563) is recorded as a candidate. Neither of the two taken here was in the 119-candidate town-name scan — the town's largest feed was invisible to it. Bounded the same way every search here is: contacts.SearchRequest ranks by Telegram's own relevance and returns at most ten rows per query, so this closes the question by record rather than proving absence."
     }
   },
   "git": {
-    "commit": "0eb12d5df81ff8f27c43f7c4895e9563d4f1c26e",
+    "commit": "a61eccb7580e20583c6386fa786e5ab0ac6ac58d",
     "dirty": [
-      "config/registry.yaml",
-      "docs/CHANNELS-launch.md",
-      "results/collect_5c1.json",
-      "results/joins_5c1.jsonl",
-      "scripts/apply_gate_rulings_5c1.py",
-      "scripts/entry_check.py",
+      "knowledge/hot.md",
       "scripts/late_batch_5c1.py",
-      "tests/test_entry_gate_5c1.py",
-      "tests/test_gate_rulings_5c1.py",
-      "tests/test_late_batch_5c1.py",
-      "results/harvest_mothers_ua.json",
-      "scripts/harvest_similar_5c1.py",
-      "tests/test_harvest_similar_5c1.py"
+      "tests/test_late_batch_5c1.py"
     ]
   }
 }

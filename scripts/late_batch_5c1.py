@@ -320,6 +320,150 @@ HVYLYNKA_JUDGEMENT = {
 carries the name. Deciding which match is convincing is a human call, and this is that call with
 its reasons, applied by `--close-hvylynka` without touching Telegram."""
 
+SEARCH_LIMIT = (
+    "Bounded the same way every search here is: contacts.SearchRequest ranks by Telegram's own"
+    " relevance and returns at most ten rows per query, so this closes the question by record"
+    " rather than proving absence."
+)
+
+DAY2_JUDGEMENTS = {
+    # The executor's read of the day-2 searches, 2026-08-08, kept in the repo and applied by
+    # `--close` so the RECORD carries the verdict. Step 7's rule is "not found → negative
+    # recorded", and a note that still says «MATCHES FOUND — not closed» while the report says
+    # NEGATIVE is a verdict living in prose. Every row of every search was read.
+    "novus_consumer_search": {
+        "verdict": "NEGATIVE — Novus has no consumer channel findable in Telegram",
+        "why": (
+            "Six name matches and not one is the chain: @newworldra «NOVUS ORDO SECLORUM» (1,568),"
+            " @novus_ordo, @novus_ordum, @Americana2001, @novusycc, and @dc_novus — a Kazakh"
+            " house-of-culture channel in Tobyl (81). The Latin phrase is what the name collides"
+            " with. The web pass had already found only the corporate @NovusNews, for staff."
+        ),
+    },
+    "velmart_consumer_search": {
+        "verdict": "NEGATIVE — Velmart's Telegram presence is two empty placeholders",
+        "why": (
+            "@velmart «Velmart Channel» has THREE subscribers and @velmart1 «ВЕЛМАРТ» is a chat"
+            " with three. The handles are taken and nothing is published under them; the other"
+            " matches (@velmartyr, @velmartinus) are unrelated. A registered handle is not a"
+            " channel, and neither of these would survive the gate's liveness check."
+        ),
+    },
+    "fozzy_consumer_search": {
+        "verdict": "NEGATIVE — no consumer channel for the cash-and-carry format",
+        "why": (
+            "Nine matches, all peripheral: a currency booth inside a Fozzy store"
+            " (@obminfozzy, 55), a jobs channel (@robotafozzipochayna, 3), «Fozzy Експериментаріум»"
+            " (a chat, 1,227), a test channel, and crypto/exchange channels borrowing the word."
+            " The group's retail brands are covered instead — @silposilpo is in the registry and"
+            " @forainfo entered today."
+        ),
+    },
+    "auchan_consumer_search": {
+        "verdict": "NEGATIVE for Ukraine — every real Auchan channel found is Russian",
+        "why": (
+            "@auchanrus «АШАН Россия» (82,813) and @auchan_retail_russia (1,435) are the only"
+            " substantial matches, and SPEC §3.11 (4) excludes RF-market sources regardless of"
+            " language, so finding them is not finding a candidate. The Ukrainian side returns"
+            " @auchanempire (2) and @creativefogg «Ашан» (25). The web pass had found only a"
+            " support bot, which collects nothing."
+        ),
+    },
+    "metro_consumer_search": {
+        "verdict": "NEGATIVE — METRO Ukraine's name is held by resellers, not by the chain",
+        "why": (
+            "Six matches and the largest is @metroShopikN1S «Метро шоп Україна» with THIRTEEN"
+            " subscribers; the rest run 3, 2, 2. «Метро» also collides with the underground —"
+            " @kyrsvalyutpumbpalatsukraina is an exchange rate board at a metro station. Nothing"
+            " here is the wholesaler."
+        ),
+    },
+    "food_quality_search": {
+        "verdict": "NEGATIVE — the Consumer Union's counterfeit-dairy channel is not in Telegram search",
+        "why": (
+            "@maxcontrol exists and has TWO subscribers, which is not the channel the operator"
+            " remembers. «Несміянов» and «Союз споживачів України» return nothing at all, and the"
+            " topic word «фальсифікат» returns @lukashukpidoras «комірка фальсифікатора» (98) —"
+            " not an NGO. The operator's recollection is the only prior evidence and no web pass"
+            " was run for it, so this negative is bounded by Telegram's search alone."
+        ),
+    },
+    "matusi_ukrainy_title": {
+        "verdict": "FOUND — @matusi_ukr, and the subscriber count is what confirms it",
+        "why": (
+            "«Матусі України» came back at 19,278 against the ~19.3k the operator's TGStat pass"
+            " showed. The name is a common one — the same search returns six chats and two other"
+            " towns' «Матусі» channels — so the size is what identifies the row rather than the"
+            " title. Gated the same day (PASS, ua 0.93, open group) and entered the registry."
+        ),
+    },
+    "mamo_ne_psihuy_title": {
+        "verdict": "FOUND — @mamo_nepsichuy, confirmed by size",
+        "why": (
+            "13,781 against TGStat's ~13.8k. The only other match is @maluvana2024 «Малюй і не"
+            " псіхуй» (4), a different channel borrowing the phrase. Gated PASS, ua 1.00, open"
+            " group; entered the registry and is one of the day's ten joins."
+        ),
+    },
+    "dytiache_kharchuvannia_title": {
+        "verdict": "NEGATIVE — nothing of the size the operator saw carries this name",
+        "why": (
+            "TGStat showed ~7.9k. The largest match is @dobrobutPoltava «ДИТЯЧЕ ХАРЧУВАННЯ"
+            " (ДОБРОБУТ)» with 439 subscribers — a clinic — then two shops on 28 and 4. The"
+            " phrase is also an ordinary one («baby food»), so a name match here carries less"
+            " than usual. @ya_Nenka matched too and is already ours."
+        ),
+    },
+    "vse_pro_ditey_title": {
+        "verdict": "NOT THE CHANNEL — the title matches exactly and the size does not",
+        "why": (
+            "@children45 carries «Все про дітей | Виховання | Психологія» word for word and has"
+            " 277 subscribers where TGStat showed ~23.7k — a factor of 85. A title is copyable and"
+            " a subscriber count is not, so this is either a namesake or a public shell beside a"
+            " private original. Not sent to the gate; recorded as unresolved."
+        ),
+    },
+    "suchasni_batky_title": {
+        "verdict": "NOT THE CHANNEL — same shape, and the canon predicted it",
+        "why": (
+            "@suchasnibatki «Сучасні батьки» has TEN subscribers against the ~36.4k TGStat showed"
+            " — a factor of 3,600. The canon had already flagged this one «возможно приватный»,"
+            " and a public namesake beside a private original is exactly what that looks like from"
+            " outside. It belongs to the deferred privates track, not to the gate."
+        ),
+    },
+    "poltava_broadcast_analogue": {
+        "verdict": "FOUND — two taken, and three of the four day-2 picks were invisible to the town scan",
+        "why": (
+            "Nineteen name matches. Taken to the gate: @poltava_pvp «PVP.POLTAVA» (106,761) and"
+            " @poltava20 «Полтава ІНФО | Новини Світло» (43,486), both broadcast, both PASS, both"
+            " in the registry. NOT taken, by the operator's ruling: @region_poltava_syrena"
+            " «ПОЛТАВА НОВИНИ | СИРЕНА» (195,553) and @trevoga_karta — alert feeds, the genre that"
+            " produced all three of the composition's RF_FLAGs. @poltava_insider (22,831) is"
+            " recorded as a candidate. @poltava_informue, @poltava_misto and @suspilnepoltava came"
+            " back as rows and are already ours or already excluded."
+        ),
+    },
+    "kremenchuk_broadcast_analogue": {
+        "verdict": "FOUND — two taken, and the largest feed of the town was never in the scan",
+        "why": (
+            "Twenty-two name matches. Taken: @h_kremenchug «Х Кременчук» (137,221) and"
+            " @kremen_news «КРЕМІНЬ | НОВИНИ | КРЕМЕНЧУК» (28,286), both broadcast, both PASS,"
+            " both in the registry — against the 16,056-subscriber chat that left as a supergroup."
+            " NOT taken: @sirena_kremenchuk (72,660) and @treeshkremik «НеТруха ⚡️ Кременчук |"
+            " Новини війни» (49,521), alert and war-digest feeds. @kremenchuk_insider (11,563) is"
+            " recorded as a candidate. Neither of the two taken here was in the 119-candidate"
+            " town-name scan — the town's largest feed was invisible to it."
+        ),
+    },
+}
+"""Executor judgements over the day-2 searches, applied by `--close` and never by `--search`.
+
+Same division of labour `HVYLYNKA_JUDGEMENT` set: the search records what came back and whether a
+title carries the name, and a human decides what is convincing. Kept in the repo rather than typed
+into the record once, so a re-run can carry them forward and `record_search` can mark them stale if
+the matched handles ever change."""
+
 THEME = "poltava_cities"
 CITIES = (
     "Полтава",
@@ -440,6 +584,48 @@ def record_search(key: str, found: dict) -> dict:
     return note
 
 
+def close_notes(judgements: dict[str, dict]) -> int:
+    """Write the executor's readings into the notes they are about. No API, no new search.
+
+    A search records rows; a human decides which of them is convincing. Until that decision reaches
+    the note, `results/entry_gate_5c1.json` says «MATCHES FOUND — not closed» about a question the
+    report calls answered, and the verdict lives only in prose. Step 7's rule is "not found →
+    negative recorded", and this is what records it.
+
+    `matched_handles` is stamped into the judgement so `record_search` can tell later whether the
+    reading is still about the rows it was made on — the same staleness check the Хвилинка
+    judgement already gets.
+    """
+    record = json.loads(GATE_RECORD.read_text(encoding="utf-8"))
+    notes = record.get("notes", {})
+    missing = [key for key in judgements if key not in notes]
+    if missing:
+        raise SystemExit(f"no search to judge for {sorted(missing)} — run --search first")
+
+    for key, judgement in judgements.items():
+        note = notes[key]
+        full = {
+            "judged_by": judgement.get("judged_by", "executor, 2026-08-08"),
+            **judgement,
+            "bound": judgement.get("bound", SEARCH_LIMIT),
+            "judged_on_matches": matched_handles(note),
+        }
+        note["judgement"] = full
+        note["judgement_stale"] = False
+        note["closed"] = True
+        note["finding"] = f"{full['verdict']}. {full['why']} {full['bound']}"
+        print(f"{key}:\n  {full['verdict']}")
+    record["git"] = git_state(GATE_RECORD)
+    GATE_RECORD.write_text(
+        json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+    where = (
+        GATE_RECORD.relative_to(REPO_ROOT) if GATE_RECORD.is_relative_to(REPO_ROOT) else GATE_RECORD
+    )
+    print(f"\nclosed {len(judgements)} note(s) in {where} :: notes")
+    return 0
+
+
 async def run_scan(client, known: dict, carried: list[dict]) -> dict:
     """The city scan: `discover_channels`'s own measure over this theme's queries."""
     found = await discovery.search_themes(client, {THEME: CITIES})
@@ -533,28 +719,19 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="write the executor's read of the search into the note (no API, no new search)",
     )
+    parser.add_argument(
+        "--close",
+        action="store_true",
+        help="write the executor's reads of the day-2 searches into their notes (no API)",
+    )
     parser.add_argument("--poltava", action="store_true", help="the poltava_cities discovery scan")
     parser.add_argument("--plan", action="store_true", help="print the queries and stop, no API")
     args = parser.parse_args(argv)
 
     if args.close_hvylynka:
-        record = json.loads(GATE_RECORD.read_text(encoding="utf-8"))
-        note = record.get("notes", {}).get("hvylynka_search")
-        if note is None:
-            raise SystemExit("run --search first: there is no search to judge")
-        note["judgement"] = HVYLYNKA_JUDGEMENT
-        note["closed"] = True
-        note["finding"] = (
-            f"{HVYLYNKA_JUDGEMENT['verdict']}. {HVYLYNKA_JUDGEMENT['why']}"
-            f" {HVYLYNKA_JUDGEMENT['bound']}"
-        )
-        record["git"] = git_state(GATE_RECORD)
-        GATE_RECORD.write_text(
-            json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
-        )
-        print(note["finding"])
-        print(f"\nclosed in {GATE_RECORD.relative_to(REPO_ROOT)} :: notes.hvylynka_search")
-        return 0
+        return close_notes({"hvylynka_search": HVYLYNKA_JUDGEMENT})
+    if args.close:
+        return close_notes(DAY2_JUDGEMENTS)
 
     keys = ["hvylynka_search"] if args.search else []
     keys += list(RETAIL_SEARCHES) if args.search_retail else []

@@ -32,8 +32,8 @@ fdf4115 docs(5c1): the SPEC's two new rulings, and D45-D62
 # Hot Cache — curated
 
 **Last update:** 2026-08-08 (day-2 run). `docs/PROMPT-5c1-day2.md` executed end to end: ten
-steps, plus two дозаявки the operator ruled mid-session. Registry **39 → 67**, 13 joins, zero
-FloodWait, **$0**. `make check` **1,198 passed**. This block is hand-edited; the section above it
+steps, plus two дозаявки the operator ruled mid-session. Registry **39 → 67**, **10 joins and 3
+exits** (the join log has 13 rows today and three of them are exits), zero FloodWait, **$0**. `make check` **1,198 passed**. This block is hand-edited; the section above it
 is auto-generated — do NOT touch the marker.
 
 ## 🔥 What's Hot
@@ -44,8 +44,9 @@ verdict and no loop run consumes this composition until the yield numbers exist.
 the phase: **33**. Audience: regional 18 · health_fitness 17 · baby_food 8 · retail_official 7 ·
 cooking_recipes 7 · mothers_kids 5 · supermarket_deals 4 · food_quality 1. **mothers_kids stopped
 being an empty launch segment** — 3 live (@educationwithloven, @matusi_ukr, @mamo_nepsichuy)
-against 0 yesterday, which is what the whole harvest track existed for. Subscribers 1,027,504 →
-1,951,851.
+against 0 yesterday, which is what the whole harvest track existed for. Subscribers **+924,347**
+over the 63 sources `results/entry_gate_5c1.json` measured (849,230 → 1,773,577); the four
+originals add ~178,274 more but that number is the canon's table, not an artifact.
 
 **THREE "CITY FEEDS" WERE CHATS, AND THE FIX WAS BIGGER THAN THE HOLE.** @poltava_misto,
 @kremenchug_live and @Karlivka_live came back `broadcast=false, megagroup=true` — their 111/77/197

@@ -363,3 +363,68 @@ def test_a_search_row_says_whether_it_is_a_channel_or_a_chat():
     body = source[source.index("async def suggest") : source.index("async def sample_traffic")]
     assert '"broadcast"' in body and '"megagroup"' in body
     assert entry_check.suggest.__doc__
+
+
+# --- the judgements reach the record ---------------------------------------------------------
+
+
+def test_close_writes_a_verdict_into_every_note_it_names(tmp_path, monkeypatch):
+    """A search records rows; a human decides which are convincing. Until that reaches the note,
+    the record says «MATCHES FOUND — not closed» about a question the report calls answered."""
+    notes = {
+        key: {
+            "closed": False,
+            "finding": "MATCHES FOUND — not closed.",
+            "name_matches": [match("someone")],
+        }
+        for key in late.DAY2_JUDGEMENTS
+    }
+    monkeypatch.setattr(late, "GATE_RECORD", gate_record(tmp_path))
+    path = late.GATE_RECORD
+    record = json.loads(path.read_text(encoding="utf-8"))
+    record["notes"] = notes
+    path.write_text(json.dumps(record, ensure_ascii=False), encoding="utf-8")
+
+    assert late.main(["--close"]) == 0
+    written = json.loads(path.read_text(encoding="utf-8"))["notes"]
+    for key, judgement in late.DAY2_JUDGEMENTS.items():
+        note = written[key]
+        assert note["closed"] is True, key
+        assert note["judgement_stale"] is False, key
+        assert note["finding"].startswith(judgement["verdict"]), key
+        # The reading is stamped with the rows it was made ON, so a later re-run can tell whether
+        # it still applies — the staleness check the Хвилинка judgement already gets.
+        assert note["judgement"]["judged_on_matches"] == ["someone"], key
+        assert note["judgement"]["bound"], key
+
+
+def test_close_refuses_a_note_that_does_not_exist(tmp_path, monkeypatch):
+    """The negative control: without it, `--close` on an empty record would look like success."""
+    monkeypatch.setattr(late, "GATE_RECORD", gate_record(tmp_path))
+    with pytest.raises(SystemExit, match="run --search first"):
+        late.main(["--close"])
+
+
+def test_every_handle_a_judgement_names_is_in_the_rows_it_judged():
+    """The lesson these notes exist to avoid: a verdict that quotes a channel the search never
+    returned. Each judgement is grepped back to its own note's rows in the shipped record."""
+    import re
+
+    record = json.loads((REPO_ROOT / "results" / "entry_gate_5c1.json").read_text(encoding="utf-8"))
+    for key, judgement in late.DAY2_JUDGEMENTS.items():
+        note = record["notes"][key]
+        returned = {
+            f"@{row['username']}".casefold()
+            for rows in note["rows"].values()
+            for row in rows
+            if row.get("username")
+        }
+        # A handle the search never returned is allowed only if the search's own recorded prior
+        # context names it — @NovusNews is the web pass's finding, carried in `also`, and saying
+        # so is the point of the sentence. Anything else would be a verdict about a row that does
+        # not exist.
+        context = set(re.findall(r"@[A-Za-z0-9_]+", late.SEARCHES[key]["also"].casefold()))
+        for handle in re.findall(r"@[A-Za-z0-9_]+", judgement["why"]):
+            assert handle.casefold() in returned | context, (
+                f"{key}: {handle} is in neither this search's rows nor its recorded context"
+            )
