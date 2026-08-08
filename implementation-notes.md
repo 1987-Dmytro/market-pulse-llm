@@ -4644,3 +4644,33 @@ greps out of hot.md (`~$0.24/day`, `80 GB is about what the`) — Dv16's lesson.
 block keeps its original text with a correction appended beneath it rather than a rewrite, so what
 was observed and what was inferred stay separable. `refresh-hot-cache.py` OK (55 077 bytes),
 `check-wikilinks.py` OK, none broken.
+
+### srv-2c addendum — the unwrapped control, bought on the operator's word
+
+**Authorisation:** the operator, on the srv-2c report, "да, купи $0.06 на необёрнутую команду". It
+runs against `results/spend_srv2c.json`'s existing anchor and its $0.75 cap — $0.0654 was spent, so
+$0.68 of headroom carries it and no new anchor is invented for one experiment.
+
+**The one difference from the run that answered.** The template's start command goes back to
+srv-2b's exact form, `--docker-start-cmd "bash,/runpod-volume/start.sh"` → argv
+`["bash","/runpod-volume/start.sh"]`. Image, container disk, env, GPU class, datacenter, volume,
+`workers-max`, `idle-timeout` are the srv-2c ones. Nothing on the volume changes and
+`worker-boot.log` is not written by this run, so srv-2c's evidence cannot be overwritten by it.
+
+**Pre-registered, before the first billable second:**
+
+| Outcome | What it means |
+|---|---|
+| the job **COMPLETES** | the wrapper was not the cause. srv-2b's hang was the platform on 08-08 (hypothesis 2), and the redirect fixed nothing — though Dv28 still argues for keeping it |
+| the job stays **IN_QUEUE** through the window | the wrapper *is* the difference. The only thing it changes is where fd 1 and fd 2 point, so hypothesis 1 — a blocked write to an undrained stdout pipe — is what is left |
+| anything else (FAILED, a worker that never allocates) | reported as itself; a class the pre-registration did not anticipate |
+
+**What it is worth and what it is not.** This is n=1 against n=1, but the two runs are twenty
+minutes apart on the same platform, same volume, same datacenter, same class — which is exactly the
+pairing srv-2b could not offer, since its only comparison was a vendor image on a different
+codebase. It cannot exclude a fault that comes and goes on a timescale of minutes.
+
+**The price is asymmetric and the window is set accordingly.** A completing run is ~175 s of worker
+time, about $0.054. A hang pays for the whole observation window instead, so the window is cut to
+**300 s** (`--execution-timeout 300`) rather than the contract's 600: the wrapped job was picked up
+in 15.9 s and finished at 174 s, so 300 s is a generous margin and caps the downside near $0.10.
