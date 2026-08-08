@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-07T18:31:48+00:00",
+  "generated_at": "2026-08-08T10:48:08+00:00",
   "phase": "5c1",
   "deliverable": "1 — the track-R entry gate over the launch composition",
   "contract": "docs/SPEC.md §3.11 (4); docs/PROMPT-5c1.md Deliverable 1",
   "canon": "docs/CHANNELS-launch.md — operator verdict 2026-08-06 plus that evening's addition. The composition is the operator's choice; this gate verifies each entry against the bucket it was chosen into.",
-  "complete": false,
-  "flood_wait_seconds": 55779,
+  "complete": true,
+  "flood_wait_seconds": null,
   "read_only": "no group joins, no store writes, no registry edit in this pass",
   "post_sample": 50,
   "window_days": 28,
@@ -98,7 +98,8 @@
       "@educationwithloven",
       "@pavlushaiyava",
       "@lab_of_childhood",
-      "@mandziak"
+      "@mandziak",
+      "@KarlivkaLive"
     ]
   },
   "candidates": [
@@ -4385,13 +4386,1577 @@
       "ruling": "EXCLUDED — late addition #2 EXCLUDED (operator, 2026-08-07 on the gate report): dead by canon's own conjunction — its ten sampled posts run 2024-04-19 to 2024-06-06, so 26 months of silence, and there is no discussion group. Same class as the six the operator excluded on 06.08",
       "error": null,
       "suggestions": null
+    },
+    {
+      "handle": "@mo3ambik",
+      "bucket": "city",
+      "checked_at": "2026-08-08T10:10:58+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "МОЗАМБІК.МЕДІА: Лубни, Пирятин, Хорол, Гребінка, Оржиця",
+        "username": "mo3ambik",
+        "subscribers": 34664,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 194,
+          "posts_per_week": 48.5,
+          "last_post": "2026-08-08T09:54:43+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 189,
+          "n_with_letters": 189,
+          "n_cyrillic": 189,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 1611735294,
+          "title": "Мозамбік.Медіа коментарі",
+          "username": "lubnyComments",
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 36,
+          "share_with_comments": 0.61,
+          "median_comments": 3.0,
+          "sample_first_post": "2026-08-04T07:34:17+00:00",
+          "sample_last_post": "2026-08-08T09:54:43+00:00"
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": null,
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": "CITY FEED — POSTS-ONLY by the standing ruling (canon 'Дозаявка №3', operator 2026-08-08): a city feed enters posts-only, comments_enabled false, and its discussion group is NOT joined until 5c2 rules on a category filter for threads — without one a city chat's whole traffic lands in a paid inference queue. 11 of the 16 do have a group; that is why the gate holds them in the `city` bucket, which measures a group without asserting one either way.",
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@poltava_informue",
+      "bucket": "city",
+      "checked_at": "2026-08-08T10:11:11+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Полтава Інформує",
+        "username": "poltava_informue",
+        "subscribers": 66474,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 1113,
+          "posts_per_week": 278.25,
+          "last_post": "2026-08-08T10:09:46+00:00",
+          "window_days": 28,
+          "window_truncated": true
+        },
+        "language": {
+          "n_texts": 1112,
+          "n_with_letters": 1112,
+          "n_cyrillic": 1112,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": null,
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 49,
+          "share_with_comments": 0.0,
+          "median_comments": 0,
+          "sample_first_post": "2026-08-07T05:36:16+00:00",
+          "sample_last_post": "2026-08-08T10:09:46+00:00"
+        },
+        "capability_verdict": "posts-only"
+      },
+      "prior_5a1": null,
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": "CITY FEED — POSTS-ONLY by the standing ruling (canon 'Дозаявка №3', operator 2026-08-08): a city feed enters posts-only, comments_enabled false, and its discussion group is NOT joined until 5c2 rules on a category filter for threads — without one a city chat's whole traffic lands in a paid inference queue. 11 of the 16 do have a group; that is why the gate holds them in the `city` bucket, which measures a group without asserting one either way.",
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@poltava_misto",
+      "bucket": "city",
+      "checked_at": "2026-08-08T10:11:18+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Полтава Інфо🗞⌚️☕️",
+        "username": "poltava_misto",
+        "subscribers": 60028,
+        "telegram_verified": false,
+        "broadcast": false,
+        "megagroup": true,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 445,
+          "posts_per_week": 111.25,
+          "last_post": "2026-08-08T10:09:06+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 444,
+          "n_with_letters": 444,
+          "n_cyrillic": 444,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": null,
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 50,
+          "share_with_comments": 0.0,
+          "median_comments": 0.0,
+          "sample_first_post": "2026-08-05T16:17:36+00:00",
+          "sample_last_post": "2026-08-08T10:09:06+00:00"
+        },
+        "capability_verdict": "posts-only"
+      },
+      "prior_5a1": null,
+      "verdict": "FLAG",
+      "fails": [],
+      "flags": [
+        "supergroup, not a broadcast channel"
+      ],
+      "ruling": "EXCLUDED — EXCLUDED as a supergroup (day-2 sitting): broadcast=false, megagroup=true, so its 111.25/week is chat traffic and not editorial posts. Same class as @Mambabyua and @kulinariya_chat_a, and the same deferred chat-mining track. 60,028 subscribers",
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@suspilnepoltava",
+      "bucket": "city",
+      "checked_at": "2026-08-08T10:11:28+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Суспільне Полтава",
+        "username": "suspilnepoltava",
+        "subscribers": 56254,
+        "telegram_verified": true,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 518,
+          "posts_per_week": 129.5,
+          "last_post": "2026-08-08T10:09:19+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 517,
+          "n_with_letters": 517,
+          "n_cyrillic": 517,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": null,
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 41,
+          "share_with_comments": 0.0,
+          "median_comments": 0,
+          "sample_first_post": "2026-08-06T09:31:30+00:00",
+          "sample_last_post": "2026-08-08T10:09:19+00:00"
+        },
+        "capability_verdict": "posts-only"
+      },
+      "prior_5a1": null,
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": "CITY FEED — POSTS-ONLY by the standing ruling (canon 'Дозаявка №3', operator 2026-08-08): a city feed enters posts-only, comments_enabled false, and its discussion group is NOT joined until 5c2 rules on a category filter for threads — without one a city chat's whole traffic lands in a paid inference queue. 11 of the 16 do have a group; that is why the gate holds them in the `city` bucket, which measures a group without asserting one either way.",
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@telegraf_kremenchuk",
+      "bucket": "city",
+      "checked_at": "2026-08-08T10:11:38+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Кременчуцький Телеграф",
+        "username": "telegraf_kremenchuk",
+        "subscribers": 32827,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 621,
+          "posts_per_week": 155.25,
+          "last_post": "2026-08-08T09:43:01+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 614,
+          "n_with_letters": 614,
+          "n_cyrillic": 614,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 1233246539,
+          "title": "Коментарі Телеграф",
+          "username": "telegrafkoment",
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": true,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 32,
+          "share_with_comments": 0.34,
+          "median_comments": 0.0,
+          "sample_first_post": "2026-08-06T15:08:01+00:00",
+          "sample_last_post": "2026-08-08T09:43:01+00:00"
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": null,
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": "CITY FEED — POSTS-ONLY by the standing ruling (canon 'Дозаявка №3', operator 2026-08-08): a city feed enters posts-only, comments_enabled false, and its discussion group is NOT joined until 5c2 rules on a category filter for threads — without one a city chat's whole traffic lands in a paid inference queue. 11 of the 16 do have a group; that is why the gate holds them in the `city` bucket, which measures a group without asserting one either way.",
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@kremenchug_live",
+      "bucket": "city",
+      "checked_at": "2026-08-08T10:11:44+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Кременчук LiFE🗞⌚️🏘☕️🌤",
+        "username": "kremenchug_live",
+        "subscribers": 16056,
+        "telegram_verified": false,
+        "broadcast": false,
+        "megagroup": true,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 309,
+          "posts_per_week": 77.25,
+          "last_post": "2026-08-08T10:10:06+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 309,
+          "n_with_letters": 309,
+          "n_cyrillic": 309,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": null,
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 49,
+          "share_with_comments": 0.0,
+          "median_comments": 0,
+          "sample_first_post": "2026-08-04T07:40:06+00:00",
+          "sample_last_post": "2026-08-08T10:10:06+00:00"
+        },
+        "capability_verdict": "posts-only"
+      },
+      "prior_5a1": null,
+      "verdict": "FLAG",
+      "fails": [],
+      "flags": [
+        "supergroup, not a broadcast channel"
+      ],
+      "ruling": "EXCLUDED — EXCLUDED as a supergroup (day-2 sitting): broadcast=false, megagroup=true, 77.25/week of chat traffic. 16,056 subscribers",
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@gorishnie_plavni1",
+      "bucket": "city",
+      "checked_at": "2026-08-08T10:11:54+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Горішні Плавні 🇺🇦",
+        "username": "gorishnie_plavni1",
+        "subscribers": 21077,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 554,
+          "posts_per_week": 138.5,
+          "last_post": "2026-08-08T10:11:07+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 554,
+          "n_with_letters": 554,
+          "n_cyrillic": 554,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 1341411204,
+          "title": "GP - CHAT🔥",
+          "username": "chat_gp1",
+          "megagroup": true,
+          "min": false,
+          "join_request": true,
+          "join_to_send": true,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": false,
+          "closed_because": [
+            "join needs admin approval"
+          ]
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 43,
+          "share_with_comments": 0.16,
+          "median_comments": 0,
+          "sample_first_post": "2026-08-06T10:33:17+00:00",
+          "sample_last_post": "2026-08-08T10:11:07+00:00"
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": null,
+      "verdict": "FLAG",
+      "fails": [],
+      "flags": [
+        "discussion group is not open — join needs admin approval"
+      ],
+      "ruling": "CITY FEED — POSTS-ONLY by the standing ruling (canon 'Дозаявка №3', operator 2026-08-08): a city feed enters posts-only, comments_enabled false, and its discussion group is NOT joined until 5c2 rules on a category filter for threads — without one a city chat's whole traffic lands in a paid inference queue. 11 of the 16 do have a group; that is why the gate holds them in the `city` bucket, which measures a group without asserting one either way. FLAG CLEARED — the flag is about its discussion group («GP - CHAT🔥», join by admin approval), and CITY_RULE enters a city feed posts-only and never joins the group. 21,077 subscribers, 138.5 posts/week, a broadcast channel",
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@myrhorodtown",
+      "bucket": "city",
+      "checked_at": "2026-08-08T10:11:59+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Mirgorodtown",
+        "username": "myrhorodtown",
+        "subscribers": 19587,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 264,
+          "posts_per_week": 66.0,
+          "last_post": "2026-08-08T09:37:54+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 264,
+          "n_with_letters": 264,
+          "n_cyrillic": 264,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "other": 0.01,
+            "ua": 0.99
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 1719388521,
+          "title": "Mirgorodtown Chat",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 46,
+          "share_with_comments": 0.2,
+          "median_comments": 0.0,
+          "sample_first_post": "2026-08-04T05:05:43+00:00",
+          "sample_last_post": "2026-08-08T09:37:54+00:00"
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": null,
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": "CITY FEED — POSTS-ONLY by the standing ruling (canon 'Дозаявка №3', operator 2026-08-08): a city feed enters posts-only, comments_enabled false, and its discussion group is NOT joined until 5c2 rules on a category filter for threads — without one a city chat's whole traffic lands in a paid inference queue. 11 of the 16 do have a group; that is why the gate holds them in the `city` bucket, which measures a group without asserting one either way.",
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@Hadiach_telegram",
+      "bucket": "city",
+      "checked_at": "2026-08-08T10:12:04+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Гадяч",
+        "username": "Hadiach_telegram",
+        "subscribers": 12390,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 142,
+          "posts_per_week": 35.5,
+          "last_post": "2026-08-07T17:38:06+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 142,
+          "n_with_letters": 142,
+          "n_cyrillic": 142,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 1315387946,
+          "title": "Ковальов Віталій | Адміністратор каналу",
+          "username": "komentarihadiach",
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": true,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 30,
+          "share_with_comments": 0.37,
+          "median_comments": 0,
+          "sample_first_post": "2026-08-03T17:49:35+00:00",
+          "sample_last_post": "2026-08-07T17:38:06+00:00"
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": null,
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": "CITY FEED — POSTS-ONLY by the standing ruling (canon 'Дозаявка №3', operator 2026-08-08): a city feed enters posts-only, comments_enabled false, and its discussion group is NOT joined until 5c2 rules on a category filter for threads — without one a city chat's whole traffic lands in a paid inference queue. 11 of the 16 do have a group; that is why the gate holds them in the `city` bucket, which measures a group without asserting one either way.",
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@globine1",
+      "bucket": "city",
+      "checked_at": "2026-08-08T10:12:08+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Х Глобине",
+        "username": "globine1",
+        "subscribers": 12187,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 101,
+          "posts_per_week": 25.25,
+          "last_post": "2026-08-07T13:04:06+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 98,
+          "n_with_letters": 98,
+          "n_cyrillic": 98,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "other": 0.03,
+            "ru": 0.01,
+            "ua": 0.96
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 1822890983,
+          "title": "Обговорення Глобине.",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": true,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 36,
+          "share_with_comments": 0.47,
+          "median_comments": 0.0,
+          "sample_first_post": "2026-07-27T19:22:21+00:00",
+          "sample_last_post": "2026-08-07T13:04:06+00:00"
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": null,
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": "CITY FEED — POSTS-ONLY by the standing ruling (canon 'Дозаявка №3', operator 2026-08-08): a city feed enters posts-only, comments_enabled false, and its discussion group is NOT joined until 5c2 rules on a category filter for threads — without one a city chat's whole traffic lands in a paid inference queue. 11 of the 16 do have a group; that is why the gate holds them in the `city` bucket, which measures a group without asserting one either way.",
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@piryatingromada",
+      "bucket": "city",
+      "checked_at": "2026-08-08T10:12:12+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Пирятинська громада",
+        "username": "piryatingromada",
+        "subscribers": 10997,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 69,
+          "posts_per_week": 17.25,
+          "last_post": "2026-08-07T18:19:16+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 59,
+          "n_with_letters": 59,
+          "n_cyrillic": 59,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": null,
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 20,
+          "share_with_comments": 0.0,
+          "median_comments": 0,
+          "sample_first_post": "2026-08-03T08:01:23+00:00",
+          "sample_last_post": "2026-08-07T18:19:16+00:00"
+        },
+        "capability_verdict": "posts-only"
+      },
+      "prior_5a1": null,
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": "CITY FEED — POSTS-ONLY by the standing ruling (canon 'Дозаявка №3', operator 2026-08-08): a city feed enters posts-only, comments_enabled false, and its discussion group is NOT joined until 5c2 rules on a category filter for threads — without one a city chat's whole traffic lands in a paid inference queue. 11 of the 16 do have a group; that is why the gate holds them in the `city` bucket, which measures a group without asserting one either way.",
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@Karlivka_live",
+      "bucket": "city",
+      "checked_at": "2026-08-08T10:12:26+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Карлівка Live 🇺🇦",
+        "username": "Karlivka_live",
+        "subscribers": 8045,
+        "telegram_verified": false,
+        "broadcast": false,
+        "megagroup": true,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 789,
+          "posts_per_week": 197.25,
+          "last_post": "2026-08-08T10:11:56+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 674,
+          "n_with_letters": 664,
+          "n_cyrillic": 663,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "en": 0.0,
+            "other": 0.13,
+            "ru": 0.02,
+            "ua": 0.85
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 1910855557,
+          "title": "Оголошення. Karlivka Live🇺🇦",
+          "username": "KarlivkaLive",
+          "megagroup": false,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 35,
+          "share_with_comments": 0.0,
+          "median_comments": 0,
+          "sample_first_post": "2026-08-08T08:28:28+00:00",
+          "sample_last_post": "2026-08-08T10:11:56+00:00"
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": null,
+      "verdict": "FLAG",
+      "fails": [],
+      "flags": [
+        "supergroup, not a broadcast channel"
+      ],
+      "ruling": "EXCLUDED — EXCLUDED as a supergroup (day-2 sitting): broadcast=false, megagroup=true, 197.25/week of chat traffic, 8,045 subscribers. Its LINKED object is a broadcast channel of the same town — «Оголошення. Karlivka Live🇺🇦», @KarlivkaLive — which the operator sent to the gate as «Дозаявка №9»: the canon had taken the chat's handle",
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@PirOperative",
+      "bucket": "city",
+      "checked_at": "2026-08-08T10:12:30+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "🔻Пирятин Оперативний",
+        "username": "PirOperative",
+        "subscribers": 5250,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 106,
+          "posts_per_week": 26.5,
+          "last_post": "2026-08-07T17:36:35+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 104,
+          "n_with_letters": 104,
+          "n_cyrillic": 104,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "other": 0.01,
+            "ru": 0.01,
+            "ua": 0.98
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 1440420435,
+          "title": "💬 ЧАТ | ПИРЯТИН",
+          "username": "Piryatin4AT",
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 49,
+          "share_with_comments": 0.59,
+          "median_comments": 1,
+          "sample_first_post": "2026-07-27T08:17:23+00:00",
+          "sample_last_post": "2026-08-07T17:36:35+00:00"
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": null,
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": "CITY FEED — POSTS-ONLY by the standing ruling (canon 'Дозаявка №3', operator 2026-08-08): a city feed enters posts-only, comments_enabled false, and its discussion group is NOT joined until 5c2 rules on a category filter for threads — without one a city chat's whole traffic lands in a paid inference queue. 11 of the 16 do have a group; that is why the gate holds them in the `city` bucket, which measures a group without asserting one either way.",
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@dikankaa",
+      "bucket": "city",
+      "checked_at": "2026-08-08T10:12:33+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "диканка :]",
+        "username": "dikankaa",
+        "subscribers": 3464,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 30,
+          "posts_per_week": 7.5,
+          "last_post": "2026-08-05T20:47:10+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 29,
+          "n_with_letters": 29,
+          "n_cyrillic": 27,
+          "cyrillic_share": 0.93,
+          "decisive": true,
+          "detect_mix": {
+            "en": 0.07,
+            "other": 0.24,
+            "ru": 0.69
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 1862930033,
+          "title": "диканка :] чат",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 32,
+          "share_with_comments": 0.88,
+          "median_comments": 8,
+          "sample_first_post": "2026-07-08T15:33:37+00:00",
+          "sample_last_post": "2026-08-05T20:47:10+00:00"
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": null,
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": "CITY FEED — POSTS-ONLY by the standing ruling (canon 'Дозаявка №3', operator 2026-08-08): a city feed enters posts-only, comments_enabled false, and its discussion group is NOT joined until 5c2 rules on a category filter for threads — without one a city chat's whole traffic lands in a paid inference queue. 11 of the 16 do have a group; that is why the gate holds them in the `city` bucket, which measures a group without asserting one either way.",
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@zinkivnews",
+      "bucket": "city",
+      "checked_at": "2026-08-08T10:12:35+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Зіньків Новини",
+        "username": "zinkivnews",
+        "subscribers": 3422,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 9,
+          "posts_per_week": 2.25,
+          "last_post": "2026-07-31T07:20:01+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 9,
+          "n_with_letters": 9,
+          "n_cyrillic": 9,
+          "cyrillic_share": 1.0,
+          "decisive": false,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 1686617042,
+          "title": "Зіньків Чат",
+          "username": "zinkivchat",
+          "megagroup": true,
+          "min": false,
+          "join_request": true,
+          "join_to_send": true,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": false,
+          "closed_because": [
+            "join needs admin approval"
+          ]
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 35,
+          "share_with_comments": 0.26,
+          "median_comments": 0,
+          "sample_first_post": "2026-05-06T15:45:01+00:00",
+          "sample_last_post": "2026-07-31T07:20:01+00:00"
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": null,
+      "verdict": "FLAG",
+      "fails": [],
+      "flags": [
+        "discussion group is not open — join needs admin approval"
+      ],
+      "ruling": "CITY FEED — POSTS-ONLY by the standing ruling (canon 'Дозаявка №3', operator 2026-08-08): a city feed enters posts-only, comments_enabled false, and its discussion group is NOT joined until 5c2 rules on a category filter for threads — without one a city chat's whole traffic lands in a paid inference queue. 11 of the 16 do have a group; that is why the gate holds them in the `city` bucket, which measures a group without asserting one either way. FLAG CLEARED — same shape: «Зіньків Чат» admits by approval, and the city rule does not ask for it. 3,422 subscribers, 2.25 posts/week, a broadcast channel",
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@LHVC_info",
+      "bucket": "city",
+      "checked_at": "2026-08-08T10:12:38+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Лохвиця.info",
+        "username": "LHVC_info",
+        "subscribers": 2603,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 1,
+          "posts_per_week": 0.25,
+          "last_post": "2026-07-20T10:17:18+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 1,
+          "n_with_letters": 1,
+          "n_cyrillic": 1,
+          "cyrillic_share": 1.0,
+          "decisive": false,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 2316862198,
+          "title": "Лохвиця.info Чат",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 49,
+          "share_with_comments": 0.39,
+          "median_comments": 0,
+          "sample_first_post": "2025-08-26T06:36:55+00:00",
+          "sample_last_post": "2026-07-20T10:17:18+00:00"
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": null,
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": "CITY FEED — POSTS-ONLY by the standing ruling (canon 'Дозаявка №3', operator 2026-08-08): a city feed enters posts-only, comments_enabled false, and its discussion group is NOT joined until 5c2 rules on a category filter for threads — without one a city chat's whole traffic lands in a paid inference queue. 11 of the 16 do have a group; that is why the gate holds them in the `city` bucket, which measures a group without asserting one either way.",
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@forainfo",
+      "bucket": "late",
+      "checked_at": "2026-08-08T10:12:56+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Фора",
+        "username": "foraINFO",
+        "subscribers": 7533,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 16,
+          "posts_per_week": 4.0,
+          "last_post": "2026-08-08T08:14:36+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 16,
+          "n_with_letters": 16,
+          "n_cyrillic": 16,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": null,
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 41,
+          "share_with_comments": 0.0,
+          "median_comments": 0,
+          "sample_first_post": "2026-06-05T06:58:55+00:00",
+          "sample_last_post": "2026-08-08T08:14:36+00:00"
+        },
+        "capability_verdict": "posts-only"
+      },
+      "prior_5a1": null,
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": "LATE ADDITION — national chain Фора (Fozzy Group), retail_official (canon 'Дозаявка №5'); PASS with no discussion group → posts. PASS with an open discussion group → comments bucket and the joins list; PASS without one → posts-only; FAIL or FLAG → stop and report before any further action on it.",
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@ekomarket_shop",
+      "bucket": "late",
+      "checked_at": "2026-08-08T10:12:58+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "ЕКО Маркет",
+        "username": "ekomarket_shop",
+        "subscribers": 1346,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 12,
+          "posts_per_week": 3.0,
+          "last_post": "2026-08-07T07:18:50+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 12,
+          "n_with_letters": 12,
+          "n_cyrillic": 12,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": null,
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 47,
+          "share_with_comments": 0.0,
+          "median_comments": 0,
+          "sample_first_post": "2026-04-17T09:53:43+00:00",
+          "sample_last_post": "2026-08-07T07:18:50+00:00"
+        },
+        "capability_verdict": "posts-only"
+      },
+      "prior_5a1": null,
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": "LATE ADDITION — national chain ЕКО Маркет, retail_official (canon 'Дозаявка №5'); PASS with no discussion group → posts. PASS with an open discussion group → comments bucket and the joins list; PASS without one → posts-only; FAIL or FLAG → stop and report before any further action on it.",
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@tadaua",
+      "bucket": "late",
+      "checked_at": "2026-08-08T10:13:01+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "TA-DA!",
+        "username": "tadaua",
+        "subscribers": 71,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 0,
+          "n_with_letters": 0,
+          "n_cyrillic": 0,
+          "cyrillic_share": null,
+          "decisive": false,
+          "detect_mix": {}
+        },
+        "discussion_group": null,
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 3,
+          "share_with_comments": 0.0,
+          "median_comments": 0,
+          "sample_first_post": "2024-12-19T15:35:00+00:00",
+          "sample_last_post": "2025-01-02T09:23:29+00:00"
+        },
+        "capability_verdict": "posts-only"
+      },
+      "prior_5a1": null,
+      "verdict": "FAIL",
+      "fails": [
+        "dead against its bucket — no posts in 28 days and no discussion group"
+      ],
+      "flags": [],
+      "ruling": "EXCLUDED — EXCLUDED as dead (day-2 sitting): 71 subscribers and three posts in its whole history, the last 2025-01-02 — nineteen months of silence, and no discussion group. Same class as @akcii_skidki_plt, excluded 07.08. It was the team lead's own suggestion in «Дозаявка №5», and the gate is what measured it",
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@tvorcha_matusyua",
+      "bucket": "late",
+      "checked_at": "2026-08-08T10:13:25+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Творча Матуся | Розвиток дитини",
+        "username": "tvorcha_matusyua",
+        "subscribers": 45396,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 111,
+          "posts_per_week": 27.75,
+          "last_post": "2026-08-08T10:07:16+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 111,
+          "n_with_letters": 111,
+          "n_cyrillic": 111,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "other": 0.05,
+            "ua": 0.95
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 1646653582,
+          "title": "Чат 💁🏻‍♀️ Творча Матуся",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": true,
+          "join_to_send": true,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": false,
+          "closed_because": [
+            "join needs admin approval"
+          ]
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 26,
+          "share_with_comments": 0.0,
+          "median_comments": 0.0,
+          "sample_first_post": "2026-08-03T17:16:21+00:00",
+          "sample_last_post": "2026-08-08T10:07:16+00:00"
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": null,
+      "verdict": "FLAG",
+      "fails": [],
+      "flags": [
+        "discussion group is not open — join needs admin approval"
+      ],
+      "ruling": "LATE ADDITION — harvest candidate Творча Матуся (canon 'Дозаявка №8', ~45.4k); PASS with no discussion group → posts. PASS with an open discussion group → comments bucket and the joins list; PASS without one → posts-only; FAIL or FLAG → stop and report before any further action on it. FLAG CLEARED — LATE_RULE already answers a closed group — «PASS without an open one → posts-only» — so the flag decides nothing the rule had not decided. 45,396 subscribers, 27.75 posts/week, ua 0.95",
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@mamaiagolodniy",
+      "bucket": "late",
+      "checked_at": "2026-08-08T10:13:28+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Мама, я Голодний😋",
+        "username": "mamaiagolodniy",
+        "subscribers": 35757,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 5,
+          "posts_per_week": 1.25,
+          "last_post": "2026-08-01T08:22:22+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 5,
+          "n_with_letters": 5,
+          "n_cyrillic": 5,
+          "cyrillic_share": 1.0,
+          "decisive": false,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": null,
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 49,
+          "share_with_comments": 0.0,
+          "median_comments": 0,
+          "sample_first_post": "2026-02-10T06:05:00+00:00",
+          "sample_last_post": "2026-08-01T08:22:22+00:00"
+        },
+        "capability_verdict": "posts-only"
+      },
+      "prior_5a1": null,
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": "LATE ADDITION — harvest candidate «Мама, я Голодний» (canon 'Дозаявка №8', ~35.8k); PASS with no discussion group → posts. PASS with an open discussion group → comments bucket and the joins list; PASS without one → posts-only; FAIL or FLAG → stop and report before any further action on it.",
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@educationwithloven",
+      "bucket": "late",
+      "checked_at": "2026-08-08T10:13:41+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "ВИХОВАННЯ З ЛЮБОВ'Ю💕",
+        "username": "educationwithloven",
+        "subscribers": 31490,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 265,
+          "posts_per_week": 66.25,
+          "last_post": "2026-08-08T09:12:38+00:00",
+          "window_days": 28,
+          "window_truncated": true
+        },
+        "language": {
+          "n_texts": 244,
+          "n_with_letters": 242,
+          "n_cyrillic": 242,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "other": 0.02,
+            "ua": 0.98
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 1578428307,
+          "title": "ВИХОВАННЯ З ЛЮБОВ'Ю 💕",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": true,
+          "join_to_send": true,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": false,
+          "closed_because": [
+            "join needs admin approval"
+          ]
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 12,
+          "share_with_comments": 0.08,
+          "median_comments": 0,
+          "sample_first_post": "2026-08-08T07:33:12+00:00",
+          "sample_last_post": "2026-08-08T09:12:38+00:00"
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": null,
+      "verdict": "FLAG",
+      "fails": [],
+      "flags": [
+        "discussion group is not open — join needs admin approval"
+      ],
+      "ruling": "LATE ADDITION — harvest candidate Виховання з любов'ю (canon 'Дозаявка №8', ~31.5k); PASS with no discussion group → posts. PASS with an open discussion group → comments bucket and the joins list; PASS without one → posts-only; FAIL or FLAG → stop and report before any further action on it. FLAG CLEARED — same rule, same answer: posts-only. 31,490 subscribers, 66.25 posts/week, ua 0.98",
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@pavlushaiyava",
+      "bucket": "late",
+      "checked_at": "2026-08-08T10:13:45+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "✨Павлуша і Ява 🇺🇦",
+        "username": "pavlushaiyava",
+        "subscribers": 45810,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 109,
+          "posts_per_week": 27.25,
+          "last_post": "2026-08-07T17:05:32+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 109,
+          "n_with_letters": 109,
+          "n_cyrillic": 109,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": null,
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 50,
+          "share_with_comments": 0.0,
+          "median_comments": 0,
+          "sample_first_post": "2026-07-25T17:03:49+00:00",
+          "sample_last_post": "2026-08-07T17:05:32+00:00"
+        },
+        "capability_verdict": "posts-only"
+      },
+      "prior_5a1": null,
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": "LATE ADDITION — harvest candidate Павлуша і Ява (canon 'Дозаявка №8', ~45.8k); PASS with no discussion group → posts. PASS with an open discussion group → comments bucket and the joins list; PASS without one → posts-only; FAIL or FLAG → stop and report before any further action on it.",
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@lab_of_childhood",
+      "bucket": "late",
+      "checked_at": "2026-08-08T10:13:48+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "ЛАБОРАТОРІЯ ДИТИНСТВА",
+        "username": "lab_of_childhood",
+        "subscribers": 2484,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 0,
+          "posts_per_week": 0.0,
+          "last_post": null,
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 0,
+          "n_with_letters": 0,
+          "n_cyrillic": 0,
+          "cyrillic_share": null,
+          "decisive": false,
+          "detect_mix": {}
+        },
+        "discussion_group": null,
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 49,
+          "share_with_comments": 0.0,
+          "median_comments": 0,
+          "sample_first_post": "2020-05-10T13:04:05+00:00",
+          "sample_last_post": "2026-06-04T19:08:51+00:00"
+        },
+        "capability_verdict": "posts-only"
+      },
+      "prior_5a1": null,
+      "verdict": "FAIL",
+      "fails": [
+        "dead against its bucket — no posts in 28 days and no discussion group"
+      ],
+      "flags": [],
+      "ruling": "KEPT, bucket changed — FAIL overridden into watch (day-2 sitting, 2026-08-08): 0 posts in the 28-day window is what failed it, but the history is there — 49 sampled posts from 2020-05-10 to 2026-06-04, so it went quiet two months ago rather than being dead. watch is exactly that state: posts collected, the group NEVER joined, revisited when it speaks again. The canon's own words were «живість не підтверджена» and «в резерв, пометка мелкий»",
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@mandziak",
+      "bucket": "late",
+      "checked_at": "2026-08-08T10:13:52+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Мандзяк Віктор",
+        "username": "mandziak",
+        "subscribers": 123985,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 121,
+          "posts_per_week": 30.25,
+          "last_post": "2026-08-07T21:30:33+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 120,
+          "n_with_letters": 120,
+          "n_cyrillic": 120,
+          "cyrillic_share": 1.0,
+          "decisive": true,
+          "detect_mix": {
+            "other": 0.03,
+            "ua": 0.97
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 1834041310,
+          "title": "Мандзяк Віктор Chat",
+          "username": null,
+          "megagroup": true,
+          "min": false,
+          "join_request": false,
+          "join_to_send": false,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": true,
+          "closed_because": []
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 50,
+          "share_with_comments": 0.76,
+          "median_comments": 4,
+          "sample_first_post": "2026-07-31T21:07:44+00:00",
+          "sample_last_post": "2026-08-07T21:30:33+00:00"
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": null,
+      "verdict": "PASS",
+      "fails": [],
+      "flags": [],
+      "ruling": "LATE ADDITION — harvest candidate Мандзяк Віктор (canon 'Дозаявка №8', ~123.9k); PASS with an open discussion group → comments. PASS with an open discussion group → comments bucket and the joins list; PASS without one → posts-only; FAIL or FLAG → stop and report before any further action on it.",
+      "error": null,
+      "suggestions": null
+    },
+    {
+      "handle": "@KarlivkaLive",
+      "bucket": "city",
+      "checked_at": "2026-08-08T10:48:06+00:00",
+      "checks": {
+        "resolved": true,
+        "title": "Оголошення. Karlivka Live🇺🇦",
+        "username": "KarlivkaLive",
+        "subscribers": 539,
+        "telegram_verified": false,
+        "broadcast": true,
+        "megagroup": false,
+        "scam": false,
+        "fake": false,
+        "liveness": {
+          "n_posts": 12,
+          "posts_per_week": 3.0,
+          "last_post": "2026-08-08T08:32:36+00:00",
+          "window_days": 28,
+          "window_truncated": false
+        },
+        "language": {
+          "n_texts": 9,
+          "n_with_letters": 9,
+          "n_cyrillic": 9,
+          "cyrillic_share": 1.0,
+          "decisive": false,
+          "detect_mix": {
+            "ua": 1.0
+          }
+        },
+        "discussion_group": {
+          "present": true,
+          "read": true,
+          "id": 1667756323,
+          "title": "Карлівка Live 🇺🇦",
+          "username": "Karlivka_live",
+          "megagroup": true,
+          "min": false,
+          "join_request": true,
+          "join_to_send": true,
+          "restricted": false,
+          "already_member": false,
+          "participants_count": null,
+          "open": false,
+          "closed_because": [
+            "join needs admin approval"
+          ]
+        },
+        "comments": {
+          "post_sample": 50,
+          "n_posts_sampled": 20,
+          "share_with_comments": 0.05,
+          "median_comments": 0.0,
+          "sample_first_post": "2023-05-24T17:54:33+00:00",
+          "sample_last_post": "2026-08-08T08:32:36+00:00"
+        },
+        "capability_verdict": "usable"
+      },
+      "prior_5a1": null,
+      "verdict": "FLAG",
+      "fails": [],
+      "flags": [
+        "discussion group is not open — join needs admin approval"
+      ],
+      "ruling": "CITY FEED — POSTS-ONLY by the standing ruling (canon 'Дозаявка №3', operator 2026-08-08): a city feed enters posts-only, comments_enabled false, and its discussion group is NOT joined until 5c2 rules on a category filter for threads — without one a city chat's whole traffic lands in a paid inference queue. 11 of the 16 do have a group; that is why the gate holds them in the `city` bucket, which measures a group without asserting one either way. FLAG CLEARED — same shape as the two city feeds above, and its closed group IS the excluded @Karlivka_live supergroup — so the flag is raised by the very thing the ruling threw out. Live and Ukrainian: 3.0 posts/week, last post 2026-08-08, ua 1.00. The cost of the swap is recorded with it rather than after it: 539 subscribers against the chat's 8,045, so the town's audience stayed in the chat and this covers about a fifteenth of what left. «Карлівка покрыта» must not be read off this row",
+      "error": null,
+      "suggestions": null
     }
   ],
   "summary": {
-    "n": 64,
-    "PASS": 55,
-    "FAIL": 2,
-    "FLAG": 7,
+    "n": 90,
+    "PASS": 71,
+    "FAIL": 4,
+    "FLAG": 15,
     "ERROR": 0,
     "by_bucket": {
       "comments": {
@@ -4416,17 +5981,17 @@
         "ERROR": 0
       },
       "late": {
-        "n": 3,
-        "PASS": 1,
-        "FAIL": 2,
-        "FLAG": 0,
+        "n": 12,
+        "PASS": 6,
+        "FAIL": 4,
+        "FLAG": 2,
         "ERROR": 0
       },
       "city": {
-        "n": 0,
-        "PASS": 0,
+        "n": 17,
+        "PASS": 11,
         "FAIL": 0,
-        "FLAG": 0,
+        "FLAG": 6,
         "ERROR": 0
       }
     }
@@ -4434,7 +5999,7 @@
   "registry_written": true,
   "note": "PROMPT-5c1 D1 stops here: every FAIL and FLAG goes to the operator, who rules in chat; the rulings land in each row's `ruling`, and only then is config/registry.yaml written. data/entry_check_report.json (the 2026-07-27 run) is untouched, and the four registry channels are out of this gate's scope.",
   "rulings": {
-    "applied_at": "2026-08-07T17:41:06+00:00",
+    "applied_at": "2026-08-08T10:50:16+00:00",
     "canon": "docs/CHANNELS-launch.md, sections 'Рулинги гейта 5c1 (2026-08-07)' and 'Рулинги, волна 2'",
     "composition": {
       "comments": [
@@ -4445,6 +6010,7 @@
         "@kkondr_fit",
         "@klopotenkofood",
         "@kopiyochka1",
+        "@mandziak",
         "@olgaa_trainer",
         "@polyakova_fitness",
         "@retsepty",
@@ -4455,20 +6021,40 @@
         "@ya_Nenka"
       ],
       "posts": [
+        "@Hadiach_telegram",
+        "@KarlivkaLive",
+        "@LHVC_info",
+        "@PirOperative",
         "@Wellosophy_Lesya",
         "@anastasiiadavydiukfitness",
         "@atb_aktsiyi",
         "@blwbabies",
+        "@dikankaa",
         "@dpssgovua",
+        "@educationwithloven",
+        "@ekomarket_shop",
         "@epicentrk_sale",
+        "@forainfo",
         "@gaid_skobioale",
+        "@globine1",
+        "@gorishnie_plavni1",
         "@konservacia_kulinaria",
         "@korolevakuchni",
+        "@mamaiagolodniy",
         "@mameni_recepti",
         "@marketopt_promo",
         "@maudau",
+        "@mo3ambik",
+        "@myrhorodtown",
+        "@pavlushaiyava",
+        "@piryatingromada",
+        "@poltava_informue",
         "@recepti",
-        "@vylkachannel"
+        "@suspilnepoltava",
+        "@telegraf_kremenchuk",
+        "@tvorcha_matusyua",
+        "@vylkachannel",
+        "@zinkivnews"
       ],
       "watch": [
         "@Evgenija_dutjache_menu",
@@ -4476,10 +6062,12 @@
         "@dutyache_menu",
         "@hydnem_prosto",
         "@itsmamix",
+        "@lab_of_childhood",
         "@skhudnennya"
       ],
       "excluded": [
         "@ATB_FANatik",
+        "@Karlivka_live",
         "@Mambabyua",
         "@Pro_Detyintumama",
         "@akcii_skidki_plt",
@@ -4490,18 +6078,21 @@
         "@intensiv_Mamiev",
         "@katyal55",
         "@kolyastravinsky",
+        "@kremenchug_live",
         "@kuksa2022",
         "@kulinariya_chat_a",
         "@marketopt_official",
         "@netainaya_vecherya",
         "@offspringrus",
         "@polinalykovagv",
+        "@poltava_misto",
         "@prostetsofa",
         "@regina_tatlybaeva",
         "@retsepty10",
         "@retsepty4",
         "@retsepty5",
         "@rezeptmoi",
+        "@tadaua",
         "@tretyakovaele",
         "@uasaler",
         "@viktoria_sshh",
@@ -4511,12 +6102,12 @@
       ]
     },
     "counts": {
-      "registry_before": 41,
-      "comments": 15,
-      "posts": 14,
-      "watch": 6,
-      "excluded": 29,
-      "sources_after": 39
+      "registry_before": 39,
+      "comments": 16,
+      "posts": 34,
+      "watch": 7,
+      "excluded": 33,
+      "sources_after": 61
     },
     "joins_authorised": [
       "@HealthPsycholog",
@@ -4526,6 +6117,7 @@
       "@kkondr_fit",
       "@klopotenkofood",
       "@kopiyochka1",
+      "@mandziak",
       "@olgaa_trainer",
       "@polyakova_fitness",
       "@retsepty",
@@ -4731,20 +6323,20 @@
     }
   },
   "git": {
-    "commit": "789c3522c59a6b6083629bed759c46af003e3dfa",
+    "commit": "cfb3eec3b834e82ddb49721619d739327a33cf94",
     "dirty": [
+      "config/registry.yaml",
       "docs/CHANNELS-launch.md",
-      "docs/STATUS.md",
-      "knowledge/daily_logs/2026-08-07.md",
-      "knowledge/index.md",
+      "results/collect_5c1.json",
+      "results/joins_5c1.jsonl",
       "scripts/apply_gate_rulings_5c1.py",
       "scripts/entry_check.py",
+      "scripts/late_batch_5c1.py",
       "tests/test_entry_gate_5c1.py",
       "tests/test_gate_rulings_5c1.py",
-      "docs/PROMPT-5c1-day2.md",
-      "results/market_screen_5c1.json",
-      "scripts/market_screen_5c1.py",
-      "tests/test_market_screen_5c1.py"
+      "tests/test_late_batch_5c1.py",
+      "scripts/harvest_similar_5c1.py",
+      "tests/test_harvest_similar_5c1.py"
     ]
   }
 }

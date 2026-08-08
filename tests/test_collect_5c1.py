@@ -388,7 +388,8 @@ def test_a_ruling_that_excludes_an_authorised_channel_does_not_break_the_cross_c
 
 def test_the_shipped_record_still_agrees_with_the_shipped_registry():
     """The check that actually fires tomorrow: the live registry and the live rulings, not a
-    fixture. After wave 3 this is 15 authorised, not 21."""
+    fixture. Wave 3 took it from 21 to 15; the day-2 sitting added @mandziak, the only one of
+    «Дозаявка №8»'s six with an open discussion group, so it is 16 now."""
     import sys as _sys
 
     _sys.path.insert(0, str(REPO_ROOT / "src"))
@@ -396,7 +397,8 @@ def test_the_shipped_record_still_agrees_with_the_shipped_registry():
 
     record = json.loads((REPO_ROOT / "results" / "entry_gate_5c1.json").read_text(encoding="utf-8"))
     joins = collect.joinable(_load(REPO_ROOT / "config" / "registry.yaml"), record)
-    assert len(joins) == 15, [h for _, h in joins]
+    assert len(joins) == 16, [h for _, h in joins]
+    assert "@mandziak" in [h for _, h in joins]
 
 
 def test_leaving_a_group_is_refused_inside_the_flood_wait_window(monkeypatch, tmp_path):

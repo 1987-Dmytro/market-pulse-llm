@@ -186,6 +186,11 @@ CANDIDATES = (
     ("@pavlushaiyava", "late"),
     ("@lab_of_childhood", "late"),
     ("@mandziak", "late"),
+    # "Дозаявка №9" (canon, 2026-08-08 morning — the day-2 gate sitting). @Karlivka_live came back
+    # a supergroup and went out with the other two, but its LINKED object is a broadcast channel
+    # of the same town: the canon had taken the chat's handle. `city`, like the sixteen, because
+    # it enters under the same posts-only city rule.
+    ("@KarlivkaLive", "city"),
 )
 
 
@@ -198,6 +203,11 @@ async def suggest(client, name: str) -> list[dict]:
             "username": getattr(chat, "username", None),
             "telegram_verified": bool(getattr(chat, "verified", False)),
             "subscribers": getattr(chat, "participants_count", None),
+            # Carried because a search for a REPLACEMENT has to tell a channel from a chat: the
+            # day-2 sitting excluded three "city feeds" that were supergroups, and a search whose
+            # rows cannot say which is which would hand back the same class again.
+            "broadcast": bool(getattr(chat, "broadcast", False)),
+            "megagroup": bool(getattr(chat, "megagroup", False)),
         }
         for chat in found.chats
         if getattr(chat, "username", None)

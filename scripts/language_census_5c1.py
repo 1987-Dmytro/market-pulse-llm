@@ -217,6 +217,15 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", type=Path, default=RECORD, help="where to write the record")
     args = parser.parse_args(argv)
+    if args.out == RECORD and RECORD.exists():
+        raise SystemExit(
+            f"{RECORD.relative_to(REPO_ROOT)} already exists and is the evidence behind wave 3:"
+            " @retsepty5 (ru 1.00 over 139 posts), @retsepty4 (115), @katyal55 (36) and"
+            " @tretyakovaele left the registry on the strength of those rows, so a re-run over"
+            " today's composition writes a table that CANNOT contain them. The census re-derives"
+            " from the windows, but only for sources that are still in the registry — which is"
+            " exactly the half a ruling never cites. Pass --out with another path."
+        )
 
     registered = check_preregistration()
     since = window_since()

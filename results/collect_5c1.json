@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-07T10:43:39+00:00",
+  "generated_at": "2026-08-08T10:55:02+00:00",
   "phase": "5c1",
   "deliverable": "2 — joins and the four-week collection window",
   "contract": "docs/SPEC.md §3.11 (6) ruling 22; docs/PROMPT-5c1.md Deliverable 2",
@@ -10,19 +10,6 @@
     "note": "`since` is fixed by the first run and read back from this record afterwards: a resume days later must collect the same window, not a sliding one."
   },
   "channels": [
-    {
-      "channel": "@tretyakovaele",
-      "source_id": "tretyakovaele",
-      "source_type": "community",
-      "watch": false,
-      "comments_enabled": true,
-      "posts_stored": 1,
-      "posts_first": "2026-07-16T13:52:03+00:00",
-      "posts_last": "2026-07-16T13:52:03+00:00",
-      "comments_stored": 106,
-      "threads_with_comments": 1,
-      "damaged_lines": 0
-    },
     {
       "channel": "@kopiyochka1",
       "source_id": "kopiyochka1",
@@ -63,19 +50,6 @@
       "damaged_lines": 0
     },
     {
-      "channel": "@uasaler",
-      "source_id": "uasaler",
-      "source_type": "aggregator",
-      "watch": false,
-      "comments_enabled": true,
-      "posts_stored": 30,
-      "posts_first": "2026-07-10T22:02:09+00:00",
-      "posts_last": "2026-08-07T09:51:52+00:00",
-      "comments_stored": 0,
-      "threads_with_comments": 0,
-      "damaged_lines": 0
-    },
-    {
       "channel": "@retsepty",
       "source_id": "retsepty",
       "source_type": "community",
@@ -84,19 +58,6 @@
       "posts_stored": 91,
       "posts_first": "2026-07-11T05:02:11+00:00",
       "posts_last": "2026-08-07T10:00:36+00:00",
-      "comments_stored": 0,
-      "threads_with_comments": 0,
-      "damaged_lines": 0
-    },
-    {
-      "channel": "@katyal55",
-      "source_id": "katyal55",
-      "source_type": "community",
-      "watch": false,
-      "comments_enabled": true,
-      "posts_stored": 38,
-      "posts_first": "2026-07-13T05:46:36+00:00",
-      "posts_last": "2026-08-07T07:22:33+00:00",
       "comments_stored": 0,
       "threads_with_comments": 0,
       "damaged_lines": 0
@@ -154,32 +115,6 @@
       "damaged_lines": 0
     },
     {
-      "channel": "@znishkom",
-      "source_id": "znishkom",
-      "source_type": "aggregator",
-      "watch": false,
-      "comments_enabled": true,
-      "posts_stored": 193,
-      "posts_first": "2026-07-10T13:33:59+00:00",
-      "posts_last": "2026-08-06T19:03:14+00:00",
-      "comments_stored": 0,
-      "threads_with_comments": 0,
-      "damaged_lines": 0
-    },
-    {
-      "channel": "@kuksa2022",
-      "source_id": "kuksa2022",
-      "source_type": "community",
-      "watch": false,
-      "comments_enabled": true,
-      "posts_stored": 2,
-      "posts_first": "2026-08-04T14:32:50+00:00",
-      "posts_last": "2026-08-05T10:30:45+00:00",
-      "comments_stored": 0,
-      "threads_with_comments": 0,
-      "damaged_lines": 0
-    },
-    {
       "channel": "@HealthPsycholog",
       "source_id": "healthpsycholog",
       "source_type": "community",
@@ -193,32 +128,6 @@
       "damaged_lines": 0
     },
     {
-      "channel": "@ATB_FANatik",
-      "source_id": "atb_fanatik",
-      "source_type": "aggregator",
-      "watch": false,
-      "comments_enabled": true,
-      "posts_stored": 18,
-      "posts_first": "2026-07-14T14:45:55+00:00",
-      "posts_last": "2026-08-04T19:23:02+00:00",
-      "comments_stored": 0,
-      "threads_with_comments": 0,
-      "damaged_lines": 0
-    },
-    {
-      "channel": "@offspringrus",
-      "source_id": "offspringrus",
-      "source_type": "community",
-      "watch": false,
-      "comments_enabled": true,
-      "posts_stored": 17,
-      "posts_first": "2026-07-10T11:22:09+00:00",
-      "posts_last": "2026-08-05T11:29:02+00:00",
-      "comments_stored": 0,
-      "threads_with_comments": 0,
-      "damaged_lines": 0
-    },
-    {
       "channel": "@sashafitnesslife",
       "source_id": "sashafitnesslife",
       "source_type": "community",
@@ -227,19 +136,6 @@
       "posts_stored": 20,
       "posts_first": "2026-07-11T06:15:14+00:00",
       "posts_last": "2026-08-06T14:40:20+00:00",
-      "comments_stored": 0,
-      "threads_with_comments": 0,
-      "damaged_lines": 0
-    },
-    {
-      "channel": "@Pro_Detyintumama",
-      "source_id": "pro_detyintumama",
-      "source_type": "community",
-      "watch": false,
-      "comments_enabled": true,
-      "posts_stored": 4,
-      "posts_first": "2026-08-03T10:53:04+00:00",
-      "posts_last": "2026-08-05T12:07:57+00:00",
       "comments_stored": 0,
       "threads_with_comments": 0,
       "damaged_lines": 0
@@ -266,19 +162,6 @@
       "posts_stored": 10,
       "posts_first": "2026-07-22T19:42:40+00:00",
       "posts_last": "2026-08-06T11:15:28+00:00",
-      "comments_stored": 0,
-      "threads_with_comments": 0,
-      "damaged_lines": 0
-    },
-    {
-      "channel": "@baby_broccoli_club",
-      "source_id": "baby_broccoli_club",
-      "source_type": "community",
-      "watch": false,
-      "comments_enabled": true,
-      "posts_stored": 1,
-      "posts_first": "2026-07-17T16:19:54+00:00",
-      "posts_last": "2026-07-17T16:19:54+00:00",
       "comments_stored": 0,
       "threads_with_comments": 0,
       "damaged_lines": 0
@@ -336,32 +219,6 @@
       "damaged_lines": 0
     },
     {
-      "channel": "@rezeptmoi",
-      "source_id": "rezeptmoi",
-      "source_type": "community",
-      "watch": false,
-      "comments_enabled": true,
-      "posts_stored": 2,
-      "posts_first": "2026-07-20T12:35:47+00:00",
-      "posts_last": "2026-07-20T12:37:59+00:00",
-      "comments_stored": 0,
-      "threads_with_comments": 0,
-      "damaged_lines": 0
-    },
-    {
-      "channel": "@discountua1",
-      "source_id": "discountua1",
-      "source_type": "community",
-      "watch": false,
-      "comments_enabled": true,
-      "posts_stored": 19,
-      "posts_first": "2026-07-15T05:03:03+00:00",
-      "posts_last": "2026-07-29T06:48:33+00:00",
-      "comments_stored": 0,
-      "threads_with_comments": 0,
-      "damaged_lines": 0
-    },
-    {
       "channel": "@recepti",
       "source_id": "recepti",
       "source_type": "community",
@@ -383,19 +240,6 @@
       "posts_stored": 253,
       "posts_first": "2026-07-10T11:50:00+00:00",
       "posts_last": "2026-08-07T08:50:13+00:00",
-      "comments_stored": 0,
-      "threads_with_comments": 0,
-      "damaged_lines": 0
-    },
-    {
-      "channel": "@retsepty4",
-      "source_id": "retsepty4",
-      "source_type": "community",
-      "watch": false,
-      "comments_enabled": false,
-      "posts_stored": 115,
-      "posts_first": "2026-07-10T13:59:01+00:00",
-      "posts_last": "2026-08-07T08:51:26+00:00",
       "comments_stored": 0,
       "threads_with_comments": 0,
       "damaged_lines": 0
@@ -427,32 +271,6 @@
       "damaged_lines": 0
     },
     {
-      "channel": "@intensiv_Mamiev",
-      "source_id": "intensiv_mamiev",
-      "source_type": "community",
-      "watch": false,
-      "comments_enabled": false,
-      "posts_stored": 1,
-      "posts_first": "2026-07-24T07:12:46+00:00",
-      "posts_last": "2026-07-24T07:12:46+00:00",
-      "comments_stored": 0,
-      "threads_with_comments": 0,
-      "damaged_lines": 0
-    },
-    {
-      "channel": "@retsepty5",
-      "source_id": "retsepty5",
-      "source_type": "community",
-      "watch": false,
-      "comments_enabled": false,
-      "posts_stored": 140,
-      "posts_first": "2026-07-10T12:13:28+00:00",
-      "posts_last": "2026-08-07T09:13:50+00:00",
-      "comments_stored": 0,
-      "threads_with_comments": 0,
-      "damaged_lines": 0
-    },
-    {
       "channel": "@blwbabies",
       "source_id": "blwbabies",
       "source_type": "community",
@@ -474,19 +292,6 @@
       "posts_stored": 27,
       "posts_first": "2026-07-11T16:08:01+00:00",
       "posts_last": "2026-08-05T17:39:01+00:00",
-      "comments_stored": 0,
-      "threads_with_comments": 0,
-      "damaged_lines": 0
-    },
-    {
-      "channel": "@whitecode_zny",
-      "source_id": "whitecode_zny",
-      "source_type": "aggregator",
-      "watch": false,
-      "comments_enabled": false,
-      "posts_stored": 25,
-      "posts_first": "2026-07-13T10:09:32+00:00",
-      "posts_last": "2026-08-06T09:33:14+00:00",
       "comments_stored": 0,
       "threads_with_comments": 0,
       "damaged_lines": 0
@@ -583,73 +388,8 @@
       "damaged_lines": 0
     },
     {
-      "channel": "@regina_tatlybaeva",
-      "source_id": "regina_tatlybaeva",
-      "source_type": "community",
-      "watch": true,
-      "comments_enabled": true,
-      "posts_stored": 0,
-      "posts_first": null,
-      "posts_last": null,
-      "comments_stored": 0,
-      "threads_with_comments": 0,
-      "damaged_lines": 0
-    },
-    {
-      "channel": "@netainaya_vecherya",
-      "source_id": "netainaya_vecherya",
-      "source_type": "community",
-      "watch": true,
-      "comments_enabled": true,
-      "posts_stored": 0,
-      "posts_first": null,
-      "posts_last": null,
-      "comments_stored": 0,
-      "threads_with_comments": 0,
-      "damaged_lines": 0
-    },
-    {
-      "channel": "@retsepty10",
-      "source_id": "retsepty10",
-      "source_type": "community",
-      "watch": true,
-      "comments_enabled": true,
-      "posts_stored": 0,
-      "posts_first": null,
-      "posts_last": null,
-      "comments_stored": 0,
-      "threads_with_comments": 0,
-      "damaged_lines": 0
-    },
-    {
       "channel": "@skhudnennya",
       "source_id": "skhudnennya",
-      "source_type": "community",
-      "watch": true,
-      "comments_enabled": true,
-      "posts_stored": 0,
-      "posts_first": null,
-      "posts_last": null,
-      "comments_stored": 0,
-      "threads_with_comments": 0,
-      "damaged_lines": 0
-    },
-    {
-      "channel": "@prostetsofa",
-      "source_id": "prostetsofa",
-      "source_type": "community",
-      "watch": true,
-      "comments_enabled": true,
-      "posts_stored": 0,
-      "posts_first": null,
-      "posts_last": null,
-      "comments_stored": 0,
-      "threads_with_comments": 0,
-      "damaged_lines": 0
-    },
-    {
-      "channel": "@viktoria_sshh",
-      "source_id": "viktoria_sshh",
       "source_type": "community",
       "watch": true,
       "comments_enabled": true,
@@ -700,19 +440,6 @@
       "damaged_lines": 0
     },
     {
-      "channel": "@polinalykovagv",
-      "source_id": "polinalykovagv",
-      "source_type": "community",
-      "watch": true,
-      "comments_enabled": true,
-      "posts_stored": 0,
-      "posts_first": null,
-      "posts_last": null,
-      "comments_stored": 0,
-      "threads_with_comments": 0,
-      "damaged_lines": 0
-    },
-    {
       "channel": "@Evgenija_dutjache_menu",
       "source_id": "evgenija_dutjache_menu",
       "source_type": "community",
@@ -726,35 +453,9 @@
       "damaged_lines": 0
     },
     {
-      "channel": "@chekh_yevheniia1982",
-      "source_id": "chekh_yevheniia1982",
-      "source_type": "community",
-      "watch": true,
-      "comments_enabled": true,
-      "posts_stored": 0,
-      "posts_first": null,
-      "posts_last": null,
-      "comments_stored": 0,
-      "threads_with_comments": 0,
-      "damaged_lines": 0
-    },
-    {
-      "channel": "@cozymotherhood",
-      "source_id": "cozymotherhood",
-      "source_type": "community",
-      "watch": true,
-      "comments_enabled": true,
-      "posts_stored": 0,
-      "posts_first": null,
-      "posts_last": null,
-      "comments_stored": 0,
-      "threads_with_comments": 0,
-      "damaged_lines": 0
-    },
-    {
       "channel": "@marketopt_promo",
       "source_id": "marketopt_promo",
-      "source_type": "community",
+      "source_type": "official_retail",
       "watch": false,
       "comments_enabled": false,
       "posts_stored": 12,
@@ -763,19 +464,310 @@
       "comments_stored": 0,
       "threads_with_comments": 0,
       "damaged_lines": 0
+    },
+    {
+      "channel": "@mo3ambik",
+      "source_id": "mo3ambik",
+      "source_type": "community",
+      "watch": false,
+      "comments_enabled": false,
+      "posts_stored": 197,
+      "posts_first": "2026-07-10T10:34:40+00:00",
+      "posts_last": "2026-08-08T10:34:02+00:00",
+      "comments_stored": 0,
+      "threads_with_comments": 0,
+      "damaged_lines": 0
+    },
+    {
+      "channel": "@poltava_informue",
+      "source_id": "poltava_informue",
+      "source_type": "community",
+      "watch": false,
+      "comments_enabled": false,
+      "posts_stored": 1316,
+      "posts_first": "2026-07-10T11:52:35+00:00",
+      "posts_last": "2026-08-08T10:34:10+00:00",
+      "comments_stored": 0,
+      "threads_with_comments": 0,
+      "damaged_lines": 0
+    },
+    {
+      "channel": "@suspilnepoltava",
+      "source_id": "suspilnepoltava",
+      "source_type": "community",
+      "watch": false,
+      "comments_enabled": false,
+      "posts_stored": 534,
+      "posts_first": "2026-07-10T11:09:55+00:00",
+      "posts_last": "2026-08-08T10:52:35+00:00",
+      "comments_stored": 0,
+      "threads_with_comments": 0,
+      "damaged_lines": 0
+    },
+    {
+      "channel": "@telegraf_kremenchuk",
+      "source_id": "telegraf_kremenchuk",
+      "source_type": "community",
+      "watch": false,
+      "comments_enabled": false,
+      "posts_stored": 634,
+      "posts_first": "2026-07-10T11:21:04+00:00",
+      "posts_last": "2026-08-08T09:43:01+00:00",
+      "comments_stored": 0,
+      "threads_with_comments": 0,
+      "damaged_lines": 0
+    },
+    {
+      "channel": "@gorishnie_plavni1",
+      "source_id": "gorishnie_plavni1",
+      "source_type": "community",
+      "watch": false,
+      "comments_enabled": false,
+      "posts_stored": 568,
+      "posts_first": "2026-07-10T10:41:01+00:00",
+      "posts_last": "2026-08-08T10:50:01+00:00",
+      "comments_stored": 0,
+      "threads_with_comments": 0,
+      "damaged_lines": 0
+    },
+    {
+      "channel": "@myrhorodtown",
+      "source_id": "myrhorodtown",
+      "source_type": "community",
+      "watch": false,
+      "comments_enabled": false,
+      "posts_stored": 273,
+      "posts_first": "2026-07-10T11:35:05+00:00",
+      "posts_last": "2026-08-08T10:34:24+00:00",
+      "comments_stored": 0,
+      "threads_with_comments": 0,
+      "damaged_lines": 0
+    },
+    {
+      "channel": "@Hadiach_telegram",
+      "source_id": "hadiach_telegram",
+      "source_type": "community",
+      "watch": false,
+      "comments_enabled": false,
+      "posts_stored": 145,
+      "posts_first": "2026-07-10T13:53:31+00:00",
+      "posts_last": "2026-08-07T17:38:06+00:00",
+      "comments_stored": 0,
+      "threads_with_comments": 0,
+      "damaged_lines": 0
+    },
+    {
+      "channel": "@globine1",
+      "source_id": "globine1",
+      "source_type": "community",
+      "watch": false,
+      "comments_enabled": false,
+      "posts_stored": 103,
+      "posts_first": "2026-07-10T11:34:53+00:00",
+      "posts_last": "2026-08-07T13:04:06+00:00",
+      "comments_stored": 0,
+      "threads_with_comments": 0,
+      "damaged_lines": 0
+    },
+    {
+      "channel": "@piryatingromada",
+      "source_id": "piryatingromada",
+      "source_type": "community",
+      "watch": false,
+      "comments_enabled": false,
+      "posts_stored": 70,
+      "posts_first": "2026-07-10T15:41:34+00:00",
+      "posts_last": "2026-08-07T18:19:16+00:00",
+      "comments_stored": 0,
+      "threads_with_comments": 0,
+      "damaged_lines": 0
+    },
+    {
+      "channel": "@PirOperative",
+      "source_id": "piroperative",
+      "source_type": "community",
+      "watch": false,
+      "comments_enabled": false,
+      "posts_stored": 106,
+      "posts_first": "2026-07-11T20:00:25+00:00",
+      "posts_last": "2026-08-07T17:36:35+00:00",
+      "comments_stored": 0,
+      "threads_with_comments": 0,
+      "damaged_lines": 0
+    },
+    {
+      "channel": "@dikankaa",
+      "source_id": "dikankaa",
+      "source_type": "community",
+      "watch": false,
+      "comments_enabled": false,
+      "posts_stored": 30,
+      "posts_first": "2026-07-14T10:52:11+00:00",
+      "posts_last": "2026-08-05T20:47:10+00:00",
+      "comments_stored": 0,
+      "threads_with_comments": 0,
+      "damaged_lines": 0
+    },
+    {
+      "channel": "@zinkivnews",
+      "source_id": "zinkivnews",
+      "source_type": "community",
+      "watch": false,
+      "comments_enabled": false,
+      "posts_stored": 9,
+      "posts_first": "2026-07-13T16:17:10+00:00",
+      "posts_last": "2026-07-31T07:20:01+00:00",
+      "comments_stored": 0,
+      "threads_with_comments": 0,
+      "damaged_lines": 0
+    },
+    {
+      "channel": "@LHVC_info",
+      "source_id": "lhvc_info",
+      "source_type": "community",
+      "watch": false,
+      "comments_enabled": false,
+      "posts_stored": 1,
+      "posts_first": "2026-07-20T10:17:18+00:00",
+      "posts_last": "2026-07-20T10:17:18+00:00",
+      "comments_stored": 0,
+      "threads_with_comments": 0,
+      "damaged_lines": 0
+    },
+    {
+      "channel": "@forainfo",
+      "source_id": "forainfo",
+      "source_type": "official_retail",
+      "watch": false,
+      "comments_enabled": false,
+      "posts_stored": 16,
+      "posts_first": "2026-07-13T06:44:23+00:00",
+      "posts_last": "2026-08-08T08:14:36+00:00",
+      "comments_stored": 0,
+      "threads_with_comments": 0,
+      "damaged_lines": 0
+    },
+    {
+      "channel": "@ekomarket_shop",
+      "source_id": "ekomarket_shop",
+      "source_type": "official_retail",
+      "watch": false,
+      "comments_enabled": false,
+      "posts_stored": 12,
+      "posts_first": "2026-07-16T09:24:31+00:00",
+      "posts_last": "2026-08-07T07:18:50+00:00",
+      "comments_stored": 0,
+      "threads_with_comments": 0,
+      "damaged_lines": 0
+    },
+    {
+      "channel": "@tvorcha_matusyua",
+      "source_id": "tvorcha_matusyua",
+      "source_type": "community",
+      "watch": false,
+      "comments_enabled": false,
+      "posts_stored": 116,
+      "posts_first": "2026-07-10T14:55:01+00:00",
+      "posts_last": "2026-08-08T10:07:16+00:00",
+      "comments_stored": 0,
+      "threads_with_comments": 0,
+      "damaged_lines": 0
+    },
+    {
+      "channel": "@mamaiagolodniy",
+      "source_id": "mamaiagolodniy",
+      "source_type": "community",
+      "watch": false,
+      "comments_enabled": false,
+      "posts_stored": 5,
+      "posts_first": "2026-07-12T16:34:31+00:00",
+      "posts_last": "2026-08-01T08:22:22+00:00",
+      "comments_stored": 0,
+      "threads_with_comments": 0,
+      "damaged_lines": 0
+    },
+    {
+      "channel": "@educationwithloven",
+      "source_id": "educationwithloven",
+      "source_type": "community",
+      "watch": false,
+      "comments_enabled": false,
+      "posts_stored": 426,
+      "posts_first": "2026-07-10T13:37:01+00:00",
+      "posts_last": "2026-08-08T10:31:17+00:00",
+      "comments_stored": 0,
+      "threads_with_comments": 0,
+      "damaged_lines": 0
+    },
+    {
+      "channel": "@pavlushaiyava",
+      "source_id": "pavlushaiyava",
+      "source_type": "community",
+      "watch": false,
+      "comments_enabled": false,
+      "posts_stored": 115,
+      "posts_first": "2026-07-10T11:01:30+00:00",
+      "posts_last": "2026-08-07T17:05:32+00:00",
+      "comments_stored": 0,
+      "threads_with_comments": 0,
+      "damaged_lines": 0
+    },
+    {
+      "channel": "@lab_of_childhood",
+      "source_id": "lab_of_childhood",
+      "source_type": "community",
+      "watch": true,
+      "comments_enabled": false,
+      "posts_stored": 0,
+      "posts_first": null,
+      "posts_last": null,
+      "comments_stored": 0,
+      "threads_with_comments": 0,
+      "damaged_lines": 0
+    },
+    {
+      "channel": "@mandziak",
+      "source_id": "mandziak",
+      "source_type": "community",
+      "watch": false,
+      "comments_enabled": true,
+      "posts_stored": 123,
+      "posts_first": "2026-07-10T17:59:17+00:00",
+      "posts_last": "2026-08-07T21:30:33+00:00",
+      "comments_stored": 0,
+      "threads_with_comments": 0,
+      "damaged_lines": 0
+    },
+    {
+      "channel": "@KarlivkaLive",
+      "source_id": "karlivkalive",
+      "source_type": "community",
+      "watch": false,
+      "comments_enabled": false,
+      "posts_stored": 12,
+      "posts_first": "2026-07-17T14:21:44+00:00",
+      "posts_last": "2026-08-08T08:32:36+00:00",
+      "comments_stored": 0,
+      "threads_with_comments": 0,
+      "damaged_lines": 0
     }
   ],
   "totals": {
-    "channels": 58,
-    "posts_stored": 2132,
-    "comments_stored": 106,
+    "channels": 57,
+    "posts_stored": 6337,
+    "comments_stored": 0,
     "damaged_lines": 0,
-    "channels_with_posts": 44,
-    "channels_with_comments": 1
+    "channels_with_posts": 50,
+    "channels_with_comments": 0
   },
-  "joins": {},
+  "joins": {
+    "attempted": 1,
+    "landed": 1,
+    "flood_wait_seconds": null
+  },
   "phases_run": [
     "comments",
+    "join",
     "posts"
   ],
   "protected": {
@@ -783,10 +775,20 @@
     "note": "The four original registry channels are out of the gate's scope and their six raw v1 files are refused at channel level, before a record is built."
   },
   "git": {
-    "commit": "f104f91e5b9092e0156db47f1d86514bfca783ce",
+    "commit": "cfb3eec3b834e82ddb49721619d739327a33cf94",
     "dirty": [
-      "knowledge/daily_logs/2026-08-07.md",
-      "knowledge/index.md"
+      "config/registry.yaml",
+      "docs/CHANNELS-launch.md",
+      "results/entry_gate_5c1.json",
+      "results/joins_5c1.jsonl",
+      "scripts/apply_gate_rulings_5c1.py",
+      "scripts/entry_check.py",
+      "scripts/late_batch_5c1.py",
+      "tests/test_entry_gate_5c1.py",
+      "tests/test_gate_rulings_5c1.py",
+      "tests/test_late_batch_5c1.py",
+      "scripts/harvest_similar_5c1.py",
+      "tests/test_harvest_similar_5c1.py"
     ]
   }
 }

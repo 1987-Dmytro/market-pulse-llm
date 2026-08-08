@@ -105,21 +105,61 @@ def test_a_failed_control_makes_the_verdicts_unreportable(tmp_path, monkeypatch)
     assert record["sources"], "the evidence still has to be written down"
 
 
-def test_the_shipped_record_covers_the_live_registry_and_flags_nothing_yet(tmp_path):
-    """Wave 3 removed the RF-market sources, so a clean sweep here is the expected shape — and it
-    is only meaningful BECAUSE the controls fire on the excluded ones. A screen that flagged
-    nothing and had no working control would be indistinguishable from a broken one."""
+def test_the_07_08_record_is_the_pass_over_the_39_and_stays_one():
+    """Wave 3 removed the RF-market sources, so a clean sweep was the expected shape there — and
+    it is only meaningful BECAUSE the controls fire on the excluded ones. That record is a dated
+    measurement of a composition that no longer exists; the live one is the day-2 pass below."""
+    record = json.loads((REPO_ROOT / "results" / "market_screen_5c1.json").read_text("utf-8"))
+    assert record["summary"]["n"] == 39
+    assert record["summary"]["by_verdict"].get("RF_FLAG", 0) == 0
+
+
+def test_the_day_2_record_covers_the_live_registry_and_the_two_flags_are_war_reporting():
+    """The `regional` segment brought a failure mode the screen was never asked about: a Ukrainian
+    city feed REPORTING on an RF target names an RF retailer and an RF city in one Ukrainian
+    sentence. Both flags are that, and the ratio is what says so — 947 UA-evidence posts against
+    one mention. Report-only by design; the reading is the operator's, and this pins the evidence
+    so a later "the screen flagged two regionals" cannot be read as "two RF channels entered".
+    """
     sys.path.insert(0, str(REPO_ROOT / "src"))
     from market_pulse.registry import load_registry
 
-    record = json.loads((REPO_ROOT / "results" / "market_screen_5c1.json").read_text("utf-8"))
+    record = json.loads((REPO_ROOT / "results" / "market_screen_5c1_day2.json").read_text("utf-8"))
     live = {
         handle
         for s in load_registry(REPO_ROOT / "config" / "registry.yaml").sources
         for handle in s.telegram_channels
     }
     assert {row["handle"] for row in record["sources"]} == live
-    assert record["summary"]["by_verdict"].get("RF_FLAG", 0) == 0
+    assert record["verdicts_reportable"] is True
+
+    flagged = {row["handle"]: row for row in record["sources"] if row["verdict"] == "RF_FLAG"}
+    assert set(flagged) == {"@myrhorodtown", "@poltava_informue"}, sorted(flagged)
+    # The record is a dated artifact, so the counts are pinned rather than bounded: this is what
+    # was measured, and a reader six weeks from now should not have to recompute it to believe it.
+    assert (flagged["@myrhorodtown"]["posts_with_rf_evidence"], 273) == (2, 273)
+    assert flagged["@myrhorodtown"]["posts_with_ua_evidence"] == 50
+    assert (flagged["@poltava_informue"]["posts_with_rf_evidence"], 1316) == (1, 1316)
+    assert flagged["@poltava_informue"]["posts_with_ua_evidence"] == 947
+    for handle, row in flagged.items():
+        assert row["audience"] == "regional", handle
+        # Every sampled RF signal sits in a Ukrainian sentence about an RF target being hit. The
+        # sample is deduplicated by term, so it need not cover every flagged post — which is
+        # itself why the ratio above is quoted beside it rather than left to the examples.
+        assert all("Wildberries" in ev["line"] for ev in row["rf_evidence"]), handle
+        assert all(
+            "розбомбили" in ev["line"] or "пожежі" in ev["line"] for ev in row["rf_evidence"]
+        )
+
+
+def test_the_screen_refuses_to_overwrite_the_dated_pass(tmp_path):
+    """«RF 0 on the live 39» is quoted out of that file. A re-run in place would leave the quote
+    pointing at a table of 61 rows with two flags in it."""
+    with pytest.raises(SystemExit, match="already exists"):
+        screen.main([])
+    # The negative control: another path is accepted, which is how the day-2 pass was written.
+    assert screen.main(["--out", str(tmp_path / "elsewhere.json"), "--only", "@dpssgovua"]) == 0
+    assert (tmp_path / "elsewhere.json").exists()
 
 
 def test_only_narrows_the_sweep_and_refuses_a_handle_the_registry_lacks(tmp_path):

@@ -118,6 +118,23 @@ EXCLUDED = {
     " Чех» — silent in the window, 0 posts, so the census has nothing to read either",
     "@polinalykovagv": "EXCLUDED on RU title (wave 3 top-up, watch): «ГВ/прикорм/сон с Полиной"
     " Лыковой» — silent in the window, 0 posts",
+    # --- the day-2 gate sitting (operator, 2026-08-08 morning) --------------------------------
+    # Three of "Дозаявка №3"'s sixteen are supergroups, not broadcast channels, so their
+    # posts/week is member chat traffic. The class @Mambabyua and @kulinariya_chat_a were
+    # excluded for on 06.08, measured the same way and ruled the same way.
+    "@poltava_misto": "EXCLUDED as a supergroup (day-2 sitting): broadcast=false, megagroup=true,"
+    " so its 111.25/week is chat traffic and not editorial posts. Same class as @Mambabyua and"
+    " @kulinariya_chat_a, and the same deferred chat-mining track. 60,028 subscribers",
+    "@kremenchug_live": "EXCLUDED as a supergroup (day-2 sitting): broadcast=false,"
+    " megagroup=true, 77.25/week of chat traffic. 16,056 subscribers",
+    "@Karlivka_live": "EXCLUDED as a supergroup (day-2 sitting): broadcast=false, megagroup=true,"
+    " 197.25/week of chat traffic, 8,045 subscribers. Its LINKED object is a broadcast channel of"
+    " the same town — «Оголошення. Karlivka Live🇺🇦», @KarlivkaLive — which the operator sent to"
+    " the gate as «Дозаявка №9»: the canon had taken the chat's handle",
+    "@tadaua": "EXCLUDED as dead (day-2 sitting): 71 subscribers and three posts in its whole"
+    " history, the last 2025-01-02 — nineteen months of silence, and no discussion group. Same"
+    " class as @akcii_skidki_plt, excluded 07.08. It was the team lead's own suggestion in"
+    " «Дозаявка №5», and the gate is what measured it",
 }
 """Ruled out of the composition. Their gate rows stay in the record, carrying this text."""
 
@@ -126,6 +143,14 @@ MOVED = {
         "posts",
         "moved to posts-only: the linked group bans everyone from sending, so 0 of 50 sampled"
         " posts carry comments and a join buys nothing. comments_enabled false, NO join",
+    ),
+    "@lab_of_childhood": (
+        "watch",
+        "FAIL overridden into watch (day-2 sitting, 2026-08-08): 0 posts in the 28-day window is"
+        " what failed it, but the history is there — 49 sampled posts from 2020-05-10 to"
+        " 2026-06-04, so it went quiet two months ago rather than being dead. watch is exactly"
+        " that state: posts collected, the group NEVER joined, revisited when it speaks again."
+        " The canon's own words were «живість не підтверджена» and «в резерв, пометка мелкий»",
     ),
 }
 
@@ -152,6 +177,35 @@ KEPT = {
     " happens in this phase; this surfaces when the channel wakes up",
 }
 
+CLEARED = {
+    # Day-2 sitting, 2026-08-08. Four PASS-shaped channels the gate FLAGged for a property of a
+    # capability the bucket they enter does not use: a city feed's group is never joined
+    # (CITY_RULE), and LATE_RULE routes a late addition WITHOUT an open group to posts-only. The
+    # operator cleared the flag rather than the measurement — the row still says it was raised,
+    # and the ruling text says why it does not bite.
+    "@gorishnie_plavni1": "the flag is about its discussion group («GP - CHAT🔥», join by admin"
+    " approval), and CITY_RULE enters a city feed posts-only and never joins the group. 21,077"
+    " subscribers, 138.5 posts/week, a broadcast channel",
+    "@zinkivnews": "same shape: «Зіньків Чат» admits by approval, and the city rule does not ask"
+    " for it. 3,422 subscribers, 2.25 posts/week, a broadcast channel",
+    "@tvorcha_matusyua": "LATE_RULE already answers a closed group — «PASS without an open one →"
+    " posts-only» — so the flag decides nothing the rule had not decided. 45,396 subscribers,"
+    " 27.75 posts/week, ua 0.95",
+    "@educationwithloven": "same rule, same answer: posts-only. 31,490 subscribers, 66.25"
+    " posts/week, ua 0.98",
+    # The fifth clearance, ruled after the other four because the channel was gated after them.
+    "@KarlivkaLive": "same shape as the two city feeds above, and its closed group IS the"
+    " excluded @Karlivka_live supergroup — so the flag is raised by the very thing the ruling"
+    " threw out. Live and Ukrainian: 3.0 posts/week, last post 2026-08-08, ua 1.00. The cost of"
+    " the swap is recorded with it rather than after it: 539 subscribers against the chat's"
+    " 8,045, so the town's audience stayed in the chat and this covers about a fifteenth of what"
+    " left. «Карлівка покрыта» must not be read off this row",
+}
+"""FLAG → PASS by operator ruling, with the reason the flag does not reach the bucket.
+
+Only a FLAG is cleared, never a FAIL: a FAIL says the channel cannot be collected at all, and
+overriding that is a bucket change (`MOVED`), not a clearance."""
+
 CITY_FEEDS = (
     "@mo3ambik",
     "@poltava_informue",
@@ -169,6 +223,9 @@ CITY_FEEDS = (
     "@dikankaa",
     "@zinkivnews",
     "@LHVC_info",
+    # "Дозаявка №9" (day-2 sitting): the broadcast channel behind the excluded @Karlivka_live
+    # supergroup. Same town, same rule, so it joins this tuple rather than getting one of its own.
+    "@KarlivkaLive",
 )
 CITY_RULE = (
     "POSTS-ONLY by the standing ruling (canon 'Дозаявка №3', operator 2026-08-08): a city feed"
@@ -334,6 +391,10 @@ AUDIENCE = {
     "@dikankaa": "regional",  # диканка :]
     "@zinkivnews": "regional",  # Зіньків Новини
     "@LHVC_info": "regional",  # Лохвиця.info
+    # "Дозаявка №9": the ONE regional row whose provenance is not the Poltava scan — the scan
+    # never returned it. It came out of the gate's own group finding on @Karlivka_live, and the
+    # title below is that finding's, not a scan row's.
+    "@KarlivkaLive": "regional",  # Оголошення. Karlivka Live🇺🇦
 }
 """Handle → audience segment. The canon's table, and the whole of it: `main` refuses a registry
 source this dict does not name rather than shipping one with a null audience."""
@@ -348,8 +409,23 @@ def final_bucket(row: dict) -> tuple[str | None, str | None]:
 
     ``None`` means it does not enter. The replacement's bucket is not a ruling but a rule the
     operator wrote in advance, resolved against what the gate then measured.
+
+    A cleared FLAG is resolved BEFORE the routing rather than after it: `GATED_LATE` and the
+    city path both refuse a non-PASS row, so a clearance applied afterwards would never be
+    reached. The row's own `verdict` is untouched — the gate measured what it measured, and the
+    clearance rides in the ruling text.
     """
-    handle, verdict = row["handle"], row["verdict"]
+    handle = row["handle"]
+    cleared = handle in CLEARED and row["verdict"] == "FLAG"
+    bucket, ruling = _placed(row, "PASS" if cleared else row["verdict"])
+    if cleared:
+        ruling = f"{ruling or 'ENTERS on the gate finding'} FLAG CLEARED — {CLEARED[handle]}"
+    return bucket, ruling
+
+
+def _placed(row: dict, verdict: str) -> tuple[str | None, str | None]:
+    """`final_bucket`'s routing, against the verdict it is asked to route on."""
+    handle = row["handle"]
     if handle in EXCLUDED:
         return None, f"EXCLUDED — {EXCLUDED[handle]}"
     if handle in MOVED:

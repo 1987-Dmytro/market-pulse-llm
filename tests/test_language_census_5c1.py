@@ -150,6 +150,55 @@ def test_the_shipped_record_carries_the_preregistration_it_was_computed_under():
     # computed BEFORE wave 3 took the registry to 41, and a re-run after any composition change
     # writes a different n without making either record wrong.
     assert record["summary"]["n"] == len(record["sources"])
-    assert record["summary"]["n"] >= len(
-        load_registry(REPO_ROOT / "config" / "registry.yaml").sources
+    # It is the WAVE-3 record and stays one: the rows the ruling cites are channels that have
+    # since left, so this file can never be re-derived from today's registry. The pass that must
+    # cover the live composition is the day-2 one below.
+    for handle in ("@retsepty5", "@retsepty4", "@katyal55", "@tretyakovaele"):
+        assert any(row["handle"] == handle for row in record["sources"]), handle
+
+
+def test_the_day_2_census_covers_the_live_registry_under_the_same_bars():
+    """Step 6 of the day-2 order. Same pre-registration file, a second output path — so the wave-3
+    evidence survives and the live composition still has a language verdict."""
+    import hashlib
+
+    record = json.loads(
+        (REPO_ROOT / "results" / "language_census_5c1_day2.json").read_text(encoding="utf-8")
     )
+    live = {
+        handle
+        for source in load_registry(REPO_ROOT / "config" / "registry.yaml").sources
+        for handle in source.telegram_channels
+    }
+    assert {row["handle"] for row in record["sources"]} == live
+    assert (
+        record["preregistration"]["sha256"]
+        == hashlib.sha256(census.PREREGISTRATION.read_bytes()).hexdigest()
+    ), "a second pass under a different bar is a different instrument"
+    assert record["preregistration"]["dominance"] == census.DOMINANCE
+    assert record["verdicts_reportable"] is True
+    # The one RU_DOMINANT of the day-2 entrants, reported and not acted on: the brief says fresh
+    # entries are REPORT ONLY. Its own text is why it is worth the operator's eye — a rehoming
+    # post covering «Волгоградской области ( Энгельс, Саратов )».
+    ru = [row["handle"] for row in record["sources"] if row["verdict"] == "RU_DOMINANT"]
+    assert ru == ["@dikankaa"], ru
+    assert any(
+        "Саратов" in line
+        for line in next(row for row in record["sources"] if row["handle"] == "@dikankaa")[
+            "ru_examples"
+        ]
+    )
+
+
+def test_the_census_refuses_to_overwrite_the_wave_3_evidence(tmp_path, monkeypatch):
+    """The failure it prevents: a re-run writes a table without @retsepty5's 139 posts in it, and
+    the ruling that cites them keeps pointing at a file that no longer says so."""
+    import pytest
+
+    with pytest.raises(SystemExit, match="evidence behind wave 3"):
+        census.main([])
+    # The negative control, without which this only proves the script refuses everything: another
+    # path is accepted, and it is what the day-2 pass above was written through.
+    monkeypatch.setattr(census, "REGISTRY", REPO_ROOT / "config" / "registry.yaml")
+    assert census.main(["--out", str(tmp_path / "elsewhere.json")]) == 0
+    assert (tmp_path / "elsewhere.json").exists()

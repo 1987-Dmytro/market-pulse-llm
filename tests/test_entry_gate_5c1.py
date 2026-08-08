@@ -102,6 +102,16 @@ def canon_city_feeds() -> list[str]:
     return re.findall(r"@[A-Za-z0-9_]+", listing.split("\n\n")[0])
 
 
+def canon_city_topup() -> list[str]:
+    """ "Дозаявка №9" — the broadcast channel the day-2 sitting sent to the gate in place of an
+    excluded supergroup. Its own paragraph, in the same prose shape as "Дозаявка №3": the singular
+    «1 хендл на гейт» is what keeps `canon_city_feeds` above from reading this section instead."""
+    text = CANON.read_text(encoding="utf-8")
+    section = text[text.index("## Рулинги гейта дня 2") :]
+    listing = section[section.index("хендл на гейт:") :]
+    return re.findall(r"@[A-Za-z0-9_]+", listing.split("\n\n")[0])
+
+
 def canon_retail_5() -> list[str]:
     """The national chains "Дозаявка №5" sends to the gate, read out of the master list.
 
@@ -201,7 +211,24 @@ def test_the_city_feeds_are_the_canons_own_and_all_of_them():
     picks = canon_city_feeds()
     assert len(picks) == 16, picks
     assert len(set(picks)) == 16, "a handle is listed twice"
-    assert list(picks) == list(apply_rulings_city_feeds()), "the routing table drifted"
+    # The routing table also carries "Дозаявка №9"'s one replacement, appended after the sixteen:
+    # same rule, same tuple, so the derivation is the two sections rather than one.
+    assert list(picks) + canon_city_topup() == list(apply_rulings_city_feeds())
+
+
+def test_the_city_topup_is_one_broadcast_channel_and_not_the_supergroup_it_replaces():
+    """The whole point of "Дозаявка №9" is that the canon had taken the chat's handle. A top-up
+    that read back the excluded supergroup would re-enter exactly what the sitting threw out."""
+    import apply_gate_rulings_5c1 as apply
+
+    assert canon_city_topup() == ["@KarlivkaLive"]
+    assert "@Karlivka_live" in apply.EXCLUDED
+    assert "@Karlivka_live" not in canon_city_topup()
+    record = json.loads((REPO_ROOT / "results" / "entry_gate_5c1.json").read_text("utf-8"))
+    excluded = next(r for r in record["candidates"] if r["handle"] == "@Karlivka_live")
+    # The replacement's provenance IS this finding — the Poltava scan never returned the handle.
+    assert excluded["checks"]["discussion_group"]["username"] == "KarlivkaLive"
+    assert excluded["checks"]["megagroup"] is True
 
 
 def apply_rulings_city_feeds():
@@ -223,7 +250,8 @@ def test_the_candidate_list_is_the_canons_own():
     city = [(handle, "city") for handle in canon_city_feeds()]
     retail = [(handle, "late") for handle in canon_retail_5()]
     harvest = [(handle, "late") for handle in canon_harvest_6()]
-    assert list(gate.CANDIDATES) == canon_buckets() + late + city + retail + harvest
+    topup = [(handle, "city") for handle in canon_city_topup()]
+    assert list(gate.CANDIDATES) == canon_buckets() + late + city + retail + harvest + topup
 
 
 def test_the_composition_is_the_62_plus_what_the_rulings_added():
@@ -233,7 +261,7 @@ def test_the_composition_is_the_62_plus_what_the_rulings_added():
     }
     # + the withdrawn "Дозаявка оператора" row, + "Дозаявка №5"'s three chains, + №8's six
     late = len(canon_sent_to_the_gate()) + 1 + len(canon_retail_5()) + len(canon_harvest_6())
-    city = len(canon_city_feeds())
+    city = len(canon_city_feeds()) + len(canon_city_topup())
     assert counts == {"comments": 29, "posts": 18, "watch": 14, "late": late, "city": city}
     assert len(gate.CANDIDATES) == (
         62 + len(canon_sent_to_the_gate()) + city + len(canon_retail_5()) + len(canon_harvest_6())

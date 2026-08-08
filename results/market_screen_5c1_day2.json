@@ -1,0 +1,1662 @@
+{
+  "generated_at": "2026-08-08T10:57:00+00:00",
+  "phase": "5c1 day-2 pre-flight",
+  "asks": "which market does each source sell into — a question about facts, not language",
+  "contract": "docs/SPEC.md §3.11 (4), 'Market-origin screen' (operator ruling 2026-08-08)",
+  "report_only": "no exclusion, no registry edit, no Telegram. Every flag goes to the operator, who rules; this screen never removes a source",
+  "window": {
+    "since": "2026-07-10T10:33:14+00:00",
+    "source": "data/raw/posts/, the window of collect_5c1.json"
+  },
+  "rules": {
+    "verdicts": {
+      "RF_FLAG": "at least one RF market fact, quoted",
+      "UA_EVIDENCE": "UA market facts and no RF one",
+      "NO_EVIDENCE": "neither — the gate's «REQUIRES UA evidence» is unmet, which is a finding about the channel's posts, not a verdict about its market"
+    },
+    "evidence": "a quoted line with the term that matched it, never a counter",
+    "signals": {
+      "ua": [
+        "currency",
+        "domain",
+        "location",
+        "phone",
+        "retailer"
+      ],
+      "rf": [
+        "currency",
+        "disclaimer",
+        "domain",
+        "location",
+        "retailer"
+      ]
+    },
+    "deliberately_excluded": "the country's own name and the bare «РФ» — a Ukrainian channel writes both about the war, not about a market"
+  },
+  "controls": {
+    "@offspringrus": {
+      "kind": "channel",
+      "expected": "RF_FLAG",
+      "measured": "RF_FLAG",
+      "evidence": [
+        {
+          "signal": "location",
+          "term": "Москва",
+          "matched": "Москве",
+          "line": "Приглашаем вас на 25-ю выставку товаров для беременных и новорождённых MYBABYKO в Москве 🐰",
+          "msg_id": 1700,
+          "date": "2026-08-05T11:29:02+00:00"
+        },
+        {
+          "signal": "domain",
+          "term": "*.ru",
+          "matched": "mybabyko.ru",
+          "line": "Вход бесплатный, но нужна регистрация https://mybabyko.ru",
+          "msg_id": 1700,
+          "date": "2026-08-05T11:29:02+00:00"
+        }
+      ],
+      "ok": true
+    },
+    "@dpssgovua": {
+      "kind": "channel",
+      "expected": "UA_EVIDENCE",
+      "measured": "UA_EVIDENCE",
+      "evidence": [
+        {
+          "signal": "domain",
+          "term": "*.ua",
+          "matched": "gov.ua",
+          "line": "📅 До 17 серпня 2026 року необхідно надіслати на info@dpss.gov.ua документи, що підтверджують проведення фітосанітарних процедур щодо місць вирощування та зберігання продукції.",
+          "msg_id": 5966,
+          "date": "2026-08-04T09:46:50+00:00"
+        },
+        {
+          "signal": "location",
+          "term": "Київ",
+          "matched": "Київ",
+          "line": "✅ Заступник Голови з питань цифрового розвитку, цифрових трансформацій і цифровізації Державної служби України з питань безпечності харчових продуктів та захисту споживачів Сергій ",
+          "msg_id": 5931,
+          "date": "2026-07-27T13:01:26+00:00"
+        }
+      ],
+      "ok": true
+    },
+    "@tretyakovaele :: Сочи": {
+      "kind": "row",
+      "expected": "rf evidence in the row the operator cited",
+      "rows_found": 1,
+      "evidence": [
+        {
+          "signal": "location",
+          "term": "Сочи",
+          "matched": "Сочи",
+          "line": "Мы с Миланой прилетели в Сочи, на Красную Поляну, чтобы стать частью знаменитого Семейного образовательного форума Леонида Агутина. Это не просто фестиваль, а огромное пространство"
+        },
+        {
+          "signal": "location",
+          "term": "Красная Поляна",
+          "matched": "Красную Поляну",
+          "line": "Мы с Миланой прилетели в Сочи, на Красную Поляну, чтобы стать частью знаменитого Семейного образовательного форума Леонида Агутина. Это не просто фестиваль, а огромное пространство"
+        }
+      ],
+      "ok": true
+    },
+    "@retsepty5 :: Яндекс": {
+      "kind": "row",
+      "expected": "rf evidence in the row the operator cited",
+      "rows_found": 1,
+      "evidence": [
+        {
+          "signal": "currency",
+          "term": "₽",
+          "matched": "₽",
+          "line": "📍 доход до 8 500 ₽ в день, выплаты каждый день (оформление как самозанятый)"
+        },
+        {
+          "signal": "retailer",
+          "term": "Яндекс Еда/Лавка/Маркет",
+          "matched": "Яндекс Еды",
+          "line": "💛 Подработка курьером в вашем городе — доставка заказов Яндекс Еды и Яндекс Лавки"
+        }
+      ],
+      "ok": true
+    },
+    "negative control :: просочився": {
+      "kind": "negative",
+      "expected": "no RF evidence — «просочився» is not «Сочи»",
+      "line": "Поставити салат у холодильник на 1–2 години, щоб добре просочився",
+      "evidence": [],
+      "ok": true
+    }
+  },
+  "verdicts_reportable": true,
+  "summary": {
+    "n": 61,
+    "by_verdict": {
+      "RF_FLAG": 2,
+      "NO_EVIDENCE": 23,
+      "UA_EVIDENCE": 36
+    }
+  },
+  "sources": [
+    {
+      "handle": "@myrhorodtown",
+      "posts_in_window": 273,
+      "posts_with_rf_evidence": 2,
+      "posts_with_ua_evidence": 50,
+      "verdict": "RF_FLAG",
+      "rf_evidence": [
+        {
+          "signal": "retailer",
+          "term": "Wildberries",
+          "matched": "Wildberries",
+          "line": "⚡️Один із найбільших складів Wildberries розбомбили: під Санкт-Петербургом прилетіло по розподільчому хабу площею 154 тис м², — монітори.",
+          "msg_id": 19866,
+          "date": "2026-08-04T06:22:27+00:00"
+        },
+        {
+          "signal": "location",
+          "term": "Санкт-Петербург",
+          "matched": "Санкт-Петербургом",
+          "line": "⚡️Один із найбільших складів Wildberries розбомбили: під Санкт-Петербургом прилетіло по розподільчому хабу площею 154 тис м², — монітори.",
+          "msg_id": 19866,
+          "date": "2026-08-04T06:22:27+00:00"
+        }
+      ],
+      "ua_evidence": [
+        {
+          "signal": "retailer",
+          "term": "Сільпо",
+          "matched": "Сільпо",
+          "line": "📍 Локація: перетин вулиць Гоголя та Незалежності (біля супермаркету «Сільпо»)",
+          "msg_id": 19911,
+          "date": "2026-08-08T03:25:01+00:00"
+        },
+        {
+          "signal": "location",
+          "term": "Полтава",
+          "matched": "Полтавська",
+          "line": "Полтавська обласна військова адміністрація запрошує взяти участь у фізкультурно-оздоровчому велопробігу з нагоди 35-річчя Незалежності України „Велогарт Полтавщина 2026: Миргород –",
+          "msg_id": 19903,
+          "date": "2026-08-07T09:20:01+00:00"
+        },
+        {
+          "signal": "currency",
+          "term": "грн",
+          "matched": "грн",
+          "line": "✔️ 6-7 серпня – подарункові картки на 500 грн першим покупцям",
+          "msg_id": 19885,
+          "date": "2026-08-05T15:00:07+00:00"
+        },
+        {
+          "signal": "location",
+          "term": "Київ",
+          "matched": "Київ",
+          "line": "❗️Під час нічної атаки на Київ сили ППО перехопили лише 1 із 27 запущених балістичних ракет, — Повітряні сили",
+          "msg_id": 19828,
+          "date": "2026-08-01T06:55:26+00:00"
+        }
+      ],
+      "audience": "regional"
+    },
+    {
+      "handle": "@poltava_informue",
+      "posts_in_window": 1316,
+      "posts_with_rf_evidence": 1,
+      "posts_with_ua_evidence": 947,
+      "verdict": "RF_FLAG",
+      "rf_evidence": [
+        {
+          "signal": "retailer",
+          "term": "Wildberries",
+          "matched": "Wildberries",
+          "line": "Крім того, виникли пожежі на складах Wildberries, ймовірною причиною яких називають роботу російського РЕБ.",
+          "msg_id": 35612,
+          "date": "2026-07-18T05:35:10+00:00"
+        }
+      ],
+      "ua_evidence": [
+        {
+          "signal": "location",
+          "term": "Полтава",
+          "matched": "Полтава",
+          "line": "Полтава Інформує",
+          "msg_id": 37289,
+          "date": "2026-08-08T10:09:46+00:00"
+        },
+        {
+          "signal": "domain",
+          "term": "*.ua",
+          "matched": "monobank.ua",
+          "line": "Монобанка- https://send.monobank.ua/jar/3dGgf1jpQe",
+          "msg_id": 37277,
+          "date": "2026-08-08T05:02:15+00:00"
+        },
+        {
+          "signal": "location",
+          "term": "Київ",
+          "matched": "Київському",
+          "line": "🚗 У Полтаві на Київському шосе, поблизу «Епіцентру», сталася ДТП",
+          "msg_id": 37164,
+          "date": "2026-08-06T09:46:41+00:00"
+        },
+        {
+          "signal": "location",
+          "term": "Кременчук",
+          "matched": "Кременчука",
+          "line": "😞 Біля Кременчука дуже сильно зацвіла вода",
+          "msg_id": 37110,
+          "date": "2026-08-05T17:46:07+00:00"
+        }
+      ],
+      "audience": "regional"
+    },
+    {
+      "handle": "@retsepty",
+      "posts_in_window": 91,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 0,
+      "verdict": "NO_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [],
+      "audience": "cooking_recipes"
+    },
+    {
+      "handle": "@smirnov108",
+      "posts_in_window": 28,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 0,
+      "verdict": "NO_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [],
+      "audience": "health_fitness"
+    },
+    {
+      "handle": "@polyakova_fitness",
+      "posts_in_window": 53,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 0,
+      "verdict": "NO_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [],
+      "audience": "health_fitness"
+    },
+    {
+      "handle": "@chifit_family",
+      "posts_in_window": 4,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 0,
+      "verdict": "NO_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [],
+      "audience": "health_fitness"
+    },
+    {
+      "handle": "@ya_Nenka",
+      "posts_in_window": 10,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 0,
+      "verdict": "NO_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [],
+      "audience": "baby_food"
+    },
+    {
+      "handle": "@useful_healthy_fitness_menu",
+      "posts_in_window": 17,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 0,
+      "verdict": "NO_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [],
+      "audience": "health_fitness"
+    },
+    {
+      "handle": "@olgaa_trainer",
+      "posts_in_window": 8,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 0,
+      "verdict": "NO_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [],
+      "audience": "health_fitness"
+    },
+    {
+      "handle": "@denisovapro",
+      "posts_in_window": 22,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 0,
+      "verdict": "NO_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [],
+      "audience": "health_fitness"
+    },
+    {
+      "handle": "@eftforhealth",
+      "posts_in_window": 1,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 0,
+      "verdict": "NO_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [],
+      "audience": "health_fitness"
+    },
+    {
+      "handle": "@konservacia_kulinaria",
+      "posts_in_window": 92,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 0,
+      "verdict": "NO_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [],
+      "audience": "cooking_recipes"
+    },
+    {
+      "handle": "@vylkachannel",
+      "posts_in_window": 27,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 0,
+      "verdict": "NO_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [],
+      "audience": "cooking_recipes"
+    },
+    {
+      "handle": "@gaid_skobioale",
+      "posts_in_window": 18,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 0,
+      "verdict": "NO_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [],
+      "audience": "health_fitness"
+    },
+    {
+      "handle": "@Wellosophy_Lesya",
+      "posts_in_window": 8,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 0,
+      "verdict": "NO_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [],
+      "audience": "health_fitness"
+    },
+    {
+      "handle": "@anastasiiadavydiukfitness",
+      "posts_in_window": 1,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 0,
+      "verdict": "NO_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [],
+      "audience": "health_fitness"
+    },
+    {
+      "handle": "@itsmamix",
+      "posts_in_window": 0,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 0,
+      "verdict": "NO_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [],
+      "audience": "mothers_kids"
+    },
+    {
+      "handle": "@skhudnennya",
+      "posts_in_window": 0,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 0,
+      "verdict": "NO_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [],
+      "audience": "health_fitness"
+    },
+    {
+      "handle": "@hydnem_prosto",
+      "posts_in_window": 0,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 0,
+      "verdict": "NO_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [],
+      "audience": "health_fitness"
+    },
+    {
+      "handle": "@dimakaminskyifit",
+      "posts_in_window": 0,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 0,
+      "verdict": "NO_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [],
+      "audience": "health_fitness"
+    },
+    {
+      "handle": "@dutyache_menu",
+      "posts_in_window": 0,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 0,
+      "verdict": "NO_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [],
+      "audience": "baby_food"
+    },
+    {
+      "handle": "@Evgenija_dutjache_menu",
+      "posts_in_window": 0,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 0,
+      "verdict": "NO_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [],
+      "audience": "baby_food"
+    },
+    {
+      "handle": "@dikankaa",
+      "posts_in_window": 30,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 0,
+      "verdict": "NO_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [],
+      "audience": "regional"
+    },
+    {
+      "handle": "@LHVC_info",
+      "posts_in_window": 1,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 0,
+      "verdict": "NO_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [],
+      "audience": "regional"
+    },
+    {
+      "handle": "@lab_of_childhood",
+      "posts_in_window": 0,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 0,
+      "verdict": "NO_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [],
+      "audience": "mothers_kids"
+    },
+    {
+      "handle": "@silposilpo",
+      "posts_in_window": 23,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 23,
+      "verdict": "UA_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [
+        {
+          "signal": "retailer",
+          "term": "Сільпо",
+          "matched": "Сільпо",
+          "line": "Такого ще не було у доставці «Сільпо»😮",
+          "msg_id": 3809,
+          "date": "2026-07-27T08:00:12+00:00"
+        },
+        {
+          "signal": "domain",
+          "term": "*.ua",
+          "matched": "silpo.ua",
+          "line": "Детальніше - у мобільному застосунку «Сільпо» та на silpo.ua.",
+          "msg_id": 3809,
+          "date": "2026-07-27T08:00:12+00:00"
+        },
+        {
+          "signal": "currency",
+          "term": "грн",
+          "matched": "грн",
+          "line": "Просто замовляйте онлайн від 1 000 грн та обирайте у кошику Оплата Дольками на silpo.ua та в застосунку «Сільпо»🧡",
+          "msg_id": 3808,
+          "date": "2026-07-27T06:53:16+00:00"
+        }
+      ],
+      "audience": "retail_official"
+    },
+    {
+      "handle": "@atb_market_official",
+      "posts_in_window": 13,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 4,
+      "verdict": "UA_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [
+        {
+          "signal": "retailer",
+          "term": "АТБ",
+          "matched": "АТБ",
+          "line": "Найкраща ціна на засіб для миття посуду ТМ «Fairy» в АТБ 🫧",
+          "msg_id": 4518,
+          "date": "2026-07-22T07:38:19+00:00"
+        }
+      ],
+      "audience": "retail_official"
+    },
+    {
+      "handle": "@VARUS_channel",
+      "posts_in_window": 87,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 17,
+      "verdict": "UA_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [
+        {
+          "signal": "location",
+          "term": "Київ",
+          "matched": "Київський",
+          "line": "🔸Морозиво Київський Торт ТМ Хрещатик",
+          "msg_id": 10613,
+          "date": "2026-07-25T11:15:35+00:00"
+        },
+        {
+          "signal": "location",
+          "term": "Одеса",
+          "matched": "Одеса",
+          "line": "м. Одеса +38099****9169",
+          "msg_id": 10601,
+          "date": "2026-07-23T15:31:29+00:00"
+        },
+        {
+          "signal": "location",
+          "term": "Дніпро",
+          "matched": "Дніпро",
+          "line": "м. Дніпро +38099****6057",
+          "msg_id": 10601,
+          "date": "2026-07-23T15:31:29+00:00"
+        },
+        {
+          "signal": "phone",
+          "term": "+380",
+          "matched": "+380",
+          "line": "м. Дніпро +38099****6057",
+          "msg_id": 10601,
+          "date": "2026-07-23T15:31:29+00:00"
+        }
+      ],
+      "audience": "retail_official"
+    },
+    {
+      "handle": "@msuaaaa",
+      "posts_in_window": 36,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 22,
+      "verdict": "UA_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [
+        {
+          "signal": "currency",
+          "term": "грн",
+          "matched": "грн",
+          "line": "МакЧікен + Стріпси 3 шт. + Напій середній = 225 грн",
+          "msg_id": 10698,
+          "date": "2026-07-27T08:08:11+00:00"
+        },
+        {
+          "signal": "retailer",
+          "term": "Сільпо",
+          "matched": "Сільпо",
+          "line": "Цінотижики в Сільпо 🏢",
+          "msg_id": 10690,
+          "date": "2026-07-23T06:47:37+00:00"
+        },
+        {
+          "signal": "retailer",
+          "term": "АТБ",
+          "matched": "АТБ",
+          "line": "Знижки в АТБ 😜🤪",
+          "msg_id": 10672,
+          "date": "2026-07-21T16:16:57+00:00"
+        },
+        {
+          "signal": "domain",
+          "term": "*.ua",
+          "matched": "Finance.ua",
+          "line": "⛽️ Розіграш 10 000 грн на пальне від Finance.ua!",
+          "msg_id": 10655,
+          "date": "2026-07-21T07:00:01+00:00"
+        }
+      ],
+      "audience": "supermarket_deals"
+    },
+    {
+      "handle": "@kopiyochka1",
+      "posts_in_window": 52,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 7,
+      "verdict": "UA_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [
+        {
+          "signal": "domain",
+          "term": "*.ua",
+          "matched": "kopiyochka.ua",
+          "line": "Ще більше імбових пропозицій ти знайдеш на нашому сайті 👉 https://www.kopiyochka.ua/",
+          "msg_id": 21993,
+          "date": "2026-08-03T08:27:22+00:00"
+        },
+        {
+          "signal": "currency",
+          "term": "грн",
+          "matched": "грн",
+          "line": "З 18 по 27 липня у застосунку Копійочка розігруємо подарунки за чек від 1️⃣9️⃣9️⃣ грн:",
+          "msg_id": 21751,
+          "date": "2026-07-20T14:14:24+00:00"
+        }
+      ],
+      "audience": "supermarket_deals"
+    },
+    {
+      "handle": "@klopotenkofood",
+      "posts_in_window": 40,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 2,
+      "verdict": "UA_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [
+        {
+          "signal": "location",
+          "term": "Полтава",
+          "matched": "Полтаві",
+          "line": "Наша ранкова підтримка в «Полтаві» ❤️",
+          "msg_id": 6070,
+          "date": "2026-08-05T09:14:41+00:00"
+        },
+        {
+          "signal": "retailer",
+          "term": "Сільпо",
+          "matched": "Сільпо",
+          "line": "В Сільпо з 30 липня до 5 серпня -40% на молодий норвезький оселедець Norsk Delikatesse. Обирайте в найближчому супермаркеті або онлайн на silpo.ua.",
+          "msg_id": 6054,
+          "date": "2026-07-31T15:15:29+00:00"
+        },
+        {
+          "signal": "domain",
+          "term": "*.ua",
+          "matched": "silpo.ua",
+          "line": "В Сільпо з 30 липня до 5 серпня -40% на молодий норвезький оселедець Norsk Delikatesse. Обирайте в найближчому супермаркеті або онлайн на silpo.ua.",
+          "msg_id": 6054,
+          "date": "2026-07-31T15:15:29+00:00"
+        }
+      ],
+      "audience": "cooking_recipes"
+    },
+    {
+      "handle": "@maudau",
+      "posts_in_window": 64,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 18,
+      "verdict": "UA_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [
+        {
+          "signal": "currency",
+          "term": "грн",
+          "matched": "грн",
+          "line": "А це не твій гель для прання Wash&Free зараз по 425 245 грн? 👀",
+          "msg_id": 2843,
+          "date": "2026-08-04T15:27:02+00:00"
+        }
+      ],
+      "audience": "supermarket_deals"
+    },
+    {
+      "handle": "@tarilka_malyuka",
+      "posts_in_window": 82,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 1,
+      "verdict": "UA_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [
+        {
+          "signal": "retailer",
+          "term": "АТБ",
+          "matched": "АТБ",
+          "line": "АТБ:",
+          "msg_id": 725,
+          "date": "2026-07-19T19:03:32+00:00"
+        },
+        {
+          "signal": "retailer",
+          "term": "Сільпо",
+          "matched": "Сільпо",
+          "line": "Сільпо:",
+          "msg_id": 725,
+          "date": "2026-07-19T19:03:32+00:00"
+        },
+        {
+          "signal": "retailer",
+          "term": "Novus",
+          "matched": "Novus",
+          "line": "Novus:",
+          "msg_id": 725,
+          "date": "2026-07-19T19:03:32+00:00"
+        }
+      ],
+      "audience": "baby_food"
+    },
+    {
+      "handle": "@kkondr_fit",
+      "posts_in_window": 2,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 1,
+      "verdict": "UA_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [
+        {
+          "signal": "currency",
+          "term": "грн",
+          "matched": "грн",
+          "line": "💳 Вартість участі - 650 грн",
+          "msg_id": 1385,
+          "date": "2026-08-03T14:19:55+00:00"
+        },
+        {
+          "signal": "location",
+          "term": "Львів",
+          "matched": "Львів",
+          "line": "📍Стрийський парк, м. Львів",
+          "msg_id": 1385,
+          "date": "2026-08-03T14:19:55+00:00"
+        }
+      ],
+      "audience": "health_fitness"
+    },
+    {
+      "handle": "@HealthPsycholog",
+      "posts_in_window": 17,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 3,
+      "verdict": "UA_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [
+        {
+          "signal": "currency",
+          "term": "грн",
+          "matched": "грн",
+          "line": "Обов'язковою умовою є придбання двох методичних посібників (750 грн), які стануть вашим практичним інструментом у роботі. Вони містять покрокову структуру проведення індивідуальної",
+          "msg_id": 881,
+          "date": "2026-08-03T05:27:02+00:00"
+        }
+      ],
+      "audience": "health_fitness"
+    },
+    {
+      "handle": "@sashafitnesslife",
+      "posts_in_window": 20,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 2,
+      "verdict": "UA_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [
+        {
+          "signal": "currency",
+          "term": "грн",
+          "matched": "грн",
+          "line": "🔸 Самостійний формат — 3500 грн замість 4000 грн.",
+          "msg_id": 3902,
+          "date": "2026-07-14T04:10:07+00:00"
+        }
+      ],
+      "audience": "health_fitness"
+    },
+    {
+      "handle": "@recepti",
+      "posts_in_window": 201,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 1,
+      "verdict": "UA_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [
+        {
+          "signal": "retailer",
+          "term": "Сільпо",
+          "matched": "Сільпо",
+          "line": "Вітання з Норвегії! Матіас уже приплив у «Сільпо»🐟",
+          "msg_id": 11820,
+          "date": "2026-07-30T09:01:07+00:00"
+        },
+        {
+          "signal": "domain",
+          "term": "*.ua",
+          "matched": "silpo.ua",
+          "line": "З 30 липня до 5 серпня виловлюйте -40% на молодий норвезький оселедець Norsk Delikatesse. Обирайте в найближчому супермаркеті або на silpo.ua.",
+          "msg_id": 11820,
+          "date": "2026-07-30T09:01:07+00:00"
+        }
+      ],
+      "audience": "cooking_recipes"
+    },
+    {
+      "handle": "@mameni_recepti",
+      "posts_in_window": 253,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 79,
+      "verdict": "UA_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [
+        {
+          "signal": "currency",
+          "term": "грн",
+          "matched": "грн",
+          "line": "🟢Вартість: 399 грн",
+          "msg_id": 12719,
+          "date": "2026-08-06T17:50:18+00:00"
+        }
+      ],
+      "audience": "cooking_recipes"
+    },
+    {
+      "handle": "@epicentrk_sale",
+      "posts_in_window": 141,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 81,
+      "verdict": "UA_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [
+        {
+          "signal": "currency",
+          "term": "₴",
+          "matched": "₴",
+          "line": "💰 503,30 ₴ 678,60 ₴",
+          "msg_id": 6257,
+          "date": "2026-08-07T07:35:29+00:00"
+        },
+        {
+          "signal": "currency",
+          "term": "грн",
+          "matched": "грн",
+          "line": "нова ціна: 1 074 грн",
+          "msg_id": 6254,
+          "date": "2026-08-06T11:02:27+00:00"
+        },
+        {
+          "signal": "domain",
+          "term": "*.ua",
+          "matched": "EpicentrK.ua",
+          "line": "Замовляйте на EpicentrK.ua!",
+          "msg_id": 6254,
+          "date": "2026-08-06T11:02:27+00:00"
+        },
+        {
+          "signal": "retailer",
+          "term": "Епіцентр",
+          "matched": "Епіцентр",
+          "line": "Цієї ночі ворог завдав жахливого удару по виробничій та логістичній інфраструктурі компанії «Епіцентр».",
+          "msg_id": 6246,
+          "date": "2026-08-05T06:48:43+00:00"
+        }
+      ],
+      "audience": "retail_official"
+    },
+    {
+      "handle": "@blwbabies",
+      "posts_in_window": 4,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 1,
+      "verdict": "UA_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [
+        {
+          "signal": "domain",
+          "term": "*.ua",
+          "matched": "com.ua",
+          "line": "https://blwbabies.com.ua",
+          "msg_id": 416,
+          "date": "2026-07-31T07:06:03+00:00"
+        }
+      ],
+      "audience": "baby_food"
+    },
+    {
+      "handle": "@dpssgovua",
+      "posts_in_window": 79,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 9,
+      "verdict": "UA_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [
+        {
+          "signal": "domain",
+          "term": "*.ua",
+          "matched": "gov.ua",
+          "line": "📅 До 17 серпня 2026 року необхідно надіслати на info@dpss.gov.ua документи, що підтверджують проведення фітосанітарних процедур щодо місць вирощування та зберігання продукції.",
+          "msg_id": 5966,
+          "date": "2026-08-04T09:46:50+00:00"
+        },
+        {
+          "signal": "location",
+          "term": "Київ",
+          "matched": "Київ",
+          "line": "✅ Заступник Голови з питань цифрового розвитку, цифрових трансформацій і цифровізації Державної служби України з питань безпечності харчових продуктів та захисту споживачів Сергій ",
+          "msg_id": 5931,
+          "date": "2026-07-27T13:01:26+00:00"
+        },
+        {
+          "signal": "currency",
+          "term": "грн",
+          "matched": "грн.",
+          "line": "📍 «За результатами проведеної роботи споживачам повернуто 32,5 млн грн. Це не просто фінансовий показник, а конкретний результат роботи, спрямованої на ефективний захист прав спожи",
+          "msg_id": 5920,
+          "date": "2026-07-22T18:58:51+00:00"
+        },
+        {
+          "signal": "location",
+          "term": "Львів",
+          "matched": "Львові",
+          "line": "🤝Неважливо, де людина придбала товар — у Києві, Львові, Одесі чи будь-якому іншому місті України. Її права мають бути захищені однаково, а бізнес — працювати за єдиними правилами. ",
+          "msg_id": 5908,
+          "date": "2026-07-20T11:37:58+00:00"
+        }
+      ],
+      "audience": "food_quality"
+    },
+    {
+      "handle": "@atb_aktsiyi",
+      "posts_in_window": 53,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 5,
+      "verdict": "UA_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [
+        {
+          "signal": "retailer",
+          "term": "АТБ",
+          "matched": "АТБ",
+          "line": "Що купити в АТБ на сніданок👇🏼",
+          "msg_id": 3209,
+          "date": "2026-08-04T13:54:53+00:00"
+        },
+        {
+          "signal": "currency",
+          "term": "грн",
+          "matched": "грн",
+          "line": "Станом на кінець липня в країні працює 1342 магазини АТБ, в тому числі і на прифронтових територіях. Сьогодні в АТБ-Маркет працевлаштовано понад 49 тисяч осіб. За підсумками 2025 р",
+          "msg_id": 3178,
+          "date": "2026-07-29T04:11:01+00:00"
+        },
+        {
+          "signal": "location",
+          "term": "Львів",
+          "matched": "Львові",
+          "line": "Європейська Бізнес Асоціація об’єднує 900+ компаній з різноманітних сфер, що створюють понад 700 тисяч робочих місць в Україні. Асоціація працює з 1999 року, має офіс в Києві та пр",
+          "msg_id": 3178,
+          "date": "2026-07-29T04:11:01+00:00"
+        },
+        {
+          "signal": "location",
+          "term": "Одеса",
+          "matched": "Одесі",
+          "line": "Європейська Бізнес Асоціація об’єднує 900+ компаній з різноманітних сфер, що створюють понад 700 тисяч робочих місць в Україні. Асоціація працює з 1999 року, має офіс в Києві та пр",
+          "msg_id": 3178,
+          "date": "2026-07-29T04:11:01+00:00"
+        }
+      ],
+      "audience": "supermarket_deals"
+    },
+    {
+      "handle": "@korolevakuchni",
+      "posts_in_window": 126,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 1,
+      "verdict": "UA_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [
+        {
+          "signal": "currency",
+          "term": "грн",
+          "matched": "грн",
+          "line": "ЗБИРАЄМО: 120 000 грн",
+          "msg_id": 10437,
+          "date": "2026-07-28T08:16:14+00:00"
+        },
+        {
+          "signal": "currency",
+          "term": "гривня",
+          "matched": "гривня",
+          "line": "🙏 Підтримайте – кожна гривня важлива!",
+          "msg_id": 10437,
+          "date": "2026-07-28T08:16:14+00:00"
+        },
+        {
+          "signal": "domain",
+          "term": "*.ua",
+          "matched": "monobank.ua",
+          "line": "✅ Монобанка Володимира: send.monobank.ua/jar/35B3TD8oPR",
+          "msg_id": 10437,
+          "date": "2026-07-28T08:16:14+00:00"
+        }
+      ],
+      "audience": "cooking_recipes"
+    },
+    {
+      "handle": "@marketopt_promo",
+      "posts_in_window": 12,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 4,
+      "verdict": "UA_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [
+        {
+          "signal": "location",
+          "term": "Кременчук",
+          "matched": "Кременчук",
+          "line": "#ХеппіКошик #Маркетопт #Толока #Кременчук #Знижки",
+          "msg_id": 2917,
+          "date": "2026-08-07T08:06:42+00:00"
+        }
+      ],
+      "audience": "retail_official"
+    },
+    {
+      "handle": "@mo3ambik",
+      "posts_in_window": 197,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 64,
+      "verdict": "UA_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [
+        {
+          "signal": "location",
+          "term": "Київ",
+          "matched": "Київ",
+          "line": "Пожежа сталася на трасі Київ–Харків, неподалік села Іванівка. Рятувальники оперативно ліквідували загоряння.",
+          "msg_id": 38753,
+          "date": "2026-08-08T09:14:11+00:00"
+        },
+        {
+          "signal": "location",
+          "term": "Харків",
+          "matched": "Харків",
+          "line": "Пожежа сталася на трасі Київ–Харків, неподалік села Іванівка. Рятувальники оперативно ліквідували загоряння.",
+          "msg_id": 38753,
+          "date": "2026-08-08T09:14:11+00:00"
+        },
+        {
+          "signal": "currency",
+          "term": "грн",
+          "matched": "грн",
+          "line": "💰 Заробітна плата — від 16 000 грн",
+          "msg_id": 38751,
+          "date": "2026-08-08T07:58:24+00:00"
+        },
+        {
+          "signal": "location",
+          "term": "Полтава",
+          "matched": "Полтавщині",
+          "line": "⚖️ На Полтавщині судитимуть посадовця, якого обвинувачують у незаконному видобутку піску.",
+          "msg_id": 38735,
+          "date": "2026-08-07T08:30:38+00:00"
+        }
+      ],
+      "audience": "regional"
+    },
+    {
+      "handle": "@suspilnepoltava",
+      "posts_in_window": 534,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 441,
+      "verdict": "UA_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [
+        {
+          "signal": "location",
+          "term": "Полтава",
+          "matched": "Полтаві",
+          "line": "Пункт перетримки бездоглядних тварин у Полтаві досі не розширили",
+          "msg_id": 48702,
+          "date": "2026-08-08T10:52:35+00:00"
+        },
+        {
+          "signal": "currency",
+          "term": "гривня",
+          "matched": "гривень",
+          "line": "Суд визнав винним підприємця, який за допомогою підроблених медичних документів оформив дитині інвалідність. Він незаконно отримав майже 20 тисяч гривень державної допомоги та відс",
+          "msg_id": 48691,
+          "date": "2026-08-08T09:26:58+00:00"
+        },
+        {
+          "signal": "location",
+          "term": "Дніпро",
+          "matched": "Дніпра",
+          "line": "У Кременчуці 2027 року планують облаштувати душові на центральному пляжі. Воду для них братимуть із комунальної мережі, а не з Дніпра. Також на пляжі продовжать створення інклюзивн",
+          "msg_id": 48629,
+          "date": "2026-08-07T10:34:20+00:00"
+        },
+        {
+          "signal": "currency",
+          "term": "грн",
+          "matched": "грн.",
+          "line": "Правоохоронці оцінюють збитки, завдані державі, у 8,23 млн грн.",
+          "msg_id": 48625,
+          "date": "2026-08-07T08:50:37+00:00"
+        }
+      ],
+      "audience": "regional"
+    },
+    {
+      "handle": "@telegraf_kremenchuk",
+      "posts_in_window": 634,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 441,
+      "verdict": "UA_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [
+        {
+          "signal": "currency",
+          "term": "грн",
+          "matched": "грн.",
+          "line": "💳 Купуйте на суму від 1 499 грн.",
+          "msg_id": 71473,
+          "date": "2026-08-08T09:03:55+00:00"
+        },
+        {
+          "signal": "domain",
+          "term": "*.ua",
+          "matched": "myplay.ua",
+          "line": "Повні умови — на https://myplay.ua/vw0 та в магазинах MYplay.",
+          "msg_id": 71473,
+          "date": "2026-08-08T09:03:55+00:00"
+        },
+        {
+          "signal": "location",
+          "term": "Київ",
+          "matched": "Київ",
+          "line": "7 серпня близько 13.00 на автодорозі Київ — Харків поблизу села Іванівка Лубенського району загорілася вантажівка",
+          "msg_id": 71471,
+          "date": "2026-08-08T08:47:30+00:00"
+        },
+        {
+          "signal": "location",
+          "term": "Харків",
+          "matched": "Харків",
+          "line": "7 серпня близько 13.00 на автодорозі Київ — Харків поблизу села Іванівка Лубенського району загорілася вантажівка",
+          "msg_id": 71471,
+          "date": "2026-08-08T08:47:30+00:00"
+        }
+      ],
+      "audience": "regional"
+    },
+    {
+      "handle": "@gorishnie_plavni1",
+      "posts_in_window": 568,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 232,
+      "verdict": "UA_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [
+        {
+          "signal": "location",
+          "term": "Полтава",
+          "matched": "Полтавській",
+          "line": "❗️Попередження про пожежну небезпеку по Полтавській області",
+          "msg_id": 31532,
+          "date": "2026-08-08T10:50:01+00:00"
+        },
+        {
+          "signal": "currency",
+          "term": "грн",
+          "matched": "грн.",
+          "line": "За даними слідства, у листопаді 2024 року поблизу села Кратова Говтва без спеціального дозволу видобули понад 370 м³ піску. Збитки державі, за висновками експертизи, становлять пон",
+          "msg_id": 31523,
+          "date": "2026-08-08T05:25:13+00:00"
+        },
+        {
+          "signal": "location",
+          "term": "Кременчук",
+          "matched": "Кременчука",
+          "line": "31 липня 2026 року в офісному приміщенні Кременчука провели обшук на підставі ухвали суду.",
+          "msg_id": 31512,
+          "date": "2026-08-07T13:21:01+00:00"
+        },
+        {
+          "signal": "currency",
+          "term": "гривня",
+          "matched": "гривень",
+          "line": "Класичні та сучасні моделі від 3 420 гривень у Столичній Ювелірній Фабриці",
+          "msg_id": 31503,
+          "date": "2026-08-07T07:01:01+00:00"
+        }
+      ],
+      "audience": "regional"
+    },
+    {
+      "handle": "@Hadiach_telegram",
+      "posts_in_window": 145,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 57,
+      "verdict": "UA_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [
+        {
+          "signal": "location",
+          "term": "Полтава",
+          "matched": "Полтавській",
+          "line": "📍 Загубилася в районі Сарського, біля місцевої ветклініки на вул. Полтавській.",
+          "msg_id": 12919,
+          "date": "2026-08-07T10:38:03+00:00"
+        },
+        {
+          "signal": "phone",
+          "term": "+380",
+          "matched": "+380",
+          "line": "🙏 Якщо ви бачили Асю або знаєте, де вона може бути, будь ласка, повідомте: +380996371707",
+          "msg_id": 12919,
+          "date": "2026-08-07T10:38:03+00:00"
+        },
+        {
+          "signal": "domain",
+          "term": "*.ua",
+          "matched": "gov.ua",
+          "line": "https://hadiach-rada.gov.ua/news/1786077255/",
+          "msg_id": 12918,
+          "date": "2026-08-07T07:20:23+00:00"
+        },
+        {
+          "signal": "currency",
+          "term": "грн",
+          "matched": "грн",
+          "line": "✅Салатний мікс «Цезарь» Зелена грядка 130 г - 40,90 грн;",
+          "msg_id": 12917,
+          "date": "2026-08-07T06:01:43+00:00"
+        }
+      ],
+      "audience": "regional"
+    },
+    {
+      "handle": "@globine1",
+      "posts_in_window": 103,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 37,
+      "verdict": "UA_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [
+        {
+          "signal": "currency",
+          "term": "грн",
+          "matched": "грн.",
+          "line": "В серпні минулого року лежала в пульмонології в Полтаві. Лікування коштувало 360 грн. А в грудні в терапії в Глобине обійшлося в 11000 грн. Відразу дають підписати заяву, що прошу ",
+          "msg_id": 10024,
+          "date": "2026-08-07T09:36:27+00:00"
+        },
+        {
+          "signal": "location",
+          "term": "Полтава",
+          "matched": "Полтаві",
+          "line": "В серпні минулого року лежала в пульмонології в Полтаві. Лікування коштувало 360 грн. А в грудні в терапії в Глобине обійшлося в 11000 грн. Відразу дають підписати заяву, що прошу ",
+          "msg_id": 10024,
+          "date": "2026-08-07T09:36:27+00:00"
+        },
+        {
+          "signal": "location",
+          "term": "Кременчук",
+          "matched": "Кременчук",
+          "line": "Є в приймальному мадам, брюнетка. Її ставлення переходить усі межі норми. Що до дорослих, що до діток. В пряму говорить, я нічого не буду робити, що баришню розбудили, приходиться ",
+          "msg_id": 10023,
+          "date": "2026-08-07T08:50:32+00:00"
+        },
+        {
+          "signal": "domain",
+          "term": "*.ua",
+          "matched": "centrolab.ua",
+          "line": "🌐 centrolab.ua.",
+          "msg_id": 9987,
+          "date": "2026-07-30T14:38:02+00:00"
+        }
+      ],
+      "audience": "regional"
+    },
+    {
+      "handle": "@piryatingromada",
+      "posts_in_window": 70,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 25,
+      "verdict": "UA_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [
+        {
+          "signal": "location",
+          "term": "Полтава",
+          "matched": "Полтавській",
+          "line": "На 8 серпня 2026 року застосування графіка погодинного відключення електроенергії у Полтавській області не прогнозується.",
+          "msg_id": 24089,
+          "date": "2026-08-07T18:19:16+00:00"
+        },
+        {
+          "signal": "currency",
+          "term": "грн",
+          "matched": "грн",
+          "line": "🔸1 626 000 грн одноразової матеріальної допомоги виплачено 418 жителям Пирятинської міської територіальної громади;",
+          "msg_id": 24086,
+          "date": "2026-08-07T11:07:17+00:00"
+        },
+        {
+          "signal": "currency",
+          "term": "гривня",
+          "matched": "гривень",
+          "line": "🔷Протягом січня–липня 2026 року допомогу на лікування отримали 565 жителів громади на загальну суму 2 574 420 гривень.",
+          "msg_id": 24086,
+          "date": "2026-08-07T11:07:17+00:00"
+        },
+        {
+          "signal": "location",
+          "term": "Харків",
+          "matched": "Харківського",
+          "line": "Микола Хандола народився 6 квітня 1975 року в Пирятині. Протягом 1982-1993 років навчався у міській школі №6. У 1993 році був призваний на строкову військову службу, після повернен",
+          "msg_id": 24066,
+          "date": "2026-08-05T06:32:39+00:00"
+        }
+      ],
+      "audience": "regional"
+    },
+    {
+      "handle": "@PirOperative",
+      "posts_in_window": 106,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 5,
+      "verdict": "UA_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [
+        {
+          "signal": "phone",
+          "term": "+380",
+          "matched": "+380",
+          "line": "📞 +380 (97) 804 04 94",
+          "msg_id": 29313,
+          "date": "2026-08-03T13:59:01+00:00"
+        },
+        {
+          "signal": "location",
+          "term": "Полтава",
+          "matched": "Полтаву",
+          "line": "Доброго дня,можливо в понеділок зранку хтось їхатиме в Полтаву?",
+          "msg_id": 29211,
+          "date": "2026-07-11T20:00:42+00:00"
+        }
+      ],
+      "audience": "regional"
+    },
+    {
+      "handle": "@zinkivnews",
+      "posts_in_window": 9,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 5,
+      "verdict": "UA_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [
+        {
+          "signal": "location",
+          "term": "Полтава",
+          "matched": "Полтавщини",
+          "line": "28 липня близько 19:00 на вулиці Солов'янівській у Зінькові сталася дорожньо-транспортна пригода. Внаслідок зіткнення мотоцикла «Дельта» та автомобіля ВАЗ постраждав 36-річний мото",
+          "msg_id": 2871,
+          "date": "2026-07-31T07:20:01+00:00"
+        },
+        {
+          "signal": "location",
+          "term": "Кременчук",
+          "matched": "Кременчук",
+          "line": "Унаслідок аварійного відключення без світла тимчасово залишилися понад 1000 абонентів у Зіньківській, Лохвицькій, Шишацькій громадах та у м. Кременчук. Про це повідомив начальник П",
+          "msg_id": 2870,
+          "date": "2026-07-29T12:03:21+00:00"
+        },
+        {
+          "signal": "currency",
+          "term": "гривня",
+          "matched": "гривень",
+          "line": "Для ліквідації звалища Зіньківська міська рада уклала договір вартістю 300 тисяч гривень із Лебединською філією державного підприємства «Укрветсанзавод», інформує Суспільне Полтава",
+          "msg_id": 2863,
+          "date": "2026-07-15T18:35:33+00:00"
+        }
+      ],
+      "audience": "regional"
+    },
+    {
+      "handle": "@forainfo",
+      "posts_in_window": 16,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 15,
+      "verdict": "UA_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [
+        {
+          "signal": "currency",
+          "term": "грн",
+          "matched": "грн",
+          "line": "🐱 Корм ТМ «Felix» Fantastic з куркою, кроликом або індичкою в желе за 11,90 грн/85 г зі знижкою -40%!",
+          "msg_id": 6045,
+          "date": "2026-08-07T11:01:37+00:00"
+        },
+        {
+          "signal": "retailer",
+          "term": "Фора",
+          "matched": "Фора",
+          "line": "✨ Не пропустіть Вікенд знижок у 🏪«Фора»!",
+          "msg_id": 6045,
+          "date": "2026-08-07T11:01:37+00:00"
+        },
+        {
+          "signal": "domain",
+          "term": "*.ua",
+          "matched": "fora.ua",
+          "line": "📍Акція діє щопонеділка у всіх магазинах «Фора», а також на fora.ua та в мобільному застосунку «Фора».",
+          "msg_id": 6042,
+          "date": "2026-08-03T04:38:27+00:00"
+        },
+        {
+          "signal": "location",
+          "term": "Львів",
+          "matched": "Львова",
+          "line": "☕ Кава «Кава Старого Львова» — 139,90 грн зі знижкою -57%",
+          "msg_id": 6036,
+          "date": "2026-07-24T05:02:33+00:00"
+        }
+      ],
+      "audience": "retail_official"
+    },
+    {
+      "handle": "@ekomarket_shop",
+      "posts_in_window": 12,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 6,
+      "verdict": "UA_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [
+        {
+          "signal": "currency",
+          "term": "грн",
+          "matched": "грн",
+          "line": "🛍 Зробіть покупку від 500 грн та отримайте каву за 1 грн ☕️",
+          "msg_id": 1453,
+          "date": "2026-07-30T08:27:38+00:00"
+        },
+        {
+          "signal": "retailer",
+          "term": "ЕКО Маркет",
+          "matched": "ЕКО Маркет",
+          "line": "🎉 1 серпня — святкове відкриття нового ЕКО Маркет! 🎉",
+          "msg_id": 1453,
+          "date": "2026-07-30T08:27:38+00:00"
+        },
+        {
+          "signal": "location",
+          "term": "Дніпро",
+          "matched": "Дніпра",
+          "line": "🥓 -31% - Ковбаса варена \"Молочна\" ТМ \"Зоря Дніпра\", 400г - 103,9грн",
+          "msg_id": 1445,
+          "date": "2026-07-22T09:04:04+00:00"
+        }
+      ],
+      "audience": "retail_official"
+    },
+    {
+      "handle": "@tvorcha_matusyua",
+      "posts_in_window": 116,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 1,
+      "verdict": "UA_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [
+        {
+          "signal": "location",
+          "term": "Київ",
+          "matched": "Київ",
+          "line": "📍 Київ, зустрічаємося наживо!",
+          "msg_id": 12584,
+          "date": "2026-07-21T16:00:22+00:00"
+        }
+      ],
+      "audience": "baby_food"
+    },
+    {
+      "handle": "@mamaiagolodniy",
+      "posts_in_window": 5,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 3,
+      "verdict": "UA_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [
+        {
+          "signal": "domain",
+          "term": "*.ua",
+          "matched": "com.ua",
+          "line": "https://happyhomely.com.ua/spilnuystil",
+          "msg_id": 4101,
+          "date": "2026-08-01T08:22:22+00:00"
+        },
+        {
+          "signal": "currency",
+          "term": "грн",
+          "matched": "грн",
+          "line": "💛 Один гайд — 199 грн",
+          "msg_id": 4096,
+          "date": "2026-07-12T16:34:31+00:00"
+        }
+      ],
+      "audience": "baby_food"
+    },
+    {
+      "handle": "@educationwithloven",
+      "posts_in_window": 426,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 8,
+      "verdict": "UA_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [
+        {
+          "signal": "currency",
+          "term": "грн",
+          "matched": "грн.",
+          "line": "📌Вартість лише - 70 грн.",
+          "msg_id": 105820,
+          "date": "2026-08-05T05:25:46+00:00"
+        },
+        {
+          "signal": "currency",
+          "term": "гривня",
+          "matched": "гривень",
+          "line": "На одному уроці мудра вчителька розпочала заняття не з підручника 📚, а з несподіванки. Вона дістала з кишені п’ятсот гривень 💵, підняла купюру догори й запитала:",
+          "msg_id": 105397,
+          "date": "2026-08-01T05:53:03+00:00"
+        }
+      ],
+      "audience": "mothers_kids"
+    },
+    {
+      "handle": "@pavlushaiyava",
+      "posts_in_window": 115,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 21,
+      "verdict": "UA_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [
+        {
+          "signal": "location",
+          "term": "Київ",
+          "matched": "Київ",
+          "line": "Анастасія Фастовець, м. Київ",
+          "msg_id": 24168,
+          "date": "2026-08-07T13:00:45+00:00"
+        }
+      ],
+      "audience": "baby_food"
+    },
+    {
+      "handle": "@mandziak",
+      "posts_in_window": 123,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 2,
+      "verdict": "UA_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [
+        {
+          "signal": "location",
+          "term": "Одеса",
+          "matched": "Одеси",
+          "line": "Підпищики з Одеси, атеншен! Завтра, 8 серпня я у вашому прекрасному і коханому мною місці буду розказувати про те… як похудати. Буде корисно, цікаво, весело. Радий буду бачити кожн",
+          "msg_id": 3785,
+          "date": "2026-08-07T08:20:45+00:00"
+        },
+        {
+          "signal": "location",
+          "term": "Київ",
+          "matched": "Київський",
+          "line": "Якщо в якості рятівного продукту ти обрав торт Київський, то схуднення також гарантовано!",
+          "msg_id": 3743,
+          "date": "2026-08-01T09:00:54+00:00"
+        }
+      ],
+      "audience": "health_fitness"
+    },
+    {
+      "handle": "@KarlivkaLive",
+      "posts_in_window": 12,
+      "posts_with_rf_evidence": 0,
+      "posts_with_ua_evidence": 1,
+      "verdict": "UA_EVIDENCE",
+      "rf_evidence": [],
+      "ua_evidence": [
+        {
+          "signal": "location",
+          "term": "Полтава",
+          "matched": "Полтавський",
+          "line": "📍 Адреса: Полтавський Шлях, 136А",
+          "msg_id": 5309,
+          "date": "2026-07-27T06:13:17+00:00"
+        },
+        {
+          "signal": "phone",
+          "term": "+380",
+          "matched": "+380",
+          "line": "📞 Телефон: +380 (99) 858-82-38",
+          "msg_id": 5309,
+          "date": "2026-07-27T06:13:17+00:00"
+        }
+      ],
+      "audience": "regional"
+    }
+  ],
+  "git": {
+    "commit": "cfb3eec3b834e82ddb49721619d739327a33cf94",
+    "dirty": [
+      "config/registry.yaml",
+      "docs/CHANNELS-launch.md",
+      "results/collect_5c1.json",
+      "results/entry_gate_5c1.json",
+      "results/joins_5c1.jsonl",
+      "scripts/apply_gate_rulings_5c1.py",
+      "scripts/entry_check.py",
+      "scripts/late_batch_5c1.py",
+      "tests/test_collect_5c1.py",
+      "tests/test_entry_gate_5c1.py",
+      "tests/test_gate_rulings_5c1.py",
+      "tests/test_late_batch_5c1.py",
+      "results/language_census_5c1_day2.json",
+      "scripts/harvest_similar_5c1.py",
+      "tests/test_harvest_similar_5c1.py"
+    ]
+  }
+}

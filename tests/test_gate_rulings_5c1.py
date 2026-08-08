@@ -52,6 +52,19 @@ def canon_harvest_6() -> list[str]:
 
 HARVEST_6 = canon_harvest_6()
 
+
+def canon_city_topup() -> list[str]:
+    """ "Дозаявка №9"'s one handle, parsed here too rather than imported from the gate's test."""
+    import re
+
+    text = CANON.read_text(encoding="utf-8")
+    section = text[text.index("## Рулинги гейта дня 2") :]
+    listing = section[section.index("хендл на гейт:") :]
+    return re.findall(r"@[A-Za-z0-9_]+", listing.split("\n\n")[0])
+
+
+CITY_TOPUP = canon_city_topup()
+
 AWAITING_A_RULING = set()
 """Gated, not PASS, and no ruling covers it yet — the operator's rule is to stop and report.
 
@@ -132,7 +145,7 @@ def test_uasaler_leaves_the_composition_entirely():
 def test_a_city_feed_enters_posts_only_and_buys_no_join():
     """ "Дозаявка №3": PASS → registry bucket posts, comments_enabled false, watch false. The
     group it may have does not move any of the three — that is the whole ruling."""
-    gated = row("@poltava_misto", "city", group=True, open_group=True)
+    gated = row("@poltava_informue", "city", group=True, open_group=True)
     bucket, ruling = apply.final_bucket(gated)
     assert bucket == "posts"
     assert "POSTS-ONLY" in ruling and "5c2" in ruling
@@ -144,10 +157,14 @@ def test_a_city_feed_enters_posts_only_and_buys_no_join():
 
 def test_a_city_feed_that_did_not_pass_is_not_routed_by_its_bucket():
     """ "FAIL or FLAG → report with evidence, do not resolve yourself" — the refusal is what
-    enforces it, and a city row must not slip past on the strength of the ruling."""
+    enforces it, and a city row must not slip past on the strength of the ruling.
+
+    Asked of a city feed the day-2 sitting did NOT clear: @gorishnie_plavni1 and @zinkivnews
+    would pass this on their clearance, which is the difference the clearance is supposed to
+    make."""
     for verdict in ("FAIL", "FLAG"):
         with pytest.raises(SystemExit, match="no ruling covers it"):
-            apply.final_bucket(row("@poltava_misto", "city", verdict=verdict))
+            apply.final_bucket(row("@poltava_informue", "city", verdict=verdict))
 
 
 def test_a_city_row_the_ruling_does_not_name_refuses_to_enter():
@@ -155,6 +172,77 @@ def test_a_city_row_the_ruling_does_not_name_refuses_to_enter():
     handle appearing in the gate must not enter on the label alone."""
     with pytest.raises(SystemExit, match="CITY_FEEDS does not name it"):
         apply.final_bucket(row("@some_new_town", "city"))
+
+
+# --- the day-2 sitting, 2026-08-08 ---------------------------------------------------------------
+
+
+def test_the_three_supergroups_leave_and_the_gate_row_is_why():
+    """Three of "Дозаявка №3"'s sixteen are chats, so their posts/week is member traffic. The
+    ruling is checked against the measurement it cites rather than against its own wording."""
+    record = json.loads((REPO_ROOT / "results" / "entry_gate_5c1.json").read_text("utf-8"))
+    rows = {r["handle"]: r for r in record["candidates"]}
+    for handle in ("@poltava_misto", "@kremenchug_live", "@Karlivka_live"):
+        bucket, ruling = apply.final_bucket(row(handle, "city", verdict="FLAG"))
+        assert bucket is None and "supergroup" in ruling, handle
+        assert rows[handle]["checks"]["megagroup"] is True, handle
+        assert rows[handle]["checks"]["broadcast"] is False, handle
+
+
+def test_the_dead_chain_leaves_on_the_same_conjunction_as_the_last_one():
+    """@tadaua is the team lead's own suggestion in "Дозаявка №5" and the gate killed it: 71
+    subscribers, last post 2025-01-02. The ruling names @akcii_skidki_plt, the precedent."""
+    bucket, ruling = apply.final_bucket(row("@tadaua", "late", verdict="FAIL"))
+    assert bucket is None
+    assert "@akcii_skidki_plt" in ruling and "2025-01-02" in ruling
+
+
+def test_a_cleared_flag_enters_by_the_rule_that_was_already_written():
+    """The clearance does not invent a bucket — it lets the standing rule route the row. Both
+    pairs land in posts-only: the city rule for the two feeds, LATE_RULE for the two additions."""
+    for handle in ("@gorishnie_plavni1", "@zinkivnews"):
+        bucket, ruling = apply.final_bucket(
+            row(handle, "city", verdict="FLAG", group=True, open_group=False)
+        )
+        assert bucket == "posts", handle
+        assert "POSTS-ONLY" in ruling and "FLAG CLEARED" in ruling, handle
+    for handle in ("@tvorcha_matusyua", "@educationwithloven"):
+        bucket, ruling = apply.final_bucket(
+            row(handle, "late", verdict="FLAG", group=True, open_group=False)
+        )
+        assert bucket == "posts", handle
+        assert "no discussion group" in ruling and "FLAG CLEARED" in ruling, handle
+
+
+def test_a_clearance_covers_a_flag_and_never_a_fail():
+    """A FAIL says the channel cannot be collected at all; overriding that is a bucket change, not
+    a clearance. Without this the four entries would quietly cover a future FAIL on the same row."""
+    for handle in apply.CLEARED:
+        with pytest.raises(SystemExit):
+            apply.final_bucket(row(handle, "city", verdict="FAIL"))
+
+
+def test_the_clearance_leaves_the_measurement_alone():
+    """The gate row still says FLAG. The clearance is a ruling ABOUT a finding, and a run that
+    rewrote the finding would leave nothing to disagree with it."""
+    record = json.loads((REPO_ROOT / "results" / "entry_gate_5c1.json").read_text("utf-8"))
+    rows = {r["handle"]: r for r in record["candidates"]}
+    for handle in apply.CLEARED:
+        assert rows[handle]["verdict"] == "FLAG", handle
+        assert rows[handle]["flags"], handle
+
+
+def test_the_quiet_harvest_candidate_enters_watch_and_buys_no_join():
+    """0 posts in the window is what failed it; 49 posts to 2026-06-04 is why it is not dead.
+    watch is that state exactly — collected, never joined."""
+    gated = row("@lab_of_childhood", "late", verdict="FAIL", group=False)
+    bucket, ruling = apply.final_bucket(gated)
+    assert bucket == "watch"
+    assert "2026-06-04" in ruling and "NEVER joined" in ruling
+    entry = apply.source_entry(gated, bucket)
+    assert entry["watch"] is True
+    assert entry["comments_enabled"] is False
+    assert entry["audience"] == "mothers_kids"
 
 
 # --- audience is the canon's table, not a reading of the channels --------------------------------
@@ -233,7 +321,7 @@ def test_the_city_rows_of_the_audience_table_are_the_gates_own():
     from drifting: same handles, same order, and `regional` for every one of them."""
     regional = [handle for handle, segment in apply.AUDIENCE.items() if segment == "regional"]
     assert regional == list(apply.CITY_FEEDS)
-    assert len(regional) == 16
+    assert len(regional) == 16 + len(CITY_TOPUP)
 
 
 def test_the_titles_beside_the_city_rows_are_the_scans_own():
@@ -246,6 +334,14 @@ def test_the_titles_beside_the_city_rows_are_the_scans_own():
         (REPO_ROOT / "results" / "discovery_5c1_poltava.json").read_text(encoding="utf-8")
     )
     titles = {row["handle"]: row["title"] for row in ledger["candidates"]}
+
+    # "Дозаявка №9"'s row is the one the scan cannot answer for — it never returned the handle.
+    # Its title is checked against the record that DID produce it: the gate's group finding on the
+    # supergroup it replaces. A row with neither provenance is what this test is here to catch.
+    record = json.loads((REPO_ROOT / "results" / "entry_gate_5c1.json").read_text("utf-8"))
+    replaced = next(r for r in record["candidates"] if r["handle"] == "@Karlivka_live")
+    titles["@KarlivkaLive"] = replaced["checks"]["discussion_group"]["title"]
+    assert "@KarlivkaLive" not in {row["handle"] for row in ledger["candidates"]}
 
     source = (REPO_ROOT / "scripts" / "apply_gate_rulings_5c1.py").read_text(encoding="utf-8")
     annotated = dict(re.findall(r'"(@[A-Za-z0-9_]+)": "regional",\s+# (.+)', source))
@@ -285,7 +381,7 @@ def test_the_shipped_registry_carries_the_canons_audience_for_every_source():
     """Read by HANDLE: the four originals predate `source_entry` and their ids do not follow
     from their handles (@VARUS_channel is `varus`), so an id-keyed check would miss them."""
     sources = load_registry(REPO_ROOT / "config" / "registry.yaml").sources
-    assert len(sources) == 39
+    assert len(sources) == 61
     for src in sources:
         for handle in src.telegram_channels:
             assert src.audience == apply.AUDIENCE[handle], handle
@@ -370,14 +466,22 @@ def test_the_replacement_lands_by_the_rule_the_operator_wrote_in_advance():
 
 def test_a_national_chain_routes_by_the_group_finding_like_any_late_addition():
     """ "Comments per the group finding" (operator, «Дозаявка №5») is the late-addition rule that
-    was already written, so the three chains enter through it rather than through a new one."""
+    was already written, so the three chains enter through it rather than through a new one.
+
+    Asked of the chains the rule still routes. @tadaua came back FAIL at the day-2 gate and left
+    on a ruling, so the rule no longer reaches it — asserted below rather than dropped, because a
+    handle silently falling out of a loop is how a rule stops being tested.
+    """
     assert set(RETAIL_5) <= set(apply.GATED_LATE)
-    for handle in RETAIL_5:
+    routed = [handle for handle in RETAIL_5 if handle not in apply.EXCLUDED]
+    assert routed == ["@forainfo", "@ekomarket_shop"], routed
+    for handle in routed:
         with_group = row(handle, "late", group=True, open_group=True)
         assert apply.final_bucket(with_group)[0] == "comments"
         assert apply.final_bucket(row(handle, "late", group=False))[0] == "posts"
         with pytest.raises(SystemExit, match="stop and report"):
             apply.final_bucket(row(handle, "late", verdict="FLAG"))
+    assert apply.final_bucket(row("@tadaua", "late", verdict="FAIL"))[0] is None
 
 
 def test_no_retail_official_source_enters_as_a_community_channel():
@@ -528,7 +632,10 @@ def test_a_run_with_nothing_new_leaves_the_file_byte_identical():
 def test_an_emoji_title_survives_the_yaml_round_trip(tmp_path):
     """Titles carry emoji, colons and quotes; a hand-rolled YAML writer is where those break."""
     nasty = 'Знижки: "супер" 💛 | все'
-    entries = [apply.source_entry(row("@zinkivnews", "city", title=nasty, group=False), "posts")]
+    # A handle the AUDIENCE table names and the registry never will: @poltava_misto left as a
+    # supergroup at the day-2 sitting. The earlier pick, @zinkivnews, entered the registry at the
+    # same sitting and the round trip then failed on a duplicate id instead of on the quoting.
+    entries = [apply.source_entry(row("@poltava_misto", "city", title=nasty, group=False), "posts")]
     original = (REPO_ROOT / "config" / "registry.yaml").read_text(encoding="utf-8")
     path = tmp_path / "registry.yaml"
     path.write_text(apply.insert_sources(original, entries), encoding="utf-8")
@@ -564,7 +671,7 @@ def test_the_shipped_registry_is_re_derivable_from_the_gate_record():
             expected["watch"],
         ), candidate["handle"]
         checked += 1
-    assert checked == 35
+    assert checked == 57
 
 
 def test_the_composition_matches_the_canons_own_summary():
@@ -601,14 +708,25 @@ def test_the_composition_matches_the_canons_own_summary():
     buckets = {"comments": 0, "posts": 0, "watch": 0, "excluded": 0}
     for _, bucket in resolved(record):
         buckets["excluded" if bucket is None else bucket] += 1
-    assert buckets["comments"] == 15
-    assert buckets["watch"] == 6
-    assert buckets["posts"] == 14
+    # The day-2 sitting: 25 new candidates plus "Дозаявка №9"'s replacement. The wave-3 line above
+    # is kept because the canon keeps it — an amended file is a history, not a latest-value store.
+    day2 = " ".join(text[text.index("**Сводка после дня 2") :][:420].split())
+    assert "**Сводка после дня 2: реестр 61 = запуск 54 + watch 7.**" in day2
+    assert "комментных 16, постовых 34" in day2
+    assert "Исключено за фазу **33**" in day2
+    assert "боевой **1** (@educationwithloven)" in day2, "the mothers segment stopped being empty"
+    provisional = " ".join(text[text.index("**Весь дифф реестра дня 2") :][:400].split())
+    assert "PROVISIONAL pending yield screen" in provisional
+
+    assert buckets["comments"] == 16
+    assert buckets["watch"] == 7
+    assert buckets["posts"] == 34
     # Six by 07.08 midday, the five the theme screen caught that evening (@znishkom,
     # @whitecode_zny, @offspringrus off-topic; @discountua1, @ATB_FANatik text-free), @uasaler by
-    # wave 2, and wave 3's fifteen — 3 on the census, 1 on market-origin evidence, 11 on RU titles.
-    assert buckets["excluded"] == 29
+    # wave 2, wave 3's fifteen — 3 on the census, 1 on market-origin evidence, 11 on RU titles —
+    # and the day-2 four: three supergroups and one dead chain.
+    assert buckets["excluded"] == 33
     # The four originals are out of the gate's scope, so they are added here rather than counted.
     # None of the fifteen was one of them: @tretyakovaele was gated in 5c1 like the rest.
-    assert 4 + buckets["comments"] + buckets["posts"] == 33
-    assert 4 + buckets["comments"] + buckets["posts"] + buckets["watch"] == 39
+    assert 4 + buckets["comments"] + buckets["posts"] == 54
+    assert 4 + buckets["comments"] + buckets["posts"] + buckets["watch"] == 61

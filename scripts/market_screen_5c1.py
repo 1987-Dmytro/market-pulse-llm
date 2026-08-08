@@ -250,11 +250,29 @@ def print_table(rows: list[dict]) -> None:
         )
 
 
+def refuse_to_overwrite(out: Path) -> None:
+    """A screen is a measurement of a composition, and the composition moves.
+
+    `results/market_screen_5c1.json` is the 2026-08-07 pass over the live 39, and «RF 0» is quoted
+    from it in STATUS and in the hot cache. Re-running in place under a 61-source registry writes
+    a different table under the same name and the quote silently stops matching its source. The
+    theme screen already carries this refusal for a harder reason — its rows cannot be re-derived
+    at all — and this is the same lesson one notch weaker: a dated measurement gets a dated file.
+    """
+    if out == RECORD and RECORD.exists():
+        raise SystemExit(
+            f"{RECORD.relative_to(REPO_ROOT)} already exists — it is the 2026-08-07 screen of the"
+            " composition as it stood then, and «RF 0 on the live 39» is quoted from it. A pass"
+            " over today's registry is a different measurement: give it --out with another path."
+        )
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", type=Path, default=RECORD, help="where to write the record")
     parser.add_argument("--only", metavar="HANDLE", nargs="+", help="screen only these handles")
     args = parser.parse_args(argv)
+    refuse_to_overwrite(args.out)
 
     since = census.window_since()
     registry = load_registry(REGISTRY)
