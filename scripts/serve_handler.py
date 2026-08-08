@@ -30,9 +30,11 @@ The model loads once per cold start, at the first job — not at import, so that
 misconfigured worker reports the refusal instead of the container dying before it can.
 """
 
+import hashlib
 import importlib.metadata
 import json
 import os
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -156,11 +158,82 @@ def describe(config: dict, runtime: dict, artifact_sha: str, merged_provenance: 
     }
 
 
+MIN_RUNPOD_SDK = (1, 10, 1)
+"""RunPod's own troubleshooting page: 1.7.11–1.10.0 "could corrupt per-worker job tracking".
+
+The symptom is the one srv-2b spent $1.00 failing to explain — jobs stay IN_QUEUE while
+workers are available — and the documented fix is `pip install --upgrade "runpod>=1.10.1"`.
+The volume already carries 1.11.0 (`results/srv2c_bootlog.json :: worker_info.runtime.runpod`),
+so this guard is not a diagnosis of srv-2b; it is a boot-time refusal that stops a re-staged
+volume from silently reintroducing a delivery bug no downstream number could see.
+"""
+
+
+def assert_sdk_version(version: str | None) -> str:
+    """Refuse to serve on an SDK release whose job tracking is documented broken.
+
+    An absent version is a refusal too: a worker that cannot say which SDK is
+    dispatching its jobs cannot be cleared of the bug either.
+    """
+    if not version:
+        raise SystemExit(
+            "the runpod SDK does not report a version — a worker that cannot name its"
+            f" dispatcher cannot be cleared of the {'.'.join(map(str, MIN_RUNPOD_SDK))} job-"
+            "tracking bug. Install runpod and re-stage."
+        )
+    parts = tuple(int(number) for number in re.findall(r"\d+", version)[:3])
+    if parts < MIN_RUNPOD_SDK:
+        # A floor, not a range test. RunPod documents the breakage in 1.7.11–1.10.0 and the
+        # fix in 1.10.1; nothing says an older release is safe, and this endpoint has no
+        # reason to run one. So the message names the fix rather than claiming every
+        # refused version sits inside the documented range.
+        raise SystemExit(
+            f"runpod {version} is below {'.'.join(map(str, MIN_RUNPOD_SDK))}, the release that"
+            " fixes the per-worker job tracking RunPod documents as corrupted in 1.7.11–1.10.0"
+            " (jobs stay IN_QUEUE while workers are available). Re-stage the volume's venv."
+        )
+    return version
+
+
+def dump_rows(path: str, start: int, texts: list[str], replies: list[dict]) -> None:
+    """Append this chunk's replies to a file on the network volume, one JSON row each.
+
+    The API result of an async job is deleted 30 minutes after it completes, and the
+    parity pass is one job that runs for the better part of an hour — so until it
+    returns, the only durable copy of the rows already generated is this file. Opened
+    and closed per chunk on purpose: at batch 1 that is one fsync-able write per row,
+    which is what makes a job that dies at row 700 still worth 699 rows.
+
+    ``sha8`` is the row's own text, not its index: a dump recovered without the job that
+    produced it can then be *checked* against the test set rather than trusted to be in
+    the order someone remembers sending.
+    """
+    with open(path, "a", encoding="utf-8") as handle:
+        for offset, (text, reply) in enumerate(zip(texts, replies)):
+            handle.write(
+                json.dumps(
+                    {
+                        "i": start + offset,
+                        "sha8": hashlib.sha256(text.encode("utf-8")).hexdigest()[:8],
+                        "reply": reply,
+                    },
+                    ensure_ascii=False,
+                )
+                + "\n"
+            )
+
+
 def handle(job: dict, client, info: dict) -> dict:
     """Dispatch one job against an already-loaded client. Pure — the tests drive it.
 
     An unknown ``op`` is an error rather than a default: a typo that silently
     returned ``info`` would score zero rows and look like an empty test set.
+
+    ``batch_size`` splits the job's texts into forward passes; it defaults to all of
+    them, which is what every caller before srv-2d sent and what the smoke measured.
+    srv-2d ships one input's whole slice in a single job and passes 1, so each forward
+    receives a one-element list — the identical call the 8-row smoke and `_one_row`
+    already make. The transport changed; the compute path did not.
     """
     payload = job.get("input") or {}
     op = payload.get("op")
@@ -170,8 +243,22 @@ def handle(job: dict, client, info: dict) -> dict:
         texts = payload.get("texts")
         if not isinstance(texts, list) or not texts:
             raise ValueError(f"batch needs a non-empty list of texts, got {type(texts).__name__}")
-        replies = client.batch(payload["task"], texts, payload.get("posts"))
-        return {"replies": replies, "n": len(replies)}
+        posts = payload.get("posts")
+        asked = payload.get("batch_size")
+        size = len(texts) if asked is None else int(asked)
+        if size < 1:
+            raise ValueError(f"batch_size must be at least 1, got {size}")
+        dump = payload.get("dump_path")
+        replies: list[dict] = []
+        for start in range(0, len(texts), size):
+            window = texts[start : start + size]
+            context = posts[start : start + size] if posts else None
+            fresh = client.batch(payload["task"], window, context)
+            replies.extend(fresh)
+            if dump:
+                dump_rows(dump, start, window, fresh)
+        out = {"replies": replies, "n": len(replies)}
+        return out | {"dump_path": dump, "forward_batch_size": size} if dump else out
     raise ValueError(f"unknown op {op!r} — this worker answers 'info' and 'batch'")
 
 
@@ -219,6 +306,10 @@ class Worker:
 def main() -> int:  # pragma: no cover — the RunPod entrypoint, exercised on the worker
     import runpod
 
+    # Before the job loop, not inside it: an SDK that mis-tracks jobs fails by never
+    # delivering one, and a refusal printed into the boot log is readable where a
+    # silently-swallowed job is not.
+    print(f"runpod SDK {assert_sdk_version(library_versions(('runpod',))['runpod'])}", flush=True)
     runpod.serverless.start({"handler": Worker()})
     return 0
 

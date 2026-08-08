@@ -64,6 +64,37 @@ POLL_SECONDS = 5.0
 TERMINAL = frozenset({"COMPLETED", "FAILED", "CANCELLED", "TIMED_OUT"})
 
 
+def execution_policy(execution_timeout_s: float, ttl_s: float) -> dict:
+    """RunPod's per-request execution policy, and the ONE place seconds become milliseconds.
+
+    The endpoint's own execution timeout defaults to 600 000 ms and kills the job when it
+    is exceeded — fine for the 758 one-row jobs 5b sent, fatal for srv-2d's one job per
+    input, which carries a whole slice. RunPod's `send-requests` page (the unit reference
+    that `endpoint-configurations` links to for these two fields) documents both in
+    **milliseconds**: the example reads ``"executionTimeout": 900000``, the defaults are
+    600 000 and 86 400 000, the minimums 5 s and 10 s. Every caller and every runbook line
+    here is written in seconds, and this function is the conversion — a briefing that says
+    3600 means an hour, and 3600 on the wire would mean 3.6 s, which is below RunPod's own
+    minimum.
+
+    ``ttl`` is not the same clock: it starts at SUBMISSION, not at pickup, so it has to
+    cover the queue delay as well as the run.
+    """
+    if execution_timeout_s < 5 or ttl_s < 10:
+        raise ValueError(
+            f"executionTimeout {execution_timeout_s}s / ttl {ttl_s}s: RunPod's documented"
+            " minimums are 5 s and 10 s, and these fields are SECONDS here — the"
+            " milliseconds are this function's business"
+        )
+    if ttl_s <= execution_timeout_s:
+        raise ValueError(
+            f"ttl {ttl_s}s must outlast executionTimeout {execution_timeout_s}s: the ttl"
+            " clock starts at submission and the execution clock at pickup, so a ttl that"
+            " only equals the execution budget deletes a job that was merely queued"
+        )
+    return {"executionTimeout": int(execution_timeout_s * 1000), "ttl": int(ttl_s * 1000)}
+
+
 def endpoint_url(endpoint_id: str, path: str) -> str:
     return f"{BASE_URL}/{endpoint_id}/{path}"
 
@@ -112,8 +143,23 @@ class EndpointClient:
         timeout: float = DEFAULT_TIMEOUT,
         handshake_timeout: float = HANDSHAKE_TIMEOUT,
         retries: int = 0,
+        forward_batch_size: int | None = None,
+        dump_path: str | None = None,
+        policy: dict | None = None,
+        job_timeout: float | None = None,
+        submit: str = "runsync",
     ) -> None:
         self.endpoint_id, self.api_key = endpoint_id, api_key
+        # srv-2d's job shape, and all five default to what 5b sent: one job per forward,
+        # synchronous, no policy, no dump. A field that is None is left out of the payload
+        # entirely rather than sent as null — the worker's defaults are then the ones the
+        # smoke measured, and the wire format of a 5b job is unchanged byte for byte.
+        self.forward_batch_size = forward_batch_size
+        self.dump_path = dump_path
+        self.policy = policy
+        self.job_timeout = job_timeout
+        self.submit = submit
+        self.rows = 0
         # None means RunPod's own API, which keys the endpoint in the path. A base URL
         # means the worker's own server on a pod, where there is no endpoint to key by and
         # `endpoint_id` is a label for the record — the pod id, not a routable thing.
@@ -138,17 +184,23 @@ class EndpointClient:
             else f"{self.base_url}/{path}"
         )
 
-    def _run(self, payload: dict, timeout: float | None = None) -> dict:
-        """One ``/runsync`` job, polled through ``/status`` if it outlives the call.
+    def _run(self, payload: dict, timeout: float | None = None, route: str = "runsync") -> dict:
+        """One job, polled through ``/status`` until it is terminal.
 
         ``retries`` defaults to 0 and 5b passes it: SPEC amendment 3.11 (2) gives
         the phase one attempt, and a client that quietly re-asked a row would turn
         a failed run into a slower one.
+
+        ``route`` is ``runsync`` for everything 5b sent and ``run`` for srv-2d's
+        one-job-per-input pass: a job that runs for the better part of an hour has no
+        business holding an HTTP connection open, and the poll loop below is the same
+        either way — only the first response differs, ``run`` answering with an id
+        immediately where ``runsync`` may answer with the finished job.
         """
         timeout = self.timeout if timeout is None else timeout
         if self.started_at is None:
             self.started_at = time.monotonic()
-        job = _post(self.url("runsync"), self.api_key, payload, timeout)
+        job = _post(self.url(route), self.api_key, payload, timeout)
         deadline = time.monotonic() + timeout
         while job.get("status") not in TERMINAL:
             if "id" not in job:
@@ -171,11 +223,13 @@ class EndpointClient:
             raise ApiError(-1, f"job {job.get('id')} ended {job['status']}: {str(job)[:300]}")
         return job.get("output") or {}
 
-    def _run_with_retry(self, payload: dict, timeout: float | None = None) -> dict:
+    def _run_with_retry(
+        self, payload: dict, timeout: float | None = None, route: str = "runsync"
+    ) -> dict:
         attempt = 0
         while True:
             try:
-                return self._run(payload, timeout)
+                return self._run(payload, timeout, route)
             except ApiError as err:
                 attempt += 1
                 if attempt > self.retries or err.status not in RETRYABLE:
@@ -198,9 +252,13 @@ class EndpointClient:
         """
         if posts is not None and len(posts) != len(texts):
             raise ValueError(f"{len(posts)} parent posts for {len(texts)} rows")
-        output = self._run_with_retry(
-            {"input": {"op": "batch", "task": task, "texts": texts, "posts": posts}}
-        )
+        job_input = {"op": "batch", "task": task, "texts": texts, "posts": posts}
+        if self.forward_batch_size is not None:
+            job_input["batch_size"] = self.forward_batch_size
+        if self.dump_path is not None:
+            job_input["dump_path"] = self.dump_path
+        payload = {"input": job_input} | ({"policy": self.policy} if self.policy else {})
+        output = self._run_with_retry(payload, self.job_timeout, self.submit)
         replies = output.get("replies")
         if not isinstance(replies, list) or len(replies) != len(texts):
             raise ApiError(
@@ -208,6 +266,7 @@ class EndpointClient:
                 f"the worker answered {len(replies) if isinstance(replies, list) else 'no'} rows"
                 f" for {len(texts)} texts — the batch is mispaired, stop and report",
             )
+        self.rows += len(replies)
         for reply in replies:
             usage = reply.get("usage") or {}
             self.usage["prompt_tokens"] += int(usage.get("prompt_tokens") or 0)
@@ -232,11 +291,17 @@ class EndpointClient:
         )
         return {
             "calls": self.calls,
+            "rows": self.rows,
             "worker_seconds": round(self.worker_seconds, 3),
             "queue_seconds": round(self.queue_seconds, 3),
             "wall_seconds": wall,
             "seconds_per_call": round(self.worker_seconds / self.calls, 3) if self.calls else None,
             "wall_per_call": round(wall / self.calls, 3) if wall and self.calls else None,
+            # A call was a row until srv-2d and is a whole input slice after it, so the
+            # per-row rate the cost reading divides by has to be counted, not inferred
+            # from `calls`. Wall clock, because that is the unit the worker bills in.
+            "wall_per_row": round(wall / self.rows, 3) if wall and self.rows else None,
+            "seconds_per_row": round(self.worker_seconds / self.rows, 3) if self.rows else None,
             "idle_share": (
                 round(1 - self.worker_seconds / wall, 4) if wall and self.worker_seconds else None
             ),

@@ -63,6 +63,13 @@ MAX_TOKENS = 256
 PHASE_CAP_USD = 8.00
 DEFAULT_RUN_CAP_USD = 1.50
 UNUSABLE_LIMIT = 0.02
+CLIENT_GRACE_SECONDS = 300.0
+"""How much longer than the job's own ttl this client waits before calling it lost.
+
+The ttl clock starts at submission and the execution clock at pickup, so the ttl is the
+outer of the two server-side deadlines. A client that gave up first would abandon a job
+that is still running and still billing — and under `retries=0` there is no second ask.
+"""
 # Fallbacks are off, so a pinned endpoint's rate limit is ours to wait out. Six
 # attempts is ~46 s of backoff per row; four workers is what stopped `venice/fp8`
 # from returning 429 at all (the first qwen3.5-9b run lost 11 rows to it).
@@ -688,6 +695,17 @@ def serving_config(config: dict, args, info: dict, merged: dict | None, client) 
             # record whose runtime has to be inferred from the endpoint id is not one.
             "transport": "pod-loopback" if args.endpoint_url else "serverless-api",
             "endpoint_url": args.endpoint_url or serving.BASE_URL,
+            # The job shape, beside the generation block rather than inside it: the
+            # forward batch is what decides a token and lives in `generation`; how many
+            # rows shared a job decides only the bill and the blast radius, and a reader
+            # comparing this record to the pod's has to be able to see which is which.
+            "job_shape": {
+                "route": client.submit,
+                "rows_per_job": "one input slice" if args.job_per_input else "one forward",
+                "forward_batch_size": client.forward_batch_size or args.batch_size,
+                "policy_ms": client.policy,
+                "row_dump": client.dump_path,
+            },
             "merge_state": info.get("merge_state"),
             "worker": {k: v for k, v in info.items() if k != "runtime"},
             "timing": client.timing(),
@@ -1190,6 +1208,35 @@ def main(argv: list[str] | None = None) -> int:
         help="--backend local: rows per padded generate call",
     )
     parser.add_argument(
+        "--job-per-input",
+        action="store_true",
+        help="--backend endpoint: send each input's rows as ONE asynchronous /run job instead"
+        " of one job per forward. --batch-size still fixes the forward, so the compute path"
+        " is unchanged; what changes is that 758 jobs become 3 (srv-2d).",
+    )
+    parser.add_argument(
+        "--volume-dump",
+        help="--job-per-input: a path PREFIX on the worker's network volume. The worker"
+        " appends every row's reply under <prefix>_<input>.jsonl as it goes, which is the"
+        " only durable copy while a job runs — an async result is deleted 30 min after it"
+        " completes, and this job runs for the better part of an hour.",
+    )
+    parser.add_argument(
+        "--job-timeout",
+        type=float,
+        default=3600.0,
+        help="--job-per-input: the per-request execution budget in SECONDS (RunPod's own"
+        " default is 600 s, which one input's slice would blow through). Sent as"
+        " milliseconds — market_pulse.serving.execution_policy is the conversion.",
+    )
+    parser.add_argument(
+        "--job-ttl",
+        type=float,
+        default=7200.0,
+        help="--job-per-input: the job's lifespan in SECONDS. This clock starts at"
+        " SUBMISSION, not at pickup, so it covers the queue delay too.",
+    )
+    parser.add_argument(
         "--batch-measurement",
         action="store_true",
         help="--backend endpoint: the batch measurement SPEC amendment 3.11 (2) pre-registered"
@@ -1263,6 +1310,10 @@ def main(argv: list[str] | None = None) -> int:
         parser.error("--endpoint-id is a serving run: pass --backend endpoint")
     if args.endpoint_url and not served:
         parser.error("--endpoint-url is a serving run: pass --backend endpoint")
+    if args.job_per_input and not served:
+        parser.error("--job-per-input is a served run's transport: pass --backend endpoint")
+    if args.volume_dump and not args.job_per_input:
+        parser.error("--volume-dump is where a --job-per-input job writes its rows as it runs")
     if args.batch_measurement and not served:
         parser.error(
             "--batch-measurement is the SERVED run of SPEC amendment 3.11 (2): gate evals stay"
@@ -1368,6 +1419,18 @@ def main(argv: list[str] | None = None) -> int:
             args.endpoint_id,
             "" if args.endpoint_url else runpod_api_key(),
             base_url=args.endpoint_url or None,
+            # One job per input, and the forward batch travels inside it: the worker
+            # chunks the slice at `--batch-size`, so every generate call is the same
+            # one the smoke made. The client's own deadline outlasts the server's
+            # execution budget, or it would give up on a job that is still running.
+            forward_batch_size=args.batch_size if args.job_per_input else None,
+            policy=(
+                serving.execution_policy(args.job_timeout, args.job_ttl)
+                if args.job_per_input
+                else None
+            ),
+            job_timeout=args.job_ttl + CLIENT_GRACE_SECONDS if args.job_per_input else None,
+            submit="run" if args.job_per_input else "runsync",
         )
         # Before the first paid row: the worker has to say what it loaded, and it has to be
         # the half of the pair this invocation claims. An endpoint is updatable and its name
@@ -1490,11 +1553,15 @@ def main(argv: list[str] | None = None) -> int:
                     if contexts[name] is None
                     else {row["id"]: post for row, post in zip(data[name], contexts[name])}
                 )
+                if args.job_per_input and args.volume_dump:
+                    # One file per input, so the filename is the tag: a dump recovered off
+                    # the volume says which slice it belongs to without a field to trust.
+                    client.dump_path = f"{args.volume_dump}_{name}.jsonl"
                 fresh = classify_local(
                     client,
                     task,
                     pending,
-                    args.batch_size,
+                    max(len(pending), 1) if args.job_per_input else args.batch_size,
                     on_row,
                     None if by_row is None else [by_row[row["id"]] for row in pending],
                 )

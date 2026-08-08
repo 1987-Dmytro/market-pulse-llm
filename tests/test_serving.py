@@ -329,3 +329,92 @@ def test_a_worker_that_does_not_report_a_library_is_refused():
         serving.assert_runtime_matches(
             {k: v for k, v in ANCHOR_STACK.items() if k != "transformers"}, ANCHOR_STACK
         )
+
+
+# --- srv-2d: one job per input, and the policy that lets it finish ------------
+
+
+def test_the_policy_is_written_in_seconds_and_sent_in_milliseconds():
+    """RunPod's send-requests page: the example reads 900000 and the fields are ms. Every
+    runbook and briefing here says 3600, and 3600 on the wire would be 3.6 s."""
+    assert serving.execution_policy(3600, 7200) == {
+        "executionTimeout": 3600000,
+        "ttl": 7200000,
+    }
+
+
+@pytest.mark.parametrize(
+    ("timeout", "ttl", "message"),
+    [
+        (3.0, 7200, "minimums are 5 s and 10 s"),
+        (600, 9, "minimums are 5 s and 10 s"),
+        (3600, 3600, "must outlast"),
+    ],
+)
+def test_a_policy_below_runpods_own_minimums_is_refused(timeout, ttl, message):
+    with pytest.raises(ValueError, match=message):
+        serving.execution_policy(timeout, ttl)
+
+
+def test_one_job_carries_the_slice_the_forward_size_and_the_dump(client):
+    """The srv-2d shape, on the wire: the worker walks the rows and writes them down."""
+    endpoint = client(
+        {"id": "job-7", "status": "IN_QUEUE"},
+        job({"replies": [reply("a"), reply("b")], "n": 2}) | {"id": "job-7"},
+        forward_batch_size=1,
+        dump_path="/runpod-volume/parity_comments.jsonl",
+        policy=serving.execution_policy(3600, 7200),
+        job_timeout=7500.0,
+        submit="run",
+    )
+    endpoint.batch("T1", ["one", "two"])
+    url, payload = endpoint.transport.seen[0]
+    assert url.endswith("/run")  # not runsync: a 45-minute job holds no HTTP connection
+    assert payload == {
+        "input": {
+            "op": "batch",
+            "task": "T1",
+            "texts": ["one", "two"],
+            "posts": None,
+            "batch_size": 1,
+            "dump_path": "/runpod-volume/parity_comments.jsonl",
+        },
+        "policy": {"executionTimeout": 3600000, "ttl": 7200000},
+    }
+    assert endpoint.transport.seen[1][0].endswith("/status/job-7")
+
+
+def test_the_handshake_stays_synchronous_even_when_the_batches_do_not(client):
+    """`info` is the guard that runs before the first paid row, and /runsync is the path
+    srv-2c proved answers on this endpoint. A transport change must not move it."""
+    endpoint = client(job({"serving_config": "A"}), submit="run")
+    endpoint.info()
+    assert endpoint.transport.seen[0][0].endswith("/runsync")
+
+
+def test_the_client_waits_out_the_job_it_asked_for(client, monkeypatch):
+    """`retries=0` means a client that gives up first abandons a job that is still running
+    and still billing, with no second ask available."""
+    ticks = iter([0.0, 0.0, 100.0, 7000.0, 7000.0])
+    monkeypatch.setattr(serving.time, "monotonic", lambda: next(ticks))
+    endpoint = client(
+        {"id": "job-3", "status": "IN_PROGRESS"},
+        job({"replies": [reply()]}) | {"id": "job-3"},
+        job_timeout=7500.0,
+        submit="run",
+    )
+    assert len(endpoint.batch("T1", ["one"])) == 1
+
+
+def test_timing_counts_rows_because_a_call_stopped_being_one(client, monkeypatch):
+    """Before srv-2d a call WAS a row. One job per input breaks that, and the cost reading
+    divides by rows — so they are counted, not inferred from `calls`."""
+    ticks = iter([0.0, 0.0, 60.0, 60.0])
+    monkeypatch.setattr(serving.time, "monotonic", lambda: next(ticks))
+    endpoint = client(job({"replies": [reply(), reply(), reply()]}, execution_ms=45000))
+    endpoint.batch("T1", ["a", "b", "c"])
+    timing = endpoint.timing()
+    assert timing["calls"] == 1 and timing["rows"] == 3
+    assert timing["wall_per_call"] == 60.0
+    assert timing["wall_per_row"] == 20.0
+    assert timing["seconds_per_row"] == 15.0

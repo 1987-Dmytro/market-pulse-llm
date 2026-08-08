@@ -202,6 +202,13 @@ def ask(client, rows: list[dict]) -> list[dict]:
             {
                 "id": row["id"],
                 "task": task,
+                # The reply itself, not just whether it parsed: `scripts/runbook_srv2b.md`
+                # §C.5 asks this record to carry the rows' text and answers, because the
+                # three T2 rows that "proved this stack on the pod" were never written
+                # down and could not be re-read. It is also what the one-job control of
+                # srv-2d compares against — a byte comparison needs the bytes.
+                "text": row["text"],
+                "content": reply.get("content"),
                 "finish_reason": reply.get("finish_reason"),
                 "parsed": parsed is not None,
                 "parse_failure": failure,
@@ -213,6 +220,47 @@ def ask(client, rows: list[dict]) -> list[dict]:
             }
         )
     return out
+
+
+def group_by_rendering(rows: list[dict]) -> list[tuple[str, bool, list[dict]]]:
+    """The carve's rows, split into groups one job can carry: same task, same post-ness.
+
+    ``ask`` sends ``posts=None`` for a row without a parent and a one-element list for a
+    row with one. A mixed group would have to send ``[None, {...}]``, which is a third
+    rendering neither the per-row pass nor 4.5h2 ever sent — so the split is by both.
+    """
+    keys = sorted({(rendering(row["task"]), bool(row.get("post"))) for row in rows})
+    return [
+        (
+            task,
+            has_post,
+            [r for r in rows if rendering(r["task"]) == task and bool(r.get("post")) == has_post],
+        )
+        for task, has_post in keys
+    ]
+
+
+def ask_one_job(client, rows: list[dict], dump_prefix: str | None) -> dict:
+    """The same carve rows again, through srv-2d's transport: one job per group, batch 1.
+
+    This is the positive control the parity attempt does not get to have. srv-2d ships a
+    whole input slice in a single job, so the worker — not the driver — is what walks the
+    rows; the claim that this cannot move a token is that each forward still receives a
+    one-element list. A claim like that is cheap to *check* on training data and expensive
+    to be wrong about on the one paid pass, so the check runs first and compares contents
+    byte for byte against the per-row replies.
+    """
+    replies = {}
+    for task, has_post, group in group_by_rendering(rows):
+        if dump_prefix:
+            client.dump_path = f"{dump_prefix}_{task}{'_post' if has_post else ''}.jsonl"
+        answered = client.batch(
+            task,
+            [row["text"] for row in group],
+            [row["post"] for row in group] if has_post else None,
+        )
+        replies |= {row["id"]: reply for row, reply in zip(group, answered)}
+    return replies
 
 
 def stamp_cost(path: Path, usd: float, pod_usd_per_hour: float = 0.0, pod_id: str = "") -> dict:
@@ -302,6 +350,30 @@ def main(argv: list[str] | None = None) -> int:
         " serverless inequality onto one a correctly-priced pod run can pass",
     )
     parser.add_argument(
+        "--one-job-check",
+        action="store_true",
+        help="after the per-row pass, ask the SAME carve rows again as one job per task with"
+        " the worker chunking at batch 1 — srv-2d's parity transport. The replies must be"
+        " byte-identical to the per-row pass or the run stops.",
+    )
+    parser.add_argument(
+        "--volume-dump",
+        help="--one-job-check: a path prefix on the worker's network volume for the per-row"
+        " dump the parity pass depends on. Proves the worker takes that branch.",
+    )
+    parser.add_argument(
+        "--job-timeout",
+        type=float,
+        default=600.0,
+        help="--one-job-check: the per-request execution budget in SECONDS (sent as ms)",
+    )
+    parser.add_argument(
+        "--job-ttl",
+        type=float,
+        default=1200.0,
+        help="--one-job-check: the job's lifespan in SECONDS, counted from submission",
+    )
+    parser.add_argument(
         "--pod-id",
         default="",
         help="--stamp-cost on a pod: fill the record's deployment block from runpodctl, which"
@@ -353,6 +425,42 @@ def main(argv: list[str] | None = None) -> int:
 
     scored = ask(client, rows)
     timing = client.timing()
+    control = None
+    if args.one_job_check:
+        # A second, warm client so the two transports' timings never share a counter.
+        check_client = serving.EndpointClient(
+            args.endpoint_id,
+            key,
+            base_url=args.endpoint_url or None,
+            forward_batch_size=1,
+            policy=serving.execution_policy(args.job_timeout, args.job_ttl),
+            job_timeout=args.job_ttl + 300.0,
+            submit="run",
+        )
+        answered = ask_one_job(check_client, rows, args.volume_dump)
+        mismatched = [
+            {"id": row["id"], "per_row": row["content"], "one_job": answered[row["id"]]["content"]}
+            for row in scored
+            if answered[row["id"]]["content"] != row["content"]
+        ]
+        control = {
+            "why": (
+                "srv-2d's parity pass sends one job per input and lets the WORKER walk the"
+                " rows at batch 1. This is the same code path on the arm's own carve, and"
+                " the replies are compared byte for byte against the per-row pass above."
+            ),
+            "route": check_client.submit,
+            "policy_ms": check_client.policy,
+            "forward_batch_size": check_client.forward_batch_size,
+            "dump_path": check_client.dump_path,
+            "groups": [
+                {"task": task, "with_post": has_post, "rows": len(group)}
+                for task, has_post, group in group_by_rendering(rows)
+            ],
+            "identical": not mismatched,
+            "mismatches": mismatched,
+            "timing": check_client.timing(),
+        }
     parsed = sum(1 for row in scored if row["parsed"])
     # The handshake carried the cold start; the rows after it are the steady state.
     row_wall = (timing["wall_seconds"] or 0) - (handshake["wall_seconds"] or 0)
@@ -378,6 +486,7 @@ def main(argv: list[str] | None = None) -> int:
         "timing": timing,
         "cold_start": handshake,
         "seconds_per_row_wall": per_row,
+        "one_job_control": control,
         "prompt_sha256": {task: prompts.prompt_sha256(task) for task in prompts.TASKS},
         "note": (
             "MECHANICS AND LATENCY ONLY. The rows are the arm's own held-out carve — training"
@@ -404,6 +513,17 @@ def main(argv: list[str] | None = None) -> int:
     if parsed != len(scored):
         print("\nSTOP AND REPORT: a carve row did not parse. The path is not proven.")
         return 3
+    if control is not None:
+        print(
+            f"one-job ctrl   {len(scored) - len(control['mismatches'])}/{len(scored)} identical"
+            f" · {control['timing']['wall_seconds']}s wall · dump {control['dump_path']}"
+        )
+        if not control["identical"]:
+            print(
+                "\nSTOP AND REPORT: the same rows answered differently when the worker walked"
+                " them. srv-2d's transport is not the instrument the smoke measured."
+            )
+            return 4
     return 0
 
 

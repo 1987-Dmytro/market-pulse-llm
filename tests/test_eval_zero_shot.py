@@ -1140,6 +1140,13 @@ def test_config_b_must_carry_the_merged_artifacts_own_provenance(capsys):
 
 
 class TimedClient:
+    """`EndpointClient`'s surface as `serving_config` reads it — the 5b job shape."""
+
+    submit = "runsync"
+    forward_batch_size = None
+    policy = None
+    dump_path = None
+
     def usage_dict(self):
         return {}
 
@@ -1148,7 +1155,13 @@ class TimedClient:
 
 
 def serving_args(config, **kwargs):
-    defaults = {"endpoint_id": "ep-9", "serving_config": config, "endpoint_url": ""}
+    defaults = {
+        "endpoint_id": "ep-9",
+        "serving_config": config,
+        "endpoint_url": "",
+        "job_per_input": False,
+        "batch_size": 1,
+    }
     return type("Args", (), defaults | kwargs)
 
 
@@ -1206,6 +1219,41 @@ def test_the_serving_block_carries_the_endpoint_the_worker_and_the_billed_second
     assert "runtime" not in config["serving"]["worker"]
     assert config["serving"]["worker"]["adapter_sha256"] == "b3ca6308"
     assert config["serving"]["transport"] == "serverless-api"
+    # the 5b job shape, unchanged: one forward per job, no policy, no dump
+    assert config["serving"]["job_shape"] == {
+        "route": "runsync",
+        "rows_per_job": "one forward",
+        "forward_batch_size": 1,
+        "policy_ms": None,
+        "row_dump": None,
+    }
+
+
+def test_the_record_says_how_many_rows_shared_a_job():
+    """srv-2d ships a whole input slice per job. That decides the bill and the blast radius
+    and nothing else — the forward batch, which decides a token, stays 1 and stays in
+    `generation`. A reader comparing this record to the pod's has to see which is which."""
+
+    class OneJobClient(TimedClient):
+        submit = "run"
+        forward_batch_size = 1
+        policy = {"executionTimeout": 3600000, "ttl": 7200000}
+        dump_path = "/runpod-volume/parity_srv2_sarcasm_holdout.jsonl"
+
+    config = runner.serving_config(
+        {"train_sources": {}, "testset_version": "v4"},
+        serving_args("A", job_per_input=True),
+        {"merge_state": "unmerged-adapter", "adapter_sha256": "b3ca6308", "runtime": {}},
+        None,
+        OneJobClient(),
+    )
+    assert config["serving"]["job_shape"] == {
+        "route": "run",
+        "rows_per_job": "one input slice",
+        "forward_batch_size": 1,
+        "policy_ms": {"executionTimeout": 3600000, "ttl": 7200000},
+        "row_dump": "/runpod-volume/parity_srv2_sarcasm_holdout.jsonl",
+    }
 
 
 def test_the_record_names_the_runtime_that_produced_it():

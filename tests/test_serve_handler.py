@@ -6,7 +6,9 @@ the environment names, what `info` promises the Mac-side guard, and that a batch
 to `LocalClient` untouched. The load itself is the one thing stubbed out.
 """
 
+import hashlib
 import importlib.util
+import json
 import sys
 from pathlib import Path
 
@@ -173,3 +175,115 @@ def test_info_names_the_commit_the_worker_is_serving():
 def test_the_commit_is_absent_rather_than_fatal_off_a_checkout(monkeypatch):
     monkeypatch.setattr(handler, "REPO_ROOT", Path("/nonexistent-checkout"))
     assert handler.repo_commit() is None
+
+
+# --- srv-2d: one job carries a whole input, and the worker walks it -----------
+
+
+def test_a_job_without_a_batch_size_is_one_forward_as_it_always_was():
+    """The default is what the 8-row smoke measured; srv-2d must not move it silently."""
+    client = StubClient()
+    handler.handle({"input": {"op": "batch", "task": "T1", "texts": ["a", "b", "c"]}}, client, {})
+    assert client.seen == [("T1", ["a", "b", "c"], None)]
+
+
+def test_batch_size_1_makes_every_forward_a_one_row_call():
+    """The parity claim in one line: the transport changed, the generate call did not."""
+    client = StubClient()
+    out = handler.handle(
+        {"input": {"op": "batch", "task": "T1", "texts": ["a", "b", "c"], "batch_size": 1}},
+        client,
+        {},
+    )
+    assert client.seen == [("T1", ["a"], None), ("T1", ["b"], None), ("T1", ["c"], None)]
+    assert [r["content"] for r in out["replies"]] == ["reply to a", "reply to b", "reply to c"]
+    assert out["n"] == 3
+
+
+def test_the_parent_posts_are_sliced_with_their_rows():
+    """A window that took the whole posts list would render every row against post 0."""
+    client = StubClient()
+    posts = [{"post_text": "p0"}, {"post_text": "p1"}]
+    handler.handle(
+        {
+            "input": {
+                "op": "batch",
+                "task": "T1",
+                "texts": ["a", "b"],
+                "posts": posts,
+                "batch_size": 1,
+            }
+        },
+        client,
+        {},
+    )
+    assert client.seen == [("T1", ["a"], [posts[0]]), ("T1", ["b"], [posts[1]])]
+
+
+def test_a_zero_batch_size_is_refused_rather_than_looping_forever():
+    with pytest.raises(ValueError, match="batch_size must be at least 1"):
+        handler.handle(
+            {"input": {"op": "batch", "task": "T1", "texts": ["a"], "batch_size": 0}},
+            StubClient(),
+            {},
+        )
+
+
+def test_the_rows_land_on_the_volume_as_they_are_generated(tmp_path):
+    """The async result is deleted after 30 minutes and the job runs for the better part of
+    an hour — until it returns, this file is the only copy of the rows already answered."""
+    dump = tmp_path / "parity_comments.jsonl"
+    out = handler.handle(
+        {
+            "input": {
+                "op": "batch",
+                "task": "T1",
+                "texts": ["a", "b"],
+                "batch_size": 1,
+                "dump_path": str(dump),
+            }
+        },
+        StubClient(),
+        {},
+    )
+    lines = [json.loads(line) for line in dump.read_text(encoding="utf-8").splitlines()]
+    assert [line["i"] for line in lines] == [0, 1]
+    assert [line["reply"]["content"] for line in lines] == ["reply to a", "reply to b"]
+    # the row's own text, so a recovered dump can be CHECKED against the test set
+    assert lines[0]["sha8"] == hashlib.sha256(b"a").hexdigest()[:8]
+    assert out["dump_path"] == str(dump) and out["forward_batch_size"] == 1
+
+
+def test_a_job_that_asked_for_no_dump_writes_none(tmp_path):
+    out = handler.handle({"input": {"op": "batch", "task": "T1", "texts": ["a"]}}, StubClient(), {})
+    assert "dump_path" not in out
+    assert list(tmp_path.iterdir()) == []
+
+
+# --- srv-2d: the SDK release RunPod documents as breaking job delivery --------
+
+
+@pytest.mark.parametrize("version", ["1.7.11", "1.8.0", "1.10.0", "1.9.9"])
+def test_the_broken_sdk_range_refuses_to_serve(version):
+    with pytest.raises(SystemExit, match="job tracking"):
+        handler.assert_sdk_version(version)
+
+
+@pytest.mark.parametrize("version", ["1.10.1", "1.11.0", "2.0.0", "1.11.0.post1"])
+def test_a_fixed_sdk_serves(version):
+    assert handler.assert_sdk_version(version) == version
+
+
+def test_an_sdk_that_cannot_name_itself_is_refused_too():
+    """`library_versions` answers None for a distribution that is not installed."""
+    with pytest.raises(SystemExit, match="cannot name its dispatcher"):
+        handler.assert_sdk_version(None)
+
+
+def test_the_bar_is_a_floor_and_not_a_range_test():
+    """RunPod documents 1.7.11-1.10.0 as broken and 1.10.1 as the fix. Nothing says an
+    OLDER release is safe, so the guard is a floor — and its message says so, because a
+    refusal that misdescribes the version it refused sends the next reader to the wrong page."""
+    assert handler.MIN_RUNPOD_SDK == (1, 10, 1)
+    with pytest.raises(SystemExit, match="below 1.10.1"):
+        handler.assert_sdk_version("1.7.10")

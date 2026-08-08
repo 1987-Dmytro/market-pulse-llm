@@ -464,3 +464,99 @@ an attempt the contract does not have.
 **Fetch before you delete.** Anything written on the volume or the pod — sidecars, checkpoints,
 logs — comes back to the Mac and is verified against the record *before* the only other copy is
 destroyed, one command per artifact.
+
+---
+
+## D. srv-2d amendments — the parity attempt on a live endpoint
+
+Everything above is srv-2b's record and is not rewritten: it describes a session that
+happened, aborted at the handshake rung, and cost $0.9999. This section names the lines it
+supersedes and is what srv-2d copy-pastes. Two RunPod pages are normative for every setting
+here, declared so by `docs/PROMPT-srv-2d.md`:
+[endpoint-configurations](https://docs.runpod.io/serverless/endpoints/endpoint-configurations.md)
+and [troubleshooting](https://docs.runpod.io/serverless/troubleshooting.md).
+
+### D.1 The start command carries the redirect — standing, not a diagnostic
+
+Supersedes §C.4's `--docker-start-cmd "bash,/runpod-volume/start.sh"`:
+
+```bash
+--docker-start-cmd "bash,-c,exec bash /runpod-volume/start.sh > /runpod-volume/worker-boot.log 2>&1"
+```
+
+RunPod's troubleshooting page says logs "only appear for successfully initialized workers"
+and recommends storing detailed logs on network volumes instead of console output — so on
+the failure that matters most, the console channel is empty by design. srv-2c proved the
+redirect returns the whole boot sequence for $0.05 and its paid control proved the wrapper
+is **not** what made that run answer, so this is kept as the log channel and not as a fix.
+It truncates `/runpod-volume/worker-boot.log` on every worker boot; srv-2c's copy is already
+verbatim inside `results/srv2c_bootlog.json`, and anything else worth keeping comes off the
+volume *before* the next endpoint is created.
+
+### D.2 One job per input, and the policy that lets it finish
+
+758 `runsync` jobs was §C.7's shape. srv-2d sends **one asynchronous `/run` job per input** —
+three jobs for the v4 pass, because v4 is three slices under two renderings (comments_test
+400 · T1v2_with_post, posts_test 250 · T2, sarcasm_holdout 108 · T1v2_with_post) and one job
+carries one rendering. The forward batch stays 1: the worker chunks the slice itself, so
+every `generate` call still receives a one-element list.
+
+The endpoint's execution timeout defaults to **600 000 ms** and kills the job when exceeded,
+which one 400-row slice would blow through. The per-request override, in the units the
+`send-requests` page documents (**milliseconds**; its example reads `"executionTimeout":
+900000`):
+
+```json
+{"policy": {"executionTimeout": 3600000, "ttl": 7200000}}
+```
+
+`market_pulse.serving.execution_policy(3600, 7200)` is the one place seconds become
+milliseconds — pass seconds everywhere else. The **ttl clock starts at submission**, not at
+pickup, so it has to cover the queue delay as well as the run; that is why it is not equal to
+the execution budget.
+
+`--execution-timeout` on the *create* call keeps §C.4's warning: the flag takes seconds and
+stores milliseconds, `serverless update` cannot change it, and the per-request policy above
+overrides it per job anyway.
+
+### D.3 The row dump is on the volume because the API result is not durable
+
+An async result is **deleted 30 minutes after the job completes**, and these jobs run for
+tens of minutes. So `--volume-dump /runpod-volume/parity_srv2` makes the worker append every
+row's reply to `<prefix>_<input>.jsonl` as it is generated: at batch 1 that is one closed
+write per row, which is what makes a job that dies at row 700 still worth 699 rows. Fetch
+`/status` the moment a job completes, and fetch the dump off the volume before the endpoint
+is deleted (**§ the abort ladder: fetch before you delete**).
+
+### D.4 The SDK assert at boot
+
+`serve_handler.assert_sdk_version` refuses to start the job loop below **runpod 1.10.1**.
+RunPod documents 1.7.11–1.10.0 as corrupting per-worker job tracking — jobs stay IN_QUEUE
+while workers are available, which is srv-2b's symptom exactly. The volume carries **1.11.0**
+(`results/srv2c_bootlog.json :: worker_info.runtime.runpod`), outside that range, so this is
+a guard against a future re-stage and not a diagnosis of srv-2b.
+
+### D.5 An idle endpoint scales itself down
+
+From the configurations page: "After 3 days with no requests, the endpoint's max workers is
+reduced to 2 and Runpod sends you an email notification. After 7 days with no requests, max
+workers is set to 0." An endpoint left standing between sessions is therefore not the same
+endpoint a week later — read `workersMax` back from `serverless get` before relying on one,
+and prefer creating a fresh endpoint per session, which is what every srv-2 session has done.
+
+### D.6 The order that keeps the money path safe
+
+1. Code, tests, `make check`, commit — **before** anything is created.
+2. Spend anchor `results/spend_srv2d.json` written and committed, cap $2.00.
+3. Cheap pod → refresh `repo/` on the volume to the committed HEAD, prove the checkout by
+   hash, delete the pod, prove by listing.
+4. Endpoint per §C.4 with D.1's start command, **ADA_24 pinned, no fallback list** — a
+   measurement does not mix cards.
+5. Smoke: the 8-row carve, per-row (§C.5) **plus `--one-job-check`**, which asks the same
+   rows again through D.2's transport and refuses unless the replies are byte-identical.
+   That is the positive control the one paid attempt does not get to have.
+6. The projection, against the rule pre-registered in `implementation-notes.md` before the
+   smoke ran: if the measured rate does not fit the largest slice inside the execution
+   budget with margin, **STOP and report** — a job killed at its timeout spends the attempt.
+7. The parity pass, one attempt, no retry under any outcome.
+8. Fetch the dumps, delete the endpoint, prove by listing, stamp the spend.
