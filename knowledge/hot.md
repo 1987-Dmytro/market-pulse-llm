@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-08 22:19:45 (every SessionStart)
+**Auto-refreshed:** 2026-08-08 22:36:55 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+cbeeb80 chore(srv-2c): the closing figure, and the fact that it was still rising
+a70f742 docs(srv-2c): the live state records the control, and stops blaming our container
 84696d6 feat(srv-2c): the unwrapped control answers too -- the wrapper was never the cause
 d1c3aaf docs(srv-2c): the unwrapped control's outcomes, registered before it is bought
 64bbd1a docs(srv-2c): the day's log, and the live state stops asserting a cleared blocker
-475cc73 chore(srv-2c): the spend figure in the record, re-read after settlement
-b30652d feat(srv-2c): the boot log exists, and it says the worker starts and answers
 ```
 
 ## 📋 Recent decisions
@@ -31,15 +31,15 @@ b30652d feat(srv-2c): the boot log exists, and it says the worker starts and ans
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-08 22:20 (srv-2c close, control included). `docs/PROMPT-srv-2c.md`
+**Last update:** 2026-08-08 22:31 (`/save`, srv-2c + control accepted, srv-2d briefed). `docs/PROMPT-srv-2c.md`
 executed — **the boot log exists, our serverless worker answers, and the operator-bought control
-shows the unwrapped command answers too**: srv-2b's hang was the platform, not us. **$0.1006** of
-its $0.75 cap, record `results/srv2c_bootlog.json`. Earlier the same evening `docs/PROMPT-srv-2b.md` ran and **ABORTED at
+shows the unwrapped command answers too**: srv-2b's hang was the platform, not us. **$0.1377** of
+its $0.75 cap (the delta was still settling when the run closed — Dv33), record `results/srv2c_bootlog.json`. Earlier the same evening `docs/PROMPT-srv-2b.md` ran and **ABORTED at
 the handshake-timeout rung, $0.9999 of its $4.00 cap** — that abort is accepted, and srv-2c has now
 falsified the diagnosis it carried — twice over, the second time with a control the operator paid
 for. The volume `qw4nwleanc` (100 GB, EU-RO-1) is the only thing
 either session left standing; every endpoint, template and pod is deleted and proven deleted by
-listing. Eleven commits across the two (`066c282` → `475cc73`), `make check` **1,271 passed**.
+listing. Fifteen commits across the two (`066c282` → `cbeeb80`), `make check` **1,271 passed**.
 Earlier the same evening: srv-2a accepted, and the caption pilot at **$0.0180 of its $0.10 cap**. The runtime ADR is [[srv2-serverless-runtime-target]]; the yield half is
 [[5c1-relevance-floor-and-discovery]]; the day-2 half is [[5c1-day2-composition-and-search]]. This
 block is hand-edited; the section above it is auto-generated — do NOT touch the marker.
@@ -76,7 +76,7 @@ for batch-1 inference before this one.
 **PARITY WAS NOT RUN AND ITS SINGLE ATTEMPT IS NOT SPENT.** `results/parity_srv2.json` **does not
 exist**; §C.7 was never reached, test v4 was never opened, no head has a verdict and **no serving
 number reaches any aggregate**. What failed is the smoke, on the arm's own training carve. SPEC
-3.11 (2) remains unsatisfied and mandatory.
+3.11 (2) remains unsatisfied and mandatory — and **srv-2d is briefed to spend that one attempt** (see Next). srv-2c's live job is not parity but it is effectively the smoke that had to come first: a real worker answered with the schema and runtime asserts passing.
 
 **THE D7 RE-READ, HONESTLY BOUNDED.** `ADA_24` with a volume attached: **allocates and consumes**.
 The **48 GB half was never asked** — EU-RO-1 catalogues only the A6000 at stock `none` — and the
@@ -234,6 +234,23 @@ one, because the gate stores a title and never a bio.
 
 ## ⏭️ Next
 
+**srv-2d IS THE NEXT STEP AND IT SPENDS THE ONE PARITY ATTEMPT — `docs/PROMPT-srv-2d.md`, cap
+$2.00 out of the ~$5.35 of GPU headroom left.** srv-2c and its control are **accepted**; the road is
+open because the smoke is effectively already green (a live worker answered with real schema and
+runtime asserts). The contract: 758 rows of test v4, **batch 1**, ONE `/run` job, `ADA_24` **pinned
+with no fallback list** — a measurement does not mix cards — request policy
+`{"executionTimeout": 3600, "ttl": 7200}`, scored against `results/parity_5b_a.json` under
+3.11 (2). **No retry under any outcome; a failed gate is a finding reported with both readings.**
+
+**Two RunPod doc pages are normative for srv-2d and must be read before anything billable** —
+`endpoint-configurations` and `troubleshooting`. Four things they carry that this project learned
+the hard way or not at all: the **TTL timer starts at SUBMISSION**, not at pickup; **async `/run`
+results are deleted after 30 minutes**, which is why the per-row dump must land on the volume and
+`/status` must be fetched the moment the job completes; there is a **network-volume job-tracking bug
+in SDK 1.7.11–1.10.0** (our volume runs `runpod 1.11.0`, i.e. outside that range — so it does not
+explain srv-2b, but the boot assert `runpod>=1.10.1` is cheap); and **"logs only appear for
+successfully initialized workers"**, which is a large part of why srv-2b's console was empty.
+
 **srv-2a IS ACCEPTED — the team lead re-ran the suite (1,270 in 32.8 s) and verified the tail was
 committed unedited.** Two notes came back with it. The **step reordering is credited as an
 improvement**: the D7 re-read now happens **BEFORE the volume is created**, so the volume lands in
@@ -242,7 +259,7 @@ volume ended up pinning CA-MTL-3 where no 48 GB class allocated. And **Dv3 caugh
 error**: the contract cited its smoke from prose rather than from an artifact, and those three T2
 rows exist in no file. Ten deviations against a norm of 0–4, charged to an overloaded contract.
 
-**srv-2c IS DONE AND THE ANSWER IS THAT IT WORKS — $0.0506 of its $0.75 cap.** The boot log exists:
+**srv-2c IS DONE AND THE ANSWER IS THAT IT WORKS — $0.1377 of its $0.75 cap, control included.** The boot log exists:
 20 827 bytes on the volume, sha `4a48f32a…`, and it holds the SDK's own start — `Starting Serverless
 Worker | Version 1.11.0`, seven fitness checks in 3 993 ms, `Jobs in queue: 1`, `Started.`, 1 188
 weight shards in 93 s, `Finished.` The job returned **COMPLETED** (`delay 15.9 s · exec 158.4 s`)
@@ -270,8 +287,9 @@ durable place our worker's output can go.
 
 **THE VOLUME PERSISTS AND ITS CONTENTS ARE WRITTEN DOWN.** `qw4nwleanc` holds `hf/` at revision
 `842da379…` (59 GB, no `.incomplete` blobs), `venv/` with the pinned stack over the image's torch,
-`repo/` at **`48948d7a` — already stale**, the adapter inside it at `b3ca6308…`, `start.sh`, and
-the staging pod's logs. A next session should re-clone the repo, **not** re-stage the weights. Two
+`repo/` at **`cf4cf71` — refreshed at srv-2c by an incremental bundle, tree clean**, the adapter
+inside it at `b3ca6308…`, `start.sh`, and three logs (the staging pod's two plus
+`worker-boot.log`). A next session should bundle the delta, **not** re-stage the weights. Two
 notes ride along: runbook §B.1's "the adapter is the one item with a single copy" is no longer
 true, and `repo/` was refreshed to **`cf4cf71`** at srv-2c (incremental bundle, tree clean).
 **The volume's price IS now read** — `billing network-volume` settled one row at srv-2c:
