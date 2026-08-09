@@ -206,10 +206,63 @@ class FakeEndpoint:
         return {"calls": self.jobs, "rows": 0, "wall_seconds": 0.0, "smoke": True}
 
 
-def run(client, jobs: list[list[dict]], dump_prefix: str | None, on_slice) -> list[dict]:
-    """One job per slice, in order. A slice that fails is named and never re-asked."""
+SETTLED_RATE = REPO_ROOT / "results" / "srv2d_cost.json"
+COLD_START_USD = 0.0733
+"""SPEC 3.15 (3) / runbook §C.1, pre-registered: 239.022 s at the settled rate. A pre-registration
+is a file, not a preference — the measured start of THIS session is reported beside it and never
+swapped into the formula."""
+
+
+def rate_usd_per_second(path: Path = SETTLED_RATE) -> float:
+    return float(json.loads(path.read_text(encoding="utf-8"))["rate"]["usd_per_second"])
+
+
+def projection(
+    boot_seconds: float, worker_seconds: float, rows_done: int, rows_total: int, rate: float
+) -> dict:
+    """What the whole run will cost, from what it has cost so far. The §C.1 stop, per slice.
+
+    The first timed call is the `info` handshake, and on a cold endpoint it CARRIES the weight
+    load — vis-b's re-pilot hid a whole cold start inside `worker_seconds` and made its per-post
+    rate 2x too high (the ADR's retraction). So the boot is subtracted before the per-post rate
+    is taken, and added back once, as the pre-registered constant.
+    """
+    marginal_s = max(worker_seconds - boot_seconds, 0.0) / max(rows_done, 1)
+    return {
+        "rows_done": rows_done,
+        "rows_total": rows_total,
+        "boot_seconds": round(boot_seconds, 3),
+        "marginal_seconds_per_row": round(marginal_s, 3),
+        "marginal_usd_per_row": round(marginal_s * rate, 6),
+        # the pre-registered formula, which is the one the stop is taken on
+        "projected_usd": round(rows_total * marginal_s * rate + COLD_START_USD, 4),
+        "cold_start_usd_preregistered": COLD_START_USD,
+        # reported BESIDE it: this session's own boot, never substituted into the line above
+        "cold_start_usd_measured_here": round(boot_seconds * rate, 4),
+        "projected_usd_on_the_measured_start": round(
+            rows_total * marginal_s * rate + boot_seconds * rate, 4
+        ),
+    }
+
+
+def run(
+    client,
+    jobs: list[list[dict]],
+    dump_prefix: str | None,
+    on_slice,
+    stop=None,
+) -> list[dict]:
+    """One job per slice, in order. A slice that fails is named and never re-asked.
+
+    ``stop(index, rows_done)`` is the §C.1 re-projection gate: it returns a reason to halt, and
+    the slices not bought are left out of the outcomes rather than marked failed — nothing was
+    asked for them.
+    """
     outcomes = []
     for index, batch in enumerate(jobs):
+        if stop is not None and index and (reason := stop(index, len(outcomes))):
+            print(f"  STOP before job {index:02d}: {reason}", flush=True)
+            break
         if dump_prefix is not None:
             client.dump_path = f"{dump_prefix}_{index:02d}.jsonl"
         try:
@@ -253,6 +306,13 @@ def main(argv: list[str] | None = None, client=None) -> int:
     parser.add_argument("--dump-prefix", default=None, help="a path prefix on the network volume")
     parser.add_argument("--smoke", action="store_true", help="fake client, no network, no spend")
     parser.add_argument("--dry-run", action="store_true", help="the population and slices, stop")
+    parser.add_argument(
+        "--project-stop-usd",
+        type=float,
+        default=None,
+        help="§C.1: stop before a slice once the run projects above this. Default: what is left"
+        " of the session cap on the ledger",
+    )
     args = parser.parse_args(argv)
 
     out = args.out or OUT_DIR / f"gm4_{args.scope}.jsonl"
@@ -340,6 +400,34 @@ def main(argv: list[str] | None = None, client=None) -> int:
     print(f"  prompt        {TASK} {info['caption_prompt_sha256'][:12]}…")
 
     started = datetime.now(UTC).isoformat(timespec="seconds")
+    # After `info` and before the first caption: on a cold endpoint this is the weight load.
+    boot_seconds = float(client.timing().get("worker_seconds") or 0.0)
+    rate = rate_usd_per_second()
+    rows_total = sum(len(job) for job in jobs)
+    budget = args.project_stop_usd
+    if budget is None and ledger is not None:
+        budget = round(session_cap - spent, 4)
+    projections = []
+
+    def gate(index: int, rows_done: int) -> str | None:
+        seen = projection(
+            boot_seconds, float(client.timing()["worker_seconds"]), rows_done, rows_total, rate
+        )
+        projections.append({"before_job": index, **seen})
+        print(
+            f"  §C.1 after {rows_done}/{rows_total} rows: ${seen['marginal_usd_per_row']:.6f}/post"
+            f" → ${seen['projected_usd']:.4f} projected"
+            f" (measured start ${seen['cold_start_usd_measured_here']:.4f}"
+            f" vs pre-registered ${COLD_START_USD})",
+            flush=True,
+        )
+        if budget is not None and seen["projected_usd"] > budget:
+            return (
+                f"the run projects ${seen['projected_usd']:.4f} against ${budget:.4f} left of the"
+                f" ${session_cap:.2f} cap. A cap is not raised to finish a run"
+            )
+        return None
+
     outcomes = run(
         client,
         jobs,
@@ -348,6 +436,7 @@ def main(argv: list[str] | None = None, client=None) -> int:
             f"  job {i:02d}  {len(batch)} posts  {'ok' if replies else 'FAILED'}"
             f"  {sum(p['bytes'] for p in batch) / 1e6:.2f} MB"
         ),
+        gate if budget is not None else None,
     )
 
     by_name = {entry["name"]: entry for entry in images}
@@ -376,6 +465,8 @@ def main(argv: list[str] | None = None, client=None) -> int:
 
     balance, spent = (None, None) if ledger is None else spend_now(ledger, args.session)
     unusable = [row for row in outcomes if not row["caption"]]
+    asked = {row["name"] for row in outcomes}
+    unbought = sorted(post["name"] for job in jobs for post in job if post["name"] not in asked)
     record = {
         "timestamp": started,
         "phase": f"5c1 {args.session} — the GM4 caption instrument",
@@ -421,6 +512,17 @@ def main(argv: list[str] | None = None, client=None) -> int:
             row["name"] for row in outcomes if row.get("finish_reason") == "length"
         ),
         "timing": client.timing(),
+        # §C.1 (SPEC 3.15 (3)): the run re-priced before every slice but the first, from its own
+        # measured seconds with the boot subtracted, and stopped the moment the projection went
+        # past what was left of the cap. `unbought` is what was never asked for — not a failure.
+        "projection": {
+            "rate_usd_per_second": rate,
+            "rate_source": "results/srv2d_cost.json :: rate.usd_per_second",
+            "stop_at_usd": budget,
+            "per_slice": projections,
+            "stopped_early": bool(unbought),
+            "unbought": unbought,
+        },
         "out": str(out.relative_to(REPO_ROOT)) if out.is_relative_to(REPO_ROOT) else str(out),
         "out_sha256": sha256(out.read_bytes()).hexdigest(),
         "cost": {

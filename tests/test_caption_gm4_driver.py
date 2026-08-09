@@ -189,3 +189,55 @@ def test_the_driver_sends_batch_1_and_one_registered_source():
     assert driver.SESSIONS == {"vis-b": 1.00, "vis-c": 1.50}, "SPEC amendment 3.13 (4)"
     source = (REPO_ROOT / "scripts" / "caption_gm4_5c1.py").read_text(encoding="utf-8")
     assert "forward_batch_size=1" in source
+
+
+def test_the_projection_subtracts_the_boot_before_taking_a_per_post_rate():
+    """vis-b's re-pilot hid a whole cold start inside `worker_seconds` and its per-post rate came
+    out 2x high. §C.1 prices the boot ONCE, as the pre-registered constant, and the measured
+    start is reported beside it — never substituted into the line the stop is taken on."""
+    rate = 0.00030669
+    seen = driver.projection(
+        boot_seconds=215.0, worker_seconds=215.0 + 60.0, rows_done=4, rows_total=100, rate=rate
+    )
+    assert seen["marginal_seconds_per_row"] == 15.0
+    assert seen["projected_usd"] == round(100 * 15.0 * rate + driver.COLD_START_USD, 4)
+    assert seen["cold_start_usd_preregistered"] == driver.COLD_START_USD
+    assert seen["cold_start_usd_measured_here"] == round(215.0 * rate, 4)
+    # the naive reading, which is what the retraction was about
+    naive = (215.0 + 60.0) / 4 * 100 * rate
+    assert naive > seen["projected_usd"] * 2, "the boot-in-every-post reading is the one to avoid"
+
+
+def test_the_rate_is_read_from_the_settled_record_not_typed_in():
+    assert driver.rate_usd_per_second() == 0.00030669
+
+
+def test_the_gate_stops_the_run_and_names_what_was_never_asked_for():
+    """A slice that was not bought is `unbought`, not `unusable`: nothing failed, the money ran
+    out. The two must not merge — one is a finding about the model, the other about the cap."""
+    calls = []
+
+    class Client:
+        dump_path = None
+
+        def caption(self, task, albums):
+            calls.append(len(albums))
+            return [{"content": "морозиво", "finish_reason": "stop"} for _ in albums]
+
+    jobs = [
+        [
+            {
+                "name": f"@a:{n}",
+                "urls": [],
+                "bytes": 1,
+                "images_sent": 1,
+                "images_available": 1,
+                "sha8": "00000000",
+            }
+        ]
+        for n in range(4)
+    ]
+    outcomes = driver.run(Client(), jobs, None, lambda *a: None, lambda i, done: "over cap")
+    assert calls == [1], "the gate fires before the SECOND slice, so exactly one was bought"
+    assert [row["name"] for row in outcomes] == ["@a:0"]
+    assert all(row["unusable"] is None for row in outcomes)
