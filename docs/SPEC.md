@@ -496,6 +496,32 @@ and dumps, never the gitignored media.
 one-post smoke first; a >$0.50 projection for the 19 posts stops the session
 BEFORE the re-pilot, and the measured rate is reported — it is a 5c2 input
 either way. Cold start $0.0733 (srv-2d reading) is priced into the cap.
+**Amendment 3.16 (operator order 2026-08-09: a second-instrument REVIEW of
+brand recall and caption faithfulness on Opus 5 inside Claude Code, before
+the launch signature):**
+(1) **Class: REVIEW, never measurement.** The 2026-08-08 ruling ("an
+executor chat session may not produce data — no model pin, no price") is
+NARROWED by the operator's order, not repealed: a chat session may produce
+REVIEWABLE FINDINGS under a committed audit protocol; it may not produce
+numbers that enter gates, screens or `results/baselines.json`. The
+deterministic matcher remains the sole judge of screen/G1e numbers; screen
+v2 verdicts are not re-scored; prereg bars do not move.
+(2) **The pin that is possible is mandatory:** the running model name
+echoed in the report header (claude-opus-5), the audit protocol file
+committed with its sha BEFORE any pack is opened, the pack manifest
+sha-pinned (build_audit_pack pattern, 4.5a). Price is unpinnable
+(subscription) — which is WHY the output class is review.
+(3) **Adjudication:** Opus findings (missed-brand candidates, caption
+faithfulness flags, patterns) go to an operator sitting; only ratified
+items become watchlist/lexicon revisions (named revision, provenance;
+G1e history never re-scored on it) or caption re-do orders. The launch
+signature waits for this audit by the operator's word — deferral
+criterion: audit findings on the table.
+(4) **Population is bounded by strata,** committed in the pack manifest:
+S1 all caption-decided screen hits; S2 per-channel sample of matcher
+brand-hit posts (precision); S3 per-channel sample of matcher-zero
+relevant posts (recall probe); S4 all committed GM4 captions against
+their images (faithfulness; images are the sha-matched sent sets).
 **Date:** 2026-07-26 · **Team lead:** Fable session · **Executor:** Claude Code
 **Repo folder:** `/Users/hdv_1987/Desktop/Projects/market-pulse-llm`
 **rev. 3 change (operator decision):** producers in Ukraine barely use Telegram for
