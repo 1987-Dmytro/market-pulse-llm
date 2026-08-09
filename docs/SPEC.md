@@ -477,6 +477,25 @@ reusing the 5b entrypoint proven on the pod (`scripts/serve_handler.py` +
 (one paid session, cap set at its briefing): volume + weights + endpoint +
 smoke + D7 re-read + parity. The caption instrument of amendment 3.13 is
 unchanged; vis-a code is runtime-agnostic and rides along.
+**Amendment 3.15 (operator go 2026-08-09, after srv-2d parity held: the vis
+program moves to the proven serverless runtime):**
+(1) Supersedes the SESSION SHAPE of 3.13 (4) only: vis-b and vis-c run as
+serverless-endpoint sessions (CAPTION template/config, weights resident on
+volume `qw4nwleanc`), not pod sessions. Everything else in 3.13 stands
+unchanged: caps ($1.00 / $1.50 from the $8 GPU line), the gate order, the
+untouched prereg sha `1aa89818…` (= sha256 of
+`results/yield_bars_5c1.preregistration.json`, which the screen record
+carries), the instrument-failure STOP rule, and the launch-signing freeze.
+vis-b procedure: `scripts/runbook_vis_b.md` (accepted at vis-a-r), anchor
+`results/spend_5c1_vis.json` written before the first billable action.
+(2) Transport constraint measured at vis-a-r binds the job shape: media
+travel as data: URLs inside the job under RunPod's documented 10 MB `/run`
+ceiling (19 ATB posts → 8 jobs, largest 7.83 MB); the volume carries weights
+and dumps, never the gitignored media.
+(3) §C.1 stop rule, pre-registered: the caption rate is measured on a
+one-post smoke first; a >$0.50 projection for the 19 posts stops the session
+BEFORE the re-pilot, and the measured rate is reported — it is a 5c2 input
+either way. Cold start $0.0733 (srv-2d reading) is priced into the cap.
 **Date:** 2026-07-26 · **Team lead:** Fable session · **Executor:** Claude Code
 **Repo folder:** `/Users/hdv_1987/Desktop/Projects/market-pulse-llm`
 **rev. 3 change (operator decision):** producers in Ukraine barely use Telegram for
