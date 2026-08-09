@@ -6035,3 +6035,23 @@ pack that is not this session's, which makes the protocol's rule 2 ("one pack pe
 enforceable instead of requested. The allowlist is still passed, because it is the correct
 statement on a machine whose settings do not open the tools globally; it is simply not what is
 relied on here. Two probes at $0 on the cheapest model replaced a hedge in the report with a table.
+
+**Dv94 (cont.) — the finding applied to the repo that carried it.** The three `Write(/docs/…)`
+entries in `.claude/settings.json` were the same mistake the driver made, sitting in the project's
+own deny list and printing a warning on every session start. They are gone. What replaced them is
+nothing: the `Edit(path)` rules beside them already did the whole job, and the probe is the proof —
+after the removal, with `Read` and one unrelated `Edit(...)` allow rule and **no** `Write` deny rule
+anywhere:
+
+```
+WRITE-STATUS-DENIED    Write tool -> docs/STATUS.md
+EDIT-SPEC-DENIED       Edit tool  -> docs/SPEC.md
+WRITE-PROMPT-DENIED    Write tool -> docs/PROMPT-opus-audit-protocol.md
+CONTROL-OK             Write tool -> a scratch path with no deny rule
+```
+
+All 42 team-lead files hashed byte-identical before and after. The control matters as much as the
+three refusals: without it, "DENIED" three times is equally consistent with a session that could
+not write anything at all. `knowledge/hot.md` said the rules "refuse `Edit` *and* `Write`", which
+read as two rules doing two jobs; it now says one rule covers both tools and that the `Write` form
+is not a rule at all.

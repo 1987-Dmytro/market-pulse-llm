@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-09 21:44:44 (every SessionStart)
+**Auto-refreshed:** 2026-08-09 21:53:18 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+82c2a45 chore(vault): the addendum's tail
+c406eeb fix(opus-audit): Write(path) is not a permission rule -- the deny list is the confinement
 9f9119a chore(vault): the day's log carries the opus-audit build
 a72b057 docs(3.16): the addendum -- blind packs and a pilot-first driver
 027a3ff feat(opus-audit): the packs go blind, and a driver that stops after two
-34b7a9e fix(opus-audit): S4 is every committed caption row -- 30 of them were in no pack at all
-319804a feat(opus-audit): 468 items in 24 packs, and the draw must reproduce the screen first
 ```
 
 ## 📋 Recent decisions
@@ -481,9 +481,13 @@ path. The same trap has fired with every queued prompt since `docs/PROMPT-4.5g4.
   empty files, and `diff` on those is silent success.
 
 - **`docs/STATUS.md`, `docs/SPEC.md`, `docs/PROMPT-*.md` are team-lead files.** Read and commit,
-  never edit — the deny rules refuse `Edit` *and* `Write` on them, without a restart. Phase-end
-  facts go to the daily log or `implementation-notes.md`. The refusal reads "File is in a directory
-  that is denied", but the rules are file-scoped: the rest of `docs/` is still writable.
+  never edit — **one `Edit(path)` deny rule covers every file-editing tool, Write included**, and it
+  bites without a restart. A `Write(path)` rule is not the other half of that pair: the harness
+  refuses to match one against a file operation and says so on startup. Three of them sat in
+  `.claude/settings.json` doing nothing until 2026-08-09; dropping them changed no behaviour, and
+  the probe that proved it is in `implementation-notes.md` (Dv94). Phase-end facts go to the daily
+  log or `implementation-notes.md`. The refusal reads "File is in a directory that is denied", but
+  the rules are file-scoped: the rest of `docs/` is still writable.
 - **A ceiling lifted by the operator is not a ceiling lifted in code.** `train_xlmr_baseline.py`
   refuses to train above `--time-budget-min` and exits **3** — it prints a projection and leaves no
   process, which reads exactly like a crash. Grep your own guards before any unattended launch.
