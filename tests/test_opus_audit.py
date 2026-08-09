@@ -457,3 +457,46 @@ def test_the_reader_refuses_to_aggregate_nothing(manifest, tmp_path):
         reader.main(
             ["--manifest", str(path), "--pack", str(tmp_path / "empty"), "--record", str(tmp_path)]
         )
+
+
+# ---------------------------------------------------------------- the blind
+
+
+def a_pack(items, watchlist=None):
+    from market_pulse.registry import load_registry
+
+    brands = watchlist or load_registry(REPO_ROOT / REGISTRY).watchlist
+    return builder.render_pack("pack_01", items, brands, {"path": "p.md", "sha256": "0" * 64})
+
+
+def blind_items(**overrides):
+    pool = derived({"@a": [(1, ["rud"], "a caption")]})
+    item = {**pool["@a"][0], "strata": ["S1", "S2", "S4"], **overrides}
+    return [item]
+
+
+def test_the_pack_never_names_the_matcher_or_a_stratum():
+    """The addendum's ruling, checked on the bytes that ship rather than on the diff."""
+    assert builder.blinding_sweep(a_pack(blind_items())) == []
+
+
+def test_the_sweep_fires_when_the_verdict_is_put_back():
+    """The negative control. A sweep that never fires proves nothing about what it guards."""
+    leaked = a_pack(blind_items()) + "\n**matcher's answer:** watchlist brands `rud`\n"
+    assert builder.blinding_sweep(leaked)
+    assert builder.blinding_sweep(a_pack(blind_items()) + "\n- strata: **S3**\n")
+
+
+def test_a_post_may_say_anything_the_scaffolding_may_not():
+    """Source text is quoted verbatim inside a fence and is not the pack's own voice."""
+    inside = a_pack(blind_items(text="S3 matcher strata", caption=""))
+    assert "S3 matcher strata" in inside
+    assert builder.blinding_sweep(inside) == []
+
+
+def test_the_shuffle_breaks_the_stratum_blocks():
+    pool = derived({"@a": [(n, ["rud"] if n <= 40 else [], "") for n in range(1, 81)]})
+    items, _ = builder.draw(pool, 42, 40)
+    order = [entry["strata"][0] for entry in items]
+    assert set(order) == {"S2", "S3"}
+    assert order != sorted(order)  # stratum-major would have been every S2 then every S3

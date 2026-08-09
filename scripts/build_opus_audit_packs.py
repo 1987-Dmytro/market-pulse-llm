@@ -51,6 +51,7 @@ sha-pinned `results/opus_audit_manifest.json` (committed provenance).
 import argparse
 import json
 import random
+import re
 import subprocess
 import sys
 from hashlib import sha256
@@ -340,11 +341,19 @@ def reproduction(record: dict, derived: dict[str, list[dict]]) -> dict:
 def draw(
     derived: dict[str, list[dict]], seed: int, per_channel: int
 ) -> tuple[list[dict], dict[str, list[str]]]:
-    """The four strata, deduplicated into one item list in a fixed order.
+    """The four strata, deduplicated, then shuffled into the order the packs are cut in.
 
     Strata in `STRATA` order, channels in the screen's order, posts by msg_id, and one
-    seeded generator for both samples: the draw is a function of the seed and the
-    inputs alone. An item met a second time gains a stratum tag and is not re-emitted.
+    seeded generator for the samples and the shuffle alike: the draw is a function of the
+    seed and the inputs alone. An item met a second time gains a stratum tag and is not
+    re-emitted.
+
+    The shuffle is the second half of the blind (addendum to `docs/PROMPT-opus-audit-a.md`,
+    team-lead ruling on Dv87). Dropping the printed verdict is not enough on its own: cut
+    in stratum order, pack_17 would have been S3 end to end — one contiguous block of
+    posts the matcher found no brand in, which is the recall probe's answer expressed as
+    an ordering instead of as a sentence. Shuffled, a pack carries several strata and the
+    reviewer cannot read one item's neighbours as a hint about it.
     """
     rng = random.Random(seed)
     ordered: dict[str, dict] = {}
@@ -378,7 +387,9 @@ def draw(
         for item in sorted(items, key=lambda item: item["msg_id"]):
             if item["caption"]:
                 take(item, "S4")
-    return list(ordered.values()), members
+    drawn = list(ordered.values())
+    rng.shuffle(drawn)
+    return drawn, members
 
 
 def compose(items: list[dict], pack_max: int = PACK_MAX) -> list[list[dict]]:
@@ -447,14 +458,19 @@ def empty_row(pack_id: str, item: dict) -> str:
 
 
 def render_item(pack_id: str, item: dict) -> str:
-    matcher = item["matcher"]
-    brands = ", ".join(f"`{brand}`" for brand in matcher["watchlist_brands"]) or "— none"
-    groups = ", ".join(f"`{group}`" for group in matcher["category_groups"]) or "— none"
-    strata = " · ".join(f"**{name}** ({STRATUM_TEXT[name]})" for name in item["strata"])
+    """One item, blind: the post, what stands in for it, and an empty row.
+
+    No matcher verdict and no stratum tag. The first version of this pack printed both
+    beside every item — the contract asked for it twice — and the team lead ruled it out
+    on the second reading (Dv87 → the addendum): S3 exists to ask whether the matcher
+    missed a brand, and «matcher: none» printed above the question is the answer, sitting
+    exactly where the second instrument was supposed to look for itself. Both facts are
+    in `results/opus_audit_manifest.json`, and `scripts/read_opus_audit.py` does the
+    comparison there, after the judgement rather than during it.
+    """
     out = [
         f"## item `{item['item']}`",
         "",
-        f"- strata: {strata}",
         f"- channel `{item['channel']}` · msg_id `{item['msg_id']}` · {item['date']}",
         "",
     ]
@@ -469,7 +485,7 @@ def render_item(pack_id: str, item: dict) -> str:
         out += ["**post text** — `[image-only]` (the post carries no text of its own)", ""]
     if item["caption"]:
         title = (
-            "**GM4 caption** — this is what you judge in S4"
+            "**model caption** — this is the text whose faithfulness you judge"
             if item["judgeable_caption"]
             else f"**stand-in text** (`{item['caption_kind']}`, written by"
             f" `{item['caption_source'] or 'no model — a free transcription'}`)"
@@ -493,9 +509,6 @@ def render_item(pack_id: str, item: dict) -> str:
                 "",
             ]
     out += [
-        f"**matcher's answer (the reference):** watchlist brands {brands} · category groups"
-        f" {groups} · relevant: {'yes' if matcher['relevant'] else 'no'}",
-        "",
         "**your row** — copy into the returns file and fill it:",
         "",
         f"```json\n{empty_row(pack_id, item)}\n```",
@@ -504,28 +517,76 @@ def render_item(pack_id: str, item: dict) -> str:
     return "\n".join(out)
 
 
+def scaffold(markdown: str) -> str:
+    """The pack with every fenced block removed — everything this script wrote itself.
+
+    The post text and the caption are source data and may legitimately contain any word;
+    what may not is the scaffolding around them. Same split `build_audit_pack`'s
+    blinding sweep makes between `text` and the cells beside it.
+    """
+    kept, inside = [], 0
+    for line in markdown.splitlines():
+        stripped = line.strip()
+        ticks = len(stripped) - len(stripped.lstrip("`"))
+        if not inside:
+            if ticks >= 3:
+                inside = ticks
+                continue
+            kept.append(line)
+            continue
+        # A closing fence is backticks and nothing else, at least as long as the opener —
+        # ```` ```json ```` opens and ```` ``` ```` closes it. Comparing the whole line
+        # instead never closes an annotated fence, and then the sweep silently reads the
+        # rest of the pack as source and finds nothing wherever it is put.
+        if ticks >= inside and not stripped.strip("`"):
+            inside = 0
+    return "\n".join(kept)
+
+
+TELLS = (
+    re.compile(r"matcher", re.I),
+    re.compile(r"reference answer", re.I),
+    re.compile(r"precision probe|recall probe", re.I),
+    re.compile(r"\bstrat(um|a)\b", re.I),
+    re.compile(r"\bS[1-4]\b"),
+)
+"""Every way the scaffolding could name the matcher's answer or the stratum it came from.
+
+A word list clears the vocabulary, not the tell — the ordering was the other half and is
+handled in `draw` — but it is what stops the next edit to `render_item` from quietly
+putting the reference back beside the question."""
+
+
+def blinding_sweep(markdown: str) -> list[str]:
+    """Scaffold lines that name the matcher or a stratum. Empty is the pack being blind."""
+    return [
+        line for line in scaffold(markdown).splitlines() if any(tell.search(line) for tell in TELLS)
+    ]
+
+
 def render_pack(pack_id: str, items: list[dict], watchlist, protocol: dict) -> str:
     """One self-contained pack. The protocol says not to read project docs, so it is all here."""
     judged = sum(1 for item in items if item["judgeable_caption"])
     header = f"""# Opus 5 audit — {pack_id}
 
 > **Class: REVIEW, never measurement (SPEC 3.16 (1)).** Nothing you write here
-> enters a gate, the screen or `results/baselines.json`. The deterministic matcher
-> stays the judge of every number; you are the second instrument reading the first.
-> An empty finding — "the matcher missed nothing here" — is a good finding.
+> enters a gate, the screen or `results/baselines.json`. You are the second
+> instrument, reading the posts for yourself; the first instrument's answers are
+> deliberately NOT in this file, and the comparison happens after you are done.
+> An empty finding — "there is nothing here" — is a good finding.
 
 - Session rules: `{protocol["path"]}` (sha256 `{protocol["sha256"][:16]}…`).
 - **First line of your output: the model you are running as.** If it is not
   `claude-opus-5`, STOP and say so.
 - Write one row per item into `data/annotation/opus_audit_5c1/returns_{pack_id.removeprefix("pack_")}.jsonl`.
   Never edit this file.
-- Items: {len(items)} · of which carry a GM4 caption over sha-matched images: {judged}.
+- Items: {len(items)} · of which carry a model caption over sha-matched images: {judged}. The items are in no meaningful order: do not read one as a hint about the next.
 
 ## What to fill
 
 | field | what it is |
 |---|---|
-| `watchlist_hits` | **closed-book:** the `brand_id`s from the canon table below that are ACTUALLY mentioned in this post's text / visible in its images. Declensions and homoglyph variants count. Decide it yourself, then look at the matcher's answer. |
+| `watchlist_hits` | **closed-book:** the `brand_id`s from the canon table below that are ACTUALLY mentioned in this post's text / visible in its images. Declensions and homoglyph variants count. Nothing in this pack tells you what another instrument thought — that is the point; read the post. |
 | `other_dairy_brands` | **open extraction:** any OTHER dairy or ice-cream brand names present, UA/RU spelling as seen. Free text. Dairy and ice cream only — not general food brands. |
 | `caption_verdict` | `faithful` (describes what is there) · `partial` (true but misses category-relevant content) · `wrong` (describes things not present) · `n/a` (nothing to judge — pre-filled for you, leave it). |
 | `brands_visible_missed` | `brand_id`s readable in the images that the caption does not carry. |
@@ -594,7 +655,14 @@ def main(argv: list[str] | None = None) -> int:
         for item in batch:
             item["pack"] = pack_id
         path = args.pack / f"{pack_id}.md"
-        path.write_text(render_pack(pack_id, batch, registry.watchlist, protocol), encoding="utf-8")
+        markdown = render_pack(pack_id, batch, registry.watchlist, protocol)
+        if leaks := blinding_sweep(markdown):
+            raise SystemExit(
+                f"{pack_id} names the first instrument or a stratum in {len(leaks)} scaffold"
+                f" line(s): {leaks[:2]}. A pack that carries the answer measures agreement with"
+                " it, which is the one thing the second instrument cannot be used for."
+            )
+        path.write_text(markdown, encoding="utf-8")
         written.append(
             {
                 "pack": pack_id,
@@ -620,6 +688,42 @@ def main(argv: list[str] | None = None) -> int:
         "seed": args.seed,
         "protocol": protocol,
         "screen": {"path": rel(args.screen), "sha256": digest(args.screen)},
+        "blind": {
+            "ruling": (
+                "docs/PROMPT-opus-audit-a.md addendum 2026-08-09, team lead on Dv87. The one"
+                " authorised rebuild: same seed, same strata, same population"
+            ),
+            "removed_from_every_item": ["the matcher's verdict", "the stratum tags"],
+            "ordering": (
+                "the deduplicated items are shuffled by the same seeded generator before the packs"
+                " are cut. Stratum-major order would have made a whole pack one stratum, which is"
+                " the recall probe's answer expressed as an ordering"
+            ),
+            "kept_in_the_pack": [
+                "the canon watchlist table",
+                "the post text or [image-only]",
+                "the caption and its image paths",
+                "an empty returns row per item",
+            ],
+            "compared_where": (
+                "results/opus_audit_manifest.json carries every item's matcher verdict and strata;"
+                " scripts/read_opus_audit.py does the comparison after the judgement"
+            ),
+            "sweep": (
+                "every pack's scaffolding — the file with its fenced post and caption blocks"
+                " removed — is searched for the matcher, a stratum name or a probe's name before"
+                " it is written. A pack that names one stops the build"
+            ),
+            "packs_carrying_one_stratum_only": [
+                entry["pack"]
+                for entry in written
+                if sum(1 for count in entry["strata"].values() if count) == 1
+            ],
+            "packs_carrying_one_stratum_only_note": (
+                "the measurement the shuffle is for. A homogeneous pack would be the stratum"
+                " printed as a block, and an empty list is the only reading that says it is not"
+            ),
+        },
         "pinned_inputs": pinned,
         "captions": {k: v for k, v in caption_block.items() if k != "truncated_set"},
         "reproduction": reproduced,

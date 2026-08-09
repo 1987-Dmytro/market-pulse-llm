@@ -5942,3 +5942,55 @@ of judgements has no HEAD to restore from.
 The reader's `instrument.model` is a **declaration**, recorded as one. A returns file cannot prove
 which model wrote it and the price is unpinnable on a subscription — which is 3.16 (2)'s own reason
 for the output class being review.
+
+### The addendum: the blind rebuild and the session driver (Dv89–Dv93)
+
+Team-lead ruling on Dv87, 2026-08-09: the matcher's answer comes out of the packs. One
+authorised rebuild, same seed 42, same strata, same 498 items in 25 packs of 19–20 —
+byte-identical on a second build, and `results/opus_audit_manifest.json` still carries every
+matcher verdict, which is where `read_opus_audit.py` reads it. Plus `scripts/run_opus_packs.sh`,
+verified against a stub and never against Opus.
+
+**Dv89 — the blind needed three cuts, and only one of them was the printed verdict.** The item's
+`**matcher's answer:**` line was the obvious one. The stratum tag beside it said the same thing in
+other words — S2's own label is "the matcher found at least one watchlist brand here" and S3's is
+"the matcher found NO watchlist brand", so printing the tag printed the answer. And the item
+ORDER was the third: cut in stratum order, `pack_17` would have been S3 end to end, one contiguous
+block of posts the matcher found nothing in — the recall probe's answer expressed as an ordering
+instead of as a sentence. The items are now shuffled by the same seeded generator before the packs
+are cut, and the manifest carries `packs_carrying_one_stratum_only: []` as the measurement rather
+than the intention. Every pack now spans 3 or 4 strata.
+
+**Dv90 — the blinding sweep's first version could not have caught anything, and its own negative
+control is what said so.** `scaffold()` strips the fenced post and caption blocks so the sweep
+reads only what this script wrote; it closed a fence on an exact line match, so ```` ```json ````
+opened a block that ```` ``` ```` never closed, and everything after the first item's returns row
+was read as source. A pack with `**matcher's answer:** watchlist brands rud` pasted at the end swept
+clean. The test that fails on a leak is the only reason this is a paragraph and not a defect: a
+guard's self-test needs a control that makes it fire. Fixed to backtick-run matching — a closing
+fence is backticks only, at least as long as the opener. The sweep now reads ~350 of a pack's ~680
+lines; before, it read the header.
+
+**Dv91 — the driver is exercised end to end and never against Opus.** "Do not run any Opus session
+yourself" still stands, so `CLAUDE_BIN`, `OPUS_PACK_DIR` and `OPUS_MANIFEST` are the seams and a
+fake `claude` records what it was asked. 12 tests: the pilot runs exactly packs 01–02 and stops,
+`--after-pilot` refuses until both pilot returns exist and validate, an existing returns file is
+read rather than re-bought, `--dry-run` invokes nothing, and each of the three stop conditions
+halts the loop after ONE session rather than after twenty-five.
+
+**Dv92 — the protocol's rule 1 is checked, not trusted.** The session must open with the model it
+is running as; the driver reads the first non-empty line of the transcript and stops the whole run
+if it does not name Opus. A silent fallback to a smaller model would otherwise produce 25 packs of
+findings whose whole justification was the stronger instrument.
+
+**Dv93 — the sessions still boot with the project's hooks and CLAUDE.md, and that is a deliberate
+trade.** `--bare` would skip hooks, auto-memory and CLAUDE.md discovery — exactly the "do not
+re-read project docs" the protocol asks for — but it also forces `ANTHROPIC_API_KEY` and never
+reads OAuth or the keychain. That would move the review off the subscription and give it a price,
+which is the one property 3.16 (2) says is unpinnable and the reason the output class is review at
+all. The protocol's rule stays a session rule rather than an enforced one.
+
+**What the pilot is actually for.** The `--allowedTools` scoping is the part nobody can verify from
+here: if a path rule does not match how the harness normalises it, the session is denied its Read
+and writes nothing. The driver treats that as a stop after pack_01 — one session spent, not
+twenty-five — and it is the first thing to look at if the pilot comes back empty.
