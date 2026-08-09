@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-09 00:35:52 (every SessionStart)
+**Auto-refreshed:** 2026-08-09 10:45:00 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+23ea209 docs(srv-2d): one balance, one moment -- the phase figure was a stale reading
 824f716 docs(srv-2d): the live state stops saying the attempt is unspent
 f276aaa docs(srv-2d): the report, and six deviations
 6fcfa5e feat(srv-2d): the parity attempt is spent, and it holds
 76a1b31 feat(srv-2d): the 0.005 clause stops being prose
-ed9c0c9 chore(srv-2d): the spend anchor, before the first billable action
 ```
 
 ## 📋 Recent decisions
@@ -23,354 +23,150 @@ ed9c0c9 chore(srv-2d): the spend anchor, before the first billable action
 
 ## 📅 Recent daily logs
 
+- `2026-08-09.md`
 - `2026-08-08.md`
 - `2026-08-07.md`
-- `2026-08-06.md`
 
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-09 00:35 local / 2026-08-08 22:30 UTC — **`docs/PROMPT-srv-2d.md` executed: the SPEC 3.11 (2) parity attempt is SPENT and it HOLDS.** 758/758 rows, zero failures, every 4.5h2-passed gate still passing, worst head movement **+0.0000** against the pod reading of the identical config. **$1.2383 of the $2.00 cap.** Records `results/parity_srv2.json` (verdict stamped in its `parity` block) and `results/srv2d_cost.json`. **The cost is the finding: $1.4281/1000 rows against the pod's $0.5993 — 2.38x — and it is the machine's price, not the model's speed.** Earlier: `docs/PROMPT-srv-2c.md`
-executed — **the boot log exists, our serverless worker answers, and the operator-bought control
-shows the unwrapped command answers too**: srv-2b's hang was the platform, not us. **$0.1377** of
-its $0.75 cap (the delta was still settling when the run closed — Dv33), record `results/srv2c_bootlog.json`. Earlier the same evening `docs/PROMPT-srv-2b.md` ran and **ABORTED at
-the handshake-timeout rung, $0.9999 of its $4.00 cap** — that abort is accepted, and srv-2c has now
-falsified the diagnosis it carried — twice over, the second time with a control the operator paid
-for. The volume `qw4nwleanc` (100 GB, EU-RO-1) is the only thing
-either session left standing; every endpoint, template and pod is deleted and proven deleted by
-listing. Fifteen commits across the two (`066c282` → `cbeeb80`), `make check` **1,271 passed**.
-Earlier the same evening: srv-2a accepted, and the caption pilot at **$0.0180 of its $0.10 cap**. The runtime ADR is [[srv2-serverless-runtime-target]]; the yield half is
-[[5c1-relevance-floor-and-discovery]]; the day-2 half is [[5c1-day2-composition-and-search]]. This
-block is hand-edited; the section above it is auto-generated — do NOT touch the marker.
+**Last update:** 2026-08-08 (`/close`). **Day closed: six contracts, $2.3939 spent, and the
+serverless question is answered by measurement rather than argument.** The headline —
+`docs/PROMPT-srv-2d.md` executed, **the single SPEC 3.11 (2) parity attempt is SPENT and it
+HOLDS** — and the team lead accepted it the same night: serverless is the ruled runtime and 5c1 is
+off HOLD. This block is hand-edited; the section above it is auto-generated — do NOT touch the
+marker. Long form: `implementation-notes.md`, and the day's log [[2026-08-08]]. ADRs:
+[[srv2-serverless-runtime-target]] · [[5c1-relevance-floor-and-discovery]] ·
+[[5c1-day2-composition-and-search]] · [[5b2-batch-measurement]].
 
 ## 🔥 What's Hot
 
-**THE WALL IS DOWN WITH A VOLUME ATTACHED TOO — AND WHAT STOPPED US IS OUR OWN CONTAINER.**
-srv-2b's control settles the question the team-lead probe left open: RunPod's own
-`runpod/mock-worker:dev`, on **the same volume `qw4nwleanc`, the same EU-RO-1, the same `ADA_24`
-class**, completed its job in `delayTime 6 477 ms · executionTime 144 ms`. The probe carried no
-volume and pre-registered exactly this gap. Our endpoint `zbptdon5jvfteu` did not: the job sat
-`IN_QUEUE` through the full **1800 s** handshake while health reported one *running* worker and
-zero jobs in progress, the worker restarted 26 minutes in, and the console's Logs tab held **zero
-lines at any level after 35 minutes**. Zero lines means the failure is **before
-`serve_handler.py`'s first print** — and the serverless job-loop path
-(`runpod.serverless.start` with no `--rp_serve_api`) **has never executed in this project**: 5b
-aborted before a worker ran, and srv-2a's pod proof exercised the same file's HTTP-server mode.
-The suspect is the one thing a pod cannot cover — whether `--docker-start-cmd
-bash,/runpod-volume/start.sh` becomes the worker's main process under the stock image. **Unproven;
-no log line exists to confirm it.** Full record: `results/d7_reread_srv2b.json`.
-**ANSWERED BY srv-2c, AGAINST THIS BLOCK:** it does become the main process, and the container
-starts and answers. The observation above stands; the inference drawn from "zero lines" does not —
-there is no worker-log channel outside the console, and the console was not rendering.
-
-**THE 24 GB FIT IS ANSWERED, AND THE ANSWER IS BETTER THAN THE PREFERENCE.** The staging pod was
-deliberately taken on the *serving* class (RTX 4090, $0.74/h) so the OOM rung would be measured at
-a third of the serverless rate instead of discovered on a billed worker with no second attempt.
-`results/smoke_srv2b_pod.json`: **8/8 carve rows parsed · 19 874 of 24 564 MiB · cold start
-175.791 s off the network volume · 2.198 s/row** against the A6000's 4.071
-(`serving_5b.json :: adopted.seconds_per_row`). GM4 NF4 config A fits a 24 GB card at batch 1 with
-~4.6 GB to spare and runs **1.85× faster**. No record in this repository carried a peak-VRAM figure
-for batch-1 inference before this one.
-
-**PARITY IS RUN, THE ATTEMPT IS SPENT, AND IT HOLDS.** `results/parity_srv2.json` exists:
+**PARITY IS RUN, THE ATTEMPT IS SPENT, AND IT HOLDS.** `results/parity_srv2.json`:
 **758/758 rows scored, zero parse / api / generation failures**, config A on `ADA_24` in EU-RO-1
 off the volume. Both clauses of 3.11 (2) hold — G1b, G1d and G1e (everything 4.5h2 passed) still
 pass, `under_bar: []`, and the **worst head movement against `results/parity_5b_a.json` is
-+0.0000**: nothing dropped, G1c rose 0.0018 and G1e rose 0.0133. G1a fails its bar exactly as it
-did on the pod and at 4.5h2, to the same sixteen digits — the deferred 3.11 question, not a new
-finding. Row-level agreement with the pod **751/758 = 99.08%** (description, gated on nothing).
-**A serving number may now reach an aggregate.** Not appended to `results/baselines.json`: a
-parity measurement is not a gate anchor, and the pod reading of 08-06 is not in there either.
++0.0000**: nothing dropped, G1c rose 0.0018 (and now clears a bar the pod missed by 0.0005), G1e
+rose 0.0133. G1a fails its bar exactly as it did on the pod and at 4.5h2, to the same sixteen
+digits — the deferred 3.11 question, not a new finding. Row agreement with the pod **751/758 =
+99.08%**, description and gated on nothing. **A serving number may now reach an aggregate.** Not
+appended to `results/baselines.json`: a parity measurement is not a gate anchor, and the pod
+reading of 08-06 is not in there either.
 
-**THE D7 RE-READ, HONESTLY BOUNDED.** `ADA_24` with a volume attached: **allocates and consumes**.
-The **48 GB half was never asked** — EU-RO-1 catalogues only the A6000 at stock `none` — and the
-record says so rather than reading its silence as a negative. The datacenter itself came from free
-readings: GraphQL `dataCenters{storageSupport}` returns **exactly 18 of 49**, re-deriving the
-runbook's own figure, and EU-RO-1 was picked because it is the only volume-capable region whose
-*fallback* class has real stock (the only `Medium` 4090 of the eighteen) — US-NC-1 and US-TX-3 had
-L40S at `Low` but a 4090 at `none`, which would strand the volume exactly as 5b stranded one in
-CA-MTL-3.
+**AND THE COST IS THE FINDING.** `results/srv2d_cost.json`: **$1.4281 / 1000 rows against the
+pod's committed $0.5993 — 2.38×**; $1.0825 a pass against $0.4611. The cause is priced, not
+mysterious: the RTX 4090 worker runs **4.262 s/row against the A6000 pod's 4.071** (4.7% slower)
+at **$1.1041/h equivalent against $0.53/h**. Two independent readings agree to 1% — this
+endpoint's own settled ledger rate on measured seconds, and the balance delta — and Dv33 makes
+both **floors**. See Next: this is the operator's ruling, not the executor's.
 
-**THE SERVERLESS WALL IS DOWN AND THE RUNTIME TARGET MOVED BACK (SPEC 3.14).** A team-lead probe
-in the operator's own console, the same evening: `runpod/mock-worker:dev` on endpoint
-`8mkl2lbxho3bfa`, queue mode, 16 GB flex, no volume, no DC pin — **two jobs consumed and
-COMPLETED** (delay 10 964 / 6 800 ms, execution 142/144 ms), deleted the moment it had answered,
-deletion proven by a zero-endpoint listing. The 5b blocker did not reproduce and the vendor ticket
-was closed unfiled. `results/parity_verdict_5b.json` stands **untouched** as the honest record of
-2026-08-06. Pods remain the measured fallback; serverless is the target again, and **all paid 5c1
-steps are HELD by the operator's word until srv-2 proves out.** The probe pre-registers what it
-did NOT prove: the volume-attached GPU offering (D7 re-read), NF4 fit and batch-1 byte-stability
-on whatever card is offered, and cost per row against the pod's $0.5993/1000.
+**THE SERVERLESS RUNTIME IS PROVEN END TO END, AND THREE OLD BELIEFS ARE DEAD.** The 5b "wall"
+(no endpoint reaches a job-consuming worker) was true on 08-06 and is gone. srv-2b's diagnosis
+("our own container does not start") was **falsified twice** — by srv-2c's boot log, and then by
+an operator-bought control running srv-2b's *exact unwrapped argv* twenty minutes later on the
+same volume, region and class: also COMPLETED. So srv-2b's hang was **the platform**, not us. And
+the 24 GB fit is answered better than the preference: **19 874 of 24 564 MiB**, batch 1, with the
+adapter loaded. `ADA_24` with a volume attached allocates and consumes; the 48 GB half was never
+asked, because EU-RO-1 catalogues only the A6000 at stock `none`.
 
-**srv-2a IS DONE AND THE WORKER WAS ALREADY A SERVERLESS CONFIG — MINUS THE peft IT COULD NOT
-NAME.** No `/workspace` is baked into `serve_handler.py` or `start_5b_worker.sh`; the template env
-and `settings()` agree field for field; `runpod.serverless.start` with a callable handler is
-proven on the pod (06.08, the three-row T2 batch), not assumed. **CORRECTED BY srv-2b: what that
-proved is the `--rp_serve_api` HTTP mode of the file, not the job loop a real worker runs — the
-sibling branch of the same entrypoint. srv-2c then ran that branch and it ANSWERED, so it was
-untested, not broken.** The one thing verification
-demanded: **config A is `peft` applying a LoRA to an NF4 base and no record named the peft that
-served.** `RUNTIME_LIBRARIES` cannot grow — the 4.5h2 anchor carries three libraries and a fourth
-entry would be a guard that never fires — so `library_versions()` now **reports** peft, accelerate
-and runpod inside the `runtime` block, where widening breaks no schema. The pin is **0.20.0**,
-read from the adapter's own `adapter_config.json`, i.e. from **inside the directory whose sha256
-`b3ca6308…` the guard already checks**; `runbook_5b2.md`'s `peft==0.18.0` is corrected in the open
-and that runbook is left unedited.
+**THE VOLUME IS THE ONLY STANDING RESOURCE AND ITS CONTENTS ARE KNOWN.** `qw4nwleanc`, 100 GB,
+EU-RO-1, **$0.009722/h settled** (= $7.00/720 h, read from `billing network-volume`, not a prior).
+It holds `hf/` at revision `842da379…`, `venv/` with the pinned stack (`runpod 1.11.0`, outside
+the 1.7.11–1.10.0 job-tracking bug), `repo/` at **`ed9c0c9`**, the adapter at `b3ca6308…`, and
+`start.sh` byte-identical to `scripts/start_5b_worker.sh`. Everything else is deleted and proven
+deleted by listing.
 
-**THE srv-2b COST ARITHMETIC IS PRE-REGISTERED AND ITS PRIOR IS WEAK ON PURPOSE.** The pod side is
-committed: **$0.4611 per 758-row pass**, $0.5993/1000 rows, 4.071 s/row, cold start 46.2 s off
-local NVMe vs **278.9 s off a network volume**. The serverless side is
-`(measured_cold_start + 758 × measured_s_per_row) × measured_usd_per_second` — **the run's own
-numbers, not the pod's.** Filling it with what exists today (A6000 seconds, the probe's
-$0.00016/s on a 16 GB class) gives $0.538 a pass, 17% dearer, $0.045 of it the boot alone — but
-all three inputs come off hardware this endpoint will probably not run on, and at 3.0 s/row on a
-4090 serverless wins instead. Quoted as a prior, never as a finding.
-**srv-2b bought two of the three inputs and they cut opposite ways:** the 4090 does **2.198 s/row**
-(better than the 3.0 the prior guessed at) but the endpoint's flex rate read **$0.00031/s** off the
-console header, ~2× the probe's 16 GB class. Product: `(cold_start + 758 × 2.198) × 0.00031` ≈
-**$0.57 a pass** against the pod's $0.4611 — still a prior, because the endpoint never completed a
-row and its own s/row is unmeasured. **A crash-looping worker bills at that rate too:** $0.55 of
-srv-2b's $0.9999 bought nothing at all.
+**5c1: THE REGISTRY IS 66 = launch 59 + watch 7**, the window is **9 393 posts and 4 880
+comments** over 63 channels (0 malformed rows, `shasum -c` 6/6), and the queue 5c2 prices is
+**16 218 rows**. Two channels that did not exist in the repository twelve hours earlier carry
+**81%** of what was collected. `mothers_kids` is 3 live channels against 0.
 
-**THE FAILED CONTROL WAS ABOUT MODALITY, AND READING THE IMAGES ANSWERS IT: ATB GOES 0 → 13.**
-Same window, same matcher, same lexicon, same pre-registered bar (`1aa89818…`, unmoved) — the only
-thing added is a caption for each silent post. `results/caption_rematch_5c1.json`: **before 0 of 25
-relevant, bar A FAIL** (re-derived here as a control, and it reproduces the signed screen exactly)
-→ **after 13 of 25, bar A PASS**. It survives brand ablation: strike every brand alias, including
-ATB's own «Своя Лінія» (12 of the 13 hits), and **10 posts still carry dairy or ice-cream**;
-`bar_A_sole_carriers` is **empty** — the pass hangs on no single term. Five captioned posts are
-honest misses: the «7 ДНІВ» leaflets sell bags, toys and a metal glider, and the matcher fires on
-nothing. **RULED on acceptance: a private label IS a full brand hit**, not the executor's «miss of
-the second kind» — a chain's own label inside its own channel is the most valuable class of hit
-there is, so v2 carries a `private_label` flag from the registry and counts those hits in full;
-the ablation is a side metric that demotes nothing. This does NOT lift `verdicts_reportable:
-false` on the yield screen — that is screen v2's job.
+**THE YIELD SCREEN REFUSED TO REPORT, AND THE REFUSAL IS HONEST.** Its pre-registered positive
+control failed on @atb_market_official — 25 posts in its own 28 days, **19 image-only**, no dairy,
+no ice cream, no watchlist brand — so `verdicts_reportable: false`, exit 1, record complete. Of 66
+sources, 29 clear bar A and 8 bar B; of the 36 below both, **only 24 can be graded** — nine have 0
+posts in the window and three have fewer readable posts than the bar itself, and seven of those
+twelve are the whole `watch` bucket. **"варто" outscores every real brand** (89 posts in 24
+channels): ATB's private label and an ordinary Ukrainian word. Nothing was patched — the lexicon is
+`draft-not-law` and the watchlist is the operator's.
 
-**THE BLINDNESS IS 2.8% OF THE CORPUS AND IT IS NOT EVENLY SPREAD.** `results/image_census_5c1.json`
-over 66 channels and 9,343 windowed posts, counted by `parents.context` state: **261 unreadable
-today**, 250 of them carrying media, 11 carrying nothing at all. By segment — supermarket_deals
-**22.6%** · health_fitness **16.2%** · retail_official **14.9%** against regional **0.5%**. The two
-segments the screen just failed on content are the two that publish in pictures. Worst rows:
-@atb_aktsiyi 46 of 53 · @VARUS_channel 32 of 135 · @matusi_ukr 23 · @educationwithloven 22 ·
-@atb_market_official 19 of 25. Every channel's split is reconciled against the signed screen and a
-mismatch stops the run.
-
-**THE PILOT BILLED TWICE THE PROJECTED RATE, AND BOTH NUMBERS ARE THE OPERATOR'S TO READ.** The
-census had to project at 4.5g2's $0.000483/post — the brief said so and the file was committed
-before a cent was spent, which is what makes it a projection. The pilot then billed **$0.000948
-per post asked** ($0.001001 per usable caption), 1.96×, and album size does not explain it (5.37
-images/post against 4.5g2's 5.33). One full pass over the 250 captionable posts: **$0.12 upper /
-$0.06 discounted at the projected rate, $0.24 / $0.12 at the measured one**; the **232 still
-uncaptioned** (the 18 are bought, 4350 is billed-and-unusable) are $0.22 / $0.11. The 0.512
-discount is 4.5g2's photo/poll/unreadable split — this pilot's own population came out **19 photos
-of 19**, so a retail-leaflet run sits nearer the upper bound.
-
-**66 SOURCES: BAR A 29 · BAR B 8 · BELOW BOTH 36 — BUT ONLY 24 OF THOSE ARE A CONTENT FINDING.**
-Twelve rows could not be graded at all: nine have **0 posts in the window** and three have fewer
-readable posts than the bar is high, so they fail bar A by arithmetic. Seven of the twelve are the
-ENTIRE `watch` bucket, already ruled onto a waiting list for that same silence — re-failing them
-would re-decide a decision on evidence that measures nothing. `summary.below_both_gradeable` (24)
-is the list to act from; `below_both_not_gradeable` (12) says why each one is not on it.
-Gradeable-empty by segment: health_fitness **7 of 17** · regional 8 of 17 · baby_food 4 of 8 ·
-supermarket_deals 3 of 4 · mothers_kids 1 of 5 · retail_official 1 of 7 · cooking_recipes **0 of
-7**. Nothing entered or left on this: removal is an operator ruling, never automatic.
-
-**«ВАРТО» OUTFIRES EVERY REAL BRAND.** It is АТБ's private label AND the ordinary Ukrainian word
-for "it is worth": **89 posts across 24 channels**, more than any other brand on the list.
-«Президент» is 33 posts, mostly Zelensky; «масл» + the lexicon's `ов` ending is the justice
-minister Маслов. Nothing was patched — the lexicon says `draft-not-law` and the watchlist is the
-operator's — but every count now breaks down to the term that made it with one quoted line, and
-each row carries `bar_A_sole_carriers`: **@polyakova_fitness clears bar A on «варто» alone,
-@myrhorodtown on «Президент» alone.** The pass list of 29 must not be read as 29 channels that
-carry the category.
-
-**THE REGISTRY IS 66 = launch 59 + watch 7**, @dikankaa excluded on the acceptance (ru 1.00 over
-20 decidable posts). Still **PROVISIONAL pending the operator's signature** — amendment 3.12's
-rider: the failed control has been ruled on, and the signature now waits on screen v2. Excluded
-across the phase: **34**. Audience: regional 17 · health_fitness 17 · baby_food 8 · retail_official 7 ·
-cooking_recipes 7 · mothers_kids 5 · supermarket_deals 4 · food_quality 1. **mothers_kids stopped
-being an empty launch segment** — 3 live (@educationwithloven, @matusi_ukr, @mamo_nepsichuy)
-against 0 yesterday, which is what the whole harvest track existed for. Subscribers **+924,347**
-over the 63 sources `results/entry_gate_5c1.json` measured (849,230 → 1,773,577); the four
-originals add ~178,274 more but that number is the canon's table, not an artifact.
-
-**THREE "CITY FEEDS" WERE CHATS, AND THE FIX WAS BIGGER THAN THE HOLE.** @poltava_misto,
-@kremenchug_live and @Karlivka_live came back `broadcast=false, megagroup=true` — their 111/77/197
-posts a week is member traffic, the class @Mambabyua was excluded for on 06.08. @Karlivka_live's
-LINKED object turned out to be a broadcast channel of the same town (@KarlivkaLive), so the canon
-had taken the chat's handle; and the operator's own addition to step 7 — search for broadcast
-analogues of the two remaining towns — returned feeds LARGER than what left: @h_kremenchug 137,221
-against a 16,056 chat. **Three of the four picks were not in the 119-candidate town-name scan at
-all.** Name-scanning under-covers; `contacts.SearchRequest` over the same words did not.
-
-**FIVE FLAGS WERE CLEARED, NOT OVERRIDDEN, AND THE ROWS STILL SAY FLAG.** Each was raised about a
-discussion group on a channel that enters posts-only and never joins one. `CLEARED` covers a FLAG
-and refuses a FAIL — a FAIL is a bucket change (`MOVED`), which is how @lab_of_childhood went to
-watch: 0 posts in the window failed it, 49 posts to 2026-06-04 is why it is not dead.
-
-**THE SCREENS NOW REFUSE THEIR OWN DEFAULT PATH.** `language_census_5c1.json` IS wave 3's evidence
-— @retsepty5's 139 posts, @katyal55's 36 — and those channels have LEFT, so a re-run writes a
-table that cannot contain the rows the rulings cite. Same for the market screen's «RF 0 on the
-live 39». Today's passes are `results/language_census_5c1_day2.json` (UA_DOMINANT 43 ·
-TOO_FEW 16 · NO_POSTS 7 · **RU_DOMINANT 1**) and `results/market_screen_5c1_day2.json`
-(UA_EVIDENCE 40 · NO_EVIDENCE 24 · **RF_FLAG 3**). Both report-only, all seven controls fire.
-
-**THE MARKET SCREEN'S FIRST FALSE POSITIVES ARE WAR REPORTING.** All three RF_FLAGs are Ukrainian
-city feeds on the same sentence: «склади Wildberries розбомбили під Санкт-Петербургом»
-(@myrhorodtown 2 of 273), «пожежі на складах Wildberries» (@poltava_informue 1 of 1,316),
-«Українські БПЛА рознесли … хабів … Wildberries в Електросталі» (@poltava20 1 of 1,535). The
-ratio reads the row — 947 UA-evidence posts against one mention. There is no stop-word fix:
-*Wildberries* IS an RF retailer and naming it IS what the screen is for.
-
-**THE WINDOW IS 9,393 POSTS AND 4,880 COMMENTS NOW, AND THE QUEUE 5c2 PRICES IS 16,218 ROWS.**
-0 damaged lines, `shasum -c` 6/6, 0 threads left to fetch. The two channels step 7's handle top-up
-found are the biggest comment sources in the composition: **@matusi_ukr 2,890 comments over 156
-threads** and @mandziak 1,048 over 104 — between them 81% of everything the window collected.
-The queue is 11,338 of 5a's v1 backlog plus these 4,880; `results/collect_5c1.json` carries the
-per-channel table and `run_loop.py --once --dry-run` renders the total.
-
-**AND THE TWO SCREENS DISAGREED ABOUT @dikankaa, BOTH RIGHT.** Census: RU_DOMINANT, ru 1.00 over 20
-decidable posts, its own text covering «Волгоградской области ( Энгельс, Саратов )». Market screen:
-NO_EVIDENCE — those oblasts are not in a table of places a MARKET is in. Neither instrument
-subsumes the other. RULED on the acceptance: EXCLUDED on the census, and the removal comment says
-which half of the operator's reason this repo holds an artifact for — the description is not in
-one, because the gate stores a title and never a bio.
+**CAPTIONS ANSWER THE MODALITY QUESTION: ATB GOES 0 → 13.** Corpus blindness is 2.8% and unevenly
+spread. The pilot billed **twice its projected rate** — $0.000948/post against 4.5g2's $0.000483,
+same model, same endpoint, same prompt — $0.0180 of its $0.10 cap.
 
 ## ⏭️ Next
 
-**srv-2d IS DONE — the parity attempt is spent and both clauses of 3.11 (2) hold.** $1.2383 of the
-$2.00 cap; Phase 4 stands at **$20.8844 of $25.00, $4.1156 left** (read 22:34:28Z). Everything created is deleted and
-proven deleted by listing; the volume `qw4nwleanc` is the only thing standing. Full report and six
-deviations (Dv34–Dv39) in `implementation-notes.md`.
+**THE RUNTIME IS RULED, AND IT IS SERVERLESS.** The team lead accepted srv-2d the same night
+(`docs/STATUS.md`, "ТЫ ЗДЕСЬ — serverless ДОКАЗАН (паритет Δ=0); 5c1 снят с HOLD"): parity verified
+against the artefacts, **serverless validated as the runtime**, ruling 23 executed, **5c1 comes off
+HOLD**, and the vis contracts are re-issued against the endpoint. The cost finding was accepted as
+a finding **against** the chosen path and goes into the 5c2 briefing rather than being argued away
+— their reading of the same artefacts, $1.0825/pass against $0.4611 (×2.35), matches
+`results/srv2d_cost.json` (the per-1000 ratio is 2.38 on a different denominator, both correct).
 
-**WHAT IS OPEN, AND IT IS A MONEY QUESTION FOR THE OPERATOR.** The measurement that was supposed to
-clear the runtime found the gates fine and the **cost 2.38x the pod's**: `$1.4281/1000 rows` against
-the pod's committed `$0.5993`, `$1.0825/pass` against `$0.4611`. The cause is priced, not
-mysterious — the RTX 4090 worker runs **4.262 s/row against the A6000 pod's 4.071** (4.7% slower)
-at **$1.1041/h equivalent against $0.53/h**. Two independent readings agree to 1% (this endpoint's
-own settled ledger rate x measured seconds, and the balance delta), and Dv33 makes both floors.
-**This session rules on nothing.** SPEC 3.14's economic case rests partly on scale-to-zero between
-the two collection passes a day, which is real and is NOT measured here — what is measured is the
-price of a pass. It goes to an operator briefing the way a dropped head would: both readings,
-authorising nothing. The pod runtime remains measured, proven and cheaper per pass.
+**NEXT SESSION: vis-a / vis-b on the endpoint** (flyer captions) → screen v2 → the composition
+signature. Team-lead debt for the morning, deliberately deferred to daylight: the ADR closing the
+srv-2 programme, and the operator quiz.
 
 **Three things srv-2d built that the next session inherits.** The worker takes `batch_size` and
 `dump_path` in a job, so one job carries a whole input slice at forward batch 1 and writes every
-reply to the volume as it goes (an async result is deleted 30 min after completion).
-`serving.execution_policy(seconds, ttl)` is the single seconds->milliseconds conversion for RunPod's
-request policy. `serve_handler.assert_sdk_version` refuses to boot below `runpod 1.10.1`, and its
-first line is in the production boot log.
+reply to the volume as it goes (an async `/run` result is deleted 30 min after completion, and
+"logs only appear for successfully initialized workers" — the volume is the log channel, not a
+diagnostic to remove). `serving.execution_policy(seconds, ttl)` is the single seconds→milliseconds
+conversion for RunPod's request policy. `serve_handler.assert_sdk_version` refuses to boot below
+`runpod 1.10.1`.
 
-**srv-2a IS ACCEPTED — the team lead re-ran the suite (1,270 in 32.8 s) and verified the tail was
-committed unedited.** Two notes came back with it. The **step reordering is credited as an
-improvement**: the D7 re-read now happens **BEFORE the volume is created**, so the volume lands in
-a datacenter that actually has the GPU — 5b did it the other way round, which is exactly how the
-volume ended up pinning CA-MTL-3 where no 48 GB class allocated. And **Dv3 caught a team-lead
-error**: the contract cited its smoke from prose rather than from an artifact, and those three T2
-rows exist in no file. Ten deviations against a norm of 0–4, charged to an overloaded contract.
-
-**srv-2c IS DONE AND THE ANSWER IS THAT IT WORKS — $0.1377 of its $0.75 cap, control included.** The boot log exists:
-20 827 bytes on the volume, sha `4a48f32a…`, and it holds the SDK's own start — `Starting Serverless
-Worker | Version 1.11.0`, seven fitness checks in 3 993 ms, `Jobs in queue: 1`, `Started.`, 1 188
-weight shards in 93 s, `Finished.` The job returned **COMPLETED** (`delay 15.9 s · exec 158.4 s`)
-with the full `info` payload, and that payload PASSED `assert_serving` and `assert_runtime_matches`
-against the 5b records with a negative control. **The serverless job loop of
-`scripts/start_5b_worker.sh` runs.** Two srv-2b hypotheses died for free on the same pod:
-`/runpod-volume/start.sh` is byte-identical to the repo copy (`5b3bcbb2…`, mode `-rwxrwxrwx`, 0
-CRLF), and the image's `Entrypoint nvidia_entrypoint.sh` does exec its CMD. The record is
-`results/srv2c_bootlog.json`, log untrimmed. The team lead's acceptance of the srv-2b abort stands
-and **the parity attempt is still unspent** — test v4 was never opened.
-
-**AND THE CONTROL SAYS srv-2b'S HANG WAS THE PLATFORM, NOT US.** The operator bought the separating
-experiment on the report: srv-2b's **exact** argv `["bash","/runpod-volume/start.sh"]`, one job,
-twenty minutes after the wrapped run on the same volume, datacenter and class —
-**COMPLETED**, `delay 26.9 s · exec 212.0 s`, same `info` payload. So the wrapper was never the
-cause, and the blocked-stdout hypothesis is demoted: it may describe 08-08 if the log plane was
-degraded then, but it is not a standing property of running without the redirect. **The fault
-srv-2b charged to our container was not ours.** The control is clean on the code axis — the
-volume's checkout moved `48948d7a` → `cf4cf71` between the runs and the diff over
-`serve_handler.py`, `start_5b_worker.sh` and `src/market_pulse/` is empty. Recorded but NOT called
-a finding: unwrapped executed 34% slower (212.0 s vs 158.4 s), n=1 against n=1 on different
-workers. **Keep the redirect anyway** — RunPod has **no worker-log channel outside the console**
-(no `logs` verb in the CLI, 400 from every `rest.runpod.io` worker path), so the volume is the only
-durable place our worker's output can go.
-
-**THE VOLUME PERSISTS AND ITS CONTENTS ARE WRITTEN DOWN.** `qw4nwleanc` holds `hf/` at revision
-`842da379…` (59 GB, no `.incomplete` blobs), `venv/` with the pinned stack over the image's torch,
-`repo/` at **`cf4cf71` — refreshed at srv-2c by an incremental bundle, tree clean**, the adapter
-inside it at `b3ca6308…`, `start.sh`, and three logs (the staging pod's two plus
-`worker-boot.log`). A next session should bundle the delta, **not** re-stage the weights. Two
-notes ride along: runbook §B.1's "the adapter is the one item with a single copy" is no longer
-true, and `repo/` was refreshed to **`cf4cf71`** at srv-2c (incremental bundle, tree clean).
-**The volume's price IS now read** — `billing network-volume` settled one row at srv-2c:
-**$0.009722222574 for 100 GB = exactly $7.00/720 h**, i.e. **$0.07/GB/month, $0.2333/day,
-$7.00/month**. That closes srv-2b's Dv13. The old $7.20/month figure was a prior and was 3% high;
-the frozen `results/volume_calc_5c1.json` derivation is deliberately **not** edited to match.
-
-**THE CAPTION PROGRAM WAS RE-ROUTED BEFORE IT SPENT ANYTHING (SPEC 3.13).**
-`docs/PROMPT-5c1-captions-full.md` is **VOID, never executed** — its $0.35 OpenRouter cap was
-never touched, and it is kept only as provenance of the authorisation it recorded. Captions move
-to the project's own **Gemma-4 vision path**: NF4 base at the pinned revision, **adapter OFF**,
-greedy, batch 1, its own registered prompt with a new sha before any result, and a
-`caption_source` field (`qwen-4.5g2` | `gm4-nf4-base`) so numbers from two caption instruments
-are never compared silently. `docs/PROMPT-5c1-vis-a.md` is **ON HOLD** and will be re-issued
-against the proven runtime after srv-2b parity — the runner must target the endpoint, not a pod
-session. The 19 qwen captions already bought stay bought and become the bridge table's control.
-
-**THE LAUNCH SIGNATURE IS STILL FROZEN — it is the operator's, next session, on the v2 numbers.**
-`results/yield_screen_5c1.json` still reads `verdicts_reportable: false` and **the pilot does not
-lift it** — lifting it is screen v2's job, and every registry action waits behind it.
-The operator's v1 readings stand: a text-only screen is systematically blind to image-first
-segments, so nothing is cut from those on v1 numbers; the two rows that held bar A on noise
-(@polyakova_fitness on «варто», @myrhorodtown on «Президент») **count as BELOW bar A** and now
-carry that ruling in the record itself (`--close`, `summary.pass_A_ruled_below_bar_A`); matcher
-guards for «Варто»/«Президент» are deferred to the 5c3 lexicon session.
-
-**The discovery session is still a separate future contract** (amendment 3.12 (2)), priced and
-unspent: Premium €5.99/mo ALREADY active on the collector account, **10 free full-text queries a
-day**, 10 Stars ≈ €0.20 beyond it — a brand-lexicon pass (~20–25 queries, +3 for the new brands) is
-$0 over two to three days or ~€2–3 in one. TGStat is out (RF service); Telemetr.io free is the
-fallback.
+**Still open on the 5c1 track, none of it started:** the launch signature is the operator's, on the
+v2 numbers; the discovery session is a separate future contract (3.12 (2)); the candidate reserve is
+untouched — `results/harvest_mothers_ua.json` (79 recommendations, 3 genuinely in-segment), five
+unaccepted city analogues in `results/entry_gate_5c1.json :: notes.*_broadcast_analogue`, reserve
+#4 (12 handles) and the private track, RECORDED and not actioned.
 
 ## 🚧 Blockers
 
-**None.** The 2026-08-07 wall cleared at 10:02:05 UTC and today's ~100 resolves drew no new one —
-because every collection run was scoped with `--only`. That is the discipline, not luck:
-`collectable()` returns the whole registry and a bare `--posts` over 66 sources is sixty-six
-`ResolveUsernameRequest`s for the work of six.
+**None, technical.** The 2026-08-07 FloodWait wall cleared at 10:02:05 UTC and ~100 resolves drew
+no new one — because every collection run carried `--only`. That is discipline, not luck.
 
-**$0.0180 spent today, all of it on the caption pilot, and the account is idle again.** The yield
-session touched Telegram zero times (step 5's one authorised resolve was never needed —
-@KarlivkaLive had been gated on day 2 at 10:48, so the brief's «66 → 67» was one step behind the
-registry). The pilot's fetch brought the account back for 19 posts and 159 images and drew **no
-FloodWait**; raw v1 is byte-identical before and after, `shasum -c results/raw_v1_baseline.sha256`
-6/6. The money sits on the pilot's OWN anchor, `results/spend_5c1_captions.json` — $0.0180 against
-its $0.10 cap, and 4.5g2's $0.75 balance was never touched.
-
-**~~OUR SERVERLESS CONTAINER DOES NOT START~~ — CLEARED BY srv-2c ON 08-08.** It starts, it takes
-jobs and it answers; the boot log and a COMPLETED job say so (`results/srv2c_bootlog.json`). What
-is left is not a blocker but an unpriced curiosity — *why* srv-2b hung — and one ≈$0.06 experiment
-would settle it. **No serving number exists yet** all the same: SPEC 3.11 (2) parity has not been
-run and its single attempt is unspent, so production has no measured serving verdict either way.
+**Budget is the live constraint.** Phase 4 stands at **$20.8844 of $25.00, $4.1156 left** (read
+2026-08-08 22:34:28Z; still settling — Dv33). Today spent $2.3939 across four paid sessions.
+`pod list -a` → `[]`, `serverless list` → `[]`; only the volume stands.
 
 **Recorded rather than open:** the CA-MTL-3 volume is deleted, so its **~$0.24/day** idle billing
 has stopped — that literal is load-bearing, not decoration: `scripts/volume_calc_5c1.py` greps it
-out of THIS file as a priced input, and a rewrite that drops it reddens nine tests. **The account is
-no longer empty:** srv-2b's volume `qw4nwleanc` (100 GB, EU-RO-1) persists as a run-rate line, and
-that is the only thing it left — `pod list -a` → `[]`, `serverless list` → `[]` at close. Arm A's
-per-row dump is permanently lost.
+out of THIS file as a priced input, and a rewrite that drops it reddens ten tests. Arm A's 4.5h2
+per-row dump is permanently lost (`results/predictions/LOST.md`). Two billed rows nobody claims:
+a **4090 pod row, $0.5098 / 2 470 s on 08-08** (Dv38) and srv-2b's 30-second A4500 row — neither
+moves a number, since `runpod_guard.spend()` takes the max of the balance delta and the ledger and
+the delta binds.
 
 **SUPERSEDED, kept so the old line is not re-read as current:** "no serverless endpoint on this
 account reaches a job-consuming worker" was true on **2026-08-06** and is the honest content of
-`results/parity_verdict_5b.json`. The probe of **2026-08-08** overturned it (SPEC 3.14) — but on
-`n=2`, one evening, **no volume attached**. "The wall is down today" is not "it can never return",
-and the volume is exactly the variable the probe left out. **srv-2b closed that variable on
-2026-08-08: a volume-attached `ADA_24` endpoint in EU-RO-1 consumed and completed a job.**
-Production still stays a stop-after pod — not because of the wall, but because our own worker does
-not start and parity has never been measured.
+`results/parity_verdict_5b.json`. Everything after it — the probe, srv-2b's volume-attached
+allocation, srv-2c's boot log and control, srv-2d's 758 rows — overturned it. Do not cite that file
+as current state.
 
 ## ⚠️ Footguns for the next run
+
+**A `git fetch` that names a missing ref leaves the OLD `FETCH_HEAD`, so the merge after it
+"succeeds" and moves nothing.** `git bundle create f.bundle <base>..HEAD` names its ref **`HEAD`**,
+not `main`; the srv-2d staging script (copied from srv-2c, whose bundle carried `main`) fetched
+`main`, printed `fatal: couldn't find remote ref main`, and the next line's `merge --ff-only
+FETCH_HEAD` then merged the **previous session's** pointer and printed `Already up to date.` The
+volume stayed on the old commit with a paid run minutes away. Only the script's own sha256
+comparison against the Mac's values caught it. End every deploy with a **content** check of the
+files the runtime executes; `git bundle list-heads` names the real ref in one command.
+
+**`smoke_5b.py --record` defaults to `results/serving_5b.json` — the pod's cost anchor.** That file
+holds the `adopted` block every serverless comparison is measured against ($0.5993/1000,
+$0.4611/pass, 4.071 s/row). A smoke run without an explicit `--record` overwrites the baseline with
+the number under test. Always pass a path.
+
+**RunPod's request policy is in MILLISECONDS and every briefing writes seconds.**
+`serving.execution_policy(3600, 7200)` is the one conversion point and it refuses values under the
+documented minimums (5 s / 10 s). The endpoint's own `--execution-timeout` takes **seconds** and
+stores ms — the two are opposite, which is exactly how a 3 600 ms budget kills an hour-long job.
+Set the endpoint-level timeout to cover the run as well: if a per-request override silently fails,
+the endpoint value is what remains.
 
 **A failing serverless worker bills exactly like a working one, and only DELETE stops it.** srv-2b's
 worker was `running` for 31 minutes at **$0.00031/s** with its job stuck in the queue — $0.55 for
@@ -452,159 +248,10 @@ the **smallest** reply target in the thread, because the mirror exists before an
 Sanity gate: if the reply family comes out near the corpus size, the discriminator is wrong, not
 the corpus. Measured 2026-08-03 on one real thread **before** the 1,538-thread walk.
 
-**`results/sitting_45g2_manifest.json` no longer matches the batch it pins, and that is correct.**
-4.5g5 wrote 35 adjudicated rows into `uplabel_precheck_45g2.jsonl` (`df688e59…` → `f436c419…`).
-`build_sitting_pack.py` will refuse. **Do not re-pin the manifest** — it describes the corpus the
-300 verdicts were passed on; `results/verdicts_45g5.json` is the only place the chain lives. Same
-shape as `calib_45e_manifest.json` and `relabel_45e.json`.
-
-**The batch is no longer pure model output.** 35 of the 1,912 rows carry
-`annotator: sitting-45g-verdicts`. Any counter that says "the precheck said X" has to name which
-rows it means, and any new gate over the batch has to decide whether adjudicated rows are in it.
-
-**A size and a cost are different numbers, and only the cost decides.** The reply family is the
-bigger one — 23 of 42 refusals against the sender family's 7 — and the more expensive by far: a
-blanket rule over it flips 62 of 258 judged-correct rows against the sender family's 10 of 45.
-Measure what a rule would break on the rows already accepted before deciding a feature is worth
-buying.
-
-**"N of the refusals are in family F" is co-occurrence and reads as explanation.** 23 refusals are
-structurally replies; only **10** have a note that says the refusal was *about* the reply. The
-other 13 are food-poll `taste` rulings and P5/P6 rows that happen to sit on replying rows. Before
-a family size becomes an argument, check the notes: does the verdict name the feature?
-
-**A family averaged over two members can hide that they behave oppositely.** The two hyperactive
-pseudonyms cost 6-of-40 and 4-of-5 under the same rule, one is `official_retail` and the other an
-`aggregator`, and one has 874 texted comments against the other's 73 in 3,761 rows. The pair's
-"10 of 45" is arithmetic, not a description of either. Split before pricing.
-
-**A prompt revision can only re-weigh evidence the model HAS.** v2.2 states the corporate-voice
-ruling, and `UNCLEAR_RULE` had already listed it since v2 — the model reads it twice and still
-answers `unclear: false` on 3 of the 4 P6 rows, because nothing in their text identifies a
-retailer. The discriminator was one directory away the whole time (`sender_anon_id`, same
-pseudonym on all four). Before rewording a rule the model keeps breaking, check whether the input
-it would need to obey the rule is in the row at all.
-
-**A pre-registration that is not committed is not a pre-registration.** `run_v22_probe.py` shells
-out to `git ls-files` and `git diff HEAD` and refuses to spend against a plan that is untracked
-**or modified** — tracked-but-edited is the case a shallow check misses. Both branches are tested
-against a throwaway repo.
-
-**A comparison row read off the wrong file looks like a perfect score.** The v2.1 baseline was
-first computed from the plan's own source batch, which holds the labels the sitting judged: v2
-against itself, reported as 58/58 for a prompt that scores 20. The smoke run caught it. Whenever
-a record carries a "before" column, check which file it came from.
-
-**A cost estimate must price what the run will BUY, not what it chooses from.** `rerun_failed_strata`
-priced the whole 1,912-row scope against the remaining headroom and refused a 17-row resume that
-would have cost $0.008. It now reads the resume file before the ledger block and prices `pending`.
-`precheck_uplabel.py` still has the older shape — if a resume of it is ever refused, that is why.
-
-**A history's `old` is whatever the reader of that history reverses to — not the value on disk.**
-`measure_empty_drop.reversals` keeps the LAST fix per id, so a block recording the disk value
-restores a later fix's answer and the population stops deriving. `merge_sitting_returns` writes
-`old` (the re-labeller's answer) and `replaced` (what this run overwrote) as two fields. Anything
-appending to `results/relabel_45e.json` has to do the same.
-
 **Never `git add -A` here.** `docs/SPEC.md` and `docs/STATUS.md` are modified by the team lead
 right now, and the next queued `docs/PROMPT-5c*.md` will land untracked without warning. Stage by
 path. The same trap has fired with every queued prompt since `docs/PROMPT-4.5g4.md`.
 
-- **Two taxonomies exist now, and the five-class one is still the one every number was measured
-  over.** `scorer.INTENTS` (5) is what `run_baseline.py`, `train_xlmr_baseline.py` and
-  `parse_reply("T1", ...)` use; `INTENTS_V2` (6) is what guideline v2, `T1v2` and the re-labeller
-  use. **Never widen the five-member tuple** — it would change old label spaces in files nobody
-  edited. And never add a prompt to `prompts.TASKS`: that tuple is the identity map
-  `records.assert_prompt_sha` compares whole against every stored record.
-- **Eight registered prompts now, and none of them may be edited in place.** 4.5g added
-  `T1v2_with_post`, `relabel_intents_v2_with_post` and `precheck_v2_with_post` **beside** the four,
-  which are pinned in `results/relabel_45e.json` / `relabel_probe_45d.json`; 4.5g2 added
-  `caption_post`. A with-post variant is *derived* from its base at import through `_swap`, so
-  editing the base silently moves the revision too — that is the point, and it is also why the
-  derivation is asserted both ways in `tests/test_prompts.py`. Adding another **labelling** prompt
-  means adding it to `PROMPTS`, `DELIMITERS`, `INTENTS_OF` **and** `COMMENT_FIELDS`; the
-  registration test fails on any one of them missing. `caption_post` is in **none** of those three
-  tables and is in `FREE_TEXT` instead — its answer is prose, so `build_messages` and `parse_reply`
-  refuse it **by name** rather than crashing on a missing table entry.
-- **A post reaches the model in one of four states, and one function decides which.**
-  `parents.context(posts, captions, row)` returns `post_text` / `image_caption` / `poll_text` /
-  `no_text_and_no_caption` **and** the text to render, so a run cannot ask half its rows with a
-  description and half with `(this post has no text)` because two call sites disagreed — the counts
-  land in the record and are checkable. `build_messages` refuses a caption beside a post that has
-  text and beside a task that takes no post, the same both-directions guard `parent` already had.
-  **A caption file that is not the one its record describes stops a run before the first request**:
-  the failure it prevents is invisible downstream, since the prompt hash does not move.
-- **A script that appends to a history and reads it back must tell its own writes apart.**
-  `relabel_emptied.py` held rows by "a `fixes` block has moved this row" — right on the first run,
-  and on the second it read back its own block and called 32 model answers operator rulings. It is
-  narrowed by `applied_by` now. Anything else that grows a `fixes` list inherits the same trap.
-- **`results/spend_45d.json` and `results/spend_45e.json` are anchors, not logs.** Same footgun as
-  `results/spend_3b.json` and `results/spend_phase4.json`: delete or regenerate one and its counter
-  silently restarts at today's lifetime usage. Each is written *before* the first request on
-  purpose, and `relabel_intents.py --phase` refuses a ledger carrying another phase's anchor key.
-  **The run entries do not sum to the phase spend** — `Budget.reconcile` can only push a number up,
-  so a run whose predecessor had not yet posted absorbs its tail ($0.5778 of entries against
-  $0.5448 measured from the anchor). The anchored difference is the spend; the sum is a bound.
-- **The `_tax2` files are accepted now, but they are still not drop-in replacements.** The ≥90% gate
-  passed, so the labels are validated — the row *counts* are not: `sarcasm_holdout_pool_tax2.jsonl`
-  has 915 of 971 rows (54 frozen ids + 2 with no answer) and `comments_train_tax2.jsonl` 1,594 of
-  1,600. A trainer pointed at them silently drops the 14 unreadable rows and the frozen ids. 4.5g
-  moved 32 of their `intents` cells and did **not** change any count.
-- **`read_calibration_returns.py` refuses to run, and that is correct.** It sha-pins the staged
-  files against `results/calib_45e_manifest.json`, and the three 4.5f rulings moved them
-  (`comments_train_tax2.jsonl` `d2132c1e…` → `e5a52a08…`). The gate was computed **before** the
-  rulings and lives in `results/calib_45e_verdict.json`; the sealed manifest describes the corpus as
-  it was sealed, and `fixes` in `results/relabel_45e.json` is the only place the chain to today's
-  bytes is written down. Do not "fix" the refusal by re-pinning the manifest.
-- **`uplabel_precheck_45g2.jsonl` is the live batch; `…_45g.jsonl` is its predecessor and both are
-  committed MODEL output.** The gitignore exceptions are deliberate (paid output a gate decision
-  reads), but neither file is annotation: every row carries `annotator: "llm-precheck"` and nothing
-  may merge until all three strata of **`results/sitting_45g2_manifest.json`** come back ≥0.90. A
-  stratum that misses sends back its **whole population** — 382 / 671 / 859 rows, not the 100
-  judged. The 4.5g batch is kept byte-identical because the superseded manifest pins its sha; read
-  the **g2** file for anything current.
-- **`build_sitting_pack.py` now writes the 4.5g2 pack, and `--force` destroys an evening's
-  verdicts** — the same footgun `build_audit_pack.py` and `build_micro_pack.py` carry, and the pack
-  directory is gitignored, so there is no HEAD to restore from. `verdicts_present` in the manifest
-  is what a rebuild measured, so a forced one says what it destroyed. The build also stops if the
-  draw no longer matches the superseded manifest's `stratum_of`, or if `unreadable14.csv` no longer
-  hashes to what `results/calib_45e_micro_manifest.json` pinned; the latter means the operator has
-  started on it, and the answer is to say so in the manifest, never to re-pin.
-- **A 4.5g2 script must never import `PHASE` / `CAP_USD` / `LEDGER` from `relabel_emptied`.**
-  `precheck_uplabel.py` does exactly that on purpose — it *is* 4.5g and shares the $1.25 cap and the
-  4.5g anchor. Copying that import into a later phase charges new work against a closed phase's
-  budget and its anchor. Each phase declares its own three constants; `Asker` is fine to reuse.
-- **Two gold versions exist now, so every number has to name one.** `data/frozen/*_v3.jsonl` sit
-  beside the v2 files and **nothing reads them by default** — the gates, the bars,
-  `eval_zero_shot.py` and `run_baseline.py` all still score against v2, which is what keeps Phase 4's
-  verdict meaningful. v3 numbers live only in `results/rescores_v3.json` (`gold_version: "v3"`) and
-  are **program measurements, never gate results**; they must never be appended to
-  `results/baselines.json`. Scoring a *new* run against v3 is a gate decision nobody has taken.
-- **`data/annotation/audit_45a/` now holds 244 verdicts and gitignored data has no HEAD to restore
-  from.** `build_audit_pack.py --force` is the only path that overwrites a filled pack and it takes
-  no snapshot — do not run it to "regenerate" anything. What can be re-run safely:
-  `normalize_audit_returns.py` (no-ops once the pack matches `results/audit_45b_returns.json`) and
-  `audit_ceiling.py` (reads only). The verdicts survive in the raw returns under
-  `data/annotation/audit_45a_returned/`, sha-pinned in the normalizer and in that record; treat that
-  directory as read-only.
-- **Registry brand normalization does not fold Unicode homoglyphs.** A mention spelled with a
-  Cyrillic `о` inside a Latin-script brand casefolds to a token the watchlist alias table misses,
-  so two strings that render identically score as two different entities — one FP and one FN on
-  G1e. Found on the 4.5a brands stratum (n=4, so at least a quarter of it). **The fix is deferred
-  to the 4.5 follow-ups on purpose: a normalization change mid-audit would silently redefine future
-  G1e numbers against past ones** — Phase 3, the own-pod anchor and both arms were all scored
-  through today's `normalise_brand`. Do not "just fix" it; it is a re-scoring decision with a plan,
-  and every old run can be re-scored from its dump at $0 (`implementation-notes.md`, Phase 4.5a).
-- **The results record holds TWO rows under the gate id `G1d`** — post_type, which gates, and
-  relevance, which amendment 3.3 reports beside it and never inside it. A dict keyed by gate id
-  returns the relevance number and a bar that looks entirely plausible (0.9315 instead of 0.8984).
-  `records.anchor_values` selects on the metric name and refuses anything but one match.
-- **Gemma 4's chat template drops the thinking channel when you render a full assistant turn.**
-  The generation prompt ends `<|turn>model\n<|channel>thought\n<channel|>`; the turn form ends
-  `<|turn>model\n` and then the content. Build a training example from the turn form and the model
-  is conditioned on a context no gate row carries — silent, and it only shows up as gates lower
-  than the smoke suggested. Take the prompt from the eval call, the end-of-turn marker from the
-  turn form.
 - **A stopped pod with no network volume still bills its container disk.** 80 GB is about what the
   100 GB network volume costs per month. If the pod exists only for one session, **delete** it
   (`runpodctl pod delete` — there is no `pod terminate`), do not stop it.
@@ -654,44 +301,8 @@ path. The same trap has fired with every queued prompt since `docs/PROMPT-4.5g4.
 - **A ceiling lifted by the operator is not a ceiling lifted in code.** `train_xlmr_baseline.py`
   refuses to train above `--time-budget-min` and exits **3** — it prints a projection and leaves no
   process, which reads exactly like a crash. Grep your own guards before any unattended launch.
-- **The six 3b zero-shot records carry no per-row predictions — never claim paired re-scoring from
-  them.** They hold `scored_ids_sha256` (a hash of the id list) and error counts, nothing that can
-  be re-scored. Dumps exist only from step 3c onward, and the six are **not** backfilled: they
-  cannot be reconstructed and a synthesized dump would be worse than the gap.
-- **A prediction dump must be sorted before it is hashed.** Rows come back from four workers; a
-  digest in completion order is a hash of the scheduler, not of the data. And it carries ids and
-  predicted labels **only** — no gold, no source text, or it becomes a second copy of a frozen file.
-- **`results/spend_3b.json` is the $8 cap's anchor and must not be regenerated.** It stores the
-  lifetime OpenRouter usage as of the first 3b request; delete it and the next run re-anchors at
-  today's usage, silently resetting the phase counter to zero.
-- **Never use `anthropic/claude-haiku-4.5:batch`** — served only through `/api/beta/batches`, 404s
-  on `/chat/completions`. The runner refuses the slug on purpose.
-- **The reference row is marked in the record, not just the filename.** `build_record` rewrites
-  every `gate` field of a `--reference-only` run to `ref`, so a lookup for `G1d` cannot find it.
-  Do not "fix" those entries back to gate ids.
 - **A run that trips the cap writes no record** — a partial run must never become a gate anchor.
   Do not re-run with a bigger `--max-run-usd` to get the record.
-- **`GET /api/v1/generation?id=` 404s for our generations** at every delay tried (2 s to 60 s).
-  Spend reads `usage.cost` and reconciles against `/credits`; do not "restore" that path.
-- **Endpoint health readings are point-in-time.** The pins were chosen on status/uptime as read at
-  pin time; `deepinfra/fp8` was deranked then and healthy hours later. The precision *rule* is
-  pre-registered; re-pinning a provider is legal — but say so if you do it.
-- **`scripts/freeze_testsets.py --force` would rebuild the split and destroy v2.** A fresh draw
-  differs from v2 by 8 rows. Do not run it. Likewise `mine_sarcasm_candidates.py --force`
-  (746 hand labels) and `mine_sarcasm_holdout.py --force` (971); `refreeze_v2.py`,
-  `sync_batch_v2.py` and `freeze_sarcasm_holdout.py` are one-shot.
-- **`data/annotation/sarcasm_holdout_pool.jsonl` is not training data** — its non-sarcastic rows
-  share threads with the holdout.
-- **Never merge `synthetic_sarcasm.jsonl` into a real-source file.** The Phase-4 ablation has to
-  drop it by dropping one path. `data/annotation/*` is gitignored, so the file survives only
-  through an explicit `!` exception — do not "tidy" that line away.
-- **The generated rows passed QA but carry no QA number, and that is not an oversight.** ≥80% `ok`
-  was pre-registered before the 50-row draw; the operator ruled it passed without returning the
-  marked-up CSV. The executor never scores its own sample (SPEC §10), so the empty
-  `operator_verdict` column stays empty. The ADR is the authority on the verdict.
-- **The freeze shrank `sarcasm_candidates.pristine.jsonl` 800 → 746** so the validator would not
-  read the moved rows as lost. Legitimate once, audited — but the validator can be silenced the
-  same way again. Any further row loss must be diffed against the baseline before it is believed.
 - **`results/baselines.json` is append-only and never hand-edited.** Numbers reach it only through
   the scorer; `scripts/show_results.py` only reads. A hand-typed number there is invisible.
 - **A results record cannot name the commit that contains it**, so provenance is `commit` + the
@@ -699,28 +310,12 @@ path. The same trap has fired with every queued prompt since `docs/PROMPT-4.5g4.
 - sklearn lives in the `baseline` extra and torch/transformers in `xlmr` — no test may import
   either, or `make check` stops being runnable on a bare checkout.
 - `RAW_STORE_SALT` in `.env` must never be rotated: a new salt orphans every `sender_anon_id`.
-- `packaging` has 19 rows in the test set — G1c is thin by construction, not by accident.
-- **Do not merge a QLoRA adapter into bf16 base weights without measuring it (Phase 5).** An
-  adapter trained against a 4-bit NF4 base learned to compensate THAT base's quantization error;
-  merged into unquantized weights it corrects errors that are no longer there. Second-order but
-  measurable — so measure it: score the final artefact in the EXACT configuration that will serve
-  production. Safe default: serve the same 4-bit base plus the adapter, unmerged.
-- **XLM-R cannot do G1e** without a token-classification head. An empty G1e cell means "not
-  attempted", never "scored zero" — the two must never be conflated in a comparison table.
 
 - **A print statement can crash a run after the record is written.** The G1b-slice line at the end
   of `eval_zero_shot.main` was guarded by `anchor_valid` alone; on a fine-tuned arm `slice_ids` is
   `None`. It would have raised at the end of a 45-minute eval following a 3.4 h training run. Drive
   `main` through `--record-out` with a stub: `--smoke` returns before the record is built and
   `--probe` before it is written, so neither exercises that path.
-- **`planned` is not `steps`.** `ceil(rows / (micro × accum)) × epochs` over-counts by one step per
-  epoch whenever the epoch's micro-batches do not divide by the accumulation, and those leftovers'
-  gradients are never zeroed — they fold into the next epoch's first step. 272 planned, 270 run.
-- **Two runs of the same arm at the same seed give different losses** (0.18010 vs 0.18051 at step 5,
-  same pod, same data, same config). Never write "identical" about two runs on this stack.
-- **A test fixture that copies the real results file will collide with reality.** `test_gate_verdict`
-  adds two fixture arms to the committed history; once the real arms existed that was two rows per
-  arm and the suite failed on its own setup. It now strips records carrying `config.fine_tune`.
 
 ## 🐞 Known harness bug
 
