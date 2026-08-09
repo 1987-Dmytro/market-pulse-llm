@@ -31,7 +31,9 @@ import json, os, re, sys
 argv = " ".join(sys.argv[1:])
 number = re.search(r"returns_(\\d+)\\.jsonl", argv).group(1)
 with open(os.environ["STUB_LOG"], "a", encoding="utf-8") as log:
-    log.write(f"pack_{number}\\t{'--model opus' in argv}\\t{argv.count('allowedTools')}\\n")
+    log.write(f"pack_{number}\\t{'--model opus' in argv}\\t{argv.count('--allowedTools')}\\n")
+with open(os.environ["STUB_LOG"] + ".argv", "a", encoding="utf-8") as log:
+    log.write(argv + "\\n")
 
 print(os.environ.get("STUB_FIRST_LINE", "claude-opus-5"))
 if os.environ.get("STUB_WRITE") == "0":
@@ -150,6 +152,18 @@ def test_the_session_is_told_the_model_and_the_allowlist(world):
     assert allowlists == "1"
 
 
+def test_the_session_is_confined_by_denies_not_by_the_allowlist(world):
+    """Measured, not read off the docs (Dv94): allow rules union with the user's own settings,
+    so only a deny narrows anything -- and a `Write(path)` rule is never matched at all."""
+    run(world, "--only", "01")
+    argv = Path(str(world["log"]) + ".argv").read_text()
+    assert "--disallowedTools" in argv
+    assert "Bash" in argv and "WebFetch" in argv
+    assert "returns_01.jsonl)" in argv.split("--disallowedTools")[0]
+    assert "Write(" not in argv  # only Edit(path) rules are matched against a file operation
+    assert "pack_02.md" in argv and "pack_03.md" in argv  # rule 2: one pack per session
+
+
 def test_the_rest_will_not_run_before_the_pilot(world):
     done = run(world, "--after-pilot")
     assert done.returncode == 1
@@ -215,7 +229,8 @@ def test_a_dry_run_spends_nothing(world):
     assert invoked(world) == []
     assert not list(world["packs"].glob("returns_*.jsonl"))
     assert done.stdout.count("--allowedTools") == 2
-    assert "Write(" in done.stdout and "pack_01.md" in done.stdout
+    assert "Edit(" in done.stdout and "pack_01.md" in done.stdout
+    assert done.stdout.count("--disallowedTools") == 2
 
 
 def test_only_runs_one_pack(world):

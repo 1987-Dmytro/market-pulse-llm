@@ -12,10 +12,16 @@
 # instrument has never been run. Two returns files are enough to see whether the rows come
 # back in the shape the validator wants, and the other 23 are cheaper to not have run.
 #
-# What each session may do is the allowlist and nothing else: read ITS pack, read the sent
-# images, write ITS returns file. Everything else is denied by omission -- in print mode an
-# unallowed tool is refused rather than prompted for, so a session that tries to open
-# another pack or edit the one it was given simply cannot.
+# What confines a session is the DENY list, not the allowlist, and that is a measurement
+# rather than a reading of the docs (Dv94). Allow rules union: `~/.claude/settings.json` on
+# this machine allows bare `Read`, `Edit`, `Write` and `Bash(*)`, so no --allowedTools value
+# can narrow a session below that. Deny rules subtract, and were checked one at a time: with
+# `Bash` and `Edit(...pack_*.md)` denied, a session asked to run a shell command and to append
+# a line to its own pack answered BASH-DENIED and EDIT-DENIED, and the pack still hashed to
+# what the manifest pins.
+#
+# The allowlist is still passed, because it is what the rules would be on a machine whose
+# settings do not open the tools globally -- but it is not what is relied on here.
 #
 # Three ways a run stops rather than continuing into a wasted afternoon: the model's first
 # line is not Opus (the protocol's rule 1, checked here instead of trusted), the returns
@@ -99,15 +105,40 @@ run_pack() {
 - The pack does not tell you what any other instrument found. That is deliberate: your
   answer is the second reading, and it is only worth having if it is your own."
 
+  # `Edit(path)`, never `Write(path)`: the harness refuses to match a Write rule against a
+  # file operation and says so on every run -- "only Edit(path) rules are; Edit rules cover all
+  # file-editing tools". The project's own CLAUDE.md carries the same sentence about its deny
+  # list. A Write rule here would look like a scope and be none.
   local tools
-  tools="Read($(tool_path "$pack")) Read($(tool_path "$MEDIA")/**) Write($(tool_path "$returns"))"
-  local -a command=("$CLAUDE_BIN" -p "$prompt" --model opus --allowedTools "$tools")
+  tools="Read($(tool_path "$pack")) Read($(tool_path "$MEDIA")/**) Edit($(tool_path "$returns"))"
+
+  # Everything a review session has no business doing. The returns file is the one thing it may
+  # write, so the writable trees are denied by name rather than by an "except" nobody can spell.
+  local -a deny=(
+    Bash WebFetch WebSearch Task
+    "Edit($(tool_path "$PACK_DIR")/pack_*.md)"
+    "Edit(./results/**)" "Edit(./src/**)" "Edit(./scripts/**)" "Edit(./docs/**)"
+    "Edit(./config/**)" "Edit(./tests/**)" "Edit(./knowledge/**)" "Edit(./*.md)"
+  )
+  # Rule 2 of the protocol -- one pack per session -- made enforceable rather than requested.
+  local other
+  for other in "${all[@]}"; do
+    [[ "$other" == "$number" ]] && continue
+    deny+=("Read($(tool_path "$PACK_DIR")/pack_${other}.md)")
+  done
+
+  local -a command=(
+    "$CLAUDE_BIN" -p "$prompt" --model opus
+    --allowedTools "$tools"
+    --disallowedTools "${deny[*]}"
+  )
 
   if [[ $dry_run -eq 1 ]]; then
     # The prompt is the whole protocol and would bury the line that matters, which is the
     # allowlist -- that is what a reader of a dry run is checking.
     echo "pack_${number}: $CLAUDE_BIN -p <protocol + assignment, ${#prompt} chars> --model opus"
     echo "               --allowedTools '$tools'"
+    echo "               --disallowedTools '${deny[*]}'"
     return 0
   fi
 

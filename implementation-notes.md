@@ -5994,3 +5994,44 @@ all. The protocol's rule stays a session rule rather than an enforced one.
 here: if a path rule does not match how the harness normalises it, the session is denied its Read
 and writes nothing. The driver treats that as a stop after pack_01 — one session spent, not
 twenty-five — and it is the first thing to look at if the pilot comes back empty.
+
+**Dv94 — the driver's scoping was wrong in both halves, and one cheap probe found it.** The
+addendum asks for `--allowedTools` "scoped to reading the pack/images and writing that pack's
+`returns_NN.jsonl` only". Written from the docs, that is `Write(./…returns_01.jsonl)`. Run once
+against a haiku session — $0, no Opus, no returns file in the pack directory — the harness answers
+on its own:
+
+> Permission allow rule (--allowed-tools): `Write(…/probe.jsonl)` is not matched by file permission
+> checks — only `Edit(path)` rules are. Use `Edit(…)` instead (Edit rules cover all file-editing
+> tools).
+
+It prints the same about three of **this repo's own** deny rules in `.claude/settings.json`, and
+`CLAUDE.md` has carried the sentence "an `Edit(...)` rule covers every file-editing tool, Write
+included" the whole time. A `Write(path)` rule is not a narrow permission; it is no permission
+statement at all.
+
+**The second half is worse and does not show up as a warning.** With `Edit(/abs/allowed.jsonl)` as
+the only allow rule, the session wrote to `allowed.jsonl` **and** to a second path that was in no
+rule. The reason is that allow rules UNION: `~/.claude/settings.json` on this machine allows bare
+`Read`, `Edit`, `Write` and `Bash(*)`, so `--allowedTools` cannot narrow a session below what the
+user's own settings already opened. The control says the harness is not simply permissive — with no
+`--allowedTools` at all, the same write was DENIED.
+
+**Only a deny subtracts, and that was measured too**, with the driver's final rule set and a
+five-line probe:
+
+```
+PACK-READ-OK          Read(//…/pack_01.md)                     -> allowed
+WRITE-OK              Edit(//…/returns_01.jsonl)               -> allowed, file created
+BASH-DENIED           Bash                                     -> denied
+PACKEDIT-DENIED       Edit(//…/pack_*.md)                      -> denied, pack still hashes to
+                                                                  what the manifest pins
+OTHERPACK-DENIED      Read(//…/pack_02.md)                     -> denied
+```
+
+So the driver now passes `--disallowedTools` as the real confinement: `Bash`, `WebFetch`,
+`WebSearch`, `Task`, `Edit` over every writable tree in the repo, and — one rule per pack — every
+pack that is not this session's, which makes the protocol's rule 2 ("one pack per session")
+enforceable instead of requested. The allowlist is still passed, because it is the correct
+statement on a machine whose settings do not open the tools globally; it is simply not what is
+relied on here. Two probes at $0 on the cheapest model replaced a hedge in the report with a table.
