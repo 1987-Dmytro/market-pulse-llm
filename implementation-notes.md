@@ -5173,12 +5173,42 @@ is the case they describe. The contract's own close clause is the instruction fo
 partial session reports what it bought.* So it does, rather than picking the reading of that line
 that would let it keep spending.
 
+### The cold-start constant §C.1 pre-registered is conservative, measured here
+
+SPEC 3.15 (3) and §C.1 price the cold start at **$0.0733** = 239.022 s × $0.00030669/s, srv-2d's
+reading. This endpoint's own components, off the boot log and the two job envelopes:
+`delayTime` **16 603 ms** on the first request and **1 222 ms** on the second, with the weight
+load — **99 s** — inside `executionTime` rather than the delay. So ~116 s against 239 s, and the
+pre-registered constant is conservative by roughly 2× on this class with `--flash-boot` and a
+volume already warm. **The formula is not rewritten and the gate is not recomputed** — a
+pre-registration is a file, not a preference — but the measurement is recorded here because
+vis-b-r's §C.1 projection and the 5c2 briefing both read this number, and a constant that is 2×
+high makes the $0.50 stop fire early rather than late.
+
 ### Cleanup, proven by listing
 
-`serverless list` → `[]` · `pod list -a` → `[]` · `network-volume list` → the single
-`qw4nwleanc`, `mp-srv2`, 100 GB, EU-RO-1, which is the one standing resource by design.
-Template `rvt6nvg5yh` deleted and proven by `runpodctl template list --type user` going **3 → 2**
-— see Dv59, because the default listing cannot see a user template at all.
+```
+=== runpodctl serverless list ===
+[]
+=== runpodctl pod list -a ===
+[]
+=== runpodctl network-volume list ===
+[
+  {
+    "dataCenterId": "EU-RO-1",
+    "id": "qw4nwleanc",
+    "name": "mp-srv2",
+    "size": 100
+  }
+]
+=== runpodctl template list --type user ===
+[ ... "id": "unfcr3ja0t", "name": "market-pulse-5b-a" ...
+  ... "id": "0g6zg73ptq", "name": "mp-5b-diag" ... ]      # 2 rows; rvt6nvg5yh gone
+```
+
+The volume is the one standing resource by design. `rvt6nvg5yh` was proven deleted by the
+**user** template listing going 3 → 2 — see Dv59, because the default listing cannot see a user
+template at all, and the two rows that remain are 5b-era and untouched by this contract.
 
 ### Spend
 
