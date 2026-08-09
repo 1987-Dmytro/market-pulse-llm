@@ -5830,3 +5830,103 @@ It is **not** fixed here. A Mac-side edit changes nothing in the record without 
 volume, and re-staging risks the session's one endpoint on the `FETCH_HEAD` footgun with no restart
 lever — the exact trade vis-b lost $0.16 to. It is named here so the next session that opens the
 volume fixes it in the same trip.
+
+## opus-audit-a — the second instrument's packs, validator and reader ($0, 2026-08-09)
+
+SPEC 3.16, class REVIEW. Three scripts, 42 tests, `make check` 1402 green. No paid call, no Opus
+session, no returns file filled: the sessions are the operator's, and this contract builds the
+instrument they run through.
+
+**468 items in 24 packs of 19–20**, drawn at seed 42 from the screen-v2 population:
+S1 75 · S2 145 · S3 197 · S4 163 (580 stratum memberships over 468 posts — the strata overlap).
+586 of 586 sent images present and sha-matched against the digests the caption rows recorded.
+A second build reproduces all 24 packs byte for byte (`cmp`).
+
+### The check nobody asked for, and the reason it is first (Dv80)
+
+**Dv80 — the pack refuses to be drawn until the re-derivation reproduces screen v2.** The strata
+are per-post facts and the signed screen only persists per-channel counts, so the hits have to be
+re-emitted. They are re-emitted through `yield_screen_5c1`'s own `in_window` / `surrogates` and
+`market_pulse.yield_screen`'s two matchers — imported, never restated — and then **66 channels ×
+6 cells** (`posts_in_window`, `relevant_posts`, `brand_hit_posts`, `category_hit_posts`, `graded`,
+`graded_on_a_caption`) must come back equal to `results/yield_screen_5c1_v2.json`'s own before a
+single item is drawn. Sharing the code is not the same claim as reproducing the number: the window
+rule, the caption merge and the surrogate rule are all upstream of the matchers and all invisible
+in a diff. `read_calibration_returns.rebuild()` is the precedent.
+
+### Three ways the contract's prose and the artifacts disagree (Dv81–Dv83)
+
+**Dv81 — the sent images are not where the brief says they are.** The contract names
+`data/annotation/posts_media/…`; the caption rows record
+`data/annotation/captions_5c1/posts_media/…`, and there is no directory at the first path. The
+caption row is the authority on what was sent, so the packs carry its own paths and
+`results/opus_audit_manifest.json` carries `images.path_note` saying which reading was taken.
+
+**Dv82 — 31 of the 194 "committed GM4 captions" were not written by GM4.** They are poll
+transcriptions: `model` and `caption_source` are `null`, `images` is `[]`, and the text is a free,
+deterministic rendering of the poll's own question and options. **S4 is 163, not 194.** They still
+stand in for a silent post on the screen exactly like a caption does, so they keep S1/S2/S3 and
+their brand questions are asked — but their `caption_verdict` is `n/a`, pre-filled by the pack and
+enforced by the validator. Scoring them would have put 31 free rows into GM4's faithfulness rate,
+and "is the caption faithful to the image" has no image to be asked about.
+
+**Dv83 — an item is written once and carries every stratum it belongs to.** A caption-decided brand
+hit is S1, S2 and S4 at the same time. Three copies would have bought nothing, cost three sessions,
+and let one post vote three times in the aggregate. The manifest reports both readings: per-stratum
+counts and `items_total`.
+
+### Two readings of "decided by a caption", and the measured zero between them (Dv84)
+
+**Dv84 — the narrow reading and the wide one coincide here, and it is measured rather than
+assumed.** S1 is `graded_on_a_caption` — a post with no text of its own whose caption made it
+relevant, 75 rows. The wider reading (a post that HAD text, which its caption then made relevant)
+has no member, because `captions_over_a_post_that_had_text` is **0** across all 66 channels: no
+committed caption sits over a texted post at all. The manifest carries the 0 and the 75, because a
+month from now a measured zero and an unasked question are the same empty field.
+
+### What the two guards refuse, and in which direction (Dv85–Dv87)
+
+**Dv85 — the validator accepts a display name, not only a `brand_id`.** The committed protocol tells
+the session to *list the watchlist brands*; it never says "emit ids", and it may not be edited. So
+the pack's empty row shows ids unmistakably and the validator resolves either form through the
+registry's own alias table — pinned by sha, because the canon table printed at the top of every pack
+came out of that file. A string that is neither is refused rather than dropped: the open-extraction
+field is where a non-watchlist brand belongs, and silently losing one would shrink the very finding
+the review exists to produce.
+
+**Dv86 — `n/a` is enforced in one direction only.** No model caption over sha-matched images →
+`caption_verdict` must be `n/a`, refused otherwise. A judgeable caption answered `n/a` is counted as
+`declined_n_a` and reported, never refused: an honest refusal to rule is a finding, and refusing it
+buys guesses. Coverage reports four states apart — items, rows, unanswered, declined — because a
+pack nobody ran and a pack whose every caption came back `n/a` are the same "rows returned" and
+completely different facts.
+
+**Dv87 — the matcher's answer sits beside the item, and that is an anchoring risk the sitting should
+know about.** The contract requires it twice ("matcher output is the reference answer inside the
+pack"; "each pack embeds … the matcher's verdict for that post"), so it is built that way. But the
+closed-book question is then asked of a reviewer who can already see the reference answer, which
+makes a CONFIRMATION weaker evidence than a MISS: the FN column of `results/opus_audit_5c1.json` is
+the load-bearing half, and the TP column should be read as agreement, not as independent
+corroboration. A blinded variant — the same verdicts in an appendix the reviewer meets after
+judging — was considered and deliberately **not** built: moving them would be a silent redesign of
+the operator's instrument. It is the operator's call, and one re-run of the builder is all it costs.
+
+### The pins, and one band the contract cannot satisfy (Dv88)
+
+**Dv88 — 15–20 posts per pack is not always arithmetically possible, and the ceiling is the half
+that is kept.** 21 items are one pack of 21 or two of 11; `ceil(n/20) > floor(n/15)` names that
+band. A pack over 20 is the worse break — it is a session longer than the contract sized — so inside
+the band the packs come out short, `main` prints the range it produced, and the manifest carries
+each pack's own count. It did not bind here: 468 → 24 packs of 19–20.
+
+Pins that stop a run rather than annotate it: the protocol must be **tracked and identical to HEAD**
+(3.16 (2) wants its sha to exist before a pack is opened, and tracked-but-edited is the case a
+`Path.exists()` waves through — `run_v22_probe.py` precedent); every sha256 screen v2 pinned —
+lexicon, registry, prereg, both caption files, both caption run records — is re-checked against
+disk; the reader stops if the protocol at HEAD is no longer the one the packs name; and a rebuild
+stops if any `returns_NN.jsonl` exists, because `data/annotation/**` is gitignored and an evening
+of judgements has no HEAD to restore from.
+
+The reader's `instrument.model` is a **declaration**, recorded as one. A returns file cannot prove
+which model wrote it and the price is unpinnable on a subscription — which is 3.16 (2)'s own reason
+for the output class being review.
