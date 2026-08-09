@@ -127,6 +127,11 @@ def test_the_runbooks_smoke_invocation_runs_to_a_written_record(tmp_path):
     here against the fake client, because a runbook step that fails on syntax fails after the
     endpoint exists — and `--only` must narrow the record's population, not just its work."""
     out, record = tmp_path / "gm4_smoke1.jsonl", tmp_path / "serving_visb_smoke.json"
+    # The claim below is "this invocation did not touch the default path", NOT "nothing ever
+    # writes there" — vis-b-r ran the real §B and the file now exists as bought evidence. An
+    # absence assertion would have reddened the suite the moment the runbook was executed.
+    default = REPO_ROOT / "results" / "smoke" / "gm4_smoke1.jsonl"
+    before = default.read_bytes() if default.exists() else None
     assert (
         driver.main(
             [
@@ -162,7 +167,7 @@ def test_the_runbooks_smoke_invocation_runs_to_a_written_record(tmp_path):
     }
     assert len(parents.read_caption_rows(out)) == 1
     # an explicit --out/--record survives --smoke: the redirect fires only on the defaults
-    assert not (REPO_ROOT / "results" / "smoke" / "gm4_smoke1.jsonl").exists()
+    assert (default.read_bytes() if default.exists() else None) == before
 
 
 def test_a_slice_stays_under_runpods_documented_run_ceiling():

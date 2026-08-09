@@ -5173,17 +5173,17 @@ is the case they describe. The contract's own close clause is the instruction fo
 partial session reports what it bought.* So it does, rather than picking the reading of that line
 that would let it keep spending.
 
-### The cold-start constant §C.1 pre-registered is conservative, measured here
+### The cold start, partially measured — and see vis-b-r, which corrected this reading
 
 SPEC 3.15 (3) and §C.1 price the cold start at **$0.0733** = 239.022 s × $0.00030669/s, srv-2d's
-reading. This endpoint's own components, off the boot log and the two job envelopes:
-`delayTime` **16 603 ms** on the first request and **1 222 ms** on the second, with the weight
-load — **99 s** — inside `executionTime` rather than the delay. So ~116 s against 239 s, and the
-pre-registered constant is conservative by roughly 2× on this class with `--flash-boot` and a
-volume already warm. **The formula is not rewritten and the gate is not recomputed** — a
-pre-registration is a file, not a preference — but the measurement is recorded here because
-vis-b-r's §C.1 projection and the 5c2 briefing both read this number, and a constant that is 2×
-high makes the $0.50 stop fire early rather than late.
+reading. The components visible in this session's two failed handshakes: `delayTime` **16 603 ms**
+on the first request and **1 222 ms** on the second, with a **99 s** weight-load bar inside
+`executionTime`. **Those do not add up to a cold start** and the first version of this paragraph
+wrongly summed them to ~116 s and called the pre-registration 2× conservative. `executionTime`
+covers more than the weight-load bar — the processor, the quantised load, the handler's own
+setup — and the client raised before either job's `executionTime` was recorded. vis-b-r measured
+the whole thing on a clean boot: **244.074 s**, i.e. $0.0749, against the pre-registered 239.022 s
+/ $0.0733. The pre-registration is accurate to 2%, not conservative.
 
 ### Cleanup, proven by listing
 
@@ -5274,3 +5274,256 @@ listing that could not have shown one.
 produced a record whose population is zero, and a measured zero and a run that never happened are
 not the same thing. The session's evidence is `results/visb_worker_boot.log`, the ledger entry in
 `results/spend_5c1_vis.json`, and this section.
+
+## 5c1 vis-b-r — the resume, and the caption instrument finally runs ($0.4993 of $1.00, 2026-08-09)
+
+**19 of 19 ATB posts captioned on the project's own Gemma 4, and bar A PASSES where qwen's PASS
+stands — 0 → 14 relevant against a bar of 4, qwen's own reading being 0 → 13.** The pre-registered
+instrument-failure STOP of SPEC 3.13 (4) does not fire. Every rung of the runbook was walked in
+order, no rung was retried, and the session closed inside its cap with **$0.5007 unspent**.
+
+### R0 — the $0 preflight, on real transformers, before anything billable
+
+The addendum's own words: the mixin is what is under test, so a stub is not a valid subject.
+`scripts/preflight_serving_guards.py` builds a real `Gemma4ForConditionalGeneration` from a tiny
+config — no download, no weights, CPU, seconds — and drives the guard both ways.
+
+```
+local   transformers 5.14.1 · peft 0.20.0 · torch 2.13.0
+volume  transformers 5.14.1 · peft 0.20.0
+
+subject Gemma4ForConditionalGeneration from config, 135,207,040 params
+  isinstance(model, PeftAdapterMixin)  True
+  getattr(model, 'active_adapters')    method PeftAdapterMixin.active_adapters, bool() = True   <- an API, not an answer
+  getattr(model, 'peft_config', None)  None
+
+1. bare real model            assert_no_adapter  ACCEPT
+   control (the vis-a guard)                      REFUSE — the caption model carries an adapter (Gemma4ForConditionalGeneration, active_adapters).
+
+2. after add_adapter          peft_config ['default'] · active_adapters() ['default']
+   assert_no_adapter                              REFUSE — the caption model carries an adapter (Gemma4ForConditionalGeneration, default). …
+
+PASS  the fixed guard ACCEPTS a bare real model
+PASS  the fixed guard REFUSES an adapter-carrying one
+PASS  the control fires: the vis-a guard refuses the bare model
+```
+
+exit 0. The local stack is the volume's stack on the two libraries that matter, which is what
+makes the check faithful; torch differs (2.13.0 against the worker's 2.8.0+cu128) and is not
+under test. The script exits 1 with an explicit message when the libraries are absent — verified
+on the bare interpreter — because an unrunnable preflight is a finding, never a pass. It found
+one defect immediately, in itself: the control's verdict was scored with inverted polarity, so
+it printed `REFUSE` and reported `FAIL`. Fixed before the commit.
+
+### R1 — one replacement endpoint, and no staging pod at all
+
+`git diff d408034 HEAD -- scripts/serve_handler.py scripts/start_5b_worker.sh src/market_pulse/`
+is **empty**: every file the worker imports is byte-identical at the staged commit and at HEAD,
+so the volume needed nothing and the resume paid for no staging pod. Template `2289gdo7oy`
+re-created free; endpoint `14yxhbglvqmvsj`, `ADA_24`, EU-RO-1, volume `qw4nwleanc`,
+`workersMax 1`, `idleTimeout 60`, `executionTimeoutMs 1800000`, flash boot.
+
+**The boot proof (addendum item 4), and why the second half of it is the real one.** The
+handshake's `info` named `repo_commit d408034db4c2247f3ac8fb03d6ca151ff0f5e652`. That is
+necessary but *not sufficient* on its own: `repo_commit()` shells out to `git rev-parse` and
+therefore reads the **disk**, which is exactly what said "deployed" while the old module was
+answering. The sufficient proof is behavioural — **`info` answered at all on
+`SERVING_CONFIG=CAPTION`**, and the vis-a guard could not produce that reply. The worker also
+answered `peft 0.20.0 · transformers 5.14.1 · torch 2.8.0+cu128`, `RTX 4090`, `24564 MiB`.
+
+Cold start, timed on its own so §C.1's terms do not double-count (Dv55 continues):
+**244.074 s** wall = `delayTime` 23.847 s + `executionTime` 215.015 s.
+
+### §B — the smoke, and the first GM4 caption in this project
+
+The runbook's line verbatim, `--record` and `--out` to new paths. All four PASS conditions:
+
+1. handshake refused nothing — `CAPTION/base-no-adapter`, revision `842da3794eaa…`, prompt
+   `caption_post_gm4 41d33d0299fe…`;
+2. Ukrainian prose about a leaflet, not JSON and not reasoning:
+   *«АТБ з 01.07.2026 по 07.07.2026 ЗНИЖКИ до -51%* Зображення представляє промоцію на шоколад
+   Milka, морозиво брендів Three Bears, Рудь, Своя Лінія та ковбасу Баликова.»* (164 chars);
+3. `truncated_replies: []` — `finish_reason` was `stop`;
+4. the dump on the volume matches: `dump matches: ef590986 1`, the runbook's own assertion pair
+   run unmodified. The stricter byte-for-byte reading differs by whitespace only — the driver
+   writes `" ".join(text.split())` so a caption is one JSONL field, which is why the runbook's
+   check `.split()`s both sides. Recorded so the next reader does not mistake it for drift.
+
+### §C.1 — the rate, and the pre-registered projection
+
+```
+rate (results/srv2d_cost.json :: rate)   $0.00030669/s
+smoke wall_seconds / posts               16.861 / 1 = 16.861 s/post   (WARM worker)
+$/post                                   $0.005171
+19 x $0.005171 = $0.0983  +  $0.0733 (pre-registered cold start)  =  $0.1716   vs the $0.50 STOP
+```
+
+**PASS, and by a factor of three.** The measured cold start is reported beside the constant and
+never swapped into it (addendum item 6): **244.074 s = $0.0749** against the pre-registered
+239.022 s = $0.0733 — the pre-registration is accurate to 2%. The `$/post` above is conservative
+in the right direction: the smoke's wall covers its own `info` call as well as the caption, and a
+re-pilot slice amortises that across two or three posts.
+
+### §C.2 — the re-pilot, 19 posts in 8 jobs
+
+Every job returned: 2/3/2/3/3/2/2/2 posts at 5.30–7.83 MB, the largest exactly the 7.83 MB vis-a
+predicted from the manifest. **19 captioned, 0 unusable**, 108 of 159 images sent at 6 per post,
+`caption_sources: ["gm4-nf4-base"]`. Timing: 9 calls, 552.14 s wall, 492.07 s worker,
+`idle_share` 0.1088, `wall_per_row` 29.06 s. Actual cost of the leg **$0.2211** against the
+$0.1716 projection — the difference is the cold start the re-pilot paid on its own plus the
+larger slices' longer forwards, and both readings are floors.
+
+**One truncated reply, reported and not repaired: `@atb_market_official:4391` hit the 400-token
+ceiling** (847 chars against a 231-char median). The ladder's rung is explicit — report the post,
+do not raise the budget, because a raised ceiling would make the bridge compare two ceilings. It
+is named in `results/captions_gm4_atb19.json :: truncated_replies`.
+
+**All eight volume dumps were fetched and checked before anything was deleted**, on one $0.24/h
+RTX 2000 Ada pod (`el203s29fbfibd`) that also served §B: 19 dumped rows against 19 written
+captions, `sha8` lists equal to the record's per job and every dumped reply equal to the caption
+written for that post. Copied to `results/predictions/visb-volume-captiondump--*.jsonl`, which
+matters more here than at srv-2d: `data/annotation/**` is gitignored, so those dumps plus
+`results/captions_gm4_atb19.json :: jobs[].posts/sha8` are the only committed copy of the
+captions this session bought.
+
+### §C.3 — the bridge, and the check that makes it a comparison of models
+
+`results/bridge_gm4_qwen_5c1.json`, whole and per post, with both captions quoted at every
+disagreement. **18 posts compared** — qwen's arm is missing `4350`, which its own record lists as
+`unusable`, so GM4 captioned one post qwen never did.
+
+| msg_id | qwen terms | gm4 terms | |
+|---|---|---|---|
+| 4340 | rud, svoia-liniia, try-vedmedi, молок, молочн, морозив | rud, svoia-liniia, морозив | ≠ |
+| 4360 | limo, svoia-liniia, морозив | морозив | ≠ |
+| 4370 | — | — | = |
+| 4377 | svoia-liniia | svoia-liniia | = |
+| 4381 | морозив | president, сир, морозив | ≠ |
+| 4391 | — | svoia-liniia, сир, сметан | ≠ |
+| 4401 | svoia-liniia | йогурт, масл, сир, морозив | ≠ |
+| 4411 | svoia-liniia, сир, сметан | — | ≠ |
+| 4415 | — | — | = |
+| 4421 | svoia-liniia, сметан | svoia-liniia, сметан | = |
+| 4426 | svoia-liniia, морозив | svoia-liniia, морозив | = |
+| 4436 | svoia-liniia, сир | сир | ≠ |
+| 4446 | limo, rud, svoia-liniia, try-vedmedi, морозив | морозив | ≠ |
+| 4455 | — | — | = |
+| 4467 | rud, svoia-liniia, молок, молочн, морозив | rud, svoia-liniia, морозив | ≠ |
+| 4498 | svoia-liniia | svoia-liniia | = |
+| 4508 | lasunka, limo, rud, svoia-liniia, try-vedmedi, морожен, морозив | морозив | ≠ |
+| 4519 | — | — | = |
+
+**Agreement 8 of 18, four of those being both-empty.** An agreement rate gates nothing and is
+not offered as a quality score — it is there so a reader of a future screen number knows which
+instrument produced it.
+
+**The disagreements are the models, not the inputs, and that was checked rather than assumed.**
+Reading the table, 4391 and 4411 look alarming: qwen describes salmon where GM4 describes
+mayonnaise, and vice versa. Both rows carry the files they were sent, so the question is
+answerable for free — **all 18 posts sent byte-identical image lists by sha256 in both arms**
+(same manifest `results/post_media_5c1.json` at `a93fc8a1…`, untouched since the fetch commit
+`f67cf04`; the same `entry["images"][:6]` slice in both scripts; qwen's 102 images and GM4's 108
+differ by exactly the six of the post qwen failed).
+
+So the finding is about the task, not about either model: **an ATB album is six pages of a promo
+leaflet holding dozens of products, and a ~230-character caption is a SAMPLE of it, not a
+description.** Two instruments sample different products, and a term match downstream inherits
+that sampling. That is a 5c2 input and it is not fixable by choosing the "better" captioner.
+
+### §C.4 — bar A, against the untouched pre-registration
+
+`results/yield_bars_5c1.preregistration.json` re-hashed **before** use:
+`1aa898180b01762d909e29997db659d2dc70931816855f4c0325b1ea1c892f2b`, the sha SPEC 3.15 (1) names,
+and `git status` on the path is empty — it did not move.
+
+```
+@atb_market_official · 25 posts in 2026-06-26…2026-07-24
+  before:   0 relevant  bar A FAIL
+  after:   14 relevant  bar A PASS  (bar = 4)
+  captioned 19 · misses 5: [4370, 4411, 4415, 4455, 4519]
+control reproduces the signed screen                    OK
+control same window as the signed screen                OK
+control negative control :: a fitness post with no taxonomy OK
+```
+
+The *before* reading is re-derived and reproduces the zero the signed screen reported, so the
+after is a number about the same instrument. **Bar A passes where qwen's pass stands** — 14
+against qwen's 13 — so the pre-registered instrument failure of 3.13 (4) does not fire and there
+is no fork to return to the operator.
+
+### Cleanup, proven by positive-controlled listings (addendum item 5)
+
+The listing was first shown to DISPLAY a live object of each kind, then shown empty:
+
+```
+# with the endpoint and template alive
+serverless list          [('14yxhbglvqmvsj', 'market-pulse-vis-caption')]
+template list --type user ['unfcr3ja0t', '2289gdo7oy', '0g6zg73ptq']
+
+# after deletion
+=== runpodctl serverless list ===        []
+=== runpodctl pod list -a ===            []
+=== runpodctl template list --type user  ['unfcr3ja0t', '0g6zg73ptq']
+=== runpodctl network-volume list ===    qw4nwleanc · mp-srv2 · 100 GB · EU-RO-1
+```
+
+The endpoint's own accounting before deletion: `jobs {completed: 12, failed: 0}`,
+`workers {idle: 1, running: 0}` — it had scaled itself down, unlike attempt 1's worker. The two
+5b-era templates predate this contract and stay.
+
+### Spend — both readings, both floors
+
+| reading | value |
+|---|---|
+| `results/spend_5c1_vis.json`, balance delta on this session's own anchor | **$0.4993 of $1.00**, remaining $0.5007 |
+| `runpod_guard.py`, phase | **$21.5004 of $25.00**, remaining $3.4996 |
+| the guard's itemised corroboration | $21.0905 (lags the delta, as always) |
+
+Both are FLOORS (Dv33) and were read minutes after the deletes. The whole vis-b contract,
+attempt 1 plus the resume, cost **$0.4993** of its $1.00 — attempt 1's $0.1702 of failed
+handshakes and staging included. Per-leg: staging + two failed handshakes $0.1702, R1 handshake
+$0.0242, §B smoke $0.0838, §C.2 re-pilot $0.2211.
+
+### Deviations — PROMPT-5c1-vis-b RESUME addendum
+
+**Dv61 — R0 was made a committed script rather than run and discarded.**
+`scripts/preflight_serving_guards.py`. The addendum asks for the check and its output; STATUS
+names "$0 integration-preflight on real imports before every paid session" as the standing
+remedy, and a preflight that lives in `/tmp` cannot serve a standing rule. No test imports it, so
+`make check` stays torch-free at 1345 passed. It carries the vis-a guard body as its own positive
+control, so it cannot silently degrade into a check that never looked.
+
+**Dv62 — no staging pod was created, and the volume was left at `d408034` rather than HEAD.** The
+addendum expects the worker to name `d408034`; HEAD had moved two commits past it for the
+team-lead docs and the preflight script. `git diff` over every file the worker imports is empty
+between the two, so re-staging would have cost a pod and changed nothing the worker executes.
+The boot proof is against `d408034` exactly as written.
+
+**Dv63 — the endpoint was deleted before §C.3/§C.4 rather than at session end.** Both remaining
+rungs are local and free, and attempt 1's finding is that a worker which fails to idle down bills
+until the endpoint is destroyed. Deleting once no billable step remained removes that exposure;
+the volume dumps had already been fetched and verified, so nothing was lost by it.
+
+**Dv64 — one $0.24/h pod served both dump fetches instead of two.** Created after §B, held
+through §C.2, deleted before the endpoint. The runbook's own §B note (added at the close of
+attempt 1) says the scp host is a pod because a serverless worker exposes no SSH.
+
+**Dv65 — the correction to attempt 1's cold-start paragraph.** It summed `delayTime` and the
+weight-load progress bar to ~116 s and called the pre-registered $0.0733 twice too high.
+`executionTime` covers more than that bar, and the resume's clean measurement is **244.074 s**,
+within 2% of srv-2d's 239.022 s. The earlier paragraph is rewritten in place with the error named
+rather than deleted, because a wrong number that reached a 5c2 input has to be visibly retracted.
+
+**Dv67 — the SUCCESSFUL boot log was not fetched, and it is on a clock.** Attempt 1's failed
+boot is committed as `results/visb_worker_boot.log`; the clean boot that followed overwrote the
+volume's copy and was never brought back, because the fetch pod was deleted before the endpoint
+and re-creating one after the spend was stamped would have re-opened a closed session for a file.
+`vis-c`'s first worker boot truncates it. What it would have carried is preserved elsewhere and
+was checked: the `info` reply in `results/captions_gm4_atb19.json :: endpoint.worker` names the
+runtime, the revision, the repo commit and the merge state. Named here rather than left silent —
+the next session should fetch the boot log while its pod is still up.
+
+**Dv66 — `results/bridge_gm4_qwen_5c1.json` is a new result file the contract did not name.** The
+runbook says the bridge table "goes into the session record whole, per post, with both captions
+quoted"; `results/captions_gm4_atb19.json` was already written and sealed by the driver before
+the bridge ran, so the table has its own file rather than an edit to a paid record.
