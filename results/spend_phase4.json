@@ -171,6 +171,20 @@
       "spent_usd": 20.8793,
       "remaining_usd": 4.1207,
       "note": "srv-2d closed: endpoint, template and both pods deleted, listings empty"
+    },
+    {
+      "at": "2026-08-09T10:27:14+00:00",
+      "balance": 13.9988911968,
+      "spent_usd": 21.0011,
+      "remaining_usd": 3.9989,
+      "note": "vis-b staging pod, repo/ ed9c0c9 -> a8cc418"
+    },
+    {
+      "at": "2026-08-09T10:41:33+00:00",
+      "balance": 13.8407742968,
+      "spent_usd": 21.1592,
+      "remaining_usd": 3.8408,
+      "note": "vis-b stopped at the boot rung, endpoint and template deleted"
     }
   ]
 }

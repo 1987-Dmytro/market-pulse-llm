@@ -47,8 +47,14 @@ runpodctl template create --name market-pulse-vis-caption --serverless \
 runpodctl serverless create --name market-pulse-vis-caption --template-id <TEMPLATE_ID> \
   --gpu-id ADA_24 --gpu-count 1 --workers-max 1 \
   --network-volume-id qw4nwleanc --data-center-ids EU-RO-1 \
-  --idle-timeout 60 --execution-timeout 900 --flash-boot
+  --idle-timeout 60 --execution-timeout 1800 --flash-boot
 ```
+
+**1800, not 900** (vis-b's own correction to this line): the driver's per-request policy is
+`execution_policy(1800, 3600)`, and hot.md's footgun says the endpoint value is what remains if
+a per-request override silently fails. An endpoint budget *below* the request budget is a way to
+lose a paid slice to a timeout with no retry. Read `executionTimeoutMs` back — the flag takes
+seconds and stores milliseconds, so 1800 stores `1800000`.
 
 **The stdout redirect is a standing line, not a diagnostic** (`runbook_srv2b.md` §D.1). RunPod's
 troubleshooting page says logs "only appear for successfully initialized workers", so on the
@@ -89,6 +95,20 @@ This runbook has a second, cheaper net for exactly that failure: the worker repo
 `caption_prompt_sha256` in `info`, and `caption_gm4_5c1.py` refuses before the first paid caption
 unless it equals the sha this Mac renders. A volume a session behind fails the handshake instead
 of captioning happily under the old prompt.
+
+**Stage the volume BEFORE the endpoint exists, and never merge into a volume an endpoint is
+already serving.** vis-b learned this at $0.16: a running worker has already imported
+`serve_handler` and every module under it, so a `git merge` on the volume changes the files on
+disk and reaches nothing. There is no reload lever — `serverless update` does not restart a
+worker, and vis-b's `--idle-timeout 60` did **not** stop one that had failed a job (health read
+`workers.running: 1` fifteen minutes and two full weight reloads later). The only restart is
+**delete the endpoint**, which is why the order is not a preference:
+
+1. staging pod → `repo/` at the session's commit, content-verified, pod deleted;
+2. template + endpoint;
+3. handshake, and from here the code on the volume is frozen for the session.
+
+A code fix discovered after step 2 costs a new endpoint, and this contract forbids one.
 
 ### A.4 The decoding facts, which are code and not configuration
 
@@ -139,9 +159,14 @@ PASS is four things:
 4. **the dump on the volume matches the reply byte for byte.** Fetch it before deleting
    anything (§ the abort ladder):
 
+**The host in the next line is a POD, not the worker** — a serverless worker exposes no SSH, so
+the only way off the volume is a cheap pod with it mounted (at `/workspace` there,
+`/runpod-volume` on the worker). srv-2d paid $0.0363 for two RTX 2000 Ada pods, staging and the
+dump fetch, at $0.24/h — the cheapest class EU-RO-1 catalogues in stock.
+
 ```bash
 scp -i ~/.runpod/ssh/runpodctl-ssh-key -P <PORT> \
-    root@<HOST>:/runpod-volume/captions_visb_smoke_00.jsonl /tmp/visb_dump.jsonl
+    root@<HOST>:/workspace/captions_visb_smoke_00.jsonl /tmp/visb_dump.jsonl
 python3 - <<'PY'
 import json
 dump = [json.loads(line) for line in open("/tmp/visb_dump.jsonl")]
@@ -291,6 +316,7 @@ record rather than re-asking it, because a serverless worker bills while it fail
 | **Over cap** | the guard exits 1, or the driver's own anchor reaches $1.00 | a cap is not raised to finish a run. Whatever was bought is reported as bought. |
 | **Bar A fails where qwen passed** | §C.4 | the pre-registered instrument failure. The fork returns to the operator with the bridge table. Not a prompt revision. |
 | **A worker restarts** | any restart with a job still queued | srv-2b: 31 minutes at $0.00031/s for nothing. Watch **the first job's status**, not the worker's health, and delete the endpoint on the first restart. |
+| **A worker does NOT restart** | the same failure twice, and `/health` still reads `workers.running: 1` | vis-b: the boot log was **appended to**, not truncated — one `Starting Serverless Worker`, one worker id, two full weight loads. The container is alive with the old modules imported, and a volume `git merge` cannot reach it. ~$0.031 per failed handshake. Delete the endpoint; there is no other restart lever. |
 
 **Fetch before you delete.** The row dumps, `worker-boot.log`, anything written on the volume —
 one command per artifact, verified against the record, **before** the only other copy is

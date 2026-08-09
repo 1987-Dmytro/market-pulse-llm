@@ -1,6 +1,13 @@
 {
   "runpod_balance_at_5c1vis_vis-b_start": 13.9988911968,
   "5c1vis_vis-b_cap_usd": 1.0,
-  "gpu_sessions": [],
+  "gpu_sessions": [
+    {
+      "at": "2026-08-09T10:41:31+00:00",
+      "balance": 13.8407742968,
+      "step_spent_usd": 0.1581,
+      "note": "vis-b STOPPED at the boot rung with 0 captions. Bought: two RTX 2000 Ada staging pods (repo/ ed9c0c9 -> a8cc418 -> d408034, content-verified), and endpoint 5zd8xmlj3kg7wl whose single worker ic15zi8yk1bg7b loaded the NF4 base twice (1188 shards, 99 s each) and refused both handshakes on our own assert_no_adapter. Plus the volume run-rate. A floor (Dv33). The driver never ran, so this entry is written by hand."
+    }
+  ],
   "gpu_note": "RunPod account balance read before the first caption job of a 5c1 vis session. Session spend = its own anchor minus the balance now, enforced against the cap SPEC amendment 3.13 (4) pre-registered (vis-b $1.00, vis-c $1.50). The Phase 4 cap is enforced separately against results/spend_phase4.json, and neither anchor may be regenerated."
 }
