@@ -103,6 +103,21 @@ def test_the_response_schema_is_unchanged_against_the_5b_record():
     assert set(info) == set(SERVING_5B["worker"]), "srv-2 must not move 5b's info schema"
 
 
+def test_the_caption_config_adds_one_field_and_a_b_stay_byte_for_byte_the_5b_schema():
+    """vis-a's CAPTION config is the first thing to widen this payload, and only for itself.
+
+    `assert_serving` reads a field the worker does not report as `<absent>` and refuses, so a
+    key that exists only on CAPTION makes "name the caption prompt you serve" a refusal for
+    free on an A endpoint — where a null would have compared equal to nothing."""
+    a_and_b = handler.describe(handler.settings(template_env()), {}, "b3ca6308", {})
+    caption = handler.describe(
+        handler.settings({"SERVING_CONFIG": "CAPTION", "MODEL_REVISION": "842da379"}), {}, None, {}
+    )
+    assert set(a_and_b) == set(SERVING_5B["worker"])
+    assert set(caption) - set(a_and_b) == {"caption_prompt_sha256"}
+    assert not set(a_and_b) - set(caption)
+
+
 def test_the_runtime_block_gains_the_reported_libraries_and_nothing_else():
     """`runtime` is free-form provenance and is where the new fields go, because the guard
     that reads it walks a fixed list of three keys while `assert_serving` compares the top

@@ -18,13 +18,17 @@ Two ops, and the first one is a guard rather than a convenience:
 ``batch``
     ``(task, texts, posts)`` → one reply dict per text, in order.
 
+``caption``
+    ``(task, images)`` → one prose caption per album, in order. Config CAPTION only.
+
 Configuration is environment, because a serverless worker has no argv:
 
-    SERVING_CONFIG   A (NF4 base + unmerged adapter) or B (merged, requantized to NF4)
+    SERVING_CONFIG   A (NF4 base + unmerged adapter), B (merged, requantized to NF4)
+                     or CAPTION (NF4 base at the pinned revision, NO adapter)
     ADAPTER_DIR      config A: the arm-A adapter directory
-    BASE_WEIGHTS     config A: the base checkpoint, defaulting to the Hugging Face repo id
+    BASE_WEIGHTS     configs A and CAPTION: the base checkpoint, defaulting to the HF repo id
     MERGED_DIR       config B: the merged+requantized checkpoint directory
-    MODEL_REVISION   config A: the base weights revision to pin
+    MODEL_REVISION   configs A and CAPTION: the base weights revision to pin
 
 The model loads once per cold start, at the first job — not at import, so that `info` on a
 misconfigured worker reports the refusal instead of the container dying before it can.
@@ -42,9 +46,19 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))  # the package is not pip-installed
 
-from market_pulse import local_llm, records  # noqa: E402
+from market_pulse import local_llm, prompts, records, serving  # noqa: E402
 
-CONFIGS = ("A", "B")
+CONFIGS = serving.CONFIGS
+"""Read from `market_pulse.serving` rather than restated: the driver asserts what the worker
+answers, and two tuples that could disagree is the one shape `assert_serving` cannot catch."""
+
+ADAPTER_ENV = ("ADAPTER_DIR", "MERGED_DIR")
+"""Every environment variable that puts trained weights on this worker.
+
+Enumerated in one tuple because the CAPTION refusal is a check against the WHOLE set, not
+against two names spelled out at the call site: the failure this guards is a third variable
+added later that the refusal never learned about. A test holds the tuple against the names
+`settings` actually reads."""
 
 REPORTED_LIBRARIES = ("peft", "accelerate", "runpod")
 """Recorded, never asserted — the wheels `local_llm.environment` does not name.
@@ -73,6 +87,31 @@ def settings(env: dict) -> dict:
     config = (env.get("SERVING_CONFIG") or "").strip().upper()
     if config not in CONFIGS:
         raise ValueError(f"SERVING_CONFIG must be one of {CONFIGS}, got {config!r}")
+    revision = (env.get("MODEL_REVISION") or "").strip() or None
+    if config == serving.CAPTION_CONFIG:
+        # The refusal is against the whole set, not against the variable this config happens
+        # to have no use for: an endpoint updated from an A template keeps A's environment,
+        # and a caption worker that quietly loaded a classification adapter would answer every
+        # job without a single number downstream being able to see which model wrote it.
+        loaded = [name for name in ADAPTER_ENV if (env.get(name) or "").strip()]
+        if loaded:
+            raise ValueError(
+                f"config {config} serves the base with the ADAPTER OFF (SPEC amendment 3.13"
+                f" (3)) and {', '.join(loaded)} is set. Captions through the classification"
+                " adapter are a third instrument — clear it from the endpoint's environment."
+            )
+        if not revision:
+            raise ValueError(
+                f"config {config} needs MODEL_REVISION and it is unset: 3.13 (3) fixes the"
+                " caption instrument at the PINNED base revision, and an unpinned base is a"
+                " different model that every record would still call gm4-nf4-base"
+            )
+        return {
+            "serving_config": config,
+            "weights_dir": (env.get("BASE_WEIGHTS") or local_llm.MODEL_ID),
+            "adapter_dir": None,
+            "revision": revision,
+        }
     needed = "ADAPTER_DIR" if config == "A" else "MERGED_DIR"
     path = (env.get(needed) or "").strip()
     if not path:
@@ -85,8 +124,32 @@ def settings(env: dict) -> dict:
         # what lets `describe` answer the same questions about either config.
         "weights_dir": path if merged else (env.get("BASE_WEIGHTS") or local_llm.MODEL_ID),
         "adapter_dir": None if merged else path,
-        "revision": (env.get("MODEL_REVISION") or "").strip() or None,
+        "revision": revision,
     }
+
+
+def assert_no_adapter(model):
+    """Refuse a caption model that arrived with trained weights on it.
+
+    `settings` refuses the *environment* that would load one; this refuses the object, and the
+    two are not the same check. peft attaches itself to the model it wraps, so a `PeftModel` —
+    or a base someone called `load_adapter` on — carries `peft_config` and answers every job
+    looking exactly like the base. SPEC amendment 3.13 (3) fixes the instrument as the NF4 BASE
+    with the adapter off; a caption written through the classification adapter would land in
+    the same file under the same `caption_source`.
+
+    Takes the model rather than reading it off `self` so a test can drive it with a stub: the
+    real load needs the GPU extra and 62 GB of weights.
+    """
+    marks = [name for name in ("peft_config", "active_adapters") if getattr(model, name, None)]
+    if marks or type(model).__name__.startswith("Peft"):
+        raise ValueError(
+            f"the caption model carries an adapter ({type(model).__name__},"
+            f" {', '.join(marks) or 'by class'}). SPEC amendment 3.13 (3) serves the NF4 BASE"
+            " with the adapter OFF — captions through a classification adapter are a third"
+            " instrument and nothing in the caption file could say so."
+        )
+    return model
 
 
 def repo_commit() -> str | None:
@@ -136,11 +199,28 @@ def describe(config: dict, runtime: dict, artifact_sha: str, merged_provenance: 
     field that changed meaning between the two configs could not compare them.
     """
     merged = config["serving_config"] == "B"
+    caption = config["serving_config"] == serving.CAPTION_CONFIG
     return {
         "serving_config": config["serving_config"],
-        "merge_state": "merged-requantized" if merged else "unmerged-adapter",
-        "adapter_sha256": merged_provenance.get("adapter_sha256") if merged else artifact_sha,
+        "merge_state": serving.MERGE_STATE[config["serving_config"]],
+        "adapter_sha256": None
+        if caption
+        else (merged_provenance.get("adapter_sha256") if merged else artifact_sha),
         "merged_sha256": artifact_sha if merged else None,
+        # What CAPTION has instead of an adapter sha: the registered prompt as THIS checkout
+        # spells it. The volume carries its own `repo/`, and a fetch that names a missing ref
+        # leaves it on the previous session's commit while printing "Already up to date" —
+        # so the driver compares this against its own copy before the first paid caption.
+        #
+        # Added for CAPTION only, and absent rather than null elsewhere: `results/serving_5b.json
+        # :: worker` pins the schema A and B answer with, and `assert_serving` reads a missing
+        # field as `<absent>` and refuses — so asking an A endpoint to name a caption prompt is
+        # a refusal for free instead of a null that compares equal to nothing.
+        **(
+            {"caption_prompt_sha256": prompts.prompt_sha256(prompts.CAPTION_TASK_GM4)}
+            if caption
+            else {}
+        ),
         "quantization": local_llm.QUANTIZATION,
         "chat_template": local_llm.CHAT_TEMPLATE,
         "max_new_tokens": local_llm.MAX_NEW_TOKENS,
@@ -195,7 +275,7 @@ def assert_sdk_version(version: str | None) -> str:
     return version
 
 
-def dump_rows(path: str, start: int, texts: list[str], replies: list[dict]) -> None:
+def dump_rows(path: str, start: int, keys: list[str], replies: list[dict]) -> None:
     """Append this chunk's replies to a file on the network volume, one JSON row each.
 
     The API result of an async job is deleted 30 minutes after it completes, and the
@@ -204,17 +284,18 @@ def dump_rows(path: str, start: int, texts: list[str], replies: list[dict]) -> N
     and closed per chunk on purpose: at batch 1 that is one fsync-able write per row,
     which is what makes a job that dies at row 700 still worth 699 rows.
 
-    ``sha8`` is the row's own text, not its index: a dump recovered without the job that
+    ``sha8`` is the row's own input, not its index: a dump recovered without the job that
     produced it can then be *checked* against the test set rather than trusted to be in
-    the order someone remembers sending.
+    the order someone remembers sending. For a `batch` job the input is the row's text; for
+    a `caption` job it is `serving.album_key` over the post's images.
     """
     with open(path, "a", encoding="utf-8") as handle:
-        for offset, (text, reply) in enumerate(zip(texts, replies)):
+        for offset, (key, reply) in enumerate(zip(keys, replies)):
             handle.write(
                 json.dumps(
                     {
                         "i": start + offset,
-                        "sha8": hashlib.sha256(text.encode("utf-8")).hexdigest()[:8],
+                        "sha8": hashlib.sha256(key.encode("utf-8")).hexdigest()[:8],
                         "reply": reply,
                     },
                     ensure_ascii=False,
@@ -239,27 +320,43 @@ def handle(job: dict, client, info: dict) -> dict:
     op = payload.get("op")
     if op == "info":
         return info
-    if op == "batch":
-        texts = payload.get("texts")
-        if not isinstance(texts, list) or not texts:
-            raise ValueError(f"batch needs a non-empty list of texts, got {type(texts).__name__}")
+    if op in ("batch", "caption"):
+        field = "texts" if op == "batch" else "images"
+        items = payload.get(field)
+        if not isinstance(items, list) or not items:
+            raise ValueError(f"{op} needs a non-empty list of {field}, got {type(items).__name__}")
+        served = info.get("serving_config")
+        if (op == "caption") != (served == serving.CAPTION_CONFIG):
+            # Both directions, and neither is a typo: a caption job on config A would be
+            # answered by the classification adapter, and a batch job on CAPTION would score
+            # rows on the bare base. Both produce replies, and both land in a record that
+            # names the configuration the endpoint's environment claims.
+            raise ValueError(
+                f"op {op!r} on config {served!r}: captions are served by"
+                f" {serving.CAPTION_CONFIG} and rows by the other configs — stop and report"
+            )
         posts = payload.get("posts")
         asked = payload.get("batch_size")
-        size = len(texts) if asked is None else int(asked)
+        size = len(items) if asked is None else int(asked)
         if size < 1:
             raise ValueError(f"batch_size must be at least 1, got {size}")
         dump = payload.get("dump_path")
         replies: list[dict] = []
-        for start in range(0, len(texts), size):
-            window = texts[start : start + size]
-            context = posts[start : start + size] if posts else None
-            fresh = client.batch(payload["task"], window, context)
+        for start in range(0, len(items), size):
+            window = items[start : start + size]
+            if op == "caption":
+                fresh = client.caption(payload["task"], window)
+                keys = [serving.album_key(album) for album in window]
+            else:
+                context = posts[start : start + size] if posts else None
+                fresh = client.batch(payload["task"], window, context)
+                keys = window
             replies.extend(fresh)
             if dump:
-                dump_rows(dump, start, window, fresh)
+                dump_rows(dump, start, keys, fresh)
         out = {"replies": replies, "n": len(replies)}
         return out | {"dump_path": dump, "forward_batch_size": size} if dump else out
-    raise ValueError(f"unknown op {op!r} — this worker answers 'info' and 'batch'")
+    raise ValueError(f"unknown op {op!r} — this worker answers 'info', 'batch' and 'caption'")
 
 
 class Worker:
@@ -273,6 +370,15 @@ class Worker:
 
     def _load(self, config: dict):  # pragma: no cover — needs the GPU extra and the weights
         weights = config["weights_dir"]
+        if config["serving_config"] == serving.CAPTION_CONFIG:
+            processor, model = local_llm.load_captioner(weights, revision=config["revision"])
+            assert_no_adapter(model)
+            client = local_llm.CaptionClient(processor, model)
+            runtime = local_llm.environment(model, weights=weights, revision=config["revision"])
+            # No artifact sha: there is no adapter to hash and hashing the base checkpoint
+            # would walk 62 GB at every cold start. What pins this instrument is the revision,
+            # which `environment` reports as requested AND as transformers resolved it.
+            return client, describe(config, runtime, None, {})
         merged = config["serving_config"] == "B"
         tokenizer, model = local_llm.load(
             weights, revision=None if merged else config["revision"], prequantized=merged

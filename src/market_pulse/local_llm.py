@@ -125,6 +125,169 @@ def load(
     raise RuntimeError(f"{model_id}: no transformers auto-class loaded it — {' | '.join(errors)}")
 
 
+CAPTION_MAX_NEW_TOKENS = 400
+"""The caption budget, and deliberately not :data:`MAX_NEW_TOKENS`.
+
+4.5g2 measured it on the API instrument (`caption_posts.MAX_TOKENS`): "a six-image leaflet
+transcribed item by item runs past 600 tokens and never reaches its summary sentence". 256 is
+3b's budget for a JSON object of four fields, and a caption cut off before its closing sentence
+is not a shorter caption — it is a description of half a leaflet, silently, since free text has
+no parse failure to count. The two instruments get the same budget so that the 3.13 (4) bridge
+compares models rather than ceilings.
+"""
+
+
+def image_from_data_url(url: str):
+    """One ``data:`` URL from a caption job, as a PIL image.
+
+    The driver runs on the Mac and the pictures are gitignored, so they cannot ride on the
+    network volume with the weights: they travel inside the job, base64, exactly as
+    `caption_posts.data_url` already encodes them for the API instrument. Pillow arrives with
+    the vision half of transformers and is imported here rather than at module scope, like
+    every other GPU-extra dependency in this file.
+    """
+    import base64
+    import io
+
+    from PIL import Image
+
+    if not url.startswith("data:"):
+        raise ValueError(f"a caption image must be a data: URL, got {url[:32]!r}")
+    payload = url.split(",", 1)[1] if "," in url else ""
+    if not payload:
+        raise ValueError("a data: URL with no payload carries no picture")
+    return Image.open(io.BytesIO(base64.b64decode(payload))).convert("RGB")
+
+
+def load_captioner(model_id: str = MODEL_ID, revision: str | None = None, seed: int = SEED):
+    """Processor + NF4 image-text model — the caption instrument of SPEC amendment 3.13 (3).
+
+    Two differences from :func:`load`, both deliberate:
+
+    - an ``AutoProcessor``, not an ``AutoTokenizer``. The processor is what turns pixels into
+      the model's image tokens; a tokenizer would render the chat template and silently drop
+      every picture, and a caption written without looking at the image is the one failure
+      nothing downstream can see.
+    - **no causal-LM fallback.** :func:`load` falls back because a load that fails after a
+      62 GB download costs a pod session. Here the fallback would be the failure: a text-only
+      auto-class that accepts these weights would generate captions from the prompt alone.
+
+    The adapter is not loaded and is not loadable here — see `serve_handler.assert_no_adapter`,
+    which is what refuses if one ever arrives.
+    """
+    import torch
+    import transformers
+
+    torch.manual_seed(seed)  # greedy decoding, so this is recorded, not load-bearing
+    processor = transformers.AutoProcessor.from_pretrained(model_id, revision=revision)
+    model = transformers.AutoModelForImageTextToText.from_pretrained(
+        model_id,
+        revision=revision,
+        device_map="auto",
+        quantization_config=quantization_config(),
+    )
+    model.eval()
+    return processor, model
+
+
+class CaptionClient:
+    """One post's album per call, greedy, forward batch 1 — never more.
+
+    The reply dict is `LocalClient`'s, key for key, so the worker's job envelope and every
+    record downstream cannot tell a caption reply from a labelling one. ``cost`` is 0.0 for the
+    same reason: serverless bills the worker's uptime, and the driver's own spend anchor is
+    what counts the dollars.
+
+    Batch 1 is not a default here, it is the instrument (SPEC amendment 3.13 (3)). It is also
+    what makes the padding question moot: nothing is padded, so the left-padding trap
+    `LocalClient._assert_left_padding` exists for cannot arise.
+    """
+
+    def __init__(self, processor, model, *, max_new_tokens: int = CAPTION_MAX_NEW_TOKENS):
+        self.processor, self.model = processor, model
+        self.max_new_tokens = max_new_tokens
+        self.usage = Counter()
+        self._assert_template_emits_bos()
+
+    def _assert_template_emits_bos(self) -> None:
+        """`add_special_tokens=False` is only safe while the template emits <bos>.
+
+        `LocalClient` checks this against the tokenizer; the processor wraps one, and the
+        chat template it renders is the same file. A processor that does not expose a
+        tokenizer is not a reason to refuse — it is a reason to say nothing, since the flag
+        then has nothing to drop.
+        """
+        tokenizer = getattr(self.processor, "tokenizer", None)
+        bos = getattr(tokenizer, "bos_token", None)
+        if not bos:
+            return
+        if not self.render(prompts.CAPTION_TASK_GM4, 1).startswith(bos):
+            raise RuntimeError(
+                f"the chat template no longer starts the caption prompt with {bos!r}, so"
+                " add_special_tokens=False would drop it silently — stop and report"
+            )
+
+    def render(self, task: str, images: int) -> str:
+        """The caption request through the processor's own chat template.
+
+        ``task`` is checked rather than used: the job names the registered prompt it wants and
+        this worker serves exactly one. A job asking for `caption_post` would be asking for the
+        4.5g2 API text, which is a different sha and therefore a different measurement.
+        """
+        if task != prompts.CAPTION_TASK_GM4:
+            raise ValueError(
+                f"{task}: the CAPTION config serves {prompts.CAPTION_TASK_GM4} and nothing else"
+                " — a caption under another registered prompt is another instrument"
+            )
+        return self.processor.apply_chat_template(
+            prompts.caption_messages_gm4(images), tokenize=False, **CHAT_TEMPLATE
+        )
+
+    def caption(self, task: str, albums: list[list[str]]) -> list[dict]:
+        """One reply dict per album, in order. Each album is one post's images as data URLs.
+
+        Positional and never zipped short, the way `LocalClient.batch` is: a reply list that
+        did not match its albums would attach every caption after the gap to the wrong post,
+        and a caption file is read by `(channel, msg_id)` — nothing downstream could see it.
+        """
+        replies = []
+        for album in albums:
+            images = [image_from_data_url(url) for url in album]
+            text = self.render(task, len(images))
+            encoded = self.processor(
+                text=text,
+                images=images,
+                return_tensors="pt",
+                add_special_tokens=False,  # the chat template already emits <bos>
+            ).to(self.model.device)
+            generated = self.model.generate(
+                **encoded,
+                max_new_tokens=self.max_new_tokens,
+                do_sample=False,  # temperature 0 / greedy, as everywhere in this repo
+            )
+            width = encoded["input_ids"].shape[1]
+            new = generated[0].tolist()[width:]
+            prompt_tokens = int(encoded["input_ids"].shape[1])
+            self.usage["prompt_tokens"] += prompt_tokens
+            self.usage["completion_tokens"] += len(new)
+            replies.append(
+                {
+                    "content": self.processor.decode(new, skip_special_tokens=True),
+                    # At batch 1 nothing is padded, so a reply that used its whole budget is
+                    # the truncation `LocalClient._trim` reads off the stop token. Free text
+                    # has no parse failure to count, so this field is the only signal that a
+                    # caption stopped mid-leaflet.
+                    "finish_reason": "length" if len(new) >= self.max_new_tokens else "stop",
+                    "cost": 0.0,
+                    # completion_tokens counts the end-of-turn token, which `skip_special_tokens`
+                    # keeps out of `content`. A token of slack in a counter nothing is billed on.
+                    "usage": {"prompt_tokens": prompt_tokens, "completion_tokens": len(new)},
+                    "generation_id": None,
+                }
+            )
+        return replies
+
+
 class LocalClient:
     """One padded batch per call, greedy, in the reply shape ``classify`` expects.
 

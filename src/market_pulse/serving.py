@@ -95,6 +95,18 @@ def execution_policy(execution_timeout_s: float, ttl_s: float) -> dict:
     return {"executionTimeout": int(execution_timeout_s * 1000), "ttl": int(ttl_s * 1000)}
 
 
+def album_key(album: list[str]) -> str:
+    """One caption input as a single string — what the worker's dump hashes it under.
+
+    `serve_handler.dump_rows` writes ``sha8`` of the row's own input so that a dump recovered
+    without the job that produced it can be *checked* against the manifest rather than trusted
+    to be in the order someone remembers sending. A caption's input is a list of images, so the
+    join has to be one rule both sides read; the driver writes the same digest per post into
+    its record, and §B of the runbook is where the two are compared.
+    """
+    return "\n".join(album)
+
+
 def endpoint_url(endpoint_id: str, path: str) -> str:
     return f"{BASE_URL}/{endpoint_id}/{path}"
 
@@ -252,7 +264,30 @@ class EndpointClient:
         """
         if posts is not None and len(posts) != len(texts):
             raise ValueError(f"{len(posts)} parent posts for {len(texts)} rows")
-        job_input = {"op": "batch", "task": task, "texts": texts, "posts": posts}
+        return self._ask({"op": "batch", "task": task, "texts": texts, "posts": posts}, len(texts))
+
+    def caption(self, task: str, albums: list[list[str]]) -> list[dict]:
+        """Caption a slice of posts; one reply dict per album, in order (config CAPTION).
+
+        Each album is one post's images as ``data:`` URLs — the pictures are gitignored and
+        live on the Mac, so they travel inside the job rather than off the network volume.
+        The volume stays what srv-2d made it: the dump and log channel.
+
+        The same length check `batch` makes, and for a sharper reason: a caption file is keyed
+        by ``(channel, msg_id)``, so a reply list off by one would file every description after
+        the gap under the wrong post and read as a model that describes the wrong pictures.
+        """
+        if not albums or any(not album for album in albums):
+            raise ValueError(f"{len(albums)} albums, and a post with no image describes nothing")
+        return self._ask({"op": "caption", "task": task, "images": albums}, len(albums))
+
+    def _ask(self, job_input: dict, expected: int) -> list[dict]:
+        """One job with this client's knobs on it, and the reply list it must come back with.
+
+        ``batch_size`` / ``dump_path`` / ``policy`` are srv-2d's contract and all three default
+        to what 5b sent: a field that is None is left out of the payload entirely rather than
+        sent as null, so the wire format of a 5b job is unchanged byte for byte.
+        """
         if self.forward_batch_size is not None:
             job_input["batch_size"] = self.forward_batch_size
         if self.dump_path is not None:
@@ -260,11 +295,11 @@ class EndpointClient:
         payload = {"input": job_input} | ({"policy": self.policy} if self.policy else {})
         output = self._run_with_retry(payload, self.job_timeout, self.submit)
         replies = output.get("replies")
-        if not isinstance(replies, list) or len(replies) != len(texts):
+        if not isinstance(replies, list) or len(replies) != expected:
             raise ApiError(
                 -1,
                 f"the worker answered {len(replies) if isinstance(replies, list) else 'no'} rows"
-                f" for {len(texts)} texts — the batch is mispaired, stop and report",
+                f" for {expected} inputs — the batch is mispaired, stop and report",
             )
         self.rows += len(replies)
         for reply in replies:
@@ -307,6 +342,27 @@ class EndpointClient:
             ),
             "worker_ids": sorted(self.worker_ids),
         }
+
+
+CAPTION_CONFIG = "CAPTION"
+"""SPEC amendment 3.13 (3): the NF4 base at the pinned revision with the ADAPTER OFF.
+
+A third served configuration and not a flag on config A. The adapter is classification-tuned,
+so captions through it would be a third instrument — and the difference has to be visible to
+`assert_serving`, which compares what the worker SAYS it loaded against what the phase
+registered. "Config A with a different job in it" says nothing.
+"""
+
+CONFIGS = ("A", "B", CAPTION_CONFIG)
+
+MERGE_STATE = {
+    "A": "unmerged-adapter",
+    "B": "merged-requantized",
+    CAPTION_CONFIG: "base-no-adapter",
+}
+"""What each config's ``merge_state`` reads, for the worker that answers it and the driver that
+asserts it. One table so the two cannot disagree; a test holds its keys to :data:`CONFIGS`, so a
+fourth config cannot be added without deciding what it is serving."""
 
 
 def assert_serving(observed: dict, expected: dict) -> dict:
