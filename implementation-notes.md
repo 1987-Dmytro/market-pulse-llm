@@ -5594,6 +5594,24 @@ record aggregates `executionTime` and cannot be split per call: $0.0045–$0.006
 $0.00891 that divides a whole leg by 19. vis-c's own run then measured the same quantity directly
 and cleanly, which is the next section.
 
+**The counting method has a positive control, and it holds.** Dv70 is an inference from counting
+things in a truncated file, so it was re-run on `results/visc_worker_boot.log` — vis-c's own boot
+log, where the answer is known independently, because the driver sampled `boot_seconds = 183.58`
+directly at the handshake. The prediction was written before the file was opened: one banner, one
+weight load, **sixteen** request ids — one `sync-` then fifteen async, matching
+`captions_gm4_visc.json :: timing.calls: 16` — and the smoke's two calls absent, the gap between
+them being longer than `--idle-timeout 60`. Measured: **1 banner, 1 weight load
+(`| 0/1188 [` once, `| 1188/1188 [` once), 16 ids, 1 sync, 15 async, no second sync.** The method
+predicts a cold start that was measured another way, so vis-b's retraction is no longer a lone
+inference. (The naive counter "lines showing `0%`" reads 4 in *both* logs — tqdm re-prints at 0%
+for the first few of 1188 shards. The load-start marker is `| 0/1188 [`, and it appears once.)
+
+While the file was open, one clause the contract's report line invites: **the boot log does not
+name the running commit.** Neither log contains `repo_commit` or `d408034` — the redirect captures
+the RunPod SDK's stdout, and the commit is reported by the worker's own `info` reply. That is
+where this session's boot proof comes from, and the addendum's requirement is met by the handshake
+rather than by a file nobody opened.
+
 ### The population: 231 named, 11 unnamed, 56 blind, 31 free (Dv71–Dv73)
 
 **Dv71 — the briefing's "232 remaining posts" is not a figure in any artifact.** The census names
@@ -5761,9 +5779,15 @@ stands.
 | reading | figure | what it prices |
 |---|---|---|
 | balance delta on the vis-c anchor at close | **$0.5505 of $1.50** | the ACCOUNT since 13.4842305468 — a floor (Dv33) |
+| `runpod_guard`'s itemised ledger, same window | **$0.0098** ($21.5060 → $21.5158 phase-wide) | what RunPod has *settled* — a floor, and far behind |
 | endpoint, rate × `worker_seconds` | $0.0587 smoke + $0.4011 run = **$0.4598** | the two legs' own measured compute |
 | endpoint, rate × `wall_seconds` | $0.0720 + $0.4621 = $0.5341 | the same legs including client-side gaps |
 | three $0.24/h pods + the volume run-rate | ≈ $0.08 (≈18 min of pod, ~1.2 h of volume) | the only way off a network volume |
+
+Both floors are reported and **the max is the one the cap is enforced on** (Dv33): $0.5505. The
+itemised ledger moved $0.0098 while the balance moved $0.5505 — it has settled essentially none of
+this session, which is what "the ledger lags by hours" looks like on the day rather than in the
+abstract, and is why the balance and not the ledger binds.
 
 $0.4598 + $0.08 = **$0.5398** against the $0.5505 balance floor — 2% apart, and the balance is
 the larger, which is the right direction for a reading that lags. `worker_seconds` reconciles;

@@ -58,8 +58,11 @@ SESSIONS = {"vis-b": 1.00, "vis-c": 1.50}
 LEDGER = REPO_ROOT / "results" / "spend_5c1_vis.json"
 """This contract's three constants. The caps are SPEC amendment 3.13 (4)'s, transcribed rather
 than chosen: vis-b buys the smoke, the rate measure, the 19-post re-pilot and the bridge; vis-c
-buys the remaining 232 posts. One ledger, one anchor key per session, and neither may be
-regenerated — delete it and the counter silently restarts at today's balance."""
+buys the rest of the silent posts — 144 of them, once the census's 242 are split into what has
+media, what is video or a document, and what is a poll Telegram already carries the question for.
+(The briefing said "232"; that figure is in no artifact — see Dv71.) One ledger, one anchor key
+per session, and neither may be regenerated — delete it and the counter silently restarts at
+today's balance."""
 
 MANIFEST = REPO_ROOT / "results" / "post_media_5c1.json"
 OUT_DIR = REPO_ROOT / "data" / "annotation" / "captions_5c1"
