@@ -199,6 +199,20 @@
       "spent_usd": 21.5004,
       "remaining_usd": 3.4996,
       "note": "vis-b-r closed: 19 captions, bar A PASS, endpoint+template deleted"
+    },
+    {
+      "at": "2026-08-09T12:38:30+00:00",
+      "balance": 13.451810019,
+      "spent_usd": 21.5482,
+      "remaining_usd": 3.4518,
+      "note": "vis-c smoke + dump check"
+    },
+    {
+      "at": "2026-08-09T13:06:47+00:00",
+      "balance": 12.9337324634,
+      "spent_usd": 22.0663,
+      "remaining_usd": 2.9337,
+      "note": "vis-c closed: endpoint, template and both pods deleted"
     }
   ]
 }

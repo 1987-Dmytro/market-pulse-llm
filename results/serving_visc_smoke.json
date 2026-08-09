@@ -1,0 +1,131 @@
+{
+  "timestamp": "2026-08-09T12:36:41+00:00",
+  "phase": "5c1 vis-c — the GM4 caption instrument",
+  "contract": "docs/PROMPT-5c1-vis-a.md deliverable 4",
+  "task": "caption_post_gm4",
+  "caption_source": "gm4-nf4-base",
+  "caption_sources": [
+    "gm4-nf4-base"
+  ],
+  "endpoint": {
+    "id": "2mda2iqe0dchkk",
+    "worker": {
+      "adapter_dir": null,
+      "adapter_sha256": null,
+      "caption_prompt_sha256": "41d33d0299fe30db76d255883569d47929b78b81f58d10e2015bee9c48912039",
+      "chat_template": {
+        "add_generation_prompt": true,
+        "enable_thinking": false
+      },
+      "max_new_tokens": 256,
+      "merge_state": "base-no-adapter",
+      "merged_provenance": null,
+      "merged_sha256": null,
+      "model": "google/gemma-4-31b-it",
+      "quantization": {
+        "bnb_4bit_compute_dtype": "bfloat16",
+        "bnb_4bit_quant_type": "nf4",
+        "bnb_4bit_use_double_quant": true,
+        "load_in_4bit": true
+      },
+      "repo_commit": "d408034db4c2247f3ac8fb03d6ca151ff0f5e652",
+      "revision_requested": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+      "runtime": {
+        "accelerate": "1.14.0",
+        "bitsandbytes": "0.50.0",
+        "cuda_runtime": "12.8",
+        "driver": "570.211.01",
+        "gpu": "NVIDIA GeForce RTX 4090",
+        "gpu_count": 1,
+        "gpu_memory_total": "24564 MiB",
+        "model_revision": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+        "peft": "0.20.0",
+        "pod_id": "p56c3z6o51c8z7",
+        "revision_requested": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+        "runpod": "1.11.0",
+        "torch": "2.8.0+cu128",
+        "transformers": "5.14.1",
+        "weights_requested": "google/gemma-4-31b-it"
+      },
+      "serving_config": "CAPTION",
+      "weights_dir": "google/gemma-4-31b-it"
+    }
+  },
+  "smoke": false,
+  "attempts_per_slice": 1,
+  "prompt_sha256": {
+    "caption_post_gm4": "41d33d0299fe30db76d255883569d47929b78b81f58d10e2015bee9c48912039"
+  },
+  "source": "results/post_media_5c1.json",
+  "population": {
+    "media_only_posts": 1,
+    "captioned": 1,
+    "transcribed_polls": 0,
+    "unusable": [],
+    "no_surrogate_at_all": []
+  },
+  "jobs": [
+    {
+      "i": 0,
+      "posts": [
+        "@atb_market_official:4340"
+      ],
+      "sha8": [
+        "ef590986"
+      ],
+      "megabytes": 2.389,
+      "dump_path": "/runpod-volume/captions_visc_smoke_00.jsonl"
+    }
+  ],
+  "images": {
+    "sent": 6,
+    "available": 10,
+    "max_per_request": 6,
+    "posts_truncated": [
+      "@atb_market_official:4340"
+    ]
+  },
+  "truncated_replies": [],
+  "timing": {
+    "calls": 2,
+    "rows": 1,
+    "worker_seconds": 191.391,
+    "queue_seconds": 37.561,
+    "wall_seconds": 234.812,
+    "seconds_per_call": 95.695,
+    "wall_per_call": 117.406,
+    "wall_per_row": 234.812,
+    "seconds_per_row": 191.391,
+    "idle_share": 0.1849,
+    "worker_ids": [
+      "p56c3z6o51c8z7"
+    ]
+  },
+  "projection": {
+    "rate_usd_per_second": 0.00030669,
+    "rate_source": "results/srv2d_cost.json :: rate.usd_per_second",
+    "stop_at_usd": 1.4942,
+    "per_slice": [],
+    "stopped_early": false,
+    "unbought": []
+  },
+  "out": "results/smoke/gm4_visc_smoke1.jsonl",
+  "out_sha256": "2526a4d47a0b18d772bf765e5745fcb0ea6da0aab8faca2681cf51388453db6b",
+  "cost": {
+    "jobs": 1,
+    "usd": 0.0324,
+    "cap_usd": 1.5,
+    "session": "vis-c",
+    "anchor": "results/spend_5c1_vis.json",
+    "reading": "the RunPod balance delta against this session's own anchor. It is a FLOOR — the balance settles minutes to hours behind the resource (Dv33) — and runpod_guard's itemised corroboration is the phase-level check, not this one."
+  },
+  "git": {
+    "commit": "de886ea4bff3ba804cef5b0eddf5ea7114748b8e",
+    "dirty": [
+      "knowledge/daily_logs/2026-08-09.md",
+      "knowledge/hot.md",
+      "knowledge/index.md"
+    ]
+  },
+  "note": "Captions from the project's own NF4 base at the pinned revision, adapter OFF, greedy, forward batch 1, under the registered caption_post_gm4 prompt (SPEC amendment 3.13 (3)). The pictures travelled inside the job as base64; the network volume carried the per-post dump. One attempt per slice — a job that failed is named here and was never re-asked."
+}
