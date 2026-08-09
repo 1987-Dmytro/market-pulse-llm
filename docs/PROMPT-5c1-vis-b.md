@@ -69,3 +69,37 @@ Per §-gate: the command and what it returned; dump paths on the volume;
 the bridge table; the screen-pilot verdict with prereg sha echoed; both
 spend floors and the closing balance; `implementation-notes.md` Deviations
 section (silence is not compliance). Report in English.
+
+---
+
+## RESUME addendum — 2026-08-09, operator go after the boot-rung stop
+
+> The stop was correct: a guard defect (fixed in `d408034`) plus a worker
+> that held the old module left no lever except a new endpoint, and the
+> original DO-NOT banned it by letter. This addendum amends exactly that
+> line and nothing else. Deviations continue from Dv61.
+
+1. **Recovery clause — amends "No second endpoint".** The rule's GOAL is
+   "never two BILLING endpoints concurrently". ONE replacement endpoint may
+   be created after the previous endpoint's deletion is proven; this
+   addendum authorises exactly one such replacement for this resume.
+2. **Step R0 — $0, on the Mac, BEFORE anything billable:** exercise the
+   fixed guard against the REAL transformers PeftAdapterMixin, both
+   directions — it ACCEPTS a bare real model and REFUSES an adapter-carrying
+   one. The mixin is what is under test, so a tiny config-built real model
+   is a valid subject; a stub is NOT. If the Mac venv cannot express the
+   check honestly, STOP and say so. Paste the command and its output.
+3. **Step R1:** template re-created (free), the replacement endpoint, then
+   the runbook from §B unchanged. Every stop stands: cap remainder
+   **$0.8419** on the SAME anchor (`results/spend_5c1_vis.json` continues,
+   never re-anchored); §C.1 >$0.50 projection STOP; instrument-failure
+   STOP; worker restart = delete.
+4. **Boot proof before the first job:** the boot log must name the repo
+   commit the RUNNING worker imported (`d408034`) — a fix staged on the
+   volume is not deployed until the running process names it.
+5. **Deletion proofs use positive-controlled listings** (this session's
+   template-list finding): first show the listing CAN display a known-live
+   object of that kind (or use the API that names it), then show it gone.
+6. **§C.1 arithmetic:** the pre-registered cold-start constant $0.0733
+   stays in the formula (a pre-registration is a file, not a preference);
+   the cheaper measured start is reported BESIDE it, never swapped in.
