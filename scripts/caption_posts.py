@@ -41,7 +41,14 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import eval_zero_shot as evaluator  # noqa: E402
 import relabel_intents as relabel  # noqa: E402
 from build_audit_pack import git_state  # noqa: E402
-from market_pulse import prompts, zero_shot  # noqa: E402
+from market_pulse import parents, prompts, zero_shot  # noqa: E402
+
+SOURCE = parents.LEGACY_SOURCE
+"""What this script's captions are: the 4.5g2 API instrument (SPEC amendment 3.13 (3)).
+
+Retired for NEW data by the amendment — the model is one of :data:`VISION`, none of which is
+the project's own GM4. It stays runnable because its records are history and history has to
+remain re-derivable; every row it writes now names the instrument explicitly."""
 
 MANIFEST = REPO_ROOT / "results" / "post_media_45g2.json"
 CAPTIONS = REPO_ROOT / "data" / "annotation" / "post_captions.jsonl"
@@ -173,14 +180,35 @@ def caption_all(posts: list[dict], ask, concurrency: int, root: Path, on_row) ->
     return out
 
 
-def record_for(entry: dict, caption: str, kind: str, model: str | None, sent: int) -> dict:
+def record_for(
+    entry: dict,
+    caption: str,
+    kind: str,
+    model: str | None,
+    sent: int,
+    caption_source: str | None,
+    task: str = prompts.CAPTION_TASK,
+) -> dict:
+    """One caption row. ``caption_source`` is required and is not derived from ``model``.
+
+    SPEC amendment 3.13 (3): every caption-carrying record names its instrument. Required
+    rather than defaulted because the default would be this function's guess — and the guess
+    that is right today ("a model means 4.5g2") is exactly the one the GM4 driver breaks.
+    ``None`` is the answer for a poll, whose text no model wrote.
+    """
+    if bool(model) != (caption_source in parents.CAPTION_SOURCES):
+        raise ValueError(
+            f"model {model!r} and caption_source {caption_source!r} disagree: a model wrote"
+            " this caption or it did not, and the two fields are read by different code"
+        )
     return {
         "channel": entry["channel"],
         "msg_id": entry["msg_id"],
         "kind": kind,
         "caption": caption,
         "model": model,
-        "prompt_sha256": prompts.prompt_sha256(prompts.CAPTION_TASK) if model else None,
+        "caption_source": caption_source,
+        "prompt_sha256": prompts.prompt_sha256(task) if model else None,
         "images": [
             {"file": item["file"], "sha256": item["sha256"]} for item in entry["images"][:sent]
         ],
@@ -258,12 +286,19 @@ def main(argv: list[str] | None = None, asker=None) -> int:
     by_name = {entry["name"]: entry for entry in images}
     written = [
         record_for(
-            by_name[out["name"]], out["caption"], "image", args.model, out.get("images_sent", 0)
+            by_name[out["name"]],
+            out["caption"],
+            "image",
+            args.model,
+            out.get("images_sent", 0),
+            SOURCE,
         )
         for out in outcomes
         if out["caption"]
     ]
-    written += [record_for(entry, poll_caption(entry["poll"]), "poll", None, 0) for entry in polls]
+    written += [
+        record_for(entry, poll_caption(entry["poll"]), "poll", None, 0, None) for entry in polls
+    ]
     written.sort(key=lambda row: (row["channel"], row["msg_id"]))
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(
@@ -297,6 +332,7 @@ def main(argv: list[str] | None = None, asker=None) -> int:
             ),
         },
         "kinds": dict(Counter(row["kind"] for row in written)),
+        "caption_sources": sorted({row["caption_source"] for row in written if row["model"]}),
         "out": relabel.rel(args.out),
         "out_sha256": sha256(args.out.read_bytes()).hexdigest(),
         "cost": {

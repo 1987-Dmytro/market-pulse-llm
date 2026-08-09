@@ -203,13 +203,18 @@ def main(argv: list[str] | None = None, asker=None) -> int:
     by_name = {entry["name"]: entry for entry in images}
     written = [
         pattern.record_for(
-            by_name[out["name"]], out["caption"], "image", MODEL, out.get("images_sent", 0)
+            by_name[out["name"]],
+            out["caption"],
+            "image",
+            MODEL,
+            out.get("images_sent", 0),
+            pattern.SOURCE,
         )
         for out in outcomes
         if out["caption"]
     ]
     written += [
-        pattern.record_for(entry, pattern.poll_caption(entry["poll"]), "poll", None, 0)
+        pattern.record_for(entry, pattern.poll_caption(entry["poll"]), "poll", None, 0, None)
         for entry in polls
     ]
     written.sort(key=lambda row: (row["channel"], row["msg_id"]))
@@ -250,6 +255,7 @@ def main(argv: list[str] | None = None, asker=None) -> int:
             ),
         },
         "kinds": dict(Counter(row["kind"] for row in written)),
+        "caption_sources": sorted({row["caption_source"] for row in written if row["model"]}),
         "out": str(args.out.relative_to(REPO_ROOT))
         if args.out.is_relative_to(REPO_ROOT)
         else str(args.out),

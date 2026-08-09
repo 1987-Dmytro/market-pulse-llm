@@ -29,6 +29,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import yield_screen_5c1 as screen  # noqa: E402
 from build_audit_pack import git_state  # noqa: E402
 
+from market_pulse import parents  # noqa: E402
 from market_pulse import yield_screen as core  # noqa: E402
 from market_pulse.brands import watchlist_aliases  # noqa: E402
 from market_pulse.registry import load_registry  # noqa: E402
@@ -44,12 +45,16 @@ first: the instrument fired on nothing. The second — it fired on the wrong thi
 about a quoted line, so every hit carries its line and the operator reads them."""
 
 
-def load_captions(path: Path) -> dict[int, dict]:
+def load_captions(path: Path, record: Path = CAPTION_RECORD) -> dict[int, dict]:
+    """This channel's captions, keyed by msg_id — and one instrument, or a declared mix.
+
+    SPEC amendment 3.13 (3): the before/after this script reports is one matcher over two
+    readings, and the whole claim is that only the *caption* changed between them. A file
+    holding half 4.5g2 rows and half GM4 rows would make the after a reading of two
+    instruments averaged, which is neither of them and looks exactly like either.
+    """
     rows = {}
-    for line in path.read_text(encoding="utf-8").splitlines():
-        if not line.strip():
-            continue
-        row = json.loads(line)
+    for row in parents.read_caption_rows(path):
         if row["channel"] != HANDLE:
             raise SystemExit(f"{path.name} carries {row['channel']}, not {HANDLE}")
         if row["msg_id"] in rows:
@@ -57,6 +62,8 @@ def load_captions(path: Path) -> dict[int, dict]:
                 f"{path.name}: {row['msg_id']} is captioned twice, so neither is the one"
             )
         rows[row["msg_id"]] = row
+    named = parents.sources_named(json.loads(record.read_text(encoding="utf-8")))
+    parents.assert_one_source(path.name, list(rows.values()), named)
     return rows
 
 
@@ -178,6 +185,9 @@ def main(argv: list[str] | None = None) -> int:
                 "sha256": hashlib.sha256(args.captions.read_bytes()).hexdigest(),
                 "record": screen.rel(CAPTION_RECORD),
                 "rows": len(captions),
+                "sources": sorted(
+                    {source for source in map(parents.caption_source, captions.values()) if source}
+                ),
             },
             "note": "the bars are not touched here; this reports which side of bar A each reading lands on",
         },

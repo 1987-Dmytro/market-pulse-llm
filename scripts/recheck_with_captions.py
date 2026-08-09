@@ -136,6 +136,38 @@ class FakeAsker:
         return '{"sentiment": "positive", "sarcasm": false, "intents": ["taste"], "unclear": false}'
 
 
+def caption_input(captions_path: Path, record_path: Path) -> tuple[dict, dict, set[str]]:
+    """The surrogates, what the record says was written, and which instruments wrote them.
+
+    Two refusals, both before a single request goes out. The count check is 4.5g2's: a caption
+    file that is not the one its record describes would render some rows with a description and
+    some with `no text`, and nothing downstream could tell them apart — the prompt hash does not
+    move. The source check is SPEC amendment 3.13 (3)'s: mixing instruments is legal and silence
+    about it is not, so a file holding both has to be a file whose record says so.
+
+    Its own function so the guards can be driven directly. `main` reaches them only after a
+    posts index and a batch load, and a check nobody can run cheaply is a check nobody runs.
+    """
+    captions = parents.load_captions(captions_path)
+    record = json.loads(record_path.read_text(encoding="utf-8"))
+    # Re-read raw rather than taken off `captions`: the field lives on the row and
+    # `load_captions` is keyed by post.
+    sources = parents.assert_one_source(
+        relabel.rel(captions_path),
+        parents.read_caption_rows(captions_path),
+        parents.sources_named(record),
+    )
+    written = record["runs"][-1]["kinds"]
+    if len(captions) != sum(written.values()):
+        raise SystemExit(
+            f"{relabel.rel(captions_path)} holds {len(captions)} surrogates and"
+            f" {relabel.rel(record_path)} recorded {written}. Asking with a caption file that is"
+            " not the one the record describes would render some rows with a description and"
+            " some with `no text`, and nothing downstream could tell them apart."
+        )
+    return captions, written, sources
+
+
 def with_context(rows: list[dict], posts: dict, captions: dict) -> list[dict]:
     """Every row with what its post says, and the name of which of the three that is."""
     out = []
@@ -280,15 +312,7 @@ def main(argv: list[str] | None = None, asker=None) -> int:
 
     posts_full = posts_index(args.posts)
     posts = {key: record["text"] for key, record in posts_full.items()}
-    captions = parents.load_captions(args.captions)
-    written = json.loads(args.caption_record.read_text(encoding="utf-8"))["runs"][-1]["kinds"]
-    if len(captions) != sum(written.values()):
-        raise SystemExit(
-            f"{relabel.rel(args.captions)} holds {len(captions)} surrogates and"
-            f" {relabel.rel(args.caption_record)} recorded {written}. Asking with a caption file"
-            " that is not the one the record describes would render some rows with a description"
-            " and some with `no text`, and nothing downstream could tell them apart."
-        )
+    captions, written, sources = caption_input(args.captions, args.caption_record)
 
     batch_rows, batch_lines = relabel.load(args.batch_in)
     media = media_only(batch_rows, posts_full)
@@ -448,6 +472,7 @@ def main(argv: list[str] | None = None, asker=None) -> int:
             "sha256": sha256(args.captions.read_bytes()).hexdigest(),
             "surrogates": len(captions),
             "kinds": written,
+            "sources": sorted(sources),
         },
         "precheck": {
             "source": relabel.rel(args.batch_in),
