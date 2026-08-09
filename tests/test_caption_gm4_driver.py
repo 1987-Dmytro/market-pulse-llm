@@ -122,6 +122,49 @@ def test_the_driver_writes_its_source_and_its_slices(tmp_path):
     }
 
 
+def test_the_runbooks_smoke_invocation_runs_to_a_written_record(tmp_path):
+    """§B is the first command an operator types on a billed endpoint. Its flag shape is driven
+    here against the fake client, because a runbook step that fails on syntax fails after the
+    endpoint exists — and `--only` must narrow the record's population, not just its work."""
+    out, record = tmp_path / "gm4_smoke1.jsonl", tmp_path / "serving_visb_smoke.json"
+    assert (
+        driver.main(
+            [
+                "--scope",
+                "smoke1",
+                "--only",
+                "@atb_market_official:4340",
+                "--dump-prefix",
+                "/runpod-volume/captions_visb_smoke",
+                "--record",
+                str(record),
+                "--out",
+                str(out),
+                "--smoke",
+            ]
+        )
+        == 0
+    )
+    written = json.loads(record.read_text(encoding="utf-8"))
+    assert len(written["jobs"]) == 1, "§B reads jobs[0]"
+    # §B compares `[row["sha8"] for row in dump]` against this field, so it has to be the LIST
+    # of the job's post digests and not one post's digest — a scalar would never compare equal
+    digests = written["jobs"][0]["sha8"]
+    assert isinstance(digests, list) and len(digests) == 1
+    assert re.fullmatch(r"[0-9a-f]{8}", digests[0])
+    assert written["jobs"][0]["dump_path"] == "/runpod-volume/captions_visb_smoke_00.jsonl"
+    assert written["population"] == {
+        "media_only_posts": 1,
+        "captioned": 1,
+        "transcribed_polls": 0,
+        "unusable": [],
+        "no_surrogate_at_all": [],
+    }
+    assert len(parents.read_caption_rows(out)) == 1
+    # an explicit --out/--record survives --smoke: the redirect fires only on the defaults
+    assert not (REPO_ROOT / "results" / "smoke" / "gm4_smoke1.jsonl").exists()
+
+
 def test_a_slice_stays_under_runpods_documented_run_ceiling():
     """RunPod documents 10 MB on `/run`; the pictures travel inside the job because
     `data/annotation/**` is gitignored and cannot ride to the worker on the volume."""

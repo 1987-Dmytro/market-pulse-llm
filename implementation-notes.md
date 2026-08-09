@@ -4919,8 +4919,16 @@ instrument that stamped the verdict is inside the commit the record names.
 
 `docs/PROMPT-5c1-vis-a.md`, re-issued after srv-2d. Four pre-authorised step-0 commits, five
 deliverables, **no billable resource created and no paid call made**. `make check` green at
-every commit: **1301 → 1302 → 1323 → 1333 → 1342 passed, 33–35 s**, and `ruff format --check .`
+every commit: **1301 → 1302 → 1323 → 1333 → 1343 passed, 33–35 s**, and `ruff format --check .`
 clean (the verifier does not run the formatter — Dv-of-old, still true).
+
+> **One judgment call, flagged rather than buried (see Dv40).** Deliverable 1 cites the vision
+> path as "the existing `AutoModelForImageTextToText` branch"; that branch selects a model class
+> and nothing more, so the generation path underneath the five deliverables did not exist and had
+> to be written. I judged it **in scope under SPEC amendment 3.13 (4)** — which makes vis-a
+> "processor path + caption task + tests + runbook" — rather than stopping under the contract's
+> "if one runs deeper than briefed — STOP". If the team lead reads that clause as covering it,
+> the code is written, tested and reviewable, but the decision to continue was mine.
 
 What exists now that did not: a third served configuration, `CAPTION`; a registered prompt
 `caption_post_gm4` (`41d33d0299fe…`) beside `caption_post`; a processor path

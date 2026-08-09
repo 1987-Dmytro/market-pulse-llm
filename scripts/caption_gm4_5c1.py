@@ -275,6 +275,9 @@ def main(argv: list[str] | None = None, client=None) -> int:
         wanted = set(args.only)
         images = [entry for entry in images if entry["name"] in wanted]
         polls = [entry for entry in polls if entry["name"] in wanted]
+        # `blind` is filtered too, or a one-post smoke reports the whole manifest's
+        # `no_surrogate_at_all` in its record — a count about posts the run never looked at
+        blind = [name for name in blind if name in wanted]
     packed = albums(images, args.root)
     jobs = slices(packed, args.max_payload_mb)
     print(
