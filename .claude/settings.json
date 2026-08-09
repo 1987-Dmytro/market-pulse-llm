@@ -3,7 +3,10 @@
     "deny": [
       "Edit(/docs/STATUS.md)",
       "Edit(/docs/SPEC.md)",
-      "Edit(/docs/PROMPT-*.md)"
+      "Edit(/docs/PROMPT-*.md)",
+      "Write(/docs/STATUS.md)",
+      "Write(/docs/SPEC.md)",
+      "Write(/docs/PROMPT-*.md)"
     ]
   },
   "hooks": {
