@@ -5837,8 +5837,9 @@ SPEC 3.16, class REVIEW. Three scripts, 42 tests, `make check` 1402 green. No pa
 session, no returns file filled: the sessions are the operator's, and this contract builds the
 instrument they run through.
 
-**468 items in 24 packs of 19–20**, drawn at seed 42 from the screen-v2 population:
-S1 75 · S2 145 · S3 197 · S4 163 (580 stratum memberships over 468 posts — the strata overlap).
+**498 items in 25 packs of 19–20**, drawn at seed 42 from the screen-v2 population:
+S1 75 · S2 145 · S3 197 · S4 194 (611 stratum memberships over 498 posts — the strata overlap).
+All 194 committed caption rows are in a pack; 163 of them are judgeable for faithfulness.
 586 of 586 sent images present and sha-matched against the digests the caption rows recorded.
 A second build reproduces all 24 packs byte for byte (`cmp`).
 
@@ -5862,13 +5863,24 @@ in a diff. `read_calibration_returns.rebuild()` is the precedent.
 caption row is the authority on what was sent, so the packs carry its own paths and
 `results/opus_audit_manifest.json` carries `images.path_note` saying which reading was taken.
 
-**Dv82 — 31 of the 194 "committed GM4 captions" were not written by GM4.** They are poll
-transcriptions: `model` and `caption_source` are `null`, `images` is `[]`, and the text is a free,
-deterministic rendering of the poll's own question and options. **S4 is 163, not 194.** They still
-stand in for a silent post on the screen exactly like a caption does, so they keep S1/S2/S3 and
-their brand questions are asked — but their `caption_verdict` is `n/a`, pre-filled by the pack and
-enforced by the validator. Scoring them would have put 31 free rows into GM4's faithfulness rate,
-and "is the caption faithful to the image" has no image to be asked about.
+**Dv82 — 31 of the 194 "committed GM4 captions" were not written by GM4, and the first fix for
+that dropped 30 of them out of the review entirely.** They are poll transcriptions: `model` and
+`caption_source` are `null`, `images` is `[]`, and the text is a free, deterministic rendering of
+the poll's own question and options. Scoring them would put 31 free rows into GM4's faithfulness
+rate, and "is the caption faithful to the image" has no image to be asked about — so S4 was first
+built as the 163 a model wrote.
+
+**That was wrong, and the check that caught it was subtraction, not reasoning.** Take the 194
+`(channel, msg_id)` keys of the committed caption files and subtract the manifest's item ids: **30**
+came back. A poll transcription is only in S1/S2/S3 if the matcher found something in it, and 30 of
+the 31 are not relevant — so excluding them from S4 put them in **zero strata and no pack**, which
+is 30 committed rows nobody would ever have reviewed, under a contract whose word is "all". The
+claim "they keep S1/S2/S3" was true only of the one relevant transcription.
+
+**S4 is now every committed caption row — 194 — and `judgeable_captions` (163) is the faithfulness
+denominator, carried beside it in the manifest.** The brand questions are asked of all 194 (the
+transcription is that post's content); `caption_verdict` is `n/a` on the 31, pre-filled by the pack
+and enforced by the validator. The re-draw cost one extra pack: 468 → 498 items, 24 → 25 packs.
 
 **Dv83 — an item is written once and carries every stratum it belongs to.** A caption-decided brand
 hit is S1, S2 and S4 at the same time. Three copies would have bought nothing, cost three sessions,

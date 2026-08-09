@@ -14,8 +14,12 @@ Four strata, 3.16 (4), drawn with a fixed seed:
 * **S2** per channel, up to 10 posts where the matcher found a watchlist brand
   (the precision probe).
 * **S3** per channel, up to 10 relevant posts where it found none (recall).
-* **S4** every committed GM4 caption, beside the local paths of the images it was
-  produced from, each verified against the sha256 the caption row recorded.
+* **S4** every committed caption row, beside the local paths of the images it was
+  produced from, each verified against the sha256 the caption row recorded. The
+  faithfulness question is asked of the 163 a model wrote; the 31 free poll
+  transcriptions carry the brand questions only, and are in the pack because "all
+  committed captions" is the contract's word and a row in no pack is a row nobody
+  reviews.
 
 An item is written ONCE and carries every stratum it belongs to: a caption-decided
 brand hit is S1, S2 and S4, and asking three sessions to judge the same post three
@@ -83,7 +87,8 @@ STRATUM_TEXT = {
     "S1": "the screen's relevance for this post was decided by its caption",
     "S2": "the matcher found at least one watchlist brand here (precision probe)",
     "S3": "the post is relevant and the matcher found NO watchlist brand (recall probe)",
-    "S4": "a committed GM4 caption, judged against the images it was made from",
+    "S4": "a committed caption row standing in for a silent post; where a model wrote it"
+    " over images, its faithfulness is judged too",
 }
 
 CELLS = (
@@ -371,7 +376,7 @@ def draw(
                 take(item, stratum)
     for items in derived.values():
         for item in sorted(items, key=lambda item: item["msg_id"]):
-            if item["judgeable_caption"]:
+            if item["caption"]:
                 take(item, "S4")
     return list(ordered.values()), members
 
@@ -639,6 +644,18 @@ def main(argv: list[str] | None = None) -> int:
                 "items": len(members[name]),
                 "channels": len({item.split(":")[0] for item in members[name]}),
                 "per_channel_cap": PER_CHANNEL if name in ("S2", "S3") else None,
+                **(
+                    {
+                        "judgeable_captions": sum(1 for item in items if item["judgeable_caption"]),
+                        "judgeable_note": (
+                            "the faithfulness denominator. The rest are poll transcriptions with"
+                            " no model and no image: in the pack for their brand questions, out of"
+                            " the caption rate"
+                        ),
+                    }
+                    if name == "S4"
+                    else {}
+                ),
             }
             for name in STRATA
         },

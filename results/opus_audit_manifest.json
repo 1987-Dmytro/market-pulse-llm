@@ -6,7 +6,7 @@
   "protocol": {
     "path": "docs/PROMPT-opus-audit-protocol.md",
     "sha256": "d02ed1f4e7f5f0c5bf5bf2df9250912e1768dc04c21addafd524cfe039d74aa4",
-    "head": "cb9a004d903add81ed49f19d694b4c8c56109e36",
+    "head": "319804a034515dfdb40a1a0692157852f1623948",
     "rule": "tracked and identical to HEAD at build time; sha256 of the file's bytes, which is what scripts/read_opus_audit.py recomputes"
   },
   "screen": {
@@ -101,21 +101,23 @@
       "per_channel_cap": 10
     },
     "S4": {
-      "asks": "a committed GM4 caption, judged against the images it was made from",
-      "items": 163,
-      "channels": 16,
-      "per_channel_cap": null
+      "asks": "a committed caption row standing in for a silent post; where a model wrote it over images, its faithfulness is judged too",
+      "items": 194,
+      "channels": 21,
+      "per_channel_cap": null,
+      "judgeable_captions": 163,
+      "judgeable_note": "the faithfulness denominator. The rest are poll transcriptions with no model and no image: in the pack for their brand questions, out of the caption rate"
     }
   },
   "stand_in_text": {
     "rule": "S4 is the captions a MODEL wrote over images it was sent. 31 of the 194 committed rows are poll transcriptions: `model` and `caption_source` are null, they carry no image, and the text is a free, deterministic rendering of the poll's own question and options",
     "rows_in_the_committed_files": 194,
-    "items_carrying_a_stand_in": 164,
+    "items_carrying_a_stand_in": 194,
     "judgeable_gm4_captions": 163,
-    "poll_transcriptions": 1,
+    "poll_transcriptions": 31,
     "note": "a transcription stands in for a silent post on the screen exactly like a caption does, so these items still carry S1/S2/S3 and their brand questions are asked. Their `caption_verdict` is `n/a` and the validator refuses anything else there: «is the caption faithful to the image» has no image to be asked about, and scoring them would put 31 free rows into GM4's faithfulness rate"
   },
-  "items_total": 468,
+  "items_total": 498,
   "items_note": "an item appears once and carries every stratum it belongs to; the per-stratum counts above therefore sum to more than items_total",
   "images": {
     "named": 586,
@@ -128,20 +130,20 @@
     {
       "pack": "pack_01",
       "path": "data/annotation/opus_audit_5c1/pack_01.md",
-      "sha256": "bc93abac7294c34217e7ab8f138ffd6c0474d3d2b1fc01e37e8cd0c3d8280001",
+      "sha256": "48ffd81f428d045dbb602bc24875db152285669ce4afd8d598d82d8c94609f08",
       "items": 20,
       "judgeable_captions": 19,
       "strata": {
         "S1": 20,
         "S2": 10,
         "S3": 7,
-        "S4": 19
+        "S4": 20
       }
     },
     {
       "pack": "pack_02",
       "path": "data/annotation/opus_audit_5c1/pack_02.md",
-      "sha256": "d72a1375603b2c4e8c985d83e4dc61d2b5168037be9da3d7f292b23d445f5591",
+      "sha256": "83355a06cfa4443674e547431b74d699294f868cee596a589af6a96d060cb496",
       "items": 20,
       "judgeable_captions": 20,
       "strata": {
@@ -154,7 +156,7 @@
     {
       "pack": "pack_03",
       "path": "data/annotation/opus_audit_5c1/pack_03.md",
-      "sha256": "82ccc8b59f64864361afe386254e2eeb9bbcbc3514b5f905c236ed8e66672f86",
+      "sha256": "bc7c9127dea4341c962fb9fadef109a658cf9d9a7c723ea90fb7871093d5e2cd",
       "items": 20,
       "judgeable_captions": 20,
       "strata": {
@@ -167,7 +169,7 @@
     {
       "pack": "pack_04",
       "path": "data/annotation/opus_audit_5c1/pack_04.md",
-      "sha256": "283a7076500bfbfd60571d0bce61daa005ef15c145bb4291aa67852d65030e74",
+      "sha256": "31a08a5683e57815be675e4f1d764c86a2790f0d7ab974cba1b3788392d9001f",
       "items": 20,
       "judgeable_captions": 15,
       "strata": {
@@ -284,139 +286,152 @@
     {
       "pack": "pack_13",
       "path": "data/annotation/opus_audit_5c1/pack_13.md",
-      "sha256": "62b8d6eb2e8cbddba6cca7aa9ade11c4ab7aee30d81b5c28b718ed1a8eaa53a8",
-      "items": 19,
+      "sha256": "f22c5a88ebb37c860f5fc734acf0533d39b1f4124b0fc14ca4459933051ef33f",
+      "items": 20,
       "judgeable_captions": 0,
       "strata": {
         "S1": 0,
         "S2": 0,
-        "S3": 19,
+        "S3": 20,
         "S4": 0
       }
     },
     {
       "pack": "pack_14",
       "path": "data/annotation/opus_audit_5c1/pack_14.md",
-      "sha256": "599e12be870d36f169749987f04f9d5983ff6b16e46a49779bec5dfdd5c4482e",
-      "items": 19,
+      "sha256": "c312009beca856aa3930387300fcf2424518da9c868867c436ff5dfe83d3184d",
+      "items": 20,
       "judgeable_captions": 0,
       "strata": {
         "S1": 0,
         "S2": 0,
-        "S3": 19,
+        "S3": 20,
         "S4": 0
       }
     },
     {
       "pack": "pack_15",
       "path": "data/annotation/opus_audit_5c1/pack_15.md",
-      "sha256": "060f22f086bfda7b0bdb38e0dd3353722ed55516fda4efe1d2ed82bb1426980b",
-      "items": 19,
+      "sha256": "7f208312b7b7c5b96250e20c24f543157c748bd9edca086fe3791b4fb92fbd53",
+      "items": 20,
       "judgeable_captions": 0,
       "strata": {
         "S1": 0,
         "S2": 0,
-        "S3": 19,
+        "S3": 20,
         "S4": 0
       }
     },
     {
       "pack": "pack_16",
       "path": "data/annotation/opus_audit_5c1/pack_16.md",
-      "sha256": "c5d7e46d91e23f527de6a712f07750949f98a34e80a8cc10a7af9a065e5b4357",
-      "items": 19,
+      "sha256": "26209a5a6e96143be62476346cf8c53d0b7b4a189dba5f4ff38260e1b086b912",
+      "items": 20,
       "judgeable_captions": 0,
       "strata": {
         "S1": 0,
         "S2": 0,
-        "S3": 19,
+        "S3": 20,
         "S4": 0
       }
     },
     {
       "pack": "pack_17",
       "path": "data/annotation/opus_audit_5c1/pack_17.md",
-      "sha256": "2975dfa70341d26bf509548c12be082fbdf22462406f21118190cf8d6bb5f8bf",
-      "items": 19,
+      "sha256": "caab1370e7bf1cf3aba3a134796a0bfbda92c36b5e057d18091270fdb295166f",
+      "items": 20,
       "judgeable_captions": 0,
       "strata": {
         "S1": 0,
         "S2": 0,
-        "S3": 19,
+        "S3": 20,
         "S4": 0
       }
     },
     {
       "pack": "pack_18",
       "path": "data/annotation/opus_audit_5c1/pack_18.md",
-      "sha256": "e56bff6508e112c901fd8daca2488494e426ff6afae5011a785d56d02169143c",
-      "items": 19,
+      "sha256": "5a0e657bef7db73cb60f376bd5af3c18eab591afa40515ebe126a096ace6fc95",
+      "items": 20,
       "judgeable_captions": 0,
       "strata": {
         "S1": 0,
         "S2": 0,
-        "S3": 19,
+        "S3": 20,
         "S4": 0
       }
     },
     {
       "pack": "pack_19",
       "path": "data/annotation/opus_audit_5c1/pack_19.md",
-      "sha256": "bf9a3e5df4c01afc8dd6f3c8653ee0c89e9b17f45dda71708440a768c48dcf31",
-      "items": 19,
+      "sha256": "00e8891dc28b97aa76fc0327e0e7969e06bdbe53739dfdbc88a461e914c8e49e",
+      "items": 20,
       "judgeable_captions": 0,
       "strata": {
         "S1": 0,
         "S2": 0,
         "S3": 19,
-        "S4": 0
+        "S4": 1
       }
     },
     {
       "pack": "pack_20",
       "path": "data/annotation/opus_audit_5c1/pack_20.md",
-      "sha256": "0539bbbc5f06f4231af9d329b1f87b293990808cc2d223ff14e6703bea182f5f",
-      "items": 19,
-      "judgeable_captions": 13,
+      "sha256": "bfbabdbfed119397ed14453db7296eb93670e46f29ea78ea498e05f92a212215",
+      "items": 20,
+      "judgeable_captions": 19,
       "strata": {
         "S1": 0,
         "S2": 0,
-        "S3": 6,
-        "S4": 13
+        "S3": 0,
+        "S4": 20
       }
     },
     {
       "pack": "pack_21",
       "path": "data/annotation/opus_audit_5c1/pack_21.md",
-      "sha256": "36f69357376df4a698dc3a5dee31901e24810d2f4cda03c5f4f7472b6ec671d8",
-      "items": 19,
+      "sha256": "4bed81b30ec4a1e8d96bfe1a3e65b31309488d74d51009ed03776e2bf0f69ab7",
+      "items": 20,
       "judgeable_captions": 19,
       "strata": {
         "S1": 0,
         "S2": 0,
         "S3": 0,
-        "S4": 19
+        "S4": 20
       }
     },
     {
       "pack": "pack_22",
       "path": "data/annotation/opus_audit_5c1/pack_22.md",
-      "sha256": "b6ae845c15c8e86ba8fd9dd92f849b1249253f3b73baad92411674190eb64a6c",
-      "items": 19,
-      "judgeable_captions": 19,
+      "sha256": "03ff923cc02374f02cb664072df91f6e13b8ddca89d06d1c611cd205ae2a6623",
+      "items": 20,
+      "judgeable_captions": 11,
       "strata": {
         "S1": 0,
         "S2": 0,
         "S3": 0,
-        "S4": 19
+        "S4": 20
       }
     },
     {
       "pack": "pack_23",
       "path": "data/annotation/opus_audit_5c1/pack_23.md",
-      "sha256": "09cf185f79cf7352230d61011bbdc3a11ef7ad3b776af00c44f228c339ae5bff",
+      "sha256": "25c1090d5468be6ed2a20360d1c1b70e1846948ab0ee4222b8654eac629682cd",
+      "items": 20,
+      "judgeable_captions": 7,
+      "strata": {
+        "S1": 0,
+        "S2": 0,
+        "S3": 0,
+        "S4": 20
+      }
+    },
+    {
+      "pack": "pack_24",
+      "path": "data/annotation/opus_audit_5c1/pack_24.md",
+      "sha256": "5e63edcf25c21975e147b0491005a6e97fdbdc1d2ab4a6e8a014b9417fe45837",
       "items": 19,
-      "judgeable_captions": 19,
+      "judgeable_captions": 17,
       "strata": {
         "S1": 0,
         "S2": 0,
@@ -425,11 +440,11 @@
       }
     },
     {
-      "pack": "pack_24",
-      "path": "data/annotation/opus_audit_5c1/pack_24.md",
-      "sha256": "61f48dcfa4de49d4c4572d9fb79d4ee048c03ea4dced78dc0095b05cb590817d",
+      "pack": "pack_25",
+      "path": "data/annotation/opus_audit_5c1/pack_25.md",
+      "sha256": "07e9cde8b5944f5647100adf128068632dbbafea3a52ffc3bf193b9b44229974",
       "items": 19,
-      "judgeable_captions": 19,
+      "judgeable_captions": 16,
       "strata": {
         "S1": 0,
         "S2": 0,
@@ -614,7 +629,8 @@
       "date": "2026-07-15T18:19:05+00:00",
       "strata": [
         "S1",
-        "S3"
+        "S3",
+        "S4"
       ],
       "has_text": false,
       "has_caption": true,
@@ -7208,7 +7224,7 @@
     },
     {
       "item": "@retsepty:7322",
-      "pack": "pack_14",
+      "pack": "pack_13",
       "channel": "@retsepty",
       "msg_id": 7322,
       "date": "2026-07-25T10:04:55+00:00",
@@ -7683,7 +7699,7 @@
     },
     {
       "item": "@dpssgovua:5922",
-      "pack": "pack_15",
+      "pack": "pack_14",
       "channel": "@dpssgovua",
       "msg_id": 5922,
       "date": "2026-07-24T06:24:46+00:00",
@@ -7708,7 +7724,7 @@
     },
     {
       "item": "@dpssgovua:5927",
-      "pack": "pack_15",
+      "pack": "pack_14",
       "channel": "@dpssgovua",
       "msg_id": 5927,
       "date": "2026-07-24T09:50:37+00:00",
@@ -8158,7 +8174,7 @@
     },
     {
       "item": "@useful_healthy_fitness_menu:3099",
-      "pack": "pack_16",
+      "pack": "pack_15",
       "channel": "@useful_healthy_fitness_menu",
       "msg_id": 3099,
       "date": "2026-07-23T05:08:02+00:00",
@@ -8183,7 +8199,7 @@
     },
     {
       "item": "@educationwithloven:104306",
-      "pack": "pack_16",
+      "pack": "pack_15",
       "channel": "@educationwithloven",
       "msg_id": 104306,
       "date": "2026-07-17T08:38:07+00:00",
@@ -8208,7 +8224,7 @@
     },
     {
       "item": "@educationwithloven:105396",
-      "pack": "pack_16",
+      "pack": "pack_15",
       "channel": "@educationwithloven",
       "msg_id": 105396,
       "date": "2026-08-01T05:52:26+00:00",
@@ -8633,7 +8649,7 @@
     },
     {
       "item": "@gorishnie_plavni1:31091",
-      "pack": "pack_17",
+      "pack": "pack_16",
       "channel": "@gorishnie_plavni1",
       "msg_id": 31091,
       "date": "2026-07-24T08:52:58+00:00",
@@ -8658,7 +8674,7 @@
     },
     {
       "item": "@gorishnie_plavni1:31320",
-      "pack": "pack_17",
+      "pack": "pack_16",
       "channel": "@gorishnie_plavni1",
       "msg_id": 31320,
       "date": "2026-07-30T16:32:01+00:00",
@@ -8683,7 +8699,7 @@
     },
     {
       "item": "@gorishnie_plavni1:31331",
-      "pack": "pack_17",
+      "pack": "pack_16",
       "channel": "@gorishnie_plavni1",
       "msg_id": 31331,
       "date": "2026-07-31T07:40:28+00:00",
@@ -8708,7 +8724,7 @@
     },
     {
       "item": "@gorishnie_plavni1:31488",
-      "pack": "pack_17",
+      "pack": "pack_16",
       "channel": "@gorishnie_plavni1",
       "msg_id": 31488,
       "date": "2026-08-06T16:32:01+00:00",
@@ -9115,7 +9131,7 @@
     },
     {
       "item": "@myrhorodtown:19802",
-      "pack": "pack_18",
+      "pack": "pack_17",
       "channel": "@myrhorodtown",
       "msg_id": 19802,
       "date": "2026-07-29T11:50:18+00:00",
@@ -9140,7 +9156,7 @@
     },
     {
       "item": "@myrhorodtown:19813",
-      "pack": "pack_18",
+      "pack": "pack_17",
       "channel": "@myrhorodtown",
       "msg_id": 19813,
       "date": "2026-07-30T12:03:10+00:00",
@@ -9165,7 +9181,7 @@
     },
     {
       "item": "@poltava20:42224",
-      "pack": "pack_18",
+      "pack": "pack_17",
       "channel": "@poltava20",
       "msg_id": 42224,
       "date": "2026-07-14T05:47:05+00:00",
@@ -9190,7 +9206,7 @@
     },
     {
       "item": "@poltava20:42514",
-      "pack": "pack_18",
+      "pack": "pack_17",
       "channel": "@poltava20",
       "msg_id": 42514,
       "date": "2026-07-19T07:26:58+00:00",
@@ -9215,7 +9231,7 @@
     },
     {
       "item": "@poltava20:42938",
-      "pack": "pack_18",
+      "pack": "pack_17",
       "channel": "@poltava20",
       "msg_id": 42938,
       "date": "2026-07-25T09:17:23+00:00",
@@ -9593,7 +9609,7 @@
     },
     {
       "item": "@epicentrk_sale:6225",
-      "pack": "pack_19",
+      "pack": "pack_18",
       "channel": "@epicentrk_sale",
       "msg_id": 6225,
       "date": "2026-08-01T07:10:04+00:00",
@@ -9619,7 +9635,7 @@
     },
     {
       "item": "@epicentrk_sale:6230",
-      "pack": "pack_19",
+      "pack": "pack_18",
       "channel": "@epicentrk_sale",
       "msg_id": 6230,
       "date": "2026-08-02T09:12:00+00:00",
@@ -9644,7 +9660,7 @@
     },
     {
       "item": "@epicentrk_sale:6257",
-      "pack": "pack_19",
+      "pack": "pack_18",
       "channel": "@epicentrk_sale",
       "msg_id": 6257,
       "date": "2026-08-07T07:35:29+00:00",
@@ -9669,7 +9685,7 @@
     },
     {
       "item": "@forainfo:6029",
-      "pack": "pack_19",
+      "pack": "pack_18",
       "channel": "@forainfo",
       "msg_id": 6029,
       "date": "2026-07-13T06:44:23+00:00",
@@ -9694,7 +9710,7 @@
     },
     {
       "item": "@forainfo:6036",
-      "pack": "pack_19",
+      "pack": "pack_18",
       "channel": "@forainfo",
       "msg_id": 6036,
       "date": "2026-07-24T05:02:33+00:00",
@@ -9719,7 +9735,7 @@
     },
     {
       "item": "@marketopt_promo:2871",
-      "pack": "pack_19",
+      "pack": "pack_18",
       "channel": "@marketopt_promo",
       "msg_id": 2871,
       "date": "2026-07-17T06:36:06+00:00",
@@ -10070,7 +10086,7 @@
     },
     {
       "item": "@VARUS_channel:10531",
-      "pack": "pack_20",
+      "pack": "pack_19",
       "channel": "@VARUS_channel",
       "msg_id": 10531,
       "date": "2026-07-22T15:00:22+00:00",
@@ -10095,7 +10111,7 @@
     },
     {
       "item": "@kopiyochka1:21672",
-      "pack": "pack_20",
+      "pack": "pack_19",
       "channel": "@kopiyochka1",
       "msg_id": 21672,
       "date": "2026-07-16T14:50:05+00:00",
@@ -10120,7 +10136,7 @@
     },
     {
       "item": "@maudau:2800",
-      "pack": "pack_20",
+      "pack": "pack_19",
       "channel": "@maudau",
       "msg_id": 2800,
       "date": "2026-07-18T15:13:02+00:00",
@@ -10145,7 +10161,7 @@
     },
     {
       "item": "@msuaaaa:10467",
-      "pack": "pack_20",
+      "pack": "pack_19",
       "channel": "@msuaaaa",
       "msg_id": 10467,
       "date": "2026-07-07T17:53:28+00:00",
@@ -10170,7 +10186,7 @@
     },
     {
       "item": "@msuaaaa:10533",
-      "pack": "pack_20",
+      "pack": "pack_19",
       "channel": "@msuaaaa",
       "msg_id": 10533,
       "date": "2026-07-10T15:19:45+00:00",
@@ -10195,7 +10211,7 @@
     },
     {
       "item": "@msuaaaa:10651",
-      "pack": "pack_20",
+      "pack": "pack_19",
       "channel": "@msuaaaa",
       "msg_id": 10651,
       "date": "2026-07-20T18:27:21+00:00",
@@ -10216,6 +10232,52 @@
           "ice-cream"
         ],
         "relevant": true
+      }
+    },
+    {
+      "item": "@klopotenkofood:6022",
+      "pack": "pack_19",
+      "channel": "@klopotenkofood",
+      "msg_id": 6022,
+      "date": "2026-07-15T14:14:05+00:00",
+      "strata": [
+        "S4"
+      ],
+      "has_text": false,
+      "has_caption": true,
+      "caption_source": null,
+      "judgeable_caption": false,
+      "images": {
+        "named": 0,
+        "sha_matched": 0
+      },
+      "matcher": {
+        "watchlist_brands": [],
+        "category_groups": [],
+        "relevant": false
+      }
+    },
+    {
+      "item": "@klopotenkofood:6071",
+      "pack": "pack_20",
+      "channel": "@klopotenkofood",
+      "msg_id": 6071,
+      "date": "2026-08-05T14:36:26+00:00",
+      "strata": [
+        "S4"
+      ],
+      "has_text": false,
+      "has_caption": true,
+      "caption_source": null,
+      "judgeable_caption": false,
+      "images": {
+        "named": 0,
+        "sha_matched": 0
+      },
+      "matcher": {
+        "watchlist_brands": [],
+        "category_groups": [],
+        "relevant": false
       }
     },
     {
@@ -10519,7 +10581,7 @@
     },
     {
       "item": "@retsepty:7355",
-      "pack": "pack_21",
+      "pack": "pack_20",
       "channel": "@retsepty",
       "msg_id": 7355,
       "date": "2026-08-06T05:24:30+00:00",
@@ -10542,7 +10604,7 @@
     },
     {
       "item": "@denisovapro:845",
-      "pack": "pack_21",
+      "pack": "pack_20",
       "channel": "@denisovapro",
       "msg_id": 845,
       "date": "2026-07-18T09:49:54+00:00",
@@ -10565,7 +10627,7 @@
     },
     {
       "item": "@denisovapro:849",
-      "pack": "pack_21",
+      "pack": "pack_20",
       "channel": "@denisovapro",
       "msg_id": 849,
       "date": "2026-07-22T13:25:40+00:00",
@@ -10588,7 +10650,7 @@
     },
     {
       "item": "@gaid_skobioale:1284",
-      "pack": "pack_21",
+      "pack": "pack_20",
       "channel": "@gaid_skobioale",
       "msg_id": 1284,
       "date": "2026-07-12T17:12:35+00:00",
@@ -10611,7 +10673,7 @@
     },
     {
       "item": "@gaid_skobioale:1285",
-      "pack": "pack_21",
+      "pack": "pack_20",
       "channel": "@gaid_skobioale",
       "msg_id": 1285,
       "date": "2026-07-15T18:32:06+00:00",
@@ -10634,7 +10696,7 @@
     },
     {
       "item": "@gaid_skobioale:1286",
-      "pack": "pack_21",
+      "pack": "pack_20",
       "channel": "@gaid_skobioale",
       "msg_id": 1286,
       "date": "2026-07-17T17:25:45+00:00",
@@ -10956,7 +11018,7 @@
     },
     {
       "item": "@gaid_skobioale:1304",
-      "pack": "pack_22",
+      "pack": "pack_21",
       "channel": "@gaid_skobioale",
       "msg_id": 1304,
       "date": "2026-08-07T09:47:27+00:00",
@@ -10978,8 +11040,31 @@
       }
     },
     {
+      "item": "@olgaa_trainer:301",
+      "pack": "pack_21",
+      "channel": "@olgaa_trainer",
+      "msg_id": 301,
+      "date": "2026-07-14T14:30:07+00:00",
+      "strata": [
+        "S4"
+      ],
+      "has_text": false,
+      "has_caption": true,
+      "caption_source": null,
+      "judgeable_caption": false,
+      "images": {
+        "named": 0,
+        "sha_matched": 0
+      },
+      "matcher": {
+        "watchlist_brands": [],
+        "category_groups": [],
+        "relevant": false
+      }
+    },
+    {
       "item": "@useful_healthy_fitness_menu:3098",
-      "pack": "pack_22",
+      "pack": "pack_21",
       "channel": "@useful_healthy_fitness_menu",
       "msg_id": 3098,
       "date": "2026-07-20T11:44:43+00:00",
@@ -11002,7 +11087,7 @@
     },
     {
       "item": "@useful_healthy_fitness_menu:3110",
-      "pack": "pack_22",
+      "pack": "pack_21",
       "channel": "@useful_healthy_fitness_menu",
       "msg_id": 3110,
       "date": "2026-08-02T15:19:43+00:00",
@@ -11025,7 +11110,7 @@
     },
     {
       "item": "@useful_healthy_fitness_menu:3112",
-      "pack": "pack_22",
+      "pack": "pack_21",
       "channel": "@useful_healthy_fitness_menu",
       "msg_id": 3112,
       "date": "2026-08-02T15:19:43+00:00",
@@ -11048,7 +11133,7 @@
     },
     {
       "item": "@useful_healthy_fitness_menu:3114",
-      "pack": "pack_22",
+      "pack": "pack_21",
       "channel": "@useful_healthy_fitness_menu",
       "msg_id": 3114,
       "date": "2026-08-02T15:19:43+00:00",
@@ -11071,7 +11156,7 @@
     },
     {
       "item": "@educationwithloven:103961",
-      "pack": "pack_22",
+      "pack": "pack_21",
       "channel": "@educationwithloven",
       "msg_id": 103961,
       "date": "2026-07-10T15:07:06+00:00",
@@ -11346,8 +11431,514 @@
       }
     },
     {
-      "item": "@globine1:9888",
+      "item": "@matusi_ukr:22036",
       "pack": "pack_22",
+      "channel": "@matusi_ukr",
+      "msg_id": 22036,
+      "date": "2026-07-11T19:09:03+00:00",
+      "strata": [
+        "S4"
+      ],
+      "has_text": false,
+      "has_caption": true,
+      "caption_source": null,
+      "judgeable_caption": false,
+      "images": {
+        "named": 0,
+        "sha_matched": 0
+      },
+      "matcher": {
+        "watchlist_brands": [],
+        "category_groups": [],
+        "relevant": false
+      }
+    },
+    {
+      "item": "@matusi_ukr:22037",
+      "pack": "pack_22",
+      "channel": "@matusi_ukr",
+      "msg_id": 22037,
+      "date": "2026-07-11T19:12:12+00:00",
+      "strata": [
+        "S4"
+      ],
+      "has_text": false,
+      "has_caption": true,
+      "caption_source": null,
+      "judgeable_caption": false,
+      "images": {
+        "named": 0,
+        "sha_matched": 0
+      },
+      "matcher": {
+        "watchlist_brands": [],
+        "category_groups": [],
+        "relevant": false
+      }
+    },
+    {
+      "item": "@matusi_ukr:22038",
+      "pack": "pack_22",
+      "channel": "@matusi_ukr",
+      "msg_id": 22038,
+      "date": "2026-07-11T19:17:49+00:00",
+      "strata": [
+        "S4"
+      ],
+      "has_text": false,
+      "has_caption": true,
+      "caption_source": null,
+      "judgeable_caption": false,
+      "images": {
+        "named": 0,
+        "sha_matched": 0
+      },
+      "matcher": {
+        "watchlist_brands": [],
+        "category_groups": [],
+        "relevant": false
+      }
+    },
+    {
+      "item": "@matusi_ukr:22040",
+      "pack": "pack_22",
+      "channel": "@matusi_ukr",
+      "msg_id": 22040,
+      "date": "2026-07-11T19:29:52+00:00",
+      "strata": [
+        "S4"
+      ],
+      "has_text": false,
+      "has_caption": true,
+      "caption_source": null,
+      "judgeable_caption": false,
+      "images": {
+        "named": 0,
+        "sha_matched": 0
+      },
+      "matcher": {
+        "watchlist_brands": [],
+        "category_groups": [],
+        "relevant": false
+      }
+    },
+    {
+      "item": "@matusi_ukr:22042",
+      "pack": "pack_22",
+      "channel": "@matusi_ukr",
+      "msg_id": 22042,
+      "date": "2026-07-11T19:38:23+00:00",
+      "strata": [
+        "S4"
+      ],
+      "has_text": false,
+      "has_caption": true,
+      "caption_source": null,
+      "judgeable_caption": false,
+      "images": {
+        "named": 0,
+        "sha_matched": 0
+      },
+      "matcher": {
+        "watchlist_brands": [],
+        "category_groups": [],
+        "relevant": false
+      }
+    },
+    {
+      "item": "@matusi_ukr:22079",
+      "pack": "pack_22",
+      "channel": "@matusi_ukr",
+      "msg_id": 22079,
+      "date": "2026-07-14T19:08:36+00:00",
+      "strata": [
+        "S4"
+      ],
+      "has_text": false,
+      "has_caption": true,
+      "caption_source": null,
+      "judgeable_caption": false,
+      "images": {
+        "named": 0,
+        "sha_matched": 0
+      },
+      "matcher": {
+        "watchlist_brands": [],
+        "category_groups": [],
+        "relevant": false
+      }
+    },
+    {
+      "item": "@matusi_ukr:22080",
+      "pack": "pack_22",
+      "channel": "@matusi_ukr",
+      "msg_id": 22080,
+      "date": "2026-07-14T19:10:19+00:00",
+      "strata": [
+        "S4"
+      ],
+      "has_text": false,
+      "has_caption": true,
+      "caption_source": null,
+      "judgeable_caption": false,
+      "images": {
+        "named": 0,
+        "sha_matched": 0
+      },
+      "matcher": {
+        "watchlist_brands": [],
+        "category_groups": [],
+        "relevant": false
+      }
+    },
+    {
+      "item": "@matusi_ukr:22081",
+      "pack": "pack_22",
+      "channel": "@matusi_ukr",
+      "msg_id": 22081,
+      "date": "2026-07-14T19:11:34+00:00",
+      "strata": [
+        "S4"
+      ],
+      "has_text": false,
+      "has_caption": true,
+      "caption_source": null,
+      "judgeable_caption": false,
+      "images": {
+        "named": 0,
+        "sha_matched": 0
+      },
+      "matcher": {
+        "watchlist_brands": [],
+        "category_groups": [],
+        "relevant": false
+      }
+    },
+    {
+      "item": "@matusi_ukr:22091",
+      "pack": "pack_22",
+      "channel": "@matusi_ukr",
+      "msg_id": 22091,
+      "date": "2026-07-15T18:21:26+00:00",
+      "strata": [
+        "S4"
+      ],
+      "has_text": false,
+      "has_caption": true,
+      "caption_source": null,
+      "judgeable_caption": false,
+      "images": {
+        "named": 0,
+        "sha_matched": 0
+      },
+      "matcher": {
+        "watchlist_brands": [],
+        "category_groups": [],
+        "relevant": false
+      }
+    },
+    {
+      "item": "@matusi_ukr:22092",
+      "pack": "pack_23",
+      "channel": "@matusi_ukr",
+      "msg_id": 22092,
+      "date": "2026-07-15T18:24:18+00:00",
+      "strata": [
+        "S4"
+      ],
+      "has_text": false,
+      "has_caption": true,
+      "caption_source": null,
+      "judgeable_caption": false,
+      "images": {
+        "named": 0,
+        "sha_matched": 0
+      },
+      "matcher": {
+        "watchlist_brands": [],
+        "category_groups": [],
+        "relevant": false
+      }
+    },
+    {
+      "item": "@matusi_ukr:22105",
+      "pack": "pack_23",
+      "channel": "@matusi_ukr",
+      "msg_id": 22105,
+      "date": "2026-07-16T18:55:16+00:00",
+      "strata": [
+        "S4"
+      ],
+      "has_text": false,
+      "has_caption": true,
+      "caption_source": null,
+      "judgeable_caption": false,
+      "images": {
+        "named": 0,
+        "sha_matched": 0
+      },
+      "matcher": {
+        "watchlist_brands": [],
+        "category_groups": [],
+        "relevant": false
+      }
+    },
+    {
+      "item": "@matusi_ukr:22106",
+      "pack": "pack_23",
+      "channel": "@matusi_ukr",
+      "msg_id": 22106,
+      "date": "2026-07-16T18:56:48+00:00",
+      "strata": [
+        "S4"
+      ],
+      "has_text": false,
+      "has_caption": true,
+      "caption_source": null,
+      "judgeable_caption": false,
+      "images": {
+        "named": 0,
+        "sha_matched": 0
+      },
+      "matcher": {
+        "watchlist_brands": [],
+        "category_groups": [],
+        "relevant": false
+      }
+    },
+    {
+      "item": "@matusi_ukr:22107",
+      "pack": "pack_23",
+      "channel": "@matusi_ukr",
+      "msg_id": 22107,
+      "date": "2026-07-16T18:58:00+00:00",
+      "strata": [
+        "S4"
+      ],
+      "has_text": false,
+      "has_caption": true,
+      "caption_source": null,
+      "judgeable_caption": false,
+      "images": {
+        "named": 0,
+        "sha_matched": 0
+      },
+      "matcher": {
+        "watchlist_brands": [],
+        "category_groups": [],
+        "relevant": false
+      }
+    },
+    {
+      "item": "@matusi_ukr:22108",
+      "pack": "pack_23",
+      "channel": "@matusi_ukr",
+      "msg_id": 22108,
+      "date": "2026-07-16T18:59:17+00:00",
+      "strata": [
+        "S4"
+      ],
+      "has_text": false,
+      "has_caption": true,
+      "caption_source": null,
+      "judgeable_caption": false,
+      "images": {
+        "named": 0,
+        "sha_matched": 0
+      },
+      "matcher": {
+        "watchlist_brands": [],
+        "category_groups": [],
+        "relevant": false
+      }
+    },
+    {
+      "item": "@matusi_ukr:22213",
+      "pack": "pack_23",
+      "channel": "@matusi_ukr",
+      "msg_id": 22213,
+      "date": "2026-07-28T07:53:03+00:00",
+      "strata": [
+        "S4"
+      ],
+      "has_text": false,
+      "has_caption": true,
+      "caption_source": null,
+      "judgeable_caption": false,
+      "images": {
+        "named": 0,
+        "sha_matched": 0
+      },
+      "matcher": {
+        "watchlist_brands": [],
+        "category_groups": [],
+        "relevant": false
+      }
+    },
+    {
+      "item": "@matusi_ukr:22226",
+      "pack": "pack_23",
+      "channel": "@matusi_ukr",
+      "msg_id": 22226,
+      "date": "2026-07-28T17:56:46+00:00",
+      "strata": [
+        "S4"
+      ],
+      "has_text": false,
+      "has_caption": true,
+      "caption_source": null,
+      "judgeable_caption": false,
+      "images": {
+        "named": 0,
+        "sha_matched": 0
+      },
+      "matcher": {
+        "watchlist_brands": [],
+        "category_groups": [],
+        "relevant": false
+      }
+    },
+    {
+      "item": "@matusi_ukr:22227",
+      "pack": "pack_23",
+      "channel": "@matusi_ukr",
+      "msg_id": 22227,
+      "date": "2026-07-28T17:58:52+00:00",
+      "strata": [
+        "S4"
+      ],
+      "has_text": false,
+      "has_caption": true,
+      "caption_source": null,
+      "judgeable_caption": false,
+      "images": {
+        "named": 0,
+        "sha_matched": 0
+      },
+      "matcher": {
+        "watchlist_brands": [],
+        "category_groups": [],
+        "relevant": false
+      }
+    },
+    {
+      "item": "@matusi_ukr:22228",
+      "pack": "pack_23",
+      "channel": "@matusi_ukr",
+      "msg_id": 22228,
+      "date": "2026-07-28T18:01:13+00:00",
+      "strata": [
+        "S4"
+      ],
+      "has_text": false,
+      "has_caption": true,
+      "caption_source": null,
+      "judgeable_caption": false,
+      "images": {
+        "named": 0,
+        "sha_matched": 0
+      },
+      "matcher": {
+        "watchlist_brands": [],
+        "category_groups": [],
+        "relevant": false
+      }
+    },
+    {
+      "item": "@matusi_ukr:22229",
+      "pack": "pack_23",
+      "channel": "@matusi_ukr",
+      "msg_id": 22229,
+      "date": "2026-07-28T18:05:20+00:00",
+      "strata": [
+        "S4"
+      ],
+      "has_text": false,
+      "has_caption": true,
+      "caption_source": null,
+      "judgeable_caption": false,
+      "images": {
+        "named": 0,
+        "sha_matched": 0
+      },
+      "matcher": {
+        "watchlist_brands": [],
+        "category_groups": [],
+        "relevant": false
+      }
+    },
+    {
+      "item": "@matusi_ukr:22274",
+      "pack": "pack_23",
+      "channel": "@matusi_ukr",
+      "msg_id": 22274,
+      "date": "2026-08-01T17:34:43+00:00",
+      "strata": [
+        "S4"
+      ],
+      "has_text": false,
+      "has_caption": true,
+      "caption_source": null,
+      "judgeable_caption": false,
+      "images": {
+        "named": 0,
+        "sha_matched": 0
+      },
+      "matcher": {
+        "watchlist_brands": [],
+        "category_groups": [],
+        "relevant": false
+      }
+    },
+    {
+      "item": "@matusi_ukr:22275",
+      "pack": "pack_23",
+      "channel": "@matusi_ukr",
+      "msg_id": 22275,
+      "date": "2026-08-01T17:35:30+00:00",
+      "strata": [
+        "S4"
+      ],
+      "has_text": false,
+      "has_caption": true,
+      "caption_source": null,
+      "judgeable_caption": false,
+      "images": {
+        "named": 0,
+        "sha_matched": 0
+      },
+      "matcher": {
+        "watchlist_brands": [],
+        "category_groups": [],
+        "relevant": false
+      }
+    },
+    {
+      "item": "@matusi_ukr:22276",
+      "pack": "pack_23",
+      "channel": "@matusi_ukr",
+      "msg_id": 22276,
+      "date": "2026-08-01T17:37:00+00:00",
+      "strata": [
+        "S4"
+      ],
+      "has_text": false,
+      "has_caption": true,
+      "caption_source": null,
+      "judgeable_caption": false,
+      "images": {
+        "named": 0,
+        "sha_matched": 0
+      },
+      "matcher": {
+        "watchlist_brands": [],
+        "category_groups": [],
+        "relevant": false
+      }
+    },
+    {
+      "item": "@globine1:9888",
+      "pack": "pack_23",
       "channel": "@globine1",
       "msg_id": 9888,
       "date": "2026-07-14T08:35:47+00:00",
@@ -11370,7 +11961,7 @@
     },
     {
       "item": "@globine1:9917",
-      "pack": "pack_22",
+      "pack": "pack_23",
       "channel": "@globine1",
       "msg_id": 9917,
       "date": "2026-07-17T07:52:35+00:00",
@@ -11508,7 +12099,7 @@
     },
     {
       "item": "@mo3ambik:38418",
-      "pack": "pack_23",
+      "pack": "pack_24",
       "channel": "@mo3ambik",
       "msg_id": 38418,
       "date": "2026-07-24T13:07:09+00:00",
@@ -11531,7 +12122,7 @@
     },
     {
       "item": "@mo3ambik:38496",
-      "pack": "pack_23",
+      "pack": "pack_24",
       "channel": "@mo3ambik",
       "msg_id": 38496,
       "date": "2026-07-28T07:49:37+00:00",
@@ -11554,7 +12145,7 @@
     },
     {
       "item": "@mo3ambik:38584",
-      "pack": "pack_23",
+      "pack": "pack_24",
       "channel": "@mo3ambik",
       "msg_id": 38584,
       "date": "2026-07-31T13:07:17+00:00",
@@ -11577,7 +12168,7 @@
     },
     {
       "item": "@PirOperative:29223",
-      "pack": "pack_23",
+      "pack": "pack_24",
       "channel": "@PirOperative",
       "msg_id": 29223,
       "date": "2026-07-14T10:50:07+00:00",
@@ -11600,7 +12191,7 @@
     },
     {
       "item": "@piryatingromada:23796",
-      "pack": "pack_23",
+      "pack": "pack_24",
       "channel": "@piryatingromada",
       "msg_id": 23796,
       "date": "2026-07-12T14:56:04+00:00",
@@ -11623,7 +12214,7 @@
     },
     {
       "item": "@piryatingromada:23820",
-      "pack": "pack_23",
+      "pack": "pack_24",
       "channel": "@piryatingromada",
       "msg_id": 23820,
       "date": "2026-07-14T08:57:25+00:00",
@@ -11646,7 +12237,7 @@
     },
     {
       "item": "@piryatingromada:23869",
-      "pack": "pack_23",
+      "pack": "pack_24",
       "channel": "@piryatingromada",
       "msg_id": 23869,
       "date": "2026-07-19T08:35:41+00:00",
@@ -11669,7 +12260,7 @@
     },
     {
       "item": "@piryatingromada:23882",
-      "pack": "pack_23",
+      "pack": "pack_24",
       "channel": "@piryatingromada",
       "msg_id": 23882,
       "date": "2026-07-20T17:23:13+00:00",
@@ -11692,7 +12283,7 @@
     },
     {
       "item": "@piryatingromada:23936",
-      "pack": "pack_23",
+      "pack": "pack_24",
       "channel": "@piryatingromada",
       "msg_id": 23936,
       "date": "2026-07-24T06:49:48+00:00",
@@ -11715,7 +12306,7 @@
     },
     {
       "item": "@piryatingromada:23972",
-      "pack": "pack_23",
+      "pack": "pack_24",
       "channel": "@piryatingromada",
       "msg_id": 23972,
       "date": "2026-07-27T15:45:14+00:00",
@@ -11738,7 +12329,7 @@
     },
     {
       "item": "@piryatingromada:24023",
-      "pack": "pack_23",
+      "pack": "pack_24",
       "channel": "@piryatingromada",
       "msg_id": 24023,
       "date": "2026-08-01T09:35:13+00:00",
@@ -11761,7 +12352,7 @@
     },
     {
       "item": "@piryatingromada:24048",
-      "pack": "pack_23",
+      "pack": "pack_24",
       "channel": "@piryatingromada",
       "msg_id": 24048,
       "date": "2026-08-03T12:30:19+00:00",
@@ -11783,8 +12374,31 @@
       }
     },
     {
+      "item": "@suspilnepoltava:48135",
+      "pack": "pack_24",
+      "channel": "@suspilnepoltava",
+      "msg_id": 48135,
+      "date": "2026-07-31T08:45:09+00:00",
+      "strata": [
+        "S4"
+      ],
+      "has_text": false,
+      "has_caption": true,
+      "caption_source": null,
+      "judgeable_caption": false,
+      "images": {
+        "named": 0,
+        "sha_matched": 0
+      },
+      "matcher": {
+        "watchlist_brands": [],
+        "category_groups": [],
+        "relevant": false
+      }
+    },
+    {
       "item": "@atb_market_official:4370",
-      "pack": "pack_23",
+      "pack": "pack_24",
       "channel": "@atb_market_official",
       "msg_id": 4370,
       "date": "2026-07-01T17:54:20+00:00",
@@ -11807,7 +12421,7 @@
     },
     {
       "item": "@atb_market_official:4411",
-      "pack": "pack_23",
+      "pack": "pack_24",
       "channel": "@atb_market_official",
       "msg_id": 4411,
       "date": "2026-07-08T11:12:09+00:00",
@@ -11898,8 +12512,54 @@
       }
     },
     {
-      "item": "@VARUS_channel:10232",
+      "item": "@epicentrk_sale:6212",
       "pack": "pack_24",
+      "channel": "@epicentrk_sale",
+      "msg_id": 6212,
+      "date": "2026-07-29T15:24:01+00:00",
+      "strata": [
+        "S4"
+      ],
+      "has_text": false,
+      "has_caption": true,
+      "caption_source": null,
+      "judgeable_caption": false,
+      "images": {
+        "named": 0,
+        "sha_matched": 0
+      },
+      "matcher": {
+        "watchlist_brands": [],
+        "category_groups": [],
+        "relevant": false
+      }
+    },
+    {
+      "item": "@VARUS_channel:10115",
+      "pack": "pack_25",
+      "channel": "@VARUS_channel",
+      "msg_id": 10115,
+      "date": "2026-06-29T13:38:39+00:00",
+      "strata": [
+        "S4"
+      ],
+      "has_text": false,
+      "has_caption": true,
+      "caption_source": null,
+      "judgeable_caption": false,
+      "images": {
+        "named": 0,
+        "sha_matched": 0
+      },
+      "matcher": {
+        "watchlist_brands": [],
+        "category_groups": [],
+        "relevant": false
+      }
+    },
+    {
+      "item": "@VARUS_channel:10232",
+      "pack": "pack_25",
       "channel": "@VARUS_channel",
       "msg_id": 10232,
       "date": "2026-07-07T06:01:44+00:00",
@@ -11921,8 +12581,54 @@
       }
     },
     {
+      "item": "@VARUS_channel:10347",
+      "pack": "pack_25",
+      "channel": "@VARUS_channel",
+      "msg_id": 10347,
+      "date": "2026-07-11T14:04:51+00:00",
+      "strata": [
+        "S4"
+      ],
+      "has_text": false,
+      "has_caption": true,
+      "caption_source": null,
+      "judgeable_caption": false,
+      "images": {
+        "named": 0,
+        "sha_matched": 0
+      },
+      "matcher": {
+        "watchlist_brands": [],
+        "category_groups": [],
+        "relevant": false
+      }
+    },
+    {
+      "item": "@VARUS_channel:10365",
+      "pack": "pack_25",
+      "channel": "@VARUS_channel",
+      "msg_id": 10365,
+      "date": "2026-07-14T14:36:57+00:00",
+      "strata": [
+        "S4"
+      ],
+      "has_text": false,
+      "has_caption": true,
+      "caption_source": null,
+      "judgeable_caption": false,
+      "images": {
+        "named": 0,
+        "sha_matched": 0
+      },
+      "matcher": {
+        "watchlist_brands": [],
+        "category_groups": [],
+        "relevant": false
+      }
+    },
+    {
       "item": "@VARUS_channel:10592",
-      "pack": "pack_24",
+      "pack": "pack_25",
       "channel": "@VARUS_channel",
       "msg_id": 10592,
       "date": "2026-07-23T06:03:23+00:00",
@@ -11945,7 +12651,7 @@
     },
     {
       "item": "@atb_aktsiyi:3036",
-      "pack": "pack_24",
+      "pack": "pack_25",
       "channel": "@atb_aktsiyi",
       "msg_id": 3036,
       "date": "2026-07-14T14:54:28+00:00",
@@ -11968,7 +12674,7 @@
     },
     {
       "item": "@atb_aktsiyi:3040",
-      "pack": "pack_24",
+      "pack": "pack_25",
       "channel": "@atb_aktsiyi",
       "msg_id": 3040,
       "date": "2026-07-15T10:50:15+00:00",
@@ -11991,7 +12697,7 @@
     },
     {
       "item": "@atb_aktsiyi:3047",
-      "pack": "pack_24",
+      "pack": "pack_25",
       "channel": "@atb_aktsiyi",
       "msg_id": 3047,
       "date": "2026-07-17T15:29:01+00:00",
@@ -12014,7 +12720,7 @@
     },
     {
       "item": "@atb_aktsiyi:3097",
-      "pack": "pack_24",
+      "pack": "pack_25",
       "channel": "@atb_aktsiyi",
       "msg_id": 3097,
       "date": "2026-07-22T03:51:15+00:00",
@@ -12037,7 +12743,7 @@
     },
     {
       "item": "@atb_aktsiyi:3113",
-      "pack": "pack_24",
+      "pack": "pack_25",
       "channel": "@atb_aktsiyi",
       "msg_id": 3113,
       "date": "2026-07-23T06:42:34+00:00",
@@ -12060,7 +12766,7 @@
     },
     {
       "item": "@atb_aktsiyi:3174",
-      "pack": "pack_24",
+      "pack": "pack_25",
       "channel": "@atb_aktsiyi",
       "msg_id": 3174,
       "date": "2026-07-29T03:24:28+00:00",
@@ -12083,7 +12789,7 @@
     },
     {
       "item": "@atb_aktsiyi:3177",
-      "pack": "pack_24",
+      "pack": "pack_25",
       "channel": "@atb_aktsiyi",
       "msg_id": 3177,
       "date": "2026-07-29T04:10:08+00:00",
@@ -12106,7 +12812,7 @@
     },
     {
       "item": "@atb_aktsiyi:3179",
-      "pack": "pack_24",
+      "pack": "pack_25",
       "channel": "@atb_aktsiyi",
       "msg_id": 3179,
       "date": "2026-07-29T13:33:34+00:00",
@@ -12129,7 +12835,7 @@
     },
     {
       "item": "@atb_aktsiyi:3185",
-      "pack": "pack_24",
+      "pack": "pack_25",
       "channel": "@atb_aktsiyi",
       "msg_id": 3185,
       "date": "2026-07-30T15:08:39+00:00",
@@ -12152,7 +12858,7 @@
     },
     {
       "item": "@atb_aktsiyi:3248",
-      "pack": "pack_24",
+      "pack": "pack_25",
       "channel": "@atb_aktsiyi",
       "msg_id": 3248,
       "date": "2026-08-06T15:39:28+00:00",
@@ -12175,7 +12881,7 @@
     },
     {
       "item": "@kopiyochka1:21878",
-      "pack": "pack_24",
+      "pack": "pack_25",
       "channel": "@kopiyochka1",
       "msg_id": 21878,
       "date": "2026-07-27T15:01:42+00:00",
@@ -12198,7 +12904,7 @@
     },
     {
       "item": "@kopiyochka1:21886",
-      "pack": "pack_24",
+      "pack": "pack_25",
       "channel": "@kopiyochka1",
       "msg_id": 21886,
       "date": "2026-07-27T15:01:59+00:00",
@@ -12221,7 +12927,7 @@
     },
     {
       "item": "@kopiyochka1:21894",
-      "pack": "pack_24",
+      "pack": "pack_25",
       "channel": "@kopiyochka1",
       "msg_id": 21894,
       "date": "2026-07-27T15:02:14+00:00",
@@ -12244,7 +12950,7 @@
     },
     {
       "item": "@maudau:2812",
-      "pack": "pack_24",
+      "pack": "pack_25",
       "channel": "@maudau",
       "msg_id": 2812,
       "date": "2026-07-22T16:00:09+00:00",
@@ -12267,9 +12973,10 @@
     }
   ],
   "git": {
-    "commit": "cb9a004d903add81ed49f19d694b4c8c56109e36",
+    "commit": "319804a034515dfdb40a1a0692157852f1623948",
     "dirty": [
-      "scripts/build_opus_audit_packs.py"
+      "scripts/build_opus_audit_packs.py",
+      "tests/test_opus_audit.py"
     ]
   }
 }

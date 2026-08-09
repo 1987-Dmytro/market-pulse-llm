@@ -173,14 +173,24 @@ def test_an_item_in_two_strata_is_written_once():
     assert [len(members[name]) for name in ("S1", "S2", "S3", "S4")] == [1, 1, 0, 1]
 
 
-def test_a_transcription_without_a_model_is_not_in_S4():
+def test_a_transcription_is_in_S4_but_is_not_judgeable():
+    """It is a committed caption row, so it is reviewed; no model wrote it, so its
+    faithfulness is not asked about. A row in no pack is a row nobody reviews."""
     pool = derived({"@a": [(1, [], "the poll, transcribed")]})
     for entry in pool["@a"]:
         entry["caption_source"] = None
+        entry["images"] = {
+            "files": [],
+            "named": 0,
+            "sha_matched": 0,
+            "missing": [],
+            "sha_differs": [],
+        }
         entry["judgeable_caption"] = builder.judgeable(entry)
     items, members = builder.draw(pool, 42, 10)
-    assert members["S4"] == []
-    assert items[0]["strata"] == ["S1", "S3"]
+    assert members["S4"] == ["@a:1"]
+    assert items[0]["strata"] == ["S1", "S3", "S4"]
+    assert not items[0]["judgeable_caption"]
 
 
 def test_judgeable_needs_a_model_and_every_image():
