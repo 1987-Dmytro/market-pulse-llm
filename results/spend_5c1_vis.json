@@ -21,5 +21,7 @@
       "note": "vis-b atb19: 19 of 19 media-only posts captioned in 8 jobs"
     }
   ],
-  "gpu_note": "RunPod account balance read before the first caption job of a 5c1 vis session. Session spend = its own anchor minus the balance now, enforced against the cap SPEC amendment 3.13 (4) pre-registered (vis-b $1.00, vis-c $1.50). The Phase 4 cap is enforced separately against results/spend_phase4.json, and neither anchor may be regenerated."
+  "gpu_note": "RunPod account balance read before the first caption job of a 5c1 vis session. Session spend = its own anchor minus the balance now, enforced against the cap SPEC amendment 3.13 (4) pre-registered (vis-b $1.00, vis-c $1.50). The Phase 4 cap is enforced separately against results/spend_phase4.json, and neither anchor may be regenerated.",
+  "runpod_balance_at_5c1vis_vis-c_start": 13.4842305468,
+  "5c1vis_vis-c_cap_usd": 1.5
 }
