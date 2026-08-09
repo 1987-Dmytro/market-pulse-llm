@@ -66,3 +66,26 @@ three scripts you will deliver, one line each.
 Manifest counts per stratum; pack count and sizes; `make check` tail;
 validator refusal demo (one bad row rejected, output pasted); Deviations
 continue Dv80+. Report in English.
+
+---
+
+## Addendum — 2026-08-09, after acceptance (team-lead ruling on Dv87)
+
+1. **Blind rebuild.** Rebuild the packs WITHOUT the matcher's verdict on
+   any item (S1–S3): the matcher's answers move to the manifest, and
+   `read_opus_audit.py` performs the comparison. Rationale: S3 is the
+   recall probe — "matcher: none" printed beside the item is an anchor
+   exactly where the second instrument must look for itself. S4 items
+   are unchanged (the caption and images ARE the object under review);
+   the canon watchlist table stays in every pack. Same seed 42, same
+   strata, same manifest discipline; this is the one authorised rebuild.
+2. **Session driver.** `scripts/run_opus_packs.sh`: loops packs through
+   headless Claude Code — one invocation per pack, model `opus`,
+   `claude -p` with the protocol file plus the pack path as the prompt,
+   `--allowedTools` scoped to reading the pack/images and writing that
+   pack's `returns_NN.jsonl` only. **Pilot-first:** the driver runs
+   packs 01–02 and STOPS for team-lead review of the validated returns;
+   the remaining 23 run only after that check. The protocol's rules
+   stand unchanged (model echo first line; one pack per session; rows
+   only). Validate every returns file as it lands.
+3. Nothing else in this contract changes; deviations continue Dv89+.
