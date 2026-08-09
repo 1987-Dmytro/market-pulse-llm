@@ -33,6 +33,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from build_audit_pack import git_state  # noqa: E402
 
+from market_pulse import parents  # noqa: E402
 from market_pulse import yield_screen as core  # noqa: E402
 from market_pulse.brands import watchlist_aliases  # noqa: E402
 from market_pulse.registry import load_registry  # noqa: E402
@@ -150,21 +151,81 @@ def in_window(rows: list[dict], window: dict) -> list[dict]:
     return [row for row in rows if window["since"] <= row.get("date", "") < window["until"]]
 
 
-def screen_channel(handle: str, window: dict, compiled: dict, aliases: list, bars: dict) -> dict:
+def caption_census(
+    handle: str,
+    posts: list[dict],
+    texted: list[dict],
+    readable: list[tuple[dict, str]],
+    captions: dict,
+    truncated: set[str] | None,
+) -> dict:
+    """graded / blind / truncated for one channel, and where each of the three came from.
+
+    `blind` is a fact about the corpus that stays in the denominator: a post whose window row is
+    silent and for which no caption exists — not fetched, not fetchable, or not bought. It is
+    counted here rather than dropped, because a screen that quietly narrowed its window to the
+    posts it could read would report a yield about the readable half of a channel.
+    """
+    truncated = truncated or set()
+    mine = {row["msg_id"] for row in posts}
+    captioned = {msg_id for channel, msg_id in captions if channel == handle and msg_id in mine}
+    return {
+        "graded": len(readable),
+        "with_own_text": len(texted),
+        "graded_on_a_caption": len(readable) - len(texted),
+        "blind": len(posts) - len(readable),
+        "truncated": sum(1 for msg_id in captioned if f"{handle}:{msg_id}" in truncated),
+        "captions_over_a_post_that_had_text": sum(
+            1 for row in texted if (handle, row["msg_id"]) in captions
+        ),
+    }
+
+
+def surrogates(handle: str, posts: list[dict], captions: dict) -> list[tuple[dict, str]]:
+    """Each post the matcher can read, with the string it reads — text, or the caption for it.
+
+    `market_pulse.parents.context` is the project's one rule for "the post's text if there is
+    any, else what stands in for it", and this is that rule applied to a screen rather than to a
+    prompt. With no captions the list is exactly the texted posts and the string is the stored
+    text **verbatim**, so a screen run without `--captions` reads what the signed screen read.
+    """
+    out = []
+    for row in posts:
+        text = row.get("text") or ""
+        caption = (captions.get((handle, row["msg_id"])) or {}).get("text") or ""
+        if not caption.strip():
+            if text.strip():
+                out.append((row, text))
+            continue
+        out.append((row, "\n".join(part for part in (text.strip(), caption.strip()) if part)))
+    return out
+
+
+def screen_channel(
+    handle: str,
+    window: dict,
+    compiled: dict,
+    aliases: list,
+    bars: dict,
+    captions: dict | None = None,
+    truncated: set[str] | None = None,
+) -> dict:
     """One channel's yield over one window. Reads two files and decides nothing."""
     posts = in_window(load_jsonl(POSTS / f"{handle.lstrip('@')}.jsonl"), window)
     comments_path = COMMENTS / f"{handle.lstrip('@')}.jsonl"
     has_comment_source = comments_path.exists()
     comments = load_jsonl(comments_path)
 
+    captions = captions or {}
     texted = [row for row in posts if (row.get("text") or "").strip()]
+    readable = surrogates(handle, posts, captions)
     by_group: dict[str, int] = {}
     by_brand: dict[str, int] = {}
     relevant, carried, with_category, with_brand = [], [], 0, 0
     examples: dict[str, dict] = {}
-    for row in texted:
-        groups = core.category_hits(row["text"], compiled)
-        brands = core.brand_hits(row["text"], aliases)
+    for row, text in readable:
+        groups = core.category_hits(text, compiled)
+        brands = core.brand_hits(text, aliases)
         for group in groups:
             by_group[group] = by_group.get(group, 0) + 1
         for brand in brands:
@@ -172,20 +233,20 @@ def screen_channel(handle: str, window: dict, compiled: dict, aliases: list, bar
         with_category += bool(groups)
         with_brand += bool(brands)
         if groups or brands:
-            relevant.append(row)
-            terms = core.carriers(row["text"], compiled, aliases)
+            relevant.append((row, text))
+            terms = core.carriers(text, compiled, aliases)
             carried.append(terms)
             for term in terms - set(examples):
-                if found := core.evidence_line(row["text"], compiled, aliases, want=term):
+                if found := core.evidence_line(text, compiled, aliases, want=term):
                     examples[term] = {"msg_id": row["msg_id"], **found}
 
-    relevant_ids = {row["msg_id"] for row in relevant}
+    relevant_ids = {row["msg_id"] for row, _ in relevant}
     under_relevant = [row for row in comments if row.get("parent_msg_id") in relevant_ids]
     threads = {row["parent_msg_id"] for row in under_relevant}
 
     evidence = None
-    for row in sorted(relevant, key=lambda r: r["msg_id"]):
-        if found := core.evidence_line(row["text"], compiled, aliases):
+    for row, text in sorted(relevant, key=lambda pair: pair[0]["msg_id"]):
+        if found := core.evidence_line(text, compiled, aliases):
             evidence = {**found, "msg_id": row["msg_id"], "date": row["date"]}
             break
 
@@ -226,8 +287,19 @@ def screen_channel(handle: str, window: dict, compiled: dict, aliases: list, bar
         **core.bar_verdicts(len(relevant), len(under_relevant), has_comment_source, bars),
         # Whether a FAIL on bar A is about content at all. A channel with fewer readable posts
         # than the bar cannot clear it whatever it publishes — and the whole `watch` bucket is
-        # silent by definition, which the operator already ruled on once.
-        "bar_A_reach": core.bar_A_reach(len(posts), len(texted), bars["bar_A_relevant_posts_28d"]),
+        # silent by definition, which the operator already ruled on once. `readable`, not
+        # `texted`: a captioned post is one the matcher can read, and reach is about the
+        # denominator the verdict is computed over.
+        "bar_A_reach": core.bar_A_reach(
+            len(posts), len(readable), bars["bar_A_relevant_posts_28d"]
+        ),
+        # Present only when captions were joined, so a run without --captions writes the record
+        # the signed screen wrote. graded / blind / truncated is what a v2 verdict has to name.
+        **(
+            {"captions": caption_census(handle, posts, texted, readable, captions, truncated)}
+            if captions
+            else {}
+        ),
         # Which terms this row's bar-A pass hangs on. Measured, not judged: a row carried by
         # «сир» and a row carried by «варто» read identically in the counts above.
         "bar_A_sole_carriers": core.sole_carriers(carried, bars["bar_A_relevant_posts_28d"]),
@@ -357,6 +429,48 @@ def close_rulings(out: Path) -> int:
     return 0
 
 
+def read_caption_files(
+    paths: list[Path] | None, records: list[Path] | None
+) -> tuple[dict, dict | None]:
+    """Every caption file merged into one join map, and the block that says whose captions they are.
+
+    SPEC amendment 3.13 (3): numbers from different caption instruments are never compared
+    without saying so. `parents.assert_one_source` is the check, and it is given the union of
+    what the run records declare — so a v2 screen over a 4.5g2 file and a GM4 file is legal only
+    when the records name both, and silently mixing them is not possible from here.
+    """
+    if not paths:
+        return {}, None
+    declared: set[str] = set()
+    for record in records or []:
+        declared |= parents.sources_named(json.loads(record.read_text(encoding="utf-8")))
+    merged: dict[tuple[str, int], dict] = {}
+    rows: list[dict] = []
+    for path in paths:
+        rows += parents.read_caption_rows(path)
+        for key, value in parents.load_captions(path).items():
+            if key in merged:
+                raise SystemExit(f"{key[0]}:{key[1]} is captioned in two files, so neither is it")
+            merged[key] = value
+    present = parents.assert_one_source(", ".join(rel(path) for path in paths), rows, declared)
+    truncated: set[str] = set()
+    for record in records or []:
+        truncated |= set(
+            json.loads(record.read_text(encoding="utf-8")).get("truncated_replies", [])
+        )
+    block = {
+        "files": [{"path": rel(path), "sha256": sha256_of(path)} for path in paths],
+        "records": [{"path": rel(path), "sha256": sha256_of(path)} for path in records or []],
+        "rows": len(merged),
+        "sources": sorted(present),
+        "declared_by_the_records": sorted(declared),
+        "truncated_replies": sorted(truncated),
+        "note": "a caption stands in for a silent post's text; the bars, the lexicon and the"
+        " matcher are the signed screen's own and are not touched here",
+    }
+    return merged, {**block, "truncated_set": truncated}
+
+
 def refuse_to_overwrite(out: Path) -> None:
     """A screen is a measurement of a composition, and the composition moves.
 
@@ -396,10 +510,27 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="write the operator's rulings onto an existing record; measures nothing",
     )
+    parser.add_argument(
+        "--captions",
+        type=Path,
+        nargs="+",
+        default=None,
+        help="caption jsonl files to read the silent posts with — this is screen v2",
+    )
+    parser.add_argument(
+        "--caption-record",
+        type=Path,
+        nargs="+",
+        default=None,
+        help="the run records of those captions: they declare the instrument and the truncations",
+    )
     args = parser.parse_args(argv)
     if args.close:
         return close_rulings(args.out)
+    if args.caption_record and not args.captions:
+        raise SystemExit("--caption-record without --captions screens nothing differently")
     refuse_to_overwrite(args.out)
+    captions, caption_block = read_caption_files(args.captions, args.caption_record)
 
     prereg_sha, bars = check_preregistration()
     lexicon = json.loads(LEXICON.read_text(encoding="utf-8"))
@@ -418,9 +549,10 @@ def main(argv: list[str] | None = None) -> int:
 
     rows = []
     for handle in handles:
+        truncated = (caption_block or {}).get("truncated_set")
         posts = load_jsonl(POSTS / f"{handle.lstrip('@')}.jsonl")
         window = window_for(handle, posts, shared, collected)
-        row = screen_channel(handle, window, compiled, aliases, bars)
+        row = screen_channel(handle, window, compiled, aliases, bars, captions, truncated)
         source = sources[handle]
         rows.append(
             {
@@ -441,6 +573,8 @@ def main(argv: list[str] | None = None) -> int:
                 compiled,
                 aliases,
                 bars,
+                captions,
+                truncated,
             )
             rows[-1]["alternative_window"] = {
                 "source": "collect_5c1",
@@ -552,6 +686,21 @@ def main(argv: list[str] | None = None) -> int:
         "controls": controls,
         "verdicts_reportable": reportable,
         "term_evidence": term_block,
+        **(
+            {
+                "captions": {
+                    **{k: v for k, v in caption_block.items() if k != "truncated_set"},
+                    "graded": sum(row["captions"]["graded"] for row in rows),
+                    "graded_on_a_caption": sum(
+                        row["captions"]["graded_on_a_caption"] for row in rows
+                    ),
+                    "blind": sum(row["captions"]["blind"] for row in rows),
+                    "truncated": sum(row["captions"]["truncated"] for row in rows),
+                }
+            }
+            if caption_block
+            else {}
+        ),
         "summary": {
             "n": len(rows),
             "pass_A": [row["handle"] for row in rows if row["bar_A"] == "PASS"],
