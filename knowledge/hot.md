@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-09 15:13:47 (every SessionStart)
+**Auto-refreshed:** 2026-08-09 15:55:04 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+c8d4584 docs(vis-c): the retraction gets a positive control, and the second floor is named
+7f8038c chore(vault): the vis-c tail -- the screen reports, and the launch stays the operator's
 62d3423 docs(vis-c): the report, and twelve deviations
 caf118e feat(vis-c): 144 posts captioned, 31 polls transcribed -- and the screen reports
 de886ea feat(vis-c): the C.1 re-projection stop, inside the run
-faeba91 feat(vis-c): the manifest -- 231 asked, 175 fetchable, 56 blind, 0 owed
-71fd882 feat(vis-c): the yield screen learns to read a caption -- screen v2, same instrument
 ```
 
 ## 📋 Recent decisions
@@ -31,7 +31,7 @@ faeba91 feat(vis-c): the manifest -- 231 asked, 175 fetchable, 56 blind, 0 owed
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-09 15:20 (vis-c close). **`docs/PROMPT-5c1-vis-c.md` IS DONE — 144 of
+**Last update:** 2026-08-09 (`/close`). **`docs/PROMPT-5c1-vis-c.md` IS DONE — 144 of
 144 posts captioned, 31 polls transcribed free, and the YIELD SCREEN NOW REPORTS: v2 flips
 `verdicts_reportable` FALSE → TRUE because its pre-registered positive control was the channel the
 captions unblind. $0.5505 of $1.50.** Three rows crossed bar A, pass_A 29 → 32. **The launch
@@ -95,10 +95,12 @@ re-derives the signed screen's zero and then reads **0 → 14 relevant, bar A PA
 qwen's own bought reading was 0 → 13, so **the pre-registered instrument failure of 3.13 (4) does
 NOT fire** and there is no fork to hand back. Prereg `1aa89818…` re-hashed before use and
 untouched. §C.1 projected **$0.1716 against the $0.50 stop** and the leg cost **$0.1693** — 552 s
-of wall at the settled rate, accurate to 1.4%. The whole session ran on **one worker**
-(`spotut2es3fgl2` across handshake, smoke and re-pilot) and paid **one** cold start, so the
-formula's `+$0.0733` term was conservative here. Balance deltas are NOT per-leg costs: a $0.24/h
-pod was running inside those windows. **One
+of wall at the settled rate, accurate to 1.4%. Balance deltas are NOT per-leg costs: a $0.24/h
+pod was running inside those windows. **RETRACTED at vis-c:** this block used to say the whole
+session ran on one worker and paid one cold start. `worker_ids` was the same across the legs, but
+a slot keeps its id across scale-to-zero, and the rescued boot log shows the re-pilot booted for
+itself — so its per-post rate is a **bound**, $0.0045–$0.0061, not the $0.00891 that divides the
+whole leg by 19. **One
 truncated reply** (`@atb_market_official:4391`, the 400-token ceiling, 847 chars against a
 231-char median) is reported and NOT repaired — raising the budget would make the bridge compare
 two ceilings.
@@ -237,6 +239,15 @@ HOLD**, and the vis contracts are re-issued against the endpoint. The cost findi
 a finding **against** the chosen path and goes into the 5c2 briefing rather than being argued away
 — their reading of the same artefacts, $1.0825/pass against $0.4611 (×2.35), matches
 `results/srv2d_cost.json` (the per-1000 ratio is 2.38 on a different denominator, both correct).
+
+**QUEUED WHILE vis-c RAN — READ BEFORE STAGING ANYTHING.** The team lead landed a new SPEC §3.16
+and two contracts: `docs/PROMPT-opus-audit-a.md` ($0, local — build the packs, the validator and
+the reader) and `docs/PROMPT-opus-audit-protocol.md` (one Opus 5 session per pack). Class is
+**REVIEW**: a second instrument reviewing the deterministic matcher and the GM4 captioner, and
+**nothing it produces may enter a gate, the screen, or `results/baselines.json`** — the matcher
+stays the judge. `docs/SPEC.md` and `docs/STATUS.md` also moved and are uncommitted; they are
+team-lead files, commit them **unedited** and stage by path (`git add -A` would sweep the vault
+tail and the new prompts into one commit).
 
 **NEXT: THE OPERATOR'S SIGNATURE, then 5c2.** vis-c is done and the package is on the desk —
 `results/yield_screen_5c1_v2.json`, the same instrument as the signed screen, prereg `1aa89818…`
