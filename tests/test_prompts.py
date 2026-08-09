@@ -68,6 +68,7 @@ def test_taxonomy_v2_prompts_are_registered_beside_v1_and_not_inside_it():
         "relabel_intents_v2_with_post",
         "precheck_v2_with_post",
         "caption_post",
+        "caption_post_gm4",
         "T1v2.1",
         "precheck_v2.1_with_post",
         "T1v2.2",
@@ -319,11 +320,17 @@ def test_the_caption_prompt_is_registered_and_asks_for_what_the_labeller_needs()
     assert "no guess" in text
 
 
-def test_the_caption_prompt_is_not_rendered_or_parsed_as_a_labelling_one():
+@pytest.mark.parametrize("task", sorted(prompts.FREE_TEXT))
+def test_a_caption_prompt_is_not_rendered_or_parsed_as_a_labelling_one(task):
+    """Refused BY NAME on both sides, which is not the same as refused.
+
+    `parse_reply` used to fall through to "unknown task" here — the same stop, but it reads as
+    a typo in the caller rather than as the registered prose prompt it is, and a reader chasing
+    it would look for a missing table entry that was never supposed to exist."""
     with pytest.raises(ValueError, match="answers in prose"):
-        prompts.build_messages(prompts.CAPTION_TASK, "Так")
-    with pytest.raises(ValueError, match="unknown task"):
-        prompts.parse_reply(prompts.CAPTION_TASK, '{"intents": []}')
+        prompts.build_messages(task, "Так")
+    with pytest.raises(ValueError, match="answers in prose"):
+        prompts.parse_reply(task, '{"intents": []}')
 
 
 def test_every_image_of_one_post_travels_in_one_caption_request():

@@ -262,6 +262,25 @@ that :func:`parse_reply` cannot read and :func:`build_messages` will not render 
 labelling prompt, and a record that cannot name the prompt that wrote its input describes a run
 nobody can reproduce."""
 
+CAPTION_ANSWER_ALONE = "Answer with the description alone: no preamble, no quotes, no formatting."
+"""The closing clause of :data:`CAPTION_POST_PROMPT`, quoted so a derivation can swap it.
+
+Quoted rather than spliced: :data:`CAPTION_POST_PROMPT` is a registered prompt whose sha is
+pinned in `results/captions_45g2.json` and `results/captions_5c1.json`, so its bytes are not
+rebuilt from parts. :func:`_swap` refuses unless this string appears in it exactly once, which
+makes the quotation self-checking without the base moving."""
+
+CAPTION_ANSWER_ALONE_GM4 = (
+    "Answer with the description alone: no preamble, no quotes, no formatting, and no"
+    " working-out before it — the first thing you write is the description itself."
+)
+"""The same clause for a model with a thinking channel (SPEC amendment 3.13 (3)).
+
+Gemma 4 renders one, and `local_llm.CHAT_TEMPLATE` closes it with ``enable_thinking=False`` —
+the template is what decides it and this sentence does not replace that. It is the belt: a
+caption is free text, so a paragraph of reasoning in front of it is not a parse failure anybody
+downstream can see, it is simply the wrong caption in the file."""
+
 SETTLED_CASES = """\
 Cases the annotation guideline has since settled, and they outrank the general wording above:
 - A joke, a piece of trivia or banter about neither a product nor the retailer is not a consumer \
@@ -352,6 +371,19 @@ Registered beside :data:`T1_PROMPT_V2` and never over it: `results/relabel_45e.j
 is a different measurement under the same name (SPEC §7)."""
 
 RELABEL_INTENTS_PROMPT_WITH_POST = _swap(RELABEL_INTENTS_PROMPT, JUDGE_TEXT_ALONE, PARENT_POST_RULE)
+
+CAPTION_POST_GM4_PROMPT = _swap(CAPTION_POST_PROMPT, CAPTION_ANSWER_ALONE, CAPTION_ANSWER_ALONE_GM4)
+"""The captioning instrument on the project's own Gemma 4 — 4.5g2's task, a second model.
+
+Registered BESIDE :data:`CAPTION_POST_PROMPT` and never over it (SPEC §7): the 4.5g2 captions
+were bought under that text and its sha is pinned in the records that hold them. Derived through
+:func:`_swap` for the reason every other derivation here is — the two texts differ in exactly one
+clause, and a hand-copied twin could drift from its base without a test noticing.
+
+What the swap buys is stated in :data:`CAPTION_ANSWER_ALONE_GM4`. Everything the description has
+to CONTAIN is deliberately identical, because SPEC amendment 3.13 (4) pre-registers a bridge
+table of GM4 against qwen on the same posts: two instruments compared on one task, not two
+tasks."""
 
 _shape_v2 = (
     '{"sentiment": "positive|negative|neutral", "sarcasm": true|false, "intents": ["price"]}'
@@ -475,6 +507,7 @@ PROMPTS = {
     "relabel_intents_v2_with_post": RELABEL_INTENTS_PROMPT_WITH_POST,
     "precheck_v2_with_post": PRECHECK_PROMPT_V2_WITH_POST,
     "caption_post": CAPTION_POST_PROMPT,
+    "caption_post_gm4": CAPTION_POST_GM4_PROMPT,
     "T1v2.1": T1_PROMPT_V2_1,
     "precheck_v2.1_with_post": PRECHECK_PROMPT_V2_1_WITH_POST,
     "T1v2.2": T1_PROMPT_V2_2,
@@ -531,7 +564,14 @@ def revision_sha256(version: str) -> dict:
 
 
 CAPTION_TASK = "caption_post"
-FREE_TEXT = frozenset({CAPTION_TASK})
+CAPTION_TASK_GM4 = "caption_post_gm4"
+"""The 3.13 instrument: the same task on the project's own NF4 base, adapter off.
+
+A second name rather than a flag, because it is what a record NAMES. `caption_source` says
+which model wrote a caption and this says which text it was asked with — and the two together
+are what stops a GM4 number and a qwen number from being compared in silence."""
+
+FREE_TEXT = frozenset({CAPTION_TASK, CAPTION_TASK_GM4})
 """Prompts whose answer is prose, not labels. They are registered and hashed like the others and
 are excluded from every table that only makes sense for a labelling task: no delimiter, no label
 space, no field list. :func:`build_messages` and :func:`parse_reply` refuse them by name rather
@@ -720,6 +760,33 @@ def caption_messages(images: list[str]) -> list[dict]:
     ]
 
 
+def caption_messages_gm4(images: int) -> list[dict]:
+    """The same request for a Hugging Face processor: the instructions, then N image slots.
+
+    :func:`caption_messages` is OpenRouter-shaped — it carries the picture itself, as a
+    ``image_url`` part holding a data URL. A local processor does not: it takes ``{"type":
+    "image"}`` placeholders in the chat template and the pixels through a separate ``images=``
+    argument, so the count is all this function can know and the caller owns the pairing.
+
+    The order is the OpenRouter one — instructions first, pictures after — because SPEC
+    amendment 3.13 (4) compares the two instruments on the same posts, and the position of
+    the text relative to the images is one of the few things a comparison can control for
+    free. Deliberately NOT a change to :func:`caption_messages`: two paid records pin that
+    function's behaviour.
+    """
+    if images < 1:
+        raise ValueError("a caption request with no image would describe nothing")
+    return [
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": PROMPTS[CAPTION_TASK_GM4]},
+                *({"type": "image"} for _ in range(images)),
+            ],
+        }
+    ]
+
+
 def _object(reply: str) -> dict:
     """The JSON object inside a reply, tolerant of wrappers, strict about content.
 
@@ -775,6 +842,11 @@ def parse_reply(task: str, reply: str) -> dict:
     could not answer the majority class would flatter it exactly where it is
     weakest (docs/PROMPT-3b.md; ADR 3b-infra-and-precision §(e)).
     """
+    if task in FREE_TEXT:
+        # By name, and before the tables — the same refusal `build_messages` makes. Falling
+        # through to "unknown task" would also stop the run, but it reads as a typo in the
+        # caller rather than as the registered prose prompt it is.
+        raise ValueError(f"{task}: this prompt answers in prose — there is nothing to parse")
     payload = _object(reply)
     if fields := COMMENT_FIELDS.get(task):
         _require(payload, *fields)
