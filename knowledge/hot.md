@@ -31,16 +31,32 @@ f276aaa docs(srv-2d): the report, and six deviations
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-08 (`/close`). **Day closed: six contracts, $2.3939 spent, and the
-serverless question is answered by measurement rather than argument.** The headline —
-`docs/PROMPT-srv-2d.md` executed, **the single SPEC 3.11 (2) parity attempt is SPENT and it
-HOLDS** — and the team lead accepted it the same night: serverless is the ruled runtime and 5c1 is
-off HOLD. This block is hand-edited; the section above it is auto-generated — do NOT touch the
-marker. Long form: `implementation-notes.md`, and the day's log [[2026-08-08]]. ADRs:
-[[srv2-serverless-runtime-target]] · [[5c1-relevance-floor-and-discovery]] ·
-[[5c1-day2-composition-and-search]] · [[5b2-batch-measurement]].
+**Last update:** 2026-08-09. **`docs/PROMPT-5c1-vis-a.md` (re-issue) executed at $0 — the GM4
+caption instrument exists in code, and nothing billable was created or called.** Yesterday's
+headline still stands underneath it: the single SPEC 3.11 (2) parity attempt is SPENT and it
+HOLDS, serverless is the ruled runtime, 5c1 is off HOLD. **Next session is vis-b, and it is
+PAID — cap $1.00.** This block is hand-edited; the section above it is auto-generated — do NOT
+touch the marker. Long form: `implementation-notes.md`, and the days' logs [[2026-08-09]] /
+[[2026-08-08]]. ADRs: [[srv2-program-close]] · [[srv2-serverless-runtime-target]] ·
+[[5c1-relevance-floor-and-discovery]] · [[5c1-day2-composition-and-search]] ·
+[[5b2-batch-measurement]].
 
 ## 🔥 What's Hot
+
+**THE CAPTION INSTRUMENT IS BUILT AND UNPAID.** A third served configuration `CAPTION` (NF4 base
+at the pinned revision, adapter OFF — refused on `ADAPTER_DIR`, on `MERGED_DIR`, on a missing
+`MODEL_REVISION`, and on the loaded object itself via `assert_no_adapter`); the registered prompt
+**`caption_post_gm4` = `41d33d0299fe…`** beside `caption_post` (`5dd76ab2…`), derived by one
+clause; the processor path `local_llm.load_captioner` + `CaptionClient` at **400 new tokens** and
+forward batch 1; required `caption_source` (`qwen-4.5g2` | `gm4-nf4-base`) with both readers
+refusing an undeclared mix; `scripts/caption_gm4_5c1.py`; `scripts/runbook_vis_b.md`.
+**1 342 tests, 34 s.** Deviations: 13, and Dv40 explains twelve of them.
+
+**TWO NUMBERS vis-b INHERITS, MEASURED FOR FREE.** One post at six images is **3.68 MB** encoded
+against RunPod's documented **10 MB `/run` ceiling** — the pictures ride inside the job because
+`data/annotation/**` is gitignored — so the 19 ATB posts are **8 jobs, largest 7.83 MB**. And the
+cold start on this endpoint class is **$0.0733** (239.022 s × $0.00030669/s), 7% of vis-b's cap
+before a single caption exists.
 
 **PARITY IS RUN, THE ATTEMPT IS SPENT, AND IT HOLDS.** `results/parity_srv2.json`:
 **758/758 rows scored, zero parse / api / generation failures**, config A on `ADA_24` in EU-RO-1
@@ -104,9 +120,24 @@ a finding **against** the chosen path and goes into the 5c2 briefing rather than
 — their reading of the same artefacts, $1.0825/pass against $0.4611 (×2.35), matches
 `results/srv2d_cost.json` (the per-1000 ratio is 2.38 on a different denominator, both correct).
 
-**NEXT SESSION: vis-a / vis-b on the endpoint** (flyer captions) → screen v2 → the composition
-signature. Team-lead debt for the morning, deliberately deferred to daylight: the ADR closing the
-srv-2 programme, and the operator quiz.
+**NEXT SESSION: vis-b, and it is the first PAID step since srv-2d — cap $1.00** (SPEC 3.13 (4)),
+anchored in `results/spend_5c1_vis.json`. vis-a-r is done and is $0. The procedure is
+`scripts/runbook_vis_b.md` end to end: endpoint from the CAPTION template → **one-post smoke with
+the dump read back byte for byte** → the rate measure, which **aborts if 19 posts project above
+$0.50** → the 19-post re-pilot → the GM4-vs-qwen bridge on identical posts (free, both caption
+sets on disk) → bar A against the untouched prereg. The pre-registered instrument failure is not
+this session's to soften: if ATB with GM4 captions FAILS bar A where qwen's PASS stands, STOP and
+the fork goes to the operator with the bridge table — no prompt revision, no image-count change,
+no re-run. Then vis-c (232 posts, cap $1.50) and screen v2.
+
+**Before the first job, the volume's `repo/` must move.** It is at `ed9c0c9`, which predates
+`caption_post_gm4`, `CaptionClient` and the CAPTION branch of `settings()`. The cheap net is
+built: the worker reports `caption_prompt_sha256` in `info` and the driver refuses before the
+first paid caption unless it equals `41d33d0299fe…`. The expensive net is still the FETCH_HEAD
+footgun below — end the deploy with a content check.
+
+Team-lead debt cleared this morning: the ADR closing srv-2 is [[srv2-program-close]]. The
+operator quiz is still owed.
 
 **Three things srv-2d built that the next session inherits.** The worker takes `batch_size` and
 `dump_path` in a job, so one job carries a whole input slice at forward batch 1 and writes every
@@ -128,8 +159,12 @@ unaccepted city analogues in `results/entry_gate_5c1.json :: notes.*_broadcast_a
 no new one — because every collection run carried `--only`. That is discipline, not luck.
 
 **Budget is the live constraint.** Phase 4 stands at **$20.8844 of $25.00, $4.1156 left** (read
-2026-08-08 22:34:28Z; still settling — Dv33). Today spent $2.3939 across four paid sessions.
-`pod list -a` → `[]`, `serverless list` → `[]`; only the volume stands.
+2026-08-08 22:34:28Z; still settling — Dv33). 08.08 spent $2.3939 across four paid sessions;
+**09.08 spent $0.00** — vis-a-r created nothing and called nothing. `pod list -a` → `[]`,
+`serverless list` → `[]`; only the volume stands. The vis programme wants **$2.50 of the
+$4.1156** (vis-b $1.00 + vis-c $1.50, SPEC 3.13 (4)), which fits — but re-read the guard before
+each session rather than trusting this line, and note the volume's own $0.009722/h keeps
+running underneath it.
 
 **Recorded rather than open:** the CA-MTL-3 volume is deleted, so its **~$0.24/day** idle billing
 has stopped — that literal is load-bearing, not decoration: `scripts/volume_calc_5c1.py` greps it
@@ -146,6 +181,21 @@ allocation, srv-2c's boot log and control, srv-2d's 758 rows — overturned it. 
 as current state.
 
 ## ⚠️ Footguns for the next run
+
+**The caption endpoint cannot be made by editing the srv-2d template — `settings()` refuses it,
+by design.** `SERVING_CONFIG=CAPTION` beside `ADAPTER_DIR` or `MERGED_DIR` raises before the
+model loads, because an endpoint updated from an A template keeps A's environment and a caption
+worker that quietly loaded the classification adapter would answer every job while every row it
+wrote still said `gm4-nf4-base`. Create a NEW template with the three variables of
+`runbook_vis_b.md` §A.1 and nothing else. The refusal is against `serve_handler.ADAPTER_ENV` as a
+whole, not against two names inline, so a third such variable added later still fires — and a
+test derives that tuple back out of the code that reads it.
+
+**A caption travels as base64 inside the job, and RunPod's `/run` ceiling is 10 MB.** One ATB
+post at six images is 3.68 MB; a slice of three is up to 7.83 MB. There is no volume path for the
+pictures — `data/annotation/**` is gitignored, so they exist only on this Mac. If a post ever
+grows past the budget the driver refuses rather than dropping images, because a shortened album
+is a different instrument for that one post.
 
 **A `git fetch` that names a missing ref leaves the OLD `FETCH_HEAD`, so the merge after it
 "succeeds" and moves nothing.** `git bundle create f.bundle <base>..HEAD` names its ref **`HEAD`**,
