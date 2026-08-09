@@ -2,24 +2,24 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-09 10:45:00 (every SessionStart)
+**Auto-refreshed:** 2026-08-09 12:14:41 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-23ea209 docs(srv-2d): one balance, one moment -- the phase figure was a stale reading
-824f716 docs(srv-2d): the live state stops saying the attempt is unspent
-f276aaa docs(srv-2d): the report, and six deviations
-6fcfa5e feat(srv-2d): the parity attempt is spent, and it holds
-76a1b31 feat(srv-2d): the 0.005 clause stops being prose
+f79fa3c fix(vis-a): the runbook's own smoke invocation, driven; --only narrows the count too
+9f24e25 chore(vault): the vis-a-r tail -- and hot.md now says the next step is PAID
+ee59fd2 docs(vis-a): the report, and thirteen deviations
+e5879d8 feat(vis-a): the GM4 caption driver and the vis-b runbook
+201f98d feat(vis-a): caption_source, and neither reader will average two instruments
 ```
 
 ## 📋 Recent decisions
 
 - `INDEX.md` — Decision records
+- `srv2-program-close.md` — The srv-2 programme closes: serverless is the runtime, and its price is a finding against it
 - `srv2-serverless-runtime-target.md` — The 5b wall did not reproduce, and the production runtime target moves back to serverless
-- `5c1-relevance-floor-and-discovery.md` — 5c1 — the relevance floor: 66 channels were admitted without anyone measuring the category
 
 ## 📅 Recent daily logs
 
@@ -31,7 +31,7 @@ f276aaa docs(srv-2d): the report, and six deviations
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-09. **`docs/PROMPT-5c1-vis-a.md` (re-issue) executed at $0 — the GM4
+**Last update:** 2026-08-09 12:08 (`/save`). **`docs/PROMPT-5c1-vis-a.md` (re-issue) executed at $0 — the GM4
 caption instrument exists in code, and nothing billable was created or called.** Yesterday's
 headline still stands underneath it: the single SPEC 3.11 (2) parity attempt is SPENT and it
 HOLDS, serverless is the ruled runtime, 5c1 is off HOLD. **Next session is vis-b, and it is
@@ -50,7 +50,16 @@ at the pinned revision, adapter OFF — refused on `ADAPTER_DIR`, on `MERGED_DIR
 clause; the processor path `local_llm.load_captioner` + `CaptionClient` at **400 new tokens** and
 forward batch 1; required `caption_source` (`qwen-4.5g2` | `gm4-nf4-base`) with both readers
 refusing an undeclared mix; `scripts/caption_gm4_5c1.py`; `scripts/runbook_vis_b.md`.
-**1 342 tests, 34 s.** Deviations: 13, and Dv40 explains twelve of them.
+**1 343 tests, 33 s**, and the four deliverable commits were each checked out and run alone
+(1302 / 1323 / 1333 / 1342). Deviations: 13, and Dv40 explains twelve of them — the judgment
+call it names sits at the head of the report, not inside it.
+
+**THE RUNBOOK'S OWN FIRST COMMAND IS NOW DRIVEN, AND IT FOUND A BUG.** §B's invocation shape had
+never been run: the write path was proved through `--smoke`'s redirected defaults and a fake
+client on tmp paths, neither of which is what the document prints. Run verbatim, `--only`
+turned out to narrow `images` and `polls` but **not** `blind` — a one-post smoke would have
+written the whole manifest's `no_surrogate_at_all` into its record. Empty on the ATB manifest,
+so nothing showed; vis-c is a different scope. Fixed, and a test now runs §B word for word.
 
 **TWO NUMBERS vis-b INHERITS, MEASURED FOR FREE.** One post at six images is **3.68 MB** encoded
 against RunPod's documented **10 MB `/run` ceiling** — the pictures ride inside the job because
