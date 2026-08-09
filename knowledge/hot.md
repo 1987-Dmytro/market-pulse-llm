@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-09 15:55:04 (every SessionStart)
+**Auto-refreshed:** 2026-08-09 21:44:44 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-c8d4584 docs(vis-c): the retraction gets a positive control, and the second floor is named
-7f8038c chore(vault): the vis-c tail -- the screen reports, and the launch stays the operator's
-62d3423 docs(vis-c): the report, and twelve deviations
-caf118e feat(vis-c): 144 posts captioned, 31 polls transcribed -- and the screen reports
-de886ea feat(vis-c): the C.1 re-projection stop, inside the run
+9f9119a chore(vault): the day's log carries the opus-audit build
+a72b057 docs(3.16): the addendum -- blind packs and a pilot-first driver
+027a3ff feat(opus-audit): the packs go blind, and a driver that stops after two
+34b7a9e fix(opus-audit): S4 is every committed caption row -- 30 of them were in no pack at all
+319804a feat(opus-audit): 468 items in 24 packs, and the draw must reproduce the screen first
 ```
 
 ## 📋 Recent decisions
