@@ -5059,3 +5059,188 @@ seven on purpose, so the smoke exercises the unusable branch and the record's `u
 Returning 3 for that would make a runbook step whose whole job is proving the write path read as
 a failed run. The non-smoke path (a real client, or `main(client=…)`) still returns 3 on any
 post without a caption, and a test drives both.
+
+## 5c1 vis-b — the paid caption session, STOPPED at the boot rung ($0.1581 of $1.00, 2026-08-09)
+
+**Zero captions. The instrument never generated a token, and the reason was our own code.**
+`serve_handler.assert_no_adapter` — the check SPEC 3.13 (3) asks for, that the caption model
+arrived without the classification adapter — refused the NF4 base it exists to admit. The worker
+was right; the guard could not read it. It is fixed at `d408034`, proven on the volume's own
+interpreter, and the session stopped there because the only way to put a fixed worker in front of
+a job is a **new endpoint**, which this contract forbids by name.
+
+**One sentence for the operator: the fix is committed and proven, the volume is staged at the
+fixed commit, $0.8419 of the cap remains, and a re-issue costs a staging pod and a cold start.**
+
+### Step 0, before anything billable
+
+Three commits, in the contract's order, on a clean tree and a green `make check`:
+`4ed85fa` team-lead docs unedited (SPEC 3.15, STATUS, this contract) · `b83404c` the vault tail
+of the 12:08 checkpoint · `a8cc418` the spend anchor `results/spend_5c1_vis.json`, written by
+`caption_gm4_5c1.read_ledger` itself so the driver would find its own key present and never
+re-anchor. Balance at the anchor **$13.9988911968**, with `pod list -a` and `serverless list`
+both `[]` — so the anchor covers the staging pods and the cold start as well as the captions.
+
+Free pre-flight, all of it re-derived rather than quoted: `make check` 1343 passed ·
+`ruff format --check .` 192 files · prereg `results/yield_bars_5c1.preregistration.json` =
+`1aa898180b01762d909e29997db659d2dc70931816855f4c0325b1ea1c892f2b`, matching SPEC 3.15 (1) ·
+`caption_post_gm4` = `41d33d0299fe…` · the driver's dry run 19 posts → 8 jobs, largest 7.83 MB ·
+and the runbook's own §B post `@atb_market_official:4340` → 1 job, 2.39 MB, 6 of 10 images,
+checked because a name that is not in the manifest empties the population and writes a record
+having proved nothing, on an endpoint already paid for.
+
+### §A — the volume, staged and verified twice
+
+Pod `rc6yu85tvuairv`, **RTX 2000 Ada at $0.24/h**, the cheapest class EU-RO-1 catalogues in
+stock (`ADA_24`/RTX 4090 is $0.74/h and the staging work is I/O). `--terminate-after` two hours
+out as a net. `repo/` moved **`ed9c0c9` → `a8cc418`** by a bundle whose ref `git bundle
+list-heads` named as `HEAD` before the fetch — the FETCH_HEAD footgun, disarmed by reading the
+ref rather than assuming `main`.
+
+Verified by **content**, not by `Already up to date.`: `scripts/serve_handler.py`,
+`src/market_pulse/{serving,local_llm,prompts,parents}.py` and `scripts/start_5b_worker.sh` all
+byte-identical to the Mac, `/workspace/start.sh` = `5b3bcbb2f593…` = the repo's copy, working
+tree clean. The adapter survived the merge intact — `records.artifact_sha256` on the volume
+re-derived `b3ca630846c7e75c5e7058ce45804c45a6bff5c49dcf2389cb8cdda0b7a68a6c`, the committed
+value — and the volume's venv rendered `caption_post_gm4` at `41d33d0299fe…` while reporting
+`runpod 1.11.0 · transformers 5.14.1 · torch 2.8.0+cu128`. Pod deleted, `pod list -a` → `[]`.
+
+Template `rvt6nvg5yh`, three environment variables and no fourth. Endpoint `5zd8xmlj3kg7wl`,
+`ADA_24`, EU-RO-1, volume `qw4nwleanc`, `workersMax 1`, `idleTimeout 60`, `flashBoot`,
+`executionTimeoutMs 1800000` read back from the create payload.
+
+### The boot rung: the model loaded, and the guard refused it
+
+`results/visb_worker_boot.log`, the whole channel, committed because it lived on the volume and
+the next worker boot truncates it. Job `sync-a1ebbc9b…`, `delayTime 16603 ms`:
+
+- seven fitness checks passed in **3 983.97 ms** — 1 GPU healthy, CUDA 12.8, 165.04 of 187.82 GB
+  memory, 29.98 GB disk, network 22 ms, matrix multiply 59 ms;
+- **`Loading weights: 100%|██████████| 1188/1188 [01:39<00:00, 11.96it/s]`** — the NF4 base *and its vision
+  tower* loaded on a 24 GB card in **99 s**. srv-2d's comparable figure was 127 s with the
+  adapter and no processor. **The OOM-at-load rung is cleared and measured;** the forward pass at
+  six images is a different allocation and remains unmeasured, exactly as the ladder says;
+- then `serve_handler.py:375 assert_no_adapter(model)` → `ValueError: the caption model carries
+  an adapter (Gemma4ForConditionalGeneration, active_adapters)`.
+
+**The message is the diagnosis.** The parenthetical prints `type(model).__name__` and the marks
+that fired. `Gemma4ForConditionalGeneration` does not start with `Peft`, and `peft_config` — the
+attribute peft writes onto anything it attaches to — is **absent from the list**, so nothing was
+attached. What fired was `active_adapters`, and transformers gives *every* model a bound method
+of that name through `PeftAdapterMixin`. A bound method is truthy. The guard read the presence of
+an API as the presence of an adapter and refused the one model the CAPTION config exists to
+serve.
+
+The vis-a suite was green because its stubs (`SimpleNamespace(peft_config=None)`) had no
+`active_adapters` attribute at all — the false-positive path did not exist in the tests. That is
+the missing negative control, and it is now there: a stub shaped like a real transformers model
+(a bound `active_adapters` that raises `ValueError("No adapter loaded")`) must PASS, and it fails
+against the vis-a guard **with the worker's own message**, verified by reverting the guard body
+and re-running. `active_adapters` is now called rather than read, and only its two "nothing is
+loaded" answers (transformers' `ValueError`, `ImportError` when peft is absent) become an empty
+list — anything else propagates, because reading an unknown failure as "clean" is the same defect
+pointing the other way.
+
+### The second fact, which cost the session: a running worker cannot be redeployed
+
+Pod `uoh0m62oyw4334` fetched the failed boot log **before** anything could truncate it, staged
+`a8cc418` → `d408034`, and re-verified the six hashes — `scripts/serve_handler.py` at
+`39bb0b23e49e…` on both sides. The fixed guard was then driven **on the volume's own
+interpreter**, both ways: a base-shaped model admitted, an adapted one refused.
+
+The re-run handshake failed **identically**. Job `sync-7d88cbc2…`, `delayTime 1222 ms`, same
+`ValueError`. The evidence that this was not a bad merge:
+
+- the boot log **grew** 22 617 → 43 986 bytes and the first fetch (`42996cc7…`) is a **byte-exact
+  prefix** of the committed file (`079e23d2…`) — the file was appended to, not truncated;
+- **one** `Starting Serverless Worker`, **one** worker id `ic15zi8yk1bg7b`, **one** fitness-check
+  block — and **two** `1188/1188` weight loads;
+- `/health` read `workers.running: 1`, `jobs.failed: 2`.
+
+So the container had been alive since the first request, had already imported `serve_handler` and
+everything under it, and a `git merge` on the volume changed files it would never re-read. It
+reloaded 62 GB of weights on the second attempt and refused from memory — **~$0.031 a
+handshake**. And `--idle-timeout 60` did not stop it: fifteen minutes and two failed jobs later
+the worker was still `running`. Only `serverless delete` stopped it, which is the abort ladder's
+own sentence read from the other side.
+
+### Why the session stopped here
+
+A third attempt needs a worker that has never imported the old module, and the only lever that
+produces one is a **new endpoint**. `docs/PROMPT-5c1-vis-b.md` lists "No second endpoint" beside
+"no retry of a failed rung" and "no `--record` defaults" — three anti-workaround rules, and this
+is the case they describe. The contract's own close clause is the instruction for this state: *a
+partial session reports what it bought.* So it does, rather than picking the reading of that line
+that would let it keep spending.
+
+### Cleanup, proven by listing
+
+`serverless list` → `[]` · `pod list -a` → `[]` · `network-volume list` → the single
+`qw4nwleanc`, `mp-srv2`, 100 GB, EU-RO-1, which is the one standing resource by design.
+Template `rvt6nvg5yh` deleted and proven by `runpodctl template list --type user` going **3 → 2**
+— see Dv59, because the default listing cannot see a user template at all.
+
+### Spend
+
+**$0.1581 of the $1.00 cap**, `results/spend_5c1_vis.json :: runpod_balance_at_5c1vis_vis-b_start`
+$13.9988911968 against a closing balance of $13.8408. A **floor** (Dv33): the balance settles
+minutes to hours behind the resource, and this reading was taken minutes after the delete. The
+phase reads **$21.1592 of $25.00, $3.8408 left**, its itemised corroboration `$20.9914 (read)`.
+`billing_since` does walk all three kinds — pods, network-volume **and serverless** — since
+srv-2b; the itemised total still lags the balance because RunPod settles the rows late, so the
+delta binds, exactly as it did at srv-2d. (hot.md's footgun line "serverless spend is invisible
+to it" is the pre-srv-2b state and is superseded by the code.)
+
+What it bought: two RTX 2000 Ada staging pods, one endpoint whose single worker loaded the base
+twice, and the volume's own run rate. What it left: `repo/` on the volume at `d408034`, the fixed
+commit, so a re-issue pays a staging pod only if it lands new code.
+
+### Deviations — PROMPT-5c1-vis-b
+
+**Dv54 — `--execution-timeout 1800` where the runbook printed 900.** The driver's per-request
+policy is `execution_policy(1800, 3600)` and hot.md's footgun says the endpoint value is what
+remains if a per-request override silently fails; an endpoint budget *below* the request budget
+is a way to lose a paid slice to a timeout that no retry may recover. The runbook's own §A.2 and
+its §A.1 disagreed, and the money path decided it. `executionTimeoutMs 1800000` read back from
+the create payload. The runbook line is corrected in the same commit.
+
+**Dv55 — a standalone timed handshake before the §B driver line.** `EndpointClient.started_at` is
+set on the first `_run`, which is the `info` call, so the driver's `wall_seconds` carries the cold
+start inside it — and §C.1's formula adds `+ $0.0733` for the cold start as a **separate** term.
+A `$/post` divided out of that wall would double-count and manufacture a STOP the measurement
+does not support (239 s × $0.00030669 alone projects $1.39 for 19 posts). It costs nothing extra:
+the cold start is paid by whichever request arrives first. It also puts the boot rung where it
+belongs — before 2.39 MB of base64 is packed.
+
+**Dv56 — the guard was fixed and the volume re-staged mid-session; the second handshake was not a
+retry.** The ladder rung that fired says *"find out what the worker loaded"*, and the answer was
+that the worker loaded the base correctly and the checker could not read it. `assert_no_adapter`
+sits outside the generation path: fixing it changes nothing about what the model computes, and no
+measurement had been taken to re-buy. The rule's own stated rationale — "a serverless worker bills
+while it fails" — is about not re-asking a slice, not about refusing to deploy a fix. This is
+flagged rather than buried: if the team lead reads "no retry of a failed rung" as covering the
+handshake too, the session should have ended $0.03 earlier, and everything after that point is
+the deviation.
+
+**Dv57 — two staging pods, not one.** The first staged `ed9c0c9 → a8cc418` before the endpoint
+existed; the second existed only because the fix arrived after the endpoint did. Both were
+deleted immediately and both are in the $0.1581. The runbook now says why the order matters.
+
+**Dv58 — `scripts/runbook_vis_b.md` was amended by the session that failed against it.** Four
+changes, each paid for here: stage before the endpoint exists (with the worker-caches-modules
+reason and the delete-is-the-only-restart recovery); `--execution-timeout 1800`; the §B `scp`
+names a **pod**, because a serverless worker exposes no SSH and the volume is at `/workspace`
+there; and a new ladder rung for the worker that does *not* restart. Leaving a procedure known to
+misorder the deploy for the next paid session would be the larger fault.
+
+**Dv59 — `runpodctl template list` cannot see a user template.** It shows official + community,
+first ten. `--type user` is required, and only that listing proves a template deletion. Reading
+it turned up **two 5b-era templates still standing**, `unfcr3ja0t market-pulse-5b-a` and
+`0g6zg73ptq mp-5b-diag` — they carry no charge, they predate this contract and they are left
+untouched, but every earlier session's "template deleted, proven by listing" was proven against a
+listing that could not have shown one.
+
+**Dv60 — no `results/captions_gm4_*.json` was written.** The driver never ran: it would have
+produced a record whose population is zero, and a measured zero and a run that never happened are
+not the same thing. The session's evidence is `results/visb_worker_boot.log`, the ledger entry in
+`results/spend_5c1_vis.json`, and this section.
