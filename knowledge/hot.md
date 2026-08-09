@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-09 12:14:41 (every SessionStart)
+**Auto-refreshed:** 2026-08-09 12:48:39 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-f79fa3c fix(vis-a): the runbook's own smoke invocation, driven; --only narrows the count too
-9f24e25 chore(vault): the vis-a-r tail -- and hot.md now says the next step is PAID
-ee59fd2 docs(vis-a): the report, and thirteen deviations
-e5879d8 feat(vis-a): the GM4 caption driver and the vis-b runbook
-201f98d feat(vis-a): caption_source, and neither reader will average two instruments
+ccac09d docs(vis-b): the report -- zero captions, one guard defect, seven deviations
+52b3d26 docs(vis-b): the boot log, the spend floor, and the redeploy order the runbook lacked
+d408034 fix(vis-b): active_adapters is a method, and reading it as a flag refused the base
+a8cc418 chore(vis-b): the spend anchor, before the first billable action
+b83404c chore(vault): the vis-a-r checkpoint tail
 ```
 
 ## 📋 Recent decisions
@@ -31,17 +31,43 @@ e5879d8 feat(vis-a): the GM4 caption driver and the vis-b runbook
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-09 12:08 (`/save`). **`docs/PROMPT-5c1-vis-a.md` (re-issue) executed at $0 — the GM4
-caption instrument exists in code, and nothing billable was created or called.** Yesterday's
-headline still stands underneath it: the single SPEC 3.11 (2) parity attempt is SPENT and it
-HOLDS, serverless is the ruled runtime, 5c1 is off HOLD. **Next session is vis-b, and it is
-PAID — cap $1.00.** This block is hand-edited; the section above it is auto-generated — do NOT
+**Last update:** 2026-08-09 13:55 (vis-b close). **`docs/PROMPT-5c1-vis-b.md` STOPPED at the boot
+rung — 0 captions, $0.1581 of $1.00, endpoint and template deleted and proven by listing.** The
+caption instrument now exists in code AND is staged on the volume at the fixed commit `d408034`;
+what it has never done is generate a caption. Underneath: the single SPEC 3.11 (2) parity attempt
+is SPENT and it HOLDS, serverless is the ruled runtime, 5c1 is off HOLD. **Next is vis-b-r, still
+PAID, $0.8419 left under the same $1.00 cap.** This block is hand-edited; the section above it is auto-generated — do NOT
 touch the marker. Long form: `implementation-notes.md`, and the days' logs [[2026-08-09]] /
 [[2026-08-08]]. ADRs: [[srv2-program-close]] · [[srv2-serverless-runtime-target]] ·
 [[5c1-relevance-floor-and-discovery]] · [[5c1-day2-composition-and-search]] ·
 [[5b2-batch-measurement]].
 
 ## 🔥 What's Hot
+
+**vis-b STOPPED AT THE BOOT RUNG. ZERO CAPTIONS, $0.1581 OF $1.00, AND THE CAUSE WAS OUR OWN
+GUARD.** `assert_no_adapter` refused the NF4 base it exists to admit: it read
+`getattr(model, "active_adapters")` for truthiness, and transformers hands **every** model that
+name as a bound method (`PeftAdapterMixin`), which is always truthy. The worker's own message
+named the base class and did **not** name `peft_config`, so nothing was ever attached. Fixed at
+`d408034` — the attribute is now *called*, and only its two "nothing is loaded" answers become an
+empty list. The vis-a suite was green because its stubs had no such attribute at all: **a stub
+built from the same assumption as the guard cannot contradict it.** The new negative control
+fails against the old guard with the worker's own sentence.
+
+**THE ONE MEASUREMENT THE SESSION DID BUY: GM4 NF4 + THE VISION TOWER LOADS ON A 24 GB CARD.**
+`results/visb_worker_boot.log` — seven fitness checks in 3 983.97 ms, CUDA 12.8, then
+**`1188/1188 [01:39]`**, no OOM. srv-2d's comparable load was 127 s *with* the adapter and no
+processor. The forward pass at six images is a different allocation and is still **unmeasured**.
+
+**AND THE FACT THAT ENDED IT: A RUNNING WORKER CANNOT BE REDEPLOYED.** The fix was staged onto the
+volume and hash-verified byte for byte; the next handshake failed **identically**. The boot log
+had been *appended to*, not truncated — the earlier copy is a byte-exact prefix — with **one**
+`Starting Serverless Worker`, one worker id, and **two** full weight loads (~$0.031 each). The
+container imported `serve_handler` at boot and held it. `--idle-timeout 60` did not stop a worker
+that had failed a job: `/health` read `workers.running: 1` fifteen minutes later. Only
+`serverless delete` stops one — and a fresh endpoint is what the contract forbids by name, so the
+session reported what it bought. **Stage the volume BEFORE the endpoint exists.** The runbook now
+says so, in §A.3 and in a new ladder rung.
 
 **THE CAPTION INSTRUMENT IS BUILT AND UNPAID.** A third served configuration `CAPTION` (NF4 base
 at the pinned revision, adapter OFF — refused on `ADAPTER_DIR`, on `MERGED_DIR`, on a missing
@@ -97,9 +123,14 @@ asked, because EU-RO-1 catalogues only the A6000 at stock `none`.
 **THE VOLUME IS THE ONLY STANDING RESOURCE AND ITS CONTENTS ARE KNOWN.** `qw4nwleanc`, 100 GB,
 EU-RO-1, **$0.009722/h settled** (= $7.00/720 h, read from `billing network-volume`, not a prior).
 It holds `hf/` at revision `842da379…`, `venv/` with the pinned stack (`runpod 1.11.0`, outside
-the 1.7.11–1.10.0 job-tracking bug), `repo/` at **`ed9c0c9`**, the adapter at `b3ca6308…`, and
+the 1.7.11–1.10.0 job-tracking bug), `repo/` at **`d408034`** (moved by vis-b from `ed9c0c9`, the
+six runtime files hash-checked on both sides), the adapter at `b3ca6308…` — re-derived on the
+volume after the merge, because a fresh clone would have wiped a gitignored 467 MB file — and
 `start.sh` byte-identical to `scripts/start_5b_worker.sh`. Everything else is deleted and proven
-deleted by listing.
+deleted by listing. **Two 5b-era serverless TEMPLATES also survive** (`unfcr3ja0t
+market-pulse-5b-a`, `0g6zg73ptq mp-5b-diag`): they carry no charge, but they were invisible until
+vis-b — `runpodctl template list` shows official + community only, and **`--type user` is the
+only listing that can prove a template deletion.**
 
 **5c1: THE REGISTRY IS 66 = launch 59 + watch 7**, the window is **9 393 posts and 4 880
 comments** over 63 channels (0 malformed rows, `shasum -c` 6/6), and the queue 5c2 prices is
@@ -129,8 +160,17 @@ a finding **against** the chosen path and goes into the 5c2 briefing rather than
 — their reading of the same artefacts, $1.0825/pass against $0.4611 (×2.35), matches
 `results/srv2d_cost.json` (the per-1000 ratio is 2.38 on a different denominator, both correct).
 
-**NEXT SESSION: vis-b, and it is the first PAID step since srv-2d — cap $1.00** (SPEC 3.13 (4)),
-anchored in `results/spend_5c1_vis.json`. vis-a-r is done and is $0. The procedure is
+**NEXT SESSION: vis-b-r — the same $1.00 cap and the same anchor, $0.8419 of it left.** It needs
+a team-lead re-issue for one reason only: `docs/PROMPT-5c1-vis-b.md` says **"No second
+endpoint"**, and the endpoint vis-b created is deleted, so the re-run cannot happen under that
+contract as written. Nothing else is missing — the guard is fixed and committed, the volume's
+`repo/` is already at `d408034`, the template is deletable-and-recreatable for free, and the boot
+path is now measured. A re-issue that says "one endpoint, created fresh" costs a cold start and
+whatever the captions cost. If instead the team lead reads "no second endpoint" as "not two at
+once", say so and the session resumes at §A with no staging pod at all.
+
+**The stale text below describes vis-b as it was briefed, and is kept because the procedure
+inside it is still the procedure.** The procedure is
 `scripts/runbook_vis_b.md` end to end: endpoint from the CAPTION template → **one-post smoke with
 the dump read back byte for byte** → the rate measure, which **aborts if 19 posts project above
 $0.50** → the 19-post re-pilot → the GM4-vs-qwen bridge on identical posts (free, both caption
@@ -167,13 +207,14 @@ unaccepted city analogues in `results/entry_gate_5c1.json :: notes.*_broadcast_a
 **None, technical.** The 2026-08-07 FloodWait wall cleared at 10:02:05 UTC and ~100 resolves drew
 no new one — because every collection run carried `--only`. That is discipline, not luck.
 
-**Budget is the live constraint.** Phase 4 stands at **$20.8844 of $25.00, $4.1156 left** (read
-2026-08-08 22:34:28Z; still settling — Dv33). 08.08 spent $2.3939 across four paid sessions;
-**09.08 spent $0.00** — vis-a-r created nothing and called nothing. `pod list -a` → `[]`,
-`serverless list` → `[]`; only the volume stands. The vis programme wants **$2.50 of the
-$4.1156** (vis-b $1.00 + vis-c $1.50, SPEC 3.13 (4)), which fits — but re-read the guard before
-each session rather than trusting this line, and note the volume's own $0.009722/h keeps
-running underneath it.
+**Budget is the live constraint.** Phase 4 stands at **$21.1592 of $25.00, $3.8408 left** (read
+2026-08-09 10:41Z, still settling — Dv33). 08.08 spent $2.3939 across four paid sessions; **09.08
+spent $0.1581**, all of it vis-b, all of it before a single caption. `pod list -a` → `[]`,
+`serverless list` → `[]`, `template list --type user` → the two 5b leftovers; only the volume
+stands and only it bills. The vis programme still wants **$2.50** (vis-b $1.00 + vis-c $1.50,
+SPEC 3.13 (4)) and **$0.8419 of vis-b's own cap is unspent** — but re-read the guard before each
+session rather than trusting this line, and note the volume's own $0.009722/h keeps running
+underneath it.
 
 **Recorded rather than open:** the CA-MTL-3 volume is deleted, so its **~$0.24/day** idle billing
 has stopped — that literal is load-bearing, not decoration: `scripts/volume_calc_5c1.py` greps it
@@ -226,6 +267,17 @@ documented minimums (5 s / 10 s). The endpoint's own `--execution-timeout` takes
 stores ms — the two are opposite, which is exactly how a 3 600 ms budget kills an hour-long job.
 Set the endpoint-level timeout to cover the run as well: if a per-request override silently fails,
 the endpoint value is what remains.
+
+**A RUNNING WORKER HOLDS THE CODE IT BOOTED WITH — a `git merge` on the volume reaches nothing.**
+vis-b paid $0.1581 to learn it: the fix landed on the volume, hash-verified byte for byte, and
+the next handshake failed identically. The boot log had been **appended to**, not truncated (the
+earlier copy is a byte-exact prefix), with one `Starting Serverless Worker`, one worker id and
+two full weight loads at ~$0.031 each. There is no reload lever: `serverless update` does not
+restart a worker, `--idle-timeout 60` did not stop one that had failed a job (`/health` read
+`workers.running: 1` fifteen minutes later), and **only `serverless delete` stops it**. So:
+**stage the volume BEFORE the endpoint exists**, run every guard the worker will run on the
+volume's own interpreter while a $0.24/h staging pod is still up, and treat the code as frozen
+from the first request onward.
 
 **A failing serverless worker bills exactly like a working one, and only DELETE stops it.** srv-2b's
 worker was `running` for 31 minutes at **$0.00031/s** with its job stuck in the queue — $0.55 for
