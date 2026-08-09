@@ -5553,3 +5553,256 @@ the next session should fetch the boot log while its pod is still up.
 runbook says the bridge table "goes into the session record whole, per post, with both captions
 quoted"; `results/captions_gm4_atb19.json` was already written and sealed by the driver before
 the bridge ran, so the table has its own file rather than an edit to a paid record.
+
+## 5c1 vis-c — 232 posts became 144, and the yield screen reports ($0.5505 of $1.50, 2026-08-09)
+
+`docs/PROMPT-5c1-vis-c.md`, executed end to end. Nothing is outstanding; the launch composition
+is **not** signed here and this contract never had the authority to.
+
+### The read-back check, and the one departure from step 0's order
+
+The step-0 items, the slice-plan gates and all seventeen stop rules were read back before anything
+was created. **Dv68 — step 0 ran 4 → anchor → 1 → 2 → 3, not 1 → 2 → 3 → 4.** Step 0 is headed
+"before anything billable" and its item 1 — fetching the boot log off the network volume — is the
+only billable item in it, because a serverless worker exposes no SSH and the volume can only be
+read from a pod. The operator's own instruction ("nothing billable before the boot-log debt is
+rescued **and** the $0 preflight passes") is satisfied strictly by running the $0 preflight first,
+and it costs nothing to do so. **Dv69 — one sub-step the contract does not list was inserted
+before the pod: the vis-c anchor.** `runpod_balance_at_5c1vis_vis-c_start = 13.4842305468` was
+written by the driver's own `read_ledger` (so it carries the shared note rather than a hand-built
+one), asserted not to move vis-b's anchor or its three logged sessions, and **committed** in
+`2f7d702` before a single billable second. An anchor read after a pod has run understates the
+session by the pod, and it may never be regenerated.
+
+The $0 preflight (`scripts/preflight_serving_guards.py`, on the real `transformers 5.14.1 · peft
+0.20.0 · torch 2.13.0`) passed all three ways — accepts a bare `Gemma4ForConditionalGeneration`,
+refuses one carrying an adapter, and the vis-a guard control still fires on the bare model.
+
+### The boot log paid for itself in an hour (Dv70)
+
+`results/visc_worker_boot_attempt2.log`, 24 343 bytes, sha `47cc7f540adf…`, byte-identical to the
+volume's copy. It is **not** a receipt. The file is truncated at every worker boot, and it holds
+one `Starting Serverless Worker`, one weight load (1188 shards, `[01:48<00:00]`) and exactly nine
+request ids — one `sync-` handshake plus eight async jobs, which is vis-b's re-pilot's own
+`timing.calls`. The earlier handshake and smoke calls are **absent**, so a boot happened between
+them: **the re-pilot paid its own cold start**, inside its `worker_seconds: 492.07`.
+
+That retracts vis-b's "one worker, one cold start". A stable `worker_id` across legs is not a warm
+worker — a RunPod worker slot keeps its id across scale-to-zero. The vis-b ADR was corrected in
+place with the error named (`e020665`), and its per-post rate restated as a **bound**, because the
+record aggregates `executionTime` and cannot be split per call: $0.0045–$0.0061 marginal, not the
+$0.00891 that divides a whole leg by 19. vis-c's own run then measured the same quantity directly
+and cleanly, which is the next section.
+
+### The population: 231 named, 11 unnamed, 56 blind, 31 free (Dv71–Dv73)
+
+**Dv71 — the briefing's "232 remaining posts" is not a figure in any artifact.** The census names
+`uncaptioned_msg_ids` only for posts that HAVE media: 250 of them, 19 already bought, so **231**
+are askable. It separately counts 11 unreadable posts it never names, because they carry no media
+at all. 231 + 11 = **242**, which is the census's `no_text_and_no_caption` (261) minus vis-b's 19.
+The manifest closes its arithmetic on 242 and reports the 11 as `blind_unnamed_no_media`; the
+enumerated list is the population, and the prose figure is neither of the two readings.
+
+**Dv72 — the manifest carries three states, not the contract's two.** `fetchable` / `blind` /
+**`owed`**. A FloodWait above `MAX_FLOOD_SLEEP` stops the sweep, and filing what was never asked
+for as `blind` would put a transport failure into the yield screen's denominator as a fact about
+the corpus. The sweep in fact ended with `owed: 0`, so the distinction cost nothing this time —
+which is exactly when it is cheap to build.
+
+The sweep: **231 asked → 175 fetchable, 56 blind, 0 owed**, 657 images, one Telethon client on one
+connect, `data/raw` verified untouched (`shasum -c results/raw_v1_baseline.sha256`: 6 files OK, 0
+failed). Every blind post says why: **42 video/mp4**, 8 pdf, 2 audio/ogg, 2 docx, 1 pptx, 1
+giveaway. Two channels are wholly blind — @polyakova_fitness (18 of 18 video) and
+@Wellosophy_Lesya — so no caption budget can grade them. That is the answer to the design question
+`docs/STATUS.md` raised about a non-empty blind on a wider manifest: it is 56 of 231, it is
+dominated by video, and it is not a fetch failure.
+
+**Dv73 — 31 of the 175 fetchable never reached the model.** They carry a poll and no image, and
+Telegram has been carrying their question all along, so `caption_posts` transcribes them for free.
+The paid population was therefore **144 posts**, 478 images at the six-image cap — **3.32 per
+post** against ATB's 5.68.
+
+### The endpoint, and a stop rule that was built rather than performed (Dv74)
+
+Template `qhemuctjco` → endpoint `2mda2iqe0dchkk`, `ADA_24` in EU-RO-1 on volume `qw4nwleanc`,
+`--idle-timeout 60 --execution-timeout 1800`, read back as `executionTimeoutMs: 1800000`.
+
+**No staging pod was bought**, because the worker's import closure was enumerated —
+`scripts/serve_handler.py`, `scripts/start_5b_worker.sh`, and `local_llm`, `prompts`, `records`,
+`scorer`, `serving`, `zero_shot` under `src/market_pulse/` — and `git diff d408034 HEAD` over
+exactly those eight files is empty. The volume's `repo/` is at `d408034` with a clean tree (read
+on the step-0 pod), and the worker's own `info` named `repo_commit d408034` **before the first
+job**. That is the boot proof of addendum item 4, and it is behavioural as well as textual: `info`
+answered `CAPTION` / `base-no-adapter` / `caption_prompt_sha256 41d33d0299fe…` at all.
+
+**Dv74 — §C.1 was implemented inside the driver instead of performed between two invocations.**
+The contract says "after the first slice, project the full run from measured spend; STOP if the
+projection exceeds the cap remainder". Doing that by hand needs a second invocation, and a second
+invocation on a `--idle-timeout 60` endpoint pays a second cold start to ask a question the first
+run already had the numbers for. So `--project-stop-usd` re-prices before **every** slice but the
+first, and its formula is the one the vis-b retraction forced: the boot seconds are read once,
+after `info` and before the first caption, and subtracted before a per-post rate is taken; the
+cold start is then added back **once**, as the pre-registered $0.0733 (SPEC 3.15 (3), addendum
+item 6), with this session's own measured start reported beside it and never substituted into the
+line the stop is taken on. A test pins that the naive boot-in-every-post reading is more than
+twice the honest one.
+
+The gate never fired. It ran fifteen times and the projection stayed between **$0.3496 and
+$0.4603** against **$1.4676** left of the cap:
+
+| after rows | marginal $/post | projected total | measured start | pre-registered |
+|---|---|---|---|---|
+| 25/144 | $0.001918 | $0.3496 | $0.0563 | $0.0733 |
+| 63/144 | $0.002688 | $0.4603 | $0.0563 | $0.0733 |
+| 139/144 | $0.002328 | $0.4086 | $0.0563 | $0.0733 |
+
+**The measured production rate, which is what 5c2 needs either way: $0.002328 per post**,
+7.592 s/row marginal, boot 183.58 s. That is **half** vis-b's ATB rate, and the reason is in the
+manifest rather than in the model — 3.32 images per post against 5.68, and shorter captions for a
+single photo than for six pages of leaflet.
+
+### §B, and a control the contract did not ask for (Dv75)
+
+**Dv75 — the one-post smoke was run on `@atb_market_official:4340`, a post vis-b already bought.**
+The smoke has to be paid whatever post it uses; spending it on a post with a known answer turns it
+into a **cross-endpoint reproducibility control** for free. All four §B PASS conditions held: the
+handshake refused nothing, the reply is Ukrainian prose about a shelf, `finish_reason: stop`, and
+the volume dump matches the reply byte for byte (`sha8 ef590986`, fetched on pod
+`k5hvj9k68frde0`).
+
+The control's finding is worth more than the smoke:
+
+```
+vis-b: … морозиво брендів Three Bears, Рудь, Своя Лінія та ковбасу Баликова.        (164 chars)
+vis-c: … морозиво брендів Three Bears, Рудь та Своя Лінія, а також ковбасу Баликова. (172 chars)
+```
+
+Same pinned weights, same NF4 config, same prompt sha, greedy, batch 1, and **image lists proven
+byte-identical by sha256**. The captions are **not** identical. The two runs differ in worker
+instance and in GPU driver (580.173.02 → 570.211.01) on the same RTX 4090 class. And yet
+`core.carriers` extracts **exactly the same three terms** from both — `brand:rud`,
+`brand:svoia-liniia`, `ice-cream:морозив`.
+
+So: the caption instrument is **not byte-reproducible across worker instances**, and on this one
+post it is **verdict-stable anyway**. n = 1 — that is an existence proof, not a rate, and 5c2
+should price a proper re-run if any downstream number is going to be defended as reproducible.
+Nothing here is re-run on it: the rule against retries stands.
+
+### What the run bought
+
+144 of 144 captioned in 15 jobs, one attempt per slice, **0 failed, 0 unusable**, plus 31 poll
+transcripts. `results/captions_gm4_visc.json`, out `data/annotation/captions_5c1/gm4_visc.jsonl`
+at `fe8510537b140d40…`; every row carries `caption_source: "gm4-nf4-base"` and the record's
+`caption_sources` is that one instrument.
+
+**Truncations at the 400-token ceiling: 4** — @educationwithloven ×3, @atb_aktsiyi ×1 (5 across
+the whole caption set, with vis-b's @atb_market_official:4391). The ceiling was **not** touched
+mid-run. On the design question `docs/STATUS.md` raised: 4 of 144 is 2.8%, and it is concentrated
+in the two channels that publish multi-page leaflets, not spread across the single-photo posts —
+so the case for revisiting 400 is a case about leaflet channels specifically, and it must be a
+**named revision** if it is made at all, because two ceilings inside one screen cannot be told
+apart afterwards.
+
+Separately, **52 posts hit the six-image cap** (`images.posts_truncated`) — 657 images available,
+478 sent. That is the same instrument vis-b and the qwen pilot used and is not a new choice.
+
+### Screen v2
+
+`results/yield_screen_5c1_v2.json`, written by the **same script** as the signed screen
+(Dv77 — `yield_screen_5c1.py` gained `--captions` rather than being forked; one matcher, one
+lexicon, one registry, one window rule, five controls). Proof that the option changed nothing on
+its own: a run **without** `--captions` reproduces the signed record's per-channel rows, summary
+and `term_evidence` compared equal, and writes no `captions` block at all.
+
+Pre-registration re-hashed at run time and echoed into the record:
+**`1aa898180b01762d909e29997db659d2dc70931816855f4c0325b1ea1c892f2b`**, unmoved.
+
+**`verdicts_reportable`: FALSE → TRUE.** The signed screen refused to report because its
+pre-registered positive control, @atb_market_official, measured 0 relevant posts — and that
+channel is precisely the one whose 19 posts are pictures. All four positive controls and the
+negative control now pass.
+
+| | v1 | v2 |
+|---|---|---|
+| bar A passed | 29 | **32** |
+| bar B passed | 8 | 8 |
+| below both bars | 36 | **33** |
+| graded on a caption | — | 194 |
+| blind | — | 67 |
+| truncated | — | 5 |
+
+Seven rows moved and three of them crossed bar A:
+
+| channel | relevant v1 → v2 | bar A | graded/blind/truncated |
+|---|---|---|---|
+| @atb_market_official | 0 → **14** | FAIL → **PASS** | 25/0/1 |
+| @atb_aktsiyi | 1 → **26** | FAIL → **PASS** | 42/11/1 |
+| @useful_healthy_fitness_menu | 3 → **6** | FAIL → **PASS** | 16/1/0 |
+| @VARUS_channel | 65 → 90 | PASS | 133/2/0 |
+| @retsepty | 58 → 61 | PASS | 91/0/0 |
+| @marketopt_promo | 4 → 8 | PASS | 12/0/0 |
+| @matusi_ukr | 20 → 21 | PASS | 229/0/0 |
+
+One row changed **kind** rather than verdict: **@gaid_skobioale** was `TOO_FEW_TEXTED_POSTS` — 1
+texted post in 18 against a bar of 4, so bar A was unreachable by arithmetic — and its 17 captions
+give it a denominator of 18. It is now `gradeable` and still FAILs, which is a measured finding
+about content instead of a refusal to rule. `bar_A_reach` counts readable posts in v2, not texted ones, and that
+is the only place the screen's own logic moved.
+
+`blind: 67` = the 56 the sweep could not fetch + the 11 the census never named. 261 − 194 = 67, and
+the screen never reads the census: the arithmetic closes across two files that do not know about
+each other.
+
+**This contract signs nothing.** The launch composition is the operator's word, and the freeze
+stands.
+
+### Money (Dv79 — three readings, reported and not reconciled into one)
+
+| reading | figure | what it prices |
+|---|---|---|
+| balance delta on the vis-c anchor at close | **$0.5505 of $1.50** | the ACCOUNT since 13.4842305468 — a floor (Dv33) |
+| endpoint, rate × `worker_seconds` | $0.0587 smoke + $0.4011 run = **$0.4598** | the two legs' own measured compute |
+| endpoint, rate × `wall_seconds` | $0.0720 + $0.4621 = $0.5341 | the same legs including client-side gaps |
+| three $0.24/h pods + the volume run-rate | ≈ $0.08 (≈18 min of pod, ~1.2 h of volume) | the only way off a network volume |
+
+$0.4598 + $0.08 = **$0.5398** against the $0.5505 balance floor — 2% apart, and the balance is
+the larger, which is the right direction for a reading that lags. `worker_seconds` reconciles;
+`wall_seconds` alone ($0.5341) already exceeds the endpoint's share and leaves no room for the
+pods. vis-b's re-pilot leg was priced on **wall** ($0.1693); on the same basis as here it would be
+$0.1509, and both sit inside the noise of a settling balance, so that figure is left standing and
+this is recorded as the better basis for the next session rather than as a retraction.
+
+Phase 4: **$22.0663 of $25.00, remaining $2.9337.**
+
+### Cleanup, with the positive controls the vis-b finding requires (Dv78)
+
+Every artifact was fetched and content-verified **before** anything was deleted: 17 files off the
+volume with **0 sha256 mismatches** against the remote, and all **144** dump rows compared equal to
+the captions written on the Mac. The 16 dumps are committed under
+`results/predictions/visc-volume-captiondump--*.jsonl`, since `data/annotation/**` is gitignored
+and that is the only copy git carries.
+
+**Dv78 — the Dv67 debt is paid forward as well as paid off.** vis-c's own boot log was fetched
+while the last pod was still up (`results/visc_worker_boot.log`, 25 308 bytes, sha
+`b66bd1c834be…`), instead of being left for the next session to discover missing.
+
+| resource | proof it is gone |
+|---|---|
+| pods `djya0kpfajbloq`, `k5hvj9k68frde0`, `l5bd97ct02jfcj` | each listed live by `pod list -a` before its delete, `[]` after |
+| endpoint `2mda2iqe0dchkk` | listed live by `serverless list` before, `[]` after |
+| template `qhemuctjco` | listed live by `template list --type user` among three, **absent from the default `template list` the whole time** — the vis-b finding, demonstrated again — and two 5b-era templates remain, unchanged and uncharged |
+| volume `qw4nwleanc` | still there, as required |
+
+### One defect found and deliberately not fixed (Dv76)
+
+`serve_handler.describe()` reports `"max_new_tokens": local_llm.MAX_NEW_TOKENS` — **256** — even
+under `SERVING_CONFIG=CAPTION`, while the caption path is `local_llm.CaptionClient(processor,
+model)` with the default `max_new_tokens=CAPTION_MAX_NEW_TOKENS` = **400**
+(`scripts/serve_handler.py:241` against `:391`, `src/market_pulse/local_llm.py:128, 206`). Every
+vis-b and vis-c record therefore carries a provenance field naming a ceiling the run did not use;
+`finish_reason: length` and `truncated_replies` are computed against the real 400 and are correct.
+
+It is **not** fixed here. A Mac-side edit changes nothing in the record without re-staging the
+volume, and re-staging risks the session's one endpoint on the `FETCH_HEAD` footgun with no restart
+lever — the exact trade vis-b lost $0.16 to. It is named here so the next session that opens the
+volume fixes it in the same trip.
