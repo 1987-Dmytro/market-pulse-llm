@@ -1,0 +1,240 @@
+{
+  "timestamp": "2026-08-09T11:23:16+00:00",
+  "phase": "5c1 vis-b — the GM4 caption instrument",
+  "contract": "docs/PROMPT-5c1-vis-a.md deliverable 4",
+  "task": "caption_post_gm4",
+  "caption_source": "gm4-nf4-base",
+  "caption_sources": [
+    "gm4-nf4-base"
+  ],
+  "endpoint": {
+    "id": "14yxhbglvqmvsj",
+    "worker": {
+      "adapter_dir": null,
+      "adapter_sha256": null,
+      "caption_prompt_sha256": "41d33d0299fe30db76d255883569d47929b78b81f58d10e2015bee9c48912039",
+      "chat_template": {
+        "add_generation_prompt": true,
+        "enable_thinking": false
+      },
+      "max_new_tokens": 256,
+      "merge_state": "base-no-adapter",
+      "merged_provenance": null,
+      "merged_sha256": null,
+      "model": "google/gemma-4-31b-it",
+      "quantization": {
+        "bnb_4bit_compute_dtype": "bfloat16",
+        "bnb_4bit_quant_type": "nf4",
+        "bnb_4bit_use_double_quant": true,
+        "load_in_4bit": true
+      },
+      "repo_commit": "d408034db4c2247f3ac8fb03d6ca151ff0f5e652",
+      "revision_requested": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+      "runtime": {
+        "accelerate": "1.14.0",
+        "bitsandbytes": "0.50.0",
+        "cuda_runtime": "12.8",
+        "driver": "580.173.02",
+        "gpu": "NVIDIA GeForce RTX 4090",
+        "gpu_count": 1,
+        "gpu_memory_total": "24564 MiB",
+        "model_revision": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+        "peft": "0.20.0",
+        "pod_id": "spotut2es3fgl2",
+        "revision_requested": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+        "runpod": "1.11.0",
+        "torch": "2.8.0+cu128",
+        "transformers": "5.14.1",
+        "weights_requested": "google/gemma-4-31b-it"
+      },
+      "serving_config": "CAPTION",
+      "weights_dir": "google/gemma-4-31b-it"
+    }
+  },
+  "smoke": false,
+  "attempts_per_slice": 1,
+  "prompt_sha256": {
+    "caption_post_gm4": "41d33d0299fe30db76d255883569d47929b78b81f58d10e2015bee9c48912039"
+  },
+  "source": "results/post_media_5c1.json",
+  "population": {
+    "media_only_posts": 19,
+    "captioned": 19,
+    "transcribed_polls": 0,
+    "unusable": [],
+    "no_surrogate_at_all": []
+  },
+  "jobs": [
+    {
+      "i": 0,
+      "posts": [
+        "@atb_market_official:4340",
+        "@atb_market_official:4350"
+      ],
+      "sha8": [
+        "ef590986",
+        "342d5c62"
+      ],
+      "megabytes": 5.302,
+      "dump_path": "/runpod-volume/captions_visb_atb19_00.jsonl"
+    },
+    {
+      "i": 1,
+      "posts": [
+        "@atb_market_official:4360",
+        "@atb_market_official:4370",
+        "@atb_market_official:4377"
+      ],
+      "sha8": [
+        "8f5e608a",
+        "1f4505b6",
+        "b23bf04c"
+      ],
+      "megabytes": 7.317,
+      "dump_path": "/runpod-volume/captions_visb_atb19_01.jsonl"
+    },
+    {
+      "i": 2,
+      "posts": [
+        "@atb_market_official:4381",
+        "@atb_market_official:4391"
+      ],
+      "sha8": [
+        "2217a27a",
+        "d59d068a"
+      ],
+      "megabytes": 5.843,
+      "dump_path": "/runpod-volume/captions_visb_atb19_02.jsonl"
+    },
+    {
+      "i": 3,
+      "posts": [
+        "@atb_market_official:4401",
+        "@atb_market_official:4411",
+        "@atb_market_official:4415"
+      ],
+      "sha8": [
+        "bf6eeb28",
+        "f73e208e",
+        "42304da8"
+      ],
+      "megabytes": 7.733,
+      "dump_path": "/runpod-volume/captions_visb_atb19_03.jsonl"
+    },
+    {
+      "i": 4,
+      "posts": [
+        "@atb_market_official:4421",
+        "@atb_market_official:4426",
+        "@atb_market_official:4436"
+      ],
+      "sha8": [
+        "33059a48",
+        "1203707a",
+        "acc82e3b"
+      ],
+      "megabytes": 7.829,
+      "dump_path": "/runpod-volume/captions_visb_atb19_04.jsonl"
+    },
+    {
+      "i": 5,
+      "posts": [
+        "@atb_market_official:4446",
+        "@atb_market_official:4455"
+      ],
+      "sha8": [
+        "526c9a07",
+        "e9d85bd7"
+      ],
+      "megabytes": 6.591,
+      "dump_path": "/runpod-volume/captions_visb_atb19_05.jsonl"
+    },
+    {
+      "i": 6,
+      "posts": [
+        "@atb_market_official:4467",
+        "@atb_market_official:4498"
+      ],
+      "sha8": [
+        "11554219",
+        "64ca11c2"
+      ],
+      "megabytes": 5.268,
+      "dump_path": "/runpod-volume/captions_visb_atb19_06.jsonl"
+    },
+    {
+      "i": 7,
+      "posts": [
+        "@atb_market_official:4508",
+        "@atb_market_official:4519"
+      ],
+      "sha8": [
+        "1c29a2e4",
+        "f5ea14d7"
+      ],
+      "megabytes": 6.596,
+      "dump_path": "/runpod-volume/captions_visb_atb19_07.jsonl"
+    }
+  ],
+  "images": {
+    "sent": 108,
+    "available": 159,
+    "max_per_request": 6,
+    "posts_truncated": [
+      "@atb_market_official:4340",
+      "@atb_market_official:4350",
+      "@atb_market_official:4360",
+      "@atb_market_official:4370",
+      "@atb_market_official:4381",
+      "@atb_market_official:4391",
+      "@atb_market_official:4401",
+      "@atb_market_official:4426",
+      "@atb_market_official:4436",
+      "@atb_market_official:4446",
+      "@atb_market_official:4455",
+      "@atb_market_official:4467",
+      "@atb_market_official:4498",
+      "@atb_market_official:4508",
+      "@atb_market_official:4519"
+    ]
+  },
+  "truncated_replies": [
+    "@atb_market_official:4391"
+  ],
+  "timing": {
+    "calls": 9,
+    "rows": 19,
+    "worker_seconds": 492.07,
+    "queue_seconds": 23.787,
+    "wall_seconds": 552.14,
+    "seconds_per_call": 54.674,
+    "wall_per_call": 61.349,
+    "wall_per_row": 29.06,
+    "seconds_per_row": 25.898,
+    "idle_share": 0.1088,
+    "worker_ids": [
+      "spotut2es3fgl2"
+    ]
+  },
+  "out": "data/annotation/captions_5c1/gm4_atb19.jsonl",
+  "out_sha256": "576d668bb4e749effcc64629c943b74305ff059c8cbb46eea332427659866dea",
+  "cost": {
+    "jobs": 8,
+    "usd": 0.3869,
+    "cap_usd": 1.0,
+    "session": "vis-b",
+    "anchor": "results/spend_5c1_vis.json",
+    "reading": "the RunPod balance delta against this session's own anchor. It is a FLOOR — the balance settles minutes to hours behind the resource (Dv33) — and runpod_guard's itemised corroboration is the phase-level check, not this one."
+  },
+  "git": {
+    "commit": "55ee581f4c7ac25286dc6fb2ac033df7795e2517",
+    "dirty": [
+      "knowledge/daily_logs/2026-08-09.md",
+      "knowledge/index.md",
+      "results/spend_5c1_vis.json",
+      "results/spend_phase4.json",
+      "results/serving_visb_smoke.json"
+    ]
+  },
+  "note": "Captions from the project's own NF4 base at the pinned revision, adapter OFF, greedy, forward batch 1, under the registered caption_post_gm4 prompt (SPEC amendment 3.13 (3)). The pictures travelled inside the job as base64; the network volume carried the per-post dump. One attempt per slice — a job that failed is named here and was never re-asked."
+}

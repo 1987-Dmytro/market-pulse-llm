@@ -185,6 +185,20 @@
       "spent_usd": 21.1592,
       "remaining_usd": 3.8408,
       "note": "vis-b stopped at the boot rung, endpoint and template deleted"
+    },
+    {
+      "at": "2026-08-09T11:18:46+00:00",
+      "balance": 13.804533669,
+      "spent_usd": 21.1955,
+      "remaining_usd": 3.8045,
+      "note": "vis-b-r smoke, 1 post"
+    },
+    {
+      "at": "2026-08-09T11:31:48+00:00",
+      "balance": 13.4995549857,
+      "spent_usd": 21.5004,
+      "remaining_usd": 3.4996,
+      "note": "vis-b-r closed: 19 captions, bar A PASS, endpoint+template deleted"
     }
   ]
 }

@@ -1,0 +1,434 @@
+{
+  "generated_at": "2026-08-09T11:30:05+00:00",
+  "phase": "5c1 — the ATB caption pilot",
+  "contract": "docs/PROMPT-5c1-captions-pilot.md step 4",
+  "channel": "@atb_market_official",
+  "window": {
+    "since": "2026-06-26T00:00:00+00:00",
+    "until": "2026-07-24T00:00:00+00:00",
+    "source": "raw_v1_own_last_28d"
+  },
+  "instrument": {
+    "matcher": "market_pulse.yield_screen — the yield screen's own, imported",
+    "lexicon": {
+      "path": "data/category_lexicon_draft.json",
+      "sha256": "1225ad7597f3328f2c725afba0d92458d18b95924438575bc2d46131371dd2b3",
+      "status": "draft-not-law"
+    },
+    "registry": {
+      "path": "config/registry.yaml",
+      "sha256": "c82d0cff1ee7d1bbf7c40d46bbcb02662f44898e4bc6980a2d75ced9cce46a2e"
+    },
+    "preregistration": {
+      "path": "results/yield_bars_5c1.preregistration.json",
+      "sha256": "1aa898180b01762d909e29997db659d2dc70931816855f4c0325b1ea1c892f2b",
+      "bar_A_relevant_posts_28d": 4,
+      "bar_B_comments_under_relevant_28d": 10,
+      "ruled_by": "operator 2026-08-08",
+      "currencies": "posts and comments are separate; never blended"
+    },
+    "captions": {
+      "path": "data/annotation/captions_5c1/gm4_atb19.jsonl",
+      "sha256": "576d668bb4e749effcc64629c943b74305ff059c8cbb46eea332427659866dea",
+      "record": "results/captions_5c1.json",
+      "rows": 19,
+      "sources": [
+        "gm4-nf4-base"
+      ]
+    },
+    "note": "the bars are not touched here; this reports which side of bar A each reading lands on"
+  },
+  "controls": {
+    "reproduces the signed screen": {
+      "expected": "0 relevant posts on text alone",
+      "measured": 0,
+      "ok": true
+    },
+    "same window as the signed screen": {
+      "expected": 25,
+      "measured": 25,
+      "ok": true
+    },
+    "negative control :: a fitness post with no taxonomy": {
+      "expected": "no category and no brand — the yield screen's own control line",
+      "measured": [],
+      "ok": true
+    }
+  },
+  "verdicts_reportable": true,
+  "posts_in_window": 25,
+  "before": {
+    "reading": "the posts' own text, exactly what the yield screen read",
+    "relevant_posts": 0,
+    "bar_A": "FAIL",
+    "by_term": {}
+  },
+  "after": {
+    "reading": "the posts' own text plus the caption written for the silent ones",
+    "relevant_posts": 14,
+    "bar_A": "PASS",
+    "relevant_on_category_alone": 12,
+    "bar_A_on_category_alone": "PASS",
+    "by_term": {
+      "brand:svoia-liniia": 8,
+      "ice-cream:морозив": 8,
+      "dairy:сир": 5,
+      "brand:rud": 2,
+      "dairy:йогурт": 2,
+      "dairy:сметан": 2,
+      "brand:president": 1,
+      "dairy:масл": 1
+    },
+    "bar_A_sole_carriers": []
+  },
+  "captioned_posts": {
+    "n": 19,
+    "relevant": 14,
+    "misses": {
+      "definition": "a post whose surrogate text the matcher still reads as carrying none of the taxonomy",
+      "n": 5,
+      "msg_ids": [
+        4370,
+        4411,
+        4415,
+        4455,
+        4519
+      ]
+    }
+  },
+  "posts": [
+    {
+      "msg_id": 4332,
+      "date": "2026-06-30T11:39:04+00:00",
+      "has_own_text": true,
+      "captioned": false,
+      "terms": [],
+      "evidence": null
+    },
+    {
+      "msg_id": 4333,
+      "date": "2026-06-30T11:39:48+00:00",
+      "has_own_text": true,
+      "captioned": false,
+      "terms": [],
+      "evidence": null
+    },
+    {
+      "msg_id": 4340,
+      "date": "2026-07-01T17:53:57+00:00",
+      "has_own_text": false,
+      "captioned": true,
+      "terms": [
+        "brand:rud",
+        "brand:svoia-liniia",
+        "ice-cream:морозив"
+      ],
+      "evidence": {
+        "kind": "category",
+        "name": "ice-cream:морозив",
+        "matched": "морозиво",
+        "line": "АТБ з 01.07.2026 по 07.07.2026 ЗНИЖКИ до -51%* Зображення представляє промоцію на шоколад Milka, морозиво брендів Three Bears, Рудь, Своя Лінія та ковбасу Баликова."
+      }
+    },
+    {
+      "msg_id": 4350,
+      "date": "2026-07-01T17:54:06+00:00",
+      "has_own_text": false,
+      "captioned": true,
+      "terms": [
+        "brand:svoia-liniia",
+        "dairy:йогурт",
+        "dairy:сир"
+      ],
+      "evidence": {
+        "kind": "category",
+        "name": "dairy:йогурт",
+        "matched": "йогурт",
+        "line": "АТБ Сир м'який, Чипси, Йогурт, Батончик, Ковбаски «Шашличні», Консерви з 01.07.26 по 07.07.26 Зображення представляє промоцію на різні продукти харчування: м'який сир «Своя Лінія»,…"
+      }
+    },
+    {
+      "msg_id": 4360,
+      "date": "2026-07-01T17:54:14+00:00",
+      "has_own_text": false,
+      "captioned": true,
+      "terms": [
+        "ice-cream:морозив"
+      ],
+      "evidence": {
+        "kind": "category",
+        "name": "ice-cream:морозив",
+        "matched": "морозиво",
+        "line": "АТБ Акція з 01.07.26 по 07.07.26. Зображення містить кілька рекламних листів із промоціями на морозиво, рибу та морепродукти, чай, каву, солодощі, соуси, олію, сухі сніданки, консе…"
+      }
+    },
+    {
+      "msg_id": 4370,
+      "date": "2026-07-01T17:54:20+00:00",
+      "has_own_text": false,
+      "captioned": true,
+      "terms": [],
+      "evidence": null
+    },
+    {
+      "msg_id": 4377,
+      "date": "2026-07-08T11:10:00+00:00",
+      "has_own_text": false,
+      "captioned": true,
+      "terms": [
+        "brand:svoia-liniia"
+      ],
+      "evidence": {
+        "kind": "brand",
+        "name": "svoia-liniia",
+        "matched": "своя лінія",
+        "line": "ВЛАСНІ ТОРГОВІ МАРКИ АТБ – ПЕРЕВІРЕНА ЯКІСТЬ ТА ВИГІДНА ЦІНА з 08.07.26 по 14.07.26 Ковбаса сирокопчена «Салямі Фірмова», 1 кг ТМ «М'ЯСНА ЛАВКА/ СВОЯ ЛІНІЯ» Кетчуп «До шашлику»/ «Л…"
+      }
+    },
+    {
+      "msg_id": 4381,
+      "date": "2026-07-08T11:11:35+00:00",
+      "has_own_text": false,
+      "captioned": true,
+      "terms": [
+        "brand:president",
+        "dairy:сир",
+        "ice-cream:морозив"
+      ],
+      "evidence": {
+        "kind": "category",
+        "name": "dairy:сир",
+        "matched": "сир",
+        "line": "АТБ ЗНИЖКИ В АТБ до 50% з 08.07.26 по 14.07.26 Зображення представляє промоцію на морозиво (Maximuse, Стакан Великан, Гран-Прі, Каштан), плавлений сир President, твердий сир Komo т…"
+      }
+    },
+    {
+      "msg_id": 4391,
+      "date": "2026-07-08T11:11:49+00:00",
+      "has_own_text": false,
+      "captioned": true,
+      "terms": [
+        "brand:svoia-liniia",
+        "dairy:сир",
+        "dairy:сметан"
+      ],
+      "evidence": {
+        "kind": "category",
+        "name": "dairy:сир",
+        "matched": "сиру",
+        "line": "Майонез/ Соус «Європейський», 72%/ «Провансаль», 67%/ «Смачний», 50%/ майонезний «Легкий», 28%, 300 г ТМ «Своя Лінія» 08.07.26 по 14.07.26 АТБ Зображення пропонує акцію на різні ви…"
+      }
+    },
+    {
+      "msg_id": 4401,
+      "date": "2026-07-08T11:12:03+00:00",
+      "has_own_text": false,
+      "captioned": true,
+      "terms": [
+        "dairy:йогурт",
+        "dairy:масл",
+        "dairy:сир",
+        "ice-cream:морозив"
+      ],
+      "evidence": {
+        "kind": "category",
+        "name": "dairy:йогурт",
+        "matched": "йогурти",
+        "line": "АТБ Акція діє з 08.07.26 по 14.07.26. Зображення містить рекламні листівки з акціями на підгузки Mini Bee, ковбасу, сосиски, сир, масло, тісто, нагети, вареники, сирок, йогурти, ве…"
+      }
+    },
+    {
+      "msg_id": 4411,
+      "date": "2026-07-08T11:12:09+00:00",
+      "has_own_text": false,
+      "captioned": true,
+      "terms": [],
+      "evidence": null
+    },
+    {
+      "msg_id": 4415,
+      "date": "2026-07-09T12:46:55+00:00",
+      "has_own_text": false,
+      "captioned": true,
+      "terms": [],
+      "evidence": null
+    },
+    {
+      "msg_id": 4421,
+      "date": "2026-07-14T09:04:58+00:00",
+      "has_own_text": false,
+      "captioned": true,
+      "terms": [
+        "brand:svoia-liniia",
+        "dairy:сметан"
+      ],
+      "evidence": {
+        "kind": "category",
+        "name": "dairy:сметан",
+        "matched": "сметани",
+        "line": "ВЛАСНІ ТОРГОВІ МАРКИ АТБ - ПЕРЕВІРЕНА ЯКІСТЬ ТА ВИГІДНА ЦІНА з 15.07.26 по 21.07.26 Ковбаса напівкопчена «Губернська», 420 г/ сирокопчена «Салямі Італійська», 1 кг ТМ «М'ЯСНА ЛАВКА…"
+      }
+    },
+    {
+      "msg_id": 4425,
+      "date": "2026-07-14T13:15:07+00:00",
+      "has_own_text": true,
+      "captioned": false,
+      "terms": [],
+      "evidence": null
+    },
+    {
+      "msg_id": 4426,
+      "date": "2026-07-15T06:25:20+00:00",
+      "has_own_text": false,
+      "captioned": true,
+      "terms": [
+        "brand:svoia-liniia",
+        "ice-cream:морозив"
+      ],
+      "evidence": {
+        "kind": "category",
+        "name": "ice-cream:морозив",
+        "matched": "морозиво",
+        "line": "АТБ ЗНИЖКИ В АТБ до 55% з 15.07.26 по 21.07.26 Зображення представляє промоцію на різні види продуктів: морозиво Magnat, Хрещатик, Своя Лінія, Розумний вибір, ковбасу Губернська та…"
+      }
+    },
+    {
+      "msg_id": 4436,
+      "date": "2026-07-15T06:27:47+00:00",
+      "has_own_text": false,
+      "captioned": true,
+      "terms": [
+        "dairy:сир"
+      ],
+      "evidence": {
+        "kind": "category",
+        "name": "dairy:сир",
+        "matched": "сир",
+        "line": "АТБ з 15.07.26 по 21.07.26 Кетчуп «До Шашлику»/ «Лагідний»/ «Чілі», Соус/ Гірчиця майонезний «Делікатесний»/ «Джонська», Майонез «Європейський»/ «Домашній», Хачапурі «По-аджарські»…"
+      }
+    },
+    {
+      "msg_id": 4446,
+      "date": "2026-07-15T06:28:06+00:00",
+      "has_own_text": false,
+      "captioned": true,
+      "terms": [
+        "ice-cream:морозив"
+      ],
+      "evidence": {
+        "kind": "category",
+        "name": "ice-cream:морозив",
+        "matched": "морозиво",
+        "line": "АТБ Акція проводиться виключно в мережі магазинів ТОВ «АТБ-МАРКЕТ», тільки з 15.07.26 по 21.07.26. Зображення представляє собою рекламний лист із промоціями на морозиво, напої, кав…"
+      }
+    },
+    {
+      "msg_id": 4455,
+      "date": "2026-07-17T15:03:12+00:00",
+      "has_own_text": false,
+      "captioned": true,
+      "terms": [],
+      "evidence": null
+    },
+    {
+      "msg_id": 4462,
+      "date": "2026-07-22T06:32:28+00:00",
+      "has_own_text": true,
+      "captioned": false,
+      "terms": [],
+      "evidence": null
+    },
+    {
+      "msg_id": 4463,
+      "date": "2026-07-22T06:33:07+00:00",
+      "has_own_text": true,
+      "captioned": false,
+      "terms": [],
+      "evidence": null
+    },
+    {
+      "msg_id": 4467,
+      "date": "2026-07-22T07:27:14+00:00",
+      "has_own_text": false,
+      "captioned": true,
+      "terms": [
+        "brand:rud",
+        "brand:svoia-liniia",
+        "ice-cream:морозив"
+      ],
+      "evidence": {
+        "kind": "category",
+        "name": "ice-cream:морозив",
+        "matched": "морозиво",
+        "line": "АТБ з 22.07.2026 по 28.07.2026 ЗНИЖКИ до -55%* Зображення представляє промоцію на морозиво (ТМ «Рудь», «Київський Пломбір», «Своя Лінія»), шоколад Roshen та ковбасу «До пюрешки»."
+      }
+    },
+    {
+      "msg_id": 4498,
+      "date": "2026-07-22T07:37:06+00:00",
+      "has_own_text": false,
+      "captioned": true,
+      "terms": [
+        "brand:svoia-liniia"
+      ],
+      "evidence": {
+        "kind": "brand",
+        "name": "svoia-liniia",
+        "matched": "своя лінія",
+        "line": "АТБ Форель слабосолона, скибочки без шкіри, 100 г ТМ «Своя Лінія» Сьомга слабосолона, філе-шматок на шкірі, 1 гатунок, 180 г ТМ «Своя Лінія» Пресерви оселедець пряного посолу, філе…"
+      }
+    },
+    {
+      "msg_id": 4508,
+      "date": "2026-07-22T07:37:07+00:00",
+      "has_own_text": false,
+      "captioned": true,
+      "terms": [
+        "ice-cream:морозив"
+      ],
+      "evidence": {
+        "kind": "category",
+        "name": "ice-cream:морозив",
+        "matched": "морозиво",
+        "line": "АТБ Акція діє на всі території України, за винятком тимчасово окупованих територій. 22.07.26 по 28.07.26 Зображення містить рекламні пропозиції на морозиво, заморожені продукти (пе…"
+      }
+    },
+    {
+      "msg_id": 4518,
+      "date": "2026-07-22T07:38:19+00:00",
+      "has_own_text": true,
+      "captioned": false,
+      "terms": [],
+      "evidence": null
+    },
+    {
+      "msg_id": 4519,
+      "date": "2026-07-23T06:35:09+00:00",
+      "has_own_text": false,
+      "captioned": true,
+      "terms": [],
+      "evidence": null
+    }
+  ],
+  "git": {
+    "commit": "55ee581f4c7ac25286dc6fb2ac033df7795e2517",
+    "dirty": [
+      "knowledge/daily_logs/2026-08-09.md",
+      "knowledge/index.md",
+      "results/spend_5c1_vis.json",
+      "results/spend_phase4.json",
+      "results/captions_gm4_atb19.json",
+      "results/predictions/visb-volume-captiondump--00.jsonl",
+      "results/predictions/visb-volume-captiondump--01.jsonl",
+      "results/predictions/visb-volume-captiondump--02.jsonl",
+      "results/predictions/visb-volume-captiondump--03.jsonl",
+      "results/predictions/visb-volume-captiondump--04.jsonl",
+      "results/predictions/visb-volume-captiondump--05.jsonl",
+      "results/predictions/visb-volume-captiondump--06.jsonl",
+      "results/predictions/visb-volume-captiondump--07.jsonl",
+      "results/predictions/visb-volume-captiondump--smoke1.jsonl",
+      "results/serving_visb_smoke.json"
+    ]
+  }
+}
