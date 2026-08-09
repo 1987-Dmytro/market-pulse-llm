@@ -2,24 +2,24 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-09 13:42:37 (every SessionStart)
+**Auto-refreshed:** 2026-08-09 15:13:47 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-ed98d16 chore(vault): the vis-b-r tail -- the instrument works, and what the bridge revealed
-3634533 docs(vis-b-r): the report, seven deviations, and one number retracted
-a6b0d1f feat(vis-b-r): 19 ATB posts captioned on the project's own GM4, and bar A passes
-55ee581 feat(vis-b-r): R0 -- the guard preflight, on real transformers, both directions
-c54a3ef docs(team-lead): the RESUME addendum and the process audit
+62d3423 docs(vis-c): the report, and twelve deviations
+caf118e feat(vis-c): 144 posts captioned, 31 polls transcribed -- and the screen reports
+de886ea feat(vis-c): the C.1 re-projection stop, inside the run
+faeba91 feat(vis-c): the manifest -- 231 asked, 175 fetchable, 56 blind, 0 owed
+71fd882 feat(vis-c): the yield screen learns to read a caption -- screen v2, same instrument
 ```
 
 ## 📋 Recent decisions
 
+- `5c1-vis-b-caption-instrument.md` — The project's own Gemma 4 is the caption instrument: 19 of 19, bar A taken, and the bridge says a caption is a sample
 - `INDEX.md` — Decision records
 - `srv2-program-close.md` — The srv-2 programme closes: serverless is the runtime, and its price is a finding against it
-- `srv2-serverless-runtime-target.md` — The 5b wall did not reproduce, and the production runtime target moves back to serverless
 
 ## 📅 Recent daily logs
 
@@ -31,18 +31,63 @@ c54a3ef docs(team-lead): the RESUME addendum and the process audit
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-09 14:40 (vis-b-r close). **`docs/PROMPT-5c1-vis-b.md` IS DONE — 19 of 19
-ATB posts captioned on the project's own Gemma 4, bar A PASSES (0 → 14 against a bar of 4, where
-qwen's PASS was 0 → 13), $0.4993 of $1.00 across both attempts, everything deleted and proven by
-positive-controlled listings.** The pre-registered instrument-failure STOP did not fire. Underneath:
-the single SPEC 3.11 (2) parity attempt is SPENT and it HOLDS, serverless is the ruled runtime.
-**Next is vis-c — 232 posts + screen v2, cap $1.50.** This block is hand-edited; the section above it is auto-generated — do NOT
-touch the marker. Long form: `implementation-notes.md`, and the days' logs [[2026-08-09]] /
-[[2026-08-08]]. ADRs: [[srv2-program-close]] · [[srv2-serverless-runtime-target]] ·
+**Last update:** 2026-08-09 15:20 (vis-c close). **`docs/PROMPT-5c1-vis-c.md` IS DONE — 144 of
+144 posts captioned, 31 polls transcribed free, and the YIELD SCREEN NOW REPORTS: v2 flips
+`verdicts_reportable` FALSE → TRUE because its pre-registered positive control was the channel the
+captions unblind. $0.5505 of $1.50.** Three rows crossed bar A, pass_A 29 → 32. **The launch
+composition is NOT signed — that is the operator's word, and the package is on the desk.** Under
+it: vis-b built the instrument, the single SPEC 3.11 (2) parity attempt is SPENT and HOLDS,
+serverless is the ruled runtime. **Next is the operator's signature, then 5c2.** This block is
+hand-edited; the section above it is auto-generated — do NOT touch the marker. Long form:
+`implementation-notes.md`, and the days' logs [[2026-08-09]] / [[2026-08-08]]. ADRs:
+[[5c1-vis-b-caption-instrument]] · [[srv2-program-close]] · [[srv2-serverless-runtime-target]] ·
 [[5c1-relevance-floor-and-discovery]] · [[5c1-day2-composition-and-search]] ·
 [[5b2-batch-measurement]].
 
 ## 🔥 What's Hot
+
+**THE SCREEN REPORTS. `results/yield_screen_5c1_v2.json`, same script as the signed one (it gained
+`--captions`, it was not forked), prereg `1aa89818…` re-hashed and unmoved, five controls green —
+and `verdicts_reportable` goes FALSE → TRUE.** The signed screen refused because
+@atb_market_official measured 0 relevant posts, and that channel is the one whose posts are
+pictures. **bar A passed 29 → 32**, below-both 36 → 33, bar B unmoved. Three flips:
+@atb_market_official 0 → 14, @atb_aktsiyi 1 → 26, @useful_healthy_fitness_menu 3 → 6. One change
+of KIND: @gaid_skobioale was `TOO_FEW_TEXTED_POSTS` (1 texted post in 18, bar unreachable by
+arithmetic) and its 17 captions make it `gradeable` — still FAIL, but now a finding about content.
+194 graded on a caption, **67 blind**, 5 truncated. **NOTHING IS SIGNED HERE.**
+
+**THE PAID POPULATION WAS 144, NOT 232 — AND EVERY MISSING POST IS COUNTED.** The census names
+231 askable ids outside ATB and counts 11 more it never names (no media at all): 242. The sweep
+fetched 175 and left **56 blind, 0 owed** — **42 of them video/mp4**, plus 8 pdf, 2 ogg, 2 docx,
+1 pptx, 1 giveaway. @polyakova_fitness (18 of 18 video) and @Wellosophy_Lesya are wholly blind, so
+no budget grades them. Of the 175 fetchable, **31 carry a poll and no image** — Telegram has been
+carrying the question all along, so they are transcribed for **$0** and never reach the model.
+
+**THE MEASURED PRODUCTION RATE FOR 5c2 IS $0.002328/POST** (7.592 s/row marginal, boot 183.58 s
+priced once). That is HALF vis-b's ATB rate, and the reason is the manifest, not the model: 3.32
+images per post against ATB's 5.68. The §C.1 gate re-priced before all 15 slices and never fired —
+projection $0.35–$0.46 against $1.4676 left of the cap.
+
+**GREEDY IS NOT BYTE-REPRODUCIBLE ACROSS WORKERS — AND THE VERDICT SURVIVED ANYWAY.** The smoke was
+spent on `@atb_market_official:4340`, a post vis-b already bought, which made it a free
+cross-endpoint control. Same weights, same NF4 config, same prompt sha, greedy, batch 1, image
+lists proven byte-identical: vis-b wrote 164 chars, vis-c 172 (`Рудь, Своя Лінія та ковбасу` vs
+`Рудь та Своя Лінія, а також ковбасу`). Different worker, different driver (580.173.02 →
+570.211.01). `core.carriers` extracted **exactly the same three terms** from both. n = 1 — an
+existence proof, not a rate; 5c2 prices a real re-run if any number is to be defended as
+reproducible.
+
+**A STABLE `worker_id` IS NOT A WARM WORKER, AND IT COST A PUBLISHED NUMBER.** The rescued boot
+log (Dv67's debt, paid in step 0) is truncated at every boot and held ONE weight load and exactly
+NINE request ids — vis-b's re-pilot's own `timing.calls`, with the handshake and smoke calls
+absent. So the re-pilot paid its OWN cold start inside `worker_seconds: 492.07`, and vis-b's "one
+worker, one cold start" is **retracted** in the ADR with the error named. A worker slot keeps its
+id across scale-to-zero.
+
+**KNOWN AND DELIBERATELY NOT FIXED:** `serve_handler.describe()` reports `max_new_tokens: 256`
+under `SERVING_CONFIG=CAPTION` while the caption path runs at **400**. Provenance only —
+`finish_reason` and `truncated_replies` use the real 400. Fixing it needs a volume re-stage, which
+risks a session's one endpoint for a field; the next session that opens the volume does it.
 
 **THE PROJECT'S OWN GEMMA 4 NOW WRITES CAPTIONS, AND THE SCREEN MOVES ON THEM.** 19 of 19 ATB
 media-only posts, 8 jobs, 0 unusable, every row `caption_source: gm4-nf4-base`. `rematch`
@@ -193,58 +238,47 @@ a finding **against** the chosen path and goes into the 5c2 briefing rather than
 — their reading of the same artefacts, $1.0825/pass against $0.4611 (×2.35), matches
 `results/srv2d_cost.json` (the per-1000 ratio is 2.38 on a different denominator, both correct).
 
-**NEXT SESSION: vis-c — the remaining 232 posts + yield screen v2, cap $1.50**, prereg unchanged,
-launch signing still frozen until v2. Everything vis-b bought carries over: the CAPTION template
-recipe, the volume at `d408034`, the measured rate (**$0.005171/post warm**, cold start
-**244.074 s = $0.0749**, within 2% of the pre-registered $0.0733), and the 10 MB transport
-ceiling. Two things vis-c must decide rather than inherit: the 400-token ceiling truncated 1 of
-19 here and vis-c's posts are not ATB leaflets, and `blind` is non-empty on a wider scope — the
-`--only` bug vis-a fixed was invisible on this manifest for exactly that reason.
+**NEXT: THE OPERATOR'S SIGNATURE, then 5c2.** vis-c is done and the package is on the desk —
+`results/yield_screen_5c1_v2.json`, the same instrument as the signed screen, prereg `1aa89818…`
+unmoved, `verdicts_reportable: true`, **pass_A 32 of 66**, below-both 33, 67 blind named and
+counted. The launch composition is frozen by the operator's own word and **this executor signed
+nothing**. Nothing is queued and no contract is outstanding.
 
-**The vis-b text below is kept because the procedure inside it is still the procedure.** The procedure is
-`scripts/runbook_vis_b.md` end to end: endpoint from the CAPTION template → **one-post smoke with
-the dump read back byte for byte** → the rate measure, which **aborts if 19 posts project above
-$0.50** → the 19-post re-pilot → the GM4-vs-qwen bridge on identical posts (free, both caption
-sets on disk) → bar A against the untouched prereg. The pre-registered instrument failure is not
-this session's to soften: if ATB with GM4 captions FAILS bar A where qwen's PASS stands, STOP and
-the fork goes to the operator with the bridge table — no prompt revision, no image-count change,
-no re-run. Then vis-c (232 posts, cap $1.50) and screen v2.
+**What 5c2 inherits, priced:** the caption instrument (NF4 base at `842da379…`, adapter OFF,
+prompt `caption_post_gm4 41d33d0299fe…`), the CAPTION template recipe and the volume at
+`d408034`, the 10 MB `/run` transport ceiling, and **two rates that must not be confused** —
+marginal **$0.002328/post** on the wide manifest (3.32 images/post), marginal **$0.0045–$0.0061**
+on ATB leaflets (5.68 images/post), plus the cold start **once** at the pre-registered $0.0733
+(measured $0.0563 here). Never multiply an all-in per-post figure by a post count.
 
-**Before the first job, the volume's `repo/` must move.** It is at `ed9c0c9`, which predates
-`caption_post_gm4`, `CaptionClient` and the CAPTION branch of `settings()`. The cheap net is
-built: the worker reports `caption_prompt_sha256` in `info` and the driver refuses before the
-first paid caption unless it equals `41d33d0299fe…`. The expensive net is still the FETCH_HEAD
-footgun below — end the deploy with a content check.
+**Three questions vis-c answered rather than left open:** (1) the 400-token ceiling truncated 4 of
+144, concentrated in the two leaflet channels — a case about leaflet channels specifically, and
+only ever a NAMED revision; (2) blind is 56 of 231 and **42 of those are video**, not a fetch
+failure, so no budget grades @polyakova_fitness or @Wellosophy_Lesya; (3) a caption is a SAMPLE of
+a dense leaflet, which is the bridge's finding and a 5c2 design input.
 
-Team-lead debt cleared this morning: the ADR closing srv-2 is [[srv2-program-close]]. The
-operator quiz is still owed.
-
-**Three things srv-2d built that the next session inherits.** The worker takes `batch_size` and
-`dump_path` in a job, so one job carries a whole input slice at forward batch 1 and writes every
-reply to the volume as it goes (an async `/run` result is deleted 30 min after completion, and
-"logs only appear for successfully initialized workers" — the volume is the log channel, not a
-diagnostic to remove). `serving.execution_policy(seconds, ttl)` is the single seconds→milliseconds
-conversion for RunPod's request policy. `serve_handler.assert_sdk_version` refuses to boot below
-`runpod 1.10.1`.
-
-**Still open on the 5c1 track, none of it started:** the launch signature is the operator's, on the
-v2 numbers; the discovery session is a separate future contract (3.12 (2)); the candidate reserve is
-untouched — `results/harvest_mothers_ua.json` (79 recommendations, 3 genuinely in-segment), five
-unaccepted city analogues in `results/entry_gate_5c1.json :: notes.*_broadcast_analogue`, reserve
-#4 (12 handles) and the private track, RECORDED and not actioned.
+**One defect left on purpose:** `describe()` reports `max_new_tokens: 256` under CAPTION while the
+caption path runs at 400. Fix it on the next trip that opens the volume — a re-stage risks a
+session's one endpoint, and there is no restart lever short of deleting the endpoint.
 
 ## 🚧 Blockers
 
 **None, technical.** The 2026-08-07 FloodWait wall cleared at 10:02:05 UTC and ~100 resolves drew
 no new one — because every collection run carried `--only`. That is discipline, not luck.
 
-**Budget is the live constraint.** Phase 4 stands at **$21.5004 of $25.00, $3.4996 left** (read
-2026-08-09 11:40Z, still settling — Dv33). 08.08 spent $2.3939 across four paid sessions; **09.08
-spent $0.4993**, the whole vis-b contract, both attempts, inside its $1.00 cap with $0.5007
-unspent. `pod list -a` → `[]`, `serverless list` → `[]`, `template list --type user` → the two 5b
-leftovers; only the volume stands and only it bills. **vis-c's $1.50 fits the $3.4996** — but
-re-read the guard before each session rather than trusting this line, and note the volume's own
-$0.009722/h keeps running underneath it.
+**Budget is the live constraint.** Phase 4 stands at **$22.0663 of $25.00, $2.9337 left** (read
+2026-08-09 after the vis-c close, still settling — Dv33). 09.08 spent **$0.4993** on vis-b (both
+attempts, inside $1.00) and **$0.5505** on vis-c (inside $1.50, $0.9495 unspent). `pod list -a` →
+`[]`, `serverless list` → `[]`, `template list --type user` → the two 5b leftovers; only the
+volume stands and only it bills. Re-read the guard before each session rather than trusting this
+line, and note the volume's own $0.009722/h keeps running underneath it.
+
+**Bill the compute on `worker_seconds`, not `wall_seconds`.** vis-c reconciles: endpoint
+$0.4598 (rate x worker) + ~$0.08 of pod and volume = $0.5398 against a $0.5505 balance floor, 2%
+apart in the right direction. On wall the endpoint alone reads $0.5341 and leaves no room for the
+pods that demonstrably ran. vis-b's $0.1693 leg was priced on wall; on this basis it is $0.1509,
+and both sit inside a settling balance's noise, so that figure stands and this is the better basis
+going forward.
 
 **Recorded rather than open:** the CA-MTL-3 volume is deleted, so its **~$0.24/day** idle billing
 has stopped — that literal is load-bearing, not decoration: `scripts/volume_calc_5c1.py` greps it
