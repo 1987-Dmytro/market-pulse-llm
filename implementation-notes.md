@@ -6055,3 +6055,52 @@ three refusals: without it, "DENIED" three times is equally consistent with a se
 not write anything at all. `knowledge/hot.md` said the rules "refuse `Edit` *and* `Write`", which
 read as two rules doing two jobs; it now says one rule covers both tools and that the `Write` form
 is not a rule at all.
+
+### The pilot: 40 rows, and they measure the captioner rather than the matcher (Dv95)
+
+`scripts/run_opus_packs.sh`, packs 01–02, then the stop. Both sessions opened with
+`claude-opus-5`, both wrote 20 of 20 rows, both validate: 0 unanswered, 12 judgeable captions all
+judged, 0 declined, a note on every row. All 25 packs still hash to the manifest and all 42
+team-lead files are byte-identical — the deny list held under a real session, not just a probe.
+
+Raw: **tp 3 · fp 10 · fn 13** over 40 items, which reads as precision 0.23 and recall 0.19. Both
+figures are `review, not measurement` by 3.16 (1), and the pilot's job was to find out what they
+are measurements *of*. They are not the matcher's.
+
+**Dv95 — 13 of the 13 misses are image-only, and none is a matcher defect.** For every brand the
+reviewer named and the matcher did not, the string the matcher actually read — post text plus the
+committed caption — was searched for that brand's display names. Twelve contained nothing. The
+thirteenth looked like a defect and is the opposite: `@atb_aktsiyi:3087` / `limo`, where the only
+occurrence of «Лимо» is inside **«Лимон»**, and the matcher's word-boundary rule correctly refused
+it. The substring probe that flagged it was wrong; the matcher was right. The reviewer's own
+`brands_visible_missed` agrees with the reading — it is set on 11 of the 13.
+
+So the FN column prices the **caption instrument**, not the matcher: a ~230-character caption of a
+six-page promo leaflet carries a few of its brands, and the reviewer had the images. That is the
+bridge finding (`results/bridge_gm4_qwen_5c1.json`, "a caption is a SAMPLE") measured a second way
+and against a second instrument. `@atb_aktsiyi:3087` alone contributes 6 of the 13 and is one of
+the five posts whose caption hit the 400-token ceiling.
+
+**The false positives are the collisions already ruled on, plus one real question.** `president` ×4
+is «Президент Зеленський / Президент України» every time; `varto` ×3 is the ordinary word («варто
+виконувати», «не варто обсипати», «варто зазначити»); `varus-pl` ×2 is VARUS naming its own store
+inside its own channel, not a private label. Those nine are the yield screen's own ruling arriving
+from a second direction. The tenth is new and is a category question, not a bug: «масло
+солодковершкове **Селянське**, 72,6%» — a TM on the watchlist and also a traditional butter grade.
+That one belongs in the sitting.
+
+**Open extraction returned 12 names the watchlist does not carry**, which is the finding the strata
+were drawn for: Лактонія · Лактонія Імун+ · Каштан · Легко · Київський Пломбір · Pro Milk ·
+Radamer · SERENADA · Bonfetto · DORBLU · Laciaty.
+
+**What this means for the remaining 23 packs.** The reviewer is given strictly more than the
+matcher had — the images — so every image-only brand lands in the FN column, and the aggregate
+`recall_candidate` in `results/opus_audit_5c1.json` will read as an indictment of the matcher that
+the evidence does not support. The fix is $0 and needs no re-run: the discriminator above is
+deterministic from the manifest, the caption files and the post store, so `read_opus_audit.py` can
+split FN into *in the text the matcher read* and *image-only* before it divides. Not done here —
+the contract stopped at the pilot, and this is the operator's call.
+
+The returns are preserved under `results/opus_audit_returns/` for the same reason the vis-c dumps
+are under `results/predictions/`: `data/annotation/**` is gitignored, and two Opus sessions are not
+a regenerable artifact.

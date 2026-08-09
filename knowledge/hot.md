@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-09 21:53:18 (every SessionStart)
+**Auto-refreshed:** 2026-08-09 22:06:42 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+a153741 chore(perms): drop three deny rules that never matched anything
 82c2a45 chore(vault): the addendum's tail
 c406eeb fix(opus-audit): Write(path) is not a permission rule -- the deny list is the confinement
 9f9119a chore(vault): the day's log carries the opus-audit build
 a72b057 docs(3.16): the addendum -- blind packs and a pilot-first driver
-027a3ff feat(opus-audit): the packs go blind, and a driver that stops after two
 ```
 
 ## 📋 Recent decisions
