@@ -4912,3 +4912,142 @@ the driver scored. `git diff ed9c0c9 76a1b31 -- scripts/serve_handler.py scripts
 src/market_pulse/` is **empty**: the only change between them is `parity_verdict_5b.py`'s new
 `--vs-pod` mode and its tests, so nothing the worker ran moved between staging and scoring, and the
 instrument that stamped the verdict is inside the commit the record names.
+
+---
+
+## 5c1 vis-a-r — the GM4 caption instrument, built against the endpoint ($0, 2026-08-09)
+
+`docs/PROMPT-5c1-vis-a.md`, re-issued after srv-2d. Four pre-authorised step-0 commits, five
+deliverables, **no billable resource created and no paid call made**. `make check` green at
+every commit: **1301 → 1302 → 1323 → 1333 → 1342 passed, 33–35 s**, and `ruff format --check .`
+clean (the verifier does not run the formatter — Dv-of-old, still true).
+
+What exists now that did not: a third served configuration, `CAPTION`; a registered prompt
+`caption_post_gm4` (`41d33d0299fe…`) beside `caption_post`; a processor path
+(`local_llm.load_captioner` + `CaptionClient`); a required `caption_source` on every new
+caption record with both readers refusing a silent mix; `scripts/caption_gm4_5c1.py`; and
+`scripts/runbook_vis_b.md`. Nothing in `data/frozen/**`, `results/baselines.json`,
+`results/verdict_*.json`, `results/parity_*.json` or the adapter was touched, and no registered
+prompt was edited in place.
+
+### The two numbers vis-b will need, measured here for free
+
+**One post at six images encodes to 3.68 MB** (median 2.9 MB, 19 posts = 52.5 MB in total) and
+**RunPod documents 10 MB on `/run`** (`serverless/workers/handler-functions` § Payload limits).
+The pictures have to travel inside the job — `data/annotation/**` is gitignored, so the media
+cannot ride to the worker on the volume with the weights — so the driver packs whole posts
+against an 8 MB budget and the 19 ATB posts come out as **8 jobs, largest 7.83 MB**. This is the
+first constraint in this project that comes from the transport rather than from the model, and
+it is the reason a "one job for the whole scope" shape was never on the table.
+
+**The cold start on this endpoint class is $0.0733** — 239.022 s (`results/srv2d_cost.json ::
+inputs.cold_start_seconds_measured_on_this_endpoint`) at the settled $0.00030669/s. That is 7%
+of vis-b's $1.00 cap before a single caption is generated, which is why §C.1 of the runbook
+measures the per-post rate on the one-post smoke and aborts at a $0.50 projection rather than
+discovering the rate at post 19.
+
+### Deviations — PROMPT-5c1-vis-a (re-issue)
+
+Thirteen, which is far above the 0–4 norm. Most of them are one cause: the brief's five
+deliverables name the *interfaces* of the caption instrument and not the generation path
+underneath, so the work that makes them run had to be located in the SPEC rather than in the
+contract. Dv40 is that cause; Dv41–Dv44 are its consequences.
+
+**Dv40 — the processor path is in scope by the SPEC, not by the deliverable list.**
+Deliverable 1 says the vision path goes "via the existing `AutoModelForImageTextToText` branch
+(`local_llm.py:109`)". That branch is **model-class selection only**: `LocalClient` renders
+through `tokenizer.apply_chat_template` and calls `self.tokenizer(...)`, and there is no image
+tensor path anywhere in the module. SPEC amendment 3.13 (2) already says so — "Missing and to be
+built: the AutoProcessor image path, a caption task and runner, tests, and a pod runbook" — and
+3.13 (4) makes vis-a "processor path + caption task + tests + runbook". So it was built:
+`load_captioner` and `CaptionClient`. Flagged because the deliverable's citation understates it,
+and because "if one runs deeper than briefed — STOP" is a rule I read as covering a deliverable
+that turns out to be a different *kind* of work, not one whose authority is one document out.
+
+**Dv41 — `CaptionClient` is a sibling of `LocalClient`, not a branch inside it.**
+`LocalClient.__init__` runs `_assert_template_emits_bos`, which renders `prompts.TASKS[0]`
+through `build_messages` — a labelling prompt, the exact thing a caption-only worker must never
+render. Wiring captions into that class means either weakening the assert or rendering a T1
+prompt on a CAPTION endpoint. The sibling keeps both guards honest and duplicates nothing that
+decides a token.
+
+**Dv42 — `caption_messages` could not be reused, so there is a second builder.** It emits
+OpenRouter's `{"type": "image_url", "image_url": {"url": ...}}`; a Hugging Face processor takes
+`{"type": "image"}` placeholders in the template and the pixels through a separate `images=`
+argument. `caption_messages_gm4(images: int)` takes the count and the caller owns the pairing.
+`caption_messages` is untouched: `scripts/caption_posts.py` and `scripts/caption_atb_5c1.py`
+both call it and two paid records pin its behaviour.
+
+**Dv43 — 400 new tokens, not `local_llm.MAX_NEW_TOKENS`.** Not in the brief. 256 is 3b's budget
+for a JSON object of four fields; 4.5g2 measured, under this same task, that "a six-image
+leaflet transcribed item by item runs past 600 tokens and never reaches its summary sentence"
+(`caption_posts.MAX_TOKENS = 400`). A caption cut off before its closing sentence is not a
+shorter caption and free text has no parse failure to count, so the two instruments get the
+same budget and `finish_reason: length` is reported per post.
+
+**Dv44 — the image transport is not verified against a real processor, and cannot be here.**
+`processor(text=…, images=…, return_tensors="pt", add_special_tokens=False)` is the
+conventional call and it is what `LocalClient` does one layer down, but no GPU and no weights
+exist in a $0 contract. Two nets: `CaptionClient._assert_template_emits_bos` mirrors
+`LocalClient`'s (a template that stopped emitting `<bos>` would make `add_special_tokens=False`
+drop it silently), and §B of the runbook is a one-post smoke whose dump is read back byte for
+byte before anything else is bought.
+
+**Dv45 — `describe` gains a field for CAPTION only, and absent rather than null elsewhere.**
+`tests/test_srv2a_worker.py` pins the info schema against `results/serving_5b.json :: worker`
+("srv-2 must not move 5b's info schema") and a top-level key added for every config broke it —
+correctly. `caption_prompt_sha256` is therefore present only on CAPTION. That is better than a
+null: `assert_serving` reads a missing field as `<absent>` and refuses, so asking an A endpoint
+to name a caption prompt is a refusal for free. The guard it exists for is the FETCH_HEAD
+footgun — the volume's `repo/` a session behind, captioning happily under the old prompt.
+
+**Dv46 — `parse_reply` now refuses a FREE_TEXT task by name, which changed one assertion.**
+It already refused, through the `unknown task` fall-through at the bottom. That reads as a typo
+in the caller rather than as the registered prose prompt it is, and `FREE_TEXT`'s own docstring
+has claimed the by-name refusal since 4.5g2. `tests/test_prompts.py`'s matcher moved from
+`unknown task` to `answers in prose` and the test is now parametrized over `FREE_TEXT`. No
+prompt hash moves and no record changes.
+
+**Dv47 — `serving.py` gained more than "a third config beside A/B" implies.** `CONFIGS`,
+`CAPTION_CONFIG`, `MERGE_STATE` (one table both the worker and the driver read, so they cannot
+disagree), `album_key`, `EndpointClient.caption`, and `_ask` extracted out of `batch` so the two
+share one payload assembly. The mispair message says "for N inputs" where it said "for N texts";
+no test matched that string, and the wire format of a 5b job is unchanged byte for byte.
+
+**Dv48 — the driver borrows `runpod_guard.balance()`.** The brief says copy
+`scripts/caption_atb_5c1.py` and not the relabel ledger helper. That script anchors an
+**OpenRouter** balance and this spend is GPU, so the three constants are local
+(`PHASE`/`SESSIONS`/`LEDGER`, its own file `results/spend_5c1_vis.json`, one anchor key per
+session) and only the balance reader is imported. `relabel.read_ledger` is not imported and its
+`docs/PROMPT-5.c1captions.md` provenance string does not appear anywhere in the new code.
+
+**Dv49 — two caps, because SPEC 3.13 (4) pre-registers two.** `SESSIONS = {"vis-b": 1.00,
+"vis-c": 1.50}`. vis-a's contract sets no cap and the runbook is vis-b's only; encoding both is
+transcription from the amendment rather than a choice, and it means vis-c does not need a second
+copy of this script with one number changed.
+
+**Dv50 — the brief pairs sha `1aa89818…` with the wrong file.** The parenthetical reads
+"(`results/yield_screen_5c1.json`, sha `1aa89818…`)". That digest is
+`results/yield_bars_5c1.preregistration.json`'s — `shasum -a 256` confirms
+`1aa898180b01762d909e29997db659d2dc70931816855f4c0325b1ea1c892f2b` — and the screen record
+*carries* it as the pre-registration it was scored against. Both files are named in §C.4 of the
+runbook, and neither is touched.
+
+**Dv51 — `recheck_with_captions.main` was refactored by three lines.** Deliverable 3 says
+"Nothing else changes", read as "no behaviour beyond the refusal". The caption load and its two
+guards moved into `caption_input(captions_path, record_path)` with identical behaviour, because
+`main` reaches them only after a posts index and a batch load and a guard nobody can run cheaply
+is a guard nobody tests. The extraction is what lets the refusal be driven on **both** reader
+paths rather than on one plus an argument.
+
+**Dv52 — `caption_posts.record_for` changed signature, so two existing scripts changed.**
+`caption_source` is a required sixth argument and `task` an optional seventh. Both call sites
+(`caption_posts.main`, `caption_atb_5c1.main`) pass `qwen-4.5g2` for image rows and `None` for
+polls, and both run records gain `caption_sources`. Neither script is re-run: their outputs are
+paid evidence and `refuse_to_overwrite` still stands over them.
+
+**Dv53 — `--smoke` exits 0 where a real run exits 3.** The fake client empties one reply in
+seven on purpose, so the smoke exercises the unusable branch and the record's `unusable` list.
+Returning 3 for that would make a runbook step whose whole job is proving the write path read as
+a failed run. The non-smoke path (a real client, or `main(client=…)`) still returns 3 on any
+post without a caption, and a test drives both.
