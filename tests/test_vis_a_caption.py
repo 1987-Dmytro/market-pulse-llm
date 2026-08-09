@@ -82,6 +82,17 @@ def test_caption_refuses_an_unpinned_base():
         handler.settings({"SERVING_CONFIG": "CAPTION"})
 
 
+def no_adapter_loaded():
+    """The shape a real transformers model has: `active_adapters` is a bound METHOD, and with
+    nothing attached it raises rather than returning a list. Truthiness of the attribute says
+    nothing at all — this is the model the CAPTION config is built to serve."""
+
+    def active_adapters():
+        raise ValueError("No adapter loaded. Please load an adapter first.")
+
+    return SimpleNamespace(active_adapters=active_adapters)
+
+
 def test_an_adapter_on_the_loaded_model_is_refused_too():
     """`settings` refuses the environment; this refuses the object, and they are not the same
     check — peft attaches to the model it wraps and the result answers like the base."""
@@ -90,6 +101,29 @@ def test_an_adapter_on_the_loaded_model_is_refused_too():
         handler.assert_no_adapter(SimpleNamespace(peft_config={"default": object()}))
     with pytest.raises(ValueError, match="carries an adapter"):
         handler.assert_no_adapter(type("PeftModelForCausalLM", (), {})())
+
+
+def test_the_base_model_transformers_actually_hands_back_is_not_read_as_adapted():
+    """vis-b's first paid handshake died here: the guard read `getattr(model, "active_adapters")`
+    as a flag, and every transformers model carries that name as a bound method, which is
+    truthy. The negative control was missing — the old stubs had no such attribute at all — so
+    the suite was green while the check refused the one model it exists to admit."""
+    handler.assert_no_adapter(no_adapter_loaded())
+
+    peft_absent = SimpleNamespace(active_adapters=lambda: (_ for _ in ()).throw(ImportError()))
+    handler.assert_no_adapter(peft_absent)
+
+    loaded = SimpleNamespace(active_adapters=lambda: ["default"])
+    with pytest.raises(ValueError, match="carries an adapter \\(.*default"):
+        handler.assert_no_adapter(loaded)
+
+
+def test_an_unknown_failure_reading_the_adapters_is_not_read_as_none():
+    """The other direction of the same defect: "no adapter loaded" and "the question could not
+    be asked" are different answers, and only the first one may pass a model through."""
+    broken = SimpleNamespace(active_adapters=lambda: (_ for _ in ()).throw(RuntimeError("cuda")))
+    with pytest.raises(RuntimeError, match="cuda"):
+        handler.assert_no_adapter(broken)
 
 
 def test_the_caption_worker_names_the_prompt_it_serves():

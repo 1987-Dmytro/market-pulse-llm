@@ -140,8 +140,23 @@ def assert_no_adapter(model):
 
     Takes the model rather than reading it off `self` so a test can drive it with a stub: the
     real load needs the GPU extra and 62 GB of weights.
+
+    `active_adapters` has to be CALLED, not read. transformers gives every model a bound method
+    of that name (`PeftAdapterMixin`), and a bound method is truthy — so reading it as a flag
+    refuses the very base this config exists to serve. vis-b's first paid handshake was refused
+    by exactly that, on a `Gemma4ForConditionalGeneration` with no `peft_config` at all.
     """
-    marks = [name for name in ("peft_config", "active_adapters") if getattr(model, name, None)]
+    marks = sorted(getattr(model, "peft_config", None) or ())
+    active = getattr(model, "active_adapters", None)
+    if callable(active):
+        try:
+            active = active()
+        except (ValueError, ImportError):
+            # transformers raises ValueError("No adapter loaded") when none is, and ImportError
+            # when peft is absent. Both answer the question. Anything else propagates: reading
+            # an unknown failure as "clean" is the same defect in the other direction.
+            active = ()
+    marks += [str(name) for name in (active or ()) if str(name) not in marks]
     if marks or type(model).__name__.startswith("Peft"):
         raise ValueError(
             f"the caption model carries an adapter ({type(model).__name__},"
