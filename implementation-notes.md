@@ -5369,9 +5369,17 @@ re-pilot slice amortises that across two or three posts.
 Every job returned: 2/3/2/3/3/2/2/2 posts at 5.30–7.83 MB, the largest exactly the 7.83 MB vis-a
 predicted from the manifest. **19 captioned, 0 unusable**, 108 of 159 images sent at 6 per post,
 `caption_sources: ["gm4-nf4-base"]`. Timing: 9 calls, 552.14 s wall, 492.07 s worker,
-`idle_share` 0.1088, `wall_per_row` 29.06 s. Actual cost of the leg **$0.2211** against the
-$0.1716 projection — the difference is the cold start the re-pilot paid on its own plus the
-larger slices' longer forwards, and both readings are floors.
+`idle_share` 0.1088, `wall_per_row` 29.06 s. **The leg cost $0.1693** — 552.14 s of wall at
+$0.00030669/s — against the $0.1716 projection, so the projection was accurate to 1.4%.
+
+An earlier version of this paragraph put the leg at $0.2211 and blamed "the cold start the
+re-pilot paid plus longer forwards". Both halves were wrong. $0.2211 is the *balance delta
+between two readings taken either side of the leg*, and the $0.24/h fetch pod was running inside
+that window — it charges a pod to the endpoint's forwards. And the re-pilot paid **no** cold
+start: `worker_ids` is `["spotut2es3fgl2"]` for the handshake, the smoke and the re-pilot alike,
+and `idle_share 0.1088` over 552 s leaves no room for a 244 s boot. **The whole session ran on
+one worker and paid one cold start**, which makes §C.1's `+$0.0733` term conservative for this
+run — the honest form of the claim Dv65 retracts.
 
 **One truncated reply, reported and not repaired: `@atb_market_official:4391` hit the 400-token
 ceiling** (847 chars against a 231-char median). The ladder's rung is explicit — report the post,
@@ -5479,10 +5487,28 @@ The endpoint's own accounting before deletion: `jobs {completed: 12, failed: 0}`
 | `runpod_guard.py`, phase | **$21.5004 of $25.00**, remaining $3.4996 |
 | the guard's itemised corroboration | $21.0905 (lags the delta, as always) |
 
-Both are FLOORS (Dv33) and were read minutes after the deletes. The whole vis-b contract,
-attempt 1 plus the resume, cost **$0.4993** of its $1.00 — attempt 1's $0.1702 of failed
-handshakes and staging included. Per-leg: staging + two failed handshakes $0.1702, R1 handshake
-$0.0242, §B smoke $0.0838, §C.2 re-pilot $0.2211.
+Both are FLOORS (Dv33) and were read minutes after the deletes. The whole vis-b contract, attempt
+1 plus the resume, cost **$0.4993** of its $1.00 — attempt 1's failed handshakes and staging
+included.
+
+**Per-leg, and the two kinds of number are not interchangeable.** The balance is a lagging floor,
+so a delta between two of its readings attributes to a leg whatever else was running in that
+window — here, up to three RTX 2000 Ada pods at $0.24/h. Where measured seconds exist, the
+rate-derived figure is the one to quote:
+
+| leg | rate-derived, from measured wall seconds | cumulative balance floor at that moment |
+|---|---|---|
+| attempt 1: staging + two failed handshakes | — (the client raised before `executionTime` was recorded) | $0.1702 |
+| R1 handshake, cold start 244.074 s | $0.0749 | $0.1944 |
+| §B smoke, 16.861 s | $0.0052 | $0.2782 |
+| §C.2 re-pilot, 552.14 s | $0.1693 | — |
+| **endpoint total, 813.075 s** | **$0.2494** | $0.4993 at close |
+
+The gap between $0.2494 of endpoint time and the $0.4993 delta is the three staging/fetch pods,
+attempt 1's failed worker, the volume's own run rate, and the 60 s idle timeout billed after each
+burst. It is not decomposed further here, because the balance settles too late to support it —
+srv-2d's `cross_check_against_the_balance` is the precedent for reporting the two readings side
+by side rather than forcing them to agree.
 
 ### Deviations — PROMPT-5c1-vis-b RESUME addendum
 

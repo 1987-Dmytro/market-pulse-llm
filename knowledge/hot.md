@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-09 13:39:11 (every SessionStart)
+**Auto-refreshed:** 2026-08-09 13:42:37 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+ed98d16 chore(vault): the vis-b-r tail -- the instrument works, and what the bridge revealed
 3634533 docs(vis-b-r): the report, seven deviations, and one number retracted
 a6b0d1f feat(vis-b-r): 19 ATB posts captioned on the project's own GM4, and bar A passes
 55ee581 feat(vis-b-r): R0 -- the guard preflight, on real transformers, both directions
 c54a3ef docs(team-lead): the RESUME addendum and the process audit
-a95a266 docs(vis-b): the closing listings verbatim, and the cold start this endpoint measured
 ```
 
 ## 📋 Recent decisions
@@ -49,7 +49,11 @@ media-only posts, 8 jobs, 0 unusable, every row `caption_source: gm4-nf4-base`. 
 re-derives the signed screen's zero and then reads **0 → 14 relevant, bar A PASS (bar = 4)** —
 qwen's own bought reading was 0 → 13, so **the pre-registered instrument failure of 3.13 (4) does
 NOT fire** and there is no fork to hand back. Prereg `1aa89818…` re-hashed before use and
-untouched. §C.1 projected **$0.1716 against the $0.50 stop**; the leg cost $0.2211. **One
+untouched. §C.1 projected **$0.1716 against the $0.50 stop** and the leg cost **$0.1693** — 552 s
+of wall at the settled rate, accurate to 1.4%. The whole session ran on **one worker**
+(`spotut2es3fgl2` across handshake, smoke and re-pilot) and paid **one** cold start, so the
+formula's `+$0.0733` term was conservative here. Balance deltas are NOT per-leg costs: a $0.24/h
+pod was running inside those windows. **One
 truncated reply** (`@atb_market_official:4391`, the 400-token ceiling, 847 chars against a
 231-char median) is reported and NOT repaired — raising the budget would make the bridge compare
 two ceilings.
