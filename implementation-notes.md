@@ -6454,3 +6454,48 @@ without a HEAD there is nothing to restore from. 30 rows of already-collected co
 **All five ticks empty is a legitimate answer**, and it is the one that prices the pre-filter: a drawn
 row that names no position at all is a pre-filter false positive. Said in the manifest and in the
 README before the returns arrive, because a reading invented after the fact is not a measurement.
+
+### Deliverable 5: the pre-registration, and the five lines that need a word before sku-b runs
+
+`results/sku_pilot_prereg.json`, written by `scripts/write_sku_prereg.py` and committed **in its own
+commit before any sku-b artifact exists** — git history is the only witness to that ordering, and a
+test asserts the four `results/sku_*.json` files are sku-a's own and that none of them carries a bar
+result.
+
+The three bars are quoted out of `docs/SPEC.md` **verbatim** and the writer refuses to run if any of
+them is not in the file as written; the negative control reworded one and watched the refusal fire. So
+is the one-attempt clause and the green-gate sentence.
+
+Every bar needed a denominator SPEC does not state, and each reading is written down with what it
+excludes:
+
+| bar | denominator as registered | reachability |
+|---|---|---|
+| leaflet brand-recall ≥ 0.75 | the **15** posts with a non-empty gold set; recall per POST over the union of that post's page answers, macro-averaged; micro over the 55 pairs reported beside it | measured **before** the run: 15 of 19 |
+| price-pair accuracy ≥ 0.80 | extracted positions with `price_old`, marked correct by the team lead against the cited page image | n ≥ 10 SCORED · 1–9 REPORTED, NOT_SCORED · 0 NOT_REACHABLE |
+| text tier accuracy ≥ 0.85 | adjudicated rows with a legal tick set, gold tier vs the model's highest rung | n ≥ 20 SCORED; unreadable replies excluded and counted, >10% blocks the bar |
+
+**Dv110 — five readings are the executor's and are marked as such.** R1 the per-post reading of "per
+page" · R2 the page set is the 108 sent pages, not the 159 available · R3 the four empty-gold posts
+are out of the recall average · R4 bar 2's minimum n · R5 bar 3's unreadable-row rule, its minimum n
+and the pooled carrier reading. R1 carries the strongest wording — **sku-b must not run until it is
+ratified**: one paid attempt against a denominator nobody agreed to is the session spent for nothing,
+and a failed bar closes B by measurement.
+
+Bar 2's procedure names the artefact the human opens, because SPEC's own wording puts a team lead
+between the run and the number: a per-position dump carrying item, page number, the page's file and
+**sha256**, every identity and price field, the code-assigned tier, `depth()` and
+`depth_disagrees_with_printed()`. The executor never scores its own sample (SPEC §10). A right promo
+beside a wrong old price is one wrong pair, because depth is computed from both.
+
+The ladder is pinned as an **input**, not decoration: bar 3's gold is computed from the operator's
+ticks by `tier_from_presence` and the model's tier by the same `tier()`, so the whole 32-row table
+and its sha `b497c072…` are in the file — a future reader does not have to run this code to see what
+was registered, and the pack manifest cites the same value. Both prompt shas are pinned for the same
+reason: the pilot cannot be run under a revised text and reported against these bars.
+
+`not_in_scope` names the loudest omission out loud: the 5c3 rulings («Варто» text-matching OFF,
+«Селянське» anchored-only) are **not** applied to brand resolution here. A «Варто» the model reads off
+a page resolves like any other name, and the leaflet gold contains it because the reviewer saw it
+printed. The 141 unlisted names resolve to `raw:` keys on both sides of bar 1, which is symmetric and
+does not move the recall.
