@@ -14,7 +14,7 @@ from pathlib import Path
 
 import pytest
 from market_pulse import positions as P
-from market_pulse import prompts
+from market_pulse import prompts, yield_screen
 from market_pulse.brands import watchlist_aliases
 from market_pulse.registry import load_registry
 
@@ -574,3 +574,93 @@ def test_the_parser_and_the_prompt_ask_for_the_same_keys():
     for key in P.REPLY_KEYS:
         assert f'"{key}"' in prompts.PROMPTS["positions_post_gm4"], key
     assert prompts.POSITIONS == {"positions_post_gm4", "positions_text_gm4"}
+
+
+# --- the pre-filter -------------------------------------------------------------------------------
+
+LEXICON = json.loads((REPO_ROOT / "data" / "category_lexicon_draft.json").read_text("utf-8"))
+COMPILED = yield_screen.compile_categories(LEXICON)
+COMPILED_ALIASES = yield_screen.compile_aliases(ALIASES)
+
+
+def passes(text: str):
+    return P.prefilter({"text": text}, COMPILED, COMPILED_ALIASES)
+
+
+@pytest.mark.parametrize(
+    "text, hit, pattern",
+    [
+        ("Молоко Яготинське 2,5% 900 г — 39,90 грн", "category:dairy:молок", "2,5%"),
+        ("Пломбір Рудь 500 г", "brand:rud", "500 г"),
+        ("Сметана 15% ТМ Яготинська 350 г", "category:dairy:сметан", "15%"),
+        ("0,5 л молока", "category:dairy:молок", "0,5 л"),
+        ("Морозиво Ласунка 12,90 грн", "category:ice-cream:морозив", "12,90 грн"),
+    ],
+)
+def test_the_prefilter_passes_a_hit_beside_a_number_and_says_which(text, hit, pattern):
+    """The evidence is the payload: a pass carries the line, the term that fired and the pattern
+    beside it, so a human can check one at a glance instead of trusting a count."""
+    found = passes(text)
+    assert found is not None
+    assert (found["hit"], found["pattern"]) == (hit, pattern)
+    assert found["line"] == " ".join(text.split())
+
+
+@pytest.mark.parametrize(
+    "text, why",
+    [
+        ("Люблю сир і морозиво!", "a category with no number"),
+        ("Кросівки, розмір 37, 1499 грн", "a price with no category and no brand"),
+        (
+            "Знижка 20% на тренування, реєстрація за посиланням",
+            "the shape of a hit and no taxonomy",
+        ),
+        ("Морозиво\nвсього 89,90 грн", "the hit and the number on different lines"),
+        ("", "nothing at all"),
+        ("Сир 500 грам", "«грам» is outside the six units the contract names"),
+        ("Молоко 5 гривень", "«гривень» is outside them too"),
+    ],
+)
+def test_the_prefilter_refuses_and_the_conjunction_is_what_refuses(text, why):
+    assert passes(text) is None, why
+
+
+def test_the_same_line_rule_is_the_rule_and_the_looser_reading_is_measurable():
+    """The strictness is a choice and the census prices it, so both readings have to be computable
+    from these primitives — this is the pair the census's `passed_row_level` column is built from."""
+    split = "Морозиво Рудь\nвсього 89,90 грн"
+    assert passes(split) is None
+    assert yield_screen.brand_hits(split, COMPILED_ALIASES) == ["rud"]
+    assert P.size_price_pattern(split) == "89,90 грн"
+
+
+@pytest.mark.parametrize(
+    "text, expect",
+    [
+        ("90 грн", "90 грн"),
+        ("500 г", "500 г"),
+        ("1,5 кг", "1,5 кг"),
+        ("0,5л", "0,5л"),
+        ("82,5%", "82,5%"),
+        ("500 грам", None),
+        ("5 гривень", None),
+        ("сир", None),
+        ("37 розмір", None),
+    ],
+)
+def test_the_size_price_pattern_is_the_six_units_the_contract_names(text, expect):
+    """Closed on purpose: widening it moves the frame the text bar of 3.17 (6) is measured over."""
+    assert P.size_price_pattern(text) == expect
+    assert P.SIZE_PRICE_UNITS == ("кг", "мл", "грн", "г", "л", "%")
+
+
+def test_grn_wins_over_g_because_the_alternation_is_ordered():
+    """«90 грн» must not read as a size. The branch order is load-bearing, so it is pinned."""
+    assert P.pattern_kind(P.size_price_pattern("90 грн")) == "currency"
+    assert P.pattern_kind(P.size_price_pattern("500 г")) == "size"
+    assert P.pattern_kind(P.size_price_pattern("82,5%")) == "percent"
+    assert P.size_price_patterns("масло 82,5%, 180 г — 79,99 грн") == [
+        "82,5%",
+        "180 г",
+        "79,99 грн",
+    ]

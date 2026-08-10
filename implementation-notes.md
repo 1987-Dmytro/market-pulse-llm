@@ -6340,3 +6340,59 @@ derived from the page leg through `_swap`, one paragraph, so the two cannot drif
 answers three separate failures at once — the caption's selectivity over a six-page album, the
 400-token ceiling that truncated a reply mid-token, and the 10 MB transport — so a batched page would
 undo all three quietly. `positions_messages_page_gm4(2)` raises with all three named.
+
+### Deliverable 3: the pre-filter, and a frame that is mostly not offers
+
+`positions.prefilter(row, compiled, aliases)` — a watchlist brand or a tracked category term **AND**
+a size/price pattern, both on the **same line**. Both halves are the shipped instruments, not new
+ones: `yield_screen.compile_categories` for the lexicon (its own matcher and endings, tracked half
+only) and the alias rule G1e is scored against for brands. The second half is the contract's six
+units, ordered longest-first because «г» before «грн» would read "90 грн" as a size.
+
+**Dv104 — «nearby» needed a definition, and the strict one is the rule with the loose one measured
+beside it.** The contract says "a size/price pattern nearby". Same-line is the project's own evidence
+discipline (`evidence_line` quotes a line, never a counter) and it is what the pre-filter enforces;
+the census reports `passed_row_level` — the same two primitives with the same-line requirement
+dropped — in every cell, so the cost of the strictness is a number rather than an argument. It is
+**717 vs 1,092** on posts and **52 vs 60** on comments.
+
+`results/sku_prefilter_census.json`, over the signed 66:
+
+```
+post_text    14,388 texted rows · 717 passed (4.98%) · row-level reading 1,092
+comment      10,875 texted rows ·  52 passed (0.48%) · row-level reading 60
+frame        769 rows · ids 80c6507b…
+controls     4/4 OK (1 positive, 3 negatives)
+```
+
+**Dv105 — the frame is dominated by recipe feeds, and that is the filter working as specified.** The
+top channels are `@silposilpo` 135, `@recepti` 92, `@mameni_recepti` 77, `@korolevakuchni` 54 — and
+the recipe feeds fire on `category:dairy:сир` beside an ingredient quantity: «Твердий сир - 120 г»,
+«Кефір -400 мл». Those are real category terms beside real sizes and they are **not offers**. The
+conjunction SPEC 3.17 (4) specifies cannot tell them apart, and no negative control catches it,
+because nothing about the line is wrong.
+
+So the census measures the one deterministic thing that separates them, and reports it rather than
+acting on it: `passed_carrying`, the passing ROWS by which units they carry anywhere in their text.
+Posts: **currency 226 · percent 384 · size 478** of 717. Comments: 20 · 24 · 16 of 52. `percent` is
+its own bucket because «82,5%» is a fat content and «-38%» is a discount and nothing here can tell
+which. **The 30-row pack is what prices this properly**: a drawn row whose adjudication names no
+brand is a pre-filter false positive, so bar 3's sample doubles as the filter's precision — said in
+the pre-registration so that reading is not invented afterwards.
+
+**Comments are 52 of the 769 rows (6.8%).** A plain seed-42 draw of 30 therefore holds ~2 comment
+rows in expectation, which means bar 3 prices the **post** leg. That is the contract's draw as
+written ("seed-42 sample of 30 pre-filtered rows") and the split is reported rather than engineered:
+a stratified redraw is a team-lead ruling about what the bar is for, not an executor's.
+
+Three omissions are named in the record itself, because an omission nobody wrote down cannot be told
+from an oversight: **captions** (a caption is a model's sample of a picture, so a price inside one is
+GM4's transcription and not the source's words — the leaflet leg reads those pages per page),
+**`data/raw/comments_v2/`** (the same two channels re-fetched with `reply_to_msg_id`; msg_id sets
+identical, measured — VARUS 6,410 and msuaaaa 4,928 in both, zero either-only), and the **16 stores
+outside the signed composition** (@dikankaa, @znishkom, @tretyakovaele's comments and the rest of the
+5c1 exclusions), listed with their row counts.
+
+The record refuses a second pass over the same path (D68): it is the frame the pack's manifest pins,
+and a pass over a moved corpus would land under the name the pack cites. `ids_sha256` is what the
+pack builder re-derives and compares before it draws.

@@ -468,3 +468,82 @@ def parse_positions(
             )
         )
     return out
+
+
+# --- the pre-filter: which text rows are worth asking a model about --------------------------------
+
+SIZE_PRICE_UNITS = ("кг", "мл", "грн", "г", "л", "%")
+"""The six units the contract names: «число + г|кг|л|мл|%|грн».
+
+Ordered longest-first, because a regex alternation takes the first branch that matches and «г»
+before «грн» would read "90 грн" as a size. The list is deliberately closed: «500 грам» and «5
+гривень» do NOT match it, and widening it would move the sample frame the text bar is measured on,
+so it is a named revision and not a tweak.
+"""
+
+_SIZE_PRICE = re.compile(rf"{_NUMBER}\s*(?:{'|'.join(SIZE_PRICE_UNITS)})(?!\w)", re.IGNORECASE)
+
+
+def size_price_pattern(text: str) -> str | None:
+    """The first «число + unit» in this text, or None. The second half of the pre-filter's AND."""
+    found = _SIZE_PRICE.search(text or "")
+    return found.group(0) if found else None
+
+
+def size_price_patterns(text: str) -> list[str]:
+    """Every «число + unit» in this text, in order. What the census reads a row's shape from."""
+    return _SIZE_PRICE.findall(text or "")
+
+
+def pattern_kind(pattern: str) -> str:
+    """``currency`` | ``percent`` | ``size`` — which of the six units fired.
+
+    The pre-filter's second half accepts all three and cannot tell an OFFER from a recipe: «Кефір —
+    400 мл» is a category term beside a size and passes, and it is an ingredient list. A currency
+    marker is the cheapest deterministic signal that a line is priced at all, and ``percent`` is
+    honestly its own bucket rather than folded into either — «82,5%» is a fat content and «-38%» is
+    a discount, and nothing here can tell them apart.
+    """
+    low = pattern.casefold()
+    if "грн" in low:
+        return "currency"
+    if "%" in low:
+        return "percent"
+    return "size"
+
+
+def prefilter(row: dict, compiled: dict, aliases: list) -> dict | None:
+    """Is this corpus row worth asking a position model about? Deterministic, and $0.
+
+    SPEC 3.17 (4): text extraction runs only on rows a deterministic pre-filter passes. The rule is
+    a conjunction — a watchlist brand or a tracked category term, **and** a size/price pattern — and
+    both halves must be on **the same line**.
+
+    Same-line rather than same-row, for two reasons. It is the project's own evidence discipline
+    (`yield_screen.evidence_line` quotes a line, never a counter), and a row that names «сир»
+    somewhere and «20%» somewhere else is very often two unrelated sentences. The looser reading is
+    not lost: the census reports it in the next column, computed from these same primitives, so the
+    cost of the strictness is a number rather than an argument.
+
+    # ponytail: one rule, no window parameter. If the census shows leaflet-style posts splitting the
+    # brand from the price across lines, the upgrade is a ±1-line window — and it is a named change,
+    # because it moves the frame the text bar of 3.17 (6) is measured over.
+
+    Returns the evidence — the line, the term that fired and the pattern beside it — so a human can
+    check a pass at a glance. `None` is a fail, and it is not an error.
+    """
+    from market_pulse import yield_screen
+
+    for line in (row.get("text") or "").splitlines():
+        pattern = size_price_pattern(line)
+        if pattern is None:
+            continue
+        found = yield_screen.evidence_line(line, compiled, aliases)
+        if found is not None:
+            return {
+                "line": found["line"],
+                "hit": f"{found['kind']}:{found['name']}",
+                "matched": found["matched"],
+                "pattern": pattern,
+            }
+    return None
