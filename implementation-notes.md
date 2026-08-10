@@ -6265,3 +6265,78 @@ correct and both now written where they will be read:
 
 The stamp names that cost in the registry itself, because that is the file the next editor opens.
 What it does **not** name is its own resulting sha — a file cannot state its own hash.
+
+### Deliverables 1-2: the schema, the ladder, and two instruments that cannot be read as labels
+
+**The three structural rules of 3.17 are enforced, not documented.** Identity is a method
+(`Position.identity`) returning (brand, line, category, size, fat_pct), and a test moves every price
+field while watching the tuple stand still — "price is an observation" becomes checkable rather than
+asserted. The tier and the depth are **methods, not fields**, so no writer can store a value the
+fields do not support; and `Position` has **no defaults at all**, so a forgotten field is a
+`TypeError` and never a `None` that reads downstream as "the source did not name it".
+`assert_no_imputation()` is the one line that checks that, and `test_a_forgotten_field_is_a_TypeError`
+is its negative control.
+
+**Dv101 — the ladder's three sentences leave two cells undecided, and the executor decided them.**
+SPEC 3.17 (2) says `position` = "brand + category + ≥1 differentiating attribute", `product_mention`
+= "brand + product, no attributes", `brand_mention`. Two combinations are outside all three:
+
+* **brand + category + line, no size and no fat → `position`.** `line` is read as a differentiating
+  attribute, which is exactly what variant C adds to identity in 3.17 (2); a named line inside a
+  category is what a weekly aggregate can follow.
+* **brand + size (or fat, or line) with NO category → `product_mention`.** More than a bare brand
+  mention, and not a position: no aggregate for question 7 can place a record whose category half is
+  missing.
+
+Both readings are in `positions.tier`'s docstring and both are pinned by the truth table — all 16
+combinations of (category, line, size, fat), with the expectation written independently of the
+implementation so the table cannot pass whatever the ladder does. Monotonicity is asserted beside it:
+filling a field never lowers the tier, which is what makes the rungs safe to aggregate on.
+
+**Dv102 — a record with no brand is REFUSED, and the prompt says so too.** All three rungs start at a
+brand, so an unbranded leaflet line («Сир 50% 200 г — 89,90», a real thing on a page) has no rung.
+Inventing a fourth would be law this contract cannot write, so the schema refuses it by name and the
+counter gets the refusal. The narrowing is charged to the *contract* and not to the model, because
+the prompt carries it in words: "an offer with no trade mark printed on it is not listed at all".
+Where the prompt and the parser disagree the gap is charged to the model — so they are held equal
+from both sides, by a test in each file.
+
+**The parser refuses, and the two ways a page can come back empty are different outcomes.** `[]` is
+"no dairy on this page"; a `SchemaError` is "this page was not read", and its `reason` is what a run
+counts. Unwrapping a ```json fence or a sentence before the bracket is formatting and is allowed —
+the same line `prompts._object` draws. Repairing content is not, anywhere: an unknown key, an empty
+string, a category outside the taxonomy, a multipack size, a price range, one bad entry in an
+otherwise good array — each stops the reply.
+
+**What the model is not allowed to say.** `DECIDED_BY_CODE` = tier, carrier, price_origin,
+extraction_source, depth, brand_id. A reply naming any of them is refused with a reason that says
+why: a model that names its own tier has assigned it, and 3.17 (2) says code does. `parse_reply`
+refuses the two new tasks BY NAME for the same reason it refuses the caption prompts — and it matters
+more here, because a position reply *is* JSON, so a lenient labelling parser would not crash. It
+would return a shape nothing downstream can use and the run would look like it had answers.
+
+**The category vocabulary is written twice, and the two copies are held equal.** The module reads it
+off `config/registry.yaml` (`category_keys`, 2 groups + 9 dairy subcategories = **11** keys today);
+the prompt must enumerate it, because a model cannot read a YAML file. A test asserts the prompt's
+list equals the registry's key set in both directions — so the day 5c3 widens the taxonomy it fails,
+which is correct: a registered prompt cannot silently start asking for a category it never listed,
+and the answer is a named revision beside it.
+
+**Dv103 — "the 13+2 taxonomy" is in the contract and in no artifact.** `docs/PROMPT-sku-a.md`
+deliverable 1 says "category from the 13+2 taxonomy". Enumerated: `config/registry.yaml` carries 2
+tracked groups and 9 dairy subcategories (11 keys); `data/category_lexicon_draft.json` carries 2
+tracked + 12 draft families (14, and it says `draft-not-law`); `results/categories_45h.json` measures
+those same 14. Nothing in the repo carries 13+2, and `git log -S "13+2"` finds one hit, in
+`docs/STATUS.md`'s day-2 summary. The registry is the authority SPEC §3 names, so the code reads the
+registry and the count follows the file rather than a literal.
+
+**Both prompts are registered BESIDE the existing fourteen with their own shas** —
+`positions_post_gm4` `ca6303c1…`, `positions_text_gm4` `7250b87a…` — and `TASKS` is untouched
+(widening it would make every stored record fail `records.assert_prompt_sha`). The text leg is
+derived from the page leg through `_swap`, one paragraph, so the two cannot drift: the bars of
+3.17 (6) are measured on one schema and a difference between the legs has to be the leg.
+
+**The page request carries exactly one image and refuses two.** SPEC 3.17 (4)'s per-page ruling
+answers three separate failures at once — the caption's selectivity over a six-page album, the
+400-token ceiling that truncated a reply mid-token, and the 10 MB transport — so a batched page would
+undo all three quietly. `positions_messages_page_gm4(2)` raises with all three named.

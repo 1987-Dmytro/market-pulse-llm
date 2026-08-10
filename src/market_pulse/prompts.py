@@ -498,6 +498,83 @@ CONTEXT_TEMPLATES = (REPLY_CONTEXT, *SENDER_CONTEXT.values())
 run over, and what the probe record hashes. The prompt hash cannot see them: it covers
 :data:`PROMPTS`, and this revision's entry there is byte-identical to v2's."""
 
+POSITIONS_PAGE_INTRO = """\
+You read ONE page of a promotional leaflet from a Ukrainian food-retail chain and list the offers on \
+it that belong to the tracked category. One page, one answer: you are not shown the rest of the \
+leaflet and must not describe it."""
+
+POSITIONS_TEXT_INTRO = """\
+You read ONE row of text from a Ukrainian food-retail Telegram channel — a post or a comment — and \
+list the offers in it that belong to the tracked category. Judge the text you are given: you cannot \
+see any image, and you must not describe one."""
+
+POSITIONS_BODY = """\
+
+The tracked category is dairy — milk, kefir and ryazhanka, yogurt, curd and syrky, sour cream, \
+butter, cheese, dairy desserts, plant-based milk analogs — and ice cream in any format. Anything \
+else on the page is not yours: chocolate, sausage, coffee, nappies and cheese-flavoured snacks are \
+not dairy, and dairy used as an ingredient in a prepared dish is not dairy either.
+
+Return one JSON array, one object per OFFER: one product, at one size, at one price. The same \
+product in two sizes is two objects. An object may carry these keys and no others.
+
+- "brand" — the trade mark as printed, without the ТМ marker and without quotes. REQUIRED: an \
+offer with no trade mark printed on it is not listed at all, however clearly it is dairy.
+- "line" — the product line or product name printed beside the trade mark, as printed.
+- "category" — exactly one of: dairy, milk, kefir-ryazhanka, yogurt, curd, sour-cream, butter, \
+cheese, dairy-desserts, plant-based-analogs, ice-cream. Take the narrowest one the source \
+supports, and "dairy" when it names a dairy product whose kind is not one of the others.
+- "size" — the pack size as printed, the unit included: "450 г", "0,5 л", "1 кг", "500 мл". A \
+multipack ("2х100 г") is written as printed and never multiplied out.
+- "fat" — the fat percentage as printed: "2,5%".
+- "price_promo" — the price being offered, as printed.
+- "price_old" — the crossed-out price this offer is reduced from, as printed. Only when it is there.
+- "discount_pct_printed" — the discount percentage printed on this offer, as printed: "-51%". A \
+percentage printed on the page as a whole, not on this offer, is not this offer's.
+
+Rules that outrank everything above:
+
+- OMIT a key you cannot read. Never write an empty string, never write null, and never fill a key \
+from what a product like this usually is. A missing key is an answer; a guessed one is not.
+- COMPUTE NOTHING. Do not work out a discount, do not work out an old price from a percentage, do \
+not convert a unit, do not round. Copy what is written.
+- Never write a key that is not in the list above. In particular you are not asked how specific an \
+offer is, where it was read, or who quoted the price: those are decided from your answer, not by it.
+- Two prices are the offered one and the crossed-out one. If only one price is printed, it is \
+"price_promo" and there is no "price_old". A hedged price — "по 90", "~90" — is written as it is \
+hedged.
+- Nothing of the tracked category here: return the empty array.
+
+Answer with the JSON array alone: no explanation, no code fence, and no working-out before it — the \
+first thing you write is "[".
+[{"brand": "Рудь", "line": "Пломбір", "category": "ice-cream", "size": "500 г", \
+"price_promo": "89,90", "price_old": "129,90", "discount_pct_printed": "-30%"}]\
+"""
+"""The schema half of both position prompts, byte-identical between the two legs.
+
+SPEC 3.17 (6) pre-registers a leaflet bar and a text bar, and a difference between the two legs has
+to be the leg — the page against the row — and not a schema worded twice. So the intro is the only
+thing that moves and :func:`_swap` is what moves it.
+
+The shape line is a FORMAT illustration and not a labelled example: it shows which keys exist and
+how a printed size, price and percentage are copied. There is no source row beside it and no
+demonstration set — the zero-shot rule of SPEC §7 covers the pre-registered T1/T2 baselines, and
+these are extraction instruments for one pilot."""
+
+POSITIONS_POST_PROMPT = POSITIONS_PAGE_INTRO + POSITIONS_BODY
+"""One leaflet PAGE → the positions on it (SPEC 3.17 (4): one image = one call).
+
+Per page rather than per post, which is what the vis-b bridge bought the right to say: an ATB album
+is six pages of dense leaflet and a ~230-character caption is a SAMPLE of it
+(`[[5c1-vis-b-caption-instrument]]`). Asking per page answers the caption's selectivity, the
+400-token ceiling and the 10 MB transport at once."""
+
+POSITIONS_TEXT_PROMPT = _swap(POSITIONS_POST_PROMPT, POSITIONS_PAGE_INTRO, POSITIONS_TEXT_INTRO)
+"""One text row → the same schema. Derived, so the two legs cannot drift apart.
+
+Registered BESIDE the page prompt with its own sha, never as a variant selected by a flag: a record
+has to be able to name which of the two produced it, and `positions_text_gm4` is that name."""
+
 PROMPTS = {
     "T1": T1_PROMPT,
     "T2": T2_PROMPT,
@@ -513,6 +590,8 @@ PROMPTS = {
     "T1v2.2": T1_PROMPT_V2_2,
     "precheck_v2.2_with_post": PRECHECK_PROMPT_V2_2_WITH_POST,
     "precheck_v2ctx_with_post": PRECHECK_PROMPT_V2CTX_WITH_POST,
+    "positions_post_gm4": POSITIONS_POST_PROMPT,
+    "positions_text_gm4": POSITIONS_TEXT_PROMPT,
 }
 RENDER_ONLY = {"precheck_v2ctx_with_post": "precheck_v2_with_post"}
 """Registered tasks whose prompt text *is* another task's, mapped to the base they share.
@@ -576,6 +655,19 @@ FREE_TEXT = frozenset({CAPTION_TASK, CAPTION_TASK_GM4})
 are excluded from every table that only makes sense for a labelling task: no delimiter, no label
 space, no field list. :func:`build_messages` and :func:`parse_reply` refuse them by name rather
 than failing on a missing table entry."""
+
+POSITIONS_TASK_PAGE = "positions_post_gm4"
+POSITIONS_TASK_TEXT = "positions_text_gm4"
+POSITIONS = frozenset({POSITIONS_TASK_PAGE, POSITIONS_TASK_TEXT})
+"""The two position instruments of SPEC 3.17 (5). Same treatment as :data:`FREE_TEXT`: registered
+and hashed like every other prompt, and out of every table that describes a *labelling* task —
+their answer is a JSON array of records, not a label per row, so there is no label space and no
+field list to put them in.
+
+:func:`parse_reply` refuses them BY NAME, because their parser is a different one on purpose:
+`market_pulse.positions.parse_positions` validates against the position schema, which is where the
+tier ladder, the normalisation and the no-imputation rule live. A reply read by the labelling
+parser would come back as a dict of labels nothing downstream could use."""
 
 WITH_POST = frozenset(
     {
@@ -708,6 +800,8 @@ def build_messages(
     """
     if task in FREE_TEXT:
         raise ValueError(f"{task}: this prompt answers in prose — use caption_messages")
+    if task in POSITIONS:
+        raise ValueError(f"{task}: this prompt extracts positions — use positions_messages")
     tag = DELIMITERS[task]
     facts = context_lines(reply, sender)
     if facts and task not in WITH_CONTEXT:
@@ -787,6 +881,53 @@ def caption_messages_gm4(images: int) -> list[dict]:
     ]
 
 
+def positions_messages_page_gm4(images: int = 1) -> list[dict]:
+    """The page request: the instructions, then EXACTLY one image slot.
+
+    One image is not a default, it is the ruling. SPEC 3.17 (4) fixes leaflet extraction at one
+    page per call, and that single decision answers three separate failures at once: the caption's
+    selectivity over a six-page album (`[[5c1-vis-b-caption-instrument]]`), the 400-token ceiling
+    that truncated a reply mid-token, and the 10 MB transport limit. A second image here would
+    quietly undo all three, so ``images != 1`` is refused rather than accepted and sliced.
+
+    Processor-shaped like :func:`caption_messages_gm4`: the placeholder travels here and the pixels
+    go through ``images=``, so the count is all this function can know.
+    """
+    if images != 1:
+        raise ValueError(
+            f"{images} images: leaflet extraction is one PAGE per call (SPEC 3.17 (4)) — the"
+            " per-page ruling is what answers caption sampling, the 400-token ceiling and the"
+            " 10 MB transport, and a batched page would undo all three"
+        )
+    return [
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": PROMPTS[POSITIONS_TASK_PAGE]},
+                {"type": "image"},
+            ],
+        }
+    ]
+
+
+def positions_messages_text_gm4(text: str) -> list[dict]:
+    """The text-leg request: the instructions and the row, fenced.
+
+    Fenced in ``<row>`` for the reason every other row in this module is: retail text contains
+    everything, and a row that ends in "Answer with the JSON array alone" must not read as
+    instructions. One tag for both carriers — a post and a comment are the same request here, and
+    which one it was is recorded on the position, never asked of the model.
+    """
+    if not text.strip():
+        raise ValueError("an extraction request over an empty row would extract nothing")
+    return [
+        {
+            "role": "user",
+            "content": f"{PROMPTS[POSITIONS_TASK_TEXT]}\n\n<row>\n{text}\n</row>",
+        }
+    ]
+
+
 def _object(reply: str) -> dict:
     """The JSON object inside a reply, tolerant of wrappers, strict about content.
 
@@ -847,6 +988,12 @@ def parse_reply(task: str, reply: str) -> dict:
         # through to "unknown task" would also stop the run, but it reads as a typo in the
         # caller rather than as the registered prose prompt it is.
         raise ValueError(f"{task}: this prompt answers in prose — there is nothing to parse")
+    if task in POSITIONS:
+        # Same refusal, and the reason it matters more here: this reply IS JSON, so a lenient
+        # reader would return `{"intents": [...]}`-shaped nothing instead of stopping.
+        raise ValueError(
+            f"{task}: this prompt answers with positions — use positions.parse_positions"
+        )
     payload = _object(reply)
     if fields := COMMENT_FIELDS.get(task):
         _require(payload, *fields)
