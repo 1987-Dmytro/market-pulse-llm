@@ -441,6 +441,25 @@ def test_a_declined_caption_is_not_a_wrong_one(manifest, tmp_path):
     assert captions["faithful_rate_candidate"] is None
 
 
+def test_a_stratum_the_matcher_never_spoke_on_says_so(manifest, tmp_path):
+    """S3 is drawn as the posts with no brand hit, so its recall is 0 by construction.
+
+    `ratio` already refuses to turn an empty denominator into 0.0; this is the other half —
+    a denominator that exists over a numerator that cannot. Read beside S2's, the bare 0.0
+    is a floor somebody compares against, and it is not a measurement at all.
+    """
+    found = read(manifest, tmp_path, row("@chan:2", caption_verdict="n/a", watchlist_hits=["rud"]))
+    strata = found["matcher_candidates"]["by_stratum"]
+    assert strata["S3"]["recall_candidate"] == 0.0
+    assert "not a floor" in strata["S3"]["recall_is_definitional"]
+    assert strata["S3"]["precision_candidate"] is None
+
+
+def test_a_stratum_the_matcher_did_speak_on_carries_no_such_note(manifest, tmp_path):
+    found = read(manifest, tmp_path, row(watchlist_hits=["rud"]))
+    assert "recall_is_definitional" not in found["matcher_candidates"]["by_stratum"]["S2"]
+
+
 def test_the_reader_refuses_a_defective_file(manifest, tmp_path):
     path = tmp_path / "manifest.json"
     path.write_text(json.dumps(manifest, ensure_ascii=False), encoding="utf-8")

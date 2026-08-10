@@ -6221,3 +6221,12 @@ Operationally: the run took three launches. The first was killed by the harness 
 (Dv97), the second halted on pack_08's first line (Dv97), the third ran packs 09–25 unattended in
 ~1h45m at 6–8 minutes a pack. All 25 returns are preserved under `results/opus_audit_returns/`,
 byte-identical to the gitignored originals.
+
+**Dv99 — a zero that is a definition wearing a number.** S3 is drawn as the relevant posts the
+matcher found no brand in, so its tp is 0 before any reviewer looks at it, and `by_stratum` reported
+`recall_candidate: 0.0` beside S2's 0.9091 as though the two measured the same thing. `ratio()`
+already refuses to divide by an empty denominator; this is the other half — a denominator that
+exists over a numerator that cannot. Any stratum where the matcher emitted nothing now carries
+`recall_is_definitional` saying so. S3's precision was already `null` for the same reason; only the
+recall looked like a finding. Nothing was re-run: the counts and the enumerations were right, the
+reading of them was not.

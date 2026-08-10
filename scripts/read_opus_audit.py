@@ -345,6 +345,19 @@ def matcher_candidates(manifest: dict, rows: list[dict], strings: dict, compiled
                 **dict(tally),
                 "precision_candidate": ratio(tally["tp"], tally["tp"] + tally["fp"]),
                 "recall_candidate": ratio(tally["tp"], tally["tp"] + tally["fn"]),
+                **(
+                    {}
+                    if tally["tp"] + tally["fp"]
+                    else {
+                        "recall_is_definitional": (
+                            "the matcher emitted nothing on this stratum, so tp is 0 by how the"
+                            " stratum was drawn and the recall above is a definition, not a floor."
+                            " S3 is the relevant posts the matcher found no brand in. Precision"
+                            " comes back null for the same reason and the recall only looks like a"
+                            " number because its denominator is not empty"
+                        )
+                    }
+                ),
             }
             for name, tally in sorted(by_stratum.items())
         },
