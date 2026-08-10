@@ -6174,3 +6174,50 @@ could not see it, because a `tail -f` on a dead process's log is indistinguishab
 The re-launch is `nohup … & disown` off the harness's process group, with a second watcher that
 waits on the *process* and reports the returns count when it disappears. Watch the process, not the
 log.
+
+### The full audit: 498 rows, and every miss is image-only (Dv98)
+
+All 25 packs came back and validate — 498 of 498 items answered, `unanswered` empty, 163 of 163
+judgeable captions judged. The record was rebuilt over the whole population:
+
+```
+498 rows from 25 of 25 packs
+matcher candidates: tp 93 · fp 104 · fn 102 · precision 0.4721 · recall 0.4769
+captions: 163/163 judged · {'faithful': 117, 'partial': 43, 'wrong': 3} · faithful rate 0.7178
+fn split: 0 on the matcher · 102 image-only · a substring test would disagree on 1
+open extraction: 141 name(s)
+```
+
+`matcher_strings` re-derived 9343 posts, reproduced 66 channels × 6 cells, and re-checked **498 of
+498** item verdicts against the manifest — the corpus did not move under the packs during the run.
+
+**The split is 0 / 102, and the shape of that number is the point.** Not one of the reviewer's 102
+misses had the brand's own name in the string the matcher read. That is not luck: a word-boundary
+matcher over its own alias table finds *every* alias literally present, so `fn_matcher` can only
+ever be non-empty through the nested-alias rule («Яготинське» inside «Яготинське для дітей») or a
+reviewer naming a brand the text does not spell. Neither happened. So the bucket is in practice a
+nesting detector, and the finding is the other one: **the entire FN column prices the caption's
+coverage.** `recall_candidate` 0.4769 is not the matcher's recall and must not be read as one. The
+single `substring_would_disagree` row is still @atb_aktsiyi:3087 / «лимо» inside «лимон».
+
+**The strata separate cleanly, which is what they were drawn for.** S2 (posts the matcher found a
+brand in) returns precision 0.3774 and recall 0.9091; S1/S4 (caption-decided, and the committed
+captions) return precision 0.9104 and recall ~0.39. Where the matcher speaks it is often wrong and
+rarely incomplete; where a caption stands in for the post it is right when it speaks and blind most
+of the time. S3 — relevant posts with no brand hit — returns 35 misses and no hits at all, by
+construction: the matcher emitted nothing there.
+
+**The false positives are one word and one office.** `varto` ×69 and `president` ×24 are 93 of the
+104: the Ukrainian adverb «варто» and «Президент України / Офісу Президента». `varus-pl` ×5 is VARUS
+naming its own store. That is the pilot's reading holding at 25× the sample, and it stays raw in the
+record by the ruling — a committed list of already-settled collisions is the sitting's to write, not
+this script's to assume.
+
+**Open extraction returned 141 distinct names** the watchlist does not carry, against 12 on the
+pilot. That is the deliverable the strata were drawn for and it is the sitting's largest single
+input.
+
+Operationally: the run took three launches. The first was killed by the harness at 36 minutes
+(Dv97), the second halted on pack_08's first line (Dv97), the third ran packs 09–25 unattended in
+~1h45m at 6–8 minutes a pack. All 25 returns are preserved under `results/opus_audit_returns/`,
+byte-identical to the gitignored originals.
