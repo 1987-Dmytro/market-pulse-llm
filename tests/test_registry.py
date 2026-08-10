@@ -1,11 +1,41 @@
 """Validation tests for the source registry loader."""
 
+from hashlib import sha256
 from pathlib import Path
 
 import pytest
 from market_pulse.registry import AUDIENCES, load_registry
 
 REGISTRY = Path(__file__).resolve().parents[1] / "config" / "registry.yaml"
+
+SIGNED_SCREEN_REGISTRY_SHA = "c82d0cff1ee7d1bbf7c40d46bbcb02662f44898e4bc6980a2d75ced9cce46a2e"
+"""The registry bytes `results/yield_screen_5c1.json` read — the composition the operator signed.
+
+That screen is never re-run (`yield_screen_5c1.refuse_to_overwrite`), so the sha it cites is
+frozen at the file as it stood before the 2026-08-10 signature stamp. Same shape as
+`results/sitting_45g2_manifest.json`, which also stopped matching the corpus it pins: the sealed
+record describes what it read, the divergence is declared rather than re-pinned, and
+:func:`registry_without_the_signature_stamp` is where the chain to today's bytes is written down."""
+
+STAMP_OPENS = "  # SIGNED 2026-08-10"
+STAMP_CLOSES = "sitting-2026-08-10-composition-signed.md"
+
+
+def registry_without_the_signature_stamp() -> bytes:
+    """Today's registry minus the 2026-08-10 operator stamp — the bytes the signed screen read.
+
+    The stamp is a comment block: it changes no row, and it does move the file's sha256. Stripping
+    it back out is what makes "nothing but the signature moved" a checkable claim instead of a
+    sentence in a commit message.
+    """
+    lines = REGISTRY.read_text(encoding="utf-8").splitlines(keepends=True)
+    opens = [i for i, line in enumerate(lines) if line.startswith(STAMP_OPENS)]
+    closes = [i for i, line in enumerate(lines) if STAMP_CLOSES in line]
+    assert len(opens) == len(closes) == 1, "the signature stamp is one block, written once"
+    start, end = opens[0], closes[0]
+    assert lines[start - 1] == "  #\n", "the stamp is set off by a bare comment line"
+    return "".join(lines[: start - 1] + lines[end + 1 :]).encode("utf-8")
+
 
 SOURCES = (
     "sources:\n"
@@ -161,6 +191,43 @@ def test_the_operators_watchlist_addition_is_in_both_files_and_says_the_same_thi
         assert brands[brand_id].display_names == names, brand_id
         assert brands[brand_id].own is False, brand_id
         assert f"| {brand_id} | {names[0]}, {names[1]} |" in doc, brand_id
+
+
+def test_the_signature_stamp_moved_the_file_and_not_one_row_of_it():
+    """The 2026-08-10 operator signature (SPEC 3.17 step 0): composition 66 = launch 59 + watch 7,
+    the day-2 PROVISIONAL diff signed as it stands.
+
+    Two things have to be true at once, and only one of them is obvious. The stamp is provenance,
+    so no source, no taxonomy group and no watchlist brand may move under it — checked by parsing
+    the file with the block and without it and comparing all three entities. And the file's sha256
+    DID move, which is what a record pinning those bytes sees; the reconstruction is the chain from
+    the signed screen's citation to today's file.
+    """
+    stripped = registry_without_the_signature_stamp()
+    assert sha256(stripped).hexdigest() == SIGNED_SCREEN_REGISTRY_SHA
+    assert sha256(REGISTRY.read_bytes()).hexdigest() != SIGNED_SCREEN_REGISTRY_SHA
+
+    live = load_registry(REGISTRY)
+    text = REGISTRY.read_text(encoding="utf-8")
+    assert text.count("SIGNED 2026-08-10") == 1
+    for claim in ("66 sources", "launch 59 + watch 7", "changes no", "5c3 NAMED revision"):
+        assert claim in text, claim
+    # the numbers the stamp claims, read off the file it stamps
+    watch = [s for s in live.sources if s.watch]
+    assert (len(live.sources), len(live.sources) - len(watch), len(watch)) == (66, 59, 7)
+
+
+def test_the_stamped_and_unstamped_registries_parse_to_the_same_three_entities(tmp_path):
+    """The other half of the claim above: the comment block is invisible to the loader.
+
+    Written against a temp copy rather than by re-reading the shipped file twice — two reads of one
+    path cannot tell "the stamp changes nothing" from "the stamp is not there".
+    """
+    before = write(tmp_path, registry_without_the_signature_stamp().decode("utf-8"))
+    a, b = load_registry(before), load_registry(REGISTRY)
+    assert [vars(s) for s in a.sources] == [vars(s) for s in b.sources]
+    assert a.taxonomy.tracked_groups == b.taxonomy.tracked_groups
+    assert [vars(w) for w in a.watchlist] == [vars(w) for w in b.watchlist]
 
 
 def test_the_baby_food_line_is_a_row_of_its_own_and_its_name_nests_in_its_parents():

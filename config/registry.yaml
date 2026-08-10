@@ -57,6 +57,27 @@ sources:
   # collected and the discussion group is NEVER joined until the channel posts again and the
   # operator says so (SPEC 3.11 (4)); those channels keep comments_enabled because the group
   # exists — the join is what they do not have.
+  #
+  # SIGNED 2026-08-10 (operator, the 3.16 (3) sitting): the launch composition is 66 sources =
+  # launch 59 + watch 7, and the 08.08 freeze is lifted. Every row of the day-2 diff that stood
+  # PROVISIONAL pending the yield signature is signed here AS IT STANDS — this stamp changes no
+  # row, no bucket and no flag, and it is the only thing that moved in this file. The deferral
+  # criterion of SPEC 3.16 (3) was met by the Opus review programme: 25 of 25 packs, 498 of 498
+  # rows, findings presented at the sitting (results/opus_audit_5c1.json). Two rulings of that
+  # sitting touch matching and are deliberately NOT applied here — «ВАРТО» text-matching OFF and
+  # «Селянське» anchored-only are the 5c3 NAMED revision through the two-level watchlist of SPEC
+  # 3.17 (2), and G1e history is never re-scored on them.
+  # What this stamp COSTS, said here because this is the file a future editor opens: it moves this
+  # file's sha256 away from the signed bytes c82d0cff… (what it moved TO is not written here: a
+  # file cannot state its own hash), and five sealed records pin those signed bytes —
+  # results/yield_screen_5c1.json, …_v2.json, caption_rematch_5c1.json, caption_rematch_gm4_5c1.json
+  # and results/opus_audit_manifest.json. So scripts/validate_opus_returns.py and
+  # scripts/read_opus_audit.py now REFUSE to run, exactly as read_calibration_returns.py does, and
+  # that is correct: the sealed manifest describes the watchlist the 25 Opus sessions were given.
+  # Do NOT re-pin any of them. To re-derive results/opus_audit_5c1.json, check this file out at
+  # commit d832477 first; tests/test_registry.py reconstructs the signed bytes by stripping this
+  # block, which is the only chain between the two. ADRs: knowledge/decisions/
+  # opus-review-programme-close.md and sitting-2026-08-10-composition-signed.md.
   # tretyakovaele removed 2026-08-07: EXCLUDED on market-origin evidence (wave 3): its single post in the window is a Russian-language travel post — «Мы с Миланой прилетели в Сочи, на Красную Поляну» — a flight into the RF, which is what SPEC §3.11 (4)'s market screen excludes regardless of language. A MEMBER (group left, flag re-read) and the costliest row in this ruling: 244k subscribers, the only channel with collected comments (106) and the biggest comment source in the composition. The operator named that cost at the sitting
   - id: kopiyochka1
     name: "Копійочка 🫶🏻"

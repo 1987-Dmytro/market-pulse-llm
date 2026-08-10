@@ -6230,3 +6230,38 @@ exists over a numerator that cannot. Any stratum where the matcher emitted nothi
 `recall_is_definitional` saying so. S3's precision was already `null` for the same reason; only the
 recall looked like a finding. Nothing was re-run: the counts and the enumerations were right, the
 reading of them was not.
+
+## sku-a — the position layer, everything before the pilot ($0, 2026-08-10)
+
+Contract `docs/PROMPT-sku-a.md`, authority SPEC §3.17 (operator go 2026-08-10). Six deliverables,
+all local: schema + tier ladder, two registered prompts and their parser, the deterministic
+pre-filter and its corpus census, two ground-truth packs, and the pre-registration of sku-b's three
+bars. No paid call of any kind. Deviations continue at **Dv100** — the contract says "Dv96+" and
+Dv96–Dv99 were spent by the opus-audit close on the same day.
+
+### Step 0: the signature stamp, and the five records it moved out from under
+
+**Dv100 — the operator's signature moves `config/registry.yaml`'s sha256, and five sealed records
+pin the old bytes.** The stamp is a comment block: composition 66 = launch 59 + watch 7, the day-2
+PROVISIONAL diff signed as it stands, no row touched. Proved rather than asserted — the file is
+parsed with the block and without it and all three entities (66 sources, taxonomy, 23 watchlist
+brands) compare equal, while the sha moves `c82d0cff…` → something else. Five committed records
+cite the signed bytes: `results/yield_screen_5c1.json`, `…_v2.json`, `caption_rematch_5c1.json`,
+`caption_rematch_gm4_5c1.json` and `results/opus_audit_manifest.json`. Two consequences, both
+correct and both now written where they will be read:
+
+* `tests/test_yield_screen_5c1.py` asserted the shipped screen's cited registry sha against the
+  **live file** and therefore failed. It is **not** loosened and the record is **not** re-pinned —
+  the screen is the one the operator signed against and `refuse_to_overwrite` stops it being
+  re-run. The assertion now runs against `registry_without_the_signature_stamp()`, which strips the
+  block back out and must reproduce `c82d0cff…`. That is a stronger check than the one it replaces:
+  the old form said "the file has not moved", the new one says "nothing but the signature moved".
+* `scripts/validate_opus_returns.py` and `scripts/read_opus_audit.py` now **refuse to run** —
+  `config/registry.yaml: sha256 65d4d5cb…, the manifest pins c82d0cff…` — exactly as
+  `read_calibration_returns.py` does after the 4.5f rulings. The sealed manifest describes the
+  watchlist the 25 Opus sessions were given; re-pinning it would rewrite what they were asked. To
+  re-derive `results/opus_audit_5c1.json`, check the registry out at `d832477` first. Verified:
+  both scripts exit on the sha line and write nothing.
+
+The stamp names that cost in the registry itself, because that is the file the next editor opens.
+What it does **not** name is its own resulting sha — a file cannot state its own hash.
