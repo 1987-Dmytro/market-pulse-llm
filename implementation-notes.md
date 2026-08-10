@@ -6151,3 +6151,26 @@ alias table produced would look identical. `verdicts_still_hold` is tested both 
 `matcher_strings` itself is stubbed in the suite — it reads gitignored collected posts — and was
 verified by running the reader for real: 66 channels reproduced, 498 verdicts re-checked, 9343 posts
 re-derived.
+
+**Dv97 — the model was declared, and the guard checks where.** The driver halted on pack_08: the
+session's final message opened with «Готово. Правки внесены…» and carried `**Модель:**
+claude-opus-5` on its third line. The protocol's rule 1 asks for the first line, so the stop was
+correct as written and wrong about what it implies — the session had written its rows, re-read them
+and fixed them, which is why the outcome led. `returns_08.jsonl` is 20 of 20 and validates.
+
+The operator's ruling: **the rows are accepted, and the gate stays strict.** The reasoning is worth
+keeping, because the temptation was the other way. The declaration is not what makes the model
+Opus — `--model opus` on the command line is — and a returns file cannot prove which model wrote it
+anyway, which is *why* 3.16 (1) puts the whole programme in the review class. Position adds nothing
+to that guarantee; it only makes obedience checkable. But a guard loosened mid-run to keep a run
+moving is a guard the next surprise passes through, so the check stays as it is and every further
+occurrence stops the driver and is ruled on one at a time. Cost of the ruling: nothing. Cost of the
+alternative: one session re-bought for the order of two lines.
+
+The same halt exposed a second thing worth recording: **the harness killed the first `--after-pilot`
+run at 36 minutes**, mid-pack_06. Nothing was lost — the session had already written its file, and
+the driver skips a pack that has returns («an evening is not re-runnable») — but the log monitor
+could not see it, because a `tail -f` on a dead process's log is indistinguishable from a quiet one.
+The re-launch is `nohup … & disown` off the harness's process group, with a second watcher that
+waits on the *process* and reports the returns count when it disappears. Watch the process, not the
+log.
