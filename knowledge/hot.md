@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-09 22:06:42 (every SessionStart)
+**Auto-refreshed:** 2026-08-10 16:27:38 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-a153741 chore(perms): drop three deny rules that never matched anything
-82c2a45 chore(vault): the addendum's tail
-c406eeb fix(opus-audit): Write(path) is not a permission rule -- the deny list is the confinement
-9f9119a chore(vault): the day's log carries the opus-audit build
-a72b057 docs(3.16): the addendum -- blind packs and a pilot-first driver
+d832477 fix(opus-audit): S3's recall is a definition, and the record now says so
+d652869 feat(opus-audit): all 25 packs read -- 498 rows, and every miss is image-only
+9e27618 docs(opus-audit): pack_08 declared Opus third, and the gate stays strict
+0b5d5e9 feat(opus-audit): the misses split by what the matcher could read
+8aa7d13 feat(opus-audit): the pilot returns -- 40 rows that price the captioner, not the matcher
 ```
 
 ## 📋 Recent decisions
@@ -23,28 +23,93 @@ a72b057 docs(3.16): the addendum -- blind packs and a pilot-first driver
 
 ## 📅 Recent daily logs
 
+- `2026-08-10.md`
 - `2026-08-09.md`
 - `2026-08-08.md`
-- `2026-08-07.md`
 
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-09 (`/close`). **`docs/PROMPT-5c1-vis-c.md` IS DONE — 144 of
-144 posts captioned, 31 polls transcribed free, and the YIELD SCREEN NOW REPORTS: v2 flips
-`verdicts_reportable` FALSE → TRUE because its pre-registered positive control was the channel the
-captions unblind. $0.5505 of $1.50.** Three rows crossed bar A, pass_A 29 → 32. **The launch
-composition is NOT signed — that is the operator's word, and the package is on the desk.** Under
-it: vis-b built the instrument, the single SPEC 3.11 (2) parity attempt is SPENT and HOLDS,
-serverless is the ruled runtime. **Next is the operator's signature, then 5c2.** This block is
-hand-edited; the section above it is auto-generated — do NOT touch the marker. Long form:
-`implementation-notes.md`, and the days' logs [[2026-08-09]] / [[2026-08-08]]. ADRs:
-[[5c1-vis-b-caption-instrument]] · [[srv2-program-close]] · [[srv2-serverless-runtime-target]] ·
-[[5c1-relevance-floor-and-discovery]] · [[5c1-day2-composition-and-search]] ·
-[[5b2-batch-measurement]].
+**Last update:** 2026-08-10 (sku-a). **THE COMPOSITION IS SIGNED (66 = launch 59 + watch 7) AND THE
+POSITION LAYER'S WHOLE $0 HALF IS BUILT.** SPEC 3.17: schema + tier ladder, two registered prompts,
+the deterministic pre-filter and its 769-row census, both ground-truth packs, and sku-b's three bars
+pre-registered. The Opus audit closed before it — 25/25 packs, 498/498 rows — and its findings now
+live in two ADRs instead of here. **Next: the team lead ratifies R1–R5 in
+`results/sku_pilot_prereg.json`, the operator ticks the 30-row pack, THEN sku-b (one paid attempt,
+cap $0.35).** This block is hand-edited; the section above it is auto-generated — do NOT touch the
+marker. Long form: `implementation-notes.md` (Dv100–Dv110), and the days' logs [[2026-08-10]] /
+[[2026-08-09]]. ADRs: [[opus-review-programme-close]] · [[sitting-2026-08-10-composition-signed]] ·
+[[5c1-vis-b-caption-instrument]] · [[srv2-program-close]] · [[5c1-relevance-floor-and-discovery]] ·
+[[5c1-day2-composition-and-search]].
+
 
 ## 🔥 What's Hot
+
+**SKU-B MUST NOT RUN UNTIL R1 IS RATIFIED.** `results/sku_pilot_prereg.json` carries the three bars
+verbatim plus the denominators SPEC does not state, and five readings in it are the EXECUTOR's:
+**R1** the bar says "brand-recall ≥ 0.75 **per page**" and the audit gold exists **per POST** (one
+reviewer judged a post's whole sent set — nothing attributes a brand to a page), so the registered
+reading is per-post recall macro-averaged over the 15 scoreable posts. **R2** the page set is the
+**108 sent** pages, not the 159 available — for 15 of 19 posts that is the first six pages of a
+longer leaflet. **R3** four posts have an **empty** gold brand set and are out of the recall average
+(precision probe instead). **R4** bar 2 needs n ≥ 10 pairs to score. **R5** bar 3 excludes unreadable
+replies and pools both carriers. One attempt, and a failed bar closes B by measurement — an
+unratified denominator is that attempt spent for nothing.
+
+**THE PRE-FILTER'S FRAME IS MOSTLY RECIPES, AND THAT IS THE RULE WORKING AS WRITTEN.** 769 rows:
+posts 717 of 14,388 texted (4.98%), comments 52 of 10,875 (0.48%). The top channels after @silposilpo
+are recipe feeds firing on «сир» beside an ingredient quantity — «Твердий сир - 120 г» is a category
+term next to a real size and is not an offer. The only deterministic separator is in the record:
+`passed_carrying` = currency 226 · percent 384 · size 478 of the 717 posts. **The 30-row pack prices
+it properly** — a drawn row adjudicated as naming no position is a pre-filter false positive, and
+that reading is pre-registered rather than invented afterwards. Comments are 6.8% of the frame, so
+bar 3 prices the POST leg; a comment bar of its own would be a team-lead ruling.
+
+**THE SIGNATURE STAMP MOVED `config/registry.yaml`'s SHA, AND FIVE SEALED RECORDS PIN THE OLD BYTES.**
+`validate_opus_returns.py` and `read_opus_audit.py` now REFUSE to run — correctly, the same way
+`read_calibration_returns.py` does. **Do not re-pin any manifest.** To re-derive
+`results/opus_audit_5c1.json`, check the registry out at `d832477` first;
+`tests/test_registry.py::registry_without_the_signature_stamp` strips the block and reproduces the
+signed bytes `c82d0cff…`, and that reconstruction is the only chain between the two.
+
+**THE AUDIT'S NUMBERS NOW LIVE IN AN ADR, NOT HERE.** [[opus-review-programme-close]]: 25/25 packs,
+498/498 rows, `fn_matcher` **0** with all 102 misses image-only — so `recall_candidate` 0.4769 is a
+number about the CAPTIONS and must never be quoted as the matcher's; captions 117/43/3 (0.7178);
+93 of 104 FP are «варто» + «Президент»; 141 names outside the watchlist. Two things that ADR adds
+and the old blocks here did not have: the strata's FN columns **do not sum** to the total (230 vs
+102 — an item carries every stratum it belongs to), and GM4 wrote «Three Bears» for Три Ведмеді on
+two rows, so the caption was right and the **Cyrillic-only alias table** missed — a 5c3 gap, not a
+captioner one. The sitting's rulings are in [[sitting-2026-08-10-composition-signed]]: «Варто»
+text-matching OFF, «Селянське» anchored-only, the 141 names deferred into the position layer. Both
+are 5c3's NAMED revision and **neither is applied in sku-a** — brand resolution here is the plain
+alias table.
+
+**OPERATIONAL, AND IT WILL RECUR: THE HARNESS KILLS LONG BACKGROUND WORK.** A 2.7 h driver launched
+with Bash `run_in_background` was stopped from outside at 36 minutes; the process watcher armed the
+same way at ~30. Nothing was lost only because the driver skips any pack whose returns file exists.
+Launch anything past half an hour with `nohup … & disown`, and watch the **process**
+(`while pgrep -f "[r]un_x.sh" …` — the bracket stops `pgrep` matching the watcher itself), not a
+`tail -f`, which is silent through a dead process exactly as it is through a quiet one. Second stop
+of the run: pack_08 named Opus on line 3 instead of line 1. **Operator's ruling: rows accepted,
+gate left strict** — a gate loosened to keep a run moving is the gate the next surprise walks
+through. Further occurrences stop the driver and get ruled one at a time.
+
+**A `Write(path)` PERMISSION RULE IS NOT A RULE, AND AN ALLOWLIST CANNOT NARROW.** Measured, twice,
+$0: the harness refuses to match `Write(path)` against a file operation and says so on startup —
+only `Edit(path)` does, and it covers every file-editing tool. Worse and silent: **allow rules
+union**, and `~/.claude/settings.json` carries bare `Read`/`Edit`/`Write`/`Bash(*)`, so
+`--allowedTools` cannot narrow a headless session below that. **Only deny subtracts.** Three dead
+`Write(/docs/…)` rules are gone from `.claude/settings.json`; the `Edit(...)` rules beside them
+already did the job, proved with both tools plus a positive control, 42 team-lead files
+byte-identical. `run_opus_packs.sh` confines with `--disallowedTools`, one rule per foreign pack.
+
+**THE BLIND NEEDED THREE CUTS AND THE SWEEP THAT GUARDS IT WAS ITSELF BROKEN.** Removing the
+printed verdict was one; the stratum tag says the same thing (S2's label *is* "the matcher found a
+brand here"); and stratum-major ORDER would have made a whole pack one contiguous stratum. All
+three handled — items shuffled by the same seed, `packs_carrying_one_stratum_only: []`, 3–4 strata
+per pack. The blinding sweep's fence tracker never closed ` ```json `, so it read one header and
+swept a pasted-back verdict clean; **its negative control is what found that**, not review.
 
 **THE SCREEN REPORTS. `results/yield_screen_5c1_v2.json`, same script as the signed one (it gained
 `--captions`, it was not forked), prereg `1aa89818…` re-hashed and unmoved, five controls green —
@@ -232,6 +297,15 @@ same model, same endpoint, same prompt — $0.0180 of its $0.10 cap.
 
 ## ⏭️ Next
 
+**THE TEAM LEAD'S RULING IS THE NEXT CONTRACT (STATUS.md, 09:25 10.08, uncommitted here).**
+(1) Build the deterministic FN split in `read_opus_audit.py` — `fn_matcher` vs `fn_image_only`,
+FP left raw on purpose. (2) Then release the remaining 23: `scripts/run_opus_packs.sh
+--after-pilot` — it refuses until both pilot returns exist and validate, and an existing returns
+file is read, never re-bought. **~7 min per pack observed, so ~2.7 h of wall for the 23.**
+(3) Then the sitting on the findings: «Селянське» (TM or butter grade), the 12 open-extraction
+names as candidate watchlist entries, SPEC 3.16 (3) — only ratified items become revisions and G1e
+history is never re-scored on them. Then the launch signature, then 5c2.
+
 **THE RUNTIME IS RULED, AND IT IS SERVERLESS.** The team lead accepted srv-2d the same night
 (`docs/STATUS.md`, "ТЫ ЗДЕСЬ — serverless ДОКАЗАН (паритет Δ=0); 5c1 снят с HOLD"): parity verified
 against the artefacts, **serverless validated as the runtime**, ruling 23 executed, **5c1 comes off
@@ -249,7 +323,18 @@ stays the judge. `docs/SPEC.md` and `docs/STATUS.md` also moved and are uncommit
 team-lead files, commit them **unedited** and stage by path (`git add -A` would sweep the vault
 tail and the new prompts into one commit).
 
-**NEXT: THE OPERATOR'S SIGNATURE, then 5c2.** vis-c is done and the package is on the desk —
+**NEXT: THE SITTING OF 3.16 (3), THEN THE SIGNATURE, THEN 5c2.** The audit is off the critical
+path: 25 of 25 packs, 498 of 498 rows, `results/opus_audit_5c1.json` rebuilt over the whole
+population and committed with its returns preserved in `results/opus_audit_returns/`. What the
+sitting rules on, in one list: **141 open-extraction names** the watchlist lacks · **`varto` in both
+columns** (13 misses, 69 FPs — the adverb against the brand) · `president` ×24 and `varus-pl` ×5 as
+already-settled collisions arriving a second time · «Селянське» as a watchlist TM *and* a butter
+grade · **3 captions judged outright wrong** and 43 partial of 163 (faithful rate 0.7178) · and the
+finding under all of it, that the FN column prices the caption's coverage and not the matcher.
+Nothing here may enter a gate — 3.16 (1), review class, the deterministic matcher stays the judge.
+No contract is outstanding and nothing is queued.
+
+**AFTER THE SIGNATURE: 5c2.** vis-c is done and the package is on the desk —
 `results/yield_screen_5c1_v2.json`, the same instrument as the signed screen, prereg `1aa89818…`
 unmoved, `verdicts_reportable: true`, **pass_A 32 of 66**, below-both 33, 67 blind named and
 counted. The launch composition is frozen by the operator's own word and **this executor signed
@@ -273,6 +358,11 @@ caption path runs at 400. Fix it on the next trip that opens the volume — a re
 session's one endpoint, and there is no restart lever short of deleting the endpoint.
 
 ## 🚧 Blockers
+
+**The launch signature waits on the SITTING, and the sitting is the only blocker left.** SPEC
+3.16 (3)'s deferral criterion — "audit findings on the table" — is satisfied: all 25 packs are in,
+498 rows validate, the record is committed. The audit owes nothing further. `docs/STATUS.md` is
+dirty in the tree from the team lead's 09:25 edit — commit it **unedited**, staged by path.
 
 **None, technical.** The 2026-08-07 FloodWait wall cleared at 10:02:05 UTC and ~100 resolves drew
 no new one — because every collection run carried `--only`. That is discipline, not luck.
