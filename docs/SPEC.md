@@ -522,6 +522,55 @@ S1 all caption-decided screen hits; S2 per-channel sample of matcher
 brand-hit posts (precision); S3 per-channel sample of matcher-zero
 relevant posts (recall probe); S4 all committed GM4 captions against
 their images (faithfulness; images are the sha-matched sent sets).
+**Amendment 3.17 (operator, 2026-08-10: the position layer — question 7
+of PRODUCT.md; design ratified in the team-lead sitting the same day):**
+(1) **The question.** PRODUCT.md gains question 7 (operator's wording):
+what and at what price the chains promote — and at what DISCOUNT DEPTH —
+for our brands and competitors. The layer answers it from leaflets.
+(2) **Data model.** A position's IDENTITY is (brand_id | brand_raw,
+line, category, size, fat_pct); PRICE is an OBSERVATION at (channel,
+date, carrier), never part of identity. The tier ladder is assigned by
+CODE from field completeness, never by the model: `position` (brand +
+category + ≥1 differentiating attribute) / `product_mention` (brand +
+product, no attributes) / `brand_mention`. No field is ever imputed;
+aggregates roll up at the level a record actually names. `line` subsumes
+variant C: the watchlist becomes two-level (brand → lines[], with
+requires_anchor flags) — the 5c3 named revision implements the operator's
+2026-08-10 ВАРТО and «Селянське» rulings through it.
+(3) **Prices.** Three extracted fields: price_promo, price_old,
+discount_pct_printed. depth = (old − promo) / old is computed by code
+ONLY when both prices exist; the printed % never substitutes arithmetic
+and old price is never reconstructed from it; printed-vs-computed
+disagreement is recorded as a flag, not resolved. One price without
+promo markers = regular price; promo price without an old one = depth
+null. Aggregate for question 7: promo depth, brand × category × week
+(median + n).
+(4) **Carriers and origins.** carrier = leaflet_page | post_text |
+comment; price_origin = retail_leaflet | consumer_quote. Consumer
+quotes NEVER enter promo aggregates — they feed the price ASPECT
+(question 2). Leaflet extraction is per PAGE (one image = one call:
+answers caption sampling, the 400-token ceiling and the 10 MB transport
+at once). Text extraction runs only on rows passed by a DETERMINISTIC
+pre-filter (watchlist/category hit + a size/price pattern nearby).
+(5) **Instruments.** New registered prompts positions_post_gm4 (page)
+and positions_text_gm4 (text) BESIDE the existing ones, own shas, own
+strict JSON parser; extraction_source on every record, never silently
+mixed with caption_source; the frozen classification family (T1v2) is
+untouched.
+(6) **Program and gates.** sku-a (executor, $0): PRODUCT.md row, schema
++ tier ladder + normalization + depth/cross-check, both prompts, the
+pre-filter and its corpus census, ground-truth packs (leaflet reference
+from the Opus-audit S4 rows; text sample for team-lead triage +
+operator adjudication, 4.5f pattern, ~30 min of operator time), and the
+PRE-REGISTERED sku-b bars committed before the pilot: leaflet
+brand-recall ≥ 0.75 per page vs audit-visible brands; price-pair
+accuracy ≥ 0.80 on positions carrying a crossed-out price (verified by
+team-lead read of the per-position dump against the images at
+acceptance); text tier-assignment accuracy ≥ 0.85 vs adjudicated rows.
+sku-b (one paid session, cap $0.35 GPU): the two-leg pilot (19 ATB
+posts page-wise; ~30 adjudicated text rows), one attempt; a failed bar
+closes B as "instrument not ready" by measurement. Integration into
+the 5c2 loop only on a green gate.
 **Date:** 2026-07-26 · **Team lead:** Fable session · **Executor:** Claude Code
 **Repo folder:** `/Users/hdv_1987/Desktop/Projects/market-pulse-llm`
 **rev. 3 change (operator decision):** producers in Ukraine barely use Telegram for
