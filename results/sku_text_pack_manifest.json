@@ -1,0 +1,161 @@
+{
+  "generated_at": "2026-08-10T15:20:53+00:00",
+  "phase": "sku-a — the text leg's adjudication pack",
+  "contract": "docs/PROMPT-sku-a.md deliverable 4(b); docs/SPEC.md amendment 3.17 (6)",
+  "pack": "data/annotation/sku_a_text/text30.csv",
+  "readme": "data/annotation/sku_a_text/README-text30.md",
+  "gitignored": "data/annotation/** is gitignored, so this manifest is the only committed witness to what was asked. `git status` proves nothing about the pack itself",
+  "rows": 30,
+  "columns": [
+    "id",
+    "channel",
+    "carrier",
+    "date",
+    "hit",
+    "pattern",
+    "text",
+    "brand",
+    "line",
+    "category",
+    "size",
+    "fat",
+    "notes"
+  ],
+  "delimiter": ";",
+  "to_fill": [
+    "brand",
+    "line",
+    "category",
+    "size",
+    "fat"
+  ],
+  "tick_values": [
+    "y",
+    ""
+  ],
+  "nothing_is_proposed": "every tick column ships blank. A suggested tier is not independent adjudication, and the ladder is code's either way (SPEC 3.17 (2))",
+  "ladder": {
+    "function": "market_pulse.positions.tier_from_presence",
+    "sha256": "b497c07200db74132140ec207fa27e623c6beb2aa1a5aa35acdd6a115f69f238",
+    "why": "bar 3 compares an adjudicated tier against a model's tier and BOTH come out of positions.tier. A ladder that moved between this build and the pilot would move the gold silently, so its 32-row table is hashed here and results/sku_pilot_prereg.json cites the same value",
+    "table": {
+      "brand": "brand_mention",
+      "brand+category": "product_mention",
+      "brand+category+fat": "position",
+      "brand+category+size": "position",
+      "brand+category+size+fat": "position",
+      "brand+fat": "product_mention",
+      "brand+line": "product_mention",
+      "brand+line+category": "position",
+      "brand+line+category+fat": "position",
+      "brand+line+category+size": "position",
+      "brand+line+category+size+fat": "position",
+      "brand+line+fat": "product_mention",
+      "brand+line+size": "product_mention",
+      "brand+line+size+fat": "product_mention",
+      "brand+size": "product_mention",
+      "brand+size+fat": "product_mention",
+      "category": "none",
+      "category+fat": "none",
+      "category+size": "none",
+      "category+size+fat": "none",
+      "fat": "none",
+      "line": "none",
+      "line+category": "none",
+      "line+category+fat": "none",
+      "line+category+size": "none",
+      "line+category+size+fat": "none",
+      "line+fat": "none",
+      "line+size": "none",
+      "line+size+fat": "none",
+      "none": "none",
+      "size": "none",
+      "size+fat": "none"
+    }
+  },
+  "draw": {
+    "seed": 42,
+    "size": 30,
+    "rule": "random.Random(42).sample over the census frame in the record's own order. NOT stratified: the contract says a seed-42 sample of 30 pre-filtered rows, and the pack inherits the frame's carrier proportion",
+    "frame": {
+      "path": "results/sku_prefilter_census.json",
+      "sha256": "9e7dadf5fe3923015bad5f7c00984a457b4b61eaf6a447112272ee7f852af050",
+      "rows": 769,
+      "ids_sha256": "80c6507b7e4ac4b4203c6674f918b685f76c416d012073fd6d9a66924286a8d6"
+    },
+    "by_carrier": {
+      "post_text": 26,
+      "comment": 4
+    },
+    "carrier_share_of_the_frame": {
+      "post_text": 717,
+      "comment": 52
+    },
+    "comment_leg_note": "comments are 52 of the frame's 769 rows, so a proportional draw of 30 holds a handful. Bar 3 therefore prices the POST leg; whether the comment carrier needs a bar of its own is a team-lead ruling and is flagged in the pre-registration"
+  },
+  "sha256": {
+    "data/annotation/sku_a_text/text30.csv": "d0945b9136459a25be50b93ad21acf02c2293e795566e1893884c90730e79795",
+    "data/annotation/sku_a_text/README-text30.md": "64819d0d6dad95e1f260312a15f617a5c406b3e5fcf624a519382afa40fb0a26"
+  },
+  "given_sha256": "448d8d20af3382c24762d186c4faca415c5410f5d4345060fabf00ac826cf2aa",
+  "given_columns": [
+    "id",
+    "channel",
+    "carrier",
+    "date",
+    "hit",
+    "pattern",
+    "text"
+  ],
+  "ids": [
+    "@VARUS_channel:7119",
+    "@VARUS_channel:7440",
+    "@VARUS_channel:800",
+    "@VARUS_channel:8297",
+    "@VARUS_channel:1775",
+    "@VARUS_channel:1912",
+    "@VARUS_channel:2119",
+    "@VARUS_channel:2562",
+    "@VARUS_channel:4791",
+    "@VARUS_channel:9580",
+    "@atb_market_official:1155",
+    "@atb_market_official:1339",
+    "@atb_market_official:1822",
+    "@epicentrk_sale:6148",
+    "@korolevakuchni:10350",
+    "@matusi_ukr:22025",
+    "@matusi_ukr:22255",
+    "@recepti:11794",
+    "@retsepty:7281",
+    "@retsepty:7318",
+    "@silposilpo:2529",
+    "@silposilpo:2745",
+    "@silposilpo:3154",
+    "@silposilpo:3234",
+    "@silposilpo:3517",
+    "@silposilpo:3671",
+    "@suspilnepoltava:46982",
+    "@telegraf_kremenchuk:70595",
+    "@telegraf_kremenchuk:71000",
+    "@telegraf_kremenchuk:71024"
+  ],
+  "pattern_kinds": {
+    "currency": 14,
+    "percent": 21,
+    "size": 16
+  },
+  "also_measures": "the pre-filter's precision. A drawn row whose five ticks all come back empty names no position at all, which makes it a pre-filter false positive — the frame is dominated by recipe feeds (see results/sku_prefilter_census.json), and this pack is the only thing that prices that",
+  "git": {
+    "commit": "81fd2da6372e5135e645d088e49989bcdc333355",
+    "dirty": [
+      "knowledge/daily_logs/2026-08-09.md",
+      "knowledge/hot.md",
+      "knowledge/index.md",
+      "src/market_pulse/positions.py",
+      "knowledge/daily_logs/2026-08-10.md",
+      "results/sku_reference_leaflet.json",
+      "scripts/build_sku_reference_leaflet.py",
+      "scripts/build_sku_text_pack.py"
+    ]
+  }
+}

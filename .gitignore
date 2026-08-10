@@ -68,6 +68,15 @@ data/annotation/sitting_45g/*
 !data/annotation/calib_45e/
 data/annotation/calib_45e/*
 !data/annotation/calib_45e/unreadable14.csv
+# The sku-a text pack (SPEC 3.17 (6), bar 3): 30 pre-filtered rows the operator ticks by hand.
+# Same rule as unreadable14.csv above and the same reason — an adjudication that exists only in a
+# working tree is an evening nobody can restore, and `build_sku_text_pack.py --force` would take it
+# with no HEAD behind it. The README goes in beside it because the pack is unreadable without the
+# instructions it was filled in under.
+!data/annotation/sku_a_text/
+data/annotation/sku_a_text/*
+!data/annotation/sku_a_text/text30.csv
+!data/annotation/sku_a_text/README-text30.md
 models/
 *.safetensors
 *.gguf

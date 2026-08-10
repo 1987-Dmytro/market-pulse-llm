@@ -547,3 +547,70 @@ def prefilter(row: dict, compiled: dict, aliases: list) -> dict | None:
                 "pattern": pattern,
             }
     return None
+
+
+# --- the ladder from a checklist: the adjudicator's side, and one function for both sides ----------
+
+PRESENCE_FIELDS = ("brand", "line", "category", "size", "fat")
+"""What an adjudicator ticks per row. The five fields the ladder reads, and no price field: bar 3 of
+SPEC 3.17 (6) is tier accuracy, and a price does not move a rung."""
+
+
+def tier_from_presence(
+    brand: bool, line: bool, category: bool, size: bool, fat: bool
+) -> str | None:
+    """The rung a source reaches when it names exactly these fields, or ``None`` for no brand.
+
+    Built by constructing a :class:`Position` with placeholder values and calling :func:`tier` on it,
+    deliberately rather than by restating the rungs: the adjudicated tier and the model's tier MUST
+    come out of one function, or bar 3 compares two ladders and a drift between them reads as model
+    error. The placeholders are arbitrary because the ladder is a function of PRESENCE only — which
+    is the property this indirection proves rather than claims.
+
+    ``None`` means "this row names no position at all": the pre-filter's own false positives, which
+    have no rung because every rung starts at a brand.
+    """
+    if not brand:
+        return None
+    return tier(
+        Position(
+            brand_id=None,
+            brand_raw="?",
+            line="?" if line else None,
+            category="?" if category else None,
+            size_value=1.0 if size else None,
+            size_unit="г" if size else None,
+            fat_pct=1.0 if fat else None,
+            price_promo=None,
+            price_old=None,
+            discount_pct_printed=None,
+            price_qualifier=None,
+            price_origin="retail_leaflet",
+            carrier="leaflet_page",
+            extraction_source="ladder",
+        )
+    )
+
+
+def ladder_table() -> dict[str, str]:
+    """The whole ladder as data: every combination of the five fields → its rung.
+
+    32 rows, keyed by the fields present joined with ``+`` (``"none"`` when a row names nothing).
+    Serialised so a pre-registration can pin the LADDER and not only the bar: bar 3's gold is
+    computed by this function from an operator's ticks, so a ladder that moved between the pack
+    build and the pilot would move the gold silently and nothing downstream could see it.
+    """
+    out = {}
+    for mask in range(1 << len(PRESENCE_FIELDS)):
+        present = [field for index, field in enumerate(PRESENCE_FIELDS) if mask & (1 << index)]
+        rung = tier_from_presence(**{field: field in present for field in PRESENCE_FIELDS})
+        out["+".join(present) or "none"] = rung or "none"
+    return dict(sorted(out.items()))
+
+
+def ladder_sha256() -> str:
+    """SHA256 of :func:`ladder_table`, canonically encoded — what the prereg and the pack both cite."""
+    import hashlib
+
+    payload = json.dumps(ladder_table(), ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()

@@ -6396,3 +6396,61 @@ outside the signed composition** (@dikankaa, @znishkom, @tretyakovaele's comment
 The record refuses a second pass over the same path (D68): it is the frame the pack's manifest pins,
 and a pass over a moved corpus would land under the name the pack cites. `ids_sha256` is what the
 pack builder re-derives and compares before it draws.
+
+### Deliverable 4: two ground-truth packs, and three facts about the leaflet gold
+
+**(a) `results/sku_reference_leaflet.json` — 19 ATB posts, 55 gold (post, brand) pairs.** Built from
+the audit's S4 rows narrowed to `@atb_market_official`: 34 watchlist pairs + 21 outside the
+watchlist, 108 pages sent of 159 available, every page re-verified on disk against the sha the
+caption row recorded (108/108, the builder refuses to write otherwise). Caption verdicts on these 19:
+9 faithful, 10 partial, **0 wrong** — the audit's three `wrong` captions are elsewhere in the 163.
+
+Three properties of that gold are stated in the record itself, because bar 1 is computed over it and
+none of them is visible from a count:
+
+**Dv106 — the gold is per POST and the bar says "per page".** One reviewer judged the whole set of
+pages sent for a post and named what was visible across them; nothing in the audit attributes a brand
+to a page. So a per-page recall **cannot be computed from this file**. The record says so and the
+pre-registration carries the reading the bar is scored under, marked for team-lead ratification —
+sku-b is ONE paid attempt and a failed bar closes B by measurement, so a denominator nobody ratified
+is a session spent against a void.
+
+**Dv107 — the pages are a 6-page SLICE for 15 of the 19 posts.** The caption run sent at most 6
+images (108 of 159), so the reviewer saw the first six pages of a longer leaflet. `pages_not_sent`
+names the rest per post: a brand printed on page 7 is **not** in this gold, and a pilot that reads it
+is not wrong. Pre-registered consequence: the pilot reads exactly the sent set, page by page.
+
+**Dv108 — four of the 19 posts have an EMPTY gold brand set.** @atb_market_official:4370, :4415,
+:4455 and :4519 are summer non-food and similar; the reviewer's notes say what is on them. Recall
+over an empty denominator is undefined, so they cannot enter a recall average — an absolute bar over
+them would fail by arithmetic rather than by measurement. They stay in the record as a **precision
+probe**: any brand extracted on their pages is a false positive. 15 of 19 posts are recall-scoreable.
+
+The gold key is one more thing that had to be decided rather than assumed: `watchlist_hits` come back
+as brand_ids and `other_dairy_brands` as names as printed, so the record normalises both to the
+watchlist id when the name resolves and `raw:` + casefolded otherwise. Measured, not assumed: **no**
+`other_dairy_brands` name resolves to a watchlist alias, so the two halves are disjoint. The record
+declares itself SCORING input and never model input — Dv87 in reverse.
+
+**(b) `data/annotation/sku_a_text/text30.csv` + `results/sku_text_pack_manifest.json`** — the 4.5f
+pattern: semicolon CSV, Russian README, committed manifest pinning both shas. Seed 42 over the
+census frame, re-derived and hash-checked before a row is drawn; 30 rows, **26 post_text + 4 comment**
+(the frame's own proportion), pattern kinds currency 14 / percent 21 / size 16.
+
+**Dv109 — the operator ticks five columns and code computes the tier from them.** Not a tier column:
+SPEC 3.17 (2) says the ladder is code's, and that has to hold for the GOLD as well as for the model.
+So `positions.tier_from_presence` builds a `Position` from the ticks and calls the same `tier()` the
+parser calls — one ladder on both sides of bar 3. The pack manifest pins
+`positions.ladder_sha256()` (32-row table, `b497c072…`) and the pre-registration cites the same
+value, so a ladder that moved between the build and the pilot breaks a check instead of moving the
+gold in silence. `validate_sku_text_pack.py` re-checks it, refuses any cell that is not `y` or empty,
+and refuses a pack whose GIVEN columns moved — the whole-file sha cannot see that, because it moves
+the moment a tick is entered.
+
+**The pack is admitted to git by an explicit gitignore exception**, the same way
+`calib_45e/unreadable14.csv` is: `data/annotation/**` is ignored, `--force` destroys an evening, and
+without a HEAD there is nothing to restore from. 30 rows of already-collected corpus text.
+
+**All five ticks empty is a legitimate answer**, and it is the one that prices the pre-filter: a drawn
+row that names no position at all is a pre-filter false positive. Said in the manifest and in the
+README before the returns arrive, because a reading invented after the fact is not a measurement.
