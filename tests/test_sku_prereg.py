@@ -7,6 +7,7 @@ empty, an executor's reading passing as the contract's.
 
 import hashlib
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -172,26 +173,51 @@ def test_the_prereg_says_what_it_does_not_touch(record):
     assert "consumer quotes never enter" in out["aggregates"]
 
 
-def test_no_pilot_artifact_exists_yet(record):
-    """A pre-registration written after the thing it judges is a rationalisation. The bars are
-    registered here and the only sku-b artifacts in the repo are the ones sku-b will write."""
+def test_the_prereg_was_committed_before_any_pilot_artifact(record):
+    """A pre-registration written after the thing it judges is a rationalisation, and git history is
+    the only witness to the ordering — so the claim is checked against history rather than against
+    today's directory listing, which stops being evidence the moment sku-b writes its records.
+
+    The same discipline `run_v22_probe.py` uses: shell out to git, and treat "not tracked" as a
+    failure rather than a skip. An uncommitted pre-registration is not one.
+    """
     assert "before any sku-b artifact exists" in record["class"]
-    results = REPO_ROOT / "results"
-    for name in ("sku_pilot_leaflet.json", "sku_pilot_text.json", "sku_pilot_verdict.json"):
-        assert not (results / name).exists(), name
-    # what DOES exist is sku-a's own four files, and none of them carries a bar result
-    assert sorted(path.name for path in results.glob("sku_*.json")) == [
-        "sku_pilot_prereg.json",
-        "sku_prefilter_census.json",
-        "sku_reference_leaflet.json",
-        "sku_text_pack_manifest.json",
+    added = subprocess.run(
+        ["git", "log", "--diff-filter=A", "--format=%H", "--", "results/sku_pilot_prereg.json"],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout.split()
+    assert len(added) == 1, "the pre-registration is added exactly once, or its ordering is unclear"
+    tree = subprocess.run(
+        ["git", "ls-tree", "-r", "--name-only", added[0], "results/"],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout.split()
+    assert "results/sku_pilot_prereg.json" in tree
+    # at the commit that added it, no other sku_pilot_* result existed. That is permanent.
+    others = [
+        name
+        for name in tree
+        if name.startswith("results/sku_pilot_") and name != "results/sku_pilot_prereg.json"
     ]
-    # and none of those four carries a bar RESULT: no verdict block, and no bar with a measurement
-    for path in results.glob("sku_*.json"):
-        body = json.loads(path.read_text(encoding="utf-8"))
-        assert "verdict" not in body, path.name
+    assert others == [], others
+
+
+def test_nothing_here_carries_a_bar_result(record):
+    """The other half, and it holds after sku-b runs too: a pre-registration states thresholds and
+    procedures, and a `measured` field in it would make the file its own scorer."""
     for name, bar in record["bars"].items():
         assert not {"measured", "value", "verdict", "result"} & set(bar), name
+    assert "verdict" not in record
+    for path in (REPO_ROOT / "results").glob("sku_*.json"):
+        if path.name.startswith("sku_pilot_") and path.name != "sku_pilot_prereg.json":
+            continue  # sku-b's own records are allowed to carry verdicts; sku-a's are not
+        body = json.loads(path.read_text(encoding="utf-8"))
+        assert "verdict" not in body, path.name
 
 
 def test_the_record_rebuilds_identically_apart_from_its_timestamp(tmp_path):

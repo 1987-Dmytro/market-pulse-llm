@@ -284,6 +284,13 @@ def main(argv: list[str] | None = None) -> int:
             ),
         },
         "sha256": {rel(args.pack): pack_sha, rel(readme): sha256_of(readme)},
+        "csv_sha_note": (
+            "the CSV's sha above is the pack AS BUILT and is expected to move on the first tick —"
+            " that is what the pack is for. `given_sha256` is the one that must not: it covers only"
+            " the columns the operator was told not to touch, so it stands still while the answer is"
+            " written and `validate_sku_text_pack.py` re-checks it. The README's sha does not move"
+            " either, because nothing is filled in there"
+        ),
         "given_sha256": given_sha256(rows),
         "given_columns": list(GIVEN),
         "ids": [row["id"] for row in rows],

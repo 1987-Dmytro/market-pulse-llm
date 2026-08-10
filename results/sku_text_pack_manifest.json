@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-10T15:20:53+00:00",
+  "generated_at": "2026-08-10T15:44:28+00:00",
   "phase": "sku-a — the text leg's adjudication pack",
   "contract": "docs/PROMPT-sku-a.md deliverable 4(b); docs/SPEC.md amendment 3.17 (6)",
   "pack": "data/annotation/sku_a_text/text30.csv",
@@ -97,6 +97,7 @@
     "data/annotation/sku_a_text/text30.csv": "d0945b9136459a25be50b93ad21acf02c2293e795566e1893884c90730e79795",
     "data/annotation/sku_a_text/README-text30.md": "64819d0d6dad95e1f260312a15f617a5c406b3e5fcf624a519382afa40fb0a26"
   },
+  "csv_sha_note": "the CSV's sha above is the pack AS BUILT and is expected to move on the first tick — that is what the pack is for. `given_sha256` is the one that must not: it covers only the columns the operator was told not to touch, so it stands still while the answer is written and `validate_sku_text_pack.py` re-checks it. The README's sha does not move either, because nothing is filled in there",
   "given_sha256": "448d8d20af3382c24762d186c4faca415c5410f5d4345060fabf00ac826cf2aa",
   "given_columns": [
     "id",
@@ -146,16 +147,11 @@
   },
   "also_measures": "the pre-filter's precision. A drawn row whose five ticks all come back empty names no position at all, which makes it a pre-filter false positive — the frame is dominated by recipe feeds (see results/sku_prefilter_census.json), and this pack is the only thing that prices that",
   "git": {
-    "commit": "81fd2da6372e5135e645d088e49989bcdc333355",
+    "commit": "e40c58e720195875dce6f55af59412b6044cc9e4",
     "dirty": [
-      "knowledge/daily_logs/2026-08-09.md",
-      "knowledge/hot.md",
-      "knowledge/index.md",
-      "src/market_pulse/positions.py",
-      "knowledge/daily_logs/2026-08-10.md",
-      "results/sku_reference_leaflet.json",
-      "scripts/build_sku_reference_leaflet.py",
-      "scripts/build_sku_text_pack.py"
+      "scripts/build_sku_text_pack.py",
+      "tests/test_sku_packs.py",
+      "tests/test_sku_prereg.py"
     ]
   }
 }

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-10T15:27:24+00:00",
+  "generated_at": "2026-08-10T15:44:47+00:00",
   "phase": "sku-b — the position-layer pilot, pre-registered",
   "written_by": "sku-a (executor, $0), docs/PROMPT-sku-a.md deliverable 5",
   "authority": "docs/SPEC.md amendment 3.17 (6)",
@@ -58,7 +58,7 @@
       "gold": {
         "pack": "data/annotation/sku_a_text/text30.csv",
         "manifest": "results/sku_text_pack_manifest.json",
-        "manifest_sha256": "0dac71c551a33855b87cd278a5d7824bc1f27a854eb83f2dc761fdca58fff1e7",
+        "manifest_sha256": "2b941243274febde50b65e0e20f949a742581494304575e5fd52c68fa7c13dfb",
         "rows": 30,
         "by_carrier": {
           "post_text": 26,
@@ -118,7 +118,7 @@
   "pinned_inputs": {
     "docs/SPEC.md": "973c87890ad049d5fa09879de148794f171994fac64437128bcecbaeade36604",
     "results/sku_reference_leaflet.json": "e301bb4f48f527e4f9f6b64bb1a53911fd69d2871e9e7cbc302195f8f982eb20",
-    "results/sku_text_pack_manifest.json": "0dac71c551a33855b87cd278a5d7824bc1f27a854eb83f2dc761fdca58fff1e7",
+    "results/sku_text_pack_manifest.json": "2b941243274febde50b65e0e20f949a742581494304575e5fd52c68fa7c13dfb",
     "results/sku_prefilter_census.json": "9e7dadf5fe3923015bad5f7c00984a457b4b61eaf6a447112272ee7f852af050",
     "config/registry.yaml": "920c7f203b9f0e38fd8df9e893d9b15705a6b19b297bd9d14b14258ae38ac3be"
   },
@@ -167,13 +167,12 @@
     "aggregates": "no promo aggregate is computed anywhere in sku-b. Question 7's brand x category x week rollup is 5c2's, and consumer quotes never enter it (SPEC 3.17 (4))"
   },
   "git": {
-    "commit": "330e995e686ffd567f9e56fc3e2d0e36a0c17473",
+    "commit": "e40c58e720195875dce6f55af59412b6044cc9e4",
     "dirty": [
-      "knowledge/daily_logs/2026-08-09.md",
-      "knowledge/hot.md",
-      "knowledge/index.md",
-      "knowledge/daily_logs/2026-08-10.md",
-      "scripts/write_sku_prereg.py"
+      "results/sku_text_pack_manifest.json",
+      "scripts/build_sku_text_pack.py",
+      "tests/test_sku_packs.py",
+      "tests/test_sku_prereg.py"
     ]
   }
 }

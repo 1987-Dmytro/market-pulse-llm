@@ -203,15 +203,49 @@ def rows():
     return validator.read_pack(pack.PACK)
 
 
+def fresh_rows(tmp_path) -> list[dict]:
+    """A blank pack built into a temp directory — the fixture every validator test mutates.
+
+    Deliberately not the shipped CSV: once the operator starts ticking it, a test that mutated it
+    would be asserting against somebody's half-finished evening. A fresh build carries the same
+    GIVEN columns by construction, so it still verifies against the committed manifest.
+    """
+    out = tmp_path / "blank.csv"
+    assert pack.main(["--pack", str(out), "--manifest", str(tmp_path / "blank.json")]) == 0
+    return validator.read_pack(out)
+
+
 def test_the_pack_is_thirty_rows_and_every_tick_ships_blank(rows, manifest):
     """Nothing is proposed: a suggested tier is not independent adjudication."""
     assert len(rows) == manifest["rows"] == 30
     assert list(rows[0]) == list(pack.COLUMNS)
     for row in rows:
+        assert row["text"].strip(), "a row with no text cannot be adjudicated"
+    if pack.filled(pack.PACK):
+        pytest.skip(
+            "adjudication has started — blankness is a build-time property, not an invariant"
+        )
+    for row in rows:
         for field in positions.PRESENCE_FIELDS:
             assert row[field] == "", (row["id"], field)
         assert row["notes"] == ""
-        assert row["text"].strip(), "a row with no text cannot be adjudicated"
+
+
+def test_a_fresh_build_is_always_blank_whatever_the_shipped_pack_now_holds(tmp_path):
+    """The half of the test above that must never be skipped.
+
+    "Nothing is proposed" is a property of the BUILDER, and the builder is what a re-run uses. The
+    shipped pack stops being blank the moment the operator starts, and a suite that went red for
+    that would be a suite the next session loosens — the failure this repo has refused twice
+    (`test_yield_screen_5c1`, `read_calibration_returns`).
+    """
+    out = tmp_path / "text30.csv"
+    assert pack.main(["--pack", str(out), "--manifest", str(tmp_path / "m.json")]) == 0
+    for row in validator.read_pack(out):
+        for field in positions.PRESENCE_FIELDS:
+            assert row[field] == "", (row["id"], field)
+        assert row["notes"] == ""
+    assert pack.filled(out) == 0
 
 
 def test_the_pack_carries_the_columns_the_ladder_reads_and_no_price_column(rows):
@@ -252,12 +286,30 @@ def test_the_manifest_pins_the_ladder_the_gold_will_be_computed_by(manifest):
     assert manifest["ladder"]["function"] == "market_pulse.positions.tier_from_presence"
 
 
-def test_the_manifest_pins_both_files_and_the_columns_that_must_not_move(rows, manifest):
-    for path, sha in manifest["sha256"].items():
-        assert hashlib.sha256((REPO_ROOT / path).read_bytes()).hexdigest() == sha, path
+def test_the_manifest_pins_the_columns_that_must_not_move(rows, manifest):
+    """`given_sha256` covers the QUESTION and stands still while the answer is written; the CSV's
+    whole-file sha is expected to move on the first tick, which is why they are two fields and why
+    only one of them is an invariant."""
     assert manifest["given_sha256"] == pack.given_sha256(rows)
     assert manifest["given_columns"] == list(pack.GIVEN)
     assert [row["id"] for row in rows] == manifest["ids"]
+    readme = pack.PACK.parent / pack.README.name
+    assert (
+        hashlib.sha256(readme.read_bytes()).hexdigest() == manifest["sha256"][pack.rel(readme)]
+    ), "the instructions are not filled in and their sha does not move"
+    assert "expected to move" in manifest["csv_sha_note"]
+
+
+def test_the_shipped_csv_still_hashes_to_the_manifest_while_it_is_blank(manifest):
+    """A build-time property, and it says so. Once a tick is entered the file is a different
+    artifact by design — skipping here rather than asserting is what stops the next session from
+    loosening `given_sha256` along with it."""
+    if pack.filled(pack.PACK):
+        pytest.skip("adjudication has started — the CSV's whole-file sha is expected to have moved")
+    assert (
+        hashlib.sha256(pack.PACK.read_bytes()).hexdigest()
+        == manifest["sha256"][pack.rel(pack.PACK)]
+    )
 
 
 def test_the_carrier_split_is_reported_rather_than_engineered(rows, manifest):
@@ -295,7 +347,7 @@ def test_the_readme_asks_for_ticks_and_forbids_writing_a_tier():
 def test_a_filled_pack_reads_back_through_the_same_ladder_as_the_model(tmp_path, manifest):
     """The validator's own exam, on a pack filled in by hand. Three shapes: a full position, a bare
     brand mention, and a row that names nothing — which is a legitimate answer and not a gap."""
-    rows = validator.read_pack(pack.PACK)
+    rows = fresh_rows(tmp_path)
     rows[0].update({"brand": "y", "category": "y", "size": "y"})
     rows[1].update({"brand": "y"})
     rows[2].update({"notes": "не про товар"})
@@ -315,16 +367,16 @@ def test_a_filled_pack_reads_back_through_the_same_ladder_as_the_model(tmp_path,
 
 
 def test_the_validator_refuses_a_cell_that_is_not_a_tick(tmp_path, manifest):
-    rows = validator.read_pack(pack.PACK)
+    rows = fresh_rows(tmp_path)
     rows[0]["brand"] = "так"
     _, defects = validator.check(rows, manifest)
     assert any("takes y or nothing" in defect for defect in defects)
 
 
-def test_the_validator_catches_a_question_that_moved(manifest):
+def test_the_validator_catches_a_question_that_moved(tmp_path, manifest):
     """A row whose `text` was edited was adjudicated against something else, and the whole-file sha
     cannot see it — it moves the moment a tick is entered. The given-columns hash can."""
-    rows = validator.read_pack(pack.PACK)
+    rows = fresh_rows(tmp_path)
     rows[0]["text"] = rows[0]["text"] + " (edited)"
     _, defects = validator.check(rows, manifest)
     assert any("different question" in defect for defect in defects)
@@ -333,20 +385,20 @@ def test_the_validator_catches_a_question_that_moved(manifest):
     assert any("ids or their order moved" in defect for defect in defects)
 
 
-def test_the_validator_catches_a_ladder_that_moved(monkeypatch, manifest):
+def test_the_validator_catches_a_ladder_that_moved(monkeypatch, tmp_path, manifest):
     """The check the pre-registration exists for: the gold is computed from the operator's ticks by
     this code, so a changed ladder is a changed gold."""
     monkeypatch.setitem(manifest["ladder"], "sha256", "f" * 64)
-    _, defects = validator.check(validator.read_pack(pack.PACK), manifest)
+    _, defects = validator.check(fresh_rows(tmp_path), manifest)
     assert any("the ladder moved" in defect for defect in defects)
 
 
 def test_rebuilding_a_pack_that_carries_ticks_is_refused(tmp_path):
     """`data/annotation/**` is gitignored for everything except this pack, and --force takes an
     evening with it. The same footgun build_audit_pack and build_micro_pack carry."""
-    rows = validator.read_pack(pack.PACK)
+    rows = fresh_rows(tmp_path)
     rows[0]["brand"] = "y"
-    target = tmp_path / "text30.csv"
+    target = tmp_path / "ticked.csv"
     with target.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(
             handle, fieldnames=pack.COLUMNS, delimiter=pack.DELIMITER, lineterminator="\n"
@@ -356,10 +408,22 @@ def test_rebuilding_a_pack_that_carries_ticks_is_refused(tmp_path):
     assert pack.filled(target) == 1
     with pytest.raises(SystemExit, match="already carries ticks"):
         pack.main(["--pack", str(target), "--manifest", str(tmp_path / "m.json")])
-    assert pack.filled(pack.PACK) == 0, "the shipped pack is blank"
+    # and --force goes through, which is what makes the refusal above the only thing standing
+    # between a rebuild and an evening of adjudication
+    assert (
+        pack.main(["--pack", str(target), "--manifest", str(tmp_path / "m.json"), "--force"]) == 0
+    )
+    assert pack.filled(target) == 0
 
 
-def test_the_pack_rebuilds_to_the_same_thirty_rows(tmp_path):
+def test_the_pack_rebuilds_to_the_same_thirty_questions(tmp_path):
+    """The GIVEN columns, not the bytes: a rebuild reproduces the draw and its text forever, while a
+    byte-comparison against the shipped file stops holding the moment a tick is entered."""
     out, manifest_path = tmp_path / "text30.csv", tmp_path / "m.json"
     assert pack.main(["--pack", str(out), "--manifest", str(manifest_path)]) == 0
-    assert out.read_bytes() == pack.PACK.read_bytes()
+    rebuilt = validator.read_pack(out)
+    shipped = validator.read_pack(pack.PACK)
+    assert pack.given_sha256(rebuilt) == pack.given_sha256(shipped)
+    assert [row["id"] for row in rebuilt] == [row["id"] for row in shipped]
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    assert manifest["given_sha256"] == json.loads(pack.MANIFEST.read_text("utf-8"))["given_sha256"]

@@ -6499,3 +6499,46 @@ reason: the pilot cannot be run under a revised text and reported against these 
 a page resolves like any other name, and the leaflet gold contains it because the reviewer saw it
 printed. The 141 unlisted names resolve to `raw:` keys on both sides of bar 1, which is symmetric and
 does not move the recall.
+
+### The fix the green suite could not see: five tests with a shelf life
+
+**Dv111 — `make check` was green NOW and would have gone red for the operator doing exactly what the
+README asks.** Five tests asserted build-time properties as invariants:
+`test_..._every_tick_ships_blank`, the manifest's whole-file CSV sha, the `--force` test's closing
+`assert pack.filled(pack.PACK) == 0`, the byte-for-byte rebuild comparison, and the prereg's
+`test_no_pilot_artifact_exists_yet`, which pinned the exact `results/sku_*.json` listing. The first
+tick on `text30.csv` breaks four of them; sku-b's first record breaks the fifth. The next session's
+cheapest move would then be to loosen them — the pattern this repo refused twice today already
+(`test_yield_screen_5c1`, and `read_calibration_returns` before it).
+
+Measured rather than argued: with one cell ticked and a fake `results/sku_pilot_leaflet.json` in
+place, the pre-fix suite reports **5 failed, 36 passed**. After the fix, the whole suite reports
+**1611 passed, 2 skipped** on the same two events, and the pack was restored byte-identically
+(`cmp` against a copy taken first).
+
+The fix is the same shape as the yield-screen one: separate the invariant from the property of a
+fresh build.
+
+* `given_sha256` — the columns the operator must not touch — is stable across ticks BY
+  CONSTRUCTION and stays unconditional, as do the ids, their order, the README's sha and the
+  ladder's. The manifest now also *says* that the CSV's whole-file sha is expected to move, because
+  the manifest is what the next reader opens and that sentence lived only in a docstring.
+* The blankness and whole-file-sha assertions skip once `pack.filled()` is non-zero, with the reason
+  in the docstring. What must never skip is asserted separately:
+  `test_a_fresh_build_is_always_blank_whatever_the_shipped_pack_now_holds` builds into a temp
+  directory, because "nothing is proposed" is a property of the BUILDER and the builder is what a
+  re-run uses.
+* Every validator test now mutates a `fresh_rows(tmp_path)` fixture instead of the live CSV — a test
+  that edited the shipped pack would be asserting against somebody's half-finished evening.
+* The `--force` test now also proves `--force` GOES THROUGH, which is what makes the refusal beside
+  it the only thing between a rebuild and a lost adjudication.
+* The prereg's ordering claim is re-anchored to git: `git log --diff-filter=A` finds the single
+  commit that ADDED the file and `git ls-tree` shows no other `results/sku_pilot_*` in it. That is a
+  permanent fact about history, where a directory listing was evidence with a shelf life. Not
+  tracked is a FAILURE and not a skip — an uncommitted pre-registration is not one.
+
+**The prereg was re-derived once, and only its pins moved.** Adding `csv_sha_note` to the pack
+manifest moved that manifest's sha, which the pre-registration pins — so the writer was re-run and
+the two files diffed field by field: **2 of them changed**, both the same manifest sha
+(`0dac71c5…` → `2b941243…`). Bars, thresholds, procedures and the R1–R5 list are byte-identical, and
+no pilot artifact exists, so the registration is still ahead of what it judges.
