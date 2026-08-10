@@ -35,15 +35,21 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))  # the package is not pip-installed
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+import build_opus_audit_packs as builder  # noqa: E402
 import validate_opus_returns as validator  # noqa: E402
+import yield_screen_5c1 as screen  # noqa: E402
 from build_audit_pack import git_state  # noqa: E402
 from build_opus_audit_packs import MANIFEST, PACK_DIR, digest, protocol_pin, rel  # noqa: E402
+from market_pulse import yield_screen as core  # noqa: E402
 
 RECORD = REPO_ROOT / "results" / "opus_audit_5c1.json"
 MODEL = "claude-opus-5"
 
 REVIEW = "review, not measurement"
 """The label 3.16 (1) requires on every candidate number, in the record itself."""
+
+CONTEXT = 40
+"""Characters kept either side of a matched alias, so the sitting can see the word it sits in."""
 
 
 def protocol_at_head(manifest: dict) -> dict:
@@ -83,7 +89,198 @@ def ratio(numerator: int, denominator: int) -> float | None:
     return round(numerator / denominator, 4) if denominator else None
 
 
-def matcher_candidates(manifest: dict, rows: list[dict]) -> dict:
+def verdicts_still_hold(manifest: dict, derived: dict[str, dict]) -> int:
+    """Every manifest item's matcher verdict, re-derived today, against the one it was drawn with.
+
+    `builder.reproduction` compares six aggregate cells per channel, and an aggregate cannot
+    see a post whose text changed in place — the counts stay equal while the string the split
+    reads underneath them does not. This is the same question asked per row, which is the
+    granularity the split's claim is made at.
+    """
+    for entry in manifest["items"]:
+        today = derived.get(entry["item"])
+        if today is None:
+            raise SystemExit(
+                f"{entry['item']} is in the manifest but not in today's re-derivation. The post"
+                " the reviewer judged is gone from the corpus, and a split over the rest would"
+                " quietly drop it."
+            )
+        if today["matcher"]["watchlist_brands"] != entry["matcher"]["watchlist_brands"]:
+            raise SystemExit(
+                f"{entry['item']}: the matcher reads {today['matcher']['watchlist_brands']} today,"
+                f" the manifest recorded {entry['matcher']['watchlist_brands']}. The corpus moved"
+                " under the packs — the string this split would search is not the one the matcher"
+                " was judged on."
+            )
+    return len(manifest["items"])
+
+
+def matcher_strings(manifest: dict) -> tuple[dict[str, str], dict]:
+    """The exact string the matcher read, per item, rebuilt from the screen's own inputs.
+
+    Not a second implementation of anything: the screen record names its inputs, `check_pins`
+    re-checks them, and `rederive` is the builder's own re-emission of screen v2 per post —
+    which `surrogates` defines as the post's text, the caption that stands in for it, or the
+    two joined. That string is what «is the brand name in the text or the caption» has to be
+    asked against; asking it of anything else would price a different instrument.
+
+    Three gates, because a split is only as good as the string under it: the screen record
+    must still hash to what the manifest pinned, its six cells per channel must still
+    reproduce, and every drawn item's verdict must still be the one the manifest recorded.
+    The counts they were passed on come back beside the strings — a guard that leaves no
+    number behind is indistinguishable from one a refactor stopped calling.
+    """
+    path = REPO_ROOT / manifest["screen"]["path"]
+    if (found := digest(path)) != manifest["screen"]["sha256"]:
+        raise SystemExit(
+            f"{manifest['screen']['path']}: sha256 {found[:16]}…, the manifest pins"
+            f" {manifest['screen']['sha256'][:16]}…. The packs were drawn from that record; the"
+            " split cannot be re-derived from a different one."
+        )
+    record = json.loads(path.read_text(encoding="utf-8"))
+    builder.check_pins(record)
+    files = [REPO_ROOT / entry["path"] for entry in record["captions"]["files"]]
+    captions, _ = screen.read_caption_files(
+        files, [REPO_ROOT / entry["path"] for entry in record["captions"]["records"]]
+    )
+    derived = builder.rederive(record, captions, builder.caption_rows(files))
+    reproduced = builder.reproduction(record, derived)
+    index = {item["item"]: item for items in derived.values() for item in items}
+    provenance = {
+        "rebuilt_from": manifest["screen"]["path"],
+        "sha256": found,
+        "posts_rederived": len(index),
+        "channels_reproduced": reproduced["channels"],
+        "cells_per_channel": reproduced["cells_per_channel"],
+        "verdicts_rechecked": verdicts_still_hold(manifest, index),
+        "note": (
+            "the string every split below searched. Screen v2 re-emitted per post, its six"
+            " aggregate cells per channel equal to the record's, and every drawn item's matcher"
+            " verdict equal to the one the manifest recorded — the last is the row-level check"
+            " the aggregate one cannot make"
+        ),
+    }
+    return {name: item["read_as"] or "" for name, item in index.items()}, provenance
+
+
+def quote(haystack: str, start: int, end: int) -> str:
+    """The matched alias with its neighbours, on one line — the sitting's own evidence.
+
+    Casefolded, because that is the string the matcher searched: «Лимо» inside «Лимон» is
+    only legible as a finding if the reader can see the word it was refused out of.
+    """
+    left = "…" if start > CONTEXT else ""
+    right = "…" if end + CONTEXT < len(haystack) else ""
+    window = haystack[max(0, start - CONTEXT) : end + CONTEXT]
+    return f"{left}{' '.join(window.split())}{right}"
+
+
+def fn_split(missed: list[tuple[str, str]], strings: dict[str, str], compiled: list) -> dict:
+    """The reviewer's misses, divided by whether the name was in the string the matcher read.
+
+    The team lead's ruling of 2026-08-10: a raw FN column reads as the matcher's recall and is
+    nothing of the kind while the reviewer has the images and the matcher has a caption. So the
+    misses are split deterministically — `fn_matcher`, where the brand's own name was in the
+    text or the caption and the matcher did not emit it, against `fn_image_only`, where it was
+    never in that string at all. The first is the lexicon's to answer, the second the
+    captioner's; they have different owners and different remedies.
+
+    The discriminator is `compile_aliases`' own patterns — casefolded and bounded by non-word
+    characters — and not a substring test. The difference is not academic: the only «Лимо» in
+    the pilot's @atb_aktsiyi:3087 sits inside «Лимон», which a bare `in` reads as the name
+    being present and the matcher being wrong. `substring_would_disagree` carries exactly those
+    pairs, so the choice of test is a field in the record rather than a footnote about it.
+    """
+    by_brand: dict[str, list[tuple]] = {}
+    for pattern, brand_id, alias in compiled:
+        by_brand.setdefault(brand_id, []).append((pattern, alias))
+
+    on_the_matcher, image_only, loose = [], [], []
+    for item, brand_id in missed:
+        if item not in strings:
+            raise SystemExit(
+                f"{item}: no re-derived string, so «was the name in it» has no answer. An"
+                " unsplit miss is not an image-only one."
+            )
+        if brand_id not in by_brand:
+            raise SystemExit(
+                f"{brand_id!r} is not a brand_id on the pinned watchlist. The misses and the"
+                " alias table are in different id spaces, and every pair would fall through to"
+                " fn_image_only without one alias ever being tried."
+            )
+        low = strings[item].casefold()
+        hit = next(
+            (
+                (match, alias)
+                for pattern, alias in by_brand[brand_id]
+                if (match := pattern.search(low))
+            ),
+            None,
+        )
+        if hit:
+            match, alias = hit
+            on_the_matcher.append(
+                {
+                    "item": item,
+                    "brand_id": brand_id,
+                    "alias": alias,
+                    "context": quote(low, match.start(), match.end()),
+                }
+            )
+            continue
+        image_only.append({"item": item, "brand_id": brand_id})
+        for _, alias in by_brand[brand_id]:
+            if (at := low.find(alias)) >= 0:
+                loose.append(
+                    {
+                        "item": item,
+                        "brand_id": brand_id,
+                        "alias": alias,
+                        "context": quote(low, at, at + len(alias)),
+                    }
+                )
+                break
+    return {
+        "label": REVIEW,
+        "ruling": (
+            "docs/STATUS.md, team lead, 2026-08-10: the reader splits FN deterministically. The"
+            " false positives stay raw on purpose — there is no committed list of already-ruled"
+            " collisions, so reading them is the sitting's prose and not this script's arithmetic"
+        ),
+        "rule": (
+            "the brand's own aliases from the pinned watchlist, compiled by"
+            " market_pulse.yield_screen.compile_aliases — casefolded, bounded by non-word"
+            " characters — searched over the exact string the matcher read (the post's text, the"
+            " caption standing in for it, or the two joined). Not a substring test"
+        ),
+        "counts": {
+            "pairs": len(on_the_matcher) + len(image_only),
+            "fn_matcher": len(on_the_matcher),
+            "fn_image_only": len(image_only),
+            "substring_would_disagree": len(loose),
+        },
+        "fn_matcher": {
+            "asks": "the name was in the string the matcher read and it did not emit the brand",
+            "owner": "the lexicon and the alias table",
+            "pairs": on_the_matcher,
+        },
+        "fn_image_only": {
+            "asks": "the name was never in that string — the reviewer read it off the image",
+            "owner": "the caption's coverage, not the matcher's recall",
+            "pairs": image_only,
+        },
+        "substring_would_disagree": {
+            "asks": (
+                "pairs a bare `in` test would have called fn_matcher and the word-boundary rule"
+                " refuses. Each one is the matcher being right, and each one is a row where a"
+                " count taken the loose way differs from the count above"
+            ),
+            "pairs": loose,
+        },
+    }
+
+
+def matcher_candidates(manifest: dict, rows: list[dict], strings: dict, compiled: list) -> dict:
     """The matcher against the reviewer, per channel, as (item, brand_id) pairs.
 
     Judged at the pair level rather than the post level: a post where the matcher found
@@ -153,7 +350,13 @@ def matcher_candidates(manifest: dict, rows: list[dict]) -> dict:
         },
         "by_channel": dict(sorted(by_channel.items())),
         "false_positive_candidates": brand_tallies(false_positives),
+        "false_positives_not_split": (
+            "raw on purpose (team-lead ruling, 2026-08-10). Splitting them would need a committed"
+            " list of collisions the operator has already ruled on, and there is none — «Президент»"
+            " the head of state and «варто» the ordinary word are read at the sitting, not here"
+        ),
         "missed_brand_candidates": brand_tallies(missed),
+        "fn_split": fn_split(missed, strings, compiled),
     }
 
 
@@ -238,6 +441,8 @@ def main(argv: list[str] | None = None) -> int:
             + "\n  ".join(defects[:5])
         )
     rows = [row for pack in sorted(by_pack) for row in by_pack[pack]]
+    strings, provenance = matcher_strings(manifest)
+    compiled = core.compile_aliases(validator.aliases(manifest))
 
     record = {
         "read_by": "scripts/read_opus_audit.py",
@@ -260,6 +465,7 @@ def main(argv: list[str] | None = None) -> int:
             ),
         },
         "manifest": {"path": rel(args.manifest), "sha256": digest(args.manifest)},
+        "matcher_strings": provenance,
         "seed": manifest["seed"],
         "coverage": {
             "packs_in_manifest": len(manifest["packs"]),
@@ -274,7 +480,7 @@ def main(argv: list[str] | None = None) -> int:
                 " rows that came back and names its own denominator"
             ),
         },
-        "matcher_candidates": matcher_candidates(manifest, rows),
+        "matcher_candidates": matcher_candidates(manifest, rows, strings, compiled),
         "caption_candidates": caption_candidates(manifest, rows),
         "open_extraction_candidates": {
             "label": REVIEW,
@@ -305,6 +511,12 @@ def main(argv: list[str] | None = None) -> int:
         f" · faithful rate {captions['faithful_rate_candidate']}   [{REVIEW}]"
     )
     print(f"missed-brand candidates: {len(matcher['missed_brand_candidates'])} brand(s)")
+    split = matcher["fn_split"]["counts"]
+    print(
+        f"fn split: {split['fn_matcher']} on the matcher (the name was in the string it read) ·"
+        f" {split['fn_image_only']} image-only · a substring test would disagree on"
+        f" {split['substring_would_disagree']}"
+    )
     print(f"open extraction: {len(record['open_extraction_candidates']['names'])} name(s)")
     print(f"\nwrote {rel(args.record)} — candidates for the sitting, never gate numbers")
     return 0

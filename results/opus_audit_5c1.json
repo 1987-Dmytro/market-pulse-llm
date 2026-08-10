@@ -1,0 +1,1081 @@
+{
+  "read_by": "scripts/read_opus_audit.py",
+  "class": "REVIEW, never measurement (SPEC 3.16 (1)). Nothing in this file may enter a gate, the screen or results/baselines.json. The deterministic matcher remains the sole judge of screen and G1e numbers; screen v2 verdicts are not re-scored; the prereg bars do not move. These are candidates for the operator sitting of 3.16 (3)",
+  "instrument": {
+    "model": "claude-opus-5",
+    "protocol_sha": "d02ed1f4e7f5f0c5bf5bf2df9250912e1768dc04c21addafd524cfe039d74aa4",
+    "protocol_path": "docs/PROMPT-opus-audit-protocol.md",
+    "protocol_head": "8aa7d13cb8933d39cf656dffa659dd3d5bbb3773",
+    "declared_not_verified": "the model is what the session declared on its first line, per the protocol's rule 1 — a returns file cannot prove which model wrote it. Price is unpinnable (subscription). 3.16 (2): the pin that is possible is mandatory, and the rest is why the output class is review"
+  },
+  "manifest": {
+    "path": "results/opus_audit_manifest.json",
+    "sha256": "b2708885f569866b2677b811e54dbd172750aa88462e3a4d70aa650a15404799"
+  },
+  "matcher_strings": {
+    "rebuilt_from": "results/yield_screen_5c1_v2.json",
+    "sha256": "24c5397c1fc49d31c741db99cafb9b83214df3ae99a53b5a972e4cc4936c357a",
+    "posts_rederived": 9343,
+    "channels_reproduced": 66,
+    "cells_per_channel": 6,
+    "verdicts_rechecked": 498,
+    "note": "the string every split below searched. Screen v2 re-emitted per post, its six aggregate cells per channel equal to the record's, and every drawn item's matcher verdict equal to the one the manifest recorded — the last is the row-level check the aggregate one cannot make"
+  },
+  "seed": 42,
+  "coverage": {
+    "packs_in_manifest": 25,
+    "packs_returned": [
+      "pack_01",
+      "pack_02"
+    ],
+    "items_in_returned_packs": 40,
+    "items_in_all_packs": 498,
+    "rows_read": 40,
+    "unanswered": [],
+    "by_pack": [
+      {
+        "pack": "pack_01",
+        "items": 20,
+        "rows": 20,
+        "unanswered": [],
+        "captions_judgeable": 6,
+        "captions_judged": 6,
+        "captions_declined": []
+      },
+      {
+        "pack": "pack_02",
+        "items": 20,
+        "rows": 20,
+        "unanswered": [],
+        "captions_judgeable": 6,
+        "captions_judged": 6,
+        "captions_declined": []
+      }
+    ],
+    "note": "packs the operator has not run are absent, not zero. Every rate below is over the rows that came back and names its own denominator"
+  },
+  "matcher_candidates": {
+    "label": "review, not measurement",
+    "definition": "one (item, brand_id) pair per brand. TP the matcher and the reviewer agree, FP the matcher emitted and the reviewer did not confirm, FN the reviewer named and the matcher did not. Precision over the matcher's emissions, recall over the reviewer's finds",
+    "not_a_rate": "S2 and S3 are per-channel samples capped at 10, drawn for leverage and not proportionally, and one reviewer judged them. These ratios are a prompt for the sitting of 3.16 (3); the matcher's own numbers are the screen's and do not move",
+    "overall": {
+      "tp": 3,
+      "fp": 10,
+      "fn": 13,
+      "items_judged": 40,
+      "precision_candidate": 0.2308,
+      "recall_candidate": 0.1875
+    },
+    "by_stratum": {
+      "S1": {
+        "items_judged": 7,
+        "tp": 3,
+        "fp": 2,
+        "fn": 12,
+        "precision_candidate": 0.6,
+        "recall_candidate": 0.2
+      },
+      "S2": {
+        "items_judged": 8,
+        "tp": 0,
+        "fp": 8,
+        "fn": 0,
+        "precision_candidate": 0.0,
+        "recall_candidate": null
+      },
+      "S3": {
+        "items_judged": 20,
+        "tp": 0,
+        "fp": 0,
+        "fn": 5,
+        "precision_candidate": null,
+        "recall_candidate": 0.0
+      },
+      "S4": {
+        "items_judged": 15,
+        "tp": 3,
+        "fp": 2,
+        "fn": 12,
+        "precision_candidate": 0.6,
+        "recall_candidate": 0.2
+      }
+    },
+    "by_channel": {
+      "@VARUS_channel": {
+        "items_judged": 5,
+        "tp": 2,
+        "fp": 2,
+        "fn": 2,
+        "false_positives": [
+          {
+            "item": "@VARUS_channel:10303",
+            "brand_id": "varus-pl"
+          },
+          {
+            "item": "@VARUS_channel:10529",
+            "brand_id": "varus-pl"
+          }
+        ],
+        "missed": [
+          {
+            "item": "@VARUS_channel:10420",
+            "brand_id": "varto"
+          },
+          {
+            "item": "@VARUS_channel:10303",
+            "brand_id": "varto"
+          }
+        ],
+        "precision_candidate": 0.5,
+        "recall_candidate": 0.5
+      },
+      "@atb_aktsiyi": {
+        "items_judged": 3,
+        "tp": 1,
+        "fp": 1,
+        "fn": 8,
+        "false_positives": [
+          {
+            "item": "@atb_aktsiyi:3087",
+            "brand_id": "selianske"
+          }
+        ],
+        "missed": [
+          {
+            "item": "@atb_aktsiyi:3164",
+            "brand_id": "svoia-liniia"
+          },
+          {
+            "item": "@atb_aktsiyi:3087",
+            "brand_id": "ferma"
+          },
+          {
+            "item": "@atb_aktsiyi:3087",
+            "brand_id": "lasunka"
+          },
+          {
+            "item": "@atb_aktsiyi:3087",
+            "brand_id": "limo"
+          },
+          {
+            "item": "@atb_aktsiyi:3087",
+            "brand_id": "molokija"
+          },
+          {
+            "item": "@atb_aktsiyi:3087",
+            "brand_id": "rud"
+          },
+          {
+            "item": "@atb_aktsiyi:3087",
+            "brand_id": "zlahoda"
+          },
+          {
+            "item": "@atb_aktsiyi:3240",
+            "brand_id": "svoia-liniia"
+          }
+        ],
+        "precision_candidate": 0.5,
+        "recall_candidate": 0.1111
+      },
+      "@atb_market_official": {
+        "items_judged": 1,
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "false_positives": [],
+        "missed": [
+          {
+            "item": "@atb_market_official:4360",
+            "brand_id": "limo"
+          },
+          {
+            "item": "@atb_market_official:4360",
+            "brand_id": "svoia-liniia"
+          }
+        ],
+        "precision_candidate": null,
+        "recall_candidate": 0.0
+      },
+      "@denisovapro": {
+        "items_judged": 1,
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "false_positives": [],
+        "missed": [],
+        "precision_candidate": null,
+        "recall_candidate": null
+      },
+      "@educationwithloven": {
+        "items_judged": 1,
+        "tp": 0,
+        "fp": 1,
+        "fn": 0,
+        "false_positives": [
+          {
+            "item": "@educationwithloven:104044",
+            "brand_id": "varto"
+          }
+        ],
+        "missed": [],
+        "precision_candidate": 0.0,
+        "recall_candidate": null
+      },
+      "@gaid_skobioale": {
+        "items_judged": 1,
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "false_positives": [],
+        "missed": [],
+        "precision_candidate": null,
+        "recall_candidate": null
+      },
+      "@globine1": {
+        "items_judged": 1,
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "false_positives": [],
+        "missed": [],
+        "precision_candidate": null,
+        "recall_candidate": null
+      },
+      "@gorishnie_plavni1": {
+        "items_judged": 1,
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "false_positives": [],
+        "missed": [],
+        "precision_candidate": null,
+        "recall_candidate": null
+      },
+      "@h_kremenchug": {
+        "items_judged": 1,
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "false_positives": [],
+        "missed": [],
+        "precision_candidate": null,
+        "recall_candidate": null
+      },
+      "@klopotenkofood": {
+        "items_judged": 1,
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "false_positives": [],
+        "missed": [],
+        "precision_candidate": null,
+        "recall_candidate": null
+      },
+      "@konservacia_kulinaria": {
+        "items_judged": 1,
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "false_positives": [],
+        "missed": [],
+        "precision_candidate": null,
+        "recall_candidate": null
+      },
+      "@kopiyochka1": {
+        "items_judged": 1,
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "false_positives": [],
+        "missed": [],
+        "precision_candidate": null,
+        "recall_candidate": null
+      },
+      "@korolevakuchni": {
+        "items_judged": 1,
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "false_positives": [],
+        "missed": [],
+        "precision_candidate": null,
+        "recall_candidate": null
+      },
+      "@mandziak": {
+        "items_judged": 3,
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "false_positives": [],
+        "missed": [],
+        "precision_candidate": null,
+        "recall_candidate": null
+      },
+      "@matusi_ukr": {
+        "items_judged": 2,
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "false_positives": [],
+        "missed": [],
+        "precision_candidate": null,
+        "recall_candidate": null
+      },
+      "@mo3ambik": {
+        "items_judged": 1,
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "false_positives": [],
+        "missed": [],
+        "precision_candidate": null,
+        "recall_candidate": null
+      },
+      "@myrhorodtown": {
+        "items_judged": 1,
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "false_positives": [],
+        "missed": [],
+        "precision_candidate": null,
+        "recall_candidate": null
+      },
+      "@poltava_informue": {
+        "items_judged": 1,
+        "tp": 0,
+        "fp": 1,
+        "fn": 0,
+        "false_positives": [
+          {
+            "item": "@poltava_informue:36801",
+            "brand_id": "president"
+          }
+        ],
+        "missed": [],
+        "precision_candidate": 0.0,
+        "recall_candidate": null
+      },
+      "@recepti": {
+        "items_judged": 3,
+        "tp": 0,
+        "fp": 1,
+        "fn": 0,
+        "false_positives": [
+          {
+            "item": "@recepti:11800",
+            "brand_id": "varto"
+          }
+        ],
+        "missed": [],
+        "precision_candidate": 0.0,
+        "recall_candidate": null
+      },
+      "@retsepty": {
+        "items_judged": 2,
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "false_positives": [],
+        "missed": [],
+        "precision_candidate": null,
+        "recall_candidate": null
+      },
+      "@silposilpo": {
+        "items_judged": 2,
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "false_positives": [],
+        "missed": [
+          {
+            "item": "@silposilpo:3791",
+            "brand_id": "premia"
+          }
+        ],
+        "precision_candidate": null,
+        "recall_candidate": 0.0
+      },
+      "@suspilnepoltava": {
+        "items_judged": 2,
+        "tp": 0,
+        "fp": 2,
+        "fn": 0,
+        "false_positives": [
+          {
+            "item": "@suspilnepoltava:46771",
+            "brand_id": "president"
+          },
+          {
+            "item": "@suspilnepoltava:47056",
+            "brand_id": "president"
+          }
+        ],
+        "missed": [],
+        "precision_candidate": 0.0,
+        "recall_candidate": null
+      },
+      "@tarilka_malyuka": {
+        "items_judged": 2,
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "false_positives": [],
+        "missed": [],
+        "precision_candidate": null,
+        "recall_candidate": null
+      },
+      "@telegraf_kremenchuk": {
+        "items_judged": 2,
+        "tp": 0,
+        "fp": 2,
+        "fn": 0,
+        "false_positives": [
+          {
+            "item": "@telegraf_kremenchuk:70925",
+            "brand_id": "president"
+          },
+          {
+            "item": "@telegraf_kremenchuk:71000",
+            "brand_id": "varto"
+          }
+        ],
+        "missed": [],
+        "precision_candidate": 0.0,
+        "recall_candidate": null
+      }
+    },
+    "false_positive_candidates": {
+      "president": {
+        "count": 4,
+        "items": [
+          "@poltava_informue:36801",
+          "@suspilnepoltava:46771",
+          "@suspilnepoltava:47056",
+          "@telegraf_kremenchuk:70925"
+        ]
+      },
+      "varto": {
+        "count": 3,
+        "items": [
+          "@educationwithloven:104044",
+          "@recepti:11800",
+          "@telegraf_kremenchuk:71000"
+        ]
+      },
+      "varus-pl": {
+        "count": 2,
+        "items": [
+          "@VARUS_channel:10303",
+          "@VARUS_channel:10529"
+        ]
+      },
+      "selianske": {
+        "count": 1,
+        "items": [
+          "@atb_aktsiyi:3087"
+        ]
+      }
+    },
+    "false_positives_not_split": "raw on purpose (team-lead ruling, 2026-08-10). Splitting them would need a committed list of collisions the operator has already ruled on, and there is none — «Президент» the head of state and «варто» the ordinary word are read at the sitting, not here",
+    "missed_brand_candidates": {
+      "svoia-liniia": {
+        "count": 3,
+        "items": [
+          "@atb_aktsiyi:3164",
+          "@atb_aktsiyi:3240",
+          "@atb_market_official:4360"
+        ]
+      },
+      "limo": {
+        "count": 2,
+        "items": [
+          "@atb_aktsiyi:3087",
+          "@atb_market_official:4360"
+        ]
+      },
+      "varto": {
+        "count": 2,
+        "items": [
+          "@VARUS_channel:10303",
+          "@VARUS_channel:10420"
+        ]
+      },
+      "ferma": {
+        "count": 1,
+        "items": [
+          "@atb_aktsiyi:3087"
+        ]
+      },
+      "lasunka": {
+        "count": 1,
+        "items": [
+          "@atb_aktsiyi:3087"
+        ]
+      },
+      "molokija": {
+        "count": 1,
+        "items": [
+          "@atb_aktsiyi:3087"
+        ]
+      },
+      "premia": {
+        "count": 1,
+        "items": [
+          "@silposilpo:3791"
+        ]
+      },
+      "rud": {
+        "count": 1,
+        "items": [
+          "@atb_aktsiyi:3087"
+        ]
+      },
+      "zlahoda": {
+        "count": 1,
+        "items": [
+          "@atb_aktsiyi:3087"
+        ]
+      }
+    },
+    "fn_split": {
+      "label": "review, not measurement",
+      "ruling": "docs/STATUS.md, team lead, 2026-08-10: the reader splits FN deterministically. The false positives stay raw on purpose — there is no committed list of already-ruled collisions, so reading them is the sitting's prose and not this script's arithmetic",
+      "rule": "the brand's own aliases from the pinned watchlist, compiled by market_pulse.yield_screen.compile_aliases — casefolded, bounded by non-word characters — searched over the exact string the matcher read (the post's text, the caption standing in for it, or the two joined). Not a substring test",
+      "counts": {
+        "pairs": 13,
+        "fn_matcher": 0,
+        "fn_image_only": 13,
+        "substring_would_disagree": 1
+      },
+      "fn_matcher": {
+        "asks": "the name was in the string the matcher read and it did not emit the brand",
+        "owner": "the lexicon and the alias table",
+        "pairs": []
+      },
+      "fn_image_only": {
+        "asks": "the name was never in that string — the reviewer read it off the image",
+        "owner": "the caption's coverage, not the matcher's recall",
+        "pairs": [
+          {
+            "item": "@atb_aktsiyi:3164",
+            "brand_id": "svoia-liniia"
+          },
+          {
+            "item": "@atb_aktsiyi:3087",
+            "brand_id": "ferma"
+          },
+          {
+            "item": "@atb_aktsiyi:3087",
+            "brand_id": "lasunka"
+          },
+          {
+            "item": "@atb_aktsiyi:3087",
+            "brand_id": "limo"
+          },
+          {
+            "item": "@atb_aktsiyi:3087",
+            "brand_id": "molokija"
+          },
+          {
+            "item": "@atb_aktsiyi:3087",
+            "brand_id": "rud"
+          },
+          {
+            "item": "@atb_aktsiyi:3087",
+            "brand_id": "zlahoda"
+          },
+          {
+            "item": "@silposilpo:3791",
+            "brand_id": "premia"
+          },
+          {
+            "item": "@VARUS_channel:10420",
+            "brand_id": "varto"
+          },
+          {
+            "item": "@VARUS_channel:10303",
+            "brand_id": "varto"
+          },
+          {
+            "item": "@atb_market_official:4360",
+            "brand_id": "limo"
+          },
+          {
+            "item": "@atb_market_official:4360",
+            "brand_id": "svoia-liniia"
+          },
+          {
+            "item": "@atb_aktsiyi:3240",
+            "brand_id": "svoia-liniia"
+          }
+        ]
+      },
+      "substring_would_disagree": {
+        "asks": "pairs a bare `in` test would have called fn_matcher and the word-boundary rule refuses. Each one is the matcher being right, and each one is a row where a count taken the loose way differs from the count above",
+        "pairs": [
+          {
+            "item": "@atb_aktsiyi:3087",
+            "brand_id": "limo",
+            "alias": "лимо",
+            "context": "…«fairy» «зелене яблуко»/ «pure&clean»/ «лимон», 450 мл виріб м'ясомісткий «гурман з…"
+          }
+        ]
+      }
+    }
+  },
+  "caption_candidates": {
+    "label": "review, not measurement",
+    "instrument_judged": "gm4-nf4-base captions over their sha-matched sent images",
+    "denominator": "items whose caption a model wrote over images that are on disk under the sha the caption row recorded. Poll transcriptions carry no image and no model and are not in it — they would otherwise put free deterministic rows into GM4's rate",
+    "judgeable": 12,
+    "judged": 12,
+    "declined_n_a": 0,
+    "tally": {
+      "faithful": 6,
+      "partial": 6
+    },
+    "faithful_rate_candidate": 0.5,
+    "by_channel": {
+      "@VARUS_channel": {
+        "judged": 3,
+        "faithful": 1,
+        "partial": 2,
+        "wrong": 0,
+        "faithful_rate_candidate": 0.3333
+      },
+      "@atb_aktsiyi": {
+        "judged": 3,
+        "faithful": 0,
+        "partial": 3,
+        "wrong": 0,
+        "faithful_rate_candidate": 0.0
+      },
+      "@atb_market_official": {
+        "judged": 1,
+        "faithful": 0,
+        "partial": 1,
+        "wrong": 0,
+        "faithful_rate_candidate": 0.0
+      },
+      "@denisovapro": {
+        "judged": 1,
+        "faithful": 1,
+        "partial": 0,
+        "wrong": 0,
+        "faithful_rate_candidate": 1.0
+      },
+      "@gaid_skobioale": {
+        "judged": 1,
+        "faithful": 1,
+        "partial": 0,
+        "wrong": 0,
+        "faithful_rate_candidate": 1.0
+      },
+      "@kopiyochka1": {
+        "judged": 1,
+        "faithful": 1,
+        "partial": 0,
+        "wrong": 0,
+        "faithful_rate_candidate": 1.0
+      },
+      "@mo3ambik": {
+        "judged": 1,
+        "faithful": 1,
+        "partial": 0,
+        "wrong": 0,
+        "faithful_rate_candidate": 1.0
+      },
+      "@retsepty": {
+        "judged": 1,
+        "faithful": 1,
+        "partial": 0,
+        "wrong": 0,
+        "faithful_rate_candidate": 1.0
+      }
+    },
+    "brands_visible_missed": {
+      "svoia-liniia": {
+        "count": 3,
+        "items": [
+          "@atb_aktsiyi:3164",
+          "@atb_aktsiyi:3240",
+          "@atb_market_official:4360"
+        ]
+      },
+      "limo": {
+        "count": 2,
+        "items": [
+          "@atb_aktsiyi:3087",
+          "@atb_market_official:4360"
+        ]
+      },
+      "varto": {
+        "count": 2,
+        "items": [
+          "@VARUS_channel:10303",
+          "@VARUS_channel:10420"
+        ]
+      },
+      "ferma": {
+        "count": 1,
+        "items": [
+          "@atb_aktsiyi:3087"
+        ]
+      },
+      "lasunka": {
+        "count": 1,
+        "items": [
+          "@atb_aktsiyi:3087"
+        ]
+      },
+      "molokija": {
+        "count": 1,
+        "items": [
+          "@atb_aktsiyi:3087"
+        ]
+      },
+      "rud": {
+        "count": 1,
+        "items": [
+          "@atb_aktsiyi:3087"
+        ]
+      },
+      "zlahoda": {
+        "count": 1,
+        "items": [
+          "@atb_aktsiyi:3087"
+        ]
+      }
+    }
+  },
+  "open_extraction_candidates": {
+    "label": "review, not measurement",
+    "asks": "dairy / ice-cream names present that the watchlist does not carry",
+    "names": {
+      "каштан": {
+        "count": 2,
+        "as_written": [
+          "Каштан"
+        ],
+        "items": [
+          "@atb_aktsiyi:3087",
+          "@atb_market_official:4360"
+        ]
+      },
+      "bonfetto": {
+        "count": 1,
+        "as_written": [
+          "Bonfetto"
+        ],
+        "items": [
+          "@silposilpo:3783"
+        ]
+      },
+      "dorblu": {
+        "count": 1,
+        "as_written": [
+          "DORBLU"
+        ],
+        "items": [
+          "@matusi_ukr:22130"
+        ]
+      },
+      "laciaty": {
+        "count": 1,
+        "as_written": [
+          "Laciaty"
+        ],
+        "items": [
+          "@atb_aktsiyi:3240"
+        ]
+      },
+      "pro milk": {
+        "count": 1,
+        "as_written": [
+          "Pro Milk"
+        ],
+        "items": [
+          "@VARUS_channel:10529"
+        ]
+      },
+      "radamer": {
+        "count": 1,
+        "as_written": [
+          "Radamer"
+        ],
+        "items": [
+          "@atb_aktsiyi:3087"
+        ]
+      },
+      "serenada": {
+        "count": 1,
+        "as_written": [
+          "SERENADA"
+        ],
+        "items": [
+          "@atb_aktsiyi:3087"
+        ]
+      },
+      "київський пломбір": {
+        "count": 1,
+        "as_written": [
+          "Київський Пломбір"
+        ],
+        "items": [
+          "@atb_market_official:4360"
+        ]
+      },
+      "лактонія": {
+        "count": 1,
+        "as_written": [
+          "Лактонія"
+        ],
+        "items": [
+          "@atb_aktsiyi:3087"
+        ]
+      },
+      "лактонія (лактонія імун+)": {
+        "count": 1,
+        "as_written": [
+          "Лактонія (Лактонія Імун+)"
+        ],
+        "items": [
+          "@atb_aktsiyi:3240"
+        ]
+      },
+      "лактонія імун+": {
+        "count": 1,
+        "as_written": [
+          "Лактонія Імун+"
+        ],
+        "items": [
+          "@atb_aktsiyi:3087"
+        ]
+      },
+      "легко": {
+        "count": 1,
+        "as_written": [
+          "Легко"
+        ],
+        "items": [
+          "@VARUS_channel:10420"
+        ]
+      }
+    }
+  },
+  "notes": [
+    {
+      "item": "@recepti:11714",
+      "channel": "@recepti",
+      "note": "Recipe post: only category words (густий грецький йогурт, фелата) -- no brand of any kind; 'фелата' is a misspelling of the cheese type feta, not a trade mark."
+    },
+    {
+      "item": "@educationwithloven:104044",
+      "channel": "@educationwithloven",
+      "note": "Nothing here; but note the substring trap -- 'ЛАБІРИНТИ ДЛЯ ДІТЕЙ' contains the tail of 'Яготинське для дітей', so a matcher keying on the 'для дітей' fragment would fire on a childrens-alphabet post."
+    },
+    {
+      "item": "@atb_aktsiyi:3164",
+      "channel": "@atb_aktsiyi",
+      "note": "The caption transcribes ONE page of six -- and not the first: it renders atb_aktsiyi_3165, the loyalty-card cover, which is the only page in the album carrying no products; the four ТМ «Своя Лінія» blocks on pages 3164 and 3166 (скумбрія/кілька/шпроти, соломка зі смаком сиру-сметани, арахіс зі смаком сметани) are invisible to it, as is ТМ «Щедро» (sauces/mayonnaise, incl. соус «Сирний» -- cheese-flavoured, not a dairy brand)."
+    },
+    {
+      "item": "@atb_aktsiyi:3087",
+      "channel": "@atb_aktsiyi",
+      "note": "The caption is truncated mid-token ('...180 г Т') exactly where page atb_aktsiyi_3091 begins, so it stops at the doorstep of the album's two dairy pages and carries none of them: 3091 holds ТМ «Ферма» (масло + молоко), ТМ «Молокія» (4 yoghurts), ТМ «Злагода» (сирки) and ТМ «Лактонія»/«Лактонія Імун+», and 3092 is a whole ice-cream page -- ТМ «Ласунка», ТМ «Рудь» (pack logo reads Latin 'RUD'), ТМ «Лімо» (pack logo lowercase 'лімо'), ТМ «Каштан»; separately, on 3091 «Селянське» is the BUTTER GRADE under ТМ «Ферма», not the selianske brand, and on 3088 «Yogurt&Oats Avena» is a hand soap -- two guaranteed false positives for a string matcher."
+    },
+    {
+      "item": "@VARUS_channel:10365",
+      "channel": "@VARUS_channel",
+      "note": "Football poll on the VARUS channel: the retailer name is in the channel handle only, never in the post's own text, so closed-book this is [] -- a channel-level attribution would score varus-pl here wrongly."
+    },
+    {
+      "item": "@VARUS_channel:10582",
+      "channel": "@VARUS_channel",
+      "note": "Six pages and not one dairy or ice-cream item -- the album is juice/canned veg then pure non-food (hygiene, laundry, cleaning), so the caption's category list is complete for our purposes and the honest answer on brands is the empty one; watch the toilet paper on VARUS_channel_10587, '3-шаровий Нейчрл Преміо ТМ Диво' -- «Преміо»/'Premio' on a paper pack is a false-positive shape for premia."
+    },
+    {
+      "item": "@h_kremenchug:100607",
+      "channel": "@h_kremenchug",
+      "note": "Маркетопт promo listing 'кефір, улюблене морозиво' -- retailer name plus generic category words, lowercase 'улюблене морозиво' reads as an adjective, not a private label."
+    },
+    {
+      "item": "@recepti:11800",
+      "channel": "@recepti",
+      "note": "Recipe: 'сир', 'пармезан' are category/type words, no trade marks anywhere."
+    },
+    {
+      "item": "@mandziak:3688",
+      "channel": "@mandziak",
+      "note": "Long nutrition essay: 'грецького йогурта' generic; 'оземпіки з мунджарами' are drug names (Ozempic/Mounjaro), a pharma-brand shape that must not be read as food brands."
+    },
+    {
+      "item": "@retsepty:7279",
+      "channel": "@retsepty",
+      "note": "Greeting-card stock photo -- both overlay lines ('Доброго ранку!', 'Гарного дня!') are transcribed correctly and the coffee/waffles/strawberries/blueberries are all there; no packaging, no logo, the only dairy is unbranded milk foam in the cup."
+    },
+    {
+      "item": "@recepti:11684",
+      "channel": "@recepti",
+      "note": "Recipe with молоко / сметана / вершкове масло -- three dairy categories and zero brands; posts like this are the dairy-relevant-but-brandless class."
+    },
+    {
+      "item": "@telegraf_kremenchuk:70925",
+      "channel": "@telegraf_kremenchuk",
+      "note": "'Президент України' / 'указом Президента' -- head of state, not the President dairy brand; watchlist entry 'Президент' is a standing false-positive source on news channels and needs a case/context guard."
+    },
+    {
+      "item": "@silposilpo:3791",
+      "channel": "@silposilpo",
+      "note": "'морозиво-ріжок PREMIA' twice, Latin-script uppercase -- the canon table lists only Премія/Премия, so the retailer's own writing of its private label would be missed by a Cyrillic-only lexicon; 'Сільпо' is the retailer, not a dairy brand."
+    },
+    {
+      "item": "@mandziak:3666",
+      "channel": "@mandziak",
+      "note": "Diet advice naming milk fat percentages (1% vs 3,2%) -- category talk, no brand."
+    },
+    {
+      "item": "@kopiyochka1:21878",
+      "channel": "@kopiyochka1",
+      "note": "Pages 7-12 of the catalogue and not one dairy or ice-cream SKU -- spices (Любисток, Ямуна), ketchup, Pit Bull, кава Queen, kitchenware, textiles, bags, toys, pet food (Murkiss, My Pets, PreVital, OptiVital); the caption's category list covers all six pages and the empty brand row is the real answer, though the caption spells the retailer 'копіїчка' where every page logo reads 'копійочка'."
+    },
+    {
+      "item": "@VARUS_channel:10420",
+      "channel": "@VARUS_channel",
+      "note": "Варто is on eight blocks across five of the six pages, always doubled -- 'ТМ Варто' in the Cyrillic price copy and a Latin 'Varto' badge stamped on the photo -- and the caption carries neither; its category list also has no dairy slot at all, so it drops the two dairy items in the album: 'МОЛОКО ЗГУЩЕНЕ з цукром 8,5% Преміум ТМ Варто 870г' (VARUS_channel_10422) and 'СИРНИКИ міні запечені ТМ Легко' (10420, where «Легко» is a frozen-convenience TM whose product is merely curd-based -- discount it as a dairy brand if you prefer); 'Преміум' as a grade word on that condensed milk is another premia false-positive shape."
+    },
+    {
+      "item": "@gorishnie_plavni1:30892",
+      "channel": "@gorishnie_plavni1",
+      "note": "Official price monitoring: 'молоко', 'сметана 15%' as regulated basket items -- dairy-relevant, brandless by construction."
+    },
+    {
+      "item": "@suspilnepoltava:46771",
+      "channel": "@suspilnepoltava",
+      "note": "'Президент Зеленський' -- second instance of the president false-positive shape in this pack, here with a capitalised standalone 'Президент' directly before a surname."
+    },
+    {
+      "item": "@poltava_informue:36801",
+      "channel": "@poltava_informue",
+      "note": "'президент України' lowercase -- third president occurrence in the pack, none of them the brand; a case-insensitive bare-token rule fires on all three."
+    },
+    {
+      "item": "@telegraf_kremenchuk:71000",
+      "channel": "@telegraf_kremenchuk",
+      "note": "Same price-monitoring bulletin shape as @gorishnie_plavni1:30892 (identical молоко +1,10 / сметана +3,25 figures) -- two channels republish one source, so brandless dairy posts arrive duplicated."
+    },
+    {
+      "item": "@konservacia_kulinaria:6904",
+      "channel": "@konservacia_kulinaria",
+      "note": "Salted-fish recipe, no dairy content at all and no brand of any kind; a clean negative."
+    },
+    {
+      "item": "@globine1:9871",
+      "channel": "@globine1",
+      "note": "Cafe opening; note the toponym in the locative -- \"У Глобиному\" -- one letter from the food brand \"Глобино\" that appears as a real on-pack brand elsewhere in this pack (ATB cheese sticks), a place-name/brand collision a lexicon will fire on."
+    },
+    {
+      "item": "@tarilka_malyuka:754",
+      "channel": "@tarilka_malyuka",
+      "note": "Dairy present only as generic types (\"міні моцарела\", \"пармезан\"); the one branded item, томатне пюре «Маленький кухар», is not dairy."
+    },
+    {
+      "item": "@VARUS_channel:10303",
+      "channel": "@VARUS_channel",
+      "note": "«Варто Клін»/«Varto Clean» bin bags on p.63 are a watchlist brand appearing ONLY in the image and on a non-dairy product, and the caption does not carry it; VARUS occurs on four pages purely as the chain wordmark/footer and never as a product brand, so it is recorded as NO hit -- a matcher firing here fired on the fascia; the Диво toilet paper carries «Premio», a near-neighbour of watchlist «Премія» and a false-positive risk; «Каша молочна ТМ Мілупа» is the only dairy-adjacent item and is left out of open extraction under the rule that a non-dairy brand selling one dairy-ish SKU is not a dairy brand."
+    },
+    {
+      "item": "@silposilpo:3783",
+      "channel": "@silposilpo",
+      "note": "The only dairy brand sits inside a price line -- «Сир Bonfetto 45% «Моцарела» або «Сулугуні»» -- where the brand is wedged between a category word and a quoted variety name, so a matcher keying on «Сир ...» boundaries can lose it."
+    },
+    {
+      "item": "@myrhorodtown:19802",
+      "channel": "@myrhorodtown",
+      "note": "Milk appears as a generic good (\"продаж домашніх пиріжків, молока\"); the channel handle @myrhorodtown shares its stem with watchlist «Миргородська корівка», so channel-level metadata must never leak into a text-level brand hit."
+    },
+    {
+      "item": "@tarilka_malyuka:799",
+      "channel": "@tarilka_malyuka",
+      "note": "Three dairy ingredients unbranded (\"кисломолочний сир дитячий\", \"натуральним йогуртом\"); high category relevance, zero brand signal."
+    },
+    {
+      "item": "@VARUS_channel:10529",
+      "channel": "@VARUS_channel",
+      "note": "Pure dairy post for «ТМ Pro Milk» (yogurts and curd cheeses), a brand not on the watchlist; VARUS occurs twice but as the chain and the site (\"у VARUS або на VARUS.UA\"), so `varus-pl` is recorded as NO hit -- same rule as «Президент» in @suspilnepoltava:47056, the string is present and the referent is not the brand."
+    },
+    {
+      "item": "@gaid_skobioale:1304",
+      "channel": "@gaid_skobioale",
+      "note": "Caption transcribes the whole chat bubble verbatim including sender and the arithmetic; nothing in the image is missed and no brand is present."
+    },
+    {
+      "item": "@korolevakuchni:10436",
+      "channel": "@korolevakuchni",
+      "note": "Dairy only as generic types (\"250 г фети\", \"100 г твердого сиру\"); recipe channels are dense in category words and empty of brands."
+    },
+    {
+      "item": "@atb_market_official:4360",
+      "channel": "@atb_market_official",
+      "note": "Page 1 is an all-ice-cream page naming «Київський Пломбір», «Каштан» and watchlist «Лімо», and «Своя Лінія» carries eight items across pages 2-6, yet the caption lists categories only and names no brand at all -- every brand in this post is image-only, so a text matcher scores zero here by construction; «Сирні палички ТМ «ЇЗІ»» (Глобино) is left out of open extraction under the rule that a non-dairy brand selling one cheese SKU is not a dairy brand."
+    },
+    {
+      "item": "@matusi_ukr:22130",
+      "channel": "@matusi_ukr",
+      "note": "«ГРИБИ З DORBLU» -- a Latin-script cheese brand in an all-caps UA heading, used as if it were the cheese type itself; сулугуні and сметана beside it stay generic."
+    },
+    {
+      "item": "@retsepty:7341",
+      "channel": "@retsepty",
+      "note": "\"вершковий сир\" unbranded; the only named entity is the TikTok author foodblog_kristi, not a brand."
+    },
+    {
+      "item": "@denisovapro:849",
+      "channel": "@denisovapro",
+      "note": "Candle offer, nothing category-relevant; caption reads the label brand «notera» and the whole price overlay, dropping only the quoted DM (\"Можно мені по блату купити свічку\") and the commenter avatar reading \"4cheese\" -- a cheese-looking string that is an account handle, not a dairy brand."
+    },
+    {
+      "item": "@matusi_ukr:22213",
+      "channel": "@matusi_ukr",
+      "note": "Poll on leaving Kharkiv; no food content and no brands."
+    },
+    {
+      "item": "@suspilnepoltava:47056",
+      "channel": "@suspilnepoltava",
+      "note": "Highest-risk false positive in the pack: «Президент» occurs four times as a title of the head of state (\"Президент Зеленський\") and is a watchlist display name for `president` -- a capitalised, sentence-initial, undeclined form that no morphology rule separates from the brand; only the political context does."
+    },
+    {
+      "item": "@atb_aktsiyi:3240",
+      "channel": "@atb_aktsiyi",
+      "note": "The card page holds two real dairy items -- «Напій кисломолочний йогуртний «Полуниця»/«Мультифрукт» ТМ «Лактонія Імун+»» and «Паста сиркова «Вершкова», 57,5% ТМ «Laciaty»» -- and the caption compresses both into the single word \"сир\"; «Своя Лінія» appears on roughly a dozen items across four pages and is never named."
+    },
+    {
+      "item": "@mandziak:3753",
+      "channel": "@mandziak",
+      "note": "Glycaemic-index rant; \"молочного шоколаду\" is a product type, not a brand, and the surzhyk/obscenity register makes this a likely nuisance match for anything keying on \"молоч-\"."
+    },
+    {
+      "item": "@mo3ambik:38258",
+      "channel": "@mo3ambik",
+      "note": "Cashier vacancy for the «Хвилинка» store; caption transcribes the whole poster (city, schedule, salary, phone) and invents nothing -- «Хвилинка» is a retail fascia, not a dairy brand."
+    },
+    {
+      "item": "@klopotenkofood:6071",
+      "channel": "@klopotenkofood",
+      "note": "Vegetable-of-the-day poll; four options, no dairy and no brands."
+    }
+  ],
+  "git": {
+    "commit": "8aa7d13cb8933d39cf656dffa659dd3d5bbb3773",
+    "dirty": [
+      "docs/STATUS.md",
+      "knowledge/daily_logs/2026-08-09.md",
+      "knowledge/hot.md",
+      "knowledge/index.md",
+      "scripts/read_opus_audit.py",
+      "tests/test_opus_audit.py",
+      "knowledge/daily_logs/2026-08-10.md"
+    ]
+  }
+}

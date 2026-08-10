@@ -6104,3 +6104,50 @@ the contract stopped at the pilot, and this is the operator's call.
 The returns are preserved under `results/opus_audit_returns/` for the same reason the vis-c dumps
 are under `results/predictions/`: `data/annotation/**` is gitignored, and two Opus sessions are not
 a regenerable artifact.
+
+### The FN split: the misses divided by what the matcher could read (Dv96)
+
+The team lead's ruling of 2026-08-10 (`docs/STATUS.md`), executed in `read_opus_audit.py`. The
+reviewer's misses are now split deterministically into `fn_matcher` — the brand's own name was in
+the string the matcher read and it did not emit the brand — and `fn_image_only`, where the name was
+never in that string. Different owners, different remedies: the first is the lexicon's, the second
+the captioner's coverage. The false positives stay **raw on purpose**, and the record says so in a
+field rather than in prose: splitting them would need a committed list of the collisions the
+operator has already ruled on, and there is none.
+
+**Dv96 — the discriminator needs the string, and the string is not in the manifest.** The manifest
+carries each item's matcher verdict but not its text; the blind rebuild deliberately put the
+verdicts there and left the text to the packs. So `matcher_strings()` rebuilds it the only way that
+is not a second implementation: `build_opus_audit_packs.rederive()` re-emits screen v2 per post
+(3.8 s over 66 channels, 9343 posts), and `yield_screen_5c1.surrogates` is what defines the string —
+the post's text, the caption standing in for it, or the two joined. Three gates guard it. The screen
+record must still hash to what the manifest pinned; its six cells per channel must still reproduce;
+and — the one the aggregate cannot make — **every drawn item's matcher verdict must still be the one
+the manifest recorded**, 498 of 498, because a post edited in place keeps all six counts equal while
+changing the string the split reads. The counts come back beside the strings and into
+`matcher_strings` in the record: a guard that leaves no number behind cannot be told from one a
+refactor stopped calling.
+
+**The discriminator is the matcher's own rule, and that is the whole finding.** It runs
+`compile_aliases`' compiled patterns — casefolded, bounded by non-word characters — not `in`. On the
+pilot's 13 misses the split is **0 fn_matcher / 13 fn_image_only**, and exactly one pair changes
+sides under a substring test: `@atb_aktsiyi:3087` / `limo`, where the only «лимо» in the post sits
+inside «лимон». `docs/STATUS.md` reports «12 из 13» image-only and names that row; the record now
+carries the disagreement as a measured field, `substring_would_disagree`, with the alias and the
+casefolded context, so the choice of test is auditable instead of being a difference between two
+prose counts. The strict count is 13.
+
+**Two refusals, because a bad split is silent.** A pair whose item has no re-derived string stops the
+run — an unsplit miss is not an image-only one. And a `brand_id` that is not on the pinned watchlist
+stops it too: the misses come out of the validator, which resolves display names to ids, but if that
+ever changed, every `.get(brand_id)` would miss, no alias would ever be tried, and the split would
+come back 0/N looking exactly like today's correct answer.
+
+**What the suite proves and what it does not.** `fn_split` is tested against the **real** compiled
+watchlist, both ways: «Морозиво Рудь» → `fn_matcher` naming alias «рудь», «Лимон 1 кг» → image-only
+plus one substring disagreement, the pilot's own row reproduced. That positive control matters
+because the bucket the sitting cares about came back empty on real data, and an empty bucket a fake
+alias table produced would look identical. `verdicts_still_hold` is tested both ways as well.
+`matcher_strings` itself is stubbed in the suite — it reads gitignored collected posts — and was
+verified by running the reader for real: 66 channels reproduced, 498 verdicts re-checked, 9343 posts
+re-derived.

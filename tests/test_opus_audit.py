@@ -24,6 +24,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 import build_opus_audit_packs as builder  # noqa: E402
 import read_opus_audit as reader  # noqa: E402
 import validate_opus_returns as validator  # noqa: E402
+from market_pulse import yield_screen as core  # noqa: E402
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 REGISTRY = "config/registry.yaml"
@@ -357,6 +358,27 @@ def test_coverage_separates_unanswered_from_declined(manifest, tmp_path):
 # ---------------------------------------------------------------- the reader
 
 
+@pytest.fixture(autouse=True)
+def strings(monkeypatch):
+    """What the matcher read, per item — the one input the reader takes from gitignored data.
+
+    `reader.matcher_strings` rebuilds it by re-deriving screen v2 over the collected posts,
+    which this suite deliberately does not depend on (see the module docstring). So it is
+    replaced here by a table the tests fill, and the split's own logic — which is what the
+    ruling is about — is exercised directly against the real alias table below.
+    """
+    table: dict[str, str] = {}
+    monkeypatch.setattr(
+        reader,
+        "matcher_strings",
+        lambda manifest: (
+            {entry["item"]: table.get(entry["item"], "") for entry in manifest["items"]},
+            {"posts_rederived": 0, "verdicts_rechecked": len(manifest["items"]), "note": "stubbed"},
+        ),
+    )
+    return table
+
+
 def read(manifest, tmp_path, *rows):
     """The reader driven to its file — a return value proves nothing about what is written."""
     path = tmp_path / "manifest.json"
@@ -457,6 +479,114 @@ def test_the_reader_refuses_to_aggregate_nothing(manifest, tmp_path):
         reader.main(
             ["--manifest", str(path), "--pack", str(tmp_path / "empty"), "--record", str(tmp_path)]
         )
+
+
+# ------------------------------------------------------------- the fn split
+
+
+def table():
+    """The real watchlist's compiled aliases — the table the reader itself splits with.
+
+    A synthetic alias proves the loop; only this proves that `compile_aliases` over the
+    committed registry can ever put a pair in `fn_matcher`. On the pilot's rows that bucket
+    came back empty, and an empty bucket a fake table produced would look identical.
+    """
+    from market_pulse.brands import watchlist_aliases
+    from market_pulse.registry import load_registry
+
+    return core.compile_aliases(watchlist_aliases(load_registry(REPO_ROOT / REGISTRY).watchlist))
+
+
+def test_a_name_in_the_string_the_matcher_read_is_the_matchers_miss():
+    split = reader.fn_split(
+        [("@chan:1", "rud")], {"@chan:1": "Морозиво Рудь зі знижкою 20%"}, table()
+    )
+    assert split["counts"] == {
+        "pairs": 1,
+        "fn_matcher": 1,
+        "fn_image_only": 0,
+        "substring_would_disagree": 0,
+    }
+    found = split["fn_matcher"]["pairs"][0]
+    assert found["alias"] == "рудь"
+    assert "рудь" in found["context"]
+
+
+def test_a_name_that_was_never_in_the_string_is_image_only():
+    split = reader.fn_split([("@chan:1", "rud")], {"@chan:1": "Знижки цього тижня"}, table())
+    assert split["counts"]["fn_image_only"] == 1
+    assert split["counts"]["substring_would_disagree"] == 0
+    assert split["fn_image_only"]["pairs"] == [{"item": "@chan:1", "brand_id": "rud"}]
+
+
+def test_a_substring_is_not_a_hit():
+    """@atb_aktsiyi:3087, the pilot's one disagreement: «Лимо» only occurs inside «Лимон».
+
+    The bucket it lands in is the whole difference between the ruling's split and the loose
+    one — and the loose reading is the one docs/STATUS.md's «12 из 13» took, so the record
+    has to carry the disagreement as a field rather than leave it to prose.
+    """
+    split = reader.fn_split([("@chan:1", "limo")], {"@chan:1": "Лимон 1 кг — 39,90"}, table())
+    assert split["counts"]["fn_matcher"] == 0
+    assert split["counts"]["fn_image_only"] == 1
+    disagreement = split["substring_would_disagree"]["pairs"]
+    assert [entry["alias"] for entry in disagreement] == ["лимо"]
+    assert "лимон" in disagreement[0]["context"]
+
+
+def test_the_split_refuses_a_pair_it_cannot_resolve():
+    with pytest.raises(SystemExit, match="An unsplit miss is not an image-only one"):
+        reader.fn_split([("@chan:9", "rud")], {"@chan:1": "Рудь"}, table())
+
+
+def test_the_split_refuses_a_foreign_id_space():
+    """A display name where a brand_id belongs would match no alias and split 0/N silently."""
+    with pytest.raises(SystemExit, match="different id spaces"):
+        reader.fn_split([("@chan:1", "Рудь")], {"@chan:1": "Рудь"}, table())
+
+
+def test_the_verdicts_are_rechecked_per_row(manifest):
+    derived = {
+        entry["item"]: {"matcher": entry["matcher"], "read_as": ""} for entry in manifest["items"]
+    }
+    assert reader.verdicts_still_hold(manifest, derived) == len(manifest["items"])
+
+    derived["@chan:1"]["matcher"] = {
+        "watchlist_brands": [],
+        "category_groups": [],
+        "relevant": True,
+    }
+    with pytest.raises(SystemExit, match="corpus moved"):
+        reader.verdicts_still_hold(manifest, derived)
+
+
+def test_a_drawn_item_that_left_the_corpus_stops_the_split(manifest):
+    derived = {
+        entry["item"]: {"matcher": entry["matcher"], "read_as": ""} for entry in manifest["items"]
+    }
+    del derived["@chan:2"]
+    with pytest.raises(SystemExit, match="gone from the corpus"):
+        reader.verdicts_still_hold(manifest, derived)
+
+
+def test_the_record_carries_the_split_and_says_why_fp_is_raw(manifest, tmp_path, strings):
+    strings["@chan:2"] = "сир Галичина 9%"  # the reviewer's find WAS in what the matcher read
+    found = read(
+        manifest,
+        tmp_path,
+        row(watchlist_hits=["rud"]),
+        row("@chan:2", caption_verdict="n/a", watchlist_hits=["halychyna"]),
+    )
+    split = found["matcher_candidates"]["fn_split"]
+    assert split["label"] == "review, not measurement"
+    assert split["counts"] == {
+        "pairs": 1,
+        "fn_matcher": 1,
+        "fn_image_only": 0,
+        "substring_would_disagree": 0,
+    }
+    assert split["fn_matcher"]["pairs"][0]["item"] == "@chan:2"
+    assert "raw on purpose" in found["matcher_candidates"]["false_positives_not_split"]
 
 
 # ---------------------------------------------------------------- the blind
