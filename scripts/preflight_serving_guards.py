@@ -20,6 +20,11 @@ control that says the guard is discriminating rather than merely refusing. Those
 and would run with no GPU stack at all; they live here because this is the list that runs before a
 paid session, not because they need one.
 
+sku-b-v3-prep adds the RESUME half (SPEC 3.17 (11)) below that, on the same terms and for a sharper
+reason: 17 of the 138 elements have already been paid for once, under a clause that gives them no
+second draw. The registration, the selection, the warm-up inputs and the merged output are each
+driven both ways before the second session opens.
+
     scripts/preflight_serving_guards.py
 
 Needs `transformers` and `peft` — the versions the volume's venv carries, which the run prints
@@ -211,6 +216,126 @@ def positions_guards(handler, adapted_model) -> dict:
     return checks
 
 
+def resume_guards() -> dict:
+    """The resume of SPEC 3.17 (11), driven BOTH WAYS before a cent of the second session is spent.
+
+    The first session bought 17 of 138 elements for $0.1965 under a one-attempt clause. Every guard
+    below stands between the resumed session and buying one of those 17 again — and every one of
+    them is driven with its CONTROL, because a refusal proves something is blocked and never that
+    the blocked set is the one that was meant.
+
+    Four subjects, in the order a run meets them: the registration (are the pins still the bytes
+    they name), the selection (is what is about to travel unbought), the warm-up inputs (are they
+    real and still non-gold), and the merged output (does any source carry two answers). Pure
+    checks, no GPU stack needed — they live here because this is the list that runs before the paid
+    session, not because they need one.
+    """
+    import hashlib
+    import json
+
+    import positions_gm4_skub as driver
+
+    print("\n--- SPEC 3.17 (11): the resume ---")
+    checks: dict[str, bool] = {}
+    prereg = json.loads(driver.PREREG_RESUME.read_text(encoding="utf-8"))
+    pin_sha = hashlib.sha256(driver.PIN.read_bytes()).hexdigest()
+
+    def moved(mutate) -> dict:
+        body = json.loads(json.dumps(prereg))
+        mutate(body["resume"])
+        return body
+
+    plan = driver.resume_plan(prereg, pin_sha, REPO_ROOT)
+    already = prereg["resume"]["bought_already"]
+    print(
+        f"\n9. the registration          {len(plan['to_buy'])} to buy,"
+        f" {len(plan['already_asked'])} already bought   <- the control: it ACCEPTS"
+    )
+    checks["the honest registration is accepted and names 121 elements to buy"] = (
+        len(plan["to_buy"]) == already["n_unbought"] == 121
+        and len(plan["already_asked"]) == already["n_asked"] == 17
+    )
+
+    for label, mutate in (
+        ("a moved dump pin", lambda r: r["bought_already"]["dump"].update(sha256="0" * 64)),
+        (
+            "a moved serving pin",
+            lambda r: r["bought_already"]["serving_pin"].update(sha256="0" * 64),
+        ),
+        (
+            "an unbought id with an answer",
+            lambda r: r["bought_already"].update(
+                unbought=[r["bought_already"]["asked"][0], *r["bought_already"]["unbought"]]
+            ),
+        ),
+    ):
+        refused, how = refuses(driver.resume_plan, moved(mutate), pin_sha, REPO_ROOT)
+        print(f"   {label:<30} {how}")
+        checks[f"the resume refuses {label}"] = refused
+
+    bought, fresh = already["asked"][0], already["unbought"][0]
+    asked = set(already["asked"])
+    refused, how = refuses(
+        driver.resume_population,
+        [{"file": bought, "bytes": 1}],
+        {"to_buy": {bought}, "already_asked": asked},
+        "page",
+    )
+    kept = driver.resume_population(
+        [{"file": fresh, "bytes": 1}], {"to_buy": {fresh}, "already_asked": asked}, "page"
+    )
+    print(f"\n10. the selection            a bought id     {how}")
+    print(f"    an unbought id           {len(kept)} kept   <- the control")
+    checks["a bought id that reaches the selection is refused"] = refused
+    checks["the control: an unbought id passes the same selection"] = len(kept) == 1
+
+    reference = json.loads(driver.REFERENCE.read_text(encoding="utf-8"))
+    manifest = json.loads(driver.MANIFEST.read_text(encoding="utf-8"))
+    honest = driver.resume_warmup_inputs(prereg["resume"], reference, manifest, REPO_ROOT)
+    print(
+        f"\n11. the (11)(c) warm-up      {honest['page']['file'].rsplit('/', 1)[-1]}"
+        f" {honest['page']['bytes'] / 1e6:.2f} MB · row {honest['row']['id']}"
+        f" ({len(honest['text'])} chars)   <- the control: ACCEPT"
+    )
+    checks["the registered warm-up inputs are real, full-size and accepted"] = (
+        honest["page"]["bytes"] > 100_000 and len(honest["text"]) > 50
+    )
+    for label, mutate in (
+        (
+            "a page inside the sent 108",
+            lambda r: r["warmup"]["page"].update(
+                file=reference["posts"][0]["pages_sent"][0]["file"]
+            ),
+        ),
+        ("a row inside the 30", lambda r: r["warmup"]["text"].update(id=manifest["ids"][0])),
+    ):
+        refused, how = refuses(
+            driver.resume_warmup_inputs, moved(mutate)["resume"], reference, manifest, REPO_ROOT
+        )
+        print(f"    {label:<24} {how}")
+        checks[f"the warm-up refuses {label}"] = refused
+
+    run_record = REPO_ROOT / already["run_record"]["path"]
+    merge_plan = {
+        "run": json.loads(run_record.read_text(encoding="utf-8")),
+        "run_record": run_record,
+        "run_dump": REPO_ROOT / already["dump"]["path"],
+    }
+
+    def outcome(source):
+        return [{"source": source, "unreadable": None, "n_positions": 1}]
+
+    merged = driver.merge_sessions(merge_plan, outcome(fresh), [])
+    refused, how = refuses(driver.merge_sessions, merge_plan, outcome(bought), [])
+    print(f"\n12. the merged bar input     a source bought twice  {how}")
+    print(f"    an unbought source       {len(merged['outcomes'])} outcomes   <- the control")
+    checks["a source answered by both sessions is refused in the merge"] = refused
+    checks["the control: the merged record carries 17 + what this session bought"] = (
+        len(merged["outcomes"]) == already["n_asked"] + 1
+    )
+    return checks
+
+
 def main(argv: list[str] | None = None) -> int:
     try:
         import peft
@@ -269,6 +394,7 @@ def main(argv: list[str] | None = None) -> int:
         "the control fires: the vis-a guard refuses the bare model": not control_accepted,
     }
     checks |= positions_guards(handler, model)
+    checks |= resume_guards()
     print()
     for label, ok in checks.items():
         print(f"{'PASS' if ok else 'FAIL'}  {label}")
