@@ -1,0 +1,529 @@
+{
+  "timestamp": "2026-08-11T18:12:29+00:00",
+  "phase": "sku-b — the position-layer pilot, one paid attempt",
+  "contract": "docs/PROMPT-sku-b-prep.md deliverable 2 + docs/PROMPT-sku-b-prep-fix.md; docs/SPEC.md amendment 3.17 (6), (9), (10)",
+  "prereg": {
+    "path": "results/sku_pilot_prereg_v2.json",
+    "sha256": "d4ced2a8ba00b48bca2d30af9c7ce8977eb387631b1735b4e05ea15ba306e9ad"
+  },
+  "serving_pin": {
+    "path": "results/sku_pilot_serving.json",
+    "sha256": "5f900beb555f12f511c4d0b134f454f24927976146823cb9846a31dcd89bc882"
+  },
+  "endpoint": {
+    "id": "0yqlvm0b8wzzsw",
+    "worker": {
+      "adapter_dir": null,
+      "adapter_sha256": null,
+      "chat_template": {
+        "add_generation_prompt": true,
+        "enable_thinking": false
+      },
+      "max_new_tokens": 800,
+      "merge_state": "base-no-adapter",
+      "merged_provenance": null,
+      "merged_sha256": null,
+      "model": "google/gemma-4-31b-it",
+      "positions_prompt_sha256": {
+        "positions_post_gm4": "ca6303c157d46e707aaf3fc52c7a05ed1450e24c26db0e7c93eefba4f6968754",
+        "positions_text_gm4": "7250b87aa1c2de407e06ab9eed565dd4d88025add7be0d2d2a87607c0d872860"
+      },
+      "quantization": {
+        "bnb_4bit_compute_dtype": "bfloat16",
+        "bnb_4bit_quant_type": "nf4",
+        "bnb_4bit_use_double_quant": true,
+        "load_in_4bit": true
+      },
+      "repo_commit": "49665c7d0397d24bea21d66fdd981c1c05e1d123",
+      "revision_requested": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+      "runtime": {
+        "accelerate": "1.14.0",
+        "bitsandbytes": "0.50.0",
+        "cuda_runtime": "12.8",
+        "driver": "580.159.04",
+        "gpu": "NVIDIA GeForce RTX 4090",
+        "gpu_count": 1,
+        "gpu_memory_total": "24564 MiB",
+        "model_revision": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+        "peft": "0.20.0",
+        "pod_id": "gtszhrcxvcvh5z",
+        "revision_requested": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+        "runpod": "1.11.0",
+        "torch": "2.8.0+cu128",
+        "transformers": "5.14.1",
+        "weights_requested": "google/gemma-4-31b-it"
+      },
+      "serving_config": "POSITIONS",
+      "weights_dir": "google/gemma-4-31b-it"
+    }
+  },
+  "smoke": false,
+  "attempts_per_job": 1,
+  "stopped_before_gold": false,
+  "ended_by": null,
+  "warmup": {
+    "why": "SPEC 3.17 (9): a call on NON-gold inputs before either leg touches gold",
+    "inputs": {
+      "page": "a generated 64x64 image",
+      "text": "Тестовий рядок поза пакетом: молоко 1 л 45,90 грн."
+    },
+    "replies": {
+      "positions_post_gm4": {
+        "content": "[]",
+        "finish_reason": "stop",
+        "marginal_seconds": 1.436
+      },
+      "positions_text_gm4": {
+        "content": "[]",
+        "finish_reason": "stop",
+        "marginal_seconds": 0.756
+      }
+    }
+  },
+  "population": {
+    "pages_sent": 108,
+    "pages_available": 159,
+    "posts": 19,
+    "text_rows": 30,
+    "asked": 17,
+    "unbought": [
+      "@VARUS_channel:1775",
+      "@VARUS_channel:1912",
+      "@VARUS_channel:2119",
+      "@VARUS_channel:2562",
+      "@VARUS_channel:4791",
+      "@VARUS_channel:7119",
+      "@VARUS_channel:7440",
+      "@VARUS_channel:800",
+      "@VARUS_channel:8297",
+      "@VARUS_channel:9580",
+      "@atb_market_official:1155",
+      "@atb_market_official:1339",
+      "@atb_market_official:1822",
+      "@epicentrk_sale:6148",
+      "@korolevakuchni:10350",
+      "@matusi_ukr:22025",
+      "@matusi_ukr:22255",
+      "@recepti:11794",
+      "@retsepty:7281",
+      "@retsepty:7318",
+      "@silposilpo:2529",
+      "@silposilpo:2745",
+      "@silposilpo:3154",
+      "@silposilpo:3234",
+      "@silposilpo:3517",
+      "@silposilpo:3671",
+      "@suspilnepoltava:46982",
+      "@telegraf_kremenchuk:70595",
+      "@telegraf_kremenchuk:71000",
+      "@telegraf_kremenchuk:71024",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4365.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4370.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4371.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4372.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4373.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4374.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4375.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4377.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4378.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4379.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4380.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4381.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4382.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4383.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4384.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4385.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4386.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4391.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4392.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4393.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4394.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4395.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4396.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4401.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4402.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4403.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4404.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4405.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4406.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4411.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4412.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4413.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4414.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4415.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4416.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4417.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4418.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4419.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4420.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4421.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4422.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4423.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4424.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4426.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4427.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4428.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4429.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4430.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4431.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4436.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4437.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4438.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4439.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4440.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4441.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4446.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4447.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4448.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4449.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4450.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4451.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4455.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4456.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4457.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4458.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4459.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4460.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4467.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4468.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4469.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4470.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4471.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4472.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4498.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4499.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4500.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4501.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4502.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4503.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4508.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4509.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4510.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4511.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4512.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4513.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4519.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4520.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4521.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4522.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4523.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4524.jpg"
+    ]
+  },
+  "extraction": {
+    "positions": 14,
+    "by_tier": {
+      "position": 14
+    },
+    "empty_answers": [
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4340.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4345.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4351.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4353.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4354.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4355.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4361.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4362.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4363.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4364.jpg"
+    ],
+    "unreadable": [
+      {
+        "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4342.jpg",
+        "reason": "printed discount '-50%*' is not a percentage"
+      }
+    ],
+    "unreadable_by_reason": {
+      "printed discount '-50%*' is not a percentage": 1
+    },
+    "unreadable_share": 0.0588,
+    "reading": "an unreadable reply and an empty array are DIFFERENT outcomes and are counted separately. A refusal is excluded from bar 3's denominator by its reason (results/sku_pilot_prereg_v2.json :: bars.text_tier_accuracy.unreadable_rows); an empty array is a source that names no tracked position, which is an answer",
+    "truncated_replies": []
+  },
+  "dump": {
+    "path": "results/sku_b_positions.jsonl",
+    "sha256": "4178ce5e53559c8449bad90e48d750fd6c5b09142055329d3f1768be15109c22",
+    "rows": 14,
+    "columns": [
+      "item",
+      "page",
+      "file",
+      "sha256",
+      "brand_raw",
+      "brand_id",
+      "line",
+      "category",
+      "size",
+      "fat",
+      "price_promo",
+      "price_old",
+      "discount_pct_printed",
+      "price_qualifier",
+      "tier",
+      "depth",
+      "depth_disagrees_with_printed"
+    ],
+    "columns_source": "results/sku_pilot_prereg_v2.json :: bars.price_pair_accuracy.procedure",
+    "wire_key": {
+      "attribute": "fat",
+      "why": "the schema field is `attribute_pct` (SPEC 3.17 (8)) and the registered dairy prompts ask for `fat` on the wire. The dump carries the WIRE name because that is the name the pre-registered sentence uses"
+    },
+    "price_pairs": {
+      "n": 13,
+      "reachability": "n >= 10 pairs: the bar is SCORED. 1 <= n < 10: the accuracy is REPORTED with its n and the bar is NOT_SCORED — neither a PASS nor a closure of B, and the team lead rules at acceptance whether the small-n reading stands. n = 0: NOT_REACHABLE, and the finding is that the pages carry no crossed-out prices at all",
+      "note": "the denominator of bar 2, discovered BY THIS RUN. The bar is scored by the team lead against the page images at acceptance — the executor never scores its own sample (SPEC §10)"
+    }
+  },
+  "outcomes": [
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4340.jpg",
+      "item": "@atb_market_official:4340",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "c0da4021",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4341.jpg",
+      "item": "@atb_market_official:4340",
+      "carrier": "leaflet_page",
+      "n_positions": 2,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "d52ffcfe",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4342.jpg",
+      "item": "@atb_market_official:4340",
+      "carrier": "leaflet_page",
+      "n_positions": null,
+      "unreadable": "printed discount '-50%*' is not a percentage",
+      "finish_reason": "stop",
+      "sha8": "0f5e6070",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4343.jpg",
+      "item": "@atb_market_official:4340",
+      "carrier": "leaflet_page",
+      "n_positions": 1,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "1753be1e",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4344.jpg",
+      "item": "@atb_market_official:4340",
+      "carrier": "leaflet_page",
+      "n_positions": 1,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "78cd9a18",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4345.jpg",
+      "item": "@atb_market_official:4340",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "1a836a68",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4350.jpg",
+      "item": "@atb_market_official:4350",
+      "carrier": "leaflet_page",
+      "n_positions": 2,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "d98f5ae7",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4351.jpg",
+      "item": "@atb_market_official:4350",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "578fb694",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4352.jpg",
+      "item": "@atb_market_official:4350",
+      "carrier": "leaflet_page",
+      "n_positions": 2,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "f362bbca",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4353.jpg",
+      "item": "@atb_market_official:4350",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "4513053f",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4354.jpg",
+      "item": "@atb_market_official:4350",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "243c609b",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4355.jpg",
+      "item": "@atb_market_official:4350",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "6217fe84",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4360.jpg",
+      "item": "@atb_market_official:4360",
+      "carrier": "leaflet_page",
+      "n_positions": 6,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "914406fe",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4361.jpg",
+      "item": "@atb_market_official:4360",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "82a405f7",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4362.jpg",
+      "item": "@atb_market_official:4360",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "ef559797",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4363.jpg",
+      "item": "@atb_market_official:4360",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "580416c4",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4364.jpg",
+      "item": "@atb_market_official:4360",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "076a0c68",
+      "leg": "page"
+    }
+  ],
+  "timing": {
+    "calls": 4,
+    "rows": 19,
+    "worker_seconds": 479.873,
+    "queue_seconds": 43.243,
+    "wall_seconds": 538.272,
+    "seconds_per_call": 119.968,
+    "wall_per_call": 134.568,
+    "wall_per_row": 28.33,
+    "seconds_per_row": 25.256,
+    "idle_share": 0.1085,
+    "worker_ids": [
+      "gtszhrcxvcvh5z"
+    ]
+  },
+  "projection": {
+    "rate_usd_per_second": 0.00030669,
+    "rate_source": "results/srv2d_cost.json :: rate.usd_per_second",
+    "stop_at_usd": 0.3403,
+    "boot_seconds": 391.369,
+    "boot_usd": 0.12,
+    "warmup_seconds": 2.192,
+    "opened_seconds": 393.561,
+    "go_no_go": {
+      "when": "after the two non-gold warm-up calls of SPEC 3.17 (9), before the first gold call",
+      "billed_seconds": 393.561,
+      "page_marginal_seconds": 1.436,
+      "text_marginal_seconds": 0.756,
+      "gold_calls": 138,
+      "gold_seconds": 177.768,
+      "idle_tail_seconds": 60.0,
+      "projected_usd": 0.1936,
+      "budget_usd": 0.3403,
+      "refuse": false
+    },
+    "per_gate": [
+      {
+        "calls_done": 17,
+        "calls_total": 138,
+        "opened_seconds": 393.561,
+        "billed_seconds": 479.873,
+        "marginal_seconds_per_call": 5.0772,
+        "idle_tail_seconds": 60.0,
+        "spent_usd": 0.1472,
+        "remaining_usd": 0.1884,
+        "projected_usd": 0.354
+      },
+      {
+        "calls_done": 17,
+        "calls_total": 138,
+        "opened_seconds": 393.561,
+        "billed_seconds": 479.873,
+        "marginal_seconds_per_call": 5.0772,
+        "idle_tail_seconds": 60.0,
+        "spent_usd": 0.1472,
+        "remaining_usd": 0.1884,
+        "projected_usd": 0.354
+      }
+    ],
+    "stopped_early": true,
+    "reading": "the stop prices what is LEFT against what is already billed — it never re-adds a pre-registered cold start on top of measured seconds, because by the time any gate runs the boot has been paid and is inside `billed_seconds`. `calls_done` counts across BOTH legs, and the idle tail the worker bills after the last job is inside `projected_usd` and outside `spent_usd`"
+  },
+  "cost": {
+    "jobs": 8,
+    "usd": 0.0943,
+    "cap_usd": 0.35,
+    "anchor": "results/spend_sku_b.json",
+    "read_failed": null,
+    "reading": "the RunPod balance delta against this session's own anchor. It is a FLOOR — the balance settles minutes to hours behind the resource (Dv33) — and runpod_guard's itemised corroboration is the phase-level check, not this one. A `usd` of null beside a `read_failed` means the balance could not be read AFTER the paid legs: the anchor survives, so the spend is recoverable by hand, and the record is kept rather than lost to the crash."
+  },
+  "git": {
+    "commit": "49665c7d0397d24bea21d66fdd981c1c05e1d123",
+    "dirty": [
+      "knowledge/daily_logs/2026-08-11.md",
+      "knowledge/hot.md",
+      "knowledge/index.md",
+      "results/sku_b_positions.jsonl",
+      "results/spend_sku_b.json"
+    ]
+  }
+}

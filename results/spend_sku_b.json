@@ -1,0 +1,13 @@
+{
+  "runpod_balance_at_sku-b_start": 12.4184987367,
+  "cap_usd": 0.35,
+  "note": "RunPod account balance read before the first job of sku-b, the single paid session of SPEC 3.17 (6). Session spend = this anchor minus the balance now, enforced against the $0.35 cap the amendment pre-registered. The Phase 4 cap is enforced separately against results/spend_phase4.json, and neither anchor may be regenerated: delete this file and the counter silently restarts at today's balance.",
+  "runs": [
+    {
+      "at": "2026-08-11T18:14:10+00:00",
+      "balance": 12.3242157645,
+      "step_spent_usd": 0.0943,
+      "note": "17 sources asked, 14 positions extracted"
+    }
+  ]
+}
