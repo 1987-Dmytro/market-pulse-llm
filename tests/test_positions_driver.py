@@ -1,0 +1,408 @@
+"""The sku-b driver, everything about the paid attempt that can be proved for $0.
+
+One session, one attempt, a $0.35 cap and a failed bar closes B by measurement — so every failure
+here is expensive and most of them are quiet. What is pinned:
+
+* the dump's columns are DERIVED from the pre-registration's own sentence, and the attribute column
+  is the WIRE name, read through `positions.wire_key`;
+* the page leg is exactly the 108 SENT pages, each verified against the bytes on disk;
+* the text leg is the 30 adjudicated rows, given columns only — the ticks are gold and never travel;
+* a job that would exceed the payload budget is a refusal, never a shortened album;
+* a parse refusal is counted by reason and is never an empty answer;
+* the identity stop reads `results/sku_pilot_serving.json` and restates nothing;
+* `--smoke` writes no ledger, spends nothing, and prints one line per source.
+"""
+
+import importlib.util
+import json
+import sys
+from hashlib import sha256
+from pathlib import Path
+
+import pytest
+from market_pulse import positions, prompts
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(REPO_ROOT / "src"))
+sys.path.insert(0, str(REPO_ROOT / "scripts"))
+
+
+def _script(name: str):
+    spec = importlib.util.spec_from_file_location(name, REPO_ROOT / "scripts" / f"{name}.py")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+driver = _script("positions_gm4_skub")
+
+
+@pytest.fixture(scope="module")
+def prereg() -> dict:
+    return json.loads(driver.PREREG.read_text(encoding="utf-8"))
+
+
+@pytest.fixture(scope="module")
+def manifest() -> dict:
+    return json.loads(driver.MANIFEST.read_text(encoding="utf-8"))
+
+
+@pytest.fixture(scope="module")
+def reference() -> dict:
+    return json.loads(driver.REFERENCE.read_text(encoding="utf-8"))
+
+
+# --- the dump's columns -------------------------------------------------------------------------
+
+
+def test_the_dump_columns_are_read_out_of_the_pre_registration(prereg):
+    """Bar 2 is the team lead reading this dump against the page images, so the columns are the
+    registered sentence's — derived from it rather than retyped beside it, because a retyped list
+    drifts silently and the drift shows up as a field the reader expected and did not get."""
+    assert driver.dump_fields(prereg) == (
+        "item",
+        "page",
+        "file",
+        "sha256",
+        "brand_raw",
+        "brand_id",
+        "line",
+        "category",
+        "size",
+        "fat",
+        "price_promo",
+        "price_old",
+        "discount_pct_printed",
+        "price_qualifier",
+        "tier",
+        "depth",
+        "depth_disagrees_with_printed",
+    )
+
+
+def test_the_attribute_column_is_the_wire_name_and_not_the_schema_name(prereg):
+    """The sentence says `fat`, because v2 keeps every bar byte-equal to v1 and was written before
+    SPEC 3.17 (8) renamed the schema field. The dump carries the wire name through `wire_key` —
+    `row["attribute"]` would be a lookup that returns a legal absent on every single row."""
+    fields = driver.dump_fields(prereg)
+    assert positions.wire_key("attribute", driver.FAMILY) in fields
+    assert "attribute" not in fields
+    assert "attribute_pct" not in fields
+
+
+def test_prose_that_is_not_a_field_name_stops_the_writer(prereg):
+    """The control that caught this for real: "the page's file and sha256" is one phrase with an
+    `and` inside it, and splitting before looking it up produced a column literally called "the
+    page's file" — legal-looking JSON nobody can address."""
+    moved = json.loads(json.dumps(prereg))
+    moved["bars"]["price_pair_accuracy"]["procedure"] = (
+        "sku-b writes a per-position dump — one row per extracted position carrying item, the"
+        " reviewer's own opinion, brand_raw. The team lead opens each cited page image."
+    )
+    with pytest.raises(SystemExit, match="as prose rather than as field names"):
+        driver.dump_fields(moved)
+
+
+def test_a_row_carries_every_registered_column_in_order(prereg):
+    fields = driver.dump_fields(prereg)
+    position = positions.Position(
+        brand_id="rud",
+        brand_raw="Рудь",
+        line="Пломбір",
+        category="ice-cream",
+        size_value=450.0,
+        size_unit="г",
+        attribute_pct=12.0,
+        price_promo=89.9,
+        price_old=129.9,
+        discount_pct_printed=31.0,
+        price_qualifier="exact",
+        price_origin="retail_leaflet",
+        carrier="leaflet_page",
+        extraction_source="positions_post_gm4",
+    )
+    source = {"item": "@atb:1", "page": 2, "file": "a.jpg", "sha256": "abc"}
+    row = driver.row_for(position, source, fields)
+    assert tuple(row) == fields
+    assert row["fat"] == 12.0 and row["size"] == "450 г"
+    assert row["tier"] == "position"
+    assert row["depth"] == pytest.approx((129.9 - 89.9) / 129.9)
+    assert row["depth_disagrees_with_printed"] is False
+
+
+# --- the page leg -------------------------------------------------------------------------------
+
+
+@pytest.fixture(scope="module")
+def sent_pages(reference) -> list[dict]:
+    return driver.pages(reference)
+
+
+def test_the_page_leg_is_exactly_the_pages_that_were_sent(reference, sent_pages):
+    """Never the 159 available. The gold is one reviewer's reading of the SENT set, so a brand on a
+    page nobody sent is not in the gold and reading it would score as a false positive for being
+    right (`sku_pilot_prereg_v2.json :: R2`)."""
+    assert len(sent_pages) == reference["population"]["pages_sent"] == 108
+    assert reference["population"]["pages_available"] == 159
+    files = {page["file"] for page in sent_pages}
+    never_sent = {name for post in reference["posts"] for name in post["pages_not_sent"]}
+    assert never_sent and not (files & never_sent)
+
+
+def test_every_page_is_checked_against_the_bytes_on_disk(reference, tmp_path):
+    """`images_verified` in the reference records what was true when it was BUILT. A page whose
+    bytes moved since is a different image under a gold set written against the old one."""
+    moved = json.loads(json.dumps(reference))
+    moved["posts"][0]["pages_sent"][0]["sha256"] = "0" * 64
+    with pytest.raises(SystemExit, match="no longer hash to what"):
+        driver.pages(moved)
+
+    absent = json.loads(json.dumps(reference))
+    absent["posts"][0]["pages_sent"][0]["file"] = "data/annotation/nope.jpg"
+    with pytest.raises(SystemExit, match="are not on disk"):
+        driver.pages(absent)
+
+
+def test_a_page_travels_as_its_own_one_image_album(sent_pages):
+    for page in sent_pages[:5]:
+        assert page["url"].startswith("data:image/")
+        assert page["bytes"] == len(page["url"])
+
+
+# --- the text leg -------------------------------------------------------------------------------
+
+
+@pytest.fixture(scope="module")
+def text_rows(manifest) -> list[dict]:
+    return driver.rows(manifest, REPO_ROOT / manifest["pack"])
+
+
+def test_the_text_leg_is_the_thirty_adjudicated_rows(manifest, text_rows):
+    assert len(text_rows) == manifest["rows"] == 30
+    assert [row["id"] for row in text_rows] == manifest["ids"]
+
+
+def test_the_gold_ticks_never_reach_the_model(manifest, text_rows):
+    """The five tick columns ARE the answer to bar 3. Sending them would be asking the model to
+    agree with itself, and nothing in the reply would say it had been told."""
+    ticks = set(manifest["to_fill"])
+    assert ticks and not (ticks & set(text_rows[0]))
+    assert set(text_rows[0]) == set(manifest["given_columns"])
+
+
+def test_a_pack_that_moved_under_the_manifest_is_refused(manifest, tmp_path):
+    """Both readings: the ids and their order, and the hash over the columns the operator was told
+    not to touch. A row whose `text` moved was adjudicated against a different question."""
+    import csv
+
+    pack_path = REPO_ROOT / manifest["pack"]
+    with pack_path.open(encoding="utf-8-sig", newline="") as handle:
+        table = list(csv.DictReader(handle, delimiter=";"))
+
+    edited = tmp_path / "text30.csv"
+
+    def write(rows):
+        with edited.open("w", encoding="utf-8", newline="") as handle:
+            writer = csv.DictWriter(
+                handle, fieldnames=list(rows[0]), delimiter=";", lineterminator="\n"
+            )
+            writer.writeheader()
+            writer.writerows(rows)
+
+    short = json.loads(json.dumps(table))[:-1]
+    write(short)
+    with pytest.raises(SystemExit, match="the ids or their order moved"):
+        driver.rows(manifest, edited)
+
+    touched = json.loads(json.dumps(table))
+    touched[0]["text"] = touched[0]["text"] + " (edited)"
+    write(touched)
+    with pytest.raises(SystemExit, match="adjudicated against a different question"):
+        driver.rows(manifest, edited)
+
+
+def test_the_warm_up_row_is_not_one_of_the_thirty(text_rows):
+    """SPEC 3.17 (9) opens the paid session on inputs NO bar is scored on. A warm-up row that had
+    drifted into the pack would spend gold on the cold start."""
+    assert driver.WARMUP_ROW.strip() not in {row["text"].strip() for row in text_rows}
+
+
+# --- packing ------------------------------------------------------------------------------------
+
+
+def test_the_budget_is_numeric_and_under_the_documented_ceiling():
+    assert isinstance(driver.MAX_PAYLOAD_MB, float)
+    assert driver.MAX_PAYLOAD_MB < 10.0, "RunPod documents /run at 10 MB"
+
+
+def test_an_oversized_item_is_refused_and_never_shortened():
+    """A shortened album is a different instrument. The refusal names the file rather than dropping
+    an image, resizing it, or splitting the page across two calls."""
+    with pytest.raises(SystemExit, match="encode above the"):
+        driver.jobs([{"file": "huge.jpg", "bytes": 9_000_000}], 8.0)
+
+
+def test_items_are_packed_whole_and_in_order():
+    items = [{"file": f"{n}.jpg", "bytes": 3_000_000} for n in range(5)]
+    packed = driver.jobs(items, 8.0)
+    assert [len(job) for job in packed] == [2, 2, 1]
+    assert [item["file"] for job in packed for item in job] == [item["file"] for item in items]
+    for job in packed:
+        assert sum(item["bytes"] for item in job) <= 8_000_000
+
+
+def test_the_real_page_population_packs_under_the_budget(sent_pages):
+    packed = driver.jobs(sent_pages, driver.MAX_PAYLOAD_MB)
+    assert sum(len(job) for job in packed) == len(sent_pages)
+    assert max(sum(page["bytes"] for page in job) for job in packed) <= 8_000_000
+
+
+# --- parsing: a refusal is a reason, never an empty answer ---------------------------------------
+
+CATEGORIES = frozenset({"ice-cream", "milk"})
+ALIASES = {"рудь": "rud"}
+
+
+def reply(content: str) -> dict:
+    return {"content": content, "finish_reason": "stop"}
+
+
+def test_an_unreadable_reply_is_counted_by_reason():
+    found, reason = driver.parse(
+        reply('[{"brand": "Рудь", '), "leaflet_page", "t", CATEGORIES, ALIASES
+    )
+    assert found == [] and reason == "malformed JSON"
+
+
+def test_an_empty_array_is_an_answer_and_not_a_failure():
+    found, reason = driver.parse(reply("[]"), "leaflet_page", "t", CATEGORIES, ALIASES)
+    assert found == [] and reason is None
+
+
+def test_the_wire_key_is_what_carries_the_attribute():
+    """The reply says `fat` because that is what the registered prompt asks for. If the parser were
+    handed the schema name the percentage would vanish and every position would drop a rung."""
+    found, reason = driver.parse(
+        reply('[{"brand": "Рудь", "category": "milk", "fat": "2,5%"}]'),
+        "leaflet_page",
+        "t",
+        CATEGORIES,
+        ALIASES,
+    )
+    assert reason is None and found[0].attribute_pct == 2.5
+    refused, why = driver.parse(
+        reply('[{"brand": "Рудь", "category": "milk", "attribute": "2,5%"}]'),
+        "leaflet_page",
+        "t",
+        CATEGORIES,
+        ALIASES,
+    )
+    assert refused == [] and "unasked key" in why
+
+
+# --- the run: identity stop, no ledger, per-source lines ------------------------------------------
+
+
+@pytest.fixture(scope="module")
+def pin() -> dict:
+    return json.loads(driver.PIN.read_text(encoding="utf-8"))
+
+
+def run_smoke(tmp_path, extra=(), client=None):
+    out = tmp_path / "dump.jsonl"
+    record = tmp_path / "record.json"
+    ledger = tmp_path / "ledger.json"
+    code = driver.main(
+        [
+            "--leg",
+            "text",
+            "--out",
+            str(out),
+            "--record",
+            str(record),
+            "--ledger",
+            str(ledger),
+            *(["--smoke"] if client is None else []),
+            *extra,
+        ],
+        client=client,
+    )
+    return code, out, record, ledger
+
+
+def test_the_smoke_drives_the_whole_write_path_and_spends_nothing(tmp_path, capsys):
+    code, out, record, ledger = run_smoke(tmp_path)
+    assert code == 0
+    assert not ledger.exists(), "a $0 contract must not create the paid session's anchor"
+
+    written = json.loads(record.read_text(encoding="utf-8"))
+    assert written["smoke"] is True
+    assert written["cost"]["usd"] is None and written["cost"]["cap_usd"] == 0.35
+    assert written["attempts_per_job"] == 1
+    assert written["population"]["text_rows"] == 30
+
+    rows = [json.loads(line) for line in out.read_text(encoding="utf-8").splitlines()]
+    assert rows and set(rows[0]) == set(written["dump"]["columns"])
+    assert written["dump"]["sha256"] == sha256(out.read_bytes()).hexdigest()
+
+    # per-source lines, not only aggregates — a runbook step can `test -s` this
+    printed = capsys.readouterr().out
+    assert printed.count("position(s)") + printed.count("UNREADABLE") >= 30
+
+
+def test_the_record_keeps_unreadable_and_empty_apart(tmp_path):
+    """The two outcomes a driver most easily conflates. The fake client breaks one reply in seven
+    on purpose and empties one in five, so both branches are exercised rather than assumed."""
+    _, _, record, _ = run_smoke(tmp_path)
+    written = json.loads(record.read_text(encoding="utf-8"))["extraction"]
+    assert written["unreadable"] and written["empty_answers"]
+    assert set(written["unreadable_by_reason"])
+    assert not set(row["source"] for row in written["unreadable"]) & set(written["empty_answers"])
+    assert written["unreadable_share"] == pytest.approx(len(written["unreadable"]) / 30, abs=1e-4)
+
+
+def test_the_identity_stop_refuses_a_worker_that_is_not_the_pin(tmp_path, pin):
+    """The stop reads the committed pin and restates nothing. Driven with a client that answers
+    like a CAPTION worker — the shape an endpoint updated from the wrong template would have."""
+
+    class WrongWorker:
+        dump_path = None
+
+        def info(self):
+            return dict(pin["expected_worker"]) | {"serving_config": "CAPTION"}
+
+        def positions(self, task, items):  # pragma: no cover — never reached
+            raise AssertionError("a paid call was made after the identity stop should have fired")
+
+        def timing(self):
+            return {}
+
+    with pytest.raises(SystemExit, match="not serving the registered configuration"):
+        run_smoke(tmp_path, client=WrongWorker())
+
+
+def test_a_dump_that_already_exists_is_never_overwritten(tmp_path):
+    """It is what a paid run bought, and there is one attempt. Re-running would spend again."""
+    run_smoke(tmp_path)
+    with pytest.raises(SystemExit, match="already exists"):
+        run_smoke(tmp_path)
+
+
+def test_the_dry_run_reaches_no_client_at_all(tmp_path, capsys):
+    class Exploding:
+        dump_path = None
+
+        def info(self):  # pragma: no cover
+            raise AssertionError("--dry-run asked the endpoint something")
+
+    code = driver.main(["--leg", "text", "--dry-run"], client=Exploding())
+    assert code == 0
+    assert "text leg   30 rows" in capsys.readouterr().out
+
+
+def test_the_driver_names_the_two_registered_tasks_and_no_others():
+    source = (REPO_ROOT / "scripts" / "positions_gm4_skub.py").read_text(encoding="utf-8")
+    for task in prompts.POSITIONS:
+        assert f"POSITIONS_TASK_{'PAGE' if 'post' in task else 'TEXT'}" in source
+    assert "CAPTION_TASK" not in source
