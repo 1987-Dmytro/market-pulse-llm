@@ -176,11 +176,13 @@ def test_every_pinned_input_still_hashes_to_what_it_says(record):
         "sku-b-ratification-2",
         "sku-b-ratification-3",
         "sku-b-ratification-4",
+        "sku-b-ratification-5",
     ]
     law = prereg.registered_law(prereg.SPEC).decode("utf-8")
     assert "sku-b-ratification-2" not in law
     assert "sku-b-ratification-3" not in law
     assert "sku-b-ratification-4" not in law
+    assert "sku-b-ratification-5" not in law
 
     for path, sha in record["pinned_inputs"].items():
         if path == "docs/SPEC.md":
