@@ -27,6 +27,7 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 from precheck_45h import scoreable  # noqa: E402  — one definition of "scoreable", not two
 
+from market_pulse import lexicon  # noqa: E402
 from market_pulse.brands import watchlist_aliases  # noqa: E402
 from market_pulse.registry import load_registry  # noqa: E402
 
@@ -222,25 +223,16 @@ def load_dir(directory: Path) -> list[dict]:
 # --- the draft lexicon --------------------------------------------------------
 def build_lexicon(registry) -> dict:
     """Tracked stems checked against the registry's display names, draft stems beside them."""
-    groups = registry.taxonomy.tracked_groups
-    names = {
-        key: " ".join([group["name"], *group.get("subcategories", {}).values()]).casefold()
-        for key, group in groups.items()
-    }
-    for key, stems in TRACKED_STEMS.items():
-        if key not in names:
+    # the rule itself lives in `market_pulse.lexicon` since uni-b, so the law in
+    # `config/lexicon.yaml` and this draft are held to ONE implementation of it
+    bad = lexicon.unmatched_stems(TRACKED_STEMS, registry.taxonomy, exempt=RU_VARIANTS)
+    for key, unmatched in sorted(bad.items()):
+        if not unmatched:
             raise SystemExit(f"{key} is not a tracked group of {rel(REGISTRY)}")
-        unmatched = [
-            stem
-            for stem in stems
-            if stem not in RU_VARIANTS
-            and not any(token.startswith(stem) for token in re.findall(r"[\w']+", names[key]))
-        ]
-        if unmatched:
-            raise SystemExit(
-                f"{key}: {unmatched} are not prefixes of any display name in the registry —"
-                " a tracked stem that names nothing measures nothing"
-            )
+        raise SystemExit(
+            f"{key}: {unmatched} are not prefixes of any display name in the registry —"
+            " a tracked stem that names nothing measures nothing"
+        )
     return {
         "status": "draft-not-law",
         "note": (

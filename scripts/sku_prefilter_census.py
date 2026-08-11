@@ -14,8 +14,10 @@ picture, so a size or a price inside one is the captioner's transcription and no
 words — the leaflet leg exists to read those pages directly, per page. Counting caption text here
 would put GM4's transcription into a frame labelled "text rows".
 
-The lexicon is a SCREENING instrument, never the category law (`draft-not-law`, 5c3 owns the law).
-This screen decides nothing: it counts, and the pack that follows draws.
+The lexicon is a SCREENING instrument here — it counts and decides nothing, and the pack that
+follows draws. Since uni-b it reads `config/lexicon.yaml`, the vocabulary LAW of SPEC 3.17 (8):
+the shipped record below was produced against `data/category_lexicon_draft.json` and names that
+file by sha, and the two carry the same stems and endings (`tests/test_lexicon.py`).
 
     PYTHONPATH=src python3 scripts/sku_prefilter_census.py
 """
@@ -35,10 +37,11 @@ from build_audit_pack import git_state  # noqa: E402
 
 from market_pulse import positions, yield_screen  # noqa: E402
 from market_pulse.brands import watchlist_aliases  # noqa: E402
+from market_pulse.lexicon import load_lexicon  # noqa: E402
 from market_pulse.registry import load_registry  # noqa: E402
 
 REGISTRY = REPO_ROOT / "config" / "registry.yaml"
-LEXICON = REPO_ROOT / "data" / "category_lexicon_draft.json"
+LEXICON = REPO_ROOT / "config" / "lexicon.yaml"
 POSTS = REPO_ROOT / "data" / "raw" / "posts"
 COMMENTS = REPO_ROOT / "data" / "raw" / "comments"
 RECORD = REPO_ROOT / "results" / "sku_prefilter_census.json"
@@ -185,8 +188,10 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     refuse_to_overwrite(args.out)
 
-    lexicon = json.loads(LEXICON.read_text(encoding="utf-8"))
     registry = load_registry(REGISTRY)
+    # the law, checked against this registry's display names as it loads — a stem that names
+    # nothing in the taxonomy screens nothing, and a silent zero is what that looks like
+    lexicon = load_lexicon(LEXICON, taxonomy=registry.taxonomy)
     compiled = yield_screen.compile_categories(lexicon)
     aliases = yield_screen.compile_aliases(watchlist_aliases(registry.watchlist))
 

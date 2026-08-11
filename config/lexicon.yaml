@@ -1,0 +1,113 @@
+# The category vocabulary — LAW (operator ruling 2026-08-11, SPEC 3.17 (8)).
+#
+# What the pre-filter's category half reads. Until uni-b it read
+# `data/category_lexicon_draft.json`, a file marked `status: draft-not-law` that no registry edit
+# could reach: uni-a measured the cost of that (docs/reports/uni-a.md, LEAK L1) — a new tracked
+# category changes `config/registry.yaml` and the pre-filter keeps passing dairy rows.
+#
+# Migrated BYTE-FAITHFULLY from that draft: source data/category_lexicon_draft.json, sha256
+# 1225ad7597f3328f2c725afba0d92458d18b95924438575bc2d46131371dd2b3. The 36 endings and the 14 + 2
+# tracked stems below are that file's own, in its own order, and `tests/test_lexicon.py` asserts
+# the equality against the draft on disk. The draft is NOT edited and NOT deleted — five sealed
+# records pin its sha and it stays readable as history; the `draft:` families beside its tracked
+# half (bakery, meat, produce, …) are other people's categories and are deliberately not law.
+#
+# One home per fact: a stem lives here, a display name lives in config/registry.yaml, and every
+# tracked stem must be a PREFIX of one of that registry's display names — `market_pulse.lexicon`
+# refuses the file loudly when it is not, which is `scripts/measure_categories.py::build_lexicon`'s
+# own rule, now on the law and with one implementation.
+
+status: law
+authority: docs/SPEC.md amendment 3.17 (8) — ratified by the operator 2026-08-11
+source:
+  path: data/category_lexicon_draft.json
+  sha256: 1225ad7597f3328f2c725afba0d92458d18b95924438575bc2d46131371dd2b3
+  status_then: draft-not-law
+matcher: "stem + one of `endings`, bounded by non-word characters on both sides"
+known_collision: "сир + ий matches `креветка сира` (raw shrimp) on 11 posts"
+
+# The tracked groups' stems, keyed by the registry's own tracked_groups keys.
+# `кефир`, `творог` and `морожен` are the Russian forms of a tracked stem: the registry's display
+# names are Ukrainian, so they have nothing to be a prefix of and are exempt one by one rather
+# than by loosening the check. The corpus is UA/RU mixed (SPEC §1) and dropping them undercounts
+# the RU half.
+tracked:
+  dairy:
+    - "аналог"
+    - "десерт"
+    - "йогурт"
+    - "кефир"
+    - "кефір"
+    - "масл"
+    - "молок"
+    - "молочн"
+    - "рослинн"
+    - "ряжанк"
+    - "сир"
+    - "сирк"
+    - "сметан"
+    - "творог"
+  ice-cream:
+    - "морожен"
+    - "морозив"
+
+ru_variants:
+  - "кефир"
+  - "творог"
+  - "морожен"
+
+# The pre-filter's second half — «число + one of these» (SPEC 3.17 (4)), absorbed from
+# `positions.SIZE_PRICE_UNITS` (uni-a LEAK L6).
+#
+# THE ORDER IS LOAD-BEARING AND IS NOT ALPHABETICAL. A regex alternation takes the first branch
+# that matches, so «г» before «грн» would read "90 грн" as a size. Longest-first, and
+# `tests/test_lexicon.py` asserts this exact sequence rather than the set.
+#
+# The list is deliberately closed: «500 грам» and «5 гривень» do NOT match it, and widening it
+# moves the sample frame the text bar of SPEC 3.17 (6) is measured on — a named revision, not a
+# tweak. `results/sku_prefilter_census.json` records these six in its own words.
+units:
+  - "кг"
+  - "мл"
+  - "грн"
+  - "г"
+  - "л"
+  - "%"
+
+endings:
+  - ""
+  - "а"
+  - "у"
+  - "и"
+  - "і"
+  - "е"
+  - "о"
+  - "я"
+  - "ю"
+  - "ї"
+  - "й"
+  - "ы"
+  - "ів"
+  - "ой"
+  - "ою"
+  - "ом"
+  - "ем"
+  - "ім"
+  - "ам"
+  - "ям"
+  - "ах"
+  - "ях"
+  - "ей"
+  - "ов"
+  - "ий"
+  - "их"
+  - "ій"
+  - "ої"
+  - "не"
+  - "на"
+  - "ні"
+  - "ами"
+  - "ями"
+  - "ими"
+  - "ого"
+  - "ому"

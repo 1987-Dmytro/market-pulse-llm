@@ -26,6 +26,7 @@ import json
 import re
 from dataclasses import MISSING, dataclass, fields
 
+from market_pulse import lexicon
 from market_pulse.registry import Taxonomy
 
 CARRIERS = ("leaflet_page", "post_text", "comment")
@@ -472,13 +473,14 @@ def parse_positions(
 
 # --- the pre-filter: which text rows are worth asking a model about --------------------------------
 
-SIZE_PRICE_UNITS = ("кг", "мл", "грн", "г", "л", "%")
-"""The six units the contract names: «число + г|кг|л|мл|%|грн».
+SIZE_PRICE_UNITS = tuple(lexicon.load_lexicon()["units"])
+"""The units the contract names: «число + г|кг|л|мл|%|грн» — read from `config/lexicon.yaml`
+(SPEC 3.17 (8)) and NOT restated here, which is what uni-a's LEAK L6 was.
 
-Ordered longest-first, because a regex alternation takes the first branch that matches and «г»
-before «грн» would read "90 грн" as a size. The list is deliberately closed: «500 грам» and «5
-гривень» do NOT match it, and widening it would move the sample frame the text bar is measured on,
-so it is a named revision and not a tweak.
+Ordered longest-first in the law file, because a regex alternation takes the first branch that
+matches and «г» before «грн» would read "90 грн" as a size. The list is deliberately closed: «500
+грам» and «5 гривень» do NOT match it, and widening it would move the sample frame the text bar is
+measured on, so it is a named revision and not a tweak.
 """
 
 _SIZE_PRICE = re.compile(rf"{_NUMBER}\s*(?:{'|'.join(SIZE_PRICE_UNITS)})(?!\w)", re.IGNORECASE)

@@ -19,11 +19,13 @@ import sku_prefilter_census as census  # noqa: E402
 
 from market_pulse import positions, yield_screen  # noqa: E402
 from market_pulse.brands import watchlist_aliases  # noqa: E402
+from market_pulse.lexicon import load_lexicon  # noqa: E402
 from market_pulse.registry import load_registry  # noqa: E402
 
 REGISTRY = load_registry(REPO_ROOT / "config" / "registry.yaml")
-LEXICON = json.loads(census.LEXICON.read_text(encoding="utf-8"))
+LEXICON = load_lexicon(census.LEXICON, taxonomy=REGISTRY.taxonomy)
 COMPILED = yield_screen.compile_categories(LEXICON)
+DRAFT = REPO_ROOT / "data" / "category_lexicon_draft.json"
 ALIASES = yield_screen.compile_aliases(watchlist_aliases(REGISTRY.watchlist))
 
 
@@ -107,10 +109,23 @@ def test_the_shipped_record_covers_the_signed_composition(shipped):
     assert {row["handle"] for row in shipped["channels"]} == live
     assert shipped["summary"]["channels"] == len(live) == 66
     assert shipped["sources_read"]["registry"]["sha256"] == census.sha256_of(census.REGISTRY)
-    assert shipped["sources_read"]["lexicon"]["sha256"] == census.sha256_of(census.LEXICON)
-    assert shipped["sources_read"]["lexicon"]["status"] == "draft-not-law"
     assert shipped["frame_reportable"] is True
     assert all(control["ok"] for control in shipped["controls"].values())
+
+
+def test_the_record_names_the_lexicon_it_was_run_against_and_the_law_says_the_same(shipped):
+    """uni-b moved this script onto `config/lexicon.yaml` (SPEC 3.17 (8)). The record predates that
+    and is a DO-NOT: it names the draft it actually read, by sha, and that stays true. What makes
+    the migration safe for a sealed frame is the second half — the law carries the draft's stems and
+    endings, so the filter that selected these 769 rows is the filter the law compiles today.
+    """
+    read = shipped["sources_read"]["lexicon"]
+    assert read["path"] == "data/category_lexicon_draft.json"
+    assert read["status"] == "draft-not-law"
+    assert read["sha256"] == census.sha256_of(DRAFT)
+    draft = json.loads(DRAFT.read_text(encoding="utf-8"))
+    assert LEXICON["tracked"] == draft["tracked"] and LEXICON["endings"] == draft["endings"]
+    assert read["known_collision"] == LEXICON["known_collision"]
 
 
 def test_the_shipped_frame_adds_up_and_its_hash_reproduces(shipped):

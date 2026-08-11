@@ -14,7 +14,7 @@ from pathlib import Path
 
 import pytest
 from market_pulse import positions as P
-from market_pulse import prompts, yield_screen
+from market_pulse import lexicon, prompts, yield_screen
 from market_pulse.brands import watchlist_aliases
 from market_pulse.registry import load_registry
 
@@ -578,7 +578,7 @@ def test_the_parser_and_the_prompt_ask_for_the_same_keys():
 
 # --- the pre-filter -------------------------------------------------------------------------------
 
-LEXICON = json.loads((REPO_ROOT / "data" / "category_lexicon_draft.json").read_text("utf-8"))
+LEXICON = lexicon.load_lexicon()  # the vocabulary LAW, SPEC 3.17 (8) — not the draft it migrated
 COMPILED = yield_screen.compile_categories(LEXICON)
 COMPILED_ALIASES = yield_screen.compile_aliases(ALIASES)
 
