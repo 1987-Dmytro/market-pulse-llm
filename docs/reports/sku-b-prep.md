@@ -44,6 +44,8 @@ proved below to create no spend anchor at all.
 | D2 | `b6cf872` | the sku-b driver — proved end to end on `--smoke`, zero network |
 | D5 | `a2b66bc` | the preflight learns the POSITIONS guards, both ways |
 | D6 | `de9a637` | `results/sku_projection.json` — and the upper corner does not fit |
+| — | `8530f97` | the importer count re-derived — 51, not "some forty" |
+| — | `9157118` | **the cap's in-run stop CRASHED on its first call, and was never exercised** |
 
 Order is not the brief's numbering and that is deliberate: D3 before D2 because the brief calls the
 driver "caller six", so landing the driver first would have written a seventh `git_state` copy and
@@ -70,7 +72,7 @@ de9a637  1728 passed, 2 skipped in 51.44s
 `make check` on HEAD:
 
 ```
-1728 passed, 2 skipped in 52.04s
+1734 passed, 2 skipped in 52.64s
 ```
 
 `ruff check .` → `All checks passed!` · `ruff format --check .` clean (the formatter is not in
@@ -226,6 +228,56 @@ endpoint       <smoke> · POSITIONS/base-no-adapter
   before any call reaches the client.
 * **`--smoke` writes no spend anchor.** Asserted, because a $0 contract that created the paid
   session's anchor would silently re-base its counter at today's balance.
+
+### The finding: the in-run cap stop had never run, and crashed the first time it did
+
+The gate is only wired when a budget exists, and under `--smoke` there is no ledger and
+`--project-stop-usd` defaults to `None` — so `budget is None`, `gate` was never passed to
+`run_leg`, and all 24 driver tests ran the loop with `stop=None`. Driven for the first time
+(`--smoke --project-stop-usd 0.35`) it raised on its first call:
+
+```
+    seen = leader.projection(
+        boot_seconds, float(client.timing()["worker_seconds"]), done, rows_total, rate)
+KeyError: 'worker_seconds'
+```
+
+A client that has made no call has no such key. The cap-enforcement path would have died on the
+paid attempt, at the first re-projection, after the money was spent. Three defects behind it:
+
+1. **The clock was indexed, not read.** `billed_seconds()` now uses `.get` and reads an absent
+   clock as `0.0`.
+2. **The counter was per LEG.** `run_leg` owned its own outcome list, so `done` restarted at 0 when
+   the text leg opened while the billed clock carried the whole page leg — and `and index` skipped
+   each leg's first job, so the text leg had **no gate at all**. Both lists are the run's now, the
+   gate closes over them, and it returns `None` at `done == 0` instead of being skipped by position.
+3. **The formula re-added a cold start that was already billed.**
+   `caption_gm4_5c1.projection` prices `rows_total × marginal + COLD_START_USD` — vis-b's caption
+   constant. By the time any gate runs the boot is inside the measured seconds, so adding $0.0733
+   on top double-counts it. The driver has its own now: everything paid is in `billed`, only what
+   is LEFT is projected, and the marginal is measured from *after* the 3.17 (9) warm-up so neither
+   the cold start nor the two non-gold calls is multiplied by 138.
+
+The fake endpoint gained a **synthetic clock** — vis-c's 183.58 s boot plus 2.5 s/call, between
+vis-b's 2.34 s/image and srv-2d's 4.26 s/row. Without one the marginal is zero and the gate can
+never fire, which is a gate nothing proves. The record labels it (`timing.smoke: true`).
+
+Measured on the real population, `--project-stop-usd 0.35`:
+
+```
+gates at calls_done 17 34 50 67 81 98 108 (7 of them), calls_total 138
+the LAST is the text leg's first job and carries the page leg's 108
+boot 183.58 s = $0.0563 · warm-up 5.0 s · projected $0.1636 · nothing unbought
+```
+
+and at `--project-stop-usd 0.10`:
+
+```
+STOP before positions_post_gm4 job 01: the run projects $0.1636 against $0.1000 left of the
+$0.35 cap. A cap is not raised to finish a run
+STOP before positions_text_gm4 job 00: …
+17 asked · 121 unbought · stopped_early true
+```
 
 ---
 
@@ -467,9 +519,11 @@ team-lead ruling, not something the driver should paper over.
 | the pin matches the code both ways | `pytest tests/test_sku_serving_pin.py` | 10 passed |
 | the guards fire on real libraries | `preflight_serving_guards.py` | 13/13 PASS, exit 0 |
 | the driver runs end to end at $0 | `positions_gm4_skub.py --smoke` | 138 sources, 92 positions, no spend |
+| the cap's in-run stop fires | `--smoke --project-stop-usd 0.10` | stops both legs, 17 asked, 121 unbought |
+| its counter is cross-leg | `--smoke --project-stop-usd 0.35` | 7 gates, last at 108/138 |
 | the projection is re-derivable | `pytest tests/test_sku_projection.py` | 10 passed |
 
-New tests this phase: 91 (38 D1 · 9 D3 · 10 D4 · 24 D2 · 10 D6). Suite 1637 → 1728.
+New tests this phase: 97 (38 D1 · 9 D3 · 10 D4 · 30 D2 · 10 D6). Suite 1637 → 1734.
 
 ---
 
@@ -537,3 +591,6 @@ landing it first would have created work to undo. No deliverable's content chang
    not what was generated (400). Declared here rather than re-pinned.
 4. **The preflight now needs a venv carrying `peft`** (Dv138). Without one it exits 1, which is a
    finding, not a pass.
+5. **The in-run cap stop was broken and is now fixed and measured** (`9157118`, section under D2).
+   It is worth a second pair of eyes because it is the only thing standing between a projection
+   that lands on the cap and an overrun — and it had a `KeyError` on its first call.
