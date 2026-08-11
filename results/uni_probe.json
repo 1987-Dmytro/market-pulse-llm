@@ -1,0 +1,640 @@
+{
+  "generated_at": "2026-08-11T12:19:13+00:00",
+  "phase": "uni-a — the universality dry run (deliverable B)",
+  "contract": "docs/PROMPT-uni-a.md deliverable B",
+  "asks": "what follows config/registry.yaml when the tracked category changes",
+  "cost_usd": 0.0,
+  "no_model": "every number here is a deterministic function of this repository's code. No request was sent anywhere and no model was loaded",
+  "writes": "this file only. The toy registry and the toy lexicon were materialised in a tempdir and deleted at exit; data/raw/ was READ and not written; config/, src/, tests/ and every other results/ file are untouched",
+  "verdict_vocabulary": {
+    "follows-registry": "the value flows from the registry it was handed — a registry edit is enough",
+    "needs-new-registration": "a new domain needs a new registered artifact, authored by hand",
+    "hard-coded": "the domain is fixed in code or in a second file the registry cannot reach",
+    "UNMEASURED": "the step could not be measured; the reason is stated and never guessed"
+  },
+  "verdicts": {
+    "1 · positions.category_keys over the toy taxonomy": "follows-registry",
+    "2 · the deterministic pre-filter over the corpus": "hard-coded",
+    "3 · the strict parser and the tier ladder": "follows-registry",
+    "4 · brand resolution over the toy watchlist": "follows-registry",
+    "5 · prompt instantiation": "needs-new-registration"
+  },
+  "steps": {
+    "1 · positions.category_keys over the toy taxonomy": {
+      "verdict": "follows-registry",
+      "asks": "does positions.category_keys read the toy taxonomy, both levels?",
+      "toy_keys": [
+        "coffee",
+        "coffee-beans",
+        "coffee-capsules",
+        "ground-coffee",
+        "instant-coffee"
+      ],
+      "live_keys": [
+        "butter",
+        "cheese",
+        "curd",
+        "dairy",
+        "dairy-desserts",
+        "ice-cream",
+        "kefir-ryazhanka",
+        "milk",
+        "plant-based-analogs",
+        "sour-cream",
+        "yogurt"
+      ],
+      "overlap_with_live": [],
+      "evidence": "positions.category_keys(taxonomy) returns the tracked group keys plus every subcategory key, read off the Taxonomy object it is handed. Handed the toy taxonomy it returns 5 names and none of the live 11",
+      "caveat": "this is the PARSER's accepted vocabulary only. What the model is ASKED for is the registered prompt's own enum — step 5, and it does not move with the registry"
+    },
+    "2 · the deterministic pre-filter over the corpus": {
+      "verdict": "hard-coded",
+      "asks": "does the deterministic pre-filter follow a registry change?",
+      "halves": {
+        "brand half — yield_screen.compile_aliases(watchlist_aliases(registry.watchlist))": "follows-registry",
+        "category half — yield_screen.compile_categories(lexicon)": "hard-coded"
+      },
+      "sample": {
+        "rows": 2000,
+        "files_read": 8,
+        "rows_per_channel": {
+          "@ATB_FANatik": 18,
+          "@Hadiach_telegram": 145,
+          "@HealthPsycholog": 17,
+          "@KarlivkaLive": 9,
+          "@LHVC_info": 1,
+          "@PirOperative": 104,
+          "@Pro_Detyintumama": 3,
+          "@VARUS_channel": 1703
+        },
+        "ids_sha256": "4753d94ca5ef823f40eb51bee65eca9c4c7319cb9b3e57ed3e785bc1a3e45b17",
+        "draw": "data/raw/posts/*.jsonl in sorted file-name order, rows in file order, rows carrying text only, stopping at 2000. No seed and no shuffle: the draw is reproducible from the corpus alone"
+      },
+      "under_the_toy_lexicon": {
+        "passed": 11,
+        "share_of_sample": 0.0055,
+        "passed_carrying": {
+          "currency": 7,
+          "percent": 10,
+          "size": 1
+        },
+        "by_hit": {
+          "category:coffee:кав": 11
+        },
+        "examples": [
+          {
+            "id": "@VARUS_channel:9273",
+            "line": "🔸Кава в асортименті — до -45%",
+            "hit": "category:coffee:кав",
+            "matched": "кава",
+            "pattern": "45%"
+          },
+          {
+            "id": "@VARUS_channel:8344",
+            "line": "Знижка 25% на чеки від 1 000 грн із промокодом DRINK25 на замовлення: води, соків, напоїв, снеків; кави, чаю та гарячих напоїв.",
+            "hit": "category:coffee:кав",
+            "matched": "кави",
+            "pattern": "25%"
+          },
+          {
+            "id": "@VARUS_channel:5370",
+            "line": "Хапай знижку 25% на чеки від 1 000 грн із промокодом TEPLO на замовлення: кондитерських виробів та солодощів; чаю; кави.",
+            "hit": "category:coffee:кав",
+            "matched": "кави",
+            "pattern": "25%"
+          },
+          {
+            "id": "@VARUS_channel:3717",
+            "line": "Хапай знижку 25% на чеки від 1 000 грн із промокодом SWEET на різні товари: чай, каву, гарячі напої; печиво, цукерки",
+            "hit": "category:coffee:кав",
+            "matched": "каву",
+            "pattern": "25%"
+          },
+          {
+            "id": "@VARUS_channel:2551",
+            "line": "👉 Кава розчинна Movenpick Gold 100 г",
+            "hit": "category:coffee:кав",
+            "matched": "кава",
+            "pattern": "100 г"
+          }
+        ]
+      },
+      "under_the_live_lexicon_with_the_toy_registry": {
+        "passed": 90,
+        "share_of_sample": 0.045,
+        "passed_carrying": {
+          "currency": 27,
+          "percent": 84,
+          "size": 10
+        },
+        "by_hit": {
+          "category:dairy:сир": 26,
+          "category:dairy:масл": 17,
+          "category:dairy:молок": 11,
+          "category:dairy:сметан": 11,
+          "category:ice-cream:морозив": 11,
+          "category:dairy:йогурт": 6,
+          "category:dairy:молочн": 5,
+          "category:dairy:кефір": 2,
+          "category:dairy:ряжанк": 1
+        },
+        "examples": [
+          {
+            "id": "@ATB_FANatik:4525",
+            "line": "1) Ковбаса 0,55 кг М'ясна лавка/Своя лінія Молочна ДСТУ вар вектор",
+            "hit": "category:dairy:молочн",
+            "matched": "молочна",
+            "pattern": "0,55 кг"
+          },
+          {
+            "id": "@VARUS_channel:10628",
+            "line": "🔸Сметана 15% ТМ Фанні",
+            "hit": "category:dairy:сметан",
+            "matched": "сметана",
+            "pattern": "15%"
+          },
+          {
+            "id": "@VARUS_channel:10593",
+            "line": "Лови знижку 25% на чеки від 1000 грн із промокодом MILKY25 на замовлення: рослинного молока, морозива, йогуртів і сирів.",
+            "hit": "category:dairy:йогурт",
+            "matched": "йогуртів",
+            "pattern": "25%"
+          },
+          {
+            "id": "@VARUS_channel:10531",
+            "line": "🔸Сметана 15% ТМ Фанні",
+            "hit": "category:dairy:сметан",
+            "matched": "сметана",
+            "pattern": "15%"
+          },
+          {
+            "id": "@VARUS_channel:10456",
+            "line": "🔸 Сметана 20% ТМ ПростоНаше",
+            "hit": "category:dairy:сметан",
+            "matched": "сметана",
+            "pattern": "20%"
+          }
+        ]
+      },
+      "controls": {
+        "positive :: Кава мелена Галка 250 г — 89,90 грн": {
+          "kind": "positive",
+          "measured": {
+            "line": "Кава мелена Галка 250 г — 89,90 грн",
+            "hit": "category:coffee:кав",
+            "matched": "кава",
+            "pattern": "250 г"
+          },
+          "ok": true
+        },
+        "negative :: a category with no number beside it": {
+          "kind": "negative",
+          "line": "Люблю каву і чай!",
+          "measured": null,
+          "ok": true
+        },
+        "negative :: a price with no category and no brand": {
+          "kind": "negative",
+          "line": "Кросівки, розмір 37, 1499 грн",
+          "measured": null,
+          "ok": true
+        },
+        "negative :: a fitness post with a discount and no taxonomy": {
+          "kind": "negative",
+          "line": "Розклад тренувань на тиждень: понеділок — ноги, середа — спина, п'ятниця — руки. Реєстрація за посиланням, знижка 20% до кінця місяця.",
+          "measured": null,
+          "ok": true
+        },
+        "negative :: the live census's dairy control, under the toy lexicon": {
+          "kind": "negative",
+          "line": "Молоко Яготинське 2,5% 900 г — 39,90 грн",
+          "measured": null,
+          "ok": true
+        }
+      },
+      "controls_ok": true,
+      "the_leak": {
+        "dairy_line": "Молоко Яготинське 2,5% 900 г — 39,90 грн",
+        "passes_under_the_toy_lexicon": false,
+        "passes_under_the_live_lexicon": true,
+        "reading": "the pre-filter's brand half IS registry-driven — the aliases come from the watchlist it was handed. Its category half is not: yield_screen.compile_categories takes a LEXICON, and the only lexicon in the repository is data/category_lexicon_draft.json, whose tracked half is dairy and ice-cream. Swap the registry and nothing about the category matcher moves: the toy run needed a second file, written by this probe, to have any coffee stems at all"
+      },
+      "evidence": "positions.prefilter(row, compiled, aliases) — `compiled` comes from yield_screen.compile_categories(lexicon), never from a Taxonomy"
+    },
+    "3 · the strict parser and the tier ladder": {
+      "verdict": "follows-registry",
+      "asks": "do the parser and the tier ladder work on a domain they have never seen?",
+      "replies": 10,
+      "parsed": [
+        {
+          "case": "a full page position: brand, line, category, size and both prices",
+          "positions": 1,
+          "tiers": [
+            "position"
+          ],
+          "expected_tiers": [
+            "position"
+          ],
+          "ok": true,
+          "brand_ids": [
+            "halka"
+          ],
+          "brand_raw": [
+            "Галка"
+          ]
+        },
+        {
+          "case": "two offers on one page, one of them a capsule pack",
+          "positions": 2,
+          "tiers": [
+            "position",
+            "position"
+          ],
+          "expected_tiers": [
+            "position",
+            "position"
+          ],
+          "ok": true,
+          "brand_ids": [
+            "chorna-karta",
+            "nescafe"
+          ],
+          "brand_raw": [
+            "Чорна карта",
+            "Nescafé"
+          ]
+        },
+        {
+          "case": "the group key itself, which the taxonomy also carries",
+          "positions": 1,
+          "tiers": [
+            "position"
+          ],
+          "expected_tiers": [
+            "position"
+          ],
+          "ok": true,
+          "brand_ids": [
+            "halka"
+          ],
+          "brand_raw": [
+            "Галка"
+          ]
+        },
+        {
+          "case": "a brand and a category with no attribute — the middle rung",
+          "positions": 1,
+          "tiers": [
+            "product_mention"
+          ],
+          "expected_tiers": [
+            "product_mention"
+          ],
+          "ok": true,
+          "brand_ids": [
+            "nescafe"
+          ],
+          "brand_raw": [
+            "Nescafé"
+          ]
+        },
+        {
+          "case": "a brand and a size with no category — the middle rung from the other side",
+          "positions": 1,
+          "tiers": [
+            "product_mention"
+          ],
+          "expected_tiers": [
+            "product_mention"
+          ],
+          "ok": true,
+          "brand_ids": [
+            "chorna-karta"
+          ],
+          "brand_raw": [
+            "Чорна карта"
+          ]
+        },
+        {
+          "case": "a bare brand — the bottom rung",
+          "positions": 1,
+          "tiers": [
+            "brand_mention"
+          ],
+          "expected_tiers": [
+            "brand_mention"
+          ],
+          "ok": true,
+          "brand_ids": [
+            "halka"
+          ],
+          "brand_raw": [
+            "Галка"
+          ]
+        },
+        {
+          "case": "nothing of the tracked category on the page",
+          "positions": 0,
+          "tiers": [],
+          "expected_tiers": [],
+          "ok": true,
+          "brand_ids": [],
+          "brand_raw": []
+        },
+        {
+          "case": "a hedged price — and a price does not move a rung, so this is the middle one",
+          "positions": 1,
+          "tiers": [
+            "product_mention"
+          ],
+          "expected_tiers": [
+            "product_mention"
+          ],
+          "ok": true,
+          "brand_ids": [
+            "halka"
+          ],
+          "brand_raw": [
+            "Галка"
+          ]
+        },
+        {
+          "case": "an unregistered brand — kept as brand_raw, never dropped",
+          "positions": 1,
+          "tiers": [
+            "position"
+          ],
+          "expected_tiers": [
+            "position"
+          ],
+          "ok": true,
+          "brand_ids": [
+            null
+          ],
+          "brand_raw": [
+            "Lavazza"
+          ]
+        },
+        {
+          "case": "a line without a category — a line is a differentiating attribute",
+          "positions": 1,
+          "tiers": [
+            "product_mention"
+          ],
+          "expected_tiers": [
+            "product_mention"
+          ],
+          "ok": true,
+          "brand_ids": [
+            "nescafe"
+          ],
+          "brand_raw": [
+            "Nescafé"
+          ]
+        }
+      ],
+      "parse_failures": [],
+      "tiers_all_as_expected": true,
+      "dairy_control": {
+        "reply": "[{\"brand\": \"Яготинське\", \"category\": \"milk\", \"size\": \"900 г\", \"price_promo\": \"39,90\"}]",
+        "refused": true,
+        "reason": "entry 0 category 'milk' is outside the taxonomy",
+        "why": "`milk` is a live subcategory and is NOT in the toy taxonomy, so the parser must refuse the whole reply. A parser that accepted it would be carrying the dairy vocabulary rather than reading the registry"
+      },
+      "ladder_sha256": "b497c07200db74132140ec207fa27e623c6beb2aa1a5aa35acdd6a115f69f238",
+      "evidence": "positions.parse_positions(..., categories=positions.category_keys(toy.taxonomy)); the rung comes from positions.tier, a pure function of which fields are filled in, and no branch of it names a category"
+    },
+    "4 · brand resolution over the toy watchlist": {
+      "verdict": "follows-registry",
+      "asks": "does brand resolution follow the watchlist, and what does its exactness cost?",
+      "alias_table": {
+        "nescafé": "nescafe",
+        "галка": "halka",
+        "черная карта": "chorna-karta",
+        "чорна карта": "chorna-karta"
+      },
+      "alias_count": 4,
+      "strings": [
+        {
+          "string": "Галка",
+          "note": "the display name exactly as registered",
+          "resolve_brand": "halka",
+          "normalise_brand": "halka",
+          "resolved": true
+        },
+        {
+          "string": "галка",
+          "note": "the same name casefolded",
+          "resolve_brand": "halka",
+          "normalise_brand": "halka",
+          "resolved": true
+        },
+        {
+          "string": "ГАЛКА",
+          "note": "the same name upper-cased",
+          "resolve_brand": "halka",
+          "normalise_brand": "halka",
+          "resolved": true
+        },
+        {
+          "string": "Чорна карта",
+          "note": "a two-word display name",
+          "resolve_brand": "chorna-karta",
+          "normalise_brand": "chorna-karta",
+          "resolved": true
+        },
+        {
+          "string": "Черная карта",
+          "note": "the registered RU spelling",
+          "resolve_brand": "chorna-karta",
+          "normalise_brand": "chorna-karta",
+          "resolved": true
+        },
+        {
+          "string": "Чорна Карта",
+          "note": "the UA name with the second word capitalised",
+          "resolve_brand": "chorna-karta",
+          "normalise_brand": "chorna-karta",
+          "resolved": true
+        },
+        {
+          "string": "Nescafé",
+          "note": "the Latin brand as registered, with its diacritic",
+          "resolve_brand": "nescafe",
+          "normalise_brand": "nescafe",
+          "resolved": true
+        },
+        {
+          "string": "Nescafe",
+          "note": "the same brand as a keyboard writes it, without the diacritic",
+          "resolve_brand": null,
+          "normalise_brand": "nescafe",
+          "resolved": false
+        },
+        {
+          "string": "NESCAFÉ",
+          "note": "the Latin brand upper-cased",
+          "resolve_brand": "nescafe",
+          "normalise_brand": "nescafe",
+          "resolved": true
+        },
+        {
+          "string": "Галку",
+          "note": "the accusative — Slavic inflection",
+          "resolve_brand": null,
+          "normalise_brand": "галку",
+          "resolved": false
+        },
+        {
+          "string": "Lavazza",
+          "note": "a coffee brand outside the toy watchlist",
+          "resolve_brand": null,
+          "normalise_brand": "lavazza",
+          "resolved": false
+        },
+        {
+          "string": "Яготинське",
+          "note": "a DAIRY watchlist brand — must not resolve under the toy registry",
+          "resolve_brand": null,
+          "normalise_brand": "яготинське",
+          "resolved": false
+        }
+      ],
+      "resolved": 8,
+      "unresolved": [
+        "Nescafe",
+        "Галку",
+        "Lavazza",
+        "Яготинське"
+      ],
+      "brand_hits_over_a_sentence": [
+        "chorna-karta",
+        "halka",
+        "nescafe"
+      ],
+      "cost_of_exactness": "the table is a casefolded exact lookup with no stemming, no diacritic folding and no transliteration (market_pulse.brands.watchlist_aliases). Every unresolved string above is a spelling a new domain would have to register as its own display_name — and for a Latin-script category that is structural, not marginal: «Nescafe» and «Nescafé» are two different keys",
+      "evidence": "positions.resolve_brand(name, aliases) and scorer.normalise_brand(entry, aliases) both take the alias table as an argument; neither names a brand"
+    },
+    "5 · prompt instantiation": {
+      "verdict": "needs-new-registration",
+      "asks": "is a prompt for a new category generated, or written and registered by hand?",
+      "measured_fact": "there is no generator. market_pulse.prompts.PROMPTS is a dict of literal strings and the two position prompts are built by string concatenation at import time (POSITIONS_POST_PROMPT = POSITIONS_PAGE_INTRO + POSITIONS_BODY, and the text prompt is _swap'ped from it). Nothing in the module reads a Taxonomy",
+      "public_callables_taking_a_domain_argument": [],
+      "public_callables_taking_a_domain_argument_note": "measured by walking every public callable's signature for a taxonomy / registry / categories / watchlist / aliases parameter — not by reading function names. An empty list means no function in the module can be handed a domain",
+      "registered_prompts": 16,
+      "position_prompt_shas": {
+        "positions_post_gm4": "ca6303c157d4",
+        "positions_text_gm4": "7250b87aa1c2"
+      },
+      "what_would_have_to_be_written_anew": {
+        "intro (page leg)": {
+          "lines": 1,
+          "chars": 230,
+          "domain_bound": "«promotional leaflet from a Ukrainian food-retail chain» — the leg, not the category. Reusable as written"
+        },
+        "intro (text leg)": {
+          "lines": 1,
+          "chars": 244,
+          "domain_bound": "same: the leg. Reusable as written"
+        },
+        "category paragraph": {
+          "text": "The tracked category is dairy — milk, kefir and ryazhanka, yogurt, curd and syrky, sour cream, butter, cheese, dairy desserts, plant-based milk analogs — and ice cream in any format. Anything else on the page is not yours: chocolate, sausage, coffee, nappies and cheese-flavoured snacks are not dairy, and dairy used as an ingredient in a prepared dish is not dairy either.",
+          "domain_bound": "names the eleven dairy kinds AND excludes coffee BY NAME. Rewritten in full for a new category"
+        },
+        "category enum": {
+          "text": "- \"category\" — exactly one of: dairy, milk, kefir-ryazhanka, yogurt, curd, sour-cream, butter, cheese, dairy-desserts, plant-based-analogs, ice-cream. Take the narrowest one the source supports, and \"dairy\" when it names a dairy product whose kind is not one of the others.",
+          "names_quoted": [
+            "dairy",
+            "milk",
+            "kefir-ryazhanka",
+            "yogurt",
+            "curd",
+            "sour-cream",
+            "butter",
+            "cheese",
+            "dairy-desserts",
+            "plant-based-analogs",
+            "ice-cream"
+          ],
+          "count": 11,
+          "domain_bound": "the eleven category values the model may answer, written as literals. A toy registry offering five coffee keys changes nothing here"
+        },
+        "the shape example": {
+          "text": "[{\"brand\": \"Рудь\", \"line\": \"Пломбір\", \"category\": \"ice-cream\", \"size\": \"500 г\", \"price_promo\": \"89,90\", \"price_old\": \"129,90\", \"discount_pct_printed\": \"-30%\"}]",
+          "domain_bound": "«Рудь · Пломбір · ice-cream» — a dairy brand, a dairy line and a dairy category key. A format illustration, but written in the live domain"
+        },
+        "the schema rules": {
+          "lines": 12,
+          "domain_bound": "OMIT-a-key, COMPUTE-NOTHING, the two-price rule, the empty-array rule: domain-free. Reusable as written"
+        }
+      },
+      "the_coffee_clause": {
+        "quote": "chocolate, sausage, coffee, nappies and cheese-flavoured snacks are not dairy",
+        "grepped_back": true,
+        "why_it_matters": "the toy domain is coffee, and the registered page prompt instructs the model to refuse coffee BY NAME. Step 1's parser would accept a coffee category; this prompt would never produce one. The pair is the finding, and either half read alone is misleading"
+      },
+      "evidence": "src/market_pulse/prompts.py POSITIONS_PAGE_INTRO / POSITIONS_TEXT_INTRO / POSITIONS_BODY, read at run time from the imported module — not transcribed"
+    }
+  },
+  "toy": {
+    "registry": {
+      "path": "a tempdir, deleted at exit — never committed",
+      "sha256": "34723b804d51eb3cd0a2c32ac581f241d6e40b93758ea67b5f10cbfdaf420246",
+      "sources": 66,
+      "sources_note": "the live sources block, carried over unchanged (the brief fixes the sources); only taxonomy and watchlist were swapped",
+      "tracked_groups": [
+        "coffee"
+      ],
+      "category_keys": [
+        "coffee",
+        "coffee-beans",
+        "coffee-capsules",
+        "ground-coffee",
+        "instant-coffee"
+      ],
+      "watchlist": [
+        "halka",
+        "chorna-karta",
+        "nescafe"
+      ]
+    },
+    "lexicon": {
+      "path": "a tempdir, deleted at exit — never committed",
+      "sha256": "d31680859b4f5323398a36b84513f99a4c04312adb710be3e4eb98f32eba26a2",
+      "tracked": {
+        "coffee": [
+          "кав",
+          "еспресо",
+          "лате",
+          "капучино"
+        ]
+      },
+      "why_it_exists": "the brief anticipated one toy file. The pre-filter's category half reads a lexicon and not the registry, so a second toy file had to be built for step 2 to run at all — that necessity is itself a finding (Dv121)"
+    }
+  },
+  "live": {
+    "registry": {
+      "path": "config/registry.yaml",
+      "sha256": "920c7f203b9f0e38fd8df9e893d9b15705a6b19b297bd9d14b14258ae38ac3be",
+      "untouched": true
+    },
+    "lexicon": {
+      "path": "data/category_lexicon_draft.json",
+      "sha256": "1225ad7597f3328f2c725afba0d92458d18b95924438575bc2d46131371dd2b3",
+      "untouched": true
+    },
+    "prompts": {
+      "count": 16,
+      "positions": {
+        "positions_post_gm4": "ca6303c157d46e707aaf3fc52c7a05ed1450e24c26db0e7c93eefba4f6968754",
+        "positions_text_gm4": "7250b87aa1c2de407e06ab9eed565dd4d88025add7be0d2d2a87607c0d872860"
+      }
+    }
+  },
+  "git": {
+    "commit": "a9ac92dabc3172443e822fa9ba4118ee2f9060a9",
+    "dirty": [
+      "scripts/uni_probe.py"
+    ]
+  }
+}
