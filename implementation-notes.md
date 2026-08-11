@@ -6542,3 +6542,148 @@ manifest moved that manifest's sha, which the pre-registration pins — so the w
 the two files diffed field by field: **2 of them changed**, both the same manifest sha
 (`0dac71c5…` → `2b941243…`). Bars, thresholds, procedures and the R1–R5 list are byte-identical, and
 no pilot artifact exists, so the registration is still ahead of what it judges.
+
+## arch-a — the code graph, the architecture document and the instrument inventory ($0, 2026-08-11)
+
+Contract `docs/PROMPT-arch-a.md` (operator decision 11.08). This phase MAPS: no instrument is built,
+nothing in `scripts/`, `src/`, `results/` or `data/` is deleted, renamed or rewritten, and no call of
+any kind is paid for. Deviations continue at **Dv112** — Dv100–Dv111 were spent by sku-a on 10.08.
+
+### How the map was made, and what that buys
+
+The graph is `graphify update .` — AST only, no API key, 15,420 nodes / 18,318 edges / 1,362
+communities over 478 files in 13.6 s. `graphify extract` is the LLM path and was never run: the
+DO-NOT list forbids paid calls and the tool's own tip to set `GEMINI_API_KEY` was declined.
+
+The inventory is 149 rows — 111 files in `scripts/`, 22 in `src/market_pulse/`, 16 prompt-registry
+entries — and every row carries a checked artifact. Evidence collection was fanned out to **13
+read-only agents** (8 script chunks, 2 module chunks, the prompt registry, and one verifier per
+flow), each forbidden to write, commit or spend, and each required to confirm a path exists before
+citing it. **Coverage was proved mechanically rather than trusted**: the returned paths were diffed
+against `find scripts -maxdepth 1 -type f` and `find src/market_pulse -maxdepth 1 -name '*.py'` —
+zero missing, zero extra — and against `prompts.PROMPTS`, and then the finished document was diffed
+against the same three listings again, so a row lost during assembly could not pass as a row that
+was never there.
+
+Class assignment is the executor's, not the agents'. The three DEVIATION findings and both NOT_BUILT
+findings were re-derived by hand before they were written down — a fan-out is an intern with a grep,
+and the failure mode of an intern with a grep is a confident sentence about a file nobody opened.
+
+### The verification, node by node
+
+The team lead's two node lists were transcribed first and verified second. 19 nodes: 14 CONFIRMED,
+3 DEVIATION, 2 NOT_BUILT. The command behind each verdict:
+
+* **1. telegram channels** — `PYTHONPATH=src python3 -c "from market_pulse.registry import load_registry; r=load_registry('config/registry.yaml'); print(len(r.sources))" -> 66 · grep -n "atb_market_official" config/registry.yaml -> line 27 · git log --oneline -1 -- config/registry.yaml -> f5ef06e` → **CONFIRMED**.
+* **2. `telegram_client` collector — jpg + sha on disk, $0** — `grep -n "telegram_client" scripts/fetch_atb_media_5c1.py -> L70 `from market_pulse.telegram_client import build_client` · grep -n "sha256" scripts/fetch_post_media.py -> L149 `\"sha256\": sha256(path.read_bytes()).hexdigest()` · python3 -c json.load('results/post_media_5c1.json') -> 19 entries, 159…` → **CONFIRMED**.
+* **3. one page = one call (base64 inside the job, <= 10 MB)** — `grep -n "def positions_messages_page_gm4" -A 20 src/market_pulse/prompts.py -> L884, `if images != 1: raise ValueError(..."one PAGE per call (SPEC 3.17 (4))"...)` · grep -rn "10 MB|MAX_PAYLOAD" --include='*.py' src scripts tests · grep -rln "positions_messages_page_gm4" --include='*.py' src scripts…` → **DEVIATION**.
+* **4. RunPod serverless, GM4-31B NF4, adapter OFF, prompt `positions_post_gm4`** — `grep -n "assert_no_adapter" scripts/serve_handler.py -> def at L131, called at L390 · sed -n 78,128p scripts/serve_handler.py -> `settings(env)` reads SERVING_CONFIG · sed -n 347,392p src/market_pulse/serving.py -> CAPTION_CONFIG, CONFIGS, MERGE_STATE, assert_serving · grep -n "op ==" scripts/serve…` → **DEVIATION**.
+* **5. strict JSON parser (`positions.py` / `prompts.py`), NO salvage** — `grep -n "^def " src/market_pulse/positions.py -> `_array` L344, `parse_positions` L392 · sed -n 344,470p src/market_pulse/positions.py · grep -n "def test_" tests/test_positions.py` → **CONFIRMED**.
+* **6. position records: `extraction_source` on every record, tier assigned BY CODE** — `sed -n 99,232p src/market_pulse/positions.py · grep -n "DECIDED_BY_CODE" src/market_pulse/positions.py -> L323, L419 · grep -n "which code decides and not a model" src/market_pulse/positions.py -> L421 · grep -n "extraction_source names the instrument" -> L140 · sed -n 445,460p tests/test_positions…` → **CONFIRMED**.
+* **7. per-position price-pair dump, read by the team lead at acceptance** — `grep -rn "price_pair|price-pair|price pair" --include='*.py' --include='*.md' --include='*.json' src scripts tests docs results knowledge -> 14 hits, ALL bar-text/threshold · grep -rn "def .*dump|dump_path" --include='*.py' src scripts · grep -rln "Position(|parse_positions|positions\." --include='…` → **NOT_BUILT**.
+* **8. brand matcher** — `grep -n "^def " src/market_pulse/brands.py -> watchlist_aliases L15, find_watchlist_brands L24 · sed -n 369,380p src/market_pulse/positions.py -> resolve_brand · grep -n "def test_" tests/test_brands.py` → **CONFIRMED**.
+* **9. question-7 aggregate (promo depth, brand x category x week), code only** — `grep -rni "question 7|question_7|promo depth|promo_depth|brand × category|brand x category" --include='*.py' src scripts tests -> 3 hits, all prose · python3 -c print(json.load('results/sku_pilot_prereg.json')['not_in_scope'])` → **NOT_BUILT**.
+* **10. text leg: `positions.prefilter` (769 of 31 638) -> `positions_text_gm4` -> the same parser** — `sed -n 515,550p src/market_pulse/positions.py -> `def prefilter(row, compiled, aliases) -> dict | None` at L515 · python3 -c json.load('results/sku_prefilter_census.json') -> summary.passed=769, frame.rows=769, by_carrier rows 15420+16218=31638 · grep -n "769" tests/test_sku_prefilter_census.py ->…` → **CONFIRMED**.
+* **11. caption side-branch `caption_post_gm4` ("themes/coverage only — brands come from the position layer")** — `PYTHONPATH=src python3 -c "from market_pulse import prompts; print('caption_post_gm4' in prompts.PROMPTS, prompts.prompt_sha256('caption_post_gm4')[:16], len(prompts.PROMPTS))" -> True 41d33d0299fe30db 16 · grep -n "TASK =" scripts/caption_gm4_5c1.py -> L70 `TASK = prompts.CAPTION_TASK_GM4` · grep…` → **CONFIRMED**.
+* **Flow 2, node 1 — comment + parent post (`parents.py`)** — `cat src/market_pulse/parents.py; grep -n 'def test_' tests/test_parents.py; sed -n '117,127p' scripts/eval_zero_shot.py; ls data/raw/posts/*.jsonl | wc -l; git log --oneline -1 -- src/market_pulse/parents.py` → **CONFIRMED**.
+* **Flow 2, node 2 — `T1v2_with_post` rendering** — `PYTHONPATH=src python3 -c "from market_pulse import prompts; print(prompts.DELIMITERS['T1v2_with_post'], prompts.prompt_sha256('T1v2_with_post'), prompts.REVISIONS['v4']); print(repr(prompts.build_messages('T1v2_with_post','COMMENT-TEXT',parent='POST-TEXT')[0]['content'][-300:]))"; sed -n '768,835p…` → **CONFIRMED**.
+* **Flow 2, node 3 — GM4 NF4 + adapter 4.5h2-arm-A, batch 1, greedy** — `sed -n '26,60p' src/market_pulse/local_llm.py; grep -n 'do_sample|adapter|batch_size' src/market_pulse/local_llm.py scripts/eval_zero_shot.py; sed -n '1318,1355p' scripts/eval_zero_shot.py; sed -n '728,760p' scripts/eval_zero_shot.py; sed -n '573,612p' scripts/eval_zero_shot.py; sed -n '190,200p' s…` → **CONFIRMED**.
+* **Flow 2, node 4 — strict parser** — `sed -n '977,1038p' src/market_pulse/prompts.py; grep -n 'class ParseError|class SchemaError|def parse_reply|def parse_positions|def _object|use positions.parse_positions' src/market_pulse/prompts.py src/market_pulse/positions.py; sed -n '344,412p' src/market_pulse/positions.py` → **CONFIRMED**.
+* **Flow 2, node 5 — the five heads G1a/G1b/G1c/G1d/G1e in scorer.py** — `PYTHONPATH=src python3 -c "import inspect, market_pulse.scorer as s; [print(g,n,'NotImplementedError' in inspect.getsource(getattr(s,n)), getattr(s,n).__code__.co_firstlineno) for g,n in {'G1a':'sentiment_macro_f1','G1b':'sarcasm_slice_fix_rate','G1c':'intents_micro_f1','G1d':'launch_detection_macr…` → **CONFIRMED**.
+* **Flow 2, node 6 — `scorer.py` as the single judge (no fork)** — `grep -rniE "def .*(f1|macro|micro|accuracy|fix_rate|recall|precision)\b" --include='*.py' src/ scripts/ | grep -v scorer.py; grep -rn 'scorer\.' --include='*.py' src/ scripts/; sed -n '280,320p;470,500p' scripts/measure_categories.py; sed -n '143,180p' scripts/audit_ceiling.py` → **CONFIRMED**.
+* **Flow 2, node 7 — result files with sha (provenance stamp)** — `sed -n '205,246p' src/market_pulse/zero_shot.py; grep -rn 'build_record' --include='*.py' .; sed -n '143,172p' scripts/eval_zero_shot.py; sed -n '1651,1725p' scripts/eval_zero_shot.py; sed -n '573,640p' scripts/eval_zero_shot.py; grep -rn 'git rev-parse' --include='*.py' src/ scripts/` → **CONFIRMED**.
+* **EXTRA — the current anchor result file for the five gates' numbers, and whether it is append-only** — `grep -l 'G1a' results/*.json; sed -n '35,60p;140,165p' docs/STATUS.md; sed -n '164,172p' scripts/eval_zero_shot.py; sed -n '78,130p' src/market_pulse/records.py; sed -n '175,200p' scripts/gate_verdict_45h.py; git log --oneline --all -- results/verdict_45h2.json; git log --oneline -- results/baselin…` → **DEVIATION**.
+
+### Deviations
+
+**Dv112 — the pin-test evolution the brief specifies is half of what keeps the suite green, and the
+missing half is in the producer.** Step 0 (2) says to evolve
+`test_every_pinned_input_still_hashes_to_what_it_says` so that `docs/SPEC.md` is stripped of the
+3.17 (7) block before hashing. That test then passes — and
+`test_the_record_rebuilds_identically_apart_from_its_timestamp` goes red, because
+`write_sku_prereg.main()` recomputes `pinned_inputs` from the live file on every run and the rebuild
+is compared to the committed record field by field.
+
+Measured, not argued: with the strip left out of the producer, the rebuild reports
+`fields that moved: ['pinned_inputs']`, `docs/SPEC.md` at `781f611a…` against the committed
+`973c8789…`, and `a == b` is False. So the strip lives in ONE function,
+`write_sku_prereg.registered_law`, called by the producer and by the test. Two implementations of
+one strip is the failure this repo has already paid for once: they drift, and nothing downstream can
+see it. The pre-registration itself was not touched and was not re-pinned.
+
+The pin is now checked in both directions, because either half alone passes for the wrong reason:
+the block must be present, the live hash must NOT equal the pin, and the stripped hash must. The
+strip was also proved exact against a copy of `docs/SPEC.md` taken before the write — the stripped
+bytes are the pre-amendment bytes, `cmp`-identical.
+
+**Dv113 — the 10 MB transport ceiling is enforced on the caption leg and inherited by the positions
+leg as prose.** Flow 1 node 3 names "base64 in job, ≤10 MB". The one-image-per-call half is real
+code: `prompts.positions_messages_page_gm4` raises for any count but 1 and a test drives it with 0,
+2 and 6. The ceiling half is not: the only numeric guard in the repo is
+`scripts/caption_gm4_5c1.py::MAX_PAYLOAD_MB = 8.0`, with
+`test_a_slice_stays_under_runpods_documented_run_ceiling` asserting it stays under 10. On the
+positions path the number appears only in a docstring and an error message. A leaflet page at one
+image is far under the ceiling, so this is not urgent — but the leg that will pack the job has no
+check, and hot.md's own footgun says the driver must refuse rather than drop images.
+
+**Dv114 — every part of "RunPod serverless, GM4 NF4, adapter OFF" exists, and none of it is wired to
+positions.** `serve_handler.assert_no_adapter` and `serve_handler.settings` do refuse a
+trained-weights environment — on the CAPTION path. The worker answers exactly three ops, `info`,
+`batch` and `caption`, and `CaptionClient.render` refuses any task but `caption_post_gm4`, so today's
+endpoint would refuse a `positions_post_gm4` job outright. `results/sku_pilot_prereg.json` pins the
+two prompt shas and registers **no serving config at all** — zero occurrences of `serving`,
+`CAPTION` or `merge_state`. The pilot's serving configuration is therefore un-pre-registered, which
+is a question for the sku-b briefing and not something this phase may answer.
+
+**Dv115 — two Flow-1 nodes have no producer, and one of them is a bar's evidence.** The
+per-position price-pair dump (node 7) is the artifact bar 2 is scored from: the team lead opens it
+at acceptance and marks each `(price_promo, price_old)` pair. No writer exists — every occurrence of
+the phrase in the repo is the bar's own wording. What exists is the generic
+`serve_handler.dump_rows` jsonl and `Position.depth()`. **sku-b must build it**, and a pilot that
+runs without it cannot be scored on bar 2. The question-7 aggregate (node 9) is also absent and that
+one is correct: the pre-registration says in its own words that no promo aggregate is computed
+anywhere in sku-b and the rollup is 5c2's.
+
+**Dv116 — "the anchor" names two files and they are not interchangeable.** The five gates' current
+numbers live in `results/verdict_45h2.json`, whose writer does a whole-file overwrite; it is
+immutable by history — `git log --all` returns exactly one commit — but not by mechanism. The
+append-only file is `results/baselines.json`, from which `records.anchor` selects the bar-setting row
+programmatically and refuses ambiguity rather than first-matching. Drawn as two boxes in
+`docs/ARCHITECTURE.md` for that reason, because a diagram with one box would license the wrong write.
+
+**Dv117 — `scripts/` holds 111 files, not the 112 `docs/STATUS.md` states.** The difference is
+`scripts/__pycache__`, a directory counted as an entry by `ls`. 111 = 98 `.py` + 10 `.md` + 3 `.sh`.
+STATUS is a team-lead file and was not edited; the count is stated here and in the inventory.
+
+**Dv118 — `CLAUDE.md`'s Code map is stale about the scorer.** It says every public function in
+`src/market_pulse/scorer.py` "raises `NotImplementedError` until its phase implements it". The module
+contains **zero** occurrences of it; the mechanism was replaced one phase later by
+`tests/test_scorer.py::test_every_public_scorer_function_has_a_hand_computed_test`, which
+reflectively demands a hand-computed test per public function. A one-line correction, deliberately
+not made — this phase maps and does not move the terrain, and `CLAUDE.md` was already written to
+twice today by `graphify claude install` and the augment layer.
+
+**Dv119 — `graphify` leaves two pieces of housekeeping to the caller.** `graphify claude install`
+wrote `.claude/settings.json` **without a trailing newline**; restored, and the JSON re-parsed. And
+neither `claude install` nor `hook install` adds `graphify-out/` to `.gitignore`, so 28 MB of derived
+AST sat untracked-but-not-ignored. The entry was added with the reason in a comment: the post-commit
+hook rebuilds the graph after every commit, so a committed copy would be an 11 MB churn diff that is
+always one async rebuild behind the tree it describes. The deny layer survived the install
+byte-identically — `permissions` sha256 `6fdfb753…` before and after.
+
+**Dv120 — the candidate-dead list is empty, and that is the measurement.** All 149 rows carry at
+least one of a result record, a test, an ADR or a doc pointing at them. Two files have no inbound
+reference of any kind and are handed to the operator as the nearest thing:
+`scripts/make_annotation_batch.py`, whose only inbound reference is a ruff `E402` per-file ignore in
+`pyproject.toml`, and `scripts/runbook_5b1.md`, which nothing cites although the record it produced
+(`results/parity_5b_a.json`) is live and cited. Both are classified `one-shot-done` here, because
+each has an artifact that is still load-bearing, and the ruling being asked for is narrow: is
+"nothing names this file" enough to reclassify a one-shot whose output is still read? Nothing was
+deleted either way.
+
+### One observation that is not a deviation
+
+`git_state()` — the provenance stamp every result record carries — is copied five times, in
+`scripts/eval_zero_shot.py`, `run_baseline.py`, `train_xlmr_baseline.py`, `freeze_testsets_v3.py`
+and `build_audit_pack.py`. Every result record in the repo therefore depends on five near-identical
+implementations agreeing. Not touched: this phase maps. Worth a ruling before a sixth copy appears.
