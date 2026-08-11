@@ -114,6 +114,38 @@ def step_anchor_key(step: str) -> str:
     return f"runpod_balance_at_{step}_start"
 
 
+def step_file(step: str) -> Path:
+    """The step's ledger, under ONE spelling: `sku-b` and `sku_b` are the same step.
+
+    Dv151, measured: `--step sku-b` created `results/spend_sku-b.json` beside the driver's own
+    `results/spend_sku_b.json`, holding the balance AFTER the step had spent $0.0943 and a
+    `step_spent_usd` of 0.0. Every number in it was false and none of them looked it — a second
+    anchor for one step is a counter that restarts at today's balance, which is the footgun this
+    module's docstring warns about, arriving through a naming convention instead of a delete.
+    """
+    return REPO_ROOT / "results" / f"spend_{step.replace('-', '_')}.json"
+
+
+def anchor_key_in(ledger: dict, step: str) -> str | None:
+    """The step's anchor key as this ledger actually spells it, or None if it has none.
+
+    Normalising the FILE is not enough on its own: the driver writes `runpod_balance_at_sku-b_start`
+    into `spend_sku_b.json`, so the two halves of one step disagree about the separator inside the
+    same document. Both spellings are looked for before anything is created — an anchor that exists
+    is never written twice, whichever way its step was typed.
+    """
+    for key in dict.fromkeys(
+        (
+            step_anchor_key(step),
+            step_anchor_key(step.replace("-", "_")),
+            step_anchor_key(step.replace("_", "-")),
+        )
+    ):
+        if key in ledger:
+            return key
+    return None
+
+
 def read_step(path: Path, step: str, cap: float, balance_now: float) -> dict:
     """A step's own anchor, created once beside whatever else its ledger already holds.
 
@@ -122,7 +154,7 @@ def read_step(path: Path, step: str, cap: float, balance_now: float) -> dict:
     GPU anchor is a separate key and is written once, before the step's first pod.
     """
     ledger = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
-    key = step_anchor_key(step)
+    key = anchor_key_in(ledger, step) or step_anchor_key(step)
     if key not in ledger:
         ledger[key] = balance_now
         ledger[f"{step}_gpu_cap_usd"] = cap
@@ -219,17 +251,17 @@ def main(argv: list[str] | None = None) -> int:
 
     step_ledger, step_spent = None, None
     if args.step:
-        path = args.step_ledger or REPO_ROOT / "results" / f"spend_{args.step}.json"
+        path = args.step_ledger or step_file(args.step)
+        on_disk = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
         step_ledger = read_step(path, args.step, args.step_cap, balance_now)
-        step_anchor = float(step_ledger[step_anchor_key(args.step)])
+        key = anchor_key_in(step_ledger, args.step)
+        step_anchor = float(step_ledger[key])
         step_spent = step_anchor - balance_now
         print(
             f"{args.step.upper()} SPENT      ${step_spent:.4f} of ${args.step_cap:.2f}"
-            f"  (anchor ${step_anchor:.2f})"
+            f"  (anchor ${step_anchor:.2f} from {key})"
         )
-        if not path.exists() or step_anchor_key(args.step) not in json.loads(
-            path.read_text(encoding="utf-8")
-        ):
+        if anchor_key_in(on_disk, args.step) is None:
             write_ledger_at(path, step_ledger)
             print(f"anchored {path.name} for {args.step} — commit it and never regenerate it")
         if step_spent >= args.step_cap:

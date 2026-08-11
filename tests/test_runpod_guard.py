@@ -145,3 +145,73 @@ def test_a_step_anchor_lands_beside_what_the_ledger_already_holds(tmp_path):
 def test_a_cap_without_an_anchor_is_refused():
     with pytest.raises(SystemExit):
         guard.main(["--step-cap", "9.00"])
+
+
+# --- Dv151: one step, one anchor, however its name is typed -------------------
+
+
+def test_a_hyphen_and_an_underscore_are_the_same_step(tmp_path):
+    """Measured on 2026-08-11. `--step sku-b` wrote `results/spend_sku-b.json` beside the driver's
+    own `results/spend_sku_b.json`, holding the balance AFTER the step had spent $0.0943 and a
+    `step_spent_usd` of 0.0 — every number false and none of them looking it.
+
+    Two halves of the fix, and each one alone leaves the hole open: the file is normalised, and the
+    key is looked for under BOTH spellings inside it, because the driver writes
+    `runpod_balance_at_sku-b_start` into the underscored file.
+    """
+    assert guard.step_file("sku-b") == guard.step_file("sku_b")
+    assert guard.step_file("sku-b").name == "spend_sku_b.json"
+
+    path = tmp_path / "spend_sku_b.json"
+    path.write_text(
+        json.dumps({"runpod_balance_at_sku-b_start": 12.4184987367, "runs": []}), encoding="utf-8"
+    )
+    ledger = guard.read_step(path, "sku-b", 0.35, 12.2220)
+    assert guard.anchor_key_in(ledger, "sku-b") == "runpod_balance_at_sku-b_start"
+    assert ledger["runpod_balance_at_sku-b_start"] == 12.4184987367
+    assert "runpod_balance_at_sku_b_start" not in ledger, "a second anchor for one step"
+    # and the other way round: the underscored spelling finds the same one
+    assert guard.read_step(path, "sku_b", 0.35, 1.0)["runpod_balance_at_sku-b_start"] == (
+        12.4184987367
+    )
+
+
+def test_the_existing_anchor_is_what_the_cap_is_enforced_against(tmp_path, monkeypatch, capsys):
+    """The consequence, driven through `main`: the step's spend is measured against the anchor that
+    already exists, not against today's balance, and nothing is rewritten."""
+    ledger_path = tmp_path / "spend_phase4.json"
+    ledger_path.write_text(
+        json.dumps(
+            {
+                "phase4_cap_usd": 25.0,
+                "runpod_balance_at_phase4_start": 35.0,
+                "anchored_at": "2026-08-01T09:00:00+00:00",
+                "sessions": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(guard, "LEDGER", ledger_path)
+    step_path = tmp_path / "spend_sku_b.json"
+    before = json.dumps({"runpod_balance_at_sku-b_start": 12.4184987367, "runs": []})
+    step_path.write_text(before, encoding="utf-8")
+
+    drive(monkeypatch, balance=12.2220, billing=(0.0, "no billing rows yet"))
+    assert (
+        guard.main(["--step", "sku-b", "--step-cap", "0.35", "--step-ledger", str(step_path)]) == 0
+    )
+    printed = capsys.readouterr().out
+    assert "SKU-B SPENT      $0.1965" in printed
+    assert "anchored" not in printed, "an existing anchor is never re-anchored"
+    assert step_path.read_text(encoding="utf-8") == before
+
+    # the control: a step that genuinely has no anchor still gets one
+    fresh = tmp_path / "spend_new_step.json"
+    drive(monkeypatch, balance=12.2220, billing=(0.0, "no billing rows yet"))
+    assert (
+        guard.main(["--step", "new-step", "--step-cap", "1.00", "--step-ledger", str(fresh)]) == 0
+    )
+    assert json.loads(fresh.read_text(encoding="utf-8"))["runpod_balance_at_new-step_start"] == (
+        12.2220
+    )
+    assert "anchored" in capsys.readouterr().out
