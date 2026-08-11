@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-11 19:26:36 (every SessionStart)
+**Auto-refreshed:** 2026-08-11 20:30:18 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-4adfd91 docs(report): sku-b-prep -- fix pass
-aafbb43 feat(sku-b-prep-fix): F6 -- the idle tail enters the projection, and it costs
-0c11642 fix(sku-b-prep-fix): the cap discipline in the driver -- F1..F5
-305e48d feat(sku-b-prep-fix): a job the CLOCK killed is its own error (F1, half one)
-f2d1506 docs(decision): sku-b's serving configuration and its cap discipline
+b0232fc docs(report): sku-b-run
+dffd8d3 fix(sku-b-run): the overwrite guard sat above the $0 dry run
+268affa feat(sku-b-run): the paid session's artifacts -- 17 of 138 calls, stopped by the cap
+49665c7 docs(team-lead): the sku-b-run contract and the acceptance that authorises it
+3877543 chore(vault): the fix-pass tail -- the day's log, hot.md's cap facts, the index
 ```
 
 ## 📋 Recent decisions
@@ -30,26 +30,34 @@ f2d1506 docs(decision): sku-b's serving configuration and its cap discipline
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-11 20:10 (arch-a ✅, uni-a ✅, uni-b ✅, **sku-b-prep принят + фикс-пасс
-исполнен**). **sku-a ✅, R1–R5 ратифицированы, голд text30 размечен, SPEC 3.17 (7)(8)(9)(10) —
-закон, серв-путь позиций ПОСТРОЕН И ЗАЩИЩЁН ПО КАПУ** — `docs/ARCHITECTURE.md`, граф кода, отчёты
-`uni-a.md` + `uni-b.md` + `sku-b-prep.md` (+ секция `## Fix pass`), `docs/PORTING.md`,
-`config/lexicon.yaml`, `results/sku_pilot_prereg_v2.json`, `results/sku_pilot_serving.json`,
-`results/sku_projection.json`, `scripts/positions_gm4_skub.py`, всё за $0. **Next: приёмка
-фикс-пасса**, потом **sku-b-run** — одна платная попытка, кап $0.35. Блок правится руками; секция
-выше — авто-ген, маркер НЕ трогать. Длинная форма: `implementation-notes.md` (Dv100–120 и указатели
+**Last update:** 2026-08-11 20:30 (arch-a ✅, uni-a ✅, uni-b ✅, sku-b-prep ✅, **sku-b-run
+ПРОВЕДЁН — единственная платная попытка ИЗРАСХОДОВАНА, $0.1965, стоп по капу на 17/138**). **sku-a ✅,
+R1–R5 ратифицированы, голд text30 размечен, SPEC 3.17 (7)(8)(9)(10) — закон** —
+`docs/ARCHITECTURE.md`, граф кода, отчёты `uni-a.md` + `uni-b.md` + `sku-b-prep.md` + **`sku-b-run.md`**,
+`docs/PORTING.md`, `config/lexicon.yaml`, `results/sku_pilot_prereg_v2.json`,
+`results/sku_pilot_serving.json`, `results/sku_projection.json`, `results/sku_b_positions.json`.
+**Мяч у тимлида: (10)(b) — находка про КАП, ни одна планка не оценена** (детали в блоке Next).
+Блок правится руками; секция выше — авто-ген, маркер НЕ
+трогать. Длинная форма: `implementation-notes.md` (Dv100–120 и указатели
 Dv133–147), `docs/reports/uni-a.md` (Dv121–124), `uni-b.md` (Dv125–132), `sku-b-prep.md`
-(Dv133–147), дневники [[2026-08-11]] / [[2026-08-10]], ADR по ссылкам ниже.
+(Dv133–147), `sku-b-run.md` (Dv148–153), дневники [[2026-08-11]] / [[2026-08-10]], ADR ниже.
 
 ## 🔥 What's Hot
 
-**ПРОЕКЦИЯ ВЫШЛА ЗА КАП В ДВУХ УГЛАХ ИЗ ЧЕТЫРЁХ — И ЭТО ГЛАВНОЕ ЧИСЛО ДЛЯ sku-b-run (20:10).**
-Хвост idle-timeout (60 с = $0.0184, F6) вошёл во все проекции: $0.1936 / $0.2106 внизу, **$0.3580 и
-$0.3750 в обоих ЗАЯВЛЕННЫХ углах — выше $0.35**. Практическое чтение: **sku-b-run скорее всего
-откажет сам себе на go/no-go** SPEC 3.17 (10)(a), если warm-up не померяет декод короче отношения
-зарегистрированных потолков. По (10)(a) такой отказ стоит бут + два не-голд вызова (~$0.08–0.10) и
-**НЕ расходует попытку** — пилот возвращается тимлиду за v3 по измеренной цене. Ничего не
-подкручено; `results/sku_projection.json :: against_the_cap` говорит это сам, тест пиннит.
+**ПРОБА НЕ СТОИТ ТОГО, ЧТО СТОИТ ПРОГОН — ГЛАВНАЯ НАХОДКА ПЛАТНОЙ СЕССИИ (20:30).** go/no-go
+(10)(a) померил warm-up на СИНТЕТИЧЕСКОЙ картинке 64×64 (1.436 с) и на строке (0.756 с),
+спроецировал 138 голд-вызовов в **$0.1936** против $0.3403 остатка и **пропустил ран**. Реальная
+страница листовки — **5.0772 с/вызов, ×3.54 от warm-up**; ин-ран гейт пере-оценил тот же ран в
+**$0.3540** и остановил его на **17 из 138**. Гейт, существующий ради «никогда не покупать полпилота»,
+купил 12% пилота. Арифметика гейта была ВЕРНА (бут 391 с = $0.12 лёг на `info`, F2 держится) — врал
+ВХОД. Урок в память: [[the-probe-must-cost-what-the-run-costs]]. **$0.3540 > $0.35 и без вычета
+стейдж-пода — якорь Dv149 стоп НЕ вызвал.**
+
+**ЧТО КУПЛЕНО И ЧТО НЕТ.** Измерено: бут **391.369 с = $0.1200** (исторический холодный старт
+175.8 с — регресс ×2.2), страничный голд-маргинал **5.0772 с/вызов** (n=17), хвост idle 60 с =
+$0.0184. **Текстовый голд-маргинал НЕ ИЗМЕРЕН ВООБЩЕ** — текстовая нога не сделала ни одного вызова,
+и единственное текстовое число (0.756 с warm-up) эта же сессия опровергла. v3, экстраполирующий
+текстовую ногу из warm-up, повторит ровно ту ошибку.
 
 **ЗАКОН КАПА ИСПОЛНЕН В КОДЕ (SPEC 3.17 (10), фикс-пасс).** (a) go/no-go после двух warm-up вызовов,
 каждая нога по СВОЕЙ мерке, отказ ДО первого голд-вызова: дамп не пишется вообще, запись несёт
@@ -86,15 +94,12 @@ there. They had drifted two ways, invisible on a clean tree: three sorted the di
 did not, and each ignored a different set. `sort` is a named parameter, NOT a thing to standardise:
 every record on disk was written under one of the two readings.
 
-**THE CATEGORY VOCABULARY IS LAW NOW: `config/lexicon.yaml` (SPEC 3.17 (8), uni-b).** It carries the
-draft's own 14+2 stems, 36 endings and the six pre-filter `units` (ORDERED longest-first — «г»
-before «грн» would read "90 грн" as a size). `data/category_lexicon_draft.json` is frozen history:
-five sealed records pin `1225ad75…`, the law's header names it as source, and the 5c1 SCREEN
-instruments still read it (Dv129). The law REFUSES a taxonomy its stems do not name — one
-implementation of that rule, `market_pulse.lexicon.unmatched_stems`. **Cost the probe measured: 3 of
-4 plausible coffee stems («еспресо», «лате», «капучино») are not prefixes of any «Кава …» display
-name, so a new category either names those subcategories or exempts each stem by name** (Dv130).
-The dairy lexicon was correct for the dairy pilot: **sku-b changes nothing because of this.**
+**THE CATEGORY VOCABULARY IS LAW NOW: `config/lexicon.yaml` (SPEC 3.17 (8), uni-b).** 14+2 stems,
+36 endings, six `units` ORDERED longest-first («г» before «грн»). `data/category_lexicon_draft.json`
+is frozen history — five sealed records pin `1225ad75…` and the 5c1 SCREEN instruments still read it
+(Dv129). The law REFUSES a taxonomy its stems do not name (`lexicon.unmatched_stems`); a NEW
+category must name its subcategories or exempt each stem (3 of 4 coffee stems failed the probe,
+Dv130). **sku-b changes nothing because of this.** Long form: `docs/reports/uni-b.md`.
 
 **`fat` → `attribute` IS DONE, AT THE SCHEMA ONLY, AND THE WIRE KEPT THE DOMAIN WORD.** Ladder
 `b497c072…` → **`6a257e04…`**; the renamed table is a BIJECTION onto the old one, so no rung moved.
@@ -198,13 +203,18 @@ of which 42 are video. **This executor signed nothing** — the composition is t
 
 ## ⏭️ Next
 
-**ФИКС-ПАСС ИСПОЛНЕН И ЖДЁТ ПРИЁМКИ ($0).** Все шесть фиксов `docs/PROMPT-sku-b-prep-fix.md` в
-дереве, шесть коммитов `77c0820..aafbb43` + отчёт `4adfd91`; suite **1750 passed, 2 skipped**,
-каждый коммит прогнан на СВОЁМ чекауте. Читать: `docs/reports/sku-b-prep.md :: ## Fix pass
-(Dv141+)`. Следующее — **sku-b-run**: пере-стейдж POSITIONS-воркера и
-`scripts/positions_gm4_skub.py --endpoint-id <id>`, ОДНА попытка, и **эндпойнт создавать с
-`--execution-timeout 900 --idle-timeout 60`** — оба числа теперь входят в арифметику капа.
-**Потом брифинг 5c2.**
+**МЯЧ У ТИМЛИДА — РЕШЕНИЕ ПО (10)(b), И ТОЛЬКО ОНО ОТКРЫВАЕТ СЛЕДУЮЩИЙ ШАГ.** Отчёт
+`docs/reports/sku-b-run.md`. Стоп посреди ноги — находка про КАП, не про инструмент: B не закрыта,
+проваленных планок нет, ни одна планка не оценена и оценена быть не может. Планка 1 — 17 из
+зарегистрированных **108** страниц (R2 держит знаменатель, частичный числитель читался бы как
+«модель пропустила бренды»). Планка 3 — **0** строк из ≥20. Планка 2 — дамп есть, `n = 13` (это ≥10
+по R4), **но пары взяты с 17-страничного префикса 108-страничной популяции** — применим ли к нему
+«SCORED», решает тимлид; пары в любом случае читает он (SPEC §10).
+
+**ЧЕГО НЕЛЬЗЯ ДЕЛАТЬ БЕЗ РЕШЕНИЯ.** Попытка SPEC 3.17 (6) ИЗРАСХОДОВАНА — «ни планка, ни нога, ни
+жеребьёвка не перезапускаются после своего результата». Драйвер сам откажется перезаписать
+`results/sku_b_positions.jsonl`. v3-регистрация — тимлидовская, и она упирается в неизмеренную
+текстовую цену (см. What's Hot). **Потом брифинг 5c2.**
 
 **WHAT sku-b-run MUST NOT DO.** Re-run a bar after seeing its result; read the 159 available pages
 instead of the 108 the gold covers; score its own sample (SPEC §10 — bar 2 is the team lead's read
@@ -218,14 +228,15 @@ change either way.
 
 ## 🚧 Blockers
 
-**None on the critical path.** The 30-row pack is adjudicated and committed, R1–R5 are ratified,
-SPEC 3.17 (7)–(10) are law, the suite is green (1750) and the deny gap is closed. This file is
-**over arch-a's 6.0K bar** — the cap блоки заменили собой более старые, но не полностью. Said, not
-hidden. **Единственное, что реально стоит денег в sku-b-run — go/no-go, см. первый блок.**
+**ОДИН, И ОН НЕ ТЕХНИЧЕСКИЙ: решение тимлида по (10)(b).** Всё остальное на критическом пути готово —
+пакет размечен, R1–R5 ратифицированы, SPEC 3.17 (7)–(10) закон, сюита зелёная (1750), sku-b-prep
+закрыт, sku-b-run проведён и разобран. This file is **over arch-a's 6.0K bar**; said, not hidden.
 
-**Budget is the live constraint.** Phase 4 stands at **$22.0663 of $25.00, $2.9337 left** (read
-2026-08-09 after the vis-c close, still settling — Dv33). `pod list -a` → `[]`, `serverless list` →
-`[]`, `template list --type user` → the two 5b leftovers; only the volume stands and only it bills.
+**Budget is the live constraint.** Phase 4 stands at **$22.7780 of $25.00, $2.2220 left** (read
+2026-08-11T18:23:45Z, ~7 min after the sku-b-run teardown — still settling, Dv33). sku-b's own
+anchor `results/spend_sku_b.json` says the session cost **$0.1965** of its $0.35 (floor).
+`pod list -a` → `[]`, `serverless list` → `[]`, `template list --type user` → the two 5b leftovers
+(`unfcr3ja0t`, `0g6zg73ptq`); only the volume `qw4nwleanc` stands and only it bills.
 Re-read the guard before each session rather than trusting this line.
 
 **Recorded rather than open:** the CA-MTL-3 volume is deleted, so its **~$0.24/day** idle billing has
