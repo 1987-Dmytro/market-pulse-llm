@@ -600,6 +600,23 @@ thresholds, the $0.35 cap, the one-attempt clause and the R1–R5 readings are
 verbatim-unchanged; only schema naming and vocabulary provenance moved. Bar 3's
 ladder sha follows the renamed table.
 <!-- sku-b-ratification-2 end -->
+<!-- sku-b-ratification-3 begin — stripped by tests/test_sku_prereg.py before
+hashing docs/SPEC.md against the prereg pin; the registered law is the stripped text -->
+(9) **Pilot serving configuration and split — ratified (operator, 2026-08-11 joint
+review).** The positions instruments serve from the NF4 BASE at the pinned revision
+with NO adapter, greedy, batch 1, max_new_tokens 800 (a ceiling against mid-JSON
+truncation, not a target length), under a new worker configuration
+SERVING_CONFIG=POSITIONS that mirrors CAPTION's refusals: any variable of
+serve_handler's adapter set present refuses before the model loads, and
+MODEL_REVISION is required. The configuration is committed as its own artifact
+BEFORE the paid attempt and the driver stops before the first paid call unless the
+worker's describe() matches it. The build of the positions serving path — the
+worker op, the driver with its per-position dump and a numeric payload guard, the
+$0 preflight guards — is a $0 precursor contract (sku-b-prep); the paid attempt
+remains the single session of (6), and inside its cap it opens with a smoke call
+on NON-gold inputs (a synthetic image and a text row outside the 30-row pack)
+before either leg touches gold.
+<!-- sku-b-ratification-3 end -->
 **Date:** 2026-07-26 · **Team lead:** Fable session · **Executor:** Claude Code
 **Repo folder:** `/Users/hdv_1987/Desktop/Projects/market-pulse-llm`
 **rev. 3 change (operator decision):** producers in Ukraine barely use Telegram for
