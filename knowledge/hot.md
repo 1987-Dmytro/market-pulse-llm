@@ -2,43 +2,44 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-10 16:27:38 (every SessionStart)
+**Auto-refreshed:** 2026-08-11 12:00:39 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-d832477 fix(opus-audit): S3's recall is a definition, and the record now says so
-d652869 feat(opus-audit): all 25 packs read -- 498 rows, and every miss is image-only
-9e27618 docs(opus-audit): pack_08 declared Opus third, and the gate stays strict
-0b5d5e9 feat(opus-audit): the misses split by what the matcher could read
-8aa7d13 feat(opus-audit): the pilot returns -- 40 rows that price the captioner, not the matcher
+1c3ecc9 docs(status): the team lead's 10.08 handover block, verbatim
+115a4db fix(sku-a): five tests had a shelf life -- the operator's first tick reddened them
+e40c58e chore(vault): the sku-a tail
+0fcc002 feat(sku-a): the three bars pre-registered, before sku-b exists
+330e995 feat(sku-a): the two ground-truth packs, and what the leaflet gold cannot do
 ```
 
 ## 📋 Recent decisions
 
-- `5c1-vis-b-caption-instrument.md` — The project's own Gemma 4 is the caption instrument: 19 of 19, bar A taken, and the bridge says a caption is a sample
+- `sitting-2026-08-10-composition-signed.md` — The 2026-08-10 sitting: «Варто» loses text matching, «Селянське» needs an anchor, the 141 names wait for the position layer, and the composition is signed
+- `opus-review-programme-close.md` — The Opus review programme closes: the matcher is acquitted on 498 rows, and every miss prices the captions
 - `INDEX.md` — Decision records
-- `srv2-program-close.md` — The srv-2 programme closes: serverless is the runtime, and its price is a finding against it
 
 ## 📅 Recent daily logs
 
+- `2026-08-11.md`
 - `2026-08-10.md`
 - `2026-08-09.md`
-- `2026-08-08.md`
 
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 
 # Hot Cache — curated
 
-**Last update:** 2026-08-10 (sku-a). **THE COMPOSITION IS SIGNED (66 = launch 59 + watch 7) AND THE
-POSITION LAYER'S WHOLE $0 HALF IS BUILT.** SPEC 3.17: schema + tier ladder, two registered prompts,
-the deterministic pre-filter and its 769-row census, both ground-truth packs, and sku-b's three bars
-pre-registered. The Opus audit closed before it — 25/25 packs, 498/498 rows — and its findings now
-live in two ADRs instead of here. **Next: the team lead ratifies R1–R5 in
-`results/sku_pilot_prereg.json`, the operator ticks the 30-row pack, THEN sku-b (one paid attempt,
-cap $0.35).** This block is hand-edited; the section above it is auto-generated — do NOT touch the
-marker. Long form: `implementation-notes.md` (Dv100–Dv110), and the days' logs [[2026-08-10]] /
+**Last update:** 2026-08-10 18:17 (`/save`, sku-a delivered). **THE COMPOSITION IS SIGNED
+(66 = launch 59 + watch 7) AND THE POSITION LAYER'S WHOLE $0 HALF IS BUILT.** SPEC 3.17: schema +
+tier ladder, two registered prompts, the deterministic pre-filter and its 769-row census, both
+ground-truth packs, and sku-b's three bars pre-registered. The Opus audit closed before it — 25/25
+packs, 498/498 rows — and its findings now live in two ADRs instead of here. **sku-a IS ACCEPTED and R1–R5 are
+RATIFIED (operator, 10.08, quiz passed). Next: the operator ticks the 30-row pack (~45–60 min), THEN
+sku-b — one paid attempt, cap $0.35.** This block is hand-edited; the section above it is auto-generated —
+do NOT touch the marker. Long form: `implementation-notes.md` (Dv100–Dv111), and the days' logs
+[[2026-08-10]] /
 [[2026-08-09]]. ADRs: [[opus-review-programme-close]] · [[sitting-2026-08-10-composition-signed]] ·
 [[5c1-vis-b-caption-instrument]] · [[srv2-program-close]] · [[5c1-relevance-floor-and-discovery]] ·
 [[5c1-day2-composition-and-search]].
@@ -46,16 +47,17 @@ marker. Long form: `implementation-notes.md` (Dv100–Dv110), and the days' logs
 
 ## 🔥 What's Hot
 
-**SKU-B MUST NOT RUN UNTIL R1 IS RATIFIED.** `results/sku_pilot_prereg.json` carries the three bars
-verbatim plus the denominators SPEC does not state, and five readings in it are the EXECUTOR's:
-**R1** the bar says "brand-recall ≥ 0.75 **per page**" and the audit gold exists **per POST** (one
-reviewer judged a post's whole sent set — nothing attributes a brand to a page), so the registered
-reading is per-post recall macro-averaged over the 15 scoreable posts. **R2** the page set is the
-**108 sent** pages, not the 159 available — for 15 of 19 posts that is the first six pages of a
-longer leaflet. **R3** four posts have an **empty** gold brand set and are out of the recall average
-(precision probe instead). **R4** bar 2 needs n ≥ 10 pairs to score. **R5** bar 3 excludes unreadable
-replies and pools both carriers. One attempt, and a failed bar closes B by measurement — an
-unratified denominator is that attempt spent for nothing.
+**THE FIVE RATIFIED READINGS ARE HOW EVERY sku-b NUMBER IS COMPUTED, AND THEIR HOME IS
+`results/sku_pilot_prereg.json` — NOT SPEC.** All five were the executor's readings of denominators
+SPEC does not state, and all five were ratified 10.08: **R1** recall per POST over the union of a
+post's page answers, macro-averaged over the 15 posts with a non-empty gold set (the bar says "per
+page"; the audit gold cannot be split that way). **R2** the page set is the **108 SENT** pages, not
+the 159 available. **R3** four empty-gold posts are a precision probe, not recall. **R4** bar 2
+scores at n ≥ 10 pairs. **R5** bar 3 excludes and counts unreadable replies, n ≥ 20, carriers pooled.
+Thresholds, the $0.35 cap and "one attempt" never moved. Read them from
+`ratification_required` in that file — SPEC 3.17 (7) lands in sku-b's step 0, because
+`test_every_pinned_input_still_hashes_to_what_it_says` pins the live SPEC byte-for-byte and the
+amendment needs the pin test to evolve in the same green commit (the Dv100 manoeuvre).
 
 **THE PRE-FILTER'S FRAME IS MOSTLY RECIPES, AND THAT IS THE RULE WORKING AS WRITTEN.** 769 rows:
 posts 717 of 14,388 texted (4.98%), comments 52 of 10,875 (0.48%). The top channels after @silposilpo
@@ -297,14 +299,24 @@ same model, same endpoint, same prompt — $0.0180 of its $0.10 cap.
 
 ## ⏭️ Next
 
-**THE TEAM LEAD'S RULING IS THE NEXT CONTRACT (STATUS.md, 09:25 10.08, uncommitted here).**
-(1) Build the deterministic FN split in `read_opus_audit.py` — `fn_matcher` vs `fn_image_only`,
-FP left raw on purpose. (2) Then release the remaining 23: `scripts/run_opus_packs.sh
---after-pilot` — it refuses until both pilot returns exist and validate, and an existing returns
-file is read, never re-bought. **~7 min per pack observed, so ~2.7 h of wall for the 23.**
-(3) Then the sitting on the findings: «Селянське» (TM or butter grade), the 12 open-extraction
-names as candidate watchlist entries, SPEC 3.16 (3) — only ratified items become revisions and G1e
-history is never re-scored on them. Then the launch signature, then 5c2.
+**R1–R5 ARE RATIFIED (operator, 10.08) — the readings are above and in the pre-registration.**
+
+**WHAT IS LEFT, IN ORDER.** (1) **The adjudication sitting** — ~45–60 minutes of operator time on
+`data/annotation/sku_a_text/text30.csv`, `README-text30.md` beside it, then
+`PYTHONPATH=src python3 scripts/validate_sku_text_pack.py`, which refuses a non-tick cell, a moved
+GIVEN column and a moved ladder and computes no gate number. (2) **sku-b**: two legs, cap $0.35, ONE
+attempt, a failed bar closes B by measurement. Its step 0 also carries the four acceptance tails
+listed under Blockers. (3) Then the **5c2 briefing**.
+
+**WHAT sku-b MUST NOT DO.** Re-run a bar after seeing its result; read the 159 available pages
+instead of the 108 the gold covers; write a renderer (both are built and tested —
+`prompts.positions_messages_page_gm4`, which refuses two images, and
+`positions_messages_text_gm4`); score its own sample (SPEC §10 — bar 2 is the team lead's read of
+the per-position dump against the page images); or read a parse failure as an empty answer.
+
+**THE OPUS-AUDIT QUEUE IS CLOSED.** The FN split, the 23 remaining packs and the findings sitting all
+happened on 10.08 — see [[opus-review-programme-close]] and
+[[sitting-2026-08-10-composition-signed]]. Nothing in that programme is owed.
 
 **THE RUNTIME IS RULED, AND IT IS SERVERLESS.** The team lead accepted srv-2d the same night
 (`docs/STATUS.md`, "ТЫ ЗДЕСЬ — serverless ДОКАЗАН (паритет Δ=0); 5c1 снят с HOLD"): parity verified
@@ -359,10 +371,23 @@ session's one endpoint, and there is no restart lever short of deleting the endp
 
 ## 🚧 Blockers
 
-**The launch signature waits on the SITTING, and the sitting is the only blocker left.** SPEC
-3.16 (3)'s deferral criterion — "audit findings on the table" — is satisfied: all 25 packs are in,
-498 rows validate, the record is committed. The audit owes nothing further. `docs/STATUS.md` is
-dirty in the tree from the team lead's 09:25 edit — commit it **unedited**, staged by path.
+**THE 30-ROW PACK IS BLANK, AND IT IS THE ONLY BLOCKER.** Without it bar 3 has no gold.
+`data/annotation/sku_a_text/text30.csv`, README beside it, ~45–60 minutes of operator time, then
+`PYTHONPATH=src python3 scripts/validate_sku_text_pack.py`. Everything else sku-b needs is built,
+pinned and ratified.
+
+**FOUR ACCEPTANCE TAILS, RULED INTO sku-b's STEP 0 (team lead, 10.08):** (1) commit the two vault
+files the tree carries — the 10.08 daily log and `knowledge/index.md` (both landed in `e40c58e`; what
+is dirty now is a 17:53 Stop-hook regeneration of the index plus this checkpoint's own edits);
+(2) curate this file — 604 lines, `cat` in full at every boot against a 9.0K-token target; (3) an ADR
+of the R1–R5 ratification; (4) SPEC 3.17 (7) plus the pin-test evolution, one green commit.
+
+**The signature is DONE** (66 = launch 59 + watch 7, stamped in `config/registry.yaml`), and its
+price is a live footgun rather than a blocker: five sealed records pin the pre-stamp bytes, so
+`validate_opus_returns.py` and `read_opus_audit.py` refuse to run. Correct. Do not re-pin.
+
+**The `permissions.deny` hole is CLOSED** — the team lead added `Edit(/docs/PRODUCT.md)` on 10.08, so
+all four team-lead file classes are now enforced and not merely observed.
 
 **None, technical.** The 2026-08-07 FloodWait wall cleared at 10:02:05 UTC and ~100 resolves drew
 no new one — because every collection run carried `--only`. That is discipline, not luck.
