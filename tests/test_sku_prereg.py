@@ -36,11 +36,30 @@ def test_every_bar_is_quoted_out_of_the_spec_as_written(record):
         assert bar["verbatim"] == prereg.BARS[name]
     assert record["attempts"]["verbatim"] in law
     assert record["attempts"]["on_success"] in law
+    # (11)'s five readings are TRANSCRIBED, not redesigned: the resumed session is held to them and
+    # a paraphrase here would be a clause the law does not contain
+    assert record["resume"]["supersedes_clause"]["verbatim"] in law
+    assert record["resume"]["bars_unchanged"] in law
+    for key, reading in record["resume"]["readings"].items():
+        assert reading in law, key
+        assert reading == prereg.RESUME_READINGS[key]
+    assert set(record["resume"]["readings"]) == {"a", "b", "c", "d", "e"}
 
 
 def test_a_paraphrased_bar_stops_the_write(monkeypatch, tmp_path):
     """The negative control: the check is only worth having if it fires on a reworded bar."""
     monkeypatch.setitem(prereg.BARS, "text_tier_accuracy", "text tier accuracy at least 0.85")
+    with pytest.raises(SystemExit, match="not in docs/SPEC.md as written"):
+        prereg.main(["--out", str(tmp_path / "p.json")])
+
+
+def test_a_paraphrased_resume_reading_stops_the_write(monkeypatch, tmp_path):
+    """The same control on (11)'s readings, which the bars' check did not cover until v3 carried
+    them. The resumed session is held to (11)(c) — a warm-up that is representative — and a
+    reworded copy of it here is a clause with nobody's signature on it."""
+    monkeypatch.setitem(
+        prereg.RESUME_READINGS, "c", "the warm-up uses a real page and a real row this time"
+    )
     with pytest.raises(SystemExit, match="not in docs/SPEC.md as written"):
         prereg.main(["--out", str(tmp_path / "p.json")])
 
@@ -58,10 +77,15 @@ def test_the_three_thresholds_and_their_direction(record):
 
 
 def test_one_attempt_and_a_failure_closes_b(record):
+    """v3 buys ONE additional session under SPEC 3.17 (11) at the cap (11)(d) names, and (6)'s own
+    clause is quoted beside it rather than deleted: it is what the first 17 answers were bought
+    under, and a reader has to be able to see which clause each half of the population came from."""
     assert record["attempts"]["count"] == 1
-    assert record["attempts"]["cap_usd"] == 0.35
+    assert record["attempts"]["cap_usd"] == 0.45
     assert "BY MEASUREMENT" in record["attempts"]["on_failure"]
     assert "No retry" in record["attempts"]["on_failure"]
+    assert record["attempts"]["verbatim"] == prereg.RESUME_CLAUSE
+    assert record["resume"]["supersedes_clause"]["verbatim"] == prereg.ONE_ATTEMPT
 
 
 def test_every_bar_names_a_denominator_and_what_it_excludes(record):
@@ -212,11 +236,39 @@ def test_the_prereg_says_what_it_does_not_touch(record):
     assert "consumer quotes never enter" in out["aggregates"]
 
 
-PREREGS = ("results/sku_pilot_prereg.json", "results/sku_pilot_prereg_v2.json")
+V1 = "results/sku_pilot_prereg.json"
+V2 = "results/sku_pilot_prereg_v2.json"
+V3 = "results/sku_pilot_prereg_v3.json"
+PREREGS = (V1, V2, V3)
+BEFORE_ANY_ARTIFACT = (V1, V2)
+"""The two that were registered before sku-b had bought anything. v3 cannot make that claim and
+must not pretend to — it is registered before the RESUMED session, over a population half of which
+is already paid for, and its own ordering rule is the test below."""
+
+SEALED = {
+    V1: "b1bfa40d1f5073ec7b3d199bd57d96dd1bb72f37d99d26135f98386a8473a142",
+    V2: "d4ced2a8ba00b48bca2d30af9c7ce8977eb387631b1735b4e05ea15ba306e9ad",
+}
+"""Every superseded registration, by the bytes rather than by a description. v2 leaves the
+producer's hands when RECORD moves to v3 — exactly as v1 did — and from that moment nothing rebuilds
+it, so a literal sha is the only thing standing between "v2 is untouched" and nobody checking. v2
+matters more than v1 did: it is the record the 17 paid answers were bought under, and the resumed
+session's bars are scored against ITS verbatim texts."""
 
 
-@pytest.mark.parametrize("prereg_path", PREREGS)
-def test_the_prereg_was_committed_before_any_pilot_artifact(record, prereg_path):
+def leaves(node, path=""):
+    if isinstance(node, dict):
+        for key, value in node.items():
+            yield from leaves(value, f"{path}.{key}")
+    elif isinstance(node, list):
+        for index, value in enumerate(node):
+            yield from leaves(value, f"{path}[{index}]")
+    else:
+        yield path, node
+
+
+@pytest.mark.parametrize("prereg_path", BEFORE_ANY_ARTIFACT)
+def test_the_prereg_was_committed_before_any_pilot_artifact(prereg_path):
     """A pre-registration written after the thing it judges is a rationalisation, and git history is
     the only witness to the ordering — so the claim is checked against history rather than against
     today's directory listing, which stops being evidence the moment sku-b writes its records.
@@ -227,7 +279,8 @@ def test_the_prereg_was_committed_before_any_pilot_artifact(record, prereg_path)
     The same discipline `run_v22_probe.py` uses: shell out to git, and treat "not tracked" as a
     failure rather than a skip. An uncommitted pre-registration is not one.
     """
-    assert "before any sku-b artifact exists" in record["class"]
+    body = json.loads((REPO_ROOT / prereg_path).read_text(encoding="utf-8"))
+    assert "before any sku-b artifact exists" in body["class"]
     added = subprocess.run(
         ["git", "log", "--diff-filter=A", "--format=%H", "--", prereg_path],
         cwd=REPO_ROOT,
@@ -252,53 +305,225 @@ def test_the_prereg_was_committed_before_any_pilot_artifact(record, prereg_path)
     assert others == [], others
 
 
-def test_v1_is_sealed_and_this_record_names_it(record):
-    """v1 is what was registered on 2026-08-10 and it is not edited by the re-registration — the
-    c82d0cff pattern: the bytes are the evidence, so they are hashed here rather than described.
+def test_v3_was_committed_before_the_resumed_session_and_over_what_it_pins(record):
+    """v3's ordering duty is a different sentence and needs a different check.
 
-    The live pin-test above now runs against v2; this is the other half, and without it the phrase
-    "v1 is untouched" would rest on nobody checking.
+    The rule above cannot be reused: `results/sku_pilot_serving.json` landed after v2 (sku-b-prep)
+    and the interrupted run's own artifacts landed before v3, so the "no pilot artifact exists"
+    reading would fail v3 for being exactly what SPEC 3.17 (11) asked for. What v3 must prove is
+    narrower and stronger — at the commit that added it, the ONLY sku-b run artifacts in the tree
+    were the two its `bought_already` block pins, and they hashed to what it pinned. That rules out
+    both directions of the failure: a resume registered after the resumed session had already
+    bought something, and a resume registered against a record that has since moved.
     """
-    sealed = REPO_ROOT / "results" / "sku_pilot_prereg.json"
-    assert hashlib.sha256(sealed.read_bytes()).hexdigest() == (
-        "b1bfa40d1f5073ec7b3d199bd57d96dd1bb72f37d99d26135f98386a8473a142"
-    )
-    assert prereg.RECORD.name == "sku_pilot_prereg_v2.json"
-    assert record["supersedes"]["record"] == "results/sku_pilot_prereg.json"
-    assert record["supersedes"]["sha256"] == hashlib.sha256(sealed.read_bytes()).hexdigest()
-    assert "no bar moved" in record["supersedes"]["reason"]
+    added = subprocess.run(
+        ["git", "log", "--diff-filter=A", "--format=%H", "--", V3],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout.split()
+    assert len(added) == 1, "the re-registration is added exactly once, or its ordering is unclear"
+    tree = subprocess.run(
+        ["git", "ls-tree", "-r", "--name-only", added[0], "results/"],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout.split()
+    assert V3 in tree
+    already = record["resume"]["bought_already"]
+    pinned = {already["run_record"]["path"]: already["run_record"]["sha256"]}
+    pinned[already["dump"]["path"]] = already["dump"]["sha256"]
+    assert sorted(name for name in tree if name.startswith("results/sku_b_")) == sorted(pinned)
+    for path, sha in pinned.items():
+        blob = subprocess.run(
+            ["git", "show", f"{added[0]}:{path}"],
+            cwd=REPO_ROOT,
+            capture_output=True,
+            check=True,
+        ).stdout
+        assert hashlib.sha256(blob).hexdigest() == sha, path
 
 
-def test_v2_carries_v1s_bars_and_readings_byte_for_byte(record):
+def test_every_superseded_registration_is_sealed_and_this_record_names_its_parent(record):
+    """v1 and v2 are what was registered, and neither is edited by the re-registration that follows
+    it — the c82d0cff pattern: the bytes are the evidence, so they are hashed here rather than
+    described.
+
+    The live pin-test above now runs against v3; this is the other half, and without it the phrase
+    "v2 is untouched" would rest on nobody checking. It is also the moment v2 stops being
+    rebuildable: the producer points at v3 now, so this literal sha is v2's only witness.
+    """
+    for path, sha in SEALED.items():
+        assert hashlib.sha256((REPO_ROOT / path).read_bytes()).hexdigest() == sha, path
+    assert prereg.RECORD.name == "sku_pilot_prereg_v3.json"
+    assert record["supersedes"]["record"] == V2
+    assert record["supersedes"]["sha256"] == SEALED[V2]
+    assert "no bar does" in record["supersedes"]["reason"]
+    v2 = json.loads((REPO_ROOT / V2).read_text(encoding="utf-8"))
+    assert v2["supersedes"]["record"] == V1
+    assert v2["supersedes"]["sha256"] == SEALED[V1]
+
+
+def test_v2_carries_v1s_bars_and_readings_byte_for_byte():
     """The whole point of a re-registration: the pins move and the CONTRACT does not.
 
     Compared leaf by leaf rather than field by field, because "verbatim" is a property of every
     string in those sections and a spot-check of three of them would pass while a fourth drifted.
     The two ladder/manifest shas are the declared exceptions and are asserted to BE the differences,
     not merely allowed to differ.
-    """
-    v1 = json.loads((REPO_ROOT / "results" / "sku_pilot_prereg.json").read_text(encoding="utf-8"))
 
-    def leaves(node, path=""):
-        if isinstance(node, dict):
-            for key, value in node.items():
-                yield from leaves(value, f"{path}.{key}")
-        elif isinstance(node, list):
-            for index, value in enumerate(node):
-                yield from leaves(value, f"{path}[{index}]")
-        else:
-            yield path, node
+    Both records are read off disk rather than through the live `record` fixture: that fixture is
+    v3 now, and this test is about a link in the chain that no longer has a producer.
+    """
+    v1 = json.loads((REPO_ROOT / V1).read_text(encoding="utf-8"))
+    v2 = json.loads((REPO_ROOT / V2).read_text(encoding="utf-8"))
 
     differ = []
     for section in ("bars", "attempts", "ratification_required", "not_in_scope", "instruments"):
         old = dict(leaves(v1[section], section))
-        new = dict(leaves(record[section], section))
+        new = dict(leaves(v2[section], section))
         assert set(old) == set(new), section
         differ += [path for path in old if old[path] != new[path]]
     assert sorted(differ) == [
         "bars.text_tier_accuracy.gold.ladder_sha256",
         "bars.text_tier_accuracy.gold.manifest_sha256",
     ]
+
+
+def test_v3_carries_v2s_measurement_byte_for_byte_and_moves_only_the_attempt(record):
+    """SPEC 3.17 (11)(b): the instrument is FROZEN as registered. So the resume may move the ATTEMPT
+    and nothing that decides a number.
+
+    The same leaf-by-leaf comparison, widened to the ladder and to `pinned_inputs` — and
+    `pinned_inputs` is compared as a mapping rather than as a key set, because the existing key-set
+    assertion would pass a pin whose VALUE had moved, which is the only way a pinned input can
+    betray a bar. What is left is `attempts`, where exactly two leaves are allowed to move, and one
+    new section. If this list ever comes out longer than the four entries `supersedes.moved`
+    enumerates, the re-registration is doing something (11) did not authorise.
+    """
+    v2 = json.loads((REPO_ROOT / V2).read_text(encoding="utf-8"))
+    for section in (
+        "bars",
+        "ratification_required",
+        "not_in_scope",
+        "instruments",
+        "ladder",
+        "pinned_inputs",
+    ):
+        assert record[section] == v2[section], section
+
+    old = dict(leaves(v2["attempts"], "attempts"))
+    new = dict(leaves(record["attempts"], "attempts"))
+    assert set(old) == set(new), "the attempt clause gains no field and loses none"
+    assert sorted(path for path in old if old[path] != new[path]) == [
+        "attempts.cap_usd",
+        "attempts.verbatim",
+    ]
+    assert set(record) - set(v2) == {"resume"}
+    assert set(v2) - set(record) == set()
+    assert len(record["supersedes"]["moved"]) == 4
+    assert record["supersedes"]["moved_metadata"], "what necessarily moved is named, not omitted"
+
+
+def test_the_resume_warm_up_is_real_full_size_and_outside_every_gold_set(record):
+    """SPEC 3.17 (11)(c), and the reason it exists: the first session priced 138 gold calls off a
+    generated 64x64 image that answered in 1.436 s, and the pages cost 5.0772 s each.
+
+    The probe is now fixed on the axis that moves the number — a real leaflet page, a real collected
+    row — and must stay unrepresentative on the axis that must not move. That second half is what is
+    checked hardest here: a seed-42 pick that quietly landed inside the 108 sent pages or inside the
+    30-row pack would spend a warm-up on a scored input and contaminate the denominator the resume
+    exists to complete. Stability is checked too, because a pick that is not reproducible is not a
+    registration.
+    """
+    warmup = record["resume"]["warmup"]
+    reference = json.loads(
+        (REPO_ROOT / "results" / "sku_reference_leaflet.json").read_text("utf-8")
+    )
+    manifest = json.loads(
+        (REPO_ROOT / "results" / "sku_text_pack_manifest.json").read_text(encoding="utf-8")
+    )
+
+    sent = {page["file"] for post in reference["posts"] for page in post["pages_sent"]}
+    unsent = {file for post in reference["posts"] for file in post["pages_not_sent"]}
+    assert len(sent) == 108 and len(unsent) == 51
+    assert warmup["page"]["file"] in unsent
+    assert warmup["page"]["file"] not in sent, "the warm-up page is inside R2's registered gold set"
+    page = REPO_ROOT / warmup["page"]["file"]
+    assert hashlib.sha256(page.read_bytes()).hexdigest() == warmup["page"]["sha256"]
+    assert warmup["page"]["bytes"] > 100_000, "a real leaflet page, not a thumbnail"
+
+    assert warmup["text"]["id"] not in set(manifest["ids"])
+    frame = {
+        row["id"] for row in json.loads((REPO_ROOT / prereg.CENSUS).read_text("utf-8"))["rows"]
+    }
+    assert warmup["text"]["id"] in frame, "the warm-up row is one the pre-filter actually passed"
+
+    again = prereg.resume_warmup(reference, manifest)
+    assert again["page"]["file"] == warmup["page"]["file"]
+    assert again["text"]["id"] == warmup["text"]["id"]
+    assert again["text"]["text_sha256"] == warmup["text"]["text_sha256"]
+    assert warmup["seed"] == 42
+
+
+def test_the_bought_already_block_partitions_the_registered_population(record):
+    """SPEC 3.17 (11)(a): each element is bought EXACTLY ONCE across the program. The resumed
+    session's population is this block's `unbought` and nothing else, so the two lists have to
+    partition the registered 138 — not merely add up to it."""
+    already = record["resume"]["bought_already"]
+    run = json.loads((REPO_ROOT / already["run_record"]["path"]).read_text(encoding="utf-8"))
+    asked, unbought = set(already["asked"]), set(already["unbought"])
+    assert len(asked) == already["n_asked"] == 17
+    assert len(unbought) == already["n_unbought"] == 121
+    assert not asked & unbought
+    assert len(asked | unbought) == 138
+    assert asked == {row["source"] for row in run["outcomes"]}
+    assert unbought == set(run["population"]["unbought"])
+    assert record["resume"]["population"] == {
+        "registered": 138,
+        "already_bought": 17,
+        "to_buy": 121,
+        "why": record["resume"]["population"]["why"],
+    }
+    for path, sha in (
+        (already["run_record"]["path"], already["run_record"]["sha256"]),
+        (already["dump"]["path"], already["dump"]["sha256"]),
+        (already["serving_pin"]["path"], already["serving_pin"]["sha256"]),
+        (already["bought_under"]["path"], already["bought_under"]["sha256"]),
+    ):
+        assert hashlib.sha256((REPO_ROOT / path).read_bytes()).hexdigest() == sha, path
+    # the parse refusal is an ANSWER that was paid for; (11)(a) makes it enter the bars as it stands
+    assert already["unreadable"] == run["extraction"]["unreadable"]
+
+
+def test_a_run_record_that_moved_stops_the_re_registration(tmp_path, monkeypatch):
+    """The negative control for the block above, driven both ways.
+
+    A resume registered against a record that has since moved would pin evidence nobody can
+    re-derive, and a record whose asked and unbought sets overlap cannot say which elements are
+    still to buy. Both are refusals in the producer rather than findings in the report.
+    """
+    run = json.loads(prereg.RUN_RECORD.read_text(encoding="utf-8"))
+
+    def rewritten(section: str, value: dict):
+        body = json.loads(json.dumps(run)) | {section: value}
+        path = tmp_path / "moved.json"
+        path.write_text(json.dumps(body, ensure_ascii=False), encoding="utf-8")
+        monkeypatch.setattr(prereg, "RUN_RECORD", path)
+
+    rewritten("dump", dict(run["dump"], sha256="0" * 64))
+    with pytest.raises(SystemExit, match="as it now hashes"):
+        prereg.bought_already()
+
+    rewritten("population", dict(run["population"], unbought=[run["outcomes"][0]["source"]]))
+    with pytest.raises(SystemExit, match="EXACTLY ONCE"):
+        prereg.bought_already()
+
+    # the control: the record as it stands passes the same path
+    monkeypatch.undo()
+    assert prereg.bought_already()["n_unbought"] == 121
 
 
 def test_the_ladder_rename_is_a_bijection_and_moved_no_rung(record):

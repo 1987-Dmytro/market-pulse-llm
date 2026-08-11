@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
-"""Write `results/sku_pilot_prereg_v2.json` — sku-b's three bars, before sku-b exists ($0).
+"""Write `results/sku_pilot_prereg_v3.json` — sku-b's three bars, resumed ($0).
 
 Deliverable 5 of `docs/PROMPT-sku-a.md`, re-registered by uni-b deliverable D(2) under SPEC
-3.17 (8). A pre-registration that is not committed is not a pre-registration, and a
-pre-registration committed after the artifact it judges is a rationalisation: git history is the
-only witness to the ordering, so this file goes in its own commit and no pilot artifact exists in
-the repo yet.
+3.17 (8) and again by sku-b-v3-prep D1 under SPEC 3.17 (11). A pre-registration that is not
+committed is not a pre-registration, and a pre-registration committed after the artifact it judges
+is a rationalisation: git history is the only witness to the ordering, so this file goes in its own
+commit — before any artifact of the RESUMED session exists.
 
-**v2 is registered BESIDE v1, never over it.** `results/sku_pilot_prereg.json` is not edited and
-not deleted: it is what was registered, it stays byte-identical (`b1bfa40d…`, held by a sealed
-test), and this record names it in `supersedes` with the reason. What moved is pins — the ladder's
-hash follows the `fat` → `attribute` rename and the pack manifest was rebuilt over it; what did not
-move is every bar, threshold, reachability rule, the $0.35 cap, the one-attempt clause and all five
-R1–R5 readings, which are byte-equal to v1 and asserted so.
+**Each version is registered BESIDE the last, never over it.** v1 (`b1bfa40d…`) and v2
+(`d4ced2a8…`) are not edited and not deleted: they are what was registered, they stay
+byte-identical under sealed tests, and each record names its predecessor in `supersedes` with the
+reason. v1 → v2 moved PINS (the ladder's hash followed the `fat` → `attribute` rename and the pack
+manifest was rebuilt over it). v2 → v3 moves the ATTEMPT CLAUSE and nothing else about the
+measurement: the (10)(b) stop at 17 of 138 gold calls resolves as RESUME, so the clause becomes
+3.17 (11)'s, the cap becomes $0.45, the warm-up inputs become representative, and a
+`resume.bought_already` block pins what the first session already bought. Every bar, threshold,
+reachability rule and all five R1–R5 readings are byte-equal to v2 and asserted so.
 
 Three things it carries, and the second is the one that costs work:
 
@@ -46,6 +49,8 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+import build_sku_text_pack as text_pack  # noqa: E402
+
 from build_audit_pack import git_state  # noqa: E402
 
 from market_pulse import positions, prompts  # noqa: E402
@@ -56,17 +61,30 @@ PACK_MANIFEST = REPO_ROOT / "results" / "sku_text_pack_manifest.json"
 CENSUS = REPO_ROOT / "results" / "sku_prefilter_census.json"
 REGISTRY = REPO_ROOT / "config" / "registry.yaml"
 LEXICON = REPO_ROOT / "config" / "lexicon.yaml"
-SUPERSEDED = REPO_ROOT / "results" / "sku_pilot_prereg.json"
-RECORD = REPO_ROOT / "results" / "sku_pilot_prereg_v2.json"
+SUPERSEDED = REPO_ROOT / "results" / "sku_pilot_prereg_v2.json"
+RECORD = REPO_ROOT / "results" / "sku_pilot_prereg_v3.json"
+
+SERVING_PIN = REPO_ROOT / "results" / "sku_pilot_serving.json"
+RUN_RECORD = REPO_ROOT / "results" / "sku_b_positions.json"
+RUN_DUMP = REPO_ROOT / "results" / "sku_b_positions.jsonl"
+"""What the interrupted session left behind, pinned into `resume.bought_already`.
+
+Not `pinned_inputs`: those are the bar's INPUTS and they are byte-equal to v2 by construction. These
+three are EVIDENCE of what was already bought, and the resumed run refuses to start unless they
+still hash to what is registered here (SPEC 3.17 (11)(a): each element is bought exactly once)."""
 
 SUPERSEDES_REASON = (
-    "schema rename + vocabulary law; before any attempt; no bar moved. SPEC 3.17 (8) generalised the"
-    " position schema's fifth presence field fat → attribute and made the pre-filter's category"
-    " vocabulary law in config/lexicon.yaml. Both move PINS this record carries — the ladder's hash"
-    " follows the renamed table and the pack manifest was rebuilt over it — and neither moves a"
-    " threshold, the cap, the one-attempt clause or a registered reading. So v1 is not edited: it"
-    " stays exactly as it was registered and this record is registered BESIDE it, still before the"
-    " one paid attempt"
+    "the (10)(b) stop resolves as RESUME; the attempt clause moves and no bar does. SPEC 3.17 (11)"
+    " ratifies the completion of the interrupted attempt: the registered population is bought to"
+    " completion in ONE additional paid session, buying only the 121 elements the run record names"
+    " as unbought, with the 17 existing answers entering the bars as they stand. What moves here is"
+    " the attempt clause itself (from (6)'s to (11)'s), the cap ($0.35 → $0.45, priced from the"
+    " measured marginals), the warm-up inputs (now representative, (11)(c)) and a new"
+    " resume.bought_already block pinning what the first session bought. No threshold, no bar text,"
+    " no reachability rule and no registered reading moves — the instrument is FROZEN as registered"
+    " ((11)(b)). So v2 is not edited: it stays exactly as it was registered, it is what the 17"
+    " existing answers were bought under, and this record is registered BESIDE it, before the"
+    " resumed session"
 )
 
 BARS = {
@@ -86,6 +104,49 @@ ONE_ATTEMPT = (
 )
 GREEN_GATE = "Integration into the 5c2 loop only on a green gate."
 
+RESUME_CLAUSE = (
+    "The (10)(b) stop at 17 of 138 gold calls resolves as RESUME: the registered population is"
+    " bought to completion in ONE additional paid session under a re-registration"
+    " (results/sku_pilot_prereg_v3.json, registered BESIDE v2 before the resumed session)."
+)
+"""SPEC 3.17 (11)'s own sentence. It REPLACES (6)'s one-attempt clause in `attempts.verbatim` and
+does not delete it — (6) is what the first session was bought under and it is quoted beside."""
+
+RESUME_READINGS = {
+    "a": (
+        "each element of the registered population (108 pages + 30 rows) is bought EXACTLY ONCE"
+        " across the program — the resumed session buys only the 121 recorded as unbought, and the"
+        " 17 existing answers (including the one parse refusal) enter the bars as they stand, never"
+        " re-asked"
+    ),
+    "b": (
+        "the instrument is FROZEN as registered — prompts, parser and serving pin unchanged; the"
+        " superscript and asterisk findings are a post-pilot NAMED revision, never an in-flight edit"
+    ),
+    "c": (
+        "for the resumed session the warm-up of (9) becomes REPRESENTATIVE: one real UNSENT page (of"
+        " the 51 outside the R2 gold) and one real pre-filtered text row outside the 30-row pack;"
+        " warm-up answers are never scored"
+    ),
+    "d": (
+        "the resumed session's cap is $0.45, priced from the measured marginals; the go/no-go and"
+        " every reading of (10) apply unchanged against that cap"
+    ),
+    "e": (
+        "the team lead's calibration read of the 13 prefix pairs (6 correct) is NON-GATING: bar 2 is"
+        " scored only by the team-lead read over the pairs of the COMPLETED population at acceptance"
+    ),
+}
+"""(11)(a)–(e), transcribed rather than redesigned, and checked against `docs/SPEC.md` on every run
+by the same function that checks the bars. A reading paraphrased here is a reading the resumed
+session could be held to and the law does not contain."""
+
+BARS_UNCHANGED = "The three bars' verbatim texts, thresholds and R1–R5 are unchanged."
+
+RESUME_CAP_USD = 0.45
+"""SPEC 3.17 (11)(d). Transcribed, not chosen — and it is the ONE number in this record that (11)
+moves, together with the clause the cap belongs to."""
+
 
 def verbatim(spec: Path) -> str:
     """The amendment as one line, so a quote can be checked against it regardless of wrapping."""
@@ -94,7 +155,15 @@ def verbatim(spec: Path) -> str:
 
 def check_the_bars_are_the_laws(spec: Path) -> None:
     law = verbatim(spec)
-    for name, bar in {**BARS, "one_attempt": ONE_ATTEMPT, "green_gate": GREEN_GATE}.items():
+    quoted = {
+        **BARS,
+        "one_attempt": ONE_ATTEMPT,
+        "green_gate": GREEN_GATE,
+        "resume_clause": RESUME_CLAUSE,
+        "bars_unchanged": BARS_UNCHANGED,
+        **{f"reading_{key}": text for key, text in RESUME_READINGS.items()},
+    }
+    for name, bar in quoted.items():
         if bar not in law:
             raise SystemExit(
                 f"{name}: this text is not in docs/SPEC.md as written. A pre-registration that"
@@ -149,6 +218,194 @@ def pinned_sha256(path: Path) -> str:
     return hashlib.sha256(registered_law(path) if path == SPEC else path.read_bytes()).hexdigest()
 
 
+WARMUP_SEED = 42
+"""The same seed the pack was drawn under. One seed in this pilot, so a reader does not have to ask
+which draw a number came from."""
+
+
+def resume_warmup(reference: dict, manifest: dict) -> dict:
+    """SPEC 3.17 (11)(c): the two REPRESENTATIVE warm-up inputs, picked once and REGISTERED.
+
+    The interrupted session opened on a generated 64x64 image and an invented row. They answered in
+    1.436 s and 0.756 s, the go/no-go of (10)(a) priced 138 gold calls off those marginals and let
+    the run proceed — and the first real leaflet page cost 5.0772 s, 3.54x the warm-up. The gate
+    passed the run it exists to refuse, and the defect was the PROBE rather than the arithmetic:
+    seconds are seconds, and nothing inside the gate could see that a thumbnail and a 7 MB leaflet
+    page are the same op on different work.
+
+    So the probe is fixed on the axis that moves the number, and left deliberately unrepresentative
+    on the axis that must not move: both inputs are REAL and full-size, and neither is gold. The
+    page is one of the 51 the reference records as NOT sent — outside R2's registered page set, so
+    bar 1 cannot see it — and the row is one the pre-filter passed and the 30-row pack did not draw.
+
+    Picked HERE and pinned, not re-derived by the driver. A registered input the paid run looks up
+    cannot drift from the one that was registered; a rule the paid run re-runs can — and this is the
+    session where a warm-up input that quietly landed inside the gold would contaminate the very
+    denominator the resume exists to complete.
+    """
+    import random
+
+    sent = {page["file"] for post in reference["posts"] for page in post["pages_sent"]}
+    unsent = [file for post in reference["posts"] for file in post["pages_not_sent"]]
+    expected = reference["population"]["pages_available"] - reference["population"]["pages_sent"]
+    if len(unsent) != expected or set(unsent) & sent:
+        raise SystemExit(
+            f"{rel(REFERENCE)}: {len(unsent)} unsent pages against {expected} the population"
+            f" implies, {len(set(unsent) & sent)} of them also sent. (11)(c)'s warm-up page has to"
+            " come from outside the registered 108, and this reference cannot say which those are"
+        )
+    page = random.Random(WARMUP_SEED).choice(unsent)
+    page_path = REPO_ROOT / page
+    if not page_path.exists():
+        raise SystemExit(f"{page}: (11)(c)'s warm-up page is not on disk")
+
+    _, frame = text_pack.frame_from_census(CENSUS)
+    drawn = set(manifest["ids"])
+    outside = [row for row in frame if row["id"] not in drawn]
+    if len(outside) != len(frame) - len(drawn):
+        raise SystemExit(
+            f"{rel(CENSUS)}: the 30-row pack's ids are not all in the frame — the warm-up row"
+            " cannot be proved to sit outside a pack whose rows this frame does not contain"
+        )
+    row = random.Random(WARMUP_SEED).choice(outside)
+    text = text_pack.store_text(row)
+    if not text.strip():
+        raise SystemExit(f"{row['id']}: the drawn warm-up row has no text; it would price nothing")
+
+    return {
+        "verbatim": RESUME_READINGS["c"],
+        "why": (
+            "the first session's warm-up priced a leaflet page at 1.436 s and the pages cost 5.0772"
+            " s. A probe that is cheap on the axis being measured makes the go/no-go a gate that"
+            " passes the run it exists to refuse — see results/sku_b_positions.json ::"
+            " projection.go_no_go against projection.per_gate[0]"
+        ),
+        "seed": WARMUP_SEED,
+        "page": {
+            "rule": (
+                "random.Random(42).choice over the pages results/sku_reference_leaflet.json records"
+                " as NOT sent, in the reference's own order"
+            ),
+            "file": page,
+            "sha256": sha256_of(page_path),
+            "bytes": page_path.stat().st_size,
+            "population": len(unsent),
+            "not_gold": (
+                "outside the 108 sent pages, so it is outside R2's registered page set and no bar"
+                " reads it. A brand printed on it is in no gold set"
+            ),
+        },
+        "text": {
+            "rule": (
+                "random.Random(42).choice over the census frame's rows whose id is not in the"
+                " 30-row pack, in the census's own order"
+            ),
+            "id": row["id"],
+            "channel": row["channel"],
+            "carrier": row["carrier"],
+            "text_sha256": hashlib.sha256(text.encode("utf-8")).hexdigest(),
+            "text_chars": len(text),
+            "read_by": "build_sku_text_pack.store_text — the raw store, the same reader the pack used",
+            "population": len(outside),
+            "not_gold": (
+                "one of the pre-filtered rows the seed-42 pack did NOT draw, so it is outside bar"
+                " 3's adjudicated set. The text itself is not copied here: it is a collected row"
+                " and the raw store is where it lives — the sha is what proves the resumed session"
+                " read the same one"
+            ),
+        },
+        "never_scored": (
+            "both answers are recorded in the run record and enter NO bar artifact. What they buy is"
+            " the cold start, the proof the instrument answers, and the only honest marginal that"
+            " exists before the first gold call of the resumed session"
+        ),
+    }
+
+
+def bought_already() -> dict:
+    """SPEC 3.17 (11)(a): what the interrupted session already bought, pinned so it is never rebought.
+
+    Everything here is READ out of `results/sku_b_positions.json` and re-derived against the files
+    on disk. Four agreements are checked rather than assumed, because each one is a way the resume
+    could quietly buy the wrong thing: the record must have been written under v2 as v2 now stands,
+    under the serving pin as it now stands ((11)(b): the instrument is frozen), over the dump as it
+    now hashes, and its asked and unbought sets must partition the registered 138 with no id in both.
+    """
+    run = json.loads(RUN_RECORD.read_text(encoding="utf-8"))
+    asked = [row["source"] for row in run["outcomes"]]
+    unbought = list(run["population"]["unbought"])
+    agreements = {
+        f"the run was bought under {rel(SUPERSEDED)} as it now stands": (
+            run["prereg"]["sha256"],
+            sha256_of(SUPERSEDED),
+        ),
+        f"the run served under {rel(SERVING_PIN)} as it now stands": (
+            run["serving_pin"]["sha256"],
+            sha256_of(SERVING_PIN),
+        ),
+        f"the record describes {rel(RUN_DUMP)} as it now hashes": (
+            run["dump"]["sha256"],
+            sha256_of(RUN_DUMP),
+        ),
+    }
+    for claim, (recorded, on_disk) in agreements.items():
+        if recorded != on_disk:
+            raise SystemExit(
+                f"{claim} — it does not: the record says {recorded[:16]}… and the file hashes"
+                f" {on_disk[:16]}…. A resume registered against a moved artifact would buy against"
+                " evidence nobody can re-derive; stop and report."
+            )
+    if len(set(asked)) != len(asked) or set(asked) & set(unbought):
+        raise SystemExit(
+            f"{rel(RUN_RECORD)}: {len(asked)} asked ids with {len(set(asked))} distinct and"
+            f" {len(set(asked) & set(unbought))} of them also unbought. (11)(a) buys each element"
+            " EXACTLY ONCE and this record cannot say which those are."
+        )
+    registered = run["population"]["pages_sent"] + run["population"]["text_rows"]
+    if len(asked) + len(unbought) != registered:
+        raise SystemExit(
+            f"{rel(RUN_RECORD)}: {len(asked)} asked + {len(unbought)} unbought against"
+            f" {registered} registered. The resume's population is the difference and it does not"
+            " add up."
+        )
+    return {
+        "verbatim": RESUME_READINGS["a"],
+        "why": (
+            "the resumed session's population is this record's `unbought` and nothing else. Pinned"
+            " by sha so a run against a moved record refuses: these are answers that were PAID for"
+            " once, under a one-attempt clause, and there is no second draw for any of them"
+        ),
+        "run_record": {"path": rel(RUN_RECORD), "sha256": sha256_of(RUN_RECORD)},
+        "dump": {
+            "path": rel(RUN_DUMP),
+            "sha256": sha256_of(RUN_DUMP),
+            "rows": run["dump"]["rows"],
+            "price_pairs_n": run["dump"]["price_pairs"]["n"],
+        },
+        "serving_pin": {
+            "path": rel(SERVING_PIN),
+            "sha256": sha256_of(SERVING_PIN),
+            "why": (
+                "(11)(b): the instrument is FROZEN as registered. The resumed session serves under"
+                " the same pin the 17 answers were bought under — pinned in this record so a"
+                " re-created endpoint under a different configuration cannot pass the identity stop"
+                " and still be reported against these bars"
+            ),
+        },
+        "bought_under": {"path": rel(SUPERSEDED), "sha256": sha256_of(SUPERSEDED)},
+        "asked": sorted(asked),
+        "n_asked": len(asked),
+        "unbought": sorted(unbought),
+        "n_unbought": len(unbought),
+        "unreadable": run["extraction"]["unreadable"],
+        "unreadable_reading": (
+            "(11)(a): the parse refusal enters bar 3's accounting AS IT STANDS. It is an answer the"
+            " session paid for, it is excluded by its reason and counted — not re-asked, and not"
+            " turned into an empty page by a resume that found it inconvenient"
+        ),
+    }
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", type=Path, default=RECORD)
@@ -160,15 +417,19 @@ def main(argv: list[str] | None = None) -> int:
     pack = json.loads(PACK_MANIFEST.read_text(encoding="utf-8"))
     scoreable = reference["gold"]["posts_with_a_non_empty_gold_set"]
     empty = reference["gold"]["posts_with_an_empty_gold_set"]
+    warmup = resume_warmup(reference, pack)
+    already = bought_already()
 
     record = {
         "generated_at": datetime.now(UTC).isoformat(timespec="seconds"),
-        "phase": "sku-b — the position-layer pilot, pre-registered",
-        "written_by": "sku-a (executor, $0), docs/PROMPT-sku-a.md deliverable 5",
-        "authority": "docs/SPEC.md amendment 3.17 (6)",
+        "phase": "sku-b — the position-layer pilot, resumed and re-registered",
+        "written_by": "sku-b-v3-prep (executor, $0), docs/PROMPT-sku-b-v3-prep.md deliverable 1",
+        "authority": "docs/SPEC.md amendment 3.17 (6), (10)(b), (11)",
         "class": (
-            "PRE-REGISTRATION. Committed in its own commit before any sku-b artifact exists in the"
-            " repo; git history is the only witness to that ordering. Nothing here is a result"
+            "PRE-REGISTRATION. Committed in its own commit before any artifact of the RESUMED"
+            " session exists in the repo; git history is the only witness to that ordering. The"
+            " interrupted session's own artifacts DO exist and are pinned in resume.bought_already —"
+            " that is what a resume is. Nothing here is a result"
         ),
         "supersedes": {
             "record": rel(SUPERSEDED),
@@ -176,21 +437,31 @@ def main(argv: list[str] | None = None) -> int:
             "reason": SUPERSEDES_REASON,
             "unchanged": (
                 "every bar's verbatim text and threshold, the direction, both reachability rules,"
-                " the $0.35 cap, attempts=1, on_failure/on_success and all five R1–R5 readings are"
-                " BYTE-EQUAL to v1 — asserted row by row in tests/test_sku_prereg.py, not claimed"
+                " attempts=1, on_failure/on_success, all five R1–R5 readings, both instrument shas,"
+                " the ladder and every pinned input are BYTE-EQUAL to v2 — asserted leaf by leaf in"
+                " tests/test_sku_prereg.py, not claimed"
             ),
             "moved": [
-                "ladder.sha256 and ladder.table (fat → attribute; the rungs are a bijection)",
-                "bars.text_tier_accuracy.gold.ladder_sha256 (follows the table)",
-                "pinned_inputs['results/sku_text_pack_manifest.json'] (manifest rebuilt over the"
-                " new ladder; its ids, given_sha256 and README sha did not move)",
-                "pinned_inputs['config/lexicon.yaml'] (new pin: the vocabulary is law now)",
+                "attempts.verbatim (SPEC 3.17 (6)'s one-attempt clause → (11)'s resume clause; (6)"
+                " is quoted beside it as what the first session was bought under)",
+                "attempts.cap_usd (0.35 → 0.45, SPEC 3.17 (11)(d), priced from the measured"
+                " marginals)",
+                "resume.warmup (new: (11)(c)'s representative warm-up inputs, picked once and"
+                " pinned — a real unsent page and a real pre-filtered row outside the pack)",
+                "resume.bought_already (new: the run record, dump and serving pin by sha, the 17"
+                " asked ids and the 121 unbought ones)",
+            ],
+            "moved_metadata": [
+                "phase, written_by, authority, class — this record's own description of itself,"
+                " which cannot stay v2's without lying: v2 was written before any sku-b artifact"
+                " existed and this one is written after the interrupted session's",
+                "generated_at, git — stamped by the producer on every build",
             ],
         },
         "attempts": {
-            "verbatim": ONE_ATTEMPT,
+            "verbatim": RESUME_CLAUSE,
             "count": 1,
-            "cap_usd": 0.35,
+            "cap_usd": RESUME_CAP_USD,
             "on_failure": (
                 "a failed bar closes B as 'instrument not ready' BY MEASUREMENT. No retry, no"
                 " re-prompt, no second draw: a bar re-run after its own result is not the bar that"
@@ -398,6 +669,53 @@ def main(argv: list[str] | None = None) -> int:
                 "if_refused": "a stratified redraw is a different pack and this one is already built",
             },
         ],
+        "resume": {
+            "verbatim": RESUME_CLAUSE,
+            "authority": "docs/SPEC.md amendment 3.17 (11), ratified at the sku-b-run acceptance",
+            "readings": {key: RESUME_READINGS[key] for key in ("a", "b", "c", "d", "e")},
+            "bars_unchanged": BARS_UNCHANGED,
+            "supersedes_clause": {
+                "verbatim": ONE_ATTEMPT,
+                "why": (
+                    "SPEC 3.17 (6)'s clause is what the first session was bought under and it is"
+                    " not deleted by (11): the 17 answers it paid for stand, and this record quotes"
+                    " it so a reader can see which clause each half of the population came from"
+                ),
+            },
+            "population": {
+                "registered": 138,
+                "already_bought": 17,
+                "to_buy": 121,
+                "why": (
+                    "the resumed session's population is exactly resume.bought_already.unbought."
+                    " Bar 1's denominator is still R2's 108 sent pages and bar 3's is still the 30"
+                    " adjudicated rows — the resume completes the population, it does not redefine"
+                    " it"
+                ),
+            },
+            "warmup": warmup,
+            "bought_already": already,
+            "instrument_frozen": {
+                "verbatim": RESUME_READINGS["b"],
+                "prompts": "the two shas in `instruments` below, byte-equal to v2",
+                "serving_pin": "resume.bought_already.serving_pin, byte-equal to what the run served",
+                "named_revision": (
+                    "the superscript kopeck and the asterisk qualifier the team lead's calibration"
+                    " read found are a POST-pilot revision registered beside these prompts, never an"
+                    " edit inside the measurement. A prompt revised mid-pilot makes the 17 bought"
+                    " answers and the 121 resumed ones two different instruments"
+                ),
+            },
+            "calibration_read_is_not_a_bar": {
+                "verbatim": RESUME_READINGS["e"],
+                "why": (
+                    "6 of 13 pairs is a READ of a 17-page prefix, and bar 2 is registered over the"
+                    " completed population. Recorded because it is the strongest available signal"
+                    " about what the resumed session will measure, and gating nothing because a"
+                    " prefix is not the sample the bar was registered on"
+                ),
+            },
+        },
         "instruments": {
             "positions_post_gm4": prompts.prompt_sha256("positions_post_gm4"),
             "positions_text_gm4": prompts.prompt_sha256("positions_text_gm4"),
@@ -451,6 +769,17 @@ def main(argv: list[str] | None = None) -> int:
     print(
         f"  ladder {positions.ladder_sha256()[:16]}… · prompts {record['instruments']['positions_post_gm4'][:8]}…/"
         f"{record['instruments']['positions_text_gm4'][:8]}…"
+    )
+    resume = record["resume"]
+    print(
+        f"  resume        {resume['population']['already_bought']} bought,"
+        f" {resume['population']['to_buy']} to buy of {resume['population']['registered']}"
+        f" · cap ${record['attempts']['cap_usd']:.2f}"
+        f"\n  warm-up page  {warmup['page']['file']} ({warmup['page']['bytes'] / 1e6:.2f} MB,"
+        f" 1 of {warmup['page']['population']} never sent)"
+        f"\n  warm-up row   {warmup['text']['id']} {warmup['text']['carrier']}"
+        f" ({warmup['text']['text_chars']} chars, 1 of {warmup['text']['population']} outside the pack)"
+        f"\n  supersedes    {rel(SUPERSEDED)} {record['supersedes']['sha256'][:16]}…"
     )
     return 0
 
