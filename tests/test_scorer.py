@@ -629,3 +629,63 @@ def test_select_serving_config_returns_the_rule_it_applied():
     assert decision["configs"] == ["A", "B"]
     assert decision["tolerance"] == 0.005
     assert decision["must_stay_passing"] == {"G1b": True, "G1d": True, "G1e": True}
+
+
+# --- the sku-b position bars -------------------------------------------------
+#
+# Hand-computed on three posts, so the macro mean and the micro pooling cannot
+# be the same number by construction — that is the whole disagreement the
+# registered reading (R1) turns on.
+
+BRANDS_GOLD = [
+    {"rud", "raw:kashtan", "svoia-liniia"},  # 3 gold, 2 found -> 2/3
+    {"lasunka"},  # 1 gold, 1 found -> 1/1
+    {"limo", "raw:laska"},  # 2 gold, 0 found -> 0/2
+]
+BRANDS_PRED = [
+    {"rud", "svoia-liniia", "raw:invented"},
+    {"lasunka"},
+    {"halychyna"},
+]
+
+
+def test_leaflet_brand_recall_macro_is_the_mean_of_the_post_recalls():
+    reading = scorer.leaflet_brand_recall(BRANDS_GOLD, BRANDS_PRED)
+    assert reading["per_post"] == pytest.approx([2 / 3, 1.0, 0.0])
+    # (0.6667 + 1 + 0) / 3 = 0.5556, and the micro pooling is 3/6 = 0.5 — a post
+    # with one brand carries a third of the macro and a sixth of the micro.
+    assert reading["macro"] == pytest.approx(0.5555555556, abs=1e-9)
+    assert reading["micro"] == pytest.approx(0.5)
+    assert (reading["n_posts"], reading["n_gold"], reading["n_extracted"]) == (3, 6, 5)
+
+
+def test_leaflet_brand_recall_reports_precision_over_everything_extracted():
+    reading = scorer.leaflet_brand_recall(BRANDS_GOLD, BRANDS_PRED)
+    # 3 of the 5 extracted keys are in the gold: `raw:invented` and `halychyna` are not.
+    assert reading["precision_micro"] == pytest.approx(0.6)
+    silent = scorer.leaflet_brand_recall([{"rud"}], [set()])
+    assert silent["precision_micro"] is None and silent["macro"] == 0.0
+
+
+def test_leaflet_brand_recall_refuses_an_empty_gold_set():
+    with pytest.raises(ValueError, match="post 1 has an empty gold set"):
+        scorer.leaflet_brand_recall([{"rud"}, set()], [{"rud"}, {"limo"}])
+    with pytest.raises(ValueError, match="2 gold posts against 1 predicted"):
+        scorer.leaflet_brand_recall([{"rud"}, {"limo"}], [{"rud"}])
+    with pytest.raises(ValueError, match="at least one non-empty gold set"):
+        scorer.leaflet_brand_recall([], [])
+
+
+def test_text_tier_accuracy_counts_agreements_over_the_rows_it_was_given():
+    gold = ["position", "product_mention", "none", "position", "brand_mention"]
+    pred = ["position", "position", "none", "position", "none"]
+    # 3 of 5 agree; `none` is a rung like any other here, and the two disagreements
+    # are the two directions — a tier read too high and a row the model emptied.
+    assert scorer.text_tier_accuracy(gold, pred) == pytest.approx(0.6)
+
+
+def test_text_tier_accuracy_refuses_an_empty_or_ragged_comparison():
+    with pytest.raises(ValueError, match="every adjudicated row was excluded"):
+        scorer.text_tier_accuracy([], [])
+    with pytest.raises(ValueError, match="3 gold rows against 2 predicted"):
+        scorer.text_tier_accuracy(["none"] * 3, ["none"] * 2)

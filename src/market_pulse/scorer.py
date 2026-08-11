@@ -551,3 +551,64 @@ def gate_verdicts(values: dict, bars: dict) -> dict:
             ],
         }
     return verdicts
+
+
+# --- the sku-b position bars (SPEC amendment 3.17 (6)) -----------------------
+#
+# Two of the three bars are arithmetic and live here; the third — price-pair
+# accuracy — is a team-lead read of the dump against the page images (SPEC §10)
+# and has no function, because the executor never scores its own sample.
+
+
+def leaflet_brand_recall(y_true: list[set[str]], y_pred: list[set[str]]) -> dict:
+    """Bar 1 — brand recall per POST, macro-averaged. R1/R2/R3 of the pilot's registration.
+
+    Both sides arrive as sets of the SAME gold key (the reference's `gold.definition`), because
+    ids and printed names are two spaces and a comparison across them scores «Каштан» against a
+    ``brand_id``. Rendering them is the caller's job; deciding they are comparable is not something
+    this function can check, so it is stated where both are built.
+
+    The bar is the MACRO mean of per-post recall: one reviewer judged a whole post, and a macro mean
+    weighs a post with one brand like a post with four — which is what "per page" asked for and the
+    gold cannot deliver. ``micro`` (all pairs pooled) and ``precision_micro`` are reported beside it
+    and gate nothing; precision is not a gate because the gold is one reviewer's reading in the
+    REVIEW class of SPEC 3.16 (1), so a brand the model found and the reviewer did not is not
+    evidence of an error.
+
+    An empty gold set is refused rather than skipped: recall is undefined there, and the posts it
+    happens to are named in the registration (R3) so the caller drops them deliberately.
+    """
+    if len(y_true) != len(y_pred):
+        raise ValueError(f"{len(y_true)} gold posts against {len(y_pred)} predicted")
+    if not y_true:
+        raise ValueError("no scoreable posts: recall needs at least one non-empty gold set")
+    for index, gold in enumerate(y_true):
+        if not gold:
+            raise ValueError(f"post {index} has an empty gold set — recall over it is undefined")
+    per_post = [len(gold & pred) / len(gold) for gold, pred in zip(y_true, y_pred)]
+    hits = sum(len(gold & pred) for gold, pred in zip(y_true, y_pred))
+    extracted = sum(len(pred) for pred in y_pred)
+    return {
+        "macro": sum(per_post) / len(per_post),
+        "micro": hits / sum(len(gold) for gold in y_true),
+        "precision_micro": (hits / extracted) if extracted else None,
+        "n_posts": len(per_post),
+        "n_gold": sum(len(gold) for gold in y_true),
+        "n_extracted": extracted,
+        "per_post": per_post,
+    }
+
+
+def text_tier_accuracy(y_true: list[str], y_pred: list[str]) -> float:
+    """Bar 3 — the share of adjudicated rows whose tier the model got right.
+
+    Both sides come out of ``positions.tier_from_presence`` / ``positions.tier``, one ladder, or the
+    bar measures a drift between two ladders and reports it as model error. A row the parser refused
+    is not a row that answered ``none``: the caller excludes and counts it (R5) before this sees the
+    pair, because an unreadable reply and an empty answer are different outcomes.
+    """
+    if len(y_true) != len(y_pred):
+        raise ValueError(f"{len(y_true)} gold rows against {len(y_pred)} predicted")
+    if not y_true:
+        raise ValueError("no scoreable rows: every adjudicated row was excluded")
+    return sum(gold == pred for gold, pred in zip(y_true, y_pred)) / len(y_true)
