@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """The universality dry run: what follows `config/registry.yaml` when the domain changes ($0).
 
-ONE-SHOT, deliverable B of `docs/PROMPT-uni-a.md`. It answers one question with measurements
+ONE-SHOT, deliverable B of `docs/PROMPT-uni-a.md`, re-run as the regression proof of uni-b
+deliverable D(4). It answers one question with measurements
 instead of a reading of the code: if the operator swapped the tracked category from dairy to
 coffee tomorrow, which instruments would follow the registry, which would need a new
 registration, and which carry the old domain hard-coded.
@@ -11,7 +12,9 @@ three real coffee brands, the live `sources` block carried over unchanged — dr
 shipped library functions. **No live file is written and no live file is read for anything but
 its bytes**: the corpus under `data/raw/` is read, never modified, the live registry, the live
 lexicon and every registered prompt are read and their shas recorded beside the toy ones. The
-only artifact is `results/uni_probe.json`.
+only artifact is `results/uni_probe_v2.json` — uni-a's `results/uni_probe.json` is a DATED
+measurement of the code as it stood before SPEC 3.17 (8) and is never overwritten (the default
+`--out` refuses it by name).
 
 No model is called and no money is spent: every step below is a deterministic function of the
 repository's own code.
@@ -37,14 +40,15 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from build_audit_pack import git_state  # noqa: E402
 
-from market_pulse import positions, prompts, scorer, yield_screen  # noqa: E402
+from market_pulse import lexicon, positions, prompts, scorer, yield_screen  # noqa: E402
 from market_pulse.brands import watchlist_aliases  # noqa: E402
 from market_pulse.registry import load_registry  # noqa: E402
 
 REGISTRY = REPO_ROOT / "config" / "registry.yaml"
-LEXICON = REPO_ROOT / "data" / "category_lexicon_draft.json"
+LEXICON = lexicon.LAW
 POSTS = REPO_ROOT / "data" / "raw" / "posts"
-RECORD = REPO_ROOT / "results" / "uni_probe.json"
+RECORD = REPO_ROOT / "results" / "uni_probe_v2.json"
+SEALED = REPO_ROOT / "results" / "uni_probe.json"
 
 SAMPLE_ROWS = 2000
 """The floor the brief sets for step 2. The sample is taken deterministically — channel files in
@@ -52,6 +56,12 @@ sorted order, rows in file order, texted rows only — and the draw stops at the
 takes it to or past this number, so the count is a property of the corpus and not of a seed."""
 
 FOLLOWS = "follows-registry"
+FOLLOWS_LAW = "follows-registry(law)"
+"""uni-b's verdict for the pre-filter's category half: the vocabulary is a FILE, so a registry edit
+alone is still not enough — but the file is law now (`config/lexicon.yaml`), and it REFUSES to load
+against a taxonomy whose display names its stems do not name. One edit, checked, instead of a
+silent carry-over."""
+
 NEEDS_REGISTRATION = "needs-new-registration"
 HARD_CODED = "hard-coded"
 UNMEASURED = "UNMEASURED"
@@ -218,25 +228,41 @@ def write_toy_registry(directory: Path) -> Path:
     return path
 
 
-def write_toy_lexicon(directory: Path, live: dict) -> Path:
-    """A toy lexicon in the shipped shape: the live `endings`, coffee stems, no draft families.
+def toy_stems_the_law_accepts(toy_registry) -> tuple[list[str], list[str]]:
+    """TOY_STEMS split by the law's own rule: a stem must be a PREFIX of a display name.
+
+    Measured, not chosen. «еспресо», «лате» and «капучино» are words a Ukrainian coffee post
+    actually uses and NONE of them is a prefix of «Кава» / «Кава мелена» / «Кава в зернах» /
+    «Кава розчинна» / «Кава в капсулах», so the law refuses them — correctly, and that refusal is
+    a cost a new domain pays: either the registry names those subcategories, or each stem is
+    exempted by name the way `ru_variants` exempts the Russian forms. Never by loosening the rule.
+    """
+    unmatched = lexicon.unmatched_stems({"coffee": TOY_STEMS}, toy_registry.taxonomy)
+    rejected = unmatched.get("coffee", [])
+    return [stem for stem in TOY_STEMS if stem not in rejected], rejected
+
+
+def write_toy_lexicon(directory: Path, live: dict, stems: list[str]) -> Path:
+    """A toy vocabulary law in the shipped shape: the live `endings` and `units`, coffee stems.
 
     A separate file because the pre-filter's category half reads a LEXICON, not the registry —
-    which is the finding this probe exists to price, and it cannot be measured without building
-    the second file the finding is about.
+    which is the finding this probe priced in uni-a. Since SPEC 3.17 (8) that file is LAW
+    (`config/lexicon.yaml`) rather than a draft nobody could reach from a registry edit, so the
+    toy is written in the law's own shape and loaded through the law's own loader, guard included.
     """
     toy = {
         "status": "toy-not-law — built at run time by scripts/uni_probe.py, never committed",
-        "note": "the coffee equivalent of data/category_lexicon_draft.json's tracked half",
+        "note": "the coffee equivalent of config/lexicon.yaml's tracked half",
         "matcher": live["matcher"],
         "endings": live["endings"],
+        "units": live["units"],
         "known_collision": "«кав» + «а» matches «кава» and also the surname «Кавун» is NOT matched"
         " (the stem is bounded by the ending list, as shipped)",
-        "tracked": {"coffee": TOY_STEMS},
-        "draft": {},
+        "tracked": {"coffee": stems},
+        "ru_variants": [],
     }
-    path = directory / "category_lexicon_toy.json"
-    path.write_text(json.dumps(toy, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    path = directory / "lexicon_toy.yaml"
+    path.write_text(yaml.safe_dump(toy, allow_unicode=True, sort_keys=False), encoding="utf-8")
     return path
 
 
@@ -349,7 +375,9 @@ def step_1_category_keys(toy, live) -> dict:
     }
 
 
-def step_2_prefilter(rows, sample, toy_registry, live_lexicon, toy_lexicon) -> dict:
+def step_2_prefilter(
+    rows, sample, toy_registry, live_lexicon, toy_lexicon, toy_lexicon_path
+) -> dict:
     """The pre-filter over the corpus, under the toy vocabulary and under the live one."""
     toy_aliases = yield_screen.compile_aliases(watchlist_aliases(toy_registry.watchlist))
     toy_compiled = yield_screen.compile_categories(toy_lexicon)
@@ -368,15 +396,29 @@ def step_2_prefilter(rows, sample, toy_registry, live_lexicon, toy_lexicon) -> d
         "measured": dairy_under_toy,
         "ok": dairy_under_toy is None,
     }
+    # the law's own guard, MEASURED rather than described: the live vocabulary refuses to load
+    # against the toy taxonomy, which is what stops a domain change from carrying dairy stems
+    # forward in silence. This is the difference between uni-a's HARD_CODED and uni-b's
+    # FOLLOWS_LAW, and it is computed here, not asserted in the record.
+    try:
+        lexicon.load_lexicon(LEXICON, taxonomy=toy_registry.taxonomy)
+        guard = {"refused": False, "reason": None}
+    except ValueError as error:
+        guard = {"refused": True, "reason": str(error)}
+    toy_loads = lexicon.load_lexicon(toy_lexicon_path, taxonomy=toy_registry.taxonomy)
+    verdict = FOLLOWS_LAW if guard["refused"] and toy_loads["tracked"] else HARD_CODED
     return {
-        "verdict": HARD_CODED,
+        "verdict": verdict,
         "asks": "does the deterministic pre-filter follow a registry change?",
         "halves": {
             "brand half — yield_screen.compile_aliases(watchlist_aliases(registry.watchlist))": (
                 FOLLOWS
             ),
-            "category half — yield_screen.compile_categories(lexicon)": HARD_CODED,
+            "category half — yield_screen.compile_categories(load_lexicon(config/lexicon.yaml))": (
+                verdict
+            ),
         },
+        "the_law_refuses_a_taxonomy_its_stems_do_not_name": guard,
         "sample": sample,
         "under_the_toy_lexicon": toy_yield,
         "under_the_live_lexicon_with_the_toy_registry": leak_yield,
@@ -388,11 +430,15 @@ def step_2_prefilter(rows, sample, toy_registry, live_lexicon, toy_lexicon) -> d
             "passes_under_the_live_lexicon": dairy_under_live is not None,
             "reading": (
                 "the pre-filter's brand half IS registry-driven — the aliases come from the"
-                " watchlist it was handed. Its category half is not: yield_screen.compile_"
-                "categories takes a LEXICON, and the only lexicon in the repository is"
-                " data/category_lexicon_draft.json, whose tracked half is dairy and ice-cream."
-                " Swap the registry and nothing about the category matcher moves: the toy run"
-                " needed a second file, written by this probe, to have any coffee stems at all"
+                " watchlist it was handed. Its category half still reads a FILE: yield_screen."
+                "compile_categories takes a lexicon, never a Taxonomy, and the toy run needs a"
+                " second toy file to have any coffee stems at all. What changed in uni-b is what"
+                " happens when the two disagree. In uni-a the file was data/category_lexicon_"
+                "draft.json, `status: draft-not-law`, unreachable from any registry edit, and a"
+                " coffee registry beside a dairy lexicon produced a silent yield of dairy rows."
+                " Now the file is config/lexicon.yaml, law, and loading it against the toy"
+                " taxonomy RAISES — see the_law_refuses_a_taxonomy_its_stems_do_not_name. The"
+                " vocabulary is still one hand-authored file; it is no longer one nobody notices"
             ),
         },
         "evidence": (
@@ -635,15 +681,22 @@ def main(argv: list[str] | None = None) -> int:
     )
     args = parser.parse_args(argv)
 
+    if args.out.resolve() == SEALED.resolve():
+        raise SystemExit(
+            f"{rel(SEALED)} is uni-a's dated measurement of the code BEFORE SPEC 3.17 (8) and is"
+            " not re-derivable under today's schema. Write beside it, never over it."
+        )
+
     live_registry = load_registry(REGISTRY)
-    live_lexicon = json.loads(LEXICON.read_text(encoding="utf-8"))
+    live_lexicon = lexicon.load_lexicon(LEXICON, taxonomy=live_registry.taxonomy)
 
     with tempfile.TemporaryDirectory(prefix="uni-a-") as tmp:
         directory = Path(tmp)
         toy_registry_path = write_toy_registry(directory)
-        toy_lexicon_path = write_toy_lexicon(directory, live_lexicon)
         toy_registry = load_registry(toy_registry_path)
-        toy_lexicon = json.loads(toy_lexicon_path.read_text(encoding="utf-8"))
+        accepted_stems, rejected_stems = toy_stems_the_law_accepts(toy_registry)
+        toy_lexicon_path = write_toy_lexicon(directory, live_lexicon, accepted_stems)
+        toy_lexicon = lexicon.load_lexicon(toy_lexicon_path, taxonomy=toy_registry.taxonomy)
 
         rows, sample = corpus_sample(args.rows)
         steps = {
@@ -651,7 +704,7 @@ def main(argv: list[str] | None = None) -> int:
                 toy_registry, live_registry
             ),
             "2 · the deterministic pre-filter over the corpus": step_2_prefilter(
-                rows, sample, toy_registry, live_lexicon, toy_lexicon
+                rows, sample, toy_registry, live_lexicon, toy_lexicon, toy_lexicon_path
             ),
             "3 · the strict parser and the tier ladder": step_3_parser_and_ladder(toy_registry),
             "4 · brand resolution over the toy watchlist": step_4_brand_resolution(toy_registry),
@@ -671,11 +724,23 @@ def main(argv: list[str] | None = None) -> int:
             "lexicon": {
                 "path": "a tempdir, deleted at exit — never committed",
                 "sha256": sha256_of(toy_lexicon_path),
-                "tracked": {"coffee": TOY_STEMS},
+                "tracked": {"coffee": accepted_stems},
+                "stems_the_law_refused": rejected_stems,
+                "why_they_were_refused": (
+                    "config/lexicon.yaml's guard: a tracked stem must be a prefix of one of its"
+                    " group's display names. «еспресо», «лате» and «капучино» are words a coffee"
+                    " post uses and none of them is a prefix of «Кава …», so a real coffee"
+                    " taxonomy either names those subcategories or exempts each stem by name, the"
+                    " way ru_variants exempts «кефир»/«творог»/«морожен». Measured here rather"
+                    " than worked around: this is what the law costs, and it is the cost of not"
+                    " being able to carry dairy stems forward in silence"
+                ),
                 "why_it_exists": (
                     "the brief anticipated one toy file. The pre-filter's category half reads a"
                     " lexicon and not the registry, so a second toy file had to be built for step"
-                    " 2 to run at all — that necessity is itself a finding (Dv121)"
+                    " 2 to run at all — that necessity is itself a finding (Dv121). Since SPEC"
+                    " 3.17 (8) the toy is written in the LAW's shape and loaded through the law's"
+                    " loader, guard included"
                 ),
             },
         }
@@ -683,8 +748,18 @@ def main(argv: list[str] | None = None) -> int:
     verdicts = {name: step["verdict"] for name, step in steps.items()}
     record = {
         "generated_at": datetime.now(UTC).isoformat(timespec="seconds"),
-        "phase": "uni-a — the universality dry run (deliverable B)",
-        "contract": "docs/PROMPT-uni-a.md deliverable B",
+        "phase": "uni-b — the universality dry run, re-run (deliverable D(4))",
+        "contract": "docs/PROMPT-uni-a.md deliverable B; re-run per docs/PROMPT-uni-b.md D(4)",
+        "supersedes": {
+            "record": "results/uni_probe.json",
+            "sha256": sha256_of(SEALED),
+            "reason": (
+                "uni-a's run, kept as the dated measurement of the code before SPEC 3.17 (8). It"
+                " is not overwritten and not re-derivable: step 2 read a draft lexicon that is no"
+                " longer what the pre-filter loads, and the schema's fifth presence field was"
+                " named fat"
+            ),
+        },
         "asks": "what follows config/registry.yaml when the tracked category changes",
         "cost_usd": 0.0,
         "no_model": "every number here is a deterministic function of this repository's code."
@@ -696,6 +771,8 @@ def main(argv: list[str] | None = None) -> int:
         ),
         "verdict_vocabulary": {
             FOLLOWS: "the value flows from the registry it was handed — a registry edit is enough",
+            FOLLOWS_LAW: "a second file carries it, but that file is LAW: it must agree with the"
+            " registry's display names and refuses to load when it does not",
             NEEDS_REGISTRATION: "a new domain needs a new registered artifact, authored by hand",
             HARD_CODED: "the domain is fixed in code or in a second file the registry cannot reach",
             UNMEASURED: "the step could not be measured; the reason is stated and never guessed",
@@ -705,7 +782,12 @@ def main(argv: list[str] | None = None) -> int:
         "toy": toy,
         "live": {
             "registry": {"path": rel(REGISTRY), "sha256": sha256_of(REGISTRY), "untouched": True},
-            "lexicon": {"path": rel(LEXICON), "sha256": sha256_of(LEXICON), "untouched": True},
+            "lexicon": {
+                "path": rel(LEXICON),
+                "sha256": sha256_of(LEXICON),
+                "status": "law (SPEC 3.17 (8)) — uni-a read data/category_lexicon_draft.json here",
+                "untouched": True,
+            },
             "prompts": {
                 "count": len(prompts.PROMPTS),
                 "positions": {
