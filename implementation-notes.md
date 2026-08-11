@@ -6734,3 +6734,40 @@ in that report, same reason as uni-a's: one fact, one home.
 Artifacts: `config/lexicon.yaml`, `src/market_pulse/lexicon.py`,
 `results/sku_pilot_prereg_v2.json` (beside the sealed v1), `results/uni_probe_v2.json`,
 `docs/PORTING.md` (updated), `docs/reports/uni-b.md`.
+
+## sku-b-prep — the positions serving path, before the paid pilot (2026-08-11, $0)
+
+**The deviations of this phase live in `docs/reports/sku-b-prep.md`, not here.** Dv133–Dv140 are
+filed in that report; one fact, one home.
+
+- **Dv133** — the team-lead docs commit is RED on its own checkout by construction (SPEC 3.17 (9)
+  reddens the marker enumeration; step 0.2 greens it). The brief names the failure and forbids any
+  other fix.
+- **Dv134** — `docs/STATUS.md` committed in step 0.1 though the brief's list omits it; STATUS.md's
+  own handoff paragraph authorises it.
+- **Dv135** — two producer scripts written for artifacts the brief names as files
+  (`write_sku_serving_pin.py`, `write_sku_projection.py`): a hand-built record drops the shared git
+  stamp and cannot be compared against code.
+- **Dv136** — the paid non-gold warm-up of 3.17 (9) is implemented although D2's bullet list omits
+  it; the authority header ratifies "smoke-before-legs".
+- **Dv137** — three existing tests moved with D1's code (the `info={}` call sites, the merge-state
+  uniqueness assertion, two refusal-message matches).
+- **Dv138** — `peft` installed into a SCRATCH venv (`--system-site-packages`), as the preflight's
+  own message instructs. No repo dependency moved; the preflight exits 1 under the plain
+  interpreter, which is correct.
+- **Dv139** — the projection's summary block is `against_the_cap`, not `verdict`: an existing guard
+  refuses a `verdict` key in `results/sku_*.json` and fired. The field was renamed, not the gate.
+- **Dv140** — deliverables landed out of the brief's numbering (0 → D1 → D3 → D4 → D2 → D5 → D6):
+  the driver is `git_state`'s caller six and reads the serving pin.
+
+Two things the report carries that are not deviations and are worth finding from here:
+
+- the in-run cap stop had **never been exercised** and raised `KeyError` on its first call; the
+  counter was per-leg against a per-run clock, and the formula re-added an already-billed cold
+  start (`9157118`);
+- `max_new_tokens: 256` in `results/captions_gm4_atb19.json` and `results/serving_visc_smoke.json`
+  is what `info` reported and NOT what was generated (400). Declared, never re-pinned.
+
+Artifacts: `src/market_pulse/provenance.py`, `src/market_pulse/serving.py` (POSITIONS + CONFIG_OPS),
+`local_llm.PositionsClient`, `scripts/positions_gm4_skub.py`, `results/sku_pilot_serving.json`,
+`results/sku_projection.json`, `docs/reports/sku-b-prep.md`.

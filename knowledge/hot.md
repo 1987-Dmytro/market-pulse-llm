@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-11 16:08:17 (every SessionStart)
+**Auto-refreshed:** 2026-08-11 17:59:21 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-e17ab43 docs(report): uni-b -- each commit proved green on its own checkout
-f6d30ec chore(vault): the uni-b tail -- the day's log, hot.md's corrected facts, the Dv pointer
-6f1e00a docs(report): uni-b
-e7ea9d8 feat(uni-b): the probe re-run -- step 2 now reads follows-registry(law)
-b1a2a63 feat(uni-b): L2-L5 de-literalled -- loud refusals where there were silent zeros
+25f921b docs(report): sku-b-prep -- the in-run cap stop, its crash and its fix
+9157118 fix(sku-b-prep): the cap's in-run stop CRASHED on its first call, and was never exercised
+2beff78 docs(report): sku-b-prep
+8530f97 docs(sku-b-prep): the importer count re-derived -- 51, not "some forty"
+de9a637 feat(sku-b-prep): results/sku_projection.json -- and the upper corner does not fit
 ```
 
 ## 📋 Recent decisions
@@ -30,16 +30,16 @@ b1a2a63 feat(uni-b): L2-L5 de-literalled -- loud refusals where there were silen
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-11 (arch-a ✅, uni-a ✅; **uni-b executed, awaiting acceptance**). **sku-a ✅,
-R1–R5 ratified, the 30-row text gold adjudicated, SPEC 3.17 (7) AND (8) law, the map drawn, the
-universality question answered and its three moves landed** — `docs/ARCHITECTURE.md`, the code
-graph, `docs/reports/uni-a.md` + `uni-b.md`, `docs/PORTING.md`, `config/lexicon.yaml`,
-`results/sku_pilot_prereg_v2.json`, `results/uni_probe_v2.json`, all $0. **Next: the operator's
-uni-b acceptance** (~15 min: sign prereg v2 + the report), then the joint review of the sku-b brief,
-then **sku-b** — one paid attempt, cap $0.35, a failed bar closes B by measurement. This block is
-hand-edited; the section above it is auto-generated — do NOT touch the marker. Long form:
-`implementation-notes.md` (Dv100–Dv120), `docs/reports/uni-a.md` (Dv121–Dv124), `uni-b.md`
-(Dv125–Dv132), the day logs [[2026-08-11]] / [[2026-08-10]], and the ADRs named inline below.
+**Last update:** 2026-08-11 (arch-a ✅, uni-a ✅, uni-b ✅ ПРИНЯТ; **sku-b-prep исполнен, ждёт
+приёмки**). **sku-a ✅, R1–R5 ратифицированы, голд text30 размечен, SPEC 3.17 (7)(8)(9) — закон,
+карта нарисована, универсальность закрыта, серв-путь позиций ПОСТРОЕН** — `docs/ARCHITECTURE.md`,
+граф кода, отчёты `uni-a.md` + `uni-b.md` + `sku-b-prep.md`, `docs/PORTING.md`,
+`config/lexicon.yaml`, `results/sku_pilot_prereg_v2.json`, `results/sku_pilot_serving.json`,
+`results/sku_projection.json`, `scripts/positions_gm4_skub.py`, всё за $0. **Next: приёмка
+sku-b-prep**, потом **sku-b-run** — одна платная попытка, кап $0.35. Блок правится руками; секция
+выше — авто-ген, маркер НЕ трогать. Длинная форма: `implementation-notes.md` (Dv100–Dv120 и
+указатели Dv133–Dv140), `docs/reports/uni-a.md` (Dv121–124), `uni-b.md` (Dv125–132),
+`sku-b-prep.md` (Dv133–140), дневники [[2026-08-11]] / [[2026-08-10]], ADR по ссылкам ниже.
 
 ## 🔥 What's Hot
 
@@ -47,19 +47,27 @@ hand-edited; the section above it is auto-generated — do NOT touch the marker.
 `docs/reports/<phase>.md`, own commit `docs(report): <phase>` — and **chat gets only the path**, not
 a summary beside it. Two relayed reports arrived mangled on 11.08; the team lead reads from disk.
 
-**WHAT sku-b MUST BUILD, FROM arch-a's MAP (adopted by the team lead as its build list).**
-(1) **The per-position price-pair dump** — the artifact bar 2 is SCORED from has no writer anywhere;
-every occurrence of the phrase is the bar's own wording (Dv115). (2) **A positions op on the worker**
-— today's answers exactly `info | batch | caption` and `CaptionClient.render` refuses any task but
-`caption_post_gm4`, so it would reject a `positions_post_gm4` job (Dv114). (3) **A pinned serving
-config BEFORE the run** — the prereg pins both prompt shas and registers none (Dv114). (4) **A
-numeric ≤10 MB guard when packing the job** — real code only on the caption leg
-(`MAX_PAYLOAD_MB = 8.0`); on the positions leg it is a docstring (Dv113).
+**sku-b's FOUR BUILD ITEMS ARE BUILT (sku-b-prep, 11.08, $0).** The per-position dump (17 columns
+DERIVED from the prereg's own sentence), the `positions` op with `PositionsClient`, the pinned
+serving config `results/sku_pilot_serving.json`, and the numeric payload guard — all landed and
+tested. What sku-b-run still has to do: re-stage the volume with a POSITIONS worker, then run
+`scripts/positions_gm4_skub.py --endpoint-id <id>`. **THE PROJECTION SITS ON THE CAP**
+(`results/sku_projection.json`): $0.1752 at the lower corner, **$0.3566 at the stated upper one,
+which is OVER $0.35**. The spread is one assumption — the decode uplift for a positions reply
+nothing has ever generated. An early stop is NOT a cheaper pilot: bar 1's page set is EXACTLY the
+108 (R2), so fewer pages moves the numerator and not the denominator.
 
-**`git_state()` ×5 COPIES IS FIX-ON-TOUCH (operator, 11.08).** The first phase that touches one of
-the five carriers, or writes a sixth provenance stamp, collapses them onto one function in `src/`
-with an equality test. Until then, leave them. (The candidate-dead question of the same day is
-closed: both files stay one-shot.)
+**TWO FOOTGUNS sku-b-run MUST NOT "FIX".** (1) `max_new_tokens: 256` in
+`results/captions_gm4_atb19.json` and `results/serving_visc_smoke.json` is what `info` REPORTED,
+not what was generated (400) — `describe()` is fixed in code; those two records stay wrong on
+purpose. (2) The preflight now needs a venv carrying `peft` (`--system-site-packages`); under the
+plain interpreter it exits 1, and that is the correct behaviour, not a failure.
+
+**`git_state()` IS ONE FUNCTION NOW: `market_pulse.provenance.git_state` (sku-b-prep).** The five
+copies delegate and `build_audit_pack.git_state` KEEPS ITS NAME — **51** scripts import it from
+there. They had drifted two ways, invisible on a clean tree: three sorted the dirty list and two
+did not, and each ignored a different set. `sort` is a named parameter, NOT a thing to standardise:
+every record on disk was written under one of the two readings.
 
 **THE CATEGORY VOCABULARY IS LAW NOW: `config/lexicon.yaml` (SPEC 3.17 (8), uni-b).** It carries the
 draft's own 14+2 stems, 36 endings and the six pre-filter `units` (ORDERED longest-first — «г»
@@ -100,24 +108,22 @@ rows price refusal discipline, the 14 rung rows price tiering, and the bar catch
 validator: 11 position · 3 product_mention · 0 brand_mention · 16 none, of the none-rows 12 carry
 ticks without a brand and 4 are all-empty pre-filter false positives.
 
-**SPEC 3.17 (7) AND (8) ARE IN THE FILE, AND THE PIN HOLDS THE STRIPPED TEXT.** Each amendment wears
-`<!-- sku-b-ratification[-N] begin/end -->` markers; `write_sku_prereg.registered_law` cuts out
-**every** marked block (uni-b evolved it from one — a strip that knew only (7) would have left (8)
-inside the hash) and the pin `973c8789…` is the sha of what is left. ONE strip function, called by
-the producer AND by the pin test. **Never re-pin the prereg**; a third block is `-3` and needs a
-line in the test that enumerates the names.
+**SPEC 3.17 (7)(8)(9) ARE IN THE FILE AND THE PIN HOLDS THE STRIPPED TEXT.** Each wears
+`<!-- sku-b-ratification[-N] begin/end -->`; `write_sku_prereg.registered_law` cuts out **every**
+marked block and the pin `973c8789…` is the sha of what is left. ONE strip function, called by the
+producer AND by the pin test. **Never re-pin the prereg** — a fourth block is `-4` and its only
+legal landing is one more name in the test's enumeration (sku-b-prep did exactly that for `-3`).
 
-**THE PRE-FILTER'S FRAME IS MOSTLY RECIPES, AND THAT IS THE RULE WORKING AS WRITTEN.** 769 of 31 638
-rows: posts 717/14 388 texted (4.98%), comments 52/10 875 (0.48%) — breakdown in
-`results/sku_prefilter_census.json`. Recipe feeds firing on «сир» beside an ingredient quantity
-dominate; 4 of the 30 drawn rows are direct false positives. Comments are 6.8% of the frame, so bar
-3 prices the POST leg; a comment bar of its own is a team-lead ruling after the pilot.
+**THE PRE-FILTER'S FRAME IS MOSTLY RECIPES — THE RULE WORKING AS WRITTEN.** 769 of 31 638 rows
+(posts 4.98%, comments 0.48%; `results/sku_prefilter_census.json`). Recipe feeds firing on «сир»
+beside an ingredient quantity dominate; 4 of the 30 drawn rows are direct false positives. Comments
+are 6.8% of the frame, so bar 3 prices the POST leg; a comment bar is a team-lead ruling after the
+pilot.
 
-**THE SIGNATURE STAMP MOVED `config/registry.yaml`'s SHA, AND FIVE SEALED RECORDS PIN THE OLD BYTES.**
+**THE SIGNATURE STAMP MOVED `config/registry.yaml`'s SHA; FIVE SEALED RECORDS PIN THE OLD BYTES.**
 `validate_opus_returns.py` and `read_opus_audit.py` REFUSE to run — correctly. **Do not re-pin any
-manifest.** To re-derive `results/opus_audit_5c1.json`, check the registry out at `d832477`;
-`tests/test_registry.py::registry_without_the_signature_stamp` strips the block and reproduces the
-signed bytes `c82d0cff…`, and that reconstruction is the only chain between the two.
+manifest.** To re-derive `results/opus_audit_5c1.json`: registry at `d832477`, and
+`tests/test_registry.py::registry_without_the_signature_stamp` reproduces the signed `c82d0cff…`.
 
 **THE AUDIT'S AND THE SITTING'S NUMBERS LIVE IN ADRs, NOT HERE.**
 [[opus-review-programme-close]]: 25/25 packs, 498/498 rows, `fn_matcher` **0**, all 102 misses
@@ -155,16 +161,11 @@ gave 164 vs 172 chars on two workers while `core.carriers` read the same terms. 
 `worker_id` is not a warm worker** — a slot keeps its id across scale-to-zero (that retracted vis-b's
 "one cold start"). Find the boot, subtract once, quote all-in and marginal separately.
 
-**KNOWN AND DELIBERATELY NOT FIXED:** `serve_handler.describe()` reports `max_new_tokens: 256` under
-`SERVING_CONFIG=CAPTION` while the path runs at **400** — provenance only; the counters use the real
-400. The fix needs a volume re-stage; the next session that opens the volume does it.
-
-**THE MIDDLE RUNG EXISTS: `scripts/preflight_serving_guards.py`, $0, RUN BEFORE PAYING.** It builds a
-REAL `Gemma4ForConditionalGeneration` from a tiny config (no download, CPU, seconds) and drives every
-serving guard both ways against real transformers + peft, carrying the vis-a guard body as its own
-positive control so it cannot degrade into a check that never looked. It exits 1 when the
-libraries are missing — an unrunnable preflight is a finding, never a pass. `make check` stays
-torch-free: no test imports it.
+**THE MIDDLE RUNG: `scripts/preflight_serving_guards.py`, $0, RUN BEFORE PAYING.** A REAL
+`Gemma4ForConditionalGeneration` from a tiny config (no download, CPU, seconds) drives every serving
+guard both ways — CAPTION's and, since sku-b-prep, POSITIONS' whole 3x4 op matrix, the payload
+boundary and the parser — each with a control that says it discriminates rather than merely refuses.
+13/13 PASS. `make check` stays torch-free: no test imports it.
 
 **THE VOLUME IS THE ONLY STANDING RESOURCE AND ITS CONTENTS ARE KNOWN.** `qw4nwleanc`, 100 GB, EU-RO-1,
 **$0.009722/h settled**. It holds `hf/` at revision `842da379…`, `venv/` with the pinned stack (`runpod
@@ -182,20 +183,18 @@ of which 42 are video. **This executor signed nothing** — the composition is t
 
 ## ⏭️ Next
 
-**uni-a IS EXECUTED AND WAITING ON THE OPERATOR ($0, ~20–30 min).** Three things to rule on:
-the **six LEAKs** (L1–L6, unfixed by contract — L1 is the lexicon above and blocks nothing in
-sku-b), **`docs/PORTING.md`** as the standing procedure for level (a) brands/channels and level (b)
-a new category, and the **`fat` SPEC question** with its ordering constraint. Evidence:
-`docs/reports/uni-a.md`, `results/uni_probe.json`.
+**sku-b-prep IS EXECUTED AND WAITING ON THE TEAM LEAD ($0).** Read `docs/reports/sku-b-prep.md`
+from disk. Four things want a word: (1) **the projection's upper corner does not fit** — $0.3566
+against the $0.35 cap, nothing tuned to make it; (2) an early stop breaks bar 1's registered page
+set (R2: exactly 108); (3) `max_new_tokens: 256` in two paid records stays wrong on purpose;
+(4) the preflight needs a venv with `peft`. Then **sku-b-run**: re-stage a POSITIONS worker and run
+`scripts/positions_gm4_skub.py --endpoint-id <id>` — ONE attempt, a failed bar closes B by
+measurement. **Then the 5c2 briefing.**
 
-**THEN the joint review of the sku-b brief, then sku-b:** two legs, cap $0.35, **ONE attempt**, a failed bar closes B by measurement. **Then the
-5c2 briefing.**
-
-**WHAT sku-b MUST NOT DO.** Re-run a bar after seeing its result; read the 159 available pages instead
-of the 108 the gold covers; write a renderer (both are built and tested —
-`prompts.positions_messages_page_gm4`, which refuses two images, and `positions_messages_text_gm4`);
-score its own sample (SPEC §10 — bar 2 is the team lead's read of the per-position dump against the
-page images); or read a parse failure as an empty answer.
+**WHAT sku-b-run MUST NOT DO.** Re-run a bar after seeing its result; read the 159 available pages
+instead of the 108 the gold covers; score its own sample (SPEC §10 — bar 2 is the team lead's read
+of the per-position dump against the page images); or read a parse failure as an empty answer. The
+driver refuses all four by construction; the one it cannot refuse is the first.
 
 **DEFERRED, DECIDED AFTER THE PILOT AND NOT BEFORE:** a two-stage leaflet read (OCR transcript → SKU
 from the text) — the operator's 10.08 proposal, recorded under "Отложено СОЗНАТЕЛЬНО" in
@@ -204,8 +203,10 @@ change either way.
 
 ## 🚧 Blockers
 
-**None on the critical path.** The 30-row pack is adjudicated and committed, R1–R5 are ratified, SPEC
-3.17 (7) is law, and the deny gap is closed.
+**None on the critical path.** The 30-row pack is adjudicated and committed, R1–R5 are ratified,
+SPEC 3.17 (7) AND (8) are law, and the deny gap is closed. The boot tax is 13.0K against a 9.0K
+target and this file is **6.36K tok against arch-a's 6.0K bar** — over by 0.36K after uni-b added
+two blocks and eight older ones were compressed to pay for them. Said, not hidden.
 
 **Budget is the live constraint.** Phase 4 stands at **$22.0663 of $25.00, $2.9337 left** (read
 2026-08-09 after the vis-c close, still settling — Dv33). `pod list -a` → `[]`, `serverless list` →
@@ -232,24 +233,21 @@ overturned since (parity 758/758, worst head movement 0.0000, [[srv2-program-clo
   vis-b paid $0.1581 to learn it. `serverless update` does not restart a worker, `--idle-timeout 60`
   does not stop one that failed a job, and **only `serverless delete` stops it**. **Stage the volume
   BEFORE the endpoint exists** and treat the code as frozen from the first request onward.
-- **A failing serverless worker bills exactly like a working one.** srv-2b's was `running` 31 minutes
-  at $0.00031/s with its job stuck in the queue. Watch **the first job's status**, not worker health.
-  Two more from that session: `runpod_guard`'s billing corroboration walks pods and volumes only, so
-  **serverless spend is invisible to it** (only the balance delta binds); and a remote `pgrep -f` inside
-  an ssh command **matches its own shell**.
-- **A `git fetch` that names a missing ref leaves the OLD `FETCH_HEAD`,** so the merge after it
-  "succeeds" and moves nothing (`Already up to date.` is also the signature of a no-op). End every
-  deploy with a **content** check of the files the runtime executes; `git bundle list-heads` names the
-  real ref in one command.
+- **A failing serverless worker bills exactly like a working one** — srv-2b's ran 31 min at
+  $0.00031/s with its job stuck in the queue. Watch **the first job's status**, not worker health.
+  Also: `runpod_guard` walks pods and volumes only, so **serverless spend is invisible to it**; and a
+  remote `pgrep -f` inside an ssh command **matches its own shell**.
+- **A `git fetch` naming a missing ref leaves the OLD `FETCH_HEAD`,** so the merge "succeeds" and
+  moves nothing (`Already up to date.` is also a no-op's signature). End every deploy with a
+  **content** check of what the runtime executes; `git bundle list-heads` names the real ref.
 - **`smoke_5b.py --record` defaults to `results/serving_5b.json` — the pod's cost anchor** ($0.5993/1000,
   $0.4611/pass, 4.071 s/row). Always pass an explicit path.
 - **RunPod's request policy is in MILLISECONDS and every briefing writes seconds.**
   `serving.execution_policy(3600, 7200)` is the one conversion point; the endpoint's own
   `--execution-timeout` takes **seconds** and stores ms. Set the endpoint-level timeout too.
-- **`assert_runtime_matches` pins three libraries and cannot be taught a fourth.** It skips any library
-  the frozen anchor (`results/verdict_45h2.json`) does not carry, so adding `peft` would pass every test
-  and never fire. peft's pin lives in `scripts/runbook_srv2b.md` (**0.20.0**) and the version is merely
-  REPORTED by `serve_handler.library_versions()`.
+- **`assert_runtime_matches` pins three libraries and cannot be taught a fourth** — it skips any the
+  frozen anchor (`results/verdict_45h2.json`) lacks, so a `peft` entry would pass every test and never
+  fire. peft's pin is in `scripts/runbook_srv2b.md` (**0.20.0**), only REPORTED at runtime.
 - **`relabel.read_ledger` writes a provenance string that is wrong for anything past phase 4** — for a
   5c1 phase name it renders `docs/PROMPT-5.c1captions.md` INSIDE a money record. Copy
   `scripts/caption_atb_5c1.py`'s own three-key anchor, not the helper.
