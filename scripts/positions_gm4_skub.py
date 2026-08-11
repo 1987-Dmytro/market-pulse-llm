@@ -746,12 +746,6 @@ def main(argv: list[str] | None = None, client=None) -> int:
         smoke = REPO_ROOT / "results" / "smoke"
         out = out if args.out else smoke / out.name
         record_path = record_path if args.record else smoke / record_path.name
-    for path in (out, record_path):
-        if path.exists():
-            raise SystemExit(
-                f"{path} already exists — it is what a paid run bought. Re-running would spend"
-                " again and overwrite the only copy: give --out/--record another path."
-            )
 
     reference = json.loads(args.reference.read_text(encoding="utf-8"))
     manifest = json.loads(args.manifest.read_text(encoding="utf-8"))
@@ -787,6 +781,17 @@ def main(argv: list[str] | None = None, client=None) -> int:
         for row in text_items[:3]:
             print(f"  row  {row['id']} {row['carrier']} {row['text'][:60]}…")
         return 0
+
+    # BELOW the dry run on purpose. `--dry-run` writes nothing, and the paid artifacts exist
+    # forever once a session has bought them — with this check above the early return, the $0 path
+    # the run contract puts in its first gate stops working the day it is first needed to look at
+    # the population without spending.
+    for path in (out, record_path):
+        if path.exists():
+            raise SystemExit(
+                f"{path} already exists — it is what a paid run bought. Re-running would spend"
+                " again and overwrite the only copy: give --out/--record another path."
+            )
 
     registry = load_registry(args.root / rel(REGISTRY))
     categories = positions.category_keys(registry.taxonomy)
