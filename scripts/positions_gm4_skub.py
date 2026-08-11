@@ -224,6 +224,27 @@ def spend_or_note(
     return balance, spent, None
 
 
+def log_run(ledger: dict | None, path: Path, balance, spent, note: str, cost_note=None) -> None:
+    """Append this run to the anchor's `runs` and persist it — on EVERY exit that billed.
+
+    One function and two callers, because the two exits used to disagree: the completed run
+    appended its entry and the (10)(a) refusal did not, so a session that paid for a boot and two
+    warm-ups and then refused left an anchor whose `runs` said nothing had happened. The record
+    carried the spend, but the ledger is what the next session reads.
+    """
+    if ledger is None:
+        return
+    ledger["runs"].append(
+        {
+            "at": datetime.now(UTC).isoformat(timespec="seconds"),
+            "balance": balance,
+            "step_spent_usd": None if spent is None else round(spent, 4),
+            "note": note + ("" if cost_note is None else f" — {cost_note}"),
+        }
+    )
+    path.write_text(json.dumps(ledger, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
 # --- the two populations ------------------------------------------------------------------------
 
 
@@ -1320,6 +1341,16 @@ def main(argv: list[str] | None = None, client=None) -> int:
             + "\n",
             encoding="utf-8",
         )
+        log_run(
+            ledger,
+            args.ledger,
+            balance,
+            spent,
+            f"REFUSED by the (10)(a) go/no-go: {verdict['gold_calls']} gold calls project"
+            f" ${verdict['projected_usd']:.4f} against ${budget:.4f}. Boot and the two warm-ups"
+            " were billed; no gold call was made and no attempt was consumed",
+            cost_note,
+        )
         raise SystemExit(
             f"REFUSED before the first gold call: the run projects"
             f" ${verdict['projected_usd']:.4f} against ${budget:.4f} left of the ${cap:.2f}"
@@ -1557,19 +1588,14 @@ def main(argv: list[str] | None = None, client=None) -> int:
     record_path.write_text(
         json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
-    if ledger is not None:
-        ledger["runs"].append(
-            {
-                "at": datetime.now(UTC).isoformat(timespec="seconds"),
-                "balance": balance,
-                "step_spent_usd": None if spent is None else round(spent, 4),
-                "note": f"{len(outcomes)} sources asked, {len(dumped)} positions extracted"
-                + ("" if cost_note is None else f" — {cost_note}"),
-            }
-        )
-        args.ledger.write_text(
-            json.dumps(ledger, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
-        )
+    log_run(
+        ledger,
+        args.ledger,
+        balance,
+        spent,
+        f"{len(outcomes)} sources asked, {len(dumped)} positions extracted",
+        cost_note,
+    )
 
     # per-source lines, not only aggregates: a runbook step can `test -s` this and a reader can see
     # which page or row produced what without opening the dump

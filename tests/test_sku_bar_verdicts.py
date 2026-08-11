@@ -411,3 +411,17 @@ def test_highest_tier_takes_the_best_rung_and_names_an_empty_answer():
     assert verdicts.highest_tier(["brand_mention", "position", "product_mention"]) == "position"
     assert verdicts.highest_tier(["brand_mention", "product_mention"]) == "product_mention"
     assert verdicts.highest_tier([]) == "none"
+
+
+def test_main_refuses_the_record_of_a_session_that_stopped_before_gold(tmp_path):
+    """The likeliest record anyone will point this at, and it used to crash on `REPO_ROOT / None`.
+
+    Measured on sku-b-v3: the (10)(a) go/no-go refused, so the session wrote a record with
+    `dump.path: None` and no answers at all. A producer that dies with a TypeError there says
+    nothing about why; the control below is the same record with the flag cleared, which gets past
+    this guard and fails on the pins instead.
+    """
+    tree = fixture_tree(tmp_path, stopped_before_gold=True)
+    with pytest.raises(SystemExit, match="stopped before the first gold call"):
+        run(tree)
+    assert run(fixture_tree(tmp_path, stopped_before_gold=False)) == 0

@@ -1096,6 +1096,51 @@ def test_an_explicit_project_stop_tightens_the_cap_and_never_replaces_it(
     assert written["projection"]["stop_at_usd"] == pytest.approx(0.05)
 
 
+def test_a_refusal_that_billed_a_boot_still_lands_in_the_ledger(tmp_path, monkeypatch, pin):
+    """Measured on the paid sku-b-v3 session: the (10)(a) refusal wrote its record and left the
+    anchor's `runs` EMPTY, so the ledger said nothing had happened after a boot and two warm-up
+    calls had been billed. The record carried the spend; the ledger is what the next session reads
+    to see what is left of the cap.
+
+    The control is the completed path, which always appended its own entry: one function, two
+    callers, and the two notes say which exit wrote them."""
+    ledger = ledgered(tmp_path, monkeypatch, pin, balance=10.0, anchor=10.30)
+    with pytest.raises(SystemExit, match="REFUSED before the first gold call"):
+        driver.main(
+            [
+                "--leg", "text",
+                "--out", str(tmp_path / "d.jsonl"),
+                "--record", str(tmp_path / "r.json"),
+                "--ledger", str(ledger),
+            ]
+        )  # fmt: skip
+    refused = json.loads(ledger.read_text(encoding="utf-8"))["runs"]
+    assert len(refused) == 1
+    assert refused[0]["step_spent_usd"] == pytest.approx(0.30)
+    assert "REFUSED by the (10)(a) go/no-go" in refused[0]["note"]
+    assert "no attempt was consumed" in refused[0]["note"]
+
+    other = ledgered(tmp_path / "ok", monkeypatch, pin, balance=10.0)
+    (tmp_path / "ok").mkdir(exist_ok=True)
+    assert (
+        driver.main(
+            [
+                "--leg",
+                "text",
+                "--out",
+                str(tmp_path / "ok.jsonl"),
+                "--record",
+                str(tmp_path / "ok.json"),
+                "--ledger",
+                str(other),
+            ]
+        )  # fmt: skip
+        == 0
+    )
+    done = json.loads(other.read_text(encoding="utf-8"))["runs"]
+    assert len(done) == 1 and "sources asked" in done[0]["note"]
+
+
 def test_a_half_explicit_smoke_never_writes_at_the_real_record_default(tmp_path, monkeypatch):
     """`--smoke --out X` left `--record` at its real default, because the redirect fired only when
     BOTH were defaulted. The $0 path would then plant a FAKE record at the paid run's own path —

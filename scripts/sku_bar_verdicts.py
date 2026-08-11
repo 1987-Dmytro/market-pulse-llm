@@ -340,6 +340,14 @@ def main(argv: list[str] | None = None) -> int:
         refuse(f"{rel(args.record)} does not exist — the bars are read from the run's own record")
     record = json.loads(args.record.read_text(encoding="utf-8"))
     prereg = json.loads(args.prereg.read_text(encoding="utf-8"))
+    # a (10)(a) refusal writes a record with no dump at all. Measured on the sku-b-v3 session,
+    # where this crashed on `REPO_ROOT / None` instead of saying what was wrong: the record of a
+    # session that bought nothing is a legitimate thing to point this at, and by far the likeliest.
+    if record.get("stopped_before_gold") or record["dump"].get("path") is None:
+        refuse(
+            f"{rel(args.record)} stopped before the first gold call — it has no dump and no"
+            " answers. There is nothing to score: the bars need the COMPLETED population of (11)"
+        )
     args.dump = args.dump or REPO_ROOT / record["dump"]["path"]
     # a smoke record must never be able to write the paid verdict, the F4 rule of the driver
     if args.out is None:
