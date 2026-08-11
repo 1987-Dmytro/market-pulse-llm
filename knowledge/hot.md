@@ -2,24 +2,24 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-11 17:59:21 (every SessionStart)
+**Auto-refreshed:** 2026-08-11 19:26:36 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-25f921b docs(report): sku-b-prep -- the in-run cap stop, its crash and its fix
-9157118 fix(sku-b-prep): the cap's in-run stop CRASHED on its first call, and was never exercised
-2beff78 docs(report): sku-b-prep
-8530f97 docs(sku-b-prep): the importer count re-derived -- 51, not "some forty"
-de9a637 feat(sku-b-prep): results/sku_projection.json -- and the upper corner does not fit
+4adfd91 docs(report): sku-b-prep -- fix pass
+aafbb43 feat(sku-b-prep-fix): F6 -- the idle tail enters the projection, and it costs
+0c11642 fix(sku-b-prep-fix): the cap discipline in the driver -- F1..F5
+305e48d feat(sku-b-prep-fix): a job the CLOCK killed is its own error (F1, half one)
+f2d1506 docs(decision): sku-b's serving configuration and its cap discipline
 ```
 
 ## 📋 Recent decisions
 
+- `sku-b-serving-and-cap-discipline.md` — sku-b's serving configuration and its cap discipline: the prep/run split, the base-off pin, and the three readings that keep one job from out-billing the cap
 - `INDEX.md` — Decision records
 - `sku-b-pilot-readings-ratified.md` — sku-b's five readings are ratified, the text gold is adjudicated, and bar 3's denominator is all 30 rows
-- `sitting-2026-08-10-composition-signed.md` — The 2026-08-10 sitting: «Варто» loses text matching, «Селянське» needs an anchor, the 141 names wait for the position layer, and the composition is signed
 
 ## 📅 Recent daily logs
 
@@ -30,32 +30,49 @@ de9a637 feat(sku-b-prep): results/sku_projection.json -- and the upper corner do
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-11 (arch-a ✅, uni-a ✅, uni-b ✅ ПРИНЯТ; **sku-b-prep исполнен, ждёт
-приёмки**). **sku-a ✅, R1–R5 ратифицированы, голд text30 размечен, SPEC 3.17 (7)(8)(9) — закон,
-карта нарисована, универсальность закрыта, серв-путь позиций ПОСТРОЕН** — `docs/ARCHITECTURE.md`,
-граф кода, отчёты `uni-a.md` + `uni-b.md` + `sku-b-prep.md`, `docs/PORTING.md`,
+**Last update:** 2026-08-11 20:10 (arch-a ✅, uni-a ✅, uni-b ✅, **sku-b-prep принят + фикс-пасс
+исполнен**). **sku-a ✅, R1–R5 ратифицированы, голд text30 размечен, SPEC 3.17 (7)(8)(9)(10) —
+закон, серв-путь позиций ПОСТРОЕН И ЗАЩИЩЁН ПО КАПУ** — `docs/ARCHITECTURE.md`, граф кода, отчёты
+`uni-a.md` + `uni-b.md` + `sku-b-prep.md` (+ секция `## Fix pass`), `docs/PORTING.md`,
 `config/lexicon.yaml`, `results/sku_pilot_prereg_v2.json`, `results/sku_pilot_serving.json`,
 `results/sku_projection.json`, `scripts/positions_gm4_skub.py`, всё за $0. **Next: приёмка
-sku-b-prep**, потом **sku-b-run** — одна платная попытка, кап $0.35. Блок правится руками; секция
-выше — авто-ген, маркер НЕ трогать. Длинная форма: `implementation-notes.md` (Dv100–Dv120 и
-указатели Dv133–Dv140), `docs/reports/uni-a.md` (Dv121–124), `uni-b.md` (Dv125–132),
-`sku-b-prep.md` (Dv133–140), дневники [[2026-08-11]] / [[2026-08-10]], ADR по ссылкам ниже.
+фикс-пасса**, потом **sku-b-run** — одна платная попытка, кап $0.35. Блок правится руками; секция
+выше — авто-ген, маркер НЕ трогать. Длинная форма: `implementation-notes.md` (Dv100–120 и указатели
+Dv133–147), `docs/reports/uni-a.md` (Dv121–124), `uni-b.md` (Dv125–132), `sku-b-prep.md`
+(Dv133–147), дневники [[2026-08-11]] / [[2026-08-10]], ADR по ссылкам ниже.
 
 ## 🔥 What's Hot
+
+**ПРОЕКЦИЯ ВЫШЛА ЗА КАП В ДВУХ УГЛАХ ИЗ ЧЕТЫРЁХ — И ЭТО ГЛАВНОЕ ЧИСЛО ДЛЯ sku-b-run (20:10).**
+Хвост idle-timeout (60 с = $0.0184, F6) вошёл во все проекции: $0.1936 / $0.2106 внизу, **$0.3580 и
+$0.3750 в обоих ЗАЯВЛЕННЫХ углах — выше $0.35**. Практическое чтение: **sku-b-run скорее всего
+откажет сам себе на go/no-go** SPEC 3.17 (10)(a), если warm-up не померяет декод короче отношения
+зарегистрированных потолков. По (10)(a) такой отказ стоит бут + два не-голд вызова (~$0.08–0.10) и
+**НЕ расходует попытку** — пилот возвращается тимлиду за v3 по измеренной цене. Ничего не
+подкручено; `results/sku_projection.json :: against_the_cap` говорит это сам, тест пиннит.
+
+**ЗАКОН КАПА ИСПОЛНЕН В КОДЕ (SPEC 3.17 (10), фикс-пасс).** (a) go/no-go после двух warm-up вызовов,
+каждая нога по СВОЕЙ мерке, отказ ДО первого голд-вызова: дамп не пишется вообще, запись несёт
+`stopped_before_gold: true`. (b) стоп посреди ноги — находка про КАП, не про инструмент. (c)
+`JOB_TIMEOUT_S` 1800 → **900** (1800 с = $0.5520 = 1.58× капа при гейте только МЕЖДУ джобами; 900 с
+= $0.2760), и джоб, убитый ЧАСАМИ (`serving.JobExpired`, только `TIMED_OUT` + дедлайн клиента),
+кончает ВЕСЬ ран. `--project-stop-usd` теперь `min()`, а не замена. Арифметика F2 держится на том,
+что бут биллится на `info`-хендшейке — **проверено в `serve_handler.Worker.__call__`** (загрузка на
+первом джобе любого op), это единственное допущение, ломающее go/no-go, если бы было иначе.
+
+**ПРАВИЛО РАСТУЩЕГО ЗАКОНА ПОДТВЕРЖДЕНО ВТОРОЙ РАЗ (`-4`).** Стрип name-agnostic → пин
+`973c8789…` воспроизводится при любом числе блоков; перечисление имён в `test_sku_prereg.py`
+НАРОЧНО буквальное → каждая новая поправка красит ровно один тест. Лечение всегда одно: ОДНА строка
+в перечислении + одна `not in law`, step 0 брифа. **Никогда не пере-пиннивать прережку.**
 
 **NEW REPORT PROTOCOL, IN FORCE FROM uni-a (operator, 11.08).** The phase report is a FILE —
 `docs/reports/<phase>.md`, own commit `docs(report): <phase>` — and **chat gets only the path**, not
 a summary beside it. Two relayed reports arrived mangled on 11.08; the team lead reads from disk.
 
-**sku-b's FOUR BUILD ITEMS ARE BUILT (sku-b-prep, 11.08, $0).** The per-position dump (17 columns
-DERIVED from the prereg's own sentence), the `positions` op with `PositionsClient`, the pinned
-serving config `results/sku_pilot_serving.json`, and the numeric payload guard — all landed and
-tested. What sku-b-run still has to do: re-stage the volume with a POSITIONS worker, then run
-`scripts/positions_gm4_skub.py --endpoint-id <id>`. **THE PROJECTION SITS ON THE CAP**
-(`results/sku_projection.json`): $0.1752 at the lower corner, **$0.3566 at the stated upper one,
-which is OVER $0.35**. The spread is one assumption — the decode uplift for a positions reply
-nothing has ever generated. An early stop is NOT a cheaper pilot: bar 1's page set is EXACTLY the
-108 (R2), so fewer pages moves the numerator and not the denominator.
+**sku-b's ЧЕТЫРЕ ПУНКТА ПОСТРОЕНЫ (sku-b-prep, $0):** пер-позиционный дамп (17 колонок ВЫВЕДЕНЫ из
+собственного предложения прережки), op `positions` + `PositionsClient`, пин серв-конфига
+`results/sku_pilot_serving.json`, числовой гард пейлоада. Ранний стоп — НЕ более дешёвый пилот:
+набор страниц планки 1 — ровно 108 (R2), меньше страниц двигает числитель и не двигает знаменатель.
 
 **TWO FOOTGUNS sku-b-run MUST NOT "FIX".** (1) `max_new_tokens: 256` in
 `results/captions_gm4_atb19.json` and `results/serving_visc_smoke.json` is what `info` REPORTED,
@@ -92,14 +109,12 @@ pins the pack manifest at `2b941243…`; uni-b rebuilt it over the renamed ladde
 means. The chain to today's bytes is `supersedes` inside v2 — same shape as
 `sitting_45g2_manifest.json` and `calib_45e_manifest.json`, same instruction: **do not re-pin.**
 
-**THE FIVE RATIFIED READINGS ARE HOW EVERY sku-b NUMBER IS COMPUTED, AND THEIR HOME IS
-`results/sku_pilot_prereg_v2.json` — v1 `b1bfa40d…` is SEALED beside it, byte-equal on every bar,
-threshold, cap and reading; only the ladder and manifest shas moved (uni-b D(2)). NOT THIS FILE** ([[sku-b-pilot-readings-ratified]] is the long
-form). **R1** recall per POST, macro-averaged over the 15 non-empty-gold posts (the micro reading
-over 55 pairs is reported and gates nothing). **R2** the **108 SENT** pages, not the 159 available.
-**R3** the four empty-gold posts are a precision probe. **R4** bar 2 scores at n ≥ 10 pairs, reports
-at 1–9, NOT_REACHABLE at 0. **R5** unreadable replies excluded and counted (>10% blocks bar 3),
-n ≥ 20, carriers pooled. Thresholds, the $0.35 cap and "one attempt" never moved.
+**THE FIVE RATIFIED READINGS LIVE IN `results/sku_pilot_prereg_v2.json`, NOT HERE** (long form:
+[[sku-b-pilot-readings-ratified]]; v1 `b1bfa40d…` is SEALED beside it and byte-equal on every bar,
+threshold, cap and reading). **R1** recall per POST over the 15 non-empty-gold posts, macro.
+**R2** the **108 SENT** pages, never the 159. **R3** the four empty-gold posts are a precision
+probe. **R4** bar 2 scores at n ≥ 10, reports at 1–9, NOT_REACHABLE at 0. **R5** unreadable replies
+excluded and counted (>10% blocks bar 3), n ≥ 20, carriers pooled.
 
 **BAR 3's DENOMINATOR IS ALL 30 ADJUDICATED ROWS, AND 14 WAS REFUSED (team lead, 11.08).** Gold `none`
 is a VALUE — the prereg's `comparison` clause makes the model answer `[]` to match it. The 16 `none`
@@ -146,20 +161,20 @@ it covers every file-editing tool. Allow rules **union** with `~/.claude/setting
 `--allowedTools` cannot narrow a headless session; `--disallowedTools` can. `permissions.deny` is 4
 entries covering all four team-lead file classes (STATUS, SPEC, PRODUCT, PROMPT-*).
 
-**TWO RATES THAT MUST NOT BE CONFUSED, AND A COLD START PRICED ONCE.** Marginal **$0.002328/post**
-on the wide 5c2 manifest (3.32 img/post); **$0.0045–$0.0061** on ATB leaflets (5.68 img/post); cold
-start **$0.0733** pre-registered, $0.0563 measured. Never multiply an all-in per-post figure by a
-post count, and bill compute on **`worker_seconds`, not `wall_seconds`** (vis-c reconciles to 2%).
+**EVERY RATE sku-b NEEDS IS IN `results/sku_projection.json`, WITH ITS SOURCE PINNED.** Per-IMAGE
+marginal 2.3432 s (vis-b, the same 108 pages) corroborated at 2.3523 s (vis-c, 478 images, 0.4%
+apart); text row 4.262 s (srv-2d); rate $0.00030669/s; cold start $0.0563 measured / $0.0733
+pre-registered, carried as a RANGE. Never multiply an all-in session figure by a count — vis-b's
+$0.3869 is a balance delta and the record names it in `never_used`. Bill on `worker_seconds`.
 
 **A JOB CARRIES ITS IMAGES AS BASE64 AND RunPod's `/run` CEILING IS 10 MB.** One ATB post at six
 images is 3.68 MB, a slice of three up to 7.83 MB → the 19 ATB posts are 8 jobs. No volume path for
 the pictures (`data/annotation/**` is gitignored, they exist only on this Mac). The driver refuses
 rather than dropping images: a shortened album is a different instrument for that post.
 
-**GREEDY IS NOT BYTE-REPRODUCIBLE ACROSS WORKERS** — identical weights, config, prompt sha and images
-gave 164 vs 172 chars on two workers while `core.carriers` read the same terms. n = 1. **And a stable
-`worker_id` is not a warm worker** — a slot keeps its id across scale-to-zero (that retracted vis-b's
-"one cold start"). Find the boot, subtract once, quote all-in and marginal separately.
+**GREEDY IS NOT BYTE-REPRODUCIBLE ACROSS WORKERS** (164 vs 172 chars on identical inputs, n = 1),
+**and a stable `worker_id` is not a warm worker** — a slot keeps its id across scale-to-zero, which
+retracted vis-b's "one cold start". Find the boot, subtract once, quote all-in and marginal apart.
 
 **THE MIDDLE RUNG: `scripts/preflight_serving_guards.py`, $0, RUN BEFORE PAYING.** A REAL
 `Gemma4ForConditionalGeneration` from a tiny config (no download, CPU, seconds) drives every serving
@@ -183,13 +198,13 @@ of which 42 are video. **This executor signed nothing** — the composition is t
 
 ## ⏭️ Next
 
-**sku-b-prep IS EXECUTED AND WAITING ON THE TEAM LEAD ($0).** Read `docs/reports/sku-b-prep.md`
-from disk. Four things want a word: (1) **the projection's upper corner does not fit** — $0.3566
-against the $0.35 cap, nothing tuned to make it; (2) an early stop breaks bar 1's registered page
-set (R2: exactly 108); (3) `max_new_tokens: 256` in two paid records stays wrong on purpose;
-(4) the preflight needs a venv with `peft`. Then **sku-b-run**: re-stage a POSITIONS worker and run
-`scripts/positions_gm4_skub.py --endpoint-id <id>` — ONE attempt, a failed bar closes B by
-measurement. **Then the 5c2 briefing.**
+**ФИКС-ПАСС ИСПОЛНЕН И ЖДЁТ ПРИЁМКИ ($0).** Все шесть фиксов `docs/PROMPT-sku-b-prep-fix.md` в
+дереве, шесть коммитов `77c0820..aafbb43` + отчёт `4adfd91`; suite **1750 passed, 2 skipped**,
+каждый коммит прогнан на СВОЁМ чекауте. Читать: `docs/reports/sku-b-prep.md :: ## Fix pass
+(Dv141+)`. Следующее — **sku-b-run**: пере-стейдж POSITIONS-воркера и
+`scripts/positions_gm4_skub.py --endpoint-id <id>`, ОДНА попытка, и **эндпойнт создавать с
+`--execution-timeout 900 --idle-timeout 60`** — оба числа теперь входят в арифметику капа.
+**Потом брифинг 5c2.**
 
 **WHAT sku-b-run MUST NOT DO.** Re-run a bar after seeing its result; read the 159 available pages
 instead of the 108 the gold covers; score its own sample (SPEC §10 — bar 2 is the team lead's read
@@ -204,9 +219,9 @@ change either way.
 ## 🚧 Blockers
 
 **None on the critical path.** The 30-row pack is adjudicated and committed, R1–R5 are ratified,
-SPEC 3.17 (7) AND (8) are law, and the deny gap is closed. The boot tax is 13.0K against a 9.0K
-target and this file is **6.36K tok against arch-a's 6.0K bar** — over by 0.36K after uni-b added
-two blocks and eight older ones were compressed to pay for them. Said, not hidden.
+SPEC 3.17 (7)–(10) are law, the suite is green (1750) and the deny gap is closed. This file is
+**over arch-a's 6.0K bar** — the cap блоки заменили собой более старые, но не полностью. Said, not
+hidden. **Единственное, что реально стоит денег в sku-b-run — go/no-go, см. первый блок.**
 
 **Budget is the live constraint.** Phase 4 stands at **$22.0663 of $25.00, $2.9337 left** (read
 2026-08-09 after the vis-c close, still settling — Dv33). `pod list -a` → `[]`, `serverless list` →
