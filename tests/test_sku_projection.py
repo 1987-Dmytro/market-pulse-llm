@@ -119,14 +119,36 @@ def test_every_corner_is_priced_against_the_cap(projection):
             cell["page_leg_usd"]
             + cell["text_leg_usd"]
             + cell["warmup_usd"]
-            + cell["cold_start_usd"],
+            + cell["cold_start_usd"]
+            + cell["idle_tail_usd"],
             abs=1e-3,
         )
 
 
-def test_the_verdict_says_plainly_that_the_upper_corner_does_not_fit(projection):
+def test_the_idle_tail_is_priced_once_per_session_and_names_its_source(projection):
+    """Serverless bills WALL UPTIME: the worker stays up for the endpoint's idle timeout after the
+    last reply, and that tail is charged to whoever woke it. It is charged once per session, which
+    is why it sits beside the cold start rather than inside either leg's rate — and it is bigger
+    than the headroom the stated corner had before it was added."""
+    driver = _script("positions_gm4_skub")
+    tail = projection["assumptions"]["idle_tail"]
+    assert tail["seconds"] == driver.IDLE_TAIL_SECONDS == 60.0
+    assert "idle-timeout 60" in tail["source"]
+    rate = projection["rate"]["usd_per_second"]
+    assert tail["usd"] == pytest.approx(tail["seconds"] * rate, abs=1e-4)
+    for cell in projection["corners"].values():
+        assert cell["idle_tail_usd"] == tail["usd"]
+    assert tail["usd"] > 0.0104, "it exceeds the headroom the stated corner had without it"
+
+
+def test_the_verdict_says_plainly_that_the_stated_corners_do_not_fit(projection):
     """The finding the operator is authorising against. A projection that quietly reported only
-    the corner that fits would be an argument, not arithmetic.
+    the corners that fit would be an argument, not arithmetic.
+
+    With the idle tail inside every corner this moved from ONE corner over the cap to TWO: at the
+    stated decode uplift the pilot exceeds $0.35 on both readings of the cold start. The reading
+    says so and names the consequence — the go/no-go of 3.17 (10)(a) becomes the likely first real
+    event of the paid session. The number was not tuned to fit.
 
     The block is `against_the_cap` and not `verdict`: `tests/test_sku_prereg.py` refuses a
     `verdict` key anywhere in `results/sku_*.json` — a bar result and a pre-registration must not
@@ -135,7 +157,10 @@ def test_the_verdict_says_plainly_that_the_upper_corner_does_not_fit(projection)
     verdict = projection["against_the_cap"]
     assert verdict["fits_at_every_corner"] is False
     assert verdict["highest_usd"] > verdict["cap_usd"] >= verdict["lowest_usd"]
-    assert "sits ON the cap" in verdict["reading"]
+    over = verdict["corners_over_the_cap"]
+    assert len(over) == 2 and all(name.startswith("stated") for name in over)
+    assert "OVER IT AT BOTH STATED ONES" in verdict["reading"]
+    assert "3.17 (10)(a)" in verdict["reading"], "the consequence, not just the number"
     assert (
         "R2" in verdict["what_an_early_stop_costs"]
         or "108" in (verdict["what_an_early_stop_costs"])

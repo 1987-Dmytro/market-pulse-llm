@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-11T15:28:08+00:00",
+  "generated_at": "2026-08-11T17:11:21+00:00",
   "phase": "sku-b — the paid attempt, priced before it is authorised",
   "written_by": "sku-b-prep (executor, $0), docs/PROMPT-sku-b-prep.md deliverable 6",
   "class": "PROJECTION. Arithmetic over named artifacts — no new measurement was taken and no paid call was made to produce it. Every input names the file it came from",
@@ -65,6 +65,12 @@
       "preregistered_source": "SPEC 3.15 (3) / runbook §C.1, via caption_gm4_5c1",
       "why_a_range": "which boot the paid session pays is not knowable in advance — it depends on whether the endpoint's weights are warm. Both are carried and neither is substituted into the other"
     },
+    "idle_tail": {
+      "seconds": 60.0,
+      "usd": 0.0184,
+      "source": "scripts/positions_gm4_skub.py :: IDLE_TAIL_SECONDS — the `--idle-timeout 60` every endpoint this repo's runbooks create is made with (scripts/runbook_5b.md, runbook_srv2b.md, runbook_vis_b.md)",
+      "why": "serverless bills WALL UPTIME, not jobs: the worker stays up for the endpoint's idle timeout after the last reply and that tail is charged to whoever woke it. It is charged ONCE per session, which is why it sits beside the cold start rather than inside either leg's rate. It is larger than the $0.0104 of headroom the stated corner had before it was added — a cap arithmetic that left it out was short by more than the margin it was reasoning about"
+    },
     "one_attempt": "no retry is priced, because none is permitted: SPEC 3.17 (6) gives the pilot one attempt and a failed bar closes B by measurement"
   },
   "corners": {
@@ -77,10 +83,11 @@
       "page_leg_usd": 0.0776,
       "text_leg_usd": 0.0392,
       "warmup_usd": 0.002,
-      "total_usd": 0.1752,
+      "idle_tail_usd": 0.0184,
+      "total_usd": 0.1936,
       "cap_usd": 0.35,
-      "headroom_usd": 0.1748,
-      "headroom_share_of_cap": 0.4996,
+      "headroom_usd": 0.1564,
+      "headroom_share_of_cap": 0.447,
       "fits": true
     },
     "lower — no decode uplift, cold start pre-registered": {
@@ -92,10 +99,11 @@
       "page_leg_usd": 0.0776,
       "text_leg_usd": 0.0392,
       "warmup_usd": 0.002,
-      "total_usd": 0.1922,
+      "idle_tail_usd": 0.0184,
+      "total_usd": 0.2106,
       "cap_usd": 0.35,
-      "headroom_usd": 0.1578,
-      "headroom_share_of_cap": 0.451,
+      "headroom_usd": 0.1394,
+      "headroom_share_of_cap": 0.3984,
       "fits": true
     },
     "stated — ceiling-ratio uplift, cold start as measured": {
@@ -107,11 +115,12 @@
       "page_leg_usd": 0.1552,
       "text_leg_usd": 0.1225,
       "warmup_usd": 0.0055,
-      "total_usd": 0.3396,
+      "idle_tail_usd": 0.0184,
+      "total_usd": 0.358,
       "cap_usd": 0.35,
-      "headroom_usd": 0.0104,
-      "headroom_share_of_cap": 0.0297,
-      "fits": true
+      "headroom_usd": -0.008,
+      "headroom_share_of_cap": -0.0228,
+      "fits": false
     },
     "stated — ceiling-ratio uplift, cold start pre-registered": {
       "decode_uplift": {
@@ -122,19 +131,24 @@
       "page_leg_usd": 0.1552,
       "text_leg_usd": 0.1225,
       "warmup_usd": 0.0055,
-      "total_usd": 0.3566,
+      "idle_tail_usd": 0.0184,
+      "total_usd": 0.375,
       "cap_usd": 0.35,
-      "headroom_usd": -0.0066,
-      "headroom_share_of_cap": -0.0188,
+      "headroom_usd": -0.025,
+      "headroom_share_of_cap": -0.0714,
       "fits": false
     }
   },
   "against_the_cap": {
     "cap_usd": 0.35,
-    "lowest_usd": 0.1752,
-    "highest_usd": 0.3566,
+    "lowest_usd": 0.1936,
+    "highest_usd": 0.375,
     "fits_at_every_corner": false,
-    "reading": "the pilot fits the $0.35 cap comfortably at the lower corner ($0.1752, 50% headroom) and sits ON the cap at the stated upper one ($0.3566). The decode uplift is the whole spread: it is an assumption about a reply nothing has generated yet, and the warm-up call of SPEC 3.17 (9) is the first thing that will price it for real",
+    "corners_over_the_cap": [
+      "stated — ceiling-ratio uplift, cold start as measured",
+      "stated — ceiling-ratio uplift, cold start pre-registered"
+    ],
+    "reading": "the pilot fits the $0.35 cap comfortably at the lower corners ($0.1936, 45% headroom) and is OVER IT AT BOTH STATED ONES ($0.3750 at worst) — at the stated decode uplift the pilot exceeds the cap on either reading of the cold start. The decode uplift is the whole spread: it is an assumption about a reply nothing has generated yet, and the two warm-up calls of SPEC 3.17 (9) are the first thing that will price it for real. Which makes the go/no-go of 3.17 (10)(a) the likely first real event of the paid session: unless the warm-up measures a decode materially shorter than the ratio of the registered ceilings, the run refuses itself before the first gold call — and under (10)(a) that consumes no attempt and returns the pilot to the team lead for a v3 registration at the measured price",
     "what_an_early_stop_costs": "the driver re-projects before every job and stops when the run would pass what is left of the cap, so an overrun is impossible — but a page leg that stops early is NOT a cheaper pilot. Bar 1's registered page set is EXACTLY the 108 sent pages (results/sku_pilot_prereg_v2.json :: R2), and a post whose pages were partly bought has a gold set written against all of them. Fewer pages moves the numerator and not the denominator, which reads as a model that missed brands. If the stop fires, the finding is about the cap and not about the instrument"
   },
   "pinned_inputs": {
@@ -145,13 +159,16 @@
     "results/sku_text_pack_manifest.json": "80e4e12c0278f8cce82f2619967e1c92e1bf4bc7f8cf358e29712049b5afd376"
   },
   "git": {
-    "commit": "a2b66bc90424c555b34cda3ee4376269dec7768b",
+    "commit": "f2d1506b31a4ea618a57a2de53b4773354532061",
     "dirty": [
       "knowledge/daily_logs/2026-08-11.md",
       "knowledge/hot.md",
       "knowledge/index.md",
+      "scripts/positions_gm4_skub.py",
       "scripts/write_sku_projection.py",
-      "tests/test_sku_projection.py"
+      "src/market_pulse/serving.py",
+      "tests/test_positions_driver.py",
+      "tests/test_serving.py"
     ]
   }
 }

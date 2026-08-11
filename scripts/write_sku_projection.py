@@ -123,6 +123,8 @@ def build(out: Path) -> dict:
     text_uplift = POSITIONS_CEILING / SRV2D_CEILING
     per_page = page_rate["marginal_seconds_per_image"]
 
+    idle_usd = driver.IDLE_TAIL_SECONDS * rate
+
     def corner(uplift: bool, cold_usd: float) -> dict:
         up_page = page_uplift if uplift else 1.0
         up_text = text_uplift if uplift else 1.0
@@ -130,13 +132,14 @@ def build(out: Path) -> dict:
         text_usd = n_rows * text_row_seconds * up_text * rate
         # SPEC 3.17 (9) opens the session on NON-gold inputs: one image and one row
         warm_usd = (per_page * up_page + text_row_seconds * up_text) * rate
-        total = page_usd + text_usd + warm_usd + cold_usd
+        total = page_usd + text_usd + warm_usd + cold_usd + idle_usd
         return {
             "decode_uplift": {"page": round(up_page, 4), "text": round(up_text, 4)},
             "cold_start_usd": cold_usd,
             "page_leg_usd": round(page_usd, 4),
             "text_leg_usd": round(text_usd, 4),
             "warmup_usd": round(warm_usd, 4),
+            "idle_tail_usd": round(idle_usd, 4),
             "total_usd": round(total, 4),
             "cap_usd": driver.CAP_USD,
             "headroom_usd": round(driver.CAP_USD - total, 4),
@@ -242,6 +245,23 @@ def build(out: Path) -> dict:
                     " substituted into the other"
                 ),
             },
+            "idle_tail": {
+                "seconds": driver.IDLE_TAIL_SECONDS,
+                "usd": round(idle_usd, 4),
+                "source": (
+                    "scripts/positions_gm4_skub.py :: IDLE_TAIL_SECONDS — the `--idle-timeout 60`"
+                    " every endpoint this repo's runbooks create is made with"
+                    " (scripts/runbook_5b.md, runbook_srv2b.md, runbook_vis_b.md)"
+                ),
+                "why": (
+                    "serverless bills WALL UPTIME, not jobs: the worker stays up for the endpoint's"
+                    " idle timeout after the last reply and that tail is charged to whoever woke"
+                    " it. It is charged ONCE per session, which is why it sits beside the cold"
+                    " start rather than inside either leg's rate. It is larger than the $0.0104 of"
+                    " headroom the stated corner had before it was added — a cap arithmetic that"
+                    " left it out was short by more than the margin it was reasoning about"
+                ),
+            },
             "one_attempt": (
                 "no retry is priced, because none is permitted: SPEC 3.17 (6) gives the pilot one"
                 " attempt and a failed bar closes B by measurement"
@@ -257,13 +277,22 @@ def build(out: Path) -> dict:
             "lowest_usd": best["total_usd"],
             "highest_usd": worst["total_usd"],
             "fits_at_every_corner": all(cell["fits"] for cell in corners.values()),
+            "corners_over_the_cap": sorted(
+                name for name, cell in corners.items() if not cell["fits"]
+            ),
             "reading": (
-                f"the pilot fits the ${driver.CAP_USD:.2f} cap comfortably at the lower corner"
+                f"the pilot fits the ${driver.CAP_USD:.2f} cap comfortably at the lower corners"
                 f" (${best['total_usd']:.4f}, {best['headroom_share_of_cap']:.0%} headroom) and"
-                f" sits ON the cap at the stated upper one (${worst['total_usd']:.4f}). The"
-                " decode uplift is the whole spread: it is an assumption about a reply nothing"
-                " has generated yet, and the warm-up call of SPEC 3.17 (9) is the first thing"
-                " that will price it for real"
+                f" is OVER IT AT BOTH STATED ONES (${worst['total_usd']:.4f} at worst) — at the"
+                " stated decode uplift the pilot exceeds the cap on either reading of the cold"
+                " start. The decode uplift is the whole spread: it is an assumption about a reply"
+                " nothing has generated yet, and the two warm-up calls of SPEC 3.17 (9) are the"
+                " first thing that will price it for real. Which makes the go/no-go of 3.17 (10)(a)"
+                " the likely first real event of the paid session: unless the warm-up measures a"
+                " decode materially shorter than the ratio of the registered ceilings, the run"
+                " refuses itself before the first gold call — and under (10)(a) that consumes no"
+                " attempt and returns the pilot to the team lead for a v3 registration at the"
+                " measured price"
             ),
             "what_an_early_stop_costs": (
                 "the driver re-projects before every job and stops when the run would pass what"
