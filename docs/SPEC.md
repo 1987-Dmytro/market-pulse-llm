@@ -571,6 +571,22 @@ sku-b (one paid session, cap $0.35 GPU): the two-leg pilot (19 ATB
 posts page-wise; ~30 adjudicated text rows), one attempt; a failed bar
 closes B as "instrument not ready" by measurement. Integration into
 the 5c2 loop only on a green gate.
+<!-- sku-b-ratification begin — stripped by tests/test_sku_prereg.py before hashing
+docs/SPEC.md against the prereg pin; the registered law is the stripped text -->
+(7) **Pilot bar operationalization — ratified (operator, 2026-08-10).** The five
+readings registered in results/sku_pilot_prereg.json (ratification_required, R1–R5)
+are ratified as written there: R1 — bar 1's "per page" is read per POST (recall over
+the union of the post's page answers), macro-averaged over the 15 posts with a
+non-empty gold set; the micro reading over the 55 pairs is reported beside it and
+gates nothing. R2 — the page set is exactly the 108 sent pages. R3 — the four
+empty-gold posts are outside the recall mean and serve as a precision probe. R4 —
+bar 2 is SCORED at n >= 10 pairs, REPORTED and not scored at 1–9, NOT_REACHABLE at 0.
+R5 — unreadable replies are excluded and counted (>10% blocks bar 3); n >= 20
+adjudicated rows to score; both carriers pooled as drawn. Thresholds, the $0.35 cap
+and the one-attempt clause are unchanged. Text gold: data/annotation/sku_a_text/
+text30.csv adjudicated 2026-08-10, 30/30 rows, validator clean (11 position ·
+3 product_mention · 16 none).
+<!-- sku-b-ratification end -->
 **Date:** 2026-07-26 · **Team lead:** Fable session · **Executor:** Claude Code
 **Repo folder:** `/Users/hdv_1987/Desktop/Projects/market-pulse-llm`
 **rev. 3 change (operator decision):** producers in Ukraine barely use Telegram for

@@ -18,7 +18,10 @@ Three things it carries, and the second is the one that costs work:
   by measurement, so a denominator nobody ratified is a session spent against a void.
 * **the inputs, pinned.** The reference record, the pack manifest, the census frame, the tier
   ladder's own hash and both prompt shas. Bar 3's gold is computed from the operator's ticks by
-  `positions.tier_from_presence`, so the ladder is an input like any other.
+  `positions.tier_from_presence`, so the ladder is an input like any other. `docs/SPEC.md` is
+  pinned as its REGISTERED LAW — the file with amendment 3.17 (7)'s marked block stripped, see
+  `registered_law` — because that amendment records the ratification of readings already in here
+  and a pin that follows the file is not a pin.
 
     PYTHONPATH=src python3 scripts/write_sku_prereg.py
 """
@@ -84,6 +87,37 @@ def sha256_of(path: Path) -> str:
 
 def rel(path: Path) -> str:
     return str(path.relative_to(REPO_ROOT)) if path.is_relative_to(REPO_ROOT) else str(path)
+
+
+RATIFICATION_BEGIN = "<!-- sku-b-ratification begin"
+RATIFICATION_END = "<!-- sku-b-ratification end -->"
+
+
+def registered_law(spec: Path) -> bytes:
+    """`docs/SPEC.md` with amendment 3.17 (7) cut out, marker lines included.
+
+    3.17 (7) ratifies the readings this record already carries — it moves no bar, no threshold and
+    no denominator — but it moves the file's bytes, and the pin below predates it. Re-pinning would
+    make the pin follow the file instead of holding it, so the block wears its own markers and the
+    REGISTERED LAW is what is left when they come off. One implementation, called by the producer
+    and by `tests/test_sku_prereg.py`: a second copy of this strip would drift from the one that
+    writes the record and nothing downstream could see it.
+    """
+    text = spec.read_text(encoding="utf-8")
+    if RATIFICATION_BEGIN not in text:
+        return text.encode("utf-8")  # the pre-amendment file, hashed as it is
+    if text.count(RATIFICATION_BEGIN) != 1 or text.count(RATIFICATION_END) != 1:
+        raise SystemExit(f"{rel(spec)}: the ratification block must appear exactly once")
+    start = text.index(RATIFICATION_BEGIN)
+    end = text.index(RATIFICATION_END, start) + len(RATIFICATION_END)
+    if (start and text[start - 1] != "\n") or not text[end:].startswith("\n"):
+        raise SystemExit(f"{rel(spec)}: the ratification block does not own whole lines")
+    return (text[:start] + text[end + 1 :]).encode("utf-8")
+
+
+def pinned_sha256(path: Path) -> str:
+    """What the pre-registration pins: for `docs/SPEC.md` the registered law, else the file."""
+    return hashlib.sha256(registered_law(path) if path == SPEC else path.read_bytes()).hexdigest()
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -328,7 +362,7 @@ def main(argv: list[str] | None = None) -> int:
             ),
         },
         "pinned_inputs": {
-            rel(path): sha256_of(path)
+            rel(path): pinned_sha256(path)
             for path in (SPEC, REFERENCE, PACK_MANIFEST, CENSUS, REGISTRY)
         },
         "ladder": {

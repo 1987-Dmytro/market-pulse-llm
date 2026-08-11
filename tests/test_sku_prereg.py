@@ -151,7 +151,24 @@ def test_both_instruments_are_pinned_by_sha(record):
 
 
 def test_every_pinned_input_still_hashes_to_what_it_says(record):
+    """`docs/SPEC.md` now carries amendment 3.17 (7), which the pin predates: the block ratifies
+    readings this record already states and moves no bar, so the pin holds the file WITHOUT it —
+    the registered law — instead of following the file. Checked both directions, because either
+    one alone passes for the wrong reason: a live hash equal to the pin would mean the amendment
+    never landed, and a stripped hash equal to the pin proves the law is the bytes that were
+    registered. The strip is the producer's own function; a copy of it here could drift from the
+    one that writes the record. Every other pinned input is still hashed as it sits on disk.
+    """
+    live = hashlib.sha256(prereg.SPEC.read_bytes()).hexdigest()
+    pin = record["pinned_inputs"]["docs/SPEC.md"]
+    spec_text = prereg.SPEC.read_text(encoding="utf-8")
+    assert prereg.RATIFICATION_BEGIN in spec_text and prereg.RATIFICATION_END in spec_text
+    assert live != pin, "the live SPEC hashes to the pin — 3.17 (7) is not in the file"
+    assert hashlib.sha256(prereg.registered_law(prereg.SPEC)).hexdigest() == pin
+
     for path, sha in record["pinned_inputs"].items():
+        if path == "docs/SPEC.md":
+            continue  # both directions, above
         assert hashlib.sha256((REPO_ROOT / path).read_bytes()).hexdigest() == sha, path
     assert set(record["pinned_inputs"]) == {
         "docs/SPEC.md",
