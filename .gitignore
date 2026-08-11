@@ -7,6 +7,10 @@ __pycache__/
 # Tooling caches
 .pytest_cache/
 .ruff_cache/
+# The code graph (arch-a): 28 MB of derived AST, rebuilt from the repo by the post-commit
+# hook after every commit. Committing it would carry an 11 MB churn diff per commit and the
+# committed copy would always be one async rebuild behind the tree it claims to describe.
+graphify-out/
 
 # macOS
 .DS_Store
