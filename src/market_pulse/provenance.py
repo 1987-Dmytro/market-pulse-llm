@@ -5,7 +5,7 @@ the numbers were produced against **and** the list of files that were not in it.
 something under `src/` or `scripts/` means the commit does not reproduce the numbers.
 
 There were five copies of this function — `run_baseline`, `eval_zero_shot`, `train_xlmr_baseline`,
-`freeze_testsets_v3` and `build_audit_pack`, the last of which some forty scripts import from — and
+`freeze_testsets_v3` and `build_audit_pack`, the last of which 51 scripts import from — and
 they had drifted in two ways, not one: three sorted the dirty list and two did not, and each
 excluded a different set of paths. That is invisible on a clean tree, where all five return
 ``dirty: []``, and it is why the collapse is a fix-on-touch (operator, 2026-08-11) rather than a

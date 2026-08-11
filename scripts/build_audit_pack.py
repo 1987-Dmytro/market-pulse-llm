@@ -159,7 +159,7 @@ def digest(path: Path) -> str:
 
 
 def git_state(mine: Path) -> dict:
-    """`market_pulse.provenance.git_state`, kept under this name because some forty scripts do
+    """`market_pulse.provenance.git_state`, kept under this name because 51 scripts do
     `from build_audit_pack import git_state` — this module became the repo's provenance helper by
     accident and the import is what every record's `git` block is written through.
 
