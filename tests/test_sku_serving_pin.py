@@ -13,6 +13,7 @@ out of `docs/SPEC.md`.
 import hashlib
 import importlib.util
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -158,8 +159,38 @@ def test_the_pin_refuses_to_be_rewritten_over(tmp_path):
     assert writer.main(["--out", str(out), "--force"]) == 0
 
 
-def test_the_pin_predates_every_sku_b_run_artifact():
-    """The claim the record makes about itself, checked: nothing this pin exists to judge is in
-    the repo yet. A pin committed after the run it constrains is a rationalisation."""
-    for name in ("positions_gm4_*.json", "sku_b_*.json", "spend_sku_b*.json"):
-        assert not list((REPO_ROOT / "results").glob(name)), name
+RUN_ARTIFACTS = ("results/sku_b_positions.json", "results/spend_sku_b.json")
+"""What sku-b-run will write. Named here so the ordering check below has something to check
+against once they exist — and it must still pass on the day they do."""
+
+
+def added_in(path: str) -> str | None:
+    """The commit that first added ``path``, or None if git has never seen it."""
+    out = subprocess.run(
+        ["git", "-C", str(REPO_ROOT), "log", "--diff-filter=A", "--format=%H", "--", path],
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout.split()
+    return out[-1] if out else None
+
+
+def test_the_pin_was_committed_before_every_sku_b_run_artifact():
+    """The claim the record makes about itself, checked against git rather than against the
+    filesystem. "No run artifact exists yet" is true today and false the moment sku-b-run lands,
+    so asserting it would be a green suite with a shelf life — the operator's own run reddens it.
+    The INVARIANT is the ordering: a pin committed after the run it constrains is a
+    rationalisation, and git history is the only witness to which came first."""
+    pin_commit = added_in("results/sku_pilot_serving.json")
+    assert pin_commit, "the pin is not committed yet — nothing witnesses the ordering"
+    for artifact in RUN_ARTIFACTS:
+        later = added_in(artifact)
+        if later is None:
+            continue  # not run yet; the ordering cannot be violated by a file that does not exist
+        assert (
+            subprocess.run(
+                ["git", "-C", str(REPO_ROOT), "merge-base", "--is-ancestor", pin_commit, later],
+                capture_output=True,
+            ).returncode
+            == 0
+        ), f"{artifact} was committed before the serving pin that was supposed to constrain it"
