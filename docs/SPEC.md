@@ -617,6 +617,23 @@ remains the single session of (6), and inside its cap it opens with a smoke call
 on NON-gold inputs (a synthetic image and a text row outside the 30-row pack)
 before either leg touches gold.
 <!-- sku-b-ratification-3 end -->
+<!-- sku-b-ratification-4 begin — stripped by tests/test_sku_prereg.py before
+hashing docs/SPEC.md against the prereg pin; the registered law is the stripped text -->
+(10) **Cap discipline for the paid attempt — ratified (operator, 2026-08-11,
+sku-b-prep acceptance).** Three readings, registered before the run: (a) after the
+two non-gold warm-up calls of (9) the driver re-projects the WHOLE run from the
+warm-up-measured marginal plus everything already billed, and REFUSES to make any
+gold call if that projection exceeds what is left of the $0.35 cap — a session
+stopped at this gate has touched no gold and has consumed NO attempt; the pilot
+then returns to the team lead for a v3 registration under the measured price.
+(b) A cap stop that fires mid-leg, after gold calls began, is a finding about the
+CAP and not about the instrument: it does not close B, it is not a failed bar, and
+what happens next is a team-lead ruling — never a silent re-run. (c) No single job
+may be CAPABLE of billing past the remaining cap on its own: the per-job execution
+timeout is sized so one wedged job cannot overrun, and a job that ends TIMED_OUT
+ends the run, its unbought remainder recorded. Thresholds, the cap and the
+one-attempt clause of (6) are unchanged.
+<!-- sku-b-ratification-4 end -->
 **Date:** 2026-07-26 · **Team lead:** Fable session · **Executor:** Claude Code
 **Repo folder:** `/Users/hdv_1987/Desktop/Projects/market-pulse-llm`
 **rev. 3 change (operator decision):** producers in Ukraine barely use Telegram for
