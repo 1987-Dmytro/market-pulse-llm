@@ -243,18 +243,26 @@ def bar_three(record: dict, dump: list[dict], prereg: dict, readings: list[dict]
     """Tier accuracy per adjudicated row; unreadable replies excluded and counted (R5)."""
     bar = prereg["bars"]["text_tier_accuracy"]
     gold_tier = {row["id"]: row["tier"] for row in readings}
+    # "the adjudicated rows that came back with a legal tick set. A row the operator left untouched
+    # is not gold and is not counted" — the bar's own denominator. `tier_from_presence` reads five
+    # blank cells as `none`, which is also a legitimate ANSWER, so an unfinished pack would score
+    # its blanks as agreements with every empty model reply. The predicate is the validator's.
+    untouched = {row["id"] for row in readings if not pack.is_adjudicated(row)}
     tiers_of: dict[str, list[str]] = {}
     for row in dump:
         if row["page"] is None:
             tiers_of.setdefault(row["item"], []).append(row["tier"])
 
-    rows, excluded = [], []
+    rows, excluded, not_gold = [], [], []
     for outcome in record["outcomes"]:
         if outcome["leg"] != "text":
             continue
         item = outcome["item"]
         if item not in gold_tier:
             refuse(f"{item} was asked in the text leg and is not in the adjudicated pack")
+        if item in untouched:
+            not_gold.append(item)
+            continue
         if outcome["unreadable"]:
             excluded.append({"id": item, "reason": outcome["unreadable"]})
             continue
@@ -311,6 +319,15 @@ def bar_three(record: dict, dump: list[dict], prereg: dict, readings: list[dict]
         "why_not_scored": why,
         "n_scored": len(rows),
         "n_asked": asked,
+        "not_gold": {
+            "rule": bar["denominator"],
+            "n": len(not_gold),
+            "ids": not_gold,
+            "why": (
+                "rows the operator never touched. Not unreadable and not wrong — outside the"
+                " denominator, because five blank cells are not an adjudication"
+            ),
+        },
         "by_carrier": bar["gold"]["by_carrier"],
         "unreadable": {
             "rule": bar["unreadable_rows"],

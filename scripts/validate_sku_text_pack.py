@@ -85,6 +85,18 @@ def check(rows: list[dict], manifest: dict) -> tuple[list[dict], list[str]]:
     return readings, defects
 
 
+def is_adjudicated(reading: dict) -> bool:
+    """Did the operator answer this row at all?
+
+    A tick or a note. An untouched row is not gold — five blank cells and no note are indis-
+    tinguishable from "the operator has not got to it yet", and `tier_from_presence` reads them as
+    `none`, which is a legitimate ANSWER. Bar 3's registered denominator is "the adjudicated rows
+    that came back with a legal tick set", so the two must not be conflated; this predicate is what
+    both this validator and the bar producer decide on, in one place.
+    """
+    return any(reading["ticks"].values()) or bool(reading["notes"])
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--pack", type=Path, default=builder.PACK)
@@ -95,7 +107,7 @@ def main(argv: list[str] | None = None) -> int:
     rows = read_pack(args.pack)
     readings, defects = check(rows, manifest)
 
-    adjudicated = [row for row in readings if any(row["ticks"].values()) or row["notes"]]
+    adjudicated = [row for row in readings if is_adjudicated(row)]
     by_tier = {
         tier: sum(1 for row in readings if row["tier"] == tier)
         for tier in (*positions.TIERS, "none")

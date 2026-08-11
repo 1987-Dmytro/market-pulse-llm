@@ -18,6 +18,7 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 import build_sku_text_pack as builder  # noqa: E402
 import sku_bar_verdicts as verdicts  # noqa: E402
+import validate_sku_text_pack as pack  # noqa: E402
 
 from market_pulse import positions  # noqa: E402
 from market_pulse.brands import watchlist_aliases  # noqa: E402
@@ -44,6 +45,7 @@ PREREG = {
         "text_tier_accuracy": {
             "verbatim": "text tier-assignment accuracy ≥ 0.85 vs adjudicated rows",
             "threshold": 0.85,
+            "denominator": "a row the operator left untouched is not gold and is not counted",
             "comparison": "per row, both tiers from positions.tier_from_presence",
             "unreadable_rows": "excluded and counted; over 10% the bar is NOT_SCORED",
             "reachability": {"rule": "n >= 20 rows scores"},
@@ -201,7 +203,10 @@ def test_bar_two_counts_leaflet_pairs_only_and_never_scores_them():
 def text_fixture(n_rows: int, unreadable: int = 0, wrong: int = 0) -> tuple[dict, list, list]:
     """`n_rows` adjudicated rows, all gold `position`; the first `unreadable` refuse to parse and
     the next `wrong` come back a rung lower."""
-    readings = [{"id": f"@t:{i}", "tier": "position"} for i in range(n_rows)]
+    readings = [
+        {"id": f"@t:{i}", "tier": "position", "ticks": {"brand": True}, "notes": ""}
+        for i in range(n_rows)
+    ]
     outcomes, dump = [], []
     for i in range(n_rows):
         reason = "malformed JSON" if i < unreadable else None
@@ -425,3 +430,31 @@ def test_main_refuses_the_record_of_a_session_that_stopped_before_gold(tmp_path)
     with pytest.raises(SystemExit, match="stopped before the first gold call"):
         run(tree)
     assert run(fixture_tree(tmp_path, stopped_before_gold=False)) == 0
+
+
+def test_bar_three_leaves_the_rows_the_operator_never_touched_out_of_the_denominator():
+    """The bar's registered denominator: "a row the operator left untouched is not gold and is not
+    counted". `tier_from_presence` reads five blank cells as `none`, which is ALSO a legitimate
+    answer — so an unfinished pack would score its blanks as agreements with every empty model
+    reply and read as a bar that passed. The validator returns 0 on an unfinished pack, so nothing
+    upstream refuses either.
+
+    The control is the same fixture fully adjudicated: 22 rows in, 22 scored."""
+    record, dump, readings = text_fixture(22)
+    for reading in readings[:2]:  # blank ticks, blank notes: never answered
+        reading.update(ticks={"brand": False}, notes="", tier="none")
+    bar = verdicts.bar_three(record, dump, PREREG, readings)
+    assert bar["not_gold"]["n"] == 2 and bar["not_gold"]["ids"] == ["@t:0", "@t:1"]
+    assert bar["n_scored"] == 20 and bar["n_asked"] == 20
+    assert bar["unreadable"]["n"] == 0, "untouched is not unreadable — different exclusions"
+
+    whole = verdicts.bar_three(*text_fixture(22)[:2], PREREG, text_fixture(22)[2])
+    assert whole["not_gold"]["n"] == 0 and whole["n_scored"] == 22
+
+
+def test_the_untouched_rule_is_the_validators_own_predicate():
+    """One rule, two readers. A note with no tick is still an adjudication — the operator writing
+    «пусто» has answered "this row names no position", which is what `none` means."""
+    assert pack.is_adjudicated({"ticks": {"brand": True}, "notes": ""})
+    assert pack.is_adjudicated({"ticks": {"brand": False}, "notes": "пусто"})
+    assert not pack.is_adjudicated({"ticks": {"brand": False}, "notes": ""})
