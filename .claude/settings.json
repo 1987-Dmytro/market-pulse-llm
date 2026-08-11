@@ -3,6 +3,7 @@
     "deny": [
       "Edit(/docs/STATUS.md)",
       "Edit(/docs/SPEC.md)",
+      "Edit(/docs/PRODUCT.md)",
       "Edit(/docs/PROMPT-*.md)"
     ]
   },
