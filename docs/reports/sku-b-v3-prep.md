@@ -48,8 +48,8 @@
 |---|---|---|
 | 0.1 | `7e0632c` | team-lead docs committed unedited: `docs/SPEC.md` (the `-5` block), `docs/PROMPT-sku-b-v3-prep.md`, `docs/STATUS.md` |
 | 0.2 | `f9d0a15` | the marker enumeration gains `sku-b-ratification-5` |
-| 0.3 | `<vault>` | ADR `knowledge/decisions/sku-b-run-acceptance-and-resume.md` + INDEX |
-| 0.4 | `<vault>` | the day's log, hot.md, the index |
+| 0.3 | `8e6e418` | ADR `knowledge/decisions/sku-b-run-acceptance-and-resume.md` + INDEX |
+| 0.4 | `8e6e418` | the day's log, hot.md, the index |
 
 The brief's prediction was exact — one test red on checkout, the marker enumeration:
 
@@ -444,3 +444,6 @@ volume's versions. No repo dependency moved; `pyproject.toml` is untouched.
 | D3 | `8211328` | one step, one anchor, however its name is typed (Dv151) |
 | D4 | `b8eae3d` | the resumed session priced from what the interrupted one measured |
 | D5 | `fa2fd0f` | the preflight learns the resume guards, both ways |
+| — | `cdb5d91` | this report |
+| — | `00a6f9d` | the fake's submission counter gains its handshake (post-review fix) |
+| 0.3/0.4 | `8e6e418` | the acceptance ADR and the vault tail |
