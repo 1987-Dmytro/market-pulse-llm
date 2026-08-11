@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-11 21:40:48 (every SessionStart)
+**Auto-refreshed:** 2026-08-11 23:09:41 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-00a6f9d fix(sku-b-v3-prep): the fake's submission counter now includes its handshake
-cdb5d91 docs(report): sku-b-v3-prep
-fa2fd0f test(sku-b-v3-prep): the preflight learns the resume guards, both ways
-b8eae3d feat(sku-b-v3-prep): the resumed session priced from what the interrupted one measured
-8211328 fix(sku-b-v3-prep): one step, one anchor, however its name is typed (Dv151)
+1f196f6 docs(report): sku-b-v3-run -- name the commit the previous row could not
+c265918 docs(report): sku-b-v3-run -- Dv167, Dv168 and the settled balance
+9e0be97 fix(sku-b-v3-run): bar 3's denominator drops the rows nobody adjudicated
+545fe1b docs(report): sku-b-v3-run
+5dd9e1a feat(sku-b-v3-run): the session's whole output -- a (10)(a) refusal
 ```
 
 ## 📋 Recent decisions
@@ -30,20 +30,49 @@ b8eae3d feat(sku-b-v3-prep): the resumed session priced from what the interrupte
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-11 21:38 (arch-a ✅, uni-a ✅, uni-b ✅, sku-b-prep ✅, sku-b-run ✅ ПРИНЯТ,
-**sku-b-v3-prep ✅ — resume построен, $0, ни одного платного вызова**). **sku-a ✅,
-R1–R5 ратифицированы, голд text30 размечен, SPEC 3.17 (7)(8)(9)(10)(11) — закон** —
+**Last update:** 2026-08-11 23:20 (arch-a ✅, uni-a ✅, uni-b ✅, sku-b-prep ✅, sku-b-run ✅ ПРИНЯТ,
+sku-b-v3-prep ✅, **sku-b-v3-run ⛔ ОТКАЗ go/no-go — 0 голд-вызовов, попытка НЕ израсходована**).
+**sku-a ✅, R1–R5 ратифицированы, голд text30 размечен, SPEC 3.17 (7)(8)(9)(10)(11) — закон** —
 `docs/ARCHITECTURE.md`, граф кода, отчёты `uni-a.md` + `uni-b.md` + `sku-b-prep.md` + `sku-b-run.md`
-+ **`sku-b-v3-prep.md`**, `docs/PORTING.md`, `config/lexicon.yaml`, **`results/sku_pilot_prereg_v3.json`**,
-`results/sku_pilot_serving.json`, **`results/sku_projection_v3.json`**, `results/sku_b_positions.json`.
-**Next: платный v3-run — докупка 121 элемента, кап $0.45, нужен GO оператора** (детали в блоке Next).
++ `sku-b-v3-prep.md` + **`sku-b-v3-run.md`**, `docs/PORTING.md`, `config/lexicon.yaml`,
+**`results/sku_pilot_prereg_v3.json`**, `results/sku_pilot_serving.json`,
+`results/sku_projection_v3.json`, `results/sku_b_positions.json`, **`results/sku_b_positions_v3.json`**.
+**Next: решение тимлида — перерегистрация v4 под измеренную цену** (детали в блоке Next).
 Блок правится руками; секция выше — авто-ген, маркер НЕ
 трогать. Длинная форма: `implementation-notes.md` (Dv100–120 и указатели
 Dv133–147), `docs/reports/uni-a.md` (Dv121–124), `uni-b.md` (Dv125–132), `sku-b-prep.md`
-(Dv133–147), `sku-b-run.md` (Dv148–153), **`sku-b-v3-prep.md` (Dv154–160)**, дневники
-[[2026-08-11]] / [[2026-08-10]], ADR ниже.
+(Dv133–147), `sku-b-run.md` (Dv148–153), `sku-b-v3-prep.md` (Dv154–160),
+**`sku-b-v3-run.md` (Dv161–168)**, дневники [[2026-08-11]] / [[2026-08-10]], ADR ниже.
 
 ## 🔥 What's Hot
+
+**⛔ v3-RUN ОТКАЗАЛ НА go/no-go (10)(a), 20:44. НИ ОДНОГО ГОЛД-ВЫЗОВА, ПОПЫТКА ЦЕЛА.**
+121 вызов спроецирован в **$0.5964** против $0.4500 остатка капа → отказ ДО первого голд-вызова.
+Дампа на диске нет, `stopped_before_gold: true`, куплено по-прежнему 17 из 138.
+**Отказала та самая поправка, которая для этого и писалась:** (11)(c) заменила синтетическую
+картинку 64×64 реальной неотправленной страницей — и та померила **14.808 с/страницу** против
+1.436 с синтетики и 5.0772 с/вызов, которые первая сессия измерила на 17 реальных страницах.
+Break-even = **9.5622 с/страницу**; на маргинале первой сессии ран проецируется в $0.3248 и прошёл бы.
+**Оба числа — измерения одного замороженного инструмента, n=1 против n=17.** Первая сессия: 10 из 17
+страниц ответили `[]` (14 позиций всего), т.е. её средний маргинал занижен «пустыми» страницами;
+warm-up-страница ответила плотным списком. Глубина страниц НЕ разделяет выборки (17 — это стр. 1–6
+трёх постов, 91 — стр. 1–6 остальных шестнадцати). Выбор маргинала = перерегистрация = решение
+тимлида. **Ничего не перезапускалось ради другого числа.** Отчёт: `docs/reports/sku-b-v3-run.md`.
+
+**СЛЕДУЮЩАЯ ПОПЫТКА СЕЙЧАС ОТКАЗАЛА БЫ ДАЖЕ ПО ОПТИМИСТИЧНОМУ МАРГИНАЛУ (Dv167).**
+`RESUME_CAP_USD = 0.45`, `RESUME_LEDGER = spend_sku_b_v3.json`, `RESUME_PHASE = "sku-b-v3"` —
+три константы модуля; `read_ledger` возвращает СУЩЕСТВУЮЩИЙ якорь, `--project-stop-usd` умеет
+только ужимать (F5). Итого бюджет второго `--resume` = 0.45 − 0.1526 = **$0.2974 < $0.3248**.
+Потраченное отказавшей сессией молча ложится на следующую. v4 нужны СВОИ три константы вместе,
+а не поднятое число в одной. Считает ли отказ (10)(a) в счёт следующей попытки — решение тимлида.
+
+**БУТ ДИАГНОСТИРОВАН (391.369 с, лог снят со стейдж-пода до создания шаблона).** Лог именует
+**11.76 с** SDK-fitness-проверок и **112 с** загрузки 1188 шардов; остальные **267.6 с (68%)** —
+вычитание, лог без таймстемпов и не может разделить старт контейнера / импорт torch+transformers /
+конструирование модели. Единственная содержательная находка: первые 822 шарда идут **7.61/с за
+108 с**, последние 366 — **за 4 с (91.5/с)**, ×12 ступенька = холодное чтение сетевого тома, потом
+кэш. Веса лежат на `qw4nwleanc` (`HF_HOME=/runpod-volume/hf`). Сегодняшний бут **402.586 с** на
+ДРУГОМ воркере (+2.9%) — режим 390–400 с воспроизводится, 175.8/183.58 с это другой режим.
 
 **RESUME ГОТОВ К ЗАПУСКУ (sku-b-v3-prep ✅, 21:38, $0).** `results/sku_pilot_prereg_v3.json`
 зарегистрирована РЯДОМ с v2 — ровно четыре сдвига (`attempts.verbatim` (6)→(11), `cap_usd`
@@ -221,12 +250,14 @@ of which 42 are video. **This executor signed nothing** — the composition is t
 
 ## ⏭️ Next
 
-**СЛЕДУЮЩЕЕ — ПЛАТНЫЙ `sku-b-v3-run`: докупка 121 элемента, кап $0.45, НУЖЕН GO ОПЕРАТОРА.**
-Подготовка закрыта ($0). Что запустит сессию: `PYTHONPATH=src python3
-scripts/positions_gm4_skub.py --resume --endpoint-id <id>` — прережка, якорь (`spend_sku_b_v3.json`),
-кап и оба пути вывода следуют флагу сами. Стейджинг тома и НОВЫЙ шаблон/эндпойнт — как в
-`sku-b-run.md` (воркер держит код, с которым загрузился). Заодно бесплатно: `worker-boot.log` на томе
-`qw4nwleanc` — диагноз регресса бута ×2.13.
+**СЛЕДУЮЩЕЕ — РЕШЕНИЕ ТИМЛИДА ПО ПЕРЕРЕГИСТРАЦИИ. Кода к написанию нет, пока не решено.**
+v3-run отказал на go/no-go, попытка (11) ЦЕЛА, куплено 17 из 138. На столе три числа и один вопрос:
+$0.5964 (по маргиналу 14.808 с/стр., n=1) · $0.3248 (по 5.0772 с/стр., n=17) · break-even
+9.5622 с/стр. Вопрос: считать ли $0.1526, потраченные отказавшей сессией, в счёт следующей (Dv167 —
+сейчас драйвер считает их МОЛЧА, и тогда бюджет второй попытки $0.2974, ниже даже оптимистичной
+проекции). v4 = новая прережка РЯДОМ с v3 + свои `RESUME_*` константы (кап, путь якоря, ключ фазы)
+вместе. Всё остальное готово: том стейджится в 2 минуты, шаблон/эндпойнт по рецепту
+`sku-b-v3-run.md`, продюсер планок написан и протестирован (`scripts/sku_bar_verdicts.py`).
 
 **РУЛИНГ 11.08 НОЧЬЮ: sku-b-run ПРИНЯТ, исход = RESUME.** SPEC 3.17 **(11)**, пять чтений: (a) каждый элемент
 популяции покупается РОВНО ОДИН раз за программу — докупаются только **121** некупленный, 17
@@ -259,7 +290,9 @@ change either way.
 
 ## 🚧 Blockers
 
-**СЮИТА ЗЕЛЁНАЯ: 1780 passed, 2 skipped; `ruff format --check` 226 файлов.** Красный тест пятого
+**СЮИТА ЗЕЛЁНАЯ: 1806 passed, 2 skipped; `ruff format --check` 228 файлов. Дерево чистое,
+восемь коммитов `84a7d22..1f196f6`; почекаутная таблица зелёная на каждом (контроль — родитель
+`6888de7`, 1780).** Красный тест пятого
 блока закрыт step 0.2. **Поправка к записи 20:50:** предсказание брифа было ТОЧНЫМ — ассерт
 перечисления маркеров живёт ВНУТРИ `test_every_pinned_input_still_hashes_to_what_it_says`, это один
 и тот же тест, а не два. Ничего не биллится: платных вызовов в v3-prep не было вообще.
