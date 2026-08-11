@@ -325,9 +325,20 @@ class FakeEndpoint:
     empty array is a page the model says has no dairy on it.
     """
 
+    SMOKE_BOOT_SECONDS = 183.58
+    """vis-c's measured cold start (`results/captions_gm4_visc.json`). A SYNTHETIC clock, and the
+    record says so (`timing.smoke: true`) — but a fake whose `timing()` reported nothing left the
+    §C.1 gate with a marginal of zero, which is a gate that can never fire and therefore a gate
+    nothing proves. Its first real call raised `KeyError` on this very dict."""
+
+    SMOKE_SECONDS_PER_CALL = 2.5
+    """Between vis-b's 2.34 s/image and srv-2d's 4.26 s/row, so a smoke at the real population
+    projects into the same order of magnitude the $0.35 cap lives in."""
+
     def __init__(self, worker: dict, categories) -> None:
         self.worker = worker
         self.jobs = 0
+        self.calls = 0
         self.dump_path = None
         self.asked: list[tuple[str, int]] = []
         # The category the fake answers with is checked against the registry's own keys. Without
@@ -349,6 +360,7 @@ class FakeEndpoint:
         if task not in prompts.POSITIONS:
             raise ValueError(f"{task}: the smoke serves {sorted(prompts.POSITIONS)}")
         self.jobs += 1
+        self.calls += len(items)
         self.asked.append((task, len(items)))
         replies = []
         for index, _ in enumerate(items):
@@ -375,7 +387,17 @@ class FakeEndpoint:
         return replies
 
     def timing(self) -> dict:
-        return {"calls": self.jobs, "rows": 0, "wall_seconds": 0.0, "smoke": True}
+        """A synthetic clock, labelled as one. `worker_seconds` is what the gate divides by, so a
+        fake that reported none made the projection unmeasurable and its arithmetic unprovable."""
+        return {
+            "calls": self.jobs,
+            "rows": self.calls,
+            "worker_seconds": round(
+                self.SMOKE_BOOT_SECONDS + self.calls * self.SMOKE_SECONDS_PER_CALL, 3
+            ),
+            "wall_seconds": 0.0,
+            "smoke": True,
+        }
 
 
 def parse(reply: dict, carrier: str, task: str, categories, aliases) -> tuple[list, str | None]:
@@ -407,18 +429,24 @@ def run_leg(
     fields: tuple[str, ...],
     dump_prefix: str | None,
     on_job,
+    outcomes: list[dict],
+    dumped: list[dict],
     stop=None,
-) -> tuple[list[dict], list[dict]]:
-    """One job per pack, in order. Returns (per-source outcomes, dump rows).
+) -> None:
+    """One job per pack, in order, appending to the RUN's outcome and dump lists.
 
     A job that fails is named against every source in it and never re-asked; ``stop`` is the
     re-projection gate and the sources it skips are left out of the outcomes rather than marked
     failed — nothing was asked for them.
+
+    ``outcomes`` and ``dumped`` are the run's, not this leg's, and that is the whole point: the
+    gate prices what the SESSION has spent against what the SESSION will spend, and a per-leg
+    counter would restart the arithmetic at zero when the text leg opened while the billed seconds
+    carried the whole page leg.
     """
-    outcomes, dumped = [], []
     for index, batch in enumerate(packed):
-        if stop is not None and index and (reason := stop(len(outcomes))):
-            print(f"  STOP before job {index:02d}: {reason}", flush=True)
+        if stop is not None and (reason := stop()):
+            print(f"  STOP before {task} job {index:02d}: {reason}", flush=True)
             break
         if dump_prefix is not None:
             client.dump_path = f"{dump_prefix}_{task}_{index:02d}.jsonl"
@@ -458,7 +486,48 @@ def run_leg(
             )
             dumped += [row_for(position, item, fields) for position in found]
         on_job(index, batch, replies)
-    return outcomes, dumped
+
+
+def billed_seconds(client) -> float:
+    """What the worker reports as billed so far, or 0.0 when it does not report at all.
+
+    Read through ``.get`` and not ``[...]``: `timing()` is a client's own dict and a client that
+    never made a call has no ``worker_seconds`` in it. Indexing it raised `KeyError` inside the
+    gate, which is a crash on the one path a $0 contract can prove and a paid run cannot afford.
+    """
+    return float((client.timing() or {}).get("worker_seconds") or 0.0)
+
+
+def projection(*, opened_seconds: float, billed: float, done: int, total: int, rate: float) -> dict:
+    """What the run will cost, from what it has ALREADY been billed. The stop reads this.
+
+    Deliberately not `caption_gm4_5c1.projection`, which this driver otherwise follows. That one
+    prices `rows_total x marginal + COLD_START_USD` — a caption constant (vis-b's $0.0733), which
+    this contract has no business re-adding: the boot has already been billed by the time any gate
+    runs, and adding a pre-registered figure on top of measured seconds double-counts it. Here
+    everything paid is in ``billed`` and only what is LEFT is projected.
+
+    ``opened_seconds`` is the clock after the `info` handshake AND the 3.17 (9) warm-up, so the
+    marginal is the legs' own and carries neither the cold start nor the two non-gold calls. Those
+    are still charged — they are inside ``billed`` — they are just not multiplied by 138.
+
+    ``done`` and ``total`` count CALLS across both legs. The marginal is therefore a blend once the
+    text leg opens, and that is the honest reading with one instrument and two input shapes: no
+    artifact prices a positions call on either shape yet, so a per-leg rate table here would be two
+    guesses instead of one measurement. It self-corrects — every gate re-reads the clock.
+    """
+    marginal = (billed - opened_seconds) / max(done, 1)
+    remaining = max(total - done, 0) * marginal
+    return {
+        "calls_done": done,
+        "calls_total": total,
+        "opened_seconds": round(opened_seconds, 3),
+        "billed_seconds": round(billed, 3),
+        "marginal_seconds_per_call": round(marginal, 4),
+        "spent_usd": round(billed * rate, 4),
+        "remaining_usd": round(remaining * rate, 4),
+        "projected_usd": round((billed + remaining) * rate, 4),
+    }
 
 
 def warmup(client, task_page: str, task_text: str) -> dict:
@@ -612,27 +681,39 @@ def main(argv: list[str] | None = None, client=None) -> int:
     )
 
     started = datetime.now(UTC).isoformat(timespec="seconds")
-    boot_seconds = float(client.timing().get("worker_seconds") or 0.0)
+    # after `info` and before the warm-up: on a cold endpoint this is the weight load
+    boot_seconds = billed_seconds(client)
     rate = leader.rate_usd_per_second()
 
     opened = warmup(client, prompts.POSITIONS_TASK_PAGE, prompts.POSITIONS_TASK_TEXT)
     for task, reply in opened.items():
         print(f"  warm-up {task:<20} {reply['finish_reason']}  {reply['content'][:60]}")
+    # after the warm-up: everything charged before the first gold call. The legs' marginal is
+    # measured from HERE, so neither the cold start nor the two non-gold calls is multiplied by 138
+    opened_seconds = billed_seconds(client)
 
-    rows_total = len(page_items) + len(text_items)
+    calls_total = len(page_items) + len(text_items)
     budget = args.project_stop_usd
     if budget is None and ledger is not None:
         budget = round(CAP_USD - spent, 4)
     projections: list[dict] = []
 
-    def gate(done: int) -> str | None:
-        seen = leader.projection(
-            boot_seconds, float(client.timing()["worker_seconds"]), done, rows_total, rate
+    def gate() -> str | None:
+        """Re-price the whole run before every job but the first. Cross-leg by construction."""
+        done = len(outcomes)
+        if not done:
+            return None  # nothing has been billed for a call yet; there is no marginal to read
+        seen = projection(
+            opened_seconds=opened_seconds,
+            billed=billed_seconds(client),
+            done=done,
+            total=calls_total,
+            rate=rate,
         )
         projections.append(seen)
         print(
-            f"  after {done}/{rows_total}: ${seen['marginal_usd_per_row']:.6f}/call →"
-            f" ${seen['projected_usd']:.4f} projected",
+            f"  after {done}/{calls_total}: {seen['marginal_seconds_per_call']}s/call ·"
+            f" ${seen['spent_usd']:.4f} spent → ${seen['projected_usd']:.4f} projected",
             flush=True,
         )
         if budget is not None and seen["projected_usd"] > budget:
@@ -656,7 +737,8 @@ def main(argv: list[str] | None = None, client=None) -> int:
         ("page", prompts.POSITIONS_TASK_PAGE, page_jobs, lambda item: "leaflet_page"),
         ("text", prompts.POSITIONS_TASK_TEXT, text_jobs, lambda item: item["carrier"]),
     ):
-        got, wrote = run_leg(
+        before = len(outcomes)
+        run_leg(
             client,
             task,
             carrier_of,
@@ -666,12 +748,12 @@ def main(argv: list[str] | None = None, client=None) -> int:
             fields,
             args.dump_prefix,
             announce(leg),
+            outcomes,
+            dumped,
             gate if budget is not None else None,
         )
-        for row in got:
+        for row in outcomes[before:]:
             row["leg"] = leg
-        outcomes += got
-        dumped += wrote
 
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(
@@ -769,8 +851,20 @@ def main(argv: list[str] | None = None, client=None) -> int:
             "rate_usd_per_second": rate,
             "rate_source": "results/srv2d_cost.json :: rate.usd_per_second",
             "stop_at_usd": budget,
+            # what was billed before the first gold call, split so the report of this run can be
+            # compared against results/sku_projection.json's two cold-start corners
+            "boot_seconds": round(boot_seconds, 3),
+            "boot_usd": round(boot_seconds * rate, 4),
+            "warmup_seconds": round(opened_seconds - boot_seconds, 3),
+            "opened_seconds": round(opened_seconds, 3),
             "per_gate": projections,
             "stopped_early": bool(unbought),
+            "reading": (
+                "the stop prices what is LEFT against what is already billed — it never re-adds a"
+                " pre-registered cold start on top of measured seconds, because by the time any"
+                " gate runs the boot has been paid and is inside `billed_seconds`. `calls_done`"
+                " counts across BOTH legs"
+            ),
         },
         "cost": {
             "jobs": len(page_jobs) + len(text_jobs),

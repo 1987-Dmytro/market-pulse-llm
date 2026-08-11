@@ -401,6 +401,133 @@ def test_the_dry_run_reaches_no_client_at_all(tmp_path, capsys):
     assert "text leg   30 rows" in capsys.readouterr().out
 
 
+# --- the projection gate: the one path that enforces the cap inside a run ------------------------
+
+
+def test_the_projection_prices_what_is_left_and_never_re_adds_the_boot():
+    """`caption_gm4_5c1.projection` adds a pre-registered cold-start constant on top of measured
+    seconds. Here the boot has already been billed by the time any gate runs, so re-adding it would
+    double-count; everything paid is inside `billed` and only what is LEFT is projected."""
+    seen = driver.projection(opened_seconds=200.0, billed=300.0, done=40, total=140, rate=0.001)
+    assert seen["marginal_seconds_per_call"] == pytest.approx(2.5)
+    assert seen["spent_usd"] == pytest.approx(0.3)
+    assert seen["remaining_usd"] == pytest.approx(100 * 2.5 * 0.001)
+    assert seen["projected_usd"] == pytest.approx(0.3 + 0.25)
+    # nothing left to buy: the projection is what has been spent, not spend plus a constant
+    done = driver.projection(opened_seconds=200.0, billed=300.0, done=140, total=140, rate=0.001)
+    assert done["remaining_usd"] == 0.0 and done["projected_usd"] == done["spent_usd"]
+
+
+def test_a_client_that_reports_no_clock_is_read_as_zero_and_never_raises():
+    """The crash this replaced: `client.timing()["worker_seconds"]` raised `KeyError` on the first
+    gate call, so the whole cap-enforcement path died the moment it was exercised."""
+
+    class Silent:
+        def timing(self):
+            return {}
+
+    assert driver.billed_seconds(Silent()) == 0.0
+
+    class Nothing:
+        def timing(self):
+            return None
+
+    assert driver.billed_seconds(Nothing()) == 0.0
+
+
+def test_the_gate_stops_the_run_and_leaves_the_rest_unbought(tmp_path, capsys):
+    """A budget the run passes on its first job. What is skipped is `unbought` — not asked for,
+    not failed — and the stop reaches the SECOND leg too."""
+    out, record, ledger = tmp_path / "d.jsonl", tmp_path / "r.json", tmp_path / "l.json"
+    code = driver.main(
+        [
+            "--smoke",
+            "--project-stop-usd",
+            "0.10",
+            "--out",
+            str(out),
+            "--record",
+            str(record),
+            "--ledger",
+            str(ledger),
+        ]
+    )
+    assert code == 0
+    written = json.loads(record.read_text(encoding="utf-8"))
+    assert written["projection"]["stopped_early"] is True
+    assert written["population"]["unbought"], "the pages never asked for must be named"
+    assert written["population"]["asked"] < 138
+    assert written["projection"]["per_gate"], "the gate must have run at all"
+    printed = capsys.readouterr().out
+    assert "STOP before positions_post_gm4" in printed
+    assert "STOP before positions_text_gm4" in printed, "the stop must reach the second leg"
+
+
+def test_a_generous_budget_buys_the_whole_population(tmp_path):
+    out, record, ledger = tmp_path / "d.jsonl", tmp_path / "r.json", tmp_path / "l.json"
+    driver.main(
+        [
+            "--smoke",
+            "--project-stop-usd",
+            "9.99",
+            "--out",
+            str(out),
+            "--record",
+            str(record),
+            "--ledger",
+            str(ledger),
+        ]
+    )
+    written = json.loads(record.read_text(encoding="utf-8"))
+    assert written["population"]["asked"] == 138
+    assert written["population"]["unbought"] == []
+    assert written["projection"]["stopped_early"] is False
+
+
+def test_the_gate_counts_calls_across_BOTH_legs(tmp_path):
+    """The bug this pins: `run_leg` used to own its outcome list, so `done` restarted at 0 when the
+    text leg opened while the billed clock carried the whole page leg — and the marginal the stop
+    read was 108 pages' seconds divided by a handful of rows."""
+    out, record, ledger = tmp_path / "d.jsonl", tmp_path / "r.json", tmp_path / "l.json"
+    driver.main(
+        [
+            "--smoke",
+            "--project-stop-usd",
+            "9.99",
+            "--out",
+            str(out),
+            "--record",
+            str(record),
+            "--ledger",
+            str(ledger),
+        ]
+    )
+    gates = json.loads(record.read_text(encoding="utf-8"))["projection"]["per_gate"]
+    counts = [gate["calls_done"] for gate in gates]
+    assert counts == sorted(counts), "calls_done must never restart"
+    # the LAST gate is the one before the text leg's first job, and it carries the whole page leg.
+    # Under a per-leg counter it would have read 0 — and the old `and index` condition skipped a
+    # leg's first job entirely, so this gate did not exist at all.
+    assert counts[-1] == 108, "the text leg's first gate must carry the page leg's 108 calls"
+    for gate in gates:
+        assert gate["calls_total"] == 138
+        # the warm-up's two non-gold calls are billed but are NOT in the marginal
+        assert gate["marginal_seconds_per_call"] == pytest.approx(
+            driver.FakeEndpoint.SMOKE_SECONDS_PER_CALL, abs=1e-6
+        )
+        assert gate["billed_seconds"] > gate["opened_seconds"] > 0
+
+
+def test_the_smoke_clock_is_synthetic_and_says_so(tmp_path):
+    """A fake whose `timing()` reported nothing left the gate with a marginal of zero — a gate
+    that can never fire is a gate nothing proves. The seconds are made up; the record says so."""
+    out, record = tmp_path / "d.jsonl", tmp_path / "r.json"
+    driver.main(["--smoke", "--leg", "text", "--out", str(out), "--record", str(record)])
+    timing = json.loads(record.read_text(encoding="utf-8"))["timing"]
+    assert timing["smoke"] is True
+    assert timing["worker_seconds"] > driver.FakeEndpoint.SMOKE_BOOT_SECONDS
+
+
 def test_the_driver_names_the_two_registered_tasks_and_no_others():
     source = (REPO_ROOT / "scripts" / "positions_gm4_skub.py").read_text(encoding="utf-8")
     for task in prompts.POSITIONS:
