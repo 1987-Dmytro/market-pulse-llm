@@ -166,14 +166,19 @@ def test_every_pinned_input_still_hashes_to_what_it_says(record):
     assert live != pin, "the live SPEC hashes to the pin — 3.17 (7) is not in the file"
     assert hashlib.sha256(prereg.registered_law(prereg.SPEC)).hexdigest() == pin
 
-    # 3.17 (8) landed beside (7) in uni-b, so the strip has to take BOTH marked blocks off or this
-    # pin stops re-deriving. Named here rather than implied: the day a `-3` block lands, this is the
-    # line that says what the strip is expected to know about.
+    # 3.17 (8) landed beside (7) in uni-b and (9) beside both in sku-b-prep, so the strip has to
+    # take EVERY marked block off or this pin stops re-deriving. Named here rather than implied:
+    # this is the line that says what the strip is expected to know about, and extending it is the
+    # only legal way to green a ratification block — re-pinning the record is not (the prereg chain
+    # is the pilot's witness, and a v3 happens only on team-lead instruction).
     assert prereg.RATIFICATION_NAME.findall(spec_text) == [
         "sku-b-ratification",
         "sku-b-ratification-2",
+        "sku-b-ratification-3",
     ]
-    assert "sku-b-ratification-2" not in prereg.registered_law(prereg.SPEC).decode("utf-8")
+    law = prereg.registered_law(prereg.SPEC).decode("utf-8")
+    assert "sku-b-ratification-2" not in law
+    assert "sku-b-ratification-3" not in law
 
     for path, sha in record["pinned_inputs"].items():
         if path == "docs/SPEC.md":
