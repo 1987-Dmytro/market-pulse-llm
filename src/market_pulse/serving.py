@@ -64,6 +64,21 @@ POLL_SECONDS = 5.0
 TERMINAL = frozenset({"COMPLETED", "FAILED", "CANCELLED", "TIMED_OUT"})
 
 
+class JobExpired(ApiError):
+    """The CLOCK ended a job rather than the job ending itself — RunPod's own ``TIMED_OUT``, or
+    this client's deadline passing while the job was still running.
+
+    Its own type because a run under a spend cap has to treat the two differently. A job that
+    ends ``FAILED`` or ``CANCELLED`` is one batch's problem and says nothing about the next one;
+    a job the clock killed **billed the whole execution timeout** and is evidence that something
+    is wedged, so a caller enforcing a cap between jobs has no reason to believe the next job
+    will be cheaper (SPEC amendment 3.17 (10)(c)).
+
+    A SUBCLASS of :class:`ApiError` on purpose: every ``except ApiError`` already written keeps
+    catching it, and only a caller that wants the distinction has to know it exists.
+    """
+
+
 def execution_policy(execution_timeout_s: float, ttl_s: float) -> dict:
     """RunPod's per-request execution policy, and the ONE place seconds become milliseconds.
 
@@ -229,7 +244,9 @@ class EndpointClient:
             if "id" not in job:
                 raise ApiError(-1, f"no job id and no terminal status: {str(job)[:200]}")
             if time.monotonic() > deadline:
-                raise ApiError(408, f"job {job['id']} still {job.get('status')} after the timeout")
+                raise JobExpired(
+                    408, f"job {job['id']} still {job.get('status')} after the timeout"
+                )
             time.sleep(POLL_SECONDS)
             # RunPod's API answers `/status` on GET; the SDK's own server registers it POST-only.
             # A pod's `runsync` returns terminal, so this loop should never run there — and if it
@@ -243,7 +260,11 @@ class EndpointClient:
         if job.get("workerId"):
             self.worker_ids.add(job["workerId"])
         if job["status"] != "COMPLETED":
-            raise ApiError(-1, f"job {job.get('id')} ended {job['status']}: {str(job)[:300]}")
+            # TIMED_OUT only. FAILED and CANCELLED stay ordinary ApiErrors: the narrower type is
+            # about the CLOCK, and widening it here would silently turn "a failed job is named
+            # per item and the run continues" into "any job failure kills the run".
+            expired = JobExpired if job["status"] == "TIMED_OUT" else ApiError
+            raise expired(-1, f"job {job.get('id')} ended {job['status']}: {str(job)[:300]}")
         return job.get("output") or {}
 
     def _run_with_retry(

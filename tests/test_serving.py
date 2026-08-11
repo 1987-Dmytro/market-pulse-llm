@@ -109,6 +109,39 @@ def test_a_failed_job_is_an_error_not_an_empty_output(client):
         endpoint.batch("T1", ["one"])
 
 
+def test_a_job_the_clock_killed_is_its_own_error(client):
+    """SPEC amendment 3.17 (10)(c). A caller enforcing a spend cap between jobs has to treat this
+    one differently: a TIMED_OUT job billed the WHOLE execution timeout, so nothing about it says
+    the next job will be cheaper. A subclass, so every `except ApiError` already written still
+    catches it and only a caller that wants the distinction has to know it exists."""
+    endpoint = client(job({"replies": []}) | {"status": "TIMED_OUT"})
+    assert issubclass(serving.JobExpired, ApiError)
+    with pytest.raises(serving.JobExpired, match="ended TIMED_OUT"):
+        endpoint.batch("T1", ["one"])
+
+
+@pytest.mark.parametrize("status", ["FAILED", "CANCELLED"])
+def test_only_the_clock_raises_the_clock_error(client, status):
+    """The negative control, and the reason the branch is written on the status rather than on
+    `!= COMPLETED`: a narrower type that covered every terminal status would silently convert
+    "a failed job is named per item and the run continues" into "any job failure kills the run"
+    in every caller that ends a run on `JobExpired`."""
+    endpoint = client(job({"replies": []}) | {"status": status})
+    with pytest.raises(ApiError) as caught:
+        endpoint.batch("T1", ["one"])
+    assert not isinstance(caught.value, serving.JobExpired)
+
+
+def test_a_deadline_that_passes_while_the_job_runs_is_the_clock_too(client, monkeypatch):
+    """The other way the clock ends a job: the worker is still running and this client stops
+    waiting. Same reading for a cap — the job is up and billing and nobody is watching it."""
+    ticks = iter([0.0, 0.0, 10_000.0])
+    monkeypatch.setattr(serving.time, "monotonic", lambda: next(ticks))
+    endpoint = client({"id": "job-7", "status": "IN_PROGRESS"}, job_timeout=60.0, submit="run")
+    with pytest.raises(serving.JobExpired, match="after the timeout"):
+        endpoint.batch("T1", ["one"])
+
+
 def test_an_in_progress_job_is_polled_to_completion(client):
     endpoint = client(
         {"id": "job-9", "status": "IN_PROGRESS"},
