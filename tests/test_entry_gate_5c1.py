@@ -23,6 +23,7 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 import entry_check as gate  # noqa: E402
 
+from market_pulse import entry_check as core  # noqa: E402
 from market_pulse.entry_check import gate_verdict, script_mix  # noqa: E402
 
 CANON = REPO_ROOT / "docs" / "CHANNELS-launch.md"
@@ -256,6 +257,24 @@ def apply_rulings_city_feeds():
     import apply_gate_rulings_5c1 as apply
 
     return apply.CITY_FEEDS
+
+
+def test_a_pre_registered_flag_whose_channel_left_is_reported_and_not_silent():
+    """uni-a's LEAK L4. The three flag keys are a transcribed 5c1 ruling and they STAY — the handles
+    are its provenance, not configuration. What they lacked was a way to go stale loudly: a channel
+    that leaves the composition takes its flag with it and the dictionary goes on reading like a
+    live instruction.
+
+    Today all three are in the gate's own candidate list, so the field is empty — which is the
+    answer, and it is written into the record either way, because an empty list and a
+    never-computed one look identical to a reader.
+    """
+    handles = [handle for handle, _ in gate.CANDIDATES]
+    assert core.unmatched_flags(handles) == []
+    assert set(core.PRE_REGISTERED_FLAGS) <= set(handles)
+    # the negative control: drop one candidate and its flag must surface by name
+    without = [handle for handle in handles if handle != "@whowears"]
+    assert core.unmatched_flags(without) == ["@whowears"]
 
 
 def test_the_candidate_list_is_the_canons_own():

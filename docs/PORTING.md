@@ -5,19 +5,33 @@ How this system moves when `config/registry.yaml` changes. Two levels, ruled by 
 retail category. Beyond-Telegram is one paragraph of contour at the end and nothing more.
 
 Every claim here cites a measurement. The measurements are `results/uni_probe.json` (the uni-a dry
-run: a toy «кава» registry driven through the shipped code, $0, no model) and the domain-leak
+run: a toy «кава» registry driven through the shipped code, $0, no model), its re-run
+`results/uni_probe_v2.json` (uni-b, the same probe under the changed code) and the domain-leak
 sweep recorded in `docs/reports/uni-a.md`. Where this document and the code disagree, the code is
 right and this document is stale — say so and fix the document.
 
+**uni-b (2026-08-11, SPEC 3.17 (8)) closed four of the leaks this document was written around.**
+The category vocabulary is law in `config/lexicon.yaml` and follows a registry edit; the unit list
+moved into it; the schema's fifth presence field is `attribute`, not `fat`; and the two silent
+zeros (L2, L3) are loud refusals. What did NOT change is the expensive half — the registered
+prompt texts, the gold, the bars. Sections marked **[uni-b]** below are the ones whose cost moved.
+
 ## The one-line answer
 
-The **schema** follows the registry. The **vocabulary** does not.
+The **schema** follows the registry. The **vocabulary** does now too — the prompts still do not.
+
+*(Before uni-b this line ended at "does not", and the file it pointed at was
+`data/category_lexicon_draft.json`. That half is fixed; the sentence is kept in its corrected form
+rather than deleted, because the SHAPE of the finding is what the cost model below rests on.)*
 
 `positions.category_keys`, the parser, the tier ladder and both brand resolvers read whatever
 registry they are handed — measured, not asserted (uni_probe steps 1, 3, 4). The words that decide
-which rows are looked at and what the model is asked for live in two places the registry cannot
+which rows are looked at and what the model is asked for lived in two places the registry could not
 reach: `data/category_lexicon_draft.json` and the registered prompt texts in
-`src/market_pulse/prompts.py`. That split is the whole cost model below.
+`src/market_pulse/prompts.py`. The first is now `config/lexicon.yaml`, a law file with a guard
+tying its stems to the registry's display names; the second is unchanged and unchangeable — a
+registered text is replaced by a NEW registration, never edited (SPEC 3.17 (5)). That split is
+still the whole cost model below, with one side of it now cheap.
 
 ---
 
@@ -56,15 +70,21 @@ the honest cost of exactness rather than a bug: «Nescafe» written without its 
 resolve to the registered «Nescafé», and the accusative «Галку» does not resolve to «Галка». Every
 spelling a source actually uses has to be a registered `display_name`.
 
-**What step 6 costs, precisely.** Eight files under `results/` pin the registry's sha256. Five of
+**What step 6 costs, precisely.** Nine files under `results/` pin the registry's sha256. Five of
 them already hold pre-signature bytes (`c82d0cff…`) and refuse to re-run, which is correct and
-documented. **Three hold the live `920c7f20…`**:
+documented. **Four hold the live `920c7f20…`** (re-measured after uni-b, which added the fourth):
 
-- `results/sku_pilot_prereg.json` — sku-b's own pre-registration
+- `results/sku_pilot_prereg.json` — sku-b's pre-registration as first registered, now sealed
+- `results/sku_pilot_prereg_v2.json` — its uni-b re-registration, the LIVE one
 - `results/sku_prefilter_census.json` — the frame the sku-b text sample is drawn from
 - `results/sku_reference_leaflet.json` — the leaflet gold
 
-A level-(a) edit moves all three to stale. **Two of them are inputs to the paid attempt that has
+(`results/uni_probe.json` and `results/uni_probe_v2.json` carry the same string, but as a
+MEASUREMENT — "the live registry was untouched while a toy one was driven through the code" — not
+as a pin. Counting them here would inflate the cost of a registry edit by two files that judge
+nothing.)
+
+A level-(a) edit moves all four to stale. **Two of them are inputs to the paid attempt that has
 not run yet**, so a watchlist edit *during* phase B is a collision, not a chore: it would move the
 sha a live pre-registration pins. The window for a level-(a) edit is before sku-b starts or after
 B closes.
@@ -140,25 +160,25 @@ dairy. That is the silent failure this checklist exists to prevent.
 
 ## The checklist
 
-### 1 · The category lexicon — FIRST, and it is not the registry (cheap, one file)
+### 1 · The category lexicon — FIRST, and it is LAW now **[uni-b]**
 
-`data/category_lexicon_draft.json` needs a new `tracked` family: the stems of the new category
-under the lexicon's own matcher (`stem + one of endings, bounded by non-word characters`). Nothing
+`config/lexicon.yaml` needs a new `tracked` family: the stems of the new category under the
+lexicon's own matcher (`stem + one of endings, bounded by non-word characters`). Nothing
 downstream can measure the new category until it exists — the uni-a probe itself had to write a
 toy lexicon in a tempdir before step 2 could run at all.
 
-Its producer is `scripts/measure_categories.py::build_lexicon`, which checks every tracked stem
-against the registry's display names and **exits loudly** when they do not match
-(`SystemExit: … are not prefixes of any display name in the registry`). That refusal is a good
-property: swapping the taxonomy and re-running the producer cannot silently keep the old stems.
-The file on disk has no such guard — it is read as shipped by `scripts/yield_screen_5c1.py`
-(battle), `scripts/sku_prefilter_census.py`, `scripts/theme_screen_5c1.py` and
-`scripts/rematch_with_captions_5c1.py`, and its sha is pinned in five committed records.
+The guard moved onto the law with it. `market_pulse.lexicon.load_lexicon(path, taxonomy=…)` checks
+every tracked stem against the registry's display names and **raises loudly** when they do not
+match (`… are not prefixes of any display name in the registry`), which is
+`scripts/measure_categories.py::build_lexicon`'s own rule with ONE implementation, now called by
+both. Swapping the taxonomy without swapping the stems is refused rather than measured as zero.
 
-Two facts to carry into the ruling: the file's own `note` still says "nothing reads this file
-except scripts/measure_categories.py", which stopped being true when the yield screen shipped; and
-its `status` is `draft-not-law` — **5c3 owns the category law**, so a new family here is a
-screening instrument, never the taxonomy.
+`data/category_lexicon_draft.json` stays on disk, frozen, `status: draft-not-law`: five committed
+records pin its sha `1225ad75…` and the law's header names it as source with that sha. It is still
+read as shipped by the 5c1 SCREEN instruments — `scripts/yield_screen_5c1.py` (battle),
+`scripts/theme_screen_5c1.py` (through the producer) and `scripts/rematch_with_captions_5c1.py` —
+which sealed their records against it; the pre-filter path (`scripts/sku_prefilter_census.py`,
+`market_pulse.positions`) reads the law.
 
 ### 2 · The registry taxonomy block (cheap, registry edit only)
 
@@ -185,14 +205,20 @@ What has to be written anew, by line class, measured off the live text:
 
 Registration discipline, unchanged: the new prompts are added **beside** the dairy ones with their
 own shas, never by editing a registered text. Today's two are `positions_post_gm4` `ca6303c157d4`
-and `positions_text_gm4` `7250b87aa1c2`, both pinned in `results/sku_pilot_prereg.json`.
+and `positions_text_gm4` `7250b87aa1c2`, both pinned — unchanged — in
+`results/sku_pilot_prereg.json` and its uni-b re-registration `results/sku_pilot_prereg_v2.json`.
 
-### 4 · The pre-filter's second half — the unit list (cheap, but a NAMED revision)
+### 4 · The pre-filter's second half — the unit list (cheap, but a NAMED revision) **[uni-b]**
 
-`positions.SIZE_PRICE_UNITS` is a closed list of six: `кг · мл · грн · г · л · %`. Coffee survives
-it (a pack is grams), but a category sold by the piece does not — «6 шт» is not a match, and
-widening the list moves the sample frame the text bar of SPEC 3.17 (6) is measured over. The
-module says so itself; it is a named revision and not a tweak.
+The six units `кг · мл · грн · г · л · %` are `units:` in `config/lexicon.yaml` and
+`positions.SIZE_PRICE_UNITS` reads them from there. Coffee survives the list (a pack is grams), but
+a category sold by the piece does not — «6 шт» is not a match, and widening the list moves the
+sample frame the text bar of SPEC 3.17 (6) is measured over. It is a named revision and not a
+tweak, and it is now pinned by sha in `results/sku_pilot_prereg_v2.json` like the registry is.
+
+**The order is load-bearing.** Longest-first: a regex alternation takes the first branch that
+matches, so «г» before «грн» reads "90 грн" as a size. `tests/test_lexicon.py` asserts the exact
+sequence, not the set — an alphabetical tidy-up of that list is a silent breakage.
 
 ### 5 · The watchlist for the new category (cheap, with a structural caveat)
 
@@ -202,21 +228,33 @@ keys, measured (uni_probe step 4). A Latin-brand category needs every spelling r
 normalization decision — and normalization is a re-scoring decision with a plan, not a fix (the
 homoglyph gap found on the 4.5a brands stratum is deferred for exactly this reason).
 
-### 6 · The `fat` field — a SPEC QUESTION, flagged, not decided
+### 6 · The attribute field — RULED, and the ceremony it cost **[uni-b]**
 
-`Position.fat_pct` is a dairy attribute. A coffee position has roast and grind; a detergent
-position has concentration. Whether the schema generalizes it to an `attribute` or keeps a
-per-domain field is the operator's ruling, and the ruling has a constraint this phase measured:
+`Position.attribute_pct` was `fat_pct` until SPEC 3.17 (8). A coffee position has roast and grind;
+a detergent position has concentration — the ladder is a function of PRESENCE, and «жирність» was
+only what a dairy source happens to differentiate a SKU by. The operator ruled the generalization
+on 2026-08-11, before sku-b, which is the only window it had:
 
-`fat` is one of `positions.PRESENCE_FIELDS` → `PRESENCE_FIELDS` builds `ladder_table()` →
-`ladder_table()` is hashed by `ladder_sha256()` → that hash, **`b497c072…`, is pinned inside
-`results/sku_pilot_prereg.json`** (line 68), with the whole 32-row table beside it (line 125) and
-the prereg's own words for why: "bar 3's gold is computed from the operator's ticks by this ladder
-and the model's tier by the same function, so the ladder is an INPUT to the bar."
+`attribute` is one of `positions.PRESENCE_FIELDS` → `PRESENCE_FIELDS` builds `ladder_table()` →
+`ladder_table()` is hashed by `ladder_sha256()` → that hash is pinned inside the pilot's
+pre-registration, whose own words are: "bar 3's gold is computed from the operator's ticks by this
+ladder and the model's tier by the same function, so the ladder is an INPUT to the bar."
 
-**Therefore:** generalizing `fat` is not a rename. It moves a sha that a live pre-registration
-pins and that sku-b's one paid attempt is scored against. It can happen **before sku-b starts or
-after B closes — never between.** This phase decides nothing here.
+So it was never a rename. `b497c072…` → `6a257e04…`, and the price was a ceremony: SPEC 3.17 (8),
+`results/sku_pilot_prereg_v2.json` registered BESIDE the sealed v1, the pack manifest rebuilt over
+the new ladder. What did NOT move: any rung (the renamed table is a bijection onto the old one),
+any threshold, the $0.35 cap, the one-attempt clause, the R1–R5 readings, the adjudicated
+`text30.csv` or its `given_sha256`.
+
+**Two things a new domain inherits from this.** The field is still percent-only —
+`attribute_pct > 100` is refused and `parse_fat` takes «2,5%» — so a coffee attribute that is not a
+percentage needs a schema decision, not just a registry edit. And the WIRE keeps the domain word:
+the dairy prompts ask for `"fat"` and `positions.WIRE_KEYS` maps it to the schema, because a
+registered prompt text is replaced by a new registration, never edited. A new instrument family
+registers its own prompts and adds one row to that table.
+
+**The window rule still stands for anything else of this shape:** a change that moves a pinned sha
+happens **before sku-b starts or after B closes — never between.**
 
 ### 7 · New gold, new frozen sets, gates re-earned — THE IRREDUCIBLE COST
 
@@ -241,17 +279,29 @@ discipline that governs this is the project's own ablation rule: score the artif
 configuration production will serve, compare arms on pre-registered criteria, and let the
 measurement decide. A new category does not authorise a retrain — a measured failure does.
 
-### 9 · The instruments that must be re-pointed, or they answer about dairy
+### 9 · The instruments that must be re-pointed, or they answer about dairy **[uni-b]**
 
-Found by the uni-a sweep; the full table with classes is in `docs/reports/uni-a.md`.
+Found by the uni-a sweep; the full table with classes is in `docs/reports/uni-a.md`. uni-b closed
+or made loud everything above the line; what is left below it is what a new domain still pays.
+
+**Closed:**
+
+| was | now |
+|---|---|
+| `data/category_lexicon_draft.json` — the pre-filter kept passing dairy rows: 90 of 2,000 sampled, measured (L1) | `config/lexicon.yaml`, law, guarded against the registry's display names |
+| `positions.SIZE_PRICE_UNITS` — a closed literal (L6) | `units:` in the same law file |
+| `scripts/theme_screen_5c1.py::TRACKED = ("dairy", "ice-cream")` — a literal whose docstring called it the registry's (L2) | `tracked_groups(registry, compiled)`; an empty intersection is `SystemExit`, never a table of zeros |
+| `scripts/measure_categories.py::coverage()` — `tracked = {"dairy", "ice-cream"}` (L3) | the same, in the script that produces the draft |
+| `src/market_pulse/entry_check.py::PRE_REGISTERED_FLAGS` — three 5c1 handles (L4) | the keys stay (transcribed ruling, provenance); the gate record now carries `flags_unmatched` naming any key the composition no longer holds |
+| `src/market_pulse/prompts.py::SENDER_CONTEXT` — two channel identities inside `src/` (L5) | unchanged BY LAW — a registered text file is not edited — but fenced: the lines render only for `precheck_v2ctx_with_post`, a closed 4.5g4 revision in no live task set, and `tests/test_prompts.py` holds that reach. A new domain inherits an unreachable dictionary, not two channel identities in its prompts |
+
+**Still open:**
 
 | instrument | what a new domain would observe |
 |---|---|
-| `data/category_lexicon_draft.json` | the pre-filter keeps passing dairy rows: 90 of 2,000 sampled, measured |
-| `scripts/theme_screen_5c1.py::TRACKED = ("dairy", "ice-cream")` | a literal whose docstring calls it "the tracked groups of config/registry.yaml". Under a new taxonomy the intersection is empty and every channel reads ZERO — silently |
-| `scripts/measure_categories.py::coverage()` — `tracked = {"dairy", "ice-cream"}` | same shape, same silence, in the script that PRODUCES the lexicon |
-| `src/market_pulse/entry_check.py::PRE_REGISTERED_FLAGS` | three 5c1 handles that will never match again; the new composition's flagged channels are not flagged |
-| the eight `results/` files pinning the registry sha | five already stale, three go stale on the first edit |
+| the registered prompt texts (`positions_post_gm4`, `positions_text_gm4`) | the model is asked about eleven dairy kinds and told to exclude coffee by name. Two NEW registrations — step 3 above |
+| the nine `results/` files pinning the registry sha | five already stale, the rest go stale on the first edit |
+| every gold pack, frozen set and bar | step 7 — the irreducible cost |
 
 ---
 

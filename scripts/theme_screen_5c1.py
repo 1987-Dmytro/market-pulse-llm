@@ -42,9 +42,30 @@ GATE_RECORD = REPO_ROOT / "results" / "entry_gate_5c1.json"
 STORE = REPO_ROOT / "data" / "raw" / "posts"
 RECORD = REPO_ROOT / "results" / "theme_screen_5c1.json"
 
-TRACKED = ("dairy", "ice-cream")
-"""The tracked groups of `config/registry.yaml`. Everything else the lexicon knows is a draft
-family and is reported as "food at all", which is the weaker and more forgiving question."""
+
+def tracked_groups(registry, compiled: dict) -> tuple[str, ...]:
+    """The tracked groups, READ from `config/registry.yaml` — uni-a's LEAK L2.
+
+    They were a literal `("dairy", "ice-cream")` under a docstring that called them the registry's,
+    which is the failure worth naming: the sentence was true and the code was not, so a taxonomy
+    change would have left this screen measuring dairy under a new category's name.
+
+    Everything else the lexicon knows is a draft family and is reported as "food at all", the
+    weaker and more forgiving question.
+
+    An empty intersection with what the lexicon compiles is a REFUSAL, not a zero: every channel
+    would score `tracked_share: 0.0` and the table would read as "no source carries the category"
+    when it means "nothing here can see the category at all".
+    """
+    tracked = tuple(sorted(registry.taxonomy.tracked_groups))
+    known = tuple(key for key in tracked if key in compiled)
+    if not known:
+        raise SystemExit(
+            f"the registry tracks {list(tracked)} and the lexicon compiles {sorted(compiled)} —"
+            " no group is in both, so every channel would score zero on the tracked category and"
+            " the table would read as a finding about the sources"
+        )
+    return known
 
 
 def posts_of(handle: str) -> list[dict]:
@@ -61,21 +82,24 @@ def posts_of(handle: str) -> list[dict]:
     return rows
 
 
-def screen(handle: str, compiled: dict, aliases: dict) -> dict:
-    """One channel's window, measured against the lexicon."""
+def screen(handle: str, compiled: dict, aliases: dict, tracked: tuple[str, ...]) -> dict:
+    """One channel's window, measured against the lexicon and the registry's tracked groups."""
     posts = posts_of(handle)
     texts = [(row.get("text") or "").strip() for row in posts]
     with_text = [text for text in texts if text]
     tracked_hits, food_hits, brands, examples = 0, 0, {}, []
     for text in with_text:
         families = cat.categories_of(text, compiled)
-        on_category = [key for key in families if key in TRACKED]
+        on_category = [key for key in families if key in tracked]
         if on_category:
             tracked_hits += 1
             if len(examples) < 3:
                 terms = cat.matched_terms(text, compiled)
                 examples.append(
-                    {"terms": {k: v for k, v in terms.items() if k in TRACKED}, "text": text[:140]}
+                    {
+                        "terms": {k: v for k, v in terms.items() if k in tracked},
+                        "text": text[:140],
+                    }
                 )
         if families:
             food_hits += 1
@@ -125,7 +149,8 @@ def main(argv: list[str] | None = None) -> int:
     compiled = cat.patterns(cat.build_lexicon(registry))
     aliases = watchlist_aliases(list(registry.watchlist))
 
-    rows = [screen(handle, compiled, aliases) for handle in bucket_of]
+    tracked = tracked_groups(registry, compiled)
+    rows = [screen(handle, compiled, aliases, tracked) for handle in bucket_of]
     for row in rows:
         row["bucket"] = bucket_of[row["channel"]]
 
@@ -159,7 +184,7 @@ def main(argv: list[str] | None = None) -> int:
             " The gate never measured theme; @uasaler is why that gap is worth a number."
         ),
         "lexicon": cat.build_lexicon(registry),
-        "tracked_groups": list(TRACKED),
+        "tracked_groups": list(tracked),
         "source": "data/raw/posts/ — the window collected by scripts/collect_5c1.py --posts",
         "caveats": [
             "a SCREEN, not a verdict: the lexicon calls itself draft-not-law and has a known"

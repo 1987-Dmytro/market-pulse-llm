@@ -352,11 +352,22 @@ def comparison_marker(sentence: str) -> str | None:
 
 
 # --- the four measures --------------------------------------------------------
-def coverage(posts: list[dict], compiled: dict) -> dict:
+def coverage(posts: list[dict], compiled: dict, tracked: set[str]) -> dict:
+    """`tracked` comes from `config/registry.yaml` — uni-a's LEAK L3.
+
+    It was the literal `{"dairy", "ice-cream"}`, sitting inside the lexicon's own producer: the one
+    file that already holds a registry and checks every stem against it still restated the taxonomy
+    by hand. `share_of_texted_naming_tracked` would have kept counting dairy under a new category.
+    """
     texted = [post for post in posts if post.get("text")]
     read = [(post, categories_of(post["text"], compiled)) for post in texted]
     with_signal = [(post, cats) for post, cats in read if cats]
-    tracked = {"dairy", "ice-cream"}
+    if not tracked & set(compiled):
+        raise SystemExit(
+            f"the registry tracks {sorted(tracked)} and the lexicon compiles {sorted(compiled)} —"
+            " no group is in both, so `posts_naming_a_tracked_group` would be a measured zero and"
+            " read as a fact about the corpus"
+        )
     tracked_only = [(p, c) for p, c in with_signal if set(c) & tracked]
     return {
         "posts": len(posts),
@@ -618,7 +629,7 @@ def main(argv: list[str] | None = None) -> int:
             "every share is a lower bound: a draft lexicon, stem + closed inflectional endings,"
             " and no morphology beyond it"
         ),
-        "post_category_coverage": coverage(posts, compiled),
+        "post_category_coverage": coverage(posts, compiled, set(registry.taxonomy.tracked_groups)),
         "cross_category_comments": [
             cross_category(comments, post_index, compiled, "all comments (raw v2 store)"),
             cross_category(train, post_index, compiled, "scoreable train rows"),

@@ -58,6 +58,7 @@ from market_pulse.entry_check import (
     gate_verdict,
     script_mix,
     traffic_stats,
+    unmatched_flags,
 )
 from market_pulse.registry import Source, load_registry
 from market_pulse.telegram_client import build_client
@@ -789,6 +790,16 @@ async def run_gate(only: list[str] | None = None) -> int:
         },
         "candidates": rows,
         "summary": summary,
+        "flags_unmatched": {
+            "handles": unmatched_flags(handle for handle, _ in CANDIDATES),
+            "why": (
+                "pre-registered flag keys (PROMPT-5c1 D1, transcribed by name) that no candidate in"
+                " this pass carries. A handle that leaves the composition takes its flag with it in"
+                " silence, and the dictionary goes on reading like a live instruction — this field"
+                " is what makes that visible. Always written: an empty list and a never-computed"
+                " one look the same in a record"
+            ),
+        },
         # Carried, not reset. Gating a LATER candidate must not un-say what the rulings already
         # decided about the earlier ones: a fresh `False` here silently told the 5c1 collector
         # the registry had never been written, and it refused to collect — correctly, on a fact

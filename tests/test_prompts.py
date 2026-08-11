@@ -694,6 +694,41 @@ def test_v2ctx_is_the_v2_prompt_and_the_revision_is_the_rendering():
     assert "precheck_v2ctx_with_post" in prompts.WITH_POST
 
 
+def test_the_two_channel_identities_are_reachable_only_from_a_closed_task():
+    """uni-b deliverable C, LEAK L5 — and the cleanup is a GUARD, not an edit.
+
+    `SENDER_CONTEXT` names two channels of the signed composition inside `src/`, which is exactly
+    the domain literal uni-a was looking for. It is not removed: `src/market_pulse/prompts.py` is
+    a registered-text file under this phase's DO-NOT, and deleting a rendering that a committed
+    probe record hashes would make that record un-derivable.
+
+    What is checkable instead is its REACH. The lines render for one task, `precheck_v2ctx_with_post`,
+    which is a closed 4.5g4 revision: it is in none of the live task sets, and its only consumers in
+    the tree are the two one-shot probe scripts that spent it. A new domain inherits an unreachable
+    dictionary rather than two channel identities in its prompts — and if that ever stops being
+    true, this test is what says so.
+    """
+    closed = "precheck_v2ctx_with_post"
+    assert closed in prompts.RENDER_ONLY, "the task is a render-only revision, not a new text"
+    for live in (prompts.TASKS, prompts.POSITIONS, prompts.FREE_TEXT):
+        assert closed not in live
+    assert prompts.CONTEXT_TEMPLATES[1:] == tuple(prompts.SENDER_CONTEXT.values())
+    # nothing outside that task renders them: `context_lines` is only reached with a sender by a
+    # caller that asked for this task, and the two callers are named here by measurement
+    root = Path(__file__).resolve().parents[1]
+    callers = sorted(
+        path.relative_to(root).as_posix()
+        for folder in ("src", "scripts")
+        for path in (root / folder).rglob("*.py")
+        if closed in path.read_text(encoding="utf-8")
+    )
+    assert callers == [
+        "scripts/plan_v2ctx_probe.py",
+        "scripts/run_v2ctx_probe.py",
+        "src/market_pulse/prompts.py",
+    ], callers
+
+
 def render(task, **context):
     return prompts.build_messages(task, "текст", parent="пост", **context)[0]["content"]
 

@@ -148,7 +148,24 @@ PRE_REGISTERED_FLAGS = {
     "@whowears": "theme check (PROMPT-5c1 D1)",
     "@marketopt_official": "class + comments confirm (PROMPT-5c1 D1)",
 }
-"""Flagged whatever the measurement says — the operator asked for these three by name."""
+"""Flagged whatever the measurement says — the operator asked for these three by name.
+
+The keys STAY as they are: this is a transcribed 5c1 ruling and the handles are its provenance,
+not configuration (uni-a's LEAK L4). What it lacked was a way to notice that it had gone stale —
+a handle that leaves the composition takes its flag with it in silence, and the dictionary keeps
+reading like a live instruction. :func:`unmatched_flags` is that notice, and the gate record
+carries its answer whether or not it is empty."""
+
+
+def unmatched_flags(handles) -> list[str]:
+    """Pre-registered flag keys no candidate in this pass carries.
+
+    Not a refusal: a flag for a channel that left is not a defect in the run, it is a fact about
+    the ruling, and the gate is not the place to overrule the operator. It IS reported — an empty
+    list and a never-computed one look identical in a record, so the field is always written.
+    """
+    present = {str(handle).casefold() for handle in handles}
+    return sorted(handle for handle in PRE_REGISTERED_FLAGS if handle.casefold() not in present)
 
 
 def script_mix(texts: list[str]) -> dict:

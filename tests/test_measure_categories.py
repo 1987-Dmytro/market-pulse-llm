@@ -95,6 +95,25 @@ def test_a_tracked_stem_that_names_nothing_stops_the_build(registry, monkeypatch
         mc.build_lexicon(registry)
 
 
+def test_the_coverage_measure_reads_the_tracked_groups_from_the_registry(registry, compiled):
+    """uni-a's LEAK L3: `coverage` held `tracked = {"dairy", "ice-cream"}` as a local literal —
+    inside the very file that checks every stem against the registry. `share_of_texted_naming_
+    tracked` would have kept counting dairy under a new taxonomy's name."""
+    posts = [
+        {"text": "Морозиво Рудь 500 г", "channel": "@x", "msg_id": 1},
+        {"text": "Хліб та булочки", "channel": "@x", "msg_id": 2},
+    ]
+    read = mc.coverage(posts, compiled, set(registry.taxonomy.tracked_groups))
+    assert read["posts_naming_a_tracked_group"] == 1
+    assert read["posts_with_a_category_signal"] == 2
+
+
+def test_a_taxonomy_the_lexicon_cannot_see_stops_the_coverage_measure(compiled):
+    """The loud half. Every share would come back 0.0 and read as a fact about the corpus."""
+    with pytest.raises(SystemExit, match="no group is in both"):
+        mc.coverage([{"text": "Морозиво"}], compiled, {"coffee"})
+
+
 def test_the_position_span_needs_a_category_or_a_brand_on_the_line(registry, compiled):
     aliases = watchlist_aliases(registry.watchlist)
     assert mc.position_span("масло 200 г", compiled, aliases)
