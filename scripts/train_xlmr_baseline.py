@@ -32,7 +32,6 @@ import gc
 import json
 import math
 import random
-import subprocess
 import sys
 import time
 from collections import Counter
@@ -42,7 +41,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))  # the package is not pip-installed
 
-from market_pulse import scorer  # noqa: E402
+from market_pulse import provenance, scorer  # noqa: E402
 from market_pulse.brands import watchlist_aliases  # noqa: E402
 from market_pulse.registry import load_registry  # noqa: E402
 
@@ -90,17 +89,8 @@ def gold(rows: list[dict], field: str, unclear=scorer.UNCLEAR):
 
 
 def git_state() -> dict:
-    def run(*args: str) -> str:
-        return subprocess.run(
-            ["git", *args], cwd=REPO_ROOT, capture_output=True, text=True, check=True
-        ).stdout
-
-    dirty = [line.split(maxsplit=1)[1] for line in run("status", "--porcelain").splitlines()]
-    ignore = {"results/baselines.json", "results/spend_3b.json"}
-    return {
-        "commit": run("rev-parse", "HEAD").strip(),
-        "dirty": sorted(path for path in dirty if path not in ignore),
-    }
+    """`market_pulse.provenance.git_state`, sorted, ignoring the results file and the 3b anchor."""
+    return provenance.git_state("results/baselines.json", "results/spend_3b.json", sort=True)
 
 
 def append(record: dict) -> None:

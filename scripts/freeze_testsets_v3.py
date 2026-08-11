@@ -29,7 +29,6 @@ table for docs/frozen-testsets.md.
 import argparse
 import csv
 import json
-import subprocess
 import sys
 from hashlib import sha256
 from pathlib import Path
@@ -37,7 +36,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))  # the package is not pip-installed
 
-from market_pulse import audit  # noqa: E402
+from market_pulse import audit, provenance  # noqa: E402
 from market_pulse.brands import watchlist_aliases  # noqa: E402
 from market_pulse.registry import load_registry  # noqa: E402
 
@@ -80,14 +79,8 @@ def rel(path: Path) -> str:
 
 
 def git_state(mine: Path) -> dict:
-    def run(*args: str) -> str:
-        return subprocess.run(
-            ["git", *args], cwd=REPO_ROOT, capture_output=True, text=True, check=True
-        ).stdout
-
-    name = rel(mine)
-    dirty = [line.split(maxsplit=1)[1] for line in run("status", "--porcelain").splitlines()]
-    return {"commit": run("rev-parse", "HEAD").strip(), "dirty": [p for p in dirty if p != name]}
+    """`market_pulse.provenance.git_state`, unsorted — `freeze_testsets_v4` imports this name."""
+    return provenance.git_state(mine)
 
 
 def read_pack(pack: Path, key: dict) -> dict[str, list[str]]:

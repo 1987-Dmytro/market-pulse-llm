@@ -15,7 +15,6 @@ Every number leaves this script through `market_pulse.scorer` and lands in
 
 import argparse
 import json
-import subprocess
 import sys
 from collections import Counter
 from datetime import UTC, datetime
@@ -24,7 +23,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))  # the package is not pip-installed
 
-from market_pulse import scorer  # noqa: E402
+from market_pulse import provenance, scorer  # noqa: E402
 from market_pulse.brands import find_watchlist_brands, watchlist_aliases  # noqa: E402
 from market_pulse.registry import load_registry  # noqa: E402
 
@@ -87,26 +86,8 @@ def fit_predict(train_rows: list[dict], test_sets: list[list[dict]], labels: lis
 
 
 def git_state() -> dict:
-    """HEAD plus every path that differs from it — provenance, not a boolean.
-
-    A results file can never name the commit that contains it, so the honest
-    record is the commit these numbers were produced against *and* the list of
-    files that were not in it. `dirty` naming something under `src/` or
-    `scripts/` means the commit does not reproduce the numbers.
-    """
-
-    def run(*args: str) -> str:
-        return subprocess.run(
-            ["git", *args], cwd=REPO_ROOT, capture_output=True, text=True, check=True
-        ).stdout
-
-    # `XY <path>`, and the X of an unstaged change is a space — stripping the
-    # output first eats it and the first path loses a character.
-    dirty = [line.split(maxsplit=1)[1] for line in run("status", "--porcelain").splitlines()]
-    return {
-        "commit": run("rev-parse", "HEAD").strip(),
-        "dirty": sorted(path for path in dirty if path != str(RESULTS.relative_to(REPO_ROOT))),
-    }
+    """`market_pulse.provenance.git_state`, sorted, ignoring the results file it appends to."""
+    return provenance.git_state(RESULTS, sort=True)
 
 
 def append(record: dict) -> None:

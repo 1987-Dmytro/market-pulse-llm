@@ -29,7 +29,6 @@ import argparse
 import csv
 import json
 import random
-import subprocess
 import sys
 from hashlib import sha256
 from pathlib import Path
@@ -37,7 +36,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))  # the package is not pip-installed
 
-from market_pulse import audit, records  # noqa: E402
+from market_pulse import audit, provenance, records  # noqa: E402
 from market_pulse.brands import watchlist_aliases  # noqa: E402
 from market_pulse.registry import load_registry  # noqa: E402
 
@@ -160,21 +159,13 @@ def digest(path: Path) -> str:
 
 
 def git_state(mine: Path) -> dict:
-    """HEAD plus the paths that differ from it — a file cannot name the commit
-    that will contain it, so the honest record is what it was built against.
+    """`market_pulse.provenance.git_state`, kept under this name because some forty scripts do
+    `from build_audit_pack import git_state` — this module became the repo's provenance helper by
+    accident and the import is what every record's `git` block is written through.
 
-    ``mine`` is the record being written: it is left out of its own dirty list,
-    being dirty on every rerun and absent on the first, which would make the field
-    say more about how often this ran than about what it ran against."""
-
-    def run(*args: str) -> str:
-        return subprocess.run(
-            ["git", *args], cwd=REPO_ROOT, capture_output=True, text=True, check=True
-        ).stdout
-
-    mine = str(mine.relative_to(REPO_ROOT)) if mine.is_relative_to(REPO_ROOT) else str(mine)
-    dirty = [line.split(maxsplit=1)[1] for line in run("status", "--porcelain").splitlines()]
-    return {"commit": run("rev-parse", "HEAD").strip(), "dirty": [p for p in dirty if p != mine]}
+    Unsorted, which is what this copy always was: porcelain order is "tracked, then untracked",
+    and every record already on disk that names this function was written that way."""
+    return provenance.git_state(mine)
 
 
 def predictions(path: Path) -> dict[str, dict[str, dict]]:

@@ -28,7 +28,6 @@ import itertools
 import json
 import os
 import re
-import subprocess
 import sys
 import threading
 from collections import Counter
@@ -40,7 +39,16 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))  # the package is not pip-installed
 
-from market_pulse import local_llm, parents, prompts, records, scorer, serving, zero_shot  # noqa: E402
+from market_pulse import (  # noqa: E402
+    local_llm,
+    parents,
+    prompts,
+    provenance,
+    records,
+    scorer,
+    serving,
+    zero_shot,
+)
 from market_pulse.brands import watchlist_aliases  # noqa: E402
 from market_pulse.registry import load_registry  # noqa: E402
 from market_pulse.scorer import UNCLEAR  # noqa: E402
@@ -141,24 +149,8 @@ def gold(rows: list[dict], field: str, unclear=UNCLEAR):
 
 
 def git_state() -> dict:
-    """HEAD plus every path that differs from it — provenance, not a boolean.
-
-    Same rule as scripts/run_baseline.py: a results file cannot name the commit
-    that contains it, so the honest record is the commit the numbers were made
-    against and the files that were not in it.
-    """
-
-    def run(*args: str) -> str:
-        return subprocess.run(
-            ["git", *args], cwd=REPO_ROOT, capture_output=True, text=True, check=True
-        ).stdout
-
-    dirty = [line.split(maxsplit=1)[1] for line in run("status", "--porcelain").splitlines()]
-    ignore = {str(p.relative_to(REPO_ROOT)) for p in (RESULTS, LEDGER)}
-    return {
-        "commit": run("rev-parse", "HEAD").strip(),
-        "dirty": sorted(path for path in dirty if path not in ignore),
-    }
+    """`market_pulse.provenance.git_state`, sorted, ignoring this phase's results and ledger."""
+    return provenance.git_state(RESULTS, LEDGER, sort=True)
 
 
 def append(record: dict) -> None:
