@@ -2,24 +2,24 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-11 20:30:18 (every SessionStart)
+**Auto-refreshed:** 2026-08-11 21:40:48 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-b0232fc docs(report): sku-b-run
-dffd8d3 fix(sku-b-run): the overwrite guard sat above the $0 dry run
-268affa feat(sku-b-run): the paid session's artifacts -- 17 of 138 calls, stopped by the cap
-49665c7 docs(team-lead): the sku-b-run contract and the acceptance that authorises it
-3877543 chore(vault): the fix-pass tail -- the day's log, hot.md's cap facts, the index
+00a6f9d fix(sku-b-v3-prep): the fake's submission counter now includes its handshake
+cdb5d91 docs(report): sku-b-v3-prep
+fa2fd0f test(sku-b-v3-prep): the preflight learns the resume guards, both ways
+b8eae3d feat(sku-b-v3-prep): the resumed session priced from what the interrupted one measured
+8211328 fix(sku-b-v3-prep): one step, one anchor, however its name is typed (Dv151)
 ```
 
 ## 📋 Recent decisions
 
-- `sku-b-serving-and-cap-discipline.md` — sku-b's serving configuration and its cap discipline: the prep/run split, the base-off pin, and the three readings that keep one job from out-billing the cap
 - `INDEX.md` — Decision records
-- `sku-b-pilot-readings-ratified.md` — sku-b's five readings are ratified, the text gold is adjudicated, and bar 3's denominator is all 30 rows
+- `sku-b-run-acceptance-and-resume.md` — sku-b-run accepted at 17 of 138: the probe priced the run, not the cap, and the (10)(b) stop resolves as a resume
+- `sku-b-serving-and-cap-discipline.md` — sku-b's serving configuration and its cap discipline: the prep/run split, the base-off pin, and the three readings that keep one job from out-billing the cap
 
 ## 📅 Recent daily logs
 
@@ -30,19 +30,37 @@ dffd8d3 fix(sku-b-run): the overwrite guard sat above the $0 dry run
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-11 20:30 (arch-a ✅, uni-a ✅, uni-b ✅, sku-b-prep ✅, **sku-b-run
-ПРОВЕДЁН — единственная платная попытка ИЗРАСХОДОВАНА, $0.1965, стоп по капу на 17/138**). **sku-a ✅,
-R1–R5 ратифицированы, голд text30 размечен, SPEC 3.17 (7)(8)(9)(10) — закон** —
-`docs/ARCHITECTURE.md`, граф кода, отчёты `uni-a.md` + `uni-b.md` + `sku-b-prep.md` + **`sku-b-run.md`**,
-`docs/PORTING.md`, `config/lexicon.yaml`, `results/sku_pilot_prereg_v2.json`,
-`results/sku_pilot_serving.json`, `results/sku_projection.json`, `results/sku_b_positions.json`.
-**Мяч у тимлида: (10)(b) — находка про КАП, ни одна планка не оценена** (детали в блоке Next).
+**Last update:** 2026-08-11 21:38 (arch-a ✅, uni-a ✅, uni-b ✅, sku-b-prep ✅, sku-b-run ✅ ПРИНЯТ,
+**sku-b-v3-prep ✅ — resume построен, $0, ни одного платного вызова**). **sku-a ✅,
+R1–R5 ратифицированы, голд text30 размечен, SPEC 3.17 (7)(8)(9)(10)(11) — закон** —
+`docs/ARCHITECTURE.md`, граф кода, отчёты `uni-a.md` + `uni-b.md` + `sku-b-prep.md` + `sku-b-run.md`
++ **`sku-b-v3-prep.md`**, `docs/PORTING.md`, `config/lexicon.yaml`, **`results/sku_pilot_prereg_v3.json`**,
+`results/sku_pilot_serving.json`, **`results/sku_projection_v3.json`**, `results/sku_b_positions.json`.
+**Next: платный v3-run — докупка 121 элемента, кап $0.45, нужен GO оператора** (детали в блоке Next).
 Блок правится руками; секция выше — авто-ген, маркер НЕ
 трогать. Длинная форма: `implementation-notes.md` (Dv100–120 и указатели
 Dv133–147), `docs/reports/uni-a.md` (Dv121–124), `uni-b.md` (Dv125–132), `sku-b-prep.md`
-(Dv133–147), `sku-b-run.md` (Dv148–153), дневники [[2026-08-11]] / [[2026-08-10]], ADR ниже.
+(Dv133–147), `sku-b-run.md` (Dv148–153), **`sku-b-v3-prep.md` (Dv154–160)**, дневники
+[[2026-08-11]] / [[2026-08-10]], ADR ниже.
 
 ## 🔥 What's Hot
+
+**RESUME ГОТОВ К ЗАПУСКУ (sku-b-v3-prep ✅, 21:38, $0).** `results/sku_pilot_prereg_v3.json`
+зарегистрирована РЯДОМ с v2 — ровно четыре сдвига (`attempts.verbatim` (6)→(11), `cap_usd`
+0.35→0.45, `resume.warmup`, `resume.bought_already`), всё остальное байт-в-байт, проверяется лист за
+листом. Драйвер: `--resume` покупает только 121 некупленный элемент, **четыре отказа** (сдвинутый
+пин / некупленный-с-ответом / купленный в ВЫБОРКЕ / источник, отвеченный обеими сессиями в
+СЛИТОЙ записи), варм-ап по (11)(c) читается из прережки и НЕ перевыбирается. Слитая запись —
+`results/sku_b_positions_v3.{json,jsonl}` (новые файлы: аппенд в старый дамп сломал бы пин, который
+и доказывает, что 17 ответов не переспрашивались). Прелёт: 24 проверки, 0 FAIL, exit 0.
+ADR: [[sku-b-run-acceptance-and-resume]].
+
+**ЦЕНА RESUME: $0.3300 В ХУДШЕМ УГЛУ ПРОТИВ $0.45** (`results/sku_projection_v3.json`, шесть углов,
+все влезают). Решение — НЕРАВЕНСТВО, а не оценка: страничный маргинал должен дорасти до
+**8.26 с/вызов (×1.63)** от измеренных 5.0772, чтобы кап исчерпался. Ошибка прошлой сессии была
+×3.54 ровно в этой величине — запас реален и не безграничен. Текстовая нога всё ещё НЕ измерена:
+она ОГРАНИЧЕНА страничным маргиналом (тот же инструмент, тот же потолок 800, без картинки на
+проводе), srv-2d 4.262 с/строка стоит рядом как сосед, а не как ставка.
 
 **ПРОБА НЕ СТОИТ ТОГО, ЧТО СТОИТ ПРОГОН — ГЛАВНАЯ НАХОДКА ПЛАТНОЙ СЕССИИ (20:30).** go/no-go
 (10)(a) померил warm-up на СИНТЕТИЧЕСКОЙ картинке 64×64 (1.436 с) и на строке (0.756 с),
@@ -53,8 +71,8 @@ Dv133–147), `docs/reports/uni-a.md` (Dv121–124), `uni-b.md` (Dv125–132), `
 ВХОД. Урок в память: [[the-probe-must-cost-what-the-run-costs]]. **$0.3540 > $0.35 и без вычета
 стейдж-пода — якорь Dv149 стоп НЕ вызвал.**
 
-**ЧТО КУПЛЕНО И ЧТО НЕТ.** Измерено: бут **391.369 с = $0.1200** (исторический холодный старт
-175.8 с — регресс ×2.2), страничный голд-маргинал **5.0772 с/вызов** (n=17), хвост idle 60 с =
+**ЧТО КУПЛЕНО И ЧТО НЕТ.** Измерено: бут **391.369 с = $0.1200** (регресс ×2.13 против vis-c
+183.58 с — см. Blockers: 175.8 с из старых записей это ПОД, другой транспорт), страничный голд-маргинал **5.0772 с/вызов** (n=17), хвост idle 60 с =
 $0.0184. **Текстовый голд-маргинал НЕ ИЗМЕРЕН ВООБЩЕ** — текстовая нога не сделала ни одного вызова,
 и единственное текстовое число (0.756 с warm-up) эта же сессия опровергла. v3, экстраполирующий
 текстовую ногу из warm-up, повторит ровно ту ошибку.
@@ -203,18 +221,31 @@ of which 42 are video. **This executor signed nothing** — the composition is t
 
 ## ⏭️ Next
 
-**МЯЧ У ТИМЛИДА — РЕШЕНИЕ ПО (10)(b), И ТОЛЬКО ОНО ОТКРЫВАЕТ СЛЕДУЮЩИЙ ШАГ.** Отчёт
-`docs/reports/sku-b-run.md`. Стоп посреди ноги — находка про КАП, не про инструмент: B не закрыта,
-проваленных планок нет, ни одна планка не оценена и оценена быть не может. Планка 1 — 17 из
-зарегистрированных **108** страниц (R2 держит знаменатель, частичный числитель читался бы как
-«модель пропустила бренды»). Планка 3 — **0** строк из ≥20. Планка 2 — дамп есть, `n = 13` (это ≥10
-по R4), **но пары взяты с 17-страничного префикса 108-страничной популяции** — применим ли к нему
-«SCORED», решает тимлид; пары в любом случае читает он (SPEC §10).
+**СЛЕДУЮЩЕЕ — ПЛАТНЫЙ `sku-b-v3-run`: докупка 121 элемента, кап $0.45, НУЖЕН GO ОПЕРАТОРА.**
+Подготовка закрыта ($0). Что запустит сессию: `PYTHONPATH=src python3
+scripts/positions_gm4_skub.py --resume --endpoint-id <id>` — прережка, якорь (`spend_sku_b_v3.json`),
+кап и оба пути вывода следуют флагу сами. Стейджинг тома и НОВЫЙ шаблон/эндпойнт — как в
+`sku-b-run.md` (воркер держит код, с которым загрузился). Заодно бесплатно: `worker-boot.log` на томе
+`qw4nwleanc` — диагноз регресса бута ×2.13.
 
-**ЧЕГО НЕЛЬЗЯ ДЕЛАТЬ БЕЗ РЕШЕНИЯ.** Попытка SPEC 3.17 (6) ИЗРАСХОДОВАНА — «ни планка, ни нога, ни
-жеребьёвка не перезапускаются после своего результата». Драйвер сам откажется перезаписать
-`results/sku_b_positions.jsonl`. v3-регистрация — тимлидовская, и она упирается в неизмеренную
-текстовую цену (см. What's Hot). **Потом брифинг 5c2.**
+**РУЛИНГ 11.08 НОЧЬЮ: sku-b-run ПРИНЯТ, исход = RESUME.** SPEC 3.17 **(11)**, пять чтений: (a) каждый элемент
+популяции покупается РОВНО ОДИН раз за программу — докупаются только **121** некупленный, 17
+существующих ответов (включая parse refusal) входят как есть и НИКОГДА не переспрашиваются;
+(b) инструмент **ЗАМОРОЖЕН** — суперскрипт/звёздочка идут в пост-пилотную ИМЕНОВАННУЮ ревизию, не в
+правку на лету; (c) warm-up возобновлённой сессии **РЕПРЕЗЕНТАТИВЕН** — реальная неотправленная
+страница (из 51 вне R2) + реальная строка вне пакета, ответы не скорятся; (d) кап **$0.45**, все
+чтения (10) в силе; (e) калибровка тимлида 6/13 — НЕ-гейтящая. Прережка **v3 РЯДОМ с v2** до
+запуска. Дальше: v3-run (платный, отдельный контракт) → приёмка планок → **брифинг 5c2**.
+
+**КАЛИБРОВКА ТИМЛИДА (n=13, один лейаут — инференс, не приговор):** промо **13/13** ✓, печатный %
+**13/13** ✓, бренды читаются отлично; **вся ошибка в зачёркнутой старой цене и вся — в суперскрипте
+копеек** (264⁹⁰→264.5, 39⁹⁰→39.99, 71⁵⁰→71.9, 19⁹⁰→19.99, 44⁴⁰→44.9, 42⁹⁰→42.5). Плюс дубль
+«Каштан 75г» в n и промо-без-старой (два товара под одним ценником). Если 91 оставшаяся страница
+ведёт себя так же, планка 2 (0.80) провалится и B закроется ИЗМЕРЕНИЕМ.
+
+**ЧТО НЕЛЬЗЯ ДЕЛАТЬ И ПОСЛЕ РУЛИНГА.** Не переспрашивать ни один из 17 ответов; не править
+промпты/парсер/пин (заморозка (11)(b)); не пере-пиннивать v2 — v3 регистрируется РЯДОМ. Драйвер сам
+откажется перезаписать `results/sku_b_positions.jsonl`.
 
 **WHAT sku-b-run MUST NOT DO.** Re-run a bar after seeing its result; read the 159 available pages
 instead of the 108 the gold covers; score its own sample (SPEC §10 — bar 2 is the team lead's read
@@ -228,9 +259,18 @@ change either way.
 
 ## 🚧 Blockers
 
-**ОДИН, И ОН НЕ ТЕХНИЧЕСКИЙ: решение тимлида по (10)(b).** Всё остальное на критическом пути готово —
-пакет размечен, R1–R5 ратифицированы, SPEC 3.17 (7)–(10) закон, сюита зелёная (1750), sku-b-prep
-закрыт, sku-b-run проведён и разобран. This file is **over arch-a's 6.0K bar**; said, not hidden.
+**СЮИТА ЗЕЛЁНАЯ: 1780 passed, 2 skipped; `ruff format --check` 226 файлов.** Красный тест пятого
+блока закрыт step 0.2. **Поправка к записи 20:50:** предсказание брифа было ТОЧНЫМ — ассерт
+перечисления маркеров живёт ВНУТРИ `test_every_pinned_input_still_hashes_to_what_it_says`, это один
+и тот же тест, а не два. Ничего не биллится: платных вызовов в v3-prep не было вообще.
+This file is **over arch-a's 6.0K bar**; said, not hidden.
+
+**ОДИН ДОЛГ ОСТАЛСЯ ИЗ ДВУХ.** (1) `cost.jobs` — **ЗАКРЫТ** (Dv153): поле разделено на
+`jobs_planned` / `jobs_submitted`, старая запись `results/sku_b_positions.json` НЕ правлена руками —
+она улика. Заодно фейку добавлен счёт `info`-хендшейка: прод-клиент его считает, фейк не считал, и
+единственный тест поля проверял семантику фикстуры. (2) Холодный старт **391.369 с против
+исторических 183.58 с у vis-c (×2.13)** — ОТКРЫТ; `worker-boot.log` на томе `qw4nwleanc`, читается
+почти бесплатно в v3-run. Внимание: 175.8 с из старых записей — это **под**, другой транспорт.
 
 **Budget is the live constraint.** Phase 4 stands at **$22.7780 of $25.00, $2.2220 left** (read
 2026-08-11T18:23:45Z, ~7 min after the sku-b-run teardown — still settling, Dv33). sku-b's own
