@@ -362,6 +362,27 @@ first-session boot regime is **$0.60**, and $0.65 would carry a boot at the 402.
 plus the observed 3% boot variance. That is arithmetic, not a proposal: the re-registration is the
 team lead's, and (11) authorised one session at $0.45.
 
+### And a number that cap has to be set with open eyes about
+
+**Re-running `--resume` today would refuse again, at a budget of $0.2974 — even at the optimistic
+marginal.** Three constants compose into it, and none of them is a flag:
+
+```
+RESUME_CAP_USD  = 0.45                            # hardcoded; --project-stop-usd only TIGHTENS (F5)
+RESUME_LEDGER   = results/spend_sku_b_v3.json     # hardcoded, and read_ledger returns the EXISTING
+RESUME_PHASE    = "sku-b-v3"                      #   file when its key is there
+
+anchor $12.2025 − balance $12.0499 = spent_before $0.1526
+budget = cap − spent_before = 0.45 − 0.1526 = $0.2974   <   $0.3248, the optimistic projection
+```
+
+So this session's refused spend — a boot and two warm-up calls that bought nothing — is charged
+against the anchor the next attempt would run under, and the cap would have to rise by that much
+just to stand still. **Whether a refused (10)(a) session's spend counts against the next one is a
+team-lead ruling**; that the driver currently makes it count *silently*, with no flag to say
+otherwise, is the finding (Dv167). A v4 needs its own `RESUME_*` constants — cap, ledger path and
+phase key together — not a raised number in one of them.
+
 ---
 
 ## Gate 7 — teardown, proven with the positive control
@@ -389,12 +410,15 @@ ends.
 
 | reading | value | what it is |
 |---|---:|---|
-| balance delta (anchor − now) | **$0.1416** | a FLOOR (Dv33). Read at the refusal and re-read after teardown: **the same number both times**, so the account has absorbed neither the 60 s idle tail nor the staging pod's last seconds |
-| billed seconds × rate | **$0.1476** | 421.256 worker s + 60 s tail at $0.00030669/s — the tighter reading |
+| balance delta at the refusal | **$0.1416** | a FLOOR (Dv33). Re-read immediately after teardown: **the same number**, so nothing had settled yet |
+| billed seconds × rate | **$0.1476** | 421.256 worker s + 60 s tail at $0.00030669/s — the reading that does not wait for the account |
 | \+ the staging pod | **≈ $0.1556** | ≤ 3.5 min at $0.24/h ≤ $0.0140 on top, priced by the pod's own clock |
-| the cap | $0.45 | **$0.29 unspent**, and the attempt not consumed |
+| balance delta, ~20 min later | **$0.1526** | the same floor once it settled — $0.0110 above the first read, and within $0.0030 of the bound above. The two instruments agree |
+| the cap | $0.45 | **$0.2974 left**, and the attempt not consumed |
 
-`results/spend_sku_b_v3.json :: runs` now carries the entry; that it did not is Dv161 below.
+`results/spend_sku_b_v3.json :: runs` now carries the entry; that it did not is Dv161 below. Its
+`step_spent_usd` is the $0.1416 read at teardown, which is why the settled $0.1526 is stated here
+rather than written over it — a ledger entry is what a read returned at the time it ran.
 
 ---
 
@@ -518,6 +542,29 @@ attribute the remaining 267.6 s between container start, the python import chain
 construction. Reported as a bound with the one substantive finding (the cold network-volume read
 profile) rather than as a split invented from line ordering.
 
+**Dv167 — a refused session's spend is charged against the next attempt's budget, silently.**
+`RESUME_CAP_USD`, `RESUME_LEDGER` and `RESUME_PHASE` are three module constants, `read_ledger`
+returns the existing anchor whenever its key is present, and `--project-stop-usd` can only tighten
+(the F5 fix). Compose them and a second `--resume` today gets `0.45 − 0.1526 = $0.2974`, which is
+below even the optimistic $0.3248 — so the next run refuses on this run's boot, not on prices.
+Whether a (10)(a) refusal's spend should carry forward is a team-lead ruling; that there is no flag
+that says either way is the defect. **Not fixed here**: a v4 needs its own three constants set
+together against its own registration, and inventing them inside a contract that authorised one
+session at $0.45 would be exactly the "raised cap to finish a run" the DO-NOT list forbids. Named,
+priced, and left on the team lead's desk. Same family as Dv163: constants scoped to a phase that
+is over.
+
+**Dv168 — bar 3 counted rows nobody had adjudicated.** The registered denominator excludes "a row
+the operator left untouched"; the producer built its gold from every reading, and
+`tier_from_presence` returns `none` for five blank cells — which is also a legitimate ANSWER. An
+unfinished pack would have scored its blanks as agreements with every empty model reply, and the
+validator returns 0 on an unfinished pack, so nothing upstream would have caught it. It does not
+bite today (30 of 30 came back, asserted) but this is the producer that scores the real bar. Fixed:
+the validator's own predicate promoted to `is_adjudicated` — a tick OR a note, because an operator
+writing «пусто» has answered — and untouched rows land in their own `not_gold` block, separate from
+`unreadable`. Found by re-reading the bar's registered text against the code after it was written,
+which is the check that should have come first.
+
 **Dv166 — the staging pod is priced from its own clock, not from the balance.** The balance had not
 moved at all when the endpoint was created, so a balance-derived "billed so far" would have read
 $0.0000 and overstated the headroom. Rented at 20:33:31 UTC and deleted before 20:37, so ≤ 3.5 min
@@ -553,5 +600,12 @@ at $0.24/h ≤ $0.0140 — an upper bound, used as one.
 | 2 | `6811c74` | `results/spend_sku_b_v3.json`, anchored before anything billed |
 | 3 | `53f33b6` | Dv161 and Dv162, fix-on-touch, each with a control |
 | 4 | `5dd9e1a` | the session's whole output: the refusal record and the ledger entry |
-| 5 | this report | `docs(report): sku-b-v3-run` |
-| 6 | the vault tail | its own final commit |
+| 5 | `545fe1b` | this report |
+| 6 | `9e0be97` | Dv168 — bar 3's denominator drops the unadjudicated rows |
+| 7 | `4c3d123` | this report again: Dv167, Dv168 and the settled balance |
+| 8 | the vault tail | its own final commit |
+
+The report has two commits because the last review pass found Dv167 and Dv168 after it was first
+written. The checkout table above covers commits 0–4; `9e0be97` was checked separately —
+`make check` **1806 passed, 2 skipped**, and the two rows it adds are the untouched-row exclusion
+and its control.
