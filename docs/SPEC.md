@@ -634,6 +634,28 @@ timeout is sized so one wedged job cannot overrun, and a job that ends TIMED_OUT
 ends the run, its unbought remainder recorded. Thresholds, the cap and the
 one-attempt clause of (6) are unchanged.
 <!-- sku-b-ratification-4 end -->
+<!-- sku-b-ratification-5 begin — stripped by tests/test_sku_prereg.py before
+hashing docs/SPEC.md against the prereg pin; the registered law is the stripped text -->
+(11) **Completion of the interrupted attempt — ratified (operator, 2026-08-11,
+sku-b-run acceptance).** The (10)(b) stop at 17 of 138 gold calls resolves as
+RESUME: the registered population is bought to completion in ONE additional paid
+session under a re-registration (results/sku_pilot_prereg_v3.json, registered
+BESIDE v2 before the resumed session). Readings: (a) each element of the
+registered population (108 pages + 30 rows) is bought EXACTLY ONCE across the
+program — the resumed session buys only the 121 recorded as unbought, and the 17
+existing answers (including the one parse refusal) enter the bars as they stand,
+never re-asked; (b) the instrument is FROZEN as registered — prompts, parser and
+serving pin unchanged; the superscript and asterisk findings are a post-pilot
+NAMED revision, never an in-flight edit; (c) for the resumed session the warm-up
+of (9) becomes REPRESENTATIVE: one real UNSENT page (of the 51 outside the R2
+gold) and one real pre-filtered text row outside the 30-row pack; warm-up
+answers are never scored; (d) the resumed session's cap is $0.45, priced from
+the measured marginals; the go/no-go and every reading of (10) apply unchanged
+against that cap; (e) the team lead's calibration read of the 13 prefix pairs
+(6 correct) is NON-GATING: bar 2 is scored only by the team-lead read over the
+pairs of the COMPLETED population at acceptance. The three bars' verbatim texts,
+thresholds and R1–R5 are unchanged.
+<!-- sku-b-ratification-5 end -->
 **Date:** 2026-07-26 · **Team lead:** Fable session · **Executor:** Claude Code
 **Repo folder:** `/Users/hdv_1987/Desktop/Projects/market-pulse-llm`
 **rev. 3 change (operator decision):** producers in Ukraine barely use Telegram for
