@@ -1,0 +1,65 @@
+{
+  "generated_at": "2026-08-11T15:09:04+00:00",
+  "phase": "sku-b — the pilot's serving configuration, pinned",
+  "written_by": "sku-b-prep (executor, $0), docs/PROMPT-sku-b-prep.md deliverable 4",
+  "authority": "docs/SPEC.md amendment 3.17 (9)",
+  "class": "SERVING PIN. Committed in its own commit before any sku-b-run artifact exists in the repo; git history is the only witness to that ordering. Nothing here is a result, and nothing here is a preference — every value is transcription of 3.17 (9)",
+  "serving": {
+    "serving_config": "POSITIONS",
+    "merge_state": "base-no-adapter",
+    "adapter": null,
+    "adapter_note": "the NF4 BASE with the adapter OFF. `serve_handler.settings` refuses the whole ADAPTER_ENV set before the model loads and `assert_no_adapter` refuses the loaded object — the environment and the model are two different checks",
+    "model": "google/gemma-4-31b-it",
+    "model_revision": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+    "quantization": {
+      "load_in_4bit": true,
+      "bnb_4bit_quant_type": "nf4",
+      "bnb_4bit_use_double_quant": true,
+      "bnb_4bit_compute_dtype": "bfloat16"
+    },
+    "chat_template": {
+      "add_generation_prompt": true,
+      "enable_thinking": false
+    },
+    "decoding": "greedy",
+    "do_sample": false,
+    "forward_batch_size": 1,
+    "max_new_tokens": 800,
+    "max_new_tokens_note": "a CEILING against mid-JSON truncation, not a target length. A reply that used its whole budget is a PARSE FAILURE here, counted by reason and excluded from bar 3's denominator — not a shorter answer"
+  },
+  "instruments": {
+    "positions_post_gm4": "ca6303c157d46e707aaf3fc52c7a05ed1450e24c26db0e7c93eefba4f6968754",
+    "positions_text_gm4": "7250b87aa1c2de407e06ab9eed565dd4d88025add7be0d2d2a87607c0d872860",
+    "source": "results/sku_pilot_prereg_v2.json :: instruments",
+    "note": "copied from the pre-registration, not recomputed: the bars were registered against these two texts, and a checkout rendering anything else stops this writer"
+  },
+  "expected_worker": {
+    "serving_config": "POSITIONS",
+    "merge_state": "base-no-adapter",
+    "adapter_sha256": null,
+    "positions_prompt_sha256": {
+      "positions_post_gm4": "ca6303c157d46e707aaf3fc52c7a05ed1450e24c26db0e7c93eefba4f6968754",
+      "positions_text_gm4": "7250b87aa1c2de407e06ab9eed565dd4d88025add7be0d2d2a87607c0d872860"
+    },
+    "max_new_tokens": 800,
+    "revision_requested": "842da3794eaa0b77d5f08bae87a17459d91ff475"
+  },
+  "expected_worker_note": "handed WHOLE to serving.assert_serving by scripts/positions_gm4_skub.py before the first paid call. The driver restates none of it, so this file is the identity stop",
+  "pinned_inputs": {
+    "results/sku_pilot_prereg_v2.json": "d4ced2a8ba00b48bca2d30af9c7ce8977eb387631b1735b4e05ea15ba306e9ad"
+  },
+  "revision_corroborated_by": "results/captions_gm4_atb19.json :: endpoint.worker.revision_requested — the freshest PAID record on this base. docs/SPEC.md names the revision abbreviated, and a worker cannot be held to an abbreviation",
+  "not_in_scope": {
+    "the volume re-stage": "deploying a worker that serves this configuration is sku-b-run's step, not this contract's. What is built here is the code and the pin; nothing is deployed and no RunPod resource of any kind is created",
+    "the endpoint id": "there is no default endpoint anywhere in this contract. A run against whatever id was last in a shell variable is a run against an unknown configuration"
+  },
+  "git": {
+    "commit": "7bc0bad9ad5eda3975cff1c46b828486e396610c",
+    "dirty": [
+      "knowledge/daily_logs/2026-08-11.md",
+      "knowledge/hot.md",
+      "knowledge/index.md",
+      "scripts/write_sku_serving_pin.py"
+    ]
+  }
+}
