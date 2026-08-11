@@ -185,6 +185,10 @@ def test_every_pinned_input_still_hashes_to_what_it_says(record):
         "results/sku_text_pack_manifest.json",
         "results/sku_prefilter_census.json",
         "config/registry.yaml",
+        # new in v2: the pre-filter's category vocabulary stopped being a draft nobody pinned
+        # (SPEC 3.17 (8)). Bar 3's rows were selected by that filter, so it is an input like the
+        # registry is — and an unpinned input is one that can move under the bar unnoticed.
+        "config/lexicon.yaml",
     }
 
 
@@ -199,17 +203,24 @@ def test_the_prereg_says_what_it_does_not_touch(record):
     assert "consumer quotes never enter" in out["aggregates"]
 
 
-def test_the_prereg_was_committed_before_any_pilot_artifact(record):
+PREREGS = ("results/sku_pilot_prereg.json", "results/sku_pilot_prereg_v2.json")
+
+
+@pytest.mark.parametrize("prereg_path", PREREGS)
+def test_the_prereg_was_committed_before_any_pilot_artifact(record, prereg_path):
     """A pre-registration written after the thing it judges is a rationalisation, and git history is
     the only witness to the ordering — so the claim is checked against history rather than against
     today's directory listing, which stops being evidence the moment sku-b writes its records.
+
+    Both records, because v2 re-registers BESIDE v1 and inherits the same duty: the ordering that
+    matters is "before the one paid attempt", and each has to be able to prove it on its own.
 
     The same discipline `run_v22_probe.py` uses: shell out to git, and treat "not tracked" as a
     failure rather than a skip. An uncommitted pre-registration is not one.
     """
     assert "before any sku-b artifact exists" in record["class"]
     added = subprocess.run(
-        ["git", "log", "--diff-filter=A", "--format=%H", "--", "results/sku_pilot_prereg.json"],
+        ["git", "log", "--diff-filter=A", "--format=%H", "--", prereg_path],
         cwd=REPO_ROOT,
         capture_output=True,
         text=True,
@@ -223,14 +234,77 @@ def test_the_prereg_was_committed_before_any_pilot_artifact(record):
         text=True,
         check=True,
     ).stdout.split()
-    assert "results/sku_pilot_prereg.json" in tree
-    # at the commit that added it, no other sku_pilot_* result existed. That is permanent.
+    assert prereg_path in tree
+    # at the commit that added it, no pilot RESULT existed — only pre-registrations. That is
+    # permanent: a record written after the artifact it judges cannot be repaired later.
     others = [
-        name
-        for name in tree
-        if name.startswith("results/sku_pilot_") and name != "results/sku_pilot_prereg.json"
+        name for name in tree if name.startswith("results/sku_pilot_") and name not in PREREGS
     ]
     assert others == [], others
+
+
+def test_v1_is_sealed_and_this_record_names_it(record):
+    """v1 is what was registered on 2026-08-10 and it is not edited by the re-registration — the
+    c82d0cff pattern: the bytes are the evidence, so they are hashed here rather than described.
+
+    The live pin-test above now runs against v2; this is the other half, and without it the phrase
+    "v1 is untouched" would rest on nobody checking.
+    """
+    sealed = REPO_ROOT / "results" / "sku_pilot_prereg.json"
+    assert hashlib.sha256(sealed.read_bytes()).hexdigest() == (
+        "b1bfa40d1f5073ec7b3d199bd57d96dd1bb72f37d99d26135f98386a8473a142"
+    )
+    assert prereg.RECORD.name == "sku_pilot_prereg_v2.json"
+    assert record["supersedes"]["record"] == "results/sku_pilot_prereg.json"
+    assert record["supersedes"]["sha256"] == hashlib.sha256(sealed.read_bytes()).hexdigest()
+    assert "no bar moved" in record["supersedes"]["reason"]
+
+
+def test_v2_carries_v1s_bars_and_readings_byte_for_byte(record):
+    """The whole point of a re-registration: the pins move and the CONTRACT does not.
+
+    Compared leaf by leaf rather than field by field, because "verbatim" is a property of every
+    string in those sections and a spot-check of three of them would pass while a fourth drifted.
+    The two ladder/manifest shas are the declared exceptions and are asserted to BE the differences,
+    not merely allowed to differ.
+    """
+    v1 = json.loads((REPO_ROOT / "results" / "sku_pilot_prereg.json").read_text(encoding="utf-8"))
+
+    def leaves(node, path=""):
+        if isinstance(node, dict):
+            for key, value in node.items():
+                yield from leaves(value, f"{path}.{key}")
+        elif isinstance(node, list):
+            for index, value in enumerate(node):
+                yield from leaves(value, f"{path}[{index}]")
+        else:
+            yield path, node
+
+    differ = []
+    for section in ("bars", "attempts", "ratification_required", "not_in_scope", "instruments"):
+        old = dict(leaves(v1[section], section))
+        new = dict(leaves(record[section], section))
+        assert set(old) == set(new), section
+        differ += [path for path in old if old[path] != new[path]]
+    assert sorted(differ) == [
+        "bars.text_tier_accuracy.gold.ladder_sha256",
+        "bars.text_tier_accuracy.gold.manifest_sha256",
+    ]
+
+
+def test_the_ladder_rename_is_a_bijection_and_moved_no_rung(record):
+    """SPEC 3.17 (8) renamed the schema's fifth presence field; bar 3 reads the LADDER, so the
+    question the operator signs off is not "did the hash change" — it did, by design — but "did any
+    row change its rung". Substring-safe: none of brand/line/category/size contains `fat`."""
+    v1 = json.loads((REPO_ROOT / "results" / "sku_pilot_prereg.json").read_text(encoding="utf-8"))
+    renamed = {key.replace("fat", "attribute"): rung for key, rung in v1["ladder"]["table"].items()}
+    assert renamed == record["ladder"]["table"] == positions.ladder_table()
+    assert record["ladder"]["sha256"] != v1["ladder"]["sha256"]
+    assert len(record["ladder"]["table"]) == 32
+    # the 32 keys also re-sort — `attribute` sorts before `brand` — and the hash does not notice,
+    # because ladder_sha256 dumps with sort_keys=True. Said here so a reader diffing the two tables
+    # does not read the reordering as a change.
+    assert list(record["ladder"]["table"]) == sorted(record["ladder"]["table"])
 
 
 def test_nothing_here_carries_a_bar_result(record):

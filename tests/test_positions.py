@@ -32,7 +32,7 @@ def position(**over) -> P.Position:
         "category": None,
         "size_value": None,
         "size_unit": None,
-        "fat_pct": None,
+        "attribute_pct": None,
         "price_promo": None,
         "price_old": None,
         "discount_pct_printed": None,
@@ -50,9 +50,9 @@ FILLED = {
     "category": {"category": "ice-cream"},
     "line": {"line": "Золотий Каштан"},
     "size": {"size_value": 500.0, "size_unit": "г"},
-    "fat": {"fat_pct": 2.5},
+    "attribute": {"attribute_pct": 2.5},
 }
-ATTRIBUTES = ("line", "size", "fat")
+ATTRIBUTES = ("line", "size", "attribute")
 
 
 def expected(present: frozenset[str]) -> str:
@@ -135,12 +135,12 @@ def test_identity_carries_no_price_field():
     """SPEC 3.17 (2): price is an OBSERVATION at (channel, date, carrier), never identity. So the
     same SKU seen at two prices is ONE identity — checked by moving every price field and watching
     the tuple stand still."""
-    cheap = position(category="milk", size_value=900.0, size_unit="мл", fat_pct=2.5)
+    cheap = position(category="milk", size_value=900.0, size_unit="мл", attribute_pct=2.5)
     dear = position(
         category="milk",
         size_value=900.0,
         size_unit="мл",
-        fat_pct=2.5,
+        attribute_pct=2.5,
         price_promo=39.9,
         price_old=49.9,
         discount_pct_printed=20.0,
@@ -292,9 +292,9 @@ def test_a_price_that_is_not_one_number_is_refused(raw):
         P.parse_price(raw)
 
 
-def test_a_fat_percentage_above_one_hundred_is_not_a_percentage():
+def test_an_attribute_percentage_above_one_hundred_is_not_a_percentage():
     with pytest.raises(P.SchemaError, match="not a percentage"):
-        position(fat_pct=250.0)
+        position(attribute_pct=250.0)
 
 
 @pytest.mark.parametrize("name", ["size_value", "price_promo", "price_old", "discount_pct_printed"])

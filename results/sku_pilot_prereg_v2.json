@@ -1,0 +1,194 @@
+{
+  "generated_at": "2026-08-11T13:30:50+00:00",
+  "phase": "sku-b — the position-layer pilot, pre-registered",
+  "written_by": "sku-a (executor, $0), docs/PROMPT-sku-a.md deliverable 5",
+  "authority": "docs/SPEC.md amendment 3.17 (6)",
+  "class": "PRE-REGISTRATION. Committed in its own commit before any sku-b artifact exists in the repo; git history is the only witness to that ordering. Nothing here is a result",
+  "supersedes": {
+    "record": "results/sku_pilot_prereg.json",
+    "sha256": "b1bfa40d1f5073ec7b3d199bd57d96dd1bb72f37d99d26135f98386a8473a142",
+    "reason": "schema rename + vocabulary law; before any attempt; no bar moved. SPEC 3.17 (8) generalised the position schema's fifth presence field fat → attribute and made the pre-filter's category vocabulary law in config/lexicon.yaml. Both move PINS this record carries — the ladder's hash follows the renamed table and the pack manifest was rebuilt over it — and neither moves a threshold, the cap, the one-attempt clause or a registered reading. So v1 is not edited: it stays exactly as it was registered and this record is registered BESIDE it, still before the one paid attempt",
+    "unchanged": "every bar's verbatim text and threshold, the direction, both reachability rules, the $0.35 cap, attempts=1, on_failure/on_success and all five R1–R5 readings are BYTE-EQUAL to v1 — asserted row by row in tests/test_sku_prereg.py, not claimed",
+    "moved": [
+      "ladder.sha256 and ladder.table (fat → attribute; the rungs are a bijection)",
+      "bars.text_tier_accuracy.gold.ladder_sha256 (follows the table)",
+      "pinned_inputs['results/sku_text_pack_manifest.json'] (manifest rebuilt over the new ladder; its ids, given_sha256 and README sha did not move)",
+      "pinned_inputs['config/lexicon.yaml'] (new pin: the vocabulary is law now)"
+    ]
+  },
+  "attempts": {
+    "verbatim": "sku-b (one paid session, cap $0.35 GPU): the two-leg pilot (19 ATB posts page-wise; ~30 adjudicated text rows), one attempt; a failed bar closes B as \"instrument not ready\" by measurement.",
+    "count": 1,
+    "cap_usd": 0.35,
+    "on_failure": "a failed bar closes B as 'instrument not ready' BY MEASUREMENT. No retry, no re-prompt, no second draw: a bar re-run after its own result is not the bar that was registered",
+    "on_success": "Integration into the 5c2 loop only on a green gate."
+  },
+  "bars": {
+    "leaflet_brand_recall": {
+      "verbatim": "leaflet brand-recall ≥ 0.75 per page vs audit-visible brands",
+      "threshold": 0.75,
+      "direction": ">=",
+      "gold": {
+        "path": "results/sku_reference_leaflet.json",
+        "sha256": "e301bb4f48f527e4f9f6b64bb1a53911fd69d2871e9e7cbc302195f8f982eb20",
+        "pairs": 55,
+        "key": "brands_visible = watchlist_hits + other_dairy_brands, deduplicated on the gold key: the watchlist id when the name resolves to one, `raw:` + the casefolded name when it does not. The two fields arrive in different spaces — ids and names as printed — and comparing them unnormalised would score «Каштан» against a brand_id"
+      },
+      "extraction_unit": "one PAGE, one call, under the registered prompt positions_post_gm4 (SPEC 3.17 (4)). The page set is EXACTLY the 108 pages the reference names as sent — not the 159 available. A brand printed on an unsent page is not in the gold, so reading one would be scored as a false positive for being right",
+      "denominator": "the 15 posts whose gold brand set is non-empty. Recall is computed PER POST as |extracted ∩ gold| / |gold|, over the union of that post's page answers, and the bar reads the MACRO MEAN of those 15 values. The micro reading over all 55 pairs is reported beside it and gates nothing",
+      "why_not_per_page": "the bar says 'per page' and the gold cannot be split that way: one Opus reviewer judged the whole sent set of a post and named what was visible across it, so no artifact in this repo attributes a brand to a page. Building per-page gold would be a new adjudication and is not in this contract. THIS IS THE EXECUTOR'S READING — see ratification_required",
+      "excluded": {
+        "posts": [
+          "@atb_market_official:4370",
+          "@atb_market_official:4415",
+          "@atb_market_official:4455",
+          "@atb_market_official:4519"
+        ],
+        "why": "an empty gold set makes recall undefined, and an absolute bar over it fails by arithmetic rather than by measurement",
+        "instead": "they are a PRECISION probe: every brand extracted on their pages is a false positive and is reported with its page. Their reviewer notes say what is actually on them (summer non-food and similar)"
+      },
+      "reported_never_gated": "precision on the 15 scoreable posts. The gold is ONE reviewer's reading in the REVIEW class of SPEC 3.16 (1), so a brand the pilot finds and the reviewer did not is not evidence of a false positive — SPEC gates recall only, and this pre-registration does not widen it",
+      "reachable": "yes, measured before the run: 15 of 19 posts carry a non-empty gold set and 55 pairs sit on them"
+    },
+    "price_pair_accuracy": {
+      "verbatim": "price-pair accuracy ≥ 0.80 on positions carrying a crossed-out price (verified by team-lead read of the per-position dump against the images at acceptance)",
+      "threshold": 0.8,
+      "direction": ">=",
+      "denominator": "extracted positions carrying a crossed-out price — `price_old is not None` on a position whose carrier is leaflet_page. Discovered BY THE RUN: nothing before it can say how many of the 108 pages print an old price",
+      "numerator": "positions whose (price_promo, price_old) pair the team lead marks correct against the page image at acceptance. Both numbers, as one verdict: a right promo beside a wrong old price is a wrong pair, because depth is computed from the two of them",
+      "procedure": "sku-b writes a per-position dump — one row per extracted position carrying item, page number, the page's file and sha256, brand_raw, brand_id, line, category, size, fat, price_promo, price_old, discount_pct_printed, price_qualifier, the code-assigned tier, depth() and depth_disagrees_with_printed(). The team lead opens each cited page image and marks the pair correct or incorrect. The executor never scores its own sample (SPEC §10), and the dump is what makes the read possible without re-running anything",
+      "reachability": {
+        "rule": "n >= 10 pairs: the bar is SCORED. 1 <= n < 10: the accuracy is REPORTED with its n and the bar is NOT_SCORED — neither a PASS nor a closure of B, and the team lead rules at acceptance whether the small-n reading stands. n = 0: NOT_REACHABLE, and the finding is that the pages carry no crossed-out prices at all",
+        "why": "at a 0.80 bar one error costs 10 pp at n=10 and 33 pp at n=3, so a small denominator makes the threshold an artefact of arithmetic. Fixed here rather than after the run, when the n is known and the temptation is obvious. THIS IS THE EXECUTOR'S THRESHOLD — see ratification_required"
+      },
+      "printed_percentage": "never substitutes the pair (SPEC 3.17 (3)). A position with a printed % and one price is not in this denominator, and depth() returns None there"
+    },
+    "text_tier_accuracy": {
+      "verbatim": "text tier-assignment accuracy ≥ 0.85 vs adjudicated rows",
+      "threshold": 0.85,
+      "direction": ">=",
+      "gold": {
+        "pack": "data/annotation/sku_a_text/text30.csv",
+        "manifest": "results/sku_text_pack_manifest.json",
+        "manifest_sha256": "80e4e12c0278f8cce82f2619967e1c92e1bf4bc7f8cf358e29712049b5afd376",
+        "rows": 30,
+        "by_carrier": {
+          "post_text": 26,
+          "comment": 4
+        },
+        "computed_by": "market_pulse.positions.tier_from_presence",
+        "ladder_sha256": "6a257e04375b45796d4d3a665e749c116f2e407577614266085a0b65a7d8d999"
+      },
+      "denominator": "the adjudicated rows that came back with a legal tick set. A row the operator left untouched is not gold and is not counted",
+      "comparison": "per ROW, the gold tier against the model's tier, both from the SAME function: positions.tier_from_presence for the ticks, positions.tier for each parsed position. A row naming several products is compared on its HIGHEST rung, and a row whose ticks are all empty has gold `none` — the model must return [] to agree with it",
+      "unreadable_rows": "a reply the strict parser refuses is NOT scored as `none`. It is counted by its reason, listed by id, and excluded from the denominator: an unreadable reply and an empty answer are different outcomes, and conflating them would report parse failures as rows with nothing in them. If unreadable rows exceed 10% of the adjudicated set the bar is NOT_SCORED — the instrument did not answer",
+      "reachability": {
+        "rule": "n >= 20 adjudicated rows: SCORED. Below that, REPORTED with its n and NOT_SCORED",
+        "why": "30 are drawn; a bar at 0.85 over fewer than 20 rows moves 5 pp per row"
+      },
+      "carrier": "pooled over both carriers as drawn: {'post_text': 26, 'comment': 4}. Comments are 52 of the frame's 769 rows, so this bar prices the POST leg. Whether the comment carrier needs a bar of its own is a team-lead ruling — see ratification_required",
+      "also_measures": "the pre-filter's precision. A drawn row adjudicated as naming no position is a pre-filter false positive; the frame is dominated by recipe feeds (results/sku_prefilter_census.json), and this sample is the only thing that prices it. Reported, not gated — SPEC does not put a bar on the filter"
+    }
+  },
+  "ratification_required": [
+    {
+      "id": "R1",
+      "bar": "leaflet_brand_recall",
+      "question": "the bar says 'per page' and the gold is per POST. Registered reading: recall per post over the union of its page answers, macro-averaged over the 15 posts with a non-empty gold set",
+      "if_refused": "per-page gold does not exist and building it is a new adjudication. sku-b must NOT run until this line is ratified: one attempt against a denominator nobody agreed to is the paid session wasted"
+    },
+    {
+      "id": "R2",
+      "bar": "leaflet_brand_recall",
+      "question": "the page set is the 108 pages the caption run SENT, not the 159 available. For 15 of 19 posts that is the first six pages of a longer leaflet",
+      "if_refused": "reading all 159 pages means brands with no gold behind them, which would score as false positives for being correct"
+    },
+    {
+      "id": "R3",
+      "bar": "leaflet_brand_recall",
+      "question": "the 4 posts with an empty gold set are out of the recall average: ['@atb_market_official:4370', '@atb_market_official:4415', '@atb_market_official:4455', '@atb_market_official:4519']",
+      "if_refused": "recall is undefined there; the alternative is a bar that fails by arithmetic"
+    },
+    {
+      "id": "R4",
+      "bar": "price_pair_accuracy",
+      "question": "n >= 10 pairs to score the bar; 1..9 reports and does not score; 0 is NOT_REACHABLE",
+      "if_refused": "the team lead sets another n, in writing, before the run"
+    },
+    {
+      "id": "R5",
+      "bar": "text_tier_accuracy",
+      "question": "unreadable replies are excluded and counted (>10% blocks the bar); n >= 20 adjudicated rows to score; both carriers pooled as drawn",
+      "if_refused": "a stratified redraw is a different pack and this one is already built"
+    }
+  ],
+  "instruments": {
+    "positions_post_gm4": "ca6303c157d46e707aaf3fc52c7a05ed1450e24c26db0e7c93eefba4f6968754",
+    "positions_text_gm4": "7250b87aa1c2de407e06ab9eed565dd4d88025add7be0d2d2a87607c0d872860",
+    "note": "the two registered prompts of SPEC 3.17 (5), pinned here so the pilot cannot be run under a revised text and reported against these bars. A revision is a new registration beside them, never an edit"
+  },
+  "pinned_inputs": {
+    "docs/SPEC.md": "973c87890ad049d5fa09879de148794f171994fac64437128bcecbaeade36604",
+    "results/sku_reference_leaflet.json": "e301bb4f48f527e4f9f6b64bb1a53911fd69d2871e9e7cbc302195f8f982eb20",
+    "results/sku_text_pack_manifest.json": "80e4e12c0278f8cce82f2619967e1c92e1bf4bc7f8cf358e29712049b5afd376",
+    "results/sku_prefilter_census.json": "9e7dadf5fe3923015bad5f7c00984a457b4b61eaf6a447112272ee7f852af050",
+    "config/registry.yaml": "920c7f203b9f0e38fd8df9e893d9b15705a6b19b297bd9d14b14258ae38ac3be",
+    "config/lexicon.yaml": "21b50bac55c7768334efa270f4048f1cc441670f336707e4e372737378cf1d98"
+  },
+  "ladder": {
+    "sha256": "6a257e04375b45796d4d3a665e749c116f2e407577614266085a0b65a7d8d999",
+    "table": {
+      "attribute": "none",
+      "brand": "brand_mention",
+      "brand+attribute": "product_mention",
+      "brand+category": "product_mention",
+      "brand+category+attribute": "position",
+      "brand+category+size": "position",
+      "brand+category+size+attribute": "position",
+      "brand+line": "product_mention",
+      "brand+line+attribute": "product_mention",
+      "brand+line+category": "position",
+      "brand+line+category+attribute": "position",
+      "brand+line+category+size": "position",
+      "brand+line+category+size+attribute": "position",
+      "brand+line+size": "product_mention",
+      "brand+line+size+attribute": "product_mention",
+      "brand+size": "product_mention",
+      "brand+size+attribute": "product_mention",
+      "category": "none",
+      "category+attribute": "none",
+      "category+size": "none",
+      "category+size+attribute": "none",
+      "line": "none",
+      "line+attribute": "none",
+      "line+category": "none",
+      "line+category+attribute": "none",
+      "line+category+size": "none",
+      "line+category+size+attribute": "none",
+      "line+size": "none",
+      "line+size+attribute": "none",
+      "none": "none",
+      "size": "none",
+      "size+attribute": "none"
+    },
+    "why": "bar 3's gold is computed from the operator's ticks by this ladder and the model's tier by the same function, so the ladder is an INPUT to the bar. Pinned as its whole 32-row table, not only as a hash, so a future reader can see what was registered without running this code"
+  },
+  "not_in_scope": {
+    "the 5c3 rulings": "«Варто» text-matching OFF and «Селянське» anchored-only are the 5c3 named revision (knowledge/decisions/sitting-2026-08-10-composition-signed.md) and are NOT applied to brand resolution here. A «Варто» the model reads off a page resolves like any other name, and the leaflet gold contains it because the reviewer saw it printed",
+    "the 141 names": "still outside the watchlist, so they resolve to `raw:` keys on both sides of bar 1. That is symmetric and does not move the recall",
+    "the frozen family": "T1v2, the frozen sets, results/baselines.json and the adapter are untouched",
+    "aggregates": "no promo aggregate is computed anywhere in sku-b. Question 7's brand x category x week rollup is 5c2's, and consumer quotes never enter it (SPEC 3.17 (4))"
+  },
+  "git": {
+    "commit": "1aa431fd2168e437769d68408934f31e201c6a54",
+    "dirty": [
+      "results/sku_text_pack_manifest.json",
+      "scripts/build_sku_text_pack.py",
+      "scripts/validate_sku_text_pack.py",
+      "scripts/write_sku_prereg.py",
+      "src/market_pulse/positions.py",
+      "tests/test_positions.py",
+      "tests/test_sku_packs.py"
+    ]
+  }
+}

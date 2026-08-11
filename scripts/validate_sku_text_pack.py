@@ -63,10 +63,14 @@ def check(rows: list[dict], manifest: dict) -> tuple[list[dict], list[str]]:
     for row in rows:
         ticks = {}
         for field in positions.PRESENCE_FIELDS:
-            value = row.get(field) or ""
+            # the CSV carries the dairy instruments' wire names (`fat`), the ladder takes the
+            # schema's (`attribute`) — SPEC 3.17 (8). Reading `row[field]` here would find no
+            # column, score every tick as blank and report 30 rows of `none`, silently.
+            column = positions.wire_key(field)
+            value = row.get(column) or ""
             if value not in builder.TICK_VALUES:
                 defects.append(
-                    f"{row['id']}: {field} is {value!r}, and the cell takes y or nothing"
+                    f"{row['id']}: {column} is {value!r}, and the cell takes y or nothing"
                 )
             ticks[field] = value == "y"
         readings.append(

@@ -226,8 +226,8 @@ def test_the_pack_is_thirty_rows_and_every_tick_ships_blank(rows, manifest):
             "adjudication has started — blankness is a build-time property, not an invariant"
         )
     for row in rows:
-        for field in positions.PRESENCE_FIELDS:
-            assert row[field] == "", (row["id"], field)
+        for column in pack.TICKS:
+            assert row[column] == "", (row["id"], column)
         assert row["notes"] == ""
 
 
@@ -242,16 +242,26 @@ def test_a_fresh_build_is_always_blank_whatever_the_shipped_pack_now_holds(tmp_p
     out = tmp_path / "text30.csv"
     assert pack.main(["--pack", str(out), "--manifest", str(tmp_path / "m.json")]) == 0
     for row in validator.read_pack(out):
-        for field in positions.PRESENCE_FIELDS:
-            assert row[field] == "", (row["id"], field)
+        for column in pack.TICKS:
+            assert row[column] == "", (row["id"], column)
         assert row["notes"] == ""
     assert pack.filled(out) == 0
 
 
 def test_the_pack_carries_the_columns_the_ladder_reads_and_no_price_column(rows):
     """Bar 3 is tier accuracy, and a price does not move a rung. Asking for one would be 30 rows of
-    the operator's evening spent on a column nothing reads."""
-    assert set(positions.PRESENCE_FIELDS) == {"brand", "line", "category", "size", "fat"}
+    the operator's evening spent on a column nothing reads.
+
+    Three assertions, not one, because SPEC 3.17 (8) split the schema from the wire and the
+    disagreement is DELIBERATE: the ladder's fifth field is `attribute`, this pack's fifth column is
+    still `fat` — the CSV was adjudicated under that header and `data/annotation/**` has no HEAD to
+    restore from — and `positions.WIRE_KEYS` is the one place the two are tied together. A test that
+    checked only the schema tuple would pass while the builder wrote a header nobody can fill in.
+    """
+    assert set(positions.PRESENCE_FIELDS) == {"brand", "line", "category", "size", "attribute"}
+    assert set(pack.TICKS) == {"brand", "line", "category", "size", "fat"}
+    assert pack.TICKS == tuple(positions.wire_key(f) for f in positions.PRESENCE_FIELDS)
+    assert positions.WIRE_KEYS["dairy"] == {"attribute": "fat"}
     assert not {"price_promo", "price_old", "discount_pct_printed"} & set(rows[0])
 
 
@@ -336,8 +346,8 @@ def test_the_pack_says_it_also_prices_the_prefilter(manifest):
 def test_the_readme_asks_for_ticks_and_forbids_writing_a_tier():
     readme = (pack.PACK.parent / pack.README.name).read_text(encoding="utf-8")
     assert "руками ярус не пишем" in readme
-    for field in positions.PRESENCE_FIELDS:
-        assert f"`{field}`" in readme, field
+    for column in pack.TICKS:
+        assert f"`{column}`" in readme, column
     assert "оставь ВСЕ пять пустыми" in readme, "the no-position answer is a legitimate one"
     assert "самый подробно описанный" in readme, "the max-tier rule for a multi-position row"
     assert "Не трогай" in readme

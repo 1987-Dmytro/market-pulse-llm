@@ -27,6 +27,7 @@ import hashlib
 import json
 import random
 import sys
+import tempfile
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -47,7 +48,14 @@ SEED = 42
 DRAW = 30
 DELIMITER = ";"
 GIVEN = ("id", "channel", "carrier", "date", "hit", "pattern", "text")
-TICKS = positions.PRESENCE_FIELDS
+TICKS = tuple(positions.wire_key(field) for field in positions.PRESENCE_FIELDS)
+"""The tick COLUMNS — the dairy instruments' wire names, not the schema's.
+
+SPEC 3.17 (8) renamed the schema's fifth presence field `fat` → `attribute`; the pack on disk was
+built and adjudicated under `fat`, `data/annotation/**` is gitignored so there is no HEAD to restore
+it from, and this manifest is the only committed witness to what was asked. A column list that
+followed the schema would rebuild the header, read every filled tick as blank — `filled()` is what
+stands between a rebuild and 26 adjudicated rows — and describe a CSV nobody has."""
 COLUMNS = (*GIVEN, *TICKS, "notes")
 TICK_VALUES = ("y", "")
 
@@ -193,9 +201,14 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--pack", type=Path, default=PACK)
     parser.add_argument("--manifest", type=Path, default=MANIFEST)
     parser.add_argument("--force", action="store_true", help="overwrite a pack being filled in")
+    parser.add_argument(
+        "--manifest-only",
+        action="store_true",
+        help="rebuild the manifest from the same draw, leaving the pack on disk untouched",
+    )
     args = parser.parse_args(argv)
 
-    if (already := filled(args.pack)) and not args.force:
+    if (already := filled(args.pack)) and not (args.force or args.manifest_only):
         raise SystemExit(
             f"{rel(args.pack)} already carries ticks on {already} row(s) — rebuilding would destroy"
             " an evening of adjudication, and this directory is gitignored so there is no HEAD to"
@@ -220,9 +233,23 @@ def main(argv: list[str] | None = None) -> int:
     ]
     rows.sort(key=lambda row: (row["carrier"], row["channel"], row["id"]))
 
-    pack_sha = write_csv(args.pack, rows)
-    args.pack.with_name(README.name).write_text(README_TEXT, encoding="utf-8")
     readme = args.pack.with_name(README.name)
+    if args.manifest_only:
+        # the ladder's sha is an INPUT to bar 3 and it moved with SPEC 3.17 (8)'s rename, so the
+        # manifest has to be rebuilt — but the pack it describes is adjudicated and gitignored, and
+        # `write_csv` would blank 26 rows of answers. The CSV is re-derived into a temp file for its
+        # sha instead: same draw, same columns, so the sha the manifest pins is still the pack AS
+        # BUILT and is still checkable against the one this run would have written.
+        if readme.exists() and readme.read_text(encoding="utf-8") != README_TEXT:
+            raise SystemExit(
+                f"{rel(readme)} on disk is not what this script writes — a manifest rebuilt over it"
+                " would pin a README nobody has"
+            )
+        with tempfile.TemporaryDirectory() as tmp:
+            pack_sha = write_csv(Path(tmp) / args.pack.name, rows)
+    else:
+        pack_sha = write_csv(args.pack, rows)
+        readme.write_text(README_TEXT, encoding="utf-8")
 
     by_carrier = {
         carrier: sum(1 for row in rows if row["carrier"] == carrier)
@@ -316,7 +343,10 @@ def main(argv: list[str] | None = None) -> int:
     print(f"  pattern kinds in the draw: {manifest['pattern_kinds']}")
     print(f"  ladder {positions.ladder_sha256()[:16]}… over {len(positions.ladder_table())} rows")
     print(f"  given columns hash {manifest['given_sha256'][:16]}…")
-    print(f"wrote {rel(args.manifest)} and {rel(readme)}")
+    if args.manifest_only:
+        print(f"wrote {rel(args.manifest)} only — {rel(args.pack)} and its README were not touched")
+    else:
+        print(f"wrote {rel(args.manifest)} and {rel(readme)}")
     return 0
 
 

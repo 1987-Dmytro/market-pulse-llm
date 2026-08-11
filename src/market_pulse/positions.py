@@ -5,9 +5,9 @@ what price, and at what discount depth. Three of its rules are structural and ar
 rather than trusted:
 
 * **Identity is not price.** :meth:`Position.identity` returns (brand, line, category, size,
-  fat_pct) and no price field can reach it. A price is an OBSERVATION at (channel, date, carrier),
-  so the same SKU at two prices is one identity with two observations — and a test holds the tuple
-  to that.
+  attribute_pct) and no price field can reach it. A price is an OBSERVATION at (channel, date,
+  carrier), so the same SKU at two prices is one identity with two observations — and a test holds
+  the tuple to that.
 * **The tier is assigned by CODE, never by the model.** :func:`tier` is a pure function of which
   fields are filled in. Nothing in a model's reply can name a tier, and the parser refuses a reply
   that tries.
@@ -112,7 +112,7 @@ class Position:
     category: str | None
     size_value: float | None
     size_unit: str | None
-    fat_pct: float | None
+    attribute_pct: float | None
     price_promo: float | None
     price_old: float | None
     discount_pct_printed: float | None
@@ -143,7 +143,13 @@ class Position:
             raise SchemaError("a size is a number and a unit, or neither")
         if self.size_unit is not None and self.size_unit not in SIZE_UNITS:
             raise SchemaError(f"size_unit {self.size_unit!r} is not normalised to г or мл")
-        for name in ("size_value", "fat_pct", "price_promo", "price_old", "discount_pct_printed"):
+        for name in (
+            "size_value",
+            "attribute_pct",
+            "price_promo",
+            "price_old",
+            "discount_pct_printed",
+        ):
             value = getattr(self, name)
             if value is not None and (
                 isinstance(value, bool) or not isinstance(value, int | float)
@@ -151,8 +157,8 @@ class Position:
                 raise SchemaError(f"{name} is not a number")
             if value is not None and value <= 0:
                 raise SchemaError(f"{name} must be positive, not {value}")
-        if self.fat_pct is not None and self.fat_pct > 100:
-            raise SchemaError(f"fat_pct {self.fat_pct} is not a percentage")
+        if self.attribute_pct is not None and self.attribute_pct > 100:
+            raise SchemaError(f"attribute_pct {self.attribute_pct} is not a percentage")
         has_price = self.price_promo is not None or self.price_old is not None
         if has_price != (self.price_qualifier is not None):
             raise SchemaError("price_qualifier belongs to a price, and only to a price")
@@ -160,7 +166,7 @@ class Position:
             raise SchemaError(f"price_qualifier {self.price_qualifier!r} is not exact/approx")
 
     def identity(self) -> tuple:
-        """(brand, line, category, size, fat_pct) — SPEC 3.17 (2), and no price in it.
+        """(brand, line, category, size, attribute_pct) — SPEC 3.17 (2), and no price in it.
 
         The brand key is ``brand_id`` when it resolved and the raw string otherwise, so two records
         of the same watchlist brand under different spellings are one identity and an unresolved
@@ -172,7 +178,7 @@ class Position:
             self.category,
             self.size_value,
             self.size_unit,
-            self.fat_pct,
+            self.attribute_pct,
         )
 
     def tier(self) -> str:
@@ -209,21 +215,24 @@ def has_size(position: Position) -> bool:
 def tier(position: Position) -> str:
     """The ladder of SPEC 3.17 (2), as a pure function of which fields are filled in.
 
-    * ``position`` — a category AND at least one differentiating attribute (line, size, fat_pct).
+    * ``position`` — a category AND at least one differentiating attribute (line, size,
+      attribute_pct).
     * ``product_mention`` — a category or an attribute, but not both.
     * ``brand_mention`` — the brand alone.
 
     Two cells SPEC's three sentences do not reach, decided here and pinned by the truth-table test
     (`tests/test_positions.py`), so the reading is visible rather than implicit:
 
-    * **brand + category + line, no size and no fat** is a ``position``. ``line`` is a
+    * **brand + category + line, no size and no attribute** is a ``position``. ``line`` is a
       differentiating attribute — it is exactly what variant C adds to identity in 3.17 (2), and a
       named line inside a category is what an aggregate can follow week to week.
-    * **brand + size (or fat, or line) with NO category** is a ``product_mention``. It is more than
+    * **brand + size (or attribute, or line) with NO category** is a ``product_mention``. It is more than
       a bare brand mention and it is not a position, because the category half of the identity is
       missing and no aggregate for question 7 can place it.
     """
-    attributes = position.line is not None or has_size(position) or position.fat_pct is not None
+    attributes = (
+        position.line is not None or has_size(position) or position.attribute_pct is not None
+    )
     if position.category is not None and attributes:
         return "position"
     if position.category is not None or attributes:
@@ -319,7 +328,11 @@ REPLY_KEYS = (
 
 An unknown key is a refusal and not a shrug: it means the model answered a question nobody asked,
 and the three keys it is most likely to invent are the three that must never come from it — `tier`,
-`carrier` and `price_origin` are decided from the answer, not by it."""
+`carrier` and `price_origin` are decided from the answer, not by it.
+
+These are WIRE keys, and `fat` is one of them on purpose: SPEC 3.17 (8) renamed the schema's field
+to `attribute` and left the registered prompts alone, so the vocabulary a reply may use is still the
+dairy instruments' own. :data:`WIRE_KEYS` is where the two meet."""
 
 DECIDED_BY_CODE = ("tier", "carrier", "price_origin", "extraction_source", "depth", "brand_id")
 """Named separately from the rest of the unknown keys so the refusal says WHY.
@@ -327,6 +340,33 @@ DECIDED_BY_CODE = ("tier", "carrier", "price_origin", "extraction_source", "dept
 `tier` is the one that matters: SPEC 3.17 (2) says the ladder is assigned by code from field
 completeness, and a model that names its own tier has assigned it. The others would let a reply
 claim its own provenance."""
+
+WIRE_KEYS = {"dairy": {"attribute": "fat"}}
+"""Schema field → the key that instrument family writes ON THE WIRE, and the inverse read backwards.
+
+SPEC 3.17 (8) generalised the schema's fifth presence field from `fat` to `attribute`: the ladder is
+a function of PRESENCE, and «жирність» is only what a DAIRY source happens to differentiate a SKU
+by. The instruments did not move with it, and must not: `positions_post_gm4` and
+`positions_text_gm4` are registered prompt texts pinned by sha in
+`results/sku_pilot_prereg*.json`, so they still ask for `"fat"` and their replies still say `"fat"`.
+Editing a registered text is not a rename, it is a new registration (SPEC 3.17 (5)).
+
+So the wire keeps the domain word and the schema carries the general one, and this table is the one
+place the two are tied together — the pack column, the validator's column and the parser's key all
+read it. A second instrument family (coffee, say) registers its own prompts and adds one row here;
+a family with no entry uses the schema's own name, which is why the table is a translation and not
+a vocabulary.
+"""
+
+DEFAULT_FAMILY = "dairy"
+"""The only family with registered instruments today. Named once here rather than defaulted in
+three signatures, so the day a second one exists the callers that must choose are greppable."""
+
+
+def wire_key(field: str, family: str = DEFAULT_FAMILY) -> str:
+    """What ``family``'s replies and packs call this schema field. Unaliased fields are themselves."""
+    return WIRE_KEYS.get(family, {}).get(field, field)
+
 
 _PERCENT = re.compile(rf"^-?\s*({_NUMBER})\s*%?$")
 
@@ -398,6 +438,7 @@ def parse_positions(
     price_origin: str,
     extraction_source: str,
     aliases: dict[str, str],
+    family: str = DEFAULT_FAMILY,
 ) -> list[Position]:
     """One model reply → the positions in it, or :class:`SchemaError` naming what is wrong.
 
@@ -410,9 +451,14 @@ def parse_positions(
     ``carrier``, ``price_origin`` and ``extraction_source`` are stamped by the caller and are
     refused if the reply carries them: they are facts about the request, and a model cannot be both
     the subject and the witness.
+
+    ``family`` says whose instrument produced the reply, and the only thing it decides is which wire
+    key carries the `attribute` field — `fat` for the dairy prompts (:data:`WIRE_KEYS`). It is not a
+    domain switch: nothing else in this parser reads it.
     """
     if carrier not in CARRIERS:
         raise SchemaError(f"carrier {carrier!r} is not one of {list(CARRIERS)}")
+    attribute_key = wire_key("attribute", family)
     out = []
     for index, entry in enumerate(_array(reply)):
         if not isinstance(entry, dict):
@@ -450,7 +496,7 @@ def parse_positions(
                 category=category,
                 size_value=size_value,
                 size_unit=size_unit,
-                fat_pct=parse_fat(entry["fat"]) if "fat" in entry else None,
+                attribute_pct=(parse_fat(entry[attribute_key]) if attribute_key in entry else None),
                 price_promo=prices.get("price_promo"),
                 price_old=prices.get("price_old"),
                 discount_pct_printed=(
@@ -553,13 +599,17 @@ def prefilter(row: dict, compiled: dict, aliases: list) -> dict | None:
 
 # --- the ladder from a checklist: the adjudicator's side, and one function for both sides ----------
 
-PRESENCE_FIELDS = ("brand", "line", "category", "size", "fat")
+PRESENCE_FIELDS = ("brand", "line", "category", "size", "attribute")
 """What an adjudicator ticks per row. The five fields the ladder reads, and no price field: bar 3 of
-SPEC 3.17 (6) is tier accuracy, and a price does not move a rung."""
+SPEC 3.17 (6) is tier accuracy, and a price does not move a rung.
+
+The fifth was `fat` until SPEC 3.17 (8): the ladder is a function of PRESENCE and «жирність» is only
+what a dairy source differentiates a SKU by. These are SCHEMA names — the pack column and the
+model's reply still say `fat`, through :data:`WIRE_KEYS`."""
 
 
 def tier_from_presence(
-    brand: bool, line: bool, category: bool, size: bool, fat: bool
+    brand: bool, line: bool, category: bool, size: bool, attribute: bool
 ) -> str | None:
     """The rung a source reaches when it names exactly these fields, or ``None`` for no brand.
 
@@ -582,7 +632,7 @@ def tier_from_presence(
             category="?" if category else None,
             size_value=1.0 if size else None,
             size_unit="г" if size else None,
-            fat_pct=1.0 if fat else None,
+            attribute_pct=1.0 if attribute else None,
             price_promo=None,
             price_old=None,
             discount_pct_printed=None,

@@ -1,10 +1,18 @@
 #!/usr/bin/env python3
-"""Write `results/sku_pilot_prereg.json` — sku-b's three bars, before sku-b exists ($0).
+"""Write `results/sku_pilot_prereg_v2.json` — sku-b's three bars, before sku-b exists ($0).
 
-Deliverable 5 of `docs/PROMPT-sku-a.md`. A pre-registration that is not committed is not a
-pre-registration, and a pre-registration committed after the artifact it judges is a rationalisation:
-git history is the only witness to the ordering, so this file goes in its own commit and no pilot
-artifact exists in the repo yet.
+Deliverable 5 of `docs/PROMPT-sku-a.md`, re-registered by uni-b deliverable D(2) under SPEC
+3.17 (8). A pre-registration that is not committed is not a pre-registration, and a
+pre-registration committed after the artifact it judges is a rationalisation: git history is the
+only witness to the ordering, so this file goes in its own commit and no pilot artifact exists in
+the repo yet.
+
+**v2 is registered BESIDE v1, never over it.** `results/sku_pilot_prereg.json` is not edited and
+not deleted: it is what was registered, it stays byte-identical (`b1bfa40d…`, held by a sealed
+test), and this record names it in `supersedes` with the reason. What moved is pins — the ladder's
+hash follows the `fat` → `attribute` rename and the pack manifest was rebuilt over it; what did not
+move is every bar, threshold, reachability rule, the $0.35 cap, the one-attempt clause and all five
+R1–R5 readings, which are byte-equal to v1 and asserted so.
 
 Three things it carries, and the second is the one that costs work:
 
@@ -47,7 +55,19 @@ REFERENCE = REPO_ROOT / "results" / "sku_reference_leaflet.json"
 PACK_MANIFEST = REPO_ROOT / "results" / "sku_text_pack_manifest.json"
 CENSUS = REPO_ROOT / "results" / "sku_prefilter_census.json"
 REGISTRY = REPO_ROOT / "config" / "registry.yaml"
-RECORD = REPO_ROOT / "results" / "sku_pilot_prereg.json"
+LEXICON = REPO_ROOT / "config" / "lexicon.yaml"
+SUPERSEDED = REPO_ROOT / "results" / "sku_pilot_prereg.json"
+RECORD = REPO_ROOT / "results" / "sku_pilot_prereg_v2.json"
+
+SUPERSEDES_REASON = (
+    "schema rename + vocabulary law; before any attempt; no bar moved. SPEC 3.17 (8) generalised the"
+    " position schema's fifth presence field fat → attribute and made the pre-filter's category"
+    " vocabulary law in config/lexicon.yaml. Both move PINS this record carries — the ladder's hash"
+    " follows the renamed table and the pack manifest was rebuilt over it — and neither moves a"
+    " threshold, the cap, the one-attempt clause or a registered reading. So v1 is not edited: it"
+    " stays exactly as it was registered and this record is registered BESIDE it, still before the"
+    " one paid attempt"
+)
 
 BARS = {
     "leaflet_brand_recall": "leaflet brand-recall ≥ 0.75 per page vs audit-visible brands",
@@ -150,6 +170,23 @@ def main(argv: list[str] | None = None) -> int:
             "PRE-REGISTRATION. Committed in its own commit before any sku-b artifact exists in the"
             " repo; git history is the only witness to that ordering. Nothing here is a result"
         ),
+        "supersedes": {
+            "record": rel(SUPERSEDED),
+            "sha256": sha256_of(SUPERSEDED),
+            "reason": SUPERSEDES_REASON,
+            "unchanged": (
+                "every bar's verbatim text and threshold, the direction, both reachability rules,"
+                " the $0.35 cap, attempts=1, on_failure/on_success and all five R1–R5 readings are"
+                " BYTE-EQUAL to v1 — asserted row by row in tests/test_sku_prereg.py, not claimed"
+            ),
+            "moved": [
+                "ladder.sha256 and ladder.table (fat → attribute; the rungs are a bijection)",
+                "bars.text_tier_accuracy.gold.ladder_sha256 (follows the table)",
+                "pinned_inputs['results/sku_text_pack_manifest.json'] (manifest rebuilt over the"
+                " new ladder; its ids, given_sha256 and README sha did not move)",
+                "pinned_inputs['config/lexicon.yaml'] (new pin: the vocabulary is law now)",
+            ],
+        },
         "attempts": {
             "verbatim": ONE_ATTEMPT,
             "count": 1,
@@ -372,7 +409,7 @@ def main(argv: list[str] | None = None) -> int:
         },
         "pinned_inputs": {
             rel(path): pinned_sha256(path)
-            for path in (SPEC, REFERENCE, PACK_MANIFEST, CENSUS, REGISTRY)
+            for path in (SPEC, REFERENCE, PACK_MANIFEST, CENSUS, REGISTRY, LEXICON)
         },
         "ladder": {
             "sha256": positions.ladder_sha256(),
