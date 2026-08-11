@@ -25,6 +25,8 @@ decisions are in STATUS.md.
   `implementation-notes.md`, never into STATUS.md.
 - Executor files (the team lead does not edit them): `src/`, `tests/`, `scripts/`, `results/`,
   `config/`, `knowledge/**`, `implementation-notes.md`, runbooks, the rest of `docs/`.
+- `docs/reports/` — executor's; a phase report is a FILE (`docs/reports/<phase>.md`, own commit
+  `docs(report): <phase>`), never a chat summary. Chat gets the path.
 
 ## Rules
 - Chat: Russian. All artifacts (code, comments, commits, docs): English.
@@ -72,10 +74,10 @@ inside a `.venv` if they are not on PATH.
 
 Which phase is live is in `knowledge/hot.md` and `docs/STATUS.md`, never here or in code comments.
 
-- `src/market_pulse/scorer.py` — one public function per Tier-1 gate; every one raises
-  `NotImplementedError` until its phase implements it. `tests/test_scorer.py` discovers those
-  functions reflectively, so adding a public function to the module immediately puts it under the
-  same rule: it must refuse to run until real numbers back it.
+- `src/market_pulse/scorer.py` — one public function per Tier-1 gate, all implemented (the module
+  holds zero `NotImplementedError`). `tests/test_scorer.py::test_every_public_scorer_function_has_a_hand_computed_test`
+  discovers the public functions reflectively and demands a hand-computed `test_<name>_*` for each,
+  so adding a public function to the module immediately puts it under the same rule.
 - `src/market_pulse/registry.py` — `config/registry.yaml` → frozen `Source` / `Taxonomy` /
   `WatchlistBrand` inside a `Registry`, raising `ValueError` that names the defect (malformed
   `@handle`, duplicate id, empty channel list, unknown `source_type`, no tracked groups). Strict on
