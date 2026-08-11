@@ -314,8 +314,8 @@ def test_nothing_here_carries_a_bar_result(record):
         assert not {"measured", "value", "verdict", "result"} & set(bar), name
     assert "verdict" not in record
     for path in (REPO_ROOT / "results").glob("sku_*.json"):
-        if path.name.startswith("sku_pilot_") and path.name != "sku_pilot_prereg.json":
-            continue  # sku-b's own records are allowed to carry verdicts; sku-a's are not
+        if path.name.startswith("sku_pilot_") and f"results/{path.name}" not in PREREGS:
+            continue  # sku-b's own records may carry verdicts; a pre-registration never may
         body = json.loads(path.read_text(encoding="utf-8"))
         assert "verdict" not in body, path.name
 

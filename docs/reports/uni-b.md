@@ -79,6 +79,13 @@ reads "90 грн" as a size. The test does not only assert the list: it measures
 `size_price_pattern("Сир 90 грн") == "90 грн"`. `positions.SIZE_PRICE_UNITS` now reads them from the
 file, which is what closes uni-a's LEAK L6.
 
+**One behavioural consequence of A, stated because it is a contract change.**
+`positions.SIZE_PRICE_UNITS = tuple(lexicon.load_lexicon()["units"])` runs at IMPORT, so importing
+the schema module now requires `config/lexicon.yaml` beside it — unlike `registry.py`, which takes
+its path as an argument. That is the price of keeping `SIZE_PRICE_UNITS` a module constant that two
+existing readers (`sku_prefilter_census.py`, `tests/test_positions.py`) already import by name; the
+alternative was a lazily-compiled regex and a changed signature on `size_price_pattern`.
+
 The YAML round-trip's own footgun is pinned too: `endings[0]` is `""`, and a bare `-` in YAML loads
 as `None`, which would reach `re.escape` three call frames from the file that caused it. The loader
 refuses a non-string and a test writes one.
@@ -175,6 +182,15 @@ has would be worse than no rebuild). Diffed key by key against the old manifest:
 
 `text30.csv` on disk: `ba77b381a6d3c4d0…` before and after.
 
+**One thing the rename opened, found in review and closed here.** With `family="coffee"` and no
+row in `WIRE_KEYS`, `wire_key("attribute", "coffee")` falls through to the schema's own name — and
+both directions then fail QUIETLY: a reply naming `attribute` is refused as an unasked key (it is
+not in `REPLY_KEYS`), and one naming `fat` passes the key check and is dropped by the parser, which
+is looking elsewhere. Measured before fixing: a coffee-family reply carrying `"fat": "2,5%"` parsed
+to `attribute_pct = None`. `parse_positions` now refuses an unregistered family by name, with a test
+on both sides, and `docs/PORTING.md` §6 says registering a family is TWO edits — `WIRE_KEYS` and
+`REPLY_KEYS` — instead of one.
+
 **Zero stale references.** `lsp_find_references` was unavailable this session (**Dv126**): the
 `pyright-lsp@claude-plugins-official` plugin installed and enabled, but no Python LSP server came up
 for the `LSP` tool. The substitute is stronger rather than weaker — a type-check of the whole tree:
@@ -260,6 +276,19 @@ Still one implementation, called by the producer and by the test.
 
 ### D(2) · `results/sku_pilot_prereg_v2.json`, beside v1
 
+**One consequence to state before signing: v1's manifest pin is now stale, by design.**
+`results/sku_pilot_prereg.json` pins `results/sku_text_pack_manifest.json: 2b941243274febde…` and the
+file on disk is `80e4e12c…`, because deliverable B rebuilt it over the renamed ladder. Re-measured:
+of v1's five pins, four still hold (`SPEC` through the strip, the leaflet reference, the census, the
+registry) and that one does not.
+
+**Do not re-pin v1.** It is the repo's own standing footgun — `sitting_45g2_manifest.json` and
+`calib_45e_manifest.json` both carry "do not re-pin the manifest" in `.claude/rules/`, for the same
+reason: a sealed record describes the corpus as it was sealed. The chain from v1's bytes to today's
+is `supersedes` inside v2, which names v1 by path and sha and lists what moved. v1 stays **readable**
+and **re-derivable as what was registered**; it is no longer a description of today's `results/`,
+and that is what superseding means.
+
 Sha `d4ced2a8ba00b48b…`. v1 is not edited: `b1bfa40d1f5073ec…`, now held by
 `test_v1_is_sealed_and_this_record_names_it`.
 
@@ -335,6 +364,8 @@ Two runs, `generated_at` and `git` removed: **byte-identical**.
 | `lsp_find_references` zero-stale per renamed symbol | **not available (Dv126)** — pyright 1.1.411 over the whole tree instead: 403 errors = baseline, 0 naming any renamed symbol, 0 `fat_pct` in the tree |
 | probe v2 verdicts | 1 follows · 2 follows(law) · 3 follows · 4 follows · 5 needs-registration, controls OK |
 | manifest rebuild: ids + given_sha + README sha unchanged, ladder sha new | 30 ids, `448d8d20…`, `64819d0d…` unchanged; ladder `6a257e04…` new; only `generated_at`/`git`/`ladder` moved |
+| `results/sku_reference_leaflet.json` byte-identical | `e301bb4f48f527e4…` — unchanged, and still the sha v1 AND v2 pin |
+| `results/sku_prefilter_census.json` byte-identical | `9e7dadf5fe392301…` — unchanged, and still the sha v1 AND v2 pin, despite its producer moving onto the law |
 | wikilinks green | `check-wikilinks: OK, none broken` |
 | nothing else moved | over `results/` + `config/` + `data/` + `prompts.py`, the ONLY files whose hash differs from the pre-phase baseline are `results/sku_text_pack_manifest.json` (rebuilt) and the three new files `config/lexicon.yaml`, `results/sku_pilot_prereg_v2.json`, `results/uni_probe_v2.json` |
 | Deviations Dv125+ | Dv125–Dv132 below |

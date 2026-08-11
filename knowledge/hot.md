@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-11 15:53:04 (every SessionStart)
+**Auto-refreshed:** 2026-08-11 16:08:17 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+e17ab43 docs(report): uni-b -- each commit proved green on its own checkout
+f6d30ec chore(vault): the uni-b tail -- the day's log, hot.md's corrected facts, the Dv pointer
 6f1e00a docs(report): uni-b
 e7ea9d8 feat(uni-b): the probe re-run -- step 2 now reads follows-registry(law)
 b1a2a63 feat(uni-b): L2-L5 de-literalled -- loud refusals where there were silent zeros
-fc662e0 feat(uni-b): fat -> attribute at the schema, and the pre-registration re-registered beside v1
-1aa431f docs(spec): 3.17 (8) ratified, and the strip learns to take every marked block
 ```
 
 ## 📋 Recent decisions
@@ -78,6 +78,12 @@ and `positions.WIRE_KEYS = {"dairy": {"attribute": "fat"}}` is the single place 
 validator maps the column, and reading `row["attribute"]` off that CSV would score 30 rows of
 `none` in silence. Regression held: 11 position · 3 product_mention · 16 none, unchanged.
 
+**v1's MANIFEST PIN IS STALE BY DESIGN AND MUST NOT BE RE-PINNED.** `results/sku_pilot_prereg.json`
+pins the pack manifest at `2b941243…`; uni-b rebuilt it over the renamed ladder and disk says
+`80e4e12c…`. Four of v1's five pins still hold; that one does not, and that is what superseding
+means. The chain to today's bytes is `supersedes` inside v2 — same shape as
+`sitting_45g2_manifest.json` and `calib_45e_manifest.json`, same instruction: **do not re-pin.**
+
 **THE FIVE RATIFIED READINGS ARE HOW EVERY sku-b NUMBER IS COMPUTED, AND THEIR HOME IS
 `results/sku_pilot_prereg_v2.json` — v1 `b1bfa40d…` is SEALED beside it, byte-equal on every bar,
 threshold, cap and reading; only the ladder and manifest shas moved (uni-b D(2)). NOT THIS FILE** ([[sku-b-pilot-readings-ratified]] is the long
@@ -114,11 +120,11 @@ manifest.** To re-derive `results/opus_audit_5c1.json`, check the registry out a
 signed bytes `c82d0cff…`, and that reconstruction is the only chain between the two.
 
 **THE AUDIT'S AND THE SITTING'S NUMBERS LIVE IN ADRs, NOT HERE.**
-[[opus-review-programme-close]]: 25/25 packs, 498/498 rows, `fn_matcher` **0** with all 102 misses
-image-only — so `recall_candidate` 0.4769 is a number about the CAPTIONS, never the matcher's;
-captions 117/43/3. [[sitting-2026-08-10-composition-signed]]: «Варто» text-matching OFF, «Селянське»
-anchored-only, the 141 names deferred into the position layer. Both are 5c3's **NAMED** revision and
-**neither is applied in sku-a or sku-b** — brand resolution there is the plain alias table.
+[[opus-review-programme-close]]: 25/25 packs, 498/498 rows, `fn_matcher` **0**, all 102 misses
+image-only — so `recall_candidate` 0.4769 is about the CAPTIONS, never the matcher.
+[[sitting-2026-08-10-composition-signed]]: «Варто» text-matching OFF, «Селянське» anchored-only, the
+141 names deferred into the position layer. Both are 5c3's **NAMED** revision and **neither is
+applied in sku-a or sku-b** — brand resolution there is the plain alias table.
 
 **A CAPTION IS A SAMPLE OF A LEAFLET PAGE, AND NO BETTER CAPTIONER FIXES IT.** GM4 vs qwen agree on
 terms for 8 of 18 posts on byte-identical inputs ([[5c1-vis-b-caption-instrument]]) — why the
@@ -134,11 +140,10 @@ it covers every file-editing tool. Allow rules **union** with `~/.claude/setting
 `--allowedTools` cannot narrow a headless session; `--disallowedTools` can. `permissions.deny` is 4
 entries covering all four team-lead file classes (STATUS, SPEC, PRODUCT, PROMPT-*).
 
-**TWO RATES THAT MUST NOT BE CONFUSED, AND A COLD START PRICED ONCE.** Marginal **$0.002328/post** on
-the wide 5c2 manifest (3.32 images/post); marginal **$0.0045–$0.0061** on ATB leaflets (5.68
-images/post); cold start **$0.0733** pre-registered, $0.0563 measured. Never multiply an all-in
-per-post figure by a post count, and **bill compute on `worker_seconds`, not `wall_seconds`** — vis-c
-reconciles to 2% that way and leaves room for the pods that demonstrably ran.
+**TWO RATES THAT MUST NOT BE CONFUSED, AND A COLD START PRICED ONCE.** Marginal **$0.002328/post**
+on the wide 5c2 manifest (3.32 img/post); **$0.0045–$0.0061** on ATB leaflets (5.68 img/post); cold
+start **$0.0733** pre-registered, $0.0563 measured. Never multiply an all-in per-post figure by a
+post count, and bill compute on **`worker_seconds`, not `wall_seconds`** (vis-c reconciles to 2%).
 
 **A JOB CARRIES ITS IMAGES AS BASE64 AND RunPod's `/run` CEILING IS 10 MB.** One ATB post at six
 images is 3.68 MB, a slice of three up to 7.83 MB → the 19 ATB posts are 8 jobs. No volume path for
@@ -156,8 +161,8 @@ gave 164 vs 172 chars on two workers while `core.carriers` read the same terms. 
 
 **THE MIDDLE RUNG EXISTS: `scripts/preflight_serving_guards.py`, $0, RUN BEFORE PAYING.** It builds a
 REAL `Gemma4ForConditionalGeneration` from a tiny config (no download, CPU, seconds) and drives every
-serving guard both ways against real transformers + peft. It carries the vis-a guard body as its own
-positive control, so it cannot degrade into a check that never looked, and it exits 1 when the
+serving guard both ways against real transformers + peft, carrying the vis-a guard body as its own
+positive control so it cannot degrade into a check that never looked. It exits 1 when the
 libraries are missing — an unrunnable preflight is a finding, never a pass. `make check` stays
 torch-free: no test imports it.
 

@@ -459,6 +459,16 @@ def parse_positions(
     if carrier not in CARRIERS:
         raise SchemaError(f"carrier {carrier!r} is not one of {list(CARRIERS)}")
     attribute_key = wire_key("attribute", family)
+    if attribute_key not in REPLY_KEYS:
+        # a family with no row in WIRE_KEYS falls through to the schema's own name, which no
+        # registered prompt asks for. Both directions then fail QUIETLY: a reply naming
+        # `attribute` is refused as an unasked key, and one naming `fat` passes the key check
+        # and is dropped here, because the parser is looking for something else. Registering a
+        # family is two edits — this table and REPLY_KEYS — and this is the one that says so.
+        raise SchemaError(
+            f"family {family!r} reads its attribute from {attribute_key!r}, which is not a key"
+            f" the prompts ask for ({list(REPLY_KEYS)}) — its instruments are not registered"
+        )
     out = []
     for index, entry in enumerate(_array(reply)):
         if not isinstance(entry, dict):

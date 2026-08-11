@@ -250,8 +250,15 @@ any threshold, the $0.35 cap, the one-attempt clause, the R1–R5 readings, the 
 `attribute_pct > 100` is refused and `parse_fat` takes «2,5%» — so a coffee attribute that is not a
 percentage needs a schema decision, not just a registry edit. And the WIRE keeps the domain word:
 the dairy prompts ask for `"fat"` and `positions.WIRE_KEYS` maps it to the schema, because a
-registered prompt text is replaced by a new registration, never edited. A new instrument family
-registers its own prompts and adds one row to that table.
+registered prompt text is replaced by a new registration, never edited.
+
+**Registering a new instrument family is TWO edits, not one:** a row in `positions.WIRE_KEYS`
+(`{"coffee": {"attribute": "<the key that family's prompt asks for>"}}`) **and** that key in
+`positions.REPLY_KEYS`, which is the closed vocabulary a reply may use. Do only the first and the
+parser refuses the family by name — `family 'coffee' reads its attribute from …, which is not a key
+the prompts ask for` — which is deliberate: before that guard existed, a coffee reply carrying
+`"fat"` passed the key check and was then dropped in silence, and a reply carrying `"attribute"`
+was refused as an unasked key. Two silent halves, both now loud.
 
 **The window rule still stands for anything else of this shape:** a change that moves a pinned sha
 happens **before sku-b starts or after B closes — never between.**

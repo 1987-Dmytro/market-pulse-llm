@@ -426,6 +426,34 @@ def test_rebuilding_a_pack_that_carries_ticks_is_refused(tmp_path):
     assert pack.filled(target) == 0
 
 
+def test_manifest_only_rebuilds_the_manifest_and_writes_no_pack(tmp_path):
+    """The path uni-b added, and the one thing it must never do. `--manifest-only` bypasses the
+    filled-pack guard on purpose — the ladder's sha is an input to bar 3 and had to be re-pinned —
+    so what stands between it and 26 adjudicated rows is that it writes no CSV at all."""
+    rows = fresh_rows(tmp_path)
+    rows[0]["brand"] = "y"
+    target, manifest_path = tmp_path / "ticked.csv", tmp_path / "m.json"
+    with target.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(
+            handle, fieldnames=pack.COLUMNS, delimiter=pack.DELIMITER, lineterminator="\n"
+        )
+        writer.writeheader()
+        writer.writerows(rows)
+    (tmp_path / pack.README.name).write_text(pack.README_TEXT, encoding="utf-8")
+    before = hashlib.sha256(target.read_bytes()).hexdigest()
+
+    assert (
+        pack.main(["--pack", str(target), "--manifest", str(manifest_path), "--manifest-only"]) == 0
+    )
+    assert hashlib.sha256(target.read_bytes()).hexdigest() == before
+    assert pack.filled(target) == 1, "the ticks are still there"
+    written = json.loads(manifest_path.read_text(encoding="utf-8"))
+    assert written["ladder"]["sha256"] == positions.ladder_sha256()
+    # and the sha it pins is the pack AS BUILT — the blank rebuild, not the ticked file beside it
+    assert written["sha256"][pack.rel(target) if target.is_relative_to(REPO_ROOT) else str(target)]
+    assert written["sha256"] != before
+
+
 def test_the_pack_rebuilds_to_the_same_thirty_questions(tmp_path):
     """The GIVEN columns, not the bytes: a rebuild reproduces the draw and its text forever, while a
     byte-comparison against the shipped file stops holding the moment a tick is entered."""

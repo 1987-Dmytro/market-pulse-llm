@@ -576,6 +576,27 @@ def test_the_parser_and_the_prompt_ask_for_the_same_keys():
     assert prompts.POSITIONS == {"positions_post_gm4", "positions_text_gm4"}
 
 
+def test_an_unregistered_instrument_family_is_refused_rather_than_read_as_empty():
+    """SPEC 3.17 (8) split the schema's `attribute` from the wire's `fat`, and a family with no row
+    in `WIRE_KEYS` falls through to the schema's own name — which no registered prompt asks for.
+
+    Both directions then fail SILENTLY: a reply naming `attribute` is refused as an unasked key, and
+    one naming `fat` passes the key check and is dropped by the parser, which is looking elsewhere.
+    That is the empty-class silence this repo keeps paying for, so it is a refusal instead."""
+    reply = '[{"brand": "Галка", "category": "ice-cream", "fat": "2,5%"}]'
+    kwargs = dict(
+        categories=frozenset({"ice-cream"}),
+        carrier="leaflet_page",
+        price_origin="retail_leaflet",
+        extraction_source=SOURCE,
+        aliases={},
+    )
+    # the registered family reads it
+    assert P.parse_positions(reply, **kwargs)[0].attribute_pct == 2.5
+    with pytest.raises(P.SchemaError, match="instruments are not registered"):
+        P.parse_positions(reply, family="coffee", **kwargs)
+
+
 # --- the pre-filter -------------------------------------------------------------------------------
 
 LEXICON = lexicon.load_lexicon()  # the vocabulary LAW, SPEC 3.17 (8) — not the draft it migrated
