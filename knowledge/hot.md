@@ -30,15 +30,25 @@ daa2832 docs(team-lead): the 11.08 arch-a brief, the 10.08 acceptance block, the
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-11 (arch-a step 0). **sku-a IS ACCEPTED, R1–R5 ARE RATIFIED, THE 30-ROW TEXT
-GOLD IS ADJUDICATED, AND SPEC 3.17 (7) IS LAW.** Everything sku-b needs is built, pinned and ratified.
-Live phase: **arch-a** ($0 — code graph, `docs/ARCHITECTURE.md`, instrument inventory; nothing is
-deleted). Then **sku-b**: one paid attempt, cap $0.35, a failed bar closes B by measurement. This
-block is hand-edited; the section above it is auto-generated — do NOT touch the marker. Long form:
-`implementation-notes.md` (Dv100–), the day logs [[2026-08-11]] / [[2026-08-10]], and the ADRs named
-inline below.
+**Last update:** 2026-08-11 (arch-a delivered). **sku-a IS ACCEPTED, R1–R5 ARE RATIFIED, THE 30-ROW
+TEXT GOLD IS ADJUDICATED, SPEC 3.17 (7) IS LAW, AND THE MAP IS DRAWN** — `docs/ARCHITECTURE.md`, the
+code graph, 149 inventory rows, $0. **Next: sku-b** — one paid attempt, cap $0.35, a failed bar
+closes B by measurement. This block is hand-edited; the section above it is auto-generated — do NOT
+touch the marker. Long form: `implementation-notes.md` (Dv100–Dv120), the day logs [[2026-08-11]] /
+[[2026-08-10]], and the ADRs named inline below.
 
 ## 🔥 What's Hot
+
+**arch-a FOUND TWO THINGS sku-b WOULD HAVE WALKED INTO, AND ONE IS A BAR WITH NO EVIDENCE FILE.**
+(1) **The per-position price-pair dump does not exist.** It is the artifact bar 2 is SCORED from —
+the team lead opens it at acceptance — and no writer for it is in the repo; every occurrence of the
+phrase is the bar's own wording. **sku-b must build it**, or bar 2 cannot be read. (2) **Today's
+endpoint would refuse a `positions_post_gm4` job.** The worker answers exactly `info | batch |
+caption`, `CaptionClient.render` refuses any task but `caption_post_gm4`, and `assert_no_adapter` /
+`settings()` guard the CAPTION path only — while `results/sku_pilot_prereg.json` pins the two prompt
+shas and registers **no serving config at all**. A third, smaller: the 10 MB `/run` ceiling is real
+code only on the caption leg (`MAX_PAYLOAD_MB = 8.0`); on the positions leg it is a docstring.
+Details and every verdict: `docs/ARCHITECTURE.md`, Dv113–Dv115.
 
 **THE FIVE RATIFIED READINGS ARE HOW EVERY sku-b NUMBER IS COMPUTED, AND THEIR HOME IS
 `results/sku_pilot_prereg.json` — NOT THIS FILE.** [[sku-b-pilot-readings-ratified]] is the long form.
@@ -149,11 +159,12 @@ of which 42 are video. **This executor signed nothing** — the composition is t
 
 ## ⏭️ Next
 
-**arch-a IS LIVE ($0).** Code graph (graphify + post-commit hook), `docs/ARCHITECTURE.md` with the two
-ratified flows, and an instrument inventory of every prompt, script and module. **Nothing is deleted
-or renamed** — the candidate-dead list goes to the operator for a ruling at acceptance.
+**arch-a IS DELIVERED ($0)** — the graph, `docs/ARCHITECTURE.md` (19 nodes verified: 14 CONFIRMED,
+3 DEVIATION, 2 NOT_BUILT) and 149 inventory rows. Nothing was deleted or renamed; the
+**candidate-dead list is empty** and the two files with no inbound reference wait for an operator
+ruling at acceptance.
 
-**THEN sku-b:** two legs, cap $0.35, **ONE attempt**, a failed bar closes B by measurement. **Then the
+**NEXT — sku-b:** two legs, cap $0.35, **ONE attempt**, a failed bar closes B by measurement. **Then the
 5c2 briefing.**
 
 **WHAT sku-b MUST NOT DO.** Re-run a bar after seeing its result; read the 159 available pages instead
