@@ -46,6 +46,9 @@ proved below to create no spend anchor at all.
 | D6 | `de9a637` | `results/sku_projection.json` — and the upper corner does not fit |
 | — | `8530f97` | the importer count re-derived — 51, not "some forty" |
 | — | `9157118` | **the cap's in-run stop CRASHED on its first call, and was never exercised** |
+| — | `2beff78`, `25f921b`, `c5670c4` | the report, and its two corrections |
+| — | `31fb3ff` | `run_leg`'s two accumulators are the run's, and their order matters |
+| tail | `8b9301f` | the vault tail — the day's log, hot.md, the Dv pointers |
 
 Order is not the brief's numbering and that is deliberate: D3 before D2 because the brief calls the
 driver "caller six", so landing the driver first would have written a seventh `git_state` copy and
@@ -53,33 +56,38 @@ then migrated it; D4 before D2 because the driver's identity stop reads the pin.
 
 ### Each commit ran its own suite, on its own checkout
 
-`git checkout <sha>` in the repository itself (a detached worktree cannot run this suite — 
+`git checkout <sha>` in the repository itself (a detached worktree cannot run this suite —
 `data/raw/` is gitignored and `tests/test_train_qlora.py` raises at collection without it), then
-`python3 -m pytest -q`:
+`python3 -m pytest -q`. Every row prints `git rev-parse --short HEAD` and one content fact that
+differs across the phase (`grep -c '^def test_' tests/test_positions_driver.py`), so a checkout
+that silently did nothing cannot pass for a run — see the note below.
 
 ```
-1131d78  1 failed, 1636 passed, 2 skipped in 49.38s   <- RED BY CONSTRUCTION, see Dv133
-e657db7  1637 passed, 2 skipped in 49.03s
-68c84bb  1675 passed, 2 skipped in 49.71s
-7bc0bad  1684 passed, 2 skipped in 50.46s
-0577bef  1694 passed, 2 skipped in 50.69s
-c0b0ecc  1694 passed, 2 skipped in 51.06s
-b6cf872  1718 passed, 2 skipped in 51.84s
-a2b66bc  1718 passed, 2 skipped in 52.02s
-de9a637  1728 passed, 2 skipped in 51.44s
-8530f97  1728 passed, 2 skipped in 51.61s
-2beff78  1728 passed, 2 skipped in 52.09s
-9157118  1734 passed, 2 skipped in 52.56s
-25f921b  1734 passed, 2 skipped in 52.44s
+sha        head       driver_tests   suite
+1131d78    1131d78    (file absent)  1 failed, 1636 passed, 2 skipped   <- RED BY CONSTRUCTION, Dv133
+e657db7    e657db7    (file absent)  1637 passed, 2 skipped
+68c84bb    68c84bb    (file absent)  1675 passed, 2 skipped
+7bc0bad    7bc0bad    (file absent)  1684 passed, 2 skipped
+0577bef    0577bef    (file absent)  1694 passed, 2 skipped
+c0b0ecc    c0b0ecc    (file absent)  1694 passed, 2 skipped
+b6cf872    b6cf872    24             1718 passed, 2 skipped
+a2b66bc    a2b66bc    24             1718 passed, 2 skipped
+de9a637    de9a637    24             1728 passed, 2 skipped
+8530f97    8530f97    24             1728 passed, 2 skipped
+2beff78    2beff78    24             1728 passed, 2 skipped
+9157118    9157118    30             1734 passed, 2 skipped
+25f921b    25f921b    30             1734 passed, 2 skipped
+c5670c4    c5670c4    30             1734 passed, 2 skipped
+8b9301f    8b9301f    30             1734 passed, 2 skipped
+31fb3ff    31fb3ff    30             1734 passed, 2 skipped
 ```
 
-**The first attempt at the last four was invalid and is reported as such.** `git checkout` ABORTS
-on a dirty tracked file, and the report itself was modified at the time — with stderr redirected
-the loop printed a number for every commit while the tree never moved, so two different commits
-both reported `1734`. The rerun above commits the report first, prints `git rev-parse --short HEAD`
-and `grep -c '^def test_' tests/test_positions_driver.py` per commit, and shows 24 → 24 → 30 → 30
-test functions against 1728 → 1728 → 1734 → 1734. A verification loop that cannot fail loudly is
-not a verification.
+**An earlier attempt at part of this table was invalid, and the table above is its rerun.**
+`git checkout` ABORTS on a dirty tracked file — the report itself was being edited at the time —
+and with stderr redirected the loop printed a number for every commit while the tree never moved:
+two commits whose test files differ by six functions both reported `1734`. The identical number was
+the only tell. So the whole table was re-run from a clean tree with HEAD and a content fact printed
+per row. A verification loop that cannot fail loudly is not a verification.
 
 `make check` on HEAD:
 
