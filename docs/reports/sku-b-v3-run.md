@@ -602,7 +602,7 @@ at $0.24/h ≤ $0.0140 — an upper bound, used as one.
 | 4 | `5dd9e1a` | the session's whole output: the refusal record and the ledger entry |
 | 5 | `545fe1b` | this report |
 | 6 | `9e0be97` | Dv168 — bar 3's denominator drops the unadjudicated rows |
-| 7 | `4c3d123` | this report again: Dv167, Dv168 and the settled balance |
+| 7 | `c265918` | this report again: Dv167, Dv168 and the settled balance |
 | 8 | the vault tail | its own final commit |
 
 The report has two commits because the last review pass found Dv167 and Dv168 after it was first
