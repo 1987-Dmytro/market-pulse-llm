@@ -29,6 +29,7 @@ Three things it carries, and the second is the one that costs work:
 import argparse
 import hashlib
 import json
+import re
 import sys
 from datetime import UTC, datetime
 from pathlib import Path
@@ -91,28 +92,36 @@ def rel(path: Path) -> str:
 
 RATIFICATION_BEGIN = "<!-- sku-b-ratification begin"
 RATIFICATION_END = "<!-- sku-b-ratification end -->"
+RATIFICATION_NAME = re.compile(r"^<!-- (sku-b-ratification(?:-\d+)?) begin", re.MULTILINE)
+"""Every marked ratification block, by name. 3.17 (7) wears `sku-b-ratification` and 3.17 (8)
+`sku-b-ratification-2`; a third would be `-3` and would be stripped by this same expression."""
 
 
 def registered_law(spec: Path) -> bytes:
-    """`docs/SPEC.md` with amendment 3.17 (7) cut out, marker lines included.
+    """`docs/SPEC.md` with EVERY marked ratification block cut out, marker lines included.
 
-    3.17 (7) ratifies the readings this record already carries — it moves no bar, no threshold and
-    no denominator — but it moves the file's bytes, and the pin below predates it. Re-pinning would
-    make the pin follow the file instead of holding it, so the block wears its own markers and the
-    REGISTERED LAW is what is left when they come off. One implementation, called by the producer
-    and by `tests/test_sku_prereg.py`: a second copy of this strip would drift from the one that
-    writes the record and nothing downstream could see it.
+    A ratification amendment records that readings this record already carries were accepted — it
+    moves no bar, no threshold and no denominator — but it moves the file's bytes, and the pin
+    predates it. Re-pinning would make the pin follow the file instead of holding it, so each such
+    block wears its own markers and the REGISTERED LAW is what is left when they all come off.
+    Stripping ALL of them (uni-b, for 3.17 (8)) rather than the first is what keeps the v1 pin
+    `973c8789…` re-derivable after the second amendment lands: a strip that knew one block would
+    leave (8) in the hash and the pre-registration would stop verifying at this commit.
+
+    One implementation, called by the producer and by `tests/test_sku_prereg.py`: a second copy of
+    this strip would drift from the one that writes the record and nothing downstream could see it.
     """
     text = spec.read_text(encoding="utf-8")
-    if RATIFICATION_BEGIN not in text:
-        return text.encode("utf-8")  # the pre-amendment file, hashed as it is
-    if text.count(RATIFICATION_BEGIN) != 1 or text.count(RATIFICATION_END) != 1:
-        raise SystemExit(f"{rel(spec)}: the ratification block must appear exactly once")
-    start = text.index(RATIFICATION_BEGIN)
-    end = text.index(RATIFICATION_END, start) + len(RATIFICATION_END)
-    if (start and text[start - 1] != "\n") or not text[end:].startswith("\n"):
-        raise SystemExit(f"{rel(spec)}: the ratification block does not own whole lines")
-    return (text[:start] + text[end + 1 :]).encode("utf-8")
+    for name in RATIFICATION_NAME.findall(text):
+        begin, end_marker = f"<!-- {name} begin", f"<!-- {name} end -->"
+        if text.count(begin) != 1 or text.count(end_marker) != 1:
+            raise SystemExit(f"{rel(spec)}: ratification block {name} must appear exactly once")
+        start = text.index(begin)
+        end = text.index(end_marker, start) + len(end_marker)
+        if (start and text[start - 1] != "\n") or not text[end:].startswith("\n"):
+            raise SystemExit(f"{rel(spec)}: ratification block {name} does not own whole lines")
+        text = text[:start] + text[end + 1 :]
+    return text.encode("utf-8")
 
 
 def pinned_sha256(path: Path) -> str:

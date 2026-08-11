@@ -587,6 +587,19 @@ and the one-attempt clause are unchanged. Text gold: data/annotation/sku_a_text/
 text30.csv adjudicated 2026-08-10, 30/30 rows, validator clean (11 position ·
 3 product_mention · 16 none).
 <!-- sku-b-ratification end -->
+<!-- sku-b-ratification-2 begin — stripped by tests/test_sku_prereg.py before
+hashing docs/SPEC.md against the prereg pin; the registered law is the stripped text -->
+(8) **Vocabulary law and the attribute field — ratified (operator, 2026-08-11).**
+The pre-filter's category vocabulary is law in config/lexicon.yaml (source:
+data/category_lexicon_draft.json sha 1225ad75…, migrated byte-faithfully; the
+draft stays frozen as history). The position schema's fifth presence field is
+generalized fat → attribute; dairy instruments keep the wire key "fat" — the
+registered prompt texts are unchanged. The pilot's pre-registration is
+re-registered beside as results/sku_pilot_prereg_v2.json BEFORE any attempt:
+thresholds, the $0.35 cap, the one-attempt clause and the R1–R5 readings are
+verbatim-unchanged; only schema naming and vocabulary provenance moved. Bar 3's
+ladder sha follows the renamed table.
+<!-- sku-b-ratification-2 end -->
 **Date:** 2026-07-26 · **Team lead:** Fable session · **Executor:** Claude Code
 **Repo folder:** `/Users/hdv_1987/Desktop/Projects/market-pulse-llm`
 **rev. 3 change (operator decision):** producers in Ukraine barely use Telegram for
