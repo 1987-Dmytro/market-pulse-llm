@@ -2,5 +2,12 @@
   "runpod_balance_at_sku-b-v3_start": 12.2025374089,
   "cap_usd": 0.45,
   "note": "RunPod account balance read before the first job of sku-b-v3, the paid session of SPEC 3.17 (6)/(11). Session spend = this anchor minus the balance now, enforced against the $0.45 cap the amendment pre-registered. The Phase 4 cap is enforced separately against results/spend_phase4.json, and neither anchor may be regenerated: delete this file and the counter silently restarts at today's balance.",
-  "runs": []
+  "runs": [
+    {
+      "at": "2026-08-11T20:48:07+00:00",
+      "balance": 12.0609061756,
+      "step_spent_usd": 0.1416,
+      "note": "REFUSED by the (10)(a) go/no-go: 121 gold calls project $0.5964 against $0.4500. Boot and the two warm-up calls were billed; no gold call was made and no attempt was consumed. This balance was re-read AFTER teardown and returns the same $0.1416 the record was written with -- the account has not yet absorbed the 60 s idle tail or the last seconds of the mp-skub-v3-stage pod, which is what makes a balance delta a FLOOR (Dv33). The tighter reading is billed seconds: 421.256 worker s + 60 s tail at $0.00030669/s = $0.1476, plus ~2.0 min of staging pod at $0.24/h = ~$0.008, so ~$0.1556 all in. Appended through the driver's own log_run: the refusal branch did not call it at the time, and that gap is fixed in this same phase"
+    }
+  ]
 }
