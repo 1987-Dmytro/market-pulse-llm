@@ -21,6 +21,12 @@ What it does NOT do, and each omission is somebody's expensive evening:
 - **No hidden model swap.** The worker is asked what it loaded and the run stops before the first
   paid call unless it answers exactly `results/sku_pilot_serving.json :: expected_worker`. Not one
   value of that block is restated here.
+- **No job that can out-bill the cap.** 3.17 (10)(c): the projection gate re-prices BETWEEN jobs
+  and cannot see inside one, so :data:`JOB_TIMEOUT_S` is what bounds a wedged worker — sized under
+  the cap on its own — and a job the CLOCK kills ends the run rather than the batch. And before any
+  of that, 3.17 (10)(a): after the two warm-up calls the whole run is priced from what they
+  measured, and a projection over what is left of the cap refuses BEFORE the first gold call, which
+  consumes no attempt.
 - **No salvage.** `positions.parse_positions` is strict at the level of the whole reply, and a
   refusal is counted by its reason and excluded — never read as a page with no dairy on it. `[]`
   and "unreadable" are different outcomes and conflating them reports parse failures as empty
@@ -88,9 +94,32 @@ vis-b measured the same encoding on the same pictures: the largest six-image ATB
 the wire. A page over budget on its own is a refusal — see the module docstring."""
 
 ENDPOINT_ENV = "RUNPOD_POSITIONS_ENDPOINT"
-JOB_TIMEOUT_S = 1800.0
+JOB_TIMEOUT_S = 900.0
 JOB_TTL_S = 3600.0
-"""Seconds. `serving.execution_policy` is the one place they become milliseconds."""
+"""Seconds. `serving.execution_policy` is the one place they become milliseconds.
+
+SPEC 3.17 (10)(c): **no single job may be CAPABLE of billing past the remaining cap on its own.**
+The projection gate below re-prices BETWEEN jobs and cannot see inside one, so the execution
+timeout is the only thing bounding a wedged worker — and at 1800 s one such job bills
+1800 x $0.00030669 = **$0.5520**, which is 1.58x the whole $0.35 cap with every guard here
+reporting normally. 900 s bills $0.2760, under the cap on its own, and is still more than twice
+the longest job the projection predicts: the text leg is ONE job carrying all 30 rows
+(30 x 4.262 s x 3.125 decode uplift ~ 400 s) and the page leg's largest of 7 is 17 pages ~ 80 s.
+`scripts/runbook_5b.md` and `scripts/runbook_srv2b.md` already create endpoints at
+`--execution-timeout 900`.
+
+The ttl is a DIFFERENT clock — it starts at submission, so it has to cover the queue as well as
+the run — and 3.17 (10)(c) is about what a worker can bill, which is the execution one."""
+
+IDLE_TAIL_SECONDS = 60.0
+"""Seconds a serverless worker keeps billing after the last job, and a term in every projection.
+
+Serverless bills wall uptime, not jobs: the worker stays up for the endpoint's `--idle-timeout`
+before it scales to zero, and that tail is charged to whoever woke it. Every endpoint this repo's
+runbooks create uses `--idle-timeout 60` (`scripts/runbook_5b.md`, `runbook_srv2b.md`,
+`runbook_vis_b.md`), which is $0.0184 at the settled rate — larger than the $0.0104 of headroom the
+projection's stated corner had before this term was added. A cap arithmetic that leaves it out is
+short by more than the margin it is reasoning about."""
 
 WARMUP_ROW = "Тестовий рядок поза пакетом: молоко 1 л 45,90 грн."
 """SPEC 3.17 (9): the paid session opens on NON-gold inputs before either leg touches gold. This
@@ -135,6 +164,32 @@ def spend_now(ledger: dict) -> tuple[float, float]:
     """(balance, spend). The delta is a FLOOR — RunPod settles it minutes to hours late (Dv33)."""
     balance = guard.balance()
     return balance, float(ledger[anchor_key()]) - balance
+
+
+def spend_or_note(ledger: dict | None) -> tuple[float | None, float | None, str | None]:
+    """:func:`spend_now`, or (None, None, why) — a balance read must never lose the run's record.
+
+    `guard.balance()` shells out to `runpodctl` and parses its JSON, so it can die on a network
+    blip, a CLI update, an auth expiry or a schema change. Read AFTER the paid legs, and every one
+    of those failures would have aborted `main` between the last paid call and the only write of
+    the record — which, in a session that gets ONE attempt, throws away the evidence rather than
+    the money. The anchor file survives regardless, so the spend stays recoverable by hand.
+
+    The catch is deliberately blind. Narrowing it to the exceptions this path is known to raise
+    would re-open the hole for the next one, and there is nothing above this frame that could do
+    anything useful with the exception anyway.
+    """
+    if ledger is None:
+        return None, None, None
+    try:
+        balance, spent = spend_now(ledger)
+    except Exception as err:  # noqa: BLE001 — see the docstring: the record outranks the reason
+        return (
+            None,
+            None,
+            f"the balance read failed after the paid legs: {type(err).__name__}: {err}",
+        )
+    return balance, spent, None
 
 
 # --- the two populations ------------------------------------------------------------------------
@@ -335,7 +390,22 @@ class FakeEndpoint:
     """Between vis-b's 2.34 s/image and srv-2d's 4.26 s/row, so a smoke at the real population
     projects into the same order of magnitude the $0.35 cap lives in."""
 
-    def __init__(self, worker: dict, categories) -> None:
+    WARMUP_CALLS = 2
+    """SPEC 3.17 (9) makes exactly two non-gold calls, and the fake has to know where they end.
+
+    ``gold_seconds_per_call`` defaults to the same rate, so nothing changes unless a caller asks
+    for it. What it buys is the one scenario the IN-RUN gate exists for and the go/no-go of
+    3.17 (10)(a) cannot cover: a warm-up that priced cheap and legs that turned out expensive. On
+    a flat clock the two gates compute the identical number by construction — if the go/no-go
+    passes, the in-run stop can never fire — so a fake that could not get slower would have left
+    the mid-leg path unprovable through `main`."""
+
+    def __init__(
+        self, worker: dict, categories, gold_seconds_per_call: float | None = None
+    ) -> None:
+        self.gold_seconds_per_call = (
+            self.SMOKE_SECONDS_PER_CALL if gold_seconds_per_call is None else gold_seconds_per_call
+        )
         self.worker = worker
         self.jobs = 0
         self.calls = 0
@@ -389,11 +459,16 @@ class FakeEndpoint:
     def timing(self) -> dict:
         """A synthetic clock, labelled as one. `worker_seconds` is what the gate divides by, so a
         fake that reported none made the projection unmeasurable and its arithmetic unprovable."""
+        warm = min(self.calls, self.WARMUP_CALLS)
+        gold = max(self.calls - self.WARMUP_CALLS, 0)
         return {
             "calls": self.jobs,
             "rows": self.calls,
             "worker_seconds": round(
-                self.SMOKE_BOOT_SECONDS + self.calls * self.SMOKE_SECONDS_PER_CALL, 3
+                self.SMOKE_BOOT_SECONDS
+                + warm * self.SMOKE_SECONDS_PER_CALL
+                + gold * self.gold_seconds_per_call,
+                3,
             ),
             "wall_seconds": 0.0,
             "smoke": True,
@@ -432,8 +507,15 @@ def run_leg(
     outcomes: list[dict],
     dumped: list[dict],
     stop=None,
-) -> None:
+) -> str | None:
     """One job per pack, in order, appending to the RUN's outcome and dump lists.
+
+    Returns the reason the RUN ended, or None if this leg simply finished. A job the CLOCK killed
+    (`serving.JobExpired` — RunPod's `TIMED_OUT`, or the client's deadline) ends the whole run and
+    not just the batch, per SPEC 3.17 (10)(c): it billed the entire execution timeout, so nothing
+    about it says the next job will be cheaper, and the one-attempt clause forfeits its items
+    either way. Every OTHER job failure stays what it was — named against its items, and the leg
+    continues.
 
     A job that fails is named against every source in it and never re-asked; ``stop`` is the
     re-projection gate and the sources it skips are left out of the outcomes rather than marked
@@ -444,30 +526,43 @@ def run_leg(
     per-leg counter would restart the arithmetic at zero when the text leg opened while the billed
     seconds carried the whole page leg.
 
-    **Their order matters and neither is returned.** They are mutated in place and they are the
-    only two list arguments here; a caller that swapped them would write an empty dump beside
-    outcomes full of extraction rows, and every count downstream would still add up.
+    **Their order matters and they are not what comes back.** They are mutated in place and they
+    are the only two list arguments here; a caller that swapped them would write an empty dump
+    beside outcomes full of extraction rows, and every count downstream would still add up.
     """
+
+    def forfeit(index: int, batch: list[dict], err) -> None:
+        outcomes.extend(
+            {
+                "source": item.get("file") or item["id"],
+                "item": item.get("item") or item.get("id"),
+                "n_positions": None,
+                "unreadable": f"job {index}: {err}",
+            }
+            for item in batch
+        )
+
     for index, batch in enumerate(packed):
         if stop is not None and (reason := stop()):
             print(f"  STOP before {task} job {index:02d}: {reason}", flush=True)
-            break
+            return None
         if dump_prefix is not None:
             client.dump_path = f"{dump_prefix}_{task}_{index:02d}.jsonl"
         # a page travels as a ONE-image album (SPEC 3.17 (4)); a row travels as its text
         payload = [[item["url"]] if "url" in item else item["text"] for item in batch]
         try:
             replies = client.positions(task, payload)
+        except serving.JobExpired as err:
+            forfeit(index, batch, err)
+            on_job(index, batch, None)
+            print(f"  RUN ENDS on {task} job {index:02d}: the clock killed it", flush=True)
+            return (
+                f"{task} job {index} was ended by the CLOCK ({err}). SPEC 3.17 (10)(c): a job that"
+                f" ends TIMED_OUT billed the whole {JOB_TIMEOUT_S:.0f}s execution timeout and says"
+                " nothing about the next one, so the run ends and its remainder is unbought"
+            )
         except (ApiError, ValueError, OSError) as err:
-            outcomes += [
-                {
-                    "source": item.get("file") or item["id"],
-                    "item": item.get("item") or item.get("id"),
-                    "n_positions": None,
-                    "unreadable": f"job {index}: {err}",
-                }
-                for item in batch
-            ]
+            forfeit(index, batch, err)
             on_job(index, batch, None)
             continue
         for item, reply in zip(batch, replies):
@@ -519,6 +614,11 @@ def projection(*, opened_seconds: float, billed: float, done: int, total: int, r
     text leg opens, and that is the honest reading with one instrument and two input shapes: no
     artifact prices a positions call on either shape yet, so a per-leg rate table here would be two
     guesses instead of one measurement. It self-corrects — every gate re-reads the clock.
+
+    :data:`IDLE_TAIL_SECONDS` is inside ``projected_usd`` and outside ``spent_usd``, which is what
+    each of the two words means: the tail has not been billed yet and it WILL be, because the
+    worker keeps running after the last job. It is not in the marginal either — it is charged once
+    per session, not once per call.
     """
     marginal = (billed - opened_seconds) / max(done, 1)
     remaining = max(total - done, 0) * marginal
@@ -528,34 +628,84 @@ def projection(*, opened_seconds: float, billed: float, done: int, total: int, r
         "opened_seconds": round(opened_seconds, 3),
         "billed_seconds": round(billed, 3),
         "marginal_seconds_per_call": round(marginal, 4),
+        "idle_tail_seconds": IDLE_TAIL_SECONDS,
         "spent_usd": round(billed * rate, 4),
         "remaining_usd": round(remaining * rate, 4),
-        "projected_usd": round((billed + remaining) * rate, 4),
+        "projected_usd": round((billed + remaining + IDLE_TAIL_SECONDS) * rate, 4),
     }
 
 
-def warmup(client, task_page: str, task_text: str) -> dict:
+def go_no_go(
+    *,
+    billed: float,
+    page_marginal: float,
+    text_marginal: float,
+    n_pages: int,
+    n_rows: int,
+    rate: float,
+    budget: float | None,
+) -> dict:
+    """SPEC 3.17 (10)(a): price the WHOLE run from the warm-up, before the first gold call.
+
+    The in-run gate below cannot answer this question. It needs a gold call to have a marginal at
+    all, so by the time it first fires the pilot has already bought something — and under the
+    one-attempt clause a run stopped after two pages is the most expensive outcome available: the
+    money is gone and no bar is scoreable. This is the one gate that can refuse while the session
+    is still worth nothing, and (10)(a) says a session stopped here has consumed NO attempt.
+
+    Each leg is priced from ITS OWN warm-up call, because the two shapes are not the same call:
+    the page leg sends an image and the text leg sends a string. Two measurements of one call each
+    is a thin instrument and it is the only one that exists before gold — the in-run gate re-prices
+    on real volume from the first job onward.
+    """
+    gold_seconds = n_pages * page_marginal + n_rows * text_marginal
+    projected = (billed + gold_seconds + IDLE_TAIL_SECONDS) * rate
+    return {
+        "when": "after the two non-gold warm-up calls of SPEC 3.17 (9), before the first gold call",
+        "billed_seconds": round(billed, 3),
+        "page_marginal_seconds": round(page_marginal, 4),
+        "text_marginal_seconds": round(text_marginal, 4),
+        "gold_calls": n_pages + n_rows,
+        "gold_seconds": round(gold_seconds, 3),
+        "idle_tail_seconds": IDLE_TAIL_SECONDS,
+        "projected_usd": round(projected, 4),
+        "budget_usd": budget,
+        "refuse": budget is not None and round(projected, 4) > budget,
+    }
+
+
+def warmup(client, task_page: str, task_text: str, clock=None) -> dict:
     """SPEC 3.17 (9): a paid call on NON-gold inputs before either leg touches gold.
 
     A synthetic image and a row that is not in the 30-row pack. What it buys is the cold start and
     the proof that the instrument answers at all, on inputs no bar is scored on — so a worker that
     comes back unparseable costs the warm-up rather than a leg of the gold.
+
+    It also buys the only per-leg price that exists before gold, which is why the clock is read
+    BETWEEN the two calls rather than once at the end: :func:`go_no_go` prices 108 pages and 30
+    rows separately, and a single blended figure would charge the image leg's seconds to the text
+    leg's 30 calls. ``clock`` is :func:`billed_seconds` and is injected so a caller can prove the
+    arithmetic without a worker.
     """
     import base64
     import io
 
     from PIL import Image
 
+    clock = billed_seconds if clock is None else clock
     buffer = io.BytesIO()
     Image.new("RGB", (64, 64), (240, 240, 240)).save(buffer, format="JPEG")
     synthetic = "data:image/jpeg;base64," + base64.b64encode(buffer.getvalue()).decode("ascii")
-    out = {}
+    out, before = {}, clock(client)
     for task, item in ((task_page, [synthetic]), (task_text, WARMUP_ROW)):
         reply = client.positions(task, [item])[0]
+        now = clock(client)
         out[task] = {
             "content": (reply.get("content") or "")[:200],
             "finish_reason": reply.get("finish_reason"),
+            "marginal_seconds": round(now - before, 4),
         }
+        before = now
     return out
 
 
@@ -586,11 +736,16 @@ def main(argv: list[str] | None = None, client=None) -> int:
 
     out = args.out or DUMP
     record_path = args.record or RECORD
-    if args.smoke and (args.out, args.record) == (None, None):
+    if args.smoke:
         # A smoke on the real paths fills the paid artifacts with fake extractions and then makes
         # the real run refuse to overwrite them. The 4.5g2 redirect, for the same reason.
+        #
+        # Each path redirects on ITS OWN default. The redirect used to need BOTH of them unset, so
+        # `--smoke --out /tmp/x` wrote a fake RECORD at results/sku_b_positions.json — the exact
+        # artifact the paid run then refuses to overwrite, planted by the $0 path.
         smoke = REPO_ROOT / "results" / "smoke"
-        out, record_path = smoke / out.name, smoke / record_path.name
+        out = out if args.out else smoke / out.name
+        record_path = record_path if args.record else smoke / record_path.name
     for path in (out, record_path):
         if path.exists():
             raise SystemExit(
@@ -638,7 +793,7 @@ def main(argv: list[str] | None = None, client=None) -> int:
     aliases = watchlist_aliases(registry.watchlist)
 
     endpoint_id = args.endpoint_id or os.environ.get(ENDPOINT_ENV, "")
-    ledger = None
+    ledger, spent_before = None, None
     if client is not None:
         pass
     elif args.smoke:
@@ -658,11 +813,11 @@ def main(argv: list[str] | None = None, client=None) -> int:
         args.ledger.write_text(
             json.dumps(ledger, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
         )  # anchored before the first job, never after
-        balance, spent = spend_now(ledger)
-        print(f"ledger: spent ${spent:.4f} of ${CAP_USD:.2f} (balance ${balance:.2f})")
-        if spent >= CAP_USD:
+        balance, spent_before = spend_now(ledger)
+        print(f"ledger: spent ${spent_before:.4f} of ${CAP_USD:.2f} (balance ${balance:.2f})")
+        if spent_before >= CAP_USD:
             raise SystemExit(
-                f"REFUSED: the ${CAP_USD:.2f} cap is reached (${spent:.4f} spent). Stop and"
+                f"REFUSED: the ${CAP_USD:.2f} cap is reached (${spent_before:.4f} spent). Stop and"
                 " report — an overrun aborts, it does not raise the cap."
             )
         client = serving.EndpointClient(
@@ -689,18 +844,142 @@ def main(argv: list[str] | None = None, client=None) -> int:
     boot_seconds = billed_seconds(client)
     rate = leader.rate_usd_per_second()
 
+    calls_total = len(page_items) + len(text_items)
+    budget = args.project_stop_usd
+    if ledger is not None:
+        # `--project-stop-usd` TIGHTENS the cap, it never replaces it. It used to be taken as the
+        # budget outright, so a value above what is left of the $0.35 cap disabled the in-run stop
+        # entirely — a flag that reads like a safety knob and can only ever loosen the one guard.
+        left = round(CAP_USD - spent_before, 4)
+        budget = left if budget is None else min(budget, left)
+    projections: list[dict] = []
+
+    # everything both records carry, built once so the go/no-go stop below cannot drift from the
+    # record a completed run writes
+    head = {
+        "timestamp": started,
+        "phase": "sku-b — the position-layer pilot, one paid attempt",
+        "contract": (
+            "docs/PROMPT-sku-b-prep.md deliverable 2 + docs/PROMPT-sku-b-prep-fix.md;"
+            " docs/SPEC.md amendment 3.17 (6), (9), (10)"
+        ),
+        "prereg": {
+            "path": rel(args.prereg),
+            "sha256": sha256(args.prereg.read_bytes()).hexdigest(),
+        },
+        "serving_pin": {
+            "path": rel(args.pin),
+            "sha256": sha256(args.pin.read_bytes()).hexdigest(),
+        },
+        "endpoint": {"id": endpoint_id or None, "worker": info},
+        "smoke": bool(args.smoke),
+        "attempts_per_job": 1,
+    }
+
     opened = warmup(client, prompts.POSITIONS_TASK_PAGE, prompts.POSITIONS_TASK_TEXT)
     for task, reply in opened.items():
-        print(f"  warm-up {task:<20} {reply['finish_reason']}  {reply['content'][:60]}")
+        print(
+            f"  warm-up {task:<20} {reply['finish_reason']}"
+            f"  {reply['marginal_seconds']}s  {reply['content'][:50]}"
+        )
     # after the warm-up: everything charged before the first gold call. The legs' marginal is
     # measured from HERE, so neither the cold start nor the two non-gold calls is multiplied by 138
     opened_seconds = billed_seconds(client)
 
-    calls_total = len(page_items) + len(text_items)
-    budget = args.project_stop_usd
-    if budget is None and ledger is not None:
-        budget = round(CAP_USD - spent, 4)
-    projections: list[dict] = []
+    warmup_block = {
+        "why": "SPEC 3.17 (9): a call on NON-gold inputs before either leg touches gold",
+        "inputs": {"page": "a generated 64x64 image", "text": WARMUP_ROW},
+        "replies": opened,
+    }
+    verdict = go_no_go(
+        billed=opened_seconds,
+        page_marginal=opened[prompts.POSITIONS_TASK_PAGE]["marginal_seconds"],
+        text_marginal=opened[prompts.POSITIONS_TASK_TEXT]["marginal_seconds"],
+        n_pages=len(page_items),
+        n_rows=len(text_items),
+        rate=rate,
+        budget=budget,
+    )
+    print(
+        f"  go/no-go      {verdict['gold_calls']} gold calls project"
+        f" ${verdict['projected_usd']:.4f}"
+        + (
+            "  (no budget: nothing to refuse against)"
+            if budget is None
+            else f" against ${budget:.4f} left of the cap"
+            f" — {'REFUSE' if verdict['refuse'] else 'proceed'}"
+        ),
+        flush=True,
+    )
+    if verdict["refuse"]:
+        # SPEC 3.17 (10)(a). No gold call is made, so no gold artifact exists: the dump is never
+        # written, and this record is the whole output of the session. The attempt is NOT consumed.
+        balance, spent, cost_note = spend_or_note(ledger)
+        record_path.parent.mkdir(parents=True, exist_ok=True)
+        record_path.write_text(
+            json.dumps(
+                head
+                | {
+                    "stopped_before_gold": True,
+                    "why": (
+                        "SPEC 3.17 (10)(a): after the two non-gold warm-up calls the whole run"
+                        f" projects ${verdict['projected_usd']:.4f} against ${budget:.4f} left of"
+                        f" the ${CAP_USD:.2f} cap. Refused BEFORE the first gold call, which is the"
+                        " only stop that leaves nothing half-bought — and under (10)(a) it consumes"
+                        " NO attempt. The pilot returns to the team lead for a v3 registration"
+                        " under the measured price"
+                    ),
+                    "warmup": warmup_block,
+                    "population": {
+                        "pages_sent": len(page_items),
+                        "text_rows": len(text_items),
+                        "asked": 0,
+                        "unbought": sorted(
+                            (item.get("file") or item["id"])
+                            for packed in (page_jobs, text_jobs)
+                            for job in packed
+                            for item in job
+                        ),
+                    },
+                    "dump": {"path": None, "rows": 0, "why": "no gold call was made"},
+                    "projection": {
+                        "rate_usd_per_second": rate,
+                        "rate_source": "results/srv2d_cost.json :: rate.usd_per_second",
+                        "stop_at_usd": budget,
+                        "boot_seconds": round(boot_seconds, 3),
+                        "boot_usd": round(boot_seconds * rate, 4),
+                        "warmup_seconds": round(opened_seconds - boot_seconds, 3),
+                        "opened_seconds": round(opened_seconds, 3),
+                        "go_no_go": verdict,
+                        "per_gate": [],
+                    },
+                    "cost": {
+                        "jobs": 0,
+                        "usd": None if spent is None else round(spent, 4),
+                        "cap_usd": CAP_USD,
+                        "anchor": rel(args.ledger),
+                        "read_failed": cost_note,
+                        "reading": (
+                            "what the handshake and the two warm-up calls cost. A FLOOR — the"
+                            " balance settles minutes to hours behind the resource (Dv33)"
+                        ),
+                    },
+                    "timing": client.timing(),
+                    "git": provenance.git_state(record_path),
+                },
+                ensure_ascii=False,
+                indent=2,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        raise SystemExit(
+            f"REFUSED before the first gold call: the run projects"
+            f" ${verdict['projected_usd']:.4f} against ${budget:.4f} left of the ${CAP_USD:.2f}"
+            f" cap (SPEC 3.17 (10)(a)). No gold call was made and NO attempt was consumed —"
+            f" {rel(record_path)} is the record. Stop and report; the pilot needs a v3"
+            " registration under the measured price, not a raised cap."
+        )
 
     def gate() -> str | None:
         """Re-price the whole run before every job but the first. Cross-leg by construction."""
@@ -736,13 +1015,13 @@ def main(argv: list[str] | None = None, client=None) -> int:
 
         return on_job
 
-    outcomes, dumped = [], []
+    outcomes, dumped, ended_by = [], [], None
     for leg, task, packed, carrier_of in (
         ("page", prompts.POSITIONS_TASK_PAGE, page_jobs, lambda item: "leaflet_page"),
         ("text", prompts.POSITIONS_TASK_TEXT, text_jobs, lambda item: item["carrier"]),
     ):
         before = len(outcomes)
-        run_leg(
+        ended_by = run_leg(
             client,
             task,
             carrier_of,
@@ -758,6 +1037,8 @@ def main(argv: list[str] | None = None, client=None) -> int:
         )
         for row in outcomes[before:]:
             row["leg"] = leg
+        if ended_by:
+            break  # SPEC 3.17 (10)(c): a job the clock killed ends the RUN, not just the leg
 
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(
@@ -775,29 +1056,13 @@ def main(argv: list[str] | None = None, client=None) -> int:
         for item in job
         if (item.get("file") or item["id"]) not in asked
     )
-    balance, spent = (None, None) if ledger is None else spend_now(ledger)
+    balance, spent, cost_note = spend_or_note(ledger)
     with_old_price = [row for row in dumped if row.get("price_old") is not None]
 
-    record = {
-        "timestamp": started,
-        "phase": "sku-b — the position-layer pilot, one paid attempt",
-        "contract": "docs/PROMPT-sku-b-prep.md deliverable 2; docs/SPEC.md amendment 3.17 (6), (9)",
-        "prereg": {
-            "path": rel(args.prereg),
-            "sha256": sha256(args.prereg.read_bytes()).hexdigest(),
-        },
-        "serving_pin": {
-            "path": rel(args.pin),
-            "sha256": sha256(args.pin.read_bytes()).hexdigest(),
-        },
-        "endpoint": {"id": endpoint_id or None, "worker": info},
-        "smoke": bool(args.smoke),
-        "attempts_per_job": 1,
-        "warmup": {
-            "why": "SPEC 3.17 (9): a call on NON-gold inputs before either leg touches gold",
-            "inputs": {"page": "a generated 64x64 image", "text": WARMUP_ROW},
-            "replies": opened,
-        },
+    record = head | {
+        "stopped_before_gold": False,
+        "ended_by": ended_by,
+        "warmup": warmup_block,
         "population": {
             "pages_sent": len(page_items),
             "pages_available": reference["population"]["pages_available"],
@@ -861,13 +1126,15 @@ def main(argv: list[str] | None = None, client=None) -> int:
             "boot_usd": round(boot_seconds * rate, 4),
             "warmup_seconds": round(opened_seconds - boot_seconds, 3),
             "opened_seconds": round(opened_seconds, 3),
+            "go_no_go": verdict,
             "per_gate": projections,
             "stopped_early": bool(unbought),
             "reading": (
                 "the stop prices what is LEFT against what is already billed — it never re-adds a"
                 " pre-registered cold start on top of measured seconds, because by the time any"
                 " gate runs the boot has been paid and is inside `billed_seconds`. `calls_done`"
-                " counts across BOTH legs"
+                " counts across BOTH legs, and the idle tail the worker bills after the last job"
+                " is inside `projected_usd` and outside `spent_usd`"
             ),
         },
         "cost": {
@@ -875,10 +1142,14 @@ def main(argv: list[str] | None = None, client=None) -> int:
             "usd": None if spent is None else round(spent, 4),
             "cap_usd": CAP_USD,
             "anchor": rel(args.ledger),
+            "read_failed": cost_note,
             "reading": (
                 "the RunPod balance delta against this session's own anchor. It is a FLOOR — the"
                 " balance settles minutes to hours behind the resource (Dv33) — and runpod_guard's"
-                " itemised corroboration is the phase-level check, not this one."
+                " itemised corroboration is the phase-level check, not this one. A `usd` of null"
+                " beside a `read_failed` means the balance could not be read AFTER the paid legs:"
+                " the anchor survives, so the spend is recoverable by hand, and the record is kept"
+                " rather than lost to the crash."
             ),
         },
         "git": provenance.git_state(record_path),
@@ -892,8 +1163,9 @@ def main(argv: list[str] | None = None, client=None) -> int:
             {
                 "at": datetime.now(UTC).isoformat(timespec="seconds"),
                 "balance": balance,
-                "step_spent_usd": round(spent, 4),
-                "note": f"{len(outcomes)} sources asked, {len(dumped)} positions extracted",
+                "step_spent_usd": None if spent is None else round(spent, 4),
+                "note": f"{len(outcomes)} sources asked, {len(dumped)} positions extracted"
+                + ("" if cost_note is None else f" — {cost_note}"),
             }
         )
         args.ledger.write_text(
@@ -916,6 +1188,10 @@ def main(argv: list[str] | None = None, client=None) -> int:
         f" · {'$%.4f' % spent if spent is not None else 'no spend'} of ${CAP_USD:.2f}"
         f"\nwrote {record['dump']['path']} and {rel(record_path)}"
     )
+    if ended_by:
+        print(f"STOP AND REPORT: the run ended early — {ended_by}")
+    if cost_note:
+        print(f"STOP AND REPORT: {cost_note}. The record is written; read the anchor by hand.")
     if unreadable and not args.smoke:
         print("STOP AND REPORT: a reply was refused by the parser. No retry is made.")
     if spent is not None and spent >= CAP_USD:

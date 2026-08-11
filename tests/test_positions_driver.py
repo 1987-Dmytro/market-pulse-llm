@@ -20,7 +20,9 @@ from hashlib import sha256
 from pathlib import Path
 
 import pytest
-from market_pulse import positions, prompts
+from market_pulse import positions, prompts, serving
+from market_pulse.registry import load_registry
+from market_pulse.zero_shot import ApiError
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))
@@ -309,6 +311,16 @@ def pin() -> dict:
     return json.loads(driver.PIN.read_text(encoding="utf-8"))
 
 
+def slow_endpoint(pin, *, gold_seconds_per_call):
+    """The smoke's own fake, priced to get expensive once the two warm-up calls are behind it."""
+    registry = load_registry(driver.REGISTRY)
+    return driver.FakeEndpoint(
+        pin["expected_worker"],
+        positions.category_keys(registry.taxonomy),
+        gold_seconds_per_call=gold_seconds_per_call,
+    )
+
+
 def run_smoke(tmp_path, extra=(), client=None):
     out = tmp_path / "dump.jsonl"
     record = tmp_path / "record.json"
@@ -407,15 +419,22 @@ def test_the_dry_run_reaches_no_client_at_all(tmp_path, capsys):
 def test_the_projection_prices_what_is_left_and_never_re_adds_the_boot():
     """`caption_gm4_5c1.projection` adds a pre-registered cold-start constant on top of measured
     seconds. Here the boot has already been billed by the time any gate runs, so re-adding it would
-    double-count; everything paid is inside `billed` and only what is LEFT is projected."""
+    double-count; everything paid is inside `billed` and only what is LEFT is projected.
+
+    The idle tail is the one term that is added rather than measured, and it belongs to the
+    SESSION: it is inside `projected_usd`, outside `spent_usd` (it has not been billed yet) and
+    outside the marginal (it is charged once, not once per call)."""
+    tail = driver.IDLE_TAIL_SECONDS * 0.001
     seen = driver.projection(opened_seconds=200.0, billed=300.0, done=40, total=140, rate=0.001)
     assert seen["marginal_seconds_per_call"] == pytest.approx(2.5)
     assert seen["spent_usd"] == pytest.approx(0.3)
     assert seen["remaining_usd"] == pytest.approx(100 * 2.5 * 0.001)
-    assert seen["projected_usd"] == pytest.approx(0.3 + 0.25)
-    # nothing left to buy: the projection is what has been spent, not spend plus a constant
+    assert seen["projected_usd"] == pytest.approx(0.3 + 0.25 + tail)
+    # nothing left to buy: the projection is what has been spent plus the tail still to come,
+    # never a re-added cold start
     done = driver.projection(opened_seconds=200.0, billed=300.0, done=140, total=140, rate=0.001)
-    assert done["remaining_usd"] == 0.0 and done["projected_usd"] == done["spent_usd"]
+    assert done["remaining_usd"] == 0.0
+    assert done["projected_usd"] == pytest.approx(done["spent_usd"] + tail)
 
 
 def test_a_client_that_reports_no_clock_is_read_as_zero_and_never_raises():
@@ -435,22 +454,28 @@ def test_a_client_that_reports_no_clock_is_read_as_zero_and_never_raises():
     assert driver.billed_seconds(Nothing()) == 0.0
 
 
-def test_the_gate_stops_the_run_and_leaves_the_rest_unbought(tmp_path, capsys):
+def test_the_gate_stops_the_run_and_leaves_the_rest_unbought(tmp_path, capsys, pin):
     """A budget the run passes on its first job. What is skipped is `unbought` — not asked for,
-    not failed — and the stop reaches the SECOND leg too."""
+    not failed — and the stop reaches the SECOND leg too.
+
+    The fake gets EXPENSIVE after the warm-up, and that is the whole scenario the in-run gate
+    exists for. On a flat clock the go/no-go of 3.17 (10)(a) and this gate compute the identical
+    number by construction — so a budget low enough to trip this one would be refused before the
+    first gold call, and this path could not be driven through `main` at all."""
     out, record, ledger = tmp_path / "d.jsonl", tmp_path / "r.json", tmp_path / "l.json"
     code = driver.main(
         [
             "--smoke",
             "--project-stop-usd",
-            "0.10",
+            "0.30",
             "--out",
             str(out),
             "--record",
             str(record),
             "--ledger",
             str(ledger),
-        ]
+        ],
+        client=slow_endpoint(pin, gold_seconds_per_call=60.0),
     )
     assert code == 0
     written = json.loads(record.read_text(encoding="utf-8"))
@@ -533,3 +558,298 @@ def test_the_driver_names_the_two_registered_tasks_and_no_others():
     for task in prompts.POSITIONS:
         assert f"POSITIONS_TASK_{'PAGE' if 'post' in task else 'TEXT'}" in source
     assert "CAPTION_TASK" not in source
+
+
+# --- the cap discipline of SPEC 3.17 (10) ---------------------------------------------------------
+
+
+class OneBadJob:
+    """The smoke's fake with ONE gold job replaced by a failure, and everything else answering.
+
+    The wrapper counts the two non-gold warm-up calls of 3.17 (9) out first, so `kill_gold_job`
+    numbers the jobs a reader of the run's own output sees.
+    """
+
+    def __init__(self, inner, *, kill_gold_job: int, error) -> None:
+        self.inner, self.kill_gold_job, self.error = inner, kill_gold_job, error
+        self.seen, self.dump_path = 0, None
+
+    def info(self) -> dict:
+        return self.inner.info()
+
+    def timing(self) -> dict:
+        return self.inner.timing()
+
+    def positions(self, task: str, items: list) -> list[dict]:
+        self.seen += 1
+        if self.seen - driver.FakeEndpoint.WARMUP_CALLS == self.kill_gold_job:
+            raise self.error  # it ran and it billed; only its answer is missing
+        return self.inner.positions(task, items)
+
+
+def test_a_job_the_clock_kills_ends_the_run_and_not_just_the_batch(tmp_path, capsys, pin):
+    """SPEC 3.17 (10)(c). A TIMED_OUT job billed the WHOLE execution timeout, so nothing about it
+    says the next job will be cheaper — and the projection gate cannot see inside a job. Its own
+    items are forfeit under one attempt, everything after it is `unbought`, the second leg never
+    opens, and the record is still written and says why."""
+    out, record = tmp_path / "d.jsonl", tmp_path / "r.json"
+    client = OneBadJob(
+        slow_endpoint(pin, gold_seconds_per_call=2.5),
+        kill_gold_job=3,
+        error=serving.JobExpired(-1, "job abc ended TIMED_OUT: {'id': 'abc'}"),
+    )
+    code = driver.main(["--smoke", "--out", str(out), "--record", str(record)], client=client)
+    assert code == 0
+
+    written = json.loads(record.read_text(encoding="utf-8"))
+    assert written["ended_by"] and "TIMED_OUT" in written["ended_by"]
+    assert {row["leg"] for row in written["outcomes"]} == {"page"}, "the text leg must never open"
+    assert written["population"]["asked"] < 138
+    assert len(written["population"]["unbought"]) > 30, "the whole text leg is unbought"
+    forfeit = [
+        row for row in written["outcomes"] if row["unreadable"] and "TIMED_OUT" in row["unreadable"]
+    ]
+    assert forfeit, "the killed job's own items are named, not silently dropped"
+    printed = capsys.readouterr().out
+    assert "RUN ENDS" in printed and "STOP AND REPORT" in printed
+
+
+def test_an_ordinary_job_failure_names_its_items_and_the_leg_continues(tmp_path, pin):
+    """The negative control for the test above, and the reason `JobExpired` is raised only for
+    TIMED_OUT: a FAILED job is one batch's problem. Widening the type would have converted every
+    job failure into a dead run — a much more expensive behaviour than the one it replaced."""
+    out, record = tmp_path / "d.jsonl", tmp_path / "r.json"
+    client = OneBadJob(
+        slow_endpoint(pin, gold_seconds_per_call=2.5),
+        kill_gold_job=3,
+        error=ApiError(-1, "job abc ended FAILED: {'id': 'abc'}"),
+    )
+    driver.main(["--smoke", "--out", str(out), "--record", str(record)], client=client)
+
+    written = json.loads(record.read_text(encoding="utf-8"))
+    assert written["ended_by"] is None
+    assert {row["leg"] for row in written["outcomes"]} == {"page", "text"}
+    assert written["population"]["asked"] == 138 and written["population"]["unbought"] == []
+    assert any("ended FAILED" in (row["unreadable"] or "") for row in written["outcomes"])
+
+
+def test_no_single_job_can_out_bill_the_cap():
+    """The blocker (10)(c) was written for, as arithmetic. The gate re-prices BETWEEN jobs, so the
+    execution timeout is the only thing bounding one wedged worker — and the value this replaced
+    could bill more than the whole cap while every guard in the driver reported normally."""
+    rate = driver.leader.rate_usd_per_second()
+    assert driver.JOB_TIMEOUT_S * rate < driver.CAP_USD
+    assert 1800.0 * rate > driver.CAP_USD, "the 1800 s this replaced — one job, 1.58x the cap"
+    # and still more than twice the longest job the projection predicts: the text leg is ONE job
+    # carrying all 30 rows at the stated decode uplift
+    assert driver.JOB_TIMEOUT_S >= 2 * (30 * 4.262 * (800 / 256))
+    assert serving.execution_policy(driver.JOB_TIMEOUT_S, driver.JOB_TTL_S) == {
+        "executionTimeout": 900_000,
+        "ttl": 3_600_000,
+    }
+
+
+def test_the_go_no_go_refuses_before_the_first_gold_call(tmp_path, capsys):
+    """SPEC 3.17 (10)(a). The in-run gate cannot answer this question — it needs a gold call to
+    have a marginal at all — and under one attempt a run stopped after two pages is the most
+    expensive outcome available: the money is gone and no bar is scoreable. This is the only stop
+    that leaves nothing half-bought, and (10)(a) says it consumes NO attempt."""
+    out, record = tmp_path / "d.jsonl", tmp_path / "r.json"
+    with pytest.raises(SystemExit, match="REFUSED before the first gold call"):
+        driver.main(
+            [
+                "--smoke",
+                "--project-stop-usd",
+                "0.10",
+                "--out",
+                str(out),
+                "--record",
+                str(record),
+            ]
+        )
+    assert not out.exists(), "a stop before gold must leave NO gold artifact on disk"
+    written = json.loads(record.read_text(encoding="utf-8"))
+    assert written["stopped_before_gold"] is True
+    assert written["population"]["asked"] == 0
+    assert len(written["population"]["unbought"]) == 138
+    assert written["dump"]["rows"] == 0 and written["dump"]["path"] is None
+    assert "NO attempt" in written["why"] and "v3 registration" in written["why"]
+    assert written["projection"]["go_no_go"]["refuse"] is True
+    assert written["warmup"]["replies"], "the warm-up happened and is recorded — it was paid for"
+    assert "REFUSE" in capsys.readouterr().out
+
+
+def test_a_warm_up_the_budget_can_afford_proceeds_to_gold(tmp_path):
+    """The other way, on the same path: a go/no-go that only ever refused would be a gate nothing
+    proves. The budget here is above the projection and every one of the 138 calls is made."""
+    out, record = tmp_path / "d.jsonl", tmp_path / "r.json"
+    code = driver.main(
+        ["--smoke", "--project-stop-usd", "0.30", "--out", str(out), "--record", str(record)]
+    )
+    assert code == 0
+    written = json.loads(record.read_text(encoding="utf-8"))
+    assert written["stopped_before_gold"] is False
+    assert written["projection"]["go_no_go"]["refuse"] is False
+    assert written["population"]["asked"] == 138 and out.exists()
+
+
+def test_the_go_no_go_prices_each_leg_from_its_own_warm_up_call():
+    """108 images and 30 strings are not the same call, and the warm-up makes exactly one of each.
+    A single blended figure would charge the image leg's seconds to the text leg's 30 calls."""
+    args = dict(billed=100.0, n_pages=108, n_rows=30, rate=0.001)
+    seen = driver.go_no_go(page_marginal=4.0, text_marginal=1.0, budget=None, **args)
+    assert seen["gold_calls"] == 138
+    assert seen["gold_seconds"] == pytest.approx(108 * 4.0 + 30 * 1.0)
+    assert seen["projected_usd"] == pytest.approx(
+        (100.0 + 462.0 + driver.IDLE_TAIL_SECONDS) * 0.001, abs=1e-6
+    )
+    blended = driver.go_no_go(page_marginal=2.5, text_marginal=2.5, budget=None, **args)
+    assert blended["gold_seconds"] != seen["gold_seconds"]
+    # both ways against a budget, and `refuse` is False when there is no budget to refuse against
+    assert seen["refuse"] is False
+    assert (
+        driver.go_no_go(page_marginal=4.0, text_marginal=1.0, budget=1.0, **args)["refuse"] is False
+    )
+    assert (
+        driver.go_no_go(page_marginal=4.0, text_marginal=1.0, budget=0.1, **args)["refuse"] is True
+    )
+
+
+def test_the_warm_up_reads_the_clock_between_its_two_calls():
+    """One reading at the end would give a blend, and the go/no-go would price both legs at it."""
+
+    class Answering:
+        def positions(self, task, items):
+            return [{"content": "[]", "finish_reason": "stop"}]
+
+    ticks = iter([10.0, 40.0, 45.0])
+    out = driver.warmup(Answering(), "page_task", "text_task", clock=lambda _client: next(ticks))
+    assert out["page_task"]["marginal_seconds"] == 30.0
+    assert out["text_task"]["marginal_seconds"] == 5.0
+
+
+def test_the_idle_tail_is_a_named_term_in_the_go_no_go_too():
+    """Serverless bills wall uptime plus the endpoint's idle tail, and a run of nothing still pays
+    it. $0.0184 at the settled rate — larger than the headroom the stated corner had."""
+    assert driver.IDLE_TAIL_SECONDS == 60.0
+    empty = driver.go_no_go(
+        billed=0.0,
+        page_marginal=0.0,
+        text_marginal=0.0,
+        n_pages=0,
+        n_rows=0,
+        rate=0.001,
+        budget=None,
+    )
+    assert empty["gold_seconds"] == 0.0
+    assert empty["projected_usd"] == pytest.approx(driver.IDLE_TAIL_SECONDS * 0.001)
+
+
+# --- the ledgered paths: driven with the network client replaced, everything else real ------------
+
+
+def ledgered(tmp_path, monkeypatch, pin, *, balance, anchor=None, fails_after=None):
+    """A run that reaches the ledger branch of `main` — the one `--smoke` deliberately skips.
+
+    Only `serving.EndpointClient` and `guard.balance` are replaced; `read_ledger`, the budget
+    arithmetic, the record write and the ledger append all run for real.
+    """
+    reads = {"n": 0}
+
+    def read_balance():
+        reads["n"] += 1
+        if fails_after is not None and reads["n"] > fails_after:
+            raise RuntimeError("runpodctl: connection reset by peer")
+        return balance
+
+    monkeypatch.setattr(driver.guard, "balance", read_balance)
+    monkeypatch.setattr(driver.serving, "EndpointClient", lambda *a, **k: fake)
+    monkeypatch.setenv("RUNPOD_API_KEY", "test-key")
+    monkeypatch.setenv(driver.ENDPOINT_ENV, "ep-fake")
+    fake = slow_endpoint(pin, gold_seconds_per_call=2.5)
+
+    ledger = tmp_path / "l.json"
+    if anchor is not None:
+        ledger.write_text(json.dumps({driver.anchor_key(): anchor, "runs": []}), encoding="utf-8")
+    return ledger
+
+
+def test_a_balance_read_that_crashes_after_the_paid_legs_keeps_the_record(
+    tmp_path, monkeypatch, pin
+):
+    """The record is the only artifact of a one-attempt session, and `spend_now` shells out to
+    `runpodctl` AFTER the paid legs. A network blip, an auth expiry or a schema change there used
+    to abort `main` between the last paid call and the only write — throwing away the evidence
+    rather than the money. The anchor survives either way, so the spend stays recoverable."""
+    ledger = ledgered(tmp_path, monkeypatch, pin, balance=10.0, fails_after=2)
+    out, record = tmp_path / "d.jsonl", tmp_path / "r.json"
+    code = driver.main(
+        ["--leg", "text", "--out", str(out), "--record", str(record), "--ledger", str(ledger)]
+    )
+    assert code == 0
+
+    written = json.loads(record.read_text(encoding="utf-8"))
+    assert written["population"]["asked"] == 30, "the paid leg finished; only the balance read died"
+    assert written["cost"]["usd"] is None
+    assert "connection reset" in written["cost"]["read_failed"]
+    assert out.exists(), "the dump the run paid for is on disk"
+    anchored = json.loads(ledger.read_text(encoding="utf-8"))
+    assert driver.anchor_key() in anchored
+    assert anchored["runs"][-1]["step_spent_usd"] is None
+    assert "connection reset" in anchored["runs"][-1]["note"]
+
+
+def test_an_explicit_project_stop_tightens_the_cap_and_never_replaces_it(
+    tmp_path, monkeypatch, pin
+):
+    """`--project-stop-usd` used to be taken as the budget outright, so a value above what is left
+    of the $0.35 cap disabled the in-run stop entirely — a flag that reads like a safety knob and
+    could only ever loosen the one guard. Here $0.30 of the cap is already spent, so $0.05 is left
+    and the run must refuse against THAT, not against the 9.99 on the command line."""
+    ledger = ledgered(tmp_path, monkeypatch, pin, balance=10.0, anchor=10.30)
+    record = tmp_path / "r.json"
+    with pytest.raises(SystemExit, match="REFUSED before the first gold call"):
+        driver.main(
+            [
+                "--leg",
+                "text",
+                "--project-stop-usd",
+                "9.99",
+                "--out",
+                str(tmp_path / "d.jsonl"),
+                "--record",
+                str(record),
+                "--ledger",
+                str(ledger),
+            ]
+        )
+    written = json.loads(record.read_text(encoding="utf-8"))
+    assert written["projection"]["go_no_go"]["budget_usd"] == pytest.approx(0.05)
+    assert written["projection"]["stop_at_usd"] == pytest.approx(0.05)
+
+
+def test_a_half_explicit_smoke_never_writes_at_the_real_record_default(tmp_path, monkeypatch):
+    """`--smoke --out X` left `--record` at its real default, because the redirect fired only when
+    BOTH were defaulted. The $0 path would then plant a FAKE record at the paid run's own path —
+    the artifact the real run refuses to overwrite, and the only copy of what it bought."""
+    monkeypatch.setattr(driver, "REPO_ROOT", tmp_path)
+    real_record = tmp_path / "results" / "sku_b_positions.json"
+    monkeypatch.setattr(driver, "RECORD", real_record)
+    monkeypatch.setattr(driver, "DUMP", tmp_path / "results" / "sku_b_positions.jsonl")
+
+    # --root still points at the checkout: what is being moved is where the DEFAULTS resolve to,
+    # so the test can watch the real record path without writing inside the repo
+    driver.main(
+        [
+            "--smoke",
+            "--leg",
+            "text",
+            "--root",
+            str(REPO_ROOT),
+            "--out",
+            str(tmp_path / "mine.jsonl"),
+        ]
+    )
+    assert not real_record.exists(), "a smoke wrote at the paid run's record path"
+    assert (tmp_path / "results" / "smoke" / real_record.name).exists()
+    assert (tmp_path / "mine.jsonl").exists(), "the explicit path is still honoured"
