@@ -439,10 +439,14 @@ def run_leg(
     re-projection gate and the sources it skips are left out of the outcomes rather than marked
     failed — nothing was asked for them.
 
-    ``outcomes`` and ``dumped`` are the run's, not this leg's, and that is the whole point: the
-    gate prices what the SESSION has spent against what the SESSION will spend, and a per-leg
-    counter would restart the arithmetic at zero when the text leg opened while the billed seconds
-    carried the whole page leg.
+    ``outcomes`` and ``dumped`` are the run's accumulators, not this leg's, and that is the whole
+    point: the gate prices what the SESSION has spent against what the SESSION will spend, and a
+    per-leg counter would restart the arithmetic at zero when the text leg opened while the billed
+    seconds carried the whole page leg.
+
+    **Their order matters and neither is returned.** They are mutated in place and they are the
+    only two list arguments here; a caller that swapped them would write an empty dump beside
+    outcomes full of extraction rows, and every count downstream would still add up.
     """
     for index, batch in enumerate(packed):
         if stop is not None and (reason := stop()):
