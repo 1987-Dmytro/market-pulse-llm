@@ -47,6 +47,20 @@ Executor's phase report. Contract: `docs/PROMPT-uni-b.md` (team-lead, committed 
 
 `ruff check .` clean at every commit; `ruff format --check .` — 215 files already formatted.
 
+**Each commit was also checked out and made to run its own suite**, rather than only being green in
+the working tree it was cut from:
+
+```
+d8827c8  1623 passed, 2 skipped      b1a2a63  1633 passed, 2 skipped
+1aa431f  1623 passed, 2 skipped      e7ea9d8  1635 passed, 2 skipped
+fc662e0  1627 passed, 2 skipped      6f1e00a  1635 passed, 2 skipped
+                                     f6d30ec  1635 passed, 2 skipped
+```
+
+(Run in the repository itself, not a `git worktree`: a detached worktree has no `data/raw/`, which
+is gitignored, and `tests/test_train_qlora.py` refuses to collect without it — so a worktree pass
+would have measured the worktree, not the commit.)
+
 ---
 
 ## Deliverable A — the vocabulary law
