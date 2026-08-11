@@ -6616,6 +6616,16 @@ the block must be present, the live hash must NOT equal the pin, and the strippe
 strip was also proved exact against a copy of `docs/SPEC.md` taken before the write — the stripped
 bytes are the pre-amendment bytes, `cmp`-identical.
 
+**Named because it is a collision with this phase's own DO-NOT list.** That list forbids rewriting
+anything in `scripts/`, and `scripts/write_sku_prereg.py` is in `scripts/`. Step 0 (2) names only
+`tests/test_sku_prereg.py`. The edit is taken anyway and flagged rather than taken quietly, because
+step 0 (2) requires ONE GREEN commit and the Recovery clause forbids committing a red pin test —
+there is no version of this step that goes green without it. What was done to the producer is
+additive and reversible: two new functions (`registered_law`, `pinned_sha256`), one call site
+changed from `sha256_of` to `pinned_sha256`, one docstring bullet extended. Nothing in that file was
+deleted, renamed or moved, and no other file under `scripts/`, `src/`, `results/` or `data/` was
+touched in this phase at all.
+
 **Dv113 — the 10 MB transport ceiling is enforced on the caption leg and inherited by the positions
 leg as prose.** Flow 1 node 3 names "base64 in job, ≤10 MB". The one-image-per-call half is real
 code: `prompts.positions_messages_page_gm4` raises for any count but 1 and a test drives it with 0,
