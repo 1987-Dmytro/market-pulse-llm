@@ -673,7 +673,10 @@ def test_the_go_no_go_refuses_before_the_first_gold_call(tmp_path, capsys):
     assert written["population"]["asked"] == 0
     assert len(written["population"]["unbought"]) == 138
     assert written["dump"]["rows"] == 0 and written["dump"]["path"] is None
-    assert "NO attempt" in written["why"] and "v3 registration" in written["why"]
+    # "a re-registration", not "a v3 registration": the same stop can fire inside the RESUMED
+    # session, which already runs under v3, and a message naming the version it is running would
+    # send the next reader to the record they are holding
+    assert "NO attempt" in written["why"] and "re-registration" in written["why"]
     assert written["projection"]["go_no_go"]["refuse"] is True
     assert written["warmup"]["replies"], "the warm-up happened and is recorded — it was paid for"
     assert "REFUSE" in capsys.readouterr().out
@@ -743,6 +746,263 @@ def test_the_idle_tail_is_a_named_term_in_the_go_no_go_too():
     )
     assert empty["gold_seconds"] == 0.0
     assert empty["projected_usd"] == pytest.approx(driver.IDLE_TAIL_SECONDS * 0.001)
+
+
+# --- the resume of SPEC 3.17 (11) -----------------------------------------------------------------
+
+
+@pytest.fixture(scope="module")
+def prereg_v3() -> dict:
+    return json.loads(driver.PREREG_RESUME.read_text(encoding="utf-8"))
+
+
+def run_resume(tmp_path, extra=(), prereg=None, client=None):
+    """`--resume --smoke` through the whole write path: no network, no spend, real artifacts read."""
+    out, record, ledger = tmp_path / "d.jsonl", tmp_path / "r.json", tmp_path / "l.json"
+    code = driver.main(
+        [
+            "--resume",
+            "--out",
+            str(out),
+            "--record",
+            str(record),
+            "--ledger",
+            str(ledger),
+            *(["--prereg", str(prereg)] if prereg else []),
+            *(["--smoke"] if client is None else []),
+            *extra,
+        ],
+        client=client,
+    )
+    return code, out, record, ledger
+
+
+def doctored(tmp_path, mutate) -> Path:
+    """The registration with one thing moved, written where the driver will read it."""
+    body = json.loads(driver.PREREG_RESUME.read_text(encoding="utf-8"))
+    mutate(body["resume"])
+    path = tmp_path / "prereg_moved.json"
+    path.write_text(json.dumps(body, ensure_ascii=False), encoding="utf-8")
+    return path
+
+
+def test_the_resume_buys_only_the_unbought_and_merges_both_sessions(tmp_path, prereg_v3):
+    """SPEC 3.17 (11)(a) end to end. The population narrows to the 121 the run record names as
+    unbought, the 17 bought answers are never re-asked, and what the record holds afterwards is the
+    MERGED bar input — 138 outcomes, both dumps, every row naming the session that bought it."""
+    code, out, record, _ = run_resume(tmp_path)
+    assert code == 0
+    written = json.loads(record.read_text(encoding="utf-8"))
+    already = prereg_v3["resume"]["bought_already"]
+
+    assert written["population"]["asked_this_session"] == 121
+    assert written["population"]["asked"] == 138
+    assert written["population"]["unbought"] == []
+    assert written["population"]["pages_sent"] == 108, "the merged record keeps R2's denominator"
+
+    sources = [row["source"] for row in written["outcomes"]]
+    assert len(sources) == len(set(sources)) == 138
+    assert set(already["asked"]) < set(sources) and set(already["unbought"]) < set(sources)
+    bought = {row["source"]: row[driver.BOUGHT_BY] for row in written["outcomes"]}
+    assert {bought[source] for source in already["asked"]} == {driver.PHASE}
+    assert {bought[source] for source in already["unbought"]} == {driver.RESUME_PHASE}
+
+    rows = [json.loads(line) for line in out.read_text(encoding="utf-8").splitlines()]
+    assert len(rows) == written["dump"]["rows"] > already["dump"]["rows"]
+    assert rows[: already["dump"]["rows"]] == [
+        json.loads(line) | {driver.BOUGHT_BY: driver.PHASE}
+        for line in driver.RESUME_DUMP.with_name("sku_b_positions.jsonl")
+        .read_text(encoding="utf-8")
+        .splitlines()
+    ], "the first session's rows travel into the merged dump unchanged but for their provenance"
+    assert written["dump"]["columns"][-1] == driver.BOUGHT_BY
+    assert written["resume"]["sessions"][0]["phase"] == driver.PHASE
+    assert "sha256" not in written["resume"]["sessions"][1], "a record cannot carry its own hash"
+
+
+def test_the_sealed_artifacts_of_the_first_session_are_never_touched(tmp_path, prereg_v3):
+    """The whole reason the resumed session writes NEW files: `resume.bought_already` pins the first
+    session's dump, so an in-place append would break the pin that proves the 17 answers were not
+    re-asked — in the same commit the rows landed."""
+    already = prereg_v3["resume"]["bought_already"]
+    before = {
+        path: sha256((REPO_ROOT / path).read_bytes()).hexdigest()
+        for path in (already["run_record"]["path"], already["dump"]["path"])
+    }
+    run_resume(tmp_path)
+    for path, digest in before.items():
+        assert sha256((REPO_ROOT / path).read_bytes()).hexdigest() == digest, path
+    assert driver.RESUME_DUMP != REPO_ROOT / already["dump"]["path"]
+    assert driver.RESUME_RECORD != REPO_ROOT / already["run_record"]["path"]
+
+
+def test_the_resume_refuses_a_registration_whose_pins_have_moved(tmp_path):
+    """A resume registered against bytes that have since moved would buy around evidence nobody can
+    re-derive. Driven on each pin separately, because they fail for different reasons: a moved dump
+    is lost evidence and a moved serving pin is (11)(b) broken — the resumed half would be a
+    different instrument from the bought half, under one set of bars."""
+
+    def move_dump(resume):
+        resume["bought_already"]["dump"]["sha256"] = "0" * 64
+
+    def move_pin(resume):
+        resume["bought_already"]["serving_pin"]["sha256"] = "0" * 64
+
+    with pytest.raises(SystemExit, match="the resume is registered against bytes"):
+        run_resume(tmp_path, prereg=doctored(tmp_path, move_dump))
+    with pytest.raises(SystemExit, match="freezes the instrument"):
+        run_resume(tmp_path, prereg=doctored(tmp_path, move_pin))
+
+
+def test_the_resume_refuses_when_an_unbought_id_already_carries_an_answer(tmp_path, prereg_v3):
+    """The registration and the record disagreeing about what was bought. Neither can then say
+    which 121 elements are left, and the honest move is to stop rather than to pick one."""
+    bought = prereg_v3["resume"]["bought_already"]["asked"][0]
+
+    def claim_it_is_unbought(resume):
+        resume["bought_already"]["unbought"] = [bought, *resume["bought_already"]["unbought"]]
+
+    with pytest.raises(SystemExit, match="already carry an answer"):
+        run_resume(tmp_path, prereg=doctored(tmp_path, claim_it_is_unbought))
+
+
+def test_the_resume_refuses_a_registration_that_is_not_the_records_population(tmp_path):
+    """121 of the WRONG ids is still 121, so the sets are compared and not counted."""
+
+    def swap_one(resume):
+        resume["bought_already"]["unbought"] = [
+            "data/annotation/captions_5c1/posts_media/nope.jpg",
+            *resume["bought_already"]["unbought"][1:],
+        ]
+
+    with pytest.raises(SystemExit, match="not the same set"):
+        run_resume(tmp_path, prereg=doctored(tmp_path, swap_one))
+
+
+def test_a_bought_id_that_reaches_the_selection_is_refused(prereg_v3):
+    """The third refusal, and it guards the SELECTION rather than the registration: a filter that
+    inverted its condition would send the paid run at pages somebody already paid for. Checked on
+    what is about to travel, because that is the value that ends up on the wire."""
+    already = prereg_v3["resume"]["bought_already"]
+    bought = already["asked"][0]
+    plan = {"to_buy": {bought}, "already_asked": set(already["asked"])}
+    with pytest.raises(SystemExit, match="EXACTLY ONCE"):
+        driver.resume_population([{"file": bought, "bytes": 1}], plan, "page")
+    # the control: an id that is genuinely unbought passes the same call
+    fresh = already["unbought"][0]
+    plan = {"to_buy": {fresh}, "already_asked": set(already["asked"])}
+    kept = driver.resume_population([{"file": fresh, "bytes": 1}], plan, "page")
+    assert [item["file"] for item in kept] == [fresh]
+    assert kept[0][driver.BOUGHT_BY] == driver.RESUME_PHASE
+
+
+def test_the_merged_record_refuses_a_source_answered_by_both_sessions(prereg_v3):
+    """The output-side control. The plan's refusals guard what goes on the wire; this one guards
+    what gets scored, and a duplicate here is an element bought twice with no gate able to see it."""
+    already = prereg_v3["resume"]["bought_already"]
+    plan = {
+        "run": json.loads((REPO_ROOT / already["run_record"]["path"]).read_text(encoding="utf-8")),
+        "run_record": REPO_ROOT / already["run_record"]["path"],
+        "run_dump": REPO_ROOT / already["dump"]["path"],
+    }
+    honest = [{"source": already["unbought"][0], "unreadable": None, "n_positions": 1}]
+    merged = driver.merge_sessions(plan, list(honest), [])
+    assert len(merged["outcomes"]) == 18 and merged["previous"]["asked"] == 17
+
+    twice = [{"source": already["asked"][0], "unreadable": None, "n_positions": 1}]
+    with pytest.raises(SystemExit, match="BOTH sessions"):
+        driver.merge_sessions(plan, twice, [])
+
+
+def test_the_registered_warm_up_is_refused_if_it_drifted_into_gold(tmp_path, prereg_v3):
+    """SPEC 3.17 (11)(c) is two claims and only one of them is about realism. The other is that
+    neither input is gold — and a registered page that had drifted into the 108, or a row into the
+    30, would spend a warm-up on an input a bar scores. Both directions, plus the control."""
+    reference = json.loads(driver.REFERENCE.read_text(encoding="utf-8"))
+    manifest = json.loads(driver.MANIFEST.read_text(encoding="utf-8"))
+    resume = json.loads(json.dumps(prereg_v3["resume"]))
+
+    honest = driver.resume_warmup_inputs(resume, reference, manifest, REPO_ROOT)
+    assert honest["page"]["file"] == resume["warmup"]["page"]["file"]
+    assert honest["text"] and honest["page_url"].startswith("data:image/")
+
+    gold_page = json.loads(json.dumps(resume))
+    gold_page["warmup"]["page"]["file"] = reference["posts"][0]["pages_sent"][0]["file"]
+    with pytest.raises(SystemExit, match="SENT pages"):
+        driver.resume_warmup_inputs(gold_page, reference, manifest, REPO_ROOT)
+
+    gold_row = json.loads(json.dumps(resume))
+    gold_row["warmup"]["text"]["id"] = manifest["ids"][0]
+    with pytest.raises(SystemExit, match="one of the 30 adjudicated rows"):
+        driver.resume_warmup_inputs(gold_row, reference, manifest, REPO_ROOT)
+
+    moved = json.loads(json.dumps(resume))
+    moved["warmup"]["page"]["sha256"] = "0" * 64
+    with pytest.raises(SystemExit, match="would price a different image"):
+        driver.resume_warmup_inputs(moved, reference, manifest, REPO_ROOT)
+
+
+def test_the_resumed_warm_up_is_the_registered_page_and_row_not_a_thumbnail(tmp_path, prereg_v3):
+    """The finding that stopped the first session, closed. Its warm-up recorded «a generated 64x64
+    image»; this one records a real leaflet page and a real collected row, by file and by sha."""
+    _, _, record, _ = run_resume(tmp_path)
+    inputs = json.loads(record.read_text(encoding="utf-8"))["warmup"]["inputs"]
+    assert inputs["page"] == {
+        "file": prereg_v3["resume"]["warmup"]["page"]["file"],
+        "sha256": prereg_v3["resume"]["warmup"]["page"]["sha256"],
+        "bytes": prereg_v3["resume"]["warmup"]["page"]["bytes"],
+    }
+    assert inputs["page"]["bytes"] > 100_000
+    assert inputs["text"]["id"] == prereg_v3["resume"]["warmup"]["text"]["id"]
+    assert "64x64" not in json.dumps(inputs)
+
+
+def test_a_resume_without_its_own_registration_refuses(tmp_path):
+    """`--resume --prereg <v2>` is a resumed session claiming a $0.35 cap and a population v2 does
+    not contain. The default follows the flag; an explicit mismatch is refused rather than obeyed."""
+    with pytest.raises(SystemExit, match="carries no `resume` block"):
+        run_resume(tmp_path, prereg=driver.PREREG)
+
+
+def test_the_two_records_the_two_caps_and_the_two_anchors_never_cross(tmp_path, monkeypatch, pin):
+    """Every default follows the mode. A resumed session enforcing (11)(d)'s $0.45 against the first
+    session's anchor would start $0.1965 in the red on a cap priced without it, and one writing at
+    the first session's paths would overwrite the evidence its own registration pins."""
+    assert driver.RESUME_CAP_USD == 0.45 and driver.CAP_USD == 0.35
+    assert driver.anchor_key(driver.RESUME_PHASE) == "runpod_balance_at_sku-b-v3_start"
+    assert driver.anchor_key() == "runpod_balance_at_sku-b_start"
+    assert driver.RESUME_LEDGER != driver.LEDGER
+
+    ledger = ledgered(tmp_path, monkeypatch, pin, balance=10.0)
+    record = tmp_path / "r.json"
+    driver.main(
+        [
+            "--resume",
+            "--leg",
+            "text",
+            "--out",
+            str(tmp_path / "d.jsonl"),
+            "--record",
+            str(record),
+            "--ledger",
+            str(ledger),
+        ]
+    )
+    written = json.loads(record.read_text(encoding="utf-8"))
+    assert written["cost"]["cap_usd"] == 0.45
+    assert driver.anchor_key(driver.RESUME_PHASE) in json.loads(ledger.read_text(encoding="utf-8"))
+    assert written["projection"]["stop_at_usd"] == pytest.approx(0.45)
+
+
+def test_the_job_count_says_what_it_planned_and_what_it_submitted(tmp_path):
+    """Dv153: `cost.jobs` was the PLAN. The run that stopped at 17 of 138 recorded 8 while 4 jobs
+    ran, and read as a job count it said the session did twice the work it did."""
+    _, _, record, _ = run_resume(tmp_path, extra=["--leg", "text"])
+    cost = json.loads(record.read_text(encoding="utf-8"))["cost"]
+    assert cost["jobs_planned"] == 1, "30 rows pack into one job"
+    assert cost["jobs_submitted"] == 3, "the job plus the two warm-up calls"
+    assert "jobs" not in cost, "the ambiguous name is gone, not aliased"
+    assert "warm-up" in cost["jobs_reading"]
 
 
 # --- the ledgered paths: driven with the network client replaced, everything else real ------------

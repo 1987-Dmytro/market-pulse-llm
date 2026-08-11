@@ -35,9 +35,19 @@ What it does NOT do, and each omission is somebody's expensive evening:
   exceeds it on its own is a refusal, not a re-encode: SPEC 3.17 (4) is one page per call, and an
   image dropped or shrunk to fit is a different instrument for that one page.
 
+- **No element bought twice.** `--resume` (SPEC 3.17 (11)) buys ONLY what
+  `results/sku_b_positions.json` records as unbought, under the re-registration that pins it. It
+  refuses if a pin has moved, if an id the registration calls unbought already carries an answer, if
+  the selection contains an id the first session bought, or if the merged outcomes name any source
+  twice. The warm-up stops being synthetic: (11)(c)'s registered real page and real row, because the
+  probe — not the arithmetic — is what let the first session's go/no-go pass a run it should have
+  refused.
+
     PYTHONPATH=src python3 scripts/positions_gm4_skub.py --dry-run
     PYTHONPATH=src python3 scripts/positions_gm4_skub.py --smoke
     PYTHONPATH=src python3 scripts/positions_gm4_skub.py --endpoint-id <id>
+    PYTHONPATH=src python3 scripts/positions_gm4_skub.py --resume --dry-run
+    PYTHONPATH=src python3 scripts/positions_gm4_skub.py --resume --endpoint-id <id>
 """
 
 import argparse
@@ -71,14 +81,33 @@ LEDGER = REPO_ROOT / "results" / "spend_sku_b.json"
 buys the whole two-leg pilot and nothing else. One anchor key, written before the first job, and it
 may never be regenerated — delete it and the counter silently restarts at today's balance."""
 
+RESUME_PHASE = "sku-b-v3"
+RESUME_CAP_USD = 0.45
+RESUME_LEDGER = REPO_ROOT / "results" / "spend_sku_b_v3.json"
+"""The same three, for the RESUMED session of SPEC 3.17 (11). Its own anchor, because the first
+session's is spent: `results/spend_sku_b.json` measures a balance from before a $0.1965 run, and a
+resumed session enforcing its cap against that anchor would start 0.1965 in the red on a cap that
+was priced without it. (11)(d)'s $0.45 is transcribed, not chosen."""
+
 REFERENCE = REPO_ROOT / "results" / "sku_reference_leaflet.json"
 MANIFEST = REPO_ROOT / "results" / "sku_text_pack_manifest.json"
 PREREG = REPO_ROOT / "results" / "sku_pilot_prereg_v2.json"
+PREREG_RESUME = REPO_ROOT / "results" / "sku_pilot_prereg_v3.json"
 PIN = REPO_ROOT / "results" / "sku_pilot_serving.json"
 REGISTRY = REPO_ROOT / "config" / "registry.yaml"
 
 DUMP = REPO_ROOT / "results" / "sku_b_positions.jsonl"
 RECORD = REPO_ROOT / "results" / "sku_b_positions.json"
+
+RESUME_DUMP = REPO_ROOT / "results" / "sku_b_positions_v3.jsonl"
+RESUME_RECORD = REPO_ROOT / "results" / "sku_b_positions_v3.json"
+"""The resumed session writes NEW files and appends the first session's rows into them.
+
+Not an in-place append, and the reason is forced rather than chosen: `sku_pilot_prereg_v3.json ::
+resume.bought_already.dump.sha256` pins `sku_b_positions.jsonl` as it stands, so appending to it
+would break the pin in the same commit the rows landed — and that pin is what proves the 17 answers
+were not re-asked. The sealed pair stays evidence; this pair is the merged bar input, and every row
+in it names the session that bought it."""
 
 FAMILY = positions.DEFAULT_FAMILY
 """Whose instruments produced the replies. `positions_post_gm4` and `positions_text_gm4` are the
@@ -132,27 +161,28 @@ def rel(path: Path) -> str:
     return str(path.relative_to(REPO_ROOT)) if path.is_relative_to(REPO_ROOT) else str(path)
 
 
-def anchor_key() -> str:
-    return f"runpod_balance_at_{PHASE}_start"
+def anchor_key(phase: str = PHASE) -> str:
+    return f"runpod_balance_at_{phase}_start"
 
 
-def read_ledger(path: Path, balance_now: float) -> dict:
+def read_ledger(path: Path, balance_now: float, phase: str = PHASE, cap: float = CAP_USD) -> dict:
     """This session's anchor, created before the first job or refused if it is another's."""
+    key = anchor_key(phase)
     if path.exists():
         ledger = json.loads(path.read_text(encoding="utf-8"))
-        if anchor_key() not in ledger:
+        if key not in ledger:
             raise SystemExit(
-                f"{path.name} carries no {anchor_key()} — it is another phase's anchor. Spending"
+                f"{path.name} carries no {key} — it is another phase's anchor. Spending"
                 " against it would enforce this cap on the wrong balance."
             )
         return ledger
     return {
-        anchor_key(): balance_now,
-        "cap_usd": CAP_USD,
+        key: balance_now,
+        "cap_usd": cap,
         "note": (
-            "RunPod account balance read before the first job of sku-b, the single paid session of"
-            f" SPEC 3.17 (6). Session spend = this anchor minus the balance now, enforced against"
-            f" the ${CAP_USD:.2f} cap the amendment pre-registered. The Phase 4 cap is enforced"
+            f"RunPod account balance read before the first job of {phase}, the paid session of"
+            f" SPEC 3.17 (6)/(11). Session spend = this anchor minus the balance now, enforced"
+            f" against the ${cap:.2f} cap the amendment pre-registered. The Phase 4 cap is enforced"
             " separately against results/spend_phase4.json, and neither anchor may be regenerated:"
             " delete this file and the counter silently restarts at today's balance."
         ),
@@ -160,13 +190,15 @@ def read_ledger(path: Path, balance_now: float) -> dict:
     }
 
 
-def spend_now(ledger: dict) -> tuple[float, float]:
+def spend_now(ledger: dict, phase: str = PHASE) -> tuple[float, float]:
     """(balance, spend). The delta is a FLOOR — RunPod settles it minutes to hours late (Dv33)."""
     balance = guard.balance()
-    return balance, float(ledger[anchor_key()]) - balance
+    return balance, float(ledger[anchor_key(phase)]) - balance
 
 
-def spend_or_note(ledger: dict | None) -> tuple[float | None, float | None, str | None]:
+def spend_or_note(
+    ledger: dict | None, phase: str = PHASE
+) -> tuple[float | None, float | None, str | None]:
     """:func:`spend_now`, or (None, None, why) — a balance read must never lose the run's record.
 
     `guard.balance()` shells out to `runpodctl` and parses its JSON, so it can die on a network
@@ -182,7 +214,7 @@ def spend_or_note(ledger: dict | None) -> tuple[float | None, float | None, str 
     if ledger is None:
         return None, None, None
     try:
-        balance, spent = spend_now(ledger)
+        balance, spent = spend_now(ledger, phase)
     except Exception as err:  # noqa: BLE001 — see the docstring: the record outranks the reason
         return (
             None,
@@ -287,6 +319,227 @@ def jobs(items: list[dict], budget_mb: float, key: str = "bytes") -> list[list[d
     return out + [current] if current else out
 
 
+# --- the resume of SPEC 3.17 (11) ----------------------------------------------------------------
+
+BOUGHT_BY = "bought_by"
+"""The one column the resumed dump adds to the registered seventeen.
+
+Bar 2 is a human reading rows against page images, and the merged dump carries rows from two paid
+sessions. Which session bought a row is not decoration: it is what lets the team lead see that the
+17-page prefix they already calibrated on is the same 17 rows, and it is the only place the
+provenance can live once the two dumps are one file."""
+
+
+def resume_plan(prereg: dict, pin_sha: str, root: Path = REPO_ROOT) -> dict:
+    """What the resumed session may buy, and the refusals that decide it (SPEC 3.17 (11)(a)).
+
+    Everything is read back through the registration rather than through the run record alone: the
+    pre-registration is what was signed, the record is the evidence, and a resume is only honest
+    when the two agree. Three refusals, and each one is a different way the same $0.19 gets spent
+    twice:
+
+    * **a pin that moved.** The record, the dump and the serving pin are pinned in
+      `resume.bought_already`. A run against a moved record would buy against evidence nobody can
+      re-derive — and a moved serving pin is (11)(b) broken: the resumed half would be a different
+      instrument from the bought half, with one set of bars over both.
+    * **an unbought id that already carries an answer.** If a page the registration lists as
+      unbought turns up in the record's own outcomes, then the two disagree about what was bought
+      and neither can be trusted to say which 121 elements are left.
+    * **a registration that does not match the record.** The lists are compared as sets, not
+      counted: 121 of the wrong ids is still 121.
+
+    The third refusal of the brief — a BOUGHT id requested again — is not here. It guards the
+    selection rather than the registration and fires in :func:`resume_population`, which is the code
+    that could actually make that mistake.
+    """
+    resume = prereg.get("resume")
+    if not resume:
+        raise SystemExit(
+            "the pre-registration carries no `resume` block: --resume runs under SPEC 3.17 (11) and"
+            f" its registration is {rel(PREREG_RESUME)}. Pass --prereg pointing at it, or drop"
+            " --resume — a resumed session registered under v2 would claim a cap and a population"
+            " that record does not contain."
+        )
+    already = resume["bought_already"]
+    run_record = root / already["run_record"]["path"]
+    run_dump = root / already["dump"]["path"]
+    for label, path, pinned in (
+        ("the run record", run_record, already["run_record"]["sha256"]),
+        ("the per-position dump", run_dump, already["dump"]["sha256"]),
+    ):
+        if not path.exists():
+            raise SystemExit(
+                f"{rel(path)} is not on disk, and {label} is what the resume buys around"
+            )
+        on_disk = sha256(path.read_bytes()).hexdigest()
+        if on_disk != pinned:
+            raise SystemExit(
+                f"{label} hashes {on_disk[:16]}… and {rel(PREREG_RESUME)} pins {pinned[:16]}… —"
+                " the resume is registered against bytes that have since moved. Stop and report;"
+                " nothing here may be re-bought to make the numbers agree."
+            )
+    if pin_sha != already["serving_pin"]["sha256"]:
+        raise SystemExit(
+            f"the serving pin hashes {pin_sha[:16]}… and the registration pins"
+            f" {already['serving_pin']['sha256'][:16]}… — SPEC 3.17 (11)(b) freezes the instrument,"
+            " and a resumed half served under a different configuration is not the same instrument"
+            " the 17 bought answers came from."
+        )
+
+    run = json.loads(run_record.read_text(encoding="utf-8"))
+    asked = {row["source"] for row in run["outcomes"]}
+    registered = set(already["unbought"])
+    answered = sorted(registered & asked)
+    if answered:
+        raise SystemExit(
+            f"{len(answered)} id(s) the registration lists as UNBOUGHT already carry an answer in"
+            f" {rel(run_record)} — {', '.join(answered[:3])}…. (11)(a) buys each element exactly"
+            " once and these two artifacts disagree about which were bought. Stop and report."
+        )
+    if registered != set(run["population"]["unbought"]):
+        raise SystemExit(
+            f"{rel(PREREG_RESUME)} registers {len(registered)} unbought ids and {rel(run_record)}"
+            f" names {len(run['population']['unbought'])} — and they are not the same set. The"
+            " resumed population is what was REGISTERED; a run against a different one is a"
+            " different sample."
+        )
+    return {
+        "prereg": resume,
+        "to_buy": registered,
+        "already_asked": asked,
+        "run": run,
+        "run_record": run_record,
+        "run_dump": run_dump,
+    }
+
+
+def resume_population(items: list[dict], plan: dict, leg: str) -> list[dict]:
+    """The leg's items narrowed to what is still unbought, in the registered order.
+
+    The refusal here is the one the brief calls "a bought id is requested again", and it guards
+    THIS function: a filter that inverted its condition, or an id space that looked comparable and
+    was not, would send the paid run at pages somebody already paid for. It is checked on what is
+    about to travel rather than on what was registered, because that is the value that ends up on
+    the wire.
+    """
+    keep = [
+        item | {BOUGHT_BY: RESUME_PHASE}
+        for item in items
+        if (item.get("file") or item["id"]) in plan["to_buy"]
+    ]
+    rebought = [
+        item.get("file") or item["id"]
+        for item in keep
+        if (item.get("file") or item["id"]) in plan["already_asked"]
+    ]
+    if rebought:
+        raise SystemExit(
+            f"the {leg} leg selected {len(rebought)} id(s) the first session already bought —"
+            f" {', '.join(rebought[:3])}…. SPEC 3.17 (11)(a): each element is bought EXACTLY ONCE"
+            " across the program, and there is no second draw for any of them."
+        )
+    return keep
+
+
+def merge_sessions(plan: dict, outcomes: list[dict], dumped: list[dict]) -> dict:
+    """Both paid sessions as ONE bar input, every row naming the session that bought it.
+
+    The bars are registered over the whole population — 108 pages and 30 rows — and after a resume
+    that population lives in two records. Scoring from either alone would report a fraction of a
+    bar as the bar; scoring from a hand-merged pair would be an artifact nobody can re-derive. So
+    the merge happens here, in the run that knows both halves, and the result is what the team lead
+    and the scorer read.
+
+    The invariant of SPEC 3.17 (11)(a) is checked on the OUTPUT rather than on the plan: no source
+    appears twice in the merged outcomes. The plan's refusals guard the inputs, and this one guards
+    the thing that would actually be scored — a duplicate here means an element was bought twice,
+    and no cap or gate downstream can see it.
+    """
+    previous_rows = [
+        json.loads(line) | {BOUGHT_BY: PHASE}
+        for line in plan["run_dump"].read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
+    previous_outcomes = [row | {BOUGHT_BY: PHASE} for row in plan["run"]["outcomes"]]
+    for row in outcomes:
+        row[BOUGHT_BY] = RESUME_PHASE
+    merged = previous_outcomes + outcomes
+    twice = [source for source, n in Counter(row["source"] for row in merged).items() if n > 1]
+    if twice:
+        raise SystemExit(
+            f"{len(twice)} source(s) carry an answer from BOTH sessions — {', '.join(twice[:3])}…."
+            " SPEC 3.17 (11)(a) buys each element exactly once; the merged record would score one"
+            " of them twice and nothing downstream could see it. Stop and report."
+        )
+    return {
+        "outcomes": merged,
+        "dumped": previous_rows + dumped,
+        "previous": {
+            "phase": PHASE,
+            "record": rel(plan["run_record"]),
+            "record_sha256": sha256(plan["run_record"].read_bytes()).hexdigest(),
+            "dump": rel(plan["run_dump"]),
+            "dump_sha256": sha256(plan["run_dump"].read_bytes()).hexdigest(),
+            "prereg": plan["run"]["prereg"],
+            "asked": len(previous_outcomes),
+            "dump_rows": len(previous_rows),
+        },
+    }
+
+
+def resume_warmup_inputs(prereg_resume: dict, reference: dict, manifest: dict, root: Path) -> dict:
+    """SPEC 3.17 (11)(c)'s two REGISTERED warm-up inputs, re-verified before they are sent.
+
+    Read out of the pre-registration and not re-picked. The rule that chose them is the producer's
+    (`write_sku_prereg.resume_warmup`), and re-deriving it here would be a second implementation
+    that can disagree with the registered one — with the disagreement landing on the go/no-go's
+    input, which is the number this whole amendment exists to fix.
+
+    What IS re-checked is the property (11)(c) cares about: neither input is gold. A registered
+    page that had drifted into the 108 sent ones would spend a warm-up on a page bar 1 scores, and
+    a registered row inside the 30 would do the same to bar 3. Both hashes are re-derived too — the
+    page from disk and the row from the raw store — because a warm-up that priced a different input
+    than the registered one is the 64x64 failure with better paperwork.
+    """
+    warmup = prereg_resume["warmup"]
+    sent = {page["file"] for post in reference["posts"] for page in post["pages_sent"]}
+    page_file = warmup["page"]["file"]
+    if page_file in sent:
+        raise SystemExit(
+            f"{page_file} is one of the {len(sent)} SENT pages: the registered warm-up page is"
+            " inside bar 1's page set (R2) and a warm-up answer on it would be paid for on gold."
+        )
+    page_path = root / page_file
+    if not page_path.exists():
+        raise SystemExit(f"{page_file}: the registered warm-up page is not on disk")
+    page_sha = sha256(page_path.read_bytes()).hexdigest()
+    if page_sha != warmup["page"]["sha256"]:
+        raise SystemExit(
+            f"{page_file} hashes {page_sha[:16]}… and the registration pins"
+            f" {warmup['page']['sha256'][:16]}… — the warm-up would price a different image"
+        )
+
+    row = warmup["text"]
+    if row["id"] in set(manifest["ids"]):
+        raise SystemExit(
+            f"{row['id']} is one of the 30 adjudicated rows: the registered warm-up row is inside"
+            " bar 3's gold and 3.17 (9) opens on inputs NO bar is scored on."
+        )
+    text = pack.store_text({"id": row["id"], "carrier": row["carrier"]})
+    text_sha = sha256(text.encode("utf-8")).hexdigest()
+    if text_sha != row["text_sha256"]:
+        raise SystemExit(
+            f"{row['id']} reads {len(text)} chars hashing {text_sha[:16]}… and the registration"
+            f" pins {row['text_sha256'][:16]}… — the raw store moved under a registered input"
+        )
+    return {
+        "page_url": media.data_url(page_path),
+        "text": text,
+        "page": {"file": page_file, "sha256": page_sha, "bytes": page_path.stat().st_size},
+        "row": {"id": row["id"], "carrier": row["carrier"], "text_sha256": text_sha},
+    }
+
+
 # --- the dump's columns, read out of the pre-registration ----------------------------------------
 
 PHRASE_FIELDS = {
@@ -359,6 +612,9 @@ def row_for(position: positions.Position, source: dict, fields: tuple[str, ...])
         "tier": position.tier(),
         "depth": position.depth(),
         "depth_disagrees_with_printed": position.depth_disagrees_with_printed(),
+        # only in the resumed session's column list; the item carries it, so a row cannot be
+        # stamped with a session it did not travel in
+        BOUGHT_BY: source.get(BOUGHT_BY),
     }
     missing = [field for field in fields if field not in values]
     if missing:
@@ -674,7 +930,14 @@ def go_no_go(
     }
 
 
-def warmup(client, task_page: str, task_text: str, clock=None) -> dict:
+def warmup(
+    client,
+    task_page: str,
+    task_text: str,
+    clock=None,
+    page_url: str | None = None,
+    text: str | None = None,
+) -> dict:
     """SPEC 3.17 (9): a paid call on NON-gold inputs before either leg touches gold.
 
     A synthetic image and a row that is not in the 30-row pack. What it buys is the cold start and
@@ -686,18 +949,25 @@ def warmup(client, task_page: str, task_text: str, clock=None) -> dict:
     rows separately, and a single blended figure would charge the image leg's seconds to the text
     leg's 30 calls. ``clock`` is :func:`billed_seconds` and is injected so a caller can prove the
     arithmetic without a worker.
+
+    ``page_url`` and ``text`` are SPEC 3.17 (11)(c): for the RESUMED session the probe stops being
+    synthetic. The first session's 64x64 image answered in 1.436 s, the go/no-go multiplied that by
+    138 and let the run proceed, and the first real page cost 5.0772 s — the gate passed the run it
+    exists to refuse, and the arithmetic was right. The inputs are the registered ones and this
+    function does not choose them; it only sends what it is given.
     """
-    import base64
-    import io
-
-    from PIL import Image
-
     clock = billed_seconds if clock is None else clock
-    buffer = io.BytesIO()
-    Image.new("RGB", (64, 64), (240, 240, 240)).save(buffer, format="JPEG")
-    synthetic = "data:image/jpeg;base64," + base64.b64encode(buffer.getvalue()).decode("ascii")
+    if page_url is None:
+        import base64
+        import io
+
+        from PIL import Image
+
+        buffer = io.BytesIO()
+        Image.new("RGB", (64, 64), (240, 240, 240)).save(buffer, format="JPEG")
+        page_url = "data:image/jpeg;base64," + base64.b64encode(buffer.getvalue()).decode("ascii")
     out, before = {}, clock(client)
-    for task, item in ((task_page, [synthetic]), (task_text, WARMUP_ROW)):
+    for task, item in ((task_page, [page_url]), (task_text, WARMUP_ROW if text is None else text)):
         reply = client.positions(task, [item])[0]
         now = clock(client)
         out[task] = {
@@ -715,9 +985,14 @@ def main(argv: list[str] | None = None, client=None) -> int:
     parser.add_argument("--reference", type=Path, default=REFERENCE)
     parser.add_argument("--manifest", type=Path, default=MANIFEST)
     parser.add_argument("--pack", type=Path, default=None, help="default: the manifest's own pack")
-    parser.add_argument("--prereg", type=Path, default=PREREG)
+    parser.add_argument("--prereg", type=Path, default=None, help=f"default: {rel(PREREG)}")
     parser.add_argument("--pin", type=Path, default=PIN)
-    parser.add_argument("--ledger", type=Path, default=LEDGER)
+    parser.add_argument("--ledger", type=Path, default=None, help=f"default: {rel(LEDGER)}")
+    parser.add_argument(
+        "--resume",
+        action="store_true",
+        help="SPEC 3.17 (11): buy ONLY what results/sku_b_positions.json records as unbought",
+    )
     parser.add_argument("--out", type=Path, default=None, help="the per-position dump (jsonl)")
     parser.add_argument("--record", type=Path, default=None)
     parser.add_argument("--root", type=Path, default=REPO_ROOT, help=argparse.SUPPRESS)
@@ -734,8 +1009,18 @@ def main(argv: list[str] | None = None, client=None) -> int:
     )
     args = parser.parse_args(argv)
 
-    out = args.out or DUMP
-    record_path = args.record or RECORD
+    # Every default follows the mode, and each one is a way a resumed session could quietly be the
+    # first one again: v2's registration has no resume block and a $0.35 cap, the first session's
+    # anchor measures a balance from before its own $0.1965, and its artifacts are the evidence the
+    # registration pins. A flag that changed the population and left the money and the paperwork
+    # pointing at the interrupted run would enforce the wrong cap over the right pages.
+    args.prereg = args.prereg or (PREREG_RESUME if args.resume else PREREG)
+    args.ledger = args.ledger or (RESUME_LEDGER if args.resume else LEDGER)
+    phase = RESUME_PHASE if args.resume else PHASE
+    cap = RESUME_CAP_USD if args.resume else CAP_USD
+
+    out = args.out or (RESUME_DUMP if args.resume else DUMP)
+    record_path = args.record or (RESUME_RECORD if args.resume else RECORD)
     if args.smoke:
         # A smoke on the real paths fills the paid artifacts with fake extractions and then makes
         # the real run refuse to overwrite them. The 4.5g2 redirect, for the same reason.
@@ -753,6 +1038,12 @@ def main(argv: list[str] | None = None, client=None) -> int:
     pin = json.loads(args.pin.read_text(encoding="utf-8"))
     fields = dump_fields(prereg)
 
+    plan = (
+        resume_plan(prereg, sha256(args.pin.read_bytes()).hexdigest(), args.root)
+        if args.resume
+        else None
+    )
+
     page_items = pages(reference, args.root) if args.leg in ("page", "both") else []
     pack_path = args.pack or (args.root / manifest["pack"])
     text_items = []
@@ -764,6 +1055,12 @@ def main(argv: list[str] | None = None, client=None) -> int:
             raise SystemExit(
                 "the warm-up row is one of the 30 — 3.17 (9) opens on inputs NO bar is scored on"
             )
+    registered_pages, registered_rows = len(page_items), len(text_items)
+    if plan is not None:
+        page_items = resume_population(page_items, plan, "page")
+        text_items = resume_population(text_items, plan, "text")
+        fields = (*fields, BOUGHT_BY)
+
     page_jobs = jobs(page_items, args.max_payload_mb)
     text_jobs = jobs(text_items, args.max_payload_mb)
 
@@ -775,6 +1072,16 @@ def main(argv: list[str] | None = None, client=None) -> int:
         f"\ntext leg   {len(text_items)} rows in {len(text_jobs)} job(s)"
         f"\ndump       {len(fields)} columns: {', '.join(fields)}"
     )
+    if plan is not None:
+        already = plan["prereg"]["bought_already"]
+        print(
+            f"resume     SPEC 3.17 (11) under {rel(args.prereg)}"
+            f"\n  bought    {already['n_asked']} of"
+            f" {registered_pages + registered_rows} by {rel(plan['run_record'])}, never re-asked"
+            f"\n  to buy    {len(page_items)} page(s) + {len(text_items)} row(s)"
+            f" = {len(page_items) + len(text_items)} of {already['n_unbought']} registered"
+            f"\n  cap       ${cap:.2f} (11)(d) · anchor {rel(args.ledger)}"
+        )
     if args.dry_run:
         for item in page_items[:3]:
             print(f"  page {item['item']} p{item['page']} {item['bytes'] / 1e6:.2f} MB")
@@ -813,16 +1120,16 @@ def main(argv: list[str] | None = None, client=None) -> int:
         from eval_zero_shot import runpod_api_key  # noqa: PLC0415
 
         balance = guard.balance()
-        ledger = read_ledger(args.ledger, balance)
+        ledger = read_ledger(args.ledger, balance, phase, cap)
         args.ledger.parent.mkdir(parents=True, exist_ok=True)
         args.ledger.write_text(
             json.dumps(ledger, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
         )  # anchored before the first job, never after
-        balance, spent_before = spend_now(ledger)
-        print(f"ledger: spent ${spent_before:.4f} of ${CAP_USD:.2f} (balance ${balance:.2f})")
-        if spent_before >= CAP_USD:
+        balance, spent_before = spend_now(ledger, phase)
+        print(f"ledger: spent ${spent_before:.4f} of ${cap:.2f} (balance ${balance:.2f})")
+        if spent_before >= cap:
             raise SystemExit(
-                f"REFUSED: the ${CAP_USD:.2f} cap is reached (${spent_before:.4f} spent). Stop and"
+                f"REFUSED: the ${cap:.2f} cap is reached (${spent_before:.4f} spent). Stop and"
                 " report — an overrun aborts, it does not raise the cap."
             )
         client = serving.EndpointClient(
@@ -855,7 +1162,7 @@ def main(argv: list[str] | None = None, client=None) -> int:
         # `--project-stop-usd` TIGHTENS the cap, it never replaces it. It used to be taken as the
         # budget outright, so a value above what is left of the $0.35 cap disabled the in-run stop
         # entirely — a flag that reads like a safety knob and can only ever loosen the one guard.
-        left = round(CAP_USD - spent_before, 4)
+        left = round(cap - spent_before, 4)
         budget = left if budget is None else min(budget, left)
     projections: list[dict] = []
 
@@ -863,9 +1170,15 @@ def main(argv: list[str] | None = None, client=None) -> int:
     # record a completed run writes
     head = {
         "timestamp": started,
-        "phase": "sku-b — the position-layer pilot, one paid attempt",
+        "phase": (
+            "sku-b — the position-layer pilot, the resumed session"
+            if args.resume
+            else "sku-b — the position-layer pilot, one paid attempt"
+        ),
         "contract": (
-            "docs/PROMPT-sku-b-prep.md deliverable 2 + docs/PROMPT-sku-b-prep-fix.md;"
+            "docs/PROMPT-sku-b-v3-prep.md deliverable 2; docs/SPEC.md amendment 3.17 (9), (10), (11)"
+            if args.resume
+            else "docs/PROMPT-sku-b-prep.md deliverable 2 + docs/PROMPT-sku-b-prep-fix.md;"
             " docs/SPEC.md amendment 3.17 (6), (9), (10)"
         ),
         "prereg": {
@@ -881,7 +1194,18 @@ def main(argv: list[str] | None = None, client=None) -> int:
         "attempts_per_job": 1,
     }
 
-    opened = warmup(client, prompts.POSITIONS_TASK_PAGE, prompts.POSITIONS_TASK_TEXT)
+    probe = (
+        resume_warmup_inputs(plan["prereg"], reference, manifest, args.root)
+        if plan is not None
+        else None
+    )
+    opened = warmup(
+        client,
+        prompts.POSITIONS_TASK_PAGE,
+        prompts.POSITIONS_TASK_TEXT,
+        page_url=None if probe is None else probe["page_url"],
+        text=None if probe is None else probe["text"],
+    )
     for task, reply in opened.items():
         print(
             f"  warm-up {task:<20} {reply['finish_reason']}"
@@ -893,7 +1217,20 @@ def main(argv: list[str] | None = None, client=None) -> int:
 
     warmup_block = {
         "why": "SPEC 3.17 (9): a call on NON-gold inputs before either leg touches gold",
-        "inputs": {"page": "a generated 64x64 image", "text": WARMUP_ROW},
+        "inputs": (
+            {"page": "a generated 64x64 image", "text": WARMUP_ROW}
+            if probe is None
+            else {
+                "page": probe["page"],
+                "text": probe["row"],
+                "why": (
+                    "SPEC 3.17 (11)(c): REPRESENTATIVE and still non-gold. The page is one of the 51"
+                    " the reference records as never sent and the row is one the pre-filter passed"
+                    " and the 30-row pack did not draw — both registered in"
+                    f" {rel(args.prereg)} :: resume.warmup and re-verified here against the bytes"
+                ),
+            }
+        ),
         "replies": opened,
     }
     verdict = go_no_go(
@@ -919,7 +1256,7 @@ def main(argv: list[str] | None = None, client=None) -> int:
     if verdict["refuse"]:
         # SPEC 3.17 (10)(a). No gold call is made, so no gold artifact exists: the dump is never
         # written, and this record is the whole output of the session. The attempt is NOT consumed.
-        balance, spent, cost_note = spend_or_note(ledger)
+        balance, spent, cost_note = spend_or_note(ledger, phase)
         record_path.parent.mkdir(parents=True, exist_ok=True)
         record_path.write_text(
             json.dumps(
@@ -929,9 +1266,9 @@ def main(argv: list[str] | None = None, client=None) -> int:
                     "why": (
                         "SPEC 3.17 (10)(a): after the two non-gold warm-up calls the whole run"
                         f" projects ${verdict['projected_usd']:.4f} against ${budget:.4f} left of"
-                        f" the ${CAP_USD:.2f} cap. Refused BEFORE the first gold call, which is the"
+                        f" the ${cap:.2f} cap. Refused BEFORE the first gold call, which is the"
                         " only stop that leaves nothing half-bought — and under (10)(a) it consumes"
-                        " NO attempt. The pilot returns to the team lead for a v3 registration"
+                        " NO attempt. The pilot returns to the team lead for a re-registration"
                         " under the measured price"
                     ),
                     "warmup": warmup_block,
@@ -961,7 +1298,7 @@ def main(argv: list[str] | None = None, client=None) -> int:
                     "cost": {
                         "jobs": 0,
                         "usd": None if spent is None else round(spent, 4),
-                        "cap_usd": CAP_USD,
+                        "cap_usd": cap,
                         "anchor": rel(args.ledger),
                         "read_failed": cost_note,
                         "reading": (
@@ -980,10 +1317,10 @@ def main(argv: list[str] | None = None, client=None) -> int:
         )
         raise SystemExit(
             f"REFUSED before the first gold call: the run projects"
-            f" ${verdict['projected_usd']:.4f} against ${budget:.4f} left of the ${CAP_USD:.2f}"
+            f" ${verdict['projected_usd']:.4f} against ${budget:.4f} left of the ${cap:.2f}"
             f" cap (SPEC 3.17 (10)(a)). No gold call was made and NO attempt was consumed —"
-            f" {rel(record_path)} is the record. Stop and report; the pilot needs a v3"
-            " registration under the measured price, not a raised cap."
+            f" {rel(record_path)} is the record. Stop and report; the pilot needs a re-registration"
+            " under the measured price, not a raised cap."
         )
 
     def gate() -> str | None:
@@ -1007,7 +1344,7 @@ def main(argv: list[str] | None = None, client=None) -> int:
         if budget is not None and seen["projected_usd"] > budget:
             return (
                 f"the run projects ${seen['projected_usd']:.4f} against ${budget:.4f} left of the"
-                f" ${CAP_USD:.2f} cap. A cap is not raised to finish a run"
+                f" ${cap:.2f} cap. A cap is not raised to finish a run"
             )
         return None
 
@@ -1045,14 +1382,10 @@ def main(argv: list[str] | None = None, client=None) -> int:
         if ended_by:
             break  # SPEC 3.17 (10)(c): a job the clock killed ends the RUN, not just the leg
 
-    out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(
-        "".join(json.dumps(row, ensure_ascii=False) + "\n" for row in dumped), encoding="utf-8"
-    )
-
-    unreadable = [row for row in outcomes if row["unreadable"]]
-    by_reason = Counter(row["unreadable"] for row in unreadable)
-    empty = [row for row in outcomes if row["n_positions"] == 0]
+    # this SESSION's own accounting, taken before the merge: `unbought` is what THIS run did not
+    # buy of what it set out to buy, and a merged denominator would report the first session's
+    # completed pages as bought by this one
+    asked_here = len(outcomes)
     asked = {row["source"] for row in outcomes}
     unbought = sorted(
         (item.get("file") or item["id"])
@@ -1061,7 +1394,19 @@ def main(argv: list[str] | None = None, client=None) -> int:
         for item in job
         if (item.get("file") or item["id"]) not in asked
     )
-    balance, spent, cost_note = spend_or_note(ledger)
+    merged = merge_sessions(plan, outcomes, dumped) if plan is not None else None
+    if merged is not None:
+        outcomes, dumped = merged["outcomes"], merged["dumped"]
+
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(
+        "".join(json.dumps(row, ensure_ascii=False) + "\n" for row in dumped), encoding="utf-8"
+    )
+
+    unreadable = [row for row in outcomes if row["unreadable"]]
+    by_reason = Counter(row["unreadable"] for row in unreadable)
+    empty = [row for row in outcomes if row["n_positions"] == 0]
+    balance, spent, cost_note = spend_or_note(ledger, phase)
     with_old_price = [row for row in dumped if row.get("price_old") is not None]
 
     record = head | {
@@ -1069,11 +1414,12 @@ def main(argv: list[str] | None = None, client=None) -> int:
         "ended_by": ended_by,
         "warmup": warmup_block,
         "population": {
-            "pages_sent": len(page_items),
+            "pages_sent": registered_pages,
             "pages_available": reference["population"]["pages_available"],
             "posts": reference["population"]["posts"],
-            "text_rows": len(text_items),
+            "text_rows": registered_rows,
             "asked": len(outcomes),
+            "asked_this_session": asked_here,
             "unbought": unbought,
         },
         "extraction": {
@@ -1143,9 +1489,20 @@ def main(argv: list[str] | None = None, client=None) -> int:
             ),
         },
         "cost": {
-            "jobs": len(page_jobs) + len(text_jobs),
+            "jobs_planned": len(page_jobs) + len(text_jobs),
+            "jobs_submitted": (client.timing() or {}).get("calls"),
+            "jobs_reading": (
+                "`jobs_planned` is what the packing set out to send and it does NOT shrink when a"
+                " stop fires: the run stopped at 17 of 138 recorded 8 planned against 4 submitted,"
+                " and read as a job count it said the session ran twice the work it did."
+                " `jobs_submitted` is `timing().calls` — the client's own counter of terminal /run"
+                " submissions, which on the real endpoint client includes the `info` handshake and"
+                " always includes the two warm-up calls. There is no health read on this client, so"
+                " this is the nearest honest number and it is named rather than passed off as a"
+                " count of gold jobs"
+            ),
             "usd": None if spent is None else round(spent, 4),
-            "cap_usd": CAP_USD,
+            "cap_usd": cap,
             "anchor": rel(args.ledger),
             "read_failed": cost_note,
             "reading": (
@@ -1159,6 +1516,38 @@ def main(argv: list[str] | None = None, client=None) -> int:
         },
         "git": provenance.git_state(record_path),
     }
+    if merged is not None:
+        record["resume"] = {
+            "authority": "docs/SPEC.md amendment 3.17 (11), registered in " + rel(args.prereg),
+            "reading": (
+                "this record is the MERGED bar input: `outcomes` and the dump carry both paid"
+                " sessions' answers, every row naming the session that bought it in"
+                f" `{BOUGHT_BY}`. The bars are registered over the whole population and after a"
+                " resume that population lives in two records — scoring from either alone would"
+                " report a fraction of a bar as the bar"
+            ),
+            "sessions": [
+                merged["previous"],
+                {
+                    "phase": RESUME_PHASE,
+                    "record": rel(record_path)
+                    if record_path.is_relative_to(REPO_ROOT)
+                    else str(record_path),
+                    "dump": record["dump"]["path"],
+                    "dump_sha256": record["dump"]["sha256"],
+                    "prereg": record["prereg"],
+                    "asked": asked_here,
+                    "note": (
+                        "no sha for this record: a file cannot carry its own hash. The dump's is"
+                        " here because the dump is written before this record is assembled"
+                    ),
+                },
+            ],
+            "bought_exactly_once": (
+                "checked on the merged outcomes, not on the plan: no source appears twice. The"
+                " plan's refusals guard what goes on the wire; this guards what gets scored"
+            ),
+        }
     record_path.parent.mkdir(parents=True, exist_ok=True)
     record_path.write_text(
         json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
@@ -1190,7 +1579,7 @@ def main(argv: list[str] | None = None, client=None) -> int:
         f"\n{len(dumped)} positions from {len(outcomes)} sources"
         f" · {len(unreadable)} unreadable · {len(empty)} empty"
         f" · {len(with_old_price)} carry a crossed-out price"
-        f" · {'$%.4f' % spent if spent is not None else 'no spend'} of ${CAP_USD:.2f}"
+        f" · {'$%.4f' % spent if spent is not None else 'no spend'} of ${cap:.2f}"
         f"\nwrote {record['dump']['path']} and {rel(record_path)}"
     )
     if ended_by:
@@ -1199,7 +1588,7 @@ def main(argv: list[str] | None = None, client=None) -> int:
         print(f"STOP AND REPORT: {cost_note}. The record is written; read the anchor by hand.")
     if unreadable and not args.smoke:
         print("STOP AND REPORT: a reply was refused by the parser. No retry is made.")
-    if spent is not None and spent >= CAP_USD:
+    if spent is not None and spent >= cap:
         print("STOP AND REPORT: the cap is reached. An overrun aborts, it does not raise a cap.")
         return 3
     return 0
