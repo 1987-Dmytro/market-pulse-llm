@@ -21,14 +21,23 @@ Two ops, and the first one is a guard rather than a convenience:
 ``caption``
     ``(task, images)`` → one prose caption per album, in order. Config CAPTION only.
 
+``positions``
+    ``(task, items)`` → one JSON-array reply per page or row, in order. Config POSITIONS only
+    (SPEC 3.17 (9)). ``task`` picks the leg: `positions_post_gm4` items are one-image albums,
+    `positions_text_gm4` items are row texts.
+
+Which op each config answers is `serving.CONFIG_OPS`, read as a whole table — a job on the wrong
+configuration is refused rather than answered by whatever client happens to be loaded.
+
 Configuration is environment, because a serverless worker has no argv:
 
-    SERVING_CONFIG   A (NF4 base + unmerged adapter), B (merged, requantized to NF4)
-                     or CAPTION (NF4 base at the pinned revision, NO adapter)
+    SERVING_CONFIG   A (NF4 base + unmerged adapter), B (merged, requantized to NF4),
+                     CAPTION or POSITIONS (NF4 base at the pinned revision, NO adapter)
     ADAPTER_DIR      config A: the arm-A adapter directory
-    BASE_WEIGHTS     configs A and CAPTION: the base checkpoint, defaulting to the HF repo id
+    BASE_WEIGHTS     A, CAPTION, POSITIONS: the base checkpoint, defaulting to the HF repo id
     MERGED_DIR       config B: the merged+requantized checkpoint directory
-    MODEL_REVISION   configs A and CAPTION: the base weights revision to pin
+    MODEL_REVISION   A, CAPTION, POSITIONS: the base weights revision to pin (required for the
+                     two base-only configs)
 
 The model loads once per cold start, at the first job — not at import, so that `info` on a
 misconfigured worker reports the refusal instead of the container dying before it can.
@@ -51,6 +60,15 @@ from market_pulse import local_llm, prompts, records, serving  # noqa: E402
 CONFIGS = serving.CONFIGS
 """Read from `market_pulse.serving` rather than restated: the driver asserts what the worker
 answers, and two tuples that could disagree is the one shape `assert_serving` cannot catch."""
+
+BASE_ONLY = {
+    serving.CAPTION_CONFIG: "SPEC amendment 3.13 (3)",
+    serving.POSITIONS_CONFIG: "SPEC amendment 3.17 (9)",
+}
+"""The configs that serve the NF4 BASE with the adapter OFF, each beside the amendment that fixes
+it there. Both refusals below read this table rather than naming one config, so the second
+adapter-free instrument inherits the first one's guards instead of restating them — the failure
+that costs money is a new config whose refusals were copied and then narrowed by one word."""
 
 ADAPTER_ENV = ("ADAPTER_DIR", "MERGED_DIR")
 """Every environment variable that puts trained weights on this worker.
@@ -88,7 +106,8 @@ def settings(env: dict) -> dict:
     if config not in CONFIGS:
         raise ValueError(f"SERVING_CONFIG must be one of {CONFIGS}, got {config!r}")
     revision = (env.get("MODEL_REVISION") or "").strip() or None
-    if config == serving.CAPTION_CONFIG:
+    if config in BASE_ONLY:
+        authority = BASE_ONLY[config]
         # The refusal is against the whole set, not against the variable this config happens
         # to have no use for: an endpoint updated from an A template keeps A's environment,
         # and a caption worker that quietly loaded a classification adapter would answer every
@@ -96,14 +115,14 @@ def settings(env: dict) -> dict:
         loaded = [name for name in ADAPTER_ENV if (env.get(name) or "").strip()]
         if loaded:
             raise ValueError(
-                f"config {config} serves the base with the ADAPTER OFF (SPEC amendment 3.13"
-                f" (3)) and {', '.join(loaded)} is set. Captions through the classification"
+                f"config {config} serves the base with the ADAPTER OFF ({authority})"
+                f" and {', '.join(loaded)} is set. Answers written through the classification"
                 " adapter are a third instrument — clear it from the endpoint's environment."
             )
         if not revision:
             raise ValueError(
-                f"config {config} needs MODEL_REVISION and it is unset: 3.13 (3) fixes the"
-                " caption instrument at the PINNED base revision, and an unpinned base is a"
+                f"config {config} needs MODEL_REVISION and it is unset: {authority} fixes this"
+                " instrument at the PINNED base revision, and an unpinned base is a"
                 " different model that every record would still call gm4-nf4-base"
             )
         return {
@@ -129,7 +148,7 @@ def settings(env: dict) -> dict:
 
 
 def assert_no_adapter(model):
-    """Refuse a caption model that arrived with trained weights on it.
+    """Refuse a base-only model that arrived with trained weights on it.
 
     `settings` refuses the *environment* that would load one; this refuses the object, and the
     two are not the same check. peft attaches itself to the model it wraps, so a `PeftModel` —
@@ -159,10 +178,10 @@ def assert_no_adapter(model):
     marks += [str(name) for name in (active or ()) if str(name) not in marks]
     if marks or type(model).__name__.startswith("Peft"):
         raise ValueError(
-            f"the caption model carries an adapter ({type(model).__name__},"
-            f" {', '.join(marks) or 'by class'}). SPEC amendment 3.13 (3) serves the NF4 BASE"
-            " with the adapter OFF — captions through a classification adapter are a third"
-            " instrument and nothing in the caption file could say so."
+            f"the base-only model carries an adapter ({type(model).__name__},"
+            f" {', '.join(marks) or 'by class'}). SPEC amendments 3.13 (3) and 3.17 (9) serve"
+            " the NF4 BASE with the adapter OFF — answers written through a classification"
+            " adapter are another instrument and nothing in the output file could say so."
         )
     return model
 
@@ -205,21 +224,43 @@ def library_versions(names: tuple[str, ...] = REPORTED_LIBRARIES) -> dict:
     return versions
 
 
+MAX_NEW_TOKENS = {
+    "A": local_llm.MAX_NEW_TOKENS,
+    "B": local_llm.MAX_NEW_TOKENS,
+    serving.CAPTION_CONFIG: local_llm.CAPTION_MAX_NEW_TOKENS,
+    serving.POSITIONS_CONFIG: local_llm.POSITIONS_MAX_NEW_TOKENS,
+}
+"""What each config's client actually generates, which is what ``info`` has to report.
+
+Until now `describe` answered `local_llm.MAX_NEW_TOKENS` for every configuration, and that was
+false for one of them: `CaptionClient` has generated 400 tokens since vis-a while `info` said 256.
+Nothing broke, because no caller compares the field — `caption_gm4_5c1.expected_worker()` asserts
+four fields and this is not one of them — which is precisely why it survived two paid sessions and
+sits wrong in `results/captions_gm4_atb19.json` and `results/serving_visc_smoke.json`. Those two
+records are NOT re-pinned: they say what the worker said, and a record edited after the fact is
+worse than a record that names a bug. A test holds every value here against the client class the
+config builds, so the table cannot drift from the generation call again.
+"""
+
+
 def describe(config: dict, runtime: dict, artifact_sha: str, merged_provenance: dict) -> dict:
     """What ``info`` answers — every field `serving.assert_serving` can be asked to check.
 
-    ``adapter_sha256`` means the same thing in both configs and that is the point:
+    ``adapter_sha256`` means the same thing in every config and that is the point:
     for A it is the unmerged adapter this worker loaded, for B it is the adapter
-    the merge consumed, copied out of the merged artifact's own provenance. A
-    field that changed meaning between the two configs could not compare them.
+    the merge consumed, copied out of the merged artifact's own provenance, and for
+    the two base-only configs it is ``None`` because there is no adapter to name. A
+    field that changed meaning between the configs could not compare them.
     """
-    merged = config["serving_config"] == "B"
-    caption = config["serving_config"] == serving.CAPTION_CONFIG
+    served = config["serving_config"]
+    merged = served == "B"
+    caption = served == serving.CAPTION_CONFIG
+    positions = served == serving.POSITIONS_CONFIG
     return {
-        "serving_config": config["serving_config"],
-        "merge_state": serving.MERGE_STATE[config["serving_config"]],
+        "serving_config": served,
+        "merge_state": serving.MERGE_STATE[served],
         "adapter_sha256": None
-        if caption
+        if served in BASE_ONLY
         else (merged_provenance.get("adapter_sha256") if merged else artifact_sha),
         "merged_sha256": artifact_sha if merged else None,
         # What CAPTION has instead of an adapter sha: the registered prompt as THIS checkout
@@ -236,9 +277,22 @@ def describe(config: dict, runtime: dict, artifact_sha: str, merged_provenance: 
             if caption
             else {}
         ),
+        # POSITIONS' equivalent, and a dict because the config serves TWO registered prompts
+        # (SPEC 3.17 (5)): the page leg and the text leg are one instrument in two halves, and a
+        # worker a session behind on one of them would extract happily under the other's text.
+        # `results/sku_pilot_serving.json` pins exactly this dict and the driver compares it whole.
+        **(
+            {
+                "positions_prompt_sha256": {
+                    task: prompts.prompt_sha256(task) for task in sorted(prompts.POSITIONS)
+                }
+            }
+            if positions
+            else {}
+        ),
         "quantization": local_llm.QUANTIZATION,
         "chat_template": local_llm.CHAT_TEMPLATE,
-        "max_new_tokens": local_llm.MAX_NEW_TOKENS,
+        "max_new_tokens": MAX_NEW_TOKENS[served],
         "model": local_llm.MODEL_ID,
         "repo_commit": repo_commit(),
         "weights_dir": config["weights_dir"],
@@ -319,6 +373,16 @@ def dump_rows(path: str, start: int, keys: list[str], replies: list[dict]) -> No
             )
 
 
+OP_FIELD = {"batch": "texts", "caption": "images", "positions": "items"}
+"""Each generation op and the payload field that carries its inputs.
+
+``positions`` takes ``items`` rather than a shape-specific name because the op serves two legs:
+`positions_post_gm4` sends one-image albums and `positions_text_gm4` sends row texts. What decides
+which is the registered ``task``, never an inspection of the payload — the client refuses a task it
+does not serve, and a worker guessing the leg from the type of the first element would answer a
+mixed job silently."""
+
+
 def handle(job: dict, client, info: dict) -> dict:
     """Dispatch one job against an already-loaded client. Pure — the tests drive it.
 
@@ -335,20 +399,26 @@ def handle(job: dict, client, info: dict) -> dict:
     op = payload.get("op")
     if op == "info":
         return info
-    if op in ("batch", "caption"):
-        field = "texts" if op == "batch" else "images"
+    if op in OP_FIELD:
+        field = OP_FIELD[op]
         items = payload.get(field)
         if not isinstance(items, list) or not items:
             raise ValueError(f"{op} needs a non-empty list of {field}, got {type(items).__name__}")
         served = info.get("serving_config")
-        if (op == "caption") != (served == serving.CAPTION_CONFIG):
-            # Both directions, and neither is a typo: a caption job on config A would be
-            # answered by the classification adapter, and a batch job on CAPTION would score
-            # rows on the bare base. Both produce replies, and both land in a record that
-            # names the configuration the endpoint's environment claims.
+        allowed = serving.CONFIG_OPS.get(served, ())
+        if op not in allowed:
+            # Every direction, and none of them is a typo: a caption job on config A would be
+            # answered by the classification adapter, a batch job on CAPTION would score rows on
+            # the bare base, and a batch job on POSITIONS would score them on the base at an
+            # 800-token ceiling. All three produce replies, and all three land in a record that
+            # names the configuration the endpoint's environment claims. The table is read whole
+            # rather than compared pairwise — see `serving.CONFIG_OPS` for what that cost once.
+            routing = "; ".join(
+                f"{name} serves {'/'.join(ops)}" for name, ops in serving.CONFIG_OPS.items()
+            )
             raise ValueError(
-                f"op {op!r} on config {served!r}: captions are served by"
-                f" {serving.CAPTION_CONFIG} and rows by the other configs — stop and report"
+                f"op {op!r} on config {served!r}: this configuration answers"
+                f" {'/'.join(allowed) or 'nothing but info'} — {routing}. Stop and report"
             )
         posts = payload.get("posts")
         asked = payload.get("batch_size")
@@ -362,6 +432,9 @@ def handle(job: dict, client, info: dict) -> dict:
             if op == "caption":
                 fresh = client.caption(payload["task"], window)
                 keys = [serving.album_key(album) for album in window]
+            elif op == "positions":
+                fresh = client.positions(payload["task"], window)
+                keys = [serving.positions_key(item) for item in window]
             else:
                 context = posts[start : start + size] if posts else None
                 fresh = client.batch(payload["task"], window, context)
@@ -371,7 +444,7 @@ def handle(job: dict, client, info: dict) -> dict:
                 dump_rows(dump, start, keys, fresh)
         out = {"replies": replies, "n": len(replies)}
         return out | {"dump_path": dump, "forward_batch_size": size} if dump else out
-    raise ValueError(f"unknown op {op!r} — this worker answers 'info', 'batch' and 'caption'")
+    raise ValueError(f"unknown op {op!r} — this worker answers 'info' and {sorted(OP_FIELD)}")
 
 
 class Worker:
@@ -385,10 +458,18 @@ class Worker:
 
     def _load(self, config: dict):  # pragma: no cover — needs the GPU extra and the weights
         weights = config["weights_dir"]
-        if config["serving_config"] == serving.CAPTION_CONFIG:
+        if config["serving_config"] in BASE_ONLY:
+            # `load_captioner` is named for its first caller and is the NF4 image-text base with
+            # no adapter and no causal-LM fallback — which is what BOTH base-only configs serve.
+            # The positions page leg needs the same processor for the same reason: a tokenizer
+            # would render the template and drop the picture.
             processor, model = local_llm.load_captioner(weights, revision=config["revision"])
             assert_no_adapter(model)
-            client = local_llm.CaptionClient(processor, model)
+            client = (
+                local_llm.CaptionClient(processor, model)
+                if config["serving_config"] == serving.CAPTION_CONFIG
+                else local_llm.PositionsClient(processor, model)
+            )
             runtime = local_llm.environment(model, weights=weights, revision=config["revision"])
             # No artifact sha: there is no adapter to hash and hashing the base checkpoint
             # would walk 62 GB at every cold start. What pins this instrument is the revision,

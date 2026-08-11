@@ -26,6 +26,14 @@ spec.loader.exec_module(handler)
 ENV_A = {"SERVING_CONFIG": "A", "ADAPTER_DIR": "/vol/adapter", "MODEL_REVISION": "842da379"}
 ENV_B = {"SERVING_CONFIG": "B", "MERGED_DIR": "/vol/merged-nf4"}
 
+INFO_A = {"serving_config": "A"}
+"""What `describe` puts in front of `handle`, reduced to the field the op router reads.
+
+`{}` used to do here: until SPEC 3.17 (9) there were two ops and the routing was one XOR, which
+read False on both sides for an info dict naming no config at all. `serving.CONFIG_OPS` is a
+closed table now and an unnamed config answers nothing — an endpoint that cannot say what it
+loaded is not a configuration (`serving.assert_serving`, same rule one layer up)."""
+
 
 class StubClient:
     """`LocalClient`'s interface, remembering exactly what it was asked."""
@@ -103,7 +111,7 @@ def test_info_carries_the_source_adapter_through_a_merge():
 def test_batch_reaches_the_client_untouched():
     client = StubClient()
     out = handler.handle(
-        {"input": {"op": "batch", "task": "T1", "texts": ["a", "b"], "posts": None}}, client, {}
+        {"input": {"op": "batch", "task": "T1", "texts": ["a", "b"], "posts": None}}, client, INFO_A
     )
     assert client.seen == [("T1", ["a", "b"], None)]
     assert out["n"] == 2 and len(out["replies"]) == 2
@@ -114,7 +122,7 @@ def test_the_parent_post_travels_with_the_row():
     handler.handle(
         {"input": {"op": "batch", "task": "T2", "texts": ["a"], "posts": [{"post_text": "p"}]}},
         client,
-        {},
+        INFO_A,
     )
     assert client.seen[0][2] == [{"post_text": "p"}]
 
@@ -138,7 +146,7 @@ def test_info_answers_without_touching_the_client():
 )
 def test_a_job_the_worker_cannot_answer_is_an_error(payload, message):
     with pytest.raises(ValueError, match=message):
-        handler.handle({"input": payload}, StubClient(), {})
+        handler.handle({"input": payload}, StubClient(), INFO_A)
 
 
 # --- the worker -------------------------------------------------------------
@@ -183,7 +191,9 @@ def test_the_commit_is_absent_rather_than_fatal_off_a_checkout(monkeypatch):
 def test_a_job_without_a_batch_size_is_one_forward_as_it_always_was():
     """The default is what the 8-row smoke measured; srv-2d must not move it silently."""
     client = StubClient()
-    handler.handle({"input": {"op": "batch", "task": "T1", "texts": ["a", "b", "c"]}}, client, {})
+    handler.handle(
+        {"input": {"op": "batch", "task": "T1", "texts": ["a", "b", "c"]}}, client, INFO_A
+    )
     assert client.seen == [("T1", ["a", "b", "c"], None)]
 
 
@@ -193,7 +203,7 @@ def test_batch_size_1_makes_every_forward_a_one_row_call():
     out = handler.handle(
         {"input": {"op": "batch", "task": "T1", "texts": ["a", "b", "c"], "batch_size": 1}},
         client,
-        {},
+        INFO_A,
     )
     assert client.seen == [("T1", ["a"], None), ("T1", ["b"], None), ("T1", ["c"], None)]
     assert [r["content"] for r in out["replies"]] == ["reply to a", "reply to b", "reply to c"]
@@ -215,7 +225,7 @@ def test_the_parent_posts_are_sliced_with_their_rows():
             }
         },
         client,
-        {},
+        INFO_A,
     )
     assert client.seen == [("T1", ["a"], [posts[0]]), ("T1", ["b"], [posts[1]])]
 
@@ -225,7 +235,7 @@ def test_a_zero_batch_size_is_refused_rather_than_looping_forever():
         handler.handle(
             {"input": {"op": "batch", "task": "T1", "texts": ["a"], "batch_size": 0}},
             StubClient(),
-            {},
+            INFO_A,
         )
 
 
@@ -244,7 +254,7 @@ def test_the_rows_land_on_the_volume_as_they_are_generated(tmp_path):
             }
         },
         StubClient(),
-        {},
+        INFO_A,
     )
     lines = [json.loads(line) for line in dump.read_text(encoding="utf-8").splitlines()]
     assert [line["i"] for line in lines] == [0, 1]
@@ -255,7 +265,9 @@ def test_the_rows_land_on_the_volume_as_they_are_generated(tmp_path):
 
 
 def test_a_job_that_asked_for_no_dump_writes_none(tmp_path):
-    out = handler.handle({"input": {"op": "batch", "task": "T1", "texts": ["a"]}}, StubClient(), {})
+    out = handler.handle(
+        {"input": {"op": "batch", "task": "T1", "texts": ["a"]}}, StubClient(), INFO_A
+    )
     assert "dump_path" not in out
     assert list(tmp_path.iterdir()) == []
 

@@ -417,6 +417,122 @@ class LocalClient:
         return replies
 
 
+POSITIONS_MAX_NEW_TOKENS = 800
+"""SPEC 3.17 (9), transcribed and not chosen here: a CEILING against mid-JSON truncation.
+
+Not a target length, and that is the whole reason it is not :data:`CAPTION_MAX_NEW_TOKENS`. A
+caption cut off at 400 tokens is a description of half a leaflet and only ``finish_reason`` can see
+it; a position array cut off mid-object is a **parse failure**, which the strict parser counts by
+reason and excludes from bar 3's denominator (`results/sku_pilot_prereg_v2.json ::
+bars.text_tier_accuracy.unreadable_rows`). One dense leaflet page can name a dozen SKUs at ~40
+tokens of JSON each, so the ceiling has to sit above the longest honest answer or the instrument
+fails on exactly the pages that carry the most.
+"""
+
+
+class PositionsClient:
+    """One page or one row per call, greedy, forward batch 1 — the instruments of SPEC 3.17 (5).
+
+    Built on the processor and not the tokenizer, because one of the two legs carries an image:
+    `positions_post_gm4` is a page (SPEC 3.17 (4): one image, one call) and `positions_text_gm4`
+    is a row of text with no image at all. A tokenizer would render the page request's template
+    and silently drop the picture, which is the one failure nothing downstream can see — the reply
+    would still be a legal JSON array, of whatever the instructions alone suggest.
+
+    The reply dict is `LocalClient`'s, key for key, so the worker's job envelope and every record
+    downstream cannot tell a positions reply from a caption or a labelling one.
+    """
+
+    def __init__(self, processor, model, *, max_new_tokens: int = POSITIONS_MAX_NEW_TOKENS):
+        self.processor, self.model = processor, model
+        self.max_new_tokens = max_new_tokens
+        self.usage = Counter()
+        self._assert_template_emits_bos()
+
+    def _assert_template_emits_bos(self) -> None:
+        """`add_special_tokens=False` is only safe while the template emits <bos>. `CaptionClient`'s
+        check, on the text leg — it needs no picture and renders through the same template file."""
+        tokenizer = getattr(self.processor, "tokenizer", None)
+        bos = getattr(tokenizer, "bos_token", None)
+        if not bos:
+            return
+        if not self.render(prompts.POSITIONS_TASK_TEXT, "проба").startswith(bos):
+            raise RuntimeError(
+                f"the chat template no longer starts the positions prompt with {bos!r}, so"
+                " add_special_tokens=False would drop it silently — stop and report"
+            )
+
+    def render(self, task: str, item) -> str:
+        """The request for one page or one row, through the processor's own chat template.
+
+        ``task`` is checked and not used as a switch label: this worker serves exactly the two
+        prompts SPEC 3.17 (5) registered, and their shas are pinned in
+        `results/sku_pilot_prereg_v2.json :: instruments`. A job asking for anything else — a
+        revised text, a caption prompt — is another instrument and is refused rather than served.
+        """
+        if task == prompts.POSITIONS_TASK_PAGE:
+            # `positions_messages_page_gm4` is what refuses a second image: the one-page ruling
+            # answers caption sampling, the token ceiling and the 10 MB transport at once.
+            images = len(item) if isinstance(item, list) else 1
+            messages = prompts.positions_messages_page_gm4(images)
+        elif task == prompts.POSITIONS_TASK_TEXT:
+            messages = prompts.positions_messages_text_gm4(item)
+        else:
+            raise ValueError(
+                f"{task}: the POSITIONS config serves {sorted(prompts.POSITIONS)} and nothing"
+                " else — an extraction under another registered prompt is another instrument"
+            )
+        return self.processor.apply_chat_template(messages, tokenize=False, **CHAT_TEMPLATE)
+
+    def positions(self, task: str, items: list) -> list[dict]:
+        """One reply dict per item, in order. A page item is a one-image album, a text item a row.
+
+        Positional and never zipped short, the way `CaptionClient.caption` is: the per-position
+        dump the price-pair bar is read from cites a page by its file and sha, so a reply list off
+        by one would attribute every extraction after the gap to the wrong image.
+        """
+        replies = []
+        for item in items:
+            images = (
+                [image_from_data_url(url) for url in item]
+                if task == prompts.POSITIONS_TASK_PAGE
+                else []
+            )
+            text = self.render(task, item)
+            encoded = self.processor(
+                text=text,
+                # the text leg passes no `images` at all rather than an empty list: a processor
+                # asked to align zero pictures against a template with no image token is a
+                # different call, and this way the two legs differ only where they must.
+                **({"images": images} if images else {}),
+                return_tensors="pt",
+                add_special_tokens=False,  # the chat template already emits <bos>
+            ).to(self.model.device)
+            generated = self.model.generate(
+                **encoded,
+                max_new_tokens=self.max_new_tokens,
+                do_sample=False,  # temperature 0 / greedy, as everywhere in this repo
+            )
+            width = encoded["input_ids"].shape[1]
+            new = generated[0].tolist()[width:]
+            prompt_tokens = int(width)
+            self.usage["prompt_tokens"] += prompt_tokens
+            self.usage["completion_tokens"] += len(new)
+            replies.append(
+                {
+                    "content": self.processor.decode(new, skip_special_tokens=True),
+                    # At batch 1 nothing is padded, so a reply that used its whole budget ran out
+                    # of ceiling. Here that is not a shorter answer but an unparseable one, and
+                    # the driver counts it by reason rather than reading it as an empty page.
+                    "finish_reason": "length" if len(new) >= self.max_new_tokens else "stop",
+                    "cost": 0.0,
+                    "usage": {"prompt_tokens": prompt_tokens, "completion_tokens": len(new)},
+                    "generation_id": None,
+                }
+            )
+        return replies
+
+
 def nvidia_smi() -> dict:
     """Driver and card as the driver itself reports them, or ``{}`` off-GPU."""
     try:

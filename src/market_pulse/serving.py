@@ -107,6 +107,17 @@ def album_key(album: list[str]) -> str:
     return "\n".join(album)
 
 
+def positions_key(item) -> str:
+    """One positions input as a single string — what the worker's dump hashes it under.
+
+    The op takes two shapes and neither may be hashed as the other: the page leg sends a
+    one-image album (a list of one ``data:`` URL) and the text leg sends the row's text. Same
+    rule as :func:`album_key`, and one function so the worker's dump and the driver's record
+    agree on what a row's ``sha8`` covers.
+    """
+    return album_key(item) if isinstance(item, list) else str(item)
+
+
 def endpoint_url(endpoint_id: str, path: str) -> str:
     return f"{BASE_URL}/{endpoint_id}/{path}"
 
@@ -281,6 +292,22 @@ class EndpointClient:
             raise ValueError(f"{len(albums)} albums, and a post with no image describes nothing")
         return self._ask({"op": "caption", "task": task, "images": albums}, len(albums))
 
+    def positions(self, task: str, items: list) -> list[dict]:
+        """Extract positions from a slice of pages or rows; one reply dict per item, in order.
+
+        Two shapes, decided by ``task`` and never by inspection: `positions_post_gm4` sends a
+        one-image album per item (SPEC 3.17 (4): one page, one call) and `positions_text_gm4`
+        sends the row's text. The worker's client refuses any other task, and so does this —
+        a job naming an unregistered prompt is a different instrument.
+
+        The same length check `caption` makes: a per-position dump is keyed back to its page or
+        its row by index, so a reply list off by one would file every extraction after the gap
+        against the wrong image and the price-pair read would be of something else.
+        """
+        if not items or any(item is None or item == "" or item == [] for item in items):
+            raise ValueError(f"{len(items)} items, and an empty page or row extracts nothing")
+        return self._ask({"op": "positions", "task": task, "items": items}, len(items))
+
     def _ask(self, job_input: dict, expected: int) -> list[dict]:
         """One job with this client's knobs on it, and the reply list it must come back with.
 
@@ -353,16 +380,46 @@ so captions through it would be a third instrument — and the difference has to
 registered. "Config A with a different job in it" says nothing.
 """
 
-CONFIGS = ("A", "B", CAPTION_CONFIG)
+POSITIONS_CONFIG = "POSITIONS"
+"""SPEC 3.17 (9): the NF4 base at the pinned revision, adapter OFF, greedy, batch 1, 800 tokens.
+
+A fourth served configuration and not CAPTION with a different prompt, for the reason CAPTION is
+not config A with a different job: what the endpoint serves has to be visible to `assert_serving`,
+which compares what the worker SAYS it loaded against what the phase registered. The two
+instruments differ in their registered prompt, their answer (a JSON array, not prose) and their
+token ceiling, and «CAPTION with a longer budget» says none of that in a record."""
+
+CONFIGS = ("A", "B", CAPTION_CONFIG, POSITIONS_CONFIG)
 
 MERGE_STATE = {
     "A": "unmerged-adapter",
     "B": "merged-requantized",
     CAPTION_CONFIG: "base-no-adapter",
+    POSITIONS_CONFIG: "base-no-adapter",
 }
 """What each config's ``merge_state`` reads, for the worker that answers it and the driver that
 asserts it. One table so the two cannot disagree; a test holds its keys to :data:`CONFIGS`, so a
-fourth config cannot be added without deciding what it is serving."""
+fourth config cannot be added without deciding what it is serving.
+
+CAPTION and POSITIONS share a state on purpose — both ARE the base with no adapter, and a state
+invented to tell them apart would be describing the prompt rather than the weights. What tells
+them apart in a record is `serving_config`, which `assert_serving` compares."""
+
+CONFIG_OPS = {
+    "A": ("batch",),
+    "B": ("batch",),
+    CAPTION_CONFIG: ("caption",),
+    POSITIONS_CONFIG: ("positions",),
+}
+"""Which generation op each configuration answers. ``info`` is not in it: every config answers it,
+and it is the guard that reports the others.
+
+A TABLE and not a pair of conditions. Until SPEC 3.17 (9) there were three configs and two ops, so
+`serve_handler.handle` could route on one XOR — ``(op == "caption") != (served == CAPTION)``. Add a
+fourth config and that expression reads False on both sides for a `batch` job on POSITIONS: the job
+passes the guard and is answered by whichever client POSITIONS loaded. The failure is silent and
+lands in a record naming the configuration the environment claims, which is the exact shape the
+guard exists to prevent. A closed table refuses every cell it does not name."""
 
 
 def assert_serving(observed: dict, expected: dict) -> dict:

@@ -145,7 +145,22 @@ def test_the_caption_worker_names_the_prompt_it_serves():
 
 def test_the_merge_state_table_covers_every_config_and_nothing_else():
     assert set(serving.MERGE_STATE) == set(serving.CONFIGS) == set(handler.CONFIGS)
-    assert len(set(serving.MERGE_STATE.values())) == len(serving.CONFIGS)
+    # The states were one-per-config until SPEC 3.17 (9), and asserting that read as "every
+    # config is distinguishable". It is not what this field says: `merge_state` describes the
+    # WEIGHTS, and CAPTION and POSITIONS load the identical ones — the same base at the same
+    # revision with no adapter. Inventing a fourth state to keep the count would be describing
+    # the prompt in a field about the checkpoint. What distinguishes them in a record is
+    # `serving_config`, which `assert_serving` compares and the test below drives.
+    assert sorted(set(serving.MERGE_STATE.values())) == [
+        "base-no-adapter",
+        "merged-requantized",
+        "unmerged-adapter",
+    ]
+    assert (
+        serving.MERGE_STATE[serving.CAPTION_CONFIG]
+        == serving.MERGE_STATE[serving.POSITIONS_CONFIG]
+        == "base-no-adapter"
+    )
 
 
 def caption_worker(config: str = "CAPTION"):
@@ -193,10 +208,13 @@ def test_a_caption_job_and_a_row_job_are_refused_on_each_other_s_config():
     """Both directions: a caption on config A is answered by the classification adapter, and a
     batch on CAPTION scores rows on the bare base. Both produce replies."""
     _, caption_side = caption_worker("CAPTION")
-    with pytest.raises(ValueError, match="captions are served by"):
+    # the refusal names the whole routing table now (SPEC 3.17 (9) made a fourth config, and a
+    # pairwise reading has a silent cell — see serving.CONFIG_OPS). The full matrix is driven in
+    # tests/test_positions_serving.py; these two cells stay here because they are vis-a's.
+    with pytest.raises(ValueError, match="this configuration answers"):
         caption_side({"input": {"op": "batch", "task": "T1", "texts": ["x"]}})
     _, label_side = caption_worker("A")
-    with pytest.raises(ValueError, match="captions are served by"):
+    with pytest.raises(ValueError, match="this configuration answers"):
         label_side(
             {"input": {"op": "caption", "task": prompts.CAPTION_TASK_GM4, "images": [["d"]]}}
         )
