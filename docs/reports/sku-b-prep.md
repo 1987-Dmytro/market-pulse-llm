@@ -529,7 +529,7 @@ team-lead ruling, not something the driver should paper over.
 
 | claim | command | result |
 |---|---|---|
-| the suite is green on HEAD | `make check` | 1728 passed, 2 skipped |
+| the suite is green on HEAD | `make check` | 1734 passed, 2 skipped |
 | every commit is green on its own checkout | `git checkout <sha> && pytest -q` ×9 | table above; `1131d78` red by construction (Dv133) |
 | lint and format | `ruff check .` · `ruff format --check .` | passed · clean |
 | nothing on the DO-NOT list moved | sha of 16 paths, before and after | 0 moved |
@@ -614,3 +614,296 @@ landing it first would have created work to undo. No deliverable's content chang
 5. **The in-run cap stop was broken and is now fixed and measured** (`9157118`, section under D2).
    It is worth a second pair of eyes because it is the only thing standing between a projection
    that lands on the cap and an overrun — and it had a `KeyError` on its first call.
+
+---
+
+# Fix pass (Dv141+) — the cap discipline, hardened before the paid run ($0)
+
+## Read-back
+
+**F1 (blocker).** `JOB_TIMEOUT_S` 1800 → 900, and a job the CLOCK killed (`TIMED_OUT`, or the
+client's deadline) ends the RUN rather than the batch — its items forfeit and named, the remainder
+`unbought`, the record still written.
+**F2.** After both non-gold warm-up calls the whole run is projected from what they measured, each
+leg from its own call, and a projection over what is left of the cap REFUSES before any gold call —
+record written with `stopped_before_gold: true`, no dump on disk, no attempt consumed (3.17 (10)(a)).
+**F3.** A `spend_now` crash after the paid legs no longer loses the record: `cost.usd: null` plus a
+note naming the failure, and the anchor survives.
+**F4.** `--smoke` redirects `--out` and `--record` on their own defaults, so a half-explicit smoke
+cannot plant a fake record at the paid run's path.
+**F5.** `--project-stop-usd` TIGHTENS the cap and never replaces it — `min(explicit, what is left)`.
+**F6.** The idle-timeout tail (60 s, $0.0184) is a named term inside the driver's `projection()`, the
+F2 go/no-go and `scripts/write_sku_projection.py`; `results/sku_projection.json` is regenerated.
+
+**The invariant: no paid calls in this contract.** No pod, no endpoint, no template, no `/run`
+request of any kind. Every number below comes from a file already in the repo or from the in-process
+fake.
+
+## Commits
+
+| # | commit | what |
+|---|---|---|
+| 0.1 | `77c0820` | team-lead docs, unedited: SPEC 3.17 (10), the fix brief, STATUS.md |
+| 0.2 | `c6ab33f` | the marker enumeration learns `sku-b-ratification-4` |
+| 0.3 | `f2d1506` | ADR `sku-b-serving-and-cap-discipline` + INDEX row |
+| F1a | `305e48d` | `serving.JobExpired` — a job the CLOCK killed is its own error |
+| F1–F5 | `0c11642` | the cap discipline in the driver |
+| F6 | `aafbb43` | the idle tail enters the projection, and it costs |
+
+### Each commit ran its own suite, on its own checkout
+
+Same method as the phase above and for the same reason: the four dirty tracked files (this report and
+the vault tail) were **stashed first**, because `git checkout` aborts on a dirty tracked file and a
+loop that swallows stderr then prints a number for a tree that never moved. Every row prints
+`git rev-parse --short HEAD` and two content facts that differ across the pass.
+
+```
+sha        head       driver_tests  jt900   suite
+77c0820    77c0820    30            0       1 failed, 1733 passed, 2 skipped  <- RED BY CONSTRUCTION
+c6ab33f    c6ab33f    30            0       1734 passed, 2 skipped
+f2d1506    f2d1506    30            0       1734 passed, 2 skipped
+305e48d    305e48d    30            0       1738 passed, 2 skipped
+0c11642    0c11642    41            1       1749 passed, 2 skipped
+aafbb43    aafbb43    41            1       1750 passed, 2 skipped
+```
+
+`77c0820` is red exactly as `1131d78` was, and for the same mechanism: the strip is name-agnostic so
+the pin holds, the enumeration is not so the amendment cannot land unseen. Before that commit the pin
+was re-derived on this checkout — `registered_law(SPEC)` →
+`973c87890ad049d5fa09879de148794f171994fac64437128bcecbaeade36604`, equal to what
+`results/sku_pilot_prereg_v2.json` pins, while the live file hashes to `01b3569f4901c8ca`. No
+ratification name survives the strip.
+
+`make check` on HEAD:
+
+```
+1750 passed, 2 skipped in 53.68s
+```
+
+`ruff check .` → `All checks passed!` · `ruff format --check .` → `224 files already formatted`.
+
+### The DO-NOT list — one file moved, and it is the team lead's own
+
+15 of the 16 baselined paths are byte-identical to the prep phase's table. The sixteenth:
+
+```
+3653a98618058c44 -> 01b3569f4901c8ca   docs/SPEC.md
+```
+
+That is the `sku-b-ratification-4` block, arriving from the team lead and committed **unedited** in
+step 0.1 — the brief's own instruction. The registered law did not move: the strip removes every
+marked block, so the pin re-derives to `973c8789…` as above. `results/sku_pilot_prereg.json`,
+`_v2.json`, `results/sku_pilot_serving.json`, `baselines.json`, `spend_phase4.json`, both registered
+prompt texts, the frozen sets, the lexicon and the registry are untouched.
+
+---
+
+## F1 — no single job can out-bill the cap
+
+The blocker, as arithmetic. The projection gate re-prices **between** jobs and cannot see inside one,
+so the per-job execution timeout is the only thing bounding a wedged worker:
+
+| | seconds | at $0.00030669/s | against the $0.35 cap |
+|---|---|---|---|
+| the value this replaced | 1800 | **$0.5520** | **1.58× the whole cap** |
+| the value now | 900 | $0.2760 | fits on its own |
+| the longest honest job predicted | ~400 | $0.1227 | the text leg is ONE job of 30 rows |
+| the page leg's largest of 7 | ~80 | $0.0245 | 17 pages at the stated uplift |
+
+900 s is also what `scripts/runbook_5b.md` and `scripts/runbook_srv2b.md` already pass as
+`--execution-timeout`, so the driver and the endpoint that serves it now agree.
+
+**The type, and what it deliberately is not.** Detection is not a string match on an error message.
+`serving.JobExpired` is raised at the two sites where the clock ends a job — RunPod's `TIMED_OUT`
+status and this client's own deadline — and it is a **subclass** of `ApiError`, so every
+`except ApiError` written before it keeps catching it. It fires on the STATUS and not on
+`!= COMPLETED`: `FAILED` and `CANCELLED` stay ordinary errors. Widening it would have silently
+converted *a failed job is named per item and the run continues* into *any job failure kills the
+run* — a much more expensive behaviour than the one being fixed, and the negative control is a test.
+
+```
+tests/test_serving.py::test_a_job_the_clock_killed_is_its_own_error PASSED
+tests/test_serving.py::test_only_the_clock_raises_the_clock_error[FAILED] PASSED
+tests/test_serving.py::test_only_the_clock_raises_the_clock_error[CANCELLED] PASSED
+tests/test_serving.py::test_a_deadline_that_passes_while_the_job_runs_is_the_clock_too PASSED
+```
+
+In the driver, `run_leg` now returns the reason the run ended and `main` breaks out of the leg loop
+on it. Driven end to end on the fake with one gold job replaced by a `JobExpired`:
+
+```
+test_a_job_the_clock_kills_ends_the_run_and_not_just_the_batch     PASSED
+test_an_ordinary_job_failure_names_its_items_and_the_leg_continues PASSED
+test_no_single_job_can_out_bill_the_cap                            PASSED
+```
+
+The first asserts the record's `ended_by` names TIMED_OUT, that `{row["leg"]}` is `{"page"}` only —
+the text leg never opens — that the killed job's own items are named rather than dropped, and that
+the remainder is `unbought`. The second is its control: a `FAILED` job leaves `ended_by` None, both
+legs run, and nothing is unbought.
+
+## F2 — the go/no-go, and the assumption under it
+
+The in-run gate cannot answer this question: it needs a gold call to have a marginal at all, so by
+the time it first fires the pilot has bought something. Under one attempt that is the most expensive
+outcome available — the money is gone and no bar is scoreable. F2 is the only stop that can refuse
+while the session is still worth nothing, and (10)(a) says it consumes NO attempt.
+
+Each leg is priced from **its own** warm-up call. The warm-up makes exactly two, one per shape, and
+the clock is read between them; a single blended figure would charge the image call's seconds to the
+text leg's 30 calls.
+
+```
+test_the_go_no_go_refuses_before_the_first_gold_call        PASSED
+test_a_warm_up_the_budget_can_afford_proceeds_to_gold       PASSED
+test_the_go_no_go_prices_each_leg_from_its_own_warm_up_call PASSED
+test_the_warm_up_reads_the_clock_between_its_two_calls      PASSED
+```
+
+The refusal test asserts what "zero gold artifacts" actually means on disk: **`assert not
+out.exists()`** — the dump is never written — plus `asked == 0`, all 138 sources `unbought`,
+`stopped_before_gold: true`, and a `why` that names the v3 route rather than a raised cap. The
+proceed test is its control at a budget above the projection.
+
+**The assumption this rests on, and it is checkable rather than assumed.** The per-leg marginals are
+only honest if the weight load has already been billed by the time the warm-up runs. It has:
+`serve_handler.Worker.__call__` loads on the **first job of any op**, and the driver's first job is
+the `info` handshake — so `boot_seconds`, read immediately after `info`, contains the cold start and
+neither warm-up call carries it. Had the load been lazy until the first `generate`, the page warm-up
+would have swallowed ~183 s, the page marginal would have read ~183 s/call, and F2 would refuse a
+perfectly healthy run. That is why it is named here.
+
+## F3, F4, F5 — the three quiet ones, each driven through `main`
+
+`--smoke` deliberately creates no ledger, so the whole ledgered branch of `main` is invisible to the
+$0 path — the same shape as the defect the prep phase found in the cap stop. Two of these three tests
+therefore drive the **ledgered** branch, with only `serving.EndpointClient` and `guard.balance`
+replaced; `read_ledger`, the budget arithmetic, the record write and the ledger append all run for
+real.
+
+```
+test_a_balance_read_that_crashes_after_the_paid_legs_keeps_the_record PASSED
+test_an_explicit_project_stop_tightens_the_cap_and_never_replaces_it  PASSED
+test_a_half_explicit_smoke_never_writes_at_the_real_record_default    PASSED
+```
+
+* **F3** lets the balance read succeed twice (the anchor, the pre-run cap check) and raise on the
+  third — the one after the paid legs. The run still returns 0, the record is on disk with
+  `cost.usd: null` and `"connection reset"` in `cost.read_failed`, the dump the run paid for is
+  there, and the ledger's own run entry carries a null spend and the reason.
+* **F5** pre-writes an anchor $0.30 above the balance, so $0.05 of the cap is left, and passes
+  `--project-stop-usd 9.99`. The run refuses at **$0.05**, not at 9.99: the record's
+  `go_no_go.budget_usd` and `projection.stop_at_usd` both read 0.05. Under the old code the flag
+  replaced the budget and the one in-run guard was off.
+* **F4** moves the module's `REPO_ROOT`/`RECORD`/`DUMP` to a tmp tree (with `--root` still at the
+  checkout, so only where the DEFAULTS resolve is moved) and runs `--smoke --out <explicit>`. The
+  real record path stays absent, the smoke copy lands under `results/smoke/`, and the explicit `--out`
+  is still honoured.
+
+## F6 — the idle tail, and what it does to the finding
+
+Serverless bills **wall uptime**, not jobs: the worker stays up for the endpoint's idle timeout after
+the last reply and that tail is charged to whoever woke it. Every endpoint this repo's runbooks
+create is made with `--idle-timeout 60` — 60 s × $0.00030669/s = **$0.0184**. It is charged once per
+session, so it sits beside the cold start rather than inside either leg's rate.
+
+| corner | before | after | headroom | |
+|---|---|---|---|---|
+| lower — no uplift, cold start measured | $0.1752 | **$0.1936** | +$0.1564 | fits |
+| lower — no uplift, cold start pre-registered | $0.1922 | **$0.2106** | +$0.1394 | fits |
+| stated — ceiling-ratio uplift, cold start measured | $0.3396 | **$0.3580** | −$0.0080 | **OVER** |
+| stated — ceiling-ratio uplift, cold start pre-registered | $0.3566 | **$0.3750** | −$0.0250 | **OVER** |
+
+**The count of corners over the cap goes 1 → 2, and that is the finding, not the arithmetic.** At the
+stated decode uplift the pilot exceeds $0.35 on *both* readings of the cold start. Nothing was tuned:
+the rate, both per-image sources, the uplift and the corner structure are re-derived from the same
+artifacts at the same shas, and only the one term was added.
+
+The consequence is in the record's own `against_the_cap.reading` and pinned by a test: **the go/no-go
+of 3.17 (10)(a) is now the likely first real event of sku-b-run.** Unless the two warm-up calls
+measure a decode materially shorter than the ratio of the registered ceilings, the run will refuse
+itself before the first gold call — which consumes no attempt and returns the pilot to the team lead
+for a v3 registration at the measured price. That is the designed behaviour of (10)(a), not a
+failure; it is stated here because it changes what "authorise sku-b-run" means.
+
+```
+test_the_idle_tail_is_priced_once_per_session_and_names_its_source PASSED
+test_the_verdict_says_plainly_that_the_stated_corners_do_not_fit   PASSED
+test_every_corner_is_priced_against_the_cap                        PASSED
+test_the_idle_tail_is_a_named_term_in_the_go_no_go_too             PASSED
+```
+
+## Verify
+
+| claim | command | result |
+|---|---|---|
+| the suite is green on HEAD | `make check` | 1750 passed, 2 skipped |
+| every commit is green on its own checkout | stash → `git checkout <sha> && pytest -q` ×6 | table above; `77c0820` red by construction |
+| lint and format | `ruff check .` · `ruff format --check .` | passed · 224 files formatted |
+| the prereg pin still re-derives | `write_sku_prereg.registered_law(SPEC)` | `973c8789…` = the pinned sha; live file `01b3569f…` |
+| the DO-NOT list held | sha of 16 paths | 15 identical; `docs/SPEC.md` = the team lead's own (10) block |
+| one job cannot out-bill the cap | `pytest -k out_bill` | 900 s × rate = $0.2760 < $0.35; 1800 s = $0.5520 |
+| a clock-killed job ends the run | `pytest -k "clock_kills or ordinary_job"` | 2 passed, both directions |
+| the go/no-go fires both ways | `pytest -k go_no_go` | 3 passed; no dump on the refusal |
+| the record survives a dead balance read | `pytest -k balance_read` | 1 passed, ledgered branch driven |
+| `--project-stop-usd` only tightens | `pytest -k project_stop` | refuses at $0.05, not at 9.99 |
+| the smoke cannot touch the real record | `pytest -k half_explicit` | 1 passed |
+| the projection is re-derivable | `PYTHONPATH=src python3 scripts/write_sku_projection.py` | 4 corners, 2 OVER; `pytest tests/test_sku_projection.py` 11 passed |
+| the driver still runs end to end at $0 | `--smoke` | go/no-go proceeds, 138 sources, 92 positions, no spend |
+| the in-run gate is still cross-leg | `--smoke --project-stop-usd 0.35` | go/no-go proceeds; 7 gates, last at 108/138 |
+
+## Deviations
+
+**Dv141 — F1's detection is a new exception type in `src/market_pulse/serving.py`, not a string
+match in the driver.** The brief named the behaviour ("a job that ends `TIMED_OUT` … ends the RUN")
+and not the mechanism. Matching `"TIMED_OUT" in str(err)` would pin the driver to the exact wording
+of a message in another module. `serving.JobExpired` is ~10 lines, is a subclass so no existing
+caller changes, and is raised only on the two clock sites. It does touch a shared module — declared
+for that reason.
+
+**Dv142 — `FakeEndpoint` gained one constructor knob, `gold_seconds_per_call`.** Not asked for. On a
+flat clock the go/no-go and the in-run gate compute the **identical** number by construction, so any
+budget low enough to trip the mid-leg stop is refused before the first gold call — and
+`test_the_gate_stops_the_run_and_leaves_the_rest_unbought` could not be driven through `main` at all.
+The knob models the one scenario the in-run gate exists for: a warm-up that priced cheap and legs
+that turned out expensive. It defaults to the old value, so every other test is unchanged.
+
+**Dv143 — `run_leg` now returns a value.** It returned None and mutated its two accumulators; it now
+also returns the reason the RUN ended (or None). The docstring's "neither is returned" line moved
+with it.
+
+**Dv144 — both records carry `stopped_before_gold`.** The brief asked for it on the refusal record.
+The completed record carries `false` as well, so a reader keys on one field in either — and the two
+records are built from one shared `head` dict so the stop path cannot drift from the run path.
+
+**Dv145 — `spend_or_note` catches `Exception` blind**, with a `noqa` and a docstring saying why.
+Narrowing it to the failures `runpodctl` is known to produce would re-open the hole for the next one,
+and there is nothing above that frame that could use the exception. The record outranks the reason.
+
+**Dv146 — one row of the prep phase's Verify table is now superseded, and was left standing.** It
+reads `--smoke --project-stop-usd 0.10 → stops both legs, 17 asked, 121 unbought`. Under F2 that
+command refuses **before** the first gold call instead. The brief authorised exactly one prose fix in
+that table (1728 → 1734) and the table is the record of what was true at the phase's HEAD, so the row
+was not rewritten — the supersession is named here. The equivalent command today is
+`--smoke --project-stop-usd 0.35` (the row below it), which still proceeds and still gates cross-leg.
+
+**Dv147 — no other deviation.** The six fixes are the six in the brief, none ran deeper than briefed,
+and nothing on the DO-NOT list was touched.
+
+---
+
+## What the team lead is being asked to look at (fix pass)
+
+1. **Two corners are now over the cap, not one** ($0.3580 and $0.3750 against $0.35), and both are at
+   the stated decode uplift. The practical reading: **sku-b-run will probably refuse itself at the
+   go/no-go** unless the warm-up measures a shorter decode. Under (10)(a) that costs the warm-up and
+   the boot (~$0.08–0.10) and consumes no attempt — but it is a likely outcome, not a corner case,
+   and it is worth deciding in advance whether that refusal is acceptable or whether the legs should
+   be split across two registrations.
+2. **F2's arithmetic depends on the boot being billed to the `info` handshake.** Verified in
+   `serve_handler.Worker.__call__` (the load is on the first job of any op) rather than assumed — but
+   it is the single assumption that, if wrong, makes the go/no-go refuse a healthy run.
+3. **`JobExpired` lives in `src/market_pulse/serving.py`** and is therefore visible to every phase
+   that uses the endpoint client, not only sku-b (Dv141).
+4. **The prep report's `--project-stop-usd 0.10` row is superseded** (Dv146) — left standing on
+   purpose, since the table records what was true then.
