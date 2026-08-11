@@ -67,7 +67,19 @@ c0b0ecc  1694 passed, 2 skipped in 51.06s
 b6cf872  1718 passed, 2 skipped in 51.84s
 a2b66bc  1718 passed, 2 skipped in 52.02s
 de9a637  1728 passed, 2 skipped in 51.44s
+8530f97  1728 passed, 2 skipped in 51.61s
+2beff78  1728 passed, 2 skipped in 52.09s
+9157118  1734 passed, 2 skipped in 52.56s
+25f921b  1734 passed, 2 skipped in 52.44s
 ```
+
+**The first attempt at the last four was invalid and is reported as such.** `git checkout` ABORTS
+on a dirty tracked file, and the report itself was modified at the time — with stderr redirected
+the loop printed a number for every commit while the tree never moved, so two different commits
+both reported `1734`. The rerun above commits the report first, prints `git rev-parse --short HEAD`
+and `grep -c '^def test_' tests/test_positions_driver.py` per commit, and shows 24 → 24 → 30 → 30
+test functions against 1728 → 1728 → 1734 → 1734. A verification loop that cannot fail loudly is
+not a verification.
 
 `make check` on HEAD:
 
