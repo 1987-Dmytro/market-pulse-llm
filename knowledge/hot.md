@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-11 12:29:30 (every SessionStart)
+**Auto-refreshed:** 2026-08-11 13:58:58 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-5add452 docs(adr): the five sku-b readings ratified, and bar 3's denominator is 30
-d3bf781 docs(spec): 3.17 (7) ratified, and the pin holds the law instead of the file
-5c94f40 chore(vault): the standing tail -- 10.08 checkpoint, the 11.08 stub, hot.md, index
-e1a46a5 chore(augment): the Tooling layer -- CLAUDE.md routing map + the runbook behind it
-daa2832 docs(team-lead): the 11.08 arch-a brief, the 10.08 acceptance block, the PRODUCT.md deny line
+43b5886 docs(arch-a): name Dv112's collision with the DO-NOT list
+2fde2d5 chore(vault): the arch-a tail -- the day's log, hot.md's two new footguns, the index
+b34fbfa docs(arch-a): ARCHITECTURE.md -- two verified flows and the whole instrument inventory
+0278522 feat(arch-a): the code graph -- graphify installed, built AST-only, hooked to post-commit
+483081a chore(vault): hot.md curated 12.0K -> 5.7K tok, and the boot tax with it
 ```
 
 ## 📋 Recent decisions
@@ -30,34 +30,45 @@ daa2832 docs(team-lead): the 11.08 arch-a brief, the 10.08 acceptance block, the
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-11 (arch-a delivered). **sku-a IS ACCEPTED, R1–R5 ARE RATIFIED, THE 30-ROW
-TEXT GOLD IS ADJUDICATED, SPEC 3.17 (7) IS LAW, AND THE MAP IS DRAWN** — `docs/ARCHITECTURE.md`, the
-code graph, 149 inventory rows, $0. **Next: sku-b** — one paid attempt, cap $0.35, a failed bar
-closes B by measurement. This block is hand-edited; the section above it is auto-generated — do NOT
-touch the marker. Long form: `implementation-notes.md` (Dv100–Dv120), the day logs [[2026-08-11]] /
-[[2026-08-10]], and the ADRs named inline below.
+**Last update:** 2026-08-11 (arch-a accepted; uni-a next). **sku-a ✅, R1–R5 ratified, the 30-row
+text gold adjudicated, SPEC 3.17 (7) law, and the map is drawn and accepted** —
+`docs/ARCHITECTURE.md`, the code graph, 149 inventory rows, $0. **Next: uni-a** ($0, brief issued:
+`docs/PROMPT-uni-a.md`), then the joint review of the sku-b brief, then **sku-b** — one paid attempt,
+cap $0.35, a failed bar closes B by measurement. This block is hand-edited; the section above it is
+auto-generated — do NOT touch the marker. Long form: `implementation-notes.md` (Dv100–Dv120), the day
+logs [[2026-08-11]] / [[2026-08-10]], and the ADRs named inline below.
 
 ## 🔥 What's Hot
 
-**arch-a FOUND TWO THINGS sku-b WOULD HAVE WALKED INTO, AND ONE IS A BAR WITH NO EVIDENCE FILE.**
-(1) **The per-position price-pair dump does not exist.** It is the artifact bar 2 is SCORED from —
-the team lead opens it at acceptance — and no writer for it is in the repo; every occurrence of the
-phrase is the bar's own wording. **sku-b must build it**, or bar 2 cannot be read. (2) **Today's
-endpoint would refuse a `positions_post_gm4` job.** The worker answers exactly `info | batch |
-caption`, `CaptionClient.render` refuses any task but `caption_post_gm4`, and `assert_no_adapter` /
-`settings()` guard the CAPTION path only — while `results/sku_pilot_prereg.json` pins the two prompt
-shas and registers **no serving config at all**. A third, smaller: the 10 MB `/run` ceiling is real
-code only on the caption leg (`MAX_PAYLOAD_MB = 8.0`); on the positions leg it is a docstring.
-Details and every verdict: `docs/ARCHITECTURE.md`, Dv113–Dv115.
+**NEW REPORT PROTOCOL, IN FORCE FROM uni-a (operator, 11.08).** The phase report is a FILE —
+`docs/reports/<phase>.md`, own commit `docs(report): <phase>` — and **chat gets only the path**, not
+a summary beside it. Two relayed reports arrived mangled on 11.08; the team lead reads from disk.
+
+**WHAT sku-b MUST BUILD, FROM arch-a's MAP (adopted by the team lead as its build list).**
+(1) **The per-position price-pair dump** — the artifact bar 2 is SCORED from has no writer anywhere;
+every occurrence of the phrase is the bar's own wording (Dv115). (2) **A positions op on the worker**
+— today's answers exactly `info | batch | caption` and `CaptionClient.render` refuses any task but
+`caption_post_gm4`, so it would reject a `positions_post_gm4` job (Dv114). (3) **A pinned serving
+config BEFORE the run** — the prereg pins both prompt shas and registers none (Dv114). (4) **A
+numeric ≤10 MB guard when packing the job** — real code only on the caption leg
+(`MAX_PAYLOAD_MB = 8.0`); on the positions leg it is a docstring (Dv113).
+
+**TWO RULINGS CLOSING arch-a's OPEN QUESTIONS (operator, 11.08).** `make_annotation_batch.py` and
+`runbook_5b1.md` **stay one-shot, not dead** — nothing names them, but their artifacts are
+load-bearing. `git_state()` ×5 copies is **fix-on-touch**: the first phase that touches one of the
+five carriers, or writes a sixth stamp, collapses them onto one function in `src/` with an equality
+test. Until then, leave them.
+
+**NUMBERING: `docs/PROMPT-uni-a.md` says "continue at Dv119" and Dv119/Dv120 are TAKEN** — arch-a
+filed Dv112–Dv120. **uni-a starts at Dv121** and says so, rather than renumbering or colliding.
 
 **THE FIVE RATIFIED READINGS ARE HOW EVERY sku-b NUMBER IS COMPUTED, AND THEIR HOME IS
-`results/sku_pilot_prereg.json` — NOT THIS FILE.** [[sku-b-pilot-readings-ratified]] is the long form.
-**R1** recall per POST over the union of a post's page answers, macro-averaged over the 15 posts with
-a non-empty gold set (the micro reading over 55 pairs is reported and gates nothing). **R2** the page
-set is the **108 SENT** pages, not the 159 available. **R3** the four empty-gold posts are a precision
-probe, not recall. **R4** bar 2 scores at n ≥ 10 pairs, reports at 1–9, NOT_REACHABLE at 0. **R5**
-unreadable replies are excluded and counted (>10% blocks bar 3), n ≥ 20, carriers pooled. Thresholds
-(0.75/0.80/0.85), the $0.35 cap and "one attempt" never moved.
+`results/sku_pilot_prereg.json` — NOT THIS FILE** ([[sku-b-pilot-readings-ratified]] is the long
+form). **R1** recall per POST, macro-averaged over the 15 non-empty-gold posts (the micro reading
+over 55 pairs is reported and gates nothing). **R2** the **108 SENT** pages, not the 159 available.
+**R3** the four empty-gold posts are a precision probe. **R4** bar 2 scores at n ≥ 10 pairs, reports
+at 1–9, NOT_REACHABLE at 0. **R5** unreadable replies excluded and counted (>10% blocks bar 3),
+n ≥ 20, carriers pooled. Thresholds, the $0.35 cap and "one attempt" never moved.
 
 **BAR 3's DENOMINATOR IS ALL 30 ADJUDICATED ROWS, AND 14 WAS REFUSED (team lead, 11.08).** Gold `none`
 is a VALUE — the prereg's `comparison` clause makes the model answer `[]` to match it. The 16 `none`
@@ -66,11 +77,10 @@ rows price refusal discipline, the 14 rung rows price tiering, and the bar catch
 validator: 11 position · 3 product_mention · 0 brand_mention · 16 none, of the none-rows 12 carry
 ticks without a brand and 4 are all-empty pre-filter false positives.
 
-**SPEC 3.17 (7) IS IN THE FILE, AND THE PREREG PIN NOW HOLDS THE STRIPPED TEXT.** The amendment is
-wrapped in `<!-- sku-b-ratification begin/end -->` markers; `write_sku_prereg.registered_law` cuts the
+**SPEC 3.17 (7) IS IN THE FILE, AND THE PREREG PIN NOW HOLDS THE STRIPPED TEXT.** The amendment
+wears `<!-- sku-b-ratification begin/end -->` markers; `write_sku_prereg.registered_law` cuts the
 block out and the pin `973c8789…` is the sha of what is left. ONE strip function, called by the
-producer and by `test_every_pinned_input_still_hashes_to_what_it_says` — a second copy would drift and
-nothing downstream would see it. **Never re-pin the prereg**, and never add a second marked block:
+producer AND by the pin test. **Never re-pin the prereg**, and never add a second marked block —
 the strip refuses more than one.
 
 **THE PRE-FILTER'S FRAME IS MOSTLY RECIPES, AND THAT IS THE RULE WORKING AS WRITTEN.** 769 of 31 638
@@ -86,20 +96,16 @@ manifest.** To re-derive `results/opus_audit_5c1.json`, check the registry out a
 `tests/test_registry.py::registry_without_the_signature_stamp` strips the block and reproduces the
 signed bytes `c82d0cff…`, and that reconstruction is the only chain between the two.
 
-**THE AUDIT'S AND THE SITTING'S NUMBERS LIVE IN ADRs, NOT HERE.** [[opus-review-programme-close]]:
-25/25 packs, 498/498 rows, `fn_matcher` **0** with all 102 misses image-only — so `recall_candidate`
-0.4769 is a number about the CAPTIONS and must never be quoted as the matcher's; captions 117/43/3
-(0.7178); 93 of 104 FP are «варто» + «Президент»; 141 names outside the watchlist; the strata's FN
-columns do not sum (an item carries every stratum it belongs to). [[sitting-2026-08-10-composition-signed]]:
-«Варто» text-matching OFF, «Селянське» anchored-only, the 141 names deferred into the position layer.
-Both are 5c3's **NAMED** revision and **neither is applied in sku-a or sku-b** — brand resolution
-there is the plain alias table.
+**THE AUDIT'S AND THE SITTING'S NUMBERS LIVE IN ADRs, NOT HERE.**
+[[opus-review-programme-close]]: 25/25 packs, 498/498 rows, `fn_matcher` **0** with all 102 misses
+image-only — so `recall_candidate` 0.4769 is a number about the CAPTIONS, never the matcher's;
+captions 117/43/3. [[sitting-2026-08-10-composition-signed]]: «Варто» text-matching OFF, «Селянське»
+anchored-only, the 141 names deferred into the position layer. Both are 5c3's **NAMED** revision and
+**neither is applied in sku-a or sku-b** — brand resolution there is the plain alias table.
 
 **A CAPTION IS A SAMPLE OF A LEAFLET PAGE, AND NO BETTER CAPTIONER FIXES IT.** GM4 vs qwen agree on
-terms for 8 of 18 posts on inputs proven byte-identical by sha256 ([[5c1-vis-b-caption-instrument]]) —
-an ATB album is six pages carrying dozens of products and a ~230-character caption samples it. That is
-why the position layer exists: sku-b measures a NEW per-page instrument (1 page = 1 call, recall bar
-0.75) and captions stay in the loop for **themes and coverage, never for brands**.
+terms for 8 of 18 posts on byte-identical inputs ([[5c1-vis-b-caption-instrument]]). That is why the
+position layer exists; captions stay in the loop for **themes and coverage, never for brands**.
 
 **OPERATIONAL, AND IT WILL RECUR: THE HARNESS KILLS LONG BACKGROUND WORK.** A 2.7 h driver launched
 with Bash `run_in_background` was stopped from outside at 36 minutes. Launch anything past half an
@@ -159,12 +165,14 @@ of which 42 are video. **This executor signed nothing** — the composition is t
 
 ## ⏭️ Next
 
-**arch-a IS DELIVERED ($0)** — the graph, `docs/ARCHITECTURE.md` (19 nodes verified: 14 CONFIRMED,
-3 DEVIATION, 2 NOT_BUILT) and 149 inventory rows. Nothing was deleted or renamed; the
-**candidate-dead list is empty** and the two files with no inbound reference wait for an operator
-ruling at acceptance.
+**uni-a IS LIVE ($0)** — `docs/PROMPT-uni-a.md`: how universal is the system when
+`config/registry.yaml` changes. Three deliverables — a domain-leak sweep over `src/`/`scripts/`/
+`tests/` (leaks are LISTED, never fixed), a dry-run «кава» probe with no model
+(`results/uni_probe.json`), and `docs/PORTING.md`. Beyond-Telegram is one paragraph of contour, not
+a design. Step 0 also fixes CLAUDE.md's stale scorer sentence (Dv118) and adds `docs/reports/` to
+the ownership map.
 
-**NEXT — sku-b:** two legs, cap $0.35, **ONE attempt**, a failed bar closes B by measurement. **Then the
+**THEN the joint review of the sku-b brief, then sku-b:** two legs, cap $0.35, **ONE attempt**, a failed bar closes B by measurement. **Then the
 5c2 briefing.**
 
 **WHAT sku-b MUST NOT DO.** Re-run a bar after seeing its result; read the 159 available pages instead
