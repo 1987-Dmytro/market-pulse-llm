@@ -680,6 +680,11 @@ class FakeEndpoint:
             )
 
     def info(self) -> dict:
+        # counted, because the real client counts it: `EndpointClient._run` increments `calls` for
+        # every terminal submission and the handshake is one. A fake whose `calls` skipped it would
+        # make `cost.jobs_submitted` mean one thing under test and another in production — which is
+        # the shape of the Dv153 defect this field exists to close.
+        self.jobs += 1
         return dict(self.worker) | {"weights_dir": "<smoke>"}
 
     def positions(self, task: str, items: list) -> list[dict]:

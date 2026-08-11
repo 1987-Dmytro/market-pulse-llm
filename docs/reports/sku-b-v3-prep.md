@@ -14,7 +14,8 @@
    the new rows with per-row provenance; `--smoke`/`--dry-run` prove the whole path with no network.
 3. **Guard and record fixes (Dv151/Dv153)** — `runpod_guard.py` step ledgers normalise hyphen ≡
    underscore and refuse to create a second anchor for one step; the driver's `cost.jobs` splits
-   into `jobs_planned` and `jobs_billed`; both under test.
+   into `jobs_planned` and `jobs_billed` (shipped as `jobs_submitted` — the briefed name has no
+   producer, Dv154); both under test.
 4. **Projection v2** — `results/sku_projection_v3.json`: 91 pages at the measured 5.0772 s/call
    (n=17, its one-job caveat named), 30 text calls bounded by the page marginal with srv-2d's 4.262
    s/row beside it, warm-up at 2 × the page marginal, boot as a range, idle tail $0.0184, against
@@ -225,9 +226,16 @@ SKU-B SPENT      $0.1965 of $0.35  (anchor $12.42 from runpod_balance_at_sku-b_s
 # the control: a step that genuinely has no anchor still gets one.
 ```
 
-Dv153: `cost.jobs` was the packing PLAN. The interrupted run recorded 8 while 4 jobs ran, and read
-as a job count it said the session did twice the work it did. Split into `jobs_planned` and
-`jobs_submitted`, with what each includes said in the record itself.
+Dv153: `cost.jobs` was the packing PLAN. The interrupted run recorded 8 while 4 submissions were
+made, and read as a job count it said the session did twice the work it did. Split into
+`jobs_planned` and `jobs_submitted`, with what each includes said in the record itself.
+
+The 4 is what the test reproduces, and getting there needed a fix to the FAKE: the real
+`EndpointClient` counts the `info` handshake as a submission and `FakeEndpoint` did not, so the
+field's own prose ("includes the `info` handshake") would have been checked by a client where it was
+false — the same shape of defect as the one Dv153 closes. The fake now counts its handshake, and the
+test asserts the smoke's 4 beside the interrupted session's own `timing.calls = 4` against
+`cost.jobs = 8`.
 
 ---
 

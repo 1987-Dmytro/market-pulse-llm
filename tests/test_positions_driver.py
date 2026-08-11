@@ -809,11 +809,10 @@ def test_the_resume_buys_only_the_unbought_and_merges_both_sessions(tmp_path, pr
 
     rows = [json.loads(line) for line in out.read_text(encoding="utf-8").splitlines()]
     assert len(rows) == written["dump"]["rows"] > already["dump"]["rows"]
+    sealed = REPO_ROOT / already["dump"]["path"]  # the registration's own path, not a derived one
     assert rows[: already["dump"]["rows"]] == [
         json.loads(line) | {driver.BOUGHT_BY: driver.PHASE}
-        for line in driver.RESUME_DUMP.with_name("sku_b_positions.jsonl")
-        .read_text(encoding="utf-8")
-        .splitlines()
+        for line in sealed.read_text(encoding="utf-8").splitlines()
     ], "the first session's rows travel into the merged dump unchanged but for their provenance"
     assert written["dump"]["columns"][-1] == driver.BOUGHT_BY
     assert written["resume"]["sessions"][0]["phase"] == driver.PHASE
@@ -996,13 +995,22 @@ def test_the_two_records_the_two_caps_and_the_two_anchors_never_cross(tmp_path, 
 
 def test_the_job_count_says_what_it_planned_and_what_it_submitted(tmp_path):
     """Dv153: `cost.jobs` was the PLAN. The run that stopped at 17 of 138 recorded 8 while 4 jobs
-    ran, and read as a job count it said the session did twice the work it did."""
+    ran, and read as a job count it said the session did twice the work it did.
+
+    The 4 is the number to reproduce, and it is what makes this test worth having: the real client
+    counts the `info` handshake and both warm-up calls alongside the gold job, so the fake was given
+    the same handshake counter. Without it the fake would answer 3 here while production answered 4,
+    and the field's own prose — which says the handshake is inside it — would be checked by nothing.
+    """
     _, _, record, _ = run_resume(tmp_path, extra=["--leg", "text"])
     cost = json.loads(record.read_text(encoding="utf-8"))["cost"]
     assert cost["jobs_planned"] == 1, "30 rows pack into one job"
-    assert cost["jobs_submitted"] == 3, "the job plus the two warm-up calls"
+    assert cost["jobs_submitted"] == 4, "the handshake, the two warm-up calls and the job"
     assert "jobs" not in cost, "the ambiguous name is gone, not aliased"
-    assert "warm-up" in cost["jobs_reading"]
+    assert "handshake" in cost["jobs_reading"] and "warm-up" in cost["jobs_reading"]
+    # the same shape the interrupted session recorded: 1 + 2 + 1 against 8 planned
+    run = json.loads(driver.RECORD.read_text(encoding="utf-8"))
+    assert run["timing"]["calls"] == 4 and run["cost"]["jobs"] == 8
 
 
 # --- the ledgered paths: driven with the network client replaced, everything else real ------------
