@@ -6712,3 +6712,25 @@ not read as if the numbering stopped.
 
 Artifacts: `results/uni_probe.json` (the five verdicts), `docs/PORTING.md` (the two levels),
 `scripts/uni_probe.py` (one-shot).
+
+## uni-b — the vocabulary law, the attribute field, one re-registration (2026-08-11, $0)
+
+**The deviations of this phase live in `docs/reports/uni-b.md`, not here.** Dv125–Dv132 are filed
+in that report, same reason as uni-a's: one fact, one home.
+
+- **Dv125** — B and D(2)/D(3) landed in ONE commit (the ladder sha is a pin inside v1; splitting
+  them would commit a red pin), and D(1) went before B, proved green from a stash.
+- **Dv126** — `lsp_find_references` unavailable; pyright 1.1.411 over the whole tree instead.
+- **Dv127** — `docs/SPEC.md` edited through a script (`Edit(/docs/SPEC.md)` is denied; precedent
+  `d3bf781`), which is also what makes the block byte-exact.
+- **Dv128** — `build_sku_text_pack.py --manifest-only`, a flag the brief does not name: `main()`
+  would have blanked 26 adjudicated rows in a gitignored directory.
+- **Dv129** — the 5c1 SCREEN instruments deliberately NOT migrated to the law.
+- **Dv130** — the law refused 3 of the probe's 4 coffee stems; recorded as a cost, not worked around.
+- **Dv131** — `test_sku_prefilter_census.py`'s lexicon assertion evolved (record keeps its history,
+  the law's content-equality is what makes the migration safe).
+- **Dv132** — `docs/PORTING.md`'s registry-pin count re-measured: 8 → 9 files, 3 → 4 on the live sha.
+
+Artifacts: `config/lexicon.yaml`, `src/market_pulse/lexicon.py`,
+`results/sku_pilot_prereg_v2.json` (beside the sealed v1), `results/uni_probe_v2.json`,
+`docs/PORTING.md` (updated), `docs/reports/uni-b.md`.

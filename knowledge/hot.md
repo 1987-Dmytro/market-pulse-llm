@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-11 15:01:07 (every SessionStart)
+**Auto-refreshed:** 2026-08-11 15:53:04 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-f331bee chore(vault): the uni-a tail -- the day's log, hot.md's new facts, the Dv pointer
-8c2ba25 docs(report): uni-a
-341d7ff docs(uni-a): PORTING.md -- what a domain change costs, level (a) and level (b)
-eb8758e feat(uni-a): the dry-run probe -- a toy «кава» registry through the shipped code ($0)
-a9ac92d docs(uni-a): step 0 (2) -- docs/reports/ in the ownership map, the scorer sentence corrected
+6f1e00a docs(report): uni-b
+e7ea9d8 feat(uni-b): the probe re-run -- step 2 now reads follows-registry(law)
+b1a2a63 feat(uni-b): L2-L5 de-literalled -- loud refusals where there were silent zeros
+fc662e0 feat(uni-b): fat -> attribute at the schema, and the pre-registration re-registered beside v1
+1aa431f docs(spec): 3.17 (8) ratified, and the strip learns to take every marked block
 ```
 
 ## 📋 Recent decisions
@@ -30,15 +30,16 @@ a9ac92d docs(uni-a): step 0 (2) -- docs/reports/ in the ownership map, the score
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-11 (arch-a accepted; **uni-a executed, awaiting acceptance**). **sku-a ✅,
-R1–R5 ratified, the 30-row text gold adjudicated, SPEC 3.17 (7) law, the map drawn and accepted, and
-the universality question answered** — `docs/ARCHITECTURE.md`, the code graph, 149 inventory rows,
-`docs/reports/uni-a.md`, `docs/PORTING.md`, `results/uni_probe.json`, all $0. **Next: the operator's
-uni-a acceptance** (~20–30 min: the six LEAKs, PORTING.md, the `fat` SPEC question), then the joint
-review of the sku-b brief, then **sku-b** — one paid attempt, cap $0.35, a failed bar closes B by
-measurement. This block is hand-edited; the section above it is auto-generated — do NOT touch the
-marker. Long form: `implementation-notes.md` (Dv100–Dv120), `docs/reports/uni-a.md` (Dv121–Dv124),
-the day logs [[2026-08-11]] / [[2026-08-10]], and the ADRs named inline below.
+**Last update:** 2026-08-11 (arch-a ✅, uni-a ✅; **uni-b executed, awaiting acceptance**). **sku-a ✅,
+R1–R5 ratified, the 30-row text gold adjudicated, SPEC 3.17 (7) AND (8) law, the map drawn, the
+universality question answered and its three moves landed** — `docs/ARCHITECTURE.md`, the code
+graph, `docs/reports/uni-a.md` + `uni-b.md`, `docs/PORTING.md`, `config/lexicon.yaml`,
+`results/sku_pilot_prereg_v2.json`, `results/uni_probe_v2.json`, all $0. **Next: the operator's
+uni-b acceptance** (~15 min: sign prereg v2 + the report), then the joint review of the sku-b brief,
+then **sku-b** — one paid attempt, cap $0.35, a failed bar closes B by measurement. This block is
+hand-edited; the section above it is auto-generated — do NOT touch the marker. Long form:
+`implementation-notes.md` (Dv100–Dv120), `docs/reports/uni-a.md` (Dv121–Dv124), `uni-b.md`
+(Dv125–Dv132), the day logs [[2026-08-11]] / [[2026-08-10]], and the ADRs named inline below.
 
 ## 🔥 What's Hot
 
@@ -60,22 +61,26 @@ the five carriers, or writes a sixth provenance stamp, collapses them onto one f
 with an equality test. Until then, leave them. (The candidate-dead question of the same day is
 closed: both files stay one-shot.)
 
-**THE CATEGORY VOCABULARY IS A FILE THE REGISTRY CANNOT REACH, AND THE DAIRY LEXICON IS CORRECT FOR
-THE DAIRY PILOT — sku-b CHANGES NOTHING BECAUSE OF THIS.** `positions.prefilter`'s brand half is
-registry-driven; its category half comes from `yield_screen.compile_categories(lexicon)`, and the
-lexicon is `data/category_lexicon_draft.json` (`draft-not-law`, 14 dairy stems + 2 ice-cream).
-Priced by uni-a on a deterministic 2 000-row sample: **11 rows pass under a toy coffee lexicon, 90
-under the live one standing beside a coffee registry**, all 90 on dairy stems. It is LEAK L1 of six,
-listed for the operator and deliberately unfixed. **The schema follows the registry; the vocabulary
-does not** — `docs/PORTING.md` is the procedure, `docs/reports/uni-a.md` the evidence. Numbering:
-uni-a filed **Dv121–Dv124** (the brief said Dv119; arch-a had taken it).
+**THE CATEGORY VOCABULARY IS LAW NOW: `config/lexicon.yaml` (SPEC 3.17 (8), uni-b).** It carries the
+draft's own 14+2 stems, 36 endings and the six pre-filter `units` (ORDERED longest-first — «г»
+before «грн» would read "90 грн" as a size). `data/category_lexicon_draft.json` is frozen history:
+five sealed records pin `1225ad75…`, the law's header names it as source, and the 5c1 SCREEN
+instruments still read it (Dv129). The law REFUSES a taxonomy its stems do not name — one
+implementation of that rule, `market_pulse.lexicon.unmatched_stems`. **Cost the probe measured: 3 of
+4 plausible coffee stems («еспресо», «лате», «капучино») are not prefixes of any «Кава …» display
+name, so a new category either names those subcategories or exempts each stem by name** (Dv130).
+The dairy lexicon was correct for the dairy pilot: **sku-b changes nothing because of this.**
 
-**GENERALISING `fat` MOVES A PIN INSIDE THE LIVE PRE-REGISTRATION** — `PRESENCE_FIELDS` →
-`ladder_table()` → `ladder_sha256()` `b497c072…`, pinned in `results/sku_pilot_prereg.json`. So the
-`attribute` question is answerable **before sku-b or after B closes, never between**.
+**`fat` → `attribute` IS DONE, AT THE SCHEMA ONLY, AND THE WIRE KEPT THE DOMAIN WORD.** Ladder
+`b497c072…` → **`6a257e04…`**; the renamed table is a BIJECTION onto the old one, so no rung moved.
+The registered prompts still ask for `"fat"`, the adjudicated `text30.csv` still has a `fat` column,
+and `positions.WIRE_KEYS = {"dairy": {"attribute": "fat"}}` is the single place the two meet — the
+validator maps the column, and reading `row["attribute"]` off that CSV would score 30 rows of
+`none` in silence. Regression held: 11 position · 3 product_mention · 16 none, unchanged.
 
 **THE FIVE RATIFIED READINGS ARE HOW EVERY sku-b NUMBER IS COMPUTED, AND THEIR HOME IS
-`results/sku_pilot_prereg.json` — NOT THIS FILE** ([[sku-b-pilot-readings-ratified]] is the long
+`results/sku_pilot_prereg_v2.json` — v1 `b1bfa40d…` is SEALED beside it, byte-equal on every bar,
+threshold, cap and reading; only the ladder and manifest shas moved (uni-b D(2)). NOT THIS FILE** ([[sku-b-pilot-readings-ratified]] is the long
 form). **R1** recall per POST, macro-averaged over the 15 non-empty-gold posts (the micro reading
 over 55 pairs is reported and gates nothing). **R2** the **108 SENT** pages, not the 159 available.
 **R3** the four empty-gold posts are a precision probe. **R4** bar 2 scores at n ≥ 10 pairs, reports
@@ -89,18 +94,18 @@ rows price refusal discipline, the 14 rung rows price tiering, and the bar catch
 validator: 11 position · 3 product_mention · 0 brand_mention · 16 none, of the none-rows 12 carry
 ticks without a brand and 4 are all-empty pre-filter false positives.
 
-**SPEC 3.17 (7) IS IN THE FILE, AND THE PREREG PIN NOW HOLDS THE STRIPPED TEXT.** The amendment
-wears `<!-- sku-b-ratification begin/end -->` markers; `write_sku_prereg.registered_law` cuts the
-block out and the pin `973c8789…` is the sha of what is left. ONE strip function, called by the
-producer AND by the pin test. **Never re-pin the prereg**, and never add a second marked block —
-the strip refuses more than one.
+**SPEC 3.17 (7) AND (8) ARE IN THE FILE, AND THE PIN HOLDS THE STRIPPED TEXT.** Each amendment wears
+`<!-- sku-b-ratification[-N] begin/end -->` markers; `write_sku_prereg.registered_law` cuts out
+**every** marked block (uni-b evolved it from one — a strip that knew only (7) would have left (8)
+inside the hash) and the pin `973c8789…` is the sha of what is left. ONE strip function, called by
+the producer AND by the pin test. **Never re-pin the prereg**; a third block is `-3` and needs a
+line in the test that enumerates the names.
 
 **THE PRE-FILTER'S FRAME IS MOSTLY RECIPES, AND THAT IS THE RULE WORKING AS WRITTEN.** 769 of 31 638
-collected rows: posts 717 of 14 388 texted (4.98%), comments 52 of 10 875 (0.48%) — the rest of the
-breakdown is in `results/sku_prefilter_census.json`. Top channels after @silposilpo are recipe feeds
-firing on «сир» beside an ingredient quantity, and the 30-row pack prices it: 4 of 30 drawn rows are
-direct false positives. Comments are 6.8% of the frame, so bar 3 prices the POST leg; a comment bar
-of its own is a team-lead ruling after the pilot.
+rows: posts 717/14 388 texted (4.98%), comments 52/10 875 (0.48%) — breakdown in
+`results/sku_prefilter_census.json`. Recipe feeds firing on «сир» beside an ingredient quantity
+dominate; 4 of the 30 drawn rows are direct false positives. Comments are 6.8% of the frame, so bar
+3 prices the POST leg; a comment bar of its own is a team-lead ruling after the pilot.
 
 **THE SIGNATURE STAMP MOVED `config/registry.yaml`'s SHA, AND FIVE SEALED RECORDS PIN THE OLD BYTES.**
 `validate_opus_returns.py` and `read_opus_audit.py` REFUSE to run — correctly. **Do not re-pin any
@@ -116,14 +121,13 @@ anchored-only, the 141 names deferred into the position layer. Both are 5c3's **
 **neither is applied in sku-a or sku-b** — brand resolution there is the plain alias table.
 
 **A CAPTION IS A SAMPLE OF A LEAFLET PAGE, AND NO BETTER CAPTIONER FIXES IT.** GM4 vs qwen agree on
-terms for 8 of 18 posts on byte-identical inputs ([[5c1-vis-b-caption-instrument]]). That is why the
-position layer exists; captions stay in the loop for **themes and coverage, never for brands**.
+terms for 8 of 18 posts on byte-identical inputs ([[5c1-vis-b-caption-instrument]]) — why the
+position layer exists. Captions stay in for **themes and coverage, never brands**.
 
-**OPERATIONAL, AND IT WILL RECUR: THE HARNESS KILLS LONG BACKGROUND WORK.** A 2.7 h driver launched
-with Bash `run_in_background` was stopped from outside at 36 minutes. Launch anything past half an
-hour with `nohup … & disown`, and watch the **process** (`while pgrep -f "[r]un_x.sh" …` — the bracket
-stops `pgrep` matching the watcher itself), never a `tail -f`, which is silent through a dead process
-exactly as it is through a quiet one.
+**THE HARNESS KILLS LONG BACKGROUND WORK.** A 2.7 h driver on Bash `run_in_background` was stopped
+from outside at 36 min. Past half an hour: `nohup … & disown`, and watch the **process**
+(`pgrep -f "[r]un_x.sh"` — the bracket stops it matching the watcher), never `tail -f`, which is
+silent through a dead process exactly as through a quiet one.
 
 **ONLY `deny` NARROWS A SESSION, AND `Write(path)` IS NOT A RULE** — only `Edit(path)` matches, and
 it covers every file-editing tool. Allow rules **union** with `~/.claude/settings.json`, so
@@ -137,21 +141,18 @@ per-post figure by a post count, and **bill compute on `worker_seconds`, not `wa
 reconciles to 2% that way and leaves room for the pods that demonstrably ran.
 
 **A JOB CARRIES ITS IMAGES AS BASE64 AND RunPod's `/run` CEILING IS 10 MB.** One ATB post at six
-images is 3.68 MB, a slice of three up to 7.83 MB, so the 19 ATB posts are 8 jobs. There is no volume
-path for the pictures — `data/annotation/**` is gitignored, they exist only on this Mac. The driver
-refuses rather than dropping images: a shortened album is a different instrument for that post.
+images is 3.68 MB, a slice of three up to 7.83 MB → the 19 ATB posts are 8 jobs. No volume path for
+the pictures (`data/annotation/**` is gitignored, they exist only on this Mac). The driver refuses
+rather than dropping images: a shortened album is a different instrument for that post.
 
-**GREEDY IS NOT BYTE-REPRODUCIBLE ACROSS WORKERS** — same weights, NF4 config, prompt sha, batch 1 and
-byte-identical image lists produced 164 vs 172 chars on two workers (different driver versions), while
-`core.carriers` extracted exactly the same terms. n = 1: an existence proof, not a rate. **And a
-stable `worker_id` is not a warm worker** — a slot keeps its id across scale-to-zero, which retracted
-vis-b's "one cold start" in its own ADR. Find the boot, subtract it once, quote all-in and marginal
-separately.
+**GREEDY IS NOT BYTE-REPRODUCIBLE ACROSS WORKERS** — identical weights, config, prompt sha and images
+gave 164 vs 172 chars on two workers while `core.carriers` read the same terms. n = 1. **And a stable
+`worker_id` is not a warm worker** — a slot keeps its id across scale-to-zero (that retracted vis-b's
+"one cold start"). Find the boot, subtract once, quote all-in and marginal separately.
 
 **KNOWN AND DELIBERATELY NOT FIXED:** `serve_handler.describe()` reports `max_new_tokens: 256` under
-`SERVING_CONFIG=CAPTION` while the caption path runs at **400**. Provenance only — `finish_reason` and
-`truncated_replies` use the real 400. Fixing it needs a volume re-stage, which risks a session's one
-endpoint for a field; the next session that opens the volume does it.
+`SERVING_CONFIG=CAPTION` while the path runs at **400** — provenance only; the counters use the real
+400. The fix needs a volume re-stage; the next session that opens the volume does it.
 
 **THE MIDDLE RUNG EXISTS: `scripts/preflight_serving_guards.py`, $0, RUN BEFORE PAYING.** It builds a
 REAL `Gemma4ForConditionalGeneration` from a tiny config (no download, CPU, seconds) and drives every
