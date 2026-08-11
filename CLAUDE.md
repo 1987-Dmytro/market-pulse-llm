@@ -92,3 +92,12 @@ Which phase is live is in `knowledge/hot.md` and `docs/STATUS.md`, never here or
   `scripts/brain-session-end.py`, which regenerates `knowledge/index.md` and the daily-log stub.
   Generated regions belong to those scripts — do not hand-edit them.
 - `/save` (checkpoint) and `/close` (end of day) in `.claude/commands/` are operator-invoked only.
+
+## Tooling
+
+- Library/API docs → `context7` or `ref`; never guess a version.
+- GitHub → `gh` CLI, never a GitHub MCP (context + rate limits).
+- `blockscout` / `rust-analyzer-lsp` are user-level and irrelevant here — do not reach for them.
+- `ponytail` is active (level `full`) — smallest working diff; a deliberate simplification carries a
+  `ponytail:` comment naming its ceiling.
+- Full inventory, auth and gotchas: `knowledge/runbooks/tooling.md`.
