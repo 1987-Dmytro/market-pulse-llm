@@ -30,13 +30,15 @@ b34fbfa docs(arch-a): ARCHITECTURE.md -- two verified flows and the whole instru
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-11 (arch-a accepted; uni-a next). **sku-a ✅, R1–R5 ratified, the 30-row
-text gold adjudicated, SPEC 3.17 (7) law, and the map is drawn and accepted** —
-`docs/ARCHITECTURE.md`, the code graph, 149 inventory rows, $0. **Next: uni-a** ($0, brief issued:
-`docs/PROMPT-uni-a.md`), then the joint review of the sku-b brief, then **sku-b** — one paid attempt,
-cap $0.35, a failed bar closes B by measurement. This block is hand-edited; the section above it is
-auto-generated — do NOT touch the marker. Long form: `implementation-notes.md` (Dv100–Dv120), the day
-logs [[2026-08-11]] / [[2026-08-10]], and the ADRs named inline below.
+**Last update:** 2026-08-11 (arch-a accepted; **uni-a executed, awaiting acceptance**). **sku-a ✅,
+R1–R5 ratified, the 30-row text gold adjudicated, SPEC 3.17 (7) law, the map drawn and accepted, and
+the universality question answered** — `docs/ARCHITECTURE.md`, the code graph, 149 inventory rows,
+`docs/reports/uni-a.md`, `docs/PORTING.md`, `results/uni_probe.json`, all $0. **Next: the operator's
+uni-a acceptance** (~20–30 min: the six LEAKs, PORTING.md, the `fat` SPEC question), then the joint
+review of the sku-b brief, then **sku-b** — one paid attempt, cap $0.35, a failed bar closes B by
+measurement. This block is hand-edited; the section above it is auto-generated — do NOT touch the
+marker. Long form: `implementation-notes.md` (Dv100–Dv120), `docs/reports/uni-a.md` (Dv121–Dv124),
+the day logs [[2026-08-11]] / [[2026-08-10]], and the ADRs named inline below.
 
 ## 🔥 What's Hot
 
@@ -53,14 +55,24 @@ config BEFORE the run** — the prereg pins both prompt shas and registers none 
 numeric ≤10 MB guard when packing the job** — real code only on the caption leg
 (`MAX_PAYLOAD_MB = 8.0`); on the positions leg it is a docstring (Dv113).
 
-**TWO RULINGS CLOSING arch-a's OPEN QUESTIONS (operator, 11.08).** `make_annotation_batch.py` and
-`runbook_5b1.md` **stay one-shot, not dead** — nothing names them, but their artifacts are
-load-bearing. `git_state()` ×5 copies is **fix-on-touch**: the first phase that touches one of the
-five carriers, or writes a sixth stamp, collapses them onto one function in `src/` with an equality
-test. Until then, leave them.
+**`git_state()` ×5 COPIES IS FIX-ON-TOUCH (operator, 11.08).** The first phase that touches one of
+the five carriers, or writes a sixth provenance stamp, collapses them onto one function in `src/`
+with an equality test. Until then, leave them. (The candidate-dead question of the same day is
+closed: both files stay one-shot.)
 
-**NUMBERING: `docs/PROMPT-uni-a.md` says "continue at Dv119" and Dv119/Dv120 are TAKEN** — arch-a
-filed Dv112–Dv120. **uni-a starts at Dv121** and says so, rather than renumbering or colliding.
+**THE CATEGORY VOCABULARY IS A FILE THE REGISTRY CANNOT REACH, AND THE DAIRY LEXICON IS CORRECT FOR
+THE DAIRY PILOT — sku-b CHANGES NOTHING BECAUSE OF THIS.** `positions.prefilter`'s brand half is
+registry-driven; its category half comes from `yield_screen.compile_categories(lexicon)`, and the
+lexicon is `data/category_lexicon_draft.json` (`draft-not-law`, 14 dairy stems + 2 ice-cream).
+Priced by uni-a on a deterministic 2 000-row sample: **11 rows pass under a toy coffee lexicon, 90
+under the live one standing beside a coffee registry**, all 90 on dairy stems. It is LEAK L1 of six,
+listed for the operator and deliberately unfixed. **The schema follows the registry; the vocabulary
+does not** — `docs/PORTING.md` is the procedure, `docs/reports/uni-a.md` the evidence. Numbering:
+uni-a filed **Dv121–Dv124** (the brief said Dv119; arch-a had taken it).
+
+**GENERALISING `fat` MOVES A PIN INSIDE THE LIVE PRE-REGISTRATION** — `PRESENCE_FIELDS` →
+`ladder_table()` → `ladder_sha256()` `b497c072…`, pinned in `results/sku_pilot_prereg.json`. So the
+`attribute` question is answerable **before sku-b or after B closes, never between**.
 
 **THE FIVE RATIFIED READINGS ARE HOW EVERY sku-b NUMBER IS COMPUTED, AND THEIR HOME IS
 `results/sku_pilot_prereg.json` — NOT THIS FILE** ([[sku-b-pilot-readings-ratified]] is the long
@@ -84,11 +96,11 @@ producer AND by the pin test. **Never re-pin the prereg**, and never add a secon
 the strip refuses more than one.
 
 **THE PRE-FILTER'S FRAME IS MOSTLY RECIPES, AND THAT IS THE RULE WORKING AS WRITTEN.** 769 of 31 638
-collected rows (= 769 of the 25 263 that carry text): posts 717 of 14 388 texted (4.98%), comments 52
-of 10 875 (0.48%). `passed_carrying` = currency 226 · percent 384 · size 478 of the 717 posts. Top
-channels after @silposilpo are recipe feeds firing on «сир» beside an ingredient quantity. The 30-row
-pack prices it: 4 of 30 drawn rows are direct false positives. Comments are 6.8% of the frame, so bar
-3 prices the POST leg; a comment bar of its own is a team-lead ruling after the pilot.
+collected rows: posts 717 of 14 388 texted (4.98%), comments 52 of 10 875 (0.48%) — the rest of the
+breakdown is in `results/sku_prefilter_census.json`. Top channels after @silposilpo are recipe feeds
+firing on «сир» beside an ingredient quantity, and the 30-row pack prices it: 4 of 30 drawn rows are
+direct false positives. Comments are 6.8% of the frame, so bar 3 prices the POST leg; a comment bar
+of its own is a team-lead ruling after the pilot.
 
 **THE SIGNATURE STAMP MOVED `config/registry.yaml`'s SHA, AND FIVE SEALED RECORDS PIN THE OLD BYTES.**
 `validate_opus_returns.py` and `read_opus_audit.py` REFUSE to run — correctly. **Do not re-pin any
@@ -113,11 +125,10 @@ hour with `nohup … & disown`, and watch the **process** (`while pgrep -f "[r]u
 stops `pgrep` matching the watcher itself), never a `tail -f`, which is silent through a dead process
 exactly as it is through a quiet one.
 
-**ONLY `deny` NARROWS A SESSION, AND `Write(path)` IS NOT A RULE.** The harness refuses to match
-`Write(path)` against a file operation; only `Edit(path)` does, and it covers every file-editing tool.
-Allow rules **union** with `~/.claude/settings.json`, so `--allowedTools` cannot narrow a headless
-session below it. `permissions.deny` is 4 entries and now covers all four team-lead file classes
-(STATUS, SPEC, PRODUCT, PROMPT-*). `run_opus_packs.sh` confines with `--disallowedTools`.
+**ONLY `deny` NARROWS A SESSION, AND `Write(path)` IS NOT A RULE** — only `Edit(path)` matches, and
+it covers every file-editing tool. Allow rules **union** with `~/.claude/settings.json`, so
+`--allowedTools` cannot narrow a headless session; `--disallowedTools` can. `permissions.deny` is 4
+entries covering all four team-lead file classes (STATUS, SPEC, PRODUCT, PROMPT-*).
 
 **TWO RATES THAT MUST NOT BE CONFUSED, AND A COLD START PRICED ONCE.** Marginal **$0.002328/post** on
 the wide 5c2 manifest (3.32 images/post); marginal **$0.0045–$0.0061** on ATB leaflets (5.68
@@ -165,12 +176,11 @@ of which 42 are video. **This executor signed nothing** — the composition is t
 
 ## ⏭️ Next
 
-**uni-a IS LIVE ($0)** — `docs/PROMPT-uni-a.md`: how universal is the system when
-`config/registry.yaml` changes. Three deliverables — a domain-leak sweep over `src/`/`scripts/`/
-`tests/` (leaks are LISTED, never fixed), a dry-run «кава» probe with no model
-(`results/uni_probe.json`), and `docs/PORTING.md`. Beyond-Telegram is one paragraph of contour, not
-a design. Step 0 also fixes CLAUDE.md's stale scorer sentence (Dv118) and adds `docs/reports/` to
-the ownership map.
+**uni-a IS EXECUTED AND WAITING ON THE OPERATOR ($0, ~20–30 min).** Three things to rule on:
+the **six LEAKs** (L1–L6, unfixed by contract — L1 is the lexicon above and blocks nothing in
+sku-b), **`docs/PORTING.md`** as the standing procedure for level (a) brands/channels and level (b)
+a new category, and the **`fat` SPEC question** with its ordering constraint. Evidence:
+`docs/reports/uni-a.md`, `results/uni_probe.json`.
 
 **THEN the joint review of the sku-b brief, then sku-b:** two legs, cap $0.35, **ONE attempt**, a failed bar closes B by measurement. **Then the
 5c2 briefing.**
@@ -202,10 +212,9 @@ THIS file as a priced input, and a rewrite that drops it reddens ten tests. Arm 
 is permanently lost (`results/predictions/LOST.md`). Two billed rows nobody claims: a 4090 pod row
 $0.5098 / 2 470 s on 08-08 (Dv38) and srv-2b's 30-second A4500 row — neither moves a number.
 
-**SUPERSEDED, kept so the old line is not re-read as current:** "no serverless endpoint on this account
-reaches a job-consuming worker" was true on **2026-08-06** and is the honest content of
-`results/parity_verdict_5b.json`. Everything after it overturned it — parity is 758/758 with worst head
-movement 0.0000, see [[srv2-program-close]]. Do not cite that file as current state.
+**SUPERSEDED, kept so the old line is not re-read as current:** `results/parity_verdict_5b.json`
+says no serverless endpoint here reaches a job-consuming worker — true on **2026-08-06** and
+overturned since (parity 758/758, worst head movement 0.0000, [[srv2-program-close]]).
 
 ## ⚠️ Footguns for the next run
 

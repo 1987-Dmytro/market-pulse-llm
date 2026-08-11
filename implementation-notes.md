@@ -6697,3 +6697,18 @@ deleted either way.
 `scripts/eval_zero_shot.py`, `run_baseline.py`, `train_xlmr_baseline.py`, `freeze_testsets_v3.py`
 and `build_audit_pack.py`. Every result record in the repo therefore depends on five near-identical
 implementations agreeing. Not touched: this phase maps. Worth a ruling before a sixth copy appears.
+
+## uni-a — the universality audit (2026-08-11, $0)
+
+**The deviations of this phase live in `docs/reports/uni-a.md`, not here.** Dv121–Dv124 are filed
+in that report under the 11.08 file-report protocol: the phase report is a file, and duplicating
+its Deviations block here would give one fact two homes. Named so the Dv100–Dv120 range above does
+not read as if the numbering stopped.
+
+- **Dv121** — the probe needed a second toy file (a toy LEXICON beside the toy registry).
+- **Dv122** — the brief's "pre-filter category words (registry)" is half wrong, measured.
+- **Dv123** — the sweep needed a fourth class, LOUD REFUSAL, discriminated on silent vs loud.
+- **Dv124** — `graphify path` failed its positive control and is cited nowhere as evidence.
+
+Artifacts: `results/uni_probe.json` (the five verdicts), `docs/PORTING.md` (the two levels),
+`scripts/uni_probe.py` (one-shot).
