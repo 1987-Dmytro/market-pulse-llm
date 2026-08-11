@@ -1,0 +1,157 @@
+{
+  "generated_at": "2026-08-11T15:28:08+00:00",
+  "phase": "sku-b — the paid attempt, priced before it is authorised",
+  "written_by": "sku-b-prep (executor, $0), docs/PROMPT-sku-b-prep.md deliverable 6",
+  "class": "PROJECTION. Arithmetic over named artifacts — no new measurement was taken and no paid call was made to produce it. Every input names the file it came from",
+  "rate": {
+    "usd_per_second": 0.00030669,
+    "source": "results/srv2d_cost.json :: rate.usd_per_second",
+    "sha256": "71f1ec4884286961c1c672071a3846e22c40e7179189f5e0e607b17fb0d30427",
+    "corroboration": "five serverless endpoints billed on 2026-08-08 all read within 1% of $0.000307/s, srv-2c's included — the rate is settled even where the totals are not"
+  },
+  "page_leg": {
+    "calls": 108,
+    "unit": "one PAGE, one call (SPEC 3.17 (4))",
+    "source": {
+      "path": "results/captions_gm4_atb19.json",
+      "sha256": "92be7717868008fc968cba5a7fb8ae62e770c919493bc9522392a3360809f39f",
+      "why": "the freshest record that PAID for ATB leaflet captions, and it captioned EXACTLY the 108 images sku-b's page leg sends — the same files, the same encoding, the same base at the same revision",
+      "worker_seconds": 492.07,
+      "boot_seconds": 239.004,
+      "images": 108,
+      "posts": 19,
+      "images_per_call": 5.68,
+      "marginal_seconds_per_image": 2.3432
+    },
+    "corroboration": {
+      "path": "results/captions_gm4_visc.json",
+      "sha256": "14d8a9c08adf4603972f1d37425ada01bf1c4fcd65b3e2e56b25a19f388b8271",
+      "why": "an independent session on the same base with a different album size. Its per-image marginal agrees with vis-b's to under half a percent, which is what makes a two-point rate a rate rather than one run's weather",
+      "worker_seconds": 1307.956,
+      "boot_seconds": 183.58,
+      "images": 478,
+      "posts": 144,
+      "images_per_call": 3.32,
+      "marginal_seconds_per_image": 2.3523
+    },
+    "never_used": {
+      "session_usd": 0.3869,
+      "why": "a BALANCE DELTA for the whole vis-b session — staging, boot and every job inside it. Divided by 19 posts it reads $0.0204 per post, and multiplying that by a page count would price 108 albums plus 108 cold starts"
+    }
+  },
+  "text_leg": {
+    "calls": 30,
+    "unit": "one ROW, one call, no image",
+    "source": {
+      "path": "results/srv2d_cost.json",
+      "field": "measured.like_for_like_seconds_per_row",
+      "seconds_per_row": 4.262,
+      "why": "srv-2d's 758-row parity pass: the same base on the same serverless runtime, text in and JSON out, with no image on the wire. It is the only artifact that prices an image-free call on this stack"
+    }
+  },
+  "assumptions": {
+    "decode_uplift": "ASSUMPTION, not a measurement. A positions reply is a JSON array and a caption is one sentence, so the positions leg decodes more tokens per call — but no artifact prices a positions reply, because none has ever been generated. The uplift used is the RATIO OF THE REGISTERED CEILINGS of the source instrument and this one (800/400 for the page leg against vis-b's captions, 800/256 for the text leg against srv-2d's rows). A ceiling bounds the longest honest answer, so this is an UPPER bound on the decode and the projection at uplift 1.0 is reported beside it as the lower one. Two biases, in opposite directions and both stated: applying the uplift to the WHOLE marginal over-counts, because the image prefill does not grow with the reply; and taking a per-image rate from a 5.7-image-per-call run under-counts the per-call overhead of a 1-image-per-call one.",
+    "ceilings": {
+      "captions (vis-b)": 400,
+      "srv-2d rows": 256,
+      "positions (SPEC 3.17 (9))": 800
+    },
+    "cold_start": {
+      "measured_usd": 0.0563,
+      "measured_seconds": 183.58,
+      "measured_source": "results/captions_gm4_visc.json :: projection.per_slice[0].cold_start_usd_measured_here",
+      "preregistered_usd": 0.0733,
+      "preregistered_seconds": 239.004,
+      "preregistered_source": "SPEC 3.15 (3) / runbook §C.1, via caption_gm4_5c1",
+      "why_a_range": "which boot the paid session pays is not knowable in advance — it depends on whether the endpoint's weights are warm. Both are carried and neither is substituted into the other"
+    },
+    "one_attempt": "no retry is priced, because none is permitted: SPEC 3.17 (6) gives the pilot one attempt and a failed bar closes B by measurement"
+  },
+  "corners": {
+    "lower — no decode uplift, cold start as measured": {
+      "decode_uplift": {
+        "page": 1.0,
+        "text": 1.0
+      },
+      "cold_start_usd": 0.0563,
+      "page_leg_usd": 0.0776,
+      "text_leg_usd": 0.0392,
+      "warmup_usd": 0.002,
+      "total_usd": 0.1752,
+      "cap_usd": 0.35,
+      "headroom_usd": 0.1748,
+      "headroom_share_of_cap": 0.4996,
+      "fits": true
+    },
+    "lower — no decode uplift, cold start pre-registered": {
+      "decode_uplift": {
+        "page": 1.0,
+        "text": 1.0
+      },
+      "cold_start_usd": 0.0733,
+      "page_leg_usd": 0.0776,
+      "text_leg_usd": 0.0392,
+      "warmup_usd": 0.002,
+      "total_usd": 0.1922,
+      "cap_usd": 0.35,
+      "headroom_usd": 0.1578,
+      "headroom_share_of_cap": 0.451,
+      "fits": true
+    },
+    "stated — ceiling-ratio uplift, cold start as measured": {
+      "decode_uplift": {
+        "page": 2.0,
+        "text": 3.125
+      },
+      "cold_start_usd": 0.0563,
+      "page_leg_usd": 0.1552,
+      "text_leg_usd": 0.1225,
+      "warmup_usd": 0.0055,
+      "total_usd": 0.3396,
+      "cap_usd": 0.35,
+      "headroom_usd": 0.0104,
+      "headroom_share_of_cap": 0.0297,
+      "fits": true
+    },
+    "stated — ceiling-ratio uplift, cold start pre-registered": {
+      "decode_uplift": {
+        "page": 2.0,
+        "text": 3.125
+      },
+      "cold_start_usd": 0.0733,
+      "page_leg_usd": 0.1552,
+      "text_leg_usd": 0.1225,
+      "warmup_usd": 0.0055,
+      "total_usd": 0.3566,
+      "cap_usd": 0.35,
+      "headroom_usd": -0.0066,
+      "headroom_share_of_cap": -0.0188,
+      "fits": false
+    }
+  },
+  "against_the_cap": {
+    "cap_usd": 0.35,
+    "lowest_usd": 0.1752,
+    "highest_usd": 0.3566,
+    "fits_at_every_corner": false,
+    "reading": "the pilot fits the $0.35 cap comfortably at the lower corner ($0.1752, 50% headroom) and sits ON the cap at the stated upper one ($0.3566). The decode uplift is the whole spread: it is an assumption about a reply nothing has generated yet, and the warm-up call of SPEC 3.17 (9) is the first thing that will price it for real",
+    "what_an_early_stop_costs": "the driver re-projects before every job and stops when the run would pass what is left of the cap, so an overrun is impossible — but a page leg that stops early is NOT a cheaper pilot. Bar 1's registered page set is EXACTLY the 108 sent pages (results/sku_pilot_prereg_v2.json :: R2), and a post whose pages were partly bought has a gold set written against all of them. Fewer pages moves the numerator and not the denominator, which reads as a model that missed brands. If the stop fires, the finding is about the cap and not about the instrument"
+  },
+  "pinned_inputs": {
+    "results/srv2d_cost.json": "71f1ec4884286961c1c672071a3846e22c40e7179189f5e0e607b17fb0d30427",
+    "results/captions_gm4_atb19.json": "92be7717868008fc968cba5a7fb8ae62e770c919493bc9522392a3360809f39f",
+    "results/captions_gm4_visc.json": "14d8a9c08adf4603972f1d37425ada01bf1c4fcd65b3e2e56b25a19f388b8271",
+    "results/sku_reference_leaflet.json": "e301bb4f48f527e4f9f6b64bb1a53911fd69d2871e9e7cbc302195f8f982eb20",
+    "results/sku_text_pack_manifest.json": "80e4e12c0278f8cce82f2619967e1c92e1bf4bc7f8cf358e29712049b5afd376"
+  },
+  "git": {
+    "commit": "a2b66bc90424c555b34cda3ee4376269dec7768b",
+    "dirty": [
+      "knowledge/daily_logs/2026-08-11.md",
+      "knowledge/hot.md",
+      "knowledge/index.md",
+      "scripts/write_sku_projection.py",
+      "tests/test_sku_projection.py"
+    ]
+  }
+}
