@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-11 13:58:58 (every SessionStart)
+**Auto-refreshed:** 2026-08-11 15:01:07 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-43b5886 docs(arch-a): name Dv112's collision with the DO-NOT list
-2fde2d5 chore(vault): the arch-a tail -- the day's log, hot.md's two new footguns, the index
-b34fbfa docs(arch-a): ARCHITECTURE.md -- two verified flows and the whole instrument inventory
-0278522 feat(arch-a): the code graph -- graphify installed, built AST-only, hooked to post-commit
-483081a chore(vault): hot.md curated 12.0K -> 5.7K tok, and the boot tax with it
+f331bee chore(vault): the uni-a tail -- the day's log, hot.md's new facts, the Dv pointer
+8c2ba25 docs(report): uni-a
+341d7ff docs(uni-a): PORTING.md -- what a domain change costs, level (a) and level (b)
+eb8758e feat(uni-a): the dry-run probe -- a toy «кава» registry through the shipped code ($0)
+a9ac92d docs(uni-a): step 0 (2) -- docs/reports/ in the ownership map, the scorer sentence corrected
 ```
 
 ## 📋 Recent decisions
