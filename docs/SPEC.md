@@ -656,6 +656,24 @@ against that cap; (e) the team lead's calibration read of the 13 prefix pairs
 pairs of the COMPLETED population at acceptance. The three bars' verbatim texts,
 thresholds and R1–R5 are unchanged.
 <!-- sku-b-ratification-5 end -->
+<!-- sku-b-ratification-6 begin — stripped by tests/test_sku_prereg.py before
+hashing docs/SPEC.md against the prereg pin; the registered law is the stripped text -->
+(12) **The v4 session and the cost of a refusal — ratified (operator, 2026-08-11,
+sku-b-v3-run acceptance).** The v3 session was refused by the (10)(a) gate on a
+representative probe (14.808 s/page from the registered unsent page) and consumed
+no attempt. Readings: (a) ONE more resumed session is authorised under a v4
+re-registration (results/sku_pilot_prereg_v4.json, BESIDE v3, before the session),
+cap **$0.65** — sized to admit the gate's own pessimistic projection (~$0.60),
+whose probe is structurally a DEEP leaflet page and prices above the first-six-page
+gold population's drawn marginal (5.0772 s, n=17); the in-run gate still protects
+the middle. (b) **A session refused at the (10)(a) gate charges the PHASE ledger,
+never the next attempt's cap:** each registered attempt runs under its own fresh
+anchor and its own cap/ledger/phase constants, set together (the Dv167 finding).
+(c) The warm-up inputs remain the REGISTERED ones of v3 — the same unsent page and
+the same non-pack row, re-verified by hash, never re-picked. (d) Every reading of
+(10) and (11) otherwise applies unchanged; the population is still the 121
+unbought elements, each element of the 138 bought exactly once across the program.
+<!-- sku-b-ratification-6 end -->
 **Date:** 2026-07-26 · **Team lead:** Fable session · **Executor:** Claude Code
 **Repo folder:** `/Users/hdv_1987/Desktop/Projects/market-pulse-llm`
 **rev. 3 change (operator decision):** producers in Ukraine barely use Telegram for
