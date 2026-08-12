@@ -1,7 +1,8 @@
 """The sku-b driver, everything about the paid attempt that can be proved for $0.
 
-One session, one attempt, a $0.35 cap and a failed bar closes B by measurement — so every failure
-here is expensive and most of them are quiet. What is pinned:
+One session, one attempt, and a failed bar closes B by measurement — so every failure here is
+expensive and most of them are quiet. The live session is skub2 under SPEC 3.17 (13)/(14): all 138
+elements, a $0.65 cap, `results/sku_pilot_prereg_b2.json`. What is pinned:
 
 * the dump's columns are DERIVED from the pre-registration's own sentence, and the attribute column
   is the WIRE name, read through `positions.wire_key`;
@@ -9,7 +10,8 @@ here is expensive and most of them are quiet. What is pinned:
 * the text leg is the 30 adjudicated rows, given columns only — the ticks are gold and never travel;
 * a job that would exceed the payload budget is a refusal, never a shortened album;
 * a parse refusal is counted by reason and is never an empty answer;
-* the identity stop reads `results/sku_pilot_serving.json` and restates nothing;
+* the identity stop reads the serving pin the mode selects — v2 for skub2, v1 for `--resume` —
+  and restates nothing;
 * `--smoke` writes no ledger, spends nothing, and prints one line per source.
 """
 
@@ -38,6 +40,14 @@ def _script(name: str):
 
 
 driver = _script("positions_gm4_skub")
+
+SPENT_LEAVING_FIVE_CENTS = round(driver.CAP_USD - 0.05, 4)
+"""What an anchor must already have spent to leave $0.05 of the cap for the run under test.
+
+Derived, not typed. It was 0.30 against SPEC 3.17 (6)'s $0.35 cap; 3.17 (14)(e) moved the live cap
+to $0.65 and the three (10)(a)-refusal tests below stopped refusing — a projection that fits is not
+a bug, but a test tuned to a cap by a literal stops testing the moment the cap moves, and it stops
+QUIETLY in the direction of passing."""
 
 
 @pytest.fixture(scope="module")
@@ -318,6 +328,17 @@ def pin() -> dict:
     return json.loads(driver.PIN.read_text(encoding="utf-8"))
 
 
+@pytest.fixture(scope="module")
+def pin_resume() -> dict:
+    """v1's serving pin, for the one test that drives `--resume` through a fake worker.
+
+    The two differ on `max_new_tokens` — 800 against instrument v2's 1200 — so a fake built from
+    the live pin and driven down the resume path is refused by `assert_serving`, correctly and for
+    the reason the resume path pins v1's in the first place.
+    """
+    return json.loads(driver.PIN_RESUME.read_text(encoding="utf-8"))
+
+
 def slow_endpoint(pin, *, gold_seconds_per_call):
     """The smoke's own fake, priced to get expensive once the two warm-up calls are behind it."""
     registry = load_registry(driver.REGISTRY)
@@ -331,7 +352,7 @@ def slow_endpoint(pin, *, gold_seconds_per_call):
 def run_smoke(tmp_path, extra=(), client=None):
     out = tmp_path / "dump.jsonl"
     record = tmp_path / "record.json"
-    ledger = tmp_path / "ledger.json"
+    ledger = tmp_path / driver.LEDGER.name
     code = driver.main(
         [
             "--leg",
@@ -357,7 +378,7 @@ def test_the_smoke_drives_the_whole_write_path_and_spends_nothing(tmp_path, caps
 
     written = json.loads(record.read_text(encoding="utf-8"))
     assert written["smoke"] is True
-    assert written["cost"]["usd"] is None and written["cost"]["cap_usd"] == 0.35
+    assert written["cost"]["usd"] is None and written["cost"]["cap_usd"] == driver.CAP_USD == 0.65
     assert written["attempts_per_job"] == 1
     assert written["population"]["text_rows"] == 30
 
@@ -469,7 +490,7 @@ def test_the_gate_stops_the_run_and_leaves_the_rest_unbought(tmp_path, capsys, p
     exists for. On a flat clock the go/no-go of 3.17 (10)(a) and this gate compute the identical
     number by construction — so a budget low enough to trip this one would be refused before the
     first gold call, and this path could not be driven through `main` at all."""
-    out, record, ledger = tmp_path / "d.jsonl", tmp_path / "r.json", tmp_path / "l.json"
+    out, record, ledger = tmp_path / "d.jsonl", tmp_path / "r.json", tmp_path / driver.LEDGER.name
     code = driver.main(
         [
             "--smoke",
@@ -496,7 +517,7 @@ def test_the_gate_stops_the_run_and_leaves_the_rest_unbought(tmp_path, capsys, p
 
 
 def test_a_generous_budget_buys_the_whole_population(tmp_path):
-    out, record, ledger = tmp_path / "d.jsonl", tmp_path / "r.json", tmp_path / "l.json"
+    out, record, ledger = tmp_path / "d.jsonl", tmp_path / "r.json", tmp_path / driver.LEDGER.name
     driver.main(
         [
             "--smoke",
@@ -520,7 +541,7 @@ def test_the_gate_counts_calls_across_BOTH_legs(tmp_path):
     """The bug this pins: `run_leg` used to own its outcome list, so `done` restarted at 0 when the
     text leg opened while the billed clock carried the whole page leg — and the marginal the stop
     read was 108 pages' seconds divided by a handful of rows."""
-    out, record, ledger = tmp_path / "d.jsonl", tmp_path / "r.json", tmp_path / "l.json"
+    out, record, ledger = tmp_path / "d.jsonl", tmp_path / "r.json", tmp_path / driver.LEDGER.name
     driver.main(
         [
             "--smoke",
@@ -646,9 +667,19 @@ def test_no_single_job_can_out_bill_the_cap():
     could bill more than the whole cap while every guard in the driver reported normally."""
     rate = driver.leader.rate_usd_per_second()
     assert driver.JOB_TIMEOUT_S * rate < driver.CAP_USD
-    assert 1800.0 * rate > driver.CAP_USD, "the 1800 s this replaced — one job, 1.58x the cap"
+    # The 1800 s this replaced, priced against the cap the finding was made under — SPEC 3.17 (6)'s
+    # $0.35, one job at 1.58x the whole session's budget. Quoted at ITS cap rather than at the live
+    # one: against (14)(e)'s $0.65 the same job is 85% of the budget, which is not a bound either,
+    # and re-pricing the finding would shrink it into looking like a margin somebody chose.
+    assert 1800.0 * rate > 0.35
+    assert 1800.0 * rate > 0.8 * driver.CAP_USD
     # and still more than twice the longest job the projection predicts: the text leg is ONE job
-    # carrying all 30 rows at the stated decode uplift
+    # carrying all 30 rows at the stated decode uplift. The 800 is v1's ceiling and stays: this is
+    # v1's own uplift model, srv-2d's 4.262 s/row scaled by the ratio of registered ceilings, and
+    # it was never a measurement. `results/sku_projection_b2.json :: job_timeout_headroom` is the
+    # MEASURED re-check at the 1200 ceiling — 2x181 s against 900 — and the two models disagree by
+    # 3x. The money guard is the line above; this one is design margin, and it is reported rather
+    # than re-fitted, because a literal moved to keep a test green is not a re-check.
     assert driver.JOB_TIMEOUT_S >= 2 * (30 * 4.262 * (800 / 256))
     assert serving.execution_policy(driver.JOB_TIMEOUT_S, driver.JOB_TTL_S) == {
         "executionTimeout": 900_000,
@@ -978,16 +1009,33 @@ def test_a_resume_without_its_own_registration_refuses(tmp_path):
         run_resume(tmp_path, prereg=driver.PREREG)
 
 
-def test_the_two_records_the_two_caps_and_the_two_anchors_never_cross(tmp_path, monkeypatch, pin):
+def test_the_two_records_the_two_caps_and_the_two_anchors_never_cross(
+    tmp_path, monkeypatch, pin_resume
+):
     """Every default follows the mode. A resumed session enforcing (12)(a)'s $0.65 against an older
-    anchor would start in the red on a cap priced without it, and one writing at the first session's
-    paths would overwrite the evidence its own registration pins."""
-    assert driver.RESUME_CAP_USD == 0.65 and driver.CAP_USD == 0.35
-    assert driver.anchor_key(driver.RESUME_PHASE) == "runpod_balance_at_sku-b-v4_start"
-    assert driver.anchor_key() == "runpod_balance_at_sku-b_start"
-    assert driver.RESUME_LEDGER != driver.LEDGER
+    anchor would start in the red on a cap priced without it, and one writing at the other
+    session's paths would overwrite the evidence its own registration pins.
 
-    ledger = ledgered(tmp_path, monkeypatch, pin, balance=10.0, name=driver.RESUME_LEDGER.name)
+    The CAPS no longer separate the two sets: SPEC 3.17 (14)(e) put skub2's at $0.65, which is what
+    (12)(a) gave v4. So the cap is asserted as a value and never used as the discriminator — the
+    phase key, the anchor, the ledger, the registration and both artifact names are what keep the
+    sets apart, and every one of them is checked here."""
+    assert driver.RESUME_CAP_USD == driver.CAP_USD == 0.65, "equal, and telling nothing apart"
+    assert driver.anchor_key(driver.RESUME_PHASE) == "runpod_balance_at_sku-b-v4_start"
+    assert driver.anchor_key() == "runpod_balance_at_skub2_start"
+    for live, resumed in (
+        (driver.PHASE, driver.RESUME_PHASE),
+        (driver.LEDGER, driver.RESUME_LEDGER),
+        (driver.PREREG, driver.PREREG_RESUME),
+        (driver.DUMP, driver.RESUME_DUMP),
+        (driver.RECORD, driver.RESUME_RECORD),
+        (driver.PIN, driver.PIN_RESUME),
+    ):
+        assert live != resumed, live
+
+    ledger = ledgered(
+        tmp_path, monkeypatch, pin_resume, balance=10.0, name=driver.RESUME_LEDGER.name
+    )
     record = tmp_path / "r.json"
     driver.main(
         [
@@ -1046,6 +1094,74 @@ def test_the_three_constants_name_one_phase_and_the_registration_signs_all_three
         )
 
 
+def test_the_live_sessions_three_constants_are_signed_by_its_own_registration(prereg):
+    """The same reading for skub2, and the reason this exists as a second test rather than a second
+    argument: the check was CALLED inside `if args.resume:`, so it had never run on the path that
+    now carries a fresh cap, a fresh anchor and a fresh registration. SPEC 3.17 (14)(e) is the cap;
+    B′ signs all three."""
+    registered = prereg["attempts"]
+    assert (registered["phase"], registered["cap_usd"], registered["ledger"]) == (
+        driver.PHASE,
+        driver.CAP_USD,
+        driver.rel(driver.LEDGER),
+    )
+    assert driver.PHASE == "skub2"
+    assert driver.LEDGER.name == "spend_skub2.json"
+    assert driver.PREREG.name == "sku_pilot_prereg_b2.json"
+
+    driver.check_the_constants_are_the_registrations(  # the control: the honest set is accepted
+        prereg, driver.PHASE, driver.CAP_USD, driver.LEDGER
+    )
+    with pytest.raises(SystemExit, match="ledger: the run would use 'spend_sku_b.json'"):
+        driver.check_the_constants_are_the_registrations(
+            prereg, driver.PHASE, driver.CAP_USD, driver.REPO_ROOT / "results" / "spend_sku_b.json"
+        )
+    with pytest.raises(SystemExit, match="cap_usd: the run would use 0.4"):
+        driver.check_the_constants_are_the_registrations(prereg, driver.PHASE, 0.40, driver.LEDGER)
+    with pytest.raises(SystemExit, match="phase: the run would use 'sku-b'"):
+        driver.check_the_constants_are_the_registrations(
+            prereg, "sku-b", driver.CAP_USD, driver.LEDGER
+        )
+
+
+def test_the_constants_check_runs_on_the_non_resume_path_too(tmp_path):
+    """The WIRING, not the function. A guard called inside `if args.resume:` passes every test that
+    calls it directly and protects nothing on the other path — and skub2 is forced onto the other
+    path, because B′ has no resume block. Driven through `main` on `--dry-run`, which is $0 and
+    reaches the check before it reads anything."""
+    with pytest.raises(SystemExit, match="the run's constants do not match the registration"):
+        driver.main(
+            [
+                "--dry-run",
+                "--leg", "text",
+                "--ledger", str(tmp_path / "spend_sku_b_v3.json"),
+            ]
+        )  # fmt: skip
+
+
+def test_the_serving_pin_is_held_against_the_registration_that_names_it(prereg, tmp_path):
+    """B′ is the first non-resume registration that names its instrument, and the pin is what
+    `assert_serving` holds the worker to — `max_new_tokens` included. The wrong pin is not a
+    paperwork error: it refuses AFTER the boot has been billed, which is what (12)(b) prices.
+
+    Three ways: the honest pin passes, v1's is refused by name and sha, and a registration with no
+    such block is skipped rather than failed — v1–v4 name their serving config elsewhere.
+    """
+    driver.check_the_serving_pin_is_the_registered_one(prereg, driver.PIN)
+    with pytest.raises(SystemExit, match="the run would serve against sku_pilot_serving.json"):
+        driver.check_the_serving_pin_is_the_registered_one(prereg, driver.PIN_RESUME)
+
+    moved = tmp_path / driver.PIN.name
+    moved.write_text(driver.PIN.read_text(encoding="utf-8") + "\n", encoding="utf-8")
+    with pytest.raises(SystemExit, match="the run would serve against sku_pilot_serving_v2.json"):
+        driver.check_the_serving_pin_is_the_registered_one(prereg, moved)
+
+    driver.check_the_serving_pin_is_the_registered_one({}, driver.PIN_RESUME)
+    without = json.loads(json.dumps(prereg))
+    without["instruments"].pop("instrument_v2")
+    driver.check_the_serving_pin_is_the_registered_one(without, driver.PIN_RESUME)
+
+
 def test_the_job_count_says_what_it_planned_and_what_it_submitted(tmp_path):
     """Dv153: `cost.jobs` was the PLAN. The run that stopped at 17 of 138 recorded 8 while 4 jobs
     ran, and read as a job count it said the session did twice the work it did.
@@ -1061,22 +1177,27 @@ def test_the_job_count_says_what_it_planned_and_what_it_submitted(tmp_path):
     assert cost["jobs_submitted"] == 4, "the handshake, the two warm-up calls and the job"
     assert "jobs" not in cost, "the ambiguous name is gone, not aliased"
     assert "handshake" in cost["jobs_reading"] and "warm-up" in cost["jobs_reading"]
-    # the same shape the interrupted session recorded: 1 + 2 + 1 against 8 planned
-    run = json.loads(driver.RECORD.read_text(encoding="utf-8"))
+    # the same shape the interrupted session recorded: 1 + 2 + 1 against 8 planned. Named by path,
+    # not through `driver.RECORD`: that constant follows the LIVE session and is skub2's now, so a
+    # reference to it would have gone looking for a file no run has written yet.
+    first_session = driver.REPO_ROOT / "results" / "sku_b_positions.json"
+    run = json.loads(first_session.read_text(encoding="utf-8"))
     assert run["timing"]["calls"] == 4 and run["cost"]["jobs"] == 8
 
 
 # --- the ledgered paths: driven with the network client replaced, everything else real ------------
 
 
-def ledgered(tmp_path, monkeypatch, pin, *, balance, anchor=None, fails_after=None, name="l.json"):
+def ledgered(tmp_path, monkeypatch, pin, *, balance, anchor=None, fails_after=None, name=None):
     """A run that reaches the ledger branch of `main` — the one `--smoke` deliberately skips.
 
     Only `serving.EndpointClient` and `guard.balance` are replaced; `read_ledger`, the budget
     arithmetic, the record write and the ledger append all run for real.
 
-    `name` is the anchor's file name: a `--resume` run is checked against the registration's
-    `attempts.ledger` before it reads a balance, so a resumed caller passes the registered one.
+    `name` is the anchor's file name and defaults to the LIVE session's. SPEC 3.17 (12)(b)'s
+    constants check runs on both paths now, before either reads a balance, so every caller passes
+    the name its own registration carries — `driver.RESUME_LEDGER.name` for a resumed one. A
+    harness that renamed it would be driving a session nobody registered.
     """
     reads = {"n": 0}
 
@@ -1092,7 +1213,7 @@ def ledgered(tmp_path, monkeypatch, pin, *, balance, anchor=None, fails_after=No
     monkeypatch.setenv(driver.ENDPOINT_ENV, "ep-fake")
     fake = slow_endpoint(pin, gold_seconds_per_call=2.5)
 
-    ledger = tmp_path / name
+    ledger = tmp_path / (name or driver.LEDGER.name)
     if anchor is not None:
         ledger.write_text(json.dumps({driver.anchor_key(): anchor, "runs": []}), encoding="utf-8")
     return ledger
@@ -1130,7 +1251,9 @@ def test_an_explicit_project_stop_tightens_the_cap_and_never_replaces_it(
     of the $0.35 cap disabled the in-run stop entirely — a flag that reads like a safety knob and
     could only ever loosen the one guard. Here $0.30 of the cap is already spent, so $0.05 is left
     and the run must refuse against THAT, not against the 9.99 on the command line."""
-    ledger = ledgered(tmp_path, monkeypatch, pin, balance=10.0, anchor=10.30)
+    ledger = ledgered(
+        tmp_path, monkeypatch, pin, balance=10.0, anchor=10.0 + SPENT_LEAVING_FIVE_CENTS
+    )
     record = tmp_path / "r.json"
     with pytest.raises(SystemExit, match="REFUSED before the first gold call"):
         driver.main(
@@ -1160,7 +1283,9 @@ def test_a_refusal_that_billed_a_boot_still_lands_in_the_ledger(tmp_path, monkey
 
     The control is the completed path, which always appended its own entry: one function, two
     callers, and the two notes say which exit wrote them."""
-    ledger = ledgered(tmp_path, monkeypatch, pin, balance=10.0, anchor=10.30)
+    ledger = ledgered(
+        tmp_path, monkeypatch, pin, balance=10.0, anchor=10.0 + SPENT_LEAVING_FIVE_CENTS
+    )
     with pytest.raises(SystemExit, match="REFUSED before the first gold call"):
         driver.main(
             [
@@ -1172,7 +1297,7 @@ def test_a_refusal_that_billed_a_boot_still_lands_in_the_ledger(tmp_path, monkey
         )  # fmt: skip
     refused = json.loads(ledger.read_text(encoding="utf-8"))["runs"]
     assert len(refused) == 1
-    assert refused[0]["step_spent_usd"] == pytest.approx(0.30)
+    assert refused[0]["step_spent_usd"] == pytest.approx(SPENT_LEAVING_FIVE_CENTS)
     assert "REFUSED by the (10)(a) go/no-go" in refused[0]["note"]
     assert "no attempt was consumed" in refused[0]["note"]
 
@@ -1209,7 +1334,9 @@ def test_both_exits_write_the_same_cost_fields(tmp_path, monkeypatch, pin):
     rather than a 0 that reads as "nothing was planned".
     """
     refused_path = tmp_path / "refused.json"
-    ledger = ledgered(tmp_path, monkeypatch, pin, balance=10.0, anchor=10.30)
+    ledger = ledgered(
+        tmp_path, monkeypatch, pin, balance=10.0, anchor=10.0 + SPENT_LEAVING_FIVE_CENTS
+    )
     with pytest.raises(SystemExit, match="REFUSED before the first gold call"):
         driver.main(
             [

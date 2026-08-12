@@ -166,10 +166,16 @@ def test_it_pins_the_records_it_read(projection):
 
 
 def test_it_says_what_it_does_not_configure(projection):
-    """The driver still carries v4's cap, phase and ledger. A projection that quietly moved them
-    would be a run configured by the file that prices it."""
-    assert "skub2-run's step" in projection["not_in_scope"]["the driver's constants"]
+    """The driver's constants moved at skub2-fix (Dv208). A projection that had moved them itself
+    would be a run configured by the file that prices it — so the note now says where they moved
+    and what holds them there, and the driver's own cap is checked against the registration rather
+    than against this record."""
+    driver = _script("positions_gm4_skub")
+    note = projection["not_in_scope"]["the driver's constants"]
+    assert "Dv208 paid" in note and "does not configure the run" in note
     assert projection["class"].startswith("PROJECTION")
+    assert driver.CAP_USD == projection["cap_usd"] == 0.65
+    assert "attempts.cap_usd" in projection["cap_source"]
 
 
 def test_the_shipped_projection_is_the_one_this_script_writes(projection, tmp_path):

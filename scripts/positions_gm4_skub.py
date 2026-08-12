@@ -2,10 +2,13 @@
 """The sku-b position pilot: 108 leaflet pages and 30 text rows, one attempt. (PAID — see --smoke.)
 
 SPEC 3.17 (6) buys ONE paid session at a $0.35 cap and a failed bar closes B as "instrument not
-ready" BY MEASUREMENT — no retry, no re-prompt, no second draw. 3.17 (9) fixes what serves it:
-SERVING_CONFIG=POSITIONS, the NF4 base at the pinned revision with the adapter OFF, greedy,
-batch 1, max_new_tokens 800, and a smoke call on NON-gold inputs before either leg touches gold.
-The bars, their denominators and the five ratified readings are `results/sku_pilot_prereg_v2.json`.
+ready" BY MEASUREMENT — no retry, no re-prompt, no second draw. It did: the pilot closed on two
+failed bars of three. 3.17 (13) authorises ONE re-measurement under instrument v2 and (14) fixes
+its terms, so what the constants below now name is the skub2 session — all 138 elements, a $0.65
+cap, and `results/sku_pilot_prereg_b2.json` for the bars, their denominators and the five ruled
+readings. 3.17 (9) still fixes what serves it: SERVING_CONFIG=POSITIONS, the NF4 base at the pinned
+revision with the adapter OFF, greedy, batch 1, and a smoke call on NON-gold inputs before either
+leg touches gold — at the 1200-token ceiling of (13)(a), which is why the pin moved too.
 
 What it does NOT do, and each omission is somebody's expensive evening:
 
@@ -14,13 +17,14 @@ What it does NOT do, and each omission is somebody's expensive evening:
   configuration.
 - **No retries.** A page or a row whose job errors is named in the record and never re-asked. One
   attempt is the pre-registration, not a setting.
-- **No shared ledger.** Three constants below are this contract's own — its phase name, the $0.35
-  cap SPEC 3.17 (6) wrote, and its own anchor file. `relabel.read_ledger` renders another phase's
-  briefing path inside a money record; `scripts/caption_atb_5c1.py` writes its own anchor instead
-  and this copies that pattern, not the helper.
+- **No shared ledger.** Three constants below are the live session's own — its phase name, the
+  $0.65 cap SPEC 3.17 (14)(e) wrote, and its own anchor file. `relabel.read_ledger` renders another
+  phase's briefing path inside a money record; `scripts/caption_atb_5c1.py` writes its own anchor
+  instead and this copies that pattern, not the helper. `check_the_constants_are_the_registrations`
+  holds all three against the registration the run claims, on BOTH paths.
 - **No hidden model swap.** The worker is asked what it loaded and the run stops before the first
-  paid call unless it answers exactly `results/sku_pilot_serving.json :: expected_worker`. Not one
-  value of that block is restated here.
+  paid call unless it answers exactly `results/sku_pilot_serving_v2.json :: expected_worker`. Not
+  one value of that block is restated here.
 - **No job that can out-bill the cap.** 3.17 (10)(c): the projection gate re-prices BETWEEN jobs
   and cannot see inside one, so :data:`JOB_TIMEOUT_S` is what bounds a wedged worker — sized under
   the cap on its own — and a job the CLOCK kills ends the run rather than the batch. And before any
@@ -74,12 +78,20 @@ from market_pulse.brands import watchlist_aliases  # noqa: E402
 from market_pulse.registry import load_registry  # noqa: E402
 from market_pulse.zero_shot import ApiError  # noqa: E402
 
-PHASE = "sku-b"
-CAP_USD = 0.35
-LEDGER = REPO_ROOT / "results" / "spend_sku_b.json"
-"""This contract's three constants. The cap is SPEC 3.17 (6)'s, transcribed rather than chosen: it
-buys the whole two-leg pilot and nothing else. One anchor key, written before the first job, and it
-may never be regenerated — delete it and the counter silently restarts at today's balance."""
+PHASE = "skub2"
+CAP_USD = 0.65
+LEDGER = REPO_ROOT / "results" / "spend_skub2.json"
+"""The LIVE session's three constants — SPEC 3.17 (14)(e)'s cap, its phase key and its own anchor.
+
+They were `sku-b` / $0.35 / `spend_sku_b.json` for the first session and are moved here rather than
+added beside: the first session is closed, its ledger measures a balance from before its own
+$0.1965, and a run started on it would enforce a number nobody registered. One anchor key, written
+before the first job, and it may never be regenerated — delete it and the counter silently restarts
+at today's balance.
+
+This is Dv208 paid, and it is paid in the PREP rather than in the run: the three move together with
+:data:`PREREG`, and `check_the_constants_are_the_registrations` is what makes half of them
+impossible. The `--resume` triple below is v4's and stays v4's — that session completed."""
 
 RESUME_PHASE = "sku-b-v4"
 RESUME_CAP_USD = 0.65
@@ -98,13 +110,28 @@ chosen."""
 
 REFERENCE = REPO_ROOT / "results" / "sku_reference_leaflet.json"
 MANIFEST = REPO_ROOT / "results" / "sku_text_pack_manifest.json"
-PREREG = REPO_ROOT / "results" / "sku_pilot_prereg_v2.json"
+PREREG = REPO_ROOT / "results" / "sku_pilot_prereg_b2.json"
 PREREG_RESUME = REPO_ROOT / "results" / "sku_pilot_prereg_v4.json"
-PIN = REPO_ROOT / "results" / "sku_pilot_serving.json"
+PIN = REPO_ROOT / "results" / "sku_pilot_serving_v2.json"
+PIN_RESUME = REPO_ROOT / "results" / "sku_pilot_serving.json"
+"""Serving pin v2 for the live session, v1's for `--resume`, and this one is not paperwork:
+`assert_serving` compares EVERY field of `expected_worker`, `max_new_tokens` among them. v1's pin
+says 800 and instrument v2 serves 1200, so a run left on the old pin refuses at the identity stop —
+after the boot has been billed, which is the one refusal SPEC 3.17 (12)(b) prices. It moves with the
+other constants for that reason and not for tidiness.
+
+Two constants and a mode-dependent default rather than one that follows the cap, because the
+resumed session is pinned the other way round: `sku_pilot_prereg_v4.json :: resume.bought_already`
+holds v1's pin by sha and (11)(b) refuses a resumed half served under a different configuration."""
+
 REGISTRY = REPO_ROOT / "config" / "registry.yaml"
 
-DUMP = REPO_ROOT / "results" / "sku_b_positions.jsonl"
-RECORD = REPO_ROOT / "results" / "sku_b_positions.json"
+DUMP = REPO_ROOT / "results" / "sku_b_positions_skub2.jsonl"
+RECORD = REPO_ROOT / "results" / "sku_b_positions_skub2.json"
+"""The skub2 pair. `sku_b_positions.json` and its dump are the FIRST session's, they are pinned in
+`sku_pilot_prereg_v4.json :: resume.bought_already`, and the overwrite guard below would have
+stopped a run on them at $0 — with a message about a paid artifact rather than about a
+registration. Named for their own session instead, the same way the v4 pair is."""
 
 RESUME_DUMP = REPO_ROOT / "results" / "sku_b_positions_v4.jsonl"
 RESUME_RECORD = REPO_ROOT / "results" / "sku_b_positions_v4.json"
@@ -445,6 +472,35 @@ def check_the_constants_are_the_registrations(
             " each registered attempt runs under its own fresh anchor and its own cap/ledger/phase"
             " constants, SET TOGETHER. Half of them is how a refused session's spend gets charged"
             " to the next attempt's cap without anyone deciding it."
+        )
+
+
+def check_the_serving_pin_is_the_registered_one(prereg: dict, pin: Path) -> None:
+    """The instrument half of the same decision, for a registration that names its serving pin.
+
+    `resume_plan` already refuses a moved pin on the `--resume` path, because (11)(b) freezes the
+    instrument across a resumed population. The non-resume path had no equivalent — and B′ is the
+    first registration on it that names an instrument out loud, in
+    `instruments.instrument_v2.serving_pin`. Without this the pin is a module constant the
+    registration cannot see, and the failure it allows is the expensive one: `assert_serving`
+    compares `max_new_tokens`, so the wrong pin refuses AFTER the boot is billed.
+
+    Skipped, not failed, for a registration with no such block: v1–v4 pin their serving config
+    elsewhere or not at all, and inventing a location for them here would be re-registering them.
+    """
+    registered = prereg.get("instruments", {}).get("instrument_v2", {}).get("serving_pin")
+    if not registered:
+        return
+    on_disk = sha256(pin.read_bytes()).hexdigest()
+    # ponytail: by FILE NAME and by sha, not by full path — the same reading
+    # `check_the_constants_are_the_registrations` takes of the ledger. The sha is the real check;
+    # the name is what makes the message say which pin was meant.
+    if pin.name != Path(registered["path"]).name or on_disk != registered["sha256"]:
+        raise SystemExit(
+            f"the run would serve against {pin.name} ({on_disk[:16]}…) and the registration names"
+            f" {registered['path']} ({registered['sha256'][:16]}…). The pin is what"
+            " `assert_serving` holds the worker to, `max_new_tokens` included — a mismatch here is"
+            " a refusal after the boot has been billed, not a paperwork error."
         )
 
 
@@ -1124,7 +1180,7 @@ def main(argv: list[str] | None = None, client=None) -> int:
     parser.add_argument("--manifest", type=Path, default=MANIFEST)
     parser.add_argument("--pack", type=Path, default=None, help="default: the manifest's own pack")
     parser.add_argument("--prereg", type=Path, default=None, help=f"default: {rel(PREREG)}")
-    parser.add_argument("--pin", type=Path, default=PIN)
+    parser.add_argument("--pin", type=Path, default=None, help=f"default: {rel(PIN)}")
     parser.add_argument("--ledger", type=Path, default=None, help=f"default: {rel(LEDGER)}")
     parser.add_argument(
         "--resume",
@@ -1148,12 +1204,15 @@ def main(argv: list[str] | None = None, client=None) -> int:
     args = parser.parse_args(argv)
 
     # Every default follows the mode, and each one is a way a resumed session could quietly be the
-    # first one again: v2's registration has no resume block and a $0.35 cap, the first session's
-    # anchor measures a balance from before its own $0.1965, and its artifacts are the evidence the
-    # registration pins. A flag that changed the population and left the money and the paperwork
-    # pointing at the interrupted run would enforce the wrong cap over the right pages.
+    # first one again: v4's registration has a resume block and its own anchor, the skub2 anchor
+    # measures a balance from before nothing at all, and each session's artifacts are the evidence
+    # the other's registration pins. A flag that changed the population and left the money and the
+    # paperwork pointing at the other run would enforce the wrong cap over the right pages. `--pin`
+    # is in this list for the same reason and one more: the two pins differ on `max_new_tokens`, so
+    # the wrong one is not a paperwork error, it is a refusal after the boot has been billed.
     args.prereg = args.prereg or (PREREG_RESUME if args.resume else PREREG)
     args.ledger = args.ledger or (RESUME_LEDGER if args.resume else LEDGER)
+    args.pin = args.pin or (PIN_RESUME if args.resume else PIN)
     phase = RESUME_PHASE if args.resume else PHASE
     cap = RESUME_CAP_USD if args.resume else CAP_USD
 
@@ -1179,11 +1238,16 @@ def main(argv: list[str] | None = None, client=None) -> int:
     plan = None
     if args.resume:
         # `resume_plan` first, because it is the one that recognises a registration with no resume
-        # block at all — the constants below would report three missing fields for what is really
-        # one wrong file. Then SPEC 3.17 (12)(b)'s three, before anything reads a balance and on the
-        # `--dry-run` path too.
+        # block at all — the constants check would report three missing fields for what is really
+        # one wrong file.
         plan = resume_plan(prereg, sha256(args.pin.read_bytes()).hexdigest(), args.root)
-        check_the_constants_are_the_registrations(prereg, phase, cap, args.ledger)
+    # SPEC 3.17 (12)(b)'s three, before anything reads a balance and on the `--dry-run` path too.
+    # OUTSIDE the resume branch, and that is the whole of it: the guard was written for the v4
+    # session, which resumed, and skub2 does not — B′ has no resume block and buys all 138. Left
+    # where it was, the one path that now carries a fresh cap, a fresh anchor and a fresh
+    # registration would be the one path nothing checked.
+    check_the_constants_are_the_registrations(prereg, phase, cap, args.ledger)
+    check_the_serving_pin_is_the_registered_one(prereg, args.pin)
 
     page_items = pages(reference, args.root) if args.leg in ("page", "both") else []
     pack_path = args.pack or (args.root / manifest["pack"])

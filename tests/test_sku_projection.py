@@ -113,9 +113,13 @@ def test_the_uplift_is_an_assumption_and_the_total_is_reported_without_it(projec
 
 
 def test_every_corner_is_priced_against_the_cap(projection):
+    """$0.35, transcribed in the producer for the same reason the 800 ceiling is: SPEC 3.17 (14)(e)
+    moved `positions_gm4_skub.CAP_USD` to $0.65 for skub2, and a sealed projection that followed
+    the live constant would re-price itself into a comfortable fit against a cap it never had."""
     driver = _script("positions_gm4_skub")
+    assert writer.CAP_USD == 0.35 != driver.CAP_USD
     for name, cell in projection["corners"].items():
-        assert cell["cap_usd"] == driver.CAP_USD == 0.35, name
+        assert cell["cap_usd"] == writer.CAP_USD == 0.35, name
         assert cell["headroom_usd"] == pytest.approx(cell["cap_usd"] - cell["total_usd"], abs=1e-4)
         assert cell["fits"] == (cell["total_usd"] <= cell["cap_usd"])
         assert cell["total_usd"] == pytest.approx(

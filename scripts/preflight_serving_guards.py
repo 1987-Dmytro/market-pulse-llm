@@ -333,7 +333,10 @@ def resume_guards() -> dict:
     print("\n--- SPEC 3.17 (11)/(12): the resume ---")
     checks: dict[str, bool] = {}
     prereg = json.loads(driver.PREREG_RESUME.read_text(encoding="utf-8"))
-    pin_sha = hashlib.sha256(driver.PIN.read_bytes()).hexdigest()
+    # `driver.PIN_RESUME` and not `driver.PIN`: SPEC 3.17 (13)(a) moved the live pin to serving v2
+    # at the 1200 ceiling, and (11)(b) freezes the RESUMED session's instrument at v1's. Reading
+    # the live one here would make every check below fail on the pin before reaching its subject.
+    pin_sha = hashlib.sha256(driver.PIN_RESUME.read_bytes()).hexdigest()
 
     def moved(mutate) -> dict:
         """The registration with one thing moved. The mutation gets the WHOLE record: (12) put a
@@ -414,6 +417,50 @@ def resume_guards() -> dict:
     )
     print(f"    read_ledger, for contrast  {how}")
     checks["read_ledger refuses the v3 anchor too, and for its own reason"] = also
+
+    # 9c — the LIVE session, and the reason it is a separate block rather than a second argument
+    # above: `check_the_constants_are_the_registrations` was called inside `if args.resume:`, so
+    # nothing had ever driven it on the path skub2 takes. B′ has no resume block, so it is the only
+    # path skub2 CAN take. Same three constants, its own registration, its own old sets to refuse.
+    print("\n9c. the live session         skub2 against results/sku_pilot_prereg_b2.json")
+    live = json.loads(driver.PREREG.read_text(encoding="utf-8"))
+    signed = live["attempts"]
+    blocked, how = refuses(
+        driver.check_the_constants_are_the_registrations,
+        live,
+        driver.PHASE,
+        driver.CAP_USD,
+        driver.LEDGER,
+    )
+    print(
+        f"    the registered set         {how}   <- the control"
+        f" (${signed['cap_usd']:.2f} · {signed['phase']} · {signed['ledger']})"
+    )
+    checks["the control: skub2's registered cap/ledger/phase are accepted together"] = not blocked
+    for label, args in (
+        (
+            "the FIRST session's ledger",
+            (driver.PHASE, driver.CAP_USD, REPO_ROOT / "results" / "spend_sku_b.json"),
+        ),
+        ("(13)(d)'s superseded cap", (driver.PHASE, 0.40, driver.LEDGER)),
+        ("the FIRST session's phase", ("sku-b", driver.CAP_USD, driver.LEDGER)),
+    ):
+        refused, how = refuses(driver.check_the_constants_are_the_registrations, live, *args)
+        print(f"    {label:<26} {how}")
+        checks[f"the live run refuses {label}"] = refused
+
+    print("\n9d. the registered instrument the serving pin B′ names, by name and by sha")
+    blocked, how = refuses(driver.check_the_serving_pin_is_the_registered_one, live, driver.PIN)
+    print(f"    serving pin v2             {how}   <- the control")
+    checks["the control: the registered serving pin is accepted"] = not blocked
+    refused, how = refuses(
+        driver.check_the_serving_pin_is_the_registered_one, live, driver.PIN_RESUME
+    )
+    print(f"    v1's pin (800 ceiling)     {how}")
+    checks["the live run refuses v1's serving pin, before the boot is billed"] = refused
+    blocked, how = refuses(driver.check_the_serving_pin_is_the_registered_one, prereg, driver.PIN)
+    print(f"    v4, which names no pin     {how}   <- skipped, not failed")
+    checks["a registration that names no serving pin is skipped rather than failed"] = not blocked
 
     bought, fresh = already["asked"][0], already["unbought"][0]
     asked = set(already["asked"])

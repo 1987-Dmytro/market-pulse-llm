@@ -276,10 +276,11 @@ def build(out: Path) -> dict:
         },
         "not_in_scope": {
             "the driver's constants": (
-                "scripts/positions_gm4_skub.py still carries v4's CAP_USD, PHASE and LEDGER. Moving"
-                " them to the B′ three is skub2-run's step and is guarded by the driver's own"
-                " refusal on a mismatched registration — this file prices the run, it does not"
-                " configure it"
+                "scripts/positions_gm4_skub.py now carries skub2's CAP_USD, PHASE, LEDGER, PREREG"
+                " and serving PIN — moved together at skub2-fix, which is Dv208 paid. This file"
+                " still does not configure the run: it reads `write_sku_prereg_b2.CAP_USD` to know"
+                " what line to price against, and the driver is held to the same number by"
+                " `check_the_constants_are_the_registrations` against the registration itself"
             ),
         },
         "git": provenance.git_state(out),

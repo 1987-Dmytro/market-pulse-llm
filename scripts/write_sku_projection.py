@@ -53,6 +53,16 @@ COLD_START_USD_MEASURED = 0.0563
 projection.per_slice[].cold_start_usd_measured_here` (183.58 s). Carried BESIDE the pre-registered
 figure and never substituted into it — a pre-registration is a file, not a preference."""
 
+CAP_USD = 0.35
+"""The cap THIS projection was written against — SPEC 3.17 (6)'s, transcribed rather than read off
+the driver.
+
+Same reason as the ceiling below, and it came due the same way. `positions_gm4_skub.CAP_USD` was
+this number while the first session was the live one; SPEC 3.17 (14)(e) moved it to $0.65 for
+skub2, and a sealed projection that followed the live constant would re-price itself into a
+comfortable fit against a cap nobody had when it was written. The first session's own corners
+were computed against $0.35 and its go/no-go gate read them; that is what this file records."""
+
 CAPTION_CEILING = local_llm.CAPTION_MAX_NEW_TOKENS
 POSITIONS_CEILING = 800
 """The ceiling THIS projection was written under, transcribed rather than read off the code.
@@ -147,10 +157,10 @@ def build(out: Path) -> dict:
             "warmup_usd": round(warm_usd, 4),
             "idle_tail_usd": round(idle_usd, 4),
             "total_usd": round(total, 4),
-            "cap_usd": driver.CAP_USD,
-            "headroom_usd": round(driver.CAP_USD - total, 4),
-            "headroom_share_of_cap": round((driver.CAP_USD - total) / driver.CAP_USD, 4),
-            "fits": total <= driver.CAP_USD,
+            "cap_usd": CAP_USD,
+            "headroom_usd": round(CAP_USD - total, 4),
+            "headroom_share_of_cap": round((CAP_USD - total) / CAP_USD, 4),
+            "fits": total <= CAP_USD,
         }
 
     corners = {
@@ -279,7 +289,7 @@ def build(out: Path) -> dict:
         # is a reading against the CAP and not against a bar, and the guard is right to be narrow —
         # the fix is the field's name, never the gate.
         "against_the_cap": {
-            "cap_usd": driver.CAP_USD,
+            "cap_usd": CAP_USD,
             "lowest_usd": best["total_usd"],
             "highest_usd": worst["total_usd"],
             "fits_at_every_corner": all(cell["fits"] for cell in corners.values()),
@@ -287,7 +297,7 @@ def build(out: Path) -> dict:
                 name for name, cell in corners.items() if not cell["fits"]
             ),
             "reading": (
-                f"the pilot fits the ${driver.CAP_USD:.2f} cap comfortably at the lower corners"
+                f"the pilot fits the ${CAP_USD:.2f} cap comfortably at the lower corners"
                 f" (${best['total_usd']:.4f}, {best['headroom_share_of_cap']:.0%} headroom) and"
                 f" is OVER IT AT BOTH STATED ONES (${worst['total_usd']:.4f} at worst) — at the"
                 " stated decode uplift the pilot exceeds the cap on either reading of the cold"
