@@ -197,6 +197,18 @@ def test_main_writes_the_real_read_over_the_sealed_dump(tmp_path, capsys):
     assert all(key["printed_old"] is not None for key in written["keys"])
     assert written["diagnosis"] == applier.DIAGNOSIS
     assert "0.3279" in capsys.readouterr().out
+    # this read states one set of counts and extends nothing — both fields exist for B′'s read,
+    # and a v4 record that acquired either would be claiming something about itself that is false
+    assert written["checksum_deviation"] is None and "extends" not in written
+
+
+def test_the_default_read_is_this_modules_own_constants():
+    """`main` takes the read as a parameter so a second dictation can reuse these guards. The
+    default has to stay this file's, or B′'s table would be applied by running the v4 script."""
+    assert applier.THIS.dictated is applier.DICTATED
+    assert applier.THIS.expected is applier.EXPECTED
+    assert (applier.THIS.record, applier.THIS.out) == (applier.RECORD, applier.OUT)
+    assert (applier.THIS.stated, applier.THIS.prior) == (None, None)
 
 
 def test_the_contract_the_record_names_is_in_the_tree():

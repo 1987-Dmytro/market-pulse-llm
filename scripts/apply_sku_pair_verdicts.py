@@ -28,6 +28,10 @@ What it guards, in the order a defect would arrive:
 
 Writes `results/sku_b_pair_verdicts.json`, which `scripts/sku_bar_verdicts.py` consumes to score
 bar 2. Nothing else on disk is touched: the dump, the run record and the registration are immutable.
+
+A second read exists — B′'s 80 pairs, `scripts/apply_sku_pair_verdicts_skub2.py`. It carries its own
+dictation and reaches the guards above through :class:`Read` rather than copying them: two matchers
+would be two rules, and the one that is not exercised daily is the one that rots.
 """
 
 import argparse
@@ -35,6 +39,7 @@ import hashlib
 import json
 import sys
 from pathlib import Path
+from typing import NamedTuple
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))
@@ -113,6 +118,44 @@ DIAGNOSIS = (
     " to .0, or digit-shifted), and depth() is wrong wherever the old price is."
 )
 """The team lead's diagnosis line, carried verbatim into this record and into the ADR."""
+
+PHASE = "sku-b — bar 2, the team lead's read applied to the dump"
+
+
+class Read(NamedTuple):
+    """One team-lead read: what was dictated, what it states about itself, and where it lands.
+
+    Everything that changes between two reads of the same kind and nothing that does not — the
+    guards, the join and the record's shape are :func:`main`'s, so a second read cannot acquire a
+    second set of rules by being written in a second file.
+    """
+
+    phase: str
+    contract: str
+    scope: str
+    dictated: tuple
+    expected: dict
+    diagnosis: str
+    record: Path
+    out: Path
+    stated: dict | None = None
+    """The contract's own checksum line, verbatim, when it differs from `expected`."""
+    stated_why: str | None = None
+    """Why the asserted expectation departs from it — see :func:`deviation`."""
+    prior: Path | None = None
+    """A sealed earlier read this one extends, checked and split by :func:`carried_forward`."""
+
+
+THIS = Read(
+    phase=PHASE,
+    contract=CONTRACT,
+    scope=READ_SCOPE,
+    dictated=DICTATED,
+    expected=EXPECTED,
+    diagnosis=DIAGNOSIS,
+    record=RECORD,
+    out=OUT,
+)
 
 
 def rel(path: Path) -> str:
@@ -198,33 +241,114 @@ def match(dictated, pairs: list[dict]) -> list[dict]:
     return keys
 
 
-def checksums(keys: list[dict], expected: dict) -> dict:
-    """The team lead's stated counts against the joined table. Every miss is a refusal."""
+def tally(keys: list[dict]) -> dict:
+    """The four counts and the share, straight off a joined table. Asserts nothing."""
     found = {
         "keys": len(keys),
         "rows": sum(key["n"] for key in keys),
         "correct_rows": sum(key["n"] for key in keys if key["verdict"] == "correct"),
         "wrong_rows": sum(key["n"] for key in keys if key["verdict"] == "wrong"),
     }
+    accuracy = found["correct_rows"] / found["rows"] if found["rows"] else 0.0
+    return {**found, "accuracy": accuracy, "accuracy_4dp": round(accuracy, 4)}
+
+
+def checksums(keys: list[dict], expected: dict) -> dict:
+    """The team lead's stated counts against the joined table. Every miss is a refusal."""
+    found = tally(keys)
     for what in ("keys", "rows", "correct_rows", "wrong_rows"):
         if found[what] != expected[what]:
             refuse(
                 f"the read states {what} = {expected[what]} and the table joins to {found[what]}"
             )
-    accuracy = found["correct_rows"] / found["rows"]
-    if round(accuracy, 4) != expected["accuracy_4dp"]:
+    if found["accuracy_4dp"] != expected["accuracy_4dp"]:
         refuse(
-            f"{found['correct_rows']}/{found['rows']} rounds to {round(accuracy, 4)} and the read"
-            f" states {expected['accuracy_4dp']}"
+            f"{found['correct_rows']}/{found['rows']} rounds to {found['accuracy_4dp']} and the"
+            f" read states {expected['accuracy_4dp']}"
         )
-    return {**found, "accuracy": accuracy, "accuracy_4dp": round(accuracy, 4)}
+    return found
 
 
-def main(argv: list[str] | None = None) -> int:
+def deviation(read: Read) -> dict | None:
+    """Where the asserted expectation departs from the contract's own checksum line, field by field.
+
+    A read whose `stated` is None deviates nowhere and this is None. Where it is set, the record
+    carries BOTH numbers and names each field that moved: an executor who quietly retypes a
+    team-lead checksum to make the applier run has deleted the only thing standing between a
+    mistyped dictation and a verdict record, and the difference between that and this is that this
+    one is on the page.
+    """
+    if read.stated is None:
+        return None
+    moved = {
+        field: {"contract": read.stated[field], "asserted": read.expected[field]}
+        for field in read.stated
+        if read.stated[field] != read.expected[field]
+    }
+    if not moved:
+        refuse(
+            "the read carries a separate `stated` checksum line that is identical to `expected` —"
+            " a deviation nobody can see is not a deviation, and two names for one number drift"
+        )
+    return {"contract_checksums": read.stated, "fields": moved, "why": read.stated_why}
+
+
+def carried_forward(keys: list[dict], prior_path: Path) -> dict:
+    """This read against the sealed read it extends: the shared keys checked, the split reported.
+
+    A contract that says "same reader, same pages, the printed values already documented" is making
+    a claim about a file on disk, so it is checked rather than repeated. A shared key whose verdict
+    or `printed_old` moved is refused — a re-read that quietly flips an adjudicated pair re-scores a
+    sample that already has a result, which `attempts.on_failure` forbids in as many words.
+
+    `n` is allowed to differ and is reported: it counts the rows of a DUMP, and two instruments can
+    extract one physical price box a different number of times. What may not differ is the verdict.
+    """
+    prior = json.loads(prior_path.read_text(encoding="utf-8"))
+    before = {(key["file"], key["price_promo"], key["price_old"]): key for key in prior["keys"]}
+    shared, fresh, moved_n = [], [], []
+    for key in keys:
+        was = before.get((key["file"], key["price_promo"], key["price_old"]))
+        if was is None:
+            fresh.append(key)
+            continue
+        for field in ("verdict", "printed_old"):
+            if was[field] != key[field]:
+                refuse(
+                    f"{key['file'].rsplit('/', 1)[-1]} {key['price_promo']}/{key['price_old']}:"
+                    f" {rel(prior_path)} reads {field} {was[field]!r} and this read says"
+                    f" {key[field]!r} — a pair that already has a verdict is not re-adjudicated"
+                )
+        if was["n"] != key["n"]:
+            moved_n.append({"key": key["file"], "prior_n": was["n"], "n": key["n"]})
+        shared.append(key)
+    by_page: dict[str, int] = {}
+    for key in fresh:
+        page = key["file"].rsplit("/", 1)[-1]
+        by_page[page] = by_page.get(page, 0) + key["n"]
+    return {
+        "prior": {
+            "path": rel(prior_path),
+            "sha256": sha256_of(prior_path),
+            "read_on": prior["read_on"],
+            "checksums": prior["checksums"],
+        },
+        "shared": tally(shared),
+        "new": {**tally(fresh), "rows_by_page": dict(sorted(by_page.items()))},
+        "rows_whose_n_moved": moved_n,
+        "why": (
+            "the shared keys are the prior read's verdicts, unchanged and re-asserted against this"
+            " dump; the new ones are what this instrument put in front of the reader that the last"
+            " one did not. The two shares are what moved the bar, and neither is a re-adjudication"
+        ),
+    }
+
+
+def main(argv: list[str] | None = None, read: Read = THIS) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--record", type=Path, default=RECORD)
+    parser.add_argument("--record", type=Path, default=read.record)
     parser.add_argument("--dump", type=Path, help="default: the record's own dump path")
-    parser.add_argument("--out", type=Path, default=OUT)
+    parser.add_argument("--out", type=Path, default=read.out)
     args = parser.parse_args(argv)
 
     record = json.loads(args.record.read_text(encoding="utf-8"))
@@ -238,12 +362,12 @@ def main(argv: list[str] | None = None) -> int:
 
     dump = [json.loads(line) for line in dump_path.read_text(encoding="utf-8").splitlines() if line]
     pairs = pair_rows(dump)
-    keys = match(DICTATED, pairs)
-    sums = checksums(keys, EXPECTED)
+    keys = match(read.dictated, pairs)
+    sums = checksums(keys, read.expected)
 
     out = {
-        "phase": "sku-b — bar 2, the team lead's read applied to the dump",
-        "contract": CONTRACT,
+        "phase": read.phase,
+        "contract": read.contract,
         "class": (
             "TRANSCRIPTION. Every verdict here was read by the team lead against the page image;"
             " this file joins the dictation to the dump's rows and refuses anything that does not"
@@ -251,19 +375,22 @@ def main(argv: list[str] | None = None) -> int:
         ),
         "authority": (
             f"SPEC §10 — the executor never scores its own sample. Read by {READ_BY} on {READ_ON},"
-            f" {READ_SCOPE}"
+            f" {read.scope}"
         ),
         "read_by": READ_BY,
         "read_on": READ_ON,
-        "read_scope": READ_SCOPE,
+        "read_scope": read.scope,
         "record": {"path": rel(args.record), "sha256": sha256_of(args.record)},
         "dump": {"path": rel(dump_path), "sha256": dump_sha, "pair_rows": len(pairs)},
         "key": "(file, price_promo, price_old); n = the dump rows sharing one physical price box",
         "checksums": sums,
-        "expected": EXPECTED,
-        "diagnosis": DIAGNOSIS,
+        "expected": read.expected,
+        "checksum_deviation": deviation(read),
+        "diagnosis": read.diagnosis,
         "keys": keys,
     }
+    if read.prior is not None:
+        out["extends"] = carried_forward(keys, read.prior)
     out["git"] = provenance.git_state(args.out)
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(out, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
@@ -273,7 +400,16 @@ def main(argv: list[str] | None = None) -> int:
         f"  correct {sums['correct_rows']} · wrong {sums['wrong_rows']} ·"
         f" accuracy {sums['accuracy_4dp']:.4f} ({sums['correct_rows']}/{sums['rows']})"
     )
-    print(f"  {DIAGNOSIS}")
+    if out.get("extends"):
+        for what in ("shared", "new"):
+            part = out["extends"][what]
+            print(
+                f"  {what:7s} {part['keys']:2d} keys · {part['rows']:2d} rows ·"
+                f" {part['correct_rows']}/{part['rows']} = {part['accuracy_4dp']:.4f}"
+            )
+    if out["checksum_deviation"]:
+        print(f"  checksum deviation: {out['checksum_deviation']['fields']}")
+    print(f"  {read.diagnosis}")
     print(f"wrote {rel(args.out)}")
     return 0
 
