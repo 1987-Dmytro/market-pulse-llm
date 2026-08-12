@@ -571,11 +571,10 @@ control for the checker's own bias.
 | 8 | `483e4da` | this table's rows 6–7 | 4 hits for the two rows above | 1824 passed, 2 skipped |
 
 Restored at `e579382` for the first pass with the same 3 dirty vault paths; rows 6–8 were checked out
-afterwards on a clean tree, which is why they need no stash. **The last row is always one commit
-behind and always will be** — a report cannot check out the commit that carries it, so commit 9 (the
-bar-1 correction below) is stated here rather than tabled, and the contract pre-authorises the extra
-commit (the Dv175 reading). Commit 9 changes three prose files and no code; the suite it would run is
-`make check` under Verify above, run on that working tree before it was committed.
+afterwards on a clean tree, which is why they need no stash. **The table stops one commit short of
+itself and always will** — a report cannot check out the commit that carries it, and the contract
+pre-authorises the extra commit (the Dv175 reading). Commits 9–11 are in the commits table below:
+they change prose only, no code, and each ran `make check` on its working tree before it landed.
 
 The parent's 1823 is the baseline that says the growth is this phase's, and the one row it grows by
 is gate 0.5's provenance test.
@@ -662,10 +661,14 @@ from: the go/no-go's estimator is unbiased for the probe and biased against the 
 | 6 | `8107ceb` | `docs(report)`: sku-b-v4-run |
 | 7 | `8a2c28f` | `chore(vault)`: the sku-b-v4-run tail — the day's log, hot.md, the index |
 | 8 | `483e4da` | `docs(report)`: sku-b-v4-run — the checkout table's own tail |
-| 9 | — | `docs(report)`: sku-b-v4-run — bar 1's false-positive count, factored from the record |
+| 9 | `fbaae0d` | `docs(report)`: sku-b-v4-run — bar 1's false-positive count, factored from the record |
+| 10 | `da5791a` | `docs(report)`: sku-b-v4-run — commit 8's row, and the rule that ends the regress |
+| 11 | — | `docs(report)`: sku-b-v4-run — the last row, which is this one |
 
-Nine commits, and the last row can never carry its own sha. The vault tail is commit 7 rather than
-the last, for the reason Dv175 gave in the previous report and this contract pre-authorises: the
-checkout table can only record the suite of the commit that carries the report after that commit
-exists. Commit 9 is a correction, not a tail — `micro 0.4727` factors as 26/55 and `precision 0.9286`
-as 26/28, so bar 1's false-positive count is two, and the first draft of this report said one.
+Eleven commits, and **the last row can never carry its own sha** — a report cannot name the commit
+that carries it, which is why row 11 is blank rather than wrong. Rows 9–11 change prose only, no
+code; the suite on each of their working trees is the `make check` under Verify above, run before
+each was committed. The vault tail is commit 7 rather than the last, for the reason Dv175 gave in the
+previous report and this contract pre-authorises. Commit 9 is a correction, not a tail — `micro
+0.4727` factors as 26/55 and `precision 0.9286` as 26/28, so bar 1's false-positive count is two, and
+the first draft of this report said one.
