@@ -1,0 +1,144 @@
+{
+  "generated_at": "2026-08-12T13:20:23+00:00",
+  "phase": "skub2 — what the re-measurement costs against its $0.40 cap",
+  "written_by": "skub2-prep (executor, $0), docs/PROMPT-skub2-prep.md deliverable 5",
+  "authority": "docs/SPEC.md amendment 3.17 (10)(a) and (13)(d)",
+  "class": "PROJECTION. Every rate is MEASURED — this is the first sku-b projection with a completed session behind it — and the two things that are not measured, the boot spread and what the 800 → 1200 ceiling does to a decode, are carried as corners rather than averaged into one number. Nothing here authorises a run: the (10)(a) gate re-prices from the session's own warm-up before the first gold call",
+  "population": {
+    "pages": 108,
+    "text_rows": 30,
+    "elements": 138,
+    "reading": "all 138, per SPEC 3.17 (13)(d) — a re-measurement of instrument v2 cannot reuse instrument v1's answers, so the 17 the first session bought are re-asked"
+  },
+  "cap_usd": 0.4,
+  "cap_source": "results/sku_pilot_prereg_b2.json :: attempts.cap_usd (SPEC 3.17 (13)(d))",
+  "rate_usd_per_second": 0.00030669,
+  "rate_source": "results/srv2d_cost.json :: rate.usd_per_second",
+  "marginals": {
+    "page_seconds_per_call": {
+      "value": 4.0161,
+      "n": 91,
+      "source": "results/sku_b_positions_v4.json :: projection.per_gate[-1].marginal_seconds_per_call",
+      "what_it_is": "the last in-run gate of the completed v4 session, over 91 leaflet pages of the registered gold population. This is the number the cap stop itself acted on"
+    },
+    "text_seconds_per_row": {
+      "value": 2.8188,
+      "n": 30,
+      "source": "results/sku_b_positions_v4.json :: timing.worker_seconds less the page leg — see text_marginal",
+      "what_it_is": "the 30 adjudicated rows, derived from the same record's billed seconds. Short answers on short inputs: a third of a page's cost and nowhere near any ceiling"
+    },
+    "boot_seconds": {
+      "low": 205.518,
+      "high": 402.586,
+      "source": "results/sku_b_positions_v4.json :: projection.boot_seconds (low) and results/sku_b_positions_v3.json :: projection.boot_seconds (high)",
+      "what_it_is": "a RANGE and not an estimate: the same serving configuration on the same volume booted in 205.518 s once and 402.586 s once, a 1.96x spread with n=1 on each side. Both are corners; neither is averaged away"
+    },
+    "warmup_seconds": {
+      "value": 18.398,
+      "source": "results/sku_b_positions_v4.json :: projection.warmup_seconds",
+      "what_it_is": "the two non-gold calls of SPEC 3.17 (9), billed before the first gold one"
+    },
+    "idle_tail_seconds": {
+      "value": 60.0,
+      "source": "scripts/positions_gm4_skub.IDLE_TAIL_SECONDS",
+      "what_it_is": "what the worker bills after the last job, inside every projection below"
+    }
+  },
+  "decode_uplift": {
+    "none": {
+      "factor": 1.0,
+      "reading": "the ceiling binds only the replies that REACH it. v4 recorded exactly one page refused as `malformed JSON` — a reply that used its whole budget — so if that page is the only one that was truncated, the measured rates stand"
+    },
+    "the whole ceiling": {
+      "factor": 1.5,
+      "reading": "every call decodes to the new ceiling: 1200 / 800. A hard UPPER bound rather than a guess — no reply can generate past the ceiling — and the reason 4.0161 s/page is quoted as a floor at 1200 rather than as a rate"
+    }
+  },
+  "drift": {
+    "factor": 0.03,
+    "reading": "a contract term carried from the v4 projection, not a measurement. Applied to the whole billed second count"
+  },
+  "corners": {
+    "boot low · decode none": {
+      "boot_seconds": 205.518,
+      "decode_uplift": 1.0,
+      "warmup_seconds": 18.398,
+      "page_leg_seconds": 433.739,
+      "text_leg_seconds": 84.564,
+      "idle_tail_seconds": 60.0,
+      "billed_seconds": 802.219,
+      "usd": 0.246,
+      "usd_with_drift": 0.2534
+    },
+    "boot low · decode the whole ceiling": {
+      "boot_seconds": 205.518,
+      "decode_uplift": 1.5,
+      "warmup_seconds": 27.597,
+      "page_leg_seconds": 650.608,
+      "text_leg_seconds": 126.846,
+      "idle_tail_seconds": 60.0,
+      "billed_seconds": 1070.569,
+      "usd": 0.3283,
+      "usd_with_drift": 0.3382
+    },
+    "boot high · decode none": {
+      "boot_seconds": 402.586,
+      "decode_uplift": 1.0,
+      "warmup_seconds": 18.398,
+      "page_leg_seconds": 433.739,
+      "text_leg_seconds": 84.564,
+      "idle_tail_seconds": 60.0,
+      "billed_seconds": 999.287,
+      "usd": 0.3065,
+      "usd_with_drift": 0.3157
+    },
+    "boot high · decode the whole ceiling": {
+      "boot_seconds": 402.586,
+      "decode_uplift": 1.5,
+      "warmup_seconds": 27.597,
+      "page_leg_seconds": 650.608,
+      "text_leg_seconds": 126.846,
+      "idle_tail_seconds": 60.0,
+      "billed_seconds": 1267.637,
+      "usd": 0.3888,
+      "usd_with_drift": 0.4004
+    }
+  },
+  "against_the_cap": {
+    "cheapest_usd": 0.2534,
+    "dearest_usd": 0.4004,
+    "cap_usd": 0.4,
+    "fits": false,
+    "headroom_usd": -0.0004,
+    "dearest_usd_without_drift": 0.3888,
+    "fits_without_drift": true,
+    "headroom_without_drift_usd": 0.0112,
+    "reading": "the dearest corner is boot-high with every call decoding to the new ceiling, and it is a HARD upper bound rather than a pessimistic guess: no reply can generate past the ceiling and no boot longer than the longest one ever measured on this configuration is in evidence. It overshoots the cap by four hundredths of a cent — and only once the 3% drift term is applied ON TOP of that bound, which is the one number in this file that is a contract term rather than a measurement. Without it the same corner fits with $0.0112 to spare. The executor does not choose between those two readings: what the cap admits is (13)(d)'s, and this record states both so the ruling is made on the arithmetic. What must NOT happen is discovering it in flight — the (10)(a) gate would refuse the session after the boot is already billed, which is exactly the outcome (12)(b) prices"
+  },
+  "job_timeout_headroom": {
+    "job_timeout_s": 900.0,
+    "longest_job_measured_rates_s": 126.8,
+    "longest_job_conservative_s": 180.7,
+    "twice_the_conservative_job_s": 361.4,
+    "still_twice_the_conservative_job": true,
+    "reading": "checked because the property was established at the 800 ceiling and a ceiling change is exactly what could have quietly broken it. It did not: even at the conservative bound the driver's own test uses — 30 rows each as dense as a leaflet page, every one decoding to 1200 — twice the longest job still sits well under the 900 s timeout, and one wedged worker still cannot out-bill the cap. Measured rather than assumed, and reported either way"
+  },
+  "pinned_inputs": {
+    "results/srv2d_cost.json": "71f1ec4884286961c1c672071a3846e22c40e7179189f5e0e607b17fb0d30427",
+    "results/sku_b_positions_v4.json": "fd0eb79695c2bc546743d8fde93448d48a321fa92598a17a14155aa2766ff9c5",
+    "results/sku_b_positions_v3.json": "7196abfbf488168d6db1243a54369d871e27f087584615ed609b2fb813bac70e"
+  },
+  "not_in_scope": {
+    "the driver's constants": "scripts/positions_gm4_skub.py still carries v4's CAP_USD, PHASE and LEDGER. Moving them to the B′ three is skub2-run's step and is guarded by the driver's own refusal on a mismatched registration — this file prices the run, it does not configure it"
+  },
+  "git": {
+    "commit": "61369e4899da5b8fc92eb51c4816db51f40e36c5",
+    "dirty": [
+      "knowledge/daily_logs/2026-08-12.md",
+      "knowledge/hot.md",
+      "knowledge/index.md",
+      "scripts/write_sku_projection_b2.py",
+      "tests/test_sku_projection_b2.py"
+    ]
+  }
+}
