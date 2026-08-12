@@ -697,6 +697,26 @@ unchanged; gold and instrument shas move; cap **$0.40**), with every reading of
 (9)–(12) in force. No new ML mechanism is authorised: the two-stage OCR and the
 brands_visible channel stay named candidates, unbuilt.
 <!-- sku-b-ratification-7 end -->
+<!-- sku-b-ratification-8 begin — stripped by tests/test_sku_prereg.py before
+hashing docs/SPEC.md against the prereg pin; the registered law is the stripped text -->
+(14) **B′ finalised — ratified (operator + team lead, 2026-08-12, skub2-prep
+acceptance).** (a) The four pending pairs are read: #4, #9, #28, #29 are ALL
+class b (the watchlist brand is printed with price boxes on non-dairy goods —
+fish/tea/mayonnaise/dumplings — across every sent page; full-page reads, not
+samples). Final decomposition: a=11 · b=16 · c=2. (b) B4 is ruled PER PAIR: a
+class is a fact about one (post, brand) pair, never about the brand everywhere —
+a brand ruled non-dairy on one post stays gold where it sits on a dairy position.
+(c) B5 follows from the verdicts: the re-scoped gold is 37 pairs over 10 posts
+with non-empty gold (five posts empty and become precision probes under R3).
+(d) B1 stands: all 138 elements are re-asked; v1's answers remain v1's sealed
+measurement. (e) **The session cap is $0.65, superseding (13)(d)'s $0.40 before
+any registration existed:** the (12)(c) registered warm-up prices the gate's
+projection at ~$0.61 (the deep-page probe against 138 calls), and (12)(a)'s rule
+— the cap admits the gate's own pessimism, the in-run gate protects the middle —
+applies; the measured expectation remains ~$0.25–0.33. (f) Dv210's wiring —
+`bar_one` reading gold from the B′ registration's own `gold.per_post` — is
+skub2-run's first gate, enforced by the existing refusal.
+<!-- sku-b-ratification-8 end -->
 **Date:** 2026-07-26 · **Team lead:** Fable session · **Executor:** Claude Code
 **Repo folder:** `/Users/hdv_1987/Desktop/Projects/market-pulse-llm`
 **rev. 3 change (operator decision):** producers in Ukraine barely use Telegram for
