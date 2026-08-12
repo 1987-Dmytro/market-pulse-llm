@@ -195,18 +195,21 @@ def test_every_pinned_input_still_hashes_to_what_it_says(record):
     # this is the line that says what the strip is expected to know about, and extending it is the
     # only legal way to green a ratification block — re-pinning the record is not (the prereg chain
     # is the pilot's witness, and a v3 happens only on team-lead instruction).
-    assert prereg.RATIFICATION_NAME.findall(spec_text) == [
+    blocks = [
         "sku-b-ratification",
         "sku-b-ratification-2",
         "sku-b-ratification-3",
         "sku-b-ratification-4",
         "sku-b-ratification-5",
+        # (12) — the v4 session and the cost of a refusal, ratified at the sku-b-v3-run acceptance.
+        # It landed with this line missing, which is how the enumeration stays the thing that has to
+        # be looked at: the amendment cannot arrive unnoticed.
+        "sku-b-ratification-6",
     ]
+    assert prereg.RATIFICATION_NAME.findall(spec_text) == blocks
     law = prereg.registered_law(prereg.SPEC).decode("utf-8")
-    assert "sku-b-ratification-2" not in law
-    assert "sku-b-ratification-3" not in law
-    assert "sku-b-ratification-4" not in law
-    assert "sku-b-ratification-5" not in law
+    for name in blocks[1:]:  # the first block's own name is a prefix of every later one
+        assert name not in law
 
     for path, sha in record["pinned_inputs"].items():
         if path == "docs/SPEC.md":
