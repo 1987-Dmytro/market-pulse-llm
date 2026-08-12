@@ -44,6 +44,13 @@ def test_every_bar_is_quoted_out_of_the_spec_as_written(record):
         assert reading in law, key
         assert reading == prereg.RESUME_READINGS[key]
     assert set(record["resume"]["readings"]) == {"a", "b", "c", "d", "e"}
+    # and (12)(a)–(d), which is the law THIS record is registered under. Same rule, same check: the
+    # markdown emphasis is carried through because a quote that tidies the law can drift from it
+    assert record["supersedes"]["verbatim"] in law
+    for key, reading in record["supersedes"]["readings"].items():
+        assert reading in law, key
+        assert reading == prereg.V4_READINGS[key]
+    assert set(record["supersedes"]["readings"]) == {"a", "b", "c", "d"}
 
 
 def test_a_paraphrased_bar_stops_the_write(monkeypatch, tmp_path):
@@ -64,6 +71,17 @@ def test_a_paraphrased_resume_reading_stops_the_write(monkeypatch, tmp_path):
         prereg.main(["--out", str(tmp_path / "p.json")])
 
 
+def test_a_paraphrased_v4_reading_stops_the_write(monkeypatch, tmp_path):
+    """(12)'s readings under the same control, and (12)(b) is the one worth naming: it is the clause
+    that says a refused session charges the PHASE, and a paraphrase of it here would be the licence
+    this record claims to carry with nobody's signature on it."""
+    monkeypatch.setitem(
+        prereg.V4_READINGS, "b", "a refused session's spend does not come out of the next cap"
+    )
+    with pytest.raises(SystemExit, match="not in docs/SPEC.md as written"):
+        prereg.main(["--out", str(tmp_path / "p.json")])
+
+
 def test_the_three_thresholds_and_their_direction(record):
     assert {name: bar["threshold"] for name, bar in record["bars"].items()} == {
         "leaflet_brand_recall": 0.75,
@@ -77,11 +95,11 @@ def test_the_three_thresholds_and_their_direction(record):
 
 
 def test_one_attempt_and_a_failure_closes_b(record):
-    """v3 buys ONE additional session under SPEC 3.17 (11) at the cap (11)(d) names, and (6)'s own
-    clause is quoted beside it rather than deleted: it is what the first 17 answers were bought
-    under, and a reader has to be able to see which clause each half of the population came from."""
+    """v4 buys ONE additional session at the cap (12)(a) names, and every earlier clause is quoted
+    beside it rather than deleted: (6)'s is what the first 17 answers were bought under and (11)'s
+    is the clause the attempt still runs on, so a reader can see which law each half came from."""
     assert record["attempts"]["count"] == 1
-    assert record["attempts"]["cap_usd"] == 0.45
+    assert record["attempts"]["cap_usd"] == 0.65
     assert "BY MEASUREMENT" in record["attempts"]["on_failure"]
     assert "No retry" in record["attempts"]["on_failure"]
     assert record["attempts"]["verbatim"] == prereg.RESUME_CLAUSE
@@ -242,21 +260,24 @@ def test_the_prereg_says_what_it_does_not_touch(record):
 V1 = "results/sku_pilot_prereg.json"
 V2 = "results/sku_pilot_prereg_v2.json"
 V3 = "results/sku_pilot_prereg_v3.json"
-PREREGS = (V1, V2, V3)
+V4 = "results/sku_pilot_prereg_v4.json"
+PREREGS = (V1, V2, V3, V4)
 BEFORE_ANY_ARTIFACT = (V1, V2)
-"""The two that were registered before sku-b had bought anything. v3 cannot make that claim and
-must not pretend to — it is registered before the RESUMED session, over a population half of which
-is already paid for, and its own ordering rule is the test below."""
+"""The two that were registered before sku-b had bought anything. Neither v3 nor v4 can make that
+claim and neither pretends to — each is registered before its own session, over a population part of
+which is already paid for, and each has its own ordering rule in the tests below."""
 
 SEALED = {
     V1: "b1bfa40d1f5073ec7b3d199bd57d96dd1bb72f37d99d26135f98386a8473a142",
     V2: "d4ced2a8ba00b48bca2d30af9c7ce8977eb387631b1735b4e05ea15ba306e9ad",
+    V3: "a80e8e55488439372244715f24f7bbfb56cf46a3a2586d38fa75a14c4c643656",
 }
-"""Every superseded registration, by the bytes rather than by a description. v2 leaves the
-producer's hands when RECORD moves to v3 — exactly as v1 did — and from that moment nothing rebuilds
-it, so a literal sha is the only thing standing between "v2 is untouched" and nobody checking. v2
-matters more than v1 did: it is the record the 17 paid answers were bought under, and the resumed
-session's bars are scored against ITS verbatim texts."""
+"""Every superseded registration, by the bytes rather than by a description. Each leaves the
+producer's hands when RECORD moves past it, and from that moment nothing rebuilds it, so a literal
+sha is the only thing standing between "v2 is untouched" and nobody checking. v2 matters most: it is
+the record the 17 paid answers were bought under, and the bars are scored against ITS verbatim texts.
+v3 was registered and never spent — its session was refused at the (10)(a) gate — which is exactly
+why it is sealed rather than deleted: it is the registration that refusal happened under."""
 
 
 def leaves(node, path=""):
@@ -308,19 +329,19 @@ def test_the_prereg_was_committed_before_any_pilot_artifact(prereg_path):
     assert others == [], others
 
 
-def test_v3_was_committed_before_the_resumed_session_and_over_what_it_pins(record):
-    """v3's ordering duty is a different sentence and needs a different check.
+def registered_over(prereg_path: str, pinned: dict[str, str]) -> None:
+    """At the commit that ADDED this registration, the sku-b run artifacts in the tree were exactly
+    `pinned` and each hashed to what the record pins.
 
-    The rule above cannot be reused: `results/sku_pilot_serving.json` landed after v2 (sku-b-prep)
-    and the interrupted run's own artifacts landed before v3, so the "no pilot artifact exists"
-    reading would fail v3 for being exactly what SPEC 3.17 (11) asked for. What v3 must prove is
-    narrower and stronger — at the commit that added it, the ONLY sku-b run artifacts in the tree
-    were the two its `bought_already` block pins, and they hashed to what it pinned. That rules out
-    both directions of the failure: a resume registered after the resumed session had already
-    bought something, and a resume registered against a record that has since moved.
+    The `BEFORE_ANY_ARTIFACT` rule cannot be reused from v3 onwards: `results/sku_pilot_serving.json`
+    landed after v2 and the interrupted run's own artifacts landed before v3, so "no pilot artifact
+    exists" would fail a record for being exactly what SPEC 3.17 (11) asked for. What a resumed
+    registration must prove is narrower and stronger, and it rules out both directions of the
+    failure: a resume registered after its own session had already bought something, and a resume
+    registered against a record that has since moved.
     """
     added = subprocess.run(
-        ["git", "log", "--diff-filter=A", "--format=%H", "--", V3],
+        ["git", "log", "--diff-filter=A", "--format=%H", "--", prereg_path],
         cwd=REPO_ROOT,
         capture_output=True,
         text=True,
@@ -334,10 +355,7 @@ def test_v3_was_committed_before_the_resumed_session_and_over_what_it_pins(recor
         text=True,
         check=True,
     ).stdout.split()
-    assert V3 in tree
-    already = record["resume"]["bought_already"]
-    pinned = {already["run_record"]["path"]: already["run_record"]["sha256"]}
-    pinned[already["dump"]["path"]] = already["dump"]["sha256"]
+    assert prereg_path in tree
     assert sorted(name for name in tree if name.startswith("results/sku_b_")) == sorted(pinned)
     for path, sha in pinned.items():
         blob = subprocess.run(
@@ -347,6 +365,42 @@ def test_v3_was_committed_before_the_resumed_session_and_over_what_it_pins(recor
             check=True,
         ).stdout
         assert hashlib.sha256(blob).hexdigest() == sha, path
+
+
+def test_v3_was_committed_before_the_resumed_session_and_over_what_it_pins():
+    """Read off disk, not through the `record` fixture: that fixture is v4 now, and v3 is a link in
+    the chain whose producer is gone. Two artifacts existed when it landed — the first session's
+    record and its dump."""
+    already = json.loads((REPO_ROOT / V3).read_text(encoding="utf-8"))["resume"]["bought_already"]
+    registered_over(
+        V3,
+        {
+            already["run_record"]["path"]: already["run_record"]["sha256"],
+            already["dump"]["path"]: already["dump"]["sha256"],
+        },
+    )
+
+
+def test_v4_was_committed_before_the_v4_session_and_over_all_three_artifacts(record):
+    """v4's version of the same duty, and the set is THREE files rather than two.
+
+    The refused v3 session left a record — `results/sku_b_positions_v3.json` — and it is a sku-b run
+    artifact like the other two, so a copy of v3's check would fail here for the honest reason that
+    the tree has grown. Pinned instead: v4's population claim rests on that record saying the
+    session bought nothing, and this is where "it had not moved when we registered against it" is
+    proved. There is no `sku_b_positions_v3.jsonl` — a session refused before the first gold call
+    writes no dump, which is why the expected set is three and not four.
+    """
+    already = record["resume"]["bought_already"]
+    refused = record["supersedes"]["refused_record"]
+    registered_over(
+        V4,
+        {
+            already["run_record"]["path"]: already["run_record"]["sha256"],
+            already["dump"]["path"]: already["dump"]["sha256"],
+            refused["path"]: refused["sha256"],
+        },
+    )
 
 
 def test_every_superseded_registration_is_sealed_and_this_record_names_its_parent(record):
@@ -360,13 +414,15 @@ def test_every_superseded_registration_is_sealed_and_this_record_names_its_paren
     """
     for path, sha in SEALED.items():
         assert hashlib.sha256((REPO_ROOT / path).read_bytes()).hexdigest() == sha, path
-    assert prereg.RECORD.name == "sku_pilot_prereg_v3.json"
-    assert record["supersedes"]["record"] == V2
-    assert record["supersedes"]["sha256"] == SEALED[V2]
-    assert "no bar does" in record["supersedes"]["reason"]
-    v2 = json.loads((REPO_ROOT / V2).read_text(encoding="utf-8"))
-    assert v2["supersedes"]["record"] == V1
-    assert v2["supersedes"]["sha256"] == SEALED[V1]
+    assert prereg.RECORD.name == "sku_pilot_prereg_v4.json"
+    assert record["supersedes"]["record"] == V3
+    assert record["supersedes"]["sha256"] == SEALED[V3]
+    assert "nothing in `resume` moves" in record["supersedes"]["reason"]
+    # the whole chain, each link naming the one before it by the bytes that were registered
+    for child, parent in ((V3, V2), (V2, V1)):
+        body = json.loads((REPO_ROOT / child).read_text(encoding="utf-8"))
+        assert body["supersedes"]["record"] == parent
+        assert body["supersedes"]["sha256"] == SEALED[parent]
 
 
 def test_v2_carries_v1s_bars_and_readings_byte_for_byte():
@@ -395,39 +451,105 @@ def test_v2_carries_v1s_bars_and_readings_byte_for_byte():
     ]
 
 
-def test_v3_carries_v2s_measurement_byte_for_byte_and_moves_only_the_attempt(record):
-    """SPEC 3.17 (11)(b): the instrument is FROZEN as registered. So the resume may move the ATTEMPT
-    and nothing that decides a number.
+FROZEN_SECTIONS = (
+    "bars",
+    "ratification_required",
+    "not_in_scope",
+    "instruments",
+    "ladder",
+    "pinned_inputs",
+)
+"""What a re-registration may never move. `pinned_inputs` is compared as a mapping rather than as a
+key set, because the key-set assertion elsewhere would pass a pin whose VALUE had moved — which is
+the only way a pinned input can betray a bar."""
 
-    The same leaf-by-leaf comparison, widened to the ladder and to `pinned_inputs` — and
-    `pinned_inputs` is compared as a mapping rather than as a key set, because the existing key-set
-    assertion would pass a pin whose VALUE had moved, which is the only way a pinned input can
-    betray a bar. What is left is `attempts`, where exactly two leaves are allowed to move, and one
-    new section. If this list ever comes out longer than the four entries `supersedes.moved`
-    enumerates, the re-registration is doing something (11) did not authorise.
+
+def test_v3_carries_v2s_measurement_byte_for_byte_and_moves_only_the_attempt():
+    """SPEC 3.17 (11)(b): the instrument is FROZEN as registered. So the resume may move the ATTEMPT
+    and nothing that decides a number. Both records off disk — v3's producer is gone.
     """
     v2 = json.loads((REPO_ROOT / V2).read_text(encoding="utf-8"))
-    for section in (
-        "bars",
-        "ratification_required",
-        "not_in_scope",
-        "instruments",
-        "ladder",
-        "pinned_inputs",
-    ):
-        assert record[section] == v2[section], section
+    v3 = json.loads((REPO_ROOT / V3).read_text(encoding="utf-8"))
+    for section in FROZEN_SECTIONS:
+        assert v3[section] == v2[section], section
 
     old = dict(leaves(v2["attempts"], "attempts"))
-    new = dict(leaves(record["attempts"], "attempts"))
+    new = dict(leaves(v3["attempts"], "attempts"))
     assert set(old) == set(new), "the attempt clause gains no field and loses none"
     assert sorted(path for path in old if old[path] != new[path]) == [
         "attempts.cap_usd",
         "attempts.verbatim",
     ]
-    assert set(record) - set(v2) == {"resume"}
-    assert set(v2) - set(record) == set()
-    assert len(record["supersedes"]["moved"]) == 4
+    assert set(v3) - set(v2) == {"resume"}
+    assert set(v2) - set(v3) == set()
+    assert len(v3["supersedes"]["moved"]) == 4
+
+
+def test_v4_carries_v3s_whole_measurement_and_moves_only_the_cap_and_the_two_names(record):
+    """SPEC 3.17 (12): v3's session was refused BEFORE the first gold call, so it measured nothing a
+    bar can read and there is nothing for a re-registration to reflect.
+
+    That makes this comparison stricter than the last one: `resume` is in the frozen list too. The
+    population, the (11)(c) warm-up pins and `bought_already`'s 17 of 138 are the same bytes v3
+    carried, because the same 17 answers are still the only ones bought. What is allowed to move is
+    the cap and the two names that decide which anchor it is enforced against — (12)(a) and (12)(b),
+    the Dv167 finding — and `attempts.authority` beside them, which says where the $0.65 comes from
+    given that the clause it sits under is still (11)'s. If this list ever comes out longer than the
+    three entries `supersedes.moved` enumerates, the re-registration is doing something (12) did not
+    authorise.
+    """
+    v3 = json.loads((REPO_ROOT / V3).read_text(encoding="utf-8"))
+    for section in (*FROZEN_SECTIONS, "resume"):
+        assert record[section] == v3[section], section
+
+    old = dict(leaves(v3["attempts"], "attempts"))
+    new = dict(leaves(record["attempts"], "attempts"))
+    assert sorted(set(new) - set(old)) == [
+        "attempts.authority",
+        "attempts.ledger",
+        "attempts.phase",
+    ]
+    assert set(old) - set(new) == set(), "the attempt clause loses no field"
+    assert [path for path in old if old[path] != new[path]] == ["attempts.cap_usd"]
+    assert (v3["attempts"]["cap_usd"], record["attempts"]["cap_usd"]) == (0.45, 0.65)
+    assert set(record) == set(v3), "no section is added or dropped"
+    assert len(record["supersedes"]["moved"]) == 3
     assert record["supersedes"]["moved_metadata"], "what necessarily moved is named, not omitted"
+
+    # (11)(d)'s $0.45 is SUPERSEDED and not overwritten: it stays in the resume block as the reading
+    # v3 ran under, and the record says so in one place a reader will reach from either direction
+    assert "$0.45" in record["resume"]["readings"]["d"]
+    assert "supersedes (11)(d)'s $0.45 without overwriting it" in record["attempts"]["authority"]
+
+
+def test_the_refused_session_is_pinned_and_read_not_merely_quoted(record):
+    """v4's population is 121 because the v3 session bought nothing. That is a claim about the
+    CONTENTS of a file, and a sha does not check contents — so both halves are asserted here.
+    """
+    refused = record["supersedes"]["refused_record"]
+    body = json.loads((REPO_ROOT / refused["path"]).read_bytes())
+    assert (
+        hashlib.sha256((REPO_ROOT / refused["path"]).read_bytes()).hexdigest() == refused["sha256"]
+    )
+    assert body["stopped_before_gold"] is True
+    assert body["population"]["asked"] == 0 == refused["asked"]
+    assert body["dump"]["path"] is None, "a session refused before gold writes no dump"
+    # and the population it leaves is the one v4 registers, unchanged from v3
+    assert record["resume"]["population"]["to_buy"] == len(body["population"]["unbought"]) == 121
+
+
+def test_a_v3_record_that_had_bought_something_stops_the_write(monkeypatch, tmp_path):
+    """The control for the check above: it is only worth having if it fires. A refusal record whose
+    session reached the gold means elements carry answers this registration does not know about, and
+    the v4 run would buy them twice."""
+    bought = json.loads(prereg.REFUSED.read_text(encoding="utf-8"))
+    bought["stopped_before_gold"] = False
+    bought["population"]["asked"] = 3
+    fake = tmp_path / "sku_b_positions_v3.json"
+    fake.write_text(json.dumps(bought, ensure_ascii=False), encoding="utf-8")
+    monkeypatch.setattr(prereg, "REFUSED", fake)
+    with pytest.raises(SystemExit, match="would buy them twice"):
+        prereg.main(["--out", str(tmp_path / "p.json")])
 
 
 def test_the_resume_warm_up_is_real_full_size_and_outside_every_gold_set(record):

@@ -1,21 +1,31 @@
 #!/usr/bin/env python3
-"""Write `results/sku_pilot_prereg_v3.json` — sku-b's three bars, resumed ($0).
+"""Write `results/sku_pilot_prereg_v4.json` — sku-b's three bars, on a fresh ledger ($0).
 
 Deliverable 5 of `docs/PROMPT-sku-a.md`, re-registered by uni-b deliverable D(2) under SPEC
-3.17 (8) and again by sku-b-v3-prep D1 under SPEC 3.17 (11). A pre-registration that is not
-committed is not a pre-registration, and a pre-registration committed after the artifact it judges
-is a rationalisation: git history is the only witness to the ordering, so this file goes in its own
-commit — before any artifact of the RESUMED session exists.
+3.17 (8), by sku-b-v3-prep D1 under SPEC 3.17 (11) and again by sku-b-v4-prep D1 under SPEC
+3.17 (12). A pre-registration that is not committed is not a pre-registration, and a
+pre-registration committed after the artifact it judges is a rationalisation: git history is the
+only witness to the ordering, so this file goes in its own commit — before any artifact of the v4
+session exists.
 
-**Each version is registered BESIDE the last, never over it.** v1 (`b1bfa40d…`) and v2
-(`d4ced2a8…`) are not edited and not deleted: they are what was registered, they stay
+**Each version is registered BESIDE the last, never over it.** v1 (`b1bfa40d…`), v2 (`d4ced2a8…`)
+and v3 (`a80e8e55…`) are not edited and not deleted: they are what was registered, they stay
 byte-identical under sealed tests, and each record names its predecessor in `supersedes` with the
 reason. v1 → v2 moved PINS (the ladder's hash followed the `fat` → `attribute` rename and the pack
-manifest was rebuilt over it). v2 → v3 moves the ATTEMPT CLAUSE and nothing else about the
-measurement: the (10)(b) stop at 17 of 138 gold calls resolves as RESUME, so the clause becomes
-3.17 (11)'s, the cap becomes $0.45, the warm-up inputs become representative, and a
-`resume.bought_already` block pins what the first session already bought. Every bar, threshold,
-reachability rule and all five R1–R5 readings are byte-equal to v2 and asserted so.
+manifest was rebuilt over it). v2 → v3 moved the ATTEMPT CLAUSE and nothing else about the
+measurement: the (10)(b) stop at 17 of 138 gold calls resolves as RESUME, so the clause became
+3.17 (11)'s, the cap became $0.45, the warm-up inputs became representative, and a
+`resume.bought_already` block pinned what the first session already bought.
+
+v3 → v4 moves LESS than that, and the reason is the shape of what happened: v3's session was
+refused by the (10)(a) gate on its own representative probe, before the first gold call, so it
+consumed no attempt and bought nothing. Nothing it measured belongs to a bar. What moves is the
+cap ($0.45 → $0.65, 3.17 (12)(a)) and the two names that decide which anchor the next session
+enforces that cap against (3.17 (12)(b) — the Dv167 finding: a refused session's spend is the
+PHASE's overhead and never the next attempt's burden, and cap, ledger and phase are set TOGETHER
+or one of them is silently another session's). The whole `resume` block — population, the (11)(c)
+warm-up pins, `bought_already`'s 17 of 138 — every bar, threshold, reachability rule and all five
+R1–R5 readings are byte-equal to v3 and asserted so.
 
 Three things it carries, and the second is the one that costs work:
 
@@ -61,8 +71,18 @@ PACK_MANIFEST = REPO_ROOT / "results" / "sku_text_pack_manifest.json"
 CENSUS = REPO_ROOT / "results" / "sku_prefilter_census.json"
 REGISTRY = REPO_ROOT / "config" / "registry.yaml"
 LEXICON = REPO_ROOT / "config" / "lexicon.yaml"
-SUPERSEDED = REPO_ROOT / "results" / "sku_pilot_prereg_v2.json"
-RECORD = REPO_ROOT / "results" / "sku_pilot_prereg_v3.json"
+SUPERSEDED = REPO_ROOT / "results" / "sku_pilot_prereg_v3.json"
+RECORD = REPO_ROOT / "results" / "sku_pilot_prereg_v4.json"
+BOUGHT_UNDER = REPO_ROOT / "results" / "sku_pilot_prereg_v2.json"
+"""Two different questions, and v4 is the version where they stop having the same answer.
+
+`SUPERSEDED` is the record this one is registered BESIDE — v3, retired UNSPENT: its session was
+refused at the (10)(a) gate before the first gold call. `BOUGHT_UNDER` is what the 17 paid answers
+were actually bought under, which is v2 and stays v2 however many re-registrations follow it."""
+
+REFUSED = REPO_ROOT / "results" / "sku_b_positions_v3.json"
+"""The (10)(a) refusal record, pinned in `supersedes` because it is the evidence for the one claim
+v4 inherits without re-deriving: the v3 session bought NOTHING, so the population is still 121."""
 
 SERVING_PIN = REPO_ROOT / "results" / "sku_pilot_serving.json"
 RUN_RECORD = REPO_ROOT / "results" / "sku_b_positions.json"
@@ -74,17 +94,17 @@ three are EVIDENCE of what was already bought, and the resumed run refuses to st
 still hash to what is registered here (SPEC 3.17 (11)(a): each element is bought exactly once)."""
 
 SUPERSEDES_REASON = (
-    "the (10)(b) stop resolves as RESUME; the attempt clause moves and no bar does. SPEC 3.17 (11)"
-    " ratifies the completion of the interrupted attempt: the registered population is bought to"
-    " completion in ONE additional paid session, buying only the 121 elements the run record names"
-    " as unbought, with the 17 existing answers entering the bars as they stand. What moves here is"
-    " the attempt clause itself (from (6)'s to (11)'s), the cap ($0.35 → $0.45, priced from the"
-    " measured marginals), the warm-up inputs (now representative, (11)(c)) and a new"
-    " resume.bought_already block pinning what the first session bought. No threshold, no bar text,"
-    " no reachability rule and no registered reading moves — the instrument is FROZEN as registered"
-    " ((11)(b)). So v2 is not edited: it stays exactly as it was registered, it is what the 17"
-    " existing answers were bought under, and this record is registered BESIDE it, before the"
-    " resumed session"
+    "v3 was registered and never spent: its session was refused at the (10)(a) gate on the"
+    " representative probe (11)(c) registered, before the first gold call, so it bought nothing and"
+    " consumed no attempt. SPEC 3.17 (12) authorises ONE more resumed session in its place. What"
+    " moves is the CAP ($0.45 → $0.65, (12)(a): sized to admit the gate's own pessimistic"
+    " projection of ~$0.60, whose probe is a deep leaflet page and prices above the first-six-page"
+    " population's drawn marginal) and the two NAMES that decide which anchor that cap is enforced"
+    " against ((12)(b): each attempt runs under its own fresh anchor with cap, ledger and phase set"
+    " together). No bar, no threshold, no reachability rule, no registered reading and nothing in"
+    " `resume` moves — not the population, not the (11)(c) warm-up pins, not bought_already's 17 of"
+    " 138. So v3 is not edited: it stays exactly as it was registered, it is what the refused"
+    " session ran under, and this record is registered BESIDE it, before the v4 session"
 )
 
 BARS = {
@@ -143,9 +163,52 @@ session could be held to and the law does not contain."""
 
 BARS_UNCHANGED = "The three bars' verbatim texts, thresholds and R1–R5 are unchanged."
 
-RESUME_CAP_USD = 0.45
-"""SPEC 3.17 (11)(d). Transcribed, not chosen — and it is the ONE number in this record that (11)
-moves, together with the clause the cap belongs to."""
+V4_HEADLINE = (
+    "The v3 session was refused by the (10)(a) gate on a representative probe (14.808 s/page from"
+    " the registered unsent page) and consumed no attempt."
+)
+"""SPEC 3.17 (12)'s own finding, and the whole reason this record exists rather than a v3 re-run."""
+
+V4_READINGS = {
+    "a": (
+        "ONE more resumed session is authorised under a v4 re-registration"
+        " (results/sku_pilot_prereg_v4.json, BESIDE v3, before the session), cap **$0.65** — sized"
+        " to admit the gate's own pessimistic projection (~$0.60), whose probe is structurally a"
+        " DEEP leaflet page and prices above the first-six-page gold population's drawn marginal"
+        " (5.0772 s, n=17); the in-run gate still protects the middle."
+    ),
+    "b": (
+        "**A session refused at the (10)(a) gate charges the PHASE ledger, never the next attempt's"
+        " cap:** each registered attempt runs under its own fresh anchor and its own"
+        " cap/ledger/phase constants, set together (the Dv167 finding)."
+    ),
+    "c": (
+        "The warm-up inputs remain the REGISTERED ones of v3 — the same unsent page and the same"
+        " non-pack row, re-verified by hash, never re-picked."
+    ),
+    "d": (
+        "Every reading of (10) and (11) otherwise applies unchanged; the population is still the 121"
+        " unbought elements, each element of the 138 bought exactly once across the program."
+    ),
+}
+"""(12)(a)–(d), transcribed rather than redesigned and checked against `docs/SPEC.md` by the same
+function that checks the bars. The markdown emphasis is carried because the check is verbatim: a
+quote that tidies the law is a quote that can drift from it."""
+
+RESUME_CAP_USD = 0.65
+"""SPEC 3.17 (12)(a). Transcribed, not chosen. (11)(d)'s $0.45 is what v3 was registered under and
+it is not edited anywhere — it stays in `resume.readings.d` as the reading v3 ran under, superseded
+here by (12)(a) and not overwritten by it."""
+
+RESUME_PHASE = "sku-b-v4"
+RESUME_LEDGER = REPO_ROOT / "results" / "spend_sku_b_v4.json"
+"""SPEC 3.17 (12)(b): the cap above and these two names are ONE decision, so they are registered
+together and the driver's copies are asserted equal to them.
+
+Dv167 is what this pays: v3's three constants were a cap, a ledger path and a phase key living in
+three places, and a second `--resume` after the refusal would have read the v3 anchor, subtracted a
+refused session's $0.1526 from a cap priced without it, and refused again on arithmetic nobody
+chose. A refusal charges the PHASE, and the next attempt starts on a fresh anchor of its own."""
 
 
 def verbatim(spec: Path) -> str:
@@ -161,7 +224,9 @@ def check_the_bars_are_the_laws(spec: Path) -> None:
         "green_gate": GREEN_GATE,
         "resume_clause": RESUME_CLAUSE,
         "bars_unchanged": BARS_UNCHANGED,
+        "v4_headline": V4_HEADLINE,
         **{f"reading_{key}": text for key, text in RESUME_READINGS.items()},
+        **{f"v4_reading_{key}": text for key, text in V4_READINGS.items()},
     }
     for name, bar in quoted.items():
         if bar not in law:
@@ -335,9 +400,9 @@ def bought_already() -> dict:
     asked = [row["source"] for row in run["outcomes"]]
     unbought = list(run["population"]["unbought"])
     agreements = {
-        f"the run was bought under {rel(SUPERSEDED)} as it now stands": (
+        f"the run was bought under {rel(BOUGHT_UNDER)} as it now stands": (
             run["prereg"]["sha256"],
-            sha256_of(SUPERSEDED),
+            sha256_of(BOUGHT_UNDER),
         ),
         f"the run served under {rel(SERVING_PIN)} as it now stands": (
             run["serving_pin"]["sha256"],
@@ -392,7 +457,7 @@ def bought_already() -> dict:
                 " and still be reported against these bars"
             ),
         },
-        "bought_under": {"path": rel(SUPERSEDED), "sha256": sha256_of(SUPERSEDED)},
+        "bought_under": {"path": rel(BOUGHT_UNDER), "sha256": sha256_of(BOUGHT_UNDER)},
         "asked": sorted(asked),
         "n_asked": len(asked),
         "unbought": sorted(unbought),
@@ -402,6 +467,41 @@ def bought_already() -> dict:
             "(11)(a): the parse refusal enters bar 3's accounting AS IT STANDS. It is an answer the"
             " session paid for, it is excluded by its reason and counted — not re-asked, and not"
             " turned into an empty page by a resume that found it inconvenient"
+        ),
+    }
+
+
+def refused_nothing_bought() -> dict:
+    """SPEC 3.17 (12): the v3 session's record, pinned — and READ, because the pin is not the claim.
+
+    v4 inherits v3's population without re-deriving it, and that inheritance rests on one fact: the
+    refused session bought nothing. A sha alone proves the file has not moved since; it says nothing
+    about what is inside it. So the two fields that carry the claim are checked here, and a v3 record
+    that reached the gold would stop this write instead of being registered around.
+    """
+    record = json.loads(REFUSED.read_text(encoding="utf-8"))
+    asked = record["population"]["asked"]
+    if not record.get("stopped_before_gold") or asked:
+        raise SystemExit(
+            f"{rel(REFUSED)} says stopped_before_gold={record.get('stopped_before_gold')!r} with"
+            f" {asked} source(s) asked. (12) registers v4 over the population v3 left untouched; a"
+            " v3 session that bought something means elements this record does not know about have"
+            " answers, and the v4 run would buy them twice. Stop and report."
+        )
+    return {
+        "path": rel(REFUSED),
+        "sha256": sha256_of(REFUSED),
+        "stopped_before_gold": True,
+        "asked": asked,
+        "cost_usd": record["cost"]["usd"],
+        "why": (
+            "the (10)(a) refusal, pinned as EVIDENCE rather than quoted as a story. It is what makes"
+            " v4's population still 121: the session was refused before the first gold call, so no"
+            " element of the 138 changed hands and resume.bought_already is still the FIRST"
+            " session's 17. Both halves of that are checked when this record is written and again"
+            " before the v4 run — the bytes against this sha, and stopped_before_gold/asked against"
+            " what they say. Its $0.1416 is the phase's overhead under (12)(b) and is charged to"
+            " results/spend_sku_b_v3.json, never to this attempt's cap"
         ),
     }
 
@@ -419,42 +519,52 @@ def main(argv: list[str] | None = None) -> int:
     empty = reference["gold"]["posts_with_an_empty_gold_set"]
     warmup = resume_warmup(reference, pack)
     already = bought_already()
+    refused = refused_nothing_bought()
 
     record = {
         "generated_at": datetime.now(UTC).isoformat(timespec="seconds"),
-        "phase": "sku-b — the position-layer pilot, resumed and re-registered",
-        "written_by": "sku-b-v3-prep (executor, $0), docs/PROMPT-sku-b-v3-prep.md deliverable 1",
-        "authority": "docs/SPEC.md amendment 3.17 (6), (10)(b), (11)",
+        "phase": "sku-b — the position-layer pilot, resumed on a fresh ledger",
+        "written_by": "sku-b-v4-prep (executor, $0), docs/PROMPT-sku-b-v4-prep.md deliverable 1",
+        "authority": "docs/SPEC.md amendment 3.17 (6), (10)(b), (11), (12)",
         "class": (
-            "PRE-REGISTRATION. Committed in its own commit before any artifact of the RESUMED"
-            " session exists in the repo; git history is the only witness to that ordering. The"
-            " interrupted session's own artifacts DO exist and are pinned in resume.bought_already —"
-            " that is what a resume is. Nothing here is a result"
+            "PRE-REGISTRATION. Committed in its own commit before any artifact of the v4 session"
+            " exists in the repo; git history is the only witness to that ordering. THREE sku-b run"
+            " artifacts do exist and all three are pinned here — the first session's record and dump"
+            " in resume.bought_already, and the refused v3 session's record in"
+            " supersedes.refused_record. Nothing here is a result"
         ),
         "supersedes": {
             "record": rel(SUPERSEDED),
             "sha256": sha256_of(SUPERSEDED),
             "reason": SUPERSEDES_REASON,
+            "authority": "docs/SPEC.md amendment 3.17 (12), ratified at the sku-b-v3-run acceptance",
+            "verbatim": V4_HEADLINE,
+            "readings": {key: V4_READINGS[key] for key in ("a", "b", "c", "d")},
+            "refused_record": refused,
             "unchanged": (
                 "every bar's verbatim text and threshold, the direction, both reachability rules,"
-                " attempts=1, on_failure/on_success, all five R1–R5 readings, both instrument shas,"
-                " the ladder and every pinned input are BYTE-EQUAL to v2 — asserted leaf by leaf in"
-                " tests/test_sku_prereg.py, not claimed"
+                " attempts.verbatim/.count/.on_failure/.on_success, all five R1–R5 readings, both"
+                " instrument shas, the ladder, every pinned input and the WHOLE resume block —"
+                " population, the (11)(c) warm-up pins and bought_already's 17 of 138 — are"
+                " BYTE-EQUAL to v3, asserted leaf by leaf in tests/test_sku_prereg.py, not claimed"
             ),
             "moved": [
-                "attempts.verbatim (SPEC 3.17 (6)'s one-attempt clause → (11)'s resume clause; (6)"
-                " is quoted beside it as what the first session was bought under)",
-                "attempts.cap_usd (0.35 → 0.45, SPEC 3.17 (11)(d), priced from the measured"
-                " marginals)",
-                "resume.warmup (new: (11)(c)'s representative warm-up inputs, picked once and"
-                " pinned — a real unsent page and a real pre-filtered row outside the pack)",
-                "resume.bought_already (new: the run record, dump and serving pin by sha, the 17"
-                " asked ids and the 121 unbought ones)",
+                "attempts.cap_usd (0.45 → 0.65, SPEC 3.17 (12)(a): sized to admit the gate's own"
+                " pessimistic projection of ~$0.60, whose probe is structurally a deep leaflet page"
+                " and prices above the first-six-page population's drawn marginal of 5.0772 s)",
+                "attempts.phase and attempts.ledger (new: sku-b-v4 and results/spend_sku_b_v4.json,"
+                " SPEC 3.17 (12)(b) — the cap, the ledger and the phase are ONE decision and are"
+                " registered together, which is what Dv167 found missing; attempts.authority is new"
+                " beside them and names which reading each comes from, because the clause the cap"
+                " sits under is still (11)'s)",
+                "supersedes (this record names v3 as its parent, transcribes (12)(a)–(d) and pins"
+                " the (10)(a) refusal record results/sku_b_positions_v3.json — whose"
+                " stopped_before_gold is what proves the population did not move)",
             ],
             "moved_metadata": [
                 "phase, written_by, authority, class — this record's own description of itself,"
-                " which cannot stay v2's without lying: v2 was written before any sku-b artifact"
-                " existed and this one is written after the interrupted session's",
+                " which cannot stay v3's without lying: v3 was written before a session that was"
+                " then refused, and this one is written after that refusal",
                 "generated_at, git — stamped by the producer on every build",
             ],
         },
@@ -462,6 +572,16 @@ def main(argv: list[str] | None = None) -> int:
             "verbatim": RESUME_CLAUSE,
             "count": 1,
             "cap_usd": RESUME_CAP_USD,
+            "phase": RESUME_PHASE,
+            "ledger": rel(RESUME_LEDGER),
+            "authority": (
+                "the clause above is SPEC 3.17 (11)'s and is unchanged, so its parenthetical still"
+                " names the registration v3 WAS — it is quoted as registered, not edited to point at"
+                " this file. What authorises this attempt is 3.17 (12): (12)(a) for the $0.65 cap,"
+                " which supersedes (11)(d)'s $0.45 without overwriting it in resume.readings, and"
+                " (12)(b) for the phase and ledger names beside it. Both are transcribed verbatim in"
+                " supersedes.readings"
+            ),
             "on_failure": (
                 "a failed bar closes B as 'instrument not ready' BY MEASUREMENT. No retry, no"
                 " re-prompt, no second draw: a bar re-run after its own result is not the bar that"
@@ -774,12 +894,15 @@ def main(argv: list[str] | None = None) -> int:
     print(
         f"  resume        {resume['population']['already_bought']} bought,"
         f" {resume['population']['to_buy']} to buy of {resume['population']['registered']}"
-        f" · cap ${record['attempts']['cap_usd']:.2f}"
+        f"\n  attempt       cap ${record['attempts']['cap_usd']:.2f} ·"
+        f" phase {record['attempts']['phase']} · ledger {record['attempts']['ledger']}"
         f"\n  warm-up page  {warmup['page']['file']} ({warmup['page']['bytes'] / 1e6:.2f} MB,"
         f" 1 of {warmup['page']['population']} never sent)"
         f"\n  warm-up row   {warmup['text']['id']} {warmup['text']['carrier']}"
         f" ({warmup['text']['text_chars']} chars, 1 of {warmup['text']['population']} outside the pack)"
         f"\n  supersedes    {rel(SUPERSEDED)} {record['supersedes']['sha256'][:16]}…"
+        f"\n  refused       {refused['path']} {refused['sha256'][:16]}…"
+        f" (stopped_before_gold, {refused['asked']} asked, ${refused['cost_usd']:.4f} to the phase)"
     )
     return 0
 
