@@ -215,7 +215,7 @@ under two minutes.
 
 ## Gate 2 — the volume, staged before any endpoint existed
 
-Staging pod `yax8ck1ajwuip5`, **L4 at $0.49/h** (Dv176 — v3's $0.24/h class is not offered in
+Staging pod `yax8ck1ajwuip5`, **L4 at $0.49/h** (Dv177 — v3's $0.24/h class is not offered in
 EU-RO-1 today), EU-RO-1, volume attached, `--terminate-after` an hour out. Rented **08:58:48 UTC**,
 deleted **09:00:47 UTC** — **1 min 59 s by the pod's own clock**, an upper bound of **$0.0162**.
 
@@ -672,3 +672,348 @@ each was committed. The vault tail is commit 7 rather than the last, for the rea
 previous report and this contract pre-authorises. Commit 9 is a correction, not a tail — `micro
 0.4727` factors as 26/55 and `precision 0.9286` as 26/28, so bar 1's false-positive count is two, and
 the first draft of this report said one.
+
+---
+
+# Close — bar 2 applied, the pilot closed by measurement ($0)
+
+`docs/PROMPT-sku-b-close.md` · executor · 2026-08-12 · **no paid calls, no RunPod resources**
+
+## Read-back
+
+**The four deliverables, one line each:**
+
+1. **The applier** — `scripts/apply_sku_pair_verdicts.py` carries the 45 dictated keys as its own
+   data, joins them to the sealed dump's 61 pair rows exactly once each, and writes
+   `results/sku_b_pair_verdicts.json`; it refuses on any checksum miss, any unmatched or
+   doubly-matched row, and on the two verdict flips the counts cannot see.
+2. **The verdict record, finalised** — `scripts/sku_bar_verdicts.py` consumes that file (pinned by
+   sha, over the same dump), bar 2 becomes **0.3279 vs 0.80 — FAIL (n=61, read by the team lead
+   2026-08-12)**, bars 1 and 3 are unchanged to the digit, and the `closure` block quotes
+   `attempts.on_failure` out of the registration.
+3. **The ADR** — `knowledge/decisions/sku-b-pilot-closed-by-measurement.md` plus its INDEX row: three
+   bars, the diagnosis, the under-reading evidence, the gold-vs-instrument mismatch, the four probe
+   numbers, $0.6032 over three sessions, and three named revision CANDIDATES.
+4. **Depth-from-percent** — `scripts/measure_depth_from_pct.py` prices the badge and the extracted
+   old price against the team lead's own `printed_old` on all 61 pairs into
+   `results/sku_depth_from_pct.json`; no threshold is registered and the adequacy rule is stated in
+   the record as the script's own.
+
+**The three bars:** brand recall **0.3603 vs 0.75 FAIL** · price-pair accuracy **0.3279 vs 0.80
+FAIL** · text tier accuracy **0.8621 vs 0.85 PASS** → **CLOSED — instrument not ready, BY
+MEASUREMENT** (2 of 3 bars failed).
+
+**No paid calls in this contract.** No endpoint, no template, no pod, no network-volume operation,
+no model request of any kind: every number below is arithmetic over files that were already on disk.
+
+---
+
+## Deliverable 1 — the applier
+
+```
+$ PYTHONPATH=src python3 scripts/apply_sku_pair_verdicts.py
+results/sku_b_positions_v4.jsonl — 61 pair rows over 45 keys, each matched once
+  correct 20 · wrong 41 · accuracy 0.3279 (20/61)
+  promo price 61/61 correct · printed % 61/61 correct · crossed-out old price 20/61 — every error is confined to the small struck-through number (superscript kopiyky garbled, truncated to .0, or digit-shifted), and depth() is wrong wherever the old price is.
+wrote results/sku_b_pair_verdicts.json
+```
+
+The join is the deliverable, not the arithmetic. A key is `(file, price_promo, price_old)` and `n`
+is how many dump rows carry it — duplicates share one physical price box and therefore one verdict.
+Every dictated key had to find its rows, every dump pair row had to be claimed once, and the file
+suffix the table writes (`…4341.jpg`) is resolved against the dump rather than expanded in the
+script, so a suffix that reached two pages would be a refusal instead of a silent pick.
+
+**`EXPECTED` is the contract's own checksum line, transcribed — not computed from `DICTATED`.** A
+checksum derived from the thing it checks agrees with every typo in it. The four counts
+(45 / 61 / 20 / 41) and `0.3279` are therefore an independent statement the joined table has to
+satisfy.
+
+**The refusal the counts cannot see.** Flip one `correct` row to `wrong` and one `wrong` row to
+`correct` and 20/41 still holds. The only field that has to move with the verdict is `printed_old`:
+a `wrong` key must carry one AND it must differ from the dump's old price; a `correct` key must
+carry none, and the record fills it from the dump (for a correct pair the dump's old price IS the
+printed one, which is what makes deliverable 4 possible). Both directions are asserted, both are
+tested.
+
+### The guards, driven live — refusals with a positive control
+
+```
+$ … --record <a record re-pinned to a dump missing one pair row>
+refused: 4341.jpg 37.9/75.9 was ruled on and no dump row carries it
+exit=1
+
+$ … --dump <that same short dump, against the REAL record's pin>
+refused: …/dump_short.jsonl hashes 1dafcd286c4705ca… and results/sku_b_positions_v4.json pins
+         e7d24a0a6b5aeff1… — these are not the pairs that were bought
+exit=1
+
+$ PYTHONPATH=src python3 scripts/sku_bar_verdicts.py --pairs <a read with a hand-edited accuracy>
+refused: 20/61 rounds to 0.3279 and the read states 0.85
+exit=1
+
+$ …the same three commands against the sealed inputs
+exit=0    exit=0                                    ← the positive control at the other end
+```
+
+The first two are the same tampered dump and they refuse for **different reasons on purpose**: the
+sha pin fires first and would shadow the join guard, so the first run re-pins the record to reach
+the join. A guard that is only ever exercised behind another guard has not been exercised.
+
+### Bar 2 by page — it is not one bad page
+
+| page | correct | rows |  | page | correct | rows |
+|---|---:|---:|---|---|---:|---:|
+| `…4341.jpg` | 1 | 2 | | `…4402.jpg` | 1 | 1 |
+| `…4343.jpg` | 1 | 1 | | `…4403.jpg` | 1 | 1 |
+| `…4344.jpg` | 0 | 1 | | `…4404.jpg` | 2 | 6 |
+| `…4350.jpg` | 0 | 1 | | `…4426.jpg` | 0 | 3 |
+| `…4352.jpg` | 0 | 2 | | `…4427.jpg` | 0 | 2 |
+| `…4360.jpg` | 4 | 6 | | `…4428.jpg` | 0 | 4 |
+| `…4381.jpg` | 0 | 2 | | `…4440.jpg` | 0 | 3 |
+| `…4382.jpg` | 2 | 4 | | `…4468.jpg` | 0 | 3 |
+| `…4383.jpg` | 3 | 3 | | `…4470.jpg` | 0 | 1 |
+| `…4384.jpg` | 0 | 2 | | `…4471.jpg` | 0 | 2 |
+| `…4385.jpg` | 0 | 4 | | `…4508.jpg` | 5 | 7 |
+
+**22 pages, 20 correct rows of 61.** Four pages are clean (`4343`, `4383`, `4402`, `4403`, 6 rows
+between them), **thirteen have not one correct pair**, and five are mixed. A failure concentrated on
+one leaflet would be a page problem; spread over 18 of 22 pages it is the instrument.
+
+---
+
+## Deliverable 2 — the verdict record, finalised
+
+```
+$ PYTHONPATH=src python3 scripts/sku_bar_verdicts.py
+results/sku_b_positions_v4.json — 138 elements, unbought 0
+  leaflet_brand_recall       0.3603 vs 0.75   FAIL
+  price_pair_accuracy        0.3279 vs 0.80   FAIL
+  text_tier_accuracy         0.8621 vs 0.85   PASS
+  bar 1 over 15 posts · micro 0.4727 · precision 0.9285714286
+  bar 3 over 29 of 30 rows · 1 unreadable (3.3%)
+  bar 2 over 61 pairs, the team lead's read — 0.3279 vs 0.80 — FAIL (n=61, read by the team lead 2026-08-12)
+  closure: CLOSED — instrument not ready, BY MEASUREMENT (2 of 3 bars failed: leaflet_brand_recall, price_pair_accuracy)
+wrote results/sku_bar_verdicts.json
+```
+
+**Bars 1 and 3 are unchanged to the digit** — `0.3603174603` and `0.8620689655`, the same values the
+Gate 6 section above reports. Nothing in this contract touched the dump, the run record, the
+registration or the sealed pairs.
+
+**The share is re-derived, never read.** `bar_two` calls the applier's own `checksums` over the read
+file's `keys`; it does not take `accuracy` out of the JSON. One implementation, two callers, and the
+third refusal above is what that buys — a hand-edited accuracy field is caught by the read's own
+stated counts. Two further refusals guard it: a read taken over a different dump, and a read whose
+row count is not the bar's denominator (a bar scored over a sample of a sample).
+
+**The closure is derived, and the rule is quoted.** `closure()` reads
+`results/sku_pilot_prereg_v4.json :: attempts.on_failure` verbatim rather than restating it, and
+names the failed bars from the computed verdicts — the registered sentence says "**a** failed bar"
+in the singular and the pilot failed two, so the list has to come from the data. A bar still without
+a verdict makes the state `UNDETERMINED`, never a closure taken on two thirds of the evidence.
+
+```
+"closure": {
+  "rule": "a failed bar closes B as 'instrument not ready' BY MEASUREMENT. No retry, no re-prompt,
+           no second draw: a bar re-run after its own result is not the bar that was registered",
+  "failed_bars": ["leaflet_brand_recall", "price_pair_accuracy"],
+  "passed_bars": ["text_tier_accuracy"],
+  "state": "CLOSED — instrument not ready, BY MEASUREMENT"
+}
+```
+
+---
+
+## Deliverable 4 — depth from the printed percentage ($0, and it changes the reading)
+
+```
+$ PYTHONPATH=src python3 scripts/measure_depth_from_pct.py
+results/sku_b_positions_v4.jsonl — 61 pairs against the team lead's printed_old
+  badge                median 0.2886 pp · max 1.4171 pp · ≤1pp 60/61 · ≤2pp 61/61
+  extracted_old_price  median 0.1761 pp · max 1.6366 pp · ≤1pp 56/61 · ≤2pp 61/61
+wrote results/sku_depth_from_pct.json
+```
+
+| instrument | median \|Δ\| | max \|Δ\| | mean signed Δ | ≤ 1 pp | ≤ 2 pp | outside 1 pp |
+|---|---:|---:|---:|---:|---:|---|
+| the printed `-N%` badge | **0.2886 pp** | **1.4171 pp** | −0.3425 pp | 60/61 | **61/61** | `…4404` 26.5 (−1.4171) |
+| the extracted old price | **0.1761 pp** | **1.6366 pp** | −0.1661 pp | 56/61 | **61/61** | `…4428` ×2, `…4427` ×2, `…4468` ×1 |
+
+**The third column is the finding.** The brief's hypothesis — the badge reads 61/61 and the old
+price 20/61, so question 7's depth may not need the old price at all — is only half right. Every
+dictated error is kopiyky-scale (`230.0` where the page prints `230.90`, a 0.4% error on the old
+price), and depth is insensitive to that: **the old price the pipeline already extracts is inside
+2 pp on all 61 pairs too**, and beats the badge in the median. Dropping it would buy no accuracy.
+
+The plain reading, computed from the two summaries rather than written down:
+
+> the badge IS an adequate depth instrument for a weekly median (median 0.29 pp, max 1.42 pp, 61/61
+> within 2 pp) — and the old price the pipeline already extracts also is (0.18 pp median, 1.64 pp
+> max), because every error the team lead found is in the kopiyky and depth barely moves on them.
+> **Bar 2 fails on the printed NUMBER; on this population it does not fail on the DEPTH that number
+> is used for.**
+
+**No threshold is registered.** The adequacy rule the sentence reads against — every pair within
+2 pp AND the median within 1 pp — is stated inside the record as this script's own. It is a
+measurement for the B′ design session, not a bar, and the real threshold is the operator's.
+
+**The arithmetic has a control.** `measure_depth_from_pct.depth` is a second place `(old − promo)/old`
+is written, so the suite asserts it against the `depth` the dump's own producer
+(`positions.Position.depth`) wrote, on every one of the 20 pairs where the printed and extracted old
+prices are the same number. A drift between the two implementations reddens the suite.
+
+---
+
+## Deliverable 3 — the ADR
+
+`knowledge/decisions/sku-b-pilot-closed-by-measurement.md`, with its row appended to
+`knowledge/decisions/INDEX.md` (which is ordered ascending by date, so it is the last row, not the
+first). It carries the three bars, the diagnosis verbatim, the four pieces of under-reading evidence
+(precision 0.9286 = 26/28 against 29 gold pairs never named · a clean empty-gold probe · every bar-3
+miss downward · transcription-scale price errors), the gold-vs-instrument mismatch **with the fact
+under it and without claiming it as a measured cause**, the programme's cost and what each stop
+bought, the probe in four numbers, and three revision CANDIDATES marked as candidates.
+
+---
+
+## Verify
+
+```
+$ ruff format --check .
+234 files already formatted                ← not in `make check`, so it is run separately
+
+$ make check
+1854 passed, 2 skipped in 56.29s           ← 1824 before this contract; the 30 new rows are its tests
+```
+
+**The immutables did not move.** Hashed before the first write of this session and again after the
+last:
+
+| file | sha256 | |
+|---|---|---|
+| `results/sku_b_positions_v4.json` | `fd0eb79695c2bc54…` | unchanged |
+| `results/sku_b_positions_v4.jsonl` | `e7d24a0a6b5aeff1…` | unchanged |
+| `results/sku_pilot_prereg_v4.json` | `22fd7d9cc363ac93…` | unchanged |
+| `results/spend_sku_b_v4.json` | `d88b28a0085dedca…` | unchanged |
+| `results/sku_reference_leaflet.json` | `e301bb4f48f527e4…` | unchanged |
+
+**What this contract wrote:**
+
+| file | sha256 |
+|---|---|
+| `results/sku_b_pair_verdicts.json` | `a61f1dce0ff3a13e…` |
+| `results/sku_bar_verdicts.json` | `bb95f369d352f5fa…` |
+| `results/sku_depth_from_pct.json` | `23cb7215ae63e252…` |
+
+### Per-commit checkout table
+
+Each commit checked out into the working tree, `HEAD` printed by `git rev-parse`, one content fact
+read off that tree, and **that commit's own suite** run on it. The parent `06617c8` is the control
+for the checker's own bias.
+
+| # | commit | HEAD | content fact | ruff | its own suite |
+|---|---|---|---|---|---|
+| 0 | parent (control) | `06617c8` | new files present: **0** | clean | **1824 passed**, 2 skipped |
+| 1 | team-lead docs | `0b103ec` | dictated rows in the contract: **45** | clean | **1824 passed**, 2 skipped |
+| 2 | the applier | `4bfd391` | `DICTATED` **45** rows · `EXPECTED` **61** / **0.3279** | clean | **1839 passed**, 2 skipped |
+| 3 | the read applied | `2fae1c2` | pair record: **20 / 61 = 0.3279** | clean | **1839 passed**, 2 skipped |
+| 4 | the consumer | `5b2a649` | `closure()` present · `bar_two` takes **5** parameters | clean | **1845 passed**, 2 skipped |
+| 5 | the verdict record | `20ac6dd` | bar 2 **FAIL** · failed bars **[recall, price-pair]** | clean | **1846 passed**, 2 skipped |
+| 6 | depth-from-percent | `0f1e43e` | **61** pairs · badge adequate **True** · extracted adequate **True** | clean | **1854 passed**, 2 skipped |
+| 7 | the ADR | `fa7f3df` | ADR tracked **1** · INDEX row **1** | clean | **1854 passed**, 2 skipped |
+
+The row counts climb 1824 → 1839 → 1845 → 1846 → 1854 in exactly the places tests were added, and
+the control at the top proves the checker is not simply reporting today's tree eight times.
+
+**Commit 5 carries one test beside the record** — see Dv186. Commits 8 (this report) and 9 (the vault
+tail) are added to this table after they exist; a report cannot run a suite on the commit that
+carries it.
+
+---
+
+## Deviations
+
+**Dv181 — the brief's "$0.62" and the ledgers' $0.6032.** `docs/PROMPT-sku-b-close.md` deliverable 3
+asks for "the program's cost $0.62 over three sessions". The three settled balance deltas are
+**$0.1965** (`sku-b`) **+ $0.1526** (`sku-b-v3`) **+ $0.2541** (`sku-b-v4`) = **$0.6032**, each of
+them a floor (Dv33) read from its own session's report. The ADR states $0.6032 with the three
+components and names the brief's figure beside it. The gap is $0.0168 and changes nothing; the
+number in the ADR is the one that can be walked back to a ledger.
+
+**Dv182 — the depth measurement qualifies the last clause of the diagnosis line, which is carried
+verbatim anyway.** The team lead's line ends *"and depth() is wrong wherever the old price is"*.
+That is arithmetically true and the magnitude is **≤ 1.6366 pp on every one of the 61 pairs**, with
+a median of 0.1761 pp — so on this population the extracted old price is as adequate a depth
+instrument as the badge (deliverable 4). The dictated line is **not edited**: it goes into
+`results/sku_b_pair_verdicts.json :: diagnosis`, into the ADR and into this report exactly as
+written, and the qualification is stated as a separate measurement beside it. A dictation is
+transcribed, never improved.
+
+**Dv183 — a wrong deviation cross-reference in this report, fixed in place.** The Gate 2 section
+cited "Dv176" for the L4 staging class; the deviations list numbers that **Dv177** and Dv176 is the
+driver's `contract` string. One word, no number, nothing derives from it, and it is corrected rather
+than footnoted.
+
+**Dv184 — the Gate 6 artifact table's sha for `results/sku_bar_verdicts.json` no longer matches the
+file on disk, and is left as it stands.** That table records what the **v4-run** produced
+(`e7fe6ae865e6a57d…`, bars 1 and 3 computed and bar 2 pending), which is a true statement about that
+session and the evidence that bar 2 carried no value before the read. The rewritten record's sha is
+in the Verify block above. Re-pinning the historical row would erase the only witness that the two
+writings are different files.
+
+**Dv185 — Dv176 stays open.** `scripts/positions_gm4_skub.py` still writes
+`docs/PROMPT-sku-b-v3-prep.md deliverable 2; … 3.17 (9), (10), (11)` into every run record's
+`head.contract`, omitting (12). This contract's Do-NOT list forbids touching the run records and does
+not authorise touching the driver, and no consumer reads that field (grepped in the previous
+session). It is a reader's exposure and it is still logged.
+
+**Dv186 — "the verdict record in its own commit" carries one test with it.** Deliverable 2 asks for
+`results/sku_bar_verdicts.json` re-written in its own commit. The test that pins the shipped record
+(`test_the_shipped_run_has_a_read_to_score_and_does_not_fall_back_to_pending`) asserts on that file's
+contents, so committing it one commit earlier would leave commit 4 with a red suite of its own — the
+rule that every commit must pass its own tests. The test therefore ships in commit 5 beside the
+record it pins, and commit 5 contains nothing else.
+
+---
+
+## Assumptions
+
+1. **The dictated table is authoritative and was not checked against a page image.** SPEC §10 runs
+   both ways: the executor never scores its own sample and never second-guesses the team lead's
+   read. `printed_old`, the verdicts and the four checksums are transcribed; what was verified is
+   that they are internally consistent and land on the dump exactly once.
+2. **`n` means "dump rows sharing one physical price box".** The contract says so and the join
+   confirms it: 45 keys expand to exactly the 61 pair rows the dump carries, with no row left over
+   and none claimed twice.
+3. **A missing read puts bar 2 back to PENDING rather than refusing.** `--pairs` defaults to the real
+   file; if it went missing the producer would still write a record, with bar 2 pending and the
+   closure `UNDETERMINED`. That is the state the bar was in for the whole pilot and is not an error
+   — so the guard is a test asserting the file exists and that the record on disk is the scored one.
+4. **The adequacy rule in deliverable 4 is this session's, not a registration.** Stated inside the
+   record, named in the reading line, and repeated here so no later reader can mistake it for a
+   pre-registered bar.
+5. **The three session costs are settled balance deltas, each a floor** (Dv33). No new balance was
+   read this session — nothing billed — so the programme total is as settled as the three reports
+   left it.
+6. **`graphify update .` was run after the code changes**, per CLAUDE.md. `graphify-out/` is
+   gitignored, so it is not evidence and appears in no commit.
+
+---
+
+## Commits
+
+| # | commit | subject |
+|---|---|---|
+| 1 | `0b103ec` | `chore(docs)`: the team lead's close contract and the STATUS tail — committed unedited |
+| 2 | `4bfd391` | `feat(sku-b-close)`: the bar-2 applier — 45 dictated keys, 61 rows, matched exactly once |
+| 3 | `2fae1c2` | `data(sku-b-close)`: the bar-2 read applied — 20 of 61 = 0.3279 vs 0.80 |
+| 4 | `5b2a649` | `feat(sku-b-close)`: the bar producer learns the bar-2 read, and states the closure |
+| 5 | `20ac6dd` | `data(sku-b-close)`: the verdict record, finalised — two bars of three FAIL, B closes |
+| 6 | `0f1e43e` | `feat(sku-b-close)`: depth from the printed percentage, measured on what is already bought |
+| 7 | `fa7f3df` | `docs(decision)`: the sku-b pilot closed by measurement |
+| 8 | — | `docs(report)`: sku-b-close — this section |
+| 9 | — | `chore(vault)`: the sku-b-close tail — the day's log, hot.md, the index |
+
+Row 8 is blank for the reason the previous table gives: a report cannot name the commit that carries
+it. Rows 8 and 9 are filled in by one follow-up commit, which is where the regress ends.
