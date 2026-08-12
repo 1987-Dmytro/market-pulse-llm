@@ -778,7 +778,9 @@ the join. A guard that is only ever exercised behind another guard has not been 
 
 **22 pages, 20 correct rows of 61.** Four pages are clean (`4343`, `4383`, `4402`, `4403`, 6 rows
 between them), **thirteen have not one correct pair**, and five are mixed. A failure concentrated on
-one leaflet would be a page problem; spread over 18 of 22 pages it is the instrument.
+one leaflet would be a page problem; spread over 18 of 22 pages it is the instrument **on ATB's
+layout, which is the only chain in this population** — all 22 pages are `atb_market_official_*`, so
+nothing here says how the instrument reads another chain's price box.
 
 ---
 
@@ -978,6 +980,26 @@ contents, so committing it one commit earlier would leave commit 4 with a red su
 rule that every commit must pass its own tests. The test therefore ships in commit 5 beside the
 record it pins, and commit 5 contains nothing else.
 
+**Dv187 — the three new records name their own producers in `git.dirty`, and they are NOT
+rewritten.** `provenance.git_state` runs at write time, and all three were written before any of
+this contract's commits existed: each carries `commit: 06617c8` (the session's starting HEAD) and a
+`dirty` list of 7, 10 and 13 paths that includes the very scripts that produced them. By
+`src/market_pulse/provenance.py`'s own docstring, *"`dirty` naming something under `src/` or
+`scripts/` means the commit does not reproduce the numbers"* — so the field is saying something true
+and unhelpful. Re-running the producers now would fix the field and move three shas that this report,
+two tests and the depth record's own pin all depend on, which is a worse trade. The claim is proved
+directly instead: on the clean tree at `d347777`, all three producers were re-run into a scratch
+directory and **every field except `git` is byte-identical**, with `dirty: []`.
+
+```
+sku_b_pair_verdicts      identical apart from `git`: True   (shipped dirty 7  → rebuilt dirty [])
+sku_bar_verdicts         identical apart from `git`: True   (shipped dirty 10 → rebuilt dirty [])
+sku_depth_from_pct       identical apart from `git`: True   (shipped dirty 13 → rebuilt dirty [])
+```
+
+A producer that must write its provenance before it can be committed cannot do better than this;
+what it can do is say so rather than leave a reader to find the field.
+
 ---
 
 ## Assumptions
@@ -1017,9 +1039,11 @@ record it pins, and commit 5 contains nothing else.
 | 7 | `fa7f3df` | `docs(decision)`: the sku-b pilot closed by measurement |
 | 8 | `c10f641` | `docs(report)`: sku-b-close — appended as the report's Close section |
 | 9 | `043dfe6` | `chore(vault)`: the sku-b-close tail — the day's log, hot.md, the index |
-| 10 | — | `docs(report)`: sku-b-close — the two rows this table could not name |
+| 10 | `d347777` | `docs(report)`: sku-b-close — the two rows this table could not name |
+| 11 | — | `docs(report)`: sku-b-close — Dv187, and the one clause the page table was missing |
 
-Ten commits. Row 10 is blank for the reason the previous table gives: a report cannot name the
-commit that carries it, and one follow-up is where the regress ends. Commit 10 changes prose only —
-the two table rows above and their checkout entries — on the tree commit 9 left, whose suite is the
-`1854 passed, 2 skipped` in the row for commit 9.
+Eleven commits. Row 11 is blank for the reason the previous table gives: a report cannot name the
+commit that carries it. It is one commit later than the row above predicted, and the reason is
+better than tidiness — a review after commit 10 found the `git.dirty` field of Dv187 and one
+sentence claiming more than a single-chain sample can. Commits 10 and 11 change prose only, on the
+tree commit 9 left, whose suite is the `1854 passed, 2 skipped` in the row for commit 9.
