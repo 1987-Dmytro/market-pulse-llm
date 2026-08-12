@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-12 13:42:30 (every SessionStart)
+**Auto-refreshed:** 2026-08-12 13:52:17 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+0001cd9 data(sku-miss-pack): the pack re-stamped after the page-file guard
+c2940ca fix(sku-miss-pack): the page a position is filed under, and the empty half
+b92e74d chore(vault): the sku-miss-pack tail -- the day's log, hot.md, the index
 0a48cf0 data(sku-miss-pack): the pack re-stamped from the tree that contains its producer
 610af67 feat(sku-miss-pack): bar 1's 29 misses, packed for the team-lead read ($0)
-1845b49 chore(docs): the team lead's miss-pack contract and the STATUS pointer
-1c2963c docs(report): sku-b-close -- Dv187, and the one clause the page table was missing
-d347777 docs(report): sku-b-close -- the two rows this table could not name
 ```
 
 ## 📋 Recent decisions
@@ -30,7 +30,7 @@ d347777 docs(report): sku-b-close -- the two rows this table could not name
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-12 13:55 (arch-a ✅, uni-a ✅, uni-b ✅, sku-b-prep ✅, sku-b-run ✅ ПРИНЯТ,
+**Last update:** 2026-08-12 14:10 (arch-a ✅, uni-a ✅, uni-b ✅, sku-b-prep ✅, sku-b-run ✅ ПРИНЯТ,
 sku-b-v3-prep ✅, sku-b-v3-run ⛔ ОТКАЗ на воротах — попытка ЦЕЛА, sku-b-v4-prep ✅ $0,
 sku-b-v4-run ✅ 121 куплен, **sku-b-close ✅ $0 — ПИЛОТ ЗАКРЫТ ИЗМЕРЕНИЕМ, 2 планки из 3 FAIL**,
 **sku-miss-pack ✅ $0 — стол для чтения 29 пропущенных пар накрыт, вердиктов НЕТ**).
@@ -52,14 +52,14 @@ sku-b-v4-run ✅ 121 куплен, **sku-b-close ✅ $0 — ПИЛОТ ЗАКР�
 Длинная форма отклонений: `implementation-notes.md` (Dv100–120), `uni-a.md` (Dv121–124),
 `uni-b.md` (Dv125–132), `sku-b-prep.md` (Dv133–147), `sku-b-run.md` (Dv148–153),
 `sku-b-v3-prep.md` (Dv154–160), `sku-b-v3-run.md` (Dv161–168), `sku-b-v4-prep.md` (Dv169–175),
-**`sku-b-v4-run.md` (Dv176–180, и в её секции `# Close` — Dv181–186)**, **Dv188–193 — только в
+**`sku-b-v4-run.md` (Dv176–180, и в её секции `# Close` — Dv181–186)**, **Dv188–194 — только в
 дневнике [[2026-08-12]]: лёгкий контракт 12.08 отчёта-файла не просит**.
 Дневники [[2026-08-12]] / [[2026-08-11]], ADR ниже.
 
 ## 🔥 What's Hot
 
-**СТОЛ ДЛЯ ЧТЕНИЯ ПЛАНКИ 1 НАКРЫТ, ВЕРДИКТОВ НЕТ** (`sku-miss-pack` ✅ 12.08, $0, три коммита
-`1845b49..0a48cf0`). `results/sku_miss_pack.md` — 29 пропущенных голд-пар по постам: строка КАК её
+**СТОЛ ДЛЯ ЧТЕНИЯ ПЛАНКИ 1 НАКРЫТ, ВЕРДИКТОВ НЕТ** (`sku-miss-pack` ✅ 12.08, $0, шесть коммитов
+`1845b49..0001cd9`). `results/sku_miss_pack.md` — 29 пропущенных голд-пар по постам: строка КАК её
 написал ревьюер, отправленные страницы с sha и ответ инструмента на каждой (`brand_raw` / `[]` /
 `UNREADABLE` с причиной), найденная половина рядом как контроль, 29 пустых ячеек `a|b|c` в конце.
 Планка 1 пересчитана `sku_bar_verdicts.bar_one` (тот же `gold_key` с обеих сторон) и построчно
@@ -177,9 +177,9 @@ v4.
 
 ## 🚧 Blockers
 
-**НИЧЕГО НЕ БЛОКИРУЕТ B′.** Сюита **1866 passed, 2 skipped** (+12 за `sku-miss-pack`, +30 за
-`sku-b-close`); `ruff format --check` 236 файлов; дерево чистое, **три коммита
-`1845b49..0a48cf0`** поверх одиннадцати `0b103ec..1c2963c`. Почекаутная таблица зелёная на КАЖДОМ
+**НИЧЕГО НЕ БЛОКИРУЕТ B′.** Сюита **1869 passed, 2 skipped** (+15 за `sku-miss-pack`, +30 за
+`sku-b-close`); `ruff format --check` 236 файлов; дерево чистое, **шесть коммитов
+`1845b49..0001cd9`** поверх одиннадцати `0b103ec..1c2963c`. Почекаутная таблица зелёная на КАЖДОМ
 коммите; контроль — родитель `1c2963c`, 1853. Иммутабельные артефакты
 (`sku_b_positions_v4.{json,jsonl}`, `sku_pilot_prereg_v4.json`, `spend_sku_b_v4.json`,
 `sku_reference_leaflet.json`) захэшированы ДО первого пишущего действия и после — те же байты.
