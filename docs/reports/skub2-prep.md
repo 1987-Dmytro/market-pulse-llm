@@ -3,7 +3,8 @@
 `docs/PROMPT-skub2-prep.md` · authority SPEC §3.17 (13), ratified 2026-08-12 · executor, $0, no
 paid calls · 2026-08-12.
 
-Five deliverables, eleven commits, `d3fa574..b39b55e`. Four of the five landed as files on disk.
+Five deliverables, sixteen commits, `d3fa574..<the vault tail>`. Four of the five landed as files
+on disk.
 The fifth — the B′ pre-registration — **is a producer that refuses**, because four decomposition
 pairs are still `PENDING_TEAM_LEAD` and each of them can still leave the denominator it would
 register.
@@ -24,13 +25,13 @@ register.
 
 ```
 $ python3 -m pytest -q
-1966 passed, 2 skipped in 58.17s
+1969 passed, 2 skipped in 58.89s
 $ ruff check . && ruff format --check .
 All checks passed!
 244 files already formatted
 ```
 
-1854 tests at the start of the day, 1869 after the miss-pack contract, **1966** now.
+1854 tests at the start of the day, 1869 after the miss-pack contract, **1969** now.
 
 ---
 
@@ -311,8 +312,40 @@ matched `raw:try-vedmedi` to `try-vedmedi`. A pair that matches no reviewer name
 because (13)(b) is part of the instrument being registered. The three halves of instrument v2 are
 each pinned where they can actually be read: the parser module sha, serving pin v2, the registry.
 
-The bars are byte-equal to v4 leaf by leaf except `leaflet_brand_recall.gold`, with a negative
-control on both the text and the threshold.
+The bars' **verbatim texts and thresholds** are byte-equal to v4, with a negative control on both.
+
+### Dv209 — the three readings that were still counting v4's posts
+
+Found in review, after the first build. Bar 1 was assembled as *v4's bar with the gold replaced*,
+so three leaves stayed v4's while the gold said something else:
+
+| leaf | said | should say |
+| --- | --- | --- |
+| `excluded.posts` | 4 empty-gold posts | 8 |
+| `denominator` | «the 15 posts … all 55 pairs» | 11 posts, 41 pairs |
+| `reachable` | «15 of 19 posts … 55 pairs» | 11 of 19, 41 pairs |
+
+The record answered the same question two ways, and **B5 asked the team lead to ratify 11 while the
+machine-readable field said 15**.
+
+It is not cosmetic. `sku_bar_verdicts.bar_one` opens by comparing `excluded.posts` against the
+reference's own empty-gold list and refuses if they differ. With v4's four inherited, that
+comparison **matches** the sealed reference and waves a 15-post scoring through — reading gold from
+the sealed reference in the **v4 key space** while instrument v2's extractions key as `rud` and
+`limo`. Guaranteed misses on exactly the two brands (13)(b) exists to fix, silently, at the one
+paid attempt.
+
+Recomputed, the same guard **refuses**, so skub2-run cannot begin without pointing the scorer at
+this record's own `gold.per_post`. `check_the_bars_did_not_move` now names all four moved leaves
+literally — the contract holds the bars' *verbatim texts and thresholds* byte-equal and those are
+untouched; these four are the registration's **reading**, and every one of them counts posts or
+pairs. The equality `bar_one` depends on is asserted with a control that fires.
+
+**Dv210 — the scorer's gold source is skub2-run's first step.** `bar_one` reads gold from
+`reference["posts"][…]["brands_visible"]["gold_keys"]`. B′'s gold lives in
+`bars.leaflet_brand_recall.gold.per_post` and is in a different key space. Same shape as Dv199:
+this contract registers the denominator, and wiring the scorer to it is the run's step — now
+guarded by a refusal rather than left to be noticed.
 
 ### Dv207 — (13)(d) against (11)(a), stated out loud
 
@@ -393,7 +426,13 @@ d7f240f  data: the decomposition re-stamped                 1 failed, 1965 passe
 2b6ee3f  data: serving pin v2 re-stamped                    1 failed, 1965 passed, 2 skipped
 0c4dfe1  data: the B' projection re-stamped                 1 failed, 1965 passed, 2 skipped
 b39b55e  data: serving pin v2, the last sibling             1 failed, 1965 passed, 2 skipped
+79eaccb  docs(report): skub2-prep                           1 failed, 1965 passed, 2 skipped
+10bcc3a  chore(vault): the skub2-prep tail                  1 failed, 1965 passed, 2 skipped
+300a338  fix: the three readings that counted v4's posts    1 failed, 1968 passed, 2 skipped
 ```
+
+The last three rows were run after the review pass that found Dv209; the report and vault commits
+below them carry no code.
 
 **Dv206 — the one failure on every row is the checker's, not the tree's.** `data/` is gitignored,
 so the worktree is given a symlink to the repo's copy, and
@@ -456,6 +495,15 @@ the control commit too. §The checkout table.
 
 **Dv208.** The driver still carries v4's cap, phase and ledger; moving them is skub2-run's step.
 
+**Dv209.** Found in review: bar 1's `excluded`, `denominator` and `reachable` were still v4's and
+still counting 15 posts and 55 pairs beside a gold of 11 and 41 — and `bar_one`'s own guard would
+have matched the sealed reference and scored 15 posts in the v4 key space. Recomputed; the guard
+now refuses. §Deliverable 4.
+
+**Dv210.** `bar_one` still reads gold from the sealed reference. Pointing it at
+`bars.leaflet_brand_recall.gold.per_post` is skub2-run's first step, and Dv209's fix makes it a
+stop rather than a silent wrong number.
+
 ---
 
 ## What the acceptance has to decide
@@ -471,5 +519,9 @@ the control commit too. §The checkout table.
 4. **B5** — 11 posts in the macro mean.
 5. **The $0.40 cap against a $0.4004 upper bound** — accept, drop the drift term on a corner that
    is already a bound, or move the cap.
+6. **The scorer's gold source** (Dv210) — `sku_bar_verdicts.bar_one` reads the sealed reference's
+   `gold_keys`, which are the v4 key space. skub2-run has to point it at the B′ registration's own
+   `gold.per_post` before the first paid call; until then the run refuses at `bar_one`'s
+   empty-gold check, which is where Dv209's fix put the stop.
 
 Nothing above is a number this session chose.
