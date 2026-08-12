@@ -229,6 +229,11 @@ def test_every_pinned_input_still_hashes_to_what_it_says(record):
         # 800 → 1200 ceiling and three alias rows. The strip still takes it off, because this pin is
         # v4's and v4 was registered before any of that existed.
         "sku-b-ratification-7",
+        # (14) — B′ finalised: the four pending pairs read, B1/B4/B5 ruled, and the cap moved from
+        # (13)(d)'s $0.40 to $0.65. Same one-name-short arrival as its two predecessors. Stripped
+        # here for the same reason (13) is — v4 predates it — and KEPT by
+        # `write_sku_prereg_b2.KEEP_BLOCKS`, whose registration is made UNDER it.
+        "sku-b-ratification-8",
     ]
     assert prereg.RATIFICATION_NAME.findall(spec_text) == blocks
     law = prereg.registered_law(prereg.SPEC).decode("utf-8")
