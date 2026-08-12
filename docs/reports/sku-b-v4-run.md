@@ -2,7 +2,7 @@
 
 ## Read-back
 
-**The eight gates, one line each:**
+**Step 0.5 and the eight gates, one line each:**
 
 0.5 **Dv170** — `scripts/sku_bar_verdicts.py`'s three v3 references move to v4: both defaults, and
    the provenance string it writes into the verdict record, now a constant pinned by a test.
@@ -451,11 +451,13 @@ pages (R2), with the 4 empty-gold posts excluded (R3).
 | `…:4360` | 0.7500 | 4 | 3 | 1 | 0 |
 | `…:4426` | 1.0000 | 4 | 4 | 0 | 0 |
 
-Beside it, and gating nothing: micro **0.4727**, precision **0.9286**, 55 distinct gold keys against
-28 distinct extracted keys. **The instrument under-reads; it does not mis-read** — of everything it
-named on a scoreable post, one key was not in the gold. The **precision probe is clean**: on the four
-posts whose gold set is empty, the model extracted **zero** brands, so it did not invent a dairy
-brand on a page of summer non-food.
+Beside it, and gating nothing: micro **0.4727** = **26 / 55**, precision **0.9286** = **26 / 28**.
+Both denominators are (post, brand-key) PAIRS summed over the 15 scoreable posts, which is the
+prereg's own word for the 55 — the gold's distinct key count is 27. **The instrument under-reads; it
+does not mis-read**: of the 28 pairs it named on a scoreable post, **two** were not in the gold —
+`raw:three bears` on `…:4340` and `raw:komo` on `…:4381` — against **29 gold pairs it never named**.
+The **precision probe is clean** on top of that: on the four posts whose gold set is empty, the model
+extracted **zero** brands, so it did not invent a dairy brand on a page of summer non-food.
 
 Four of the 15 posts carry an unreadable page. Bar 1's registered reading has no unreadable clause —
 only bar 3 does — so nothing is excluded and the exposure is reported: an unreadable page contributes
