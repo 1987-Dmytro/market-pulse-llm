@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-12T15:14:59+00:00",
+  "generated_at": "2026-08-12T15:16:40+00:00",
   "phase": "skub2 — what the re-measurement costs against its $0.65 cap",
   "written_by": "skub2-prep (executor, $0), docs/PROMPT-skub2-prep.md deliverable 5; re-stamped by docs/PROMPT-skub2-fix.md step 5 against the cap 3.17 (14)(e) sets",
   "authority": "docs/SPEC.md amendment 3.17 (10)(a), (13)(d) and (14)(e)",
@@ -132,18 +132,11 @@
     "the driver's constants": "scripts/positions_gm4_skub.py now carries skub2's CAP_USD, PHASE, LEDGER, PREREG and serving PIN — moved together at skub2-fix, which is Dv208 paid. This file still does not configure the run: it reads `write_sku_prereg_b2.CAP_USD` to know what line to price against, and the driver is held to the same number by `check_the_constants_are_the_registrations` against the registration itself"
   },
   "git": {
-    "commit": "c2fc096c3ea56c89ee02ce97fc5c19a09d0e5392",
+    "commit": "b30cb0d4cd89defb6f3f5cba494164fe28ce8b96",
     "dirty": [
       "knowledge/daily_logs/2026-08-12.md",
       "knowledge/hot.md",
-      "knowledge/index.md",
-      "scripts/positions_gm4_skub.py",
-      "scripts/preflight_serving_guards.py",
-      "scripts/write_sku_projection.py",
-      "scripts/write_sku_projection_b2.py",
-      "tests/test_positions_driver.py",
-      "tests/test_sku_projection.py",
-      "tests/test_sku_projection_b2.py"
+      "knowledge/index.md"
     ]
   }
 }
