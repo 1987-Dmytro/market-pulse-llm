@@ -25,6 +25,11 @@ reason: 17 of the 138 elements have already been paid for once, under a clause t
 second draw. The registration, the selection, the warm-up inputs and the merged output are each
 driven both ways before the second session opens.
 
+sku-b-v4-prep re-drives that half against the v4 registration and adds the two subjects (12) made
+possible: the pinned (10)(a) refusal record, which is the evidence the v4 population is still 121,
+and the three constants of (12)(b) — a v4 run reading `results/spend_sku_b_v3.json` is the Dv167
+trap and must refuse before it reads a balance.
+
     scripts/preflight_serving_guards.py
 
 Needs `transformers` and `peft` — the versions the volume's venv carries, which the run prints
@@ -217,32 +222,38 @@ def positions_guards(handler, adapted_model) -> dict:
 
 
 def resume_guards() -> dict:
-    """The resume of SPEC 3.17 (11), driven BOTH WAYS before a cent of the second session is spent.
+    """The resume of SPEC 3.17 (11)/(12), driven BOTH WAYS before a cent of the session is spent.
 
-    The first session bought 17 of 138 elements for $0.1965 under a one-attempt clause. Every guard
-    below stands between the resumed session and buying one of those 17 again — and every one of
-    them is driven with its CONTROL, because a refusal proves something is blocked and never that
-    the blocked set is the one that was meant.
+    The first session bought 17 of 138 elements for $0.1965 under a one-attempt clause, and the v3
+    session was refused at the (10)(a) gate for $0.1526 without buying any of the rest. Every guard
+    below stands between the v4 session and either paying for one of those 17 again or paying for
+    the refused session's overhead a second time — and every one of them is driven with its CONTROL,
+    because a refusal proves something is blocked and never that the blocked set is the one that was
+    meant.
 
-    Four subjects, in the order a run meets them: the registration (are the pins still the bytes
-    they name), the selection (is what is about to travel unbought), the warm-up inputs (are they
-    real and still non-gold), and the merged output (does any source carry two answers). Pure
-    checks, no GPU stack needed — they live here because this is the list that runs before the paid
-    session, not because they need one.
+    Five subjects, in the order a run meets them: the registration (are the pins still the bytes
+    they name, including the refusal record's), the constants of (12)(b) (do the cap, the ledger and
+    the phase name ONE session), the selection (is what is about to travel unbought), the warm-up
+    inputs (are they real and still non-gold), and the merged output (does any source carry two
+    answers). Pure checks, no GPU stack needed — they live here because this is the list that runs
+    before the paid session, not because they need one.
     """
     import hashlib
     import json
 
     import positions_gm4_skub as driver
 
-    print("\n--- SPEC 3.17 (11): the resume ---")
+    print("\n--- SPEC 3.17 (11)/(12): the resume ---")
     checks: dict[str, bool] = {}
     prereg = json.loads(driver.PREREG_RESUME.read_text(encoding="utf-8"))
     pin_sha = hashlib.sha256(driver.PIN.read_bytes()).hexdigest()
 
     def moved(mutate) -> dict:
+        """The registration with one thing moved. The mutation gets the WHOLE record: (12) put a
+        pin outside the `resume` block for the first time — the refusal record lives in
+        `supersedes` — and a helper that could only reach `resume` would leave it undriven."""
         body = json.loads(json.dumps(prereg))
-        mutate(body["resume"])
+        mutate(body)
         return body
 
     plan = driver.resume_plan(prereg, pin_sha, REPO_ROOT)
@@ -257,21 +268,65 @@ def resume_guards() -> dict:
     )
 
     for label, mutate in (
-        ("a moved dump pin", lambda r: r["bought_already"]["dump"].update(sha256="0" * 64)),
+        (
+            "a moved dump pin",
+            lambda b: b["resume"]["bought_already"]["dump"].update(sha256="0" * 64),
+        ),
         (
             "a moved serving pin",
-            lambda r: r["bought_already"]["serving_pin"].update(sha256="0" * 64),
+            lambda b: b["resume"]["bought_already"]["serving_pin"].update(sha256="0" * 64),
         ),
         (
             "an unbought id with an answer",
-            lambda r: r["bought_already"].update(
-                unbought=[r["bought_already"]["asked"][0], *r["bought_already"]["unbought"]]
+            lambda b: b["resume"]["bought_already"].update(
+                unbought=[
+                    b["resume"]["bought_already"]["asked"][0],
+                    *b["resume"]["bought_already"]["unbought"],
+                ]
             ),
+        ),
+        # new in v4: the refusal record is what says the v3 session bought nothing, and the whole
+        # population this run buys is inherited from it rather than re-derived
+        (
+            "a moved (10)(a) refusal-record pin",
+            lambda b: b["supersedes"]["refused_record"].update(sha256="0" * 64),
         ),
     ):
         refused, how = refuses(driver.resume_plan, moved(mutate), pin_sha, REPO_ROOT)
-        print(f"   {label:<30} {how}")
+        print(f"   {label:<34} {how}")
         checks[f"the resume refuses {label}"] = refused
+
+    print("\n9b. the (12)(b) constants    cap, ledger and phase against the registration")
+    registered = prereg["attempts"]
+    v3_ledger = REPO_ROOT / "results" / "spend_sku_b_v3.json"
+    blocked, how = refuses(
+        driver.check_the_constants_are_the_registrations,
+        prereg,
+        driver.RESUME_PHASE,
+        driver.RESUME_CAP_USD,
+        driver.RESUME_LEDGER,
+    )
+    print(
+        f"    the registered set         {how}   <- the control"
+        f" (${registered['cap_usd']:.2f} · {registered['phase']} · {registered['ledger']})"
+    )
+    checks["the control: the registered cap/ledger/phase are accepted together"] = not blocked
+    for label, args in (
+        ("the OLD ledger name", (driver.RESUME_PHASE, driver.RESUME_CAP_USD, v3_ledger)),
+        ("the OLD cap", (driver.RESUME_PHASE, 0.45, driver.RESUME_LEDGER)),
+        ("the OLD phase key", ("sku-b-v3", driver.RESUME_CAP_USD, driver.RESUME_LEDGER)),
+    ):
+        refused, how = refuses(driver.check_the_constants_are_the_registrations, prereg, *args)
+        print(f"    {label:<26} {how}")
+        checks[f"the run refuses {label}"] = refused
+    # which guard fires matters: `read_ledger` also stops a v3 anchor, by its MISSING KEY and only
+    # after a balance has been read. Driven here so the two messages are visibly different rather
+    # than assumed to be, and so a reader can see the constants check is not standing in for it.
+    also, how = refuses(
+        driver.read_ledger, v3_ledger, 10.0, driver.RESUME_PHASE, driver.RESUME_CAP_USD
+    )
+    print(f"    read_ledger, for contrast  {how}")
+    checks["read_ledger refuses the v3 anchor too, and for its own reason"] = also
 
     bought, fresh = already["asked"][0], already["unbought"][0]
     asked = set(already["asked"])
@@ -303,11 +358,14 @@ def resume_guards() -> dict:
     for label, mutate in (
         (
             "a page inside the sent 108",
-            lambda r: r["warmup"]["page"].update(
+            lambda b: b["resume"]["warmup"]["page"].update(
                 file=reference["posts"][0]["pages_sent"][0]["file"]
             ),
         ),
-        ("a row inside the 30", lambda r: r["warmup"]["text"].update(id=manifest["ids"][0])),
+        (
+            "a row inside the 30",
+            lambda b: b["resume"]["warmup"]["text"].update(id=manifest["ids"][0]),
+        ),
     ):
         refused, how = refuses(
             driver.resume_warmup_inputs, moved(mutate)["resume"], reference, manifest, REPO_ROOT
