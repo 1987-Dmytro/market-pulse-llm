@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-12 10:17:22 (every SessionStart)
+**Auto-refreshed:** 2026-08-12 10:25:57 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+10fe3c5 docs(report): sku-b-v4-prep -- the checkout table's own tail, and Dv175
+7b9caa4 chore(vault): the sku-b-v4-prep tail -- the day's log, hot.md, the index
 8f4a7ed docs(report): sku-b-v4-prep
 bb6b96e docs(decision): the v3 refusal and the v4 ruling
 87c2240 feat(sku-b-v4-prep): the preflight re-driven against the v4 registration
-6369123 feat(sku-b-v4-prep): projection v4 -- both measured marginals as corners
-20b9436 feat(sku-b-v4-prep): the v4 constants set together, and one cost block for both exits
 ```
 
 ## 📋 Recent decisions
@@ -42,7 +42,7 @@ sku-b-v3-prep ✅, sku-b-v3-run ⛔ ОТКАЗ go/no-go (попытка ЦЕЛА
 трогать. Длинная форма: `implementation-notes.md` (Dv100–120 и указатели
 Dv133–147), `docs/reports/uni-a.md` (Dv121–124), `uni-b.md` (Dv125–132), `sku-b-prep.md`
 (Dv133–147), `sku-b-run.md` (Dv148–153), `sku-b-v3-prep.md` (Dv154–160),
-`sku-b-v3-run.md` (Dv161–168), **`sku-b-v4-prep.md` (Dv169–174)**,
+`sku-b-v3-run.md` (Dv161–168), **`sku-b-v4-prep.md` (Dv169–175)**,
 дневники [[2026-08-12]] / [[2026-08-11]], ADR ниже.
 
 ## 🔥 What's Hot

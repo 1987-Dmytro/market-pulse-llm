@@ -35,7 +35,7 @@
   unbought elements, each of the 138 bought exactly once across the program.
 
 **No paid calls in this contract.** No pod, no endpoint, no template, no `/run`. The only network
-this session touched was `runpodctl`'s two read-only listings below and one `pip install` into a
+this session touched was `runpodctl`'s four read-only listings below and one `pip install` into a
 scratch venv outside the repo (Dv173).
 
 ---
@@ -328,14 +328,23 @@ $ ruff format --check .
 
 The formatter is not in `make check`, so it is run separately.
 
-The account, unchanged because this contract created nothing:
+The account, unchanged because this contract created nothing — with a POSITIVE CONTROL, because two
+empty arrays are also what an unauthenticated or broken CLI returns:
 
 ```
 $ runpodctl pod list -a
 []
 $ runpodctl serverless list
 []
+$ runpodctl template list --type user      ← the control: the tool can see things
+unfcr3ja0t | market-pulse-5b-a
+0g6zg73ptq | mp-5b-diag
+$ runpodctl network-volume list
+qw4nwleanc mp-srv2 EU-RO-1 100
 ```
+
+The two 5b-era templates and the volume are the same rows the sku-b-v3-run teardown left standing.
+Nothing here bills but the volume.
 
 ### The per-commit checkout table
 
@@ -355,6 +364,11 @@ control for the checker's own bias.
 | 7 | `bb6b96e` | the ADR | 1 row in `knowledge/decisions/INDEX.md` | 1823 passed, 2 skipped |
 
 Restored at `bb6b96e` with the same 4 dirty vault paths.
+
+The table covers commits 1–7. Commit 8 (this report) was checked out separately after it landed —
+`HEAD 8f4a7ed`, **1823 passed, 2 skipped** — and commit 9 is the vault tail, whose `make check` is
+the one printed above under Verify. A report cannot check out the commit that carries it, so the
+last two rows are stated here rather than left implied.
 
 Row 1's single failure is
 `tests/test_sku_prereg.py::test_every_pinned_input_still_hashes_to_what_it_says` — exactly the test
@@ -376,12 +390,19 @@ superseded by (12)(a) and it is not overwritten, and a test asserts both halves 
 in the record. Named rather than tidied, because tidying a registered clause is how a registration
 stops being the thing that was signed.
 
-**Dv170 — `scripts/sku_bar_verdicts.py`'s defaults still name v3.** `PREREG` and `RECORD` default to
-`results/sku_pilot_prereg_v3.json` and `results/sku_b_positions_v3.json`. Not in this contract's four
-deliverables and not moved: the producer takes `--record` and `--prereg`, and it already refuses a
-mismatch by name (`the record was bought under X, not Y`), so pointing it at a v4 record with the v3
-default is a loud stop rather than a wrong number. The honest place for the defaults is the v4-run
-contract, where the record they name will exist.
+**Dv170 — `scripts/sku_bar_verdicts.py` still names v3 in three places, and one of them is not
+guarded.** `PREREG` and `RECORD` default to `results/sku_pilot_prereg_v3.json` and
+`results/sku_b_positions_v3.json` — those two are loud, because the producer takes `--record` and
+`--prereg` and already refuses a mismatch by name (`the record was bought under X, not Y`). The
+third is not: line 395 writes `"contract": "docs/PROMPT-sku-b-v3-run.md step 6; docs/SPEC.md
+amendment 3.17 (6), (11)"` INTO the verdict record — the artifact the team lead opens at acceptance
+— and nothing checks a provenance string. Scored after the v4 run it would claim the verdicts were
+produced under the v3-run contract and cite (6) and (11) without (12). Not moved in this contract:
+it is the bar producer's own work and the record it names will exist in the v4-run contract, which
+is where all three belong. Named here so that contract inherits a complete list rather than a
+partial one. Checked and clear: nothing in that file keys on the `bought_by` VALUE — the
+`RESUME_PHASE` rename to `sku-b-v4` reaches every dump row, and the producer reads
+`record["resume"]["sessions"]` as data without comparing it to a literal.
 
 **Dv171 — the ledger guard compares the file NAME, not the path.** The trap (12)(b) names is reading
 another session's anchor, and `spend_sku_b_v3.json` against `spend_sku_b_v4.json` is what separates
@@ -409,6 +430,12 @@ libraries.
 the list is a set of pre-authorised commits rather than a sequence. The ADR quotes the cap arithmetic
 of deliverable 3, so writing it before that record existed would have meant quoting numbers not yet
 produced. Ordering chosen on that ground and named here.
+**Dv175 — the vault tail is its own commit but not the last one.** The contract says "vault tail →
+its own final commit", and it is commit 9 of 10: this report needed one more commit to record the
+`make check` of the commit that carries it, which by construction can only be written after that
+commit exists. The vault tail is not mixed into any other change, which is what the rule protects;
+what moved is the word "final". Named rather than repaired by a rebase — rewriting a published
+commit to make an ordering claim true is a worse trade than saying it plainly.
 
 ---
 
@@ -449,4 +476,8 @@ produced. Ordering chosen on that ground and named here.
 | 6 | `87c2240` | `feat(sku-b-v4-prep)`: the preflight re-driven against the v4 registration |
 | 7 | `bb6b96e` | `docs(decision)`: the v3 refusal and the v4 ruling |
 
-This report is commit 8 (`docs(report): sku-b-v4-prep`); the vault tail is commit 9 and last.
+| 8 | `8f4a7ed` | `docs(report)`: sku-b-v4-prep |
+| 9 | `7b9caa4` | `chore(vault)`: the sku-b-v4-prep tail — the day's log, hot.md, the index |
+| 10 | — | `docs(report)`: sku-b-v4-prep — the checkout table's own tail, and Dv175 |
+
+Ten commits. The vault tail is commit 9 rather than the last; Dv175 says why.
