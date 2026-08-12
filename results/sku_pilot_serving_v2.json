@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-12T12:59:00+00:00",
+  "generated_at": "2026-08-12T13:23:00+00:00",
   "phase": "skub2 — instrument v2's serving configuration, pinned",
   "written_by": "skub2-prep (executor, $0), docs/PROMPT-skub2-prep.md deliverable 2",
   "authority": "docs/SPEC.md amendment 3.17 (13)(a) — instrument v2, ratified 2026-08-12",
@@ -61,21 +61,9 @@
     "the deployment": "nothing is deployed and no RunPod resource is created. What is built here is the pin; standing a worker up against it is skub2-run's step"
   },
   "git": {
-    "commit": "c6f777404dbb1071df0d14ee21df93271e49af0c",
+    "commit": "d7f240ff904bee0a88632cf508f070cafd216e67",
     "dirty": [
-      "knowledge/daily_logs/2026-08-12.md",
-      "knowledge/hot.md",
-      "knowledge/index.md",
-      "scripts/write_sku_projection.py",
-      "scripts/write_sku_serving_pin.py",
-      "src/market_pulse/local_llm.py",
-      "src/market_pulse/positions.py",
-      "tests/test_positions.py",
-      "tests/test_positions_driver.py",
-      "tests/test_positions_serving.py",
-      "tests/test_sku_projection.py",
-      "tests/test_sku_serving_pin.py",
-      "scripts/write_sku_serving_pin_v2.py"
+      "results/sku_projection_b2.json"
     ]
   }
 }
