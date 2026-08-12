@@ -81,33 +81,45 @@ LEDGER = REPO_ROOT / "results" / "spend_sku_b.json"
 buys the whole two-leg pilot and nothing else. One anchor key, written before the first job, and it
 may never be regenerated — delete it and the counter silently restarts at today's balance."""
 
-RESUME_PHASE = "sku-b-v3"
-RESUME_CAP_USD = 0.45
-RESUME_LEDGER = REPO_ROOT / "results" / "spend_sku_b_v3.json"
-"""The same three, for the RESUMED session of SPEC 3.17 (11). Its own anchor, because the first
-session's is spent: `results/spend_sku_b.json` measures a balance from before a $0.1965 run, and a
-resumed session enforcing its cap against that anchor would start 0.1965 in the red on a cap that
-was priced without it. (11)(d)'s $0.45 is transcribed, not chosen."""
+RESUME_PHASE = "sku-b-v4"
+RESUME_CAP_USD = 0.65
+RESUME_LEDGER = REPO_ROOT / "results" / "spend_sku_b_v4.json"
+"""The same three, for the RESUMED session of SPEC 3.17 (11), now under (12). ONE decision written
+in three places, so they move together or not at all — and `check_the_constants_are_the_registrations`
+is what makes "or not at all" impossible.
+
+Its own anchor, because every earlier session's is spent. `results/spend_sku_b.json` measures a
+balance from before a $0.1965 run; `results/spend_sku_b_v3.json` measures one from before a session
+that was REFUSED at the (10)(a) gate for $0.1526. Either one would start this session in the red on
+a cap priced without it — the v3 anchor by $0.1526, which is more than the $0.0356 of headroom the
+projection's own pessimistic corner leaves. That is Dv167, and (12)(b) is its ruling: a refused
+session charges the PHASE ledger, never the next attempt's cap. (12)(a)'s $0.65 is transcribed, not
+chosen."""
 
 REFERENCE = REPO_ROOT / "results" / "sku_reference_leaflet.json"
 MANIFEST = REPO_ROOT / "results" / "sku_text_pack_manifest.json"
 PREREG = REPO_ROOT / "results" / "sku_pilot_prereg_v2.json"
-PREREG_RESUME = REPO_ROOT / "results" / "sku_pilot_prereg_v3.json"
+PREREG_RESUME = REPO_ROOT / "results" / "sku_pilot_prereg_v4.json"
 PIN = REPO_ROOT / "results" / "sku_pilot_serving.json"
 REGISTRY = REPO_ROOT / "config" / "registry.yaml"
 
 DUMP = REPO_ROOT / "results" / "sku_b_positions.jsonl"
 RECORD = REPO_ROOT / "results" / "sku_b_positions.json"
 
-RESUME_DUMP = REPO_ROOT / "results" / "sku_b_positions_v3.jsonl"
-RESUME_RECORD = REPO_ROOT / "results" / "sku_b_positions_v3.json"
+RESUME_DUMP = REPO_ROOT / "results" / "sku_b_positions_v4.jsonl"
+RESUME_RECORD = REPO_ROOT / "results" / "sku_b_positions_v4.json"
 """The resumed session writes NEW files and appends the first session's rows into them.
 
-Not an in-place append, and the reason is forced rather than chosen: `sku_pilot_prereg_v3.json ::
+Not an in-place append, and the reason is forced rather than chosen: `sku_pilot_prereg_v4.json ::
 resume.bought_already.dump.sha256` pins `sku_b_positions.jsonl` as it stands, so appending to it
 would break the pin in the same commit the rows landed — and that pin is what proves the 17 answers
 were not re-asked. The sealed pair stays evidence; this pair is the merged bar input, and every row
-in it names the session that bought it."""
+in it names the session that bought it.
+
+`sku_b_positions_v3.json` is a THIRD file and this pair does not overwrite it: it is the (10)(a)
+refusal record, it is pinned in `sku_pilot_prereg_v4.json :: supersedes.refused_record`, and it is
+the evidence that the population is still 121. There is no v3 dump — a session refused before the
+first gold call writes none."""
 
 FAMILY = positions.DEFAULT_FAMILY
 """Whose instruments produced the replies. `positions_post_gm4` and `positions_text_gm4` are the
@@ -245,6 +257,47 @@ def log_run(ledger: dict | None, path: Path, balance, spent, note: str, cost_not
     path.write_text(json.dumps(ledger, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
+JOBS_READING = (
+    "`jobs_planned` is what the packing set out to send and it does NOT shrink when a stop fires:"
+    " the first session stopped at 17 of 138 recorded 8 planned against 4 submitted, and read as a"
+    " job count it said the session ran twice the work it did. On a session refused at the (10)(a)"
+    " gate the whole plan is unsent, so `jobs_planned` is the size of the run that did not happen —"
+    " it is the number the projection priced, and it is never 0 because the packing had already"
+    " happened when the gate fired. `jobs_submitted` is `timing().calls` — the client's own counter"
+    " of terminal /run submissions, which on the real endpoint client includes the `info` handshake"
+    " and always includes the two warm-up calls; on the refusal exit those three ARE the whole"
+    " count. There is no health read on this client, so this is the nearest honest number and it is"
+    " named rather than passed off as a count of gold jobs"
+)
+
+
+def cost_block(
+    *, jobs_planned: int, client, spent, cap: float, anchor: str, read_failed, reading: str
+) -> dict:
+    """The `cost` block, built by ONE function on both exits (Dv163).
+
+    The two exits used to build their own dicts, so Dv154's `jobs_planned` / `jobs_submitted` split
+    landed on the completed path and the (10)(a) refusal kept writing `jobs: 0` — the very field
+    name Dv153 found ambiguous, on the record a reader reaches for FIRST when a session refused.
+    Both numbers and the prose that reads them now come from here, and a test drives both exits
+    against the same field names.
+
+    Only `reading` differs, because the two exits really are pricing different things: a completed
+    run's delta is the balance against the anchor after the paid legs, and a refusal's is what the
+    handshake and the two warm-up calls cost before any gold was asked for.
+    """
+    return {
+        "jobs_planned": jobs_planned,
+        "jobs_submitted": (client.timing() or {}).get("calls"),
+        "jobs_reading": JOBS_READING,
+        "usd": None if spent is None else round(spent, 4),
+        "cap_usd": cap,
+        "anchor": anchor,
+        "read_failed": read_failed,
+        "reading": reading,
+    }
+
+
 # --- the two populations ------------------------------------------------------------------------
 
 
@@ -351,6 +404,50 @@ sessions. Which session bought a row is not decoration: it is what lets the team
 provenance can live once the two dumps are one file."""
 
 
+def check_the_constants_are_the_registrations(
+    prereg: dict, phase: str, cap: float, ledger: Path
+) -> None:
+    """SPEC 3.17 (12)(b): the cap, the ledger and the phase are ONE decision, so they agree or stop.
+
+    This is Dv167 paid off. The three lived as three module constants with nothing binding them to
+    each other or to the file they claim to run under, and the failure they allow is silent in both
+    directions: a new cap enforced against the previous session's anchor spends a refused run's
+    overhead out of this run's budget, and a new anchor under an old cap enforces a number nobody
+    registered. Neither shows up in any output — the run just refuses, or does not, for a reason
+    that is nowhere written down.
+
+    Checked here rather than left to `read_ledger`. That function does refuse a foreign anchor, by
+    its missing key, so `--ledger results/spend_sku_b_v3.json` would eventually stop — but only
+    after the balance has been read, with a message about anchor keys rather than about a
+    registration, and only while the old file happens to exist. This runs at $0 before any network
+    call, on the `--dry-run` path too, and it fails on the registration the run claims.
+    """
+    registered = prereg["attempts"]
+    # ponytail: the ledger is compared by FILE NAME, not by path. The trap Dv167 names is reading
+    # another session's anchor — `spend_sku_b_v3.json` where `spend_sku_b_v4.json` was registered —
+    # and the name is what separates those. A deliberate redirect into another directory still
+    # passes; it creates a fresh anchor at today's balance and charges no previous session, which is
+    # the harm this guard exists for. Tighten to the full path if a run is ever driven from a
+    # working copy whose results/ is not the registration's.
+    wrong = {
+        "phase": (phase, registered["phase"]),
+        "cap_usd": (cap, registered["cap_usd"]),
+        "ledger": (ledger.name, Path(registered["ledger"]).name),
+    }
+    wrong = {name: pair for name, pair in wrong.items() if pair[0] != pair[1]}
+    if wrong:
+        detail = "; ".join(
+            f"{name}: the run would use {used!r} and the registration names {signed!r}"
+            for name, (used, signed) in sorted(wrong.items())
+        )
+        raise SystemExit(
+            f"the run's constants do not match the registration — {detail}. SPEC 3.17 (12)(b):"
+            " each registered attempt runs under its own fresh anchor and its own cap/ledger/phase"
+            " constants, SET TOGETHER. Half of them is how a refused session's spend gets charged"
+            " to the next attempt's cap without anyone deciding it."
+        )
+
+
 def resume_plan(prereg: dict, pin_sha: str, root: Path = REPO_ROOT) -> dict:
     """What the resumed session may buy, and the refusals that decide it (SPEC 3.17 (11)(a)).
 
@@ -368,6 +465,10 @@ def resume_plan(prereg: dict, pin_sha: str, root: Path = REPO_ROOT) -> dict:
       and neither can be trusted to say which 121 elements are left.
     * **a registration that does not match the record.** The lists are compared as sets, not
       counted: 121 of the wrong ids is still 121.
+    * **a moved refusal record.** v4 inherits its population from v3 rather than re-deriving it, and
+      what makes that legal is `results/sku_b_positions_v3.json` saying the refused session bought
+      nothing. The registration pins its bytes; if they moved, the inheritance rests on a file
+      nobody can re-derive.
 
     The third refusal of the brief — a BOUGHT id requested again — is not here. It guards the
     selection rather than the registration and fires in :func:`resume_population`, which is the code
@@ -405,6 +506,17 @@ def resume_plan(prereg: dict, pin_sha: str, root: Path = REPO_ROOT) -> dict:
             f" {already['serving_pin']['sha256'][:16]}… — SPEC 3.17 (11)(b) freezes the instrument,"
             " and a resumed half served under a different configuration is not the same instrument"
             " the 17 bought answers came from."
+        )
+    refused = prereg["supersedes"]["refused_record"]
+    refused_path = root / refused["path"]
+    on_disk = sha256(refused_path.read_bytes()).hexdigest() if refused_path.exists() else None
+    if on_disk != refused["sha256"]:
+        raise SystemExit(
+            f"{rel(refused_path)} hashes {(on_disk or 'nothing — it is not on disk')[:16]}… and"
+            f" {rel(PREREG_RESUME)} pins {refused['sha256'][:16]}…. That record is the evidence the"
+            " v3 session bought NOTHING, which is the whole reason this run's population is still"
+            f" {already['n_unbought']}. A pin that moved means the claim cannot be re-derived —"
+            " stop and report."
         )
 
     run = json.loads(run_record.read_text(encoding="utf-8"))
@@ -1064,11 +1176,14 @@ def main(argv: list[str] | None = None, client=None) -> int:
     pin = json.loads(args.pin.read_text(encoding="utf-8"))
     fields = dump_fields(prereg)
 
-    plan = (
-        resume_plan(prereg, sha256(args.pin.read_bytes()).hexdigest(), args.root)
-        if args.resume
-        else None
-    )
+    plan = None
+    if args.resume:
+        # `resume_plan` first, because it is the one that recognises a registration with no resume
+        # block at all — the constants below would report three missing fields for what is really
+        # one wrong file. Then SPEC 3.17 (12)(b)'s three, before anything reads a balance and on the
+        # `--dry-run` path too.
+        plan = resume_plan(prereg, sha256(args.pin.read_bytes()).hexdigest(), args.root)
+        check_the_constants_are_the_registrations(prereg, phase, cap, args.ledger)
 
     page_items = pages(reference, args.root) if args.leg in ("page", "both") else []
     pack_path = args.pack or (args.root / manifest["pack"])
@@ -1106,7 +1221,7 @@ def main(argv: list[str] | None = None, client=None) -> int:
             f" {registered_pages + registered_rows} by {rel(plan['run_record'])}, never re-asked"
             f"\n  to buy    {len(page_items)} page(s) + {len(text_items)} row(s)"
             f" = {len(page_items) + len(text_items)} of {already['n_unbought']} registered"
-            f"\n  cap       ${cap:.2f} (11)(d) · anchor {rel(args.ledger)}"
+            f"\n  cap       ${cap:.2f} (12)(a) · phase {phase} · anchor {rel(args.ledger)}"
         )
     if args.dry_run:
         for item in page_items[:3]:
@@ -1321,17 +1436,20 @@ def main(argv: list[str] | None = None, client=None) -> int:
                         "go_no_go": verdict,
                         "per_gate": [],
                     },
-                    "cost": {
-                        "jobs": 0,
-                        "usd": None if spent is None else round(spent, 4),
-                        "cap_usd": cap,
-                        "anchor": rel(args.ledger),
-                        "read_failed": cost_note,
-                        "reading": (
+                    "cost": cost_block(
+                        jobs_planned=len(page_jobs) + len(text_jobs),
+                        client=client,
+                        spent=spent,
+                        cap=cap,
+                        anchor=rel(args.ledger),
+                        read_failed=cost_note,
+                        reading=(
                             "what the handshake and the two warm-up calls cost. A FLOOR — the"
-                            " balance settles minutes to hours behind the resource (Dv33)"
+                            " balance settles minutes to hours behind the resource (Dv33). Under"
+                            " SPEC 3.17 (12)(b) it is the PHASE's overhead and is charged to this"
+                            " anchor; the next registered attempt starts on a fresh one"
                         ),
-                    },
+                    ),
                     "timing": client.timing(),
                     "git": provenance.git_state(record_path),
                 },
@@ -1524,24 +1642,14 @@ def main(argv: list[str] | None = None, client=None) -> int:
                 " is inside `projected_usd` and outside `spent_usd`"
             ),
         },
-        "cost": {
-            "jobs_planned": len(page_jobs) + len(text_jobs),
-            "jobs_submitted": (client.timing() or {}).get("calls"),
-            "jobs_reading": (
-                "`jobs_planned` is what the packing set out to send and it does NOT shrink when a"
-                " stop fires: the run stopped at 17 of 138 recorded 8 planned against 4 submitted,"
-                " and read as a job count it said the session ran twice the work it did."
-                " `jobs_submitted` is `timing().calls` — the client's own counter of terminal /run"
-                " submissions, which on the real endpoint client includes the `info` handshake and"
-                " always includes the two warm-up calls. There is no health read on this client, so"
-                " this is the nearest honest number and it is named rather than passed off as a"
-                " count of gold jobs"
-            ),
-            "usd": None if spent is None else round(spent, 4),
-            "cap_usd": cap,
-            "anchor": rel(args.ledger),
-            "read_failed": cost_note,
-            "reading": (
+        "cost": cost_block(
+            jobs_planned=len(page_jobs) + len(text_jobs),
+            client=client,
+            spent=spent,
+            cap=cap,
+            anchor=rel(args.ledger),
+            read_failed=cost_note,
+            reading=(
                 "the RunPod balance delta against this session's own anchor. It is a FLOOR — the"
                 " balance settles minutes to hours behind the resource (Dv33) — and runpod_guard's"
                 " itemised corroboration is the phase-level check, not this one. A `usd` of null"
@@ -1549,7 +1657,7 @@ def main(argv: list[str] | None = None, client=None) -> int:
                 " the anchor survives, so the spend is recoverable by hand, and the record is kept"
                 " rather than lost to the crash."
             ),
-        },
+        ),
         "git": provenance.git_state(record_path),
     }
     if merged is not None:

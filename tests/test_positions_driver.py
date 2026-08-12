@@ -752,13 +752,19 @@ def test_the_idle_tail_is_a_named_term_in_the_go_no_go_too():
 
 
 @pytest.fixture(scope="module")
-def prereg_v3() -> dict:
+def prereg_resume() -> dict:
     return json.loads(driver.PREREG_RESUME.read_text(encoding="utf-8"))
 
 
 def run_resume(tmp_path, extra=(), prereg=None, client=None):
-    """`--resume --smoke` through the whole write path: no network, no spend, real artifacts read."""
-    out, record, ledger = tmp_path / "d.jsonl", tmp_path / "r.json", tmp_path / "l.json"
+    """`--resume --smoke` through the whole write path: no network, no spend, real artifacts read.
+
+    The ledger keeps the REGISTERED file name even in a tmp directory: SPEC 3.17 (12)(b)'s constants
+    check compares it against `attempts.ledger`, and a harness that renamed it would be driving a
+    run the registration does not describe.
+    """
+    out, record = tmp_path / "d.jsonl", tmp_path / "r.json"
+    ledger = tmp_path / driver.RESUME_LEDGER.name
     code = driver.main(
         [
             "--resume",
@@ -786,14 +792,14 @@ def doctored(tmp_path, mutate) -> Path:
     return path
 
 
-def test_the_resume_buys_only_the_unbought_and_merges_both_sessions(tmp_path, prereg_v3):
+def test_the_resume_buys_only_the_unbought_and_merges_both_sessions(tmp_path, prereg_resume):
     """SPEC 3.17 (11)(a) end to end. The population narrows to the 121 the run record names as
     unbought, the 17 bought answers are never re-asked, and what the record holds afterwards is the
     MERGED bar input — 138 outcomes, both dumps, every row naming the session that bought it."""
     code, out, record, _ = run_resume(tmp_path)
     assert code == 0
     written = json.loads(record.read_text(encoding="utf-8"))
-    already = prereg_v3["resume"]["bought_already"]
+    already = prereg_resume["resume"]["bought_already"]
 
     assert written["population"]["asked_this_session"] == 121
     assert written["population"]["asked"] == 138
@@ -819,11 +825,11 @@ def test_the_resume_buys_only_the_unbought_and_merges_both_sessions(tmp_path, pr
     assert "sha256" not in written["resume"]["sessions"][1], "a record cannot carry its own hash"
 
 
-def test_the_sealed_artifacts_of_the_first_session_are_never_touched(tmp_path, prereg_v3):
+def test_the_sealed_artifacts_of_the_first_session_are_never_touched(tmp_path, prereg_resume):
     """The whole reason the resumed session writes NEW files: `resume.bought_already` pins the first
     session's dump, so an in-place append would break the pin that proves the 17 answers were not
     re-asked — in the same commit the rows landed."""
-    already = prereg_v3["resume"]["bought_already"]
+    already = prereg_resume["resume"]["bought_already"]
     before = {
         path: sha256((REPO_ROOT / path).read_bytes()).hexdigest()
         for path in (already["run_record"]["path"], already["dump"]["path"])
@@ -853,10 +859,10 @@ def test_the_resume_refuses_a_registration_whose_pins_have_moved(tmp_path):
         run_resume(tmp_path, prereg=doctored(tmp_path, move_pin))
 
 
-def test_the_resume_refuses_when_an_unbought_id_already_carries_an_answer(tmp_path, prereg_v3):
+def test_the_resume_refuses_when_an_unbought_id_already_carries_an_answer(tmp_path, prereg_resume):
     """The registration and the record disagreeing about what was bought. Neither can then say
     which 121 elements are left, and the honest move is to stop rather than to pick one."""
-    bought = prereg_v3["resume"]["bought_already"]["asked"][0]
+    bought = prereg_resume["resume"]["bought_already"]["asked"][0]
 
     def claim_it_is_unbought(resume):
         resume["bought_already"]["unbought"] = [bought, *resume["bought_already"]["unbought"]]
@@ -878,11 +884,11 @@ def test_the_resume_refuses_a_registration_that_is_not_the_records_population(tm
         run_resume(tmp_path, prereg=doctored(tmp_path, swap_one))
 
 
-def test_a_bought_id_that_reaches_the_selection_is_refused(prereg_v3):
+def test_a_bought_id_that_reaches_the_selection_is_refused(prereg_resume):
     """The third refusal, and it guards the SELECTION rather than the registration: a filter that
     inverted its condition would send the paid run at pages somebody already paid for. Checked on
     what is about to travel, because that is the value that ends up on the wire."""
-    already = prereg_v3["resume"]["bought_already"]
+    already = prereg_resume["resume"]["bought_already"]
     bought = already["asked"][0]
     plan = {"to_buy": {bought}, "already_asked": set(already["asked"])}
     with pytest.raises(SystemExit, match="EXACTLY ONCE"):
@@ -895,10 +901,10 @@ def test_a_bought_id_that_reaches_the_selection_is_refused(prereg_v3):
     assert kept[0][driver.BOUGHT_BY] == driver.RESUME_PHASE
 
 
-def test_the_merged_record_refuses_a_source_answered_by_both_sessions(prereg_v3):
+def test_the_merged_record_refuses_a_source_answered_by_both_sessions(prereg_resume):
     """The output-side control. The plan's refusals guard what goes on the wire; this one guards
     what gets scored, and a duplicate here is an element bought twice with no gate able to see it."""
-    already = prereg_v3["resume"]["bought_already"]
+    already = prereg_resume["resume"]["bought_already"]
     plan = {
         "run": json.loads((REPO_ROOT / already["run_record"]["path"]).read_text(encoding="utf-8")),
         "run_record": REPO_ROOT / already["run_record"]["path"],
@@ -913,13 +919,13 @@ def test_the_merged_record_refuses_a_source_answered_by_both_sessions(prereg_v3)
         driver.merge_sessions(plan, twice, [])
 
 
-def test_the_registered_warm_up_is_refused_if_it_drifted_into_gold(tmp_path, prereg_v3):
+def test_the_registered_warm_up_is_refused_if_it_drifted_into_gold(tmp_path, prereg_resume):
     """SPEC 3.17 (11)(c) is two claims and only one of them is about realism. The other is that
     neither input is gold — and a registered page that had drifted into the 108, or a row into the
     30, would spend a warm-up on an input a bar scores. Both directions, plus the control."""
     reference = json.loads(driver.REFERENCE.read_text(encoding="utf-8"))
     manifest = json.loads(driver.MANIFEST.read_text(encoding="utf-8"))
-    resume = json.loads(json.dumps(prereg_v3["resume"]))
+    resume = json.loads(json.dumps(prereg_resume["resume"]))
 
     honest = driver.resume_warmup_inputs(resume, reference, manifest, REPO_ROOT)
     assert honest["page"]["file"] == resume["warmup"]["page"]["file"]
@@ -941,18 +947,20 @@ def test_the_registered_warm_up_is_refused_if_it_drifted_into_gold(tmp_path, pre
         driver.resume_warmup_inputs(moved, reference, manifest, REPO_ROOT)
 
 
-def test_the_resumed_warm_up_is_the_registered_page_and_row_not_a_thumbnail(tmp_path, prereg_v3):
+def test_the_resumed_warm_up_is_the_registered_page_and_row_not_a_thumbnail(
+    tmp_path, prereg_resume
+):
     """The finding that stopped the first session, closed. Its warm-up recorded «a generated 64x64
     image»; this one records a real leaflet page and a real collected row, by file and by sha."""
     _, _, record, _ = run_resume(tmp_path)
     inputs = json.loads(record.read_text(encoding="utf-8"))["warmup"]["inputs"]
     assert inputs["page"] == {
-        "file": prereg_v3["resume"]["warmup"]["page"]["file"],
-        "sha256": prereg_v3["resume"]["warmup"]["page"]["sha256"],
-        "bytes": prereg_v3["resume"]["warmup"]["page"]["bytes"],
+        "file": prereg_resume["resume"]["warmup"]["page"]["file"],
+        "sha256": prereg_resume["resume"]["warmup"]["page"]["sha256"],
+        "bytes": prereg_resume["resume"]["warmup"]["page"]["bytes"],
     }
     assert inputs["page"]["bytes"] > 100_000
-    assert inputs["text"]["id"] == prereg_v3["resume"]["warmup"]["text"]["id"]
+    assert inputs["text"]["id"] == prereg_resume["resume"]["warmup"]["text"]["id"]
     assert "64x64" not in json.dumps(inputs)
 
 
@@ -964,15 +972,15 @@ def test_a_resume_without_its_own_registration_refuses(tmp_path):
 
 
 def test_the_two_records_the_two_caps_and_the_two_anchors_never_cross(tmp_path, monkeypatch, pin):
-    """Every default follows the mode. A resumed session enforcing (11)(d)'s $0.45 against the first
-    session's anchor would start $0.1965 in the red on a cap priced without it, and one writing at
-    the first session's paths would overwrite the evidence its own registration pins."""
-    assert driver.RESUME_CAP_USD == 0.45 and driver.CAP_USD == 0.35
-    assert driver.anchor_key(driver.RESUME_PHASE) == "runpod_balance_at_sku-b-v3_start"
+    """Every default follows the mode. A resumed session enforcing (12)(a)'s $0.65 against an older
+    anchor would start in the red on a cap priced without it, and one writing at the first session's
+    paths would overwrite the evidence its own registration pins."""
+    assert driver.RESUME_CAP_USD == 0.65 and driver.CAP_USD == 0.35
+    assert driver.anchor_key(driver.RESUME_PHASE) == "runpod_balance_at_sku-b-v4_start"
     assert driver.anchor_key() == "runpod_balance_at_sku-b_start"
     assert driver.RESUME_LEDGER != driver.LEDGER
 
-    ledger = ledgered(tmp_path, monkeypatch, pin, balance=10.0)
+    ledger = ledgered(tmp_path, monkeypatch, pin, balance=10.0, name=driver.RESUME_LEDGER.name)
     record = tmp_path / "r.json"
     driver.main(
         [
@@ -988,9 +996,47 @@ def test_the_two_records_the_two_caps_and_the_two_anchors_never_cross(tmp_path, 
         ]
     )
     written = json.loads(record.read_text(encoding="utf-8"))
-    assert written["cost"]["cap_usd"] == 0.45
+    assert written["cost"]["cap_usd"] == 0.65
     assert driver.anchor_key(driver.RESUME_PHASE) in json.loads(ledger.read_text(encoding="utf-8"))
-    assert written["projection"]["stop_at_usd"] == pytest.approx(0.45)
+    assert written["projection"]["stop_at_usd"] == pytest.approx(0.65)
+
+
+def test_the_three_constants_name_one_phase_and_the_registration_signs_all_three(prereg_resume):
+    """SPEC 3.17 (12)(b), and the composition Dv167 found: the cap, the ledger and the phase are ONE
+    decision living in three module constants, with nothing binding them to each other.
+
+    Half-update them and the failure is silent in both directions — a v4 cap enforced against the v3
+    anchor spends a refused session's $0.1526 out of this session's budget, and a v4 anchor under a
+    v3 cap enforces a number nobody registered. So the registration signs all three and this asserts
+    they agree, plus the two negative controls that prove the check is not vacuous.
+    """
+    registered = prereg_resume["attempts"]
+    assert (registered["phase"], registered["cap_usd"], registered["ledger"]) == (
+        driver.RESUME_PHASE,
+        driver.RESUME_CAP_USD,
+        driver.rel(driver.RESUME_LEDGER),
+    )
+    # every name carries the same version tail, so a half-rename cannot look tidy
+    assert driver.RESUME_PHASE == "sku-b-v4"
+    assert driver.RESUME_LEDGER.name == "spend_sku_b_v4.json"
+    assert driver.PREREG_RESUME.name == "sku_pilot_prereg_v4.json"
+    assert driver.RESUME_RECORD.name == "sku_b_positions_v4.json"
+    assert driver.RESUME_DUMP.name == "sku_b_positions_v4.jsonl"
+
+    driver.check_the_constants_are_the_registrations(  # the control: the honest set is accepted
+        prereg_resume, driver.RESUME_PHASE, driver.RESUME_CAP_USD, driver.RESUME_LEDGER
+    )
+    with pytest.raises(SystemExit, match="ledger: the run would use 'spend_sku_b_v3.json'"):
+        driver.check_the_constants_are_the_registrations(
+            prereg_resume,
+            driver.RESUME_PHASE,
+            driver.RESUME_CAP_USD,
+            driver.REPO_ROOT / "results" / "spend_sku_b_v3.json",
+        )
+    with pytest.raises(SystemExit, match="cap_usd: the run would use 0.45"):
+        driver.check_the_constants_are_the_registrations(
+            prereg_resume, driver.RESUME_PHASE, 0.45, driver.RESUME_LEDGER
+        )
 
 
 def test_the_job_count_says_what_it_planned_and_what_it_submitted(tmp_path):
@@ -1016,11 +1062,14 @@ def test_the_job_count_says_what_it_planned_and_what_it_submitted(tmp_path):
 # --- the ledgered paths: driven with the network client replaced, everything else real ------------
 
 
-def ledgered(tmp_path, monkeypatch, pin, *, balance, anchor=None, fails_after=None):
+def ledgered(tmp_path, monkeypatch, pin, *, balance, anchor=None, fails_after=None, name="l.json"):
     """A run that reaches the ledger branch of `main` — the one `--smoke` deliberately skips.
 
     Only `serving.EndpointClient` and `guard.balance` are replaced; `read_ledger`, the budget
     arithmetic, the record write and the ledger append all run for real.
+
+    `name` is the anchor's file name: a `--resume` run is checked against the registration's
+    `attempts.ledger` before it reads a balance, so a resumed caller passes the registered one.
     """
     reads = {"n": 0}
 
@@ -1036,7 +1085,7 @@ def ledgered(tmp_path, monkeypatch, pin, *, balance, anchor=None, fails_after=No
     monkeypatch.setenv(driver.ENDPOINT_ENV, "ep-fake")
     fake = slow_endpoint(pin, gold_seconds_per_call=2.5)
 
-    ledger = tmp_path / "l.json"
+    ledger = tmp_path / name
     if anchor is not None:
         ledger.write_text(json.dumps({driver.anchor_key(): anchor, "runs": []}), encoding="utf-8")
     return ledger
@@ -1139,6 +1188,60 @@ def test_a_refusal_that_billed_a_boot_still_lands_in_the_ledger(tmp_path, monkey
     )
     done = json.loads(other.read_text(encoding="utf-8"))["runs"]
     assert len(done) == 1 and "sources asked" in done[0]["note"]
+
+
+def test_both_exits_write_the_same_cost_fields(tmp_path, monkeypatch, pin):
+    """Dv163: the two exits built their `cost` dicts separately, so Dv154's `jobs_planned` /
+    `jobs_submitted` split landed on the completed path and the (10)(a) refusal kept writing
+    `jobs: 0` — the field name Dv153 found ambiguous, on the record a reader opens FIRST when a
+    session refused.
+
+    Driven through both exits against the same field names, which is the only way to see the two
+    disagree. The refusal's `jobs_planned` is the one that carries the finding: the plan was packed
+    before the gate fired, so the run that did not happen still reports the size it would have been
+    rather than a 0 that reads as "nothing was planned".
+    """
+    refused_path = tmp_path / "refused.json"
+    ledger = ledgered(tmp_path, monkeypatch, pin, balance=10.0, anchor=10.30)
+    with pytest.raises(SystemExit, match="REFUSED before the first gold call"):
+        driver.main(
+            [
+                "--leg", "text",
+                "--out", str(tmp_path / "d.jsonl"),
+                "--record", str(refused_path),
+                "--ledger", str(ledger),
+            ]
+        )  # fmt: skip
+    refused = json.loads(refused_path.read_text(encoding="utf-8"))["cost"]
+
+    (tmp_path / "ok").mkdir(exist_ok=True)
+    other = ledgered(tmp_path / "ok", monkeypatch, pin, balance=10.0)
+    done_path = tmp_path / "ok.json"
+    assert (
+        driver.main(
+            [
+                "--leg",
+                "text",
+                "--out",
+                str(tmp_path / "ok.jsonl"),
+                "--record",
+                str(done_path),
+                "--ledger",
+                str(other),
+            ]
+        )  # fmt: skip
+        == 0
+    )
+    done = json.loads(done_path.read_text(encoding="utf-8"))["cost"]
+
+    assert set(refused) == set(done), "one builder, one set of field names on both exits"
+    assert "jobs" not in refused, "the ambiguous name is gone from the refusal exit too"
+    assert refused["jobs_reading"] == done["jobs_reading"]
+    # 30 rows pack into one job on both, and the refusal reports it UNSENT rather than as 0
+    assert refused["jobs_planned"] == done["jobs_planned"] == 1
+    assert refused["jobs_submitted"] == 3, "the handshake and the two warm-up calls, no gold job"
+    assert done["jobs_submitted"] == 4, "and the gold job on top of them"
+    assert "the whole plan is unsent" in refused["jobs_reading"]
 
 
 def test_a_half_explicit_smoke_never_writes_at_the_real_record_default(tmp_path, monkeypatch):
