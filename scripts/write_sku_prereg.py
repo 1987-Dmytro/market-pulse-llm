@@ -252,8 +252,14 @@ RATIFICATION_NAME = re.compile(r"^<!-- (sku-b-ratification(?:-\d+)?) begin", re.
 `sku-b-ratification-2`; a third would be `-3` and would be stripped by this same expression."""
 
 
-def registered_law(spec: Path) -> bytes:
-    """`docs/SPEC.md` with EVERY marked ratification block cut out, marker lines included.
+def registered_law(spec: Path, keep: tuple[str, ...] = ()) -> bytes:
+    """`docs/SPEC.md` with every marked ratification block cut out except those named in ``keep``.
+
+    ``keep`` is empty for v1–v4 and that is the whole of their story: each was registered before the
+    blocks existed. It is NOT empty for B′, which is registered UNDER 3.17 (13) — a pin taken over a
+    law with its own authority stripped out would be a pin on a document that does not authorise the
+    run it registers. One implementation with a parameter, rather than a second strip beside it,
+    because the two would drift and only one of them writes the records.
 
     A ratification amendment records that readings this record already carries were accepted — it
     moves no bar, no threshold and no denominator — but it moves the file's bytes, and the pin
@@ -267,7 +273,11 @@ def registered_law(spec: Path) -> bytes:
     this strip would drift from the one that writes the record and nothing downstream could see it.
     """
     text = spec.read_text(encoding="utf-8")
+    if unknown := sorted(set(keep) - set(RATIFICATION_NAME.findall(text))):
+        raise SystemExit(f"{rel(spec)}: asked to keep {unknown}, which the file does not carry")
     for name in RATIFICATION_NAME.findall(text):
+        if name in keep:
+            continue
         begin, end_marker = f"<!-- {name} begin", f"<!-- {name} end -->"
         if text.count(begin) != 1 or text.count(end_marker) != 1:
             raise SystemExit(f"{rel(spec)}: ratification block {name} must appear exactly once")
