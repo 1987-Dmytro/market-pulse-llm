@@ -536,7 +536,8 @@ Nothing above is a number this session chose.
 ## Fix
 
 `docs/PROMPT-skub2-fix.md` · authority SPEC §3.17 (14), ratified 2026-08-12 · executor, $0, no paid
-calls · 2026-08-12. Eleven commits, `2621d6f..<the vault tail>`.
+calls · 2026-08-12, 16:30–17:39. **Twelve** commits, `2621d6f..6a20671`, and a thirteenth that
+corrects two numbers in this section — see §Corrections at its foot.
 
 The four pending pairs land, the B′ registration writes, and the driver's constants move with it.
 
@@ -880,3 +881,27 @@ of them was written.
    branch is v4's.
 4. **Dv223, carried.** The driver's job-timeout margin literal is v1's model at v1's ceiling.
 
+
+---
+
+### Corrections
+
+Two numbers in this section were wrong when it was committed at `4f59132`, and both are the same
+mistake — a count taken from the nearest thing that looked like it, instead of from `git log`.
+
+1. **«Eleven commits»** was the checkout table's ROW count, which includes `c85d595` — the control,
+   which is not a commit of this contract. Twelve: `2621d6f 56b2214 e59016c 881f816 ada5afe c2fc096
+   b30cb0d 40042c5 30673be 53d59ba 4f59132 6a20671`. The vault commit's own message and hot.md
+   repeated the eleven; hot.md is corrected, a commit message cannot be.
+2. **The session's wall clock.** The day's log header said «16:20–18:05» and hot.md's
+   `**Last update:**` said 18:05. `git log --date=format:'%H:%M'` says **16:30** for the first
+   commit and **17:39** for the last. Corrected in both.
+
+This is the second time in one day: the 16:16 checkpoint corrected «14:20–17:40 / 17:40–18:20» to
+14:18–15:58 and wrote down the rule it broke — the wall clock of a session comes from `git log`, not
+from a sense of how long the work felt. It broke again in the same file within five hours, which is
+what says the rule needs a command and not a resolution:
+
+```
+git log --reverse --format='%h %ad %s' --date=format:'%H:%M' <first>^..HEAD
+```

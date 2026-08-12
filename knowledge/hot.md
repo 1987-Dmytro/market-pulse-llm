@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-12 17:38:09 (every SessionStart)
+**Auto-refreshed:** 2026-08-12 17:44:38 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+6a20671 chore(vault): the skub2-fix tail -- the day's log, hot.md, the index
 4f59132 docs(report): skub2-fix appended as the report's Fix section
 53d59ba test(skub2-fix): the pin guard's wiring, and two docstrings the move falsified
 30673be fix(skub2-fix): the run record's contract string follows the constants
 40042c5 data(skub2-fix): the projection re-stamped after Dv208 landed
-b30cb0d feat(skub2-fix): the driver's constants move to skub2, and the guard moves with them
 ```
 
 ## 📋 Recent decisions
@@ -30,7 +30,7 @@ b30cb0d feat(skub2-fix): the driver's constants move to skub2, and the guard mov
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-12 18:05 (arch-a ✅, uni-a ✅, uni-b ✅, sku-b-prep ✅, sku-b-run ✅ ПРИНЯТ,
+**Last update:** 2026-08-12 17:45 (arch-a ✅, uni-a ✅, uni-b ✅, sku-b-prep ✅, sku-b-run ✅ ПРИНЯТ,
 sku-b-v3-prep ✅, sku-b-v3-run ⛔ ОТКАЗ на воротах — попытка ЦЕЛА, sku-b-v4-prep ✅ $0,
 sku-b-v4-run ✅ 121 куплен, **sku-b-close ✅ $0 — ПИЛОТ ЗАКРЫТ ИЗМЕРЕНИЕМ, 2 планки из 3 FAIL**,
 sku-miss-pack ✅ $0, skub2-prep ✅ $0, **skub2-fix ✅ $0 — ПРЕРЕЖКА B′ НАПИСАНА, драйвер переведён
@@ -68,7 +68,7 @@ $0.65 — ПРЕДРАНОВАЯ УЛИКА, не перезаписываетс
 ## 🔥 What's Hot
 
 **ПРЕРЕЖКА B′ НАПИСАНА. ГОЛД 37 ПАР / 10 ПОСТОВ, ВСЕ 138 ЭЛЕМЕНТОВ, КАП $0.65** (`skub2-fix` ✅
-12.08, $0, одиннадцать коммитов `2621d6f..`, `make check` 1985 / 2 skipped, префлайт 47/0).
+12.08, $0, двенадцать коммитов `2621d6f..6a20671`, `make check` 1985 / 2 skipped, префлайт 47/0).
 SPEC 3.17 (14): четыре висевшие пары (#4 #9 #28 #29) — ВСЕ класс b, каждая с процитированными
 страницами; итог **a=11 · b=16 · c=2**, `final` = 37. B1/B4/B5 РАТИФИЦИРОВАНЫ ((14)(b) — класс это
 факт о ПАРЕ, не о бренде везде), кап (13)(d) $0.40 → **(14)(e) $0.65**. Пин прережки держит и `-7`,
@@ -107,7 +107,8 @@ v4-й. Две вещи сверх буквы контракта, обе на д�
 поэтому `gold_key` отвечает `rud` там, где запечатанный референс хранит `raw:rud` — голд B′
 ПЕРЕСОБИРАЕТСЯ по именам ревьюера, а не фильтруется, и префикс `raw:` нигде не срезается.
 
-**СТОЛ ДЛЯ ЧТЕНИЯ ПЛАНКИ 1 НАКРЫТ, ВЕРДИКТОВ НЕТ** (`sku-miss-pack` ✅ 12.08, $0, семь коммитов
+**СТОЛ ДЛЯ ЧТЕНИЯ ПЛАНКИ 1 — КАК ОН БЫЛ НАКРЫТ** (вердикты сняты полностью, см. выше: a=11 ·
+b=16 · c=2) (`sku-miss-pack` ✅ 12.08, $0, семь коммитов
 `1845b49..724d65c`). `results/sku_miss_pack.md` — 29 пропущенных голд-пар по постам: строка КАК её
 написал ревьюер, отправленные страницы с sha и ответ инструмента на каждой (`brand_raw` / `[]` /
 `UNREADABLE` с причиной), найденная половина рядом как контроль, 29 пустых ячеек `a|b|c` в конце.
@@ -233,7 +234,7 @@ v4.
 ## 🚧 Blockers
 
 **НИЧЕГО НЕ БЛОКИРУЕТ — ЖДЁМ КОНТРАКТ skub2-run.** Сюита **1985 passed, 2 skipped**;
-`ruff check` и `ruff format --check` чисты, 244 файла; **одиннадцать коммитов `2621d6f..`** поверх
+`ruff check` и `ruff format --check` чисты, 244 файла; **двенадцать коммитов `2621d6f..6a20671`** поверх
 шестнадцати `d3fa574..c85d595`. Почекаутная таблица зелёная на каждом коммите, кроме `2621d6f` —
 там второй красный **ПО ЗАМЫСЛУ** (восьмой маркер ратификации приходит на коммите тимлид-доков,
 перечисление в `tests/test_sku_prereg.py` на имя короче, зелено снова на `56b2214`). Контроль —
