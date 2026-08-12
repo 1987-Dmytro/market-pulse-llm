@@ -1,0 +1,792 @@
+{
+  "generated_at": "2026-08-12T14:56:26+00:00",
+  "phase": "skub2 — the position layer re-measured under instrument v2",
+  "written_by": "skub2-fix (executor, $0), docs/PROMPT-skub2-fix.md step 3. Built by the producer docs/PROMPT-skub2-prep.md deliverable 4 wrote, which refused until 3.17 (14)(a)",
+  "authority": "docs/SPEC.md amendment 3.17 (6), (9)–(12) as they stand, (13) and (14)",
+  "class": "PRE-REGISTRATION, registered BESIDE results/sku_pilot_prereg_v4.json and never in place of it. Committed in its own commit before any skub2-run artifact exists; git history is the only witness to that ordering. Nothing here is a result. The bars are (6)'s words unchanged; what (13) moves is bar 1's GOLD and the instrument, and what (14) moves is the cap",
+  "supersedes": {
+    "record": "results/sku_pilot_prereg_v4.json",
+    "sha256": "22fd7d9cc363ac9357b77e4a3ff3561f723fe6c4a12aedcc638c11be65dc9449",
+    "reason": "v4 stays SEALED and stays true: its three bars are what closed the sku-b pilot by measurement, and the 121 elements it bought were extracted under instrument v1. This record does not revise that verdict — it registers the ONE re-measurement 3.17 (13)(d) authorises, under an instrument the same law changes",
+    "authority": "docs/SPEC.md amendment 3.17 (13), ratified 2026-08-12",
+    "bars_unchanged": "The three bars' verbatim texts, thresholds and R1–R5 are unchanged."
+  },
+  "attempts": {
+    "verbatim": "one re-measurement of instrument v2 over the same 138 elements under a B′ pre-registration BESIDE v4 (bars' verbatim thresholds unchanged; gold and instrument shas move; cap $0.40), with every reading of (9)–(12) in force",
+    "verbatim_source": "SPEC 3.17 (13)(d), which is where the attempt comes from",
+    "cap_verbatim": "The session cap is $0.65, superseding (13)(d)'s $0.40 before any registration existed: the (12)(c) registered warm-up prices the gate's projection at ~$0.61 (the deep-page probe against 138 calls), and (12)(a)'s rule — the cap admits the gate's own pessimism, the in-run gate protects the middle — applies; the measured expectation remains ~$0.25–0.33",
+    "cap_verbatim_source": "SPEC 3.17 (14)(e), which is where the cap comes from",
+    "count": 1,
+    "cap_usd": 0.65,
+    "phase": "skub2",
+    "ledger": "results/spend_skub2.json",
+    "authority": "SPEC 3.17 (13)(d) for the attempt and 3.17 (14)(e) for the cap — (13)(d)'s own sentence says $0.40 and is quoted above unedited, because a law is not tidied to match the amendment that supersedes it; (12)(b)'s standing rule for the three constants being one decision. A session refused at the (10)(a) gate charges this phase's ledger and never the next attempt's cap",
+    "on_failure": "a failed bar closes B as 'instrument not ready' BY MEASUREMENT. No retry, no re-prompt, no second draw: a bar re-run after its own result is not the bar that was registered",
+    "on_success": "Integration into the 5c2 loop only on a green gate."
+  },
+  "population": {
+    "elements": 138,
+    "reading": "ALL 138, and this is a reading rather than a transcription: (11)(a) says each element is bought exactly once ACROSS THE PROGRAM, and (13)(d) says «one re-measurement of instrument v2 over the same 138 elements». A re-measurement cannot reuse the old instrument's answers — the 17 first-session pages and the 121 v4 pages were extracted at an 800-token ceiling by a parser that refused four of them. So (13)(d) supersedes (11)(a) HERE, for this registration only, and the earlier answers stay on disk as v1's measurement. RULED by 3.17 (14)(d) — «B1 stands: all 138 elements are re-asked; v1's answers remain v1's sealed measurement». See ratification_required B1",
+    "not_a_resume": "v4's `resume` block and its bought_already/17-of-138 pins describe a session that completed a population. This is not that: nothing here is carried over, and no element of the 138 is excluded because someone already paid for it"
+  },
+  "instruments": {
+    "positions_post_gm4": "ca6303c157d46e707aaf3fc52c7a05ed1450e24c26db0e7c93eefba4f6968754",
+    "positions_text_gm4": "7250b87aa1c2de407e06ab9eed565dd4d88025add7be0d2d2a87607c0d872860",
+    "note": "UNCHANGED, and copied from v4 rather than recomputed. (13) says «no new ML mechanism is authorised»: the two registered prompt texts are byte-identical to the ones the pilot was scored against, and what moves is around them",
+    "instrument_v2": {
+      "parser": {
+        "path": "src/market_pulse/positions.py",
+        "sha256": "0b058e80024401d589653f4f810c4a4a56eba8e6c0b563deae24cdd0c777837e"
+      },
+      "serving_pin": {
+        "path": "results/sku_pilot_serving_v2.json",
+        "sha256": "75f5e0d5a369cf2d915bb2bed8a98caffd0f11a9ded800ab269fc29f111ccf10"
+      },
+      "registry": {
+        "path": "config/registry.yaml",
+        "sha256": "d4e3b2373c4378f3acc51079dc1d0560c28d58c46b71335b2bb352cae39be3ba"
+      },
+      "reading": "the three halves of instrument v2, each pinned where it can actually be read: the parser family and the warnings of (13)(a) in the module sha, the 1200 ceiling in serving pin v2 (which is what the worker's describe() is held against), and the three Latin aliases of (13)(b) in the registry sha. The prompts are not among them"
+    }
+  },
+  "bars": {
+    "leaflet_brand_recall": {
+      "verbatim": "leaflet brand-recall ≥ 0.75 per page vs audit-visible brands",
+      "threshold": 0.75,
+      "direction": ">=",
+      "extraction_unit": "one PAGE, one call, under the registered prompt positions_post_gm4 (SPEC 3.17 (4)). The page set is EXACTLY the 108 pages the reference names as sent — not the 159 available. A brand printed on an unsent page is not in the gold, so reading one would be scored as a false positive for being right",
+      "why_not_per_page": "the bar says 'per page' and the gold cannot be split that way: one Opus reviewer judged the whole sent set of a post and named what was visible across it, so no artifact in this repo attributes a brand to a page. Building per-page gold would be a new adjudication and is not in this contract. THIS IS THE EXECUTOR'S READING — see ratification_required",
+      "reported_never_gated": "precision on the 15 scoreable posts. The gold is ONE reviewer's reading in the REVIEW class of SPEC 3.16 (1), so a brand the pilot finds and the reviewer did not is not evidence of a false positive — SPEC gates recall only, and this pre-registration does not widen it",
+      "excluded": {
+        "posts": [
+          "@atb_market_official:4370",
+          "@atb_market_official:4377",
+          "@atb_market_official:4391",
+          "@atb_market_official:4411",
+          "@atb_market_official:4415",
+          "@atb_market_official:4421",
+          "@atb_market_official:4455",
+          "@atb_market_official:4498",
+          "@atb_market_official:4519"
+        ],
+        "why": "an empty gold set makes recall undefined, and an absolute bar over it fails by arithmetic rather than by measurement",
+        "instead": "they are a PRECISION probe: every brand extracted on their pages is a false positive and is reported with its page. Their reviewer notes say what is actually on them (summer non-food and similar)",
+        "why_this_list_grew": "v4 excluded 4 posts and B′ excludes 9 posts. The 5 new ones carried exactly 1 gold key each, every one of them ruled class b or c, so (13)(c) empties their gold and R3's own rule — an empty gold set is a precision probe — moves them. The rule is not new; what changed is which posts it reaches"
+      },
+      "denominator": "the 10 posts whose gold brand set is non-empty AFTER the (13)(c) re-scope. Recall is computed PER POST as |extracted ∩ gold| / |gold|, over the union of that post's page answers, and the bar reads the MACRO MEAN of those 10 values. The micro reading over all 37 pairs is reported beside it and gates nothing",
+      "reachable": "yes, measured before the run: 10 of 19 posts carry a non-empty gold set after the re-scope and 37 pairs sit on them",
+      "gold": {
+        "derived_from": {
+          "path": "results/sku_reference_leaflet.json",
+          "sha256": "e301bb4f48f527e4f9f6b64bb1a53911fd69d2871e9e7cbc302195f8f982eb20"
+        },
+        "decomposition": {
+          "path": "results/sku_miss_decomposition.json",
+          "sha256": "f713a385178e21983f5157cad2fb8b73f8672429172d6ff292466b27bf7b83f6",
+          "read_by": "the team lead",
+          "read_on": "2026-08-12"
+        },
+        "rule": "SPEC 3.17 (13)(c) — the B′ gold is the dairy positions carrying a price box on the sent pages: class-b and class-c pairs leave the denominator, class-a pairs and the 26 found stay. 3.17 (14)(b) fixes the grain: a class is a fact about ONE (post, brand) pair and never about the brand everywhere, so a brand ruled non-dairy on one post stays gold where it sits on a dairy position",
+        "pairs": 37,
+        "pairs_v4": 55,
+        "removed": 18,
+        "removed_pairs": [
+          [
+            "@atb_market_official:4350",
+            "raw:lactel"
+          ],
+          [
+            "@atb_market_official:4360",
+            "raw:svoia-liniia"
+          ],
+          [
+            "@atb_market_official:4377",
+            "raw:svoia-liniia"
+          ],
+          [
+            "@atb_market_official:4381",
+            "raw:maximuse"
+          ],
+          [
+            "@atb_market_official:4381",
+            "raw:каштан"
+          ],
+          [
+            "@atb_market_official:4381",
+            "raw:комо / komo"
+          ],
+          [
+            "@atb_market_official:4391",
+            "raw:svoia-liniia"
+          ],
+          [
+            "@atb_market_official:4401",
+            "raw:selianske"
+          ],
+          [
+            "@atb_market_official:4401",
+            "raw:svoia-liniia"
+          ],
+          [
+            "@atb_market_official:4411",
+            "raw:svoia-liniia"
+          ],
+          [
+            "@atb_market_official:4421",
+            "raw:svoia-liniia"
+          ],
+          [
+            "@atb_market_official:4436",
+            "raw:svoia-liniia"
+          ],
+          [
+            "@atb_market_official:4446",
+            "raw:nesquik (какао-напій шоколадно-молочний коктейль, 200 г)"
+          ],
+          [
+            "@atb_market_official:4446",
+            "raw:svoia-liniia"
+          ],
+          [
+            "@atb_market_official:4467",
+            "raw:максхолод"
+          ],
+          [
+            "@atb_market_official:4498",
+            "raw:svoia-liniia"
+          ],
+          [
+            "@atb_market_official:4508",
+            "raw:svoia-liniia"
+          ],
+          [
+            "@atb_market_official:4508",
+            "raw:try-vedmedi"
+          ]
+        ],
+        "key": "the same `gold_key` on both halves, computed under the (13)(b) alias table. NOT the v4 keys: «Rud» and «LIMO» became display names of their own brand_ids, so a name that keyed `raw:rud` under v4 keys `rud` here. The decomposition's rows are in the v4 space and are joined in it, once, by re-keying every reviewer name under both tables",
+        "per_post": [
+          {
+            "item": "@atb_market_official:4340",
+            "msg_id": 4340,
+            "gold_keys_v4": [
+              "raw:rud",
+              "raw:svoia-liniia",
+              "raw:try-vedmedi"
+            ],
+            "gold_keys": [
+              "raw:svoia-liniia",
+              "raw:try-vedmedi",
+              "rud"
+            ],
+            "removed": []
+          },
+          {
+            "item": "@atb_market_official:4350",
+            "msg_id": 4350,
+            "gold_keys_v4": [
+              "raw:lactel",
+              "raw:svoia-liniia",
+              "raw:дольче"
+            ],
+            "gold_keys": [
+              "raw:svoia-liniia",
+              "raw:дольче"
+            ],
+            "removed": [
+              {
+                "field": "other_dairy_brands",
+                "written": "lactel",
+                "gold_key_v4": "raw:lactel",
+                "gold_key_b2": "raw:lactel"
+              }
+            ]
+          },
+          {
+            "item": "@atb_market_official:4360",
+            "msg_id": 4360,
+            "gold_keys_v4": [
+              "raw:limo",
+              "raw:svoia-liniia",
+              "raw:каштан",
+              "raw:київський пломбір"
+            ],
+            "gold_keys": [
+              "limo",
+              "raw:каштан",
+              "raw:київський пломбір"
+            ],
+            "removed": [
+              {
+                "field": "watchlist",
+                "written": "svoia-liniia",
+                "gold_key_v4": "raw:svoia-liniia",
+                "gold_key_b2": "raw:svoia-liniia"
+              }
+            ]
+          },
+          {
+            "item": "@atb_market_official:4370",
+            "msg_id": 4370,
+            "gold_keys_v4": [],
+            "gold_keys": [],
+            "removed": []
+          },
+          {
+            "item": "@atb_market_official:4377",
+            "msg_id": 4377,
+            "gold_keys_v4": [
+              "raw:svoia-liniia"
+            ],
+            "gold_keys": [],
+            "removed": [
+              {
+                "field": "watchlist",
+                "written": "svoia-liniia",
+                "gold_key_v4": "raw:svoia-liniia",
+                "gold_key_b2": "raw:svoia-liniia"
+              }
+            ]
+          },
+          {
+            "item": "@atb_market_official:4381",
+            "msg_id": 4381,
+            "gold_keys_v4": [
+              "president",
+              "raw:laska",
+              "raw:lasunka",
+              "raw:maximuse",
+              "raw:каштан",
+              "raw:комо / komo",
+              "raw:розумний вибір"
+            ],
+            "gold_keys": [
+              "president",
+              "raw:laska",
+              "raw:lasunka",
+              "raw:розумний вибір"
+            ],
+            "removed": [
+              {
+                "field": "other_dairy_brands",
+                "written": "Maximuse",
+                "gold_key_v4": "raw:maximuse",
+                "gold_key_b2": "raw:maximuse"
+              },
+              {
+                "field": "other_dairy_brands",
+                "written": "Каштан",
+                "gold_key_v4": "raw:каштан",
+                "gold_key_b2": "raw:каштан"
+              },
+              {
+                "field": "other_dairy_brands",
+                "written": "Комо / Komo",
+                "gold_key_v4": "raw:комо / komo",
+                "gold_key_b2": "raw:комо / komo"
+              }
+            ]
+          },
+          {
+            "item": "@atb_market_official:4391",
+            "msg_id": 4391,
+            "gold_keys_v4": [
+              "raw:svoia-liniia"
+            ],
+            "gold_keys": [],
+            "removed": [
+              {
+                "field": "watchlist",
+                "written": "svoia-liniia",
+                "gold_key_v4": "raw:svoia-liniia",
+                "gold_key_b2": "raw:svoia-liniia"
+              }
+            ]
+          },
+          {
+            "item": "@atb_market_official:4401",
+            "msg_id": 4401,
+            "gold_keys_v4": [
+              "raw:ferma",
+              "raw:frenzy (рудь)",
+              "raw:halychyna",
+              "raw:imperium (рудь)",
+              "raw:molokija",
+              "raw:premialle",
+              "raw:rud",
+              "raw:selianske",
+              "raw:svoia-liniia",
+              "raw:try-vedmedi",
+              "raw:zlahoda",
+              "raw:київський пломбір"
+            ],
+            "gold_keys": [
+              "raw:ferma",
+              "raw:frenzy (рудь)",
+              "raw:halychyna",
+              "raw:imperium (рудь)",
+              "raw:molokija",
+              "raw:premialle",
+              "raw:try-vedmedi",
+              "raw:zlahoda",
+              "raw:київський пломбір",
+              "rud"
+            ],
+            "removed": [
+              {
+                "field": "watchlist",
+                "written": "selianske",
+                "gold_key_v4": "raw:selianske",
+                "gold_key_b2": "raw:selianske"
+              },
+              {
+                "field": "watchlist",
+                "written": "svoia-liniia",
+                "gold_key_v4": "raw:svoia-liniia",
+                "gold_key_b2": "raw:svoia-liniia"
+              }
+            ]
+          },
+          {
+            "item": "@atb_market_official:4411",
+            "msg_id": 4411,
+            "gold_keys_v4": [
+              "raw:svoia-liniia"
+            ],
+            "gold_keys": [],
+            "removed": [
+              {
+                "field": "watchlist",
+                "written": "svoia-liniia",
+                "gold_key_v4": "raw:svoia-liniia",
+                "gold_key_b2": "raw:svoia-liniia"
+              }
+            ]
+          },
+          {
+            "item": "@atb_market_official:4415",
+            "msg_id": 4415,
+            "gold_keys_v4": [],
+            "gold_keys": [],
+            "removed": []
+          },
+          {
+            "item": "@atb_market_official:4421",
+            "msg_id": 4421,
+            "gold_keys_v4": [
+              "raw:svoia-liniia"
+            ],
+            "gold_keys": [],
+            "removed": [
+              {
+                "field": "watchlist",
+                "written": "svoia-liniia",
+                "gold_key_v4": "raw:svoia-liniia",
+                "gold_key_b2": "raw:svoia-liniia"
+              }
+            ]
+          },
+          {
+            "item": "@atb_market_official:4426",
+            "msg_id": 4426,
+            "gold_keys_v4": [
+              "raw:magnat",
+              "raw:svoia-liniia",
+              "raw:розумний вибір",
+              "raw:хрещатик"
+            ],
+            "gold_keys": [
+              "raw:magnat",
+              "raw:svoia-liniia",
+              "raw:розумний вибір",
+              "raw:хрещатик"
+            ],
+            "removed": []
+          },
+          {
+            "item": "@atb_market_official:4436",
+            "msg_id": 4436,
+            "gold_keys_v4": [
+              "raw:sot",
+              "raw:svoia-liniia"
+            ],
+            "gold_keys": [
+              "raw:sot"
+            ],
+            "removed": [
+              {
+                "field": "watchlist",
+                "written": "svoia-liniia",
+                "gold_key_v4": "raw:svoia-liniia",
+                "gold_key_b2": "raw:svoia-liniia"
+              }
+            ]
+          },
+          {
+            "item": "@atb_market_official:4446",
+            "msg_id": 4446,
+            "gold_keys_v4": [
+              "raw:limo",
+              "raw:nesquik (какао-напій шоколадно-молочний коктейль, 200 г)",
+              "raw:rud",
+              "raw:svoia-liniia",
+              "raw:try-vedmedi"
+            ],
+            "gold_keys": [
+              "limo",
+              "raw:try-vedmedi",
+              "rud"
+            ],
+            "removed": [
+              {
+                "field": "watchlist",
+                "written": "svoia-liniia",
+                "gold_key_v4": "raw:svoia-liniia",
+                "gold_key_b2": "raw:svoia-liniia"
+              },
+              {
+                "field": "other_dairy_brands",
+                "written": "Nesquik (Какао-напій шоколадно-молочний коктейль, 200 г)",
+                "gold_key_v4": "raw:nesquik (какао-напій шоколадно-молочний коктейль, 200 г)",
+                "gold_key_b2": "raw:nesquik (какао-напій шоколадно-молочний коктейль, 200 г)"
+              }
+            ]
+          },
+          {
+            "item": "@atb_market_official:4455",
+            "msg_id": 4455,
+            "gold_keys_v4": [],
+            "gold_keys": [],
+            "removed": []
+          },
+          {
+            "item": "@atb_market_official:4467",
+            "msg_id": 4467,
+            "gold_keys_v4": [
+              "raw:rud",
+              "raw:svoia-liniia",
+              "raw:київський пломбір",
+              "raw:максхолод"
+            ],
+            "gold_keys": [
+              "raw:svoia-liniia",
+              "raw:київський пломбір",
+              "rud"
+            ],
+            "removed": [
+              {
+                "field": "other_dairy_brands",
+                "written": "Максхолод",
+                "gold_key_v4": "raw:максхолод",
+                "gold_key_b2": "raw:максхолод"
+              }
+            ]
+          },
+          {
+            "item": "@atb_market_official:4498",
+            "msg_id": 4498,
+            "gold_keys_v4": [
+              "raw:svoia-liniia"
+            ],
+            "gold_keys": [],
+            "removed": [
+              {
+                "field": "watchlist",
+                "written": "svoia-liniia",
+                "gold_key_v4": "raw:svoia-liniia",
+                "gold_key_b2": "raw:svoia-liniia"
+              }
+            ]
+          },
+          {
+            "item": "@atb_market_official:4508",
+            "msg_id": 4508,
+            "gold_keys_v4": [
+              "raw:lasunka",
+              "raw:limo",
+              "raw:rud",
+              "raw:svoia-liniia",
+              "raw:try-vedmedi",
+              "raw:каштан"
+            ],
+            "gold_keys": [
+              "limo",
+              "raw:lasunka",
+              "raw:каштан",
+              "rud"
+            ],
+            "removed": [
+              {
+                "field": "watchlist",
+                "written": "svoia-liniia",
+                "gold_key_v4": "raw:svoia-liniia",
+                "gold_key_b2": "raw:svoia-liniia"
+              },
+              {
+                "field": "watchlist",
+                "written": "try-vedmedi",
+                "gold_key_v4": "raw:try-vedmedi",
+                "gold_key_b2": "raw:try-vedmedi"
+              }
+            ]
+          },
+          {
+            "item": "@atb_market_official:4519",
+            "msg_id": 4519,
+            "gold_keys_v4": [],
+            "gold_keys": [],
+            "removed": []
+          }
+        ],
+        "posts_with_a_non_empty_gold_set": 10,
+        "posts_with_an_empty_gold_set": [
+          "@atb_market_official:4370",
+          "@atb_market_official:4377",
+          "@atb_market_official:4391",
+          "@atb_market_official:4411",
+          "@atb_market_official:4415",
+          "@atb_market_official:4421",
+          "@atb_market_official:4455",
+          "@atb_market_official:4498",
+          "@atb_market_official:4519"
+        ],
+        "posts_emptied_by_the_rescope": [
+          "@atb_market_official:4377",
+          "@atb_market_official:4391",
+          "@atb_market_official:4411",
+          "@atb_market_official:4421",
+          "@atb_market_official:4498"
+        ],
+        "asymmetry_reported_never_gated": {
+          "n": 9,
+          "by_what_the_pair_was": {
+            "a": 3,
+            "found by v1": 6
+          },
+          "pairs": [
+            {
+              "item": "@atb_market_official:4340",
+              "gold_key_v4": "raw:svoia-liniia",
+              "gold_key": "raw:svoia-liniia",
+              "was": "found by v1",
+              "field": "watchlist",
+              "written": "svoia-liniia"
+            },
+            {
+              "item": "@atb_market_official:4340",
+              "gold_key_v4": "raw:try-vedmedi",
+              "gold_key": "raw:try-vedmedi",
+              "was": "a",
+              "field": "watchlist",
+              "written": "try-vedmedi"
+            },
+            {
+              "item": "@atb_market_official:4350",
+              "gold_key_v4": "raw:svoia-liniia",
+              "gold_key": "raw:svoia-liniia",
+              "was": "found by v1",
+              "field": "watchlist",
+              "written": "svoia-liniia"
+            },
+            {
+              "item": "@atb_market_official:4360",
+              "gold_key_v4": "raw:каштан",
+              "gold_key": "raw:каштан",
+              "was": "found by v1",
+              "field": "other_dairy_brands",
+              "written": "Каштан"
+            },
+            {
+              "item": "@atb_market_official:4401",
+              "gold_key_v4": "raw:try-vedmedi",
+              "gold_key": "raw:try-vedmedi",
+              "was": "a",
+              "field": "watchlist",
+              "written": "try-vedmedi"
+            },
+            {
+              "item": "@atb_market_official:4426",
+              "gold_key_v4": "raw:svoia-liniia",
+              "gold_key": "raw:svoia-liniia",
+              "was": "found by v1",
+              "field": "watchlist",
+              "written": "svoia-liniia"
+            },
+            {
+              "item": "@atb_market_official:4446",
+              "gold_key_v4": "raw:try-vedmedi",
+              "gold_key": "raw:try-vedmedi",
+              "was": "a",
+              "field": "watchlist",
+              "written": "try-vedmedi"
+            },
+            {
+              "item": "@atb_market_official:4467",
+              "gold_key_v4": "raw:svoia-liniia",
+              "gold_key": "raw:svoia-liniia",
+              "was": "found by v1",
+              "field": "watchlist",
+              "written": "svoia-liniia"
+            },
+            {
+              "item": "@atb_market_official:4508",
+              "gold_key_v4": "raw:каштан",
+              "gold_key": "raw:каштан",
+              "was": "found by v1",
+              "field": "other_dairy_brands",
+              "written": "Каштан"
+            }
+          ],
+          "reading": "a class exists only for a pair the instrument MISSED, so (13)(c) can only ever remove misses. Every one of these is the SAME brand on another post, kept because the v1 instrument happened to find it — and it stays in the B′ denominator as a pair v2 is very likely to find again. The rescope therefore moves recall up on both sides: guaranteed misses leave and these stay. RULED by 3.17 (14)(b) — «B4 is ruled PER PAIR: a class is a fact about one (post, brand) pair, never about the brand everywhere — a brand ruled non-dairy on one post stays gold where it sits on a dairy position». They stay, and the asymmetry is reported here rather than corrected: see ratification_required B4"
+        }
+      }
+    },
+    "price_pair_accuracy": {
+      "verbatim": "price-pair accuracy ≥ 0.80 on positions carrying a crossed-out price (verified by team-lead read of the per-position dump against the images at acceptance)",
+      "threshold": 0.8,
+      "direction": ">=",
+      "denominator": "extracted positions carrying a crossed-out price — `price_old is not None` on a position whose carrier is leaflet_page. Discovered BY THE RUN: nothing before it can say how many of the 108 pages print an old price",
+      "numerator": "positions whose (price_promo, price_old) pair the team lead marks correct against the page image at acceptance. Both numbers, as one verdict: a right promo beside a wrong old price is a wrong pair, because depth is computed from the two of them",
+      "procedure": "sku-b writes a per-position dump — one row per extracted position carrying item, page number, the page's file and sha256, brand_raw, brand_id, line, category, size, fat, price_promo, price_old, discount_pct_printed, price_qualifier, the code-assigned tier, depth() and depth_disagrees_with_printed(). The team lead opens each cited page image and marks the pair correct or incorrect. The executor never scores its own sample (SPEC §10), and the dump is what makes the read possible without re-running anything",
+      "reachability": {
+        "rule": "n >= 10 pairs: the bar is SCORED. 1 <= n < 10: the accuracy is REPORTED with its n and the bar is NOT_SCORED — neither a PASS nor a closure of B, and the team lead rules at acceptance whether the small-n reading stands. n = 0: NOT_REACHABLE, and the finding is that the pages carry no crossed-out prices at all",
+        "why": "at a 0.80 bar one error costs 10 pp at n=10 and 33 pp at n=3, so a small denominator makes the threshold an artefact of arithmetic. Fixed here rather than after the run, when the n is known and the temptation is obvious. THIS IS THE EXECUTOR'S THRESHOLD — see ratification_required"
+      },
+      "printed_percentage": "never substitutes the pair (SPEC 3.17 (3)). A position with a printed % and one price is not in this denominator, and depth() returns None there"
+    },
+    "text_tier_accuracy": {
+      "verbatim": "text tier-assignment accuracy ≥ 0.85 vs adjudicated rows",
+      "threshold": 0.85,
+      "direction": ">=",
+      "gold": {
+        "pack": "data/annotation/sku_a_text/text30.csv",
+        "manifest": "results/sku_text_pack_manifest.json",
+        "manifest_sha256": "80e4e12c0278f8cce82f2619967e1c92e1bf4bc7f8cf358e29712049b5afd376",
+        "rows": 30,
+        "by_carrier": {
+          "post_text": 26,
+          "comment": 4
+        },
+        "computed_by": "market_pulse.positions.tier_from_presence",
+        "ladder_sha256": "6a257e04375b45796d4d3a665e749c116f2e407577614266085a0b65a7d8d999"
+      },
+      "denominator": "the adjudicated rows that came back with a legal tick set. A row the operator left untouched is not gold and is not counted",
+      "comparison": "per ROW, the gold tier against the model's tier, both from the SAME function: positions.tier_from_presence for the ticks, positions.tier for each parsed position. A row naming several products is compared on its HIGHEST rung, and a row whose ticks are all empty has gold `none` — the model must return [] to agree with it",
+      "unreadable_rows": "a reply the strict parser refuses is NOT scored as `none`. It is counted by its reason, listed by id, and excluded from the denominator: an unreadable reply and an empty answer are different outcomes, and conflating them would report parse failures as rows with nothing in them. If unreadable rows exceed 10% of the adjudicated set the bar is NOT_SCORED — the instrument did not answer",
+      "reachability": {
+        "rule": "n >= 20 adjudicated rows: SCORED. Below that, REPORTED with its n and NOT_SCORED",
+        "why": "30 are drawn; a bar at 0.85 over fewer than 20 rows moves 5 pp per row"
+      },
+      "carrier": "pooled over both carriers as drawn: {'post_text': 26, 'comment': 4}. Comments are 52 of the frame's 769 rows, so this bar prices the POST leg. Whether the comment carrier needs a bar of its own is a team-lead ruling — see ratification_required",
+      "also_measures": "the pre-filter's precision. A drawn row adjudicated as naming no position is a pre-filter false positive; the frame is dominated by recipe feeds (results/sku_prefilter_census.json), and this sample is the only thing that prices it. Reported, not gated — SPEC does not put a bar on the filter"
+    }
+  },
+  "ratification_required_note": "every line below is RULED — three of them by SPEC 3.17 (14) at the skub2-prep acceptance, two by (13) when B′ was authorised. The list is kept whole, with the question each line asked and the reading that was refused beside it: what a registration records is not only the answer but that the question was put before the run. `ruled_by` carries the law's own sentence",
+  "ratification_required": [
+    {
+      "id": "B1",
+      "bar": "leaflet_brand_recall",
+      "ruled_by": "SPEC 3.17 (14)(d) — «B1 stands: all 138 elements are re-asked; v1's answers remain v1's sealed measurement»",
+      "question": "(13)(d) authorises a re-measurement over «the same 138 elements» and (11)(a) says each element is bought exactly once across the program. Registered reading: (13)(d) supersedes (11)(a) for this registration, all 138 are re-asked, and v1's answers stay on disk as v1's measurement",
+      "if_refused": "the alternative is re-asking only what instrument v2 could change, which nobody can enumerate before the run — and a bar computed half on v1 answers and half on v2 answers measures neither instrument"
+    },
+    {
+      "id": "B2",
+      "bar": "leaflet_brand_recall",
+      "ruled_by": "SPEC 3.17 (13)(c) for the rule and 3.17 (14)(a) for the last four verdicts it needed — «Final decomposition: a=11 · b=16 · c=2»",
+      "question": "the B′ gold is 37 pairs, the 55 of v4 minus the 18 the team lead ruled class-b or class-c. Class-a pairs STAY: they are what instrument v2 exists to fix, and removing them would be marking the exam",
+      "if_refused": "the denominator is the team lead's to set; nothing here re-judges a pair"
+    },
+    {
+      "id": "B3",
+      "bar": "leaflet_brand_recall",
+      "ruled_by": "SPEC 3.17 (13)(b) — the three Latin display names are «an operator-owned registry edit, ratified here», and the key space follows the table",
+      "question": "the gold keys are computed under the (13)(b) alias table, so two of them change shape (`raw:rud` → `rud`, `raw:limo` → `limo`). The bar's threshold and text do not move; the key SPACE does",
+      "if_refused": "the alternative is scoring v2's extractions against v1's key space, where «Рудь» resolves to `rud` and the gold says `raw:rud` — a miss by arithmetic"
+    },
+    {
+      "id": "B4",
+      "bar": "leaflet_brand_recall",
+      "ruled_by": "SPEC 3.17 (14)(b) — «B4 is ruled PER PAIR: a class is a fact about one (post, brand) pair, never about the brand everywhere — a brand ruled non-dairy on one post stays gold where it sits on a dairy position». The registered reading below is the one that was accepted",
+      "question": "(13)(c) removes class-b and class-c PAIRS, and a class only exists for a pair the instrument missed — so the rescope can only ever take out misses. 9 pairs the v1 instrument FOUND carry a gold key the same team lead ruled out of the denominator on another post, and they stay. Registered reading: the verdicts are per pair and the executor re-judges none of them, so they stay",
+      "if_refused": "the alternative reading is that a brand ruled «non-dairy watchlist item» or «maker logo» is out of scope EVERYWHERE, which would take those pairs out too and lower the B′ denominator further. Both readings are defensible and they move the bar in opposite directions, which is exactly why this is a ratification line and not an executor's choice"
+    },
+    {
+      "id": "B5",
+      "bar": "leaflet_brand_recall",
+      "ruled_by": "SPEC 3.17 (14)(c) — «B5 follows from the verdicts: the re-scoped gold is 37 pairs over 10 posts with non-empty gold (five posts empty and become precision probes under R3)»",
+      "question": "the rescope EMPTIES the gold of 5 posts whose only gold key was a class-b pair, so they leave the recall average and join the precision probe under R3's own rule. The macro mean is over 10 posts, not v4's 15",
+      "if_refused": "keeping them in would divide by an empty denominator; R3 already rules that an empty gold set is a precision probe, and this applies that rule rather than writing a new one"
+    }
+  ],
+  "pinned_inputs": {
+    "docs/SPEC.md": "6818926d22b2a46b594ed417689347bbfbc8069c17fdbb11d35b40ec996b27b3",
+    "results/sku_reference_leaflet.json": "e301bb4f48f527e4f9f6b64bb1a53911fd69d2871e9e7cbc302195f8f982eb20",
+    "results/sku_text_pack_manifest.json": "80e4e12c0278f8cce82f2619967e1c92e1bf4bc7f8cf358e29712049b5afd376",
+    "results/sku_prefilter_census.json": "9e7dadf5fe3923015bad5f7c00984a457b4b61eaf6a447112272ee7f852af050",
+    "config/registry.yaml": "d4e3b2373c4378f3acc51079dc1d0560c28d58c46b71335b2bb352cae39be3ba",
+    "config/lexicon.yaml": "21b50bac55c7768334efa270f4048f1cc441670f336707e4e372737378cf1d98",
+    "src/market_pulse/positions.py": "0b058e80024401d589653f4f810c4a4a56eba8e6c0b563deae24cdd0c777837e",
+    "results/sku_pilot_serving_v2.json": "75f5e0d5a369cf2d915bb2bed8a98caffd0f11a9ded800ab269fc29f111ccf10",
+    "results/sku_miss_decomposition.json": "f713a385178e21983f5157cad2fb8b73f8672429172d6ff292466b27bf7b83f6"
+  },
+  "pinned_inputs_note": "`docs/SPEC.md` is pinned as the law WITH sku-b-ratification-7 and sku-b-ratification-8 in it and every other ratification block stripped — this registration is made under (13) and (14), and a pin over a law that does not contain them would not be a pin on the authority for this run: (13) is what authorises the re-measurement and (14) is what fixes the gold and the cap. `config/registry.yaml` is pinned LIVE for the same reason: the aliases are part of the instrument being registered",
+  "ladder": {
+    "sha256": "6a257e04375b45796d4d3a665e749c116f2e407577614266085a0b65a7d8d999",
+    "table": {
+      "attribute": "none",
+      "brand": "brand_mention",
+      "brand+attribute": "product_mention",
+      "brand+category": "product_mention",
+      "brand+category+attribute": "position",
+      "brand+category+size": "position",
+      "brand+category+size+attribute": "position",
+      "brand+line": "product_mention",
+      "brand+line+attribute": "product_mention",
+      "brand+line+category": "position",
+      "brand+line+category+attribute": "position",
+      "brand+line+category+size": "position",
+      "brand+line+category+size+attribute": "position",
+      "brand+line+size": "product_mention",
+      "brand+line+size+attribute": "product_mention",
+      "brand+size": "product_mention",
+      "brand+size+attribute": "product_mention",
+      "category": "none",
+      "category+attribute": "none",
+      "category+size": "none",
+      "category+size+attribute": "none",
+      "line": "none",
+      "line+attribute": "none",
+      "line+category": "none",
+      "line+category+attribute": "none",
+      "line+category+size": "none",
+      "line+category+size+attribute": "none",
+      "line+size": "none",
+      "line+size+attribute": "none",
+      "none": "none",
+      "size": "none",
+      "size+attribute": "none"
+    },
+    "why": "bar 3's gold is computed from the operator's ticks by this ladder and the model's tier by the same function, so the ladder is an INPUT to the bar. Pinned as its whole 32-row table, not only as a hash, so a future reader can see what was registered without running this code"
+  },
+  "not_in_scope": {
+    "the 5c3 rulings": "«Варто» text-matching OFF and «Селянське» anchored-only are the 5c3 named revision (knowledge/decisions/sitting-2026-08-10-composition-signed.md) and are NOT applied to brand resolution here. A «Варто» the model reads off a page resolves like any other name, and the leaflet gold contains it because the reviewer saw it printed",
+    "the 141 names": "still outside the watchlist, so they resolve to `raw:` keys on both sides of bar 1. That is symmetric and does not move the recall",
+    "the frozen family": "T1v2, the frozen sets, results/baselines.json and the adapter are untouched",
+    "aggregates": "no promo aggregate is computed anywhere in sku-b. Question 7's brand x category x week rollup is 5c2's, and consumer quotes never enter it (SPEC 3.17 (4))",
+    "the two candidates (13) names and does not authorise": "two-stage OCR and the brands_visible channel stay NAMED CANDIDATES, unbuilt. (13)'s last sentence: «no new ML mechanism is authorised»",
+    "the four pairs that were pending": "#4, #9, #28 and #29 were read at the B′-prep acceptance and are SPEC 3.17 (14)(a) — all class b, each with the pages it was read on. This record could not exist while any of them was pending, because the producer refuses, so a copy of it carrying four guesses was never a thing that could be produced by mistake"
+  },
+  "text_pack": {
+    "rows": 30,
+    "frame_rows": 769
+  },
+  "git": {
+    "commit": "ada5afecbb6791193f3e85e987fd07abd4d6ae6e",
+    "dirty": [
+      "knowledge/daily_logs/2026-08-12.md",
+      "knowledge/hot.md",
+      "knowledge/index.md"
+    ]
+  }
+}

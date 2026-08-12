@@ -454,3 +454,30 @@ def test_the_open_lines_are_kept_whole_and_every_one_of_them_is_ruled(record):
         assert line["ruled_by"], line["id"]
         assert line["question"] and line["if_refused"], line["id"]
     assert "every line below is RULED" in record["ratification_required_note"]
+
+
+# --- the shipped witness -------------------------------------------------------------------------
+
+
+def test_the_shipped_registration_is_the_one_this_script_writes(record):
+    """`results/sku_pilot_prereg_b2.json` is on disk from SPEC 3.17 (14)(a) onwards, and it is a
+    PRE-run witness: `generated_at` and `git` are the two fields a rebuild legitimately moves, and
+    everything else has to be what the producer computes from the shipped decomposition today."""
+    shipped = json.loads(writer.RECORD.read_text(encoding="utf-8"))
+    assert shipped.pop("git")["commit"]
+    assert shipped.pop("generated_at")
+    fresh = {key: value for key, value in record.items() if key not in ("git", "generated_at")}
+    assert shipped == fresh
+
+
+def test_the_written_registration_is_never_rewritten(tmp_path):
+    """A pre-registration regenerated after the run carries a timestamp from after it. There is no
+    --force, and the refusal fires on the shipped path — which is the one that matters."""
+    assert writer.RECORD.exists()
+    with pytest.raises(SystemExit, match="already exists"):
+        writer.main([])
+    copy = tmp_path / "b2.json"
+    copy.write_text("{}", encoding="utf-8")
+    with pytest.raises(SystemExit, match="already exists"):
+        writer.main(["--out", str(copy)])
+    assert copy.read_text(encoding="utf-8") == "{}"
