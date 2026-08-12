@@ -1003,8 +1003,10 @@ def test_the_resumed_warm_up_is_the_registered_page_and_row_not_a_thumbnail(
 
 
 def test_a_resume_without_its_own_registration_refuses(tmp_path):
-    """`--resume --prereg <v2>` is a resumed session claiming a $0.35 cap and a population v2 does
-    not contain. The default follows the flag; an explicit mismatch is refused rather than obeyed."""
+    """`--resume --prereg <B′>` is a resumed session claiming skub2's registration, which registers
+    all 138 elements and says `not_a_resume` out loud. The default follows the flag; an explicit
+    mismatch is refused rather than obeyed — and `resume_plan` is what recognises it, before the
+    constants check, because three missing fields would report one wrong file as three problems."""
     with pytest.raises(SystemExit, match="carries no `resume` block"):
         run_resume(tmp_path, prereg=driver.PREREG)
 
@@ -1162,6 +1164,14 @@ def test_the_serving_pin_is_held_against_the_registration_that_names_it(prereg, 
     driver.check_the_serving_pin_is_the_registered_one(without, driver.PIN_RESUME)
 
 
+def test_the_serving_pin_check_runs_on_the_non_resume_path_too():
+    """The WIRING of the guard above, and it is here because this contract's own Dv217 is a guard
+    that was proved as a function and called on one path only. Driven through `main --dry-run`,
+    which reaches the check and spends nothing."""
+    with pytest.raises(SystemExit, match="the run would serve against sku_pilot_serving.json"):
+        driver.main(["--dry-run", "--leg", "text", "--pin", str(driver.PIN_RESUME)])
+
+
 def test_the_job_count_says_what_it_planned_and_what_it_submitted(tmp_path):
     """Dv153: `cost.jobs` was the PLAN. The run that stopped at 17 of 138 recorded 8 while 4 jobs
     ran, and read as a job count it said the session did twice the work it did.
@@ -1248,9 +1258,11 @@ def test_an_explicit_project_stop_tightens_the_cap_and_never_replaces_it(
     tmp_path, monkeypatch, pin
 ):
     """`--project-stop-usd` used to be taken as the budget outright, so a value above what is left
-    of the $0.35 cap disabled the in-run stop entirely — a flag that reads like a safety knob and
-    could only ever loosen the one guard. Here $0.30 of the cap is already spent, so $0.05 is left
-    and the run must refuse against THAT, not against the 9.99 on the command line."""
+    of the cap disabled the in-run stop entirely — a flag that reads like a safety knob and could
+    only ever loosen the one guard. Here all but $0.05 of the cap is already spent, so the run must
+    refuse against THAT, not against the 9.99 on the command line. The anchor is derived from the
+    live cap (`SPENT_LEAVING_FIVE_CENTS`); it was 0.30 against $0.35 and is 0.60 against (14)(e)'s
+    $0.65."""
     ledger = ledgered(
         tmp_path, monkeypatch, pin, balance=10.0, anchor=10.0 + SPENT_LEAVING_FIVE_CENTS
     )
