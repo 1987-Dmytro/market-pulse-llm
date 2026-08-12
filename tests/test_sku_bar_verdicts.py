@@ -550,6 +550,25 @@ def test_the_closure_names_the_bars_that_failed_and_waits_on_one_that_has_no_ver
     )
 
 
+def test_the_shipped_run_has_a_read_to_score_and_does_not_fall_back_to_pending():
+    """The default `--pairs` is the real read. If it ever went missing, bar 2 would quietly go back
+    to PENDING and the record would still be written — so the existence of that file is the guard,
+    and the record on disk is checked to be the scored one."""
+    assert verdicts.PAIRS.exists(), f"{verdicts.PAIRS} is the read bar 2 is scored from"
+    read = json.loads(verdicts.PAIRS.read_text(encoding="utf-8"))
+    assert read["checksums"] == {
+        "keys": 45,
+        "rows": 61,
+        "correct_rows": 20,
+        "wrong_rows": 41,
+        "accuracy": pytest.approx(20 / 61),
+        "accuracy_4dp": 0.3279,
+    }
+    shipped = json.loads(verdicts.OUT.read_text(encoding="utf-8"))
+    assert shipped["bars"]["price_pair_accuracy"]["verdict"] == "FAIL"
+    assert shipped["closure"]["failed_bars"] == ["leaflet_brand_recall", "price_pair_accuracy"]
+
+
 def test_highest_tier_takes_the_best_rung_and_names_an_empty_answer():
     assert verdicts.highest_tier(["brand_mention", "position", "product_mention"]) == "position"
     assert verdicts.highest_tier(["brand_mention", "product_mention"]) == "product_mention"

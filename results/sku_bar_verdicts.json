@@ -1,7 +1,7 @@
 {
   "phase": "sku-b — the three bars over the completed population",
-  "contract": "docs/PROMPT-sku-b-v4-run.md step 6; docs/SPEC.md amendment 3.17 (6), (11), (12)",
-  "class": "MEASUREMENT. Bars 1 and 3 are computed by market_pulse.scorer over the merged population; bar 2 carries its denominator and its dump and waits for the team lead's read. No adjudication happens in this file",
+  "contract": "docs/PROMPT-sku-b-close.md deliverable 2 (bar 2 applied and the closure); docs/PROMPT-sku-b-v4-run.md step 6 (bars 1 and 3); docs/SPEC.md amendment 3.17 (6), (11), (12)",
+  "class": "MEASUREMENT. Bars 1 and 3 are computed by market_pulse.scorer over the merged population; bar 2's verdicts are the team lead's read, transcribed by scripts/apply_sku_pair_verdicts.py and re-derived here from its keys. No adjudication happens in this file",
   "smoke": false,
   "prereg": {
     "path": "results/sku_pilot_prereg_v4.json",
@@ -529,9 +529,9 @@
         "R4"
       ],
       "threshold": 0.8,
-      "value": null,
-      "verdict": "PENDING_TEAM_LEAD",
-      "why_no_value": "SPEC §10: the executor never scores its own sample. Bar 2 is the team lead's read of each cited page image against the pair in the dump, at acceptance",
+      "value": 0.3278688525,
+      "verdict": "FAIL",
+      "why_no_value": null,
       "n_pairs": 61,
       "reachability": {
         "rule": "n >= 10 pairs: the bar is SCORED. 1 <= n < 10: the accuracy is REPORTED with its n and the bar is NOT_SCORED — neither a PASS nor a closure of B, and the team lead rules at acceptance whether the small-n reading stands. n = 0: NOT_REACHABLE, and the finding is that the pages carry no crossed-out prices at all",
@@ -562,7 +562,21 @@
           "bought_by"
         ]
       },
-      "procedure": "sku-b writes a per-position dump — one row per extracted position carrying item, page number, the page's file and sha256, brand_raw, brand_id, line, category, size, fat, price_promo, price_old, discount_pct_printed, price_qualifier, the code-assigned tier, depth() and depth_disagrees_with_printed(). The team lead opens each cited page image and marks the pair correct or incorrect. The executor never scores its own sample (SPEC §10), and the dump is what makes the read possible without re-running anything"
+      "procedure": "sku-b writes a per-position dump — one row per extracted position carrying item, page number, the page's file and sha256, brand_raw, brand_id, line, category, size, fat, price_promo, price_old, discount_pct_printed, price_qualifier, the code-assigned tier, depth() and depth_disagrees_with_printed(). The team lead opens each cited page image and marks the pair correct or incorrect. The executor never scores its own sample (SPEC §10), and the dump is what makes the read possible without re-running anything",
+      "stated": "0.3279 vs 0.80 — FAIL (n=61, read by the team lead 2026-08-12)",
+      "read": {
+        "path": "results/sku_b_pair_verdicts.json",
+        "sha256": "a61f1dce0ff3a13eb54e456b9fd8ba22a55379bcc1cc34d724feac57b9d19e75",
+        "by": "the team lead",
+        "on": "2026-08-12",
+        "scope": "all 61 pairs against all 22 page images",
+        "contract": "docs/PROMPT-sku-b-close.md — the team lead's verdicts table",
+        "keys": 45,
+        "correct_rows": 20,
+        "wrong_rows": 41,
+        "accuracy_4dp": 0.3279,
+        "diagnosis": "promo price 61/61 correct · printed % 61/61 correct · crossed-out old price 20/61 — every error is confined to the small struck-through number (superscript kopiyky garbled, truncated to .0, or digit-shifted), and depth() is wrong wherever the old price is."
+      }
     },
     "text_tier_accuracy": {
       "verbatim": "text tier-assignment accuracy ≥ 0.85 vs adjudicated rows",
@@ -844,21 +858,45 @@
       ]
     }
   },
+  "closure": {
+    "rule": "a failed bar closes B as 'instrument not ready' BY MEASUREMENT. No retry, no re-prompt, no second draw: a bar re-run after its own result is not the bar that was registered",
+    "rule_source": "results/sku_pilot_prereg_v4.json attempts.on_failure, quoted verbatim",
+    "verdicts": {
+      "leaflet_brand_recall": "FAIL",
+      "price_pair_accuracy": "FAIL",
+      "text_tier_accuracy": "PASS"
+    },
+    "failed_bars": [
+      "leaflet_brand_recall",
+      "price_pair_accuracy"
+    ],
+    "passed_bars": [
+      "text_tier_accuracy"
+    ],
+    "undecided_bars": [],
+    "state": "CLOSED — instrument not ready, BY MEASUREMENT",
+    "why": "2 of 3 bars failed: leaflet_brand_recall, price_pair_accuracy"
+  },
   "scored_by": {
     "bar_1": "market_pulse.scorer.leaflet_brand_recall",
+    "bar_2": "the team lead's read; the share re-derived from its keys by apply_sku_pair_verdicts.checksums",
     "bar_3": "market_pulse.scorer.text_tier_accuracy",
     "tiers": "market_pulse.positions.tier / tier_from_presence",
     "gold_keys": "build_sku_reference_leaflet.gold_key"
   },
   "git": {
-    "commit": "ec9cf3bda3203859b0bbb3205c80491b39977b1f",
+    "commit": "06617c81d2c2b5cebdca6f78b564cbec4811c9a4",
     "dirty": [
+      "docs/STATUS.md",
       "knowledge/daily_logs/2026-08-12.md",
       "knowledge/hot.md",
       "knowledge/index.md",
-      "results/spend_sku_b_v4.json",
-      "results/sku_b_positions_v4.json",
-      "results/sku_b_positions_v4.jsonl"
+      "scripts/sku_bar_verdicts.py",
+      "tests/test_sku_bar_verdicts.py",
+      "docs/PROMPT-sku-b-close.md",
+      "results/sku_b_pair_verdicts.json",
+      "scripts/apply_sku_pair_verdicts.py",
+      "tests/test_apply_sku_pair_verdicts.py"
     ]
   }
 }
