@@ -4570,16 +4570,7 @@
   ],
   "sheet": "results/sku_miss_pack.md",
   "git": {
-    "commit": "1c2963cb17f193132ff969000ba0a212baf9da84",
-    "dirty": [
-      "docs/STATUS.md",
-      "knowledge/daily_logs/2026-08-12.md",
-      "knowledge/hot.md",
-      "knowledge/index.md",
-      "docs/PROMPT-sku-miss-pack.md",
-      "results/sku_miss_pack.md",
-      "scripts/build_sku_miss_pack.py",
-      "tests/test_build_sku_miss_pack.py"
-    ]
+    "commit": "610af67c6836ce937ef4bd6026dd8b5abddab7ef",
+    "dirty": []
   }
 }
