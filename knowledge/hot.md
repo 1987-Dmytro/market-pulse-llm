@@ -2,49 +2,70 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-11 23:09:41 (every SessionStart)
+**Auto-refreshed:** 2026-08-12 10:17:22 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-1f196f6 docs(report): sku-b-v3-run -- name the commit the previous row could not
-c265918 docs(report): sku-b-v3-run -- Dv167, Dv168 and the settled balance
-9e0be97 fix(sku-b-v3-run): bar 3's denominator drops the rows nobody adjudicated
-545fe1b docs(report): sku-b-v3-run
-5dd9e1a feat(sku-b-v3-run): the session's whole output -- a (10)(a) refusal
+8f4a7ed docs(report): sku-b-v4-prep
+bb6b96e docs(decision): the v3 refusal and the v4 ruling
+87c2240 feat(sku-b-v4-prep): the preflight re-driven against the v4 registration
+6369123 feat(sku-b-v4-prep): projection v4 -- both measured marginals as corners
+20b9436 feat(sku-b-v4-prep): the v4 constants set together, and one cost block for both exits
 ```
 
 ## 📋 Recent decisions
 
+- `sku-b-v3-refusal-and-v4.md` — The v3 session was refused by its own gate: three marginals, a fresh ledger, and a $0.65 cap
 - `INDEX.md` — Decision records
 - `sku-b-run-acceptance-and-resume.md` — sku-b-run accepted at 17 of 138: the probe priced the run, not the cap, and the (10)(b) stop resolves as a resume
-- `sku-b-serving-and-cap-discipline.md` — sku-b's serving configuration and its cap discipline: the prep/run split, the base-off pin, and the three readings that keep one job from out-billing the cap
 
 ## 📅 Recent daily logs
 
+- `2026-08-12.md`
 - `2026-08-11.md`
 - `2026-08-10.md`
-- `2026-08-09.md`
 
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-11 23:20 (arch-a ✅, uni-a ✅, uni-b ✅, sku-b-prep ✅, sku-b-run ✅ ПРИНЯТ,
-sku-b-v3-prep ✅, **sku-b-v3-run ⛔ ОТКАЗ go/no-go — 0 голд-вызовов, попытка НЕ израсходована**).
-**sku-a ✅, R1–R5 ратифицированы, голд text30 размечен, SPEC 3.17 (7)(8)(9)(10)(11) — закон** —
+**Last update:** 2026-08-12 11:05 (arch-a ✅, uni-a ✅, uni-b ✅, sku-b-prep ✅, sku-b-run ✅ ПРИНЯТ,
+sku-b-v3-prep ✅, sku-b-v3-run ⛔ ОТКАЗ go/no-go (попытка ЦЕЛА), **sku-b-v4-prep ✅ $0**).
+**sku-a ✅, R1–R5 ратифицированы, голд text30 размечен, SPEC 3.17 (7)(8)(9)(10)(11)(12) — закон** —
 `docs/ARCHITECTURE.md`, граф кода, отчёты `uni-a.md` + `uni-b.md` + `sku-b-prep.md` + `sku-b-run.md`
-+ `sku-b-v3-prep.md` + **`sku-b-v3-run.md`**, `docs/PORTING.md`, `config/lexicon.yaml`,
-**`results/sku_pilot_prereg_v3.json`**, `results/sku_pilot_serving.json`,
-`results/sku_projection_v3.json`, `results/sku_b_positions.json`, **`results/sku_b_positions_v3.json`**.
-**Next: решение тимлида — перерегистрация v4 под измеренную цену** (детали в блоке Next).
++ `sku-b-v3-prep.md` + `sku-b-v3-run.md` + **`sku-b-v4-prep.md`**, `docs/PORTING.md`,
+`config/lexicon.yaml`, **`results/sku_pilot_prereg_v4.json`**, `results/sku_pilot_serving.json`,
+**`results/sku_projection_v4.json`**, `results/sku_b_positions.json`, `results/sku_b_positions_v3.json`.
+**Next: v4-run — платный контракт, кап $0.65, докупка 121** (детали в блоке Next).
 Блок правится руками; секция выше — авто-ген, маркер НЕ
 трогать. Длинная форма: `implementation-notes.md` (Dv100–120 и указатели
 Dv133–147), `docs/reports/uni-a.md` (Dv121–124), `uni-b.md` (Dv125–132), `sku-b-prep.md`
 (Dv133–147), `sku-b-run.md` (Dv148–153), `sku-b-v3-prep.md` (Dv154–160),
-**`sku-b-v3-run.md` (Dv161–168)**, дневники [[2026-08-11]] / [[2026-08-10]], ADR ниже.
+`sku-b-v3-run.md` (Dv161–168), **`sku-b-v4-prep.md` (Dv169–174)**,
+дневники [[2026-08-12]] / [[2026-08-11]], ADR ниже.
 
 ## 🔥 What's Hot
+
+**✅ v4-prep ЗАКРЫТ, $0 (12.08). ВСЁ ГОТОВО К ПЛАТНОЙ СЕССИИ, КАП $0.65.** SPEC 3.17 **(12)**
+ратифицирована; четыре поставки на месте. Прережка **`results/sku_pilot_prereg_v4.json` РЯДОМ с v3**
+(v3 запечатана `a80e8e55…`): сдвинуто РОВНО три — `cap_usd` 0.45→0.65 ((12)(a)), новые
+`attempts.phase`/`attempts.ledger` = `sku-b-v4` / `results/spend_sku_b_v4.json` ((12)(b)) и блок
+`supersedes` (пин отказной записи + (12)(a)–(d) дословно). **307 листьев байт-в-байт**, включая ВЕСЬ
+блок `resume` — отказавшая сессия не измерила ничего, что читает планка. Драйвер: три константы
+плюс `check_the_constants_are_the_registrations` — регистрация теперь СТОРОНА договора, Dv167 не
+может повториться наполовину. **Dv163 закрыт:** один `cost_block` на оба выхода, отказ пишет
+`jobs_planned: 1` (план был упакован до срабатывания ворот), не `jobs: 0`. Прелёт **30/30, exit 0**.
+Отчёт: `docs/reports/sku-b-v4-prep.md`, ADR [[sku-b-v3-refusal-and-v4]].
+
+**ЦЕНА v4: $0.6143 В ПЕССИМИСТИЧНОМ УГЛУ ПРОТИВ $0.65** (`results/sku_projection_v4.json`).
+Два ИЗМЕРЕННЫХ страничных маргинала как углы, ни один не есть «ставка популяции»: **14.808 с/стр.
+(n=1, зарегистрированная проба, структурно ГЛУБОКАЯ страница)** → $0.5964 → $0.6143 с 3%-дрейфом,
+запас **$0.0357**; **5.0772 с/стр. (n=17, из популяции, но 10 из 17 ответили `[]`)** → $0.3218 →
+$0.3315. Текст ИЗМЕРЕН впервые: 3.862 с/строка (n=1). Бут — одно число, 402.586 с, та же
+конфигурация. Break-even **16.0366 с/стр. = ×1.083 от пробы** — запас реален и тонок, ин-ран гейт
+(10)(b) держит середину. Пессимистичный угол СВЕРЕН с $0.5964 самих ворот при сборке записи:
+разойдутся — продюсер откажется писать. 3% — термин контракта, не измерение, и так и записано.
 
 **⛔ v3-RUN ОТКАЗАЛ НА go/no-go (10)(a), 20:44. НИ ОДНОГО ГОЛД-ВЫЗОВА, ПОПЫТКА ЦЕЛА.**
 121 вызов спроецирован в **$0.5964** против $0.4500 остатка капа → отказ ДО первого голд-вызова.
@@ -250,14 +271,16 @@ of which 42 are video. **This executor signed nothing** — the composition is t
 
 ## ⏭️ Next
 
-**СЛЕДУЮЩЕЕ — РЕШЕНИЕ ТИМЛИДА ПО ПЕРЕРЕГИСТРАЦИИ. Кода к написанию нет, пока не решено.**
-v3-run отказал на go/no-go, попытка (11) ЦЕЛА, куплено 17 из 138. На столе три числа и один вопрос:
-$0.5964 (по маргиналу 14.808 с/стр., n=1) · $0.3248 (по 5.0772 с/стр., n=17) · break-even
-9.5622 с/стр. Вопрос: считать ли $0.1526, потраченные отказавшей сессией, в счёт следующей (Dv167 —
-сейчас драйвер считает их МОЛЧА, и тогда бюджет второй попытки $0.2974, ниже даже оптимистичной
-проекции). v4 = новая прережка РЯДОМ с v3 + свои `RESUME_*` константы (кап, путь якоря, ключ фазы)
-вместе. Всё остальное готово: том стейджится в 2 минуты, шаблон/эндпойнт по рецепту
-`sku-b-v3-run.md`, продюсер планок написан и протестирован (`scripts/sku_bar_verdicts.py`).
+**СЛЕДУЮЩЕЕ — v4-RUN: ПЛАТНАЯ СЕССИЯ, КАП $0.65, ДОКУПКА 121.** Всё готово и лежит в репо:
+прережка v4, проекция v4, три константы драйвера, прелёт 30/30. Порядок и рецепт — как в
+`docs/reports/sku-b-v3-run.md` (том стейджится за 2 минуты бандлом; НОВЫЙ шаблон с тремя
+переменными, старый не редактируется; эндпойнт `--gpu-id ADA_24 --workers-max 1 --idle-timeout 60
+--execution-timeout 900`). Свежий якорь `results/spend_sku_b_v4.json` заводится ДО первого джоба и
+никогда не регенерируется. Отказ v3 ($0.1526) уже списан на фазу — он в `spend_sku_b_v3.json` и
+НЕ ляжет на этот кап (12)(b). Ждёт: контракт `docs/PROMPT-sku-b-v4-run.md` от тимлида.
+
+*Уже решено и закрыто:* три маргинала (1.436 / 5.0772 / 14.808) → кап $0.65 под пессимистичный
+угол; свежий леджер; варм-апы НЕ перевыбираются. Подробности — [[sku-b-v3-refusal-and-v4]].
 
 **РУЛИНГ 11.08 НОЧЬЮ: sku-b-run ПРИНЯТ, исход = RESUME.** SPEC 3.17 **(11)**, пять чтений: (a) каждый элемент
 популяции покупается РОВНО ОДИН раз за программу — докупаются только **121** некупленный, 17
@@ -290,20 +313,22 @@ change either way.
 
 ## 🚧 Blockers
 
-**СЮИТА ЗЕЛЁНАЯ: 1806 passed, 2 skipped; `ruff format --check` 228 файлов. Дерево чистое,
-восемь коммитов `84a7d22..1f196f6`; почекаутная таблица зелёная на каждом (контроль — родитель
-`6888de7`, 1780).** Красный тест пятого
-блока закрыт step 0.2. **Поправка к записи 20:50:** предсказание брифа было ТОЧНЫМ — ассерт
-перечисления маркеров живёт ВНУТРИ `test_every_pinned_input_still_hashes_to_what_it_says`, это один
-и тот же тест, а не два. Ничего не биллится: платных вызовов в v3-prep не было вообще.
+**СЮИТА ЗЕЛЁНАЯ: 1823 passed, 2 skipped; `ruff format --check` 230 файлов. Дерево чистое,
+восемь коммитов `f721115..<vault>`; почекаутная таблица зелёная на каждом, КРОМЕ первого — он
+КРАСНЫЙ ПО ЗАМЫСЛУ (блок `sku-b-ratification-6` в SPEC приземляется до того, как step 0.2 расширит
+перечисление; бриф это авторизует, следующий коммит зеленит). Контроль — родитель `91d83ef`, 1806.
+Ничего не биллится с тирдауна 20:46 (11.08); v4-prep не создал ни пода, ни эндпойнта, ни шаблона.**
 This file is **over arch-a's 6.0K bar**; said, not hidden.
 
-**ОДИН ДОЛГ ОСТАЛСЯ ИЗ ДВУХ.** (1) `cost.jobs` — **ЗАКРЫТ** (Dv153): поле разделено на
-`jobs_planned` / `jobs_submitted`, старая запись `results/sku_b_positions.json` НЕ правлена руками —
-она улика. Заодно фейку добавлен счёт `info`-хендшейка: прод-клиент его считает, фейк не считал, и
-единственный тест поля проверял семантику фикстуры. (2) Холодный старт **391.369 с против
-исторических 183.58 с у vis-c (×2.13)** — ОТКРЫТ; `worker-boot.log` на томе `qw4nwleanc`, читается
-почти бесплатно в v3-run. Внимание: 175.8 с из старых записей — это **под**, другой транспорт.
+**ОБА ДОЛГА v3-RUN ЗАКРЫТЫ.** (1) **Dv163** — отказной выход больше не пишет `jobs: 0`: один
+`cost_block` строит блок на обоих выходах, отказ даёт `jobs_planned: 1` / `jobs_submitted: 3`
+(хендшейк + два варм-апа), тест прогоняет ОБА выхода и сравнивает наборы полей. (2) **Dv167** —
+три константы переехали вместе и связаны с прережкой (`attempts.phase/.cap_usd/.ledger`);
+`check_the_constants_are_the_registrations` отказывает ДО чтения баланса, `read_ledger` отказал бы
+позже и по другой причине — оба прогнаны рядом в прелёте, чтобы видно было, КАКОЙ гейт сработал.
+**Открытым остаётся холодный старт**: 402.586 с против 183.58 с у vis-c (×2.19), из них 112 с —
+холодное чтение 1188 шардов с тома, 267.6 с не атрибутированы (лог без таймстемпов). Рычаг —
+консолидация шардов, отложено на 5c. Внимание: 175.8 с из старых записей — это **под**.
 
 **Budget is the live constraint.** Phase 4 stands at **$22.7780 of $25.00, $2.2220 left** (read
 2026-08-11T18:23:45Z, ~7 min after the sku-b-run teardown — still settling, Dv33). sku-b's own
