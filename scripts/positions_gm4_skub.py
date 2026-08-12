@@ -1378,13 +1378,17 @@ def main(argv: list[str] | None = None, client=None) -> int:
         "phase": (
             "sku-b — the position-layer pilot, the resumed session"
             if args.resume
-            else "sku-b — the position-layer pilot, one paid attempt"
+            else "skub2 — the position layer re-measured under instrument v2"
         ),
+        # The non-resume branch described the FIRST session — `docs/PROMPT-sku-b-prep.md`, 3.17
+        # (6), (9), (10) — and that path is skub2's now, so the string had become a run record
+        # naming a contract the run was not under. Moved with the constants. The resume branch is
+        # v4's and is left alone, including the (12) it omits: that is Dv176 and it is still open.
         "contract": (
             "docs/PROMPT-sku-b-v3-prep.md deliverable 2; docs/SPEC.md amendment 3.17 (9), (10), (11)"
             if args.resume
-            else "docs/PROMPT-sku-b-prep.md deliverable 2 + docs/PROMPT-sku-b-prep-fix.md;"
-            " docs/SPEC.md amendment 3.17 (6), (9), (10)"
+            else "docs/PROMPT-skub2-prep.md + docs/PROMPT-skub2-fix.md;"
+            " docs/SPEC.md amendment 3.17 (9), (10), (13), (14)"
         ),
         "prereg": {
             "path": rel(args.prereg),
