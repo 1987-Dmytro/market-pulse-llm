@@ -363,6 +363,24 @@ def test_the_shipped_b_prime_gold_is_the_37_over_10_the_contract_states():
     )
 
 
+def test_the_shipped_verdict_record_is_the_closure_over_the_read_on_disk():
+    """B′'s closure is a file, not a sentence in a report — and it is only true while the read it
+    was taken over is the read on disk. Re-running the applier without re-running this producer
+    would leave a closure pinned to a pair-verdicts file that no longer exists at that sha.
+
+    This test reads a SHIPPED artifact, so it lives in the commit that ships it: put in the
+    producer's commit it is red until the next one, which is how `3c1dc8a` in this session's first
+    ordering came to fail its own suite (Dv240)."""
+    out = json.loads((REPO_ROOT / "results" / "sku_bar_verdicts_skub2.json").read_text("utf-8"))
+    two = out["bars"]["price_pair_accuracy"]
+    assert (two["value"], two["verdict"], two["n_pairs"]) == (0.4125, "FAIL", 80)
+    assert two["read"]["sha256"] == hashlib.sha256(verdicts.PAIRS.read_bytes()).hexdigest()
+    assert out["closure"]["state"] == "CLOSED — instrument not ready, BY MEASUREMENT"
+    assert out["closure"]["failed_bars"] == ["price_pair_accuracy"]
+    assert out["closure"]["passed_bars"] == ["leaflet_brand_recall", "text_tier_accuracy"]
+    assert out["closure"]["undecided_bars"] == []
+
+
 def test_bar_one_counts_unreadable_pages_without_excluding_them():
     record = json.loads(json.dumps(RECORD))
     record["outcomes"][1]["unreadable"] = "malformed JSON"

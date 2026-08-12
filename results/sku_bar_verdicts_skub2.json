@@ -1,7 +1,7 @@
 {
   "phase": "sku-b — the three bars over the completed population",
-  "contract": "docs/PROMPT-skub2-run.md step 6 (bars 1 and 3 over the B′ gold); docs/SPEC.md amendment 3.17 (6) the three bars, (13) and (14) the re-measurement",
-  "class": "MEASUREMENT. Bars 1 and 3 are computed by market_pulse.scorer over the merged population; bar 2's verdicts are the team lead's read, transcribed by scripts/apply_sku_pair_verdicts.py and re-derived here from its keys. No adjudication happens in this file",
+  "contract": "docs/PROMPT-skub2-close.md deliverable 2 (bar 2 applied, the closure); docs/PROMPT-skub2-run.md step 6 (bars 1 and 3 over the B′ gold); docs/SPEC.md amendment 3.17 (6) the three bars, (13) and (14) the re-measurement",
+  "class": "MEASUREMENT. Bars 1 and 3 are computed by market_pulse.scorer over the merged population; bar 2's verdicts are the team lead's read, transcribed by scripts/apply_sku_pair_verdicts_skub2.py and re-derived here from its keys. No adjudication happens in this file",
   "smoke": false,
   "prereg": {
     "path": "results/sku_pilot_prereg_b2.json",
@@ -432,9 +432,9 @@
         "R4"
       ],
       "threshold": 0.8,
-      "value": null,
-      "verdict": "PENDING_TEAM_LEAD",
-      "why_no_value": "SPEC §10: the executor never scores its own sample. Bar 2 is the team lead's read of each cited page image against the pair in the dump, at acceptance",
+      "value": 0.4125,
+      "verdict": "FAIL",
+      "why_no_value": null,
       "n_pairs": 80,
       "reachability": {
         "rule": "n >= 10 pairs: the bar is SCORED. 1 <= n < 10: the accuracy is REPORTED with its n and the bar is NOT_SCORED — neither a PASS nor a closure of B, and the team lead rules at acceptance whether the small-n reading stands. n = 0: NOT_REACHABLE, and the finding is that the pages carry no crossed-out prices at all",
@@ -464,7 +464,21 @@
           "depth_disagrees_with_printed"
         ]
       },
-      "procedure": "sku-b writes a per-position dump — one row per extracted position carrying item, page number, the page's file and sha256, brand_raw, brand_id, line, category, size, fat, price_promo, price_old, discount_pct_printed, price_qualifier, the code-assigned tier, depth() and depth_disagrees_with_printed(). The team lead opens each cited page image and marks the pair correct or incorrect. The executor never scores its own sample (SPEC §10), and the dump is what makes the read possible without re-running anything"
+      "procedure": "sku-b writes a per-position dump — one row per extracted position carrying item, page number, the page's file and sha256, brand_raw, brand_id, line, category, size, fat, price_promo, price_old, discount_pct_printed, price_qualifier, the code-assigned tier, depth() and depth_disagrees_with_printed(). The team lead opens each cited page image and marks the pair correct or incorrect. The executor never scores its own sample (SPEC §10), and the dump is what makes the read possible without re-running anything",
+      "stated": "0.4125 vs 0.80 — FAIL (n=80, read by the team lead 2026-08-12)",
+      "read": {
+        "path": "results/sku_b_pair_verdicts_skub2.json",
+        "sha256": "f780ef67432e951b42c99dcacf8a7e2cfaa9d2e07a79d831f44c20a098afe00e",
+        "by": "the team lead",
+        "on": "2026-08-12",
+        "scope": "all 80 pairs over 26 page images — 74 against the team lead's documented printed values from the v4 and decomposition reads (same reader, same pages) and 6 from the one new page 4446, read 2026-08-12",
+        "contract": "docs/PROMPT-skub2-close.md — the team lead's verdicts table",
+        "keys": 64,
+        "correct_rows": 33,
+        "wrong_rows": 47,
+        "accuracy_4dp": 0.4125,
+        "diagnosis": "promo 80/80 correct · printed % 80/80 correct · crossed-out old 33/80 — the superscript family again; dense multi-item pages read their olds better (4405: 7/9, 4446: 5/6) than single-hero posters"
+      }
     },
     "text_tier_accuracy": {
       "verbatim": "text tier-assignment accuracy ≥ 0.85 vs adjudicated rows",
@@ -755,36 +769,35 @@
     "rule_source": "results/sku_pilot_prereg_b2.json attempts.on_failure, quoted verbatim",
     "verdicts": {
       "leaflet_brand_recall": "PASS",
-      "price_pair_accuracy": "PENDING_TEAM_LEAD",
+      "price_pair_accuracy": "FAIL",
       "text_tier_accuracy": "PASS"
     },
-    "failed_bars": [],
+    "failed_bars": [
+      "price_pair_accuracy"
+    ],
     "passed_bars": [
       "leaflet_brand_recall",
       "text_tier_accuracy"
     ],
-    "undecided_bars": [
-      "price_pair_accuracy"
-    ],
-    "state": "UNDETERMINED",
-    "why": "['price_pair_accuracy'] carry no verdict yet"
+    "undecided_bars": [],
+    "state": "CLOSED — instrument not ready, BY MEASUREMENT",
+    "why": "1 of 3 bars failed: price_pair_accuracy"
   },
   "scored_by": {
     "bar_1": "market_pulse.scorer.leaflet_brand_recall",
-    "bar_2": "the team lead's read; the share re-derived from its keys by apply_sku_pair_verdicts.checksums",
+    "bar_2": "the team lead's read, transcribed by scripts/apply_sku_pair_verdicts_skub2.py; the share re-derived from its keys by apply_sku_pair_verdicts.checksums",
     "bar_3": "market_pulse.scorer.text_tier_accuracy",
     "tiers": "market_pulse.positions.tier / tier_from_presence",
     "gold_keys": "build_sku_reference_leaflet.gold_key"
   },
   "git": {
-    "commit": "0793a3cab567d1540fe76faadce878760531d6fb",
+    "commit": "866e86a8e87c835bb959a49b07c5c27e8041552e",
     "dirty": [
       "knowledge/daily_logs/2026-08-12.md",
       "knowledge/hot.md",
       "knowledge/index.md",
-      "results/spend_skub2.json",
-      "results/sku_b_positions_skub2.json",
-      "results/sku_b_positions_skub2.jsonl"
+      "scripts/sku_bar_verdicts.py",
+      "tests/test_sku_bar_verdicts.py"
     ]
   }
 }
