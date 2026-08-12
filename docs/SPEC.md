@@ -674,6 +674,29 @@ the same non-pack row, re-verified by hash, never re-picked. (d) Every reading o
 (10) and (11) otherwise applies unchanged; the population is still the 121
 unbought elements, each element of the 138 bought exactly once across the program.
 <!-- sku-b-ratification-6 end -->
+<!-- sku-b-ratification-7 begin — stripped by tests/test_sku_prereg.py before
+hashing docs/SPEC.md against the prereg pin; the registered law is the stripped text -->
+(13) **The B′ revision — ratified (operator, 2026-08-12, after the miss
+decomposition).** The team lead's read of bar 1's 29 misses found ZERO confirmed
+vision under-reads: 11 are parser refusals and one alias gap (four refused pages
+carried 8 gold pairs; the 800-token ceiling killed the densest page), 12 are
+bar-vs-instrument mismatches (non-dairy watchlist items, maker logos without a
+price box, SKU-name-vs-TM granularity), 2 are gold noise, 4 pairs remain to be
+read at the B′-prep acceptance. Ratified, all four parts: (a) **instrument v2** —
+the parser family (asterisk-footnoted discounts, multipack pack-counts,
+«від X грн» ranges become recorded WARNINGS that keep the position, never
+page-refusals) and the positions ceiling 800 → **1200** (serving pin v2,
+registered BESIDE v1); (b) **evidenced Latin aliases** enter the watchlist alias
+table (Three Bears → try-vedmedi; Rud → rud; LIMO → limo) — an operator-owned
+registry edit, ratified here; (c) **bar 1 re-scoped**: the B′ gold is the dairy
+positions carrying a price box on the sent pages — class-b and class-c pairs
+leave the denominator, derived from the decomposition verdicts, never re-judged
+by the executor; (d) **one re-measurement** of instrument v2 over the same 138
+elements under a B′ pre-registration BESIDE v4 (bars' verbatim thresholds
+unchanged; gold and instrument shas move; cap **$0.40**), with every reading of
+(9)–(12) in force. No new ML mechanism is authorised: the two-stage OCR and the
+brands_visible channel stay named candidates, unbuilt.
+<!-- sku-b-ratification-7 end -->
 **Date:** 2026-07-26 · **Team lead:** Fable session · **Executor:** Claude Code
 **Repo folder:** `/Users/hdv_1987/Desktop/Projects/market-pulse-llm`
 **rev. 3 change (operator decision):** producers in Ukraine barely use Telegram for
