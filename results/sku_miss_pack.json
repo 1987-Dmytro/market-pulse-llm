@@ -4570,11 +4570,7 @@
   ],
   "sheet": "results/sku_miss_pack.md",
   "git": {
-    "commit": "b92e74d6255f88f1fe927351aec5ffa363922bd0",
-    "dirty": [
-      "results/sku_miss_pack.md",
-      "scripts/build_sku_miss_pack.py",
-      "tests/test_build_sku_miss_pack.py"
-    ]
+    "commit": "c2940ca095e6540d9a05cf24004be22f03393991",
+    "dirty": []
   }
 }
