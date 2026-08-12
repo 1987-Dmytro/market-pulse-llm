@@ -607,13 +607,11 @@
     }
   ],
   "git": {
-    "commit": "56b22144044482f443a93bac834dbf50bf49a95c",
+    "commit": "e59016c2fa7948fd77c0e6d4bce3301131983485",
     "dirty": [
       "knowledge/daily_logs/2026-08-12.md",
       "knowledge/hot.md",
-      "knowledge/index.md",
-      "scripts/apply_miss_decomposition.py",
-      "tests/test_miss_decomposition.py"
+      "knowledge/index.md"
     ]
   }
 }
