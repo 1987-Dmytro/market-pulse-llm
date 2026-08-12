@@ -1,0 +1,136 @@
+{
+  "generated_at": "2026-08-12T07:54:50+00:00",
+  "phase": "sku-b — the v4 session, priced from what the refused one measured",
+  "written_by": "sku-b-v4-prep (executor, $0), docs/PROMPT-sku-b-v4-prep.md deliverable 3",
+  "authority": "docs/SPEC.md amendment 3.17 (12)(a)",
+  "class": "PROJECTION. Arithmetic over named artifacts — no new measurement was taken and no paid call was made to produce it. Every input names the file it came from. It does not replace results/sku_projection_v3.json, which priced the same population against the $0.45 cap and is what the (10)(a) gate then refused",
+  "population": {
+    "pages": 91,
+    "rows": 30,
+    "calls": 121,
+    "source": "results/sku_pilot_prereg_v4.json :: resume.bought_already.unbought",
+    "why": "the 121 elements SPEC 3.17 (11)(a) leaves to buy, unchanged by (12)(d). The 17 already bought are not priced here and are never re-asked; the refused session bought none of them"
+  },
+  "rate": {
+    "usd_per_second": 0.00030669,
+    "source": "results/srv2d_cost.json :: rate.usd_per_second",
+    "sha256": "71f1ec4884286961c1c672071a3846e22c40e7179189f5e0e607b17fb0d30427",
+    "corroboration": "five serverless endpoints billed on 2026-08-08 all read within 1% of $0.000307/s, srv-2c's included — the rate is settled even where the totals are not"
+  },
+  "marginals": {
+    "the registered probe, a deep unsent page": {
+      "seconds_per_call": 14.808,
+      "n": 1,
+      "source": "results/sku_b_positions_v3.json :: warmup.replies.positions_post_gm4.marginal_seconds",
+      "what_it_is": "SPEC 3.17 (11)(c)'s registered warm-up page, answered once by the refused session. It is one of the 51 pages the caption run never sent — structurally a DEEP page, because the first six of each leaflet are the ones that were sent. A dense grid of positions costs decode time the way a poster with two price tags does not",
+      "why_it_is_the_cap_corner": "it is the number the (10)(a) gate priced this run at, and (12)(a) sized the $0.65 cap to admit it. A cap that only fits the optimistic marginal is a cap that refuses on the day"
+    },
+    "the population's drawn marginal, 17 first-six pages": {
+      "seconds_per_call": 5.0772,
+      "n": 17,
+      "source": "results/sku_b_positions.json :: projection.per_gate[0].marginal_seconds_per_call",
+      "what_it_is": "(billed_seconds - opened_seconds) / calls_done = (479.873 - 393.561) / 17, so neither the cold start nor the warm-up is inside it. Drawn from the gold population itself — which is its strength — but all 17 travelled in ONE /run submission, so the rate carries that job's overhead divided by 17 and a 6-job run pays it 6 times",
+      "why_it_is_not_the_cap_corner": "10 of those 17 pages answered `[]`. An empty answer is a real outcome and a cheap one — the decode stops early — so a mean over a sample that is 59% empty prices the pages that are NOT empty at less than they cost"
+    },
+    "text, measured": {
+      "seconds_per_call": 3.862,
+      "n": 1,
+      "source": "results/sku_b_positions_v3.json :: warmup.replies.positions_text_gm4.marginal_seconds",
+      "what_it_is": "(11)(c)'s registered warm-up row — a real pre-filtered comment the 30-row pack did not draw — answered once. It is the FIRST positions call ever made on text: v3's projection had to bound the text leg by the page marginal because no such measurement existed. One row is not a rate over the pack, and it is used as one here only because the alternative is the bound it replaces"
+    }
+  },
+  "boot": {
+    "seconds": 402.586,
+    "usd": 0.1235,
+    "source": "results/sku_b_positions_v3.json :: projection.boot_seconds",
+    "why_one_number": "the refused session booted THIS endpoint class — SERVING_CONFIG=POSITIONS on ADA_24 off volume qw4nwleanc — so v3's range of neighbours is superseded by a same-configuration reading. It is 2.19x vis-c's 183.58 s on the same base and the gap is diagnosed but not fixed: 112 s of it is a cold read of 1188 shards off the network volume (docs/reports/sku-b-v3-run.md §2). The volume is warm now in no sense this record can rely on, so the full 402.586 s is priced"
+  },
+  "idle_tail": {
+    "seconds": 60.0,
+    "usd": 0.0184,
+    "source": "scripts/positions_gm4_skub.py :: IDLE_TAIL_SECONDS",
+    "why": "serverless bills WALL UPTIME: the worker stays up for the endpoint's `--idle-timeout 60` after the last reply and that tail is charged to whoever woke it. Once per session, which is why it sits beside the boot rather than inside a leg's rate"
+  },
+  "drift": {
+    "pct": 0.03,
+    "source": "docs/PROMPT-sku-b-v4-prep.md deliverable 3",
+    "why": "a contract term, not a measurement. Nothing here measures how far a serverless worker's seconds move between two runs of the same job, and presenting 3% as an observed spread would be inventing a number. Applied to the whole billed second count, because what it stands in for is the endpoint being slower on the day"
+  },
+  "corners": {
+    "the registered probe, a deep unsent page": {
+      "page_marginal_seconds": 14.808,
+      "page_marginal_n": 1,
+      "boot_seconds": 402.586,
+      "boot_usd": 0.1235,
+      "warmup_seconds": 18.67,
+      "page_leg_usd": 0.4133,
+      "text_leg_usd": 0.0355,
+      "idle_tail_usd": 0.0184,
+      "billed_seconds": 1944.644,
+      "total_usd": 0.5964,
+      "headroom_usd": 0.0536,
+      "fits": true,
+      "with_drift": {
+        "pct": 0.03,
+        "billed_seconds": 2002.983,
+        "total_usd": 0.6143,
+        "headroom_usd": 0.0357,
+        "fits": true
+      },
+      "break_even_page_marginal_seconds": 16.0366,
+      "break_even_multiple": 1.083
+    },
+    "the population's drawn marginal, 17 first-six pages": {
+      "page_marginal_seconds": 5.0772,
+      "page_marginal_n": 17,
+      "boot_seconds": 402.586,
+      "boot_usd": 0.1235,
+      "warmup_seconds": 8.939,
+      "page_leg_usd": 0.1417,
+      "text_leg_usd": 0.0355,
+      "idle_tail_usd": 0.0184,
+      "billed_seconds": 1049.41,
+      "total_usd": 0.3218,
+      "headroom_usd": 0.3282,
+      "fits": true,
+      "with_drift": {
+        "pct": 0.03,
+        "billed_seconds": 1080.893,
+        "total_usd": 0.3315,
+        "headroom_usd": 0.3185,
+        "fits": true
+      },
+      "break_even_page_marginal_seconds": 16.0366,
+      "break_even_multiple": 3.1585
+    }
+  },
+  "against_the_cap": {
+    "cap_usd": 0.65,
+    "cap_source": "results/sku_pilot_prereg_v4.json :: attempts.cap_usd (SPEC 3.17 (12)(a))",
+    "lowest_usd": 0.3218,
+    "highest_usd": 0.5964,
+    "highest_with_drift_usd": 0.6143,
+    "fits_at_every_corner": true,
+    "corners_over_the_cap": [],
+    "reading": "the v4 session fits the $0.65 cap at both corners with the 3% drift on: $0.6143 at the pessimistic one ($0.0357 of headroom) and $0.3315 at the optimistic one. Without the drift the pessimistic corner is $0.5964, which is the number the (10)(a) gate refused $0.45 with — the same arithmetic, checked against the gate's own figure when this record is built. The decision it supports is an INEQUALITY: at this boot the page marginal would have to reach 16.04 s/call — 1.08x the registered probe's own 14.808 s — before the cap is exhausted with the drift on",
+    "what_the_headroom_is_not": "it is not a licence to run at the pessimistic corner and hope. The in-run gate of (10)(b) re-prices between jobs and is what stops a run whose real marginal lands above the probe's; this record only says the CAP is adequate for the run the (10)(a) gate is expected to let through",
+    "what_an_early_stop_costs": "unchanged from results/sku_projection.json and now demonstrated twice: bar 1's page set is R2's 108, a post whose pages were partly bought has a gold set written against all of them, and fewer pages moves the numerator and not the denominator. A second partial run would leave the pilot where the first one did"
+  },
+  "pinned_inputs": {
+    "results/srv2d_cost.json": "71f1ec4884286961c1c672071a3846e22c40e7179189f5e0e607b17fb0d30427",
+    "results/sku_b_positions.json": "8d02b3aa477dd4b152bd98fec1ca0147463f5746b5ebf4c62cfdb856bdda2341",
+    "results/sku_b_positions_v3.json": "7196abfbf488168d6db1243a54369d871e27f087584615ed609b2fb813bac70e",
+    "results/sku_pilot_prereg_v4.json": "22fd7d9cc363ac9357b77e4a3ff3561f723fe6c4a12aedcc638c11be65dc9449"
+  },
+  "git": {
+    "commit": "20b9436e1c586a285eae3339e05747c0246bb978",
+    "dirty": [
+      "knowledge/daily_logs/2026-08-11.md",
+      "knowledge/hot.md",
+      "knowledge/index.md",
+      "knowledge/daily_logs/2026-08-12.md",
+      "scripts/write_sku_projection_v4.py",
+      "tests/test_sku_projection_v4.py"
+    ]
+  }
+}
