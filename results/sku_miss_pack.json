@@ -1,0 +1,4585 @@
+{
+  "phase": "sku-b — bar 1's misses, packed for the team-lead read",
+  "contract": "docs/PROMPT-sku-miss-pack.md — the pack IS the deliverable",
+  "class": "PACK. Nothing here is scored and nothing is adjudicated: bar 1 is recomputed through sku_bar_verdicts.bar_one (the same gold_key on both halves) and checked against the shipped verdict record, and every verdict field is null until the team lead dictates",
+  "pins": {
+    "prereg": {
+      "path": "results/sku_pilot_prereg_v4.json",
+      "sha256": "22fd7d9cc363ac9357b77e4a3ff3561f723fe6c4a12aedcc638c11be65dc9449"
+    },
+    "leaflet gold": {
+      "path": "results/sku_reference_leaflet.json",
+      "sha256": "e301bb4f48f527e4f9f6b64bb1a53911fd69d2871e9e7cbc302195f8f982eb20"
+    },
+    "text pack manifest": {
+      "path": "results/sku_text_pack_manifest.json",
+      "sha256": "80e4e12c0278f8cce82f2619967e1c92e1bf4bc7f8cf358e29712049b5afd376"
+    },
+    "dump": {
+      "path": "results/sku_b_positions_v4.jsonl",
+      "sha256": "e7d24a0a6b5aeff10a683a0a4beacfbcbd90aa4da6e71c39741b3cffbb79e428"
+    },
+    "record": {
+      "path": "results/sku_b_positions_v4.json",
+      "sha256": "fd0eb79695c2bc546743d8fde93448d48a321fa92598a17a14155aa2766ff9c5"
+    },
+    "verdicts": {
+      "path": "results/sku_bar_verdicts.json",
+      "sha256": "bb95f369d352f5face9c952281f929c606223acc082f7038569d153017e131f7"
+    }
+  },
+  "bar": {
+    "value": 0.3603174603,
+    "threshold": 0.75,
+    "verdict": "FAIL",
+    "n_posts": 15,
+    "n_gold_keys": 55,
+    "recomputed_by": "sku_bar_verdicts.bar_one",
+    "checked_against": "results/sku_bar_verdicts.json bars.leaflet_brand_recall.per_post"
+  },
+  "checksums": {
+    "posts": 15,
+    "missed": 29,
+    "found": 26
+  },
+  "checksums_source": "docs/PROMPT-sku-miss-pack.md, transcribed — not computed from the rows",
+  "classes": {
+    "a": "the brand is PRINTED on a sent page WITH a price box — a real under-read",
+    "b": "the brand is VISIBLE on a sent page WITHOUT a price box — bar-vs-instrument mismatch",
+    "c": "the brand is NOT VISIBLE on the sent pages at all — gold noise"
+  },
+  "flags": {
+    "unreadable_pages": "a page the extractor refused contributes no brand to its post's union, so a brand printed only there is missed for a reason the images do not show",
+    "unmatched_extractions_on_this_post": "bar 1's own not_in_gold: a key the instrument extracted on this post that is in no gold key. Carried verbatim and paired with nothing — a pairing rule written here would be a second matching rule, and bar 1 has exactly one"
+  },
+  "posts": [
+    {
+      "item": "@atb_market_official:4340",
+      "msg_id": 4340,
+      "recall": 0.3333333333333333,
+      "gold_keys": [
+        "raw:rud",
+        "raw:svoia-liniia",
+        "raw:try-vedmedi"
+      ],
+      "found": [
+        "raw:svoia-liniia"
+      ],
+      "missed": [
+        "raw:rud",
+        "raw:try-vedmedi"
+      ],
+      "unmatched_extractions": [
+        "raw:three bears"
+      ],
+      "pages_sent": 6,
+      "pages_available": 10,
+      "pages_not_sent": 4,
+      "unreadable_pages": [
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4342.jpg",
+          "reason": "printed discount '-50%*' is not a percentage"
+        }
+      ],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4340.jpg",
+          "sha256": "7ae55c29dc8d0adce4cec35cc3d4300ec696fe9f32141d7e34f6368054ec5002",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4341.jpg",
+          "sha256": "39862ec33b1a6a87aaf4005dc4dbc187cb7461ad58aeb38c6220052a545f6dec",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Three Bears",
+            "Three Bears"
+          ],
+          "brand_id": [
+            null,
+            null
+          ]
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4342.jpg",
+          "sha256": "3e9d93e56bf6b7c5497c7c928970039a18e6a0fca2e36d702dbb7aa86b4649b4",
+          "answer": "unreadable",
+          "unreadable_reason": "printed discount '-50%*' is not a percentage",
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4343.jpg",
+          "sha256": "5b99c3dcc141d66cc64960897c451d2996907d5bcf5bcc0c5626bd075be2f9aa",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Своя Лінія"
+          ],
+          "brand_id": [
+            "svoia-liniia"
+          ]
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4344.jpg",
+          "sha256": "189ce416a8da911f4e29e042b74b17fa33eca509024e6f0421dd55bef65bec77",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Своя Лінія"
+          ],
+          "brand_id": [
+            "svoia-liniia"
+          ]
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4345.jpg",
+          "sha256": "fd8d243b9791d37e61afef2b5e3f1776be114f03d06c734e3cbadbe07920cd54",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "reviewer_note": "Page 4341 headline reads ТМ «Три Ведмеді» while the caption renders it as «Three Bears» -- a Latin form the canon table has no alias for, so a matcher reading the caption sees no watchlist brand there; Своя Лінія carries three of the six pages (4343 Золотий Каштан, 4344 Факел, 4345 ковбаса «Баликова» ТМ «М'ясна лавка»/«Своя Лінія»). Verdict partial, not faithful: everything stated is true, but six product pages are compressed into one clause and all SKU names, weights and prices («Фісташка» 500 г, «100% морозиво», «Чорниця-ожина») are dropped, unlike the other ATB captions in this pack. Milka is chocolate, excluded from other_dairy_brands by the dairy/ice-cream-only rule."
+    },
+    {
+      "item": "@atb_market_official:4350",
+      "msg_id": 4350,
+      "recall": 0.6666666666666666,
+      "gold_keys": [
+        "raw:lactel",
+        "raw:svoia-liniia",
+        "raw:дольче"
+      ],
+      "found": [
+        "raw:svoia-liniia",
+        "raw:дольче"
+      ],
+      "missed": [
+        "raw:lactel"
+      ],
+      "unmatched_extractions": [],
+      "pages_sent": 6,
+      "pages_available": 10,
+      "pages_not_sent": 4,
+      "unreadable_pages": [],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4350.jpg",
+          "sha256": "3147747cc64998593852caca3a36e115beff4b02d109ff1351206f90907b0b2f",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Своя Лінія",
+            "Своя Лінія"
+          ],
+          "brand_id": [
+            "svoia-liniia",
+            "svoia-liniia"
+          ]
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4351.jpg",
+          "sha256": "08db5ad39959b0e86cd97838bea33d17436b6ab2998bfee76e4b96e2c77f9b2c",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4352.jpg",
+          "sha256": "1287d91aaf74302a83ab75cd6484fc4ce8e379a1713c98ab92efa7bf4e1c4677",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Дольче",
+            "Дольче"
+          ],
+          "brand_id": [
+            null,
+            null
+          ]
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4353.jpg",
+          "sha256": "4ea2a6918bfc5b0efa56c492750627c776ea249aa53c60470b8ebb47a7876058",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4354.jpg",
+          "sha256": "2d3c859e3e6f1b86930cf450fccfd3474007b86c793ca8586a86d9517bebde83",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4355.jpg",
+          "sha256": "022c64a0f006467586ebd668bdc6f94e0d673a1020f1cad23dda8db87765dfbd",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "reviewer_note": "Caption carries Своя Лінія and Дольче, but drops the `lactel` maker logo printed on every Дольче pot (a dairy brand only ever readable in the image), and it under-attributes: the chips (4351) and the Roar! bars (4353) are also ТМ Своя Лінія, which the caption gives only to the cheese."
+    },
+    {
+      "item": "@atb_market_official:4360",
+      "msg_id": 4360,
+      "recall": 0.75,
+      "gold_keys": [
+        "raw:limo",
+        "raw:svoia-liniia",
+        "raw:каштан",
+        "raw:київський пломбір"
+      ],
+      "found": [
+        "raw:limo",
+        "raw:каштан",
+        "raw:київський пломбір"
+      ],
+      "missed": [
+        "raw:svoia-liniia"
+      ],
+      "unmatched_extractions": [],
+      "pages_sent": 6,
+      "pages_available": 10,
+      "pages_not_sent": 4,
+      "unreadable_pages": [],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4360.jpg",
+          "sha256": "3b417da3cb1ff445ff749ca1843ffd3cdad512590f4701c0eea75899164d4d17",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Київський Пломбір",
+            "Каштан",
+            "Каштан",
+            "Київський Пломбір",
+            "Limo",
+            "Limo"
+          ],
+          "brand_id": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4361.jpg",
+          "sha256": "1ef0c6a1847d0a1d8f5fad590f997594648d892464201bd94d7b33daad1b14a7",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4362.jpg",
+          "sha256": "23f2914eb381ca7681802607209c4717e96a7652c0ed2218c712613bc7b86662",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4363.jpg",
+          "sha256": "120d01e56cd42c965629c570c15059b5b84259c673262270d74eea5cbae027a8",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4364.jpg",
+          "sha256": "30203fbdffe436a38b9e2aa41bfbe425ad500deb16a0b3a6acb0bf96bbc0d617",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4365.jpg",
+          "sha256": "8d9fe4cabdccfa853b446406c35272f693cc5665fc3e07153b4e2b3cfeeb558f",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "reviewer_note": "Page 1 is an all-ice-cream page naming «Київський Пломбір», «Каштан» and watchlist «Лімо», and «Своя Лінія» carries eight items across pages 2-6, yet the caption lists categories only and names no brand at all -- every brand in this post is image-only, so a text matcher scores zero here by construction; «Сирні палички ТМ «ЇЗІ»» (Глобино) is left out of open extraction under the rule that a non-dairy brand selling one cheese SKU is not a dairy brand."
+    },
+    {
+      "item": "@atb_market_official:4377",
+      "msg_id": 4377,
+      "recall": 0.0,
+      "gold_keys": [
+        "raw:svoia-liniia"
+      ],
+      "found": [],
+      "missed": [
+        "raw:svoia-liniia"
+      ],
+      "unmatched_extractions": [],
+      "pages_sent": 4,
+      "pages_available": 4,
+      "pages_not_sent": 0,
+      "unreadable_pages": [],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4377.jpg",
+          "sha256": "1093fd99ffc4b09e61bcf2b9b6aa4b1acc39afb6d89cb32b7bb5698e5ed03dcd",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4378.jpg",
+          "sha256": "c9d2345431788e0527ade2e3899754ab2238229b58d889203884e2e986a4f567",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4379.jpg",
+          "sha256": "51043b5cfe17b6de1b7dcaf4ca5f140289bc89db0443e414ef9b31eed3ea8ff5",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4380.jpg",
+          "sha256": "5cf4ed8c0c688d21b7e93dbd2c10f71443ee66fa909a420f2f77efa7dc27fa85",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "reviewer_note": "Four own-label posters, four ТМ lines, all four transcribed verbatim including the compound «М'ЯСНА ЛАВКА/ СВОЯ ЛІНІЯ» — same one-product-per-page layout as @atb_aktsiyi:2999 and the same clean result; no dairy on any page (salami, ketchup, cereal, foil), the milk in the cereal-bowl photo is styling."
+    },
+    {
+      "item": "@atb_market_official:4381",
+      "msg_id": 4381,
+      "recall": 0.5714285714285714,
+      "gold_keys": [
+        "president",
+        "raw:laska",
+        "raw:lasunka",
+        "raw:maximuse",
+        "raw:каштан",
+        "raw:комо / komo",
+        "raw:розумний вибір"
+      ],
+      "found": [
+        "president",
+        "raw:laska",
+        "raw:lasunka",
+        "raw:розумний вибір"
+      ],
+      "missed": [
+        "raw:maximuse",
+        "raw:каштан",
+        "raw:комо / komo"
+      ],
+      "unmatched_extractions": [
+        "raw:komo"
+      ],
+      "pages_sent": 6,
+      "pages_available": 10,
+      "pages_not_sent": 4,
+      "unreadable_pages": [],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4381.jpg",
+          "sha256": "6d02a184e8f48ee657490d10a63d2da81e00757abbd8890fb0597ee909aa0376",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Laska",
+            "Laska"
+          ],
+          "brand_id": [
+            null,
+            null
+          ]
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4382.jpg",
+          "sha256": "1449961dd36456d2329e7bc3645e2a203356d2db328a59b3c40bf54a79eb644e",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Ласунка",
+            "Ласунка",
+            "Ласунка",
+            "Ласунка"
+          ],
+          "brand_id": [
+            "lasunka",
+            "lasunka",
+            "lasunka",
+            "lasunka"
+          ]
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4383.jpg",
+          "sha256": "4418a4a0129e7e389380eabfa849fbec771b1b85d8eb3906d8fab266fb0143b2",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Розумний вибір",
+            "Розумний вибір",
+            "Розумний вибір"
+          ],
+          "brand_id": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4384.jpg",
+          "sha256": "e4457f9a4525eb4de9b1e9f88b5e13d552cebde19ac274033bb1244ca643c6c3",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "President",
+            "President"
+          ],
+          "brand_id": [
+            "president",
+            "president"
+          ]
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4385.jpg",
+          "sha256": "0f8ae2f9c7597d6679413696fc33018a2eb1f722165f7e65dbeed413932ce0a4",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Komo",
+            "Komo",
+            "Komo",
+            "Komo"
+          ],
+          "brand_id": [
+            null,
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4386.jpg",
+          "sha256": "47954a207fc9b08ef1b59dfacf594c4f25bb9588926a0a8c427a2a957a947e0b",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "reviewer_note": "Systematic pattern: the caption lists SKU names and drops the TM line. p.4382 reads 'ТМ «Ласунка»' over «Стакан Великан»/«Гран-Прі» - the caption names both SKUs and never the watchlist brand; same for 'ТМ «Laska»' behind Maximuse and 'ТМ «Розумний вибір»' behind Каштан. Only President and Komo survive because there the SKU name IS the TM."
+    },
+    {
+      "item": "@atb_market_official:4391",
+      "msg_id": 4391,
+      "recall": 0.0,
+      "gold_keys": [
+        "raw:svoia-liniia"
+      ],
+      "found": [],
+      "missed": [
+        "raw:svoia-liniia"
+      ],
+      "unmatched_extractions": [],
+      "pages_sent": 6,
+      "pages_available": 10,
+      "pages_not_sent": 4,
+      "unreadable_pages": [],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4391.jpg",
+          "sha256": "b310158e7a5966cf7a7e781b057bc1c84fb546e5e33cc09ed9b684244ccadb80",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4392.jpg",
+          "sha256": "f566591d20b645dd39ed17adbbc19b09681cf1c03e4fc41335ce421986f94f7c",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4393.jpg",
+          "sha256": "ddf11445fe8f9d0460be89e23bd9a58b0b1f4e79c4fa06b1edd05171a1b270e0",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4394.jpg",
+          "sha256": "9ed5e1c9c49a19468f2c1e7d4c0d0f2ec6de21408329f200da5017431a75b1f7",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4395.jpg",
+          "sha256": "179abdd1eccc0ec71c75a69d9bd67b1293326fc203d1232d8cc16ed99ade26de",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4396.jpg",
+          "sha256": "b8923ddb55e27f2b1569e381586453dd4f24cddee640d28dd1497ceeeca4d645",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "reviewer_note": "Caption stops mid-word at «з арома», so image 4395's second «ТМ Своя Лінія» attribution is cut and image 4396 (Norven salmon/trout) is absent entirely — a 6-image flyer captioned to a length limit; the brand_id is still carried once from 4391, so nothing is missed at brand level, but per-occurrence coverage is 4 of 6 images."
+    },
+    {
+      "item": "@atb_market_official:4401",
+      "msg_id": 4401,
+      "recall": 0.4166666666666667,
+      "gold_keys": [
+        "raw:ferma",
+        "raw:frenzy (рудь)",
+        "raw:halychyna",
+        "raw:imperium (рудь)",
+        "raw:molokija",
+        "raw:premialle",
+        "raw:rud",
+        "raw:selianske",
+        "raw:svoia-liniia",
+        "raw:try-vedmedi",
+        "raw:zlahoda",
+        "raw:київський пломбір"
+      ],
+      "found": [
+        "raw:ferma",
+        "raw:halychyna",
+        "raw:molokija",
+        "raw:premialle",
+        "raw:zlahoda"
+      ],
+      "missed": [
+        "raw:frenzy (рудь)",
+        "raw:imperium (рудь)",
+        "raw:rud",
+        "raw:selianske",
+        "raw:svoia-liniia",
+        "raw:try-vedmedi",
+        "raw:київський пломбір"
+      ],
+      "unmatched_extractions": [],
+      "pages_sent": 6,
+      "pages_available": 10,
+      "pages_not_sent": 4,
+      "unreadable_pages": [
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4405.jpg",
+          "reason": "malformed JSON"
+        }
+      ],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4401.jpg",
+          "sha256": "c4f4b3c9e8041c28f881f6b44232db6cfc311bf1d0d1e3475122dd8be6af2a8c",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4402.jpg",
+          "sha256": "8859763a6f1e7be2408ed50471b2bdd7f90236eab2c33d376b85d15c9223cf9c",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Premialle"
+          ],
+          "brand_id": [
+            null
+          ]
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4403.jpg",
+          "sha256": "eafb197478effec7fabe9559fd023ba2a05fe3f2a565e2157126c2c701606c3b",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Молокія"
+          ],
+          "brand_id": [
+            "molokija"
+          ]
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4404.jpg",
+          "sha256": "6a90291ce4cea22742d1aea607f907de7a0946ea8ea2b8d7c9fb21931b02ffc5",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Ферма",
+            "Злагода",
+            "Галичина",
+            "Галичина",
+            "Злагода",
+            "Premialle"
+          ],
+          "brand_id": [
+            "ferma",
+            "zlahoda",
+            "halychyna",
+            "halychyna",
+            "zlahoda",
+            null
+          ]
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4405.jpg",
+          "sha256": "dbd22e75e69be383aa8b02431b0761a614d4ff2abec6e7912d8e804450f3dc00",
+          "answer": "unreadable",
+          "unreadable_reason": "malformed JSON",
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4406.jpg",
+          "sha256": "48bcd38bb044ee96ec1758909ec60e66af536d03c092667915658266a4babf4f",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "reviewer_note": "Six-page leaflet, every offer headed «ТМ «...»» in large print: the caption lists categories («сир, масло, сирок, йогурти, вершки, морозиво») and carries exactly ONE brand, Mini Bee -- a nappy TM -- while 8 watchlist brands are legible; «Масло солодковершкове «Селянське» ТМ «Молокія»» is two watchlist brands in one line, and p.2/p.4 print ТМ «Premialle» and «Салямі Преміум» -- two near-misses for canon `premia` (Премія)."
+    },
+    {
+      "item": "@atb_market_official:4411",
+      "msg_id": 4411,
+      "recall": 0.0,
+      "gold_keys": [
+        "raw:svoia-liniia"
+      ],
+      "found": [],
+      "missed": [
+        "raw:svoia-liniia"
+      ],
+      "unmatched_extractions": [],
+      "pages_sent": 4,
+      "pages_available": 4,
+      "pages_not_sent": 0,
+      "unreadable_pages": [],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4411.jpg",
+          "sha256": "edb0901b78bdb275a8dff820b95e4335c178dc4ab3ec31fc80255f35539b4bec",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4412.jpg",
+          "sha256": "042793ac6b2aba9a9147454002b9dd37a414e63aecb1878cc30d5f85c16f5eae",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4413.jpg",
+          "sha256": "127a75b9c2134e4a5c93309f4a11c27002fcf3d96a6e8ab11f46b6a3b2ffb45f",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4414.jpg",
+          "sha256": "220ee6af67f3414225cde2b270611f42fcf5733d97b9289457dd1bd0e8a9909e",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "reviewer_note": "Four catalogue pages carry ТМ «Своя Лінія» on eight distinct products (желатин, агар-агар, часник, соломка, шпроти, мило, вологий папір, серветки, рушник) plus a dozen third-party TMs, and the caption names not one brand — it summarises by product class only; 'соломка зі смаком сиру/сметани' is a flavour claim on crisps, not a dairy item. Verdict basis stated explicitly: there is NO dairy or ice cream on these four pages, so I am counting the presence of a watchlist brand as category-relevant — that is why this row is `partial` while 4415, also zero-dairy but with no watchlist brand on it, is `faithful`."
+    },
+    {
+      "item": "@atb_market_official:4421",
+      "msg_id": 4421,
+      "recall": 0.0,
+      "gold_keys": [
+        "raw:svoia-liniia"
+      ],
+      "found": [],
+      "missed": [
+        "raw:svoia-liniia"
+      ],
+      "unmatched_extractions": [],
+      "pages_sent": 4,
+      "pages_available": 4,
+      "pages_not_sent": 0,
+      "unreadable_pages": [],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4421.jpg",
+          "sha256": "ee4417bbd077fcc2e1001ee7d98d003a8958c78f170bd0a8883b34d1287615bd",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4422.jpg",
+          "sha256": "dcdfa1d16c2d6593f42ef5df003de1d328cb1f1362a0bbfb36620da03119e87c",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4423.jpg",
+          "sha256": "149068940c26841f8a0e7c76be0f42d07166a34953e33529a969652b15771e8e",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4424.jpg",
+          "sha256": "852f1442cadcaefcde1a63028f18ac26225cfe0d425b473e39aa4fec0ebf8bbb",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "reviewer_note": "Private-label post: `svoia-liniia` on 3 of 4 pages (sausage, chips x2), again zero dairy. The chips are dairy-FLAVOURED («SOUR CREAM & GREENS», «CHEESE зі смаком сиру») — a category-keyword matcher would read these as dairy. Caption carries every ТМ on the pages."
+    },
+    {
+      "item": "@atb_market_official:4426",
+      "msg_id": 4426,
+      "recall": 1.0,
+      "gold_keys": [
+        "raw:magnat",
+        "raw:svoia-liniia",
+        "raw:розумний вибір",
+        "raw:хрещатик"
+      ],
+      "found": [
+        "raw:magnat",
+        "raw:svoia-liniia",
+        "raw:розумний вибір",
+        "raw:хрещатик"
+      ],
+      "missed": [],
+      "unmatched_extractions": [],
+      "pages_sent": 6,
+      "pages_available": 10,
+      "pages_not_sent": 4,
+      "unreadable_pages": [],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4426.jpg",
+          "sha256": "01bb05510052a0084379b2f2c09fd2af273d9e9cd75869c238ca040e4fc4019c",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Magnat",
+            "Magnat",
+            "Magnat"
+          ],
+          "brand_id": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4427.jpg",
+          "sha256": "e6d1c59507b56fde16b3ba6d35833e50062d84e48e4f82e1d5c2dc64589d7885",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Хрещатик",
+            "Хрещатик"
+          ],
+          "brand_id": [
+            null,
+            null
+          ]
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4428.jpg",
+          "sha256": "ccb5034ab8705d61de4d4bdb595a914abb3922dae952ec814880a97eaa8692e1",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Своя Лінія",
+            "Своя Лінія",
+            "Розумний вибір",
+            "Розумний вибір"
+          ],
+          "brand_id": [
+            "svoia-liniia",
+            "svoia-liniia",
+            null,
+            null
+          ]
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4429.jpg",
+          "sha256": "c03b710fa8cb11771bc160ddc5324a35440b953649564576fec9f82079c3ef5e",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4430.jpg",
+          "sha256": "41a98b825eea851a6f4cfc9c6059c5f6db62be14ed3776ae1ff48b0a66a30fbd",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4431.jpg",
+          "sha256": "dcca9698d2b69abf32d51969a1b01df8e6ea6b3451c7764631cf9d9c4152ac37",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "reviewer_note": "Four ice-cream TMs on three pages, all four carried by the caption, «Своя Лінія» named twice (морозиво «Великий Стакан» and чипси). Direct contrast with @atb_aktsiyi:3036 above: the same captioner carries the private label when it sits on a food/category SKU and drops it when it sits on wine, soap or paper -- so caption-mediated svoia-liniia recall is biased toward, not away from, the tracked category. Three ATB private labels here (Своя Лінія, Розумний вибір, М'ясна лавка) against one national ice-cream brand."
+    },
+    {
+      "item": "@atb_market_official:4436",
+      "msg_id": 4436,
+      "recall": 0.5,
+      "gold_keys": [
+        "raw:sot",
+        "raw:svoia-liniia"
+      ],
+      "found": [
+        "raw:sot"
+      ],
+      "missed": [
+        "raw:svoia-liniia"
+      ],
+      "unmatched_extractions": [],
+      "pages_sent": 6,
+      "pages_available": 10,
+      "pages_not_sent": 4,
+      "unreadable_pages": [],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4436.jpg",
+          "sha256": "05bf37c885091b288b39ca31f3545a6a3827f7ba96c1b7ca5cc1051182367a15",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4437.jpg",
+          "sha256": "de6eedd7b00c89bc8d89af8624a9334ce4e5e360358d59e1424d513341a14f15",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4438.jpg",
+          "sha256": "37da97d26681c527237bf840ce893f3c6dd6650a90669ed23d24e86a8d032e47",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4439.jpg",
+          "sha256": "0deb6c3f3517e69fba0885901b9dc0cb15469b8c5f38513e096e1b80d92550e7",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4440.jpg",
+          "sha256": "0eb66b03ac36c6d2c87051b75b0b704032ad711529337beab3e0c1a717232ae7",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "SOT",
+            "SOT",
+            "SOT"
+          ],
+          "brand_id": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4441.jpg",
+          "sha256": "3380d7d0559ec9e452f201c027401f16043b24aa180df11a15062ff88395c6de",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "reviewer_note": "The caption lists every product line but drops every single TM printed on the pages -- «Торчин», «День у День», «SOT», «Своя Лінія» -- and closes with 'різних брендів'; the watchlist brand svoia-liniia is legible on the jar labels of p.4441 and exists nowhere but in the images."
+    },
+    {
+      "item": "@atb_market_official:4446",
+      "msg_id": 4446,
+      "recall": 0.0,
+      "gold_keys": [
+        "raw:limo",
+        "raw:nesquik (какао-напій шоколадно-молочний коктейль, 200 г)",
+        "raw:rud",
+        "raw:svoia-liniia",
+        "raw:try-vedmedi"
+      ],
+      "found": [],
+      "missed": [
+        "raw:limo",
+        "raw:nesquik (какао-напій шоколадно-молочний коктейль, 200 г)",
+        "raw:rud",
+        "raw:svoia-liniia",
+        "raw:try-vedmedi"
+      ],
+      "unmatched_extractions": [],
+      "pages_sent": 6,
+      "pages_available": 9,
+      "pages_not_sent": 3,
+      "unreadable_pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4446.jpg",
+          "reason": "size '6х100 г' is a multipack — a pack count is not a size"
+        }
+      ],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4446.jpg",
+          "sha256": "2da2cef4f7a6a8c183d49258ddc5c1bfe4362f771d4b71fcd186f0c5c2f4e039",
+          "answer": "unreadable",
+          "unreadable_reason": "size '6х100 г' is a multipack — a pack count is not a size",
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4447.jpg",
+          "sha256": "09dfaf145ec2290001b628d2cdf5dfd7984ebe1fec792f087ec16c335d1a10f8",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4448.jpg",
+          "sha256": "a4141a2accd95a093f672111a999a3e05c9e7ba0ab72c484c38950ea3f5f9b2f",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4449.jpg",
+          "sha256": "27f774ded269a95d57c97507d0f6827eb4882a5cdddb9af06ee1ba440c8f4bf2",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4450.jpg",
+          "sha256": "45f965d35bb637f15359161e79f763078b3f3f546d13dcb5825986f0bd6a0fc4",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4451.jpg",
+          "sha256": "7ebea081687c9be6969eee97a77df77c9388d340575b2a128a0f77a88e2a91b7",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "reviewer_note": "Nesquik is listed as dairy-adjacent — a milk-drink mix, not milk; drop it if the category is read strictly. The most expensive caption in the pack: page 1 is a pure ice-cream page carrying FOUR watchlist marks — «Monaco» ТМ «Три Ведмеді», «Сиркове 1965» and «Пломбір 1965»/«LIMO ICE CREAM» ТМ «Лімо», «Соковита трилогія» and «Black-кава» ТМ «Рудь» — plus ТМ «Своя Лінія» on p2 (Wild Dog) and p5 (Crackly Crush/«Червоний Мак»), and the caption reduces all six pages to the single word 'морозиво' inside a category list with no brand at all; every category it names is correct, so the loss is entirely brand-level and this is the 3-tile grid layout again, not the single-product poster."
+    },
+    {
+      "item": "@atb_market_official:4467",
+      "msg_id": 4467,
+      "recall": 0.5,
+      "gold_keys": [
+        "raw:rud",
+        "raw:svoia-liniia",
+        "raw:київський пломбір",
+        "raw:максхолод"
+      ],
+      "found": [
+        "raw:svoia-liniia",
+        "raw:київський пломбір"
+      ],
+      "missed": [
+        "raw:rud",
+        "raw:максхолод"
+      ],
+      "unmatched_extractions": [],
+      "pages_sent": 6,
+      "pages_available": 10,
+      "pages_not_sent": 4,
+      "unreadable_pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4467.jpg",
+          "reason": "printed discount '-50%*' is not a percentage"
+        }
+      ],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4467.jpg",
+          "sha256": "adae9a803f2d195890af47a5369ccb82457236604b1c8f6848aa024390272a36",
+          "answer": "unreadable",
+          "unreadable_reason": "printed discount '-50%*' is not a percentage",
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4468.jpg",
+          "sha256": "5c9b6e24e6618eded24d78fe1ab3b79a14e8a713d1d73385e418e95da17189d2",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Київський Пломбір",
+            "Київський Пломбір",
+            "Київський Пломбір"
+          ],
+          "brand_id": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4469.jpg",
+          "sha256": "273181ece70ac493ad7eac901efd2bf294d0532c2f6d5960fcc0e778efbc7c35",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4470.jpg",
+          "sha256": "135aa9ae4989517acdfbd9264f0748d22498234d0976cf2d9cde00c2bddae994",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Своя Лінія"
+          ],
+          "brand_id": [
+            "svoia-liniia"
+          ]
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4471.jpg",
+          "sha256": "4a259e35e6de2e45cc8ee7ac35202a305d806958dfcbece8010ab04825988d9f",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Своя Лінія",
+            "Своя Лінія"
+          ],
+          "brand_id": [
+            "svoia-liniia",
+            "svoia-liniia"
+          ]
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4472.jpg",
+          "sha256": "3083dd0ce5cc094d4a9304a56dec97bd6443bb4b7158aabc2667d85b8a54d90a",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "reviewer_note": "All three ice-cream TMs across six pages are named; the same channel's 4508 caption names none, so brand-carrying varies post to post rather than being a fixed capability of the captioner."
+    },
+    {
+      "item": "@atb_market_official:4498",
+      "msg_id": 4498,
+      "recall": 0.0,
+      "gold_keys": [
+        "raw:svoia-liniia"
+      ],
+      "found": [],
+      "missed": [
+        "raw:svoia-liniia"
+      ],
+      "unmatched_extractions": [],
+      "pages_sent": 6,
+      "pages_available": 10,
+      "pages_not_sent": 4,
+      "unreadable_pages": [],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4498.jpg",
+          "sha256": "4d22c6e04921d76d5a2e8274c437c191ec06022eb19d8984cb763021c38977b0",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4499.jpg",
+          "sha256": "f22d3efff2ca24861458eea2f669d47957184e5aa2ad36b72f6659f98e4feef4",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4500.jpg",
+          "sha256": "f1013a17006487137440f0a8472e04f0c1ab5d182341e6899d4061ce79acb5f4",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4501.jpg",
+          "sha256": "96c6511e81c34b926a5fb3d169971ebe9273103b8b1bb1398e002154433b4aba",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4502.jpg",
+          "sha256": "e8193cdad9ec445872bf1070a3b707bb94e7b4518d2b3a5849010bb493b4292c",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4503.jpg",
+          "sha256": "122da62247c283db803a19b5421e655e1d402d9fd51dacb38b5b1a03ee8b81e5",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "reviewer_note": "Six leaflet pages transcribed accurately, dates included; svoia-liniia is readable on four of them but sits on fish, herring and barbecue charcoal -- a watchlist hit that carries no dairy signal at all."
+    },
+    {
+      "item": "@atb_market_official:4508",
+      "msg_id": 4508,
+      "recall": 0.6666666666666666,
+      "gold_keys": [
+        "raw:lasunka",
+        "raw:limo",
+        "raw:rud",
+        "raw:svoia-liniia",
+        "raw:try-vedmedi",
+        "raw:каштан"
+      ],
+      "found": [
+        "raw:lasunka",
+        "raw:limo",
+        "raw:rud",
+        "raw:каштан"
+      ],
+      "missed": [
+        "raw:svoia-liniia",
+        "raw:try-vedmedi"
+      ],
+      "unmatched_extractions": [],
+      "pages_sent": 6,
+      "pages_available": 10,
+      "pages_not_sent": 4,
+      "unreadable_pages": [],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4508.jpg",
+          "sha256": "713ceb7fa40f7cc110620aa04bdf7b8b0a49c70c6d502efad064db114b7267ea",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Ласунка",
+            "Рудь",
+            "Рудь",
+            "Лімо",
+            "Лімо",
+            "Каштан",
+            "Каштан"
+          ],
+          "brand_id": [
+            "lasunka",
+            "rud",
+            "rud",
+            "limo",
+            "limo",
+            null,
+            null
+          ]
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4509.jpg",
+          "sha256": "9547ccd8e03b7c3e02387690ac556f826d83b13d06d95b501570a8acd098e6ae",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4510.jpg",
+          "sha256": "2fbdf44b48d0f7acc5e8ee3c8e5034bed031406924beceac1cf1387e14e9ec4f",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4511.jpg",
+          "sha256": "e942a20653f862cd33bc170c17c4410ff241e71fe68f7e13ee1edb406fce863f",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4512.jpg",
+          "sha256": "50bd1532ed77e9f2407e8b228dde4ff976dfd45a55c7dcdbc71161e840782e02",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4513.jpg",
+          "sha256": "4c715e2c17a72fdcef7f329cdfed81f2d5648ff9eec36a476a6f25e8e2f3f603",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "reviewer_note": "Six pages, more than a dozen readable TM names, and the caption names none — it summarises by category only («морозиво, заморожені продукти, напої, чай, каву…»); the same channel's 4467 caption does name brands, so this is a per-post collapse, not a channel-wide limit. Page 4510 also carries juice ТМ «Galicia» (Latin, and a juice) — the mirror of the Latin «Rud» case in @ekomarket_shop:1450: one transliteration shape costs a miss, the other invites a false hit on `halychyna`."
+    }
+  ],
+  "missed": [
+    {
+      "n": 1,
+      "item": "@atb_market_official:4340",
+      "msg_id": 4340,
+      "gold_key": "raw:rud",
+      "written_by_the_reviewer": [
+        {
+          "source": "watchlist_hits",
+          "written": "rud"
+        }
+      ],
+      "registry_display_names": [
+        "Рудь"
+      ],
+      "unreadable_pages": [
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4342.jpg",
+          "reason": "printed discount '-50%*' is not a percentage"
+        }
+      ],
+      "unmatched_extractions_on_this_post": [
+        "raw:three bears"
+      ],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4340.jpg",
+          "sha256": "7ae55c29dc8d0adce4cec35cc3d4300ec696fe9f32141d7e34f6368054ec5002",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4341.jpg",
+          "sha256": "39862ec33b1a6a87aaf4005dc4dbc187cb7461ad58aeb38c6220052a545f6dec",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Three Bears",
+            "Three Bears"
+          ],
+          "brand_id": [
+            null,
+            null
+          ]
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4342.jpg",
+          "sha256": "3e9d93e56bf6b7c5497c7c928970039a18e6a0fca2e36d702dbb7aa86b4649b4",
+          "answer": "unreadable",
+          "unreadable_reason": "printed discount '-50%*' is not a percentage",
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4343.jpg",
+          "sha256": "5b99c3dcc141d66cc64960897c451d2996907d5bcf5bcc0c5626bd075be2f9aa",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Своя Лінія"
+          ],
+          "brand_id": [
+            "svoia-liniia"
+          ]
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4344.jpg",
+          "sha256": "189ce416a8da911f4e29e042b74b17fa33eca509024e6f0421dd55bef65bec77",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Своя Лінія"
+          ],
+          "brand_id": [
+            "svoia-liniia"
+          ]
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4345.jpg",
+          "sha256": "fd8d243b9791d37e61afef2b5e3f1776be114f03d06c734e3cbadbe07920cd54",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "verdict": null
+    },
+    {
+      "n": 2,
+      "item": "@atb_market_official:4340",
+      "msg_id": 4340,
+      "gold_key": "raw:try-vedmedi",
+      "written_by_the_reviewer": [
+        {
+          "source": "watchlist_hits",
+          "written": "try-vedmedi"
+        }
+      ],
+      "registry_display_names": [
+        "Три Ведмеді",
+        "Три Медведя"
+      ],
+      "unreadable_pages": [
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4342.jpg",
+          "reason": "printed discount '-50%*' is not a percentage"
+        }
+      ],
+      "unmatched_extractions_on_this_post": [
+        "raw:three bears"
+      ],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4340.jpg",
+          "sha256": "7ae55c29dc8d0adce4cec35cc3d4300ec696fe9f32141d7e34f6368054ec5002",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4341.jpg",
+          "sha256": "39862ec33b1a6a87aaf4005dc4dbc187cb7461ad58aeb38c6220052a545f6dec",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Three Bears",
+            "Three Bears"
+          ],
+          "brand_id": [
+            null,
+            null
+          ]
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4342.jpg",
+          "sha256": "3e9d93e56bf6b7c5497c7c928970039a18e6a0fca2e36d702dbb7aa86b4649b4",
+          "answer": "unreadable",
+          "unreadable_reason": "printed discount '-50%*' is not a percentage",
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4343.jpg",
+          "sha256": "5b99c3dcc141d66cc64960897c451d2996907d5bcf5bcc0c5626bd075be2f9aa",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Своя Лінія"
+          ],
+          "brand_id": [
+            "svoia-liniia"
+          ]
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4344.jpg",
+          "sha256": "189ce416a8da911f4e29e042b74b17fa33eca509024e6f0421dd55bef65bec77",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Своя Лінія"
+          ],
+          "brand_id": [
+            "svoia-liniia"
+          ]
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4345.jpg",
+          "sha256": "fd8d243b9791d37e61afef2b5e3f1776be114f03d06c734e3cbadbe07920cd54",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "verdict": null
+    },
+    {
+      "n": 3,
+      "item": "@atb_market_official:4350",
+      "msg_id": 4350,
+      "gold_key": "raw:lactel",
+      "written_by_the_reviewer": [
+        {
+          "source": "other_dairy_brands",
+          "written": "lactel"
+        }
+      ],
+      "registry_display_names": [],
+      "unreadable_pages": [],
+      "unmatched_extractions_on_this_post": [],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4350.jpg",
+          "sha256": "3147747cc64998593852caca3a36e115beff4b02d109ff1351206f90907b0b2f",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Своя Лінія",
+            "Своя Лінія"
+          ],
+          "brand_id": [
+            "svoia-liniia",
+            "svoia-liniia"
+          ]
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4351.jpg",
+          "sha256": "08db5ad39959b0e86cd97838bea33d17436b6ab2998bfee76e4b96e2c77f9b2c",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4352.jpg",
+          "sha256": "1287d91aaf74302a83ab75cd6484fc4ce8e379a1713c98ab92efa7bf4e1c4677",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Дольче",
+            "Дольче"
+          ],
+          "brand_id": [
+            null,
+            null
+          ]
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4353.jpg",
+          "sha256": "4ea2a6918bfc5b0efa56c492750627c776ea249aa53c60470b8ebb47a7876058",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4354.jpg",
+          "sha256": "2d3c859e3e6f1b86930cf450fccfd3474007b86c793ca8586a86d9517bebde83",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4355.jpg",
+          "sha256": "022c64a0f006467586ebd668bdc6f94e0d673a1020f1cad23dda8db87765dfbd",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "verdict": null
+    },
+    {
+      "n": 4,
+      "item": "@atb_market_official:4360",
+      "msg_id": 4360,
+      "gold_key": "raw:svoia-liniia",
+      "written_by_the_reviewer": [
+        {
+          "source": "watchlist_hits",
+          "written": "svoia-liniia"
+        }
+      ],
+      "registry_display_names": [
+        "Своя Лінія",
+        "Своя Линия"
+      ],
+      "unreadable_pages": [],
+      "unmatched_extractions_on_this_post": [],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4360.jpg",
+          "sha256": "3b417da3cb1ff445ff749ca1843ffd3cdad512590f4701c0eea75899164d4d17",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Київський Пломбір",
+            "Каштан",
+            "Каштан",
+            "Київський Пломбір",
+            "Limo",
+            "Limo"
+          ],
+          "brand_id": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4361.jpg",
+          "sha256": "1ef0c6a1847d0a1d8f5fad590f997594648d892464201bd94d7b33daad1b14a7",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4362.jpg",
+          "sha256": "23f2914eb381ca7681802607209c4717e96a7652c0ed2218c712613bc7b86662",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4363.jpg",
+          "sha256": "120d01e56cd42c965629c570c15059b5b84259c673262270d74eea5cbae027a8",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4364.jpg",
+          "sha256": "30203fbdffe436a38b9e2aa41bfbe425ad500deb16a0b3a6acb0bf96bbc0d617",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4365.jpg",
+          "sha256": "8d9fe4cabdccfa853b446406c35272f693cc5665fc3e07153b4e2b3cfeeb558f",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "verdict": null
+    },
+    {
+      "n": 5,
+      "item": "@atb_market_official:4377",
+      "msg_id": 4377,
+      "gold_key": "raw:svoia-liniia",
+      "written_by_the_reviewer": [
+        {
+          "source": "watchlist_hits",
+          "written": "svoia-liniia"
+        }
+      ],
+      "registry_display_names": [
+        "Своя Лінія",
+        "Своя Линия"
+      ],
+      "unreadable_pages": [],
+      "unmatched_extractions_on_this_post": [],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4377.jpg",
+          "sha256": "1093fd99ffc4b09e61bcf2b9b6aa4b1acc39afb6d89cb32b7bb5698e5ed03dcd",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4378.jpg",
+          "sha256": "c9d2345431788e0527ade2e3899754ab2238229b58d889203884e2e986a4f567",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4379.jpg",
+          "sha256": "51043b5cfe17b6de1b7dcaf4ca5f140289bc89db0443e414ef9b31eed3ea8ff5",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4380.jpg",
+          "sha256": "5cf4ed8c0c688d21b7e93dbd2c10f71443ee66fa909a420f2f77efa7dc27fa85",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "verdict": null
+    },
+    {
+      "n": 6,
+      "item": "@atb_market_official:4381",
+      "msg_id": 4381,
+      "gold_key": "raw:maximuse",
+      "written_by_the_reviewer": [
+        {
+          "source": "other_dairy_brands",
+          "written": "Maximuse"
+        }
+      ],
+      "registry_display_names": [],
+      "unreadable_pages": [],
+      "unmatched_extractions_on_this_post": [
+        "raw:komo"
+      ],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4381.jpg",
+          "sha256": "6d02a184e8f48ee657490d10a63d2da81e00757abbd8890fb0597ee909aa0376",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Laska",
+            "Laska"
+          ],
+          "brand_id": [
+            null,
+            null
+          ]
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4382.jpg",
+          "sha256": "1449961dd36456d2329e7bc3645e2a203356d2db328a59b3c40bf54a79eb644e",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Ласунка",
+            "Ласунка",
+            "Ласунка",
+            "Ласунка"
+          ],
+          "brand_id": [
+            "lasunka",
+            "lasunka",
+            "lasunka",
+            "lasunka"
+          ]
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4383.jpg",
+          "sha256": "4418a4a0129e7e389380eabfa849fbec771b1b85d8eb3906d8fab266fb0143b2",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Розумний вибір",
+            "Розумний вибір",
+            "Розумний вибір"
+          ],
+          "brand_id": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4384.jpg",
+          "sha256": "e4457f9a4525eb4de9b1e9f88b5e13d552cebde19ac274033bb1244ca643c6c3",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "President",
+            "President"
+          ],
+          "brand_id": [
+            "president",
+            "president"
+          ]
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4385.jpg",
+          "sha256": "0f8ae2f9c7597d6679413696fc33018a2eb1f722165f7e65dbeed413932ce0a4",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Komo",
+            "Komo",
+            "Komo",
+            "Komo"
+          ],
+          "brand_id": [
+            null,
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4386.jpg",
+          "sha256": "47954a207fc9b08ef1b59dfacf594c4f25bb9588926a0a8c427a2a957a947e0b",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "verdict": null
+    },
+    {
+      "n": 7,
+      "item": "@atb_market_official:4381",
+      "msg_id": 4381,
+      "gold_key": "raw:каштан",
+      "written_by_the_reviewer": [
+        {
+          "source": "other_dairy_brands",
+          "written": "Каштан"
+        }
+      ],
+      "registry_display_names": [],
+      "unreadable_pages": [],
+      "unmatched_extractions_on_this_post": [
+        "raw:komo"
+      ],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4381.jpg",
+          "sha256": "6d02a184e8f48ee657490d10a63d2da81e00757abbd8890fb0597ee909aa0376",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Laska",
+            "Laska"
+          ],
+          "brand_id": [
+            null,
+            null
+          ]
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4382.jpg",
+          "sha256": "1449961dd36456d2329e7bc3645e2a203356d2db328a59b3c40bf54a79eb644e",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Ласунка",
+            "Ласунка",
+            "Ласунка",
+            "Ласунка"
+          ],
+          "brand_id": [
+            "lasunka",
+            "lasunka",
+            "lasunka",
+            "lasunka"
+          ]
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4383.jpg",
+          "sha256": "4418a4a0129e7e389380eabfa849fbec771b1b85d8eb3906d8fab266fb0143b2",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Розумний вибір",
+            "Розумний вибір",
+            "Розумний вибір"
+          ],
+          "brand_id": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4384.jpg",
+          "sha256": "e4457f9a4525eb4de9b1e9f88b5e13d552cebde19ac274033bb1244ca643c6c3",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "President",
+            "President"
+          ],
+          "brand_id": [
+            "president",
+            "president"
+          ]
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4385.jpg",
+          "sha256": "0f8ae2f9c7597d6679413696fc33018a2eb1f722165f7e65dbeed413932ce0a4",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Komo",
+            "Komo",
+            "Komo",
+            "Komo"
+          ],
+          "brand_id": [
+            null,
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4386.jpg",
+          "sha256": "47954a207fc9b08ef1b59dfacf594c4f25bb9588926a0a8c427a2a957a947e0b",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "verdict": null
+    },
+    {
+      "n": 8,
+      "item": "@atb_market_official:4381",
+      "msg_id": 4381,
+      "gold_key": "raw:комо / komo",
+      "written_by_the_reviewer": [
+        {
+          "source": "other_dairy_brands",
+          "written": "Комо / Komo"
+        }
+      ],
+      "registry_display_names": [],
+      "unreadable_pages": [],
+      "unmatched_extractions_on_this_post": [
+        "raw:komo"
+      ],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4381.jpg",
+          "sha256": "6d02a184e8f48ee657490d10a63d2da81e00757abbd8890fb0597ee909aa0376",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Laska",
+            "Laska"
+          ],
+          "brand_id": [
+            null,
+            null
+          ]
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4382.jpg",
+          "sha256": "1449961dd36456d2329e7bc3645e2a203356d2db328a59b3c40bf54a79eb644e",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Ласунка",
+            "Ласунка",
+            "Ласунка",
+            "Ласунка"
+          ],
+          "brand_id": [
+            "lasunka",
+            "lasunka",
+            "lasunka",
+            "lasunka"
+          ]
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4383.jpg",
+          "sha256": "4418a4a0129e7e389380eabfa849fbec771b1b85d8eb3906d8fab266fb0143b2",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Розумний вибір",
+            "Розумний вибір",
+            "Розумний вибір"
+          ],
+          "brand_id": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4384.jpg",
+          "sha256": "e4457f9a4525eb4de9b1e9f88b5e13d552cebde19ac274033bb1244ca643c6c3",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "President",
+            "President"
+          ],
+          "brand_id": [
+            "president",
+            "president"
+          ]
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4385.jpg",
+          "sha256": "0f8ae2f9c7597d6679413696fc33018a2eb1f722165f7e65dbeed413932ce0a4",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Komo",
+            "Komo",
+            "Komo",
+            "Komo"
+          ],
+          "brand_id": [
+            null,
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4386.jpg",
+          "sha256": "47954a207fc9b08ef1b59dfacf594c4f25bb9588926a0a8c427a2a957a947e0b",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "verdict": null
+    },
+    {
+      "n": 9,
+      "item": "@atb_market_official:4391",
+      "msg_id": 4391,
+      "gold_key": "raw:svoia-liniia",
+      "written_by_the_reviewer": [
+        {
+          "source": "watchlist_hits",
+          "written": "svoia-liniia"
+        }
+      ],
+      "registry_display_names": [
+        "Своя Лінія",
+        "Своя Линия"
+      ],
+      "unreadable_pages": [],
+      "unmatched_extractions_on_this_post": [],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4391.jpg",
+          "sha256": "b310158e7a5966cf7a7e781b057bc1c84fb546e5e33cc09ed9b684244ccadb80",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4392.jpg",
+          "sha256": "f566591d20b645dd39ed17adbbc19b09681cf1c03e4fc41335ce421986f94f7c",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4393.jpg",
+          "sha256": "ddf11445fe8f9d0460be89e23bd9a58b0b1f4e79c4fa06b1edd05171a1b270e0",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4394.jpg",
+          "sha256": "9ed5e1c9c49a19468f2c1e7d4c0d0f2ec6de21408329f200da5017431a75b1f7",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4395.jpg",
+          "sha256": "179abdd1eccc0ec71c75a69d9bd67b1293326fc203d1232d8cc16ed99ade26de",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4396.jpg",
+          "sha256": "b8923ddb55e27f2b1569e381586453dd4f24cddee640d28dd1497ceeeca4d645",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "verdict": null
+    },
+    {
+      "n": 10,
+      "item": "@atb_market_official:4401",
+      "msg_id": 4401,
+      "gold_key": "raw:frenzy (рудь)",
+      "written_by_the_reviewer": [
+        {
+          "source": "other_dairy_brands",
+          "written": "Frenzy (Рудь)"
+        }
+      ],
+      "registry_display_names": [],
+      "unreadable_pages": [
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4405.jpg",
+          "reason": "malformed JSON"
+        }
+      ],
+      "unmatched_extractions_on_this_post": [],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4401.jpg",
+          "sha256": "c4f4b3c9e8041c28f881f6b44232db6cfc311bf1d0d1e3475122dd8be6af2a8c",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4402.jpg",
+          "sha256": "8859763a6f1e7be2408ed50471b2bdd7f90236eab2c33d376b85d15c9223cf9c",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Premialle"
+          ],
+          "brand_id": [
+            null
+          ]
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4403.jpg",
+          "sha256": "eafb197478effec7fabe9559fd023ba2a05fe3f2a565e2157126c2c701606c3b",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Молокія"
+          ],
+          "brand_id": [
+            "molokija"
+          ]
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4404.jpg",
+          "sha256": "6a90291ce4cea22742d1aea607f907de7a0946ea8ea2b8d7c9fb21931b02ffc5",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Ферма",
+            "Злагода",
+            "Галичина",
+            "Галичина",
+            "Злагода",
+            "Premialle"
+          ],
+          "brand_id": [
+            "ferma",
+            "zlahoda",
+            "halychyna",
+            "halychyna",
+            "zlahoda",
+            null
+          ]
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4405.jpg",
+          "sha256": "dbd22e75e69be383aa8b02431b0761a614d4ff2abec6e7912d8e804450f3dc00",
+          "answer": "unreadable",
+          "unreadable_reason": "malformed JSON",
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4406.jpg",
+          "sha256": "48bcd38bb044ee96ec1758909ec60e66af536d03c092667915658266a4babf4f",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "verdict": null
+    },
+    {
+      "n": 11,
+      "item": "@atb_market_official:4401",
+      "msg_id": 4401,
+      "gold_key": "raw:imperium (рудь)",
+      "written_by_the_reviewer": [
+        {
+          "source": "other_dairy_brands",
+          "written": "Imperium (Рудь)"
+        }
+      ],
+      "registry_display_names": [],
+      "unreadable_pages": [
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4405.jpg",
+          "reason": "malformed JSON"
+        }
+      ],
+      "unmatched_extractions_on_this_post": [],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4401.jpg",
+          "sha256": "c4f4b3c9e8041c28f881f6b44232db6cfc311bf1d0d1e3475122dd8be6af2a8c",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4402.jpg",
+          "sha256": "8859763a6f1e7be2408ed50471b2bdd7f90236eab2c33d376b85d15c9223cf9c",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Premialle"
+          ],
+          "brand_id": [
+            null
+          ]
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4403.jpg",
+          "sha256": "eafb197478effec7fabe9559fd023ba2a05fe3f2a565e2157126c2c701606c3b",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Молокія"
+          ],
+          "brand_id": [
+            "molokija"
+          ]
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4404.jpg",
+          "sha256": "6a90291ce4cea22742d1aea607f907de7a0946ea8ea2b8d7c9fb21931b02ffc5",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Ферма",
+            "Злагода",
+            "Галичина",
+            "Галичина",
+            "Злагода",
+            "Premialle"
+          ],
+          "brand_id": [
+            "ferma",
+            "zlahoda",
+            "halychyna",
+            "halychyna",
+            "zlahoda",
+            null
+          ]
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4405.jpg",
+          "sha256": "dbd22e75e69be383aa8b02431b0761a614d4ff2abec6e7912d8e804450f3dc00",
+          "answer": "unreadable",
+          "unreadable_reason": "malformed JSON",
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4406.jpg",
+          "sha256": "48bcd38bb044ee96ec1758909ec60e66af536d03c092667915658266a4babf4f",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "verdict": null
+    },
+    {
+      "n": 12,
+      "item": "@atb_market_official:4401",
+      "msg_id": 4401,
+      "gold_key": "raw:rud",
+      "written_by_the_reviewer": [
+        {
+          "source": "watchlist_hits",
+          "written": "rud"
+        }
+      ],
+      "registry_display_names": [
+        "Рудь"
+      ],
+      "unreadable_pages": [
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4405.jpg",
+          "reason": "malformed JSON"
+        }
+      ],
+      "unmatched_extractions_on_this_post": [],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4401.jpg",
+          "sha256": "c4f4b3c9e8041c28f881f6b44232db6cfc311bf1d0d1e3475122dd8be6af2a8c",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4402.jpg",
+          "sha256": "8859763a6f1e7be2408ed50471b2bdd7f90236eab2c33d376b85d15c9223cf9c",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Premialle"
+          ],
+          "brand_id": [
+            null
+          ]
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4403.jpg",
+          "sha256": "eafb197478effec7fabe9559fd023ba2a05fe3f2a565e2157126c2c701606c3b",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Молокія"
+          ],
+          "brand_id": [
+            "molokija"
+          ]
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4404.jpg",
+          "sha256": "6a90291ce4cea22742d1aea607f907de7a0946ea8ea2b8d7c9fb21931b02ffc5",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Ферма",
+            "Злагода",
+            "Галичина",
+            "Галичина",
+            "Злагода",
+            "Premialle"
+          ],
+          "brand_id": [
+            "ferma",
+            "zlahoda",
+            "halychyna",
+            "halychyna",
+            "zlahoda",
+            null
+          ]
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4405.jpg",
+          "sha256": "dbd22e75e69be383aa8b02431b0761a614d4ff2abec6e7912d8e804450f3dc00",
+          "answer": "unreadable",
+          "unreadable_reason": "malformed JSON",
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4406.jpg",
+          "sha256": "48bcd38bb044ee96ec1758909ec60e66af536d03c092667915658266a4babf4f",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "verdict": null
+    },
+    {
+      "n": 13,
+      "item": "@atb_market_official:4401",
+      "msg_id": 4401,
+      "gold_key": "raw:selianske",
+      "written_by_the_reviewer": [
+        {
+          "source": "watchlist_hits",
+          "written": "selianske"
+        }
+      ],
+      "registry_display_names": [
+        "Селянське",
+        "Селянское"
+      ],
+      "unreadable_pages": [
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4405.jpg",
+          "reason": "malformed JSON"
+        }
+      ],
+      "unmatched_extractions_on_this_post": [],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4401.jpg",
+          "sha256": "c4f4b3c9e8041c28f881f6b44232db6cfc311bf1d0d1e3475122dd8be6af2a8c",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4402.jpg",
+          "sha256": "8859763a6f1e7be2408ed50471b2bdd7f90236eab2c33d376b85d15c9223cf9c",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Premialle"
+          ],
+          "brand_id": [
+            null
+          ]
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4403.jpg",
+          "sha256": "eafb197478effec7fabe9559fd023ba2a05fe3f2a565e2157126c2c701606c3b",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Молокія"
+          ],
+          "brand_id": [
+            "molokija"
+          ]
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4404.jpg",
+          "sha256": "6a90291ce4cea22742d1aea607f907de7a0946ea8ea2b8d7c9fb21931b02ffc5",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Ферма",
+            "Злагода",
+            "Галичина",
+            "Галичина",
+            "Злагода",
+            "Premialle"
+          ],
+          "brand_id": [
+            "ferma",
+            "zlahoda",
+            "halychyna",
+            "halychyna",
+            "zlahoda",
+            null
+          ]
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4405.jpg",
+          "sha256": "dbd22e75e69be383aa8b02431b0761a614d4ff2abec6e7912d8e804450f3dc00",
+          "answer": "unreadable",
+          "unreadable_reason": "malformed JSON",
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4406.jpg",
+          "sha256": "48bcd38bb044ee96ec1758909ec60e66af536d03c092667915658266a4babf4f",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "verdict": null
+    },
+    {
+      "n": 14,
+      "item": "@atb_market_official:4401",
+      "msg_id": 4401,
+      "gold_key": "raw:svoia-liniia",
+      "written_by_the_reviewer": [
+        {
+          "source": "watchlist_hits",
+          "written": "svoia-liniia"
+        }
+      ],
+      "registry_display_names": [
+        "Своя Лінія",
+        "Своя Линия"
+      ],
+      "unreadable_pages": [
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4405.jpg",
+          "reason": "malformed JSON"
+        }
+      ],
+      "unmatched_extractions_on_this_post": [],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4401.jpg",
+          "sha256": "c4f4b3c9e8041c28f881f6b44232db6cfc311bf1d0d1e3475122dd8be6af2a8c",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4402.jpg",
+          "sha256": "8859763a6f1e7be2408ed50471b2bdd7f90236eab2c33d376b85d15c9223cf9c",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Premialle"
+          ],
+          "brand_id": [
+            null
+          ]
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4403.jpg",
+          "sha256": "eafb197478effec7fabe9559fd023ba2a05fe3f2a565e2157126c2c701606c3b",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Молокія"
+          ],
+          "brand_id": [
+            "molokija"
+          ]
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4404.jpg",
+          "sha256": "6a90291ce4cea22742d1aea607f907de7a0946ea8ea2b8d7c9fb21931b02ffc5",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Ферма",
+            "Злагода",
+            "Галичина",
+            "Галичина",
+            "Злагода",
+            "Premialle"
+          ],
+          "brand_id": [
+            "ferma",
+            "zlahoda",
+            "halychyna",
+            "halychyna",
+            "zlahoda",
+            null
+          ]
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4405.jpg",
+          "sha256": "dbd22e75e69be383aa8b02431b0761a614d4ff2abec6e7912d8e804450f3dc00",
+          "answer": "unreadable",
+          "unreadable_reason": "malformed JSON",
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4406.jpg",
+          "sha256": "48bcd38bb044ee96ec1758909ec60e66af536d03c092667915658266a4babf4f",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "verdict": null
+    },
+    {
+      "n": 15,
+      "item": "@atb_market_official:4401",
+      "msg_id": 4401,
+      "gold_key": "raw:try-vedmedi",
+      "written_by_the_reviewer": [
+        {
+          "source": "watchlist_hits",
+          "written": "try-vedmedi"
+        }
+      ],
+      "registry_display_names": [
+        "Три Ведмеді",
+        "Три Медведя"
+      ],
+      "unreadable_pages": [
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4405.jpg",
+          "reason": "malformed JSON"
+        }
+      ],
+      "unmatched_extractions_on_this_post": [],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4401.jpg",
+          "sha256": "c4f4b3c9e8041c28f881f6b44232db6cfc311bf1d0d1e3475122dd8be6af2a8c",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4402.jpg",
+          "sha256": "8859763a6f1e7be2408ed50471b2bdd7f90236eab2c33d376b85d15c9223cf9c",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Premialle"
+          ],
+          "brand_id": [
+            null
+          ]
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4403.jpg",
+          "sha256": "eafb197478effec7fabe9559fd023ba2a05fe3f2a565e2157126c2c701606c3b",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Молокія"
+          ],
+          "brand_id": [
+            "molokija"
+          ]
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4404.jpg",
+          "sha256": "6a90291ce4cea22742d1aea607f907de7a0946ea8ea2b8d7c9fb21931b02ffc5",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Ферма",
+            "Злагода",
+            "Галичина",
+            "Галичина",
+            "Злагода",
+            "Premialle"
+          ],
+          "brand_id": [
+            "ferma",
+            "zlahoda",
+            "halychyna",
+            "halychyna",
+            "zlahoda",
+            null
+          ]
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4405.jpg",
+          "sha256": "dbd22e75e69be383aa8b02431b0761a614d4ff2abec6e7912d8e804450f3dc00",
+          "answer": "unreadable",
+          "unreadable_reason": "malformed JSON",
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4406.jpg",
+          "sha256": "48bcd38bb044ee96ec1758909ec60e66af536d03c092667915658266a4babf4f",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "verdict": null
+    },
+    {
+      "n": 16,
+      "item": "@atb_market_official:4401",
+      "msg_id": 4401,
+      "gold_key": "raw:київський пломбір",
+      "written_by_the_reviewer": [
+        {
+          "source": "other_dairy_brands",
+          "written": "Київський Пломбір"
+        }
+      ],
+      "registry_display_names": [],
+      "unreadable_pages": [
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4405.jpg",
+          "reason": "malformed JSON"
+        }
+      ],
+      "unmatched_extractions_on_this_post": [],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4401.jpg",
+          "sha256": "c4f4b3c9e8041c28f881f6b44232db6cfc311bf1d0d1e3475122dd8be6af2a8c",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4402.jpg",
+          "sha256": "8859763a6f1e7be2408ed50471b2bdd7f90236eab2c33d376b85d15c9223cf9c",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Premialle"
+          ],
+          "brand_id": [
+            null
+          ]
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4403.jpg",
+          "sha256": "eafb197478effec7fabe9559fd023ba2a05fe3f2a565e2157126c2c701606c3b",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Молокія"
+          ],
+          "brand_id": [
+            "molokija"
+          ]
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4404.jpg",
+          "sha256": "6a90291ce4cea22742d1aea607f907de7a0946ea8ea2b8d7c9fb21931b02ffc5",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Ферма",
+            "Злагода",
+            "Галичина",
+            "Галичина",
+            "Злагода",
+            "Premialle"
+          ],
+          "brand_id": [
+            "ferma",
+            "zlahoda",
+            "halychyna",
+            "halychyna",
+            "zlahoda",
+            null
+          ]
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4405.jpg",
+          "sha256": "dbd22e75e69be383aa8b02431b0761a614d4ff2abec6e7912d8e804450f3dc00",
+          "answer": "unreadable",
+          "unreadable_reason": "malformed JSON",
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4406.jpg",
+          "sha256": "48bcd38bb044ee96ec1758909ec60e66af536d03c092667915658266a4babf4f",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "verdict": null
+    },
+    {
+      "n": 17,
+      "item": "@atb_market_official:4411",
+      "msg_id": 4411,
+      "gold_key": "raw:svoia-liniia",
+      "written_by_the_reviewer": [
+        {
+          "source": "watchlist_hits",
+          "written": "svoia-liniia"
+        }
+      ],
+      "registry_display_names": [
+        "Своя Лінія",
+        "Своя Линия"
+      ],
+      "unreadable_pages": [],
+      "unmatched_extractions_on_this_post": [],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4411.jpg",
+          "sha256": "edb0901b78bdb275a8dff820b95e4335c178dc4ab3ec31fc80255f35539b4bec",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4412.jpg",
+          "sha256": "042793ac6b2aba9a9147454002b9dd37a414e63aecb1878cc30d5f85c16f5eae",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4413.jpg",
+          "sha256": "127a75b9c2134e4a5c93309f4a11c27002fcf3d96a6e8ab11f46b6a3b2ffb45f",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4414.jpg",
+          "sha256": "220ee6af67f3414225cde2b270611f42fcf5733d97b9289457dd1bd0e8a9909e",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "verdict": null
+    },
+    {
+      "n": 18,
+      "item": "@atb_market_official:4421",
+      "msg_id": 4421,
+      "gold_key": "raw:svoia-liniia",
+      "written_by_the_reviewer": [
+        {
+          "source": "watchlist_hits",
+          "written": "svoia-liniia"
+        }
+      ],
+      "registry_display_names": [
+        "Своя Лінія",
+        "Своя Линия"
+      ],
+      "unreadable_pages": [],
+      "unmatched_extractions_on_this_post": [],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4421.jpg",
+          "sha256": "ee4417bbd077fcc2e1001ee7d98d003a8958c78f170bd0a8883b34d1287615bd",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4422.jpg",
+          "sha256": "dcdfa1d16c2d6593f42ef5df003de1d328cb1f1362a0bbfb36620da03119e87c",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4423.jpg",
+          "sha256": "149068940c26841f8a0e7c76be0f42d07166a34953e33529a969652b15771e8e",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4424.jpg",
+          "sha256": "852f1442cadcaefcde1a63028f18ac26225cfe0d425b473e39aa4fec0ebf8bbb",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "verdict": null
+    },
+    {
+      "n": 19,
+      "item": "@atb_market_official:4436",
+      "msg_id": 4436,
+      "gold_key": "raw:svoia-liniia",
+      "written_by_the_reviewer": [
+        {
+          "source": "watchlist_hits",
+          "written": "svoia-liniia"
+        }
+      ],
+      "registry_display_names": [
+        "Своя Лінія",
+        "Своя Линия"
+      ],
+      "unreadable_pages": [],
+      "unmatched_extractions_on_this_post": [],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4436.jpg",
+          "sha256": "05bf37c885091b288b39ca31f3545a6a3827f7ba96c1b7ca5cc1051182367a15",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4437.jpg",
+          "sha256": "de6eedd7b00c89bc8d89af8624a9334ce4e5e360358d59e1424d513341a14f15",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4438.jpg",
+          "sha256": "37da97d26681c527237bf840ce893f3c6dd6650a90669ed23d24e86a8d032e47",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4439.jpg",
+          "sha256": "0deb6c3f3517e69fba0885901b9dc0cb15469b8c5f38513e096e1b80d92550e7",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4440.jpg",
+          "sha256": "0eb66b03ac36c6d2c87051b75b0b704032ad711529337beab3e0c1a717232ae7",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "SOT",
+            "SOT",
+            "SOT"
+          ],
+          "brand_id": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4441.jpg",
+          "sha256": "3380d7d0559ec9e452f201c027401f16043b24aa180df11a15062ff88395c6de",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "verdict": null
+    },
+    {
+      "n": 20,
+      "item": "@atb_market_official:4446",
+      "msg_id": 4446,
+      "gold_key": "raw:limo",
+      "written_by_the_reviewer": [
+        {
+          "source": "watchlist_hits",
+          "written": "limo"
+        }
+      ],
+      "registry_display_names": [
+        "Лімо",
+        "Лимо"
+      ],
+      "unreadable_pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4446.jpg",
+          "reason": "size '6х100 г' is a multipack — a pack count is not a size"
+        }
+      ],
+      "unmatched_extractions_on_this_post": [],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4446.jpg",
+          "sha256": "2da2cef4f7a6a8c183d49258ddc5c1bfe4362f771d4b71fcd186f0c5c2f4e039",
+          "answer": "unreadable",
+          "unreadable_reason": "size '6х100 г' is a multipack — a pack count is not a size",
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4447.jpg",
+          "sha256": "09dfaf145ec2290001b628d2cdf5dfd7984ebe1fec792f087ec16c335d1a10f8",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4448.jpg",
+          "sha256": "a4141a2accd95a093f672111a999a3e05c9e7ba0ab72c484c38950ea3f5f9b2f",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4449.jpg",
+          "sha256": "27f774ded269a95d57c97507d0f6827eb4882a5cdddb9af06ee1ba440c8f4bf2",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4450.jpg",
+          "sha256": "45f965d35bb637f15359161e79f763078b3f3f546d13dcb5825986f0bd6a0fc4",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4451.jpg",
+          "sha256": "7ebea081687c9be6969eee97a77df77c9388d340575b2a128a0f77a88e2a91b7",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "verdict": null
+    },
+    {
+      "n": 21,
+      "item": "@atb_market_official:4446",
+      "msg_id": 4446,
+      "gold_key": "raw:nesquik (какао-напій шоколадно-молочний коктейль, 200 г)",
+      "written_by_the_reviewer": [
+        {
+          "source": "other_dairy_brands",
+          "written": "Nesquik (Какао-напій шоколадно-молочний коктейль, 200 г)"
+        }
+      ],
+      "registry_display_names": [],
+      "unreadable_pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4446.jpg",
+          "reason": "size '6х100 г' is a multipack — a pack count is not a size"
+        }
+      ],
+      "unmatched_extractions_on_this_post": [],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4446.jpg",
+          "sha256": "2da2cef4f7a6a8c183d49258ddc5c1bfe4362f771d4b71fcd186f0c5c2f4e039",
+          "answer": "unreadable",
+          "unreadable_reason": "size '6х100 г' is a multipack — a pack count is not a size",
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4447.jpg",
+          "sha256": "09dfaf145ec2290001b628d2cdf5dfd7984ebe1fec792f087ec16c335d1a10f8",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4448.jpg",
+          "sha256": "a4141a2accd95a093f672111a999a3e05c9e7ba0ab72c484c38950ea3f5f9b2f",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4449.jpg",
+          "sha256": "27f774ded269a95d57c97507d0f6827eb4882a5cdddb9af06ee1ba440c8f4bf2",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4450.jpg",
+          "sha256": "45f965d35bb637f15359161e79f763078b3f3f546d13dcb5825986f0bd6a0fc4",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4451.jpg",
+          "sha256": "7ebea081687c9be6969eee97a77df77c9388d340575b2a128a0f77a88e2a91b7",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "verdict": null
+    },
+    {
+      "n": 22,
+      "item": "@atb_market_official:4446",
+      "msg_id": 4446,
+      "gold_key": "raw:rud",
+      "written_by_the_reviewer": [
+        {
+          "source": "watchlist_hits",
+          "written": "rud"
+        }
+      ],
+      "registry_display_names": [
+        "Рудь"
+      ],
+      "unreadable_pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4446.jpg",
+          "reason": "size '6х100 г' is a multipack — a pack count is not a size"
+        }
+      ],
+      "unmatched_extractions_on_this_post": [],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4446.jpg",
+          "sha256": "2da2cef4f7a6a8c183d49258ddc5c1bfe4362f771d4b71fcd186f0c5c2f4e039",
+          "answer": "unreadable",
+          "unreadable_reason": "size '6х100 г' is a multipack — a pack count is not a size",
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4447.jpg",
+          "sha256": "09dfaf145ec2290001b628d2cdf5dfd7984ebe1fec792f087ec16c335d1a10f8",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4448.jpg",
+          "sha256": "a4141a2accd95a093f672111a999a3e05c9e7ba0ab72c484c38950ea3f5f9b2f",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4449.jpg",
+          "sha256": "27f774ded269a95d57c97507d0f6827eb4882a5cdddb9af06ee1ba440c8f4bf2",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4450.jpg",
+          "sha256": "45f965d35bb637f15359161e79f763078b3f3f546d13dcb5825986f0bd6a0fc4",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4451.jpg",
+          "sha256": "7ebea081687c9be6969eee97a77df77c9388d340575b2a128a0f77a88e2a91b7",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "verdict": null
+    },
+    {
+      "n": 23,
+      "item": "@atb_market_official:4446",
+      "msg_id": 4446,
+      "gold_key": "raw:svoia-liniia",
+      "written_by_the_reviewer": [
+        {
+          "source": "watchlist_hits",
+          "written": "svoia-liniia"
+        }
+      ],
+      "registry_display_names": [
+        "Своя Лінія",
+        "Своя Линия"
+      ],
+      "unreadable_pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4446.jpg",
+          "reason": "size '6х100 г' is a multipack — a pack count is not a size"
+        }
+      ],
+      "unmatched_extractions_on_this_post": [],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4446.jpg",
+          "sha256": "2da2cef4f7a6a8c183d49258ddc5c1bfe4362f771d4b71fcd186f0c5c2f4e039",
+          "answer": "unreadable",
+          "unreadable_reason": "size '6х100 г' is a multipack — a pack count is not a size",
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4447.jpg",
+          "sha256": "09dfaf145ec2290001b628d2cdf5dfd7984ebe1fec792f087ec16c335d1a10f8",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4448.jpg",
+          "sha256": "a4141a2accd95a093f672111a999a3e05c9e7ba0ab72c484c38950ea3f5f9b2f",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4449.jpg",
+          "sha256": "27f774ded269a95d57c97507d0f6827eb4882a5cdddb9af06ee1ba440c8f4bf2",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4450.jpg",
+          "sha256": "45f965d35bb637f15359161e79f763078b3f3f546d13dcb5825986f0bd6a0fc4",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4451.jpg",
+          "sha256": "7ebea081687c9be6969eee97a77df77c9388d340575b2a128a0f77a88e2a91b7",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "verdict": null
+    },
+    {
+      "n": 24,
+      "item": "@atb_market_official:4446",
+      "msg_id": 4446,
+      "gold_key": "raw:try-vedmedi",
+      "written_by_the_reviewer": [
+        {
+          "source": "watchlist_hits",
+          "written": "try-vedmedi"
+        }
+      ],
+      "registry_display_names": [
+        "Три Ведмеді",
+        "Три Медведя"
+      ],
+      "unreadable_pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4446.jpg",
+          "reason": "size '6х100 г' is a multipack — a pack count is not a size"
+        }
+      ],
+      "unmatched_extractions_on_this_post": [],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4446.jpg",
+          "sha256": "2da2cef4f7a6a8c183d49258ddc5c1bfe4362f771d4b71fcd186f0c5c2f4e039",
+          "answer": "unreadable",
+          "unreadable_reason": "size '6х100 г' is a multipack — a pack count is not a size",
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4447.jpg",
+          "sha256": "09dfaf145ec2290001b628d2cdf5dfd7984ebe1fec792f087ec16c335d1a10f8",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4448.jpg",
+          "sha256": "a4141a2accd95a093f672111a999a3e05c9e7ba0ab72c484c38950ea3f5f9b2f",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4449.jpg",
+          "sha256": "27f774ded269a95d57c97507d0f6827eb4882a5cdddb9af06ee1ba440c8f4bf2",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4450.jpg",
+          "sha256": "45f965d35bb637f15359161e79f763078b3f3f546d13dcb5825986f0bd6a0fc4",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4451.jpg",
+          "sha256": "7ebea081687c9be6969eee97a77df77c9388d340575b2a128a0f77a88e2a91b7",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "verdict": null
+    },
+    {
+      "n": 25,
+      "item": "@atb_market_official:4467",
+      "msg_id": 4467,
+      "gold_key": "raw:rud",
+      "written_by_the_reviewer": [
+        {
+          "source": "watchlist_hits",
+          "written": "rud"
+        }
+      ],
+      "registry_display_names": [
+        "Рудь"
+      ],
+      "unreadable_pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4467.jpg",
+          "reason": "printed discount '-50%*' is not a percentage"
+        }
+      ],
+      "unmatched_extractions_on_this_post": [],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4467.jpg",
+          "sha256": "adae9a803f2d195890af47a5369ccb82457236604b1c8f6848aa024390272a36",
+          "answer": "unreadable",
+          "unreadable_reason": "printed discount '-50%*' is not a percentage",
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4468.jpg",
+          "sha256": "5c9b6e24e6618eded24d78fe1ab3b79a14e8a713d1d73385e418e95da17189d2",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Київський Пломбір",
+            "Київський Пломбір",
+            "Київський Пломбір"
+          ],
+          "brand_id": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4469.jpg",
+          "sha256": "273181ece70ac493ad7eac901efd2bf294d0532c2f6d5960fcc0e778efbc7c35",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4470.jpg",
+          "sha256": "135aa9ae4989517acdfbd9264f0748d22498234d0976cf2d9cde00c2bddae994",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Своя Лінія"
+          ],
+          "brand_id": [
+            "svoia-liniia"
+          ]
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4471.jpg",
+          "sha256": "4a259e35e6de2e45cc8ee7ac35202a305d806958dfcbece8010ab04825988d9f",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Своя Лінія",
+            "Своя Лінія"
+          ],
+          "brand_id": [
+            "svoia-liniia",
+            "svoia-liniia"
+          ]
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4472.jpg",
+          "sha256": "3083dd0ce5cc094d4a9304a56dec97bd6443bb4b7158aabc2667d85b8a54d90a",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "verdict": null
+    },
+    {
+      "n": 26,
+      "item": "@atb_market_official:4467",
+      "msg_id": 4467,
+      "gold_key": "raw:максхолод",
+      "written_by_the_reviewer": [
+        {
+          "source": "other_dairy_brands",
+          "written": "Максхолод"
+        }
+      ],
+      "registry_display_names": [],
+      "unreadable_pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4467.jpg",
+          "reason": "printed discount '-50%*' is not a percentage"
+        }
+      ],
+      "unmatched_extractions_on_this_post": [],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4467.jpg",
+          "sha256": "adae9a803f2d195890af47a5369ccb82457236604b1c8f6848aa024390272a36",
+          "answer": "unreadable",
+          "unreadable_reason": "printed discount '-50%*' is not a percentage",
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4468.jpg",
+          "sha256": "5c9b6e24e6618eded24d78fe1ab3b79a14e8a713d1d73385e418e95da17189d2",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Київський Пломбір",
+            "Київський Пломбір",
+            "Київський Пломбір"
+          ],
+          "brand_id": [
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4469.jpg",
+          "sha256": "273181ece70ac493ad7eac901efd2bf294d0532c2f6d5960fcc0e778efbc7c35",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4470.jpg",
+          "sha256": "135aa9ae4989517acdfbd9264f0748d22498234d0976cf2d9cde00c2bddae994",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Своя Лінія"
+          ],
+          "brand_id": [
+            "svoia-liniia"
+          ]
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4471.jpg",
+          "sha256": "4a259e35e6de2e45cc8ee7ac35202a305d806958dfcbece8010ab04825988d9f",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Своя Лінія",
+            "Своя Лінія"
+          ],
+          "brand_id": [
+            "svoia-liniia",
+            "svoia-liniia"
+          ]
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4472.jpg",
+          "sha256": "3083dd0ce5cc094d4a9304a56dec97bd6443bb4b7158aabc2667d85b8a54d90a",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "verdict": null
+    },
+    {
+      "n": 27,
+      "item": "@atb_market_official:4498",
+      "msg_id": 4498,
+      "gold_key": "raw:svoia-liniia",
+      "written_by_the_reviewer": [
+        {
+          "source": "watchlist_hits",
+          "written": "svoia-liniia"
+        }
+      ],
+      "registry_display_names": [
+        "Своя Лінія",
+        "Своя Линия"
+      ],
+      "unreadable_pages": [],
+      "unmatched_extractions_on_this_post": [],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4498.jpg",
+          "sha256": "4d22c6e04921d76d5a2e8274c437c191ec06022eb19d8984cb763021c38977b0",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4499.jpg",
+          "sha256": "f22d3efff2ca24861458eea2f669d47957184e5aa2ad36b72f6659f98e4feef4",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4500.jpg",
+          "sha256": "f1013a17006487137440f0a8472e04f0c1ab5d182341e6899d4061ce79acb5f4",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4501.jpg",
+          "sha256": "96c6511e81c34b926a5fb3d169971ebe9273103b8b1bb1398e002154433b4aba",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4502.jpg",
+          "sha256": "e8193cdad9ec445872bf1070a3b707bb94e7b4518d2b3a5849010bb493b4292c",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4503.jpg",
+          "sha256": "122da62247c283db803a19b5421e655e1d402d9fd51dacb38b5b1a03ee8b81e5",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "verdict": null
+    },
+    {
+      "n": 28,
+      "item": "@atb_market_official:4508",
+      "msg_id": 4508,
+      "gold_key": "raw:svoia-liniia",
+      "written_by_the_reviewer": [
+        {
+          "source": "watchlist_hits",
+          "written": "svoia-liniia"
+        }
+      ],
+      "registry_display_names": [
+        "Своя Лінія",
+        "Своя Линия"
+      ],
+      "unreadable_pages": [],
+      "unmatched_extractions_on_this_post": [],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4508.jpg",
+          "sha256": "713ceb7fa40f7cc110620aa04bdf7b8b0a49c70c6d502efad064db114b7267ea",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Ласунка",
+            "Рудь",
+            "Рудь",
+            "Лімо",
+            "Лімо",
+            "Каштан",
+            "Каштан"
+          ],
+          "brand_id": [
+            "lasunka",
+            "rud",
+            "rud",
+            "limo",
+            "limo",
+            null,
+            null
+          ]
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4509.jpg",
+          "sha256": "9547ccd8e03b7c3e02387690ac556f826d83b13d06d95b501570a8acd098e6ae",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4510.jpg",
+          "sha256": "2fbdf44b48d0f7acc5e8ee3c8e5034bed031406924beceac1cf1387e14e9ec4f",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4511.jpg",
+          "sha256": "e942a20653f862cd33bc170c17c4410ff241e71fe68f7e13ee1edb406fce863f",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4512.jpg",
+          "sha256": "50bd1532ed77e9f2407e8b228dde4ff976dfd45a55c7dcdbc71161e840782e02",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4513.jpg",
+          "sha256": "4c715e2c17a72fdcef7f329cdfed81f2d5648ff9eec36a476a6f25e8e2f3f603",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "verdict": null
+    },
+    {
+      "n": 29,
+      "item": "@atb_market_official:4508",
+      "msg_id": 4508,
+      "gold_key": "raw:try-vedmedi",
+      "written_by_the_reviewer": [
+        {
+          "source": "watchlist_hits",
+          "written": "try-vedmedi"
+        }
+      ],
+      "registry_display_names": [
+        "Три Ведмеді",
+        "Три Медведя"
+      ],
+      "unreadable_pages": [],
+      "unmatched_extractions_on_this_post": [],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4508.jpg",
+          "sha256": "713ceb7fa40f7cc110620aa04bdf7b8b0a49c70c6d502efad064db114b7267ea",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Ласунка",
+            "Рудь",
+            "Рудь",
+            "Лімо",
+            "Лімо",
+            "Каштан",
+            "Каштан"
+          ],
+          "brand_id": [
+            "lasunka",
+            "rud",
+            "rud",
+            "limo",
+            "limo",
+            null,
+            null
+          ]
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4509.jpg",
+          "sha256": "9547ccd8e03b7c3e02387690ac556f826d83b13d06d95b501570a8acd098e6ae",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4510.jpg",
+          "sha256": "2fbdf44b48d0f7acc5e8ee3c8e5034bed031406924beceac1cf1387e14e9ec4f",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4511.jpg",
+          "sha256": "e942a20653f862cd33bc170c17c4410ff241e71fe68f7e13ee1edb406fce863f",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4512.jpg",
+          "sha256": "50bd1532ed77e9f2407e8b228dde4ff976dfd45a55c7dcdbc71161e840782e02",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4513.jpg",
+          "sha256": "4c715e2c17a72fdcef7f329cdfed81f2d5648ff9eec36a476a6f25e8e2f3f603",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ],
+      "verdict": null
+    }
+  ],
+  "found": [
+    {
+      "item": "@atb_market_official:4340",
+      "msg_id": 4340,
+      "gold_key": "raw:svoia-liniia",
+      "written_by_the_reviewer": [
+        {
+          "source": "watchlist_hits",
+          "written": "svoia-liniia"
+        }
+      ],
+      "carried_by": [
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4343.jpg",
+          "brand_raw": [
+            "Своя Лінія"
+          ],
+          "positions": 1
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4344.jpg",
+          "brand_raw": [
+            "Своя Лінія"
+          ],
+          "positions": 1
+        }
+      ]
+    },
+    {
+      "item": "@atb_market_official:4350",
+      "msg_id": 4350,
+      "gold_key": "raw:svoia-liniia",
+      "written_by_the_reviewer": [
+        {
+          "source": "watchlist_hits",
+          "written": "svoia-liniia"
+        }
+      ],
+      "carried_by": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4350.jpg",
+          "brand_raw": [
+            "Своя Лінія"
+          ],
+          "positions": 2
+        }
+      ]
+    },
+    {
+      "item": "@atb_market_official:4350",
+      "msg_id": 4350,
+      "gold_key": "raw:дольче",
+      "written_by_the_reviewer": [
+        {
+          "source": "other_dairy_brands",
+          "written": "Дольче"
+        }
+      ],
+      "carried_by": [
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4352.jpg",
+          "brand_raw": [
+            "Дольче"
+          ],
+          "positions": 2
+        }
+      ]
+    },
+    {
+      "item": "@atb_market_official:4360",
+      "msg_id": 4360,
+      "gold_key": "raw:limo",
+      "written_by_the_reviewer": [
+        {
+          "source": "watchlist_hits",
+          "written": "limo"
+        }
+      ],
+      "carried_by": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4360.jpg",
+          "brand_raw": [
+            "Limo"
+          ],
+          "positions": 2
+        }
+      ]
+    },
+    {
+      "item": "@atb_market_official:4360",
+      "msg_id": 4360,
+      "gold_key": "raw:каштан",
+      "written_by_the_reviewer": [
+        {
+          "source": "other_dairy_brands",
+          "written": "Каштан"
+        }
+      ],
+      "carried_by": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4360.jpg",
+          "brand_raw": [
+            "Каштан"
+          ],
+          "positions": 2
+        }
+      ]
+    },
+    {
+      "item": "@atb_market_official:4360",
+      "msg_id": 4360,
+      "gold_key": "raw:київський пломбір",
+      "written_by_the_reviewer": [
+        {
+          "source": "other_dairy_brands",
+          "written": "Київський Пломбір"
+        }
+      ],
+      "carried_by": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4360.jpg",
+          "brand_raw": [
+            "Київський Пломбір"
+          ],
+          "positions": 2
+        }
+      ]
+    },
+    {
+      "item": "@atb_market_official:4381",
+      "msg_id": 4381,
+      "gold_key": "president",
+      "written_by_the_reviewer": [
+        {
+          "source": "watchlist_hits",
+          "written": "president"
+        }
+      ],
+      "carried_by": [
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4384.jpg",
+          "brand_raw": [
+            "President"
+          ],
+          "positions": 2
+        }
+      ]
+    },
+    {
+      "item": "@atb_market_official:4381",
+      "msg_id": 4381,
+      "gold_key": "raw:laska",
+      "written_by_the_reviewer": [
+        {
+          "source": "other_dairy_brands",
+          "written": "Laska"
+        }
+      ],
+      "carried_by": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4381.jpg",
+          "brand_raw": [
+            "Laska"
+          ],
+          "positions": 2
+        }
+      ]
+    },
+    {
+      "item": "@atb_market_official:4381",
+      "msg_id": 4381,
+      "gold_key": "raw:lasunka",
+      "written_by_the_reviewer": [
+        {
+          "source": "watchlist_hits",
+          "written": "lasunka"
+        }
+      ],
+      "carried_by": [
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4382.jpg",
+          "brand_raw": [
+            "Ласунка"
+          ],
+          "positions": 4
+        }
+      ]
+    },
+    {
+      "item": "@atb_market_official:4381",
+      "msg_id": 4381,
+      "gold_key": "raw:розумний вибір",
+      "written_by_the_reviewer": [
+        {
+          "source": "other_dairy_brands",
+          "written": "Розумний вибір"
+        }
+      ],
+      "carried_by": [
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4383.jpg",
+          "brand_raw": [
+            "Розумний вибір"
+          ],
+          "positions": 3
+        }
+      ]
+    },
+    {
+      "item": "@atb_market_official:4401",
+      "msg_id": 4401,
+      "gold_key": "raw:ferma",
+      "written_by_the_reviewer": [
+        {
+          "source": "watchlist_hits",
+          "written": "ferma"
+        }
+      ],
+      "carried_by": [
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4404.jpg",
+          "brand_raw": [
+            "Ферма"
+          ],
+          "positions": 1
+        }
+      ]
+    },
+    {
+      "item": "@atb_market_official:4401",
+      "msg_id": 4401,
+      "gold_key": "raw:halychyna",
+      "written_by_the_reviewer": [
+        {
+          "source": "watchlist_hits",
+          "written": "halychyna"
+        }
+      ],
+      "carried_by": [
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4404.jpg",
+          "brand_raw": [
+            "Галичина"
+          ],
+          "positions": 2
+        }
+      ]
+    },
+    {
+      "item": "@atb_market_official:4401",
+      "msg_id": 4401,
+      "gold_key": "raw:molokija",
+      "written_by_the_reviewer": [
+        {
+          "source": "watchlist_hits",
+          "written": "molokija"
+        }
+      ],
+      "carried_by": [
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4403.jpg",
+          "brand_raw": [
+            "Молокія"
+          ],
+          "positions": 1
+        }
+      ]
+    },
+    {
+      "item": "@atb_market_official:4401",
+      "msg_id": 4401,
+      "gold_key": "raw:premialle",
+      "written_by_the_reviewer": [
+        {
+          "source": "other_dairy_brands",
+          "written": "Premialle"
+        }
+      ],
+      "carried_by": [
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4402.jpg",
+          "brand_raw": [
+            "Premialle"
+          ],
+          "positions": 1
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4404.jpg",
+          "brand_raw": [
+            "Premialle"
+          ],
+          "positions": 1
+        }
+      ]
+    },
+    {
+      "item": "@atb_market_official:4401",
+      "msg_id": 4401,
+      "gold_key": "raw:zlahoda",
+      "written_by_the_reviewer": [
+        {
+          "source": "watchlist_hits",
+          "written": "zlahoda"
+        }
+      ],
+      "carried_by": [
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4404.jpg",
+          "brand_raw": [
+            "Злагода"
+          ],
+          "positions": 2
+        }
+      ]
+    },
+    {
+      "item": "@atb_market_official:4426",
+      "msg_id": 4426,
+      "gold_key": "raw:magnat",
+      "written_by_the_reviewer": [
+        {
+          "source": "other_dairy_brands",
+          "written": "Magnat"
+        }
+      ],
+      "carried_by": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4426.jpg",
+          "brand_raw": [
+            "Magnat"
+          ],
+          "positions": 3
+        }
+      ]
+    },
+    {
+      "item": "@atb_market_official:4426",
+      "msg_id": 4426,
+      "gold_key": "raw:svoia-liniia",
+      "written_by_the_reviewer": [
+        {
+          "source": "watchlist_hits",
+          "written": "svoia-liniia"
+        }
+      ],
+      "carried_by": [
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4428.jpg",
+          "brand_raw": [
+            "Своя Лінія"
+          ],
+          "positions": 2
+        }
+      ]
+    },
+    {
+      "item": "@atb_market_official:4426",
+      "msg_id": 4426,
+      "gold_key": "raw:розумний вибір",
+      "written_by_the_reviewer": [
+        {
+          "source": "other_dairy_brands",
+          "written": "Розумний вибір"
+        }
+      ],
+      "carried_by": [
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4428.jpg",
+          "brand_raw": [
+            "Розумний вибір"
+          ],
+          "positions": 2
+        }
+      ]
+    },
+    {
+      "item": "@atb_market_official:4426",
+      "msg_id": 4426,
+      "gold_key": "raw:хрещатик",
+      "written_by_the_reviewer": [
+        {
+          "source": "other_dairy_brands",
+          "written": "Хрещатик"
+        }
+      ],
+      "carried_by": [
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4427.jpg",
+          "brand_raw": [
+            "Хрещатик"
+          ],
+          "positions": 2
+        }
+      ]
+    },
+    {
+      "item": "@atb_market_official:4436",
+      "msg_id": 4436,
+      "gold_key": "raw:sot",
+      "written_by_the_reviewer": [
+        {
+          "source": "other_dairy_brands",
+          "written": "SOT"
+        }
+      ],
+      "carried_by": [
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4440.jpg",
+          "brand_raw": [
+            "SOT"
+          ],
+          "positions": 3
+        }
+      ]
+    },
+    {
+      "item": "@atb_market_official:4467",
+      "msg_id": 4467,
+      "gold_key": "raw:svoia-liniia",
+      "written_by_the_reviewer": [
+        {
+          "source": "watchlist_hits",
+          "written": "svoia-liniia"
+        }
+      ],
+      "carried_by": [
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4470.jpg",
+          "brand_raw": [
+            "Своя Лінія"
+          ],
+          "positions": 1
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4471.jpg",
+          "brand_raw": [
+            "Своя Лінія"
+          ],
+          "positions": 2
+        }
+      ]
+    },
+    {
+      "item": "@atb_market_official:4467",
+      "msg_id": 4467,
+      "gold_key": "raw:київський пломбір",
+      "written_by_the_reviewer": [
+        {
+          "source": "other_dairy_brands",
+          "written": "Київський Пломбір"
+        }
+      ],
+      "carried_by": [
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4468.jpg",
+          "brand_raw": [
+            "Київський Пломбір"
+          ],
+          "positions": 3
+        }
+      ]
+    },
+    {
+      "item": "@atb_market_official:4508",
+      "msg_id": 4508,
+      "gold_key": "raw:lasunka",
+      "written_by_the_reviewer": [
+        {
+          "source": "watchlist_hits",
+          "written": "lasunka"
+        }
+      ],
+      "carried_by": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4508.jpg",
+          "brand_raw": [
+            "Ласунка"
+          ],
+          "positions": 1
+        }
+      ]
+    },
+    {
+      "item": "@atb_market_official:4508",
+      "msg_id": 4508,
+      "gold_key": "raw:limo",
+      "written_by_the_reviewer": [
+        {
+          "source": "watchlist_hits",
+          "written": "limo"
+        }
+      ],
+      "carried_by": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4508.jpg",
+          "brand_raw": [
+            "Лімо"
+          ],
+          "positions": 2
+        }
+      ]
+    },
+    {
+      "item": "@atb_market_official:4508",
+      "msg_id": 4508,
+      "gold_key": "raw:rud",
+      "written_by_the_reviewer": [
+        {
+          "source": "watchlist_hits",
+          "written": "rud"
+        }
+      ],
+      "carried_by": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4508.jpg",
+          "brand_raw": [
+            "Рудь"
+          ],
+          "positions": 2
+        }
+      ]
+    },
+    {
+      "item": "@atb_market_official:4508",
+      "msg_id": 4508,
+      "gold_key": "raw:каштан",
+      "written_by_the_reviewer": [
+        {
+          "source": "other_dairy_brands",
+          "written": "Каштан"
+        }
+      ],
+      "carried_by": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4508.jpg",
+          "brand_raw": [
+            "Каштан"
+          ],
+          "positions": 2
+        }
+      ]
+    }
+  ],
+  "sheet": "results/sku_miss_pack.md",
+  "git": {
+    "commit": "1c2963cb17f193132ff969000ba0a212baf9da84",
+    "dirty": [
+      "docs/STATUS.md",
+      "knowledge/daily_logs/2026-08-12.md",
+      "knowledge/hot.md",
+      "knowledge/index.md",
+      "docs/PROMPT-sku-miss-pack.md",
+      "results/sku_miss_pack.md",
+      "scripts/build_sku_miss_pack.py",
+      "tests/test_build_sku_miss_pack.py"
+    ]
+  }
+}
