@@ -116,6 +116,16 @@ def page_answers(post: dict, record: dict, dump: list[dict]) -> list[dict]:
                 f"{post['item']} page {page['page']} {page['file']} has no outcome in the record"
             )
         extracted = rows.get((post["item"], page["page"]), [])
+        # the outcome is found by FILE and the positions by PAGE NUMBER, two numberings that both
+        # descend from the caption run's image order and are nowhere asserted to agree. If they
+        # ever part, the sheet prints one page's brands under another page's name and sha, and the
+        # team lead opens the wrong image — silently, for every row of the post.
+        elsewhere = {row["file"] for row in extracted} - {page["file"]}
+        if elsewhere:
+            refuse(
+                f"{post['item']} page {page['page']} is {page['file']} in the reference and the"
+                f" dump files its positions under {sorted(elsewhere)}"
+            )
         if outcome["unreadable"]:
             answer, reason = "unreadable", outcome["unreadable"]
             if extracted:
@@ -301,7 +311,11 @@ def sheet(pack: dict) -> str:
             out.append(
                 f"| {page['page']} | {Path(page['file']).name} | `{page['sha256'][:12]}…` | {said} |"
             )
-        out += ["", "**MISSED — to be ruled on**", ""]
+        # an empty bold heading reads as missing data in a document a human scans, and both halves
+        # are legitimately empty here: 4426 missed nothing and six posts found nothing
+        out += ["", "**MISSED — to be ruled on**", ""] + (
+            [] if post["missed"] else ["- — none", ""]
+        )
         for row in pack["missed"]:
             if row["item"] != post["item"]:
                 continue
@@ -316,7 +330,9 @@ def sheet(pack: dict) -> str:
             out.append(line)
             for flag in flags(row):
                 out.append(f"  - {flag}")
-        out += ["", "**FOUND — the control half**", ""]
+        out += ["", "**FOUND — the control half**", ""] + (
+            [] if post["found"] else ["- — none", ""]
+        )
         for row in pack["found"]:
             if row["item"] != post["item"]:
                 continue

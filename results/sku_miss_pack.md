@@ -108,6 +108,8 @@ Each page below is in one of three states: the `brand_raw` list the instrument e
 
 **FOUND — the control half**
 
+- — none
+
 
 > Reviewer's note: Four own-label posters, four ТМ lines, all four transcribed verbatim including the compound «М'ЯСНА ЛАВКА/ СВОЯ ЛІНІЯ» — same one-product-per-page layout as @atb_aktsiyi:2999 and the same clean result; no dairy on any page (salami, ketchup, cereal, foil), the milk in the cereal-bowl photo is styling.
 
@@ -160,6 +162,8 @@ Each page below is in one of three states: the `brand_raw` list the instrument e
 - **9.** `raw:svoia-liniia` — the reviewer wrote `svoia-liniia` (watchlist_hits) · registry: «Своя Лінія» / «Своя Линия»
 
 **FOUND — the control half**
+
+- — none
 
 
 > Reviewer's note: Caption stops mid-word at «з арома», so image 4395's second «ТМ Своя Лінія» attribution is cut and image 4396 (Norven salmon/trout) is absent entirely — a 6-image flyer captioned to a length limit; the brand_id is still carried once from 4391, so nothing is missed at brand level, but per-occurrence coverage is 4 of 6 images.
@@ -221,6 +225,8 @@ Each page below is in one of three states: the `brand_raw` list the instrument e
 
 **FOUND — the control half**
 
+- — none
+
 
 > Reviewer's note: Four catalogue pages carry ТМ «Своя Лінія» on eight distinct products (желатин, агар-агар, часник, соломка, шпроти, мило, вологий папір, серветки, рушник) plus a dozen third-party TMs, and the caption names not one brand — it summarises by product class only; 'соломка зі смаком сиру/сметани' is a flavour claim on crisps, not a dairy item. Verdict basis stated explicitly: there is NO dairy or ice cream on these four pages, so I am counting the presence of a watchlist brand as category-relevant — that is why this row is `partial` while 4415, also zero-dairy but with no watchlist brand on it, is `faithful`.
 
@@ -241,6 +247,8 @@ Each page below is in one of three states: the `brand_raw` list the instrument e
 
 **FOUND — the control half**
 
+- — none
+
 
 > Reviewer's note: Private-label post: `svoia-liniia` on 3 of 4 pages (sausage, chips x2), again zero dairy. The chips are dairy-FLAVOURED («SOUR CREAM & GREENS», «CHEESE зі смаком сиру») — a category-keyword matcher would read these as dairy. Caption carries every ТМ on the pages.
 
@@ -258,6 +266,8 @@ Each page below is in one of three states: the `brand_raw` list the instrument e
 | 6 | atb_market_official_4431.jpg | `dcca9698d2b6…` | `[]` |
 
 **MISSED — to be ruled on**
+
+- — none
 
 
 **FOUND — the control half**
@@ -320,6 +330,8 @@ Each page below is in one of three states: the `brand_raw` list the instrument e
 
 **FOUND — the control half**
 
+- — none
+
 
 > Reviewer's note: Nesquik is listed as dairy-adjacent — a milk-drink mix, not milk; drop it if the category is read strictly. The most expensive caption in the pack: page 1 is a pure ice-cream page carrying FOUR watchlist marks — «Monaco» ТМ «Три Ведмеді», «Сиркове 1965» and «Пломбір 1965»/«LIMO ICE CREAM» ТМ «Лімо», «Соковита трилогія» and «Black-кава» ТМ «Рудь» — plus ТМ «Своя Лінія» on p2 (Wild Dog) and p5 (Crackly Crush/«Червоний Мак»), and the caption reduces all six pages to the single word 'морозиво' inside a category list with no brand at all; every category it names is correct, so the loss is entirely brand-level and this is the 3-tile grid layout again, not the single-product poster.
 
@@ -368,6 +380,8 @@ Each page below is in one of three states: the `brand_raw` list the instrument e
 - **27.** `raw:svoia-liniia` — the reviewer wrote `svoia-liniia` (watchlist_hits) · registry: «Своя Лінія» / «Своя Линия»
 
 **FOUND — the control half**
+
+- — none
 
 
 > Reviewer's note: Six leaflet pages transcribed accurately, dates included; svoia-liniia is readable on four of them but sits on fish, herring and barbecue charcoal -- a watchlist hit that carries no dairy signal at all.

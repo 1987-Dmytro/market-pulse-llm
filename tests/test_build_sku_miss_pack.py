@@ -116,6 +116,56 @@ def test_post_4340_by_hand(pack):
     assert found["gold_key"] == "raw:svoia-liniia"
     assert [hit["page"] for hit in found["carried_by"]] == [4, 5]
     assert all(hit["brand_raw"] == ["Своя Лінія"] for hit in found["carried_by"])
+    # page 4's positions are filed under page 4's own image, here and on all 62 page rows below
+    assert found["carried_by"][0]["file"] == post["pages"][3]["file"]
+
+
+def test_the_page_a_position_is_filed_under_is_the_page_it_is_printed_beside(pack):
+    """The outcome is joined by FILE and the positions by PAGE NUMBER; nothing else asserts that
+    the two numberings agree, and a sheet that printed one page's brands under another page's name
+    would send the read to the wrong image without ever looking wrong."""
+    dump = REPO_ROOT / "results" / "sku_b_positions_v4.jsonl"
+    rows = [json.loads(line) for line in dump.read_text(encoding="utf-8").splitlines() if line]
+    filed, checked = {}, 0
+    for row in rows:
+        if row["page"] is not None:
+            filed.setdefault((row["item"], row["page"]), set()).add(row["file"])
+    for post in pack["posts"]:
+        for page in post["pages"]:
+            for name in filed.get((post["item"], page["page"]), set()):
+                assert name == page["file"]
+                checked += 1
+    # all 22 pages that carried a position sit on a scoreable post: the four posts with an empty
+    # gold set are the precision probe, and the instrument named nothing on any of them
+    assert checked == 22
+
+
+def test_it_refuses_a_position_filed_under_another_page(tmp_path, monkeypatch):
+    """The negative control for the guard above: the same dump with one row's page number moved."""
+    real = packer.page_answers
+
+    def shifted(post, record, dump):
+        for row in dump:
+            if row["item"] == "@atb_market_official:4340" and row["page"] == 2:
+                row["page"] = 1
+        monkeypatch.setattr(packer, "page_answers", real)
+        return real(post, record, dump)
+
+    monkeypatch.setattr(packer, "page_answers", shifted)
+    with pytest.raises(
+        SystemExit, match="page 1 is .*4340.jpg in the reference and the dump files"
+    ):
+        run(tmp_path)
+
+
+def test_a_post_with_nothing_on_one_side_says_so(pack):
+    """4426 missed nothing and six posts found nothing — an empty bold heading in a document a
+    human scans reads as data that failed to render."""
+    sheet = pack["_sheet_text"]
+    assert sheet.count("**MISSED — to be ruled on**\n\n- — none") == 1
+    assert sheet.count("**FOUND — the control half**\n\n- — none") == 6
+    assert [post["msg_id"] for post in pack["posts"] if not post["missed"]] == [4426]
+    assert sum(1 for post in pack["posts"] if not post["found"]) == 6
 
 
 def test_a_name_the_reviewer_wrote_is_reproduced_as_written(pack):
