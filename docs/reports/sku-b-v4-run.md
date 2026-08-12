@@ -564,10 +564,13 @@ control for the checker's own bias.
 | 3 | `ec9cf3b` | the anchor | `11.9332285148 · 0.65 · 0 run(s)` | 1824 passed, 2 skipped |
 | 4 | `fd4bf67` | the run's artifacts | `asked 138 · unbought 0 · positions 79 · $0.2413` | 1824 passed, 2 skipped |
 | 5 | `e579382` | the verdicts | `FAIL · PENDING_TEAM_LEAD · PASS` | 1824 passed, 2 skipped |
+| 6 | `8107ceb` | this report | `Dv176`…`Dv180` ×5 in `docs/reports/sku-b-v4-run.md` | 1824 passed, 2 skipped |
+| 7 | `8a2c28f` | the vault tail | `sku-b-v4-run ✅ ЗАВЕРШЁН` ×1 in `knowledge/hot.md` | 1824 passed, 2 skipped |
 
-Restored at `e579382` on `main` with the same 3 dirty vault paths. The table covers commits 1–5;
-commit 6 is this report and commit 7 is the vault tail, whose `make check` is the one printed above
-under Verify — a report cannot check out the commit that carries it.
+Restored at `e579382` for the first pass with the same 3 dirty vault paths; rows 6 and 7 were checked
+out afterwards on a clean tree, which is why they need no stash. Commit 8 is this paragraph and the
+two rows above it — a report cannot check out the commit that carries it, so the last row is always
+one commit behind, and the contract pre-authorises the extra commit (the Dv175 reading).
 
 The parent's 1823 is the baseline that says the growth is this phase's, and the one row it grows by
 is gate 0.5's provenance test.
@@ -651,5 +654,10 @@ from: the go/no-go's estimator is unbiased for the probe and biased against the 
 | 3 | `ec9cf3b` | `chore(sku-b-v4-run)`: anchor the ledger before anything bills |
 | 4 | `fd4bf67` | `feat(sku-b-v4-run)`: the completed session — 121 bought, the merged record and dump |
 | 5 | `e579382` | `feat(sku-b-v4-run)`: the bar-1 and bar-3 verdict records over the merged population |
-| 6 | — | `docs(report)`: sku-b-v4-run |
-| 7 | — | `chore(vault)`: the sku-b-v4-run tail |
+| 6 | `8107ceb` | `docs(report)`: sku-b-v4-run |
+| 7 | `8a2c28f` | `chore(vault)`: the sku-b-v4-run tail — the day's log, hot.md, the index |
+| 8 | — | `docs(report)`: sku-b-v4-run — the checkout table's own tail |
+
+Eight commits. The vault tail is commit 7 rather than the last, for the reason Dv175 gave in the
+previous report and this contract pre-authorises: the checkout table can only record the suite of
+the commit that carries the report after that commit exists.
