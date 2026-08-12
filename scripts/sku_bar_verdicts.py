@@ -11,10 +11,10 @@ they are read over. Two of the three are arithmetic and are computed here:
 **Bar 2 is never scored here.** Price-pair accuracy is a team-lead read of the dump against the page
 images at acceptance (SPEC §10 — the executor never scores its own sample). Until that read exists
 this writes its denominator, its reachability class under R4 and the dump that makes the read
-possible, and stops there. Once it exists as `results/sku_b_pair_verdicts.json` — a transcription of
-the dictated verdicts, pinned to the same dump — the share is re-derived from that file's own keys
-by the applier's `checksums` and carried here. The value still comes from the read, not from this
-file; what this file adds is the arithmetic and the threshold.
+possible, and stops there. Once it exists as `results/sku_b_pair_verdicts_skub2.json` — a
+transcription of the dictated verdicts, pinned to the same dump — the share is re-derived from that
+file's own keys by the applier's `checksums` and carried here. The value still comes from the read,
+not from this file; what this file adds is the arithmetic and the threshold.
 
 Every number comes from :mod:`market_pulse.scorer`, every gold key from the reference's own
 ``gold_key``, and every tier from ``positions.tier_from_presence`` — one function per quantity, or a
@@ -60,7 +60,8 @@ UNREADABLE_SHARE_MAX = 0.10
 """R5: above this the instrument did not answer and bar 3 is NOT_SCORED."""
 
 CONTRACT = (
-    "docs/PROMPT-skub2-run.md step 6 (bars 1 and 3 over the B′ gold);"
+    "docs/PROMPT-skub2-close.md deliverable 2 (bar 2 applied, the closure);"
+    " docs/PROMPT-skub2-run.md step 6 (bars 1 and 3 over the B′ gold);"
     " docs/SPEC.md amendment 3.17 (6) the three bars, (13) and (14) the re-measurement"
 )
 """The provenance string written INTO the verdict record — the artifact the team lead opens at
@@ -337,9 +338,9 @@ def bar_one(record: dict, dump: list[dict], prereg: dict, reference: dict, alias
 def bar_two(record, dump: list[dict], prereg: dict, read: dict | None = None, pin=None) -> dict:
     """The denominator and the dump; the value only when the team lead's read is on the table.
 
-    ``read`` is `results/sku_b_pair_verdicts.json` — the dictated verdicts, transcribed and joined
-    to the dump by `scripts/apply_sku_pair_verdicts.py`. The share is re-derived here from that
-    file's own keys through the applier's `checksums`, never read out of it as a number: one
+    ``read`` is `results/sku_b_pair_verdicts_skub2.json` — the dictated verdicts, transcribed and
+    joined to the dump by `scripts/apply_sku_pair_verdicts_skub2.py`. The share is re-derived here
+    from that file's own keys through the applier's `checksums`, never read out of it as a number: one
     implementation, two callers, and a hand-edited accuracy field would be refused by its own
     stated counts. Without the read this stays where it was — a denominator, a reachability class
     and the dump that makes the read possible.
@@ -614,8 +615,8 @@ def main(argv: list[str] | None = None) -> int:
         "class": (
             "MEASUREMENT. Bars 1 and 3 are computed by market_pulse.scorer over the merged"
             " population; bar 2's verdicts are the team lead's read, transcribed by"
-            " scripts/apply_sku_pair_verdicts.py and re-derived here from its keys. No adjudication"
-            " happens in this file"
+            " scripts/apply_sku_pair_verdicts_skub2.py and re-derived here from its keys. No"
+            " adjudication happens in this file"
         ),
         "smoke": bool(record.get("smoke")),
         "prereg": {"path": rel(args.prereg), "sha256": pins["prereg"]["sha256"]},
@@ -645,8 +646,8 @@ def main(argv: list[str] | None = None) -> int:
         "scored_by": {
             "bar_1": "market_pulse.scorer.leaflet_brand_recall",
             "bar_2": (
-                "the team lead's read; the share re-derived from its keys by"
-                " apply_sku_pair_verdicts.checksums"
+                "the team lead's read, transcribed by scripts/apply_sku_pair_verdicts_skub2.py;"
+                " the share re-derived from its keys by apply_sku_pair_verdicts.checksums"
             ),
             "bar_3": "market_pulse.scorer.text_tier_accuracy",
             "tiers": "market_pulse.positions.tier / tier_from_presence",

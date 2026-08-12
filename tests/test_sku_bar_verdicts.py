@@ -712,6 +712,10 @@ def test_the_defaults_and_the_provenance_string_name_the_skub2_session(tmp_path)
         assert (REPO_ROOT / "results" / sealed).exists()
         assert sealed not in {path.name for path in (verdicts.OUT, verdicts.PAIRS, verdicts.RECORD)}
 
+    # both contracts, because the record is now written under the second one: the run bought the
+    # population and scored two bars, the close applied the third and took the closure
+    for named in ("docs/PROMPT-skub2-close.md", "docs/PROMPT-skub2-run.md"):
+        assert named in verdicts.CONTRACT
     named = verdicts.CONTRACT.split()[0]
     assert (REPO_ROOT / named).exists(), f"the provenance string names {named}, which is not here"
     # (13) and (14) are what this population is bought under; (11) is the resume reading and (12)

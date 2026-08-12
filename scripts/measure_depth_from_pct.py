@@ -45,6 +45,15 @@ OUT = REPO_ROOT / "results" / "sku_depth_from_pct.json"
 
 CONTRACT = "docs/PROMPT-sku-b-close.md deliverable 4"
 
+CLASS = (
+    "MEASUREMENT for the B′ design session. NO threshold is registered and nothing here is a bar:"
+    " it prices two candidate depth instruments against the team lead's own read of the pages, so"
+    " the revision decision has a number under it"
+)
+"""What this record IS, for the reader who opens it cold. Named rather than inlined because the
+decision it feeds is the one thing that moves between two runs of this measurement, and a record
+that still points at a session which has already happened is pointing nowhere."""
+
 ADEQUACY = (
     "adequate for a weekly median = every pair within 2 pp of the true depth AND the median within"
     " 1 pp. STATED HERE, not registered: no bar was pre-registered for this measurement and the"
@@ -150,12 +159,28 @@ def reading(badge: dict, extracted: dict) -> str:
     )
 
 
-def main(argv: list[str] | None = None) -> int:
+def main(
+    argv: list[str] | None = None,
+    *,
+    contract: str = CONTRACT,
+    class_note: str = CLASS,
+    adequacy: str = ADEQUACY,
+    record: Path = RECORD,
+    pairs: Path = PAIRS,
+    out: Path = OUT,
+) -> int:
+    """The measurement, over whichever population is handed to it.
+
+    The arithmetic, the three instruments and the adequacy rule's SHAPE are fixed here — B′'s 80
+    pairs are measured by this code or the two readings are not comparable. What a second caller
+    supplies is which files, and the two strings that would otherwise claim something false about
+    it: the contract it was asked for under, and whose threshold the adequacy rule is waiting on.
+    """
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--record", type=Path, default=RECORD)
+    parser.add_argument("--record", type=Path, default=record)
     parser.add_argument("--dump", type=Path, help="default: the record's own dump path")
-    parser.add_argument("--pairs", type=Path, default=PAIRS)
-    parser.add_argument("--out", type=Path, default=OUT)
+    parser.add_argument("--pairs", type=Path, default=pairs)
+    parser.add_argument("--out", type=Path, default=out)
     args = parser.parse_args(argv)
 
     record = json.loads(args.record.read_text(encoding="utf-8"))
@@ -175,14 +200,10 @@ def main(argv: list[str] | None = None) -> int:
 
     badge = summarise(rows, "delta_badge")
     extracted = summarise(rows, "delta_extracted")
-    out = {
+    written = {
         "phase": "sku-b — depth from the printed percentage, on the population already bought",
-        "contract": CONTRACT,
-        "class": (
-            "MEASUREMENT for the B′ design session. NO threshold is registered and nothing here is"
-            " a bar: it prices two candidate depth instruments against the team lead's own read of"
-            " the pages, so the revision decision has a number under it"
-        ),
+        "contract": contract,
+        "class": class_note,
         "dump": {"path": rel(dump_path), "sha256": dump_sha},
         "read": {"path": rel(args.pairs), "sha256": sha256_of(args.pairs)},
         "definitions": {
@@ -192,7 +213,7 @@ def main(argv: list[str] | None = None) -> int:
             "delta": "instrument − true, in depth units; reported in percentage POINTS",
         },
         "n_pairs": len(rows),
-        "adequacy_rule": ADEQUACY,
+        "adequacy_rule": adequacy,
         "instruments": {
             "badge": {**badge, "adequate": adequate(badge)},
             "extracted_old_price": {**extracted, "adequate": adequate(extracted)},
@@ -200,19 +221,19 @@ def main(argv: list[str] | None = None) -> int:
         "reading": reading(badge, extracted),
         "rows": rows,
     }
-    out["git"] = provenance.git_state(args.out)
+    written["git"] = provenance.git_state(args.out)
     args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_text(json.dumps(out, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    args.out.write_text(json.dumps(written, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
     print(f"{rel(dump_path)} — {len(rows)} pairs against the team lead's printed_old")
-    for name, summary in out["instruments"].items():
+    for name, summary in written["instruments"].items():
         print(
             f"  {name:20s} median {summary['median_abs_delta_pp']:6.4f} pp ·"
             f" max {summary['max_abs_delta_pp']:6.4f} pp ·"
             f" ≤1pp {summary['within_1pp']}/{summary['n']} ·"
             f" ≤2pp {summary['within_2pp']}/{summary['n']}"
         )
-    print(f"  {out['reading']}")
+    print(f"  {written['reading']}")
     print(f"wrote {rel(args.out)}")
     return 0
 
