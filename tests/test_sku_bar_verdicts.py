@@ -8,6 +8,7 @@ reviewer's brands and the dump carries the model's — so that gets its own test
 import csv
 import hashlib
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -65,7 +66,10 @@ PREREG = {
     },
     "resume": {"population": {"registered": 0}},
     "ratification_required": [{"id": "R1"}],
-    "attempts": {"on_failure": "a failed bar closes B as 'instrument not ready' BY MEASUREMENT"},
+    "attempts": {
+        "phase": "fixture",
+        "on_failure": "a failed bar closes B as 'instrument not ready' BY MEASUREMENT",
+    },
 }
 
 
@@ -151,6 +155,24 @@ REFERENCE = {
     ],
 }
 
+# The SAME three posts as B′ carries them (Dv210): the gold is the registration's own re-scoped
+# table, not the reference's. (13)(c) empties @b:2 — its one pair was ruled class b — so the macro
+# is taken over @a:1 alone and comes out 1.0 where the reference's gold gives 0.5 over two posts.
+# One set of files, two golds, two numbers: that difference is what the wiring is for.
+#
+# `gold_keys_v4` sits beside `gold_keys` in the real registration and is the trap: @a:1's «Рудь»
+# keys `raw:rud` in the v4 space and `rud` under the (13)(b) table, and `rud` is what the PREDICTION
+# side resolves to. Reading the wrong field costs a whole key on a post the instrument got right.
+B_PRIME_PER_POST = [
+    {
+        "item": "@a:1",
+        "gold_keys_v4": ["raw:rud", "raw:каштан"],
+        "gold_keys": ["rud", "raw:каштан"],
+    },
+    {"item": "@b:2", "gold_keys_v4": ["raw:svoia-liniia"], "gold_keys": []},
+    {"item": "@c:3", "gold_keys_v4": [], "gold_keys": []},
+]
+
 DUMP = [
     dump_row("@a:1", 1, "Рудь", price_old=75.9),
     dump_row("@a:1", 2, "Каштан"),
@@ -217,6 +239,128 @@ def test_bar_one_refuses_when_the_reference_and_the_ratified_exclusions_disagree
     prereg["bars"]["leaflet_brand_recall"]["excluded"]["posts"] = ["@a:1"]
     with pytest.raises(SystemExit, match="not the ones R3 excludes"):
         verdicts.bar_one(RECORD, DUMP, prereg, REFERENCE, ALIASES)
+
+
+# --- Dv210: which gold bar 1 is scored against ------------------------------
+
+
+def as_b_prime(prereg: dict, **gold_overrides) -> dict:
+    """Move a v4-shaped registration into B′'s shape, in place.
+
+    Three fields move and every one of them is a KeyError on the old reader: the gold becomes the
+    registration's own `per_post` with the reference demoted to `derived_from`, the population
+    leaves the resume block for the top level, and the resume block goes.
+    """
+    gold = prereg["bars"]["leaflet_brand_recall"]["gold"]
+    gold["derived_from"] = {"path": "reference.json", "sha256": gold.pop("sha256")}
+    gold.update(
+        per_post=json.loads(json.dumps(B_PRIME_PER_POST)),
+        posts_with_an_empty_gold_set=["@b:2", "@c:3"],
+        posts_with_a_non_empty_gold_set=1,
+        pairs=2,
+    )
+    gold.update(gold_overrides)
+    prereg["bars"]["leaflet_brand_recall"]["excluded"]["posts"] = ["@b:2", "@c:3"]
+    prereg["population"] = {"elements": prereg.pop("resume")["population"]["registered"]}
+    return prereg
+
+
+def b_prime_prereg(**gold_overrides) -> dict:
+    return as_b_prime(json.loads(json.dumps(PREREG)), **gold_overrides)
+
+
+def test_bar_one_scores_the_registrations_own_gold_when_it_carries_one():
+    """The number moves: 0.5 over the reference's two posts, 1.0 over B′'s one.
+
+    @a:1's gold is {rud, raw:каштан} on both sides and the model read both, so the post is 1.0
+    either way. What (13)(c) changes is the DENOMINATOR — @b:2, where the model was wrong, leaves
+    it — and a macro mean over a different set of posts is a different bar.
+    """
+    bar = verdicts.bar_one(RECORD, DUMP, b_prime_prereg(), REFERENCE, ALIASES)
+    assert bar["value"] == pytest.approx(1.0) and bar["verdict"] == "PASS"
+    assert [post["item"] for post in bar["per_post"]] == ["@a:1"]
+    assert bar["n_posts"] == 1 and bar["n_gold_keys"] == 2
+    assert "gold.per_post" in bar["key_space"]["gold_from"]
+    # @b:2 joined the precision probe rather than vanishing: its wrong read is still reported
+    assert [post["item"] for post in bar["precision_probe"]["posts"]] == ["@b:2", "@c:3"]
+    assert bar["precision_probe"]["posts"][0]["false_positives"] == ["raw:lasunka"]
+
+    # …and the sealed reference is still the gold when the registration pins it as one
+    assert verdicts.bar_one(RECORD, DUMP, PREREG, REFERENCE, ALIASES)["value"] == pytest.approx(0.5)
+
+
+def test_bar_one_reads_the_b_prime_keys_and_not_the_v4_ones():
+    """The half of Dv210 that produces a number instead of an error.
+
+    The control is the same fixture with the v4 space written into `gold_keys`: @a:1's «Рудь» keys
+    `raw:rud` there, the prediction side resolves it to `rud` through the (13)(b) alias table, and
+    one of two gold keys goes missing — 1.0 becomes 0.5 with nothing on screen to say why.
+    """
+    per_post = json.loads(json.dumps(B_PRIME_PER_POST))
+    assert per_post[0]["gold_keys"] != per_post[0]["gold_keys_v4"]  # the fixture has both spaces
+    bar = verdicts.bar_one(RECORD, DUMP, b_prime_prereg(), REFERENCE, ALIASES)
+    assert (
+        bar["per_post"][0]["gold"] == ["raw:каштан", "rud"] and bar["per_post"][0]["missed"] == []
+    )
+
+    # only @a:1: giving @b:2 its v4 keys back would UN-EMPTY it and the run would refuse on the
+    # denominator instead, which is a different guard and would hide the one under test
+    per_post[0]["gold_keys"] = per_post[0]["gold_keys_v4"]
+    control = verdicts.bar_one(RECORD, DUMP, b_prime_prereg(per_post=per_post), REFERENCE, ALIASES)
+    assert control["per_post"][0]["missed"] == ["raw:rud"]
+    assert control["value"] == pytest.approx(0.5)
+
+
+def test_a_registration_that_names_both_golds_or_neither_is_refused():
+    both = b_prime_prereg()
+    both["bars"]["leaflet_brand_recall"]["gold"]["sha256"] = "x"
+    with pytest.raises(SystemExit, match="both `per_post` and `sha256`"):
+        verdicts.bar_one(RECORD, DUMP, both, REFERENCE, ALIASES)
+
+    neither = json.loads(json.dumps(PREREG))
+    del neither["bars"]["leaflet_brand_recall"]["gold"]["sha256"]
+    with pytest.raises(SystemExit, match="neither `per_post` nor `sha256`"):
+        verdicts.bar_one(RECORD, DUMP, neither, REFERENCE, ALIASES)
+
+
+def test_the_gold_is_joined_to_the_reference_by_item_and_refuses_a_post_it_cannot_find():
+    """The reference supplies the post list and the sent-page counts, the registration the keys.
+    Two lists indexed side by side would attribute one post's gold to another and still report a
+    number, so the join is by `item` and a post on one side only stops it."""
+    per_post = json.loads(json.dumps(B_PRIME_PER_POST))
+    per_post[1]["item"] = "@b:22"
+    with pytest.raises(SystemExit, match="cover different posts"):
+        verdicts.bar_one(RECORD, DUMP, b_prime_prereg(per_post=per_post), REFERENCE, ALIASES)
+
+
+def test_the_registrations_summary_counts_are_checked_against_its_own_rows():
+    """10 posts and 37 pairs is the contract's checksum for the real file; here it is 1 and 2.
+    Every one of the three is re-derived from `per_post`, because a summary field is a second way
+    of saying what the rows say and only the rows are the thing."""
+    for field, value, message in (
+        ("pairs", 3, "gives pairs = 2 and the registration states 3"),
+        ("posts_with_a_non_empty_gold_set", 2, "non_empty_gold_set = 1 and the registration"),
+        ("posts_with_an_empty_gold_set", ["@c:3"], "empty_gold_set = ['@b:2', '@c:3']"),
+    ):
+        with pytest.raises(SystemExit, match=re.escape(message)):
+            verdicts.bar_one(RECORD, DUMP, b_prime_prereg(**{field: value}), REFERENCE, ALIASES)
+
+
+def test_the_shipped_b_prime_gold_is_the_37_over_10_the_contract_states():
+    """The witness on the real files: no fixture can prove the shipped registration joins."""
+    prereg = json.loads(verdicts.PREREG.read_text(encoding="utf-8"))
+    reference = json.loads(verdicts.REFERENCE.read_text(encoding="utf-8"))
+    empty, keys, source = verdicts.gold_source(prereg, reference)
+    assert len(keys) == 19 and len(empty) == 9
+    assert len(keys) - len(empty) == 10
+    assert sum(len(gold) for gold in keys.values()) == 37
+    assert "13" in source and "per_post" in source
+    # the key space, on the one post where the two tables disagree
+    assert keys["@atb_market_official:4340"] == {"rud", "raw:svoia-liniia", "raw:try-vedmedi"}
+    assert (
+        verdicts.reference_pin(prereg)
+        == hashlib.sha256(verdicts.REFERENCE.read_bytes()).hexdigest()
+    )
 
 
 def test_bar_one_counts_unreadable_pages_without_excluding_them():
@@ -352,8 +496,13 @@ def test_bar_three_refuses_a_text_row_that_is_not_in_the_adjudicated_pack():
 # --- the guards, and the whole write path ------------------------------------
 
 
-def fixture_tree(tmp_path: Path, **record_overrides) -> dict:
-    """Every file `main` reads, written to `tmp_path` with its shas wired up."""
+def fixture_tree(tmp_path: Path, *, b_prime: bool = False, **record_overrides) -> dict:
+    """Every file `main` reads, written to `tmp_path` with its shas wired up.
+
+    `b_prime` switches the two files to the shape skub2 actually writes: a registration whose gold
+    is its own `per_post` and whose population is not a resume, and a record with no resume block.
+    Three things in `main` read those fields and every one of them would raise a KeyError.
+    """
     rows = [
         {
             **{key: "" for key in builder.COLUMNS},
@@ -399,6 +548,8 @@ def fixture_tree(tmp_path: Path, **record_overrides) -> dict:
         manifest_path.read_bytes()
     ).hexdigest()
     prereg["resume"]["population"]["registered"] = 24
+    if b_prime:
+        as_b_prime(prereg)  # after the shas are wired: it moves the one it finds, never invents it
     prereg_path = tmp_path / "prereg.json"
     prereg_path.write_text(json.dumps(prereg, ensure_ascii=False), encoding="utf-8")
 
@@ -414,7 +565,8 @@ def fixture_tree(tmp_path: Path, **record_overrides) -> dict:
         "rows": len(dump),
         "columns": [],
     }
-    record["resume"] = {"sessions": ["sku-b", "sku-b-v3"]}
+    if not b_prime:
+        record["resume"] = {"sessions": ["sku-b", "sku-b-v3"]}
     record["prereg"]["sha256"] = hashlib.sha256(prereg_path.read_bytes()).hexdigest()
     record.update(record_overrides)
     record_path = tmp_path / "record.json"
@@ -458,6 +610,42 @@ def test_main_writes_all_three_bars_from_the_files_it_was_given(tmp_path, capsys
     assert "FAIL" in capsys.readouterr().out
 
 
+def test_main_writes_the_bars_from_a_registration_with_no_resume_block(tmp_path, capsys):
+    """The shape skub2 writes, end to end (Dv210). Three readers used to assume a resume block.
+
+    Bar 1 comes out 1.0 here against 0.5 on the same files under the reference's gold, which is the
+    proof the re-scope reached the arithmetic and not just the file. The population count comes
+    from `population.elements` instead of `resume.population.registered`, and `sessions` names the
+    one session out of the registration rather than KeyError-ing on a record that has none.
+    """
+    tree = fixture_tree(tmp_path, b_prime=True)
+    assert run(tree) == 0
+    out = json.loads(tree["out"].read_text(encoding="utf-8"))
+    assert out["bars"]["leaflet_brand_recall"]["value"] == pytest.approx(1.0)
+    assert out["bars"]["leaflet_brand_recall"]["verdict"] == "PASS"
+    assert out["bars"]["leaflet_brand_recall"]["n_posts"] == 1
+    assert out["sessions"] == [
+        {
+            "phase": "fixture",
+            "record": str(tree["record"]),
+            "asked": 24,
+            "note": out["sessions"][0]["note"],
+        }
+    ]
+    assert "no resume block" in out["sessions"][0]["note"]
+    assert out["closure"]["rule_source"].startswith(f"{tree['prereg']} attempts.on_failure")
+    assert "PASS" in capsys.readouterr().out
+
+    # and the count still has to be met: 24 registered, 24 asked, and 23 is a refusal
+    (tmp_path / "short").mkdir()
+    short = fixture_tree(tmp_path / "short", b_prime=True)
+    record = json.loads(short["record"].read_text(encoding="utf-8"))
+    record["outcomes"] = record["outcomes"][:-1]
+    short["record"].write_text(json.dumps(record, ensure_ascii=False), encoding="utf-8")
+    with pytest.raises(SystemExit, match="23 outcomes over 23 distinct sources against the"):
+        run(short)
+
+
 def test_main_refuses_a_gold_that_moved_under_the_registration(tmp_path):
     tree = fixture_tree(tmp_path)
     tree["reference"].write_text(json.dumps(REFERENCE, ensure_ascii=False) + "\n", encoding="utf-8")
@@ -499,26 +687,37 @@ def test_a_smoke_record_cannot_be_written_to_the_paid_verdict_path(tmp_path):
         verdicts.main(argv)
 
 
-def test_the_defaults_and_the_provenance_string_name_the_v4_session(tmp_path):
-    """Dv170: this producer named v3 in three places and one of them was unguarded.
+def test_the_defaults_and_the_provenance_string_name_the_skub2_session(tmp_path):
+    """Dv170, third session running: this producer named v3 once and v4 once, and the string it
+    writes into the record is the part nothing re-derives.
 
     `--prereg` and `--record` are loud — a record bought under another registration is refused by
     name. The `contract` string is not: it is written INTO the verdict record the team lead opens
-    at acceptance and nothing re-derives it. So it is pinned against the registration it claims
-    (the v4 one, whose own `attempts.phase` says which session bought the second half of the
-    population) and against the contract file being in the tree, not restated as a literal.
+    at acceptance. So it is pinned against the registration it claims (whose own `attempts.phase`
+    says which session bought the population) and against the contract file being in the tree.
+
+    The six defaults are checked together because they move together: a run scored with B′'s
+    registration and v4's output path would overwrite the pilot's closure, and one scored with v4's
+    pair read would refuse — the read is over another dump.
     """
     prereg = json.loads(verdicts.PREREG.read_text(encoding="utf-8"))
-    assert prereg["attempts"]["phase"] == "sku-b-v4"
-    assert verdicts.PREREG.name == "sku_pilot_prereg_v4.json"
-    assert verdicts.RECORD.name == "sku_b_positions_v4.json"
+    assert prereg["attempts"]["phase"] == "skub2"
+    assert verdicts.PREREG.name == "sku_pilot_prereg_b2.json"
+    assert verdicts.RECORD.name == "sku_b_positions_skub2.json"
+    assert verdicts.PAIRS.name == "sku_b_pair_verdicts_skub2.json"
+    assert verdicts.OUT.name == "sku_bar_verdicts_skub2.json"
+    assert verdicts.SMOKE_OUT.name == verdicts.OUT.name and verdicts.SMOKE_OUT != verdicts.OUT
+    # the pilot's sealed evidence, which these defaults must not be able to reach
+    for sealed in ("sku_bar_verdicts.json", "sku_b_pair_verdicts.json", "sku_b_positions_v4.json"):
+        assert (REPO_ROOT / "results" / sealed).exists()
+        assert sealed not in {path.name for path in (verdicts.OUT, verdicts.PAIRS, verdicts.RECORD)}
 
     named = verdicts.CONTRACT.split()[0]
     assert (REPO_ROOT / named).exists(), f"the provenance string names {named}, which is not here"
-    # (12) is the amendment the 121 are bought under and the one the v3 string was missing; the
-    # superseded contract must not still be the one the record cites.
-    assert all(part in verdicts.CONTRACT for part in ("(6)", "(11)", "(12)"))
-    assert "v3" not in verdicts.CONTRACT
+    # (13) and (14) are what this population is bought under; (11) is the resume reading and (12)
+    # is v4's amendment, and a record that still cited them would be citing a superseded run.
+    assert all(part in verdicts.CONTRACT for part in ("(6)", "(13)", "(14)"))
+    assert not any(part in verdicts.CONTRACT for part in ("v3", "v4", "(11)", "(12)"))
 
     tree = fixture_tree(tmp_path)
     assert run(tree) == 0
@@ -556,24 +755,36 @@ def test_the_closure_names_the_bars_that_failed_and_waits_on_one_that_has_no_ver
     singular and the pilot failed two, so the list has to come from the data. And two thirds of the
     evidence is not a closure — a bar still pending leaves the state UNDETERMINED."""
     bars = {"a": {"verdict": "FAIL"}, "b": {"verdict": "PASS"}, "c": {"verdict": "FAIL"}}
-    closed = verdicts.closure(bars, PREREG)
+    closed = verdicts.closure(bars, PREREG, "results/fixture.json")
     assert closed["failed_bars"] == ["a", "c"] and closed["passed_bars"] == ["b"]
     assert closed["state"].startswith("CLOSED") and "2 of 3 bars failed" in closed["why"]
     assert closed["rule"] == PREREG["attempts"]["on_failure"]
+    # the source is the registration that was read, not a literal — three of them have been live
+    assert closed["rule_source"].startswith("results/fixture.json attempts.on_failure")
 
-    waiting = verdicts.closure({**bars, "c": {"verdict": "PENDING_TEAM_LEAD"}}, PREREG)
+    waiting = verdicts.closure(
+        {**bars, "c": {"verdict": "PENDING_TEAM_LEAD"}}, PREREG, "results/fixture.json"
+    )
     assert waiting["state"] == "UNDETERMINED" and waiting["undecided_bars"] == ["c"]
     assert (
-        verdicts.closure({"a": {"verdict": "PASS"}}, PREREG)["state"] == "NOT CLOSED BY THIS RULE"
+        verdicts.closure({"a": {"verdict": "PASS"}}, PREREG, "results/fixture.json")["state"]
+        == "NOT CLOSED BY THIS RULE"
     )
 
 
-def test_the_shipped_run_has_a_read_to_score_and_does_not_fall_back_to_pending():
-    """The default `--pairs` is the real read. If it ever went missing, bar 2 would quietly go back
-    to PENDING and the record would still be written — so the existence of that file is the guard,
-    and the record on disk is checked to be the scored one."""
-    assert verdicts.PAIRS.exists(), f"{verdicts.PAIRS} is the read bar 2 is scored from"
-    read = json.loads(verdicts.PAIRS.read_text(encoding="utf-8"))
+def test_the_shipped_v4_run_has_a_read_to_score_and_does_not_fall_back_to_pending():
+    """The v4 pilot's own read and closure, named by path rather than through the defaults.
+
+    Bar 2 falls back to PENDING when its read is missing and still writes the record, so the
+    existence of that file is the guard. It is spelled out here instead of read off
+    `verdicts.PAIRS`/`verdicts.OUT` because those now point at skub2: this test guards the SEALED
+    pilot, and a test that follows the defaults would have followed them to a file that does not
+    exist yet and passed by moving.
+    """
+    pairs = REPO_ROOT / "results" / "sku_b_pair_verdicts.json"
+    verdict_record = REPO_ROOT / "results" / "sku_bar_verdicts.json"
+    assert pairs.exists(), f"{pairs} is the read v4's bar 2 is scored from"
+    read = json.loads(pairs.read_text(encoding="utf-8"))
     assert read["checksums"] == {
         "keys": 45,
         "rows": 61,
@@ -582,7 +793,7 @@ def test_the_shipped_run_has_a_read_to_score_and_does_not_fall_back_to_pending()
         "accuracy": pytest.approx(20 / 61),
         "accuracy_4dp": 0.3279,
     }
-    shipped = json.loads(verdicts.OUT.read_text(encoding="utf-8"))
+    shipped = json.loads(verdict_record.read_text(encoding="utf-8"))
     assert shipped["bars"]["price_pair_accuracy"]["verdict"] == "FAIL"
     assert shipped["closure"]["failed_bars"] == ["leaflet_brand_recall", "price_pair_accuracy"]
 

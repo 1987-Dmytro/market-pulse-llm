@@ -42,28 +42,34 @@ from market_pulse import positions, provenance, scorer  # noqa: E402
 from market_pulse.brands import watchlist_aliases  # noqa: E402
 from market_pulse.registry import load_registry_as_pinned  # noqa: E402
 
-PREREG = REPO_ROOT / "results" / "sku_pilot_prereg_v4.json"
-RECORD = REPO_ROOT / "results" / "sku_b_positions_v4.json"
-PAIRS = REPO_ROOT / "results" / "sku_b_pair_verdicts.json"
+PREREG = REPO_ROOT / "results" / "sku_pilot_prereg_b2.json"
+RECORD = REPO_ROOT / "results" / "sku_b_positions_skub2.json"
+PAIRS = REPO_ROOT / "results" / "sku_b_pair_verdicts_skub2.json"
 REFERENCE = REPO_ROOT / "results" / "sku_reference_leaflet.json"
 REGISTRY = REPO_ROOT / "config" / "registry.yaml"
-OUT = REPO_ROOT / "results" / "sku_bar_verdicts.json"
-SMOKE_OUT = REPO_ROOT / "results" / "smoke" / "sku_bar_verdicts.json"
+OUT = REPO_ROOT / "results" / "sku_bar_verdicts_skub2.json"
+SMOKE_OUT = REPO_ROOT / "results" / "smoke" / "sku_bar_verdicts_skub2.json"
+"""The skub2 defaults. Every one of the six is a NEW path beside v1–v4's, not a re-pointing of
+them: `results/sku_bar_verdicts.json` carries the pilot's closure BY MEASUREMENT, is pinned by path
+inside `scripts/build_sku_miss_pack.py`, and is evidence rather than a working file. `PAIRS` moves
+for a second reason — the shipped `sku_b_pair_verdicts.json` is a read of the V4 dump, and bar 2
+refuses a read taken over another dump, so leaving it here would abort the producer on a file that
+is doing nothing wrong."""
 
 UNREADABLE_SHARE_MAX = 0.10
 """R5: above this the instrument did not answer and bar 3 is NOT_SCORED."""
 
 CONTRACT = (
-    "docs/PROMPT-sku-b-close.md deliverable 2 (bar 2 applied and the closure);"
-    " docs/PROMPT-sku-b-v4-run.md step 6 (bars 1 and 3);"
-    " docs/SPEC.md amendment 3.17 (6), (11), (12)"
+    "docs/PROMPT-skub2-run.md step 6 (bars 1 and 3 over the B′ gold);"
+    " docs/SPEC.md amendment 3.17 (6) the three bars, (13) and (14) the re-measurement"
 )
 """The provenance string written INTO the verdict record — the artifact the team lead opens at
 acceptance. Nothing downstream checks it, which is why Dv170 named it: scored after the v4 session
 it used to claim the verdicts were produced under the v3-run contract and cite (6) and (11) without
 (12), the amendment the population's second half was bought under. A constant with a test on it,
-because a string nobody re-derives is a string that stops being true silently. It now names both
-contracts, because the record is written twice and the second writing is the one on disk."""
+because a string nobody re-derives is a string that stops being true silently. (11) and (12) leave
+it here: (11) is the resume reading and this population is not resumed, (12) is the amendment v4's
+121 were bought under. What this record scores was bought under (13) and (14)."""
 
 
 def sha256_of(path: Path) -> str:
@@ -86,12 +92,23 @@ def highest_tier(tiers: list[str]) -> str:
     return min(tiers, key=positions.TIERS.index) if tiers else "none"
 
 
+def reference_pin(prereg: dict) -> str:
+    """The sha the registration puts on `results/sku_reference_leaflet.json`.
+
+    v1–v4 pin it as the gold itself (`gold.sha256`). B′'s gold is its own re-scoped table and the
+    reference is pinned one level down, as what that table was DERIVED from — but it is still read
+    here for the post list and the sent-page counts, so it is still pinned.
+    """
+    gold = prereg["bars"]["leaflet_brand_recall"]["gold"]
+    return gold["sha256"] if "sha256" in gold else gold["derived_from"]["sha256"]
+
+
 def check_the_inputs_are_the_registered_ones(record: dict, prereg: dict, args) -> dict:
     """Every pin the bars stand on, re-derived. A moved gold is a different bar."""
     pins = {}
     for what, path, pinned in (
         ("prereg", args.prereg, record["prereg"]["sha256"]),
-        ("leaflet gold", args.reference, prereg["bars"]["leaflet_brand_recall"]["gold"]["sha256"]),
+        ("leaflet gold", args.reference, reference_pin(prereg)),
         (
             "text pack manifest",
             REPO_ROOT / prereg["bars"]["text_tier_accuracy"]["gold"]["manifest"],
@@ -122,7 +139,11 @@ def check_the_population_is_complete(record: dict, prereg: dict) -> None:
             f"{record['population']['unbought']} element(s) are still unbought — the bars read the"
             " COMPLETED population of (11), and a partial one is a different denominator"
         )
-    registered = prereg["resume"]["population"]["registered"]
+    # v1–v4 register the population inside the resume block, as "how many elements the two sessions
+    # own between them". B′ has no resume block at all — (14)(d) re-asks all 138 in one session — so
+    # the count is the registration's own `population.elements`. Same quantity, two homes.
+    resume = prereg.get("resume")
+    registered = resume["population"]["registered"] if resume else prereg["population"]["elements"]
     sources = [outcome["source"] for outcome in record["outcomes"]]
     if len(sources) != registered or len(set(sources)) != registered:
         refuse(
@@ -150,12 +171,83 @@ def registered_aliases(prereg: dict) -> dict[str, str]:
     return watchlist_aliases(load_registry_as_pinned(pin, REGISTRY).watchlist)
 
 
+def gold_source(prereg: dict, reference: dict) -> tuple[set[str], dict[str, set[str]], str]:
+    """Where bar 1's gold keys come from — decided by the registration's own shape (Dv210).
+
+    Two registrations are live and they carry the gold two different ways:
+
+    * **v1–v4** pin the sealed reference by sha and the gold IS that file's
+      ``posts[].brands_visible.gold_keys``;
+    * **B′** re-scopes it. SPEC 3.17 (13)(c) takes the class-b and class-c pairs out of the
+      denominator, so the gold is the registration's own ``gold.per_post[].gold_keys`` — 37 pairs
+      over 10 posts, against the reference's 55 over 15.
+
+    The key spaces differ as well, which is the half of this that produces a NUMBER rather than an
+    error: (13)(b) made «Rud» a display name, so a brand that keys ``raw:rud`` in the reference keys
+    ``rud`` under B′ — and ``rud`` is what the prediction side already resolves to, because it goes
+    through ``registered_aliases``. Reading the reference's keys under B′ would score two spaces
+    against each other and cost recall on a post the instrument got right.
+
+    Dispatched on the shape, never on a flag, and a registration carrying both fields or neither is
+    refused: which gold a bar was scored against is not something a reader should have to infer.
+    The reference is read in BOTH branches for the post list and the sent-page counts, and pinned in
+    both by :func:`reference_pin`.
+    """
+    gold = prereg["bars"]["leaflet_brand_recall"]["gold"]
+    rescoped, sealed = "per_post" in gold, "sha256" in gold
+    if rescoped == sealed:
+        refuse(
+            "the registration's leaflet gold carries"
+            f" {'both `per_post` and `sha256`' if sealed else 'neither `per_post` nor `sha256`'} —"
+            " one names the reference as the gold and the other re-scopes it, and which one is in"
+            " force decides both the denominator and the key space"
+        )
+    if sealed:
+        return (
+            set(reference["gold"]["posts_with_an_empty_gold_set"]),
+            {post["item"]: set(post["brands_visible"]["gold_keys"]) for post in reference["posts"]},
+            "the sealed reference's posts[].brands_visible.gold_keys",
+        )
+
+    rows = gold["per_post"]
+    keys = {row["item"]: set(row["gold_keys"]) for row in rows}
+    if len(keys) != len(rows):
+        refuse(f"the registration's gold.per_post names {len(rows)} rows over {len(keys)} posts")
+    if keys.keys() != {post["item"] for post in reference["posts"]}:
+        refuse(
+            "the registration's gold.per_post and the reference cover different posts — the gold is"
+            " joined to the reference BY ITEM, and a post on one side only has no counterpart"
+        )
+    empty = {item for item, gold_keys in keys.items() if not gold_keys}
+    # the summary fields are checked against the rows, not trusted, and not against each other: a
+    # count and the list it counts are two ways of saying the same thing and only the ROWS are the
+    # thing. 10 posts and 37 pairs is the contract's own checksum.
+    for field, found, stated in (
+        # sorted rather than compared as sets: the two are equal exactly when the sets are, and a
+        # refusal message that prints a set prints it in an order that moves between runs
+        (
+            "posts_with_an_empty_gold_set",
+            sorted(empty),
+            sorted(gold["posts_with_an_empty_gold_set"]),
+        ),
+        (
+            "posts_with_a_non_empty_gold_set",
+            len(keys) - len(empty),
+            gold["posts_with_a_non_empty_gold_set"],
+        ),
+        ("pairs", sum(len(gold_keys) for gold_keys in keys.values()), gold["pairs"]),
+    ):
+        if found != stated:
+            refuse(f"gold.per_post gives {field} = {found} and the registration states {stated}")
+    return empty, keys, "the registration's gold.per_post[].gold_keys, re-scoped by 3.17 (13)(c)"
+
+
 def bar_one(record: dict, dump: list[dict], prereg: dict, reference: dict, aliases: dict) -> dict:
     """Brand recall per post, macro over the posts with gold. R1 (per post), R2 (108 sent pages)."""
     bar = prereg["bars"]["leaflet_brand_recall"]
-    empty = set(reference["gold"]["posts_with_an_empty_gold_set"])
+    empty, gold_of, gold_from = gold_source(prereg, reference)
     if empty != set(bar["excluded"]["posts"]):
-        refuse("the reference's empty-gold posts are not the ones R3 excludes")
+        refuse(f"the empty-gold posts of {gold_from} are not the ones R3 excludes")
 
     extracted: dict[str, set[str]] = {}
     pages_of: dict[str, list[dict]] = {}
@@ -172,7 +264,7 @@ def bar_one(record: dict, dump: list[dict], prereg: dict, reference: dict, alias
             unreadable_pages.setdefault(outcome["item"], []).append(outcome["source"])
 
     scored = [post for post in reference["posts"] if post["item"] not in empty]
-    gold_sets = [set(post["brands_visible"]["gold_keys"]) for post in scored]
+    gold_sets = [gold_of[post["item"]] for post in scored]
     pred_sets = [extracted.get(post["item"], set()) for post in scored]
     reading = scorer.leaflet_brand_recall(gold_sets, pred_sets)
 
@@ -232,6 +324,7 @@ def bar_one(record: dict, dump: list[dict], prereg: dict, reference: dict, alias
         },
         "key_space": {
             "gold": reference["gold"]["definition"],
+            "gold_from": gold_from,
             "prediction": (
                 "the SAME build_sku_reference_leaflet.gold_key, applied to the position's brand_id"
                 " when the resolver found one and to brand_raw when it did not — one function on"
@@ -425,7 +518,7 @@ def bar_three(record: dict, dump: list[dict], prereg: dict, readings: list[dict]
     }
 
 
-def closure(bars: dict, prereg: dict) -> dict:
+def closure(bars: dict, prereg: dict, source: str) -> dict:
     """What the registration says happens now, with the bars that trigger it named from the data.
 
     `attempts.on_failure` is quoted out of the registration rather than restated here — the
@@ -447,7 +540,9 @@ def closure(bars: dict, prereg: dict) -> dict:
         state, why = "NOT CLOSED BY THIS RULE", "every bar passed"
     return {
         "rule": prereg["attempts"]["on_failure"],
-        "rule_source": "results/sku_pilot_prereg_v4.json attempts.on_failure, quoted verbatim",
+        # the path of the registration actually read, not a literal: this producer has now been
+        # pointed at three of them and a hand-typed source is a claim nobody re-derives
+        "rule_source": f"{source} attempts.on_failure, quoted verbatim",
         "verdicts": decided,
         "failed_bars": failed,
         "passed_bars": passed,
@@ -527,10 +622,26 @@ def main(argv: list[str] | None = None) -> int:
         "record": {"path": rel(args.record), "sha256": sha256_of(args.record)},
         "pins": pins,
         "population": record["population"],
-        "sessions": record["resume"]["sessions"],
+        # a resumed record carries both sessions; a full run carries none, so the one session is
+        # named from the registration that bought it rather than left out of the record entirely
+        "sessions": (
+            record["resume"]["sessions"]
+            if "resume" in record
+            else [
+                {
+                    "phase": prereg["attempts"]["phase"],
+                    "record": rel(args.record),
+                    "asked": record["population"]["asked"],
+                    "note": (
+                        "one session. This registration has no resume block: 3.17 (14)(d) re-asks"
+                        " every element, so nothing is carried over and nothing is merged"
+                    ),
+                }
+            ]
+        ),
         "ratification_required": prereg["ratification_required"],
         "bars": bars,
-        "closure": closure(bars, prereg),
+        "closure": closure(bars, prereg, rel(args.prereg)),
         "scored_by": {
             "bar_1": "market_pulse.scorer.leaflet_brand_recall",
             "bar_2": (
