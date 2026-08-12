@@ -212,8 +212,20 @@ def b_prime_gold(reference: dict, decomposition: dict, was: dict, now: dict) -> 
     }
 
 
+MOVED_BY_THE_RESCOPE = ("gold", "excluded", "denominator", "reachable")
+"""Every leaf of bar 1 that (13)(c) moves, enumerated LITERALLY.
+
+The contract holds the bars' «verbatim texts and thresholds» byte-equal, and those are the law's
+own words. These four are the registration's READING of the law, and all four count posts or pairs:
+a gold of 41 pairs over 11 posts beside a `denominator` still saying 15 and 55 is a record that
+answers the same question two ways. `excluded` is the sharpest of them — `sku_bar_verdicts.bar_one`
+compares it against the reference's own empty-gold list before it scores anything.
+
+Literal so a fifth cannot slip in behind the check below."""
+
+
 def check_the_bars_did_not_move(record: dict, previous: dict) -> list[str]:
-    """The bars are (6)'s words and (13) moves none of them. Everything but bar 1's gold, leaf-wise."""
+    """The bars are (6)'s words and (13) moves none of them. Only bar 1's re-scope, leaf-wise."""
     moved = []
     for name, bar in record["bars"].items():
         was = previous["bars"][name]
@@ -222,10 +234,20 @@ def check_the_bars_did_not_move(record: dict, previous: dict) -> list[str]:
                 moved.append(f"{name}.{leaf}")
         if bar["verbatim"] != was["verbatim"] or bar["threshold"] != was["threshold"]:
             refuse(f"bar {name}'s verbatim text or threshold moved, and (13) moves neither")
-    if moved != ["leaflet_brand_recall.gold"]:
+    expected = sorted(f"leaflet_brand_recall.{leaf}" for leaf in MOVED_BY_THE_RESCOPE)
+    if sorted(moved) != expected:
         refuse(
-            f"the bars differ from v4 on {moved}, and (13)(c) re-scopes exactly bar 1's GOLD."
+            f"the bars differ from v4 on {sorted(moved)} and (13)(c) re-scopes exactly {expected}."
             " Anything else is a bar nobody ratified — stop and report."
+        )
+    gold = record["bars"]["leaflet_brand_recall"]["gold"]
+    excluded = record["bars"]["leaflet_brand_recall"]["excluded"]["posts"]
+    if sorted(excluded) != sorted(gold["posts_with_an_empty_gold_set"]):
+        refuse(
+            "bar 1 excludes {excluded} and its gold says {gold} posts have an empty set — that"
+            " equality is what sku_bar_verdicts.bar_one checks before it scores anything".format(
+                excluded=len(excluded), gold=len(gold["posts_with_an_empty_gold_set"])
+            )
         )
     return moved
 
@@ -336,8 +358,35 @@ def build(decomposition: dict, out: Path) -> dict:
                 **{
                     key: value
                     for key, value in previous["bars"]["leaflet_brand_recall"].items()
-                    if key != "gold"
+                    if key not in MOVED_BY_THE_RESCOPE
                 },
+                # the three readings that COUNT posts and pairs. Inherited from v4 they would say
+                # 15 and 55 beside a gold that says 11 and 41 — and `sku_bar_verdicts.bar_one`
+                # opens by comparing `excluded.posts` against the reference's own empty-gold list,
+                # so v4's four would MATCH the sealed reference and wave a 15-post scoring through
+                # in the v4 key space. Recomputed, so that same guard refuses instead.
+                "excluded": {
+                    **previous["bars"]["leaflet_brand_recall"]["excluded"],
+                    "posts": empty,
+                    "why_this_list_grew": (
+                        f"v4 excluded {len(previous['bars']['leaflet_brand_recall']['excluded']['posts'])}"
+                        f" posts and B′ excludes {len(empty)}. The four new ones each carried exactly"
+                        " one gold key, all four ruled class b, so (13)(c) empties their gold and"
+                        " R3's own rule — an empty gold set is a precision probe — moves them. The"
+                        " rule is not new; what changed is which posts it reaches"
+                    ),
+                },
+                "denominator": (
+                    f"the {len(scoreable)} posts whose gold brand set is non-empty AFTER the (13)(c)"
+                    " re-scope. Recall is computed PER POST as |extracted ∩ gold| / |gold|, over the"
+                    f" union of that post's page answers, and the bar reads the MACRO MEAN of those"
+                    f" {len(scoreable)} values. The micro reading over all {pairs} pairs is reported"
+                    " beside it and gates nothing"
+                ),
+                "reachable": (
+                    f"yes, measured before the run: {len(scoreable)} of 19 posts carry a non-empty"
+                    f" gold set after the re-scope and {pairs} pairs sit on them"
+                ),
                 "gold": {
                     "derived_from": {"path": rel(REFERENCE), "sha256": sha256_of(REFERENCE)},
                     "decomposition": {

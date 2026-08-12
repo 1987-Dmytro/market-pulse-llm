@@ -204,15 +204,67 @@ def test_a_removed_pair_that_matches_no_reviewer_name_refuses(resolved, tmp_path
 # --- what did NOT move ----------------------------------------------------------------------------
 
 
-def test_the_three_bars_are_byte_equal_apart_from_bar_ones_gold(record, previous):
+def test_the_three_bars_are_byte_equal_apart_from_the_rescoped_leaves(record, previous):
+    """The law's words do not move; the registration's READING of them does, and exactly on the
+    four leaves that count posts and pairs. Enumerated literally in the producer so a fifth cannot
+    slip in behind this check."""
     moved = writer.check_the_bars_did_not_move(record, previous)
-    assert moved == ["leaflet_brand_recall.gold"]
+    assert sorted(moved) == [
+        "leaflet_brand_recall.denominator",
+        "leaflet_brand_recall.excluded",
+        "leaflet_brand_recall.gold",
+        "leaflet_brand_recall.reachable",
+    ]
+    assert sorted(writer.MOVED_BY_THE_RESCOPE) == ["denominator", "excluded", "gold", "reachable"]
     for name, bar in record["bars"].items():
         assert bar["verbatim"] == previous["bars"][name]["verbatim"] == v4.BARS[name], name
         assert bar["threshold"] == previous["bars"][name]["threshold"], name
     assert record["bars"]["price_pair_accuracy"] == previous["bars"]["price_pair_accuracy"]
     assert record["bars"]["text_tier_accuracy"] == previous["bars"]["text_tier_accuracy"]
     assert record["ladder"] == previous["ladder"]
+
+
+def test_the_readings_that_count_posts_follow_the_rescope(record, previous):
+    """The failure this catches is silent and expensive. Inherited from v4, bar 1 would carry
+    `denominator` = «the 15 posts … all 55 pairs», `reachable` = «15 of 19», and an `excluded` list
+    of FOUR posts — beside a gold of 41 pairs over 11. B5 would ask the team lead to ratify 11
+    while the machine-readable fields said 15."""
+    bar = record["bars"]["leaflet_brand_recall"]
+    assert len(bar["excluded"]["posts"]) == 8
+    assert "the 11 posts" in bar["denominator"] and "41 pairs" in bar["denominator"]
+    assert "11 of 19" in bar["reachable"] and "41 pairs" in bar["reachable"]
+    for stale in ("the 15 posts", "55 pairs"):
+        assert stale not in bar["denominator"] and stale not in bar["reachable"], stale
+    assert len(previous["bars"]["leaflet_brand_recall"]["excluded"]["posts"]) == 4
+    assert "class b" in bar["excluded"]["why_this_list_grew"]
+    # and the law's own words are untouched, which is the half the contract holds byte-equal
+    assert bar["verbatim"] == previous["bars"]["leaflet_brand_recall"]["verbatim"]
+    assert bar["threshold"] == previous["bars"]["leaflet_brand_recall"]["threshold"] == 0.75
+
+
+def test_the_excluded_list_is_the_one_bar_one_checks_before_it_scores(record):
+    """`sku_bar_verdicts.bar_one` opens by comparing `excluded.posts` against the reference's own
+    empty-gold list and refuses if they differ. With v4's four inherited, that comparison would
+    MATCH the sealed reference and wave a 15-post scoring through — in the v4 key space, missing
+    `rud` and `limo` by arithmetic, at the one paid attempt. With B′'s eight it refuses instead,
+    until skub2-run points the scorer at this record's own gold."""
+    reference = json.loads(writer.REFERENCE.read_text(encoding="utf-8"))
+    sealed = set(reference["gold"]["posts_with_an_empty_gold_set"])
+    bar = record["bars"]["leaflet_brand_recall"]
+    assert set(bar["excluded"]["posts"]) == set(bar["gold"]["posts_with_an_empty_gold_set"])
+    assert len(sealed) == 4
+    assert set(bar["excluded"]["posts"]) > sealed, "B′ excludes the sealed four and four more"
+    assert set(bar["excluded"]["posts"]) != sealed, "so bar_one refuses the sealed reference"
+
+
+def test_an_excluded_list_that_disagrees_with_the_gold_stops_the_write(record, previous):
+    """The negative control on the equality above — the producer has to refuse, not warn."""
+    tampered = json.loads(json.dumps(record))
+    tampered["bars"]["leaflet_brand_recall"]["excluded"]["posts"] = previous["bars"][
+        "leaflet_brand_recall"
+    ]["excluded"]["posts"]
+    with pytest.raises(SystemExit, match="that equality is what sku_bar_verdicts.bar_one checks"):
+        writer.check_the_bars_did_not_move(tampered, previous)
 
 
 def test_a_moved_bar_text_stops_the_write(record, previous):
