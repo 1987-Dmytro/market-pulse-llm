@@ -124,6 +124,20 @@ Two constants and a mode-dependent default rather than one that follows the cap,
 resumed session is pinned the other way round: `sku_pilot_prereg_v4.json :: resume.bought_already`
 holds v1's pin by sha and (11)(b) refuses a resumed half served under a different configuration."""
 
+PREREG_WARMUP = PREREG_RESUME
+PREREG_WARMUP_SHA256 = "22fd7d9cc363ac9357b77e4a3ff3561f723fe6c4a12aedcc638c11be65dc9449"
+"""Where the two warm-up inputs of SPEC 3.17 (12)(c) are registered — v4's block, for skub2 too.
+
+(12)(c): "the warm-up inputs remain the REGISTERED ones of v3 — the same unsent page and the same
+non-pack row, re-verified by hash, never re-picked". (13)(d) puts every reading of (9)–(12) in
+force for the re-measurement, and (14)(e) sizes the $0.65 cap on what THAT probe prices: "~$0.61
+(the deep-page probe against 138 calls)". B′ registers no warm-up of its own, so the file that does
+is v4's, and reading it here is what the law says rather than a convenience.
+
+The sha is transcribed because B′'s `pinned_inputs` does not name this file: a sealed sibling read
+without a pin is a read that stops being true silently. It is checked at the point of use, not in a
+test, because what it protects is the number the (10)(a) gate refuses on."""
+
 REGISTRY = REPO_ROOT / "config" / "registry.yaml"
 
 DUMP = REPO_ROOT / "results" / "sku_b_positions_skub2.jsonl"
@@ -673,6 +687,42 @@ def merge_sessions(plan: dict, outcomes: list[dict], dumped: list[dict]) -> dict
             "asked": len(previous_outcomes),
             "dump_rows": len(previous_rows),
         },
+    }
+
+
+def warmup_registration(args, plan: dict | None) -> tuple[dict, dict]:
+    """Which registration names the two warm-up inputs, and the pin that proves it did not move.
+
+    Under `--resume` it is the run's own registration. Under a FULL run it is still v4's, because
+    SPEC 3.17 (12)(c) says the inputs "remain the REGISTERED ones of v3 … never re-picked" and
+    (13)(d) puts (9)–(12) in force for the re-measurement. B′ registers no warm-up block, so
+    resolving this off the run's own registration would have sent :func:`warmup`'s fallback — a
+    generated 64x64 image — and (11)(c) exists precisely because that probe priced a leaflet page
+    at 1.436 s against a real 5.0772 s. The gate that can refuse for free would have been a gate
+    that always passes, and the $0.65 cap of (14)(e) is sized on the deep probe's ~$0.61.
+    """
+    if plan is not None:
+        return plan["prereg"], {
+            "path": rel(args.prereg),
+            "block": "resume.warmup",
+            "sha256": sha256(args.prereg.read_bytes()).hexdigest(),
+        }
+    found = sha256(PREREG_WARMUP.read_bytes()).hexdigest()
+    if found != PREREG_WARMUP_SHA256:
+        raise SystemExit(
+            f"{rel(PREREG_WARMUP)} hashes {found[:16]}… and this run transcribes"
+            f" {PREREG_WARMUP_SHA256[:16]}… — it is where SPEC 3.17 (12)(c) registers the two"
+            " warm-up inputs and B′ does not pin it, so the transcription is the only pin there is"
+        )
+    return json.loads(PREREG_WARMUP.read_text(encoding="utf-8"))["resume"], {
+        "path": rel(PREREG_WARMUP),
+        "block": "resume.warmup",
+        "sha256": found,
+        "why": (
+            "SPEC 3.17 (12)(c) — the warm-up inputs remain the registered ones and are never"
+            " re-picked. This session's own registration carries no warm-up block, so the file that"
+            " registers them is named here with its sha rather than defaulted to a synthetic probe"
+        ),
     }
 
 
@@ -1387,8 +1437,8 @@ def main(argv: list[str] | None = None, client=None) -> int:
         "contract": (
             "docs/PROMPT-sku-b-v3-prep.md deliverable 2; docs/SPEC.md amendment 3.17 (9), (10), (11)"
             if args.resume
-            else "docs/PROMPT-skub2-prep.md + docs/PROMPT-skub2-fix.md;"
-            " docs/SPEC.md amendment 3.17 (9), (10), (13), (14)"
+            else "docs/PROMPT-skub2-run.md; docs/SPEC.md amendment 3.17 (9), (10),"
+            " (11)(c) and (12)(c) the registered warm-up, (12)(a)/(14)(e) the cap, (13), (14)"
         ),
         "prereg": {
             "path": rel(args.prereg),
@@ -1403,17 +1453,14 @@ def main(argv: list[str] | None = None, client=None) -> int:
         "attempts_per_job": 1,
     }
 
-    probe = (
-        resume_warmup_inputs(plan["prereg"], reference, manifest, args.root)
-        if plan is not None
-        else None
-    )
+    registered, probe_pin = warmup_registration(args, plan)
+    probe = resume_warmup_inputs(registered, reference, manifest, args.root)
     opened = warmup(
         client,
         prompts.POSITIONS_TASK_PAGE,
         prompts.POSITIONS_TASK_TEXT,
-        page_url=None if probe is None else probe["page_url"],
-        text=None if probe is None else probe["text"],
+        page_url=probe["page_url"],
+        text=probe["text"],
     )
     for task, reply in opened.items():
         print(
@@ -1426,20 +1473,17 @@ def main(argv: list[str] | None = None, client=None) -> int:
 
     warmup_block = {
         "why": "SPEC 3.17 (9): a call on NON-gold inputs before either leg touches gold",
-        "inputs": (
-            {"page": "a generated 64x64 image", "text": WARMUP_ROW}
-            if probe is None
-            else {
-                "page": probe["page"],
-                "text": probe["row"],
-                "why": (
-                    "SPEC 3.17 (11)(c): REPRESENTATIVE and still non-gold. The page is one of the 51"
-                    " the reference records as never sent and the row is one the pre-filter passed"
-                    " and the 30-row pack did not draw — both registered in"
-                    f" {rel(args.prereg)} :: resume.warmup and re-verified here against the bytes"
-                ),
-            }
-        ),
+        "registered_in": probe_pin,
+        "inputs": {
+            "page": probe["page"],
+            "text": probe["row"],
+            "why": (
+                "SPEC 3.17 (11)(c)/(12)(c): REPRESENTATIVE and still non-gold. The page is one of"
+                " the 51 the reference records as never sent and the row is one the pre-filter"
+                " passed and the 30-row pack did not draw — both read out of the registration"
+                " named in `registered_in` and re-verified here against the bytes, never re-picked"
+            ),
+        },
         "replies": opened,
     }
     verdict = go_no_go(

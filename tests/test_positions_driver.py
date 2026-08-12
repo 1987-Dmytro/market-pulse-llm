@@ -20,6 +20,7 @@ import json
 import sys
 from hashlib import sha256
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 from market_pulse import positions, prompts, serving
@@ -1170,6 +1171,45 @@ def test_the_serving_pin_check_runs_on_the_non_resume_path_too():
     which reaches the check and spends nothing."""
     with pytest.raises(SystemExit, match="the run would serve against sku_pilot_serving.json"):
         driver.main(["--dry-run", "--leg", "text", "--pin", str(driver.PIN_RESUME)])
+
+
+def test_the_registered_warm_up_is_what_a_full_run_sends_too(tmp_path):
+    """SPEC 3.17 (12)(c), and the third guard this program has found wired where it cannot fire.
+
+    The probe used to resolve off the resume PLAN, which a full run does not build, so skub2 would
+    have opened on `warmup`'s fallback — a generated 64x64 image. (11)(c) exists because that probe
+    priced a leaflet page at 1.436 s against a real 5.0772 s, and (14)(e) sizes the $0.65 cap on
+    what the DEEP page prices: ~$0.61 over 138 calls. A cheap probe does not make the run cheaper;
+    it makes the one gate that can refuse for free into a gate that always passes.
+    """
+    args = SimpleNamespace(prereg=driver.PREREG, resume=False)
+    registered, pin = driver.warmup_registration(args, None)
+    assert pin["path"] == "results/sku_pilot_prereg_v4.json" and pin["block"] == "resume.warmup"
+    assert pin["sha256"] == driver.PREREG_WARMUP_SHA256
+    assert "12" in pin["why"] and "never" in pin["why"]
+    # B′ is the run's own registration and it carries no warm-up at all: that is why v4's is read
+    assert "warmup" not in json.loads(driver.PREREG.read_text(encoding="utf-8"))
+    assert registered["warmup"]["page"]["file"].endswith("atb_market_official_4476.jpg")
+
+    # …and it reaches the wire: the record of a full run names the registered page, not a 64x64
+    _, _, record, _ = run_smoke(tmp_path)
+    sent = json.loads(record.read_text(encoding="utf-8"))["warmup"]
+    assert sent["registered_in"] == pin
+    assert sent["inputs"]["page"]["sha256"] == registered["warmup"]["page"]["sha256"]
+    assert sent["inputs"]["text"]["id"] == registered["warmup"]["text"]["id"]
+    assert "64x64" not in json.dumps(sent, ensure_ascii=False)
+
+
+def test_the_warm_up_registration_is_refused_when_the_file_it_transcribes_moves(
+    tmp_path, monkeypatch
+):
+    """The negative control. B′'s `pinned_inputs` does not name v4's registration, so the sha in
+    this module is the only pin on it — and a pin nobody can fail is not a pin."""
+    moved = tmp_path / "sku_pilot_prereg_v4.json"
+    moved.write_text(driver.PREREG_WARMUP.read_text(encoding="utf-8") + "\n", encoding="utf-8")
+    monkeypatch.setattr(driver, "PREREG_WARMUP", moved)
+    with pytest.raises(SystemExit, match="and this run transcribes 22fd7d9cc363ac93…"):
+        driver.warmup_registration(SimpleNamespace(prereg=driver.PREREG), None)
 
 
 def test_the_job_count_says_what_it_planned_and_what_it_submitted(tmp_path):
