@@ -4,7 +4,14 @@ from hashlib import sha256
 from pathlib import Path
 
 import pytest
-from market_pulse.registry import AUDIENCES, load_registry
+from market_pulse.brands import watchlist_aliases
+from market_pulse.registry import (
+    AUDIENCES,
+    load_registry,
+    load_registry_as_pinned,
+    load_registry_text,
+    registry_before_the_latin_aliases,
+)
 
 REGISTRY = Path(__file__).resolve().parents[1] / "config" / "registry.yaml"
 
@@ -15,26 +22,42 @@ That screen is never re-run (`yield_screen_5c1.refuse_to_overwrite`), so the sha
 frozen at the file as it stood before the 2026-08-10 signature stamp. Same shape as
 `results/sitting_45g2_manifest.json`, which also stopped matching the corpus it pins: the sealed
 record describes what it read, the divergence is declared rather than re-pinned, and
-:func:`registry_without_the_signature_stamp` is where the chain to today's bytes is written down."""
+:func:`registry_as_the_signed_screen_read_it` is where the chain to today's bytes is written down.
+
+The chain has TWO links now. 2026-08-10 added the signature stamp, a comment block that moved no
+row; 2026-08-12 added the three Latin aliases of SPEC 3.17 (13)(b), which DO move three rows and
+are ratified. Each link is undone by its own function, and the enumeration of what (13)(b) touched
+is literal in `market_pulse.registry` so a third link cannot land here unseen."""
+
+PRE_13B_REGISTRY_SHA = "920c7f203b9f0e38fd8df9e893d9b15705a6b19b297bd9d14b14258ae38ac3be"
+"""The bytes the sku pre-registrations v1–v4, the leaflet gold and the pre-filter census all pin —
+today's file with the (13)(b) aliases undone, and the stamp still in it."""
 
 STAMP_OPENS = "  # SIGNED 2026-08-10"
 STAMP_CLOSES = "sitting-2026-08-10-composition-signed.md"
 
 
-def registry_without_the_signature_stamp() -> bytes:
-    """Today's registry minus the 2026-08-10 operator stamp — the bytes the signed screen read.
+def registry_without_the_signature_stamp(text: str | None = None) -> bytes:
+    """A registry minus the 2026-08-10 operator stamp — today's file unless `text` says otherwise.
 
     The stamp is a comment block: it changes no row, and it does move the file's sha256. Stripping
     it back out is what makes "nothing but the signature moved" a checkable claim instead of a
     sentence in a commit message.
     """
-    lines = REGISTRY.read_text(encoding="utf-8").splitlines(keepends=True)
+    source = REGISTRY.read_text(encoding="utf-8") if text is None else text
+    lines = source.splitlines(keepends=True)
     opens = [i for i, line in enumerate(lines) if line.startswith(STAMP_OPENS)]
     closes = [i for i, line in enumerate(lines) if STAMP_CLOSES in line]
     assert len(opens) == len(closes) == 1, "the signature stamp is one block, written once"
     start, end = opens[0], closes[0]
     assert lines[start - 1] == "  #\n", "the stamp is set off by a bare comment line"
     return "".join(lines[: start - 1] + lines[end + 1 :]).encode("utf-8")
+
+
+def registry_as_the_signed_screen_read_it() -> bytes:
+    """Both links of the chain, oldest last: undo (13)(b), then take the signature stamp off."""
+    before = registry_before_the_latin_aliases(REGISTRY).decode("utf-8")
+    return registry_without_the_signature_stamp(before)
 
 
 SOURCES = (
@@ -202,9 +225,17 @@ def test_the_signature_stamp_moved_the_file_and_not_one_row_of_it():
     the file with the block and without it and comparing all three entities. And the file's sha256
     DID move, which is what a record pinning those bytes sees; the reconstruction is the chain from
     the signed screen's citation to today's file.
+
+    Since 2026-08-12 the chain has a second link, and it is not a comment block: SPEC 3.17 (13)(b)
+    put three Latin display names into three watchlist rows. So the stamp strip alone no longer
+    reaches the signed sha — that is asserted here rather than papered over, and the composed
+    reconstruction does. The middle sha is checked too, because it is the one the sku registrations
+    pin, and a chain is only a chain if every link is nailed to something.
     """
     stripped = registry_without_the_signature_stamp()
-    assert sha256(stripped).hexdigest() == SIGNED_SCREEN_REGISTRY_SHA
+    assert sha256(stripped).hexdigest() != SIGNED_SCREEN_REGISTRY_SHA, "the aliases are the reason"
+    assert sha256(registry_before_the_latin_aliases(REGISTRY)).hexdigest() == PRE_13B_REGISTRY_SHA
+    assert sha256(registry_as_the_signed_screen_read_it()).hexdigest() == SIGNED_SCREEN_REGISTRY_SHA
     assert sha256(REGISTRY.read_bytes()).hexdigest() != SIGNED_SCREEN_REGISTRY_SHA
 
     live = load_registry(REGISTRY)
@@ -215,6 +246,81 @@ def test_the_signature_stamp_moved_the_file_and_not_one_row_of_it():
     # the numbers the stamp claims, read off the file it stamps
     watch = [s for s in live.sources if s.watch]
     assert (len(live.sources), len(live.sources) - len(watch), len(watch)) == (66, 59, 7)
+
+
+def test_the_latin_aliases_moved_three_display_name_lists_and_nothing_else():
+    """SPEC 3.17 (13)(b) says «aliases only». Checked as an entity diff rather than believed: no
+    source, no taxonomy group, no brand row and no `own` flag may move under an alias amendment,
+    and the three lists that DO move are named with their before and after."""
+    before = load_registry_text(
+        registry_before_the_latin_aliases(REGISTRY).decode("utf-8"), REGISTRY
+    )
+    live = load_registry(REGISTRY)
+    assert [vars(source) for source in before.sources] == [vars(s) for s in live.sources]
+    assert before.taxonomy.tracked_groups == live.taxonomy.tracked_groups
+    assert [b.brand_id for b in before.watchlist] == [b.brand_id for b in live.watchlist]
+    assert [b.own for b in before.watchlist] == [b.own for b in live.watchlist]
+    moved = {
+        was.brand_id: (was.display_names, now.display_names)
+        for was, now in zip(before.watchlist, live.watchlist, strict=True)
+        if was.display_names != now.display_names
+    }
+    assert moved == {
+        "rud": (("Рудь",), ("Рудь", "Rud")),
+        "try-vedmedi": (
+            ("Три Ведмеді", "Три Медведя"),
+            ("Три Ведмеді", "Три Медведя", "Three Bears"),
+        ),
+        "limo": (("Лімо", "Лимо"), ("Лімо", "Лимо", "LIMO")),
+    }
+
+
+def test_the_reconstruction_refuses_a_display_names_list_it_no_longer_recognises(tmp_path):
+    """The negative control the enumeration needs. A fourth alias added to one of these three rows
+    without a line in `LATIN_ALIASES_13B` would silently reconstruct to bytes nobody registered —
+    so the reconstruction fails instead, and the sealed pins fail with it."""
+    edited = REGISTRY.read_text(encoding="utf-8").replace(
+        'display_names: ["Лімо", "Лимо", "LIMO"]', 'display_names: ["Лімо", "Лимо", "LIMO", "Limo"]'
+    )
+    path = write(tmp_path, edited)
+    with pytest.raises(ValueError, match=r"appears 0 times, expected once"):
+        registry_before_the_latin_aliases(path)
+
+
+def test_the_reconstruction_refuses_a_registry_the_amendment_never_touched(tmp_path):
+    path = write(tmp_path, SOURCES + TAXONOMY)
+    with pytest.raises(ValueError, match="this is not the amended registry"):
+        registry_before_the_latin_aliases(path)
+
+
+def test_a_pin_neither_branch_reaches_refuses():
+    """`load_registry_as_pinned` is what every recomputation of a sealed bar goes through, so its
+    failure mode has to be a refusal and not a quiet fall-back to today's alias table."""
+    assert load_registry_as_pinned(PRE_13B_REGISTRY_SHA, REGISTRY).watchlist
+    live_sha = sha256(REGISTRY.read_bytes()).hexdigest()
+    assert load_registry_as_pinned(live_sha, REGISTRY).watchlist
+    with pytest.raises(ValueError, match="the registry has moved in a way nothing here"):
+        load_registry_as_pinned("f" * 64, REGISTRY)
+
+
+def test_the_two_alias_tables_differ_only_where_the_amendment_says(tmp_path):
+    """What the recomputation of a sealed bar actually depends on: «Three Bears» resolves today and
+    did not when v4 was bought. «Rud» and «LIMO» casefold onto their own brand_ids, which is a
+    second, quieter change — `gold_key` returns the brand_id when a name resolves, so those two
+    keys move from `raw:rud`/`raw:limo` to `rud`/`limo` in any table built after the amendment."""
+    was = watchlist_aliases(
+        load_registry_text(
+            registry_before_the_latin_aliases(REGISTRY).decode("utf-8"), REGISTRY
+        ).watchlist
+    )
+    now = watchlist_aliases(load_registry(REGISTRY).watchlist)
+    assert set(now) - set(was) == {"three bears", "rud", "limo"}
+    assert set(was) - set(now) == set()
+    assert {key: now[key] for key in set(now) - set(was)} == {
+        "three bears": "try-vedmedi",
+        "rud": "rud",
+        "limo": "limo",
+    }
 
 
 def test_the_stamped_and_unstamped_registries_parse_to_the_same_three_entities(tmp_path):

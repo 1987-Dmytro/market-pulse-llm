@@ -24,9 +24,15 @@ from market_pulse import positions  # noqa: E402
 from market_pulse.brands import watchlist_aliases  # noqa: E402
 from market_pulse.registry import load_registry  # noqa: E402
 
-ALIASES = watchlist_aliases(load_registry(REPO_ROOT / "config" / "registry.yaml").watchlist)
+REGISTRY = REPO_ROOT / "config" / "registry.yaml"
+ALIASES = watchlist_aliases(load_registry(REGISTRY).watchlist)
+LIVE_REGISTRY_SHA = hashlib.sha256(REGISTRY.read_bytes()).hexdigest()
 
 PREREG = {
+    # the alias table these synthetic bars are scored under, named the way a real registration
+    # names it. SPEC 3.17 (13)(b) made the watchlist a moving part, so `registered_aliases` reads
+    # the pin instead of the file and refuses a registration that pins neither.
+    "pinned_inputs": {"config/registry.yaml": LIVE_REGISTRY_SHA},
     "bars": {
         "leaflet_brand_recall": {
             "verbatim": "leaflet brand-recall ≥ 0.75 per page vs audit-visible brands",
@@ -118,7 +124,7 @@ def outcome(item: str, source: str, leg: str, carrier: str, unreadable=None, n=1
 
 # --- bar 1 -------------------------------------------------------------------
 #
-#   @a:1  gold {raw:rud, raw:каштан}   model reads Рудь on page 1, Каштан on page 2 -> 2/2 = 1.0
+#   @a:1  gold {rud, raw:каштан}       model reads Рудь on page 1, Каштан on page 2 -> 2/2 = 1.0
 #   @b:2  gold {raw:svoia-liniia}      model reads Ласунка                          -> 0/1 = 0.0
 #   @c:3  gold {}                      EXCLUDED by R3; its one brand is a precision probe
 #   macro over the two scoreable posts = (1.0 + 0.0) / 2 = 0.5 -> FAIL against 0.75
@@ -129,8 +135,11 @@ REFERENCE = {
     },
     "posts": [
         {
+            # `rud`, not `raw:rud`, since SPEC 3.17 (13)(b) — see the docstring of
+            # `test_bar_one_puts_a_resolved_watchlist_brand_in_the_reviewers_key_space`, which
+            # named this exact failure a session before it happened.
             "item": "@a:1",
-            "brands_visible": {"gold_keys": ["raw:rud", "raw:каштан"]},
+            "brands_visible": {"gold_keys": ["rud", "raw:каштан"]},
             "pages_sent": [page("@a:1", 1), page("@a:1", 2)],
         },
         {
@@ -174,23 +183,32 @@ def test_bar_one_macro_averages_the_posts_with_gold_and_excludes_the_empty_ones(
     assert bar["n_posts"] == 2
     probe = bar["precision_probe"]["posts"]
     assert [row["item"] for row in probe] == ["@c:3"]
-    assert probe[0]["false_positives"] == ["raw:limo"]
+    # `limo` and not `raw:limo`, the second brand (13)(b) folded onto its own id — «LIMO» is a
+    # display name now, so «Лімо» resolves and the key loses the prefix
+    assert probe[0]["false_positives"] == ["limo"]
 
 
 def test_bar_one_puts_a_resolved_watchlist_brand_in_the_reviewers_key_space():
     """The trap: the reviewer names ids, the model names printed text, and both go through
-    `gold_key`. «Рудь» resolves to the watchlist id `rud`, whose gold key is `raw:rud` — because
-    `rud` is not a display name and the alias table is keyed on display names.
+    `gold_key`. «Рудь» resolves to the watchlist id `rud`, and the id itself is now a display name
+    — SPEC 3.17 (13)(b) added the Latin «Rud», which casefolds onto `rud` — so the gold key is
+    `rud`. Until 2026-08-12 it was `raw:rud`, and this docstring said so, with the sentence «if
+    either changed, one of these two posts would silently read 0.5 instead of 1.0». It changed, and
+    that is exactly what this test read before the fixture was moved with it.
+
+    Which is the standing hazard, written down: bar 1's GOLD half is stored and its PREDICTION half
+    is recomputed, so the two agree only while the stored keys came from the same alias table. The
+    sealed v4 gold is therefore recomputed through the table its pre-registration pins, and the B′
+    gold is REBUILT under the amended table rather than filtered out of the v4 keys.
 
     The control is a brand OFF the watchlist: «Каштан» never resolves, and its key is built from
-    the printed name. Two different routes into one space; if either changed, one of these two
-    posts would silently read 0.5 instead of 1.0.
+    the printed name. Two different routes into one space.
     """
     bar = verdicts.bar_one(RECORD, DUMP, PREREG, REFERENCE, ALIASES)
     found = bar["per_post"][0]
     assert positions.resolve_brand("Рудь", ALIASES) == "rud"  # resolved…
     assert positions.resolve_brand("Каштан", ALIASES) is None  # …and not resolved
-    assert found["extracted"] == ["raw:rud", "raw:каштан"] == found["found"]
+    assert found["extracted"] == ["raw:каштан", "rud"] == found["found"]
     assert found["missed"] == [] and found["not_in_gold"] == []
 
 

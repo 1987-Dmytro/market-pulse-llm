@@ -64,6 +64,7 @@ import build_sku_text_pack as text_pack  # noqa: E402
 from build_audit_pack import git_state  # noqa: E402
 
 from market_pulse import positions, prompts  # noqa: E402
+from market_pulse.registry import registry_before_the_latin_aliases  # noqa: E402
 
 SPEC = REPO_ROOT / "docs" / "SPEC.md"
 REFERENCE = REPO_ROOT / "results" / "sku_reference_leaflet.json"
@@ -278,9 +279,29 @@ def registered_law(spec: Path) -> bytes:
     return text.encode("utf-8")
 
 
+def registered_bytes(path: Path) -> bytes:
+    """The bytes THIS registration registered — not always the bytes on disk today.
+
+    Two inputs have moved since under an amendment that says so out loud, and each is undone by the
+    function that owns it: `docs/SPEC.md` by :func:`registered_law` (the marked ratification blocks
+    come off) and `config/registry.yaml` by
+    :func:`market_pulse.registry.registry_before_the_latin_aliases` (SPEC 3.17 (13)(b)'s three
+    Latin display names come out). Everything else is hashed as it sits.
+
+    This producer writes v1–v4, all of which predate (13)(b). B′ registers the AMENDED registry and
+    has its own producer — a pre-registration that reached back through this function would pin the
+    alias table it is being written to replace.
+    """
+    if path == SPEC:
+        return registered_law(path)
+    if path == REGISTRY:
+        return registry_before_the_latin_aliases(path)
+    return path.read_bytes()
+
+
 def pinned_sha256(path: Path) -> str:
-    """What the pre-registration pins: for `docs/SPEC.md` the registered law, else the file."""
-    return hashlib.sha256(registered_law(path) if path == SPEC else path.read_bytes()).hexdigest()
+    """What the pre-registration pins — see :func:`registered_bytes`."""
+    return hashlib.sha256(registered_bytes(path)).hexdigest()
 
 
 WARMUP_SEED = 42

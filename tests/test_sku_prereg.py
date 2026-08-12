@@ -20,6 +20,7 @@ sys.path.insert(0, str(REPO_ROOT / "src"))
 import write_sku_prereg as prereg  # noqa: E402
 
 from market_pulse import positions, prompts  # noqa: E402
+from market_pulse.registry import registry_before_the_latin_aliases  # noqa: E402
 
 
 @pytest.fixture(scope="module")
@@ -234,8 +235,20 @@ def test_every_pinned_input_still_hashes_to_what_it_says(record):
     for name in blocks[1:]:  # the first block's own name is a prefix of every later one
         assert name not in law
 
+    # `config/registry.yaml` is the second input that has moved under a ratified amendment, and it
+    # gets its own narrow branch rather than a loosened loop: SPEC 3.17 (13)(b) put three Latin
+    # display names into three watchlist rows on 2026-08-12, which is a CONTENT change and not a
+    # comment block. Same rule as above and checked the same both ways — the live file must no
+    # longer hash to the pin (or the amendment never landed) and the pre-(13)(b) reconstruction
+    # must. The producer's own function does the undoing; a copy here could drift from it.
+    registry = REPO_ROOT / "config" / "registry.yaml"
+    registry_pin = record["pinned_inputs"]["config/registry.yaml"]
+    assert hashlib.sha256(registry.read_bytes()).hexdigest() != registry_pin
+    assert hashlib.sha256(prereg.registered_bytes(registry)).hexdigest() == registry_pin
+    assert prereg.registered_bytes(registry) == registry_before_the_latin_aliases(registry)
+
     for path, sha in record["pinned_inputs"].items():
-        if path == "docs/SPEC.md":
+        if path in ("docs/SPEC.md", "config/registry.yaml"):
             continue  # both directions, above
         assert hashlib.sha256((REPO_ROOT / path).read_bytes()).hexdigest() == sha, path
     assert set(record["pinned_inputs"]) == {

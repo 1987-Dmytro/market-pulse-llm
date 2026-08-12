@@ -40,9 +40,19 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from build_audit_pack import git_state  # noqa: E402
 
 from market_pulse.brands import watchlist_aliases  # noqa: E402
-from market_pulse.registry import load_registry  # noqa: E402
+from market_pulse.registry import load_registry_as_pinned  # noqa: E402
 
 REGISTRY = REPO_ROOT / "config" / "registry.yaml"
+
+REGISTRY_AS_BUILT = "920c7f203b9f0e38fd8df9e893d9b15705a6b19b297bd9d14b14258ae38ac3be"
+"""The registry bytes this SEALED record was built on, and the sha it carries in `sources`.
+
+SPEC 3.17 (13)(b) put three Latin display names into the watchlist on 2026-08-12, and one of them
+(«Three Bears») resolves a name this gold left raw. This record is the reviewer's read of 22 page
+images and is never re-built for a new population — it is re-built only to prove it still derives —
+so it stays pinned to the alias table it was written under. Rebuilding it through today's table
+would silently restate what the reviewer saw. B′ registers the amended table in its own
+pre-registration; this one does not follow the file."""
 AUDIT = REPO_ROOT / "results" / "opus_audit_5c1.json"
 MANIFEST = REPO_ROOT / "results" / "opus_audit_manifest.json"
 RETURNS = REPO_ROOT / "results" / "opus_audit_returns"
@@ -107,7 +117,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--out", type=Path, default=RECORD)
     args = parser.parse_args(argv)
 
-    aliases = watchlist_aliases(load_registry(REGISTRY).watchlist)
+    aliases = watchlist_aliases(load_registry_as_pinned(REGISTRY_AS_BUILT, REGISTRY).watchlist)
     manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
     audit = json.loads(AUDIT.read_text(encoding="utf-8"))
     media = json.loads(POST_MEDIA.read_text(encoding="utf-8"))["entries"]
@@ -253,8 +263,12 @@ def main(argv: list[str] | None = None) -> int:
             ),
         },
         "sources": {
-            rel(path): sha256_of(path)
-            for path in (AUDIT, MANIFEST, CAPTIONS, CAPTION_RECORD, POST_MEDIA, REGISTRY)
+            **{
+                rel(path): sha256_of(path)
+                for path in (AUDIT, MANIFEST, CAPTIONS, CAPTION_RECORD, POST_MEDIA)
+            },
+            # the bytes the gold keys above were computed from, not the bytes on disk today
+            rel(REGISTRY): REGISTRY_AS_BUILT,
         },
         "returns_sha256": hashlib.sha256(
             b"".join(path.read_bytes() for path in sorted(RETURNS.glob("*.jsonl")))

@@ -672,17 +672,39 @@ watchlist:
     own: false
 
   # --- competitors, ice cream ---
+  # (13)(b) --- operator addition 2026-08-12 (SPEC 3.17 (13)(b), the B′ ratification) ---
+  # (13)(b) Three EVIDENCED Latin forms enter as matching aliases. ALIASES ONLY: no row is added,
+  # (13)(b) none removed, no `own` flag moved — the 66 sources and this watchlist stand as signed.
+  # (13)(b) Every line this amendment added carries the `# (13)(b)` prefix and every display_names
+  # (13)(b) list it touched is named in market_pulse.registry.LATIN_ALIASES_13B, so the bytes the
+  # (13)(b) sealed v1–v4 records pin are reconstructible from this file instead of re-pinned.
+  # (13)(b) Nothing Latin-looking is added on suspicion: the counter-example is juice ТМ «Galicia»
+  # (13)(b) on atb_market_official_4510, which must NOT reach `halychyna` (tests/test_brands.py).
   - brand_id: rud
-    display_names: ["Рудь"]
+    # (13)(b) «Rud» — the brand's own logo form, printed RUD on the Рудь packs of
+    # (13)(b) atb_market_official_4508 and _4467. Reviewer, results/opus_audit_5c1.json
+    # (13)(b) @ekomarket_shop:1450: «Морозиво «Ескімос Панкейк» Rud, 60 г» — «Latin-script Rud is
+    # (13)(b) the brand's own logo form … but the canon table lists only Cyrillic «Рудь»».
+    display_names: ["Рудь", "Rud"]
     own: false
   - brand_id: lasunka
     display_names: ["Ласунка"]
     own: false
   - brand_id: try-vedmedi
-    display_names: ["Три Ведмеді", "Три Медведя"]
+    # (13)(b) «Three Bears» — the only one of the three that moves a gold key. Reviewer,
+    # (13)(b) results/sku_reference_leaflet.json @atb_market_official:4340: «Page 4341 headline
+    # (13)(b) reads ТМ «Три Ведмеді» while the caption renders it as «Three Bears» -- a Latin form
+    # (13)(b) the canon table has no alias for». The instrument extracted it and nothing matched:
+    # (13)(b) results/sku_miss_decomposition.json row 2, `alias:latin-form`.
+    display_names: ["Три Ведмеді", "Три Медведя", "Three Bears"]
     own: false
   - brand_id: limo
-    display_names: ["Лімо", "Лимо"]
+    # (13)(b) «LIMO» — no reviewer note names it; the evidence is the instrument's own, two
+    # (13)(b) positions read off atb_market_official_4360 page 1 as «Limo» with `brand_id: null`
+    # (13)(b) (results/sku_b_positions_v4.jsonl). It costs no recall today — `gold_key` already
+    # (13)(b) folds «Limo» and «Лімо» onto `raw:limo` through its raw branch — so what this alias
+    # (13)(b) buys is the resolved brand_id, which is what the position layer stores.
+    display_names: ["Лімо", "Лимо", "LIMO"]
     own: false
   - brand_id: khladyk
     display_names: ["Хладик"]

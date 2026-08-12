@@ -5,6 +5,7 @@ duplicate id silently merges two sources' (or two brands') data into one rollup 
 are failures that only surface as wrong analytics much later.
 """
 
+import hashlib
 import re
 from dataclasses import dataclass
 from pathlib import Path
@@ -87,11 +88,85 @@ class Registry:
 
 def load_registry(path: str | Path) -> Registry:
     """Load and validate the registry, or raise ``ValueError`` naming the defect."""
-    data = yaml.safe_load(Path(path).read_text(encoding="utf-8")) or {}
+    return load_registry_text(Path(path).read_text(encoding="utf-8"), path)
+
+
+def load_registry_text(text: str, path: str | Path) -> Registry:
+    """The same, from bytes that are not on disk — a reconstruction of what a record pinned.
+
+    ``path`` is carried for the error messages only: a defect has to say which file it is in, and
+    a reconstruction is still that file, at an earlier revision of it.
+    """
+    data = yaml.safe_load(text) or {}
     return Registry(
         _sources(path, data.get("sources")),
         _taxonomy(path, data.get("taxonomy")),
         _watchlist(path, data.get("watchlist")),
+    )
+
+
+RATIFIED_COMMENT = "# (13)(b)"
+
+LATIN_ALIASES_13B = (
+    ('display_names: ["Рудь", "Rud"]', 'display_names: ["Рудь"]'),
+    (
+        'display_names: ["Три Ведмеді", "Три Медведя", "Three Bears"]',
+        'display_names: ["Три Ведмеді", "Три Медведя"]',
+    ),
+    ('display_names: ["Лімо", "Лимо", "LIMO"]', 'display_names: ["Лімо", "Лимо"]'),
+)
+"""Every ``display_names`` list SPEC 3.17 (13)(b) touched, as it is now and as it was.
+
+Written out one pair per line, and literally: a reader deciding whether an alias is justified is
+looking at one brand, and the enumeration is also what makes the next amendment impossible to land
+unseen — it will have to be added here or the reconstruction below stops re-deriving."""
+
+
+def registry_before_the_latin_aliases(path: str | Path) -> bytes:
+    """``config/registry.yaml`` as it stood before SPEC 3.17 (13)(b) — the bytes v1–v4 pin.
+
+    The three Latin forms are a ratified edit that moves the file's sha256, and four sealed
+    pre-registrations, the leaflet gold and two 5c1 screens all pin the bytes from before it. A pin
+    re-pinned is a pin that follows the file instead of holding it, so the chain is written down
+    here instead: undo the enumerated ``display_names`` lists and drop the comment lines the
+    amendment added, and what is left is what those records read.
+
+    One implementation, called by the producers that recompute a sealed bar and by the tests that
+    re-verify the pins. A second copy of this would drift from the one the records are checked with.
+    """
+    text = Path(path).read_text(encoding="utf-8")
+    kept = [
+        line
+        for line in text.splitlines(keepends=True)
+        if not line.lstrip().startswith(RATIFIED_COMMENT)
+    ]
+    if len(kept) == len(text.splitlines()):
+        raise ValueError(f"{path}: no `{RATIFIED_COMMENT}` line — this is not the amended registry")
+    before = "".join(kept)
+    for now, then in LATIN_ALIASES_13B:
+        if before.count(now) != 1:
+            raise ValueError(f"{path}: `{now}` appears {before.count(now)} times, expected once")
+        before = before.replace(now, then)
+    return before.encode("utf-8")
+
+
+def load_registry_as_pinned(pin: str, path: str | Path) -> Registry:
+    """The registry a record pins: today's file when it still hashes to it, else the reconstruction.
+
+    A record scored under one alias table must keep being recomputed under that table — SPEC 3.17
+    (13)(b) is an instrument change, and re-deriving an old bar through it would re-score a sealed
+    measurement rather than reproduce it. A pin neither branch reaches is a refusal: it means the
+    registry has moved in some way nobody wrote down.
+    """
+    live = Path(path).read_bytes()
+    if hashlib.sha256(live).hexdigest() == pin:
+        return load_registry_text(live.decode("utf-8"), path)
+    before = registry_before_the_latin_aliases(path)
+    if hashlib.sha256(before).hexdigest() == pin:
+        return load_registry_text(before.decode("utf-8"), path)
+    raise ValueError(
+        f"{path} pins {pin[:16]}… and neither the live file nor the pre-(13)(b) reconstruction"
+        " hashes to it — the registry has moved in a way nothing here can reconstruct"
     )
 
 

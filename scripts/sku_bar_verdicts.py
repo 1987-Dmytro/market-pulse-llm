@@ -40,7 +40,7 @@ import validate_sku_text_pack as pack  # noqa: E402
 
 from market_pulse import positions, provenance, scorer  # noqa: E402
 from market_pulse.brands import watchlist_aliases  # noqa: E402
-from market_pulse.registry import load_registry  # noqa: E402
+from market_pulse.registry import load_registry_as_pinned  # noqa: E402
 
 PREREG = REPO_ROOT / "results" / "sku_pilot_prereg_v4.json"
 RECORD = REPO_ROOT / "results" / "sku_b_positions_v4.json"
@@ -129,6 +129,25 @@ def check_the_population_is_complete(record: dict, prereg: dict) -> None:
             f"{len(sources)} outcomes over {len(set(sources))} distinct sources against the"
             f" registered {registered}: the merged population must carry each element exactly once"
         )
+
+
+def registered_aliases(prereg: dict) -> dict[str, str]:
+    """The watchlist alias table the PRE-REGISTRATION pins — never simply today's.
+
+    SPEC 3.17 (13)(b) added three Latin display names on 2026-08-12, and one of them («Three
+    Bears») resolves a dump row that was `not_in_gold` when the v4 population was bought.
+    Recomputing v4's bar 1 through the amended table would report a recall nobody measured; B′
+    registers the amended table and reaches it through this same call. A registration that pins no
+    registry is refused rather than defaulted: which alias table a bar was scored under is not
+    something a reader should have to infer from the date on the file.
+    """
+    pin = (prereg.get("pinned_inputs") or {}).get("config/registry.yaml")
+    if pin is None:
+        refuse(
+            "the pre-registration pins no config/registry.yaml, so the alias table these bars were"
+            " scored under is not named anywhere — SPEC 3.17 (13)(b) made that table a moving part"
+        )
+    return watchlist_aliases(load_registry_as_pinned(pin, REGISTRY).watchlist)
 
 
 def bar_one(record: dict, dump: list[dict], prereg: dict, reference: dict, aliases: dict) -> dict:
@@ -477,7 +496,7 @@ def main(argv: list[str] | None = None) -> int:
     readings, defects = pack.check(pack.read_pack(args.pack or Path(manifest["pack"])), manifest)
     if defects:
         refuse("the adjudicated pack is not scoreable: " + "; ".join(defects))
-    aliases = watchlist_aliases(load_registry(REGISTRY).watchlist)
+    aliases = registered_aliases(prereg)
 
     # bar 2 has a value only once the team lead's read is on disk. A missing file is the state the
     # bar was in for the whole pilot and is not an error; a file that does not parse or does not

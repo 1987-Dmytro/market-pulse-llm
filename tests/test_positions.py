@@ -552,9 +552,14 @@ def test_an_unresolved_brand_keeps_its_string_and_never_guesses_a_watchlist_row(
     assert P.resolve_brand("Premialle", ALIASES) is None
     assert P.resolve_brand("  рудь  ", ALIASES) == "rud", "casefolded, whitespace collapsed"
     assert P.resolve_brand("Три Ведмеді", ALIASES) == "try-vedmedi"
-    # the audit's Latin-script finding, pinned: GM4 wrote «Three Bears» and the watchlist has no
-    # such alias, so it stays raw here too (5c3's, not this contract's)
-    assert P.resolve_brand("Three Bears", ALIASES) is None
+    # the audit's Latin-script finding is RULED ON now: SPEC 3.17 (13)(b) put «Three Bears», «Rud»
+    # and «LIMO» into the watchlist on the evidence of the pages that print them
+    assert P.resolve_brand("Three Bears", ALIASES) == "try-vedmedi"
+    assert P.resolve_brand("Rud", ALIASES) == "rud" and P.resolve_brand("LIMO", ALIASES) == "limo"
+    # and the negative half of the same ruling, which is the reason it is three names and not a
+    # transliteration rule: «Galicia» on atb_market_official_4510 is a JUICE TM, not «Галичина»
+    assert P.resolve_brand("Galicia", ALIASES) is None
+    assert P.resolve_brand("Галичина", ALIASES) == "halychyna"
 
 
 def test_the_carrier_is_the_callers_and_an_unknown_one_stops_the_parse():

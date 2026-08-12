@@ -268,15 +268,16 @@ def test_the_shipped_record_covers_the_whole_registry_and_cites_what_it_read():
     """ "Retroactively over the whole current registry" is the amendment's words, and the record
     has to be able to say WHICH registry and WHICH lexicon revision it read.
 
-    The registry sha is checked against the file MINUS the 2026-08-10 signature stamp, not against
-    the file. This screen is the one the operator signed against and it refuses to be re-run, so
-    the bytes it cites are frozen at that moment; the stamp is a comment block that moved the sha
-    and no row, and `test_registry.registry_without_the_signature_stamp` is the chain between the
-    two. Re-pinning this record would erase the composition its verdicts were measured over.
+    The registry sha is checked against a RECONSTRUCTION of the file, not against the file. This
+    screen is the one the operator signed against and it refuses to be re-run, so the bytes it
+    cites are frozen at that moment, and the file has moved twice since: the 2026-08-10 signature
+    stamp (a comment block, no row) and the SPEC 3.17 (13)(b) Latin aliases (three display names).
+    `test_registry.registry_as_the_signed_screen_read_it` is the chain between then and now.
+    Re-pinning this record would erase the composition its verdicts were measured over.
     """
     import hashlib
 
-    from test_registry import registry_without_the_signature_stamp
+    from test_registry import registry_as_the_signed_screen_read_it
 
     record = json.loads((REPO_ROOT / "results" / "yield_screen_5c1.json").read_text("utf-8"))
     live = {handle for source in REGISTRY.sources for handle in source.telegram_channels}
@@ -286,9 +287,9 @@ def test_the_shipped_record_covers_the_whole_registry_and_cites_what_it_read():
         record["preregistration"]["sha256"]
         == hashlib.sha256(screen.PREREGISTRATION.read_bytes()).hexdigest()
     )
-    signed = hashlib.sha256(registry_without_the_signature_stamp()).hexdigest()
+    signed = hashlib.sha256(registry_as_the_signed_screen_read_it()).hexdigest()
     assert record["registry"]["sha256"] == signed
-    assert signed != screen.sha256_of(screen.REGISTRY), "the stamp is in the file it stamps"
+    assert signed != screen.sha256_of(screen.REGISTRY), "the stamp and the aliases are in the file"
     assert record["lexicon"]["sha256"] == screen.sha256_of(screen.LEXICON)
     assert record["lexicon"]["status"] == "draft-not-law"
     assert record["registry"]["watchlist_brands"] == len(REGISTRY.watchlist)

@@ -39,7 +39,7 @@ import sku_bar_verdicts as bars  # noqa: E402
 
 from market_pulse import provenance  # noqa: E402
 from market_pulse.brands import watchlist_aliases  # noqa: E402
-from market_pulse.registry import load_registry  # noqa: E402
+from market_pulse.registry import load_registry_as_pinned  # noqa: E402
 
 PREREG = REPO_ROOT / "results" / "sku_pilot_prereg_v4.json"
 RECORD = REPO_ROOT / "results" / "sku_b_positions_v4.json"
@@ -426,7 +426,12 @@ def main(argv: list[str] | None = None) -> int:
     pins["verdicts"] = {"path": bars.rel(args.verdicts), "sha256": bars.sha256_of(args.verdicts)}
 
     reference = json.loads(args.reference.read_text(encoding="utf-8"))
-    watchlist = load_registry(REGISTRY).watchlist
+    # the table the pre-registration pins, the same call `sku_bar_verdicts` makes: SPEC 3.17 (13)(b)
+    # resolves «Three Bears» today and did not when this population was bought, and a pack built
+    # through the new table would decompose 28 misses against a record that says 29
+    watchlist = load_registry_as_pinned(
+        prereg["pinned_inputs"]["config/registry.yaml"], REGISTRY
+    ).watchlist
     dump = [json.loads(line) for line in args.dump.read_text(encoding="utf-8").splitlines() if line]
     bar, posts, missed, found, counted = build(
         record, dump, prereg, reference, watchlist_aliases(watchlist), watchlist

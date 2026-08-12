@@ -5,6 +5,7 @@ the counts: the two carriers are never blended, and the filter's own exam (one p
 negatives) is taken before any yield is read.
 """
 
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -20,7 +21,10 @@ import sku_prefilter_census as census  # noqa: E402
 from market_pulse import positions, yield_screen  # noqa: E402
 from market_pulse.brands import watchlist_aliases  # noqa: E402
 from market_pulse.lexicon import load_lexicon  # noqa: E402
-from market_pulse.registry import load_registry  # noqa: E402
+from market_pulse.registry import (  # noqa: E402
+    load_registry,
+    registry_before_the_latin_aliases,
+)
 
 REGISTRY = load_registry(REPO_ROOT / "config" / "registry.yaml")
 LEXICON = load_lexicon(census.LEXICON, taxonomy=REGISTRY.taxonomy)
@@ -105,10 +109,16 @@ def shipped():
 
 
 def test_the_shipped_record_covers_the_signed_composition(shipped):
+    """The registry sha is the one the frame was selected under, and since SPEC 3.17 (13)(b) that
+    is a reconstruction rather than the live file: three Latin aliases landed after this census was
+    sealed. The composition itself did not move, which is why the handle set is still compared
+    against today's registry — an alias amendment may not add or drop a channel."""
     live = {handle for source in REGISTRY.sources for handle in source.telegram_channels}
     assert {row["handle"] for row in shipped["channels"]} == live
     assert shipped["summary"]["channels"] == len(live) == 66
-    assert shipped["sources_read"]["registry"]["sha256"] == census.sha256_of(census.REGISTRY)
+    pinned = shipped["sources_read"]["registry"]["sha256"]
+    assert pinned != census.sha256_of(census.REGISTRY)
+    assert pinned == hashlib.sha256(registry_before_the_latin_aliases(census.REGISTRY)).hexdigest()
     assert shipped["frame_reportable"] is True
     assert all(control["ok"] for control in shipped["controls"].values())
 

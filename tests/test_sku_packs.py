@@ -25,9 +25,18 @@ import validate_sku_text_pack as validator  # noqa: E402
 
 from market_pulse import positions  # noqa: E402
 from market_pulse.brands import watchlist_aliases  # noqa: E402
-from market_pulse.registry import load_registry  # noqa: E402
+from market_pulse.registry import registry_before_the_latin_aliases  # noqa: E402
+from market_pulse.registry import load_registry_as_pinned  # noqa: E402
 
-ALIASES = watchlist_aliases(load_registry(REPO_ROOT / "config" / "registry.yaml").watchlist)
+ALIASES = watchlist_aliases(
+    load_registry_as_pinned(leaflet.REGISTRY_AS_BUILT, leaflet.REGISTRY).watchlist
+)
+"""The alias table the SEALED leaflet gold was written under, not today's.
+
+SPEC 3.17 (13)(b) added «Three Bears», «Rud» and «LIMO» on 2026-08-12. Two of those casefold
+onto their own brand_ids, so under the amended table `gold_key("rud")` answers `rud` where this
+record stores `raw:rud` — the gold keys below are re-derived through the table that produced
+them, which is what "still derives" has to mean for a sealed reviewer read."""
 
 
 # --- the leaflet reference ------------------------------------------------------------------------
@@ -147,8 +156,20 @@ def test_the_matchers_misses_are_a_subset_of_the_watchlist_brands_seen(reference
 
 
 def test_the_reference_pins_what_it_was_built_from(reference):
+    """`config/registry.yaml` gets its own branch: SPEC 3.17 (13)(b) moved it after this record was
+    sealed, so the pin is held against the pre-amendment reconstruction and asserted NOT to be the
+    live file. Every other source is still hashed as it sits."""
     for path, sha in reference["sources"].items():
+        if path == "config/registry.yaml":
+            continue
         assert hashlib.sha256((REPO_ROOT / path).read_bytes()).hexdigest() == sha, path
+    registry_pin = reference["sources"]["config/registry.yaml"]
+    assert registry_pin == leaflet.REGISTRY_AS_BUILT
+    assert hashlib.sha256(leaflet.REGISTRY.read_bytes()).hexdigest() != registry_pin
+    assert (
+        hashlib.sha256(registry_before_the_latin_aliases(leaflet.REGISTRY)).hexdigest()
+        == registry_pin
+    )
     assert set(reference["sources"]) >= {
         "results/opus_audit_5c1.json",
         "results/opus_audit_manifest.json",
