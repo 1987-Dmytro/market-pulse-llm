@@ -54,7 +54,13 @@ projection.per_slice[].cold_start_usd_measured_here` (183.58 s). Carried BESIDE 
 figure and never substituted into it — a pre-registration is a file, not a preference."""
 
 CAPTION_CEILING = local_llm.CAPTION_MAX_NEW_TOKENS
-POSITIONS_CEILING = local_llm.POSITIONS_MAX_NEW_TOKENS
+POSITIONS_CEILING = 800
+"""The ceiling THIS projection was written under, transcribed rather than read off the code.
+
+`local_llm.POSITIONS_MAX_NEW_TOKENS` is 1200 since SPEC 3.17 (13)(a). This record is v1's, it
+prices a run that was bought at 800, and its uplift ratios are the ones the go/no-go gate of that
+session read — following the constant would silently re-price a sealed projection. B′ writes its
+own beside it."""
 SRV2D_CEILING = local_llm.MAX_NEW_TOKENS
 
 UPLIFT_NOTE = (

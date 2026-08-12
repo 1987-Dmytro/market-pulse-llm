@@ -37,7 +37,6 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-import serve_handler as handler  # noqa: E402
 
 from market_pulse import local_llm, prompts, provenance, serving  # noqa: E402
 
@@ -53,6 +52,14 @@ the full value is checked against a record that actually served it — see :func
 REVISION_SOURCE = REPO_ROOT / "results" / "captions_gm4_atb19.json"
 """The freshest PAID record on this base: vis-b's 19 ATB posts, whose worker reported the revision
 it had resolved. A typed sha is a guess until something that ran on it agrees."""
+
+MAX_NEW_TOKENS = 800
+"""The ceiling THIS pin registered, transcribed rather than read off `serve_handler`.
+
+SPEC 3.17 (13)(a) moved the live constant to 1200 on 2026-08-12. This file is v1's serving pin, it
+is what the v4 worker's `describe()` was held against, and it refuses to be regenerated at all —
+so following the code would make it claim a configuration no paid call ever ran under. The v2 pin
+beside it reads the live table, which is the whole point of there being two."""
 
 
 def rel(path: Path) -> str:
@@ -117,7 +124,7 @@ def expected_worker(prereg: dict) -> dict:
         "merge_state": serving.MERGE_STATE[serving.POSITIONS_CONFIG],
         "adapter_sha256": None,
         "positions_prompt_sha256": instruments(prereg),
-        "max_new_tokens": handler.MAX_NEW_TOKENS[serving.POSITIONS_CONFIG],
+        "max_new_tokens": MAX_NEW_TOKENS,
         "revision_requested": pinned_revision(),
     }
 
@@ -149,7 +156,7 @@ def build(prereg: dict, out: Path) -> dict:
             "decoding": "greedy",
             "do_sample": False,
             "forward_batch_size": 1,
-            "max_new_tokens": handler.MAX_NEW_TOKENS[serving.POSITIONS_CONFIG],
+            "max_new_tokens": MAX_NEW_TOKENS,
             "max_new_tokens_note": (
                 "a CEILING against mid-JSON truncation, not a target length. A reply that used its"
                 " whole budget is a PARSE FAILURE here, counted by reason and excluded from bar 3's"

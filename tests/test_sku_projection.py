@@ -100,12 +100,15 @@ def test_the_uplift_is_an_assumption_and_the_total_is_reported_without_it(projec
     in the file, so the sensitivity is visible rather than collapsed into one number."""
     assumed = projection["assumptions"]
     assert "ASSUMPTION, not a measurement" in assumed["decode_uplift"]
-    assert assumed["ceilings"]["positions (SPEC 3.17 (9))"] == local_llm.POSITIONS_MAX_NEW_TOKENS
+    # 800, transcribed in the producer: this projection priced a run that was bought at 800, and
+    # SPEC 3.17 (13)(a) moved the live constant to 1200 afterwards
+    assert assumed["ceilings"]["positions (SPEC 3.17 (9))"] == writer.POSITIONS_CEILING == 800
+    assert writer.POSITIONS_CEILING != local_llm.POSITIONS_MAX_NEW_TOKENS
     uplifts = {tuple(cell["decode_uplift"].values()) for cell in projection["corners"].values()}
     assert (1.0, 1.0) in uplifts
     assert (
-        local_llm.POSITIONS_MAX_NEW_TOKENS / local_llm.CAPTION_MAX_NEW_TOKENS,
-        round(local_llm.POSITIONS_MAX_NEW_TOKENS / local_llm.MAX_NEW_TOKENS, 4),
+        writer.POSITIONS_CEILING / local_llm.CAPTION_MAX_NEW_TOKENS,
+        round(writer.POSITIONS_CEILING / local_llm.MAX_NEW_TOKENS, 4),
     ) in uplifts
 
 

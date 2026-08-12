@@ -1,0 +1,81 @@
+{
+  "generated_at": "2026-08-12T12:59:00+00:00",
+  "phase": "skub2 — instrument v2's serving configuration, pinned",
+  "written_by": "skub2-prep (executor, $0), docs/PROMPT-skub2-prep.md deliverable 2",
+  "authority": "docs/SPEC.md amendment 3.17 (13)(a) — instrument v2, ratified 2026-08-12",
+  "class": "SERVING PIN v2, registered BESIDE v1 and never in place of it. Committed before any skub2-run artifact exists; git history is the only witness to that ordering. Nothing here is a result and nothing is a preference — the one value that differs from v1 is the ceiling 3.17 (13)(a) raises, and this file refuses to write if a second one has",
+  "supersedes": {
+    "path": "results/sku_pilot_serving.json",
+    "sha256": "5f900beb555f12f511c4d0b134f454f24927976146823cb9846a31dcd89bc882",
+    "reading": "v1 stays SEALED and stays true: it is what the v4 worker's describe() was held against, and the 121 bought elements were extracted under it. This pin does not replace it, it stands beside it, and only skub2-run reads this one",
+    "the_one_difference": "max_new_tokens"
+  },
+  "serving": {
+    "serving_config": "POSITIONS",
+    "merge_state": "base-no-adapter",
+    "adapter": null,
+    "adapter_note": "the NF4 BASE with the adapter OFF, unchanged from v1. `serve_handler.settings` refuses the whole ADAPTER_ENV set before the model loads and `assert_no_adapter` refuses the loaded object — the environment and the model are two different checks",
+    "model": "google/gemma-4-31b-it",
+    "model_revision": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+    "quantization": {
+      "load_in_4bit": true,
+      "bnb_4bit_quant_type": "nf4",
+      "bnb_4bit_use_double_quant": true,
+      "bnb_4bit_compute_dtype": "bfloat16"
+    },
+    "chat_template": {
+      "add_generation_prompt": true,
+      "enable_thinking": false
+    },
+    "decoding": "greedy",
+    "do_sample": false,
+    "forward_batch_size": 1,
+    "max_new_tokens": 1200,
+    "max_new_tokens_was": 800,
+    "max_new_tokens_note": "still a CEILING against mid-JSON truncation and not a target length. It is raised because the v4 leaflet leg lost its DENSEST page to it: @atb_market_official:4401 page 5 came back `malformed JSON` — a reply that used its whole budget — and that one page carried five of bar 1's 29 missed gold pairs. A reply that uses 1200 is still a PARSE FAILURE, counted by reason and excluded, never a shorter answer"
+  },
+  "instruments": {
+    "positions_post_gm4": "ca6303c157d46e707aaf3fc52c7a05ed1450e24c26db0e7c93eefba4f6968754",
+    "positions_text_gm4": "7250b87aa1c2de407e06ab9eed565dd4d88025add7be0d2d2a87607c0d872860",
+    "source": "results/sku_pilot_prereg_v2.json :: instruments",
+    "note": "UNCHANGED by (13)(a), which says «no new ML mechanism is authorised». Copied from the same pre-registration v1's pin copies them from, and a checkout rendering anything else stops this writer"
+  },
+  "expected_worker": {
+    "serving_config": "POSITIONS",
+    "merge_state": "base-no-adapter",
+    "adapter_sha256": null,
+    "positions_prompt_sha256": {
+      "positions_post_gm4": "ca6303c157d46e707aaf3fc52c7a05ed1450e24c26db0e7c93eefba4f6968754",
+      "positions_text_gm4": "7250b87aa1c2de407e06ab9eed565dd4d88025add7be0d2d2a87607c0d872860"
+    },
+    "max_new_tokens": 1200,
+    "revision_requested": "842da3794eaa0b77d5f08bae87a17459d91ff475"
+  },
+  "expected_worker_note": "handed WHOLE to serving.assert_serving by the skub2-run driver before the first paid call. A worker still generating 800 is refused BY NAME on max_new_tokens, which is the whole reason the ceiling is a pinned field and not a client-side default",
+  "pinned_inputs": {
+    "results/sku_pilot_prereg_v2.json": "d4ced2a8ba00b48bca2d30af9c7ce8977eb387631b1735b4e05ea15ba306e9ad",
+    "results/sku_pilot_serving.json": "5f900beb555f12f511c4d0b134f454f24927976146823cb9846a31dcd89bc882"
+  },
+  "not_in_scope": {
+    "the parser": "market_pulse.positions runs on the CLIENT and no worker can report it, so its sha is pinned by results/sku_pilot_prereg_b2.json and not here. The two halves of instrument v2 are registered in the two files that can actually hold them",
+    "the deployment": "nothing is deployed and no RunPod resource is created. What is built here is the pin; standing a worker up against it is skub2-run's step"
+  },
+  "git": {
+    "commit": "c6f777404dbb1071df0d14ee21df93271e49af0c",
+    "dirty": [
+      "knowledge/daily_logs/2026-08-12.md",
+      "knowledge/hot.md",
+      "knowledge/index.md",
+      "scripts/write_sku_projection.py",
+      "scripts/write_sku_serving_pin.py",
+      "src/market_pulse/local_llm.py",
+      "src/market_pulse/positions.py",
+      "tests/test_positions.py",
+      "tests/test_positions_driver.py",
+      "tests/test_positions_serving.py",
+      "tests/test_sku_projection.py",
+      "tests/test_sku_serving_pin.py",
+      "scripts/write_sku_serving_pin_v2.py"
+    ]
+  }
+}

@@ -417,8 +417,15 @@ class LocalClient:
         return replies
 
 
-POSITIONS_MAX_NEW_TOKENS = 800
-"""SPEC 3.17 (9), transcribed and not chosen here: a CEILING against mid-JSON truncation.
+POSITIONS_MAX_NEW_TOKENS = 1200
+"""SPEC 3.17 (13)(a), transcribed and not chosen here: a CEILING against mid-JSON truncation.
+
+**800 until 2026-08-12, and the ceiling is what bar 1 lost its densest page to.** The v4 leaflet
+leg refused `@atb_market_official:4401` page 5 on `malformed JSON` — a reply that used its whole
+budget and stopped mid-object — and that one page carried FIVE of the 29 missed gold pairs
+(`results/sku_miss_decomposition.json`, `refusal:token-ceiling`). (13)(a) moves it to 1200 and
+registers the move in a serving pin of its own; `results/sku_pilot_serving.json` and
+`results/sku_projection.json` are v1's and still say 800, which is what they were run under.
 
 Not a target length, and that is the whole reason it is not :data:`CAPTION_MAX_NEW_TOKENS`. A
 caption cut off at 400 tokens is a description of half a leaflet and only ``finish_reason`` can see

@@ -57,10 +57,17 @@ def test_the_pin_is_what_this_checkout_would_write(pin, prereg):
     }
 
 
-def test_the_worker_this_repo_builds_satisfies_the_pin(pin):
+def test_the_worker_this_repo_builds_is_REFUSED_by_this_pin_since_the_ceiling_moved(pin):
     """The other direction, and the one that matters on the day: `assert_serving` is handed the
     pin's own `expected_worker` block against what `describe` answers for a POSITIONS worker. A
-    field the worker does not report is read as `<absent>` and refuses."""
+    field the worker does not report is read as `<absent>` and refuses.
+
+    Since SPEC 3.17 (13)(a) this checkout builds a 1200-token worker and THIS pin says 800, so the
+    right answer is a refusal that names the field — the identity stop doing its job across an
+    instrument revision rather than in spite of one. The worker that satisfies a pin is asserted
+    against the v2 pin, in `tests/test_sku_serving_pin_v2.py`; here the same block is shown to pass
+    once the one moved knob is put back, so the refusal is about the ceiling and nothing else.
+    """
     info = handler.describe(
         handler.settings(
             {"SERVING_CONFIG": "POSITIONS", "MODEL_REVISION": pin["serving"]["model_revision"]}
@@ -69,7 +76,10 @@ def test_the_worker_this_repo_builds_satisfies_the_pin(pin):
         None,
         {},
     )
-    assert serving.assert_serving(info, pin["expected_worker"]) is info
+    with pytest.raises(SystemExit, match=r"max_new_tokens: worker says 1200, expected 800"):
+        serving.assert_serving(info, pin["expected_worker"])
+    as_v4_served = dict(info) | {"max_new_tokens": writer.MAX_NEW_TOKENS}
+    assert serving.assert_serving(as_v4_served, pin["expected_worker"]) is as_v4_served
 
 
 def test_every_expected_field_can_actually_fire(pin):
@@ -103,8 +113,13 @@ def test_the_pin_names_the_generation_knobs_the_client_uses(pin):
     assert served["chat_template"] == local_llm.CHAT_TEMPLATE
     assert served["do_sample"] is False and served["decoding"] == "greedy"
     assert served["forward_batch_size"] == 1
-    assert served["max_new_tokens"] == local_llm.POSITIONS_MAX_NEW_TOKENS
-    assert served["max_new_tokens"] == handler.MAX_NEW_TOKENS[serving.POSITIONS_CONFIG]
+    # the ceiling this pin registered is v1's, transcribed in the producer. SPEC 3.17 (13)(a) moved
+    # the live constant to 1200 on 2026-08-12, and this record must NOT follow it: it is what the
+    # v4 worker's describe() was held against, and it refuses to be regenerated at all. Both
+    # directions, so "the pin is 800" cannot pass by the amendment quietly never having landed.
+    assert served["max_new_tokens"] == writer.MAX_NEW_TOKENS == 800
+    assert served["max_new_tokens"] != local_llm.POSITIONS_MAX_NEW_TOKENS
+    assert handler.MAX_NEW_TOKENS[serving.POSITIONS_CONFIG] == local_llm.POSITIONS_MAX_NEW_TOKENS
 
 
 def test_the_two_prompt_shas_are_the_pre_registrations(pin, prereg):

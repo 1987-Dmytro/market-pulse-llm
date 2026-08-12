@@ -37,6 +37,7 @@ so a mismatch is visible rather than assumed. It exits 1 and says so if they are
 unrunnable preflight is a finding, not a pass.
 """
 
+import json
 import sys
 from pathlib import Path
 
@@ -218,6 +219,92 @@ def positions_guards(handler, adapted_model) -> dict:
     )
     print(f"   an empty array               {'REFUSE' if empty else 'ACCEPT'}   <- the control")
     checks["the control: an empty array is an ANSWER and is accepted"] = not empty
+    checks |= parser_v2_guards(positions)
+    return checks
+
+
+def parse_one(positions, entry: dict):
+    """One entry through the real parser, as the leaflet leg calls it. Returns (position, why)."""
+    reply = json.dumps([{"brand": "Рудь", "category": "ice-cream", **entry}], ensure_ascii=False)
+    try:
+        return (
+            positions.parse_positions(
+                reply,
+                categories=frozenset({"ice-cream"}),
+                carrier="leaflet_page",
+                price_origin="retail_leaflet",
+                extraction_source="preflight",
+                aliases={},
+            )[0],
+            "ACCEPT",
+        )
+    except ValueError as err:
+        return None, f"REFUSE — {err}"
+
+
+def parser_v2_guards(positions) -> dict:
+    """SPEC 3.17 (13)(a): the three strings that used to cost a whole page, and what still refuses.
+
+    Each of the three is the ACTUAL string a v4 page was refused on — read out of
+    `results/sku_miss_decomposition.json`'s refusal reasons, not invented here — so this section is
+    the before/after of the amendment on its own evidence. Every one is paired with a control:
+    accepting them must not have widened the parser into salvage, and the truncated tail above must
+    still be a refusal, because the token ceiling and the parser family are the two SEPARATE halves
+    of (13)(a) and a parser that repaired truncation would hide whether the ceiling did anything.
+    """
+    print("\n--- SPEC 3.17 (13)(a): the parser family, warnings instead of page refusals ---")
+    checks: dict[str, bool] = {}
+    accepted = {
+        # (entry, the warning it must carry, the field that must read this value)
+        "-50%* (atb_market_official 4340 p3, 4467 p1)": (
+            {"price_promo": 90.0, "price_old": 180.0, "discount_pct_printed": "-50%*"},
+            "discount_footnote",
+            ("discount_pct_printed", 50.0),
+        ),
+        "6х100 г (atb_market_official 4446 p1)": (
+            {"size": "6х100 г"},
+            "multipack",
+            ("pack_count", 6),
+        ),
+        "від 39,90 (the one-sided range)": (
+            {"price_promo": "від 39,90"},
+            "price_from",
+            ("price_qualifier", "from"),
+        ),
+    }
+    for label, (entry, warning, (field, value)) in accepted.items():
+        row, why = parse_one(positions, entry)
+        ok = row is not None and warning in row.warnings() and getattr(row, field) == value
+        got = "—" if row is None else f"{', '.join(row.warnings())} · {field}={getattr(row, field)}"
+        print(f"   {label:<46} {why:<10} {got}")
+        checks[f"(13)(a) ACCEPTS {label.split(' (')[0]} and records `{warning}`"] = ok
+
+    # the unit size is kept and NEVER multiplied into a total: «6х100 г» is not «600 г»
+    row, _ = parse_one(positions, {"size": "6х100 г"})
+    kept = row is not None and (row.size_value, row.size_unit) == (100.0, "г")
+    print(
+        f"   the multipack's size is the UNIT size          {row and row.size_value} г  (not 600)"
+    )
+    checks["a pack count is read and the unit size is never multiplied into a total"] = kept
+
+    still = {
+        "2х0,5 л х 3 — not one count and one unit size": {"size": "2х0,5 л х 3"},
+        "1х100 г — a pack starts at two": {"size": "1х100 г"},
+        "80-90 — a written-out range is two prices": {"price_promo": "80-90"},
+        "-50%*** — three asterisks is not a footnote": {"discount_pct_printed": "-50%***"},
+        "39,90 від Рудь — «від» is not leading": {"price_promo": "39,90 від Рудь"},
+    }
+    print("   still refused, so the widening is not salvage:")
+    for label, entry in still.items():
+        row, why = parse_one(positions, entry)
+        print(f"     {label:<46} {'REFUSE' if row is None else 'ACCEPT'}")
+        checks[f"(13)(a) still REFUSES {label.split(' — ')[0]}"] = row is None
+
+    clean, _ = parse_one(positions, {"size": "450 г", "discount_pct_printed": "-51%"})
+    print(f"   the control: an unremarkable position          warnings {clean.warnings()}")
+    checks["the control: a position with nothing to warn about carries no warnings"] = (
+        clean.warnings() == ()
+    )
     return checks
 
 

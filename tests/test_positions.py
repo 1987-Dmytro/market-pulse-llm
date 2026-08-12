@@ -32,10 +32,12 @@ def position(**over) -> P.Position:
         "category": None,
         "size_value": None,
         "size_unit": None,
+        "pack_count": None,
         "attribute_pct": None,
         "price_promo": None,
         "price_old": None,
         "discount_pct_printed": None,
+        "discount_footnote": False,
         "price_qualifier": None,
         "price_origin": "retail_leaflet",
         "carrier": "leaflet_page",
@@ -215,8 +217,10 @@ def test_the_tolerance_absorbs_rounding_and_nothing_more():
 def test_nothing_is_imputed_and_nothing_computed_is_storable():
     P.assert_no_imputation()
     names = {field.name for field in fields(P.Position)}
-    assert not names & {"tier", "depth", "depth_disagrees_with_printed"}
-    assert len(names) == 14
+    assert not names & {"tier", "depth", "depth_disagrees_with_printed", "warnings"}
+    # 14 until SPEC 3.17 (13)(a) added `pack_count` and `discount_footnote` — both REQUIRED, so a
+    # caller that forgets one gets a TypeError rather than a silent None
+    assert len(names) == 16
 
 
 def test_a_forgotten_field_is_a_TypeError_and_not_a_None():
@@ -232,12 +236,17 @@ def test_a_forgotten_field_is_a_TypeError_and_not_a_None():
 @pytest.mark.parametrize(
     "raw, expect",
     [
-        ("450 г", (450.0, "г")),
-        ("450г", (450.0, "г")),
-        ("1 кг", (1000.0, "г")),
-        ("0,5 л", (500.0, "мл")),
-        ("1.5 Л", (1500.0, "мл")),
-        ("500 мл", (500.0, "мл")),
+        ("450 г", (450.0, "г", None)),
+        ("450г", (450.0, "г", None)),
+        ("1 кг", (1000.0, "г", None)),
+        ("0,5 л", (500.0, "мл", None)),
+        ("1.5 Л", (1500.0, "мл", None)),
+        ("500 мл", (500.0, "мл", None)),
+        # SPEC 3.17 (13)(a): the count is READ and the unit size is kept — never multiplied
+        ("2х100 г", (100.0, "г", 2)),
+        ("2 x 100 г", (100.0, "г", 2)),
+        ("6х100 г", (100.0, "г", 6)),
+        ("4×0,5 л", (500.0, "мл", 4)),
     ],
 )
 def test_sizes_normalise_to_grams_or_millilitres(raw, expect):
@@ -245,11 +254,13 @@ def test_sizes_normalise_to_grams_or_millilitres(raw, expect):
 
 
 @pytest.mark.parametrize(
-    "raw", ["2х100 г", "2 x 100 г", "200", "1 шт", "великий", "", "5 кг 200 г"]
+    "raw", ["200", "1 шт", "великий", "", "5 кг 200 г", "2х0,5 л х 3", "1х100 г", "2х100"]
 )
 def test_a_size_it_cannot_read_is_refused_and_never_guessed(raw):
-    """Multipacks are the case worth naming: «2х100 г» and «200 г» are different SKUs, and
-    multiplying one into the other invents a pack that is not on the page."""
+    """What (13)(a) did NOT widen. «2х0,5 л х 3» is not one count and one unit size, «1х100 г» is
+    not a pack, and «2х100» has no unit — each is still a refusal rather than a guess, and the unit
+    size is never multiplied into a total.
+    """
     with pytest.raises(P.SchemaError):
         P.parse_size(raw)
 
@@ -277,12 +288,24 @@ def test_a_fat_claim_that_is_not_a_number_is_refused(raw):
         ("~89", (89.0, "approx")),
         ("≈ 89,5", (89.5, "approx")),
         ("по 90 грн", (90.0, "approx")),
+        # SPEC 3.17 (13)(a): the one-sided form, UA and RU, leading only
+        ("від 39,90", (39.9, "from")),
+        ("Від 39,90 грн", (39.9, "from")),
+        ("от 39,90", (39.9, "from")),
     ],
 )
 def test_prices_carry_their_own_qualifier(raw, expect):
-    """The contract's two markers — «по 90» and «~». The qualifier says what the source wrote; it
-    is not a confidence, and a hedged number is kept rather than dropped."""
+    """The contract's markers — «по 90», «~», and «від X» since (13)(a). The qualifier says what
+    the source wrote; it is not a confidence, and a hedged number is kept rather than dropped."""
     assert P.parse_price(raw) == expect
+
+
+@pytest.mark.parametrize("raw", ["39,90 від Рудь", "відро 5"])
+def test_a_from_marker_that_is_not_leading_is_not_a_bound(raw):
+    """Anchored at the start, so a word that merely contains or follows «від» cannot make a price
+    read as a floor. Both of these are refusals — neither is one number."""
+    with pytest.raises(P.SchemaError):
+        P.parse_price(raw)
 
 
 @pytest.mark.parametrize("raw", ["80-90", "дешево", "", "два дев'яносто"])
@@ -343,8 +366,10 @@ def test_a_qualifier_belongs_to_a_price_and_only_to_a_price():
         position(price_qualifier="exact")
     with pytest.raises(P.SchemaError, match="belongs to a price"):
         position(price_promo=90.0, price_qualifier=None)
-    with pytest.raises(P.SchemaError, match="not exact/approx"):
+    with pytest.raises(P.SchemaError, match=r"is not one of \['exact', 'approx', 'from'\]"):
         position(price_promo=90.0, price_qualifier="roughly")
+    # the member (13)(a) added, and the one it did NOT: `from` is legal, a range is still not
+    assert position(price_promo=39.9, price_qualifier="from").warnings() == ("price_from",)
 
 
 def test_a_size_is_a_number_and_a_unit_or_neither():
@@ -486,7 +511,9 @@ def test_a_reply_the_schema_refuses_names_the_defect():
         ('[{"brand": "Рудь", "line": null}]', "an unread key is omitted"),
         ('[{"brand": "Рудь", "line": ""}]', "an unread key is omitted"),
         ('[{"brand": "Рудь", "category": "cheeseburger"}]', "outside the taxonomy"),
-        ('[{"brand": "Рудь", "size": "2х100 г"}]', "multipack"),
+        # (13)(a) reads «2х100 г»; what is still refused is a shape that is not one count and
+        # one unit size, and the message says which of the two the parser could not find
+        ('[{"brand": "Рудь", "size": "2х0,5 л х 3"}]', "multipack this parser cannot read"),
         ('[{"brand": "Рудь", "size": "500"}]', "not a number and one of"),
         ('[{"brand": "Рудь", "price_promo": "80-90"}]', "not one number"),
         ('[{"brand": "Рудь", "price_promo": -5}]', "must be positive"),
@@ -533,13 +560,32 @@ def test_the_printed_percentage_reaches_the_flag_and_the_sign_is_dropped():
     reply = '[{"brand": "Рудь", "price_promo": "90", "price_old": "120", "discount_pct_printed": "-50%"}]'
     row = parse(reply)[0]
     assert row.discount_pct_printed == 50.0
+    assert row.discount_footnote is False
     assert row.depth() == pytest.approx(0.25)
     assert row.depth_disagrees_with_printed() is True
 
 
-@pytest.mark.parametrize("raw, expect", [("-51%", 51.0), ("51", 51.0), ("51%", 51.0), (-30, 30.0)])
-def test_a_printed_discount_is_stored_as_a_magnitude(raw, expect):
+@pytest.mark.parametrize(
+    "raw, expect",
+    [
+        ("-51%", (51.0, False)),
+        ("51", (51.0, False)),
+        ("51%", (51.0, False)),
+        (-30, (30.0, False)),
+        # SPEC 3.17 (13)(a): the asterisk is a footnote marker, carried instead of refused
+        ("-50%*", (50.0, True)),
+        ("50%*", (50.0, True)),
+        ("-50 % **", (50.0, True)),
+    ],
+)
+def test_a_printed_discount_is_stored_as_a_magnitude_and_its_footnote_is_kept(raw, expect):
     assert P.parse_percent(raw) == expect
+
+
+@pytest.mark.parametrize("raw", ["-50%***", "-50%* (details)", "* 50%", "піввідсотка"])
+def test_a_discount_that_is_not_a_percentage_and_a_footnote_is_still_refused(raw):
+    with pytest.raises(P.SchemaError, match="not a percentage"):
+        P.parse_percent(raw)
 
 
 def test_an_unresolved_brand_keeps_its_string_and_never_guesses_a_watchlist_row():

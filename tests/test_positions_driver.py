@@ -115,10 +115,12 @@ def test_a_row_carries_every_registered_column_in_order(prereg):
         category="ice-cream",
         size_value=450.0,
         size_unit="г",
+        pack_count=None,
         attribute_pct=12.0,
         price_promo=89.9,
         price_old=129.9,
         discount_pct_printed=31.0,
+        discount_footnote=False,
         price_qualifier="exact",
         price_origin="retail_leaflet",
         carrier="leaflet_page",
@@ -128,6 +130,11 @@ def test_a_row_carries_every_registered_column_in_order(prereg):
     row = driver.row_for(position, source, fields)
     assert tuple(row) == fields
     assert row["fat"] == 12.0 and row["size"] == "450 г"
+    # SPEC 3.17 (13)(a) added two fields to Position and NEITHER is a dump column: the columns are
+    # derived from the registered `price_pair_accuracy.procedure` sentence, which B′ keeps
+    # byte-equal to v4. Carrying the warnings into the run record is skub2-run's step, and this
+    # assertion is what says the sealed column list did not move under the amendment.
+    assert "pack_count" not in row and "discount_footnote" not in row
     assert row["tier"] == "position"
     assert row["depth"] == pytest.approx((129.9 - 89.9) / 129.9)
     assert row["depth_disagrees_with_printed"] is False

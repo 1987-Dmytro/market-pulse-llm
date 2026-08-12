@@ -47,18 +47,34 @@ TIERS = ("position", "product_mention", "brand_mention")
 SIZE_UNITS = ("г", "мл")
 """Everything normalises to grams or millilitres, so two spellings of one pack compare equal."""
 
-QUALIFIERS = ("exact", "approx")
-"""Whether the number is the printed price or a hedged one — «по 90», «~89». A qualifier is not a
-confidence: it says what the source wrote."""
+QUALIFIERS = ("exact", "approx", "from")
+"""Whether the number is the printed price or a hedged one — «по 90», «~89», «від 39,90».
+
+A qualifier is not a confidence: it says what the source wrote. `from` arrived with SPEC 3.17
+(13)(a) and is the strongest of the three, because it is not a noisy point estimate — it is a LOWER
+BOUND, and a depth computed from it is wrong in a knowable direction. That is the precedence when
+one record carries several: see :func:`parse_positions`."""
 
 APPROX_MARKERS = ("~", "≈", "по ")
-# ponytail: the three markers the contract names («по 90», «~»). «близько», «десь», «від» are NOT in
-# it — widening this tuple changes what a recorded `approx` means, so it is a named revision, not a
-# tweak, and the pilot's counts would stop being comparable across it.
+# ponytail: the three markers the contract names («по 90», «~»). «близько» and «десь» are NOT in it
+# — widening this tuple changes what a recorded `approx` means, so it is a named revision, not a
+# tweak, and the pilot's counts would stop being comparable across it. «від» WAS that named
+# revision: SPEC 3.17 (13)(a) gave it its own qualifier rather than folding it in here, so an
+# `approx` still means today what it meant when v4 was bought.
+
+FROM_MARKERS = ("від", "от")
+"""SPEC 3.17 (13)(a): «від 39,90 грн» is one number and a bound, not a range of two.
+
+Leading only, and two spellings — UA and RU. Anchored at the start on purpose: «39,90 від Рудь» is
+not a bound, and a substring test would read one."""
 
 _NUMBER = r"\d+(?:[.,]\d+)?"
 _SIZE = re.compile(rf"^({_NUMBER})\s*(кг|мл|г|л)$", re.IGNORECASE)
 _MULTIPACK = re.compile(rf"^{_NUMBER}\s*[xх×*]\s*{_NUMBER}", re.IGNORECASE)
+_MULTIPACK_SIZE = re.compile(rf"^(\d+)\s*[xх×*]\s*({_NUMBER})\s*(кг|мл|г|л)$", re.IGNORECASE)
+"""«6х100 г» → a pack count and the UNIT size. SPEC 3.17 (13)(a). Narrower than :data:`_MULTIPACK`
+by design: a shape this cannot read as exactly one count and one unit size is still refused, so
+«2х0,5 л х 3» does not become a pack of two."""
 _FAT = re.compile(rf"^({_NUMBER})\s*%?$")
 _TO_GRAMS_OR_ML = {"г": ("г", 1.0), "кг": ("г", 1000.0), "мл": ("мл", 1.0), "л": ("мл", 1000.0)}
 
@@ -112,10 +128,17 @@ class Position:
     category: str | None
     size_value: float | None
     size_unit: str | None
+    # SPEC 3.17 (13)(a). Both are WARNINGS: they record something the page said that the schema's
+    # other fields cannot hold, and neither is a reason to refuse the page. `pack_count` is the
+    # multiplier of «6х100 г» beside a `size_value` of 100; `discount_footnote` is the asterisk of
+    # «-50%*». Required like every other field — a position that forgot to say is not the same
+    # answer as one that said no.
+    pack_count: int | None
     attribute_pct: float | None
     price_promo: float | None
     price_old: float | None
     discount_pct_printed: float | None
+    discount_footnote: bool
     price_qualifier: str | None
     price_origin: str
     carrier: str
@@ -163,7 +186,22 @@ class Position:
         if has_price != (self.price_qualifier is not None):
             raise SchemaError("price_qualifier belongs to a price, and only to a price")
         if self.price_qualifier is not None and self.price_qualifier not in QUALIFIERS:
-            raise SchemaError(f"price_qualifier {self.price_qualifier!r} is not exact/approx")
+            raise SchemaError(
+                f"price_qualifier {self.price_qualifier!r} is not one of {list(QUALIFIERS)}"
+            )
+        # the two (13)(a) warnings, each tied to the field it qualifies: a pack count with no size
+        # multiplies nothing, and a footnote with no printed discount marks nothing
+        if self.pack_count is not None:
+            if isinstance(self.pack_count, bool) or not isinstance(self.pack_count, int):
+                raise SchemaError(f"pack_count {self.pack_count!r} is not a whole number")
+            if self.pack_count < 2:
+                raise SchemaError(f"pack_count {self.pack_count} — a pack starts at two")
+            if self.size_value is None:
+                raise SchemaError("pack_count is the multiplier of a size, and there is no size")
+        if not isinstance(self.discount_footnote, bool):
+            raise SchemaError(f"discount_footnote {self.discount_footnote!r} is not a boolean")
+        if self.discount_footnote and self.discount_pct_printed is None:
+            raise SchemaError("discount_footnote marks a printed discount, and there is none")
 
     def identity(self) -> tuple:
         """(brand, line, category, size, attribute_pct) — SPEC 3.17 (2), and no price in it.
@@ -183,6 +221,22 @@ class Position:
 
     def tier(self) -> str:
         return tier(self)
+
+    def warnings(self) -> tuple[str, ...]:
+        """What SPEC 3.17 (13)(a) let this position through WITH — the countable form of the three.
+
+        A method and not a field, for the reason `tier` and `depth` are methods: a stored list
+        could disagree with the fields it summarises, and `assert_no_imputation` refuses exactly
+        that. The names are the warning vocabulary the preflight and the run record count by.
+        """
+        said = []
+        if self.pack_count is not None:
+            said.append("multipack")
+        if self.discount_footnote:
+            said.append("discount_footnote")
+        if self.price_qualifier == "from":
+            said.append("price_from")
+        return tuple(said)
 
     def depth(self) -> float | None:
         """(old − promo) / old, and only when both prices are there — SPEC 3.17 (3).
@@ -240,20 +294,33 @@ def tier(position: Position) -> str:
     return "brand_mention"
 
 
-def parse_size(raw: str) -> tuple[float, str]:
-    """«0,5 л» → (500.0, "мл"), «1 кг» → (1000.0, "г"). Refuses anything it cannot read.
+def parse_size(raw: str) -> tuple[float, str, int | None]:
+    """«0,5 л» → (500.0, "мл", None), «6х100 г» → (100.0, "г", 6). Refuses what it cannot read.
 
-    Multipacks are refused rather than multiplied: «2х100 г» and «200 г» are different SKUs on a
-    shelf and folding one into the other would invent a pack that is not on the page.
+    A multipack is still never MULTIPLIED — «6х100 г» and «600 г» are different SKUs on a shelf and
+    folding one into the other would invent a pack that is not on the page. What SPEC 3.17 (13)(a)
+    changed is that the pack count is now READ and carried beside the unit size instead of costing
+    the whole page: five of bar 1's 29 misses were on a page refused for exactly this string.
+
+    The third element is the count, and it is `None` for a single pack rather than 1 — a `1` would
+    read as "a multipack of one" and is not something a leaflet prints.
     """
     text = " ".join(str(raw).split())
+    if pack := _MULTIPACK_SIZE.match(text):
+        count = int(pack.group(1))
+        if count < 2:
+            raise SchemaError(f"size {text!r} names a pack of {count} — a pack starts at two")
+        unit, factor = _TO_GRAMS_OR_ML[pack.group(3).casefold()]
+        return round(float(pack.group(2).replace(",", ".")) * factor, 3), unit, count
     if _MULTIPACK.match(text):
-        raise SchemaError(f"size {text!r} is a multipack — a pack count is not a size")
+        raise SchemaError(
+            f"size {text!r} is a multipack this parser cannot read as one count and one unit size"
+        )
     found = _SIZE.match(text)
     if not found:
         raise SchemaError(f"size {text!r} is not a number and one of кг/г/л/мл")
     unit, factor = _TO_GRAMS_OR_ML[found.group(2).casefold()]
-    return round(float(found.group(1).replace(",", ".")) * factor, 3), unit
+    return round(float(found.group(1).replace(",", ".")) * factor, 3), unit, None
 
 
 def parse_fat(raw: str) -> float:
@@ -266,14 +333,23 @@ def parse_fat(raw: str) -> float:
 
 
 def parse_price(raw: str) -> tuple[float, str]:
-    """«89,90 грн» → (89.9, "exact"); «по 90» and «~89» → approx — the contract's two markers.
+    """«89,90 грн» → (89.9, "exact"); «по 90» and «~89» → approx; «від 39,90» → (39.9, "from").
 
-    The currency word is dropped and the number is kept; a range («80-90») is refused, because a
-    range is two prices and the schema holds one.
+    The currency word is dropped and the number is kept. A written-out range («80-90») is still
+    refused, because that is two prices and the schema holds one — what SPEC 3.17 (13)(a) added is
+    the ONE-sided form, where the leaflet prints a single number and calls it a floor.
     """
     text = " ".join(str(raw).split())
-    qualifier = "approx" if any(m in text.casefold() for m in APPROX_MARKERS) else "exact"
-    stripped = re.sub(r"(грн|₴|uah|\.)$", "", text.casefold().strip(), flags=re.IGNORECASE).strip()
+    folded = text.casefold()
+    bounded = any(folded.startswith(f"{marker} ") for marker in FROM_MARKERS)
+    qualifier = (
+        "from" if bounded else ("approx" if any(m in folded for m in APPROX_MARKERS) else "exact")
+    )
+    stripped = re.sub(r"(грн|₴|uah|\.)$", "", folded.strip(), flags=re.IGNORECASE).strip()
+    for marker in FROM_MARKERS:
+        if stripped.startswith(f"{marker} "):
+            stripped = stripped[len(marker) :]
+            break
     for marker in APPROX_MARKERS:
         stripped = stripped.replace(marker, " ")
     stripped = " ".join(stripped.split())
@@ -307,7 +383,7 @@ def assert_no_imputation() -> None:
     for field in fields(Position):
         if field.default is not MISSING or field.default_factory is not MISSING:
             raise SchemaError(f"{field.name} has a default — a missing field would read as absent")
-    for name in ("tier", "depth", "depth_disagrees_with_printed"):
+    for name in ("tier", "depth", "depth_disagrees_with_printed", "warnings"):
         if name in {field.name for field in fields(Position)}:
             raise SchemaError(f"{name} is a field — a computed value must not be storable")
 
@@ -334,7 +410,19 @@ These are WIRE keys, and `fat` is one of them on purpose: SPEC 3.17 (8) renamed 
 to `attribute` and left the registered prompts alone, so the vocabulary a reply may use is still the
 dairy instruments' own. :data:`WIRE_KEYS` is where the two meet."""
 
-DECIDED_BY_CODE = ("tier", "carrier", "price_origin", "extraction_source", "depth", "brand_id")
+DECIDED_BY_CODE = (
+    "tier",
+    "carrier",
+    "price_origin",
+    "extraction_source",
+    "depth",
+    "brand_id",
+    # (13)(a)'s two warnings are read OUT of `size` and `discount_pct_printed`, never announced:
+    # a reply naming its own pack count would be asserting how the page multiplies
+    "pack_count",
+    "discount_footnote",
+    "warnings",
+)
 """Named separately from the rest of the unknown keys so the refusal says WHY.
 
 `tier` is the one that matters: SPEC 3.17 (2) says the ladder is assigned by code from field
@@ -368,18 +456,27 @@ def wire_key(field: str, family: str = DEFAULT_FAMILY) -> str:
     return WIRE_KEYS.get(family, {}).get(field, field)
 
 
-_PERCENT = re.compile(rf"^-?\s*({_NUMBER})\s*%?$")
+_PERCENT = re.compile(rf"^-?\s*({_NUMBER})\s*%?\s*(\*{{1,2}})?$")
 
 
-def parse_percent(raw) -> float:
-    """«-51%» → 51.0. The sign is dropped: a printed discount is a reduction, and a stored −51
-    would compare the wrong way round against a depth of 0.51."""
+def parse_percent(raw) -> tuple[float, bool]:
+    """«-51%» → (51.0, False); «-50%*» → (50.0, True). The second element is the footnote.
+
+    The sign is dropped: a printed discount is a reduction, and a stored −51 would compare the
+    wrong way round against a depth of 0.51.
+
+    The asterisk is a FOOTNOTE MARKER, and until SPEC 3.17 (13)(a) it cost the whole page — two of
+    the four pages bar 1 lost were refused on the string `-50%*`. It is carried rather than dropped
+    because it is a fact about the number: the small print it points at is what says «-50% on the
+    second pack», and a depth compared against a footnoted headline is comparing against a
+    condition this layer cannot see.
+    """
     if isinstance(raw, int | float) and not isinstance(raw, bool):
-        return abs(float(raw))
+        return abs(float(raw)), False
     found = _PERCENT.match(" ".join(str(raw).split()))
     if not found:
         raise SchemaError(f"printed discount {raw!r} is not a percentage")
-    return float(found.group(1).replace(",", "."))
+    return float(found.group(1).replace(",", ".")), found.group(2) is not None
 
 
 def _array(reply: str) -> list:
@@ -490,14 +587,19 @@ def parse_positions(
             category = " ".join(str(category).split())
             if category not in categories:
                 raise SchemaError(f"entry {index} category {category!r} is outside the taxonomy")
-        size_value, size_unit = (None, None)
+        size_value, size_unit, pack_count = (None, None, None)
         if "size" in entry:
-            size_value, size_unit = parse_size(entry["size"])
+            size_value, size_unit, pack_count = parse_size(entry["size"])
         prices, qualifiers = {}, []
         for key in ("price_promo", "price_old"):
             if key in entry:
                 prices[key], qualifier = _number_or_price(entry[key], key)
                 qualifiers.append(qualifier)
+        printed, footnote = (
+            parse_percent(entry["discount_pct_printed"])
+            if "discount_pct_printed" in entry
+            else (None, False)
+        )
         out.append(
             Position(
                 brand_id=resolve_brand(brand, aliases),
@@ -506,19 +608,20 @@ def parse_positions(
                 category=category,
                 size_value=size_value,
                 size_unit=size_unit,
+                pack_count=pack_count,
                 attribute_pct=(parse_fat(entry[attribute_key]) if attribute_key in entry else None),
                 price_promo=prices.get("price_promo"),
                 price_old=prices.get("price_old"),
-                discount_pct_printed=(
-                    parse_percent(entry["discount_pct_printed"])
-                    if "discount_pct_printed" in entry
-                    else None
-                ),
+                discount_pct_printed=printed,
+                discount_footnote=footnote,
                 # one qualifier for the record, and a hedge anywhere in it hedges the record:
-                # «по 90» beside a crossed-out 129,90 is not an exact observation
-                price_qualifier=("approx" if "approx" in qualifiers else "exact")
-                if qualifiers
-                else None,
+                # «по 90» beside a crossed-out 129,90 is not an exact observation. The order is the
+                # precedence SPEC 3.17 (13)(a) implies and QUALIFIERS states — a `from` price is a
+                # BOUND and not a point estimate, so it outranks an `approx` beside it rather than
+                # losing to whichever price the loop above happened to read first.
+                price_qualifier=next(
+                    (name for name in ("from", "approx", "exact") if name in qualifiers), None
+                ),
                 price_origin=price_origin,
                 carrier=carrier,
                 extraction_source=extraction_source,
@@ -642,10 +745,14 @@ def tier_from_presence(
             category="?" if category else None,
             size_value=1.0 if size else None,
             size_unit="г" if size else None,
+            # the ladder is a function of PRESENCE, and (13)(a)'s two warnings are not presence
+            # fields: a multipack of six reaches the same rung a single pack does
+            pack_count=None,
             attribute_pct=1.0 if attribute else None,
             price_promo=None,
             price_old=None,
             discount_pct_printed=None,
+            discount_footnote=False,
             price_qualifier=None,
             price_origin="retail_leaflet",
             carrier="leaflet_page",

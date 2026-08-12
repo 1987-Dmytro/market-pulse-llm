@@ -278,9 +278,14 @@ def test_the_serving_knobs_are_read_back_out_of_the_amendment(phrase):
     assert phrase in ratification_block()
 
 
-def test_eight_hundred_is_the_number_the_amendment_names():
-    assert local_llm.POSITIONS_MAX_NEW_TOKENS == 800
+def test_the_ceiling_is_the_number_the_LATEST_amendment_names():
+    """(9) fixed it at 800 and (13)(a) moved it to 1200 — both blocks are quoted, because the older
+    one is still the authority the sealed v1 pin was written under and the newer one is the
+    authority the live constant follows. A test that read only one of them would pass either
+    before the amendment landed or after it was reverted."""
+    assert local_llm.POSITIONS_MAX_NEW_TOKENS == 1200
     assert re.search(r"max_new_tokens 800", ratification_block())
+    assert re.search(r"800 → \*\*1200\*\*", ratification_block("sku-b-ratification-7"))
 
 
 # --- the client: two registered tasks, one page per call, greedy --------------
