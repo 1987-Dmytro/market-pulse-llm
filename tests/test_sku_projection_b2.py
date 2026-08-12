@@ -117,19 +117,24 @@ def test_the_population_is_138_and_the_legs_add_up(projection):
     assert cheap["text_leg_seconds"] == pytest.approx(30 * marg["text_seconds_per_row"]["value"])
 
 
-def test_the_dearest_corner_overshoots_the_cap_and_the_record_says_so_both_ways(projection):
-    """The finding this file exists to surface. The hard upper bound is $0.4004 against a $0.40
-    cap — over by four hundredths of a cent, and ONLY once the 3% drift term is applied on top of
-    a bound that is already a bound. Both readings are in the record; neither is chosen here."""
+def test_the_dearest_corner_fits_the_ruled_cap_and_the_bound_did_not_move(projection):
+    """The finding this file surfaced, and what was ruled on it. The hard upper bound is $0.4004 —
+    unchanged, because nothing about the arithmetic moved — and against (13)(d)'s $0.40 it was over
+    by four hundredths of a cent. SPEC 3.17 (14)(e) set the cap at $0.65 on exactly that reading,
+    so the same bound now fits with $0.2496 to spare.
+
+    The bound is asserted BEFORE the cap here on purpose: if a later edit ever moves a corner, this
+    must fail on the corner rather than pass because the cap is roomy.
+    """
     verdict = projection["against_the_cap"]
-    assert verdict["cap_usd"] == 0.40
     assert verdict["dearest_usd"] == 0.4004
-    assert verdict["fits"] is False
-    assert verdict["headroom_usd"] == pytest.approx(-0.0004)
     assert verdict["dearest_usd_without_drift"] == 0.3888
-    assert verdict["fits_without_drift"] is True
-    assert verdict["headroom_without_drift_usd"] == pytest.approx(0.0112)
-    assert "The executor does not choose" in verdict["reading"]
+    assert verdict["cap_usd"] == 0.65
+    assert verdict["fits"] is True and verdict["fits_without_drift"] is True
+    assert verdict["headroom_usd"] == pytest.approx(0.2496)
+    assert verdict["headroom_without_drift_usd"] == pytest.approx(0.2612)
+    assert verdict["dearest_usd"] > 0.40, "and it is still over the cap (13)(d) had written"
+    assert "3.17 (14)(e)" in verdict["reading"]
 
 
 def test_the_cheapest_corner_is_the_one_the_measurement_actually_supports(projection):

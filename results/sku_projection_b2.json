@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-08-12T13:23:01+00:00",
-  "phase": "skub2 — what the re-measurement costs against its $0.40 cap",
-  "written_by": "skub2-prep (executor, $0), docs/PROMPT-skub2-prep.md deliverable 5",
-  "authority": "docs/SPEC.md amendment 3.17 (10)(a) and (13)(d)",
+  "generated_at": "2026-08-12T14:53:10+00:00",
+  "phase": "skub2 — what the re-measurement costs against its $0.65 cap",
+  "written_by": "skub2-prep (executor, $0), docs/PROMPT-skub2-prep.md deliverable 5; re-stamped by docs/PROMPT-skub2-fix.md step 5 against the cap 3.17 (14)(e) sets",
+  "authority": "docs/SPEC.md amendment 3.17 (10)(a), (13)(d) and (14)(e)",
   "class": "PROJECTION. Every rate is MEASURED — this is the first sku-b projection with a completed session behind it — and the two things that are not measured, the boot spread and what the 800 → 1200 ceiling does to a decode, are carried as corners rather than averaged into one number. Nothing here authorises a run: the (10)(a) gate re-prices from the session's own warm-up before the first gold call",
   "population": {
     "pages": 108,
@@ -10,8 +10,8 @@
     "elements": 138,
     "reading": "all 138, per SPEC 3.17 (13)(d) — a re-measurement of instrument v2 cannot reuse instrument v1's answers, so the 17 the first session bought are re-asked"
   },
-  "cap_usd": 0.4,
-  "cap_source": "results/sku_pilot_prereg_b2.json :: attempts.cap_usd (SPEC 3.17 (13)(d))",
+  "cap_usd": 0.65,
+  "cap_source": "results/sku_pilot_prereg_b2.json :: attempts.cap_usd (SPEC 3.17 (14)(e))",
   "rate_usd_per_second": 0.00030669,
   "rate_source": "results/srv2d_cost.json :: rate.usd_per_second",
   "marginals": {
@@ -107,13 +107,13 @@
   "against_the_cap": {
     "cheapest_usd": 0.2534,
     "dearest_usd": 0.4004,
-    "cap_usd": 0.4,
-    "fits": false,
-    "headroom_usd": -0.0004,
+    "cap_usd": 0.65,
+    "fits": true,
+    "headroom_usd": 0.2496,
     "dearest_usd_without_drift": 0.3888,
     "fits_without_drift": true,
-    "headroom_without_drift_usd": 0.0112,
-    "reading": "the dearest corner is boot-high with every call decoding to the new ceiling, and it is a HARD upper bound rather than a pessimistic guess: no reply can generate past the ceiling and no boot longer than the longest one ever measured on this configuration is in evidence. It overshoots the cap by four hundredths of a cent — and only once the 3% drift term is applied ON TOP of that bound, which is the one number in this file that is a contract term rather than a measurement. Without it the same corner fits with $0.0112 to spare. The executor does not choose between those two readings: what the cap admits is (13)(d)'s, and this record states both so the ruling is made on the arithmetic. What must NOT happen is discovering it in flight — the (10)(a) gate would refuse the session after the boot is already billed, which is exactly the outcome (12)(b) prices"
+    "headroom_without_drift_usd": 0.2612,
+    "reading": "the dearest corner is boot-high with every call decoding to the new ceiling, and it is a HARD upper bound rather than a pessimistic guess: no reply can generate past the ceiling and no boot longer than the longest one ever measured on this configuration is in evidence. Against (13)(d)'s $0.40 that bound OVERSHOT, by four hundredths of a cent and only once the 3% drift term was applied on top of it; the ruling on that arithmetic is SPEC 3.17 (14)(e), which sets the cap at $0.65. The same bound now fits with room, and the room is the point rather than the margin: (12)(a)'s standing rule is that the cap admits the gate's own pessimism while the in-run gate protects the middle. Nothing here moved to make that true — every corner is the number it was before the cap was ruled on. The measured expectation is still the cheapest corner and change, and what must NOT happen is discovering a shortfall in flight: the (10)(a) gate would refuse the session after the boot is already billed, which is the outcome (12)(b) prices"
   },
   "job_timeout_headroom": {
     "job_timeout_s": 900.0,
@@ -132,7 +132,17 @@
     "the driver's constants": "scripts/positions_gm4_skub.py still carries v4's CAP_USD, PHASE and LEDGER. Moving them to the B′ three is skub2-run's step and is guarded by the driver's own refusal on a mismatched registration — this file prices the run, it does not configure it"
   },
   "git": {
-    "commit": "2b6ee3fd6b9247237a0af151862ad9ebad5c6f34",
-    "dirty": []
+    "commit": "56b22144044482f443a93bac834dbf50bf49a95c",
+    "dirty": [
+      "knowledge/daily_logs/2026-08-12.md",
+      "knowledge/hot.md",
+      "knowledge/index.md",
+      "results/sku_miss_decomposition.json",
+      "scripts/apply_miss_decomposition.py",
+      "scripts/write_sku_prereg_b2.py",
+      "scripts/write_sku_projection_b2.py",
+      "tests/test_miss_decomposition.py",
+      "tests/test_sku_prereg_b2.py"
+    ]
   }
 }

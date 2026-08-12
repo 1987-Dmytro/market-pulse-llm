@@ -3,8 +3,10 @@
 
 Deliverable 1 of `docs/PROMPT-skub2-prep.md`, and the evidence SPEC 3.17 (13) was ratified on.
 `results/sku_miss_pack.md` laid 29 rows on the table with an empty verdict column; the team lead
-read the page images and dictated 25 of them, leaving four for the B′-prep acceptance. This file
-applies that dictation and derives no verdict of its own — SPEC §10 runs both ways.
+read the page images and dictated 25 of them, leaving four for the B′-prep acceptance. The four
+came back at that acceptance as SPEC 3.17 (14)(a) — all class b, each with the pages that were
+read — and `docs/PROMPT-skub2-fix.md` is where they are dictated. This file applies both
+dictations and derives no verdict of its own — SPEC §10 runs both ways.
 
 What it guards, in the order a defect would arrive:
 
@@ -22,11 +24,15 @@ What it guards, in the order a defect would arrive:
 - **the alias gap is evidenced.** The row tagged `alias:latin-form` has to sit on a post where the
   instrument DID extract something no gold key matched; a row with nothing unmatched on it cannot
   be an alias gap.
+- **a page the read names was a page that could be read.** (14)(a)'s four verdicts each cite page
+  numbers («fish p2, tea p3 …»), and those pages have to exist on that post and not be among the
+  ones the extractor refused. A verdict citing a refused page is row 14's `by-pattern` caveat
+  wearing the words of a full read.
 
     PYTHONPATH=src python3 scripts/apply_miss_decomposition.py
 
 Writes `results/sku_miss_decomposition.json`. `scripts/write_sku_prereg_b2.py` reads it for the B′
-gold and refuses while any pair is still `PENDING_TEAM_LEAD`.
+gold and refuses while any pair is still `PENDING_TEAM_LEAD`. Nothing is pending since (14)(a).
 """
 
 import argparse
@@ -44,7 +50,10 @@ PACK = REPO_ROOT / "results" / "sku_miss_pack.json"
 SHEET = REPO_ROOT / "results" / "sku_miss_pack.md"
 OUT = REPO_ROOT / "results" / "sku_miss_decomposition.json"
 
-CONTRACT = "docs/PROMPT-skub2-prep.md — deliverable 1, the decomposition verdicts applied"
+CONTRACT = (
+    "docs/PROMPT-skub2-prep.md — deliverable 1, the decomposition verdicts applied;"
+    " docs/PROMPT-skub2-fix.md — step 2, the last four verdicts of SPEC 3.17 (14)(a)"
+)
 READ_BY = "the team lead"
 READ_ON = "2026-08-12"
 READ_SCOPE = "the 29 missed pairs of results/sku_miss_pack.md against the sent page images"
@@ -59,10 +68,12 @@ DICTATED = (
     (1, "a", "refusal:asterisk"),
     (2, "a", "alias:latin-form"),
     (3, "b", "maker-logo"),
+    (4, "b", "non-dairy watchlist item"),
     (5, "b", "non-dairy watchlist item"),
     (6, "b", "SKU-name-vs-TM"),
     (7, "b", "SKU-name-vs-TM"),
     (8, "c", "gold-key artifact — brand was found"),
+    (9, "b", "non-dairy watchlist item"),
     (10, "a", "refusal:token-ceiling"),
     (11, "a", "refusal:token-ceiling"),
     (12, "a", "refusal:token-ceiling"),
@@ -81,24 +92,52 @@ DICTATED = (
     (25, "a", "refusal:asterisk"),
     (26, "b", "maker-logo"),
     (27, "b", "non-dairy watchlist item"),
+    (28, "b", "non-dairy watchlist item"),
+    (29, "b", "non-dairy watchlist item"),
 )
-"""`docs/PROMPT-skub2-prep.md`'s chat message, transcribed row for row and re-sorted by `n` only.
+"""Two chat messages, transcribed row for row and re-sorted by `n` only: `docs/PROMPT-skub2-prep.md`
+dictated 25 and `docs/PROMPT-skub2-fix.md` — SPEC 3.17 (14)(a) — the last four.
 
 `(row number on the sheet, class, mechanism)`. The mechanisms are the team lead's words: `14` is
 ruled "by-pattern" because its page came back refused and could not be read, and that caveat is
 carried rather than tidied away — it is the difference between a verdict from an image and a
-verdict from the four rows beside it."""
+verdict from the four rows beside it.
 
-PENDING = (4, 9, 28, 29)
-"""Not read yet, and NOT inferable from the five `svoia-liniia` rows that were: three of these four
-are `svoia-liniia` and the team lead ruled those separately anyway. They come back at the B′-prep
-acceptance, with their pages listed in this record."""
+The four that came last wear the SAME mechanism string as the five `non-dairy watchlist item` rows
+of the first read, deliberately: what each of them saw is in :data:`PAGE_READS`, and a per-row
+mechanism would have turned one count of nine into nine counts of one."""
+
+PAGE_READS = {
+    4: (
+        (2, 3, 4, 5, 6),
+        "fish p2, tea p3, zefir p4, oil p5, pate p6 — every page read",
+    ),
+    9: ((1, 5), "mayonnaise p1, cereals p5"),
+    28: ((2, 3, 5), "crab sticks/dough p2, drink p3, sweets p5"),
+    29: ((2,), "dumplings p2, with price boxes"),
+}
+"""What the team lead saw on each of (14)(a)'s four, page by page, verbatim from the contract.
+
+Kept beside the mechanism rather than inside it. The four rows the first read deferred are the four
+the second read had to justify hardest — the guess they were left open against was «three of these
+are `svoia-liniia`, rule them like the other two» — so the pages are the evidence that the verdict
+came from the images. :func:`check_the_page_reads_land_on_readable_pages` holds them against the
+pack: a page number that is not on that post, or that came back refused, is a claim the images
+cannot carry."""
+
+PENDING: tuple[int, ...] = ()
+"""Empty since SPEC 3.17 (14)(a). It was `(4, 9, 28, 29)` — three `svoia-liniia` rows and a
+`try-vedmedi`, deferred because they were NOT inferable from the five `svoia-liniia` rows that were
+ruled. The machinery stays: a row named here is deferred rather than guessed, `pending` is one of
+the contract's checksums, and `write_sku_prereg_b2.py` refuses while the tuple is non-empty."""
 
 PENDING_STATUS = "PENDING_TEAM_LEAD"
 
-EXPECTED = {"a": 11, "b": 12, "c": 2, "pending": 4, "rows": 29}
-"""The contract's own checksum line («a=11 · b=12 · c=2 · pending=4») and the pack's row count,
-transcribed. A checksum computed from `DICTATED` would agree with every typo in it."""
+EXPECTED = {"a": 11, "b": 16, "c": 2, "pending": 0, "rows": 29}
+"""The contract's own checksum line — `docs/PROMPT-skub2-fix.md`'s «a=11 · b=16 · c=2 · pending=0,
+total 29» — and the pack's row count, transcribed. A checksum computed from `DICTATED` would agree
+with every typo in it. The first read's line was «a=11 · b=12 · c=2 · pending=4» and the four that
+moved are exactly the four that were pending."""
 
 REFUSAL_REASON = {
     "refusal:asterisk": "printed discount '-50%*' is not a percentage",
@@ -113,7 +152,10 @@ ALIAS_MECHANISM = "alias:latin-form"
 
 B_PRIME_RULE = (
     "SPEC 3.17 (13)(c) — the B′ gold is the dairy positions carrying a price box on the sent"
-    " pages: class-b and class-c pairs leave the denominator, class-a pairs and the 26 found stay"
+    " pages: class-b and class-c pairs leave the denominator, class-a pairs and the 26 found stay."
+    " 3.17 (14)(b) fixes the grain: a class is a fact about ONE (post, brand) pair and never about"
+    " the brand everywhere, so a brand ruled non-dairy on one post stays gold where it sits on a"
+    " dairy position"
 )
 
 
@@ -180,6 +222,11 @@ def rule(dictated, pending, rows: dict[int, dict], classes: set[str]) -> list[di
                 "unreadable_pages": row["unreadable_pages"],
                 "unmatched_extractions_on_this_post": row["unmatched_extractions_on_this_post"],
                 **({"pages": row["pages"]} if verdict == PENDING_STATUS else {}),
+                **(
+                    {"pages_read": {"pages": list(PAGE_READS[n][0]), "saw": PAGE_READS[n][1]}}
+                    if n in PAGE_READS and verdict != PENDING_STATUS
+                    else {}
+                ),
             }
         )
     missing = sorted(set(rows) - set(claimed))
@@ -210,6 +257,48 @@ def check_the_mechanism_is_the_one_the_instrument_recorded(ruled: list[dict]) ->
             checked += 1
         elif mechanism is not None and mechanism.startswith("refusal:"):
             refuse(f"row {row['n']}: {mechanism!r} is a refusal this file has no reason string for")
+    return checked
+
+
+def check_the_page_reads_land_on_readable_pages(ruled: list[dict], rows: dict[int, dict]) -> int:
+    """SPEC 3.17 (14)(a) cites page numbers, and a cited page has to be one that could be read.
+
+    The second non-transcription check, and it exists for the same reason the first one does. These
+    four verdicts were deferred precisely because the rows beside them were not evidence, so «fish
+    p2» is the claim that carries them — and a page number that is not on that post, or that the
+    extractor returned as unreadable, means the verdict came from somewhere other than the image it
+    names. That is row 14's `by-pattern` caveat, and row 14 says so out loud.
+    """
+    unruled = sorted(set(PAGE_READS) - {row["n"] for row in ruled})
+    if unruled:
+        refuse(f"PAGE_READS names row(s) the table does not rule on: {unruled}")
+    deferred = sorted(
+        set(PAGE_READS) & {row["n"] for row in ruled if row["verdict"] == PENDING_STATUS}
+    )
+    if deferred:
+        refuse(
+            f"row(s) {deferred} are {PENDING_STATUS} and cite the pages they were read on — a row"
+            " nobody has ruled on cannot carry a read"
+        )
+    checked = 0
+    for row in ruled:
+        if "pages_read" not in row:
+            continue
+        packed = rows[row["n"]]
+        sent = {page["page"] for page in packed["pages"]}
+        refused = {page["page"] for page in packed["unreadable_pages"]}
+        named = set(row["pages_read"]["pages"])
+        if not named <= sent:
+            refuse(
+                f"row {row['n']} ({row['msg_id']}) cites page(s) {sorted(named - sent)} and that"
+                f" post has {sorted(sent)}"
+            )
+        if named & refused:
+            refuse(
+                f"row {row['n']} ({row['msg_id']}) cites page(s) {sorted(named & refused)} the"
+                " extractor returned as unreadable — that is a by-pattern verdict, not a page read"
+            )
+        checked += 1
     return checked
 
 
@@ -245,9 +334,12 @@ def b_prime(pack: dict, sums: dict) -> dict:
         "pending": sums["pending"],
         "final": None if sums["pending"] else gold - removed,
         "note": (
-            "`final` stays null while any pair is PENDING_TEAM_LEAD: each of the four can still"
-            " leave the denominator, so the B′ gold is not a number yet. The producer of"
-            " results/sku_pilot_prereg_b2.json refuses on this field rather than guessing it"
+            "`final` is null while ANY pair is PENDING_TEAM_LEAD — each one can still leave the"
+            " denominator, so the B′ gold is not a number yet — and the producer of"
+            " results/sku_pilot_prereg_b2.json refuses on this field rather than guessing it. It"
+            " did refuse, for one contract: the first read left four pending and SPEC 3.17 (14)(a)"
+            " ruled all four class b. `remaining_if_no_pending_pair_leaves` therefore equals"
+            " `final` now, and it is kept because it is what the field meant while they stood"
         ),
     }
 
@@ -263,8 +355,10 @@ def main(argv: list[str] | None = None) -> int:
     pack_sha, sheet_sha = sha256_of(args.pack), sha256_of(args.sheet)
 
     check_the_pack_is_the_one_that_was_read(pack, pack_sha, sheet_sha)
-    ruled = rule(DICTATED, PENDING, join(pack), set(pack["classes"]))
+    rows = join(pack)
+    ruled = rule(DICTATED, PENDING, rows, set(pack["classes"]))
     evidenced = check_the_mechanism_is_the_one_the_instrument_recorded(ruled)
+    pages_checked = check_the_page_reads_land_on_readable_pages(ruled, rows)
     sums = checksums(ruled, EXPECTED)
 
     out = {
@@ -273,12 +367,15 @@ def main(argv: list[str] | None = None) -> int:
         "class": (
             "TRANSCRIPTION. Every verdict here was read by the team lead against the page images;"
             " this file joins the dictation to the pack's rows and refuses anything that does not"
-            " land exactly once. No verdict is derived, corrected or inferred, and the four pending"
-            f" pairs are {PENDING_STATUS} rather than guessed from the rows beside them"
+            " land exactly once. No verdict is derived, corrected or inferred. The four rows the"
+            f" first read left {PENDING_STATUS} were never guessed from the rows beside them: they"
+            " were deferred, the producer of the B′ registration refused while they stood, and"
+            " they came back as SPEC 3.17 (14)(a) with the pages each verdict was read on"
         ),
         "authority": (
             "SPEC §10 — the executor never scores its own sample; SPEC 3.17 (13), ratified on this"
-            f" read. Read by {READ_BY} on {READ_ON}, {READ_SCOPE}"
+            " read, and 3.17 (14)(a), which closes it. Read by"
+            f" {READ_BY} on {READ_ON}, {READ_SCOPE}"
         ),
         "read_by": READ_BY,
         "read_on": READ_ON,
@@ -290,11 +387,22 @@ def main(argv: list[str] | None = None) -> int:
         "pending_rows": list(PENDING),
         "counts": sums,
         "expected": EXPECTED,
-        "expected_source": "docs/PROMPT-skub2-prep.md, transcribed — not computed from the rows",
+        "expected_source": (
+            "docs/PROMPT-skub2-fix.md — «a=11 · b=16 · c=2 · pending=0», transcribed and not"
+            " computed from the rows. It supersedes docs/PROMPT-skub2-prep.md's «a=11 · b=12 ·"
+            " c=2 · pending=4» by moving exactly the four rows that were pending"
+        ),
         "by_mechanism": by_mechanism(ruled),
         "mechanism_evidence": {
             "checked": evidenced,
             "refusal_reasons": REFUSAL_REASON,
+            "page_reads_checked": pages_checked,
+            "page_reads_note": (
+                "SPEC 3.17 (14)(a)'s four verdicts each cite the pages they were read on, and each"
+                " cited page was checked against the pack: it is a page of that post and the"
+                " extractor did not return it as unreadable. What is ON the page is still only the"
+                " image's to say"
+            ),
             "note": (
                 "each refusal:* row was checked against the reason the extractor recorded on its"
                 " post's refused page, and the alias:latin-form row against that post's unmatched"
@@ -312,9 +420,11 @@ def main(argv: list[str] | None = None) -> int:
     print(f"{rel(args.pack)} — {sums['rows']} missed pairs, each ruled on or deferred exactly once")
     print(
         f"  a {sums['a']} · b {sums['b']} · c {sums['c']} · {PENDING_STATUS.lower()}"
-        f" {sums['pending']} ({', '.join('#' + str(n) for n in PENDING)})"
+        f" {sums['pending']}"
+        + (f" ({', '.join('#' + str(n) for n in PENDING)})" if PENDING else "")
     )
     print(f"  {evidenced} mechanism(s) checked against the instrument's own refusal reasons")
+    print(f"  {pages_checked} page-read citation(s) checked against the pages that could be read")
     for name, count in out["by_mechanism"].items():
         print(f"    {count:2d}  {name}")
     print(f"wrote {rel(args.out)}")

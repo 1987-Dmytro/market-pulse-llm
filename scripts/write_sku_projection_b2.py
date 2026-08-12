@@ -1,7 +1,12 @@
 #!/usr/bin/env python3
-"""Write `results/sku_projection_b2.json` — what the B′ session will cost, against $0.40 ($0).
+"""Write `results/sku_projection_b2.json` — what the B′ session will cost, against $0.65 ($0).
 
-Deliverable 5 of `docs/PROMPT-skub2-prep.md`. Registered BESIDE `results/sku_projection_v4.json`,
+Deliverable 5 of `docs/PROMPT-skub2-prep.md`, re-stamped by step 5 of `docs/PROMPT-skub2-fix.md`
+against the cap SPEC 3.17 (14)(e) sets. Not one corner moved: every rate below was measured before
+the cap was, and the arithmetic is the same arithmetic. What changed is the line it is compared to
+— (13)(d)'s $0.40, which the dearest corner grazed at $0.4004, against (14)(e)'s $0.65.
+
+Registered BESIDE `results/sku_projection_v4.json`,
 which priced a 121-element session at a $0.65 cap from marginals nothing had measured yet. This one
 is the first sku-b projection built entirely out of MEASURED seconds: the v4 session completed, and
 every rate below is read off its own record.
@@ -202,9 +207,12 @@ def build(out: Path) -> dict:
 
     return {
         "generated_at": datetime.now(UTC).isoformat(timespec="seconds"),
-        "phase": "skub2 — what the re-measurement costs against its $0.40 cap",
-        "written_by": "skub2-prep (executor, $0), docs/PROMPT-skub2-prep.md deliverable 5",
-        "authority": "docs/SPEC.md amendment 3.17 (10)(a) and (13)(d)",
+        "phase": "skub2 — what the re-measurement costs against its $0.65 cap",
+        "written_by": (
+            "skub2-prep (executor, $0), docs/PROMPT-skub2-prep.md deliverable 5; re-stamped by"
+            " docs/PROMPT-skub2-fix.md step 5 against the cap 3.17 (14)(e) sets"
+        ),
+        "authority": "docs/SPEC.md amendment 3.17 (10)(a), (13)(d) and (14)(e)",
         "class": (
             "PROJECTION. Every rate is MEASURED — this is the first sku-b projection with a"
             " completed session behind it — and the two things that are not measured, the boot"
@@ -222,7 +230,7 @@ def build(out: Path) -> dict:
             ),
         },
         "cap_usd": cap,
-        "cap_source": f"{rel(b2.RECORD)} :: attempts.cap_usd (SPEC 3.17 (13)(d))",
+        "cap_source": f"{rel(b2.RECORD)} :: attempts.cap_usd (SPEC 3.17 (14)(e))",
         "rate_usd_per_second": rate,
         "rate_source": f"{rel(RATE)} :: rate.usd_per_second",
         "marginals": marg,
@@ -248,14 +256,16 @@ def build(out: Path) -> dict:
                 "the dearest corner is boot-high with every call decoding to the new ceiling, and"
                 " it is a HARD upper bound rather than a pessimistic guess: no reply can generate"
                 " past the ceiling and no boot longer than the longest one ever measured on this"
-                " configuration is in evidence. It overshoots the cap by four hundredths of a cent"
-                " — and only once the 3% drift term is applied ON TOP of that bound, which is the"
-                " one number in this file that is a contract term rather than a measurement."
-                " Without it the same corner fits with $0.0112 to spare. The executor does not"
-                " choose between those two readings: what the cap admits is (13)(d)'s, and this"
-                " record states both so the ruling is made on the arithmetic. What must NOT happen"
-                " is discovering it in flight — the (10)(a) gate would refuse the session after"
-                " the boot is already billed, which is exactly the outcome (12)(b) prices"
+                " configuration is in evidence. Against (13)(d)'s $0.40 that bound OVERSHOT, by"
+                " four hundredths of a cent and only once the 3% drift term was applied on top of"
+                " it; the ruling on that arithmetic is SPEC 3.17 (14)(e), which sets the cap at"
+                " $0.65. The same bound now fits with room, and the room is the point rather than"
+                " the margin: (12)(a)'s standing rule is that the cap admits the gate's own"
+                " pessimism while the in-run gate protects the middle. Nothing here moved to make"
+                " that true — every corner is the number it was before the cap was ruled on. The"
+                " measured expectation is still the cheapest corner and change, and what must NOT"
+                " happen is discovering a shortfall in flight: the (10)(a) gate would refuse the"
+                " session after the boot is already billed, which is the outcome (12)(b) prices"
             ),
         },
         "job_timeout_headroom": job_timeout_headroom(marg, factors),
