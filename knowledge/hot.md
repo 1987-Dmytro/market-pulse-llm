@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-12 17:44:38 (every SessionStart)
+**Auto-refreshed:** 2026-08-12 19:03:46 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-6a20671 chore(vault): the skub2-fix tail -- the day's log, hot.md, the index
-4f59132 docs(report): skub2-fix appended as the report's Fix section
-53d59ba test(skub2-fix): the pin guard's wiring, and two docstrings the move falsified
-30673be fix(skub2-fix): the run record's contract string follows the constants
-40042c5 data(skub2-fix): the projection re-stamped after Dv208 landed
+958716d docs(report): the commit count and the clock from git log, and the price_from negative
+51711db docs(report): skub2-run
+489271e data(skub2-run): bars 1 and 3 over the B-prime gold, bar 2 pending the team lead
+fb4e8dd data(skub2-run): the 138 bought, instrument v2, 101 positions and no unreadable reply
+0793a3c fix(skub2-run): the registered warm-up reaches a full run, not only a resumed one
 ```
 
 ## 📋 Recent decisions
@@ -30,16 +30,20 @@
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-12 17:45 (arch-a ✅, uni-a ✅, uni-b ✅, sku-b-prep ✅, sku-b-run ✅ ПРИНЯТ,
+**Last update:** 2026-08-12 19:01 (arch-a ✅, uni-a ✅, uni-b ✅, sku-b-prep ✅, sku-b-run ✅ ПРИНЯТ,
 sku-b-v3-prep ✅, sku-b-v3-run ⛔ ОТКАЗ на воротах — попытка ЦЕЛА, sku-b-v4-prep ✅ $0,
 sku-b-v4-run ✅ 121 куплен, **sku-b-close ✅ $0 — ПИЛОТ ЗАКРЫТ ИЗМЕРЕНИЕМ, 2 планки из 3 FAIL**,
-sku-miss-pack ✅ $0, skub2-prep ✅ $0, **skub2-fix ✅ $0 — ПРЕРЕЖКА B′ НАПИСАНА, драйвер переведён
-на skub2**).
+sku-miss-pack ✅ $0, skub2-prep ✅ $0, skub2-fix ✅ $0, **skub2-run ✅ 138 куплены за $0.2764 —
+ПЛАНКА 1 = 0.9800 PASS, планка 3 = 0.8667 PASS, планка 2 ЖДЁТ чтения тимлида**).
 **sku-a ✅, R1–R5 ратифицированы, голд text30 размечен, SPEC 3.17 (7)–(14) — закон.**
 Артефакты: **`results/sku_pilot_prereg_b2.json` (B′: голд 37 пар / 10 постов, 138 элементов, кап
 $0.65 — ПРЕДРАНОВАЯ УЛИКА, не перезаписывается)**,
 **`results/sku_b_positions_v4.json` + `.jsonl` (СЛИТЫЕ, 138 источников)**,
-**`results/sku_bar_verdicts.json` (все три планки + `closure`)**,
+**`results/sku_b_positions_skub2.json` + `.jsonl` (138 источников, 101 позиция, 0 нечитаемых,
+80 пар — ДАМП ДЛЯ ЧТЕНИЯ ПЛАНКИ 2)**,
+**`results/sku_bar_verdicts_skub2.json` (планки 1 и 3 по голду B′; планка 2 = n и НИ ОДНОГО
+значения; `closure` UNDETERMINED)**, `results/spend_skub2.json`,
+`results/sku_bar_verdicts.json` (закрытие ПИЛОТА, запечатано — не перезаписывать),
 **`results/sku_b_pair_verdicts.json` (чтение тимлида, 45 ключей / 61 строка)**,
 **`results/sku_depth_from_pct.json` (глубина: бейдж vs старая цена)**,
 `results/sku_miss_pack.json` + `.md` (стол для чтения, вердикты уже сняты),
@@ -53,22 +57,26 @@ $0.65 — ПРЕДРАНОВАЯ УЛИКА, не перезаписываетс
 `sku-b-v4-run.md` (секция `# Close` — итог пилота), `sku-b-v4-prep.md`, `sku-b-v3-run.md`,
 `sku-b-v3-prep.md`, `sku-b-run.md`, `sku-b-prep.md`, `uni-a.md`, `uni-b.md`. Ещё:
 `docs/ARCHITECTURE.md`, граф кода, `docs/PORTING.md`.
-**Next: контракт skub2-run. Прережка подписана, драйвер настроен, гарды на месте. ПЕРВЫЙ шаг
-контракта — переключить `bar_one` на `bars.leaflet_brand_recall.gold.per_post` прережки (Dv210);
-до этого скорер читает старое ключевое пространство и ОТКАЗЫВАЕТ на сверке пустых голдов.**
+**Next: чтение планки 2 тимлидом — 80 пар против картинок страниц, дамп
+`results/sku_b_positions_skub2.jsonl` (sha `5592b324…`). Транскрипция ложится в
+`results/sku_b_pair_verdicts_skub2.json`; продюсер пересчитает долю из ключей этого файла и
+ОТКАЖЕТ чтению, снятому над другим дампом. До этого чтения `closure` = UNDETERMINED и вердикта по
+B′ нет.** Планка 1 сдвинулась ПО ДВУМ причинам сразу (перескоуп голда (13)(c) + инструмент v2) —
+разложение не делалось; цифра тимлида для v1 на том же голде 0.703, из SPEC 3.17 (14).
 Блок правится руками; секция выше — авто-ген, маркер НЕ трогать.
 Длинная форма отклонений: `implementation-notes.md` (Dv100–120), `uni-a.md` (Dv121–124),
 `uni-b.md` (Dv125–132), `sku-b-prep.md` (Dv133–147), `sku-b-run.md` (Dv148–153),
 `sku-b-v3-prep.md` (Dv154–160), `sku-b-v3-run.md` (Dv161–168), `sku-b-v4-prep.md` (Dv169–175),
 **`sku-b-v4-run.md` (Dv176–180, и в её секции `# Close` — Dv181–186)**, **Dv188–194 — только в
 дневнике [[2026-08-12]]: лёгкий контракт 12.08 отчёта-файла не просит**,
-**`skub2-prep.md` (Dv195–210, и в её секции `## Fix` — Dv211–227)**.
+`skub2-prep.md` (Dv195–210, и в её секции `## Fix` — Dv211–227),
+**`skub2-run.md` (Dv228–236)**.
 Дневники [[2026-08-12]] / [[2026-08-11]], ADR ниже.
 
 ## 🔥 What's Hot
 
 **ПРЕРЕЖКА B′ НАПИСАНА. ГОЛД 37 ПАР / 10 ПОСТОВ, ВСЕ 138 ЭЛЕМЕНТОВ, КАП $0.65** (`skub2-fix` ✅
-12.08, $0, двенадцать коммитов `2621d6f..6a20671`, `make check` 1985 / 2 skipped, префлайт 47/0).
+12.08, $0, тринадцать коммитов `2621d6f..4b0ed29`, `make check` 1985 / 2 skipped, префлайт 47/0).
 SPEC 3.17 (14): четыре висевшие пары (#4 #9 #28 #29) — ВСЕ класс b, каждая с процитированными
 страницами; итог **a=11 · b=16 · c=2**, `final` = 37. B1/B4/B5 РАТИФИЦИРОВАНЫ ((14)(b) — класс это
 факт о ПАРЕ, не о бренде везде), кап (13)(d) $0.40 → **(14)(e) $0.65**. Пин прережки держит и `-7`,
@@ -234,7 +242,7 @@ v4.
 ## 🚧 Blockers
 
 **НИЧЕГО НЕ БЛОКИРУЕТ — ЖДЁМ КОНТРАКТ skub2-run.** Сюита **1985 passed, 2 skipped**;
-`ruff check` и `ruff format --check` чисты, 244 файла; **двенадцать коммитов `2621d6f..6a20671`** поверх
+`ruff check` и `ruff format --check` чисты, 244 файла; **тринадцать коммитов `2621d6f..4b0ed29`** поверх
 шестнадцати `d3fa574..c85d595`. Почекаутная таблица зелёная на каждом коммите, кроме `2621d6f` —
 там второй красный **ПО ЗАМЫСЛУ** (восьмой маркер ратификации приходит на коммите тимлид-доков,
 перечисление в `tests/test_sku_prereg.py` на имя короче, зелено снова на `56b2214`). Контроль —
