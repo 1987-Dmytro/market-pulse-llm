@@ -922,13 +922,16 @@ for the checker's own bias.
 | 5 | the verdict record | `20ac6dd` | bar 2 **FAIL** · failed bars **[recall, price-pair]** | clean | **1846 passed**, 2 skipped |
 | 6 | depth-from-percent | `0f1e43e` | **61** pairs · badge adequate **True** · extracted adequate **True** | clean | **1854 passed**, 2 skipped |
 | 7 | the ADR | `fa7f3df` | ADR tracked **1** · INDEX row **1** | clean | **1854 passed**, 2 skipped |
+| 8 | this report | `c10f641` | `##` headings in the file: **23** | clean | **1854 passed**, 2 skipped |
+| 9 | the vault tail | `043dfe6` | the two priced literals in `hot.md`: **3** and **3** | clean | **1854 passed**, 2 skipped |
 
 The row counts climb 1824 → 1839 → 1845 → 1846 → 1854 in exactly the places tests were added, and
-the control at the top proves the checker is not simply reporting today's tree eight times.
+the control at the top proves the checker is not simply reporting today's tree ten times.
 
-**Commit 5 carries one test beside the record** — see Dv186. Commits 8 (this report) and 9 (the vault
-tail) are added to this table after they exist; a report cannot run a suite on the commit that
-carries it.
+**Commit 5 carries one test beside the record** — see Dv186. **Commit 9 is checked out and run like
+the rest, not waved through as prose**: `knowledge/hot.md` is grepped as a priced input by
+`scripts/volume_calc_5c1.py`, so a vault commit can redden nine tests, and the content fact for that
+row is the two literals it needs.
 
 ---
 
@@ -1012,8 +1015,11 @@ record it pins, and commit 5 contains nothing else.
 | 5 | `20ac6dd` | `data(sku-b-close)`: the verdict record, finalised — two bars of three FAIL, B closes |
 | 6 | `0f1e43e` | `feat(sku-b-close)`: depth from the printed percentage, measured on what is already bought |
 | 7 | `fa7f3df` | `docs(decision)`: the sku-b pilot closed by measurement |
-| 8 | — | `docs(report)`: sku-b-close — this section |
-| 9 | — | `chore(vault)`: the sku-b-close tail — the day's log, hot.md, the index |
+| 8 | `c10f641` | `docs(report)`: sku-b-close — appended as the report's Close section |
+| 9 | `043dfe6` | `chore(vault)`: the sku-b-close tail — the day's log, hot.md, the index |
+| 10 | — | `docs(report)`: sku-b-close — the two rows this table could not name |
 
-Row 8 is blank for the reason the previous table gives: a report cannot name the commit that carries
-it. Rows 8 and 9 are filled in by one follow-up commit, which is where the regress ends.
+Ten commits. Row 10 is blank for the reason the previous table gives: a report cannot name the
+commit that carries it, and one follow-up is where the regress ends. Commit 10 changes prose only —
+the two table rows above and their checkout entries — on the tree commit 9 left, whose suite is the
+`1854 passed, 2 skipped` in the row for commit 9.
