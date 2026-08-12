@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-12T13:20:23+00:00",
+  "generated_at": "2026-08-12T13:23:01+00:00",
   "phase": "skub2 — what the re-measurement costs against its $0.40 cap",
   "written_by": "skub2-prep (executor, $0), docs/PROMPT-skub2-prep.md deliverable 5",
   "authority": "docs/SPEC.md amendment 3.17 (10)(a) and (13)(d)",
@@ -132,13 +132,7 @@
     "the driver's constants": "scripts/positions_gm4_skub.py still carries v4's CAP_USD, PHASE and LEDGER. Moving them to the B′ three is skub2-run's step and is guarded by the driver's own refusal on a mismatched registration — this file prices the run, it does not configure it"
   },
   "git": {
-    "commit": "61369e4899da5b8fc92eb51c4816db51f40e36c5",
-    "dirty": [
-      "knowledge/daily_logs/2026-08-12.md",
-      "knowledge/hot.md",
-      "knowledge/index.md",
-      "scripts/write_sku_projection_b2.py",
-      "tests/test_sku_projection_b2.py"
-    ]
+    "commit": "2b6ee3fd6b9247237a0af151862ad9ebad5c6f34",
+    "dirty": []
   }
 }
