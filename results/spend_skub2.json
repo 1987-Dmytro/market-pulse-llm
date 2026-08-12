@@ -2,5 +2,12 @@
   "runpod_balance_at_skub2_start": 11.6110861566,
   "cap_usd": 0.65,
   "note": "RunPod account balance read before the first job of skub2, the paid session of SPEC 3.17 (6)/(11). Session spend = this anchor minus the balance now, enforced against the $0.65 cap the amendment pre-registered. The Phase 4 cap is enforced separately against results/spend_phase4.json, and neither anchor may be regenerated: delete this file and the counter silently restarts at today's balance.",
-  "runs": []
+  "runs": [
+    {
+      "at": "2026-08-12T16:45:21+00:00",
+      "balance": 11.3347237899,
+      "step_spent_usd": 0.2764,
+      "note": "138 sources asked, 101 positions extracted"
+    }
+  ]
 }

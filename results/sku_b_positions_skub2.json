@@ -1,0 +1,1774 @@
+{
+  "timestamp": "2026-08-12T16:35:14+00:00",
+  "phase": "skub2 — the position layer re-measured under instrument v2",
+  "contract": "docs/PROMPT-skub2-run.md; docs/SPEC.md amendment 3.17 (9), (10), (11)(c) and (12)(c) the registered warm-up, (12)(a)/(14)(e) the cap, (13), (14)",
+  "prereg": {
+    "path": "results/sku_pilot_prereg_b2.json",
+    "sha256": "ad7b1c7e95e24fb9a94b4f7ad7cc59954fc68939438e375c4e4811aa50e9629f"
+  },
+  "serving_pin": {
+    "path": "results/sku_pilot_serving_v2.json",
+    "sha256": "75f5e0d5a369cf2d915bb2bed8a98caffd0f11a9ded800ab269fc29f111ccf10"
+  },
+  "endpoint": {
+    "id": "zq457b30jhgvp7",
+    "worker": {
+      "adapter_dir": null,
+      "adapter_sha256": null,
+      "chat_template": {
+        "add_generation_prompt": true,
+        "enable_thinking": false
+      },
+      "max_new_tokens": 1200,
+      "merge_state": "base-no-adapter",
+      "merged_provenance": null,
+      "merged_sha256": null,
+      "model": "google/gemma-4-31b-it",
+      "positions_prompt_sha256": {
+        "positions_post_gm4": "ca6303c157d46e707aaf3fc52c7a05ed1450e24c26db0e7c93eefba4f6968754",
+        "positions_text_gm4": "7250b87aa1c2de407e06ab9eed565dd4d88025add7be0d2d2a87607c0d872860"
+      },
+      "quantization": {
+        "bnb_4bit_compute_dtype": "bfloat16",
+        "bnb_4bit_quant_type": "nf4",
+        "bnb_4bit_use_double_quant": true,
+        "load_in_4bit": true
+      },
+      "repo_commit": "0793a3cab567d1540fe76faadce878760531d6fb",
+      "revision_requested": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+      "runtime": {
+        "accelerate": "1.14.0",
+        "bitsandbytes": "0.50.0",
+        "cuda_runtime": "12.8",
+        "driver": "580.173.02",
+        "gpu": "NVIDIA GeForce RTX 4090",
+        "gpu_count": 1,
+        "gpu_memory_total": "24564 MiB",
+        "model_revision": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+        "peft": "0.20.0",
+        "pod_id": "xwtryuc8ooikcn",
+        "revision_requested": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+        "runpod": "1.11.0",
+        "torch": "2.8.0+cu128",
+        "transformers": "5.14.1",
+        "weights_requested": "google/gemma-4-31b-it"
+      },
+      "serving_config": "POSITIONS",
+      "weights_dir": "google/gemma-4-31b-it"
+    }
+  },
+  "smoke": false,
+  "attempts_per_job": 1,
+  "stopped_before_gold": false,
+  "ended_by": null,
+  "warmup": {
+    "why": "SPEC 3.17 (9): a call on NON-gold inputs before either leg touches gold",
+    "registered_in": {
+      "path": "results/sku_pilot_prereg_v4.json",
+      "block": "resume.warmup",
+      "sha256": "22fd7d9cc363ac9357b77e4a3ff3561f723fe6c4a12aedcc638c11be65dc9449",
+      "why": "SPEC 3.17 (12)(c) — the warm-up inputs remain the registered ones and are never re-picked. This session's own registration carries no warm-up block, so the file that registers them is named here with its sha rather than defaulted to a synthetic probe"
+    },
+    "inputs": {
+      "page": {
+        "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4476.jpg",
+        "sha256": "5f0266242148d736a3d6e85a8d1ead1763684e698353c00f5f37f21a8d005fe3",
+        "bytes": 318212
+      },
+      "text": {
+        "id": "@silposilpo:3370",
+        "carrier": "post_text",
+        "text_sha256": "27021e7cce201ba8c0beaf376c8af0b0914cf769a3ce4abf8539e8133bd2e2a6"
+      },
+      "why": "SPEC 3.17 (11)(c)/(12)(c): REPRESENTATIVE and still non-gold. The page is one of the 51 the reference records as never sent and the row is one the pre-filter passed and the 30-row pack did not draw — both read out of the registration named in `registered_in` and re-verified here against the bytes, never re-picked"
+    },
+    "replies": {
+      "positions_post_gm4": {
+        "content": "```json\n[\n  {\n    \"brand\": \"De Luxe Foods&Goods Selected\",\n    \"line\": \"сир плавлений з сиром «Моцарелла»\",\n    \"category\": \"cheese\",\n    \"size\": \"130 г\",\n    \"fat\": \"35,1%\",\n    \"price_promo\": \"45,90",
+        "finish_reason": "stop",
+        "marginal_seconds": 14.925
+      },
+      "positions_text_gm4": {
+        "content": "[{\"brand\": \"Молокія\", \"line\": \"Екстра\", \"category\": \"butter\", \"size\": \"180 г\", \"fat\": \"82%\", \"price_promo\": \"69,99 грн\", \"discount_pct_printed\": \"-48%\"}]",
+        "finish_reason": "stop",
+        "marginal_seconds": 3.886
+      }
+    }
+  },
+  "population": {
+    "pages_sent": 108,
+    "pages_available": 159,
+    "posts": 19,
+    "text_rows": 30,
+    "asked": 138,
+    "asked_this_session": 138,
+    "unbought": []
+  },
+  "extraction": {
+    "positions": 101,
+    "by_tier": {
+      "position": 101
+    },
+    "empty_answers": [
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4340.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4345.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4351.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4353.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4354.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4355.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4361.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4362.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4363.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4364.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4365.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4370.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4371.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4372.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4373.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4374.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4375.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4377.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4378.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4379.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4380.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4386.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4391.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4392.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4393.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4394.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4395.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4396.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4401.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4406.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4411.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4412.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4413.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4414.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4415.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4416.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4417.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4418.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4419.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4420.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4421.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4422.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4423.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4424.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4429.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4430.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4431.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4436.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4437.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4438.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4439.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4441.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4447.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4448.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4449.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4450.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4451.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4455.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4456.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4457.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4458.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4459.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4460.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4469.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4472.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4498.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4499.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4500.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4501.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4502.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4503.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4509.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4510.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4511.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4512.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4513.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4519.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4520.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4521.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4522.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4523.jpg",
+      "data/annotation/captions_5c1/posts_media/atb_market_official_4524.jpg",
+      "@VARUS_channel:7119",
+      "@VARUS_channel:7440",
+      "@VARUS_channel:800",
+      "@VARUS_channel:8297",
+      "@VARUS_channel:1775",
+      "@VARUS_channel:4791",
+      "@VARUS_channel:9580",
+      "@atb_market_official:1155",
+      "@atb_market_official:1822",
+      "@epicentrk_sale:6148",
+      "@korolevakuchni:10350",
+      "@matusi_ukr:22025",
+      "@matusi_ukr:22255",
+      "@recepti:11794",
+      "@retsepty:7281",
+      "@retsepty:7318",
+      "@silposilpo:2529",
+      "@silposilpo:3154",
+      "@suspilnepoltava:46982",
+      "@telegraf_kremenchuk:71000"
+    ],
+    "unreadable": [],
+    "unreadable_by_reason": {},
+    "unreadable_share": 0.0,
+    "reading": "an unreadable reply and an empty array are DIFFERENT outcomes and are counted separately. A refusal is excluded from bar 3's denominator by its reason (results/sku_pilot_prereg_v2.json :: bars.text_tier_accuracy.unreadable_rows); an empty array is a source that names no tracked position, which is an answer",
+    "truncated_replies": []
+  },
+  "dump": {
+    "path": "results/sku_b_positions_skub2.jsonl",
+    "sha256": "5592b3248c17e4857fcb9e79c2309f26a43db7aec5c6e00a195a37bdb713613d",
+    "rows": 101,
+    "columns": [
+      "item",
+      "page",
+      "file",
+      "sha256",
+      "brand_raw",
+      "brand_id",
+      "line",
+      "category",
+      "size",
+      "fat",
+      "price_promo",
+      "price_old",
+      "discount_pct_printed",
+      "price_qualifier",
+      "tier",
+      "depth",
+      "depth_disagrees_with_printed"
+    ],
+    "columns_source": "results/sku_pilot_prereg_b2.json :: bars.price_pair_accuracy.procedure",
+    "wire_key": {
+      "attribute": "fat",
+      "why": "the schema field is `attribute_pct` (SPEC 3.17 (8)) and the registered dairy prompts ask for `fat` on the wire. The dump carries the WIRE name because that is the name the pre-registered sentence uses"
+    },
+    "price_pairs": {
+      "n": 80,
+      "reachability": "n >= 10 pairs: the bar is SCORED. 1 <= n < 10: the accuracy is REPORTED with its n and the bar is NOT_SCORED — neither a PASS nor a closure of B, and the team lead rules at acceptance whether the small-n reading stands. n = 0: NOT_REACHABLE, and the finding is that the pages carry no crossed-out prices at all",
+      "note": "the denominator of bar 2, discovered BY THIS RUN. The bar is scored by the team lead against the page images at acceptance — the executor never scores its own sample (SPEC §10)"
+    }
+  },
+  "outcomes": [
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4340.jpg",
+      "item": "@atb_market_official:4340",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "c0da4021",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4341.jpg",
+      "item": "@atb_market_official:4340",
+      "carrier": "leaflet_page",
+      "n_positions": 2,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "d52ffcfe",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4342.jpg",
+      "item": "@atb_market_official:4340",
+      "carrier": "leaflet_page",
+      "n_positions": 2,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "0f5e6070",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4343.jpg",
+      "item": "@atb_market_official:4340",
+      "carrier": "leaflet_page",
+      "n_positions": 1,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "1753be1e",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4344.jpg",
+      "item": "@atb_market_official:4340",
+      "carrier": "leaflet_page",
+      "n_positions": 1,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "78cd9a18",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4345.jpg",
+      "item": "@atb_market_official:4340",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "1a836a68",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4350.jpg",
+      "item": "@atb_market_official:4350",
+      "carrier": "leaflet_page",
+      "n_positions": 2,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "d98f5ae7",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4351.jpg",
+      "item": "@atb_market_official:4350",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "578fb694",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4352.jpg",
+      "item": "@atb_market_official:4350",
+      "carrier": "leaflet_page",
+      "n_positions": 2,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "f362bbca",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4353.jpg",
+      "item": "@atb_market_official:4350",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "4513053f",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4354.jpg",
+      "item": "@atb_market_official:4350",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "243c609b",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4355.jpg",
+      "item": "@atb_market_official:4350",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "6217fe84",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4360.jpg",
+      "item": "@atb_market_official:4360",
+      "carrier": "leaflet_page",
+      "n_positions": 6,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "914406fe",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4361.jpg",
+      "item": "@atb_market_official:4360",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "82a405f7",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4362.jpg",
+      "item": "@atb_market_official:4360",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "ef559797",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4363.jpg",
+      "item": "@atb_market_official:4360",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "580416c4",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4364.jpg",
+      "item": "@atb_market_official:4360",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "076a0c68",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4365.jpg",
+      "item": "@atb_market_official:4360",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "e1d4c20f",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4370.jpg",
+      "item": "@atb_market_official:4370",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "217dbe3e",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4371.jpg",
+      "item": "@atb_market_official:4370",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "47f18f5b",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4372.jpg",
+      "item": "@atb_market_official:4370",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "a5adb370",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4373.jpg",
+      "item": "@atb_market_official:4370",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "37f12ef0",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4374.jpg",
+      "item": "@atb_market_official:4370",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "1caee5ee",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4375.jpg",
+      "item": "@atb_market_official:4370",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "4be53ad8",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4377.jpg",
+      "item": "@atb_market_official:4377",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "a3e2bae2",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4378.jpg",
+      "item": "@atb_market_official:4377",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "93a2def3",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4379.jpg",
+      "item": "@atb_market_official:4377",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "025320a2",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4380.jpg",
+      "item": "@atb_market_official:4377",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "a7e48d1c",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4381.jpg",
+      "item": "@atb_market_official:4381",
+      "carrier": "leaflet_page",
+      "n_positions": 2,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "0fb0fae1",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4382.jpg",
+      "item": "@atb_market_official:4381",
+      "carrier": "leaflet_page",
+      "n_positions": 4,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "ee2f1bfe",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4383.jpg",
+      "item": "@atb_market_official:4381",
+      "carrier": "leaflet_page",
+      "n_positions": 3,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "2217c503",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4384.jpg",
+      "item": "@atb_market_official:4381",
+      "carrier": "leaflet_page",
+      "n_positions": 2,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "4f88df0a",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4385.jpg",
+      "item": "@atb_market_official:4381",
+      "carrier": "leaflet_page",
+      "n_positions": 4,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "5c683e4e",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4386.jpg",
+      "item": "@atb_market_official:4381",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "a56a54bb",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4391.jpg",
+      "item": "@atb_market_official:4391",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "f67eab6c",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4392.jpg",
+      "item": "@atb_market_official:4391",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "5fe061f9",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4393.jpg",
+      "item": "@atb_market_official:4391",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "a52b27d9",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4394.jpg",
+      "item": "@atb_market_official:4391",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "07f04f9b",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4395.jpg",
+      "item": "@atb_market_official:4391",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "45a57bc8",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4396.jpg",
+      "item": "@atb_market_official:4391",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "4eacf8db",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4401.jpg",
+      "item": "@atb_market_official:4401",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "e61918ac",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4402.jpg",
+      "item": "@atb_market_official:4401",
+      "carrier": "leaflet_page",
+      "n_positions": 1,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "50331540",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4403.jpg",
+      "item": "@atb_market_official:4401",
+      "carrier": "leaflet_page",
+      "n_positions": 1,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "615b4c65",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4404.jpg",
+      "item": "@atb_market_official:4401",
+      "carrier": "leaflet_page",
+      "n_positions": 6,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "c68c84d3",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4405.jpg",
+      "item": "@atb_market_official:4401",
+      "carrier": "leaflet_page",
+      "n_positions": 9,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "b354e383",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4406.jpg",
+      "item": "@atb_market_official:4401",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "28d13dfa",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4411.jpg",
+      "item": "@atb_market_official:4411",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "9f3e9849",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4412.jpg",
+      "item": "@atb_market_official:4411",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "ea98c525",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4413.jpg",
+      "item": "@atb_market_official:4411",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "bf541282",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4414.jpg",
+      "item": "@atb_market_official:4411",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "bc856447",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4415.jpg",
+      "item": "@atb_market_official:4415",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "79b3ac94",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4416.jpg",
+      "item": "@atb_market_official:4415",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "db383b3e",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4417.jpg",
+      "item": "@atb_market_official:4415",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "8610d540",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4418.jpg",
+      "item": "@atb_market_official:4415",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "c6dfb94d",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4419.jpg",
+      "item": "@atb_market_official:4415",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "5139787a",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4420.jpg",
+      "item": "@atb_market_official:4415",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "cc7ed526",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4421.jpg",
+      "item": "@atb_market_official:4421",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "6b6b54cc",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4422.jpg",
+      "item": "@atb_market_official:4421",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "f1cfad39",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4423.jpg",
+      "item": "@atb_market_official:4421",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "5d3d4934",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4424.jpg",
+      "item": "@atb_market_official:4421",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "59da9534",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4426.jpg",
+      "item": "@atb_market_official:4426",
+      "carrier": "leaflet_page",
+      "n_positions": 3,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "bb7e7c49",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4427.jpg",
+      "item": "@atb_market_official:4426",
+      "carrier": "leaflet_page",
+      "n_positions": 2,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "2fe46970",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4428.jpg",
+      "item": "@atb_market_official:4426",
+      "carrier": "leaflet_page",
+      "n_positions": 4,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "21949a92",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4429.jpg",
+      "item": "@atb_market_official:4426",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "6e6c6eed",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4430.jpg",
+      "item": "@atb_market_official:4426",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "8c14595b",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4431.jpg",
+      "item": "@atb_market_official:4426",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "38a11dfa",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4436.jpg",
+      "item": "@atb_market_official:4436",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "186265e4",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4437.jpg",
+      "item": "@atb_market_official:4436",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "4f36b65a",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4438.jpg",
+      "item": "@atb_market_official:4436",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "e9ec6cbc",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4439.jpg",
+      "item": "@atb_market_official:4436",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "a634527f",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4440.jpg",
+      "item": "@atb_market_official:4436",
+      "carrier": "leaflet_page",
+      "n_positions": 3,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "a5dfb701",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4441.jpg",
+      "item": "@atb_market_official:4436",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "716f6bb5",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4446.jpg",
+      "item": "@atb_market_official:4446",
+      "carrier": "leaflet_page",
+      "n_positions": 6,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "2889b3e3",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4447.jpg",
+      "item": "@atb_market_official:4446",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "5023ed6a",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4448.jpg",
+      "item": "@atb_market_official:4446",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "243771b7",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4449.jpg",
+      "item": "@atb_market_official:4446",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "a530cd17",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4450.jpg",
+      "item": "@atb_market_official:4446",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "e8475e85",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4451.jpg",
+      "item": "@atb_market_official:4446",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "005da481",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4455.jpg",
+      "item": "@atb_market_official:4455",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "ee4d07cf",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4456.jpg",
+      "item": "@atb_market_official:4455",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "d8c6d0b1",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4457.jpg",
+      "item": "@atb_market_official:4455",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "8110f0f4",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4458.jpg",
+      "item": "@atb_market_official:4455",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "9446dec9",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4459.jpg",
+      "item": "@atb_market_official:4455",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "547243b9",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4460.jpg",
+      "item": "@atb_market_official:4455",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "203433fd",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4467.jpg",
+      "item": "@atb_market_official:4467",
+      "carrier": "leaflet_page",
+      "n_positions": 2,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "6f99ca4e",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4468.jpg",
+      "item": "@atb_market_official:4467",
+      "carrier": "leaflet_page",
+      "n_positions": 3,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "0db729a4",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4469.jpg",
+      "item": "@atb_market_official:4467",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "094d736a",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4470.jpg",
+      "item": "@atb_market_official:4467",
+      "carrier": "leaflet_page",
+      "n_positions": 1,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "5b6f5241",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4471.jpg",
+      "item": "@atb_market_official:4467",
+      "carrier": "leaflet_page",
+      "n_positions": 2,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "4ea46a79",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4472.jpg",
+      "item": "@atb_market_official:4467",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "33dc1641",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4498.jpg",
+      "item": "@atb_market_official:4498",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "5150312a",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4499.jpg",
+      "item": "@atb_market_official:4498",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "86477582",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4500.jpg",
+      "item": "@atb_market_official:4498",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "a0a7b5b6",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4501.jpg",
+      "item": "@atb_market_official:4498",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "c68c43ff",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4502.jpg",
+      "item": "@atb_market_official:4498",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "91e20128",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4503.jpg",
+      "item": "@atb_market_official:4498",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "a41bb206",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4508.jpg",
+      "item": "@atb_market_official:4508",
+      "carrier": "leaflet_page",
+      "n_positions": 7,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "03e8aaff",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4509.jpg",
+      "item": "@atb_market_official:4508",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "6b3225d1",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4510.jpg",
+      "item": "@atb_market_official:4508",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "f3fde980",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4511.jpg",
+      "item": "@atb_market_official:4508",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "57aae772",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4512.jpg",
+      "item": "@atb_market_official:4508",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "e6fc4e95",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4513.jpg",
+      "item": "@atb_market_official:4508",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "0a11f218",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4519.jpg",
+      "item": "@atb_market_official:4519",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "9830b6af",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4520.jpg",
+      "item": "@atb_market_official:4519",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "8b827789",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4521.jpg",
+      "item": "@atb_market_official:4519",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "87099630",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4522.jpg",
+      "item": "@atb_market_official:4519",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "1e92ca1d",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4523.jpg",
+      "item": "@atb_market_official:4519",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "669aa3b7",
+      "leg": "page"
+    },
+    {
+      "source": "data/annotation/captions_5c1/posts_media/atb_market_official_4524.jpg",
+      "item": "@atb_market_official:4519",
+      "carrier": "leaflet_page",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "60692c15",
+      "leg": "page"
+    },
+    {
+      "source": "@VARUS_channel:7119",
+      "item": "@VARUS_channel:7119",
+      "carrier": "comment",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "d28d5b80",
+      "leg": "text"
+    },
+    {
+      "source": "@VARUS_channel:7440",
+      "item": "@VARUS_channel:7440",
+      "carrier": "comment",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "e7f73c37",
+      "leg": "text"
+    },
+    {
+      "source": "@VARUS_channel:800",
+      "item": "@VARUS_channel:800",
+      "carrier": "comment",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "1a744970",
+      "leg": "text"
+    },
+    {
+      "source": "@VARUS_channel:8297",
+      "item": "@VARUS_channel:8297",
+      "carrier": "comment",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "6cdbc0ac",
+      "leg": "text"
+    },
+    {
+      "source": "@VARUS_channel:1775",
+      "item": "@VARUS_channel:1775",
+      "carrier": "post_text",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "d58e104a",
+      "leg": "text"
+    },
+    {
+      "source": "@VARUS_channel:1912",
+      "item": "@VARUS_channel:1912",
+      "carrier": "post_text",
+      "n_positions": 1,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "1b5541b0",
+      "leg": "text"
+    },
+    {
+      "source": "@VARUS_channel:2119",
+      "item": "@VARUS_channel:2119",
+      "carrier": "post_text",
+      "n_positions": 3,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "bed4cda8",
+      "leg": "text"
+    },
+    {
+      "source": "@VARUS_channel:2562",
+      "item": "@VARUS_channel:2562",
+      "carrier": "post_text",
+      "n_positions": 1,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "80d49746",
+      "leg": "text"
+    },
+    {
+      "source": "@VARUS_channel:4791",
+      "item": "@VARUS_channel:4791",
+      "carrier": "post_text",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "8c2248e8",
+      "leg": "text"
+    },
+    {
+      "source": "@VARUS_channel:9580",
+      "item": "@VARUS_channel:9580",
+      "carrier": "post_text",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "d6610425",
+      "leg": "text"
+    },
+    {
+      "source": "@atb_market_official:1155",
+      "item": "@atb_market_official:1155",
+      "carrier": "post_text",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "2222c5de",
+      "leg": "text"
+    },
+    {
+      "source": "@atb_market_official:1339",
+      "item": "@atb_market_official:1339",
+      "carrier": "post_text",
+      "n_positions": 1,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "96def929",
+      "leg": "text"
+    },
+    {
+      "source": "@atb_market_official:1822",
+      "item": "@atb_market_official:1822",
+      "carrier": "post_text",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "5df9951b",
+      "leg": "text"
+    },
+    {
+      "source": "@epicentrk_sale:6148",
+      "item": "@epicentrk_sale:6148",
+      "carrier": "post_text",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "b68f41f8",
+      "leg": "text"
+    },
+    {
+      "source": "@korolevakuchni:10350",
+      "item": "@korolevakuchni:10350",
+      "carrier": "post_text",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "163af873",
+      "leg": "text"
+    },
+    {
+      "source": "@matusi_ukr:22025",
+      "item": "@matusi_ukr:22025",
+      "carrier": "post_text",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "756f1d18",
+      "leg": "text"
+    },
+    {
+      "source": "@matusi_ukr:22255",
+      "item": "@matusi_ukr:22255",
+      "carrier": "post_text",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "8a4dff04",
+      "leg": "text"
+    },
+    {
+      "source": "@recepti:11794",
+      "item": "@recepti:11794",
+      "carrier": "post_text",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "27351265",
+      "leg": "text"
+    },
+    {
+      "source": "@retsepty:7281",
+      "item": "@retsepty:7281",
+      "carrier": "post_text",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "ed7d3b4a",
+      "leg": "text"
+    },
+    {
+      "source": "@retsepty:7318",
+      "item": "@retsepty:7318",
+      "carrier": "post_text",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "7ef4e4f1",
+      "leg": "text"
+    },
+    {
+      "source": "@silposilpo:2529",
+      "item": "@silposilpo:2529",
+      "carrier": "post_text",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "7d772137",
+      "leg": "text"
+    },
+    {
+      "source": "@silposilpo:2745",
+      "item": "@silposilpo:2745",
+      "carrier": "post_text",
+      "n_positions": 1,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "f1d95559",
+      "leg": "text"
+    },
+    {
+      "source": "@silposilpo:3154",
+      "item": "@silposilpo:3154",
+      "carrier": "post_text",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "80a99b0d",
+      "leg": "text"
+    },
+    {
+      "source": "@silposilpo:3234",
+      "item": "@silposilpo:3234",
+      "carrier": "post_text",
+      "n_positions": 1,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "d41d34c5",
+      "leg": "text"
+    },
+    {
+      "source": "@silposilpo:3517",
+      "item": "@silposilpo:3517",
+      "carrier": "post_text",
+      "n_positions": 6,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "6c43fe36",
+      "leg": "text"
+    },
+    {
+      "source": "@silposilpo:3671",
+      "item": "@silposilpo:3671",
+      "carrier": "post_text",
+      "n_positions": 1,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "8a676bef",
+      "leg": "text"
+    },
+    {
+      "source": "@suspilnepoltava:46982",
+      "item": "@suspilnepoltava:46982",
+      "carrier": "post_text",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "3a793b25",
+      "leg": "text"
+    },
+    {
+      "source": "@telegraf_kremenchuk:70595",
+      "item": "@telegraf_kremenchuk:70595",
+      "carrier": "post_text",
+      "n_positions": 2,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "6cb1ed63",
+      "leg": "text"
+    },
+    {
+      "source": "@telegraf_kremenchuk:71000",
+      "item": "@telegraf_kremenchuk:71000",
+      "carrier": "post_text",
+      "n_positions": 0,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "91de2917",
+      "leg": "text"
+    },
+    {
+      "source": "@telegraf_kremenchuk:71024",
+      "item": "@telegraf_kremenchuk:71024",
+      "carrier": "post_text",
+      "n_positions": 3,
+      "unreadable": null,
+      "finish_reason": "stop",
+      "sha8": "eb8ef913",
+      "leg": "text"
+    }
+  ],
+  "timing": {
+    "calls": 11,
+    "rows": 140,
+    "worker_seconds": 795.5,
+    "queue_seconds": 45.465,
+    "wall_seconds": 880.503,
+    "seconds_per_call": 72.318,
+    "wall_per_call": 80.046,
+    "wall_per_row": 6.289,
+    "seconds_per_row": 5.682,
+    "idle_share": 0.0965,
+    "worker_ids": [
+      "xwtryuc8ooikcn"
+    ]
+  },
+  "projection": {
+    "rate_usd_per_second": 0.00030669,
+    "rate_source": "results/srv2d_cost.json :: rate.usd_per_second",
+    "stop_at_usd": 0.65,
+    "boot_seconds": 230.118,
+    "boot_usd": 0.0706,
+    "warmup_seconds": 18.811,
+    "opened_seconds": 248.929,
+    "go_no_go": {
+      "when": "after the two non-gold warm-up calls of SPEC 3.17 (9), before the first gold call",
+      "billed_seconds": 248.929,
+      "page_marginal_seconds": 14.925,
+      "text_marginal_seconds": 3.886,
+      "gold_calls": 138,
+      "gold_seconds": 1728.48,
+      "idle_tail_seconds": 60.0,
+      "projected_usd": 0.6249,
+      "budget_usd": 0.65,
+      "refuse": false
+    },
+    "per_gate": [
+      {
+        "calls_done": 17,
+        "calls_total": 138,
+        "opened_seconds": 248.929,
+        "billed_seconds": 336.747,
+        "marginal_seconds_per_call": 5.1658,
+        "idle_tail_seconds": 60.0,
+        "spent_usd": 0.1033,
+        "remaining_usd": 0.1917,
+        "projected_usd": 0.3134
+      },
+      {
+        "calls_done": 34,
+        "calls_total": 138,
+        "opened_seconds": 248.929,
+        "billed_seconds": 420.559,
+        "marginal_seconds_per_call": 5.0479,
+        "idle_tail_seconds": 60.0,
+        "spent_usd": 0.129,
+        "remaining_usd": 0.161,
+        "projected_usd": 0.3084
+      },
+      {
+        "calls_done": 50,
+        "calls_total": 138,
+        "opened_seconds": 248.929,
+        "billed_seconds": 510.453,
+        "marginal_seconds_per_call": 5.2305,
+        "idle_tail_seconds": 60.0,
+        "spent_usd": 0.1566,
+        "remaining_usd": 0.1412,
+        "projected_usd": 0.3161
+      },
+      {
+        "calls_done": 67,
+        "calls_total": 138,
+        "opened_seconds": 248.929,
+        "billed_seconds": 565.682,
+        "marginal_seconds_per_call": 4.7277,
+        "idle_tail_seconds": 60.0,
+        "spent_usd": 0.1735,
+        "remaining_usd": 0.1029,
+        "projected_usd": 0.2948
+      },
+      {
+        "calls_done": 81,
+        "calls_total": 138,
+        "opened_seconds": 248.929,
+        "billed_seconds": 617.865,
+        "marginal_seconds_per_call": 4.5548,
+        "idle_tail_seconds": 60.0,
+        "spent_usd": 0.1895,
+        "remaining_usd": 0.0796,
+        "projected_usd": 0.2875
+      },
+      {
+        "calls_done": 98,
+        "calls_total": 138,
+        "opened_seconds": 248.929,
+        "billed_seconds": 701.998,
+        "marginal_seconds_per_call": 4.6232,
+        "idle_tail_seconds": 60.0,
+        "spent_usd": 0.2153,
+        "remaining_usd": 0.0567,
+        "projected_usd": 0.2904
+      },
+      {
+        "calls_done": 108,
+        "calls_total": 138,
+        "opened_seconds": 248.929,
+        "billed_seconds": 711.102,
+        "marginal_seconds_per_call": 4.2794,
+        "idle_tail_seconds": 60.0,
+        "spent_usd": 0.2181,
+        "remaining_usd": 0.0394,
+        "projected_usd": 0.2759
+      }
+    ],
+    "stopped_early": false,
+    "reading": "the stop prices what is LEFT against what is already billed — it never re-adds a pre-registered cold start on top of measured seconds, because by the time any gate runs the boot has been paid and is inside `billed_seconds`. `calls_done` counts across BOTH legs, and the idle tail the worker bills after the last job is inside `projected_usd` and outside `spent_usd`"
+  },
+  "cost": {
+    "jobs_planned": 8,
+    "jobs_submitted": 11,
+    "jobs_reading": "`jobs_planned` is what the packing set out to send and it does NOT shrink when a stop fires: the first session stopped at 17 of 138 recorded 8 planned against 4 submitted, and read as a job count it said the session ran twice the work it did. On a session refused at the (10)(a) gate the whole plan is unsent, so `jobs_planned` is the size of the run that did not happen — it is the number the projection priced, and it is never 0 because the packing had already happened when the gate fired. `jobs_submitted` is `timing().calls` — the client's own counter of terminal /run submissions, which on the real endpoint client includes the `info` handshake and always includes the two warm-up calls; on the refusal exit those three ARE the whole count. There is no health read on this client, so this is the nearest honest number and it is named rather than passed off as a count of gold jobs",
+    "usd": 0.2764,
+    "cap_usd": 0.65,
+    "anchor": "results/spend_skub2.json",
+    "read_failed": null,
+    "reading": "the RunPod balance delta against this session's own anchor. It is a FLOOR — the balance settles minutes to hours behind the resource (Dv33) — and runpod_guard's itemised corroboration is the phase-level check, not this one. A `usd` of null beside a `read_failed` means the balance could not be read AFTER the paid legs: the anchor survives, so the spend is recoverable by hand, and the record is kept rather than lost to the crash."
+  },
+  "git": {
+    "commit": "0793a3cab567d1540fe76faadce878760531d6fb",
+    "dirty": [
+      "knowledge/daily_logs/2026-08-12.md",
+      "knowledge/hot.md",
+      "knowledge/index.md",
+      "results/sku_b_positions_skub2.jsonl"
+    ]
+  }
+}
