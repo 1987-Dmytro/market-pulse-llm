@@ -543,6 +543,13 @@ discount_pct_printed        92 of 101 non-null — the field discount_footnote q
 multipack                   unrecoverable
 ```
 
+**One of the three is a negative result, not just a hole.** All three `price_from` positions are on
+a single TEXT row, so «від X грн» occurred **zero times** on the 108 leaflet pages. The three
+strings the preflight accepts were read out of v4's own refusal reasons, and at least one of them
+appears not to occur on the page population at all — which bears on whether the (13)(a) parser
+family was the fix for the failure or a fix for something rarer than believed. The 4 pages v4
+refused are the place to look, and their replies this time are gone with the warnings.
+
 The indirect evidence for the parser family is still strong and is in the counts above: **0
 unreadable and 0 truncated against v4's 5 and 4 refused pages**, on the same 108 pages. What cannot
 be said from these artifacts is *which* of the three warnings kept which position alive.
@@ -613,7 +620,27 @@ old values there, or the table is measuring the working tree.
 | `fb4e8dd` | present | `prereg_b2` · `..._skub2.json` | 1 / 3 | · 1 run | 138 · 101 · $0.2764 | absent | 1994 ✅ |
 | `489271e` | present | `prereg_b2` · `..._skub2.json` | 1 / 3 | · 1 run | 138 · 101 · $0.2764 | leaflet PASS · price PENDING · text PASS | 1994 ✅ |
 
-Seven rows, six of them commits of this contract and one the control. `make check` tail at HEAD:
+Seven rows: **`4b0ed29` the control, and the six commits of this contract that existed when the
+table ran.** The report commit and the vault tail postdate it, so they are not in it. The count and
+the clock come from the command, not from the table's row count — that substitution is what
+`4b0ed29` itself corrected five hours before this session:
+
+```
+$ git log --reverse --format='%h %ad %s' --date=format:'%H:%M' 4b0ed29..HEAD
+8e484f3 18:09 docs(team-lead): the skub2-run contract and the STATUS pointer, unedited
+2509c05 18:09 feat(skub2-run): Dv210 -- bar 1 scores the B-prime gold, and five readers that assumed v4
+a60e455 18:12 chore(skub2-run): the session's spend anchor, before the first billing resource exists
+0793a3c 18:21 fix(skub2-run): the registered warm-up reaches a full run, not only a resumed one
+fb4e8dd 18:48 data(skub2-run): the 138 bought, instrument v2, 101 positions and no unreadable reply
+489271e 18:48 data(skub2-run): bars 1 and 3 over the B-prime gold, bar 2 pending the team lead
+51711db 19:01 docs(report): skub2-run
+
+$ git rev-list --count 4b0ed29..HEAD
+7
+```
+
+**Seven commits, 18:09–19:01 local**, and the vault tail after this line makes eight. `make check`
+tail at HEAD:
 
 ```
 $ make check
