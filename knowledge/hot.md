@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-12 13:52:17 (every SessionStart)
+**Auto-refreshed:** 2026-08-12 15:43:37 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-0001cd9 data(sku-miss-pack): the pack re-stamped after the page-file guard
-c2940ca fix(sku-miss-pack): the page a position is filed under, and the empty half
-b92e74d chore(vault): the sku-miss-pack tail -- the day's log, hot.md, the index
-0a48cf0 data(sku-miss-pack): the pack re-stamped from the tree that contains its producer
-610af67 feat(sku-miss-pack): bar 1's 29 misses, packed for the team-lead read ($0)
+79eaccb docs(report): skub2-prep -- instrument v2, the aliases, and a registration that refuses
+b39b55e data(skub2-prep): serving pin v2, the last sibling out of its dirty list
+0c4dfe1 data(skub2-prep): the B' projection re-stamped from the tree that holds its producer
+2b6ee3f data(skub2-prep): serving pin v2 re-stamped from the tree that holds its producer
+d7f240f data(skub2-prep): the decomposition re-stamped from the tree that holds its producer
 ```
 
 ## 📋 Recent decisions
@@ -30,36 +30,69 @@ b92e74d chore(vault): the sku-miss-pack tail -- the day's log, hot.md, the index
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-12 14:10 (arch-a ✅, uni-a ✅, uni-b ✅, sku-b-prep ✅, sku-b-run ✅ ПРИНЯТ,
+**Last update:** 2026-08-12 17:40 (arch-a ✅, uni-a ✅, uni-b ✅, sku-b-prep ✅, sku-b-run ✅ ПРИНЯТ,
 sku-b-v3-prep ✅, sku-b-v3-run ⛔ ОТКАЗ на воротах — попытка ЦЕЛА, sku-b-v4-prep ✅ $0,
 sku-b-v4-run ✅ 121 куплен, **sku-b-close ✅ $0 — ПИЛОТ ЗАКРЫТ ИЗМЕРЕНИЕМ, 2 планки из 3 FAIL**,
-**sku-miss-pack ✅ $0 — стол для чтения 29 пропущенных пар накрыт, вердиктов НЕТ**).
-**sku-a ✅, R1–R5 ратифицированы, голд text30 размечен, SPEC 3.17 (7)–(12) — закон.**
+sku-miss-pack ✅ $0, **skub2-prep ✅ $0 — инструмент v2 собран, прережка B′ ОТКАЗЫВАЕТСЯ писаться**).
+**sku-a ✅, R1–R5 ратифицированы, голд text30 размечен, SPEC 3.17 (7)–(13) — закон.**
 Артефакты: **`results/sku_b_positions_v4.json` + `.jsonl` (СЛИТЫЕ, 138 источников)**,
 **`results/sku_bar_verdicts.json` (все три планки + `closure`)**,
 **`results/sku_b_pair_verdicts.json` (чтение тимлида, 45 ключей / 61 строка)**,
 **`results/sku_depth_from_pct.json` (глубина: бейдж vs старая цена)**,
-**`results/sku_miss_pack.json` + `.md` (29 пропущенных пар планки 1, лист для чтения; ячейки
-`a|b|c` ПУСТЫЕ — ждут диктовки тимлида)**,
+`results/sku_miss_pack.json` + `.md` (стол для чтения, вердикты уже сняты),
+**`results/sku_miss_decomposition.json` (25 вердиктов + 4 PENDING_TEAM_LEAD)**,
+**`results/sku_pilot_serving_v2.json` (потолок 1200, РЯДОМ с v1)**,
+**`results/sku_projection_b2.json` (4 угла против $0.40)**,
 `results/sku_pilot_prereg_v4.json`, `results/sku_projection_v4.json`,
 `results/sku_pilot_serving.json`, `results/spend_sku_b_v4.json`,
 `results/sku_b_positions.json` + `.jsonl` (запечатаны), `results/sku_b_positions_v3.json` (отказ,
-улика). Отчёты: **`sku-b-v4-run.md` ← читать первым, секция `# Close` — итог пилота**,
-`sku-b-v4-prep.md`, `sku-b-v3-run.md`, `sku-b-v3-prep.md`, `sku-b-run.md`, `sku-b-prep.md`,
+улика). Отчёты: **`skub2-prep.md` ← читать первым**, `sku-b-v4-run.md` (секция `# Close` — итог
+пилота), `sku-b-v4-prep.md`, `sku-b-v3-run.md`, `sku-b-v3-prep.md`, `sku-b-run.md`, `sku-b-prep.md`,
 `uni-a.md`, `uni-b.md`. Ещё: `docs/ARCHITECTURE.md`, граф кода, `docs/PORTING.md`.
-**Next: ЧТЕНИЕ ПАКЕТА ТИМЛИДОМ (29 строк `a|b|c`) → дизайн-сессия B′; брифинг 5c2 — после.**
+**Next: ПРИЁМКА skub2-prep — дочитать 4 пары (#4 #9 #28 #29) и решить B1/B4/B5 + кап $0.40 против
+верхней границы $0.4004 → тогда `write_sku_prereg_b2.py` напишет прережку → skub2-run.**
 Блок правится руками; секция выше — авто-ген, маркер НЕ трогать.
 Длинная форма отклонений: `implementation-notes.md` (Dv100–120), `uni-a.md` (Dv121–124),
 `uni-b.md` (Dv125–132), `sku-b-prep.md` (Dv133–147), `sku-b-run.md` (Dv148–153),
 `sku-b-v3-prep.md` (Dv154–160), `sku-b-v3-run.md` (Dv161–168), `sku-b-v4-prep.md` (Dv169–175),
 **`sku-b-v4-run.md` (Dv176–180, и в её секции `# Close` — Dv181–186)**, **Dv188–194 — только в
-дневнике [[2026-08-12]]: лёгкий контракт 12.08 отчёта-файла не просит**.
+дневнике [[2026-08-12]]: лёгкий контракт 12.08 отчёта-файла не просит**,
+**`skub2-prep.md` (Dv195–208)**.
 Дневники [[2026-08-12]] / [[2026-08-11]], ADR ниже.
 
 ## 🔥 What's Hot
 
-**СТОЛ ДЛЯ ЧТЕНИЯ ПЛАНКИ 1 НАКРЫТ, ВЕРДИКТОВ НЕТ** (`sku-miss-pack` ✅ 12.08, $0, шесть коммитов
-`1845b49..0001cd9`). `results/sku_miss_pack.md` — 29 пропущенных голд-пар по постам: строка КАК её
+**ИНСТРУМЕНТ v2 СОБРАН, ПРЕРЕЖКА B′ ОТКАЗЫВАЕТСЯ ПИСАТЬСЯ** (`skub2-prep` ✅ 12.08, $0,
+тринадцать коммитов `d3fa574..79eaccb`, `make check` 1966 / 2 skipped). Четыре деливерабла из пяти
+легли файлами; пятый — продюсер, который **отказывается**: четыре пары декомпозиции ещё
+`PENDING_TEAM_LEAD` (#4 #9 #28 #29), а каждая может уйти из знаменателя, который он бы
+зарегистрировал. `results/sku_pilot_prereg_b2.json` НЕТ на диске и быть не должно.
+Парсер: `-50%*` → 50.0 + `discount_footnote`, `6х100 г` → 100 г + `pack_count: 6` (НЕ умножается),
+`від 39,90` → 39.9 + `price_qualifier: from` (приоритет `from` > `approx` > `exact`). Потолок
+800 → **1200** — это то, на чём планка 1 потеряла свою самую плотную страницу (4401 p5,
+`malformed JSON`, ПЯТЬ пропущенных пар на одной странице). Обрезанный хвост по-прежнему отказ:
+потолок и парсер — две РАЗНЫЕ половины (13)(a).
+
+**ДВЕ НАХОДКИ, КОТОРЫЕ РЕШАЕТ ТИМЛИД, А НЕ ИСПОЛНИТЕЛЬ.** (1) Пересмотр (13)(c) умеет убирать
+ТОЛЬКО промахи — класс существует лишь у промаха. Девять пар сидят на голд-ключе, который тот же
+тимлид вычеркнул на ДРУГОМ посту (**6 из них v1 НАШЁЛ**, 3 — класс a), и они остаются в
+знаменателе из 41. Recall едет вверх с обеих сторон. Строка B4. (2) Пересмотр ОБНУЛЯЕТ голд четырёх
+постов (4377, 4411, 4421, 4498 — у каждого был ровно один ключ, `raw:svoia-liniia`, класс b), они
+уходят в precision-пробу по правилу R3: **макро-среднее планки 1 теперь по 11 постам, не по 15.**
+Строка B5. Плюс кап: самый дорогой угол проекции **$0.4004 против $0.40** — перебор на
+четыре сотых цента, и ТОЛЬКО когда 3% дрейфа накладываются поверх границы, которая и так верхняя
+(без дрейфа $0.3888 и запас $0.0112).
+
+**АЛИАСЫ СДВИНУЛИ SHA, КОТОРЫЙ ПИНЯТ ВОСЕМЬЮ ЗАПЕЧАТАННЫМИ ЗАПИСЯМИ — НИ ОДНА НЕ ПЕРЕПИНЕНА.**
+`registry_before_the_latin_aliases` снимает правку (13)(b) и воспроизводит `920c7f20…` в точности;
+`load_registry_as_pinned` отдаёт живой файл или реконструкцию по пину, а на всё остальное —
+ОТКАЗ. Планки v4 пересчитываются в **0.3603 / 0.3279 / 0.8621** байт-в-байт. И побочный эффект,
+который поймал тест, чей docstring его предсказал: «Rud» и «LIMO» казефолдятся в СВОИ ЖЕ brand_id,
+поэтому `gold_key` отвечает `rud` там, где запечатанный референс хранит `raw:rud` — голд B′
+ПЕРЕСОБИРАЕТСЯ по именам ревьюера, а не фильтруется, и префикс `raw:` нигде не срезается.
+
+**СТОЛ ДЛЯ ЧТЕНИЯ ПЛАНКИ 1 НАКРЫТ, ВЕРДИКТОВ НЕТ** (`sku-miss-pack` ✅ 12.08, $0, семь коммитов
+`1845b49..724d65c`). `results/sku_miss_pack.md` — 29 пропущенных голд-пар по постам: строка КАК её
 написал ревьюер, отправленные страницы с sha и ответ инструмента на каждой (`brand_raw` / `[]` /
 `UNREADABLE` с причиной), найденная половина рядом как контроль, 29 пустых ячеек `a|b|c` в конце.
 Планка 1 пересчитана `sku_bar_verdicts.bar_one` (тот же `gold_key` с обеих сторон) и построчно
@@ -177,18 +210,30 @@ v4.
 
 ## 🚧 Blockers
 
-**НИЧЕГО НЕ БЛОКИРУЕТ B′.** Сюита **1869 passed, 2 skipped** (+15 за `sku-miss-pack`, +30 за
-`sku-b-close`); `ruff format --check` 236 файлов; дерево чистое, **шесть коммитов
-`1845b49..0001cd9`** поверх одиннадцати `0b103ec..1c2963c`. Почекаутная таблица зелёная на КАЖДОМ
-коммите; контроль — родитель `1c2963c`, 1853. Иммутабельные артефакты
-(`sku_b_positions_v4.{json,jsonl}`, `sku_pilot_prereg_v4.json`, `spend_sku_b_v4.json`,
-`sku_reference_leaflet.json`) захэшированы ДО первого пишущего действия и после — те же байты.
-**Ни одного платного вызова ни в одном из двух контрактов.**
+**СЕССИЮ БЛОКИРУЕТ ТОЛЬКО ПРИЁМКА — четыре пары и три строки ратификации.** Сюита
+**1966 passed, 2 skipped** (+97 за `skub2-prep` поверх 1869); `ruff check` и `ruff format --check`
+чисты, 244 файла; **тринадцать коммитов `d3fa574..79eaccb`** поверх семи `1845b49..724d65c`.
+Почекаутная таблица зелёная на каждом коммите, кроме `d3fa574` — там второй красный **ПО ЗАМЫСЛУ**
+(седьмой маркер ратификации приходит на коммите тимлид-доков, перечисление в
+`tests/test_sku_prereg.py` на имя короче, зелено снова на `2b8a35d`). Контроль — родитель
+`724d65c`, 1868. Ни одного платного вызова; префлайт перегнан в пересобранном peft-venv,
+**EXIT=0, PASS 40, FAIL 0** (было 30).
 
 **Почекаутная таблица гоняется в git-worktree, и у него свой артефакт (Dv193).** `data/`
 гитигнорится, поэтому в worktree она симлинк — и `test_collect_5c1.py::test_the_guard_reads_the_
 pinned_paths_off_the_pin_file` красный на ВСЕХ деревьях, включая контроль-родителя. Читать таблицу
 можно только с контролем рядом; «1 failed» без контроля ничего не значит.
+
+**`config/registry.yaml` СДВИНУЛСЯ, и восемь запечатанных записей пинят его прежний sha.** Не
+перепинены: реконструкция `registry_before_the_latin_aliases` + `load_registry_as_pinned`
+(`src/market_pulse/registry.py`). Правка помечена префиксом `# (13)(b)` на каждой добавленной
+строке комментария, а три тронутых списка `display_names` перечислены ЛИТЕРАЛЬНО в
+`LATIN_ALIASES_13B` — четвёртый алиас в этих строках без записи там ломает реконструкцию, а не
+проходит молча. Не «чинить» отказ перепиниванием.
+
+**Драйвер `positions_gm4_skub.py` всё ещё несёт кап/фазу/леджер v4** ($0.35, `sku-b-v4`,
+`spend_sku_b_v4.json`). Тройка B′ — $0.40 / `skub2` / `results/spend_skub2.json` — зарегистрирована
+в прережке, но в драйвер не перенесена: это шаг skub2-run (Dv208).
 
 **Три новые записи называют свои продюсеры в `git.dirty` — и это ОСТАВЛЕНО так (Dv187).**
 `provenance.git_state` пишется в момент записи, коммитов ещё нет: у всех трёх `commit: 06617c8`.
