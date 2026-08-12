@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-12 12:56:51 (every SessionStart)
+**Auto-refreshed:** 2026-08-12 13:42:30 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-c10f641 docs(report): sku-b-close -- appended as the report's Close section
-fa7f3df docs(decision): the sku-b pilot closed by measurement
-0f1e43e feat(sku-b-close): depth from the printed percentage, measured on what is already bought ($0)
-20ac6dd data(sku-b-close): the verdict record, finalised -- two bars of three FAIL, B closes
-5b2a649 feat(sku-b-close): the bar producer learns the bar-2 read, and states the closure
+0a48cf0 data(sku-miss-pack): the pack re-stamped from the tree that contains its producer
+610af67 feat(sku-miss-pack): bar 1's 29 misses, packed for the team-lead read ($0)
+1845b49 chore(docs): the team lead's miss-pack contract and the STATUS pointer
+1c2963c docs(report): sku-b-close -- Dv187, and the one clause the page table was missing
+d347777 docs(report): sku-b-close -- the two rows this table could not name
 ```
 
 ## 📋 Recent decisions
@@ -30,29 +30,46 @@ fa7f3df docs(decision): the sku-b pilot closed by measurement
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-12 14:40 (arch-a ✅, uni-a ✅, uni-b ✅, sku-b-prep ✅, sku-b-run ✅ ПРИНЯТ,
+**Last update:** 2026-08-12 13:55 (arch-a ✅, uni-a ✅, uni-b ✅, sku-b-prep ✅, sku-b-run ✅ ПРИНЯТ,
 sku-b-v3-prep ✅, sku-b-v3-run ⛔ ОТКАЗ на воротах — попытка ЦЕЛА, sku-b-v4-prep ✅ $0,
-sku-b-v4-run ✅ 121 куплен, **sku-b-close ✅ $0 — ПИЛОТ ЗАКРЫТ ИЗМЕРЕНИЕМ, 2 планки из 3 FAIL**).
+sku-b-v4-run ✅ 121 куплен, **sku-b-close ✅ $0 — ПИЛОТ ЗАКРЫТ ИЗМЕРЕНИЕМ, 2 планки из 3 FAIL**,
+**sku-miss-pack ✅ $0 — стол для чтения 29 пропущенных пар накрыт, вердиктов НЕТ**).
 **sku-a ✅, R1–R5 ратифицированы, голд text30 размечен, SPEC 3.17 (7)–(12) — закон.**
 Артефакты: **`results/sku_b_positions_v4.json` + `.jsonl` (СЛИТЫЕ, 138 источников)**,
 **`results/sku_bar_verdicts.json` (все три планки + `closure`)**,
 **`results/sku_b_pair_verdicts.json` (чтение тимлида, 45 ключей / 61 строка)**,
 **`results/sku_depth_from_pct.json` (глубина: бейдж vs старая цена)**,
+**`results/sku_miss_pack.json` + `.md` (29 пропущенных пар планки 1, лист для чтения; ячейки
+`a|b|c` ПУСТЫЕ — ждут диктовки тимлида)**,
 `results/sku_pilot_prereg_v4.json`, `results/sku_projection_v4.json`,
 `results/sku_pilot_serving.json`, `results/spend_sku_b_v4.json`,
 `results/sku_b_positions.json` + `.jsonl` (запечатаны), `results/sku_b_positions_v3.json` (отказ,
 улика). Отчёты: **`sku-b-v4-run.md` ← читать первым, секция `# Close` — итог пилота**,
 `sku-b-v4-prep.md`, `sku-b-v3-run.md`, `sku-b-v3-prep.md`, `sku-b-run.md`, `sku-b-prep.md`,
 `uni-a.md`, `uni-b.md`. Ещё: `docs/ARCHITECTURE.md`, граф кода, `docs/PORTING.md`.
-**Next: РЕВИЗИЯ ИНСТРУМЕНТА B′ (решение оператора 12.08 — СЕЙЧАС), брифинг 5c2 — после.**
+**Next: ЧТЕНИЕ ПАКЕТА ТИМЛИДОМ (29 строк `a|b|c`) → дизайн-сессия B′; брифинг 5c2 — после.**
 Блок правится руками; секция выше — авто-ген, маркер НЕ трогать.
 Длинная форма отклонений: `implementation-notes.md` (Dv100–120), `uni-a.md` (Dv121–124),
 `uni-b.md` (Dv125–132), `sku-b-prep.md` (Dv133–147), `sku-b-run.md` (Dv148–153),
 `sku-b-v3-prep.md` (Dv154–160), `sku-b-v3-run.md` (Dv161–168), `sku-b-v4-prep.md` (Dv169–175),
-**`sku-b-v4-run.md` (Dv176–180, и в её секции `# Close` — Dv181–186)**.
+**`sku-b-v4-run.md` (Dv176–180, и в её секции `# Close` — Dv181–186)**, **Dv188–193 — только в
+дневнике [[2026-08-12]]: лёгкий контракт 12.08 отчёта-файла не просит**.
 Дневники [[2026-08-12]] / [[2026-08-11]], ADR ниже.
 
 ## 🔥 What's Hot
+
+**СТОЛ ДЛЯ ЧТЕНИЯ ПЛАНКИ 1 НАКРЫТ, ВЕРДИКТОВ НЕТ** (`sku-miss-pack` ✅ 12.08, $0, три коммита
+`1845b49..0a48cf0`). `results/sku_miss_pack.md` — 29 пропущенных голд-пар по постам: строка КАК её
+написал ревьюер, отправленные страницы с sha и ответ инструмента на каждой (`brand_raw` / `[]` /
+`UNREADABLE` с причиной), найденная половина рядом как контроль, 29 пустых ячеек `a|b|c` в конце.
+Планка 1 пересчитана `sku_bar_verdicts.bar_one` (тот же `gold_key` с обеих сторон) и построчно
+сверена с отгруженной вердикт-записью: **29 / 26 / 15** сошлись.
+**Два флага на КАЖДОЙ строке, а не в шапке поста** — вердикт диктуется построчно: **16 из 29**
+сидят на посту с нечитаемой страницей, **5** — на посту с извлечённым брендом, не совпавшим ни с
+одним голд-ключом. Без флага такая строка читается как (a) «недочитал», хотя причина не в картинке.
+**Разрыв словаря (решать оператору):** две из 29 — `raw:try-vedmedi` на 4340 («Three Bears») и
+`raw:комо / komo` на 4381 («Komo») — извлечены под именем, которого нет в alias-таблице; класса для
+этого в a|b|c нет, и пары нигде не заявлены (это была бы вторая матчинг-правила).
 
 **ПИЛОТ ЗАКРЫТ ИЗМЕРЕНИЕМ. 121 КУПЛЕН, ПОПУЛЯЦИЯ 138/138, $0.2541 ИЗ $0.65** (`sku-b-v4-run` ✅
 12.08, одиннадцать коммитов `910c4b6..06617c8`). Ни (10)(a), ни (10)(b) не сработали: ворота дали **$0.5300
@@ -111,7 +128,12 @@ tier-accuracy **0.8621 против 0.85 → PASS** (29 из 30, 1 нечита�
 
 ## ⏭️ Next
 
-**ПИЛОТ ЗАКОНЧЕН. СЛЕДУЮЩЕЕ — ДИЗАЙН-СЕССИЯ B′** (решение оператора 12.08 в `docs/STATUS.md`:
+**СНАЧАЛА — ЧТЕНИЕ ПАКЕТА: 29 строк `a|b|c` в `results/sku_miss_pack.md`.** Это ровно тот счёт,
+которого пилоту не хватило: сколько из 29 промахов — реальный недочит (a), сколько — расхождение
+голда и инструмента (b, бренд без ценника), сколько — шум голда (c). Пока строки не продиктованы,
+кандидат (2) ниже стоит на одном факте (62 из 62 страничных строк — `position`), а не на счёте.
+
+**ПИЛОТ ЗАКОНЧЕН. ДАЛЬШЕ — ДИЗАЙН-СЕССИЯ B′** (решение оператора 12.08 в `docs/STATUS.md`:
 ревизия инструмента СЕЙЧАС, брифинг 5c2 — ПОСЛЕ; для B′ облегчённый режим — короче контракты, те же
 гарды на деньгах). Три КАНДИДАТА записаны в [[sku-b-pilot-closed-by-measurement]] §7 и ни один не
 авторизован: (1) двухступенчатое чтение — OCR-транскрипт, потом SKU из текста (предложение оператора
@@ -155,12 +177,23 @@ v4.
 
 ## 🚧 Blockers
 
-**НИЧЕГО НЕ БЛОКИРУЕТ B′.** Сюита **1854 passed, 2 skipped** (+30 строк за этот контракт);
-`ruff format --check` 234 файла; дерево чистое, девять коммитов `0b103ec..` этой сессии.
-Почекаутная таблица зелёная на КАЖДОМ коммите, красных по замыслу нет; контроль — родитель
-`06617c8`, 1824. Иммутабельные артефакты (`sku_b_positions_v4.{json,jsonl}`,
-`sku_pilot_prereg_v4.json`, `spend_sku_b_v4.json`, `sku_reference_leaflet.json`) захэшированы ДО
-первого пишущего действия и после — те же байты. **Ни одного платного вызова в этом контракте.**
+**НИЧЕГО НЕ БЛОКИРУЕТ B′.** Сюита **1866 passed, 2 skipped** (+12 за `sku-miss-pack`, +30 за
+`sku-b-close`); `ruff format --check` 236 файлов; дерево чистое, **три коммита
+`1845b49..0a48cf0`** поверх одиннадцати `0b103ec..1c2963c`. Почекаутная таблица зелёная на КАЖДОМ
+коммите; контроль — родитель `1c2963c`, 1853. Иммутабельные артефакты
+(`sku_b_positions_v4.{json,jsonl}`, `sku_pilot_prereg_v4.json`, `spend_sku_b_v4.json`,
+`sku_reference_leaflet.json`) захэшированы ДО первого пишущего действия и после — те же байты.
+**Ни одного платного вызова ни в одном из двух контрактов.**
+
+**Почекаутная таблица гоняется в git-worktree, и у него свой артефакт (Dv193).** `data/`
+гитигнорится, поэтому в worktree она симлинк — и `test_collect_5c1.py::test_the_guard_reads_the_
+pinned_paths_off_the_pin_file` красный на ВСЕХ деревьях, включая контроль-родителя. Читать таблицу
+можно только с контролем рядом; «1 failed» без контроля ничего не значит.
+
+**Три новые записи называют свои продюсеры в `git.dirty` — и это ОСТАВЛЕНО так (Dv187).**
+`provenance.git_state` пишется в момент записи, коммитов ещё нет: у всех трёх `commit: 06617c8`.
+Переписать = сдвинуть три sha, на которые ссылаются отчёт, два теста и пин записи глубины. Доказано
+иначе: на чистом дереве `d347777` все три пересобраны побайтно одинаково везде, кроме блока `git`.
 
 **Ничего не биллится, и это с ПОЗИТИВНЫМ КОНТРОЛЕМ** (два пустых массива — ещё и подпись
 сломанного CLI): `pod list -a` → `[]`, `serverless list` → `[]`, `template list --type user` → два
