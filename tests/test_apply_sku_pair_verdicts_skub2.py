@@ -125,12 +125,21 @@ def test_the_sixty_one_shared_rows_are_the_v4_read_unchanged(tmp_path):
     assert extends["prior"]["checksums"]["rows"] == 61 and extends["rows_whose_n_moved"] == []
 
 
-def test_the_nineteen_new_rows_are_the_four_pages_v1_never_read():
-    """What (13) actually bought: the pairs are new because the PAGES are new — 4342 and 4467 were
-    asterisk refusals under v1, 4405 was malformed JSON and the token ceiling, 4446 came back
-    empty. The share on them is not the share on the 61 the two instruments share."""
+def test_the_nineteen_new_rows_are_exactly_the_four_pages_v1_refused():
+    """What (13) actually bought, and the ADR's central claim: the new pairs are new because the
+    PAGES are new, and those pages are not "some pages" — they are precisely the four page answers
+    the v4 run recorded as unreadable (asterisk ×2, malformed JSON at the 800-token ceiling,
+    multipack). Derived from the v4 record rather than typed, because a list of four page numbers
+    written into a test is a claim that agrees with itself."""
+    v4_record = json.loads((REPO_ROOT / "results" / "sku_b_positions_v4.json").read_text("utf-8"))
+    refused = {
+        outcome["source"].rsplit("/", 1)[-1]
+        for outcome in v4_record["outcomes"]
+        if outcome["leg"] == "page" and outcome["unreadable"]
+    }
     keys = applier.match(skub2.DICTATED, dump_pairs())
     fresh = applier.carried_forward(keys, skub2.PRIOR)["new"]
+    assert set(fresh["rows_by_page"]) == refused
     assert fresh["rows_by_page"] == {
         "atb_market_official_4342.jpg": 2,
         "atb_market_official_4405.jpg": 9,
