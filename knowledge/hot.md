@@ -2,24 +2,24 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-12 10:39:32 (every SessionStart)
+**Auto-refreshed:** 2026-08-12 12:56:51 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-2fc88ae docs(report): sku-b-v4-prep -- the table's own tail, a listing control, Dv175
-7b9caa4 chore(vault): the sku-b-v4-prep tail -- the day's log, hot.md, the index
-8f4a7ed docs(report): sku-b-v4-prep
-bb6b96e docs(decision): the v3 refusal and the v4 ruling
-87c2240 feat(sku-b-v4-prep): the preflight re-driven against the v4 registration
+c10f641 docs(report): sku-b-close -- appended as the report's Close section
+fa7f3df docs(decision): the sku-b pilot closed by measurement
+0f1e43e feat(sku-b-close): depth from the printed percentage, measured on what is already bought ($0)
+20ac6dd data(sku-b-close): the verdict record, finalised -- two bars of three FAIL, B closes
+5b2a649 feat(sku-b-close): the bar producer learns the bar-2 read, and states the closure
 ```
 
 ## 📋 Recent decisions
 
-- `sku-b-v3-refusal-and-v4.md` — The v3 session was refused by its own gate: three marginals, a fresh ledger, and a $0.65 cap
+- `sku-b-pilot-closed-by-measurement.md` — The sku-b pilot closes as "instrument not ready" BY MEASUREMENT: two bars of three failed
 - `INDEX.md` — Decision records
-- `sku-b-run-acceptance-and-resume.md` — sku-b-run accepted at 17 of 138: the probe priced the run, not the cap, and the (10)(b) stop resolves as a resume
+- `sku-b-v3-refusal-and-v4.md` — The v3 session was refused by its own gate: three marginals, a fresh ledger, and a $0.65 cap
 
 ## 📅 Recent daily logs
 
@@ -30,40 +30,56 @@ bb6b96e docs(decision): the v3 refusal and the v4 ruling
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-12 (arch-a ✅, uni-a ✅, uni-b ✅, sku-b-prep ✅, sku-b-run ✅ ПРИНЯТ,
+**Last update:** 2026-08-12 14:40 (arch-a ✅, uni-a ✅, uni-b ✅, sku-b-prep ✅, sku-b-run ✅ ПРИНЯТ,
 sku-b-v3-prep ✅, sku-b-v3-run ⛔ ОТКАЗ на воротах — попытка ЦЕЛА, sku-b-v4-prep ✅ $0,
-**sku-b-v4-run ✅ ЗАВЕРШЁН, 121 куплен, $0.2541 из $0.65**).
+sku-b-v4-run ✅ 121 куплен, **sku-b-close ✅ $0 — ПИЛОТ ЗАКРЫТ ИЗМЕРЕНИЕМ, 2 планки из 3 FAIL**).
 **sku-a ✅, R1–R5 ратифицированы, голд text30 размечен, SPEC 3.17 (7)–(12) — закон.**
-Артефакты v4: **`results/sku_b_positions_v4.json` + `.jsonl` (СЛИТЫЕ, 138 источников)**,
-**`results/sku_bar_verdicts.json`**, `results/sku_pilot_prereg_v4.json`,
-`results/sku_projection_v4.json`, `results/sku_pilot_serving.json`, `results/spend_sku_b_v4.json`,
+Артефакты: **`results/sku_b_positions_v4.json` + `.jsonl` (СЛИТЫЕ, 138 источников)**,
+**`results/sku_bar_verdicts.json` (все три планки + `closure`)**,
+**`results/sku_b_pair_verdicts.json` (чтение тимлида, 45 ключей / 61 строка)**,
+**`results/sku_depth_from_pct.json` (глубина: бейдж vs старая цена)**,
+`results/sku_pilot_prereg_v4.json`, `results/sku_projection_v4.json`,
+`results/sku_pilot_serving.json`, `results/spend_sku_b_v4.json`,
 `results/sku_b_positions.json` + `.jsonl` (запечатаны), `results/sku_b_positions_v3.json` (отказ,
-улика). Отчёты: **`sku-b-v4-run.md` ← читать первым**, `sku-b-v4-prep.md`, `sku-b-v3-run.md`,
-`sku-b-v3-prep.md`, `sku-b-run.md`, `sku-b-prep.md`, `uni-a.md`, `uni-b.md`.
-Ещё: `docs/ARCHITECTURE.md`, граф кода, `docs/PORTING.md`.
-**Next: приёмка — чтение тимлидом 61 ценовой пары (планка 2), вердикт B, брифинг 5c2.**
+улика). Отчёты: **`sku-b-v4-run.md` ← читать первым, секция `# Close` — итог пилота**,
+`sku-b-v4-prep.md`, `sku-b-v3-run.md`, `sku-b-v3-prep.md`, `sku-b-run.md`, `sku-b-prep.md`,
+`uni-a.md`, `uni-b.md`. Ещё: `docs/ARCHITECTURE.md`, граф кода, `docs/PORTING.md`.
+**Next: РЕВИЗИЯ ИНСТРУМЕНТА B′ (решение оператора 12.08 — СЕЙЧАС), брифинг 5c2 — после.**
 Блок правится руками; секция выше — авто-ген, маркер НЕ трогать.
 Длинная форма отклонений: `implementation-notes.md` (Dv100–120), `uni-a.md` (Dv121–124),
 `uni-b.md` (Dv125–132), `sku-b-prep.md` (Dv133–147), `sku-b-run.md` (Dv148–153),
 `sku-b-v3-prep.md` (Dv154–160), `sku-b-v3-run.md` (Dv161–168), `sku-b-v4-prep.md` (Dv169–175),
-**`sku-b-v4-run.md` (Dv176–180)**. Дневники [[2026-08-12]] / [[2026-08-11]], ADR ниже.
+**`sku-b-v4-run.md` (Dv176–180, и в её секции `# Close` — Dv181–186)**.
+Дневники [[2026-08-12]] / [[2026-08-11]], ADR ниже.
 
 ## 🔥 What's Hot
 
 **ПИЛОТ ЗАКРЫТ ИЗМЕРЕНИЕМ. 121 КУПЛЕН, ПОПУЛЯЦИЯ 138/138, $0.2541 ИЗ $0.65** (`sku-b-v4-run` ✅
-12.08, семь коммитов `910c4b6..`). Ни (10)(a), ни (10)(b) не сработали: ворота дали **$0.5300
+12.08, одиннадцать коммитов `910c4b6..06617c8`). Ни (10)(a), ни (10)(b) не сработали: ворота дали **$0.5300
 против $0.6500 — proceed**, ин-ран гейт шёл вниз ($0.2685 → $0.2361). 79 позиций, 5 нечитаемых
 ответов (3.62%, четыре разные причины), 102 пустых, **61 позиция с зачёркнутой ценой**.
 Слитые артефакты `results/sku_b_positions_v4.{json,jsonl}` — каждая строка дампа называет свою
 сессию в `bought_by`: 65 `sku-b-v4` + 14 `sku-b`.
 
-**ПЛАНКИ (`results/sku_bar_verdicts.json`, числа из кода, приговоров нет).**
+**ВСЕ ТРИ ПЛАНКИ ПРОЧИТАНЫ, B ЗАКРЫТ** (`results/sku_bar_verdicts.json :: closure` =
+`CLOSED — instrument not ready, BY MEASUREMENT`, 2 из 3 провалены).
 Планка 1 — brand-recall **0.3603 против 0.75 → FAIL** (макро по 15 постам; micro 0.4727,
-**precision 0.9286**, на четырёх постах с пустым голдом — НОЛЬ ложных). Планка 3 — tier-accuracy
-**0.8621 против 0.85 → PASS** (29 из 30, 1 нечитаемая = 3.3% < 10%). Планка 2 — **PENDING_TEAM_LEAD,
-n = 61 пара, класс SCOREABLE (R4); значения НЕТ и быть не может — SPEC §10.**
-`attempts.on_failure` зарегистрирован: провалившаяся планка закрывает B «инструмент не готов»
-ИЗМЕРЕНИЕМ — ни ретрая, ни переформулировки, ни второй выборки.
+**precision 0.9286**, на четырёх постах с пустым голдом — НОЛЬ ложных). Планка 2 — price-pair
+**0.3279 против 0.80 → FAIL** (**20 из 61**, чтение тимлида 12.08 по всем 22 картинкам). Планка 3 —
+tier-accuracy **0.8621 против 0.85 → PASS** (29 из 30, 1 нечитаемая = 3.3% < 10%).
+`attempts.on_failure` цитируется из регистрации дословно: провалившаяся планка закрывает B
+«инструмент не готов» ИЗМЕРЕНИЕМ — ни ретрая, ни переформулировки, ни второй выборки.
+
+**ДИАГНОЗ В ОДНОЙ СТРОКЕ: КРУПНЫЙ ТЕКСТ ИДЕАЛЕН, МЕЛКИЙ ЗАЧЁРКНУТЫЙ — НА ТРЕТЬ.** Промо **61/61**,
+печатный % **61/61**, зачёркнутая старая цена **20/61**; вся ошибка — суперскрипт копеек, обрезка
+до `.0` или сдвиг цифры. По страницам: 22 страницы, **4 чистые, 13 без единой верной пары** — это
+инструмент, а не одна плохая листовка.
+
+**И ГЛАВНАЯ ПОПРАВКА К ЭТОМУ ДИАГНОЗУ (`results/sku_depth_from_pct.json`, $0):** ошибка копеечная,
+а ГЛУБИНА к ней нечувствительна. Бейдж `-N%` даёт медиану **0.2886 pp** / макс **1.4171 pp**, а
+старая цена, которую пайплайн УЖЕ извлекает, — **0.1761 pp** / **1.6366 pp**; обе внутри 2 pp на
+всех 61 паре. Планка 2 проваливается на ПЕЧАТНОМ ЧИСЛЕ, но на этой популяции не проваливается на
+ГЛУБИНЕ, ради которой это число нужно. Порог НЕ зарегистрирован — это вход в дизайн B′, не планка.
 
 **ГЛАВНАЯ НАХОДКА: ПРОБА ВЕРНА И ВСЁ РАВНО ВТРОЕ ДОРОЖЕ ПОПУЛЯЦИИ.** Зарегистрированная страница
 (11)(c) дала **14.625 с** против 14.808 с в v3 — воспроизводимость 1.2%, проба не шумная. А сама
@@ -94,12 +110,21 @@ n = 61 пара, класс SCOREABLE (R4); значения НЕТ и быть 
 
 ## ⏭️ Next
 
-**ПРИЁМКА — ЗА ТИМЛИДОМ, И ЭТО ЕДИНСТВЕННОЕ, ЧТО ОСТАЛОСЬ ОТ ПИЛОТА.** Планка 2 читается по
-`results/sku_b_positions_v4.jsonl`: **61 строка с `price_old`**, каждая несёт номер страницы, файл
-и его sha256, обе цены, печатный %, тир и `depth()` — картинку можно открыть, ничего не
-перезапуская. Исполнитель НЕ скорит свою выборку (SPEC §10) и в отчёте нет ни одного числа планки 2.
-Дальше: вердикт B (планка 1 провалена ИЗМЕРЕНИЕМ — решает тимлид, закрывает ли это B) → **брифинг
-5c2**.
+**ПИЛОТ ЗАКОНЧЕН. СЛЕДУЮЩЕЕ — ДИЗАЙН-СЕССИЯ B′** (решение оператора 12.08 в `docs/STATUS.md`:
+ревизия инструмента СЕЙЧАС, брифинг 5c2 — ПОСЛЕ; для B′ облегчённый режим — короче контракты, те же
+гарды на деньгах). Три КАНДИДАТА записаны в [[sku-b-pilot-closed-by-measurement]] §7 и ни один не
+авторизован: (1) двухступенчатое чтение — OCR-транскрипт, потом SKU из текста (предложение оператора
+10.08; отказ — глиф-резолюция, то есть проблема транскрипции раньше, чем извлечения; цена — теряется
+пространственная связь цены с товаром); (2) сайд-канал `brands_visible` рядом с позициями — тогда
+голд планки 1 и инструмент планки 1 меряют ОДИН объект (см. ниже); (3) семейство парсера
+суперскрипт/звёздочка — ИМЕНОВАННАЯ пост-пилотная ревизия ((11)(b)), обе снова в списке нечитаемых
+v4.
+
+**ГОЛД ПЛАНКИ 1 И ИНСТРУМЕНТ ПЛАНКИ 1 — РАЗНЫЕ ОБЪЕКТЫ, и это КАНДИДАТ, а не измеренная причина.**
+Голд — `brands_visible`: всё, что рецензент ВИДИТ на странице (55 пар на 15 постах). Инструмент
+возвращает ПОЗИЦИИ: все **62 из 62** страничных строк дампа несут тир `position`. Бренд без цены
+рядом виден и позицией не является, и его никто не просил. Сколько из 29 неназванных пар лежат на
+непрайсовых товарах — пилот НЕ считал.
 
 **ЧТО ОТЧЁТ КЛАДЁТ НА СТОЛ ВМЕСТЕ С ЧИСЛАМИ.** Инструмент НЕДОЧИТЫВАЕТ, а не ошибается: micro
 **26/55**, precision **26/28** — из 28 названных пар (пост, бренд) мимо голда всего **две**
@@ -109,6 +134,13 @@ n = 61 пара, класс SCOREABLE (R4); значения НЕТ и быть 
 звёздочка снова в списке нечитаемых (`'-50%*' is not a percentage` ×2) — это ПОСТ-пилотная
 ИМЕНОВАННАЯ ревизия, никогда не правка на лету ((11)(b)).
 
+**ЧЕМ ЗАКРЫТ ПИЛОТ, ПОИМЁННО.** `scripts/apply_sku_pair_verdicts.py` переносит 45 продиктованных
+ключей на 61 строку дампа (каждая ровно один раз) и отказывается на любом промахе контрольных сумм,
+на непокрытой строке, на суффиксе, достающем две страницы, и на двух переворотах вердикта, которые
+суммы 20/41 не видят. `EXPECTED` — контрольная строка контракта, ПЕРЕПИСАННАЯ, а не выведенная из
+`DICTATED`: сумма, посчитанная из проверяемого, соглашается с любой опечаткой в нём. Продюсер планок
+пере-выводит долю через `checksums` того же апплаера — правка поля `accuracy` руками ловится.
+
 **ДОЛГ Dv170 ЗАКРЫТ.** `scripts/sku_bar_verdicts.py` смотрит на v4 обоими дефолтами, а строка
 `contract` — теперь константа с тестом, который пинит её к регистрации (`attempts.phase`), к
 наличию файла контракта в дереве и к трём поправкам (6), (11), (12). Негативный контроль прогнан.
@@ -117,17 +149,17 @@ n = 61 пара, класс SCOREABLE (R4); значения НЕТ и быть 
 без (12)). Не тронуто намеренно: драйвер — денежный путь, а step 0.5 был назван поимённо. Никто это
 поле не читает (проверено грепом) — чинить в следующем контракте, который и так трогает драйвер.
 
-**DEFERRED, решается ПОСЛЕ пилота:** двухступенчатое чтение листовки (OCR-транскрипт → SKU из
-текста) — предложение оператора 10.08, записано в `docs/STATUS.md`; и нужна ли `carrier=comment`
-своя планка. Прережка не меняется ни в ту, ни в другую сторону.
+**DEFERRED, всё ещё не решено:** нужна ли `carrier=comment` своя планка. Прережка v4 закрыта и не
+меняется ни в ту, ни в другую сторону.
 
 ## 🚧 Blockers
 
-**НИЧЕГО НЕ БЛОКИРУЕТ ПРИЁМКУ.** Сюита **1824 passed, 2 skipped**; `ruff format --check` 230 файлов;
-прелёт 30/30 exit 0. Почекаутная таблица зелёная на КАЖДОМ коммите сессии, красных по замыслу нет;
-контроль — родитель `2fc88ae`, 1823. Запечатанные артефакты (`sku_b_positions.{json,jsonl}`,
-`sku_b_positions_v3.json`, `sku_pilot_prereg_v4.json`, `spend_phase4.json`, `baselines.json`)
-захэшированы ДО первого пишущего действия сессии и после рана — те же байты.
+**НИЧЕГО НЕ БЛОКИРУЕТ B′.** Сюита **1854 passed, 2 skipped** (+30 строк за этот контракт);
+`ruff format --check` 234 файла; дерево чистое, девять коммитов `0b103ec..` этой сессии.
+Почекаутная таблица зелёная на КАЖДОМ коммите, красных по замыслу нет; контроль — родитель
+`06617c8`, 1824. Иммутабельные артефакты (`sku_b_positions_v4.{json,jsonl}`,
+`sku_pilot_prereg_v4.json`, `spend_sku_b_v4.json`, `sku_reference_leaflet.json`) захэшированы ДО
+первого пишущего действия и после — те же байты. **Ни одного платного вызова в этом контракте.**
 
 **Ничего не биллится, и это с ПОЗИТИВНЫМ КОНТРОЛЕМ** (два пустых массива — ещё и подпись
 сломанного CLI): `pod list -a` → `[]`, `serverless list` → `[]`, `template list --type user` → два
@@ -151,8 +183,8 @@ n = 61 пара, класс SCOREABLE (R4); значения НЕТ и быть 
 
 **Бюджет — живое ограничение.** Phase 4 **$23.3209 из $25**, остаток **$1.6791** (читать гард перед
 сессией, а не эту строку — Dv33: баланс отстаёт от ресурса на минуты-часы). Пилот суммарно:
-$0.1965 + $0.1526 + $0.2541 ≈ **$0.60** против исходной оценки $0.35 — цена честных ворот, а не
-перерасход. `results/spend_sku_b.json`, `results/spend_sku_b_v3.json` и теперь
+$0.1965 + $0.1526 + $0.2541 = **$0.6032** против исходной оценки $0.35 — цена честных ворот, а не
+перерасход (контракт закрытия называл ≈$0.62; сходятся к леджерам именно эти три). `results/spend_sku_b.json`, `results/spend_sku_b_v3.json` и теперь
 `results/spend_sku_b_v4.json` — закрытые якоря, не трогать. Том биллится всегда: **≈ $0.012/ч**
 (выведено из двух балансов за 9.7 ч простоя) — этим объясняется, почему осевшая дельта выше
 секундной.
@@ -187,6 +219,11 @@ $0.5098 / 2470 с 08-08 (Dv38) и 30-секундная A4500 у srv-2b — ни
   page reproduces to 1.2% across two sessions and still over-prices the population **3.64×**,
   because the sent set is the first six pages of each leaflet and the unsent ones are the dense
   grids. Price the next go/no-go from `4.0161 s/page (n=91)`, not from a probe.
+- **A missing `results/sku_b_pair_verdicts.json` puts bar 2 silently back to PENDING** and the bar
+  producer still writes a record — the closure just goes `UNDETERMINED`. That is deliberate (it is
+  the state the bar was in for the whole pilot) and the guard is a test asserting the read exists
+  and that the record on disk is the scored one. Delete or move that file and the guard, not the
+  producer, is what tells you.
 - **`knowledge/hot.md` is grepped as a priced INPUT.** `volume_calc_5c1.py` needs the literals
   `~$0.24/day` and `80 GB is about what the` verbatim — translating or reformatting either reddens
   nine tests. Run `make check` after editing this file, not only after editing code.
