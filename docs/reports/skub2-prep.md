@@ -9,6 +9,11 @@ The fifth — the B′ pre-registration — **is a producer that refuses**, beca
 pairs are still `PENDING_TEAM_LEAD` and each of them can still leave the denominator it would
 register.
 
+> **This section is skub2-prep's record and its numbers are that session's.** SPEC 3.17 (14) landed
+> after it: the four pairs are read, the registration writes, the gold is 37 pairs over 10 posts and
+> the cap is $0.65. The **§Fix** section at the foot of this file is the current state; where the
+> two disagree, Fix is later.
+
 ---
 
 ## What the session produced
@@ -525,3 +530,353 @@ stop rather than a silent wrong number.
    empty-gold check, which is where Dv209's fix put the stop.
 
 Nothing above is a number this session chose.
+
+---
+
+## Fix
+
+`docs/PROMPT-skub2-fix.md` · authority SPEC §3.17 (14), ratified 2026-08-12 · executor, $0, no paid
+calls · 2026-08-12. Eleven commits, `2621d6f..<the vault tail>`.
+
+The four pending pairs land, the B′ registration writes, and the driver's constants move with it.
+
+| step | what | where it landed |
+| --- | --- | --- |
+| 1 | the team-lead docs, unedited, and the enumeration | `2621d6f` · `56b2214` |
+| 2 | the four verdicts applied, `final` = 37 | `results/sku_miss_decomposition.json` |
+| 3 | the B′ pre-registration, **written** | `results/sku_pilot_prereg_b2.json` |
+| 4 | the driver's constants — Dv208 paid | `scripts/positions_gm4_skub.py` |
+| 5 | the projection against $0.65, the preflight re-driven | `results/sku_projection_b2.json`, `scripts/preflight_serving_guards.py` |
+
+```
+$ python3 -m pytest -q
+1985 passed, 2 skipped in 58.28s
+$ ruff check . && ruff format --check .
+All checks passed!
+244 files already formatted
+```
+
+1969 tests at the end of skub2-prep, **1985** now.
+
+---
+
+### Step 2 — the four verdicts
+
+`#4`, `#9`, `#28` and `#29` are all class b. The applier's table gains four rows and `PENDING`
+becomes empty; `EXPECTED` is transcribed from the contract's own line, never computed from the table
+it checks.
+
+```
+$ PYTHONPATH=src python3 scripts/apply_miss_decomposition.py
+results/sku_miss_pack.json — 29 missed pairs, each ruled on or deferred exactly once
+  a 11 · b 16 · c 2 · pending_team_lead 0
+  11 mechanism(s) checked against the instrument's own refusal reasons
+  4 page-read citation(s) checked against the pages that could be read
+     9  non-dairy watchlist item
+     5  refusal:token-ceiling
+     3  refusal:multipack
+     2  SKU-name-vs-TM
+     2  maker-logo
+     2  refusal:asterisk
+     1  alias:latin-form
+     1  dairy-adjacent, reviewer's own caveat
+     1  gold-key artifact — brand was found
+     1  non-dairy
+     1  non-dairy, by-pattern
+     1  two-brands-one-box
+wrote results/sku_miss_decomposition.json
+```
+
+`b_prime_denominator.final` is **37** for the first time — 55 gold pairs less the 18 ruled b or c —
+and that field is what `write_sku_prereg_b2.py` refused on.
+
+#### Dv211 — a page citation is checkable, so it is checked
+
+(14)(a) does not only rule the four; it says which pages each verdict was read on («fish p2, tea p3,
+zefir p4, oil p5, pate p6 — every page read»). Those citations are the evidence that replaces the
+guess the first read refused to make, so the applier holds them against the pack.
+`check_the_page_reads_land_on_readable_pages` refuses a page number that is not on that post, a page
+the extractor returned as unreadable, a `PAGE_READS` key the table does not rule on, and a citation
+on a row that is still `PENDING_TEAM_LEAD`. Four citations checked, four negative controls.
+
+The refused-page branch is the one that matters. Row 14 is ruled «non-dairy, **by-pattern**» because
+its own page came back refused and the verdict came from the rows beside it — a full-page read that
+cited a refused page would be that same thing wearing the other words.
+
+#### Dv212 — the mechanism vocabulary is not the page reads
+
+The four wear `non-dairy watchlist item`, the string the first read already used for five other
+rows. Put into `mechanism`, the parenthetical page lists would have split one bucket of nine into
+five plus four buckets of one, and `by_mechanism` would stop counting anything. The page reads live
+in a sibling `pages_read` field on those four rows.
+
+#### Dv224 — «16 images» against 18 sent pages
+
+The contract's heading says «full-page reads on 16 images», and STATUS.md repeats it. The four rows
+sit on three posts — 4360, 4391 and 4508 — and the pack records **six sent pages each**, 18 in
+total. Every page number the verdicts cite (p1–p6) is inside that range and none is unreadable, so
+the new check passes and no verdict is affected. Reported because it is the team lead's own count
+and not the executor's to correct.
+
+---
+
+### Step 3 — the B′ pre-registration, written
+
+```
+$ PYTHONPATH=src python3 scripts/write_sku_prereg_b2.py
+wrote results/sku_pilot_prereg_b2.json  (beside results/sku_pilot_prereg_v4.json, which stays sealed)
+  bar 1 gold    37 pairs over 10 posts (55 - 18 removed by (13)(c))
+  population    138 elements, cap $0.65
+  instrument    parser 0b058e800244…
+```
+
+**37 pairs · 10 posts · 5 emptied**, each computed by the producer and each equal to what (14)(c)
+states. The three are independent in the code — the pairs are summed over the kept gold keys, the
+posts counted from the non-empty sets, the emptied list diffed against v4's — so their agreement
+with the law is a check rather than a transcription. Dv201 is closed.
+
+Nine posts now sit outside bar 1's recall average: v4's four plus the five (13)(c) empties. 4391 is
+the fifth, and it is 4391 because (14)(a) ruled its `svoia-liniia` pair class b.
+
+#### Dv213 — the pin keeps (14) too, not only (13)
+
+The contract's step 1 says the enumeration gains `sku-b-ratification-8`; it does not say what the B′
+pin keeps. It has to keep it. The cap this record enforces is (14)(e)'s, its gold is (14)(a)'s and
+its B1/B4/B5 readings are (14)(b)–(d) — a SPEC pin over a law stripped of (14) would not contain the
+sentence authorising the run it registers. `KEEP_BLOCK` becomes
+`KEEP_BLOCKS = ("sku-b-ratification-7", "sku-b-ratification-8")`, and the test asserts that a pin
+over (13) alone is a **different hash**, which is the control saying the eighth block counts.
+
+#### Dv215 — the open lines are ruled, not deleted
+
+All five of B1–B5 are answered. The block keeps its name and all five entries, each gaining a
+`ruled_by` carrying the law's own sentence, because a registration records the question as well as
+the answer: B4's losing reading is what makes the ruling mean something, and `sku_bar_verdicts.py`
+copies the block into the verdicts record verbatim.
+
+Every quoted ruling is held against the file by `check_the_quoted_rulings_are_the_law` — the rule
+`write_sku_prereg.check_the_bars_are_the_laws` already applies to the bars. Its negative control
+paraphrases B5 and the producer refuses.
+
+#### Dv216 — (13)(d)'s sentence still says $0.40
+
+`attempts.verbatim` is (13)(d) quoted unedited, «cap $0.40» included, because a law with its number
+swapped is not the law. Beside it sit `cap_verbatim` — (14)(e)'s superseding sentence — and
+`cap_verbatim_source`; `cap_usd` follows (14)(e). A reader sees which clause the run is under and
+which one it supersedes without opening SPEC.
+
+#### Dv214 — Dv209's shape, a second time
+
+`excluded.why_this_list_grew` said «the **four** new ones each carried exactly one gold key» beside
+a computed `len(empty)`. (14)(a) made it five, and «exactly one» stopped being a fact anybody had
+checked. It is a function now, with every number computed from the gold it describes — including the
+per-post key count — and a test that drives it on a fake where those numbers differ. A count in
+prose next to a count in code is a record that answers the same question twice.
+
+---
+
+### Step 4 — the driver's constants (Dv208 paid)
+
+`PHASE` / `CAP_USD` / `LEDGER` / `PREREG` become `skub2` / `$0.65` / `results/spend_skub2.json` /
+`results/sku_pilot_prereg_b2.json`.
+
+**Which triple.** Dv208 was written as «the driver still carries **v4's** cap, phase and ledger»,
+which points at `RESUME_*`. What skub2 actually reads is the PRIMARY set: B′ has no resume block, so
+`resume_plan` refuses it and skub2 is forced onto the non-resume path. The primary set moved; v4's
+triple stays v4's, because that session completed and the preflight's block 9b is its control.
+
+Three things step 4 does not name and the money path did.
+
+#### Dv217 — the coherence guard was wired where it could not fire
+
+`check_the_constants_are_the_registrations` was **called inside `if args.resume:`**. Re-pointing the
+test while leaving the call there would have given a green suite and an unguarded paid run: the one
+path that now carries a fresh cap, a fresh anchor and a fresh registration was the one path nothing
+checked. Moved out of the branch, with `test_the_constants_check_runs_on_the_non_resume_path_too`
+driving it through `main --dry-run` — the wiring, not the function — and three refusals in the
+preflight.
+
+#### Dv218 — the serving pin is a money constant
+
+`assert_serving` compares **every** field of `expected_worker`, `max_new_tokens` among them. v1's pin
+says 800 and instrument v2 serves 1200, so a run left on the old pin refuses at the identity stop —
+**after the boot has been billed**, the one refusal (12)(b) prices. `PIN` moves to
+`results/sku_pilot_serving_v2.json`, `--pin` follows the mode like `--prereg` and `--ledger`
+(`PIN_RESUME` keeps v1's for the resumed path, which (11)(b) freezes), and a new guard,
+`check_the_serving_pin_is_the_registered_one`, holds it against the registration that names it.
+Skipped rather than failed for a registration with no `instruments.instrument_v2` block, since v1–v4
+pin their serving config elsewhere.
+
+#### Dv219 — the output pair was still the first session's
+
+`DUMP` / `RECORD` defaulted to `results/sku_b_positions.jsonl` / `.json`, the artifacts pinned in
+`sku_pilot_prereg_v4.json :: resume.bought_already`. The overwrite guard would have stopped the run
+at $0, but with a message about a paid artifact rather than about a registration. They become
+`sku_b_positions_skub2.*`, named for their own session the way the v4 pair is.
+
+#### Dv225 — the run record's contract string named the wrong contract
+
+`head["contract"]`'s non-resume branch said `docs/PROMPT-sku-b-prep.md` + 3.17 (6), (9), (10) — the
+FIRST session's contract. That branch is skub2's since the constants moved, so a completed run would
+have recorded a contract it was not under. Moved with the rest, to
+`docs/PROMPT-skub2-prep.md + docs/PROMPT-skub2-fix.md; docs/SPEC.md amendment 3.17 (9), (10), (13),
+(14)`. The resume branch is untouched, **including the (12) it omits: that is Dv176 and it stays
+open.**
+
+#### Dv226 — the new guard had this contract's own defect
+
+`check_the_serving_pin_is_the_registered_one` was proved three ways as a function and driven by the
+preflight as a function, and nothing asserted `main` calls it — Dv217's shape, on code added here.
+Closed by a `main --dry-run` test. Two test docstrings that described the live constants were
+falsified by the same move and are corrected in the same commit.
+
+#### Three tests were reading live constants for sealed facts
+
+Re-pointed, not re-fitted:
+
+- **Dv220.** `scripts/write_sku_projection.py` read `driver.CAP_USD` for the SEALED v1 projection's
+  corners. With the live cap at $0.65 that record would have re-priced itself into a comfortable fit
+  against a cap it never had. It carries its own `CAP_USD = 0.35` now, exactly as it already carries
+  its own `POSITIONS_CEILING = 800`.
+- **Dv221.** `test_the_two_records_the_two_caps_and_the_two_anchors_never_cross` told the two
+  constant sets apart **by the cap**. (14)(e) put skub2's at $0.65, which is what (12)(a) gave v4:
+  the caps are equal now and separate nothing. The test asserts that equality out loud and
+  discriminates on the six names that do differ — phase, ledger, registration, dump, record, pin.
+- **Dv222.** The three (10)(a)-refusal tests anchored `10.30` against a $0.35 cap to leave $0.05 for
+  the run. At $0.65 the projection fits and they stopped refusing — silently, in the direction of
+  passing. The anchor is derived from the cap now (`SPENT_LEAVING_FIVE_CENTS`).
+
+#### Dv223 — two models of the job-timeout margin, and they disagree by 3x
+
+`tests/test_positions_driver.py` asserts `JOB_TIMEOUT_S >= 2 * (30 * 4.262 * (800 / 256))` — v1's
+uplift model, srv-2d's measured 4.262 s/row scaled by the ratio of registered ceilings. Re-typed at
+the 1200 ceiling the same expression gives 1199 s against a 900 s timeout and **would fail**. The
+measured re-check disagrees: `results/sku_projection_b2.json :: job_timeout_headroom` prices the
+same job from the v4 session's own seconds at 181 s, twice that is 362 s, and the property holds
+with 2.5x to spare.
+
+The literal is **left at 800** with a comment naming both models, because a literal moved to keep a
+test green is not a re-check. It gates nothing either way: the money guard is
+`JOB_TIMEOUT_S * rate < CAP_USD` — $0.276 against $0.65 — and one wedged worker cannot out-bill the
+cap under either model.
+
+---
+
+### Step 5 — the projection, and the preflight
+
+Not one corner moved. Every rate was measured before the cap was ruled on and the arithmetic is the
+same arithmetic; what changed is the line it is compared to.
+
+```
+$ PYTHONPATH=src python3 scripts/write_sku_projection_b2.py
+  measured      4.0161 s/page (n=91) · 2.8188 s/row (n=30) · boot 205.518–402.586 s
+  boot low · decode none                      802.2 s  $0.2460  $0.2534 with drift
+  boot low · decode the whole ceiling        1070.6 s  $0.3283  $0.3382 with drift
+  boot high · decode none                     999.3 s  $0.3065  $0.3157 with drift
+  boot high · decode the whole ceiling       1267.6 s  $0.3888  $0.4004 with drift
+  vs the $0.65 cap: FITS — dearest $0.4004, headroom $0.2496
+  job timeout   900 s vs 2x181 s conservative — ok
+```
+
+**Dv204 is closed, and closed on the arithmetic it reported:** the hard upper bound is still
+$0.4004, still over (13)(d)'s $0.40, and now $0.2496 under the cap that supersedes it.
+
+The preflight gains blocks **9c** (the live session's three constants against B′) and **9d** (the
+serving pin against the registration that names it), and its resume block reads `PIN_RESUME` — with
+`PIN` it would have failed on the pin before reaching any of its own subjects.
+
+```
+9c. the live session         skub2 against results/sku_pilot_prereg_b2.json
+    the registered set         ACCEPT   <- the control ($0.65 · skub2 · results/spend_skub2.json)
+    the FIRST session's ledger REFUSE — … ledger: the run would use 'spend_sku_b.json' …
+    (13)(d)'s superseded cap   REFUSE — … cap_usd: the run would use 0.4 and the registration names 0.65 …
+    the FIRST session's phase  REFUSE — … phase: the run would use 'sku-b' and the registration names 'skub2' …
+
+9d. the registered instrument the serving pin B′ names, by name and by sha
+    serving pin v2             ACCEPT   <- the control
+    v1's pin (800 ceiling)     REFUSE — the run would serve against sku_pilot_serving.json (5f900beb555f12f5…) …
+    v4, which names no pin     ACCEPT   <- skipped, not failed
+```
+
+`EXIT=0`, **PASS 47 · FAIL 0** (was 40), driven under the rebuilt peft venv (transformers 5.14.1 ·
+peft 0.20.0 · torch 2.13.0).
+
+---
+
+### The checkout table
+
+`PYTHONPATH=src python3 -m pytest -q` at every commit, in a detached worktree, with `c85d595` — the
+commit before this contract — as the checker's own control.
+
+```
+c85d595  chore(vault): the review tail                       1 failed, 1968 passed, 2 skipped
+2621d6f  chore(docs): SPEC 3.17 (14), the skub2-fix contract 2 failed, 1967 passed, 2 skipped
+56b2214  test(sku-prereg): the eighth ratification block     1 failed, 1968 passed, 2 skipped
+e59016c  feat: the four verdicts land -- a=11 . b=16 . c=2   1 failed, 1978 passed, 2 skipped
+881f816  data: the decomposition re-stamped                  1 failed, 1978 passed, 2 skipped
+ada5afe  data: the projection re-stamped                     1 failed, 1978 passed, 2 skipped
+c2fc096  data: the B' pre-registration, written              1 failed, 1980 passed, 2 skipped
+b30cb0d  feat: the driver's constants move to skub2          1 failed, 1983 passed, 2 skipped
+40042c5  data: the projection re-stamped after Dv208 landed  1 failed, 1983 passed, 2 skipped
+30673be  fix: the run record's contract string follows       1 failed, 1983 passed, 2 skipped
+53d59ba  test: the pin guard's wiring, two docstrings        1 failed, 1984 passed, 2 skipped
+```
+
+The report and vault commits below the last row carry no code.
+
+**Dv206 again — the one failure on every row is the checker's, not the tree's.** `data/` is
+gitignored, so the worktree is given a symlink FARM (one link per missing entry, two levels deep —
+not one link over the directory, which would show the tracked files under `data/` as deleted and
+make the next `git checkout` refuse). `test_collect_5c1.py::test_the_guard_reads_the_pinned_paths_off_the_pin_file`
+then resolves a pinned path outside the worktree root. It fires on the **control commit** too, which
+is what says it is the checker's artifact. In the repo itself the suite is 1985 passed / 2 skipped,
+and 1984 + 1 = 1985 on the last row.
+
+**`2621d6f` carries a SECOND failure and that one is by design** — its own commit message announced
+it. The team-lead docs commit lands SPEC's eighth ratification block with `tests/test_sku_prereg.py`'s
+enumeration one name short, which is the point of that enumeration: an amendment cannot arrive
+unnoticed. Green again at `56b2214`.
+
+---
+
+### Reported, gating nothing
+
+**The B′ gold is scored against a 0.75 bar, and the team lead's own figure for v1 on it is 0.703.**
+`docs/STATUS.md` records «голд v2 = 37 пар / 10 постів; v1 на нём = 0.703 — планка честная»;
+`bars.leaflet_brand_recall.threshold` is `0.75`. Not re-derived here — SPEC §10 — and quoted with
+its source. The reading it forces is worth stating before the spend rather than after it:
+
+- the re-scope **alone does not pass bar 1**. Instrument v2 has to supply roughly **4.7 pp** on top
+  of what v1's extractions already score on this gold;
+- and 0.703 is already the double-lifted number. The exclusion was distilled from an error analysis,
+  so it can only ever remove failures: 18 guaranteed misses left the denominator while nine pairs on
+  keys ruled out elsewhere stayed, six of them pairs v1 had already found (Dv203, ruled per pair by
+  (14)(b)). The 4.7 pp gap is what remains after both lifts.
+
+This is not a new measurement and it changes nothing in the registration; it is what $0.65 is
+buying, said out loud.
+
+**Dv227 — the artifacts' `git.dirty` names three `knowledge/` files.** The /save checkpoint from
+before this contract is uncommitted by the contract's own ordering (vault tail last), so
+`sku_miss_decomposition.json`, `sku_projection_b2.json` and `sku_pilot_prereg_b2.json` each record
+three dirty vault paths. Nothing under `src/`, `scripts/`, `config/` or `results/` was dirty when any
+of them was written.
+
+---
+
+### What this leaves for skub2-run
+
+1. **Dv210, still first.** `sku_bar_verdicts.bar_one` reads gold from the sealed reference's
+   `gold_keys`, which are the v4 key space. It has to be pointed at
+   `results/sku_pilot_prereg_b2.json :: bars.leaflet_brand_recall.gold.per_post` before the first
+   paid call. Until then the run refuses at `bar_one`'s empty-gold check — B′ excludes nine posts
+   and the reference four — which is exactly where Dv209's fix put the stop.
+2. **Dv199, carried.** Instrument v2's `pack_count` and `discount_footnote` reach no artifact. The
+   dump's columns are derived from bar 2's `procedure` sentence, which (13) and (14) keep byte-equal,
+   so the team lead scoring bar 2 sees `size: 100 г` for a `6х100 г` multipack with nothing saying it
+   is a six-pack. Carrying the warnings into the run RECORD, beside the dump rather than inside it,
+   is skub2-run's to decide.
+3. **Dv176, still open.** `head["contract"]`'s resume branch omits 3.17 (12). Untouched here — that
+   branch is v4's.
+4. **Dv223, carried.** The driver's job-timeout margin literal is v1's model at v1's ceiling.
+
