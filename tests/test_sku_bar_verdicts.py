@@ -59,7 +59,35 @@ PREREG = {
     },
     "resume": {"population": {"registered": 0}},
     "ratification_required": [{"id": "R1"}],
+    "attempts": {"on_failure": "a failed bar closes B as 'instrument not ready' BY MEASUREMENT"},
 }
+
+
+def pair_read(dump_sha: str, verdicts: list[tuple[str, int]]) -> dict:
+    """A synthetic `sku_b_pair_verdicts.json`: `(verdict, n)` per key, and the counts it states.
+
+    The join to the dump is the applier's job and has its own suite; what bar 2 has to get right is
+    the arithmetic, the threshold and the two things it refuses — a read over another dump and a
+    read whose rows are not the bar's denominator.
+    """
+    rows = sum(n for _, n in verdicts)
+    correct = sum(n for verdict, n in verdicts if verdict == "correct")
+    return {
+        "read_by": "the team lead",
+        "read_on": "2026-01-02",
+        "read_scope": "every pair against its page",
+        "contract": "docs/PROMPT-fixture.md",
+        "diagnosis": "the kopiyky are the whole error",
+        "dump": {"sha256": dump_sha},
+        "expected": {
+            "keys": len(verdicts),
+            "rows": rows,
+            "correct_rows": correct,
+            "wrong_rows": rows - correct,
+            "accuracy_4dp": round(correct / rows, 4),
+        },
+        "keys": [{"verdict": verdict, "n": n} for verdict, n in verdicts],
+    }
 
 
 def page(item: str, n: int) -> dict:
@@ -188,13 +216,50 @@ def test_bar_one_counts_unreadable_pages_without_excluding_them():
 # --- bar 2 -------------------------------------------------------------------
 
 
-def test_bar_two_counts_leaflet_pairs_only_and_never_scores_them():
+def test_bar_two_counts_leaflet_pairs_only_and_waits_when_there_is_no_read():
     bar = verdicts.bar_two(RECORD, DUMP, PREREG)
     assert bar["n_pairs"] == 2  # the text row's price_old is not a leaflet pair
     assert bar["value"] is None and bar["verdict"] == "PENDING_TEAM_LEAD"
     assert bar["reachability"]["class"] == "REPORTED_NOT_SCORED"
     assert verdicts.bar_two(RECORD, DUMP * 5, PREREG)["reachability"]["class"] == "SCOREABLE"
     assert verdicts.bar_two(RECORD, [], PREREG)["reachability"]["class"] == "NOT_REACHABLE"
+
+
+def test_bar_two_takes_its_value_from_the_read_and_states_it_against_the_threshold():
+    sha = RECORD["dump"]["sha256"]
+    pin = {"path": "results/pairs.json", "sha256": "abc"}
+    failed = verdicts.bar_two(RECORD, DUMP, PREREG, pair_read(sha, [("correct", 1), ("wrong", 1)]))
+    assert failed["value"] == pytest.approx(0.5) and failed["verdict"] == "FAIL"
+    assert failed["stated"] == "0.5000 vs 0.80 — FAIL (n=2, read by the team lead 2026-01-02)"
+    assert failed["why_no_value"] is None
+
+    # the control: the same shape above the bar, so FAIL is a reading of the number and not the
+    # only branch the code has
+    passed = verdicts.bar_two(RECORD, DUMP, PREREG, pair_read(sha, [("correct", 2)]), pin)
+    assert passed["value"] == 1.0 and passed["verdict"] == "PASS"
+    assert passed["read"]["path"] == "results/pairs.json" and passed["read"]["sha256"] == "abc"
+    assert passed["read"]["correct_rows"] == 2 and passed["read"]["accuracy_4dp"] == 1.0
+
+
+def test_bar_two_refuses_a_read_taken_over_a_different_dump():
+    read = pair_read("a-dump-that-is-not-this-one", [("correct", 1), ("wrong", 1)])
+    with pytest.raises(SystemExit, match="two different sets of pairs"):
+        verdicts.bar_two(RECORD, DUMP, PREREG, read)
+
+
+def test_bar_two_refuses_a_read_that_is_not_the_whole_denominator():
+    """The bar counts 2 pairs; a read of 1 of them would score a bar over a sample of a sample."""
+    read = pair_read(RECORD["dump"]["sha256"], [("correct", 1)])
+    with pytest.raises(SystemExit, match="the read covers 1 rows and the bar's denominator is 2"):
+        verdicts.bar_two(RECORD, DUMP, PREREG, read)
+
+
+def test_bar_two_refuses_a_read_whose_own_counts_do_not_add_up():
+    """The applier's checksums run again here, so a hand-edited verdicts file is caught on read."""
+    read = pair_read(RECORD["dump"]["sha256"], [("correct", 1), ("wrong", 1)])
+    read["keys"][0]["verdict"] = "wrong"  # 0 correct now, and `expected` still says 1
+    with pytest.raises(SystemExit, match="the read states correct_rows = 1"):
+        verdicts.bar_two(RECORD, DUMP, PREREG, read)
 
 
 # --- bar 3 -------------------------------------------------------------------
@@ -341,6 +406,9 @@ def fixture_tree(tmp_path: Path, **record_overrides) -> dict:
         "prereg": prereg_path,
         "reference": reference_path,
         "dump": dump_path,
+        # not written: every test below that wants a scored bar 2 writes it deliberately, so the
+        # default `--pairs` can never reach the real read and score a synthetic dump with it
+        "pairs": tmp_path / "pairs.json",
         "out": tmp_path / "verdicts.json",
     }
 
@@ -350,6 +418,7 @@ def run(tree: dict, **extra) -> int:
         "--record", str(tree["record"]),
         "--prereg", str(tree["prereg"]),
         "--reference", str(tree["reference"]),
+        "--pairs", str(tree["pairs"]),
         "--out", str(tree["out"]),
     ]  # fmt: skip
     return verdicts.main(argv + [item for pair in extra.items() for item in pair])
@@ -436,6 +505,49 @@ def test_the_defaults_and_the_provenance_string_name_the_v4_session(tmp_path):
     tree = fixture_tree(tmp_path)
     assert run(tree) == 0
     assert json.loads(tree["out"].read_text(encoding="utf-8"))["contract"] == verdicts.CONTRACT
+
+
+def test_main_scores_bar_two_from_the_read_and_states_the_closure(tmp_path):
+    """The whole write path with the read on disk: bar 2 gets a value and the closure fires.
+
+    Bar 1 fails on this fixture and bar 3 passes, so writing a failing bar 2 beside them puts two
+    FAILs in the record — the shape the pilot actually closed in — and the closure has to name both
+    of them and neither of the others.
+    """
+    tree = fixture_tree(tmp_path)
+    record = json.loads(tree["record"].read_text(encoding="utf-8"))
+    read = pair_read(record["dump"]["sha256"], [("correct", 1), ("wrong", 1)])
+    tree["pairs"].write_text(json.dumps(read, ensure_ascii=False), encoding="utf-8")
+
+    assert run(tree) == 0
+    out = json.loads(tree["out"].read_text(encoding="utf-8"))
+    two = out["bars"]["price_pair_accuracy"]
+    assert two["value"] == pytest.approx(0.5) and two["verdict"] == "FAIL"
+    assert two["read"]["path"] == str(tree["pairs"])
+    assert two["read"]["sha256"] == hashlib.sha256(tree["pairs"].read_bytes()).hexdigest()
+    assert two["read"]["diagnosis"] == "the kopiyky are the whole error"
+
+    assert out["closure"]["failed_bars"] == ["leaflet_brand_recall", "price_pair_accuracy"]
+    assert out["closure"]["passed_bars"] == ["text_tier_accuracy"]
+    assert out["closure"]["state"].startswith("CLOSED")
+    assert out["closure"]["rule"] == PREREG["attempts"]["on_failure"]
+
+
+def test_the_closure_names_the_bars_that_failed_and_waits_on_one_that_has_no_verdict():
+    """Derived from the verdicts, not restated: the registration's rule says "a failed bar" in the
+    singular and the pilot failed two, so the list has to come from the data. And two thirds of the
+    evidence is not a closure — a bar still pending leaves the state UNDETERMINED."""
+    bars = {"a": {"verdict": "FAIL"}, "b": {"verdict": "PASS"}, "c": {"verdict": "FAIL"}}
+    closed = verdicts.closure(bars, PREREG)
+    assert closed["failed_bars"] == ["a", "c"] and closed["passed_bars"] == ["b"]
+    assert closed["state"].startswith("CLOSED") and "2 of 3 bars failed" in closed["why"]
+    assert closed["rule"] == PREREG["attempts"]["on_failure"]
+
+    waiting = verdicts.closure({**bars, "c": {"verdict": "PENDING_TEAM_LEAD"}}, PREREG)
+    assert waiting["state"] == "UNDETERMINED" and waiting["undecided_bars"] == ["c"]
+    assert (
+        verdicts.closure({"a": {"verdict": "PASS"}}, PREREG)["state"] == "NOT CLOSED BY THIS RULE"
+    )
 
 
 def test_highest_tier_takes_the_best_rung_and_names_an_empty_answer():

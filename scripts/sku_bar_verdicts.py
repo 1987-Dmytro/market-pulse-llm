@@ -8,10 +8,13 @@ they are read over. Two of the three are arithmetic and are computed here:
   the posts with a non-empty gold set (R1/R2/R3);
 * **bar 3 — text tier accuracy**, per adjudicated row, unreadable replies excluded and counted (R5).
 
-**Bar 2 is not scored here and cannot be.** Price-pair accuracy is a team-lead read of the dump
-against the page images at acceptance (SPEC §10 — the executor never scores its own sample), so this
-writes its denominator, its reachability class under R4 and the dump that makes the read possible,
-and stops there.
+**Bar 2 is never scored here.** Price-pair accuracy is a team-lead read of the dump against the page
+images at acceptance (SPEC §10 — the executor never scores its own sample). Until that read exists
+this writes its denominator, its reachability class under R4 and the dump that makes the read
+possible, and stops there. Once it exists as `results/sku_b_pair_verdicts.json` — a transcription of
+the dictated verdicts, pinned to the same dump — the share is re-derived from that file's own keys
+by the applier's `checksums` and carried here. The value still comes from the read, not from this
+file; what this file adds is the arithmetic and the threshold.
 
 Every number comes from :mod:`market_pulse.scorer`, every gold key from the reference's own
 ``gold_key``, and every tier from ``positions.tier_from_presence`` — one function per quantity, or a
@@ -31,6 +34,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+import apply_sku_pair_verdicts as pair_read  # noqa: E402
 import build_sku_reference_leaflet as leaflet  # noqa: E402
 import validate_sku_text_pack as pack  # noqa: E402
 
@@ -40,6 +44,7 @@ from market_pulse.registry import load_registry  # noqa: E402
 
 PREREG = REPO_ROOT / "results" / "sku_pilot_prereg_v4.json"
 RECORD = REPO_ROOT / "results" / "sku_b_positions_v4.json"
+PAIRS = REPO_ROOT / "results" / "sku_b_pair_verdicts.json"
 REFERENCE = REPO_ROOT / "results" / "sku_reference_leaflet.json"
 REGISTRY = REPO_ROOT / "config" / "registry.yaml"
 OUT = REPO_ROOT / "results" / "sku_bar_verdicts.json"
@@ -48,12 +53,17 @@ SMOKE_OUT = REPO_ROOT / "results" / "smoke" / "sku_bar_verdicts.json"
 UNREADABLE_SHARE_MAX = 0.10
 """R5: above this the instrument did not answer and bar 3 is NOT_SCORED."""
 
-CONTRACT = "docs/PROMPT-sku-b-v4-run.md step 6; docs/SPEC.md amendment 3.17 (6), (11), (12)"
+CONTRACT = (
+    "docs/PROMPT-sku-b-close.md deliverable 2 (bar 2 applied and the closure);"
+    " docs/PROMPT-sku-b-v4-run.md step 6 (bars 1 and 3);"
+    " docs/SPEC.md amendment 3.17 (6), (11), (12)"
+)
 """The provenance string written INTO the verdict record — the artifact the team lead opens at
 acceptance. Nothing downstream checks it, which is why Dv170 named it: scored after the v4 session
 it used to claim the verdicts were produced under the v3-run contract and cite (6) and (11) without
 (12), the amendment the population's second half was bought under. A constant with a test on it,
-because a string nobody re-derives is a string that stops being true silently."""
+because a string nobody re-derives is a string that stops being true silently. It now names both
+contracts, because the record is written twice and the second writing is the one on disk."""
 
 
 def sha256_of(path: Path) -> str:
@@ -212,8 +222,16 @@ def bar_one(record: dict, dump: list[dict], prereg: dict, reference: dict, alias
     }
 
 
-def bar_two(record: dict, dump: list[dict], prereg: dict) -> dict:
-    """The denominator and the dump, and nothing else: the pairs are the team lead's read."""
+def bar_two(record, dump: list[dict], prereg: dict, read: dict | None = None, pin=None) -> dict:
+    """The denominator and the dump; the value only when the team lead's read is on the table.
+
+    ``read`` is `results/sku_b_pair_verdicts.json` — the dictated verdicts, transcribed and joined
+    to the dump by `scripts/apply_sku_pair_verdicts.py`. The share is re-derived here from that
+    file's own keys through the applier's `checksums`, never read out of it as a number: one
+    implementation, two callers, and a hand-edited accuracy field would be refused by its own
+    stated counts. Without the read this stays where it was — a denominator, a reachability class
+    and the dump that makes the read possible.
+    """
     bar = prereg["bars"]["price_pair_accuracy"]
     pairs = [row for row in dump if row["page"] is not None and row["price_old"] is not None]
     rule = bar["reachability"]["rule"]
@@ -223,7 +241,7 @@ def bar_two(record: dict, dump: list[dict], prereg: dict) -> dict:
         reach = "REPORTED_NOT_SCORED"
     else:
         reach = "SCOREABLE"
-    return {
+    out = {
         "verbatim": bar["verbatim"],
         "reading": bar["denominator"],
         "ratification": ["R4"],
@@ -244,6 +262,44 @@ def bar_two(record: dict, dump: list[dict], prereg: dict) -> dict:
         },
         "procedure": bar["procedure"],
     }
+    if read is None:
+        return out
+
+    if read["dump"]["sha256"] != record["dump"]["sha256"]:
+        refuse(
+            f"the read was taken over a dump hashing {read['dump']['sha256'][:16]}… and the record"
+            f" pins {record['dump']['sha256'][:16]}… — those are two different sets of pairs"
+        )
+    sums = pair_read.checksums(read["keys"], read["expected"])
+    if sums["rows"] != len(pairs):
+        refuse(
+            f"the read covers {sums['rows']} rows and the bar's denominator is {len(pairs)}:"
+            " every pair in the dump is in the read, or the accuracy has a different bottom"
+        )
+    value = round(sums["accuracy"], scorer.BAR_PRECISION)
+    verdict = "PASS" if value >= bar["threshold"] else "FAIL"
+    out.update(
+        value=value,
+        verdict=verdict,
+        why_no_value=None,
+        stated=(
+            f"{sums['accuracy_4dp']:.4f} vs {bar['threshold']:.2f} — {verdict}"
+            f" (n={sums['rows']}, read by {read['read_by']} {read['read_on']})"
+        ),
+        read={
+            **(pin or {}),
+            "by": read["read_by"],
+            "on": read["read_on"],
+            "scope": read["read_scope"],
+            "contract": read["contract"],
+            "keys": sums["keys"],
+            "correct_rows": sums["correct_rows"],
+            "wrong_rows": sums["wrong_rows"],
+            "accuracy_4dp": sums["accuracy_4dp"],
+            "diagnosis": read["diagnosis"],
+        },
+    )
+    return out
 
 
 def bar_three(record: dict, dump: list[dict], prereg: dict, readings: list[dict]) -> dict:
@@ -350,6 +406,38 @@ def bar_three(record: dict, dump: list[dict], prereg: dict, readings: list[dict]
     }
 
 
+def closure(bars: dict, prereg: dict) -> dict:
+    """What the registration says happens now, with the bars that trigger it named from the data.
+
+    `attempts.on_failure` is quoted out of the registration rather than restated here — the
+    consequence of a failed bar was fixed before the run and a producer that paraphrases it is a
+    producer that can soften it. The rule says "a failed bar" in the singular; which bars actually
+    failed is a fact about the verdicts, so it is derived, and a bar still without a verdict makes
+    the state UNDETERMINED rather than a closure taken on two thirds of the evidence.
+    """
+    decided = {name: bar["verdict"] for name, bar in bars.items()}
+    failed = sorted(name for name, verdict in decided.items() if verdict == "FAIL")
+    passed = sorted(name for name, verdict in decided.items() if verdict == "PASS")
+    open_bars = sorted(name for name, v in decided.items() if v not in ("PASS", "FAIL"))
+    if open_bars:
+        state, why = "UNDETERMINED", f"{open_bars} carry no verdict yet"
+    elif failed:
+        state = "CLOSED — instrument not ready, BY MEASUREMENT"
+        why = f"{len(failed)} of {len(decided)} bars failed: {', '.join(failed)}"
+    else:
+        state, why = "NOT CLOSED BY THIS RULE", "every bar passed"
+    return {
+        "rule": prereg["attempts"]["on_failure"],
+        "rule_source": "results/sku_pilot_prereg_v4.json attempts.on_failure, quoted verbatim",
+        "verdicts": decided,
+        "failed_bars": failed,
+        "passed_bars": passed,
+        "undecided_bars": open_bars,
+        "state": state,
+        "why": why,
+    }
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--record", type=Path, default=RECORD)
@@ -357,6 +445,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--prereg", type=Path, default=PREREG)
     parser.add_argument("--reference", type=Path, default=REFERENCE)
     parser.add_argument("--pack", type=Path, default=None, help="default: the manifest's own pack")
+    parser.add_argument("--pairs", type=Path, default=PAIRS, help="the team lead's bar-2 read")
     parser.add_argument("--out", type=Path, default=None)
     args = parser.parse_args(argv)
 
@@ -390,10 +479,18 @@ def main(argv: list[str] | None = None) -> int:
         refuse("the adjudicated pack is not scoreable: " + "; ".join(defects))
     aliases = watchlist_aliases(load_registry(REGISTRY).watchlist)
 
+    # bar 2 has a value only once the team lead's read is on disk. A missing file is the state the
+    # bar was in for the whole pilot and is not an error; a file that does not parse or does not
+    # match the dump is, and lands in `bar_two`.
+    read, pin = None, None
+    if args.pairs is not None and args.pairs.exists():
+        read = json.loads(args.pairs.read_text(encoding="utf-8"))
+        pin = {"path": rel(args.pairs), "sha256": sha256_of(args.pairs)}
+
     dump = [json.loads(line) for line in args.dump.read_text(encoding="utf-8").splitlines() if line]
     bars = {
         "leaflet_brand_recall": bar_one(record, dump, prereg, reference, aliases),
-        "price_pair_accuracy": bar_two(record, dump, prereg),
+        "price_pair_accuracy": bar_two(record, dump, prereg, read, pin),
         "text_tier_accuracy": bar_three(record, dump, prereg, readings),
     }
 
@@ -402,8 +499,9 @@ def main(argv: list[str] | None = None) -> int:
         "contract": CONTRACT,
         "class": (
             "MEASUREMENT. Bars 1 and 3 are computed by market_pulse.scorer over the merged"
-            " population; bar 2 carries its denominator and its dump and waits for the team lead's"
-            " read. No adjudication happens in this file"
+            " population; bar 2's verdicts are the team lead's read, transcribed by"
+            " scripts/apply_sku_pair_verdicts.py and re-derived here from its keys. No adjudication"
+            " happens in this file"
         ),
         "smoke": bool(record.get("smoke")),
         "prereg": {"path": rel(args.prereg), "sha256": pins["prereg"]["sha256"]},
@@ -413,8 +511,13 @@ def main(argv: list[str] | None = None) -> int:
         "sessions": record["resume"]["sessions"],
         "ratification_required": prereg["ratification_required"],
         "bars": bars,
+        "closure": closure(bars, prereg),
         "scored_by": {
             "bar_1": "market_pulse.scorer.leaflet_brand_recall",
+            "bar_2": (
+                "the team lead's read; the share re-derived from its keys by"
+                " apply_sku_pair_verdicts.checksums"
+            ),
             "bar_3": "market_pulse.scorer.text_tier_accuracy",
             "tiers": "market_pulse.positions.tier / tier_from_presence",
             "gold_keys": "build_sku_reference_leaflet.gold_key",
@@ -437,7 +540,12 @@ def main(argv: list[str] | None = None) -> int:
         f"  bar 3 over {three['n_scored']} of {three['n_asked']} rows ·"
         f" {three['unreadable']['n']} unreadable ({three['unreadable']['share']:.1%})"
     )
-    print(f"  bar 2 n = {bars['price_pair_accuracy']['n_pairs']} pairs, the team lead's read")
+    two = bars["price_pair_accuracy"]
+    print(
+        f"  bar 2 over {two['n_pairs']} pairs, the team lead's read — "
+        + (two["stated"] if two.get("stated") else "no read on disk, PENDING")
+    )
+    print(f"  closure: {out['closure']['state']} ({out['closure']['why']})")
     print(f"wrote {rel(args.out)}")
     return 0
 
