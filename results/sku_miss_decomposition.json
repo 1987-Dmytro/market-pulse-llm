@@ -850,12 +850,7 @@
     }
   ],
   "git": {
-    "commit": "2b8a35d51891560bbb3caf5e2b1be59ceb256074",
-    "dirty": [
-      "knowledge/daily_logs/2026-08-12.md",
-      "knowledge/hot.md",
-      "knowledge/index.md",
-      "scripts/apply_miss_decomposition.py"
-    ]
+    "commit": "7342e10aa7ee1d8a56dfdc1a2cb3354ade3cdeb6",
+    "dirty": []
   }
 }
