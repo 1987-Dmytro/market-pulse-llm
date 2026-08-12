@@ -1,0 +1,864 @@
+{
+  "phase": "sku-b — the three bars over the completed population",
+  "contract": "docs/PROMPT-sku-b-v4-run.md step 6; docs/SPEC.md amendment 3.17 (6), (11), (12)",
+  "class": "MEASUREMENT. Bars 1 and 3 are computed by market_pulse.scorer over the merged population; bar 2 carries its denominator and its dump and waits for the team lead's read. No adjudication happens in this file",
+  "smoke": false,
+  "prereg": {
+    "path": "results/sku_pilot_prereg_v4.json",
+    "sha256": "22fd7d9cc363ac9357b77e4a3ff3561f723fe6c4a12aedcc638c11be65dc9449"
+  },
+  "record": {
+    "path": "results/sku_b_positions_v4.json",
+    "sha256": "fd0eb79695c2bc546743d8fde93448d48a321fa92598a17a14155aa2766ff9c5"
+  },
+  "pins": {
+    "prereg": {
+      "path": "results/sku_pilot_prereg_v4.json",
+      "sha256": "22fd7d9cc363ac9357b77e4a3ff3561f723fe6c4a12aedcc638c11be65dc9449"
+    },
+    "leaflet gold": {
+      "path": "results/sku_reference_leaflet.json",
+      "sha256": "e301bb4f48f527e4f9f6b64bb1a53911fd69d2871e9e7cbc302195f8f982eb20"
+    },
+    "text pack manifest": {
+      "path": "results/sku_text_pack_manifest.json",
+      "sha256": "80e4e12c0278f8cce82f2619967e1c92e1bf4bc7f8cf358e29712049b5afd376"
+    },
+    "dump": {
+      "path": "results/sku_b_positions_v4.jsonl",
+      "sha256": "e7d24a0a6b5aeff10a683a0a4beacfbcbd90aa4da6e71c39741b3cffbb79e428"
+    }
+  },
+  "population": {
+    "pages_sent": 108,
+    "pages_available": 159,
+    "posts": 19,
+    "text_rows": 30,
+    "asked": 138,
+    "asked_this_session": 121,
+    "unbought": []
+  },
+  "sessions": [
+    {
+      "phase": "sku-b",
+      "record": "results/sku_b_positions.json",
+      "record_sha256": "8d02b3aa477dd4b152bd98fec1ca0147463f5746b5ebf4c62cfdb856bdda2341",
+      "dump": "results/sku_b_positions.jsonl",
+      "dump_sha256": "4178ce5e53559c8449bad90e48d750fd6c5b09142055329d3f1768be15109c22",
+      "prereg": {
+        "path": "results/sku_pilot_prereg_v2.json",
+        "sha256": "d4ced2a8ba00b48bca2d30af9c7ce8977eb387631b1735b4e05ea15ba306e9ad"
+      },
+      "asked": 17,
+      "dump_rows": 14
+    },
+    {
+      "phase": "sku-b-v4",
+      "record": "results/sku_b_positions_v4.json",
+      "dump": "results/sku_b_positions_v4.jsonl",
+      "dump_sha256": "e7d24a0a6b5aeff10a683a0a4beacfbcbd90aa4da6e71c39741b3cffbb79e428",
+      "prereg": {
+        "path": "results/sku_pilot_prereg_v4.json",
+        "sha256": "22fd7d9cc363ac9357b77e4a3ff3561f723fe6c4a12aedcc638c11be65dc9449"
+      },
+      "asked": 121,
+      "note": "no sha for this record: a file cannot carry its own hash. The dump's is here because the dump is written before this record is assembled"
+    }
+  ],
+  "ratification_required": [
+    {
+      "id": "R1",
+      "bar": "leaflet_brand_recall",
+      "question": "the bar says 'per page' and the gold is per POST. Registered reading: recall per post over the union of its page answers, macro-averaged over the 15 posts with a non-empty gold set",
+      "if_refused": "per-page gold does not exist and building it is a new adjudication. sku-b must NOT run until this line is ratified: one attempt against a denominator nobody agreed to is the paid session wasted"
+    },
+    {
+      "id": "R2",
+      "bar": "leaflet_brand_recall",
+      "question": "the page set is the 108 pages the caption run SENT, not the 159 available. For 15 of 19 posts that is the first six pages of a longer leaflet",
+      "if_refused": "reading all 159 pages means brands with no gold behind them, which would score as false positives for being correct"
+    },
+    {
+      "id": "R3",
+      "bar": "leaflet_brand_recall",
+      "question": "the 4 posts with an empty gold set are out of the recall average: ['@atb_market_official:4370', '@atb_market_official:4415', '@atb_market_official:4455', '@atb_market_official:4519']",
+      "if_refused": "recall is undefined there; the alternative is a bar that fails by arithmetic"
+    },
+    {
+      "id": "R4",
+      "bar": "price_pair_accuracy",
+      "question": "n >= 10 pairs to score the bar; 1..9 reports and does not score; 0 is NOT_REACHABLE",
+      "if_refused": "the team lead sets another n, in writing, before the run"
+    },
+    {
+      "id": "R5",
+      "bar": "text_tier_accuracy",
+      "question": "unreadable replies are excluded and counted (>10% blocks the bar); n >= 20 adjudicated rows to score; both carriers pooled as drawn",
+      "if_refused": "a stratified redraw is a different pack and this one is already built"
+    }
+  ],
+  "bars": {
+    "leaflet_brand_recall": {
+      "verbatim": "leaflet brand-recall ≥ 0.75 per page vs audit-visible brands",
+      "reading": "the 15 posts whose gold brand set is non-empty. Recall is computed PER POST as |extracted ∩ gold| / |gold|, over the union of that post's page answers, and the bar reads the MACRO MEAN of those 15 values. The micro reading over all 55 pairs is reported beside it and gates nothing",
+      "ratification": [
+        "R1",
+        "R2",
+        "R3"
+      ],
+      "threshold": 0.75,
+      "value": 0.3603174603,
+      "verdict": "FAIL",
+      "n_posts": 15,
+      "n_gold_keys": 55,
+      "n_extracted_keys": 28,
+      "micro_reported_never_gated": 0.4727272727,
+      "precision_micro_reported_never_gated": 0.9285714286,
+      "per_post": [
+        {
+          "item": "@atb_market_official:4340",
+          "gold": [
+            "raw:rud",
+            "raw:svoia-liniia",
+            "raw:try-vedmedi"
+          ],
+          "extracted": [
+            "raw:svoia-liniia",
+            "raw:three bears"
+          ],
+          "found": [
+            "raw:svoia-liniia"
+          ],
+          "missed": [
+            "raw:rud",
+            "raw:try-vedmedi"
+          ],
+          "not_in_gold": [
+            "raw:three bears"
+          ],
+          "recall": 0.3333333333333333,
+          "pages_sent": 6,
+          "unreadable_pages": 1
+        },
+        {
+          "item": "@atb_market_official:4350",
+          "gold": [
+            "raw:lactel",
+            "raw:svoia-liniia",
+            "raw:дольче"
+          ],
+          "extracted": [
+            "raw:svoia-liniia",
+            "raw:дольче"
+          ],
+          "found": [
+            "raw:svoia-liniia",
+            "raw:дольче"
+          ],
+          "missed": [
+            "raw:lactel"
+          ],
+          "not_in_gold": [],
+          "recall": 0.6666666666666666,
+          "pages_sent": 6,
+          "unreadable_pages": 0
+        },
+        {
+          "item": "@atb_market_official:4360",
+          "gold": [
+            "raw:limo",
+            "raw:svoia-liniia",
+            "raw:каштан",
+            "raw:київський пломбір"
+          ],
+          "extracted": [
+            "raw:limo",
+            "raw:каштан",
+            "raw:київський пломбір"
+          ],
+          "found": [
+            "raw:limo",
+            "raw:каштан",
+            "raw:київський пломбір"
+          ],
+          "missed": [
+            "raw:svoia-liniia"
+          ],
+          "not_in_gold": [],
+          "recall": 0.75,
+          "pages_sent": 6,
+          "unreadable_pages": 0
+        },
+        {
+          "item": "@atb_market_official:4377",
+          "gold": [
+            "raw:svoia-liniia"
+          ],
+          "extracted": [],
+          "found": [],
+          "missed": [
+            "raw:svoia-liniia"
+          ],
+          "not_in_gold": [],
+          "recall": 0.0,
+          "pages_sent": 4,
+          "unreadable_pages": 0
+        },
+        {
+          "item": "@atb_market_official:4381",
+          "gold": [
+            "president",
+            "raw:laska",
+            "raw:lasunka",
+            "raw:maximuse",
+            "raw:каштан",
+            "raw:комо / komo",
+            "raw:розумний вибір"
+          ],
+          "extracted": [
+            "president",
+            "raw:komo",
+            "raw:laska",
+            "raw:lasunka",
+            "raw:розумний вибір"
+          ],
+          "found": [
+            "president",
+            "raw:laska",
+            "raw:lasunka",
+            "raw:розумний вибір"
+          ],
+          "missed": [
+            "raw:maximuse",
+            "raw:каштан",
+            "raw:комо / komo"
+          ],
+          "not_in_gold": [
+            "raw:komo"
+          ],
+          "recall": 0.5714285714285714,
+          "pages_sent": 6,
+          "unreadable_pages": 0
+        },
+        {
+          "item": "@atb_market_official:4391",
+          "gold": [
+            "raw:svoia-liniia"
+          ],
+          "extracted": [],
+          "found": [],
+          "missed": [
+            "raw:svoia-liniia"
+          ],
+          "not_in_gold": [],
+          "recall": 0.0,
+          "pages_sent": 6,
+          "unreadable_pages": 0
+        },
+        {
+          "item": "@atb_market_official:4401",
+          "gold": [
+            "raw:ferma",
+            "raw:frenzy (рудь)",
+            "raw:halychyna",
+            "raw:imperium (рудь)",
+            "raw:molokija",
+            "raw:premialle",
+            "raw:rud",
+            "raw:selianske",
+            "raw:svoia-liniia",
+            "raw:try-vedmedi",
+            "raw:zlahoda",
+            "raw:київський пломбір"
+          ],
+          "extracted": [
+            "raw:ferma",
+            "raw:halychyna",
+            "raw:molokija",
+            "raw:premialle",
+            "raw:zlahoda"
+          ],
+          "found": [
+            "raw:ferma",
+            "raw:halychyna",
+            "raw:molokija",
+            "raw:premialle",
+            "raw:zlahoda"
+          ],
+          "missed": [
+            "raw:frenzy (рудь)",
+            "raw:imperium (рудь)",
+            "raw:rud",
+            "raw:selianske",
+            "raw:svoia-liniia",
+            "raw:try-vedmedi",
+            "raw:київський пломбір"
+          ],
+          "not_in_gold": [],
+          "recall": 0.4166666666666667,
+          "pages_sent": 6,
+          "unreadable_pages": 1
+        },
+        {
+          "item": "@atb_market_official:4411",
+          "gold": [
+            "raw:svoia-liniia"
+          ],
+          "extracted": [],
+          "found": [],
+          "missed": [
+            "raw:svoia-liniia"
+          ],
+          "not_in_gold": [],
+          "recall": 0.0,
+          "pages_sent": 4,
+          "unreadable_pages": 0
+        },
+        {
+          "item": "@atb_market_official:4421",
+          "gold": [
+            "raw:svoia-liniia"
+          ],
+          "extracted": [],
+          "found": [],
+          "missed": [
+            "raw:svoia-liniia"
+          ],
+          "not_in_gold": [],
+          "recall": 0.0,
+          "pages_sent": 4,
+          "unreadable_pages": 0
+        },
+        {
+          "item": "@atb_market_official:4426",
+          "gold": [
+            "raw:magnat",
+            "raw:svoia-liniia",
+            "raw:розумний вибір",
+            "raw:хрещатик"
+          ],
+          "extracted": [
+            "raw:magnat",
+            "raw:svoia-liniia",
+            "raw:розумний вибір",
+            "raw:хрещатик"
+          ],
+          "found": [
+            "raw:magnat",
+            "raw:svoia-liniia",
+            "raw:розумний вибір",
+            "raw:хрещатик"
+          ],
+          "missed": [],
+          "not_in_gold": [],
+          "recall": 1.0,
+          "pages_sent": 6,
+          "unreadable_pages": 0
+        },
+        {
+          "item": "@atb_market_official:4436",
+          "gold": [
+            "raw:sot",
+            "raw:svoia-liniia"
+          ],
+          "extracted": [
+            "raw:sot"
+          ],
+          "found": [
+            "raw:sot"
+          ],
+          "missed": [
+            "raw:svoia-liniia"
+          ],
+          "not_in_gold": [],
+          "recall": 0.5,
+          "pages_sent": 6,
+          "unreadable_pages": 0
+        },
+        {
+          "item": "@atb_market_official:4446",
+          "gold": [
+            "raw:limo",
+            "raw:nesquik (какао-напій шоколадно-молочний коктейль, 200 г)",
+            "raw:rud",
+            "raw:svoia-liniia",
+            "raw:try-vedmedi"
+          ],
+          "extracted": [],
+          "found": [],
+          "missed": [
+            "raw:limo",
+            "raw:nesquik (какао-напій шоколадно-молочний коктейль, 200 г)",
+            "raw:rud",
+            "raw:svoia-liniia",
+            "raw:try-vedmedi"
+          ],
+          "not_in_gold": [],
+          "recall": 0.0,
+          "pages_sent": 6,
+          "unreadable_pages": 1
+        },
+        {
+          "item": "@atb_market_official:4467",
+          "gold": [
+            "raw:rud",
+            "raw:svoia-liniia",
+            "raw:київський пломбір",
+            "raw:максхолод"
+          ],
+          "extracted": [
+            "raw:svoia-liniia",
+            "raw:київський пломбір"
+          ],
+          "found": [
+            "raw:svoia-liniia",
+            "raw:київський пломбір"
+          ],
+          "missed": [
+            "raw:rud",
+            "raw:максхолод"
+          ],
+          "not_in_gold": [],
+          "recall": 0.5,
+          "pages_sent": 6,
+          "unreadable_pages": 1
+        },
+        {
+          "item": "@atb_market_official:4498",
+          "gold": [
+            "raw:svoia-liniia"
+          ],
+          "extracted": [],
+          "found": [],
+          "missed": [
+            "raw:svoia-liniia"
+          ],
+          "not_in_gold": [],
+          "recall": 0.0,
+          "pages_sent": 6,
+          "unreadable_pages": 0
+        },
+        {
+          "item": "@atb_market_official:4508",
+          "gold": [
+            "raw:lasunka",
+            "raw:limo",
+            "raw:rud",
+            "raw:svoia-liniia",
+            "raw:try-vedmedi",
+            "raw:каштан"
+          ],
+          "extracted": [
+            "raw:lasunka",
+            "raw:limo",
+            "raw:rud",
+            "raw:каштан"
+          ],
+          "found": [
+            "raw:lasunka",
+            "raw:limo",
+            "raw:rud",
+            "raw:каштан"
+          ],
+          "missed": [
+            "raw:svoia-liniia",
+            "raw:try-vedmedi"
+          ],
+          "not_in_gold": [],
+          "recall": 0.6666666666666666,
+          "pages_sent": 6,
+          "unreadable_pages": 0
+        }
+      ],
+      "precision_probe": {
+        "why": "they are a PRECISION probe: every brand extracted on their pages is a false positive and is reported with its page. Their reviewer notes say what is actually on them (summer non-food and similar)",
+        "posts": [
+          {
+            "item": "@atb_market_official:4370",
+            "false_positives": [],
+            "on_pages": [],
+            "unreadable_pages": 0
+          },
+          {
+            "item": "@atb_market_official:4415",
+            "false_positives": [],
+            "on_pages": [],
+            "unreadable_pages": 0
+          },
+          {
+            "item": "@atb_market_official:4455",
+            "false_positives": [],
+            "on_pages": [],
+            "unreadable_pages": 0
+          },
+          {
+            "item": "@atb_market_official:4519",
+            "false_positives": [],
+            "on_pages": [],
+            "unreadable_pages": 0
+          }
+        ]
+      },
+      "unreadable_pages": {
+        "why": "an unreadable page answer contributes no brand to its post's union, so it costs recall exactly as an empty answer does. The registered reading of bar 1 carries no unreadable clause (only bar 3 does), so nothing is excluded here — the exposure is reported instead",
+        "n": 4,
+        "by_post": {
+          "@atb_market_official:4340": [
+            "data/annotation/captions_5c1/posts_media/atb_market_official_4342.jpg"
+          ],
+          "@atb_market_official:4401": [
+            "data/annotation/captions_5c1/posts_media/atb_market_official_4405.jpg"
+          ],
+          "@atb_market_official:4446": [
+            "data/annotation/captions_5c1/posts_media/atb_market_official_4446.jpg"
+          ],
+          "@atb_market_official:4467": [
+            "data/annotation/captions_5c1/posts_media/atb_market_official_4467.jpg"
+          ]
+        }
+      },
+      "key_space": {
+        "gold": "brands_visible = watchlist_hits + other_dairy_brands, deduplicated on the gold key: the watchlist id when the name resolves to one, `raw:` + the casefolded name when it does not. The two fields arrive in different spaces — ids and names as printed — and comparing them unnormalised would score «Каштан» against a brand_id",
+        "prediction": "the SAME build_sku_reference_leaflet.gold_key, applied to the position's brand_id when the resolver found one and to brand_raw when it did not — one function on both sides, so the comparison cannot be an artefact of two spaces"
+      }
+    },
+    "price_pair_accuracy": {
+      "verbatim": "price-pair accuracy ≥ 0.80 on positions carrying a crossed-out price (verified by team-lead read of the per-position dump against the images at acceptance)",
+      "reading": "extracted positions carrying a crossed-out price — `price_old is not None` on a position whose carrier is leaflet_page. Discovered BY THE RUN: nothing before it can say how many of the 108 pages print an old price",
+      "ratification": [
+        "R4"
+      ],
+      "threshold": 0.8,
+      "value": null,
+      "verdict": "PENDING_TEAM_LEAD",
+      "why_no_value": "SPEC §10: the executor never scores its own sample. Bar 2 is the team lead's read of each cited page image against the pair in the dump, at acceptance",
+      "n_pairs": 61,
+      "reachability": {
+        "rule": "n >= 10 pairs: the bar is SCORED. 1 <= n < 10: the accuracy is REPORTED with its n and the bar is NOT_SCORED — neither a PASS nor a closure of B, and the team lead rules at acceptance whether the small-n reading stands. n = 0: NOT_REACHABLE, and the finding is that the pages carry no crossed-out prices at all",
+        "class": "SCOREABLE"
+      },
+      "dump": {
+        "path": "results/sku_b_positions_v4.jsonl",
+        "sha256": "e7d24a0a6b5aeff10a683a0a4beacfbcbd90aa4da6e71c39741b3cffbb79e428",
+        "rows": 79,
+        "columns": [
+          "item",
+          "page",
+          "file",
+          "sha256",
+          "brand_raw",
+          "brand_id",
+          "line",
+          "category",
+          "size",
+          "fat",
+          "price_promo",
+          "price_old",
+          "discount_pct_printed",
+          "price_qualifier",
+          "tier",
+          "depth",
+          "depth_disagrees_with_printed",
+          "bought_by"
+        ]
+      },
+      "procedure": "sku-b writes a per-position dump — one row per extracted position carrying item, page number, the page's file and sha256, brand_raw, brand_id, line, category, size, fat, price_promo, price_old, discount_pct_printed, price_qualifier, the code-assigned tier, depth() and depth_disagrees_with_printed(). The team lead opens each cited page image and marks the pair correct or incorrect. The executor never scores its own sample (SPEC §10), and the dump is what makes the read possible without re-running anything"
+    },
+    "text_tier_accuracy": {
+      "verbatim": "text tier-assignment accuracy ≥ 0.85 vs adjudicated rows",
+      "reading": "per ROW, the gold tier against the model's tier, both from the SAME function: positions.tier_from_presence for the ticks, positions.tier for each parsed position. A row naming several products is compared on its HIGHEST rung, and a row whose ticks are all empty has gold `none` — the model must return [] to agree with it",
+      "ratification": [
+        "R5"
+      ],
+      "threshold": 0.85,
+      "value": 0.8620689655,
+      "verdict": "PASS",
+      "why_not_scored": null,
+      "n_scored": 29,
+      "n_asked": 30,
+      "not_gold": {
+        "rule": "the adjudicated rows that came back with a legal tick set. A row the operator left untouched is not gold and is not counted",
+        "n": 0,
+        "ids": [],
+        "why": "rows the operator never touched. Not unreadable and not wrong — outside the denominator, because five blank cells are not an adjudication"
+      },
+      "by_carrier": {
+        "post_text": 26,
+        "comment": 4
+      },
+      "unreadable": {
+        "rule": "a reply the strict parser refuses is NOT scored as `none`. It is counted by its reason, listed by id, and excluded from the denominator: an unreadable reply and an empty answer are different outcomes, and conflating them would report parse failures as rows with nothing in them. If unreadable rows exceed 10% of the adjudicated set the bar is NOT_SCORED — the instrument did not answer",
+        "n": 1,
+        "share": 0.0333,
+        "max_share": 0.1,
+        "by_reason": {
+          "price 'від 39,90 грн' is not one number": 1
+        },
+        "ids": [
+          "@VARUS_channel:2119"
+        ]
+      },
+      "reachability": {
+        "rule": "n >= 20 adjudicated rows: SCORED. Below that, REPORTED with its n and NOT_SCORED",
+        "n_scored": 29
+      },
+      "confusion": {
+        "none -> none": 16,
+        "position -> none": 1,
+        "position -> position": 9,
+        "product_mention -> none": 3
+      },
+      "rows": [
+        {
+          "id": "@VARUS_channel:7119",
+          "carrier": "comment",
+          "gold": "none",
+          "model": "none",
+          "n_positions": 0,
+          "agrees": true
+        },
+        {
+          "id": "@VARUS_channel:7440",
+          "carrier": "comment",
+          "gold": "none",
+          "model": "none",
+          "n_positions": 0,
+          "agrees": true
+        },
+        {
+          "id": "@VARUS_channel:800",
+          "carrier": "comment",
+          "gold": "none",
+          "model": "none",
+          "n_positions": 0,
+          "agrees": true
+        },
+        {
+          "id": "@VARUS_channel:8297",
+          "carrier": "comment",
+          "gold": "none",
+          "model": "none",
+          "n_positions": 0,
+          "agrees": true
+        },
+        {
+          "id": "@VARUS_channel:1775",
+          "carrier": "post_text",
+          "gold": "none",
+          "model": "none",
+          "n_positions": 0,
+          "agrees": true
+        },
+        {
+          "id": "@VARUS_channel:1912",
+          "carrier": "post_text",
+          "gold": "position",
+          "model": "position",
+          "n_positions": 1,
+          "agrees": true
+        },
+        {
+          "id": "@VARUS_channel:2562",
+          "carrier": "post_text",
+          "gold": "position",
+          "model": "position",
+          "n_positions": 1,
+          "agrees": true
+        },
+        {
+          "id": "@VARUS_channel:4791",
+          "carrier": "post_text",
+          "gold": "none",
+          "model": "none",
+          "n_positions": 0,
+          "agrees": true
+        },
+        {
+          "id": "@VARUS_channel:9580",
+          "carrier": "post_text",
+          "gold": "product_mention",
+          "model": "none",
+          "n_positions": 0,
+          "agrees": false
+        },
+        {
+          "id": "@atb_market_official:1155",
+          "carrier": "post_text",
+          "gold": "product_mention",
+          "model": "none",
+          "n_positions": 0,
+          "agrees": false
+        },
+        {
+          "id": "@atb_market_official:1339",
+          "carrier": "post_text",
+          "gold": "position",
+          "model": "position",
+          "n_positions": 1,
+          "agrees": true
+        },
+        {
+          "id": "@atb_market_official:1822",
+          "carrier": "post_text",
+          "gold": "product_mention",
+          "model": "none",
+          "n_positions": 0,
+          "agrees": false
+        },
+        {
+          "id": "@epicentrk_sale:6148",
+          "carrier": "post_text",
+          "gold": "none",
+          "model": "none",
+          "n_positions": 0,
+          "agrees": true
+        },
+        {
+          "id": "@korolevakuchni:10350",
+          "carrier": "post_text",
+          "gold": "none",
+          "model": "none",
+          "n_positions": 0,
+          "agrees": true
+        },
+        {
+          "id": "@matusi_ukr:22025",
+          "carrier": "post_text",
+          "gold": "none",
+          "model": "none",
+          "n_positions": 0,
+          "agrees": true
+        },
+        {
+          "id": "@matusi_ukr:22255",
+          "carrier": "post_text",
+          "gold": "none",
+          "model": "none",
+          "n_positions": 0,
+          "agrees": true
+        },
+        {
+          "id": "@recepti:11794",
+          "carrier": "post_text",
+          "gold": "none",
+          "model": "none",
+          "n_positions": 0,
+          "agrees": true
+        },
+        {
+          "id": "@retsepty:7281",
+          "carrier": "post_text",
+          "gold": "none",
+          "model": "none",
+          "n_positions": 0,
+          "agrees": true
+        },
+        {
+          "id": "@retsepty:7318",
+          "carrier": "post_text",
+          "gold": "none",
+          "model": "none",
+          "n_positions": 0,
+          "agrees": true
+        },
+        {
+          "id": "@silposilpo:2529",
+          "carrier": "post_text",
+          "gold": "none",
+          "model": "none",
+          "n_positions": 0,
+          "agrees": true
+        },
+        {
+          "id": "@silposilpo:2745",
+          "carrier": "post_text",
+          "gold": "position",
+          "model": "position",
+          "n_positions": 1,
+          "agrees": true
+        },
+        {
+          "id": "@silposilpo:3154",
+          "carrier": "post_text",
+          "gold": "position",
+          "model": "none",
+          "n_positions": 0,
+          "agrees": false
+        },
+        {
+          "id": "@silposilpo:3234",
+          "carrier": "post_text",
+          "gold": "position",
+          "model": "position",
+          "n_positions": 1,
+          "agrees": true
+        },
+        {
+          "id": "@silposilpo:3517",
+          "carrier": "post_text",
+          "gold": "position",
+          "model": "position",
+          "n_positions": 6,
+          "agrees": true
+        },
+        {
+          "id": "@silposilpo:3671",
+          "carrier": "post_text",
+          "gold": "position",
+          "model": "position",
+          "n_positions": 1,
+          "agrees": true
+        },
+        {
+          "id": "@suspilnepoltava:46982",
+          "carrier": "post_text",
+          "gold": "none",
+          "model": "none",
+          "n_positions": 0,
+          "agrees": true
+        },
+        {
+          "id": "@telegraf_kremenchuk:70595",
+          "carrier": "post_text",
+          "gold": "position",
+          "model": "position",
+          "n_positions": 2,
+          "agrees": true
+        },
+        {
+          "id": "@telegraf_kremenchuk:71000",
+          "carrier": "post_text",
+          "gold": "none",
+          "model": "none",
+          "n_positions": 0,
+          "agrees": true
+        },
+        {
+          "id": "@telegraf_kremenchuk:71024",
+          "carrier": "post_text",
+          "gold": "position",
+          "model": "position",
+          "n_positions": 3,
+          "agrees": true
+        }
+      ]
+    }
+  },
+  "scored_by": {
+    "bar_1": "market_pulse.scorer.leaflet_brand_recall",
+    "bar_3": "market_pulse.scorer.text_tier_accuracy",
+    "tiers": "market_pulse.positions.tier / tier_from_presence",
+    "gold_keys": "build_sku_reference_leaflet.gold_key"
+  },
+  "git": {
+    "commit": "ec9cf3bda3203859b0bbb3205c80491b39977b1f",
+    "dirty": [
+      "knowledge/daily_logs/2026-08-12.md",
+      "knowledge/hot.md",
+      "knowledge/index.md",
+      "results/spend_sku_b_v4.json",
+      "results/sku_b_positions_v4.json",
+      "results/sku_b_positions_v4.jsonl"
+    ]
+  }
+}
