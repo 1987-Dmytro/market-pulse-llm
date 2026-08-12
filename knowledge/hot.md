@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-12 15:43:37 (every SessionStart)
+**Auto-refreshed:** 2026-08-12 15:56:54 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+7f4e343 docs(report): skub2-prep -- Dv209 and Dv210, the readings that stayed v4's
+300a338 fix(skub2-prep): the three readings that counted the old posts and pairs
+10bcc3a chore(vault): the skub2-prep tail -- the day's log, hot.md, the index
 79eaccb docs(report): skub2-prep -- instrument v2, the aliases, and a registration that refuses
 b39b55e data(skub2-prep): serving pin v2, the last sibling out of its dirty list
-0c4dfe1 data(skub2-prep): the B' projection re-stamped from the tree that holds its producer
-2b6ee3f data(skub2-prep): serving pin v2 re-stamped from the tree that holds its producer
-d7f240f data(skub2-prep): the decomposition re-stamped from the tree that holds its producer
 ```
 
 ## 📋 Recent decisions
@@ -30,7 +30,7 @@ d7f240f data(skub2-prep): the decomposition re-stamped from the tree that holds 
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-12 17:40 (arch-a ✅, uni-a ✅, uni-b ✅, sku-b-prep ✅, sku-b-run ✅ ПРИНЯТ,
+**Last update:** 2026-08-12 18:20 (arch-a ✅, uni-a ✅, uni-b ✅, sku-b-prep ✅, sku-b-run ✅ ПРИНЯТ,
 sku-b-v3-prep ✅, sku-b-v3-run ⛔ ОТКАЗ на воротах — попытка ЦЕЛА, sku-b-v4-prep ✅ $0,
 sku-b-v4-run ✅ 121 куплен, **sku-b-close ✅ $0 — ПИЛОТ ЗАКРЫТ ИЗМЕРЕНИЕМ, 2 планки из 3 FAIL**,
 sku-miss-pack ✅ $0, **skub2-prep ✅ $0 — инструмент v2 собран, прережка B′ ОТКАЗЫВАЕТСЯ писаться**).
@@ -50,20 +50,22 @@ sku-miss-pack ✅ $0, **skub2-prep ✅ $0 — инструмент v2 собра
 пилота), `sku-b-v4-prep.md`, `sku-b-v3-run.md`, `sku-b-v3-prep.md`, `sku-b-run.md`, `sku-b-prep.md`,
 `uni-a.md`, `uni-b.md`. Ещё: `docs/ARCHITECTURE.md`, граф кода, `docs/PORTING.md`.
 **Next: ПРИЁМКА skub2-prep — дочитать 4 пары (#4 #9 #28 #29) и решить B1/B4/B5 + кап $0.40 против
-верхней границы $0.4004 → тогда `write_sku_prereg_b2.py` напишет прережку → skub2-run.**
+верхней границы $0.4004 → тогда `write_sku_prereg_b2.py` напишет прережку → skub2-run, чей ПЕРВЫЙ
+шаг — переключить `bar_one` на голд прережки (Dv210), иначе он читает старое ключевое
+пространство.**
 Блок правится руками; секция выше — авто-ген, маркер НЕ трогать.
 Длинная форма отклонений: `implementation-notes.md` (Dv100–120), `uni-a.md` (Dv121–124),
 `uni-b.md` (Dv125–132), `sku-b-prep.md` (Dv133–147), `sku-b-run.md` (Dv148–153),
 `sku-b-v3-prep.md` (Dv154–160), `sku-b-v3-run.md` (Dv161–168), `sku-b-v4-prep.md` (Dv169–175),
 **`sku-b-v4-run.md` (Dv176–180, и в её секции `# Close` — Dv181–186)**, **Dv188–194 — только в
 дневнике [[2026-08-12]]: лёгкий контракт 12.08 отчёта-файла не просит**,
-**`skub2-prep.md` (Dv195–208)**.
+**`skub2-prep.md` (Dv195–210)**.
 Дневники [[2026-08-12]] / [[2026-08-11]], ADR ниже.
 
 ## 🔥 What's Hot
 
 **ИНСТРУМЕНТ v2 СОБРАН, ПРЕРЕЖКА B′ ОТКАЗЫВАЕТСЯ ПИСАТЬСЯ** (`skub2-prep` ✅ 12.08, $0,
-тринадцать коммитов `d3fa574..79eaccb`, `make check` 1966 / 2 skipped). Четыре деливерабла из пяти
+шестнадцать коммитов `d3fa574..`, `make check` 1969 / 2 skipped). Четыре деливерабла из пяти
 легли файлами; пятый — продюсер, который **отказывается**: четыре пары декомпозиции ещё
 `PENDING_TEAM_LEAD` (#4 #9 #28 #29), а каждая может уйти из знаменателя, который он бы
 зарегистрировал. `results/sku_pilot_prereg_b2.json` НЕТ на диске и быть не должно.
@@ -230,6 +232,11 @@ pinned_paths_off_the_pin_file` красный на ВСЕХ деревьях, в
 строке комментария, а три тронутых списка `display_names` перечислены ЛИТЕРАЛЬНО в
 `LATIN_ALIASES_13B` — четвёртый алиас в этих строках без записи там ломает реконструкцию, а не
 проходит молча. Не «чинить» отказ перепиниванием.
+
+**`sku_bar_verdicts.bar_one` читает голд из ЗАПЕЧАТАННОГО референса — это старое ключевое
+пространство (Dv209/Dv210).** Пока скорер не переключён на `bars.leaflet_brand_recall.gold.per_post`,
+он отказывается на сверке пустых голдов (B′ исключает 8 постов, референс — 4). Отказ поставлен
+намеренно: до фикса та же сверка СОВПАДАЛА и молча считала по 15 постам.
 
 **Драйвер `positions_gm4_skub.py` всё ещё несёт кап/фазу/леджер v4** ($0.35, `sku-b-v4`,
 `spend_sku_b_v4.json`). Тройка B′ — $0.40 / `skub2` / `results/spend_skub2.json` — зарегистрирована
