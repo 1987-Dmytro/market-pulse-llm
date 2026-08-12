@@ -1,0 +1,859 @@
+{
+  "phase": "sku-b — bar 2, the team lead's read applied to the dump",
+  "contract": "docs/PROMPT-sku-b-close.md — the team lead's verdicts table",
+  "class": "TRANSCRIPTION. Every verdict here was read by the team lead against the page image; this file joins the dictation to the dump's rows and refuses anything that does not land exactly once. No verdict is derived, corrected or inferred",
+  "authority": "SPEC §10 — the executor never scores its own sample. Read by the team lead on 2026-08-12, all 61 pairs against all 22 page images",
+  "read_by": "the team lead",
+  "read_on": "2026-08-12",
+  "read_scope": "all 61 pairs against all 22 page images",
+  "record": {
+    "path": "results/sku_b_positions_v4.json",
+    "sha256": "fd0eb79695c2bc546743d8fde93448d48a321fa92598a17a14155aa2766ff9c5"
+  },
+  "dump": {
+    "path": "results/sku_b_positions_v4.jsonl",
+    "sha256": "e7d24a0a6b5aeff10a683a0a4beacfbcbd90aa4da6e71c39741b3cffbb79e428",
+    "pair_rows": 61
+  },
+  "key": "(file, price_promo, price_old); n = the dump rows sharing one physical price box",
+  "checksums": {
+    "keys": 45,
+    "rows": 61,
+    "correct_rows": 20,
+    "wrong_rows": 41,
+    "accuracy": 0.32786885245901637,
+    "accuracy_4dp": 0.3279
+  },
+  "expected": {
+    "keys": 45,
+    "rows": 61,
+    "correct_rows": 20,
+    "wrong_rows": 41,
+    "accuracy_4dp": 0.3279
+  },
+  "diagnosis": "promo price 61/61 correct · printed % 61/61 correct · crossed-out old price 20/61 — every error is confined to the small struck-through number (superscript kopiyky garbled, truncated to .0, or digit-shifted), and depth() is wrong wherever the old price is.",
+  "keys": [
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4341.jpg",
+      "price_promo": 37.9,
+      "price_old": 75.9,
+      "n": 1,
+      "verdict": "correct",
+      "printed_old": 75.9,
+      "printed_old_dictated": null,
+      "items": [
+        "@atb_market_official:4340"
+      ],
+      "pages": [
+        2
+      ],
+      "discount_pct_printed": [
+        50.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4341.jpg",
+      "price_promo": 131.5,
+      "price_old": 264.5,
+      "n": 1,
+      "verdict": "wrong",
+      "printed_old": 264.9,
+      "printed_old_dictated": 264.9,
+      "items": [
+        "@atb_market_official:4340"
+      ],
+      "pages": [
+        2
+      ],
+      "discount_pct_printed": [
+        50.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4343.jpg",
+      "price_promo": 17.9,
+      "price_old": 29.9,
+      "n": 1,
+      "verdict": "correct",
+      "printed_old": 29.9,
+      "printed_old_dictated": null,
+      "items": [
+        "@atb_market_official:4340"
+      ],
+      "pages": [
+        4
+      ],
+      "discount_pct_printed": [
+        40.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4344.jpg",
+      "price_promo": 27.9,
+      "price_old": 39.99,
+      "n": 1,
+      "verdict": "wrong",
+      "printed_old": 39.9,
+      "printed_old_dictated": 39.9,
+      "items": [
+        "@atb_market_official:4340"
+      ],
+      "pages": [
+        5
+      ],
+      "discount_pct_printed": [
+        30.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4350.jpg",
+      "price_promo": 49.9,
+      "price_old": 71.9,
+      "n": 1,
+      "verdict": "wrong",
+      "printed_old": 71.5,
+      "printed_old_dictated": 71.5,
+      "items": [
+        "@atb_market_official:4350"
+      ],
+      "pages": [
+        1
+      ],
+      "discount_pct_printed": [
+        30.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4352.jpg",
+      "price_promo": 12.9,
+      "price_old": 19.99,
+      "n": 1,
+      "verdict": "wrong",
+      "printed_old": 19.9,
+      "printed_old_dictated": 19.9,
+      "items": [
+        "@atb_market_official:4350"
+      ],
+      "pages": [
+        3
+      ],
+      "discount_pct_printed": [
+        35.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4352.jpg",
+      "price_promo": 30.9,
+      "price_old": 44.9,
+      "n": 1,
+      "verdict": "wrong",
+      "printed_old": 44.4,
+      "printed_old_dictated": 44.4,
+      "items": [
+        "@atb_market_official:4350"
+      ],
+      "pages": [
+        3
+      ],
+      "discount_pct_printed": [
+        30.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4360.jpg",
+      "price_promo": 21.9,
+      "price_old": 40.9,
+      "n": 1,
+      "verdict": "correct",
+      "printed_old": 40.9,
+      "printed_old_dictated": null,
+      "items": [
+        "@atb_market_official:4360"
+      ],
+      "pages": [
+        1
+      ],
+      "discount_pct_printed": [
+        46.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4360.jpg",
+      "price_promo": 23.5,
+      "price_old": 42.5,
+      "n": 2,
+      "verdict": "wrong",
+      "printed_old": 42.9,
+      "printed_old_dictated": 42.9,
+      "items": [
+        "@atb_market_official:4360"
+      ],
+      "pages": [
+        1
+      ],
+      "discount_pct_printed": [
+        45.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4360.jpg",
+      "price_promo": 42.9,
+      "price_old": 80.9,
+      "n": 1,
+      "verdict": "correct",
+      "printed_old": 80.9,
+      "printed_old_dictated": null,
+      "items": [
+        "@atb_market_official:4360"
+      ],
+      "pages": [
+        1
+      ],
+      "discount_pct_printed": [
+        46.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4360.jpg",
+      "price_promo": 24.9,
+      "price_old": 46.9,
+      "n": 1,
+      "verdict": "correct",
+      "printed_old": 46.9,
+      "printed_old_dictated": null,
+      "items": [
+        "@atb_market_official:4360"
+      ],
+      "pages": [
+        1
+      ],
+      "discount_pct_printed": [
+        46.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4360.jpg",
+      "price_promo": 29.9,
+      "price_old": 55.9,
+      "n": 1,
+      "verdict": "correct",
+      "printed_old": 55.9,
+      "printed_old_dictated": null,
+      "items": [
+        "@atb_market_official:4360"
+      ],
+      "pages": [
+        1
+      ],
+      "discount_pct_printed": [
+        46.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4381.jpg",
+      "price_promo": 74.5,
+      "price_old": 149.0,
+      "n": 1,
+      "verdict": "wrong",
+      "printed_old": 149.5,
+      "printed_old_dictated": 149.5,
+      "items": [
+        "@atb_market_official:4381"
+      ],
+      "pages": [
+        1
+      ],
+      "discount_pct_printed": [
+        50.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4381.jpg",
+      "price_promo": 99.5,
+      "price_old": 199.0,
+      "n": 1,
+      "verdict": "wrong",
+      "printed_old": 199.9,
+      "printed_old_dictated": 199.9,
+      "items": [
+        "@atb_market_official:4381"
+      ],
+      "pages": [
+        1
+      ],
+      "discount_pct_printed": [
+        50.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4382.jpg",
+      "price_promo": 24.5,
+      "price_old": 49.0,
+      "n": 2,
+      "verdict": "correct",
+      "printed_old": 49.0,
+      "printed_old_dictated": null,
+      "items": [
+        "@atb_market_official:4381"
+      ],
+      "pages": [
+        2
+      ],
+      "discount_pct_printed": [
+        50.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4382.jpg",
+      "price_promo": 39.5,
+      "price_old": 79.0,
+      "n": 2,
+      "verdict": "wrong",
+      "printed_old": 79.9,
+      "printed_old_dictated": 79.9,
+      "items": [
+        "@atb_market_official:4381"
+      ],
+      "pages": [
+        2
+      ],
+      "discount_pct_printed": [
+        50.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4383.jpg",
+      "price_promo": 13.9,
+      "price_old": 19.9,
+      "n": 1,
+      "verdict": "correct",
+      "printed_old": 19.9,
+      "printed_old_dictated": null,
+      "items": [
+        "@atb_market_official:4381"
+      ],
+      "pages": [
+        3
+      ],
+      "discount_pct_printed": [
+        30.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4383.jpg",
+      "price_promo": 119.9,
+      "price_old": 159.9,
+      "n": 2,
+      "verdict": "correct",
+      "printed_old": 159.9,
+      "printed_old_dictated": null,
+      "items": [
+        "@atb_market_official:4381"
+      ],
+      "pages": [
+        3
+      ],
+      "discount_pct_printed": [
+        25.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4384.jpg",
+      "price_promo": 15.5,
+      "price_old": 26.75,
+      "n": 2,
+      "verdict": "wrong",
+      "printed_old": 26.8,
+      "printed_old_dictated": 26.8,
+      "items": [
+        "@atb_market_official:4381"
+      ],
+      "pages": [
+        4
+      ],
+      "discount_pct_printed": [
+        42.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4385.jpg",
+      "price_promo": 59.9,
+      "price_old": 89.9,
+      "n": 2,
+      "verdict": "wrong",
+      "printed_old": 89.4,
+      "printed_old_dictated": 89.4,
+      "items": [
+        "@atb_market_official:4381"
+      ],
+      "pages": [
+        5
+      ],
+      "discount_pct_printed": [
+        32.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4385.jpg",
+      "price_promo": 59.9,
+      "price_old": 90.0,
+      "n": 1,
+      "verdict": "wrong",
+      "printed_old": 90.7,
+      "printed_old_dictated": 90.7,
+      "items": [
+        "@atb_market_official:4381"
+      ],
+      "pages": [
+        5
+      ],
+      "discount_pct_printed": [
+        33.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4385.jpg",
+      "price_promo": 68.9,
+      "price_old": 103.0,
+      "n": 1,
+      "verdict": "wrong",
+      "printed_old": 103.7,
+      "printed_old_dictated": 103.7,
+      "items": [
+        "@atb_market_official:4381"
+      ],
+      "pages": [
+        5
+      ],
+      "discount_pct_printed": [
+        33.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4402.jpg",
+      "price_promo": 46.9,
+      "price_old": 79.9,
+      "n": 1,
+      "verdict": "correct",
+      "printed_old": 79.9,
+      "printed_old_dictated": null,
+      "items": [
+        "@atb_market_official:4401"
+      ],
+      "pages": [
+        2
+      ],
+      "discount_pct_printed": [
+        41.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4403.jpg",
+      "price_promo": 79.9,
+      "price_old": 111.9,
+      "n": 1,
+      "verdict": "correct",
+      "printed_old": 111.9,
+      "printed_old_dictated": null,
+      "items": [
+        "@atb_market_official:4401"
+      ],
+      "pages": [
+        3
+      ],
+      "discount_pct_printed": [
+        28.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4404.jpg",
+      "price_promo": 11.7,
+      "price_old": 17.7,
+      "n": 1,
+      "verdict": "wrong",
+      "printed_old": 17.8,
+      "printed_old_dictated": 17.8,
+      "items": [
+        "@atb_market_official:4401"
+      ],
+      "pages": [
+        4
+      ],
+      "discount_pct_printed": [
+        34.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4404.jpg",
+      "price_promo": 20.5,
+      "price_old": 29.5,
+      "n": 1,
+      "verdict": "correct",
+      "printed_old": 29.5,
+      "printed_old_dictated": null,
+      "items": [
+        "@atb_market_official:4401"
+      ],
+      "pages": [
+        4
+      ],
+      "discount_pct_printed": [
+        30.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4404.jpg",
+      "price_promo": 26.9,
+      "price_old": 39.9,
+      "n": 1,
+      "verdict": "wrong",
+      "printed_old": 39.7,
+      "printed_old_dictated": 39.7,
+      "items": [
+        "@atb_market_official:4401"
+      ],
+      "pages": [
+        4
+      ],
+      "discount_pct_printed": [
+        32.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4404.jpg",
+      "price_promo": 26.5,
+      "price_old": 39.9,
+      "n": 1,
+      "verdict": "wrong",
+      "printed_old": 39.8,
+      "printed_old_dictated": 39.8,
+      "items": [
+        "@atb_market_official:4401"
+      ],
+      "pages": [
+        4
+      ],
+      "discount_pct_printed": [
+        32.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4404.jpg",
+      "price_promo": 15.9,
+      "price_old": 22.9,
+      "n": 1,
+      "verdict": "correct",
+      "printed_old": 22.9,
+      "printed_old_dictated": null,
+      "items": [
+        "@atb_market_official:4401"
+      ],
+      "pages": [
+        4
+      ],
+      "discount_pct_printed": [
+        30.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4404.jpg",
+      "price_promo": 119.9,
+      "price_old": 171.9,
+      "n": 1,
+      "verdict": "wrong",
+      "printed_old": 171.3,
+      "printed_old_dictated": 171.3,
+      "items": [
+        "@atb_market_official:4401"
+      ],
+      "pages": [
+        4
+      ],
+      "discount_pct_printed": [
+        30.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4426.jpg",
+      "price_promo": 103.9,
+      "price_old": 230.0,
+      "n": 3,
+      "verdict": "wrong",
+      "printed_old": 230.9,
+      "printed_old_dictated": 230.9,
+      "items": [
+        "@atb_market_official:4426"
+      ],
+      "pages": [
+        1
+      ],
+      "discount_pct_printed": [
+        55.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4427.jpg",
+      "price_promo": 17.9,
+      "price_old": 35.0,
+      "n": 1,
+      "verdict": "wrong",
+      "printed_old": 35.8,
+      "printed_old_dictated": 35.8,
+      "items": [
+        "@atb_market_official:4426"
+      ],
+      "pages": [
+        2
+      ],
+      "discount_pct_printed": [
+        50.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4427.jpg",
+      "price_promo": 22.3,
+      "price_old": 44.0,
+      "n": 1,
+      "verdict": "wrong",
+      "printed_old": 44.9,
+      "printed_old_dictated": 44.9,
+      "items": [
+        "@atb_market_official:4426"
+      ],
+      "pages": [
+        2
+      ],
+      "discount_pct_printed": [
+        50.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4428.jpg",
+      "price_promo": 25.5,
+      "price_old": 37.0,
+      "n": 2,
+      "verdict": "wrong",
+      "printed_old": 37.9,
+      "printed_old_dictated": 37.9,
+      "items": [
+        "@atb_market_official:4426"
+      ],
+      "pages": [
+        3
+      ],
+      "discount_pct_printed": [
+        32.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4428.jpg",
+      "price_promo": 117.9,
+      "price_old": 157.0,
+      "n": 2,
+      "verdict": "wrong",
+      "printed_old": 157.9,
+      "printed_old_dictated": 157.9,
+      "items": [
+        "@atb_market_official:4426"
+      ],
+      "pages": [
+        3
+      ],
+      "discount_pct_printed": [
+        25.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4440.jpg",
+      "price_promo": 64.5,
+      "price_old": 93.0,
+      "n": 3,
+      "verdict": "wrong",
+      "printed_old": 93.9,
+      "printed_old_dictated": 93.9,
+      "items": [
+        "@atb_market_official:4436"
+      ],
+      "pages": [
+        5
+      ],
+      "discount_pct_printed": [
+        31.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4468.jpg",
+      "price_promo": 18.3,
+      "price_old": 40.0,
+      "n": 1,
+      "verdict": "wrong",
+      "printed_old": 40.9,
+      "printed_old_dictated": 40.9,
+      "items": [
+        "@atb_market_official:4467"
+      ],
+      "pages": [
+        2
+      ],
+      "discount_pct_printed": [
+        55.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4468.jpg",
+      "price_promo": 26.5,
+      "price_old": 58.0,
+      "n": 1,
+      "verdict": "wrong",
+      "printed_old": 58.9,
+      "printed_old_dictated": 58.9,
+      "items": [
+        "@atb_market_official:4467"
+      ],
+      "pages": [
+        2
+      ],
+      "discount_pct_printed": [
+        55.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4468.jpg",
+      "price_promo": 36.3,
+      "price_old": 80.0,
+      "n": 1,
+      "verdict": "wrong",
+      "printed_old": 80.9,
+      "printed_old_dictated": 80.9,
+      "items": [
+        "@atb_market_official:4467"
+      ],
+      "pages": [
+        2
+      ],
+      "discount_pct_printed": [
+        55.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4470.jpg",
+      "price_promo": 16.9,
+      "price_old": 29.99,
+      "n": 1,
+      "verdict": "wrong",
+      "printed_old": 29.8,
+      "printed_old_dictated": 29.8,
+      "items": [
+        "@atb_market_official:4467"
+      ],
+      "pages": [
+        4
+      ],
+      "discount_pct_printed": [
+        43.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4471.jpg",
+      "price_promo": 28.9,
+      "price_old": 41.99,
+      "n": 2,
+      "verdict": "wrong",
+      "printed_old": 41.9,
+      "printed_old_dictated": 41.9,
+      "items": [
+        "@atb_market_official:4467"
+      ],
+      "pages": [
+        5
+      ],
+      "discount_pct_printed": [
+        31.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4508.jpg",
+      "price_promo": 29.9,
+      "price_old": 55.9,
+      "n": 2,
+      "verdict": "correct",
+      "printed_old": 55.9,
+      "printed_old_dictated": null,
+      "items": [
+        "@atb_market_official:4508"
+      ],
+      "pages": [
+        1
+      ],
+      "discount_pct_printed": [
+        46.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4508.jpg",
+      "price_promo": 21.9,
+      "price_old": 36.9,
+      "n": 2,
+      "verdict": "wrong",
+      "printed_old": 36.5,
+      "printed_old_dictated": 36.5,
+      "items": [
+        "@atb_market_official:4508"
+      ],
+      "pages": [
+        1
+      ],
+      "discount_pct_printed": [
+        40.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4508.jpg",
+      "price_promo": 24.9,
+      "price_old": 46.9,
+      "n": 1,
+      "verdict": "correct",
+      "printed_old": 46.9,
+      "printed_old_dictated": null,
+      "items": [
+        "@atb_market_official:4508"
+      ],
+      "pages": [
+        1
+      ],
+      "discount_pct_printed": [
+        46.0
+      ]
+    },
+    {
+      "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4508.jpg",
+      "price_promo": 22.9,
+      "price_old": 41.9,
+      "n": 2,
+      "verdict": "correct",
+      "printed_old": 41.9,
+      "printed_old_dictated": null,
+      "items": [
+        "@atb_market_official:4508"
+      ],
+      "pages": [
+        1
+      ],
+      "discount_pct_printed": [
+        45.0
+      ]
+    }
+  ],
+  "git": {
+    "commit": "06617c81d2c2b5cebdca6f78b564cbec4811c9a4",
+    "dirty": [
+      "docs/STATUS.md",
+      "knowledge/daily_logs/2026-08-12.md",
+      "knowledge/hot.md",
+      "knowledge/index.md",
+      "docs/PROMPT-sku-b-close.md",
+      "scripts/apply_sku_pair_verdicts.py",
+      "tests/test_apply_sku_pair_verdicts.py"
+    ]
+  }
+}
