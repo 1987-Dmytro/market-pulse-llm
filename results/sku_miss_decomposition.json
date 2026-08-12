@@ -1,0 +1,861 @@
+{
+  "phase": "sku-b — bar 1's 29 misses, decomposed by the team lead's read",
+  "contract": "docs/PROMPT-skub2-prep.md — deliverable 1, the decomposition verdicts applied",
+  "class": "TRANSCRIPTION. Every verdict here was read by the team lead against the page images; this file joins the dictation to the pack's rows and refuses anything that does not land exactly once. No verdict is derived, corrected or inferred, and the four pending pairs are PENDING_TEAM_LEAD rather than guessed from the rows beside them",
+  "authority": "SPEC §10 — the executor never scores its own sample; SPEC 3.17 (13), ratified on this read. Read by the team lead on 2026-08-12, the 29 missed pairs of results/sku_miss_pack.md against the sent page images",
+  "read_by": "the team lead",
+  "read_on": "2026-08-12",
+  "read_scope": "the 29 missed pairs of results/sku_miss_pack.md against the sent page images",
+  "pack": {
+    "path": "results/sku_miss_pack.json",
+    "sha256": "e02053ecdde1eccbc92ababd372f65c3ca6963b5d080e2ee06739a704f32e567"
+  },
+  "sheet": {
+    "path": "results/sku_miss_pack.md",
+    "sha256": "3eabfeae00e47d246398d722bec173d0f498035f58cae111bd61763bdec73ef4"
+  },
+  "classes": {
+    "a": "the brand is PRINTED on a sent page WITH a price box — a real under-read",
+    "b": "the brand is VISIBLE on a sent page WITHOUT a price box — bar-vs-instrument mismatch",
+    "c": "the brand is NOT VISIBLE on the sent pages at all — gold noise"
+  },
+  "pending_status": "PENDING_TEAM_LEAD",
+  "pending_rows": [
+    4,
+    9,
+    28,
+    29
+  ],
+  "counts": {
+    "a": 11,
+    "b": 12,
+    "c": 2,
+    "pending": 4,
+    "rows": 29
+  },
+  "expected": {
+    "a": 11,
+    "b": 12,
+    "c": 2,
+    "pending": 4,
+    "rows": 29
+  },
+  "expected_source": "docs/PROMPT-skub2-prep.md, transcribed — not computed from the rows",
+  "by_mechanism": {
+    "non-dairy watchlist item": 5,
+    "refusal:token-ceiling": 5,
+    "PENDING_TEAM_LEAD": 4,
+    "refusal:multipack": 3,
+    "SKU-name-vs-TM": 2,
+    "maker-logo": 2,
+    "refusal:asterisk": 2,
+    "alias:latin-form": 1,
+    "dairy-adjacent, reviewer's own caveat": 1,
+    "gold-key artifact — brand was found": 1,
+    "non-dairy": 1,
+    "non-dairy, by-pattern": 1,
+    "two-brands-one-box": 1
+  },
+  "mechanism_evidence": {
+    "checked": 11,
+    "refusal_reasons": {
+      "refusal:asterisk": "printed discount '-50%*' is not a percentage",
+      "refusal:token-ceiling": "malformed JSON",
+      "refusal:multipack": "size '6х100 г' is a multipack — a pack count is not a size"
+    },
+    "note": "each refusal:* row was checked against the reason the extractor recorded on its post's refused page, and the alias:latin-form row against that post's unmatched extractions. The classes themselves are the team lead's and are not checkable from here — only the images can say whether a brand carried a price box"
+  },
+  "b_prime_denominator": {
+    "rule": "SPEC 3.17 (13)(c) — the B′ gold is the dairy positions carrying a price box on the sent pages: class-b and class-c pairs leave the denominator, class-a pairs and the 26 found stay",
+    "bar_1_gold_pairs": 55,
+    "removed_so_far": 14,
+    "removed_by_class": {
+      "b": 12,
+      "c": 2
+    },
+    "remaining_if_no_pending_pair_leaves": 41,
+    "pending": 4,
+    "final": null,
+    "note": "`final` stays null while any pair is PENDING_TEAM_LEAD: each of the four can still leave the denominator, so the B′ gold is not a number yet. The producer of results/sku_pilot_prereg_b2.json refuses on this field rather than guessing it"
+  },
+  "rows": [
+    {
+      "n": 1,
+      "item": "@atb_market_official:4340",
+      "msg_id": 4340,
+      "gold_key": "raw:rud",
+      "reading_as": [
+        "Рудь"
+      ],
+      "verdict": "a",
+      "mechanism": "refusal:asterisk",
+      "unreadable_pages": [
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4342.jpg",
+          "reason": "printed discount '-50%*' is not a percentage"
+        }
+      ],
+      "unmatched_extractions_on_this_post": [
+        "raw:three bears"
+      ]
+    },
+    {
+      "n": 2,
+      "item": "@atb_market_official:4340",
+      "msg_id": 4340,
+      "gold_key": "raw:try-vedmedi",
+      "reading_as": [
+        "Три Ведмеді",
+        "Три Медведя"
+      ],
+      "verdict": "a",
+      "mechanism": "alias:latin-form",
+      "unreadable_pages": [
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4342.jpg",
+          "reason": "printed discount '-50%*' is not a percentage"
+        }
+      ],
+      "unmatched_extractions_on_this_post": [
+        "raw:three bears"
+      ]
+    },
+    {
+      "n": 3,
+      "item": "@atb_market_official:4350",
+      "msg_id": 4350,
+      "gold_key": "raw:lactel",
+      "reading_as": [
+        "lactel"
+      ],
+      "verdict": "b",
+      "mechanism": "maker-logo",
+      "unreadable_pages": [],
+      "unmatched_extractions_on_this_post": []
+    },
+    {
+      "n": 4,
+      "item": "@atb_market_official:4360",
+      "msg_id": 4360,
+      "gold_key": "raw:svoia-liniia",
+      "reading_as": [
+        "Своя Лінія",
+        "Своя Линия"
+      ],
+      "verdict": "PENDING_TEAM_LEAD",
+      "mechanism": null,
+      "unreadable_pages": [],
+      "unmatched_extractions_on_this_post": [],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4360.jpg",
+          "sha256": "3b417da3cb1ff445ff749ca1843ffd3cdad512590f4701c0eea75899164d4d17",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Київський Пломбір",
+            "Каштан",
+            "Каштан",
+            "Київський Пломбір",
+            "Limo",
+            "Limo"
+          ],
+          "brand_id": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4361.jpg",
+          "sha256": "1ef0c6a1847d0a1d8f5fad590f997594648d892464201bd94d7b33daad1b14a7",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4362.jpg",
+          "sha256": "23f2914eb381ca7681802607209c4717e96a7652c0ed2218c712613bc7b86662",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4363.jpg",
+          "sha256": "120d01e56cd42c965629c570c15059b5b84259c673262270d74eea5cbae027a8",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4364.jpg",
+          "sha256": "30203fbdffe436a38b9e2aa41bfbe425ad500deb16a0b3a6acb0bf96bbc0d617",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4365.jpg",
+          "sha256": "8d9fe4cabdccfa853b446406c35272f693cc5665fc3e07153b4e2b3cfeeb558f",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ]
+    },
+    {
+      "n": 5,
+      "item": "@atb_market_official:4377",
+      "msg_id": 4377,
+      "gold_key": "raw:svoia-liniia",
+      "reading_as": [
+        "Своя Лінія",
+        "Своя Линия"
+      ],
+      "verdict": "b",
+      "mechanism": "non-dairy watchlist item",
+      "unreadable_pages": [],
+      "unmatched_extractions_on_this_post": []
+    },
+    {
+      "n": 6,
+      "item": "@atb_market_official:4381",
+      "msg_id": 4381,
+      "gold_key": "raw:maximuse",
+      "reading_as": [
+        "Maximuse"
+      ],
+      "verdict": "b",
+      "mechanism": "SKU-name-vs-TM",
+      "unreadable_pages": [],
+      "unmatched_extractions_on_this_post": [
+        "raw:komo"
+      ]
+    },
+    {
+      "n": 7,
+      "item": "@atb_market_official:4381",
+      "msg_id": 4381,
+      "gold_key": "raw:каштан",
+      "reading_as": [
+        "Каштан"
+      ],
+      "verdict": "b",
+      "mechanism": "SKU-name-vs-TM",
+      "unreadable_pages": [],
+      "unmatched_extractions_on_this_post": [
+        "raw:komo"
+      ]
+    },
+    {
+      "n": 8,
+      "item": "@atb_market_official:4381",
+      "msg_id": 4381,
+      "gold_key": "raw:комо / komo",
+      "reading_as": [
+        "Комо / Komo"
+      ],
+      "verdict": "c",
+      "mechanism": "gold-key artifact — brand was found",
+      "unreadable_pages": [],
+      "unmatched_extractions_on_this_post": [
+        "raw:komo"
+      ]
+    },
+    {
+      "n": 9,
+      "item": "@atb_market_official:4391",
+      "msg_id": 4391,
+      "gold_key": "raw:svoia-liniia",
+      "reading_as": [
+        "Своя Лінія",
+        "Своя Линия"
+      ],
+      "verdict": "PENDING_TEAM_LEAD",
+      "mechanism": null,
+      "unreadable_pages": [],
+      "unmatched_extractions_on_this_post": [],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4391.jpg",
+          "sha256": "b310158e7a5966cf7a7e781b057bc1c84fb546e5e33cc09ed9b684244ccadb80",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4392.jpg",
+          "sha256": "f566591d20b645dd39ed17adbbc19b09681cf1c03e4fc41335ce421986f94f7c",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4393.jpg",
+          "sha256": "ddf11445fe8f9d0460be89e23bd9a58b0b1f4e79c4fa06b1edd05171a1b270e0",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4394.jpg",
+          "sha256": "9ed5e1c9c49a19468f2c1e7d4c0d0f2ec6de21408329f200da5017431a75b1f7",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4395.jpg",
+          "sha256": "179abdd1eccc0ec71c75a69d9bd67b1293326fc203d1232d8cc16ed99ade26de",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4396.jpg",
+          "sha256": "b8923ddb55e27f2b1569e381586453dd4f24cddee640d28dd1497ceeeca4d645",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ]
+    },
+    {
+      "n": 10,
+      "item": "@atb_market_official:4401",
+      "msg_id": 4401,
+      "gold_key": "raw:frenzy (рудь)",
+      "reading_as": [
+        "Frenzy (Рудь)"
+      ],
+      "verdict": "a",
+      "mechanism": "refusal:token-ceiling",
+      "unreadable_pages": [
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4405.jpg",
+          "reason": "malformed JSON"
+        }
+      ],
+      "unmatched_extractions_on_this_post": []
+    },
+    {
+      "n": 11,
+      "item": "@atb_market_official:4401",
+      "msg_id": 4401,
+      "gold_key": "raw:imperium (рудь)",
+      "reading_as": [
+        "Imperium (Рудь)"
+      ],
+      "verdict": "a",
+      "mechanism": "refusal:token-ceiling",
+      "unreadable_pages": [
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4405.jpg",
+          "reason": "malformed JSON"
+        }
+      ],
+      "unmatched_extractions_on_this_post": []
+    },
+    {
+      "n": 12,
+      "item": "@atb_market_official:4401",
+      "msg_id": 4401,
+      "gold_key": "raw:rud",
+      "reading_as": [
+        "Рудь"
+      ],
+      "verdict": "a",
+      "mechanism": "refusal:token-ceiling",
+      "unreadable_pages": [
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4405.jpg",
+          "reason": "malformed JSON"
+        }
+      ],
+      "unmatched_extractions_on_this_post": []
+    },
+    {
+      "n": 13,
+      "item": "@atb_market_official:4401",
+      "msg_id": 4401,
+      "gold_key": "raw:selianske",
+      "reading_as": [
+        "Селянське",
+        "Селянское"
+      ],
+      "verdict": "b",
+      "mechanism": "two-brands-one-box",
+      "unreadable_pages": [
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4405.jpg",
+          "reason": "malformed JSON"
+        }
+      ],
+      "unmatched_extractions_on_this_post": []
+    },
+    {
+      "n": 14,
+      "item": "@atb_market_official:4401",
+      "msg_id": 4401,
+      "gold_key": "raw:svoia-liniia",
+      "reading_as": [
+        "Своя Лінія",
+        "Своя Линия"
+      ],
+      "verdict": "b",
+      "mechanism": "non-dairy, by-pattern",
+      "unreadable_pages": [
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4405.jpg",
+          "reason": "malformed JSON"
+        }
+      ],
+      "unmatched_extractions_on_this_post": []
+    },
+    {
+      "n": 15,
+      "item": "@atb_market_official:4401",
+      "msg_id": 4401,
+      "gold_key": "raw:try-vedmedi",
+      "reading_as": [
+        "Три Ведмеді",
+        "Три Медведя"
+      ],
+      "verdict": "a",
+      "mechanism": "refusal:token-ceiling",
+      "unreadable_pages": [
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4405.jpg",
+          "reason": "malformed JSON"
+        }
+      ],
+      "unmatched_extractions_on_this_post": []
+    },
+    {
+      "n": 16,
+      "item": "@atb_market_official:4401",
+      "msg_id": 4401,
+      "gold_key": "raw:київський пломбір",
+      "reading_as": [
+        "Київський Пломбір"
+      ],
+      "verdict": "a",
+      "mechanism": "refusal:token-ceiling",
+      "unreadable_pages": [
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4405.jpg",
+          "reason": "malformed JSON"
+        }
+      ],
+      "unmatched_extractions_on_this_post": []
+    },
+    {
+      "n": 17,
+      "item": "@atb_market_official:4411",
+      "msg_id": 4411,
+      "gold_key": "raw:svoia-liniia",
+      "reading_as": [
+        "Своя Лінія",
+        "Своя Линия"
+      ],
+      "verdict": "b",
+      "mechanism": "non-dairy watchlist item",
+      "unreadable_pages": [],
+      "unmatched_extractions_on_this_post": []
+    },
+    {
+      "n": 18,
+      "item": "@atb_market_official:4421",
+      "msg_id": 4421,
+      "gold_key": "raw:svoia-liniia",
+      "reading_as": [
+        "Своя Лінія",
+        "Своя Линия"
+      ],
+      "verdict": "b",
+      "mechanism": "non-dairy watchlist item",
+      "unreadable_pages": [],
+      "unmatched_extractions_on_this_post": []
+    },
+    {
+      "n": 19,
+      "item": "@atb_market_official:4436",
+      "msg_id": 4436,
+      "gold_key": "raw:svoia-liniia",
+      "reading_as": [
+        "Своя Лінія",
+        "Своя Линия"
+      ],
+      "verdict": "b",
+      "mechanism": "non-dairy watchlist item",
+      "unreadable_pages": [],
+      "unmatched_extractions_on_this_post": []
+    },
+    {
+      "n": 20,
+      "item": "@atb_market_official:4446",
+      "msg_id": 4446,
+      "gold_key": "raw:limo",
+      "reading_as": [
+        "Лімо",
+        "Лимо"
+      ],
+      "verdict": "a",
+      "mechanism": "refusal:multipack",
+      "unreadable_pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4446.jpg",
+          "reason": "size '6х100 г' is a multipack — a pack count is not a size"
+        }
+      ],
+      "unmatched_extractions_on_this_post": []
+    },
+    {
+      "n": 21,
+      "item": "@atb_market_official:4446",
+      "msg_id": 4446,
+      "gold_key": "raw:nesquik (какао-напій шоколадно-молочний коктейль, 200 г)",
+      "reading_as": [
+        "Nesquik (Какао-напій шоколадно-молочний коктейль, 200 г)"
+      ],
+      "verdict": "c",
+      "mechanism": "dairy-adjacent, reviewer's own caveat",
+      "unreadable_pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4446.jpg",
+          "reason": "size '6х100 г' is a multipack — a pack count is not a size"
+        }
+      ],
+      "unmatched_extractions_on_this_post": []
+    },
+    {
+      "n": 22,
+      "item": "@atb_market_official:4446",
+      "msg_id": 4446,
+      "gold_key": "raw:rud",
+      "reading_as": [
+        "Рудь"
+      ],
+      "verdict": "a",
+      "mechanism": "refusal:multipack",
+      "unreadable_pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4446.jpg",
+          "reason": "size '6х100 г' is a multipack — a pack count is not a size"
+        }
+      ],
+      "unmatched_extractions_on_this_post": []
+    },
+    {
+      "n": 23,
+      "item": "@atb_market_official:4446",
+      "msg_id": 4446,
+      "gold_key": "raw:svoia-liniia",
+      "reading_as": [
+        "Своя Лінія",
+        "Своя Линия"
+      ],
+      "verdict": "b",
+      "mechanism": "non-dairy",
+      "unreadable_pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4446.jpg",
+          "reason": "size '6х100 г' is a multipack — a pack count is not a size"
+        }
+      ],
+      "unmatched_extractions_on_this_post": []
+    },
+    {
+      "n": 24,
+      "item": "@atb_market_official:4446",
+      "msg_id": 4446,
+      "gold_key": "raw:try-vedmedi",
+      "reading_as": [
+        "Три Ведмеді",
+        "Три Медведя"
+      ],
+      "verdict": "a",
+      "mechanism": "refusal:multipack",
+      "unreadable_pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4446.jpg",
+          "reason": "size '6х100 г' is a multipack — a pack count is not a size"
+        }
+      ],
+      "unmatched_extractions_on_this_post": []
+    },
+    {
+      "n": 25,
+      "item": "@atb_market_official:4467",
+      "msg_id": 4467,
+      "gold_key": "raw:rud",
+      "reading_as": [
+        "Рудь"
+      ],
+      "verdict": "a",
+      "mechanism": "refusal:asterisk",
+      "unreadable_pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4467.jpg",
+          "reason": "printed discount '-50%*' is not a percentage"
+        }
+      ],
+      "unmatched_extractions_on_this_post": []
+    },
+    {
+      "n": 26,
+      "item": "@atb_market_official:4467",
+      "msg_id": 4467,
+      "gold_key": "raw:максхолод",
+      "reading_as": [
+        "Максхолод"
+      ],
+      "verdict": "b",
+      "mechanism": "maker-logo",
+      "unreadable_pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4467.jpg",
+          "reason": "printed discount '-50%*' is not a percentage"
+        }
+      ],
+      "unmatched_extractions_on_this_post": []
+    },
+    {
+      "n": 27,
+      "item": "@atb_market_official:4498",
+      "msg_id": 4498,
+      "gold_key": "raw:svoia-liniia",
+      "reading_as": [
+        "Своя Лінія",
+        "Своя Линия"
+      ],
+      "verdict": "b",
+      "mechanism": "non-dairy watchlist item",
+      "unreadable_pages": [],
+      "unmatched_extractions_on_this_post": []
+    },
+    {
+      "n": 28,
+      "item": "@atb_market_official:4508",
+      "msg_id": 4508,
+      "gold_key": "raw:svoia-liniia",
+      "reading_as": [
+        "Своя Лінія",
+        "Своя Линия"
+      ],
+      "verdict": "PENDING_TEAM_LEAD",
+      "mechanism": null,
+      "unreadable_pages": [],
+      "unmatched_extractions_on_this_post": [],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4508.jpg",
+          "sha256": "713ceb7fa40f7cc110620aa04bdf7b8b0a49c70c6d502efad064db114b7267ea",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Ласунка",
+            "Рудь",
+            "Рудь",
+            "Лімо",
+            "Лімо",
+            "Каштан",
+            "Каштан"
+          ],
+          "brand_id": [
+            "lasunka",
+            "rud",
+            "rud",
+            "limo",
+            "limo",
+            null,
+            null
+          ]
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4509.jpg",
+          "sha256": "9547ccd8e03b7c3e02387690ac556f826d83b13d06d95b501570a8acd098e6ae",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4510.jpg",
+          "sha256": "2fbdf44b48d0f7acc5e8ee3c8e5034bed031406924beceac1cf1387e14e9ec4f",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4511.jpg",
+          "sha256": "e942a20653f862cd33bc170c17c4410ff241e71fe68f7e13ee1edb406fce863f",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4512.jpg",
+          "sha256": "50bd1532ed77e9f2407e8b228dde4ff976dfd45a55c7dcdbc71161e840782e02",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4513.jpg",
+          "sha256": "4c715e2c17a72fdcef7f329cdfed81f2d5648ff9eec36a476a6f25e8e2f3f603",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ]
+    },
+    {
+      "n": 29,
+      "item": "@atb_market_official:4508",
+      "msg_id": 4508,
+      "gold_key": "raw:try-vedmedi",
+      "reading_as": [
+        "Три Ведмеді",
+        "Три Медведя"
+      ],
+      "verdict": "PENDING_TEAM_LEAD",
+      "mechanism": null,
+      "unreadable_pages": [],
+      "unmatched_extractions_on_this_post": [],
+      "pages": [
+        {
+          "page": 1,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4508.jpg",
+          "sha256": "713ceb7fa40f7cc110620aa04bdf7b8b0a49c70c6d502efad064db114b7267ea",
+          "answer": "positions",
+          "unreadable_reason": null,
+          "brand_raw": [
+            "Ласунка",
+            "Рудь",
+            "Рудь",
+            "Лімо",
+            "Лімо",
+            "Каштан",
+            "Каштан"
+          ],
+          "brand_id": [
+            "lasunka",
+            "rud",
+            "rud",
+            "limo",
+            "limo",
+            null,
+            null
+          ]
+        },
+        {
+          "page": 2,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4509.jpg",
+          "sha256": "9547ccd8e03b7c3e02387690ac556f826d83b13d06d95b501570a8acd098e6ae",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 3,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4510.jpg",
+          "sha256": "2fbdf44b48d0f7acc5e8ee3c8e5034bed031406924beceac1cf1387e14e9ec4f",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 4,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4511.jpg",
+          "sha256": "e942a20653f862cd33bc170c17c4410ff241e71fe68f7e13ee1edb406fce863f",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 5,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4512.jpg",
+          "sha256": "50bd1532ed77e9f2407e8b228dde4ff976dfd45a55c7dcdbc71161e840782e02",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        },
+        {
+          "page": 6,
+          "file": "data/annotation/captions_5c1/posts_media/atb_market_official_4513.jpg",
+          "sha256": "4c715e2c17a72fdcef7f329cdfed81f2d5648ff9eec36a476a6f25e8e2f3f603",
+          "answer": "empty",
+          "unreadable_reason": null,
+          "brand_raw": [],
+          "brand_id": []
+        }
+      ]
+    }
+  ],
+  "git": {
+    "commit": "2b8a35d51891560bbb3caf5e2b1be59ceb256074",
+    "dirty": [
+      "knowledge/daily_logs/2026-08-12.md",
+      "knowledge/hot.md",
+      "knowledge/index.md",
+      "scripts/apply_miss_decomposition.py"
+    ]
+  }
+}
