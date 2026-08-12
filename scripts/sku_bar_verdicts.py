@@ -38,8 +38,8 @@ from market_pulse import positions, provenance, scorer  # noqa: E402
 from market_pulse.brands import watchlist_aliases  # noqa: E402
 from market_pulse.registry import load_registry  # noqa: E402
 
-PREREG = REPO_ROOT / "results" / "sku_pilot_prereg_v3.json"
-RECORD = REPO_ROOT / "results" / "sku_b_positions_v3.json"
+PREREG = REPO_ROOT / "results" / "sku_pilot_prereg_v4.json"
+RECORD = REPO_ROOT / "results" / "sku_b_positions_v4.json"
 REFERENCE = REPO_ROOT / "results" / "sku_reference_leaflet.json"
 REGISTRY = REPO_ROOT / "config" / "registry.yaml"
 OUT = REPO_ROOT / "results" / "sku_bar_verdicts.json"
@@ -47,6 +47,13 @@ SMOKE_OUT = REPO_ROOT / "results" / "smoke" / "sku_bar_verdicts.json"
 
 UNREADABLE_SHARE_MAX = 0.10
 """R5: above this the instrument did not answer and bar 3 is NOT_SCORED."""
+
+CONTRACT = "docs/PROMPT-sku-b-v4-run.md step 6; docs/SPEC.md amendment 3.17 (6), (11), (12)"
+"""The provenance string written INTO the verdict record — the artifact the team lead opens at
+acceptance. Nothing downstream checks it, which is why Dv170 named it: scored after the v4 session
+it used to claim the verdicts were produced under the v3-run contract and cite (6) and (11) without
+(12), the amendment the population's second half was bought under. A constant with a test on it,
+because a string nobody re-derives is a string that stops being true silently."""
 
 
 def sha256_of(path: Path) -> str:
@@ -392,7 +399,7 @@ def main(argv: list[str] | None = None) -> int:
 
     out = {
         "phase": "sku-b — the three bars over the completed population",
-        "contract": "docs/PROMPT-sku-b-v3-run.md step 6; docs/SPEC.md amendment 3.17 (6), (11)",
+        "contract": CONTRACT,
         "class": (
             "MEASUREMENT. Bars 1 and 3 are computed by market_pulse.scorer over the merged"
             " population; bar 2 carries its denominator and its dump and waits for the team lead's"

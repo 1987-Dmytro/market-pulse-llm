@@ -412,6 +412,32 @@ def test_a_smoke_record_cannot_be_written_to_the_paid_verdict_path(tmp_path):
         verdicts.main(argv)
 
 
+def test_the_defaults_and_the_provenance_string_name_the_v4_session(tmp_path):
+    """Dv170: this producer named v3 in three places and one of them was unguarded.
+
+    `--prereg` and `--record` are loud — a record bought under another registration is refused by
+    name. The `contract` string is not: it is written INTO the verdict record the team lead opens
+    at acceptance and nothing re-derives it. So it is pinned against the registration it claims
+    (the v4 one, whose own `attempts.phase` says which session bought the second half of the
+    population) and against the contract file being in the tree, not restated as a literal.
+    """
+    prereg = json.loads(verdicts.PREREG.read_text(encoding="utf-8"))
+    assert prereg["attempts"]["phase"] == "sku-b-v4"
+    assert verdicts.PREREG.name == "sku_pilot_prereg_v4.json"
+    assert verdicts.RECORD.name == "sku_b_positions_v4.json"
+
+    named = verdicts.CONTRACT.split()[0]
+    assert (REPO_ROOT / named).exists(), f"the provenance string names {named}, which is not here"
+    # (12) is the amendment the 121 are bought under and the one the v3 string was missing; the
+    # superseded contract must not still be the one the record cites.
+    assert all(part in verdicts.CONTRACT for part in ("(6)", "(11)", "(12)"))
+    assert "v3" not in verdicts.CONTRACT
+
+    tree = fixture_tree(tmp_path)
+    assert run(tree) == 0
+    assert json.loads(tree["out"].read_text(encoding="utf-8"))["contract"] == verdicts.CONTRACT
+
+
 def test_highest_tier_takes_the_best_rung_and_names_an_empty_answer():
     assert verdicts.highest_tier(["brand_mention", "position", "product_mention"]) == "position"
     assert verdicts.highest_tier(["brand_mention", "product_mention"]) == "product_mention"
