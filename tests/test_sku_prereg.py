@@ -223,6 +223,11 @@ def test_every_pinned_input_still_hashes_to_what_it_says(record):
         # It landed with this line missing, which is how the enumeration stays the thing that has to
         # be looked at: the amendment cannot arrive unnoticed.
         "sku-b-ratification-6",
+        # (13) — the B′ revision, ratified off the miss decomposition. It arrived the same way, one
+        # name short, and it is the first block that moves an INSTRUMENT: the parser family, the
+        # 800 → 1200 ceiling and three alias rows. The strip still takes it off, because this pin is
+        # v4's and v4 was registered before any of that existed.
+        "sku-b-ratification-7",
     ]
     assert prereg.RATIFICATION_NAME.findall(spec_text) == blocks
     law = prereg.registered_law(prereg.SPEC).decode("utf-8")
