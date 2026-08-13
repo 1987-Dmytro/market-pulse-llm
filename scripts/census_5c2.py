@@ -299,6 +299,13 @@ def totals_for(anchor: str, sources: dict, manifest: dict, cursor: dict) -> dict
             if row["comments_unanswered_in_window"] != CANNOT_ANSWER
         ),
         "leaflet_pages_in_window": sum(row["leaflet"]["pages_in_window"] for row in rows),
+        # The leaflet leg's OWN queue depth, so both legs are counted the same way. Equal to the
+        # line above today, because no `leaflet` watermark is set and no page has been extracted —
+        # but a projection that priced unanswered comments beside all pages would be subtracting on
+        # one leg and not the other, and the two would drift apart the day a pass runs.
+        "leaflet_pages_unanswered_in_window": sum(
+            row["pages_unanswered_in_window"] for row in rows
+        ),
         "leaflet_posts_in_window": sum(
             row["leaflet"]["posts_with_pages_in_window"] for row in rows
         ),

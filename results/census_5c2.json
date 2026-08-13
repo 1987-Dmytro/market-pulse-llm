@@ -87,6 +87,7 @@
     "comments_in_window": 5075,
     "comments_unanswered_in_window": 5075,
     "leaflet_pages_in_window": 78,
+    "leaflet_pages_unanswered_in_window": 78,
     "leaflet_posts_in_window": 9,
     "channels_with_a_row": 58
   },
@@ -1043,6 +1044,7 @@
       "comments_in_window": 3927,
       "comments_unanswered_in_window": 3927,
       "leaflet_pages_in_window": 45,
+      "leaflet_pages_unanswered_in_window": 45,
       "leaflet_posts_in_window": 5,
       "channels_with_a_row": 57
     },
@@ -1060,6 +1062,7 @@
       "comments_in_window": 3677,
       "comments_unanswered_in_window": 3677,
       "leaflet_pages_in_window": 159,
+      "leaflet_pages_unanswered_in_window": 159,
       "leaflet_posts_in_window": 19,
       "channels_with_a_row": 57
     }
@@ -3161,7 +3164,7 @@
   ],
   "producer": {
     "script": "scripts/census_5c2.py",
-    "sha256": "487c10f208827f1322254590e500b22ce92f1686b043d1b16fb421f1be047f5f",
+    "sha256": "f05e229ac100a3701e85d547fd281eca26272e3bcd7c300a3f8caeee294279e6",
     "why": "no git block: `git status --porcelain` is a fact about the tree, not the measurement"
   }
 }

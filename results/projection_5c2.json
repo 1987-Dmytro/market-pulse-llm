@@ -4,12 +4,13 @@
   "asks": "what the census's window costs per leg, from measurements that actually paid",
   "window": {
     "path": "results/census_5c2.json",
-    "sha256": "0e5490635ad755432c56b1d4341489abb73ce22d1a57e286ecba20b9e804daca",
+    "sha256": "a1384a12bcbe975954f8feaa1c5207d59cc66ab524b3d877099bad92ede5305f",
     "anchor": "2026-08-09T00:00:00+00:00",
     "since": "2026-07-12T00:00:00+00:00",
     "comments_unanswered": 5075,
-    "leaflet_pages": 78,
-    "why": "row counts, never a date range evaluated at run time (SPEC 3.18 (4))"
+    "leaflet_pages_unanswered": 78,
+    "posts": 9158,
+    "why": "row counts, never a date range evaluated at run time (SPEC 3.18 (4)). BOTH legs are priced on their UNANSWERED count, not on what the window holds: identical today because neither watermark is set anywhere, and it would be one leg subtracting and the other not the day a pass runs. `posts` is here because the ruling scopes them — see posts_in_scope_and_unpriced"
   },
   "rate": {
     "value": 0.00030669,
@@ -141,6 +142,32 @@
       "seconds_per_page": 4.2794
     }
   },
+  "posts_in_scope_and_unpriced": {
+    "row_type": "post text",
+    "in_scope_because": "STATUS, operator ruling 13.08 (4): «скоуп = комменты + посты + листовки того же окна», and SPEC 3.18 (2) admits the TEXT TIER leg (bar 3, 0.8667) into the 5c2 loop",
+    "not_a_leg_here": "Deliverable 2 of this contract names two legs. This block is a BOUND so that the two-leg total below is not read as the whole bill — it enters no row and no cap",
+    "no_writer": "market_pulse.loop has inference_pass and page_pass and no post-text pass at all. 5c2-run cannot buy this leg without code that does not exist — a team-lead question",
+    "posts_in_window": 9158,
+    "seconds_per_row": 2.8132,
+    "derivation": {
+      "source": "results/sku_b_positions_skub2.json :: derived, no single field holds it",
+      "how": "write_sku_projection_b2.text_marginal, the house derivation reused rather than rewritten: (timing.worker_seconds - projection.opened_seconds - pages x page_marginal) / population.text_rows",
+      "why": "skub2's own text leg — 30 rows, on the serverless runtime, paid"
+    },
+    "report_line": {
+      "quote": "text leg    84.398 s over  30 rows  = 2.8133 s/row    $0.0259",
+      "source": "docs/reports/skub2-run.md",
+      "why": "the same leg in that session's report. It reads 2.8133 against the 2.8132 derived here — a fourth-decimal rounding difference, not two measurements"
+    },
+    "bound": {
+      "billed_seconds": 25823.3,
+      "hours": 7.17,
+      "usd": 7.9197,
+      "usd_with_drift": 8.1573,
+      "jobs_at_the_execution_timeout": 29,
+      "why": "every post in the window at that rate, plus one idle tail and NO boot. An upper bound on the rows and a lower one on the fixed cost: whatever a post leg turns out to be, it is not cheaper than this"
+    }
+  },
   "whole_window": {
     "usd_with_drift": 7.687,
     "usd_source": "the CONSERVATIVE corner of each leg, summed",
@@ -149,7 +176,7 @@
     "seconds_source": "the MARGINAL corner of each leg — the only one whose seconds were counted rather than divided out of a price. Dollars and wall clock come from different corners on purpose, and each field says which",
     "remaining_usd": 6.169,
     "fits": false,
-    "why": "This is the number the window ruling turns on and it is the reason this contract ends at a STOP: the whole window does not fit in what the phase has left"
+    "why": "This is the number the window ruling turns on and it is the reason this contract ends at a STOP: the whole window does not fit in what the phase has left. TWO legs — the third row type the ruling scopes has no writer and is bounded in posts_in_scope_and_unpriced, which this total deliberately does not include"
   },
   "caps": [
     {
@@ -251,7 +278,7 @@
   },
   "producer": {
     "script": "scripts/projection_5c2.py",
-    "sha256": "3ca4d6952f31b05f77e548f42851793fb3bba7ec8747eb2976abd25dbf0dc845",
+    "sha256": "0f6e8f504b792b5d4a47449129ba96630a341648ac0d5553f0fc3d4f053360ce",
     "why": "no git block: `git status --porcelain` is a fact about the tree, not the measurement"
   }
 }

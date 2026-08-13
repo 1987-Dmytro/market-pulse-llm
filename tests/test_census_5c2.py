@@ -264,6 +264,19 @@ def test_a_manifest_that_disagrees_with_the_store_is_reported(monkeypatch, tmp_p
     assert not check["agrees"] and len(check["date_drift"]) == 1
 
 
+def test_the_totals_count_unanswered_pages_as_well_as_unanswered_comments(monkeypatch, tmp_path):
+    """Both legs get an UNANSWERED total, so a projection can price them the same way. Equal to the
+    in-window count today because no page has been extracted; a `leaflet` watermark splits them."""
+    wire(monkeypatch, tmp_path)
+    totals = run(tmp_path)["totals"]
+    assert totals["leaflet_pages_unanswered_in_window"] == totals["leaflet_pages_in_window"] == 2
+
+    wire(monkeypatch, tmp_path, cursor={"@atb": {"leaflet": 1}})
+    totals = run(tmp_path, "second.json")["totals"]
+    assert totals["leaflet_pages_in_window"] == 2, "the window still holds both"
+    assert totals["leaflet_pages_unanswered_in_window"] == 1, "and one of them is already answered"
+
+
 def test_the_watermark_is_what_makes_a_row_unanswered(monkeypatch, tmp_path):
     """Today every `inference` watermark is unset, so every in-window comment is unanswered. That
     is a reading of the cursor and not an assumption — set one and the count drops."""

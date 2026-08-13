@@ -97,7 +97,9 @@ def test_the_window_is_the_shipped_census_by_sha():
     assert window["sha256"] == hashlib.sha256((REPO_ROOT / window["path"]).read_bytes()).hexdigest()
     assert window["anchor"] == census["anchor"]["anchor"]
     assert window["comments_unanswered"] == census["totals"]["comments_unanswered_in_window"]
-    assert window["leaflet_pages"] == census["totals"]["leaflet_pages_in_window"]
+    assert (
+        window["leaflet_pages_unanswered"] == census["totals"]["leaflet_pages_unanswered_in_window"]
+    )
 
 
 def test_the_comment_legs_arithmetic_recomputed_by_hand():
@@ -183,19 +185,75 @@ def test_every_cap_row_carries_seconds_and_a_job_count():
     assert RECORD["job_shape"]["workers_max"] == 1
 
 
-def test_the_budget_is_the_ledgers_last_logged_reading_and_the_guards_own_cap():
+def test_the_budget_is_the_ledger_entry_it_names_and_the_guards_own_cap():
     """Read, never restated: the cap comes from the line that ENFORCES it and the remainder from
-    the ledger's last entry, which is what it is called in the record."""
-    ledger = json.loads((REPO_ROOT / "results" / "spend_phase4.json").read_text("utf-8"))
-    last = ledger["sessions"][-1]
-    budget = RECORD["budget"]
+    the ledger entry the record names by timestamp.
 
+    Looked up BY `read_at` rather than taken as `sessions[-1]`. 5c2-run appends its own entry to
+    that ledger, and a test pinned to the last row would go red on the operator's first paid session
+    with nothing wrong — the record would still be a true reading of the entry it names. What has to
+    hold is that the entry exists, exactly once, and that the record copies it faithfully.
+    """
+    ledger = json.loads((REPO_ROOT / "results" / "spend_phase4.json").read_text("utf-8"))
+    budget = RECORD["budget"]
+    named = [row for row in ledger["sessions"] if row["at"] == budget["read_at"]]
+
+    assert len(named) == 1, f"{budget['read_at']} is not one entry of the ledger"
     assert budget["phase_cap_usd"] == guard.PHASE_CAP_USD == ledger["phase4_cap_usd"]
     assert (budget["spent_usd"], budget["remaining_usd"]) == (
-        last["spent_usd"],
-        last["remaining_usd"],
+        named[0]["spent_usd"],
+        named[0]["remaining_usd"],
     )
-    assert budget["read_at"] == last["at"]
+
+
+def test_the_post_row_type_is_in_scope_bounded_and_kept_out_of_the_two_leg_total():
+    """The ruling scopes comments + posts + leaflets; this projection prices two of the three.
+
+    A two-leg total printed with no mention of the third reads as the whole bill, so the third is
+    carried as a BOUND with its own paid rate — and it must stay out of `whole_window`, which is
+    what the caps are solved against.
+    """
+    from market_pulse import loop
+
+    block = RECORD["posts_in_scope_and_unpriced"]
+    census = json.loads((REPO_ROOT / "results" / "census_5c2.json").read_text("utf-8"))
+
+    assert block["posts_in_window"] == census["totals"]["posts_in_window"]
+    assert block["bound"]["usd_with_drift"] > 0
+    # the rate is derived and says so, so it is checked against the house function rather than
+    # against a field: no single field of the skub2 record holds it
+    import write_sku_projection_b2 as b2
+
+    assert block["seconds_per_row"] == b2.text_marginal(
+        json.loads((REPO_ROOT / "results" / "sku_b_positions_skub2.json").read_text("utf-8"))
+    )
+    assert "value" not in block["derivation"]
+    assert RECORD["whole_window"]["usd_with_drift"] == round(
+        RECORD["legs"]["comment"]["corners"]["unit_cost"]["usd_with_drift"]
+        + RECORD["legs"]["leaflet_page"]["corners"]["marginal_plus_boot"]["usd_with_drift"],
+        4,
+    )
+    # and the claim that there is no writer, checked rather than asserted in prose
+    assert hasattr(loop, "inference_pass") and hasattr(loop, "page_pass")
+    assert [name for name in dir(loop) if name.endswith("_pass")] == [
+        "inference_pass",
+        "page_pass",
+    ]
+
+
+def test_both_legs_are_priced_on_their_unanswered_count():
+    """One leg subtracting what is already answered and the other not is an asymmetry that costs
+    nothing today — both watermarks are unset — and misprices the first re-run after a pass."""
+    census = json.loads((REPO_ROOT / "results" / "census_5c2.json").read_text("utf-8"))
+
+    assert (
+        RECORD["window"]["comments_unanswered"] == census["totals"]["comments_unanswered_in_window"]
+    )
+    assert (
+        RECORD["window"]["leaflet_pages_unanswered"]
+        == census["totals"]["leaflet_pages_unanswered_in_window"]
+    )
+    assert census["watermarks"]["inference_set_on"] == census["watermarks"]["leaflet_set_on"] == []
 
 
 def test_the_whole_window_does_not_fit_and_the_record_says_so():

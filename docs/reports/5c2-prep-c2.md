@@ -109,7 +109,7 @@ resolved from the repo-relative string, the sha of those bytes matches, and it i
 
 ## Deliverable 1 — the census
 
-`results/census_5c2.json`, written by `scripts/census_5c2.py`, 17 tests in
+`results/census_5c2.json`, written by `scripts/census_5c2.py`, 18 tests in
 `tests/test_census_5c2.py`. No number downstream of it is hand-typed.
 
 ### The anchor
@@ -143,9 +143,9 @@ anchor — it is the trade the operator is entitled to see before ruling.
 
 ```
 $ PYTHONPATH=src python3 scripts/census_5c2.py --anchor 2026-08-09T00:00:00+00:00
-0e5490635ad755432c56b1d4341489abb73ce22d1a57e286ecba20b9e804daca  results/census_5c2.json
+a1384a12bcbe975954f8feaa1c5207d59cc66ab524b3d877099bad92ede5305f  results/census_5c2.json
 $ PYTHONPATH=src python3 scripts/census_5c2.py --anchor 2026-08-09T00:00:00+00:00
-0e5490635ad755432c56b1d4341489abb73ce22d1a57e286ecba20b9e804daca  results/census_5c2.json
+a1384a12bcbe975954f8feaa1c5207d59cc66ab524b3d877099bad92ede5305f  results/census_5c2.json
 ```
 
 It did not hold on the first attempt, and the failure is worth stating because it is a class:
@@ -196,7 +196,9 @@ had either watermark set.
 
 ### Composition — the concentration question, enumerated
 
-Comments in the window, 19 channels have any:
+Comments in the window — **all 19 channels that have any**, not the top of the table, because the
+clause asks for the composition "answered by enumeration, not by reading the tail of a printed
+table":
 
 | channel | comments | share | cumulative |
 |---|---:|---:|---:|
@@ -208,6 +210,17 @@ Comments in the window, 19 channels have any:
 | `@msuaaaa` | 163 | 3.2% | 90.5% |
 | `@retsepty` | 104 | 2.1% | 92.5% |
 | `@smirnov108` | 100 | 2.0% | 94.5% |
+| `@HealthPsycholog` | 97 | 1.9% | 96.4% |
+| `@sashafitnesslife` | 83 | 1.6% | 98.1% |
+| `@tarilka_malyuka` | 45 | 0.9% | 99.0% |
+| `@ya_Nenka` | 16 | 0.3% | 99.3% |
+| `@mamo_nepsichuy` | 9 | 0.2% | 99.5% |
+| `@polyakova_fitness` | 8 | 0.2% | 99.6% |
+| `@chifit_family` | 4 | 0.1% | 99.7% |
+| `@denisovapro` | 4 | 0.1% | 99.8% |
+| `@kkondr_fit` | 4 | 0.1% | 99.8% |
+| `@olgaa_trainer` | 4 | 0.1% | 99.9% |
+| `@useful_healthy_fitness_menu` | 4 | 0.1% | 100.0% |
 
 **Two channels are 73.8% of the comment window, and neither is a retailer.** Posts are the
 opposite — flat and regional: `@poltava20` 16.2%, `@poltava_informue` 13.9%, and the top six are
@@ -241,11 +254,17 @@ against everything on disk is `@tretyakovaele`, which the registry does not carr
 window number — the dry pass has no window — and the record says so in the same block:
 the window's own figure is 5 075, and the two are different questions.
 
+**And 16 218 is not SPEC 3.18 (4)'s "full 11 338-row history" either.** 11 338 is the v1 corpus:
+`@VARUS_channel`'s 6 410 comments plus `@msuaaaa`'s 4 928, the five original channels STATUS records
+as «11 338 комментов + 6 057 постов из 5 каналов». The other 4 880 arrived with 5c1's collection of
+new channels, and the amendment's sentence predates them. The deferred decision it names is still
+the same one; the number attached to it has moved, and this report does not restate it.
+
 ---
 
 ## Deliverable 2 — the projection
 
-`results/projection_5c2.json`, written by `scripts/projection_5c2.py`, 16 tests in
+`results/projection_5c2.json`, written by `scripts/projection_5c2.py`, 18 tests in
 `tests/test_projection_5c2.py`. Every figure enters through `cite()`, which READS it out of the
 file by the dotted path the record prints; the test re-resolves all of them with a **second
 implementation** of the resolver, and the walk is over the whole record, so a citation added later
@@ -296,6 +315,27 @@ its close. Two caveats the file itself supplies and the record carries:
   pure T1. The smoke's own per-row seconds give the direction for free: T1 5.176 / 4.319 / 4.368 /
   4.408 against T2 3.978 / 3.903 / 3.991 / 3.958, n=4 each. The comment task is the **slower** of
   the two, so a blended rate under-prices this window rather than over-pricing it.
+
+### The third row type — in scope, unpriced, and bounded
+
+The operator's ruling of 13.08, as STATUS records it, scopes «комменты + **посты** + листовки того
+же окна», and SPEC 3.18 (2) admits the TEXT TIER leg (bar 3, 0.8667) into the 5c2 loop. This
+contract's Deliverable 2 named two legs and two candidate sources, and it is priced as two — but a
+two-leg total printed with no mention of the third reads as the whole bill, so the third is in the
+record as `posts_in_scope_and_unpriced`: a **bound**, entering no row and no cap.
+
+* **9 158 posts × 2.8132 s/row + one idle tail = 25 823.3 s = $8.1573 with drift, 7.17 h.**
+* The rate is skub2's own **text leg** — 30 rows, serverless, paid — derived by
+  `write_sku_projection_b2.text_marginal` (the house function, reused rather than rewritten)
+  and quoted from that session's report: `text leg    84.398 s over  30 rows  = 2.8133 s/row
+  $0.0259`. The fourth decimal differs by rounding, not by measurement.
+* It is a **bound in both directions of wrongness**: an upper bound on the population (skub2 sent
+  30 PRE-FILTERED rows, not every post it had) and a lower one on the fixed cost (no boot).
+* **There is no writer.** `market_pulse.loop` has `inference_pass` and `page_pass` and nothing that
+  asks a post's text — asserted by a test, not claimed in prose. A post leg is unbuildable in
+  5c2-run without code that does not exist, which is a team-lead question and not a deviation.
+
+**With the bound beside the two legs, the window is ~$15.84 against $6.1690 — 2.6×, not 1.25×.**
 
 ### The leaflet leg
 
@@ -377,15 +417,22 @@ in one row.
 |---|---:|---:|---:|
 | comment | 5 075 | **$7.4840** | 6.09 h, 25 jobs |
 | leaflet_page | 78 | **$0.2030** | 0.18 h, 1 job |
-| **whole window** | | **$7.6870** | **6.27 h** |
+| **the two priced legs** | | **$7.6870** | **6.27 h** |
+| post text — **BOUND, no writer** | 9 158 | *$8.1573* | *7.17 h, 29 jobs* |
+| **all three row types** | | **~$15.84** | **~13.4 h** |
+
+Both legs are priced on their UNANSWERED count, not on what the window holds — identical today
+because neither watermark is set anywhere, and one leg subtracting while the other does not would
+mis-price the first re-run after a pass.
 
 **Remaining: $6.1690** — `results/spend_phase4.json :: sessions[-1]` (spent $23.8310 of the
 $30.00 cap, read 2026-08-13T07:59:22+00:00), enforced by `scripts/runpod_guard.py :: PHASE_CAP_USD`.
 That is the **last logged reading**; nothing has been billed since (prep-a, -b, -c1 and this
 session are all $0), and the live figure needs a balance call this contract does not make.
 
-**The whole window does not fit — it is 1.25× what the phase has left**, and a test asserts it so
-that a later re-run cannot make the STOP quietly change shape.
+**The two priced legs alone do not fit — 1.25× what the phase has left**, and a test asserts it so
+that a later re-run cannot make the STOP quietly change shape. **With the post-text bound the window
+is 2.6×**, and that leg has no code behind it yet.
 
 ### 4 · Candidate caps that fit
 
@@ -404,6 +451,10 @@ that a later re-run cannot make the STOP quietly change shape.
    retailer. A cap that buys 3 928 of 5 075 comments buys mostly `@matusi_ukr`.
 3. **The cap**, from the table above, and whether the leaflet leg goes first.
 4. **Leaflets beyond ATB** — a collection decision, not an extraction one.
+5. **The post-text leg**: is it in 5c2-run at all? It is in the ruling's scope, its instrument
+   passed bar 3, it has a paid rate — and `loop.py` has no pass that asks a post's text. Building
+   one is code this contract was not given, and its bound alone is larger than the whole remaining
+   budget.
 
 A number that fell into this session's lap and belongs here rather than anywhere else: the whole
 leaflet corpus on disk is **159 pages under 19 posts**, all of them ATB, dated 2026-07-01 … 07-23.
@@ -445,7 +496,7 @@ evidence for it.
 
 ### 2 · The census run twice with the same anchor
 
-Both `sha256 = 0e5490635ad755432c56b1d4341489abb73ce22d1a57e286ecba20b9e804daca`, shown above,
+Both `sha256 = a1384a12bcbe975954f8feaa1c5207d59cc66ab524b3d877099bad92ede5305f`, shown above,
 with a working-tree change between them. The cross-check against an independent count is the
 16 218 re-derivation in Deliverable 1 — corpus-level, and labelled so it is never read as a window
 figure.
@@ -500,7 +551,7 @@ rendered file: **66 OK, 0 FAIL**. It is what caught the coverage-gap mislabel ab
 
 ## Deviations
 
-`implementation-notes.md`, section `5c2-prep-c2`: **Dv269–Dv276**. Every one of them is cited in
+`implementation-notes.md`, section `5c2-prep-c2`: **Dv269–Dv279**. Every one of them is cited in
 the sections above.
 
 ---
@@ -516,4 +567,6 @@ the sections above.
 | 5 | `716bca5` | `data(5c2-prep-c2): the projection — both legs priced from paid serverless sessions, and the window does not fit` |
 | 6 | `333cf2c` | `fix(5c2-prep-c2): the two records stop moving with the working tree, and the quote names the line it prices` |
 | 7 | `d469942` | `docs(report): 5c2-prep-c2 — the census, the projection, and the STOP the numbers force` |
-| 8 | — | `docs(report): 5c2-prep-c2 — the per-commit checkout table and the session's git log` (this amendment; a report cannot carry its own hash) |
+| 8 | `ae88b44` | `docs(report): 5c2-prep-c2 — the per-commit checkout table and the session's git log` |
+| 9 | `22ac2a6` | `chore(vault): the 5c2-prep-c2 session tail — the STOP, and the two records that stopped moving` |
+| 10 | — | `fix(5c2-prep-c2): the post row type is in scope, bounded and out of the two-leg total` (this amendment; a report cannot carry its own hash) |

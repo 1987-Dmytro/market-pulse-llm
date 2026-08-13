@@ -7004,3 +7004,25 @@ leg), `scripts/run_loop.py` (`--pages`, `StubPageTransport`, `pages_of`), `tests
   Provenance is `producer.sha256`, the producing script's own hash, which answers "which code wrote
   this" more precisely than a commit id (a commit id does not say the file was not dirty). Pinned
   by an AST test in both suites.
+- **Dv277** — a THIRD row type is in the record, as a bound and not a leg. Deliverable 2 names two
+  legs and this projection prices two, but STATUS's summary of the 13.08 ruling (4) scopes «комменты
+  + посты + листовки того же окна» and SPEC 3.18 (2) admits the TEXT TIER leg into the loop — so a
+  two-leg total printed with no mention of posts would read as the whole bill. It is a BOUND: 9 158
+  posts at skub2's own paid text marginal (2.8132 s/row, derived by the house function
+  `write_sku_projection_b2.text_marginal`, quoted from that session's report) plus one idle tail and
+  no boot, $8.1573 with drift. Upper on the population — skub2 sent 30 PRE-FILTERED rows, not every
+  post it held — and lower on the fixed cost. It enters no cap and is excluded from `whole_window`
+  by a test. The finding beside it is structural: `market_pulse.loop` has `inference_pass` and
+  `page_pass` and no post-text pass at all, asserted rather than described, so the leg is
+  unbuildable in 5c2-run without new code — a team-lead question, and the reason it is not priced
+  as a leg here.
+- **Dv278** — both legs are priced on their UNANSWERED count, which needed a new census total
+  (`leaflet_pages_unanswered_in_window`). The comment leg already subtracted its watermark and the
+  leaflet leg was being priced on everything in the window: identical today, because no watermark is
+  set on any channel, and one leg subtracting while the other does not would mis-price the first
+  re-run after a pass. The asymmetry is removed rather than explained.
+- **Dv279** — `test_the_budget_is_the_ledger_entry_it_names_and_the_guards_own_cap` looks the ledger
+  entry up BY its `at` timestamp instead of taking `sessions[-1]`. 5c2-run appends its own entry, and
+  a test pinned to the last row would have gone red on the operator's first paid session with
+  nothing wrong — the record would still be a true reading of the entry it names. Same shape as the
+  green-suite-with-a-shelf-life class already in the notes.

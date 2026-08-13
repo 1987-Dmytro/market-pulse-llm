@@ -39,6 +39,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import positions_gm4_skub as driver  # noqa: E402
 import runpod_guard as guard  # noqa: E402
+import write_sku_projection_b2 as b2  # noqa: E402
 
 RATE = REPO_ROOT / "results" / "srv2d_cost.json"
 SKUB2 = REPO_ROOT / "results" / "sku_b_positions_skub2.json"
@@ -278,6 +279,68 @@ def leaflet_leg(rate: float, pages: int) -> dict:
     }
 
 
+def posts_in_scope_and_unpriced(rate: float, posts: int) -> dict:
+    """The third row type the operator's ruling scopes, which this projection does NOT price.
+
+    STATUS's summary of the 13.08 ruling (4) reads «скоуп = комменты + посты + листовки того же
+    окна», and SPEC 3.18 (2) admits the TEXT TIER leg (bar 3, 0.8667) into the 5c2 loop. So the
+    window's 9 158 posts are in scope. This contract's Deliverable 2 named two legs and two
+    candidate sources, and a two-leg total printed with no mention of the third would read as the
+    whole bill — so the third is here, as a BOUND and not a row.
+
+    Two reasons it is a bound. There is **no writer**: `market_pulse.loop` has `inference_pass` and
+    `page_pass` and nothing that asks a post's text, so a post leg is unbuildable in 5c2-run without
+    new code, which is a team-lead question and not a deviation. And the population is an upper one:
+    skub2 sent 30 pre-filtered rows, not every post it had, so pricing all 9 158 prices a pass
+    nobody has proposed.
+    """
+    marginal = b2.text_marginal(load(SKUB2))
+    seconds = posts * marginal + driver.IDLE_TAIL_SECONDS
+    return {
+        "row_type": "post text",
+        "in_scope_because": (
+            "STATUS, operator ruling 13.08 (4): «скоуп = комменты + посты + листовки того же окна»,"
+            " and SPEC 3.18 (2) admits the TEXT TIER leg (bar 3, 0.8667) into the 5c2 loop"
+        ),
+        "not_a_leg_here": (
+            "Deliverable 2 of this contract names two legs. This block is a BOUND so that the"
+            " two-leg total below is not read as the whole bill — it enters no row and no cap"
+        ),
+        "no_writer": (
+            "market_pulse.loop has inference_pass and page_pass and no post-text pass at all."
+            " 5c2-run cannot buy this leg without code that does not exist — a team-lead question"
+        ),
+        "posts_in_window": posts,
+        "seconds_per_row": marginal,
+        # DERIVED, not a field — so it deliberately does not carry the `value` + `source` shape the
+        # citations use: that shape promises the number can be dug out of the file it names, and
+        # this one cannot. The path is still named, and the report line below quotes the same leg.
+        "derivation": {
+            "source": f"{rel(SKUB2)} :: derived, no single field holds it",
+            "how": (
+                "write_sku_projection_b2.text_marginal, the house derivation reused rather than"
+                " rewritten: (timing.worker_seconds - projection.opened_seconds"
+                " - pages x page_marginal) / population.text_rows"
+            ),
+            "why": "skub2's own text leg — 30 rows, on the serverless runtime, paid",
+        },
+        "report_line": quote_line(
+            SKUB2_REPORT,
+            "84.398",
+            "the same leg in that session's report. It reads 2.8133 against the 2.8132 derived"
+            " here — a fourth-decimal rounding difference, not two measurements",
+        ),
+        "bound": {
+            **cost(seconds, rate),
+            "why": (
+                "every post in the window at that rate, plus one idle tail and NO boot. An upper"
+                " bound on the rows and a lower one on the fixed cost: whatever a post leg turns"
+                " out to be, it is not cheaper than this"
+            ),
+        },
+    }
+
+
 def budget() -> dict:
     """The remaining phase budget, read off the ledger and the guard — never restated from memory.
 
@@ -376,7 +439,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     census = load(CENSUS)
     comment = comment_leg(rate["value"], dig(census, "totals.comments_unanswered_in_window"))
-    leaflet = leaflet_leg(rate["value"], dig(census, "totals.leaflet_pages_in_window"))
+    leaflet = leaflet_leg(rate["value"], dig(census, "totals.leaflet_pages_unanswered_in_window"))
     money = budget()
     whole = (
         comment["corners"]["unit_cost"]["usd_with_drift"]
@@ -393,8 +456,15 @@ def main(argv: list[str] | None = None) -> int:
             "anchor": dig(census, "anchor.anchor"),
             "since": dig(census, "anchor.since"),
             "comments_unanswered": comment["window_rows"],
-            "leaflet_pages": leaflet["window_pages"],
-            "why": "row counts, never a date range evaluated at run time (SPEC 3.18 (4))",
+            "leaflet_pages_unanswered": leaflet["window_pages"],
+            "posts": dig(census, "totals.posts_in_window"),
+            "why": (
+                "row counts, never a date range evaluated at run time (SPEC 3.18 (4)). BOTH legs"
+                " are priced on their UNANSWERED count, not on what the window holds: identical"
+                " today because neither watermark is set anywhere, and it would be one leg"
+                " subtracting and the other not the day a pass runs. `posts` is here because the"
+                " ruling scopes them — see posts_in_scope_and_unpriced"
+            ),
         },
         "rate": rate,
         "drift": {
@@ -419,6 +489,9 @@ def main(argv: list[str] | None = None) -> int:
             ),
         },
         "legs": {"comment": comment, "leaflet_page": leaflet},
+        "posts_in_scope_and_unpriced": posts_in_scope_and_unpriced(
+            rate["value"], dig(census, "totals.posts_in_window")
+        ),
         "whole_window": {
             "usd_with_drift": round(whole, 4),
             "usd_source": "the CONSERVATIVE corner of each leg, summed",
@@ -444,7 +517,9 @@ def main(argv: list[str] | None = None) -> int:
             "fits": whole <= money["remaining_usd"],
             "why": (
                 "This is the number the window ruling turns on and it is the reason this contract"
-                " ends at a STOP: the whole window does not fit in what the phase has left"
+                " ends at a STOP: the whole window does not fit in what the phase has left. TWO"
+                " legs — the third row type the ruling scopes has no writer and is bounded in"
+                " posts_in_scope_and_unpriced, which this total deliberately does not include"
             ),
         },
         "caps": [
