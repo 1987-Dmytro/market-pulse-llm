@@ -854,6 +854,18 @@ bound enters no cap and no session.
 exact-pins the chosen numbers by VALUE — the prep-c2 review's finding that the
 caps table is pinned by inequalities binds here: the registered cap row gets
 equality tests, not ceilings.
+(g) **The Dv290 ruling (operator, 2026-08-13, on the numbers of
+`results/census_c3a_posts.json`).** The prefilter's pass-set is 71.6% recipe
+ingredient lines — 250 of 349 rows from four cooking channels; 29 rows in the
+whole set carry a currency marker and none of them is from those four. The post
+leg's registered population is therefore the **D cut**: of the rows that pass
+the prefilter, a row is kept iff its channel's carrier is `official_retail` or
+`aggregator`, OR its matched evidence carries the `currency` pattern. The cut is
+computed deterministically from the shipped census record by the
+pre-registration's own producer and its count pinned there by value; the
+alternatives (all 349 / carriers-only 31 / currency-only 29) were priced beside
+it and declined. `POST_PRICE_ORIGIN` stays as the pilot answered it — the D cut
+is what makes that inheritance defensible: recipe carriers no longer reach it.
 <!-- amendment-3.18 end -->
 **Date:** 2026-07-26 · **Team lead:** Fable session · **Executor:** Claude Code
 **Repo folder:** `/Users/hdv_1987/Desktop/Projects/market-pulse-llm`
