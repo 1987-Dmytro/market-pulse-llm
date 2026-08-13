@@ -135,8 +135,37 @@ def test_the_cap_gate_refuses_the_job_it_cannot_absorb():
 
 def test_a_pack_plans_for_less_than_the_execution_timeout():
     """A pack sized at the whole window ends TIMED_OUT, and that ends the RUN, not the job."""
-    assert driver.pack_size(4.262) * 4.262 <= driver.JOB_TIMEOUT_S
-    assert driver.pack_size(10_000.0) == 1
+    assert driver.pack_size(4.262, 4.262) * 4.262 <= driver.JOB_TIMEOUT_S
+    assert driver.pack_size(10_000.0, 4.262) == 1
+
+
+def test_a_fast_warm_up_cannot_inflate_a_pack_past_the_registered_marginal():
+    """Dv180: one probe can be 3.64x off its population, in either direction.
+
+    A warm-up ten times faster than the paid measurement must not buy a pack ten times bigger —
+    a pack that overruns is not a slow job, it is the whole leg (3.17 (10)(c)) and its rows come
+    back unbought. The slow warm-up direction still shrinks it, which is the asymmetry intended.
+    """
+    registered = 4.2794
+    assert driver.pack_size(0.4, registered) == driver.pack_size(registered, registered)
+    assert driver.pack_size(40.0, registered) < driver.pack_size(registered, registered)
+
+
+def test_the_cap_is_priced_off_wall_clock_and_not_execution_time():
+    """A worker with one slot bills between two sequential jobs; executionTime cannot see it."""
+
+    class Clock:
+        def timing(self):
+            return {"worker_seconds": 100.0, "wall_seconds": 340.0}
+
+    assert driver.billed_now(Clock()) == 340.0
+    assert driver.billed_now(Clock()) > skub_billed(Clock())
+
+
+def skub_billed(client):
+    import positions_gm4_skub as skub
+
+    return skub.billed_seconds(client)
 
 
 # --- the selections ------------------------------------------------------------------------

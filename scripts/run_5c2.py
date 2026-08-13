@@ -72,12 +72,17 @@ JOB_TTL_S = skub.JOB_TTL_S
 MAX_PAYLOAD_MB = skub.MAX_PAYLOAD_MB
 IDLE_TAIL_SECONDS = skub.IDLE_TAIL_SECONDS
 
-JOB_FILL = 0.8
+JOB_FILL = 0.6
 """How much of the execution timeout a pack is allowed to plan for.
 
 A pack sized at the whole 900 s would end TIMED_OUT on any row slower than the marginal, and
-`serving.JobExpired` ends the RUN (3.17 (10)(c)) rather than the job. The fifth of the window this
-leaves is the margin the measured marginal is allowed to be wrong by."""
+`serving.JobExpired` ends the RUN (3.17 (10)(c)) rather than the job — and the pack is bought
+before a row is written, so its rows come back unbought too. The 40% of the window this leaves is
+how wrong :func:`pack_size`'s marginal is allowed to be before a leg dies rather than slows.
+
+It is not free: fewer rows per pack means more inter-job gaps, and the worker bills through every
+one of them. That is the trade this number IS, and `billed_now` is what keeps the cost of it
+inside the cap arithmetic instead of outside it."""
 
 
 def rel(path: Path) -> str:
@@ -304,9 +309,40 @@ def cap_gate(*, billed: float, rate: float, drift: float, cap: float) -> str | N
     return None
 
 
-def pack_size(marginal: float) -> int:
-    """How many rows a job may plan for, from the marginal the warm-up measured."""
-    return max(1, int(JOB_FILL * JOB_TIMEOUT_S / max(marginal, 1e-6)))
+def pack_size(warmup_marginal: float, registered_marginal: float) -> int:
+    """How many rows a job may plan for — from the PESSIMISTIC of the two marginals there are.
+
+    Two reasons neither one alone may size a pack.
+
+    A pack that overruns the execution timeout ends TIMED_OUT, and 3.17 (10)(c) ends the RUN on
+    that — so a pack is not merely a slow job, it is the whole leg. It is also bought BEFORE the
+    pass writes a row (:class:`SliceTransport`), so a timed-out pack loses everything it paid for
+    and the rows come back unbought.
+
+    The warm-up marginal is ONE call, and Dv180 measured a single probe over-pricing its population
+    3.64x — which means it can under-price one just as easily. The registered marginal is a
+    population measurement from a paid session (skub2's last in-run gate, srv-2d's counted
+    seconds), and it cannot see today's endpoint. Taking the larger keeps a fast warm-up from
+    inflating a pack past what a population has ever supported, and a slow one still shrinks it.
+    """
+    seconds = max(warmup_marginal, registered_marginal, 1e-6)
+    return max(1, int(JOB_FILL * JOB_TIMEOUT_S / seconds))
+
+
+def billed_now(client) -> float:
+    """What this session has been billed, in the unit serverless actually charges: WALL seconds.
+
+    `skub.billed_seconds` reads `worker_seconds`, RunPod's per-job `executionTime` summed — which
+    is what the job spent computing and NOT what the worker cost. A worker with `workersMax: 1` is
+    up and charged between two sequential jobs as well as inside them, and this run submits tens of
+    packs where srv-2d submitted four. Pricing the cap off `worker_seconds` would leave every
+    inter-job gap outside the arithmetic, all of it in the direction of spending more than the line.
+
+    The larger of the two is taken rather than the wall alone: `wall_seconds` is None until the
+    first call returns, and a gate that read None early would compare against nothing.
+    """
+    timing = client.timing() or {}
+    return max(float(timing.get("worker_seconds") or 0.0), float(timing.get("wall_seconds") or 0.0))
 
 
 # --- the legs ------------------------------------------------------------------------------------
@@ -375,6 +411,7 @@ def page_leg(
     revision,
     endpoint,
     marginal,
+    registered_marginal,
     cap,
     rate,
     drift,
@@ -384,8 +421,8 @@ def page_leg(
     handle = pages[0]["channel"]
     state = loop.channel_state(cursor, handle)
     done = []
-    for index, pack in enumerate(packs_of(pages, pack_size(marginal))):
-        if reason := cap_gate(billed=skub.billed_seconds(client), rate=rate, drift=drift, cap=cap):
+    for index, pack in enumerate(packs_of(pages, pack_size(marginal, registered_marginal))):
+        if reason := cap_gate(billed=billed_now(client), rate=rate, drift=drift, cap=cap):
             note.append(f"leaflet pack {index:02d} refused: {reason}")
             break
         albums = [loop.render_page(loop.page_file(page))[2] for page in pack]
@@ -420,6 +457,7 @@ def post_leg(
     revision,
     endpoint,
     marginal,
+    registered_marginal,
     cap,
     rate,
     drift,
@@ -429,10 +467,8 @@ def post_leg(
     out = []
     for handle, posts in queue.items():
         state = loop.channel_state(cursor, handle)
-        for index, pack in enumerate(packs_of(posts, pack_size(marginal))):
-            if reason := cap_gate(
-                billed=skub.billed_seconds(client), rate=rate, drift=drift, cap=cap
-            ):
+        for index, pack in enumerate(packs_of(posts, pack_size(marginal, registered_marginal))):
+            if reason := cap_gate(billed=billed_now(client), rate=rate, drift=drift, cap=cap):
                 note.append(f"post pack {handle} {index:02d} refused: {reason}")
                 return out
             payloads = [loop.render_post(post)[1] for post in pack]
@@ -467,6 +503,7 @@ def comment_leg(
     revision,
     endpoint,
     marginal,
+    registered_marginal,
     cap,
     rate,
     drift,
@@ -482,10 +519,8 @@ def comment_leg(
     out = []
     for handle, rows in queue.items():
         state = loop.channel_state(cursor, handle)
-        for index, pack in enumerate(packs_of(rows, pack_size(marginal))):
-            if reason := cap_gate(
-                billed=skub.billed_seconds(client), rate=rate, drift=drift, cap=cap
-            ):
+        for index, pack in enumerate(packs_of(rows, pack_size(marginal, registered_marginal))):
+            if reason := cap_gate(billed=billed_now(client), rate=rate, drift=drift, cap=cap):
                 note.append(f"comment pack {handle} {index:02d} refused: {reason}")
                 return out
             keys, texts, context = [], [], []
@@ -638,7 +673,7 @@ def main(argv: list[str] | None = None) -> int:
         warm_post = nongold_post(store, registry, posts)
         _, post_seconds = measure(client, lambda: client.positions(loop.POST_TASK, [warm_post]))
         gate = skub.go_no_go(
-            billed=skub.billed_seconds(client),
+            billed=billed_now(client),
             page_marginal=page_seconds,
             text_marginal=post_seconds,
             n_pages=len(page_queue),
@@ -662,6 +697,7 @@ def main(argv: list[str] | None = None) -> int:
                 revision=revision,
                 endpoint=endpoint,
                 marginal=page_seconds,
+                registered_marginal=prereg["prices"]["leaflet_page"]["seconds_model"]["value"],
                 cap=budget,
                 rate=rate,
                 drift=drift,
@@ -678,6 +714,7 @@ def main(argv: list[str] | None = None) -> int:
                 revision=revision,
                 endpoint=endpoint,
                 marginal=post_seconds,
+                registered_marginal=prereg["prices"]["post_text"]["seconds_model"]["value"],
                 cap=budget,
                 rate=rate,
                 drift=drift,
@@ -719,7 +756,7 @@ def main(argv: list[str] | None = None) -> int:
             ),
         )
         gate = skub.go_no_go(
-            billed=skub.billed_seconds(client),
+            billed=billed_now(client),
             page_marginal=0.0,
             text_marginal=row_seconds,
             n_pages=0,
@@ -745,6 +782,7 @@ def main(argv: list[str] | None = None) -> int:
                 revision=revision,
                 endpoint=endpoint,
                 marginal=row_seconds,
+                registered_marginal=prereg["prices"]["comment"]["seconds_model"]["value"],
                 cap=budget,
                 rate=rate,
                 drift=drift,
