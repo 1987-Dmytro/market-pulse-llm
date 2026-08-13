@@ -23,7 +23,7 @@ def ledger(tmp_path, monkeypatch):
     path.write_text(
         json.dumps(
             {
-                "phase4_cap_usd": 25.0,
+                "phase4_cap_usd": 30.0,
                 "runpod_balance_at_phase4_start": 35.0,
                 "anchored_at": "2026-08-01T09:00:00+00:00",
                 "sessions": [],
@@ -79,7 +79,10 @@ def test_a_start_under_the_cap_is_allowed(ledger, monkeypatch):
 
 
 def test_the_cap_refuses_the_next_start(ledger, monkeypatch):
-    drive(monkeypatch, balance=9.99, billing=(0.0, "no billing rows yet"))
+    """The balance moves WITH the cap: 4.99 is $30.01 spent against the $30.00 of SPEC 3.18 (3),
+    the same one cent over that 9.99 was against $25.00. Left at 9.99 this test would have gone on
+    passing while measuring the opposite thing — $25.01 is under the raised cap and allowed."""
+    drive(monkeypatch, balance=4.99, billing=(0.0, "no billing rows yet"))
     assert guard.main([]) == 1
 
 
@@ -92,7 +95,7 @@ def test_the_volume_keeps_billing_while_the_pod_is_stopped(ledger, monkeypatch):
     guard.main(["--note", "4a zero-shot run"])
     session = json.loads(ledger.read_text(encoding="utf-8"))["sessions"][-1]
     assert session["spent_usd"] == 0.4
-    assert session["remaining_usd"] == 24.6
+    assert session["remaining_usd"] == 29.6  # 30.00 − 0.40; the spend is what the volume bills
 
 
 def test_a_top_up_refuses_instead_of_quietly_under_counting(ledger, monkeypatch):
@@ -109,12 +112,15 @@ def test_the_first_run_anchors_and_says_so(tmp_path, monkeypatch, capsys):
     assert guard.main([]) == 0
     written = json.loads(path.read_text(encoding="utf-8"))
     assert written["runpod_balance_at_phase4_start"] == 35.0
-    assert written["phase4_cap_usd"] == guard.PHASE_CAP_USD == 25.00
+    # the ledger's field and the enforced constant are ONE number, and 3.18 (3) moves both together
+    assert written["phase4_cap_usd"] == guard.PHASE_CAP_USD == 30.00
     assert "never regenerate" in capsys.readouterr().out
 
 
 def test_a_session_note_is_only_logged_when_the_start_is_allowed(ledger, monkeypatch):
-    drive(monkeypatch, balance=5.0)
+    """4.00 is $31.00 spent. Under the old cap 5.00 was $30.00 — five dollars over $25.00 and now
+    exactly ON $30.00, which would still refuse, but on the boundary rather than on margin."""
+    drive(monkeypatch, balance=4.0)
     assert guard.main(["--note", "would have been a fourth arm"]) == 1
     assert json.loads(ledger.read_text(encoding="utf-8"))["sessions"] == []
 
@@ -183,7 +189,7 @@ def test_the_existing_anchor_is_what_the_cap_is_enforced_against(tmp_path, monke
     ledger_path.write_text(
         json.dumps(
             {
-                "phase4_cap_usd": 25.0,
+                "phase4_cap_usd": 30.0,
                 "runpod_balance_at_phase4_start": 35.0,
                 "anchored_at": "2026-08-01T09:00:00+00:00",
                 "sessions": [],
