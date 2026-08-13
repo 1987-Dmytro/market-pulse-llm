@@ -21,10 +21,17 @@ from datetime import UTC, datetime
 
 from market_pulse import positions, prompts
 
-KINDS = ("comment", "leaflet_page", "position_row")
-"""The three row shapes 3.18 (6) asks the sitting to show. A `comment` is one audience reaction with
-its parent post; a `leaflet_page` is one page as it was sent; a `position_row` is one SKU the page or
-the row yielded."""
+KINDS = ("comment", "leaflet_page", "position_row", "post_text")
+"""The row shapes 3.18 (6) asks the sitting to show. A `comment` is one audience reaction with its
+parent post; a `leaflet_page` is one page as it was sent; a `position_row` is one SKU the page or the
+row yielded; a `post_text` is one post as it was read.
+
+`post_text` is the FOURTH and it arrived last, ruled by the team lead at the 5c2-prep-c3a acceptance
+on Dv285. The three before it were frozen while `loop.post_pass` was written, so that leg had no way
+to say "this post was read and yielded nothing" — and a post that answered `[]` or came back
+unparseable left the disk exactly as a post nobody asked. An interrupted pass then re-bought them.
+The kind is what closes it: a marker row per post, written LAST, keyed by its msg_id, so "answered"
+is a fact on disk on all three legs rather than on two of them."""
 
 REQUIRED = (
     "row_kind",
@@ -55,6 +62,11 @@ KIND_FIELDS = {
     # ladder assigned, so the rung can be RE-DERIVED at the sitting instead of trusted; `warnings`
     # is SPEC 3.17 (13)(a)'s three, which the skub2 run computed and dropped (Dv232).
     "position_row": ("presence", "tier", "warnings"),
+    # the `comment` shape: nothing of its own. A post's text IS its `rendering`, which every row
+    # carries, and there is no second artifact to name — where the page kind has to point at the
+    # picture it was read from, this one has already shown the sitting the whole input. What it
+    # adds (`n_positions`, `unreadable`) rides in `extra`, exactly as the page marker's do.
+    "post_text": (),
 }
 """What each kind carries on top of :data:`REQUIRED`. A kind with nothing of its own says so with an
 empty tuple rather than by being absent — the table is read whole, and a kind the table does not

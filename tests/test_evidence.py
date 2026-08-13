@@ -87,6 +87,29 @@ def test_a_kind_the_table_does_not_know_is_refused():
     assert evidence.missing({"row_kind": "whatever"}) == ["row_kind"]
 
 
+def test_the_kinds_are_enumerated_literally_and_every_one_has_a_row_in_the_table():
+    """A fifth kind is a change to what the 3.18 (6) sitting is shown, so it may not land quietly.
+
+    Nothing here asserted the MEMBERSHIP of `KINDS` until the fourth one arrived — `post_text` was
+    added and the whole suite stayed green, which is exactly the shape this file exists to refuse.
+    The literal below is the amendment's cost: adding a kind costs one line here and a reader.
+    """
+    assert evidence.KINDS == ("comment", "leaflet_page", "position_row", "post_text")
+    assert set(evidence.KIND_FIELDS) == set(evidence.KINDS), (
+        "a kind the table does not know is a refusal, so every kind needs its row — an empty tuple"
+        " is how a kind says it carries nothing of its own"
+    )
+
+
+def test_a_post_text_row_carries_nothing_beyond_the_required_table():
+    """The `comment` shape: the post's text IS its `rendering`, so there is no second artifact to
+    name. What the marker adds rides in `extra` and the table does not require it."""
+    assert evidence.KIND_FIELDS["post_text"] == ()
+    assert evidence.missing(a_row(kind="post_text")) == []
+    marker = a_row(kind="post_text", n_positions=None, unreadable="unparseable JSON")
+    assert (marker["n_positions"], marker["unreadable"]) == (None, "unparseable JSON")
+
+
 def test_a_leaflet_page_row_needs_its_image_and_sha():
     with pytest.raises(ValueError, match="image_path"):
         a_row(kind="leaflet_page")

@@ -4,6 +4,7 @@ import base64
 import hashlib
 import json
 import sys
+from collections import Counter
 from pathlib import Path
 
 import pytest
@@ -14,7 +15,7 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 import run_loop as runner  # noqa: E402
 
 from market_pulse import evidence, loop, parents, positions, prompts  # noqa: E402
-from market_pulse.raw_store import RawStore, comment_record, post_record  # noqa: E402
+from market_pulse.raw_store import RawStore, comment_record, dedup_key, post_record  # noqa: E402
 from market_pulse.registry import Source, load_registry  # noqa: E402
 from test_raw_store import SALT, SOURCE, FakeMessage, provenance  # noqa: E402
 
@@ -1136,6 +1137,10 @@ def test_a_post_pass_writes_one_row_per_position_and_advances_its_own_watermark(
         "watermark": 4340,
     }
     assert len(stored(tmp_path, loop.POST_POSITION_RECORD_TYPE)) == 2
+    marker = stored(tmp_path, loop.POST_RECORD_TYPE)
+    assert [row["row_kind"] for row in marker] == ["post_text"]
+    assert (marker[0]["n_positions"], marker[0]["unreadable"]) == (2, None)
+    assert "row_id" not in marker[0], "the marker's key IS the msg_id — raw_store.dedup_key"
     assert state == {loop.POST_TEXT: 4340}, "the collection watermark is a different question"
     assert loop.POSTS not in state
 
@@ -1198,26 +1203,63 @@ def test_the_positions_of_one_post_all_survive_the_write(tmp_path):
 
 
 def test_a_refused_post_and_an_empty_post_are_counted_apart(tmp_path):
-    """Neither writes a row — see `queued_posts` — so the summary is the only place the two can be
-    told apart, and folding them would report parse failures as posts with no SKU on them."""
+    """Apart in the summary AND apart on disk since the fourth kind: folding them would report
+    parse failures as posts with no SKU on them, in either place."""
     posts, derived, state = posted(tmp_path)
 
     summary = run_posts(posts, derived, state, text_replies('[{"brand": "Рудь", ', "[]", PAIR))
 
     assert (summary["unreadable"], summary["empty"], summary["positions_written"]) == (1, 1, 2)
     assert summary["posts_read"] == 3 and summary["watermark"] == 4342
+    markers = stored(tmp_path, loop.POST_RECORD_TYPE)
+    assert [(row["n_positions"], row["unreadable"] is None) for row in markers] == [
+        (None, False),  # refused: no denominator to sit in
+        (0, True),  # empty: a post the model read and found nothing tracked on
+        (2, True),
+    ]
 
 
-def test_the_post_leg_writes_into_its_own_file_and_not_the_page_legs(tmp_path):
-    """Two record types because `above` subtracts the ids it finds in ONE of them, and a page id
-    and a post id are both channel message ids: shared, each leg would subtract the other's."""
+def test_the_post_leg_writes_into_its_own_two_files_and_not_the_page_legs(tmp_path):
+    """Two record types per leg because `above` subtracts the ids it finds in ONE of them, and a
+    page id and a post id are both channel message ids: shared, each leg would subtract the
+    other's. Four constants, four files, no two of them the same string."""
     posts, derived, state = posted(tmp_path, ids=(4340,))
     run_posts(posts, derived, state, text_replies(PAIR))
 
     assert len(stored(tmp_path, loop.POST_POSITION_RECORD_TYPE)) == 2
+    assert len(stored(tmp_path, loop.POST_RECORD_TYPE)) == 1
     assert stored(tmp_path, loop.POSITION_RECORD_TYPE) == []
     assert stored(tmp_path, loop.PAGE_RECORD_TYPE) == []
-    assert loop.POST_POSITION_RECORD_TYPE != loop.POSITION_RECORD_TYPE
+    assert (
+        len(
+            {
+                loop.POST_POSITION_RECORD_TYPE,
+                loop.POST_RECORD_TYPE,
+                loop.POSITION_RECORD_TYPE,
+                loop.PAGE_RECORD_TYPE,
+            }
+        )
+        == 4
+    )
+
+
+def test_the_post_legs_three_namespaces_are_pinned_apart(tmp_path):
+    """`POST_TEXT`, `POST_CARRIER` and `POST_RECORD_TYPE` all spell `post_text` and are a cursor
+    key, a `Position.carrier` and a store directory — three namespaces, one string, and nothing in
+    the code would notice one of them moving without the others. So this does.
+
+    The page leg is the precedent for two of them agreeing (`CARRIER` == `PAGE_RECORD_TYPE`) and
+    the counter-example for the third: its cursor key is `leaflet`, not `leaflet_page`.
+    """
+    posts, derived, state = posted(tmp_path, ids=(4340,))
+    run_posts(posts, derived, state, text_replies(PAIR))
+
+    assert loop.POST_TEXT == loop.POST_CARRIER == loop.POST_RECORD_TYPE == "post_text"
+    assert loop.LEAFLET == "leaflet" and loop.CARRIER == loop.PAGE_RECORD_TYPE == "leaflet_page"
+    # each of the three used AS its own namespace, in one pass, so the agreement is load-bearing
+    assert state[loop.POST_TEXT] == 4340
+    assert stored(tmp_path, loop.POST_RECORD_TYPE)[0]["record_type"] == "post_text"
+    assert stored(tmp_path, loop.POST_POSITION_RECORD_TYPE)[0]["position"]["carrier"] == "post_text"
 
 
 def test_an_interrupted_post_pass_leaves_the_watermark_and_the_queue_where_they_were(tmp_path):
@@ -1250,11 +1292,14 @@ def test_an_interrupted_post_pass_leaves_the_watermark_and_the_queue_where_they_
 
 
 def test_a_rerun_of_the_same_post_pass_writes_no_new_rows_and_leaves_the_watermark(tmp_path):
-    """Idempotence asserted on the ARTIFACT: the file byte for byte, and the watermark."""
+    """Idempotence asserted on the ARTIFACTS: both files byte for byte, and the watermark."""
     posts, derived, state = posted(tmp_path)
     run_posts(posts, derived, state, text_replies(TRIPLE, PAIR, PAIR))
-    path = tmp_path / "derived" / f"{loop.POST_POSITION_RECORD_TYPE}s" / "atb_market_official.jsonl"
-    before = path.read_bytes()
+    paths = [
+        tmp_path / "derived" / f"{record_type}s" / "atb_market_official.jsonl"
+        for record_type in (loop.POST_POSITION_RECORD_TYPE, loop.POST_RECORD_TYPE)
+    ]
+    before = [path.read_bytes() for path in paths]
 
     fresh = RawStore(tmp_path / "derived")
     again = run_posts(
@@ -1266,7 +1311,60 @@ def test_a_rerun_of_the_same_post_pass_writes_no_new_rows_and_leaves_the_waterma
 
     assert again["asked"] == again["posts_read"] == 0
     assert again["watermark"] == 4342
-    assert path.read_bytes() == before
+    assert [path.read_bytes() for path in paths] == before
+
+
+def test_a_second_append_of_the_same_posts_rows_adds_one_of_nothing(tmp_path):
+    """The marker's key is its msg_id, so the store REFUSES the duplicate — and that refusal is
+    what a re-ask over an unsaved cursor costs nothing.
+
+    Driven through the store rather than through the pass, because the pass would not re-ask: this
+    is the layer underneath, and it is where a marker carrying a `row_id` (one per append, unique
+    by construction) would silently start stacking markers instead of collapsing them.
+    """
+    posts, derived, state = posted(tmp_path, ids=(4340,))
+    run_posts(posts, derived, state, text_replies(PAIR))
+    rows = stored(tmp_path, loop.POST_POSITION_RECORD_TYPE) + stored(
+        tmp_path, loop.POST_RECORD_TYPE
+    )
+    assert [dedup_key(row) for row in rows] == [
+        "@atb_market_official:4340:0",
+        "@atb_market_official:4340:1",
+        4340,
+    ]
+
+    RawStore(tmp_path / "derived").append(rows)
+
+    assert len(stored(tmp_path, loop.POST_POSITION_RECORD_TYPE)) == 2
+    assert len(stored(tmp_path, loop.POST_RECORD_TYPE)) == 1
+
+
+def test_the_post_marker_is_not_written_before_the_positions_it_speaks_for(tmp_path):
+    """`page_rows`' order rule, on this leg — and measured, not asserted (the c1 precedent).
+
+    `RawStore.append` writes file by file, and `queued_posts` keys the queue on the marker's record
+    type. With the marker written FIRST, a kill between the two files leaves a marker saying
+    `n_positions: 2` with nothing behind it and the re-run subtracts the post as answered: the rows
+    gone for good, the hole invisible. The fake stops after the first file, so this test is
+    sensitive to the ORDER and not to the failure.
+    """
+    posts, derived, state = posted(tmp_path, ids=(4340,))
+
+    class DiesAfterTheFirstFile(RawStore):
+        def append(self, records):
+            first = records[0]["record_type"]
+            super().append([row for row in records if row["record_type"] == first])
+            raise OSError("the disk went away between the two files")
+
+    with pytest.raises(OSError, match="between the two files"):
+        run_posts(posts, DiesAfterTheFirstFile(tmp_path / "derived"), state, text_replies(PAIR))
+
+    fresh = RawStore(tmp_path / "derived")
+    assert [row["ordinal"] for row in stored(tmp_path, loop.POST_POSITION_RECORD_TYPE)] == [0, 1]
+    assert stored(tmp_path, loop.POST_RECORD_TYPE) == [], "and the marker is not"
+    assert [
+        post["msg_id"] for post in loop.queued_posts(posts, fresh, "@atb_market_official", None)
+    ] == [4340], "so the post is still queued and will be re-asked"
 
 
 def test_the_post_queue_subtracts_posts_a_killed_pass_already_answered(tmp_path):
@@ -1280,19 +1378,17 @@ def test_the_post_queue_subtracts_posts_a_killed_pass_already_answered(tmp_path)
     assert [post["msg_id"] for post in left] == [4342]
 
 
-def test_an_interrupted_post_pass_re_asks_the_posts_that_yielded_nothing(tmp_path):
-    """**The one property this leg does not carry, measured rather than described.**
+def test_an_interrupted_post_pass_re_asks_nothing_it_already_answered(tmp_path):
+    """**The gap the fourth kind closes, measured in both directions on the same scenario.**
 
-    The sibling legs always write a row per input — a `comment` row, or a `leaflet_page` row that
-    says `n_positions: 0` — so "already answered" is exact on both. A post that came back `[]` or
-    unparseable writes nothing, because there is no evidence kind for "a post was read and yielded
-    nothing", and `evidence.KINDS` is frozen at three by this contract's DO NOT.
+    This is c3a's own scenario, planted unchanged: a pass answers three posts, the middle two find
+    nothing (one `[]`, one unparseable), and the cursor is never persisted. Under the old code the
+    re-run re-asked exactly those two, because a post that found nothing left the disk looking like
+    a post nobody had asked. Now every post writes its `post_text` marker and the queue is empty.
 
-    So: a pass answers three posts, the middle two find nothing, and the cursor is never persisted.
-    The re-run re-asks exactly those two. It is a COST and not a hole — no row was lost and nothing
-    downstream is wrong — and the CONTROL below is the same kill on the leaflet leg with the same
-    three answers, where the marker row leaves nothing queued at all. That difference is the fourth
-    kind's absence, measured instead of argued.
+    The NEGATIVE CONTROL is the old key, planted here rather than described: keyed on the position
+    rows — which is what `queued_posts` did until Dv285 was ruled — the same store still yields the
+    two. So the marker is what changed the answer, and not the scenario, the answers or the cursor.
     """
     answers = (PAIR, "[]", '[{"brand": "Рудь", ')
     posts, derived, state = posted(tmp_path)
@@ -1302,14 +1398,16 @@ def test_an_interrupted_post_pass_re_asks_the_posts_that_yielded_nothing(tmp_pat
 
     # the kill: the pass finished, the cursor was never saved, so the watermark is unset on disk
     fresh = RawStore(tmp_path / "derived")
-    left = loop.queued_posts(posts, fresh, "@atb_market_official", None)
+    assert loop.queued_posts(posts, fresh, "@atb_market_official", None) == []
+    assert [row["msg_id"] for row in stored(tmp_path, loop.POST_RECORD_TYPE)] == [4340, 4341, 4342]
 
-    assert [post["msg_id"] for post in left] == [4341, 4342], "the two empty ones are re-asked"
-    assert loop.queued_posts(posts, fresh, "@atb_market_official", state[loop.POST_TEXT]) == [], (
-        "and a persisted cursor covers them, which is why a COMPLETED pass is still idempotent"
+    # the negative control: the OLD key, on the same store, still re-asks the two that wrote nothing
+    old_key = loop.above(
+        posts, fresh.index(loop.POST_POSITION_RECORD_TYPE, "@atb_market_official").ids, None
     )
+    assert [post["msg_id"] for post in old_key] == [4341, 4342]
 
-    # the control: the SAME kill, the same three answers, on the leg that writes a marker row
+    # and the sibling leg, unchanged: the same kill, the same three answers, nothing queued
     pages, page_derived, page_state = paged(tmp_path / "control")
     run_pages(pages, page_derived, page_state, replies(*answers))
     page_left = loop.queued_pages(
@@ -1438,9 +1536,21 @@ def test_the_stub_served_post_smoke_writes_one_row_per_position(monkeypatch, tmp
         evidence.assert_complete(row)
         assert row["position"]["carrier"] == "post_text"
     assert rows[0]["warnings"] == ["multipack", "discount_footnote", "price_from"]
-    # the two posts that wrote nothing are 4342 (refused) and 4343 (`[]`) — they are in the
-    # summary's counters and nowhere on disk, which is the fourth-kind gap `queued_posts` names
+    # 4342 (refused) and 4343 (`[]`) write no POSITION row and never did — what the fourth kind
+    # changed is that they now write a marker, so the disk says which of the two each one was
     assert {4342, 4343} & {row["msg_id"] for row in rows} == set()
+    markers = RawStore(tmp_path / "smoke" / "derived").rows(
+        loop.POST_RECORD_TYPE, "@atb_market_official"
+    )
+    # every marker's count RE-DERIVED from the position rows it speaks for, so the two files cannot
+    # disagree — and the refused post is `None` rather than 0, which is not a count at all
+    written = Counter(row["msg_id"] for row in rows)
+    assert [(row["msg_id"], row["n_positions"]) for row in markers] == [
+        (msg_id, None if msg_id == 4342 else written[msg_id]) for msg_id in range(4340, 4346)
+    ]
+    assert (written[4342], written[4343]) == (0, 0), "the refused one and the `[]` one"
+    for row in markers:
+        evidence.assert_complete(row)
 
 
 def test_a_post_smoke_leaves_the_real_cursor_and_the_derived_store_untouched(monkeypatch, tmp_path):
@@ -1465,21 +1575,18 @@ def test_a_plan_only_smoke_carries_no_posts_block(monkeypatch, tmp_path):
     assert "smoke_posts" not in record
 
 
-def test_a_second_post_smoke_over_an_exhausted_queue_re_asks_exactly_the_empty_posts(
-    monkeypatch, tmp_path
-):
-    """**The fourth-kind gap, through the SCRIPT — and this is where it actually bites.**
+def test_a_second_post_smoke_over_an_exhausted_queue_asks_nothing(monkeypatch, tmp_path):
+    """**The fourth kind through the SCRIPT — where the gap used to bite, at 0 calls now.**
 
     Dv266's lesson first: EXHAUST the queue (`--limit 400`, not the default 5) and re-run, because
     a second smoke under a small limit correctly answers the NEXT five and proves nothing.
 
-    Then the finding. A smoke never saves the cursor, so the re-run's queue is "everything with no
-    row on disk" — and on this leg that is not empty. Six posts were answered; four wrote position
-    rows; the refused one and the `[]` one wrote nothing, and the second run buys both again. The
-    sibling test `test_a_second_page_smoke_over_the_same_window_answers_nothing` runs the SAME
-    stub schedule over five pages and asks zero, because every page wrote its `leaflet_page`
-    marker — including the refused one and the empty one. That is the whole difference, and it is
-    measured here rather than described: 2 calls against 0, on the same answers.
+    A smoke never saves the cursor, so the re-run's queue is "everything with no marker on disk".
+    Six posts were answered — four with positions, one refused, one `[]` — and all six wrote their
+    `post_text` row, so the second run asks zero and the store does not move a byte. It read 2 and
+    2 until Dv285 was ruled; the sibling
+    `test_a_second_page_smoke_over_the_same_window_answers_nothing` has always read 0, and the two
+    legs now answer the same way for the same reason.
     """
     wire_posts(monkeypatch, tmp_path)
     args = ["--once", "--smoke", "--posts", "--channel", "@atb_market_official", "--limit", "400"]
@@ -1491,18 +1598,20 @@ def test_a_second_post_smoke_over_an_exhausted_queue_re_asks_exactly_the_empty_p
     record = json.loads((tmp_path / "smoke" / "loop_5a.json").read_text(encoding="utf-8"))["runs"][
         -1
     ]
-    assert record["smoke_posts"]["transport_calls"] == 2
-    assert record["smoke_posts"]["per_channel"][0]["asked"] == 2
-    assert digests(tmp_path / "smoke" / "derived") != written
+    assert record["smoke_posts"]["transport_calls"] == 0
+    assert record["smoke_posts"]["per_channel"][0]["asked"] == 0
+    assert digests(tmp_path / "smoke" / "derived") == written
 
-    rows = RawStore(tmp_path / "smoke" / "derived").rows(
-        loop.POST_POSITION_RECORD_TYPE, "@atb_market_official"
-    )
-    # the two re-asked are exactly the two that had written nothing, and nothing else moved
-    assert sorted({row["msg_id"] for row in rows}) == [4340, 4341, 4342, 4343, 4344, 4345]
-    assert [row["msg_id"] for row in rows][:6] == [4340, 4341, 4341, 4344, 4345, 4345], (
+    store = RawStore(tmp_path / "smoke" / "derived")
+    rows = store.rows(loop.POST_POSITION_RECORD_TYPE, "@atb_market_official")
+    markers = store.rows(loop.POST_RECORD_TYPE, "@atb_market_official")
+    assert [row["msg_id"] for row in rows] == [4340, 4341, 4341, 4344, 4345, 4345], (
         "the rows the first run wrote are still there, in order, unduplicated"
     )
+    # the marker is what makes 4342 (refused) and 4343 (`[]`) answered — the two the old key missed
+    assert [row["msg_id"] for row in markers] == [4340, 4341, 4342, 4343, 4344, 4345]
+    assert [row["msg_id"] for row in markers if not row["n_positions"]] == [4342, 4343]
+    assert [row["unreadable"] is None for row in markers] == [True, True, False, True, True, True]
 
 
 def test_the_post_stub_refuses_the_page_legs_payload_shape():

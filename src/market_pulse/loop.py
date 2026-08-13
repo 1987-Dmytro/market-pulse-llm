@@ -544,13 +544,24 @@ loop writes are not the same observation. It is named as a constant so the disag
 operator ever rules one, is a one-line change with a test on it rather than a search."""
 
 POST_POSITION_RECORD_TYPE = "post_position_row"
-"""The derived store's file for this leg's positions — its OWN, not shared with the page leg's.
+POST_RECORD_TYPE = "post_text"
+"""The derived store's two files for this leg — its OWN, not shared with the page leg's.
 
 `RawStore.index` keys on the record type, and :func:`above` subtracts the ids it finds there. Page
 ids and post ids are both channel message ids: one file would make each leg's queue subtract the
-other leg's answers, and the two would silently shrink each other. The `row_kind` on the rows is
-still `position_row` — the kind is what the 3.18 (6) sitting reads, the record type is where the
-row lives, and they answer different questions."""
+other leg's answers, and the two would silently shrink each other. The `row_kind` on the position
+rows is still `position_row` — the kind is what the 3.18 (6) sitting reads, the record type is where
+the row lives, and they answer different questions.
+
+:data:`POST_RECORD_TYPE` spells the same string as :data:`POST_CARRIER` and as the cursor key
+:data:`POST_TEXT`, and those are THREE namespaces that happen to agree: a key in the cursor's dict,
+a directory under the derived store, and the value `positions.Position.carrier` holds. The page leg
+is the precedent for two of them (`CARRIER` and `PAGE_RECORD_TYPE` are both `leaflet_page`) and the
+disagreement for the third (its cursor key is `leaflet`). Renaming the cursor key here would cost
+nothing today — no cursor has ever been persisted for this leg — and it is deliberately NOT done:
+the contract that added the marker did not ask for it, and
+`tests/test_loop.py::test_the_post_legs_three_namespaces_are_pinned_apart` is what would notice if
+one of them moved and the others were left behind."""
 
 
 def render_post(post: dict) -> tuple[list[dict], str]:
@@ -585,23 +596,19 @@ def parse_post(reply: dict, categories, aliases, task: str = POST_TASK) -> tuple
 
 
 def queued_posts(posts: Iterable[dict], derived, handle: str, watermark: int | None) -> list[dict]:
-    """The posts this pass still owes an extraction for, oldest first — **and see the warning**.
+    """The posts this pass still owes an extraction for, oldest first.
 
-    Keyed on this leg's position rows, which is the best key that exists today and is NOT the key
-    the sibling legs get. A comment always writes its `comment` row and a page always writes its
-    `leaflet_page` row, so "answered" is exact on both. A post writes rows only when the model found
-    something: a post that came back `[]` — or whose reply could not be parsed — leaves nothing
-    behind, and this function cannot tell it from a post that was never asked.
+    Keyed on the POST record type, not the position one — :func:`queued_pages`' rule exactly, and
+    for the same reason: a post whose reply was refused, or that answered `[]`, wrote a `post_text`
+    marker and no positions at all, and asking it again would buy the same nothing.
 
-    The consequence is bounded and is a COST, never a hole: a COMPLETED pass is covered by the
-    watermark, so the idempotence smoke is exact. An INTERRUPTED pass whose cursor was never
-    persisted re-asks its empty posts, buying the same nothing a second time. That is precisely what
-    the `leaflet_page` marker exists to prevent on the sibling leg (:func:`page_rows`), and closing
-    it here needs a row kind that has no positions on it — a fourth member of `evidence.KINDS`,
-    which is the team lead's fork and not this contract's. Measured rather than argued:
-    `tests/test_loop.py::test_an_interrupted_post_pass_re_asks_the_posts_that_yielded_nothing`.
+    It was keyed on the position rows until the team lead ruled the fourth evidence kind (Dv285):
+    with no marker, a post that found nothing left the disk indistinguishable from a post nobody had
+    asked, and an interrupted pass re-bought every one of them. That is the state
+    `tests/test_loop.py::test_an_interrupted_post_pass_re_asks_nothing_it_already_answered` now
+    measures the ABSENCE of, with the old key planted beside it as the negative control.
     """
-    return above(posts, derived.index(POST_POSITION_RECORD_TYPE, handle).ids, watermark)
+    return above(posts, derived.index(POST_RECORD_TYPE, handle).ids, watermark)
 
 
 def post_rows(
@@ -609,17 +616,24 @@ def post_rows(
     rendering,
     reply,
     found: list,
+    reason: str | None,
     *,
     model_revision,
     served_by: str,
     task: str,
 ) -> list[dict]:
-    """One post's evidence: a `position_row` per position, in the parser's order.
+    """One post's evidence: the positions in the parser's order, and the `post_text` row LAST.
 
-    No marker row and no `reason` parameter, for the same one reason: there is no kind for "a post
-    was read and yielded nothing". A refusal and an empty answer are still different outcomes — the
-    pass counts them apart in its summary — but neither reaches the disk, so neither can be read
-    back. See :func:`queued_posts`.
+    That order is :func:`page_rows`', and so is the reason it is not cosmetic: `RawStore.append`
+    writes file by file and :func:`queued_posts` keys the queue on the POST record type, so the
+    marker row on disk IS this post's answered-marker. Written first, a kill between the two file
+    writes would leave a marker saying `n_positions: 3` with no position rows behind it and the
+    re-run would subtract the post as answered. Written last, the same kill leaves position rows and
+    no marker, the post is re-asked, and `raw_store.dedup_key` skips the rows already there.
+
+    The marker carries no ``row_id``, so its key IS the msg_id — the house pattern, and what makes a
+    second append of the same post a no-op. The position rows carry one because N of them share that
+    msg_id and would otherwise collapse to the first inside a single append.
 
     ``parent_msg_id`` is ``None`` and the key is present, which `evidence.REQUIRED` is explicit
     about: a post has no parent, and an absent key and a key holding ``None`` are different states.
@@ -634,7 +648,7 @@ def post_rows(
         "rendering": rendering,
         "reply": reply,
     }
-    return [
+    rows = [
         evidence.record(
             "position_row",
             **common,
@@ -654,6 +668,19 @@ def post_rows(
         )
         for ordinal, position in enumerate(found)
     ]
+    # LAST, and see the docstring: this row is the queue's answered-marker, so it must not reach
+    # disk before the rows it speaks for. `n_positions: None` on a refusal is the page marker's
+    # convention — a refusal is excluded from a denominator and a `0` would sit inside one.
+    rows.append(
+        evidence.record(
+            "post_text",
+            **common,
+            record_type=POST_RECORD_TYPE,
+            n_positions=None if reason else len(found),
+            unreadable=reason,
+        )
+    )
+    return rows
 
 
 def post_pass(
@@ -678,8 +705,8 @@ def post_pass(
     ``send`` takes ``(task, payload)`` as both siblings do, and the payload is this instrument's
     string (:func:`render_post`). It is the SEAM and the only thing a smoke replaces.
 
-    The one place this leg is NOT its siblings is what it writes for a post that yields nothing:
-    nothing. :func:`queued_posts` carries the consequence and the fork it belongs to.
+    A post whose reply cannot be parsed still writes its `post_text` row, carrying the reason and
+    `n_positions: None`. It is answered, and re-asking it would buy the same refusal.
     """
     written, positions_written, refused, empty = [], 0, 0, 0
     for post in posts:
@@ -691,24 +718,25 @@ def post_pass(
             rendering,
             reply,
             found,
+            reason,
             model_revision=model_revision,
             served_by=served_by,
             task=task,
         )
-        if rows:
-            derived.append(rows)
+        derived.append(rows)
         advance(state, POST_TEXT, [post["msg_id"]])
         written.append(post["msg_id"])
-        positions_written += len(rows)
+        positions_written += len(rows) - 1
         refused += 1 if reason else 0
         empty += 1 if not reason and not found else 0
     return {
         "asked": len(posts),
         "posts_read": len(written),
         "positions_written": positions_written,
-        # the two outcomes that write no row, counted apart in the summary because the disk cannot
-        # tell them apart afterwards: a refusal is excluded from a denominator, an empty answer is
-        # a post the model says has no tracked SKU on it and belongs in one
+        # counted apart in the summary AND on disk since the fourth kind: the marker's
+        # `unreadable` / `n_positions` say which of the two a post was. A refusal is excluded from
+        # a denominator, an empty answer is a post the model says has no tracked SKU on it and
+        # belongs in one — and now a reader with only the rows can still tell them apart
         "unreadable": refused,
         "empty": empty,
         "watermark": state.get(POST_TEXT),
