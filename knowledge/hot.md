@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-13 16:18:52 (every SessionStart)
+**Auto-refreshed:** 2026-08-13 16:42:38 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+ba1cf7d chore(vault): the 5c2-prep-c3a session tail -- the day's log and hot.md
+0bb9e2f docs(report): 5c2-prep-c3a -- the per-commit checkout table, the commit list, and Dv291-292
+9c723a7 fix(5c2-prep-c3a): the census hashes the four modules it is built out of, and the cursor key is pinned apart from the carrier
 b048532 docs(report): 5c2-prep-c3a -- the cap, the third leg, and the population that turned out to be recipes
 5c485bc docs(decision): the 3.18 (7) STOP ruling -- and the clause that binds the team lead
-a39a8ad data(5c2-prep-c3a): the post leg's population is 349 of 9 158 -- and 320 of them carry no price
-72ac6a5 feat(5c2-prep-c3a): the post-text pass -- the third leg, and the one property it cannot carry
-c4f0aba feat(5c2-prep-c3a): the Phase 4 cap moves 30 -> 33, and the records under 30 stay where they are
 ```
 
 ## 📋 Recent decisions
@@ -30,9 +30,9 @@ c4f0aba feat(5c2-prep-c3a): the Phase 4 cap moves 30 -> 33, and the records unde
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-13 16:14 — **`5c2-prep-c3a` ✅ СДАН, ждёт приёмки, $0**, коммиты
-`454cfa4..b048532` (восемь), `make check` **2182 / 2 skipped** (было 2140), `ruff format` чист.
-Отчёт `docs/reports/5c2-prep-c3a.md`, отклонения **Dv280–290** (все с тегами `[cause:]` — новое
+**Last update:** 2026-08-13 16:38 (чекпойнт `/save`) — **`5c2-prep-c3a` ✅ СДАН, ждёт приёмки, $0**, коммиты
+`454cfa4..ba1cf7d` (одиннадцать), `make check` **2184 / 2 skipped** (было 2140), `ruff format` чист.
+Отчёт `docs/reports/5c2-prep-c3a.md`, отклонения **Dv280–292** (все с тегами `[cause:]` — новое
 домашнее правило по операторскому аудиту 13.08). Раньше в тот же день ПРИНЯТЫ `5c2-prep-a`, `-b`,
 `-c1`; `-c2` сдан и его STOP **ОТВЕЧЕН РУЛИНГОМ** (SPEC 3.18 (7)).
 Phase 4: **$23.8310 из $33.00**, остаток **$9.1690** — за день не потрачено НИЧЕГО.
@@ -157,11 +157,11 @@ BY MEASUREMENT)**,
 
 ## 🔥 What's Hot
 
-**5c2-prep-c3a ✅ 13.08 ($0) — СДАН, ждёт приёмки.** Восемь коммитов `454cfa4..b048532`;
-`make check` 2182 / 2 skipped (было 2140), `ruff format` чист, к RunPod не обращался ни разу.
+**5c2-prep-c3a ✅ 13.08 ($0) — СДАН, ждёт приёмки.** Одиннадцать коммитов `454cfa4..ba1cf7d`;
+`make check` 2184 / 2 skipped (было 2140), `ruff format` чист, к RunPod не обращался ни разу.
 **Кап 30 → 33** в обоих домах, диф леджера 2 строки, 35 сессий байт-в-байт. **Третья нога петли**
 `loop.post_pass` построена. **Ценз префильтра** `results/census_c3a_posts.json`: 349 из 9 158.
-Отклонения Dv280–290, отчёт `docs/reports/5c2-prep-c3a.md`.
+Отклонения Dv280–292, отчёт `docs/reports/5c2-prep-c3a.md`.
 
 **⚠️ Что нашёл сам, чего таблица консюмеров контракта не предсказала.** (1) Сдвиг константы
 покраснил ШЕСТЬ тестов, не пять; два ПЕРЕВЕРНУЛИСЬ (баланс 4.99 = $30.01 теперь разрешён).
