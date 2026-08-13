@@ -203,6 +203,28 @@ runbooks create uses `--idle-timeout 60` (`scripts/runbook_5b.md`, `runbook_srv2
 projection's stated corner had before this term was added. A cap arithmetic that leaves it out is
 short by more than the margin it is reasoning about."""
 
+CONTRACT = (
+    "docs/PROMPT-skub2-run.md; docs/SPEC.md amendment 3.17 (9), (10),"
+    " (11)(c) and (12)(c) the registered warm-up, (12)(a)/(14)(e) the cap, (13), (14)"
+)
+RESUME_CONTRACT = (
+    "docs/PROMPT-sku-b-v4-run.md; docs/SPEC.md amendment 3.17 (9), (10), (11) the resume,"
+    " (12) the v4 attempt — its own cap, ledger and fresh anchor, and the cost of a refusal"
+)
+"""The provenance string written INTO each run record — `contract` in `head`, the field the team
+lead opens at acceptance. Nothing downstream reads it, which is exactly why Dv170 named its twin.
+
+**This is Dv176 paid.** The resume branch was an inline string reading `docs/PROMPT-sku-b-v3-prep.md
+deliverable 2; docs/SPEC.md amendment 3.17 (9), (10), (11)` — it named the PREP contract of the
+session that was refused, not the v4 run that actually bought the 121, and it omitted **(12)**, the
+amendment that authorised that attempt and fixed its cap, its ledger and its fresh anchor. It sits
+in `results/sku_b_positions_v4.json :: contract` and it is NOT corrected there: a record edited after
+the fact is worse than a record that names a bug. What changes is what the next run would write.
+
+Constants with a test on both, because a string nobody re-derives is a string that stops being true
+silently — and because the non-resume branch had already been moved at skub2-fix while its twin was
+left standing. One arm proven is a proof that covered the sibling branch."""
+
 WARMUP_ROW = "Тестовий рядок поза пакетом: молоко 1 л 45,90 грн."
 """SPEC 3.17 (9): the paid session opens on NON-gold inputs before either leg touches gold. This
 row is deliberately not one of the 30 — the pack's ids are checked against it — and the warm-up
@@ -868,11 +890,17 @@ def row_for(position: positions.Position, source: dict, fields: tuple[str, ...])
 
 
 class FakeEndpoint:
-    """`--smoke`: the whole path, no network, no spend. Two replies are broken ON PURPOSE.
+    """`--smoke`: the whole path, no network, no spend. Three replies are unusual ON PURPOSE.
 
     One reply is unparseable and one is `[]`, because those two are the outcomes the record must
     keep apart: a refusal is counted by reason and excluded from the bar's denominator, and an
     empty array is a page the model says has no dairy on it.
+
+    The third carries all three of SPEC 3.17 (13)(a)'s warnings at once — a multipack size, a
+    footnote asterisk on the printed discount, and a «від X грн» price. Added when Dv232 was paid:
+    without it every position the smoke produced warned about nothing, so the whole write path from
+    `positions.warnings()` to `extraction.warnings_by_kind` was exercised only on empty lists. A
+    field proven only where it is empty is a field nobody has seen work.
     """
 
     SMOKE_BOOT_SECONDS = 183.58
@@ -939,6 +967,14 @@ class FakeEndpoint:
                 content = '[{"brand": "Рудь", '  # truncated mid-object: a parse failure
             elif seat % 5 == 0:
                 content = "[]"  # a page with nothing tracked on it — NOT a failure
+            elif seat % 3 == 0:
+                # all three (13)(a) warnings on one position: a multipack size, the footnote
+                # asterisk, and a «від» price. Legal — a warning is what lets a position THROUGH
+                content = (
+                    '[{"brand": "Рудь", "category": "' + self.category + '", "size": "6х100 г",'
+                    ' "fat": "12%", "price_promo": "від 89,90 грн",'
+                    ' "discount_pct_printed": "-31%*"}]'
+                )
             else:
                 content = (
                     '[{"brand": "Рудь", "category": "' + self.category + '", "size": "450 г",'
@@ -1074,6 +1110,16 @@ def run_leg(
                     "item": item.get("item") or item.get("id"),
                     "carrier": carrier,
                     "n_positions": None if reason else len(found),
+                    # Dv232. `positions.warnings()` — SPEC 3.17 (13)(a)'s multipack, discount
+                    # footnote and «від X грн» — was computed on every position and dropped, so the
+                    # skub2 record cannot say WHICH warning let WHICH position through. PER
+                    # POSITION and index-aligned to the parsed order, not a per-source aggregate:
+                    # a page yields several positions and the question the debt names is which one.
+                    # The dump's columns are derived from B′'s sealed bar-2 sentence and cannot
+                    # grow, so this rides the outcome row instead — `len(warnings) == n_positions`
+                    # is the invariant that makes the alignment checkable, and `dumped` grows by
+                    # exactly `len(found)` rows for this source on the line below.
+                    "warnings": None if reason else [list(p.warnings()) for p in found],
                     "unreadable": reason,
                     "finish_reason": reply.get("finish_reason"),
                     "sha8": sha256(
@@ -1430,16 +1476,10 @@ def main(argv: list[str] | None = None, client=None) -> int:
             if args.resume
             else "skub2 — the position layer re-measured under instrument v2"
         ),
-        # The non-resume branch described the FIRST session — `docs/PROMPT-sku-b-prep.md`, 3.17
-        # (6), (9), (10) — and that path is skub2's now, so the string had become a run record
-        # naming a contract the run was not under. Moved with the constants. The resume branch is
-        # v4's and is left alone, including the (12) it omits: that is Dv176 and it is still open.
-        "contract": (
-            "docs/PROMPT-sku-b-v3-prep.md deliverable 2; docs/SPEC.md amendment 3.17 (9), (10), (11)"
-            if args.resume
-            else "docs/PROMPT-skub2-run.md; docs/SPEC.md amendment 3.17 (9), (10),"
-            " (11)(c) and (12)(c) the registered warm-up, (12)(a)/(14)(e) the cap, (13), (14)"
-        ),
+        # Both arms are constants now, each with its own test — see :data:`CONTRACT`. The non-resume
+        # branch moved at skub2-fix; the resume branch named the REFUSED session's prep contract and
+        # omitted (12), which is Dv176 and is paid here.
+        "contract": RESUME_CONTRACT if args.resume else CONTRACT,
         "prereg": {
             "path": rel(args.prereg),
             "sha256": sha256(args.prereg.read_bytes()).hexdigest(),
@@ -1705,6 +1745,27 @@ def main(argv: list[str] | None = None, client=None) -> int:
             ),
             "truncated_replies": sorted(
                 row["source"] for row in outcomes if row.get("finish_reason") == "length"
+            ),
+            # Dv232's summary, DERIVED from the per-position lists on the outcome rows rather than
+            # counted a second time while parsing: two counters over the same event is how one of
+            # them silently stops agreeing. The per-source lists are still the answer to "which
+            # position" — this is only what a reader reaches for first.
+            "warnings_by_kind": dict(
+                Counter(
+                    said
+                    for row in outcomes
+                    for position in (row.get("warnings") or [])
+                    for said in position
+                )
+            ),
+            "positions_with_a_warning": sum(
+                1 for row in outcomes for position in (row.get("warnings") or []) if position
+            ),
+            "warnings_reading": (
+                "SPEC 3.17 (13)(a)'s three, per POSITION and index-aligned to the dump rows this"
+                " source produced. A warning is what let a position through, never a reason to"
+                " refuse the page — and until Dv232 was paid they were computed and dropped, so"
+                " results/sku_b_positions_skub2.json cannot say which position carried which"
             ),
         },
         "dump": {

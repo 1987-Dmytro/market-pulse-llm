@@ -582,6 +582,146 @@ def test_the_smoke_clock_is_synthetic_and_says_so(tmp_path):
     assert timing["worker_seconds"] > driver.FakeEndpoint.SMOKE_BOOT_SECONDS
 
 
+# --- Dv176: the provenance string, both arms ---------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    ("constant", "prompt_file", "cited", "refused"),
+    [
+        (
+            driver.CONTRACT,
+            "docs/PROMPT-skub2-run.md",
+            ("(13)", "(14)", "(9)", "(10)"),
+            ("v3-prep",),
+        ),
+        # (12) is the whole of Dv176: the v4 attempt's cap, ledger and fresh anchor were authorised
+        # by it, and the string cited (9), (10), (11) and stopped. `v3-prep` is the other half —
+        # the contract it named is the PREP of the session that was refused before its first gold
+        # call, not the run that bought the 121.
+        (
+            driver.RESUME_CONTRACT,
+            "docs/PROMPT-sku-b-v4-run.md",
+            ("(11)", "(12)", "(9)", "(10)"),
+            ("v3-prep", "(13)", "(14)"),
+        ),
+    ],
+    ids=["skub2", "resume-v4"],
+)
+def test_each_contract_string_is_a_constant_naming_the_contract_actually_in_force(
+    constant, prompt_file, cited, refused
+):
+    """Dv170's lesson applied to its twin, and BOTH arms are proven.
+
+    Nothing downstream reads `head["contract"]`, which is why it went wrong quietly and stayed
+    wrong for three sessions. The non-resume arm was moved at skub2-fix and the resume arm was left
+    standing — so a test that drove only the live path would have covered the sibling branch and
+    reported the fix verified.
+    """
+    named = constant.split(";")[0].strip()
+    assert named == prompt_file
+    assert (REPO_ROOT / named).exists(), f"the provenance string names {named}, which is not here"
+    assert all(part in constant for part in cited)
+    assert not any(part in constant for part in refused)
+
+
+def test_the_two_contract_strings_are_not_the_same_string():
+    """The negative control. Two arms that had drifted into one would name one session's contract
+    on both paths — which is the defect, spelled differently."""
+    assert driver.CONTRACT != driver.RESUME_CONTRACT
+
+
+def test_the_record_writes_the_constant_of_the_mode_it_ran_in(tmp_path):
+    out, record = tmp_path / "d.jsonl", tmp_path / "r.json"
+    driver.main(["--smoke", "--leg", "text", "--out", str(out), "--record", str(record)])
+    assert json.loads(record.read_text(encoding="utf-8"))["contract"] == driver.CONTRACT
+
+
+# --- Dv232: the parser warnings reach the record, per POSITION -----------------------------------
+
+
+@pytest.fixture
+def smoked(tmp_path) -> dict:
+    """A full smoke's record — the producer's own output, never a shipped artifact.
+
+    A shipped record predates this shape by construction: `results/sku_b_positions_skub2.json` was
+    written by the session that dropped the warnings, and a test reading it would be red in every
+    commit of the checkout table including the control.
+    """
+    out, record = tmp_path / "d.jsonl", tmp_path / "r.json"
+    driver.main(["--smoke", "--out", str(out), "--record", str(record)])
+    return json.loads(record.read_text(encoding="utf-8"))
+
+
+def test_every_answered_source_carries_one_warning_list_per_position(smoked):
+    """The alignment invariant, which is what makes "which position" answerable.
+
+    `warnings[i]` describes the i-th position this source produced, in the order they were parsed —
+    the same order `dumped` grew in. `len(warnings) == n_positions` is the only thing holding those
+    two lists together, so it is asserted on every answered row rather than argued for once.
+    """
+    answered = [row for row in smoked["outcomes"] if not row["unreadable"]]
+    assert answered, "the smoke answered nothing, so this proves nothing"
+    for row in answered:
+        assert isinstance(row["warnings"], list)
+        assert len(row["warnings"]) == row["n_positions"]
+        for said in row["warnings"]:
+            assert set(said) <= {"multipack", "discount_footnote", "price_from"}
+
+
+def test_a_refused_reply_has_no_warning_list_rather_than_an_empty_one(smoked):
+    """`[]` and "unreadable" are different outcomes everywhere else in this record, and the
+    warnings field keeps that distinction: an empty list is a position with nothing to warn about,
+    and a refusal produced no positions at all to warn about."""
+    refused = [row for row in smoked["outcomes"] if row["unreadable"]]
+    assert refused, "the fake breaks replies on purpose — none here means the fixture changed"
+    assert all(row["warnings"] is None for row in refused)
+    assert all(row["n_positions"] is None for row in refused)
+
+
+def test_the_run_level_counter_is_derived_from_the_per_source_lists(smoked):
+    """One event, one count. A second counter kept while parsing is how the summary and the rows
+    stop agreeing without either of them looking wrong."""
+    extraction = smoked["extraction"]
+    said = [w for row in smoked["outcomes"] for pos in (row["warnings"] or []) for w in pos]
+    assert said, "the smoke produced no warning at all, so this counter is proven on nothing"
+    assert extraction["warnings_by_kind"] == {kind: said.count(kind) for kind in sorted(set(said))}
+    assert set(extraction["warnings_by_kind"]) == {
+        "multipack",
+        "discount_footnote",
+        "price_from",
+    }, "all three of (13)(a)'s families reach the record, not only the one the fixture stumbles on"
+    assert extraction["positions_with_a_warning"] == sum(
+        1 for row in smoked["outcomes"] for pos in (row["warnings"] or []) if pos
+    )
+    assert sum(extraction["warnings_by_kind"].values()) >= extraction["positions_with_a_warning"]
+
+
+def test_a_position_that_carries_a_warning_can_be_named_from_the_record():
+    """The question Dv232 exists to make answerable, asked directly: WHICH position carried it.
+
+    Driven on a constructed reply rather than on the smoke's, because the smoke's fake answers a
+    clean pair with no warning on it — and a debt closed only where the fixture happens to fire is
+    a debt closed by luck.
+    """
+    reply = {
+        "content": (
+            '[{"brand": "Рудь", "category": "ice-cream", "size": "6х100 г", "price_promo":'
+            ' "від 89,90 грн", "discount_pct_printed": "-31%*"}]'
+        )
+    }
+    found, reason = driver.parse(
+        reply,
+        "leaflet_page",
+        prompts.POSITIONS_TASK_PAGE,
+        positions.category_keys(load_registry(driver.REGISTRY).taxonomy),
+        {},
+    )
+    assert reason is None and len(found) == 1
+    assert list(found[0].warnings()) == ["multipack", "discount_footnote", "price_from"]
+    # and that is exactly what the outcome row would carry, at index 0, for this source
+    assert [list(p.warnings()) for p in found] == [["multipack", "discount_footnote", "price_from"]]
+
+
 def test_the_driver_names_the_two_registered_tasks_and_no_others():
     source = (REPO_ROOT / "scripts" / "positions_gm4_skub.py").read_text(encoding="utf-8")
     for task in prompts.POSITIONS:
