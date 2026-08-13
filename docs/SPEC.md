@@ -816,6 +816,44 @@ rendering, the ladder inputs — so that persistence is a prep deliverable and n
 an afterthought. The 4.5h2 per-row dump that was lost forever
 (`results/predictions/LOST.md`) is the precedent this clause exists to prevent
 repeating.
+(7) **The STOP ruling (operator, 2026-08-13, on the numbers of
+`results/census_5c2.json` and `results/projection_5c2.json` — the prep-c2 STOP).**
+(a) **The anchor is ratified:** `2026-08-09T00:00:00+00:00`, the corpus's own
+last day + 1 — the window is 2026-07-12 … 2026-08-09, and the census's
+`ids_sha256` pins which rows it selected. The two alternatives priced beside it
+(2026-08-14, 2026-07-28) were seen and declined.
+(b) **The phase cap moves 30 → 33 US dollars.** Same mechanics as (3), both
+homes in one commit; the anchor and every logged session UNTOUCHED. No money is
+added — the balance is 11.1690 at the ledger's last reading, the raise lifts the
+artificial line only. Records written UNDER the 30 cap — the prep-c2 projection
+and its STOP (`fits: false` against remaining 6.1690) — are true statements of
+their write moment: they are NEVER regenerated to fit the new cap, and their
+tests decouple from the live guard by the cap-in-force pattern of the ledger
+repair (`CAP_IN_FORCE_USD != PHASE_CAP_USD`).
+(c) **Composition: the session buys the WHOLE two-leg window** — all 5 075
+comments plus the leaflet leg of (d), ≈7.80 US dollars with drift at the
+conservative corner — so no ordering or tie-break clause exists to cut it; stop
+rules for a mid-run truncation are the pre-registration's to state.
+(d) **The leaflet leg's population is the leaflet corpus ON DISK**
+(`results/post_media_5c1.json`: today 159 pages under 19 posts, all
+`@atb_market_official`, 2026-07-01 … 07-23), NOT window-intersected: leaflets
+follow their own weekly cadence, and the window clause of (4) binds the comment
+and post legs only. ATB-only stands for this cycle; collecting other chains'
+leaflets is AUTHORISED as a separate zero-cost collection task — a prep, never
+inside the paid session.
+(e) **The post leg enters 5c2-run FILTERED, never raw.** A post-text pass (new
+code — `market_pulse.loop` has no such pass today, a prep deliverable) runs over
+the window's posts that pass the relevance prefilter — the lexicon-over-post-text
+instrument of `scripts/sku_prefilter_census.py` (the frame skub2's text pack drew
+from, the matched line kept as evidence), never the channel entry gate of 3.12,
+which gates CHANNELS; its population is counted by a zero-cost census of the
+prefilter over THIS window BEFORE the pre-registration, and the leg is priced on that count at
+the paid text marginal (skub2's 2.8132 s/row). The projection's 9 158-post raw
+bound enters no cap and no session.
+(f) **The pre-registration stays prep-c3, now unblocked by this ruling.** It
+exact-pins the chosen numbers by VALUE — the prep-c2 review's finding that the
+caps table is pinned by inequalities binds here: the registered cap row gets
+equality tests, not ceilings.
 <!-- amendment-3.18 end -->
 **Date:** 2026-07-26 · **Team lead:** Fable session · **Executor:** Claude Code
 **Repo folder:** `/Users/hdv_1987/Desktop/Projects/market-pulse-llm`
