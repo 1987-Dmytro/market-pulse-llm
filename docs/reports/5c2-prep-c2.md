@@ -109,7 +109,7 @@ resolved from the repo-relative string, the sha of those bytes matches, and it i
 
 ## Deliverable 1 — the census
 
-`results/census_5c2.json`, written by `scripts/census_5c2.py`, 16 tests in
+`results/census_5c2.json`, written by `scripts/census_5c2.py`, 17 tests in
 `tests/test_census_5c2.py`. No number downstream of it is hand-typed.
 
 ### The anchor
@@ -414,7 +414,34 @@ leaflet corpus on disk is **159 pages under 19 posts**, all of them ATB, dated 2
 
 ### 1 · `make check` after every commit
 
-Green after each, with the per-commit checkout table below and the control beside it.
+Every commit of this session checked out into a worktree and run on its own. **Dv193 re-measured
+rather than inherited:** a worktree cannot hold `data/` (gitignored), so it is replaced by a symlink
+to the repo's, and `tests/test_collect_5c1.py::test_the_guard_reads_the_pinned_paths_off_the_pin_file`
+is red on **every** row — including the control, which is the commit before this session began. In
+the main tree that nodeid passes:
+
+```
+$ python3 -m pytest tests/test_collect_5c1.py::test_the_guard_reads_the_pinned_paths_off_the_pin_file -q
+1 passed in 0.27s
+```
+
+| # | commit | result | failures |
+|---|---|---|---|
+| — | `139dd34` **(control)** | 1 failed, 2102 passed, 2 skipped | `test_the_guard_reads_the_pinned_paths_off_the_pin_file` |
+| 1 | `86757dd` | 1 failed, 2102 passed, 2 skipped | the same one |
+| 2 | `60067a2` | 1 failed, 2102 passed, 2 skipped | the same one |
+| 3 | `f06edcd` | 1 failed, **2103** passed, 2 skipped | the same one |
+| 4 | `8d4bd0b` | 1 failed, **2118** passed, 2 skipped | the same one |
+| 5 | `716bca5` | 1 failed, **2133** passed, 2 skipped | the same one |
+| 6 | `333cf2c` | 1 failed, **2135** passed, 2 skipped | the same one |
+| 7 | `d469942` | 1 failed, **2136** passed, 2 skipped | the same one |
+
+Same nodeid on every row, control included, and the count only ever rises. In the main tree, HEAD is
+**2137 passed, 2 skipped**, and `ruff format --check .` is clean.
+
+The last commit of this session is the one that appends this table, so it cannot carry its own
+result: it adds markdown to an already-green tree, and the `make check` run beside it is the
+evidence for it.
 
 ### 2 · The census run twice with the same anchor
 
@@ -431,7 +458,28 @@ value by hand and three tests go red; regenerate and all pass.
 
 ### 4 · `git log` and a clean `git status`
 
-Below.
+```
+$ git log --oneline 139dd34..HEAD
+d469942 docs(report): 5c2-prep-c2 -- the census, the projection, and the STOP the numbers force
+333cf2c fix(5c2-prep-c2): the two records stop moving with the working tree, and the quote names the line it prices
+716bca5 data(5c2-prep-c2): the projection -- both legs priced from paid serverless sessions, and the window does not fit
+8d4bd0b data(5c2-prep-c2): the census of the window -- 66 channels, one anchor, CANNOT ANSWER where the store cannot answer
+f06edcd fix(5c2-prep-c2): image_path goes into the record repo-relative, the reader resolves it
+60067a2 docs(vault): the prep-c1 session tail
+86757dd docs: 5c2-prep-c2 queued -- STATUS after the prep-c1 acceptance
+
+$ git status --short
+?? docs/reviews/          # the operator document of step 0, left alone
+```
+
+plus this report's own amendment commit and the session's vault tail, which are the two commits a
+report cannot carry its own hash for. Nothing else is uncommitted.
+
+### 5 · The report's own numbers, re-derived
+
+A throwaway script re-derives every figure in this report straight from `results/census_5c2.json`,
+`results/projection_5c2.json`, the smoke's own rows and `git log`, and greps each one back into the
+rendered file: **66 OK, 0 FAIL**. It is what caught the coverage-gap mislabel above.
 
 ---
 
@@ -467,3 +515,5 @@ the sections above.
 | 4 | `8d4bd0b` | `data(5c2-prep-c2): the census of the window — 66 channels, one anchor, CANNOT ANSWER where the store cannot answer` |
 | 5 | `716bca5` | `data(5c2-prep-c2): the projection — both legs priced from paid serverless sessions, and the window does not fit` |
 | 6 | `333cf2c` | `fix(5c2-prep-c2): the two records stop moving with the working tree, and the quote names the line it prices` |
+| 7 | `d469942` | `docs(report): 5c2-prep-c2 — the census, the projection, and the STOP the numbers force` |
+| 8 | — | `docs(report): 5c2-prep-c2 — the per-commit checkout table and the session's git log` (this amendment; a report cannot carry its own hash) |
