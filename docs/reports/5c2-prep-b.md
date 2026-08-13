@@ -221,10 +221,21 @@ correct as history: `$0.10` (vis-a), `$8` (Phase-3b OpenRouter), `$4.00` (5b sto
 
 **The queue is the `inference` watermark's, per channel**, stored exactly as `posts` is —
 `data/loop_cursor.json` through `market_pulse.backfill`'s atomic whole-file writer. Nothing about
-the `posts` watermark or the raw v1 stores changed. Evidence rows land in a NEW root,
-`data/derived/` (already gitignored by `data/*`), through `RawStore` — which is generic over
-`record_type`, so the derived store inherits the raw store's own `(channel, msg_id)` dedup with no
-second implementation.
+the `posts` watermark or the raw v1 stores changed.
+
+**Where evidence rows go, stated exactly.** The destination decided by this contract is a NEW root,
+`data/derived/` — beside the raw v1 stores, never inside them, already gitignored by `data/*` — and
+`run_loop.DERIVED_ROOT` is that registration. **Nothing writes there yet, and the constant says so
+in its own docstring.** The writer belongs to the paid session's contract, because a served pass
+needs an endpoint this contract may not register. The only code that writes evidence rows today is
+the stub-served smoke, into `results/smoke/derived/`, which a real pass must never read as already
+answered. Both go through `RawStore`, which is generic over `record_type`, so the derived store
+inherits the raw store's own `(channel, msg_id)` dedup with no second implementation.
+
+`DERIVED_ROOT` is deliberately not monkeypatched in the tests either: patching a constant nothing
+reads makes it look wired. What is asserted instead is the real property —
+`test_a_smoke_leaves_the_real_cursor_and_the_derived_store_untouched` checks that no directory
+appears there at all.
 
 **The ordering, which is the deliverable.** Per row: render → `send` → append the evidence row →
 the write closes (flushing it) → advance the watermark. The reverse order loses rows silently,
@@ -405,6 +416,16 @@ while D1 and D2 were being built, so it describes both as "не начаты" �
 and I edited nothing in it. The acceptance reads this report for the state, not that paragraph.
 
 ## 8. For prep-c, found and not pursued
+
+**A prerequisite, not a finding — it needs scheduling, not noting.** Of the three row kinds the
+table defines, only `comment` has a producer. `leaflet_page` and `position_row` have a schema, a
+completeness guard and tests, and **no writer**: the loop's pass builds comment rows, and the sku
+driver keeps its own shapes for the reasons in §6.1. So the leaflet half of the 3.18 (6) pack is
+specified and unbuilt. **5c2-run must not be the contract that first produces a `position_row`** —
+a paid session is the wrong place to discover that a record shape has never been written, which is
+the precedent `results/predictions/LOST.md` is. The positions leg's evidence writer belongs in
+prep-c or in a contract before the paid one.
+
 
 - **16,218 rows** sit above the `inference` watermark across the whole registry today (§2.2). This
   is the standing backlog, **not** the 3.18 (4) window, which is pre-registered BY ROW COUNT from a

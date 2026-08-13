@@ -49,6 +49,17 @@ from market_pulse.registry import load_registry  # noqa: E402
 REGISTRY = REPO_ROOT / "config" / "registry.yaml"
 STORE_ROOT = REPO_ROOT / "data" / "raw"
 DERIVED_ROOT = REPO_ROOT / "data" / "derived"
+"""Where a SERVED pass will write its evidence rows — **registered here, written by nothing yet.**
+
+The decision this constant carries is the one 5c2-prep-b was asked to make: derived data lands
+BESIDE the raw v1 stores and never inside them, in its own root, which `data/*` already gitignores.
+The writer is the paid session's, because a served pass needs an endpoint and this contract may not
+register one — so the only code that writes evidence rows today is :func:`smoke_inference`, into
+`SMOKE_DERIVED` under `results/smoke/`, which a real pass must never read as already answered.
+
+Deliberately not wired to a caller that cannot exist yet: a constant read by a path that refuses
+before reaching it would look tested and be exercised by nothing."""
+
 CAPTIONS = REPO_ROOT / "data" / "annotation" / "post_captions.jsonl"
 CURSOR = REPO_ROOT / "data" / "loop_cursor.json"
 SMOKE = REPO_ROOT / "results" / "smoke" / "loop_5a.json"

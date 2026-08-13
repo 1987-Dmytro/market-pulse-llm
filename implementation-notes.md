@@ -6868,3 +6868,9 @@ Artifacts: `src/market_pulse/evidence.py`, `tests/test_evidence.py`, `src/market
 (the inference leg), `scripts/run_loop.py` (`--infer`, `StubTransport`), `scripts/positions_gm4_skub.py`
 (Dv232, Dv176), `knowledge/decisions/the-law-grows-inside-marked-blocks.md`,
 `docs/reports/5c2-prep-b.md`.
+- **Dv258** — `run_loop.DERIVED_ROOT` registers where a SERVED pass will write and **nothing reads
+  it**; the writer is the paid session's. The report first described it in the present tense, and
+  the test helper monkeypatched it, which made an unread constant look wired. Both corrected: the
+  docstring says it has no writer, the patch is gone, and the smoke test asserts the real property —
+  no directory appears there at all. Of the three evidence kinds only `comment` has a producer, so
+  5c2-run must not be the contract that first writes a `position_row`.

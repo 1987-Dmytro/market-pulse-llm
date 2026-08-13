@@ -355,7 +355,10 @@ def wire(monkeypatch, tmp_path, sources):
     monkeypatch.setattr(runner, "CURSOR", tmp_path / "loop_cursor.json")
     monkeypatch.setattr(runner, "SMOKE", tmp_path / "smoke" / "loop_5a.json")
     monkeypatch.setattr(runner, "SMOKE_DERIVED", tmp_path / "smoke" / "derived")
-    monkeypatch.setattr(runner, "DERIVED_ROOT", tmp_path / "derived")
+    # `DERIVED_ROOT` is deliberately NOT patched: nothing reads it (see its docstring — it registers
+    # where a SERVED pass will write, and that writer is the paid session's). Patching it would make
+    # an unread constant look wired, and `test_a_smoke_leaves_the_real_cursor_and_the_derived_store
+    # _untouched` asserts the real thing instead — that no directory appears there at all.
     monkeypatch.setattr(runner, "CAPTIONS", tmp_path / "post_captions.jsonl")
     monkeypatch.setattr(runner, "load_registry", lambda _: type("R", (), {"sources": sources})())
     # Telethon's own constructor, not the repo's factory: patching `build_client` would only

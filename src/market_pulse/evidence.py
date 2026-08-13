@@ -110,6 +110,11 @@ def record(
     them. Extras are not refused — 3.18 (6) says "at minimum" — but they do not satisfy the table
     either: :func:`assert_complete` is what decides, and it runs on the result before it is returned,
     so a row that could not be shown at the sitting never reaches the disk.
+
+    One extra is a STORE requirement rather than a pack requirement and is therefore not in
+    :data:`REQUIRED`: `RawStore.append` keys a record's file on ``record_type``, so a writer
+    persisting these through it passes one (`loop.RECORD_TYPE`). A writer that forgets satisfies the
+    sitting's table and dies at the store — loudly, and before anything is written.
     """
     if row_kind not in KINDS:
         raise ValueError(f"row_kind {row_kind!r} is not one of {list(KINDS)}")
