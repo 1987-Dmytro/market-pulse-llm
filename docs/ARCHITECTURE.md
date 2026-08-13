@@ -321,7 +321,7 @@ they are executable in the only sense that matters: a paid session is driven fro
 | `runbook_5b2.md` | closed | Phase 5b.2 runbook: does greedy survive N>1 — a carve ladder picks N, test v4 scored once at it. | results/batch_5b2_verdict.json |
 | `runbook_srv2b.md` | battle | srv-2b runbook: the serverless classification endpoint, from an empty account to a parity number. | tests/test_srv2a_worker.py |
 | `runbook_vis_b.md` | battle | vis-b runbook: the GM4 caption instrument on the serverless endpoint, cap $1.00, three env vars. | tests/test_caption_gm4_driver.py |
-| `runpod_guard.py` | battle | The $25 Phase-4 GPU cap, checked against RunPod billing before every pod start; per-step caps too. | tests/test_runpod_guard.py |
+| `runpod_guard.py` | battle | The $30 Phase-4 GPU cap (raised from $25 by SPEC 3.18 (3), operator ruling 2026-08-13), checked against RunPod billing before every pod start; per-step caps too. | tests/test_runpod_guard.py |
 | `salvage_5b2.py` | one-shot | Reads the OOM'd batch-16 eval checkpoint and writes a verdict whose outcome says the run failed. | results/batch_5b2_verdict.json |
 | `serve_handler.py` | battle | The RunPod serverless worker: info/batch/caption ops answered through market_pulse.local_llm. | results/parity_srv2.json:99 |
 | `show_results.py` | battle | Read-only printer of results/baselines.json and the v3 re-scores; computes nothing, writes nothing. | tests/test_rescore_v3.py |
