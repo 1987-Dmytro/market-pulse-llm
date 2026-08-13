@@ -488,13 +488,30 @@ def test_the_stub_served_smoke_writes_evidence_rows_and_names_the_stub(monkeypat
         evidence.assert_complete(row)
 
 
-def the_derived_root_is_untouched() -> None:
+def derived_root_snapshot() -> dict:
+    """Every file under the REAL derived root and its sha — ``{}`` while the root is not there."""
+    root = runner.DERIVED_ROOT
+    if not root.exists():
+        return {}
+    return {
+        str(path.relative_to(root)): hashlib.sha256(path.read_bytes()).hexdigest()
+        for path in sorted(root.rglob("*"))
+        if path.is_file()
+    }
+
+
+def the_derived_root_is_untouched(before: dict) -> None:
     """The D1 guard, spelled ONCE so the sensitivity test below exercises this very assertion.
 
     Re-typing it in the second test would prove that a look-alike refuses and say nothing about the
     one that runs in the smoke test.
+
+    Redesigned when `5c2-run` became the legitimate writer of `data/derived/`, exactly as the
+    smoke test's docstring said it would be: from "the root does not exist" to a before/after
+    snapshot, so a smoke is still refused the real root while a served pass is allowed it. The
+    weaker form would have been to delete the assertion; this one still fails on a single row.
     """
-    assert not runner.DERIVED_ROOT.exists(), "data/derived/ is the real pass's, not a smoke's"
+    assert derived_root_snapshot() == before, "data/derived/ is the real pass's, not a smoke's"
 
 
 def test_a_smoke_leaves_the_real_cursor_and_the_derived_store_untouched(monkeypatch, tmp_path):
@@ -514,12 +531,13 @@ def test_a_smoke_leaves_the_real_cursor_and_the_derived_store_untouched(monkeypa
     """
     wire_infer(monkeypatch, tmp_path)
     before = digests(tmp_path)
+    before_derived = derived_root_snapshot()
 
     runner.main(["--once", "--smoke", "--infer", "--channel", "@VARUS_channel"])
 
     after = digests(tmp_path)
     assert after["loop_cursor.json"] == before["loop_cursor.json"]
-    the_derived_root_is_untouched()
+    the_derived_root_is_untouched(before_derived)
     assert {path for path in after if not path.startswith("smoke/")} == set(before)
 
 
@@ -535,12 +553,13 @@ def test_the_derived_root_guard_refuses_a_row_planted_in_the_real_root(monkeypat
     guard, one line later.
     """
     monkeypatch.setattr(runner, "DERIVED_ROOT", tmp_path / "derived")
+    before = derived_root_snapshot()
     store, _, posts, state = wired(tmp_path)
     planted = RawStore(runner.DERIVED_ROOT)
     assert run(store, planted, posts, state)["written"] == 3
 
     with pytest.raises(AssertionError, match="the real pass's"):
-        the_derived_root_is_untouched()
+        the_derived_root_is_untouched(before)
 
 
 def test_the_smoke_answers_at_most_the_limit_it_was_given(monkeypatch, tmp_path):
@@ -848,7 +867,19 @@ def test_the_position_row_carries_the_values_the_sitting_reads_field_by_field(tm
 # --- the script's leaflet leg: stub-served, guard closed, sandbox intact --------------------
 
 
-def wire_pages(monkeypatch, tmp_path, *, ids=(4340, 4341, 4342, 4343, 4344)):
+FIXTURE_PAGE_IDS = (9_904_340, 9_904_341, 9_904_342, 9_904_343, 9_904_344)
+"""Page ids no collected leaflet can have, for the ONE fixture that runs against the real root.
+
+`wire_pages` drives `run_loop.main`, and `DERIVED_ROOT` is unpatched there on purpose so the guard
+watches the repo's own `data/derived/`. That makes the fixture share an answered-set with
+production: `5c2-run` bought `@atb_market_official` pages 4340–4526, and this fixture's five pages
+were four of them, so its queue silently became 0 and the refusal reported a number about the wrong
+thing. `paged()` and `posted()` keep the small ids — they own their derived store and cannot
+collide.
+"""
+
+
+def wire_pages(monkeypatch, tmp_path, *, ids=FIXTURE_PAGE_IDS):
     """The script's leaflet leg pointed at a throwaway manifest and throwaway pages.
 
     `REPO_ROOT` is patched rather than a `root=` knob added to `pages_of`: the manifest names
@@ -904,7 +935,7 @@ def test_pages_of_emits_the_manifests_repo_relative_path(monkeypatch, tmp_path):
     found = runner.pages_of(manifest, "@atb_market_official")
 
     assert [page["path"] for page in found] == [
-        f"media/atb_{msg_id}.jpg" for msg_id in range(4340, 4345)
+        f"media/atb_{msg_id}.jpg" for msg_id in FIXTURE_PAGE_IDS
     ]
     for page in found:
         assert not Path(page["path"]).is_absolute()
@@ -919,13 +950,14 @@ def test_a_page_pass_without_the_smoke_is_refused_by_the_guard(monkeypatch, tmp_
     the control that the older guard did not move.
     """
     wire_pages(monkeypatch, tmp_path)
+    before_derived = derived_root_snapshot()
     with pytest.raises(SystemExit, match="3.11 \\(2\\)") as refused:
         runner.main(["--once", "--pages", "--channel", "@atb_market_official"])
     # its OWN queue depth: the comment queue here is 0, and a refusal naming that number would be
     # true about something else. Five pages are waiting and the message says five.
     assert str(refused.value).startswith("5 rows are queued")
     assert not (tmp_path / "smoke").exists(), "a refused pass wrote nothing"
-    the_derived_root_is_untouched()
+    the_derived_root_is_untouched(before_derived)
 
 
 def test_the_stub_served_page_smoke_writes_a_page_row_and_its_position_rows(monkeypatch, tmp_path):
@@ -945,7 +977,7 @@ def test_the_stub_served_page_smoke_writes_a_page_row_and_its_position_rows(monk
             "pages_written": 5,
             "positions_written": 4,
             "unreadable": 1,
-            "watermark": 4344,
+            "watermark": FIXTURE_PAGE_IDS[4],
         }
     ]
     # the block beside `inference`, never inside it: that one still answers "is an endpoint
@@ -956,12 +988,17 @@ def test_the_stub_served_page_smoke_writes_a_page_row_and_its_position_rows(monk
     smoke_store = RawStore(tmp_path / "smoke" / "derived")
     pages = smoke_store.rows(loop.PAGE_RECORD_TYPE, "@atb_market_official")
     rows = smoke_store.rows(loop.POSITION_RECORD_TYPE, "@atb_market_official")
-    assert [page["msg_id"] for page in pages] == [4340, 4341, 4342, 4343, 4344]
-    assert [row["msg_id"] for row in rows] == [4340, 4341, 4341, 4344]
+    assert [page["msg_id"] for page in pages] == list(FIXTURE_PAGE_IDS)
+    assert [row["msg_id"] for row in rows] == [
+        FIXTURE_PAGE_IDS[0],
+        FIXTURE_PAGE_IDS[1],
+        FIXTURE_PAGE_IDS[1],
+        FIXTURE_PAGE_IDS[4],
+    ]
     # EQUALITY, not `endswith`: an absolute path ends with the same basename, which is how Dv264
     # shipped past the evidence-table test above. Repo-relative is the whole ruling.
     assert [page["image_path"] for page in pages] == [
-        f"media/atb_{msg_id}.jpg" for msg_id in range(4340, 4345)
+        f"media/atb_{msg_id}.jpg" for msg_id in FIXTURE_PAGE_IDS
     ]
     assert {row["served_by"] for row in pages + rows} == {runner.STUB_PAGE_SERVED_BY}
     for row in pages + rows:
@@ -975,12 +1012,13 @@ def test_the_stub_served_page_smoke_writes_a_page_row_and_its_position_rows(monk
 def test_a_page_smoke_leaves_the_real_cursor_and_the_derived_store_untouched(monkeypatch, tmp_path):
     wire_pages(monkeypatch, tmp_path)
     before = digests(tmp_path)
+    before_derived = derived_root_snapshot()
 
     runner.main(["--once", "--smoke", "--pages", "--channel", "@atb_market_official"])
 
     after = digests(tmp_path)
     assert after["loop_cursor.json"] == before["loop_cursor.json"]
-    the_derived_root_is_untouched()
+    the_derived_root_is_untouched(before_derived)
     assert {path for path in after if not path.startswith("smoke/")} == set(before)
 
 
@@ -1485,12 +1523,13 @@ def test_a_post_pass_without_the_smoke_is_refused_with_this_legs_queue_depth(mon
     number about something else.
     """
     wire_posts(monkeypatch, tmp_path)
+    before_derived = derived_root_snapshot()
     with pytest.raises(SystemExit, match="3.11 \\(2\\)") as refused:
         runner.main(["--once", "--posts", "--channel", "@atb_market_official"])
 
     assert str(refused.value).startswith("6 rows are queued")
     assert not (tmp_path / "smoke").exists(), "a refused pass wrote nothing"
-    the_derived_root_is_untouched()
+    the_derived_root_is_untouched(before_derived)
 
 
 def test_5c2_prep_c3a_leaves_the_endpoint_constant_closed():
@@ -1556,12 +1595,13 @@ def test_the_stub_served_post_smoke_writes_one_row_per_position(monkeypatch, tmp
 def test_a_post_smoke_leaves_the_real_cursor_and_the_derived_store_untouched(monkeypatch, tmp_path):
     wire_posts(monkeypatch, tmp_path)
     before = digests(tmp_path)
+    before_derived = derived_root_snapshot()
 
     runner.main(["--once", "--smoke", "--posts", "--channel", "@atb_market_official"])
 
     after = digests(tmp_path)
     assert after["loop_cursor.json"] == before["loop_cursor.json"]
-    the_derived_root_is_untouched()
+    the_derived_root_is_untouched(before_derived)
     assert {path for path in after if not path.startswith("smoke/")} == set(before)
 
 

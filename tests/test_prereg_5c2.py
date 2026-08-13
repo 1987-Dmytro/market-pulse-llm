@@ -193,7 +193,13 @@ def test_the_remainder_is_derived_from_the_live_cap_and_not_read_off_the_ledger(
     with the cap each answers under. Reading the field would have refused an $8.00 cap that fits."""
     ledger = json.loads((REPO_ROOT / "results" / "spend_phase4.json").read_text(encoding="utf-8"))
     money = RECORD["budget"]
-    last = ledger["sessions"][-1]
+    # BY ITS TIMESTAMP, not by position. The registration names this row — `budget.read_at` — and
+    # `sessions[-1]` was the same row only until the next paid session was witnessed. 5c2-run's own
+    # Endpoint A entry pushed it off the end, and a positional read would then have compared the
+    # sealed numbers against a DIFFERENT row and failed on a ledger that had done nothing wrong.
+    named = [row for row in ledger["sessions"] if row["at"] == money["read_at"]]
+    assert len(named) == 1, f"{len(named)} sessions at {money['read_at']} — the pin is ambiguous"
+    last = named[0]
 
     assert last["remaining_usd"] == 6.1690, "the field, unchanged and never re-scored"
     assert last["spent_usd"] == 23.8310
