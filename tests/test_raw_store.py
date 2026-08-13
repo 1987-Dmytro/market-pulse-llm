@@ -255,8 +255,13 @@ def test_several_rows_from_one_message_all_survive_the_append(tmp_path):
 
     assert store.append(rows) == 3
     assert len(RawStore(tmp_path).rows("position_row", "@VARUS_channel")) == 3
-    assert RawStore(tmp_path).index("position_row", "@VARUS_channel").ids == {4340}, (
+    index = RawStore(tmp_path).index("position_row", "@VARUS_channel")
+    assert index.ids == {4340}, (
         "`ids` stays the MESSAGE id space: it is what a queue subtracts answered pages by"
+    )
+    assert index.count == 1, (
+        "and `count` counts THOSE — one page, three rows. Pinned rather than left to be discovered:"
+        " for a fanned-out type it is not the row count, and nothing reads it today"
     )
 
 

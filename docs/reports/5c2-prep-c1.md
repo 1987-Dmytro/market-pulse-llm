@@ -124,6 +124,25 @@ re-run free after a pass that was killed.
 The sealed instrument is reached by import, never copied: `positions.parse_positions`,
 `positions.tier_from_presence`, `positions.origin_of`, `evidence.presence`.
 
+**Where the ladder is called from, and why it is two paths.** The `tier` a row STORES comes from
+`Position.tier()`; `positions.tier_from_presence` is what the invariant re-derives it WITH. The
+contract's letter says "the ladder through `tier_from_presence`", and writing the stored value with
+that function too would make the re-derivation compare it to itself — the invariant would hold on a
+`presence` that was wrong. The two are held together by
+`tests/test_evidence.py::test_the_presence_fields_re_derive_the_ladders_own_tier` over every
+combination of the four optional fields, and per row by the pass test above.
+
+**The page row is written LAST.** `RawStore.append` writes file by file — one `open("a")` per record
+type, closed before the next — and `queued_pages` keys the queue on the page record type, so the
+page row on disk **is** the answered-marker. Written first, a kill between the two file writes would
+leave a page row claiming `n_positions: 2` with nothing behind it and the re-run would subtract that
+page as answered: rows gone for good, hole invisible. Written last, the same kill leaves the
+positions with no marker, the page is re-asked, and `dedup_key` skips what is already there. Both
+directions are tested (`test_a_kill_between_the_two_files_leaves_the_page_queued`,
+`test_the_resumed_page_writes_only_what_the_kill_left_missing`), and the test is sensitive to the
+ORDER, not merely to the failure — under page-first it goes red with `assert [] == [0, 1]`, measured
+by temporarily restoring that order.
+
 **`image_sha256` is the sha of the bytes sent.** `render_page` reads the file ONCE and builds both
 the hash and the payload from that one `bytes` object — hashing a path separately from encoding it
 is two reads of a file that can move between them.

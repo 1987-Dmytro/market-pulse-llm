@@ -359,7 +359,16 @@ def page_rows(
     served_by: str,
     task: str,
 ) -> list[dict]:
-    """One page's evidence: the page row, then one row per position in the parser's order.
+    """One page's evidence: the positions in the parser's order, and the page row LAST.
+
+    **That order is the second half of "durable before the watermark" and it is not cosmetic.**
+    `RawStore.append` writes file by file — one `open("a")` per record type, sequential — and
+    :func:`queued_pages` keys the queue on the PAGE record type, so the page row on disk IS this
+    page's answered-marker. Written first, a kill between the two file writes would leave a page row
+    saying `n_positions: 3` with no position rows behind it, and the re-run would subtract that page
+    as answered: the three rows gone for good, and nothing downstream able to see the hole. Written
+    last, the same kill leaves position rows and no marker, the page is simply re-asked, and
+    `raw_store.dedup_key` skips the rows already there. The marker goes after the thing it marks.
 
     Both kinds carry `image_path` and `image_sha256`, though only the page kind is required to:
     SPEC 3.18 (6) shows the operator each position beside the picture it was read from, and a
@@ -385,16 +394,6 @@ def page_rows(
     }
     rows = [
         evidence.record(
-            "leaflet_page",
-            **common,
-            record_type=PAGE_RECORD_TYPE,
-            n_positions=None if reason else len(found),
-            unreadable=reason,
-            warnings=None if reason else [list(position.warnings()) for position in found],
-        )
-    ]
-    rows += [
-        evidence.record(
             "position_row",
             **common,
             record_type=POSITION_RECORD_TYPE,
@@ -418,6 +417,18 @@ def page_rows(
         )
         for ordinal, position in enumerate(found)
     ]
+    # LAST, and see the docstring: this row is the queue's answered-marker, so it must not reach
+    # disk before the rows it speaks for.
+    rows.append(
+        evidence.record(
+            "leaflet_page",
+            **common,
+            record_type=PAGE_RECORD_TYPE,
+            n_positions=None if reason else len(found),
+            unreadable=reason,
+            warnings=None if reason else [list(position.warnings()) for position in found],
+        )
+    )
     return rows
 
 

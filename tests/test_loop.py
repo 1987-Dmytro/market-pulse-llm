@@ -981,3 +981,63 @@ def test_a_second_page_smoke_over_the_same_window_answers_nothing(monkeypatch, t
     assert record["smoke_pages"]["transport_calls"] == 0
     assert record["smoke_pages"]["per_channel"][0]["asked"] == 0
     assert digests(tmp_path / "smoke" / "derived") == written
+
+
+def test_a_kill_between_the_two_files_leaves_the_page_queued(tmp_path):
+    """The page row is this page's ANSWERED-MARKER, so it must not reach disk before its positions.
+
+    `RawStore.append` writes file by file — one `open("a")` per record type, closed before the next
+    is opened — and `queued_pages` keys the queue on the page record type. With the page row written
+    first, a kill between the two files would leave a page row saying `n_positions: 2` with nothing
+    behind it, and the re-run would subtract that page as answered: the rows gone for good, and the
+    hole invisible to everything downstream. The cursor cannot help — it was never saved either.
+
+    The fake stops after the FIRST of the two files, which is what makes this test sensitive to the
+    order rather than to the failure: under the old order it is the page row that survives, and the
+    page is no longer queued.
+    """
+    pages, derived, state = paged(tmp_path, ids=(4340,))
+
+    class DiesAfterTheFirstFile(RawStore):
+        def append(self, records):
+            first = records[0]["record_type"]
+            super().append([row for row in records if row["record_type"] == first])
+            raise OSError("the disk went away between the two files")
+
+    with pytest.raises(OSError, match="between the two files"):
+        run_pages(pages, DiesAfterTheFirstFile(tmp_path / "derived"), state, replies(PAIR))
+
+    fresh = RawStore(tmp_path / "derived")
+    assert [row["ordinal"] for row in stored(tmp_path, loop.POSITION_RECORD_TYPE)] == [0, 1], (
+        "the positions are durable"
+    )
+    assert stored(tmp_path, loop.PAGE_RECORD_TYPE) == [], "and the marker is not"
+    assert [
+        page["msg_id"] for page in loop.queued_pages(pages, fresh, "@atb_market_official", None)
+    ] == [4340], "so the page is still queued and will be re-asked"
+
+
+def test_the_resumed_page_writes_only_what_the_kill_left_missing(tmp_path):
+    """The other half: re-asking a half-written page must not duplicate the rows that survived."""
+    pages, derived, state = paged(tmp_path, ids=(4340,))
+
+    class DiesAfterTheFirstFile(RawStore):
+        def append(self, records):
+            first = records[0]["record_type"]
+            super().append([row for row in records if row["record_type"] == first])
+            raise OSError("the disk went away between the two files")
+
+    with pytest.raises(OSError):
+        run_pages(pages, DiesAfterTheFirstFile(tmp_path / "derived"), {}, replies(PAIR))
+    survived = (tmp_path / "derived" / "position_rows" / "atb_market_official.jsonl").read_bytes()
+
+    fresh = RawStore(tmp_path / "derived")
+    run_pages(
+        loop.queued_pages(pages, fresh, "@atb_market_official", None), fresh, state, replies(PAIR)
+    )
+
+    assert len(stored(tmp_path, loop.POSITION_RECORD_TYPE)) == 2, "no duplicates"
+    assert (
+        tmp_path / "derived" / "position_rows" / "atb_market_official.jsonl"
+    ).read_bytes() == survived
+    assert len(stored(tmp_path, loop.PAGE_RECORD_TYPE)) == 1, "and the marker is written now"
