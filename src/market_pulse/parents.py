@@ -181,8 +181,13 @@ def text_for(posts: dict[tuple[str, int], str], row: dict) -> str:
     """
     key = (row["channel"], row["parent_msg_id"])
     if key not in posts:
+        # `id` is the annotation batches' key and every caller before the 5c2 loop had one. A raw
+        # `raw_store.comment_record` does not — it is keyed (channel, msg_id) — so naming the row by
+        # `row["id"]` turned this deliberate STOP into a KeyError for the one caller that reads the
+        # store directly, and the message that says what is wrong is the whole value of the stop.
+        named = row.get("id") or f"{row['channel']}:{row['msg_id']}"
         raise ValueError(
-            f"{row['id']}: its parent {key[0]}:{key[1]} is not in the stored posts. Every"
+            f"{named}: its parent {key[0]}:{key[1]} is not in the stored posts. Every"
             " comment was collected from a stored post's thread (docs/annotation/comments.md"
             " §Unit), so this is a gap in the store and not a row to ask without its post."
         )

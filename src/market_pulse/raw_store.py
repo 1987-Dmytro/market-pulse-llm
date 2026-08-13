@@ -182,6 +182,29 @@ class RawStore:
             cls._absorb(index, record)
         return index
 
+    def rows(self, record_type: str, channel: str) -> list[dict]:
+        """Every stored record of one (type, channel), in the order it was appended.
+
+        The index answers "which ids are here"; a caller that needs the record itself — the loop's
+        inference leg needs a comment's text and its parent — was opening the JSONL by hand, and
+        `data/raw/<type>s/<channel>.jsonl` is a layout that belongs to this class rather than to its
+        callers. Damaged lines are skipped for the same reason :meth:`_read_index` counts them: a
+        kill mid-write leaves a partial last line, and refusing the file would turn "interrupt and
+        rerun" into "start over".
+        """
+        path = self.path(record_type, channel)
+        if not path.exists():
+            return []
+        out = []
+        for line in path.read_text(encoding="utf-8").splitlines():
+            if not line.strip():
+                continue
+            try:
+                out.append(json.loads(line))
+            except json.JSONDecodeError:
+                continue
+        return out
+
     def append(self, records: list[dict]) -> int:
         """Write the records not already stored. Returns how many were new."""
         written = 0

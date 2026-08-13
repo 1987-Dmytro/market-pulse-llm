@@ -21,6 +21,7 @@ the position, and a cursor that cannot be parsed restarts the walk rather than t
 
 from collections.abc import Iterable
 
+from market_pulse import evidence, parents, prompts
 from market_pulse.backfill import load_cursor, save_cursor  # noqa: F401  (re-exported)
 
 POSTS = "posts"
@@ -131,6 +132,114 @@ def render_plan(rows: list[dict]) -> str:
         f"{sum(r['rows_to_inference'] for r in rows)} rows would go to inference"
     )
     return "\n".join(lines)
+
+
+# --- the inference leg: render, send, WRITE, then move the watermark ---------------------------
+
+COMMENT_TASK = prompts.REVISIONS["v4"]["T1"]
+"""Which registered prompt the loop asks a comment with — read out of `prompts.REVISIONS`, not
+spelled out. That table is the one place that answers "what instrument is this run using", and the
+v4 entry is the rendering the v4 gold was written with (the parent post is in the request, per
+`docs/annotation/comments.md` §Unit). A literal here would be a second answer to that question, free
+to drift from the gates the loop's numbers will be compared against."""
+
+RECORD_TYPE = "inference"
+"""The derived store's record type. `RawStore` keys its files on this and dedupes on
+``(channel, msg_id)`` per type, so the evidence rows get the raw store's own idempotence with no
+second implementation — and they land in their own root BESIDE `data/raw/`, never inside it."""
+
+
+def queued(store, derived, handle: str, watermark: int | None) -> list[dict]:
+    """The stored comments this pass still owes an answer for, oldest first.
+
+    Two filters and they close different holes. The **watermark** is the queue 3.18 prices, and it
+    is what a completed pass moves. The **derived store's own ids** are what makes a re-run free
+    after a pass that was killed: the records it did write are durable and its watermark never
+    moved, so the watermark alone would re-buy every one of them. Subtracting what is already
+    written means "a re-run buys nothing twice" holds for an INTERRUPTED pass and not only for a
+    completed one.
+    """
+    answered = derived.index(RECORD_TYPE, handle).ids
+    rows = [
+        row
+        for row in store.rows("comment", handle)
+        if row["msg_id"] > (watermark or 0) and row["msg_id"] not in answered
+    ]
+    return sorted(rows, key=lambda row: row["msg_id"])
+
+
+def render_comment(posts: dict, captions: dict, row: dict, task: str = COMMENT_TASK) -> tuple:
+    """One comment as the request the model gets, and which of the four post states it is in.
+
+    `parents.context` decides what stands in the post's place and `parents.post_kwargs` translates
+    its answer into `build_messages`' keywords — both are reached rather than reimplemented, because
+    a run that asked half its rows with a caption and half with `(this post has no text)` because
+    two call sites disagreed is precisely what those two functions exist to make impossible.
+    """
+    found = parents.context(posts, captions, row)
+    return prompts.build_messages(task, row["text"], **parents.post_kwargs(found)), found["state"]
+
+
+def inference_pass(
+    rows: list[dict],
+    *,
+    send,
+    posts: dict,
+    captions: dict,
+    derived,
+    state: dict,
+    model_revision,
+    served_by: str,
+    task: str = COMMENT_TASK,
+) -> dict:
+    """One channel's queued comments through the model. The record is durable BEFORE the watermark.
+
+    The order is the whole point and it is not a preference: append the evidence row, let the write
+    close (which flushes it), and only then move the watermark past that id. The other order loses
+    rows silently — a watermark that moved past a row whose record was never written leaves a hole
+    nothing downstream can see, because the queue is defined as "above the watermark" and the row is
+    no longer in it.
+
+    The watermark advances per ROW, in memory. Persisting the cursor is the caller's, once, after
+    the pass — and if this raises, the caller must not persist it: an exception here means the row
+    being worked on has no record, and every row before it does. `tests/test_loop.py::
+    test_an_interrupted_pass_leaves_the_watermark_and_the_queue_where_they_were` drives exactly that.
+
+    ``send`` is the SEAM, and it is the only thing a smoke replaces. Everything that builds the
+    record — the rendering, the prompt sha, the evidence table — is the production path in both
+    cases, because a stub shares the premises of the code it stands in for and would agree with a
+    record shape that is wrong.
+    """
+    written, states = [], []
+    for row in rows:
+        rendering, post_state = render_comment(posts, captions, row, task)
+        reply = send(task, rendering)
+        derived.append(
+            [
+                evidence.record(
+                    "comment",
+                    channel=row["channel"],
+                    msg_id=row["msg_id"],
+                    parent_msg_id=row["parent_msg_id"],
+                    task=task,
+                    model_revision=model_revision,
+                    served_by=served_by,
+                    rendering=rendering,
+                    reply=reply,
+                    record_type=RECORD_TYPE,
+                    post_state=post_state,
+                )
+            ]
+        )
+        advance(state, INFERENCE, [row["msg_id"]])
+        written.append(row["msg_id"])
+        states.append(post_state)
+    return {
+        "asked": len(rows),
+        "written": len(written),
+        "watermark": state.get(INFERENCE),
+        "post_states": {name: states.count(name) for name in sorted(set(states))},
+    }
 
 
 def inference_refusal(rows: int, endpoint: str | None) -> str | None:

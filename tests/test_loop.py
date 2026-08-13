@@ -1,6 +1,7 @@
 """Offline tests for the Phase-5a loop skeleton — no Telegram, no session, no writes."""
 
 import hashlib
+import json
 import sys
 from pathlib import Path
 
@@ -11,7 +12,7 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 import run_loop as runner  # noqa: E402
 
-from market_pulse import loop  # noqa: E402
+from market_pulse import evidence, loop, parents, prompts  # noqa: E402
 from market_pulse.raw_store import RawStore, comment_record, post_record  # noqa: E402
 from market_pulse.registry import Source  # noqa: E402
 from test_raw_store import SALT, SOURCE, FakeMessage, provenance  # noqa: E402
@@ -158,6 +159,158 @@ def test_queue_depth_counts_only_ids_above_the_watermark():
     assert loop.queue_depth([], 5) == 0
 
 
+# --- the inference leg: the record is durable before the watermark moves -------------------
+
+TASK = loop.COMMENT_TASK
+
+
+def texted_store(tmp_path, *, posts=(), comments=()):
+    """A store whose posts and comments carry text, so a with-post prompt can be rendered."""
+    store = RawStore(tmp_path)
+    store.append(
+        [
+            post_record(
+                FakeMessage(i, text=f"пост {i}", replies=1), SOURCE, "@VARUS_channel", provenance()
+            )
+            for i in posts
+        ]
+    )
+    store.append(
+        [
+            comment_record(
+                FakeMessage(i, text=f"коментар {i}"),
+                SOURCE,
+                "@VARUS_channel",
+                parent,
+                SALT,
+                provenance(),
+            )
+            for parent, i in comments
+        ]
+    )
+    return store
+
+
+def wired(tmp_path, *, posts=(1,), comments=((1, 100), (1, 101), (1, 102))):
+    """(store, derived, posts-index, state) for one channel — everything the pass takes."""
+    store = texted_store(tmp_path / "raw", posts=posts, comments=comments)
+    derived = RawStore(tmp_path / "derived")
+    return store, derived, parents.load(tmp_path / "raw" / "posts"), {}
+
+
+def answer(task, rendering):
+    return {"content": '{"sentiment": "neutral"}', "finish_reason": "stop"}
+
+
+def run(store, derived, posts, state, rows=None, send=answer):
+    return loop.inference_pass(
+        rows
+        if rows is not None
+        else loop.queued(store, derived, "@VARUS_channel", state.get(loop.INFERENCE)),
+        send=send,
+        posts=posts,
+        captions={},
+        derived=derived,
+        state=state,
+        model_revision=None,
+        served_by="<test>",
+    )
+
+
+def test_a_pass_writes_one_evidence_row_per_queued_comment_and_advances(tmp_path):
+    store, derived, posts, state = wired(tmp_path)
+
+    summary = run(store, derived, posts, state)
+
+    assert summary["asked"] == summary["written"] == 3
+    assert state[loop.INFERENCE] == 102
+    assert derived.index(loop.RECORD_TYPE, "@VARUS_channel").count == 3
+
+
+def test_every_row_the_pass_writes_satisfies_the_evidence_table(tmp_path):
+    """Driven through the PASS, not through `evidence.record` — checking the builder against the
+    table it also writes would be circular. What has to hold is that the production path produces
+    rows the 3.18 (6) sitting could be built from."""
+    store, derived, posts, state = wired(tmp_path)
+    run(store, derived, posts, state)
+
+    rows = RawStore(tmp_path / "derived").rows(loop.RECORD_TYPE, "@VARUS_channel")
+    assert len(rows) == 3
+    for row in rows:
+        assert evidence.assert_complete(row) is row
+        assert row["prompt_sha256"] == prompts.prompt_sha256(TASK)
+        # the EXACT rendering, not a description of it: the post and the comment are both in it
+        assert "коментар" in row["rendering"][0]["content"]
+        assert "<post>" in row["rendering"][0]["content"]
+
+
+def test_an_interrupted_pass_leaves_the_watermark_and_the_queue_where_they_were(tmp_path):
+    """The interruption is between «the model answered» and «the record was written».
+
+    The reply exists — the transport returned it — and the sink refuses. What must not happen is a
+    watermark that moved past a row whose record is not on disk: the queue is *defined* as "above
+    the watermark", so that row would leave a hole nothing downstream could see.
+
+    Asserted against the cursor ON DISK and not against the in-memory `state`: the guarantee is
+    about what survives the process, and a `finally: save_cursor(...)` anywhere in the pass would
+    make an in-memory assertion pass while the file told the opposite story.
+    """
+    cursor_path = tmp_path / "loop_cursor.json"
+    loop.save_cursor(cursor_path, {"@VARUS_channel": {loop.INFERENCE: 100}})
+    store, derived, posts, _ = wired(tmp_path)
+    cursor = loop.load_cursor(cursor_path)
+    state = loop.channel_state(cursor, "@VARUS_channel")
+    queued_before = loop.queued(store, derived, "@VARUS_channel", state.get(loop.INFERENCE))
+    assert [row["msg_id"] for row in queued_before] == [101, 102]
+
+    class RefusesToWrite(RawStore):
+        def append(self, records):
+            raise OSError("the disk went away between the answer and the write")
+
+    with pytest.raises(OSError, match="between the answer and the write"):
+        run(store, RefusesToWrite(tmp_path / "derived"), posts, state, rows=queued_before)
+
+    on_disk = loop.load_cursor(cursor_path)["@VARUS_channel"]
+    assert on_disk[loop.INFERENCE] == 100, "the watermark on disk never moved"
+    assert [
+        row["msg_id"]
+        for row in loop.queued(store, derived, "@VARUS_channel", on_disk[loop.INFERENCE])
+    ] == [101, 102], "both rows are still queued"
+
+
+def test_a_rerun_of_the_same_pass_writes_no_new_record_and_leaves_the_watermark(tmp_path):
+    """Idempotence asserted on the ARTIFACT: the file's row count and the watermark, not prose."""
+    store, derived, posts, state = wired(tmp_path)
+    run(store, derived, posts, state)
+    first = (tmp_path / "derived" / "inferences" / "VARUS_channel.jsonl").read_bytes()
+
+    again = run(store, RawStore(tmp_path / "derived"), posts, state)
+
+    assert again == {"asked": 0, "written": 0, "watermark": 102, "post_states": {}}
+    assert (tmp_path / "derived" / "inferences" / "VARUS_channel.jsonl").read_bytes() == first
+
+
+def test_the_queue_subtracts_rows_a_killed_pass_already_answered(tmp_path):
+    """The crash-resume case the watermark alone cannot see.
+
+    A pass that wrote two records and died before its cursor was saved leaves durable rows and an
+    unmoved watermark. Filtering on the watermark alone would re-buy both — which is the same money
+    the idempotence rule exists to refuse, just spent by a different route.
+    """
+    store, derived, posts, _ = wired(tmp_path)
+    run(store, derived, posts, {}, rows=loop.queued(store, derived, "@VARUS_channel", None)[:2])
+
+    fresh = RawStore(tmp_path / "derived")
+    assert [row["msg_id"] for row in loop.queued(store, fresh, "@VARUS_channel", None)] == [102]
+
+
+def test_the_pass_records_which_of_the_four_post_states_each_row_was_asked_in(tmp_path):
+    """`parents.context` is reached, not reimplemented: a post with text is `post_text`, and a
+    caller that assembled the keywords itself could ask half a run with a caption and half without."""
+    store, derived, posts, state = wired(tmp_path)
+    assert run(store, derived, posts, state)["post_states"] == {"post_text": 3}
+
+
 # --- the spend-guard hook point ----------------------------------------------------------
 
 
@@ -201,6 +354,9 @@ def wire(monkeypatch, tmp_path, sources):
     monkeypatch.setattr(runner, "STORE_ROOT", tmp_path / "raw")
     monkeypatch.setattr(runner, "CURSOR", tmp_path / "loop_cursor.json")
     monkeypatch.setattr(runner, "SMOKE", tmp_path / "smoke" / "loop_5a.json")
+    monkeypatch.setattr(runner, "SMOKE_DERIVED", tmp_path / "smoke" / "derived")
+    monkeypatch.setattr(runner, "DERIVED_ROOT", tmp_path / "derived")
+    monkeypatch.setattr(runner, "CAPTIONS", tmp_path / "post_captions.jsonl")
     monkeypatch.setattr(runner, "load_registry", lambda _: type("R", (), {"sources": sources})())
     # Telethon's own constructor, not the repo's factory: patching `build_client` would only
     # catch a call through the front door, and "no network" has to hold for every door.
@@ -252,3 +408,109 @@ def test_an_unknown_channel_stops_the_pass(monkeypatch, tmp_path):
     wire(monkeypatch, tmp_path, [SOURCE])
     with pytest.raises(SystemExit, match="@nope"):
         runner.main(["--once", "--dry-run", "--channel", "@nope"])
+
+
+# --- the script's inference leg: stub-served, guard closed, cursor untouched ---------------
+
+
+def wire_infer(monkeypatch, tmp_path):
+    texted_store(tmp_path / "raw", posts=(1,), comments=((1, 100), (1, 101), (1, 102)))
+    (tmp_path / "loop_cursor.json").write_text(
+        '{"@VARUS_channel": {"posts": 1, "inference": 100}}', encoding="utf-8"
+    )
+    wire(monkeypatch, tmp_path, [SOURCE])
+
+
+def test_a_served_pass_without_the_smoke_is_refused_by_the_guard(monkeypatch, tmp_path):
+    """The DO NOT this contract is likeliest to break. `--infer` alone asks for a SERVED pass, and
+    `loop.inference_refusal` is what stands between that and an endpoint nobody registered.
+
+    The MESSAGE is asserted and not just the exit. Left out of the mode list, `--infer` fell through
+    to `LIVE_REFUSAL` — still a refusal, still a `SystemExit`, and for a reason that does not apply:
+    that one is about appending to the raw v1 stores, which the inference leg never does. A guard
+    shadowed by an older one looks exactly like a guard that works.
+    """
+    wire_infer(monkeypatch, tmp_path)
+    with pytest.raises(SystemExit, match="3.11 \\(2\\)"):
+        runner.main(["--once", "--infer", "--channel", "@VARUS_channel"])
+    assert not (tmp_path / "smoke").exists(), "a refused pass wrote nothing"
+
+
+def test_a_pass_with_no_mode_at_all_is_still_the_5a_live_refusal(monkeypatch, tmp_path):
+    """The control for the test above: the older guard did not move, it only stopped answering for
+    a mode that is not its business."""
+    wire_infer(monkeypatch, tmp_path)
+    with pytest.raises(SystemExit, match="raw v1 stores"):
+        runner.main(["--once"])
+
+
+def test_5c2_prep_b_leaves_the_endpoint_constant_closed():
+    """`docs/PROMPT-5c2-prep-b.md` DO NOT: opening this belongs to the paid session's contract. The
+    inference leg is built and exercised in this contract and the guard stays shut through all of
+    it — `test_the_guard_opens_once_an_endpoint_exists` is the negative control beside this one."""
+    assert runner.ENDPOINT is None
+    assert loop.inference_refusal(1, runner.ENDPOINT) is not None
+
+
+def test_the_stub_served_smoke_writes_evidence_rows_and_names_the_stub(monkeypatch, tmp_path):
+    wire_infer(monkeypatch, tmp_path)
+
+    assert runner.main(["--once", "--smoke", "--infer", "--channel", "@VARUS_channel"]) == 0
+
+    record = json.loads((tmp_path / "smoke" / "loop_5a.json").read_text(encoding="utf-8"))["runs"][
+        -1
+    ]
+    served = record["smoke_inference"]
+    assert served["served_by"] == runner.STUB_SERVED_BY
+    assert served["per_channel"] == [
+        {
+            "channel": "@VARUS_channel",
+            "asked": 2,
+            "written": 2,
+            "watermark": 102,
+            "post_states": {"post_text": 2},
+        }
+    ]
+    # the block beside `inference`, never inside it: that one still answers "is an endpoint
+    # registered", which is still no, and both statements in the record are true
+    assert record["inference"]["endpoint"] is None
+    assert "3.11 (2)" in record["inference"]["refusal"]
+    rows = RawStore(tmp_path / "smoke" / "derived").rows(loop.RECORD_TYPE, "@VARUS_channel")
+    assert [row["msg_id"] for row in rows] == [101, 102]
+    assert {row["served_by"] for row in rows} == {runner.STUB_SERVED_BY}
+    for row in rows:
+        evidence.assert_complete(row)
+
+
+def test_a_smoke_leaves_the_real_cursor_and_the_derived_store_untouched(monkeypatch, tmp_path):
+    """The watermark a smoke advances lives in memory only. If it were saved, the rows a fake
+    answered would be marked bought and the next real pass would skip them — for good."""
+    wire_infer(monkeypatch, tmp_path)
+    before = digests(tmp_path)
+
+    runner.main(["--once", "--smoke", "--infer", "--channel", "@VARUS_channel"])
+
+    after = digests(tmp_path)
+    assert after["loop_cursor.json"] == before["loop_cursor.json"]
+    assert not (tmp_path / "derived").exists(), "data/derived/ is the real pass's, not a smoke's"
+    assert {path for path in after if not path.startswith("smoke/")} == set(before)
+
+
+def test_the_smoke_answers_at_most_the_limit_it_was_given(monkeypatch, tmp_path):
+    wire_infer(monkeypatch, tmp_path)
+    runner.main(["--once", "--smoke", "--infer", "--channel", "@VARUS_channel", "--limit", "1"])
+    record = json.loads((tmp_path / "smoke" / "loop_5a.json").read_text(encoding="utf-8"))["runs"][
+        -1
+    ]
+    assert record["smoke_inference"]["per_channel"][0]["written"] == 1
+
+
+def test_a_plan_only_smoke_carries_no_inference_block(monkeypatch, tmp_path):
+    """The negative control for the block above: without `--infer` nothing was served, so the
+    record must not carry a field a reader could take for served rows."""
+    wire_infer(monkeypatch, tmp_path)
+    runner.main(["--once", "--smoke", "--channel", "@VARUS_channel"])
+    record = json.loads((tmp_path / "smoke" / "loop_5a.json").read_text(encoding="utf-8"))["runs"][
+        -1
+    ]
+    assert "smoke_inference" not in record
