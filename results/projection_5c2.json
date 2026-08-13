@@ -1,0 +1,260 @@
+{
+  "phase": "5c2-prep-c2 — the projection",
+  "contract": "docs/PROMPT-5c2-prep-c2.md deliverable 2; docs/SPEC.md amendment 3.18 (4)",
+  "asks": "what the census's window costs per leg, from measurements that actually paid",
+  "window": {
+    "path": "results/census_5c2.json",
+    "sha256": "ec35644bdab8145a4ed1c3f50b010a27ebd6f15e38977188e89fd59d38f8705b",
+    "anchor": "2026-08-09T00:00:00+00:00",
+    "since": "2026-07-12T00:00:00+00:00",
+    "comments_unanswered": 5075,
+    "leaflet_pages": 78,
+    "why": "row counts, never a date range evaluated at run time (SPEC 3.18 (4))"
+  },
+  "rate": {
+    "value": 0.00030669,
+    "source": "results/srv2d_cost.json :: rate.usd_per_second",
+    "why": "the settled serverless rate: five endpoints billed on 2026-08-08 read within 1% of it. Every projection in this repo since sku-b has used this one field"
+  },
+  "drift": {
+    "factor": 0.03,
+    "source": "scripts/write_sku_projection_v4.py :: DRIFT, carried unchanged",
+    "why": "a contract term, not a measurement, applied to the whole billed second count"
+  },
+  "job_shape": {
+    "execution_timeout_s": 900.0,
+    "ttl_s": 3600.0,
+    "idle_tail_s": 60.0,
+    "workers_max": 1,
+    "source": "scripts/positions_gm4_skub.py :: JOB_TIMEOUT_S / JOB_TTL_S / IDLE_TAIL_SECONDS; results/serving_srv2d_smoke.json :: deployment.endpoint.workersMax",
+    "why": "a cap is a bound in DOLLARS and a session is also a bound in wall clock. One worker at a 900 s execution timeout means the seconds below are serial and the job count is what a session has to be packed into — SPEC 3.17 (10)(c) is the rule that no single job may be capable of billing past the remaining cap"
+  },
+  "legs": {
+    "comment": {
+      "leg": "comment",
+      "task": "T1 with the parent post — market_pulse.loop.COMMENT_TASK",
+      "paid_measurement": {
+        "session": "srv-2d, 2026-08-08",
+        "runtime": "serverless (RunPod endpoint hbq25reui1tpj6)",
+        "ledger": {
+          "path": "results/spend_srv2d.json",
+          "smoke_usd": 0.0654,
+          "parity_usd": 1.2332,
+          "why": "cumulative against that session's own anchor, so the parity step is the difference — and it is an ACCOUNT delta, not a per-leg price. The per-leg figures below come from srv2d_cost.json, which applies the settled rate to measured seconds and agrees with the account to about 1%"
+        },
+        "rows_scored": {
+          "value": 400,
+          "source": "results/parity_srv2.json :: diagnostics.failures[0].rows",
+          "why": "the comment half of the 758: 400 comments_test rows, 0 parse and 0 api failures"
+        },
+        "composition": {
+          "comments_test": 400,
+          "posts_test": 250,
+          "sarcasm_holdout": 108,
+          "why": "the unit cost is BLENDED across those three and this window is pure T1. Direction of the error, from the smoke's own per-row seconds, results/serving_srv2d_smoke.json :: rows[*].worker_seconds — T1 5.176/4.319/4.368/4.408 against T2 3.978/3.903/3.991/3.958, n=4 each — the comment task is the SLOWER of the two, so a blended rate under-prices a pure-comment window rather than over-pricing it"
+        },
+        "floor": "the RunPod balance delta lags the resource by minutes and the itemised ledger by hours (this endpoint's row had settled 1 538 s of 3 793 s when the session closed). Every figure here is a FLOOR, so the ratio against the pod is a lower bound."
+      },
+      "window_rows": 5075,
+      "corners": {
+        "unit_cost": {
+          "value": 1.4281,
+          "source": "results/srv2d_cost.json :: measured.usd_per_1000_rows",
+          "why": "srv-2d's whole parity pass over 758 rows on the serverless endpoint, its own boot amortised INSIDE it. The conservative corner: nothing else has to be added to it",
+          "billed_seconds": 23691.7,
+          "hours": 6.58,
+          "usd": 7.266,
+          "usd_with_drift": 7.484,
+          "jobs_at_the_execution_timeout": 27,
+          "note": "the boot is already inside the unit cost; only the idle tail is added",
+          "seconds_are": "IMPLIED — the dollars divided by the settled rate, not a measured wall clock. The marginal corner below is the one whose seconds were counted"
+        },
+        "marginal_plus_boot": {
+          "value": 4.262,
+          "source": "results/srv2d_cost.json :: measured.like_for_like_seconds_per_row",
+          "why": "the same session's per-row seconds with the cold start taken out — the corner a boot is added to. It is the one that answers «how many more rows fit under this cap»",
+          "boot": {
+            "value": 239.022,
+            "source": "results/srv2d_cost.json :: inputs.cold_start_seconds_measured_on_this_endpoint",
+            "why": "one cold start on that endpoint, paid once per session before any row is scored"
+          },
+          "idle_tail_seconds": 60.0,
+          "billed_seconds": 21928.7,
+          "hours": 6.09,
+          "usd": 6.7253,
+          "usd_with_drift": 6.9271,
+          "jobs_at_the_execution_timeout": 25,
+          "seconds_are": "MEASURED per-row seconds plus that endpoint's measured cold start"
+        }
+      },
+      "fixed_seconds": 299.022,
+      "seconds_per_row": 4.262
+    },
+    "leaflet_page": {
+      "leg": "leaflet_page",
+      "task": "positions_post_gm4, one page per call — SPEC 3.17 (4)",
+      "paid_measurement": {
+        "session": "skub2-run, 2026-08-12",
+        "runtime": "serverless (the POSITIONS endpoint of SPEC 3.17)",
+        "ledger": {
+          "path": "results/spend_skub2.json",
+          "usd": 0.2764,
+          "why": "the whole session against its own anchor: 138 sources, cap $0.65"
+        },
+        "population": {
+          "pages_sent": 108,
+          "text_rows": 30,
+          "asked": 138,
+          "why": "the contract's briefing says the session «bought 138 pages»; the record says 138 SOURCES — 108 pages and 30 text rows. The page marginal below is measured over the 108, which is what per_gate[-1].calls_done counts"
+        },
+        "report_line": {
+          "quote": "page leg   108 pages sent (of 159 available, 19 posts) in 7 job(s), largest 7.99 MB",
+          "source": "docs/reports/skub2-run.md",
+          "why": "the same arithmetic in that session's report: 462.173 s over 108 calls. (711.102 - 248.929) / 108 = 4.2794, which is the field cited above"
+        }
+      },
+      "window_pages": 78,
+      "corners": {
+        "marginal_plus_boot": {
+          "value": 4.2794,
+          "source": "results/sku_b_positions_skub2.json :: projection.per_gate[-1].marginal_seconds_per_call",
+          "why": "the LAST in-run gate of the skub2 session, taken when 108 of the 138 sources were done and every one of them was a page — so this is the page leg's own marginal, and it is the number the cap stop itself acted on",
+          "boot": {
+            "value": 230.118,
+            "source": "results/sku_b_positions_skub2.json :: projection.boot_seconds",
+            "why": "that session's cold start, paid once"
+          },
+          "warmup": {
+            "value": 18.811,
+            "source": "results/sku_b_positions_skub2.json :: projection.warmup_seconds",
+            "why": "the two non-gold calls SPEC 3.17 (9) requires before either leg touches gold"
+          },
+          "idle_tail_seconds": 60.0,
+          "billed_seconds": 642.7,
+          "hours": 0.18,
+          "usd": 0.1971,
+          "usd_with_drift": 0.203,
+          "jobs_at_the_execution_timeout": 1
+        }
+      },
+      "fixed_seconds": 308.929,
+      "seconds_per_page": 4.2794
+    }
+  },
+  "whole_window": {
+    "usd_with_drift": 7.687,
+    "usd_source": "the CONSERVATIVE corner of each leg, summed",
+    "billed_seconds": 22571.4,
+    "hours": 6.27,
+    "seconds_source": "the MARGINAL corner of each leg — the only one whose seconds were counted rather than divided out of a price. Dollars and wall clock come from different corners on purpose, and each field says which",
+    "remaining_usd": 6.169,
+    "fits": false,
+    "why": "This is the number the window ruling turns on and it is the reason this contract ends at a STOP: the whole window does not fit in what the phase has left"
+  },
+  "caps": [
+    {
+      "cap_usd": 0.25,
+      "fits_in_the_remaining_budget": true,
+      "buys": {
+        "leaflet_pages": 78,
+        "comments_conservative": 0,
+        "comments_optimistic": 0,
+        "why": "conservative uses the unit cost (srv-2d's boot inside it), optimistic the marginal plus one boot. The two rates differ by 9% and neither is settled — the account reading behind both is a FLOOR (Dv33)"
+      },
+      "share_of_the_comment_window": 0.0,
+      "at_the_conservative_rate": {
+        "usd_with_drift": 0.203,
+        "why": "what the cap was solved against — this is the number that must stay under it"
+      },
+      "at_the_marginal_rate": {
+        "billed_seconds": 642.7,
+        "hours": 0.18,
+        "usd": 0.1971,
+        "usd_with_drift": 0.203,
+        "jobs_at_the_execution_timeout": 1,
+        "why": "the same rows on measured seconds: the wall clock and the job count"
+      }
+    },
+    {
+      "cap_usd": 2.0,
+      "fits_in_the_remaining_budget": true,
+      "buys": {
+        "leaflet_pages": 78,
+        "comments_conservative": 1208,
+        "comments_optimistic": 1264,
+        "why": "conservative uses the unit cost (srv-2d's boot inside it), optimistic the marginal plus one boot. The two rates differ by 9% and neither is settled — the account reading behind both is a FLOOR (Dv33)"
+      },
+      "share_of_the_comment_window": 0.238,
+      "at_the_conservative_rate": {
+        "usd_with_drift": 1.9989,
+        "why": "what the cap was solved against — this is the number that must stay under it"
+      },
+      "at_the_marginal_rate": {
+        "billed_seconds": 6090.2,
+        "hours": 1.69,
+        "usd": 1.8678,
+        "usd_with_drift": 1.9239,
+        "jobs_at_the_execution_timeout": 7,
+        "why": "the same rows on measured seconds: the wall clock and the job count"
+      }
+    },
+    {
+      "cap_usd": 6.0,
+      "fits_in_the_remaining_budget": true,
+      "buys": {
+        "leaflet_pages": 78,
+        "comments_conservative": 3928,
+        "comments_optimistic": 4235,
+        "why": "conservative uses the unit cost (srv-2d's boot inside it), optimistic the marginal plus one boot. The two rates differ by 9% and neither is settled — the account reading behind both is a FLOOR (Dv33)"
+      },
+      "share_of_the_comment_window": 0.774,
+      "at_the_conservative_rate": {
+        "usd_with_drift": 5.9998,
+        "why": "what the cap was solved against — this is the number that must stay under it"
+      },
+      "at_the_marginal_rate": {
+        "billed_seconds": 17682.9,
+        "hours": 4.91,
+        "usd": 5.4232,
+        "usd_with_drift": 5.5859,
+        "jobs_at_the_execution_timeout": 20,
+        "why": "the same rows on measured seconds: the wall clock and the job count"
+      }
+    }
+  ],
+  "budget": {
+    "phase_cap_usd": 30.0,
+    "cap_source": "scripts/runpod_guard.py :: PHASE_CAP_USD (the line that ENFORCES it)",
+    "spent_usd": 23.831,
+    "remaining_usd": 6.169,
+    "read_at": "2026-08-13T07:59:22+00:00",
+    "source": "results/spend_phase4.json :: sessions[-1]",
+    "note": "5c2-prep-a: cap 25 → 30 per SPEC 3.18 (3); phase ledger repaired",
+    "ledger_cap_usd": 30.0
+  },
+  "no_paid_measurement": {
+    "legs": [],
+    "why": "both legs have one, so no row is marked NO PAID MEASUREMENT. The candidate that did NOT become a source is named beside it",
+    "candidate_read_and_not_used": {
+      "path": "results/parity_srv2.json",
+      "block": "diagnostics",
+      "holds": "row counts and failure counts — 400 + 250 + 108 rows, 0 parse failures, 0 api failures — and `parity.cap_usd` 4.0. It carries no seconds and no dollars",
+      "why": "a candidate is not a source until its number is on the screen. Its rows are used above (they are what the unit cost is per) and its cost is not, because it has none: srv2d_cost.json is where that session's price was written"
+    }
+  },
+  "context_not_a_headline": {
+    "pod_usd_per_1000_rows": 0.5993,
+    "pod_usd_per_pass": 0.4611,
+    "source": "results/srv2d_cost.json :: pod_comparison",
+    "amendment": "SPEC 3.18 (4): «5b's 0.5993 per 1,000 rows and 0.4611 per pass were measured on a POD and are not this runtime's numbers». They are printed here once, labelled, and they enter no row above",
+    "ratio_serverless_over_pod": 2.383
+  },
+  "git": {
+    "commit": "8d4bd0b058da2c5c932a622813668a12db1e3ff8",
+    "dirty": [
+      "docs/reviews/",
+      "scripts/projection_5c2.py",
+      "tests/test_projection_5c2.py"
+    ]
+  }
+}
