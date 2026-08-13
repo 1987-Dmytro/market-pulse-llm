@@ -240,3 +240,34 @@ def test_the_driver_registers_no_endpoint_of_its_own():
     """The endpoint arrives as an argument or an environment variable, never as a constant."""
     assert not hasattr(driver, "ENDPOINT")
     assert run_loop.ENDPOINT is None
+
+
+def test_a_pack_never_exceeds_the_bodies_size_ceiling(monkeypatch):
+    """RunPod refuses a `/run` body over 10 MiB with an HTTP 400, before any worker sees it.
+
+    The clock is not the only ceiling a job has and it is not the one that bites first on the
+    leaflet leg: a page travels as a base64 `data:` URL, and the first attempt of 5c2-run put 126
+    of them in one pack and died on the body size with the boot already paid for (Dv309). The row
+    count the marginal allows is the LOOSER bound here, so this asserts the tighter one holds.
+    """
+    big = "data:image/jpeg;base64," + "A" * 3_000_000
+    monkeypatch.setattr(driver.loop, "render_page", lambda path: ([], "sha", [big]))
+    monkeypatch.setattr(driver.loop, "page_file", lambda page: Path("/dev/null"))
+    pages = [{"channel": "@c", "msg_id": n, "parent_msg_id": 1, "path": "x"} for n in range(9)]
+
+    packs = driver.page_packs(pages, 126)
+
+    budget = driver.MAX_PAYLOAD_MB * 1_000_000
+    assert all(sum(len(item["album"][0]) for item in pack) <= budget for pack in packs)
+    assert sum(len(pack) for pack in packs) == 9, "no page is dropped to make a pack fit"
+    assert max(len(pack) for pack in packs) == 2, "3 MB pages, an 8 MB budget"
+
+
+def test_the_count_bound_still_applies_inside_a_byte_pack(monkeypatch):
+    """Both ceilings compose: whichever is tighter wins, per pack."""
+    small = "data:image/jpeg;base64," + "A" * 1000
+    monkeypatch.setattr(driver.loop, "render_page", lambda path: ([], "sha", [small]))
+    monkeypatch.setattr(driver.loop, "page_file", lambda page: Path("/dev/null"))
+    pages = [{"channel": "@c", "msg_id": n, "parent_msg_id": 1, "path": "x"} for n in range(10)]
+
+    assert [len(pack) for pack in driver.page_packs(pages, 3)] == [3, 3, 3, 1]

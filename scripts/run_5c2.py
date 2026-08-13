@@ -392,6 +392,31 @@ def packs_of(items: list, size: int) -> list[list]:
     return [items[start : start + size] for start in range(0, len(items), size)]
 
 
+def page_packs(pages: list[dict], count: int) -> list[list[dict]]:
+    """The leaflet leg's packs, bounded by BYTES first and by the clock second.
+
+    The clock is not the only ceiling a job has and it is not the one that bites first here. A page
+    travels as a base64 `data:` URL inside the job body, and RunPod's `/run` refuses a body over
+    **10 MiB** with an HTTP 400 before any worker sees it — which is what ended the first attempt of
+    this session with 126 pages in one pack (Dv309). `positions_gm4_skub.jobs` is the packer that
+    already knows this, at :data:`MAX_PAYLOAD_MB` = 8.0, and it never splits or re-encodes a page:
+    a single page over the budget is a refusal, because dropping resolution to fit would silently
+    change the instrument for exactly the densest pages.
+
+    Both bounds compose rather than compete — pack by bytes, then cut each byte-pack by the row
+    count the marginal allows. Whichever is tighter wins, per pack.
+    """
+    sized = [
+        {"page": page, "album": album, "bytes": len(album[0])}
+        for page, album in ((page, loop.render_page(loop.page_file(page))[2]) for page in pages)
+    ]
+    return [
+        chunk
+        for by_bytes in skub.jobs(sized, MAX_PAYLOAD_MB)
+        for chunk in packs_of(by_bytes, count)
+    ]
+
+
 def measure(client, call) -> tuple[object, float]:
     """``call()``'s answer and what the worker billed for it, from the client's own clock."""
     before = skub.billed_seconds(client)
@@ -421,11 +446,14 @@ def page_leg(
     handle = pages[0]["channel"]
     state = loop.channel_state(cursor, handle)
     done = []
-    for index, pack in enumerate(packs_of(pages, pack_size(marginal, registered_marginal))):
+    packs = page_packs(pages, pack_size(marginal, registered_marginal))
+    print(f"  leaflet: {len(pages)} pages in {len(packs)} packs", flush=True)
+    for index, pack in enumerate(packs):
         if reason := cap_gate(billed=billed_now(client), rate=rate, drift=drift, cap=cap):
             note.append(f"leaflet pack {index:02d} refused: {reason}")
             break
-        albums = [loop.render_page(loop.page_file(page))[2] for page in pack]
+        albums = [item["album"] for item in pack]
+        pack = [item["page"] for item in pack]
         transport.prime(
             [album_key(album) for album in albums], client.positions(loop.PAGE_TASK, albums)
         )
@@ -647,8 +675,66 @@ def main(argv: list[str] | None = None) -> int:
     categories = positions.category_keys(registry.taxonomy)
     aliases = watchlist_aliases(registry.watchlist)
     note: list[str] = []
-    outcome = {"leg": args.leg, "endpoint": endpoint, "already_usd": args.already_usd}
+    outcome = plan | {"leg": args.leg, "endpoint": endpoint, "already_usd": args.already_usd}
 
+    try:
+        run_the_legs(
+            args,
+            outcome=outcome,
+            note=note,
+            client=client,
+            prereg=prereg,
+            registry=registry,
+            channels=channels,
+            store=store,
+            cursor=cursor,
+            derived=derived,
+            comments=comments,
+            pages=pages,
+            posts=posts,
+            categories=categories,
+            aliases=aliases,
+            budget=budget,
+            rate=rate,
+            drift=drift,
+        )
+    except BaseException as err:  # noqa: BLE001 — the record outranks the reason (skub2's rule)
+        # The boot and the warm-ups are BILLED by the time anything here can fail, and a driver
+        # that dies without writing the ledger leaves a session whose spend nothing on disk names.
+        # skub2 closed this hole for the (10)(a) refusal exit ("the two exits used to disagree");
+        # a crash is the third exit, and the first attempt of this session hit it (Dv309). The
+        # record is written below either way, and the exception is re-raised after it.
+        outcome["died"] = f"{type(err).__name__}: {err}"
+        note.append(f"the run ENDED on an exception: {type(err).__name__}")
+        finalise(args, outcome, note, client, ledger)
+        raise
+    finalise(args, outcome, note, client, ledger)
+    return 0
+
+
+def run_the_legs(
+    args,
+    *,
+    outcome,
+    note,
+    client,
+    prereg,
+    registry,
+    channels,
+    store,
+    cursor,
+    derived,
+    comments,
+    pages,
+    posts,
+    categories,
+    aliases,
+    budget,
+    rate,
+    drift,
+):
+    """The served half, one endpoint's legs. Raises; :func:`main` is what records the death."""
+    endpoint = client.endpoint_id
     if args.leg == "positions":
         pin = json.loads(POSITIONS_PIN.read_text(encoding="utf-8"))["expected_worker"]
         info = serving.assert_serving(client.info(), pin)
@@ -789,14 +875,30 @@ def main(argv: list[str] | None = None) -> int:
                 note=note,
             )
 
+
+def finalise(args, outcome: dict, note: list, client, ledger: dict) -> None:
+    """The ledger row and the run record, on EVERY exit that could have billed.
+
+    Called from both arms of `main`'s try: a completed leg and a dead one leave the same two
+    artifacts, because the question "what did this session spend" has to be answerable from disk
+    whichever way the session ended. The balance read goes through `spend_or_note`, which refuses
+    to let a failed `runpodctl` call take the record down with it (Dv33: the delta is a FLOOR).
+    """
     outcome["timing"] = client.timing()
     outcome["notes"] = note
     balance, spent, why = skub.spend_or_note(ledger, phase=PHASE)
     outcome["ledger"] = {"balance": balance, "session_spent_usd_floor": spent, "unread": why}
-    skub.log_run(ledger, LEDGER, balance, spent, f"5c2-run {args.leg}", cost_note=None)
+    skub.log_run(
+        ledger,
+        LEDGER,
+        balance,
+        spent,
+        f"5c2-run {args.leg}",
+        cost_note=outcome.get("died"),
+    )
     args.out.write_text(
         json.dumps(
-            {"at": datetime.now(UTC).isoformat(timespec="seconds")} | plan | outcome,
+            {"at": datetime.now(UTC).isoformat(timespec="seconds")} | outcome,
             ensure_ascii=False,
             indent=2,
         )
@@ -804,7 +906,6 @@ def main(argv: list[str] | None = None) -> int:
         encoding="utf-8",
     )
     print(f"\nwrote {rel(args.out)}")
-    return 0
 
 
 if __name__ == "__main__":
