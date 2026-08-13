@@ -322,16 +322,27 @@ is to link per gitignored ENTRY, one level down.
 
 ### 2. The census's determinism pair
 
+**Amended at the 5c2-prep-c3b acceptance (Dv293).** The pair below is the one the shipped record
+has: two fresh runs, hashed against the file on disk.
+
 ```
-ab927a23fae51288bc464b3b3bcc4131520dde9792a4f69c3e86b93179511791  results/census_c3a_posts.json
---- run 2 ---
-ab927a23fae51288bc464b3b3bcc4131520dde9792a4f69c3e86b93179511791  results/census_c3a_posts.json
-producer sha matches script: True
+4a7e755b73d6381153b422495b8cce16dc8e5a040de866539c58d46f7d87b569  det1.json
+4a7e755b73d6381153b422495b8cce16dc8e5a040de866539c58d46f7d87b569  det2.json
+4a7e755b73d6381153b422495b8cce16dc8e5a040de866539c58d46f7d87b569  results/census_c3a_posts.json
+producer sha matches script: b7384e56fae339742d10236d600bf62e8203e1d08b9575e3f7a4a981b6e9232a
 ```
 
-Measured **after** `ruff format` last touched the producer (Dv288) — the record carries
-`producer.sha256` over that file, so a formatting-only edit invalidates it exactly as a logic change
-would.
+Both runs went to a scratch `--out`, so the shipped record's bytes were never rewritten to measure
+them; the third line is the shipped file, and all three agree.
+
+**What the first version of this section printed, and why it was stale.** It read `ab927a23…`
+twice — `git show a39a8ad:results/census_c3a_posts.json | shasum -a 256` returns exactly that. The
+pair was measured after `ruff format` last touched the producer (Dv288) and before commit `9c723a7`,
+which added `producer.borrows` to the record in answer to a review finding. That commit moved the
+record's bytes by design and the report's §2 was not re-measured after it: a verify gate's number
+was written once and then outlived the artifact it describes. The same class as Dv281 and as this
+session's own header correction — a true sentence about a moment, left standing after the moment
+moved.
 
 ### 3. The cap guards in both directions
 
