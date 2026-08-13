@@ -231,6 +231,27 @@ def test_a_page_is_in_the_window_when_its_post_is(monkeypatch, tmp_path):
     assert record["totals"]["leaflet_pages_in_window"] == 2
 
 
+def test_the_coverage_gap_names_both_of_its_two_nearby_numbers(monkeypatch, tmp_path):
+    """«Media posts with no page anywhere» and «media posts in channels with no page at all» are
+    different questions, and the second is smaller by the covered channel's own uncovered posts.
+
+    Here `@atb` has two in-window posts, one with media, and it is the only channel with a page —
+    so the first number counts `@varus`'s media post and ATB's own uncovered ones, and the second
+    counts `@varus`'s alone.
+    """
+    wire(monkeypatch, tmp_path)
+    jsonl(
+        tmp_path / "posts" / "atb.jsonl", [post(1, INSIDE, media=True), post(2, INSIDE, media=True)]
+    )
+    gap = run(tmp_path)["leaflet_coverage"]["gap"]
+
+    assert gap["channels_with_any_page"] == ["@atb"]
+    assert gap["posts_with_media_in_window"] == 3, "two ATB posts and @varus's one"
+    assert gap["posts_with_a_page_downloaded"] == 1
+    assert gap["posts_with_media_and_no_page"] == 2, "ATB's second post and @varus's"
+    assert gap["posts_with_media_in_channels_with_no_page_at_all"] == 1, "@varus's alone"
+
+
 def test_a_manifest_that_disagrees_with_the_store_is_reported(monkeypatch, tmp_path):
     """A manifest date that has drifted from the post's would move pages in and out of the window
     with no row moving, so the disagreement is named rather than silently used."""

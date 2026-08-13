@@ -4,7 +4,7 @@
   "asks": "what the census's window costs per leg, from measurements that actually paid",
   "window": {
     "path": "results/census_5c2.json",
-    "sha256": "af8387814c74f2f9411eb0d2b85cfe8e2e29cd0e99c6d3f0f67a10dad304d8c2",
+    "sha256": "0e5490635ad755432c56b1d4341489abb73ce22d1a57e286ecba20b9e804daca",
     "anchor": "2026-08-09T00:00:00+00:00",
     "since": "2026-07-12T00:00:00+00:00",
     "comments_unanswered": 5075,

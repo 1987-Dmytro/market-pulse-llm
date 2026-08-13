@@ -509,6 +509,25 @@ def main(argv: list[str] | None = None) -> int:
             " measured against (operator ruling 13.08)",
             "manifest": {"path": rel(POST_MEDIA), "sha256": sha256_of(POST_MEDIA)},
             "manifest_vs_store": manifest_agrees_with_the_store(manifest),
+            # The gap itself, subtracted here rather than in a report: two nearby numbers answer
+            # different questions — media posts with no page ANYWHERE, and media posts in channels
+            # with no page AT ALL — and a reader who takes the second for the first is out by the
+            # whole of ATB. Both are named.
+            "gap": {
+                "posts_with_media_in_window": totals["posts_with_media_in_window"],
+                "posts_with_a_page_downloaded": totals["leaflet_posts_in_window"],
+                "posts_with_media_and_no_page": totals["posts_with_media_in_window"]
+                - totals["leaflet_posts_in_window"],
+                "posts_with_media_in_channels_with_no_page_at_all": sum(
+                    row["posts_with_media_in_window"]
+                    for row in rows
+                    if row["posts_with_media_in_window"] != CANNOT_ANSWER
+                    and not row["leaflet"]["pages_in_window"]
+                ),
+                "channels_with_any_page": sorted(
+                    row["handle"] for row in rows if row["leaflet"]["pages_in_window"]
+                ),
+            },
             "per_channel": {
                 row["handle"]: {
                     "posts_with_media_in_window": row["posts_with_media_in_window"],

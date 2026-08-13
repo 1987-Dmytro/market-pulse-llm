@@ -6951,3 +6951,56 @@ leg), `scripts/run_loop.py` (`--pages`, `StubPageTransport`, `pages_of`), `tests
   40 unreadable, 39 empty — which is the only pairing that is reproducible from one command. The
   fake's schedule is deliberately not seeded from the page id: a fixture keyed on the data would be
   a fixture whose distribution moves when the data does.
+
+## 5c2-prep-c2 — the money track: the census, the projection, and a STOP with numbers (2026-08-13, $0)
+
+- **Dv269** — the census's anchor is a REQUIRED argument with no default, and the anchor chosen is
+  the corpus's own last day + 1 (`2026-08-09T00:00:00+00:00`) rather than today. Two departures in
+  one decision. A default read from the clock would make two runs of the same census two different
+  artifacts, and the contract makes byte-identity the census's own gate — so there is no default at
+  all and the choice lives in the command and inside the record. The anchor itself follows
+  `yield_screen_5c1.window_for`'s reasoning: the newest record in `data/raw/` is 2026-08-08, so a
+  window ending today buys five days no channel collected into and drops five that hold rows, which
+  measures the collection schedule rather than the content. Because the choice moves every column —
+  the leaflet one from 45 to 159 pages — the record also carries an `anchor_sensitivity` block
+  pricing two alternatives per column. The contract asked for ONE anchor and this is one; the
+  alternatives are reported, never summed, and a test asserts they stay out of the totals.
+- **Dv270** — the census covers the 66 REGISTRY channels, and the store files outside the registry
+  are counted apart rather than dropped or blended. The loop walks `registry.sources`
+  (`run_loop.channels_of`), so a store file with no registry entry is invisible to every number the
+  paid session will produce — but a reader comparing this census against the disk would trip over
+  the difference, so `scope.outside_the_registry` names all 17 of them with their row counts. It is
+  also what makes the cross-check land: 16 324 comments on disk less `@tretyakovaele`'s 106 is the
+  16 218 prep-b's dry pass reported.
+- **Dv271** — the in-window ids are HASHED into the record, not listed. 3.18 (4) pre-registers the
+  window by ROW COUNT and 5 075 comment ids would have been most of the file; `ids_sha256` pins
+  WHICH rows the anchor selected, so a store that moved under a later re-run is caught rather than
+  producing the same total from different rows.
+- **Dv272** — the census's D68 overwrite refusal keys on the ANCHOR, not on the file. The house
+  pattern refuses to overwrite a record of a moving composition at all, and here that would forbid
+  the determinism gate itself: a re-run under the same anchor writes the same bytes by construction
+  and has to be allowed. A run under a different anchor is refused by name.
+- **Dv273** — the contract's briefing says the skub2 session "bought 138 pages"; the record says
+  138 SOURCES — `population.pages_sent` 108 and `population.text_rows` 30. The page marginal used
+  in the projection is `projection.per_gate[-1].marginal_seconds_per_call`, whose `calls_done` is
+  that 108, and the gap between the brief and the document is carried inside the record's own
+  `population.why` rather than resolved silently.
+- **Dv274** — the comment leg is priced at TWO corners and the cap rows take one number from each.
+  `results/srv2d_cost.json` offers a whole-pass unit cost ($1.4281/1 000 rows, that session's boot
+  amortised inside it) and a marginal ($4.262 s/row plus a measured boot); they disagree by 9% and
+  neither is settled — the account reading behind both is a floor (Dv33). The row count under a cap
+  is solved at the conservative rate, so the DOLLARS that bind come from that model, while the wall
+  clock and the job count come from the marginal one, which is the only corner whose seconds were
+  counted rather than divided out of a price. Each field says which model produced it: one number
+  from each in a single unlabelled row is two denominators in one line.
+- **Dv275** — the two legs are priced with SEPARATE fixed costs. They are not the same endpoint —
+  the comment leg is srv-2d's serving config and the positions leg is the POSITIONS one — so a
+  session running both pays two boots and two idle tails, and the caps are computed that way rather
+  than assuming one shared warm worker.
+- **Dv276** — neither the census nor the projection carries a `git` block, against the house
+  convention that every record does. `git_state` embeds `git status --porcelain`, so the artifact's
+  bytes move when an unrelated file is committed: measured, not feared — the census hashed
+  `ec35644b` when written and `cbc05c84` after the next commit landed, same anchor and same data.
+  Provenance is `producer.sha256`, the producing script's own hash, which answers "which code wrote
+  this" more precisely than a commit id (a commit id does not say the file was not dirty). Pinned
+  by an AST test in both suites.

@@ -102,6 +102,15 @@
       "date_drift": [],
       "agrees": true
     },
+    "gap": {
+      "posts_with_media_in_window": 5773,
+      "posts_with_a_page_downloaded": 9,
+      "posts_with_media_and_no_page": 5764,
+      "posts_with_media_in_channels_with_no_page_at_all": 5760,
+      "channels_with_any_page": [
+        "@atb_market_official"
+      ]
+    },
     "per_channel": {
       "@Hadiach_telegram": {
         "posts_with_media_in_window": 122,
@@ -3152,7 +3161,7 @@
   ],
   "producer": {
     "script": "scripts/census_5c2.py",
-    "sha256": "3e450beef9b03ea5c05db344f3afbfac9c2c1b0917b8e9ea2fcce56fc9d338fd",
+    "sha256": "487c10f208827f1322254590e500b22ce92f1686b043d1b16fb421f1be047f5f",
     "why": "no git block: `git status --porcelain` is a fact about the tree, not the measurement"
   }
 }
