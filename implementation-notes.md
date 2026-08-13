@@ -6874,3 +6874,72 @@ Artifacts: `src/market_pulse/evidence.py`, `tests/test_evidence.py`, `src/market
   docstring says it has no writer, the patch is gone, and the smoke test asserts the real property —
   no directory appears there at all. Of the three evidence kinds only `comment` has a producer, so
   5c2-run must not be the contract that first writes a `position_row`.
+
+## 5c2-prep-c1 — the record track: B1 closed, and the positions leg keeps evidence (2026-08-13, $0)
+
+Full report: `docs/reports/5c2-prep-c1.md`. Deviations, one line each:
+
+- **Dv259** — step 0's `git status --short` showed FIVE paths, not the four the brief enumerated at
+  issue time. The fifth is `knowledge/hot.md`, and step 0's own instruction explains it: it asks for
+  `## ⏭️ Next` to be refreshed before the vault paths are committed, and the `/save` checkpoint at
+  12:04 had already done it. Not a STOP — the list that explains a path can be the brief's own next
+  sentence.
+- **Dv260** — `RawStore` dedupes on `(channel, msg_id)`, and one leaflet page yields N positions
+  that all carry the page's msg_id: the second and every later one was dropped **inside a single
+  `append()`**, because `_by_file` marks each record seen as it iterates. Measured RED before the
+  fix — 3 rows in, 1 on disk. The key is now `dedup_key(record)` = `row_id` when the record carries
+  one and `msg_id` otherwise, so every post and comment in `data/raw/` keeps the key it always had
+  and the baseline still hashes to its pin. `raw_store.py` is in no frozen list and is sha-pinned
+  nowhere, so this is an executor-file change and not the 3.18 (6) shape question the brief says to
+  STOP for. `StoreIndex` grows `keys` BESIDE `ids` rather than widening `ids`: a queue subtracts the
+  MESSAGES it has answered, and one answered page is one message and three rows.
+- **Dv261** — the page leg's seam is `send(task, payload)`, the comment leg's signature, but the
+  payload is the one-image ALBUM and not the rendering. That is the production pairing:
+  `local_llm.PositionsClient.positions` takes `[[data_url]]` and builds
+  `positions_messages_page_gm4` on its own side of the wire. So the record's `rendering` is the
+  placeholder message list — what the model actually sees — and the pixels are named by
+  `image_path` + `image_sha256`, which is what those two `KIND_FIELDS` are for. The alternative,
+  embedding the data URL in `rendering`, would put a megabyte of base64 in every row to say what a
+  64-character sha already says.
+- **Dv262** — `warnings` lands in two places for two readers. On a `position_row` it is that
+  position's own tuple, which `evidence.KIND_FIELDS` requires. On the `leaflet_page` row it is the
+  page's list of lists, `None` on a refusal — the shape SPEC 3.17 (13)(a) is counted in and the one
+  `scripts/positions_gm4_skub.py` already writes (Dv232). The page row also carries `n_positions`
+  and `unreadable` as extras: `[]` and a refusal are different outcomes and one counter cannot hold
+  both. No frozen shape moved — 3.18 (6) says "at minimum".
+- **Dv263** — a `position_row` carries the position's VALUES as an extra beside the five booleans.
+  `presence` says a size was named; 3.18 (6) asks the operator to see «450 г», the price fields and
+  the depth. `depth()` and `depth_disagrees_with_printed()` are methods on a frozen dataclass and no
+  reader of a JSON row can call them, so they are computed at write time or they are gone — which is
+  exactly what `results/predictions/LOST.md` is.
+- **Dv264** — `image_path` is written ABSOLUTE, being "the path as the run saw it" in the brief's
+  words. Every other artifact in this repo names files repo-relative, so if the sitting pack wants
+  that instead it is a one-line change in `run_loop.pages_of` and a team-lead call, not a defect:
+  the row's identity is `image_sha256`, which matched the manifest's own pin on the page checked.
+- **Dv265** — `--pages` without `--smoke` was refused with the COMMENT leg's queue depth in the
+  message: "0 rows are queued" while 159 pages waited. A true refusal reporting a number about
+  something else. Each leg now passes its own depth to `loop.inference_refusal`, and the page count
+  is read through `RawStore(DERIVED_ROOT)` — read-only; the constructor stores a path and
+  `_read_index` returns an empty index for a root that is not there, so the D1 guard stays green.
+- **Dv266** — the first idempotence demonstration repeated prep-b's own mis-step (Dv257): `--limit`
+  5 against 159 queued pages, so the second run correctly answered the NEXT five and proved nothing.
+  Redone by exhausting the queue at `--limit 400` and running it again: 0 asked, 0 transport calls,
+  both files byte-identical.
+- **Dv267** — the leaflet leg's page source is `results/post_media_5c1.json`, the only file in the
+  repository that maps a (channel, msg_id) to a downloaded page. It covers ONE channel today —
+  `@atb_market_official`, 19 posts / 159 pages — which is a fact about 5c1's collection, not a
+  choice this leg makes: a channel with no entry queues nothing and the pass says so.
+
+Two things worth finding from here that are not deviations:
+
+- **prove the collapse red before you fix it.** The store change was written after a test that
+  failed on the unmodified `RawStore` and whose output names the defect (`assert 1 == 3`). Landing
+  the fix first and seeing green afterwards is the same green-by-construction B1 was.
+- **a guard is accepted only with evidence in both directions.** `the_derived_root_is_untouched` is
+  spelled ONCE, so the sensitivity test exercises the very assertion the smoke test runs; under the
+  B1 form the same planted rows raised nothing (`DID NOT RAISE`). A re-typed assertion in the second
+  test would have proven that a look-alike refuses.
+
+Artifacts: `src/market_pulse/raw_store.py` (`dedup_key`), `src/market_pulse/loop.py` (the leaflet
+leg), `scripts/run_loop.py` (`--pages`, `StubPageTransport`, `pages_of`), `tests/test_loop.py`,
+`tests/test_raw_store.py`, `docs/reports/5c2-prep-c1.md`.
