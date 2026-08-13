@@ -1,0 +1,3161 @@
+{
+  "phase": "5c2-prep-c2 — the census of the window",
+  "contract": "docs/PROMPT-5c2-prep-c2.md deliverable 1; docs/SPEC.md amendment 3.18 (4)",
+  "asks": "what the 4-week window holds, per channel and per leg, before anything is bought",
+  "anchor": {
+    "anchor": "2026-08-09T00:00:00+00:00",
+    "days": 28,
+    "since": "2026-07-12T00:00:00+00:00",
+    "until": "2026-08-09T00:00:00+00:00",
+    "rule": "since <= date < until, half-open, so the window is exactly 28 days",
+    "why": "the corpus's own last day + 1: the newest record in data/raw/ is 2026-08-08, so this is the most recent 28 days that measures CONTENT rather than the collection schedule (yield_screen_5c1.window_for's reasoning). The operator's to overturn at the STOP — anchor_sensitivity prices the alternatives",
+    "chosen_by": "the executor; the operator's at the STOP"
+  },
+  "reads_only": "data/raw/, data/loop_cursor.json, config/registry.yaml and results/post_media_5c1.json. Nothing is fetched, nothing is written outside --out",
+  "definitions": {
+    "posts_with_media": "the stored `has_media` flag — scripts/image_census_5c1.py's own definition (`row[\"has_media\"]`), which is `message.media is not None` merged across an album by raw_store.collapse_albums",
+    "leaflet_page_in_window": "a page whose POST is in the window: a page is one message of its post's album and has no date of its own",
+    "comments_unanswered": "loop.queue_depth over the in-window ids against this channel's `inference` watermark. Every one of them is unanswered today because that watermark is unset on every channel — verified below, not assumed",
+    "CANNOT ANSWER": "the store cannot answer this cell — there is no file for that channel and that record type. It is NOT zero: a channel that was never read and a channel that was read and produced nothing are different facts"
+  },
+  "scope": {
+    "registry": {
+      "path": "config/registry.yaml",
+      "sha256": "d4e3b2373c4378f3acc51079dc1d0560c28d58c46b71335b2bb352cae39be3ba"
+    },
+    "channels": 66,
+    "verified": 66,
+    "note": "the loop walks the registry (run_loop.channels_of), so these are the channels a paid pass could ask about at all",
+    "outside_the_registry": {
+      "posts": {
+        "channels": [
+          "@ATB_FANatik",
+          "@Pro_Detyintumama",
+          "@baby_broccoli_club",
+          "@dikankaa",
+          "@discountua1",
+          "@intensiv_Mamiev",
+          "@katyal55",
+          "@kuksa2022",
+          "@offspringrus",
+          "@retsepty4",
+          "@retsepty5",
+          "@rezeptmoi",
+          "@tretyakovaele",
+          "@uasaler",
+          "@whitecode_zny",
+          "@znishkom"
+        ],
+        "rows": {
+          "@ATB_FANatik": 18,
+          "@Pro_Detyintumama": 4,
+          "@baby_broccoli_club": 1,
+          "@dikankaa": 30,
+          "@discountua1": 19,
+          "@intensiv_Mamiev": 1,
+          "@katyal55": 38,
+          "@kuksa2022": 2,
+          "@offspringrus": 17,
+          "@retsepty4": 115,
+          "@retsepty5": 140,
+          "@rezeptmoi": 2,
+          "@tretyakovaele": 1,
+          "@uasaler": 30,
+          "@whitecode_zny": 25,
+          "@znishkom": 193
+        }
+      },
+      "comments": {
+        "channels": [
+          "@tretyakovaele"
+        ],
+        "rows": {
+          "@tretyakovaele": 106
+        }
+      }
+    }
+  },
+  "watermarks": {
+    "cursor": "data/loop_cursor.json",
+    "inference_set_on": [],
+    "leaflet_set_on": [],
+    "reading": "both lists empty means no comment and no page has ever been answered, so every in-window row below is a row the paid session would buy"
+  },
+  "totals": {
+    "posts_in_window": 9158,
+    "posts_with_media_in_window": 5773,
+    "comments_in_window": 5075,
+    "comments_unanswered_in_window": 5075,
+    "leaflet_pages_in_window": 78,
+    "leaflet_posts_in_window": 9,
+    "channels_with_a_row": 58
+  },
+  "leaflet_coverage": {
+    "asks": "pages DOWNLOADED beside posts-with-media — the gap the ATB-only default is measured against (operator ruling 13.08)",
+    "manifest": {
+      "path": "results/post_media_5c1.json",
+      "sha256": "a93fc8a1af1c32a4fbc27268a2a8be0ffe57838b53e605cd3b018de437acacbb"
+    },
+    "manifest_vs_store": {
+      "checked": 19,
+      "not_in_the_store": [],
+      "date_drift": [],
+      "agrees": true
+    },
+    "per_channel": {
+      "@Hadiach_telegram": {
+        "posts_with_media_in_window": 122,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@HealthPsycholog": {
+        "posts_with_media_in_window": 16,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@KarlivkaLive": {
+        "posts_with_media_in_window": 12,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@LHVC_info": {
+        "posts_with_media_in_window": 1,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@PirOperative": {
+        "posts_with_media_in_window": 16,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@VARUS_channel": {
+        "posts_with_media_in_window": 79,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@Wellosophy_Lesya": {
+        "posts_with_media_in_window": 5,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@anastasiiadavydiukfitness": {
+        "posts_with_media_in_window": 1,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@atb_aktsiyi": {
+        "posts_with_media_in_window": 52,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@atb_market_official": {
+        "posts_with_media_in_window": 13,
+        "posts_with_pages_downloaded_in_window": 9,
+        "pages_downloaded_in_window": 78
+      },
+      "@blwbabies": {
+        "posts_with_media_in_window": 4,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@chifit_family": {
+        "posts_with_media_in_window": 3,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@denisovapro": {
+        "posts_with_media_in_window": 14,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@dpssgovua": {
+        "posts_with_media_in_window": 76,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@educationwithloven": {
+        "posts_with_media_in_window": 421,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@ekomarket_shop": {
+        "posts_with_media_in_window": 12,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@epicentrk_sale": {
+        "posts_with_media_in_window": 130,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@forainfo": {
+        "posts_with_media_in_window": 16,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@gaid_skobioale": {
+        "posts_with_media_in_window": 17,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@globine1": {
+        "posts_with_media_in_window": 65,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@gorishnie_plavni1": {
+        "posts_with_media_in_window": 317,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@h_kremenchug": {
+        "posts_with_media_in_window": 175,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@kkondr_fit": {
+        "posts_with_media_in_window": 2,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@klopotenkofood": {
+        "posts_with_media_in_window": 18,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@konservacia_kulinaria": {
+        "posts_with_media_in_window": 84,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@kopiyochka1": {
+        "posts_with_media_in_window": 51,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@korolevakuchni": {
+        "posts_with_media_in_window": 121,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@kremen_news": {
+        "posts_with_media_in_window": 326,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@mamaiagolodniy": {
+        "posts_with_media_in_window": 4,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@mameni_recepti": {
+        "posts_with_media_in_window": 239,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@mamo_nepsichuy": {
+        "posts_with_media_in_window": 44,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@mandziak": {
+        "posts_with_media_in_window": 96,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@marketopt_promo": {
+        "posts_with_media_in_window": 12,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@matusi_ukr": {
+        "posts_with_media_in_window": 217,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@maudau": {
+        "posts_with_media_in_window": 54,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@mo3ambik": {
+        "posts_with_media_in_window": 172,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@msuaaaa": {
+        "posts_with_media_in_window": 34,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@myrhorodtown": {
+        "posts_with_media_in_window": 73,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@olgaa_trainer": {
+        "posts_with_media_in_window": 5,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@pavlushaiyava": {
+        "posts_with_media_in_window": 105,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@piryatingromada": {
+        "posts_with_media_in_window": 63,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@poltava20": {
+        "posts_with_media_in_window": 345,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@poltava_informue": {
+        "posts_with_media_in_window": 252,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@poltava_pvp": {
+        "posts_with_media_in_window": 335,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@polyakova_fitness": {
+        "posts_with_media_in_window": 46,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@recepti": {
+        "posts_with_media_in_window": 190,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@retsepty": {
+        "posts_with_media_in_window": 87,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@sashafitnesslife": {
+        "posts_with_media_in_window": 19,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@silposilpo": {
+        "posts_with_media_in_window": 21,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@smirnov108": {
+        "posts_with_media_in_window": 21,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@suspilnepoltava": {
+        "posts_with_media_in_window": 370,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@tarilka_malyuka": {
+        "posts_with_media_in_window": 78,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@telegraf_kremenchuk": {
+        "posts_with_media_in_window": 558,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@tvorcha_matusyua": {
+        "posts_with_media_in_window": 109,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@useful_healthy_fitness_menu": {
+        "posts_with_media_in_window": 16,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@vylkachannel": {
+        "posts_with_media_in_window": 26,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@ya_Nenka": {
+        "posts_with_media_in_window": 8,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      },
+      "@zinkivnews": {
+        "posts_with_media_in_window": 5,
+        "posts_with_pages_downloaded_in_window": 0,
+        "pages_downloaded_in_window": 0
+      }
+    }
+  },
+  "concentration": {
+    "comments_in_window": [
+      {
+        "handle": "@matusi_ukr",
+        "n": 2717,
+        "share": 0.5354,
+        "cumulative": 2717,
+        "cumulative_share": 0.5354
+      },
+      {
+        "handle": "@mandziak",
+        "n": 1026,
+        "share": 0.2022,
+        "cumulative": 3743,
+        "cumulative_share": 0.7375
+      },
+      {
+        "handle": "@VARUS_channel",
+        "n": 242,
+        "share": 0.0477,
+        "cumulative": 3985,
+        "cumulative_share": 0.7852
+      },
+      {
+        "handle": "@kopiyochka1",
+        "n": 223,
+        "share": 0.0439,
+        "cumulative": 4208,
+        "cumulative_share": 0.8292
+      },
+      {
+        "handle": "@klopotenkofood",
+        "n": 222,
+        "share": 0.0437,
+        "cumulative": 4430,
+        "cumulative_share": 0.8729
+      },
+      {
+        "handle": "@msuaaaa",
+        "n": 163,
+        "share": 0.0321,
+        "cumulative": 4593,
+        "cumulative_share": 0.905
+      },
+      {
+        "handle": "@retsepty",
+        "n": 104,
+        "share": 0.0205,
+        "cumulative": 4697,
+        "cumulative_share": 0.9255
+      },
+      {
+        "handle": "@smirnov108",
+        "n": 100,
+        "share": 0.0197,
+        "cumulative": 4797,
+        "cumulative_share": 0.9452
+      },
+      {
+        "handle": "@HealthPsycholog",
+        "n": 97,
+        "share": 0.0191,
+        "cumulative": 4894,
+        "cumulative_share": 0.9643
+      },
+      {
+        "handle": "@sashafitnesslife",
+        "n": 83,
+        "share": 0.0164,
+        "cumulative": 4977,
+        "cumulative_share": 0.9807
+      },
+      {
+        "handle": "@tarilka_malyuka",
+        "n": 45,
+        "share": 0.0089,
+        "cumulative": 5022,
+        "cumulative_share": 0.9896
+      },
+      {
+        "handle": "@ya_Nenka",
+        "n": 16,
+        "share": 0.0032,
+        "cumulative": 5038,
+        "cumulative_share": 0.9927
+      },
+      {
+        "handle": "@mamo_nepsichuy",
+        "n": 9,
+        "share": 0.0018,
+        "cumulative": 5047,
+        "cumulative_share": 0.9945
+      },
+      {
+        "handle": "@polyakova_fitness",
+        "n": 8,
+        "share": 0.0016,
+        "cumulative": 5055,
+        "cumulative_share": 0.9961
+      },
+      {
+        "handle": "@chifit_family",
+        "n": 4,
+        "share": 0.0008,
+        "cumulative": 5059,
+        "cumulative_share": 0.9968
+      },
+      {
+        "handle": "@denisovapro",
+        "n": 4,
+        "share": 0.0008,
+        "cumulative": 5063,
+        "cumulative_share": 0.9976
+      },
+      {
+        "handle": "@kkondr_fit",
+        "n": 4,
+        "share": 0.0008,
+        "cumulative": 5067,
+        "cumulative_share": 0.9984
+      },
+      {
+        "handle": "@olgaa_trainer",
+        "n": 4,
+        "share": 0.0008,
+        "cumulative": 5071,
+        "cumulative_share": 0.9992
+      },
+      {
+        "handle": "@useful_healthy_fitness_menu",
+        "n": 4,
+        "share": 0.0008,
+        "cumulative": 5075,
+        "cumulative_share": 1.0
+      }
+    ],
+    "posts_in_window": [
+      {
+        "handle": "@poltava20",
+        "n": 1486,
+        "share": 0.1623,
+        "cumulative": 1486,
+        "cumulative_share": 0.1623
+      },
+      {
+        "handle": "@poltava_informue",
+        "n": 1271,
+        "share": 0.1388,
+        "cumulative": 2757,
+        "cumulative_share": 0.301
+      },
+      {
+        "handle": "@telegraf_kremenchuk",
+        "n": 613,
+        "share": 0.0669,
+        "cumulative": 3370,
+        "cumulative_share": 0.368
+      },
+      {
+        "handle": "@gorishnie_plavni1",
+        "n": 548,
+        "share": 0.0598,
+        "cumulative": 3918,
+        "cumulative_share": 0.4278
+      },
+      {
+        "handle": "@suspilnepoltava",
+        "n": 509,
+        "share": 0.0556,
+        "cumulative": 4427,
+        "cumulative_share": 0.4834
+      },
+      {
+        "handle": "@h_kremenchug",
+        "n": 445,
+        "share": 0.0486,
+        "cumulative": 4872,
+        "cumulative_share": 0.532
+      },
+      {
+        "handle": "@educationwithloven",
+        "n": 421,
+        "share": 0.046,
+        "cumulative": 5293,
+        "cumulative_share": 0.578
+      },
+      {
+        "handle": "@poltava_pvp",
+        "n": 404,
+        "share": 0.0441,
+        "cumulative": 5697,
+        "cumulative_share": 0.6221
+      },
+      {
+        "handle": "@kremen_news",
+        "n": 344,
+        "share": 0.0376,
+        "cumulative": 6041,
+        "cumulative_share": 0.6596
+      },
+      {
+        "handle": "@myrhorodtown",
+        "n": 259,
+        "share": 0.0283,
+        "cumulative": 6300,
+        "cumulative_share": 0.6879
+      },
+      {
+        "handle": "@mameni_recepti",
+        "n": 239,
+        "share": 0.0261,
+        "cumulative": 6539,
+        "cumulative_share": 0.714
+      },
+      {
+        "handle": "@matusi_ukr",
+        "n": 218,
+        "share": 0.0238,
+        "cumulative": 6757,
+        "cumulative_share": 0.7378
+      },
+      {
+        "handle": "@mo3ambik",
+        "n": 194,
+        "share": 0.0212,
+        "cumulative": 6951,
+        "cumulative_share": 0.759
+      },
+      {
+        "handle": "@recepti",
+        "n": 190,
+        "share": 0.0207,
+        "cumulative": 7141,
+        "cumulative_share": 0.7798
+      },
+      {
+        "handle": "@Hadiach_telegram",
+        "n": 141,
+        "share": 0.0154,
+        "cumulative": 7282,
+        "cumulative_share": 0.7952
+      },
+      {
+        "handle": "@epicentrk_sale",
+        "n": 131,
+        "share": 0.0143,
+        "cumulative": 7413,
+        "cumulative_share": 0.8095
+      },
+      {
+        "handle": "@korolevakuchni",
+        "n": 121,
+        "share": 0.0132,
+        "cumulative": 7534,
+        "cumulative_share": 0.8227
+      },
+      {
+        "handle": "@mandziak",
+        "n": 119,
+        "share": 0.013,
+        "cumulative": 7653,
+        "cumulative_share": 0.8357
+      },
+      {
+        "handle": "@tvorcha_matusyua",
+        "n": 110,
+        "share": 0.012,
+        "cumulative": 7763,
+        "cumulative_share": 0.8477
+      },
+      {
+        "handle": "@pavlushaiyava",
+        "n": 105,
+        "share": 0.0115,
+        "cumulative": 7868,
+        "cumulative_share": 0.8591
+      },
+      {
+        "handle": "@PirOperative",
+        "n": 103,
+        "share": 0.0112,
+        "cumulative": 7971,
+        "cumulative_share": 0.8704
+      },
+      {
+        "handle": "@globine1",
+        "n": 101,
+        "share": 0.011,
+        "cumulative": 8072,
+        "cumulative_share": 0.8814
+      },
+      {
+        "handle": "@retsepty",
+        "n": 87,
+        "share": 0.0095,
+        "cumulative": 8159,
+        "cumulative_share": 0.8909
+      },
+      {
+        "handle": "@konservacia_kulinaria",
+        "n": 85,
+        "share": 0.0093,
+        "cumulative": 8244,
+        "cumulative_share": 0.9002
+      },
+      {
+        "handle": "@tarilka_malyuka",
+        "n": 82,
+        "share": 0.009,
+        "cumulative": 8326,
+        "cumulative_share": 0.9092
+      },
+      {
+        "handle": "@VARUS_channel",
+        "n": 79,
+        "share": 0.0086,
+        "cumulative": 8405,
+        "cumulative_share": 0.9178
+      },
+      {
+        "handle": "@dpssgovua",
+        "n": 76,
+        "share": 0.0083,
+        "cumulative": 8481,
+        "cumulative_share": 0.9261
+      },
+      {
+        "handle": "@piryatingromada",
+        "n": 68,
+        "share": 0.0074,
+        "cumulative": 8549,
+        "cumulative_share": 0.9335
+      },
+      {
+        "handle": "@maudau",
+        "n": 61,
+        "share": 0.0067,
+        "cumulative": 8610,
+        "cumulative_share": 0.9402
+      },
+      {
+        "handle": "@atb_aktsiyi",
+        "n": 53,
+        "share": 0.0058,
+        "cumulative": 8663,
+        "cumulative_share": 0.9459
+      },
+      {
+        "handle": "@kopiyochka1",
+        "n": 51,
+        "share": 0.0056,
+        "cumulative": 8714,
+        "cumulative_share": 0.9515
+      },
+      {
+        "handle": "@polyakova_fitness",
+        "n": 50,
+        "share": 0.0055,
+        "cumulative": 8764,
+        "cumulative_share": 0.957
+      },
+      {
+        "handle": "@mamo_nepsichuy",
+        "n": 44,
+        "share": 0.0048,
+        "cumulative": 8808,
+        "cumulative_share": 0.9618
+      },
+      {
+        "handle": "@klopotenkofood",
+        "n": 38,
+        "share": 0.0041,
+        "cumulative": 8846,
+        "cumulative_share": 0.9659
+      },
+      {
+        "handle": "@msuaaaa",
+        "n": 34,
+        "share": 0.0037,
+        "cumulative": 8880,
+        "cumulative_share": 0.9696
+      },
+      {
+        "handle": "@smirnov108",
+        "n": 27,
+        "share": 0.0029,
+        "cumulative": 8907,
+        "cumulative_share": 0.9726
+      },
+      {
+        "handle": "@vylkachannel",
+        "n": 26,
+        "share": 0.0028,
+        "cumulative": 8933,
+        "cumulative_share": 0.9754
+      },
+      {
+        "handle": "@silposilpo",
+        "n": 21,
+        "share": 0.0023,
+        "cumulative": 8954,
+        "cumulative_share": 0.9777
+      },
+      {
+        "handle": "@denisovapro",
+        "n": 20,
+        "share": 0.0022,
+        "cumulative": 8974,
+        "cumulative_share": 0.9799
+      },
+      {
+        "handle": "@sashafitnesslife",
+        "n": 19,
+        "share": 0.0021,
+        "cumulative": 8993,
+        "cumulative_share": 0.982
+      },
+      {
+        "handle": "@gaid_skobioale",
+        "n": 18,
+        "share": 0.002,
+        "cumulative": 9011,
+        "cumulative_share": 0.9839
+      },
+      {
+        "handle": "@useful_healthy_fitness_menu",
+        "n": 17,
+        "share": 0.0019,
+        "cumulative": 9028,
+        "cumulative_share": 0.9858
+      },
+      {
+        "handle": "@HealthPsycholog",
+        "n": 16,
+        "share": 0.0017,
+        "cumulative": 9044,
+        "cumulative_share": 0.9876
+      },
+      {
+        "handle": "@forainfo",
+        "n": 16,
+        "share": 0.0017,
+        "cumulative": 9060,
+        "cumulative_share": 0.9893
+      },
+      {
+        "handle": "@atb_market_official",
+        "n": 13,
+        "share": 0.0014,
+        "cumulative": 9073,
+        "cumulative_share": 0.9907
+      },
+      {
+        "handle": "@KarlivkaLive",
+        "n": 12,
+        "share": 0.0013,
+        "cumulative": 9085,
+        "cumulative_share": 0.992
+      },
+      {
+        "handle": "@ekomarket_shop",
+        "n": 12,
+        "share": 0.0013,
+        "cumulative": 9097,
+        "cumulative_share": 0.9933
+      },
+      {
+        "handle": "@marketopt_promo",
+        "n": 12,
+        "share": 0.0013,
+        "cumulative": 9109,
+        "cumulative_share": 0.9946
+      },
+      {
+        "handle": "@ya_Nenka",
+        "n": 10,
+        "share": 0.0011,
+        "cumulative": 9119,
+        "cumulative_share": 0.9957
+      },
+      {
+        "handle": "@zinkivnews",
+        "n": 9,
+        "share": 0.001,
+        "cumulative": 9128,
+        "cumulative_share": 0.9967
+      },
+      {
+        "handle": "@olgaa_trainer",
+        "n": 8,
+        "share": 0.0009,
+        "cumulative": 9136,
+        "cumulative_share": 0.9976
+      },
+      {
+        "handle": "@Wellosophy_Lesya",
+        "n": 5,
+        "share": 0.0005,
+        "cumulative": 9141,
+        "cumulative_share": 0.9981
+      },
+      {
+        "handle": "@mamaiagolodniy",
+        "n": 5,
+        "share": 0.0005,
+        "cumulative": 9146,
+        "cumulative_share": 0.9987
+      },
+      {
+        "handle": "@blwbabies",
+        "n": 4,
+        "share": 0.0004,
+        "cumulative": 9150,
+        "cumulative_share": 0.9991
+      },
+      {
+        "handle": "@chifit_family",
+        "n": 4,
+        "share": 0.0004,
+        "cumulative": 9154,
+        "cumulative_share": 0.9996
+      },
+      {
+        "handle": "@kkondr_fit",
+        "n": 2,
+        "share": 0.0002,
+        "cumulative": 9156,
+        "cumulative_share": 0.9998
+      },
+      {
+        "handle": "@LHVC_info",
+        "n": 1,
+        "share": 0.0001,
+        "cumulative": 9157,
+        "cumulative_share": 0.9999
+      },
+      {
+        "handle": "@anastasiiadavydiukfitness",
+        "n": 1,
+        "share": 0.0001,
+        "cumulative": 9158,
+        "cumulative_share": 1.0
+      }
+    ]
+  },
+  "cannot_answer": {
+    "posts": {
+      "channels": [
+        "@Evgenija_dutjache_menu",
+        "@dimakaminskyifit",
+        "@dutyache_menu",
+        "@hydnem_prosto",
+        "@itsmamix",
+        "@lab_of_childhood",
+        "@skhudnennya"
+      ],
+      "why": "no file in data/raw/posts/ — the channel has never been walked"
+    },
+    "comments": {
+      "n": 47,
+      "no_discussion_group": [
+        "@Hadiach_telegram",
+        "@KarlivkaLive",
+        "@LHVC_info",
+        "@PirOperative",
+        "@Wellosophy_Lesya",
+        "@anastasiiadavydiukfitness",
+        "@atb_aktsiyi",
+        "@atb_market_official",
+        "@blwbabies",
+        "@dpssgovua",
+        "@educationwithloven",
+        "@ekomarket_shop",
+        "@epicentrk_sale",
+        "@forainfo",
+        "@gaid_skobioale",
+        "@globine1",
+        "@gorishnie_plavni1",
+        "@h_kremenchug",
+        "@konservacia_kulinaria",
+        "@korolevakuchni",
+        "@kremen_news",
+        "@lab_of_childhood",
+        "@mamaiagolodniy",
+        "@mameni_recepti",
+        "@marketopt_promo",
+        "@maudau",
+        "@mo3ambik",
+        "@myrhorodtown",
+        "@pavlushaiyava",
+        "@piryatingromada",
+        "@poltava20",
+        "@poltava_informue",
+        "@poltava_pvp",
+        "@recepti",
+        "@silposilpo",
+        "@suspilnepoltava",
+        "@telegraf_kremenchuk",
+        "@tvorcha_matusyua",
+        "@vylkachannel",
+        "@zinkivnews"
+      ],
+      "watch_never_joined": [
+        "@Evgenija_dutjache_menu",
+        "@dimakaminskyifit",
+        "@dutyache_menu",
+        "@hydnem_prosto",
+        "@itsmamix",
+        "@skhudnennya"
+      ],
+      "collection_gap": [
+        "@eftforhealth"
+      ],
+      "why": "only `collection_gap` is a gap: those channels have comments and were never read. The rest cannot produce a comment at all, and neither is reported as 0"
+    }
+  },
+  "cross_check": {
+    "what": "comments stored for registry channels, WHOLE corpus — the 5a dry pass's queue",
+    "comments_in_store_registry_channels": 16218,
+    "comments_in_store_outside_the_registry": 106,
+    "comments_on_disk_everywhere": 16324,
+    "compare_with": "docs/reports/5c2-prep-b.md — the dry pass over the registry's channels",
+    "not_a_window_number": "the dry pass has no window: it counts every stored comment above an unset watermark. The window's own figure is 5075 and the two are different questions"
+  },
+  "anchor_sensitivity": [
+    {
+      "why": "the last 28 days ending today (2026-08-13) — the literal reading of «the most recent four weeks», which buys five days no channel has collected into and drops five that hold rows",
+      "window": {
+        "anchor": "2026-08-14T00:00:00+00:00",
+        "days": 28,
+        "since": "2026-07-17T00:00:00+00:00",
+        "until": "2026-08-14T00:00:00+00:00",
+        "rule": "since <= date < until, half-open, so the window is exactly 28 days"
+      },
+      "posts_in_window": 7621,
+      "posts_with_media_in_window": 4692,
+      "comments_in_window": 3927,
+      "comments_unanswered_in_window": 3927,
+      "leaflet_pages_in_window": 45,
+      "leaflet_posts_in_window": 5,
+      "channels_with_a_row": 57
+    },
+    {
+      "why": "the last 28 days of the LEAFLET corpus: the 19 pages posts run 2026-07-01…07-23 and this is the only 28-day window that contains all of them",
+      "window": {
+        "anchor": "2026-07-28T00:00:00+00:00",
+        "days": 28,
+        "since": "2026-06-30T00:00:00+00:00",
+        "until": "2026-07-28T00:00:00+00:00",
+        "rule": "since <= date < until, half-open, so the window is exactly 28 days"
+      },
+      "posts_in_window": 5848,
+      "posts_with_media_in_window": 3788,
+      "comments_in_window": 3677,
+      "comments_unanswered_in_window": 3677,
+      "leaflet_pages_in_window": 159,
+      "leaflet_posts_in_window": 19,
+      "channels_with_a_row": 57
+    }
+  ],
+  "channels": [
+    {
+      "handle": "@Evgenija_dutjache_menu",
+      "source_id": "evgenija_dutjache_menu",
+      "audience": "baby_food",
+      "source_type": "community",
+      "comments_enabled": true,
+      "watch": true,
+      "posts": "CANNOT ANSWER",
+      "posts_with_media_in_window": "CANNOT ANSWER",
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@Hadiach_telegram",
+      "source_id": "hadiach_telegram",
+      "audience": "regional",
+      "source_type": "community",
+      "comments_enabled": false,
+      "watch": false,
+      "posts": {
+        "in_store": 145,
+        "in_window": 141,
+        "ids_sha256": "2b0c3121943c56fb39e560a438622a65c721711bc632a21aaee1a42d6a24c943",
+        "span": {
+          "first": "2026-07-10T13:53:31+00:00",
+          "last": "2026-08-07T17:38:06+00:00"
+        }
+      },
+      "posts_with_media_in_window": 122,
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@HealthPsycholog",
+      "source_id": "healthpsycholog",
+      "audience": "health_fitness",
+      "source_type": "community",
+      "comments_enabled": true,
+      "watch": false,
+      "posts": {
+        "in_store": 17,
+        "in_window": 16,
+        "ids_sha256": "4e06ef7feb2b7da50681a76a4ca4c19abb2b439089f7ff4031a3bfe6bd53f54e",
+        "span": {
+          "first": "2026-07-11T08:17:44+00:00",
+          "last": "2026-08-06T09:01:27+00:00"
+        }
+      },
+      "posts_with_media_in_window": 16,
+      "comments": {
+        "in_store": 97,
+        "in_window": 97,
+        "ids_sha256": "222d652a26e6f41ce7cc596740e348510137c3013c01c597a4563912a3d64e54",
+        "span": {
+          "first": "2026-07-12T10:19:08+00:00",
+          "last": "2026-08-07T12:32:51+00:00"
+        }
+      },
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": 97,
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@KarlivkaLive",
+      "source_id": "karlivkalive",
+      "audience": "regional",
+      "source_type": "community",
+      "comments_enabled": false,
+      "watch": false,
+      "posts": {
+        "in_store": 12,
+        "in_window": 12,
+        "ids_sha256": "1a189dfef7307098f838358e4a41d2b03e1fc6aa2635d1d9edcaf648d522a4fa",
+        "span": {
+          "first": "2026-07-17T14:21:44+00:00",
+          "last": "2026-08-08T08:32:36+00:00"
+        }
+      },
+      "posts_with_media_in_window": 12,
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@LHVC_info",
+      "source_id": "lhvc_info",
+      "audience": "regional",
+      "source_type": "community",
+      "comments_enabled": false,
+      "watch": false,
+      "posts": {
+        "in_store": 1,
+        "in_window": 1,
+        "ids_sha256": "6815fd0989fc6aa86c07ab321564405cedf401875868f38d40a4631cac92e599",
+        "span": {
+          "first": "2026-07-20T10:17:18+00:00",
+          "last": "2026-07-20T10:17:18+00:00"
+        }
+      },
+      "posts_with_media_in_window": 1,
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@PirOperative",
+      "source_id": "piroperative",
+      "audience": "regional",
+      "source_type": "community",
+      "comments_enabled": false,
+      "watch": false,
+      "posts": {
+        "in_store": 106,
+        "in_window": 103,
+        "ids_sha256": "3ed4e5282c084eb43b4607a3168b996c2c3929e07306e4157a63b8dde7116b9d",
+        "span": {
+          "first": "2026-07-11T20:00:25+00:00",
+          "last": "2026-08-07T17:36:35+00:00"
+        }
+      },
+      "posts_with_media_in_window": 16,
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@VARUS_channel",
+      "source_id": "varus",
+      "audience": "retail_official",
+      "source_type": "official_retail",
+      "comments_enabled": true,
+      "watch": false,
+      "posts": {
+        "in_store": 2252,
+        "in_window": 79,
+        "ids_sha256": "4473eb0cf3bda0894382deadddd0a91bce7fa820d9a432082c0e8311d00ac77e",
+        "span": {
+          "first": "2024-07-01T08:00:06+00:00",
+          "last": "2026-07-26T16:24:46+00:00"
+        }
+      },
+      "posts_with_media_in_window": 79,
+      "comments": {
+        "in_store": 6410,
+        "in_window": 242,
+        "ids_sha256": "0da6ae6635bc225453acf6d413f8af2a7078a62fe961cc4118ae11f948920691",
+        "span": {
+          "first": "2025-04-04T16:47:58+00:00",
+          "last": "2026-07-27T09:05:50+00:00"
+        }
+      },
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": 242,
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@Wellosophy_Lesya",
+      "source_id": "wellosophy_lesya",
+      "audience": "health_fitness",
+      "source_type": "community",
+      "comments_enabled": false,
+      "watch": false,
+      "posts": {
+        "in_store": 8,
+        "in_window": 5,
+        "ids_sha256": "cb85772bb0d62a1731ed4d9a9fb6af48798c437e7b5262202bd35e7b8a5973da",
+        "span": {
+          "first": "2026-07-11T17:04:46+00:00",
+          "last": "2026-07-13T14:43:05+00:00"
+        }
+      },
+      "posts_with_media_in_window": 5,
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@anastasiiadavydiukfitness",
+      "source_id": "anastasiiadavydiukfitness",
+      "audience": "health_fitness",
+      "source_type": "community",
+      "comments_enabled": false,
+      "watch": false,
+      "posts": {
+        "in_store": 1,
+        "in_window": 1,
+        "ids_sha256": "3fdba35f04dc8c462986c992bcf875546257113072a909c162f7e470e581e278",
+        "span": {
+          "first": "2026-07-26T09:50:18+00:00",
+          "last": "2026-07-26T09:50:18+00:00"
+        }
+      },
+      "posts_with_media_in_window": 1,
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@atb_aktsiyi",
+      "source_id": "atb_aktsiyi",
+      "audience": "supermarket_deals",
+      "source_type": "aggregator",
+      "comments_enabled": false,
+      "watch": false,
+      "posts": {
+        "in_store": 53,
+        "in_window": 53,
+        "ids_sha256": "42188a9a8bc5bd2ea0178306df8156f446aa1d36f697cdc05a1da1a50f096ca1",
+        "span": {
+          "first": "2026-07-12T09:34:54+00:00",
+          "last": "2026-08-06T15:39:28+00:00"
+        }
+      },
+      "posts_with_media_in_window": 52,
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@atb_market_official",
+      "source_id": "atb",
+      "audience": "retail_official",
+      "source_type": "official_retail",
+      "comments_enabled": false,
+      "watch": false,
+      "posts": {
+        "in_store": 777,
+        "in_window": 13,
+        "ids_sha256": "ac2a2e330f3b518e25cd75b563208b83dc3e434a74a3eb074d23003697b46832",
+        "span": {
+          "first": "2024-07-01T07:45:33+00:00",
+          "last": "2026-07-23T06:35:09+00:00"
+        }
+      },
+      "posts_with_media_in_window": 13,
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_store": 19,
+        "pages_in_store": 159,
+        "posts_with_pages_in_window": 9,
+        "pages_in_window": 78,
+        "page_ids_in_window": [
+          4421,
+          4422,
+          4423,
+          4424,
+          4426,
+          4427,
+          4428,
+          4429,
+          4430,
+          4431,
+          4432,
+          4433,
+          4434,
+          4435,
+          4436,
+          4437,
+          4438,
+          4439,
+          4440,
+          4441,
+          4442,
+          4443,
+          4444,
+          4445,
+          4446,
+          4447,
+          4448,
+          4449,
+          4450,
+          4451,
+          4452,
+          4453,
+          4454,
+          4455,
+          4456,
+          4457,
+          4458,
+          4459,
+          4460,
+          4461,
+          4467,
+          4468,
+          4469,
+          4470,
+          4471,
+          4472,
+          4473,
+          4474,
+          4475,
+          4476,
+          4498,
+          4499,
+          4500,
+          4501,
+          4502,
+          4503,
+          4504,
+          4505,
+          4506,
+          4507,
+          4508,
+          4509,
+          4510,
+          4511,
+          4512,
+          4513,
+          4514,
+          4515,
+          4516,
+          4517,
+          4519,
+          4520,
+          4521,
+          4522,
+          4523,
+          4524,
+          4525,
+          4526
+        ],
+        "manifest": "results/post_media_5c1.json"
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 78
+    },
+    {
+      "handle": "@blwbabies",
+      "source_id": "blwbabies",
+      "audience": "baby_food",
+      "source_type": "community",
+      "comments_enabled": false,
+      "watch": false,
+      "posts": {
+        "in_store": 4,
+        "in_window": 4,
+        "ids_sha256": "7568620186d6e03a7120bb03f6ebf5befa13796f5b5e42295296c05c49b783cf",
+        "span": {
+          "first": "2026-07-27T09:43:12+00:00",
+          "last": "2026-07-31T07:06:03+00:00"
+        }
+      },
+      "posts_with_media_in_window": 4,
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@chifit_family",
+      "source_id": "chifit_family",
+      "audience": "health_fitness",
+      "source_type": "community",
+      "comments_enabled": true,
+      "watch": false,
+      "posts": {
+        "in_store": 4,
+        "in_window": 4,
+        "ids_sha256": "2008b36d4782a05110faa6c0aa81f34f166634de8a7d9da70522e21a5a2ab6a9",
+        "span": {
+          "first": "2026-07-29T09:35:28+00:00",
+          "last": "2026-08-05T12:31:39+00:00"
+        }
+      },
+      "posts_with_media_in_window": 3,
+      "comments": {
+        "in_store": 4,
+        "in_window": 4,
+        "ids_sha256": "a7229f6fed6f5b296ef8d16e2c5fdd927ab5d0b8a5c346d0fb909fa68f419916",
+        "span": {
+          "first": "2026-08-05T12:45:16+00:00",
+          "last": "2026-08-05T13:04:27+00:00"
+        }
+      },
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": 4,
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@denisovapro",
+      "source_id": "denisovapro",
+      "audience": "health_fitness",
+      "source_type": "community",
+      "comments_enabled": true,
+      "watch": false,
+      "posts": {
+        "in_store": 22,
+        "in_window": 20,
+        "ids_sha256": "ec454fcdde7085265261e4518b794dde1258e1ed35433fc38f0c13be9ed3fc15",
+        "span": {
+          "first": "2026-07-11T14:38:09+00:00",
+          "last": "2026-08-06T19:11:57+00:00"
+        }
+      },
+      "posts_with_media_in_window": 14,
+      "comments": {
+        "in_store": 6,
+        "in_window": 4,
+        "ids_sha256": "d4a7c15dad0d84e8c34be41f4e366c37a9f8d728edc3c669b2723064f2cb63ef",
+        "span": {
+          "first": "2026-07-11T19:57:43+00:00",
+          "last": "2026-07-22T18:56:34+00:00"
+        }
+      },
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": 4,
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@dimakaminskyifit",
+      "source_id": "dimakaminskyifit",
+      "audience": "health_fitness",
+      "source_type": "community",
+      "comments_enabled": true,
+      "watch": true,
+      "posts": "CANNOT ANSWER",
+      "posts_with_media_in_window": "CANNOT ANSWER",
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@dpssgovua",
+      "source_id": "dpssgovua",
+      "audience": "food_quality",
+      "source_type": "government",
+      "comments_enabled": false,
+      "watch": false,
+      "posts": {
+        "in_store": 79,
+        "in_window": 76,
+        "ids_sha256": "f326eca5532c2ddedbc897dcbf58ea27386027f2468273b274b09304221406dc",
+        "span": {
+          "first": "2026-07-10T11:01:58+00:00",
+          "last": "2026-08-07T06:07:00+00:00"
+        }
+      },
+      "posts_with_media_in_window": 76,
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@dutyache_menu",
+      "source_id": "dutyache_menu",
+      "audience": "baby_food",
+      "source_type": "community",
+      "comments_enabled": true,
+      "watch": true,
+      "posts": "CANNOT ANSWER",
+      "posts_with_media_in_window": "CANNOT ANSWER",
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@educationwithloven",
+      "source_id": "educationwithloven",
+      "audience": "mothers_kids",
+      "source_type": "community",
+      "comments_enabled": false,
+      "watch": false,
+      "posts": {
+        "in_store": 426,
+        "in_window": 421,
+        "ids_sha256": "2bb594ef83227aa9ca28c804465abde8a2669e8cd56e7d69267d7369b5ff797d",
+        "span": {
+          "first": "2026-07-10T13:37:01+00:00",
+          "last": "2026-08-08T10:31:17+00:00"
+        }
+      },
+      "posts_with_media_in_window": 421,
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@eftforhealth",
+      "source_id": "eftforhealth",
+      "audience": "health_fitness",
+      "source_type": "community",
+      "comments_enabled": true,
+      "watch": false,
+      "posts": {
+        "in_store": 1,
+        "in_window": 0,
+        "ids_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "span": {
+          "first": "2026-07-10T10:41:24+00:00",
+          "last": "2026-07-10T10:41:24+00:00"
+        }
+      },
+      "posts_with_media_in_window": 0,
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@ekomarket_shop",
+      "source_id": "ekomarket_shop",
+      "audience": "retail_official",
+      "source_type": "official_retail",
+      "comments_enabled": false,
+      "watch": false,
+      "posts": {
+        "in_store": 12,
+        "in_window": 12,
+        "ids_sha256": "25203c43c0bd7fe54cbc473ba63d151adffd3db7f652c96bef9d740c09013d3a",
+        "span": {
+          "first": "2026-07-16T09:24:31+00:00",
+          "last": "2026-08-07T07:18:50+00:00"
+        }
+      },
+      "posts_with_media_in_window": 12,
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@epicentrk_sale",
+      "source_id": "epicentrk_sale",
+      "audience": "retail_official",
+      "source_type": "official_retail",
+      "comments_enabled": false,
+      "watch": false,
+      "posts": {
+        "in_store": 141,
+        "in_window": 131,
+        "ids_sha256": "c7fde135c13dff5810003399299944f1a3cb8260430e8436ba850c0ec4227637",
+        "span": {
+          "first": "2026-07-10T11:01:43+00:00",
+          "last": "2026-08-07T07:35:29+00:00"
+        }
+      },
+      "posts_with_media_in_window": 130,
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@forainfo",
+      "source_id": "forainfo",
+      "audience": "retail_official",
+      "source_type": "official_retail",
+      "comments_enabled": false,
+      "watch": false,
+      "posts": {
+        "in_store": 16,
+        "in_window": 16,
+        "ids_sha256": "26c3ba6646ad553ad81f147aabc0917db6cc671d152369f110ae247064f46953",
+        "span": {
+          "first": "2026-07-13T06:44:23+00:00",
+          "last": "2026-08-08T08:14:36+00:00"
+        }
+      },
+      "posts_with_media_in_window": 16,
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@gaid_skobioale",
+      "source_id": "gaid_skobioale",
+      "audience": "health_fitness",
+      "source_type": "community",
+      "comments_enabled": false,
+      "watch": false,
+      "posts": {
+        "in_store": 18,
+        "in_window": 18,
+        "ids_sha256": "1d560a919f06b5c627fd2e775a69b08b54c32bf462d51526af7fd1c48fe7765a",
+        "span": {
+          "first": "2026-07-12T17:12:35+00:00",
+          "last": "2026-08-07T09:47:41+00:00"
+        }
+      },
+      "posts_with_media_in_window": 17,
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@globine1",
+      "source_id": "globine1",
+      "audience": "regional",
+      "source_type": "community",
+      "comments_enabled": false,
+      "watch": false,
+      "posts": {
+        "in_store": 103,
+        "in_window": 101,
+        "ids_sha256": "0229d7bbe393b16c80a525ca151b1915d3f480c4dfaf9ff9116018d66d3b68b3",
+        "span": {
+          "first": "2026-07-10T11:34:53+00:00",
+          "last": "2026-08-07T13:04:06+00:00"
+        }
+      },
+      "posts_with_media_in_window": 65,
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@gorishnie_plavni1",
+      "source_id": "gorishnie_plavni1",
+      "audience": "regional",
+      "source_type": "community",
+      "comments_enabled": false,
+      "watch": false,
+      "posts": {
+        "in_store": 568,
+        "in_window": 548,
+        "ids_sha256": "9f11d9de11e9488cd60f7a9a6f32c39d65a5cc9647c75bb117a794b6a0aaa764",
+        "span": {
+          "first": "2026-07-10T10:41:01+00:00",
+          "last": "2026-08-08T10:50:01+00:00"
+        }
+      },
+      "posts_with_media_in_window": 317,
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@h_kremenchug",
+      "source_id": "h_kremenchug",
+      "audience": "regional",
+      "source_type": "community",
+      "comments_enabled": false,
+      "watch": false,
+      "posts": {
+        "in_store": 459,
+        "in_window": 445,
+        "ids_sha256": "b25951e4df3d2d970be42a521ce5ecb0ea59f9aeb4fee4f6a426e72437384473",
+        "span": {
+          "first": "2026-07-10T11:36:13+00:00",
+          "last": "2026-08-08T10:34:03+00:00"
+        }
+      },
+      "posts_with_media_in_window": 175,
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@hydnem_prosto",
+      "source_id": "hydnem_prosto",
+      "audience": "health_fitness",
+      "source_type": "community",
+      "comments_enabled": true,
+      "watch": true,
+      "posts": "CANNOT ANSWER",
+      "posts_with_media_in_window": "CANNOT ANSWER",
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@itsmamix",
+      "source_id": "itsmamix",
+      "audience": "mothers_kids",
+      "source_type": "community",
+      "comments_enabled": true,
+      "watch": true,
+      "posts": "CANNOT ANSWER",
+      "posts_with_media_in_window": "CANNOT ANSWER",
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@kkondr_fit",
+      "source_id": "kkondr_fit",
+      "audience": "health_fitness",
+      "source_type": "community",
+      "comments_enabled": true,
+      "watch": false,
+      "posts": {
+        "in_store": 2,
+        "in_window": 2,
+        "ids_sha256": "9a35fb247f30912a2f7f1c4ef031dc579296baebc36d89f483d8c30a4ac10130",
+        "span": {
+          "first": "2026-07-31T17:24:36+00:00",
+          "last": "2026-08-03T14:19:55+00:00"
+        }
+      },
+      "posts_with_media_in_window": 2,
+      "comments": {
+        "in_store": 4,
+        "in_window": 4,
+        "ids_sha256": "e2cb6ae0ae4c4094e51ebff6d8799a1247a0a1b2f1b649597cb0e2a93d4b1765",
+        "span": {
+          "first": "2026-07-31T17:29:52+00:00",
+          "last": "2026-08-03T19:10:49+00:00"
+        }
+      },
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": 4,
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@klopotenkofood",
+      "source_id": "klopotenkofood",
+      "audience": "cooking_recipes",
+      "source_type": "community",
+      "comments_enabled": true,
+      "watch": false,
+      "posts": {
+        "in_store": 40,
+        "in_window": 38,
+        "ids_sha256": "2f02ceb78cc41ab30b45cc46715a37bf13469e48f36172be07c345c4edb05d9c",
+        "span": {
+          "first": "2026-07-10T12:53:35+00:00",
+          "last": "2026-08-06T15:04:04+00:00"
+        }
+      },
+      "posts_with_media_in_window": 18,
+      "comments": {
+        "in_store": 232,
+        "in_window": 222,
+        "ids_sha256": "d3b23ecd144864a46d6bd7c297f32eed04658d9cc85794acb897b5620ae66502",
+        "span": {
+          "first": "2026-07-10T12:56:41+00:00",
+          "last": "2026-08-07T14:33:45+00:00"
+        }
+      },
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": 222,
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@konservacia_kulinaria",
+      "source_id": "konservacia_kulinaria",
+      "audience": "cooking_recipes",
+      "source_type": "community",
+      "comments_enabled": false,
+      "watch": false,
+      "posts": {
+        "in_store": 92,
+        "in_window": 85,
+        "ids_sha256": "710b24ff847c8c7fee3267b29bd85f23e3b309fa852817a3d2423abcbab2ca34",
+        "span": {
+          "first": "2026-07-10T11:35:09+00:00",
+          "last": "2026-08-07T06:35:09+00:00"
+        }
+      },
+      "posts_with_media_in_window": 84,
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@kopiyochka1",
+      "source_id": "kopiyochka1",
+      "audience": "supermarket_deals",
+      "source_type": "community",
+      "comments_enabled": true,
+      "watch": false,
+      "posts": {
+        "in_store": 52,
+        "in_window": 51,
+        "ids_sha256": "c24b2ab5a1e3c28a06fa575b954145077b2751dee9500a5c509fba4d6824f88d",
+        "span": {
+          "first": "2026-07-11T08:05:27+00:00",
+          "last": "2026-08-07T09:01:23+00:00"
+        }
+      },
+      "posts_with_media_in_window": 51,
+      "comments": {
+        "in_store": 223,
+        "in_window": 223,
+        "ids_sha256": "ab9fbfcbacff763c2af8174ead76de0fdd714b531f7944da1c87a7757d6f8bfb",
+        "span": {
+          "first": "2026-07-12T08:26:01+00:00",
+          "last": "2026-08-07T06:14:52+00:00"
+        }
+      },
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": 223,
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@korolevakuchni",
+      "source_id": "korolevakuchni",
+      "audience": "cooking_recipes",
+      "source_type": "community",
+      "comments_enabled": false,
+      "watch": false,
+      "posts": {
+        "in_store": 126,
+        "in_window": 121,
+        "ids_sha256": "2d905b292cd799b04a2f027d57be49e75a88c75dad4d7ffcd8f8689adc0a396b",
+        "span": {
+          "first": "2026-07-11T03:30:39+00:00",
+          "last": "2026-08-07T03:41:57+00:00"
+        }
+      },
+      "posts_with_media_in_window": 121,
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@kremen_news",
+      "source_id": "kremen_news",
+      "audience": "regional",
+      "source_type": "community",
+      "comments_enabled": false,
+      "watch": false,
+      "posts": {
+        "in_store": 354,
+        "in_window": 344,
+        "ids_sha256": "1a0ff8023e0e123e964a774ef11803dc37d2fe7c31d04b5f683853ef7c4c959c",
+        "span": {
+          "first": "2026-07-10T10:40:25+00:00",
+          "last": "2026-08-08T11:01:05+00:00"
+        }
+      },
+      "posts_with_media_in_window": 326,
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@lab_of_childhood",
+      "source_id": "lab_of_childhood",
+      "audience": "mothers_kids",
+      "source_type": "community",
+      "comments_enabled": false,
+      "watch": true,
+      "posts": "CANNOT ANSWER",
+      "posts_with_media_in_window": "CANNOT ANSWER",
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@mamaiagolodniy",
+      "source_id": "mamaiagolodniy",
+      "audience": "baby_food",
+      "source_type": "community",
+      "comments_enabled": false,
+      "watch": false,
+      "posts": {
+        "in_store": 5,
+        "in_window": 5,
+        "ids_sha256": "211667c227304aad3132f36e5fe81a6b44d594a2e3100ef234342c2ded223cfb",
+        "span": {
+          "first": "2026-07-12T16:34:31+00:00",
+          "last": "2026-08-01T08:22:22+00:00"
+        }
+      },
+      "posts_with_media_in_window": 4,
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@mameni_recepti",
+      "source_id": "mameni_recepti",
+      "audience": "cooking_recipes",
+      "source_type": "community",
+      "comments_enabled": false,
+      "watch": false,
+      "posts": {
+        "in_store": 253,
+        "in_window": 239,
+        "ids_sha256": "ba235a6ba981ecf21f9486674e4d8a0bba7c3866ab371d850d70c76a4f740265",
+        "span": {
+          "first": "2026-07-10T11:50:00+00:00",
+          "last": "2026-08-07T08:50:13+00:00"
+        }
+      },
+      "posts_with_media_in_window": 239,
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@mamo_nepsichuy",
+      "source_id": "mamo_nepsichuy",
+      "audience": "mothers_kids",
+      "source_type": "community",
+      "comments_enabled": true,
+      "watch": false,
+      "posts": {
+        "in_store": 48,
+        "in_window": 44,
+        "ids_sha256": "2ed41b6156f61779f92108797bf9c70e28b1a141582b2b841e6276f274c17b9e",
+        "span": {
+          "first": "2026-07-10T13:00:47+00:00",
+          "last": "2026-08-08T07:02:05+00:00"
+        }
+      },
+      "posts_with_media_in_window": 44,
+      "comments": {
+        "in_store": 10,
+        "in_window": 9,
+        "ids_sha256": "1c40783030822ab6dc5c34dc97ede2981a7b214adbcfbb8cdaa02e91fed86029",
+        "span": {
+          "first": "2026-07-10T15:04:18+00:00",
+          "last": "2026-08-08T07:20:22+00:00"
+        }
+      },
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": 9,
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@mandziak",
+      "source_id": "mandziak",
+      "audience": "health_fitness",
+      "source_type": "community",
+      "comments_enabled": true,
+      "watch": false,
+      "posts": {
+        "in_store": 123,
+        "in_window": 119,
+        "ids_sha256": "5c2647c342cb21c9c21c381db3d01c026c3ded19f8b2cf6ab1d10f0511ff74b9",
+        "span": {
+          "first": "2026-07-10T17:59:17+00:00",
+          "last": "2026-08-07T21:30:33+00:00"
+        }
+      },
+      "posts_with_media_in_window": 96,
+      "comments": {
+        "in_store": 1048,
+        "in_window": 1026,
+        "ids_sha256": "b86fae592d89301127cca21c1b2c77665e9b2402f5c5f0ebbbd7dc916b8e6d31",
+        "span": {
+          "first": "2026-07-10T18:42:21+00:00",
+          "last": "2026-08-08T10:17:17+00:00"
+        }
+      },
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": 1026,
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@marketopt_promo",
+      "source_id": "marketopt_promo",
+      "audience": "retail_official",
+      "source_type": "official_retail",
+      "comments_enabled": false,
+      "watch": false,
+      "posts": {
+        "in_store": 12,
+        "in_window": 12,
+        "ids_sha256": "cc9f0318c50ef39734281ab9f6c2c3664ab8d0c6a83ecf5cda54e9f50894a400",
+        "span": {
+          "first": "2026-07-17T06:36:06+00:00",
+          "last": "2026-08-07T08:06:42+00:00"
+        }
+      },
+      "posts_with_media_in_window": 12,
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@matusi_ukr",
+      "source_id": "matusi_ukr",
+      "audience": "mothers_kids",
+      "source_type": "community",
+      "comments_enabled": true,
+      "watch": false,
+      "posts": {
+        "in_store": 237,
+        "in_window": 218,
+        "ids_sha256": "77ca665bb8552db72d17bf8e73cc6a3062ab316067203aa9e73304f354b6ac3e",
+        "span": {
+          "first": "2026-07-10T11:03:36+00:00",
+          "last": "2026-08-08T11:01:27+00:00"
+        }
+      },
+      "posts_with_media_in_window": 217,
+      "comments": {
+        "in_store": 2890,
+        "in_window": 2717,
+        "ids_sha256": "5a63f1b05f8722ca835322eb5b05778ac23204cf8b66aa229e369658628a5c69",
+        "span": {
+          "first": "2026-07-10T13:07:27+00:00",
+          "last": "2026-08-08T11:19:20+00:00"
+        }
+      },
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": 2717,
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@maudau",
+      "source_id": "maudau",
+      "audience": "supermarket_deals",
+      "source_type": "community",
+      "comments_enabled": false,
+      "watch": false,
+      "posts": {
+        "in_store": 64,
+        "in_window": 61,
+        "ids_sha256": "ac1db09514c64d6e40407de678854c0bcafb804920c8efd516cbb8261a8c2bf7",
+        "span": {
+          "first": "2026-07-10T15:31:39+00:00",
+          "last": "2026-08-07T06:59:27+00:00"
+        }
+      },
+      "posts_with_media_in_window": 54,
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@mo3ambik",
+      "source_id": "mo3ambik",
+      "audience": "regional",
+      "source_type": "community",
+      "comments_enabled": false,
+      "watch": false,
+      "posts": {
+        "in_store": 197,
+        "in_window": 194,
+        "ids_sha256": "4af8eec8560d1ab52d26192997efccdeffc901b7ec38b300873bb8ab8e675657",
+        "span": {
+          "first": "2026-07-10T10:34:40+00:00",
+          "last": "2026-08-08T10:34:02+00:00"
+        }
+      },
+      "posts_with_media_in_window": 172,
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@msuaaaa",
+      "source_id": "msuaaaa",
+      "audience": "supermarket_deals",
+      "source_type": "aggregator",
+      "comments_enabled": true,
+      "watch": false,
+      "posts": {
+        "in_store": 1904,
+        "in_window": 34,
+        "ids_sha256": "dfbd63286796a3a9e3983d87a1a3609bfac7e0fc0a51a641881e57d559566703",
+        "span": {
+          "first": "2024-09-11T10:38:06+00:00",
+          "last": "2026-07-27T08:17:50+00:00"
+        }
+      },
+      "posts_with_media_in_window": 34,
+      "comments": {
+        "in_store": 4928,
+        "in_window": 163,
+        "ids_sha256": "d06b4fe751c375d0ce2fdcba2cd936afab2dfca38e242df22d2c71bea2dc9537",
+        "span": {
+          "first": "2025-02-01T21:04:21+00:00",
+          "last": "2026-07-27T08:22:26+00:00"
+        }
+      },
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": 163,
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@myrhorodtown",
+      "source_id": "myrhorodtown",
+      "audience": "regional",
+      "source_type": "community",
+      "comments_enabled": false,
+      "watch": false,
+      "posts": {
+        "in_store": 273,
+        "in_window": 259,
+        "ids_sha256": "aab694d4c9721a721c2e52548b1a396260d497c475f047dc96b71b0a957ddee2",
+        "span": {
+          "first": "2026-07-10T11:35:05+00:00",
+          "last": "2026-08-08T10:34:24+00:00"
+        }
+      },
+      "posts_with_media_in_window": 73,
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@olgaa_trainer",
+      "source_id": "olgaa_trainer",
+      "audience": "health_fitness",
+      "source_type": "community",
+      "comments_enabled": true,
+      "watch": false,
+      "posts": {
+        "in_store": 8,
+        "in_window": 8,
+        "ids_sha256": "6ea7b9262f46501904058b80186abad33cd14b05a3175d6ae0cd09c7f5b7d05d",
+        "span": {
+          "first": "2026-07-14T14:29:26+00:00",
+          "last": "2026-08-05T12:23:56+00:00"
+        }
+      },
+      "posts_with_media_in_window": 5,
+      "comments": {
+        "in_store": 4,
+        "in_window": 4,
+        "ids_sha256": "00edc69974c16f61800da36983fcf891734abef590b28a1b7564407164a8cede",
+        "span": {
+          "first": "2026-07-23T09:51:23+00:00",
+          "last": "2026-07-23T13:29:18+00:00"
+        }
+      },
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": 4,
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@pavlushaiyava",
+      "source_id": "pavlushaiyava",
+      "audience": "baby_food",
+      "source_type": "community",
+      "comments_enabled": false,
+      "watch": false,
+      "posts": {
+        "in_store": 115,
+        "in_window": 105,
+        "ids_sha256": "8c2624a7263d8edfd8686c98d3f4ab81dceec546a4db16e56ecd513c8a4078cb",
+        "span": {
+          "first": "2026-07-10T11:01:30+00:00",
+          "last": "2026-08-07T17:05:32+00:00"
+        }
+      },
+      "posts_with_media_in_window": 105,
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@piryatingromada",
+      "source_id": "piryatingromada",
+      "audience": "regional",
+      "source_type": "community",
+      "comments_enabled": false,
+      "watch": false,
+      "posts": {
+        "in_store": 70,
+        "in_window": 68,
+        "ids_sha256": "b86f6b21e4248a65daa300eed581c626836fe02c3124c8a2d99db5e159cd3dca",
+        "span": {
+          "first": "2026-07-10T15:41:34+00:00",
+          "last": "2026-08-07T18:19:16+00:00"
+        }
+      },
+      "posts_with_media_in_window": 63,
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@poltava20",
+      "source_id": "poltava20",
+      "audience": "regional",
+      "source_type": "community",
+      "comments_enabled": false,
+      "watch": false,
+      "posts": {
+        "in_store": 1535,
+        "in_window": 1486,
+        "ids_sha256": "2f3b1de4b3a2efeff251f621764a8d5ebdc340f1590adee70fa139e467293aca",
+        "span": {
+          "first": "2026-07-10T10:36:01+00:00",
+          "last": "2026-08-08T11:09:53+00:00"
+        }
+      },
+      "posts_with_media_in_window": 345,
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@poltava_informue",
+      "source_id": "poltava_informue",
+      "audience": "regional",
+      "source_type": "community",
+      "comments_enabled": false,
+      "watch": false,
+      "posts": {
+        "in_store": 1316,
+        "in_window": 1271,
+        "ids_sha256": "27b2f1487c4830d5c13f22237e698d52f460c0dc412fb7b0eb87981fbc0f330d",
+        "span": {
+          "first": "2026-07-10T11:52:35+00:00",
+          "last": "2026-08-08T10:34:10+00:00"
+        }
+      },
+      "posts_with_media_in_window": 252,
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@poltava_pvp",
+      "source_id": "poltava_pvp",
+      "audience": "regional",
+      "source_type": "community",
+      "comments_enabled": false,
+      "watch": false,
+      "posts": {
+        "in_store": 423,
+        "in_window": 404,
+        "ids_sha256": "e94d62fe1b51350f625fec39c91f4a9b844eb08b1f9e406c5018ef1076cc2dc4",
+        "span": {
+          "first": "2026-07-10T11:00:02+00:00",
+          "last": "2026-08-08T11:07:01+00:00"
+        }
+      },
+      "posts_with_media_in_window": 335,
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@polyakova_fitness",
+      "source_id": "polyakova_fitness",
+      "audience": "health_fitness",
+      "source_type": "community",
+      "comments_enabled": true,
+      "watch": false,
+      "posts": {
+        "in_store": 53,
+        "in_window": 50,
+        "ids_sha256": "31f3b63c56e8013b6b800a604ed896e7d1769937d6c3b6fbaa69f2290fa064df",
+        "span": {
+          "first": "2026-07-10T13:43:32+00:00",
+          "last": "2026-08-05T16:05:02+00:00"
+        }
+      },
+      "posts_with_media_in_window": 46,
+      "comments": {
+        "in_store": 8,
+        "in_window": 8,
+        "ids_sha256": "cf7136451535333ac7cdd7e541457b4fb393e56910659a0286b6f68c88ede722",
+        "span": {
+          "first": "2026-07-15T13:29:50+00:00",
+          "last": "2026-07-27T10:17:45+00:00"
+        }
+      },
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": 8,
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@recepti",
+      "source_id": "recepti",
+      "audience": "cooking_recipes",
+      "source_type": "community",
+      "comments_enabled": false,
+      "watch": false,
+      "posts": {
+        "in_store": 201,
+        "in_window": 190,
+        "ids_sha256": "bd4f9972701b958fe26b897bb4a0b12c751a5e957dc95effdbf67ddef6a193f2",
+        "span": {
+          "first": "2026-07-10T12:00:03+00:00",
+          "last": "2026-08-07T09:00:01+00:00"
+        }
+      },
+      "posts_with_media_in_window": 190,
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@retsepty",
+      "source_id": "retsepty",
+      "audience": "cooking_recipes",
+      "source_type": "community",
+      "comments_enabled": true,
+      "watch": false,
+      "posts": {
+        "in_store": 91,
+        "in_window": 87,
+        "ids_sha256": "53e5cc41c20f59a805b2c11afee4d1451800469c288f6f85fb043ad92fbc5c16",
+        "span": {
+          "first": "2026-07-11T05:02:11+00:00",
+          "last": "2026-08-07T10:00:36+00:00"
+        }
+      },
+      "posts_with_media_in_window": 87,
+      "comments": {
+        "in_store": 105,
+        "in_window": 104,
+        "ids_sha256": "72aa6c39647a6b170c6857cd6ba7213d2c18cb7c61cc0e82a7211d23ca63e671",
+        "span": {
+          "first": "2026-07-11T17:21:08+00:00",
+          "last": "2026-08-07T19:33:41+00:00"
+        }
+      },
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": 104,
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@sashafitnesslife",
+      "source_id": "sashafitnesslife",
+      "audience": "health_fitness",
+      "source_type": "community",
+      "comments_enabled": true,
+      "watch": false,
+      "posts": {
+        "in_store": 20,
+        "in_window": 19,
+        "ids_sha256": "80971688f2cd61ff066505fd5607676c6f5e18efe07304e1b9717689ae2f3557",
+        "span": {
+          "first": "2026-07-11T06:15:14+00:00",
+          "last": "2026-08-06T14:40:20+00:00"
+        }
+      },
+      "posts_with_media_in_window": 19,
+      "comments": {
+        "in_store": 83,
+        "in_window": 83,
+        "ids_sha256": "ad439c2a0b39d17db173c54dac65ee1ac6430490b2b015e6ce31917eb3d80df5",
+        "span": {
+          "first": "2026-07-15T04:38:18+00:00",
+          "last": "2026-08-07T14:42:46+00:00"
+        }
+      },
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": 83,
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@silposilpo",
+      "source_id": "silpo",
+      "audience": "retail_official",
+      "source_type": "official_retail",
+      "comments_enabled": false,
+      "watch": false,
+      "posts": {
+        "in_store": 1124,
+        "in_window": 21,
+        "ids_sha256": "44b0294aedecbdacbb1e96b9ef7935decc9c1a29427b368c82b7a3b5906dad17",
+        "span": {
+          "first": "2024-07-01T07:25:51+00:00",
+          "last": "2026-07-27T08:00:12+00:00"
+        }
+      },
+      "posts_with_media_in_window": 21,
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@skhudnennya",
+      "source_id": "skhudnennya",
+      "audience": "health_fitness",
+      "source_type": "community",
+      "comments_enabled": true,
+      "watch": true,
+      "posts": "CANNOT ANSWER",
+      "posts_with_media_in_window": "CANNOT ANSWER",
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@smirnov108",
+      "source_id": "smirnov108",
+      "audience": "health_fitness",
+      "source_type": "community",
+      "comments_enabled": true,
+      "watch": false,
+      "posts": {
+        "in_store": 28,
+        "in_window": 27,
+        "ids_sha256": "26bc1cca24a140df70e0b74d88bb6d45aa35b45942416ca18f37894638f412eb",
+        "span": {
+          "first": "2026-07-10T11:35:49+00:00",
+          "last": "2026-08-06T07:06:12+00:00"
+        }
+      },
+      "posts_with_media_in_window": 21,
+      "comments": {
+        "in_store": 101,
+        "in_window": 100,
+        "ids_sha256": "96835b0866ac42e0b267f5c59bd032279984bf1e6d4124073f19e2a6877db636",
+        "span": {
+          "first": "2026-07-10T14:36:25+00:00",
+          "last": "2026-08-07T12:05:07+00:00"
+        }
+      },
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": 100,
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@suspilnepoltava",
+      "source_id": "suspilnepoltava",
+      "audience": "regional",
+      "source_type": "community",
+      "comments_enabled": false,
+      "watch": false,
+      "posts": {
+        "in_store": 534,
+        "in_window": 509,
+        "ids_sha256": "c581c46e401342a2df88259e2cdb2ff57ef4e30695bf4395388ff1bdd3323154",
+        "span": {
+          "first": "2026-07-10T11:09:55+00:00",
+          "last": "2026-08-08T10:52:35+00:00"
+        }
+      },
+      "posts_with_media_in_window": 370,
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@tarilka_malyuka",
+      "source_id": "tarilka_malyuka",
+      "audience": "baby_food",
+      "source_type": "community",
+      "comments_enabled": true,
+      "watch": false,
+      "posts": {
+        "in_store": 82,
+        "in_window": 82,
+        "ids_sha256": "28f0b080bd7b690e0decd0141666fab654806e27be0a9d3a2024608e26971a7f",
+        "span": {
+          "first": "2026-07-17T18:38:47+00:00",
+          "last": "2026-08-06T13:40:54+00:00"
+        }
+      },
+      "posts_with_media_in_window": 78,
+      "comments": {
+        "in_store": 45,
+        "in_window": 45,
+        "ids_sha256": "2344915075f90da9c1b8a3e729bae76db00189dbdf7d4b6df108d2dd9ed21e91",
+        "span": {
+          "first": "2026-07-17T19:37:16+00:00",
+          "last": "2026-08-06T13:44:52+00:00"
+        }
+      },
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": 45,
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@telegraf_kremenchuk",
+      "source_id": "telegraf_kremenchuk",
+      "audience": "regional",
+      "source_type": "community",
+      "comments_enabled": false,
+      "watch": false,
+      "posts": {
+        "in_store": 634,
+        "in_window": 613,
+        "ids_sha256": "253421e60548e2eba5cff999e58d129a4191171efab4899a3c20da35adcfe767",
+        "span": {
+          "first": "2026-07-10T11:21:04+00:00",
+          "last": "2026-08-08T09:43:01+00:00"
+        }
+      },
+      "posts_with_media_in_window": 558,
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@tvorcha_matusyua",
+      "source_id": "tvorcha_matusyua",
+      "audience": "baby_food",
+      "source_type": "community",
+      "comments_enabled": false,
+      "watch": false,
+      "posts": {
+        "in_store": 116,
+        "in_window": 110,
+        "ids_sha256": "c2336a346c35f529cfd3e3a4a7b09a7b2e1d70a8130b79693a7a5a86823d6b47",
+        "span": {
+          "first": "2026-07-10T14:55:01+00:00",
+          "last": "2026-08-08T10:07:16+00:00"
+        }
+      },
+      "posts_with_media_in_window": 109,
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@useful_healthy_fitness_menu",
+      "source_id": "useful_healthy_fitness_menu",
+      "audience": "health_fitness",
+      "source_type": "community",
+      "comments_enabled": true,
+      "watch": false,
+      "posts": {
+        "in_store": 17,
+        "in_window": 17,
+        "ids_sha256": "8c8417b417b4dca0ed2bddf1e45bf41c61cc607e37767579a59bf3b8ed016f2e",
+        "span": {
+          "first": "2026-07-20T11:44:43+00:00",
+          "last": "2026-08-06T11:15:10+00:00"
+        }
+      },
+      "posts_with_media_in_window": 16,
+      "comments": {
+        "in_store": 4,
+        "in_window": 4,
+        "ids_sha256": "9a5fd259b5fc4632b10ef693c33a183eb364dbf28fec751232423dccb78b692e",
+        "span": {
+          "first": "2026-07-28T06:17:02+00:00",
+          "last": "2026-07-31T06:15:07+00:00"
+        }
+      },
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": 4,
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@vylkachannel",
+      "source_id": "vylkachannel",
+      "audience": "cooking_recipes",
+      "source_type": "community",
+      "comments_enabled": false,
+      "watch": false,
+      "posts": {
+        "in_store": 27,
+        "in_window": 26,
+        "ids_sha256": "1e789b3a1f5aeca39041bd22a169b811237aaaf71e77efe8ad6720b52622ab61",
+        "span": {
+          "first": "2026-07-11T16:08:01+00:00",
+          "last": "2026-08-05T17:39:01+00:00"
+        }
+      },
+      "posts_with_media_in_window": 26,
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@ya_Nenka",
+      "source_id": "ya_nenka",
+      "audience": "baby_food",
+      "source_type": "community",
+      "comments_enabled": true,
+      "watch": false,
+      "posts": {
+        "in_store": 10,
+        "in_window": 10,
+        "ids_sha256": "152e2f490a2fc5993487f1e1861421ecb890a4b3c23e15260e02adad283affe2",
+        "span": {
+          "first": "2026-07-22T19:42:40+00:00",
+          "last": "2026-08-06T11:15:28+00:00"
+        }
+      },
+      "posts_with_media_in_window": 8,
+      "comments": {
+        "in_store": 16,
+        "in_window": 16,
+        "ids_sha256": "6424e1f3b4a0dbc8fd71e104ecdece4641e3ec9758702f5bf34e77a39f9d1636",
+        "span": {
+          "first": "2026-07-23T09:11:48+00:00",
+          "last": "2026-08-06T21:47:15+00:00"
+        }
+      },
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": 16,
+      "pages_unanswered_in_window": 0
+    },
+    {
+      "handle": "@zinkivnews",
+      "source_id": "zinkivnews",
+      "audience": "regional",
+      "source_type": "community",
+      "comments_enabled": false,
+      "watch": false,
+      "posts": {
+        "in_store": 9,
+        "in_window": 9,
+        "ids_sha256": "a5787ac914273240a80ea3438022f7593490037ca636c317ea2ceb411efc70d7",
+        "span": {
+          "first": "2026-07-13T16:17:10+00:00",
+          "last": "2026-07-31T07:20:01+00:00"
+        }
+      },
+      "posts_with_media_in_window": 5,
+      "comments": "CANNOT ANSWER",
+      "watermarks": {
+        "inference": null,
+        "leaflet": null
+      },
+      "leaflet": {
+        "posts_with_pages_in_window": 0,
+        "pages_in_window": 0
+      },
+      "comments_unanswered_in_window": "CANNOT ANSWER",
+      "pages_unanswered_in_window": 0
+    }
+  ],
+  "git": {
+    "commit": "f06edcda3d9804944ea626646e411579f45b2616",
+    "dirty": [
+      "docs/reviews/",
+      "scripts/census_5c2.py",
+      "tests/test_census_5c2.py"
+    ]
+  }
+}
