@@ -273,20 +273,24 @@ def pages_of(manifest: dict, handle: str) -> list[dict]:
 
     A file the manifest names and disk does not have is skipped rather than sent: the leg would
     hash and encode nothing, and a page that is not there is not a page that failed.
+
+    ``path`` is the manifest's own REPO-RELATIVE string and not the absolute one existence was
+    checked with (team-lead ruling on Dv264): it goes into the evidence row verbatim, and a row that
+    named `/Users/…/market-pulse-llm/data/…` would be a record about this laptop. `loop.page_file`
+    resolves it when the bytes are read.
     """
     out = []
     for entry in manifest["entries"].values():
         if entry["channel"] != handle:
             continue
         for image in entry["images"]:
-            path = REPO_ROOT / image["file"]
-            if path.exists():
+            if (REPO_ROOT / image["file"]).exists():
                 out.append(
                     {
                         "channel": handle,
                         "msg_id": image["msg_id"],
                         "parent_msg_id": entry["msg_id"],
-                        "path": str(path),
+                        "path": image["file"],
                     }
                 )
     return sorted(out, key=lambda page: page["msg_id"])

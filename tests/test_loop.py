@@ -852,7 +852,10 @@ def wire_pages(monkeypatch, tmp_path, *, ids=(4340, 4341, 4342, 4343, 4344)):
 
     `REPO_ROOT` is patched rather than a `root=` knob added to `pages_of`: the manifest names
     repo-relative files, and a parameter that exists only so a test can pass something else is a
-    production seam nothing in production uses.
+    production seam nothing in production uses. BOTH roots are patched — the script's, which finds
+    the file to check it is there, and `loop`'s, which resolves the record's repo-relative
+    `image_path` when the bytes are read. They are one directory in production and the same
+    directory here; patching only one would leave the pass reading this checkout's `media/`.
 
     The registry shim carries the REAL taxonomy and watchlist. The stub answers with the category
     `ice-cream` and the brand «Рудь», and if either were outside the registry every reply would be
@@ -877,6 +880,7 @@ def wire_pages(monkeypatch, tmp_path, *, ids=(4340, 4341, 4342, 4343, 4344)):
     (tmp_path / "loop_cursor.json").write_text('{"@atb_market_official": {}}', encoding="utf-8")
     wire(monkeypatch, tmp_path, [ATB])
     monkeypatch.setattr(runner, "REPO_ROOT", tmp_path)
+    monkeypatch.setattr(loop, "REPO_ROOT", tmp_path)
     monkeypatch.setattr(runner, "POST_MEDIA", tmp_path / "post_media.json")
     monkeypatch.setattr(
         runner,
@@ -885,6 +889,25 @@ def wire_pages(monkeypatch, tmp_path, *, ids=(4340, 4341, 4342, 4343, 4344)):
             "R", (), {"sources": [ATB], "taxonomy": real.taxonomy, "watchlist": real.watchlist}
         )(),
     )
+
+
+def test_pages_of_emits_the_manifests_repo_relative_path(monkeypatch, tmp_path):
+    """The producer side of the Dv264 ruling, and the ONLY thing standing between the tree and its
+    return: `loop.page_file` is `REPO_ROOT / path`, and pathlib makes that a no-op on an absolute
+    path — so a producer that went back to emitting absolute paths would keep every other test in
+    this file green while writing this laptop's directory layout into the evidence rows.
+    """
+    wire_pages(monkeypatch, tmp_path)
+    manifest = json.loads((tmp_path / "post_media.json").read_text(encoding="utf-8"))
+
+    found = runner.pages_of(manifest, "@atb_market_official")
+
+    assert [page["path"] for page in found] == [
+        f"media/atb_{msg_id}.jpg" for msg_id in range(4340, 4345)
+    ]
+    for page in found:
+        assert not Path(page["path"]).is_absolute()
+        assert loop.page_file(page).read_bytes(), "and the reader resolves it against REPO_ROOT"
 
 
 def test_a_page_pass_without_the_smoke_is_refused_by_the_guard(monkeypatch, tmp_path):
@@ -934,6 +957,11 @@ def test_the_stub_served_page_smoke_writes_a_page_row_and_its_position_rows(monk
     rows = smoke_store.rows(loop.POSITION_RECORD_TYPE, "@atb_market_official")
     assert [page["msg_id"] for page in pages] == [4340, 4341, 4342, 4343, 4344]
     assert [row["msg_id"] for row in rows] == [4340, 4341, 4341, 4344]
+    # EQUALITY, not `endswith`: an absolute path ends with the same basename, which is how Dv264
+    # shipped past the evidence-table test above. Repo-relative is the whole ruling.
+    assert [page["image_path"] for page in pages] == [
+        f"media/atb_{msg_id}.jpg" for msg_id in range(4340, 4345)
+    ]
     assert {row["served_by"] for row in pages + rows} == {runner.STUB_PAGE_SERVED_BY}
     for row in pages + rows:
         evidence.assert_complete(row)

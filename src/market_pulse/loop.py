@@ -294,6 +294,25 @@ CARRIER = "leaflet_page"
 `positions.origin_of`, so a leaflet price cannot be stamped as a consumer quote by a caller that
 decided for itself."""
 
+REPO_ROOT = Path(__file__).resolve().parents[2]
+"""The checkout this package lives in — `raw_store`, `provenance` and `telegram_client`'s own line.
+
+Here for one job: :func:`page_file`. The RECORD stores `image_path` REPO-RELATIVE (team-lead ruling
+on Dv264) and the code that READS the page resolves it at use time, because a stored absolute path
+names one machine's checkout and stops being true the moment the tree is cloned, moved or read from
+a worktree — while the row it sits in is evidence the 3.18 (6) sitting has to open months later."""
+
+
+def page_file(page: dict) -> Path:
+    """Where this page's bytes are, from the repo-relative path the record carries.
+
+    An absolute ``path`` passes through unchanged — that is pathlib's `/` and not a fallback this
+    leg wants: `scripts/run_loop.pages_of` is the only producer of page dicts and
+    `tests/test_loop.py::test_pages_of_emits_the_manifests_repo_relative_path` is what holds it to
+    emitting relative ones. Nothing here can tell the two apart after the fact.
+    """
+    return REPO_ROOT / page["path"]
+
 
 def render_page(path: Path) -> tuple[list[dict], str, list[str]]:
     """One page as (rendering, sha of the bytes SENT, the one-image album the transport takes).
@@ -370,7 +389,8 @@ def page_rows(
     last, the same kill leaves position rows and no marker, the page is simply re-asked, and
     `raw_store.dedup_key` skips the rows already there. The marker goes after the thing it marks.
 
-    Both kinds carry `image_path` and `image_sha256`, though only the page kind is required to:
+    Both kinds carry `image_path` — REPO-RELATIVE, resolved by :func:`page_file` at read time — and
+    `image_sha256`, though only the page kind is required to:
     SPEC 3.18 (6) shows the operator each position beside the picture it was read from, and a
     position row that had to be joined back to its page through a second file is a join that can
     be got wrong at the sitting.
@@ -462,7 +482,7 @@ def page_pass(
     """
     written, positions_written, refused = [], 0, 0
     for page in pages:
-        rendering, image_sha256, album = render_page(Path(page["path"]))
+        rendering, image_sha256, album = render_page(page_file(page))
         reply = send(task, album)
         found, reason = parse_page(reply, categories, aliases, task)
         rows = page_rows(
