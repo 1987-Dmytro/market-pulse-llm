@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-13 13:13:56 (every SessionStart)
+**Auto-refreshed:** 2026-08-13 13:23:21 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+139dd34 chore(vault): the write-ordering fix and the final counts
 e5297dd docs(report): 5c2-prep-c1 -- the checkout table covers every commit, not the first six
 26d4176 docs(report): 5c2-prep-c1 -- the smoke counts come from one run, not a continuation
 79b60b9 fix(5c2-prep-c1): the page row is the answered-marker, so it is written LAST
 ed5ae85 docs(report): 5c2-prep-c1 -- name the commits the report cannot carry its own hash for
-86f39d4 chore(vault): the 5c2-prep-c1 session tail -- the day's log and the curated hot block
 ```
 
 ## 📋 Recent decisions
@@ -30,8 +30,8 @@ ed5ae85 docs(report): 5c2-prep-c1 -- name the commits the report cannot carry it
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-13 (конец сессии) — **`5c2-prep-c1` ✅ ЗАКРЫТ, $0**, коммиты
-`4cde4f4..e5297dd` (одиннадцать), `make check` **2103 / 2 skipped**. **B1 закрыт в обе стороны**, у
+**Last update:** 2026-08-13 13:18 (чекпойнт `/save`) — **`5c2-prep-c1` ✅ СДАН, ждёт приёмки, $0**,
+коммиты `4cde4f4..139dd34` (одиннадцать), `make check` **2103 / 2 skipped**. **B1 закрыт в обе стороны**, у
 `leaflet_page` и `position_row` появился ПИСАТЕЛЬ. Отчёт `docs/reports/5c2-prep-c1.md`,
 отклонения **Dv259–268**. Phase 4: **$23.8310 из $30.00**, остаток $6.1690 — за день не
 потрачено НИЧЕГО. Раньше в тот же день принят `5c2-prep-b` (`9d558a7..51ed64a`, Dv249–258).
@@ -108,7 +108,7 @@ BY MEASUREMENT)**,
 
 ## 🔥 What's Hot
 
-**5c2-prep-c1 ✅ 13.08 ($0) — СДАН, ждёт приёмки.** Одиннадцать коммитов `4cde4f4..e5297dd`;
+**5c2-prep-c1 ✅ 13.08 ($0) — СДАН, ждёт приёмки.** Одиннадцать коммитов `4cde4f4..139dd34`;
 `make check` 2103 / 2 skipped (было 2081), `ruff format --check` чист, куплено НИЧЕГО.
 **B1 закрыт в обе стороны:** ассерт смотрит на `runner.DERIVED_ROOT`, написан ОДИН раз
 (`the_derived_root_is_untouched`), тест чувствительности подкладывает три строки писателем самого
@@ -121,10 +121,18 @@ BY MEASUREMENT)**,
 записи 3.18 (6) в одном месте (`market_pulse.evidence`). **Dv232 и Dv176 закрыты.** Отклонения
 Dv249–258, отчёт `docs/reports/5c2-prep-b.md`.
 
+**⚠️ Два дефекта c1 нашло РЕВЬЮ, а не я — оба про порядок, оба уже исправлены.** (1) Строка
+страницы писалась ПЕРЕД своими позициями, а она их маркер — падение между двумя файлами потеряло бы
+строки навсегда; мой тест прерывания этого не видел, потому что падал ДО первой записи, то есть
+покрывал только полный отказ. (2) Числа smoke в отчёте были склеены из двух прогонов (Dv268).
+Второй день подряд ловят мой собственный порядок операций — при следующей сдаче проверять частичный
+отказ, а не только полный.
+
 **Next: `5c2-prep-c2` — «деньги», контракт ещё НЕ выдан.** Ценз окна (3.18 (4): окно
 пре-регистрируется ПО ЧИСЛУ СТРОК, не как диапазон дат) → проекция цены с ПЛАТНОГО
 serverless-замера → **STOP с числами** → прережка платной сессии после рулинга оператора.
-**Blockers: нет.** Phase 4 — **$23.8310 из $30.00**, остаток $6.1690.
+**Blockers: нет.** Phase 4 — **$23.8310 из $30.00**, остаток $6.1690. Незакоммичено на момент
+чекпойнта: хвост хранилища (дневник, этот файл, `index.md`) — коммиты по команде оператора.
 
 **Открыто для тимлида по c1 (не блокеры):** `image_path` пишется абсолютным — «путь, каким его
 увидел прогон» по букве брифа, но все остальные артефакты репозитория repo-relative (Dv264);
