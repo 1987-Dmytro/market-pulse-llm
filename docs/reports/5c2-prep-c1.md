@@ -269,13 +269,20 @@ row above the session as the control:
 | `464a33c` | 1 failed, 2081 passed, 2 skipped | same nodeid |
 | `31236c3` | 1 failed, 2083 passed, 2 skipped | same nodeid |
 | `0af552c` | 1 failed, 2100 passed, 2 skipped | same nodeid |
+| `e5a4de5` | 1 failed, 2100 passed, 2 skipped | same nodeid |
+| `86f39d4` | 1 failed, 2100 passed, 2 skipped | same nodeid |
+| `ed5ae85` | 1 failed, 2100 passed, 2 skipped | same nodeid |
+| `79b60b9` | 1 failed, 2102 passed, 2 skipped | same nodeid |
+| `26d4176` | 1 failed, 2102 passed, 2 skipped | same nodeid |
 
-One failure, the same nodeid on every row **including the control** — the Dv193 worktree symlink,
-re-measured this session rather than inherited. In the working tree itself:
+The commit that adds these five rows is doc-only and cannot appear in them; it was verified in the
+working tree at exactly this content, below. Otherwise: one failure, the same nodeid on every row
+**including the control** — the Dv193 worktree symlink, re-measured this session rather than
+inherited. In the working tree itself:
 
 ```
 $ make check
-2101 passed, 2 skipped in 60.02s
+2103 passed, 2 skipped in 59.96s
 $ ruff format --check .
 252 files already formatted
 ```
@@ -297,9 +304,11 @@ a7fd937 docs(vault): the prep-b session tail and hot.md's Next
 4cde4f4 docs: 5c2-prep-c1 queued -- STATUS after the prep-b acceptance
 ```
 
-Three commits follow and cannot be named here, because a file cannot carry its own hash: the one
-that adds this report, the pre-authorised vault tail (the day's log and hot.md's curated block), and
-the one that adds this paragraph. `git log --oneline 51ed64a..HEAD` is the enumeration.
+Five commits follow and cannot be named in that block, because a file cannot carry its own hash:
+the one that adds this report, the pre-authorised vault tail (the day's log and hot.md's curated
+block), the write-ordering fix, and the two that correct this file. They are `e5a4de5`, `86f39d4`,
+`ed5ae85`, `79b60b9`, `26d4176` and the row above — `git log --oneline 51ed64a..HEAD` is the
+enumeration, and the checkout table below carries every one of them that existed when it ran.
 
 Nothing outside the sandbox moved, hashed before the first write-capable action and again after the
 last smoke:
