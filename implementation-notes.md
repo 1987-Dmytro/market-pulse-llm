@@ -6943,3 +6943,11 @@ Two things worth finding from here that are not deviations:
 Artifacts: `src/market_pulse/raw_store.py` (`dedup_key`), `src/market_pulse/loop.py` (the leaflet
 leg), `scripts/run_loop.py` (`--pages`, `StubPageTransport`, `pages_of`), `tests/test_loop.py`,
 `tests/test_raw_store.py`, `docs/reports/5c2-prep-c1.md`.
+- **Dv268** — `StubPageTransport`'s answer schedule is per INVOCATION of the script, so a window
+  split across several runs gets a different fake answer per page than the same window answered in
+  one. The report's first draft mixed the two: the counts came from a 149-page continuation of two
+  earlier 5-page runs (112 positions / 37 unreadable) while the line counts beside them were the
+  file's cumulative totals (120). Both replaced by a single clean run — 159 pages, 120 positions,
+  40 unreadable, 39 empty — which is the only pairing that is reproducible from one command. The
+  fake's schedule is deliberately not seeded from the page id: a fixture keyed on the data would be
+  a fixture whose distribution moves when the data does.

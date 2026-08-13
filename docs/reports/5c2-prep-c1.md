@@ -156,6 +156,11 @@ PYTHONPATH=src python3 scripts/run_loop.py --once --smoke --pages --channel @atb
 wrote results/smoke/loop_5a.json (gitignored — quote it, do not point at it)
 ```
 
+Against an EMPTY smoke store: the sandbox is throwaway and was cleared between the demonstrations
+below. `StubPageTransport`'s schedule is per INVOCATION, so a window split across several runs of
+the script gets a different fake answer per page than the same window answered in one (Dv268) —
+which is why the counts below come from a single run and not from a continuation.
+
 One `leaflet_page` row's KEYS:
 
 ```
@@ -216,13 +221,13 @@ demonstration** — `--limit 5` against 159 queued pages, so the second run corr
 NEXT five (Dv266, and prep-b's Dv257 was the same mis-step). Redone by exhausting the queue:
 
 ```
---limit 400 (first)    159 pages,  112 positions,  37 unreadable
-  leaflet_pages/atb_market_official.jsonl  832216dfa012ca24…   159 lines
-  position_rows/atb_market_official.jsonl  c2d9a29b6c159446…   120 lines
+--limit 400 (first)    159 pages,  120 positions,  40 unreadable
+  leaflet_pages/atb_market_official.jsonl  8490e0489f5aad4b…   159 lines
+  position_rows/atb_market_official.jsonl  831d48a9cc364335…   120 lines
 
 --limit 400 (second)     0 pages,    0 positions,   0 unreadable    transport_calls: 0
-  leaflet_pages/atb_market_official.jsonl  832216dfa012ca24…   159 lines
-  position_rows/atb_market_official.jsonl  c2d9a29b6c159446…   120 lines
+  leaflet_pages/atb_market_official.jsonl  8490e0489f5aad4b…   159 lines
+  position_rows/atb_market_official.jsonl  831d48a9cc364335…   120 lines
 ```
 
 Zero asked, zero transport calls, both files byte-identical. Note the second run started from a
@@ -320,8 +325,8 @@ read pages 5c1 had already downloaded. `src/market_pulse/positions.py`, `evidenc
 
 The leaflet page population reachable today is **159 pages across 19 posts of one channel**
 (`@atb_market_official`), from `results/post_media_5c1.json`. Under the stub that produced 120
-position rows and 37 unreadable pages — those are the fake's schedule and mean nothing about the
-model. The 159 is a real count and prep-c2's census is where it belongs.
+position rows, 40 unreadable pages and 39 empty ones — those three are the fake's schedule and mean
+nothing about the model. Only the 159 is a real count, and prep-c2's census is where it belongs.
 
 ## Open, for the team lead
 
