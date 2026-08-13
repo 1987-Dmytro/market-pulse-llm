@@ -6817,3 +6817,54 @@ Two things worth finding from here that are not deviations:
 
 Artifacts: `scripts/repair_phase4_ledger.py`, `tests/test_repair_phase4_ledger.py`,
 `results/spend_phase4.json` (repaired, 31 → 35 entries), `docs/reports/5c2-prep-a.md`.
+
+## 5c2-prep-b — the inference leg, and the record that keeps its evidence (2026-08-13, $0)
+
+Full report: `docs/reports/5c2-prep-b.md`. Deviations, one line each:
+
+- **Dv249** — `--infer` fell through to `LIVE_REFUSAL` before reaching `loop.inference_refusal`: a
+  true refusal for a reason that does not apply (that one is about appending to the raw v1 stores).
+  `--infer` is a MODE now, the test asserts the MESSAGE, and a control pins the older guard in place.
+  A new guard shadowed by an old one looks exactly like a guard that works.
+- **Dv250** — `evidence.record` spread `**extra` after the fields it derives, so a caller could hand
+  in a `prompt_sha256` that did not belong to the task it named. Found by the test written to assert
+  the refusal before the refusal existed; extras colliding with `REQUIRED` are refused.
+- **Dv251** — `parents.text_for` named a missing parent by `row["id"]`, which a raw
+  `comment_record` has not: the loop is the first caller reading the store directly and turned a
+  deliberate STOP into a `KeyError`. Fixed on touch.
+- **Dv252** — `evidence.presence` is a SECOND implementation of the ladder's inputs, because
+  `src/market_pulse/positions.py` is pinned by sha inside `results/sku_pilot_prereg_b2.json` and a
+  sealed record is not re-pinned to make room for a function. Held to `tier_from_presence` by 16
+  parametrised cases rather than by a comment.
+- **Dv253** — the smoke's fake produced no warned position, so Dv232's whole write path was
+  exercised only on empty lists. A seat carrying all three (13)(a) families was added and the test
+  now demands all three reach the record. A field proven only where it is empty is a field nobody
+  has seen work.
+- **Dv254** — `loop.inference_refusal` still says "5a queues rows and sends none". NOT changed:
+  `implementation-notes.md:2189` quotes that string verbatim as the 5a smoke's output.
+- **Dv255** — the dump's columns are derived from B′'s sealed bar-2 sentence and cannot grow, so
+  Dv232's warnings ride the OUTCOME row instead. Named because a reader will look in the dump.
+- **Dv256** — the sku driver does not emit `evidence`-shaped rows. D2 governs what THE LOOP writes;
+  `positions_gm4_skub.py` is the closed programme's instrument and keeps its own shapes.
+- **Dv257** — `docs/STATUS.md` arrived modified mid-session, in the team lead's hand, describing D1
+  and D2 as not started — true when written, before `09b5dac` and `3232a52`. Committed verbatim.
+
+Two things worth finding from here that are not deviations:
+
+- **the ordering IS the deliverable, and the test has to read the file.** Append the record, let the
+  write close, then move the watermark; the reverse loses rows silently because the queue is
+  *defined* as "above the watermark". The interrupted-pass test asserts against `load_cursor(path)`
+  and not against the in-memory state — a `finally: save_cursor(...)` anywhere would make an
+  in-memory assertion pass while the file told the opposite story.
+- **a watermark alone cannot make a re-run free.** A pass killed after writing records and before
+  saving the cursor leaves durable rows and an unmoved watermark, so `loop.queued` subtracts the
+  derived store's own ids as well. Without it "a re-run buys nothing twice" holds only for a pass
+  that completed.
+- **a count read off the tail of a printed table is not the enumeration.** The report first named
+  the last two rows of the dry pass as the biggest queues; they are registry order. The real top two
+  are `@VARUS_channel` (6,410) and `@msuaaaa` (4,928) — 70% of the 16,218 between them.
+
+Artifacts: `src/market_pulse/evidence.py`, `tests/test_evidence.py`, `src/market_pulse/loop.py`
+(the inference leg), `scripts/run_loop.py` (`--infer`, `StubTransport`), `scripts/positions_gm4_skub.py`
+(Dv232, Dv176), `knowledge/decisions/the-law-grows-inside-marked-blocks.md`,
+`docs/reports/5c2-prep-b.md`.
