@@ -1,0 +1,287 @@
+{
+  "phase": "5c2-run — one paid session, pre-registered",
+  "class": "PRE-REGISTRATION. Written BEFORE the session exists (3.18 (5)) and sealed: the run is judged against these numbers and they are never re-derived to fit what it spent",
+  "contract": "docs/PROMPT-5c2-prep-c3b.md deliverable 2; docs/SPEC.md amendment 3.18 (5), (6), (7)",
+  "authority": "docs/SPEC.md amendment 3.18 as it stands 2026-08-13, including (7)(a)–(g)",
+  "pinned_by_value": "3.18 (7)(f): «the registered cap row gets equality tests, not ceilings». Every number in `populations`, `prices`, `legs` and `session_cap` has an equality in tests/test_prereg_5c2.py; `session_cap.fits` is an ADDITIONAL check beside them",
+  "verifier": {
+    "command": "make check",
+    "returncode": 0,
+    "green": true,
+    "measured": "over the tree as it stood immediately before this write. The suite's last line is NOT kept here — it carries the run's duration and this record's gate is byte-identity"
+  },
+  "strip": {
+    "keep": [
+      "amendment-index",
+      "sku-b-ratification",
+      "sku-b-ratification-2",
+      "sku-b-ratification-3",
+      "sku-b-ratification-4",
+      "sku-b-ratification-5",
+      "sku-b-ratification-6",
+      "sku-b-ratification-7",
+      "sku-b-ratification-8",
+      "amendment-3.18"
+    ],
+    "why": "every marked block docs/SPEC.md carries today, so the registered law IS the file as it stands. B′ keeps two because the rest postdate the records it sits beside; this registration is written the same day as its own amendment, and 3.18 (7)(c) sends the stop rules to 3.17 (10) inside sku-b-ratification-4 — a pin that stripped it would register a document not carrying the discipline this record names",
+    "the_registered_law_is_the_file_as_it_stands": "keeping all ten means the pin equals sha256 of the file TODAY. Its job starts the day they diverge: a block added later is stripped and this pin survives, which is the only legal way to green a law that grew. New text arrives inside its own marked block — a sealed registration is never re-pinned to make it green"
+  },
+  "pinned_inputs": {
+    "docs/SPEC.md": "3dd43923edc18e7279f4bae0f3d49abdc7f3dc30eded5f0feb9d3b2112f953e0",
+    "results/census_5c2.json": "a1384a12bcbe975954f8feaa1c5207d59cc66ab524b3d877099bad92ede5305f",
+    "results/census_c3a_posts.json": "4a7e755b73d6381153b422495b8cce16dc8e5a040de866539c58d46f7d87b569",
+    "results/postcut_c3b.json": "13bb475864fdd4f476237293aa279fffa5b07dd87b80820c71c65444d8321ad0",
+    "results/projection_5c2.json": "ebdb4697d2fdbf048a417a7143084cbef01493567ae8bda6bcef2126c53c2bb4",
+    "results/srv2d_cost.json": "71f1ec4884286961c1c672071a3846e22c40e7179189f5e0e607b17fb0d30427",
+    "config/registry.yaml": "d4e3b2373c4378f3acc51079dc1d0560c28d58c46b71335b2bb352cae39be3ba",
+    "config/lexicon.yaml": "21b50bac55c7768334efa270f4048f1cc441670f336707e4e372737378cf1d98",
+    "src/market_pulse/positions.py": "0b058e80024401d589653f4f810c4a4a56eba8e6c0b563deae24cdd0c777837e"
+  },
+  "populations": {
+    "comment": {
+      "rows": 5075,
+      "source": "results/census_5c2.json :: totals.comments_unanswered_in_window",
+      "sha256": "a1384a12bcbe975954f8feaa1c5207d59cc66ab524b3d877099bad92ede5305f",
+      "selection_pin": {
+        "@HealthPsycholog": "222d652a26e6f41ce7cc596740e348510137c3013c01c597a4563912a3d64e54",
+        "@VARUS_channel": "0da6ae6635bc225453acf6d413f8af2a7078a62fe961cc4118ae11f948920691",
+        "@chifit_family": "a7229f6fed6f5b296ef8d16e2c5fdd927ab5d0b8a5c346d0fb909fa68f419916",
+        "@denisovapro": "d4a7c15dad0d84e8c34be41f4e366c37a9f8d728edc3c669b2723064f2cb63ef",
+        "@kkondr_fit": "e2cb6ae0ae4c4094e51ebff6d8799a1247a0a1b2f1b649597cb0e2a93d4b1765",
+        "@klopotenkofood": "d3b23ecd144864a46d6bd7c297f32eed04658d9cc85794acb897b5620ae66502",
+        "@kopiyochka1": "ab9fbfcbacff763c2af8174ead76de0fdd714b531f7944da1c87a7757d6f8bfb",
+        "@mamo_nepsichuy": "1c40783030822ab6dc5c34dc97ede2981a7b214adbcfbb8cdaa02e91fed86029",
+        "@mandziak": "b86fae592d89301127cca21c1b2c77665e9b2402f5c5f0ebbbd7dc916b8e6d31",
+        "@matusi_ukr": "5a63f1b05f8722ca835322eb5b05778ac23204cf8b66aa229e369658628a5c69",
+        "@msuaaaa": "d06b4fe751c375d0ce2fdcba2cd936afab2dfca38e242df22d2c71bea2dc9537",
+        "@olgaa_trainer": "00edc69974c16f61800da36983fcf891734abef590b28a1b7564407164a8cede",
+        "@polyakova_fitness": "cf7136451535333ac7cdd7e541457b4fb393e56910659a0286b6f68c88ede722",
+        "@retsepty": "72aa6c39647a6b170c6857cd6ba7213d2c18cb7c61cc0e82a7211d23ca63e671",
+        "@sashafitnesslife": "ad439c2a0b39d17db173c54dac65ee1ac6430490b2b015e6ce31917eb3d80df5",
+        "@smirnov108": "96835b0866ac42e0b267f5c59bd032279984bf1e6d4124073f19e2a6877db636",
+        "@tarilka_malyuka": "2344915075f90da9c1b8a3e729bae76db00189dbdf7d4b6df108d2dd9ed21e91",
+        "@useful_healthy_fitness_menu": "9a5fd259b5fc4632b10ef693c33a183eb364dbf28fec751232423dccb78b692e",
+        "@ya_Nenka": "6424e1f3b4a0dbc8fd71e104ecdece4641e3ec9758702f5bf34e77a39f9d1636"
+      },
+      "selection_pin_note": "channels[].comments.ids_sha256, one per channel with a comment in the window — nineteen of them. The census records the selection this way and the run reproduces it channel by channel; a single hash over all of them would be a number no other reader in this repo can rebuild",
+      "window": "2026-07-12 … 2026-08-09, the anchor ratified by 3.18 (7)(a)"
+    },
+    "leaflet_page": {
+      "rows": 159,
+      "source": "results/census_c3a_posts.json :: leaflet_corpus.pages",
+      "sha256": "4a7e755b73d6381153b422495b8cce16dc8e5a040de866539c58d46f7d87b569",
+      "posts": 19,
+      "selection_pin": {
+        "path": "results/post_media_5c1.json",
+        "sha256": "a93fc8a1af1c32a4fbc27268a2a8be0ffe57838b53e605cd3b018de437acacbb"
+      },
+      "supersedes": {
+        "was": 78,
+        "record": "results/projection_5c2.json",
+        "why": "3.18 (7)(d): the population is the leaflet corpus ON DISK, «NOT window-intersected» — «leaflets follow their own weekly cadence, and the window clause of (4) binds the comment and post legs only». The c2 projection priced the 78 pages inside the window and is a true statement of its write moment; this registration buys all 159 and is not a correction of it"
+      }
+    },
+    "post_text": {
+      "rows": 44,
+      "source": "results/postcut_c3b.json :: kept.rows",
+      "sha256": "13bb475864fdd4f476237293aa279fffa5b07dd87b80820c71c65444d8321ad0",
+      "selection_pin": "c64bbd47b4e2544d31c209d78cd0d64670b5e2ade639611ac6d688662eac9ce3",
+      "selection_pin_note": "sha256 of the kept ids, newline-joined in that record's order. The count says how many; this says WHICH, and a run that asked 44 other posts would not match it",
+      "cut_from": 349,
+      "rule": "3.18 (7)(g), the D cut — computed by scripts/postcut_c3b.py, never re-decided"
+    }
+  },
+  "prices": {
+    "comment": {
+      "usd_model": {
+        "value": 1.4281,
+        "unit": "usd_per_1000_rows",
+        "source": "results/srv2d_cost.json :: measured.usd_per_1000_rows",
+        "session": "srv-2d, 2026-08-08, serverless endpoint hbq25reui1tpj6",
+        "why": "the CONSERVATIVE corner — that session's boot is already amortised inside it"
+      },
+      "seconds_model": {
+        "value": 4.262,
+        "unit": "seconds_per_row",
+        "source": "results/srv2d_cost.json :: measured.like_for_like_seconds_per_row",
+        "session": "srv-2d, 2026-08-08, serverless endpoint hbq25reui1tpj6",
+        "why": "the MARGINAL corner, cold start taken out — the only corner whose seconds were counted rather than divided out of a price, so the wall clock comes from here"
+      }
+    },
+    "leaflet_page": {
+      "usd_model": {
+        "value": null,
+        "unit": "usd_per_1000_rows",
+        "source": "NO UNIT-COST CORNER",
+        "why": "skub2 measured this leg in seconds, not in dollars per row: the dollars below are its seconds at the settled rate, and the record says so rather than printing a unit cost nothing measured"
+      },
+      "seconds_model": {
+        "value": 4.2794,
+        "unit": "seconds_per_page",
+        "source": "results/sku_b_positions_skub2.json :: projection.per_gate[-1].marginal_seconds_per_call",
+        "session": "skub2-run, 2026-08-12, the serverless POSITIONS endpoint",
+        "why": "the last in-run gate, taken when all 108 done calls were pages"
+      }
+    },
+    "post_text": {
+      "usd_model": {
+        "value": null,
+        "unit": "usd_per_1000_rows",
+        "source": "NO UNIT-COST CORNER",
+        "why": "the same as the leaflet leg's — skub2's text leg was measured in seconds"
+      },
+      "seconds_model": {
+        "value": 2.8132,
+        "unit": "seconds_per_row",
+        "source": "results/sku_b_positions_skub2.json :: derived, no single field holds it",
+        "session": "skub2-run, 2026-08-12, the same session's TEXT leg — 30 rows, PAID",
+        "why": "write_sku_projection_b2.text_marginal, the house derivation reused rather than rewritten. 3.18 (7)(e) names this rate for this leg"
+      }
+    }
+  },
+  "rate": {
+    "value": 0.00030669,
+    "source": "results/srv2d_cost.json :: rate.usd_per_second",
+    "why": "the settled serverless rate — the field every projection in this repo has used since sku-b"
+  },
+  "drift": {
+    "factor": 0.03,
+    "why": "a contract term, not a measurement — carried unchanged"
+  },
+  "legs": {
+    "comment": {
+      "rows": 5075,
+      "usd_with_drift": 7.484,
+      "billed_seconds": 21928.7,
+      "fixed_seconds": 299.022
+    },
+    "leaflet_page": {
+      "rows": 159,
+      "usd_with_drift": 0.3125,
+      "billed_seconds": 989.4,
+      "fixed_seconds": 308.929
+    },
+    "post_text": {
+      "rows": 44,
+      "usd_with_drift": 0.0581,
+      "billed_seconds": 183.8,
+      "fixed_seconds": 60.0,
+      "no_boot": "NOT added: 3.18 (7)(c) buys the two-leg window in ONE session, and this leg rides the endpoint the leaflet leg already booted. A boot here would be double-counted against results/projection_5c2.json, which already pays one"
+    }
+  },
+  "whole_session": {
+    "usd_with_drift": 7.8546,
+    "usd_source": "the conservative corner of each leg, summed",
+    "billed_seconds": 23101.9,
+    "hours": 6.42,
+    "jobs_at_the_execution_timeout": 26,
+    "workers_max": 1,
+    "seconds_source": "the marginal corner of each leg — the only counted seconds",
+    "why_it_is_larger_than_the_c2_projection_and_still_fits": "$7.6870 with `fits: false` against $7.8546 with `fits: true` is TWO supersessions and no correction: the leaflet leg's population moved 78 → 159 (3.18 (7)(d)) and the phase cap moved 30 → 33 (3.18 (7)(b)). results/projection_5c2.json is a true statement of its write moment and is never regenerated"
+  },
+  "session_cap": {
+    "cap_usd": 8.0,
+    "projected_usd_with_drift": 7.8546,
+    "rounding": "up to the next $0.50",
+    "remaining_usd": 9.169,
+    "fits": true,
+    "headroom_usd": 1.169,
+    "why": "the cap is a LINE and not a forecast: it is rounded up so the run has room for the drift it already carries, and it is registered by VALUE (3.18 (7)(f)) so a later session cannot re-derive a bigger one from a moved input and call it the same cap"
+  },
+  "budget": {
+    "phase_cap_usd": 33.0,
+    "cap_source": "scripts/runpod_guard.py :: PHASE_CAP_USD (the line that ENFORCES it)",
+    "spent_usd": 23.831,
+    "remaining_usd": 9.169,
+    "remaining_is_derived": "PHASE_CAP_USD - sessions[-1].spent_usd, not sessions[-1].remaining_usd — that field reads 6.1690 and is a true statement under the 30 cap it was written beside (3.18 (7)(b): records under an earlier cap are never re-scored)",
+    "ledger_remaining_usd_under_its_own_cap": 6.169,
+    "cap_in_force_when_the_ledger_row_was_written": 30.0,
+    "read_at": "2026-08-13T07:59:22+00:00",
+    "source": "results/spend_phase4.json :: sessions[-1]",
+    "ledger_cap_usd": 33.0
+  },
+  "stop_rules": {
+    "go_no_go": {
+      "law": "SPEC 3.17 (10)(a), applying unchanged (3.18 (5))",
+      "rule": "after the two non-gold warm-up calls, the driver re-projects the WHOLE run from the warm-up-measured marginal plus everything already billed, and REFUSES to make any gold call if that projection exceeds what is left of the $8.00 session cap",
+      "consequence": "a session stopped at this gate has touched no gold and consumed no attempt; it returns to the team lead for a re-registration under the measured price",
+      "the_warmup_must_cost_what_the_run_costs": "3.17 (11)(c)'s lesson, which this run inherits: a 64x64 probe priced a leaflet page at 1/3.5 of the truth and the gate passed the run it exists to refuse. The warm-up inputs are REPRESENTATIVE ones — a real leaflet page and a real post row"
+    },
+    "mid_run_cap_gate": {
+      "law": "SPEC 3.17 (10)(b)",
+      "rule": "a cap stop that fires after gold calls began is a finding about the CAP and not about the instrument. It closes nothing, fails no bar, and what happens next is a team-lead ruling — never a silent re-run"
+    },
+    "per_job_ceiling": {
+      "law": "SPEC 3.17 (10)(c)",
+      "rule": "no single job may be CAPABLE of billing past the remaining cap on its own, and a job that ends TIMED_OUT ends the run with its unbought remainder recorded",
+      "execution_timeout_s": 900.0,
+      "worst_case_job_usd_with_drift": 0.2843,
+      "against_the_session_cap_usd": 8.0,
+      "satisfied": true,
+      "why_the_session_cap_and_not_the_phase_cap": "the clause bounds one wedged job against what THIS run may still spend, and what this run may spend is its registered cap — the phase cap is a larger line that several sessions share"
+    },
+    "resume": {
+      "rule": "on any stop, the run resumes from the per-channel watermark plus the answered-set on disk: `comment`, `leaflet_page` and — since the fourth evidence kind — `post_text`, each written LAST for its input, so a row that was paid for is never bought twice and a row that was not is never skipped",
+      "why_the_fourth_kind_is_named_here": "until it existed the post leg had no marker and an interrupted pass re-bought every post that had answered `[]` or come back unparseable. That is a resume discipline with a hole in it, and the hole was priced in rows this cap pays for"
+    }
+  },
+  "validate_consequence": {
+    "law": "SPEC 3.18 (6), the operator sitting the phase does not close without",
+    "the_run_must_persist": {
+      "every_row": [
+        "row_kind",
+        "at",
+        "channel",
+        "msg_id",
+        "parent_msg_id",
+        "task",
+        "prompt_sha256",
+        "model_revision",
+        "served_by",
+        "rendering",
+        "reply"
+      ],
+      "by_kind": {
+        "comment": [],
+        "leaflet_page": [
+          "image_path",
+          "image_sha256"
+        ],
+        "position_row": [
+          "presence",
+          "tier",
+          "warnings"
+        ],
+        "post_text": []
+      }
+    },
+    "source": "src/market_pulse.evidence :: REQUIRED and KIND_FIELDS, the one place that names it",
+    "why_the_fields_are_listed_here": "a registration that said «the run persists evidence» would be satisfied by a run that persisted three fields. `results/predictions/LOST.md` is the precedent: a per-row dump that was never written and cannot be reconstructed at any price",
+    "kinds": [
+      "comment",
+      "leaflet_page",
+      "position_row",
+      "post_text"
+    ],
+    "the_fourth_kind": "`post_text`, ruled by the team lead at the c3a acceptance (Dv285). It carries nothing of its own — the post's text IS its `rendering` — and it is what makes «this post was read and yielded nothing» a fact on disk"
+  },
+  "not_in_scope": {
+    "the price-pair leg": "bar 2 measured 0.4125 against 0.80 and 3.18 (2) admits it to NO price surface. It contributes only what 3.18 (1) allows: the code-computed depth and the printed-vs-computed disagreement flag",
+    "the 8 809 posts the cut removes": "3.18 (7)(e) filtered the leg and (7)(g) cut it again. The projection's 9 158-post raw bound «enters no cap and no session»",
+    "other chains' leaflets": "ATB-only for this cycle (3.18 (7)(d)); collecting the others is an authorised zero-cost prep, never inside this session",
+    "the 11 338-row history": "a visibly deferred decision (3.18 (4)); this session buys a window",
+    "aggregates": "no promo aggregate is computed in 5c2-run. The legs of 3.18 (2) are verified on the window's own output at acceptance"
+  },
+  "producer": {
+    "script": "scripts/write_prereg_5c2.py",
+    "sha256": "1477512a7ea598fbf9661ce00f31eb89b8f1a62b1d52c5b284b153170643ec73",
+    "why": "no git block: `git status --porcelain` is a fact about the tree, not the measurement",
+    "borrows": {
+      "scripts/projection_5c2.py": "0f6e8f504b792b5d4a47449129ba96630a341648ac0d5553f0fc3d4f053360ce",
+      "scripts/census_c3a_posts.py": "b7384e56fae339742d10236d600bf62e8203e1d08b9575e3f7a4a981b6e9232a",
+      "scripts/write_sku_prereg.py": "2985eb296745542f6d5fb8471def7fe2501c29be60e5bdbdac667d516effbc42",
+      "scripts/runpod_guard.py": "e19ea02481b32415232a8e7d886d17d9a370402c5a9cee2ca861980d6115dfc0",
+      "scripts/positions_gm4_skub.py": "55e4e6099306bc0cc387f7ed02019ec1b9983a90baccab6c41dc97faabfd89ca"
+    }
+  }
+}
