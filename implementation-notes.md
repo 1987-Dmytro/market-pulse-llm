@@ -7026,3 +7026,75 @@ leg), `scripts/run_loop.py` (`--pages`, `StubPageTransport`, `pages_of`), `tests
   a test pinned to the last row would have gone red on the operator's first paid session with
   nothing wrong — the record would still be a true reading of the entry it names. Same shape as the
   green-suite-with-a-shelf-life class already in the notes.
+
+## 5c2-prep-c3a — the build track: cap 33, the post-text pass, the pre-filter census (2026-08-13, $0)
+
+Contract `docs/PROMPT-5c2-prep-c3a.md`, authority SPEC 3.18 (7) — the operator's ruling on the
+prep-c2 STOP. Every deviation below carries a cause tag, the house rule as of the 2026-08-13 process
+audit (`docs/reviews/2026-08-13-process-audit-and-self-improvement.md`).
+
+- **Dv280** — the contract's ledger row says "append the raise entry mirroring the 25→30 precedent",
+  and the precedent appended **no session entry**: `3cfd792` moved `phase4_cap_usd` and added a
+  sentence to the top-level `note`, while the `sessions` row at 07:59:22 came from a real
+  `runpod_guard --note` run with a live balance reading. SPEC 3.18 (7)(b) settles it in the same
+  breath — "the anchor and every logged session UNTOUCHED", and "both homes" is the constant plus
+  the field. So the ledger diff is 2 lines and the sessions array is byte-identical, measured. A
+  session entry would also have needed a `runpodctl` balance call this $0 contract forbids.
+  [cause: contract-gap]
+- **Dv281** — `scripts/repair_phase4_ledger.py` is not in the contract's consumer table and carried
+  two dead-cap sentences: "`runpod_guard.PHASE_CAP_USD` is 30.00 from 2026-08-13" (now false) and
+  "SPEC 3.18 (3) raised the phase cap to $30.00" reading as today's number. Both corrected; the
+  `CAP_IN_FORCE_USD = 25.00` literal and the note string written INTO the three repaired ledger
+  entries are untouched, because those entries are on disk and are history. The contract's own rule
+  — "never leave a true-sounding sentence about a dead cap" — is what put this in scope.
+  [cause: contract-gap]
+- **Dv282** — moving the constant alone reddened SIX tests, not the five the table enumerates. The
+  sixth is `test_a_session_note_is_only_logged_when_the_start_is_allowed`, whose balance 4.00
+  ($31.00 spent) stopped refusing at all under cap 33. Both directions measured: with the constant
+  put BACK to 30.00, five of the six refuse. [cause: contract-gap]
+- **Dv283** — `test_the_whole_window_does_not_fit_and_the_record_says_so` was named in the
+  meaning-flip class and **did not go red**: it reads the record's own fields, so it stayed green
+  while its sentence inverted (the same $7.6870 now fits inside $9.1690). Renamed and given its
+  live half. This is the shape the cap-in-force pattern exists for and the reason it is in the ADR:
+  a record that may not be regenerated needs its test to say WHEN it was true. [cause: process]
+- **Dv284** — the post leg needed a FOURTH watermark key. It shares an id space with `posts`, which
+  is why the reflex is to reuse it and why that is wrong: `posts` is how far COLLECTION walked, and
+  one completed extraction pass would tell the collector it had already fetched everything up to
+  that id. `leaflet`'s docstring made the same argument from the other direction (different id
+  spaces) and the two reasons are not the same reason. [cause: model]
+- **Dv285** — **the fork, and it is the team lead's.** `evidence.KINDS` has no member for "a post
+  was read and yielded nothing", and this contract's DO NOT freezes `KIND_FIELDS`. Both sibling legs
+  always write a row per input — a `comment` row, a `leaflet_page` row saying `n_positions: 0` — so
+  their answered-set is exact; the post leg writes only position rows, so a post that returns `[]`
+  or an unparseable reply leaves nothing behind. A COMPLETED pass is still idempotent (the watermark
+  covers it); an INTERRUPTED one re-buys its empty posts. Measured twice rather than argued: in the
+  module with the leaflet leg as a control on the SAME three answers (2 re-asked against 0), and
+  through the script where it actually bites — a smoke never saves the cursor, so the second
+  `--posts --smoke` over an exhausted queue makes 2 transport calls against the page leg's 0. The
+  fix is one new member of `KINDS` and one row in `KIND_FIELDS` mirroring `leaflet_page`'s marker;
+  it is not taken here. [cause: spec-gap]
+- **Dv286** — `price_origin` for `post_text` is INHERITED, not decided. `positions.origin_of`
+  refuses on that carrier by design ("SPEC does not rule on it, so the caller decides"), and the
+  paid skub2 text leg already answered `retail_leaflet` in the `else` of its
+  `carrier in CARRIER_ORIGIN` test. A second answer here would mean the rows the pilot scored and
+  the rows the loop writes are not the same observation. Named as a constant so a future ruling is a
+  one-line change with a test on it. [cause: spec-gap]
+- **Dv287** — the post pass does NOT window-filter. 3.18 (4) pre-registers the window BY ROW COUNT
+  in a census, so the population is the pre-registration's to name and the pass's job is the filter;
+  a window inside the pass would be a second place the population is decided. A smoke over the whole
+  store is bounded by `--limit` instead. [cause: model]
+- **Dv288** — the shipped `results/census_c3a_posts.json` had to be regenerated after `ruff format`
+  touched its producer: the record carries `producer.sha256` over that file, so a formatting-only
+  edit invalidates it exactly as a logic change would. Determinism re-measured AFTER the formatter:
+  `ab927a23` twice. [cause: tooling]
+- **Dv289** — the record's `concentration` cumulative share is 0.7163 and the printed table rounds
+  it to 71.6%; the first version of the pinning test typed 0.7161 from the printed line. Caught by
+  the test itself. The class is old (a number restated from a rendering rather than read from the
+  file) and the fix is the same as always — assert against the record. [cause: model]
+- **Dv290** — the census's own finding is not a deviation but belongs beside them, because it
+  changes what prep-c3b may pin: the pre-filter's conjunction is satisfied on this window
+  overwhelmingly by RECIPES. 328 of 349 rows carry a size, 29 carry a currency marker, and
+  @recepti + @mameni_recepti + @korolevakuchni + @retsepty are 71.6% of the population. The filter
+  cannot tell «Кефір — 400 мл» in an ingredient list from an offer — `positions.prefilter`'s own
+  docstring says exactly that, and this is the first measurement under the sentence.
+  [cause: spec-gap]
