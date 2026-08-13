@@ -381,8 +381,17 @@ After the tail commit the tree is clean apart from what the Stop hook regenerate
   asserted three ways: the determinism pair above, `postcut_c3b.json :: input.sha256`, and the
   registration's `pinned_inputs`.
 * **`evidence` changed by exactly what Step 0.5 names** — one `KINDS` member and one `KIND_FIELDS`
-  row. `REQUIRED` untouched, `src/market_pulse/positions.py` untouched, the sealed sku artifacts and
-  the team-lead files untouched, `RAW_STORE_SALT` not rotated.
+  row. `REQUIRED` is untouched, checked on the TUPLE and not on the line that assigns it (a field
+  added or removed inside the parens would move neither the assignment nor a grep for its name):
+
+  ```
+  $ git show ba1cf7d:src/market_pulse/evidence.py  →  ('row_kind', 'at', 'channel', 'msg_id',
+      'parent_msg_id', 'task', 'prompt_sha256', 'model_revision', 'served_by', 'rendering', 'reply')
+  $ HEAD                                           →  the same 11, in the same order
+  ```
+
+  `src/market_pulse/positions.py` untouched, the sealed sku artifacts and the team-lead files
+  untouched, `RAW_STORE_SALT` not rotated.
 * `data/` unchanged: `b0151164…` over 1 496 files at the start and at the end; `data/derived/` never
   created.
 
@@ -395,7 +404,7 @@ this registration keeps, and what it asks of the team lead).
 
 ## Process signals
 
-* The acceptance's own finding (Dv293) is a class, not an incident: a verify-gate number written once and outlived by its artifact. It is the third instance this week — the fix belongs in the gate, not in the report.
+* The acceptance's own finding (Dv293) is a class, not an incident: a verify-gate number written once and outlived by its artifact. Third instance TODAY (Dv281, the c3a session header, this one) — the fix belongs in the gate, not in the report.
 * The contract's expected magnitude was off by the overlap it could not know (Dv295). Naming what the range PROTECTS turned "STOP or not" into arithmetic instead of judgement.
 * SPEC and the contract operationalised (7)(g) differently (Dv296). Computing both and finding they agree costs less than choosing — and the producer now refuses where they would part.
 * A ruling's count can be a floor (Dv297): "250 from four channels" is the top four; the audience is 270 across six. Found only because a test asserted the quoted number.
