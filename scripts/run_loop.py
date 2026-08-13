@@ -58,7 +58,13 @@ register one — so the only code that writes evidence rows today is :func:`smok
 `SMOKE_DERIVED` under `results/smoke/`, which a real pass must never read as already answered.
 
 Deliberately not wired to a caller that cannot exist yet: a constant read by a path that refuses
-before reaching it would look tested and be exercised by nothing."""
+before reaching it would look tested and be exercised by nothing.
+
+**Its first reader is a guard, not a writer.** `tests/test_loop.py::the_derived_root_is_untouched`
+asserts this directory does not exist after a smoke, so a regression that pointed the stub-served
+leg at the real root would write into the working tree and be caught. That the constant is read at
+all is new in 5c2-prep-c1 (the B1 finding): before it, the assertion named a throwaway path no code
+references and could not fire."""
 
 CAPTIONS = REPO_ROOT / "data" / "annotation" / "post_captions.jsonl"
 CURSOR = REPO_ROOT / "data" / "loop_cursor.json"

@@ -355,10 +355,10 @@ def wire(monkeypatch, tmp_path, sources):
     monkeypatch.setattr(runner, "CURSOR", tmp_path / "loop_cursor.json")
     monkeypatch.setattr(runner, "SMOKE", tmp_path / "smoke" / "loop_5a.json")
     monkeypatch.setattr(runner, "SMOKE_DERIVED", tmp_path / "smoke" / "derived")
-    # `DERIVED_ROOT` is deliberately NOT patched: nothing reads it (see its docstring — it registers
-    # where a SERVED pass will write, and that writer is the paid session's). Patching it would make
-    # an unread constant look wired, and `test_a_smoke_leaves_the_real_cursor_and_the_derived_store
-    # _untouched` asserts the real thing instead — that no directory appears there at all.
+    # `DERIVED_ROOT` is deliberately NOT patched: no writer reads it (see its docstring — it
+    # registers where a SERVED pass will write, and that writer is the paid session's). Patching it
+    # would make an unwritten constant look wired, and `the_derived_root_is_untouched` watches the
+    # REAL root instead, which is the only thing a regression would write into.
     monkeypatch.setattr(runner, "CAPTIONS", tmp_path / "post_captions.jsonl")
     monkeypatch.setattr(runner, "load_registry", lambda _: type("R", (), {"sources": sources})())
     # Telethon's own constructor, not the repo's factory: patching `build_client` would only
@@ -485,9 +485,30 @@ def test_the_stub_served_smoke_writes_evidence_rows_and_names_the_stub(monkeypat
         evidence.assert_complete(row)
 
 
+def the_derived_root_is_untouched() -> None:
+    """The D1 guard, spelled ONCE so the sensitivity test below exercises this very assertion.
+
+    Re-typing it in the second test would prove that a look-alike refuses and say nothing about the
+    one that runs in the smoke test.
+    """
+    assert not runner.DERIVED_ROOT.exists(), "data/derived/ is the real pass's, not a smoke's"
+
+
 def test_a_smoke_leaves_the_real_cursor_and_the_derived_store_untouched(monkeypatch, tmp_path):
     """The watermark a smoke advances lives in memory only. If it were saved, the rows a fake
-    answered would be marked bought and the next real pass would skip them — for good."""
+    answered would be marked bought and the next real pass would skip them — for good.
+
+    `DERIVED_ROOT` is UNPATCHED here on purpose, so the guard watches the repo's own
+    `data/derived/`: a regression that wired the smoke to the real root would write into the
+    working tree, which is the failure this line exists to catch. It replaced
+    `assert not (tmp_path / "derived").exists()` — a path no code references, and therefore a
+    guard that could never fire (the B1 finding of the prep-b acceptance).
+
+    **The day a legitimate writer creates `data/derived/`, this goes red ON PURPOSE.** It is not
+    deleted to make the suite green: the guard is redesigned WITH that writer, from "the root does
+    not exist" to a before/after snapshot of it, so that a smoke is still refused the real root
+    while a served pass is allowed it.
+    """
     wire_infer(monkeypatch, tmp_path)
     before = digests(tmp_path)
 
@@ -495,8 +516,28 @@ def test_a_smoke_leaves_the_real_cursor_and_the_derived_store_untouched(monkeypa
 
     after = digests(tmp_path)
     assert after["loop_cursor.json"] == before["loop_cursor.json"]
-    assert not (tmp_path / "derived").exists(), "data/derived/ is the real pass's, not a smoke's"
+    the_derived_root_is_untouched()
     assert {path for path in after if not path.startswith("smoke/")} == set(before)
+
+
+def test_the_derived_root_guard_refuses_a_row_planted_in_the_real_root(monkeypatch, tmp_path):
+    """The other direction, and the only reason the test above is worth anything.
+
+    A guard is accepted with evidence BOTH ways: that it passes where the root is clean, and that
+    it fails where a row is in it. The row is planted through the pass's own writer — `RawStore`
+    pointed at `DERIVED_ROOT`, which is exactly the regression being guarded against — rather than
+    with `mkdir`, so what refuses here is a real evidence row in the real destination.
+
+    Patching `DERIVED_ROOT` is legitimate in THIS test and nowhere else: here it is read, by the
+    guard, one line later.
+    """
+    monkeypatch.setattr(runner, "DERIVED_ROOT", tmp_path / "derived")
+    store, _, posts, state = wired(tmp_path)
+    planted = RawStore(runner.DERIVED_ROOT)
+    assert run(store, planted, posts, state)["written"] == 3
+
+    with pytest.raises(AssertionError, match="the real pass's"):
+        the_derived_root_is_untouched()
 
 
 def test_the_smoke_answers_at_most_the_limit_it_was_given(monkeypatch, tmp_path):
