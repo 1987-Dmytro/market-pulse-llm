@@ -6771,3 +6771,49 @@ Two things the report carries that are not deviations and are worth finding from
 Artifacts: `src/market_pulse/provenance.py`, `src/market_pulse/serving.py` (POSITIONS + CONFIG_OPS),
 `local_llm.PositionsClient`, `scripts/positions_gm4_skub.py`, `results/sku_pilot_serving.json`,
 `results/sku_projection.json`, `docs/reports/sku-b-prep.md`.
+
+## 5c2-prep-a — the strip learns the amendment family, the cap moves 25 → 30, the phase ledger is repaired (2026-08-13, $0)
+
+**The full deviations of this phase live in `docs/reports/5c2-prep-a.md`, not here.** Dv242–Dv248
+are filed in that report with their evidence; one fact, one home. The list below is the index.
+
+### Deviations
+
+- **Dv242** — three counts and they differ: the contract names THREE cap-coupled literals in
+  `tests/test_runpod_guard.py`, the file carries SIX, and moving the constant reddened THREE — only
+  one of them a literal the contract names. `test_the_cap_refuses_the_next_start` FLIPS (balance
+  9.99 = $25.01 spent, under the raised cap and allowed);
+  `test_the_volume_keeps_billing_while_the_pod_is_stopped` asserts `remaining_usd == 24.6`; three
+  more are silent and were found by reading. **A suite enumerates what reddens, not what is
+  coupled.**
+- **Dv243** — `results/spend_phase4.json :: note` amended, which the contract's list of homes does
+  not name: its «the $25 cap … is enforced against that difference» was the very documentation-vs-
+  constant contradiction the contract forbids. Superseded by an appended sentence, the original left
+  byte-intact; anchor, `anchored_at` and every logged session untouched.
+- **Dv244** — the exclusion list's reason is not «no phase entry»: all three excused runs HAVE phase
+  entries, read minutes later after teardown at a lower balance. Each row names its witnessing entry
+  and the test asserts it exists, is later and reads lower. Keyed per RUN, not per FILE.
+- **Dv245** — the permanent repo-state guard rides with the repaired ledger, not with the script:
+  in the script's commit the three step ledgers are still silent and the guard would be red there.
+  Dv240's rule, which this contract cites itself. Still two commits.
+- **Dv246** — the repair's `ledger` fixture rebuilds the PRE-repair state rather than copying the
+  live file; a one-shot repair that has been shot can only reach its re-run refusal.
+- **Dv247** — two flags the contract does not name: `--ledger` (or the tests would write the
+  committed artifact) and `--dry-run` (used before the one real write).
+- **Dv248** — commit subjects use ASCII `--` where the contract writes `—`; no subject in this
+  repository's history carries an em dash. Bodies carry the contract's text verbatim.
+
+Two things worth finding from here that are not deviations:
+
+- **the strip's family is now a REGEX ALTERNATION and the enumeration is still literal.** Extending
+  `write_sku_prereg.RATIFICATION_NAME` is the only legal way to green a pin over a law that grew;
+  `tests/test_sku_prereg.py`'s `blocks` list stays literal and in DOCUMENT order so an amendment
+  cannot arrive unnoticed, and the skip below it is keyed on the NAME `sku-b-ratification` — a
+  `[1:]` slice stopped checking whichever name sorts first the moment `amendment-index` arrived.
+- **the phase ledger's silence was two days and three paid sessions long**, and the counter stayed
+  right by arithmetic the whole time. Rightness is not a witness: `results/spend_phase4.json` is
+  what the guard reads before every start, and nothing in the repo could see that it had stopped
+  being written.
+
+Artifacts: `scripts/repair_phase4_ledger.py`, `tests/test_repair_phase4_ledger.py`,
+`results/spend_phase4.json` (repaired, 31 → 35 entries), `docs/reports/5c2-prep-a.md`.
