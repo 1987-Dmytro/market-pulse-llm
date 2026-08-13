@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-13 12:10:38 (every SessionStart)
+**Auto-refreshed:** 2026-08-13 12:55:40 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-51ed64a chore(vault): the 5c2-prep-b session tail -- the day's log and the curated hot block
-273af1c fix(5c2-prep-b): DERIVED_ROOT registers a destination and writes nothing -- say so
-d0eaac0 docs(report): 5c2-prep-b -- the inference leg, the evidence table, and the two record debts paid
-3232a52 fix(5c2-prep-b): Dv232 and Dv176 -- the warnings reach the record per position, and both contract strings name the contract in force
-09b5dac feat(5c2-prep-b): the loop's inference leg -- the record is durable before the watermark moves
+e5a4de5 docs(report): 5c2-prep-c1 -- B1 closed in both directions, and the positions leg has a producer
+0af552c feat(5c2-prep-c1): the loop's leaflet leg -- one page in, a page row and its positions out
+31236c3 feat(5c2-prep-c1): the store's key is the row, not only the message
+464a33c fix(5c2-prep-c1): B1 -- the smoke guard aims at the real derived root, in both directions
+a7fd937 docs(vault): the prep-b session tail and hot.md's Next
 ```
 
 ## 📋 Recent decisions
@@ -30,25 +30,24 @@ d0eaac0 docs(report): 5c2-prep-b -- the inference leg, the evidence table, and t
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-13 12:04 (чекпойнт `/save`) — **`5c2-prep-b` ✅ ПРИНЯТ тимлидом**, $0,
-коммиты `9d558a7..51ed64a`. Петля получила ногу инференса: рендер → шов → **запись на диск** → и
-только потом watermark. Очередь вычитает И watermark, И id уже записанных строк. `run_loop.ENDPOINT`
-остался `None`. Форма записи 3.18 (6) — в ОДНОМ месте (`market_pulse.evidence`), `assert_complete`
-требует НАЛИЧИЯ поля, а не истинности. **Долги Dv232 и Dv176 закрыты**, тесты на обеих ветках.
-Отчёт `docs/reports/5c2-prep-b.md`, отклонения **Dv249–258**. Перепрогон тимлида: `make check`
-2081 / 2 skipped, субагент по гардам 9/10 PASS. Phase 4: **$23.8310 из $30.00**, остаток $6.1690 —
-за день не потрачено НИЧЕГО.
+**Last update:** 2026-08-13 (конец сессии) — **`5c2-prep-c1` ✅ ЗАКРЫТ, $0**, коммиты
+`4cde4f4..e5a4de5`, `make check` **2101 / 2 skipped**. **B1 закрыт в обе стороны**, у
+`leaflet_page` и `position_row` появился ПИСАТЕЛЬ. Отчёт `docs/reports/5c2-prep-c1.md`,
+отклонения **Dv259–267**. Phase 4: **$23.8310 из $30.00**, остаток $6.1690 — за день не
+потрачено НИЧЕГО. Раньше в тот же день принят `5c2-prep-b` (`9d558a7..51ed64a`, Dv249–258).
 
-**🔴 ОТКРЫТАЯ НАХОДКА ПРИЁМКИ — B1, шаг 0.5 контракта c1.** `tests/test_loop.py:498` проверяет
-`not (tmp_path / "derived").exists()` — путь, на который **не ссылается никакой код**: `wire_infer`
-намеренно НЕ патчит `DERIVED_ROOT`, а smoke пишет в `SMOKE_DERIVED`. Директория из ассерта появиться
-не может, страж зелен по построению. Должно быть `not runner.DERIVED_ROOT.exists()` **плюс тест
-чувствительности в другую сторону** (страж обязан ОТКАЗАТЬ на подложенной строке). Писателей у
-`DERIVED_ROOT` сегодня ноль, поэтому охранять пока нечего — но чинится ДО подключения писателя.
+**🔧 Хранилище получило более тонкий ключ — знать до следующего писателя.** `RawStore`
+дедуплицировал по `(channel, msg_id)`, а N позиций одной страницы несут msg_id ЭТОЙ страницы:
+вторая и все следующие терялись **внутри одного `append()`** (`_by_file` помечает запись
+увиденной по ходу итерации). Ключ теперь `dedup_key` = `row_id` при наличии, иначе `msg_id`;
+`row_id` детерминирован (`channel:msg_id:ordinal`). Ни одна старая запись `row_id` не несёт —
+бейзлайн сырых хранилищ v1 не сдвинулся. `StoreIndex.ids` = пространство СООБЩЕНИЙ,
+`StoreIndex.keys` = пространство СТРОК; очередь вычитает `ids`, не путать.
 
-**Знать перед c1:** из трёх видов строк улики продюсер есть только у `comment`. `leaflet_page` и
-`position_row` имеют схему, гард и тесты — и НИ ОДНОГО писателя; это и есть D2 контракта c1.
-**5c2-run не должен быть контрактом, который впервые пишет `position_row`.**
+**Шов ноги листовки:** `send(task, payload)`, где payload — альбом из ОДНОЙ картинки (это
+production-пара: `local_llm.PositionsClient.positions` берёт `[[data_url]]` и строит
+`positions_messages_page_gm4` у себя). В записи `rendering` = плейсхолдерные сообщения, пиксели
+названы `image_path` + `image_sha256`, и хэш — от ОТПРАВЛЕННЫХ байт (файл читается один раз).
 
 **Предыдущее состояние:** 2026-08-12 20:52 — ДЕНЬ ЗАКРЫТ (arch-a ✅, uni-a ✅, uni-b ✅, sku-b-prep ✅, sku-b-run ✅ ПРИНЯТ,
 sku-b-v3-prep ✅, sku-b-v3-run ⛔ ОТКАЗ на воротах — попытка ЦЕЛА, sku-b-v4-prep ✅ $0,
@@ -101,19 +100,28 @@ BY MEASUREMENT)**,
 
 ## 🔥 What's Hot
 
-**5c2-prep-b ✅ 13.08 ($0) — ПРИНЯТ.** Восемь коммитов `9d558a7..51ed64a`; `make check` 2081 /
-2 skipped (было 2025), куплено НИЧЕГО. Нога инференса: рендер → шов → **запись на диск** →
-watermark, и тест прерывает проход ровно между «модель ответила» и «запись легла», проверяя курсор
-НА ДИСКЕ. `run_loop.ENDPOINT` = `None`. Форма записи 3.18 (6) — одно место,
-`market_pulse.evidence`. **Dv232 и Dv176 закрыты.** Отклонения Dv249–258, отчёт
-`docs/reports/5c2-prep-b.md`.
+**5c2-prep-c1 ✅ 13.08 ($0) — СДАН, ждёт приёмки.** Шесть коммитов `4cde4f4..e5a4de5`;
+`make check` 2101 / 2 skipped (было 2081), `ruff format --check` чист, куплено НИЧЕГО.
+**B1 закрыт в обе стороны:** ассерт смотрит на `runner.DERIVED_ROOT`, написан ОДИН раз
+(`the_derived_root_is_untouched`), тест чувствительности подкладывает три строки писателем самого
+прохода и показывает отказ; под старой формой те же строки давали `DID NOT RAISE`.
+**Нога листовки:** страница → тот же шов → `leaflet_page` + `position_row` на позицию, запись на
+диск и только потом watermark, инструмент импортом. `run_loop.ENDPOINT` = `None`.
+Отклонения Dv259–267, отчёт `docs/reports/5c2-prep-c1.md`.
 
-**Next: `5c2-prep-c1`** — контракт ВЫДАН (`docs/PROMPT-5c2-prep-c1.md`), НЕ начат. Разрез prep-c на
-два по сцеплению (рулинг оператора 13.08): **c1 = «запись»** (фикс B1 в обе стороны + писатель улик
-позиционной ноги через тот же шов; формы 3.18 (6) и `positions.py` ЗАМОРОЖЕНЫ, только фикстуры),
-**c2 = «деньги»** (ценз окна → проекция с ПЛАТНОГО serverless-замера → STOP с числами → прережка
-после рулинга оператора). **Blockers: один — B1, см. блок выше.** Phase 4 — **$23.8310 из $30.00**,
-остаток $6.1690.
+**5c2-prep-b ✅ 13.08 ($0) — ПРИНЯТ.** Восемь коммитов `9d558a7..51ed64a`. Нога инференса и форма
+записи 3.18 (6) в одном месте (`market_pulse.evidence`). **Dv232 и Dv176 закрыты.** Отклонения
+Dv249–258, отчёт `docs/reports/5c2-prep-b.md`.
+
+**Next: `5c2-prep-c2` — «деньги», контракт ещё НЕ выдан.** Ценз окна (3.18 (4): окно
+пре-регистрируется ПО ЧИСЛУ СТРОК, не как диапазон дат) → проекция цены с ПЛАТНОГО
+serverless-замера → **STOP с числами** → прережка платной сессии после рулинга оператора.
+**Blockers: нет.** Phase 4 — **$23.8310 из $30.00**, остаток $6.1690.
+
+**Открыто для тимлида по c1 (не блокеры):** `image_path` пишется абсолютным — «путь, каким его
+увидел прогон» по букве брифа, но все остальные артефакты репозитория repo-relative (Dv264);
+источник страниц — `results/post_media_5c1.json`, один канал `@atb_market_official`, **159 страниц**
+(Dv267). 159 — реальное число, но ценз окна это **c2**, и оно там.
 
 **Что prep-b положил на стол для c2, поимённо.** Очередь сегодня — **16 218 строк**, watermark
 `inference` не выставлен НИ НА ОДНОМ канале, и 70% бэклога это два канала (`@VARUS_channel` 6 410,
@@ -314,11 +322,15 @@ tier-accuracy **0.8621 против 0.85 → PASS** (29 из 30, 1 нечита�
 Полностью — `docs/reports/5c2-prep-b.md`, отклонения Dv249–258.
 
 **`5c2-prep-c` РАЗРЕЗАН НА ДВА** (рулинг оператора 13.08, по сцеплению — джойнт-ревью prep-c).
-**`c1` — «запись», контракт выдан:** фикс B1 в обе стороны и писатель улик позиционной ноги
-(`leaflet_page` + `position_row` на страницу) через ТОТ ЖЕ шов, с тем же порядком «запись → потом
-watermark»; `evidence.REQUIRED`/`KIND_FIELDS` и `positions.py` ЗАМОРОЖЕНЫ — если ногу нельзя
-построить без сдвига формы, это СТОП и вопрос к тимлиду по 3.18 (6), а не отклонение.
-**`c2` — «деньги», отдельный контракт:** ценз окна (3.18 (4): окно пре-регистрируется ПО ЧИСЛУ
+**`c1` — «запись» ✅ ЗАКРЫТ ($0, коммиты `4cde4f4..e5a4de5`).** B1 закрыт в обе стороны; у
+`leaflet_page` и `position_row` есть писатель — `loop.page_pass` через тот же шов, с тем же
+порядком «запись → потом watermark». Формы 3.18 (6) и `positions.py` не тронуты: СТОП не
+понадобился, потому что мешало не они, а ключ хранилища (`raw_store.py` — не заморожен, нигде не
+запинен, проверено ДО правки). Что знать не из отчёта: **`RawStore` теперь дедуплицирует по
+`dedup_key`** (`row_id`, иначе `msg_id`), потому что N позиций одной страницы терялись внутри
+ОДНОГО `append()`; **`StoreIndex.ids` — сообщения, `.keys` — строки**, очередь вычитает `ids`.
+Полностью — `docs/reports/5c2-prep-c1.md`, отклонения Dv259–267.
+**`c2` — «деньги», отдельный контракт, ещё НЕ выдан:** ценз окна (3.18 (4): окно пре-регистрируется ПО ЧИСЛУ
 СТРОК, а не как диапазон дат, вычисляемый в момент прогона) → проекция цены с ПЛАТНОГО
 serverless-замера → **STOP с числами** → прережка платной сессии после рулинга оператора. Состав
 окна при нехватке остатка решается НА ЧИСЛАХ ценза, прережка до рулинга не пишется.
