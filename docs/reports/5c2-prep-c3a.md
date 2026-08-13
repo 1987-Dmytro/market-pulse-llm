@@ -287,7 +287,38 @@ would have gone red and the STOP would have read as unresolved forever.
 
 ### 1. `make check` after every commit
 
-<!-- CHECKOUT-TABLE -->
+Every session commit checked out on its own in a throwaway worktree, **with the parent commit as the
+control**. `make check` in the main tree at the end: **2 184 passed, 2 skipped** (2 140 at the
+start), `ruff format` clean.
+
+| commit | subject | suite in the worktree |
+|---|---|---|
+| `8771a02` | **the CONTROL** — prep-c2's last commit, before this session | 1 failed, 2 139 passed, 2 skipped |
+| `454cfa4` | `docs:` 5c2-prep-c3a queued — the STOP ruling in law | 1 failed, 2 139 passed, 2 skipped |
+| `5d9a261` | `docs(vault):` the prep-c2 session tail | 1 failed, 2 139 passed, 2 skipped |
+| `affa8ca` | `docs(reviews):` the 2026-08-13 process audit | 1 failed, 2 139 passed, 2 skipped |
+| `c4f0aba` | `feat:` the cap moves 30 → 33 | 1 failed, 2 139 passed, 2 skipped |
+| `72ac6a5` | `feat:` the post-text pass | 1 failed, **2 158** passed, 2 skipped |
+| `a39a8ad` | `data:` the pre-filter census | 1 failed, **2 181** passed, 2 skipped |
+| `5c485bc` | `docs(decision):` the 3.18 (7) ruling | 1 failed, 2 181 passed, 2 skipped |
+| `b048532` | `docs(report):` this report | 1 failed, 2 181 passed, 2 skipped |
+| `9c723a7` | `fix:` the borrowed-module hashes and the cursor-key pin | 1 failed, **2 183** passed, 2 skipped |
+
+**The one failure is the instrument, not a commit** (Dv193, re-measured rather than inherited): it is
+`tests/test_collect_5c1.py::test_the_guard_reads_the_pinned_paths_off_the_pin_file`, the SAME nodeid
+on every row **including the control**, and it passes in the main tree. `data/` is gitignored, so a
+worktree has to reach it through a symlink and that test resolves real paths against the worktree
+root. Two things make the table readable: the failure SET is identical on all ten rows, and the
+passed-count moves with the work (2 139 → 2 158 → 2 181 → 2 183), each one exactly its commit's own
+total minus that nodeid.
+
+**The first run of this table measured nothing, and it looked fine** (Dv291). `data/` is only
+PARTLY tracked — `data/annotation/`, `data/frozen/` and a JSON are in git — so the checkout creates
+a real `data/` directory and `ln -s $REPO/data $WT/data` lands INSIDE it as `data/data`, silently.
+Every row then read `1 error in 0.9s`: a collection abort, which ends the run before any test
+executes. "One thing wrong on every row including the control" is exactly what the known Dv193
+artifact looks like — and an ERROR is not a FAILURE, and only one of them is a measurement. The fix
+is to link per gitignored ENTRY, one level down.
 
 ### 2. The census's determinism pair
 
@@ -309,7 +340,34 @@ Above, under Deliverable 1: six red under the naive form, five red with the cap 
 
 ### 4. `git log --oneline` and a clean tree
 
-<!-- COMMITS -->
+```
+9c723a7 fix(5c2-prep-c3a): the census hashes the four modules it is built out of, and the
+        cursor key is pinned apart from the carrier
+b048532 docs(report): 5c2-prep-c3a -- the cap, the third leg, and the population that
+        turned out to be recipes
+5c485bc docs(decision): the 3.18 (7) STOP ruling -- and the clause that binds the team lead
+a39a8ad data(5c2-prep-c3a): the post leg's population is 349 of 9 158 -- and 320 of them
+        carry no price
+72ac6a5 feat(5c2-prep-c3a): the post-text pass -- the third leg, and the one property it
+        cannot carry
+c4f0aba feat(5c2-prep-c3a): the Phase 4 cap moves 30 -> 33, and the records under 30 stay
+        where they are
+affa8ca docs(reviews): the 2026-08-13 process audit -- the self-improvement loop
+5d9a261 docs(vault): the prep-c2 session tail
+454cfa4 docs: 5c2-prep-c3a queued -- the STOP ruling in law (SPEC 3.18 (7))
+```
+
+Two commits follow these nine and have no row in the table above: the one that ADDS the table to
+this file, which cannot name itself, and the session's vault tail (`knowledge/`), which is
+pre-authorised. Neither touches code — `make check` in the working tree is green with both applied.
+
+`git status --short` at the end holds only that tail:
+
+```
+ M docs/reports/5c2-prep-c3a.md      ← this table
+ M knowledge/daily_logs/2026-08-13.md
+ M knowledge/hot.md
+```
 
 ---
 
@@ -329,7 +387,7 @@ Above, under Deliverable 1: six red under the naive form, five red with the cap 
 
 ## Deviations
 
-`implementation-notes.md` § *5c2-prep-c3a* — **Dv280–Dv290**, every one with a `[cause: …]` tag.
+`implementation-notes.md` § *5c2-prep-c3a* — **Dv280–Dv292**, every one with a `[cause: …]` tag.
 Two are the ones a reader should not skip: **Dv285** (the fourth evidence kind, the team lead's
 fork) and **Dv290** (the population is recipes).
 
@@ -339,4 +397,4 @@ fork) and **Dv290** (the population is recipes).
 * "Verify each against disk" caught one flipped test the table did not predict and one that stayed green while inverting — enumeration of consumers is not enumeration of MEANINGS (Dv282, Dv283).
 * The contract said "append the raise entry"; the precedent it named did something else. Resolving it needed the actual diff of `3cfd792`, not the sentence about it (Dv280).
 * What had to be discovered rather than read: that `evidence.KINDS` has no marker kind for this leg. The contract expected the existing kinds to suffice and said to STOP if not — the fork was findable only by building the leg and killing it.
-* `ruff format` silently invalidated a shipped record's `producer.sha256`; `make check` cannot see it, because the formatter is not in the verifier (Dv288).
+* `ruff format` silently invalidated a shipped record's `producer.sha256`; `make check` cannot see it, because the formatter is not in the verifier (Dv288). The verify gate's own instrument failed the same way — a symlink that did not happen produced a table that looked exactly like the known artifact and measured nothing (Dv291).

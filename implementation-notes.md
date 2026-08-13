@@ -7098,3 +7098,19 @@ audit (`docs/reviews/2026-08-13-process-audit-and-self-improvement.md`).
   cannot tell «Кефір — 400 мл» in an ingredient list from an offer — `positions.prefilter`'s own
   docstring says exactly that, and this is the first measurement under the sentence.
   [cause: spec-gap]
+- **Dv291** — the first per-commit checkout table measured NOTHING and looked like the known
+  artifact. `data/` is only PARTLY tracked (`data/annotation/`, `data/frozen/`, a JSON), so the
+  worktree checkout creates a real `data/` directory and `ln -s $REPO/data $WT/data` lands INSIDE it
+  as `data/data` — silently, `ln -s` does not complain. Every row then read `1 error in 0.9s`: a
+  collection abort in `test_train_qlora.py`, which ends the run before any test executes. "One thing
+  wrong on every row including the control" is exactly the Dv193 signature, and an ERROR is not a
+  FAILURE — only one of the two is a measurement. Fixed by linking per gitignored ENTRY one level
+  down; the table then read the expected single nodeid and a passed-count that moves.
+  [cause: tooling]
+- **Dv292** — review found two pins guarding the half that cannot move, both fixed in `9c723a7`.
+  `producer.sha256` hashed only `census_c3a_posts.py` while the record COPIES
+  `sku_prefilter_census.__doc__` into `rule` and is built out of four modules — an edit to any of
+  them moves the record's bytes with the producer hash still. `producer.borrows` now carries all
+  four by sha. And `loop.POST_TEXT` (a cursor key) shares a literal with `loop.POST_CARRIER` (SPEC
+  3.17 (4)'s carrier); loop's own docstring says a wrong cursor key "silently starts the channel
+  over from nothing", so the two are pinned apart. [cause: process]
