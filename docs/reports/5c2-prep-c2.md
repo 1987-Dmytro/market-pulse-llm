@@ -575,4 +575,7 @@ the sections above.
 | 8 | `ae88b44` | `docs(report): 5c2-prep-c2 — the per-commit checkout table and the session's git log` |
 | 9 | `22ac2a6` | `chore(vault): the 5c2-prep-c2 session tail — the STOP, and the two records that stopped moving` |
 | 10 | `daaa355` | `fix(5c2-prep-c2): the post row type is in scope, bounded and out of the two-leg total` |
-| 11 | — | this report's own amendment and the session's vault tail — the two a report cannot carry its own hash for |
+| 11 | `b39954b` | `docs(report): 5c2-prep-c2 — the checkout table covers the three commits added after it was written` |
+| 12 | `6e9907f` | `chore(vault): the review finding — three row types, and the one with no writer` |
+| 13 | `7a4f367` | `docs(report): 5c2-prep-c2 — the opening sentence names all three row types` |
+| 14 | — | this amendment, which fills rows 11–13 in; the one commit a report can never carry its own hash for |
