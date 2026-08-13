@@ -5,7 +5,7 @@ cursor and the store alone, so it can be read before anything is fetched, and th
 idempotent because it is `RawStore.append` — the dedup on ``(channel, msg_id)`` that the
 backfill has relied on since Phase 2, not a second one written here.
 
-Two watermarks per channel, and they are different questions:
+Three watermarks per channel, and they are different questions:
 
 ``posts``
     the newest post id this channel has been walked to. Collection reads it.
@@ -13,20 +13,29 @@ Two watermarks per channel, and they are different questions:
     the newest comment id that has been handed to the model. Nothing advances it in 5a — no
     serving endpoint exists — so the queue it measures is every stored comment, which is
     exactly the number 5b needs before it can size a serving-parity run.
+``leaflet``
+    the newest leaflet PAGE id that has been extracted. Its own key rather than a share of
+    ``inference``: the two legs read different id spaces (a comment id from the discussion group,
+    a page id from the channel's own album) and one is not ahead of the other.
 
 The file is `data/backfill_cursor.json`'s pattern and `market_pulse.backfill`'s atomic writer:
 one file, one dict per channel, written whole after a flush. A kill mid-write must not lose
 the position, and a cursor that cannot be parsed restarts the walk rather than the run.
 """
 
+import base64
+import hashlib
 from collections.abc import Iterable
+from dataclasses import asdict
+from pathlib import Path
 
-from market_pulse import evidence, parents, prompts
+from market_pulse import evidence, parents, positions, prompts
 from market_pulse.backfill import load_cursor, save_cursor  # noqa: F401  (re-exported)
 
 POSTS = "posts"
 INFERENCE = "inference"
-"""The two watermark keys. Named rather than spelled out at each call site: a typo in a
+LEAFLET = "leaflet"
+"""The three watermark keys. Named rather than spelled out at each call site: a typo in a
 cursor key does not raise, it silently starts the channel over from nothing."""
 
 
@@ -149,23 +158,28 @@ RECORD_TYPE = "inference"
 second implementation — and they land in their own root BESIDE `data/raw/`, never inside it."""
 
 
-def queued(store, derived, handle: str, watermark: int | None) -> list[dict]:
-    """The stored comments this pass still owes an answer for, oldest first.
+def above(rows: Iterable[dict], answered: set, watermark: int | None) -> list[dict]:
+    """The rows a pass still owes an answer for, oldest first — the filter BOTH legs share.
 
     Two filters and they close different holes. The **watermark** is the queue 3.18 prices, and it
-    is what a completed pass moves. The **derived store's own ids** are what makes a re-run free
-    after a pass that was killed: the records it did write are durable and its watermark never
-    moved, so the watermark alone would re-buy every one of them. Subtracting what is already
-    written means "a re-run buys nothing twice" holds for an INTERRUPTED pass and not only for a
-    completed one.
+    is what a completed pass moves. The **already-answered ids** are what makes a re-run free after
+    a pass that was killed: the records it did write are durable and its watermark never moved, so
+    the watermark alone would re-buy every one of them. Subtracting what is already written means
+    "a re-run buys nothing twice" holds for an INTERRUPTED pass and not only for a completed one.
+
+    ``answered`` is a MESSAGE id set (`StoreIndex.ids`) in both legs, and that is why the fanned-out
+    positions leg subtracts correctly: one answered page is one message, whatever number of position
+    rows it wrote.
     """
-    answered = derived.index(RECORD_TYPE, handle).ids
-    rows = [
-        row
-        for row in store.rows("comment", handle)
-        if row["msg_id"] > (watermark or 0) and row["msg_id"] not in answered
-    ]
-    return sorted(rows, key=lambda row: row["msg_id"])
+    return sorted(
+        (row for row in rows if row["msg_id"] > (watermark or 0) and row["msg_id"] not in answered),
+        key=lambda row: row["msg_id"],
+    )
+
+
+def queued(store, derived, handle: str, watermark: int | None) -> list[dict]:
+    """The stored comments this pass still owes an answer for, oldest first."""
+    return above(store.rows("comment", handle), derived.index(RECORD_TYPE, handle).ids, watermark)
 
 
 def render_comment(posts: dict, captions: dict, row: dict, task: str = COMMENT_TASK) -> tuple:
@@ -260,3 +274,208 @@ def inference_refusal(rows: int, endpoint: str | None) -> str | None:
             " aggregate, so 5a queues rows and sends none."
         )
     return None
+
+
+# --- the leaflet leg: one page in, one page row and one row per position out --------------------
+
+PAGE_TASK = prompts.POSITIONS_TASK_PAGE
+"""The registered page prompt, read out of `prompts` rather than spelled out — same reason as
+:data:`COMMENT_TASK`. SPEC 3.17 (4) fixes leaflet extraction at one page per call, and
+`prompts.positions_messages_page_gm4` is what refuses a second image."""
+
+PAGE_RECORD_TYPE = "leaflet_page"
+POSITION_RECORD_TYPE = "position_row"
+"""The derived store's two record types for this leg — the same strings `evidence.KINDS` names, so a
+row's `row_kind` and the file it lands in cannot disagree. They are separate files because they are
+separate questions: how many pages have been read, and what was on them."""
+
+CARRIER = "leaflet_page"
+"""SPEC 3.17 (4): where the record was read. It fixes `price_origin` through
+`positions.origin_of`, so a leaflet price cannot be stamped as a consumer quote by a caller that
+decided for itself."""
+
+
+def render_page(path: Path) -> tuple[list[dict], str, list[str]]:
+    """One page as (rendering, sha of the bytes SENT, the one-image album the transport takes).
+
+    The file is read **once**, and the sha and the payload are both built from that one `bytes`
+    object. Hashing the path separately from encoding it is two reads of a file that can move
+    between them, and the record would then name a sha the model never saw.
+
+    The ``rendering`` is what the model is actually given: `positions_messages_page_gm4` — the
+    instructions and ONE image slot. The pixels are not in it, they travel beside it, which is why
+    `evidence.KIND_FIELDS["leaflet_page"]` is `image_path` and `image_sha256`: those two identify
+    the picture exactly and cost the record a few dozen bytes instead of a few megabytes.
+    """
+    data = path.read_bytes()
+    return (
+        prompts.positions_messages_page_gm4(1),
+        hashlib.sha256(data).hexdigest(),
+        # the house encoding (`scripts/caption_posts.data_url`), inlined for the single read above
+        ["data:image/jpeg;base64," + base64.b64encode(data).decode("ascii")],
+    )
+
+
+def parse_page(reply: dict, categories, aliases, task: str = PAGE_TASK) -> tuple[list, str | None]:
+    """One reply → its positions, or (—, reason). A refusal is a REASON, never an empty answer.
+
+    `[]` and a refusal are different outcomes: an empty array is a page the model says has no dairy
+    on it, and a reason is a reply nobody could read. A caller that conflated them would report the
+    parse failures as pages with nothing tracked on them.
+    """
+    try:
+        found = positions.parse_positions(
+            reply.get("content") or "",
+            categories=categories,
+            carrier=CARRIER,
+            price_origin=positions.origin_of(CARRIER),
+            extraction_source=task,
+            aliases=aliases,
+            family=positions.DEFAULT_FAMILY,
+        )
+    except positions.SchemaError as err:
+        return [], err.reason
+    return found, None
+
+
+def queued_pages(pages: Iterable[dict], derived, handle: str, watermark: int | None) -> list[dict]:
+    """The pages this pass still owes an extraction for, oldest first.
+
+    Keyed on the PAGE record type, not the position one: a page whose reply was refused wrote a
+    `leaflet_page` row and no positions at all, and asking it again would buy the same refusal.
+    """
+    return above(pages, derived.index(PAGE_RECORD_TYPE, handle).ids, watermark)
+
+
+def page_rows(
+    page: dict,
+    rendering,
+    image_sha256: str,
+    reply,
+    found: list,
+    reason: str | None,
+    *,
+    model_revision,
+    served_by: str,
+    task: str,
+) -> list[dict]:
+    """One page's evidence: the page row, then one row per position in the parser's order.
+
+    Both kinds carry `image_path` and `image_sha256`, though only the page kind is required to:
+    SPEC 3.18 (6) shows the operator each position beside the picture it was read from, and a
+    position row that had to be joined back to its page through a second file is a join that can
+    be got wrong at the sitting.
+
+    ``warnings`` is index-aligned per position and lives in two places for two readers. On a
+    position row it is that position's own — `evidence.KIND_FIELDS` requires it. On the page row it
+    is the whole page's list of lists, ``None`` on a refusal, which is the shape SPEC 3.17 (13)(a)
+    is counted in and the shape `scripts/positions_gm4_skub.py` already writes (Dv232).
+    """
+    common = {
+        "channel": page["channel"],
+        "msg_id": page["msg_id"],
+        "parent_msg_id": page.get("parent_msg_id"),
+        "task": task,
+        "model_revision": model_revision,
+        "served_by": served_by,
+        "rendering": rendering,
+        "reply": reply,
+        "image_path": page["path"],
+        "image_sha256": image_sha256,
+    }
+    rows = [
+        evidence.record(
+            "leaflet_page",
+            **common,
+            record_type=PAGE_RECORD_TYPE,
+            n_positions=None if reason else len(found),
+            unreadable=reason,
+            warnings=None if reason else [list(position.warnings()) for position in found],
+        )
+    ]
+    rows += [
+        evidence.record(
+            "position_row",
+            **common,
+            record_type=POSITION_RECORD_TYPE,
+            # the store's finer key: N positions share the page's msg_id, and without this the
+            # second and every later one is dropped inside a single append (`raw_store.dedup_key`).
+            # Deterministic, so a re-run of the same page recognises its own rows.
+            row_id=f"{page['channel']}:{page['msg_id']}:{ordinal}",
+            ordinal=ordinal,
+            presence=evidence.presence(position),
+            tier=position.tier(),
+            warnings=list(position.warnings()),
+            # The VALUES beside the five booleans. `presence` says a size was named; 3.18 (6) asks
+            # the sitting to see «450 г». `depth` and `depth_disagrees_with_printed` are methods on
+            # a frozen dataclass and no reader of a JSON row can call them, so they are computed
+            # here or they are lost — which is exactly what results/predictions/LOST.md is.
+            position=asdict(position)
+            | {
+                "depth": position.depth(),
+                "depth_disagrees_with_printed": position.depth_disagrees_with_printed(),
+            },
+        )
+        for ordinal, position in enumerate(found)
+    ]
+    return rows
+
+
+def page_pass(
+    pages: list[dict],
+    *,
+    send,
+    derived,
+    state: dict,
+    categories,
+    aliases,
+    model_revision,
+    served_by: str,
+    task: str = PAGE_TASK,
+) -> dict:
+    """One channel's queued pages through the model. The record is durable BEFORE the watermark.
+
+    The ordering, the seam and the failure mode are :func:`inference_pass`', deliberately: append
+    the page's rows, let the write close, and only then move the watermark past that page. A
+    watermark that moved past a page whose rows are not on disk leaves a hole nothing downstream can
+    see, because the queue is *defined* as "above the watermark".
+
+    ``send`` takes ``(task, payload)`` exactly as the comment leg's does. The payload differs
+    because the instrument does: a comment's payload IS its rendering, while a page travels as the
+    one-image album `local_llm.PositionsClient.positions` takes and the rendering is built from the
+    registered prompt on the other side of the wire. That is the production pairing, not a
+    convenience — see :func:`render_page`.
+
+    A page whose reply cannot be parsed still writes its `leaflet_page` row, carrying the reason and
+    `warnings: None`. It is answered, and re-asking it would buy the same refusal.
+    """
+    written, positions_written, refused = [], 0, 0
+    for page in pages:
+        rendering, image_sha256, album = render_page(Path(page["path"]))
+        reply = send(task, album)
+        found, reason = parse_page(reply, categories, aliases, task)
+        rows = page_rows(
+            page,
+            rendering,
+            image_sha256,
+            reply,
+            found,
+            reason,
+            model_revision=model_revision,
+            served_by=served_by,
+            task=task,
+        )
+        derived.append(rows)
+        advance(state, LEAFLET, [page["msg_id"]])
+        written.append(page["msg_id"])
+        positions_written += len(rows) - 1
+        refused += 1 if reason else 0
+    return {
+        "asked": len(pages),
+        "pages_written": len(written),
+        "positions_written": positions_written,
+        # counted, never folded into "pages with no positions": a refusal is excluded from a
+        # denominator and an empty page belongs in it
+        "unreadable": refused,
+        "watermark": state.get(LEAFLET),
+    }

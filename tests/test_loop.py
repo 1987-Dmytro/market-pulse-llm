@@ -1,5 +1,6 @@
 """Offline tests for the Phase-5a loop skeleton — no Telegram, no session, no writes."""
 
+import base64
 import hashlib
 import json
 import sys
@@ -12,11 +13,12 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 import run_loop as runner  # noqa: E402
 
-from market_pulse import evidence, loop, parents, prompts  # noqa: E402
+from market_pulse import evidence, loop, parents, positions, prompts  # noqa: E402
 from market_pulse.raw_store import RawStore, comment_record, post_record  # noqa: E402
-from market_pulse.registry import Source  # noqa: E402
+from market_pulse.registry import Source, load_registry  # noqa: E402
 from test_raw_store import SALT, SOURCE, FakeMessage, provenance  # noqa: E402
 
+ATB = Source("atb", "АТБ", "official_retail", ("@atb_market_official",), True, False)
 NO_COMMENTS = Source("silpo", "Сільпо", "official_retail", ("@silposilpo",), True, False)
 
 
@@ -558,3 +560,424 @@ def test_a_plan_only_smoke_carries_no_inference_block(monkeypatch, tmp_path):
         -1
     ]
     assert "smoke_inference" not in record
+
+
+# --- the leaflet leg: one page in, one page row and one row per position out ----------------
+
+PAGE_TASK = loop.PAGE_TASK
+CATEGORIES = frozenset({"ice-cream"})
+ALIASES = {"рудь": "rud"}
+
+TRIPLE = (
+    '[{"brand": "Рудь", "category": "ice-cream", "size": "6х100 г", "fat": "12%",'
+    ' "price_promo": "від 89,90 грн", "discount_pct_printed": "-31%*"}]'
+)
+"""All three SPEC 3.17 (13)(a) warnings on one position — the multipack, the «від» price and the
+footnote asterisk. `scripts/positions_gm4_skub.py::FakeEndpoint` is the precedent: a warning field
+proven only where it is empty is a field nobody has seen work."""
+
+PAIR = (
+    '[{"brand": "Рудь", "category": "ice-cream", "size": "450 г", "fat": "12%",'
+    ' "price_promo": "89,90 грн", "price_old": "129,90 грн"},'
+    ' {"brand": "Яготинське", "category": "ice-cream"}]'
+)
+
+
+def jpeg(path: Path, colour=(10, 20, 30)) -> Path:
+    """A real two-pixel JPEG on disk — `tests/test_positions_serving.py::one_pixel_url`'s pattern.
+
+    A real file rather than arbitrary bytes because `render_page` reads and hashes it, and the
+    fixture should be the kind of thing the leg is pointed at.
+    """
+    from PIL import Image
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    Image.new("RGB", (2, 2), colour).save(path, format="JPEG")
+    return path
+
+
+def paged(tmp_path, *, ids=(4340, 4341, 4342)):
+    """(pages, derived, state) for one channel — everything the page pass takes."""
+    pages = [
+        {
+            "channel": "@atb_market_official",
+            "msg_id": msg_id,
+            "parent_msg_id": 4340,
+            "path": str(jpeg(tmp_path / "media" / f"atb_{msg_id}.jpg", (msg_id % 200, 20, 30))),
+        }
+        for msg_id in ids
+    ]
+    return pages, RawStore(tmp_path / "derived"), {}
+
+
+def replies(*contents):
+    """A `send` answering the given contents in order, then repeating the last one."""
+    answers = list(contents)
+
+    def send(task, payload):
+        assert task == PAGE_TASK
+        assert len(payload) == 1 and payload[0].startswith("data:image/jpeg;base64,")
+        return {
+            "content": answers.pop(0) if len(answers) > 1 else answers[0],
+            "finish_reason": "stop",
+        }
+
+    return send
+
+
+def run_pages(pages, derived, state, send, task=PAGE_TASK):
+    return loop.page_pass(
+        pages,
+        send=send,
+        derived=derived,
+        state=state,
+        categories=CATEGORIES,
+        aliases=ALIASES,
+        model_revision=None,
+        served_by="<test>",
+        task=task,
+    )
+
+
+def stored(tmp_path, record_type, channel="@atb_market_official"):
+    return RawStore(tmp_path / "derived").rows(record_type, channel)
+
+
+def test_a_page_pass_writes_one_page_row_and_one_row_per_position(tmp_path):
+    pages, derived, state = paged(tmp_path, ids=(4340,))
+
+    summary = run_pages(pages, derived, state, replies(PAIR))
+
+    assert summary == {
+        "asked": 1,
+        "pages_written": 1,
+        "positions_written": 2,
+        "unreadable": 0,
+        "watermark": 4340,
+    }
+    assert len(stored(tmp_path, loop.PAGE_RECORD_TYPE)) == 1
+    assert len(stored(tmp_path, loop.POSITION_RECORD_TYPE)) == 2
+
+
+def test_every_leaflet_row_the_pass_writes_satisfies_the_evidence_table(tmp_path):
+    """Driven through the PASS, not through `evidence.record`: what has to hold is that the
+    production path produces rows the 3.18 (6) sitting could be built from."""
+    pages, derived, state = paged(tmp_path, ids=(4340,))
+    run_pages(pages, derived, state, replies(TRIPLE))
+
+    rows = stored(tmp_path, loop.PAGE_RECORD_TYPE) + stored(tmp_path, loop.POSITION_RECORD_TYPE)
+    assert len(rows) == 2
+    for row in rows:
+        assert evidence.assert_complete(row) is row
+        assert row["prompt_sha256"] == prompts.prompt_sha256(PAGE_TASK)
+        # the EXACT rendering: the registered page prompt and one image slot, per SPEC 3.17 (4)
+        assert row["rendering"] == prompts.positions_messages_page_gm4(1)
+        assert row["image_path"].endswith("atb_4340.jpg")
+
+
+def test_the_image_sha_is_the_sha_of_the_bytes_that_were_sent(tmp_path):
+    """Not of a path re-read later. The record's sha and the payload come from one `read_bytes`."""
+    pages, derived, state = paged(tmp_path, ids=(4340,))
+    sent = {}
+
+    def send(task, payload):
+        sent["url"] = payload[0]
+        return {"content": "[]", "finish_reason": "stop"}
+
+    run_pages(pages, derived, state, send)
+
+    row = stored(tmp_path, loop.PAGE_RECORD_TYPE)[0]
+    on_disk = Path(row["image_path"]).read_bytes()
+    assert row["image_sha256"] == hashlib.sha256(on_disk).hexdigest()
+    assert sent["url"] == "data:image/jpeg;base64," + base64.b64encode(on_disk).decode("ascii")
+
+
+def test_each_position_row_re_derives_the_ladders_own_tier(tmp_path):
+    """The rung is RE-DERIVABLE at the sitting instead of trusted: the five booleans in the record
+    must produce the tier in the record, through `positions.tier_from_presence` itself."""
+    pages, derived, state = paged(tmp_path, ids=(4340,))
+    run_pages(pages, derived, state, replies(PAIR))
+
+    rows = stored(tmp_path, loop.POSITION_RECORD_TYPE)
+    assert [row["tier"] for row in rows] == ["position", "product_mention"]
+    for row in rows:
+        assert positions.tier_from_presence(**row["presence"]) == row["tier"]
+
+
+def test_the_warnings_are_index_aligned_per_position_and_on_the_page(tmp_path):
+    pages, derived, state = paged(tmp_path, ids=(4340,))
+    run_pages(pages, derived, state, replies(TRIPLE))
+
+    page = stored(tmp_path, loop.PAGE_RECORD_TYPE)[0]
+    rows = stored(tmp_path, loop.POSITION_RECORD_TYPE)
+    assert page["n_positions"] == len(rows) == 1
+    assert len(page["warnings"]) == page["n_positions"], "index-aligned on every answered page"
+    assert rows[0]["warnings"] == ["multipack", "discount_footnote", "price_from"]
+    assert page["warnings"] == [rows[0]["warnings"]]
+
+
+def test_a_refused_page_is_answered_with_a_reason_and_no_positions(tmp_path):
+    """A refusal is a REASON. The page row is still written — it is answered, and re-asking it
+    would buy the same refusal — and `warnings` is None rather than an empty list."""
+    pages, derived, state = paged(tmp_path, ids=(4340,))
+
+    summary = run_pages(pages, derived, state, replies('[{"brand": "Рудь", '))
+
+    assert summary["unreadable"] == 1 and summary["positions_written"] == 0
+    page = stored(tmp_path, loop.PAGE_RECORD_TYPE)[0]
+    assert page["unreadable"] and page["warnings"] is None and page["n_positions"] is None
+    assert stored(tmp_path, loop.POSITION_RECORD_TYPE) == []
+
+
+def test_an_empty_page_is_not_a_refusal(tmp_path):
+    """`[]` is a page the model says has no dairy on it, and it belongs in a denominator a refusal
+    is excluded from. The two must never be one counter."""
+    pages, derived, state = paged(tmp_path, ids=(4340,))
+
+    summary = run_pages(pages, derived, state, replies("[]"))
+
+    assert summary["unreadable"] == 0 and summary["positions_written"] == 0
+    page = stored(tmp_path, loop.PAGE_RECORD_TYPE)[0]
+    assert page["unreadable"] is None and page["warnings"] == [] and page["n_positions"] == 0
+
+
+def test_an_interrupted_page_pass_leaves_the_watermark_and_the_queue_where_they_were(tmp_path):
+    """The interruption is between «the model answered» and «the rows were written»."""
+    cursor_path = tmp_path / "loop_cursor.json"
+    loop.save_cursor(cursor_path, {"@atb_market_official": {loop.LEAFLET: 4340}})
+    pages, derived, _ = paged(tmp_path)
+    cursor = loop.load_cursor(cursor_path)
+    state = loop.channel_state(cursor, "@atb_market_official")
+    queued_before = loop.queued_pages(
+        pages, derived, "@atb_market_official", state.get(loop.LEAFLET)
+    )
+    assert [page["msg_id"] for page in queued_before] == [4341, 4342]
+
+    class RefusesToWrite(RawStore):
+        def append(self, records):
+            raise OSError("the disk went away between the answer and the write")
+
+    with pytest.raises(OSError, match="between the answer and the write"):
+        run_pages(queued_before, RefusesToWrite(tmp_path / "derived"), state, replies(PAIR))
+
+    on_disk = loop.load_cursor(cursor_path)["@atb_market_official"]
+    assert on_disk[loop.LEAFLET] == 4340, "the watermark on disk never moved"
+    assert [
+        page["msg_id"]
+        for page in loop.queued_pages(pages, derived, "@atb_market_official", on_disk[loop.LEAFLET])
+    ] == [4341, 4342], "both pages are still queued"
+
+
+def test_a_rerun_of_the_same_page_pass_writes_no_new_rows_and_leaves_the_watermark(tmp_path):
+    """Idempotence asserted on the ARTIFACT: both files byte for byte, and the watermark."""
+    pages, derived, state = paged(tmp_path)
+    run_pages(pages, derived, state, replies(TRIPLE, PAIR, "[]"))
+    files = {
+        kind: (tmp_path / "derived" / f"{kind}s" / "atb_market_official.jsonl").read_bytes()
+        for kind in (loop.PAGE_RECORD_TYPE, loop.POSITION_RECORD_TYPE)
+    }
+
+    fresh = RawStore(tmp_path / "derived")
+    again = run_pages(
+        loop.queued_pages(pages, fresh, "@atb_market_official", state.get(loop.LEAFLET)),
+        fresh,
+        state,
+        replies(TRIPLE),
+    )
+
+    assert again["asked"] == again["pages_written"] == 0
+    assert again["watermark"] == 4342
+    for kind, before in files.items():
+        assert (
+            tmp_path / "derived" / f"{kind}s" / "atb_market_official.jsonl"
+        ).read_bytes() == before
+
+
+def test_the_page_queue_subtracts_pages_a_killed_pass_already_answered(tmp_path):
+    """A pass that wrote two pages and died before its cursor was saved leaves durable rows and an
+    unmoved watermark. The watermark alone would re-buy both."""
+    pages, derived, _ = paged(tmp_path)
+    run_pages(pages[:2], derived, {}, replies(TRIPLE, PAIR))
+
+    fresh = RawStore(tmp_path / "derived")
+    left = loop.queued_pages(pages, fresh, "@atb_market_official", None)
+    assert [page["msg_id"] for page in left] == [4342]
+
+
+def test_the_positions_of_one_page_all_survive_the_write(tmp_path):
+    """The fan-out `raw_store.dedup_key` exists for: three positions share the page's msg_id, and a
+    msg_id-only key kept the first and dropped the other two inside one append."""
+    pages, derived, state = paged(tmp_path, ids=(4340,))
+    three = (
+        '[{"brand": "Рудь", "category": "ice-cream", "size": "450 г"},'
+        ' {"brand": "Яготинське", "category": "ice-cream", "size": "900 г"},'
+        ' {"brand": "Своя Лінія", "category": "ice-cream", "size": "1 кг"}]'
+    )
+
+    run_pages(pages, derived, state, replies(three))
+
+    rows = stored(tmp_path, loop.POSITION_RECORD_TYPE)
+    assert [row["ordinal"] for row in rows] == [0, 1, 2]
+    assert [row["position"]["brand_raw"] for row in rows] == ["Рудь", "Яготинське", "Своя Лінія"]
+    assert len({row["row_id"] for row in rows}) == 3
+    assert {row["msg_id"] for row in rows} == {4340}, "they are all read from the one page"
+
+
+def test_the_position_row_carries_the_values_the_sitting_reads_field_by_field(tmp_path):
+    """`presence` says a size was NAMED; SPEC 3.18 (6) asks the operator to see «450 г» and the
+    depth. Both are computed at write time or they are gone — `results/predictions/LOST.md`."""
+    pages, derived, state = paged(tmp_path, ids=(4340,))
+    run_pages(pages, derived, state, replies(PAIR))
+
+    row = stored(tmp_path, loop.POSITION_RECORD_TYPE)[0]
+    assert row["presence"] == {
+        "brand": True,
+        "line": False,
+        "category": True,
+        "size": True,
+        "attribute": True,  # «12%» — the dairy family reads the attribute off the `fat` wire key
+    }
+    assert row["position"]["size_value"] == 450 and row["position"]["size_unit"] == "г"
+    assert row["position"]["brand_id"] == "rud", "the alias table resolved it"
+    assert row["position"]["depth"] == pytest.approx((129.90 - 89.90) / 129.90)
+    assert row["position"]["carrier"] == "leaflet_page"
+    assert row["position"]["price_origin"] == "retail_leaflet", "SPEC 3.17 (4) fixes it"
+
+
+# --- the script's leaflet leg: stub-served, guard closed, sandbox intact --------------------
+
+
+def wire_pages(monkeypatch, tmp_path, *, ids=(4340, 4341, 4342, 4343, 4344)):
+    """The script's leaflet leg pointed at a throwaway manifest and throwaway pages.
+
+    `REPO_ROOT` is patched rather than a `root=` knob added to `pages_of`: the manifest names
+    repo-relative files, and a parameter that exists only so a test can pass something else is a
+    production seam nothing in production uses.
+
+    The registry shim carries the REAL taxonomy and watchlist. The stub answers with the category
+    `ice-cream` and the brand «Рудь», and if either were outside the registry every reply would be
+    refused — the smoke would then report a finding about the parser instead of a defect in its own
+    fixture (`positions_gm4_skub.FakeEndpoint`'s lesson, paid for once already).
+    """
+    real = load_registry(runner.REGISTRY)
+    manifest = {
+        "channel": "@atb_market_official",
+        "entries": {
+            f"@atb_market_official:{ids[0]}": {
+                "channel": "@atb_market_official",
+                "msg_id": ids[0],
+                "images": [{"msg_id": msg_id, "file": f"media/atb_{msg_id}.jpg"} for msg_id in ids],
+            }
+        },
+    }
+    for msg_id in ids:
+        jpeg(tmp_path / "media" / f"atb_{msg_id}.jpg", (msg_id % 200, 20, 30))
+    (tmp_path / "post_media.json").write_text(json.dumps(manifest), encoding="utf-8")
+    store_with(tmp_path / "raw", posts=(1,), comments=((1, 100),))
+    (tmp_path / "loop_cursor.json").write_text('{"@atb_market_official": {}}', encoding="utf-8")
+    wire(monkeypatch, tmp_path, [ATB])
+    monkeypatch.setattr(runner, "REPO_ROOT", tmp_path)
+    monkeypatch.setattr(runner, "POST_MEDIA", tmp_path / "post_media.json")
+    monkeypatch.setattr(
+        runner,
+        "load_registry",
+        lambda _: type(
+            "R", (), {"sources": [ATB], "taxonomy": real.taxonomy, "watchlist": real.watchlist}
+        )(),
+    )
+
+
+def test_a_page_pass_without_the_smoke_is_refused_by_the_guard(monkeypatch, tmp_path):
+    """The new leg gets the SAME guard, and the message is asserted, not just the exit.
+
+    `test_a_served_pass_without_the_smoke_is_refused_by_the_guard` is the comment leg's and is
+    untouched beside this one; `test_a_pass_with_no_mode_at_all_is_still_the_5a_live_refusal` is
+    the control that the older guard did not move.
+    """
+    wire_pages(monkeypatch, tmp_path)
+    with pytest.raises(SystemExit, match="3.11 \\(2\\)") as refused:
+        runner.main(["--once", "--pages", "--channel", "@atb_market_official"])
+    # its OWN queue depth: the comment queue here is 0, and a refusal naming that number would be
+    # true about something else. Five pages are waiting and the message says five.
+    assert str(refused.value).startswith("5 rows are queued")
+    assert not (tmp_path / "smoke").exists(), "a refused pass wrote nothing"
+    the_derived_root_is_untouched()
+
+
+def test_the_stub_served_page_smoke_writes_a_page_row_and_its_position_rows(monkeypatch, tmp_path):
+    wire_pages(monkeypatch, tmp_path)
+
+    assert runner.main(["--once", "--smoke", "--pages", "--channel", "@atb_market_official"]) == 0
+
+    record = json.loads((tmp_path / "smoke" / "loop_5a.json").read_text(encoding="utf-8"))["runs"][
+        -1
+    ]
+    served = record["smoke_pages"]
+    assert served["served_by"] == runner.STUB_PAGE_SERVED_BY
+    assert served["per_channel"] == [
+        {
+            "channel": "@atb_market_official",
+            "asked": 5,
+            "pages_written": 5,
+            "positions_written": 4,
+            "unreadable": 1,
+            "watermark": 4344,
+        }
+    ]
+    # the block beside `inference`, never inside it: that one still answers "is an endpoint
+    # registered", which is still no
+    assert record["inference"]["endpoint"] is None
+    assert "3.11 (2)" in record["inference"]["refusal"]
+
+    smoke_store = RawStore(tmp_path / "smoke" / "derived")
+    pages = smoke_store.rows(loop.PAGE_RECORD_TYPE, "@atb_market_official")
+    rows = smoke_store.rows(loop.POSITION_RECORD_TYPE, "@atb_market_official")
+    assert [page["msg_id"] for page in pages] == [4340, 4341, 4342, 4343, 4344]
+    assert [row["msg_id"] for row in rows] == [4340, 4341, 4341, 4344]
+    assert {row["served_by"] for row in pages + rows} == {runner.STUB_PAGE_SERVED_BY}
+    for row in pages + rows:
+        evidence.assert_complete(row)
+    # the triple-warning page and the refused one, both inside the default limit on purpose
+    assert rows[0]["warnings"] == ["multipack", "discount_footnote", "price_from"]
+    assert pages[2]["unreadable"] and pages[2]["warnings"] is None
+    assert pages[3]["n_positions"] == 0 and pages[3]["unreadable"] is None
+
+
+def test_a_page_smoke_leaves_the_real_cursor_and_the_derived_store_untouched(monkeypatch, tmp_path):
+    wire_pages(monkeypatch, tmp_path)
+    before = digests(tmp_path)
+
+    runner.main(["--once", "--smoke", "--pages", "--channel", "@atb_market_official"])
+
+    after = digests(tmp_path)
+    assert after["loop_cursor.json"] == before["loop_cursor.json"]
+    the_derived_root_is_untouched()
+    assert {path for path in after if not path.startswith("smoke/")} == set(before)
+
+
+def test_a_plan_only_smoke_carries_no_pages_block(monkeypatch, tmp_path):
+    """The negative control: without `--pages` nothing was extracted, so the record must not carry
+    a field a reader could take for extracted positions."""
+    wire_pages(monkeypatch, tmp_path)
+    runner.main(["--once", "--smoke", "--channel", "@atb_market_official"])
+    record = json.loads((tmp_path / "smoke" / "loop_5a.json").read_text(encoding="utf-8"))["runs"][
+        -1
+    ]
+    assert "smoke_pages" not in record
+
+
+def test_a_second_page_smoke_over_the_same_window_answers_nothing(monkeypatch, tmp_path):
+    """Idempotence through the SCRIPT: the smoke store already holds the pages, so the queue is
+    empty and the stub is never called a sixth time."""
+    wire_pages(monkeypatch, tmp_path)
+    runner.main(["--once", "--smoke", "--pages", "--channel", "@atb_market_official"])
+    written = digests(tmp_path / "smoke" / "derived")
+
+    runner.main(["--once", "--smoke", "--pages", "--channel", "@atb_market_official"])
+
+    record = json.loads((tmp_path / "smoke" / "loop_5a.json").read_text(encoding="utf-8"))["runs"][
+        -1
+    ]
+    assert record["smoke_pages"]["transport_calls"] == 0
+    assert record["smoke_pages"]["per_channel"][0]["asked"] == 0
+    assert digests(tmp_path / "smoke" / "derived") == written
