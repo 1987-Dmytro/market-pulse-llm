@@ -228,3 +228,51 @@ def test_the_raw_v1_stores_still_hash_to_their_baseline():
     for digest, path in baseline_lines():
         assert path.exists(), f"{path} is in the baseline and not on disk"
         assert hashlib.sha256(path.read_bytes()).hexdigest() == digest, f"{path} moved"
+
+
+def test_several_rows_from_one_message_all_survive_the_append(tmp_path):
+    """The fan-out case the (channel, msg_id) key cannot hold, and 5c2's positions leg is made of.
+
+    One leaflet page yields N positions, and every one of them is a row the 3.18 (6) sitting shows
+    field by field. They share the page's ``msg_id`` because that is the message they were read
+    from, so under a msg_id-only key the second and every later position is silently dropped —
+    inside a SINGLE :meth:`append` call, because `_by_file` marks each record seen as it iterates.
+
+    ``row_id`` is what a record carries when its identity is finer than its message. Absent — every
+    post and every comment ever stored — the key falls back to ``msg_id`` and nothing changes.
+    """
+    store = RawStore(tmp_path)
+    rows = [
+        {
+            "record_type": "position_row",
+            "channel": "@VARUS_channel",
+            "msg_id": 4340,
+            "row_id": f"@VARUS_channel:4340:{ordinal}",
+            "brand": name,
+        }
+        for ordinal, name in enumerate(("Рудь", "Яготинське", "Своя Лінія"))
+    ]
+
+    assert store.append(rows) == 3
+    assert len(RawStore(tmp_path).rows("position_row", "@VARUS_channel")) == 3
+    assert RawStore(tmp_path).index("position_row", "@VARUS_channel").ids == {4340}, (
+        "`ids` stays the MESSAGE id space: it is what a queue subtracts answered pages by"
+    )
+
+
+def test_a_rerun_of_a_fanned_out_page_writes_none_of_its_rows_twice(tmp_path):
+    """The other half: a finer key must not cost idempotence. Same rows, second call, zero written."""
+    store = RawStore(tmp_path)
+    rows = [
+        {
+            "record_type": "position_row",
+            "channel": "@VARUS_channel",
+            "msg_id": 4340,
+            "row_id": f"@VARUS_channel:4340:{ordinal}",
+        }
+        for ordinal in range(3)
+    ]
+    store.append(rows)
+
+    assert RawStore(tmp_path).append(rows) == 0
+    assert len(RawStore(tmp_path).rows("position_row", "@VARUS_channel")) == 3

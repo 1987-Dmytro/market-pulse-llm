@@ -10,6 +10,10 @@ linked discussion group, and the two id spaces are unrelated.
 Raw sender ids are never written. A comment carries `sender_anon_id`, the HMAC of
 the sender id under RAW_STORE_SALT, which is stable across runs and useless
 without the salt.
+
+Deduplication is on :func:`dedup_key` per (record_type, channel): the message id, unless the
+record carries a finer ``row_id`` of its own. Everything in `data/raw/` is keyed on the message
+id and stays keyed on it — the fallback IS the old behaviour.
 """
 
 import hashlib
@@ -120,11 +124,33 @@ def collapse_albums(records: list[dict]) -> list[dict]:
     return merged
 
 
+def dedup_key(record: dict):
+    """What makes this record one row. ``row_id`` when it has one, its ``msg_id`` otherwise.
+
+    A post and a comment ARE their message, so the message id is their identity and always was. A
+    row whose identity is FINER than its message is new in 5c2: one leaflet page yields N positions
+    and every one of them is a row the SPEC 3.18 (6) sitting reads field by field, so they all carry
+    the page's ``msg_id`` — and under a msg_id-only key the second and every later position was
+    dropped inside a single :meth:`RawStore.append`, silently, because :meth:`RawStore._by_file`
+    marks each record seen as it iterates.
+
+    The fallback is what keeps this free: no record ever written carries ``row_id``, so for every
+    post and every comment in `data/raw/` the key is the msg_id it always was.
+    """
+    return record.get("row_id", record["msg_id"])
+
+
 @dataclass
 class StoreIndex:
     """What is already stored for one (record_type, channel) file."""
 
     ids: set[int] = field(default_factory=set)
+    # `ids` is the MESSAGE id space and `keys` the ROW id space, and they are deliberately two
+    # fields rather than one widened set: a queue subtracts the messages it has answered
+    # (`loop.queued`), and answering a page with three positions on it means one message and three
+    # rows. Collapsed into one set, `ids` would hold strings for a fanned-out type and the queue
+    # would compare a msg_id against them forever without matching.
+    keys: set = field(default_factory=set)
     parents: set[int] = field(default_factory=set)  # comments: posts already fetched
     with_replies: set[int] = field(default_factory=set)  # posts: threads worth fetching
     first_date: str | None = None
@@ -155,6 +181,7 @@ class RawStore:
     @staticmethod
     def _absorb(index: StoreIndex, record: dict) -> None:
         index.ids.add(record["msg_id"])
+        index.keys.add(dedup_key(record))
         if record.get("parent_msg_id") is not None:
             index.parents.add(record["parent_msg_id"])
         if record.get("reply_count"):
@@ -221,7 +248,7 @@ class RawStore:
         batches: dict[Path, list[dict]] = {}
         for record in records:
             index = self.index(record["record_type"], record["channel"])
-            if record["msg_id"] in index.ids:
+            if dedup_key(record) in index.keys:
                 continue
             self._absorb(index, record)
             path = self.path(record["record_type"], record["channel"])
