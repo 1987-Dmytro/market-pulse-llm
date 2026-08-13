@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-13 13:23:21 (every SessionStart)
+**Auto-refreshed:** 2026-08-13 14:42:01 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-139dd34 chore(vault): the write-ordering fix and the final counts
-e5297dd docs(report): 5c2-prep-c1 -- the checkout table covers every commit, not the first six
-26d4176 docs(report): 5c2-prep-c1 -- the smoke counts come from one run, not a continuation
-79b60b9 fix(5c2-prep-c1): the page row is the answered-marker, so it is written LAST
-ed5ae85 docs(report): 5c2-prep-c1 -- name the commits the report cannot carry its own hash for
+ae88b44 docs(report): 5c2-prep-c2 -- the per-commit checkout table and the session's git log
+d469942 docs(report): 5c2-prep-c2 -- the census, the projection, and the STOP the numbers force
+333cf2c fix(5c2-prep-c2): the two records stop moving with the working tree, and the quote names the line it prices
+716bca5 data(5c2-prep-c2): the projection -- both legs priced from paid serverless sessions, and the window does not fit
+8d4bd0b data(5c2-prep-c2): the census of the window -- 66 channels, one anchor, CANNOT ANSWER where the store cannot answer
 ```
 
 ## 📋 Recent decisions
@@ -30,11 +30,36 @@ ed5ae85 docs(report): 5c2-prep-c1 -- name the commits the report cannot carry it
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-13 13:18 (чекпойнт `/save`) — **`5c2-prep-c1` ✅ СДАН, ждёт приёмки, $0**,
-коммиты `4cde4f4..139dd34` (одиннадцать), `make check` **2103 / 2 skipped**. **B1 закрыт в обе стороны**, у
-`leaflet_page` и `position_row` появился ПИСАТЕЛЬ. Отчёт `docs/reports/5c2-prep-c1.md`,
-отклонения **Dv259–268**. Phase 4: **$23.8310 из $30.00**, остаток $6.1690 — за день не
-потрачено НИЧЕГО. Раньше в тот же день принят `5c2-prep-b` (`9d558a7..51ed64a`, Dv249–258).
+**Last update:** 2026-08-13 15:20 — **`5c2-prep-c2` ✅ СДАН, ждёт приёмки, $0**, коммиты
+`86757dd..ae88b44` (восемь), `make check` **2137 / 2 skipped**, `ruff format --check` чист.
+Отчёт `docs/reports/5c2-prep-c2.md`, отклонения **Dv269–276**. Раньше в тот же день ПРИНЯТЫ
+`5c2-prep-a`, `-b` и `-c1`. Phase 4: **$23.8310 из $30.00**, остаток $6.1690 — за день не
+потрачено НИЧЕГО.
+
+**🛑 КОНТРАКТ ЗАКАНЧИВАЕТСЯ STOP-ом: окно ЦЕЛИКОМ НЕ ВЛЕЗАЕТ.** $7.6870 с дрейфом против
+$6.1690 остатка = 1.25× того, что у фазы осталось. Прережка НЕ НАПИСАНА — это prep-c3, после
+рулинга оператора. Что решает оператор: (1) якорь — 2026-08-09 выбран исполнителем, рядом
+посчитаны 2026-08-14 и 2026-07-28; (2) состав — `@matusi_ukr` + `@mandziak` = **73.8%** окна
+комментариев, и ни один из них не ритейлер; (3) кап из таблицы $0.25 / $2.00 / $6.00;
+(4) листовки шире АТБ — это задача СБОРА, не извлечения.
+
+**📊 Окно (якорь 2026-08-09, 2026-07-12…08-09), `results/census_5c2.json`:** 5 075 комментариев
+(все неотвеченные — вотермарк `inference` не выставлен ни у кого), 9 158 постов, 5 773 с медиа,
+**78 страниц листовок под 9 постами**. Покрытие листовок: 5 764 поста с медиа БЕЗ единой
+скачанной страницы, каналов со страницами — **один** (`@atb_market_official`), и даже внутри
+АТБ 9 из 13. Цены ног — `results/projection_5c2.json`, оба из ПЛАТНЫХ serverless-сессий
+(srv-2d $1.4281/1000 строк; skub2 4.2794 с/страница над 108 страницами).
+
+**🧭 Два правила артефактов, выученные тут.** (1) Ценз и проекция НЕ несут `git`-блок:
+`git_state` кладёт внутрь `git status --porcelain`, и байты записи двигаются от чужого коммита —
+измерено (`ec35644b` → `cbc05c84` при том же якоре). Провенанс = `producer.sha256`, хэш самого
+скрипта. (2) Цитата из отчёта берётся по УНИКАЛЬНОМУ якорю: игла `page leg` поймала строку
+упаковки вместо строки маргинала — истинная цитата рядом с числом, к которому не относится.
+`quote_line` теперь отказывает на любом количестве совпадений кроме одного.
+
+**📄 Не мой файл в дереве:** `docs/reviews/2026-08-13-process-audit-and-self-improvement.md`
+(untracked, появился в 14:00) — операторский документ внешнего аудита о процессе team-lead ↔
+исполнитель. Не трогал, не коммитил, назван в отчёте.
 
 **🔧 Хранилище получило более тонкий ключ — знать до следующего писателя.** `RawStore`
 дедуплицировал по `(channel, msg_id)`, а N позиций одной страницы несут msg_id ЭТОЙ страницы:
