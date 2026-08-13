@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-13 14:42:01 (every SessionStart)
+**Auto-refreshed:** 2026-08-13 14:57:54 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+b39954b docs(report): 5c2-prep-c2 -- the checkout table covers the three commits added after it was written
+daaa355 fix(5c2-prep-c2): the post row type is in scope, bounded and out of the two-leg total
+22ac2a6 chore(vault): the 5c2-prep-c2 session tail -- the STOP, and the two records that stopped moving
 ae88b44 docs(report): 5c2-prep-c2 -- the per-commit checkout table and the session's git log
 d469942 docs(report): 5c2-prep-c2 -- the census, the projection, and the STOP the numbers force
-333cf2c fix(5c2-prep-c2): the two records stop moving with the working tree, and the quote names the line it prices
-716bca5 data(5c2-prep-c2): the projection -- both legs priced from paid serverless sessions, and the window does not fit
-8d4bd0b data(5c2-prep-c2): the census of the window -- 66 channels, one anchor, CANNOT ANSWER where the store cannot answer
 ```
 
 ## 📋 Recent decisions
@@ -30,14 +30,18 @@ d469942 docs(report): 5c2-prep-c2 -- the census, the projection, and the STOP th
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-13 15:20 — **`5c2-prep-c2` ✅ СДАН, ждёт приёмки, $0**, коммиты
-`86757dd..ae88b44` (восемь), `make check` **2137 / 2 skipped**, `ruff format --check` чист.
-Отчёт `docs/reports/5c2-prep-c2.md`, отклонения **Dv269–276**. Раньше в тот же день ПРИНЯТЫ
+**Last update:** 2026-08-13 16:05 — **`5c2-prep-c2` ✅ СДАН, ждёт приёмки, $0**, коммиты
+`86757dd..b39954b` (одиннадцать), `make check` **2140 / 2 skipped**, `ruff format --check` чист.
+Отчёт `docs/reports/5c2-prep-c2.md`, отклонения **Dv269–279**. Раньше в тот же день ПРИНЯТЫ
 `5c2-prep-a`, `-b` и `-c1`. Phase 4: **$23.8310 из $30.00**, остаток $6.1690 — за день не
 потрачено НИЧЕГО.
 
-**🛑 КОНТРАКТ ЗАКАНЧИВАЕТСЯ STOP-ом: окно ЦЕЛИКОМ НЕ ВЛЕЗАЕТ.** $7.6870 с дрейфом против
-$6.1690 остатка = 1.25× того, что у фазы осталось. Прережка НЕ НАПИСАНА — это prep-c3, после
+**🛑 КОНТРАКТ ЗАКАНЧИВАЕТСЯ STOP-ом: окно ЦЕЛИКОМ НЕ ВЛЕЗАЕТ.** Две оценённые ноги — $7.6870 с
+дрейфом против $6.1690 остатка = 1.25×. **А с третьим типом строк (посты) — ~$15.84, то есть 2.6×.**
+Посты в скоупе рулинга (4) и 3.18 (2) впускает TEXT TIER в петлю, но у них **нет писателя**:
+в `market_pulse.loop` есть `inference_pass` и `page_pass` и НИ ОДНОГО прохода по тексту поста —
+нога непостроима в 5c2-run без нового кода, это вопрос к тимлиду. Оценка ноги постов = ограничение
+сверху ($8.1573, 9 158 постов × 2.8132 с — платный текстовый маргинал skub2), в кап не входит. Прережка НЕ НАПИСАНА — это prep-c3, после
 рулинга оператора. Что решает оператор: (1) якорь — 2026-08-09 выбран исполнителем, рядом
 посчитаны 2026-08-14 и 2026-07-28; (2) состав — `@matusi_ukr` + `@mandziak` = **73.8%** окна
 комментариев, и ни один из них не ритейлер; (3) кап из таблицы $0.25 / $2.00 / $6.00;
