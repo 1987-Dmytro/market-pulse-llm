@@ -92,12 +92,14 @@ def test_every_number_is_read_from_the_step_ledger_and_none_is_typed(ledger):
 
 
 def test_the_history_is_scored_under_the_cap_that_was_in_force_not_todays(ledger):
-    """SPEC 3.18 (3) raised the cap to $30.00 on 2026-08-13, after all three of these sessions. A
-    repaired entry scored against $30.00 would report room those runs never had — so the constant
-    is this module's own literal and is asserted to be DIFFERENT from the one the guard enforces.
+    """SPEC 3.18 (3) raised the cap to $30.00 on 2026-08-13, after all three of these sessions, and
+    (7)(b) raised it to $33.00 the same day. A repaired entry scored against either would report
+    room those runs never had — so the constant is this module's own literal and is asserted to be
+    DIFFERENT from the one the guard enforces. The gap has now widened twice without this test
+    changing its shape, which is what the pattern is for.
     """
     assert repair.CAP_IN_FORCE_USD == 25.00
-    assert guard.PHASE_CAP_USD == 30.00
+    assert guard.PHASE_CAP_USD == 33.00
     assert repair.CAP_IN_FORCE_USD != guard.PHASE_CAP_USD
 
     assert repair.main(["--ledger", str(ledger)]) == 0

@@ -39,15 +39,20 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 LEDGER = REPO_ROOT / "results" / "spend_phase4.json"
 
-PHASE_CAP_USD = 30.00
-"""SPEC amendment 3.4 (4), raised 25 → 30 by amendment 3.18 (3) (operator, 2026-08-13). Not a
-target — the line the run does not cross.
+PHASE_CAP_USD = 33.00
+"""SPEC amendment 3.4 (4), raised 25 → 30 by amendment 3.18 (3) and 30 → 33 by amendment 3.18 (7)(b)
+(operator, both 2026-08-13). Not a target — the line the run does not cross.
 
 This constant is what the guard ENFORCES: `read_ledger` returns the ledger untouched when the file
 exists, so `phase4_cap_usd` in `results/spend_phase4.json` is documentation and moves WITH this line
-or it is a lie waiting to be quoted. What 3.18 (3) does NOT move: the anchor (35.00 read
+or it is a lie waiting to be quoted. What neither raise moves: the anchor (35.00 read
 2026-08-01T08:34:09Z), `anchored_at`, and every session already logged. No money was added — the
-raise lifts an artificial line, and the refusal on a balance ABOVE the anchor stays in force."""
+raise lifts an artificial line, and the refusal on a balance ABOVE the anchor stays in force.
+
+Records WRITTEN under an earlier cap are not re-scored by it either (3.18 (7)(b)): the prep-c2
+projection's `fits: false` is a true sentence about $6.1690 remaining on 2026-08-13T07:59, and the
+tests that read it pin the cap that was IN FORCE at its write moment — `repair_phase4_ledger
+.CAP_IN_FORCE_USD` is the same pattern, one cap earlier."""
 
 
 def runpodctl(*args: str):

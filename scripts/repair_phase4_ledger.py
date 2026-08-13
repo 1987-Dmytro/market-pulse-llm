@@ -12,9 +12,11 @@ the phase anchor, in the guard's own shape and rounding. What is typed is the la
 nothing downstream reads it.
 
 **`remaining_usd` is scored against $25.00, the cap IN FORCE when that money was spent.** SPEC 3.18
-(3) raised the phase cap to $30.00 on 2026-08-13, after all three sessions. A repaired history that
-quietly re-scores itself under today's cap is a rewritten history — which is why the literal below
-is this module's own and must never become an import of `runpod_guard.PHASE_CAP_USD`.
+(3) raised the phase cap to $30.00 on 2026-08-13, after all three sessions, and (7)(b) raised it
+again to $33.00 the same day — today's cap is the second number and neither is these entries'. A
+repaired history that quietly re-scores itself under today's cap is a rewritten history — which is
+why the literal below is this module's own and must never become an import of
+`runpod_guard.PHASE_CAP_USD`.
 
 It REFUSES rather than guesses, and writes nothing when it refuses: a step ledger that is missing or
 carries no paid run, a timestamp that is not strictly after the last entry already in the phase
@@ -39,10 +41,11 @@ LEDGER = REPO_ROOT / "results" / "spend_phase4.json"
 CAP_IN_FORCE_USD = 25.00
 """The phase cap these three sessions were spent under, and this module's own literal on purpose.
 
-`runpod_guard.PHASE_CAP_USD` is 30.00 from 2026-08-13 (SPEC 3.18 (3)). Importing it here for the
-sake of one constant would silently re-score three historical entries under a cap that did not
-exist when they were billed, and the ledger would read as if the sessions had five dollars more
-room than they had."""
+`runpod_guard.PHASE_CAP_USD` is 33.00 from 2026-08-13 (SPEC 3.18 (3) raised it to 30.00 and (7)(b)
+to 33.00 the same day). Importing it here for the sake of one constant would silently re-score three
+historical entries under a cap that did not exist when they were billed, and the ledger would read
+as if the sessions had eight dollars more room than they had — and the gap grows with every raise,
+which is the point: this literal is fixed to a moment and that constant is not."""
 
 MISSING = (
     (

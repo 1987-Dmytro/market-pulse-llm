@@ -20,6 +20,17 @@ import runpod_guard as guard  # noqa: E402
 
 RECORD = json.loads(projection.RECORD.read_text(encoding="utf-8"))
 
+CAP_IN_FORCE_AT_WRITE_USD = 30.00
+"""The phase cap in force when this record was written (2026-08-13T07:59:22+00:00), and this file's
+own literal on purpose — `repair_phase4_ledger.CAP_IN_FORCE_USD`'s pattern, one cap later.
+
+SPEC 3.18 (7)(b) raised the cap 30 → 33 AFTER the record was written and rules in the same breath
+that records written under the 30 cap are NEVER regenerated to fit the new one. So the record's
+`phase_cap_usd` may not be compared to `guard.PHASE_CAP_USD` any more: the naive chain
+`record == guard == ledger` was a true reading of one moment when the three were one number, and
+under the raise it fails while nothing is wrong. What has to hold instead is that the record is a
+faithful reading of ITS moment, and that the moment is over — asserted below in both directions."""
+
 
 def dig(data, dotted: str):
     """A second implementation of `projection.dig`, on purpose: two readers, one source string."""
@@ -185,21 +196,27 @@ def test_every_cap_row_carries_seconds_and_a_job_count():
     assert RECORD["job_shape"]["workers_max"] == 1
 
 
-def test_the_budget_is_the_ledger_entry_it_names_and_the_guards_own_cap():
-    """Read, never restated: the cap comes from the line that ENFORCES it and the remainder from
-    the ledger entry the record names by timestamp.
+def test_the_budget_is_the_ledger_entry_it_names_and_the_cap_that_was_in_force():
+    """Read, never restated: the remainder comes from the ledger entry the record names by
+    timestamp, and the cap from the moment the record was written.
 
     Looked up BY `read_at` rather than taken as `sessions[-1]`. 5c2-run appends its own entry to
     that ledger, and a test pinned to the last row would go red on the operator's first paid session
     with nothing wrong — the record would still be a true reading of the entry it names. What has to
     hold is that the entry exists, exactly once, and that the record copies it faithfully.
+
+    The cap is the same problem one raise later (SPEC 3.18 (7)(b)): `phase_cap_usd` is pinned to
+    :data:`CAP_IN_FORCE_AT_WRITE_USD` and asserted DIFFERENT from what the guard enforces today. The
+    entry's own `remaining_usd` is left exactly as the ledger holds it — it is $6.1690 against the
+    30 cap, and the three dollars the raise added are not retroactively in that row.
     """
     ledger = json.loads((REPO_ROOT / "results" / "spend_phase4.json").read_text("utf-8"))
     budget = RECORD["budget"]
     named = [row for row in ledger["sessions"] if row["at"] == budget["read_at"]]
 
     assert len(named) == 1, f"{budget['read_at']} is not one entry of the ledger"
-    assert budget["phase_cap_usd"] == guard.PHASE_CAP_USD == ledger["phase4_cap_usd"]
+    assert budget["phase_cap_usd"] == CAP_IN_FORCE_AT_WRITE_USD
+    assert budget["phase_cap_usd"] != guard.PHASE_CAP_USD == ledger["phase4_cap_usd"] == 33.00
     assert (budget["spent_usd"], budget["remaining_usd"]) == (
         named[0]["spent_usd"],
         named[0]["remaining_usd"],
@@ -256,13 +273,28 @@ def test_both_legs_are_priced_on_their_unanswered_count():
     assert census["watermarks"]["inference_set_on"] == census["watermarks"]["leaflet_set_on"] == []
 
 
-def test_the_whole_window_does_not_fit_and_the_record_says_so():
-    """The finding this contract ends on, asserted rather than described: if a later re-run makes
-    it fit, this test is what makes somebody notice the STOP has changed shape."""
+def test_the_whole_window_did_not_fit_under_the_cap_in_force_and_fits_under_todays():
+    """The finding this contract ended on — and what the operator's ruling did to it.
+
+    `fits: false` is a statement about 2026-08-13T07:59: $7.6870 with drift against the $6.1690 that
+    remained under the $30.00 cap. SPEC 3.18 (7)(b) answered it by raising the cap to $33.00 and
+    ruling in (7)(c) that the session buys the WHOLE two-leg window — so the record is not
+    regenerated and its sentence stays true of its moment, while the LIVE reading is the opposite
+    one and is asserted here beside it. Both directions, in one test, because a green
+    `fits is False` with no live half is exactly what would let the STOP look unresolved forever.
+    """
     whole = RECORD["whole_window"]
 
     assert whole["usd_with_drift"] > whole["remaining_usd"]
     assert whole["fits"] is False
+    assert whole["remaining_usd"] == round(
+        CAP_IN_FORCE_AT_WRITE_USD - RECORD["budget"]["spent_usd"], 4
+    )
+
+    # the live half: the same two legs against the cap 3.18 (7)(b) put in force
+    remaining_today = round(guard.PHASE_CAP_USD - RECORD["budget"]["spent_usd"], 4)
+    assert remaining_today == 9.1690
+    assert whole["usd_with_drift"] < remaining_today
 
 
 def test_the_record_carries_no_git_state_and_names_its_producer():
