@@ -31,10 +31,17 @@ Two flags, the house meanings (`scripts/migrate_intents_v4.py`, `scripts/prechec
     same ordering, same guard: with `--smoke` the transport is :class:`StubPageTransport`, and
     without it the pass is refused for the same reason `--infer` is.
 
+``--posts``
+    5c2-prep-c3a's half: the posts a channel's own text gets read for, through the SAME instrument
+    the leaflet leg uses and the other of its two input shapes (a string, not an album). The queue
+    is the posts `positions.prefilter` passes — SPEC 3.18 (7)(e), "FILTERED, never raw" — and the
+    guard and the stub are the leaflet leg's, with this leg's own queue depth in the refusal.
+
     PYTHONPATH=src python3 scripts/run_loop.py --once --dry-run
     PYTHONPATH=src python3 scripts/run_loop.py --once --smoke --channel @VARUS_channel
     PYTHONPATH=src python3 scripts/run_loop.py --once --smoke --infer --channel @VARUS_channel
     PYTHONPATH=src python3 scripts/run_loop.py --once --smoke --pages --channel @atb_market_official
+    PYTHONPATH=src python3 scripts/run_loop.py --once --smoke --posts --channel @atb_market_official
 """
 
 import argparse
@@ -50,12 +57,14 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import relabel_intents as relabel  # noqa: E402
 from build_audit_pack import git_state  # noqa: E402
 
-from market_pulse import loop, parents, positions  # noqa: E402
+from market_pulse import loop, parents, positions, yield_screen  # noqa: E402
 from market_pulse.brands import watchlist_aliases  # noqa: E402
+from market_pulse.lexicon import load_lexicon  # noqa: E402
 from market_pulse.raw_store import RawStore  # noqa: E402
 from market_pulse.registry import load_registry  # noqa: E402
 
 REGISTRY = REPO_ROOT / "config" / "registry.yaml"
+LEXICON = REPO_ROOT / "config" / "lexicon.yaml"
 STORE_ROOT = REPO_ROOT / "data" / "raw"
 DERIVED_ROOT = REPO_ROOT / "data" / "derived"
 """Where a SERVED pass will write its evidence rows — **registered here, written by nothing yet.**
@@ -106,6 +115,7 @@ is the assertion that this line has not moved."""
 
 STUB_SERVED_BY = "<stub: scripts/run_loop.py::StubTransport>"
 STUB_PAGE_SERVED_BY = "<stub: scripts/run_loop.py::StubPageTransport>"
+STUB_POST_SERVED_BY = "<stub: scripts/run_loop.py::StubPostTransport>"
 """What a stub-served evidence row names as its transport.
 
 `market_pulse.evidence.REQUIRED` carries `served_by` for this one reason: a row answered by a fake
@@ -183,6 +193,33 @@ class StubPageTransport:
         if len(album) != 1:
             raise ValueError(
                 f"{len(album)} images: leaflet extraction is one PAGE per call (SPEC 3.17 (4))"
+            )
+        content = self.ANSWERS[self.calls % len(self.ANSWERS)]
+        self.calls += 1
+        return {
+            "content": content,
+            "finish_reason": "length" if content.endswith(", ") else "stop",
+            "cost": 0.0,
+            "usage": {"prompt_tokens": 0, "completion_tokens": 0},
+            "generation_id": None,
+        }
+
+
+class StubPostTransport(StubPageTransport):
+    """The post-text leg's stub — the same four outcomes, arriving as a STRING.
+
+    Subclassed rather than copied: the schedule is the sibling's for the sibling's reason (a
+    modulus plus a small `--limit` can deterministically produce zero of a class the gate names),
+    and what differs is exactly one thing — the payload shape, which is what this leg's `send`
+    contract is about. A stub that accepted either shape would agree with a pass that sent the
+    wrong one.
+    """
+
+    def __call__(self, task: str, payload) -> dict:
+        if not isinstance(payload, str):
+            raise ValueError(
+                f"{type(payload).__name__}: the text leg sends a row as a string —"
+                " `positions_gm4_skub.run_leg` packs an album only for a page"
             )
         content = self.ANSWERS[self.calls % len(self.ANSWERS)]
         self.calls += 1
@@ -368,8 +405,114 @@ def smoke_pages(channels, cursor, registry, limit: int) -> dict:
     }
 
 
+def prefilter_instruments(registry) -> tuple[dict, list]:
+    """The pre-filter's two compiled halves — the lexicon LAW and the watchlist aliases.
+
+    Compiled shapes, and they are NOT the ones `parse_positions` takes: the filter screens raw text
+    with `yield_screen`'s matchers, the parser resolves a brand name the model returned. Both are
+    built from the same registry and the same `config/lexicon.yaml` (SPEC 3.17 (8)), which is what
+    keeps the frame the census counts and the queue the pass answers the same population.
+    """
+    lexicon = load_lexicon(LEXICON, taxonomy=registry.taxonomy)
+    return (
+        yield_screen.compile_categories(lexicon),
+        yield_screen.compile_aliases(watchlist_aliases(registry.watchlist)),
+    )
+
+
+def posts_of(store, handle: str, compiled: dict, screen_aliases: list) -> list[dict]:
+    """One channel's posts that the relevance PRE-FILTER passes, oldest first.
+
+    SPEC 3.18 (7)(e): "the post leg enters 5c2-run FILTERED, never raw" — through
+    `positions.prefilter`, the lexicon-over-post-text instrument, and explicitly not the channel
+    entry gate of 3.12, which gates CHANNELS. The raw 9 158-post bound of the prep-c2 projection
+    "enters no cap and no session".
+
+    The WINDOW is not applied here and that is deliberate: 3.18 (4) pre-registers the window BY ROW
+    COUNT in a census, so the population is the pre-registration's to name and this function's job
+    is the filter. A smoke over the whole store is bounded by `--limit` instead.
+    """
+    return sorted(
+        (
+            {"channel": handle, "msg_id": row["msg_id"], "text": row["text"]}
+            for row in store.rows("post", handle)
+            if positions.prefilter(row, compiled, screen_aliases) is not None
+        ),
+        key=lambda post: post["msg_id"],
+    )
+
+
+def queued_posts_by_channel(channels, store, cursor, derived, registry) -> dict:
+    """``{handle: the posts that channel still owes an extraction for}`` — one answer, two callers.
+
+    `queued_pages_by_channel`'s shape and its reason: the guard COUNTS these and the smoke ANSWERS
+    them, and a second implementation would let the refusal report a queue the pass does not have.
+    """
+    compiled, screen_aliases = prefilter_instruments(registry)
+    return {
+        handle: loop.queued_posts(
+            posts_of(store, handle, compiled, screen_aliases),
+            derived,
+            handle,
+            loop.channel_state(cursor, handle).get(loop.POST_TEXT),
+        )
+        for _, handle in channels
+    }
+
+
+def smoke_posts(channels, store, cursor, registry, limit: int) -> dict:
+    """The post-text leg, stub-served, over at most ``limit`` queued posts per channel.
+
+    Everything except the transport is the production path — the pre-filter, the fenced rendering,
+    `positions.parse_positions`, the ladder and the rows-then-watermark ordering — and the evidence
+    lands in the same throwaway store under `results/smoke/` the other two legs use.
+    """
+    derived = RawStore(SMOKE_DERIVED)
+    queue = queued_posts_by_channel(channels, store, cursor, derived, registry)
+    transport = StubPostTransport()
+    categories = positions.category_keys(registry.taxonomy)
+    aliases = watchlist_aliases(registry.watchlist)
+    per_channel = []
+    for _, handle in channels:
+        state = loop.channel_state(cursor, handle)
+        summary = loop.post_pass(
+            queue[handle][:limit],
+            send=transport,
+            derived=derived,
+            state=state,
+            categories=categories,
+            aliases=aliases,
+            model_revision=None,
+            served_by=STUB_POST_SERVED_BY,
+        )
+        per_channel.append({"channel": handle} | summary)
+    return {
+        "served_by": STUB_POST_SERVED_BY,
+        "why": (
+            "the SEAM only. No endpoint is registered (`inference.refusal` above stands and this"
+            " contract may not open it), no client is built, no request leaves the machine and"
+            " nothing is billed. The pre-filter, the rendering, the parser, the ladder and the"
+            " rows-before-watermark ordering are the production path in both cases."
+            " NO NUMBER FROM THESE ROWS MAY REACH AN AGGREGATE."
+        ),
+        "prefilter": (
+            "positions.prefilter over config/lexicon.yaml and the watchlist — SPEC 3.18 (7)(e)."
+            " The window of 3.18 (4) is the pre-registration's to apply, not this pass's"
+        ),
+        "records": relabel.rel(SMOKE_DERIVED),
+        "transport_calls": transport.calls,
+        "limit_per_channel": limit,
+        "per_channel": per_channel,
+    }
+
+
 def smoke_record(
-    rows: list[dict], refusal: str | None, only: str | None, served=None, pages=None
+    rows: list[dict],
+    refusal: str | None,
+    only: str | None,
+    served=None,
+    pages=None,
+    posts=None,
 ) -> dict:
     return {
         "timestamp": datetime.now(UTC).isoformat(timespec="seconds"),
@@ -398,13 +541,17 @@ def smoke_record(
         # POSITIONS, which are not rows-to-inference, and a reader summing one column across both
         # blocks would be adding comments to SKUs.
         **({"smoke_pages": pages} if pages is not None else {}),
+        # and its own block for the third leg, same reason again: it counts POSTS and POSITIONS,
+        # and a post that yielded nothing leaves no row at all, so its `empty`/`unreadable` counters
+        # are the only record of it — summed into another block they would vanish.
+        **({"smoke_posts": posts} if posts is not None else {}),
         "wrote": (
             "nothing — a dry pass builds no client, fetches nothing and leaves the store and the"
             " cursor byte-identical (tests/test_loop.py::test_a_dry_pass_writes_nothing)"
-            if served is None and pages is None
+            if served is None and pages is None and posts is None
             else "the plan above, plus stub-served evidence rows under results/smoke/derived/ —"
-            " see the `smoke_inference` / `smoke_pages` blocks. The raw v1 stores and"
-            " data/derived/ are untouched"
+            " see the `smoke_inference` / `smoke_pages` / `smoke_posts` blocks. The raw v1 stores"
+            " and data/derived/ are untouched"
         ),
         "git": git_state(SMOKE),
     }
@@ -431,6 +578,11 @@ def main(argv: list[str] | None = None) -> int:
         help="run the leaflet leg (--smoke serves it from a stub; no endpoint exists)",
     )
     parser.add_argument(
+        "--posts",
+        action="store_true",
+        help="run the post-text leg over pre-filtered posts (--smoke serves it from a stub)",
+    )
+    parser.add_argument(
         "--limit",
         type=int,
         default=5,
@@ -445,7 +597,7 @@ def main(argv: list[str] | None = None) -> int:
     # true refusal with the wrong reason, since that one is about appending to the raw v1 stores and
     # neither leg does. Both are refused a few lines down by `inference_refusal`, which is the guard
     # that actually governs them (Dv249, and its repeat is what this line prevents).
-    if not (args.dry_run or args.smoke or args.infer or args.pages):
+    if not (args.dry_run or args.smoke or args.infer or args.pages or args.posts):
         raise SystemExit(LIVE_REFUSAL)
 
     registry = load_registry(REGISTRY)
@@ -503,9 +655,28 @@ def main(argv: list[str] | None = None) -> int:
                 f" watermark now {row['watermark']}"
             )
 
+    posts = None
+    if args.posts:
+        if not args.smoke:
+            # `RawStore(DERIVED_ROOT)` is READ and never written, exactly as the leaflet leg reads
+            # it: nothing has been extracted yet, and that is the true answer rather than a guess.
+            queue = queued_posts_by_channel(
+                channels, store, cursor, RawStore(DERIVED_ROOT), registry
+            )
+            refuse_a_served_pass(sum(len(found) for found in queue.values()))
+        posts = smoke_posts(channels, store, cursor, registry, args.limit)
+        for row in posts["per_channel"]:
+            print(
+                f"  stub-served {row['channel'][:23]:<24} {row['posts_read']:>4} posts,"
+                f" {row['positions_written']:>4} positions, {row['unreadable']} unreadable,"
+                f" {row['empty']} empty, watermark now {row['watermark']}"
+            )
+
     if args.smoke:
         SMOKE.parent.mkdir(parents=True, exist_ok=True)
-        relabel.append_record(SMOKE, smoke_record(rows, refusal, args.channel, served, pages))
+        relabel.append_record(
+            SMOKE, smoke_record(rows, refusal, args.channel, served, pages, posts)
+        )
         print(f"\nwrote {relabel.rel(SMOKE)} (gitignored — quote it, do not point at it)")
     else:
         print("\n--dry-run: nothing fetched, nothing written, no client built")

@@ -17,6 +17,12 @@ Three watermarks per channel, and they are different questions:
     the newest leaflet PAGE id that has been extracted. Its own key rather than a share of
     ``inference``: the two legs read different id spaces (a comment id from the discussion group,
     a page id from the channel's own album) and one is not ahead of the other.
+``post_text``
+    the newest POST id whose own text has been read by the position instrument (SPEC 3.18 (7)(e)).
+    Its own key though it shares an id space with ``posts``, and that is exactly why: ``posts``
+    answers "how far has collection walked" and this one answers "how far has extraction read".
+    Folded together, one completed extraction pass would tell the collector it had already fetched
+    everything up to that id, and the channel would stop collecting.
 
 The file is `data/backfill_cursor.json`'s pattern and `market_pulse.backfill`'s atomic writer:
 one file, one dict per channel, written whole after a flush. A kill mid-write must not lose
@@ -35,7 +41,8 @@ from market_pulse.backfill import load_cursor, save_cursor  # noqa: F401  (re-ex
 POSTS = "posts"
 INFERENCE = "inference"
 LEAFLET = "leaflet"
-"""The three watermark keys. Named rather than spelled out at each call site: a typo in a
+POST_TEXT = "post_text"
+"""The four watermark keys. Named rather than spelled out at each call site: a typo in a
 cursor key does not raise, it silently starts the channel over from nothing."""
 
 
@@ -509,4 +516,200 @@ def page_pass(
         # denominator and an empty page belongs in it
         "unreadable": refused,
         "watermark": state.get(LEAFLET),
+    }
+
+
+# --- the post-text leg: one post's own text in, one row per position out ------------------------
+
+POST_TASK = prompts.POSITIONS_TASK_TEXT
+"""The registered TEXT prompt — SPEC 3.18 (2)'s text tier, the leg that passed bar 3 at 0.8667.
+
+One instrument, two input shapes: `positions_gm4_skub.py` sends a page as a one-image album and a
+row as a string, through the same `parse` and the same ladder. This leg is the string shape, and
+:data:`PAGE_TASK` is the other one — the same reason both are read out of `prompts` rather than
+spelled out here."""
+
+POST_CARRIER = "post_text"
+POST_PRICE_ORIGIN = "retail_leaflet"
+"""SPEC 3.17 (4)'s third carrier, and the one origin SPEC deliberately does NOT fix for it:
+`positions.CARRIER_ORIGIN` has no `post_text` row, and `origin_of` raises rather than guess, because
+"a retail chain's post and an aggregator's repost are the retailer speaking, and a community
+channel's post about prices may not be".
+
+So the caller states it, and this caller INHERITS rather than decides: the paid skub2 session's text
+leg already answered `retail_leaflet` for exactly this carrier (`positions_gm4_skub.parse`, the
+`else` of its `carrier in CARRIER_ORIGIN` test), and its bar-3 measurement is the number 3.18 (2)
+admitted this leg on. A second answer here would mean the rows the pilot scored and the rows the
+loop writes are not the same observation. It is named as a constant so the disagreement, if the
+operator ever rules one, is a one-line change with a test on it rather than a search."""
+
+POST_POSITION_RECORD_TYPE = "post_position_row"
+"""The derived store's file for this leg's positions — its OWN, not shared with the page leg's.
+
+`RawStore.index` keys on the record type, and :func:`above` subtracts the ids it finds there. Page
+ids and post ids are both channel message ids: one file would make each leg's queue subtract the
+other leg's answers, and the two would silently shrink each other. The `row_kind` on the rows is
+still `position_row` — the kind is what the 3.18 (6) sitting reads, the record type is where the
+row lives, and they answer different questions."""
+
+
+def render_post(post: dict) -> tuple[list[dict], str]:
+    """One post as (the rendering the model is given, the string the transport takes).
+
+    Both from ONE read of ``post["text"]``, for `render_page`'s reason one layer up: the rendering
+    that goes into the evidence row and the payload that goes on the wire must be the same text, or
+    the record names a request the model never saw.
+
+    The payload is a bare string and the page leg's is a one-image album — that asymmetry is the
+    instrument's, not this module's (`positions_gm4_skub.run_leg`: ``[item["url"]] if "url" in item
+    else item["text"]``), and it is why ``send`` takes ``(task, payload)`` and not a rendering.
+    """
+    return prompts.positions_messages_text_gm4(post["text"]), post["text"]
+
+
+def parse_post(reply: dict, categories, aliases, task: str = POST_TASK) -> tuple[list, str | None]:
+    """One reply → its positions, or (—, reason). :func:`parse_page`'s rule, on the text carrier."""
+    try:
+        found = positions.parse_positions(
+            reply.get("content") or "",
+            categories=categories,
+            carrier=POST_CARRIER,
+            price_origin=POST_PRICE_ORIGIN,
+            extraction_source=task,
+            aliases=aliases,
+            family=positions.DEFAULT_FAMILY,
+        )
+    except positions.SchemaError as err:
+        return [], err.reason
+    return found, None
+
+
+def queued_posts(posts: Iterable[dict], derived, handle: str, watermark: int | None) -> list[dict]:
+    """The posts this pass still owes an extraction for, oldest first — **and see the warning**.
+
+    Keyed on this leg's position rows, which is the best key that exists today and is NOT the key
+    the sibling legs get. A comment always writes its `comment` row and a page always writes its
+    `leaflet_page` row, so "answered" is exact on both. A post writes rows only when the model found
+    something: a post that came back `[]` — or whose reply could not be parsed — leaves nothing
+    behind, and this function cannot tell it from a post that was never asked.
+
+    The consequence is bounded and is a COST, never a hole: a COMPLETED pass is covered by the
+    watermark, so the idempotence smoke is exact. An INTERRUPTED pass whose cursor was never
+    persisted re-asks its empty posts, buying the same nothing a second time. That is precisely what
+    the `leaflet_page` marker exists to prevent on the sibling leg (:func:`page_rows`), and closing
+    it here needs a row kind that has no positions on it — a fourth member of `evidence.KINDS`,
+    which is the team lead's fork and not this contract's. Measured rather than argued:
+    `tests/test_loop.py::test_an_interrupted_post_pass_re_asks_the_posts_that_yielded_nothing`.
+    """
+    return above(posts, derived.index(POST_POSITION_RECORD_TYPE, handle).ids, watermark)
+
+
+def post_rows(
+    post: dict,
+    rendering,
+    reply,
+    found: list,
+    *,
+    model_revision,
+    served_by: str,
+    task: str,
+) -> list[dict]:
+    """One post's evidence: a `position_row` per position, in the parser's order.
+
+    No marker row and no `reason` parameter, for the same one reason: there is no kind for "a post
+    was read and yielded nothing". A refusal and an empty answer are still different outcomes — the
+    pass counts them apart in its summary — but neither reaches the disk, so neither can be read
+    back. See :func:`queued_posts`.
+
+    ``parent_msg_id`` is ``None`` and the key is present, which `evidence.REQUIRED` is explicit
+    about: a post has no parent, and an absent key and a key holding ``None`` are different states.
+    """
+    common = {
+        "channel": post["channel"],
+        "msg_id": post["msg_id"],
+        "parent_msg_id": None,
+        "task": task,
+        "model_revision": model_revision,
+        "served_by": served_by,
+        "rendering": rendering,
+        "reply": reply,
+    }
+    return [
+        evidence.record(
+            "position_row",
+            **common,
+            record_type=POST_POSITION_RECORD_TYPE,
+            # the store's finer key, `page_rows`' reason exactly: N positions share one msg_id and
+            # `raw_store.dedup_key` would drop all but the first inside a single append
+            row_id=f"{post['channel']}:{post['msg_id']}:{ordinal}",
+            ordinal=ordinal,
+            presence=evidence.presence(position),
+            tier=position.tier(),
+            warnings=list(position.warnings()),
+            position=asdict(position)
+            | {
+                "depth": position.depth(),
+                "depth_disagrees_with_printed": position.depth_disagrees_with_printed(),
+            },
+        )
+        for ordinal, position in enumerate(found)
+    ]
+
+
+def post_pass(
+    posts: list[dict],
+    *,
+    send,
+    derived,
+    state: dict,
+    categories,
+    aliases,
+    model_revision,
+    served_by: str,
+    task: str = POST_TASK,
+) -> dict:
+    """One channel's queued posts through the text instrument. Durable BEFORE the watermark.
+
+    The ordering, the seam and the failure mode are :func:`inference_pass`', deliberately — the same
+    sentence :func:`page_pass` carries, and the same code shape under it: write the rows, let the
+    write close, and only then move the watermark past that post. A watermark ahead of a row that
+    was never written leaves a hole nothing downstream can see.
+
+    ``send`` takes ``(task, payload)`` as both siblings do, and the payload is this instrument's
+    string (:func:`render_post`). It is the SEAM and the only thing a smoke replaces.
+
+    The one place this leg is NOT its siblings is what it writes for a post that yields nothing:
+    nothing. :func:`queued_posts` carries the consequence and the fork it belongs to.
+    """
+    written, positions_written, refused, empty = [], 0, 0, 0
+    for post in posts:
+        rendering, payload = render_post(post)
+        reply = send(task, payload)
+        found, reason = parse_post(reply, categories, aliases, task)
+        rows = post_rows(
+            post,
+            rendering,
+            reply,
+            found,
+            model_revision=model_revision,
+            served_by=served_by,
+            task=task,
+        )
+        if rows:
+            derived.append(rows)
+        advance(state, POST_TEXT, [post["msg_id"]])
+        written.append(post["msg_id"])
+        positions_written += len(rows)
+        refused += 1 if reason else 0
+        empty += 1 if not reason and not found else 0
+    return {
+        "asked": len(posts),
+        "posts_read": len(written),
+        "positions_written": positions_written,
+        # the two outcomes that write no row, counted apart in the summary because the disk cannot
+        # tell them apart afterwards: a refusal is excluded from a denominator, an empty answer is
+        # a post the model says has no tracked SKU on it and belongs in one
+        "unreadable": refused,
+        "empty": empty,
+        "watermark": state.get(POST_TEXT),
     }

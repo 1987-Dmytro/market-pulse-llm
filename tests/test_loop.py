@@ -1069,3 +1069,446 @@ def test_the_resumed_page_writes_only_what_the_kill_left_missing(tmp_path):
         tmp_path / "derived" / "position_rows" / "atb_market_official.jsonl"
     ).read_bytes() == survived
     assert len(stored(tmp_path, loop.PAGE_RECORD_TYPE)) == 1, "and the marker is written now"
+
+
+# --- the post-text leg: one post's own text in, one row per position out ---------------------
+
+POST_TASK = loop.POST_TASK
+
+POST_TEXT = "Морозиво Рудь пломбір 450 г — 89,90 грн замість 129,90 грн"
+"""One line carrying both halves of the pre-filter's conjunction — a watchlist brand and a
+size/price pattern — because that is what SPEC 3.18 (7)(e) sends this leg."""
+
+
+def posted(tmp_path, *, ids=(4340, 4341, 4342)):
+    """(posts, derived, state) for one channel — everything the post pass takes."""
+    posts = [
+        {"channel": "@atb_market_official", "msg_id": msg_id, "text": POST_TEXT} for msg_id in ids
+    ]
+    return posts, RawStore(tmp_path / "derived"), {}
+
+
+def text_replies(*contents):
+    """A `send` answering the given contents in order, then repeating the last one.
+
+    Asserts the payload shape as `replies` does for the page leg, and the assertion is the point:
+    the two legs are ONE instrument with two input shapes, so a post arriving as an album — or a
+    page as a string — is a defect this fixture has to be able to see.
+    """
+    answers = list(contents)
+
+    def send(task, payload):
+        assert task == POST_TASK
+        assert isinstance(payload, str) and payload == POST_TEXT
+        return {
+            "content": answers.pop(0) if len(answers) > 1 else answers[0],
+            "finish_reason": "stop",
+        }
+
+    return send
+
+
+def run_posts(posts, derived, state, send, task=POST_TASK):
+    return loop.post_pass(
+        posts,
+        send=send,
+        derived=derived,
+        state=state,
+        categories=CATEGORIES,
+        aliases=ALIASES,
+        model_revision=None,
+        served_by="<test>",
+        task=task,
+    )
+
+
+def test_a_post_pass_writes_one_row_per_position_and_advances_its_own_watermark(tmp_path):
+    posts, derived, state = posted(tmp_path, ids=(4340,))
+
+    summary = run_posts(posts, derived, state, text_replies(PAIR))
+
+    assert summary == {
+        "asked": 1,
+        "posts_read": 1,
+        "positions_written": 2,
+        "unreadable": 0,
+        "empty": 0,
+        "watermark": 4340,
+    }
+    assert len(stored(tmp_path, loop.POST_POSITION_RECORD_TYPE)) == 2
+    assert state == {loop.POST_TEXT: 4340}, "the collection watermark is a different question"
+    assert loop.POSTS not in state
+
+
+def test_every_post_row_the_pass_writes_satisfies_the_evidence_table(tmp_path):
+    """Driven through the PASS: what has to hold is that the production path produces rows the
+    3.18 (6) sitting could be built from."""
+    posts, derived, state = posted(tmp_path, ids=(4340,))
+    run_posts(posts, derived, state, text_replies(TRIPLE))
+
+    rows = stored(tmp_path, loop.POST_POSITION_RECORD_TYPE)
+    assert len(rows) == 1
+    for row in rows:
+        assert evidence.assert_complete(row) is row
+        assert row["prompt_sha256"] == prompts.prompt_sha256(POST_TASK)
+        # the EXACT rendering, the text fenced in <row> — what the model was actually given
+        assert row["rendering"] == prompts.positions_messages_text_gm4(POST_TEXT)
+        assert row["parent_msg_id"] is None, "a post has no parent, and the key is still there"
+
+
+def test_the_post_row_carries_this_legs_carrier_and_the_origin_skub2_chose(tmp_path):
+    """`positions.origin_of("post_text")` REFUSES — SPEC fixes no origin for this carrier and the
+    caller states it. The caller inherits skub2's answer, and this is what holds it to that."""
+    posts, derived, state = posted(tmp_path, ids=(4340,))
+    run_posts(posts, derived, state, text_replies(PAIR))
+
+    row = stored(tmp_path, loop.POST_POSITION_RECORD_TYPE)[0]
+    assert row["position"]["carrier"] == loop.POST_CARRIER == "post_text"
+    assert row["position"]["price_origin"] == loop.POST_PRICE_ORIGIN == "retail_leaflet"
+    with pytest.raises(positions.SchemaError, match="does not fix a price_origin"):
+        positions.origin_of("post_text")
+
+
+def test_each_post_position_row_re_derives_the_ladders_own_tier(tmp_path):
+    posts, derived, state = posted(tmp_path, ids=(4340,))
+    run_posts(posts, derived, state, text_replies(PAIR))
+
+    rows = stored(tmp_path, loop.POST_POSITION_RECORD_TYPE)
+    assert [row["tier"] for row in rows] == ["position", "product_mention"]
+    for row in rows:
+        assert positions.tier_from_presence(**row["presence"]) == row["tier"]
+
+
+def test_the_positions_of_one_post_all_survive_the_write(tmp_path):
+    """`raw_store.dedup_key`'s fan-out, on this leg's own record type: three positions share the
+    post's msg_id and a msg_id-only key would keep the first inside one append."""
+    posts, derived, state = posted(tmp_path, ids=(4340,))
+    three = (
+        '[{"brand": "Рудь", "category": "ice-cream", "size": "450 г"},'
+        ' {"brand": "Яготинське", "category": "ice-cream", "size": "900 г"},'
+        ' {"brand": "Своя Лінія", "category": "ice-cream", "size": "1 кг"}]'
+    )
+
+    run_posts(posts, derived, state, text_replies(three))
+
+    rows = stored(tmp_path, loop.POST_POSITION_RECORD_TYPE)
+    assert [row["ordinal"] for row in rows] == [0, 1, 2]
+    assert len({row["row_id"] for row in rows}) == 3
+    assert {row["msg_id"] for row in rows} == {4340}
+
+
+def test_a_refused_post_and_an_empty_post_are_counted_apart(tmp_path):
+    """Neither writes a row — see `queued_posts` — so the summary is the only place the two can be
+    told apart, and folding them would report parse failures as posts with no SKU on them."""
+    posts, derived, state = posted(tmp_path)
+
+    summary = run_posts(posts, derived, state, text_replies('[{"brand": "Рудь", ', "[]", PAIR))
+
+    assert (summary["unreadable"], summary["empty"], summary["positions_written"]) == (1, 1, 2)
+    assert summary["posts_read"] == 3 and summary["watermark"] == 4342
+
+
+def test_the_post_leg_writes_into_its_own_file_and_not_the_page_legs(tmp_path):
+    """Two record types because `above` subtracts the ids it finds in ONE of them, and a page id
+    and a post id are both channel message ids: shared, each leg would subtract the other's."""
+    posts, derived, state = posted(tmp_path, ids=(4340,))
+    run_posts(posts, derived, state, text_replies(PAIR))
+
+    assert len(stored(tmp_path, loop.POST_POSITION_RECORD_TYPE)) == 2
+    assert stored(tmp_path, loop.POSITION_RECORD_TYPE) == []
+    assert stored(tmp_path, loop.PAGE_RECORD_TYPE) == []
+    assert loop.POST_POSITION_RECORD_TYPE != loop.POSITION_RECORD_TYPE
+
+
+def test_an_interrupted_post_pass_leaves_the_watermark_and_the_queue_where_they_were(tmp_path):
+    """The interruption is between «the model answered» and «the rows were written»."""
+    cursor_path = tmp_path / "loop_cursor.json"
+    loop.save_cursor(cursor_path, {"@atb_market_official": {loop.POST_TEXT: 4340}})
+    posts, derived, _ = posted(tmp_path)
+    cursor = loop.load_cursor(cursor_path)
+    state = loop.channel_state(cursor, "@atb_market_official")
+    queued_before = loop.queued_posts(
+        posts, derived, "@atb_market_official", state.get(loop.POST_TEXT)
+    )
+    assert [post["msg_id"] for post in queued_before] == [4341, 4342]
+
+    class RefusesToWrite(RawStore):
+        def append(self, records):
+            raise OSError("the disk went away between the answer and the write")
+
+    with pytest.raises(OSError, match="between the answer and the write"):
+        run_posts(queued_before, RefusesToWrite(tmp_path / "derived"), state, text_replies(PAIR))
+
+    on_disk = loop.load_cursor(cursor_path)["@atb_market_official"]
+    assert on_disk[loop.POST_TEXT] == 4340, "the watermark on disk never moved"
+    assert [
+        post["msg_id"]
+        for post in loop.queued_posts(
+            posts, derived, "@atb_market_official", on_disk[loop.POST_TEXT]
+        )
+    ] == [4341, 4342], "both posts are still queued"
+
+
+def test_a_rerun_of_the_same_post_pass_writes_no_new_rows_and_leaves_the_watermark(tmp_path):
+    """Idempotence asserted on the ARTIFACT: the file byte for byte, and the watermark."""
+    posts, derived, state = posted(tmp_path)
+    run_posts(posts, derived, state, text_replies(TRIPLE, PAIR, PAIR))
+    path = tmp_path / "derived" / f"{loop.POST_POSITION_RECORD_TYPE}s" / "atb_market_official.jsonl"
+    before = path.read_bytes()
+
+    fresh = RawStore(tmp_path / "derived")
+    again = run_posts(
+        loop.queued_posts(posts, fresh, "@atb_market_official", state.get(loop.POST_TEXT)),
+        fresh,
+        state,
+        text_replies(TRIPLE),
+    )
+
+    assert again["asked"] == again["posts_read"] == 0
+    assert again["watermark"] == 4342
+    assert path.read_bytes() == before
+
+
+def test_the_post_queue_subtracts_posts_a_killed_pass_already_answered(tmp_path):
+    """A pass that answered two posts and died before its cursor was saved leaves durable rows and
+    an unmoved watermark. The watermark alone would re-buy both."""
+    posts, derived, _ = posted(tmp_path)
+    run_posts(posts[:2], derived, {}, text_replies(TRIPLE, PAIR))
+
+    fresh = RawStore(tmp_path / "derived")
+    left = loop.queued_posts(posts, fresh, "@atb_market_official", None)
+    assert [post["msg_id"] for post in left] == [4342]
+
+
+def test_an_interrupted_post_pass_re_asks_the_posts_that_yielded_nothing(tmp_path):
+    """**The one property this leg does not carry, measured rather than described.**
+
+    The sibling legs always write a row per input — a `comment` row, or a `leaflet_page` row that
+    says `n_positions: 0` — so "already answered" is exact on both. A post that came back `[]` or
+    unparseable writes nothing, because there is no evidence kind for "a post was read and yielded
+    nothing", and `evidence.KINDS` is frozen at three by this contract's DO NOT.
+
+    So: a pass answers three posts, the middle two find nothing, and the cursor is never persisted.
+    The re-run re-asks exactly those two. It is a COST and not a hole — no row was lost and nothing
+    downstream is wrong — and the CONTROL below is the same kill on the leaflet leg with the same
+    three answers, where the marker row leaves nothing queued at all. That difference is the fourth
+    kind's absence, measured instead of argued.
+    """
+    answers = (PAIR, "[]", '[{"brand": "Рудь", ')
+    posts, derived, state = posted(tmp_path)
+
+    first = run_posts(posts, derived, state, text_replies(*answers))
+    assert (first["positions_written"], first["empty"], first["unreadable"]) == (2, 1, 1)
+
+    # the kill: the pass finished, the cursor was never saved, so the watermark is unset on disk
+    fresh = RawStore(tmp_path / "derived")
+    left = loop.queued_posts(posts, fresh, "@atb_market_official", None)
+
+    assert [post["msg_id"] for post in left] == [4341, 4342], "the two empty ones are re-asked"
+    assert loop.queued_posts(posts, fresh, "@atb_market_official", state[loop.POST_TEXT]) == [], (
+        "and a persisted cursor covers them, which is why a COMPLETED pass is still idempotent"
+    )
+
+    # the control: the SAME kill, the same three answers, on the leg that writes a marker row
+    pages, page_derived, page_state = paged(tmp_path / "control")
+    run_pages(pages, page_derived, page_state, replies(*answers))
+    page_left = loop.queued_pages(
+        pages, RawStore(tmp_path / "control" / "derived"), "@atb_market_official", None
+    )
+    assert page_left == [], "an empty page and a refused page both wrote their leaflet_page row"
+
+
+# --- the script's post-text leg: pre-filtered, stub-served, guard closed, sandbox intact ------
+
+PASSES_THE_PREFILTER = "Морозиво Рудь пломбір 450 г — 89,90 грн замість 129,90 грн"
+FAILS_THE_PREFILTER = "Графік роботи магазинів у святкові дні. Дякуємо, що ви з нами!"
+"""A post with no size/price pattern and no brand — the conjunction's negative control. Without it
+"the queue is six" and "the filter passes everything" look the same."""
+
+
+def wire_posts(monkeypatch, tmp_path, *, passing=6):
+    """The script's post-text leg pointed at a throwaway store, over the REAL lexicon.
+
+    `runner.LEXICON` is deliberately NOT patched: `config/lexicon.yaml` is the vocabulary LAW of
+    SPEC 3.17 (8) and the census that counts this leg's population reads the same file. A fixture
+    lexicon here would let the queue and the population be measured by two different instruments.
+    """
+    real = load_registry(runner.REGISTRY)
+    store = RawStore(tmp_path / "raw")
+    store.append(
+        [
+            post_record(
+                FakeMessage(4340 + i, text=PASSES_THE_PREFILTER),
+                SOURCE,
+                "@atb_market_official",
+                provenance(),
+            )
+            for i in range(passing)
+        ]
+        + [
+            post_record(
+                FakeMessage(4400, text=FAILS_THE_PREFILTER),
+                SOURCE,
+                "@atb_market_official",
+                provenance(),
+            )
+        ]
+    )
+    (tmp_path / "loop_cursor.json").write_text('{"@atb_market_official": {}}', encoding="utf-8")
+    wire(monkeypatch, tmp_path, [ATB])
+    monkeypatch.setattr(
+        runner,
+        "load_registry",
+        lambda _: type(
+            "R", (), {"sources": [ATB], "taxonomy": real.taxonomy, "watchlist": real.watchlist}
+        )(),
+    )
+    return store
+
+
+def test_posts_of_queues_only_what_the_prefilter_passes(monkeypatch, tmp_path):
+    """SPEC 3.18 (7)(e): FILTERED, never raw. Seven posts on disk, six in the queue."""
+    store = wire_posts(monkeypatch, tmp_path)
+    registry = runner.load_registry(runner.REGISTRY)
+    compiled, screen_aliases = runner.prefilter_instruments(registry)
+
+    found = runner.posts_of(store, "@atb_market_official", compiled, screen_aliases)
+
+    assert len(store.rows("post", "@atb_market_official")) == 7
+    assert [post["msg_id"] for post in found] == list(range(4340, 4346))
+    assert 4400 not in {post["msg_id"] for post in found}
+
+
+def test_a_post_pass_without_the_smoke_is_refused_with_this_legs_queue_depth(monkeypatch, tmp_path):
+    """The third leg gets the SAME guard, and the number in the message is its OWN (Dv265).
+
+    The comment queue here is 0 — no comment is stored — so a refusal built from the wrong leg's
+    depth would say «0 rows are queued» while six posts waited, which is a true refusal reporting a
+    number about something else.
+    """
+    wire_posts(monkeypatch, tmp_path)
+    with pytest.raises(SystemExit, match="3.11 \\(2\\)") as refused:
+        runner.main(["--once", "--posts", "--channel", "@atb_market_official"])
+
+    assert str(refused.value).startswith("6 rows are queued")
+    assert not (tmp_path / "smoke").exists(), "a refused pass wrote nothing"
+    the_derived_root_is_untouched()
+
+
+def test_5c2_prep_c3a_leaves_the_endpoint_constant_closed():
+    """The DO NOT, asserted: this contract builds the third leg and may not open the guard."""
+    assert runner.ENDPOINT is None
+
+
+def test_the_stub_served_post_smoke_writes_one_row_per_position(monkeypatch, tmp_path):
+    wire_posts(monkeypatch, tmp_path)
+
+    assert (
+        runner.main(
+            ["--once", "--smoke", "--posts", "--channel", "@atb_market_official", "--limit", "400"]
+        )
+        == 0
+    )
+
+    record = json.loads((tmp_path / "smoke" / "loop_5a.json").read_text(encoding="utf-8"))["runs"][
+        -1
+    ]
+    served = record["smoke_posts"]
+    assert served["served_by"] == runner.STUB_POST_SERVED_BY
+    assert served["per_channel"] == [
+        {
+            "channel": "@atb_market_official",
+            "asked": 6,
+            "posts_read": 6,
+            "positions_written": 6,
+            "unreadable": 1,
+            "empty": 1,
+            "watermark": 4345,
+        }
+    ]
+    assert record["inference"]["endpoint"] is None
+    assert "3.11 (2)" in record["inference"]["refusal"]
+
+    rows = RawStore(tmp_path / "smoke" / "derived").rows(
+        loop.POST_POSITION_RECORD_TYPE, "@atb_market_official"
+    )
+    assert [row["msg_id"] for row in rows] == [4340, 4341, 4341, 4344, 4345, 4345]
+    assert {row["served_by"] for row in rows} == {runner.STUB_POST_SERVED_BY}
+    for row in rows:
+        evidence.assert_complete(row)
+        assert row["position"]["carrier"] == "post_text"
+    assert rows[0]["warnings"] == ["multipack", "discount_footnote", "price_from"]
+    # the two posts that wrote nothing are 4342 (refused) and 4343 (`[]`) — they are in the
+    # summary's counters and nowhere on disk, which is the fourth-kind gap `queued_posts` names
+    assert {4342, 4343} & {row["msg_id"] for row in rows} == set()
+
+
+def test_a_post_smoke_leaves_the_real_cursor_and_the_derived_store_untouched(monkeypatch, tmp_path):
+    wire_posts(monkeypatch, tmp_path)
+    before = digests(tmp_path)
+
+    runner.main(["--once", "--smoke", "--posts", "--channel", "@atb_market_official"])
+
+    after = digests(tmp_path)
+    assert after["loop_cursor.json"] == before["loop_cursor.json"]
+    the_derived_root_is_untouched()
+    assert {path for path in after if not path.startswith("smoke/")} == set(before)
+
+
+def test_a_plan_only_smoke_carries_no_posts_block(monkeypatch, tmp_path):
+    """The negative control: without `--posts` nothing was extracted from post text."""
+    wire_posts(monkeypatch, tmp_path)
+    runner.main(["--once", "--smoke", "--channel", "@atb_market_official"])
+    record = json.loads((tmp_path / "smoke" / "loop_5a.json").read_text(encoding="utf-8"))["runs"][
+        -1
+    ]
+    assert "smoke_posts" not in record
+
+
+def test_a_second_post_smoke_over_an_exhausted_queue_re_asks_exactly_the_empty_posts(
+    monkeypatch, tmp_path
+):
+    """**The fourth-kind gap, through the SCRIPT — and this is where it actually bites.**
+
+    Dv266's lesson first: EXHAUST the queue (`--limit 400`, not the default 5) and re-run, because
+    a second smoke under a small limit correctly answers the NEXT five and proves nothing.
+
+    Then the finding. A smoke never saves the cursor, so the re-run's queue is "everything with no
+    row on disk" — and on this leg that is not empty. Six posts were answered; four wrote position
+    rows; the refused one and the `[]` one wrote nothing, and the second run buys both again. The
+    sibling test `test_a_second_page_smoke_over_the_same_window_answers_nothing` runs the SAME
+    stub schedule over five pages and asks zero, because every page wrote its `leaflet_page`
+    marker — including the refused one and the empty one. That is the whole difference, and it is
+    measured here rather than described: 2 calls against 0, on the same answers.
+    """
+    wire_posts(monkeypatch, tmp_path)
+    args = ["--once", "--smoke", "--posts", "--channel", "@atb_market_official", "--limit", "400"]
+    runner.main(args)
+    written = digests(tmp_path / "smoke" / "derived")
+
+    runner.main(args)
+
+    record = json.loads((tmp_path / "smoke" / "loop_5a.json").read_text(encoding="utf-8"))["runs"][
+        -1
+    ]
+    assert record["smoke_posts"]["transport_calls"] == 2
+    assert record["smoke_posts"]["per_channel"][0]["asked"] == 2
+    assert digests(tmp_path / "smoke" / "derived") != written
+
+    rows = RawStore(tmp_path / "smoke" / "derived").rows(
+        loop.POST_POSITION_RECORD_TYPE, "@atb_market_official"
+    )
+    # the two re-asked are exactly the two that had written nothing, and nothing else moved
+    assert sorted({row["msg_id"] for row in rows}) == [4340, 4341, 4342, 4343, 4344, 4345]
+    assert [row["msg_id"] for row in rows][:6] == [4340, 4341, 4341, 4344, 4345, 4345], (
+        "the rows the first run wrote are still there, in order, unduplicated"
+    )
+
+
+def test_the_post_stub_refuses_the_page_legs_payload_shape():
+    """One instrument, two input shapes — and a stub that took either would agree with a pass that
+    sent the wrong one, which is exactly the class `positions_gm4_skub.FakeEndpoint` was built to
+    stop being. The page stub's own assertion is the mirror of this one."""
+    with pytest.raises(ValueError, match="the text leg sends a row as a string"):
+        runner.StubPostTransport()(loop.POST_TASK, ["data:image/jpeg;base64,AAA"])
+    assert runner.StubPostTransport()(loop.POST_TASK, "текст")["content"]

@@ -250,12 +250,15 @@ def test_the_post_row_type_is_in_scope_bounded_and_kept_out_of_the_two_leg_total
         + RECORD["legs"]["leaflet_page"]["corners"]["marginal_plus_boot"]["usd_with_drift"],
         4,
     )
-    # and the claim that there is no writer, checked rather than asserted in prose
-    assert hasattr(loop, "inference_pass") and hasattr(loop, "page_pass")
-    assert [name for name in dir(loop) if name.endswith("_pass")] == [
-        "inference_pass",
-        "page_pass",
-    ]
+    # The record's own claim, which is the one that has to keep holding: the post leg is a BOUND
+    # and not a priced leg BECAUSE no writer existed when this was written. SPEC 3.18 (7)(e)
+    # ordered that writer and prep-c3a built it (`loop.post_pass`), so pinning `dir(loop)` to two
+    # passes — which is what this test did, and which documented the repo rather than the record —
+    # now goes red on the fix it asked for. What stays true forever is the record's sentence.
+    assert block["no_writer"].startswith(
+        "market_pulse.loop has inference_pass and page_pass and no post-text pass at all"
+    )
+    assert hasattr(loop, "post_pass"), "3.18 (7)(e)'s writer, which the bound above predates"
 
 
 def test_both_legs_are_priced_on_their_unanswered_count():
