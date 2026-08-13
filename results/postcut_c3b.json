@@ -1,0 +1,1009 @@
+{
+  "phase": "5c2-prep-c3b — the D cut of the post leg",
+  "contract": "docs/PROMPT-5c2-prep-c3b.md deliverable 1; docs/SPEC.md amendment 3.18 (7)(g)",
+  "asks": "which of the 349 passing posts the registered post leg buys, and what they cost",
+  "decides_nothing": "the ruling decided the rule; this file applies it. The pre-registration pins the count below BY VALUE. Nothing is fetched, nothing is spent, no row is asked of any model",
+  "rule": {
+    "verbatim": [
+      "leg's registered population is therefore the **D cut**: of the rows that pass",
+      "the prefilter, a row is kept iff its channel's carrier is `official_retail` or",
+      "`aggregator`, OR its matched evidence carries the `currency` pattern. The cut is"
+    ],
+    "verbatim_source": "docs/SPEC.md :: amendment 3.18 (7)(g)",
+    "keep_iff": "the channel's registry source_type is one of `carriers`, OR the row's `pattern_kinds` carries `currency`. A union, never a conjunction",
+    "carriers": [
+      "aggregator",
+      "official_retail"
+    ],
+    "pattern_kind": "currency",
+    "the_carrier_field": "config/registry.yaml :: sources[].source_type, carried into the census's channel rows. NOT the census row's own `carrier`, which reads `post_text` on all 349 — that field says where the text was read, and this rule asks who is speaking",
+    "two_readings": {
+      "asks": "3.18 (7)(g) says «its matched evidence carries the currency pattern» and the contract operationalises it as «currency ∈ pattern_kinds». The census field is the ANYWHERE reading — kinds found anywhere in the post's text — and the narrow one is the matched LINE alone. If they disagree, a reader coming from the SPEC's wording would re-derive a different cut and nothing would say so",
+      "carrying_currency_anywhere": 29,
+      "carrying_currency_on_the_matched_line": 29,
+      "cut_under_the_anywhere_reading": 44,
+      "cut_under_the_matched_line_reading": 44,
+      "agree": true,
+      "rows_only_one_reading_keeps": [],
+      "the_reading_used": "pattern_kinds, stated verbatim by the contract. It is also the field behind the 29 the ruling cites (results/census_c3a_posts.json :: totals.passed_carrying.currency), so it is the number the operator saw"
+    }
+  },
+  "input": {
+    "path": "results/census_c3a_posts.json",
+    "sha256": "4a7e755b73d6381153b422495b8cce16dc8e5a040de866539c58d46f7d87b569",
+    "anchor": "2026-08-09T00:00:00+00:00",
+    "passed": 349,
+    "frame_ids_sha256": "d996ab14d87eafb944da149c4a0831bc149f0ab7525e444d9c82b0cc3c6a7e2c",
+    "why": "the SHIPPED record, read and not rewritten: its byte-identity under its anchor is its own gate (3.18 (7)) and this cut is a new record beside it, never inside it"
+  },
+  "kept": {
+    "rows": 44,
+    "share_of_passed": 0.1261,
+    "channels": 10,
+    "ids_sha256": "c64bbd47b4e2544d31c209d78cd0d64670b5e2ade639611ac6d688662eac9ce3",
+    "ids_sha256_note": "sha256 of the kept ids, newline-joined in this record's order — the census's own convention, so the pre-registration pins the SELECTION and not only its size",
+    "by_reason": {
+      "carrier_only": 15,
+      "currency_only": 13,
+      "both": 16
+    },
+    "recipe_channels_kept": []
+  },
+  "rate": {
+    "value": 0.00030669,
+    "source": "results/srv2d_cost.json :: rate.usd_per_second",
+    "why": "the settled serverless rate — the same field results/census_c3a_posts.json priced the uncut leg with, so the cut and what it replaces are in one currency"
+  },
+  "priced": {
+    "rows": 44,
+    "seconds_per_row": 2.8132,
+    "derivation": {
+      "source": "results/sku_b_positions_skub2.json :: derived, no single field holds it",
+      "how": "write_sku_projection_b2.text_marginal, the house derivation reused rather than rewritten: (timing.worker_seconds - projection.opened_seconds - pages x page_marginal) / population.text_rows",
+      "why": "skub2's own text leg — 30 rows, on the serverless runtime, PAID"
+    },
+    "report_line": {
+      "quote": "text leg    84.398 s over  30 rows  = 2.8133 s/row    $0.0259",
+      "source": "docs/reports/skub2-run.md",
+      "why": "the same leg in that session's report. It reads 2.8133 against the 2.8132 derived here — a fourth-decimal rounding difference, not two measurements"
+    },
+    "billed_seconds": 183.8,
+    "hours": 0.05,
+    "usd": 0.0564,
+    "usd_with_drift": 0.0581,
+    "jobs_at_the_execution_timeout": 1,
+    "fixed_seconds": {
+      "idle_tail": 60.0,
+      "boot": "NOT added: 3.18 (7)(c) buys the two-leg window in ONE session, and this leg rides the endpoint the leaflet leg already booted. A boot here would be double-counted against results/projection_5c2.json, which already pays one"
+    }
+  },
+  "removed_recipes": {
+    "asks": "did the rule remove the population it was ruled to remove",
+    "cooking_recipes_channels_with_a_pass": [
+      "@recepti",
+      "@mameni_recepti",
+      "@korolevakuchni",
+      "@retsepty",
+      "@konservacia_kulinaria",
+      "@vylkachannel"
+    ],
+    "cooking_recipes_rows": 270,
+    "the_rulings_four": 250,
+    "the_rulings_four_are": [
+      "@recepti",
+      "@mameni_recepti",
+      "@korolevakuchni",
+      "@retsepty"
+    ],
+    "kept_from_them": 0,
+    "audiences_kept": [
+      "regional",
+      "retail_official",
+      "supermarket_deals"
+    ],
+    "why_the_two_numbers_differ": "«250 of 349 rows from four cooking channels» names the top four of the census's concentration table (85 + 72 + 52 + 41 = 250, cumulative share 0.7163). The audience has two more channels with a pass, 20 rows between them, so the population the cut removes is 270 — the ruling's premise understates it and is not contradicted by it"
+  },
+  "magnitude_check": {
+    "expected_rows": [
+      50,
+      55
+    ],
+    "measured_rows": 44,
+    "inside_the_expected_range": false,
+    "measured_usd_with_drift": 0.0581,
+    "cause": "the estimate is 31 + 29 minus a small overlap; the overlap is 16, not the ~5–10 it implies. Currency-bearing rows cluster in exactly the retail and aggregator carriers the first half already keeps — which is the coherence 3.18 (7)(g) rests on, so the miss is evidence FOR the ruling and not against it",
+    "why_it_does_not_stop_the_session": "the range protects the registered cap. 44 rows and 55 rows differ by 31 seconds at 2.8132 s/row — under two cents — and the cap is rounded UP to the next half dollar, so the three-leg projection names the same cap at either end of the range"
+  },
+  "alternatives_declined": {
+    "quote": "the alternatives (all 349 / carriers-only 31 / currency-only 29) were priced beside it and declined",
+    "source": "docs/SPEC.md :: amendment 3.18 (7)(g)",
+    "counts": {
+      "all_that_pass": 349,
+      "carriers_only": 31,
+      "currency_only": 29
+    },
+    "usd_with_drift": {
+      "all_that_pass": 0.3291,
+      "carriers_only": 0.0465,
+      "currency_only": 0.0447
+    },
+    "why": "each is RE-COUNTED here from the same rows rather than copied out of the clause, so the ruling's three numbers and this record's cut are one arithmetic. They are printed to show what the cut cost and what it saved — none of them is the registered population"
+  },
+  "channels": [
+    {
+      "handle": "@VARUS_channel",
+      "source_type": "official_retail",
+      "kept": 9,
+      "by": {
+        "carrier": 9,
+        "currency": 4
+      },
+      "passed": 9
+    },
+    {
+      "handle": "@telegraf_kremenchuk",
+      "source_type": "community",
+      "kept": 8,
+      "by": {
+        "currency": 8
+      },
+      "passed": 9
+    },
+    {
+      "handle": "@epicentrk_sale",
+      "source_type": "official_retail",
+      "kept": 6,
+      "by": {
+        "carrier": 6
+      },
+      "passed": 6
+    },
+    {
+      "handle": "@ekomarket_shop",
+      "source_type": "official_retail",
+      "kept": 5,
+      "by": {
+        "carrier": 5,
+        "currency": 5
+      },
+      "passed": 5
+    },
+    {
+      "handle": "@forainfo",
+      "source_type": "official_retail",
+      "kept": 4,
+      "by": {
+        "carrier": 4,
+        "currency": 4
+      },
+      "passed": 4
+    },
+    {
+      "handle": "@gorishnie_plavni1",
+      "source_type": "community",
+      "kept": 4,
+      "by": {
+        "currency": 4
+      },
+      "passed": 4
+    },
+    {
+      "handle": "@marketopt_promo",
+      "source_type": "official_retail",
+      "kept": 4,
+      "by": {
+        "carrier": 4
+      },
+      "passed": 4
+    },
+    {
+      "handle": "@silposilpo",
+      "source_type": "official_retail",
+      "kept": 2,
+      "by": {
+        "carrier": 2,
+        "currency": 2
+      },
+      "passed": 2
+    },
+    {
+      "handle": "@kremen_news",
+      "source_type": "community",
+      "kept": 1,
+      "by": {
+        "currency": 1
+      },
+      "passed": 1
+    },
+    {
+      "handle": "@msuaaaa",
+      "source_type": "aggregator",
+      "kept": 1,
+      "by": {
+        "carrier": 1,
+        "currency": 1
+      },
+      "passed": 1
+    }
+  ],
+  "rows": [
+    {
+      "id": "@VARUS_channel:10360",
+      "channel": "@VARUS_channel",
+      "source_type": "official_retail",
+      "date": "2026-07-14T07:32:54+00:00",
+      "line": "🔸Молоко Дитяче 3,2% ТМ Селянське",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "3,2%",
+      "pattern_kinds": [
+        "percent"
+      ],
+      "kept_by": [
+        "carrier"
+      ]
+    },
+    {
+      "id": "@VARUS_channel:10366",
+      "channel": "@VARUS_channel",
+      "source_type": "official_retail",
+      "date": "2026-07-14T14:56:20+00:00",
+      "line": "🔸 3 сертифікати VARUS по 1000 грн.",
+      "hit": "brand:varus-pl",
+      "matched": "varus",
+      "pattern": "1000 грн",
+      "pattern_kinds": [
+        "currency"
+      ],
+      "kept_by": [
+        "carrier",
+        "currency"
+      ]
+    },
+    {
+      "id": "@VARUS_channel:10367",
+      "channel": "@VARUS_channel",
+      "source_type": "official_retail",
+      "date": "2026-07-14T15:21:39+00:00",
+      "line": "🔸Сир Гауда 45% ТМ Hollander",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "45%",
+      "pattern_kinds": [
+        "percent"
+      ],
+      "kept_by": [
+        "carrier"
+      ]
+    },
+    {
+      "id": "@VARUS_channel:10456",
+      "channel": "@VARUS_channel",
+      "source_type": "official_retail",
+      "date": "2026-07-17T12:05:16+00:00",
+      "line": "🔸 Сметана 20% ТМ ПростоНаше",
+      "hit": "category:dairy:сметан",
+      "matched": "сметана",
+      "pattern": "20%",
+      "pattern_kinds": [
+        "percent"
+      ],
+      "kept_by": [
+        "carrier"
+      ]
+    },
+    {
+      "id": "@VARUS_channel:10466",
+      "channel": "@VARUS_channel",
+      "source_type": "official_retail",
+      "date": "2026-07-17T14:18:51+00:00",
+      "line": "Розігруємо 3 сертифікати VARUS по 1000 грн. З 17 до 21 липня виконуйте прості умови та отримайте шанс на виграш.",
+      "hit": "brand:varus-pl",
+      "matched": "varus",
+      "pattern": "1000 грн",
+      "pattern_kinds": [
+        "currency"
+      ],
+      "kept_by": [
+        "carrier",
+        "currency"
+      ]
+    },
+    {
+      "id": "@VARUS_channel:10528",
+      "channel": "@VARUS_channel",
+      "source_type": "official_retail",
+      "date": "2026-07-22T06:42:30+00:00",
+      "line": "СЕРТИФІКАТ на покупку у VARUS 1000 грн отримує:",
+      "hit": "brand:varus-pl",
+      "matched": "varus",
+      "pattern": "1000 грн",
+      "pattern_kinds": [
+        "currency"
+      ],
+      "kept_by": [
+        "carrier",
+        "currency"
+      ]
+    },
+    {
+      "id": "@VARUS_channel:10531",
+      "channel": "@VARUS_channel",
+      "source_type": "official_retail",
+      "date": "2026-07-22T15:00:22+00:00",
+      "line": "🔸Сметана 15% ТМ Фанні",
+      "hit": "category:dairy:сметан",
+      "matched": "сметана",
+      "pattern": "15%",
+      "pattern_kinds": [
+        "percent"
+      ],
+      "kept_by": [
+        "carrier"
+      ]
+    },
+    {
+      "id": "@VARUS_channel:10593",
+      "channel": "@VARUS_channel",
+      "source_type": "official_retail",
+      "date": "2026-07-23T09:05:43+00:00",
+      "line": "Лови знижку 25% на чеки від 1000 грн із промокодом MILKY25 на замовлення: рослинного молока, морозива, йогуртів і сирів.",
+      "hit": "category:dairy:йогурт",
+      "matched": "йогуртів",
+      "pattern": "25%",
+      "pattern_kinds": [
+        "currency",
+        "percent"
+      ],
+      "kept_by": [
+        "carrier",
+        "currency"
+      ]
+    },
+    {
+      "id": "@VARUS_channel:10628",
+      "channel": "@VARUS_channel",
+      "source_type": "official_retail",
+      "date": "2026-07-26T14:48:26+00:00",
+      "line": "🔸Сметана 15% ТМ Фанні",
+      "hit": "category:dairy:сметан",
+      "matched": "сметана",
+      "pattern": "15%",
+      "pattern_kinds": [
+        "percent"
+      ],
+      "kept_by": [
+        "carrier"
+      ]
+    },
+    {
+      "id": "@ekomarket_shop:1445",
+      "channel": "@ekomarket_shop",
+      "source_type": "official_retail",
+      "date": "2026-07-22T09:04:04+00:00",
+      "line": "🥓 -31% - Ковбаса варена \"Молочна\" ТМ \"Зоря Дніпра\", 400г - 103,9грн",
+      "hit": "category:dairy:молочн",
+      "matched": "молочна",
+      "pattern": "31%",
+      "pattern_kinds": [
+        "currency",
+        "percent",
+        "size"
+      ],
+      "kept_by": [
+        "carrier",
+        "currency"
+      ]
+    },
+    {
+      "id": "@ekomarket_shop:1448",
+      "channel": "@ekomarket_shop",
+      "source_type": "official_retail",
+      "date": "2026-07-23T06:31:40+00:00",
+      "line": "🥛 Молоко «Селянське» 2,5% 900 г — 38,99 грн (-40%)",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "2,5%",
+      "pattern_kinds": [
+        "currency",
+        "percent",
+        "size"
+      ],
+      "kept_by": [
+        "carrier",
+        "currency"
+      ]
+    },
+    {
+      "id": "@ekomarket_shop:1450",
+      "channel": "@ekomarket_shop",
+      "source_type": "official_retail",
+      "date": "2026-07-28T06:26:04+00:00",
+      "line": "🍦 Морозиво «Ескімос Панкейк» Rud, 60 г — 25,90 грн (-50%)",
+      "hit": "category:ice-cream:морозив",
+      "matched": "морозиво",
+      "pattern": "60 г",
+      "pattern_kinds": [
+        "currency",
+        "percent",
+        "size"
+      ],
+      "kept_by": [
+        "carrier",
+        "currency"
+      ]
+    },
+    {
+      "id": "@ekomarket_shop:1456",
+      "channel": "@ekomarket_shop",
+      "source_type": "official_retail",
+      "date": "2026-08-05T09:11:32+00:00",
+      "line": "🥟-21% - Пельмені \"Мініпельмені\" ТМ \"Рудь\", 800г - 109,9грн",
+      "hit": "brand:rud",
+      "matched": "рудь",
+      "pattern": "21%",
+      "pattern_kinds": [
+        "currency",
+        "percent",
+        "size"
+      ],
+      "kept_by": [
+        "carrier",
+        "currency"
+      ]
+    },
+    {
+      "id": "@ekomarket_shop:1458",
+      "channel": "@ekomarket_shop",
+      "source_type": "official_retail",
+      "date": "2026-08-07T07:18:50+00:00",
+      "line": "🧀-45% - Сир \"Тенеро Мілк\" ТМ \"Комо\", 150г - 66,5грн",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "45%",
+      "pattern_kinds": [
+        "currency",
+        "percent",
+        "size"
+      ],
+      "kept_by": [
+        "carrier",
+        "currency"
+      ]
+    },
+    {
+      "id": "@epicentrk_sale:6148",
+      "channel": "@epicentrk_sale",
+      "source_type": "official_retail",
+      "date": "2026-07-18T07:33:00+00:00",
+      "line": "🧈 Холодне вершкове масло — 100 г",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "kept_by": [
+        "carrier"
+      ]
+    },
+    {
+      "id": "@epicentrk_sale:6186",
+      "channel": "@epicentrk_sale",
+      "source_type": "official_retail",
+      "date": "2026-07-25T07:11:04+00:00",
+      "line": "🧈 Вершкове масло — 50 г",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "50 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "kept_by": [
+        "carrier"
+      ]
+    },
+    {
+      "id": "@epicentrk_sale:6200",
+      "channel": "@epicentrk_sale",
+      "source_type": "official_retail",
+      "date": "2026-07-28T07:58:37+00:00",
+      "line": "2️⃣ Суха молочна суміш Hipp Junior Combiotic 4 з 18 місяців, 500г",
+      "hit": "category:dairy:молочн",
+      "matched": "молочна",
+      "pattern": "500г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "kept_by": [
+        "carrier"
+      ]
+    },
+    {
+      "id": "@epicentrk_sale:6225",
+      "channel": "@epicentrk_sale",
+      "source_type": "official_retail",
+      "date": "2026-08-01T07:10:04+00:00",
+      "line": "🧈 Вершкове масло — 60 г",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "60 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "kept_by": [
+        "carrier"
+      ]
+    },
+    {
+      "id": "@epicentrk_sale:6230",
+      "channel": "@epicentrk_sale",
+      "source_type": "official_retail",
+      "date": "2026-08-02T09:12:00+00:00",
+      "line": "4️⃣ Бочка харчова широка горловина для молока та води 48 л Білий",
+      "hit": "category:dairy:молок",
+      "matched": "молока",
+      "pattern": "48 л",
+      "pattern_kinds": [
+        "size"
+      ],
+      "kept_by": [
+        "carrier"
+      ]
+    },
+    {
+      "id": "@epicentrk_sale:6257",
+      "channel": "@epicentrk_sale",
+      "source_type": "official_retail",
+      "date": "2026-08-07T07:35:29+00:00",
+      "line": "3️⃣ Крем-мило PROservice Молоко та мед 5000 мл",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "5000 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "kept_by": [
+        "carrier"
+      ]
+    },
+    {
+      "id": "@forainfo:6032",
+      "channel": "@forainfo",
+      "source_type": "official_retail",
+      "date": "2026-07-17T06:48:38+00:00",
+      "line": "🥔 Чипси ТМ «Lay’s» зі смаком краба або сметани і зелені за 59,90 грн/170 г зі знижкою -45%!",
+      "hit": "category:dairy:сметан",
+      "matched": "сметани",
+      "pattern": "59,90 грн",
+      "pattern_kinds": [
+        "currency",
+        "percent",
+        "size"
+      ],
+      "kept_by": [
+        "carrier",
+        "currency"
+      ]
+    },
+    {
+      "id": "@forainfo:6036",
+      "channel": "@forainfo",
+      "source_type": "official_retail",
+      "date": "2026-07-24T05:02:33+00:00",
+      "line": "🧀 Сир Premialle «Фелата» — 35,90 грн зі знижкою -50%",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "35,90 грн",
+      "pattern_kinds": [
+        "currency",
+        "percent"
+      ],
+      "kept_by": [
+        "carrier",
+        "currency"
+      ]
+    },
+    {
+      "id": "@forainfo:6041",
+      "channel": "@forainfo",
+      "source_type": "official_retail",
+      "date": "2026-07-31T09:35:28+00:00",
+      "line": "🍫 Драже ТМ «Pergale» Picks із сублімованою полуницею або вишнею в молочному шоколаді за 99,90 грн/90 г зі знижкою -33%!",
+      "hit": "category:dairy:молочн",
+      "matched": "молочному",
+      "pattern": "99,90 грн",
+      "pattern_kinds": [
+        "currency",
+        "percent",
+        "size"
+      ],
+      "kept_by": [
+        "carrier",
+        "currency"
+      ]
+    },
+    {
+      "id": "@forainfo:6045",
+      "channel": "@forainfo",
+      "source_type": "official_retail",
+      "date": "2026-08-07T11:01:37+00:00",
+      "line": "🧈 Масло ТМ «Біло» екстра 82% за 65,90 грн/180 г зі знижкою -44%!",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "82%",
+      "pattern_kinds": [
+        "currency",
+        "percent",
+        "size"
+      ],
+      "kept_by": [
+        "carrier",
+        "currency"
+      ]
+    },
+    {
+      "id": "@gorishnie_plavni1:30892",
+      "channel": "@gorishnie_plavni1",
+      "source_type": "community",
+      "date": "2026-07-16T16:23:01+00:00",
+      "line": "⏺молоко — +1,10 грн (0,9 л);",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "1,10 грн",
+      "pattern_kinds": [
+        "currency",
+        "percent",
+        "size"
+      ],
+      "kept_by": [
+        "currency"
+      ]
+    },
+    {
+      "id": "@gorishnie_plavni1:31088",
+      "channel": "@gorishnie_plavni1",
+      "source_type": "community",
+      "date": "2026-07-24T06:51:01+00:00",
+      "line": "⏺молоко — +1,10 грн (0,9 л);",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "1,10 грн",
+      "pattern_kinds": [
+        "currency",
+        "percent",
+        "size"
+      ],
+      "kept_by": [
+        "currency"
+      ]
+    },
+    {
+      "id": "@gorishnie_plavni1:31320",
+      "channel": "@gorishnie_plavni1",
+      "source_type": "community",
+      "date": "2026-07-30T16:32:01+00:00",
+      "line": "🥛 сметана 15% (400 г) — +3,25 грн;",
+      "hit": "category:dairy:сметан",
+      "matched": "сметана",
+      "pattern": "15%",
+      "pattern_kinds": [
+        "currency",
+        "percent",
+        "size"
+      ],
+      "kept_by": [
+        "currency"
+      ]
+    },
+    {
+      "id": "@gorishnie_plavni1:31488",
+      "channel": "@gorishnie_plavni1",
+      "source_type": "community",
+      "date": "2026-08-06T16:32:01+00:00",
+      "line": "🥛 молоко — −3,65 грн/0,9 л;",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "3,65 грн",
+      "pattern_kinds": [
+        "currency",
+        "size"
+      ],
+      "kept_by": [
+        "currency"
+      ]
+    },
+    {
+      "id": "@kremen_news:50043",
+      "channel": "@kremen_news",
+      "source_type": "community",
+      "date": "2026-07-20T10:20:20+00:00",
+      "line": "Станом на 16 липня найбільше подорожчала молода морква — до 37,87 грн/кг (+8 грн). Також зросли ціни на молоду капусту, гречку, сметану, соняшникову олію, молоко, буряк і бензин. В…",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "37,87 грн",
+      "pattern_kinds": [
+        "currency"
+      ],
+      "kept_by": [
+        "currency"
+      ]
+    },
+    {
+      "id": "@marketopt_promo:2871",
+      "channel": "@marketopt_promo",
+      "source_type": "official_retail",
+      "date": "2026-07-17T06:36:06+00:00",
+      "line": "1. Сметана 15% Простонаше 300г",
+      "hit": "category:dairy:сметан",
+      "matched": "сметана",
+      "pattern": "15%",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "kept_by": [
+        "carrier"
+      ]
+    },
+    {
+      "id": "@marketopt_promo:2884",
+      "channel": "@marketopt_promo",
+      "source_type": "official_retail",
+      "date": "2026-07-24T06:39:23+00:00",
+      "line": "1. Сир Кантрі Комо 150г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "150г",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "kept_by": [
+        "carrier"
+      ]
+    },
+    {
+      "id": "@marketopt_promo:2897",
+      "channel": "@marketopt_promo",
+      "source_type": "official_retail",
+      "date": "2026-07-31T06:53:58+00:00",
+      "line": "1. Вершки 10% Ферма 505г",
+      "hit": "brand:ferma",
+      "matched": "ферма",
+      "pattern": "10%",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "kept_by": [
+        "carrier"
+      ]
+    },
+    {
+      "id": "@marketopt_promo:2910",
+      "channel": "@marketopt_promo",
+      "source_type": "official_retail",
+      "date": "2026-08-07T05:29:36+00:00",
+      "line": "1. Крем-сир Ферма 170г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "170г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "kept_by": [
+        "carrier"
+      ]
+    },
+    {
+      "id": "@msuaaaa:10656",
+      "channel": "@msuaaaa",
+      "source_type": "aggregator",
+      "date": "2026-07-21T08:45:44+00:00",
+      "line": "🔣Масло Молокія лише 59 грн від 2 штук",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "59 грн",
+      "pattern_kinds": [
+        "currency"
+      ],
+      "kept_by": [
+        "carrier",
+        "currency"
+      ]
+    },
+    {
+      "id": "@silposilpo:3790",
+      "channel": "@silposilpo",
+      "source_type": "official_retail",
+      "date": "2026-07-14T07:06:34+00:00",
+      "line": "Сьогодні, 14.07, з 11:00 до 14:00 ловіть печінку тріски «Премія»® за 95,99 грн від 3-х шт.🐟",
+      "hit": "brand:premia",
+      "matched": "премія",
+      "pattern": "95,99 грн",
+      "pattern_kinds": [
+        "currency"
+      ],
+      "kept_by": [
+        "carrier",
+        "currency"
+      ]
+    },
+    {
+      "id": "@silposilpo:3805",
+      "channel": "@silposilpo",
+      "source_type": "official_retail",
+      "date": "2026-07-23T13:40:06+00:00",
+      "line": "🧈Масло солодковершкове «Ферма» «Екстра» 82%, 180 г зі знижкою 57% – 69,99 грн",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "82%",
+      "pattern_kinds": [
+        "currency",
+        "percent",
+        "size"
+      ],
+      "kept_by": [
+        "carrier",
+        "currency"
+      ]
+    },
+    {
+      "id": "@telegraf_kremenchuk:70785",
+      "channel": "@telegraf_kremenchuk",
+      "source_type": "community",
+      "date": "2026-07-16T11:00:01+00:00",
+      "line": "⏺ молоко — на 1,10 грн за 0,9 л;",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "1,10 грн",
+      "pattern_kinds": [
+        "currency",
+        "percent",
+        "size"
+      ],
+      "kept_by": [
+        "currency"
+      ]
+    },
+    {
+      "id": "@telegraf_kremenchuk:70827",
+      "channel": "@telegraf_kremenchuk",
+      "source_type": "community",
+      "date": "2026-07-17T12:26:32+00:00",
+      "line": "🧀Сир Брі 50%, La Belle Laitiere, 100 г, зі знижкою 40% – 44,90 грн",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "50%",
+      "pattern_kinds": [
+        "currency",
+        "percent",
+        "size"
+      ],
+      "kept_by": [
+        "currency"
+      ]
+    },
+    {
+      "id": "@telegraf_kremenchuk:71000",
+      "channel": "@telegraf_kremenchuk",
+      "source_type": "community",
+      "date": "2026-07-23T15:22:01+00:00",
+      "line": "⏺ молоко — на 1,10 грн за 0,9 л;",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "1,10 грн",
+      "pattern_kinds": [
+        "currency",
+        "percent",
+        "size"
+      ],
+      "kept_by": [
+        "currency"
+      ]
+    },
+    {
+      "id": "@telegraf_kremenchuk:71024",
+      "channel": "@telegraf_kremenchuk",
+      "source_type": "community",
+      "date": "2026-07-24T12:01:35+00:00",
+      "line": "🧀Сир Маасдам 45%, 100 г, зі знижкою 53% – 32,90 грн",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "45%",
+      "pattern_kinds": [
+        "currency",
+        "percent",
+        "size"
+      ],
+      "kept_by": [
+        "currency"
+      ]
+    },
+    {
+      "id": "@telegraf_kremenchuk:71197",
+      "channel": "@telegraf_kremenchuk",
+      "source_type": "community",
+      "date": "2026-07-30T11:06:58+00:00",
+      "line": "⏺ сметана 15% — на 3,25 грн за упаковку 400 г;",
+      "hit": "category:dairy:сметан",
+      "matched": "сметана",
+      "pattern": "15%",
+      "pattern_kinds": [
+        "currency",
+        "percent",
+        "size"
+      ],
+      "kept_by": [
+        "currency"
+      ]
+    },
+    {
+      "id": "@telegraf_kremenchuk:71243",
+      "channel": "@telegraf_kremenchuk",
+      "source_type": "community",
+      "date": "2026-07-31T11:59:58+00:00",
+      "line": "🧀Сир Гауда 48%, 100 г, зі знижкою 53% – 32,90 грн",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "48%",
+      "pattern_kinds": [
+        "currency",
+        "percent",
+        "size"
+      ],
+      "kept_by": [
+        "currency"
+      ]
+    },
+    {
+      "id": "@telegraf_kremenchuk:71436",
+      "channel": "@telegraf_kremenchuk",
+      "source_type": "community",
+      "date": "2026-08-06T16:06:01+00:00",
+      "line": "⏺ молоко — на 3,65 грн за 0,9 л;",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "3,65 грн",
+      "pattern_kinds": [
+        "currency",
+        "size"
+      ],
+      "kept_by": [
+        "currency"
+      ]
+    },
+    {
+      "id": "@telegraf_kremenchuk:71457",
+      "channel": "@telegraf_kremenchuk",
+      "source_type": "community",
+      "date": "2026-08-07T12:02:30+00:00",
+      "line": "🧀Сир Маасдам 45%, 100 г, зі знижкою 53% – 32,90 грн",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "45%",
+      "pattern_kinds": [
+        "currency",
+        "percent",
+        "size"
+      ],
+      "kept_by": [
+        "currency"
+      ]
+    }
+  ],
+  "producer": {
+    "script": "scripts/postcut_c3b.py",
+    "sha256": "8b682c5e26cef7a3dad56ef0ab9206e9bd560b7c48af1f0ce2475786eaf74172",
+    "why": "no git block: `git status --porcelain` is a fact about the tree, not the measurement",
+    "borrows": {
+      "scripts/census_5c2.py": "f05e229ac100a3701e85d547fd281eca26272e3bcd7c300a3f8caeee294279e6",
+      "scripts/census_c3a_posts.py": "b7384e56fae339742d10236d600bf62e8203e1d08b9575e3f7a4a981b6e9232a",
+      "scripts/projection_5c2.py": "0f6e8f504b792b5d4a47449129ba96630a341648ac0d5553f0fc3d4f053360ce",
+      "scripts/sku_prefilter_census.py": "bde2d21e901bc91ea630dcbfb694157895e37f6815f44f872bbe7945b470b205",
+      "scripts/write_sku_projection_b2.py": "c989cd83c06179247492488956c3a712d0a864fbafa6c758400bd755ed429abd"
+    }
+  }
+}
