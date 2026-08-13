@@ -220,6 +220,34 @@
       "spent_usd": 22.7675,
       "remaining_usd": 2.2325,
       "note": "sku-b-run: staging pod, POSITIONS endpoint, cap stop mid-page-leg at 17/138 (SPEC 3.17 (10)(b)); endpoint+template deleted, volume kept"
+    },
+    {
+      "at": "2026-08-11T20:48:07+00:00",
+      "balance": 12.0609061756,
+      "spent_usd": 22.9391,
+      "remaining_usd": 2.0609,
+      "note": "sku-b-v3-run: REFUSED by the (10)(a) go/no-go before the first gold call; boot and the two warm-up calls were billed and no attempt was consumed. Phase-ledger entry REPAIRED 2026-08-13 by scripts/repair_phase4_ledger.py (5c2-prep-a): the session ran, it was logged in its own step ledger, and this file never heard about it. Every number here is read from results/spend_sku_b_v3.json :: runs[-1]. remaining_usd is against the $25.00 cap IN FORCE when the money was spent — SPEC 3.18 (3) raised the phase cap to $30.00 on 2026-08-13, after all three of these sessions, and a repaired history is not re-scored under a later cap."
+    },
+    {
+      "at": "2026-08-12T09:14:58+00:00",
+      "balance": 11.6919336398,
+      "spent_usd": 23.3081,
+      "remaining_usd": 1.6919,
+      "note": "sku-b-v4-run: the resumed pilot, 138 sources asked. Phase-ledger entry REPAIRED 2026-08-13 by scripts/repair_phase4_ledger.py (5c2-prep-a): the session ran, it was logged in its own step ledger, and this file never heard about it. Every number here is read from results/spend_sku_b_v4.json :: runs[-1]. remaining_usd is against the $25.00 cap IN FORCE when the money was spent — SPEC 3.18 (3) raised the phase cap to $30.00 on 2026-08-13, after all three of these sessions, and a repaired history is not re-scored under a later cap."
+    },
+    {
+      "at": "2026-08-12T16:45:21+00:00",
+      "balance": 11.3347237899,
+      "spent_usd": 23.6653,
+      "remaining_usd": 1.3347,
+      "note": "skub2-run: the B′ re-measurement under instrument v2, 138 sources asked. Phase-ledger entry REPAIRED 2026-08-13 by scripts/repair_phase4_ledger.py (5c2-prep-a): the session ran, it was logged in its own step ledger, and this file never heard about it. Every number here is read from results/spend_skub2.json :: runs[-1]. remaining_usd is against the $25.00 cap IN FORCE when the money was spent — SPEC 3.18 (3) raised the phase cap to $30.00 on 2026-08-13, after all three of these sessions, and a repaired history is not re-scored under a later cap."
+    },
+    {
+      "at": "2026-08-13T07:59:22+00:00",
+      "balance": 11.1690436569,
+      "spent_usd": 23.831,
+      "remaining_usd": 6.169,
+      "note": "5c2-prep-a: cap 25 → 30 per SPEC 3.18 (3); phase ledger repaired"
     }
   ]
 }
