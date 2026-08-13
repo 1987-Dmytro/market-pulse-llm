@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-12 20:33:09 (every SessionStart)
+**Auto-refreshed:** 2026-08-13 09:12:41 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+aecdd22 chore(vault): the skub2-close tail -- the day's log, hot.md, the index
 661792a docs(report): skub2-close appended -- bar 2 scored, B-prime closed by measurement
 1157343 test(skub2-close): derive the four newly-read pages from the v4 record, not from a list
 60eda29 docs(decision): B-prime closed by measurement -- what (13) fixed, and what it never touched
 ec29732 data(skub2-close): B-prime closed by measurement -- 0.98 PASS / 0.4125 FAIL / 0.8667 PASS
-5309dbc feat(skub2-close): the closure's producer re-pointed, and depth-from-pct over the 80
 ```
 
 ## 📋 Recent decisions
@@ -30,7 +30,7 @@ ec29732 data(skub2-close): B-prime closed by measurement -- 0.98 PASS / 0.4125 F
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-12 20:30 (arch-a ✅, uni-a ✅, uni-b ✅, sku-b-prep ✅, sku-b-run ✅ ПРИНЯТ,
+**Last update:** 2026-08-12 20:52 — ДЕНЬ ЗАКРЫТ (arch-a ✅, uni-a ✅, uni-b ✅, sku-b-prep ✅, sku-b-run ✅ ПРИНЯТ,
 sku-b-v3-prep ✅, sku-b-v3-run ⛔ ОТКАЗ на воротах — попытка ЦЕЛА, sku-b-v4-prep ✅ $0,
 sku-b-v4-run ✅ 121 куплен, **sku-b-close ✅ $0 — ПИЛОТ ЗАКРЫТ ИЗМЕРЕНИЕМ, 2 планки из 3 FAIL**,
 sku-miss-pack ✅ $0, skub2-prep ✅ $0, skub2-fix ✅ $0, skub2-run ✅ 138 куплены за $0.2764,
@@ -258,6 +258,16 @@ tier-accuracy **0.8621 против 0.85 → PASS** (29 из 30, 1 нечита�
 как число она верна в 33 случаях из 80. Зачёркнутая цена не идёт ни в одну поверхность, где
 читатель сверит её с листовкой.
 
+**`docs/STATUS.md` — указатель УЖЕ переставлен тимлидом** (файл пришёл изменённым в 21:00, не
+тронут мной): ТЫ ЗДЕСЬ = «брифинг 5c2 (следующая сессия) — слой позиций в петлю; продуктовый рулинг
+оператора: вопрос 7 = промо + печатный % (+advisory реконструкция старой цены под амендмент к (3));
+канал brands_visible — кандидат». То есть направление рулинга совпало с кандидатом ADR §6, а
+«advisory реконструкция старой цены» — это уже НОВОЕ по сравнению с ним: считать старую цену из
+промо и процента, а не извлекать её как число. Амендмент к 3.17 (3) — тимлидовский.
+
+**Перед ЛЮБЫМ будущим прогоном позиций — Dv232.** Предупреждения парсера (13)(a) не доходят до
+записи рана; пока драйвер не доработан, нельзя сказать, какое предупреждение спасло какую позицию.
+
 **ЧТЕНИЕ ПЛАНКИ 2 ✅ ПРИМЕНЕНО** (`results/sku_b_pair_verdicts_skub2.json`, 64 ключа / 80 строк,
 `extends` сверен с запечатанным v4). Правка поля `accuracy` руками по-прежнему ловится: продюсер
 пере-выводит долю из ключей файла через `apply_sku_pair_verdicts.checksums`.
@@ -328,7 +338,9 @@ v4.
 
 ## 🚧 Blockers
 
-**НИЧЕГО НЕ БЛОКИРУЕТ — sku-b ЗАКОНЧЕН, ДАЛЬШЕ 5c2.** Сюита **2013 passed, 2 skipped** (+19 тестов
+**НИЧЕГО НЕ БЛОКИРУЕТ — sku-b ЗАКОНЧЕН, ДАЛЬШЕ 5c2.** День закрыт: **$0.5305** за две платные сессии
+из восьми контрактов, **$0.8796 за позиционный инструмент от начала до конца**, Phase 4
+**$23.6653 из $25** ($35.00 якоря минус баланс $11.3347). Сюита **2013 passed, 2 skipped** (+19 тестов
 за сессию: 11 апплаер skub2, 6 глубина v2, 1 дрейф-пин закрытия, 1 неизменные дефолты v4-апплаера);
 `ruff check` и `ruff format --check` чисты. Почекаутная таблица зелёная на каждой из восьми строк,
 включая контроль-родителя `74609da` (1994), гонялась В ОСНОВНОМ ДЕРЕВЕ со стэшем `knowledge/`.
@@ -340,6 +352,11 @@ v4.
 гитигнорится, поэтому в worktree она симлинк — и `test_collect_5c1.py::test_the_guard_reads_the_
 pinned_paths_off_the_pin_file` красный на ВСЕХ деревьях, включая контроль-родителя. Читать таблицу
 можно только с контролем рядом; «1 failed» без контроля ничего не значит.
+
+**`results/spend_phase4.json` не дописывался с 11.08 18:16 (`sku-b-run`).** Три платные сессии
+после этого — v3-run, v4-run, skub2-run — живут только в своих леджерах; Phase 4 считается
+арифметикой от якоря. Файл на денежном пути (`scripts/precheck_45h.py` его читает), поэтому вне
+контракта не тронут.
 
 **`config/registry.yaml` СДВИНУЛСЯ, и восемь запечатанных записей пинят его прежний sha.** Не
 перепинены: реконструкция `registry_before_the_latin_aliases` + `load_registry_as_pinned`
