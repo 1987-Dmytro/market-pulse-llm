@@ -2,5 +2,12 @@
   "runpod_balance_at_5c2run_start": 11.0815436571,
   "cap_usd": 8.0,
   "note": "RunPod account balance read before the first job of 5c2run, the paid session of SPEC 3.17 (6)/(11). Session spend = this anchor minus the balance now, enforced against the $8.00 cap the amendment pre-registered. The Phase 4 cap is enforced separately against results/spend_phase4.json, and neither anchor may be regenerated: delete this file and the counter silently restarts at today's balance.",
-  "runs": []
+  "runs": [
+    {
+      "at": "2026-08-13T17:59:20+00:00",
+      "balance": 10.2585299348,
+      "step_spent_usd": 0.823,
+      "note": "5c2-run positions"
+    }
+  ]
 }

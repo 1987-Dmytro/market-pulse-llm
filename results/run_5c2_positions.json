@@ -1,0 +1,269 @@
+{
+  "at": "2026-08-13T17:59:20+00:00",
+  "phase": "5c2-run",
+  "authority": "results/prereg_5c2_run.json",
+  "pinned_inputs": {
+    "docs/SPEC.md": "byte-identical",
+    "results/census_5c2.json": "byte-identical",
+    "results/census_c3a_posts.json": "byte-identical",
+    "results/postcut_c3b.json": "byte-identical",
+    "results/projection_5c2.json": "byte-identical",
+    "results/srv2d_cost.json": "byte-identical",
+    "config/registry.yaml": "byte-identical",
+    "config/lexicon.yaml": "byte-identical",
+    "src/market_pulse/positions.py": "byte-identical"
+  },
+  "session_cap_usd": 8.0,
+  "rate_usd_per_second": 0.00030669,
+  "drift": 0.03,
+  "worst_case_job_usd": 0.2843,
+  "selection": {
+    "comment": {
+      "rows": 5075,
+      "channels": 19,
+      "pins_matched": "19/19"
+    },
+    "leaflet_page": {
+      "rows": 159,
+      "posts": 19,
+      "channels": [
+        "@atb_market_official"
+      ]
+    },
+    "post_text": {
+      "rows": 44,
+      "channels": 10
+    }
+  },
+  "leg": "positions",
+  "endpoint": "m34sxo00ami5wt",
+  "already_usd": 0.1287,
+  "go_no_go": {
+    "when": "after the two non-gold warm-up calls of SPEC 3.17 (9), before the first gold call",
+    "billed_seconds": 307.342,
+    "page_marginal_seconds": 1.729,
+    "text_marginal_seconds": 0.947,
+    "gold_calls": 203,
+    "gold_seconds": 316.579,
+    "idle_tail_seconds": 60.0,
+    "projected_usd": 0.2098,
+    "budget_usd": 7.8713,
+    "refuse": false
+  },
+  "leaflet": {
+    "channel": "@atb_market_official",
+    "packs": [
+      {
+        "pack": 0,
+        "asked": 18,
+        "pages_written": 18,
+        "positions_written": 12,
+        "unreadable": 0,
+        "watermark": 4357
+      },
+      {
+        "pack": 1,
+        "asked": 15,
+        "pages_written": 15,
+        "positions_written": 16,
+        "unreadable": 0,
+        "watermark": 4372
+      },
+      {
+        "pack": 2,
+        "asked": 16,
+        "pages_written": 16,
+        "positions_written": 15,
+        "unreadable": 0,
+        "watermark": 4388
+      },
+      {
+        "pack": 3,
+        "asked": 15,
+        "pages_written": 15,
+        "positions_written": 2,
+        "unreadable": 0,
+        "watermark": 4403
+      },
+      {
+        "pack": 4,
+        "asked": 15,
+        "pages_written": 15,
+        "positions_written": 17,
+        "unreadable": 0,
+        "watermark": 4418
+      },
+      {
+        "pack": 5,
+        "asked": 16,
+        "pages_written": 16,
+        "positions_written": 9,
+        "unreadable": 0,
+        "watermark": 4435
+      },
+      {
+        "pack": 6,
+        "asked": 14,
+        "pages_written": 14,
+        "positions_written": 9,
+        "unreadable": 1,
+        "watermark": 4449
+      },
+      {
+        "pack": 7,
+        "asked": 14,
+        "pages_written": 14,
+        "positions_written": 5,
+        "unreadable": 0,
+        "watermark": 4468
+      },
+      {
+        "pack": 8,
+        "asked": 17,
+        "pages_written": 17,
+        "positions_written": 6,
+        "unreadable": 1,
+        "watermark": 4506
+      },
+      {
+        "pack": 9,
+        "asked": 14,
+        "pages_written": 14,
+        "positions_written": 15,
+        "unreadable": 0,
+        "watermark": 4521
+      },
+      {
+        "pack": 10,
+        "asked": 5,
+        "pages_written": 5,
+        "positions_written": 0,
+        "unreadable": 0,
+        "watermark": 4526
+      }
+    ]
+  },
+  "post_text": [
+    {
+      "channel": "@silposilpo",
+      "pack": 0,
+      "asked": 2,
+      "posts_read": 2,
+      "positions_written": 2,
+      "unreadable": 0,
+      "empty": 1,
+      "watermark": 3805
+    },
+    {
+      "channel": "@VARUS_channel",
+      "pack": 0,
+      "asked": 9,
+      "posts_read": 9,
+      "positions_written": 3,
+      "unreadable": 0,
+      "empty": 6,
+      "watermark": 10628
+    },
+    {
+      "channel": "@msuaaaa",
+      "pack": 0,
+      "asked": 1,
+      "posts_read": 1,
+      "positions_written": 1,
+      "unreadable": 0,
+      "empty": 0,
+      "watermark": 10656
+    },
+    {
+      "channel": "@epicentrk_sale",
+      "pack": 0,
+      "asked": 6,
+      "posts_read": 6,
+      "positions_written": 0,
+      "unreadable": 0,
+      "empty": 6,
+      "watermark": 6257
+    },
+    {
+      "channel": "@marketopt_promo",
+      "pack": 0,
+      "asked": 4,
+      "posts_read": 4,
+      "positions_written": 4,
+      "unreadable": 0,
+      "empty": 0,
+      "watermark": 2910
+    },
+    {
+      "channel": "@telegraf_kremenchuk",
+      "pack": 0,
+      "asked": 8,
+      "posts_read": 8,
+      "positions_written": 9,
+      "unreadable": 1,
+      "empty": 4,
+      "watermark": 71457
+    },
+    {
+      "channel": "@gorishnie_plavni1",
+      "pack": 0,
+      "asked": 4,
+      "posts_read": 4,
+      "positions_written": 0,
+      "unreadable": 0,
+      "empty": 4,
+      "watermark": 31488
+    },
+    {
+      "channel": "@forainfo",
+      "pack": 0,
+      "asked": 4,
+      "posts_read": 4,
+      "positions_written": 9,
+      "unreadable": 0,
+      "empty": 0,
+      "watermark": 6045
+    },
+    {
+      "channel": "@ekomarket_shop",
+      "pack": 0,
+      "asked": 5,
+      "posts_read": 5,
+      "positions_written": 11,
+      "unreadable": 0,
+      "empty": 0,
+      "watermark": 1458
+    },
+    {
+      "channel": "@kremen_news",
+      "pack": 0,
+      "asked": 1,
+      "posts_read": 1,
+      "positions_written": 0,
+      "unreadable": 0,
+      "empty": 1,
+      "watermark": 50043
+    }
+  ],
+  "timing": {
+    "calls": 24,
+    "rows": 205,
+    "worker_seconds": 2133.705,
+    "queue_seconds": 36.087,
+    "wall_seconds": 2267.544,
+    "seconds_per_call": 88.904,
+    "wall_per_call": 94.481,
+    "wall_per_row": 11.061,
+    "seconds_per_row": 10.408,
+    "idle_share": 0.059,
+    "worker_ids": [
+      "k2hdd6krvd8fb3"
+    ]
+  },
+  "notes": [],
+  "ledger": {
+    "balance": 10.2585299348,
+    "session_spent_usd_floor": 0.8230137222999989,
+    "unread": null
+  }
+}
