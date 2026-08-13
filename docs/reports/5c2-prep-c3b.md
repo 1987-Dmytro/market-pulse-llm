@@ -358,9 +358,16 @@ e8b31fa docs: 5c2-prep-c3b queued -- the D cut in law (SPEC 3.18 (7)(g))
 2bdb53f data(5c2-prep-c3b): the D cut computed -- 44 of 349, and the ruling's four channels are 270 rows
 0e390ff data(5c2-prep-c3b): the pre-registration of 5c2-run -- three populations, three prices, an $8.00 cap
 e64398d docs(decision): the D cut and the fourth evidence kind
-<this report>  docs(report): 5c2-prep-c3b
-<the tail>     chore(vault): the 5c2-prep-c3b session tail
+82d5483 docs(report): 5c2-prep-c3b -- the D cut, the fourth kind, and the sealed numbers
+16a4da9 chore(vault): the 5c2-prep-c3b session tail -- the day's log and hot.md
+b6a9c86 docs(report): 5c2-prep-c3b -- REQUIRED checked on the tuple, not the assignment line
+<this line's own commit>  docs(report): the commit list closed
 ```
+
+**Ten commits, `e8b31fa..HEAD`.** The list cannot name its own last entry — writing a sha into the
+file that produces it is not possible — so the honest form is the RANGE plus the count, and
+`git rev-list --count e8b31fa^..HEAD` is what settles it. Every entry above `82d5483` is in the
+checkout table; the rest are documentation with their own `make check` at commit time.
 
 `make check` green immediately before this report's commit: **2 235 passed, 2 skipped**.
 `ruff format --check .`: **262 files already formatted** — run separately, because `make check`
