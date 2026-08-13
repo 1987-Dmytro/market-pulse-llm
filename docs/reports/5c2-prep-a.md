@@ -332,8 +332,11 @@ $23.8310 of $30.00, remaining $6.1690.
 
 ### 4. The session's history
 
+The command was run **when the checkout table ran**, so it names the six commits the table covers.
+This report and the vault tail follow it and are not in either — re-running it today returns eight.
+
 ```
-$ git log --reverse --format='%h %ad %s' --date=format:'%H:%M' aecdd22..HEAD
+$ git log --reverse --format='%h %ad %s' --date=format:'%H:%M' aecdd22..HEAD   # at dff9fc2
 5ac33b6 09:47 docs: 5c2 opened -- STATUS pointer of 12.08, PROMPT-5c2-prep-a
 b31d2eb 09:47 docs(vault): the 12.08 tail
 81855de 09:51 feat(5c2-prep-a): the strip learns the amendment family -- both sealed pins re-derive
@@ -341,12 +344,16 @@ b31d2eb 09:47 docs(vault): the 12.08 tail
 a00240c 09:59 feat(5c2-prep-a): the phase-ledger repair -- numbers read from the step ledgers, refusals instead of guesses
 dff9fc2 10:02 data(5c2-prep-a): the phase ledger tells the truth again -- three repaired entries, today's reading, and a guard against the next silence
 
-$ git rev-list --count aecdd22..HEAD
+$ git rev-list --count aecdd22..HEAD                                          # at dff9fc2
 6
 ```
 
-**Six commits, 09:47–10:02 local**, and this report and the vault tail after this line make eight.
-`git status --short` is clean apart from the pre-authorised session output.
+**Six commits, 09:47–10:02 local**, and this report (`c86315c`) and the vault tail (`1344863`) after
+this line make eight. Those two are **docs-only and are not in the checkout table** — the table
+stops at `dff9fc2`, the last commit carrying code or a result file. Their evidence is `make check`
+green in a working tree identical to each of them, run after each commit; the precedent is
+`skub2-run.md`'s own table, whose report and vault rows «carry no code». `git status --short` is
+clean.
 
 ---
 
