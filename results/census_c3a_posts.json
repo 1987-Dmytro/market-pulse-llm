@@ -6255,7 +6255,13 @@
   ],
   "producer": {
     "script": "scripts/census_c3a_posts.py",
-    "sha256": "adf15d861da9c4dd147c223b80b8ece4013cd18352d828258f9da6f977486ba7",
-    "why": "no git block: `git status --porcelain` is a fact about the tree, not the measurement"
+    "sha256": "b7384e56fae339742d10236d600bf62e8203e1d08b9575e3f7a4a981b6e9232a",
+    "why": "no git block: `git status --porcelain` is a fact about the tree, not the measurement",
+    "borrows": {
+      "scripts/census_5c2.py": "f05e229ac100a3701e85d547fd281eca26272e3bcd7c300a3f8caeee294279e6",
+      "scripts/sku_prefilter_census.py": "bde2d21e901bc91ea630dcbfb694157895e37f6815f44f872bbe7945b470b205",
+      "scripts/projection_5c2.py": "0f6e8f504b792b5d4a47449129ba96630a341648ac0d5553f0fc3d4f053360ce",
+      "scripts/write_sku_projection_b2.py": "c989cd83c06179247492488956c3a712d0a864fbafa6c758400bd755ed429abd"
+    }
   }
 }

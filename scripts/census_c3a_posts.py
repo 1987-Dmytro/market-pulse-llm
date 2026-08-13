@@ -71,11 +71,21 @@ def producer() -> dict:
 
     A `git` block holds `git status --porcelain`, so the artifact's bytes move when an unrelated
     file is committed. Byte-identity under one anchor is this record's gate; that block voids it.
+
+    ``borrows`` is this record's own addition and it closes a hole the other two do not have. This
+    census is deliberately built out of four other modules — the window, the screening, the controls
+    and the price — and it copies one of their docstrings INTO the record (``rule``). So a change in
+    any of them moves these bytes while `sha256` above sits still, and a pre-registration pinning
+    this file by sha would be pinning half of what produced it.
     """
     return {
         "script": rel(Path(__file__)),
         "sha256": sha256_of(Path(__file__)),
         "why": "no git block: `git status --porcelain` is a fact about the tree, not the measurement",
+        "borrows": {
+            rel(Path(module.__file__)): sha256_of(Path(module.__file__))
+            for module in (c2, frame, projection, b2)
+        },
     }
 
 

@@ -441,3 +441,38 @@ def test_the_shipped_record_reads_the_same_prefilter_the_pass_answers():
         if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute)
     }
     assert "prefilter" in called and callable(positions.prefilter)
+
+
+def test_the_producer_names_every_module_whose_bytes_reach_the_record():
+    """`producer.sha256` hashes THIS script and the record copies another module's docstring into
+    `rule` — so the four modules it is built out of are hashed beside it, or an edit in any of them
+    moves these bytes with the producer hash sitting still. The class is old: a pin that guards the
+    half that cannot move.
+    """
+    borrows = RECORD["producer"]["borrows"]
+
+    assert set(borrows) == {
+        "scripts/census_5c2.py",
+        "scripts/sku_prefilter_census.py",
+        "scripts/projection_5c2.py",
+        "scripts/write_sku_projection_b2.py",
+    }
+    for path, sha in borrows.items():
+        assert hashlib.sha256((REPO_ROOT / path).read_bytes()).hexdigest() == sha, path
+    # and the borrowed docstring really is in the record, so this is not a hypothetical
+    import sku_prefilter_census as frame_module
+
+    assert RECORD["rule"] == frame_module.__doc__.split("\n\n")[0].strip()
+
+
+def test_the_cursor_key_is_pinned_independently_of_the_carrier_name():
+    """`loop.POST_TEXT` (a cursor key) and `loop.POST_CARRIER` (SPEC 3.17 (4)'s carrier) are the
+    same string today and are not the same thing. The module's own docstring says a wrong cursor
+    key "does not raise, it silently starts the channel over from nothing" — so a future carrier
+    rename must not be able to reset every channel's extraction watermark by sharing a literal.
+    """
+    from market_pulse import loop
+
+    assert loop.POST_TEXT == "post_text"
+    assert loop.POST_CARRIER == "post_text"
+    assert loop.POST_TEXT not in (loop.POSTS, loop.INFERENCE, loop.LEAFLET)
