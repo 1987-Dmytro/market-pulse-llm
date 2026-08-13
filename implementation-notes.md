@@ -7114,3 +7114,75 @@ audit (`docs/reviews/2026-08-13-process-audit-and-self-improvement.md`).
   four by sha. And `loop.POST_TEXT` (a cursor key) shares a literal with `loop.POST_CARRIER` (SPEC
   3.17 (4)'s carrier); loop's own docstring says a wrong cursor key "silently starts the channel
   over from nothing", so the two are pinned apart. [cause: process]
+
+## 5c2-prep-c3b — the pre-registration: the D cut, the fourth kind, the sealed numbers (2026-08-13, $0)
+
+- **Dv293** — the c3a report's Verify gate §2 printed a determinism pair that had outlived the
+  artifact. `ab927a23…` is the `a39a8ad` revision of `results/census_c3a_posts.json`; commit
+  `9c723a7` added `producer.borrows` and moved the record's bytes by design, and §2 was not
+  re-measured after it. Re-measured this session — two fresh runs to a scratch `--out`, both
+  `4a7e755b…`, equal to the shipped file — and §2 amended with the cause named. The class is Dv281's
+  and the session-header one's: a true sentence about a moment, left standing after the moment
+  moved. [cause: process]
+- **Dv294** — the census producer's anchor guard has a hole that only shows on a fresh `--out`.
+  `refuse_to_move_the_anchor` reads the OUT file's own anchor, so writing to a NEW path skips it
+  entirely: `--anchor 2026-08-09` (a bare date, parsed as local time) silently produced a DIFFERENT
+  window — 9 160 posts, anchor `2026-08-08T22:00:00+00:00` — and the run only failed because the
+  selection pin disagreed on all 59 channels and `main` returns 1. The instrument caught it; the
+  guard did not. Not fixed: the guard is c3a's shipped code and its record is sealed, and the pin
+  is the stronger check anyway. The help text already names the full ISO value.
+  [cause: tooling]
+- **Dv295** — the D cut is **44** rows, below the contract's expected 50–55, and this is a REPORT
+  rather than the STOP the contract offers. The estimate is 31 + 29 minus a small overlap; the
+  overlap is **16**. Currency-bearing rows cluster in exactly the retail and aggregator carriers the
+  first half already keeps — which is the coherence 3.18 (7)(g) rests on, so the miss is evidence FOR
+  the ruling. What the range protects is the registered cap, and the cap is $8.00 at 44 rows and
+  $8.00 at 55: 11 rows is 31 seconds at 2.8132 s/row, under two cents, inside one rounding step.
+  Both ends computed before deciding not to stop. [cause: contract-gap]
+- **Dv296** — SPEC 3.18 (7)(g) says "its matched evidence carries the `currency` pattern" and the
+  contract operationalises it as `"currency" ∈ pattern_kinds`. Those are two different readings —
+  `pattern_kinds` is the kinds found ANYWHERE in the post's text (`sku_prefilter_census.screen_rows`)
+  and the wording points at the matched LINE. Both computed: 29 rows either way, 44 either way, so
+  the ambiguity is closed by measurement. The producer carries both and exits non-zero on a
+  population where they part (`test_a_population_whose_two_readings_disagree_is_reported_and_the_run_refuses`
+  plants one). The contract's reading is also the one behind the 29 the ruling cites, which is the
+  tie-break. [cause: spec-gap]
+- **Dv297** — the ruling's "250 of 349 rows from four cooking channels" is the TOP FOUR of the
+  concentration table (85 + 72 + 52 + 41, cumulative share 0.7163). The `cooking_recipes` audience
+  has six channels with a pass and **270** rows between them. The cut removes all 270. Reported as a
+  floor rather than a contradiction, with both numbers in `postcut_c3b.json :: removed_recipes` —
+  found because a test asserted 250 and went red. [cause: spec-gap]
+- **Dv298** — the fourth evidence kind flipped three sentences that no test would have reddened.
+  `post_pass`'s summary comment said the two no-row outcomes are told apart "in the summary because
+  the disk cannot tell them apart afterwards" — false the moment the marker carries `n_positions` /
+  `unreadable`; `queued_posts`' whole docstring documented a gap that no longer exists; and
+  `if rows:` became a dead branch. Only two tests went red (the two the contract named). Also found:
+  `tests/test_evidence.py` never asserted the MEMBERSHIP of `KINDS` — `post_text` was added and the
+  suite stayed green — so a literal enumeration was added, the "law that grows loudly" pattern.
+  [cause: process]
+- **Dv299** — the pre-registration's remainder could not be read off the ledger.
+  `spend_phase4.json :: sessions[-1].remaining_usd` is **6.1690**, a true statement under the 30 cap
+  it was written beside and never re-scored (3.18 (7)(b)). `projection_5c2.budget()` reads that
+  field, so reusing it would have refused an $8.00 cap that fits with $1.1690 of headroom. The
+  producer derives `PHASE_CAP_USD - spent_usd` = **9.1690** instead and prints BOTH with the cap
+  each answers under. The class is Dv283's: a field whose truth is fixed to a moment, read as if it
+  were current. [cause: process]
+- **Dv300** — the registered law keeps ALL TEN marked blocks, not the two of the B′ precedent.
+  3.18 (7)(c) sends the run's stop rules to 3.17 (10), which lives inside `sku-b-ratification-4`; a
+  pin that stripped it would register a document that does not carry the discipline the record
+  names. Keeping all ten means the pin equals the raw file today and the strip's job starts the day
+  they diverge — a block added LATER is taken off and the pin survives. The producer refuses on a
+  block SET that is not exactly those ten, which is stronger than trusting the name expression:
+  `amendment-3\.\d+` would match a future `amendment-3.19` and strip it silently.
+  [cause: spec-gap]
+- **Dv301** — the registration's `verifier` block cannot carry pytest's last line. That line holds
+  the run's DURATION, and byte-identity under the same inputs is this record's gate, so a second run
+  would produce different bytes for no reason. The tail is returned beside the block and printed
+  only in the refusal message. Found by the determinism pair failing on its first attempt.
+  [cause: tooling]
+- **Dv302** — `tests/test_prereg_5c2.py` reads the record at import, so it cannot be present when
+  the record is written for the FIRST time: the producer runs `make check`, the suite collects the
+  test, and the test cannot find the file. Bootstrapped by holding the test module aside for one
+  run, then re-running with it in place — the record is byte-identical across both and the shipped
+  `verifier.green` therefore describes a suite that includes its own equalities. The class is
+  `a_test_that_reads_a_shipped_artifact`. [cause: process]
