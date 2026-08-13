@@ -273,6 +273,10 @@ a7fd937 docs(vault): the prep-b session tail and hot.md's Next
 4cde4f4 docs: 5c2-prep-c1 queued -- STATUS after the prep-b acceptance
 ```
 
+Three commits follow and cannot be named here, because a file cannot carry its own hash: the one
+that adds this report, the pre-authorised vault tail (the day's log and hot.md's curated block), and
+the one that adds this paragraph. `git log --oneline 51ed64a..HEAD` is the enumeration.
+
 Nothing outside the sandbox moved, hashed before the first write-capable action and again after the
 last smoke:
 
