@@ -136,6 +136,36 @@ def test_the_record_carries_no_clock_of_its_own(monkeypatch, tmp_path):
     assert not called & {"now", "utcnow", "today", "time"}, "the census reads no clock"
 
 
+def test_the_record_carries_no_git_state_and_names_its_producer(monkeypatch, tmp_path):
+    """`git_state` embeds `git status --porcelain`, so a record carrying it moves when an unrelated
+    file is committed or edited. Measured, not feared: this census was committed, the next commit
+    landed, and the same command with the same anchor produced different bytes — which is the
+    determinism gate voided by a provenance field. Provenance here is the script's own sha.
+
+    Read off the AST for the same reason the clock test is: `producer()`'s docstring argues about
+    `git_state` in prose, and a grep cannot tell an argument from a call.
+    """
+    import ast
+    import hashlib
+
+    wire(monkeypatch, tmp_path)
+    record = run(tmp_path)
+
+    assert "git" not in record
+    assert (
+        record["producer"]["sha256"]
+        == hashlib.sha256(Path(census.__file__).read_bytes()).hexdigest()
+    )
+    tree = ast.parse(Path(census.__file__).read_text(encoding="utf-8"))
+    assert not [
+        node
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Call)
+        and isinstance(node.func, ast.Name)
+        and node.func.id == "git_state"
+    ]
+
+
 def test_a_row_on_the_boundary_is_in_and_a_row_on_the_anchor_is_out(monkeypatch, tmp_path):
     """Half-open, so the window counts exactly 28 days and two adjacent windows never share a row."""
     wire(monkeypatch, tmp_path)

@@ -32,7 +32,6 @@ sys.path.insert(0, str(REPO_ROOT / "src"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import yield_screen_5c1 as screen  # noqa: E402
-from build_audit_pack import git_state  # noqa: E402
 
 from market_pulse import loop  # noqa: E402
 from market_pulse.registry import load_registry  # noqa: E402
@@ -76,6 +75,24 @@ def rel(path: Path) -> str:
 
 def sha256_of(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def producer() -> dict:
+    """Which code wrote this, by its own sha — and NOT `git_state`, deliberately.
+
+    Every other record in this repo carries a `git` block, and this one may not: that block holds
+    `git status --porcelain`, so the artifact's bytes change when an unrelated file is committed or
+    edited. Byte-identity under the same anchor is this record's own gate, and a provenance field
+    that moves with the working tree voids it on the first commit after the record was written —
+    measured here, not feared: the record was committed, an unrelated commit landed, and the same
+    command produced different bytes. The script's sha is the stronger answer anyway; a commit id
+    does not say the file was not dirty when it ran.
+    """
+    return {
+        "script": rel(Path(__file__)),
+        "sha256": sha256_of(Path(__file__)),
+        "why": "no git block: `git status --porcelain` is a fact about the tree, not the measurement",
+    }
 
 
 def window_of(anchor: str) -> dict:
@@ -524,7 +541,7 @@ def main(argv: list[str] | None = None) -> int:
             for anchor, why in ALTERNATIVE_ANCHORS
         ],
         "channels": rows,
-        "git": git_state(args.out),
+        "producer": producer(),
     }
     args.out.write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 

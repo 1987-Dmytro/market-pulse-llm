@@ -207,6 +207,19 @@ def test_the_whole_window_does_not_fit_and_the_record_says_so():
     assert whole["fits"] is False
 
 
+def test_the_record_carries_no_git_state_and_names_its_producer():
+    """Same reason as the census's: `git status --porcelain` inside a record makes its bytes move
+    when an unrelated file is committed, and this record is cited BY SHA from nowhere but is itself
+    pinned to a census by sha — a drifting pair would break on the first unrelated commit."""
+    import hashlib
+
+    assert "git" not in RECORD
+    assert (
+        RECORD["producer"]["sha256"]
+        == hashlib.sha256(Path(projection.__file__).read_bytes()).hexdigest()
+    )
+
+
 def test_a_rerun_writes_the_same_bytes(tmp_path):
     """The projection is a pure function of the files it cites — no clock, no sampling."""
     projection.main(["--out", str(tmp_path / "first.json")])

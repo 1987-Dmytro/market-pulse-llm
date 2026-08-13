@@ -39,7 +39,6 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import positions_gm4_skub as driver  # noqa: E402
 import runpod_guard as guard  # noqa: E402
-from build_audit_pack import git_state  # noqa: E402
 
 RATE = REPO_ROOT / "results" / "srv2d_cost.json"
 SKUB2 = REPO_ROOT / "results" / "sku_b_positions_skub2.json"
@@ -90,15 +89,42 @@ def cite(path: Path, dotted: str, why: str) -> dict:
 
 
 def quote_line(path: Path, needle: str, why: str) -> dict:
-    """A line of a report, verbatim, with the file that holds it. Refuses if it is not there."""
-    lines = [line for line in path.read_text(encoding="utf-8").splitlines() if needle in line]
-    if not lines:
-        raise SystemExit(f"{rel(path)} has no line containing {needle!r} — the quote is stale")
-    return {"quote": lines[0].strip(), "source": rel(path), "why": why}
+    """A line of a report, verbatim, with the file that holds it. One line, or a refusal.
+
+    Ambiguity is the failure this refuses. A loose needle («page leg») matches the packing line and
+    the marginal line in the same report, takes the first, and the record then prints a true quote
+    that says nothing about the number beside it — caught here by printing the citations and
+    reading them, which is the only reason it is not still in the file.
+    """
+    lines = [
+        line.strip() for line in path.read_text(encoding="utf-8").splitlines() if needle in line
+    ]
+    if len(lines) != 1:
+        raise SystemExit(
+            f"{rel(path)} has {len(lines)} lines containing {needle!r} — a quote is one line"
+        )
+    return {"quote": lines[0], "source": rel(path), "why": why}
 
 
 def sha256_of(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def producer() -> dict:
+    """Which code wrote this, by its own sha — and NOT `git_state`, deliberately.
+
+    Every other record in this repo carries a `git` block, and this one may not: that block holds
+    `git status --porcelain`, so the artifact's bytes change when an unrelated file is committed
+    or edited. The contract makes byte-identity this record's own gate, and a provenance field that
+    moves with the working tree would void it on the first commit after the record was written —
+    which is exactly what happened here once before this line existed. The script's sha is the
+    stronger answer anyway: a commit id does not say the file was not dirty when it ran.
+    """
+    return {
+        "script": rel(Path(__file__)),
+        "sha256": sha256_of(Path(__file__)),
+        "why": "no git block: `git status --porcelain` is a fact about the tree, not the measurement",
+    }
 
 
 def cost(seconds: float, rate: float) -> dict:
@@ -232,9 +258,9 @@ def leaflet_leg(rate: float, pages: int) -> dict:
             },
             "report_line": quote_line(
                 SKUB2_REPORT,
-                "page leg",
-                "the same arithmetic in that session's report: 462.173 s over 108 calls."
-                " (711.102 - 248.929) / 108 = 4.2794, which is the field cited above",
+                "462.173",
+                "the same arithmetic in that session's own report: (711.102 - 248.929) / 108 ="
+                " 4.2794, which is the field cited above, and $0.1417 is what those pages cost",
             ),
         },
         "window_pages": pages,
@@ -459,7 +485,7 @@ def main(argv: list[str] | None = None) -> int:
                 load(RATE), "pod_comparison.ratio_per_1000_serverless_over_pod"
             ),
         },
-        "git": git_state(args.out),
+        "producer": producer(),
     }
     args.out.write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 

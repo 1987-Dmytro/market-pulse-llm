@@ -4,7 +4,7 @@
   "asks": "what the census's window costs per leg, from measurements that actually paid",
   "window": {
     "path": "results/census_5c2.json",
-    "sha256": "ec35644bdab8145a4ed1c3f50b010a27ebd6f15e38977188e89fd59d38f8705b",
+    "sha256": "af8387814c74f2f9411eb0d2b85cfe8e2e29cd0e99c6d3f0f67a10dad304d8c2",
     "anchor": "2026-08-09T00:00:00+00:00",
     "since": "2026-07-12T00:00:00+00:00",
     "comments_unanswered": 5075,
@@ -108,9 +108,9 @@
           "why": "the contract's briefing says the session «bought 138 pages»; the record says 138 SOURCES — 108 pages and 30 text rows. The page marginal below is measured over the 108, which is what per_gate[-1].calls_done counts"
         },
         "report_line": {
-          "quote": "page leg   108 pages sent (of 159 available, 19 posts) in 7 job(s), largest 7.99 MB",
+          "quote": "page leg   462.173 s over 108 calls = 4.2794 s/page   $0.1417",
           "source": "docs/reports/skub2-run.md",
-          "why": "the same arithmetic in that session's report: 462.173 s over 108 calls. (711.102 - 248.929) / 108 = 4.2794, which is the field cited above"
+          "why": "the same arithmetic in that session's own report: (711.102 - 248.929) / 108 = 4.2794, which is the field cited above, and $0.1417 is what those pages cost"
         }
       },
       "window_pages": 78,
@@ -249,12 +249,9 @@
     "amendment": "SPEC 3.18 (4): «5b's 0.5993 per 1,000 rows and 0.4611 per pass were measured on a POD and are not this runtime's numbers». They are printed here once, labelled, and they enter no row above",
     "ratio_serverless_over_pod": 2.383
   },
-  "git": {
-    "commit": "8d4bd0b058da2c5c932a622813668a12db1e3ff8",
-    "dirty": [
-      "docs/reviews/",
-      "scripts/projection_5c2.py",
-      "tests/test_projection_5c2.py"
-    ]
+  "producer": {
+    "script": "scripts/projection_5c2.py",
+    "sha256": "3ca4d6952f31b05f77e548f42851793fb3bba7ec8747eb2976abd25dbf0dc845",
+    "why": "no git block: `git status --porcelain` is a fact about the tree, not the measurement"
   }
 }
