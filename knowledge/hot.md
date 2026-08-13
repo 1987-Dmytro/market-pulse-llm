@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-13 12:55:40 (every SessionStart)
+**Auto-refreshed:** 2026-08-13 13:13:56 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-e5a4de5 docs(report): 5c2-prep-c1 -- B1 closed in both directions, and the positions leg has a producer
-0af552c feat(5c2-prep-c1): the loop's leaflet leg -- one page in, a page row and its positions out
-31236c3 feat(5c2-prep-c1): the store's key is the row, not only the message
-464a33c fix(5c2-prep-c1): B1 -- the smoke guard aims at the real derived root, in both directions
-a7fd937 docs(vault): the prep-b session tail and hot.md's Next
+e5297dd docs(report): 5c2-prep-c1 -- the checkout table covers every commit, not the first six
+26d4176 docs(report): 5c2-prep-c1 -- the smoke counts come from one run, not a continuation
+79b60b9 fix(5c2-prep-c1): the page row is the answered-marker, so it is written LAST
+ed5ae85 docs(report): 5c2-prep-c1 -- name the commits the report cannot carry its own hash for
+86f39d4 chore(vault): the 5c2-prep-c1 session tail -- the day's log and the curated hot block
 ```
 
 ## 📋 Recent decisions
@@ -31,9 +31,9 @@ a7fd937 docs(vault): the prep-b session tail and hot.md's Next
 # Hot Cache — curated
 
 **Last update:** 2026-08-13 (конец сессии) — **`5c2-prep-c1` ✅ ЗАКРЫТ, $0**, коммиты
-`4cde4f4..e5a4de5`, `make check` **2101 / 2 skipped**. **B1 закрыт в обе стороны**, у
+`4cde4f4..e5297dd` (одиннадцать), `make check` **2103 / 2 skipped**. **B1 закрыт в обе стороны**, у
 `leaflet_page` и `position_row` появился ПИСАТЕЛЬ. Отчёт `docs/reports/5c2-prep-c1.md`,
-отклонения **Dv259–267**. Phase 4: **$23.8310 из $30.00**, остаток $6.1690 — за день не
+отклонения **Dv259–268**. Phase 4: **$23.8310 из $30.00**, остаток $6.1690 — за день не
 потрачено НИЧЕГО. Раньше в тот же день принят `5c2-prep-b` (`9d558a7..51ed64a`, Dv249–258).
 
 **🔧 Хранилище получило более тонкий ключ — знать до следующего писателя.** `RawStore`
@@ -43,6 +43,14 @@ a7fd937 docs(vault): the prep-b session tail and hot.md's Next
 `row_id` детерминирован (`channel:msg_id:ordinal`). Ни одна старая запись `row_id` не несёт —
 бейзлайн сырых хранилищ v1 не сдвинулся. `StoreIndex.ids` = пространство СООБЩЕНИЙ,
 `StoreIndex.keys` = пространство СТРОК; очередь вычитает `ids`, не путать.
+
+**⚠️ Строка страницы пишется ПОСЛЕДНЕЙ — знать любому, кто добавит писателя.** `RawStore.append`
+пишет по файлу за раз (один `open("a")` на record_type, закрывается до следующего), а очередь
+ключуется на record_type СТРАНИЦЫ — значит строка страницы и есть маркер «отвечено». Первой она бы
+пережила падение между двумя файлами, а её позиции — нет, и повторный проход вычел бы страницу как
+отвеченную: строки потеряны навсегда, дыра не видна. Последней — падение оставляет позиции без
+маркера, страница переспрашивается, `dedup_key` пропускает уже лежащее. Тест чувствителен к
+ПОРЯДКУ (падает `assert [] == [0, 1]` при обратном), найдено ревью, не мной.
 
 **Шов ноги листовки:** `send(task, payload)`, где payload — альбом из ОДНОЙ картинки (это
 production-пара: `local_llm.PositionsClient.positions` берёт `[[data_url]]` и строит
@@ -100,14 +108,14 @@ BY MEASUREMENT)**,
 
 ## 🔥 What's Hot
 
-**5c2-prep-c1 ✅ 13.08 ($0) — СДАН, ждёт приёмки.** Шесть коммитов `4cde4f4..e5a4de5`;
-`make check` 2101 / 2 skipped (было 2081), `ruff format --check` чист, куплено НИЧЕГО.
+**5c2-prep-c1 ✅ 13.08 ($0) — СДАН, ждёт приёмки.** Одиннадцать коммитов `4cde4f4..e5297dd`;
+`make check` 2103 / 2 skipped (было 2081), `ruff format --check` чист, куплено НИЧЕГО.
 **B1 закрыт в обе стороны:** ассерт смотрит на `runner.DERIVED_ROOT`, написан ОДИН раз
 (`the_derived_root_is_untouched`), тест чувствительности подкладывает три строки писателем самого
 прохода и показывает отказ; под старой формой те же строки давали `DID NOT RAISE`.
 **Нога листовки:** страница → тот же шов → `leaflet_page` + `position_row` на позицию, запись на
 диск и только потом watermark, инструмент импортом. `run_loop.ENDPOINT` = `None`.
-Отклонения Dv259–267, отчёт `docs/reports/5c2-prep-c1.md`.
+Отклонения Dv259–268, отчёт `docs/reports/5c2-prep-c1.md`.
 
 **5c2-prep-b ✅ 13.08 ($0) — ПРИНЯТ.** Восемь коммитов `9d558a7..51ed64a`. Нога инференса и форма
 записи 3.18 (6) в одном месте (`market_pulse.evidence`). **Dv232 и Dv176 закрыты.** Отклонения
@@ -322,14 +330,14 @@ tier-accuracy **0.8621 против 0.85 → PASS** (29 из 30, 1 нечита�
 Полностью — `docs/reports/5c2-prep-b.md`, отклонения Dv249–258.
 
 **`5c2-prep-c` РАЗРЕЗАН НА ДВА** (рулинг оператора 13.08, по сцеплению — джойнт-ревью prep-c).
-**`c1` — «запись» ✅ ЗАКРЫТ ($0, коммиты `4cde4f4..e5a4de5`).** B1 закрыт в обе стороны; у
+**`c1` — «запись» ✅ ЗАКРЫТ ($0, коммиты `4cde4f4..e5297dd`).** B1 закрыт в обе стороны; у
 `leaflet_page` и `position_row` есть писатель — `loop.page_pass` через тот же шов, с тем же
 порядком «запись → потом watermark». Формы 3.18 (6) и `positions.py` не тронуты: СТОП не
 понадобился, потому что мешало не они, а ключ хранилища (`raw_store.py` — не заморожен, нигде не
 запинен, проверено ДО правки). Что знать не из отчёта: **`RawStore` теперь дедуплицирует по
 `dedup_key`** (`row_id`, иначе `msg_id`), потому что N позиций одной страницы терялись внутри
 ОДНОГО `append()`; **`StoreIndex.ids` — сообщения, `.keys` — строки**, очередь вычитает `ids`.
-Полностью — `docs/reports/5c2-prep-c1.md`, отклонения Dv259–267.
+Полностью — `docs/reports/5c2-prep-c1.md`, отклонения Dv259–268.
 **`c2` — «деньги», отдельный контракт, ещё НЕ выдан:** ценз окна (3.18 (4): окно пре-регистрируется ПО ЧИСЛУ
 СТРОК, а не как диапазон дат, вычисляемый в момент прогона) → проекция цены с ПЛАТНОГО
 serverless-замера → **STOP с числами** → прережка платной сессии после рулинга оператора. Состав
