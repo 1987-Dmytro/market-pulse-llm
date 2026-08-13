@@ -2,24 +2,24 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-13 10:30:43 (every SessionStart)
+**Auto-refreshed:** 2026-08-13 11:26:40 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-c53e069 docs(report): 5c2-prep-a -- the log block dated to the table, the two docs commits named as outside it
-1344863 chore(vault): the 5c2-prep-a tail -- the day's log and the curated hot block
-c86315c docs(report): 5c2-prep-a -- both pins re-derive, the cap is 30 in every home, the phase ledger has its three missing sessions
-dff9fc2 data(5c2-prep-a): the phase ledger tells the truth again -- three repaired entries, today's reading, and a guard against the next silence
-a00240c feat(5c2-prep-a): the phase-ledger repair -- numbers read from the step ledgers, refusals instead of guesses
+273af1c fix(5c2-prep-b): DERIVED_ROOT registers a destination and writes nothing -- say so
+d0eaac0 docs(report): 5c2-prep-b -- the inference leg, the evidence table, and the two record debts paid
+3232a52 fix(5c2-prep-b): Dv232 and Dv176 -- the warnings reach the record per position, and both contract strings name the contract in force
+09b5dac feat(5c2-prep-b): the loop's inference leg -- the record is durable before the watermark moves
+2910037 docs(5c2-prep-b): prep-a's record closed -- the ADR for the team lead, hot.md's Next, the $30 cap in ARCHITECTURE
 ```
 
 ## 📋 Recent decisions
 
-- `skub2-b-prime-closed.md` — B′ closes as "instrument not ready" BY MEASUREMENT: two bars pass, and the one that fails is the same glyph it always was
 - `INDEX.md` — Decision records
-- `sku-b-pilot-closed-by-measurement.md` — The sku-b pilot closes as "instrument not ready" BY MEASUREMENT: two bars of three failed
+- `the-law-grows-inside-marked-blocks.md` — The law may only grow inside a marked block whose name the strip knows, and a sealed pre-registration is never re-pinned to make it green
+- `skub2-b-prime-closed.md` — B′ closes as "instrument not ready" BY MEASUREMENT: two bars pass, and the one that fails is the same glyph it always was
 
 ## 📅 Recent daily logs
 
@@ -30,14 +30,21 @@ a00240c feat(5c2-prep-a): the phase-ledger repair -- numbers read from the step 
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-13 10:26 (чекпойнт `/save`) — **5c2 ОТКРЫТ. `5c2-prep-a` ✅ $0**: SPEC 3.18 — закон; strip
-выучил семью поправок (оба запечатанных пина выводятся точно, НИЧЕГО не перепинено); кап фазы
-**25 → 30** во всех трёх домах; реестр фазы починен (31 → 35 входов) + постоянный страж молчания.
-Phase 4: **$23.8310 из $30.00**, остаток $6.1690, баланс $11.1690. Отчёт `5c2-prep-a.md`,
-отклонения Dv242–248. **Next: 5c2-prep-b и 5c2-prep-c — ядро цикла на serverless, ценз, проекция и
-пре-регистрация платной сессии; отдельные контракты, в этот НЕ входили.**
-Знать: `docs/ARCHITECTURE.md:324` всё ещё говорит «$25 Phase-4 GPU cap» — устарело, оставлено
-намеренно (три дома контракта закрыты, расширять скоуп запрещено).
+**Last update:** 2026-08-13 (конец сессии) — **`5c2-prep-b` ✅ ЗАКРЫТ, $0**, коммиты
+`9d558a7..273af1c`. Петля получила ногу инференса: рендер → шов → **запись на диск** → и только
+потом watermark. Очередь вычитает И watermark, И id уже записанных строк, поэтому убитый проход
+доигрывается бесплатно. `run_loop.ENDPOINT` остался `None` — гард закрыт, `--infer` без `--smoke`
+отказывает по 3.11 (2). Форма записи 3.18 (6) названа в ОДНОМ месте (`market_pulse.evidence`),
+`assert_complete` требует НАЛИЧИЯ поля, а не истинности. **Долги закрыты: Dv232** (предупреждения
+парсера — по ПОЗИЦИИ, выровнены по индексу, `len(warnings) == n_positions`) и **Dv176** (обе ветки
+`head["contract"]` — константы с тестом на каждой). Отчёт `docs/reports/5c2-prep-b.md`, отклонения
+**Dv249–258**. Раньше: `5c2-prep-a` ✅ (SPEC 3.18 — закон, кап 25 → 30, реестр фазы починен).
+Phase 4: **$23.8310 из $30.00**, остаток $6.1690 — за сессию не потрачено НИЧЕГО.
+
+**Знать перед prep-c:** из трёх видов строк улики продюсер есть только у `comment`.
+`leaflet_page` и `position_row` имеют схему, гард и тесты — и НИ ОДНОГО писателя. **5c2-run не
+должен быть контрактом, который впервые пишет `position_row`.** И `data/derived/` —
+зарегистрированное место, куда ПОКА никто не пишет (писатель — платной сессии).
 
 **Предыдущее состояние:** 2026-08-12 20:52 — ДЕНЬ ЗАКРЫТ (arch-a ✅, uni-a ✅, uni-b ✅, sku-b-prep ✅, sku-b-run ✅ ПРИНЯТ,
 sku-b-v3-prep ✅, sku-b-v3-run ⛔ ОТКАЗ на воротах — попытка ЦЕЛА, sku-b-v4-prep ✅ $0,
@@ -90,10 +97,24 @@ BY MEASUREMENT)**,
 
 ## 🔥 What's Hot
 
-**5c2-prep-a ✅ 13.08 ($0) — ЗАКРЫТ.** Восемь коммитов `5ac33b6..c53e069`; `make check` 2025 /
-2 skipped, дерево чистое. **Next: `5c2-prep-b` и `5c2-prep-c`** — ядро цикла на serverless, ценз и
-проекция, пре-регистрация платной сессии (SPEC 3.18 (5)); в этот контракт намеренно не входили.
+**5c2-prep-b ✅ 13.08 ($0) — ЗАКРЫТ.** Восемь коммитов `9d558a7..273af1c`; `make check` 2081 /
+2 skipped (было 2025), дерево чистое, куплено НИЧЕГО. Нога инференса: рендер → шов → **запись на
+диск** → watermark, и тест прерывает проход ровно между «модель ответила» и «запись легла»,
+проверяя курсор НА ДИСКЕ. `run_loop.ENDPOINT` = `None`. Форма записи 3.18 (6) — одно место,
+`market_pulse.evidence`. **Dv232 и Dv176 закрыты.** Отклонения Dv249–258, отчёт
+`docs/reports/5c2-prep-b.md`. **Next: `5c2-prep-c`** — ценз окна ПО ЧИСЛУ СТРОК, проекция цены с
+serverless (не подовые числа 5b) и пре-регистрация платной сессии (SPEC 3.18 (5)).
 **Blockers: нет.** Phase 4 — **$23.8310 из $30.00**, остаток $6.1690.
+
+**Знать перед prep-c, поимённо.** (1) Из трёх видов строк улики продюсер есть только у `comment` —
+`leaflet_page` и `position_row` имеют схему, гард и тесты и ни одного писателя; **5c2-run не должен
+быть контрактом, который впервые пишет `position_row`**. (2) `data/derived/` зарегистрирован и пуст:
+писатель — платной сессии. (3) Очередь сегодня — **16 218 строк**, watermark `inference` не выставлен
+нигде, и 70% бэклога это два канала (`@VARUS_channel` 6 410, `@msuaaaa` 4 928) против шести каналов
+по 4 строки — окно по числу строк без стратификации будет окном про два канала.
+
+**5c2-prep-a ✅ 13.08 ($0) — ЗАКРЫТ.** Восемь коммитов `5ac33b6..c53e069`; `make check` 2025 /
+2 skipped, дерево чистое.
 
 Из них шесть — `5ac33b6..dff9fc2`, плюс отчёт и хвост хранилища; таблица checkout — семь строк
 (контроль + шесть), она останавливается на `dff9fc2`, последнем коммите с кодом; ни одна строка не
@@ -279,19 +300,20 @@ tier-accuracy **0.8621 против 0.85 → PASS** (29 из 30, 1 нечита�
 Программа фазы задана (5): **один бесплатный прекурсор, потом ОДНА платная сессия**. Прекурсор
 разбит на три контракта, `5c2-prep-a` ✅ закрыт.
 
-**`5c2-prep-b` — В РАБОТЕ (этот контракт, $0).** Петля получает вторую половину — ногу инференса —
-и форму записи, которую 3.18 (6) делает обязательной. Что в нём: очередь по watermark `inference`
-на канал; запись на диск ДО сдвига watermark; повторный проход не покупает ничего дважды;
-`--dry-run` + стаб-smoke через ТОТ ЖЕ шов, которым пойдёт продакшн; константа эндпоинта
-спенд-гарда остаётся ЗАКРЫТОЙ. Плюс два стоячих долга — **Dv232** (предупреждения парсера не
-доходят до записи рана) и **Dv176** (`head["contract"]` драйвера называет контракт, под которым
-прогон не шёл) — оба садятся в Deliverable 2 и закрываются здесь.
+**`5c2-prep-b` ✅ ЗАКРЫТ ($0, коммиты `9d558a7..273af1c`).** Петля получила ногу инференса и форму
+записи 3.18 (6). Что осталось знать из него, а не из отчёта: очередь вычитает и watermark, и id уже
+записанных строк; smoke НИКОГДА не сохраняет курсор (иначе строки, на которые ответил фейк, стали бы
+«купленными» навсегда); `run_loop.ENDPOINT` остался `None`. Долги **Dv232** и **Dv176** закрыты.
+Полностью — `docs/reports/5c2-prep-b.md`, отклонения Dv249–258.
 
 **`5c2-prep-c` — СЛЕДУЮЩИЙ, отдельный контракт.** Ценз окна (3.18 (4): окно пре-регистрируется ПО
 ЧИСЛУ СТРОК, а не как диапазон дат, вычисляемый в момент прогона), ценовая проекция на serverless
 и пре-регистрация платной сессии — её кап, её стоп-правила и что окно покупает, закоммиченные до
-того, как сессия существует. **В prep-b не входит намеренно**: если число для них попадётся под
-руку — записать в отчёт и идти дальше.
+того, как сессия существует. **В prep-b не входило намеренно.** Что prep-b положил ему на стол:
+**16 218 строк** стоят над watermark `inference` по всему реестру, watermark НЕ выставлен ни на
+одном канале, и очередь крайне неровная — `@VARUS_channel` 6 410 + `@msuaaaa` 4 928 = **70%**
+бэклога, ещё шесть каналов по 4 строки. Окно по числу строк без стратификации — это окно про два
+канала. Плюс писатель улик для позиционной ноги (см. выше).
 
 **5c2-run — ОДНА платная сессия** под этой пре-регистрацией, с go/no-go ре-проекцией 3.17 (10)(a)
 без изменений. Ноги (2) проверяются на выходе самого окна при приёмке; нога, которую там проверить
