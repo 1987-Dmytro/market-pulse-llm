@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-13 09:12:41 (every SessionStart)
+**Auto-refreshed:** 2026-08-13 10:30:43 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-aecdd22 chore(vault): the skub2-close tail -- the day's log, hot.md, the index
-661792a docs(report): skub2-close appended -- bar 2 scored, B-prime closed by measurement
-1157343 test(skub2-close): derive the four newly-read pages from the v4 record, not from a list
-60eda29 docs(decision): B-prime closed by measurement -- what (13) fixed, and what it never touched
-ec29732 data(skub2-close): B-prime closed by measurement -- 0.98 PASS / 0.4125 FAIL / 0.8667 PASS
+c53e069 docs(report): 5c2-prep-a -- the log block dated to the table, the two docs commits named as outside it
+1344863 chore(vault): the 5c2-prep-a tail -- the day's log and the curated hot block
+c86315c docs(report): 5c2-prep-a -- both pins re-derive, the cap is 30 in every home, the phase ledger has its three missing sessions
+dff9fc2 data(5c2-prep-a): the phase ledger tells the truth again -- three repaired entries, today's reading, and a guard against the next silence
+a00240c feat(5c2-prep-a): the phase-ledger repair -- numbers read from the step ledgers, refusals instead of guesses
 ```
 
 ## 📋 Recent decisions
@@ -23,14 +23,14 @@ ec29732 data(skub2-close): B-prime closed by measurement -- 0.98 PASS / 0.4125 F
 
 ## 📅 Recent daily logs
 
+- `2026-08-13.md`
 - `2026-08-12.md`
 - `2026-08-11.md`
-- `2026-08-10.md`
 
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-13 10:15 — **5c2 ОТКРЫТ. `5c2-prep-a` ✅ $0**: SPEC 3.18 — закон; strip
+**Last update:** 2026-08-13 10:26 (чекпойнт `/save`) — **5c2 ОТКРЫТ. `5c2-prep-a` ✅ $0**: SPEC 3.18 — закон; strip
 выучил семью поправок (оба запечатанных пина выводятся точно, НИЧЕГО не перепинено); кап фазы
 **25 → 30** во всех трёх домах; реестр фазы починен (31 → 35 входов) + постоянный страж молчания.
 Phase 4: **$23.8310 из $30.00**, остаток $6.1690, баланс $11.1690. Отчёт `5c2-prep-a.md`,
@@ -90,8 +90,13 @@ BY MEASUREMENT)**,
 
 ## 🔥 What's Hot
 
-**5c2-prep-a ✅ 13.08 ($0).** Шесть коммитов `5ac33b6..dff9fc2` плюс отчёт седьмым и хвост
-хранилища восьмым; `make check` 2025 / 2 skipped; таблица checkout — семь строк, ни одна не
+**5c2-prep-a ✅ 13.08 ($0) — ЗАКРЫТ.** Восемь коммитов `5ac33b6..c53e069`; `make check` 2025 /
+2 skipped, дерево чистое. **Next: `5c2-prep-b` и `5c2-prep-c`** — ядро цикла на serverless, ценз и
+проекция, пре-регистрация платной сессии (SPEC 3.18 (5)); в этот контракт намеренно не входили.
+**Blockers: нет.** Phase 4 — **$23.8310 из $30.00**, остаток $6.1690.
+
+Из них шесть — `5ac33b6..dff9fc2`, плюс отчёт и хвост хранилища; таблица checkout — семь строк
+(контроль + шесть), она останавливается на `dff9fc2`, последнем коммите с кодом; ни одна строка не
 краснее контроля (единственный провал — артефакт проверяющего, Dv193/Dv206:
 `test_collect_5c1.py::test_the_guard_reads_the_pinned_paths_off_the_pin_file`).
 `docs/SPEC.md` едет РОВНО в одном коммите — `81855de`, вместе с кодом, который его зеленит.
