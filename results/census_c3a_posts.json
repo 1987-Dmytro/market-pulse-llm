@@ -1,0 +1,6261 @@
+{
+  "phase": "5c2-prep-c3a — the pre-filter census of the post leg",
+  "contract": "docs/PROMPT-5c2-prep-c3a.md deliverable 3; docs/SPEC.md amendment 3.18 (7)(e)",
+  "asks": "how many of the window's posts the relevance pre-filter passes, and what they cost",
+  "decides_nothing": "the pre-registration (prep-c3b) pins the number; this file only counts it. Nothing is fetched, nothing is spent, and no row is asked of any model",
+  "anchor": {
+    "anchor": "2026-08-09T00:00:00+00:00",
+    "days": 28,
+    "since": "2026-07-12T00:00:00+00:00",
+    "until": "2026-08-09T00:00:00+00:00",
+    "rule": "since <= date < until, half-open, so the window is exactly 28 days",
+    "why": "ratified by SPEC 3.18 (7)(a) — the corpus's own last day + 1. The two alternatives priced beside it in results/census_5c2.json were seen and declined",
+    "ratified_by": "the operator, 2026-08-13 (3.18 (7)(a))"
+  },
+  "rule": "The text leg's sample frame: which corpus rows the position pre-filter passes ($0, offline).",
+  "instrument": {
+    "prefilter": "market_pulse.positions.prefilter — a watchlist brand or a tracked category term AND a size/price pattern, both on the SAME line",
+    "not_the_entry_gate": "3.18 (7)(e) is explicit: «never the channel entry gate of 3.12, which gates CHANNELS». This filter gates ROWS and every registry channel is screened",
+    "lexicon": {
+      "path": "config/lexicon.yaml",
+      "sha256": "21b50bac55c7768334efa270f4048f1cc441670f336707e4e372737378cf1d98"
+    },
+    "registry": {
+      "path": "config/registry.yaml",
+      "sha256": "d4e3b2373c4378f3acc51079dc1d0560c28d58c46b71335b2bb352cae39be3ba"
+    },
+    "same_code_as_the_pass": "scripts/run_loop.py :: posts_of calls the same positions.prefilter over the same two files, so the population counted here is the queue that pass would answer"
+  },
+  "selection_pin": {
+    "asks": "is this the window the operator ratified, or another one with the same dates",
+    "source": "results/census_5c2.json :: channels[].posts.ids_sha256",
+    "census_5c2_sha256": "a1384a12bcbe975954f8feaa1c5207d59cc66ab524b3d877099bad92ede5305f",
+    "channels_pinned": 59,
+    "channels_checked": 59,
+    "disagreements": [],
+    "agrees": true,
+    "why": "the row COUNT can match while the rows differ — a store that moved under a later re-run produces the same total from different posts. The hash is what catches it"
+  },
+  "controls": {
+    "positive :: a leaflet line with brand, category, size, fat and price": {
+      "kind": "positive",
+      "line": "Молоко Яготинське 2,5% 900 г — 39,90 грн",
+      "expected": "passes, on one line",
+      "measured": {
+        "line": "Молоко Яготинське 2,5% 900 г — 39,90 грн",
+        "hit": "category:dairy:молок",
+        "matched": "молоко",
+        "pattern": "2,5%"
+      },
+      "ok": true
+    },
+    "negative :: a fitness post with a discount and no taxonomy": {
+      "kind": "negative",
+      "line": "Розклад тренувань на тиждень: понеділок — ноги, середа — спина, п'ятниця — руки. Реєстрація за посиланням, знижка 20% до кінця місяця.",
+      "expected": "does not pass — the rule is a conjunction",
+      "measured": null,
+      "ok": true
+    },
+    "negative :: a category with no number beside it": {
+      "kind": "negative",
+      "line": "Люблю сир і морозиво!",
+      "expected": "does not pass — the rule is a conjunction",
+      "measured": null,
+      "ok": true
+    },
+    "negative :: a price with no category and no brand": {
+      "kind": "negative",
+      "line": "Кросівки, розмір 37, 1499 грн",
+      "expected": "does not pass — the rule is a conjunction",
+      "measured": null,
+      "ok": true
+    }
+  },
+  "population_reportable": true,
+  "totals": {
+    "posts_in_window": 9158,
+    "with_text": 8926,
+    "passed": 349,
+    "passed_row_level": 441,
+    "share_of_posts_in_window": 0.0381,
+    "channels_with_a_pass": 25,
+    "passed_carrying": {
+      "currency": 29,
+      "percent": 92,
+      "size": 328
+    },
+    "carrying_note": "rows, not matches, and the three are not exclusive. `currency` is the cheapest deterministic reading of «is this line priced at all» — the filter cannot tell an OFFER from a recipe, and «Кефір — 400 мл» is a category term beside a size in an ingredient list. `percent` is its own bucket because «82,5%» is a fat content and «-38%» is a discount, and nothing here can tell them apart"
+  },
+  "frame": {
+    "rows": 349,
+    "ids_sha256": "d996ab14d87eafb944da149c4a0831bc149f0ab7525e444d9c82b0cc3c6a7e2c",
+    "ids_sha256_note": "sha256 of the passing ids, newline-joined in this record's order — sku_prefilter_census's own convention, so prep-c3b can pin the draw",
+    "evidence": "every row below carries the LINE that fired, the term that matched and the size/price pattern beside it, which is the frame convention 3.18 (7)(e) names"
+  },
+  "rate": {
+    "value": 0.00030669,
+    "source": "results/srv2d_cost.json :: rate.usd_per_second",
+    "why": "the settled serverless rate — the one field every projection in this repo has used since sku-b, and the one results/projection_5c2.json prices both other legs with"
+  },
+  "priced": {
+    "rows": 349,
+    "seconds_per_row": 2.8132,
+    "derivation": {
+      "source": "results/sku_b_positions_skub2.json :: derived, no single field holds it",
+      "how": "write_sku_projection_b2.text_marginal, the house derivation reused rather than rewritten: (timing.worker_seconds - projection.opened_seconds - pages x page_marginal) / population.text_rows",
+      "why": "skub2's own text leg — 30 rows, on the serverless runtime, PAID"
+    },
+    "report_line": {
+      "quote": "text leg    84.398 s over  30 rows  = 2.8133 s/row    $0.0259",
+      "source": "docs/reports/skub2-run.md",
+      "why": "the same leg in that session's report. It reads 2.8133 against the 2.8132 derived here — a fourth-decimal rounding difference, not two measurements"
+    },
+    "billed_seconds": 1041.8,
+    "hours": 0.29,
+    "usd": 0.3195,
+    "usd_with_drift": 0.3291,
+    "jobs_at_the_execution_timeout": 2,
+    "fixed_seconds": {
+      "idle_tail": 60.0,
+      "boot": "NOT added: 3.18 (7)(c) buys the two-leg window in ONE session, and this leg rides the endpoint the leaflet leg already booted. A boot here would be double-counted against results/projection_5c2.json, which already pays one"
+    }
+  },
+  "leaflet_corpus": {
+    "asks": "the whole leaflet corpus on disk — 3.18 (7)(d), NOT intersected with the window",
+    "manifest": {
+      "path": "results/post_media_5c1.json",
+      "sha256": "a93fc8a1af1c32a4fbc27268a2a8be0ffe57838b53e605cd3b018de437acacbb"
+    },
+    "pages": 159,
+    "posts": 19,
+    "channels": [
+      "@atb_market_official"
+    ],
+    "span": {
+      "first": "2026-07-01T17:53:57+00:00",
+      "last": "2026-07-23T06:35:09+00:00"
+    },
+    "ruling": {
+      "quote": "(`results/post_media_5c1.json`: today 159 pages under 19 posts, all",
+      "source": "docs/SPEC.md",
+      "why": "SPEC 3.18 (7)(d) states the population; the numbers beside it are re-counted from the manifest here, so the clause and the file agree or this record shows they do not"
+    },
+    "why_not_window_intersected": "«leaflets follow their own weekly cadence, and the window clause of (4) binds the comment and post legs only» — 3.18 (7)(d). The window holds 78 of these 159 pages (results/census_5c2.json :: totals.leaflet_pages_in_window) and the leg buys all 159"
+  },
+  "concentration": [
+    {
+      "handle": "@recepti",
+      "n": 85,
+      "share": 0.2436,
+      "cumulative": 85,
+      "cumulative_share": 0.2436
+    },
+    {
+      "handle": "@mameni_recepti",
+      "n": 72,
+      "share": 0.2063,
+      "cumulative": 157,
+      "cumulative_share": 0.4499
+    },
+    {
+      "handle": "@korolevakuchni",
+      "n": 52,
+      "share": 0.149,
+      "cumulative": 209,
+      "cumulative_share": 0.5989
+    },
+    {
+      "handle": "@retsepty",
+      "n": 41,
+      "share": 0.1175,
+      "cumulative": 250,
+      "cumulative_share": 0.7163
+    },
+    {
+      "handle": "@tarilka_malyuka",
+      "n": 17,
+      "share": 0.0487,
+      "cumulative": 267,
+      "cumulative_share": 0.765
+    },
+    {
+      "handle": "@konservacia_kulinaria",
+      "n": 16,
+      "share": 0.0458,
+      "cumulative": 283,
+      "cumulative_share": 0.8109
+    },
+    {
+      "handle": "@VARUS_channel",
+      "n": 9,
+      "share": 0.0258,
+      "cumulative": 292,
+      "cumulative_share": 0.8367
+    },
+    {
+      "handle": "@telegraf_kremenchuk",
+      "n": 9,
+      "share": 0.0258,
+      "cumulative": 301,
+      "cumulative_share": 0.8625
+    },
+    {
+      "handle": "@matusi_ukr",
+      "n": 7,
+      "share": 0.0201,
+      "cumulative": 308,
+      "cumulative_share": 0.8825
+    },
+    {
+      "handle": "@epicentrk_sale",
+      "n": 6,
+      "share": 0.0172,
+      "cumulative": 314,
+      "cumulative_share": 0.8997
+    },
+    {
+      "handle": "@ekomarket_shop",
+      "n": 5,
+      "share": 0.0143,
+      "cumulative": 319,
+      "cumulative_share": 0.914
+    },
+    {
+      "handle": "@forainfo",
+      "n": 4,
+      "share": 0.0115,
+      "cumulative": 323,
+      "cumulative_share": 0.9255
+    },
+    {
+      "handle": "@gorishnie_plavni1",
+      "n": 4,
+      "share": 0.0115,
+      "cumulative": 327,
+      "cumulative_share": 0.937
+    },
+    {
+      "handle": "@mandziak",
+      "n": 4,
+      "share": 0.0115,
+      "cumulative": 331,
+      "cumulative_share": 0.9484
+    },
+    {
+      "handle": "@marketopt_promo",
+      "n": 4,
+      "share": 0.0115,
+      "cumulative": 335,
+      "cumulative_share": 0.9599
+    },
+    {
+      "handle": "@vylkachannel",
+      "n": 4,
+      "share": 0.0115,
+      "cumulative": 339,
+      "cumulative_share": 0.9713
+    },
+    {
+      "handle": "@silposilpo",
+      "n": 2,
+      "share": 0.0057,
+      "cumulative": 341,
+      "cumulative_share": 0.9771
+    },
+    {
+      "handle": "@blwbabies",
+      "n": 1,
+      "share": 0.0029,
+      "cumulative": 342,
+      "cumulative_share": 0.9799
+    },
+    {
+      "handle": "@h_kremenchug",
+      "n": 1,
+      "share": 0.0029,
+      "cumulative": 343,
+      "cumulative_share": 0.9828
+    },
+    {
+      "handle": "@kremen_news",
+      "n": 1,
+      "share": 0.0029,
+      "cumulative": 344,
+      "cumulative_share": 0.9857
+    },
+    {
+      "handle": "@maudau",
+      "n": 1,
+      "share": 0.0029,
+      "cumulative": 345,
+      "cumulative_share": 0.9885
+    },
+    {
+      "handle": "@msuaaaa",
+      "n": 1,
+      "share": 0.0029,
+      "cumulative": 346,
+      "cumulative_share": 0.9914
+    },
+    {
+      "handle": "@poltava_informue",
+      "n": 1,
+      "share": 0.0029,
+      "cumulative": 347,
+      "cumulative_share": 0.9943
+    },
+    {
+      "handle": "@suspilnepoltava",
+      "n": 1,
+      "share": 0.0029,
+      "cumulative": 348,
+      "cumulative_share": 0.9971
+    },
+    {
+      "handle": "@useful_healthy_fitness_menu",
+      "n": 1,
+      "share": 0.0029,
+      "cumulative": 349,
+      "cumulative_share": 1.0
+    }
+  ],
+  "cannot_answer": {
+    "channels": [
+      "@Evgenija_dutjache_menu",
+      "@dimakaminskyifit",
+      "@dutyache_menu",
+      "@hydnem_prosto",
+      "@itsmamix",
+      "@lab_of_childhood",
+      "@skhudnennya"
+    ],
+    "why": "no file in data/raw/posts/ — the channel has never been walked. NOT zero"
+  },
+  "channels": [
+    {
+      "handle": "@recepti",
+      "source_id": "recepti",
+      "audience": "cooking_recipes",
+      "source_type": "community",
+      "posts_in_window": 190,
+      "ids_sha256": "bd4f9972701b958fe26b897bb4a0b12c751a5e957dc95effdbf67ddef6a193f2",
+      "matches_census_5c2": true,
+      "rows": 190,
+      "with_text": 190,
+      "passed": 85,
+      "passed_row_level": 98,
+      "share_of_texted": 0.4474,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 17,
+        "size": 84
+      },
+      "by_hit": {
+        "category:dairy:сир": 41,
+        "category:dairy:масл": 17,
+        "category:dairy:молок": 12,
+        "category:dairy:йогурт": 6,
+        "category:dairy:кефір": 4,
+        "category:dairy:сметан": 3,
+        "category:dairy:рослинн": 1,
+        "category:dairy:ряжанк": 1
+      }
+    },
+    {
+      "handle": "@mameni_recepti",
+      "source_id": "mameni_recepti",
+      "audience": "cooking_recipes",
+      "source_type": "community",
+      "posts_in_window": 239,
+      "ids_sha256": "ba235a6ba981ecf21f9486674e4d8a0bba7c3866ab371d850d70c76a4f740265",
+      "matches_census_5c2": true,
+      "rows": 239,
+      "with_text": 239,
+      "passed": 72,
+      "passed_row_level": 96,
+      "share_of_texted": 0.3013,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 16,
+        "size": 72
+      },
+      "by_hit": {
+        "category:dairy:сир": 28,
+        "category:dairy:масл": 19,
+        "category:dairy:молок": 14,
+        "category:dairy:сметан": 6,
+        "category:dairy:кефір": 4,
+        "category:dairy:йогурт": 1
+      }
+    },
+    {
+      "handle": "@korolevakuchni",
+      "source_id": "korolevakuchni",
+      "audience": "cooking_recipes",
+      "source_type": "community",
+      "posts_in_window": 121,
+      "ids_sha256": "2d905b292cd799b04a2f027d57be49e75a88c75dad4d7ffcd8f8689adc0a396b",
+      "matches_census_5c2": true,
+      "rows": 121,
+      "with_text": 121,
+      "passed": 52,
+      "passed_row_level": 64,
+      "share_of_texted": 0.4298,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 4,
+        "size": 52
+      },
+      "by_hit": {
+        "category:dairy:сир": 25,
+        "category:dairy:молок": 11,
+        "category:dairy:масл": 9,
+        "category:dairy:сметан": 5,
+        "category:dairy:йогурт": 1,
+        "category:dairy:кефір": 1
+      }
+    },
+    {
+      "handle": "@retsepty",
+      "source_id": "retsepty",
+      "audience": "cooking_recipes",
+      "source_type": "community",
+      "posts_in_window": 87,
+      "ids_sha256": "53e5cc41c20f59a805b2c11afee4d1451800469c288f6f85fb043ad92fbc5c16",
+      "matches_census_5c2": true,
+      "rows": 87,
+      "with_text": 71,
+      "passed": 41,
+      "passed_row_level": 43,
+      "share_of_texted": 0.5775,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 5,
+        "size": 40
+      },
+      "by_hit": {
+        "category:dairy:сир": 19,
+        "category:dairy:масл": 7,
+        "category:dairy:молок": 7,
+        "category:dairy:кефір": 4,
+        "category:dairy:йогурт": 2,
+        "category:dairy:ряжанк": 1,
+        "category:dairy:сметан": 1
+      }
+    },
+    {
+      "handle": "@tarilka_malyuka",
+      "source_id": "tarilka_malyuka",
+      "audience": "baby_food",
+      "source_type": "community",
+      "posts_in_window": 82,
+      "ids_sha256": "28f0b080bd7b690e0decd0141666fab654806e27be0a9d3a2024608e26971a7f",
+      "matches_census_5c2": true,
+      "rows": 82,
+      "with_text": 81,
+      "passed": 17,
+      "passed_row_level": 24,
+      "share_of_texted": 0.2099,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 0,
+        "size": 17
+      },
+      "by_hit": {
+        "category:dairy:сир": 11,
+        "category:dairy:молок": 4,
+        "category:dairy:масл": 2
+      }
+    },
+    {
+      "handle": "@konservacia_kulinaria",
+      "source_id": "konservacia_kulinaria",
+      "audience": "cooking_recipes",
+      "source_type": "community",
+      "posts_in_window": 85,
+      "ids_sha256": "710b24ff847c8c7fee3267b29bd85f23e3b309fa852817a3d2423abcbab2ca34",
+      "matches_census_5c2": true,
+      "rows": 85,
+      "with_text": 85,
+      "passed": 16,
+      "passed_row_level": 20,
+      "share_of_texted": 0.1882,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 10,
+        "size": 16
+      },
+      "by_hit": {
+        "category:dairy:рослинн": 12,
+        "category:dairy:масл": 2,
+        "category:dairy:молок": 2
+      }
+    },
+    {
+      "handle": "@VARUS_channel",
+      "source_id": "varus",
+      "audience": "retail_official",
+      "source_type": "official_retail",
+      "posts_in_window": 79,
+      "ids_sha256": "4473eb0cf3bda0894382deadddd0a91bce7fa820d9a432082c0e8311d00ac77e",
+      "matches_census_5c2": true,
+      "rows": 79,
+      "with_text": 64,
+      "passed": 9,
+      "passed_row_level": 12,
+      "share_of_texted": 0.1406,
+      "passed_carrying": {
+        "currency": 4,
+        "percent": 6,
+        "size": 0
+      },
+      "by_hit": {
+        "brand:varus-pl": 3,
+        "category:dairy:сметан": 3,
+        "category:dairy:йогурт": 1,
+        "category:dairy:молок": 1,
+        "category:dairy:сир": 1
+      }
+    },
+    {
+      "handle": "@telegraf_kremenchuk",
+      "source_id": "telegraf_kremenchuk",
+      "audience": "regional",
+      "source_type": "community",
+      "posts_in_window": 613,
+      "ids_sha256": "253421e60548e2eba5cff999e58d129a4191171efab4899a3c20da35adcfe767",
+      "matches_census_5c2": true,
+      "rows": 613,
+      "with_text": 606,
+      "passed": 9,
+      "passed_row_level": 14,
+      "share_of_texted": 0.0149,
+      "passed_carrying": {
+        "currency": 8,
+        "percent": 8,
+        "size": 8
+      },
+      "by_hit": {
+        "category:dairy:сир": 5,
+        "category:dairy:молок": 3,
+        "category:dairy:сметан": 1
+      }
+    },
+    {
+      "handle": "@matusi_ukr",
+      "source_id": "matusi_ukr",
+      "audience": "mothers_kids",
+      "source_type": "community",
+      "posts_in_window": 218,
+      "ids_sha256": "77ca665bb8552db72d17bf8e73cc6a3062ab316067203aa9e73304f354b6ac3e",
+      "matches_census_5c2": true,
+      "rows": 218,
+      "with_text": 200,
+      "passed": 7,
+      "passed_row_level": 9,
+      "share_of_texted": 0.035,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 1,
+        "size": 7
+      },
+      "by_hit": {
+        "category:dairy:сир": 5,
+        "category:dairy:йогурт": 1,
+        "category:dairy:масл": 1
+      }
+    },
+    {
+      "handle": "@epicentrk_sale",
+      "source_id": "epicentrk_sale",
+      "audience": "retail_official",
+      "source_type": "official_retail",
+      "posts_in_window": 131,
+      "ids_sha256": "c7fde135c13dff5810003399299944f1a3cb8260430e8436ba850c0ec4227637",
+      "matches_census_5c2": true,
+      "rows": 131,
+      "with_text": 130,
+      "passed": 6,
+      "passed_row_level": 7,
+      "share_of_texted": 0.0462,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 1,
+        "size": 6
+      },
+      "by_hit": {
+        "category:dairy:масл": 3,
+        "category:dairy:молок": 2,
+        "category:dairy:молочн": 1
+      }
+    },
+    {
+      "handle": "@ekomarket_shop",
+      "source_id": "ekomarket_shop",
+      "audience": "retail_official",
+      "source_type": "official_retail",
+      "posts_in_window": 12,
+      "ids_sha256": "25203c43c0bd7fe54cbc473ba63d151adffd3db7f652c96bef9d740c09013d3a",
+      "matches_census_5c2": true,
+      "rows": 12,
+      "with_text": 12,
+      "passed": 5,
+      "passed_row_level": 5,
+      "share_of_texted": 0.4167,
+      "passed_carrying": {
+        "currency": 5,
+        "percent": 5,
+        "size": 5
+      },
+      "by_hit": {
+        "brand:rud": 1,
+        "category:dairy:молок": 1,
+        "category:dairy:молочн": 1,
+        "category:dairy:сир": 1,
+        "category:ice-cream:морозив": 1
+      }
+    },
+    {
+      "handle": "@forainfo",
+      "source_id": "forainfo",
+      "audience": "retail_official",
+      "source_type": "official_retail",
+      "posts_in_window": 16,
+      "ids_sha256": "26c3ba6646ad553ad81f147aabc0917db6cc671d152369f110ae247064f46953",
+      "matches_census_5c2": true,
+      "rows": 16,
+      "with_text": 16,
+      "passed": 4,
+      "passed_row_level": 5,
+      "share_of_texted": 0.25,
+      "passed_carrying": {
+        "currency": 4,
+        "percent": 4,
+        "size": 3
+      },
+      "by_hit": {
+        "category:dairy:масл": 1,
+        "category:dairy:молочн": 1,
+        "category:dairy:сир": 1,
+        "category:dairy:сметан": 1
+      }
+    },
+    {
+      "handle": "@gorishnie_plavni1",
+      "source_id": "gorishnie_plavni1",
+      "audience": "regional",
+      "source_type": "community",
+      "posts_in_window": 548,
+      "ids_sha256": "9f11d9de11e9488cd60f7a9a6f32c39d65a5cc9647c75bb117a794b6a0aaa764",
+      "matches_census_5c2": true,
+      "rows": 548,
+      "with_text": 548,
+      "passed": 4,
+      "passed_row_level": 5,
+      "share_of_texted": 0.0073,
+      "passed_carrying": {
+        "currency": 4,
+        "percent": 3,
+        "size": 4
+      },
+      "by_hit": {
+        "category:dairy:молок": 3,
+        "category:dairy:сметан": 1
+      }
+    },
+    {
+      "handle": "@mandziak",
+      "source_id": "mandziak",
+      "audience": "health_fitness",
+      "source_type": "community",
+      "posts_in_window": 119,
+      "ids_sha256": "5c2647c342cb21c9c21c381db3d01c026c3ded19f8b2cf6ab1d10f0511ff74b9",
+      "matches_census_5c2": true,
+      "rows": 119,
+      "with_text": 118,
+      "passed": 4,
+      "passed_row_level": 7,
+      "share_of_texted": 0.0339,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 4,
+        "size": 2
+      },
+      "by_hit": {
+        "category:dairy:молочн": 2,
+        "category:dairy:йогурт": 1,
+        "category:dairy:рослинн": 1
+      }
+    },
+    {
+      "handle": "@marketopt_promo",
+      "source_id": "marketopt_promo",
+      "audience": "retail_official",
+      "source_type": "official_retail",
+      "posts_in_window": 12,
+      "ids_sha256": "cc9f0318c50ef39734281ab9f6c2c3664ab8d0c6a83ecf5cda54e9f50894a400",
+      "matches_census_5c2": true,
+      "rows": 12,
+      "with_text": 8,
+      "passed": 4,
+      "passed_row_level": 4,
+      "share_of_texted": 0.5,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 3,
+        "size": 4
+      },
+      "by_hit": {
+        "category:dairy:сир": 2,
+        "brand:ferma": 1,
+        "category:dairy:сметан": 1
+      }
+    },
+    {
+      "handle": "@vylkachannel",
+      "source_id": "vylkachannel",
+      "audience": "cooking_recipes",
+      "source_type": "community",
+      "posts_in_window": 26,
+      "ids_sha256": "1e789b3a1f5aeca39041bd22a169b811237aaaf71e77efe8ad6720b52622ab61",
+      "matches_census_5c2": true,
+      "rows": 26,
+      "with_text": 26,
+      "passed": 4,
+      "passed_row_level": 7,
+      "share_of_texted": 0.1538,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 0,
+        "size": 4
+      },
+      "by_hit": {
+        "category:dairy:масл": 2,
+        "category:dairy:сир": 2
+      }
+    },
+    {
+      "handle": "@silposilpo",
+      "source_id": "silpo",
+      "audience": "retail_official",
+      "source_type": "official_retail",
+      "posts_in_window": 21,
+      "ids_sha256": "44b0294aedecbdacbb1e96b9ef7935decc9c1a29427b368c82b7a3b5906dad17",
+      "matches_census_5c2": true,
+      "rows": 21,
+      "with_text": 21,
+      "passed": 2,
+      "passed_row_level": 5,
+      "share_of_texted": 0.0952,
+      "passed_carrying": {
+        "currency": 2,
+        "percent": 1,
+        "size": 1
+      },
+      "by_hit": {
+        "brand:premia": 1,
+        "category:dairy:масл": 1
+      }
+    },
+    {
+      "handle": "@blwbabies",
+      "source_id": "blwbabies",
+      "audience": "baby_food",
+      "source_type": "community",
+      "posts_in_window": 4,
+      "ids_sha256": "7568620186d6e03a7120bb03f6ebf5befa13796f5b5e42295296c05c49b783cf",
+      "matches_census_5c2": true,
+      "rows": 4,
+      "with_text": 4,
+      "passed": 1,
+      "passed_row_level": 1,
+      "share_of_texted": 0.25,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 1,
+        "size": 1
+      },
+      "by_hit": {
+        "category:dairy:йогурт": 1
+      }
+    },
+    {
+      "handle": "@h_kremenchug",
+      "source_id": "h_kremenchug",
+      "audience": "regional",
+      "source_type": "community",
+      "posts_in_window": 445,
+      "ids_sha256": "b25951e4df3d2d970be42a521ce5ecb0ea59f9aeb4fee4f6a426e72437384473",
+      "matches_census_5c2": true,
+      "rows": 445,
+      "with_text": 445,
+      "passed": 1,
+      "passed_row_level": 1,
+      "share_of_texted": 0.0022,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 1,
+        "size": 0
+      },
+      "by_hit": {
+        "category:dairy:сир": 1
+      }
+    },
+    {
+      "handle": "@kremen_news",
+      "source_id": "kremen_news",
+      "audience": "regional",
+      "source_type": "community",
+      "posts_in_window": 344,
+      "ids_sha256": "1a0ff8023e0e123e964a774ef11803dc37d2fe7c31d04b5f683853ef7c4c959c",
+      "matches_census_5c2": true,
+      "rows": 344,
+      "with_text": 344,
+      "passed": 1,
+      "passed_row_level": 1,
+      "share_of_texted": 0.0029,
+      "passed_carrying": {
+        "currency": 1,
+        "percent": 0,
+        "size": 0
+      },
+      "by_hit": {
+        "category:dairy:масл": 1
+      }
+    },
+    {
+      "handle": "@maudau",
+      "source_id": "maudau",
+      "audience": "supermarket_deals",
+      "source_type": "community",
+      "posts_in_window": 61,
+      "ids_sha256": "ac1db09514c64d6e40407de678854c0bcafb804920c8efd516cbb8261a8c2bf7",
+      "matches_census_5c2": true,
+      "rows": 61,
+      "with_text": 57,
+      "passed": 1,
+      "passed_row_level": 2,
+      "share_of_texted": 0.0175,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 1,
+        "size": 0
+      },
+      "by_hit": {
+        "category:dairy:десерт": 1
+      }
+    },
+    {
+      "handle": "@msuaaaa",
+      "source_id": "msuaaaa",
+      "audience": "supermarket_deals",
+      "source_type": "aggregator",
+      "posts_in_window": 34,
+      "ids_sha256": "dfbd63286796a3a9e3983d87a1a3609bfac7e0fc0a51a641881e57d559566703",
+      "matches_census_5c2": true,
+      "rows": 34,
+      "with_text": 34,
+      "passed": 1,
+      "passed_row_level": 2,
+      "share_of_texted": 0.0294,
+      "passed_carrying": {
+        "currency": 1,
+        "percent": 0,
+        "size": 0
+      },
+      "by_hit": {
+        "category:dairy:масл": 1
+      }
+    },
+    {
+      "handle": "@poltava_informue",
+      "source_id": "poltava_informue",
+      "audience": "regional",
+      "source_type": "community",
+      "posts_in_window": 1271,
+      "ids_sha256": "27b2f1487c4830d5c13f22237e698d52f460c0dc412fb7b0eb87981fbc0f330d",
+      "matches_census_5c2": true,
+      "rows": 1271,
+      "with_text": 1270,
+      "passed": 1,
+      "passed_row_level": 1,
+      "share_of_texted": 0.0008,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 0,
+        "size": 1
+      },
+      "by_hit": {
+        "brand:varto": 1
+      }
+    },
+    {
+      "handle": "@suspilnepoltava",
+      "source_id": "suspilnepoltava",
+      "audience": "regional",
+      "source_type": "community",
+      "posts_in_window": 509,
+      "ids_sha256": "c581c46e401342a2df88259e2cdb2ff57ef4e30695bf4395388ff1bdd3323154",
+      "matches_census_5c2": true,
+      "rows": 509,
+      "with_text": 508,
+      "passed": 1,
+      "passed_row_level": 2,
+      "share_of_texted": 0.002,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 1,
+        "size": 0
+      },
+      "by_hit": {
+        "category:dairy:масл": 1
+      }
+    },
+    {
+      "handle": "@useful_healthy_fitness_menu",
+      "source_id": "useful_healthy_fitness_menu",
+      "audience": "health_fitness",
+      "source_type": "community",
+      "posts_in_window": 17,
+      "ids_sha256": "8c8417b417b4dca0ed2bddf1e45bf41c61cc607e37767579a59bf3b8ed016f2e",
+      "matches_census_5c2": true,
+      "rows": 17,
+      "with_text": 9,
+      "passed": 1,
+      "passed_row_level": 1,
+      "share_of_texted": 0.1111,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 0,
+        "size": 1
+      },
+      "by_hit": {
+        "category:dairy:сир": 1
+      }
+    },
+    {
+      "handle": "@Hadiach_telegram",
+      "source_id": "hadiach_telegram",
+      "audience": "regional",
+      "source_type": "community",
+      "posts_in_window": 141,
+      "ids_sha256": "2b0c3121943c56fb39e560a438622a65c721711bc632a21aaee1a42d6a24c943",
+      "matches_census_5c2": true,
+      "rows": 141,
+      "with_text": 141,
+      "passed": 0,
+      "passed_row_level": 0,
+      "share_of_texted": 0.0,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 0,
+        "size": 0
+      },
+      "by_hit": {}
+    },
+    {
+      "handle": "@HealthPsycholog",
+      "source_id": "healthpsycholog",
+      "audience": "health_fitness",
+      "source_type": "community",
+      "posts_in_window": 16,
+      "ids_sha256": "4e06ef7feb2b7da50681a76a4ca4c19abb2b439089f7ff4031a3bfe6bd53f54e",
+      "matches_census_5c2": true,
+      "rows": 16,
+      "with_text": 16,
+      "passed": 0,
+      "passed_row_level": 0,
+      "share_of_texted": 0.0,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 0,
+        "size": 0
+      },
+      "by_hit": {}
+    },
+    {
+      "handle": "@KarlivkaLive",
+      "source_id": "karlivkalive",
+      "audience": "regional",
+      "source_type": "community",
+      "posts_in_window": 12,
+      "ids_sha256": "1a189dfef7307098f838358e4a41d2b03e1fc6aa2635d1d9edcaf648d522a4fa",
+      "matches_census_5c2": true,
+      "rows": 12,
+      "with_text": 9,
+      "passed": 0,
+      "passed_row_level": 0,
+      "share_of_texted": 0.0,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 0,
+        "size": 0
+      },
+      "by_hit": {}
+    },
+    {
+      "handle": "@LHVC_info",
+      "source_id": "lhvc_info",
+      "audience": "regional",
+      "source_type": "community",
+      "posts_in_window": 1,
+      "ids_sha256": "6815fd0989fc6aa86c07ab321564405cedf401875868f38d40a4631cac92e599",
+      "matches_census_5c2": true,
+      "rows": 1,
+      "with_text": 1,
+      "passed": 0,
+      "passed_row_level": 0,
+      "share_of_texted": 0.0,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 0,
+        "size": 0
+      },
+      "by_hit": {}
+    },
+    {
+      "handle": "@PirOperative",
+      "source_id": "piroperative",
+      "audience": "regional",
+      "source_type": "community",
+      "posts_in_window": 103,
+      "ids_sha256": "3ed4e5282c084eb43b4607a3168b996c2c3929e07306e4157a63b8dde7116b9d",
+      "matches_census_5c2": true,
+      "rows": 103,
+      "with_text": 101,
+      "passed": 0,
+      "passed_row_level": 0,
+      "share_of_texted": 0.0,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 0,
+        "size": 0
+      },
+      "by_hit": {}
+    },
+    {
+      "handle": "@Wellosophy_Lesya",
+      "source_id": "wellosophy_lesya",
+      "audience": "health_fitness",
+      "source_type": "community",
+      "posts_in_window": 5,
+      "ids_sha256": "cb85772bb0d62a1731ed4d9a9fb6af48798c437e7b5262202bd35e7b8a5973da",
+      "matches_census_5c2": true,
+      "rows": 5,
+      "with_text": 4,
+      "passed": 0,
+      "passed_row_level": 0,
+      "share_of_texted": 0.0,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 0,
+        "size": 0
+      },
+      "by_hit": {}
+    },
+    {
+      "handle": "@anastasiiadavydiukfitness",
+      "source_id": "anastasiiadavydiukfitness",
+      "audience": "health_fitness",
+      "source_type": "community",
+      "posts_in_window": 1,
+      "ids_sha256": "3fdba35f04dc8c462986c992bcf875546257113072a909c162f7e470e581e278",
+      "matches_census_5c2": true,
+      "rows": 1,
+      "with_text": 1,
+      "passed": 0,
+      "passed_row_level": 0,
+      "share_of_texted": 0.0,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 0,
+        "size": 0
+      },
+      "by_hit": {}
+    },
+    {
+      "handle": "@atb_aktsiyi",
+      "source_id": "atb_aktsiyi",
+      "audience": "supermarket_deals",
+      "source_type": "aggregator",
+      "posts_in_window": 53,
+      "ids_sha256": "42188a9a8bc5bd2ea0178306df8156f446aa1d36f697cdc05a1da1a50f096ca1",
+      "matches_census_5c2": true,
+      "rows": 53,
+      "with_text": 7,
+      "passed": 0,
+      "passed_row_level": 0,
+      "share_of_texted": 0.0,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 0,
+        "size": 0
+      },
+      "by_hit": {}
+    },
+    {
+      "handle": "@atb_market_official",
+      "source_id": "atb",
+      "audience": "retail_official",
+      "source_type": "official_retail",
+      "posts_in_window": 13,
+      "ids_sha256": "ac2a2e330f3b518e25cd75b563208b83dc3e434a74a3eb074d23003697b46832",
+      "matches_census_5c2": true,
+      "rows": 13,
+      "with_text": 4,
+      "passed": 0,
+      "passed_row_level": 0,
+      "share_of_texted": 0.0,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 0,
+        "size": 0
+      },
+      "by_hit": {}
+    },
+    {
+      "handle": "@chifit_family",
+      "source_id": "chifit_family",
+      "audience": "health_fitness",
+      "source_type": "community",
+      "posts_in_window": 4,
+      "ids_sha256": "2008b36d4782a05110faa6c0aa81f34f166634de8a7d9da70522e21a5a2ab6a9",
+      "matches_census_5c2": true,
+      "rows": 4,
+      "with_text": 4,
+      "passed": 0,
+      "passed_row_level": 0,
+      "share_of_texted": 0.0,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 0,
+        "size": 0
+      },
+      "by_hit": {}
+    },
+    {
+      "handle": "@denisovapro",
+      "source_id": "denisovapro",
+      "audience": "health_fitness",
+      "source_type": "community",
+      "posts_in_window": 20,
+      "ids_sha256": "ec454fcdde7085265261e4518b794dde1258e1ed35433fc38f0c13be9ed3fc15",
+      "matches_census_5c2": true,
+      "rows": 20,
+      "with_text": 16,
+      "passed": 0,
+      "passed_row_level": 0,
+      "share_of_texted": 0.0,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 0,
+        "size": 0
+      },
+      "by_hit": {}
+    },
+    {
+      "handle": "@dpssgovua",
+      "source_id": "dpssgovua",
+      "audience": "food_quality",
+      "source_type": "government",
+      "posts_in_window": 76,
+      "ids_sha256": "f326eca5532c2ddedbc897dcbf58ea27386027f2468273b274b09304221406dc",
+      "matches_census_5c2": true,
+      "rows": 76,
+      "with_text": 76,
+      "passed": 0,
+      "passed_row_level": 0,
+      "share_of_texted": 0.0,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 0,
+        "size": 0
+      },
+      "by_hit": {}
+    },
+    {
+      "handle": "@educationwithloven",
+      "source_id": "educationwithloven",
+      "audience": "mothers_kids",
+      "source_type": "community",
+      "posts_in_window": 421,
+      "ids_sha256": "2bb594ef83227aa9ca28c804465abde8a2669e8cd56e7d69267d7369b5ff797d",
+      "matches_census_5c2": true,
+      "rows": 421,
+      "with_text": 396,
+      "passed": 0,
+      "passed_row_level": 0,
+      "share_of_texted": 0.0,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 0,
+        "size": 0
+      },
+      "by_hit": {}
+    },
+    {
+      "handle": "@eftforhealth",
+      "source_id": "eftforhealth",
+      "audience": "health_fitness",
+      "source_type": "community",
+      "posts_in_window": 0,
+      "ids_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "matches_census_5c2": true,
+      "rows": 0,
+      "with_text": 0,
+      "passed": 0,
+      "passed_row_level": 0,
+      "share_of_texted": 0.0,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 0,
+        "size": 0
+      },
+      "by_hit": {}
+    },
+    {
+      "handle": "@gaid_skobioale",
+      "source_id": "gaid_skobioale",
+      "audience": "health_fitness",
+      "source_type": "community",
+      "posts_in_window": 18,
+      "ids_sha256": "1d560a919f06b5c627fd2e775a69b08b54c32bf462d51526af7fd1c48fe7765a",
+      "matches_census_5c2": true,
+      "rows": 18,
+      "with_text": 1,
+      "passed": 0,
+      "passed_row_level": 0,
+      "share_of_texted": 0.0,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 0,
+        "size": 0
+      },
+      "by_hit": {}
+    },
+    {
+      "handle": "@globine1",
+      "source_id": "globine1",
+      "audience": "regional",
+      "source_type": "community",
+      "posts_in_window": 101,
+      "ids_sha256": "0229d7bbe393b16c80a525ca151b1915d3f480c4dfaf9ff9116018d66d3b68b3",
+      "matches_census_5c2": true,
+      "rows": 101,
+      "with_text": 98,
+      "passed": 0,
+      "passed_row_level": 0,
+      "share_of_texted": 0.0,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 0,
+        "size": 0
+      },
+      "by_hit": {}
+    },
+    {
+      "handle": "@kkondr_fit",
+      "source_id": "kkondr_fit",
+      "audience": "health_fitness",
+      "source_type": "community",
+      "posts_in_window": 2,
+      "ids_sha256": "9a35fb247f30912a2f7f1c4ef031dc579296baebc36d89f483d8c30a4ac10130",
+      "matches_census_5c2": true,
+      "rows": 2,
+      "with_text": 2,
+      "passed": 0,
+      "passed_row_level": 0,
+      "share_of_texted": 0.0,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 0,
+        "size": 0
+      },
+      "by_hit": {}
+    },
+    {
+      "handle": "@klopotenkofood",
+      "source_id": "klopotenkofood",
+      "audience": "cooking_recipes",
+      "source_type": "community",
+      "posts_in_window": 38,
+      "ids_sha256": "2f02ceb78cc41ab30b45cc46715a37bf13469e48f36172be07c345c4edb05d9c",
+      "matches_census_5c2": true,
+      "rows": 38,
+      "with_text": 31,
+      "passed": 0,
+      "passed_row_level": 1,
+      "share_of_texted": 0.0,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 0,
+        "size": 0
+      },
+      "by_hit": {}
+    },
+    {
+      "handle": "@kopiyochka1",
+      "source_id": "kopiyochka1",
+      "audience": "supermarket_deals",
+      "source_type": "community",
+      "posts_in_window": 51,
+      "ids_sha256": "c24b2ab5a1e3c28a06fa575b954145077b2751dee9500a5c509fba4d6824f88d",
+      "matches_census_5c2": true,
+      "rows": 51,
+      "with_text": 48,
+      "passed": 0,
+      "passed_row_level": 0,
+      "share_of_texted": 0.0,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 0,
+        "size": 0
+      },
+      "by_hit": {}
+    },
+    {
+      "handle": "@mamaiagolodniy",
+      "source_id": "mamaiagolodniy",
+      "audience": "baby_food",
+      "source_type": "community",
+      "posts_in_window": 5,
+      "ids_sha256": "211667c227304aad3132f36e5fe81a6b44d594a2e3100ef234342c2ded223cfb",
+      "matches_census_5c2": true,
+      "rows": 5,
+      "with_text": 5,
+      "passed": 0,
+      "passed_row_level": 0,
+      "share_of_texted": 0.0,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 0,
+        "size": 0
+      },
+      "by_hit": {}
+    },
+    {
+      "handle": "@mamo_nepsichuy",
+      "source_id": "mamo_nepsichuy",
+      "audience": "mothers_kids",
+      "source_type": "community",
+      "posts_in_window": 44,
+      "ids_sha256": "2ed41b6156f61779f92108797bf9c70e28b1a141582b2b841e6276f274c17b9e",
+      "matches_census_5c2": true,
+      "rows": 44,
+      "with_text": 44,
+      "passed": 0,
+      "passed_row_level": 0,
+      "share_of_texted": 0.0,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 0,
+        "size": 0
+      },
+      "by_hit": {}
+    },
+    {
+      "handle": "@mo3ambik",
+      "source_id": "mo3ambik",
+      "audience": "regional",
+      "source_type": "community",
+      "posts_in_window": 194,
+      "ids_sha256": "4af8eec8560d1ab52d26192997efccdeffc901b7ec38b300873bb8ab8e675657",
+      "matches_census_5c2": true,
+      "rows": 194,
+      "with_text": 189,
+      "passed": 0,
+      "passed_row_level": 0,
+      "share_of_texted": 0.0,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 0,
+        "size": 0
+      },
+      "by_hit": {}
+    },
+    {
+      "handle": "@myrhorodtown",
+      "source_id": "myrhorodtown",
+      "audience": "regional",
+      "source_type": "community",
+      "posts_in_window": 259,
+      "ids_sha256": "aab694d4c9721a721c2e52548b1a396260d497c475f047dc96b71b0a957ddee2",
+      "matches_census_5c2": true,
+      "rows": 259,
+      "with_text": 259,
+      "passed": 0,
+      "passed_row_level": 1,
+      "share_of_texted": 0.0,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 0,
+        "size": 0
+      },
+      "by_hit": {}
+    },
+    {
+      "handle": "@olgaa_trainer",
+      "source_id": "olgaa_trainer",
+      "audience": "health_fitness",
+      "source_type": "community",
+      "posts_in_window": 8,
+      "ids_sha256": "6ea7b9262f46501904058b80186abad33cd14b05a3175d6ae0cd09c7f5b7d05d",
+      "matches_census_5c2": true,
+      "rows": 8,
+      "with_text": 6,
+      "passed": 0,
+      "passed_row_level": 0,
+      "share_of_texted": 0.0,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 0,
+        "size": 0
+      },
+      "by_hit": {}
+    },
+    {
+      "handle": "@pavlushaiyava",
+      "source_id": "pavlushaiyava",
+      "audience": "baby_food",
+      "source_type": "community",
+      "posts_in_window": 105,
+      "ids_sha256": "8c2624a7263d8edfd8686c98d3f4ab81dceec546a4db16e56ecd513c8a4078cb",
+      "matches_census_5c2": true,
+      "rows": 105,
+      "with_text": 105,
+      "passed": 0,
+      "passed_row_level": 0,
+      "share_of_texted": 0.0,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 0,
+        "size": 0
+      },
+      "by_hit": {}
+    },
+    {
+      "handle": "@piryatingromada",
+      "source_id": "piryatingromada",
+      "audience": "regional",
+      "source_type": "community",
+      "posts_in_window": 68,
+      "ids_sha256": "b86f6b21e4248a65daa300eed581c626836fe02c3124c8a2d99db5e159cd3dca",
+      "matches_census_5c2": true,
+      "rows": 68,
+      "with_text": 58,
+      "passed": 0,
+      "passed_row_level": 0,
+      "share_of_texted": 0.0,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 0,
+        "size": 0
+      },
+      "by_hit": {}
+    },
+    {
+      "handle": "@poltava20",
+      "source_id": "poltava20",
+      "audience": "regional",
+      "source_type": "community",
+      "posts_in_window": 1486,
+      "ids_sha256": "2f3b1de4b3a2efeff251f621764a8d5ebdc340f1590adee70fa139e467293aca",
+      "matches_census_5c2": true,
+      "rows": 1486,
+      "with_text": 1485,
+      "passed": 0,
+      "passed_row_level": 0,
+      "share_of_texted": 0.0,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 0,
+        "size": 0
+      },
+      "by_hit": {}
+    },
+    {
+      "handle": "@poltava_pvp",
+      "source_id": "poltava_pvp",
+      "audience": "regional",
+      "source_type": "community",
+      "posts_in_window": 404,
+      "ids_sha256": "e94d62fe1b51350f625fec39c91f4a9b844eb08b1f9e406c5018ef1076cc2dc4",
+      "matches_census_5c2": true,
+      "rows": 404,
+      "with_text": 404,
+      "passed": 0,
+      "passed_row_level": 1,
+      "share_of_texted": 0.0,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 0,
+        "size": 0
+      },
+      "by_hit": {}
+    },
+    {
+      "handle": "@polyakova_fitness",
+      "source_id": "polyakova_fitness",
+      "audience": "health_fitness",
+      "source_type": "community",
+      "posts_in_window": 50,
+      "ids_sha256": "31f3b63c56e8013b6b800a604ed896e7d1769937d6c3b6fbaa69f2290fa064df",
+      "matches_census_5c2": true,
+      "rows": 50,
+      "with_text": 33,
+      "passed": 0,
+      "passed_row_level": 1,
+      "share_of_texted": 0.0,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 0,
+        "size": 0
+      },
+      "by_hit": {}
+    },
+    {
+      "handle": "@sashafitnesslife",
+      "source_id": "sashafitnesslife",
+      "audience": "health_fitness",
+      "source_type": "community",
+      "posts_in_window": 19,
+      "ids_sha256": "80971688f2cd61ff066505fd5607676c6f5e18efe07304e1b9717689ae2f3557",
+      "matches_census_5c2": true,
+      "rows": 19,
+      "with_text": 19,
+      "passed": 0,
+      "passed_row_level": 0,
+      "share_of_texted": 0.0,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 0,
+        "size": 0
+      },
+      "by_hit": {}
+    },
+    {
+      "handle": "@smirnov108",
+      "source_id": "smirnov108",
+      "audience": "health_fitness",
+      "source_type": "community",
+      "posts_in_window": 27,
+      "ids_sha256": "26bc1cca24a140df70e0b74d88bb6d45aa35b45942416ca18f37894638f412eb",
+      "matches_census_5c2": true,
+      "rows": 27,
+      "with_text": 27,
+      "passed": 0,
+      "passed_row_level": 0,
+      "share_of_texted": 0.0,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 0,
+        "size": 0
+      },
+      "by_hit": {}
+    },
+    {
+      "handle": "@tvorcha_matusyua",
+      "source_id": "tvorcha_matusyua",
+      "audience": "baby_food",
+      "source_type": "community",
+      "posts_in_window": 110,
+      "ids_sha256": "c2336a346c35f529cfd3e3a4a7b09a7b2e1d70a8130b79693a7a5a86823d6b47",
+      "matches_census_5c2": true,
+      "rows": 110,
+      "with_text": 110,
+      "passed": 0,
+      "passed_row_level": 0,
+      "share_of_texted": 0.0,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 0,
+        "size": 0
+      },
+      "by_hit": {}
+    },
+    {
+      "handle": "@ya_Nenka",
+      "source_id": "ya_nenka",
+      "audience": "baby_food",
+      "source_type": "community",
+      "posts_in_window": 10,
+      "ids_sha256": "152e2f490a2fc5993487f1e1861421ecb890a4b3c23e15260e02adad283affe2",
+      "matches_census_5c2": true,
+      "rows": 10,
+      "with_text": 10,
+      "passed": 0,
+      "passed_row_level": 1,
+      "share_of_texted": 0.0,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 0,
+        "size": 0
+      },
+      "by_hit": {}
+    },
+    {
+      "handle": "@zinkivnews",
+      "source_id": "zinkivnews",
+      "audience": "regional",
+      "source_type": "community",
+      "posts_in_window": 9,
+      "ids_sha256": "a5787ac914273240a80ea3438022f7593490037ca636c317ea2ceb411efc70d7",
+      "matches_census_5c2": true,
+      "rows": 9,
+      "with_text": 9,
+      "passed": 0,
+      "passed_row_level": 0,
+      "share_of_texted": 0.0,
+      "passed_carrying": {
+        "currency": 0,
+        "percent": 0,
+        "size": 0
+      },
+      "by_hit": {}
+    }
+  ],
+  "rows": [
+    {
+      "id": "@VARUS_channel:10360",
+      "date": "2026-07-14T07:32:54+00:00",
+      "line": "🔸Молоко Дитяче 3,2% ТМ Селянське",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "3,2%",
+      "pattern_kinds": [
+        "percent"
+      ],
+      "channel": "@VARUS_channel",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@VARUS_channel:10366",
+      "date": "2026-07-14T14:56:20+00:00",
+      "line": "🔸 3 сертифікати VARUS по 1000 грн.",
+      "hit": "brand:varus-pl",
+      "matched": "varus",
+      "pattern": "1000 грн",
+      "pattern_kinds": [
+        "currency"
+      ],
+      "channel": "@VARUS_channel",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@VARUS_channel:10367",
+      "date": "2026-07-14T15:21:39+00:00",
+      "line": "🔸Сир Гауда 45% ТМ Hollander",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "45%",
+      "pattern_kinds": [
+        "percent"
+      ],
+      "channel": "@VARUS_channel",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@VARUS_channel:10456",
+      "date": "2026-07-17T12:05:16+00:00",
+      "line": "🔸 Сметана 20% ТМ ПростоНаше",
+      "hit": "category:dairy:сметан",
+      "matched": "сметана",
+      "pattern": "20%",
+      "pattern_kinds": [
+        "percent"
+      ],
+      "channel": "@VARUS_channel",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@VARUS_channel:10466",
+      "date": "2026-07-17T14:18:51+00:00",
+      "line": "Розігруємо 3 сертифікати VARUS по 1000 грн. З 17 до 21 липня виконуйте прості умови та отримайте шанс на виграш.",
+      "hit": "brand:varus-pl",
+      "matched": "varus",
+      "pattern": "1000 грн",
+      "pattern_kinds": [
+        "currency"
+      ],
+      "channel": "@VARUS_channel",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@VARUS_channel:10528",
+      "date": "2026-07-22T06:42:30+00:00",
+      "line": "СЕРТИФІКАТ на покупку у VARUS 1000 грн отримує:",
+      "hit": "brand:varus-pl",
+      "matched": "varus",
+      "pattern": "1000 грн",
+      "pattern_kinds": [
+        "currency"
+      ],
+      "channel": "@VARUS_channel",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@VARUS_channel:10531",
+      "date": "2026-07-22T15:00:22+00:00",
+      "line": "🔸Сметана 15% ТМ Фанні",
+      "hit": "category:dairy:сметан",
+      "matched": "сметана",
+      "pattern": "15%",
+      "pattern_kinds": [
+        "percent"
+      ],
+      "channel": "@VARUS_channel",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@VARUS_channel:10593",
+      "date": "2026-07-23T09:05:43+00:00",
+      "line": "Лови знижку 25% на чеки від 1000 грн із промокодом MILKY25 на замовлення: рослинного молока, морозива, йогуртів і сирів.",
+      "hit": "category:dairy:йогурт",
+      "matched": "йогуртів",
+      "pattern": "25%",
+      "pattern_kinds": [
+        "currency",
+        "percent"
+      ],
+      "channel": "@VARUS_channel",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@VARUS_channel:10628",
+      "date": "2026-07-26T14:48:26+00:00",
+      "line": "🔸Сметана 15% ТМ Фанні",
+      "hit": "category:dairy:сметан",
+      "matched": "сметана",
+      "pattern": "15%",
+      "pattern_kinds": [
+        "percent"
+      ],
+      "channel": "@VARUS_channel",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@blwbabies:401",
+      "date": "2026-07-27T09:43:12+00:00",
+      "line": "1. Грецький йогурт. 2 ст.л.грецького йогурту 8% змішала з горіховою пастою кешʼю.Змішати ретельно,щоб паста не була цілим комочком.Треба,щоб вона повністю перемішалася із йогуртом.…",
+      "hit": "category:dairy:йогурт",
+      "matched": "йогурт",
+      "pattern": "8%",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@blwbabies",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@ekomarket_shop:1445",
+      "date": "2026-07-22T09:04:04+00:00",
+      "line": "🥓 -31% - Ковбаса варена \"Молочна\" ТМ \"Зоря Дніпра\", 400г - 103,9грн",
+      "hit": "category:dairy:молочн",
+      "matched": "молочна",
+      "pattern": "31%",
+      "pattern_kinds": [
+        "currency",
+        "percent",
+        "size"
+      ],
+      "channel": "@ekomarket_shop",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@ekomarket_shop:1448",
+      "date": "2026-07-23T06:31:40+00:00",
+      "line": "🥛 Молоко «Селянське» 2,5% 900 г — 38,99 грн (-40%)",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "2,5%",
+      "pattern_kinds": [
+        "currency",
+        "percent",
+        "size"
+      ],
+      "channel": "@ekomarket_shop",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@ekomarket_shop:1450",
+      "date": "2026-07-28T06:26:04+00:00",
+      "line": "🍦 Морозиво «Ескімос Панкейк» Rud, 60 г — 25,90 грн (-50%)",
+      "hit": "category:ice-cream:морозив",
+      "matched": "морозиво",
+      "pattern": "60 г",
+      "pattern_kinds": [
+        "currency",
+        "percent",
+        "size"
+      ],
+      "channel": "@ekomarket_shop",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@ekomarket_shop:1456",
+      "date": "2026-08-05T09:11:32+00:00",
+      "line": "🥟-21% - Пельмені \"Мініпельмені\" ТМ \"Рудь\", 800г - 109,9грн",
+      "hit": "brand:rud",
+      "matched": "рудь",
+      "pattern": "21%",
+      "pattern_kinds": [
+        "currency",
+        "percent",
+        "size"
+      ],
+      "channel": "@ekomarket_shop",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@ekomarket_shop:1458",
+      "date": "2026-08-07T07:18:50+00:00",
+      "line": "🧀-45% - Сир \"Тенеро Мілк\" ТМ \"Комо\", 150г - 66,5грн",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "45%",
+      "pattern_kinds": [
+        "currency",
+        "percent",
+        "size"
+      ],
+      "channel": "@ekomarket_shop",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@epicentrk_sale:6148",
+      "date": "2026-07-18T07:33:00+00:00",
+      "line": "🧈 Холодне вершкове масло — 100 г",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@epicentrk_sale",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@epicentrk_sale:6186",
+      "date": "2026-07-25T07:11:04+00:00",
+      "line": "🧈 Вершкове масло — 50 г",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "50 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@epicentrk_sale",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@epicentrk_sale:6200",
+      "date": "2026-07-28T07:58:37+00:00",
+      "line": "2️⃣ Суха молочна суміш Hipp Junior Combiotic 4 з 18 місяців, 500г",
+      "hit": "category:dairy:молочн",
+      "matched": "молочна",
+      "pattern": "500г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@epicentrk_sale",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@epicentrk_sale:6225",
+      "date": "2026-08-01T07:10:04+00:00",
+      "line": "🧈 Вершкове масло — 60 г",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "60 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@epicentrk_sale",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@epicentrk_sale:6230",
+      "date": "2026-08-02T09:12:00+00:00",
+      "line": "4️⃣ Бочка харчова широка горловина для молока та води 48 л Білий",
+      "hit": "category:dairy:молок",
+      "matched": "молока",
+      "pattern": "48 л",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@epicentrk_sale",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@epicentrk_sale:6257",
+      "date": "2026-08-07T07:35:29+00:00",
+      "line": "3️⃣ Крем-мило PROservice Молоко та мед 5000 мл",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "5000 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@epicentrk_sale",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@forainfo:6032",
+      "date": "2026-07-17T06:48:38+00:00",
+      "line": "🥔 Чипси ТМ «Lay’s» зі смаком краба або сметани і зелені за 59,90 грн/170 г зі знижкою -45%!",
+      "hit": "category:dairy:сметан",
+      "matched": "сметани",
+      "pattern": "59,90 грн",
+      "pattern_kinds": [
+        "currency",
+        "percent",
+        "size"
+      ],
+      "channel": "@forainfo",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@forainfo:6036",
+      "date": "2026-07-24T05:02:33+00:00",
+      "line": "🧀 Сир Premialle «Фелата» — 35,90 грн зі знижкою -50%",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "35,90 грн",
+      "pattern_kinds": [
+        "currency",
+        "percent"
+      ],
+      "channel": "@forainfo",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@forainfo:6041",
+      "date": "2026-07-31T09:35:28+00:00",
+      "line": "🍫 Драже ТМ «Pergale» Picks із сублімованою полуницею або вишнею в молочному шоколаді за 99,90 грн/90 г зі знижкою -33%!",
+      "hit": "category:dairy:молочн",
+      "matched": "молочному",
+      "pattern": "99,90 грн",
+      "pattern_kinds": [
+        "currency",
+        "percent",
+        "size"
+      ],
+      "channel": "@forainfo",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@forainfo:6045",
+      "date": "2026-08-07T11:01:37+00:00",
+      "line": "🧈 Масло ТМ «Біло» екстра 82% за 65,90 грн/180 г зі знижкою -44%!",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "82%",
+      "pattern_kinds": [
+        "currency",
+        "percent",
+        "size"
+      ],
+      "channel": "@forainfo",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@gorishnie_plavni1:30892",
+      "date": "2026-07-16T16:23:01+00:00",
+      "line": "⏺молоко — +1,10 грн (0,9 л);",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "1,10 грн",
+      "pattern_kinds": [
+        "currency",
+        "percent",
+        "size"
+      ],
+      "channel": "@gorishnie_plavni1",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@gorishnie_plavni1:31088",
+      "date": "2026-07-24T06:51:01+00:00",
+      "line": "⏺молоко — +1,10 грн (0,9 л);",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "1,10 грн",
+      "pattern_kinds": [
+        "currency",
+        "percent",
+        "size"
+      ],
+      "channel": "@gorishnie_plavni1",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@gorishnie_plavni1:31320",
+      "date": "2026-07-30T16:32:01+00:00",
+      "line": "🥛 сметана 15% (400 г) — +3,25 грн;",
+      "hit": "category:dairy:сметан",
+      "matched": "сметана",
+      "pattern": "15%",
+      "pattern_kinds": [
+        "currency",
+        "percent",
+        "size"
+      ],
+      "channel": "@gorishnie_plavni1",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@gorishnie_plavni1:31488",
+      "date": "2026-08-06T16:32:01+00:00",
+      "line": "🥛 молоко — −3,65 грн/0,9 л;",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "3,65 грн",
+      "pattern_kinds": [
+        "currency",
+        "size"
+      ],
+      "channel": "@gorishnie_plavni1",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@h_kremenchug:100406",
+      "date": "2026-07-22T17:24:38+00:00",
+      "line": "Як повідомляє кореспондентка «Кременчуцького Телеграфа», через повітряну тривогу учасники не проводили мітинг, а зібралися неподалік із безалкогольним пивом, квасом, напоями та сир…",
+      "hit": "category:dairy:сир",
+      "matched": "сиром",
+      "pattern": "50%",
+      "pattern_kinds": [
+        "percent"
+      ],
+      "channel": "@h_kremenchug",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@konservacia_kulinaria:6848",
+      "date": "2026-07-12T11:35:13+00:00",
+      "line": "6 Змішуєте всі овочі і додаєте в них 2,5 ст. л. солі, 1,5 склянки цукру, 0,5 л рослинної олії.",
+      "hit": "category:dairy:рослинн",
+      "matched": "рослинної",
+      "pattern": "0,5 л",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@konservacia_kulinaria",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@konservacia_kulinaria:6852",
+      "date": "2026-07-13T11:35:13+00:00",
+      "line": "кабачок 100 г + 3 яйця + 100 мл молока /або сметани+ тв. сир до 30 % 20 г + зелень 20 г.",
+      "hit": "category:dairy:молок",
+      "matched": "молока",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@konservacia_kulinaria",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@konservacia_kulinaria:6857",
+      "date": "2026-07-14T15:35:13+00:00",
+      "line": "вершкове масло - 20г",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "20г",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@konservacia_kulinaria",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@konservacia_kulinaria:6860",
+      "date": "2026-07-15T11:35:15+00:00",
+      "line": "200 г рослинної олії",
+      "hit": "category:dairy:рослинн",
+      "matched": "рослинної",
+      "pattern": "200 г",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@konservacia_kulinaria",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@konservacia_kulinaria:6864",
+      "date": "2026-07-16T11:35:14+00:00",
+      "line": "100 мл молока",
+      "hit": "category:dairy:молок",
+      "matched": "молока",
+      "pattern": "100 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@konservacia_kulinaria",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@konservacia_kulinaria:6869",
+      "date": "2026-07-17T15:35:15+00:00",
+      "line": "-Рослинна олія - ​​200 г.",
+      "hit": "category:dairy:рослинн",
+      "matched": "рослинна",
+      "pattern": "200 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@konservacia_kulinaria",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@konservacia_kulinaria:6873",
+      "date": "2026-07-18T15:35:15+00:00",
+      "line": "6 Змішуєте всі овочі і додаєте в них 2,5 ст. л. солі, 1,5 склянки цукру, 0,5 л рослинної олії.",
+      "hit": "category:dairy:рослинн",
+      "matched": "рослинної",
+      "pattern": "0,5 л",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@konservacia_kulinaria",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@konservacia_kulinaria:6874",
+      "date": "2026-07-18T18:35:17+00:00",
+      "line": "олія рослинна - 100 г;",
+      "hit": "category:dairy:рослинн",
+      "matched": "рослинна",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@konservacia_kulinaria",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@konservacia_kulinaria:6880",
+      "date": "2026-07-20T11:35:13+00:00",
+      "line": "200 мл Рослинної олії",
+      "hit": "category:dairy:рослинн",
+      "matched": "рослинної",
+      "pattern": "200 мл",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@konservacia_kulinaria",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@konservacia_kulinaria:6881",
+      "date": "2026-07-20T15:35:11+00:00",
+      "line": "Рослинна олія-100 мл",
+      "hit": "category:dairy:рослинн",
+      "matched": "рослинна",
+      "pattern": "100 мл",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@konservacia_kulinaria",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@konservacia_kulinaria:6884",
+      "date": "2026-07-21T12:35:15+00:00",
+      "line": "﻿﻿200 г рослинної олії;",
+      "hit": "category:dairy:рослинн",
+      "matched": "рослинної",
+      "pattern": "200 г",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@konservacia_kulinaria",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@konservacia_kulinaria:6897",
+      "date": "2026-07-25T06:35:13+00:00",
+      "line": "▫️Вершкове масло 120г;",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "120г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@konservacia_kulinaria",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@konservacia_kulinaria:6901",
+      "date": "2026-07-26T12:35:14+00:00",
+      "line": "• Рослинна олія — 150 мл",
+      "hit": "category:dairy:рослинн",
+      "matched": "рослинна",
+      "pattern": "150 мл",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@konservacia_kulinaria",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@konservacia_kulinaria:6903",
+      "date": "2026-07-28T06:35:14+00:00",
+      "line": "• Рослинна олія — 170 мл",
+      "hit": "category:dairy:рослинн",
+      "matched": "рослинна",
+      "pattern": "170 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@konservacia_kulinaria",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@konservacia_kulinaria:6904",
+      "date": "2026-07-28T12:35:16+00:00",
+      "line": "• Рослинна олія — 2 ст. л. (34 г)",
+      "hit": "category:dairy:рослинн",
+      "matched": "рослинна",
+      "pattern": "34 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@konservacia_kulinaria",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@konservacia_kulinaria:6912",
+      "date": "2026-07-30T17:35:17+00:00",
+      "line": "100 мл рослинної олії",
+      "hit": "category:dairy:рослинн",
+      "matched": "рослинної",
+      "pattern": "100 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@konservacia_kulinaria",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10352",
+      "date": "2026-07-12T03:35:08+00:00",
+      "line": "Молоко - 100-150 мл",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "150 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10359",
+      "date": "2026-07-13T03:46:20+00:00",
+      "line": "Сир твердий — 200 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "200 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10360",
+      "date": "2026-07-13T03:46:44+00:00",
+      "line": "100 г вершкового масла",
+      "hit": "category:dairy:масл",
+      "matched": "масла",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10361",
+      "date": "2026-07-13T03:47:03+00:00",
+      "line": "сметана - 180 г",
+      "hit": "category:dairy:сметан",
+      "matched": "сметана",
+      "pattern": "180 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10362",
+      "date": "2026-07-14T03:47:13+00:00",
+      "line": "Твердий сир — 300 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "300 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10364",
+      "date": "2026-07-14T03:48:36+00:00",
+      "line": "Сметана 1 ст.л. 15%",
+      "hit": "category:dairy:сметан",
+      "matched": "сметана",
+      "pattern": "15%",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10365",
+      "date": "2026-07-14T03:48:48+00:00",
+      "line": "твердий сир - 70 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "70 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10369",
+      "date": "2026-07-15T10:00:36+00:00",
+      "line": "Сир кисломолочний — 200 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "200 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10370",
+      "date": "2026-07-15T10:01:25+00:00",
+      "line": "Крем-сир - 200 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "200 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10372",
+      "date": "2026-07-16T07:35:17+00:00",
+      "line": "сир кисломолочний - 400 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "400 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10374",
+      "date": "2026-07-16T07:35:55+00:00",
+      "line": "Вершкове масло - 130 г",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "130 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10375",
+      "date": "2026-07-16T07:36:18+00:00",
+      "line": "Згущене молоко - 100 г",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10376",
+      "date": "2026-07-16T07:36:49+00:00",
+      "line": "Твердий сир - 100 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10383",
+      "date": "2026-07-18T03:45:18+00:00",
+      "line": "Твердий сир - 50 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "50 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10385",
+      "date": "2026-07-18T03:46:44+00:00",
+      "line": "Твердий сир — 200 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "200 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10387",
+      "date": "2026-07-19T03:48:55+00:00",
+      "line": "50 г вершкового масла",
+      "hit": "category:dairy:масл",
+      "matched": "масла",
+      "pattern": "50 г",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10391",
+      "date": "2026-07-19T03:51:03+00:00",
+      "line": "молоко - 900 мл",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "900 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10395",
+      "date": "2026-07-20T03:33:43+00:00",
+      "line": "Згущене молоко варене - 220 г",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "220 г",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10396",
+      "date": "2026-07-20T03:34:17+00:00",
+      "line": "Вершкове масло - 20 г",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "20 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10397",
+      "date": "2026-07-21T03:53:24+00:00",
+      "line": "Сметана - 250 г",
+      "hit": "category:dairy:сметан",
+      "matched": "сметана",
+      "pattern": "250 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10398",
+      "date": "2026-07-21T03:53:41+00:00",
+      "line": "Йогурт 300 мл",
+      "hit": "category:dairy:йогурт",
+      "matched": "йогурт",
+      "pattern": "300 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10403",
+      "date": "2026-07-22T10:22:40+00:00",
+      "line": "сир кисломолочний – 360 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "360 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10407",
+      "date": "2026-07-23T03:41:47+00:00",
+      "line": "Сир твердий - 70 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "70 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10409",
+      "date": "2026-07-23T03:42:38+00:00",
+      "line": "Твердий сир — 200 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "200 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10413",
+      "date": "2026-07-24T03:49:47+00:00",
+      "line": "Сир кисломолочний 250 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "250 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10416",
+      "date": "2026-07-24T03:50:43+00:00",
+      "line": "сир кисломолочний – 250 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "250 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10417",
+      "date": "2026-07-25T03:49:05+00:00",
+      "line": "250 г сметани",
+      "hit": "category:dairy:сметан",
+      "matched": "сметани",
+      "pattern": "250 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10420",
+      "date": "2026-07-25T03:50:39+00:00",
+      "line": "Вершкове масло - 60 г + для змащування",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "60 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10422",
+      "date": "2026-07-26T08:23:24+00:00",
+      "line": "твердий сир — 150 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "150 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10426",
+      "date": "2026-07-26T08:24:49+00:00",
+      "line": "Сир вершковий – 125 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "125 г",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10429",
+      "date": "2026-07-27T10:54:39+00:00",
+      "line": "арахісове масло - 160 г",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "160 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10434",
+      "date": "2026-07-28T07:49:54+00:00",
+      "line": "Вершкове масло, розтопити — 250 мл",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "250 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10436",
+      "date": "2026-07-28T07:50:30+00:00",
+      "line": "100 г твердого сиру",
+      "hit": "category:dairy:сир",
+      "matched": "сиру",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10440",
+      "date": "2026-07-29T03:44:49+00:00",
+      "line": "120 мл згущеного молока",
+      "hit": "category:dairy:молок",
+      "matched": "молока",
+      "pattern": "120 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10442",
+      "date": "2026-07-29T03:46:29+00:00",
+      "line": "сметана – 100 г",
+      "hit": "category:dairy:сметан",
+      "matched": "сметана",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10444",
+      "date": "2026-07-29T03:47:04+00:00",
+      "line": "Молоко - 400 мл",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "400 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10445",
+      "date": "2026-07-30T10:18:46+00:00",
+      "line": "Молоко - 500 мл",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "500 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10446",
+      "date": "2026-07-30T10:19:08+00:00",
+      "line": "Молоко 190 мл",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "190 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10447",
+      "date": "2026-07-30T10:19:23+00:00",
+      "line": "40 г твердого сиру",
+      "hit": "category:dairy:сир",
+      "matched": "сиру",
+      "pattern": "40 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10449",
+      "date": "2026-07-30T10:20:39+00:00",
+      "line": "Плавленний сир — 200 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "200 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10453",
+      "date": "2026-07-31T06:39:17+00:00",
+      "line": "400 мл молока",
+      "hit": "category:dairy:молок",
+      "matched": "молока",
+      "pattern": "400 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10454",
+      "date": "2026-07-31T06:39:36+00:00",
+      "line": "Твердий сир - 70 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "70 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10457",
+      "date": "2026-08-02T12:14:51+00:00",
+      "line": "Вершкове масло — 10 г",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "10 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10460",
+      "date": "2026-08-03T08:10:51+00:00",
+      "line": "Вершковий сир — 160 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "160 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10461",
+      "date": "2026-08-03T08:11:04+00:00",
+      "line": "Молоко - 0,5 л",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "0,5 л",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10462",
+      "date": "2026-08-03T08:11:54+00:00",
+      "line": "Твердий сир 150 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "150 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10464",
+      "date": "2026-08-03T08:13:33+00:00",
+      "line": "Вершковий сир – 200 мл",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "200 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10465",
+      "date": "2026-08-04T07:44:13+00:00",
+      "line": "Молоко - 200 мл",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "200 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10469",
+      "date": "2026-08-04T07:46:48+00:00",
+      "line": "твердий сир - 80 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "80 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10470",
+      "date": "2026-08-07T03:39:51+00:00",
+      "line": "кефір - 500 мл",
+      "hit": "category:dairy:кефір",
+      "matched": "кефір",
+      "pattern": "500 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10473",
+      "date": "2026-08-07T03:41:11+00:00",
+      "line": "150 г пастоподібного сиру кисломолочного",
+      "hit": "category:dairy:сир",
+      "matched": "сиру",
+      "pattern": "150 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@korolevakuchni:10474",
+      "date": "2026-08-07T03:41:57+00:00",
+      "line": "вершкове масло — 50 г",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "50 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@korolevakuchni",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@kremen_news:50043",
+      "date": "2026-07-20T10:20:20+00:00",
+      "line": "Станом на 16 липня найбільше подорожчала молода морква — до 37,87 грн/кг (+8 грн). Також зросли ціни на молоду капусту, гречку, сметану, соняшникову олію, молоко, буряк і бензин. В…",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "37,87 грн",
+      "pattern_kinds": [
+        "currency"
+      ],
+      "channel": "@kremen_news",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12480",
+      "date": "2026-07-12T03:50:06+00:00",
+      "line": "✔️Вершкове масло — 50 г",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "50 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12482",
+      "date": "2026-07-12T06:50:07+00:00",
+      "line": "✔️М’яке вершкове масло — 100 г",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12483",
+      "date": "2026-07-12T08:50:15+00:00",
+      "line": "✔️Твердий сир - 100 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12488",
+      "date": "2026-07-12T18:50:19+00:00",
+      "line": "✔️150 г згущеного молока",
+      "hit": "category:dairy:молок",
+      "matched": "молока",
+      "pattern": "150 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12489",
+      "date": "2026-07-13T03:50:03+00:00",
+      "line": "✔️Загальна кількість сиру — близько 200 г.",
+      "hit": "category:dairy:сир",
+      "matched": "сиру",
+      "pattern": "200 г",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12494",
+      "date": "2026-07-13T12:50:13+00:00",
+      "line": "✔️125г масла",
+      "hit": "category:dairy:масл",
+      "matched": "масла",
+      "pattern": "125г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12495",
+      "date": "2026-07-13T15:50:14+00:00",
+      "line": "✔️100 г твердого сиру",
+      "hit": "category:dairy:сир",
+      "matched": "сиру",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12498",
+      "date": "2026-07-14T03:50:04+00:00",
+      "line": "✔️Масло - 100 г;",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12504",
+      "date": "2026-07-14T15:50:14+00:00",
+      "line": "✔️40 г вершкового масла",
+      "hit": "category:dairy:масл",
+      "matched": "масла",
+      "pattern": "40 г",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12510",
+      "date": "2026-07-15T08:50:17+00:00",
+      "line": "✔️Крем-сир Philadelphia original — 100 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12512",
+      "date": "2026-07-15T12:50:16+00:00",
+      "line": "✔️20 г вершкового масла",
+      "hit": "category:dairy:масл",
+      "matched": "масла",
+      "pattern": "20 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12521",
+      "date": "2026-07-16T12:50:17+00:00",
+      "line": "✔️Крем-сир 100 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12531",
+      "date": "2026-07-17T12:49:58+00:00",
+      "line": "✔️150г вершкового масла",
+      "hit": "category:dairy:масл",
+      "matched": "масла",
+      "pattern": "150г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12532",
+      "date": "2026-07-17T15:49:58+00:00",
+      "line": "✔️Молоко - 70 мл",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "70 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12538",
+      "date": "2026-07-18T08:50:12+00:00",
+      "line": "✔️Масло вершкове 15 г",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "15 г",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12549",
+      "date": "2026-07-19T12:50:11+00:00",
+      "line": "✔️250 мл молока",
+      "hit": "category:dairy:молок",
+      "matched": "молока",
+      "pattern": "250 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12552",
+      "date": "2026-07-19T18:50:21+00:00",
+      "line": "✔️300 мл молока",
+      "hit": "category:dairy:молок",
+      "matched": "молока",
+      "pattern": "300 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12556",
+      "date": "2026-07-20T08:50:12+00:00",
+      "line": "✔️200 г вершкового сиру",
+      "hit": "category:dairy:сир",
+      "matched": "сиру",
+      "pattern": "200 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12562",
+      "date": "2026-07-21T03:50:07+00:00",
+      "line": "✔️Вершкове масло — 40 г",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "40 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12565",
+      "date": "2026-07-21T08:50:12+00:00",
+      "line": "✔️Сир 80 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "80 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12567",
+      "date": "2026-07-21T12:50:18+00:00",
+      "line": "✔️2 ст. л. олії або 15 г вершкового масла",
+      "hit": "category:dairy:масл",
+      "matched": "масла",
+      "pattern": "15 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12570",
+      "date": "2026-07-21T18:50:17+00:00",
+      "line": "✔️Сметана (15-20%) — 150 г",
+      "hit": "category:dairy:сметан",
+      "matched": "сметана",
+      "pattern": "20%",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12571",
+      "date": "2026-07-22T03:50:08+00:00",
+      "line": "✔️Кисломолочний сир - 200 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "200 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12573",
+      "date": "2026-07-22T06:50:10+00:00",
+      "line": "✔️Кисломолочний сир 500г. ( я брала бренд Bandi 0.5% жирності)",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "500г",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12574",
+      "date": "2026-07-22T08:50:15+00:00",
+      "line": "✔️Масло 50 г",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "50 г",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12577",
+      "date": "2026-07-22T15:50:17+00:00",
+      "line": "✔️450 мл молока",
+      "hit": "category:dairy:молок",
+      "matched": "молока",
+      "pattern": "450 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12582",
+      "date": "2026-07-23T06:50:09+00:00",
+      "line": "✔️Сир - 100 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12585",
+      "date": "2026-07-23T12:50:18+00:00",
+      "line": "✔️Кефір - 300 мл",
+      "hit": "category:dairy:кефір",
+      "matched": "кефір",
+      "pattern": "300 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12586",
+      "date": "2026-07-23T15:50:13+00:00",
+      "line": "✔️Молоко тепле (не гаряче) - 250 мл;",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "250 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12588",
+      "date": "2026-07-23T18:50:20+00:00",
+      "line": "✔️Вершкове масло — 120 г",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "120 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12589",
+      "date": "2026-07-24T03:50:06+00:00",
+      "line": "Дрібно наріжте капусту та обсмажте її разом із натертою морквою до м’якості. До фаршу додайте відварений рис, обсмажені овочі, сіль, перець і улюблені спеції, добре перемішайте до …",
+      "hit": "category:dairy:сметан",
+      "matched": "сметану",
+      "pattern": "400 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12594",
+      "date": "2026-07-24T12:50:19+00:00",
+      "line": "✔️Масло 100 г",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12597",
+      "date": "2026-07-24T18:50:16+00:00",
+      "line": "✔️100 г крем-сиру",
+      "hit": "category:dairy:сир",
+      "matched": "сиру",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12598",
+      "date": "2026-07-25T03:50:07+00:00",
+      "line": "✔️100 г грецького йогурту 10%",
+      "hit": "category:dairy:йогурт",
+      "matched": "йогурту",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12600",
+      "date": "2026-07-25T06:50:10+00:00",
+      "line": "✔️250 г кисломолочного сиру",
+      "hit": "category:dairy:сир",
+      "matched": "сиру",
+      "pattern": "250 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12603",
+      "date": "2026-07-25T12:50:12+00:00",
+      "line": "✔️Вершкове масло-100 г",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12604",
+      "date": "2026-07-25T15:50:18+00:00",
+      "line": "✔️Сир маскарпоне 250 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "250 г",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12607",
+      "date": "2026-07-26T03:50:11+00:00",
+      "line": "✔️Сир кисломолочний — 200 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "200 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12612",
+      "date": "2026-07-26T12:50:15+00:00",
+      "line": "✔️Кисломолочний сир 9% — 500 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "9%",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12613",
+      "date": "2026-07-26T15:50:22+00:00",
+      "line": "✔️50 г твердого сиру",
+      "hit": "category:dairy:сир",
+      "matched": "сиру",
+      "pattern": "50 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12616",
+      "date": "2026-07-27T03:50:03+00:00",
+      "line": "✔️Творожний сир — 100 г (1 пачка)",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12618",
+      "date": "2026-07-27T06:50:13+00:00",
+      "line": "✔️200 мл молока",
+      "hit": "category:dairy:молок",
+      "matched": "молока",
+      "pattern": "200 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12619",
+      "date": "2026-07-27T08:50:12+00:00",
+      "line": "✔️200 г кисломолочного сиру",
+      "hit": "category:dairy:сир",
+      "matched": "сиру",
+      "pattern": "200 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12621",
+      "date": "2026-07-27T12:50:16+00:00",
+      "line": "✔️50г розтопленого вершкового масла",
+      "hit": "category:dairy:масл",
+      "matched": "масла",
+      "pattern": "50г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12622",
+      "date": "2026-07-27T15:50:12+00:00",
+      "line": "✔️50 г тертого сиру",
+      "hit": "category:dairy:сир",
+      "matched": "сиру",
+      "pattern": "50 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12624",
+      "date": "2026-07-27T18:50:19+00:00",
+      "line": "✔️Твердий сир — 100 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12628",
+      "date": "2026-07-28T06:50:10+00:00",
+      "line": "✔️Сир твердий 100 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12639",
+      "date": "2026-07-29T08:50:12+00:00",
+      "line": "✔️Кефір — 300 мл",
+      "hit": "category:dairy:кефір",
+      "matched": "кефір",
+      "pattern": "300 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12647",
+      "date": "2026-07-29T18:50:19+00:00",
+      "line": "✔️Твердий сир 60 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "60 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12650",
+      "date": "2026-07-30T06:50:11+00:00",
+      "line": "✔️200 г сметани",
+      "hit": "category:dairy:сметан",
+      "matched": "сметани",
+      "pattern": "200 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12653",
+      "date": "2026-07-30T12:50:18+00:00",
+      "line": "✔️50 г сметани",
+      "hit": "category:dairy:сметан",
+      "matched": "сметани",
+      "pattern": "50 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12656",
+      "date": "2026-07-30T18:50:10+00:00",
+      "line": "✔️50 г твердого сиру",
+      "hit": "category:dairy:сир",
+      "matched": "сиру",
+      "pattern": "50 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12657",
+      "date": "2026-07-31T03:50:05+00:00",
+      "line": "✔️250 мл молока",
+      "hit": "category:dairy:молок",
+      "matched": "молока",
+      "pattern": "250 мл",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12659",
+      "date": "2026-07-31T06:50:14+00:00",
+      "line": "✔️Сир кисломолочний - 200 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "200 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12663",
+      "date": "2026-07-31T15:50:19+00:00",
+      "line": "✔️Сметана: 200 г",
+      "hit": "category:dairy:сметан",
+      "matched": "сметана",
+      "pattern": "200 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12665",
+      "date": "2026-07-31T18:50:20+00:00",
+      "line": "✔️Молоко 100 мл",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "100 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12668",
+      "date": "2026-08-01T06:50:14+00:00",
+      "line": "✔️Сметана-200 г",
+      "hit": "category:dairy:сметан",
+      "matched": "сметана",
+      "pattern": "200 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12669",
+      "date": "2026-08-01T08:50:09+00:00",
+      "line": "✔️1 плавлений сирок або 100 г крем-сиру",
+      "hit": "category:dairy:сир",
+      "matched": "сиру",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12674",
+      "date": "2026-08-01T18:50:14+00:00",
+      "line": "✔️200 мл кефіру (теплого)",
+      "hit": "category:dairy:кефір",
+      "matched": "кефіру",
+      "pattern": "200 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12677",
+      "date": "2026-08-02T06:50:11+00:00",
+      "line": "✔️Сир Фетакса — 150–180 г.",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "180 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12686",
+      "date": "2026-08-03T06:50:08+00:00",
+      "line": "✔️Молоко — 100 мл",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "100 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12687",
+      "date": "2026-08-03T08:50:12+00:00",
+      "line": "✔️100 г масла",
+      "hit": "category:dairy:масл",
+      "matched": "масла",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12692",
+      "date": "2026-08-03T18:50:13+00:00",
+      "line": "✔️150 мл теплого молока",
+      "hit": "category:dairy:молок",
+      "matched": "молока",
+      "pattern": "150 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12695",
+      "date": "2026-08-04T08:01:26+00:00",
+      "line": "✔️380 г згущеного молока",
+      "hit": "category:dairy:молок",
+      "matched": "молока",
+      "pattern": "380 г",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12699",
+      "date": "2026-08-04T12:50:14+00:00",
+      "line": "✔️Кефір 2,5% (теплий) — 350 мл",
+      "hit": "category:dairy:кефір",
+      "matched": "кефір",
+      "pattern": "2,5%",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12700",
+      "date": "2026-08-04T15:50:21+00:00",
+      "line": "✔️Молоко 300 мл",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "300 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12706",
+      "date": "2026-08-05T08:50:17+00:00",
+      "line": "✔️Вершкове масло — 30 г",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "30 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12711",
+      "date": "2026-08-05T18:50:15+00:00",
+      "line": "✔️Моцарела або твердий сир - 100 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12715",
+      "date": "2026-08-06T08:50:16+00:00",
+      "line": "✔️200 г твердого сиру",
+      "hit": "category:dairy:сир",
+      "matched": "сиру",
+      "pattern": "200 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12718",
+      "date": "2026-08-06T15:50:19+00:00",
+      "line": "✔️Холодне вершкове масло -90 г",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "90 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12720",
+      "date": "2026-08-06T18:50:15+00:00",
+      "line": "✔️Тепле молоко — 125 мл",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "125 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mameni_recepti:12721",
+      "date": "2026-08-07T03:50:09+00:00",
+      "line": "✔️30–40 г вершкового масла",
+      "hit": "category:dairy:масл",
+      "matched": "масла",
+      "pattern": "40 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@mameni_recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mandziak:3688",
+      "date": "2026-07-18T11:53:25+00:00",
+      "line": "Візьмемо пані Галю, яка важить 65 і, відповідно, потребує 104г білка на добу. Враховуючи, що важче назвати їжу, в якій білка нема, ніж в якій його достатньо, якщо Галя з’їсть за ці…",
+      "hit": "category:dairy:йогурт",
+      "matched": "йогурта",
+      "pattern": "104г",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@mandziak",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mandziak:3720",
+      "date": "2026-07-28T13:03:00+00:00",
+      "line": "Але є й зворотня сторона медалі: кожен додатковий відсоток жиру в 200-грамовому продукті збільшує його калорійністьна 18 калорій. Саме тому в 9%-му кисломолочному сирі вдвічі більш…",
+      "hit": "category:dairy:молочн",
+      "matched": "молочних",
+      "pattern": "9%",
+      "pattern_kinds": [
+        "percent"
+      ],
+      "channel": "@mandziak",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mandziak:3736",
+      "date": "2026-07-31T16:35:08+00:00",
+      "line": "Звісно, можна подискутувати. В сирій рослинній їжі є багато резистентного крохмалю, який не засвоюється в тонкому кишечнику, що знижує калорійність продукту. Але навряд чи тобі сма…",
+      "hit": "category:dairy:рослинн",
+      "matched": "рослинній",
+      "pattern": "10%",
+      "pattern_kinds": [
+        "percent"
+      ],
+      "channel": "@mandziak",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@mandziak:3753",
+      "date": "2026-08-02T15:01:37+00:00",
+      "line": "9️⃣ А який ГІ в молочного шоколаду? Це ж один з найкалорійніших продуктів. Теж сімдесят! Шоколадка для cхуднення те саме, що й варена бульба? Пффф. ГІ молочного шоколаду мене не ди…",
+      "hit": "category:dairy:молочн",
+      "matched": "молочного",
+      "pattern": "50%",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@mandziak",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@marketopt_promo:2871",
+      "date": "2026-07-17T06:36:06+00:00",
+      "line": "1. Сметана 15% Простонаше 300г",
+      "hit": "category:dairy:сметан",
+      "matched": "сметана",
+      "pattern": "15%",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@marketopt_promo",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@marketopt_promo:2884",
+      "date": "2026-07-24T06:39:23+00:00",
+      "line": "1. Сир Кантрі Комо 150г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "150г",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@marketopt_promo",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@marketopt_promo:2897",
+      "date": "2026-07-31T06:53:58+00:00",
+      "line": "1. Вершки 10% Ферма 505г",
+      "hit": "brand:ferma",
+      "matched": "ферма",
+      "pattern": "10%",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@marketopt_promo",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@marketopt_promo:2910",
+      "date": "2026-08-07T05:29:36+00:00",
+      "line": "1. Крем-сир Ферма 170г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "170г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@marketopt_promo",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@matusi_ukr:22048",
+      "date": "2026-07-12T11:37:01+00:00",
+      "line": "• 🧀 Сир дорблю — 80 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "80 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@matusi_ukr",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@matusi_ukr:22208",
+      "date": "2026-07-27T11:02:23+00:00",
+      "line": "🌾 Рис (сирий) — 200 г",
+      "hit": "category:dairy:сир",
+      "matched": "сирий",
+      "pattern": "200 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@matusi_ukr",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@matusi_ukr:22255",
+      "date": "2026-07-30T11:05:02+00:00",
+      "line": "🧀 Крем-сир — 150 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "150 г",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@matusi_ukr",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@matusi_ukr:22261",
+      "date": "2026-07-31T11:01:36+00:00",
+      "line": "🍚 Рис (сирий) — 200 г",
+      "hit": "category:dairy:сир",
+      "matched": "сирий",
+      "pattern": "200 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@matusi_ukr",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@matusi_ukr:22270",
+      "date": "2026-08-01T11:03:24+00:00",
+      "line": "✔️ 150 г грецького йогурту",
+      "hit": "category:dairy:йогурт",
+      "matched": "йогурту",
+      "pattern": "150 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@matusi_ukr",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@matusi_ukr:22328",
+      "date": "2026-08-07T11:01:08+00:00",
+      "line": "🧈 Вершкове масло — 50 г",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "50 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@matusi_ukr",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@matusi_ukr:22335",
+      "date": "2026-08-08T11:01:27+00:00",
+      "line": "🧀 Твердий сир — 80 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "80 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@matusi_ukr",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@maudau:2800",
+      "date": "2026-07-18T15:13:02+00:00",
+      "line": "Що може бути солодшим за десерти? Знижки до -45% на них 🍬",
+      "hit": "category:dairy:десерт",
+      "matched": "десерти",
+      "pattern": "45%",
+      "pattern_kinds": [
+        "percent"
+      ],
+      "channel": "@maudau",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@msuaaaa:10656",
+      "date": "2026-07-21T08:45:44+00:00",
+      "line": "🔣Масло Молокія лише 59 грн від 2 штук",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "59 грн",
+      "pattern_kinds": [
+        "currency"
+      ],
+      "channel": "@msuaaaa",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@poltava_informue:36967",
+      "date": "2026-08-03T16:30:01+00:00",
+      "line": "Оптимально — 200–300 г за раз, і не варто з’їдати всю денну норму за один прийом.",
+      "hit": "brand:varto",
+      "matched": "варто",
+      "pattern": "300 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@poltava_informue",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11687",
+      "date": "2026-07-12T07:00:02+00:00",
+      "line": "▫️ряжанка - 800 мл;",
+      "hit": "category:dairy:ряжанк",
+      "matched": "ряжанка",
+      "pattern": "800 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11688",
+      "date": "2026-07-12T09:00:04+00:00",
+      "line": "Для тіста: 450 г борошна, 200 г холодного масла, 5 жовтків, 1 ст. л. оцту, 125 г сметани. У борошно додати холодне масло й перетерти в крихту, додати жовтки, оцет і сметану, заміси…",
+      "hit": "category:dairy:масл",
+      "matched": "масла",
+      "pattern": "450 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11689",
+      "date": "2026-07-12T12:00:01+00:00",
+      "line": "▫️ кефір — 200 мл",
+      "hit": "category:dairy:кефір",
+      "matched": "кефір",
+      "pattern": "200 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11691",
+      "date": "2026-07-12T16:00:02+00:00",
+      "line": "🌿 Кефір — 500 мл",
+      "hit": "category:dairy:кефір",
+      "matched": "кефір",
+      "pattern": "500 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11694",
+      "date": "2026-07-13T07:00:04+00:00",
+      "line": "• 100 г сиру",
+      "hit": "category:dairy:сир",
+      "matched": "сиру",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11696",
+      "date": "2026-07-13T12:00:03+00:00",
+      "line": "- кисломолочний сир 180 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "180 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11701",
+      "date": "2026-07-14T07:00:03+00:00",
+      "line": "Розтоплене вершкове масло 70 г",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "70 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11703",
+      "date": "2026-07-14T12:00:01+00:00",
+      "line": "▪️ 100 г вершкового масла",
+      "hit": "category:dairy:масл",
+      "matched": "масла",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11704",
+      "date": "2026-07-14T14:00:04+00:00",
+      "line": "- Кисломолочний сир - 180 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "180 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11706",
+      "date": "2026-07-14T18:00:01+00:00",
+      "line": "Крем-сир - 100 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11708",
+      "date": "2026-07-15T07:00:02+00:00",
+      "line": "▫️Твердий сир-50г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "50г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11710",
+      "date": "2026-07-15T10:00:01+00:00",
+      "line": "• 20 г. вершкового масла",
+      "hit": "category:dairy:масл",
+      "matched": "масла",
+      "pattern": "20 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11711",
+      "date": "2026-07-15T12:00:02+00:00",
+      "line": "вершкове масло - 100 г",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11712",
+      "date": "2026-07-15T14:00:03+00:00",
+      "line": "✔️ сметана 15%",
+      "hit": "category:dairy:сметан",
+      "matched": "сметана",
+      "pattern": "15%",
+      "pattern_kinds": [
+        "percent"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11713",
+      "date": "2026-07-15T16:00:04+00:00",
+      "line": "Твердий сир - 120 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "120 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11714",
+      "date": "2026-07-15T18:00:03+00:00",
+      "line": "густий грецький йогурт - 300 г",
+      "hit": "category:dairy:йогурт",
+      "matched": "йогурт",
+      "pattern": "300 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11716",
+      "date": "2026-07-16T07:00:03+00:00",
+      "line": "🌿 Твердий сир — 80г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "80г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11717",
+      "date": "2026-07-16T09:00:03+00:00",
+      "line": "Крем -сир-200 г;",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "200 г",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11718",
+      "date": "2026-07-16T12:00:01+00:00",
+      "line": "▫️Кефір 330 мл",
+      "hit": "category:dairy:кефір",
+      "matched": "кефір",
+      "pattern": "330 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11723",
+      "date": "2026-07-17T07:00:05+00:00",
+      "line": "Твердий сир - 100 г;",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11729",
+      "date": "2026-07-17T14:00:04+00:00",
+      "line": "Кефір -400 мл;",
+      "hit": "category:dairy:кефір",
+      "matched": "кефір",
+      "pattern": "400 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11730",
+      "date": "2026-07-17T16:00:03+00:00",
+      "line": "Твердий сир - 150-200 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "200 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11731",
+      "date": "2026-07-17T18:00:02+00:00",
+      "line": "сир Dorblu — 80–100 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11735",
+      "date": "2026-07-18T09:00:03+00:00",
+      "line": "- 120г м’якого вершкового масла",
+      "hit": "category:dairy:масл",
+      "matched": "масла",
+      "pattern": "120г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11736",
+      "date": "2026-07-18T12:00:02+00:00",
+      "line": "Кисломолочний сир - 200 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "200 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11743",
+      "date": "2026-07-19T12:00:07+00:00",
+      "line": "Рослинна олія – 20 г",
+      "hit": "category:dairy:рослинн",
+      "matched": "рослинна",
+      "pattern": "20 г",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11744",
+      "date": "2026-07-19T14:00:04+00:00",
+      "line": "- сир 30 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "30 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11745",
+      "date": "2026-07-19T16:00:01+00:00",
+      "line": "Сир 70 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "70 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11748",
+      "date": "2026-07-20T07:00:03+00:00",
+      "line": "Молоко - 210 мл",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "210 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11749",
+      "date": "2026-07-20T09:00:03+00:00",
+      "line": "350г сиру кисломолочного",
+      "hit": "category:dairy:сир",
+      "matched": "сиру",
+      "pattern": "350г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11750",
+      "date": "2026-07-20T12:00:03+00:00",
+      "line": "• 500 мл теплого молока",
+      "hit": "category:dairy:молок",
+      "matched": "молока",
+      "pattern": "500 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11751",
+      "date": "2026-07-20T14:00:02+00:00",
+      "line": "•Сир - 200 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "200 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11756",
+      "date": "2026-07-21T09:00:04+00:00",
+      "line": "• 125 мл. молока",
+      "hit": "category:dairy:молок",
+      "matched": "молока",
+      "pattern": "125 мл",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11757",
+      "date": "2026-07-21T12:00:04+00:00",
+      "line": "✔️ вершкове масло - 160 г",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "160 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11758",
+      "date": "2026-07-21T14:00:02+00:00",
+      "line": "🧀 Твердий сир (тертий) — 40 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "40 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11759",
+      "date": "2026-07-21T16:00:02+00:00",
+      "line": "Молоко - 100 мл.",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "100 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11760",
+      "date": "2026-07-21T18:00:01+00:00",
+      "line": "• 5ст. л. сметани 20%",
+      "hit": "category:dairy:сметан",
+      "matched": "сметани",
+      "pattern": "20%",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11762",
+      "date": "2026-07-22T07:00:02+00:00",
+      "line": "▪️кисломолочний сир 5% 350 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "5%",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11764",
+      "date": "2026-07-22T12:00:01+00:00",
+      "line": "Варене згущене молоко - 250 г",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "250 г",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11766",
+      "date": "2026-07-22T16:00:03+00:00",
+      "line": "🧀сир – 250 г,",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "250 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11772",
+      "date": "2026-07-23T14:00:02+00:00",
+      "line": "• Грецький йогурт - 200 г",
+      "hit": "category:dairy:йогурт",
+      "matched": "йогурт",
+      "pattern": "200 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11773",
+      "date": "2026-07-23T16:00:07+00:00",
+      "line": "Сир твердий натертий 100 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11778",
+      "date": "2026-07-24T12:00:04+00:00",
+      "line": "• 20 г вершкового масла",
+      "hit": "category:dairy:масл",
+      "matched": "масла",
+      "pattern": "20 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11779",
+      "date": "2026-07-24T14:00:01+00:00",
+      "line": "🔹300мл молока",
+      "hit": "category:dairy:молок",
+      "matched": "молока",
+      "pattern": "300мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11783",
+      "date": "2026-07-25T07:00:04+00:00",
+      "line": "70 г розтопленого вершкового масла",
+      "hit": "category:dairy:масл",
+      "matched": "масла",
+      "pattern": "70 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11784",
+      "date": "2026-07-25T09:00:02+00:00",
+      "line": "• 120 г твердого сиру",
+      "hit": "category:dairy:сир",
+      "matched": "сиру",
+      "pattern": "120 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11791",
+      "date": "2026-07-26T09:00:02+00:00",
+      "line": "•Кисломолочний сир — 250 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "250 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11792",
+      "date": "2026-07-26T12:00:03+00:00",
+      "line": "70 г вершкового масла",
+      "hit": "category:dairy:масл",
+      "matched": "масла",
+      "pattern": "70 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11794",
+      "date": "2026-07-26T16:00:02+00:00",
+      "line": "🧈 Вершкове масло — 20 г",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "20 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11795",
+      "date": "2026-07-26T18:00:01+00:00",
+      "line": "Сир тертий 70 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "70 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11799",
+      "date": "2026-07-27T12:00:01+00:00",
+      "line": "Крем-сир Philadelphia original — 100 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11800",
+      "date": "2026-07-27T14:00:01+00:00",
+      "line": "🔹 40г сиру(у мене пармезан)",
+      "hit": "category:dairy:сир",
+      "matched": "сиру",
+      "pattern": "40г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11804",
+      "date": "2026-07-28T07:00:00+00:00",
+      "line": "Сир 150 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "150 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11807",
+      "date": "2026-07-28T14:00:01+00:00",
+      "line": "• Твердий сир - 120 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "120 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11809",
+      "date": "2026-07-28T18:00:01+00:00",
+      "line": "200 г м’якого сиру (у мене рікота)",
+      "hit": "category:dairy:сир",
+      "matched": "сиру",
+      "pattern": "200 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11811",
+      "date": "2026-07-29T07:00:02+00:00",
+      "line": "Сир - 150-200 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "200 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11812",
+      "date": "2026-07-29T09:00:02+00:00",
+      "line": "Холодне вершкове масло - 180 г",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "180 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11813",
+      "date": "2026-07-29T12:00:03+00:00",
+      "line": "м’яке вершкове масло — 100 г",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11814",
+      "date": "2026-07-29T14:00:03+00:00",
+      "line": "•Крем - сир - 250-300 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "300 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11815",
+      "date": "2026-07-29T16:00:00+00:00",
+      "line": "• 150 г грецького йогурту 3%",
+      "hit": "category:dairy:йогурт",
+      "matched": "йогурту",
+      "pattern": "150 г",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11818",
+      "date": "2026-07-30T07:00:00+00:00",
+      "line": "• 450 мл молока",
+      "hit": "category:dairy:молок",
+      "matched": "молока",
+      "pattern": "450 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11819",
+      "date": "2026-07-30T09:00:03+00:00",
+      "line": "Молоко - 70 мл",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "70 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11823",
+      "date": "2026-07-30T14:00:02+00:00",
+      "line": "- крем-сир 100 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11824",
+      "date": "2026-07-30T16:00:01+00:00",
+      "line": "✔️ 150 г грецького йогурту",
+      "hit": "category:dairy:йогурт",
+      "matched": "йогурту",
+      "pattern": "150 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11828",
+      "date": "2026-07-31T09:00:02+00:00",
+      "line": "✔️ Молоко - 280 мл",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "280 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11829",
+      "date": "2026-07-31T12:00:04+00:00",
+      "line": "330г сметани 20%",
+      "hit": "category:dairy:сметан",
+      "matched": "сметани",
+      "pattern": "330г",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11835",
+      "date": "2026-08-01T09:00:00+00:00",
+      "line": "Сир для посипання – 180 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "180 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11837",
+      "date": "2026-08-01T14:00:03+00:00",
+      "line": "Сир (чеддер або будь-який твердий) — 100 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11839",
+      "date": "2026-08-01T18:00:01+00:00",
+      "line": "• кисломолочний сир у вершках (зернистий) — 200 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "200 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11842",
+      "date": "2026-08-02T09:00:03+00:00",
+      "line": "- 300 г сиру",
+      "hit": "category:dairy:сир",
+      "matched": "сиру",
+      "pattern": "300 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11843",
+      "date": "2026-08-02T12:00:01+00:00",
+      "line": "📌згущене молоко 400г, в мене бананове та персикове, але можна і класичне",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "400г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11851",
+      "date": "2026-08-03T12:00:02+00:00",
+      "line": "▫️кисломолочний сир 5% 500г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "5%",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11854",
+      "date": "2026-08-03T16:00:02+00:00",
+      "line": "• 100–120 г крем-сиру",
+      "hit": "category:dairy:сир",
+      "matched": "сиру",
+      "pattern": "120 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11857",
+      "date": "2026-08-04T07:00:03+00:00",
+      "line": "▫️ Кисломолочний сир — 300 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "300 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11858",
+      "date": "2026-08-04T09:00:04+00:00",
+      "line": "Крем-сир - 400 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "400 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11859",
+      "date": "2026-08-04T12:00:04+00:00",
+      "line": "-масло - 100 г",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11861",
+      "date": "2026-08-04T16:00:01+00:00",
+      "line": "60 г вершкового масла",
+      "hit": "category:dairy:масл",
+      "matched": "масла",
+      "pattern": "60 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11862",
+      "date": "2026-08-04T18:00:01+00:00",
+      "line": "Крем-сир 50 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "50 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11866",
+      "date": "2026-08-05T09:00:03+00:00",
+      "line": "100 г м'якого вершкового масла",
+      "hit": "category:dairy:масл",
+      "matched": "масла",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11867",
+      "date": "2026-08-05T12:00:02+00:00",
+      "line": "500 мл молока",
+      "hit": "category:dairy:молок",
+      "matched": "молока",
+      "pattern": "500 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11868",
+      "date": "2026-08-05T14:00:02+00:00",
+      "line": "100 г грецького йогурту 10%",
+      "hit": "category:dairy:йогурт",
+      "matched": "йогурту",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11869",
+      "date": "2026-08-05T16:00:02+00:00",
+      "line": "✔️ сир - 200 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "200 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11870",
+      "date": "2026-08-05T18:00:02+00:00",
+      "line": "150–200 г грецького йогурту або сметани",
+      "hit": "category:dairy:йогурт",
+      "matched": "йогурту",
+      "pattern": "200 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11874",
+      "date": "2026-08-06T12:00:03+00:00",
+      "line": "▫️Молоко - 250 мл",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "250 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@recepti:11880",
+      "date": "2026-08-07T09:00:01+00:00",
+      "line": "Пісочне печиво - 180 г + розтоплене вершкове масло - 70 г",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "180 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@recepti",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@retsepty:7280",
+      "date": "2026-07-13T06:10:10+00:00",
+      "line": "🔸молоко 200мл",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "200мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@retsepty",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@retsepty:7281",
+      "date": "2026-07-13T08:01:29+00:00",
+      "line": "🔸150г молока +300г води",
+      "hit": "category:dairy:молок",
+      "matched": "молока",
+      "pattern": "150г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@retsepty",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@retsepty:7284",
+      "date": "2026-07-14T05:10:06+00:00",
+      "line": "🔸50 г сиру",
+      "hit": "category:dairy:сир",
+      "matched": "сиру",
+      "pattern": "50 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@retsepty",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@retsepty:7288",
+      "date": "2026-07-15T05:10:09+00:00",
+      "line": "🔸сир — 300 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "300 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@retsepty",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@retsepty:7289",
+      "date": "2026-07-15T07:01:09+00:00",
+      "line": "🔸Вершкове масло холодне - 180 г",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "180 г",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@retsepty",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@retsepty:7292",
+      "date": "2026-07-16T05:10:10+00:00",
+      "line": "🔸350 г дуже теплого кефіру",
+      "hit": "category:dairy:кефір",
+      "matched": "кефіру",
+      "pattern": "350 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@retsepty",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@retsepty:7294",
+      "date": "2026-07-16T10:04:42+00:00",
+      "line": "🔸сир Сулугуні - 100 г;",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@retsepty",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@retsepty:7297",
+      "date": "2026-07-17T07:01:25+00:00",
+      "line": "🔸сир твердий 100 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@retsepty",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@retsepty:7300",
+      "date": "2026-07-18T05:20:08+00:00",
+      "line": "🔸140 мл молока",
+      "hit": "category:dairy:молок",
+      "matched": "молока",
+      "pattern": "140 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@retsepty",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@retsepty:7301",
+      "date": "2026-07-18T07:20:15+00:00",
+      "line": "🔸70г твердого сиру",
+      "hit": "category:dairy:сир",
+      "matched": "сиру",
+      "pattern": "70г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@retsepty",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@retsepty:7302",
+      "date": "2026-07-18T10:01:25+00:00",
+      "line": "🔸вершкове масло - 50 г",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "50 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@retsepty",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@retsepty:7306",
+      "date": "2026-07-20T10:01:15+00:00",
+      "line": "🔸80-100 г твердого сиру",
+      "hit": "category:dairy:сир",
+      "matched": "сиру",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@retsepty",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@retsepty:7308",
+      "date": "2026-07-21T05:10:08+00:00",
+      "line": "🔸ряжанка - 800 мл;",
+      "hit": "category:dairy:ряжанк",
+      "matched": "ряжанка",
+      "pattern": "800 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@retsepty",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@retsepty:7310",
+      "date": "2026-07-21T10:03:04+00:00",
+      "line": "🔸Молоко — 80 мл",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "80 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@retsepty",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@retsepty:7312",
+      "date": "2026-07-22T05:10:09+00:00",
+      "line": "▫️ кефір — 200 мл",
+      "hit": "category:dairy:кефір",
+      "matched": "кефір",
+      "pattern": "200 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@retsepty",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@retsepty:7313",
+      "date": "2026-07-22T07:02:06+00:00",
+      "line": "🔸кисломолочний сир 180 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "180 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@retsepty",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@retsepty:7317",
+      "date": "2026-07-24T05:10:10+00:00",
+      "line": "🔸Розтоплене вершкове масло 70 г",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "70 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@retsepty",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@retsepty:7318",
+      "date": "2026-07-24T07:03:41+00:00",
+      "line": "🔸Твердий сир-50г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "50г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@retsepty",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@retsepty:7321",
+      "date": "2026-07-25T07:00:48+00:00",
+      "line": "🔸20 г. вершкового масла",
+      "hit": "category:dairy:масл",
+      "matched": "масла",
+      "pattern": "20 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@retsepty",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@retsepty:7322",
+      "date": "2026-07-25T10:04:55+00:00",
+      "line": "🔸Твердий сир - 120 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "120 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@retsepty",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@retsepty:7323",
+      "date": "2026-07-26T05:10:09+00:00",
+      "line": "🔸вершкове масло - 100 г",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@retsepty",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@retsepty:7324",
+      "date": "2026-07-26T07:00:53+00:00",
+      "line": "🔸сметана 15%",
+      "hit": "category:dairy:сметан",
+      "matched": "сметана",
+      "pattern": "15%",
+      "pattern_kinds": [
+        "percent"
+      ],
+      "channel": "@retsepty",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@retsepty:7325",
+      "date": "2026-07-26T10:04:26+00:00",
+      "line": "🔸густий грецький йогурт - 300 г",
+      "hit": "category:dairy:йогурт",
+      "matched": "йогурт",
+      "pattern": "300 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@retsepty",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@retsepty:7326",
+      "date": "2026-07-28T05:10:12+00:00",
+      "line": "🌿 Твердий сир — 80г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "80г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@retsepty",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@retsepty:7327",
+      "date": "2026-07-28T07:01:12+00:00",
+      "line": "🔸Кефір 330 мл",
+      "hit": "category:dairy:кефір",
+      "matched": "кефір",
+      "pattern": "330 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@retsepty",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@retsepty:7330",
+      "date": "2026-07-29T07:01:54+00:00",
+      "line": "🔸Кефір -400 мл;",
+      "hit": "category:dairy:кефір",
+      "matched": "кефір",
+      "pattern": "400 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@retsepty",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@retsepty:7331",
+      "date": "2026-07-29T10:05:16+00:00",
+      "line": "🔸Твердий сир - 100 г;",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@retsepty",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@retsepty:7333",
+      "date": "2026-07-30T05:10:08+00:00",
+      "line": "🔸120г м’якого вершкового масла",
+      "hit": "category:dairy:масл",
+      "matched": "масла",
+      "pattern": "120г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@retsepty",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@retsepty:7334",
+      "date": "2026-07-30T07:03:10+00:00",
+      "line": "🔸Твердий сир - 150-200 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "200 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@retsepty",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@retsepty:7335",
+      "date": "2026-07-30T10:04:19+00:00",
+      "line": "🔸сир Dorblu — 80–100 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "100 г",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@retsepty",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@retsepty:7337",
+      "date": "2026-07-31T05:10:07+00:00",
+      "line": "🔸Кисломолочний сир - 200 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "200 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@retsepty",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@retsepty:7342",
+      "date": "2026-08-01T10:04:11+00:00",
+      "line": "🔸сир 30 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "30 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@retsepty",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@retsepty:7343",
+      "date": "2026-08-03T06:40:01+00:00",
+      "line": "🔸Молоко - 210 мл",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "210 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@retsepty",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@retsepty:7345",
+      "date": "2026-08-03T08:03:27+00:00",
+      "line": "🔸Сир - 200 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "200 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@retsepty",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@retsepty:7348",
+      "date": "2026-08-04T05:10:08+00:00",
+      "line": "🔸125 мл. молока",
+      "hit": "category:dairy:молок",
+      "matched": "молока",
+      "pattern": "125 мл",
+      "pattern_kinds": [
+        "percent",
+        "size"
+      ],
+      "channel": "@retsepty",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@retsepty:7349",
+      "date": "2026-08-04T07:03:36+00:00",
+      "line": "🧀 Твердий сир (тертий) — 40 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "40 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@retsepty",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@retsepty:7350",
+      "date": "2026-08-04T10:04:04+00:00",
+      "line": "🔸Молоко - 100 мл.",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "100 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@retsepty",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@retsepty:7353",
+      "date": "2026-08-05T08:03:00+00:00",
+      "line": "🔸Грецький йогурт - 200 г",
+      "hit": "category:dairy:йогурт",
+      "matched": "йогурт",
+      "pattern": "200 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@retsepty",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@retsepty:7354",
+      "date": "2026-08-05T10:00:27+00:00",
+      "line": "🧀сир – 250 г,",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "250 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@retsepty",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@retsepty:7356",
+      "date": "2026-08-06T05:32:44+00:00",
+      "line": "🔸70 г розтопленого 🔸вершкового масла",
+      "hit": "category:dairy:масл",
+      "matched": "масла",
+      "pattern": "70 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@retsepty",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@retsepty:7357",
+      "date": "2026-08-06T07:00:25+00:00",
+      "line": "🔸120 г твердого сиру",
+      "hit": "category:dairy:сир",
+      "matched": "сиру",
+      "pattern": "120 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@retsepty",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@silposilpo:3790",
+      "date": "2026-07-14T07:06:34+00:00",
+      "line": "Сьогодні, 14.07, з 11:00 до 14:00 ловіть печінку тріски «Премія»® за 95,99 грн від 3-х шт.🐟",
+      "hit": "brand:premia",
+      "matched": "премія",
+      "pattern": "95,99 грн",
+      "pattern_kinds": [
+        "currency"
+      ],
+      "channel": "@silposilpo",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@silposilpo:3805",
+      "date": "2026-07-23T13:40:06+00:00",
+      "line": "🧈Масло солодковершкове «Ферма» «Екстра» 82%, 180 г зі знижкою 57% – 69,99 грн",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "82%",
+      "pattern_kinds": [
+        "currency",
+        "percent",
+        "size"
+      ],
+      "channel": "@silposilpo",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@suspilnepoltava:46982",
+      "date": "2026-07-15T06:49:39+00:00",
+      "line": "У червні на Полтавщині найбільше подешевшали яйця — одразу на 30,2%. Також нижчими стали ціни на м'ясо, молоко, масло, овочі та соняшникову олію.",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "30,2%",
+      "pattern_kinds": [
+        "percent"
+      ],
+      "channel": "@suspilnepoltava",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@tarilka_malyuka:709",
+      "date": "2026-07-19T05:19:52+00:00",
+      "line": "• Кисломолочний сир 180 г (у мене упаковка Білоцерківського в брекеті)",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "180 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@tarilka_malyuka",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@tarilka_malyuka:714",
+      "date": "2026-07-19T10:24:37+00:00",
+      "line": "• Кисломолочний сир 180 г (у мене упаковка Білоцерківського в брекеті)",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "180 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@tarilka_malyuka",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@tarilka_malyuka:715",
+      "date": "2026-07-19T10:57:34+00:00",
+      "line": "• Дитячий кисломолочний сир - 270 г (3 упаковки по 90 г, у мене агуня, він густіший ніж мілупа)",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "270 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@tarilka_malyuka",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@tarilka_malyuka:721",
+      "date": "2026-07-19T13:26:23+00:00",
+      "line": "- молоко/суміш 100 мл",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "100 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@tarilka_malyuka",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@tarilka_malyuka:734",
+      "date": "2026-07-20T12:08:48+00:00",
+      "line": "• 30 мл молока",
+      "hit": "category:dairy:молок",
+      "matched": "молока",
+      "pattern": "30 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@tarilka_malyuka",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@tarilka_malyuka:757",
+      "date": "2026-07-21T16:08:25+00:00",
+      "line": "• дитячий кисломолочний сир - 90 г (одна упаковка) 🥣",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "90 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@tarilka_malyuka",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@tarilka_malyuka:758",
+      "date": "2026-07-21T16:37:09+00:00",
+      "line": "• сир напівтвердий 200 г (у мене гауда)",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "200 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@tarilka_malyuka",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@tarilka_malyuka:765",
+      "date": "2026-07-22T07:42:09+00:00",
+      "line": "• кисломолочний сир 150 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "150 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@tarilka_malyuka",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@tarilka_malyuka:779",
+      "date": "2026-07-23T07:22:41+00:00",
+      "line": "🧀 Моцарела або твердий сир — 35–40 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "40 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@tarilka_malyuka",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@tarilka_malyuka:782",
+      "date": "2026-07-23T09:48:10+00:00",
+      "line": "- кисломолочний дитячий сир 30-50 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "50 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@tarilka_malyuka",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@tarilka_malyuka:790",
+      "date": "2026-07-24T10:15:34+00:00",
+      "line": "- вершкове масло 50-80г 🧈",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "80г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@tarilka_malyuka",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@tarilka_malyuka:811",
+      "date": "2026-07-27T08:42:47+00:00",
+      "line": "• вершкове масло 50 г 🧈",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "50 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@tarilka_malyuka",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@tarilka_malyuka:814",
+      "date": "2026-07-28T10:02:22+00:00",
+      "line": "- кисломолочний сир (зернистий) 120 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "120 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@tarilka_malyuka",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@tarilka_malyuka:820",
+      "date": "2026-07-29T14:04:03+00:00",
+      "line": "- 250 мл теплого молока",
+      "hit": "category:dairy:молок",
+      "matched": "молока",
+      "pattern": "250 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@tarilka_malyuka",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@tarilka_malyuka:828",
+      "date": "2026-08-01T07:11:25+00:00",
+      "line": "- твердий сир 30 г 🧀",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "30 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@tarilka_malyuka",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@tarilka_malyuka:832",
+      "date": "2026-08-03T10:26:28+00:00",
+      "line": "- Молоко/вода ~30 мл",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "30 мл",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@tarilka_malyuka",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@tarilka_malyuka:837",
+      "date": "2026-08-05T10:24:16+00:00",
+      "line": "- Кисломолочний сир 150 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "150 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@tarilka_malyuka",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@telegraf_kremenchuk:70785",
+      "date": "2026-07-16T11:00:01+00:00",
+      "line": "⏺ молоко — на 1,10 грн за 0,9 л;",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "1,10 грн",
+      "pattern_kinds": [
+        "currency",
+        "percent",
+        "size"
+      ],
+      "channel": "@telegraf_kremenchuk",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@telegraf_kremenchuk:70827",
+      "date": "2026-07-17T12:26:32+00:00",
+      "line": "🧀Сир Брі 50%, La Belle Laitiere, 100 г, зі знижкою 40% – 44,90 грн",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "50%",
+      "pattern_kinds": [
+        "currency",
+        "percent",
+        "size"
+      ],
+      "channel": "@telegraf_kremenchuk",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@telegraf_kremenchuk:70972",
+      "date": "2026-07-22T17:20:45+00:00",
+      "line": "Як повідомляє кореспондентка «Кременчуцького Телеграфа», через повітряну тривогу учасники не проводили мітинг, а зібралися неподалік із безалкогольним пивом, квасом, напоями та сир…",
+      "hit": "category:dairy:сир",
+      "matched": "сиром",
+      "pattern": "50%",
+      "pattern_kinds": [
+        "percent"
+      ],
+      "channel": "@telegraf_kremenchuk",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@telegraf_kremenchuk:71000",
+      "date": "2026-07-23T15:22:01+00:00",
+      "line": "⏺ молоко — на 1,10 грн за 0,9 л;",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "1,10 грн",
+      "pattern_kinds": [
+        "currency",
+        "percent",
+        "size"
+      ],
+      "channel": "@telegraf_kremenchuk",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@telegraf_kremenchuk:71024",
+      "date": "2026-07-24T12:01:35+00:00",
+      "line": "🧀Сир Маасдам 45%, 100 г, зі знижкою 53% – 32,90 грн",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "45%",
+      "pattern_kinds": [
+        "currency",
+        "percent",
+        "size"
+      ],
+      "channel": "@telegraf_kremenchuk",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@telegraf_kremenchuk:71197",
+      "date": "2026-07-30T11:06:58+00:00",
+      "line": "⏺ сметана 15% — на 3,25 грн за упаковку 400 г;",
+      "hit": "category:dairy:сметан",
+      "matched": "сметана",
+      "pattern": "15%",
+      "pattern_kinds": [
+        "currency",
+        "percent",
+        "size"
+      ],
+      "channel": "@telegraf_kremenchuk",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@telegraf_kremenchuk:71243",
+      "date": "2026-07-31T11:59:58+00:00",
+      "line": "🧀Сир Гауда 48%, 100 г, зі знижкою 53% – 32,90 грн",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "48%",
+      "pattern_kinds": [
+        "currency",
+        "percent",
+        "size"
+      ],
+      "channel": "@telegraf_kremenchuk",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@telegraf_kremenchuk:71436",
+      "date": "2026-08-06T16:06:01+00:00",
+      "line": "⏺ молоко — на 3,65 грн за 0,9 л;",
+      "hit": "category:dairy:молок",
+      "matched": "молоко",
+      "pattern": "3,65 грн",
+      "pattern_kinds": [
+        "currency",
+        "size"
+      ],
+      "channel": "@telegraf_kremenchuk",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@telegraf_kremenchuk:71457",
+      "date": "2026-08-07T12:02:30+00:00",
+      "line": "🧀Сир Маасдам 45%, 100 г, зі знижкою 53% – 32,90 грн",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "45%",
+      "pattern_kinds": [
+        "currency",
+        "percent",
+        "size"
+      ],
+      "channel": "@telegraf_kremenchuk",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@useful_healthy_fitness_menu:3093",
+      "date": "2026-07-20T11:44:43+00:00",
+      "line": "▫️сир фета 180 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "180 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@useful_healthy_fitness_menu",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@vylkachannel:1644",
+      "date": "2026-07-17T09:26:22+00:00",
+      "line": "- 🧀 Твердий сир - 150–200 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "200 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@vylkachannel",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@vylkachannel:1645",
+      "date": "2026-07-19T19:00:55+00:00",
+      "line": "‎- 🧈 Вершкове масло (м'яке) - 50 г",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "50 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@vylkachannel",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@vylkachannel:1658",
+      "date": "2026-08-01T08:56:12+00:00",
+      "line": "- ⚪️ Вершковий сир - 200 г",
+      "hit": "category:dairy:сир",
+      "matched": "сир",
+      "pattern": "200 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@vylkachannel",
+      "carrier": "post_text"
+    },
+    {
+      "id": "@vylkachannel:1663",
+      "date": "2026-08-05T05:46:02+00:00",
+      "line": "- 🧈 Вершкове масло - 20 г (розплавлене)",
+      "hit": "category:dairy:масл",
+      "matched": "масло",
+      "pattern": "20 г",
+      "pattern_kinds": [
+        "size"
+      ],
+      "channel": "@vylkachannel",
+      "carrier": "post_text"
+    }
+  ],
+  "producer": {
+    "script": "scripts/census_c3a_posts.py",
+    "sha256": "adf15d861da9c4dd147c223b80b8ece4013cd18352d828258f9da6f977486ba7",
+    "why": "no git block: `git status --porcelain` is a fact about the tree, not the measurement"
+  }
+}
