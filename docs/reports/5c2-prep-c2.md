@@ -486,13 +486,16 @@ $ python3 -m pytest tests/test_collect_5c1.py::test_the_guard_reads_the_pinned_p
 | 5 | `716bca5` | 1 failed, **2133** passed, 2 skipped | the same one |
 | 6 | `333cf2c` | 1 failed, **2135** passed, 2 skipped | the same one |
 | 7 | `d469942` | 1 failed, **2136** passed, 2 skipped | the same one |
+| 8 | `ae88b44` | 1 failed, 2136 passed, 2 skipped | the same one |
+| 9 | `22ac2a6` | 1 failed, 2136 passed, 2 skipped | the same one |
+| 10 | `daaa355` | 1 failed, **2139** passed, 2 skipped | the same one |
 
 Same nodeid on every row, control included, and the count only ever rises. In the main tree, HEAD is
-**2137 passed, 2 skipped**, and `ruff format --check .` is clean.
+**2140 passed, 2 skipped**, and `ruff format --check .` is clean.
 
-The last commit of this session is the one that appends this table, so it cannot carry its own
-result: it adds markdown to an already-green tree, and the `make check` run beside it is the
-evidence for it.
+The last commits of this session are the ones that append this table and the vault tail, so they
+cannot carry their own result: they add markdown to an already-green tree, and the `make check` run
+beside each is the evidence for it.
 
 ### 2 · The census run twice with the same anchor
 
@@ -569,4 +572,5 @@ the sections above.
 | 7 | `d469942` | `docs(report): 5c2-prep-c2 — the census, the projection, and the STOP the numbers force` |
 | 8 | `ae88b44` | `docs(report): 5c2-prep-c2 — the per-commit checkout table and the session's git log` |
 | 9 | `22ac2a6` | `chore(vault): the 5c2-prep-c2 session tail — the STOP, and the two records that stopped moving` |
-| 10 | — | `fix(5c2-prep-c2): the post row type is in scope, bounded and out of the two-leg total` (this amendment; a report cannot carry its own hash) |
+| 10 | `daaa355` | `fix(5c2-prep-c2): the post row type is in scope, bounded and out of the two-leg total` |
+| 11 | — | this report's own amendment and the session's vault tail — the two a report cannot carry its own hash for |
