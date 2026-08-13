@@ -9,8 +9,10 @@ Three plain sentences, first:
    recorded anchor and reproducible byte for byte from it.
 2. Both legs of the paid session now have a price that came off a session that actually paid on
    the serverless runtime, with the file and the field printed beside every figure.
-3. And the answer is that **the whole window does not fit**: $7.6870 with drift against $6.1690
-   left in the phase, which is why this contract ends at a STOP and writes no pre-registration.
+3. And the answer is that **the window does not fit**: the two priced legs are $7.6870 with drift
+   against $6.1690 left in the phase, and with the third row type the ruling scopes — posts, which
+   have a paid rate and no writer — it is ~$15.84. That is why this contract ends at a STOP and
+   writes no pre-registration.
 
 ---
 
