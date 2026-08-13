@@ -11,6 +11,20 @@ Gemma-4 vision path; API caption instrument retired) ruled by the operator
 2026-08-08, recorded the same session; amendment 3.14 (target runtime =
 serverless; same-evening probe overturns the 5b wall) ruled and recorded
 2026-08-08 late evening.
+<!-- amendment-index begin — stripped by write_sku_prereg.registered_law() before hashing
+docs/SPEC.md against the SEALED pre-registration pins; this index did not exist when they were
+taken, and the title line above CANNOT be corrected for the same reason: the pins hash those
+bytes. The revision number in the heading is frozen at 3.14; the current revision is 3.18 -->
+**Amendment index, repaired 2026-08-13 (the paragraph above stopped being updated after
+3.14 and the body kept growing — the BODY is the law, this list is a finding aid):**
+amendment 3.15 (the vis program moves to the proven serverless runtime) — operator go
+2026-08-09; amendment 3.16 (second-instrument REVIEW class: findings, never measurements) —
+operator order 2026-08-09; amendment 3.17 (the position layer — question 7 of PRODUCT.md,
+with ratifications (7)–(14) in their own marked blocks) — operator 2026-08-10, ratified
+through 2026-08-12; amendment 3.18 (5c2: the position layer enters the loop narrowed,
+question 7's depth instrument, the phase cap 25 → 30, and the 5c2-validate operator
+sitting) — operator at the 5c2 briefing 2026-08-13.
+<!-- amendment-index end -->
 **Amendment 3.1:** EN removed from per-language gates — the collected corpus
 contains 8 EN comments out of 2,000 sampled (retail channels post in UA); a
 per-language metric over n=8 is meaningless. Gates run on UA and RU. The model
@@ -717,6 +731,92 @@ applies; the measured expectation remains ~$0.25–0.33. (f) Dv210's wiring —
 `bar_one` reading gold from the B′ registration's own `gold.per_post` — is
 skub2-run's first gate, enforced by the existing refusal.
 <!-- sku-b-ratification-8 end -->
+<!-- amendment-3.18 begin — stripped by write_sku_prereg.registered_law() before hashing
+docs/SPEC.md against the SEALED pre-registration pins of v1–v4 and B′, every one of which
+predates this text; the law those records registered is the stripped text. The strip is the
+only legal way to green a law that grew — re-pinning a sealed registration is not -->
+**Amendment 3.18 (operator, 2026-08-13, the 5c2 briefing: the position layer
+enters the loop NARROWED, question 7's depth instrument, the phase cap):**
+(1) **Question 7's depth instrument — ruled.** The weekly promo-depth aggregate
+of 3.17 (3) is computed from the promo price and the PRINTED `-N%` badge. Both
+are 80/80 correct in the team lead's read of the B′ population
+(`results/sku_b_pair_verdicts_skub2.json`), and the badge lands within 2 pp of
+the depth on every pair of it (median 0.3212 pp, max 1.4171 pp —
+`results/sku_depth_from_pct_skub2.json`). The EXTRACTED old price is KEPT — it is
+the more accurate depth input of the two (median 0.1670 pp) — and it is FLAGGED:
+right as a NUMBER on only 33 of 80 pairs, it never reaches a surface that prints
+it as a price, and no "was/now" claim is built on it. The crossed-out number is
+never trusted to the kopiyka. (3)'s prohibition stands UNCHANGED: the old price
+is never reconstructed from the promo and the badge — the operator DECLINED the
+advisory reconstruction the 5c2 pointer carried as a candidate — and the printed
+% never substitutes the arithmetic where both prices exist; the code-computed
+depth and the printed-vs-computed disagreement flag remain exactly as (3) writes
+them.
+(2) **Narrow integration on a red gate — ratified.** 3.17 (6)'s sentence
+"Integration into the 5c2 loop only on a green gate" is NOT edited: it is quoted
+verbatim inside sealed pre-registrations and asserted by tests, and a law is not
+tidied to match the amendment that supersedes it. It is superseded IN
+APPLICATION, for named legs only, on the measurement in
+`results/sku_bar_verdicts_skub2.json`: the leaflet BRAND leg (bar 1, 0.9800
+against 0.75, zero false positives on the nine empty-gold posts) and the TEXT
+TIER leg (bar 3, 0.8667 against 0.85) enter the 5c2 loop; the PRICE-PAIR leg
+(bar 2, 0.4125 against 0.80) enters no price surface and contributes only what
+(1) allows. B stays CLOSED — instrument not ready, BY MEASUREMENT: no bar is
+reopened, nothing is re-scored, and no third instrument is authorised — the
+two-stage OCR read and the brands_visible channel stay named candidates, unbuilt,
+per (13).
+(3) **The phase cap moves 25 → 30 US dollars.** Both homes move together, in one
+commit: `PHASE_CAP_USD` in `scripts/runpod_guard.py` and `phase4_cap_usd` in
+`results/spend_phase4.json`. The anchor (balance 35.00 read 2026-08-01T08:34:09Z)
+and every logged session are UNTOUCHED — an anchor rewritten is a counter reset.
+No money is added to the account: the balance is 11.3347, so the raise lifts an
+artificial line only, and the guard's refusal on a balance ABOVE the anchor stays
+in force. Phase spend at the ruling: 23.6653 by the anchor arithmetic. The ledger
+FILE is stale since 2026-08-11 — v3-run, v4-run and skub2-run live only in their
+session ledgers — and its repair is a deliverable of the 5c2 precursor, never of
+the paid session.
+(4) **The 5c2 backlog window.** The cycle-1 economics ruling of 2026-08-06 stands:
+the backlog is scored as a WINDOW of the most recent ~4 weeks, and the full
+11,338-row history remains a visibly deferred decision. The window is
+PRE-REGISTERED BY ROW COUNT — computed by a zero-cost census before the paid
+session, never as a date range evaluated at run time — and priced from the most
+recent measurement that actually PAID on the serverless runtime. 5b's 0.5993 per
+1,000 rows and 0.4611 per pass were measured on a POD and are not this runtime's
+numbers.
+(5) **Program shape: one zero-cost precursor, then ONE paid session.** 5c2-prep
+(no spend): the loop core on the serverless runtime, the census and the
+projection, the ledger repair of (3), the guards, and the pre-registration of the
+paid session — its cap, its stop rules and what the window buys — committed
+before the session exists. 5c2-run: one paid session under that cap, with the
+go/no-go re-projection of 3.17 (10)(a) applying unchanged. The legs of (2) are
+verified on the window's own output at acceptance; a leg that cannot be verified
+there is reported as unverified, never assumed.
+(6) **5c2-validate — an OPERATOR SITTING, and the phase does not close without
+it (operator requirement, 2026-08-13).** After 5c2-run and before the phase
+closes, the system's own output is shown to the operator in a form he can check
+against reality: at least FIVE leaflet posts and FIVE comments, each as
+original-beside-verdict. Per post: the page image as it was sent, the positions
+the instrument returned from it, and — field by field — what made each a POSITION
+rather than a product_mention (brand, line, category, size, attribute), the price
+fields with the depth of (1), and the tier the LADDER assigned by code. Per
+comment: the comment as written, its parent post, the rendering the model was
+given, and every head's verdict (sentiment, sarcasm, intents, and the brand
+attribution) with the aggregate the row belongs to printed beside it, so a single
+row is never read as the population. Readings: (a) the ten are DRAWN under a
+recorded seed from the window's own output, never picked — a hand-picked example
+is a demo, not a validation; (b) the pack reads from result files only and fails
+loudly on a missing source, per §5's honesty rules; (c) the sitting produces
+FINDINGS in the REVIEW class of 3.16 (1) — the operator's reactions are recorded
+as ratified / disputed and become watchlist, lexicon or prompt revision ORDERS,
+never re-scored numbers and never a moved bar; (d) budget ~45 minutes of operator
+time, recorded as an actual at phase close. **Consequence for the loop, binding
+on 5c2-prep:** the pack is unbuildable unless the run PERSISTS its per-row
+evidence — the page image path and sha, the model's raw reply, the exact
+rendering, the ladder inputs — so that persistence is a prep deliverable and not
+an afterthought. The 4.5h2 per-row dump that was lost forever
+(`results/predictions/LOST.md`) is the precedent this clause exists to prevent
+repeating.
+<!-- amendment-3.18 end -->
 **Date:** 2026-07-26 · **Team lead:** Fable session · **Executor:** Claude Code
 **Repo folder:** `/Users/hdv_1987/Desktop/Projects/market-pulse-llm`
 **rev. 3 change (operator decision):** producers in Ukraine barely use Telegram for

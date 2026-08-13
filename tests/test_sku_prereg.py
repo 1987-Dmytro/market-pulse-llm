@@ -215,6 +215,11 @@ def test_every_pinned_input_still_hashes_to_what_it_says(record):
     # only legal way to green a ratification block — re-pinning the record is not (the prereg chain
     # is the pilot's witness, and a v3 happens only on team-lead instruction).
     blocks = [
+        # the amendment index, repaired 2026-08-13: the header paragraph stopped being updated after
+        # 3.14 and the body kept growing, so the list of amendments became a finding aid written
+        # separately. It moves no bar and it did not exist when this pin was taken, so it wears
+        # markers like the rest. Document order puts it first — it sits near the top of the file.
+        "amendment-index",
         "sku-b-ratification",
         "sku-b-ratification-2",
         "sku-b-ratification-3",
@@ -234,10 +239,21 @@ def test_every_pinned_input_still_hashes_to_what_it_says(record):
         # here for the same reason (13) is — v4 predates it — and KEPT by
         # `write_sku_prereg_b2.KEEP_BLOCKS`, whose registration is made UNDER it.
         "sku-b-ratification-8",
+        # 3.18 — the 5c2 briefing (2026-08-13): question 7's depth instrument, the NARROWED
+        # integration on a red gate, the phase cap 25 → 30 and the 5c2-validate operator sitting.
+        # The first block of a second family, and the arrival was the same one-name-short one its
+        # predecessors had. Stripped here because this pin predates every word of it.
+        "amendment-3.18",
     ]
     assert prereg.RATIFICATION_NAME.findall(spec_text) == blocks
     law = prereg.registered_law(prereg.SPEC).decode("utf-8")
-    for name in blocks[1:]:  # the first block's own name is a prefix of every later one
+    for name in blocks:
+        if name == "sku-b-ratification":
+            # skipped by NAME and not by position. It is a prefix of `sku-b-ratification-2` … `-8`,
+            # so a strip that left one of those standing would fail on this line first and name the
+            # wrong block. Document order now puts `amendment-index` at blocks[0], and a `[1:]`
+            # slice would quietly stop checking whichever name sorts there.
+            continue
         assert name not in law
 
     # `config/registry.yaml` is the second input that has moved under a ratified amendment, and it
@@ -267,6 +283,43 @@ def test_every_pinned_input_still_hashes_to_what_it_says(record):
         # registry is — and an unpinned input is one that can move under the bar unnoticed.
         "config/lexicon.yaml",
     }
+
+
+B2 = "results/sku_pilot_prereg_b2.json"
+
+
+def test_a_line_outside_every_marked_block_breaks_both_sealed_pins(tmp_path):
+    """The negative control for the strip, and the reason the strip is not a licence to edit SPEC.
+
+    Extending `RATIFICATION_NAME` greens a pin by taking MARKED text off. What it must never do is
+    make the pin blind: a line that arrives outside every marked block still moves the registered
+    law, and both sealed records have to notice. Driven on a COPY in `tmp_path` — a test that wrote
+    to `docs/SPEC.md` would be the drift these pins exist to catch, and that file is the team
+    lead's.
+
+    Both records, because they strip different sets: v4 keeps nothing (it predates every block) and
+    B′ keeps `sku-b-ratification-7` and `-8` (it is registered UNDER them). The live file is checked
+    first as the positive control — an inequality nobody has seen equal is not evidence.
+    """
+    import write_sku_prereg_b2 as b2
+
+    v4_pin = json.loads(prereg.RECORD.read_text(encoding="utf-8"))["pinned_inputs"]["docs/SPEC.md"]
+    b2_pin = json.loads((REPO_ROOT / B2).read_text(encoding="utf-8"))["pinned_inputs"][
+        "docs/SPEC.md"
+    ]
+    assert hashlib.sha256(prereg.registered_law(prereg.SPEC)).hexdigest() == v4_pin
+    assert (
+        hashlib.sha256(prereg.registered_law(prereg.SPEC, keep=b2.KEEP_BLOCKS)).hexdigest()
+        == b2_pin
+    )
+
+    copy = tmp_path / "SPEC.md"
+    copy.write_text(
+        prereg.SPEC.read_text(encoding="utf-8") + "\nan amendment nobody marked.\n",
+        encoding="utf-8",
+    )
+    assert hashlib.sha256(prereg.registered_law(copy)).hexdigest() != v4_pin
+    assert hashlib.sha256(prereg.registered_law(copy, keep=b2.KEEP_BLOCKS)).hexdigest() != b2_pin
 
 
 def test_the_prereg_says_what_it_does_not_touch(record):

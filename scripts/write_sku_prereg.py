@@ -247,9 +247,27 @@ def rel(path: Path) -> str:
 
 RATIFICATION_BEGIN = "<!-- sku-b-ratification begin"
 RATIFICATION_END = "<!-- sku-b-ratification end -->"
-RATIFICATION_NAME = re.compile(r"^<!-- (sku-b-ratification(?:-\d+)?) begin", re.MULTILINE)
-"""Every marked ratification block, by name. 3.17 (7) wears `sku-b-ratification` and 3.17 (8)
-`sku-b-ratification-2`; a third would be `-3` and would be stripped by this same expression."""
+RATIFICATION_NAME = re.compile(
+    r"^<!-- (sku-b-ratification(?:-\d+)?|amendment-(?:index|3\.\d+)) begin", re.MULTILINE
+)
+"""Every marked block `docs/SPEC.md` wears, by name — the family the strip takes off before hashing.
+
+**What the family is FOR.** `pinned_inputs` holds the WHOLE spec, and the spec keeps growing after a
+registration is sealed. Text that arrives later and moves no bar of the record it would break wears
+its own markers, so the REGISTERED LAW is what is left when they all come off: the ratifications of
+readings a record already carries (3.17 (7)–(14), `sku-b-ratification` … `-8`), the amendment index
+repaired 2026-08-13 (`amendment-index`, a finding aid — the heading's `rev. 3.14` is deliberately
+NOT corrected, because the pins hash that line), and an amendment ruled after the pin was taken
+(`amendment-3.18`). Extending this expression is the only legal way to green a law that grew;
+re-pinning a sealed registration is not — those records are the pilot's witness.
+
+**A block this expression does not know is not stripped**, so the pin stops re-deriving and
+`tests/test_sku_prereg.py::test_every_pinned_input_still_hashes_to_what_it_says` goes RED. That is
+the design: an amendment cannot arrive quietly. Greening it is one name here and one line in that
+test's literal enumeration, both of which have to be looked at.
+
+One expression, one implementation: `write_sku_prereg_b2.py` and both test modules reach
+`registered_law` through this module, so this is the single point of change."""
 
 
 def registered_law(spec: Path, keep: tuple[str, ...] = ()) -> bytes:
