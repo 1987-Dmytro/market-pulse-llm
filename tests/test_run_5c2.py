@@ -271,3 +271,36 @@ def test_the_count_bound_still_applies_inside_a_byte_pack(monkeypatch):
     pages = [{"channel": "@c", "msg_id": n, "parent_msg_id": 1, "path": "x"} for n in range(10)]
 
     assert [len(pack) for pack in driver.page_packs(pages, 3)] == [3, 3, 3, 1]
+
+
+def test_the_two_carriers_of_the_config_a_pin_agree():
+    """Config A has no `expected_worker` block of its own — the expectation is ASSEMBLED.
+
+    `results/serving_5b.json :: worker` is the house pin and `results/parity_srv2.json ::
+    config.serving.worker` is the srv-2d session whose measured price the registration uses. Both
+    describe the same configuration, so a disagreement means one of them is wrong and the driver
+    must refuse rather than pick. Eleven fields today.
+    """
+    expected = driver.config_a_expected()
+
+    assert expected["serving_config"] == "A"
+    assert expected["merge_state"] == "unmerged-adapter"
+    assert expected["max_new_tokens"] == 256
+    assert not set(expected) & set(driver.SERVING_A_DROP), "provenance is not the measurement"
+    assert len(expected) == 11
+
+
+def test_the_config_a_expectation_refuses_when_the_carriers_disagree(monkeypatch, tmp_path):
+    house = json.loads((REPO_ROOT / "results" / "serving_5b.json").read_text(encoding="utf-8"))
+    house["worker"]["max_new_tokens"] = 512
+    forged = tmp_path / "serving_5b.json"
+    forged.write_text(json.dumps(house), encoding="utf-8")
+    monkeypatch.setattr(driver, "REPO_ROOT", tmp_path)
+    monkeypatch.setattr(
+        driver, "PARITY_PIN", REPO_ROOT / "results" / "parity_srv2.json", raising=False
+    )
+    (tmp_path / "results").mkdir(exist_ok=True)
+    (tmp_path / "results" / "serving_5b.json").write_text(json.dumps(house), encoding="utf-8")
+
+    with pytest.raises(SystemExit, match="disagree"):
+        driver.config_a_expected()

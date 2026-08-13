@@ -377,14 +377,67 @@ def nongold_post(store, registry, selection: dict) -> str:
     raise SystemExit("no pre-filtered post outside the D cut — the warm-up has no non-gold input")
 
 
-def nongold_comment(store, selection: dict) -> dict:
-    """A real comment row OUTSIDE the registered window — the same shape, none of the population."""
+SERVING_A_DROP = ("repo_commit", "runtime", "merged_provenance")
+"""What config A's pin carries that a run must NOT be held to.
+
+`repo_commit` moves with every staging, `runtime` is free-form provenance with its own guard
+(`assert_runtime_matches`), and `merged_provenance` is B's business. Everything else in the pin
+DOES decide the measurement and is compared — the adapter sha, the merge state, the quantization
+dict, the chat template, the token ceiling, the model, both directories and the revision."""
+
+
+def config_a_expected() -> dict:
+    """What the comment endpoint's worker must report, from the house pin — cross-checked.
+
+    POSITIONS has `results/sku_pilot_serving_v2.json :: expected_worker`, a block written to BE the
+    expectation. Config A's equivalent is `results/serving_5b.json :: worker`, and this run has a
+    second independent carrier of the same configuration in `results/parity_srv2.json ::
+    config.serving.worker` — the srv-2d session whose measured price the registration uses. Both
+    are read and required to agree on every compared field, so a typo in either is a refusal here
+    rather than a wrong instrument on the wire. They agree on all eleven today.
+    """
+    house = json.loads((REPO_ROOT / "results" / "serving_5b.json").read_text(encoding="utf-8"))
+    pinned = house["worker"]
+    twin = json.loads(PARITY_PIN.read_text(encoding="utf-8"))["config"]["serving"]["worker"]
+    expected = {key: value for key, value in pinned.items() if key not in SERVING_A_DROP}
+    disagree = {key for key, value in expected.items() if twin.get(key, "<absent>") != value}
+    if disagree:
+        raise SystemExit(
+            f"the two carriers of the config-A pin disagree on {sorted(disagree)} —"
+            " results/serving_5b.json and results/parity_srv2.json describe the same"
+            " configuration and one of them is wrong. Stop and report."
+        )
+    return expected
+
+
+WARMUP_ROWS = 3
+"""How many non-gold comment rows the Endpoint B warm-up prices itself on.
+
+ONE row is a point, and Dv310 is what a point costs: the leaflet warm-up drew `page_queue[0]`,
+which turned out to be a poster with nothing on it, and priced the population 2.4x under. Three
+rows from three different channels, sent as ONE job, measure a per-row marginal on the shape a
+pack actually has instead of on the shape a single call has. The extra two rows cost ≈$0.003."""
+
+
+def nongold_comments(store, selection: dict, wanted: int = WARMUP_ROWS) -> list[dict]:
+    """Real comment rows OUTSIDE the registered window — the same shape, none of the population.
+
+    One per channel before a second from any channel, so a warm-up cannot be three rows of one
+    talkative channel's house style. 11 143 of the 16 218 stored comments are out of window, so
+    there is no shortage to ration.
+    """
+    found = []
     for handle, ids in selection.items():
         keep = set(ids)
         for row in store.rows("comment", handle):
             if row["msg_id"] not in keep and row.get("text"):
-                return row | {"channel": handle}
-    raise SystemExit("no comment outside the window — the warm-up has no non-gold input")
+                found.append(row | {"channel": handle})
+                break
+        if len(found) >= wanted:
+            return found
+    if not found:
+        raise SystemExit("no comment outside the window — the warm-up has no non-gold input")
+    return found
 
 
 def packs_of(items: list, size: int) -> list[list]:
@@ -544,12 +597,23 @@ def comment_leg(
     calls here. Sending a rendered prompt as a `text` would have the worker wrap it a second time —
     a different prefix, invisible in every record downstream.
     """
-    out = []
+    # The plan is recorded BEFORE the first job, and it is what makes a stop legible. A cap stop
+    # returns with the untouched channels simply absent from `packs`, and absent reads identically
+    # to "had nothing queued" — so a resume story told from this record would be an assertion.
+    # 3.18 (6) is precisely the clause that forbids that.
+    out = {
+        "planned": {handle: len(rows) for handle, rows in queue.items()},
+        "packs": [],
+        "reached": [],
+        "stopped_at": None,
+    }
     for handle, rows in queue.items():
         state = loop.channel_state(cursor, handle)
+        out["reached"].append(handle)
         for index, pack in enumerate(packs_of(rows, pack_size(marginal, registered_marginal))):
             if reason := cap_gate(billed=billed_now(client), rate=rate, drift=drift, cap=cap):
                 note.append(f"comment pack {handle} {index:02d} refused: {reason}")
+                out["stopped_at"] = {"channel": handle, "pack": index, "reason": reason}
                 return out
             keys, texts, context = [], [], []
             for row in pack:
@@ -569,7 +633,7 @@ def comment_leg(
                 served_by=endpoint,
             )
             loop.save_cursor(run_loop.CURSOR, cursor)
-            out.append({"channel": handle, "pack": index} | summary)
+            out["packs"].append({"channel": handle, "pack": index} | summary)
             print(f"  comment {handle} pack {index:02d}: {summary}", flush=True)
     return out
 
@@ -807,18 +871,7 @@ def run_the_legs(
                 note=note,
             )
     else:
-        pin = json.loads(PARITY_PIN.read_text(encoding="utf-8"))["config"]["serving"]["worker"]
-        expected = {
-            key: pin[key]
-            for key in (
-                "serving_config",
-                "merge_state",
-                "adapter_sha256",
-                "max_new_tokens",
-                "revision_requested",
-            )
-        }
-        info = serving.assert_serving(client.info(), expected)
+        info = serving.assert_serving(client.info(), config_a_expected())
         revision = info.get("revision_requested")
         posts_map = parents.load(run_loop.STORE_ROOT / "posts")
         captions = parents.load_captions(run_loop.CAPTIONS)
@@ -831,16 +884,26 @@ def run_the_legs(
             )
             for handle, ids in comments.items()
         }
-        warm_row = nongold_comment(store, comments)
-        rendering, _ = loop.render_comment(posts_map, captions, warm_row)
-        _, row_seconds = measure(
+        warm_rows = nongold_comments(store, comments)
+        _, warm_seconds = measure(
             client,
             lambda: client.batch(
                 loop.COMMENT_TASK,
-                [warm_row["text"]],
-                [parents.post_kwargs(parents.context(posts_map, captions, warm_row))],
+                [row["text"] for row in warm_rows],
+                [
+                    parents.post_kwargs(parents.context(posts_map, captions, row))
+                    for row in warm_rows
+                ],
             ),
         )
+        row_seconds = warm_seconds / len(warm_rows)
+        outcome["warmup"] = {
+            "rows": len(warm_rows),
+            "channels": [row["channel"] for row in warm_rows],
+            "seconds_total": round(warm_seconds, 3),
+            "seconds_per_row": round(row_seconds, 4),
+            "registered_seconds_per_row": prereg["prices"]["comment"]["seconds_model"]["value"],
+        }
         gate = skub.go_no_go(
             billed=billed_now(client),
             page_marginal=0.0,
