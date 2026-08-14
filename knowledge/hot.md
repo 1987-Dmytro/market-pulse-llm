@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-13 18:33:08 (every SessionStart)
+**Auto-refreshed:** 2026-08-14 12:16:14 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-f8ba5bf docs(report): the commit list closed
-b6a9c86 docs(report): 5c2-prep-c3b -- REQUIRED checked on the tuple, not the assignment line
-16a4da9 chore(vault): the 5c2-prep-c3b session tail -- the day's log and hot.md
-82d5483 docs(report): 5c2-prep-c3b -- the D cut, the fourth kind, and the sealed numbers
-e64398d docs(decision): the D cut and the fourth evidence kind
+50c5727 docs(report): 5c2-run -- the watermarks, and a post-condition that came out FALSE
+6887543 chore(vault): the 5c2-run session tail -- the day's log and hot.md
+4ebd3e5 docs(report): 5c2-run -- the whole window bought, and two prices that disagreed
+d513869 data(5c2-run): the comment leg complete -- 5 075 of 5 075, and the session closed
+82aa1ae feat(ledger): witness a paid run in the phase ledger from the run's own numbers
 ```
 
 ## 📋 Recent decisions
@@ -23,20 +23,20 @@ e64398d docs(decision): the D cut and the fourth evidence kind
 
 ## 📅 Recent daily logs
 
+- `2026-08-14.md`
 - `2026-08-13.md`
 - `2026-08-12.md`
-- `2026-08-11.md`
 
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-14 — **`5c2-run` ИСПОЛНЕН, исход ЗАВЕРШЕНИЕ.** Куплено ВСЁ
+**Last update:** 2026-08-14 (закрытие дня) — **`5c2-run` ИСПОЛНЕН, исход ЗАВЕРШЕНИЕ.** Куплено ВСЁ
 зарегистрированное население: **5 075 комментов + 159 страниц листовок + 44 поста**, ни одна нога
 не остановлена, **5 423 строки улик, ноль неполных** (`evidence.assert_complete` по всем).
 Потрачено **$7.5309** из капа $8.00 (по дельте баланса; $7.5491 по стенным часам) против
 зарегистрированных $7.8546. Phase 4: **$31.4493 из $33.00**, остаток **$1.5507**. `make check`
 **2262 / 2 skipped**. Консоль пуста, оба эндпоинта снесены и доказаны листингом, том цел.
-Отчёт — `docs/reports/5c2-run.md`.
+Отчёт — `docs/reports/5c2-run.md`, Dv303–Dv315. Полный день — [[2026-08-14]].
 
 ## 🔥 What's Hot
 
@@ -95,43 +95,45 @@ $1.4281/1000 строк (≈4.656 с/строку), а прошла по 4.312 �
 
 ## 🚧 Blockers
 
-**НИЧЕГО НЕ БЛОКИРУЕТ.** Оба вопроса, стоявшие после c3a, закрыты рулингами. Деньги упирались —
-линия поднята до $33.00, кап рана $8.00 против остатка $9.1690.
+**НИЧЕГО НЕ БЛОКИРУЕТ.** Ран завершён, деньги сведены, консоль пуста, дерево чистое, суита зелёная.
 
-**Знать перед платной сессией:**
-- **Остаток НЕЛЬЗЯ читать из леджера.** `spend_phase4.json :: sessions[-1].remaining_usd` = **6.1690**
-  — верно про кап 30, и 3.18 (7)(b) запрещает перескоривать. Чтение поля отказало бы капу $8.00,
-  который влезает. Выводить `PHASE_CAP_USD - spent_usd` = **9.1690** и печатать оба с их капами.
-  `projection_5c2.budget()` читает это поле — не переиспользовать
-  ([[the-field-true-under-the-old-constant]]).
-- **Прережка держит ВСЕ ДЕСЯТЬ размеченных блоков SPEC**, а не два по прецеденту B′: 3.18 (7)(c)
-  отправляет стоп-правила в 3.17 (10) внутри `sku-b-ratification-4`. Новый текст закона — только
-  внутри своего размеченного блока (`amendment-3\.\d+` молча срезал бы будущий 3.19, поэтому
-  продюсер отказывается на НАБОРЕ блоков). Запечатанную прережку не перепинивают
-  ([[the-law-grows-inside-marked-blocks]]).
-- **`--anchor` берёт ПОЛНЫЙ ISO.** Голая дата парсится как локальное время и даёт другое окно
-  (9 160 постов); `refuse_to_move_the_anchor` смотрит только в файл `--out` и на свежем пути не
-  срабатывает. Ловит пин выборки, не гвард.
-- **`docs/ARCHITECTURE.md:324`** всё ещё описывает кап как «$25 Phase-4 GPU cap» — устарело с утра,
-  оставлено намеренно (расширять скоуп запрещено).
+**⚠️ Деньги — вот что изменилось.** Phase 4: **$31.4493 из $33.00**, остаток **$1.5507**. На полный
+цикл этого НЕ хватит; линию поднимает только оператор. Остаток по-прежнему ВЫВОДИТЬ
+(`PHASE_CAP_USD - spent_usd`), а не читать из `sessions[-1].remaining_usd`
+([[the-field-true-under-the-old-constant]]). И новое: записи леджера фазы **anchor-relative** —
+`spent_usd` по сессиям НЕ суммируется, стоимость сессии это разность.
 
-**Бюджет — живое ограничение.** Phase 4 **$23.8310 из $33.00**, остаток **$9.1690** (читать гард
-перед сессией, а не эту строку — Dv33: баланс отстаёт от ресурса на минуты-часы). Баланс
-$11.1690436569 на 13.08. Позиционный инструмент от начала до конца стоил **$0.8796**;
-`results/spend_sku_b*.json` и `results/spend_skub2.json` — закрытые якоря, не трогать. Том биллится
-всегда: **≈ $0.012/ч**.
+**⚠️ Зарегистрированная цена страницы листовки известна НЕВЕРНОЙ.** 4.2794 с в
+`results/sku_b_positions_skub2.json` снята со 108 первых страниц листовок (постеры); полная
+популяция из 159 страниц стоит **10.408 с**. Не переиспользовать её в следующей прережке без
+рулинга — открытый вопрос №1 в `docs/reports/5c2-run.md`
+([[a-price-is-as-representative-as-its-sample]]).
+
+**⚠️ Очередь комментов читает 0, а не 11 143.** Окно — самые новые строки, вотермарк накрыл всё
+старое. Строки на диске целы, отвеченных 5 075, но контракт, который захочет историю, обязан САМ
+сбросить поле `inference` в `data/loop_cursor.json`
+([[a-watermark-past-a-window-buries-the-backlog]]).
+
+**⚠️ `scripts/witness_phase_ledger.py` никто не вызывает автоматически.** Эта сессия запускала его
+руками дважды. Следующая платная снова оставит леджер молчащим, пока `finalise` драйвера его не
+вызовет или контракт не назовёт шагом.
+
+**Якоря, которые не трогают:** `results/spend_5c2run.json` — закрытый якорь сессии, драйвер
+отказывается его переписать; второй якорь перезапустил бы счётчик на сегодняшнем балансе.
+`results/spend_sku_b*.json`, `results/spend_skub2.json` — тоже закрыты. Том биллится всегда:
+**≈ $0.012/ч**.
 
 **Recorded rather than open:** том CA-MTL-3 удалён, его **~$0.24/day** больше не капают — литерал
 нагруженный, не украшение, и он ОБЯЗАН стоять ровно так, по-английски со слэшем:
 `scripts/volume_calc_5c1.py :: quoted(HOT, "~$0.24/day", 0.24)` грепает его ИЗ ЭТОГО ФАЙЛА как вход.
 Перевод слова `day` уже уронил девять тестов один раз (12.08). Второй такой литерал —
-`80 GB is about what the` в Footguns. Подушный дамп арма A из 4.5h2 потерян
-навсегда (`results/predictions/LOST.md`). Две оплаченные строки, которых никто не claim'ит: под 4090
-$0.5098 / 2470 с 08-08 (Dv38) и 30-секундная A4500 у srv-2b — ни одна не двигает число.
+`80 GB is about what the` в Footguns. Подушный дамп арма A из 4.5h2 потерян навсегда
+(`results/predictions/LOST.md`).
 
 **SUPERSEDED, оставлено чтобы старую строку не прочли как текущую:** `results/parity_verdict_5b.json`
 говорит, что ни один serverless-эндпойнт здесь не доходит до воркера — верно на **2026-08-06** и
-опровергнуто с тех пор (паритет 758/758, худшее движение головы 0.0000, [[srv2-program-close]]).
+опровергнуто с тех пор (паритет 758/758, [[srv2-program-close]]; и 5c2-run купил на serverless
+5 278 строк).
 
 ## ⚠️ Footguns for the next run
 
