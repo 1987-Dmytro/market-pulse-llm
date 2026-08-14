@@ -1,0 +1,2232 @@
+<meta charset="utf-8">
+<title>5c2-validate — пакет сидения</title>
+<style>
+ body { font: 15px/1.5 -apple-system, system-ui, sans-serif; max-width: 1100px; margin: 2rem auto;
+        padding: 0 1rem; color: #16191d; }
+ h1 { font-size: 1.6rem } h2 { margin-top: 2.5rem; border-top: 2px solid #16191d; padding-top: .6rem }
+ h3 { margin-bottom: .3rem }
+ .law { background: #fff6d6; border-left: 4px solid #d8a800; padding: .8rem 1rem; margin: 1rem 0 }
+ .row { border: 1px solid #d5d9de; border-radius: 6px; padding: 1rem; margin: 1.2rem 0 }
+ .sent { background: #f4f6f8; padding: .6rem .8rem; border-radius: 4px; white-space: pre-wrap;
+          font-family: ui-monospace, Menlo, monospace; font-size: 13px }
+ table { border-collapse: collapse; margin: .6rem 0; font-size: 14px }
+ td, th { border: 1px solid #d5d9de; padding: .25rem .5rem; text-align: left; vertical-align: top }
+ th { background: #f4f6f8 }
+ .page { display: flex; gap: 1rem; align-items: flex-start; margin: .8rem 0;
+          border-top: 1px dashed #d5d9de; padding-top: .8rem }
+ .page img { width: 300px; border: 1px solid #d5d9de }
+ .empty { color: #6b7480 }
+ .flag { color: #8a4b00; font-size: 13px }
+ code { background: #f4f6f8; padding: 0 .2rem }
+ details { margin: .4rem 0 }
+</style>
+<h1>5c2-validate — пакет сидения</h1>
+<div class="law"><b>Вердикты сидения — это ORDERS класса REVIEW 3.16 (1): watchlist, лексикон или ревизия промпта. НИКОГДА не пересчитанные числа и НИКОГДА не сдвинутая планка.</b><br>
+Слоты вердиктов пусты и заполняются ВО ВРЕМЯ сидения — в
+<code>results/validate_5c2_pack.json</code>, блок <code>findings</code>.</div>
+<p>Строки <b>вытянуты по записанному seed 42</b>, не выбраны руками. Страты и
+вытянутые id — в записи. Каждая строка подписана агрегатом, к которому принадлежит
+(<code>results/window_summary_5c2.json</code>): одна строка никогда не читается как
+популяция.</p>
+<p class="empty">Вытянуто: @matusi_ukr:580182, @mandziak:48186, @VARUS_channel:21270, @kopiyochka1:392342, @klopotenkofood:21280 · @atb_market_official:4340, @atb_market_official:4350, @atb_market_official:4370, @atb_market_official:4377, @atb_market_official:4401, @atb_market_official:4508</p>
+<p class="empty">Картинки лежат вне git (<code>data/</code>), пути относительные — открывай этот
+файл из <code>results/</code> внутри чекаута.</p>
+<h2>Комментарии — 5 строк, по одной из пяти самых крупных каналов</h2>
+<div class="row">
+<h3>@matusi_ukr:580182 <span class="empty">· мова ua · пост
+22312 (post_text)</span></h3>
+<b>Комментарий, как написан:</b>
+<div class="sent">Щодо хрпц. Я там народжувала у лікаря якого обрала. Може зараз щось змінилось. Але якщо ставати на облік то там тільки  певні лікарі до яких можна стати. Лежала в патології  відношення адекватне.</div>
+<b>Родительский пост, как его получила модель:</b>
+<div class="sent">Добрий день! Дуже цікавлять реальні відгуки дівчат, хто нещодавно стикався з регіональним перінатальним центром (ХРПЦ на Незалежності) та міським перінатальним центром (ХМПЦ 602 м/р)🙏
+Якщо ставати на облік, то де менші черги, чи можна записатися певний час, яке де відношення та обстеження?  В ХРПЦ не можна обрати обрати лікаря?
+Де яке відношення у відділі патології вагітності? (Була в ХМПЦ, там квест &quot; знайди лікаря і щось дізнайся&quot;, але можна, щоб в палату приходили відвідувачі. А в ХРПЦ чула, що не можна, щоб відвідувачі до палати приходили, але частіше мед персонал заходить).
+І, може хто стикався, з дитячою реанімацію та виходжуванням немовлят, які враження
+
+▫️ «Матусі України» Підписатися 
+▫️ Задати питання ✍️</div>
+<details><summary>Точный рендеринг запроса (T1v2_with_post,
+sha 495b43d1361d0e4f…) и сырой ответ</summary>
+<div class="sent">You label one comment from a Ukrainian food-retail Telegram channel (retail chains and discount aggregators). Comments are in Ukrainian or Russian. You are given the comment and the post it replies to. Judge the comment on its own text, and read the post only when the comment is meaningless without it — a bare agreement, a participation marker, a two-word answer to a question the post asked. Never label from other comments: you cannot see them.
+
+Return three labels.
+
+sentiment — the attitude the author expresses towards the product, the price or the retailer, not their mood.
+- &quot;positive&quot;: praise, thanks, satisfaction.
+- &quot;negative&quot;: complaint, disappointment, accusation.
+- &quot;neutral&quot;: a question, a factual statement or a request carrying no evaluation.
+Sarcasm outranks the surface wording: a sarcastic compliment is &quot;negative&quot;. If praise and complaint are mixed, take the dominant one; if neither dominates, &quot;neutral&quot;. For a comment that is only emoji, read the emoji when it is unambiguous.
+
+sarcasm — true when the literal reading contradicts the intended one: irony, mock praise, bitter exaggeration. It is a flag, not a sentiment: &quot;negative&quot; can carry either value. Emoji alone never decide it — the contradiction has to be in the text.
+
+intents — what the comment is about. Any subset of these six, possibly empty:
+- &quot;taste&quot;: flavour, smell, texture.
+- &quot;price&quot;: cost, discount, promo value — what the buyer pays. A question or a complaint about a promo mechanic — how a discount is applied, whether a giveaway is fair, what the terms say — is not &quot;price&quot;, it is &quot;service&quot;.
+- &quot;packaging&quot;: package, volume, label, portion.
+- &quot;quality&quot;: freshness, spoilage, composition, production.
+- &quot;availability&quot;: presence in a store, stock, delivery of the product. The product itself, not the process around the order: a slot moved, a courier, an order that cannot be cancelled is &quot;service&quot;.
+- &quot;service&quot;: interaction with the retailer as a service: in-store and online service, the delivery process, the app and the checkout, the support hotline, staff, and how promos and giveaways are organised — mechanics, fairness, communication.
+The first five are about the product and &quot;service&quot; is about the retailer; a comment can carry both. A bare participation marker under a giveaway post, an emoji-only comment, bare thanks and banter about neither the product nor the retailer carry no intent at all: return [].
+
+Answer with one JSON object and nothing else: no explanation, no code fence.
+{&quot;sentiment&quot;: &quot;positive|negative|neutral&quot;, &quot;sarcasm&quot;: true|false, &quot;intents&quot;: [&quot;price&quot;]}
+
+&lt;post&gt;
+Добрий день! Дуже цікавлять реальні відгуки дівчат, хто нещодавно стикався з регіональним перінатальним центром (ХРПЦ на Незалежності) та міським перінатальним центром (ХМПЦ 602 м/р)🙏
+Якщо ставати на облік, то де менші черги, чи можна записатися певний час, яке де відношення та обстеження?  В ХРПЦ не можна обрати обрати лікаря?
+Де яке відношення у відділі патології вагітності? (Була в ХМПЦ, там квест &quot; знайди лікаря і щось дізнайся&quot;, але можна, щоб в палату приходили відвідувачі. А в ХРПЦ чула, що не можна, щоб відвідувачі до палати приходили, але частіше мед персонал заходить).
+І, може хто стикався, з дитячою реанімацію та виходжуванням немовлят, які враження
+
+▫️ «Матусі України» Підписатися 
+▫️ Задати питання ✍️
+&lt;/post&gt;
+
+&lt;comment&gt;
+Щодо хрпц. Я там народжувала у лікаря якого обрала. Може зараз щось змінилось. Але якщо ставати на облік то там тільки  певні лікарі до яких можна стати. Лежала в патології  відношення адекватне.
+&lt;/comment&gt;</div>
+<div class="sent">{&quot;sentiment&quot;: &quot;neutral&quot;, &quot;sarcasm&quot;: false, &quot;intents&quot;: []}</div></details>
+<table>
+<tr><th>голова</th><th>вердикт строки</th><th>агрегат канала @matusi_ukr
+(2717 строк)</th><th>агрегат окна (5075)</th></tr>
+<tr><td>sentiment</td><td><b>neutral</b></td>
+<td>{&quot;neutral&quot;: 2429, &quot;negative&quot;: 67, &quot;positive&quot;: 221}</td>
+<td>{&quot;positive&quot;: 661, &quot;neutral&quot;: 4144, &quot;negative&quot;: 270}</td></tr>
+<tr><td>sarcasm</td><td><b>ні</b></td>
+<td>доля 0.0022</td>
+<td>доля 0.0132</td></tr>
+<tr><td>intents</td><td><b>— (жодної з шести)</b></td>
+<td>{&quot;service&quot;: 49, &quot;price&quot;: 458, &quot;taste&quot;: 31, &quot;quality&quot;: 81, &quot;availability&quot;: 53, &quot;packaging&quot;: 9}
+· без интенции 2148</td>
+<td>{&quot;service&quot;: 161, &quot;price&quot;: 553, &quot;availability&quot;: 184, &quot;taste&quot;: 245, &quot;quality&quot;: 138, &quot;packaging&quot;: 17}
+· без интенции 3944</td></tr>
+<tr><td>brand attribution</td>
+<td><b>—</b></td>
+<td colspan="2" class="flag">Модельной головы НЕТ: T1v2_with_post отдаёт три метки. Это
+детерминированный матчер watchlist по отправленному тексту — в окне он срабатывает на
+11 строках из
+5075.</td></tr>
+</table>
+<p class="empty">Слот вердикта: <code>findings.comments["@matusi_ukr:580182"]</code></p>
+</div>
+<div class="row">
+<h3>@mandziak:48186 <span class="empty">· мова ua · пост
+3704 (post_text)</span></h3>
+<b>Комментарий, как написан:</b>
+<div class="sent">Цікаво</div>
+<b>Родительский пост, как его получила модель:</b>
+<div class="sent">😜-30 КГ І 3 РОКИ ЗБЕРЕЖЕННЯ РЕЗУЛЬТАТУ🔥
+
+Антон Прудиус худнув за програмою «Наука і здоровий глузд».
+Тренувався 3 р на тиждень, ну і як без солодкого – воно теж було і є в житті Антона🍩
+Він не просто схуднув, а навчився жити смачно, ситно, яскраво – і при тому залишатися у формі. Тому що у справі схуднення працюють не короткострокові дії, а зміна способу життя загалом.
+
+Ось, що каже сам учасник Антон:
+
+&quot;ТИ ДІЙСНО ЗМІНЮЄШ СВІЙ СПОСІБ ЖИТТЯ, ПОЧИНАЄШ ЖИТИ, ХАРЧУВАТИСЯ І ТАК ДАЛІ ПО-ІНШОМУ&quot;
+
+
+💪Результат, який зберігає Антон:
+✅маса тіла: -30,2 кг (102-71,8);
+✅обхват талії: -30 см (109-79);
+✅зросли фізичні якості;
+✅покращилось самопочуття та самооцінка.
+Вік: 28 р | Зріст: 181 см
+
+❓Хочеш так само?
+Пиши «ЦІКАВИТЬ» мені сюди @sport_food_life</div>
+<details><summary>Точный рендеринг запроса (T1v2_with_post,
+sha 495b43d1361d0e4f…) и сырой ответ</summary>
+<div class="sent">You label one comment from a Ukrainian food-retail Telegram channel (retail chains and discount aggregators). Comments are in Ukrainian or Russian. You are given the comment and the post it replies to. Judge the comment on its own text, and read the post only when the comment is meaningless without it — a bare agreement, a participation marker, a two-word answer to a question the post asked. Never label from other comments: you cannot see them.
+
+Return three labels.
+
+sentiment — the attitude the author expresses towards the product, the price or the retailer, not their mood.
+- &quot;positive&quot;: praise, thanks, satisfaction.
+- &quot;negative&quot;: complaint, disappointment, accusation.
+- &quot;neutral&quot;: a question, a factual statement or a request carrying no evaluation.
+Sarcasm outranks the surface wording: a sarcastic compliment is &quot;negative&quot;. If praise and complaint are mixed, take the dominant one; if neither dominates, &quot;neutral&quot;. For a comment that is only emoji, read the emoji when it is unambiguous.
+
+sarcasm — true when the literal reading contradicts the intended one: irony, mock praise, bitter exaggeration. It is a flag, not a sentiment: &quot;negative&quot; can carry either value. Emoji alone never decide it — the contradiction has to be in the text.
+
+intents — what the comment is about. Any subset of these six, possibly empty:
+- &quot;taste&quot;: flavour, smell, texture.
+- &quot;price&quot;: cost, discount, promo value — what the buyer pays. A question or a complaint about a promo mechanic — how a discount is applied, whether a giveaway is fair, what the terms say — is not &quot;price&quot;, it is &quot;service&quot;.
+- &quot;packaging&quot;: package, volume, label, portion.
+- &quot;quality&quot;: freshness, spoilage, composition, production.
+- &quot;availability&quot;: presence in a store, stock, delivery of the product. The product itself, not the process around the order: a slot moved, a courier, an order that cannot be cancelled is &quot;service&quot;.
+- &quot;service&quot;: interaction with the retailer as a service: in-store and online service, the delivery process, the app and the checkout, the support hotline, staff, and how promos and giveaways are organised — mechanics, fairness, communication.
+The first five are about the product and &quot;service&quot; is about the retailer; a comment can carry both. A bare participation marker under a giveaway post, an emoji-only comment, bare thanks and banter about neither the product nor the retailer carry no intent at all: return [].
+
+Answer with one JSON object and nothing else: no explanation, no code fence.
+{&quot;sentiment&quot;: &quot;positive|negative|neutral&quot;, &quot;sarcasm&quot;: true|false, &quot;intents&quot;: [&quot;price&quot;]}
+
+&lt;post&gt;
+😜-30 КГ І 3 РОКИ ЗБЕРЕЖЕННЯ РЕЗУЛЬТАТУ🔥
+
+Антон Прудиус худнув за програмою «Наука і здоровий глузд».
+Тренувався 3 р на тиждень, ну і як без солодкого – воно теж було і є в житті Антона🍩
+Він не просто схуднув, а навчився жити смачно, ситно, яскраво – і при тому залишатися у формі. Тому що у справі схуднення працюють не короткострокові дії, а зміна способу життя загалом.
+
+Ось, що каже сам учасник Антон:
+
+&quot;ТИ ДІЙСНО ЗМІНЮЄШ СВІЙ СПОСІБ ЖИТТЯ, ПОЧИНАЄШ ЖИТИ, ХАРЧУВАТИСЯ І ТАК ДАЛІ ПО-ІНШОМУ&quot;
+
+
+💪Результат, який зберігає Антон:
+✅маса тіла: -30,2 кг (102-71,8);
+✅обхват талії: -30 см (109-79);
+✅зросли фізичні якості;
+✅покращилось самопочуття та самооцінка.
+Вік: 28 р | Зріст: 181 см
+
+❓Хочеш так само?
+Пиши «ЦІКАВИТЬ» мені сюди @sport_food_life
+&lt;/post&gt;
+
+&lt;comment&gt;
+Цікаво
+&lt;/comment&gt;</div>
+<div class="sent">{&quot;sentiment&quot;: &quot;neutral&quot;, &quot;sarcasm&quot;: false, &quot;intents&quot;: []}</div></details>
+<table>
+<tr><th>голова</th><th>вердикт строки</th><th>агрегат канала @mandziak
+(1026 строк)</th><th>агрегат окна (5075)</th></tr>
+<tr><td>sentiment</td><td><b>neutral</b></td>
+<td>{&quot;neutral&quot;: 777, &quot;negative&quot;: 78, &quot;positive&quot;: 171}</td>
+<td>{&quot;positive&quot;: 661, &quot;neutral&quot;: 4144, &quot;negative&quot;: 270}</td></tr>
+<tr><td>sarcasm</td><td><b>ні</b></td>
+<td>доля 0.0302</td>
+<td>доля 0.0132</td></tr>
+<tr><td>intents</td><td><b>— (жодної з шести)</b></td>
+<td>{&quot;quality&quot;: 31, &quot;taste&quot;: 43, &quot;packaging&quot;: 1, &quot;price&quot;: 35, &quot;service&quot;: 12}
+· без интенции 913</td>
+<td>{&quot;service&quot;: 161, &quot;price&quot;: 553, &quot;availability&quot;: 184, &quot;taste&quot;: 245, &quot;quality&quot;: 138, &quot;packaging&quot;: 17}
+· без интенции 3944</td></tr>
+<tr><td>brand attribution</td>
+<td><b>—</b></td>
+<td colspan="2" class="flag">Модельной головы НЕТ: T1v2_with_post отдаёт три метки. Это
+детерминированный матчер watchlist по отправленному тексту — в окне он срабатывает на
+11 строках из
+5075.</td></tr>
+</table>
+<p class="empty">Слот вердикта: <code>findings.comments["@mandziak:48186"]</code></p>
+</div>
+<div class="row">
+<h3>@VARUS_channel:21270 <span class="empty">· мова ru · пост
+10469 (post_text)</span></h3>
+<b>Комментарий, как написан:</b>
+<div class="sent">Это как с киевским , оно уже 2 недели по акции 45 грн но в наличии нет, акция пройдет и пиво появится</div>
+<b>Родительский пост, как его получила модель:</b>
+<div class="sent">🔸Пиво Корифей ТМ Опілля</div>
+<details><summary>Точный рендеринг запроса (T1v2_with_post,
+sha 495b43d1361d0e4f…) и сырой ответ</summary>
+<div class="sent">You label one comment from a Ukrainian food-retail Telegram channel (retail chains and discount aggregators). Comments are in Ukrainian or Russian. You are given the comment and the post it replies to. Judge the comment on its own text, and read the post only when the comment is meaningless without it — a bare agreement, a participation marker, a two-word answer to a question the post asked. Never label from other comments: you cannot see them.
+
+Return three labels.
+
+sentiment — the attitude the author expresses towards the product, the price or the retailer, not their mood.
+- &quot;positive&quot;: praise, thanks, satisfaction.
+- &quot;negative&quot;: complaint, disappointment, accusation.
+- &quot;neutral&quot;: a question, a factual statement or a request carrying no evaluation.
+Sarcasm outranks the surface wording: a sarcastic compliment is &quot;negative&quot;. If praise and complaint are mixed, take the dominant one; if neither dominates, &quot;neutral&quot;. For a comment that is only emoji, read the emoji when it is unambiguous.
+
+sarcasm — true when the literal reading contradicts the intended one: irony, mock praise, bitter exaggeration. It is a flag, not a sentiment: &quot;negative&quot; can carry either value. Emoji alone never decide it — the contradiction has to be in the text.
+
+intents — what the comment is about. Any subset of these six, possibly empty:
+- &quot;taste&quot;: flavour, smell, texture.
+- &quot;price&quot;: cost, discount, promo value — what the buyer pays. A question or a complaint about a promo mechanic — how a discount is applied, whether a giveaway is fair, what the terms say — is not &quot;price&quot;, it is &quot;service&quot;.
+- &quot;packaging&quot;: package, volume, label, portion.
+- &quot;quality&quot;: freshness, spoilage, composition, production.
+- &quot;availability&quot;: presence in a store, stock, delivery of the product. The product itself, not the process around the order: a slot moved, a courier, an order that cannot be cancelled is &quot;service&quot;.
+- &quot;service&quot;: interaction with the retailer as a service: in-store and online service, the delivery process, the app and the checkout, the support hotline, staff, and how promos and giveaways are organised — mechanics, fairness, communication.
+The first five are about the product and &quot;service&quot; is about the retailer; a comment can carry both. A bare participation marker under a giveaway post, an emoji-only comment, bare thanks and banter about neither the product nor the retailer carry no intent at all: return [].
+
+Answer with one JSON object and nothing else: no explanation, no code fence.
+{&quot;sentiment&quot;: &quot;positive|negative|neutral&quot;, &quot;sarcasm&quot;: true|false, &quot;intents&quot;: [&quot;price&quot;]}
+
+&lt;post&gt;
+🔸Пиво Корифей ТМ Опілля
+&lt;/post&gt;
+
+&lt;comment&gt;
+Это как с киевским , оно уже 2 недели по акции 45 грн но в наличии нет, акция пройдет и пиво появится
+&lt;/comment&gt;</div>
+<div class="sent">{&quot;sentiment&quot;: &quot;negative&quot;, &quot;sarcasm&quot;: true, &quot;intents&quot;: [&quot;availability&quot;, &quot;price&quot;]}</div></details>
+<table>
+<tr><th>голова</th><th>вердикт строки</th><th>агрегат канала @VARUS_channel
+(242 строк)</th><th>агрегат окна (5075)</th></tr>
+<tr><td>sentiment</td><td><b>negative</b></td>
+<td>{&quot;neutral&quot;: 160, &quot;positive&quot;: 28, &quot;negative&quot;: 54}</td>
+<td>{&quot;positive&quot;: 661, &quot;neutral&quot;: 4144, &quot;negative&quot;: 270}</td></tr>
+<tr><td>sarcasm</td><td><b>так</b></td>
+<td>доля 0.062</td>
+<td>доля 0.0132</td></tr>
+<tr><td>intents</td><td><b>availability, price</b></td>
+<td>{&quot;service&quot;: 28, &quot;availability&quot;: 28, &quot;price&quot;: 19, &quot;taste&quot;: 33, &quot;quality&quot;: 14}
+· без интенции 146</td>
+<td>{&quot;service&quot;: 161, &quot;price&quot;: 553, &quot;availability&quot;: 184, &quot;taste&quot;: 245, &quot;quality&quot;: 138, &quot;packaging&quot;: 17}
+· без интенции 3944</td></tr>
+<tr><td>brand attribution</td>
+<td><b>—</b></td>
+<td colspan="2" class="flag">Модельной головы НЕТ: T1v2_with_post отдаёт три метки. Это
+детерминированный матчер watchlist по отправленному тексту — в окне он срабатывает на
+11 строках из
+5075.</td></tr>
+</table>
+<p class="empty">Слот вердикта: <code>findings.comments["@VARUS_channel:21270"]</code></p>
+</div>
+<div class="row">
+<h3>@kopiyochka1:392342 <span class="empty">· мова ua · пост
+21963 (post_text)</span></h3>
+<b>Комментарий, как написан:</b>
+<div class="sent">Хахахахахаахаз що це??</div>
+<b>Родительский пост, как его получила модель:</b>
+<div class="sent">Коірййочпєаа</div>
+<details><summary>Точный рендеринг запроса (T1v2_with_post,
+sha 495b43d1361d0e4f…) и сырой ответ</summary>
+<div class="sent">You label one comment from a Ukrainian food-retail Telegram channel (retail chains and discount aggregators). Comments are in Ukrainian or Russian. You are given the comment and the post it replies to. Judge the comment on its own text, and read the post only when the comment is meaningless without it — a bare agreement, a participation marker, a two-word answer to a question the post asked. Never label from other comments: you cannot see them.
+
+Return three labels.
+
+sentiment — the attitude the author expresses towards the product, the price or the retailer, not their mood.
+- &quot;positive&quot;: praise, thanks, satisfaction.
+- &quot;negative&quot;: complaint, disappointment, accusation.
+- &quot;neutral&quot;: a question, a factual statement or a request carrying no evaluation.
+Sarcasm outranks the surface wording: a sarcastic compliment is &quot;negative&quot;. If praise and complaint are mixed, take the dominant one; if neither dominates, &quot;neutral&quot;. For a comment that is only emoji, read the emoji when it is unambiguous.
+
+sarcasm — true when the literal reading contradicts the intended one: irony, mock praise, bitter exaggeration. It is a flag, not a sentiment: &quot;negative&quot; can carry either value. Emoji alone never decide it — the contradiction has to be in the text.
+
+intents — what the comment is about. Any subset of these six, possibly empty:
+- &quot;taste&quot;: flavour, smell, texture.
+- &quot;price&quot;: cost, discount, promo value — what the buyer pays. A question or a complaint about a promo mechanic — how a discount is applied, whether a giveaway is fair, what the terms say — is not &quot;price&quot;, it is &quot;service&quot;.
+- &quot;packaging&quot;: package, volume, label, portion.
+- &quot;quality&quot;: freshness, spoilage, composition, production.
+- &quot;availability&quot;: presence in a store, stock, delivery of the product. The product itself, not the process around the order: a slot moved, a courier, an order that cannot be cancelled is &quot;service&quot;.
+- &quot;service&quot;: interaction with the retailer as a service: in-store and online service, the delivery process, the app and the checkout, the support hotline, staff, and how promos and giveaways are organised — mechanics, fairness, communication.
+The first five are about the product and &quot;service&quot; is about the retailer; a comment can carry both. A bare participation marker under a giveaway post, an emoji-only comment, bare thanks and banter about neither the product nor the retailer carry no intent at all: return [].
+
+Answer with one JSON object and nothing else: no explanation, no code fence.
+{&quot;sentiment&quot;: &quot;positive|negative|neutral&quot;, &quot;sarcasm&quot;: true|false, &quot;intents&quot;: [&quot;price&quot;]}
+
+&lt;post&gt;
+Коірййочпєаа
+&lt;/post&gt;
+
+&lt;comment&gt;
+Хахахахахаахаз що це??
+&lt;/comment&gt;</div>
+<div class="sent">{&quot;sentiment&quot;: &quot;neutral&quot;, &quot;sarcasm&quot;: false, &quot;intents&quot;: []}</div></details>
+<table>
+<tr><th>голова</th><th>вердикт строки</th><th>агрегат канала @kopiyochka1
+(223 строк)</th><th>агрегат окна (5075)</th></tr>
+<tr><td>sentiment</td><td><b>neutral</b></td>
+<td>{&quot;neutral&quot;: 180, &quot;positive&quot;: 22, &quot;negative&quot;: 21}</td>
+<td>{&quot;positive&quot;: 661, &quot;neutral&quot;: 4144, &quot;negative&quot;: 270}</td></tr>
+<tr><td>sarcasm</td><td><b>ні</b></td>
+<td>доля 0.0179</td>
+<td>доля 0.0132</td></tr>
+<tr><td>intents</td><td><b>— (жодної з шести)</b></td>
+<td>{&quot;availability&quot;: 95, &quot;quality&quot;: 3, &quot;service&quot;: 23, &quot;price&quot;: 22, &quot;packaging&quot;: 3}
+· без интенции 95</td>
+<td>{&quot;service&quot;: 161, &quot;price&quot;: 553, &quot;availability&quot;: 184, &quot;taste&quot;: 245, &quot;quality&quot;: 138, &quot;packaging&quot;: 17}
+· без интенции 3944</td></tr>
+<tr><td>brand attribution</td>
+<td><b>—</b></td>
+<td colspan="2" class="flag">Модельной головы НЕТ: T1v2_with_post отдаёт три метки. Это
+детерминированный матчер watchlist по отправленному тексту — в окне он срабатывает на
+11 строках из
+5075.</td></tr>
+</table>
+<p class="empty">Слот вердикта: <code>findings.comments["@kopiyochka1:392342"]</code></p>
+</div>
+<div class="row">
+<h3>@klopotenkofood:21280 <span class="empty">· мова other · пост
+6040 (post_text)</span></h3>
+<b>Комментарий, как написан:</b>
+<div class="sent">ой кайф!</div>
+<b>Родительский пост, как его получила модель:</b>
+<div class="sent">Що плануєте готувати, робити на вихідних?)</div>
+<details><summary>Точный рендеринг запроса (T1v2_with_post,
+sha 495b43d1361d0e4f…) и сырой ответ</summary>
+<div class="sent">You label one comment from a Ukrainian food-retail Telegram channel (retail chains and discount aggregators). Comments are in Ukrainian or Russian. You are given the comment and the post it replies to. Judge the comment on its own text, and read the post only when the comment is meaningless without it — a bare agreement, a participation marker, a two-word answer to a question the post asked. Never label from other comments: you cannot see them.
+
+Return three labels.
+
+sentiment — the attitude the author expresses towards the product, the price or the retailer, not their mood.
+- &quot;positive&quot;: praise, thanks, satisfaction.
+- &quot;negative&quot;: complaint, disappointment, accusation.
+- &quot;neutral&quot;: a question, a factual statement or a request carrying no evaluation.
+Sarcasm outranks the surface wording: a sarcastic compliment is &quot;negative&quot;. If praise and complaint are mixed, take the dominant one; if neither dominates, &quot;neutral&quot;. For a comment that is only emoji, read the emoji when it is unambiguous.
+
+sarcasm — true when the literal reading contradicts the intended one: irony, mock praise, bitter exaggeration. It is a flag, not a sentiment: &quot;negative&quot; can carry either value. Emoji alone never decide it — the contradiction has to be in the text.
+
+intents — what the comment is about. Any subset of these six, possibly empty:
+- &quot;taste&quot;: flavour, smell, texture.
+- &quot;price&quot;: cost, discount, promo value — what the buyer pays. A question or a complaint about a promo mechanic — how a discount is applied, whether a giveaway is fair, what the terms say — is not &quot;price&quot;, it is &quot;service&quot;.
+- &quot;packaging&quot;: package, volume, label, portion.
+- &quot;quality&quot;: freshness, spoilage, composition, production.
+- &quot;availability&quot;: presence in a store, stock, delivery of the product. The product itself, not the process around the order: a slot moved, a courier, an order that cannot be cancelled is &quot;service&quot;.
+- &quot;service&quot;: interaction with the retailer as a service: in-store and online service, the delivery process, the app and the checkout, the support hotline, staff, and how promos and giveaways are organised — mechanics, fairness, communication.
+The first five are about the product and &quot;service&quot; is about the retailer; a comment can carry both. A bare participation marker under a giveaway post, an emoji-only comment, bare thanks and banter about neither the product nor the retailer carry no intent at all: return [].
+
+Answer with one JSON object and nothing else: no explanation, no code fence.
+{&quot;sentiment&quot;: &quot;positive|negative|neutral&quot;, &quot;sarcasm&quot;: true|false, &quot;intents&quot;: [&quot;price&quot;]}
+
+&lt;post&gt;
+Що плануєте готувати, робити на вихідних?)
+&lt;/post&gt;
+
+&lt;comment&gt;
+ой кайф!
+&lt;/comment&gt;</div>
+<div class="sent">{&quot;sentiment&quot;: &quot;positive&quot;, &quot;sarcasm&quot;: false, &quot;intents&quot;: []}</div></details>
+<table>
+<tr><th>голова</th><th>вердикт строки</th><th>агрегат канала @klopotenkofood
+(222 строк)</th><th>агрегат окна (5075)</th></tr>
+<tr><td>sentiment</td><td><b>positive</b></td>
+<td>{&quot;positive&quot;: 58, &quot;neutral&quot;: 147, &quot;negative&quot;: 17}</td>
+<td>{&quot;positive&quot;: 661, &quot;neutral&quot;: 4144, &quot;negative&quot;: 270}</td></tr>
+<tr><td>sarcasm</td><td><b>ні</b></td>
+<td>доля 0.0135</td>
+<td>доля 0.0132</td></tr>
+<tr><td>intents</td><td><b>— (жодної з шести)</b></td>
+<td>{&quot;taste&quot;: 100, &quot;quality&quot;: 6, &quot;availability&quot;: 3, &quot;service&quot;: 1}
+· без интенции 113</td>
+<td>{&quot;service&quot;: 161, &quot;price&quot;: 553, &quot;availability&quot;: 184, &quot;taste&quot;: 245, &quot;quality&quot;: 138, &quot;packaging&quot;: 17}
+· без интенции 3944</td></tr>
+<tr><td>brand attribution</td>
+<td><b>—</b></td>
+<td colspan="2" class="flag">Модельной головы НЕТ: T1v2_with_post отдаёт три метки. Это
+детерминированный матчер watchlist по отправленному тексту — в окне он срабатывает на
+11 строках из
+5075.</td></tr>
+</table>
+<p class="empty">Слот вердикта: <code>findings.comments["@klopotenkofood:21280"]</code></p>
+</div>
+<h2>Листовки — 6 постов: страницы как отправлены, и что с них снято</h2>
+<div class="law">Агрегат, к которому принадлежит каждая строка ниже
+(<code>results/window_summary_5c2.json</code>): страниц 159, из них с позициями
+30, пустых 127, нечитаемых
+2; позиций с листовок 106, тиры
+{&quot;position&quot;: 106}. Глубина по печатному бейджу:
+{&quot;n&quot;: 100, &quot;min&quot;: 0.21, &quot;median&quot;: 0.41, &quot;max&quot;: 0.55}.
+<br><br><span class="flag">SPEC 3.18 (1): извлечённая старая цена — ПОМЕЧЕННЫЙ вход глубины, а не цена. На популяции B′ она верна как ЧИСЛО лишь на 33 из 80 пар; она не выходит ни на одну поверхность, которая печатает её как цену, и никакое «было/стало» на ней не строится. Здесь она показана ИМЕННО как вход — чтобы оператор мог сверить её с перечёркнутым числом на картинке.</span></div>
+<div class="row">
+<h3>@atb_market_official:4340 <span class="empty">· страта «yielded positions» ·
+10 страниц · 8 позиций ·
+positions_post_gm4 sha ca6303c157d46e70…</span></h3>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4340.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4340.jpg" alt="4340"></a>
+<div><b>msg_id 4340</b>
+<span class="empty">· sha 7ae55c29dc8d0adc… (сверена с байтами на диске)</span>
+<p class="empty">0 позиций — страница прочитана и ничего из категории не несёт.</p>
+<details><summary>Сырой ответ модели</summary><div class="sent">[]</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4341.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4341.jpg" alt="4341"></a>
+<div><b>msg_id 4341</b>
+<span class="empty">· sha 39862ec33b1a6a87… (сверена с байтами на диске)</span>
+<table>
+<tr><th colspan="2">@atb_market_official:4341:0 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size</b><br>
+бренд <b>Three Bears</b> (id try-vedmedi) · линия
+в асортименті, двошарове, вафельний ріжок · категория <b>ice-cream</b> · размер
+150 г · жирность —</td></tr>
+<tr><td>цена</td><td>промо <b>37.9</b> · печатный бейдж
+50.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+75.9</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.5</b> · по паре цен
+0.5007 · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4341:0"]</code></span>
+</td></tr>
+</table>
+<table>
+<tr><th colspan="2">@atb_market_official:4341:1 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size</b><br>
+бренд <b>Three Bears</b> (id try-vedmedi) · линия
+Фісташка · категория <b>ice-cream</b> · размер
+500 г · жирность —</td></tr>
+<tr><td>цена</td><td>промо <b>131.5</b> · печатный бейдж
+50.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+264.5</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.5</b> · по паре цен
+0.5028 · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4341:1"]</code></span>
+</td></tr>
+</table>
+<details><summary>Сырой ответ модели</summary><div class="sent">```json
+[
+  {
+    &quot;brand&quot;: &quot;Three Bears&quot;,
+    &quot;line&quot;: &quot;в асортименті, двошарове, вафельний ріжок&quot;,
+    &quot;category&quot;: &quot;ice-cream&quot;,
+    &quot;size&quot;: &quot;150 г&quot;,
+    &quot;price_promo&quot;: &quot;37,90&quot;,
+    &quot;price_old&quot;: &quot;75,90&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-50%&quot;
+  },
+  {
+    &quot;brand&quot;: &quot;Three Bears&quot;,
+    &quot;line&quot;: &quot;Фісташка&quot;,
+    &quot;category&quot;: &quot;ice-cream&quot;,
+    &quot;size&quot;: &quot;500 г&quot;,
+    &quot;price_promo&quot;: &quot;131,50&quot;,
+    &quot;price_old&quot;: &quot;264,50&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-50%&quot;
+  }
+]
+```</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4342.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4342.jpg" alt="4342"></a>
+<div><b>msg_id 4342</b>
+<span class="empty">· sha 3e9d93e56bf6b7c5… (сверена с байтами на диске)</span>
+<table>
+<tr><th colspan="2">@atb_market_official:4342:0 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size</b><br>
+бренд <b>Рудь</b> (id rud) · линия
+100% морозиво · категория <b>ice-cream</b> · размер
+500 г · жирность —</td></tr>
+<tr><td>цена</td><td>промо <b>66.9</b> · печатный бейдж
+50.0% · сноска так ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+135.2</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.5</b> · по паре цен
+0.5052 · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>discount_footnote
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4342:0"]</code></span>
+</td></tr>
+</table>
+<table>
+<tr><th colspan="2">@atb_market_official:4342:1 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size</b><br>
+бренд <b>Рудь</b> (id rud) · линия
+Чорниця-ожина · категория <b>ice-cream</b> · размер
+500 г · жирность —</td></tr>
+<tr><td>цена</td><td>промо <b>75.9</b> · печатный бейдж
+50.0% · сноска так ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+152.2</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.5</b> · по паре цен
+0.5013 · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>discount_footnote
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4342:1"]</code></span>
+</td></tr>
+</table>
+<details><summary>Сырой ответ модели</summary><div class="sent">[
+  {
+    &quot;brand&quot;: &quot;Рудь&quot;,
+    &quot;line&quot;: &quot;100% морозиво&quot;,
+    &quot;category&quot;: &quot;ice-cream&quot;,
+    &quot;size&quot;: &quot;500 г&quot;,
+    &quot;price_promo&quot;: &quot;66,90&quot;,
+    &quot;price_old&quot;: &quot;135,20&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-50%*&quot;
+  },
+  {
+    &quot;brand&quot;: &quot;Рудь&quot;,
+    &quot;line&quot;: &quot;Чорниця-ожина&quot;,
+    &quot;category&quot;: &quot;ice-cream&quot;,
+    &quot;size&quot;: &quot;500 г&quot;,
+    &quot;price_promo&quot;: &quot;75,90&quot;,
+    &quot;price_old&quot;: &quot;152,20&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-50%*&quot;
+  }
+]</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4343.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4343.jpg" alt="4343"></a>
+<div><b>msg_id 4343</b>
+<span class="empty">· sha 5b99c3dcc141d66c… (сверена с байтами на диске)</span>
+<table>
+<tr><th colspan="2">@atb_market_official:4343:0 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size</b><br>
+бренд <b>Своя Лінія</b> (id svoia-liniia) · линия
+Золотий Каштан пломбір у вершковій глазурі · категория <b>ice-cream</b> · размер
+70 г · жирность —</td></tr>
+<tr><td>цена</td><td>промо <b>17.9</b> · печатный бейдж
+40.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+29.9</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.4</b> · по паре цен
+0.4013 · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4343:0"]</code></span>
+</td></tr>
+</table>
+<table>
+<tr><th colspan="2">@atb_market_official:4343:1 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size</b><br>
+бренд <b>Своя Лінія</b> (id svoia-liniia) · линия
+Золотий Каштан шоколадний у вершковій глазурі · категория <b>ice-cream</b> · размер
+70 г · жирность —</td></tr>
+<tr><td>цена</td><td>промо <b>17.9</b> · печатный бейдж
+40.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+29.9</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.4</b> · по паре цен
+0.4013 · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4343:1"]</code></span>
+</td></tr>
+</table>
+<details><summary>Сырой ответ модели</summary><div class="sent">[
+  {
+    &quot;brand&quot;: &quot;Своя Лінія&quot;,
+    &quot;line&quot;: &quot;Золотий Каштан пломбір у вершковій глазурі&quot;,
+    &quot;category&quot;: &quot;ice-cream&quot;,
+    &quot;size&quot;: &quot;70 г&quot;,
+    &quot;price_promo&quot;: &quot;17,90&quot;,
+    &quot;price_old&quot;: &quot;29,90&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-40%&quot;
+  },
+  {
+    &quot;brand&quot;: &quot;Своя Лінія&quot;,
+    &quot;line&quot;: &quot;Золотий Каштан шоколадний у вершковій глазурі&quot;,
+    &quot;category&quot;: &quot;ice-cream&quot;,
+    &quot;size&quot;: &quot;70 г&quot;,
+    &quot;price_promo&quot;: &quot;17,90&quot;,
+    &quot;price_old&quot;: &quot;29,90&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-40%&quot;
+  }
+]</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4344.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4344.jpg" alt="4344"></a>
+<div><b>msg_id 4344</b>
+<span class="empty">· sha 189ce416a8da911f… (сверена с байтами на диске)</span>
+<table>
+<tr><th colspan="2">@atb_market_official:4344:0 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size</b><br>
+бренд <b>Своя Лінія</b> (id svoia-liniia) · линия
+Факел з какао зі згущеним молоком · категория <b>ice-cream</b> · размер
+90 г · жирность —</td></tr>
+<tr><td>цена</td><td>промо <b>27.9</b> · печатный бейдж
+30.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+39.99</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.3</b> · по паре цен
+0.3023 · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4344:0"]</code></span>
+</td></tr>
+</table>
+<table>
+<tr><th colspan="2">@atb_market_official:4344:1 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size</b><br>
+бренд <b>Своя Лінія</b> (id svoia-liniia) · линия
+Факел Полуниця · категория <b>ice-cream</b> · размер
+90 г · жирность —</td></tr>
+<tr><td>цена</td><td>промо <b>27.9</b> · печатный бейдж
+30.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+39.99</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.3</b> · по паре цен
+0.3023 · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4344:1"]</code></span>
+</td></tr>
+</table>
+<details><summary>Сырой ответ модели</summary><div class="sent">[
+  {
+    &quot;brand&quot;: &quot;Своя Лінія&quot;,
+    &quot;line&quot;: &quot;Факел з какао зі згущеним молоком&quot;,
+    &quot;category&quot;: &quot;ice-cream&quot;,
+    &quot;size&quot;: &quot;90 г&quot;,
+    &quot;price_promo&quot;: &quot;27,90&quot;,
+    &quot;price_old&quot;: &quot;39,99&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-30%&quot;
+  },
+  {
+    &quot;brand&quot;: &quot;Своя Лінія&quot;,
+    &quot;line&quot;: &quot;Факел Полуниця&quot;,
+    &quot;category&quot;: &quot;ice-cream&quot;,
+    &quot;size&quot;: &quot;90 г&quot;,
+    &quot;price_promo&quot;: &quot;27,90&quot;,
+    &quot;price_old&quot;: &quot;39,99&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-30%&quot;
+  }
+]</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4345.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4345.jpg" alt="4345"></a>
+<div><b>msg_id 4345</b>
+<span class="empty">· sha fd8d243b9791d37e… (сверена с байтами на диске)</span>
+<p class="empty">0 позиций — страница прочитана и ничего из категории не несёт.</p>
+<details><summary>Сырой ответ модели</summary><div class="sent">[]</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4346.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4346.jpg" alt="4346"></a>
+<div><b>msg_id 4346</b>
+<span class="empty">· sha 35f4ad5081adeb89… (сверена с байтами на диске)</span>
+<p class="empty">0 позиций — страница прочитана и ничего из категории не несёт.</p>
+<details><summary>Сырой ответ модели</summary><div class="sent">[]</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4347.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4347.jpg" alt="4347"></a>
+<div><b>msg_id 4347</b>
+<span class="empty">· sha ba23f1c6c78c406e… (сверена с байтами на диске)</span>
+<p class="empty">0 позиций — страница прочитана и ничего из категории не несёт.</p>
+<details><summary>Сырой ответ модели</summary><div class="sent">[]</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4348.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4348.jpg" alt="4348"></a>
+<div><b>msg_id 4348</b>
+<span class="empty">· sha 5166e38ccb90eab0… (сверена с байтами на диске)</span>
+<p class="empty">0 позиций — страница прочитана и ничего из категории не несёт.</p>
+<details><summary>Сырой ответ модели</summary><div class="sent">[]</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4349.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4349.jpg" alt="4349"></a>
+<div><b>msg_id 4349</b>
+<span class="empty">· sha 01963b2002840d4b… (сверена с байтами на диске)</span>
+<p class="empty">0 позиций — страница прочитана и ничего из категории не несёт.</p>
+<details><summary>Сырой ответ модели</summary><div class="sent">[]</div></details>
+</div></div>
+<p class="empty">Слот вердикта поста: <code>findings.leaflet_posts["@atb_market_official:4340"]</code></p>
+</div>
+<div class="row">
+<h3>@atb_market_official:4350 <span class="empty">· страта «yielded positions» ·
+10 страниц · 14 позиций ·
+positions_post_gm4 sha ca6303c157d46e70…</span></h3>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4350.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4350.jpg" alt="4350"></a>
+<div><b>msg_id 4350</b>
+<span class="empty">· sha 3147747cc6499859… (сверена с байтами на диске)</span>
+<table>
+<tr><th colspan="2">@atb_market_official:4350:0 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size+attribute</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size, attribute</b><br>
+бренд <b>Своя Лінія</b> (id svoia-liniia) · линия
+Сир м&#x27;який чеддеризований Моцарела · категория <b>cheese</b> · размер
+180 г · жирность 45.0</td></tr>
+<tr><td>цена</td><td>промо <b>49.9</b> · печатный бейдж
+% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b></b> · по паре цен
+ · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4350:0"]</code></span>
+</td></tr>
+</table>
+<table>
+<tr><th colspan="2">@atb_market_official:4350:1 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size+attribute</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size, attribute</b><br>
+бренд <b>Своя Лінія</b> (id svoia-liniia) · линия
+Сир м&#x27;який чеддеризований Сулугуні · категория <b>cheese</b> · размер
+180 г · жирность 45.0</td></tr>
+<tr><td>цена</td><td>промо <b>49.9</b> · печатный бейдж
+30.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+71.9</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.3</b> · по паре цен
+0.306 · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4350:1"]</code></span>
+</td></tr>
+</table>
+<details><summary>Сырой ответ модели</summary><div class="sent">```json
+[
+  {
+    &quot;brand&quot;: &quot;Своя Лінія&quot;,
+    &quot;line&quot;: &quot;Сир м&#x27;який чеддеризований Моцарела&quot;,
+    &quot;category&quot;: &quot;cheese&quot;,
+    &quot;size&quot;: &quot;180 г&quot;,
+    &quot;fat&quot;: &quot;45%&quot;,
+    &quot;price_promo&quot;: &quot;49,90&quot;
+  },
+  {
+    &quot;brand&quot;: &quot;Своя Лінія&quot;,
+    &quot;line&quot;: &quot;Сир м&#x27;який чеддеризований Сулугуні&quot;,
+    &quot;category&quot;: &quot;cheese&quot;,
+    &quot;size&quot;: &quot;180 г&quot;,
+    &quot;fat&quot;: &quot;45%&quot;,
+    &quot;price_promo&quot;: &quot;49,90&quot;,
+    &quot;price_old&quot;: &quot;71,90&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-30%&quot;
+  }
+]
+```</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4351.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4351.jpg" alt="4351"></a>
+<div><b>msg_id 4351</b>
+<span class="empty">· sha 08db5ad39959b0e8… (сверена с байтами на диске)</span>
+<p class="empty">0 позиций — страница прочитана и ничего из категории не несёт.</p>
+<details><summary>Сырой ответ модели</summary><div class="sent">[]</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4352.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4352.jpg" alt="4352"></a>
+<div><b>msg_id 4352</b>
+<span class="empty">· sha 1287d91aaf74302a… (сверена с байтами на диске)</span>
+<table>
+<tr><th colspan="2">@atb_market_official:4352:0 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+category+size+attribute</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, category, size, attribute</b><br>
+бренд <b>Дольче</b> (id —) · линия
+— · категория <b>yogurt</b> · размер
+115 г · жирность 3.2</td></tr>
+<tr><td>цена</td><td>промо <b>12.9</b> · печатный бейдж
+35.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+19.99</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.35</b> · по паре цен
+0.3547 · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4352:0"]</code></span>
+</td></tr>
+</table>
+<table>
+<tr><th colspan="2">@atb_market_official:4352:1 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+category+size+attribute</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, category, size, attribute</b><br>
+бренд <b>Дольче</b> (id —) · линия
+— · категория <b>yogurt</b> · размер
+280 г · жирность 3.2</td></tr>
+<tr><td>цена</td><td>промо <b>30.9</b> · печатный бейдж
+30.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+44.9</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.3</b> · по паре цен
+0.3118 · расходятся: так</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4352:1"]</code></span>
+</td></tr>
+</table>
+<details><summary>Сырой ответ модели</summary><div class="sent">```json
+[
+  {
+    &quot;brand&quot;: &quot;Дольче&quot;,
+    &quot;category&quot;: &quot;yogurt&quot;,
+    &quot;size&quot;: &quot;115 г&quot;,
+    &quot;fat&quot;: &quot;3,2%&quot;,
+    &quot;price_promo&quot;: &quot;12,90&quot;,
+    &quot;price_old&quot;: &quot;19,99&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-35%&quot;
+  },
+  {
+    &quot;brand&quot;: &quot;Дольче&quot;,
+    &quot;category&quot;: &quot;yogurt&quot;,
+    &quot;size&quot;: &quot;280 г&quot;,
+    &quot;fat&quot;: &quot;3,2%&quot;,
+    &quot;price_promo&quot;: &quot;30,90&quot;,
+    &quot;price_old&quot;: &quot;44,90&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-30%&quot;
+  }
+]
+```</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4353.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4353.jpg" alt="4353"></a>
+<div><b>msg_id 4353</b>
+<span class="empty">· sha 4ea2a6918bfc5b0e… (сверена с байтами на диске)</span>
+<p class="empty">0 позиций — страница прочитана и ничего из категории не несёт.</p>
+<details><summary>Сырой ответ модели</summary><div class="sent">[]</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4354.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4354.jpg" alt="4354"></a>
+<div><b>msg_id 4354</b>
+<span class="empty">· sha 2d3c859e3e6f1b86… (сверена с байтами на диске)</span>
+<p class="empty">0 позиций — страница прочитана и ничего из категории не несёт.</p>
+<details><summary>Сырой ответ модели</summary><div class="sent">[]</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4355.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4355.jpg" alt="4355"></a>
+<div><b>msg_id 4355</b>
+<span class="empty">· sha 022c64a0f0064675… (сверена с байтами на диске)</span>
+<p class="empty">0 позиций — страница прочитана и ничего из категории не несёт.</p>
+<details><summary>Сырой ответ модели</summary><div class="sent">[]</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4356.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4356.jpg" alt="4356"></a>
+<div><b>msg_id 4356</b>
+<span class="empty">· sha bbe872caa8ca2726… (сверена с байтами на диске)</span>
+<p class="empty">0 позиций — страница прочитана и ничего из категории не несёт.</p>
+<details><summary>Сырой ответ модели</summary><div class="sent">[]</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4357.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4357.jpg" alt="4357"></a>
+<div><b>msg_id 4357</b>
+<span class="empty">· sha c9a9fcebbcfb861a… (сверена с байтами на диске)</span>
+<p class="empty">0 позиций — страница прочитана и ничего из категории не несёт.</p>
+<details><summary>Сырой ответ модели</summary><div class="sent">[]</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4358.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4358.jpg" alt="4358"></a>
+<div><b>msg_id 4358</b>
+<span class="empty">· sha e56a9955f4f0bc85… (сверена с байтами на диске)</span>
+<table>
+<tr><th colspan="2">@atb_market_official:4358:0 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size+attribute</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size, attribute</b><br>
+бренд <b>Ryki</b> (id —) · линия
+RYCKI EDAM · категория <b>cheese</b> · размер
+135 г · жирность 45.0</td></tr>
+<tr><td>цена</td><td>промо <b>58.5</b> · печатный бейдж
+% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b></b> · по паре цен
+ · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4358:0"]</code></span>
+</td></tr>
+</table>
+<table>
+<tr><th colspan="2">@atb_market_official:4358:1 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size+attribute</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size, attribute</b><br>
+бренд <b>Ryki</b> (id —) · линия
+RYCKI IAASDAM · категория <b>cheese</b> · размер
+135 г · жирность 45.0</td></tr>
+<tr><td>цена</td><td>промо <b>58.5</b> · печатный бейдж
+% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b></b> · по паре цен
+ · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4358:1"]</code></span>
+</td></tr>
+</table>
+<table>
+<tr><th colspan="2">@atb_market_official:4358:2 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size+attribute</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size, attribute</b><br>
+бренд <b>Ryki</b> (id —) · линия
+CEZAR · категория <b>cheese</b> · размер
+135 г · жирность 45.0</td></tr>
+<tr><td>цена</td><td>промо <b>58.5</b> · печатный бейдж
+% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b></b> · по паре цен
+ · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4358:2"]</code></span>
+</td></tr>
+</table>
+<details><summary>Сырой ответ модели</summary><div class="sent">[
+  {
+    &quot;brand&quot;: &quot;Ryki&quot;,
+    &quot;line&quot;: &quot;RYCKI EDAM&quot;,
+    &quot;category&quot;: &quot;cheese&quot;,
+    &quot;size&quot;: &quot;135 г&quot;,
+    &quot;fat&quot;: &quot;45%&quot;,
+    &quot;price_promo&quot;: &quot;58,50&quot;
+  },
+  {
+    &quot;brand&quot;: &quot;Ryki&quot;,
+    &quot;line&quot;: &quot;RYCKI IAASDAM&quot;,
+    &quot;category&quot;: &quot;cheese&quot;,
+    &quot;size&quot;: &quot;135 г&quot;,
+    &quot;fat&quot;: &quot;45%&quot;,
+    &quot;price_promo&quot;: &quot;58,50&quot;
+  },
+  {
+    &quot;brand&quot;: &quot;Ryki&quot;,
+    &quot;line&quot;: &quot;CEZAR&quot;,
+    &quot;category&quot;: &quot;cheese&quot;,
+    &quot;size&quot;: &quot;135 г&quot;,
+    &quot;fat&quot;: &quot;45%&quot;,
+    &quot;price_promo&quot;: &quot;58,50&quot;
+  }
+]</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4359.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4359.jpg" alt="4359"></a>
+<div><b>msg_id 4359</b>
+<span class="empty">· sha 2fb6324f94ba1778… (сверена с байтами на диске)</span>
+<table>
+<tr><th colspan="2">@atb_market_official:4359:0 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size+attribute</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size, attribute</b><br>
+бренд <b>KOMO</b> (id —) · линия
+Бекон · категория <b>cheese</b> · размер
+75 г · жирность 35.0</td></tr>
+<tr><td>цена</td><td>промо <b>17.5</b> · печатный бейдж
+35.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.35</b> · по паре цен
+ · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4359:0"]</code></span>
+</td></tr>
+</table>
+<table>
+<tr><th colspan="2">@atb_market_official:4359:1 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size+attribute</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size, attribute</b><br>
+бренд <b>KOMO</b> (id —) · линия
+Вершковий тенеро · категория <b>cheese</b> · размер
+75 г · жирность 35.0</td></tr>
+<tr><td>цена</td><td>промо <b>17.5</b> · печатный бейдж
+35.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.35</b> · по паре цен
+ · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4359:1"]</code></span>
+</td></tr>
+</table>
+<table>
+<tr><th colspan="2">@atb_market_official:4359:2 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size</b><br>
+бренд <b>Активіа</b> (id —) · линия
+Біфідойогурт · категория <b>yogurt</b> · размер
+260 г · жирность —</td></tr>
+<tr><td>цена</td><td>промо <b>24.7</b> · печатный бейдж
+33.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.33</b> · по паре цен
+ · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4359:2"]</code></span>
+</td></tr>
+</table>
+<table>
+<tr><th colspan="2">@atb_market_official:4359:3 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size</b><br>
+бренд <b>Активіа</b> (id —) · линия
+Біфідойогурт · категория <b>yogurt</b> · размер
+260 г · жирность —</td></tr>
+<tr><td>цена</td><td>промо <b>23.9</b> · печатный бейдж
+33.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.33</b> · по паре цен
+ · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4359:3"]</code></span>
+</td></tr>
+</table>
+<table>
+<tr><th colspan="2">@atb_market_official:4359:4 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size+attribute</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size, attribute</b><br>
+бренд <b>Яготинське</b> (id yagotynske) · линия
+Молоко · категория <b>milk</b> · размер
+870 г · жирность 2.6</td></tr>
+<tr><td>цена</td><td>промо <b>38.9</b> · печатный бейдж
+32.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.32</b> · по паре цен
+ · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4359:4"]</code></span>
+</td></tr>
+</table>
+<table>
+<tr><th colspan="2">@atb_market_official:4359:5 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size+attribute</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size, attribute</b><br>
+бренд <b>Своя Лінія</b> (id svoia-liniia) · линия
+Сир кисломолочний · категория <b>curd</b> · размер
+350 г · жирность 5.0</td></tr>
+<tr><td>цена</td><td>промо <b>57.5</b> · печатный бейдж
+21.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+72.9</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.21</b> · по паре цен
+0.2112 · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4359:5"]</code></span>
+</td></tr>
+</table>
+<table>
+<tr><th colspan="2">@atb_market_official:4359:6 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size+attribute</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size, attribute</b><br>
+бренд <b>Своя Лінія</b> (id svoia-liniia) · линия
+Сир кисломолочний · категория <b>curd</b> · размер
+350 г · жирность 9.0</td></tr>
+<tr><td>цена</td><td>промо <b>63.9</b> · печатный бейдж
+21.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+80.9</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.21</b> · по паре цен
+0.2101 · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4359:6"]</code></span>
+</td></tr>
+</table>
+<details><summary>Сырой ответ модели</summary><div class="sent">```json
+[
+  {
+    &quot;brand&quot;: &quot;KOMO&quot;,
+    &quot;line&quot;: &quot;Бекон&quot;,
+    &quot;category&quot;: &quot;cheese&quot;,
+    &quot;size&quot;: &quot;75 г&quot;,
+    &quot;fat&quot;: &quot;35%&quot;,
+    &quot;price_promo&quot;: &quot;17,50&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-35%&quot;
+  },
+  {
+    &quot;brand&quot;: &quot;KOMO&quot;,
+    &quot;line&quot;: &quot;Вершковий тенеро&quot;,
+    &quot;category&quot;: &quot;cheese&quot;,
+    &quot;size&quot;: &quot;75 г&quot;,
+    &quot;fat&quot;: &quot;35%&quot;,
+    &quot;price_promo&quot;: &quot;17,50&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-35%&quot;
+  },
+  {
+    &quot;brand&quot;: &quot;Активіа&quot;,
+    &quot;line&quot;: &quot;Біфідойогурт&quot;,
+    &quot;category&quot;: &quot;yogurt&quot;,
+    &quot;size&quot;: &quot;260 г&quot;,
+    &quot;price_promo&quot;: &quot;24,70&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-33%&quot;
+  },
+  {
+    &quot;brand&quot;: &quot;Активіа&quot;,
+    &quot;line&quot;: &quot;Біфідойогурт&quot;,
+    &quot;category&quot;: &quot;yogurt&quot;,
+    &quot;size&quot;: &quot;260 г&quot;,
+    &quot;price_promo&quot;: &quot;23,90&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-33%&quot;
+  },
+  {
+    &quot;brand&quot;: &quot;Яготинське&quot;,
+    &quot;line&quot;: &quot;Молоко&quot;,
+    &quot;category&quot;: &quot;milk&quot;,
+    &quot;size&quot;: &quot;870 г&quot;,
+    &quot;fat&quot;: &quot;2,6%&quot;,
+    &quot;price_promo&quot;: &quot;38,90&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-32%&quot;
+  },
+  {
+    &quot;brand&quot;: &quot;Своя Лінія&quot;,
+    &quot;line&quot;: &quot;Сир кисломолочний&quot;,
+    &quot;category&quot;: &quot;curd&quot;,
+    &quot;size&quot;: &quot;350 г&quot;,
+    &quot;fat&quot;: &quot;5%&quot;,
+    &quot;price_promo&quot;: &quot;57,50&quot;,
+    &quot;price_old&quot;: &quot;72,90&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-21%&quot;
+  },
+  {
+    &quot;brand&quot;: &quot;Своя Лінія&quot;,
+    &quot;line&quot;: &quot;Сир кисломолочний&quot;,
+    &quot;category&quot;: &quot;curd&quot;,
+    &quot;size&quot;: &quot;350 г&quot;,
+    &quot;fat&quot;: &quot;9%&quot;,
+    &quot;price_promo&quot;: &quot;63,90&quot;,
+    &quot;price_old&quot;: &quot;80,90&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-21%&quot;
+  }
+]
+```</div></details>
+</div></div>
+<p class="empty">Слот вердикта поста: <code>findings.leaflet_posts["@atb_market_official:4350"]</code></p>
+</div>
+<div class="row">
+<h3>@atb_market_official:4370 <span class="empty">· страта «yielded none» ·
+7 страниц · 0 позиций ·
+positions_post_gm4 sha ca6303c157d46e70…</span></h3>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4370.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4370.jpg" alt="4370"></a>
+<div><b>msg_id 4370</b>
+<span class="empty">· sha 73cf9509db31fb97… (сверена с байтами на диске)</span>
+<p class="empty">0 позиций — страница прочитана и ничего из категории не несёт.</p>
+<details><summary>Сырой ответ модели</summary><div class="sent">[]</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4371.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4371.jpg" alt="4371"></a>
+<div><b>msg_id 4371</b>
+<span class="empty">· sha 088ebefc9831a6b6… (сверена с байтами на диске)</span>
+<p class="empty">0 позиций — страница прочитана и ничего из категории не несёт.</p>
+<details><summary>Сырой ответ модели</summary><div class="sent">[]</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4372.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4372.jpg" alt="4372"></a>
+<div><b>msg_id 4372</b>
+<span class="empty">· sha ae6f71ddbe4244a4… (сверена с байтами на диске)</span>
+<p class="empty">0 позиций — страница прочитана и ничего из категории не несёт.</p>
+<details><summary>Сырой ответ модели</summary><div class="sent">[]</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4373.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4373.jpg" alt="4373"></a>
+<div><b>msg_id 4373</b>
+<span class="empty">· sha e2add20f07908cea… (сверена с байтами на диске)</span>
+<p class="empty">0 позиций — страница прочитана и ничего из категории не несёт.</p>
+<details><summary>Сырой ответ модели</summary><div class="sent">[]</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4374.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4374.jpg" alt="4374"></a>
+<div><b>msg_id 4374</b>
+<span class="empty">· sha 2846f14cab7559c8… (сверена с байтами на диске)</span>
+<p class="empty">0 позиций — страница прочитана и ничего из категории не несёт.</p>
+<details><summary>Сырой ответ модели</summary><div class="sent">[]</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4375.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4375.jpg" alt="4375"></a>
+<div><b>msg_id 4375</b>
+<span class="empty">· sha f87ff18fb775ee05… (сверена с байтами на диске)</span>
+<p class="empty">0 позиций — страница прочитана и ничего из категории не несёт.</p>
+<details><summary>Сырой ответ модели</summary><div class="sent">[]</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4376.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4376.jpg" alt="4376"></a>
+<div><b>msg_id 4376</b>
+<span class="empty">· sha c913ec5e4c63b363… (сверена с байтами на диске)</span>
+<p class="empty">0 позиций — страница прочитана и ничего из категории не несёт.</p>
+<details><summary>Сырой ответ модели</summary><div class="sent">[]</div></details>
+</div></div>
+<p class="empty">Слот вердикта поста: <code>findings.leaflet_posts["@atb_market_official:4370"]</code></p>
+</div>
+<div class="row">
+<h3>@atb_market_official:4377 <span class="empty">· страта «yielded none» ·
+4 страниц · 0 позиций ·
+positions_post_gm4 sha ca6303c157d46e70…</span></h3>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4377.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4377.jpg" alt="4377"></a>
+<div><b>msg_id 4377</b>
+<span class="empty">· sha 1093fd99ffc4b09e… (сверена с байтами на диске)</span>
+<p class="empty">0 позиций — страница прочитана и ничего из категории не несёт.</p>
+<details><summary>Сырой ответ модели</summary><div class="sent">[]</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4378.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4378.jpg" alt="4378"></a>
+<div><b>msg_id 4378</b>
+<span class="empty">· sha c9d2345431788e05… (сверена с байтами на диске)</span>
+<p class="empty">0 позиций — страница прочитана и ничего из категории не несёт.</p>
+<details><summary>Сырой ответ модели</summary><div class="sent">[]</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4379.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4379.jpg" alt="4379"></a>
+<div><b>msg_id 4379</b>
+<span class="empty">· sha 51043b5cfe17b6de… (сверена с байтами на диске)</span>
+<p class="empty">0 позиций — страница прочитана и ничего из категории не несёт.</p>
+<details><summary>Сырой ответ модели</summary><div class="sent">[]</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4380.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4380.jpg" alt="4380"></a>
+<div><b>msg_id 4380</b>
+<span class="empty">· sha 5cf4ed8c0c688d21… (сверена с байтами на диске)</span>
+<p class="empty">0 позиций — страница прочитана и ничего из категории не несёт.</p>
+<details><summary>Сырой ответ модели</summary><div class="sent">[]</div></details>
+</div></div>
+<p class="empty">Слот вердикта поста: <code>findings.leaflet_posts["@atb_market_official:4377"]</code></p>
+</div>
+<div class="row">
+<h3>@atb_market_official:4401 <span class="empty">· страта «yielded positions» ·
+10 страниц · 19 позиций ·
+positions_post_gm4 sha ca6303c157d46e70…</span></h3>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4401.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4401.jpg" alt="4401"></a>
+<div><b>msg_id 4401</b>
+<span class="empty">· sha c4f4b3c9e8041c28… (сверена с байтами на диске)</span>
+<p class="empty">0 позиций — страница прочитана и ничего из категории не несёт.</p>
+<details><summary>Сырой ответ модели</summary><div class="sent">[]</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4402.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4402.jpg" alt="4402"></a>
+<div><b>msg_id 4402</b>
+<span class="empty">· sha 8859763a6f1e7be2… (сверена с байтами на диске)</span>
+<table>
+<tr><th colspan="2">@atb_market_official:4402:0 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size+attribute</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size, attribute</b><br>
+бренд <b>Premialle</b> (id —) · линия
+Фелата · категория <b>cheese</b> · размер
+180 г · жирность 45.0</td></tr>
+<tr><td>цена</td><td>промо <b>46.9</b> · печатный бейдж
+41.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+79.9</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.41</b> · по паре цен
+0.413 · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4402:0"]</code></span>
+</td></tr>
+</table>
+<details><summary>Сырой ответ модели</summary><div class="sent">[{&quot;brand&quot;: &quot;Premialle&quot;, &quot;line&quot;: &quot;Фелата&quot;, &quot;category&quot;: &quot;cheese&quot;, &quot;size&quot;: &quot;180 г&quot;, &quot;fat&quot;: &quot;45%&quot;, &quot;price_promo&quot;: &quot;46,90&quot;, &quot;price_old&quot;: &quot;79,90&quot;, &quot;discount_pct_printed&quot;: &quot;-41%&quot;}]</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4403.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4403.jpg" alt="4403"></a>
+<div><b>msg_id 4403</b>
+<span class="empty">· sha eafb197478effec7… (сверена с байтами на диске)</span>
+<table>
+<tr><th colspan="2">@atb_market_official:4403:0 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size+attribute</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size, attribute</b><br>
+бренд <b>Молокія</b> (id molokija) · линия
+Селянське · категория <b>butter</b> · размер
+180 г · жирность 73.0</td></tr>
+<tr><td>цена</td><td>промо <b>79.9</b> · печатный бейдж
+28.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+111.9</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.28</b> · по паре цен
+0.286 · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4403:0"]</code></span>
+</td></tr>
+</table>
+<details><summary>Сырой ответ модели</summary><div class="sent">[{&quot;brand&quot;: &quot;Молокія&quot;, &quot;line&quot;: &quot;Селянське&quot;, &quot;category&quot;: &quot;butter&quot;, &quot;size&quot;: &quot;180 г&quot;, &quot;fat&quot;: &quot;73%&quot;, &quot;price_promo&quot;: &quot;79,90&quot;, &quot;price_old&quot;: &quot;111,90&quot;, &quot;discount_pct_printed&quot;: &quot;-28%&quot;}]</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4404.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4404.jpg" alt="4404"></a>
+<div><b>msg_id 4404</b>
+<span class="empty">· sha 6a90291ce4cea227… (сверена с байтами на диске)</span>
+<table>
+<tr><th colspan="2">@atb_market_official:4404:0 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size+attribute</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size, attribute</b><br>
+бренд <b>Ферма</b> (id ferma) · линия
+Сирок глазурований Ваніль · категория <b>curd</b> · размер
+36 г · жирность 23.0</td></tr>
+<tr><td>цена</td><td>промо <b>11.7</b> · печатный бейдж
+34.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+17.7</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.34</b> · по паре цен
+0.339 · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4404:0"]</code></span>
+</td></tr>
+</table>
+<table>
+<tr><th colspan="2">@atb_market_official:4404:1 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size+attribute</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size, attribute</b><br>
+бренд <b>Ферма</b> (id ferma) · линия
+Сирок глазурований Згущене молоко · категория <b>curd</b> · размер
+36 г · жирность 23.0</td></tr>
+<tr><td>цена</td><td>промо <b>11.7</b> · печатный бейдж
+34.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+17.7</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.34</b> · по паре цен
+0.339 · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4404:1"]</code></span>
+</td></tr>
+</table>
+<table>
+<tr><th colspan="2">@atb_market_official:4404:2 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size+attribute</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size, attribute</b><br>
+бренд <b>Ферма</b> (id ferma) · линия
+Сирок глазурований Вишня-черешня · категория <b>curd</b> · размер
+36 г · жирность 23.0</td></tr>
+<tr><td>цена</td><td>промо <b>11.7</b> · печатный бейдж
+34.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+17.7</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.34</b> · по паре цен
+0.339 · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4404:2"]</code></span>
+</td></tr>
+</table>
+<table>
+<tr><th colspan="2">@atb_market_official:4404:3 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size+attribute</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size, attribute</b><br>
+бренд <b>Злагода</b> (id zlahoda) · линия
+Йогурт · категория <b>yogurt</b> · размер
+200 г · жирность 2.8</td></tr>
+<tr><td>цена</td><td>промо <b>20.5</b> · печатный бейдж
+30.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+29.9</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.3</b> · по паре цен
+0.3144 · расходятся: так</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4404:3"]</code></span>
+</td></tr>
+</table>
+<table>
+<tr><th colspan="2">@atb_market_official:4404:4 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size+attribute</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size, attribute</b><br>
+бренд <b>Галичина</b> (id halychyna) · линия
+Йогурт · категория <b>yogurt</b> · размер
+240 г · жирность 2.2</td></tr>
+<tr><td>цена</td><td>промо <b>26.9</b> · печатный бейдж
+32.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+39.9</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.32</b> · по паре цен
+0.3258 · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4404:4"]</code></span>
+</td></tr>
+</table>
+<table>
+<tr><th colspan="2">@atb_market_official:4404:5 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size+attribute</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size, attribute</b><br>
+бренд <b>Галичина</b> (id halychyna) · линия
+Йогурт · категория <b>yogurt</b> · размер
+280 г · жирность 1.6</td></tr>
+<tr><td>цена</td><td>промо <b>26.5</b> · печатный бейдж
+32.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+39.9</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.32</b> · по паре цен
+0.3358 · расходятся: так</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4404:5"]</code></span>
+</td></tr>
+</table>
+<table>
+<tr><th colspan="2">@atb_market_official:4404:6 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size+attribute</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size, attribute</b><br>
+бренд <b>Злагода</b> (id zlahoda) · линия
+Йогурт · категория <b>yogurt</b> · размер
+170 г · жирность 2.8</td></tr>
+<tr><td>цена</td><td>промо <b>15.9</b> · печатный бейдж
+30.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+22.9</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.3</b> · по паре цен
+0.3057 · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4404:6"]</code></span>
+</td></tr>
+</table>
+<table>
+<tr><th colspan="2">@atb_market_official:4404:7 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size+attribute</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size, attribute</b><br>
+бренд <b>Premialle</b> (id —) · линия
+Вершки ультрапастеризовані · категория <b>dairy</b> · размер
+500 г · жирность 33.0</td></tr>
+<tr><td>цена</td><td>промо <b>119.9</b> · печатный бейдж
+30.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+171.9</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.3</b> · по паре цен
+0.3025 · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4404:7"]</code></span>
+</td></tr>
+</table>
+<details><summary>Сырой ответ модели</summary><div class="sent">[
+  {
+    &quot;brand&quot;: &quot;Ферма&quot;,
+    &quot;line&quot;: &quot;Сирок глазурований Ваніль&quot;,
+    &quot;category&quot;: &quot;curd&quot;,
+    &quot;size&quot;: &quot;36 г&quot;,
+    &quot;fat&quot;: &quot;23%&quot;,
+    &quot;price_promo&quot;: &quot;11,70&quot;,
+    &quot;price_old&quot;: &quot;17,70&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-34%&quot;
+  },
+  {
+    &quot;brand&quot;: &quot;Ферма&quot;,
+    &quot;line&quot;: &quot;Сирок глазурований Згущене молоко&quot;,
+    &quot;category&quot;: &quot;curd&quot;,
+    &quot;size&quot;: &quot;36 г&quot;,
+    &quot;fat&quot;: &quot;23%&quot;,
+    &quot;price_promo&quot;: &quot;11,70&quot;,
+    &quot;price_old&quot;: &quot;17,70&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-34%&quot;
+  },
+  {
+    &quot;brand&quot;: &quot;Ферма&quot;,
+    &quot;line&quot;: &quot;Сирок глазурований Вишня-черешня&quot;,
+    &quot;category&quot;: &quot;curd&quot;,
+    &quot;size&quot;: &quot;36 г&quot;,
+    &quot;fat&quot;: &quot;23%&quot;,
+    &quot;price_promo&quot;: &quot;11,70&quot;,
+    &quot;price_old&quot;: &quot;17,70&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-34%&quot;
+  },
+  {
+    &quot;brand&quot;: &quot;Злагода&quot;,
+    &quot;line&quot;: &quot;Йогурт&quot;,
+    &quot;category&quot;: &quot;yogurt&quot;,
+    &quot;size&quot;: &quot;200 г&quot;,
+    &quot;fat&quot;: &quot;2,8%&quot;,
+    &quot;price_promo&quot;: &quot;20,50&quot;,
+    &quot;price_old&quot;: &quot;29,90&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-30%&quot;
+  },
+  {
+    &quot;brand&quot;: &quot;Галичина&quot;,
+    &quot;line&quot;: &quot;Йогурт&quot;,
+    &quot;category&quot;: &quot;yogurt&quot;,
+    &quot;size&quot;: &quot;240 г&quot;,
+    &quot;fat&quot;: &quot;2,2%&quot;,
+    &quot;price_promo&quot;: &quot;26,90&quot;,
+    &quot;price_old&quot;: &quot;39,90&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-32%&quot;
+  },
+  {
+    &quot;brand&quot;: &quot;Галичина&quot;,
+    &quot;line&quot;: &quot;Йогурт&quot;,
+    &quot;category&quot;: &quot;yogurt&quot;,
+    &quot;size&quot;: &quot;280 г&quot;,
+    &quot;fat&quot;: &quot;1,6%&quot;,
+    &quot;price_promo&quot;: &quot;26,50&quot;,
+    &quot;price_old&quot;: &quot;39,90&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-32%&quot;
+  },
+  {
+    &quot;brand&quot;: &quot;Злагода&quot;,
+    &quot;line&quot;: &quot;Йогурт&quot;,
+    &quot;category&quot;: &quot;yogurt&quot;,
+    &quot;size&quot;: &quot;170 г&quot;,
+    &quot;fat&quot;: &quot;2,8%&quot;,
+    &quot;price_promo&quot;: &quot;15,90&quot;,
+    &quot;price_old&quot;: &quot;22,90&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-30%&quot;
+  },
+  {
+    &quot;brand&quot;: &quot;Premialle&quot;,
+    &quot;line&quot;: &quot;Вершки ультрапастеризовані&quot;,
+    &quot;category&quot;: &quot;dairy&quot;,
+    &quot;size&quot;: &quot;500 г&quot;,
+    &quot;fat&quot;: &quot;33%&quot;,
+    &quot;price_promo&quot;: &quot;119,90&quot;,
+    &quot;price_old&quot;: &quot;171,90&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-30%&quot;
+  }
+]</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4405.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4405.jpg" alt="4405"></a>
+<div><b>msg_id 4405</b>
+<span class="empty">· sha dbd22e75e69be383… (сверена с байтами на диске)</span>
+<table>
+<tr><th colspan="2">@atb_market_official:4405:0 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size</b><br>
+бренд <b>Київський Пломбір</b> (id —) · линия
+пломбір, без цукру · категория <b>ice-cream</b> · размер
+80 г · жирность —</td></tr>
+<tr><td>цена</td><td>промо <b>26.5</b> · печатный бейдж
+48.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+51.9</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.48</b> · по паре цен
+0.4894 · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4405:0"]</code></span>
+</td></tr>
+</table>
+<table>
+<tr><th colspan="2">@atb_market_official:4405:1 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size</b><br>
+бренд <b>Київський Пломбір</b> (id —) · линия
+пломбір, з варенням із лохини · категория <b>ice-cream</b> · размер
+140 г · жирность —</td></tr>
+<tr><td>цена</td><td>промо <b>41.5</b> · печатный бейдж
+48.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+80.9</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.48</b> · по паре цен
+0.487 · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4405:1"]</code></span>
+</td></tr>
+</table>
+<table>
+<tr><th colspan="2">@atb_market_official:4405:2 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size</b><br>
+бренд <b>Київський Пломбір</b> (id —) · линия
+з малиновим варенням/ з печивом з какао · категория <b>ice-cream</b> · размер
+110 г · жирность —</td></tr>
+<tr><td>цена</td><td>промо <b>39.9</b> · печатный бейдж
+48.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+76.9</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.48</b> · по паре цен
+0.4811 · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4405:2"]</code></span>
+</td></tr>
+</table>
+<table>
+<tr><th colspan="2">@atb_market_official:4405:3 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size</b><br>
+бренд <b>Рудь</b> (id rud) · линия
+100% морозиво, біле/ шоколадне · категория <b>ice-cream</b> · размер
+70 г · жирность —</td></tr>
+<tr><td>цена</td><td>промо <b>16.3</b> · печатный бейдж
+45.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+29.9</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.45</b> · по паре цен
+0.4548 · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4405:3"]</code></span>
+</td></tr>
+</table>
+<table>
+<tr><th colspan="2">@atb_market_official:4405:4 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size</b><br>
+бренд <b>Рудь</b> (id rud) · линия
+100% морозиво, біле/ шоколадне · категория <b>ice-cream</b> · размер
+150 г · жирность —</td></tr>
+<tr><td>цена</td><td>промо <b>17.5</b> · печатный бейдж
+45.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+31.9</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.45</b> · по паре цен
+0.4514 · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4405:4"]</code></span>
+</td></tr>
+</table>
+<table>
+<tr><th colspan="2">@atb_market_official:4405:5 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size</b><br>
+бренд <b>Рудь</b> (id rud) · линия
+100% морозиво, брикет · категория <b>ice-cream</b> · размер
+90 г · жирность —</td></tr>
+<tr><td>цена</td><td>промо <b>18.9</b> · печатный бейдж
+45.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+34.9</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.45</b> · по паре цен
+0.4585 · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4405:5"]</code></span>
+</td></tr>
+</table>
+<table>
+<tr><th colspan="2">@atb_market_official:4405:6 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size</b><br>
+бренд <b>Рудь</b> (id rud) · линия
+Imperium · категория <b>ice-cream</b> · размер
+100 г · жирность —</td></tr>
+<tr><td>цена</td><td>промо <b>33.9</b> · печатный бейдж
+45.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+61.9</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.45</b> · по паре цен
+0.4523 · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4405:6"]</code></span>
+</td></tr>
+</table>
+<table>
+<tr><th colspan="2">@atb_market_official:4405:7 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size</b><br>
+бренд <b>Рудь</b> (id rud) · линия
+ескімо · категория <b>ice-cream</b> · размер
+85 г · жирность —</td></tr>
+<tr><td>цена</td><td>промо <b>22.3</b> · печатный бейдж
+45.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+40.9</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.45</b> · по паре цен
+0.4548 · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4405:7"]</code></span>
+</td></tr>
+</table>
+<table>
+<tr><th colspan="2">@atb_market_official:4405:8 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size</b><br>
+бренд <b>Три Ведмеді</b> (id try-vedmedi) · линия
+ескімо · категория <b>ice-cream</b> · размер
+70 г · жирность —</td></tr>
+<tr><td>цена</td><td>промо <b>24.5</b> · печатный бейдж
+45.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+44.9</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.45</b> · по паре цен
+0.4543 · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4405:8"]</code></span>
+</td></tr>
+</table>
+<details><summary>Сырой ответ модели</summary><div class="sent">```json
+[
+  {
+    &quot;brand&quot;: &quot;Київський Пломбір&quot;,
+    &quot;line&quot;: &quot;пломбір, без цукру&quot;,
+    &quot;category&quot;: &quot;ice-cream&quot;,
+    &quot;size&quot;: &quot;80 г&quot;,
+    &quot;price_promo&quot;: &quot;26,50&quot;,
+    &quot;price_old&quot;: &quot;51,90&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-48%&quot;
+  },
+  {
+    &quot;brand&quot;: &quot;Київський Пломбір&quot;,
+    &quot;line&quot;: &quot;пломбір, з варенням із лохини&quot;,
+    &quot;category&quot;: &quot;ice-cream&quot;,
+    &quot;size&quot;: &quot;140 г&quot;,
+    &quot;price_promo&quot;: &quot;41,50&quot;,
+    &quot;price_old&quot;: &quot;80,90&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-48%&quot;
+  },
+  {
+    &quot;brand&quot;: &quot;Київський Пломбір&quot;,
+    &quot;line&quot;: &quot;з малиновим варенням/ з печивом з какао&quot;,
+    &quot;category&quot;: &quot;ice-cream&quot;,
+    &quot;size&quot;: &quot;110 г&quot;,
+    &quot;price_promo&quot;: &quot;39,90&quot;,
+    &quot;price_old&quot;: &quot;76,90&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-48%&quot;
+  },
+  {
+    &quot;brand&quot;: &quot;Рудь&quot;,
+    &quot;line&quot;: &quot;100% морозиво, біле/ шоколадне&quot;,
+    &quot;category&quot;: &quot;ice-cream&quot;,
+    &quot;size&quot;: &quot;70 г&quot;,
+    &quot;price_promo&quot;: &quot;16,30&quot;,
+    &quot;price_old&quot;: &quot;29,90&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-45%&quot;
+  },
+  {
+    &quot;brand&quot;: &quot;Рудь&quot;,
+    &quot;line&quot;: &quot;100% морозиво, біле/ шоколадне&quot;,
+    &quot;category&quot;: &quot;ice-cream&quot;,
+    &quot;size&quot;: &quot;150 г&quot;,
+    &quot;price_promo&quot;: &quot;17,50&quot;,
+    &quot;price_old&quot;: &quot;31,90&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-45%&quot;
+  },
+  {
+    &quot;brand&quot;: &quot;Рудь&quot;,
+    &quot;line&quot;: &quot;100% морозиво, брикет&quot;,
+    &quot;category&quot;: &quot;ice-cream&quot;,
+    &quot;size&quot;: &quot;90 г&quot;,
+    &quot;price_promo&quot;: &quot;18,90&quot;,
+    &quot;price_old&quot;: &quot;34,90&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-45%&quot;
+  },
+  {
+    &quot;brand&quot;: &quot;Рудь&quot;,
+    &quot;line&quot;: &quot;Imperium&quot;,
+    &quot;category&quot;: &quot;ice-cream&quot;,
+    &quot;size&quot;: &quot;100 г&quot;,
+    &quot;price_promo&quot;: &quot;33,90&quot;,
+    &quot;price_old&quot;: &quot;61,90&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-45%&quot;
+  },
+  {
+    &quot;brand&quot;: &quot;Рудь&quot;,
+    &quot;line&quot;: &quot;ескімо&quot;,
+    &quot;category&quot;: &quot;ice-cream&quot;,
+    &quot;size&quot;: &quot;85 г&quot;,
+    &quot;price_promo&quot;: &quot;22,30&quot;,
+    &quot;price_old&quot;: &quot;40,90&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-45%&quot;
+  },
+  {
+    &quot;brand&quot;: &quot;Три Ведмеді&quot;,
+    &quot;line&quot;: &quot;ескімо&quot;,
+    &quot;category&quot;: &quot;ice-cream&quot;,
+    &quot;size&quot;: &quot;70 г&quot;,
+    &quot;price_promo&quot;: &quot;24,50&quot;,
+    &quot;price_old&quot;: &quot;44,90&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-45%&quot;
+  }
+]
+```</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4406.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4406.jpg" alt="4406"></a>
+<div><b>msg_id 4406</b>
+<span class="empty">· sha 48bcd38bb044ee96… (сверена с байтами на диске)</span>
+<p class="empty">0 позиций — страница прочитана и ничего из категории не несёт.</p>
+<details><summary>Сырой ответ модели</summary><div class="sent">[]</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4407.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4407.jpg" alt="4407"></a>
+<div><b>msg_id 4407</b>
+<span class="empty">· sha 6e387617a02df819… (сверена с байтами на диске)</span>
+<p class="empty">0 позиций — страница прочитана и ничего из категории не несёт.</p>
+<details><summary>Сырой ответ модели</summary><div class="sent">[]</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4408.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4408.jpg" alt="4408"></a>
+<div><b>msg_id 4408</b>
+<span class="empty">· sha 9894468a64ddae2f… (сверена с байтами на диске)</span>
+<p class="empty">0 позиций — страница прочитана и ничего из категории не несёт.</p>
+<details><summary>Сырой ответ модели</summary><div class="sent">[]</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4409.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4409.jpg" alt="4409"></a>
+<div><b>msg_id 4409</b>
+<span class="empty">· sha a5d84c471eae1a3f… (сверена с байтами на диске)</span>
+<p class="empty">0 позиций — страница прочитана и ничего из категории не несёт.</p>
+<details><summary>Сырой ответ модели</summary><div class="sent">[]</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4410.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4410.jpg" alt="4410"></a>
+<div><b>msg_id 4410</b>
+<span class="empty">· sha c88e64e8755d8f7b… (сверена с байтами на диске)</span>
+<p class="empty">0 позиций — страница прочитана и ничего из категории не несёт.</p>
+<details><summary>Сырой ответ модели</summary><div class="sent">[]</div></details>
+</div></div>
+<p class="empty">Слот вердикта поста: <code>findings.leaflet_posts["@atb_market_official:4401"]</code></p>
+</div>
+<div class="row">
+<h3>@atb_market_official:4508 <span class="empty">· страта «yielded positions» ·
+10 страниц · 7 позиций ·
+positions_post_gm4 sha ca6303c157d46e70…</span></h3>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4508.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4508.jpg" alt="4508"></a>
+<div><b>msg_id 4508</b>
+<span class="empty">· sha 713ceb7fa40f7cc1… (сверена с байтами на диске)</span>
+<table>
+<tr><th colspan="2">@atb_market_official:4508:0 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size</b><br>
+бренд <b>Ласунка</b> (id lasunka) · линия
+Стоп-наркотик крем-брюле з маком у глазурі, ескімо · категория <b>ice-cream</b> · размер
+85 г · жирность —</td></tr>
+<tr><td>цена</td><td>промо <b>29.9</b> · печатный бейдж
+46.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+55.9</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.46</b> · по паре цен
+0.4651 · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4508:0"]</code></span>
+</td></tr>
+</table>
+<table>
+<tr><th colspan="2">@atb_market_official:4508:1 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size</b><br>
+бренд <b>Рудь</b> (id rud) · линия
+Donut зі смаком Ваніль-полуниця, ескімо · категория <b>ice-cream</b> · размер
+70 г · жирность —</td></tr>
+<tr><td>цена</td><td>промо <b>21.9</b> · печатный бейдж
+40.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+36.9</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.4</b> · по паре цен
+0.4065 · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4508:1"]</code></span>
+</td></tr>
+</table>
+<table>
+<tr><th colspan="2">@atb_market_official:4508:2 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size</b><br>
+бренд <b>Рудь</b> (id rud) · линия
+Donut зі смаком Банан-шоколад, ескімо · категория <b>ice-cream</b> · размер
+70 г · жирность —</td></tr>
+<tr><td>цена</td><td>промо <b>21.9</b> · печатный бейдж
+40.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+36.9</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.4</b> · по паре цен
+0.4065 · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4508:2"]</code></span>
+</td></tr>
+</table>
+<table>
+<tr><th colspan="2">@atb_market_official:4508:3 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size</b><br>
+бренд <b>Лімо</b> (id limo) · линия
+Пломбір 1965, ескімо в шоколадній глазурі · категория <b>ice-cream</b> · размер
+80 г · жирность —</td></tr>
+<tr><td>цена</td><td>промо <b>24.9</b> · печатный бейдж
+46.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+46.9</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.46</b> · по паре цен
+0.4691 · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4508:3"]</code></span>
+</td></tr>
+</table>
+<table>
+<tr><th colspan="2">@atb_market_official:4508:4 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size</b><br>
+бренд <b>Лімо</b> (id limo) · линия
+Пломбір 1965, ескімо в шоколадній глазурі · категория <b>ice-cream</b> · размер
+90 г · жирность —</td></tr>
+<tr><td>цена</td><td>промо <b>29.9</b> · печатный бейдж
+46.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+55.9</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.46</b> · по паре цен
+0.4651 · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4508:4"]</code></span>
+</td></tr>
+</table>
+<table>
+<tr><th colspan="2">@atb_market_official:4508:5 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size</b><br>
+бренд <b>Каштан</b> (id —) · линия
+Солона карамель у кондитерській глазурі · категория <b>ice-cream</b> · размер
+75 г · жирность —</td></tr>
+<tr><td>цена</td><td>промо <b>22.9</b> · печатный бейдж
+45.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+41.9</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.45</b> · по паре цен
+0.4535 · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4508:5"]</code></span>
+</td></tr>
+</table>
+<table>
+<tr><th colspan="2">@atb_market_official:4508:6 — тир <b>position</b>
+(перевыведен из присутствия: position, ключ лестницы
+<code>brand+line+category+size</code>)</th></tr>
+<tr><td>что сделало это ПОЗИЦИЕЙ</td><td>присутствуют: <b>brand, line, category, size</b><br>
+бренд <b>Каштан</b> (id —) · линия
+Полуничний у білій кондитерській глазурі · категория <b>ice-cream</b> · размер
+75 г · жирность —</td></tr>
+<tr><td>цена</td><td>промо <b>22.9</b> · печатный бейдж
+45.0% · сноска ні ·
+квалификатор exact · происхождение
+retail_leaflet<br><span class="flag">старая цена (вход глубины, ПОМЕЧЕН):
+41.9</span></td></tr>
+<tr><td>глубина</td><td>по бейджу <b>0.45</b> · по паре цен
+0.4535 · расходятся: ні</td></tr>
+<tr><td>предупреждения</td><td>—
+<br><span class="empty">слот вердикта: <code>findings.positions["@atb_market_official:4508:6"]</code></span>
+</td></tr>
+</table>
+<details><summary>Сырой ответ модели</summary><div class="sent">[
+  {
+    &quot;brand&quot;: &quot;Ласунка&quot;,
+    &quot;line&quot;: &quot;Стоп-наркотик крем-брюле з маком у глазурі, ескімо&quot;,
+    &quot;category&quot;: &quot;ice-cream&quot;,
+    &quot;size&quot;: &quot;85 г&quot;,
+    &quot;price_promo&quot;: &quot;29,90&quot;,
+    &quot;price_old&quot;: &quot;55,90&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-46%&quot;
+  },
+  {
+    &quot;brand&quot;: &quot;Рудь&quot;,
+    &quot;line&quot;: &quot;Donut зі смаком Ваніль-полуниця, ескімо&quot;,
+    &quot;category&quot;: &quot;ice-cream&quot;,
+    &quot;size&quot;: &quot;70 г&quot;,
+    &quot;price_promo&quot;: &quot;21,90&quot;,
+    &quot;price_old&quot;: &quot;36,90&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-40%&quot;
+  },
+  {
+    &quot;brand&quot;: &quot;Рудь&quot;,
+    &quot;line&quot;: &quot;Donut зі смаком Банан-шоколад, ескімо&quot;,
+    &quot;category&quot;: &quot;ice-cream&quot;,
+    &quot;size&quot;: &quot;70 г&quot;,
+    &quot;price_promo&quot;: &quot;21,90&quot;,
+    &quot;price_old&quot;: &quot;36,90&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-40%&quot;
+  },
+  {
+    &quot;brand&quot;: &quot;Лімо&quot;,
+    &quot;line&quot;: &quot;Пломбір 1965, ескімо в шоколадній глазурі&quot;,
+    &quot;category&quot;: &quot;ice-cream&quot;,
+    &quot;size&quot;: &quot;80 г&quot;,
+    &quot;price_promo&quot;: &quot;24,90&quot;,
+    &quot;price_old&quot;: &quot;46,90&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-46%&quot;
+  },
+  {
+    &quot;brand&quot;: &quot;Лімо&quot;,
+    &quot;line&quot;: &quot;Пломбір 1965, ескімо в шоколадній глазурі&quot;,
+    &quot;category&quot;: &quot;ice-cream&quot;,
+    &quot;size&quot;: &quot;90 г&quot;,
+    &quot;price_promo&quot;: &quot;29,90&quot;,
+    &quot;price_old&quot;: &quot;55,90&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-46%&quot;
+  },
+  {
+    &quot;brand&quot;: &quot;Каштан&quot;,
+    &quot;line&quot;: &quot;Солона карамель у кондитерській глазурі&quot;,
+    &quot;category&quot;: &quot;ice-cream&quot;,
+    &quot;size&quot;: &quot;75 г&quot;,
+    &quot;price_promo&quot;: &quot;22,90&quot;,
+    &quot;price_old&quot;: &quot;41,90&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-45%&quot;
+  },
+  {
+    &quot;brand&quot;: &quot;Каштан&quot;,
+    &quot;line&quot;: &quot;Полуничний у білій кондитерській глазурі&quot;,
+    &quot;category&quot;: &quot;ice-cream&quot;,
+    &quot;size&quot;: &quot;75 г&quot;,
+    &quot;price_promo&quot;: &quot;22,90&quot;,
+    &quot;price_old&quot;: &quot;41,90&quot;,
+    &quot;discount_pct_printed&quot;: &quot;-45%&quot;
+  }
+]</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4509.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4509.jpg" alt="4509"></a>
+<div><b>msg_id 4509</b>
+<span class="empty">· sha 9547ccd8e03b7c3e… (сверена с байтами на диске)</span>
+<p class="empty">0 позиций — страница прочитана и ничего из категории не несёт.</p>
+<details><summary>Сырой ответ модели</summary><div class="sent">[]</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4510.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4510.jpg" alt="4510"></a>
+<div><b>msg_id 4510</b>
+<span class="empty">· sha 2fbdf44b48d0f7ac… (сверена с байтами на диске)</span>
+<p class="empty">0 позиций — страница прочитана и ничего из категории не несёт.</p>
+<details><summary>Сырой ответ модели</summary><div class="sent">[]</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4511.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4511.jpg" alt="4511"></a>
+<div><b>msg_id 4511</b>
+<span class="empty">· sha e942a20653f862cd… (сверена с байтами на диске)</span>
+<p class="empty">0 позиций — страница прочитана и ничего из категории не несёт.</p>
+<details><summary>Сырой ответ модели</summary><div class="sent">[]</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4512.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4512.jpg" alt="4512"></a>
+<div><b>msg_id 4512</b>
+<span class="empty">· sha 50bd1532ed77e9f2… (сверена с байтами на диске)</span>
+<p class="empty">0 позиций — страница прочитана и ничего из категории не несёт.</p>
+<details><summary>Сырой ответ модели</summary><div class="sent">[]</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4513.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4513.jpg" alt="4513"></a>
+<div><b>msg_id 4513</b>
+<span class="empty">· sha 4c715e2c17a72fdc… (сверена с байтами на диске)</span>
+<p class="empty">0 позиций — страница прочитана и ничего из категории не несёт.</p>
+<details><summary>Сырой ответ модели</summary><div class="sent">[]</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4514.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4514.jpg" alt="4514"></a>
+<div><b>msg_id 4514</b>
+<span class="empty">· sha 7e1867abffcea744… (сверена с байтами на диске)</span>
+<p class="empty">0 позиций — страница прочитана и ничего из категории не несёт.</p>
+<details><summary>Сырой ответ модели</summary><div class="sent">[]</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4515.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4515.jpg" alt="4515"></a>
+<div><b>msg_id 4515</b>
+<span class="empty">· sha 2f0f01e7a2c60abf… (сверена с байтами на диске)</span>
+<p class="empty">0 позиций — страница прочитана и ничего из категории не несёт.</p>
+<details><summary>Сырой ответ модели</summary><div class="sent">[]</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4516.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4516.jpg" alt="4516"></a>
+<div><b>msg_id 4516</b>
+<span class="empty">· sha f585670a628ae88d… (сверена с байтами на диске)</span>
+<p class="empty">0 позиций — страница прочитана и ничего из категории не несёт.</p>
+<details><summary>Сырой ответ модели</summary><div class="sent">[]</div></details>
+</div></div>
+<div class="page">
+<a href="../data/annotation/captions_5c1/posts_media/atb_market_official_4517.jpg"><img loading="lazy"
+ src="../data/annotation/captions_5c1/posts_media/atb_market_official_4517.jpg" alt="4517"></a>
+<div><b>msg_id 4517</b>
+<span class="empty">· sha 4c297dd91ef3fa6e… (сверена с байтами на диске)</span>
+<p class="empty">0 позиций — страница прочитана и ничего из категории не несёт.</p>
+<details><summary>Сырой ответ модели</summary><div class="sent">[]</div></details>
+</div></div>
+<p class="empty">Слот вердикта поста: <code>findings.leaflet_posts["@atb_market_official:4508"]</code></p>
+</div>
+<h2>Лестница тиров — 32 комбинации, sha 6a257e04375b4579…</h2>
+<p>the rung is a function of PRESENCE only. Every row below carries its five booleans and its `ladder_key`, so the tier can be re-derived at the table from this table.</p>
+<details><summary>Открыть таблицу</summary><table>
+<tr><th>присутствуют</th><th>тир</th></tr>
+<tr><td><code>attribute</code></td><td>none</td></tr>
+<tr><td><code>brand</code></td><td>brand_mention</td></tr>
+<tr><td><code>brand+attribute</code></td><td>product_mention</td></tr>
+<tr><td><code>brand+category</code></td><td>product_mention</td></tr>
+<tr><td><code>brand+category+attribute</code></td><td>position</td></tr>
+<tr><td><code>brand+category+size</code></td><td>position</td></tr>
+<tr><td><code>brand+category+size+attribute</code></td><td>position</td></tr>
+<tr><td><code>brand+line</code></td><td>product_mention</td></tr>
+<tr><td><code>brand+line+attribute</code></td><td>product_mention</td></tr>
+<tr><td><code>brand+line+category</code></td><td>position</td></tr>
+<tr><td><code>brand+line+category+attribute</code></td><td>position</td></tr>
+<tr><td><code>brand+line+category+size</code></td><td>position</td></tr>
+<tr><td><code>brand+line+category+size+attribute</code></td><td>position</td></tr>
+<tr><td><code>brand+line+size</code></td><td>product_mention</td></tr>
+<tr><td><code>brand+line+size+attribute</code></td><td>product_mention</td></tr>
+<tr><td><code>brand+size</code></td><td>product_mention</td></tr>
+<tr><td><code>brand+size+attribute</code></td><td>product_mention</td></tr>
+<tr><td><code>category</code></td><td>none</td></tr>
+<tr><td><code>category+attribute</code></td><td>none</td></tr>
+<tr><td><code>category+size</code></td><td>none</td></tr>
+<tr><td><code>category+size+attribute</code></td><td>none</td></tr>
+<tr><td><code>line</code></td><td>none</td></tr>
+<tr><td><code>line+attribute</code></td><td>none</td></tr>
+<tr><td><code>line+category</code></td><td>none</td></tr>
+<tr><td><code>line+category+attribute</code></td><td>none</td></tr>
+<tr><td><code>line+category+size</code></td><td>none</td></tr>
+<tr><td><code>line+category+size+attribute</code></td><td>none</td></tr>
+<tr><td><code>line+size</code></td><td>none</td></tr>
+<tr><td><code>line+size+attribute</code></td><td>none</td></tr>
+<tr><td><code>none</code></td><td>none</td></tr>
+<tr><td><code>size</code></td><td>none</td></tr>
+<tr><td><code>size+attribute</code></td><td>none</td></tr>
+</table></details>
