@@ -1,0 +1,262 @@
+{
+  "phase": "5c2-validate — the operator sitting's returns",
+  "class": "RETURNS. The operator's reactions to a sealed pack. SPEC 3.18 (6)(c) files them in the REVIEW class of 3.16 (1): they become watchlist, lexicon or prompt-revision ORDERS, never re-scored numbers and never a moved bar",
+  "contract": "docs/PROMPT-5c2-close.md deliverable 1; docs/SPEC.md amendment 3.18 (6)",
+  "answers": {
+    "pack": "results/validate_5c2_pack.json",
+    "sha256": "2fad5339ecb721d963a1cf2ca6cb091aabea473b706301e656b6e0bd15afc12a",
+    "seed": 42,
+    "why_the_sha_is_pinned": "the pack is DRAWN under a seed, so a redraw produces the same filename and a different set of rows. Without the sha these verdicts could be read as answering a draw the operator never saw"
+  },
+  "sitting": {
+    "held": "2026-08-14",
+    "mode": "asynchronous — the operator read results/validate_5c2_pack.html and his verdicts were relayed to this executor through the team lead",
+    "operator_minutes": null,
+    "operator_minutes_note": "no actual was relayed and nothing on disk carries one, so the field is null rather than filled. docs/STATUS.md named ~45 minutes BEFORE the sitting; that is a plan and a plan is not a measurement",
+    "verdicts_are_the_operators": "the executor scores nothing here (SPEC §10). Every verdict below is the operator's own, applied to the group he ruled on"
+  },
+  "halves": {
+    "leaflet": {
+      "verdict": "ratified",
+      "posts": 6,
+      "positions": 36,
+      "verbatim": "распознавание SKU идеальное",
+      "verbatim_language": "ru",
+      "verbatim_source": "docs/PROMPT-5c2-close.md — the team lead relaying the sitting",
+      "verbatim_note": "kept in the operator's own words and untranslated: it is the DATUM this half produced, and a translation of it would be this executor's sentence"
+    },
+    "comment": {
+      "verdict": "ratified",
+      "comments": 5,
+      "of": 5
+    }
+  },
+  "totals": {
+    "slots": 47,
+    "tally": {
+      "ratified": 47
+    },
+    "disputed": 0,
+    "orders_issued": 0,
+    "orders": [],
+    "orders_note": "an ORDER follows a dispute. Nothing was disputed, so the sitting issued none — reported as zero rather than left out, because an absent field reads as unasked"
+  },
+  "ruling": {
+    "amendment": "3.19",
+    "where": "docs/SPEC.md, inside the marked block `amendment-3.19`",
+    "answers": "Dv324 — 1 361 of the 5 075 bought comment rows reached the model with empty text",
+    "reference_not_restatement": "the clauses are not copied here. A record that paraphrased them would become a second place to read the law from, and the two would drift on the first correction",
+    "not_a_finding": "3.18 (6)(c) makes the sitting's VERDICTS review-class findings. This is the other thing a sitting can produce — a ruling that becomes law — and it is filed as law"
+  },
+  "resolved": {
+    "leaflet_posts": {
+      "@atb_market_official:4340": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@atb_market_official:4370": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@atb_market_official:4391": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@atb_market_official:4401": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@atb_market_official:4436": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@atb_market_official:4446": {
+        "verdict": "ratified",
+        "note": ""
+      }
+    },
+    "positions": {
+      "@atb_market_official:4341:0": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@atb_market_official:4341:1": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@atb_market_official:4342:0": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@atb_market_official:4342:1": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@atb_market_official:4343:0": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@atb_market_official:4343:1": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@atb_market_official:4344:0": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@atb_market_official:4344:1": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@atb_market_official:4402:0": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@atb_market_official:4403:0": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@atb_market_official:4404:0": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@atb_market_official:4404:1": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@atb_market_official:4404:2": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@atb_market_official:4404:3": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@atb_market_official:4404:4": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@atb_market_official:4404:5": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@atb_market_official:4404:6": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@atb_market_official:4404:7": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@atb_market_official:4405:0": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@atb_market_official:4405:1": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@atb_market_official:4405:2": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@atb_market_official:4405:3": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@atb_market_official:4405:4": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@atb_market_official:4405:5": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@atb_market_official:4405:6": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@atb_market_official:4405:7": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@atb_market_official:4405:8": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@atb_market_official:4440:0": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@atb_market_official:4440:1": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@atb_market_official:4440:2": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@atb_market_official:4446:0": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@atb_market_official:4446:1": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@atb_market_official:4446:2": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@atb_market_official:4446:3": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@atb_market_official:4446:4": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@atb_market_official:4446:5": {
+        "verdict": "ratified",
+        "note": ""
+      }
+    },
+    "comments": {
+      "@VARUS_channel:21629": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@klopotenkofood:21239": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@kopiyochka1:392092": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@mandziak:48066": {
+        "verdict": "ratified",
+        "note": ""
+      },
+      "@matusi_ukr:576430": {
+        "verdict": "ratified",
+        "note": ""
+      }
+    }
+  },
+  "resolved_note": "every slot the pack printed, with the verdict of the group it belongs to. Kept row by row rather than summarised: a half that was ratified wholesale still has to name WHICH rows were on the table, or a later reader cannot tell what was examined",
+  "refuses_when": [
+    "the pack's sha256 is not the one the sitting read",
+    "its findings groups or their sizes are not what the sitting ruled on",
+    "a printed row has no slot, or a slot has no printed row",
+    "the pack's skeleton is already filled in",
+    "the verbatim is not in the contract, or amendment 3.19 is not in the SPEC"
+  ],
+  "producer": {
+    "script": "scripts/write_validate_returns.py",
+    "sha256": "20aa33f09a262eb96c8d500a04a3842c0eb6f5b6cb5bfe27796a4d51fec424ce",
+    "why": "no git block: `git status --porcelain` is a fact about the tree, not the sitting",
+    "borrows": {},
+    "borrows_note": "this producer imports no module of this repo. It reads three files and writes what the sitting said about one of them; there is no house function whose bytes could change a field here, and an empty map says that rather than hiding it"
+  }
+}
