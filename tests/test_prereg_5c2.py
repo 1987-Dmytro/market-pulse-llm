@@ -398,8 +398,13 @@ def test_the_resume_discipline_names_the_watermark_and_the_fourth_kind():
     assert "written LAST" in resume["rule"]
 
 
-SEALING_COMMIT = "0e390ff"
+SEALING_COMMIT = "0e390ffceae5c14733c19afb4ab77d78dba98f4c"
 """The commit that landed `results/prereg_5c2_run.json` and the producer it names, together.
+
+Written out in full and not as `0e390ff`. An abbreviation is valid until the day a seventh hex
+digit collides with another object, and on that day this test errors for a reason nobody would
+connect to a pre-registration. The short form is fine in the human-facing command below, which a
+person runs once and reads the answer to.
 
 `scripts/write_prereg_5c2.py` moved on 2026-08-14 — the write-path enumeration learned
 `amendment-3.19`, so a future registration can be made over the grown law — and the record is NOT

@@ -151,7 +151,15 @@ def printed_slots(pack: dict) -> dict[str, list[str]]:
 
 
 def resolve(pack: dict) -> dict:
-    """Every slot the pack carries, with the verdict the sitting gave its group — or a refusal."""
+    """Every slot the pack carries, with the verdict the sitting gave its group — or a refusal.
+
+    What makes "every slot accounted for" a CHECK and not a tautology: the resolution is built by
+    iterating the pack's own keys, and every one of them gets a group verdict by construction — so
+    a loop looking for a slot that came out empty could never find one. The two guards that CAN
+    fire are the ones below: the group sizes are the sitting's own (a 37th position row is refused,
+    not covered), and the slots are joined to the rows the pack PRINTED (a slot with no row, or a
+    row with no slot, is a stop). `refuses_when` in the record names those two and not a third.
+    """
     findings = pack["findings"]
     groups = {name: slots for name, slots in findings.items() if name != "verdicts"}
     if set(groups) != set(SITTING):
@@ -195,11 +203,6 @@ def resolve(pack: dict) -> dict:
             for key in sorted(slots)
         }
 
-    unaccounted = sorted(
-        key for slots in resolved.values() for key, slot in slots.items() if not slot["verdict"]
-    )
-    if unaccounted:
-        refuse(f"{len(unaccounted)} slots came out with no verdict: {unaccounted}")
     stray = sorted(key for key in DISPUTED if not any(key in slots for slots in resolved.values()))
     if stray:
         refuse(f"the sitting disputed {stray}, which the pack does not carry")

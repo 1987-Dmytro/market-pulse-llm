@@ -4,15 +4,18 @@ paths:
   - "scripts/write_sku_prereg*.py"
   - "scripts/write_sku_projection*.py"
   - "scripts/projection_*.py"
-  - "scripts/build_*_pack.py"
+  - "scripts/build_*_pack*.py"
 ---
 # Registrations and draws — the 5c2 retro's one rule
 
 > **Beside every price, name what it was measured ON. Beside every draw, measure a rank.**
 
 Routed here at the 5c2 phase close (2026-08-14) off the `[model]` cluster — 10 of the program's 45
-tagged deviations, the largest single tag. Loaded only when a producer matching `paths:` is touched,
-which is exactly when it binds.
+tagged deviations, the largest single tag. `paths:` is what the harness matches to decide when this
+is loaded, so it costs nothing at startup and arrives when it binds. Each glob was checked to match
+at least one real producer (1 / 2 / 4 / 1 / 10 files); the injection itself was NOT observed in the
+session that wrote this file — a rule appears to load once per session and the sibling rule had
+already loaded before this one existed.
 
 ## The price half
 

@@ -49,7 +49,9 @@ d69c812 fix(5c2-validate): a correlated draw, and a quarter of the comment leg w
 
 **Правило регистраций и жребиев** — «рядом с каждой ценой ИМЕНУЙ выборку замера; рядом с каждым
 жребием МЕРЬ ранг» — живёт в `.claude/rules/registrations-and-draws.md`, path-scoped, 0 токенов на
-старте. Подхватится сам, когда тронешь `write_prereg*`, `projection_*` или `build_*_pack`.
+старте. Должно подхватиться при работе с `write_prereg*`, `projection_*`, `build_*_pack*` — globs
+проверены по реальным файлам, сама инжекция в сессии написания НЕ наблюдалась (правило грузится
+один раз за сессию). Не увидел его в system-reminder, редактируя регистрацию, — открой руками.
 
 ## ⏭️ Next
 

@@ -254,7 +254,7 @@
   ],
   "producer": {
     "script": "scripts/write_validate_returns.py",
-    "sha256": "20aa33f09a262eb96c8d500a04a3842c0eb6f5b6cb5bfe27796a4d51fec424ce",
+    "sha256": "9d32d165cbed5222db2b1b665aac9859d250d74e2e1d8ede128f79b7bb25e7c9",
     "why": "no git block: `git status --porcelain` is a fact about the tree, not the sitting",
     "borrows": {},
     "borrows_note": "this producer imports no module of this repo. It reads three files and writes what the sitting said about one of them; there is no house function whose bytes could change a field here, and an empty map says that rather than hiding it"

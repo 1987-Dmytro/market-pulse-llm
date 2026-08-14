@@ -72,7 +72,7 @@ weaker statement that is *still a statement*. Four instances now, in four differ
 | **freeze the constant** (cap-in-force) | `PHASE_CAP_USD`, live, 25 → 30 → 33 | `repair_phase4_ledger.CAP_IN_FORCE_USD = 25.00`, fixed to the moment its three entries were billed — records under an earlier cap are never re-scored (3.18 (7)(b)) |
 | **snapshot instead of absence** (derived root) | «`data/derived/` does not exist», which 5c2-run legitimately ended | a before/after snapshot of every file and its sha, so a smoke is still refused the real root and the guard still fails on a single row |
 | **strip instead of identity** (ten-keep) | «the pin equals sha256 of `docs/SPEC.md`» | «the pin equals the strip of today's file», with `live != pin` asserted beside it so a law that never grew would also fail |
-| **recover instead of re-pin** (sealing commit) | «`producer.sha256` equals the live producer's bytes» | «those bytes are still fetchable at `git show 0e390ff:`, and the live file has MOVED» |
+| **recover instead of re-pin** (sealing commit) | «`producer.sha256` equals the live producer's bytes» | «those bytes are still fetchable at `git show 0e390ff:`, and the live file has MOVED» — the constant holds the full 40-char hash; the short form is for the human running the command |
 
 The rule the next flip cites instead of rediscovering: **when a guard reddens because something
 legitimate changed, ask what invariant the guard was really protecting and assert THAT — with the

@@ -207,12 +207,12 @@ Three shapes, one rule:
 > **Beside every price, name what it was measured ON. Beside every draw, measure a rank.**
 
 **Home: `.claude/rules/registrations-and-draws.md`**, path-scoped to the registration, projection
-and pack producers — 0 tokens at startup, loaded exactly when one of those files is touched.
-CLAUDE.md was declined (200-line cap, and `scripts/context-census.py` reads 13.4K against a 9.0K
-target — a rule binding on two kinds of file would be paid for in every session that edits neither);
-a producer docstring was declined (it reaches whoever opens that one file, and the next cycle writes
-a new producer). Routed in this session — Dv327 records the deviation from the contract's two
-options.
+and pack producers — 0 tokens at startup. CLAUDE.md was declined (200-line cap, and
+`scripts/context-census.py` reads 13.4K against a 9.0K target — a rule binding on two kinds of file
+would be paid for in every session that edits neither); a producer docstring was declined (it
+reaches whoever opens that one file, and the next cycle writes a new producer). Routed in this
+session — Dv327 records the deviation from the contract's two options, and the limit of what could
+be measured about it.
 
 ### `[contract-gap]` — 11: the two lines the next cycle's contracts inherit
 
@@ -293,10 +293,19 @@ two candidates, «CLAUDE.md vs the prereg producer's docstring», and both were 
 capped at 200 lines and the boot census reads **13.4K against a 9.0K target**, so a rule that binds
 only when a registration or a pack is written would be paid for in every session that writes
 neither; a producer docstring reaches whoever opens that one file, and the next cycle's registration
-is a new file. `.claude/rules/registrations-and-draws.md` is path-scoped — 0 tokens at startup,
-loaded exactly when one of those producers is touched — and CLAUDE.md itself prescribes that
-mechanism. Stated rather than done quietly, because choosing outside the offered set is the team
-lead's to overrule. [cause: contract-gap]
+is a new file. `.claude/rules/registrations-and-draws.md` is path-scoped — 0 tokens at startup —
+and CLAUDE.md itself prescribes that mechanism. Stated rather than done quietly, because choosing
+outside the offered set is the team lead's to overrule.
+
+**What could not be measured about it, said out loud.** Each of the five globs was checked to match
+at least one real producer (`write_prereg*` 1 · `write_sku_prereg*` 2 · `write_sku_projection*` 4 ·
+`projection_*` 1 · `build_*_pack*` 10 — the last widened from `build_*_pack.py`, which missed
+`build_opus_audit_packs.py`). The harness INJECTION was not observed: a rule appears to load once
+per session, the sibling `.claude/rules/phase345-artifacts.md` had already loaded before this file
+existed, and reading a matching producer afterwards produced nothing. So the loading is asserted
+from the mechanism and from a proven sibling of the same frontmatter shape, and is not a
+measurement in this report. The next session that edits a registration is the observation.
+[cause: contract-gap]
 
 **Dv328 — the retro's requested range is wider than the tag convention.** Dv249–Dv324 is 76
 numbers; 45 carry `[cause:]` tags and all 45 are Dv280–Dv324. The convention began at 5c2-prep-c3a,
