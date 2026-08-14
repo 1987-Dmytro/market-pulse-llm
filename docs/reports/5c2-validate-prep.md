@@ -1,12 +1,12 @@
 # 5c2-validate-prep — the sitting pack, and three report debts
 
 The sitting of SPEC 3.18 (6) can now be held: `results/validate_5c2_pack.html` shows six leaflet
-posts and five comments, original beside verdict, drawn under seed 42 from the window's own output
-and captioned with the aggregates in `results/window_summary_5c2.json`. All three debts of the
+posts (56 pages, 36 positions) and five comments, original beside verdict, drawn under seed 42 from
+the window's own output and captioned with the aggregates in `results/window_summary_5c2.json`. All three debts of the
 accepted run report are paid by measurement — Dv307's hole is CLOSED at HEAD and the amendment says
 so with the commit that closed it, the $0.8451 is named as a hand-typed conservative reading with
 its consequence priced both ways, and the 55th call is the `assert_serving` handshake, verified on
-both legs. `make check` is 2 303 passed / 2 skipped, nothing cloud-touching ran, and nothing under
+both legs. `make check` is 2 305 passed / 2 skipped, nothing cloud-touching ran, and nothing under
 `data/derived/` was written, moved or re-scored.
 
 ## Read-back
@@ -95,9 +95,9 @@ silently reopen it. This test is what would go red.
 `--already-usd 0.8451` is **hand-typed and no artifact on this disk re-derives it.** Every persisted
 carrier says something else: the ledger row `$0.8230` (anchor $11.0815436571 − balance
 $10.2585299348), the phase ledger carrying the same balance reading, and the client's wall clock
-`$0.8344` ((2 267.544 + 393.079 + 60) s × $0.00030669). No balance of $10.2364436571 — the reading
-that would produce the typed number — appears in any file, log or record in the repo, and the
-session transcript is not on disk.
+**$0.8160 – $0.8344** — a RANGE, because the session has one 60 s idle tail and nothing on disk says
+which leg it belongs to. No balance of $10.2364436571 — the reading that would produce the typed
+number — appears in any file, log or record in the repo, and the session transcript is not on disk.
 
 It is legal because Dv33 makes the balance delta a **FLOOR** ("RunPod settles it minutes to hours
 late"), so the true spend was ≥ $0.8230 and a bigger number is the conservative direction. The
@@ -125,12 +125,12 @@ both legs leave exactly one call unaccounted after packs and warm-ups.
 
 ## Deliverable 1 — `results/window_summary_5c2.json` (`e9770da`)
 
-`scripts/window_summary_5c2.py`, 65 KB of record, one second to build, reading `data/derived/`
+`scripts/window_summary_5c2.py`, 73 KB of record, one second to build, reading `data/derived/`
 alone plus the sealed registration. What it says about the window:
 
 | leg | rows | what the aggregate carries |
 |---|---:|---|
-| comments | 5 075 | 5 075 scored, **0 unreadable**; sentiment 4 144 neutral / 661 positive / 270 negative; sarcasm **0.0132** on the scored rows; intents 553 price · 245 taste · 184 availability · 161 service · 138 quality · 17 packaging, **3 944 rows with no intent**; languages ua 2 606 · other 1 925 · ru 493 · en 51 |
+| comments | 5 075 | 5 075 scored, **0 unreadable**; **1 361 sent with an EMPTY `<comment>` block**; sentiment 4 144 neutral / 661 positive / 270 negative; sarcasm **0.0132** on the scored rows; intents 553 price · 245 taste · 184 availability · 161 service · 138 quality · 17 packaging, **3 944 rows with no intent**; languages ua 2 606 · other 1 925 · ru 493 · en 51 |
 | leaflet pages | 159 | 30 with positions · 127 empty · 2 unreadable · 106 positions, 19 posts |
 | post texts | 44 | 21 with positions · 22 empty · 1 unreadable · 39 positions |
 | position rows | 145 | tier **`position` × 145** · promo price on 138 · printed badge on 128 · old price on 95 · depth by badge median 0.4150, by price pair median 0.4206 · printed disagrees with computed on 8 |
@@ -154,6 +154,17 @@ never substitutes it. Both are reported side by side with the disagreement count
 price is COUNTED and never VALUED in this record — a test asserts no depth block ever grows a field
 that could leak one.
 
+**A quarter of the comment leg was sent with no text at all.** Recovering the sent string made a
+class visible that no counter in the run report has: **1 361 of the 5 075** comments reached the
+model as an EMPTY `<comment></comment>` block — a sticker, a photo, a voice note. Every head
+answered them anyway, and all 1 361 came back with `intents: []`, so **a third of
+`rows_with_no_intent: 3944` is not a statement about what the audience talks about**. @matusi_ukr
+carries 1 172 of them — 43% of that channel's own 2 717 rows. Counted as its own class per channel
+and total rather than dropped: the rows were bought and they are inside the registered 5 075, and a
+distribution that does not say how many of its rows had no text is a distribution about the wrong
+thing. A shown empty row says which class it is instead of being a blank box beside three confident
+labels.
+
 **No clock and no git block**, so the record is byte-identical across runs and
 `tests/test_window_summary_5c2.py::test_the_committed_record_is_what_the_producer_writes_today`
 regenerates it and compares bytes. Every number in it re-derives or the suite is red.
@@ -162,11 +173,11 @@ regenerates it and compares bytes. Every number in it re-derives or the suite is
 
 ```
 $ PYTHONPATH=src python3 scripts/build_validate_pack.py
-wrote results/validate_5c2_pack.json  sha256 0c57d094102b025c…
-wrote results/validate_5c2_pack.html sha256 e2754e8834937017…
-  seed 42 · 6 leaflet posts, 51 pages, 48 positions
+wrote results/validate_5c2_pack.json  sha256 a1a70e721f3adcae…
+wrote results/validate_5c2_pack.html sha256 bcc37d4895b17bbf…
+  seed 42 · 6 leaflet posts, 56 pages, 36 positions
   5 comments from ['@matusi_ukr', '@mandziak', '@VARUS_channel', '@kopiyochka1', '@klopotenkofood']
-  findings: 6 post slots, 48 position slots, 5 comment slots — all empty
+  findings: 6 post slots, 36 position slots, 5 comment slots — all empty
 ```
 
 **The draw, and its two strata.** Comments: one row from each of the five channels with the most
@@ -175,9 +186,30 @@ channels are 73.8% of the window. Leaflets: the nineteen posts split by whether 
 yielded a position (11 / 8), four drawn from the first and two from the second. That second stratum
 is a deviation from the letter of the contract and is argued in Dv317: a post that yielded nothing
 cannot answer "field by field, what made each a POSITION", and a blind draw of five from nineteen
-could have shown the operator one such post. Both strata are stated in the record, both populations
-with them, and neither is a filter on the VERDICT — no row is selected for what the model said about
-it. The draw is reproducible from the record alone, and a test redoes it from the seed.
+could have shown the operator one such post. Both strata are stated in the record with their
+populations. **Precisely:** the leaflet stratum keys on whether the instrument PRODUCED output —
+which is something the model did — and never on whether that output looks correct; no row in either
+stratum was chosen for what its verdict SAYS. The draw is reproducible from the seed and the record
+alone, and a test redoes it.
+
+**The draw was rebuilt once, and both versions are here.** The first build re-seeded each stratum
+with the same `Random(42)`, which is `build_sitting_pack.draw`'s shape — and one `Random(42)` asked
+for one element out of pools of 242, 223 and 222 answers the same INDEX for all three. Measured
+after the fact: rank **163 of 242, 163 of 223, 163 of 222** — three of five comments at one
+position. Nobody picked those rows and their ids differ, but five draws sharing an index are not
+five independent draws. The seed is now derived per stratum (`f"{SEED}:{stratum}"`, recorded in the
+record as `seed_derivation`) and the ranks spread: 218/2717, 158/1026, 224/242, 128/223, 126/222.
+The last two are within two of each other on pools of nearly equal size and come from different
+streams — a coincidence, not the old shared one.
+
+| | first build | after the fix |
+|---|---|---|
+| comments | `@matusi_ukr:580182` `@mandziak:48186` `@VARUS_channel:21270` `@kopiyochka1:392342` `@klopotenkofood:21280` | `@matusi_ukr:576430` `@mandziak:48066` `@VARUS_channel:21629` `@kopiyochka1:392092` `@klopotenkofood:21239` |
+| leaflet posts | 4340 · 4350 · 4370 · 4377 · 4401 · 4508 | 4340 · 4370 · 4391 · 4401 · 4436 · 4446 |
+| pages / positions | 51 / 48 | 56 / 36 |
+
+Both are printed because a draw that changes after someone has seen it is either auditable or it is
+a redraw. `8b6cbf4` holds the first, `d69c812` the second; the fix is a defect fix and not a taste.
 
 **Per leaflet post** — every page of the post as it was sent, each `<img>` beside what came back
 from it, and per position the five presence booleans with their VALUES, the rung, the rung
@@ -191,7 +223,7 @@ captioned with BOTH denominators, the channel's and the window's, read from Deli
 recomputed nowhere.
 
 **The honesty rails, each with a test.** A missing source refuses by name. A page image is re-hashed
-against the `image_sha256` the run recorded — 51 of 51 agree, so "as it was SENT" is proven and not
+against the `image_sha256` the run recorded — 56 of 56 agree, so "as it was SENT" is proven and not
 merely displayed. The pack refuses unless `window_summary_5c2.json` was computed over the same bytes
 it reads, because a caption measured on another disk is worse than no caption. The seed, the strata,
 the populations and the drawn ids are IN the record. Not one `findings` slot carries a value.
@@ -219,14 +251,14 @@ Two runs of each producer over the same evidence, and the committed artifact bes
 
 ```
 $ scripts/window_summary_5c2.py --out {A,B}
-b6d043833f430a6d…  results/window_summary_5c2.json
-b6d043833f430a6d…  pair A
-b6d043833f430a6d…  pair B
+7760d32d0ffec80c…  results/window_summary_5c2.json
+7760d32d0ffec80c…  pair A
+7760d32d0ffec80c…  pair B
 
 $ scripts/build_validate_pack.py --out {A,B} --page {A,B}
-0c57d094102b025c…  results/validate_5c2_pack.json    e2754e8834937017…  results/validate_5c2_pack.html
-0c57d094102b025c…  pair A                            e2754e8834937017…  pair A
-0c57d094102b025c…  pair B                            e2754e8834937017…  pair B
+a1a70e721f3adcae…  results/validate_5c2_pack.json    bcc37d4895b17bbf…  results/validate_5c2_pack.html
+a1a70e721f3adcae…  pair A                            bcc37d4895b17bbf…  pair A
+a1a70e721f3adcae…  pair B                            bcc37d4895b17bbf…  pair B
 ```
 
 Both pairs are byte-identical, record AND rendering, and both are asserted in the suite against the
@@ -262,7 +294,7 @@ The handshake test's: the worker's own answer passes the same guard.
 
 ```
 $ set -o pipefail && make check
-2303 passed, 2 skipped in 64.30s
+2305 passed, 2 skipped in 64.78s
 $ ruff format --check scripts/window_summary_5c2.py scripts/build_validate_pack.py \
       tests/test_window_summary_5c2.py tests/test_build_validate_pack.py
 4 files already formatted            # `make check` does not run the formatter
@@ -271,7 +303,7 @@ $ git status --short
 ```
 
 Green after every commit of this session; the verifier was invoked under `set -o pipefail` each
-time (Dv313). New tests: 1 for the Dv307 debt, 18 for Deliverable 1, 22 for Deliverable 2 — 41
+time (Dv313). New tests: 1 for the Dv307 debt, 20 for Deliverable 1, 22 for Deliverable 2 — 43
 against the 2 262 the run left.
 
 **$0 held.** No pod, no endpoint, no serverless job, no OpenRouter call, no Telegram client; the one
@@ -279,8 +311,13 @@ test that drives the paid driver stubs `runpod_guard.balance` and never reaches 
 only network use in the session was `127.0.0.1:8731`, a local `http.server` opened to look at the
 rendering and stopped afterwards.
 
-**`data/derived/` untouched.** Every producer opens it read-only; `tests/test_run_5c2.py`'s
-derived-root guard is green in the full suite above, which is the check that would have seen a write.
+**`data/derived/` untouched.** Every producer opens it read-only, and the proof is a hash rather
+than an assertion: `results/window_summary_5c2.json` records the sha256 of all 38 derived files, and
+`test_the_record_carries_the_producer_and_every_source_it_read` re-hashes every one of them against
+the record on each suite run. Independently, every count Deliverable 1 computes off those bytes —
+5 075 / 159 / 44 / 106 / 39 and the 2 + 1 unreadable — equals what `docs/reports/5c2-run.md` recorded
+before this session existed. (`data/derived/` is gitignored, so there is no HEAD to diff and no
+baseline was taken before the first write-capable action; that is the gap those two checks close.)
 
 ---
 
@@ -294,6 +331,12 @@ instrument and no model verdict to show. Resolved by showing the deterministic w
 field, in the caption and in the rendering — a string match presented as a model's answer is the
 worst kind of number at a sitting. Its yield is the finding: **11 rows of 5 075** carry a watchlist
 brand. Whether the comment leg should have a brand head at all is a ruling, not an executor's call.
+
+This head is also the ONLY reason either producer reads a file outside `data/derived/` and
+`results/`: the watchlist lives in `config/registry.yaml`, and both scripts reach it through the
+sealed registration's own pin (`registry_through_the_seal`), so a registry that moved since the run
+is a refusal rather than a differently-measured brand column. The pack has to run the SAME matcher
+on the shown row that the aggregate beside it was built with, which is why the read is in both.
 [cause: contract-gap]
 
 **Dv317 — the leaflet draw needed a stratum the contract prescribed only for comments, and six
@@ -301,9 +344,11 @@ posts rather than five.** The contract stratifies the COMMENT draw and leaves th
 plain. Eleven of nineteen posts yielded a position, so a blind draw of five could have shown the
 operator a sitting where "field by field, what made each a POSITION" has no subject. Four are drawn
 from the posts that yielded and two from those that did not — six against the clause's "at least
-five", both strata and both populations stated in the record, and no row selected for what the model
-said about it. The alternative considered and rejected: draw five blind and accept the risk, which
-would have made the pack's usefulness a function of the seed. [cause: contract-gap]
+five", both strata and both populations stated in the record. The claim the record makes about it
+is the precise one: the stratum keys on whether the instrument PRODUCED output — something the model
+did — and never on whether that output looks correct, so no row is chosen for what its verdict says.
+The alternative considered and rejected: draw five blind and accept the risk, which would have made
+the pack's usefulness a function of the seed. [cause: contract-gap]
 
 **Dv318 — two surfaces, two readings of 3.18 (1) on the extracted old price.** The clause says it
 "never reaches a surface that prints it as a price". The AGGREGATE record counts rows that carry one
@@ -344,17 +389,40 @@ NOT have produced (a stripped-away post, a foreign prompt, a mangled delimiter),
 uses one. The evidence row's own integrity against tampering is the store's problem, not this
 function's, and saying so is the honest scope. [cause: model]
 
+**Dv323 — the seeded draw was CORRELATED across strata, and only a rank measurement showed it.**
+`build_sitting_pack.draw`'s shape re-seeds every stratum with the same constant, and one
+`Random(42)` asked for one element out of pools of 242, 223 and 222 answers the same INDEX for all
+three: the first build of this pack drew rank 163 of each. The rows were not picked and their ids
+differ, so nothing in the record, the tests or the rendering could have shown it — it took computing
+each drawn row's rank inside its own sorted channel. Fixed by deriving the seed per stratum
+(`f"{SEED}:{stratum}"`, with `seed_derivation` in the record so reproducibility is unchanged); both
+draws are printed in this report because a draw changed after it was seen has to be auditable. The
+house's own `build_sitting_pack.py` still has the shape and is NOT touched here: its three strata
+are 382/671/859 rows and 100 draws each, a different exposure, and re-drawing a pack whose 300
+verdicts are already in `results/verdicts_45g5.json` is not a fix. [cause: model]
+
+**Dv324 — 1 361 of the 5 075 comments were sent to the model with an EMPTY `<comment>` block.**
+26.8% of the paid comment leg — stickers, photos, voice notes — and the run report has no counter
+for it. Found by recovering the SENT string per row for the language column, not by looking for it.
+All 1 361 came back with no intent, so `rows_with_no_intent: 3944` is a third made of rows that had
+no text; @matusi_ukr carries 1 172 of them, 43% of that channel. Counted as its own class in the
+aggregate rather than dropped from the population, because the rows were bought and are inside the
+registered 5 075 — the class is a caveat on every distribution, not a correction to one. Whether the
+loop should skip a text-less comment before paying for it is a ruling for the next contract; nothing
+was re-scored here. [cause: model]
+
 ## Process signals
 
 1. **A deviation can be true of the revision it was written against and false of the session that
    wrote it.** `git log -S` on the mechanism, not a re-read of HEAD, is what dated Dv307's claim.
-2. **Two of this session's own controls first passed for the wrong reason** (a "control" field that
-   the pin actually compares; an in-delimiter edit that re-renders by construction). A guard that
-   fires still has to be asked WHY it fired.
-3. **A hand-typed money number has no carrier a month later.** `--already-usd` should read the
-   previous leg's `step_spent_usd` and require an override to be LARGER, or record its provenance.
-4. **The strongest guard here cost one line: rebuild the input and compare bytes.** Re-rendering the
-   split beat every delimiter rule I could have written for it.
+2. **A draw can be reproducible, unpicked and still not random** (Dv323). Nothing in a record shows
+   it; measure each drawn row's RANK inside its own stratum, which is one line and the only check
+   that would have.
+3. **Two of this session's own controls first passed for the wrong reason** (a "control" field the
+   pin actually compares; an in-delimiter edit that re-renders by construction). A guard that fires
+   still has to be asked WHY.
+4. **Reconstructing the input beat every rule I could have written about it.** Re-rendering the
+   split proved the cut, and it is what surfaced Dv324 as a side effect.
 5. **`make check` does not run the formatter**, and `ruff format` moved the producer's own sha256 —
    which is inside its record. Format first, generate second, or the byte-identical test is red.
 
@@ -365,6 +433,9 @@ function's, and saying so is the honest scope. [cause: model]
    this category, is a ruling.
 2. **Dv318 — the old price at the sitting.** The pack prints it, flagged. If the reading is wrong,
    the fix is one field in `position_block` and a rebuild.
-3. **The sitting's own record.** `findings` is a skeleton in a committed file; whether the filled
+3. **Dv324 — the 1 361 text-less comments.** They were bought and labelled. Whether the loop should
+   skip a comment with no text before paying for it, and whether the phase's numbers should ever be
+   reported on the 3 714 rows that HAD text, is a ruling — nothing was re-scored here.
+4. **The sitting's own record.** `findings` is a skeleton in a committed file; whether the filled
    version supersedes it in place or lands as a new record (`results/validate_5c2_returns.json`, the
    `read_sitting_returns.py` pattern) is a decision the sitting should not discover at the table.

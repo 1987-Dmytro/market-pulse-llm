@@ -717,12 +717,18 @@ What the persisted carriers say about the same quantity:
 |---|---|---|
 | `results/spend_5c2run.json :: runs[0].step_spent_usd` | **$0.8230** | $11.0815436571 − $10.2585299348, the balance delta |
 | `results/spend_phase4.json :: sessions[-2]` | balance $10.2585299348 | the same reading, witnessed into the phase ledger |
-| the client's wall clock | $0.8344 | (2 267.544 + 393.079 + 60) s × $0.00030669 |
+| the client's wall clock | $0.8160 – $0.8344 | (2 267.544 + 393.079) s × $0.00030669, and the same plus the 60 s idle tail |
 | typed at the command line | **$0.8451** | +$0.0221 over the delta, +$0.0107 over the wall |
+
+The wall reading is a RANGE and not a point, because this session has ONE 60 s idle tail and the
+table above spends it once for the whole session: charging it to Endpoint A gives $0.8344, leaving
+it to the comment leg gives $0.8160. Which is right is a question about when the worker scaled to
+zero and nothing on disk answers it — so both ends are printed rather than one of them chosen.
 
 The gap to the delta is $0.0221 — 72 seconds of worker time at the registered rate. No balance of
 $10.2364436571 (the reading that would produce it) appears in any file, log or record in this repo;
-neither the wall arithmetic nor the delta reproduces it, and the session transcript is not on disk.
+neither end of the wall range nor the delta reproduces it, and the session transcript is not on
+disk.
 So the honest statement is the one at the top: it was typed by hand as a safer reading, not read
 back from a carrier.
 
