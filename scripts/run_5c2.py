@@ -49,6 +49,7 @@ import census_5c2 as census  # noqa: E402
 import positions_gm4_skub as skub  # noqa: E402
 import run_loop  # noqa: E402
 import runpod_guard as guard  # noqa: E402
+import witness_phase_ledger as witness  # noqa: E402
 import write_sku_prereg as law  # noqa: E402
 
 from market_pulse import loop, parents, positions, serving  # noqa: E402
@@ -60,6 +61,7 @@ PHASE = "5c2run"
 SPEC = REPO_ROOT / "docs" / "SPEC.md"
 PREREG = REPO_ROOT / "results" / "prereg_5c2_run.json"
 LEDGER = REPO_ROOT / "results" / "spend_5c2run.json"
+PHASE_LEDGER = witness.LEDGER
 RECORD = REPO_ROOT / "results" / "run_5c2.json"
 POSITIONS_PIN = REPO_ROOT / "results" / "sku_pilot_serving_v2.json"
 PARITY_PIN = REPO_ROOT / "results" / "parity_srv2.json"
@@ -966,16 +968,51 @@ def run_the_legs(
             )
 
 
-def finalise(args, outcome: dict, note: list, client, ledger: dict) -> None:
-    """The ledger row and the run record, on EVERY exit that could have billed.
+def witness_the_phase(leg: str | None) -> str:
+    """This session's paid run, appended to the PHASE ledger from the step ledger's own numbers.
 
-    Called from both arms of `main`'s try: a completed leg and a dead one leave the same two
+    The team lead's ruling after 5c2-run: the witness is wired into the driver so no future paid
+    exit can leave the phase ledger silent. Until it was, witnessing was a named step of every paid
+    contract — and a step of a contract is a thing a session can forget, which is how the ledger
+    went quiet for three sessions and needed `scripts/repair_phase4_ledger.py` to go back for them.
+
+    Three properties, none of them incidental:
+
+    * it runs AFTER `log_run`, because it reads `runs[-1]` of the step ledger — the row `log_run`
+      has just appended. Before it, the entry would witness the previous leg;
+    * it NEVER raises. `main`'s exception arm calls `finalise` and then re-raises whatever killed
+      the run; a `SystemExit` escaping here would replace that exception and the re-raise would
+      never happen, so a wedged endpoint would be reported as a bookkeeping failure. The record
+      outranks the reason — the same rule that put `finalise` in the exception arm at all;
+    * a refusal is RECORDED rather than swallowed. `witness_phase_ledger` refuses on a timestamp
+      the phase ledger already carries (that is what makes it idempotent) and on one that is not
+      strictly after the last entry, and either way the run record says so in a note.
+    """
+    try:
+        witness.main(
+            [
+                "--source",
+                rel(LEDGER),
+                "--label",
+                f"5c2-run: the {leg} leg",
+                "--ledger",
+                str(PHASE_LEDGER),
+            ]
+        )
+    except (Exception, SystemExit) as err:  # noqa: BLE001 — see the docstring: the record outranks it
+        return f"the phase ledger was NOT witnessed: {err}"
+    return f"the phase ledger was witnessed in {rel(PHASE_LEDGER)}"
+
+
+def finalise(args, outcome: dict, note: list, client, ledger: dict) -> None:
+    """The ledger row, the phase-ledger entry and the run record, on EVERY exit that could have
+    billed.
+
+    Called from both arms of `main`'s try: a completed leg and a dead one leave the same three
     artifacts, because the question "what did this session spend" has to be answerable from disk
     whichever way the session ended. The balance read goes through `spend_or_note`, which refuses
     to let a failed `runpodctl` call take the record down with it (Dv33: the delta is a FLOOR).
     """
-    outcome["timing"] = client.timing()
-    outcome["notes"] = note
     balance, spent, why = skub.spend_or_note(ledger, phase=PHASE)
     outcome["ledger"] = {"balance": balance, "session_spent_usd_floor": spent, "unread": why}
     skub.log_run(
@@ -986,6 +1023,10 @@ def finalise(args, outcome: dict, note: list, client, ledger: dict) -> None:
         f"5c2-run {args.leg}",
         cost_note=outcome.get("died"),
     )
+    note.append(witness_the_phase(args.leg))
+
+    outcome["timing"] = client.timing()
+    outcome["notes"] = note
     args.out.write_text(
         json.dumps(
             {"at": datetime.now(UTC).isoformat(timespec="seconds")} | outcome,

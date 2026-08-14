@@ -6,6 +6,7 @@ byte-identical evidence rows. Anything the live path builds differently is a rec
 saw, and `docs/reports/5c2-prep-b.md` §4 is explicit that only the TRANSPORT may differ.
 """
 
+import argparse
 import json
 import sys
 from pathlib import Path
@@ -339,6 +340,93 @@ class RefusingEndpoint:
         return {"calls": self.calls, "rows": 0, "worker_seconds": 0.0, "wall_seconds": None}
 
 
+def a_phase_ledger(tmp_path, *, last="2026-08-01T08:00:00+00:00") -> Path:
+    """A phase-ledger FIXTURE. No test in this file reads or writes `results/spend_phase4.json`.
+
+    That file is the money record of the whole phase, and a suite that appended to it on every run
+    would be writing sessions that never happened into the ledger every later contract prices
+    against. Every test that reaches `finalise` patches `driver.PHASE_LEDGER` at this path.
+    """
+    path = tmp_path / "spend_phase4.json"
+    path.write_text(
+        json.dumps(
+            {
+                "phase4_cap_usd": 33.0,
+                "runpod_balance_at_phase4_start": 35.0,
+                "anchored_at": "2026-08-01T08:34:09+00:00",
+                "sessions": [{"at": last, "balance": 12.0, "spent_usd": 23.0, "note": "before"}],
+            }
+        ),
+        encoding="utf-8",
+    )
+    return path
+
+
+class Timing:
+    """Everything `finalise` asks a client for, which is one method."""
+
+    def timing(self) -> dict:
+        return {"calls": 3, "rows": 0, "worker_seconds": 0.0, "wall_seconds": None}
+
+
+def drive_finalise(tmp_path, monkeypatch, phase: Path) -> tuple[dict, list]:
+    """`finalise` on the arm a COMPLETED leg takes, with every path pointed at `tmp_path`."""
+    import positions_gm4_skub as skub
+
+    step, record = tmp_path / "spend_5c2run.json", tmp_path / "run.json"
+    monkeypatch.setattr(driver, "LEDGER", step)
+    monkeypatch.setattr(driver, "PHASE_LEDGER", phase)
+    monkeypatch.setattr(driver.guard, "balance", lambda: 9.0)
+    ledger = {skub.anchor_key(driver.PHASE): 10.5, "cap_usd": 8.0, "runs": []}
+    note: list[str] = []
+
+    driver.finalise(argparse.Namespace(leg="comments", out=record), {}, note, Timing(), ledger)
+
+    return json.loads(record.read_text(encoding="utf-8")), note
+
+
+def test_finalise_witnesses_the_phase_ledger_from_the_runs_own_numbers(tmp_path, monkeypatch):
+    """The team lead's ruling after 5c2-run, wired: no paid exit leaves the phase ledger silent.
+
+    The property the permanent silence guard reads is that the phase entry and the step ledger's
+    run carry the SAME balance READING — a re-read minutes later is a different number and the two
+    records would stop matching. Both are asserted against each other rather than against literals.
+
+    Delete the `witness_the_phase` call from `finalise` and this test fails on `len(sessions)`.
+    """
+    phase = a_phase_ledger(tmp_path)
+
+    written, note = drive_finalise(tmp_path, monkeypatch, phase)
+
+    sessions = json.loads(phase.read_text(encoding="utf-8"))["sessions"]
+    run = json.loads((tmp_path / "spend_5c2run.json").read_text(encoding="utf-8"))["runs"][-1]
+    assert len(sessions) == 2
+    assert sessions[-1]["balance"] == run["balance"] == 9.0
+    assert sessions[-1]["at"] == run["at"]
+    assert sessions[-1]["spent_usd"] == 26.0, "35.00 anchor - 9.00, anchor-relative"
+    assert sessions[-1]["remaining_usd"] == 7.0, "against the $33.00 cap in force"
+    assert note == [f"the phase ledger was witnessed in {phase}"]
+    assert written["notes"] == note
+
+
+def test_a_witness_that_refuses_costs_the_run_record_nothing(tmp_path, monkeypatch):
+    """The other direction: the witness refuses and the record is written anyway, saying so.
+
+    `witness_phase_ledger` refuses on an entry that is not strictly after the last one — that
+    refusal is what makes it idempotent, so it is a NORMAL outcome and not a crash. A driver that
+    let it through would lose the run record to a bookkeeping stop.
+    """
+    phase = a_phase_ledger(tmp_path, last="2099-01-01T00:00:00+00:00")
+    before = phase.read_bytes()
+
+    written, note = drive_finalise(tmp_path, monkeypatch, phase)
+
+    assert phase.read_bytes() == before, "a refused witness writes nothing"
+    assert note[0].startswith("the phase ledger was NOT witnessed:")
+    assert "not strictly after" in note[0]
+    assert written["ledger"]["balance"] == 9.0 and written["timing"]["calls"] == 3
+
+
 def test_a_refused_handshake_writes_the_ledger_row_and_the_record(monkeypatch, tmp_path):
     """What Dv307 says is open, MEASURED — the driver is driven into the refusal and the disk read.
 
@@ -358,8 +446,10 @@ def test_a_refused_handshake_writes_the_ledger_row_and_the_record(monkeypatch, t
     """
     expected = driver.config_a_expected()
     ledger, record = tmp_path / "spend_5c2run.json", tmp_path / "run.json"
+    phase = a_phase_ledger(tmp_path)
     client = RefusingEndpoint("e-fake", expected | {"merge_state": "merged-requantized"})
     monkeypatch.setattr(driver, "LEDGER", ledger)
+    monkeypatch.setattr(driver, "PHASE_LEDGER", phase)
     monkeypatch.setattr(driver.guard, "balance", lambda: 9.0)
     monkeypatch.setattr(driver, "client_for", lambda endpoint, api_key, dump=None: client)
     monkeypatch.setenv(driver.API_KEY_ENV, "not-a-key")
@@ -377,8 +467,41 @@ def test_a_refused_handshake_writes_the_ledger_row_and_the_record(monkeypatch, t
     assert runs[0]["note"].startswith("5c2-run comments — SystemExit:")
     written = json.loads(record.read_text(encoding="utf-8"))
     assert written["died"].startswith("SystemExit: the endpoint is not serving")
-    assert written["notes"] == ["the run ENDED on an exception: SystemExit"]
+    # the second note is the witness, wired into `finalise` at the 5c2-close contract: a paid exit
+    # that dies still lands in the phase ledger, from the row `log_run` has just appended.
+    assert written["notes"] == [
+        "the run ENDED on an exception: SystemExit",
+        f"the phase ledger was witnessed in {phase}",
+    ]
+    assert json.loads(phase.read_text(encoding="utf-8"))["sessions"][-1]["balance"] == 9.0
     assert written["timing"]["calls"] == 1 and "go_no_go" not in written
+
+
+def test_a_witness_failure_never_replaces_the_exception_that_killed_the_run(monkeypatch, tmp_path):
+    """The hazard the wiring creates, planted: `finalise` runs inside `main`'s exception arm and
+    the ORIGINAL exception is re-raised after it.
+
+    A `SystemExit` escaping the witness would become the exception the caller sees, the re-raise
+    would never happen, and a session killed by a wrong serving configuration would be reported as
+    a bookkeeping failure. Here the phase ledger does not exist at all — the widest failure the
+    witness can have — and the refusal the operator must see is still the handshake's.
+    """
+    expected = driver.config_a_expected()
+    ledger, record = tmp_path / "spend_5c2run.json", tmp_path / "run.json"
+    client = RefusingEndpoint("e-fake", expected | {"merge_state": "merged-requantized"})
+    monkeypatch.setattr(driver, "LEDGER", ledger)
+    monkeypatch.setattr(driver, "PHASE_LEDGER", tmp_path / "no-such-ledger.json")
+    monkeypatch.setattr(driver.guard, "balance", lambda: 9.0)
+    monkeypatch.setattr(driver, "client_for", lambda endpoint, api_key, dump=None: client)
+    monkeypatch.setenv(driver.API_KEY_ENV, "not-a-key")
+
+    with pytest.raises(SystemExit, match="not serving the registered configuration"):
+        driver.main(["--leg", "comments", "--endpoint", "e-fake", "--out", str(record)])
+
+    written = json.loads(record.read_text(encoding="utf-8"))
+    assert written["died"].startswith("SystemExit: the endpoint is not serving")
+    assert written["notes"][-1].startswith("the phase ledger was NOT witnessed:")
+    assert not (tmp_path / "no-such-ledger.json").exists(), "a failed witness creates nothing"
 
 
 def test_the_config_a_expectation_refuses_when_the_carriers_disagree(monkeypatch, tmp_path):
