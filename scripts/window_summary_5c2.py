@@ -190,6 +190,12 @@ def comment_verdicts(rows: list[dict], aliases: dict[str, str]) -> list[dict]:
                 "labels": labels,
                 "unreadable": reason,
                 "language": langid.detect(text),
+                # what the model was actually asked. A comment that carries a sticker, a photo or a
+                # voice note and no words reaches `build_messages` as an EMPTY `<comment>` block, and
+                # every head's answer for it is an answer about nothing. Counted rather than
+                # dropped: the rows were bought, they are in the 5 075, and a distribution that does
+                # not say how many of its rows had no text is a distribution about the wrong thing.
+                "empty_text": not text.strip(),
                 "brands": [
                     found["brand_id"] for found in brands.find_watchlist_brands(text, aliases)
                 ],
@@ -218,6 +224,19 @@ def comment_block(verdicts: list[dict]) -> dict:
         "unreadable": {
             "rows": len(verdicts) - len(scored),
             "reasons": dict(Counter(row["unreadable"] for row in verdicts if row["unreadable"])),
+        },
+        "empty_text": {
+            "rows": sum(1 for row in verdicts if row["empty_text"]),
+            "reading": (
+                "rows whose `<comment>` block was EMPTY when it was sent — a sticker, a photo or a"
+                " voice note with no words. Every head answered them anyway, so they are inside"
+                " every distribution below; a reader who wants the labels of rows that HAD text"
+                " subtracts this number. The rows were bought and are part of the registered"
+                " 5 075, so they are counted here rather than dropped."
+            ),
+            "with_no_intent": sum(
+                1 for row in scored if row["empty_text"] and not row["labels"]["intents"]
+            ),
         },
         "sentiment": dict(Counter(row["labels"]["sentiment"] for row in scored)),
         "sarcasm": {

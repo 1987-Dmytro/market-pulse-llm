@@ -92,15 +92,19 @@ def test_the_draw_is_reproducible_from_the_seed_alone(pack):
     rows = summary.read_rows(summary.DERIVED / "position_rows" / f"{channel.lstrip('@')}.jsonl")
     strata = builder.leaflet_strata(pages, rows)
 
-    redrawn = builder.draw(strata["yielded positions"], builder.LEAFLET_YIELDED, pack["seed"])
-    redrawn += builder.draw(strata["yielded none"], builder.LEAFLET_EMPTY, pack["seed"])
+    redrawn = builder.draw(
+        strata["yielded positions"], builder.LEAFLET_YIELDED, "yielded positions", pack["seed"]
+    )
+    redrawn += builder.draw(
+        strata["yielded none"], builder.LEAFLET_EMPTY, "yielded none", pack["seed"]
+    )
 
     assert sorted(redrawn) == pack["drawn"]["leaflet_posts"]
 
 
 def test_a_stratum_too_small_for_its_draw_is_a_refusal():
     with pytest.raises(SystemExit, match="rows in a stratum the draw needs"):
-        builder.draw(["a", "b"], 3)
+        builder.draw(["a", "b"], 3, "x")
 
 
 # --- what the operator is shown ----------------------------------------------------------------
@@ -120,7 +124,7 @@ def test_every_shown_position_re_derives_its_rung_from_the_ladder(pack):
 
 def test_every_shown_comment_carries_the_original_the_rendering_and_every_head(pack):
     for block in pack["comments"]:
-        assert block["text"] and block["text"] in block["rendering"][0]["content"]
+        assert block["text"] in block["rendering"][0]["content"]
         assert block["parent_post"] in block["rendering"][0]["content"]
         assert set(block["verdicts"]) == {
             "sentiment",
@@ -131,6 +135,23 @@ def test_every_shown_comment_carries_the_original_the_rendering_and_every_head(p
         }
         assert block["verdicts"]["unreadable"] is None
         assert block["reply"] and block["prompt_sha256"]
+        # a comment CAN be empty — 1 361 of the 5 075 were sent that way — and the pack has to say
+        # so rather than show a blank box beside three confident labels
+        assert block["empty_text"] == (not block["text"].strip())
+
+
+def test_an_empty_comment_is_shown_as_its_class_and_not_as_a_blank_box(pack):
+    """The draw pulled one of the 1 361 rows the model was asked about with no text at all."""
+    empty = [block for block in pack["comments"] if block["empty_text"]]
+    assert empty, "the seed drew one; if that changes this test should be re-pointed, not deleted"
+    page = PAGE.read_text(encoding="utf-8")
+    assert "ПУСТО" in page and "&lt;comment&gt;" in page
+    for block in empty:
+        assert block["aggregate"]["empty_text"]["in_window"] == 1361
+        assert (
+            block["aggregate"]["empty_text"]["in_channel"]
+            == AGGREGATES["comment"]["per_channel"][block["channel"]]["empty_text"]["rows"]
+        )
 
 
 def test_no_caption_number_is_computed_here(pack):

@@ -7,9 +7,10 @@ that pack — `results/validate_5c2_pack.json` and the Russian rendering
 `results/validate_5c2_pack.html` the sitting is read from.
 
 **Drawn, not picked.** :data:`SEED` is a constant in this file and it is written into the record;
-the draw is `random.Random(SEED).sample` over SORTED ids, which is the shape
-`scripts/build_sitting_pack.py` established. Two strata, both stated in the record and neither of
-them a filter on the verdict:
+the draw is `random.Random(f"{SEED}:{stratum}").sample` over SORTED ids — see :func:`draw` for why
+the stratum is in the seed. Two strata, both stated in the record. Neither keys on whether the
+output looks CORRECT; one of them does key on whether the instrument produced output at all, and
+says so:
 
 * leaflet posts — the pages of a post either yielded positions or they did not, and a post that
   yielded none cannot answer "field by field, what made each a POSITION". Eleven of the nineteen
@@ -24,6 +25,12 @@ them a filter on the verdict:
 and the pack refuses unless that record was written over the same bytes this one reads — a
 sitting whose "3.4% of the channel" was measured on a different disk than the row beside it is
 worse than a sitting with no caption at all.
+
+**One file outside `data/derived/` and `results/`.** `config/registry.yaml`, reached only through
+the sealed registration's own pin (`window_summary_5c2.registry_through_the_seal`), because the
+brand column 3.18 (6) asks for is a watchlist match and the pack has to run the SAME matcher on the
+shown row that the aggregate beside it was built with. A registry that moved since the run is a
+refusal here, not a differently-measured brand column.
 
 **What it refuses.** A missing source, by name. A page image whose bytes no longer hash to the
 `image_sha256` the run recorded — "the page as it was SENT" has to be provable and not merely
@@ -98,18 +105,27 @@ def read_json(path: Path) -> dict:
 # --- the draw --------------------------------------------------------------------------------
 
 
-def draw(pool: list, count: int, seed: int = SEED) -> list:
-    """`count` from a SORTED pool under the seed — `build_sitting_pack.draw`'s shape.
+def draw(pool: list, count: int, stratum: str, seed: int = SEED) -> list:
+    """`count` from a SORTED pool, under a seed DERIVED from the stratum's name.
 
     Sorted first and always: `sample` over a list whose order came off a filesystem glob would be
     reproducible only on the machine that built it.
+
+    The stratum is in the seed, and that is a defect fix rather than a flourish.
+    `build_sitting_pack.draw` re-seeds each stratum with the SAME constant, and one `Random(42)`
+    asked for one element out of pools of 242, 223 and 222 answers the same INDEX for all three:
+    the first version of this pack drew rank **163 of 242, 163 of 223 and 163 of 222** — three of
+    five comments at one position. The ids differ and nobody picked them, but five draws that share
+    an index are not five independent draws, and "drawn under a recorded seed" has to mean more
+    than "nobody typed the ids". `f"{seed}:{stratum}"` gives each stratum its own stream and stays
+    exactly as reproducible: the record carries both halves.
     """
     if len(pool) < count:
         raise SystemExit(
             f"{len(pool)} rows in a stratum the draw needs {count} from — the pack cannot show the"
             " operator rows that do not exist, and shrinking the draw silently would hide it"
         )
-    return random.Random(seed).sample(sorted(pool), count)
+    return random.Random(f"{seed}:{stratum}").sample(sorted(pool), count)
 
 
 def leaflet_strata(pages: list[dict], position_rows: list[dict]) -> dict[str, list[str]]:
@@ -265,6 +281,9 @@ def comment_block(row: dict, aggregates: dict, aliases: dict[str, str]) -> dict:
             "brand_attribution": {"matched": verdicts["brands"], "law": "laws.brand_attribution"},
         },
         "language": verdicts["language"],
+        # 1 361 of the 5 075 reached the model this way; the caption below carries the count so a
+        # shown empty row is read as its class rather than as an accident of the draw.
+        "empty_text": verdicts["empty_text"],
         "aggregate": comment_caption(row["channel"], labels, aggregates),
     }
 
@@ -298,6 +317,10 @@ def comment_caption(channel: str, labels, aggregates: dict) -> dict:
         "language": {
             "in_channel": here["language"]["rows"],
             "in_window": whole["language"]["rows"],
+        },
+        "empty_text": {
+            "in_channel": here["empty_text"]["rows"],
+            "in_window": whole["empty_text"]["rows"],
         },
         "this_row": {
             "sentiment": labels and labels["sentiment"],
@@ -341,8 +364,12 @@ def build(
     position_rows = named(loop.POSITION_RECORD_TYPE, leaflet_channel)
     strata = leaflet_strata(pages, position_rows)
     drawn_posts = [
-        (post, "yielded positions") for post in draw(strata["yielded positions"], LEAFLET_YIELDED)
-    ] + [(post, "yielded none") for post in draw(strata["yielded none"], LEAFLET_EMPTY)]
+        (post, "yielded positions")
+        for post in draw(strata["yielded positions"], LEAFLET_YIELDED, "yielded positions")
+    ] + [
+        (post, "yielded none")
+        for post in draw(strata["yielded none"], LEAFLET_EMPTY, "yielded none")
+    ]
 
     pages_of, rows_of = defaultdict(list), defaultdict(list)
     for page in pages:
@@ -355,7 +382,7 @@ def build(
     for handle in channels:
         rows = named(loop.RECORD_TYPE, handle)
         by_id = {row["msg_id"]: row for row in rows}
-        (msg_id,) = draw(list(by_id), 1)
+        (msg_id,) = draw(list(by_id), 1, handle)
         drawn_comments.append(f"{handle}:{msg_id}")
         comments.append(comment_block(by_id[msg_id], aggregates, aliases))
 
@@ -379,6 +406,13 @@ def build(
             "brand_attribution": summary.BRAND_INSTRUMENT,
         },
         "seed": SEED,
+        "seed_derivation": (
+            "random.Random(f'{seed}:{stratum}').sample(sorted(pool), n), the stratum being"
+            " «yielded positions» / «yielded none» for the leaflet legs and the channel handle for"
+            " each comment. The stratum is in the seed because ONE Random(42) asked for one element"
+            " out of pools of 242, 223 and 222 answers the same index for all three — the first"
+            " build of this pack drew rank 163 of each. Reproducible from these two fields alone."
+        ),
         "strata": {
             "leaflet_post": {
                 "rule": (
@@ -386,7 +420,9 @@ def build(
                     f" {LEAFLET_YIELDED} drawn from the first and {LEAFLET_EMPTY} from the second."
                     " A post that yielded nothing cannot answer «field by field, what made each a"
                     " POSITION», and eleven of nineteen yielded — a blind draw of five could show"
-                    " one. Neither stratum is a filter on the verdict."
+                    " one. The stratum keys on whether the instrument PRODUCED output, which is"
+                    " something the model did; it never keys on whether that output looks correct,"
+                    " and no row in either stratum was chosen for what its verdict says."
                 ),
                 "populations": {name: len(pool) for name, pool in strata.items()},
                 "drawn": {
@@ -545,11 +581,20 @@ def _head(record: dict) -> str:
 def _comment(block: dict) -> str:
     caption, verdicts = block["aggregate"], block["verdicts"]
     intents = ", ".join(verdicts["intents"] or []) or "— (жодної з шести)"
+    shown = (
+        f'<div class="sent">{esc(block["text"])}</div>'
+        if not block["empty_text"]
+        else f"""<div class="sent flag">(ПУСТО — у комментария нет текста: стикер, фото или
+голосовое. Модели ушёл пустой блок &lt;comment&gt;&lt;/comment&gt;, и все три головы ответили
+про ничто. Таких строк в окне {caption["empty_text"]["in_window"]} из
+{caption["rows"]["in_window"]}, в этом канале — {caption["empty_text"]["in_channel"]} из
+{caption["rows"]["in_channel"]}.)</div>"""
+    )
     return f"""<div class="row">
 <h3>{esc(block["comment"])} <span class="empty">· мова {esc(block["language"])} · пост
 {esc(block["parent_msg_id"])} ({esc(block["post_state"])})</span></h3>
 <b>Комментарий, как написан:</b>
-<div class="sent">{esc(block["text"])}</div>
+{shown}
 <b>Родительский пост, как его получила модель:</b>
 <div class="sent">{esc(block["parent_post"])}</div>
 <details><summary>Точный рендеринг запроса ({esc(block["task"])},

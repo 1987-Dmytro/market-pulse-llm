@@ -177,6 +177,7 @@ def test_a_block_of_three_hand_counted_comments():
             "labels": {"sentiment": "positive", "sarcasm": False, "intents": ["price", "taste"]},
             "unreadable": None,
             "language": "ua",
+            "empty_text": False,
             "brands": ["rud"],
         },
         {
@@ -185,6 +186,7 @@ def test_a_block_of_three_hand_counted_comments():
             "labels": {"sentiment": "negative", "sarcasm": True, "intents": []},
             "unreadable": None,
             "language": "ru",
+            "empty_text": False,
             "brands": [],
         },
         {
@@ -193,6 +195,7 @@ def test_a_block_of_three_hand_counted_comments():
             "labels": None,
             "unreadable": "malformed JSON",
             "language": "other",
+            "empty_text": True,
             "brands": ["rud"],
         },
     ]
@@ -212,6 +215,29 @@ def test_a_block_of_three_hand_counted_comments():
     # the brand matcher runs on the TEXT, so the unreadable reply still carries its match
     assert block["brand_attribution"]["rows_with_a_brand"] == 2
     assert block["brand_attribution"]["mentions"] == {"rud": 2}
+    # the empty-text row is the one the parser also refused, so it is inside `rows` and outside
+    # `with_no_intent`, which only counts rows that were SCORED
+    assert block["empty_text"]["rows"] == 1
+    assert block["empty_text"]["with_no_intent"] == 0
+
+
+def test_a_quarter_of_the_comment_leg_was_sent_with_no_text_at_all(record):
+    """The denominator caveat every distribution in this record needs — measured, not assumed.
+
+    A sticker, a photo or a voice note reaches `build_messages` as an EMPTY `<comment>` block, and
+    the run bought and answered them: the heads' answers for those rows are answers about nothing.
+    Every one of them came back with no intent, which is the model behaving — and it means a third
+    of `rows_with_no_intent` is not a statement about what the audience talks about.
+    """
+    total = record["comment"]["total"]
+    assert total["empty_text"]["rows"] == 1361
+    assert total["empty_text"]["with_no_intent"] == 1361, "all of them, so the class is coherent"
+    assert total["empty_text"]["rows"] < total["intents"]["rows_with_no_intent"] == 3944
+    per_channel = sum(
+        block["empty_text"]["rows"] for block in record["comment"]["per_channel"].values()
+    )
+    assert per_channel == total["empty_text"]["rows"]
+    assert record["comment"]["per_channel"]["@matusi_ukr"]["empty_text"]["rows"] == 1172
 
 
 def test_the_unreadable_row_is_not_folded_into_the_empty_intent_class():
@@ -222,6 +248,7 @@ def test_the_unreadable_row_is_not_folded_into_the_empty_intent_class():
         "labels": None,
         "unreadable": "malformed JSON",
         "language": "ua",
+        "empty_text": False,
         "brands": [],
     }
     empty = unreadable | {"labels": {"sentiment": "neutral", "sarcasm": False, "intents": []}}

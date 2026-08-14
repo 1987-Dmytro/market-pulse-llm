@@ -3,7 +3,7 @@
   "contract": "SPEC 3.18 (6) — the operator sitting the phase does not close without. At least five leaflet posts and five comments, original beside verdict, drawn under a recorded seed from the window's own output.",
   "aggregates": {
     "record": "results/window_summary_5c2.json",
-    "sha256": "b6d043833f430a6de37361a933dbd6912ae474ba31c6fd73acf8345494c759ac"
+    "sha256": "7760d32d0ffec80cc73d6ebb27e464ab5b906ed9eda00ea0aa8d15b90ae7561c"
   },
   "laws": {
     "findings": "Findings are the operator's reactions, recorded here as `ratified` or `disputed` with a note. SPEC 3.18 (6)(c): they belong to the REVIEW class of 3.16 (1) and become watchlist, lexicon or prompt-revision ORDERS — never re-scored numbers and never a moved bar. The team lead fills them DURING the sitting; this file ships every slot empty.",
@@ -12,9 +12,10 @@
     "brand_attribution": "market_pulse.brands.find_watchlist_brands over config/registry.yaml's watchlist — a DETERMINISTIC string match on the text that was sent, not a model head. The comment instrument is T1v2_with_post and it returns three labels: sentiment, sarcasm, intents. 3.18 (6) names a fourth verdict («the brand attribution») that this instrument does not produce; the matcher is what the sitting can be shown, and it is named rather than passed off as the model's answer."
   },
   "seed": 42,
+  "seed_derivation": "random.Random(f'{seed}:{stratum}').sample(sorted(pool), n), the stratum being «yielded positions» / «yielded none» for the leaflet legs and the channel handle for each comment. The stratum is in the seed because ONE Random(42) asked for one element out of pools of 242, 223 and 222 answers the same index for all three — the first build of this pack drew rank 163 of each. Reproducible from these two fields alone.",
   "strata": {
     "leaflet_post": {
-      "rule": "the nineteen posts split by whether any page of them yielded a position; 4 drawn from the first and 2 from the second. A post that yielded nothing cannot answer «field by field, what made each a POSITION», and eleven of nineteen yielded — a blind draw of five could show one. Neither stratum is a filter on the verdict.",
+      "rule": "the nineteen posts split by whether any page of them yielded a position; 4 drawn from the first and 2 from the second. A post that yielded nothing cannot answer «field by field, what made each a POSITION», and eleven of nineteen yielded — a blind draw of five could show one. The stratum keys on whether the instrument PRODUCED output, which is something the model did; it never keys on whether that output looks correct, and no row in either stratum was chosen for what its verdict says.",
       "populations": {
         "yielded positions": 11,
         "yielded none": 8
@@ -45,18 +46,18 @@
   "drawn": {
     "leaflet_posts": [
       "@atb_market_official:4340",
-      "@atb_market_official:4350",
       "@atb_market_official:4370",
-      "@atb_market_official:4377",
+      "@atb_market_official:4391",
       "@atb_market_official:4401",
-      "@atb_market_official:4508"
+      "@atb_market_official:4436",
+      "@atb_market_official:4446"
     ],
     "comments": [
-      "@matusi_ukr:580182",
-      "@mandziak:48186",
-      "@VARUS_channel:21270",
-      "@kopiyochka1:392342",
-      "@klopotenkofood:21280"
+      "@matusi_ukr:576430",
+      "@mandziak:48066",
+      "@VARUS_channel:21629",
+      "@kopiyochka1:392092",
+      "@klopotenkofood:21239"
     ]
   },
   "ladder": {
@@ -507,644 +508,6 @@
       ]
     },
     {
-      "post": "@atb_market_official:4350",
-      "channel": "@atb_market_official",
-      "parent_msg_id": 4350,
-      "stratum": "yielded positions",
-      "task": "positions_post_gm4",
-      "prompt_sha256": "ca6303c157d46e707aaf3fc52c7a05ed1450e24c26db0e7c93eefba4f6968754",
-      "pages": [
-        {
-          "msg_id": 4350,
-          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4350.jpg",
-          "image_sha256": "3147747cc64998593852caca3a36e115beff4b02d109ff1351206f90907b0b2f",
-          "n_positions": 2,
-          "unreadable": null,
-          "reply": "```json\n[\n  {\n    \"brand\": \"Своя Лінія\",\n    \"line\": \"Сир м'який чеддеризований Моцарела\",\n    \"category\": \"cheese\",\n    \"size\": \"180 г\",\n    \"fat\": \"45%\",\n    \"price_promo\": \"49,90\"\n  },\n  {\n    \"brand\": \"Своя Лінія\",\n    \"line\": \"Сир м'який чеддеризований Сулугуні\",\n    \"category\": \"cheese\",\n    \"size\": \"180 г\",\n    \"fat\": \"45%\",\n    \"price_promo\": \"49,90\",\n    \"price_old\": \"71,90\",\n    \"discount_pct_printed\": \"-30%\"\n  }\n]\n```"
-        },
-        {
-          "msg_id": 4351,
-          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4351.jpg",
-          "image_sha256": "08db5ad39959b0e86cd97838bea33d17436b6ab2998bfee76e4b96e2c77f9b2c",
-          "n_positions": 0,
-          "unreadable": null,
-          "reply": "[]"
-        },
-        {
-          "msg_id": 4352,
-          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4352.jpg",
-          "image_sha256": "1287d91aaf74302a83ab75cd6484fc4ce8e379a1713c98ab92efa7bf4e1c4677",
-          "n_positions": 2,
-          "unreadable": null,
-          "reply": "```json\n[\n  {\n    \"brand\": \"Дольче\",\n    \"category\": \"yogurt\",\n    \"size\": \"115 г\",\n    \"fat\": \"3,2%\",\n    \"price_promo\": \"12,90\",\n    \"price_old\": \"19,99\",\n    \"discount_pct_printed\": \"-35%\"\n  },\n  {\n    \"brand\": \"Дольче\",\n    \"category\": \"yogurt\",\n    \"size\": \"280 г\",\n    \"fat\": \"3,2%\",\n    \"price_promo\": \"30,90\",\n    \"price_old\": \"44,90\",\n    \"discount_pct_printed\": \"-30%\"\n  }\n]\n```"
-        },
-        {
-          "msg_id": 4353,
-          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4353.jpg",
-          "image_sha256": "4ea2a6918bfc5b0efa56c492750627c776ea249aa53c60470b8ebb47a7876058",
-          "n_positions": 0,
-          "unreadable": null,
-          "reply": "[]"
-        },
-        {
-          "msg_id": 4354,
-          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4354.jpg",
-          "image_sha256": "2d3c859e3e6f1b86930cf450fccfd3474007b86c793ca8586a86d9517bebde83",
-          "n_positions": 0,
-          "unreadable": null,
-          "reply": "[]"
-        },
-        {
-          "msg_id": 4355,
-          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4355.jpg",
-          "image_sha256": "022c64a0f006467586ebd668bdc6f94e0d673a1020f1cad23dda8db87765dfbd",
-          "n_positions": 0,
-          "unreadable": null,
-          "reply": "[]"
-        },
-        {
-          "msg_id": 4356,
-          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4356.jpg",
-          "image_sha256": "bbe872caa8ca27265a480838fd8415f484d917fe2a8348ab996e4637a07011ff",
-          "n_positions": 0,
-          "unreadable": null,
-          "reply": "[]"
-        },
-        {
-          "msg_id": 4357,
-          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4357.jpg",
-          "image_sha256": "c9a9fcebbcfb861a1be1411b5844c1ca99439e2ee616e9a369704e5053e2f305",
-          "n_positions": 0,
-          "unreadable": null,
-          "reply": "[]"
-        },
-        {
-          "msg_id": 4358,
-          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4358.jpg",
-          "image_sha256": "e56a9955f4f0bc855df8880a44213d20de0ffeefa4de4e3ab20ec46984d655cc",
-          "n_positions": 3,
-          "unreadable": null,
-          "reply": "[\n  {\n    \"brand\": \"Ryki\",\n    \"line\": \"RYCKI EDAM\",\n    \"category\": \"cheese\",\n    \"size\": \"135 г\",\n    \"fat\": \"45%\",\n    \"price_promo\": \"58,50\"\n  },\n  {\n    \"brand\": \"Ryki\",\n    \"line\": \"RYCKI IAASDAM\",\n    \"category\": \"cheese\",\n    \"size\": \"135 г\",\n    \"fat\": \"45%\",\n    \"price_promo\": \"58,50\"\n  },\n  {\n    \"brand\": \"Ryki\",\n    \"line\": \"CEZAR\",\n    \"category\": \"cheese\",\n    \"size\": \"135 г\",\n    \"fat\": \"45%\",\n    \"price_promo\": \"58,50\"\n  }\n]"
-        },
-        {
-          "msg_id": 4359,
-          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4359.jpg",
-          "image_sha256": "2fb6324f94ba17789b4aa4cd40efe1fad2fdd7d8a9b25c119eacc4598a8ff9d8",
-          "n_positions": 7,
-          "unreadable": null,
-          "reply": "```json\n[\n  {\n    \"brand\": \"KOMO\",\n    \"line\": \"Бекон\",\n    \"category\": \"cheese\",\n    \"size\": \"75 г\",\n    \"fat\": \"35%\",\n    \"price_promo\": \"17,50\",\n    \"discount_pct_printed\": \"-35%\"\n  },\n  {\n    \"brand\": \"KOMO\",\n    \"line\": \"Вершковий тенеро\",\n    \"category\": \"cheese\",\n    \"size\": \"75 г\",\n    \"fat\": \"35%\",\n    \"price_promo\": \"17,50\",\n    \"discount_pct_printed\": \"-35%\"\n  },\n  {\n    \"brand\": \"Активіа\",\n    \"line\": \"Біфідойогурт\",\n    \"category\": \"yogurt\",\n    \"size\": \"260 г\",\n    \"price_promo\": \"24,70\",\n    \"discount_pct_printed\": \"-33%\"\n  },\n  {\n    \"brand\": \"Активіа\",\n    \"line\": \"Біфідойогурт\",\n    \"category\": \"yogurt\",\n    \"size\": \"260 г\",\n    \"price_promo\": \"23,90\",\n    \"discount_pct_printed\": \"-33%\"\n  },\n  {\n    \"brand\": \"Яготинське\",\n    \"line\": \"Молоко\",\n    \"category\": \"milk\",\n    \"size\": \"870 г\",\n    \"fat\": \"2,6%\",\n    \"price_promo\": \"38,90\",\n    \"discount_pct_printed\": \"-32%\"\n  },\n  {\n    \"brand\": \"Своя Лінія\",\n    \"line\": \"Сир кисломолочний\",\n    \"category\": \"curd\",\n    \"size\": \"350 г\",\n    \"fat\": \"5%\",\n    \"price_promo\": \"57,50\",\n    \"price_old\": \"72,90\",\n    \"discount_pct_printed\": \"-21%\"\n  },\n  {\n    \"brand\": \"Своя Лінія\",\n    \"line\": \"Сир кисломолочний\",\n    \"category\": \"curd\",\n    \"size\": \"350 г\",\n    \"fat\": \"9%\",\n    \"price_promo\": \"63,90\",\n    \"price_old\": \"80,90\",\n    \"discount_pct_printed\": \"-21%\"\n  }\n]\n```"
-        }
-      ],
-      "positions": [
-        {
-          "row_id": "@atb_market_official:4350:0",
-          "page_msg_id": 4350,
-          "ordinal": 0,
-          "why_a_position": {
-            "presence": {
-              "brand": true,
-              "line": true,
-              "category": true,
-              "size": true,
-              "attribute": true
-            },
-            "values": {
-              "brand": "Своя Лінія",
-              "brand_id": "svoia-liniia",
-              "line": "Сир м'який чеддеризований Моцарела",
-              "category": "cheese",
-              "size": "180 г",
-              "attribute_pct": 45.0
-            },
-            "tier": "position",
-            "tier_re_derived": "position",
-            "ladder_key": "brand+line+category+size+attribute"
-          },
-          "price": {
-            "price_promo": 49.9,
-            "price_old": null,
-            "discount_pct_printed": null,
-            "discount_footnote": false,
-            "price_qualifier": "exact",
-            "price_origin": "retail_leaflet"
-          },
-          "depth": {
-            "from_printed_badge": null,
-            "from_price_pair": null,
-            "printed_disagrees_with_computed": false
-          },
-          "warnings": []
-        },
-        {
-          "row_id": "@atb_market_official:4350:1",
-          "page_msg_id": 4350,
-          "ordinal": 1,
-          "why_a_position": {
-            "presence": {
-              "brand": true,
-              "line": true,
-              "category": true,
-              "size": true,
-              "attribute": true
-            },
-            "values": {
-              "brand": "Своя Лінія",
-              "brand_id": "svoia-liniia",
-              "line": "Сир м'який чеддеризований Сулугуні",
-              "category": "cheese",
-              "size": "180 г",
-              "attribute_pct": 45.0
-            },
-            "tier": "position",
-            "tier_re_derived": "position",
-            "ladder_key": "brand+line+category+size+attribute"
-          },
-          "price": {
-            "price_promo": 49.9,
-            "price_old": 71.9,
-            "discount_pct_printed": 30.0,
-            "discount_footnote": false,
-            "price_qualifier": "exact",
-            "price_origin": "retail_leaflet"
-          },
-          "depth": {
-            "from_printed_badge": 0.3,
-            "from_price_pair": 0.306,
-            "printed_disagrees_with_computed": false
-          },
-          "warnings": []
-        },
-        {
-          "row_id": "@atb_market_official:4352:0",
-          "page_msg_id": 4352,
-          "ordinal": 0,
-          "why_a_position": {
-            "presence": {
-              "brand": true,
-              "line": false,
-              "category": true,
-              "size": true,
-              "attribute": true
-            },
-            "values": {
-              "brand": "Дольче",
-              "brand_id": null,
-              "line": null,
-              "category": "yogurt",
-              "size": "115 г",
-              "attribute_pct": 3.2
-            },
-            "tier": "position",
-            "tier_re_derived": "position",
-            "ladder_key": "brand+category+size+attribute"
-          },
-          "price": {
-            "price_promo": 12.9,
-            "price_old": 19.99,
-            "discount_pct_printed": 35.0,
-            "discount_footnote": false,
-            "price_qualifier": "exact",
-            "price_origin": "retail_leaflet"
-          },
-          "depth": {
-            "from_printed_badge": 0.35,
-            "from_price_pair": 0.3547,
-            "printed_disagrees_with_computed": false
-          },
-          "warnings": []
-        },
-        {
-          "row_id": "@atb_market_official:4352:1",
-          "page_msg_id": 4352,
-          "ordinal": 1,
-          "why_a_position": {
-            "presence": {
-              "brand": true,
-              "line": false,
-              "category": true,
-              "size": true,
-              "attribute": true
-            },
-            "values": {
-              "brand": "Дольче",
-              "brand_id": null,
-              "line": null,
-              "category": "yogurt",
-              "size": "280 г",
-              "attribute_pct": 3.2
-            },
-            "tier": "position",
-            "tier_re_derived": "position",
-            "ladder_key": "brand+category+size+attribute"
-          },
-          "price": {
-            "price_promo": 30.9,
-            "price_old": 44.9,
-            "discount_pct_printed": 30.0,
-            "discount_footnote": false,
-            "price_qualifier": "exact",
-            "price_origin": "retail_leaflet"
-          },
-          "depth": {
-            "from_printed_badge": 0.3,
-            "from_price_pair": 0.3118,
-            "printed_disagrees_with_computed": true
-          },
-          "warnings": []
-        },
-        {
-          "row_id": "@atb_market_official:4358:0",
-          "page_msg_id": 4358,
-          "ordinal": 0,
-          "why_a_position": {
-            "presence": {
-              "brand": true,
-              "line": true,
-              "category": true,
-              "size": true,
-              "attribute": true
-            },
-            "values": {
-              "brand": "Ryki",
-              "brand_id": null,
-              "line": "RYCKI EDAM",
-              "category": "cheese",
-              "size": "135 г",
-              "attribute_pct": 45.0
-            },
-            "tier": "position",
-            "tier_re_derived": "position",
-            "ladder_key": "brand+line+category+size+attribute"
-          },
-          "price": {
-            "price_promo": 58.5,
-            "price_old": null,
-            "discount_pct_printed": null,
-            "discount_footnote": false,
-            "price_qualifier": "exact",
-            "price_origin": "retail_leaflet"
-          },
-          "depth": {
-            "from_printed_badge": null,
-            "from_price_pair": null,
-            "printed_disagrees_with_computed": false
-          },
-          "warnings": []
-        },
-        {
-          "row_id": "@atb_market_official:4358:1",
-          "page_msg_id": 4358,
-          "ordinal": 1,
-          "why_a_position": {
-            "presence": {
-              "brand": true,
-              "line": true,
-              "category": true,
-              "size": true,
-              "attribute": true
-            },
-            "values": {
-              "brand": "Ryki",
-              "brand_id": null,
-              "line": "RYCKI IAASDAM",
-              "category": "cheese",
-              "size": "135 г",
-              "attribute_pct": 45.0
-            },
-            "tier": "position",
-            "tier_re_derived": "position",
-            "ladder_key": "brand+line+category+size+attribute"
-          },
-          "price": {
-            "price_promo": 58.5,
-            "price_old": null,
-            "discount_pct_printed": null,
-            "discount_footnote": false,
-            "price_qualifier": "exact",
-            "price_origin": "retail_leaflet"
-          },
-          "depth": {
-            "from_printed_badge": null,
-            "from_price_pair": null,
-            "printed_disagrees_with_computed": false
-          },
-          "warnings": []
-        },
-        {
-          "row_id": "@atb_market_official:4358:2",
-          "page_msg_id": 4358,
-          "ordinal": 2,
-          "why_a_position": {
-            "presence": {
-              "brand": true,
-              "line": true,
-              "category": true,
-              "size": true,
-              "attribute": true
-            },
-            "values": {
-              "brand": "Ryki",
-              "brand_id": null,
-              "line": "CEZAR",
-              "category": "cheese",
-              "size": "135 г",
-              "attribute_pct": 45.0
-            },
-            "tier": "position",
-            "tier_re_derived": "position",
-            "ladder_key": "brand+line+category+size+attribute"
-          },
-          "price": {
-            "price_promo": 58.5,
-            "price_old": null,
-            "discount_pct_printed": null,
-            "discount_footnote": false,
-            "price_qualifier": "exact",
-            "price_origin": "retail_leaflet"
-          },
-          "depth": {
-            "from_printed_badge": null,
-            "from_price_pair": null,
-            "printed_disagrees_with_computed": false
-          },
-          "warnings": []
-        },
-        {
-          "row_id": "@atb_market_official:4359:0",
-          "page_msg_id": 4359,
-          "ordinal": 0,
-          "why_a_position": {
-            "presence": {
-              "brand": true,
-              "line": true,
-              "category": true,
-              "size": true,
-              "attribute": true
-            },
-            "values": {
-              "brand": "KOMO",
-              "brand_id": null,
-              "line": "Бекон",
-              "category": "cheese",
-              "size": "75 г",
-              "attribute_pct": 35.0
-            },
-            "tier": "position",
-            "tier_re_derived": "position",
-            "ladder_key": "brand+line+category+size+attribute"
-          },
-          "price": {
-            "price_promo": 17.5,
-            "price_old": null,
-            "discount_pct_printed": 35.0,
-            "discount_footnote": false,
-            "price_qualifier": "exact",
-            "price_origin": "retail_leaflet"
-          },
-          "depth": {
-            "from_printed_badge": 0.35,
-            "from_price_pair": null,
-            "printed_disagrees_with_computed": false
-          },
-          "warnings": []
-        },
-        {
-          "row_id": "@atb_market_official:4359:1",
-          "page_msg_id": 4359,
-          "ordinal": 1,
-          "why_a_position": {
-            "presence": {
-              "brand": true,
-              "line": true,
-              "category": true,
-              "size": true,
-              "attribute": true
-            },
-            "values": {
-              "brand": "KOMO",
-              "brand_id": null,
-              "line": "Вершковий тенеро",
-              "category": "cheese",
-              "size": "75 г",
-              "attribute_pct": 35.0
-            },
-            "tier": "position",
-            "tier_re_derived": "position",
-            "ladder_key": "brand+line+category+size+attribute"
-          },
-          "price": {
-            "price_promo": 17.5,
-            "price_old": null,
-            "discount_pct_printed": 35.0,
-            "discount_footnote": false,
-            "price_qualifier": "exact",
-            "price_origin": "retail_leaflet"
-          },
-          "depth": {
-            "from_printed_badge": 0.35,
-            "from_price_pair": null,
-            "printed_disagrees_with_computed": false
-          },
-          "warnings": []
-        },
-        {
-          "row_id": "@atb_market_official:4359:2",
-          "page_msg_id": 4359,
-          "ordinal": 2,
-          "why_a_position": {
-            "presence": {
-              "brand": true,
-              "line": true,
-              "category": true,
-              "size": true,
-              "attribute": false
-            },
-            "values": {
-              "brand": "Активіа",
-              "brand_id": null,
-              "line": "Біфідойогурт",
-              "category": "yogurt",
-              "size": "260 г",
-              "attribute_pct": null
-            },
-            "tier": "position",
-            "tier_re_derived": "position",
-            "ladder_key": "brand+line+category+size"
-          },
-          "price": {
-            "price_promo": 24.7,
-            "price_old": null,
-            "discount_pct_printed": 33.0,
-            "discount_footnote": false,
-            "price_qualifier": "exact",
-            "price_origin": "retail_leaflet"
-          },
-          "depth": {
-            "from_printed_badge": 0.33,
-            "from_price_pair": null,
-            "printed_disagrees_with_computed": false
-          },
-          "warnings": []
-        },
-        {
-          "row_id": "@atb_market_official:4359:3",
-          "page_msg_id": 4359,
-          "ordinal": 3,
-          "why_a_position": {
-            "presence": {
-              "brand": true,
-              "line": true,
-              "category": true,
-              "size": true,
-              "attribute": false
-            },
-            "values": {
-              "brand": "Активіа",
-              "brand_id": null,
-              "line": "Біфідойогурт",
-              "category": "yogurt",
-              "size": "260 г",
-              "attribute_pct": null
-            },
-            "tier": "position",
-            "tier_re_derived": "position",
-            "ladder_key": "brand+line+category+size"
-          },
-          "price": {
-            "price_promo": 23.9,
-            "price_old": null,
-            "discount_pct_printed": 33.0,
-            "discount_footnote": false,
-            "price_qualifier": "exact",
-            "price_origin": "retail_leaflet"
-          },
-          "depth": {
-            "from_printed_badge": 0.33,
-            "from_price_pair": null,
-            "printed_disagrees_with_computed": false
-          },
-          "warnings": []
-        },
-        {
-          "row_id": "@atb_market_official:4359:4",
-          "page_msg_id": 4359,
-          "ordinal": 4,
-          "why_a_position": {
-            "presence": {
-              "brand": true,
-              "line": true,
-              "category": true,
-              "size": true,
-              "attribute": true
-            },
-            "values": {
-              "brand": "Яготинське",
-              "brand_id": "yagotynske",
-              "line": "Молоко",
-              "category": "milk",
-              "size": "870 г",
-              "attribute_pct": 2.6
-            },
-            "tier": "position",
-            "tier_re_derived": "position",
-            "ladder_key": "brand+line+category+size+attribute"
-          },
-          "price": {
-            "price_promo": 38.9,
-            "price_old": null,
-            "discount_pct_printed": 32.0,
-            "discount_footnote": false,
-            "price_qualifier": "exact",
-            "price_origin": "retail_leaflet"
-          },
-          "depth": {
-            "from_printed_badge": 0.32,
-            "from_price_pair": null,
-            "printed_disagrees_with_computed": false
-          },
-          "warnings": []
-        },
-        {
-          "row_id": "@atb_market_official:4359:5",
-          "page_msg_id": 4359,
-          "ordinal": 5,
-          "why_a_position": {
-            "presence": {
-              "brand": true,
-              "line": true,
-              "category": true,
-              "size": true,
-              "attribute": true
-            },
-            "values": {
-              "brand": "Своя Лінія",
-              "brand_id": "svoia-liniia",
-              "line": "Сир кисломолочний",
-              "category": "curd",
-              "size": "350 г",
-              "attribute_pct": 5.0
-            },
-            "tier": "position",
-            "tier_re_derived": "position",
-            "ladder_key": "brand+line+category+size+attribute"
-          },
-          "price": {
-            "price_promo": 57.5,
-            "price_old": 72.9,
-            "discount_pct_printed": 21.0,
-            "discount_footnote": false,
-            "price_qualifier": "exact",
-            "price_origin": "retail_leaflet"
-          },
-          "depth": {
-            "from_printed_badge": 0.21,
-            "from_price_pair": 0.2112,
-            "printed_disagrees_with_computed": false
-          },
-          "warnings": []
-        },
-        {
-          "row_id": "@atb_market_official:4359:6",
-          "page_msg_id": 4359,
-          "ordinal": 6,
-          "why_a_position": {
-            "presence": {
-              "brand": true,
-              "line": true,
-              "category": true,
-              "size": true,
-              "attribute": true
-            },
-            "values": {
-              "brand": "Своя Лінія",
-              "brand_id": "svoia-liniia",
-              "line": "Сир кисломолочний",
-              "category": "curd",
-              "size": "350 г",
-              "attribute_pct": 9.0
-            },
-            "tier": "position",
-            "tier_re_derived": "position",
-            "ladder_key": "brand+line+category+size+attribute"
-          },
-          "price": {
-            "price_promo": 63.9,
-            "price_old": 80.9,
-            "discount_pct_printed": 21.0,
-            "discount_footnote": false,
-            "price_qualifier": "exact",
-            "price_origin": "retail_leaflet"
-          },
-          "depth": {
-            "from_printed_badge": 0.21,
-            "from_price_pair": 0.2101,
-            "printed_disagrees_with_computed": false
-          },
-          "warnings": []
-        }
-      ]
-    },
-    {
       "post": "@atb_market_official:4370",
       "channel": "@atb_market_official",
       "parent_msg_id": 4370,
@@ -1212,41 +575,89 @@
       "positions": []
     },
     {
-      "post": "@atb_market_official:4377",
+      "post": "@atb_market_official:4391",
       "channel": "@atb_market_official",
-      "parent_msg_id": 4377,
+      "parent_msg_id": 4391,
       "stratum": "yielded none",
       "task": "positions_post_gm4",
       "prompt_sha256": "ca6303c157d46e707aaf3fc52c7a05ed1450e24c26db0e7c93eefba4f6968754",
       "pages": [
         {
-          "msg_id": 4377,
-          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4377.jpg",
-          "image_sha256": "1093fd99ffc4b09e61bcf2b9b6aa4b1acc39afb6d89cb32b7bb5698e5ed03dcd",
+          "msg_id": 4391,
+          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4391.jpg",
+          "image_sha256": "b310158e7a5966cf7a7e781b057bc1c84fb546e5e33cc09ed9b684244ccadb80",
           "n_positions": 0,
           "unreadable": null,
           "reply": "[]"
         },
         {
-          "msg_id": 4378,
-          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4378.jpg",
-          "image_sha256": "c9d2345431788e0527ade2e3899754ab2238229b58d889203884e2e986a4f567",
+          "msg_id": 4392,
+          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4392.jpg",
+          "image_sha256": "f566591d20b645dd39ed17adbbc19b09681cf1c03e4fc41335ce421986f94f7c",
           "n_positions": 0,
           "unreadable": null,
           "reply": "[]"
         },
         {
-          "msg_id": 4379,
-          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4379.jpg",
-          "image_sha256": "51043b5cfe17b6de1b7dcaf4ca5f140289bc89db0443e414ef9b31eed3ea8ff5",
+          "msg_id": 4393,
+          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4393.jpg",
+          "image_sha256": "ddf11445fe8f9d0460be89e23bd9a58b0b1f4e79c4fa06b1edd05171a1b270e0",
           "n_positions": 0,
           "unreadable": null,
           "reply": "[]"
         },
         {
-          "msg_id": 4380,
-          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4380.jpg",
-          "image_sha256": "5cf4ed8c0c688d21b7e93dbd2c10f71443ee66fa909a420f2f77efa7dc27fa85",
+          "msg_id": 4394,
+          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4394.jpg",
+          "image_sha256": "9ed5e1c9c49a19468f2c1e7d4c0d0f2ec6de21408329f200da5017431a75b1f7",
+          "n_positions": 0,
+          "unreadable": null,
+          "reply": "[]"
+        },
+        {
+          "msg_id": 4395,
+          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4395.jpg",
+          "image_sha256": "179abdd1eccc0ec71c75a69d9bd67b1293326fc203d1232d8cc16ed99ade26de",
+          "n_positions": 0,
+          "unreadable": null,
+          "reply": "[]"
+        },
+        {
+          "msg_id": 4396,
+          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4396.jpg",
+          "image_sha256": "b8923ddb55e27f2b1569e381586453dd4f24cddee640d28dd1497ceeeca4d645",
+          "n_positions": 0,
+          "unreadable": null,
+          "reply": "[]"
+        },
+        {
+          "msg_id": 4397,
+          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4397.jpg",
+          "image_sha256": "c2732ebe99be690389b9c8bc64388bd91e57896c3f94059796e00da712ca37be",
+          "n_positions": 0,
+          "unreadable": null,
+          "reply": "[]"
+        },
+        {
+          "msg_id": 4398,
+          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4398.jpg",
+          "image_sha256": "5101c6044cf12e777586a0ff0a511cb354e58c58ea84876a7c0ee0d702d94680",
+          "n_positions": 0,
+          "unreadable": null,
+          "reply": "[]"
+        },
+        {
+          "msg_id": 4399,
+          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4399.jpg",
+          "image_sha256": "1dbe5e6641032948c232f5f4b74f5fd27fd9f754aa8991018d407ed65d627aa2",
+          "n_positions": 0,
+          "unreadable": null,
+          "reply": "[]"
+        },
+        {
+          "msg_id": 4400,
+          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4400.jpg",
+          "image_sha256": "fa8cf66f462add6aa812504fc0d6f5eb942036f0e2843acd9a5d0f87d6492dda",
           "n_positions": 0,
           "unreadable": null,
           "reply": "[]"
@@ -2088,89 +1499,290 @@
       ]
     },
     {
-      "post": "@atb_market_official:4508",
+      "post": "@atb_market_official:4436",
       "channel": "@atb_market_official",
-      "parent_msg_id": 4508,
+      "parent_msg_id": 4436,
       "stratum": "yielded positions",
       "task": "positions_post_gm4",
       "prompt_sha256": "ca6303c157d46e707aaf3fc52c7a05ed1450e24c26db0e7c93eefba4f6968754",
       "pages": [
         {
-          "msg_id": 4508,
-          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4508.jpg",
-          "image_sha256": "713ceb7fa40f7cc110620aa04bdf7b8b0a49c70c6d502efad064db114b7267ea",
-          "n_positions": 7,
-          "unreadable": null,
-          "reply": "[\n  {\n    \"brand\": \"Ласунка\",\n    \"line\": \"Стоп-наркотик крем-брюле з маком у глазурі, ескімо\",\n    \"category\": \"ice-cream\",\n    \"size\": \"85 г\",\n    \"price_promo\": \"29,90\",\n    \"price_old\": \"55,90\",\n    \"discount_pct_printed\": \"-46%\"\n  },\n  {\n    \"brand\": \"Рудь\",\n    \"line\": \"Donut зі смаком Ваніль-полуниця, ескімо\",\n    \"category\": \"ice-cream\",\n    \"size\": \"70 г\",\n    \"price_promo\": \"21,90\",\n    \"price_old\": \"36,90\",\n    \"discount_pct_printed\": \"-40%\"\n  },\n  {\n    \"brand\": \"Рудь\",\n    \"line\": \"Donut зі смаком Банан-шоколад, ескімо\",\n    \"category\": \"ice-cream\",\n    \"size\": \"70 г\",\n    \"price_promo\": \"21,90\",\n    \"price_old\": \"36,90\",\n    \"discount_pct_printed\": \"-40%\"\n  },\n  {\n    \"brand\": \"Лімо\",\n    \"line\": \"Пломбір 1965, ескімо в шоколадній глазурі\",\n    \"category\": \"ice-cream\",\n    \"size\": \"80 г\",\n    \"price_promo\": \"24,90\",\n    \"price_old\": \"46,90\",\n    \"discount_pct_printed\": \"-46%\"\n  },\n  {\n    \"brand\": \"Лімо\",\n    \"line\": \"Пломбір 1965, ескімо в шоколадній глазурі\",\n    \"category\": \"ice-cream\",\n    \"size\": \"90 г\",\n    \"price_promo\": \"29,90\",\n    \"price_old\": \"55,90\",\n    \"discount_pct_printed\": \"-46%\"\n  },\n  {\n    \"brand\": \"Каштан\",\n    \"line\": \"Солона карамель у кондитерській глазурі\",\n    \"category\": \"ice-cream\",\n    \"size\": \"75 г\",\n    \"price_promo\": \"22,90\",\n    \"price_old\": \"41,90\",\n    \"discount_pct_printed\": \"-45%\"\n  },\n  {\n    \"brand\": \"Каштан\",\n    \"line\": \"Полуничний у білій кондитерській глазурі\",\n    \"category\": \"ice-cream\",\n    \"size\": \"75 г\",\n    \"price_promo\": \"22,90\",\n    \"price_old\": \"41,90\",\n    \"discount_pct_printed\": \"-45%\"\n  }\n]"
-        },
-        {
-          "msg_id": 4509,
-          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4509.jpg",
-          "image_sha256": "9547ccd8e03b7c3e02387690ac556f826d83b13d06d95b501570a8acd098e6ae",
+          "msg_id": 4436,
+          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4436.jpg",
+          "image_sha256": "05bf37c885091b288b39ca31f3545a6a3827f7ba96c1b7ca5cc1051182367a15",
           "n_positions": 0,
           "unreadable": null,
           "reply": "[]"
         },
         {
-          "msg_id": 4510,
-          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4510.jpg",
-          "image_sha256": "2fbdf44b48d0f7acc5e8ee3c8e5034bed031406924beceac1cf1387e14e9ec4f",
+          "msg_id": 4437,
+          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4437.jpg",
+          "image_sha256": "de6eedd7b00c89bc8d89af8624a9334ce4e5e360358d59e1424d513341a14f15",
           "n_positions": 0,
           "unreadable": null,
           "reply": "[]"
         },
         {
-          "msg_id": 4511,
-          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4511.jpg",
-          "image_sha256": "e942a20653f862cd33bc170c17c4410ff241e71fe68f7e13ee1edb406fce863f",
+          "msg_id": 4438,
+          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4438.jpg",
+          "image_sha256": "37da97d26681c527237bf840ce893f3c6dd6650a90669ed23d24e86a8d032e47",
           "n_positions": 0,
           "unreadable": null,
           "reply": "[]"
         },
         {
-          "msg_id": 4512,
-          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4512.jpg",
-          "image_sha256": "50bd1532ed77e9f2407e8b228dde4ff976dfd45a55c7dcdbc71161e840782e02",
+          "msg_id": 4439,
+          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4439.jpg",
+          "image_sha256": "0deb6c3f3517e69fba0885901b9dc0cb15469b8c5f38513e096e1b80d92550e7",
           "n_positions": 0,
           "unreadable": null,
           "reply": "[]"
         },
         {
-          "msg_id": 4513,
-          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4513.jpg",
-          "image_sha256": "4c715e2c17a72fdcef7f329cdfed81f2d5648ff9eec36a476a6f25e8e2f3f603",
+          "msg_id": 4440,
+          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4440.jpg",
+          "image_sha256": "0eb66b03ac36c6d2c87051b75b0b704032ad711529337beab3e0c1a717232ae7",
+          "n_positions": 3,
+          "unreadable": null,
+          "reply": "```json\n[\n  {\n    \"brand\": \"SOT\",\n    \"line\": \"Гауда\",\n    \"category\": \"cheese\",\n    \"size\": \"150 г\",\n    \"fat\": \"45%\",\n    \"price_promo\": \"64,50\",\n    \"price_old\": \"93\",\n    \"discount_pct_printed\": \"-31%\"\n  },\n  {\n    \"brand\": \"SOT\",\n    \"line\": \"Гауда без лактози\",\n    \"category\": \"cheese\",\n    \"size\": \"150 г\",\n    \"fat\": \"45%\",\n    \"price_promo\": \"64,50\",\n    \"price_old\": \"93\",\n    \"discount_pct_printed\": \"-31%\"\n  },\n  {\n    \"brand\": \"SOT\",\n    \"line\": \"Маасдам\",\n    \"category\": \"cheese\",\n    \"size\": \"150 г\",\n    \"fat\": \"45%\",\n    \"price_promo\": \"64,50\",\n    \"price_old\": \"93\",\n    \"discount_pct_printed\": \"-31%\"\n  }\n]\n```"
+        },
+        {
+          "msg_id": 4441,
+          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4441.jpg",
+          "image_sha256": "3380d7d0559ec9e452f201c027401f16043b24aa180df11a15062ff88395c6de",
           "n_positions": 0,
           "unreadable": null,
           "reply": "[]"
         },
         {
-          "msg_id": 4514,
-          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4514.jpg",
-          "image_sha256": "7e1867abffcea744ad935691314e17c6e2f349f7d3f562507f28be130f4819d4",
+          "msg_id": 4442,
+          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4442.jpg",
+          "image_sha256": "34171c7b5154ea2239d5c1c918dad32a578b4038a12ee93a2b1a5c2e1e02da85",
           "n_positions": 0,
           "unreadable": null,
           "reply": "[]"
         },
         {
-          "msg_id": 4515,
-          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4515.jpg",
-          "image_sha256": "2f0f01e7a2c60abf0345a3736b36c9b2bac578f23e5fa364bea48d2c191bde33",
+          "msg_id": 4443,
+          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4443.jpg",
+          "image_sha256": "48307912051a39e1b79d918c6ef3e1a23b2a024f9b532a92c442a2f9c4ef18ab",
           "n_positions": 0,
           "unreadable": null,
           "reply": "[]"
         },
         {
-          "msg_id": 4516,
-          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4516.jpg",
-          "image_sha256": "f585670a628ae88d9d5febf3fba611d28be9790a79a23e51959b81ebb651d164",
+          "msg_id": 4444,
+          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4444.jpg",
+          "image_sha256": "2b93ca81bc7d934ccee3ad6a5c8687e6ac77d4417560d8f53cf5ddd2832f278b",
           "n_positions": 0,
           "unreadable": null,
           "reply": "[]"
         },
         {
-          "msg_id": 4517,
-          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4517.jpg",
-          "image_sha256": "4c297dd91ef3fa6e67c072c52a1a64b5d326920d924410688633b140f1d4c008",
+          "msg_id": 4445,
+          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4445.jpg",
+          "image_sha256": "754f4729f0836ba84f53e790d78de8bd43e03fa64ac80385e82c4ccaf97c047a",
+          "n_positions": null,
+          "unreadable": "malformed JSON",
+          "reply": "```json\n[\n  {\n    \"brand\": \"Molendam\",\n    \"line\": \"HOLLANDER\",\n    \"category\": \"cheese\",\n    \"size\": \"70 г\",\n    \"fat\": \"38%\",\n    \"price_promo\": \"16.00\",\n    \"price_old\": \"26.00\",\n    \"discount_pct_printed\": \"-40%\"\n  },\n  {\n    \"brand\": \"Molendam\",\n    \"line\": \"JULIENNE\",\n    \"category\": \"cheese\",\n    \"size\": \"70 г\",\n    \"fat\": \"38%\",\n    \"price_promo\": \"16.00\",\n    \"price_old\": \"26.00\",\n    \"discount_pct_printed\": \"-40%\"\n  },\n  {\n    \"brand\": \"Molendam\",\n    \"line\": \"VERSHKOVY\",\n    \"category\": \"cheese\",\n    \"size\": \"70 г\",\n    \"fat\": \"40%\",\n    \"price_promo\": \"16.00\",\n    \"price_old\": \"26.00\",\n    \"discount_pct_printed\": \"-40%\"\n  },\n  {\n    \"brand\": \"ПростоНаше\",\n    \"line\": \"СМЕТАНА\",\n    \"category\": \"sour-cream\",\n    \"size\": \"300 г\",\n    \"fat\": \"15%\",\n    \"price_promo\": \"39.90\",\n    \"price_old\": \"55.00\",\n    \"discount_pct_printed\": \"-28%\"\n  },\n  {\n    \"brand\": \"Яготинський\",\n    \"line\": \"АЙРАН\",\n    \"category\": \"kefir-ryazhanka\",\n    \"size\": \"450 г\",\n    \"fat\": \"2%\",\n    \"price_promo\": \"21.50\",\n    \"price_old\": \"32.00\",\n    \"discount_pct_printed\": \"-34%\"\n  },\n  {\n    \"brand\": \"Džiugas\",\n    \"line\": \"12 міс\",\n    \"category\": \"cheese\",\n    \"size\": \"180 г\",\n    \"price_promo\": \"142.90\",\n    \"price_old\": \"199.00\",\n    \"discount_pct_printed\": \"-28%\"\n  },\n  {\n    \"brand\": \"Džiugas\",\n    \"line\": \"12 міс\",\n    \"category\": \"cheese\",\n    \"size\": \"100 г\",\n    \"fat\": \"40%\",\n    \"price_promo\": \"82.90\",\n    \"price_old\": \"115.00\",\n    \"discount_pct_printed\": \"-28%\"\n  },\n  {\n    \"brand\": \"Džiugas\",\n    \"line\": \"Fresh grated\",\n    \"category\": \"cheese\",\n    \"size\": \"100 г\",\n    \"fat\": \"40%\",\n    \"price_promo\": \"71.90\",\n    \"price_old\": \"99.00\",\n    \"discount_pct_printed\": \"-28%\"\n  },\n  {\n    \"brand\": \"Золотий резерв\",\n    \"line\": \"CHEDD\",\n    \"category\": \"cheese\",\n    \"size\": \"180 г\",\n    \"fat\": \"45%\",\n    \"price_promo\": \"55.50\",\n    \"price_old\": \"86.00\",\n    \"discount_pct_printed\": \"-36%\"\n  },\n  {\n    \"brand\": \"Золотий резерв\",\n    \"line\": \"МОЦАРЕЛА\",\n    \"category\": \"cheese\",\n    \"size\": \"180 г\",\n    \"fat\": \"45%\",\n    \"price_promo\": \"55.50\",\n    \"price_old\": \"86.00\",\n    \"discount_pct_printed\": \"-36%\"\n  },\n  {\n    \"brand\": \"Золотий резерв\",\n    \"line\": \"СУЛУГУНІ\",\n    \"category\": \"cheese\",\n    \"size\": \"180 г\",\n    \"fat\": \"45%\",\n    \"price_promo\": \"55.50\",\n    \"price_old\": \"86.00\",\n    \"discount_pct_printed\": \"-36%\"\n  },\n  {\n    \"brand\": \"Actimel\",\n    \"line\": \"солодкий\",\n    \"category\": \"dairy\",\n    \"size\": \"100 г\",\n    \"fat\": \"1,5%\",\n    \"price_promo\": \"18.30\",\n    \"price_old\": \"25.00\",\n    \"discount_pct_printed\": \"-29%\"\n  },\n  {\n    \"brand\": \"Actimel\",\n    \"line\": \"ПРОТЕЇН ДЛЯ ЖІНОК\",\n    \"category\": \"dairy\",\n    \"size"
+        }
+      ],
+      "positions": [
+        {
+          "row_id": "@atb_market_official:4440:0",
+          "page_msg_id": 4440,
+          "ordinal": 0,
+          "why_a_position": {
+            "presence": {
+              "brand": true,
+              "line": true,
+              "category": true,
+              "size": true,
+              "attribute": true
+            },
+            "values": {
+              "brand": "SOT",
+              "brand_id": null,
+              "line": "Гауда",
+              "category": "cheese",
+              "size": "150 г",
+              "attribute_pct": 45.0
+            },
+            "tier": "position",
+            "tier_re_derived": "position",
+            "ladder_key": "brand+line+category+size+attribute"
+          },
+          "price": {
+            "price_promo": 64.5,
+            "price_old": 93.0,
+            "discount_pct_printed": 31.0,
+            "discount_footnote": false,
+            "price_qualifier": "exact",
+            "price_origin": "retail_leaflet"
+          },
+          "depth": {
+            "from_printed_badge": 0.31,
+            "from_price_pair": 0.3065,
+            "printed_disagrees_with_computed": false
+          },
+          "warnings": []
+        },
+        {
+          "row_id": "@atb_market_official:4440:1",
+          "page_msg_id": 4440,
+          "ordinal": 1,
+          "why_a_position": {
+            "presence": {
+              "brand": true,
+              "line": true,
+              "category": true,
+              "size": true,
+              "attribute": true
+            },
+            "values": {
+              "brand": "SOT",
+              "brand_id": null,
+              "line": "Гауда без лактози",
+              "category": "cheese",
+              "size": "150 г",
+              "attribute_pct": 45.0
+            },
+            "tier": "position",
+            "tier_re_derived": "position",
+            "ladder_key": "brand+line+category+size+attribute"
+          },
+          "price": {
+            "price_promo": 64.5,
+            "price_old": 93.0,
+            "discount_pct_printed": 31.0,
+            "discount_footnote": false,
+            "price_qualifier": "exact",
+            "price_origin": "retail_leaflet"
+          },
+          "depth": {
+            "from_printed_badge": 0.31,
+            "from_price_pair": 0.3065,
+            "printed_disagrees_with_computed": false
+          },
+          "warnings": []
+        },
+        {
+          "row_id": "@atb_market_official:4440:2",
+          "page_msg_id": 4440,
+          "ordinal": 2,
+          "why_a_position": {
+            "presence": {
+              "brand": true,
+              "line": true,
+              "category": true,
+              "size": true,
+              "attribute": true
+            },
+            "values": {
+              "brand": "SOT",
+              "brand_id": null,
+              "line": "Маасдам",
+              "category": "cheese",
+              "size": "150 г",
+              "attribute_pct": 45.0
+            },
+            "tier": "position",
+            "tier_re_derived": "position",
+            "ladder_key": "brand+line+category+size+attribute"
+          },
+          "price": {
+            "price_promo": 64.5,
+            "price_old": 93.0,
+            "discount_pct_printed": 31.0,
+            "discount_footnote": false,
+            "price_qualifier": "exact",
+            "price_origin": "retail_leaflet"
+          },
+          "depth": {
+            "from_printed_badge": 0.31,
+            "from_price_pair": 0.3065,
+            "printed_disagrees_with_computed": false
+          },
+          "warnings": []
+        }
+      ]
+    },
+    {
+      "post": "@atb_market_official:4446",
+      "channel": "@atb_market_official",
+      "parent_msg_id": 4446,
+      "stratum": "yielded positions",
+      "task": "positions_post_gm4",
+      "prompt_sha256": "ca6303c157d46e707aaf3fc52c7a05ed1450e24c26db0e7c93eefba4f6968754",
+      "pages": [
+        {
+          "msg_id": 4446,
+          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4446.jpg",
+          "image_sha256": "2da2cef4f7a6a8c183d49258ddc5c1bfe4362f771d4b71fcd186f0c5c2f4e039",
+          "n_positions": 6,
+          "unreadable": null,
+          "reply": "[\n  {\n    \"brand\": \"Три Ведмеді\",\n    \"line\": \"Monaco\",\n    \"category\": \"ice-cream\",\n    \"size\": \"100 г\",\n    \"price_promo\": \"36,90\",\n    \"price_old\": \"68,90\",\n    \"discount_pct_printed\": \"-46%\"\n  },\n  {\n    \"brand\": \"Лімо\",\n    \"line\": \"Сиркове 1965\",\n    \"category\": \"ice-cream\",\n    \"size\": \"65 г\",\n    \"price_promo\": \"24,90\",\n    \"price_old\": \"46,90\",\n    \"discount_pct_printed\": \"-46%\"\n  },\n  {\n    \"brand\": \"Лімо\",\n    \"line\": \"Пломбір 1965\",\n    \"category\": \"ice-cream\",\n    \"size\": \"500 г\",\n    \"price_promo\": \"105,90\",\n    \"price_old\": \"196,90\",\n    \"discount_pct_printed\": \"-46%\"\n  },\n  {\n    \"brand\": \"Лімо\",\n    \"line\": \"LIMO ICE CREAM\",\n    \"category\": \"ice-cream\",\n    \"size\": \"700 г\",\n    \"price_promo\": \"114,90\",\n    \"price_old\": \"212,90\",\n    \"discount_pct_printed\": \"-46%\"\n  },\n  {\n    \"brand\": \"Рудь\",\n    \"line\": \"Соковита трилогія\",\n    \"category\": \"ice-cream\",\n    \"size\": \"6х100 г\",\n    \"price_promo\": \"88,90\",\n    \"price_old\": \"165,90\",\n    \"discount_pct_printed\": \"-46%\"\n  },\n  {\n    \"brand\": \"Рудь\",\n    \"line\": \"Black-кава\",\n    \"category\": \"ice-cream\",\n    \"size\": \"70 г\",\n    \"price_promo\": \"17,50\",\n    \"price_old\": \"32,90\",\n    \"discount_pct_printed\": \"-46%\"\n  }\n]"
+        },
+        {
+          "msg_id": 4447,
+          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4447.jpg",
+          "image_sha256": "09dfaf145ec2290001b628d2cdf5dfd7984ebe1fec792f087ec16c335d1a10f8",
+          "n_positions": 0,
+          "unreadable": null,
+          "reply": "[]"
+        },
+        {
+          "msg_id": 4448,
+          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4448.jpg",
+          "image_sha256": "a4141a2accd95a093f672111a999a3e05c9e7ba0ab72c484c38950ea3f5f9b2f",
+          "n_positions": 0,
+          "unreadable": null,
+          "reply": "[]"
+        },
+        {
+          "msg_id": 4449,
+          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4449.jpg",
+          "image_sha256": "27f774ded269a95d57c97507d0f6827eb4882a5cdddb9af06ee1ba440c8f4bf2",
+          "n_positions": 0,
+          "unreadable": null,
+          "reply": "[]"
+        },
+        {
+          "msg_id": 4450,
+          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4450.jpg",
+          "image_sha256": "45f965d35bb637f15359161e79f763078b3f3f546d13dcb5825986f0bd6a0fc4",
+          "n_positions": 0,
+          "unreadable": null,
+          "reply": "[]"
+        },
+        {
+          "msg_id": 4451,
+          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4451.jpg",
+          "image_sha256": "7ebea081687c9be6969eee97a77df77c9388d340575b2a128a0f77a88e2a91b7",
+          "n_positions": 0,
+          "unreadable": null,
+          "reply": "[]"
+        },
+        {
+          "msg_id": 4452,
+          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4452.jpg",
+          "image_sha256": "4f94b660808760b845c89a3e9d86298bf50b8a6c02f8130c9523a3d4581ddc3d",
+          "n_positions": 0,
+          "unreadable": null,
+          "reply": "[]"
+        },
+        {
+          "msg_id": 4453,
+          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4453.jpg",
+          "image_sha256": "0bc5c0e2328fc7e0f717334548bd02011c0ce1f914ed21108d233cec73207eff",
+          "n_positions": 0,
+          "unreadable": null,
+          "reply": "[]"
+        },
+        {
+          "msg_id": 4454,
+          "image_path": "data/annotation/captions_5c1/posts_media/atb_market_official_4454.jpg",
+          "image_sha256": "d1f36e2783ac1779fa66926e5c445ef698821b71825e4924c7b2a0d0d3ac9f98",
           "n_positions": 0,
           "unreadable": null,
           "reply": "[]"
@@ -2178,8 +1790,8 @@
       ],
       "positions": [
         {
-          "row_id": "@atb_market_official:4508:0",
-          "page_msg_id": 4508,
+          "row_id": "@atb_market_official:4446:0",
+          "page_msg_id": 4446,
           "ordinal": 0,
           "why_a_position": {
             "presence": {
@@ -2190,11 +1802,11 @@
               "attribute": false
             },
             "values": {
-              "brand": "Ласунка",
-              "brand_id": "lasunka",
-              "line": "Стоп-наркотик крем-брюле з маком у глазурі, ескімо",
+              "brand": "Три Ведмеді",
+              "brand_id": "try-vedmedi",
+              "line": "Monaco",
               "category": "ice-cream",
-              "size": "85 г",
+              "size": "100 г",
               "attribute_pct": null
             },
             "tier": "position",
@@ -2202,8 +1814,8 @@
             "ladder_key": "brand+line+category+size"
           },
           "price": {
-            "price_promo": 29.9,
-            "price_old": 55.9,
+            "price_promo": 36.9,
+            "price_old": 68.9,
             "discount_pct_printed": 46.0,
             "discount_footnote": false,
             "price_qualifier": "exact",
@@ -2211,93 +1823,15 @@
           },
           "depth": {
             "from_printed_badge": 0.46,
-            "from_price_pair": 0.4651,
+            "from_price_pair": 0.4644,
             "printed_disagrees_with_computed": false
           },
           "warnings": []
         },
         {
-          "row_id": "@atb_market_official:4508:1",
-          "page_msg_id": 4508,
+          "row_id": "@atb_market_official:4446:1",
+          "page_msg_id": 4446,
           "ordinal": 1,
-          "why_a_position": {
-            "presence": {
-              "brand": true,
-              "line": true,
-              "category": true,
-              "size": true,
-              "attribute": false
-            },
-            "values": {
-              "brand": "Рудь",
-              "brand_id": "rud",
-              "line": "Donut зі смаком Ваніль-полуниця, ескімо",
-              "category": "ice-cream",
-              "size": "70 г",
-              "attribute_pct": null
-            },
-            "tier": "position",
-            "tier_re_derived": "position",
-            "ladder_key": "brand+line+category+size"
-          },
-          "price": {
-            "price_promo": 21.9,
-            "price_old": 36.9,
-            "discount_pct_printed": 40.0,
-            "discount_footnote": false,
-            "price_qualifier": "exact",
-            "price_origin": "retail_leaflet"
-          },
-          "depth": {
-            "from_printed_badge": 0.4,
-            "from_price_pair": 0.4065,
-            "printed_disagrees_with_computed": false
-          },
-          "warnings": []
-        },
-        {
-          "row_id": "@atb_market_official:4508:2",
-          "page_msg_id": 4508,
-          "ordinal": 2,
-          "why_a_position": {
-            "presence": {
-              "brand": true,
-              "line": true,
-              "category": true,
-              "size": true,
-              "attribute": false
-            },
-            "values": {
-              "brand": "Рудь",
-              "brand_id": "rud",
-              "line": "Donut зі смаком Банан-шоколад, ескімо",
-              "category": "ice-cream",
-              "size": "70 г",
-              "attribute_pct": null
-            },
-            "tier": "position",
-            "tier_re_derived": "position",
-            "ladder_key": "brand+line+category+size"
-          },
-          "price": {
-            "price_promo": 21.9,
-            "price_old": 36.9,
-            "discount_pct_printed": 40.0,
-            "discount_footnote": false,
-            "price_qualifier": "exact",
-            "price_origin": "retail_leaflet"
-          },
-          "depth": {
-            "from_printed_badge": 0.4,
-            "from_price_pair": 0.4065,
-            "printed_disagrees_with_computed": false
-          },
-          "warnings": []
-        },
-        {
-          "row_id": "@atb_market_official:4508:3",
-          "page_msg_id": 4508,
-          "ordinal": 3,
           "why_a_position": {
             "presence": {
               "brand": true,
@@ -2309,9 +1843,9 @@
             "values": {
               "brand": "Лімо",
               "brand_id": "limo",
-              "line": "Пломбір 1965, ескімо в шоколадній глазурі",
+              "line": "Сиркове 1965",
               "category": "ice-cream",
-              "size": "80 г",
+              "size": "65 г",
               "attribute_pct": null
             },
             "tier": "position",
@@ -2334,9 +1868,9 @@
           "warnings": []
         },
         {
-          "row_id": "@atb_market_official:4508:4",
-          "page_msg_id": 4508,
-          "ordinal": 4,
+          "row_id": "@atb_market_official:4446:2",
+          "page_msg_id": 4446,
+          "ordinal": 2,
           "why_a_position": {
             "presence": {
               "brand": true,
@@ -2348,9 +1882,9 @@
             "values": {
               "brand": "Лімо",
               "brand_id": "limo",
-              "line": "Пломбір 1965, ескімо в шоколадній глазурі",
+              "line": "Пломбір 1965",
               "category": "ice-cream",
-              "size": "90 г",
+              "size": "500 г",
               "attribute_pct": null
             },
             "tier": "position",
@@ -2358,8 +1892,8 @@
             "ladder_key": "brand+line+category+size"
           },
           "price": {
-            "price_promo": 29.9,
-            "price_old": 55.9,
+            "price_promo": 105.9,
+            "price_old": 196.9,
             "discount_pct_printed": 46.0,
             "discount_footnote": false,
             "price_qualifier": "exact",
@@ -2367,14 +1901,94 @@
           },
           "depth": {
             "from_printed_badge": 0.46,
-            "from_price_pair": 0.4651,
+            "from_price_pair": 0.4622,
             "printed_disagrees_with_computed": false
           },
           "warnings": []
         },
         {
-          "row_id": "@atb_market_official:4508:5",
-          "page_msg_id": 4508,
+          "row_id": "@atb_market_official:4446:3",
+          "page_msg_id": 4446,
+          "ordinal": 3,
+          "why_a_position": {
+            "presence": {
+              "brand": true,
+              "line": true,
+              "category": true,
+              "size": true,
+              "attribute": false
+            },
+            "values": {
+              "brand": "Лімо",
+              "brand_id": "limo",
+              "line": "LIMO ICE CREAM",
+              "category": "ice-cream",
+              "size": "700 г",
+              "attribute_pct": null
+            },
+            "tier": "position",
+            "tier_re_derived": "position",
+            "ladder_key": "brand+line+category+size"
+          },
+          "price": {
+            "price_promo": 114.9,
+            "price_old": 212.9,
+            "discount_pct_printed": 46.0,
+            "discount_footnote": false,
+            "price_qualifier": "exact",
+            "price_origin": "retail_leaflet"
+          },
+          "depth": {
+            "from_printed_badge": 0.46,
+            "from_price_pair": 0.4603,
+            "printed_disagrees_with_computed": false
+          },
+          "warnings": []
+        },
+        {
+          "row_id": "@atb_market_official:4446:4",
+          "page_msg_id": 4446,
+          "ordinal": 4,
+          "why_a_position": {
+            "presence": {
+              "brand": true,
+              "line": true,
+              "category": true,
+              "size": true,
+              "attribute": false
+            },
+            "values": {
+              "brand": "Рудь",
+              "brand_id": "rud",
+              "line": "Соковита трилогія",
+              "category": "ice-cream",
+              "size": "6×100 г",
+              "attribute_pct": null
+            },
+            "tier": "position",
+            "tier_re_derived": "position",
+            "ladder_key": "brand+line+category+size"
+          },
+          "price": {
+            "price_promo": 88.9,
+            "price_old": 165.9,
+            "discount_pct_printed": 46.0,
+            "discount_footnote": false,
+            "price_qualifier": "exact",
+            "price_origin": "retail_leaflet"
+          },
+          "depth": {
+            "from_printed_badge": 0.46,
+            "from_price_pair": 0.4641,
+            "printed_disagrees_with_computed": false
+          },
+          "warnings": [
+            "multipack"
+          ]
+        },
+        {
+          "row_id": "@atb_market_official:4446:5",
+          "page_msg_id": 4446,
           "ordinal": 5,
           "why_a_position": {
             "presence": {
@@ -2385,11 +1999,11 @@
               "attribute": false
             },
             "values": {
-              "brand": "Каштан",
-              "brand_id": null,
-              "line": "Солона карамель у кондитерській глазурі",
+              "brand": "Рудь",
+              "brand_id": "rud",
+              "line": "Black-кава",
               "category": "ice-cream",
-              "size": "75 г",
+              "size": "70 г",
               "attribute_pct": null
             },
             "tier": "position",
@@ -2397,55 +2011,16 @@
             "ladder_key": "brand+line+category+size"
           },
           "price": {
-            "price_promo": 22.9,
-            "price_old": 41.9,
-            "discount_pct_printed": 45.0,
+            "price_promo": 17.5,
+            "price_old": 32.9,
+            "discount_pct_printed": 46.0,
             "discount_footnote": false,
             "price_qualifier": "exact",
             "price_origin": "retail_leaflet"
           },
           "depth": {
-            "from_printed_badge": 0.45,
-            "from_price_pair": 0.4535,
-            "printed_disagrees_with_computed": false
-          },
-          "warnings": []
-        },
-        {
-          "row_id": "@atb_market_official:4508:6",
-          "page_msg_id": 4508,
-          "ordinal": 6,
-          "why_a_position": {
-            "presence": {
-              "brand": true,
-              "line": true,
-              "category": true,
-              "size": true,
-              "attribute": false
-            },
-            "values": {
-              "brand": "Каштан",
-              "brand_id": null,
-              "line": "Полуничний у білій кондитерській глазурі",
-              "category": "ice-cream",
-              "size": "75 г",
-              "attribute_pct": null
-            },
-            "tier": "position",
-            "tier_re_derived": "position",
-            "ladder_key": "brand+line+category+size"
-          },
-          "price": {
-            "price_promo": 22.9,
-            "price_old": 41.9,
-            "discount_pct_printed": 45.0,
-            "discount_footnote": false,
-            "price_qualifier": "exact",
-            "price_origin": "retail_leaflet"
-          },
-          "depth": {
-            "from_printed_badge": 0.45,
-            "from_price_pair": 0.4535,
+            "from_printed_badge": 0.46,
+            "from_price_pair": 0.4681,
             "printed_disagrees_with_computed": false
           },
           "warnings": []
@@ -2530,26 +2105,28 @@
   },
   "comments": [
     {
-      "comment": "@matusi_ukr:580182",
+      "comment": "@matusi_ukr:576430",
       "channel": "@matusi_ukr",
-      "msg_id": 580182,
-      "parent_msg_id": 22312,
+      "msg_id": 576430,
+      "parent_msg_id": 22058,
       "task": "T1v2_with_post",
       "prompt_sha256": "495b43d1361d0e4f5f7a186eebb971f4dc3ed9f8afd128f539ba0f6a8ffc2a19",
       "post_state": "post_text",
-      "text": "Щодо хрпц. Я там народжувала у лікаря якого обрала. Може зараз щось змінилось. Але якщо ставати на облік то там тільки  певні лікарі до яких можна стати. Лежала в патології  відношення адекватне.",
-      "parent_post": "Добрий день! Дуже цікавлять реальні відгуки дівчат, хто нещодавно стикався з регіональним перінатальним центром (ХРПЦ на Незалежності) та міським перінатальним центром (ХМПЦ 602 м/р)🙏\nЯкщо ставати на облік, то де менші черги, чи можна записатися певний час, яке де відношення та обстеження?  В ХРПЦ не можна обрати обрати лікаря?\nДе яке відношення у відділі патології вагітності? (Була в ХМПЦ, там квест \" знайди лікаря і щось дізнайся\", але можна, щоб в палату приходили відвідувачі. А в ХРПЦ чула, що не можна, щоб відвідувачі до палати приходили, але частіше мед персонал заходить).\nІ, може хто стикався, з дитячою реанімацію та виходжуванням немовлят, які враження\n\n▫️ «Матусі України» Підписатися \n▫️ Задати питання ✍️",
+      "text": "Продам нашу улюблену шкільну форму, шили на замовлення. Гарна та оригінальна. 122р.",
+      "parent_post": "Додавайте фото/відео та короткий опис:\nщо саме, стан, ціна та місто 📍\n\n📌Правила:\n• пишемо чітко: що продаєте або шукаєте\n• вказуємо ціну або “договірна”\n• продаємо лише свої речі (від матусь)\n• ❌реклама сторінок, магазинів і будь-який бізнес — заборонені, стосовно реклами пишіть адміністратору ☝️\n• не повторюємо одне і те ж багато разів\n• дотримуємось поваги у спілкуванні 💛\n\n⚠️Важливо:\nадміністратор не несе відповідальності\nза оплату, доставку та домовленості між учасниками ❌\n\nБудьте уважні та обережні 🙏\n\n▫️«Матусі України» Телеграм\n▫️ Задати питання ✍️",
       "rendering": [
         {
           "role": "user",
-          "content": "You label one comment from a Ukrainian food-retail Telegram channel (retail chains and discount aggregators). Comments are in Ukrainian or Russian. You are given the comment and the post it replies to. Judge the comment on its own text, and read the post only when the comment is meaningless without it — a bare agreement, a participation marker, a two-word answer to a question the post asked. Never label from other comments: you cannot see them.\n\nReturn three labels.\n\nsentiment — the attitude the author expresses towards the product, the price or the retailer, not their mood.\n- \"positive\": praise, thanks, satisfaction.\n- \"negative\": complaint, disappointment, accusation.\n- \"neutral\": a question, a factual statement or a request carrying no evaluation.\nSarcasm outranks the surface wording: a sarcastic compliment is \"negative\". If praise and complaint are mixed, take the dominant one; if neither dominates, \"neutral\". For a comment that is only emoji, read the emoji when it is unambiguous.\n\nsarcasm — true when the literal reading contradicts the intended one: irony, mock praise, bitter exaggeration. It is a flag, not a sentiment: \"negative\" can carry either value. Emoji alone never decide it — the contradiction has to be in the text.\n\nintents — what the comment is about. Any subset of these six, possibly empty:\n- \"taste\": flavour, smell, texture.\n- \"price\": cost, discount, promo value — what the buyer pays. A question or a complaint about a promo mechanic — how a discount is applied, whether a giveaway is fair, what the terms say — is not \"price\", it is \"service\".\n- \"packaging\": package, volume, label, portion.\n- \"quality\": freshness, spoilage, composition, production.\n- \"availability\": presence in a store, stock, delivery of the product. The product itself, not the process around the order: a slot moved, a courier, an order that cannot be cancelled is \"service\".\n- \"service\": interaction with the retailer as a service: in-store and online service, the delivery process, the app and the checkout, the support hotline, staff, and how promos and giveaways are organised — mechanics, fairness, communication.\nThe first five are about the product and \"service\" is about the retailer; a comment can carry both. A bare participation marker under a giveaway post, an emoji-only comment, bare thanks and banter about neither the product nor the retailer carry no intent at all: return [].\n\nAnswer with one JSON object and nothing else: no explanation, no code fence.\n{\"sentiment\": \"positive|negative|neutral\", \"sarcasm\": true|false, \"intents\": [\"price\"]}\n\n<post>\nДобрий день! Дуже цікавлять реальні відгуки дівчат, хто нещодавно стикався з регіональним перінатальним центром (ХРПЦ на Незалежності) та міським перінатальним центром (ХМПЦ 602 м/р)🙏\nЯкщо ставати на облік, то де менші черги, чи можна записатися певний час, яке де відношення та обстеження?  В ХРПЦ не можна обрати обрати лікаря?\nДе яке відношення у відділі патології вагітності? (Була в ХМПЦ, там квест \" знайди лікаря і щось дізнайся\", але можна, щоб в палату приходили відвідувачі. А в ХРПЦ чула, що не можна, щоб відвідувачі до палати приходили, але частіше мед персонал заходить).\nІ, може хто стикався, з дитячою реанімацію та виходжуванням немовлят, які враження\n\n▫️ «Матусі України» Підписатися \n▫️ Задати питання ✍️\n</post>\n\n<comment>\nЩодо хрпц. Я там народжувала у лікаря якого обрала. Може зараз щось змінилось. Але якщо ставати на облік то там тільки  певні лікарі до яких можна стати. Лежала в патології  відношення адекватне.\n</comment>"
+          "content": "You label one comment from a Ukrainian food-retail Telegram channel (retail chains and discount aggregators). Comments are in Ukrainian or Russian. You are given the comment and the post it replies to. Judge the comment on its own text, and read the post only when the comment is meaningless without it — a bare agreement, a participation marker, a two-word answer to a question the post asked. Never label from other comments: you cannot see them.\n\nReturn three labels.\n\nsentiment — the attitude the author expresses towards the product, the price or the retailer, not their mood.\n- \"positive\": praise, thanks, satisfaction.\n- \"negative\": complaint, disappointment, accusation.\n- \"neutral\": a question, a factual statement or a request carrying no evaluation.\nSarcasm outranks the surface wording: a sarcastic compliment is \"negative\". If praise and complaint are mixed, take the dominant one; if neither dominates, \"neutral\". For a comment that is only emoji, read the emoji when it is unambiguous.\n\nsarcasm — true when the literal reading contradicts the intended one: irony, mock praise, bitter exaggeration. It is a flag, not a sentiment: \"negative\" can carry either value. Emoji alone never decide it — the contradiction has to be in the text.\n\nintents — what the comment is about. Any subset of these six, possibly empty:\n- \"taste\": flavour, smell, texture.\n- \"price\": cost, discount, promo value — what the buyer pays. A question or a complaint about a promo mechanic — how a discount is applied, whether a giveaway is fair, what the terms say — is not \"price\", it is \"service\".\n- \"packaging\": package, volume, label, portion.\n- \"quality\": freshness, spoilage, composition, production.\n- \"availability\": presence in a store, stock, delivery of the product. The product itself, not the process around the order: a slot moved, a courier, an order that cannot be cancelled is \"service\".\n- \"service\": interaction with the retailer as a service: in-store and online service, the delivery process, the app and the checkout, the support hotline, staff, and how promos and giveaways are organised — mechanics, fairness, communication.\nThe first five are about the product and \"service\" is about the retailer; a comment can carry both. A bare participation marker under a giveaway post, an emoji-only comment, bare thanks and banter about neither the product nor the retailer carry no intent at all: return [].\n\nAnswer with one JSON object and nothing else: no explanation, no code fence.\n{\"sentiment\": \"positive|negative|neutral\", \"sarcasm\": true|false, \"intents\": [\"price\"]}\n\n<post>\nДодавайте фото/відео та короткий опис:\nщо саме, стан, ціна та місто 📍\n\n📌Правила:\n• пишемо чітко: що продаєте або шукаєте\n• вказуємо ціну або “договірна”\n• продаємо лише свої речі (від матусь)\n• ❌реклама сторінок, магазинів і будь-який бізнес — заборонені, стосовно реклами пишіть адміністратору ☝️\n• не повторюємо одне і те ж багато разів\n• дотримуємось поваги у спілкуванні 💛\n\n⚠️Важливо:\nадміністратор не несе відповідальності\nза оплату, доставку та домовленості між учасниками ❌\n\nБудьте уважні та обережні 🙏\n\n▫️«Матусі України» Телеграм\n▫️ Задати питання ✍️\n</post>\n\n<comment>\nПродам нашу улюблену шкільну форму, шили на замовлення. Гарна та оригінальна. 122р.\n</comment>"
         }
       ],
-      "reply": "{\"sentiment\": \"neutral\", \"sarcasm\": false, \"intents\": []}",
+      "reply": "{\"sentiment\": \"neutral\", \"sarcasm\": false, \"intents\": [\"price\"]}",
       "verdicts": {
         "sentiment": "neutral",
         "sarcasm": false,
-        "intents": [],
+        "intents": [
+          "price"
+        ],
         "unreadable": null,
         "brand_attribution": {
           "matched": [],
@@ -2557,6 +2134,7 @@
         }
       },
       "language": "ua",
+      "empty_text": false,
       "aggregate": {
         "source": "results/window_summary_5c2.json",
         "channel": "@matusi_ukr",
@@ -2617,27 +2195,33 @@
             "ru": 493
           }
         },
+        "empty_text": {
+          "in_channel": 1172,
+          "in_window": 1361
+        },
         "this_row": {
           "sentiment": "neutral",
           "sarcasm": false,
-          "intents": []
+          "intents": [
+            "price"
+          ]
         }
       }
     },
     {
-      "comment": "@mandziak:48186",
+      "comment": "@mandziak:48066",
       "channel": "@mandziak",
-      "msg_id": 48186,
-      "parent_msg_id": 3704,
+      "msg_id": 48066,
+      "parent_msg_id": 3690,
       "task": "T1v2_with_post",
       "prompt_sha256": "495b43d1361d0e4f5f7a186eebb971f4dc3ed9f8afd128f539ba0f6a8ffc2a19",
       "post_state": "post_text",
-      "text": "Цікаво",
-      "parent_post": "😜-30 КГ І 3 РОКИ ЗБЕРЕЖЕННЯ РЕЗУЛЬТАТУ🔥\n\nАнтон Прудиус худнув за програмою «Наука і здоровий глузд».\nТренувався 3 р на тиждень, ну і як без солодкого – воно теж було і є в житті Антона🍩\nВін не просто схуднув, а навчився жити смачно, ситно, яскраво – і при тому залишатися у формі. Тому що у справі схуднення працюють не короткострокові дії, а зміна способу життя загалом.\n\nОсь, що каже сам учасник Антон:\n\n\"ТИ ДІЙСНО ЗМІНЮЄШ СВІЙ СПОСІБ ЖИТТЯ, ПОЧИНАЄШ ЖИТИ, ХАРЧУВАТИСЯ І ТАК ДАЛІ ПО-ІНШОМУ\"\n\n\n💪Результат, який зберігає Антон:\n✅маса тіла: -30,2 кг (102-71,8);\n✅обхват талії: -30 см (109-79);\n✅зросли фізичні якості;\n✅покращилось самопочуття та самооцінка.\nВік: 28 р | Зріст: 181 см\n\n❓Хочеш так само?\nПиши «ЦІКАВИТЬ» мені сюди @sport_food_life",
+      "text": "Пишіть сюди 👉🏻 https://t.me/sport_food_life",
+      "parent_post": "-26 кг😌\n\nВалерія не тільки схуднула, вона змінила спосіб життя. Їй смачно, вона їсть солодке, тренується вдома – словом, почувається прекрасно☺️\n\n«Я ДУЖЕ ЗАДОВОЛЕНА ЯКІСТЮ СВОГО ХАРЧУВАННЯ, ЯКІСТЮ СВОЇХ ТРЕНУВАНЬ, ЯКІСТЮ СВОГО ТІЛА СЬОГОДНІ.»\n– каже учасниця Валерія Катрук \n\n💚 13 місяців нового стилю життя\n💚-26 кг \n💚-16 см в талії\n💚 солодке і смачненьке їсть 🍰🍔\n💚 тренується вдома🏡\nВік: 39 р | Зріст: 174 см\n\n❓Хочеш так само?\nПиши «ЦІКАВИТЬ» мені сюди @sport_food_life",
       "rendering": [
         {
           "role": "user",
-          "content": "You label one comment from a Ukrainian food-retail Telegram channel (retail chains and discount aggregators). Comments are in Ukrainian or Russian. You are given the comment and the post it replies to. Judge the comment on its own text, and read the post only when the comment is meaningless without it — a bare agreement, a participation marker, a two-word answer to a question the post asked. Never label from other comments: you cannot see them.\n\nReturn three labels.\n\nsentiment — the attitude the author expresses towards the product, the price or the retailer, not their mood.\n- \"positive\": praise, thanks, satisfaction.\n- \"negative\": complaint, disappointment, accusation.\n- \"neutral\": a question, a factual statement or a request carrying no evaluation.\nSarcasm outranks the surface wording: a sarcastic compliment is \"negative\". If praise and complaint are mixed, take the dominant one; if neither dominates, \"neutral\". For a comment that is only emoji, read the emoji when it is unambiguous.\n\nsarcasm — true when the literal reading contradicts the intended one: irony, mock praise, bitter exaggeration. It is a flag, not a sentiment: \"negative\" can carry either value. Emoji alone never decide it — the contradiction has to be in the text.\n\nintents — what the comment is about. Any subset of these six, possibly empty:\n- \"taste\": flavour, smell, texture.\n- \"price\": cost, discount, promo value — what the buyer pays. A question or a complaint about a promo mechanic — how a discount is applied, whether a giveaway is fair, what the terms say — is not \"price\", it is \"service\".\n- \"packaging\": package, volume, label, portion.\n- \"quality\": freshness, spoilage, composition, production.\n- \"availability\": presence in a store, stock, delivery of the product. The product itself, not the process around the order: a slot moved, a courier, an order that cannot be cancelled is \"service\".\n- \"service\": interaction with the retailer as a service: in-store and online service, the delivery process, the app and the checkout, the support hotline, staff, and how promos and giveaways are organised — mechanics, fairness, communication.\nThe first five are about the product and \"service\" is about the retailer; a comment can carry both. A bare participation marker under a giveaway post, an emoji-only comment, bare thanks and banter about neither the product nor the retailer carry no intent at all: return [].\n\nAnswer with one JSON object and nothing else: no explanation, no code fence.\n{\"sentiment\": \"positive|negative|neutral\", \"sarcasm\": true|false, \"intents\": [\"price\"]}\n\n<post>\n😜-30 КГ І 3 РОКИ ЗБЕРЕЖЕННЯ РЕЗУЛЬТАТУ🔥\n\nАнтон Прудиус худнув за програмою «Наука і здоровий глузд».\nТренувався 3 р на тиждень, ну і як без солодкого – воно теж було і є в житті Антона🍩\nВін не просто схуднув, а навчився жити смачно, ситно, яскраво – і при тому залишатися у формі. Тому що у справі схуднення працюють не короткострокові дії, а зміна способу життя загалом.\n\nОсь, що каже сам учасник Антон:\n\n\"ТИ ДІЙСНО ЗМІНЮЄШ СВІЙ СПОСІБ ЖИТТЯ, ПОЧИНАЄШ ЖИТИ, ХАРЧУВАТИСЯ І ТАК ДАЛІ ПО-ІНШОМУ\"\n\n\n💪Результат, який зберігає Антон:\n✅маса тіла: -30,2 кг (102-71,8);\n✅обхват талії: -30 см (109-79);\n✅зросли фізичні якості;\n✅покращилось самопочуття та самооцінка.\nВік: 28 р | Зріст: 181 см\n\n❓Хочеш так само?\nПиши «ЦІКАВИТЬ» мені сюди @sport_food_life\n</post>\n\n<comment>\nЦікаво\n</comment>"
+          "content": "You label one comment from a Ukrainian food-retail Telegram channel (retail chains and discount aggregators). Comments are in Ukrainian or Russian. You are given the comment and the post it replies to. Judge the comment on its own text, and read the post only when the comment is meaningless without it — a bare agreement, a participation marker, a two-word answer to a question the post asked. Never label from other comments: you cannot see them.\n\nReturn three labels.\n\nsentiment — the attitude the author expresses towards the product, the price or the retailer, not their mood.\n- \"positive\": praise, thanks, satisfaction.\n- \"negative\": complaint, disappointment, accusation.\n- \"neutral\": a question, a factual statement or a request carrying no evaluation.\nSarcasm outranks the surface wording: a sarcastic compliment is \"negative\". If praise and complaint are mixed, take the dominant one; if neither dominates, \"neutral\". For a comment that is only emoji, read the emoji when it is unambiguous.\n\nsarcasm — true when the literal reading contradicts the intended one: irony, mock praise, bitter exaggeration. It is a flag, not a sentiment: \"negative\" can carry either value. Emoji alone never decide it — the contradiction has to be in the text.\n\nintents — what the comment is about. Any subset of these six, possibly empty:\n- \"taste\": flavour, smell, texture.\n- \"price\": cost, discount, promo value — what the buyer pays. A question or a complaint about a promo mechanic — how a discount is applied, whether a giveaway is fair, what the terms say — is not \"price\", it is \"service\".\n- \"packaging\": package, volume, label, portion.\n- \"quality\": freshness, spoilage, composition, production.\n- \"availability\": presence in a store, stock, delivery of the product. The product itself, not the process around the order: a slot moved, a courier, an order that cannot be cancelled is \"service\".\n- \"service\": interaction with the retailer as a service: in-store and online service, the delivery process, the app and the checkout, the support hotline, staff, and how promos and giveaways are organised — mechanics, fairness, communication.\nThe first five are about the product and \"service\" is about the retailer; a comment can carry both. A bare participation marker under a giveaway post, an emoji-only comment, bare thanks and banter about neither the product nor the retailer carry no intent at all: return [].\n\nAnswer with one JSON object and nothing else: no explanation, no code fence.\n{\"sentiment\": \"positive|negative|neutral\", \"sarcasm\": true|false, \"intents\": [\"price\"]}\n\n<post>\n-26 кг😌\n\nВалерія не тільки схуднула, вона змінила спосіб життя. Їй смачно, вона їсть солодке, тренується вдома – словом, почувається прекрасно☺️\n\n«Я ДУЖЕ ЗАДОВОЛЕНА ЯКІСТЮ СВОГО ХАРЧУВАННЯ, ЯКІСТЮ СВОЇХ ТРЕНУВАНЬ, ЯКІСТЮ СВОГО ТІЛА СЬОГОДНІ.»\n– каже учасниця Валерія Катрук \n\n💚 13 місяців нового стилю життя\n💚-26 кг \n💚-16 см в талії\n💚 солодке і смачненьке їсть 🍰🍔\n💚 тренується вдома🏡\nВік: 39 р | Зріст: 174 см\n\n❓Хочеш так само?\nПиши «ЦІКАВИТЬ» мені сюди @sport_food_life\n</post>\n\n<comment>\nПишіть сюди 👉🏻 https://t.me/sport_food_life\n</comment>"
         }
       ],
       "reply": "{\"sentiment\": \"neutral\", \"sarcasm\": false, \"intents\": []}",
@@ -2652,6 +2236,7 @@
         }
       },
       "language": "ua",
+      "empty_text": false,
       "aggregate": {
         "source": "results/window_summary_5c2.json",
         "channel": "@mandziak",
@@ -2711,6 +2296,10 @@
             "ru": 493
           }
         },
+        "empty_text": {
+          "in_channel": 17,
+          "in_window": 1361
+        },
         "this_row": {
           "sentiment": "neutral",
           "sarcasm": false,
@@ -2719,28 +2308,27 @@
       }
     },
     {
-      "comment": "@VARUS_channel:21270",
+      "comment": "@VARUS_channel:21629",
       "channel": "@VARUS_channel",
-      "msg_id": 21270,
-      "parent_msg_id": 10469,
+      "msg_id": 21629,
+      "parent_msg_id": 10613,
       "task": "T1v2_with_post",
       "prompt_sha256": "495b43d1361d0e4f5f7a186eebb971f4dc3ed9f8afd128f539ba0f6a8ffc2a19",
       "post_state": "post_text",
-      "text": "Это как с киевским , оно уже 2 недели по акции 45 грн но в наличии нет, акция пройдет и пиво появится",
-      "parent_post": "🔸Пиво Корифей ТМ Опілля",
+      "text": "Беремо завжди ось це-дуже смачне,навіть смачніссімо🥰🥰🥰",
+      "parent_post": "До Дня морозива хочеться лише одного — побільше улюблених смаків! 🍦\n\nУ VARUS зібрали все, що зробить ваш літній десерт ще смачнішим.\n\n🔸Морозиво йогурт-малина-лимон з вибуховою карамеллю ТМ Лімо\n🔸Морозиво ванільне без цукру ТМ Рудь\n🔸Морозиво ТМ Три Ведмеді\n🔸Морозиво брикет ТМ Рудь\n🔸Морозиво Київський Торт ТМ Хрещатик\n🔸Морозиво Дубай Катаіфі ТМ Лімо\n\nОбирайте морозиво до смаку, додавайте улюблені топінги чи горіхову пасту та насолоджуйтеся кожною літньою миттю разом із VARUS ☀️\n\nАкційні ціни діють з 23.07 до 29.07. Не пропустіть можливість придбати свої літні фаворити!",
       "rendering": [
         {
           "role": "user",
-          "content": "You label one comment from a Ukrainian food-retail Telegram channel (retail chains and discount aggregators). Comments are in Ukrainian or Russian. You are given the comment and the post it replies to. Judge the comment on its own text, and read the post only when the comment is meaningless without it — a bare agreement, a participation marker, a two-word answer to a question the post asked. Never label from other comments: you cannot see them.\n\nReturn three labels.\n\nsentiment — the attitude the author expresses towards the product, the price or the retailer, not their mood.\n- \"positive\": praise, thanks, satisfaction.\n- \"negative\": complaint, disappointment, accusation.\n- \"neutral\": a question, a factual statement or a request carrying no evaluation.\nSarcasm outranks the surface wording: a sarcastic compliment is \"negative\". If praise and complaint are mixed, take the dominant one; if neither dominates, \"neutral\". For a comment that is only emoji, read the emoji when it is unambiguous.\n\nsarcasm — true when the literal reading contradicts the intended one: irony, mock praise, bitter exaggeration. It is a flag, not a sentiment: \"negative\" can carry either value. Emoji alone never decide it — the contradiction has to be in the text.\n\nintents — what the comment is about. Any subset of these six, possibly empty:\n- \"taste\": flavour, smell, texture.\n- \"price\": cost, discount, promo value — what the buyer pays. A question or a complaint about a promo mechanic — how a discount is applied, whether a giveaway is fair, what the terms say — is not \"price\", it is \"service\".\n- \"packaging\": package, volume, label, portion.\n- \"quality\": freshness, spoilage, composition, production.\n- \"availability\": presence in a store, stock, delivery of the product. The product itself, not the process around the order: a slot moved, a courier, an order that cannot be cancelled is \"service\".\n- \"service\": interaction with the retailer as a service: in-store and online service, the delivery process, the app and the checkout, the support hotline, staff, and how promos and giveaways are organised — mechanics, fairness, communication.\nThe first five are about the product and \"service\" is about the retailer; a comment can carry both. A bare participation marker under a giveaway post, an emoji-only comment, bare thanks and banter about neither the product nor the retailer carry no intent at all: return [].\n\nAnswer with one JSON object and nothing else: no explanation, no code fence.\n{\"sentiment\": \"positive|negative|neutral\", \"sarcasm\": true|false, \"intents\": [\"price\"]}\n\n<post>\n🔸Пиво Корифей ТМ Опілля\n</post>\n\n<comment>\nЭто как с киевским , оно уже 2 недели по акции 45 грн но в наличии нет, акция пройдет и пиво появится\n</comment>"
+          "content": "You label one comment from a Ukrainian food-retail Telegram channel (retail chains and discount aggregators). Comments are in Ukrainian or Russian. You are given the comment and the post it replies to. Judge the comment on its own text, and read the post only when the comment is meaningless without it — a bare agreement, a participation marker, a two-word answer to a question the post asked. Never label from other comments: you cannot see them.\n\nReturn three labels.\n\nsentiment — the attitude the author expresses towards the product, the price or the retailer, not their mood.\n- \"positive\": praise, thanks, satisfaction.\n- \"negative\": complaint, disappointment, accusation.\n- \"neutral\": a question, a factual statement or a request carrying no evaluation.\nSarcasm outranks the surface wording: a sarcastic compliment is \"negative\". If praise and complaint are mixed, take the dominant one; if neither dominates, \"neutral\". For a comment that is only emoji, read the emoji when it is unambiguous.\n\nsarcasm — true when the literal reading contradicts the intended one: irony, mock praise, bitter exaggeration. It is a flag, not a sentiment: \"negative\" can carry either value. Emoji alone never decide it — the contradiction has to be in the text.\n\nintents — what the comment is about. Any subset of these six, possibly empty:\n- \"taste\": flavour, smell, texture.\n- \"price\": cost, discount, promo value — what the buyer pays. A question or a complaint about a promo mechanic — how a discount is applied, whether a giveaway is fair, what the terms say — is not \"price\", it is \"service\".\n- \"packaging\": package, volume, label, portion.\n- \"quality\": freshness, spoilage, composition, production.\n- \"availability\": presence in a store, stock, delivery of the product. The product itself, not the process around the order: a slot moved, a courier, an order that cannot be cancelled is \"service\".\n- \"service\": interaction with the retailer as a service: in-store and online service, the delivery process, the app and the checkout, the support hotline, staff, and how promos and giveaways are organised — mechanics, fairness, communication.\nThe first five are about the product and \"service\" is about the retailer; a comment can carry both. A bare participation marker under a giveaway post, an emoji-only comment, bare thanks and banter about neither the product nor the retailer carry no intent at all: return [].\n\nAnswer with one JSON object and nothing else: no explanation, no code fence.\n{\"sentiment\": \"positive|negative|neutral\", \"sarcasm\": true|false, \"intents\": [\"price\"]}\n\n<post>\nДо Дня морозива хочеться лише одного — побільше улюблених смаків! 🍦\n\nУ VARUS зібрали все, що зробить ваш літній десерт ще смачнішим.\n\n🔸Морозиво йогурт-малина-лимон з вибуховою карамеллю ТМ Лімо\n🔸Морозиво ванільне без цукру ТМ Рудь\n🔸Морозиво ТМ Три Ведмеді\n🔸Морозиво брикет ТМ Рудь\n🔸Морозиво Київський Торт ТМ Хрещатик\n🔸Морозиво Дубай Катаіфі ТМ Лімо\n\nОбирайте морозиво до смаку, додавайте улюблені топінги чи горіхову пасту та насолоджуйтеся кожною літньою миттю разом із VARUS ☀️\n\nАкційні ціни діють з 23.07 до 29.07. Не пропустіть можливість придбати свої літні фаворити!\n</post>\n\n<comment>\nБеремо завжди ось це-дуже смачне,навіть смачніссімо🥰🥰🥰\n</comment>"
         }
       ],
-      "reply": "{\"sentiment\": \"negative\", \"sarcasm\": true, \"intents\": [\"availability\", \"price\"]}",
+      "reply": "{\"sentiment\": \"positive\", \"sarcasm\": false, \"intents\": [\"taste\"]}",
       "verdicts": {
-        "sentiment": "negative",
-        "sarcasm": true,
+        "sentiment": "positive",
+        "sarcasm": false,
         "intents": [
-          "availability",
-          "price"
+          "taste"
         ],
         "unreadable": null,
         "brand_attribution": {
@@ -2748,7 +2336,8 @@
           "law": "laws.brand_attribution"
         }
       },
-      "language": "ru",
+      "language": "ua",
+      "empty_text": false,
       "aggregate": {
         "source": "results/window_summary_5c2.json",
         "channel": "@VARUS_channel",
@@ -2808,30 +2397,33 @@
             "ru": 493
           }
         },
+        "empty_text": {
+          "in_channel": 8,
+          "in_window": 1361
+        },
         "this_row": {
-          "sentiment": "negative",
-          "sarcasm": true,
+          "sentiment": "positive",
+          "sarcasm": false,
           "intents": [
-            "availability",
-            "price"
+            "taste"
           ]
         }
       }
     },
     {
-      "comment": "@kopiyochka1:392342",
+      "comment": "@kopiyochka1:392092",
       "channel": "@kopiyochka1",
-      "msg_id": 392342,
-      "parent_msg_id": 21963,
+      "msg_id": 392092,
+      "parent_msg_id": 21859,
       "task": "T1v2_with_post",
       "prompt_sha256": "495b43d1361d0e4f5f7a186eebb971f4dc3ed9f8afd128f539ba0f6a8ffc2a19",
       "post_state": "post_text",
-      "text": "Хахахахахаахаз що це??",
-      "parent_post": "Коірййочпєаа",
+      "text": "",
+      "parent_post": "День народження проходить, а вигода у Копійочка продовжується 🔥\n\nЗ 27 липня по 2 серпня шукай у всіх крамницях мережі новеньку ⚪️⚪️⚪️⚪️ ціну — знижки які точно не захочеться пропустити 🤩\n\nЛови перелік:\n✔️ -40% на зубну нитку Oral-B\n✔️ -30% на гель для душу Tesori \n✔️ -25% на кришки для консервації Панночка\n\nЩе більше імбових пропозицій ти знайдеш на нашому сайті 👉 https://www.kopiyochka.ua/",
       "rendering": [
         {
           "role": "user",
-          "content": "You label one comment from a Ukrainian food-retail Telegram channel (retail chains and discount aggregators). Comments are in Ukrainian or Russian. You are given the comment and the post it replies to. Judge the comment on its own text, and read the post only when the comment is meaningless without it — a bare agreement, a participation marker, a two-word answer to a question the post asked. Never label from other comments: you cannot see them.\n\nReturn three labels.\n\nsentiment — the attitude the author expresses towards the product, the price or the retailer, not their mood.\n- \"positive\": praise, thanks, satisfaction.\n- \"negative\": complaint, disappointment, accusation.\n- \"neutral\": a question, a factual statement or a request carrying no evaluation.\nSarcasm outranks the surface wording: a sarcastic compliment is \"negative\". If praise and complaint are mixed, take the dominant one; if neither dominates, \"neutral\". For a comment that is only emoji, read the emoji when it is unambiguous.\n\nsarcasm — true when the literal reading contradicts the intended one: irony, mock praise, bitter exaggeration. It is a flag, not a sentiment: \"negative\" can carry either value. Emoji alone never decide it — the contradiction has to be in the text.\n\nintents — what the comment is about. Any subset of these six, possibly empty:\n- \"taste\": flavour, smell, texture.\n- \"price\": cost, discount, promo value — what the buyer pays. A question or a complaint about a promo mechanic — how a discount is applied, whether a giveaway is fair, what the terms say — is not \"price\", it is \"service\".\n- \"packaging\": package, volume, label, portion.\n- \"quality\": freshness, spoilage, composition, production.\n- \"availability\": presence in a store, stock, delivery of the product. The product itself, not the process around the order: a slot moved, a courier, an order that cannot be cancelled is \"service\".\n- \"service\": interaction with the retailer as a service: in-store and online service, the delivery process, the app and the checkout, the support hotline, staff, and how promos and giveaways are organised — mechanics, fairness, communication.\nThe first five are about the product and \"service\" is about the retailer; a comment can carry both. A bare participation marker under a giveaway post, an emoji-only comment, bare thanks and banter about neither the product nor the retailer carry no intent at all: return [].\n\nAnswer with one JSON object and nothing else: no explanation, no code fence.\n{\"sentiment\": \"positive|negative|neutral\", \"sarcasm\": true|false, \"intents\": [\"price\"]}\n\n<post>\nКоірййочпєаа\n</post>\n\n<comment>\nХахахахахаахаз що це??\n</comment>"
+          "content": "You label one comment from a Ukrainian food-retail Telegram channel (retail chains and discount aggregators). Comments are in Ukrainian or Russian. You are given the comment and the post it replies to. Judge the comment on its own text, and read the post only when the comment is meaningless without it — a bare agreement, a participation marker, a two-word answer to a question the post asked. Never label from other comments: you cannot see them.\n\nReturn three labels.\n\nsentiment — the attitude the author expresses towards the product, the price or the retailer, not their mood.\n- \"positive\": praise, thanks, satisfaction.\n- \"negative\": complaint, disappointment, accusation.\n- \"neutral\": a question, a factual statement or a request carrying no evaluation.\nSarcasm outranks the surface wording: a sarcastic compliment is \"negative\". If praise and complaint are mixed, take the dominant one; if neither dominates, \"neutral\". For a comment that is only emoji, read the emoji when it is unambiguous.\n\nsarcasm — true when the literal reading contradicts the intended one: irony, mock praise, bitter exaggeration. It is a flag, not a sentiment: \"negative\" can carry either value. Emoji alone never decide it — the contradiction has to be in the text.\n\nintents — what the comment is about. Any subset of these six, possibly empty:\n- \"taste\": flavour, smell, texture.\n- \"price\": cost, discount, promo value — what the buyer pays. A question or a complaint about a promo mechanic — how a discount is applied, whether a giveaway is fair, what the terms say — is not \"price\", it is \"service\".\n- \"packaging\": package, volume, label, portion.\n- \"quality\": freshness, spoilage, composition, production.\n- \"availability\": presence in a store, stock, delivery of the product. The product itself, not the process around the order: a slot moved, a courier, an order that cannot be cancelled is \"service\".\n- \"service\": interaction with the retailer as a service: in-store and online service, the delivery process, the app and the checkout, the support hotline, staff, and how promos and giveaways are organised — mechanics, fairness, communication.\nThe first five are about the product and \"service\" is about the retailer; a comment can carry both. A bare participation marker under a giveaway post, an emoji-only comment, bare thanks and banter about neither the product nor the retailer carry no intent at all: return [].\n\nAnswer with one JSON object and nothing else: no explanation, no code fence.\n{\"sentiment\": \"positive|negative|neutral\", \"sarcasm\": true|false, \"intents\": [\"price\"]}\n\n<post>\nДень народження проходить, а вигода у Копійочка продовжується 🔥\n\nЗ 27 липня по 2 серпня шукай у всіх крамницях мережі новеньку ⚪️⚪️⚪️⚪️ ціну — знижки які точно не захочеться пропустити 🤩\n\nЛови перелік:\n✔️ -40% на зубну нитку Oral-B\n✔️ -30% на гель для душу Tesori \n✔️ -25% на кришки для консервації Панночка\n\nЩе більше імбових пропозицій ти знайдеш на нашому сайті 👉 https://www.kopiyochka.ua/\n</post>\n\n<comment>\n\n</comment>"
         }
       ],
       "reply": "{\"sentiment\": \"neutral\", \"sarcasm\": false, \"intents\": []}",
@@ -2845,7 +2437,8 @@
           "law": "laws.brand_attribution"
         }
       },
-      "language": "ua",
+      "language": "other",
+      "empty_text": true,
       "aggregate": {
         "source": "results/window_summary_5c2.json",
         "channel": "@kopiyochka1",
@@ -2904,6 +2497,10 @@
             "ru": 493
           }
         },
+        "empty_text": {
+          "in_channel": 14,
+          "in_window": 1361
+        },
         "this_row": {
           "sentiment": "neutral",
           "sarcasm": false,
@@ -2912,33 +2509,36 @@
       }
     },
     {
-      "comment": "@klopotenkofood:21280",
+      "comment": "@klopotenkofood:21239",
       "channel": "@klopotenkofood",
-      "msg_id": 21280,
+      "msg_id": 21239,
       "parent_msg_id": 6040,
       "task": "T1v2_with_post",
       "prompt_sha256": "495b43d1361d0e4f5f7a186eebb971f4dc3ed9f8afd128f539ba0f6a8ffc2a19",
       "post_state": "post_text",
-      "text": "ой кайф!",
+      "text": "Фаршировані перші\nЗелений борщ з морською капустою",
       "parent_post": "Що плануєте готувати, робити на вихідних?)",
       "rendering": [
         {
           "role": "user",
-          "content": "You label one comment from a Ukrainian food-retail Telegram channel (retail chains and discount aggregators). Comments are in Ukrainian or Russian. You are given the comment and the post it replies to. Judge the comment on its own text, and read the post only when the comment is meaningless without it — a bare agreement, a participation marker, a two-word answer to a question the post asked. Never label from other comments: you cannot see them.\n\nReturn three labels.\n\nsentiment — the attitude the author expresses towards the product, the price or the retailer, not their mood.\n- \"positive\": praise, thanks, satisfaction.\n- \"negative\": complaint, disappointment, accusation.\n- \"neutral\": a question, a factual statement or a request carrying no evaluation.\nSarcasm outranks the surface wording: a sarcastic compliment is \"negative\". If praise and complaint are mixed, take the dominant one; if neither dominates, \"neutral\". For a comment that is only emoji, read the emoji when it is unambiguous.\n\nsarcasm — true when the literal reading contradicts the intended one: irony, mock praise, bitter exaggeration. It is a flag, not a sentiment: \"negative\" can carry either value. Emoji alone never decide it — the contradiction has to be in the text.\n\nintents — what the comment is about. Any subset of these six, possibly empty:\n- \"taste\": flavour, smell, texture.\n- \"price\": cost, discount, promo value — what the buyer pays. A question or a complaint about a promo mechanic — how a discount is applied, whether a giveaway is fair, what the terms say — is not \"price\", it is \"service\".\n- \"packaging\": package, volume, label, portion.\n- \"quality\": freshness, spoilage, composition, production.\n- \"availability\": presence in a store, stock, delivery of the product. The product itself, not the process around the order: a slot moved, a courier, an order that cannot be cancelled is \"service\".\n- \"service\": interaction with the retailer as a service: in-store and online service, the delivery process, the app and the checkout, the support hotline, staff, and how promos and giveaways are organised — mechanics, fairness, communication.\nThe first five are about the product and \"service\" is about the retailer; a comment can carry both. A bare participation marker under a giveaway post, an emoji-only comment, bare thanks and banter about neither the product nor the retailer carry no intent at all: return [].\n\nAnswer with one JSON object and nothing else: no explanation, no code fence.\n{\"sentiment\": \"positive|negative|neutral\", \"sarcasm\": true|false, \"intents\": [\"price\"]}\n\n<post>\nЩо плануєте готувати, робити на вихідних?)\n</post>\n\n<comment>\nой кайф!\n</comment>"
+          "content": "You label one comment from a Ukrainian food-retail Telegram channel (retail chains and discount aggregators). Comments are in Ukrainian or Russian. You are given the comment and the post it replies to. Judge the comment on its own text, and read the post only when the comment is meaningless without it — a bare agreement, a participation marker, a two-word answer to a question the post asked. Never label from other comments: you cannot see them.\n\nReturn three labels.\n\nsentiment — the attitude the author expresses towards the product, the price or the retailer, not their mood.\n- \"positive\": praise, thanks, satisfaction.\n- \"negative\": complaint, disappointment, accusation.\n- \"neutral\": a question, a factual statement or a request carrying no evaluation.\nSarcasm outranks the surface wording: a sarcastic compliment is \"negative\". If praise and complaint are mixed, take the dominant one; if neither dominates, \"neutral\". For a comment that is only emoji, read the emoji when it is unambiguous.\n\nsarcasm — true when the literal reading contradicts the intended one: irony, mock praise, bitter exaggeration. It is a flag, not a sentiment: \"negative\" can carry either value. Emoji alone never decide it — the contradiction has to be in the text.\n\nintents — what the comment is about. Any subset of these six, possibly empty:\n- \"taste\": flavour, smell, texture.\n- \"price\": cost, discount, promo value — what the buyer pays. A question or a complaint about a promo mechanic — how a discount is applied, whether a giveaway is fair, what the terms say — is not \"price\", it is \"service\".\n- \"packaging\": package, volume, label, portion.\n- \"quality\": freshness, spoilage, composition, production.\n- \"availability\": presence in a store, stock, delivery of the product. The product itself, not the process around the order: a slot moved, a courier, an order that cannot be cancelled is \"service\".\n- \"service\": interaction with the retailer as a service: in-store and online service, the delivery process, the app and the checkout, the support hotline, staff, and how promos and giveaways are organised — mechanics, fairness, communication.\nThe first five are about the product and \"service\" is about the retailer; a comment can carry both. A bare participation marker under a giveaway post, an emoji-only comment, bare thanks and banter about neither the product nor the retailer carry no intent at all: return [].\n\nAnswer with one JSON object and nothing else: no explanation, no code fence.\n{\"sentiment\": \"positive|negative|neutral\", \"sarcasm\": true|false, \"intents\": [\"price\"]}\n\n<post>\nЩо плануєте готувати, робити на вихідних?)\n</post>\n\n<comment>\nФаршировані перші\nЗелений борщ з морською капустою\n</comment>"
         }
       ],
-      "reply": "{\"sentiment\": \"positive\", \"sarcasm\": false, \"intents\": []}",
+      "reply": "{\"sentiment\": \"neutral\", \"sarcasm\": false, \"intents\": [\"taste\"]}",
       "verdicts": {
-        "sentiment": "positive",
+        "sentiment": "neutral",
         "sarcasm": false,
-        "intents": [],
+        "intents": [
+          "taste"
+        ],
         "unreadable": null,
         "brand_attribution": {
           "matched": [],
           "law": "laws.brand_attribution"
         }
       },
-      "language": "other",
+      "language": "ua",
+      "empty_text": false,
       "aggregate": {
         "source": "results/window_summary_5c2.json",
         "channel": "@klopotenkofood",
@@ -2997,10 +2597,16 @@
             "ru": 493
           }
         },
+        "empty_text": {
+          "in_channel": 10,
+          "in_window": 1361
+        },
         "this_row": {
-          "sentiment": "positive",
+          "sentiment": "neutral",
           "sarcasm": false,
-          "intents": []
+          "intents": [
+            "taste"
+          ]
         }
       }
     }
@@ -3015,15 +2621,11 @@
         "verdict": "",
         "note": ""
       },
-      "@atb_market_official:4350": {
-        "verdict": "",
-        "note": ""
-      },
       "@atb_market_official:4370": {
         "verdict": "",
         "note": ""
       },
-      "@atb_market_official:4377": {
+      "@atb_market_official:4391": {
         "verdict": "",
         "note": ""
       },
@@ -3031,7 +2633,11 @@
         "verdict": "",
         "note": ""
       },
-      "@atb_market_official:4508": {
+      "@atb_market_official:4436": {
+        "verdict": "",
+        "note": ""
+      },
+      "@atb_market_official:4446": {
         "verdict": "",
         "note": ""
       }
@@ -3066,62 +2672,6 @@
         "note": ""
       },
       "@atb_market_official:4344:1": {
-        "verdict": "",
-        "note": ""
-      },
-      "@atb_market_official:4350:0": {
-        "verdict": "",
-        "note": ""
-      },
-      "@atb_market_official:4350:1": {
-        "verdict": "",
-        "note": ""
-      },
-      "@atb_market_official:4352:0": {
-        "verdict": "",
-        "note": ""
-      },
-      "@atb_market_official:4352:1": {
-        "verdict": "",
-        "note": ""
-      },
-      "@atb_market_official:4358:0": {
-        "verdict": "",
-        "note": ""
-      },
-      "@atb_market_official:4358:1": {
-        "verdict": "",
-        "note": ""
-      },
-      "@atb_market_official:4358:2": {
-        "verdict": "",
-        "note": ""
-      },
-      "@atb_market_official:4359:0": {
-        "verdict": "",
-        "note": ""
-      },
-      "@atb_market_official:4359:1": {
-        "verdict": "",
-        "note": ""
-      },
-      "@atb_market_official:4359:2": {
-        "verdict": "",
-        "note": ""
-      },
-      "@atb_market_official:4359:3": {
-        "verdict": "",
-        "note": ""
-      },
-      "@atb_market_official:4359:4": {
-        "verdict": "",
-        "note": ""
-      },
-      "@atb_market_official:4359:5": {
-        "verdict": "",
-        "note": ""
-      },
-      "@atb_market_official:4359:6": {
         "verdict": "",
         "note": ""
       },
@@ -3201,53 +2751,61 @@
         "verdict": "",
         "note": ""
       },
-      "@atb_market_official:4508:0": {
+      "@atb_market_official:4440:0": {
         "verdict": "",
         "note": ""
       },
-      "@atb_market_official:4508:1": {
+      "@atb_market_official:4440:1": {
         "verdict": "",
         "note": ""
       },
-      "@atb_market_official:4508:2": {
+      "@atb_market_official:4440:2": {
         "verdict": "",
         "note": ""
       },
-      "@atb_market_official:4508:3": {
+      "@atb_market_official:4446:0": {
         "verdict": "",
         "note": ""
       },
-      "@atb_market_official:4508:4": {
+      "@atb_market_official:4446:1": {
         "verdict": "",
         "note": ""
       },
-      "@atb_market_official:4508:5": {
+      "@atb_market_official:4446:2": {
         "verdict": "",
         "note": ""
       },
-      "@atb_market_official:4508:6": {
+      "@atb_market_official:4446:3": {
+        "verdict": "",
+        "note": ""
+      },
+      "@atb_market_official:4446:4": {
+        "verdict": "",
+        "note": ""
+      },
+      "@atb_market_official:4446:5": {
         "verdict": "",
         "note": ""
       }
     },
     "comments": {
-      "@matusi_ukr:580182": {
+      "@matusi_ukr:576430": {
         "verdict": "",
         "note": ""
       },
-      "@mandziak:48186": {
+      "@mandziak:48066": {
         "verdict": "",
         "note": ""
       },
-      "@VARUS_channel:21270": {
+      "@VARUS_channel:21629": {
         "verdict": "",
         "note": ""
       },
-      "@kopiyochka1:392342": {
+      "@kopiyochka1:392092": {
         "verdict": "",
         "note": ""
       },
-      "@klopotenkofood:21280": {
+      "@klopotenkofood:21239": {
         "verdict": "",
         "note": ""
       }
@@ -3261,18 +2819,18 @@
     "data/derived/inferences/matusi_ukr.jsonl": "c481f4671ef8ff8fbc5cc5838aa3834020b8449c0aa0ea0c1dfe89849241bf7e",
     "data/derived/leaflet_pages/atb_market_official.jsonl": "bea5d157ec7ec236e9a0d902cb9a2a10c852910776613bba0b3258b4339d62a5",
     "data/derived/position_rows/atb_market_official.jsonl": "7fe52e2d36ce16249d6ecfc14ab5dd00f8e154e7cc46eaa146731c3b8bd1cd30",
-    "results/window_summary_5c2.json": "b6d043833f430a6de37361a933dbd6912ae474ba31c6fd73acf8345494c759ac"
+    "results/window_summary_5c2.json": "7760d32d0ffec80cc73d6ebb27e464ab5b906ed9eda00ea0aa8d15b90ae7561c"
   },
   "producer": {
     "script": "scripts/build_validate_pack.py",
-    "sha256": "4ef975854729d1661d6b144cceafcee8b1768c16af3a08f25daa3168a6f69d2d",
+    "sha256": "2cdd4d4005a94bb208adda20f73f870a2595aba831808b4d886466a8d0d83946",
     "borrowed": {
       "src/market_pulse/prompts.py": "de767900a1ea578ea7b48bdb0dcc497c9f023e466a09ae0b6100d60371fdc3ab",
       "src/market_pulse/langid.py": "65c9ba294c846b8574387d1893826313e9649282f7fd8581d04354ea6cc9a2de",
       "src/market_pulse/brands.py": "fa92ccca81c91603fe242e74226a3f5370ae8e6ce4486affee9cb953448e9721",
       "src/market_pulse/positions.py": "0b058e80024401d589653f4f810c4a4a56eba8e6c0b563deae24cdd0c777837e",
       "src/market_pulse/loop.py": "1e07e44cd8f67269d1085ceff58688858536e0bd6247523c90f605f5377c0445",
-      "scripts/window_summary_5c2.py": "a1239b5119956557a5caa41162f37518a5207c9268d43e3414a7a8fa537dcf79"
+      "scripts/window_summary_5c2.py": "873f73b71063d6430d1d2c5df05cbbf5cbb2456d7d38f4bb7d4a60563751573a"
     }
   }
 }

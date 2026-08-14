@@ -23,6 +23,11 @@
         "rows": 0,
         "reasons": {}
       },
+      "empty_text": {
+        "rows": 1361,
+        "reading": "rows whose `<comment>` block was EMPTY when it was sent — a sticker, a photo or a voice note with no words. Every head answered them anyway, so they are inside every distribution below; a reader who wants the labels of rows that HAD text subtracts this number. The rows were bought and are part of the registered 5 075, so they are counted here rather than dropped.",
+        "with_no_intent": 1361
+      },
       "sentiment": {
         "positive": 661,
         "neutral": 4144,
@@ -96,6 +101,11 @@
           "rows": 0,
           "reasons": {}
         },
+        "empty_text": {
+          "rows": 2,
+          "reading": "rows whose `<comment>` block was EMPTY when it was sent — a sticker, a photo or a voice note with no words. Every head answered them anyway, so they are inside every distribution below; a reader who wants the labels of rows that HAD text subtracts this number. The rows were bought and are part of the registered 5 075, so they are counted here rather than dropped.",
+          "with_no_intent": 2
+        },
         "sentiment": {
           "positive": 10,
           "neutral": 82,
@@ -150,6 +160,11 @@
         "unreadable": {
           "rows": 0,
           "reasons": {}
+        },
+        "empty_text": {
+          "rows": 8,
+          "reading": "rows whose `<comment>` block was EMPTY when it was sent — a sticker, a photo or a voice note with no words. Every head answered them anyway, so they are inside every distribution below; a reader who wants the labels of rows that HAD text subtracts this number. The rows were bought and are part of the registered 5 075, so they are counted here rather than dropped.",
+          "with_no_intent": 8
         },
         "sentiment": {
           "neutral": 160,
@@ -219,6 +234,11 @@
           "rows": 0,
           "reasons": {}
         },
+        "empty_text": {
+          "rows": 0,
+          "reading": "rows whose `<comment>` block was EMPTY when it was sent — a sticker, a photo or a voice note with no words. Every head answered them anyway, so they are inside every distribution below; a reader who wants the labels of rows that HAD text subtracts this number. The rows were bought and are part of the registered 5 075, so they are counted here rather than dropped.",
+          "with_no_intent": 0
+        },
         "sentiment": {
           "positive": 4
         },
@@ -260,6 +280,11 @@
         "unreadable": {
           "rows": 0,
           "reasons": {}
+        },
+        "empty_text": {
+          "rows": 0,
+          "reading": "rows whose `<comment>` block was EMPTY when it was sent — a sticker, a photo or a voice note with no words. Every head answered them anyway, so they are inside every distribution below; a reader who wants the labels of rows that HAD text subtracts this number. The rows were bought and are part of the registered 5 075, so they are counted here rather than dropped.",
+          "with_no_intent": 0
         },
         "sentiment": {
           "neutral": 4
@@ -307,6 +332,11 @@
           "rows": 0,
           "reasons": {}
         },
+        "empty_text": {
+          "rows": 0,
+          "reading": "rows whose `<comment>` block was EMPTY when it was sent — a sticker, a photo or a voice note with no words. Every head answered them anyway, so they are inside every distribution below; a reader who wants the labels of rows that HAD text subtracts this number. The rows were bought and are part of the registered 5 075, so they are counted here rather than dropped.",
+          "with_no_intent": 0
+        },
         "sentiment": {
           "neutral": 2,
           "positive": 2
@@ -350,6 +380,11 @@
         "unreadable": {
           "rows": 0,
           "reasons": {}
+        },
+        "empty_text": {
+          "rows": 10,
+          "reading": "rows whose `<comment>` block was EMPTY when it was sent — a sticker, a photo or a voice note with no words. Every head answered them anyway, so they are inside every distribution below; a reader who wants the labels of rows that HAD text subtracts this number. The rows were bought and are part of the registered 5 075, so they are counted here rather than dropped.",
+          "with_no_intent": 10
         },
         "sentiment": {
           "positive": 58,
@@ -412,6 +447,11 @@
           "rows": 0,
           "reasons": {}
         },
+        "empty_text": {
+          "rows": 14,
+          "reading": "rows whose `<comment>` block was EMPTY when it was sent — a sticker, a photo or a voice note with no words. Every head answered them anyway, so they are inside every distribution below; a reader who wants the labels of rows that HAD text subtracts this number. The rows were bought and are part of the registered 5 075, so they are counted here rather than dropped.",
+          "with_no_intent": 14
+        },
         "sentiment": {
           "neutral": 180,
           "positive": 22,
@@ -470,6 +510,11 @@
           "rows": 0,
           "reasons": {}
         },
+        "empty_text": {
+          "rows": 0,
+          "reading": "rows whose `<comment>` block was EMPTY when it was sent — a sticker, a photo or a voice note with no words. Every head answered them anyway, so they are inside every distribution below; a reader who wants the labels of rows that HAD text subtracts this number. The rows were bought and are part of the registered 5 075, so they are counted here rather than dropped.",
+          "with_no_intent": 0
+        },
         "sentiment": {
           "neutral": 5,
           "positive": 4
@@ -516,6 +561,11 @@
         "unreadable": {
           "rows": 0,
           "reasons": {}
+        },
+        "empty_text": {
+          "rows": 17,
+          "reading": "rows whose `<comment>` block was EMPTY when it was sent — a sticker, a photo or a voice note with no words. Every head answered them anyway, so they are inside every distribution below; a reader who wants the labels of rows that HAD text subtracts this number. The rows were bought and are part of the registered 5 075, so they are counted here rather than dropped.",
+          "with_no_intent": 17
         },
         "sentiment": {
           "neutral": 777,
@@ -582,6 +632,11 @@
         "unreadable": {
           "rows": 0,
           "reasons": {}
+        },
+        "empty_text": {
+          "rows": 1172,
+          "reading": "rows whose `<comment>` block was EMPTY when it was sent — a sticker, a photo or a voice note with no words. Every head answered them anyway, so they are inside every distribution below; a reader who wants the labels of rows that HAD text subtracts this number. The rows were bought and are part of the registered 5 075, so they are counted here rather than dropped.",
+          "with_no_intent": 1172
         },
         "sentiment": {
           "neutral": 2429,
@@ -652,6 +707,11 @@
           "rows": 0,
           "reasons": {}
         },
+        "empty_text": {
+          "rows": 126,
+          "reading": "rows whose `<comment>` block was EMPTY when it was sent — a sticker, a photo or a voice note with no words. Every head answered them anyway, so they are inside every distribution below; a reader who wants the labels of rows that HAD text subtracts this number. The rows were bought and are part of the registered 5 075, so they are counted here rather than dropped.",
+          "with_no_intent": 126
+        },
         "sentiment": {
           "neutral": 146,
           "negative": 7,
@@ -709,6 +769,11 @@
           "rows": 0,
           "reasons": {}
         },
+        "empty_text": {
+          "rows": 0,
+          "reading": "rows whose `<comment>` block was EMPTY when it was sent — a sticker, a photo or a voice note with no words. Every head answered them anyway, so they are inside every distribution below; a reader who wants the labels of rows that HAD text subtracts this number. The rows were bought and are part of the registered 5 075, so they are counted here rather than dropped.",
+          "with_no_intent": 0
+        },
         "sentiment": {
           "positive": 4
         },
@@ -750,6 +815,11 @@
         "unreadable": {
           "rows": 0,
           "reasons": {}
+        },
+        "empty_text": {
+          "rows": 0,
+          "reading": "rows whose `<comment>` block was EMPTY when it was sent — a sticker, a photo or a voice note with no words. Every head answered them anyway, so they are inside every distribution below; a reader who wants the labels of rows that HAD text subtracts this number. The rows were bought and are part of the registered 5 075, so they are counted here rather than dropped.",
+          "with_no_intent": 0
         },
         "sentiment": {
           "positive": 5,
@@ -796,6 +866,11 @@
         "unreadable": {
           "rows": 0,
           "reasons": {}
+        },
+        "empty_text": {
+          "rows": 0,
+          "reading": "rows whose `<comment>` block was EMPTY when it was sent — a sticker, a photo or a voice note with no words. Every head answered them anyway, so they are inside every distribution below; a reader who wants the labels of rows that HAD text subtracts this number. The rows were bought and are part of the registered 5 075, so they are counted here rather than dropped.",
+          "with_no_intent": 0
         },
         "sentiment": {
           "neutral": 49,
@@ -854,6 +929,11 @@
           "rows": 0,
           "reasons": {}
         },
+        "empty_text": {
+          "rows": 0,
+          "reading": "rows whose `<comment>` block was EMPTY when it was sent — a sticker, a photo or a voice note with no words. Every head answered them anyway, so they are inside every distribution below; a reader who wants the labels of rows that HAD text subtracts this number. The rows were bought and are part of the registered 5 075, so they are counted here rather than dropped.",
+          "with_no_intent": 0
+        },
         "sentiment": {
           "positive": 9,
           "neutral": 73,
@@ -903,6 +983,11 @@
         "unreadable": {
           "rows": 0,
           "reasons": {}
+        },
+        "empty_text": {
+          "rows": 0,
+          "reading": "rows whose `<comment>` block was EMPTY when it was sent — a sticker, a photo or a voice note with no words. Every head answered them anyway, so they are inside every distribution below; a reader who wants the labels of rows that HAD text subtracts this number. The rows were bought and are part of the registered 5 075, so they are counted here rather than dropped.",
+          "with_no_intent": 0
         },
         "sentiment": {
           "positive": 51,
@@ -958,6 +1043,11 @@
           "rows": 0,
           "reasons": {}
         },
+        "empty_text": {
+          "rows": 11,
+          "reading": "rows whose `<comment>` block was EMPTY when it was sent — a sticker, a photo or a voice note with no words. Every head answered them anyway, so they are inside every distribution below; a reader who wants the labels of rows that HAD text subtracts this number. The rows were bought and are part of the registered 5 075, so they are counted here rather than dropped.",
+          "with_no_intent": 11
+        },
         "sentiment": {
           "negative": 3,
           "neutral": 31,
@@ -1011,6 +1101,11 @@
           "rows": 0,
           "reasons": {}
         },
+        "empty_text": {
+          "rows": 1,
+          "reading": "rows whose `<comment>` block was EMPTY when it was sent — a sticker, a photo or a voice note with no words. Every head answered them anyway, so they are inside every distribution below; a reader who wants the labels of rows that HAD text subtracts this number. The rows were bought and are part of the registered 5 075, so they are counted here rather than dropped.",
+          "with_no_intent": 1
+        },
         "sentiment": {
           "positive": 2,
           "neutral": 2
@@ -1055,6 +1150,11 @@
         "unreadable": {
           "rows": 0,
           "reasons": {}
+        },
+        "empty_text": {
+          "rows": 0,
+          "reading": "rows whose `<comment>` block was EMPTY when it was sent — a sticker, a photo or a voice note with no words. Every head answered them anyway, so they are inside every distribution below; a reader who wants the labels of rows that HAD text subtracts this number. The rows were bought and are part of the registered 5 075, so they are counted here rather than dropped.",
+          "with_no_intent": 0
         },
         "sentiment": {
           "positive": 7,
@@ -1910,7 +2010,7 @@
   },
   "producer": {
     "script": "scripts/window_summary_5c2.py",
-    "sha256": "a1239b5119956557a5caa41162f37518a5207c9268d43e3414a7a8fa537dcf79",
+    "sha256": "873f73b71063d6430d1d2c5df05cbbf5cbb2456d7d38f4bb7d4a60563751573a",
     "borrowed": {
       "src/market_pulse/prompts.py": "de767900a1ea578ea7b48bdb0dcc497c9f023e466a09ae0b6100d60371fdc3ab",
       "src/market_pulse/langid.py": "65c9ba294c846b8574387d1893826313e9649282f7fd8581d04354ea6cc9a2de",
