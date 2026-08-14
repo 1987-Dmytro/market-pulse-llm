@@ -341,8 +341,14 @@ $ git status --short          # after the report commit: clean
 `make check` was green after `e8205b6`, `4e839b9` and `1fc50b8` — the three commits that touch code
 — and the two step-0 commits are docs-only and red by design, which the contract states.
 
-Session commits: `2bfd172` · `c7d1d57` · `e8205b6` · `4e839b9` · `1fc50b8` · `162ba0c` · this
-report. The ADR is [[5c2-closed-the-sitting-and-the-shelf-life-redesign]].
+Session commits: `2bfd172` · `c7d1d57` · `e8205b6` · `4e839b9` · `1fc50b8` · `162ba0c` · the report
+itself · `3d30fb9` (the closing review's four fixes: a short hash in a guard, a check that could not
+fire, a loading claim nobody measured, and the record regenerated after its producer moved) · this
+line. The ADR is [[5c2-closed-the-sitting-and-the-shelf-life-redesign]].
+
+That last entry is this report obeying its own §`[contract-gap]` line 2: the commit list was true
+when it was written and stopped being true one commit later, which is the Dv281 / Dv293 class. It is
+amended here rather than left for a reader to notice.
 
 ## Process signals
 
