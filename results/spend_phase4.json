@@ -255,6 +255,13 @@
       "spent_usd": 24.7415,
       "remaining_usd": 8.2585,
       "note": "5c2-run: Endpoint A, the two positions legs (159 leaflet pages + 44 posts). Written by scripts/witness_phase_ledger.py from results/spend_5c2run.json :: runs[-1], so this entry and that run carry the SAME balance reading. remaining_usd is against the $33.00 cap in force when the money was spent."
+    },
+    {
+      "at": "2026-08-14T00:22:04+00:00",
+      "balance": 3.5506603068,
+      "spent_usd": 31.4493,
+      "remaining_usd": 1.5507,
+      "note": "5c2-run: Endpoint B, the comment leg (5 075 rows, 19 channels). Written by scripts/witness_phase_ledger.py from results/spend_5c2run.json :: runs[-1], so this entry and that run carry the SAME balance reading. remaining_usd is against the $33.00 cap in force when the money was spent."
     }
   ]
 }

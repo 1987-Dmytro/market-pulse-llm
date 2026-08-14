@@ -8,6 +8,12 @@
       "balance": 10.2585299348,
       "step_spent_usd": 0.823,
       "note": "5c2-run positions"
+    },
+    {
+      "at": "2026-08-14T00:22:04+00:00",
+      "balance": 3.5506603068,
+      "step_spent_usd": 7.5309,
+      "note": "5c2-run comments"
     }
   ]
 }

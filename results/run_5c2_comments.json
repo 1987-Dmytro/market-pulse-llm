@@ -1,0 +1,679 @@
+{
+  "at": "2026-08-14T00:22:04+00:00",
+  "phase": "5c2-run",
+  "authority": "results/prereg_5c2_run.json",
+  "pinned_inputs": {
+    "docs/SPEC.md": "byte-identical",
+    "results/census_5c2.json": "byte-identical",
+    "results/census_c3a_posts.json": "byte-identical",
+    "results/postcut_c3b.json": "byte-identical",
+    "results/projection_5c2.json": "byte-identical",
+    "results/srv2d_cost.json": "byte-identical",
+    "config/registry.yaml": "byte-identical",
+    "config/lexicon.yaml": "byte-identical",
+    "src/market_pulse/positions.py": "byte-identical"
+  },
+  "session_cap_usd": 8.0,
+  "rate_usd_per_second": 0.00030669,
+  "drift": 0.03,
+  "worst_case_job_usd": 0.2843,
+  "selection": {
+    "comment": {
+      "rows": 5075,
+      "channels": 19,
+      "pins_matched": "19/19"
+    },
+    "leaflet_page": {
+      "rows": 159,
+      "posts": 19,
+      "channels": [
+        "@atb_market_official"
+      ]
+    },
+    "post_text": {
+      "rows": 44,
+      "channels": 10
+    }
+  },
+  "leg": "comments",
+  "endpoint": "gfmtqi3uqcjyv5",
+  "already_usd": 0.8451,
+  "warmup": {
+    "rows": 3,
+    "channels": [
+      "@VARUS_channel",
+      "@denisovapro",
+      "@klopotenkofood"
+    ],
+    "seconds_total": 13.237,
+    "seconds_per_row": 4.4123,
+    "registered_seconds_per_row": 4.262
+  },
+  "go_no_go": {
+    "when": "after the two non-gold warm-up calls of SPEC 3.17 (9), before the first gold call",
+    "billed_seconds": 435.533,
+    "page_marginal_seconds": 0.0,
+    "text_marginal_seconds": 4.4123,
+    "gold_calls": 5075,
+    "gold_seconds": 22392.592,
+    "idle_tail_seconds": 60.0,
+    "projected_usd": 7.0196,
+    "budget_usd": 7.1549,
+    "refuse": false,
+    "registered_corner_usd": 7.484
+  },
+  "comment": {
+    "planned": {
+      "@HealthPsycholog": 97,
+      "@VARUS_channel": 242,
+      "@chifit_family": 4,
+      "@denisovapro": 4,
+      "@kkondr_fit": 4,
+      "@klopotenkofood": 222,
+      "@kopiyochka1": 223,
+      "@mamo_nepsichuy": 9,
+      "@mandziak": 1026,
+      "@matusi_ukr": 2717,
+      "@msuaaaa": 163,
+      "@olgaa_trainer": 4,
+      "@polyakova_fitness": 8,
+      "@retsepty": 104,
+      "@sashafitnesslife": 83,
+      "@smirnov108": 100,
+      "@tarilka_malyuka": 45,
+      "@useful_healthy_fitness_menu": 4,
+      "@ya_Nenka": 16
+    },
+    "packs": [
+      {
+        "channel": "@HealthPsycholog",
+        "pack": 0,
+        "asked": 97,
+        "written": 97,
+        "watermark": 3378,
+        "post_states": {
+          "post_text": 97
+        }
+      },
+      {
+        "channel": "@VARUS_channel",
+        "pack": 0,
+        "asked": 122,
+        "written": 122,
+        "watermark": 21026,
+        "post_states": {
+          "no_text_and_no_caption": 2,
+          "post_text": 120
+        }
+      },
+      {
+        "channel": "@VARUS_channel",
+        "pack": 1,
+        "asked": 120,
+        "written": 120,
+        "watermark": 21720,
+        "post_states": {
+          "post_text": 120
+        }
+      },
+      {
+        "channel": "@chifit_family",
+        "pack": 0,
+        "asked": 4,
+        "written": 4,
+        "watermark": 2069,
+        "post_states": {
+          "post_text": 4
+        }
+      },
+      {
+        "channel": "@denisovapro",
+        "pack": 0,
+        "asked": 4,
+        "written": 4,
+        "watermark": 2135,
+        "post_states": {
+          "post_text": 4
+        }
+      },
+      {
+        "channel": "@kkondr_fit",
+        "pack": 0,
+        "asked": 4,
+        "written": 4,
+        "watermark": 2109,
+        "post_states": {
+          "post_text": 4
+        }
+      },
+      {
+        "channel": "@klopotenkofood",
+        "pack": 0,
+        "asked": 122,
+        "written": 122,
+        "watermark": 21234,
+        "post_states": {
+          "no_text_and_no_caption": 13,
+          "post_text": 109
+        }
+      },
+      {
+        "channel": "@klopotenkofood",
+        "pack": 1,
+        "asked": 100,
+        "written": 100,
+        "watermark": 21407,
+        "post_states": {
+          "no_text_and_no_caption": 7,
+          "post_text": 93
+        }
+      },
+      {
+        "channel": "@kopiyochka1",
+        "pack": 0,
+        "asked": 122,
+        "written": 122,
+        "watermark": 392058,
+        "post_states": {
+          "post_text": 122
+        }
+      },
+      {
+        "channel": "@kopiyochka1",
+        "pack": 1,
+        "asked": 101,
+        "written": 101,
+        "watermark": 392701,
+        "post_states": {
+          "no_text_and_no_caption": 4,
+          "post_text": 97
+        }
+      },
+      {
+        "channel": "@mamo_nepsichuy",
+        "pack": 0,
+        "asked": 9,
+        "written": 9,
+        "watermark": 17508,
+        "post_states": {
+          "post_text": 9
+        }
+      },
+      {
+        "channel": "@mandziak",
+        "pack": 0,
+        "asked": 122,
+        "written": 122,
+        "watermark": 48002,
+        "post_states": {
+          "post_text": 122
+        }
+      },
+      {
+        "channel": "@mandziak",
+        "pack": 1,
+        "asked": 122,
+        "written": 122,
+        "watermark": 48203,
+        "post_states": {
+          "post_text": 122
+        }
+      },
+      {
+        "channel": "@mandziak",
+        "pack": 2,
+        "asked": 122,
+        "written": 122,
+        "watermark": 48350,
+        "post_states": {
+          "post_text": 122
+        }
+      },
+      {
+        "channel": "@mandziak",
+        "pack": 3,
+        "asked": 122,
+        "written": 122,
+        "watermark": 48523,
+        "post_states": {
+          "post_text": 122
+        }
+      },
+      {
+        "channel": "@mandziak",
+        "pack": 4,
+        "asked": 122,
+        "written": 122,
+        "watermark": 48665,
+        "post_states": {
+          "post_text": 122
+        }
+      },
+      {
+        "channel": "@mandziak",
+        "pack": 5,
+        "asked": 122,
+        "written": 122,
+        "watermark": 48812,
+        "post_states": {
+          "post_text": 122
+        }
+      },
+      {
+        "channel": "@mandziak",
+        "pack": 6,
+        "asked": 122,
+        "written": 122,
+        "watermark": 48960,
+        "post_states": {
+          "post_text": 122
+        }
+      },
+      {
+        "channel": "@mandziak",
+        "pack": 7,
+        "asked": 122,
+        "written": 122,
+        "watermark": 49151,
+        "post_states": {
+          "post_text": 122
+        }
+      },
+      {
+        "channel": "@mandziak",
+        "pack": 8,
+        "asked": 50,
+        "written": 50,
+        "watermark": 49226,
+        "post_states": {
+          "post_text": 50
+        }
+      },
+      {
+        "channel": "@matusi_ukr",
+        "pack": 0,
+        "asked": 122,
+        "written": 122,
+        "watermark": 576332,
+        "post_states": {
+          "no_text_and_no_caption": 4,
+          "post_text": 118
+        }
+      },
+      {
+        "channel": "@matusi_ukr",
+        "pack": 1,
+        "asked": 122,
+        "written": 122,
+        "watermark": 576455,
+        "post_states": {
+          "post_text": 122
+        }
+      },
+      {
+        "channel": "@matusi_ukr",
+        "pack": 2,
+        "asked": 122,
+        "written": 122,
+        "watermark": 576590,
+        "post_states": {
+          "post_text": 122
+        }
+      },
+      {
+        "channel": "@matusi_ukr",
+        "pack": 3,
+        "asked": 122,
+        "written": 122,
+        "watermark": 576749,
+        "post_states": {
+          "post_text": 122
+        }
+      },
+      {
+        "channel": "@matusi_ukr",
+        "pack": 4,
+        "asked": 122,
+        "written": 122,
+        "watermark": 576935,
+        "post_states": {
+          "no_text_and_no_caption": 66,
+          "post_text": 56
+        }
+      },
+      {
+        "channel": "@matusi_ukr",
+        "pack": 5,
+        "asked": 122,
+        "written": 122,
+        "watermark": 577156,
+        "post_states": {
+          "no_text_and_no_caption": 16,
+          "post_text": 106
+        }
+      },
+      {
+        "channel": "@matusi_ukr",
+        "pack": 6,
+        "asked": 122,
+        "written": 122,
+        "watermark": 577347,
+        "post_states": {
+          "post_text": 122
+        }
+      },
+      {
+        "channel": "@matusi_ukr",
+        "pack": 7,
+        "asked": 122,
+        "written": 122,
+        "watermark": 577489,
+        "post_states": {
+          "post_text": 122
+        }
+      },
+      {
+        "channel": "@matusi_ukr",
+        "pack": 8,
+        "asked": 122,
+        "written": 122,
+        "watermark": 577639,
+        "post_states": {
+          "post_text": 122
+        }
+      },
+      {
+        "channel": "@matusi_ukr",
+        "pack": 9,
+        "asked": 122,
+        "written": 122,
+        "watermark": 577831,
+        "post_states": {
+          "no_text_and_no_caption": 1,
+          "post_text": 121
+        }
+      },
+      {
+        "channel": "@matusi_ukr",
+        "pack": 10,
+        "asked": 122,
+        "written": 122,
+        "watermark": 578037,
+        "post_states": {
+          "no_text_and_no_caption": 2,
+          "post_text": 120
+        }
+      },
+      {
+        "channel": "@matusi_ukr",
+        "pack": 11,
+        "asked": 122,
+        "written": 122,
+        "watermark": 578254,
+        "post_states": {
+          "no_text_and_no_caption": 1,
+          "post_text": 121
+        }
+      },
+      {
+        "channel": "@matusi_ukr",
+        "pack": 12,
+        "asked": 122,
+        "written": 122,
+        "watermark": 578491,
+        "post_states": {
+          "post_text": 122
+        }
+      },
+      {
+        "channel": "@matusi_ukr",
+        "pack": 13,
+        "asked": 122,
+        "written": 122,
+        "watermark": 578614,
+        "post_states": {
+          "no_text_and_no_caption": 1,
+          "post_text": 121
+        }
+      },
+      {
+        "channel": "@matusi_ukr",
+        "pack": 14,
+        "asked": 122,
+        "written": 122,
+        "watermark": 578783,
+        "post_states": {
+          "post_text": 122
+        }
+      },
+      {
+        "channel": "@matusi_ukr",
+        "pack": 15,
+        "asked": 122,
+        "written": 122,
+        "watermark": 579007,
+        "post_states": {
+          "no_text_and_no_caption": 8,
+          "post_text": 114
+        }
+      },
+      {
+        "channel": "@matusi_ukr",
+        "pack": 16,
+        "asked": 122,
+        "written": 122,
+        "watermark": 579188,
+        "post_states": {
+          "no_text_and_no_caption": 1,
+          "post_text": 121
+        }
+      },
+      {
+        "channel": "@matusi_ukr",
+        "pack": 17,
+        "asked": 122,
+        "written": 122,
+        "watermark": 579496,
+        "post_states": {
+          "post_text": 122
+        }
+      },
+      {
+        "channel": "@matusi_ukr",
+        "pack": 18,
+        "asked": 122,
+        "written": 122,
+        "watermark": 579713,
+        "post_states": {
+          "post_text": 122
+        }
+      },
+      {
+        "channel": "@matusi_ukr",
+        "pack": 19,
+        "asked": 122,
+        "written": 122,
+        "watermark": 579847,
+        "post_states": {
+          "post_text": 122
+        }
+      },
+      {
+        "channel": "@matusi_ukr",
+        "pack": 20,
+        "asked": 122,
+        "written": 122,
+        "watermark": 580043,
+        "post_states": {
+          "post_text": 122
+        }
+      },
+      {
+        "channel": "@matusi_ukr",
+        "pack": 21,
+        "asked": 122,
+        "written": 122,
+        "watermark": 580360,
+        "post_states": {
+          "post_text": 122
+        }
+      },
+      {
+        "channel": "@matusi_ukr",
+        "pack": 22,
+        "asked": 33,
+        "written": 33,
+        "watermark": 580440,
+        "post_states": {
+          "post_text": 33
+        }
+      },
+      {
+        "channel": "@msuaaaa",
+        "pack": 0,
+        "asked": 122,
+        "written": 122,
+        "watermark": 13679,
+        "post_states": {
+          "post_text": 122
+        }
+      },
+      {
+        "channel": "@msuaaaa",
+        "pack": 1,
+        "asked": 41,
+        "written": 41,
+        "watermark": 13741,
+        "post_states": {
+          "post_text": 41
+        }
+      },
+      {
+        "channel": "@olgaa_trainer",
+        "pack": 0,
+        "asked": 4,
+        "written": 4,
+        "watermark": 643,
+        "post_states": {
+          "post_text": 4
+        }
+      },
+      {
+        "channel": "@polyakova_fitness",
+        "pack": 0,
+        "asked": 8,
+        "written": 8,
+        "watermark": 2460,
+        "post_states": {
+          "no_text_and_no_caption": 1,
+          "post_text": 7
+        }
+      },
+      {
+        "channel": "@retsepty",
+        "pack": 0,
+        "asked": 104,
+        "written": 104,
+        "watermark": 49804,
+        "post_states": {
+          "no_text_and_no_caption": 7,
+          "post_text": 97
+        }
+      },
+      {
+        "channel": "@sashafitnesslife",
+        "pack": 0,
+        "asked": 83,
+        "written": 83,
+        "watermark": 10119,
+        "post_states": {
+          "post_text": 83
+        }
+      },
+      {
+        "channel": "@smirnov108",
+        "pack": 0,
+        "asked": 100,
+        "written": 100,
+        "watermark": 31435,
+        "post_states": {
+          "post_text": 100
+        }
+      },
+      {
+        "channel": "@tarilka_malyuka",
+        "pack": 0,
+        "asked": 45,
+        "written": 45,
+        "watermark": 213,
+        "post_states": {
+          "no_text_and_no_caption": 1,
+          "post_text": 44
+        }
+      },
+      {
+        "channel": "@useful_healthy_fitness_menu",
+        "pack": 0,
+        "asked": 4,
+        "written": 4,
+        "watermark": 3227,
+        "post_states": {
+          "post_text": 4
+        }
+      },
+      {
+        "channel": "@ya_Nenka",
+        "pack": 0,
+        "asked": 16,
+        "written": 16,
+        "watermark": 2599,
+        "post_states": {
+          "post_text": 16
+        }
+      }
+    ],
+    "reached": [
+      "@HealthPsycholog",
+      "@VARUS_channel",
+      "@chifit_family",
+      "@denisovapro",
+      "@kkondr_fit",
+      "@klopotenkofood",
+      "@kopiyochka1",
+      "@mamo_nepsichuy",
+      "@mandziak",
+      "@matusi_ukr",
+      "@msuaaaa",
+      "@olgaa_trainer",
+      "@polyakova_fitness",
+      "@retsepty",
+      "@sashafitnesslife",
+      "@smirnov108",
+      "@tarilka_malyuka",
+      "@useful_healthy_fitness_menu",
+      "@ya_Nenka"
+    ],
+    "stopped_at": null
+  },
+  "timing": {
+    "calls": 55,
+    "rows": 5078,
+    "worker_seconds": 21565.258,
+    "queue_seconds": 153.926,
+    "wall_seconds": 21894.005,
+    "seconds_per_call": 392.096,
+    "wall_per_call": 398.073,
+    "wall_per_row": 4.312,
+    "seconds_per_row": 4.247,
+    "idle_share": 0.015,
+    "worker_ids": [
+      "zs3ohv1dvvpwvi"
+    ]
+  },
+  "notes": [],
+  "ledger": {
+    "balance": 3.5506603068,
+    "session_spent_usd_floor": 7.530883350299999,
+    "unread": null
+  }
+}
