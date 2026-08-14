@@ -49,6 +49,7 @@ import census_5c2 as census  # noqa: E402
 import positions_gm4_skub as skub  # noqa: E402
 import run_loop  # noqa: E402
 import runpod_guard as guard  # noqa: E402
+import write_sku_prereg as law  # noqa: E402
 
 from market_pulse import loop, parents, positions, serving  # noqa: E402
 from market_pulse.brands import watchlist_aliases  # noqa: E402
@@ -56,6 +57,7 @@ from market_pulse.raw_store import RawStore  # noqa: E402
 from market_pulse.registry import load_registry  # noqa: E402
 
 PHASE = "5c2run"
+SPEC = REPO_ROOT / "docs" / "SPEC.md"
 PREREG = REPO_ROOT / "results" / "prereg_5c2_run.json"
 LEDGER = REPO_ROOT / "results" / "spend_5c2run.json"
 RECORD = REPO_ROOT / "results" / "run_5c2.json"
@@ -106,18 +108,43 @@ def newline_ids_sha256(ids) -> str:
 # --- the registration, and its refusals -----------------------------------------------------
 
 
+def pinned_today(path: Path, prereg: dict) -> tuple[str, str]:
+    """Today's bytes as the SEAL reads them, and the label that says HOW they were read.
+
+    `docs/SPEC.md` is not hashed raw. The registration pinned the law with the ten marked blocks it
+    kept, and the law has grown since — amendment 3.19, ruled at the 5c2-validate sitting, moves no
+    number this run bought and says so in its own clause (3). A raw-identity check here had a shelf
+    life of exactly one amendment: it would stop a COMPLETE and sealed run's record from
+    re-verifying, over text the registration deliberately excluded. So the live check becomes the
+    one the pin can actually keep — the strip of today's file equals the sha the record pins, and
+    the bytes the run consumed stay recoverable from it.
+
+    The keep is read out of the record rather than restated here, so this cannot drift from the
+    strip the pin was taken with. Third instance of the same decoupling (cap-in-force, the
+    derived-root snapshot, and now the ten-keep strip), and the label is not shared with the other
+    eight inputs: calling a stripped hash "byte-identical" would put a false word in the run record.
+    """
+    if path == SPEC:
+        keep = tuple(prereg["strip"]["keep"])
+        return (
+            hashlib.sha256(law.registered_law(path, keep=keep)).hexdigest(),
+            f"derives through the {len(keep)}-block keep",
+        )
+    return (sha256_of(path) if path.exists() else "<absent>"), "byte-identical"
+
+
 def preflight(prereg: dict) -> dict:
-    """Every pinned input re-hashed. A moved input is a STOP and never a re-derivation.
+    """Every pinned input re-read the way the seal pinned it. A moved input is a STOP.
 
     The registration was sealed against these bytes; a run that priced itself from a moved census
     or scored through a moved `positions.py` would be a different experiment wearing the sealed
     numbers. The contract says it in one line: nothing is re-derived in-session to make a sealed
-    number green.
+    number green. What :func:`pinned_today` decouples is the opposite case — a file the seal never
+    pinned the whole of.
     """
-    moved = {}
+    moved, labels = {}, {}
     for path, want in prereg["pinned_inputs"].items():
-        target = REPO_ROOT / path
-        got = sha256_of(target) if target.exists() else "<absent>"
+        got, labels[path] = pinned_today(REPO_ROOT / path, prereg)
         if got != want:
             moved[path] = (got, want)
     if moved:
@@ -128,7 +155,7 @@ def preflight(prereg: dict) -> dict:
             f"the registration's pinned inputs have MOVED — {lines}. results/prereg_5c2_run.json"
             " prices this session against those bytes; stop and take it to the team lead."
         )
-    return {path: "byte-identical" for path in prereg["pinned_inputs"]}
+    return labels
 
 
 def registered_cap(prereg: dict) -> float:

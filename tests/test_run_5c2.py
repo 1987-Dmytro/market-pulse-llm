@@ -213,8 +213,36 @@ def test_a_moved_pinned_input_is_a_stop_and_not_a_re_derivation():
         driver.preflight(moved)
 
 
-def test_every_pinned_input_is_byte_identical_today():
-    assert set(driver.preflight(PREREG).values()) == {"byte-identical"}
+def test_every_pinned_input_still_reads_as_the_seal_pinned_it():
+    """Eight files hashed as they sit, and `docs/SPEC.md` through the strip the record names.
+
+    The old assertion — every input "byte-identical" — was true until the law grew and had no way
+    to stay true: amendment 3.19 landed 2026-08-14 over a run that was already complete and sealed,
+    and clause (3) says out loud that nothing this run bought is re-scored under it. The label is
+    asserted per input rather than as one set, because a stripped hash reported as "byte-identical"
+    would be a false word in the run record and a set comparison cannot see which file it came from.
+    """
+    labels = driver.preflight(PREREG)
+
+    assert labels["docs/SPEC.md"] == "derives through the 10-block keep"
+    assert set(labels) == set(PREREG["pinned_inputs"]) and len(labels) == 9
+    assert {path: label for path, label in labels.items() if label != "byte-identical"} == {
+        "docs/SPEC.md": "derives through the 10-block keep"
+    }
+
+
+def test_a_spec_that_stopped_deriving_is_the_same_stop_as_a_moved_file():
+    """The negative control for the branch above: the strip is not a way past the guard.
+
+    Without this, `pinned_today` could return anything at all for `docs/SPEC.md` and the run would
+    still start. Driven through the RECORD's pin rather than by editing the file, because the live
+    SPEC is not a test's to write to.
+    """
+    moved = json.loads(json.dumps(PREREG))
+    moved["pinned_inputs"]["docs/SPEC.md"] = "0" * 64
+
+    with pytest.raises(SystemExit, match="have MOVED"):
+        driver.preflight(moved)
 
 
 # --- what a live pass must never do --------------------------------------------------------

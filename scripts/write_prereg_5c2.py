@@ -89,6 +89,20 @@ enumeration of these ten is what refuses to let it arrive quietly. A sealed regi
 re-pinned to make it green.
 """
 
+BLOCKS_TODAY = (*KEEP_BLOCKS, "amendment-3.19")
+"""Every marked block the file carries NOW: the ten the seal keeps, plus each one that arrived after.
+
+Two questions were one constant until 3.19 landed, and they are not the same question. What the
+REGISTERED LAW is was settled the day `results/prereg_5c2_run.json` was written and cannot move —
+:data:`KEEP_BLOCKS`, ten names, and `pinned_sha256` still derives the sealed pin through them. What
+`docs/SPEC.md` carries TODAY is a fact about the file, and it grows. Merging the two would have made
+greening this producer re-pin a sealed record, which is exactly what it exists to refuse.
+
+3.19 (operator, 2026-08-14, the 5c2-validate sitting): text-less comments are skipped before payment
+from the next paid cycle on. It moves no number of the 5 075 rows this registration bought — (3)
+says so out loud — so the strip takes it off and the pin survives. A twelfth block appends HERE and
+nowhere else, and `check_the_strip_family_is_what_it_says` is what refuses until it does."""
+
 DRIFT = projection.DRIFT
 HALF_DOLLAR = 0.50
 
@@ -118,18 +132,21 @@ def pinned_sha256(path: Path) -> str:
 
 
 def check_the_strip_family_is_what_it_says(spec: Path) -> None:
-    """The blocks in the file are exactly the ones this pin keeps, or the pin is not what it says.
+    """The blocks in the file are exactly the ones this producer knows, or the strip is blind.
 
-    Refusing here rather than silently stripping an unknown block is the whole point: `keep` names
-    ten, and an eleventh that arrived would otherwise be cut out of the registered law without
-    anything saying so.
+    Refusing here rather than silently stripping an unknown block is the whole point: a block that
+    arrived since would otherwise be cut out of the registered law without anything saying so. The
+    comparison is against :data:`BLOCKS_TODAY` and not :data:`KEEP_BLOCKS` — the keep is the sealed
+    record's and never moves, and a producer that grew its keep to green itself would re-pin a
+    registration instead of registering a run.
     """
     found = tuple(prereg.RATIFICATION_NAME.findall(spec.read_text(encoding="utf-8")))
-    if found != KEEP_BLOCKS:
+    if found != BLOCKS_TODAY:
         refuse(
-            f"{rel(spec)} carries the marked blocks {list(found)} and this registration keeps"
-            f" {list(KEEP_BLOCKS)}. A block that arrived since is text the registered law would be"
-            " stripped of without a reader ever seeing it — add its name here and look at it"
+            f"{rel(spec)} carries the marked blocks {list(found)} and this producer knows"
+            f" {list(BLOCKS_TODAY)}, of which the sealed pin keeps {list(KEEP_BLOCKS)}. A block that"
+            " arrived since is text the registered law would be stripped of without a reader ever"
+            " seeing it — add its name here and look at it"
         )
 
 

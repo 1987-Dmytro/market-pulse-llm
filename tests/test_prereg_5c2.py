@@ -213,19 +213,31 @@ def test_the_remainder_is_derived_from_the_live_cap_and_not_read_off_the_ledger(
 # --- the law, the inputs and the strip ----------------------------------------------------------
 
 
-def test_the_registered_law_is_the_spec_with_every_block_it_carries_today():
+def test_the_sealed_pin_still_derives_through_the_ten_block_keep():
+    """The law grew and the pin survived, which is the design rather than damage to it.
+
+    What this test used to assert — that the pin equals the RAW file, because the keep held every
+    block the file carried — was true on the day the registration was written and had a shelf life
+    of one amendment. 3.19 ended it. What replaces it is the pair `test_sku_prereg.py` checks its
+    own pins with, because either leg alone passes for the wrong reason: a live hash equal to the
+    pin would mean 3.19 never landed, and a stripped hash equal to the pin is what proves the
+    registered law is the bytes that were registered.
+
+    The keep stays TEN. Growing it to green this file would re-pin a sealed record through
+    `pinned_sha256`, which is the one thing the producer's refusals exist to prevent.
+    """
     import write_sku_prereg as prereg
 
     spec = REPO_ROOT / "docs" / "SPEC.md"
     pin = RECORD["pinned_inputs"]["docs/SPEC.md"]
 
-    assert RECORD["strip"]["keep"] == list(writer.KEEP_BLOCKS)
+    assert RECORD["strip"]["keep"] == list(writer.KEEP_BLOCKS) == list(writer.BLOCKS_TODAY[:10])
     assert tuple(prereg.RATIFICATION_NAME.findall(spec.read_text(encoding="utf-8"))) == (
-        writer.KEEP_BLOCKS
+        writer.BLOCKS_TODAY
     )
+    assert writer.BLOCKS_TODAY[10:] == ("amendment-3.19",), "the block that arrived after the seal"
+    assert hashlib.sha256(spec.read_bytes()).hexdigest() != pin, "3.19 is not in the file"
     assert hashlib.sha256(prereg.registered_law(spec, keep=writer.KEEP_BLOCKS)).hexdigest() == pin
-    # keeping all ten means the pin equals the raw file TODAY; its job starts when they diverge
-    assert hashlib.sha256(spec.read_bytes()).hexdigest() == pin
     # and the block that carries the stop rules this record cites is one of the ten it keeps
     assert "sku-b-ratification-4" in writer.KEEP_BLOCKS
     assert "3.17 (10)" in json.dumps(RECORD["stop_rules"], ensure_ascii=False)
@@ -247,14 +259,44 @@ def test_every_pinned_input_still_hashes_to_what_it_says():
     }
 
 
-def test_an_eleventh_marked_block_is_refused_rather_than_stripped(monkeypatch, tmp_path):
+def test_the_strip_is_blind_to_3_19_and_to_nothing_the_keep_holds(tmp_path):
+    """The other direction of the decoupling, planted on a copy: 3.19's bytes may move under the
+    pin and a KEPT block's may not.
+
+    Without this the reformulation above would be satisfied by a strip that hides the whole file,
+    and the pin would have stopped being a pin. `docs/SPEC.md` itself is never written to — every
+    edit here is made to a copy in `tmp_path`.
+    """
+    import write_sku_prereg as prereg
+
+    pin = RECORD["pinned_inputs"]["docs/SPEC.md"]
+    text = (REPO_ROOT / "docs" / "SPEC.md").read_text(encoding="utf-8")
+
+    def derived(edited: str) -> str:
+        copy = tmp_path / "SPEC.md"
+        copy.write_text(edited, encoding="utf-8")
+        return hashlib.sha256(prereg.registered_law(copy, keep=writer.KEEP_BLOCKS)).hexdigest()
+
+    assert derived(text) == pin, "the control: an unedited copy derives the pin"
+    assert derived(text.replace("stickers, photos, voice notes", "stickers and photos")) == pin
+    for kept in ("**Amendment 3.18", "amendment 3.15 (the vis program moves"):
+        assert text.count(kept) == 1
+        assert derived(text.replace(kept, kept + " ")) != pin, kept
+
+
+def test_a_twelfth_marked_block_is_refused_rather_than_stripped(monkeypatch, tmp_path):
     """The negative control for the strip: a block whose name the family MATCHES would be cut out of
     the registered law silently, so the producer refuses on the block set rather than on the names
-    it happens to know."""
+    it happens to know.
+
+    The intruder was `amendment-3.19` until 3.19 became law and the eleventh block real. It is a
+    3.20 now, and the second line is the direction that keeps this a control rather than a refusal
+    that refuses everything: the file as it stands must still pass.
+    """
     grown = tmp_path / "SPEC.md"
     grown.write_text(
         (REPO_ROOT / "docs" / "SPEC.md").read_text(encoding="utf-8")
-        + "<!-- amendment-3.19 begin -->\n(1) whatever.\n<!-- amendment-3.19 end -->\n",
+        + "<!-- amendment-3.20 begin -->\n(1) whatever.\n<!-- amendment-3.20 end -->\n",
         encoding="utf-8",
     )
 
@@ -356,12 +398,45 @@ def test_the_resume_discipline_names_the_watermark_and_the_fourth_kind():
     assert "written LAST" in resume["rule"]
 
 
-def test_the_record_carries_no_clock_and_names_its_producer():
+SEALING_COMMIT = "0e390ff"
+"""The commit that landed `results/prereg_5c2_run.json` and the producer it names, together.
+
+`scripts/write_prereg_5c2.py` moved on 2026-08-14 — the write-path enumeration learned
+`amendment-3.19`, so a future registration can be made over the grown law — and the record is NOT
+re-pinned to follow it. That is the producer's own strongest refusal turned on itself. What keeps
+`producer.sha256` a checkable claim instead of a dead literal is that the bytes are RECOVERABLE:
+
+    git show 0e390ff:scripts/write_prereg_5c2.py
+
+The record has never been rewritten and the producer had never been touched until today, so this is
+the only commit either of them needs."""
+
+
+def test_the_record_carries_no_clock_and_names_the_producer_that_wrote_it():
+    """The producer moved under a sealed record, and the record is the one that stays put.
+
+    Checked both ways, because either leg alone passes for the wrong reason: a live hash equal to
+    the pin would mean the write-path enumeration never learned 3.19, and the recovered hash equal
+    to the pin is what proves the record names the bytes that actually wrote it. The recovered file
+    is read for the amendment's name too — a recovery that already carried it would mean this test
+    is checking the wrong commit.
+
+    `borrows` is still hashed LIVE: none of those five modules moved, and the day one of them does
+    is the day this line has to be looked at rather than relaxed.
+    """
     assert "generated_at" not in RECORD and "git" not in RECORD
-    assert (
-        RECORD["producer"]["sha256"]
-        == hashlib.sha256(Path(writer.__file__).read_bytes()).hexdigest()
-    )
+    sealed = subprocess.run(
+        ["git", "show", f"{SEALING_COMMIT}:scripts/write_prereg_5c2.py"],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        check=True,
+    ).stdout
+    live = hashlib.sha256(Path(writer.__file__).read_bytes()).hexdigest()
+
+    assert RECORD["producer"]["sha256"] != live, "the producer never learned amendment-3.19"
+    assert RECORD["producer"]["sha256"] == hashlib.sha256(sealed).hexdigest()
+    assert b"amendment-3.19" not in sealed, "the recovered producer predates the amendment"
+    assert "amendment-3.19" in Path(writer.__file__).read_text(encoding="utf-8")
     for path, digest in RECORD["producer"]["borrows"].items():
         assert hashlib.sha256((REPO_ROOT / path).read_bytes()).hexdigest() == digest, path
 

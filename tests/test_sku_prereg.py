@@ -244,6 +244,13 @@ def test_every_pinned_input_still_hashes_to_what_it_says(record):
         # The first block of a second family, and the arrival was the same one-name-short one its
         # predecessors had. Stripped here because this pin predates every word of it.
         "amendment-3.18",
+        # 3.19 — the 5c2-validate sitting (2026-08-14): text-less comments leave the inference
+        # queue from the next paid cycle, reporting denominators follow, and the 5 075 rows already
+        # bought are explicitly never re-scored. It arrived one name short like every block before
+        # it. Stripped here for the same reason as the rest — this pin is v1–v4's, and every one of
+        # them predates it by weeks — and stripped by the SEALED 5c2 registration too, whose
+        # ten-name keep (`write_prereg_5c2.KEEP_BLOCKS`) deliberately did NOT grow to meet it.
+        "amendment-3.19",
     ]
     assert prereg.RATIFICATION_NAME.findall(spec_text) == blocks
     law = prereg.registered_law(prereg.SPEC).decode("utf-8")
