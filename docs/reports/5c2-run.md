@@ -744,3 +744,23 @@ The rule this leaves behind: `--already-usd` takes a number no file has to agree
 record stores it (`already_usd`) without a provenance field beside it. A future driver should read
 the previous leg's `step_spent_usd` off the ledger and require the operator's override to be
 LARGER, or record where the typed number came from.
+
+### `timing.calls` 55 against 53 packs and one warm-up
+
+The extra call is the **`assert_serving` handshake** — `client.info()`, verified against the run
+records rather than asserted. `EndpointClient._run` increments `calls` on every terminal job
+whatever its `op`, and `info` goes through `_run_with_retry` like any other, so the counter is a
+count of SUBMISSIONS and not of gold jobs. `positions_gm4_skub.JOBS_READING` already says it in
+prose — "`jobs_submitted` is `timing().calls` … which on the real endpoint client includes the
+`info` handshake and always includes the two warm-up calls".
+
+Both legs leave exactly one call unaccounted for, which is what makes the handshake the answer
+rather than a guess:
+
+| leg | packs | warm-up jobs | handshake | `timing.calls` | `timing.rows` |
+|---|---:|---:|---:|---:|---:|
+| comments (`gfmtqi3uqcjyv5`) | 53 | 1 (3 rows in one job) | 1 | **55** | 5 078 = 5 075 + 3 |
+| positions (`m34sxo00ami5wt`) | 11 + 10 | 2 (one page, one post) | 1 | **24** | 205 = 159 + 44 + 2 |
+
+The comment leg's 53 packs sum to `written` 5 075 against `asked` 5 075, so no pack is missing from
+the count either.
