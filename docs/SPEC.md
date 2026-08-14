@@ -867,6 +867,29 @@ alternatives (all 349 / carriers-only 31 / currency-only 29) were priced beside
 it and declined. `POST_PRICE_ORIGIN` stays as the pilot answered it — the D cut
 is what makes that inheritance defensible: recipe carriers no longer reach it.
 <!-- amendment-3.18 end -->
+<!-- amendment-3.19 begin — stripped by write_sku_prereg.registered_law() before hashing
+docs/SPEC.md against every sealed pre-registration pin, all of which predate this text; the
+law those records registered is the stripped text. New law arrives ONLY inside its own marked
+block — a sealed registration is never re-pinned to make it green -->
+**Amendment 3.19 (operator, 2026-08-14, the 5c2-validate sitting — the Dv324
+ruling):**
+(1) **Text-less comments are SKIPPED before payment.** From the next paid cycle
+on, the inference leg's queue EXCLUDES comments whose stored text is empty
+(`text: ""` — stickers, photos, voice notes). Measured on the 2026-08-09
+window: 1 361 of the 5 075 bought rows, 26.8%, every one of them empty at the
+SOURCE store — zero lost in the pipeline, verified by re-joining all 1 361
+against `data/raw` (team-lead check, 2026-08-14). The exclusion is a QUEUE
+rule, never a deletion: the rows stay collected, watermarked and counted.
+(2) **Reporting denominators follow the rule.** Distributions over comments are
+stated on text-bearing rows, with the text-less count printed beside them as
+its own named class — the volume of wordless reactions is itself a signal and
+is never blended into a distribution about words.
+(3) The 5 075 rows of the 2026-08-09 window stay exactly as bought and
+labelled; nothing is re-scored under this amendment.
+(Index note, living here because the amendment-index block above is itself one
+of the TEN blocks the 5c2 registration's pin KEEPS — editing it would break a
+sealed pin, so this block is its own index entry until that pin retires.)
+<!-- amendment-3.19 end -->
 **Date:** 2026-07-26 · **Team lead:** Fable session · **Executor:** Claude Code
 **Repo folder:** `/Users/hdv_1987/Desktop/Projects/market-pulse-llm`
 **rev. 3 change (operator decision):** producers in Ukraine barely use Telegram for
