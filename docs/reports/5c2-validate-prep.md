@@ -6,7 +6,7 @@ the window's own output and captioned with the aggregates in `results/window_sum
 accepted run report are paid by measurement — Dv307's hole is CLOSED at HEAD and the amendment says
 so with the commit that closed it, the $0.8451 is named as a hand-typed conservative reading with
 its consequence priced both ways, and the 55th call is the `assert_serving` handshake, verified on
-both legs. `make check` is 2 305 passed / 2 skipped, nothing cloud-touching ran, and nothing under
+both legs. `make check` is 2 309 passed / 2 skipped, nothing cloud-touching ran, and nothing under
 `data/derived/` was written, moved or re-scored.
 
 ## Read-back
@@ -99,13 +99,23 @@ $10.2585299348), the phase ledger carrying the same balance reading, and the cli
 which leg it belongs to. No balance of $10.2364436571 — the reading that would produce the typed
 number — appears in any file, log or record in the repo, and the session transcript is not on disk.
 
-It is legal because Dv33 makes the balance delta a **FLOOR** ("RunPod settles it minutes to hours
-late"), so the true spend was ≥ $0.8230 and a bigger number is the conservative direction. The
+It is legal because Dv33 makes the balance delta a **FLOOR** (`positions_gm4_skub.spend_now`'s
+docstring: "RunPod settles it minutes to hours late"), so the true spend was ≥ $0.8230 and a bigger
+number is the conservative direction. The
 consequence is one-way and checkable: a larger `already_usd` SHRINKS the (10)(a) budget, so the
 typed number could only make the gate stricter. Priced both ways the verdict does not move —
 projected $7.0196 against $7.1549 (typed) or $7.1770 (ledger), GO under both, while the registered
-conservative corner $7.4840 exceeds both budgets. The addendum in `docs/reports/5c2-run.md` carries
-the table and the rule it leaves behind.
+conservative corner $7.4840 exceeds both budgets.
+
+**And the run report's own arithmetic settles which number is the true one.** Its Step 4 says
+"Session: $7.5309 of the $8.00 cap" and three lines later "$6.7079 for the comment leg on top of
+$0.8451" — but `6.7079 + 0.8451 = 7.5530`, $0.0221 over the total, while `6.7079 + 0.8230 = 7.5309`
+closes to the cent against the balance delta. The typed number does not survive its own report's
+decomposition; the ledger's does. Both the addendum and a bracketed marker on the sentence itself
+now say so, without editing the accepted line. Found by the adversarial review pass below, not by
+the debt's own arithmetic — which had checked the gate and never the decomposition.
+
+The addendum in `docs/reports/5c2-run.md` carries the table and the rule it leaves behind.
 
 ### Debt 3 — `calls` 55 against 53 packs and one warm-up (`4fb2648`)
 
@@ -173,8 +183,8 @@ regenerates it and compares bytes. Every number in it re-derives or the suite is
 
 ```
 $ PYTHONPATH=src python3 scripts/build_validate_pack.py
-wrote results/validate_5c2_pack.json  sha256 a1a70e721f3adcae…
-wrote results/validate_5c2_pack.html sha256 bcc37d4895b17bbf…
+wrote results/validate_5c2_pack.json  sha256 2fad5339ecb721d9…
+wrote results/validate_5c2_pack.html sha256 cd928f38fbc4d244…
   seed 42 · 6 leaflet posts, 56 pages, 36 positions
   5 comments from ['@matusi_ukr', '@mandziak', '@VARUS_channel', '@kopiyochka1', '@klopotenkofood']
   findings: 6 post slots, 36 position slots, 5 comment slots — all empty
@@ -233,6 +243,16 @@ header law, the comment tables and the leaflet pages all render, the `../data/�
 resolve, and the markup is balanced (checked by `html.parser` as well as by eye). The local server
 was stopped and the tab closed.
 
+**One defect shipped in it and was fixed before this report was final.** The contract makes this
+rendering the ONE artifact exempt from the English rule and names its language — "which is in
+Russian". Three of its label constructs were UKRAINIAN: `yes_no` answered «так»/«ні», the comment
+header printed «мова», and the empty-intent fallback read «— (жодної з шести)». They are the
+module's own voice, not the corpus's — every string that comes off a row goes through `esc()`
+untouched — and the STATUS.md exemption is scoped to Russian by name. Now «да»/«нет», «язык» and
+«— (ни одной из шести)», with
+`tests/test_build_validate_pack.py::test_the_rendering_speaks_russian_in_its_own_voice` holding the
+script to it: the four Ukrainian-only letters plus «мова», which those letters cannot catch.
+
 ### What the rendering makes visible — an executor observation, NOT a finding
 
 On page `@atb_market_official:4342` the leaflet prints `135⁹⁰ → 66⁹⁰ −50%` and `152⁹⁰ → 75⁹⁰ −50%`.
@@ -256,9 +276,9 @@ $ scripts/window_summary_5c2.py --out {A,B}
 7760d32d0ffec80c…  pair B
 
 $ scripts/build_validate_pack.py --out {A,B} --page {A,B}
-a1a70e721f3adcae…  results/validate_5c2_pack.json    bcc37d4895b17bbf…  results/validate_5c2_pack.html
-a1a70e721f3adcae…  pair A                            bcc37d4895b17bbf…  pair A
-a1a70e721f3adcae…  pair B                            bcc37d4895b17bbf…  pair B
+2fad5339ecb721d9…  results/validate_5c2_pack.json    cd928f38fbc4d244…  results/validate_5c2_pack.html
+2fad5339ecb721d9…  pair A                            cd928f38fbc4d244…  pair A
+2fad5339ecb721d9…  pair B                            cd928f38fbc4d244…  pair B
 ```
 
 Both pairs are byte-identical, record AND rendering, and both are asserted in the suite against the
@@ -294,7 +314,7 @@ The handshake test's: the worker's own answer passes the same guard.
 
 ```
 $ set -o pipefail && make check
-2305 passed, 2 skipped in 64.78s
+2309 passed, 2 skipped in 64.19s
 $ ruff format --check scripts/window_summary_5c2.py scripts/build_validate_pack.py \
       tests/test_window_summary_5c2.py tests/test_build_validate_pack.py
 4 files already formatted            # `make check` does not run the formatter
@@ -303,7 +323,7 @@ $ git status --short
 ```
 
 Green after every commit of this session; the verifier was invoked under `set -o pipefail` each
-time (Dv313). New tests: 1 for the Dv307 debt, 20 for Deliverable 1, 22 for Deliverable 2 — 43
+time (Dv313). New tests: 1 for the Dv307 debt, 20 for Deliverable 1, 26 for Deliverable 2 — 47
 against the 2 262 the run left.
 
 **$0 held.** No pod, no endpoint, no serverless job, no OpenRouter call, no Telegram client; the one
@@ -320,6 +340,27 @@ before this session existed. (`data/derived/` is gitignored, so there is no HEAD
 baseline was taken before the first write-capable action; that is the gap those two checks close.)
 
 ---
+
+## The adversarial review pass, and what it caught
+
+The deliverables were re-read by a fan-out of five independent lenses — contract compliance, law and
+money path, code correctness, whether the tests actually test, and the report as evidence — each of
+whose findings was then handed to a separate agent instructed to REFUTE it. 34 agents, 24 findings
+raised, **10 survived refutation**. Two were already fixed (Dv323's correlated draw, Dv324's
+text-less rows) and one was a duplicate; the other six were real and are fixed above and below:
+
+| what it caught | where it was |
+|---|---|
+| Ukrainian labels in a rendering the contract fixes as Russian | `build_validate_pack.py` — three constructs |
+| `6.7079 + 0.8451 ≠ 7.5309` in the accepted run report's own Step 4 | the debt-2 arithmetic I had not run |
+| the "FLOOR / minutes to hours late" docstring is `spend_now`'s, not `spend_or_note`'s | the addendum's attribution |
+| the comment half of the draw had NO reproducibility test — the half Dv323 was in | `test_the_draw_is_reproducible_from_the_seed_alone` |
+| `test_no_old_price_value_ever_reaches_this_record` walked three blocks while its docstring promised the whole record | the test that guards a money-path law |
+| "captioned with BOTH denominators" was false of the brand row — window only | the caption builder and the report sentence |
+
+Every one is a claim the artifacts contradicted, not a preference. The last three are the sharpest:
+a guard whose docstring promises more than its body does, a reproducibility test that covers the leg
+that was fine, and a report sentence that says "each" about four rows when it is true of three.
 
 ## Deviations
 
@@ -348,7 +389,15 @@ five", both strata and both populations stated in the record. The claim the reco
 is the precise one: the stratum keys on whether the instrument PRODUCED output — something the model
 did — and never on whether that output looks correct, so no row is chosen for what its verdict says.
 The alternative considered and rejected: draw five blind and accept the risk, which would have made
-the pack's usefulness a function of the seed. [cause: contract-gap]
+the pack's usefulness a function of the seed.
+
+One shape of `build_sitting_pack.py` is deliberately NOT reused: its **seeded shuffle**. There the
+shuffle exists so that a row's POSITION in the file cannot be read off as its stratum — the pack is
+a blind gate. This one is the opposite by clause: 3.18 (6) has the strata stated in the record and
+printed beside every row, so a shuffle could hide nothing and would only cost the operator the
+ability to walk the leaflets in msg_id order. The posts are sorted by id, which interleaves the two
+strata anyway (4340 · 4370 · 4391 · 4401 · 4436 · 4446), so the ordering carries no signal either.
+[cause: contract-gap]
 
 **Dv318 — two surfaces, two readings of 3.18 (1) on the extracted old price.** The clause says it
 "never reaches a surface that prints it as a price". The AGGREGATE record counts rows that carry one
@@ -423,8 +472,9 @@ was re-scored here. [cause: model]
    still has to be asked WHY.
 4. **Reconstructing the input beat every rule I could have written about it.** Re-rendering the
    split proved the cut, and it is what surfaced Dv324 as a side effect.
-5. **`make check` does not run the formatter**, and `ruff format` moved the producer's own sha256 —
-   which is inside its record. Format first, generate second, or the byte-identical test is red.
+5. **A test's docstring can promise more than its body delivers, and only a mutation shows it.**
+   Two of this session's guards said "the whole record" and "the draw" while walking three blocks
+   and one leg. Both were written by me and both read as thorough.
 
 ## Open questions for the team lead
 

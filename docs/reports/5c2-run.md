@@ -511,7 +511,9 @@ priced the comment leg at its marginal corner, this session would have stopped a
 Session: **$7.5309 of the $8.00 cap**, $0.4691 unspent.
 Phase 4: **$31.4493 of $33.00**, $1.5507 remaining, both legs witnessed in the phase ledger.
 
-**The two phase-ledger entries are ANCHOR-relative, not incremental**, as every entry in that file is: Endpoint A's reads `spent 24.7415` and Endpoint B's `spent 31.4493`, each being `$35.00 anchor − balance at that reading`. Summing `spent_usd` across sessions double-counts. This session's own cost is the difference, $6.7079 for the comment leg on top of $0.8451.
+**The two phase-ledger entries are ANCHOR-relative, not incremental**, as every entry in that file is: Endpoint A's reads `spent 24.7415` and Endpoint B's `spent 31.4493`, each being `$35.00 anchor − balance at that reading`. Summing `spent_usd` across sessions double-counts. This session's own cost is the difference, $6.7079 for the comment leg on top of $0.8451. *[The
+$0.8451 here is the hand-typed number and it does not close: see the addendum — the ledger's
+$0.8230 is what makes this decomposition sum to $7.5309.]*
 
 ### Watermarks after, and the deferral measured rather than asserted
 
@@ -732,8 +734,9 @@ disk.
 So the honest statement is the one at the top: it was typed by hand as a safer reading, not read
 back from a carrier.
 
-**Why it is legal, and the Dv33 floor sentence it rests on.** `spend_or_note`'s docstring and Dv33
-say the balance delta is a **FLOOR** — "RunPod settles it minutes to hours late" — so the true
+**Why it is legal, and the Dv33 floor sentence it rests on.** `positions_gm4_skub.spend_now`'s
+docstring — "(balance, spend). The delta is a FLOOR — RunPod settles it minutes to hours late
+(Dv33)" — and Dv33 itself say the balance delta is a **FLOOR**, so the true
 spend at that moment was **≥ $0.8230**, and a larger number is the conservative direction rather
 than a wrong one. The consequence is checkable and one-way: a bigger `already_usd` SHRINKS the
 (10)(a) budget, so the hand-typed reading could only make the gate stricter, never looser. Priced
@@ -745,6 +748,16 @@ budget with the ledger $0.8230  $7.1770   headroom $0.1574   → GO
 the registered conservative corner $7.4840 exceeds BOTH budgets — which is why the gate,
 and not the corner, is what let the leg run.
 ```
+
+**This report's own decomposition already proves which number the session actually spent.** Step 4
+says "Session: $7.5309 of the $8.00 cap" and, three lines below, "This session's own cost is the
+difference, $6.7079 for the comment leg on top of $0.8451". Those two sentences disagree:
+`6.7079 + 0.8451 = 7.5530`, which is $0.0221 above the session total — exactly the gap between the
+typed number and the ledger's. With the persisted `0.8230` the decomposition closes to the cent:
+`6.7079 + 0.8230 = 7.5309`, the balance delta $11.0815436571 − $3.5506603068. **The `$0.8451` in
+that sentence is therefore wrong and `$0.8230` is right**; the sentence is left as it was written
+and this paragraph supersedes its number, the same way the Dv307 amendment above supersedes a
+verdict rather than editing it. Nothing is re-scored: $7.5309 was and remains the session's spend.
 
 The rule this leaves behind: `--already-usd` takes a number no file has to agree with, and the run
 record stores it (`already_usd`) without a provenance field beside it. A future driver should read

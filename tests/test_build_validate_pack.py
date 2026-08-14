@@ -102,6 +102,37 @@ def test_the_draw_is_reproducible_from_the_seed_alone(pack):
     assert sorted(redrawn) == pack["drawn"]["leaflet_posts"]
 
 
+def test_the_comment_half_of_the_draw_is_reproducible_too(pack):
+    """The leaflet half had this and the comment half did not — which is the half Dv323 was in.
+
+    A reproducibility test that covers only one leg is the shape that let a correlated draw ship:
+    nothing in the suite ever called `draw` for a channel, so nothing could have compared the five
+    comment ids against a redraw.
+    """
+    for one in pack["drawn"]["comments"]:
+        handle, _, msg_id = one.rpartition(":")
+        rows = summary.read_rows(summary.DERIVED / "inferences" / f"{handle.lstrip('@')}.jsonl")
+        (redrawn,) = builder.draw([row["msg_id"] for row in rows], 1, handle, pack["seed"])
+
+        assert redrawn == int(msg_id), one
+
+
+def test_the_five_comment_draws_are_not_the_same_index(pack):
+    """Dv323's own measurement, kept as a test: reproducible is not the same thing as independent.
+
+    Three of the first build's five landed on rank 163 of pools of 242, 223 and 222, because one
+    `Random(42)` re-seeded per stratum answers the same index for pools of equal bit length. The
+    rank is the only place that was ever visible — the ids differ either way.
+    """
+    ranks = {}
+    for one in pack["drawn"]["comments"]:
+        handle, _, msg_id = one.rpartition(":")
+        rows = summary.read_rows(summary.DERIVED / "inferences" / f"{handle.lstrip('@')}.jsonl")
+        ranks[handle] = sorted(row["msg_id"] for row in rows).index(int(msg_id))
+
+    assert len(set(ranks.values())) == len(ranks), f"two strata drew the same index: {ranks}"
+
+
 def test_a_stratum_too_small_for_its_draw_is_a_refusal():
     with pytest.raises(SystemExit, match="rows in a stratum the draw needs"):
         builder.draw(["a", "b"], 3, "x")
@@ -219,6 +250,24 @@ def test_the_findings_law_is_on_the_table_during_the_sitting(pack):
     assert builder.FINDINGS_LAW_RU in page
     assert "ORDERS" in pack["laws"]["findings"] and "never a moved bar" in pack["laws"]["findings"]
     assert "ratified" not in page, "a verdict word in the rendering would read as a filled slot"
+
+
+def test_the_rendering_speaks_russian_in_its_own_voice(pack):
+    """The contract exempts this ONE artifact from English and names the language it must be in.
+
+    The rows are Ukrainian and Russian and pass through untouched; what is checked here is the
+    module's own labels. The four Ukrainian-only letters are the discriminator, plus «мова», which
+    is spelled with letters both alphabets share and therefore escapes it.
+    """
+    source = (REPO_ROOT / "scripts" / "build_validate_pack.py").read_text(encoding="utf-8")
+    labels = [
+        line
+        for line in source.splitlines()
+        if any(letter in line for letter in "іїєґ") or "· мова " in line
+    ]
+
+    assert not labels, f"a Ukrainian label in a rendering the contract fixes as Russian: {labels}"
+    assert "· язык " in PAGE.read_text(encoding="utf-8")
 
 
 def test_the_rendering_points_at_pictures_that_exist(pack):

@@ -2179,6 +2179,7 @@
           "no_intent_in_window": 3944
         },
         "brand_attribution": {
+          "rows_with_a_brand_in_channel": 4,
           "rows_with_a_brand_in_window": 11
         },
         "language": {
@@ -2280,6 +2281,7 @@
           "no_intent_in_window": 3944
         },
         "brand_attribution": {
+          "rows_with_a_brand_in_channel": 2,
           "rows_with_a_brand_in_window": 11
         },
         "language": {
@@ -2381,6 +2383,7 @@
           "no_intent_in_window": 3944
         },
         "brand_attribution": {
+          "rows_with_a_brand_in_channel": 2,
           "rows_with_a_brand_in_window": 11
         },
         "language": {
@@ -2482,6 +2485,7 @@
           "no_intent_in_window": 3944
         },
         "brand_attribution": {
+          "rows_with_a_brand_in_channel": 0,
           "rows_with_a_brand_in_window": 11
         },
         "language": {
@@ -2581,6 +2585,7 @@
           "no_intent_in_window": 3944
         },
         "brand_attribution": {
+          "rows_with_a_brand_in_channel": 0,
           "rows_with_a_brand_in_window": 11
         },
         "language": {
@@ -2823,7 +2828,7 @@
   },
   "producer": {
     "script": "scripts/build_validate_pack.py",
-    "sha256": "2cdd4d4005a94bb208adda20f73f870a2595aba831808b4d886466a8d0d83946",
+    "sha256": "36b2062c8976d144e3c5a8f964e364fc555ed4013094ea567716f945e0db1804",
     "borrowed": {
       "src/market_pulse/prompts.py": "de767900a1ea578ea7b48bdb0dcc497c9f023e466a09ae0b6100d60371fdc3ab",
       "src/market_pulse/langid.py": "65c9ba294c846b8574387d1893826313e9649282f7fd8581d04354ea6cc9a2de",

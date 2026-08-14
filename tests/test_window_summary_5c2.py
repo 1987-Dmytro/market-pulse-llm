@@ -100,9 +100,31 @@ def test_no_old_price_value_ever_reaches_this_record(record):
     """SPEC 3.18 (1): the extracted old price is a FLAGGED input and never a printed price.
 
     Counted, never valued — so the record may say how many rows carry one and may not say what any
-    of them is. The check is on the whole serialised record rather than on the block that writes
-    it: a future field that leaked one would pass a check aimed at today's shape.
+    of them is. The walk is over the WHOLE record and not over the blocks today's producer writes:
+    a future field that leaked a price would pass a check aimed at this shape, which is the defect
+    an earlier version of this test had.
+
+    What it enforces: every `price_old` key in the record is a COUNT (an int), and no float in the
+    record is one of the 95 old prices the evidence carries. The second half is what a count-shaped
+    check cannot do — a leak under any other key name is still a leak.
     """
+    leaked = [
+        (path, value)
+        for path, value in _walk(record)
+        if path.endswith("price_old") and not isinstance(value, int)
+    ]
+    assert not leaked, f"price_old is a count in this record and these are not: {leaked}"
+
+    prices = {
+        row["position"]["price_old"]
+        for path in summary.leg_files(summary.DERIVED, loop.POSITION_RECORD_TYPE)
+        for row in summary.read_rows(path)
+        if row["position"]["price_old"] is not None
+    }
+    assert prices, "the fixture is only meaningful while some row carries an old price"
+    values = {value for _, value in _walk(record) if isinstance(value, float)}
+    assert not (values & prices), f"an old price reached the record as a value: {values & prices}"
+
     for block in (
         record["position_row"]["total"],
         *record["position_row"]["by_carrier"].values(),
@@ -116,6 +138,29 @@ def test_no_old_price_value_ever_reaches_this_record(record):
         }
         assert "price_old" in block["price_fields_present"]
         assert all(0.0 <= value <= 1.0 for value in _depths(block))
+
+
+def _walk(node, path: str = ""):
+    """Every (dotted path, leaf) in the record — the whole thing, not the blocks it happens to have."""
+    if isinstance(node, dict):
+        for key, value in node.items():
+            yield from _walk(value, f"{path}.{key}")
+    elif isinstance(node, list):
+        for index, value in enumerate(node):
+            yield from _walk(value, f"{path}[{index}]")
+    else:
+        yield path, node
+
+
+def test_the_whole_record_walk_would_see_a_leak():
+    """The control: the walk above is only worth anything if it can go red."""
+    leaked = [
+        (path, value)
+        for path, value in _walk({"position_row": {"sample": {"price_old": 264.5}}})
+        if path.endswith("price_old") and not isinstance(value, int)
+    ]
+
+    assert leaked == [(".position_row.sample.price_old", 264.5)]
 
 
 def _depths(block: dict) -> list[float]:

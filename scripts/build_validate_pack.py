@@ -312,7 +312,8 @@ def comment_caption(channel: str, labels, aggregates: dict) -> dict:
             "no_intent_in_window": whole["intents"]["rows_with_no_intent"],
         },
         "brand_attribution": {
-            "rows_with_a_brand_in_window": whole["brand_attribution"]["rows_with_a_brand"]
+            "rows_with_a_brand_in_channel": here["brand_attribution"]["rows_with_a_brand"],
+            "rows_with_a_brand_in_window": whole["brand_attribution"]["rows_with_a_brand"],
         },
         "language": {
             "in_channel": here["language"]["rows"],
@@ -521,12 +522,18 @@ def assert_same_evidence(aggregates: dict, sources: dict, summary_path: Path) ->
 # --- the rendering ---------------------------------------------------------------------------
 
 
+# Every label this module writes is RUSSIAN. The contract's header makes the rendering the one
+# artifact exempt from the English rule and names the language — «which is in Russian» — and the
+# exemption STATUS.md carries is scoped to Russian by name, not to "whatever the reader speaks".
+# The rows themselves are Ukrainian and Russian and travel through `esc` untouched; a label in a
+# third language is this module's own voice, not the corpus's. Checked by
+# `tests/test_build_validate_pack.py::test_the_rendering_speaks_russian_in_its_own_voice`.
 def esc(value) -> str:
     return html.escape("" if value is None else str(value), quote=True)
 
 
 def yes_no(value) -> str:
-    return {True: "так", False: "ні", None: "—"}.get(value, esc(value))
+    return {True: "да", False: "нет", None: "—"}.get(value, esc(value))
 
 
 def render(record: dict) -> str:
@@ -580,7 +587,7 @@ def _head(record: dict) -> str:
 
 def _comment(block: dict) -> str:
     caption, verdicts = block["aggregate"], block["verdicts"]
-    intents = ", ".join(verdicts["intents"] or []) or "— (жодної з шести)"
+    intents = ", ".join(verdicts["intents"] or []) or "— (ни одной из шести)"
     shown = (
         f'<div class="sent">{esc(block["text"])}</div>'
         if not block["empty_text"]
@@ -591,7 +598,7 @@ def _comment(block: dict) -> str:
 {caption["rows"]["in_channel"]}.)</div>"""
     )
     return f"""<div class="row">
-<h3>{esc(block["comment"])} <span class="empty">· мова {esc(block["language"])} · пост
+<h3>{esc(block["comment"])} <span class="empty">· язык {esc(block["language"])} · пост
 {esc(block["parent_msg_id"])} ({esc(block["post_state"])})</span></h3>
 <b>Комментарий, как написан:</b>
 {shown}
@@ -617,10 +624,11 @@ sha {esc(block["prompt_sha256"][:16])}…) и сырой ответ</summary>
 · без интенции {caption["intents"]["no_intent_in_window"]}</td></tr>
 <tr><td>brand attribution</td>
 <td><b>{esc(", ".join(verdicts["brand_attribution"]["matched"]) or "—")}</b></td>
-<td colspan="2" class="flag">Модельной головы НЕТ: T1v2_with_post отдаёт три метки. Это
-детерминированный матчер watchlist по отправленному тексту — в окне он срабатывает на
-{caption["brand_attribution"]["rows_with_a_brand_in_window"]} строках из
-{caption["rows"]["in_window"]}.</td></tr>
+<td>срабатывает на {caption["brand_attribution"]["rows_with_a_brand_in_channel"]} строках
+из {caption["rows"]["in_channel"]}</td>
+<td>{caption["brand_attribution"]["rows_with_a_brand_in_window"]} из
+{caption["rows"]["in_window"]}<br><span class="flag">Модельной головы НЕТ: T1v2_with_post отдаёт
+три метки. Это детерминированный матчер watchlist по отправленному тексту.</span></td></tr>
 </table>
 <p class="empty">Слот вердикта: <code>findings.comments["{esc(block["comment"])}"]</code></p>
 </div>"""
