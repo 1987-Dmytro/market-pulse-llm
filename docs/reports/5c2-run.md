@@ -477,14 +477,56 @@ priced the comment leg at its marginal corner, this session would have stopped a
 Session: **$7.5309 of the $8.00 cap**, $0.4691 unspent.
 Phase 4: **$31.4493 of $33.00**, $1.5507 remaining, both legs witnessed in the phase ledger.
 
-### Watermarks after
+**The two phase-ledger entries are ANCHOR-relative, not incremental**, as every entry in that file is: Endpoint A's reads `spent 24.7415` and Endpoint B's `spent 31.4493`, each being `$35.00 anchor − balance at that reading`. Summing `spent_usd` across sessions double-counts. This session's own cost is the difference, $6.7079 for the comment leg on top of $0.8451.
 
-Every channel's watermark advanced past its bought rows, per leg, and the cursor was persisted once
-per pack. The comment queue's remainder is the deliberate one: `16 218 − 5 075 = 11 143` rows below
-the window, still unanswered and still on disk. They are now BELOW the `inference` watermark, so a
-future full-history pass needs the cursor field reset — the rows are not lost and `above()` would
-re-ask none of the 5 075, because the answered-set subtracts them. 3.18 (4)'s deferral stays
-reversible; it just stopped being reversible by the queue alone.
+### Watermarks after, and the deferral measured rather than asserted
+
+`data/loop_cursor.json`, the three keys per pinned channel, after the run:
+
+| channel | inference | leaflet | post_text | in_store | in_window | queue now |
+|---|---:|---:|---:|---:|---:|---:|
+| @HealthPsycholog | 3 378 | — | — | 97 | 97 | 0 |
+| @VARUS_channel | 21 720 | — | 10 628 | 6 410 | 242 | 0 |
+| @chifit_family | 2 069 | — | — | 4 | 4 | 0 |
+| @denisovapro | 2 135 | — | — | 6 | 4 | 0 |
+| @kkondr_fit | 2 109 | — | — | 4 | 4 | 0 |
+| @klopotenkofood | 21 407 | — | — | 232 | 222 | 0 |
+| @kopiyochka1 | 392 701 | — | — | 223 | 223 | 0 |
+| @mamo_nepsichuy | 17 508 | — | — | 10 | 9 | 0 |
+| @mandziak | 49 226 | — | — | 1 048 | 1 026 | 0 |
+| @matusi_ukr | 580 440 | — | — | 2 890 | 2 717 | 0 |
+| @msuaaaa | 13 741 | — | 10 656 | 4 928 | 163 | 0 |
+| @olgaa_trainer | 643 | — | — | 4 | 4 | 0 |
+| @polyakova_fitness | 2 460 | — | — | 8 | 8 | 0 |
+| @retsepty | 49 804 | — | — | 105 | 104 | 0 |
+| @sashafitnesslife | 10 119 | — | — | 83 | 83 | 0 |
+| @smirnov108 | 31 435 | — | — | 101 | 100 | 0 |
+| @tarilka_malyuka | 213 | — | — | 45 | 45 | 0 |
+| @useful_healthy_fitness_menu | 3 227 | — | — | 4 | 4 | 0 |
+| @ya_Nenka | 2 599 | — | — | 16 | 16 | 0 |
+| **TOTAL** | | | | **16 218** | **5 075** | **0** |
+
+`@atb_market_official` carries `{"leaflet": 4526}` — the top of the page corpus.
+
+**The post-condition I set before the leg came out FALSE, and that is the finding.** I expected the
+queue to read `in_store − in_window = 11 143` afterwards. It reads **0**. The window is the newest
+four weeks, so the in-window rows are each channel's HIGHEST ids: a watermark that advances past
+them lands above every older row, and the queue — defined as "above the watermark, minus answered" —
+empties. The 11 143 are not gone, they are underneath.
+
+So the reversibility claim was measured instead of asserted:
+
+```
+queue with the watermark reset : 11143
+rows already answered on disk   : 5075
+of the reset queue, IN-WINDOW   : 0     <- none of the 5 075 would be re-bought
+reversible and re-buys nothing  : True
+```
+
+**3.18 (4)'s deferral survives, and it stopped being reversible by the queue alone** — it now needs
+the `inference` cursor field cleared, at which point `above()`'s answered-set subtraction makes the
+re-entry free. A future contract that wants the full history should say so; nothing on disk was
+lost, but nothing on disk says "11 143 owed" either.
 
 ---
 
@@ -584,11 +626,13 @@ would have been reported as eleven red commits.** [cause: tooling]
 
 ## Process signals
 
-1. **The rehearsal against a fake endpoint paid for itself twice.** Driving `main()` before the
-   first billable action found two money-path defects an import could not see, and the two it did
-   NOT find (the 10 MiB body, the missing ledger row on a crash) are exactly the two the fake
-   client could not have modelled — it never refused a payload and never raised. A stub verifies
-   the code's shape, not the transport's limits.
+1. **The rehearsal against a fake endpoint paid for itself, and its two misses are the lesson.**
+   Driving `main()` before the first billable action found two money-path defects an import could
+   not see. It missed two more — the 10 MiB body ceiling and the absent ledger row on a crash —
+   and not because a fake cannot know them: the fake I wrote modelled the worker's ANSWERS and
+   never the transport's LIMITS. It never refused a payload and never raised. A fake that asserted
+   `len(json.dumps(payload)) < 10 MiB`, or that raised once, would have caught both at $0. Model
+   the failure modes, not only the happy replies.
 2. **Both cost surprises were about the SAMPLE, not the machine.** The registered leaflet price was
    measured on the sparse prefix of its own population and missed 2.43×; the registered comment
    price was measured on a population and hit within 0.4%. Worth carrying into every future
@@ -601,3 +645,20 @@ would have been reported as eleven red commits.** [cause: tooling]
    its docstring in advance. That foresight is worth copying.
 5. **`make check | tail && git commit` commits on red.** The pipeline's exit code is `tail`'s. Two
    commits shipped that way before it was noticed (Dv313); `set -o pipefail` is the fix.
+
+---
+
+## Open questions for the team lead
+
+1. **The leaflet price is known wrong by 2.43× and no artifact carries the right one.** This run
+   measured 10.408 s/page over the whole 159-page corpus — the first population measurement this
+   instrument has ever had. Whether that becomes the registered price for the next cycle, and
+   whether `results/sku_b_positions_skub2.json`'s 4.2794 s should be annotated as prefix-measured
+   rather than silently reused, is a ruling, not an executor's call.
+2. **`scripts/witness_phase_ledger.py` exists and nothing calls it automatically.** This session ran
+   it by hand, twice. The next paid session re-opens the same silence unless the driver's
+   `finalise` invokes it or a contract names it as a step. Which contract owns that is a team-lead
+   decision.
+3. **The comment backlog is now under the watermark.** 11 143 rows, recoverable by clearing one
+   cursor field and free to re-enter (measured above), but nothing on disk states the debt. If
+   3.18 (4)'s history is ever bought, the contract that buys it has to say so itself.
