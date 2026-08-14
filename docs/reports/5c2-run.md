@@ -696,3 +696,51 @@ would have been reported as eleven red commits.** [cause: tooling]
 3. **The comment backlog is now under the watermark.** 11 143 rows, recoverable by clearing one
    cursor field and free to re-enter (measured above), but nothing on disk states the debt. If
    3.18 (4)'s history is ever bought, the contract that buys it has to say so itself.
+
+---
+
+## Addendum — 2026-08-14, the acceptance's debts (5c2-validate-prep, step 0)
+
+Three questions the acceptance raised about this report, answered here rather than in the report
+that asked them. Dv307 is amended in place, above.
+
+### The $0.8451 in the Endpoint-B budget, and where it comes from
+
+The comment leg was started with `--already-usd 0.8451`, so the (10)(a) gate priced itself against
+`$8.00 − $0.8451 = $7.1549` — the `budget_usd` in `results/run_5c2_comments.json`. **That number is
+a HAND-TYPED conservative reading and no artifact on this disk re-derives it.** It is stated here
+because a hand-supplied number in a money path is legal only when the record names it as such.
+
+What the persisted carriers say about the same quantity:
+
+| carrier | value | what it is |
+|---|---|---|
+| `results/spend_5c2run.json :: runs[0].step_spent_usd` | **$0.8230** | $11.0815436571 − $10.2585299348, the balance delta |
+| `results/spend_phase4.json :: sessions[-2]` | balance $10.2585299348 | the same reading, witnessed into the phase ledger |
+| the client's wall clock | $0.8344 | (2 267.544 + 393.079 + 60) s × $0.00030669 |
+| typed at the command line | **$0.8451** | +$0.0221 over the delta, +$0.0107 over the wall |
+
+The gap to the delta is $0.0221 — 72 seconds of worker time at the registered rate. No balance of
+$10.2364436571 (the reading that would produce it) appears in any file, log or record in this repo;
+neither the wall arithmetic nor the delta reproduces it, and the session transcript is not on disk.
+So the honest statement is the one at the top: it was typed by hand as a safer reading, not read
+back from a carrier.
+
+**Why it is legal, and the Dv33 floor sentence it rests on.** `spend_or_note`'s docstring and Dv33
+say the balance delta is a **FLOOR** — "RunPod settles it minutes to hours late" — so the true
+spend at that moment was **≥ $0.8230**, and a larger number is the conservative direction rather
+than a wrong one. The consequence is checkable and one-way: a bigger `already_usd` SHRINKS the
+(10)(a) budget, so the hand-typed reading could only make the gate stricter, never looser. Priced
+both ways, the verdict does not move — the gate projected $7.0196:
+
+```
+budget with the typed $0.8451   $7.1549   headroom $0.1353   → GO
+budget with the ledger $0.8230  $7.1770   headroom $0.1574   → GO
+the registered conservative corner $7.4840 exceeds BOTH budgets — which is why the gate,
+and not the corner, is what let the leg run.
+```
+
+The rule this leaves behind: `--already-usd` takes a number no file has to agree with, and the run
+record stores it (`already_usd`) without a provenance field beside it. A future driver should read
+the previous leg's `step_spent_usd` off the ledger and require the operator's override to be
+LARGER, or record where the typed number came from.
