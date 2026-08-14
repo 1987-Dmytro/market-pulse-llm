@@ -288,6 +288,40 @@ and append nothing to `results/spend_5c2run.json`. This is exactly the hole skub
 NOT fixed mid-session — the contract forbids editing the instrument mid-flight — and the anchor file
 keeps the spend recoverable by hand. Fix belongs to the next contract. [cause: contract-gap]
 
+> **AMENDED 2026-08-14 by measurement (5c2-validate-prep, step 0).** The verdict above is a true
+> statement about `a189a32`, the revision this deviation was written against, and it stopped being
+> true **inside this session**: `79ae380` — Dv309's twin, the crash fix — wrapped the whole of
+> `run_the_legs` in `except BaseException` and calls `finalise` from that arm. `SystemExit` derives
+> from `BaseException`, so the refusal exit landed in the same handler as the crash and the hole
+> closed as a SIDE EFFECT of a fix aimed at something else. Nothing was edited for this hole, which
+> is why the sentence "not fixed mid-session" read right at the time — the instrument was not
+> touched; the exit it named moved anyway.
+>
+> Driven, not re-read: `tests/test_run_5c2.py::test_a_refused_handshake_writes_the_ledger_row_and_the_record`
+> puts `main()` on the comment leg behind a transport whose `info()` differs from the assembled
+> config-A pin in ONE field, with `runpod_guard.balance` stubbed so no `runpodctl` call is made.
+> Both directions, at HEAD: the handshake still **refuses** (`SystemExit`, `client.calls == 1` — the
+> guard is not softened into a warning), and the ledger **does** get its row, carrying the refusal
+> message the exit died on:
+>
+> ```
+> results/spend_5c2run.json :: runs[-1]
+>   {"at": …, "balance": 9.0, "step_spent_usd": 0.0,
+>    "note": "5c2-run comments — SystemExit: the endpoint is not serving the registered
+>             configuration — merge_state: worker says 'merged-requantized', expected
+>             'unmerged-adapter'. …"}
+> the record   died: "SystemExit: the endpoint is not serving the registered configuration — …"
+>              notes: ["the run ENDED on an exception: SystemExit"]   timing.calls: 1
+> ```
+>
+> The negative control that says the test measures the fix rather than passing on its own: with the
+> `except BaseException` arm deleted from a scratch copy of the driver — the Dv307 shape — the same
+> test fails on `len(runs) == 1` with `runs == []`, which is the deviation's claim, reproduced.
+>
+> What is still owed is smaller than the deviation states and is named here rather than closed: the
+> exit is covered by the CRASH handler, so a future edit that narrows `except BaseException` to a
+> crash-only type would silently reopen it. The test above is what would go red.
+
 **Dv308 — the rehearsal found two money-path defects an import could not.** Driving `main()`
 against a fake endpoint before the first billable action (the house's stub-driven verification
 rule) produced two fixes, both committed in `a189a32`:

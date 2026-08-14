@@ -19,7 +19,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import run_5c2 as driver  # noqa: E402
 import run_loop  # noqa: E402
 
-from market_pulse import loop  # noqa: E402
+from market_pulse import loop, serving  # noqa: E402
 from market_pulse.raw_store import RawStore  # noqa: E402
 
 from test_loop import ALIASES, CATEGORIES, jpeg  # noqa: E402
@@ -288,6 +288,69 @@ def test_the_two_carriers_of_the_config_a_pin_agree():
     assert expected["max_new_tokens"] == 256
     assert not set(expected) & set(driver.SERVING_A_DROP), "provenance is not the measurement"
     assert len(expected) == 11
+
+
+class RefusingEndpoint:
+    """A client whose `info()` answers with ONE field wrong. Nothing past the handshake exists.
+
+    Not a stub of the whole endpoint: everything after `assert_serving` is unreachable on this
+    path by construction, and a fake that could answer a job would be able to hide a handshake
+    that did not refuse.
+    """
+
+    def __init__(self, endpoint_id: str, observed: dict) -> None:
+        self.endpoint_id = endpoint_id
+        self.observed = observed
+        self.calls = 0
+
+    def info(self) -> dict:
+        self.calls += 1
+        return self.observed
+
+    def timing(self) -> dict:
+        return {"calls": self.calls, "rows": 0, "worker_seconds": 0.0, "wall_seconds": None}
+
+
+def test_a_refused_handshake_writes_the_ledger_row_and_the_record(monkeypatch, tmp_path):
+    """What Dv307 says is open, MEASURED — the driver is driven into the refusal and the disk read.
+
+    Dv307 recorded that `serving.assert_serving` raises `SystemExit` above `log_run`, so an endpoint
+    serving the wrong configuration would bill its boot and append nothing to the ledger — and that
+    it was NOT fixed mid-session. The crash fix of Dv309 (`79ae380`) then wrapped the whole of
+    `run_the_legs` in `except BaseException` and called `finalise` from that arm. `SystemExit`
+    derives from `BaseException`, so the refusal exit now lands in the same handler as a crash.
+
+    A re-reading is not a measurement, so this drives `main()` into the refusal with a stubbed
+    transport and reads what is on disk afterwards. Both directions: the handshake must still
+    REFUSE (the guard is not being softened into a warning) and the two artifacts must exist.
+
+    `driver.guard` and `positions_gm4_skub.guard` are the same module object, so patching
+    `balance` once covers `main`'s anchor read and `spend_or_note`'s reconcile — no `runpodctl`
+    call is made and the real `results/spend_5c2run.json` is never opened.
+    """
+    expected = driver.config_a_expected()
+    ledger, record = tmp_path / "spend_5c2run.json", tmp_path / "run.json"
+    client = RefusingEndpoint("e-fake", expected | {"merge_state": "merged-requantized"})
+    monkeypatch.setattr(driver, "LEDGER", ledger)
+    monkeypatch.setattr(driver.guard, "balance", lambda: 9.0)
+    monkeypatch.setattr(driver, "client_for", lambda endpoint, api_key, dump=None: client)
+    monkeypatch.setenv(driver.API_KEY_ENV, "not-a-key")
+
+    # the control: the worker's own answer, unaltered, passes the same guard — so what fires below
+    # is the one changed field and not a refusal that refuses everything.
+    assert serving.assert_serving(expected | {"gpu_name": "RTX 4090"}, expected)
+
+    with pytest.raises(SystemExit, match="not serving the registered configuration"):
+        driver.main(["--leg", "comments", "--endpoint", "e-fake", "--out", str(record)])
+
+    assert client.calls == 1, "the handshake is the only call the refusal path makes"
+    runs = json.loads(ledger.read_text(encoding="utf-8"))["runs"]
+    assert len(runs) == 1 and runs[0]["balance"] == 9.0
+    assert runs[0]["note"].startswith("5c2-run comments — SystemExit:")
+    written = json.loads(record.read_text(encoding="utf-8"))
+    assert written["died"].startswith("SystemExit: the endpoint is not serving")
+    assert written["notes"] == ["the run ENDED on an exception: SystemExit"]
+    assert written["timing"]["calls"] == 1 and "go_no_go" not in written
 
 
 def test_the_config_a_expectation_refuses_when_the_carriers_disagree(monkeypatch, tmp_path):
