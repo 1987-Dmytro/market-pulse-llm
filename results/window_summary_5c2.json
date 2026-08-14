@@ -1,0 +1,1922 @@
+{
+  "phase": "5c2-validate-prep",
+  "contract": "SPEC 3.18 (6) — every row shown at the operator sitting is captioned with the aggregate it belongs to, so a single row is never read as the population. These are those aggregates; results/validate_5c2_pack.json reads them and computes none.",
+  "authority": "results/prereg_5c2_run.json",
+  "reads": "data/derived only, plus config/registry.yaml through the seal's own pin. No clock, no git block: two runs over the same evidence are byte-identical.",
+  "populations_registered": {
+    "comment": 5075,
+    "leaflet_page": 159,
+    "post_text": 44
+  },
+  "comment": {
+    "task": "T1v2_with_post",
+    "prompt_sha256": "495b43d1361d0e4f5f7a186eebb971f4dc3ed9f8afd128f539ba0f6a8ffc2a19",
+    "heads": [
+      "sentiment",
+      "sarcasm",
+      "intents"
+    ],
+    "total": {
+      "rows": 5075,
+      "scored": 5075,
+      "unreadable": {
+        "rows": 0,
+        "reasons": {}
+      },
+      "sentiment": {
+        "positive": 661,
+        "neutral": 4144,
+        "negative": 270
+      },
+      "sarcasm": {
+        "true": 67,
+        "false": 5008,
+        "rate": 0.0132,
+        "denominator": "scored"
+      },
+      "intents": {
+        "frequency": {
+          "service": 161,
+          "price": 553,
+          "availability": 184,
+          "taste": 245,
+          "quality": 138,
+          "packaging": 17
+        },
+        "rows_with_no_intent": 3944,
+        "labels_per_scored_row": 0.2558
+      },
+      "language": {
+        "rows": {
+          "ua": 2606,
+          "other": 1925,
+          "en": 51,
+          "ru": 493
+        },
+        "note": "over ALL rows — the language is a property of the text, not of the reply",
+        "sentiment": {
+          "en": {
+            "neutral": 51
+          },
+          "other": {
+            "neutral": 1778,
+            "positive": 111,
+            "negative": 36
+          },
+          "ru": {
+            "neutral": 333,
+            "positive": 100,
+            "negative": 60
+          },
+          "ua": {
+            "positive": 450,
+            "neutral": 1982,
+            "negative": 174
+          }
+        }
+      },
+      "brand_attribution": {
+        "instrument": "market_pulse.brands.find_watchlist_brands over config/registry.yaml's watchlist — a DETERMINISTIC string match on the text that was sent, not a model head. The comment instrument is T1v2_with_post and it returns three labels: sentiment, sarcasm, intents. 3.18 (6) names a fourth verdict («the brand attribution») that this instrument does not produce; the matcher is what the sitting can be shown, and it is named rather than passed off as the model's answer.",
+        "rows_with_a_brand": 11,
+        "mentions": {
+          "varus-pl": 2,
+          "limo": 1,
+          "rud": 1,
+          "varto": 7,
+          "garmonija": 1,
+          "lasunka": 1
+        }
+      }
+    },
+    "per_channel": {
+      "@HealthPsycholog": {
+        "rows": 97,
+        "scored": 97,
+        "unreadable": {
+          "rows": 0,
+          "reasons": {}
+        },
+        "sentiment": {
+          "positive": 10,
+          "neutral": 82,
+          "negative": 5
+        },
+        "sarcasm": {
+          "true": 1,
+          "false": 96,
+          "rate": 0.0103,
+          "denominator": "scored"
+        },
+        "intents": {
+          "frequency": {
+            "service": 15,
+            "price": 8
+          },
+          "rows_with_no_intent": 74,
+          "labels_per_scored_row": 0.2371
+        },
+        "language": {
+          "rows": {
+            "ua": 83,
+            "other": 9,
+            "en": 5
+          },
+          "note": "over ALL rows — the language is a property of the text, not of the reply",
+          "sentiment": {
+            "en": {
+              "neutral": 5
+            },
+            "other": {
+              "neutral": 7,
+              "positive": 1,
+              "negative": 1
+            },
+            "ua": {
+              "positive": 9,
+              "neutral": 70,
+              "negative": 4
+            }
+          }
+        },
+        "brand_attribution": {
+          "instrument": "market_pulse.brands.find_watchlist_brands over config/registry.yaml's watchlist — a DETERMINISTIC string match on the text that was sent, not a model head. The comment instrument is T1v2_with_post and it returns three labels: sentiment, sarcasm, intents. 3.18 (6) names a fourth verdict («the brand attribution») that this instrument does not produce; the matcher is what the sitting can be shown, and it is named rather than passed off as the model's answer.",
+          "rows_with_a_brand": 0,
+          "mentions": {}
+        }
+      },
+      "@VARUS_channel": {
+        "rows": 242,
+        "scored": 242,
+        "unreadable": {
+          "rows": 0,
+          "reasons": {}
+        },
+        "sentiment": {
+          "neutral": 160,
+          "positive": 28,
+          "negative": 54
+        },
+        "sarcasm": {
+          "true": 15,
+          "false": 227,
+          "rate": 0.062,
+          "denominator": "scored"
+        },
+        "intents": {
+          "frequency": {
+            "service": 28,
+            "availability": 28,
+            "price": 19,
+            "taste": 33,
+            "quality": 14
+          },
+          "rows_with_no_intent": 146,
+          "labels_per_scored_row": 0.5041
+        },
+        "language": {
+          "rows": {
+            "ua": 102,
+            "ru": 42,
+            "en": 4,
+            "other": 94
+          },
+          "note": "over ALL rows — the language is a property of the text, not of the reply",
+          "sentiment": {
+            "en": {
+              "neutral": 4
+            },
+            "other": {
+              "neutral": 84,
+              "positive": 2,
+              "negative": 8
+            },
+            "ru": {
+              "neutral": 14,
+              "positive": 8,
+              "negative": 20
+            },
+            "ua": {
+              "neutral": 58,
+              "positive": 18,
+              "negative": 26
+            }
+          }
+        },
+        "brand_attribution": {
+          "instrument": "market_pulse.brands.find_watchlist_brands over config/registry.yaml's watchlist — a DETERMINISTIC string match on the text that was sent, not a model head. The comment instrument is T1v2_with_post and it returns three labels: sentiment, sarcasm, intents. 3.18 (6) names a fourth verdict («the brand attribution») that this instrument does not produce; the matcher is what the sitting can be shown, and it is named rather than passed off as the model's answer.",
+          "rows_with_a_brand": 2,
+          "mentions": {
+            "varus-pl": 2,
+            "limo": 1,
+            "rud": 1
+          }
+        }
+      },
+      "@chifit_family": {
+        "rows": 4,
+        "scored": 4,
+        "unreadable": {
+          "rows": 0,
+          "reasons": {}
+        },
+        "sentiment": {
+          "positive": 4
+        },
+        "sarcasm": {
+          "true": 0,
+          "false": 4,
+          "rate": 0.0,
+          "denominator": "scored"
+        },
+        "intents": {
+          "frequency": {},
+          "rows_with_no_intent": 4,
+          "labels_per_scored_row": 0.0
+        },
+        "language": {
+          "rows": {
+            "ua": 2,
+            "other": 2
+          },
+          "note": "over ALL rows — the language is a property of the text, not of the reply",
+          "sentiment": {
+            "other": {
+              "positive": 2
+            },
+            "ua": {
+              "positive": 2
+            }
+          }
+        },
+        "brand_attribution": {
+          "instrument": "market_pulse.brands.find_watchlist_brands over config/registry.yaml's watchlist — a DETERMINISTIC string match on the text that was sent, not a model head. The comment instrument is T1v2_with_post and it returns three labels: sentiment, sarcasm, intents. 3.18 (6) names a fourth verdict («the brand attribution») that this instrument does not produce; the matcher is what the sitting can be shown, and it is named rather than passed off as the model's answer.",
+          "rows_with_a_brand": 0,
+          "mentions": {}
+        }
+      },
+      "@denisovapro": {
+        "rows": 4,
+        "scored": 4,
+        "unreadable": {
+          "rows": 0,
+          "reasons": {}
+        },
+        "sentiment": {
+          "neutral": 4
+        },
+        "sarcasm": {
+          "true": 0,
+          "false": 4,
+          "rate": 0.0,
+          "denominator": "scored"
+        },
+        "intents": {
+          "frequency": {},
+          "rows_with_no_intent": 4,
+          "labels_per_scored_row": 0.0
+        },
+        "language": {
+          "rows": {
+            "ua": 2,
+            "other": 1,
+            "en": 1
+          },
+          "note": "over ALL rows — the language is a property of the text, not of the reply",
+          "sentiment": {
+            "en": {
+              "neutral": 1
+            },
+            "other": {
+              "neutral": 1
+            },
+            "ua": {
+              "neutral": 2
+            }
+          }
+        },
+        "brand_attribution": {
+          "instrument": "market_pulse.brands.find_watchlist_brands over config/registry.yaml's watchlist — a DETERMINISTIC string match on the text that was sent, not a model head. The comment instrument is T1v2_with_post and it returns three labels: sentiment, sarcasm, intents. 3.18 (6) names a fourth verdict («the brand attribution») that this instrument does not produce; the matcher is what the sitting can be shown, and it is named rather than passed off as the model's answer.",
+          "rows_with_a_brand": 0,
+          "mentions": {}
+        }
+      },
+      "@kkondr_fit": {
+        "rows": 4,
+        "scored": 4,
+        "unreadable": {
+          "rows": 0,
+          "reasons": {}
+        },
+        "sentiment": {
+          "neutral": 2,
+          "positive": 2
+        },
+        "sarcasm": {
+          "true": 0,
+          "false": 4,
+          "rate": 0.0,
+          "denominator": "scored"
+        },
+        "intents": {
+          "frequency": {},
+          "rows_with_no_intent": 4,
+          "labels_per_scored_row": 0.0
+        },
+        "language": {
+          "rows": {
+            "ua": 1,
+            "other": 3
+          },
+          "note": "over ALL rows — the language is a property of the text, not of the reply",
+          "sentiment": {
+            "other": {
+              "positive": 2,
+              "neutral": 1
+            },
+            "ua": {
+              "neutral": 1
+            }
+          }
+        },
+        "brand_attribution": {
+          "instrument": "market_pulse.brands.find_watchlist_brands over config/registry.yaml's watchlist — a DETERMINISTIC string match on the text that was sent, not a model head. The comment instrument is T1v2_with_post and it returns three labels: sentiment, sarcasm, intents. 3.18 (6) names a fourth verdict («the brand attribution») that this instrument does not produce; the matcher is what the sitting can be shown, and it is named rather than passed off as the model's answer.",
+          "rows_with_a_brand": 0,
+          "mentions": {}
+        }
+      },
+      "@klopotenkofood": {
+        "rows": 222,
+        "scored": 222,
+        "unreadable": {
+          "rows": 0,
+          "reasons": {}
+        },
+        "sentiment": {
+          "positive": 58,
+          "neutral": 147,
+          "negative": 17
+        },
+        "sarcasm": {
+          "true": 3,
+          "false": 219,
+          "rate": 0.0135,
+          "denominator": "scored"
+        },
+        "intents": {
+          "frequency": {
+            "taste": 100,
+            "quality": 6,
+            "availability": 3,
+            "service": 1
+          },
+          "rows_with_no_intent": 113,
+          "labels_per_scored_row": 0.4955
+        },
+        "language": {
+          "rows": {
+            "other": 45,
+            "ua": 175,
+            "en": 1,
+            "ru": 1
+          },
+          "note": "over ALL rows — the language is a property of the text, not of the reply",
+          "sentiment": {
+            "en": {
+              "neutral": 1
+            },
+            "other": {
+              "positive": 10,
+              "neutral": 34,
+              "negative": 1
+            },
+            "ru": {
+              "neutral": 1
+            },
+            "ua": {
+              "neutral": 111,
+              "negative": 16,
+              "positive": 48
+            }
+          }
+        },
+        "brand_attribution": {
+          "instrument": "market_pulse.brands.find_watchlist_brands over config/registry.yaml's watchlist — a DETERMINISTIC string match on the text that was sent, not a model head. The comment instrument is T1v2_with_post and it returns three labels: sentiment, sarcasm, intents. 3.18 (6) names a fourth verdict («the brand attribution») that this instrument does not produce; the matcher is what the sitting can be shown, and it is named rather than passed off as the model's answer.",
+          "rows_with_a_brand": 0,
+          "mentions": {}
+        }
+      },
+      "@kopiyochka1": {
+        "rows": 223,
+        "scored": 223,
+        "unreadable": {
+          "rows": 0,
+          "reasons": {}
+        },
+        "sentiment": {
+          "neutral": 180,
+          "positive": 22,
+          "negative": 21
+        },
+        "sarcasm": {
+          "true": 4,
+          "false": 219,
+          "rate": 0.0179,
+          "denominator": "scored"
+        },
+        "intents": {
+          "frequency": {
+            "availability": 95,
+            "quality": 3,
+            "service": 23,
+            "price": 22,
+            "packaging": 3
+          },
+          "rows_with_no_intent": 95,
+          "labels_per_scored_row": 0.6547
+        },
+        "language": {
+          "rows": {
+            "ua": 185,
+            "other": 37,
+            "ru": 1
+          },
+          "note": "over ALL rows — the language is a property of the text, not of the reply",
+          "sentiment": {
+            "other": {
+              "neutral": 29,
+              "positive": 5,
+              "negative": 3
+            },
+            "ru": {
+              "neutral": 1
+            },
+            "ua": {
+              "neutral": 150,
+              "positive": 17,
+              "negative": 18
+            }
+          }
+        },
+        "brand_attribution": {
+          "instrument": "market_pulse.brands.find_watchlist_brands over config/registry.yaml's watchlist — a DETERMINISTIC string match on the text that was sent, not a model head. The comment instrument is T1v2_with_post and it returns three labels: sentiment, sarcasm, intents. 3.18 (6) names a fourth verdict («the brand attribution») that this instrument does not produce; the matcher is what the sitting can be shown, and it is named rather than passed off as the model's answer.",
+          "rows_with_a_brand": 0,
+          "mentions": {}
+        }
+      },
+      "@mamo_nepsichuy": {
+        "rows": 9,
+        "scored": 9,
+        "unreadable": {
+          "rows": 0,
+          "reasons": {}
+        },
+        "sentiment": {
+          "neutral": 5,
+          "positive": 4
+        },
+        "sarcasm": {
+          "true": 0,
+          "false": 9,
+          "rate": 0.0,
+          "denominator": "scored"
+        },
+        "intents": {
+          "frequency": {
+            "taste": 1
+          },
+          "rows_with_no_intent": 8,
+          "labels_per_scored_row": 0.1111
+        },
+        "language": {
+          "rows": {
+            "ua": 7,
+            "other": 2
+          },
+          "note": "over ALL rows — the language is a property of the text, not of the reply",
+          "sentiment": {
+            "other": {
+              "neutral": 1,
+              "positive": 1
+            },
+            "ua": {
+              "neutral": 4,
+              "positive": 3
+            }
+          }
+        },
+        "brand_attribution": {
+          "instrument": "market_pulse.brands.find_watchlist_brands over config/registry.yaml's watchlist — a DETERMINISTIC string match on the text that was sent, not a model head. The comment instrument is T1v2_with_post and it returns three labels: sentiment, sarcasm, intents. 3.18 (6) names a fourth verdict («the brand attribution») that this instrument does not produce; the matcher is what the sitting can be shown, and it is named rather than passed off as the model's answer.",
+          "rows_with_a_brand": 0,
+          "mentions": {}
+        }
+      },
+      "@mandziak": {
+        "rows": 1026,
+        "scored": 1026,
+        "unreadable": {
+          "rows": 0,
+          "reasons": {}
+        },
+        "sentiment": {
+          "neutral": 777,
+          "negative": 78,
+          "positive": 171
+        },
+        "sarcasm": {
+          "true": 31,
+          "false": 995,
+          "rate": 0.0302,
+          "denominator": "scored"
+        },
+        "intents": {
+          "frequency": {
+            "quality": 31,
+            "taste": 43,
+            "packaging": 1,
+            "price": 35,
+            "service": 12
+          },
+          "rows_with_no_intent": 913,
+          "labels_per_scored_row": 0.1189
+        },
+        "language": {
+          "rows": {
+            "en": 7,
+            "other": 92,
+            "ru": 25,
+            "ua": 902
+          },
+          "note": "over ALL rows — the language is a property of the text, not of the reply",
+          "sentiment": {
+            "en": {
+              "neutral": 7
+            },
+            "other": {
+              "negative": 13,
+              "neutral": 50,
+              "positive": 29
+            },
+            "ru": {
+              "negative": 2,
+              "neutral": 21,
+              "positive": 2
+            },
+            "ua": {
+              "negative": 63,
+              "neutral": 699,
+              "positive": 140
+            }
+          }
+        },
+        "brand_attribution": {
+          "instrument": "market_pulse.brands.find_watchlist_brands over config/registry.yaml's watchlist — a DETERMINISTIC string match on the text that was sent, not a model head. The comment instrument is T1v2_with_post and it returns three labels: sentiment, sarcasm, intents. 3.18 (6) names a fourth verdict («the brand attribution») that this instrument does not produce; the matcher is what the sitting can be shown, and it is named rather than passed off as the model's answer.",
+          "rows_with_a_brand": 2,
+          "mentions": {
+            "varto": 2
+          }
+        }
+      },
+      "@matusi_ukr": {
+        "rows": 2717,
+        "scored": 2717,
+        "unreadable": {
+          "rows": 0,
+          "reasons": {}
+        },
+        "sentiment": {
+          "neutral": 2429,
+          "negative": 67,
+          "positive": 221
+        },
+        "sarcasm": {
+          "true": 6,
+          "false": 2711,
+          "rate": 0.0022,
+          "denominator": "scored"
+        },
+        "intents": {
+          "frequency": {
+            "service": 49,
+            "price": 458,
+            "taste": 31,
+            "quality": 81,
+            "availability": 53,
+            "packaging": 9
+          },
+          "rows_with_no_intent": 2148,
+          "labels_per_scored_row": 0.2506
+        },
+        "language": {
+          "rows": {
+            "other": 1384,
+            "ru": 367,
+            "ua": 933,
+            "en": 33
+          },
+          "note": "over ALL rows — the language is a property of the text, not of the reply",
+          "sentiment": {
+            "en": {
+              "neutral": 33
+            },
+            "other": {
+              "neutral": 1351,
+              "positive": 25,
+              "negative": 8
+            },
+            "ru": {
+              "neutral": 256,
+              "positive": 82,
+              "negative": 29
+            },
+            "ua": {
+              "negative": 30,
+              "positive": 114,
+              "neutral": 789
+            }
+          }
+        },
+        "brand_attribution": {
+          "instrument": "market_pulse.brands.find_watchlist_brands over config/registry.yaml's watchlist — a DETERMINISTIC string match on the text that was sent, not a model head. The comment instrument is T1v2_with_post and it returns three labels: sentiment, sarcasm, intents. 3.18 (6) names a fourth verdict («the brand attribution») that this instrument does not produce; the matcher is what the sitting can be shown, and it is named rather than passed off as the model's answer.",
+          "rows_with_a_brand": 4,
+          "mentions": {
+            "garmonija": 1,
+            "varto": 2,
+            "lasunka": 1
+          }
+        }
+      },
+      "@msuaaaa": {
+        "rows": 163,
+        "scored": 163,
+        "unreadable": {
+          "rows": 0,
+          "reasons": {}
+        },
+        "sentiment": {
+          "neutral": 146,
+          "negative": 7,
+          "positive": 10
+        },
+        "sarcasm": {
+          "true": 2,
+          "false": 161,
+          "rate": 0.0123,
+          "denominator": "scored"
+        },
+        "intents": {
+          "frequency": {
+            "service": 13,
+            "taste": 2,
+            "availability": 5,
+            "price": 7,
+            "packaging": 4
+          },
+          "rows_with_no_intent": 133,
+          "labels_per_scored_row": 0.1902
+        },
+        "language": {
+          "rows": {
+            "other": 128,
+            "ua": 32,
+            "ru": 3
+          },
+          "note": "over ALL rows — the language is a property of the text, not of the reply",
+          "sentiment": {
+            "other": {
+              "neutral": 128
+            },
+            "ru": {
+              "positive": 1,
+              "neutral": 2
+            },
+            "ua": {
+              "negative": 7,
+              "neutral": 16,
+              "positive": 9
+            }
+          }
+        },
+        "brand_attribution": {
+          "instrument": "market_pulse.brands.find_watchlist_brands over config/registry.yaml's watchlist — a DETERMINISTIC string match on the text that was sent, not a model head. The comment instrument is T1v2_with_post and it returns three labels: sentiment, sarcasm, intents. 3.18 (6) names a fourth verdict («the brand attribution») that this instrument does not produce; the matcher is what the sitting can be shown, and it is named rather than passed off as the model's answer.",
+          "rows_with_a_brand": 0,
+          "mentions": {}
+        }
+      },
+      "@olgaa_trainer": {
+        "rows": 4,
+        "scored": 4,
+        "unreadable": {
+          "rows": 0,
+          "reasons": {}
+        },
+        "sentiment": {
+          "positive": 4
+        },
+        "sarcasm": {
+          "true": 0,
+          "false": 4,
+          "rate": 0.0,
+          "denominator": "scored"
+        },
+        "intents": {
+          "frequency": {},
+          "rows_with_no_intent": 4,
+          "labels_per_scored_row": 0.0
+        },
+        "language": {
+          "rows": {
+            "ua": 3,
+            "other": 1
+          },
+          "note": "over ALL rows — the language is a property of the text, not of the reply",
+          "sentiment": {
+            "other": {
+              "positive": 1
+            },
+            "ua": {
+              "positive": 3
+            }
+          }
+        },
+        "brand_attribution": {
+          "instrument": "market_pulse.brands.find_watchlist_brands over config/registry.yaml's watchlist — a DETERMINISTIC string match on the text that was sent, not a model head. The comment instrument is T1v2_with_post and it returns three labels: sentiment, sarcasm, intents. 3.18 (6) names a fourth verdict («the brand attribution») that this instrument does not produce; the matcher is what the sitting can be shown, and it is named rather than passed off as the model's answer.",
+          "rows_with_a_brand": 0,
+          "mentions": {}
+        }
+      },
+      "@polyakova_fitness": {
+        "rows": 8,
+        "scored": 8,
+        "unreadable": {
+          "rows": 0,
+          "reasons": {}
+        },
+        "sentiment": {
+          "positive": 5,
+          "neutral": 3
+        },
+        "sarcasm": {
+          "true": 0,
+          "false": 8,
+          "rate": 0.0,
+          "denominator": "scored"
+        },
+        "intents": {
+          "frequency": {
+            "service": 1
+          },
+          "rows_with_no_intent": 7,
+          "labels_per_scored_row": 0.125
+        },
+        "language": {
+          "rows": {
+            "other": 2,
+            "ua": 6
+          },
+          "note": "over ALL rows — the language is a property of the text, not of the reply",
+          "sentiment": {
+            "other": {
+              "positive": 2
+            },
+            "ua": {
+              "positive": 3,
+              "neutral": 3
+            }
+          }
+        },
+        "brand_attribution": {
+          "instrument": "market_pulse.brands.find_watchlist_brands over config/registry.yaml's watchlist — a DETERMINISTIC string match on the text that was sent, not a model head. The comment instrument is T1v2_with_post and it returns three labels: sentiment, sarcasm, intents. 3.18 (6) names a fourth verdict («the brand attribution») that this instrument does not produce; the matcher is what the sitting can be shown, and it is named rather than passed off as the model's answer.",
+          "rows_with_a_brand": 0,
+          "mentions": {}
+        }
+      },
+      "@retsepty": {
+        "rows": 104,
+        "scored": 104,
+        "unreadable": {
+          "rows": 0,
+          "reasons": {}
+        },
+        "sentiment": {
+          "neutral": 49,
+          "positive": 42,
+          "negative": 13
+        },
+        "sarcasm": {
+          "true": 4,
+          "false": 100,
+          "rate": 0.0385,
+          "denominator": "scored"
+        },
+        "intents": {
+          "frequency": {
+            "taste": 25,
+            "price": 3
+          },
+          "rows_with_no_intent": 76,
+          "labels_per_scored_row": 0.2692
+        },
+        "language": {
+          "rows": {
+            "ru": 49,
+            "ua": 24,
+            "other": 31
+          },
+          "note": "over ALL rows — the language is a property of the text, not of the reply",
+          "sentiment": {
+            "other": {
+              "positive": 18,
+              "neutral": 12,
+              "negative": 1
+            },
+            "ru": {
+              "neutral": 35,
+              "positive": 5,
+              "negative": 9
+            },
+            "ua": {
+              "positive": 19,
+              "neutral": 2,
+              "negative": 3
+            }
+          }
+        },
+        "brand_attribution": {
+          "instrument": "market_pulse.brands.find_watchlist_brands over config/registry.yaml's watchlist — a DETERMINISTIC string match on the text that was sent, not a model head. The comment instrument is T1v2_with_post and it returns three labels: sentiment, sarcasm, intents. 3.18 (6) names a fourth verdict («the brand attribution») that this instrument does not produce; the matcher is what the sitting can be shown, and it is named rather than passed off as the model's answer.",
+          "rows_with_a_brand": 0,
+          "mentions": {}
+        }
+      },
+      "@sashafitnesslife": {
+        "rows": 83,
+        "scored": 83,
+        "unreadable": {
+          "rows": 0,
+          "reasons": {}
+        },
+        "sentiment": {
+          "positive": 9,
+          "neutral": 73,
+          "negative": 1
+        },
+        "sarcasm": {
+          "true": 0,
+          "false": 83,
+          "rate": 0.0,
+          "denominator": "scored"
+        },
+        "intents": {
+          "frequency": {
+            "service": 4,
+            "taste": 1
+          },
+          "rows_with_no_intent": 78,
+          "labels_per_scored_row": 0.0602
+        },
+        "language": {
+          "rows": {
+            "other": 66,
+            "ua": 17
+          },
+          "note": "over ALL rows — the language is a property of the text, not of the reply",
+          "sentiment": {
+            "other": {
+              "positive": 2,
+              "neutral": 64
+            },
+            "ua": {
+              "neutral": 9,
+              "positive": 7,
+              "negative": 1
+            }
+          }
+        },
+        "brand_attribution": {
+          "instrument": "market_pulse.brands.find_watchlist_brands over config/registry.yaml's watchlist — a DETERMINISTIC string match on the text that was sent, not a model head. The comment instrument is T1v2_with_post and it returns three labels: sentiment, sarcasm, intents. 3.18 (6) names a fourth verdict («the brand attribution») that this instrument does not produce; the matcher is what the sitting can be shown, and it is named rather than passed off as the model's answer.",
+          "rows_with_a_brand": 0,
+          "mentions": {}
+        }
+      },
+      "@smirnov108": {
+        "rows": 100,
+        "scored": 100,
+        "unreadable": {
+          "rows": 0,
+          "reasons": {}
+        },
+        "sentiment": {
+          "positive": 51,
+          "neutral": 46,
+          "negative": 3
+        },
+        "sarcasm": {
+          "true": 0,
+          "false": 100,
+          "rate": 0.0,
+          "denominator": "scored"
+        },
+        "intents": {
+          "frequency": {
+            "service": 15
+          },
+          "rows_with_no_intent": 85,
+          "labels_per_scored_row": 0.15
+        },
+        "language": {
+          "rows": {
+            "other": 10,
+            "ua": 85,
+            "ru": 5
+          },
+          "note": "over ALL rows — the language is a property of the text, not of the reply",
+          "sentiment": {
+            "other": {
+              "positive": 7,
+              "neutral": 3
+            },
+            "ru": {
+              "neutral": 3,
+              "positive": 2
+            },
+            "ua": {
+              "neutral": 40,
+              "positive": 42,
+              "negative": 3
+            }
+          }
+        },
+        "brand_attribution": {
+          "instrument": "market_pulse.brands.find_watchlist_brands over config/registry.yaml's watchlist — a DETERMINISTIC string match on the text that was sent, not a model head. The comment instrument is T1v2_with_post and it returns three labels: sentiment, sarcasm, intents. 3.18 (6) names a fourth verdict («the brand attribution») that this instrument does not produce; the matcher is what the sitting can be shown, and it is named rather than passed off as the model's answer.",
+          "rows_with_a_brand": 0,
+          "mentions": {}
+        }
+      },
+      "@tarilka_malyuka": {
+        "rows": 45,
+        "scored": 45,
+        "unreadable": {
+          "rows": 0,
+          "reasons": {}
+        },
+        "sentiment": {
+          "negative": 3,
+          "neutral": 31,
+          "positive": 11
+        },
+        "sarcasm": {
+          "true": 0,
+          "false": 45,
+          "rate": 0.0,
+          "denominator": "scored"
+        },
+        "intents": {
+          "frequency": {
+            "taste": 8,
+            "quality": 3
+          },
+          "rows_with_no_intent": 34,
+          "labels_per_scored_row": 0.2444
+        },
+        "language": {
+          "rows": {
+            "other": 14,
+            "ua": 31
+          },
+          "note": "over ALL rows — the language is a property of the text, not of the reply",
+          "sentiment": {
+            "other": {
+              "negative": 1,
+              "neutral": 11,
+              "positive": 2
+            },
+            "ua": {
+              "neutral": 20,
+              "negative": 2,
+              "positive": 9
+            }
+          }
+        },
+        "brand_attribution": {
+          "instrument": "market_pulse.brands.find_watchlist_brands over config/registry.yaml's watchlist — a DETERMINISTIC string match on the text that was sent, not a model head. The comment instrument is T1v2_with_post and it returns three labels: sentiment, sarcasm, intents. 3.18 (6) names a fourth verdict («the brand attribution») that this instrument does not produce; the matcher is what the sitting can be shown, and it is named rather than passed off as the model's answer.",
+          "rows_with_a_brand": 1,
+          "mentions": {
+            "varto": 1
+          }
+        }
+      },
+      "@useful_healthy_fitness_menu": {
+        "rows": 4,
+        "scored": 4,
+        "unreadable": {
+          "rows": 0,
+          "reasons": {}
+        },
+        "sentiment": {
+          "positive": 2,
+          "neutral": 2
+        },
+        "sarcasm": {
+          "true": 0,
+          "false": 4,
+          "rate": 0.0,
+          "denominator": "scored"
+        },
+        "intents": {
+          "frequency": {
+            "taste": 1
+          },
+          "rows_with_no_intent": 3,
+          "labels_per_scored_row": 0.25
+        },
+        "language": {
+          "rows": {
+            "ua": 2,
+            "other": 2
+          },
+          "note": "over ALL rows — the language is a property of the text, not of the reply",
+          "sentiment": {
+            "other": {
+              "neutral": 2
+            },
+            "ua": {
+              "positive": 2
+            }
+          }
+        },
+        "brand_attribution": {
+          "instrument": "market_pulse.brands.find_watchlist_brands over config/registry.yaml's watchlist — a DETERMINISTIC string match on the text that was sent, not a model head. The comment instrument is T1v2_with_post and it returns three labels: sentiment, sarcasm, intents. 3.18 (6) names a fourth verdict («the brand attribution») that this instrument does not produce; the matcher is what the sitting can be shown, and it is named rather than passed off as the model's answer.",
+          "rows_with_a_brand": 0,
+          "mentions": {}
+        }
+      },
+      "@ya_Nenka": {
+        "rows": 16,
+        "scored": 16,
+        "unreadable": {
+          "rows": 0,
+          "reasons": {}
+        },
+        "sentiment": {
+          "positive": 7,
+          "negative": 1,
+          "neutral": 8
+        },
+        "sarcasm": {
+          "true": 1,
+          "false": 15,
+          "rate": 0.0625,
+          "denominator": "scored"
+        },
+        "intents": {
+          "frequency": {
+            "price": 1
+          },
+          "rows_with_no_intent": 15,
+          "labels_per_scored_row": 0.0625
+        },
+        "language": {
+          "rows": {
+            "ua": 14,
+            "other": 2
+          },
+          "note": "over ALL rows — the language is a property of the text, not of the reply",
+          "sentiment": {
+            "other": {
+              "positive": 2
+            },
+            "ua": {
+              "positive": 5,
+              "negative": 1,
+              "neutral": 8
+            }
+          }
+        },
+        "brand_attribution": {
+          "instrument": "market_pulse.brands.find_watchlist_brands over config/registry.yaml's watchlist — a DETERMINISTIC string match on the text that was sent, not a model head. The comment instrument is T1v2_with_post and it returns three labels: sentiment, sarcasm, intents. 3.18 (6) names a fourth verdict («the brand attribution») that this instrument does not produce; the matcher is what the sitting can be shown, and it is named rather than passed off as the model's answer.",
+          "rows_with_a_brand": 2,
+          "mentions": {
+            "varto": 2
+          }
+        }
+      }
+    }
+  },
+  "leaflet_page": {
+    "task": "positions_post_gm4",
+    "prompt_sha256": "ca6303c157d46e707aaf3fc52c7a05ed1450e24c26db0e7c93eefba4f6968754",
+    "posts": 19,
+    "total": {
+      "rows": 159,
+      "with_positions": 30,
+      "empty": 127,
+      "unreadable": {
+        "rows": 2,
+        "reasons": {
+          "malformed JSON": 1,
+          "price '67 90' is not one number": 1
+        }
+      },
+      "positions": 106
+    },
+    "per_channel": {
+      "@atb_market_official": {
+        "rows": 159,
+        "with_positions": 30,
+        "empty": 127,
+        "unreadable": {
+          "rows": 2,
+          "reasons": {
+            "malformed JSON": 1,
+            "price '67 90' is not one number": 1
+          }
+        },
+        "positions": 106
+      }
+    }
+  },
+  "post_text": {
+    "task": "positions_text_gm4",
+    "prompt_sha256": "7250b87aa1c2de407e06ab9eed565dd4d88025add7be0d2d2a87607c0d872860",
+    "total": {
+      "rows": 44,
+      "with_positions": 21,
+      "empty": 22,
+      "unreadable": {
+        "rows": 1,
+        "reasons": {
+          "fat '1%, 1,2%' is not a percentage": 1
+        }
+      },
+      "positions": 39
+    },
+    "per_channel": {
+      "@VARUS_channel": {
+        "rows": 9,
+        "with_positions": 3,
+        "empty": 6,
+        "unreadable": {
+          "rows": 0,
+          "reasons": {}
+        },
+        "positions": 3
+      },
+      "@ekomarket_shop": {
+        "rows": 5,
+        "with_positions": 5,
+        "empty": 0,
+        "unreadable": {
+          "rows": 0,
+          "reasons": {}
+        },
+        "positions": 11
+      },
+      "@epicentrk_sale": {
+        "rows": 6,
+        "with_positions": 0,
+        "empty": 6,
+        "unreadable": {
+          "rows": 0,
+          "reasons": {}
+        },
+        "positions": 0
+      },
+      "@forainfo": {
+        "rows": 4,
+        "with_positions": 4,
+        "empty": 0,
+        "unreadable": {
+          "rows": 0,
+          "reasons": {}
+        },
+        "positions": 9
+      },
+      "@gorishnie_plavni1": {
+        "rows": 4,
+        "with_positions": 0,
+        "empty": 4,
+        "unreadable": {
+          "rows": 0,
+          "reasons": {}
+        },
+        "positions": 0
+      },
+      "@kremen_news": {
+        "rows": 1,
+        "with_positions": 0,
+        "empty": 1,
+        "unreadable": {
+          "rows": 0,
+          "reasons": {}
+        },
+        "positions": 0
+      },
+      "@marketopt_promo": {
+        "rows": 4,
+        "with_positions": 4,
+        "empty": 0,
+        "unreadable": {
+          "rows": 0,
+          "reasons": {}
+        },
+        "positions": 4
+      },
+      "@msuaaaa": {
+        "rows": 1,
+        "with_positions": 1,
+        "empty": 0,
+        "unreadable": {
+          "rows": 0,
+          "reasons": {}
+        },
+        "positions": 1
+      },
+      "@silposilpo": {
+        "rows": 2,
+        "with_positions": 1,
+        "empty": 1,
+        "unreadable": {
+          "rows": 0,
+          "reasons": {}
+        },
+        "positions": 2
+      },
+      "@telegraf_kremenchuk": {
+        "rows": 8,
+        "with_positions": 3,
+        "empty": 4,
+        "unreadable": {
+          "rows": 1,
+          "reasons": {
+            "fat '1%, 1,2%' is not a percentage": 1
+          }
+        },
+        "positions": 9
+      }
+    }
+  },
+  "position_row": {
+    "total": {
+      "rows": 145,
+      "tier": {
+        "position": 145
+      },
+      "presence": {
+        "brand": 145,
+        "line": 129,
+        "category": 145,
+        "size": 140,
+        "attribute": 66
+      },
+      "warnings": {
+        "discount_footnote": 4,
+        "multipack": 1
+      },
+      "category": {
+        "ice-cream": 69,
+        "cheese": 27,
+        "yogurt": 14,
+        "milk": 6,
+        "curd": 6,
+        "butter": 12,
+        "dairy": 3,
+        "sour-cream": 5,
+        "kefir-ryazhanka": 2,
+        "plant-based-analogs": 1
+      },
+      "brand_resolved": 80,
+      "price_fields_present": {
+        "price_promo": 138,
+        "price_old": 95,
+        "discount_pct_printed": 128,
+        "discount_footnote": 4
+      },
+      "price_fields_absent": {
+        "price_promo": 7,
+        "price_old": 50,
+        "discount_pct_printed": 17,
+        "discount_footnote": 141
+      },
+      "price_qualifier": {
+        "exact": 138,
+        "absent": 7
+      },
+      "depth": {
+        "law": "SPEC 3.18 (1): the promo-depth aggregate is computed from the promo price and the PRINTED -N% badge. Where BOTH prices exist the code-computed arithmetic of 3.17 (3) stands and the printed % never substitutes it. The extracted old price is KEPT as the more accurate depth input and is FLAGGED — it never reaches a surface that prints it as a price and no was/now claim is built on it, so this record counts the rows that carry one and prints no value of it. Reconstructing the old price from the promo and the badge stays forbidden.",
+        "from_printed_badge": {
+          "n": 128,
+          "min": 0.21,
+          "median": 0.415,
+          "max": 0.59
+        },
+        "from_price_pair": {
+          "n": 95,
+          "min": 0.2101,
+          "median": 0.4206,
+          "max": 0.5483,
+          "reading": "the arithmetic of 3.17 (3), kept and FLAGGED — never a printed price"
+        },
+        "printed_disagrees_with_computed": 8
+      }
+    },
+    "by_carrier": {
+      "leaflet_page": {
+        "rows": 106,
+        "tier": {
+          "position": 106
+        },
+        "presence": {
+          "brand": 106,
+          "line": 103,
+          "category": 106,
+          "size": 106,
+          "attribute": 42
+        },
+        "warnings": {
+          "discount_footnote": 4,
+          "multipack": 1
+        },
+        "category": {
+          "ice-cream": 62,
+          "cheese": 20,
+          "yogurt": 14,
+          "milk": 2,
+          "curd": 5,
+          "butter": 2,
+          "dairy": 1
+        },
+        "brand_resolved": 59,
+        "price_fields_present": {
+          "price_promo": 106,
+          "price_old": 95,
+          "discount_pct_printed": 100,
+          "discount_footnote": 4
+        },
+        "price_fields_absent": {
+          "price_promo": 0,
+          "price_old": 11,
+          "discount_pct_printed": 6,
+          "discount_footnote": 102
+        },
+        "price_qualifier": {
+          "exact": 106
+        },
+        "depth": {
+          "law": "SPEC 3.18 (1): the promo-depth aggregate is computed from the promo price and the PRINTED -N% badge. Where BOTH prices exist the code-computed arithmetic of 3.17 (3) stands and the printed % never substitutes it. The extracted old price is KEPT as the more accurate depth input and is FLAGGED — it never reaches a surface that prints it as a price and no was/now claim is built on it, so this record counts the rows that carry one and prints no value of it. Reconstructing the old price from the promo and the badge stays forbidden.",
+          "from_printed_badge": {
+            "n": 100,
+            "min": 0.21,
+            "median": 0.41,
+            "max": 0.55
+          },
+          "from_price_pair": {
+            "n": 95,
+            "min": 0.2101,
+            "median": 0.4206,
+            "max": 0.5483,
+            "reading": "the arithmetic of 3.17 (3), kept and FLAGGED — never a printed price"
+          },
+          "printed_disagrees_with_computed": 8
+        }
+      },
+      "post_text": {
+        "rows": 39,
+        "tier": {
+          "position": 39
+        },
+        "presence": {
+          "brand": 39,
+          "line": 26,
+          "category": 39,
+          "size": 34,
+          "attribute": 24
+        },
+        "warnings": {},
+        "category": {
+          "milk": 4,
+          "sour-cream": 5,
+          "butter": 10,
+          "cheese": 7,
+          "kefir-ryazhanka": 2,
+          "ice-cream": 7,
+          "dairy": 2,
+          "plant-based-analogs": 1,
+          "curd": 1
+        },
+        "brand_resolved": 21,
+        "price_fields_present": {
+          "price_promo": 32,
+          "price_old": 0,
+          "discount_pct_printed": 28,
+          "discount_footnote": 0
+        },
+        "price_fields_absent": {
+          "price_promo": 7,
+          "price_old": 39,
+          "discount_pct_printed": 11,
+          "discount_footnote": 39
+        },
+        "price_qualifier": {
+          "absent": 7,
+          "exact": 32
+        },
+        "depth": {
+          "law": "SPEC 3.18 (1): the promo-depth aggregate is computed from the promo price and the PRINTED -N% badge. Where BOTH prices exist the code-computed arithmetic of 3.17 (3) stands and the printed % never substitutes it. The extracted old price is KEPT as the more accurate depth input and is FLAGGED — it never reaches a surface that prints it as a price and no was/now claim is built on it, so this record counts the rows that carry one and prints no value of it. Reconstructing the old price from the promo and the badge stays forbidden.",
+          "from_printed_badge": {
+            "n": 28,
+            "min": 0.3,
+            "median": 0.445,
+            "max": 0.59
+          },
+          "from_price_pair": {
+            "n": 0,
+            "min": null,
+            "median": null,
+            "max": null,
+            "reading": "the arithmetic of 3.17 (3), kept and FLAGGED — never a printed price"
+          },
+          "printed_disagrees_with_computed": 0
+        }
+      }
+    },
+    "per_channel": {
+      "@VARUS_channel": {
+        "rows": 3,
+        "tier": {
+          "position": 3
+        },
+        "presence": {
+          "brand": 3,
+          "line": 1,
+          "category": 3,
+          "size": 0,
+          "attribute": 3
+        },
+        "warnings": {},
+        "category": {
+          "milk": 1,
+          "sour-cream": 2
+        },
+        "brand_resolved": 1,
+        "price_fields_present": {
+          "price_promo": 0,
+          "price_old": 0,
+          "discount_pct_printed": 0,
+          "discount_footnote": 0
+        },
+        "price_fields_absent": {
+          "price_promo": 3,
+          "price_old": 3,
+          "discount_pct_printed": 3,
+          "discount_footnote": 3
+        },
+        "price_qualifier": {
+          "absent": 3
+        },
+        "depth": {
+          "law": "SPEC 3.18 (1): the promo-depth aggregate is computed from the promo price and the PRINTED -N% badge. Where BOTH prices exist the code-computed arithmetic of 3.17 (3) stands and the printed % never substitutes it. The extracted old price is KEPT as the more accurate depth input and is FLAGGED — it never reaches a surface that prints it as a price and no was/now claim is built on it, so this record counts the rows that carry one and prints no value of it. Reconstructing the old price from the promo and the badge stays forbidden.",
+          "from_printed_badge": {
+            "n": 0,
+            "min": null,
+            "median": null,
+            "max": null
+          },
+          "from_price_pair": {
+            "n": 0,
+            "min": null,
+            "median": null,
+            "max": null,
+            "reading": "the arithmetic of 3.17 (3), kept and FLAGGED — never a printed price"
+          },
+          "printed_disagrees_with_computed": 0
+        }
+      },
+      "@atb_market_official": {
+        "rows": 106,
+        "tier": {
+          "position": 106
+        },
+        "presence": {
+          "brand": 106,
+          "line": 103,
+          "category": 106,
+          "size": 106,
+          "attribute": 42
+        },
+        "warnings": {
+          "discount_footnote": 4,
+          "multipack": 1
+        },
+        "category": {
+          "ice-cream": 62,
+          "cheese": 20,
+          "yogurt": 14,
+          "milk": 2,
+          "curd": 5,
+          "butter": 2,
+          "dairy": 1
+        },
+        "brand_resolved": 59,
+        "price_fields_present": {
+          "price_promo": 106,
+          "price_old": 95,
+          "discount_pct_printed": 100,
+          "discount_footnote": 4
+        },
+        "price_fields_absent": {
+          "price_promo": 0,
+          "price_old": 11,
+          "discount_pct_printed": 6,
+          "discount_footnote": 102
+        },
+        "price_qualifier": {
+          "exact": 106
+        },
+        "depth": {
+          "law": "SPEC 3.18 (1): the promo-depth aggregate is computed from the promo price and the PRINTED -N% badge. Where BOTH prices exist the code-computed arithmetic of 3.17 (3) stands and the printed % never substitutes it. The extracted old price is KEPT as the more accurate depth input and is FLAGGED — it never reaches a surface that prints it as a price and no was/now claim is built on it, so this record counts the rows that carry one and prints no value of it. Reconstructing the old price from the promo and the badge stays forbidden.",
+          "from_printed_badge": {
+            "n": 100,
+            "min": 0.21,
+            "median": 0.41,
+            "max": 0.55
+          },
+          "from_price_pair": {
+            "n": 95,
+            "min": 0.2101,
+            "median": 0.4206,
+            "max": 0.5483,
+            "reading": "the arithmetic of 3.17 (3), kept and FLAGGED — never a printed price"
+          },
+          "printed_disagrees_with_computed": 8
+        }
+      },
+      "@ekomarket_shop": {
+        "rows": 11,
+        "tier": {
+          "position": 11
+        },
+        "presence": {
+          "brand": 11,
+          "line": 6,
+          "category": 11,
+          "size": 11,
+          "attribute": 5
+        },
+        "warnings": {},
+        "category": {
+          "butter": 3,
+          "cheese": 2,
+          "kefir-ryazhanka": 2,
+          "milk": 1,
+          "sour-cream": 1,
+          "ice-cream": 2
+        },
+        "brand_resolved": 6,
+        "price_fields_present": {
+          "price_promo": 11,
+          "price_old": 0,
+          "discount_pct_printed": 11,
+          "discount_footnote": 0
+        },
+        "price_fields_absent": {
+          "price_promo": 0,
+          "price_old": 11,
+          "discount_pct_printed": 0,
+          "discount_footnote": 11
+        },
+        "price_qualifier": {
+          "exact": 11
+        },
+        "depth": {
+          "law": "SPEC 3.18 (1): the promo-depth aggregate is computed from the promo price and the PRINTED -N% badge. Where BOTH prices exist the code-computed arithmetic of 3.17 (3) stands and the printed % never substitutes it. The extracted old price is KEPT as the more accurate depth input and is FLAGGED — it never reaches a surface that prints it as a price and no was/now claim is built on it, so this record counts the rows that carry one and prints no value of it. Reconstructing the old price from the promo and the badge stays forbidden.",
+          "from_printed_badge": {
+            "n": 11,
+            "min": 0.3,
+            "median": 0.38,
+            "max": 0.5
+          },
+          "from_price_pair": {
+            "n": 0,
+            "min": null,
+            "median": null,
+            "max": null,
+            "reading": "the arithmetic of 3.17 (3), kept and FLAGGED — never a printed price"
+          },
+          "printed_disagrees_with_computed": 0
+        }
+      },
+      "@forainfo": {
+        "rows": 9,
+        "tier": {
+          "position": 9
+        },
+        "presence": {
+          "brand": 9,
+          "line": 7,
+          "category": 9,
+          "size": 8,
+          "attribute": 4
+        },
+        "warnings": {},
+        "category": {
+          "ice-cream": 3,
+          "cheese": 1,
+          "milk": 1,
+          "dairy": 1,
+          "butter": 2,
+          "plant-based-analogs": 1
+        },
+        "brand_resolved": 5,
+        "price_fields_present": {
+          "price_promo": 9,
+          "price_old": 0,
+          "discount_pct_printed": 9,
+          "discount_footnote": 0
+        },
+        "price_fields_absent": {
+          "price_promo": 0,
+          "price_old": 9,
+          "discount_pct_printed": 0,
+          "discount_footnote": 9
+        },
+        "price_qualifier": {
+          "exact": 9
+        },
+        "depth": {
+          "law": "SPEC 3.18 (1): the promo-depth aggregate is computed from the promo price and the PRINTED -N% badge. Where BOTH prices exist the code-computed arithmetic of 3.17 (3) stands and the printed % never substitutes it. The extracted old price is KEPT as the more accurate depth input and is FLAGGED — it never reaches a surface that prints it as a price and no was/now claim is built on it, so this record counts the rows that carry one and prints no value of it. Reconstructing the old price from the promo and the badge stays forbidden.",
+          "from_printed_badge": {
+            "n": 9,
+            "min": 0.44,
+            "median": 0.49,
+            "max": 0.59
+          },
+          "from_price_pair": {
+            "n": 0,
+            "min": null,
+            "median": null,
+            "max": null,
+            "reading": "the arithmetic of 3.17 (3), kept and FLAGGED — never a printed price"
+          },
+          "printed_disagrees_with_computed": 0
+        }
+      },
+      "@marketopt_promo": {
+        "rows": 4,
+        "tier": {
+          "position": 4
+        },
+        "presence": {
+          "brand": 4,
+          "line": 3,
+          "category": 4,
+          "size": 4,
+          "attribute": 2
+        },
+        "warnings": {},
+        "category": {
+          "sour-cream": 1,
+          "cheese": 2,
+          "dairy": 1
+        },
+        "brand_resolved": 2,
+        "price_fields_present": {
+          "price_promo": 0,
+          "price_old": 0,
+          "discount_pct_printed": 0,
+          "discount_footnote": 0
+        },
+        "price_fields_absent": {
+          "price_promo": 4,
+          "price_old": 4,
+          "discount_pct_printed": 4,
+          "discount_footnote": 4
+        },
+        "price_qualifier": {
+          "absent": 4
+        },
+        "depth": {
+          "law": "SPEC 3.18 (1): the promo-depth aggregate is computed from the promo price and the PRINTED -N% badge. Where BOTH prices exist the code-computed arithmetic of 3.17 (3) stands and the printed % never substitutes it. The extracted old price is KEPT as the more accurate depth input and is FLAGGED — it never reaches a surface that prints it as a price and no was/now claim is built on it, so this record counts the rows that carry one and prints no value of it. Reconstructing the old price from the promo and the badge stays forbidden.",
+          "from_printed_badge": {
+            "n": 0,
+            "min": null,
+            "median": null,
+            "max": null
+          },
+          "from_price_pair": {
+            "n": 0,
+            "min": null,
+            "median": null,
+            "max": null,
+            "reading": "the arithmetic of 3.17 (3), kept and FLAGGED — never a printed price"
+          },
+          "printed_disagrees_with_computed": 0
+        }
+      },
+      "@msuaaaa": {
+        "rows": 1,
+        "tier": {
+          "position": 1
+        },
+        "presence": {
+          "brand": 1,
+          "line": 1,
+          "category": 1,
+          "size": 0,
+          "attribute": 0
+        },
+        "warnings": {},
+        "category": {
+          "butter": 1
+        },
+        "brand_resolved": 1,
+        "price_fields_present": {
+          "price_promo": 1,
+          "price_old": 0,
+          "discount_pct_printed": 0,
+          "discount_footnote": 0
+        },
+        "price_fields_absent": {
+          "price_promo": 0,
+          "price_old": 1,
+          "discount_pct_printed": 1,
+          "discount_footnote": 1
+        },
+        "price_qualifier": {
+          "exact": 1
+        },
+        "depth": {
+          "law": "SPEC 3.18 (1): the promo-depth aggregate is computed from the promo price and the PRINTED -N% badge. Where BOTH prices exist the code-computed arithmetic of 3.17 (3) stands and the printed % never substitutes it. The extracted old price is KEPT as the more accurate depth input and is FLAGGED — it never reaches a surface that prints it as a price and no was/now claim is built on it, so this record counts the rows that carry one and prints no value of it. Reconstructing the old price from the promo and the badge stays forbidden.",
+          "from_printed_badge": {
+            "n": 0,
+            "min": null,
+            "median": null,
+            "max": null
+          },
+          "from_price_pair": {
+            "n": 0,
+            "min": null,
+            "median": null,
+            "max": null,
+            "reading": "the arithmetic of 3.17 (3), kept and FLAGGED — never a printed price"
+          },
+          "printed_disagrees_with_computed": 0
+        }
+      },
+      "@silposilpo": {
+        "rows": 2,
+        "tier": {
+          "position": 2
+        },
+        "presence": {
+          "brand": 2,
+          "line": 1,
+          "category": 2,
+          "size": 2,
+          "attribute": 2
+        },
+        "warnings": {},
+        "category": {
+          "butter": 1,
+          "sour-cream": 1
+        },
+        "brand_resolved": 1,
+        "price_fields_present": {
+          "price_promo": 2,
+          "price_old": 0,
+          "discount_pct_printed": 2,
+          "discount_footnote": 0
+        },
+        "price_fields_absent": {
+          "price_promo": 0,
+          "price_old": 2,
+          "discount_pct_printed": 0,
+          "discount_footnote": 2
+        },
+        "price_qualifier": {
+          "exact": 2
+        },
+        "depth": {
+          "law": "SPEC 3.18 (1): the promo-depth aggregate is computed from the promo price and the PRINTED -N% badge. Where BOTH prices exist the code-computed arithmetic of 3.17 (3) stands and the printed % never substitutes it. The extracted old price is KEPT as the more accurate depth input and is FLAGGED — it never reaches a surface that prints it as a price and no was/now claim is built on it, so this record counts the rows that carry one and prints no value of it. Reconstructing the old price from the promo and the badge stays forbidden.",
+          "from_printed_badge": {
+            "n": 2,
+            "min": 0.4,
+            "median": 0.485,
+            "max": 0.57
+          },
+          "from_price_pair": {
+            "n": 0,
+            "min": null,
+            "median": null,
+            "max": null,
+            "reading": "the arithmetic of 3.17 (3), kept and FLAGGED — never a printed price"
+          },
+          "printed_disagrees_with_computed": 0
+        }
+      },
+      "@telegraf_kremenchuk": {
+        "rows": 9,
+        "tier": {
+          "position": 9
+        },
+        "presence": {
+          "brand": 9,
+          "line": 7,
+          "category": 9,
+          "size": 9,
+          "attribute": 8
+        },
+        "warnings": {},
+        "category": {
+          "cheese": 2,
+          "curd": 1,
+          "butter": 3,
+          "milk": 1,
+          "ice-cream": 2
+        },
+        "brand_resolved": 5,
+        "price_fields_present": {
+          "price_promo": 9,
+          "price_old": 0,
+          "discount_pct_printed": 6,
+          "discount_footnote": 0
+        },
+        "price_fields_absent": {
+          "price_promo": 0,
+          "price_old": 9,
+          "discount_pct_printed": 3,
+          "discount_footnote": 9
+        },
+        "price_qualifier": {
+          "exact": 9
+        },
+        "depth": {
+          "law": "SPEC 3.18 (1): the promo-depth aggregate is computed from the promo price and the PRINTED -N% badge. Where BOTH prices exist the code-computed arithmetic of 3.17 (3) stands and the printed % never substitutes it. The extracted old price is KEPT as the more accurate depth input and is FLAGGED — it never reaches a surface that prints it as a price and no was/now claim is built on it, so this record counts the rows that carry one and prints no value of it. Reconstructing the old price from the promo and the badge stays forbidden.",
+          "from_printed_badge": {
+            "n": 6,
+            "min": 0.32,
+            "median": 0.4,
+            "max": 0.47
+          },
+          "from_price_pair": {
+            "n": 0,
+            "min": null,
+            "median": null,
+            "max": null,
+            "reading": "the arithmetic of 3.17 (3), kept and FLAGGED — never a printed price"
+          },
+          "printed_disagrees_with_computed": 0
+        }
+      }
+    }
+  },
+  "sources": {
+    "data/derived/inferences/HealthPsycholog.jsonl": "0b76918cf044609a71d80a46e5277cc1ecffe390802c966d39a13858d46b460f",
+    "data/derived/inferences/VARUS_channel.jsonl": "72321c09abad66a8ea0cc622ad7ab90e91108a12200c1705e3af2037ed20f5fb",
+    "data/derived/inferences/chifit_family.jsonl": "572cdeebb20239cc2b4806a5e2709eb89da2e6233ddc184dfd168c7a9dfbc90f",
+    "data/derived/inferences/denisovapro.jsonl": "3a90344aabadb47d114bbfd19a72732ba1bd894976368917abfae73cc89f85f0",
+    "data/derived/inferences/kkondr_fit.jsonl": "fa313f326363ed9e8e8a8ebfd8a20e428c67e3f0549eec402023e73ea2e1ac3c",
+    "data/derived/inferences/klopotenkofood.jsonl": "53060ce9b7fb7571cd781dfbbce31da3cb62d7bab1d873f10f80aa5fda6711c7",
+    "data/derived/inferences/kopiyochka1.jsonl": "30a981f7c7e51f2c03401ce7ecd7fae6b1eb22350b13557673791a727dc4c2dd",
+    "data/derived/inferences/mamo_nepsichuy.jsonl": "5f2a0d8dd3bf09da152df097eaaf3657dbf37e5750ba30023d03b9234fa0a16d",
+    "data/derived/inferences/mandziak.jsonl": "59f00b94e951e969bee0932cbed7ce945dc9ffcd9ca2fa7a5579db283cedd65c",
+    "data/derived/inferences/matusi_ukr.jsonl": "c481f4671ef8ff8fbc5cc5838aa3834020b8449c0aa0ea0c1dfe89849241bf7e",
+    "data/derived/inferences/msuaaaa.jsonl": "2f12fc8f45f4a67e188e6ddce434cbab6f73b2725cd99eff4497e2491a0f7ee1",
+    "data/derived/inferences/olgaa_trainer.jsonl": "1350080c18cd2713a2776e69371b9ad78c2221041bf71b01937cd7f79232cb19",
+    "data/derived/inferences/polyakova_fitness.jsonl": "c1fbc6fb04941d0e3f8f54c0498455099c75cb6977c9487743fc9a29061c06f3",
+    "data/derived/inferences/retsepty.jsonl": "6faa4ba37dc345a574a546a0b49cdb2282e730382886dddcb7a1148229bf82f5",
+    "data/derived/inferences/sashafitnesslife.jsonl": "bb0ce8090ce318ff20ade99e2124ca7f392327b7d526008553b09d8223e6edb8",
+    "data/derived/inferences/smirnov108.jsonl": "1348c7c7f7d7639abf3d43215336e77e7bc095a447fb898171d1be2ebf510206",
+    "data/derived/inferences/tarilka_malyuka.jsonl": "2787c95362ba9c835b5ae6e495e7ed06756fd6083f63a4019d44c78fb3039ffe",
+    "data/derived/inferences/useful_healthy_fitness_menu.jsonl": "4878d8c8b7c02c18bff2826d0dbdd231a94c7c85a040fd92e758fd20174220aa",
+    "data/derived/inferences/ya_Nenka.jsonl": "6e192bf6ff229324856238f509be5e07847ee7e758221c54e3bc0948cabf60e4",
+    "data/derived/leaflet_pages/atb_market_official.jsonl": "bea5d157ec7ec236e9a0d902cb9a2a10c852910776613bba0b3258b4339d62a5",
+    "data/derived/position_rows/atb_market_official.jsonl": "7fe52e2d36ce16249d6ecfc14ab5dd00f8e154e7cc46eaa146731c3b8bd1cd30",
+    "data/derived/post_texts/VARUS_channel.jsonl": "9f54441b40306950e0ad045647fe30897f5fe9682cb190d1cbd80d5423b459dc",
+    "data/derived/post_texts/ekomarket_shop.jsonl": "42d5f39bb4e7fb6564e865d426c7d2fb8c9603250006a8ed907049a98a560666",
+    "data/derived/post_texts/epicentrk_sale.jsonl": "8c44e8c624466cff2c8d8ca891ab4e095fc8b7a06866345da99308860812add3",
+    "data/derived/post_texts/forainfo.jsonl": "8b01158a44dab97ce70fd6b09182a274317eee1afe33ae18babf51b42b9aeea9",
+    "data/derived/post_texts/gorishnie_plavni1.jsonl": "b62ddc95dc14e739b488dd730510c2d9f281ca87340bedb26f3c6fe538369e75",
+    "data/derived/post_texts/kremen_news.jsonl": "d31ba8cb6d3b1aa1ce8e97efed41a6c34f871473d056b9accb17c69c2d48e43c",
+    "data/derived/post_texts/marketopt_promo.jsonl": "e4d613b3b70c544bcaa11658e44027535ad80234ea85449f6214ccabfb7bc3bd",
+    "data/derived/post_texts/msuaaaa.jsonl": "133f1ac36474f079bc2651d80f7e0990a466da3ce178ca6214f1f85185d697eb",
+    "data/derived/post_texts/silposilpo.jsonl": "c7ba3b62e4d318f0d26180e07cdfef6582cc9ac6691aad8bd1e9fe3bc4df15e7",
+    "data/derived/post_texts/telegraf_kremenchuk.jsonl": "1a0409464e2793928b37beb16c285bed095414861d69f65f4ab09fe535c6042a",
+    "data/derived/post_position_rows/VARUS_channel.jsonl": "54565070aa866245989fd073106e7a15ed8cf94702f8e93b35eb106f2e85922b",
+    "data/derived/post_position_rows/ekomarket_shop.jsonl": "86dc4d83b35dcbfef1103227740284743571479a502a20af8c3af273dd766b4e",
+    "data/derived/post_position_rows/forainfo.jsonl": "a972150f932a78c808efd9b6c7d6df8056f4f759782d836e56446c083b86d35e",
+    "data/derived/post_position_rows/marketopt_promo.jsonl": "319a9f6cba1e1d55dc477588622f3dfa4ef51daf362576d59abc7f84d86cd881",
+    "data/derived/post_position_rows/msuaaaa.jsonl": "2b435f2d243ee795dcb3ba709eee265a2e5a0e7e530f01b3f310b1d21cc21e91",
+    "data/derived/post_position_rows/silposilpo.jsonl": "7272cf92c75e58298e7163c38167db2bd3388f641da5bde77e942a4dd7592184",
+    "data/derived/post_position_rows/telegraf_kremenchuk.jsonl": "ef29a26170e65dd88334f724cb43e4d1820070278b1929a41477d0c325299667"
+  },
+  "producer": {
+    "script": "scripts/window_summary_5c2.py",
+    "sha256": "a1239b5119956557a5caa41162f37518a5207c9268d43e3414a7a8fa537dcf79",
+    "borrowed": {
+      "src/market_pulse/prompts.py": "de767900a1ea578ea7b48bdb0dcc497c9f023e466a09ae0b6100d60371fdc3ab",
+      "src/market_pulse/langid.py": "65c9ba294c846b8574387d1893826313e9649282f7fd8581d04354ea6cc9a2de",
+      "src/market_pulse/brands.py": "fa92ccca81c91603fe242e74226a3f5370ae8e6ce4486affee9cb953448e9721",
+      "src/market_pulse/positions.py": "0b058e80024401d589653f4f810c4a4a56eba8e6c0b563deae24cdd0c777837e",
+      "src/market_pulse/loop.py": "1e07e44cd8f67269d1085ceff58688858536e0bd6247523c90f605f5377c0445"
+    }
+  }
+}
