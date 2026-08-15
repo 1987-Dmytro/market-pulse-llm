@@ -531,6 +531,10 @@ def smoke_record(
         "totals": {
             "threads_to_fetch": sum(row["threads_to_fetch"] for row in rows),
             "rows_to_inference": sum(row["rows_to_inference"] for row in rows),
+            # SPEC 3.19 (2): beside the queue and never folded into it. A record that reported only
+            # the rows it would buy could not say whether a smaller queue was the skip working or
+            # collection failing — and the per-channel number is in `plan` above, row by row.
+            "text_less_skipped": sum(row["text_less_skipped"] for row in rows),
         },
         "inference": {"endpoint": ENDPOINT, "refusal": refusal},
         # Beside `inference` and never inside it: that block answers "is an endpoint registered",

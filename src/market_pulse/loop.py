@@ -87,8 +87,44 @@ def ingest(store, records: list[dict]) -> dict:
 
 
 def queue_depth(comment_ids: Iterable[int], watermark: int | None) -> int:
-    """How many stored comments sit above the inference watermark."""
+    """How many stored comments sit above the inference watermark.
+
+    The COLLECTED depth, and 3.19 does not touch it: `scripts/census_5c2.py` counts the window with
+    this and `results/census_5c2.json` says so in its own `definitions` block, so a skip folded in
+    here would silently restate a committed census. The skip lives one layer up, in the two places
+    that build a queue somebody pays for — :func:`plan_channel` and :func:`queued`.
+    """
     return sum(1 for msg_id in comment_ids if msg_id > (watermark or 0))
+
+
+def has_text(text: str) -> bool:
+    """Does this comment carry words? SPEC 3.19 (1)'s ONE predicate, in one place.
+
+    Lifted out of `scripts/window_summary_5c2.py`, where it was inline as ``not text.strip()`` and
+    where it MEASURED the split the amendment is built on — 1 361 text-less of the 5 075 rows of the
+    2026-08-09 window. The rule and the number that justified it have to be the same test, or the
+    leg would skip a population nobody ever counted; that producer now calls this function.
+
+    ``strip()`` rather than ``== ""``: the amendment writes the class as `text: ""`, and over the
+    window the two predicates return the SAME 1 361 rows, on the sent side and on the source side
+    alike (no stored comment is whitespace-only). So the stricter reading costs nothing today and is
+    right about the one-space comment that has not been collected yet.
+    """
+    return bool(text.strip())
+
+
+def text_split(rows: Iterable[dict]) -> tuple[list[dict], list[dict]]:
+    """(the rows a paid queue may hold, the text-less rows it may not) — SPEC 3.19 (1).
+
+    A QUEUE rule and never a deletion, which is why this returns both halves rather than filtering:
+    the skipped rows stay on disk, stay under the watermark the pass will move, stay in the census,
+    and their COUNT is a number the pass has to report — 3.19 (2) makes the volume of wordless
+    reactions its own named class beside the distributions, never a silent subtraction.
+    """
+    keep, skip = [], []
+    for row in rows:
+        (keep if has_text(row["text"]) else skip).append(row)
+    return keep, skip
 
 
 def plan_channel(store, source, handle: str, state: dict) -> dict:
@@ -104,6 +140,14 @@ def plan_channel(store, source, handle: str, state: dict) -> dict:
     # them would put rows nobody can fetch into the queue 5c2 prices.
     collects_comments = source.comments_enabled and not source.watch
     threads = posts.with_replies - comments.parents if collects_comments else set()
+    # The ROWS and not `comments.ids`: the index answers "which ids are here" and the 3.19 skip is a
+    # question about the text, which only the record carries. `above` with an empty answered set is
+    # deliberate — the PLAN does not subtract what is already answered, that is :func:`queued`'s job
+    # — but the watermark test and the skip must be the same two filters in both places, or the
+    # depth this row reports and the queue the pass buys are two different numbers.
+    to_infer, text_less = text_split(
+        above(store.rows("comment", handle), set(), state.get(INFERENCE))
+    )
     return {
         "channel": handle,
         "source_id": source.id,
@@ -114,7 +158,10 @@ def plan_channel(store, source, handle: str, state: dict) -> dict:
         "fetch_posts_newer_than": state.get(POSTS),
         "threads_to_fetch": len(threads),
         "inference_watermark": state.get(INFERENCE),
-        "rows_to_inference": queue_depth(comments.ids, state.get(INFERENCE)),
+        "rows_to_inference": len(to_infer),
+        # its own class beside the queue, never subtracted out of sight (SPEC 3.19 (2)): these rows
+        # are collected, watermarked and counted, and only the PAYMENT is what they are kept out of
+        "text_less_skipped": len(text_less),
         "damaged_lines": posts.damaged_lines + comments.damaged_lines,
     }
 
@@ -145,7 +192,9 @@ def render_plan(rows: list[dict]) -> str:
     lines.append("")
     lines.append(
         f"TOTAL {sum(r['threads_to_fetch'] for r in rows)} comment threads would be fetched, "
-        f"{sum(r['rows_to_inference'] for r in rows)} rows would go to inference"
+        f"{sum(r['rows_to_inference'] for r in rows)} rows would go to inference, "
+        # printed beside the queue and never inside it — SPEC 3.19 (2)'s named class
+        f"{sum(r['text_less_skipped'] for r in rows)} text-less skipped (SPEC 3.19 (1))"
     )
     return "\n".join(lines)
 
@@ -185,8 +234,20 @@ def above(rows: Iterable[dict], answered: set, watermark: int | None) -> list[di
 
 
 def queued(store, derived, handle: str, watermark: int | None) -> list[dict]:
-    """The stored comments this pass still owes an answer for, oldest first."""
-    return above(store.rows("comment", handle), derived.index(RECORD_TYPE, handle).ids, watermark)
+    """The stored comments this pass still owes an answer for, oldest first — TEXT-BEARING only.
+
+    SPEC 3.19 (1): a text-less comment never enters the queue that gets paid for. This is the
+    second of the two places the skip lives (:func:`plan_channel` is the other, and it reports the
+    depth this returns), and it is the one an endpoint bills against — `scripts/run_5c2.py`'s
+    comment leg builds its packs out of exactly this list.
+
+    What it does NOT do: touch the store, the watermark or the census. The skipped rows are still
+    on disk, still under the watermark this pass will move past them, and still counted — the
+    caller that wants their number reads `plan_channel`'s `text_less_skipped`.
+    """
+    return text_split(
+        above(store.rows("comment", handle), derived.index(RECORD_TYPE, handle).ids, watermark)
+    )[0]
 
 
 def render_comment(posts: dict, captions: dict, row: dict, task: str = COMMENT_TASK) -> tuple:

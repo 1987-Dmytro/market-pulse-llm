@@ -24,7 +24,13 @@ NO_COMMENTS = Source("silpo", "Сільпо", "official_retail", ("@silposilpo",
 
 
 def store_with(tmp_path, *, posts=(), comments=()):
-    """A store holding the given post ids, and comments under the given parents."""
+    """A store holding the given post ids, and comments under the given parents.
+
+    The comments carry TEXT since SPEC 3.19 (1): the queue skips text-less rows before payment, so
+    a fixture whose comments were all empty would make every `rows_to_inference` in this file read
+    zero and the watermark tests below would pass while measuring nothing. A text-less row is now a
+    deliberate input, planted by the tests that are about it.
+    """
     store = RawStore(tmp_path)
     store.append(
         [
@@ -34,7 +40,14 @@ def store_with(tmp_path, *, posts=(), comments=()):
     )
     store.append(
         [
-            comment_record(FakeMessage(i), SOURCE, "@VARUS_channel", parent, SALT, provenance())
+            comment_record(
+                FakeMessage(i, text=f"коментар {i}"),
+                SOURCE,
+                "@VARUS_channel",
+                parent,
+                SALT,
+                provenance(),
+            )
             for parent, i in comments
         ]
     )
@@ -160,6 +173,115 @@ def test_queue_depth_counts_only_ids_above_the_watermark():
     assert loop.queue_depth([1, 5, 9], None) == 3
     assert loop.queue_depth([1, 5, 9], 5) == 1
     assert loop.queue_depth([], 5) == 0
+
+
+# --- SPEC 3.19 (1): the text-less skip, a QUEUE rule and never a deletion -------------------
+
+
+def mixed_store(tmp_path, *, texted=(), text_less=()):
+    """A store whose comments under post 1 are the given texted and text-less message ids."""
+    store = RawStore(tmp_path)
+    store.append([post_record(FakeMessage(1, replies=1), SOURCE, "@VARUS_channel", provenance())])
+    store.append(
+        [
+            comment_record(
+                FakeMessage(msg_id, text=text),
+                SOURCE,
+                "@VARUS_channel",
+                1,
+                SALT,
+                provenance(),
+            )
+            for msg_id, text in (
+                *((msg_id, f"коментар {msg_id}") for msg_id in texted),
+                # what a sticker, a photo or a voice note is stored as: `raw_text or ""`
+                *((msg_id, "") for msg_id in text_less),
+            )
+        ]
+    )
+    return store
+
+
+def test_a_comment_with_text_is_never_skipped(tmp_path):
+    """Direction one. A queue rule that dropped a texted row would be a collection bug, not 3.19."""
+    store = mixed_store(tmp_path, texted=(100, 101, 102))
+
+    row = loop.plan_channel(store, SOURCE, "@VARUS_channel", {})
+
+    assert row["rows_to_inference"] == 3
+    assert row["text_less_skipped"] == 0
+    queued = loop.queued(store, RawStore(tmp_path / "derived"), "@VARUS_channel", None)
+    assert [one["msg_id"] for one in queued] == [100, 101, 102]
+
+
+def test_a_text_less_comment_never_enters_the_paid_queue_and_stays_collected(tmp_path):
+    """Direction two, and the half that makes it a QUEUE rule: skipped from payment, kept in place.
+
+    The row is out of both queues — the PLAN's depth, which is what `run_loop` prints and what the
+    spend guard is handed, and `queued`, which is the list `scripts/run_5c2.py` bills against — and
+    it is still in the store, still in the index the census counts, and still under the watermark.
+    """
+    store = mixed_store(tmp_path, texted=(100, 102), text_less=(101,))
+
+    row = loop.plan_channel(store, SOURCE, "@VARUS_channel", {})
+
+    assert row["rows_to_inference"] == 2
+    assert row["text_less_skipped"] == 1
+    queued = loop.queued(store, RawStore(tmp_path / "derived"), "@VARUS_channel", None)
+    assert [one["msg_id"] for one in queued] == [100, 102], "101 was never asked"
+
+    # collected, counted, and countable by the instrument the committed census used
+    index = store.index("comment", "@VARUS_channel")
+    assert row["comments_stored"] == index.count == 3
+    assert 101 in index.ids
+    assert loop.queue_depth(index.ids, None) == 3, "the census counts what the queue skips"
+    assert len(store.rows("comment", "@VARUS_channel")) == 3
+
+    # and the watermark still moves over it: a pass that answers 100 and 102 leaves 101 behind for
+    # good, which is what «остаются под вотермарком» means — not a hole the next pass re-queues
+    state = {}
+    loop.advance(state, loop.INFERENCE, [one["msg_id"] for one in queued])
+    assert state[loop.INFERENCE] == 102
+    assert loop.plan_channel(store, SOURCE, "@VARUS_channel", state)["rows_to_inference"] == 0
+
+
+def test_the_skip_is_the_predicate_the_5c2_window_was_measured_with(tmp_path):
+    """The window regression: the committed 5c2 artifacts, through the new path.
+
+    Every number here is READ — from `results/window_summary_5c2.json`, which is the record the
+    3.18 (6) sitting was captioned from, and from `results/validate_5c2_pack.json`, whose five
+    comment blocks carry the only real texts committed to the tree. Neither file is regenerated and
+    no count is typed in: 5 075 / 1 361 / 3 714 are the artifact's, not this test's.
+    """
+    record = json.loads(
+        (REPO_ROOT / "results" / "window_summary_5c2.json").read_text(encoding="utf-8")
+    )
+    pack = json.loads(
+        (REPO_ROOT / "results" / "validate_5c2_pack.json").read_text(encoding="utf-8")
+    )
+    total = record["comment"]["total"]
+    rows, empty = total["rows"], total["empty_text"]["rows"]
+
+    # the two artifacts agree on the population before either is used as a bar
+    aggregate = pack["comments"][0]["aggregate"]
+    assert aggregate["rows"]["in_window"] == rows
+    assert aggregate["empty_text"]["in_window"] == empty
+
+    # per ROW, on real texts: the shared predicate answers what the sealed pack recorded
+    for block in pack["comments"]:
+        assert loop.has_text(block["text"]) is not block["empty_text"], block["comment"]
+
+    # and the whole window through the seam: a store of the artifact's shape, planned
+    store = mixed_store(
+        tmp_path,
+        texted=range(1000, 1000 + rows - empty),
+        text_less=range(9000, 9000 + empty),
+    )
+    plan = loop.plan_channel(store, SOURCE, "@VARUS_channel", {})
+
+    assert plan["comments_stored"] == rows
+    assert plan["rows_to_inference"] == rows - empty
+    assert plan["text_less_skipped"] == empty
 
 
 # --- the inference leg: the record is durable before the watermark moves -------------------
@@ -393,7 +515,11 @@ def test_a_live_pass_is_refused_before_anything_is_read(monkeypatch, tmp_path):
 
 
 def test_the_smoke_writes_a_record_for_one_channel(monkeypatch, tmp_path):
-    store_with(tmp_path / "raw", posts=(1, 2, 3), comments=((1, 100), (1, 101)))
+    store = store_with(tmp_path / "raw", posts=(1, 2, 3), comments=((1, 100), (1, 101)))
+    # one sticker among them, so the record's split is asserted on a non-zero class
+    store.append(
+        [comment_record(FakeMessage(102), SOURCE, "@VARUS_channel", 1, SALT, provenance())]
+    )
     wire(monkeypatch, tmp_path, [SOURCE])
 
     assert runner.main(["--once", "--smoke", "--channel", "@VARUS_channel"]) == 0
@@ -406,6 +532,7 @@ def test_the_smoke_writes_a_record_for_one_channel(monkeypatch, tmp_path):
     assert record["smoke"] is True
     assert record["scope"]["channel"] == "@VARUS_channel"
     assert record["totals"]["rows_to_inference"] == 2
+    assert record["totals"]["text_less_skipped"] == 1, "SPEC 3.19 (2): beside the queue, not in it"
     assert record["inference"]["endpoint"] is None
     assert "3.11 (2)" in record["inference"]["refusal"]
 

@@ -195,7 +195,10 @@ def comment_verdicts(rows: list[dict], aliases: dict[str, str]) -> list[dict]:
                 # every head's answer for it is an answer about nothing. Counted rather than
                 # dropped: the rows were bought, they are in the 5 075, and a distribution that does
                 # not say how many of its rows had no text is a distribution about the wrong thing.
-                "empty_text": not text.strip(),
+                # `loop.has_text` and not a second `not text.strip()`: this measurement is what
+                # SPEC 3.19 (1) was ruled on, and the queue rule that now skips those rows before
+                # payment must be the SAME predicate or it would skip a class nobody counted.
+                "empty_text": not loop.has_text(text),
                 "brands": [
                     found["brand_id"] for found in brands.find_watchlist_brands(text, aliases)
                 ],

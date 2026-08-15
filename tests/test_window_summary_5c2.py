@@ -6,7 +6,9 @@ is why nothing downstream of this record may carry a hand-typed number — every
 back from the evidence or the test goes red.
 """
 
+import hashlib
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -21,6 +23,43 @@ from market_pulse import loop, prompts  # noqa: E402
 
 RECORD = REPO_ROOT / "results" / "window_summary_5c2.json"
 
+SEALING_COMMIT = "d69c812b206faff15f5a12adff113a5ef1335154"
+"""The commit that carries the bytes this record — and `results/validate_5c2_pack.json` — name.
+
+Written out in full and not as `d69c812`: an abbreviation is valid until the day a seventh hex digit
+collides, and on that day this test errors for a reason nobody would connect to a sealed summary.
+`tests/test_prereg_5c2.py` is the precedent, one contract old.
+
+The cycle-2 prep landed SPEC 3.19 (1)'s queue rule and moved two files this record pins — the
+producer itself and `src/market_pulse/loop.py`, whose `has_text` the producer now calls instead of
+its own inline `not text.strip()`. **Neither record is re-pinned**: a sealed artifact is never
+rewritten to make a test green, and the 5 075 rows it describes did not move — the amendment's own
+(3) says nothing is re-scored. What keeps `producer.sha256` a checkable claim rather than a dead
+literal is that the bytes are RECOVERABLE:
+
+    git show d69c812:scripts/window_summary_5c2.py
+    git show d69c812:src/market_pulse/loop.py
+"""
+
+MOVED_BY_THE_SKIP = ("scripts/window_summary_5c2.py", "src/market_pulse/loop.py")
+"""The two pinned files SPEC 3.19 (1)'s skip rule moved. Everything else this record names is
+hashed LIVE, and the day a third file joins this tuple is a day to look at it rather than relax it.
+"""
+
+
+def sealed_blob(path: str) -> bytes:
+    """`path` as :data:`SEALING_COMMIT` carried it — git, and nothing on disk."""
+    return subprocess.run(
+        ["git", "show", f"{SEALING_COMMIT}:{path}"],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        check=True,
+    ).stdout
+
+
+def sealed_sha256(path: str) -> str:
+    return hashlib.sha256(sealed_blob(path)).hexdigest()
+
 
 @pytest.fixture(scope="module")
 def record() -> dict:
@@ -32,10 +71,24 @@ def test_the_committed_record_is_what_the_producer_writes_today(tmp_path):
 
     No clock and no git block is what makes this possible; `scripts/build_sitting_pack.py` writes
     a `git_state()` and could not have this test.
+
+    Since SPEC 3.19 (1) two of the shas in `producer` are the only bytes allowed to differ, and each
+    one is put back to what :data:`SEALING_COMMIT` carries before the comparison — so the claim is
+    still "every byte of this record re-derives", with exactly two digests answered by `git show`
+    instead of by the disk. Each substitution must FIRE (`count == 1`): a swap that matched nothing
+    would leave the comparison passing for a file that had silently gone back to the sealed bytes.
     """
     out = tmp_path / "again.json"
     assert summary.main(["--out", str(out)]) == 0
-    assert out.read_bytes() == RECORD.read_bytes()
+
+    produced = out.read_bytes()
+    for path in MOVED_BY_THE_SKIP:
+        live, sealed = summary.sha256_of(REPO_ROOT / path), sealed_sha256(path)
+        assert live != sealed, f"{path} never learned the 3.19 skip"
+        assert produced.count(live.encode()) == 1, path
+        produced = produced.replace(live.encode(), sealed.encode())
+
+    assert produced == RECORD.read_bytes()
 
 
 def test_the_populations_are_the_sealed_ones(record):
@@ -342,13 +395,24 @@ def test_a_registry_that_moved_since_the_seal_is_a_refusal(tmp_path):
 
 
 def test_the_record_carries_the_producer_and_every_source_it_read(record):
-    """A summary that cannot say which bytes it read is a claim, not evidence."""
-    assert record["producer"]["sha256"] == summary.sha256_of(
-        REPO_ROOT / record["producer"]["script"]
-    )
+    """A summary that cannot say which bytes it read is a claim, not evidence.
+
+    The two files SPEC 3.19 (1) moved are checked BOTH ways, because either leg alone passes for the
+    wrong reason: a live hash equal to the pin would mean the skip rule never landed, and the
+    recovered hash equal to the pin is what proves the record names the bytes that wrote it. The
+    recovered blobs are read for the new name too — a recovery that already carried `has_text` would
+    mean this is checking the wrong commit.
+    """
+    assert record["producer"]["sha256"] == sealed_sha256(record["producer"]["script"])
     assert set(record["producer"]["borrowed"]) == set(summary.BORROWED)
     for name, digest in record["producer"]["borrowed"].items():
-        assert summary.sha256_of(REPO_ROOT / name) == digest
+        if name in MOVED_BY_THE_SKIP:
+            assert summary.sha256_of(REPO_ROOT / name) != digest, f"{name} never learned 3.19"
+            assert sealed_sha256(name) == digest
+            assert b"has_text" not in sealed_blob(name), f"{name}: recovered from the wrong commit"
+            assert "has_text" in (REPO_ROOT / name).read_text(encoding="utf-8")
+        else:
+            assert summary.sha256_of(REPO_ROOT / name) == digest
     everything = {
         summary.rel(path)
         for record_type in (
