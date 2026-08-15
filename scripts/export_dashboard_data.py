@@ -192,9 +192,12 @@ def dig(record: dict, path: str):
 
 
 def sample_block(conn, window_id: str, name: str) -> dict:
-    where, params = aggregates._where(window_id, None, None, aggregates.SAMPLES[name])
-    (rows,) = conn.execute(f"SELECT COUNT(*) FROM comments WHERE {where}", params).fetchone()
-    return {"name": name, "rows": rows, "reading": SAMPLE_READING[name]}
+    """A sample, named, sized and explained — what every rate in this record stands beside."""
+    return {
+        "name": name,
+        "rows": aggregates.sample_rows(conn, window_id, name),
+        "reading": SAMPLE_READING[name],
+    }
 
 
 def only(block: dict, *names: str) -> dict:
@@ -400,9 +403,7 @@ def cuts_block(conn, window_id: str) -> dict:
         },
         "comment_by_segment": {
             segment: {
-                "channels": aggregates.channels_with(
-                    conn, window_id, "channels", f"segment = '{segment}'"
-                ),
+                "channels": aggregates.channels_with(conn, window_id, "channels", segment=segment),
                 "bought": aggregates.comment_block(
                     conn, window_id, segment=segment, sample="bought"
                 ),
@@ -427,9 +428,7 @@ def cuts_block(conn, window_id: str) -> dict:
                 "total": aggregates.marker_block(conn, window_id, leg),
                 "per_channel": {
                     handle: aggregates.marker_block(conn, window_id, leg, channel=handle)
-                    for handle in aggregates.channels_with(
-                        conn, window_id, "markers", f"leg = '{leg}'"
-                    )
+                    for handle in aggregates.channels_with(conn, window_id, "markers", leg=leg)
                 },
             }
             for leg in ("leaflet_page", "post_text")

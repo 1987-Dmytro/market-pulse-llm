@@ -783,11 +783,33 @@ def coverage(conn, window_id: str) -> dict:
     }
 
 
-def channels_with(conn, window_id: str, table: str, extra: str = "") -> list[str]:
+def channels_with(
+    conn, window_id: str, table: str, *, leg: str | None = None, segment: str | None = None
+) -> list[str]:
+    """The channels one table holds rows for, sorted.
+
+    `leg` and `segment` are BOUND parameters and not an `extra` clause spliced into the SQL: the
+    values come out of the database and go straight back into it, and a filter that arrives as text
+    is one refactor away from carrying something that was never meant to be SQL. The table name is
+    the only thing interpolated, and it is always a literal at the call site.
+    """
     sql = f"SELECT DISTINCT channel FROM {table} WHERE window_id = ?"
-    if extra:
-        sql += f" AND {extra}"
-    return [handle for (handle,) in conn.execute(sql + " ORDER BY channel", (window_id,))]
+    params: tuple = (window_id,)
+    if leg is not None:
+        sql += " AND leg = ?"
+        params += (leg,)
+    if segment is not None:
+        sql += " AND segment = ?"
+        params += (segment,)
+    return [handle for (handle,) in conn.execute(sql + " ORDER BY channel", params)]
+
+
+def sample_rows(conn, window_id: str, sample: str) -> int:
+    """How many comment rows one named sample holds — the denominator, by name."""
+    if sample not in SAMPLES:
+        raise Refusal(f"unknown sample {sample!r} — the two are {sorted(SAMPLES)}")
+    where, params = _where(window_id, extra=SAMPLES[sample])
+    return conn.execute(f"SELECT COUNT(*) FROM comments WHERE {where}", params).fetchone()[0]
 
 
 # --- the convergence mirror ----------------------------------------------------------------------
@@ -823,14 +845,14 @@ def mirror(conn, window_id: str) -> dict:
             "total": marker_block(conn, window_id, "leaflet_page"),
             "per_channel": {
                 handle: marker_block(conn, window_id, "leaflet_page", channel=handle)
-                for handle in channels_with(conn, window_id, "markers", "leg = 'leaflet_page'")
+                for handle in channels_with(conn, window_id, "markers", leg="leaflet_page")
             },
         },
         "post_text": {
             "total": marker_block(conn, window_id, "post_text"),
             "per_channel": {
                 handle: marker_block(conn, window_id, "post_text", channel=handle)
-                for handle in channels_with(conn, window_id, "markers", "leg = 'post_text'")
+                for handle in channels_with(conn, window_id, "markers", leg="post_text")
             },
         },
         "position_row": {
