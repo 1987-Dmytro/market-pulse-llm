@@ -57,13 +57,21 @@ what it drew; put the stratum in it and a second draw over another stratum canno
 The middle and never the head: a price named from the first threads of a sorted list is a price of
 whatever that ordering put first."""
 
-CAP_USD = 0.20
+CAP_USD = 0.45
+"""RAISED from the contract's $0.20 by the operator, 2026-08-15, after this session showed the
+smaller cap cannot buy the registered run: $0.20 ÷ $0.00030669/s is 652 s of billed worker time, and
+the census's own LOWER bound for the 111 threads (471 s) plus one measured weight load (99 s) plus a
+staging pod ($0.032) is $0.2069 before the warm-up is priced ([[the_setup_is_inside_the_cap]]).
+
+The raise moves the ceiling and nothing else. The go/no-go still fires against it, the stop is still
+a legitimate outcome, and the phase cap behind it is untouched — `scripts/runpod_guard.py` read
+$1.0923 remaining of $33.00 when this was written."""
+
 WINDOW_MINUTES = 30.0
 AGREEMENT_BAR = 0.80
-"""The three ceilings, transcribed from `docs/PROMPT-probe-a.md` and the operator's rulings of
-2026-08-15 — cap $0.20 all-in, ≤30 minutes billed for a full window, per-comment agreement ≥0.80.
-They live in this record because a bar is a registration; the scorer computes numbers and holds no
-threshold at all."""
+"""The two ceilings the raise does NOT move, transcribed from the operator's rulings of 2026-08-15:
+≤30 minutes billed for a full window, per-comment agreement ≥0.80. They live in this record because
+a bar is a registration; the scorer computes numbers and holds no threshold at all."""
 
 
 def middle_third(kept: list[dict]) -> list[dict]:
@@ -266,6 +274,11 @@ def build(kept: list[dict], gold: dict) -> dict:
             "operator 2026-08-15: window reading time budget ≤ 30 minutes billed",
             "operator 2026-08-15: the gate is the narrow lexicon with its silencers; precision"
             " lives with the reader",
+            "operator 2026-08-15, after the arithmetic of docs/reports/probe-a.md §5: the probe's"
+            f" cap is raised from $0.20 to ${CAP_USD:.2f} all-in. Nothing else moves — the"
+            " population, the instruments, the bars and the stop rule are the ones registered"
+            " before it, and this record was re-derived and re-committed before any endpoint"
+            " existed",
         ],
         "attempt": (
             "ONE attempt, no retry. A failed bar after a completed run closes the question by"

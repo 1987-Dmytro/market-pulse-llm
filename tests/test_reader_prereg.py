@@ -135,10 +135,15 @@ def test_the_warm_up_is_drawn_from_the_middle_and_is_reproducible():
 
 
 def test_the_stop_rule_names_both_ceilings_and_what_a_stop_costs():
+    """The cap is the operator's, raised 0.20 → 0.45 on 2026-08-15 once the arithmetic of the
+    report's §5 showed the smaller one could not buy the registered run. The raise moves the
+    ceiling and nothing else: the ruling is IN the record, and the population digest, the bars and
+    the stop rule are the ones registered before it."""
     money = RECORD["money"]
-    assert money["cap_usd_all_in"] == prereg.CAP_USD == 0.20
+    assert money["cap_usd_all_in"] == prereg.CAP_USD == 0.45
     bar = RECORD["bars"]["5_time_and_cost"]["thresholds"]
-    assert bar == {"cap_usd_all_in": 0.20, "window_minutes_billed": 30.0}
+    assert bar == {"cap_usd_all_in": 0.45, "window_minutes_billed": 30.0}
+    assert any("raised from $0.20 to $0.45 all-in" in one for one in RECORD["rulings"])
     assert "STOP before any further call" in RECORD["go_no_go"]["stop_rule"]
     assert RECORD["go_no_go"]["what_a_stop_costs"].startswith("the warm-up's own spend")
     assert "ONE attempt, no retry" in RECORD["attempt"]

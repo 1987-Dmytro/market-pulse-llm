@@ -122,7 +122,7 @@
       },
       "rule": "the warm-up measures billed worker seconds per thread; the window is projected two ways and the PESSIMISTIC one binds — per thread (mean seconds × 111) and per payable comment (seconds ÷ warm-up payable × 912). A rate is a property of the sample it was measured on, and a thread call is not a comment call",
       "thresholds": {
-        "cap_usd_all_in": 0.2,
+        "cap_usd_all_in": 0.45,
         "window_minutes_billed": 30.0
       }
     }
@@ -228,7 +228,7 @@
     "task": "reader_thread_gm4"
   },
   "money": {
-    "cap_usd_all_in": 0.2,
+    "cap_usd_all_in": 0.45,
     "guard": "scripts/runpod_guard.py before the endpoint is created, read from the guard and never from a ledger line (Dv33)",
     "includes": "the warm-up, the run, and every second the endpoint bills while it exists"
   },
@@ -283,12 +283,13 @@
       "src/market_pulse/scorer.py": "dbb5406a502f813ba1b4940e0914310efd632386a8da60e0c002cc8964a97d4f"
     },
     "script": "scripts/write_reader_prereg.py",
-    "sha256": "6b21786b9259d2fe5550137eec0964bfd6e07fcbbb13b30592480a1cacd03dbf"
+    "sha256": "6f01a50fc6cf5dc0ef0aef9417b388ec5faa7cff8ac7daf88308325c58fef870"
   },
   "rulings": [
     "operator 2026-08-15: the taxonomy of plan §3 ratified — subject, signal and noise words",
     "operator 2026-08-15: per-comment agreement bar ≥ 0.80",
     "operator 2026-08-15: window reading time budget ≤ 30 minutes billed",
-    "operator 2026-08-15: the gate is the narrow lexicon with its silencers; precision lives with the reader"
+    "operator 2026-08-15: the gate is the narrow lexicon with its silencers; precision lives with the reader",
+    "operator 2026-08-15, after the arithmetic of docs/reports/probe-a.md §5: the probe's cap is raised from $0.20 to $0.45 all-in. Nothing else moves — the population, the instruments, the bars and the stop rule are the ones registered before it, and this record was re-derived and re-committed before any endpoint existed"
   ]
 }
