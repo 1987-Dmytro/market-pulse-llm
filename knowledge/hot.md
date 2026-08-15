@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-15 16:50:22 (every SessionStart)
+**Auto-refreshed:** 2026-08-15 17:17:21 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+25686d5 docs(report): fix-a -- the one cell in the artifact table that did not answer its header
+21fa26f docs(vault): the fix-a checkpoint, the census on the live map, and two questions for the sitting
 cbbb557 docs(report): fix-a -- what the rules removed, and the silencer that had no input
 7a656d2 fix(fix-a): the census read a post as a comment, and pinned a store that grows
 f6630c8 feat(fix-a): the thread gate censused -- and the fourth silencer has no input
-8371125 feat(fix-a): the matcher learns r1, and eleven brand rows become three
-0e0fbc0 law(3.21): the watchlist rules become a file, and the fourth part had a fifth
 ```
 
 ## 📋 Recent decisions
