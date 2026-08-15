@@ -553,11 +553,15 @@ def real_processor():
 
 
 def reader_guards(handler) -> dict:
-    """probe-a D4: the READER config's guards, each with the control that says it discriminates.
+    """The READER config's guards, each with the control that says it discriminates.
 
-    The reader is one paid attempt under a $0.20 cap, so every one of these has to be false before
-    the endpoint exists rather than after: a refusal met on the endpoint is a refusal that was
-    billed for the boot that reached it.
+    The reader is one paid attempt under a cap the registration fixes, so every one of these has to
+    be false before the endpoint exists rather than after: a refusal met on the endpoint is a
+    refusal that was billed for the boot that reached it.
+
+    Since probe-b the config serves TWO registered texts, so the checks that could hide a version —
+    the real chat template and the request's shape — are run over `prompts.READER` rather than over
+    the one this session reads with.
     """
     from market_pulse import local_llm, prompts
 
@@ -591,47 +595,99 @@ def reader_guards(handler) -> dict:
     processor = real_processor()
     client = local_llm.ReaderClient(processor, None)
     thread = {"channel": "@c", "post_id": 1, "post": "пост", "comments": [[2, "коментар"]]}
-    rendered = client.render(prompts.READER_TASK, thread)
     bos = processor.tokenizer.bos_token
-    closed = rendered.rstrip().endswith("<|channel>thought\n<channel|>")
-    print(
-        f"\n14. the REAL chat template    starts with {bos}: {rendered.startswith(bos)}"
-        f" · thought channel closed: {closed}"
+    rendered = {task: client.render(task, thread) for task in sorted(prompts.READER)}
+    closed = {
+        task: text.rstrip().endswith("<|channel>thought\n<channel|>")
+        for task, text in rendered.items()
+    }
+    print(f"\n14. the REAL chat template    both registered texts, <bos> {bos}")
+    for task, text in rendered.items():
+        print(f"    {task:22s} <bos>: {text.startswith(bos)} · thought closed: {closed[task]}")
+    checks["every reader request renders through the real template and keeps <bos>"] = all(
+        text.startswith(bos) for text in rendered.values()
     )
-    checks["the reader request renders through the real template and keeps <bos>"] = (
-        rendered.startswith(bos)
+    checks["enable_thinking:false closes the thought channel on every reader request"] = all(
+        closed.values()
     )
-    checks["enable_thinking:false closes the thought channel on the reader request"] = closed
+    # the two texts are different instruments and the worker must not be able to blur them
+    checks["the two registered reader texts render differently"] = len(set(rendered.values())) == 2
     wrong, how = refuses(client.render, prompts.POSITIONS_TASK_TEXT, thread)
     print(f"    another registered task                        {how}")
     checks["the reader client refuses a task it does not serve"] = wrong
 
+    served = handler.describe(config, {}, None, {})["reader_prompt_sha256"]
+    live = {task: prompts.prompt_sha256(task) for task in sorted(prompts.READER)}
+    print(
+        f"    info answers a sha per task    {sorted(served)} · equals this checkout: {served == live}"
+    )
+    checks["info names a sha for EVERY registered reader text"] = served == live
+
     big = {**thread, "comments": [[index, "х" * 400] for index in range(200)]}
-    refused, how = refuses(client.render, prompts.READER_TASK, big)
+    refused, how = refuses(client.render, prompts.READER_TASK_V2, big)
     print(f"\n15. the input ceiling         a {len(big['comments'])}-comment thread {how}")
     checks["a thread over the registered input ceiling is refused loudly"] = refused
     checks["the control: a thread inside it renders"] = bool(rendered)
 
-    verdict_json = json.dumps(
-        {
-            "thread": {"channel": "@c", "post_id": 1},
-            "post_summary": "п",
-            "discussion_summary": "д",
-            "entities": [],
-            "signals": [],
-            "per_comment": [],
-            "noise": [],
-        },
-        ensure_ascii=False,
-    )
-    whole = prompts.parse_reply(prompts.READER_TASK, verdict_json)
+    def verdict(**moves) -> str:
+        return json.dumps(
+            {
+                "thread": {"channel": "@c", "post_id": 1},
+                "post_summary": "п",
+                "discussion_summary": "д",
+                "entities": [],
+                "signals": [],
+                "per_comment": [],
+                "noise": [],
+                **moves,
+            },
+            ensure_ascii=False,
+        )
+
+    verdict_json = verdict()
+    whole = prompts.parse_reply(prompts.READER_TASK_V2, verdict_json)
     cut, how = refuses(
-        prompts.parse_reply, prompts.READER_TASK, verdict_json[: len(verdict_json) // 2]
+        prompts.parse_reply, prompts.READER_TASK_V2, verdict_json[: len(verdict_json) // 2]
     )
     print(f"\n16. a verdict cut at the ceiling                   {how}")
     print(f"    the control: a whole verdict   {len(whole)} keys parsed")
     checks["a truncated verdict is a parse failure and not an empty answer"] = cut
     checks["the control: a whole verdict parses"] = whole["thread"]["post_id"] == 1
+
+    # 17 — the two defects probe-b's D1 closes, on the parser that will read the paid replies
+    signal = {
+        "signal_type": "похвала",
+        "subject_type": "категория",
+        "subject_id": "сир",
+        "aspect": "taste",
+        "stance": "positive",
+        "reading": "смачно",
+        "quote": "смачно",
+    }
+    from_post = prompts.parse_reply(
+        prompts.READER_TASK_V2, verdict(signals=[{**signal, "evidence": [], "from_post": True}])
+    )
+    nulls, how_null = refuses(
+        prompts.parse_reply,
+        prompts.READER_TASK_V2,
+        verdict(signals=[{**signal, "evidence": [None], "from_post": True}]),
+    )
+    unflagged, how_unflagged = refuses(
+        prompts.parse_reply, prompts.READER_TASK_V2, verdict(signals=[{**signal, "evidence": []}])
+    )
+    print(f"\n17. Dv394 a post signal       from_post + [] parses: {bool(from_post['signals'])}")
+    print(f"    evidence [null]            {how_null}")
+    print(f"    an empty evidence unflagged {how_unflagged}")
+    checks["a signal read in the post parses with from_post and an empty evidence"] = (
+        from_post["signals"][0]["from_post"] is True and from_post["signals"][0]["evidence"] == []
+    )
+    checks["evidence [null] is still refused — the defect probe-a measured"] = nulls
+    checks["an empty evidence without from_post is refused"] = unflagged
+    v2_text = prompts.PROMPTS[prompts.READER_TASK_V2]
+    print(f"    Dv393 the entities line    LIST + brackets: {'a LIST of objects' in v2_text}")
+    checks["the v2 text states the array shape the parser requires"] = (
+        '"entities" — a LIST of objects' in v2_text and "[{" in v2_text
+    )
     return checks
 
 
