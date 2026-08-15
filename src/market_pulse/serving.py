@@ -340,6 +340,21 @@ class EndpointClient:
             raise ValueError(f"{len(items)} items, and an empty page or row extracts nothing")
         return self._ask({"op": "positions", "task": task, "items": items}, len(items))
 
+    def read(self, task: str, threads: list[dict]) -> list[dict]:
+        """Read a slice of THREADS; one verdict reply per thread, in order (config READER).
+
+        Each item is `{channel, post_id, post, comments: [[msg_id, text], …]}` — the ids travel
+        because the verdict's evidence is keyed by them, and the worker renders the registered
+        request from exactly these fields rather than from a string this side assembled.
+
+        The same length check `positions` makes, and for the same reason one hop further: the
+        probe's evidence file joins a verdict to its thread by position, so a reply list off by one
+        would file every verdict after the gap against the wrong thread and score the bars on it.
+        """
+        if not threads or any(not one or not one.get("channel") for one in threads):
+            raise ValueError(f"{len(threads)} threads, and a thread with no channel reads nothing")
+        return self._ask({"op": "reader", "task": task, "threads": threads}, len(threads))
+
     def _ask(self, job_input: dict, expected: int) -> list[dict]:
         """One job with this client's knobs on it, and the reply list it must come back with.
 
