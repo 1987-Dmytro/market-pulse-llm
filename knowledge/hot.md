@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-15 10:05:50 (every SessionStart)
+**Auto-refreshed:** 2026-08-15 11:19:02 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-b2ff741 docs(report): 5c2-close -- the commit list amended after the commit that followed it
-3d30fb9 fix(5c2-close): a short hash in a guard, a check that could not fire, and a claim nobody measured
-3a4fe04 docs(report): 5c2-close -- both halves ratified, and one red test the table did not predict
-162ba0c docs(vault): the phase-close ADR, the [model] rule routed, and hot.md curated
-1fc50b8 feat(5c2-run): the phase ledger witnessed from the driver, on every exit that billed
+27fb09a docs(report): cycle2-prep-a -- the census/seal divergence, and the suite at its own commit
+7cef9c4 test(cycle2-prep-a): the census/seal divergence the skip opens, pinned before it bills
+dfe8a8a docs(vault): hot.md curated for cycle-2 -- the rule that landed and the projection that waits
+5427481 docs(vault): the team lead's Phase-6 command-centre plan, committed verbatim
+2bf4014 docs(report): cycle2-prep-a -- the queue rule, the pins it moved, and what the batch cannot be
 ```
 
 ## 📋 Recent decisions
@@ -23,16 +23,17 @@ b2ff741 docs(report): 5c2-close -- the commit list amended after the commit that
 
 ## 📅 Recent daily logs
 
+- `2026-08-15.md`
 - `2026-08-14.md`
 - `2026-08-13.md`
-- `2026-08-12.md`
 
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-15 — исполнен `cycle2-prep-a` ($0): правило 3.19 вшито в очередь
-инференса, проекция батч-паритета написана. `make check` **2 346 / 2 skipped**. Отчёт —
-`docs/reports/cycle2-prep-a.md` (Dv330–Dv334). Следом — `cycle2-prep-b` (сбор). Ниже — хвост 14.08.
+**Last update:** 2026-08-15 (checkpoint 11:18) — исполнен `cycle2-prep-a` ($0): правило 3.19 вшито в
+очередь инференса, проекция батч-паритета написана. `make check` **2 347 / 2 skipped**, дерево
+чистое, потрачено $0.00. Отчёт — `docs/reports/cycle2-prep-a.md` (Dv330–Dv334), день —
+[[2026-08-15]]. Следом — `cycle2-prep-b` (сбор). Ниже — хвост 14.08.
 
 **Предыдущий срез:** 2026-08-14 (закрытие дня) — **ФАЗА 5c2 ЗАКРЫТА.** За день три контракта:
 `5c2-run` (платный, куплено ВСЁ окно за $7.5309), `5c2-validate-prep` ($0) и `5c2-close` ($0).
@@ -108,7 +109,7 @@ pre-registration обязана регистрировать ОПЛАЧИВАЕ�
 
 ## 🚧 Blockers
 
-**Ничего не блокирует работу.** `cycle2-prep-a` исполнен, суита зелёная (2 346 / 2 skipped), потрачено
+**Ничего не блокирует работу.** `cycle2-prep-a` исполнен, суита зелёная (2 347 / 2 skipped), потрачено
 $0.00, дерево чистое. Ждём приёмки и `cycle2-prep-b`. Новый файл тимлида на утверждение оператора —
 `docs/PLAN-phase6-command-center.md` (командный центр Фазы 6, черновик 15.08).
 
