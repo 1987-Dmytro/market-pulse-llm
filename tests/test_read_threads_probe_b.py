@@ -271,3 +271,23 @@ def test_the_ledger_is_anchored_before_the_first_request_and_never_regenerated(b
     run(["--endpoint", "x", "--handshake"], endpoint)
     again = json.loads(driver.LEDGER.read_text("utf-8"))
     assert again["anchored_at"] == first["anchored_at"], "the anchor must survive a second run"
+
+
+def test_the_cap_lands_in_a_ledger_the_guard_anchored_first(bench):
+    """The runbook's real order, which the test above cannot see: `runpod_guard --step probe-b
+    --step-cap 0.35` writes this file BEFORE the first pod, so when the driver runs the anchor
+    branch never fires. A cap key written only inside that branch would never land, and the ledger
+    the report reads would carry an anchor with no cap beside it."""
+    guard_written = {
+        "runpod_balance_at_probe-b_start": 22.99,
+        "probe-b_gpu_cap_usd": 0.35,
+        "gpu_note": "written by scripts/runpod_guard.py before the first pod",
+        "gpu_sessions": [],
+    }
+    driver.LEDGER.write_text(json.dumps(guard_written), encoding="utf-8")
+
+    run(["--endpoint", "x", "--handshake"], FakeEndpoint())
+    after = json.loads(driver.LEDGER.read_text("utf-8"))
+    assert after["probe-b_cap_usd"] == 0.35
+    assert after["runpod_balance_at_probe-b_start"] == 22.99, "the anchor is never overwritten"
+    assert after["gpu_sessions"] == [] and after["gpu_note"] == guard_written["gpu_note"]

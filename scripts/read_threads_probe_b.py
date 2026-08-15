@@ -422,6 +422,11 @@ def main(argv: list[str] | None = None, client_factory=None) -> int:
     client = factory()
 
     ledger = anchor(guard.balance(), record)
+    # OUTSIDE `anchor`, and that is the point: in the runbook's order `runpod_guard --step probe-b
+    # --step-cap 0.35` writes this file before the first pod, so by the time the driver runs the
+    # anchor branch never fires and a cap key written only inside it would never land. The anchor
+    # itself is never overwritten ([[a_guard_on_one_path_is_not_a_guard]]).
+    ledger[f"{PHASE}_cap_usd"] = float(record["money"]["cap_usd_all_in"])
     save_ledger(ledger)
 
     info = handshake(client, record)
