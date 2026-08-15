@@ -6,7 +6,10 @@ The second is the one D2 asks for in so many words — «the reference could car
 the truth» — and it is why the record carries both spellings wherever they differ.
 """
 
+import hashlib
 import json
+import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -25,6 +28,72 @@ RECORD_PATH = REPO_ROOT / "results" / "reader_gold_w1.json"
 RECORD = json.loads(RECORD_PATH.read_text(encoding="utf-8"))
 REFERENCE = " ".join(gold.REFERENCE.read_text(encoding="utf-8").split())
 
+SEALING_COMMIT = "8c68107"
+"""probe-a's last commit — the tree this record was written against and measured on.
+
+The gold is one of the artefacts `results/prereg_reader_probe.json` freezes «the moment the endpoint
+exists», and that endpoint has existed and been deleted. So a pinned file that moves afterwards does
+NOT get re-pinned: it joins the list below, its sealed bytes stay recoverable through `git show`, and
+the byte comparison keeps claiming exactly what it claimed on the day the money was spent.
+"""
+
+MOVED_BY_THE_RATIFIED_WORDS = ("docs/PLAN-comment-signals.md",)
+"""The one pinned file the team lead's edit of 2026-08-15 (evening) moved.
+
+§3's schema example spelled two of its own class words the short way — `"subject_type": "сеть"` and
+`"subject_type": "категория"` — and the edit puts the ratified `сеть_ритейлер` and `категория_личное`
+in their place. Not one gold row moves: the transcription is from `docs/REFERENCE-signals-w1.md`,
+which is untouched, and rebuilding this record changes exactly one byte-range — the plan's own sha.
+What that edit DOES change is which authority still carries the word `категория`; the gold scores 12
+cells on it and only the reference states it now, which `docs/reports/probe-b.md` reports as a
+finding rather than repairing here.
+"""
+
+MOVED = MOVED_BY_THE_RATIFIED_WORDS
+WITNESS = {**dict.fromkeys(MOVED_BY_THE_RATIFIED_WORDS, '"subject_type": "сеть_ритейлер"')}
+"""What each moved file learned, read BOTH ways below — absent from the sealed blob and present on
+disk — so a recovery from the wrong commit fails instead of passing."""
+
+
+def sealed_blob(path: str) -> bytes:
+    """`path` as :data:`SEALING_COMMIT` carried it — git, and nothing on disk."""
+    return subprocess.run(
+        ["git", "show", f"{SEALING_COMMIT}:{path}"],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        check=True,
+    ).stdout
+
+
+def sealed_sha256(path: str) -> str:
+    return hashlib.sha256(sealed_blob(path)).hexdigest()
+
+
+def put_the_sealed_shas_back(produced: bytes) -> bytes:
+    """Swap every MOVED file's live sha for its sealed one — each swap must FIRE.
+
+    A substitution that matched nothing would leave the byte comparison passing for a file that had
+    silently gone back to the sealed bytes, which is the one way this repair could hide a revert.
+    """
+    for path in MOVED:
+        live, sealed = summary.sha256_of(REPO_ROOT / path), sealed_sha256(path)
+        assert live != sealed, path
+        token = WITNESS[path]
+        assert token not in sealed_blob(path).decode("utf-8"), path
+        assert token in (REPO_ROOT / path).read_text(encoding="utf-8"), path
+        produced, count = re.subn(live.encode(), sealed.encode(), produced)
+        assert count == 1, path
+    return produced
+
+
+def assert_pinned(name: str, digest: str) -> None:
+    """A pinned file is its live sha — or, on the MOVED list, the sha :data:`SEALING_COMMIT` has."""
+    live = summary.sha256_of(REPO_ROOT / name)
+    if name in MOVED:
+        assert live != digest and sealed_sha256(name) == digest, name
+    else:
+        assert live == digest, name
+
 
 @pytest.fixture(scope="module")
 def store() -> dict:
@@ -32,10 +101,16 @@ def store() -> dict:
 
 
 def test_the_committed_gold_is_what_the_producer_writes_today(tmp_path):
-    """Byte-identical: the transcription is data, everything else re-derives from the stores."""
+    """Byte-identical: the transcription is data, everything else re-derives from the stores.
+
+    Since the plan's schema example took the ratified words, the sha in `authority` is the only byte
+    range allowed to differ, and it is put back to what :data:`SEALING_COMMIT` carries before the
+    comparison — so the claim is still «every byte of this record re-derives», with that one digest
+    answered by `git show` instead of by the disk.
+    """
     out = tmp_path / "again.json"
     assert gold.main(["--out", str(out)]) == 0
-    assert out.read_bytes() == RECORD_PATH.read_bytes()
+    assert put_the_sealed_shas_back(out.read_bytes()) == RECORD_PATH.read_bytes()
 
 
 def test_the_gold_names_only_msg_ids_the_reference_names(store):
@@ -213,6 +288,6 @@ def test_the_gold_names_the_instrument_it_will_be_scored_against():
         REPO_ROOT / RECORD["producer"]["script"]
     )
     for name, digest in RECORD["producer"]["borrowed"].items():
-        assert summary.sha256_of(REPO_ROOT / name) == digest, name
+        assert_pinned(name, digest)
     for name, digest in RECORD["authority"].items():
-        assert summary.sha256_of(REPO_ROOT / name) == digest, name
+        assert_pinned(name, digest)

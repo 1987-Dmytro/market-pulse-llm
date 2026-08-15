@@ -5,7 +5,10 @@ operator's word, every sha is a live file, and the one arithmetic claim it makes
 means over thirteen rows — is recomputed rather than read.
 """
 
+import hashlib
 import json
+import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -24,13 +27,74 @@ RECORD_PATH = REPO_ROOT / "results" / "prereg_reader_probe.json"
 RECORD = json.loads(RECORD_PATH.read_text(encoding="utf-8"))
 GOLD = json.loads((REPO_ROOT / "results" / "reader_gold_w1.json").read_text(encoding="utf-8"))
 
+SEALING_COMMIT = "8c68107"
+"""probe-a's last commit — the tree this registration was spent against.
+
+This record's own `frozen_when_the_endpoint_exists` names itself first, and the endpoint has existed
+and been deleted. A pinned file that moves afterwards is therefore never re-pinned: it joins the list
+below with its reason, `git show` keeps the sealed bytes recoverable, and the re-derivation test goes
+on claiming what it claimed on the day of the run rather than what is true today.
+"""
+
+MOVED_BY_THE_RATIFIED_WORDS = ("docs/PLAN-comment-signals.md",)
+"""The one pinned file the team lead's edit of 2026-08-15 (evening) moved: §3's schema example took
+the ratified `сеть_ритейлер` and `категория_личное` in place of `сеть` and `категория`. No threshold,
+no population and no instrument in this record moves — the edit is two words in an authority
+document, and `results/reader_gold_w1.json` rebuilds byte for byte beside it.
+"""
+
+MOVED = MOVED_BY_THE_RATIFIED_WORDS
+WITNESS = {**dict.fromkeys(MOVED_BY_THE_RATIFIED_WORDS, '"subject_type": "сеть_ритейлер"')}
+"""What each moved file learned, read BOTH ways below — absent from the sealed blob and present on
+disk — so a recovery from the wrong commit fails instead of passing."""
+
+
+def sealed_blob(path: str) -> bytes:
+    """`path` as :data:`SEALING_COMMIT` carried it — git, and nothing on disk."""
+    return subprocess.run(
+        ["git", "show", f"{SEALING_COMMIT}:{path}"],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        check=True,
+    ).stdout
+
+
+def sealed_sha256(path: str) -> str:
+    return hashlib.sha256(sealed_blob(path)).hexdigest()
+
+
+def put_the_sealed_shas_back(produced: bytes) -> bytes:
+    """Swap every MOVED file's live sha for its sealed one — each swap must FIRE.
+
+    A substitution that matched nothing would leave the byte comparison passing for a file that had
+    silently gone back to the sealed bytes.
+    """
+    for path in MOVED:
+        live, sealed = summary.sha256_of(REPO_ROOT / path), sealed_sha256(path)
+        assert live != sealed, path
+        token = WITNESS[path]
+        assert token not in sealed_blob(path).decode("utf-8"), path
+        assert token in (REPO_ROOT / path).read_text(encoding="utf-8"), path
+        produced, count = re.subn(live.encode(), sealed.encode(), produced)
+        assert count == 1, path
+    return produced
+
+
+def assert_pinned(name: str, digest: str) -> None:
+    """A pinned file is its live sha — or, on the MOVED list, the sha :data:`SEALING_COMMIT` has."""
+    live = summary.sha256_of(REPO_ROOT / name)
+    if name in MOVED:
+        assert live != digest and sealed_sha256(name) == digest, name
+    else:
+        assert live == digest, name
+
 
 def test_the_committed_registration_is_what_the_producer_writes_today(tmp_path):
     """No clock is stamped, so the record re-derives byte for byte and its date is the date of the
     commit that carries it — which is also the only witness that it preceded the endpoint."""
     out = tmp_path / "again.json"
     assert prereg.main(["--out", str(out)]) == 0
-    assert out.read_bytes() == RECORD_PATH.read_bytes()
+    assert put_the_sealed_shas_back(out.read_bytes()) == RECORD_PATH.read_bytes()
     assert "generated_at" not in RECORD_PATH.read_text(encoding="utf-8")
 
 
@@ -57,9 +121,9 @@ def test_every_instrument_is_pinned_by_the_bytes_it_will_run_with():
     for name in instruments["scorer"]["functions"]:
         assert callable(getattr(scorer, name)), name
     for name, digest in RECORD["authority"].items():
-        assert summary.sha256_of(REPO_ROOT / name) == digest, name
+        assert_pinned(name, digest)
     for name, digest in RECORD["producer"]["borrowed"].items():
-        assert summary.sha256_of(REPO_ROOT / name) == digest, name
+        assert_pinned(name, digest)
 
 
 def test_the_ceilings_and_the_serving_block_are_the_code_and_the_rulings():

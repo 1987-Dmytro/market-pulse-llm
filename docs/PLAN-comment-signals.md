@@ -53,17 +53,17 @@
   "discussion_summary": "спрос на без цукру; жалоба на перемороженное с
       возвратами; похвала вкусу; спор о заангажированности",
   "signals": [
-    {"signal_type": "жалоба", "subject_type": "сеть",
+    {"signal_type": "жалоба", "subject_type": "сеть_ритейлер",
      "subject_id": "varus", "aspect": "качество",
      "stance": "negative",
      "reading": "холодовая цепь: мороженое перемерзшее, возвраты не у одного",
      "evidence": [21626], "quote": "з нього просто тече вода…"},
-    {"signal_type": "спрос", "subject_type": "категория",
+    {"signal_type": "спрос", "subject_type": "категория_личное",
      "subject_id": "морозиво_без_цукру", "aspect": "наличие",
      "evidence": [21599, 21601]}
   ],
   "per_comment": [
-    {"msg_id": 21626, "subject_type": "сеть", "subject_id": "varus",
+    {"msg_id": 21626, "subject_type": "сеть_ритейлер", "subject_id": "varus",
      "stance": "negative", "aspects": ["качество"]},
     {"msg_id": 580129, "subject_type": "категория_личное",
      "subject_id": null, "stance": null,
