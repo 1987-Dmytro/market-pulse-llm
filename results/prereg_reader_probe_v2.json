@@ -1,0 +1,848 @@
+{
+  "attempt": "ONE attempt, no retry. A failed bar after a completed run closes the question by design review (plan §5). Anything this registration did not anticipate stops the run and is reported with the attempt intact",
+  "authority": {
+    "docs/PLAN-comment-signals.md": "12a29138aa21bc2943a36152f6863dc69d0551f58564420b14704f413003f83e",
+    "docs/PROMPT-probe-b.md": "4235be50bd9103ac9568c5196508788a7cc721c9aeb1e1b7880235200449cbb4",
+    "docs/REFERENCE-signals-w1.md": "6408d4bbbb6e374394e48802f1a13a2c78d92825a54968666a9ac3c54d4835b3",
+    "results/prereg_reader_probe.json": "5c2e1a49a1a8d8668482c4829b97664bfe9c46793353299b53c537d8531c521b",
+    "results/reader_gold_w1.json": "ba86bcb31d597095124d3d7a32838a55a4b5be1f1f8f72e6c14368ecafb43225"
+  },
+  "bars": {
+    "1_flagships": {
+      "gold_signals": [
+        "F1a",
+        "F1b",
+        "F1c",
+        "F2a",
+        "F3a",
+        "F4a",
+        "F5a"
+      ],
+      "rule": "each of the reference's five flagship CASES is found when every gold signal it carries is found by scorer.reader_signal_found — evidence overlap, plus subject_type and aspect where the gold states them. signal_type is not compared and neither is subject_id",
+      "scored_over": [
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5"
+      ],
+      "scorer": "reader_signal_found",
+      "threshold": "5 of 5 cases"
+    },
+    "2_entity_cases": {
+      "reading": "four CASES over five rows: E4 is one ruling about two threads and both must answer it. E1, E4a and E4b are the injected ones — v1 could only register 2 of 2 because the gate removes them before payment, and buying them directly is what makes the operator's 4/4 a measurement instead of an arithmetic impossibility",
+      "rule": "an entity case is answered when the verdict for its thread carries an entity whose name or quote resolves to the case's brand_id through the watchlist matcher AND whose subject_type is the operator's ruling. E4 is the absence case: «чи варто» is the adverb, so the case is answered when NO entity in that thread names varto",
+      "scored_over": [
+        "E1",
+        "E2",
+        "E3",
+        "E4a",
+        "E4b"
+      ],
+      "scorer": "reader_entity_found",
+      "threshold": "4 of 4 cases"
+    },
+    "3_noise": {
+      "excluded_with_cause": {
+        "N1": "carried unchanged from v1: the reference's own S list reads a signal inside this thread (S1, msg 21420), and the store shows two comments there rather than the «десятки «+»» the N list describes. A bar that failed the reader for agreeing with the reference would measure nothing. The thread is READ — S1 is in the population — and its signal count is reported beside the bar"
+      },
+      "n3_is_not_a_discriminating_case": "@sashafitnesslife:3939 reaches the reader as a post with 0 payable comments: all 29 of its comments are removed by the gate's own plus-spam silencer before payment. Its «0 signals» is therefore produced by the silencer and not by the reader, and the bar's other four threads are what can move it. Registered inside the bar because the contract names it, and reported beside it because a cell that cannot be non-zero is not evidence ([[a_structurally_unreachable_zero]])",
+      "rule": "zero signals in the verdicts of the reference's noise threads",
+      "scored_over": [
+        "N2",
+        "N3",
+        "N4",
+        "N5",
+        "N6"
+      ],
+      "scorer": "reader_noise_count",
+      "threshold": "0 signals"
+    },
+    "4_per_comment_agreement": {
+      "arithmetic": "all 14 gold rows are inside this population — 578951 came with E1 — so the bar is 12 of 14 (0.857); 11 agreements scores 0.786 and fails",
+      "rule": "each gold row is compared on the fields the reference STATES for it (`scored_fields`) and on no others; a gold row the reader wrote no per_comment entry for counts as a disagreement and is also counted separately as `absent`",
+      "scored_over": [
+        21626,
+        21599,
+        21601,
+        21629,
+        580124,
+        580129,
+        47899,
+        47902,
+        48276,
+        48283,
+        579379,
+        579457,
+        578951,
+        20664
+      ],
+      "scorer": "reader_comment_agreement",
+      "threshold": "rate >= 0.8"
+    },
+    "5_time_and_cost": {
+      "prior": {
+        "measured_on": "ADA_24 (RTX 4090) — docs/reports/5c2-run.md",
+        "rate_usd_per_second": 0.00030669,
+        "reading": "carried as the PRIOR only. The probe's own rate is what its endpoint bills, and it is what the projection uses",
+        "source": "results/run_5c2_comments.json"
+      },
+      "reported_not_gating": {
+        "reading": "the ≤30-minute budget prices a PRODUCTION window of 111 threads and this probe reads 23, four of which the gate does not deliver at all. Projecting it from here is a reported number; the cap is the ceiling that gates",
+        "window_minutes_billed": 30.0
+      },
+      "rule": "the warm-up measures billed worker seconds per thread; the UNREAD remainder is projected two ways and the PESSIMISTIC one binds — per thread and per payable comment. The warm-up's own spend and the setup are added to it, because the cap is all-in and the rung that produces nothing is inside it",
+      "thresholds": {
+        "cap_usd_all_in": 0.35
+      }
+    }
+  },
+  "class": "PRE-REGISTRATION. Committed before the endpoint exists; git history is the only witness to that order, and no clock is stamped so the record re-derives byte for byte. Nothing here is a result. A pre-registration is a registration and not law: the layer's amendment comes after adjudication",
+  "contract": "docs/PROMPT-probe-b.md D2",
+  "frozen_when_the_endpoint_exists": [
+    "results/prereg_reader_probe_v2.json",
+    "results/reader_gold_w1.json",
+    "the reader_thread_gm4_v2 prompt text",
+    "src/market_pulse/scorer.py's four reader functions",
+    "scripts/probe_b_population.py's enumeration"
+  ],
+  "go_no_go": {
+    "pattern": "the (10)(a) go/no-go: measure a warm-up, project, and stop before the rest",
+    "projection_rule": "the UNREAD remainder is what is projected, and the warm-up's own billed seconds plus the measured setup are added to it. Projecting the whole population and comparing it against what the cap has left after the warm-up counts those threads twice — 13% of this cap at 23 threads, against 2.7% at 111",
+    "stop_rule": "if setup + warm-up + the binding projection of the remainder exceeds the cap, STOP before any further call. The attempt stays intact, the measured seconds per thread and the card they were measured on go back to the operator, and no bar is scored on a partial run",
+    "warm_up": {
+      "representativeness": "3, 4 and 4 payable comments against this population's mean of 5.83 — the warm-up is SMALLER than the average thread it prices, which is exactly why the per-payable projection is registered beside the per-thread one and why the pessimistic of the two binds",
+      "rule": "probe-a's registered draw, re-read under v2 — the same three threads, so the two instruments are compared on one sample and the seconds are comparable card for card. They were drawn from the MIDDLE third of the 111 by size",
+      "threads": [
+        "@mandziak:3701",
+        "@VARUS_channel:10451",
+        "@tarilka_malyuka:715"
+      ],
+      "where_they_sit_in_this_population": [
+        {
+          "of": 23,
+          "payable_comments": 3,
+          "rank_by_size": 7,
+          "thread": "@mandziak:3701"
+        },
+        {
+          "of": 23,
+          "payable_comments": 4,
+          "rank_by_size": 9,
+          "thread": "@VARUS_channel:10451"
+        },
+        {
+          "of": 23,
+          "payable_comments": 4,
+          "rank_by_size": 10,
+          "thread": "@tarilka_malyuka:715"
+        }
+      ]
+    }
+  },
+  "instruments": {
+    "ceilings": {
+      "input_chars": 40000,
+      "input_rule": "a LOUD refusal, never a truncation. The largest thread of THIS population renders to 11424 characters under v2, so the guard cannot fire on a thread the probe is registered to read",
+      "largest_threads": [
+        "@matusi_ukr:22272 (15 payable)",
+        "@VARUS_channel:10366 (12 payable)",
+        "@mandziak:3684 (12 payable)"
+      ],
+      "output_rule": "a ceiling against a truncated verdict, not a target. A reply that uses it all comes back `finish_reason: length` and is counted as a parse failure by cause",
+      "output_tokens": 2000
+    },
+    "gold": {
+      "record": "results/reader_gold_w1.json",
+      "sha256": "ba86bcb31d597095124d3d7a32838a55a4b5be1f1f8f72e6c14368ecafb43225"
+    },
+    "parser": {
+      "change": "one branch, in place: `from_post` absent reads False, so a v1 verdict is still validated by exactly the rule it was registered under, and `evidence: [null]` still refuses",
+      "function": "parse_reply",
+      "module": "src/market_pulse/prompts.py",
+      "sha256": "4b466bec6278c80f894dff316bfa78de9dbd1826011a610c6dcda6db20068c85"
+    },
+    "prompt_rule": "a sha per REGISTERED reader text, compared whole against what the worker's `info` answers. v1 stays servable so probe-a's evidence can be re-rendered; `task` above is the one this run reads with, and a scalar could not have said both",
+    "prompt_sha256": {
+      "reader_thread_gm4": "b272115637f784ad63c6fb2483e0b0ac3d6381901a096dc1cb5406b81a46c8cd",
+      "reader_thread_gm4_v2": "9d281bc80f18c91b6b0c32cbcdb37540504be887887d0dd1f1ab1c25841250c5"
+    },
+    "scorer": {
+      "functions": [
+        "reader_signal_found",
+        "reader_entity_found",
+        "reader_comment_agreement",
+        "reader_noise_count"
+      ],
+      "module": "src/market_pulse/scorer.py",
+      "sha256": "dbb5406a502f813ba1b4940e0914310efd632386a8da60e0c002cc8964a97d4f",
+      "unchanged": "byte for byte what v1 registered. The bars move because the population can carry their cases now, never because the judge was rewritten"
+    },
+    "serving": {
+      "adapter": null,
+      "chat_template": {
+        "add_generation_prompt": true,
+        "enable_thinking": false
+      },
+      "decoding": "greedy",
+      "do_sample": false,
+      "forward_batch_size": 1,
+      "gpu_class_preference": [
+        "ADA_24",
+        "ADA_24_PRO",
+        "AMPERE_24"
+      ],
+      "gpu_rule": "requested fastest-first and never asserted. probe-a asked for the display name «NVIDIA L4», the endpoint came back `gpuIds: AMPERE_24` and the worker reported an L4 runtime — so the CLASS is what is requested and the RUNTIME string is what lands in provenance. Seconds per thread are reported per card",
+      "merge_state": "base-no-adapter",
+      "model": "google/gemma-4-31b-it",
+      "model_revision": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+      "quantization": {
+        "bnb_4bit_compute_dtype": "bfloat16",
+        "bnb_4bit_quant_type": "nf4",
+        "bnb_4bit_use_double_quant": true,
+        "load_in_4bit": true
+      },
+      "serving_config": "READER",
+      "template_note": "a NEW serving template for this run. `settings()` refuses config-mixing by design; the srv-2d, CAPTION and probe-a templates are never edited"
+    },
+    "task": "reader_thread_gm4_v2",
+    "v2_changes": {
+      "Dv393": "`entities` is a LIST with the brackets written into the schema line and the keyed form forbidden by name. All three of probe-a's paid verdicts came back as an object keyed by the name, every other field right",
+      "Dv394": "a signal read in the POST carries `from_post: true` and an empty `evidence`; the «for the post the id is null» rule is scoped to `entities.msg_id`. probe-a returned `evidence: [null]`, applying that rule to a field of message ids",
+      "derivation": "v2 is derived from v1 by three `_swap` calls in src/market_pulse/prompts.py, so «exactly two wording changes» is a property of the code rather than a claim"
+    }
+  },
+  "money": {
+    "arithmetic": {
+      "at_the_l4_rate_probe_a_measured": {
+        "all_in_usd": 0.6486,
+        "by_payable_comment": {
+          "seconds": 2002.9,
+          "usd": 0.6143
+        },
+        "by_thread": {
+          "seconds": 1260.5,
+          "usd": 0.3866
+        },
+        "seconds_per_payable_comment": 14.947,
+        "seconds_per_thread": 54.806,
+        "verdict": "does not fit the cap"
+      },
+      "break_even_rule": "the binding projection divided by the seconds the cap can buy after setup. A card this much faster than the L4 makes the registered population affordable; a slower one makes the go/no-go say STOP, which is the outcome this arithmetic exists to make legible BEFORE a resource is created rather than after",
+      "break_even_speedup": 1.946,
+      "rate_usd_per_second": 0.00030669,
+      "seconds_the_cap_buys_after_setup": 1029.4,
+      "setup_rule": "probe-a's settled step ledger ($0.0847) minus its own reading (164.4 billed worker seconds at the rate below) — the staging pod, the boot, the weight load and the idle tail, measured rather than budgeted. The rung that produces nothing is inside the same cap.",
+      "setup_usd": 0.0343,
+      "what_a_stop_costs": "the setup and the warm-up's three threads — at the L4's own rate $0.0343 + $0.0504, less on a faster card"
+    },
+    "cap_usd_all_in": 0.35,
+    "guard": "scripts/runpod_guard.py --step probe-b --step-cap 0.35, read from the guard and never from a ledger line or from a sentence in the contract (Dv33, Dv378)",
+    "includes": "the staging pod, the endpoint's boot, the warm-up, the run, the injected threads and every second the endpoint bills while it exists"
+  },
+  "non_gating": [
+    "the same bars recomputed with «категория» and «категория_личное» collapsed into one class. 8 of the 14 per-comment gold rows and 4 of the 7 flagship signals score on «категория», a word the ratified entity taxonomy does not carry and that the plan's own schema example stopped using on 2026-08-15 — so a bar that failed on that split would be measuring a vocabulary the two authorities disagree about, and the collapsed reading is what says whether it did",
+    "parse failures by reason, and how many were `finish_reason: length` — «no signal» is counted over PARSED replies only",
+    "signal types the reader proposed with `proposed: true`",
+    "signals raised in N1, the thread excluded from bar 3 with cause",
+    "signals the reader marked `from_post`, the field Dv394 adds",
+    "entities resolved inside the noise threads",
+    "how the four injected threads read, reported apart from every other number",
+    "seconds per thread on THIS card beside probe-a's 54.806 on an L4"
+  ],
+  "phase": "probe-b",
+  "population": {
+    "census_cell": {
+      "cell": "narrow|silencers_on",
+      "payable_comments": 912,
+      "reading": "the population v1 registered, and what the 19 gated threads here are a subset of. It is pinned so a later reader can say which of these threads production would ever see",
+      "record": "results/gate_census_w1.json",
+      "sha256": "1338d4003ff787682962fd5f5f89014939e533af900083367c3e2be882d65602",
+      "threads": 111
+    },
+    "class": "a registered SUBSET of window 1, enumerated as a list. NOT the census cell: 19 of these threads are inside it and 4 are injected past the gate",
+    "enumeration": {
+      "digest": "ccef35fa4b9c771fd62506cd7878177f8184c8344702ad1d05c3bec33abbc1f3",
+      "digest_rule": "sha256 over `channel:post_id\\tgated|injected\\tpayable msg_ids` for every thread, in the enumeration's order. The flag is INSIDE the line: a subset that swapped a gated thread for an injected one of the same shape would otherwise hash the same",
+      "producer": "scripts/probe_b_population.py",
+      "sha256": "468e5c5087c281b79c0ecccef5710548f0641ecd6bff3900ed7f5034fa0674fb",
+      "threads": [
+        {
+          "cases": [
+            "E3",
+            "pc:20664"
+          ],
+          "channel": "@VARUS_channel",
+          "in_the_census_cell": true,
+          "injected": false,
+          "msg_ids": [
+            20594,
+            20595,
+            20656,
+            20664,
+            20665,
+            20672,
+            20673
+          ],
+          "payable_comments": 7,
+          "post_id": 10348,
+          "rendered_chars": 6259,
+          "rendering_sha256": "cf8157bce12f19f65f7573bb97f34c88b6d0f56fd102e423d1a3e8823a86c2ea",
+          "silenced_before_payment": 0,
+          "text_less": 0,
+          "thread": "@VARUS_channel:10348"
+        },
+        {
+          "cases": [
+            "E2",
+            "S3"
+          ],
+          "channel": "@VARUS_channel",
+          "in_the_census_cell": true,
+          "injected": false,
+          "msg_ids": [
+            20737,
+            20741
+          ],
+          "payable_comments": 2,
+          "post_id": 10360,
+          "rendered_chars": 6150,
+          "rendering_sha256": "5411ab2bf4bcc713a66ded875933458edf805e3fd0fd748f51b7d4becdeb6162",
+          "silenced_before_payment": 0,
+          "text_less": 0,
+          "thread": "@VARUS_channel:10360"
+        },
+        {
+          "cases": [
+            "N2"
+          ],
+          "channel": "@VARUS_channel",
+          "in_the_census_cell": true,
+          "injected": false,
+          "msg_ids": [
+            20760,
+            20782,
+            20863,
+            20884,
+            20912,
+            20913,
+            20919,
+            20922,
+            20923,
+            20939,
+            21013,
+            21370
+          ],
+          "payable_comments": 12,
+          "post_id": 10366,
+          "rendered_chars": 6886,
+          "rendering_sha256": "69878667e284a3e93391aed964e55bca010dc3afe370f07599f265402e7a1787",
+          "silenced_before_payment": 52,
+          "text_less": 1,
+          "thread": "@VARUS_channel:10366"
+        },
+        {
+          "cases": [
+            "warm-up"
+          ],
+          "channel": "@VARUS_channel",
+          "in_the_census_cell": true,
+          "injected": false,
+          "msg_ids": [
+            21121,
+            21123,
+            21125,
+            21127
+          ],
+          "payable_comments": 4,
+          "post_id": 10451,
+          "rendered_chars": 6164,
+          "rendering_sha256": "db307d17cf1748c705ff0c5d938ba4b80b5d0a79bb7ec788937b1b6a6cfda3ba",
+          "silenced_before_payment": 0,
+          "text_less": 0,
+          "thread": "@VARUS_channel:10451"
+        },
+        {
+          "cases": [
+            "S4"
+          ],
+          "channel": "@VARUS_channel",
+          "in_the_census_cell": true,
+          "injected": false,
+          "msg_ids": [
+            21195,
+            21198,
+            21199,
+            21209,
+            21211
+          ],
+          "payable_comments": 5,
+          "post_id": 10465,
+          "rendered_chars": 6297,
+          "rendering_sha256": "dfb254418f10d340de88559a46a064711cebd0fa93bd7ce75a4745ec189997bd",
+          "silenced_before_payment": 0,
+          "text_less": 0,
+          "thread": "@VARUS_channel:10465"
+        },
+        {
+          "cases": [
+            "S5"
+          ],
+          "channel": "@VARUS_channel",
+          "in_the_census_cell": true,
+          "injected": false,
+          "msg_ids": [
+            21253,
+            21256,
+            21258,
+            21262,
+            21266
+          ],
+          "payable_comments": 5,
+          "post_id": 10471,
+          "rendered_chars": 6520,
+          "rendering_sha256": "6aaef2923ce4fdc249731c31771ec981412960fd5b38c0c7e8449e99e85313d0",
+          "silenced_before_payment": 0,
+          "text_less": 0,
+          "thread": "@VARUS_channel:10471"
+        },
+        {
+          "cases": [
+            "N1",
+            "S1"
+          ],
+          "channel": "@VARUS_channel",
+          "in_the_census_cell": true,
+          "injected": false,
+          "msg_ids": [
+            21420,
+            21421
+          ],
+          "payable_comments": 2,
+          "post_id": 10529,
+          "rendered_chars": 6113,
+          "rendering_sha256": "937f4d0654aee62164fc1456fdcce532500e5117aff5a8c6a04c8a3762b415b9",
+          "silenced_before_payment": 0,
+          "text_less": 0,
+          "thread": "@VARUS_channel:10529"
+        },
+        {
+          "cases": [
+            "S2"
+          ],
+          "channel": "@VARUS_channel",
+          "in_the_census_cell": true,
+          "injected": false,
+          "msg_ids": [
+            21507,
+            21509
+          ],
+          "payable_comments": 2,
+          "post_id": 10593,
+          "rendered_chars": 6358,
+          "rendering_sha256": "4395873ad0cc5b7258e103548d1315e1c97c2b7aa59acd399d4fb28a19fc13d6",
+          "silenced_before_payment": 0,
+          "text_less": 1,
+          "thread": "@VARUS_channel:10593"
+        },
+        {
+          "cases": [
+            "S6"
+          ],
+          "channel": "@VARUS_channel",
+          "in_the_census_cell": true,
+          "injected": false,
+          "msg_ids": [
+            21566,
+            21571,
+            21575,
+            21576,
+            21578
+          ],
+          "payable_comments": 5,
+          "post_id": 10603,
+          "rendered_chars": 6499,
+          "rendering_sha256": "09818502665ff5997b95d5244f953c25dfc4dad961a20c9851bc4c0eca06ffbf",
+          "silenced_before_payment": 0,
+          "text_less": 1,
+          "thread": "@VARUS_channel:10603"
+        },
+        {
+          "cases": [
+            "F1",
+            "pc:21599",
+            "pc:21601",
+            "pc:21626",
+            "pc:21629"
+          ],
+          "channel": "@VARUS_channel",
+          "in_the_census_cell": true,
+          "injected": false,
+          "msg_ids": [
+            21599,
+            21601,
+            21609,
+            21626,
+            21627,
+            21629,
+            21631,
+            21670,
+            21678,
+            21680
+          ],
+          "payable_comments": 10,
+          "post_id": 10613,
+          "rendered_chars": 7507,
+          "rendering_sha256": "1ae04e42313bbc7eb90c56f5ee61c62f62b614715ebf96ee780dc979648e816b",
+          "silenced_before_payment": 0,
+          "text_less": 1,
+          "thread": "@VARUS_channel:10613"
+        },
+        {
+          "cases": [
+            "F3",
+            "pc:47899",
+            "pc:47902"
+          ],
+          "channel": "@mandziak",
+          "in_the_census_cell": true,
+          "injected": false,
+          "msg_ids": [
+            47896,
+            47897,
+            47898,
+            47899,
+            47900,
+            47902,
+            47904,
+            47925,
+            47926
+          ],
+          "payable_comments": 9,
+          "post_id": 3676,
+          "rendered_chars": 7746,
+          "rendering_sha256": "5c2b3b720f95646d72e936fa70657f4a99bed8b4efdbb0bd3be286f02c540ee4",
+          "silenced_before_payment": 0,
+          "text_less": 0,
+          "thread": "@mandziak:3676"
+        },
+        {
+          "cases": [
+            "E4a"
+          ],
+          "channel": "@mandziak",
+          "in_the_census_cell": false,
+          "injected": true,
+          "msg_ids": [
+            48004,
+            48009,
+            48011,
+            48016,
+            48018,
+            48020,
+            48036,
+            48040,
+            48041,
+            48047,
+            48064,
+            48099
+          ],
+          "payable_comments": 12,
+          "post_id": 3684,
+          "rendered_chars": 6950,
+          "rendering_sha256": "e1a789168bfbc89612fb5e68fca5fed368eb54c13e1daca42ba3b0a9832cd62a",
+          "silenced_before_payment": 0,
+          "text_less": 0,
+          "thread": "@mandziak:3684"
+        },
+        {
+          "cases": [
+            "E4b"
+          ],
+          "channel": "@mandziak",
+          "in_the_census_cell": false,
+          "injected": true,
+          "msg_ids": [
+            48054,
+            48055,
+            48056,
+            48057,
+            48067,
+            48081,
+            48109,
+            48268
+          ],
+          "payable_comments": 8,
+          "post_id": 3689,
+          "rendered_chars": 8572,
+          "rendering_sha256": "5878ca17d42e28263a822a423ce5ee2361aba0ef6b52e8526ecdfd2450d9a669",
+          "silenced_before_payment": 0,
+          "text_less": 0,
+          "thread": "@mandziak:3689"
+        },
+        {
+          "cases": [
+            "warm-up"
+          ],
+          "channel": "@mandziak",
+          "in_the_census_cell": true,
+          "injected": false,
+          "msg_ids": [
+            48164,
+            48302,
+            48323
+          ],
+          "payable_comments": 3,
+          "post_id": 3701,
+          "rendered_chars": 6075,
+          "rendering_sha256": "e335c0d753e7910930bd533ee30ff3f5ce11ec45034d25b055ded0a17668e62c",
+          "silenced_before_payment": 0,
+          "text_less": 0,
+          "thread": "@mandziak:3701"
+        },
+        {
+          "cases": [
+            "F4",
+            "pc:48276",
+            "pc:48283"
+          ],
+          "channel": "@mandziak",
+          "in_the_census_cell": true,
+          "injected": false,
+          "msg_ids": [
+            48174,
+            48176,
+            48177,
+            48178,
+            48181,
+            48231,
+            48276,
+            48283,
+            49098
+          ],
+          "payable_comments": 9,
+          "post_id": 3703,
+          "rendered_chars": 8281,
+          "rendering_sha256": "210244bc58a9d9dd462b6bcfaa3e986863d209732ec6e1b45a30834f2c832548",
+          "silenced_before_payment": 0,
+          "text_less": 0,
+          "thread": "@mandziak:3703"
+        },
+        {
+          "cases": [
+            "E1",
+            "pc:578951"
+          ],
+          "channel": "@matusi_ukr",
+          "in_the_census_cell": false,
+          "injected": true,
+          "msg_ids": [
+            578931,
+            578932,
+            578939,
+            578940,
+            578942,
+            578944,
+            578947,
+            578948,
+            578951,
+            578952,
+            579007,
+            579042
+          ],
+          "payable_comments": 12,
+          "post_id": 22242,
+          "rendered_chars": 7548,
+          "rendering_sha256": "04172ed812aacb4084e0d6c0272d29236fbfe934be979eea1cdbd6e30f5b077f",
+          "silenced_before_payment": 0,
+          "text_less": 0,
+          "thread": "@matusi_ukr:22242"
+        },
+        {
+          "cases": [
+            "F5",
+            "pc:579379",
+            "pc:579457"
+          ],
+          "channel": "@matusi_ukr",
+          "in_the_census_cell": true,
+          "injected": false,
+          "msg_ids": [
+            579373,
+            579374,
+            579375,
+            579376,
+            579377,
+            579379,
+            579380,
+            579381,
+            579383,
+            579416,
+            579429,
+            579457,
+            580126,
+            580127,
+            580340
+          ],
+          "payable_comments": 15,
+          "post_id": 22272,
+          "rendered_chars": 11424,
+          "rendering_sha256": "498890aa3384b86037d250acdb71154c84965c8e66de9f8d435ab7b7059c4dbc",
+          "silenced_before_payment": 0,
+          "text_less": 0,
+          "thread": "@matusi_ukr:22272"
+        },
+        {
+          "cases": [
+            "F2",
+            "pc:580124",
+            "pc:580129"
+          ],
+          "channel": "@matusi_ukr",
+          "in_the_census_cell": true,
+          "injected": false,
+          "msg_ids": [
+            580124,
+            580129
+          ],
+          "payable_comments": 2,
+          "post_id": 22303,
+          "rendered_chars": 7151,
+          "rendering_sha256": "c6dfce684f63c75482a7230e93050689674ff9eb3f6b25b78477639b38cb3473",
+          "silenced_before_payment": 0,
+          "text_less": 0,
+          "thread": "@matusi_ukr:22303"
+        },
+        {
+          "cases": [
+            "N4"
+          ],
+          "channel": "@retsepty",
+          "in_the_census_cell": true,
+          "injected": false,
+          "msg_ids": [
+            49531,
+            49541,
+            49560
+          ],
+          "payable_comments": 3,
+          "post_id": 7312,
+          "rendered_chars": 6604,
+          "rendering_sha256": "78c8827444c9ccf96bef7f48fe6ff120edeb2e251ddfc5299cc70f086bdbbff1",
+          "silenced_before_payment": 0,
+          "text_less": 0,
+          "thread": "@retsepty:7312"
+        },
+        {
+          "cases": [
+            "N5"
+          ],
+          "channel": "@retsepty",
+          "in_the_census_cell": true,
+          "injected": false,
+          "msg_ids": [
+            49626,
+            49627
+          ],
+          "payable_comments": 2,
+          "post_id": 7325,
+          "rendered_chars": 6826,
+          "rendering_sha256": "876aad2f2657fdd19d9a0d5f32f1000676b73494e7dea47200400dbc8c2ee6b5",
+          "silenced_before_payment": 0,
+          "text_less": 0,
+          "thread": "@retsepty:7325"
+        },
+        {
+          "cases": [
+            "N6"
+          ],
+          "channel": "@retsepty",
+          "in_the_census_cell": true,
+          "injected": false,
+          "msg_ids": [
+            49632
+          ],
+          "payable_comments": 1,
+          "post_id": 7327,
+          "rendered_chars": 5862,
+          "rendering_sha256": "13940af4bec86bfcd2e61681a35263472093e4f1daff69c5dc83ea506bbfb9f8",
+          "silenced_before_payment": 0,
+          "text_less": 0,
+          "thread": "@retsepty:7327"
+        },
+        {
+          "cases": [
+            "N3"
+          ],
+          "channel": "@sashafitnesslife",
+          "in_the_census_cell": false,
+          "injected": true,
+          "msg_ids": [],
+          "payable_comments": 0,
+          "post_id": 3939,
+          "rendered_chars": 5802,
+          "rendering_sha256": "29235a841b228b33c514b7d8ac726f3298c478c19da421d15981df1b87b55434",
+          "silenced_before_payment": 29,
+          "text_less": 0,
+          "thread": "@sashafitnesslife:3939"
+        },
+        {
+          "cases": [
+            "warm-up"
+          ],
+          "channel": "@tarilka_malyuka",
+          "in_the_census_cell": true,
+          "injected": false,
+          "msg_ids": [
+            45,
+            47,
+            48,
+            49
+          ],
+          "payable_comments": 4,
+          "post_id": 715,
+          "rendered_chars": 7766,
+          "rendering_sha256": "f58040ec050b1a7bac8603502c10e149ba8e73e12caf2106c5fd6e80f1e32493",
+          "silenced_before_payment": 0,
+          "text_less": 1,
+          "thread": "@tarilka_malyuka:715"
+        }
+      ]
+    },
+    "gated_threads": 19,
+    "injected_rule": "the four threads SPEC 3.21 (1)'s marker rule removes before payment — E1, E4a, E4b and N3. They exist to make bars 2 and 3 reachable and nothing else: they never enter a production aggregate, and never a window or per-thread price for the census cell, because the gate does not deliver them and a rate measured over them would price a population nobody has. They DO cost money and are inside this cap. Whether the production gate should deliver them is the sitting's question",
+    "injected_threads": 4,
+    "payable_comments": 134,
+    "threads": 23
+  },
+  "producer": {
+    "borrowed": {
+      "scripts/probe_b_population.py": "468e5c5087c281b79c0ecccef5710548f0641ecd6bff3900ed7f5034fa0674fb",
+      "scripts/reader_population.py": "5ecb897d3d620d7d27916a3aa578a599ba1cd7c835abfb4ea136a350a440914a",
+      "scripts/write_reader_gold.py": "20a687a630387fa2556cb47cc890c4631e1cfff3a2e58dd86a927b0414385e7b",
+      "src/market_pulse/local_llm.py": "1dc6341d691e4c864dde59619e5365a8cedf96712351d7fcee161166d4f2ff14",
+      "src/market_pulse/prompts.py": "4b466bec6278c80f894dff316bfa78de9dbd1826011a610c6dcda6db20068c85",
+      "src/market_pulse/scorer.py": "dbb5406a502f813ba1b4940e0914310efd632386a8da60e0c002cc8964a97d4f"
+    },
+    "script": "scripts/write_reader_prereg_v2.py",
+    "sha256": "676d02fa48239d226beca90d9114b768a27e3664afb4e4d3fb0b551e058adf16"
+  },
+  "supersedes": {
+    "record": "results/prereg_reader_probe.json",
+    "ruling": "operator 2026-08-15 (evening), after docs/reports/probe-a.md §9: options A (fix the two shape defects), B (re-price on a faster 24 GB card) and C (score the bars on a registered subset) are bought as ONE registration under a $0.35 all-in cap. The superseded record is not edited, not re-derived and not re-pinned — it describes the run that was paid for under it",
+    "sha256": "5c2e1a49a1a8d8668482c4829b97664bfe9c46793353299b53c537d8531c521b",
+    "what_it_changes": [
+      "the instrument: reader_thread_gm4_v2, two measured defects closed (Dv393, Dv394)",
+      "the card: the fastest 24 GB class first, actual card in provenance",
+      "the population: a registered subset with four threads injected past the gate"
+    ],
+    "what_it_keeps": [
+      "the four scorer functions and every matching rule they implement",
+      "results/reader_gold_w1.json, byte for byte",
+      "the per-comment agreement bar of 0.80 and the flagship/entity/noise thresholds",
+      "the input and output ceilings",
+      "the serving block: base, no adapter, NF4, enable_thinking false, greedy, batch 1",
+      "one attempt, no retry, and a STOP that leaves the attempt intact"
+    ]
+  }
+}
