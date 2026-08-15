@@ -1,0 +1,141 @@
+{
+  "1_flagships": {
+    "missed": {
+      "F1": "@VARUS_channel:10613",
+      "F2": "@matusi_ukr:22303",
+      "F3": "@mandziak:3676"
+    },
+    "missed_on_a_refused_reply": {
+      "F3": "@mandziak:3676"
+    },
+    "missed_while_the_reply_parsed": {
+      "F1": "@VARUS_channel:10613",
+      "F2": "@matusi_ukr:22303"
+    }
+  },
+  "2_entity_cases": {
+    "missed": {
+      "E2": "@VARUS_channel:10360",
+      "E3": "@VARUS_channel:10348"
+    },
+    "missed_on_a_refused_reply": {
+      "E2": "@VARUS_channel:10360",
+      "E3": "@VARUS_channel:10348"
+    },
+    "missed_while_the_reply_parsed": {}
+  },
+  "3_noise": {
+    "passed": true,
+    "reading": "the bar counts SIGNALS, and a refused reply has none — so a thread whose verdict could not be read contributes a zero that looks exactly like a clean pass. This bar's 0 is computed over 1 of 5 threads with an actual verdict",
+    "signals": 0,
+    "threads_with_a_verdict": {
+      "@VARUS_channel:10366": 0
+    },
+    "threads_with_no_verdict": {
+      "@retsepty:7312": "signals is not a list",
+      "@retsepty:7325": "signals is not a list",
+      "@retsepty:7327": "signals is not a list",
+      "@sashafitnesslife:3939": "signals is not a list"
+    }
+  },
+  "4_per_comment_agreement": {
+    "absent": 7,
+    "absent_on_a_refused_reply": [
+      47899,
+      47902,
+      20664
+    ],
+    "absent_while_the_reply_parsed": [
+      21601,
+      21629,
+      580124,
+      578951
+    ],
+    "agreed": 5,
+    "disagreed": 2,
+    "disagreements": {
+      "21599": {
+        "subject_type": {
+          "gold": "категория",
+          "reader": "категория_личное"
+        }
+      },
+      "580129": {
+        "subject_type": {
+          "gold": "категория_личное",
+          "reader": "молочный_бренд"
+        }
+      }
+    },
+    "n": 14,
+    "rate": 0.35714285714285715,
+    "rate_over_the_rows_whose_reply_parsed": 0.45454545454545453
+  },
+  "cases_on_a_refused_reply": {
+    "E2": {
+      "parse_error": "missing field: entities",
+      "parsed": false,
+      "payable_comments": 2,
+      "thread": "@VARUS_channel:10360"
+    },
+    "E3": {
+      "parse_error": "missing field: entities",
+      "parsed": false,
+      "payable_comments": 7,
+      "thread": "@VARUS_channel:10348"
+    },
+    "E4b": {
+      "parse_error": "signals.aspect is not a string",
+      "parsed": false,
+      "payable_comments": 8,
+      "thread": "@mandziak:3689"
+    },
+    "F3": {
+      "parse_error": "noise is not a list",
+      "parsed": false,
+      "payable_comments": 9,
+      "thread": "@mandziak:3676"
+    },
+    "N3": {
+      "parse_error": "signals is not a list",
+      "parsed": false,
+      "payable_comments": 0,
+      "thread": "@sashafitnesslife:3939"
+    },
+    "N4": {
+      "parse_error": "signals is not a list",
+      "parsed": false,
+      "payable_comments": 3,
+      "thread": "@retsepty:7312"
+    },
+    "N5": {
+      "parse_error": "signals is not a list",
+      "parsed": false,
+      "payable_comments": 2,
+      "thread": "@retsepty:7325"
+    },
+    "N6": {
+      "parse_error": "signals is not a list",
+      "parsed": false,
+      "payable_comments": 1,
+      "thread": "@retsepty:7327"
+    }
+  },
+  "class": "POST-RUN ANALYSIS, reported and never gating. Written after results/reader_probe_b_verdict.json and moving nothing in it: this is the join between a bar's cases and whether their replies could be read at all",
+  "replies": {
+    "by_cause": {
+      "missing field: entities": 2,
+      "missing field: evidence": 2,
+      "noise is not a list": 1,
+      "signals is not a list": 4,
+      "signals.aspect is not a string": 1
+    },
+    "parsed": 13,
+    "read": 23,
+    "refused": 10
+  },
+  "verdict": {
+    "record": "results/reader_probe_b_verdict.json",
+    "sha256": "0c52100ebb82297b463731949c7bcc858205ba8749480adc0a458ae42d1d8424"
+  }
+}

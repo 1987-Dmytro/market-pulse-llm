@@ -1,0 +1,655 @@
+{
+  "bars": {
+    "1_flagships": {
+      "as_run": 2,
+      "coerced": 2,
+      "of": 5
+    },
+    "2_entity_cases": {
+      "as_run": 2,
+      "coerced": 3,
+      "of": 4
+    },
+    "3_noise": {
+      "as_run": 0,
+      "coerced": 0,
+      "reading": "as run, four of this bar's five threads had no verdict at all, so its zero was a count over nothing. The coerced number is the first one computed over five actual answers"
+    },
+    "4_per_comment_agreement": {
+      "as_run": 0.35714285714285715,
+      "coerced": 0.42857142857142855,
+      "threshold": 0.8
+    }
+  },
+  "class": "POST-RUN MEASUREMENT, reported and never gating. The registered verdict is results/reader_probe_b_verdict.json and nothing here moves it. This record measures what the ten refusals cost by applying container-only repairs — no field invented, no value changed, no taxonomy word mapped",
+  "collapsed_vocabulary": {
+    "as_run": {
+      "1_flagships": {
+        "as_registered": 2,
+        "collapsed": 2
+      },
+      "4_per_comment_agreement": {
+        "as_registered": 0.35714285714285715,
+        "collapsed": 0.42857142857142855
+      }
+    },
+    "coerced": {
+      "1_flagships": {
+        "as_registered": 2,
+        "collapsed": 3
+      },
+      "4_per_comment_agreement": {
+        "as_registered": 0.42857142857142855,
+        "collapsed": 0.6428571428571429
+      }
+    }
+  },
+  "detail": {
+    "coerced_verdict": {
+      "1_flagships": {
+        "reason": null,
+        "result": {
+          "cases": 5,
+          "cases_answered": 2,
+          "passed": false,
+          "per_case": [
+            {
+              "answered": false,
+              "id": "F1",
+              "signals": [
+                {
+                  "found": true,
+                  "id": "F1a",
+                  "index": 1,
+                  "signal_type": "жалоба"
+                },
+                {
+                  "found": false,
+                  "id": "F1b",
+                  "index": null,
+                  "signal_type": null
+                },
+                {
+                  "found": false,
+                  "id": "F1c",
+                  "index": null,
+                  "signal_type": null
+                }
+              ],
+              "thread": "@VARUS_channel:10613"
+            },
+            {
+              "answered": false,
+              "id": "F2",
+              "signals": [
+                {
+                  "found": false,
+                  "id": "F2a",
+                  "index": null,
+                  "signal_type": null
+                }
+              ],
+              "thread": "@matusi_ukr:22303"
+            },
+            {
+              "answered": false,
+              "id": "F3",
+              "signals": [
+                {
+                  "found": false,
+                  "id": "F3a",
+                  "index": null,
+                  "signal_type": null
+                }
+              ],
+              "thread": "@mandziak:3676"
+            },
+            {
+              "answered": true,
+              "id": "F4",
+              "signals": [
+                {
+                  "found": true,
+                  "id": "F4a",
+                  "index": 0,
+                  "signal_type": "привычка"
+                }
+              ],
+              "thread": "@mandziak:3703"
+            },
+            {
+              "answered": true,
+              "id": "F5",
+              "signals": [
+                {
+                  "found": true,
+                  "id": "F5a",
+                  "index": 0,
+                  "signal_type": "спрос"
+                }
+              ],
+              "thread": "@matusi_ukr:22272"
+            }
+          ],
+          "per_signal": [
+            {
+              "case": "F1",
+              "found": true,
+              "id": "F1a"
+            },
+            {
+              "case": "F1",
+              "found": false,
+              "id": "F1b"
+            },
+            {
+              "case": "F1",
+              "found": false,
+              "id": "F1c"
+            },
+            {
+              "case": "F2",
+              "found": false,
+              "id": "F2a"
+            },
+            {
+              "case": "F3",
+              "found": false,
+              "id": "F3a"
+            },
+            {
+              "case": "F4",
+              "found": true,
+              "id": "F4a"
+            },
+            {
+              "case": "F5",
+              "found": true,
+              "id": "F5a"
+            }
+          ],
+          "per_signal_reading": "plan §5 (1) names five SIGNALS and the reference five THREADS carrying seven; the bar is the case reading and this table is where the narrower one is read off"
+        },
+        "scored": true,
+        "scorer": "reader_signal_found",
+        "threads_in_the_evidence": [
+          "@VARUS_channel:10613",
+          "@matusi_ukr:22303",
+          "@mandziak:3676",
+          "@mandziak:3703",
+          "@matusi_ukr:22272"
+        ],
+        "threads_not_read": [],
+        "threads_registered": [
+          "@VARUS_channel:10613",
+          "@matusi_ukr:22303",
+          "@mandziak:3676",
+          "@mandziak:3703",
+          "@matusi_ukr:22272"
+        ],
+        "threshold": "5 of 5 cases",
+        "verdict": "SCORED"
+      },
+      "2_entity_cases": {
+        "reason": null,
+        "result": {
+          "cases": 4,
+          "cases_answered": 3,
+          "passed": false,
+          "per_case": {
+            "E1": true,
+            "E2": false,
+            "E3": true,
+            "E4": true
+          },
+          "per_row": [
+            {
+              "answered": true,
+              "brand_id": "garmonija",
+              "expected": "не_наш_рынок",
+              "id": "E1",
+              "reported": [
+                "не_наш_рынок"
+              ],
+              "thread": "@matusi_ukr:22242"
+            },
+            {
+              "answered": false,
+              "brand_id": "selianske",
+              "expected": "молочный_бренд",
+              "id": "E2",
+              "reported": [],
+              "thread": "@VARUS_channel:10360"
+            },
+            {
+              "answered": true,
+              "brand_id": "varus-pl",
+              "expected": "сеть_ритейлер",
+              "id": "E3",
+              "reported": [
+                "сеть_ритейлер"
+              ],
+              "thread": "@VARUS_channel:10348"
+            },
+            {
+              "answered": true,
+              "brand_id": "varto",
+              "expected": "absent",
+              "id": "E4a",
+              "reported": [],
+              "thread": "@mandziak:3684"
+            },
+            {
+              "answered": true,
+              "brand_id": "varto",
+              "expected": "absent",
+              "id": "E4b",
+              "reported": [],
+              "thread": "@mandziak:3689"
+            }
+          ]
+        },
+        "scored": true,
+        "scorer": "reader_entity_found",
+        "threads_in_the_evidence": [
+          "@matusi_ukr:22242",
+          "@VARUS_channel:10360",
+          "@VARUS_channel:10348",
+          "@mandziak:3684",
+          "@mandziak:3689"
+        ],
+        "threads_not_read": [],
+        "threads_registered": [
+          "@matusi_ukr:22242",
+          "@VARUS_channel:10360",
+          "@VARUS_channel:10348",
+          "@mandziak:3684",
+          "@mandziak:3689"
+        ],
+        "threshold": "4 of 4 cases",
+        "verdict": "SCORED"
+      },
+      "3_noise": {
+        "reason": null,
+        "result": {
+          "entities": {
+            "@VARUS_channel:10366": 1,
+            "@retsepty:7312": 0,
+            "@retsepty:7325": 0,
+            "@retsepty:7327": 0,
+            "@sashafitnesslife:3939": 0
+          },
+          "passed": true,
+          "per_thread": {
+            "@VARUS_channel:10366": 0,
+            "@retsepty:7312": 0,
+            "@retsepty:7325": 0,
+            "@retsepty:7327": 0,
+            "@sashafitnesslife:3939": 0
+          },
+          "reported_beside": {
+            "N1": 1
+          },
+          "scored_over": [
+            "N2",
+            "N3",
+            "N4",
+            "N5",
+            "N6"
+          ],
+          "signals": 0,
+          "threads": 5
+        },
+        "scored": true,
+        "scorer": "reader_noise_count",
+        "threads_in_the_evidence": [
+          "@VARUS_channel:10366",
+          "@sashafitnesslife:3939",
+          "@retsepty:7312",
+          "@retsepty:7325",
+          "@retsepty:7327"
+        ],
+        "threads_not_read": [],
+        "threads_registered": [
+          "@VARUS_channel:10366",
+          "@sashafitnesslife:3939",
+          "@retsepty:7312",
+          "@retsepty:7325",
+          "@retsepty:7327"
+        ],
+        "threshold": "0 signals",
+        "verdict": "SCORED"
+      },
+      "4_per_comment_agreement": {
+        "reason": null,
+        "result": {
+          "absent": 4,
+          "agreed": 6,
+          "disagreed": 4,
+          "n": 14,
+          "passed": false,
+          "rate": 0.42857142857142855,
+          "rows": [
+            {
+              "absent": false,
+              "agreed": true,
+              "disagreed_on": {},
+              "msg_id": 21626
+            },
+            {
+              "absent": false,
+              "agreed": false,
+              "disagreed_on": {
+                "subject_type": {
+                  "gold": "категория",
+                  "reader": "категория_личное"
+                }
+              },
+              "msg_id": 21599
+            },
+            {
+              "absent": true,
+              "agreed": false,
+              "msg_id": 21601
+            },
+            {
+              "absent": true,
+              "agreed": false,
+              "msg_id": 21629
+            },
+            {
+              "absent": true,
+              "agreed": false,
+              "msg_id": 580124
+            },
+            {
+              "absent": false,
+              "agreed": false,
+              "disagreed_on": {
+                "subject_type": {
+                  "gold": "категория_личное",
+                  "reader": "молочный_бренд"
+                }
+              },
+              "msg_id": 580129
+            },
+            {
+              "absent": false,
+              "agreed": false,
+              "disagreed_on": {
+                "subject_type": {
+                  "gold": "категория",
+                  "reader": "категория_личное"
+                }
+              },
+              "msg_id": 47899
+            },
+            {
+              "absent": false,
+              "agreed": false,
+              "disagreed_on": {
+                "subject_type": {
+                  "gold": "категория",
+                  "reader": "категория_личное"
+                }
+              },
+              "msg_id": 47902
+            },
+            {
+              "absent": false,
+              "agreed": true,
+              "disagreed_on": {},
+              "msg_id": 48276
+            },
+            {
+              "absent": false,
+              "agreed": true,
+              "disagreed_on": {},
+              "msg_id": 48283
+            },
+            {
+              "absent": false,
+              "agreed": true,
+              "disagreed_on": {},
+              "msg_id": 579379
+            },
+            {
+              "absent": false,
+              "agreed": true,
+              "disagreed_on": {},
+              "msg_id": 579457
+            },
+            {
+              "absent": true,
+              "agreed": false,
+              "msg_id": 578951
+            },
+            {
+              "absent": false,
+              "agreed": true,
+              "disagreed_on": {},
+              "msg_id": 20664
+            }
+          ],
+          "scored": true
+        },
+        "scored": true,
+        "scorer": "reader_comment_agreement",
+        "threads_in_the_evidence": [
+          "@VARUS_channel:10348",
+          "@VARUS_channel:10613",
+          "@mandziak:3676",
+          "@mandziak:3703",
+          "@matusi_ukr:22242",
+          "@matusi_ukr:22272",
+          "@matusi_ukr:22303"
+        ],
+        "threads_not_read": [],
+        "threads_registered": [
+          "@VARUS_channel:10348",
+          "@VARUS_channel:10613",
+          "@mandziak:3676",
+          "@mandziak:3703",
+          "@matusi_ukr:22242",
+          "@matusi_ukr:22272",
+          "@matusi_ukr:22303"
+        ],
+        "threshold": "rate >= 0.8",
+        "verdict": "SCORED"
+      }
+    }
+  },
+  "per_thread": [
+    {
+      "now": "parsed",
+      "repairs": [],
+      "thread": "@mandziak:3701",
+      "was": "parsed"
+    },
+    {
+      "now": "parsed",
+      "repairs": [],
+      "thread": "@VARUS_channel:10451",
+      "was": "parsed"
+    },
+    {
+      "now": "missing field: evidence",
+      "repairs": [],
+      "thread": "@tarilka_malyuka:715",
+      "was": "missing field: evidence"
+    },
+    {
+      "now": "parsed",
+      "repairs": [
+        "two top-level objects"
+      ],
+      "thread": "@VARUS_channel:10348",
+      "was": "missing field: entities"
+    },
+    {
+      "now": "missing field: entities",
+      "repairs": [
+        "two top-level objects"
+      ],
+      "thread": "@VARUS_channel:10360",
+      "was": "missing field: entities"
+    },
+    {
+      "now": "parsed",
+      "repairs": [],
+      "thread": "@VARUS_channel:10366",
+      "was": "parsed"
+    },
+    {
+      "now": "parsed",
+      "repairs": [],
+      "thread": "@VARUS_channel:10465",
+      "was": "parsed"
+    },
+    {
+      "now": "parsed",
+      "repairs": [],
+      "thread": "@VARUS_channel:10471",
+      "was": "parsed"
+    },
+    {
+      "now": "parsed",
+      "repairs": [],
+      "thread": "@VARUS_channel:10529",
+      "was": "parsed"
+    },
+    {
+      "now": "missing field: evidence",
+      "repairs": [],
+      "thread": "@VARUS_channel:10593",
+      "was": "missing field: evidence"
+    },
+    {
+      "now": "parsed",
+      "repairs": [],
+      "thread": "@VARUS_channel:10603",
+      "was": "parsed"
+    },
+    {
+      "now": "parsed",
+      "repairs": [],
+      "thread": "@VARUS_channel:10613",
+      "was": "parsed"
+    },
+    {
+      "now": "parsed",
+      "repairs": [
+        "noise: map -> list"
+      ],
+      "thread": "@mandziak:3676",
+      "was": "noise is not a list"
+    },
+    {
+      "now": "parsed",
+      "repairs": [],
+      "thread": "@mandziak:3684",
+      "was": "parsed"
+    },
+    {
+      "now": "missing field: aspect",
+      "repairs": [
+        "signals.aspect null -> dropped"
+      ],
+      "thread": "@mandziak:3689",
+      "was": "signals.aspect is not a string"
+    },
+    {
+      "now": "parsed",
+      "repairs": [],
+      "thread": "@mandziak:3703",
+      "was": "parsed"
+    },
+    {
+      "now": "parsed",
+      "repairs": [],
+      "thread": "@matusi_ukr:22242",
+      "was": "parsed"
+    },
+    {
+      "now": "parsed",
+      "repairs": [],
+      "thread": "@matusi_ukr:22272",
+      "was": "parsed"
+    },
+    {
+      "now": "parsed",
+      "repairs": [],
+      "thread": "@matusi_ukr:22303",
+      "was": "parsed"
+    },
+    {
+      "now": "parsed",
+      "repairs": [
+        "signals: empty object -> empty list"
+      ],
+      "thread": "@retsepty:7312",
+      "was": "signals is not a list"
+    },
+    {
+      "now": "parsed",
+      "repairs": [
+        "signals: empty object -> empty list"
+      ],
+      "thread": "@retsepty:7325",
+      "was": "signals is not a list"
+    },
+    {
+      "now": "parsed",
+      "repairs": [
+        "signals: empty object -> empty list"
+      ],
+      "thread": "@retsepty:7327",
+      "was": "signals is not a list"
+    },
+    {
+      "now": "parsed",
+      "repairs": [
+        "signals: empty object -> empty list"
+      ],
+      "thread": "@sashafitnesslife:3939",
+      "was": "signals is not a list"
+    }
+  ],
+  "repairs_allowed": [
+    "two top-level objects merged into one",
+    "an empty object where the schema asks for an empty list",
+    "a map keyed by the name or the id turned into the list it describes",
+    "a signal's null aspect dropped rather than invented"
+  ],
+  "repairs_refused": [
+    "an absent `evidence` on a from_post signal — an evidence list is what a finding is made of, and supplying one would be writing the answer"
+  ],
+  "replies": {
+    "as_run": {
+      "by_cause": {
+        "missing field: entities": 2,
+        "missing field: evidence": 2,
+        "noise is not a list": 1,
+        "signals is not a list": 4,
+        "signals.aspect is not a string": 1
+      },
+      "parsed": 13,
+      "refused": 10
+    },
+    "coerced": {
+      "by_cause": {
+        "missing field: aspect": 1,
+        "missing field: entities": 1,
+        "missing field: evidence": 2
+      },
+      "parsed": 19,
+      "refused": 4
+    },
+    "repairs_that_fired": {
+      "noise: map -> list": 1,
+      "signals.aspect null -> dropped": 1,
+      "signals: empty object -> empty list": 4,
+      "two top-level objects": 2
+    }
+  }
+}
