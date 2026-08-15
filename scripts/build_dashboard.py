@@ -157,10 +157,6 @@ ASPECTS = ("price", "taste", "availability", "service", "quality", "packaging")
 SENTIMENT = ("negative", "neutral", "positive")
 """The ordered scale, in its order — a diverging form only reads if the middle is the middle."""
 
-PROMO_CHAINS = ("atb", "silpo", "varus", "marketopt_promo")
-"""The four SPEC 3.20 (6) names. Keyed whether or not they carried a row."""
-
-
 # --- small helpers --------------------------------------------------------------------------------
 
 
@@ -1527,8 +1523,13 @@ class Page:
         )
 
     def render(self) -> str:
+        # the first tab is open and selected in the MARKUP, not by the script. `show()` toggles
+        # both from here on, but a page whose only visible state arrives with the JS is a blank
+        # command centre the moment anything in that script throws — and the acceptance sitting
+        # opens this file cold.
         nav = "".join(
-            f'<button class="tab-button" type="button" data-tab="{tab}">'
+            f'<button class="tab-button" type="button" data-tab="{tab}"'
+            f' aria-selected="{str(tab == TABS[0]).lower()}">'
             f"{self.s.html(f'tab.{tab}')}</button>"
             for tab in TABS
         )
@@ -1544,7 +1545,7 @@ class Page:
             "t8": self.tab_t8,
         }
         sections = "".join(
-            f'<section class="tab" id="{tab}">'
+            f'<section class="tab{" active" if tab == TABS[0] else ""}" id="{tab}">'
             f"<h2>{self.s.html(f'tab.{tab}')}<small>{self.s.html(f'tab.question.{tab}')}</small></h2>"
             f"{self.banner()}{bodies[tab]()}</section>"
             for tab in TABS

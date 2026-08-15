@@ -33,8 +33,8 @@ T0–T8, and the export embedded byte for byte so the page can be audited withou
 
 | | |
 |---|---|
-| `dashboard/index.html` | `c526b3211f7c7304…`, 502 765 bytes |
-| `scripts/build_dashboard.py` | `1c694758749bcebf…`, 82 618 bytes |
+| `dashboard/index.html` | `1cebb8a475a31778…`, 502 969 bytes |
+| `scripts/build_dashboard.py` | `72478c0de9a3a86d…`, 82 900 bytes |
 | `config/ui_strings.yaml` | `650aa1064ca2eaac…`, 31 934 bytes |
 | drill-down expanders | 27, carrying 196 drawn rows and 196 t.me links |
 
@@ -47,6 +47,12 @@ the table. It never touches the embedded record: `export-data`, `JSON.parse`, `t
 `parseFloat` appear nowhere in the script, `Number(` appears twice — both inside the sort
 comparator — and the one `Math.max` clamps a tooltip to the viewport, not a figure. Both languages
 of every label and tooltip are in the document before the script loads.
+
+**The first tab is open in the MARKUP**, not by the script: `<section class="tab active" id="t0">`
+and `aria-selected="true"` on its button. The acceptance sitting opens this file cold, and a page
+whose only visible state arrives with the JS is a blank command centre the moment anything in that
+script throws. Checked by stripping every `<script>` block from a copy and opening it — T0 renders
+whole: banner, six tiles, the three insights. **Dv353.**
 
 ### 1.2 Where a figure may come from — and the two stub classes
 
@@ -277,7 +283,7 @@ Both are in the deliverable commit. This is the second contract where an artifac
 
 ## 6. Deviations
 
-**Dv342–Dv352**, in `implementation-notes.md`:
+**Dv342–Dv353**, in `implementation-notes.md`:
 
 * **Dv342** the two stub classes, kept apart · **Dv343** the private-label flag exists nowhere ·
   **Dv344** no chain↔handle join, so no per-chain drill-down · **Dv345** a comment links to its POST
@@ -287,7 +293,8 @@ Both are in the deliverable commit. This is the second contract where an artifac
   rather than «4 тижні» · **Dv350** Гармонія emphasised typographically where the hues are the
   scale · **Dv351** the registry read for aliases and display names, pinned, never for a figure ·
   **Dv352** self-review: a claim the rule never counted, and a blob that could end its own script
-  block.
+  block · **Dv353** second review pass: every tab hidden until the script ran, and a chain list in
+  the dashboard that only its own test read.
 
 ## 7. Process signals
 
@@ -302,3 +309,6 @@ Both are in the deliverable commit. This is the second contract where an artifac
   were already second homes for names the dictionary owns.
 * A code-generated insight will happily state something its rule never computed. «Єдиний сегмент»
   was true and guaranteed by nothing; the rule now counts what it claims.
+* Testing in a browser proves the page works WITH the script. What it renders WITHOUT one is a
+  separate question, and for a file whose acceptance is «open it cold» it is the more important
+  one — strip the script from a copy and look.

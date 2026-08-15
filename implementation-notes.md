@@ -7367,6 +7367,17 @@ twice in this same contract before it was missed a third time.
   has none, `embeddable()` refuses rather than mangling one, and the negative control plants `</b>`.
   [cause: process]
 
+- **Dv353** — a second review pass, two findings. Every tab was hidden until the script ran:
+  `section.tab{display:none}` with `.active` added only by `show()` at the end of the inline JS, so
+  the document as written renders a header, a nav and nothing else. The page was tested in a browser
+  where the script ran and the hole never showed. The first tab now carries `active` and
+  `aria-selected="true"` in the markup — checked by stripping every `<script>` block from a copy and
+  opening it, which is what an operator sees if anything in that script ever throws. And
+  `PROMO_CHAINS` in the dashboard was read by nothing but its own test: the export already carries
+  `named_by_amendment_3_20` per chain, derived by 6a from the amendment's own text, so the constant
+  was a second home for a fact with an owner. Dropped; the test now asserts the export flags exactly
+  the four and that the page renders every chain the export carries. [cause: process]
+
 **Process signals — phase6b.** Opening the page in a browser found two rendering defects that no
 text-level check would have: a diverging chart drawn with a plot-width scale put a 100 %-negative
 bar straight through its own label column, and the whole first sentiment chart was EMPTY because

@@ -226,8 +226,21 @@ def test_every_honest_stub_and_every_card_the_law_names_is_on_the_page():
     assert body.count('<article class="card state-') == 8
     assert "state-silent" in body and "state-evidence_only" in body and "state-talked" in body
 
-    for chain in builder.PROMO_CHAINS:
-        assert RECORD["metrics"]["promo_pressure"]["by_chain"][chain]["named_by_amendment_3_20"]
+    # the export owns which chains the law names — 6a greps the amendment for the handle and sets
+    # the flag — so the page follows that flag and holds no list of its own to drift from it
+    chains = RECORD["metrics"]["promo_pressure"]["by_chain"]
+    named = sorted(one for one, block in chains.items() if block["named_by_amendment_3_20"])
+    law = (
+        (REPO_ROOT / "docs" / "SPEC.md")
+        .read_text(encoding="utf-8")
+        .split("<!-- amendment-3.20 begin")[1]
+        .split("<!-- amendment-3.20 end")[0]
+    )
+
+    assert named == ["atb", "marketopt_promo", "silpo", "varus"]
+    assert "@marketopt_promo" in law
+    for chain in chains:
+        assert html.escape(strings[f"chain.{chain}"]["ua"]) in body, chain
     assert 'class="watermark"' in body and "макет — не дані" in body and "mock — not data" in body
 
 
@@ -367,9 +380,12 @@ def test_the_owner_can_read_the_window_and_its_source_from_every_tab():
     """«Снимок называет своё окно» — plan §7, on every tab and not only on the first."""
     window = RECORD["window"]
 
+    assert chrome(PAGE).count('<section class="tab') == len(builder.TABS)
+    assert chrome(PAGE).count('<section class="tab active"') == 1, "the first tab, open in markup"
+    assert chrome(PAGE).count('aria-selected="true"') == 2, "the nav button, and the CSS rule"
     assert chrome(PAGE).count('<p class="window">') == len(builder.TABS) + 1
     assert PAGE.count(window["anchor"][:10]) >= len(builder.TABS)
     for tab in builder.TABS:
-        section = PAGE.split(f'<section class="tab" id="{tab}">')[1].split("<section")[0]
+        section = PAGE.split(f'id="{tab}">')[1].split("<section")[0]
         assert '<p class="window">' in section, tab
         assert "28" in section and "2026-08-09" in section
