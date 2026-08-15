@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-15 13:39:45 (every SessionStart)
+**Auto-refreshed:** 2026-08-15 13:50:32 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+526fc3e fix(phase6b): every tab was hidden until the script ran, and a chain list nobody read
+8e46655 docs(vault): the phase6b checkpoint, the 6a backlog on the live map, and a new footgun
 d4ca8a2 docs(report): phase6b -- what the browser found, and the four fields 6a never exported
 569c830 fix(phase6b): a claim the rule never counted, and a blob that could end its own script block
 3d91f64 feat(phase6b): the command centre -- nine tabs, one figure source, and rows under every number
-ac1d840 chore(tail): the phase6b prompt, and the vault tail the Stop hook left
-bc71d0d docs(vault): the eighth segment card, in the day and in hot.md
 ```
 
 ## 📋 Recent decisions
@@ -30,7 +30,7 @@ bc71d0d docs(vault): the eighth segment card, in the day and in hot.md
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-15 (checkpoint 13:38) — исполнен `phase6b` ($0): **командный центр**
+**Last update:** 2026-08-15 (checkpoint 13:52) — исполнен `phase6b` ($0): **командный центр**
 `dashboard/index.html` (девять вкладок, UA/EN, светлая/тёмная, ноль внешних запросов, экспорт вложен
 байт в байт), билд `scripts/build_dashboard.py`, словарь строк `config/ui_strings.yaml`. `make check`
 **2 392 / 2 skipped**, потрачено $0.00. Отчёт — `docs/reports/phase6b.md` (Dv342–**Dv352**).
@@ -73,7 +73,8 @@ bc71d0d docs(vault): the eighth segment card, in the day and in hot.md
 ЕСТЬ эта сборка. 27 раскрытий drill-down, 196 строк жребием (сид на стратум), каждое объявляет поле
 экспорта со своей популяцией — **билд отказывает**, если строки не сходятся с числом. Заглушки двух
 классов: семь `NOT_COMPUTABLE` экспорта и четыре `GAPS` (бэклог 6a, выше). Приёмка — сидение по
-квизу «10 секунд на вопрос».
+квизу «10 секунд на вопрос». Первая вкладка открыта РАЗМЕТКОЙ, не скриптом (Dv353): страница,
+у которой видимое состояние приходит с JS, — пустой центр в момент любой ошибки в нём.
 
 **ФАЗА 6a СДЕЛАНА (15.08, `phase6a`) — слой данных командного центра стоит.** SPEC вырос
 **амендментом 3.20** (числа только из артефактов через слой агрегатов · SQLite — дом агрегатов ·
