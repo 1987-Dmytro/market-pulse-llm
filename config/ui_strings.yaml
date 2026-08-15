@@ -1,0 +1,668 @@
+# The command centre's chrome — every rendered string that is NOT a metric name, in UA and EN.
+#
+# Division of homes (docs/PROMPT-phase6b.md D4, tested by tests/test_ui_strings.py):
+#   * metric names, definitions, formulas, how-to-read lines and pitfalls  -> config/metrics.yaml
+#   * everything else the page prints -- tab titles, section heads, table headers, stub texts,
+#     banners, toggles, the readings a screen carries -> HERE.
+# Neither file may hold the other's half: the test compares the two and fails on a duplicated name.
+#
+# **No digits.** SPEC 3.20 (1) says no hand-typed number reaches a presentation surface and a label
+# is a presentation surface (the 6a Dv339 finding: a hand-typed «лише по АТБ» went stale the moment
+# a second chain was collected). Numbers arrive as `{placeholders}` filled from the export at build
+# time. The ONE exemption is an ordinal that names a WINDOW rather than measuring anything --
+# «з вікна-2» -- and `tests/test_ui_strings.py` names it one key at a time rather than widening the
+# rule.
+#
+# Every key must carry both languages; `scripts/build_dashboard.py` refuses to build on a missing
+# key or a missing language rather than rendering an empty span.
+
+version: 1
+authority: docs/PROMPT-phase6b.md D4; docs/PLAN-phase6-command-center.md §3 §7
+
+strings:
+  # --- the shell ---------------------------------------------------------------------------------
+  app.title:
+    ua: "Командний центр категорії"
+    en: "Category command centre"
+  app.subtitle:
+    ua: "Молочка і морозиво в українському Telegram — що кажуть, де кажуть і почім промоутять"
+    en: "Dairy and ice cream in Ukrainian Telegram — what is said, where, and how it is promoted"
+  app.owner:
+    ua: "ТМ «Гармонія» і «Мгарське», Лубенський молокозавод"
+    en: "Harmonia and Mgarske, Lubny dairy plant"
+  nav.theme:
+    ua: "Тема"
+    en: "Theme"
+  banner.window:
+    ua: "вікно {days} днів · якір {anchor} · {since} — {until}"
+    en: "{days}-day window · anchor {anchor} · {since} — {until}"
+  banner.export:
+    ua: "експорт {sha}"
+    en: "export {sha}"
+  banner.built_from:
+    ua: "усі числа зібрані з цього файлу"
+    en: "every figure on this page comes from that file"
+  footer.note:
+    ua: >-
+      Жодне число на цій сторінці не введене руками: сторінку зібрано скриптом із файлу експорту,
+      і сам файл вкладено нижче байт у байт. Формат чисел єдиний для обох мов — крапка як
+      десятковий роздільник, вузький пробіл між тисячами.
+    en: >-
+      No figure on this page was typed by hand: the page is built by a script from the export file,
+      which is embedded below byte for byte. One numeric format serves both languages — a point
+      decimal separator and a narrow space between thousands.
+
+  # --- tabs --------------------------------------------------------------------------------------
+  tab.t0:
+    ua: "Огляд"
+    en: "Overview"
+  tab.t1:
+    ua: "Тональність і бренди"
+    en: "Sentiment and brands"
+  tab.t2:
+    ua: "Аспекти"
+    en: "Aspects"
+  tab.t3:
+    ua: "Сегменти аудиторії"
+    en: "Audience segments"
+  tab.t4:
+    ua: "Конкуренти"
+    en: "Competitors"
+  tab.t5:
+    ua: "Промо і ціни"
+    en: "Promo and prices"
+  tab.t6:
+    ua: "Категорії"
+    en: "Categories"
+  tab.t7:
+    ua: "Алерти"
+    en: "Alerts"
+  tab.t8:
+    ua: "Методологія"
+    en: "Methodology"
+  tab.question.t0:
+    ua: "Екран власника: п'ять чисел із контекстом"
+    en: "The owner's screen: five figures with their context"
+  tab.question.t1:
+    ua: "Що доброго й поганого кажуть про «Гармонію»?"
+    en: "What is said, good and bad, about Harmonia?"
+  tab.question.t2:
+    ua: "Що саме подобається і не подобається?"
+    en: "What exactly do people like and dislike?"
+  tab.question.t3:
+    ua: "Де це кажуть?"
+    en: "Where is it said?"
+  tab.question.t4:
+    ua: "Те саме про конкурентів?"
+    en: "The same, about the competitors?"
+  tab.question.t5:
+    ua: "Що і почім промоутять мережі — і з якою глибиною знижки?"
+    en: "What do the chains promote, at what price, and how deep is the cut?"
+  tab.question.t6:
+    ua: "Які смаки яких видів продукції хочуть?"
+    en: "Which flavours of which product kinds are wanted?"
+  tab.question.t7:
+    ua: "Сплеск негативу чи позитиву — дізнатися ОДРАЗУ"
+    en: "A spike of negative or positive — to be known AT ONCE"
+  tab.question.t8:
+    ua: "Як це побудовано і чого воно не вміє"
+    en: "How this is built and what it cannot do"
+
+  # --- shared vocabulary -------------------------------------------------------------------------
+  common.sample:
+    ua: "Вибірка"
+    en: "Sample"
+  common.rows:
+    ua: "рядків"
+    en: "rows"
+  common.of:
+    ua: "з"
+    en: "of"
+  common.bought:
+    ua: "куплено"
+    en: "bought"
+  common.no_rows:
+    ua: "жодного рядка у вікні"
+    en: "no rows in this window"
+  common.not_measured:
+    ua: "не вимірюється"
+    en: "not measured"
+  common.positive:
+    ua: "позитив"
+    en: "positive"
+  common.negative:
+    ua: "негатив"
+    en: "negative"
+  common.neutral:
+    ua: "нейтрально"
+    en: "neutral"
+  common.brand:
+    ua: "Бренд"
+    en: "Brand"
+  common.mentions:
+    ua: "Згадки"
+    en: "Mentions"
+  common.positions:
+    ua: "позицій"
+    en: "positions"
+  common.definition:
+    ua: "Визначення"
+    en: "Definition"
+  common.how_to_read:
+    ua: "Як читати"
+    en: "How to read"
+  common.pitfalls:
+    ua: "Пастки"
+    en: "Pitfalls"
+  common.formula:
+    ua: "Формула"
+    en: "Formula"
+  common.from_export:
+    ua: "Поле експорту"
+    en: "Export field"
+  common.export_prose_note:
+    ua: >-
+      Опис вибірки нижче наведено так, як його несе експорт — англійською. Це цитата з файлу
+      результатів, а не текст цієї сторінки, тому вона не перекладається.
+    en: >-
+      The sample reading below is quoted from the export as it stands, in English. It is a
+      quotation from the result file rather than a string of this page, so it is not translated.
+  common.status.no_threshold:
+    ua: "порогу не зареєстровано"
+    en: "no registered threshold"
+  common.delta.next_window:
+    ua: "з вікна-2"
+    en: "from window-2"
+
+  # --- honest stubs ------------------------------------------------------------------------------
+  stub.not_computable:
+    ua: "Не рахується у цьому вікні"
+    en: "Not computable in this window"
+  stub.reason:
+    ua: "Чому"
+    en: "Why"
+  stub.unlock:
+    ua: "Що відкриє"
+    en: "What unlocks it"
+  stub.gap:
+    ua: "Експорт не несе цього числа"
+    en: "The export does not carry this figure"
+  stub.gap.needs:
+    ua: "Потрібне поле"
+    en: "The field it needs"
+  stub.gap.note:
+    ua: >-
+      Поверхня описана в контракті, але шар агрегатів такого поля не експортує. Дашборд не
+      рахує його з рядків і не показує нуль — це борг фази 6a, названий у звіті.
+    en: >-
+      The contract names this surface and the aggregate layer exports no such field. The dashboard
+      neither recomputes it from rows nor shows a zero — it is 6a's backlog, named in the report.
+
+  # --- drill-down --------------------------------------------------------------------------------
+  drill.open:
+    ua: "Показати рядки, на яких стоїть це число"
+    en: "Show the rows this figure stands on"
+  drill.caption:
+    ua: "{drawn} з {population}, seed {seed}"
+    en: "{drawn} of {population}, seed {seed}"
+  drill.method:
+    ua: >-
+      Рядки витягнуті жеребом, не відібрані рукою: сид сталий і власний у кожного розкриття,
+      тож жереб відтворюваний і не корельований між ними.
+    en: >-
+      The rows are drawn by lot, never hand-picked: the seed is fixed and its own per expander, so
+      the draw is reproducible and uncorrelated across them.
+  drill.empty_text:
+    ua: "рядок без слів — стікер, фото або голосове"
+    en: "a row with no words — a sticker, a photo or a voice note"
+  drill.link:
+    ua: "пост у Telegram"
+    en: "the post on Telegram"
+  drill.link.comment_note:
+    ua: >-
+      Посилання веде на ПОСТ, під яким лежить коментар: id коментаря належить простору
+      обговорення, а не каналу, і рядок не несе доказу, що глибоке посилання на нього розкриється.
+    en: >-
+      The link points at the POST the comment sits under: a comment id belongs to the discussion
+      group's id space, not the channel's, and the row carries no proof a deep link to it resolves.
+  drill.sarcasm:
+    ua: "сарказм"
+    en: "sarcasm"
+  drill.aspects:
+    ua: "аспекти"
+    en: "aspects"
+  drill.brands:
+    ua: "бренди вотчлиста"
+    en: "watchlist brands"
+  drill.none:
+    ua: "немає"
+    en: "none"
+  drill.leaflet_note:
+    ua: >-
+      Джерело цієї позиції — сторінка листівки (зображення). Сторінку сюди не вкладено: сторінка
+      з зовнішнім ресурсом порушила б правило «жодного зовнішнього запиту», тож нижче — поля,
+      які модель із неї витягла, і посилання на пост.
+    en: >-
+      This position was read off a leaflet page (an image). The page is not embedded: a page with
+      an external resource would break the zero-external-requests rule, so what stands below are
+      the fields the model extracted from it, and a link to the post.
+
+  # --- T0 ----------------------------------------------------------------------------------------
+  t0.lead:
+    ua: "П'ять чисел вікна з їхнім контекстом. Жодне з них не стоїть голим."
+    en: "The window's five figures with their context. None of them stands bare."
+  t0.insights:
+    ua: "Три висновки вікна"
+    en: "Three readings of the window"
+  t0.insights.note:
+    ua: >-
+      Висновки згенеровані кодом за сталими правилами з чисел експорту (SPEC 3.20 (4)) — жодного
+      вільного тексту від моделі. Під кожним названі поля, на яких він стоїть.
+    en: >-
+      The readings are generated by fixed code rules from the export's figures (SPEC 3.20 (4)) —
+      no free prose from a model. Each names the fields it stands on.
+  t0.insights.stands_on:
+    ua: "стоїть на"
+    en: "stands on"
+  t0.insight.text_less:
+    ua: >-
+      {text_less} із {bought} куплених коментарів не несуть слів. Заголовна вибірка їх не рахує, і
+      це зсуває чисту тональність з {nsr_bought} на купленій популяції до {nsr_payable} на платній.
+    en: >-
+      {text_less} of the {bought} bought comments carry no words. The headline sample leaves them
+      out, and that moves net sentiment from {nsr_bought} on the bought population to
+      {nsr_payable} on the payable one.
+  t0.insight.dominant_aspect:
+    ua: >-
+      Розмова тримається на одному аспекті: {top_aspect} — {top_share} усіх міток. Наступний за
+      ним — {second_aspect}: {top_labels} проти {second_labels}. Це профіль причин, а не частка
+      рядків.
+    en: >-
+      The conversation rests on one aspect: {top_aspect} at {top_share} of all labels. Next comes
+      {second_aspect}: {top_labels} against {second_labels}. This is a profile of reasons, not a
+      share of rows.
+  t0.insight.coldest_segment:
+    ua: >-
+      Єдиний сегмент із від'ємною чистою тональністю — {segment} ({nsr} на {rows} рядках);
+      найтепліший — {warmest} ({warmest_nsr}). Сегмент, а не ринок: див. вкладку сегментів.
+    en: >-
+      The only segment with a negative net sentiment is {segment} ({nsr} over {rows} rows); the
+      warmest is {warmest} ({warmest_nsr}). A segment, not the market: see the segments tab.
+  t0.kpi.context.volume:
+    ua: "поруч: безтекстові коментарі · сторінки листівок · тексти постів"
+    en: "beside it: text-less comments · leaflet pages · post texts"
+  t0.kpi.beside.raw_negative:
+    ua: "без поправки"
+    en: "unadjusted"
+  t0.kpi.context.two_samples:
+    ua: "заголовна вибірка — платна; купленою поруч"
+    en: "the headline is the payable sample; the bought one stands beside it"
+  t0.kpi.context.sov:
+    ua: "серед усіх згадок брендів вотчлиста"
+    en: "among all watchlist-brand mentions"
+  t0.kpi.context.depth:
+    ua: "читання з пари цін; друковане −N% поруч на вкладці промо"
+    en: "read from the price pair; the printed −N% stands beside it on the promo tab"
+  t0.kpi.context.coverage:
+    ua: "канали і сегменти реєстру, що дали хоч рядок"
+    en: "registry channels and segments that produced at least one row"
+
+  # --- T1 ----------------------------------------------------------------------------------------
+  t1.sentiment:
+    ua: "Тональність вікна"
+    en: "The window's sentiment"
+  t1.sentiment.note:
+    ua: >-
+      Шкала впорядкована: негатив ліворуч від нейтралі, позитив праворуч, сіра середина — самі
+      нейтральні рядки. Довжина смуги — частка від розмічених рядків вибірки.
+    en: >-
+      The scale is ordered: negative left of neutral, positive right, and the gray middle is the
+      neutral rows themselves. A bar's length is a share of the sample's scored rows.
+  t1.brands:
+    ua: "Бренд × тональність"
+    en: "Brand × sentiment"
+  t1.brands.note:
+    ua: >-
+      Тут лише бренди, які матчер знайшов у тексті платних рядків. «Гармонія» виділена акцентом,
+      решта — контекст.
+    en: >-
+      Only the brands the matcher found in the text of payable rows. Harmonia carries the accent
+      and the rest are context.
+  t1.sov:
+    ua: "Частка голосу серед вотчлиста"
+    en: "Share of voice across the watchlist"
+  t1.sarcasm:
+    ua: "Поправка на сарказм"
+    en: "The sarcasm adjustment"
+  t1.sarcasm.badge:
+    ua: "{reclassified} рядків перечитано як негатив: сарказм спрацював там, де тональність не була негативною"
+    en: "{reclassified} rows re-read as negative: the sarcasm head fired where the sentiment was not negative"
+  t1.text_less:
+    ua: "Коментарі без слів"
+    en: "Comments with no words"
+  t1.text_less.badge:
+    ua: >-
+      рядків купленої популяції прийшли до моделі з порожнім блоком коментаря — стікер, фото або
+      голосове. Кожна голова відповіла і на них, тому в платній вибірці їх немає (SPEC 3.19).
+    en: >-
+      rows of the bought population reached the model with an empty comment block — a sticker, a
+      photo or a voice note. Every head answered them anyway, so the payable sample leaves them
+      out (SPEC 3.19).
+  t1.emphasis.own:
+    ua: "власна марка"
+    en: "own brand"
+
+  # --- T2 ----------------------------------------------------------------------------------------
+  t2.aspects:
+    ua: "Про що говорять"
+    en: "What the conversation is about"
+  t2.aspects.note:
+    ua: >-
+      Знаменник — мітки, а не рядки: один коментар несе кілька аспектів або жодного. Поруч —
+      скільки розмічених рядків не несуть жодного.
+    en: >-
+      The denominator is labels and not rows: one comment carries several aspects or none. Beside
+      it stands the count of scored rows carrying none at all.
+  t2.no_aspect:
+    ua: "рядків без жодного аспекту"
+    en: "rows with no aspect at all"
+  t2.price_origin:
+    ua: >-
+      Ціни з коментарів живуть тільки в цьому аспекті. У промо-агрегати вони не потрапляють
+      ніколи — SPEC 3.17, повторено амендментом 3.20 (5).
+    en: >-
+      Comment-origin prices live in this aspect only. They never enter the promo aggregates —
+      SPEC 3.17, restated by amendment 3.20 (5).
+  t2.gap.brand_aspect:
+    ua: "Матриця бренд × аспект"
+    en: "The brand × aspect matrix"
+  t2.gap.negative_profile:
+    ua: "Профіль негативу за аспектами"
+    en: "The negative profile by aspect"
+
+  # --- T3 ----------------------------------------------------------------------------------------
+  t3.cards:
+    ua: "Вісім аудиторій реєстру"
+    en: "The registry's eight audiences"
+  t3.cards.note:
+    ua: >-
+      Карток стільки, скільки аудиторій у реєстрі, а не скільки з них озвалося. Мовчазна
+      аудиторія — теж висновок, і вона тут із нулями.
+    en: >-
+      There are as many cards as the registry has audiences, not as many as spoke this window. A
+      silent audience is a finding too, and it is here with its zeros.
+  t3.state.talked:
+    ua: "розмова є"
+    en: "conversation"
+  t3.state.evidence_only:
+    ua: "матеріали є, розмови немає"
+    en: "evidence, no conversation"
+  t3.state.silent:
+    ua: "мовчить"
+    en: "silent"
+  t3.channels:
+    ua: "канали (дали рядок / у реєстрі)"
+    en: "channels (produced a row / in the registry)"
+  t3.top_aspects:
+    ua: "Топ-аспекти"
+    en: "Top aspects"
+  t3.reading.retail_official:
+    ua: >-
+      Мінус тут — функція каналу: скаржаться там, де мережа слухає. Сприйняття брендів живе в
+      інших сегментах, і переносити цю оцінку на категорію не можна.
+    en: >-
+      The minus here is a function of the channel: people complain where the chain is listening.
+      Brand perception lives in the other segments, and this reading does not carry over to the
+      category.
+
+  # --- T4 ----------------------------------------------------------------------------------------
+  t4.table:
+    ua: "Вотчлист: усі бренди, включно з тими, кого не згадали"
+    en: "The watchlist: every brand, including the ones nobody mentioned"
+  t4.table.note:
+    ua: >-
+      Бренд без згадок — нуль, а не відсутній рядок. Клацніть по заголовку стовпця, щоб
+      відсортувати.
+    en: >-
+      A brand with no mentions is a zero, not a missing row. Click a column header to sort.
+  t4.column.own:
+    ua: "Наша"
+    en: "Own"
+  t4.column.sov:
+    ua: "SoV"
+    en: "SoV"
+  t4.column.nsr:
+    ua: "NSR"
+    en: "NSR"
+  t4.sample_warning:
+    ua: >-
+      Вибірка згадок крихітна: скільки саме рядків її утворили — у рядку вибірки над таблицею.
+      Жодна різниця між брендами тут не є статистикою.
+    en: >-
+      The mention sample is tiny: how many rows made it stands in the sample line above the table.
+      No difference between brands here is a statistic.
+  t4.gap.private_label:
+    ua: "Позначка приватної марки мережі"
+    en: "The chains' private-label badge"
+
+  # --- T5 ----------------------------------------------------------------------------------------
+  t5.depth.note:
+    ua: >-
+      Два незалежні читання поруч, і жодне не виправляє інше: арифметика з пари цін і
+      надрукований бейдж −N%. Смуга — міжквартильний розмах, риска — медіана.
+    en: >-
+      Two independent readings side by side, neither correcting the other: the arithmetic of the
+      price pair and the printed −N% badge. The band is the interquartile range, the tick is the
+      median.
+  t5.reading.from_price_pair:
+    ua: "з пари цін"
+    en: "from the price pair"
+  t5.reading.from_printed_badge:
+    ua: "з друкованого бейджа"
+    en: "from the printed badge"
+  t5.disagree:
+    ua: "позицій, де читання розійшлися"
+    en: "positions where the two readings disagree"
+  t5.pressure:
+    ua: "Промо-тиск за мережами"
+    en: "Promo pressure by chain"
+  t5.pressure.note:
+    ua: >-
+      Це частота у ЗІБРАНОМУ матеріалі, а не у справжньому промо-циклі мережі. Носій названий у
+      кожної мережі окремо: сторінка листівки і текст поста — різні інструменти.
+    en: >-
+      This is frequency in what was COLLECTED, not in the chain's real promo run. Each chain names
+      its carrier: a leaflet page and a post text are different instruments.
+  t5.pressure.brands:
+    ua: "Промо-тиск за брендами"
+    en: "Promo pressure by brand"
+  t5.named_by_law:
+    ua: "названа амендментом 3.20 (6)"
+    en: "named by amendment 3.20 (6)"
+  t5.carrier.leaflet_page:
+    ua: "сторінка листівки"
+    en: "leaflet page"
+  t5.carrier.post_text:
+    ua: "текст поста"
+    en: "post text"
+  t5.no_brand:
+    ua: "позицій без розпізнаного бренду"
+    en: "positions with no resolved brand"
+
+  # --- T7 ----------------------------------------------------------------------------------------
+  t7.mock:
+    ua: "макет — не дані"
+    en: "mock — not data"
+  t7.mock.title:
+    ua: "Як виглядатиме алерт"
+    en: "What an alert will look like"
+  t7.mock.note:
+    ua: >-
+      Єдина поверхня цієї сторінки, що не є даними. Правило: частка тональності бренду відхилилася
+      від його базової лінії за вікно; пороги — словом оператора на дизайні алертів.
+    en: >-
+      The one surface on this page that is not data. The rule: a brand's sentiment share deviated
+      from its own baseline over a window; the thresholds are the operator's word on the alert
+      design.
+  t7.mock.rule:
+    ua: "правило"
+    en: "rule"
+  t7.mock.delivery:
+    ua: "доставка — Telegram оператору, обидві полярності, усі бренди вотчлиста"
+    en: "delivery — Telegram to the operator, both polarities, every watchlist brand"
+
+  # --- T8 ----------------------------------------------------------------------------------------
+  t8.glossary:
+    ua: "Глосарій метрик"
+    en: "The metric glossary"
+  t8.glossary.note:
+    ua: >-
+      Один дім на факт: те саме визначення показує і підказка ⓘ біля числа, і цей глосарій — обидва
+      рендеряться з config/metrics.yaml.
+    en: >-
+      One home per fact: the same definition renders in the ⓘ tooltip beside a figure and in this
+      glossary — both come from config/metrics.yaml.
+  t8.provenance:
+    ua: "Провенанс: який екран із якого файлу"
+    en: "Provenance: which screen from which file"
+  t8.provenance.note:
+    ua: >-
+      Кожен вхід названий своїм sha256. Файли доказів — це рядки моделі, з яких зібрано агрегати;
+      виробники — код, що їх зібрав.
+    en: >-
+      Every input is named by its sha256. The evidence files are the model's rows the aggregates
+      were built from; the producers are the code that built them.
+  t8.provenance.inputs:
+    ua: "Входи"
+    en: "Inputs"
+  t8.provenance.producers:
+    ua: "Виробники"
+    en: "Producers"
+  t8.provenance.evidence:
+    ua: "Файли доказів"
+    en: "Evidence files"
+  t8.provenance.screens:
+    ua: "Екран ← поле експорту"
+    en: "Screen ← export field"
+  t8.gates:
+    ua: "Гейти шару даних"
+    en: "The data layer's gates"
+  t8.gates.note:
+    ua: >-
+      Це гейти, які пройшов сам експорт. Вони не є гейтами моделі: числа гейтів моделі експорт не
+      несе, і поверхня нижче каже про це прямо.
+    en: >-
+      These are the gates the export itself passed. They are not the model's gates: the export
+      carries no gate figures for the model, and the surface below says so outright.
+  t8.gates.convergence:
+    ua: "Сходимість з якорем: числових листків перевірено"
+    en: "Convergence with the anchor: numeric leaves checked"
+  t8.gates.shared:
+    ua: "Спільних чисел звірено попарно"
+    en: "Shared figures compared pairwise"
+  t8.gates.disagreed:
+    ua: "Розбіжностей"
+    en: "Disagreements"
+  t8.gates.model:
+    ua: "Гейти моделі (G1a–G1e) з числами і стелями"
+    en: "The model's gates (G1a–G1e) with their figures and ceilings"
+  t8.limits:
+    ua: "Чесні обмеження"
+    en: "Honest limits"
+  t8.limits.reach:
+    ua: "Підписники — не охоплення: скільки людей побачили пост, тут не вимірюється і не стверджується."
+    en: "Subscribers are not reach: how many people saw a post is neither measured nor claimed here."
+  t8.limits.one_window:
+    ua: "Одне вікно — точка, а не тренд. Порівнювати немає з чим, доки не з'явиться друге."
+    en: "One window is a point, not a trend. There is nothing to compare against until a second one exists."
+  t8.limits.matcher:
+    ua: "Бренди знаходить детерміністичний матчер по тексту, а не голова моделі: збіг рядка не означає, що коментар про бренд."
+    en: "Brands are found by a deterministic text matcher, not a model head: a string hit does not make a comment be about that brand."
+  t8.limits.collection:
+    ua: "Чого не зібрано, того тут немає: покриття каналів і мереж — властивість збору, а не ринку."
+    en: "What was not collected is not here: channel and chain coverage is a property of collection, not of the market."
+  t8.limits.numbers:
+    ua: "Числа однакові в обох мовах і в жодній не перекладені: вони приходять з файлу експорту як є."
+    en: "The figures are the same in both languages and translated in neither: they arrive from the export as they stand."
+  t8.embedded:
+    ua: "Вкладений експорт"
+    en: "The embedded export"
+  t8.embedded.note:
+    ua: >-
+      Файл експорту вкладено в цю сторінку байт у байт — сторінку можна перевірити без доступу до
+      репозиторію: sha256 вкладеного блоку збігається зі sha у підвалі.
+    en: >-
+      The export file is embedded in this page byte for byte, so the page can be checked without
+      the repository: the sha256 of the embedded blob equals the one in the footer.
+
+  # --- aspect labels -----------------------------------------------------------------------------
+  aspect.price:
+    ua: "ціна"
+    en: "price"
+  aspect.taste:
+    ua: "смак"
+    en: "taste"
+  aspect.quality:
+    ua: "якість"
+    en: "quality"
+  aspect.packaging:
+    ua: "паковання"
+    en: "packaging"
+  aspect.availability:
+    ua: "наявність"
+    en: "availability"
+  aspect.service:
+    ua: "сервіс"
+    en: "service"
+
+  # --- segment labels ----------------------------------------------------------------------------
+  segment.mothers_kids:
+    ua: "Мами і діти"
+    en: "Mothers and kids"
+  segment.cooking_recipes:
+    ua: "Рецепти і кулінарія"
+    en: "Cooking and recipes"
+  segment.health_fitness:
+    ua: "ЗОЖ і фітнес"
+    en: "Health and fitness"
+  segment.regional:
+    ua: "Регіон (Полтавщина)"
+    en: "The region (Poltava oblast)"
+  segment.supermarket_deals:
+    ua: "Агрегатори знижок"
+    en: "Discount aggregators"
+  segment.retail_official:
+    ua: "Офіційні канали мереж"
+    en: "The chains' own channels"
+  segment.baby_food:
+    ua: "Дитяче харчування"
+    en: "Baby food"
+  segment.food_quality:
+    ua: "Якість і держконтроль"
+    en: "Food quality and state control"
+
+  # --- chain labels ------------------------------------------------------------------------------
+  chain.atb:
+    ua: "АТБ"
+    en: "ATB"
+  chain.silpo:
+    ua: "Сільпо"
+    en: "Silpo"
+  chain.varus:
+    ua: "Varus"
+    en: "Varus"
+  chain.marketopt_promo:
+    ua: "Маркетопт"
+    en: "Marketopt"
+  chain.ekomarket_shop:
+    ua: "Екомаркет"
+    en: "Ekomarket"
+  chain.forainfo:
+    ua: "Фора"
+    en: "Fora"
+  chain.msuaaaa:
+    ua: "Агрегатор знижок"
+    en: "A discount aggregator"
+  chain.telegraf_kremenchuk:
+    ua: "Телеграф Кременчук"
+    en: "Telegraf Kremenchuk"
