@@ -1,0 +1,96 @@
+{
+  "endpoint": "lfqvip37lpgcii",
+  "go_no_go": {
+    "money": {
+      "cap_usd_all_in": 0.35,
+      "headroom_usd": 0.0733,
+      "projected_total_usd": 0.2767,
+      "setup_usd": 0.044,
+      "spent_so_far_usd": 0.0631,
+      "warm_up_usd": 0.0191
+    },
+    "projections": {
+      "binding": {
+        "seconds": 696.4,
+        "usd": 0.2136,
+        "which": "by_payable_comment"
+      },
+      "by_payable_comment": {
+        "rule": "seconds ÷ warm-up payable × 123 unread payable",
+        "seconds": 696.4,
+        "usd": 0.2136
+      },
+      "by_thread": {
+        "rule": "mean seconds per thread × 20 unread",
+        "seconds": 415.2,
+        "usd": 0.1273
+      }
+    },
+    "rate_usd_per_second": 0.00030669,
+    "reading": "the projection is of the UNREAD remainder and is added to what has already been billed, setup included. A projection of the whole population compared against the cap's leftover counts the warm-up twice",
+    "remainder": {
+      "payable_comments": 123,
+      "threads": 20
+    },
+    "verdict": "GO",
+    "warm_up": {
+      "billed_seconds": 62.276,
+      "payable_comments": 11,
+      "probe_a_on_an_l4": {
+        "break_even_registered": 2.007,
+        "seconds_per_payable_comment": 14.947,
+        "seconds_per_thread": 54.806,
+        "speedup_per_payable_comment": 2.64,
+        "speedup_per_thread": 2.64
+      },
+      "seconds_per_payable_comment": 5.661,
+      "seconds_per_thread": 20.759,
+      "threads": 3
+    }
+  },
+  "phase": "probe-b",
+  "worker": {
+    "adapter_dir": null,
+    "adapter_sha256": null,
+    "chat_template": {
+      "add_generation_prompt": true,
+      "enable_thinking": false
+    },
+    "max_new_tokens": 2000,
+    "merge_state": "base-no-adapter",
+    "merged_provenance": null,
+    "merged_sha256": null,
+    "model": "google/gemma-4-31b-it",
+    "quantization": {
+      "bnb_4bit_compute_dtype": "bfloat16",
+      "bnb_4bit_quant_type": "nf4",
+      "bnb_4bit_use_double_quant": true,
+      "load_in_4bit": true
+    },
+    "reader_prompt_sha256": {
+      "reader_thread_gm4": "b272115637f784ad63c6fb2483e0b0ac3d6381901a096dc1cb5406b81a46c8cd",
+      "reader_thread_gm4_v2": "9d281bc80f18c91b6b0c32cbcdb37540504be887887d0dd1f1ab1c25841250c5"
+    },
+    "repo_commit": "f0fd745cbf711072c7dd79deb4477459bfae931a",
+    "revision_requested": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+    "runtime": {
+      "accelerate": "1.14.0",
+      "bitsandbytes": "0.50.0",
+      "cuda_runtime": "12.8",
+      "driver": "580.159.04",
+      "gpu": "NVIDIA GeForce RTX 4090",
+      "gpu_count": 1,
+      "gpu_memory_total": "24564 MiB",
+      "model_revision": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+      "peft": "0.20.0",
+      "pod_id": "q646kdh09oft14",
+      "revision_requested": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+      "runpod": "1.11.0",
+      "torch": "2.8.0+cu128",
+      "transformers": "5.14.1",
+      "weights_requested": "google/gemma-4-31b-it"
+    },
+    "serving_config": "READER",
+    "weights_dir": "google/gemma-4-31b-it"
+  }
+}

@@ -1,0 +1,754 @@
+{
+  "bars": {
+    "1_flagships": {
+      "reason": null,
+      "result": {
+        "cases": 5,
+        "cases_answered": 2,
+        "passed": false,
+        "per_case": [
+          {
+            "answered": false,
+            "id": "F1",
+            "signals": [
+              {
+                "found": true,
+                "id": "F1a",
+                "index": 1,
+                "signal_type": "жалоба"
+              },
+              {
+                "found": false,
+                "id": "F1b",
+                "index": null,
+                "signal_type": null
+              },
+              {
+                "found": false,
+                "id": "F1c",
+                "index": null,
+                "signal_type": null
+              }
+            ],
+            "thread": "@VARUS_channel:10613"
+          },
+          {
+            "answered": false,
+            "id": "F2",
+            "signals": [
+              {
+                "found": false,
+                "id": "F2a",
+                "index": null,
+                "signal_type": null
+              }
+            ],
+            "thread": "@matusi_ukr:22303"
+          },
+          {
+            "answered": false,
+            "id": "F3",
+            "signals": [
+              {
+                "found": false,
+                "id": "F3a",
+                "index": null,
+                "signal_type": null
+              }
+            ],
+            "thread": "@mandziak:3676"
+          },
+          {
+            "answered": true,
+            "id": "F4",
+            "signals": [
+              {
+                "found": true,
+                "id": "F4a",
+                "index": 0,
+                "signal_type": "привычка"
+              }
+            ],
+            "thread": "@mandziak:3703"
+          },
+          {
+            "answered": true,
+            "id": "F5",
+            "signals": [
+              {
+                "found": true,
+                "id": "F5a",
+                "index": 0,
+                "signal_type": "спрос"
+              }
+            ],
+            "thread": "@matusi_ukr:22272"
+          }
+        ],
+        "per_signal": [
+          {
+            "case": "F1",
+            "found": true,
+            "id": "F1a"
+          },
+          {
+            "case": "F1",
+            "found": false,
+            "id": "F1b"
+          },
+          {
+            "case": "F1",
+            "found": false,
+            "id": "F1c"
+          },
+          {
+            "case": "F2",
+            "found": false,
+            "id": "F2a"
+          },
+          {
+            "case": "F3",
+            "found": false,
+            "id": "F3a"
+          },
+          {
+            "case": "F4",
+            "found": true,
+            "id": "F4a"
+          },
+          {
+            "case": "F5",
+            "found": true,
+            "id": "F5a"
+          }
+        ],
+        "per_signal_reading": "plan §5 (1) names five SIGNALS and the reference five THREADS carrying seven; the bar is the case reading and this table is where the narrower one is read off"
+      },
+      "scored": true,
+      "scorer": "reader_signal_found",
+      "threads_in_the_evidence": [
+        "@VARUS_channel:10613",
+        "@matusi_ukr:22303",
+        "@mandziak:3676",
+        "@mandziak:3703",
+        "@matusi_ukr:22272"
+      ],
+      "threads_not_read": [],
+      "threads_registered": [
+        "@VARUS_channel:10613",
+        "@matusi_ukr:22303",
+        "@mandziak:3676",
+        "@mandziak:3703",
+        "@matusi_ukr:22272"
+      ],
+      "threshold": "5 of 5 cases",
+      "verdict": "SCORED"
+    },
+    "2_entity_cases": {
+      "reason": null,
+      "result": {
+        "cases": 4,
+        "cases_answered": 2,
+        "passed": false,
+        "per_case": {
+          "E1": true,
+          "E2": false,
+          "E3": false,
+          "E4": true
+        },
+        "per_row": [
+          {
+            "answered": true,
+            "brand_id": "garmonija",
+            "expected": "не_наш_рынок",
+            "id": "E1",
+            "reported": [
+              "не_наш_рынок"
+            ],
+            "thread": "@matusi_ukr:22242"
+          },
+          {
+            "answered": false,
+            "brand_id": "selianske",
+            "expected": "молочный_бренд",
+            "id": "E2",
+            "reported": [],
+            "thread": "@VARUS_channel:10360"
+          },
+          {
+            "answered": false,
+            "brand_id": "varus-pl",
+            "expected": "сеть_ритейлер",
+            "id": "E3",
+            "reported": [],
+            "thread": "@VARUS_channel:10348"
+          },
+          {
+            "answered": true,
+            "brand_id": "varto",
+            "expected": "absent",
+            "id": "E4a",
+            "reported": [],
+            "thread": "@mandziak:3684"
+          },
+          {
+            "answered": true,
+            "brand_id": "varto",
+            "expected": "absent",
+            "id": "E4b",
+            "reported": [],
+            "thread": "@mandziak:3689"
+          }
+        ]
+      },
+      "scored": true,
+      "scorer": "reader_entity_found",
+      "threads_in_the_evidence": [
+        "@matusi_ukr:22242",
+        "@VARUS_channel:10360",
+        "@VARUS_channel:10348",
+        "@mandziak:3684",
+        "@mandziak:3689"
+      ],
+      "threads_not_read": [],
+      "threads_registered": [
+        "@matusi_ukr:22242",
+        "@VARUS_channel:10360",
+        "@VARUS_channel:10348",
+        "@mandziak:3684",
+        "@mandziak:3689"
+      ],
+      "threshold": "4 of 4 cases",
+      "verdict": "SCORED"
+    },
+    "3_noise": {
+      "reason": null,
+      "result": {
+        "entities": {
+          "@VARUS_channel:10366": 1,
+          "@retsepty:7312": 0,
+          "@retsepty:7325": 0,
+          "@retsepty:7327": 0,
+          "@sashafitnesslife:3939": 0
+        },
+        "passed": true,
+        "per_thread": {
+          "@VARUS_channel:10366": 0,
+          "@retsepty:7312": 0,
+          "@retsepty:7325": 0,
+          "@retsepty:7327": 0,
+          "@sashafitnesslife:3939": 0
+        },
+        "reported_beside": {
+          "N1": 1
+        },
+        "scored_over": [
+          "N2",
+          "N3",
+          "N4",
+          "N5",
+          "N6"
+        ],
+        "signals": 0,
+        "threads": 5
+      },
+      "scored": true,
+      "scorer": "reader_noise_count",
+      "threads_in_the_evidence": [
+        "@VARUS_channel:10366",
+        "@sashafitnesslife:3939",
+        "@retsepty:7312",
+        "@retsepty:7325",
+        "@retsepty:7327"
+      ],
+      "threads_not_read": [],
+      "threads_registered": [
+        "@VARUS_channel:10366",
+        "@sashafitnesslife:3939",
+        "@retsepty:7312",
+        "@retsepty:7325",
+        "@retsepty:7327"
+      ],
+      "threshold": "0 signals",
+      "verdict": "SCORED"
+    },
+    "4_per_comment_agreement": {
+      "reason": null,
+      "result": {
+        "absent": 7,
+        "agreed": 5,
+        "disagreed": 2,
+        "n": 14,
+        "passed": false,
+        "rate": 0.35714285714285715,
+        "rows": [
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21626
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория",
+                "reader": "категория_личное"
+              }
+            },
+            "msg_id": 21599
+          },
+          {
+            "absent": true,
+            "agreed": false,
+            "msg_id": 21601
+          },
+          {
+            "absent": true,
+            "agreed": false,
+            "msg_id": 21629
+          },
+          {
+            "absent": true,
+            "agreed": false,
+            "msg_id": 580124
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория_личное",
+                "reader": "молочный_бренд"
+              }
+            },
+            "msg_id": 580129
+          },
+          {
+            "absent": true,
+            "agreed": false,
+            "msg_id": 47899
+          },
+          {
+            "absent": true,
+            "agreed": false,
+            "msg_id": 47902
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48276
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48283
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579379
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579457
+          },
+          {
+            "absent": true,
+            "agreed": false,
+            "msg_id": 578951
+          },
+          {
+            "absent": true,
+            "agreed": false,
+            "msg_id": 20664
+          }
+        ],
+        "scored": true
+      },
+      "scored": true,
+      "scorer": "reader_comment_agreement",
+      "threads_in_the_evidence": [
+        "@VARUS_channel:10348",
+        "@VARUS_channel:10613",
+        "@mandziak:3676",
+        "@mandziak:3703",
+        "@matusi_ukr:22242",
+        "@matusi_ukr:22272",
+        "@matusi_ukr:22303"
+      ],
+      "threads_not_read": [],
+      "threads_registered": [
+        "@VARUS_channel:10348",
+        "@VARUS_channel:10613",
+        "@mandziak:3676",
+        "@mandziak:3703",
+        "@matusi_ukr:22242",
+        "@matusi_ukr:22272",
+        "@matusi_ukr:22303"
+      ],
+      "threshold": "rate >= 0.8",
+      "verdict": "SCORED"
+    }
+  },
+  "collapsed_vocabulary_reading": {
+    "bars": {
+      "1_flagships": {
+        "as_registered": 2,
+        "collapsed": 2
+      },
+      "4_per_comment_agreement": {
+        "as_registered": 0.35714285714285715,
+        "collapsed": 0.42857142857142855
+      }
+    },
+    "detail": {
+      "1_flagships": {
+        "cases": 5,
+        "cases_answered": 2,
+        "passed": false,
+        "per_case": [
+          {
+            "answered": false,
+            "id": "F1",
+            "signals": [
+              {
+                "found": true,
+                "id": "F1a",
+                "index": 1,
+                "signal_type": "жалоба"
+              },
+              {
+                "found": false,
+                "id": "F1b",
+                "index": null,
+                "signal_type": null
+              },
+              {
+                "found": false,
+                "id": "F1c",
+                "index": null,
+                "signal_type": null
+              }
+            ],
+            "thread": "@VARUS_channel:10613"
+          },
+          {
+            "answered": false,
+            "id": "F2",
+            "signals": [
+              {
+                "found": false,
+                "id": "F2a",
+                "index": null,
+                "signal_type": null
+              }
+            ],
+            "thread": "@matusi_ukr:22303"
+          },
+          {
+            "answered": false,
+            "id": "F3",
+            "signals": [
+              {
+                "found": false,
+                "id": "F3a",
+                "index": null,
+                "signal_type": null
+              }
+            ],
+            "thread": "@mandziak:3676"
+          },
+          {
+            "answered": true,
+            "id": "F4",
+            "signals": [
+              {
+                "found": true,
+                "id": "F4a",
+                "index": 0,
+                "signal_type": "привычка"
+              }
+            ],
+            "thread": "@mandziak:3703"
+          },
+          {
+            "answered": true,
+            "id": "F5",
+            "signals": [
+              {
+                "found": true,
+                "id": "F5a",
+                "index": 0,
+                "signal_type": "спрос"
+              }
+            ],
+            "thread": "@matusi_ukr:22272"
+          }
+        ],
+        "per_signal": [
+          {
+            "case": "F1",
+            "found": true,
+            "id": "F1a"
+          },
+          {
+            "case": "F1",
+            "found": false,
+            "id": "F1b"
+          },
+          {
+            "case": "F1",
+            "found": false,
+            "id": "F1c"
+          },
+          {
+            "case": "F2",
+            "found": false,
+            "id": "F2a"
+          },
+          {
+            "case": "F3",
+            "found": false,
+            "id": "F3a"
+          },
+          {
+            "case": "F4",
+            "found": true,
+            "id": "F4a"
+          },
+          {
+            "case": "F5",
+            "found": true,
+            "id": "F5a"
+          }
+        ],
+        "per_signal_reading": "plan §5 (1) names five SIGNALS and the reference five THREADS carrying seven; the bar is the case reading and this table is where the narrower one is read off"
+      },
+      "4_per_comment_agreement": {
+        "absent": 7,
+        "agreed": 6,
+        "disagreed": 1,
+        "n": 14,
+        "passed": false,
+        "rate": 0.42857142857142855,
+        "rows": [
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21626
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21599
+          },
+          {
+            "absent": true,
+            "agreed": false,
+            "msg_id": 21601
+          },
+          {
+            "absent": true,
+            "agreed": false,
+            "msg_id": 21629
+          },
+          {
+            "absent": true,
+            "agreed": false,
+            "msg_id": 580124
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория",
+                "reader": "молочный_бренд"
+              }
+            },
+            "msg_id": 580129
+          },
+          {
+            "absent": true,
+            "agreed": false,
+            "msg_id": 47899
+          },
+          {
+            "absent": true,
+            "agreed": false,
+            "msg_id": 47902
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48276
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48283
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579379
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579457
+          },
+          {
+            "absent": true,
+            "agreed": false,
+            "msg_id": 578951
+          },
+          {
+            "absent": true,
+            "agreed": false,
+            "msg_id": 20664
+          }
+        ],
+        "scored": true
+      }
+    },
+    "rule": "the same two bars recomputed with «категория_личное» folded into «категория», through the same scorer functions. REPORTED and never gating",
+    "why": "8 of the 14 per-comment gold rows and 4 of the 7 flagship signals score on «категория». The word is in the prompt because plan §3's schema example used it; that example now says «категория_личное» and the reference still says «категория»"
+  },
+  "contract": "docs/PROMPT-probe-b.md",
+  "evidence": {
+    "injected_read": 4,
+    "record": "results/reader_probe_b_w1.jsonl",
+    "sha256": "2ff3ea6be0fc0a64c27d2d96b9b1d96732be69b4f25b8c15a24373db8b844a08",
+    "threads_read": 23,
+    "threads_registered": 23
+  },
+  "go_no_go": {
+    "money": {
+      "cap_usd_all_in": 0.35,
+      "headroom_usd": 0.0733,
+      "projected_total_usd": 0.2767,
+      "setup_usd": 0.044,
+      "spent_so_far_usd": 0.0631,
+      "warm_up_usd": 0.0191
+    },
+    "projections": {
+      "binding": {
+        "seconds": 696.4,
+        "usd": 0.2136,
+        "which": "by_payable_comment"
+      },
+      "by_payable_comment": {
+        "rule": "seconds ÷ warm-up payable × 123 unread payable",
+        "seconds": 696.4,
+        "usd": 0.2136
+      },
+      "by_thread": {
+        "rule": "mean seconds per thread × 20 unread",
+        "seconds": 415.2,
+        "usd": 0.1273
+      }
+    },
+    "rate_usd_per_second": 0.00030669,
+    "reading": "the projection is of the UNREAD remainder and is added to what has already been billed, setup included. A projection of the whole population compared against the cap's leftover counts the warm-up twice",
+    "remainder": {
+      "payable_comments": 123,
+      "threads": 20
+    },
+    "verdict": "GO",
+    "warm_up": {
+      "billed_seconds": 62.276,
+      "payable_comments": 11,
+      "probe_a_on_an_l4": {
+        "break_even_registered": 2.007,
+        "seconds_per_payable_comment": 14.947,
+        "seconds_per_thread": 54.806,
+        "speedup_per_payable_comment": 2.64,
+        "speedup_per_thread": 2.64
+      },
+      "seconds_per_payable_comment": 5.661,
+      "seconds_per_thread": 20.759,
+      "threads": 3
+    }
+  },
+  "gold": {
+    "record": "results/reader_gold_w1.json",
+    "sha256": "ba86bcb31d597095124d3d7a32838a55a4b5be1f1f8f72e6c14368ecafb43225"
+  },
+  "injected_threads": {
+    "entities": {
+      "@mandziak:3684": 0,
+      "@mandziak:3689": 0,
+      "@matusi_ukr:22242": 5,
+      "@sashafitnesslife:3939": 0
+    },
+    "read": [
+      "@mandziak:3684",
+      "@mandziak:3689",
+      "@matusi_ukr:22242",
+      "@sashafitnesslife:3939"
+    ],
+    "rule": "the four threads the gate removes before payment, read so bars 2 and 3 are reachable. Reported apart from every other number and never in a production aggregate or a window price",
+    "signals": {
+      "@mandziak:3684": 0,
+      "@mandziak:3689": 0,
+      "@matusi_ukr:22242": 0,
+      "@sashafitnesslife:3939": 0
+    }
+  },
+  "non_gating": {
+    "completion_tokens": 13838,
+    "gpu": null,
+    "prompt_tokens": 45789,
+    "seconds_per_thread": 31.638,
+    "worker_seconds": 727.664
+  },
+  "outcome": "GO",
+  "phase": "probe-b",
+  "registration": {
+    "population_threads": 23,
+    "record": "results/prereg_reader_probe_v2.json",
+    "sha256": "a1f9369bb771562a4ebcdfed9e9e52c63dc862907417da126b5872ff9b930ecd",
+    "task": "reader_thread_gm4_v2"
+  },
+  "replies": {
+    "finish_reason_length": 0,
+    "from_post_signals": 0,
+    "no_signal": 6,
+    "parsed": 13,
+    "proposed_signal_types": [],
+    "reading": "«no signal» is counted over PARSED replies only. A reply that could not be read is not a thread with nothing in it, and the two are never added together",
+    "refusals_by_cause": {
+      "missing field: entities": 2,
+      "missing field: evidence": 2,
+      "noise is not a list": 1,
+      "signals is not a list": 4,
+      "signals.aspect is not a string": 1
+    },
+    "refused": 10,
+    "signal_bearing": 7
+  },
+  "scorer": {
+    "functions": [
+      "reader_signal_found",
+      "reader_entity_found",
+      "reader_comment_agreement",
+      "reader_noise_count"
+    ],
+    "module": "src/market_pulse/scorer.py",
+    "sha256": "dbb5406a502f813ba1b4940e0914310efd632386a8da60e0c002cc8964a97d4f"
+  }
+}
