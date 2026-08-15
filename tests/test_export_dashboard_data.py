@@ -189,6 +189,82 @@ def test_the_promo_surface_carries_every_chain_the_amendment_names():
     assert set(chains["marketopt_promo"]["by_carrier"]) == {"post_text"}
 
 
+def test_the_positions_table_answers_for_the_whole_window_and_carries_no_old_price():
+    """SPEC 3.21 (4): the promo answer, whole — and the price 3.17 (3) keeps off every surface.
+
+    Three claims, and the third is the one that needed a decision. The table is the WINDOW's
+    population and not a draw from it; its own count is the shared figure the anchor checks. Every
+    field it carries is one the contract names. And `depth` is the printed badge's reading, never
+    the arithmetic depth of the price pair: the substring check on the block's own JSON is the blunt
+    half, and the row-by-row identity `depth == printed_pct / 100` is the half that would catch the
+    arithmetic reading arriving under the right key.
+    """
+    table = RECORD["promo"]["positions_table"]
+    rows = table["rows"]
+    fields = {name for row in rows for name in row}
+
+    assert len(rows) == table["sample"]["rows"] == RECORD["window"]["populations"]["position_rows"]
+    assert len(rows) == 145
+    assert table["window"] == builder.WINDOW_ID and table["sample"]["reading"]
+    assert fields == {
+        "row_id",
+        "brand",
+        "item",
+        "chain",
+        "carrier",
+        "promo_price",
+        "printed_pct",
+        "depth",
+        "tier",
+        "evidence",
+    }
+    # the ROWS, not the block: `law` explains in prose which price is absent and why, and a
+    # substring check over the explanation would forbid the record from saying what it forbids
+    assert "price_old" not in json.dumps(rows, ensure_ascii=False)
+    assert "price_old" in table["law"] and "3.17 (3)" in table["law"]
+    assert {name for row in rows for name in row["item"]} <= {
+        "line",
+        "category",
+        "size_value",
+        "size_unit",
+        "pack_count",
+        "attribute_pct",
+    }
+    for row in rows:
+        assert ("depth" in row) == ("printed_pct" in row)
+        if "depth" in row:
+            assert row["depth"] == round(row["printed_pct"] / 100, 4)
+        assert ("own" in row["brand"]) == ("id" in row["brand"])
+        assert row["brand"]["display"] and row["evidence"]["channel"].startswith("@")
+
+    # what the window actually holds, so a table that silently lost its unresolved half or its
+    # second carrier would fail here rather than look tidy
+    assert sum(1 for row in rows if "id" in row["brand"]) == 80
+    assert sum(1 for row in rows if row["brand"].get("own")) == 0
+    assert sum(1 for row in rows if "promo_price" in row) == 138
+    assert sum(1 for row in rows if "depth" in row) == 128
+    assert {row["carrier"] for row in rows} == {"leaflet_page", "post_text"}
+
+
+def test_a_position_the_registry_join_drops_stops_the_export(tmp_path):
+    """The negative control for the table's own refusal — a row lost on a join, not in the data.
+
+    The chain column is a JOIN to `channels`, so a channel that is not there takes its positions out
+    of the table while `positions` still holds them. That is the failure the count check exists for:
+    the table would still look like a complete answer, one chain shorter.
+    """
+    conn = builder.build(builder.DERIVED, builder.PREREG, builder.REGISTRY, tmp_path / "pulse.db")[
+        0
+    ]
+    conn.execute(
+        "DELETE FROM channels WHERE window_id = ? AND channel = ?",
+        (builder.WINDOW_ID, "@marketopt_promo"),
+    )
+
+    with pytest.raises(SystemExit, match="holds 141 rows and the window has 145 positions"):
+        exporter.promo_block(conn, builder.WINDOW_ID)
+
+
 def test_what_cannot_be_computed_says_so_with_its_unlock_condition():
     """Honest stubs, never zeros — and each one names the surface and what would unlock it."""
     stubs = RECORD["not_computable"]

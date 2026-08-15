@@ -64,6 +64,7 @@ CREATE TABLE watchlist (
     window_id TEXT NOT NULL,
     brand_id  TEXT NOT NULL,
     own       INTEGER NOT NULL,
+    display   TEXT NOT NULL,
     PRIMARY KEY (window_id, brand_id)
 );
 
@@ -144,6 +145,12 @@ CREATE TABLE positions (
     presence_category            INTEGER NOT NULL,
     presence_size                INTEGER NOT NULL,
     presence_attribute           INTEGER NOT NULL,
+    brand_raw                    TEXT,
+    line                         TEXT,
+    size_value                   REAL,
+    size_unit                    TEXT,
+    pack_count                   INTEGER,
+    attribute_pct                REAL,
     PRIMARY KEY (window_id, row_id)
 );
 
@@ -261,10 +268,17 @@ def add_watchlist(conn, window_id: str, brands: list) -> None:
 
     SoV is a share among the watchlist; a query that only saw the brands with a mention would rank
     six brands and silently drop the rest of the field it is meant to be a share of.
+
+    `display` is the registry's FIRST display name — the same choice `build_dashboard.read_evidence`
+    makes — and it is stored here so the promo table's brand column is a join and not a second map
+    built beside the page.
     """
     conn.executemany(
-        "INSERT INTO watchlist VALUES (?, ?, ?)",
-        [(window_id, brand.brand_id, 1 if brand.own else 0) for brand in brands],
+        "INSERT INTO watchlist VALUES (?, ?, ?, ?)",
+        [
+            (window_id, brand.brand_id, 1 if brand.own else 0, brand.display_names[0])
+            for brand in brands
+        ],
     )
 
 
@@ -349,7 +363,7 @@ def add_positions(conn, window_id: str, rows: list[dict]) -> None:
         one = row["position"]
         conn.execute(
             "INSERT INTO positions VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,"
-            " ?, ?, ?, ?, ?)",
+            " ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             (
                 window_id,
                 row["row_id"],
@@ -368,6 +382,15 @@ def add_positions(conn, window_id: str, rows: list[dict]) -> None:
                 one["depth"],
                 1 if one["depth_disagrees_with_printed"] else 0,
                 *(1 if row["presence"][name] else 0 for name in PRESENCE),
+                # the item ITSELF, which the layer never held before: the presence flags say a size
+                # was printed, and SPEC 3.21 (4) asks which size. Appended after them so the
+                # positional INSERT above stays readable against the CREATE TABLE.
+                one["brand_raw"],
+                one["line"],
+                one["size_value"],
+                one["size_unit"],
+                one["pack_count"],
+                one["attribute_pct"],
             ),
         )
         conn.executemany(
@@ -807,6 +830,100 @@ def promo_pressure(conn, window_id: str) -> dict:
             "SELECT COUNT(*) FROM positions WHERE window_id = ? AND brand_id IS NULL", (window_id,)
         ).fetchone()[0],
     }
+
+
+def promo_positions(conn, window_id: str, chains: tuple) -> list[dict]:
+    """Every position of the window as a ROW — the promo answer of SPEC 3.21 (4).
+
+    **The old price is not here, and neither is anything derived from it.** `depth` is the PRINTED
+    badge's own reading (SPEC 3.18 (1): the depth instrument is the promo price and the printed
+    −N%), never the `depth` COLUMN, which is the arithmetic of the extracted `price_old`. The
+    difference is not stylistic: a reader holding the promo price and the arithmetic depth has
+    `price_old = promo / (1 − depth)` back to the kopiyka, and 3.17 (3) keeps that number off every
+    surface. The arithmetic reading stays where it already lawfully lives — the window's aggregate
+    in :func:`depth_readings` — and is not carried per row.
+
+    **A field the row does not carry is ABSENT**, not null-filled: an empty `attribute_pct` key says
+    no fat percentage was printed, where `0.0` would say it was printed as zero. The tier ladder's
+    presence flags stay in :func:`position_block`; this table is what the flags were flags ABOUT.
+
+    The brand column is a LEFT JOIN on the watchlist: 65 of window-1's rows carry a trade mark the
+    registry does not resolve, and those rows keep their printed name with no id and no `own` flag —
+    an unresolved mark is not evidence that the brand is a competitor.
+    """
+    rows: list[dict] = []
+    order: list[tuple] = []
+    for (
+        row_id,
+        brand_id,
+        display,
+        own,
+        brand_raw,
+        line,
+        category,
+        size_value,
+        size_unit,
+        pack_count,
+        attribute_pct,
+        source_id,
+        carrier,
+        price_promo,
+        printed_pct,
+        tier,
+        channel,
+        msg_id,
+        ordinal,
+    ) in conn.execute(
+        "SELECT p.row_id, p.brand_id, w.display, w.own, p.brand_raw, p.line, p.category,"
+        " p.size_value, p.size_unit, p.pack_count, p.attribute_pct, ch.source_id, p.carrier,"
+        " p.price_promo, p.discount_pct_printed, p.tier, p.channel, p.msg_id, p.ordinal"
+        " FROM positions p JOIN channels ch USING (window_id, channel)"
+        " LEFT JOIN watchlist w ON w.window_id = p.window_id AND w.brand_id = p.brand_id"
+        " WHERE p.window_id = ?",
+        (window_id,),
+    ):
+        brand = {"display": display or brand_raw}
+        if brand_id is not None:
+            brand |= {"id": brand_id, "own": bool(own)}
+        rows.append(
+            {
+                "row_id": row_id,
+                "brand": brand,
+                "item": _present(
+                    {
+                        "line": line,
+                        "category": category,
+                        "size_value": size_value,
+                        "size_unit": size_unit,
+                        "pack_count": pack_count,
+                        "attribute_pct": attribute_pct,
+                    }
+                ),
+                "chain": {"id": source_id, "named_by_amendment_3_20": source_id in chains},
+                "carrier": carrier,
+                "tier": tier,
+                "evidence": {"channel": channel, "msg_id": msg_id},
+            }
+            | _present(
+                {
+                    "promo_price": price_promo,
+                    "printed_pct": printed_pct,
+                    "depth": round(printed_pct / 100, 4) if printed_pct is not None else None,
+                }
+            )
+        )
+        order.append(((display or brand_raw or "").casefold(), source_id, channel, msg_id, ordinal))
+    # sorted HERE and not by the query: SQLite's NOCASE folds ASCII only, so «ПростоНаше» and
+    # «Простонаше» would rank by code point and the rule would be one no reader could state.
+    # `casefold` is Unicode-aware, and the key is the order the operator reads — brand first, then
+    # the chain, then the message the row came out of. Sorted by INDEX so no comparison ever
+    # reaches the row dictionaries themselves.
+    return [rows[index] for index in sorted(range(len(rows)), key=order.__getitem__)]
+
+
+def _present(fields: dict) -> dict:
+    """The keys that have a value. Absence is the record's way of saying nothing was printed."""
+    return {name: value for name, value in fields.items() if value is not None}
 
 
 def promo_by_chain(conn, window_id: str, chains: tuple) -> dict:

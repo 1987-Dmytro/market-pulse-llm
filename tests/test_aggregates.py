@@ -205,6 +205,59 @@ def test_a_plan_section_3_cut_is_answered_by_sql(conn):
     assert per_sentiment == ANCHOR["comment"]["total"]["sentiment"]
 
 
+def test_the_promo_table_carries_the_item_and_not_the_old_price(conn):
+    """SPEC 3.21 (4)'s row set, from SQL: what the table gained, and what it must never gain.
+
+    The load-bearing half is the `depth` column. Both readings exist per row in the database — the
+    arithmetic one computed from `price_old` and the printed badge — and they DISAGREE on real rows.
+    The table has to carry the badge, because promo price beside the arithmetic depth is the
+    extracted old price with one division; a row where the two differ is picked out of the window
+    itself and held to the badge, so the check cannot pass on a window where they happen to agree.
+    """
+    rows = aggregates.promo_positions(conn, builder.WINDOW_ID, ("atb",))
+    (population,) = conn.execute(
+        "SELECT COUNT(*) FROM positions WHERE window_id = ?", (builder.WINDOW_ID,)
+    ).fetchone()
+    by_id = {row["row_id"]: row for row in rows}
+
+    assert len(rows) == population == len(by_id)
+    assert "price_old" not in json.dumps(rows, ensure_ascii=False)
+    keys = [
+        (
+            row["brand"]["display"].casefold(),
+            row["chain"]["id"],
+            row["evidence"]["channel"],
+            row["evidence"]["msg_id"],
+            int(row["row_id"].rsplit(":", 1)[1]),
+        )
+        for row in rows
+    ]
+    assert keys == sorted(keys), "brand, then chain, then the message the row came out of"
+
+    row_id, arithmetic, printed = conn.execute(
+        "SELECT row_id, depth, discount_pct_printed FROM positions WHERE window_id = ?"
+        " AND depth IS NOT NULL AND discount_pct_printed IS NOT NULL"
+        " AND ABS(depth - discount_pct_printed / 100.0) > 0.01 ORDER BY row_id",
+        (builder.WINDOW_ID,),
+    ).fetchone()
+    disagreeing = by_id[row_id]
+
+    assert disagreeing["depth"] == round(printed / 100, 4)
+    assert disagreeing["depth"] != round(arithmetic, 4)
+
+    # a field the row does not carry is absent, not null: the fat percentage of a butter pack that
+    # printed none is not zero, and `named_by_amendment_3_20` follows the chain list it was handed
+    bare = next(row for row in rows if "attribute_pct" not in row["item"])
+    unresolved = next(row for row in rows if "id" not in row["brand"])
+
+    assert None not in bare["item"].values() and bare["item"]["category"]
+    assert "own" not in unresolved["brand"] and unresolved["brand"]["display"]
+    assert {row["chain"]["named_by_amendment_3_20"] for row in rows} == {True, False}
+    assert [row["chain"]["id"] for row in rows if row["chain"]["named_by_amendment_3_20"]] == [
+        "atb"
+    ] * 106
+
+
 def test_the_spread_is_the_anchor_producers_own_median(conn):
     """One median, two callers. A second implementation is a second answer waiting to happen."""
     values = [0.2, 0.4, 0.41, 0.9]

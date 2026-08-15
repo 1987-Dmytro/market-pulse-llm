@@ -17,9 +17,10 @@ page with no rows at all. Each expander declares the export field that holds its
 the build REFUSES when the rows it found do not number what the export says.
 
 **Nothing leaves the page.** No `<script src>`, no stylesheet link, no webfont, no remote image, no
-fetch: the only external hrefs are t.me links on drill-down rows. JS does tabs, the two toggles,
-tooltip show/hide and table sort — no arithmetic on data; both languages of every label and tooltip
-are rendered into the document at build time.
+fetch: the only external hrefs are t.me links on drill-down rows and on the promo table. JS does
+tabs, the two toggles, tooltip show/hide, table sort and the promo table's filters — it hides rows
+and swaps option labels, it computes no figure; both languages of every label and tooltip are
+rendered into the document at build time.
 
     PYTHONPATH=src python3 scripts/build_dashboard.py
     PYTHONPATH=src python3 scripts/build_dashboard.py --out /tmp/index.html --export /tmp/poisoned.json
@@ -149,6 +150,7 @@ TAB_SOURCES = {
         "metrics.promo_pressure",
         "cuts.positions_by_category",
         "cuts.positions_by_carrier",
+        "promo.positions_table",
         "not_computable.leaflet_depth_for_silpo_varus_marketopt",
     ),
     "t6": ("not_computable.category_layer",),
@@ -836,12 +838,14 @@ class Page:
             f"{self.row_link(link_of(row, comment=False))}</p></article>"
         )
 
-    def row_link(self, href: str | None) -> str:
+    def row_link(self, href: str | None, *, lead: bool = True) -> str:
+        """The row's evidence link. `lead` is the separator it needs INSIDE a line of meta text and
+        must not have when it is a table cell of its own."""
         if not href:
             return ""
         return (
-            f' · <a href="{esc(href)}" rel="noreferrer noopener" target="_blank">'
-            f"{self.s.html('drill.link')}</a>"
+            f'{" · " if lead else ""}<a href="{esc(href)}" rel="noreferrer noopener"'
+            f' target="_blank">{self.s.html("drill.link")}</a>'
         )
 
     def stub(self, name: str) -> str:
@@ -1412,7 +1416,194 @@ class Page:
                 f"<h3>{self.s.html('t5.pressure.brands')}</h3>",
                 hbars(brand_items),
                 self.drill("t5_positions"),
+                self.positions_table(),
                 f'<p class="hint">{self.s.html("t2.price_origin")}</p>',
+            ]
+        )
+
+    # -- T5's positions table ---------------------------------------------------------------------
+
+    POSITION_COLUMNS = (
+        ("brand", "common.brand"),
+        ("item", "t5.column.item"),
+        ("chain", "t5.column.chain"),
+        ("carrier", "t5.column.carrier"),
+        ("promo", "t5.column.promo_price"),
+        ("printed", "t5.column.printed"),
+        ("depth", "t5.column.depth"),
+        ("tier", "t5.column.tier"),
+    )
+    """(the `data-` key the sort reads, the heading's string key), in render order.
+
+    The key is also what the filter selects match against, so a column and its filter cannot drift
+    into two different attributes."""
+
+    MISSING = -1.0
+    """What a numeric `data-` attribute holds when the row carries no such figure.
+
+    Not the empty string: `Number("")` is 0 in JS, so an absent promo price would sort as free.
+    Every figure in these three columns is a price or a share and none can be negative, so -1 sorts
+    them all below the cheapest real one — the same device as T4's -9 for a brand with no NSR."""
+
+    @staticmethod
+    def price(value) -> str:
+        """A promo price as the leaflet prints it — two decimals, the currency in the heading."""
+        return f"{value:.2f}" if value is not None else "—"
+
+    @staticmethod
+    def printed(value) -> str:
+        """The badge as printed: a minus and a percent. `-N%` is the source's own mark."""
+        return f"−{value:g}%" if value is not None else "—"
+
+    def own_class(self, row: dict) -> str:
+        """Ours, a competitor, or a trade mark the registry does not resolve — three states.
+
+        The registry's watchlist is our brands and the competitors we track, so `own` answers the
+        first two. It answers nothing about the 65 rows whose printed mark resolves to no watchlist
+        id, and calling those competitors would be a claim the evidence does not carry.
+        """
+        if "id" not in row["brand"]:
+            return "unresolved"
+        return "own" if row["brand"]["own"] else "competitor"
+
+    def item_cell(self, item: dict) -> str:
+        """The product as recorded: its line, its pack size, its fat percentage — absent if absent."""
+        size = ""
+        if "size_value" in item:
+            size = f"{item['size_value']:g} {item.get('size_unit', '')}".strip()
+            if "pack_count" in item:
+                size = f"{item['pack_count']:g} × {size}"
+        parts = " · ".join(
+            part
+            for part in (
+                item.get("line"),
+                size,
+                pct(item["attribute_pct"] / 100, 1) if "attribute_pct" in item else None,
+            )
+            if part
+        )
+        category = item.get("category")
+        return (
+            f"{esc(parts) if parts else '—'}{f'<small>{esc(category)}</small>' if category else ''}"
+        )
+
+    def position_filters(self, rows: list[dict]) -> str:
+        """Four selects over the table's own values — brand, chain, carrier, ours vs competitors.
+
+        The options are built from the rows THIS export carries, so a filter can never offer a
+        value no row has; both languages of every option label are in the document as attributes and
+        the language button swaps the text, the way it already swaps its own.
+        """
+        # `(casefold, itself)` and not `casefold` alone: «ПростоНаше» and «Простонаше» fold to the
+        # same key, and a tie broken by a SET's iteration order is a page that differs between runs
+        brands = sorted(
+            {row["brand"]["display"] for row in rows}, key=lambda one: (one.casefold(), one)
+        )
+        chains = sorted({row["chain"]["id"] for row in rows})
+        carriers = sorted({row["carrier"] for row in rows})
+        classes = ("own", "competitor", "unresolved")
+        controls = [
+            ("brand", "common.brand", [(one, (one, one)) for one in brands]),
+            ("chain", "t5.column.chain", [(one, self.s(f"chain.{one}")) for one in chains]),
+            (
+                "carrier",
+                "t5.column.carrier",
+                [(one, self.s(f"t5.carrier.{one}")) for one in carriers],
+            ),
+            ("own", "t5.filter.own", [(one, self.s(f"t5.own.{one}")) for one in classes]),
+        ]
+        blocks = []
+        for key, label, options in controls:
+            all_ua, all_en = self.s("t5.filter.all")
+            rendered = [
+                f'<option value="" data-ua="{esc(all_ua)}" data-en="{esc(all_en)}">{esc(all_ua)}</option>'
+            ]
+            rendered += [
+                f'<option value="{esc(value)}" data-ua="{esc(ua)}" data-en="{esc(en)}">{esc(ua)}</option>'
+                for value, (ua, en) in options
+            ]
+            blocks.append(
+                f'<label class="filter">{self.s.html(label)}'
+                f'<select data-filter-for="t5-positions" data-key="{key}">{"".join(rendered)}</select>'
+                f"</label>"
+            )
+        return f'<div class="filters">{"".join(blocks)}</div>'
+
+    def positions_table(self) -> str:
+        """SPEC 3.21 (4): what is in promo, at what price, from which brand — all of it, as a table.
+
+        Every cell is a field of `promo.positions_table.rows`; nothing here is recomputed from the
+        store and nothing is derived from a price the export does not carry. The row's own evidence
+        link is the last cell, so a reader can go from a line of this table to the post it came from.
+        """
+        table = dig(self.record, "promo.positions_table")
+        rows = table["rows"]
+        head = "".join(
+            f'<th data-column="{key}">{self.s.html(label)}</th>'
+            for key, label in self.POSITION_COLUMNS
+        )
+        head += f'<th class="plain">{self.s.html("t5.column.evidence")}</th>'
+        body = []
+        for row in rows:
+            brand, item, chain = row["brand"], row["item"], row["chain"]
+            own = self.own_class(row)
+            tag = (
+                f' <span class="tag">{self.s.html("t1.emphasis.own")}</span>'
+                if own == "own"
+                else ""
+            )
+            link = link_of(row["evidence"], comment=False)
+            chain_name = self.s.html("chain." + chain["id"])
+            carrier_name = self.s.html("t5.carrier." + row["carrier"])
+            body.append(
+                f'<tr data-brand="{esc(brand["display"])}" data-chain="{esc(chain["id"])}"'
+                f' data-carrier="{esc(row["carrier"])}" data-own="{own}"'
+                f' data-item="{esc(item.get("line") or "")}" data-tier="{esc(row["tier"])}"'
+                f' data-promo="{row.get("promo_price", self.MISSING)}"'
+                f' data-printed="{row.get("printed_pct", self.MISSING)}"'
+                f' data-depth="{row.get("depth", self.MISSING)}">'
+                f'<td class="name" title="{esc(brand.get("id", ""))}">'
+                f"{esc(brand['display'])}{tag}</td>"
+                f"<td>{self.item_cell(item)}</td>"
+                f"<td>{chain_name}</td>"
+                f"<td>{carrier_name}</td>"
+                f'<td class="figure">{esc(self.price(row.get("promo_price")))}</td>'
+                f"<td>{esc(self.printed(row.get('printed_pct')))}</td>"
+                f"<td>{esc(pct(row.get('depth'), 2))}</td>"
+                f"<td>{esc(row['tier'])}</td>"
+                f'<td class="plain">{self.row_link(link, lead=False) or "—"}</td></tr>'
+            )
+        # the filtered-to-nothing state is a row of the table itself: «наші» selects zero rows in
+        # window-1 and a tbody that just went blank is indistinguishable from a broken filter
+        body.append(
+            f'<tr class="none" hidden><td colspan="{len(self.POSITION_COLUMNS) + 1}">'
+            f"{self.s.html('common.no_rows')}</td></tr>"
+        )
+        # which chains yielded PAGES and which only post texts — the census the export already
+        # carries per chain, read from it rather than counted again over the rows
+        by_chain = dig(self.record, "metrics.promo_pressure.by_chain")
+
+        def chains_with(carrier: str, side: int) -> str:
+            return ", ".join(
+                self.s(f"chain.{chain}")[side]
+                for chain, block in sorted(by_chain.items())
+                if carrier in block["by_carrier"]
+            )
+
+        census = self.s.html(
+            "t5.positions.carriers",
+            leaflet=(chains_with("leaflet_page", 0), chains_with("leaflet_page", 1)),
+            post=(chains_with("post_text", 0), chains_with("post_text", 1)),
+        )
+        return "".join(
+            [
+                f"<h3>{self.s.html('t5.positions')}</h3>",
+                f'<p class="hint">{self.s.html("t5.positions.note")}</p>',
+                self.sample_line(table["sample"]),
+                f'<p class="hint">{census}</p>',
+                self.position_filters(rows),
+                f'<table id="t5-positions" class="sortable filtered wide">'
+                f"<thead><tr>{head}</tr></thead><tbody>{''.join(body)}</tbody></table>",
             ]
         )
 
@@ -1697,8 +1888,16 @@ a{color:var(--s1)}
 .reading{font-size:13px;color:var(--ink2);border-left:2px solid var(--axis);padding-left:8px;
 margin:8px 0}
 table{border-collapse:collapse;width:100%;max-width:900px;font-size:13px}
+table.wide{max-width:none}
+table.wide td small{display:block;color:var(--muted);font-size:11px}
+.filters{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0}
+.filters label{display:flex;flex-direction:column;gap:2px;font-size:12px;color:var(--ink2)}
+.filters select{font:inherit;font-size:13px;padding:4px 6px;border:1px solid var(--grid);
+border-radius:6px;background:var(--surface);color:var(--ink);max-width:260px}
 th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--grid);vertical-align:top}
 th{cursor:pointer;color:var(--ink2);font-size:12px;white-space:nowrap}
+th.plain{cursor:default}
+td.plain{white-space:nowrap}
 td.figure{font-size:13px;font-weight:500}
 td,th{font-variant-numeric:tabular-nums}
 table.prov td{font-size:12px}
@@ -1719,6 +1918,7 @@ letter-spacing:2px;margin:0;pointer-events:none;text-transform:uppercase}
 .glossary{border-top:1px solid var(--grid);padding:10px 0;max-width:92ch}
 .glossary ul{margin:4px 0 0;padding-left:20px}
 .empty{color:var(--muted)}
+tr[hidden]{display:none}
 html[data-lang="ua"] .en,html[data-lang="en"] .ua{display:none}
 @media (max-width:720px){main{padding:14px 12px 50px}.tiles{grid-template-columns:1fr}
 header{flex-direction:column;align-items:flex-start}}
@@ -1744,6 +1944,8 @@ langButton.addEventListener('click',function(){
   root.setAttribute('data-lang',next);
   root.setAttribute('lang',next==='ua'?'uk':'en');
   langButton.textContent=next==='ua'?langButton.dataset.ua:langButton.dataset.en;
+  document.querySelectorAll('option[data-ua]').forEach(function(o){
+    o.textContent=next==='ua'?o.dataset.ua:o.dataset.en;});
   hide();});
 var themeButton=document.getElementById('theme');
 themeButton.addEventListener('click',function(){
@@ -1777,7 +1979,7 @@ document.querySelectorAll('table.sortable').forEach(function(table){
     th.addEventListener('click',function(){
       var key=th.dataset.column;
       var body=table.tBodies[0];
-      var rows=Array.prototype.slice.call(body.rows);
+      var rows=Array.prototype.slice.call(body.querySelectorAll('tr:not(.none)'));
       rows.sort(function(a,b){
         var x=a.dataset[key],y=b.dataset[key];
         var nx=Number(x),ny=Number(y);
@@ -1786,7 +1988,24 @@ document.querySelectorAll('table.sortable').forEach(function(table){
         if(!isNaN(nx)&&!isNaN(ny)){return descending?(ny<nx?-1:1):(nx<ny?-1:1);}
         return descending?(y<x?-1:1):(x<y?-1:1);});
       rows.forEach(function(r){body.appendChild(r);});
+      var none=body.querySelector('tr.none');
+      if(none){body.appendChild(none);}
       descending=!descending;});});});
+document.querySelectorAll('table.filtered').forEach(function(table){
+  var controls=Array.prototype.slice.call(
+    document.querySelectorAll('select[data-filter-for="'+table.id+'"]'));
+  var body=table.tBodies[0];
+  var none=body.querySelector('tr.none');
+  function apply(){
+    var any=false;
+    Array.prototype.slice.call(body.querySelectorAll('tr:not(.none)')).forEach(function(r){
+      var keep=controls.every(function(c){
+        return !c.value||r.dataset[c.dataset.key]===c.value;});
+      r.hidden=!keep;
+      if(keep){any=true;}});
+    if(none){none.hidden=any;}}
+  controls.forEach(function(c){c.addEventListener('change',apply);});
+  apply();});
 })();
 """
 

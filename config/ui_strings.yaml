@@ -498,6 +498,60 @@ strings:
   t5.no_brand:
     ua: "позицій без розпізнаного бренду"
     en: "positions with no resolved brand"
+  t5.positions:
+    ua: "Позиції в промо"
+    en: "Positions in promo"
+  t5.positions.note:
+    ua: >-
+      Що саме в промо, за якою ціною і в якого бренду — УСІ позиції вікна, не вибірка. Глибина тут
+      — читання надрукованого бейджа (SPEC 3.18 (1)): закресленої ціни немає в жодній колонці
+      (SPEC 3.17 (3)) і жодна не дозволяє її відновити.
+    en: >-
+      What is in promo, at what price and from which brand — EVERY position of the window, not a
+      draw. Depth here is the printed badge's reading (SPEC 3.18 (1)): the crossed-out price is in
+      no column (SPEC 3.17 (3)) and no column lets it be reconstructed.
+  t5.positions.carriers:
+    ua: "Сторінки листівок дали: {leaflet}. Тексти постів: {post}."
+    en: "Leaflet pages came from: {leaflet}. Post texts: {post}."
+  t5.column.item:
+    ua: "Товар"
+    en: "Item"
+  t5.column.chain:
+    ua: "Мережа"
+    en: "Chain"
+  t5.column.carrier:
+    ua: "Носій"
+    en: "Carrier"
+  t5.column.promo_price:
+    ua: "Промо-ціна, ₴"
+    en: "Promo price, ₴"
+  t5.column.printed:
+    ua: "Надруковано"
+    en: "Printed"
+  t5.column.depth:
+    ua: "Глибина"
+    en: "Depth"
+  t5.column.tier:
+    ua: "Щабель"
+    en: "Tier"
+  t5.column.evidence:
+    ua: "Доказ"
+    en: "Evidence"
+  t5.filter.own:
+    ua: "Наші — конкуренти"
+    en: "Ours — competitors"
+  t5.filter.all:
+    ua: "усі"
+    en: "all"
+  t5.own.own:
+    ua: "наші"
+    en: "ours"
+  t5.own.competitor:
+    ua: "конкуренти"
+    en: "competitors"
+  t5.own.unresolved:
+    ua: "марка без розпізнаного бренду"
+    en: "mark with no resolved brand"
 
   # --- T7 ----------------------------------------------------------------------------------------
   t7.mock:

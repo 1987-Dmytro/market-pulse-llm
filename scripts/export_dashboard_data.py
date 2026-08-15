@@ -170,6 +170,12 @@ NOT_SHARED = {
         "brand × sentiment. The anchor counts brand mentions and sentiment separately and never"
         " crosses them."
     ),
+    "promo.positions_table.rows[]": (
+        "the position ROWS themselves — SPEC 3.21 (4). The anchor counts positions and spreads"
+        " their depth; it carries no row, so there is nothing on its side to equal. What holds this"
+        " table instead is its own refusal: its length must equal"
+        " `window.populations.position_rows`, and THAT figure is shared and checked above."
+    ),
     "metrics.sov.*.mentions.varto|selianske|garmonija": (
         "the three brands SPEC 3.21 (1)'s revision r1 rules on. The anchor was matched before the"
         " rules existed and is never rescored, so these counts CANNOT be equal — what holds them"
@@ -372,6 +378,56 @@ def metrics_block(conn, window_id: str) -> dict:
             }
         }
         | aggregates.coverage(conn, window_id),
+    }
+
+
+def promo_block(conn, window_id: str) -> dict:
+    """The promo answer of SPEC 3.21 (4): every position of the window, as a table.
+
+    ALL of them — the operator's question is «which positions, at which prices, of which brands are
+    in promo» and a sample answers a different one. The count is held against the window's own
+    population before the record is written, here and not only in a test: a table that lost a row on
+    a join would still look like an answer.
+
+    Two readings of the law meet on the `depth` column and the export says which one it carries.
+    SPEC 3.18 (1) names the promo price and the printed −N% as the depth instrument, and this table
+    follows it, because the arithmetic depth of 3.17 (3) is `(old − promo) / old` and printing it
+    beside the promo price hands the reader back the extracted old price that 3.17 (3) and 3.18 (1)
+    keep off every surface. The arithmetic reading is not lost: it is the window aggregate in
+    `metrics.promo_depth.readings.from_price_pair`, where no row's own price sits beside it.
+    """
+    (position_rows,) = conn.execute(
+        "SELECT COUNT(*) FROM positions WHERE window_id = ?", (window_id,)
+    ).fetchone()
+    rows = aggregates.promo_positions(conn, window_id, PROMO_CHAINS)
+    if len(rows) != position_rows:
+        raise SystemExit(
+            f"the positions table holds {len(rows)} rows and the window has {position_rows}"
+            " positions — the promo surface must answer for the whole population it names."
+            " Stop and report."
+        )
+    return {
+        "positions_table": {
+            "window": window_id,
+            "sample": {
+                "name": "position_rows",
+                "rows": position_rows,
+                "reading": (
+                    "every position row of the window, not a draw from them — the leaflet pages and"
+                    " the promo post texts the window carried. Two instruments on one table: the"
+                    " carrier column says which, and only ATB yielded leaflet PAGES in window-1"
+                ),
+            },
+            "law": (
+                "SPEC 3.21 (4). `promo_price` is the green leg of 3.18 (1) (80/80 in the team"
+                " lead's read of the B′ population). `depth` is the PRINTED badge's reading —"
+                " printed_pct / 100 — and never the arithmetic depth of 3.17 (3), which is computed"
+                " from the extracted old price: printing it beside the promo price would hand back"
+                " `price_old = promo_price / (1 - depth)`, and that number reaches no surface. The"
+                " extracted old price is in no field of this table."
+            ),
+            "rows": rows,
+        }
     }
 
 
@@ -695,6 +751,7 @@ def export(conn, sources: dict, anchor_path: Path, metrics_path: Path) -> dict:
         },
         "metrics": metrics_block(conn, builder.WINDOW_ID),
         "cuts": cuts_block(conn, builder.WINDOW_ID),
+        "promo": promo_block(conn, builder.WINDOW_ID),
         "not_computable": NOT_COMPUTABLE,
         "dictionary": {
             "path": rel(metrics_path),
@@ -760,6 +817,12 @@ def main(argv: list[str] | None = None) -> int:
         f" · {record['window']['populations']['payable']} payable"
     )
     print(f"  metrics       {', '.join(sorted(record['metrics']))}")
+    table = record["promo"]["positions_table"]
+    print(
+        f"  promo table   {len(table['rows'])} position rows"
+        f" · {sum(1 for row in table['rows'] if 'id' in row['brand'])} with a resolved brand"
+        f" · {sum(1 for row in table['rows'] if 'depth' in row)} with a printed badge"
+    )
     print(
         f"  convergence   {len(verdict['shared_figures'])} shared figures equal;"
         f" {verdict['whole_record']['agreed']}/{verdict['whole_record']['leaves']} anchor"

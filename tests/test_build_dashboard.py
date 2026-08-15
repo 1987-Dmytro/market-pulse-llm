@@ -169,6 +169,90 @@ def test_no_figure_was_typed_by_hand(tmp_path):
     assert len(shas) == BANNERS
 
 
+def positions_rows(page: str) -> list[dict]:
+    """The T5 promo table as it is on the page: one dict per row, its `data-` keys and its cells."""
+    body = page.split('<table id="t5-positions"')[1].split("<tbody>")[1].split("</tbody>")[0]
+    rows = []
+    for raw in re.findall(r"<tr (.*?)</tr>", body, re.S):
+        if raw.startswith('class="none"'):
+            continue
+        attrs = {
+            name: html.unescape(value)
+            for name, value in re.findall(r'data-(\w+)="([^"]*)"', raw.split(">")[0])
+        }
+        cells = [
+            html.unescape(re.sub(r"<[^>]+>", "|", cell)).strip("| ")
+            for cell in re.findall(r"<td[^>]*>(.*?)</td>", raw, re.S)
+        ]
+        rows.append({"attrs": attrs, "cells": cells})
+    return rows
+
+
+def test_the_promo_table_renders_every_position_of_the_window_with_its_filters():
+    """SPEC 3.21 (4) on the screen: all 145 rows, both carriers, four filters, one empty state.
+
+    Read from the COMMITTED page and held against the export cell by cell — the claim is not that a
+    table exists but that what a reader sees is what `promo.positions_table` carries. The first five
+    rows are checked to hold BOTH carriers because a chain-first order would have made them all
+    leaflet, and the promo answer's whole point is that the two instruments sit in one table.
+    """
+    rows = positions_rows(PAGE)
+    exported = RECORD["promo"]["positions_table"]["rows"]
+
+    assert len(rows) == len(exported) == 145
+    assert {row["attrs"]["carrier"] for row in rows[:5]} == {"leaflet_page", "post_text"}
+    for row, source in zip(rows, exported, strict=True):
+        assert row["attrs"]["brand"] == source["brand"]["display"]
+        assert row["attrs"]["chain"] == source["chain"]["id"]
+        assert row["cells"][4] == (
+            f"{source['promo_price']:.2f}" if "promo_price" in source else "—"
+        )
+        assert row["cells"][6] == (f"{source['depth'] * 100:.2f}%" if "depth" in source else "—")
+        assert row["cells"][7] == source["tier"]
+
+    # the own toggle's answer in window-1 is EMPTY, and an empty tbody is indistinguishable from a
+    # broken filter — the table carries its own worded row for that state
+    assert [row for row in rows if row["attrs"]["own"] == "own"] == []
+    assert sum(1 for row in rows if row["attrs"]["own"] == "unresolved") == 65
+    assert '<tr class="none" hidden>' in PAGE
+    keys = re.findall(r'<select data-filter-for="t5-positions" data-key="(\w+)">', PAGE)
+    assert keys == ["brand", "chain", "carrier", "own"]
+    for key in keys:
+        assert f'data-column="{key if key != "own" else "brand"}"' in PAGE
+
+
+def test_a_poisoned_promo_price_moves_its_own_cell_and_nothing_else(tmp_path):
+    """Guard 4, extended to the promo table — SPEC 3.21 (4)'s answer under the same rule as the KPIs.
+
+    A promo price surfaces in exactly one place on the page, so poisoning one must move exactly one
+    text node. The other half of the assertion is the one that would catch a hand-typed table: every
+    OTHER digit-bearing node on the page is untouched, and the export's own sha — a figure ABOUT the
+    export — moves on the banners, which are counted rather than excused.
+    """
+    poisoned = tmp_path / "poisoned.json"
+    record = json.loads(builder.EXPORT.read_text(encoding="utf-8"))
+    row = next(one for one in record["promo"]["positions_table"]["rows"] if "promo_price" in one)
+    was = f"{row['promo_price']:.2f}"
+    row["promo_price"] = 13.37
+    poisoned.write_text(
+        json.dumps(record, ensure_ascii=False, indent=1, sort_keys=True), encoding="utf-8"
+    )
+
+    plain, spoilt = tmp_path / "plain.html", tmp_path / "spoilt.html"
+    for out, export in ((plain, builder.EXPORT), (spoilt, poisoned)):
+        assert builder.main(["--out", str(out), "--export", str(export), "--quiet"]) == 0
+
+    assert "13.37" not in plain.read_text(encoding="utf-8")
+    before = digit_nodes(plain.read_text(encoding="utf-8"))
+    after = digit_nodes(spoilt.read_text(encoding="utf-8"))
+    moved = [(one, two) for one, two in zip(before, after, strict=True) if one != two]
+    shas = [pair for pair in moved if "експорт" in pair[0] or "export " in pair[0]]
+
+    assert len(before) == len(after)
+    assert len(moved) == len(shas) + 1
+    assert [pair for pair in moved if pair not in shas] == [(was, "13.37")]
+
+
 def test_an_export_that_would_break_the_script_block_stops_the_build(tmp_path):
     """The blob is embedded verbatim so it can be compared byte for byte — which is also why a
     closing tag inside it would end the element early and swallow the rest of the page."""
