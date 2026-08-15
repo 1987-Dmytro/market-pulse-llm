@@ -1,0 +1,162 @@
+{
+  "bars": {
+    "1_flagships": {
+      "cases_in_the_evidence": [],
+      "cases_not_read": [
+        "@VARUS_channel:10613",
+        "@matusi_ukr:22303",
+        "@mandziak:3676",
+        "@mandziak:3703",
+        "@matusi_ukr:22272"
+      ],
+      "cases_registered": [
+        "@VARUS_channel:10613",
+        "@matusi_ukr:22303",
+        "@mandziak:3676",
+        "@mandziak:3703",
+        "@matusi_ukr:22272"
+      ],
+      "reason": "the registered threads carrying this bar's cases were not read: the go/no-go stopped the run before the population was bought. A bar computed over the threads that WERE read would be a number about another sample",
+      "scored": false,
+      "scorer": "reader_signal_found",
+      "verdict": "UNSCORED"
+    },
+    "2_entity_cases": {
+      "cases_in_the_evidence": [],
+      "cases_not_read": [
+        "@VARUS_channel:10360",
+        "@VARUS_channel:10348"
+      ],
+      "cases_registered": [
+        "@VARUS_channel:10360",
+        "@VARUS_channel:10348"
+      ],
+      "reason": "the registered threads carrying this bar's cases were not read: the go/no-go stopped the run before the population was bought. A bar computed over the threads that WERE read would be a number about another sample",
+      "scored": false,
+      "scorer": "reader_entity_found",
+      "verdict": "UNSCORED"
+    },
+    "3_noise": {
+      "cases_in_the_evidence": [],
+      "cases_not_read": [
+        "@VARUS_channel:10366",
+        "@retsepty:7312",
+        "@retsepty:7325",
+        "@retsepty:7327"
+      ],
+      "cases_registered": [
+        "@VARUS_channel:10366",
+        "@retsepty:7312",
+        "@retsepty:7325",
+        "@retsepty:7327"
+      ],
+      "reason": "the registered threads carrying this bar's cases were not read: the go/no-go stopped the run before the population was bought. A bar computed over the threads that WERE read would be a number about another sample",
+      "scored": false,
+      "scorer": "reader_noise_count",
+      "verdict": "UNSCORED"
+    },
+    "4_per_comment_agreement": {
+      "cases_in_the_evidence": [],
+      "cases_not_read": [
+        "@VARUS_channel:10348",
+        "@VARUS_channel:10613",
+        "@mandziak:3676",
+        "@mandziak:3703",
+        "@matusi_ukr:22272",
+        "@matusi_ukr:22303"
+      ],
+      "cases_registered": [
+        "@VARUS_channel:10348",
+        "@VARUS_channel:10613",
+        "@mandziak:3676",
+        "@mandziak:3703",
+        "@matusi_ukr:22272",
+        "@matusi_ukr:22303"
+      ],
+      "reason": "the registered threads carrying this bar's cases were not read: the go/no-go stopped the run before the population was bought. A bar computed over the threads that WERE read would be a number about another sample",
+      "scored": false,
+      "scorer": "reader_comment_agreement",
+      "verdict": "UNSCORED"
+    }
+  },
+  "contract": "docs/PROMPT-probe-a.md D5",
+  "evidence": {
+    "record": "results/reader_probe_w1.jsonl",
+    "sha256": "4704e2a60919f3396edab98380dc0da71c04a87077917c037e342c17fd06c59b",
+    "threads_read": 3,
+    "threads_registered": 111
+  },
+  "go_no_go": {
+    "ceilings": {
+      "already_billed_usd": 0.0504,
+      "cap_usd_all_in": 0.45,
+      "remaining_usd": 0.3996,
+      "window_minutes_billed": 30.0
+    },
+    "projections": {
+      "binding": {
+        "seconds": 13631.7,
+        "usd": 4.1807,
+        "which": "by_payable_comment"
+      },
+      "by_payable_comment": {
+        "rule": "seconds ÷ warm-up payable × 912",
+        "seconds": 13631.7,
+        "usd": 4.1807
+      },
+      "by_thread": {
+        "rule": "mean seconds per thread × 111",
+        "seconds": 6083.4,
+        "usd": 1.8657
+      }
+    },
+    "rate_usd_per_second": 0.00030669,
+    "reading": "the projection is of the WHOLE window; it is compared against what the cap has left after the warm-up, because the warm-up's own spend is inside the same cap",
+    "verdict": "STOP",
+    "warm_up": {
+      "billed_seconds": 164.417,
+      "payable_comments": 11,
+      "seconds_per_payable_comment": 14.947,
+      "seconds_per_thread": 54.806,
+      "threads": 3
+    }
+  },
+  "gold": {
+    "record": "results/reader_gold_w1.json",
+    "sha256": "ba86bcb31d597095124d3d7a32838a55a4b5be1f1f8f72e6c14368ecafb43225"
+  },
+  "non_gating": {
+    "completion_tokens": 1158,
+    "prompt_tokens": 5331,
+    "seconds_per_thread": 52.751,
+    "worker_seconds": 158.252
+  },
+  "outcome": "STOP",
+  "phase": "probe-a",
+  "registration": {
+    "population_threads": 111,
+    "record": "results/prereg_reader_probe.json",
+    "sha256": "5c2e1a49a1a8d8668482c4829b97664bfe9c46793353299b53c537d8531c521b"
+  },
+  "replies": {
+    "finish_reason_length": 0,
+    "no_signal": 0,
+    "parsed": 0,
+    "reading": "«no signal» is counted over PARSED replies only. A reply that could not be read is not a thread with nothing in it, and the two are never added together",
+    "refusals_by_cause": {
+      "entities is not a list": 3
+    },
+    "refused": 3,
+    "signal_bearing": 0
+  },
+  "scorer": {
+    "functions": [
+      "reader_signal_found",
+      "reader_entity_found",
+      "reader_comment_agreement",
+      "reader_noise_count"
+    ],
+    "module": "src/market_pulse/scorer.py",
+    "sha256": "dbb5406a502f813ba1b4940e0914310efd632386a8da60e0c002cc8964a97d4f"
+  }
+}

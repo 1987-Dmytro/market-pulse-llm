@@ -1,0 +1,80 @@
+{
+  "endpoint": "g8ql4i3tunk6gr",
+  "go_no_go": {
+    "ceilings": {
+      "already_billed_usd": 0.0504,
+      "cap_usd_all_in": 0.45,
+      "remaining_usd": 0.3996,
+      "window_minutes_billed": 30.0
+    },
+    "projections": {
+      "binding": {
+        "seconds": 13631.7,
+        "usd": 4.1807,
+        "which": "by_payable_comment"
+      },
+      "by_payable_comment": {
+        "rule": "seconds ÷ warm-up payable × 912",
+        "seconds": 13631.7,
+        "usd": 4.1807
+      },
+      "by_thread": {
+        "rule": "mean seconds per thread × 111",
+        "seconds": 6083.4,
+        "usd": 1.8657
+      }
+    },
+    "rate_usd_per_second": 0.00030669,
+    "reading": "the projection is of the WHOLE window; it is compared against what the cap has left after the warm-up, because the warm-up's own spend is inside the same cap",
+    "verdict": "STOP",
+    "warm_up": {
+      "billed_seconds": 164.417,
+      "payable_comments": 11,
+      "seconds_per_payable_comment": 14.947,
+      "seconds_per_thread": 54.806,
+      "threads": 3
+    }
+  },
+  "phase": "probe-a",
+  "worker": {
+    "adapter_dir": null,
+    "adapter_sha256": null,
+    "chat_template": {
+      "add_generation_prompt": true,
+      "enable_thinking": false
+    },
+    "max_new_tokens": 2000,
+    "merge_state": "base-no-adapter",
+    "merged_provenance": null,
+    "merged_sha256": null,
+    "model": "google/gemma-4-31b-it",
+    "quantization": {
+      "bnb_4bit_compute_dtype": "bfloat16",
+      "bnb_4bit_quant_type": "nf4",
+      "bnb_4bit_use_double_quant": true,
+      "load_in_4bit": true
+    },
+    "reader_prompt_sha256": "b272115637f784ad63c6fb2483e0b0ac3d6381901a096dc1cb5406b81a46c8cd",
+    "repo_commit": "a4fb51e4169d60004f7248b0aa9c934a9db41f12",
+    "revision_requested": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+    "runtime": {
+      "accelerate": "1.14.0",
+      "bitsandbytes": "0.50.0",
+      "cuda_runtime": "12.8",
+      "driver": "570.195.03",
+      "gpu": "NVIDIA L4",
+      "gpu_count": 1,
+      "gpu_memory_total": "23034 MiB",
+      "model_revision": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+      "peft": "0.20.0",
+      "pod_id": "55urg4uflc52e4",
+      "revision_requested": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+      "runpod": "1.11.0",
+      "torch": "2.8.0+cu128",
+      "transformers": "5.14.1",
+      "weights_requested": "google/gemma-4-31b-it"
+    },
+    "serving_config": "READER",
+    "weights_dir": "google/gemma-4-31b-it"
+  }
+}

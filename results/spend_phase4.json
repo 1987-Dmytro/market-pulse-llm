@@ -269,6 +269,13 @@
       "spent_usd": 31.9174,
       "remaining_usd": 1.0826,
       "note": "probe-a: staging pod about to be created"
+    },
+    {
+      "at": "2026-08-15T18:39:15+00:00",
+      "balance": 22.9979228605,
+      "spent_usd": 31.9174,
+      "remaining_usd": 1.0826,
+      "note": "probe-a: warm-up done, gate STOP, endpoint and template deleted"
     }
   ]
 }
