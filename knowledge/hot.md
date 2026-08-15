@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-15 12:21:00 (every SessionStart)
+**Auto-refreshed:** 2026-08-15 12:30:56 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+dc6a88e docs(report): phase6a -- the eighth segment card, and Dv341
+bc6d2bd fix(phase6a): the segment cut rendered seven cards where the registry holds eight
+06fcd93 docs(vault): the phase6a checkpoint -- what the layer said about window-1
 3a16b55 docs(report): phase6a -- the index block that could not move, and 902 numbers
 a7fd072 fix(phase6a): the census printout skipped a table it had just filled
-981c5ad refactor(phase6a): bind the filters, and stop reaching for a private name
-6043d95 feat(phase6a): the deterministic export and the metric dictionary
-63676db feat(phase6a): the SQLite aggregate layer, converged with the sealed window summary
 ```
 
 ## 📋 Recent decisions
@@ -30,10 +30,10 @@ a7fd072 fix(phase6a): the census printout skipped a table it had just filled
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-15 (checkpoint 12:18) — исполнен `phase6a` ($0): **амендмент 3.20 в SPEC**,
+**Last update:** 2026-08-15 (checkpoint 12:35) — исполнен `phase6a` ($0): **амендмент 3.20 в SPEC**,
 слой агрегатов SQLite (`data/derived/pulse.db`, gitignored), детерминированный экспорт
 `results/dashboard_data_w1.json` и словарь метрик `config/metrics.yaml`. `make check`
-**2 369 / 2 skipped**, потрачено $0.00. Отчёт — `docs/reports/phase6a.md` (Dv335–Dv340).
+**2 370 / 2 skipped**, потрачено $0.00. Отчёт — `docs/reports/phase6a.md` (Dv335–**Dv341**).
 Следом — `6b` (UI) и `cycle2-prep-b` (сбор). День — [[2026-08-15]].
 
 **Предыдущий срез:** 2026-08-15 (11:18) — `cycle2-prep-a` ($0): правило 3.19 вшито в очередь
@@ -64,6 +64,15 @@ UA/EN и словарь метрик · выводы кодом · цены из
 объявленных общих пар. Сборка ОТКАЗЫВАЕТ, а не предупреждает. Восемь метрик в
 `config/metrics.yaml` (UA/EN, биекция с экспортом в обе стороны), семь `NOT_COMPUTABLE`-заглушек с
 условиями разблокировки. **6b (UI) строится ТОЛЬКО на этом файле.**
+
+**⚠️ Измерение принадлежит РЕЕСТРУ, а не уликам (Dv341).** Срез по сегментам, построенный от
+таблицы `channels` (её наполняют собранные строки), отрисовывал **семь** карточек там, где реестр
+держит восемь: `food_quality` молчал всё окно. Починено таблицей-измерением `segments`, а НЕ
+расширением `channels` — `coverage.channels.with_a_row` считает строки в `channels`, и вставка всех
+66 хендлов дала бы 66/66. Тот же аргумент уже был выигран дважды в этом контракте (`watchlist`,
+`PROMO_CHAINS`) и не был перенесён — [[a-dimension-belongs-to-the-registry]]. Три состояния
+различимы: говорил · нёс улики без разговора (`regional`) · молчал (`food_quality`, rate = **null**,
+не 0.0).
 
 **Числа окна-1, которых раньше не было (из слоя, не из прозы).** Все **1 361** бестекстовых строк
 размечены `neutral` — все до одной; поэтому NSR прыгает **0.0770 (купленная) → 0.1053 (платимая),
