@@ -7530,3 +7530,31 @@ DERIVE from this row» is not asked by any guard we have.
   wrong, so the re-derivation script could not see it — the claim is prose. Narrowed to «no column
   of this table», with a pointer to the report's finding. The drill-down is untouched: the finding
   stands as the operator's to rule on. [cause: overclaim]
+
+## fix-c — the row prints the badge (SPEC 3.22 (1))
+
+- **Dv374** — the negative control had stopped controlling. `test_a_twelfth_marked_block_is_refused_rather_than_stripped`
+  planted `amendment-3.21` as its intruder, and 3.21 became law in fix-a without the name moving on,
+  so for one contract it proved DUPLICATE detection instead of «a name nobody has looked at cannot
+  arrive quietly». Both refuse with the same message, so nothing went red. Moved to
+  `amendment-3.23` and given `assert intruder not in writer.BLOCKS_TODAY`, which makes the next
+  omission red. [cause: control-decay]
+- **Dv375** — the change is not a strict narrowing: 4 of the 20 drawn rows GAINED a depth they never
+  had, because a printed badge exists on rows with no extractable old price. Correct under 3.22 (1)
+  («absent when no badge was printed»), and counted separately in the report rather than reported as
+  «18 rows changed». [cause: scope-shape]
+- **Dv376** — the new test's first draft asserted only «depth equals the badge», which passes under
+  BOTH renderers on any draw that happens to hold no disagreeing row. Given an explicit non-vacuity
+  assertion and verified RED against the committed page before the rebuild. A test that cannot fail
+  on the code it replaces has measured nothing. [cause: test-scope]
+- **Dv377** — a `make check` launched in the background as a baseline reading overlapped the script
+  writing `docs/SPEC.md` and reddened on the enumeration. The failure is the guard working and is
+  quoted as such, but a baseline is a reading of a tree that is not moving. [cause: measurement-order]
+
+**Process signals — fix-c.** The landing manoeuvre is six parts, not the four the contracts name;
+the two undocumented ones are exactly the two nothing enforces, and one of them had already rotted.
+The one-line fix took minutes — the work was enumerating every per-row consumer of `depth` and
+ruling that the sealed validate pack is the instrument the operator ruled WITH and not a promo
+surface. «The export cannot have moved» was a correct inference and still worth verifying: had it
+been wrong, the 18-node page diff would have grown 20 banner nodes and the report's claim would have
+changed shape.
