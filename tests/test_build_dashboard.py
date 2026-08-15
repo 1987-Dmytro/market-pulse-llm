@@ -253,6 +253,45 @@ def test_a_poisoned_promo_price_moves_its_own_cell_and_nothing_else(tmp_path):
     assert [pair for pair in moved if pair not in shas] == [(was, "13.37")]
 
 
+def test_every_drawn_position_row_prints_its_badge_and_never_the_arithmetic_depth(page):
+    """SPEC 3.22 (1) on the committed page: a row's depth is the printed badge or it is absent.
+
+    The pair the law is about is `promo` and `depth` on ONE line: the arithmetic reading there
+    returns `promo / (1 − depth)` — the extracted old price — so the assertion is made against the
+    badge that the row's own evidence carries, joined row by row through the promo price.
+
+    The last line is what keeps this from passing on both codebases: the two readings agree on most
+    rows, so a draw could contain only rows where the badge and the arithmetic round to the same
+    two decimals and the test would be green under the renderer this replaces. At least one drawn
+    row must be one where they DISAGREE at the rendered precision.
+    """
+    drawn = builder.draw(page.plans["t5_depth"]) + builder.draw(page.plans["t5_positions"])
+    rendered = [
+        html.unescape(one)
+        for one in re.findall(r'<p class="verdict">([^<]*)</p>', PAGE)
+        if "promo: " in one
+    ]
+    assert len(rendered) == len(drawn) == 2 * builder.DRAW
+
+    disagreeing = []
+    for text, row in zip(rendered, drawn, strict=True):
+        one = row["position"]
+        shown = re.search(r"(?:^|· )depth: ([\d.]+%)", text)
+        # the join itself, so a mis-ordered pairing fails here rather than passing quietly
+        assert re.search(r"(?:^|· )promo: ([\d.]+)", text)[1] == str(one["price_promo"])
+
+        badge = one["discount_pct_printed"]
+        assert (shown[1] if shown else None) == (None if badge is None else f"{badge:.2f}%")
+        if (
+            badge is not None
+            and one["depth"] is not None
+            and f"{one['depth'] * 100:.2f}" != (f"{badge:.2f}")
+        ):
+            disagreeing.append((row["row_id"], one["depth"], badge))
+
+    assert disagreeing, "the draw holds no row where the two readings differ — the test is vacuous"
+
+
 def test_an_export_that_would_break_the_script_block_stops_the_build(tmp_path):
     """The blob is embedded verbatim so it can be compared byte for byte — which is also why a
     closing tag inside it would end the element early and swallow the rest of the page."""

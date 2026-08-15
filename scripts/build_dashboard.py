@@ -812,6 +812,13 @@ class Page:
 
     def position_row(self, row: dict) -> str:
         one = row["position"]
+        # SPEC 3.22 (1): the depth a ROW prints is the PRINTED badge's reading, never the
+        # arithmetic one of 3.17 (3) — `promo / (1 − arithmetic depth)` beside this row's own
+        # promo price returns the extracted old price to the kopiyka, and that is the number
+        # 3.17 (3) and 3.18 (7) keep off every surface. The arithmetic reading survives where no
+        # row's price sits beside it: `metrics.promo_depth.readings.from_price_pair`.
+        # `is not None` and not truthiness — a printed 0% badge is a fact, and absent is not zero.
+        printed = one["discount_pct_printed"]
         parts = [
             f"{key}: {value}"
             for key, value in (
@@ -820,8 +827,8 @@ class Page:
                 ("category", one["category"]),
                 ("size", f"{one['size_value']}{one['size_unit']}" if one["size_value"] else None),
                 ("promo", one["price_promo"]),
-                ("printed", one["discount_pct_printed"]),
-                ("depth", pct(one["depth"], 2) if one["depth"] is not None else None),
+                ("printed", printed),
+                ("depth", pct(printed / 100, 2) if printed is not None else None),
                 ("tier", row["tier"]),
             )
             if value not in (None, "")
