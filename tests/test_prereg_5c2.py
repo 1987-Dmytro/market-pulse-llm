@@ -235,7 +235,15 @@ def test_the_sealed_pin_still_derives_through_the_ten_block_keep():
     assert tuple(prereg.RATIFICATION_NAME.findall(spec.read_text(encoding="utf-8"))) == (
         writer.BLOCKS_TODAY
     )
-    assert writer.BLOCKS_TODAY[10:] == ("amendment-3.19", "amendment-3.20"), "after the seal"
+    # Enumerated and not counted: the three blocks that arrived after the seal are named here so a
+    # fourth cannot land by moving an integer. Dv336 called the manoeuvre four moving parts; this
+    # line is the fifth, and it is a fifth ON PURPOSE — the tail is what the keep is measured
+    # against, so it has to be written out where a reader sees which amendments are outside the pin.
+    assert writer.BLOCKS_TODAY[10:] == (
+        "amendment-3.19",
+        "amendment-3.20",
+        "amendment-3.21",
+    ), "after the seal"
     assert hashlib.sha256(spec.read_bytes()).hexdigest() != pin, "3.19 is not in the file"
     assert hashlib.sha256(prereg.registered_law(spec, keep=writer.KEEP_BLOCKS)).hexdigest() == pin
     # and the block that carries the stop rules this record cites is one of the ten it keeps

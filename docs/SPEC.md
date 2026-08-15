@@ -919,6 +919,35 @@ The index therefore still reads «the current revision is 3.18» and is now TWO 
 behind: 3.19 and 3.20 are each their own index entry, here and in the 3.19 block, until that
 pin retires.)
 <!-- amendment-3.20 end -->
+<!-- amendment-3.21 begin — stripped by write_sku_prereg.registered_law() before hashing
+docs/SPEC.md against every sealed pre-registration pin, all of which predate this text; the
+law those records registered is the stripped text. New law arrives ONLY inside its own marked
+block — a sealed registration is never re-pinned to make it green -->
+**Amendment 3.21 (operator, 2026-08-15, the red-gate sitting — the brand matcher's known
+collisions, the comment-signals architecture and the promo answer):**
+1. **Watchlist text-matching rules are law in `config/watchlist_rules.yaml` (a NEW file).**
+   `config/registry.yaml` and `config/lexicon.yaml` are sealed by pre-registration pins and are
+   never edited for rule changes. Named revision **r1 (2026-08-15)**: `varto` — text hits only
+   with a brand marker; `selianske` — text hits only with a Гармонія marker nearby (both:
+   operator rulings of 2026-08-10, applied early by the operator's 15.08 ruling); `garmonija` —
+   comment-text hits only with a dairy-category marker nearby (operator ruling 15.08 — the
+   children's-centre homonym). G1e history is never rescored; provenance names the rules revision
+   it matched under.
+2. **The comment-analysis target architecture is ratified:** thread gate with silencers → one LLM
+   reading per thread → signal verdicts carrying evidence msg_ids (design authority:
+   `docs/PLAN-comment-signals.md`). Its bars arrive by pre-registration before any paid reading.
+3. **Until the stance layer is law, every brand × tonality surface is labelled «повідомлення, де
+   згадано бренд»** — never «ставлення до бренду».
+4. **The promo surface answers with a positions TABLE:** brand × item × chain × promo price ×
+   printed −N% × depth. The promo price is a green leg (80/80); the extracted old price is never
+   printed (3.17 (3) and 3.18 (7) stand). Implementation: fix-b.
+(Index note, in this block for the reason 3.19's and 3.20's own notes give: the `amendment-index`
+block above is one of the TEN blocks `write_prereg_5c2.KEEP_BLOCKS` holds INSIDE the sealed pin of
+`results/prereg_5c2_run.json`, so editing it would break that pin and re-pinning is refused. The
+index therefore still reads «the current revision is 3.18» and is now THREE amendments behind:
+3.19, 3.20 and 3.21 are each their own index entry, here and in the two blocks before this one,
+until that pin retires.)
+<!-- amendment-3.21 end -->
 **Date:** 2026-07-26 · **Team lead:** Fable session · **Executor:** Claude Code
 **Repo folder:** `/Users/hdv_1987/Desktop/Projects/market-pulse-llm`
 **rev. 3 change (operator decision):** producers in Ukraine barely use Telegram for

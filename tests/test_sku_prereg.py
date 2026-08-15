@@ -259,6 +259,13 @@ def test_every_pinned_input_still_hashes_to_what_it_says(record):
         # index entry lives INSIDE the block — `amendment-index` is one of the ten blocks the
         # SEALED 5c2 pin KEEPS, so an edit there would break `results/prereg_5c2_run.json`.
         "amendment-3.20",
+        # 3.21 — the red-gate sitting (2026-08-15): the watchlist's text-matching rules become law
+        # in a file of their own (`config/watchlist_rules.yaml`, revision r1) so that a rule change
+        # never edits the two SEALED configs, the comment-signals architecture is ratified, brand ×
+        # tonality surfaces are labelled as MENTIONS and not as stance, and the promo surface owes
+        # a positions table. One name short on arrival like every block before it. Stripped here
+        # for the same reason as all of them: these pins are v1–v4's and predate every word of it.
+        "amendment-3.21",
     ]
     assert prereg.RATIFICATION_NAME.findall(spec_text) == blocks
     law = prereg.registered_law(prereg.SPEC).decode("utf-8")

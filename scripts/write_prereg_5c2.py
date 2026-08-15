@@ -89,7 +89,7 @@ enumeration of these ten is what refuses to let it arrive quietly. A sealed regi
 re-pinned to make it green.
 """
 
-BLOCKS_TODAY = (*KEEP_BLOCKS, "amendment-3.19", "amendment-3.20")
+BLOCKS_TODAY = (*KEEP_BLOCKS, "amendment-3.19", "amendment-3.20", "amendment-3.21")
 """Every marked block the file carries NOW: the ten the seal keeps, plus each one that arrived after.
 
 Two questions were one constant until 3.19 landed, and they are not the same question. What the
@@ -106,7 +106,14 @@ nowhere else, and `check_the_strip_family_is_what_it_says` is what refuses until
 3.20 (operator, 2026-08-15, the Phase-6 command-centre plan) is that twelfth block, and it arrived
 the way the sentence above predicted: the contract that landed it named three moving parts and this
 constant was the fourth. It moves no number either — it rules on where the DASHBOARD's figures come
-from — so the ten-name keep is untouched and the sealed pin still derives through it."""
+from — so the ten-name keep is untouched and the sealed pin still derives through it.
+
+3.21 (operator, 2026-08-15, the red-gate sitting) is the thirteenth, and it is the first one whose
+contract named all four parts — Dv336 became the brief. It moves the matcher, which is the first
+time a block in this list touches an instrument these 5 075 rows were read with, and it still moves
+no number OF this registration: its own (1) says G1e history is never rescored, the new rules live
+in a file that did not exist when the run was registered, and the sealed record's brand attribution
+keeps the matching it was measured under. So the ten-name keep is untouched again."""
 
 DRIFT = projection.DRIFT
 HALF_DOLLAR = 0.50
