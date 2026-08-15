@@ -699,6 +699,68 @@ No shape line either, unlike the position prompts: every object's keys are spell
 the illustration would add nothing but a set of values a reader could copy. Zero-shot in the sense
 SPEC §7 fixes — rules, no worked example."""
 
+READER_ENTITIES_V1 = (
+    '- "entities" — one object per name of duty (2): {"name": as it is written in the text,'
+    ' "msg_id": the comment you read it in, or null when it is in the post, "subject_type": one of'
+    ' the four readings, "reading": one phrase in Ukrainian, "quote": copied from that text}.'
+)
+READER_ENTITIES_V2 = (
+    '- "entities" — a LIST of objects, one per name of duty (2), and the name is INSIDE each object:'
+    ' [{"name": as it is written in the text, "msg_id": the comment you read it in, or null when it'
+    ' is in the post, "subject_type": one of the four readings, "reading": one phrase in Ukrainian,'
+    ' "quote": copied from that text}]. Never an object keyed by the names.'
+)
+"""Dv393, measured on all three of probe-a's paid verdicts: «one object per name» is a perfectly
+good description of a map keyed by that name, and that is what the model returned — every field
+right, the whole thread refused on the container ([[one_object_per_name_reads_as_a_map]]).
+
+The brackets are written into the line and the keyed form is named and forbidden, because the list
+was only ever implied by the surrounding key list. A container shape is not a taxonomy word, so no
+test over the ratified vocabulary could see this one."""
+
+READER_SIGNALS_V1 = '"evidence": the msg_ids you read it from; "quote": copied from one of them}.'
+READER_SIGNALS_V2 = (
+    '"evidence": the msg_ids of the COMMENTS you read it from, and the empty list [] when you read'
+    ' it in the post — never null and never the post; "from_post": true when the post is where you'
+    ' read it, and leave it out otherwise; "quote": copied from the post or from one of those'
+    " comments}."
+)
+
+READER_NULL_RULE_V1 = (
+    "- Every msg_id you write is one that was given to you. The post has none: for the post the id"
+    " is null."
+)
+READER_NULL_RULE_V2 = (
+    "- Every msg_id you write is one that was given to you. The post was given none, so null is the"
+    ' answer in exactly one field — "entities"."msg_id", where it means «this name is in the post».'
+    " Every other id field takes comment ids and never null."
+)
+"""Dv394, the two halves of one change. probe-a's third verdict carried `evidence: [null]` on a
+signal the reader had read in the POST — it applied the rule above, to a field the schema requires
+to be message ids, and that reply is the only one that still refused after the container defect was
+coerced away. A rule stated for one field reaches every field that looks like it, so the rule is
+scoped to the field it is about and the signals line is given the shape it needs instead."""
+
+READER_THREAD_PROMPT_V2 = _swap(
+    _swap(
+        _swap(READER_THREAD_PROMPT, READER_ENTITIES_V1, READER_ENTITIES_V2),
+        READER_SIGNALS_V1,
+        READER_SIGNALS_V2,
+    ),
+    READER_NULL_RULE_V1,
+    READER_NULL_RULE_V2,
+)
+"""The thread reader of `docs/PROMPT-probe-b.md` D1 — v1 with two defects closed and nothing else.
+
+DERIVED from :data:`READER_THREAD_PROMPT` by three `_swap` calls rather than retyped, so «exactly
+two wording changes» is a property of the code and not a claim in a report: every other character of
+the instrument is v1's, and a fourth edit would have to appear here as a fourth call.
+
+v1 stays registered, untouched and hashed — `results/prereg_reader_probe.json` pins its sha and
+three probe-a verdicts were bought under it. A reworded schema line is a NEW instrument and gets its
+own registration ([[prompt_revision_is_an_instrument_swap]]), which is why this is a second entry in
+:data:`PROMPTS` and not an edit to the first."""
+
 PROMPTS = {
     "T1": T1_PROMPT,
     "T2": T2_PROMPT,
@@ -717,6 +779,7 @@ PROMPTS = {
     "positions_post_gm4": POSITIONS_POST_PROMPT,
     "positions_text_gm4": POSITIONS_TEXT_PROMPT,
     "reader_thread_gm4": READER_THREAD_PROMPT,
+    "reader_thread_gm4_v2": READER_THREAD_PROMPT_V2,
 }
 RENDER_ONLY = {"precheck_v2ctx_with_post": "precheck_v2_with_post"}
 """Registered tasks whose prompt text *is* another task's, mapped to the base they share.
@@ -795,7 +858,8 @@ tier ladder, the normalisation and the no-imputation rule live. A reply read by 
 parser would come back as a dict of labels nothing downstream could use."""
 
 READER_TASK = "reader_thread_gm4"
-READER = frozenset({READER_TASK})
+READER_TASK_V2 = "reader_thread_gm4_v2"
+READER = frozenset({READER_TASK, READER_TASK_V2})
 """The thread reader of the comment-signals layer. Registered and hashed like every other prompt,
 and out of the three labelling tables for the same reason :data:`POSITIONS` is: its answer is one
 verdict about a whole thread, not a label per row.
@@ -803,7 +867,12 @@ verdict about a whole thread, not a label per row.
 Unlike :data:`POSITIONS` it is **not** refused by :func:`parse_reply`. The positions parser lives in
 `market_pulse.positions` because it validates a tier ladder, a normalisation and a no-imputation
 rule that only mean anything for extracted offers; the reader's answer is a labelled object of the
-kind this module has always read, so it is read here — one parser, `docs/PROMPT-probe-a.md` D1."""
+kind this module has always read, so it is read here — one parser, `docs/PROMPT-probe-a.md` D1.
+
+TWO registered versions since `docs/PROMPT-probe-b.md` D1, read by that one parser and rendered by
+one function. Which of them a record describes is the `task` it names and the sha it pins; v1 is
+frozen history and stays servable, because a run that could not re-render its own instrument could
+not reproduce its own evidence."""
 
 WITH_POST = frozenset(
     {
@@ -1081,9 +1150,20 @@ one attempt the probe has ([[lifted_ceiling_is_not_lifted_code]])."""
 
 
 def reader_messages_gm4(
-    channel: str, post_id: int, post: str, comments: list[tuple[int, str]]
+    channel: str,
+    post_id: int,
+    post: str,
+    comments: list[tuple[int, str]],
+    *,
+    task: str = READER_TASK_V2,
 ) -> list[dict]:
     """One thread as the reader is given it: the post, then every payable comment with its id.
+
+    ``task`` names WHICH registered reader text is rendered, and defaults to the live one. Two
+    versions exist and the pair a record has to agree on is (the task it names, the sha it pins):
+    the worker reports the sha of what it actually renders, and the driver compares that against the
+    registration before a single thread is sent. A default that pointed at frozen history would make
+    the quiet path the wrong one ([[a_sealed_caller_forces_the_default]]).
 
     The ids travel IN the request because the answer is keyed by them — every signal names the
     msg_ids it was read from, and a verdict whose evidence cannot be resolved back to a comment is
@@ -1098,6 +1178,8 @@ def reader_messages_gm4(
     A thread with no payable comment is still a thread — its post can carry the only name in it —
     but a thread with neither a post text nor a comment is nothing to read, and is refused.
     """
+    if task not in READER:
+        raise ValueError(f"{task}: not a registered reader prompt — {sorted(READER)}")
     ids = [msg_id for msg_id, _ in comments]
     if len(set(ids)) != len(ids):
         raise ValueError(
@@ -1110,7 +1192,7 @@ def reader_messages_gm4(
     if not post.strip() and not body:
         raise ValueError(f"{channel}:{post_id}: no post text and no comment — nothing to read")
     content = (
-        f'{PROMPTS[READER_TASK]}\n\n<thread channel="{channel}" post_id="{post_id}">\n'
+        f'{PROMPTS[task]}\n\n<thread channel="{channel}" post_id="{post_id}">\n'
         f"<post>\n{post.strip() or NO_POST_TEXT}\n</post>\n{body}</thread>"
     )
     if len(content) > READER_MAX_INPUT_CHARS:
@@ -1252,13 +1334,21 @@ def _reader(payload: dict) -> dict:
             # the open list of plan §3, with its escape hatch: a sixth type is legal and has to be
             # SAID, because an unflagged one is indistinguishable in the record from a ratified word
             raise ParseError("signal_type outside its domain and not flagged proposed")
+        # `from_post` is what makes an EMPTY evidence list an answer instead of a missing one
+        # (Dv394): a signal read in the post has no comment to name, and the alternative the v1
+        # instrument reached for was `[null]` in a field of message ids. Absent, it is false, so a
+        # v1 verdict is validated by exactly the rule it was registered under.
+        from_post = _flag(one.get("from_post", False), "signals.from_post")
         evidence = one["evidence"]
-        if not isinstance(evidence, list) or not evidence:
-            raise ParseError("signals.evidence is not a non-empty list")
+        if not isinstance(evidence, list):
+            raise ParseError("signals.evidence is not a list")
+        if not evidence and not from_post:
+            raise ParseError("signals.evidence is empty and the signal is not marked from_post")
         signals.append(
             {
                 "signal_type": signal_type,
                 "proposed": proposed,
+                "from_post": from_post,
                 "subject_type": _choice(
                     one["subject_type"], "signals.subject_type", READER_SUBJECT_TYPES
                 ),

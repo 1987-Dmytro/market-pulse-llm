@@ -49,8 +49,25 @@ cells on it and only the reference states it now, which `docs/reports/probe-b.md
 finding rather than repairing here.
 """
 
-MOVED = MOVED_BY_THE_RATIFIED_WORDS
-WITNESS = {**dict.fromkeys(MOVED_BY_THE_RATIFIED_WORDS, '"subject_type": "сеть_ритейлер"')}
+MOVED_BY_THE_V2_READER = ("src/market_pulse/prompts.py",)
+"""The one pinned file `docs/PROMPT-probe-b.md` D1 moved — a SECOND tuple, because the two are
+checked by different witnesses and a shared branch would assert the plan's about a file that never
+met it ([[an_invariant_the_new_member_cannot_satisfy]]).
+
+D1 registers `reader_thread_gm4_v2` BESIDE the sixteen prompts already in `prompts.PROMPTS` and
+teaches `parse_reply` the `from_post` signal. The v1 text does not move — this record's
+`instrument.prompt_sha256` is still derived LIVE below and is deliberately not relaxed — so the
+prompt this gold was built for is the prompt it still names. What moved is the module's bytes, and
+they stay RECOVERABLE:
+
+    git show 8c68107:src/market_pulse/prompts.py
+"""
+
+MOVED = MOVED_BY_THE_RATIFIED_WORDS + MOVED_BY_THE_V2_READER
+WITNESS = {
+    **dict.fromkeys(MOVED_BY_THE_RATIFIED_WORDS, '"subject_type": "сеть_ритейлер"'),
+    **dict.fromkeys(MOVED_BY_THE_V2_READER, "reader_thread_gm4_v2"),
+}
 """What each moved file learned, read BOTH ways below — absent from the sealed blob and present on
 disk — so a recovery from the wrong commit fails instead of passing."""
 

@@ -586,7 +586,7 @@ class ReaderClient:
         if not bos:
             return
         probe = {"channel": "@probe", "post_id": 1, "post": "проба", "comments": []}
-        if not self.render(prompts.READER_TASK, probe).startswith(bos):
+        if not self.render(prompts.READER_TASK_V2, probe).startswith(bos):
             raise RuntimeError(
                 f"the chat template no longer starts the reader prompt with {bos!r}, so"
                 " add_special_tokens=False would drop it silently — stop and report"
@@ -595,13 +595,16 @@ class ReaderClient:
     def render(self, task: str, item: dict) -> str:
         """One thread's request, through the processor's own chat template.
 
-        ``task`` is checked and not used as a switch label: this worker serves the one prompt the
-        probe registered, whose sha is pinned in `results/prereg_reader_probe.json`. A job asking
-        for another registered prompt is another instrument and is refused rather than served.
+        ``task`` selects which REGISTERED reader text is rendered and nothing else. Two of them
+        exist since `docs/PROMPT-probe-b.md` D1 and the worker can render either — v1 so probe-a's
+        evidence stays reproducible, v2 because it is the live instrument — while a task outside
+        `prompts.READER` is another instrument and is refused rather than served. Which one a run
+        used is not inferred from this class: `info` answers with a sha per registered task and the
+        driver compares that dict whole against its registration before the first paid thread.
         """
-        if task != prompts.READER_TASK:
+        if task not in prompts.READER:
             raise ValueError(
-                f"{task}: the READER config serves {prompts.READER_TASK} and nothing else — a"
+                f"{task}: the READER config serves {sorted(prompts.READER)} and nothing else — a"
                 " reading under another registered prompt is another instrument"
             )
         messages = prompts.reader_messages_gm4(
@@ -609,6 +612,7 @@ class ReaderClient:
             item["post_id"],
             item.get("post") or "",
             [(int(msg_id), text) for msg_id, text in item.get("comments") or ()],
+            task=task,
         )
         return self.processor.apply_chat_template(messages, tokenize=False, **CHAT_TEMPLATE)
 

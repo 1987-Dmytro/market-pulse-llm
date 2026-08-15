@@ -43,8 +43,53 @@ no population and no instrument in this record moves — the edit is two words i
 document, and `results/reader_gold_w1.json` rebuilds byte for byte beside it.
 """
 
-MOVED = MOVED_BY_THE_RATIFIED_WORDS
-WITNESS = {**dict.fromkeys(MOVED_BY_THE_RATIFIED_WORDS, '"subject_type": "сеть_ритейлер"')}
+MOVED_BY_THE_V2_READER = ("src/market_pulse/prompts.py", "src/market_pulse/local_llm.py")
+"""The two pinned files `docs/PROMPT-probe-b.md` D1 moved — a SECOND tuple, because the two groups
+are checked by different witnesses and a shared branch would assert the plan's about a file that
+never met it ([[an_invariant_the_new_member_cannot_satisfy]]).
+
+D1 registers `reader_thread_gm4_v2` BESIDE the sixteen prompts already in `prompts.PROMPTS`, teaches
+`parse_reply` the `from_post` signal, and lets `ReaderClient` render either registered text. The v1
+prompt's TEXT does not move — `instruments.prompt_sha256` below is still derived LIVE and is
+deliberately not relaxed — so every number registered here still describes the instrument that ran.
+Both files stay RECOVERABLE:
+
+    git show 8c68107:src/market_pulse/prompts.py
+    git show 8c68107:src/market_pulse/local_llm.py
+"""
+
+MOVED_BY_NAMING_THE_TASK = ("scripts/write_reader_prereg.py",)
+"""The producer itself, and a THIRD tuple because its witness is its own.
+
+probe-b made v2 the default of `prompts.reader_messages_gm4`. This producer measures `rendered_chars`
+and the input-ceiling headroom, so left on the default it would re-derive a FROZEN record under a
+prompt no thread was ever sent with; `rendering()` now names `task=prompts.READER_TASK`. One line,
+and it is the line that keeps every other byte of this record true
+([[a_sealed_caller_forces_the_default]]).
+
+    git show 8c68107:scripts/write_reader_prereg.py
+"""
+
+MOVED = MOVED_BY_THE_RATIFIED_WORDS + MOVED_BY_THE_V2_READER + MOVED_BY_NAMING_THE_TASK
+WITNESS = {
+    **dict.fromkeys(MOVED_BY_THE_RATIFIED_WORDS, '"subject_type": "сеть_ритейлер"'),
+    # the registry key in the module that owns it, the constant in the module that reads it —
+    # a shared token would have to be one that means something in both files, and the only such
+    # string here is the weaker one
+    "src/market_pulse/prompts.py": "reader_thread_gm4_v2",
+    "src/market_pulse/local_llm.py": "READER_TASK_V2",
+    "scripts/write_reader_prereg.py": "task=prompts.READER_TASK",
+}
+
+NAMED_IN_THE_RECORD = {
+    "docs/PLAN-comment-signals.md": 1,  # authority
+    "src/market_pulse/prompts.py": 2,  # instruments.parser.sha256 AND producer.borrowed
+    "src/market_pulse/local_llm.py": 1,  # producer.borrowed
+    "scripts/write_reader_prereg.py": 1,  # producer.sha256
+}
+"""How many times each moved file's sha appears in the record — stated, so a swap that put back one
+of two mentions cannot pass. `prompts.py` is named twice on purpose: once as the parser this run's
+replies were read by, once as a borrowed producer input."""
 """What each moved file learned, read BOTH ways below — absent from the sealed blob and present on
 disk — so a recovery from the wrong commit fails instead of passing."""
 
@@ -76,7 +121,7 @@ def put_the_sealed_shas_back(produced: bytes) -> bytes:
         assert token not in sealed_blob(path).decode("utf-8"), path
         assert token in (REPO_ROOT / path).read_text(encoding="utf-8"), path
         produced, count = re.subn(live.encode(), sealed.encode(), produced)
-        assert count == 1, path
+        assert count == NAMED_IN_THE_RECORD[path], (path, count)
     return produced
 
 
@@ -115,9 +160,10 @@ def test_every_instrument_is_pinned_by_the_bytes_it_will_run_with():
     assert instruments["scorer"]["sha256"] == summary.sha256_of(
         REPO_ROOT / "src" / "market_pulse" / "scorer.py"
     )
-    assert instruments["parser"]["sha256"] == summary.sha256_of(
-        REPO_ROOT / "src" / "market_pulse" / "prompts.py"
-    )
+    # the parser is one of the MOVED files: probe-b taught it `from_post` and registered a second
+    # reader text beside v1. The v1 prompt's own sha above is still LIVE and unrelaxed, which is
+    # what says this registration's instrument did not move — only the module around it
+    assert_pinned("src/market_pulse/prompts.py", instruments["parser"]["sha256"])
     for name in instruments["scorer"]["functions"]:
         assert callable(getattr(scorer, name)), name
     for name, digest in RECORD["authority"].items():

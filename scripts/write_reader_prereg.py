@@ -105,12 +105,20 @@ def draw(kept: list[dict]) -> list[dict]:
 
 
 def rendering(thread: dict) -> str:
-    """One thread as the run will send it — the registered rendering, never a look-alike."""
+    """One thread as the run sent it — the registered rendering, never a look-alike.
+
+    ``task`` is named and not defaulted. probe-b registered a second reader text and made it the
+    renderer's default, which is right for the live instrument and wrong for this producer: this
+    record describes the v1 run, its `rendered_chars` are v1's, and a frozen registration that
+    re-derived under a newer prompt would be describing a thread nobody sent
+    ([[a_sealed_caller_forces_the_default]]).
+    """
     return prompts.reader_messages_gm4(
         thread["channel"],
         thread["post_id"],
         thread["post_text"],
         [(row["msg_id"], row["text"]) for row in thread["comments"]],
+        task=prompts.READER_TASK,
     )[0]["content"]
 
 

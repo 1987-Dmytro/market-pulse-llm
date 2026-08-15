@@ -67,7 +67,10 @@ BASE_ONLY = {
     # NOT an amendment, and the value says so: probe-a registers a PROBE, and a pre-registration
     # is a registration rather than law. The layer's amendment comes after the adjudication
     # sitting; a number invented here would put a ruling in the record nobody made.
-    serving.READER_CONFIG: ("docs/PROMPT-probe-a.md D4 with results/prereg_reader_probe.json"),
+    serving.READER_CONFIG: (
+        "docs/PROMPT-probe-b.md with results/prereg_reader_probe_v2.json"
+        " (probe-a's docs/PROMPT-probe-a.md D4 registration is what it supersedes)"
+    ),
 }
 """The configs that serve the NF4 BASE with the adapter OFF, each beside the amendment that fixes
 it there. Both refusals below read this table rather than naming one config, so the second
@@ -305,12 +308,24 @@ def describe(config: dict, runtime: dict, artifact_sha: str, merged_provenance: 
             if positions
             else {}
         ),
-        # the READER's equivalent, and a single sha because the config serves ONE registered
-        # prompt. The volume carries its own `repo/`, a fetch that names a missing ref leaves it
-        # on the previous session's commit while printing "Already up to date", and the driver
-        # refuses before the first paid thread unless this equals what the Mac renders — the
-        # cheap net `caption_prompt_sha256` already is for its own instrument.
-        **({"reader_prompt_sha256": prompts.prompt_sha256(prompts.READER_TASK)} if reader else {}),
+        # the READER's equivalent, and a dict for POSITIONS' reason: since `docs/PROMPT-probe-b.md`
+        # D1 the config serves TWO registered prompts — v1, which three probe-a verdicts were bought
+        # under and which stays servable so its evidence can be re-rendered, and v2, which closes
+        # Dv393 and Dv394. A scalar could only name one of them, and a worker a session behind would
+        # answer with a sha that matches the registration while the OTHER text had moved.
+        #
+        # The volume carries its own `repo/`, a fetch that names a missing ref leaves it on the
+        # previous session's commit while printing "Already up to date", and the driver refuses
+        # before the first paid thread unless this dict equals what the Mac renders.
+        **(
+            {
+                "reader_prompt_sha256": {
+                    task: prompts.prompt_sha256(task) for task in sorted(prompts.READER)
+                }
+            }
+            if reader
+            else {}
+        ),
         "quantization": local_llm.QUANTIZATION,
         "chat_template": local_llm.CHAT_TEMPLATE,
         "max_new_tokens": MAX_NEW_TOKENS[served],

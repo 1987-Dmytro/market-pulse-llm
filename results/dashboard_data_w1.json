@@ -7941,7 +7941,7 @@
       "src/market_pulse/brands.py": "33ed070b3df9ac37d4c8579b9ecb372a9bd38b56be5d2091f7009f1579ce1674",
       "src/market_pulse/langid.py": "65c9ba294c846b8574387d1893826313e9649282f7fd8581d04354ea6cc9a2de",
       "src/market_pulse/loop.py": "3af31663cbd9d070ef00a14c033f93b285a1a0aebfb4153575d3ddda59853a1a",
-      "src/market_pulse/prompts.py": "2250180fcadc18fef102991bc00b5c3ba3f2afffafb77c69d98f169eee9fc70f"
+      "src/market_pulse/prompts.py": "4b466bec6278c80f894dff316bfa78de9dbd1826011a610c6dcda6db20068c85"
     },
     "reads": "data/derived/ through the reading path of scripts/window_summary_5c2.py, plus the records below through the sealed registration's own pins. No clock and no git block: two runs over the same evidence are byte-identical."
   },

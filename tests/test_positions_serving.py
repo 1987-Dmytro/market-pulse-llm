@@ -85,7 +85,7 @@ def test_every_base_only_config_reads_one_refusal_table():
     }
     assert handler.BASE_ONLY[serving.POSITIONS_CONFIG] == "SPEC amendment 3.17 (9)"
     assert "SPEC" not in handler.BASE_ONLY[serving.READER_CONFIG]
-    assert "prereg_reader_probe.json" in handler.BASE_ONLY[serving.READER_CONFIG]
+    assert "prereg_reader_probe_v2.json" in handler.BASE_ONLY[serving.READER_CONFIG]
     for config in handler.BASE_ONLY:
         assert serving.MERGE_STATE[config] == "base-no-adapter"
         assert config in handler.BASE_ONLY_CLIENT
@@ -233,6 +233,32 @@ def test_the_positions_worker_names_both_registered_prompts():
     }
     assert set(info["positions_prompt_sha256"]) == set(prompts.POSITIONS)
     assert "caption_prompt_sha256" not in info
+
+
+def test_the_reader_worker_names_both_registered_prompts():
+    """Same rule as the positions worker above, arrived at for the same reason and one contract
+    later: probe-b registered `reader_thread_gm4_v2` and v1 stays servable, so a scalar could name
+    only one of the two and a worker a session behind would answer with a sha that matched the
+    registration while the OTHER text had moved.
+
+    The field is a dict the driver compares WHOLE, and it is derived from `prompts.READER` rather
+    than listed, so a third reader cannot be served without appearing in it.
+    """
+    info = handler.describe(
+        handler.settings({"SERVING_CONFIG": "READER", "MODEL_REVISION": PINNED_REVISION}),
+        {},
+        None,
+        {},
+    )
+    assert info["serving_config"] == serving.READER_CONFIG
+    assert info["adapter_sha256"] is None
+    assert info["reader_prompt_sha256"] == {
+        "reader_thread_gm4": prompts.prompt_sha256("reader_thread_gm4"),
+        "reader_thread_gm4_v2": prompts.prompt_sha256("reader_thread_gm4_v2"),
+    }
+    assert set(info["reader_prompt_sha256"]) == set(prompts.READER)
+    assert len(set(info["reader_prompt_sha256"].values())) == 2
+    assert "positions_prompt_sha256" not in info and "caption_prompt_sha256" not in info
 
 
 def test_the_prompt_field_is_absent_on_the_other_configs_rather_than_null():
@@ -494,9 +520,21 @@ def test_the_reader_sends_one_thread_with_no_image_and_stays_greedy():
     assert replies[0]["usage"]["prompt_tokens"] == 3
 
 
-def test_the_reader_serves_one_registered_prompt_and_nothing_else():
+def test_the_reader_serves_the_registered_prompts_and_nothing_else():
+    """Two registered reader texts since probe-b's D1, and the worker renders whichever the JOB
+    names — v1 so probe-a's evidence stays reproducible, v2 because it is the live instrument.
+
+    What the class does NOT do is decide which of them a run used. That is what `info` answers with,
+    a sha per registered task, and what the driver compares against its registration before the
+    first paid thread — so a v1 job on a v2 registration is caught by a number rather than by a
+    default nobody reads ([[a_sealed_caller_forces_the_default]]).
+    """
     client = local_llm.ReaderClient(StubProcessor(), StubModel())
-    for other in (prompts.POSITIONS_TASK_TEXT, prompts.CAPTION_TASK_GM4, "reader_thread_gm4_v2"):
+    rendered = {task: client.render(task, thread(comments=[])) for task in prompts.READER}
+    assert len(set(rendered.values())) == 2
+    for task, text in rendered.items():
+        assert prompts.PROMPTS[task] in text
+    for other in (prompts.POSITIONS_TASK_TEXT, prompts.CAPTION_TASK_GM4, "reader_thread_gm4_v3"):
         with pytest.raises(ValueError, match="and nothing else"):
             client.render(other, thread(comments=[]))
 

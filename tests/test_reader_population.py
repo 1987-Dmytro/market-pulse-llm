@@ -64,11 +64,28 @@ def test_every_thread_carries_payable_comments_under_unique_ids(kept):
     assert [(one["channel"], one["post_id"]) for one in empty] == [("@tarilka_malyuka", 829)]
 
 
-def test_the_whole_population_renders_under_the_registered_input_ceiling(kept):
+@pytest.mark.parametrize(
+    ("task", "biggest", "median"),
+    [
+        ("reader_thread_gm4", 27593, 6095),
+        ("reader_thread_gm4_v2", 28029, 6531),
+    ],
+)
+def test_the_whole_population_renders_under_the_registered_input_ceiling(
+    kept, task, biggest, median
+):
     """The guard of `prompts.READER_MAX_INPUT_CHARS` must not be able to fire on a thread the probe
     is registered to read: a refusal mid-run would eat the one attempt the contract allows
     ([[lifted_ceiling_is_not_lifted_code]]). So it is measured over all 111, through the rendering
-    the run will use, and the largest is pinned — the number the constant's docstring quotes."""
+    the run will use, and the largest is pinned — the number the constant's docstring quotes.
+
+    BOTH registered texts, and the case is spelled out per task rather than swept: v2 is 436
+    characters longer than v1 and every thread carries that difference, so a ceiling checked only
+    against the frozen instrument would be a check on the one the run no longer sends. The
+    parametrisation is literal so a third reader has to be added here, visibly, rather than
+    inherited ([[a_law_that_grows_loudly]]).
+    """
+    assert task in prompts.READER
     sizes = []
     for one in kept:
         content = prompts.reader_messages_gm4(
@@ -76,9 +93,9 @@ def test_the_whole_population_renders_under_the_registered_input_ceiling(kept):
             one["post_id"],
             one["post_text"],
             [(row["msg_id"], row["text"]) for row in one["comments"]],
+            task=task,
         )[0]["content"]
         sizes.append((len(content), one["channel"], one["post_id"]))
-    biggest = max(sizes)
-    assert biggest == (27593, "@matusi_ukr", 22058)
-    assert biggest[0] < prompts.READER_MAX_INPUT_CHARS
-    assert sorted(sizes)[len(sizes) // 2][0] == 6095
+    assert max(sizes) == (biggest, "@matusi_ukr", 22058)
+    assert biggest < prompts.READER_MAX_INPUT_CHARS
+    assert sorted(sizes)[len(sizes) // 2][0] == median
