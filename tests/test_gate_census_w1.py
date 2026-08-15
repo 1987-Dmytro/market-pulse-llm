@@ -137,6 +137,56 @@ def test_the_narrow_lexicon_is_the_law_and_the_wide_one_is_the_draft_beside_it()
         assert wide["groups"][group] == stems, group
 
 
+def test_a_thread_is_two_carriers_and_the_gate_is_told_which():
+    """SPEC 3.21 (1) scopes the `garmonija` rule to comment text, and a thread has post text in it.
+
+    Passing one carrier for the whole thread would have applied the comment rule to the post — a
+    channel's own post naming Гармонія is a trade mark printed by a retailer, which is exactly the
+    situation `applies_to` exempts. In window-1 the two readings give the same grid, which is why
+    this is asserted on the matcher rather than inferred from a thread count that did not move.
+    """
+    from market_pulse import brands
+    from market_pulse.registry import load_registry
+
+    aliases = brands.watchlist_aliases(
+        load_registry(REPO_ROOT / "config" / "registry.yaml").watchlist
+    )
+    rules = brands.load_watchlist_rules(REPO_ROOT / "config" / "watchlist_rules.yaml")
+    categories = census.compiled(wide=False)
+    bare = "Гармонія — нові смаки вже у магазинах"
+
+    assert census.hits(bare, categories, aliases, rules, census.POST_CARRIER)["brands"] == [
+        "garmonija"
+    ]
+    assert census.hits(bare, categories, aliases, rules, census.CARRIER)["brands"] == []
+    assert census.POST_CARRIER != census.CARRIER
+
+
+def test_the_posts_are_pinned_by_what_was_read_and_not_by_a_live_store():
+    """`data/raw/posts` keeps growing — the next contract collects into it.
+
+    Hashing its 75 files would put a dated expiry on `make check`: the first appended post would
+    redden this suite for a reason nobody would connect to a gate census. The pin is over the 514
+    posts this record actually read, so a new post moves nothing and an EDIT to one of these moves
+    the digest — which is the only change that could move a number here.
+    """
+    pin = RECORD["posts_read"]
+    assert pin["posts"] == RECORD["window"]["threads"]
+    assert not any(name.startswith("data/raw/") for name in RECORD["sources"])
+
+    posts = census.raw_posts()
+    threads, orphans = census.threads(
+        [
+            row
+            for path in summary.leg_files(REPO_ROOT / "data" / "derived", "inference")
+            for row in summary.read_rows(path)
+        ],
+        posts,
+    )
+    assert orphans == []
+    assert census.posts_pin(threads)["sha256"] == pin["sha256"]
+
+
 def test_the_record_names_every_byte_it_read():
     for name, digest in RECORD["sources"].items():
         assert summary.sha256_of(REPO_ROOT / name) == digest, name

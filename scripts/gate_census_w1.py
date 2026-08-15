@@ -27,6 +27,7 @@ interval — see :func:`price` — and never as a single number derived from som
 """
 
 import argparse
+import hashlib
 import json
 import re
 import sys
@@ -49,6 +50,10 @@ PRICES = REPO_ROOT / "results" / "run_5c2_comments.json"
 OUT = REPO_ROOT / "results" / "gate_census_w1.json"
 
 CARRIER = "comment"
+POST_CARRIER = loop.POST_CARRIER
+"""The two carriers a thread is made of. `find_watchlist_brands` is told which one each text is,
+because SPEC 3.21 (1) scopes the `garmonija` rule to comment text — the channel's own post naming
+Гармонія is a trade mark printed by a retailer, not a homonym."""
 
 PLUS_SPAM = re.compile(
     r"^[+\-—•.,!?)(\s]*(?:\+|тест|test|тесты|тест\s*\d*)?[+\-—•.,!?)(\s]*$", re.I
@@ -64,6 +69,27 @@ CONTACT = re.compile(r"(?:https?://|t\.me/|@[A-Za-z][A-Za-z0-9_]{3,})")
 
 def rel(path: Path) -> str:
     return str(path.relative_to(REPO_ROOT)) if path.is_relative_to(REPO_ROOT) else str(path)
+
+
+def posts_pin(all_threads: list[dict]) -> dict:
+    """A pin over the post texts this census READ — not over the files that happen to hold them.
+
+    `data/raw/posts` is a LIVE store: the next collection contract appends to it, and hashing all 75
+    of its files would have made `make check` go red on the first new post for a reason nobody would
+    connect to a gate census (`a_green_suite_can_have_a_shelf_life`, with a dated trigger). What the
+    census actually read is 514 posts, identified by channel and id; a new post has a new id and
+    moves nothing here, while an EDIT to one of these 514 moves the digest, which is the only change
+    that could move a number in this record.
+    """
+    body = "\n".join(
+        f"{thread['channel']}:{thread['post_id']}\t{thread['post_text']}" for thread in all_threads
+    )
+    return {
+        "store": rel(RAW_POSTS),
+        "posts": len(all_threads),
+        "sha256": hashlib.sha256(body.encode("utf-8")).hexdigest(),
+        "rule": "sha256 over `channel:post_id\\ttext` for every post read, in sorted thread order",
+    }
 
 
 def raw_posts() -> dict[tuple[str, int], str]:
@@ -121,12 +147,19 @@ def compiled(wide: bool):
     )
 
 
-def hits(text: str, categories, aliases, rules) -> dict:
-    """What the gate finds in one piece of text: brand ids and category groups."""
+def hits(text: str, categories, aliases, rules, carrier: str) -> dict:
+    """What the gate finds in one piece of text: brand ids and category groups.
+
+    ``carrier`` is threaded per TEXT and not fixed for the thread. A thread is two carriers — one
+    post and its comments — and SPEC 3.21 (1) scopes the `garmonija` rule to comment text on
+    purpose: a channel's own post naming Гармонія is a retailer printing a trade mark, which is the
+    same situation the rule's `applies_to` exempts a leaflet page for. Passing one constant here
+    would have applied the comment rule to the post and silently dropped those threads.
+    """
     found = (
-        brands.find_watchlist_brands(text, aliases, rules, carrier=CARRIER)
+        brands.find_watchlist_brands(text, aliases, rules, carrier=carrier)
         if rules
-        else (brands.find_watchlist_brands(text, aliases))
+        else brands.find_watchlist_brands(text, aliases)
     )
     return {
         "brands": sorted(one["brand_id"] for one in found),
@@ -205,11 +238,15 @@ def cell(
                 else:
                     surviving.append(row)
             comments = surviving
-        texts = [thread["post_text"]] + [summary.comment_text(row) for row in comments]
+        # (text, carrier) and not a list of strings: the post is a post and the comments are
+        # comments, and one of the three rules only applies to the second kind
+        texts = [(thread["post_text"], POST_CARRIER)] + [
+            (summary.comment_text(row), CARRIER) for row in comments
+        ]
         rule = rules if "varto_rule" in active else None
         if not any(
             one["brands"] or one["categories"]
-            for one in (hits(text, categories, aliases, rule) for text in texts)
+            for one in (hits(text, categories, aliases, rule, carrier) for text, carrier in texts)
         ):
             continue
         kept.append(
@@ -245,8 +282,6 @@ def census(argv: list[str] | None = None) -> dict:
     for path in summary.leg_files(args.derived_root, loop.RECORD_TYPE):
         sources[rel(path)] = summary.sha256_of(path)
         comments += summary.read_rows(path)
-    for path in sorted(RAW_POSTS.glob("*.jsonl")):
-        sources[rel(path)] = summary.sha256_of(path)
 
     posts = raw_posts()
     all_threads, orphans = threads(comments, posts)
@@ -404,6 +439,7 @@ def census(argv: list[str] | None = None) -> dict:
             " this window and says so above rather than reporting a zero as an effect"
         ),
         "sources": sources,
+        "posts_read": posts_pin(all_threads),
         "producer": {
             "script": rel(Path(__file__)),
             "sha256": summary.sha256_of(Path(__file__)),
