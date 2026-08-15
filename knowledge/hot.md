@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-15 12:30:56 (every SessionStart)
+**Auto-refreshed:** 2026-08-15 12:34:24 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+bc71d0d docs(vault): the eighth segment card, in the day and in hot.md
 dc6a88e docs(report): phase6a -- the eighth segment card, and Dv341
 bc6d2bd fix(phase6a): the segment cut rendered seven cards where the registry holds eight
 06fcd93 docs(vault): the phase6a checkpoint -- what the layer said about window-1
 3a16b55 docs(report): phase6a -- the index block that could not move, and 902 numbers
-a7fd072 fix(phase6a): the census printout skipped a table it had just filled
 ```
 
 ## 📋 Recent decisions
