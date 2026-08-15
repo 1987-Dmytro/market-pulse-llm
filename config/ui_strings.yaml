@@ -274,20 +274,21 @@ strings:
       {nsr_payable} on the payable one.
   t0.insight.dominant_aspect:
     ua: >-
-      Розмова тримається на одному аспекті: {top_aspect} — {top_share} усіх міток. Наступний за
-      ним — {second_aspect}: {top_labels} проти {second_labels}. Це профіль причин, а не частка
-      рядків.
+      Найчастіший аспект розмови — {top_aspect}: {top_share} усіх міток. Наступний за ним —
+      {second_aspect}: {top_labels} проти {second_labels}. Це профіль причин, а не частка рядків.
     en: >-
-      The conversation rests on one aspect: {top_aspect} at {top_share} of all labels. Next comes
-      {second_aspect}: {top_labels} against {second_labels}. This is a profile of reasons, not a
-      share of rows.
+      The most frequent aspect of the conversation is {top_aspect} at {top_share} of all labels.
+      Next comes {second_aspect}: {top_labels} against {second_labels}. This is a profile of
+      reasons, not a share of rows.
   t0.insight.coldest_segment:
     ua: >-
-      Єдиний сегмент із від'ємною чистою тональністю — {segment} ({nsr} на {rows} рядках);
-      найтепліший — {warmest} ({warmest_nsr}). Сегмент, а не ринок: див. вкладку сегментів.
+      Від'ємна чиста тональність — у {negatives} з {rated} сегментів, що говорили. Найхолодніший
+      з них — {segment} ({nsr} на {rows} рядках), найтепліший — {warmest} ({warmest_nsr}).
+      Це сегмент, а не ринок: див. вкладку сегментів.
     en: >-
-      The only segment with a negative net sentiment is {segment} ({nsr} over {rows} rows); the
-      warmest is {warmest} ({warmest_nsr}). A segment, not the market: see the segments tab.
+      A negative net sentiment shows in {negatives} of the {rated} segments that spoke. The
+      coldest of them is {segment} ({nsr} over {rows} rows) and the warmest is {warmest}
+      ({warmest_nsr}). That is a segment, not the market: see the segments tab.
   t0.kpi.context.volume:
     ua: "поруч: безтекстові коментарі · сторінки листівок · тексти постів"
     en: "beside it: text-less comments · leaflet pages · post texts"

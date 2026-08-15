@@ -910,8 +910,13 @@ class Page:
         ]
         coldest = min(rated, key=lambda one: (one[1], one[0]))
         warmest = max(rated, key=lambda one: (one[1], one[0]))
+        # the sentence states how many segments are negative rather than asserting that this one is
+        # the only one: a rule may only claim what it counted, and «the only segment» was true of
+        # window-1 and guaranteed by nothing
         return self.s.html(
             "t0.insight.coldest_segment",
+            rated=num(len(rated)),
+            negatives=num(sum(1 for one in rated if one[1] < 0)),
             segment=self.s(f"segment.{coldest[0]}"),
             nsr=pct(coldest[1], 2, sign=True),
             rows=num(coldest[2]),
@@ -1254,6 +1259,8 @@ class Page:
             body.append(
                 f'<tr data-brand="{esc(brand)}" data-own="{int(brand in own)}"'
                 f' data-mentions="{sov["mentions"][brand]}" data-sov="{sov["share"][brand]}"'
+                # a brand nobody said anything about has no NSR; -9 sorts it below every real
+                # rate (which lives in [-1, 1]) instead of pretending it is a zero
                 f' data-nsr="{rate if rate is not None else -9}" data-promo="{promo}">'
                 f'<td class="name" title="{esc(brand)}">'
                 f"{esc(self.brand_names.get(brand, brand))}{drill}</td>"
@@ -1761,10 +1768,27 @@ document.querySelectorAll('table.sortable').forEach(function(table){
 """
 
 
+def embeddable(export_bytes: bytes, export_path: Path) -> bytes:
+    """The export as it will sit inside a `<script type="application/json">` block, or a refusal.
+
+    The blob is embedded VERBATIM so the page can be checked against the file byte for byte, which
+    means an export carrying a closing tag would end the script element early and take the rest of
+    the document with it. Today's export has no `</` in it at all; a future one that does must be
+    escaped by its producer rather than quietly mangled here.
+    """
+    if b"</" in export_bytes:
+        raise SystemExit(
+            f"{export_path.name} contains `</` and would be embedded verbatim in a <script> block —"
+            " the page would break at that byte. Stop and report: the fix belongs to the export's"
+            " producer, not to an escape in the dashboard."
+        )
+    return export_bytes
+
+
 def build_page(export_path: Path, strings_path: Path, metrics_path: Path, derived: Path) -> Page:
     """The assembled page, unrendered — the test that holds `config/ui_strings.yaml` against what
     the document actually asks for needs the `Strings` instance the build used, not a second one."""
-    export_bytes = export_path.read_bytes()
+    export_bytes = embeddable(export_path.read_bytes(), export_path)
     record = json.loads(export_bytes.decode("utf-8"))
     strings = Strings(strings_path)
     dictionary = yaml.safe_load(metrics_path.read_text(encoding="utf-8"))

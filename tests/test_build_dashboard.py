@@ -169,6 +169,42 @@ def test_no_figure_was_typed_by_hand(tmp_path):
     assert len(shas) == BANNERS
 
 
+def test_an_export_that_would_break_the_script_block_stops_the_build(tmp_path):
+    """The blob is embedded verbatim so it can be compared byte for byte — which is also why a
+    closing tag inside it would end the element early and swallow the rest of the page."""
+    assert b"</" not in builder.EXPORT.read_bytes()
+
+    spoilt = tmp_path / "tagged.json"
+    spoilt.write_bytes(builder.EXPORT.read_bytes().replace(b'"phase": "6a"', b'"phase": "</b>"'))
+    with pytest.raises(SystemExit, match="would be embedded verbatim"):
+        builder.build(spoilt, builder.STRINGS, builder.METRICS, builder.DERIVED)
+
+
+def test_the_three_insights_claim_only_what_their_rule_counted(page):
+    """SPEC 3.20 (4): a code-generated reading may state what it computed and nothing beside it.
+
+    The segment insight counts the negative segments instead of calling one of them the only one —
+    that was true of window-1 and guaranteed by nothing, which is how a hand-typed claim gets in
+    through a template.
+    """
+    cards = [page.insight_text_less(), page.insight_aspect(), page.insight_segment()]
+
+    assert len(cards) == 3
+    for rendered, paths in cards:
+        assert paths and all(part.startswith(("metrics.", "cuts.")) for part in paths)
+        assert '<span class="ua">' in rendered and '<span class="en">' in rendered
+    segments = RECORD["cuts"]["comment_by_segment"]
+    negatives = sum(
+        1
+        for card in segments.values()
+        if card["payable"]["scored"]
+        and card["payable"]["sentiment"].get("positive", 0)
+        < card["payable"]["sentiment"].get("negative", 0)
+    )
+    assert f"у {negatives} з" in cards[2][0] and f"in {negatives} of the" in cards[2][0]
+    assert "Єдиний" not in cards[2][0] and "only segment" not in cards[2][0]
+
+
 def test_every_honest_stub_and_every_card_the_law_names_is_on_the_page():
     """Guard 5: the export's seven gaps, the registry's eight audiences, the law's four chains."""
     body = chrome(PAGE)
