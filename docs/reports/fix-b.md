@@ -225,10 +225,11 @@ would have moved its own geometry and the diff would have been longer than one.
 
 | file | sha256 (16) | bytes |
 | --- | --- | --- |
-| `results/dashboard_data_w1.json` | `9cf193f5ba978264` | 222 592 |
-| `dashboard/index.html` | `1e87547f9f7c533c` | 715 162 |
+| `results/dashboard_data_w1.json` | `939d6a9b1af85738` | 222 697 |
+| `dashboard/index.html` | `0723226c9db10bfd` | 715 267 |
 
-Commits: `a25291a` (step 0) · `42494e1` (the table, the page, the two artifacts).
+Commits: `a25291a` (step 0) · `42494e1` (the table, the page, the two artifacts) · the narrowing of
+`positions_table.law` described in finding (1), with both artifacts rebuilt on it.
 
 ---
 
@@ -243,6 +244,12 @@ exposure the new table's `depth` column was designed to avoid, on a surface the 
 name and that 3.18 (1) can be read as permitting (it prints a depth, not a price). It is reported
 and NOT changed: the fix is one line — drop `depth` from `position_row` — and it belongs to the
 operator, not to a contract that was told to touch this table only.
+
+What WAS changed is the claim: `promo.positions_table.law` first read «that number reaches no
+surface», which this finding falsifies — the export would have shipped a false sentence and the page
+embeds the export byte for byte. It now says no column of THIS table carries the arithmetic reading
+and points here for the rest. The record and the report agree; the drill-down still prints what it
+prints, and that is the operator's ruling to make.
 
 **(2) Two columns, one number.** 3.21 (4) names «printed −N% × depth», and under 3.18 (1) the
 second is the first divided by a hundred. The table renders both because the law lists both. If the

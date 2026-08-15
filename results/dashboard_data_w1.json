@@ -4087,7 +4087,7 @@
   "phase": "6a",
   "promo": {
     "positions_table": {
-      "law": "SPEC 3.21 (4). `promo_price` is the green leg of 3.18 (1) (80/80 in the team lead's read of the B′ population). `depth` is the PRINTED badge's reading — printed_pct / 100 — and never the arithmetic depth of 3.17 (3), which is computed from the extracted old price: printing it beside the promo price would hand back `price_old = promo_price / (1 - depth)`, and that number reaches no surface. The extracted old price is in no field of this table.",
+      "law": "SPEC 3.21 (4). `promo_price` is the green leg of 3.18 (1) (80/80 in the team lead's read of the B′ population). `depth` is the PRINTED badge's reading — printed_pct / 100 — and never the arithmetic depth of 3.17 (3), which is computed from the extracted old price: printing it beside the promo price would hand back `price_old = promo_price / (1 - depth)`, so no column of this table carries the arithmetic reading. The extracted old price is in no field of this table. This says nothing about other surfaces — see docs/reports/fix-b.md finding (1).",
       "rows": [
         {
           "brand": {
@@ -7935,7 +7935,7 @@
     },
     "producers": {
       "scripts/build_aggregates.py": "31464ced3f521c1ec003d50a77df689c7a94e9826bc476934bb25bfa3674a684",
-      "scripts/export_dashboard_data.py": "714f9c260ab6d0141e28764917227c77a83cda57e831aca9c0206e854b9e30e1",
+      "scripts/export_dashboard_data.py": "8932a3aacfb909a1a61d4b806d022cbd00e77751934d80f62fa0827810fba85d",
       "scripts/window_summary_5c2.py": "239d2d5fcc0f0c93158ca41383b5ce20beb7f8e9db38974913a302ea4831fdaf",
       "src/market_pulse/aggregates.py": "0d0a33cc671f00891dfc258479580e0b4ee1ca77cdc48d9c63bf924c74b4b627",
       "src/market_pulse/brands.py": "33ed070b3df9ac37d4c8579b9ecb372a9bd38b56be5d2091f7009f1579ce1674",

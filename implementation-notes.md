@@ -7523,3 +7523,10 @@ contract — the code was an afternoon, choosing what `depth` MEANS and writing 
 reader meets it was the work. Dv372 is the shape worth keeping: a surface can obey the letter of a
 prohibition and still return the forbidden number by arithmetic, and the question «what can a reader
 DERIVE from this row» is not asked by any guard we have.
+- **Dv373** — the record made a claim this contract had no standing to make. `positions_table.law`
+  ended «and that number reaches no surface» — unqualified — while Dv372 says the drill-down on the
+  SAME page prints the arithmetic depth beside the promo price on 15 of 20 drawn rows. The export
+  would have shipped a false sentence and the page embeds the export byte for byte; no number was
+  wrong, so the re-derivation script could not see it — the claim is prose. Narrowed to «no column
+  of this table», with a pointer to the report's finding. The drill-down is untouched: the finding
+  stands as the operator's to rule on. [cause: overclaim]

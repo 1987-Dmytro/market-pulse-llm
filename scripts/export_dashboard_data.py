@@ -423,8 +423,9 @@ def promo_block(conn, window_id: str) -> dict:
                 " lead's read of the B′ population). `depth` is the PRINTED badge's reading —"
                 " printed_pct / 100 — and never the arithmetic depth of 3.17 (3), which is computed"
                 " from the extracted old price: printing it beside the promo price would hand back"
-                " `price_old = promo_price / (1 - depth)`, and that number reaches no surface. The"
-                " extracted old price is in no field of this table."
+                " `price_old = promo_price / (1 - depth)`, so no column of this table carries the"
+                " arithmetic reading. The extracted old price is in no field of this table. This"
+                " says nothing about other surfaces — see docs/reports/fix-b.md finding (1)."
             ),
             "rows": rows,
         }
