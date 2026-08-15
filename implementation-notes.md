@@ -7613,3 +7613,32 @@ driver — code written against a decision nobody has taken.
 was designed to collapse an 8×-wide interval; nobody had noticed that the interval's own floor plus
 one weight load is already over the ceiling. The division took two minutes and replaced the whole
 paid rung.
+
+### probe-a, the paid half — the cap raised, and the rate it bought ($0.0750 of $0.45)
+
+The operator raised the cap to $0.45 after the arithmetic above; the registration was amended and
+re-committed (`5790543`) **before any endpoint existed**, moving the ceiling and nothing else.
+
+**The number:** **54.806 s a thread** (three registered warm-up threads, 164.4 s of billed worker
+time), against the census's per-comment unit of 4.247 s — **12.9×**. The window projects to
+**$1.8657** by thread and **$4.1807** by payable comment; the pessimistic one binds, 111 threads is
+**101 minutes** against a 30-minute budget, and the gate said STOP before any further call. Four
+bars read UNSCORED with their cause in `results/reader_probe_verdict.json` — never 0.0.
+
+**The rate is a property of the card.** The endpoint drew an **NVIDIA L4** (class AMPERE_24, 23 034
+MiB) — the 24 GB class EU-RO-1 offers with a volume. Re-price on a faster card before re-pricing
+anything else.
+
+**Staging is cheaper than the runbooks imply on a warm volume**: a fetch + hard reset (never
+`rm -rf` — the gitignored 489 840 816-byte adapter lives inside `repo/`) took **2 min 26 s** on an
+RTX 2000 Ada, $0.0097. Boot with flash-boot and a cached 59 GB was ~$0.015. The whole no-output rung
+was ~$0.025, not the $0.16 the vis-b ledger implied.
+
+**Two frozen interface defects the money bought** (never edit after the endpoint exists):
+`entities` comes back as an object keyed by name instead of a list (all three verdicts; two of the
+three parse whole once coerced offline), and one signal carries `evidence: [null]` because the
+prompt's own «for the post the id is null» rule reached a field the schema requires to be msg_ids.
+
+**And the reader reads.** `@tarilka_malyuka:715` — a recipe thread outside the manual reading —
+came back with three dairy trade marks resolved, each with a phrase and its quote, plus a `похвала`
+comparing the thickness of two of them.
