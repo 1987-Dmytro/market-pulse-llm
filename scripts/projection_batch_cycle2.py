@@ -437,12 +437,17 @@ def break_even(arms: tuple[int, ...]) -> dict:
         }
     cheapest = min(arm["with_a_batch_1_control_usd"] for arm in costs["arms"])
     dearest = max(arm["with_a_batch_1_control_usd"] for arm in costs["arms"])
+    # read back out of the table above rather than recomputed: a prose figure that took its own
+    # path to the same quantity is how a record ends up disagreeing with itself by a rounding
+    payable_at_30 = out["depths"]["minus_30_pct"]["saving_by_volume_usd"][
+        "one_cycle_window_payable_after_3_19"
+    ]
     out["readings"] = [
         (
-            f"the 3.19 skip has already banked ${window_empty * price:.4f} per window at $0 —"
+            f"the 3.19 skip has already banked ${round(window_empty * price, 4)} per window at $0 —"
             f" {window_empty} rows of {window_rows} never reach the queue. That is more than a"
-            f" -30% batch would save on the rows that remain"
-            f" (${(window_rows - window_empty) * price * 0.30:.4f}) and it needed no probe."
+            f" -30% batch would save on the rows that remain (${payable_at_30})"
+            " and it needed no probe."
         ),
         (
             f"a probe costs between ${cheapest:.4f} and ${dearest:.4f} with a control arm. Against"

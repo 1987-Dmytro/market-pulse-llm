@@ -253,7 +253,7 @@
       }
     },
     "readings": [
-      "the 3.19 skip has already banked $1.7727 per window at $0 — 1361 rows of 5075 never reach the queue. That is more than a -30% batch would save on the rows that remain ($1.4512) and it needed no probe.",
+      "the 3.19 skip has already banked $1.7727 per window at $0 — 1361 rows of 5075 never reach the queue. That is more than a -30% batch would save on the rows that remain ($1.4511) and it needed no probe.",
       "a probe costs between $0.2145 and $2.1266 with a control arm. Against the history backlog (11143 rows) it repays at both depths; against a single post-3.19 window it repays only at -50%, and only with the smaller arms.",
       "the window's 26.8% text-less share is NOT applied to the history backlog: it is a rate measured on one 4-week window, and the history is a different sample (.claude/rules/registrations-and-draws.md). How many of the 11 143 carry no text is derivable at $0 and no anchor states it — NOT ANSWERED HERE."
     ]
@@ -346,7 +346,7 @@
     ],
     "producer": {
       "script": "scripts/projection_batch_cycle2.py",
-      "sha256": "06f998e54230be1191ef08a78441dda4ea962e45e821c88aa9dbcb385210633c",
+      "sha256": "b47e237d5c17eb4b9ab7be30fb278ccd681541d0b482957d4978d4f0c6d11638",
       "why": "no git block: `git status --porcelain` is a fact about the tree and would move this record on somebody else's commit (`projection_5c2.producer`'s reason)"
     },
     "not_typed": "every figure above is resolved through `projection_5c2.cite` / `dig` by the dotted path printed beside it, except HISTORY_ROWS, which is the contract's own reference volume and is grepped back out of it by the test"
