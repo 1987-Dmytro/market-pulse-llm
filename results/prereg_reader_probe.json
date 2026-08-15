@@ -278,7 +278,7 @@
     "borrowed": {
       "scripts/reader_population.py": "5ecb897d3d620d7d27916a3aa578a599ba1cd7c835abfb4ea136a350a440914a",
       "scripts/write_reader_gold.py": "20a687a630387fa2556cb47cc890c4631e1cfff3a2e58dd86a927b0414385e7b",
-      "src/market_pulse/local_llm.py": "f9a6c4d6ed4bdc549519083f1873de3132fb7ba9a5d41d87a73d6c573c53c47f",
+      "src/market_pulse/local_llm.py": "b8a31c862c6600492914d6e556e4d7d5bc0521980261e0305579ed500049b6bc",
       "src/market_pulse/prompts.py": "2250180fcadc18fef102991bc00b5c3ba3f2afffafb77c69d98f169eee9fc70f",
       "src/market_pulse/scorer.py": "dbb5406a502f813ba1b4940e0914310efd632386a8da60e0c002cc8964a97d4f"
     },

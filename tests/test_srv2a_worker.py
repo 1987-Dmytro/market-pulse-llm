@@ -12,6 +12,7 @@ that can be wrong for free on a Mac and expensive on a billed worker:
 * the batch-1 refusal still fires on the exact parity command the runbook prints.
 """
 
+import importlib.metadata
 import importlib.util
 import json
 import re
@@ -130,13 +131,23 @@ def test_the_runtime_block_gains_the_reported_libraries_and_nothing_else():
 
 
 def test_a_library_that_is_not_installed_is_reported_as_absent():
-    """peft is the real negative control: it is not installed on the Mac, and `None` is the
-    answer rather than a missing key or an ImportError."""
-    assert handler.library_versions(("peft",)) == {"peft": None}
+    """`None` is the answer for an absent distribution, rather than a missing key or an ImportError.
+
+    The subject is a name that cannot be installed. It used to be `peft`, which was absent from the
+    Mac — until probe-a installed the volume's pin here to run `preflight_serving_guards.py`, and a
+    control whose premise was an accident of one machine started passing for the wrong reason
+    ([[the_control_whose_premise_stopped_being_true]]). peft is still read below, and now it is read
+    the only way that stays true either way: against what the metadata database says.
+    """
     assert handler.library_versions(("no-such-distribution-srv2a",)) == {
         "no-such-distribution-srv2a": None
     }
     assert handler.library_versions(("pytest",))["pytest"] == pytest.__version__
+    try:
+        installed = importlib.metadata.version("peft")
+    except importlib.metadata.PackageNotFoundError:
+        installed = None
+    assert handler.library_versions(("peft",)) == {"peft": installed}
 
 
 # --- the pins, re-derived from the records the runbook cites ----------------

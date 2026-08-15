@@ -64,6 +64,10 @@ answers, and two tuples that could disagree is the one shape `assert_serving` ca
 BASE_ONLY = {
     serving.CAPTION_CONFIG: "SPEC amendment 3.13 (3)",
     serving.POSITIONS_CONFIG: "SPEC amendment 3.17 (9)",
+    # NOT an amendment, and the value says so: probe-a registers a PROBE, and a pre-registration
+    # is a registration rather than law. The layer's amendment comes after the adjudication
+    # sitting; a number invented here would put a ruling in the record nobody made.
+    serving.READER_CONFIG: ("docs/PROMPT-probe-a.md D4 with results/prereg_reader_probe.json"),
 }
 """The configs that serve the NF4 BASE with the adapter OFF, each beside the amendment that fixes
 it there. Both refusals below read this table rather than naming one config, so the second
@@ -145,6 +149,15 @@ def settings(env: dict) -> dict:
         "adapter_dir": None if merged else path,
         "revision": revision,
     }
+
+
+BASE_ONLY_CLIENT = {
+    serving.CAPTION_CONFIG: local_llm.CaptionClient,
+    serving.POSITIONS_CONFIG: local_llm.PositionsClient,
+    serving.READER_CONFIG: local_llm.ReaderClient,
+}
+"""Which client each adapter-free config builds. A test holds its keys to :data:`BASE_ONLY`, so a
+sixth base-only configuration cannot be added without saying what answers its jobs."""
 
 
 def assert_no_adapter(model):
@@ -229,6 +242,7 @@ MAX_NEW_TOKENS = {
     "B": local_llm.MAX_NEW_TOKENS,
     serving.CAPTION_CONFIG: local_llm.CAPTION_MAX_NEW_TOKENS,
     serving.POSITIONS_CONFIG: local_llm.POSITIONS_MAX_NEW_TOKENS,
+    serving.READER_CONFIG: local_llm.READER_MAX_NEW_TOKENS,
 }
 """What each config's client actually generates, which is what ``info`` has to report.
 
@@ -256,6 +270,7 @@ def describe(config: dict, runtime: dict, artifact_sha: str, merged_provenance: 
     merged = served == "B"
     caption = served == serving.CAPTION_CONFIG
     positions = served == serving.POSITIONS_CONFIG
+    reader = served == serving.READER_CONFIG
     return {
         "serving_config": served,
         "merge_state": serving.MERGE_STATE[served],
@@ -290,6 +305,12 @@ def describe(config: dict, runtime: dict, artifact_sha: str, merged_provenance: 
             if positions
             else {}
         ),
+        # the READER's equivalent, and a single sha because the config serves ONE registered
+        # prompt. The volume carries its own `repo/`, a fetch that names a missing ref leaves it
+        # on the previous session's commit while printing "Already up to date", and the driver
+        # refuses before the first paid thread unless this equals what the Mac renders — the
+        # cheap net `caption_prompt_sha256` already is for its own instrument.
+        **({"reader_prompt_sha256": prompts.prompt_sha256(prompts.READER_TASK)} if reader else {}),
         "quantization": local_llm.QUANTIZATION,
         "chat_template": local_llm.CHAT_TEMPLATE,
         "max_new_tokens": MAX_NEW_TOKENS[served],
@@ -373,7 +394,7 @@ def dump_rows(path: str, start: int, keys: list[str], replies: list[dict]) -> No
             )
 
 
-OP_FIELD = {"batch": "texts", "caption": "images", "positions": "items"}
+OP_FIELD = {"batch": "texts", "caption": "images", "positions": "items", "reader": "threads"}
 """Each generation op and the payload field that carries its inputs.
 
 ``positions`` takes ``items`` rather than a shape-specific name because the op serves two legs:
@@ -435,6 +456,9 @@ def handle(job: dict, client, info: dict) -> dict:
             elif op == "positions":
                 fresh = client.positions(payload["task"], window)
                 keys = [serving.positions_key(item) for item in window]
+            elif op == "reader":
+                fresh = client.read(payload["task"], window)
+                keys = [serving.reader_key(item) for item in window]
             else:
                 context = posts[start : start + size] if posts else None
                 fresh = client.batch(payload["task"], window, context)
@@ -465,11 +489,10 @@ class Worker:
             # would render the template and drop the picture.
             processor, model = local_llm.load_captioner(weights, revision=config["revision"])
             assert_no_adapter(model)
-            client = (
-                local_llm.CaptionClient(processor, model)
-                if config["serving_config"] == serving.CAPTION_CONFIG
-                else local_llm.PositionsClient(processor, model)
-            )
+            # a TABLE and not a chain of conditionals, the same reason `serving.CONFIG_OPS` is
+            # one: with three base-only configs an `if CAPTION else` answers every other one
+            # with the last branch, and the reply would be a legal answer from the wrong client
+            client = BASE_ONLY_CLIENT[config["serving_config"]](processor, model)
             runtime = local_llm.environment(model, weights=weights, revision=config["revision"])
             # No artifact sha: there is no adapter to hash and hashing the base checkpoint
             # would walk 62 GB at every cold start. What pins this instrument is the revision,

@@ -12,6 +12,10 @@ a bug that gets fixed next run — it is the attempt. What is checked:
 
 The values are transcription of SPEC 3.17 (9), and one test reads them back out of the amendment
 rather than trusting this file to have copied them right.
+
+probe-a's READER config joins them at the bottom of the file rather than in one of its own: it is
+the third adapter-free configuration, it shares every table and every stub here, and a fifth config
+added elsewhere is a config the matrix above would never have been taught about.
 """
 
 import importlib.util
@@ -65,14 +69,27 @@ def test_positions_refuses_an_unpinned_base():
         handler.settings({"SERVING_CONFIG": "POSITIONS"})
 
 
-def test_both_base_only_configs_read_one_refusal_table():
+def test_every_base_only_config_reads_one_refusal_table():
     """The negative control on the two above: if POSITIONS were spelled out in its own branch, a
     guard added to CAPTION later would not reach it. `BASE_ONLY` is what makes them one path, and
-    each entry names the amendment that put its config there."""
-    assert set(handler.BASE_ONLY) == {serving.CAPTION_CONFIG, serving.POSITIONS_CONFIG}
+    each entry names the authority that put its config there.
+
+    The membership stays a literal list, so a fourth adapter-free config has to be added HERE as
+    well as there ([[a_law_that_grows_loudly]]) — and READER's authority is deliberately NOT a SPEC
+    amendment: probe-a registers a probe, and an invented amendment number would be a ruling in the
+    record that the operator never made."""
+    assert set(handler.BASE_ONLY) == {
+        serving.CAPTION_CONFIG,
+        serving.POSITIONS_CONFIG,
+        serving.READER_CONFIG,
+    }
     assert handler.BASE_ONLY[serving.POSITIONS_CONFIG] == "SPEC amendment 3.17 (9)"
+    assert "SPEC" not in handler.BASE_ONLY[serving.READER_CONFIG]
+    assert "prereg_reader_probe.json" in handler.BASE_ONLY[serving.READER_CONFIG]
     for config in handler.BASE_ONLY:
         assert serving.MERGE_STATE[config] == "base-no-adapter"
+        assert config in handler.BASE_ONLY_CLIENT
+    assert set(handler.BASE_ONLY_CLIENT) == set(handler.BASE_ONLY)
 
 
 # --- the op router: every cell, not two directions of one pair ----------------
@@ -95,6 +112,10 @@ def worker_for(config: str):
             asked.append(("positions", task, items))
             return [{"content": "[]"} for _ in items]
 
+        def read(self, task, threads):
+            asked.append(("reader", task, threads))
+            return [{"content": "{}"} for _ in threads]
+
     env = {
         "A": {"SERVING_CONFIG": "A", "ADAPTER_DIR": "/a", "MODEL_REVISION": PINNED_REVISION},
         "B": {"SERVING_CONFIG": "B", "MERGED_DIR": "/m"},
@@ -103,6 +124,10 @@ def worker_for(config: str):
             "MODEL_REVISION": PINNED_REVISION,
         },
         serving.POSITIONS_CONFIG: positions_env(),
+        serving.READER_CONFIG: {
+            "SERVING_CONFIG": "READER",
+            "MODEL_REVISION": PINNED_REVISION,
+        },
     }[config]
     client = Client()
     worker = handler.Worker(
@@ -116,13 +141,18 @@ JOB = {
     "batch": {"op": "batch", "task": "T1", "texts": ["a"]},
     "caption": {"op": "caption", "task": prompts.CAPTION_TASK_GM4, "images": [["data:x"]]},
     "positions": {"op": "positions", "task": prompts.POSITIONS_TASK_TEXT, "items": ["a row"]},
+    "reader": {
+        "op": "reader",
+        "task": prompts.READER_TASK,
+        "threads": [{"channel": "@c", "post_id": 1, "post": "пост", "comments": [[2, "коментар"]]}],
+    },
 }
 
 
 @pytest.mark.parametrize("config", serving.CONFIGS)
 @pytest.mark.parametrize("op", sorted(handler.OP_FIELD))
 def test_every_cell_of_the_config_by_op_matrix(config, op):
-    """Twelve cells, and only the four `serving.CONFIG_OPS` names may be answered.
+    """Every cell of the matrix, and only the `serving.CONFIG_OPS` names may be answered.
 
     The reading this replaces was `(op == "caption") != (served == CAPTION)`, which is correct for
     two ops and silently permissive for three: a `batch` job on POSITIONS reads False on both
@@ -222,6 +252,7 @@ BUILDS = {
     "B": "LocalClient",
     serving.CAPTION_CONFIG: "CaptionClient",
     serving.POSITIONS_CONFIG: "PositionsClient",
+    serving.READER_CONFIG: "ReaderClient",
 }
 
 
@@ -247,12 +278,25 @@ def test_info_reports_the_token_ceiling_each_config_really_generates():
 
 def test_the_loader_builds_the_client_this_table_names():
     """The negative control on the test above: it holds a constant against a class, and the map
-    from config to class lives in `Worker._load`. If the loader ever built a `CaptionClient` for
-    POSITIONS, every assertion above would still pass and the worker would generate 400."""
+    from config to class is `handler.BASE_ONLY_CLIENT`. If it ever named `CaptionClient` for
+    POSITIONS, every assertion above would still pass and the worker would generate 400.
+
+    Checked by IDENTITY and not by grepping the loader's source: the map used to be a conditional
+    inside `_load`, and a third base-only config turned that `if/else` into a branch that answered
+    two configs with one client. What still has to be grepped is that `_load` reads this table —
+    a map nothing consults is decoration ([[a_moved_constant_fails_green]])."""
     source = inspect.getsource(handler.Worker._load)
+    assert "BASE_ONLY_CLIENT[config[" in source
     for config, class_name in BUILDS.items():
-        assert f"local_llm.{class_name}(" in source, config
-    assert "PositionsClient" in source.split("CaptionClient")[1], (
+        if config in handler.BASE_ONLY_CLIENT:
+            assert handler.BASE_ONLY_CLIENT[config] is getattr(local_llm, class_name), config
+        else:
+            assert f"local_llm.{class_name}(" in source, config
+    assert list(handler.BASE_ONLY_CLIENT) == [
+        serving.CAPTION_CONFIG,
+        serving.POSITIONS_CONFIG,
+        serving.READER_CONFIG,
+    ], (
         "the POSITIONS branch is the else of the CAPTION test — if that inverts, both configs"
         " still load and each serves the other's ceiling"
     )
@@ -427,3 +471,52 @@ def test_an_empty_row_never_reaches_the_model():
     client = local_llm.PositionsClient(StubProcessor(), StubModel())
     with pytest.raises(ValueError, match="empty row"):
         client.positions(prompts.POSITIONS_TASK_TEXT, ["   "])
+
+
+# --- the reader client (probe-a D4) ------------------------------------------
+
+
+def thread(**moves) -> dict:
+    return {"channel": "@VARUS_channel", "post_id": 10613, "post": "До Дня морозива", **moves}
+
+
+def test_the_reader_sends_one_thread_with_no_image_and_stays_greedy():
+    processor, model = StubProcessor(), StubModel("{}")
+    client = local_llm.ReaderClient(processor, model)
+    replies = client.read(prompts.READER_TASK, [thread(comments=[[21599, "А є без цукру?"]])])
+    assert processor.template_kwargs == local_llm.CHAT_TEMPLATE
+    # a thread is a post and its comments: no picture travels, so no `images` kwarg is sent
+    assert processor.calls[-1]["images"] is None
+    assert processor.calls[-1]["add_special_tokens"] is False
+    assert '<comment msg_id="21599">' in processor.calls[-1]["text"]
+    assert model.kwargs == {"max_new_tokens": local_llm.READER_MAX_NEW_TOKENS, "do_sample": False}
+    assert replies[0]["content"] == "{}" and replies[0]["cost"] == 0.0
+    assert replies[0]["usage"]["prompt_tokens"] == 3
+
+
+def test_the_reader_serves_one_registered_prompt_and_nothing_else():
+    client = local_llm.ReaderClient(StubProcessor(), StubModel())
+    for other in (prompts.POSITIONS_TASK_TEXT, prompts.CAPTION_TASK_GM4, "reader_thread_gm4_v2"):
+        with pytest.raises(ValueError, match="and nothing else"):
+            client.render(other, thread(comments=[]))
+
+
+def test_a_verdict_that_used_its_whole_budget_says_so():
+    """A caption cut off at its ceiling is a shorter caption; a verdict cut off is a PARSE FAILURE,
+    and `finish_reason` is the only field that can tell the driver which of the two it holds."""
+    client = local_llm.ReaderClient(StubProcessor(), StubModel("{}"), max_new_tokens=2)
+    reply = client.read(prompts.READER_TASK, [thread(comments=[])])[0]
+    assert reply["finish_reason"] == "length"
+
+
+def test_a_template_that_stopped_emitting_bos_is_a_refusal_for_the_reader_too():
+    with pytest.raises(RuntimeError, match="no longer starts the reader prompt"):
+        local_llm.ReaderClient(StubProcessor(bos="<different>"), StubModel())
+
+
+def test_the_reader_dump_keys_a_thread_by_its_identity_and_not_by_its_request():
+    """`serving.reader_key` is what the worker's dump hashes a row under. The thread's identity is
+    5 000 characters shorter than its request and is the only part of it a record can be joined by
+    — the driver writes the same key, and §B of the runbook is where the two are compared."""
+    assert serving.reader_key(thread(comments=[[1, "a"]])) == "@VARUS_channel:10613"
+    assert serving.reader_key({"channel": "@x", "post_id": 7}) == "@x:7"

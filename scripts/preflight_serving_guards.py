@@ -40,6 +40,7 @@ unrunnable preflight is a finding, not a pass.
 import json
 import sys
 from pathlib import Path
+from types import SimpleNamespace
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))
@@ -528,6 +529,112 @@ def resume_guards() -> dict:
     return checks
 
 
+def real_processor():
+    """A processor stand-in whose template IS Gemma 4's, read from the pinned revision on disk.
+
+    `AutoProcessor` cannot be built on this machine — the vision half needs a module the CPU stack
+    does not ship — but the only thing `ReaderClient` asks a processor for at render time is
+    `apply_chat_template`, and that lives on the tokenizer. So the subject here is the REAL
+    template at the REAL revision, which is the thing a stub cannot honestly stand in for: whether
+    the request starts with <bos> and whether `enable_thinking: false` really closes the thought
+    channel are facts about that file and nothing else.
+    """
+    from transformers import AutoTokenizer
+
+    tokenizer = AutoTokenizer.from_pretrained(
+        "google/gemma-4-31b-it",
+        revision="842da3794eaa0b77d5f08bae87a17459d91ff475",
+        local_files_only=True,
+    )
+    return SimpleNamespace(
+        tokenizer=tokenizer,
+        apply_chat_template=tokenizer.apply_chat_template,
+    )
+
+
+def reader_guards(handler) -> dict:
+    """probe-a D4: the READER config's guards, each with the control that says it discriminates.
+
+    The reader is one paid attempt under a $0.20 cap, so every one of these has to be false before
+    the endpoint exists rather than after: a refusal met on the endpoint is a refusal that was
+    billed for the boot that reached it.
+    """
+    from market_pulse import local_llm, prompts
+
+    checks: dict[str, bool] = {}
+    revision = "842da3794eaa0b77d5f08bae87a17459d91ff475"
+    config = handler.settings({"SERVING_CONFIG": "READER", "MODEL_REVISION": revision})
+    print(
+        f"\n13. the READER config         {config['serving_config']} ·"
+        f" adapter {config['adapter_dir']} · revision {config['revision'][:12]}…"
+    )
+    checks["READER is the base at the pinned revision with no adapter"] = (
+        config["adapter_dir"] is None
+        and config["weights_dir"] == local_llm.MODEL_ID
+        and config["revision"] == revision
+    )
+    refusals = []
+    for variable in handler.ADAPTER_ENV:
+        refused, _ = refuses(
+            handler.settings,
+            {"SERVING_CONFIG": "READER", "MODEL_REVISION": revision, variable: "/adapter"},
+        )
+        refusals.append(refused)
+    unpinned, how = refuses(handler.settings, {"SERVING_CONFIG": "READER"})
+    print(
+        f"    every {'/'.join(handler.ADAPTER_ENV)} refused: {all(refusals)}"
+        f" · an unpinned base {how}"
+    )
+    checks["READER inherits the adapter refusal for every variable"] = all(refusals)
+    checks["READER refuses an unpinned base"] = unpinned
+
+    processor = real_processor()
+    client = local_llm.ReaderClient(processor, None)
+    thread = {"channel": "@c", "post_id": 1, "post": "пост", "comments": [[2, "коментар"]]}
+    rendered = client.render(prompts.READER_TASK, thread)
+    bos = processor.tokenizer.bos_token
+    closed = rendered.rstrip().endswith("<|channel>thought\n<channel|>")
+    print(
+        f"\n14. the REAL chat template    starts with {bos}: {rendered.startswith(bos)}"
+        f" · thought channel closed: {closed}"
+    )
+    checks["the reader request renders through the real template and keeps <bos>"] = (
+        rendered.startswith(bos)
+    )
+    checks["enable_thinking:false closes the thought channel on the reader request"] = closed
+    wrong, how = refuses(client.render, prompts.POSITIONS_TASK_TEXT, thread)
+    print(f"    another registered task                        {how}")
+    checks["the reader client refuses a task it does not serve"] = wrong
+
+    big = {**thread, "comments": [[index, "х" * 400] for index in range(200)]}
+    refused, how = refuses(client.render, prompts.READER_TASK, big)
+    print(f"\n15. the input ceiling         a {len(big['comments'])}-comment thread {how}")
+    checks["a thread over the registered input ceiling is refused loudly"] = refused
+    checks["the control: a thread inside it renders"] = bool(rendered)
+
+    verdict_json = json.dumps(
+        {
+            "thread": {"channel": "@c", "post_id": 1},
+            "post_summary": "п",
+            "discussion_summary": "д",
+            "entities": [],
+            "signals": [],
+            "per_comment": [],
+            "noise": [],
+        },
+        ensure_ascii=False,
+    )
+    whole = prompts.parse_reply(prompts.READER_TASK, verdict_json)
+    cut, how = refuses(
+        prompts.parse_reply, prompts.READER_TASK, verdict_json[: len(verdict_json) // 2]
+    )
+    print(f"\n16. a verdict cut at the ceiling                   {how}")
+    print(f"    the control: a whole verdict   {len(whole)} keys parsed")
+    checks["a truncated verdict is a parse failure and not an empty answer"] = cut
+    checks["the control: a whole verdict parses"] = whole["thread"]["post_id"] == 1
+    return checks
+
+
 def main(argv: list[str] | None = None) -> int:
     try:
         import peft
@@ -587,6 +694,7 @@ def main(argv: list[str] | None = None) -> int:
     }
     checks |= positions_guards(handler, model)
     checks |= resume_guards()
+    checks |= reader_guards(handler)
     print()
     for label, ok in checks.items():
         print(f"{'PASS' if ok else 'FAIL'}  {label}")

@@ -133,6 +133,17 @@ def positions_key(item) -> str:
     return album_key(item) if isinstance(item, list) else str(item)
 
 
+def reader_key(item: dict) -> str:
+    """One thread input as a single string — what the worker's dump hashes it under.
+
+    The thread's identity and nothing else: `@channel:post_id`. Not the rendered request, which
+    carries the whole prompt and would hash 5 000 characters of instructions into every row, and
+    not the comment ids, which the verdict already names. Same rule as :func:`album_key` — one
+    function, so the worker's dump and the driver's record agree on what a row's ``sha8`` covers.
+    """
+    return f"{item['channel']}:{item['post_id']}"
+
+
 def endpoint_url(endpoint_id: str, path: str) -> str:
     return f"{BASE_URL}/{endpoint_id}/{path}"
 
@@ -410,13 +421,28 @@ which compares what the worker SAYS it loaded against what the phase registered.
 instruments differ in their registered prompt, their answer (a JSON array, not prose) and their
 token ceiling, and «CAPTION with a longer budget» says none of that in a record."""
 
-CONFIGS = ("A", "B", CAPTION_CONFIG, POSITIONS_CONFIG)
+READER_CONFIG = "READER"
+"""`docs/PROMPT-probe-a.md` D4: the NF4 base at the pinned revision, adapter OFF, greedy, batch 1,
+2 000 tokens — the thread reader of the comment-signals layer.
+
+A fifth served configuration and not POSITIONS with another prompt, for the reason POSITIONS is not
+CAPTION with a longer budget: what the endpoint serves has to be visible to `assert_serving`. The
+reader is a NEW capability — one call reads a whole thread and answers with one verdict — and the
+classification adapter stays out of it.
+
+Its authority is a pre-registration and NOT a SPEC amendment, deliberately: probe-a registers a
+probe, and «a pre-registration is a registration, not law». The layer's amendment comes after the
+adjudication sitting, and inventing an amendment number here would put a law in the record that the
+operator never ruled."""
+
+CONFIGS = ("A", "B", CAPTION_CONFIG, POSITIONS_CONFIG, READER_CONFIG)
 
 MERGE_STATE = {
     "A": "unmerged-adapter",
     "B": "merged-requantized",
     CAPTION_CONFIG: "base-no-adapter",
     POSITIONS_CONFIG: "base-no-adapter",
+    READER_CONFIG: "base-no-adapter",
 }
 """What each config's ``merge_state`` reads, for the worker that answers it and the driver that
 asserts it. One table so the two cannot disagree; a test holds its keys to :data:`CONFIGS`, so a
@@ -431,6 +457,7 @@ CONFIG_OPS = {
     "B": ("batch",),
     CAPTION_CONFIG: ("caption",),
     POSITIONS_CONFIG: ("positions",),
+    READER_CONFIG: ("reader",),
 }
 """Which generation op each configuration answers. ``info`` is not in it: every config answers it,
 and it is the guard that reports the others.

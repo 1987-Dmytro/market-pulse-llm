@@ -560,6 +560,96 @@ budget of the plan's §5 (5) binds long before this does — 111 threads inside 
 which is the number the warm-up measures and the go/no-go decides on."""
 
 
+class ReaderClient:
+    """One THREAD per call, greedy, forward batch 1 — the instrument of `docs/PROMPT-probe-a.md` D1.
+
+    Built on the processor rather than the tokenizer for the reason `PositionsClient`'s text leg is:
+    the READER config serves the same adapter-free NF4 base those two do, and `load_captioner` is
+    what loads it. Nothing here carries a picture — a thread is a post and its comments — so the
+    processor is asked for text alone, the same call the position text leg already makes.
+
+    The reply dict is `LocalClient`'s, key for key, so nothing downstream can tell a reader reply
+    from a caption, a positions or a labelling one — including the `finish_reason`, which is the
+    only field that can say a verdict was cut off at the ceiling rather than finished short.
+    """
+
+    def __init__(self, processor, model, *, max_new_tokens: int = READER_MAX_NEW_TOKENS):
+        self.processor, self.model = processor, model
+        self.max_new_tokens = max_new_tokens
+        self.usage = Counter()
+        self._assert_template_emits_bos()
+
+    def _assert_template_emits_bos(self) -> None:
+        """`add_special_tokens=False` is only safe while the template emits <bos>."""
+        tokenizer = getattr(self.processor, "tokenizer", None)
+        bos = getattr(tokenizer, "bos_token", None)
+        if not bos:
+            return
+        probe = {"channel": "@probe", "post_id": 1, "post": "проба", "comments": []}
+        if not self.render(prompts.READER_TASK, probe).startswith(bos):
+            raise RuntimeError(
+                f"the chat template no longer starts the reader prompt with {bos!r}, so"
+                " add_special_tokens=False would drop it silently — stop and report"
+            )
+
+    def render(self, task: str, item: dict) -> str:
+        """One thread's request, through the processor's own chat template.
+
+        ``task`` is checked and not used as a switch label: this worker serves the one prompt the
+        probe registered, whose sha is pinned in `results/prereg_reader_probe.json`. A job asking
+        for another registered prompt is another instrument and is refused rather than served.
+        """
+        if task != prompts.READER_TASK:
+            raise ValueError(
+                f"{task}: the READER config serves {prompts.READER_TASK} and nothing else — a"
+                " reading under another registered prompt is another instrument"
+            )
+        messages = prompts.reader_messages_gm4(
+            item["channel"],
+            item["post_id"],
+            item.get("post") or "",
+            [(int(msg_id), text) for msg_id, text in item.get("comments") or ()],
+        )
+        return self.processor.apply_chat_template(messages, tokenize=False, **CHAT_TEMPLATE)
+
+    def read(self, task: str, items: list[dict]) -> list[dict]:
+        """One reply dict per thread, in order.
+
+        Positional and never zipped short, the way every other client here is: the probe's evidence
+        file joins a verdict to its thread by position within the job, and a reply list off by one
+        would attribute every verdict after the gap to the wrong thread.
+        """
+        replies = []
+        for item in items:
+            text = self.render(task, item)
+            encoded = self.processor(
+                text=text,
+                return_tensors="pt",
+                add_special_tokens=False,  # the chat template already emits <bos>
+            ).to(self.model.device)
+            generated = self.model.generate(
+                **encoded,
+                max_new_tokens=self.max_new_tokens,
+                do_sample=False,  # temperature 0 / greedy, as everywhere in this repo
+            )
+            width = encoded["input_ids"].shape[1]
+            new = generated[0].tolist()[width:]
+            self.usage["prompt_tokens"] += int(width)
+            self.usage["completion_tokens"] += len(new)
+            replies.append(
+                {
+                    "content": self.processor.decode(new, skip_special_tokens=True),
+                    # a verdict that used its whole budget is a PARSE failure, not a short answer:
+                    # the JSON stops mid-object and the driver counts it by cause
+                    "finish_reason": "length" if len(new) >= self.max_new_tokens else "stop",
+                    "cost": 0.0,
+                    "usage": {"prompt_tokens": int(width), "completion_tokens": len(new)},
+                    "generation_id": None,
+                }
+            )
+        return replies
+
+
 def nvidia_smi() -> dict:
     """Driver and card as the driver itself reports them, or ``{}`` off-GPU."""
     try:
