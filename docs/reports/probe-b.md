@@ -7,7 +7,7 @@
 the card option B was bought for — an **RTX 4090**, `gpuIds: ADA_24`, read back for free before the
 first job — and the warm-up measured **20.759 s a thread against probe-a's 54.806 on an L4: 2.64×**,
 over the **2.007×** break-even this registration had computed before anything was created. The gate
-said **GO**, all **23 threads** were read for **$0.2907 of $0.35** at the deletion reading, and the
+said **GO**, all **23 threads** were read for **$0.2907 at the deletion reading, $0.3229 by the session's close**, of $0.35, and the
 four bars were computed for the first time in this program: **flagships 2 of 5 · entity cases 2 of 4
 · noise 0 signals (passes) · per-comment 0.357 against 0.80**. The two defects v2 was written to
 close never reappeared. Six OTHER reply shapes refused 10 of the 23 replies, and the two most
@@ -489,9 +489,17 @@ question the marker rule raises belongs at the sitting.
   $33.00 at the start of this session. The contract says to read the guard and that is what was done;
   $0.35 fits either way. [cause: brief-vs-instrument]
 - **Dv407** — probe-b's spend is still settling: **$0.2907** at the deletion reading, **$0.3132**
-  twenty minutes later, against a $0.35 cap. Nothing is running and nothing can be done about it now;
-  the final reading is in §Verify and the operator should re-read the guard once more tomorrow.
+  twenty minutes later, **$0.3229** at the close of this session, against a $0.35 cap. Nothing is
+  running and nothing can be done about it now; the operator should re-read the guard tomorrow.
   [cause: unsettled-billing]
+- **Dv411** — **the step reading is ONE reading, not the pessimistic maximum of two.** `spend()`
+  takes `max(balance delta, billing since anchor)` for the PHASE — the rule Dv33 fixed, and the
+  reason Phase 4 reports $32.0215 against a $12.0215 balance delta — but the `--step` path computes
+  `step anchor − balance now` alone. Run by hand for this step's window, the corroborating walk
+  answers **«no billing rows yet»**: the second reading is not zero, it is UNAVAILABLE, so
+  $0.3229 is a lower bound with no upper one beside it. On a step at 92% of its cap that is the
+  difference between «inside» and «unknown». The guard is not changed mid-report — it is a money
+  path and this is a finding, the same treatment Dv392 got one contract ago. [cause: half-applied-rule]
 - **Dv408** — `make check` is RED for exactly as long as a registration is uncommitted, because the
   driver's own guard refuses a registration that differs from HEAD. The verifier has to be read after
   the commit that carries a registration change, not before it. [cause: guard-vs-verifier]
@@ -529,8 +537,9 @@ question the marker rule raises belongs at the sitting.
 
 ## 9. What this leaves the operator
 
-**Spent: $0.3132 of $0.35** (still settling — Dv407). **Phase 4: $0.9882 remaining of $33.00** at the
-start, to be re-read.
+**Spent: $0.3229 of $0.35** at this session's close, still settling (Dv407) and read from ONE of the
+two readings the guard takes for a phase (Dv411). **Phase 4: $0.9785 remaining of $33.00.** Both are
+to be re-read tomorrow.
 
 **Decided by the run:** the card question is closed — `ADA_24` is 2.64× the L4 at the same price, and
 every future projection should name it. The window of 111 threads projects to **$0.71 by thread** /
@@ -540,7 +549,7 @@ every future projection should name it. The window of 111 threads projects to **
 
 | | what it costs | what it buys |
 |---|---|---|
-| **A. A container-tolerant reader** — accept an empty object for an empty list, a map for a list, and a split answer; DOMAIN strictness unchanged | $0, plus a re-score of the evidence already bought | +6 replies and +1 entity case, measured. It is a parser decision, not a prompt one, so it needs no new instrument sha — but it does need a registration, because it changes what «refused» means |
+| **A. A container-tolerant reader** — accept an empty object for an empty list, a map for a list, and a split answer; DOMAIN strictness unchanged | **$0 of GPU** and a day's work | +6 replies and +1 entity case, measured. NOT «free»: `probe_b_coercion.py` is a post-run measurement that merges two top-level objects with `dict.update`, i.e. last-wins on a duplicate key — moving that into `parse_reply` means ruling on what happens when the two objects disagree, re-registering what «refused» means, and moving `prompts.py`'s sha again, which fans out into the same three pinned records this session handled twice |
 | **B. Re-read the same 23 under a v3 prompt** that says «one JSON object» and «`[]` for nothing» | ~$0.08 at the measured rate | whether the framing defects are promptable at all. A new instrument, a new registration |
 | **C. The reading gap** — F1b, F1c, F2a and four absent per-comment rows in threads that parsed | a design sitting, $0 | what the reader is actually missing, once the interface stops accounting for most of it |
 | **D. The sitting's two standing questions** | $0 | the marker rule (E1/E4/N3 exist only because this run bought them) and `категория` vs `категория_личное` |
@@ -583,10 +592,13 @@ $ PYTHONPATH=src python3 scripts/probe_b_coercion.py
   2_entity_cases             as run 2 · coerced 3
   4_per_comment_agreement    as run 0.357… · coerced 0.428…
 
-$ python3 scripts/runpod_guard.py --step probe-b --step-cap 0.35
-PHASE 4 SPENT     $32.0118 of $33.00
-REMAINING         $0.9882
-PROBE-B SPENT      $0.3132 of $0.35  (anchor $22.98 from runpod_balance_at_probe-b_start)
+$ python3 scripts/runpod_guard.py --step probe-b --step-cap 0.35     # at the session's close
+PHASE 4 SPENT     $32.0215 of $33.00
+REMAINING         $0.9785
+PROBE-B SPENT      $0.3229 of $0.35  (anchor $22.98 from runpod_balance_at_probe-b_start)
+
+$ PYTHONPATH=src python3 -c "import sys; sys.path.insert(0,'scripts'); import runpod_guard as g; print(g.billing_since('2026-08-15T20:25:00Z'))"
+(0.0, 'no billing rows yet')        # Dv411: the corroborating reading has not posted
 
 $ ls results/spend_probe*
 results/spend_probe_a.json  results/spend_probe_b.json     # Dv392: one step, one ledger

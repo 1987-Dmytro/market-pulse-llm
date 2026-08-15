@@ -7642,3 +7642,45 @@ prompt's own «for the post the id is null» rule reached a field the schema req
 **And the reader reads.** `@tarilka_malyuka:715` — a recipe thread outside the manual reading —
 came back with three dairy trade marks resolved, each with a phrase and its quote, plus a `похвала`
 comparing the thickness of two of them.
+
+## probe-b — the card replaced, the interface fixed, the bars computed ($0.3229 of $0.35)
+
+`docs/reports/probe-b.md` is the report; only what a later session would look for is repeated here.
+
+**The rate now has a card beside it, and it is the fast one.** `ADA_24` (RTX 4090, 24 564 MiB) reads
+**20.759 s a thread** and **5.661 s a payable comment** on the v2 reader — **2.64×** probe-a's L4 at
+the same $/s. **Every projection in this repo that quotes `$0.00030669/s` was measured on ADA_24**
+(`docs/reports/5c2-run.md`), so probe-a's L4 was the anomaly, not the baseline. The 111-thread window
+prices at **$0.71 by thread / $1.58 by payable comment** on this card.
+
+**`gpuIds` comes back from the `serverless create` response, and creation bills nothing** — only
+requests do. probe-a asked for the display name «NVIDIA L4» and got `AMPERE_24`; probe-b asked for
+the 4090 and read `ADA_24` back before the first job. Always read it there, and take the ACTUAL card
+from the worker's `runtime.gpu` — the two fields can disagree.
+
+**The reader's answers are refused on containers, not on domains.** v2 closed both of probe-a's
+defects and neither returned; ten of 23 replies still refused, across six shapes of the same class:
+`"signals": {}` for an empty list (4 — and all four are noise threads, where «nothing» is correct),
+the answer split into **two top-level JSON objects** (2 — `parse_reply` reads from the first brace,
+so it reports the second object's first key as missing while the correct answer sits beside it),
+`noise` as a map keyed by msg_id (1), `aspect: null` (1), and a `from_post: true` signal with no
+`evidence` key at all (2). Container-only coercion takes 13 of 23 to **19 of 23**. One reply goes
+further and emits the second half as bare key-value fragments with no braces — not reconstructible
+without authoring structure.
+
+**A bar that counts «zero of X» is passed by an unreadable reply.** Bar 3 cleared with 0 signals and
+four of its five threads had no verdict at all. Any future bar with that predicate must be scored
+over answers that EXIST, and the registration is where that belongs.
+
+**Two guard facts for the next money path.** (1) `runpod_guard --step` computes `anchor − balance`
+ALONE, while the phase reading takes `max(delta, billing walk)`; the walk answered «no billing rows
+yet» for probe-b's window, so a step figure is a lower bound with no upper one (Dv411). (2) A bill
+read at deletion is optimistic — probe-a closed at $0.0750 and settled at **$0.0944**, probe-b at
+$0.2907 → $0.3229. Never derive a registered constant from a fresh reading.
+
+**Two frozen findings for the sitting.** The four injected threads (E1, E4a, E4b, N3 — the ones SPEC
+3.21 (1)'s marker rule removes before payment) answered 2 of the 4 entity cases, which is the
+measured argument that the rule is a payment gate for the reader. And `subject_type: категория`
+carries 8 of the 14 per-comment gold rows while `docs/PLAN-comment-signals.md`'s own schema example
+stopped using the word on 15.08 — the bars are reported both as registered and with the two words
+collapsed.
