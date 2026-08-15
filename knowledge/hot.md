@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-15 17:17:21 (every SessionStart)
+**Auto-refreshed:** 2026-08-15 18:03:03 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+5ba95a0 fix(fix-b): the record claimed a prohibition the page next to it does not keep
+ad38b19 docs(report): fix-b -- the badge as the depth, and the drill-down that inverts to the old price
+42494e1 feat(fix-b): the promo answer becomes a table, and the depth column is the badge
+a25291a docs(vault): the operator's reading duties for the thread pass, and fix-a's census on the plan
 25686d5 docs(report): fix-a -- the one cell in the artifact table that did not answer its header
-21fa26f docs(vault): the fix-a checkpoint, the census on the live map, and two questions for the sitting
-cbbb557 docs(report): fix-a -- what the rules removed, and the silencer that had no input
-7a656d2 fix(fix-a): the census read a post as a comment, and pinned a store that grows
-f6630c8 feat(fix-a): the thread gate censused -- and the fourth silencer has no input
 ```
 
 ## 📋 Recent decisions
@@ -30,7 +30,31 @@ f6630c8 feat(fix-a): the thread gate censused -- and the fourth silencer has no 
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-15 (checkpoint 16:47) — исполнен `fix-a` ($0): **амендмент 3.21** в SPEC
+**Last update:** 2026-08-15 (checkpoint 17:57) — исполнен `fix-b` ($0): промо-ответ 3.21 (4) стал
+**таблицей из всех 145 позиций окна** — `promo.positions_table` в экспорте, сортируемая и
+фильтруемая T5 (бренд · сеть · носитель · «наші — конкуренти»), у каждого ряда ссылка на свой пост.
+`make check` **2 437 / 2 skipped** (было 2 432), $0.00. Отчёт — `docs/reports/fix-b.md`
+(Dv367–**Dv373**). Коммиты `a25291a` · `42494e1` · `ad38b19` · `5ba95a0`. День — [[2026-08-15]].
+
+**Колонка `depth` = НАПЕЧАТАННЫЙ бейдж, а не арифметика.** 3.18 (1) против 3.17 (3): развязка в том,
+что арифметическая глубина рядом с промо-ценой отдаёт `price_old = promo / (1 − depth)` до копейки.
+**88 из 95** рядов расходятся между чтениями, **8** — сверх допуска 1.0 pp, максимум **7.1707 pp**;
+арифметика осталась оконным агрегатом `metrics.promo_depth.readings.from_price_pair`. Чтение
+записано в поле `promo.positions_table.law`.
+
+**Что окно говорит:** 80 рядов с распознанным брендом · **65** с маркой, которую реестр не разрешает
+(третий класс, НЕ «конкурент») · **0** наших → фильтр «наші» отдаёт пустое состояние словами.
+106 листовочных (только АТБ) vs 39 текстов постов, 8 сетей, 39 отображаемых имён. Экспорт
+ОТКАЗЫВАЕТСЯ, если длина таблицы ≠ `window.populations.position_rows`; конвергенция 902/902.
+
+**🚩 Находка оператору (НЕ чинил, Dv372):** drill-down того же T5 печатает АРИФМЕТИЧЕСКУЮ глубину
+рядом с промо-ценой на 15 из 20 вытянутых рядов → `promo / (1 − depth)` = 19.99, 42.50, 55.90.
+Правка — одна строка (убрать `depth` из `position_row`), но это вопрос закона: контракт запрещал
+старую цену В ЭТОЙ таблице, а 3.18 (1) можно прочитать как разрешающий печать глубины. Решает
+оператор. Рядом: 3.21 (4) называет ДВЕ колонки, которые под 3.18 (1) — одно число (бейдж и
+глубина); и заголовок цены называет ₴, которого нет ни в одном поле схемы.
+
+**Предыдущий срез:** 2026-08-15 (checkpoint 16:47) — исполнен `fix-a` ($0): **амендмент 3.21** в SPEC
 (домашний манёвр, у которого оказалось ПЯТЬ подвижных частей), правила матчера стали законом в новом
 `config/watchlist_rules.yaml` (ревизия **r1**), пересборка трёх артефактов и **ценз гейта тредов**
 `results/gate_census_w1.json`. `make check` **2 432 / 2 skipped** (было 2 392), потрачено $0.00.
@@ -52,9 +76,9 @@ f6630c8 feat(fix-a): the thread gate censused -- and the fourth silencer has no 
 «Гармонія»), из-за чего строка практически не может сматчиться; `varus-pl` ловит СЕТЬ «Varus» как
 приватную марку, r1 этого не правит (четвёртое правило = импровизация закона).
 
-**Следом:** `fix-b` — таблица промо-позиций T5 (`docs/PROMPT-fix-b.md`, отдельный контракт, идёт
-ПОСЛЕ приёмки fix-a; трогает те же три артефакта, поэтому строго последовательно). Дальше —
-`cycle2-prep-b` (сбор Сільпо/Varus/Маркетопт) и `6c` (полировка под LinkedIn).
+**Следом:** `fix-b` **исполнен** (см. верх файла). Очередь — дизайн-сидение по комментным сигналам
+(вопросы §4 fix-b и §5 fix-a), затем `cycle2-prep-b` (сбор Сільпо/Varus/Маркетопт) и `6c`
+(полировка под LinkedIn).
 
 **Бэклог 6a, из §4 отчёта 6b** (UI просит — экспорт не несёт): `cuts.brand_by_aspect` (T2,
 матрица бренд × аспект) · `cuts.aspect_by_sentiment` (T2, профиль негатива) · `gates.model` (T8,
