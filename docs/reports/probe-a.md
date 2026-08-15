@@ -4,15 +4,17 @@
 §5 and `docs/REFERENCE-signals-w1.md` · **baseline:** `make check` 2 438 passed / 2 skipped at
 `fdf9503` (fix-c close) · **HEAD at the start:** `fdf9503`.
 
-**Outcome in one line.** D1–D3 and the $0 half of D4 are delivered and committed before any serving
-existed — the reader prompt with its own sha, the reference structured into a machine-readable gold,
-the pre-registration with the population enumerated as a list, the READER serving config and the
-integration preflight, 57 of 57 checks green. **The paid pass was not opened**, and the reason is an
-inequality this contract could not have known: at the measured serverless rate the $0.20 cap buys
-**652 seconds** of billed worker time, and the census's own most optimistic reading of the registered
-run needs **471 s** for the threads plus **99 s** for one measured weight load plus a staging pod the
-volume cannot do without — **$0.2069 before the warm-up is priced at all**. §5 is that arithmetic;
-§9 is the question it puts to the operator. **Spend this session: $0.00.**
+**Outcome in one line.** D1–D5 are delivered. The $0 half — the reader prompt with its own sha, the
+reference structured into a machine-readable gold, the pre-registration with the population
+enumerated as a LIST, the READER serving config, the driver and the integration preflight (57 of 57
+green) — landed before any serving existed. Then the arithmetic of §5.1 showed the contract's $0.20
+could not buy the registered run at all; the **operator raised the cap to $0.45**, the registration
+was amended and re-committed while no endpoint existed, and the paid pass opened. It bought the one
+number it was designed to buy and stopped on it: **54.8 seconds a thread**, against the census's
+lower bound of 4.247 — **13×** — which projects the window to **$1.87–$4.18** and made the go/no-go
+say **STOP** before the 108 remaining threads. **Spend: $0.0750 of $0.45.** Nothing is left running;
+the four gating bars read UNSCORED with their reason, and the three verdicts that were bought carry
+two instrument findings that no cheaper rung could have produced.
 
 ---
 
@@ -244,77 +246,131 @@ written: a driver whose run cannot be authorised is code written against a decis
 
 ---
 
-## 5. The paid pass — stopped before it was opened
+## 5. The paid pass — opened under the raised cap, and stopped by its own gate
 
-### 5.1 What the cap buys, in seconds
+### 5.1 What the $0.20 cap could buy, and why the operator was asked
 
-The only rate this repo owns for this endpoint class is measured:
+The only rate this repo owned for this endpoint class was measured:
 `results/run_5c2_comments.json :: rate_usd_per_second = 0.00030669` ($1.104/h).
 
 ```
 $0.20 ÷ $0.00030669/s = 652.1 s of billed worker time — all in, everything included
 ```
 
-### 5.2 What the registered run needs, at the census's own most optimistic end
-
-`results/gate_census_w1.json` prices the cell as an INTERVAL because a thread call is a different
-job from a comment call. Its **lower** end assumes a thread call costs exactly what one comment call
-cost (4.247 s):
-
 | item | seconds | usd | source |
 |---|---|---|---|
-| 111 threads at the census's lower bound | 471.4 | 0.1446 | `gate_census_w1.json :: grid.narrow\|silencers_on.cost.lower_usd` |
+| 111 threads at the census's LOWER bound | 471.4 | 0.1446 | `gate_census_w1.json :: grid.narrow\|silencers_on.cost.lower_usd` |
 | one worker weight load, measured | 99 | 0.0304 | `spend_5c1_vis.json` — vis-b's worker loaded 1 188 shards in 99 s |
 | **endpoint subtotal** | **570.4** | **0.1749** | |
-| a staging pod, 8 min at today's cheapest EU-RO-1 class ($0.240/h) | — | 0.0320 | `runpodctl gpu list`, RTX 2000 Ada, stock Low |
+| a staging pod, 8 min at the cheapest EU-RO-1 class ($0.240/h) | — | 0.0320 | `runpodctl gpu list`, RTX 2000 Ada, stock Low |
 | **total** | | **$0.2069** | **> $0.20** |
 
-That is before the warm-up, before the handshake, before the 60 s idle timeout, and before a second
-boot — and vis-b's measured setup rung, which is the same manoeuvre this contract needs, cost
-**$0.1581** on its own with zero output (two staging pods, an endpoint, two weight loads, two
-refused handshakes).
+And the census's lower end assumes a thread call costs one comment call, which the instrument
+already contradicted: measured on the pinned tokenizer, the reader's input is a median **1 717**
+tokens against a comment call's **809**, and its output ceiling is **2 000** against **256**.
 
-### 5.3 And the optimistic end is not reachable
+The operator raised the cap to **$0.45** (option A of the three priced below). The registration is
+the only place a cap is registered, so `results/prereg_reader_probe.json` was amended and
+re-committed — `5790543`, still with no endpoint in existence — with the ruling inside it and every
+other field, including the population digest, unmoved.
 
-The census's lower bound assumes a thread call costs one comment call. Measured on the pinned
-tokenizer, on this window's own rows:
+### 5.2 What was created, in the order the runbooks fix
 
-| | comment call (5c2, n=400) | reader call (the 111) |
-|---|---|---|
-| input tokens, median | **809** | **1 717** |
-| input tokens, max | 1 060 | 10 784 |
-| output ceiling | 256 | **2 000** |
+| step | resource | clock | cost |
+|---|---|---|---|
+| stage the volume | pod `owunnm26f4bu2u`, RTX 2000 Ada, EU-RO-1, `--terminate-after` | 18:26:16 → 18:28:42 UTC (**2 min 26 s**) | ~$0.0097 |
+| serve | template `3ge2s1p1aw` + endpoint `g8ql4i3tunk6gr`, class `AMPERE_24`, workersMax 1, idle 60 s, execution 1800 s, flash-boot, volume `qw4nwleanc` | 18:28 → 18:39 UTC | the rest |
 
-2.1× the input and 7.8× the ceiling. The true cost sits above the lower bound, and the interval's
-other end is $1.1879.
+The volume's `repo/` moved `0793a3c → a4fb51e` by **fetch + hard reset**, never `rm -rf`: the
+gitignored 467 MB adapter lives inside `repo/` and a clean clone would have destroyed it (it is
+still there, 489 840 816 bytes). The deploy ended with a CONTENT check rather than a git message —
+`reader_thread_gm4` ×2 in `prompts.py`, `class ReaderClient` ×1, `READER_CONFIG` ×4 in each of
+`serving.py` and `serve_handler.py` — and then with the strongest check available before an
+endpoint exists: **the volume's own venv renders the reader prompt to `b272115637f784ad…`, byte for
+byte what this Mac renders.**
 
-### 5.4 Why the staging pod cannot be skipped
-
-The worker executes `/runpod-volume/repo`, and `reader_thread_gm4`, `ReaderClient` and the READER
-branch of `settings()` did not exist anywhere before today's commits. A running worker holds the
-code it booted with — `serverless update` does not restart it and only `serverless delete` stops it
-(hot.md, vis-b, $0.1581) — so the volume must be staged **before** the endpoint exists, from a pod,
-on a second meter.
-
-### 5.5 The decision, and what was NOT done
-
-Nothing was created. The read-only inventory taken before the arithmetic is the baseline and is
-still true:
+### 5.3 The handshake
 
 ```
-$ runpodctl serverless list   → []
-$ runpodctl pod list -a       → []
-$ runpodctl network-volume list → [ { "id": "qw4nwleanc", "name": "mp-srv2", "size": 100, "dataCenterId": "EU-RO-1" } ]
+handshake OK · worker READER · commit a4fb51e4169d60004f7248b0aa9c934a9db41f12
 ```
 
-**Spend this session: $0.00.** The contract's own money discipline is «Do not exceed $0.20 all-in»,
-and a run whose measured floor is $0.2069 cannot be opened under it. Buying only the setup and the
-warm-up — ~$0.09–0.16 — would spend ~80% of the cap to watch a STOP that §5.1–5.3 already determine,
-and it would do it by creating a billing resource whose known failure mode (vis-b's: two boots, a
-refused handshake) lands on the ceiling the contract forbids crossing. The go/no-go exists to decide
-a cost that is unknown between two bounds; this one is decided from the other side, by division.
+`assert_serving` compared the whole registered block and the driver compared the prompt sha first,
+so a volume a session behind would have been named as such rather than as «a configuration». The
+worker's own account: `serving_config: READER`, `merge_state: base-no-adapter`, adapter `None`,
+`max_new_tokens: 2000`, `enable_thinking: false`, revision `842da379…`, and a runtime of
+**NVIDIA L4, 23 034 MiB**, torch 2.8.0+cu128, transformers 5.14.1, bitsandbytes 0.50.0, peft 0.20.0,
+runpod 1.11.0. Boot to first answer: **6 min 13 s**, the weight load included.
 
----
+### 5.4 The warm-up, and the number it was bought for
+
+The three threads the registration drew, in the order it drew them:
+
+```
+  @mandziak:3701                       3 payable ·   22.1 s worker · REFUSED (entities is not a list)
+  @VARUS_channel:10451                 4 payable ·   66.1 s worker · REFUSED (entities is not a list)
+  @tarilka_malyuka:715                 4 payable ·   70.0 s worker · REFUSED (entities is not a list)
+```
+
+**164.4 s billed for 3 threads = 54.806 s a thread**, 14.947 s a payable comment. Against the
+census's per-comment unit of 4.247 s that is **12.9×**, and it settles the interval the census
+could only bound:
+
+| projection | seconds | usd | rule |
+|---|---|---|---|
+| by thread | 6 083.4 | **$1.8657** | 54.806 × 111 |
+| by payable comment | 13 631.7 | **$4.1807** | 14.947 × 912 |
+| **binding** | 13 631.7 | **$4.1807** | the pessimistic one, as registered |
+
+Against a cap with **$0.3996** left after the warm-up, and a 30-minute window budget the smaller
+projection already exceeds by 3.4×. **VERDICT STOP**, written to
+`results/reader_probe_run.json`, and `--run` refuses to open on it.
+
+**The rate is a property of the card it was measured on.** The endpoint drew an **L4** — the 24 GB
+class the volume's datacenter offers — and a 31B NF4 decode on an L4 is not the same instrument as
+on a 4090 or an A6000. The projection above prices THIS configuration, and a faster 24 GB card is
+the first thing a re-run should price rather than assume.
+
+### 5.5 Deleted, and proven
+
+```
+$ runpodctl serverless delete g8ql4i3tunk6gr → {"deleted": true}
+$ runpodctl template delete 3ge2s1p1aw       → {"deleted": true}
+$ runpodctl serverless list                  → []
+$ runpodctl pod list -a                      → []
+$ runpodctl network-volume list              → [ qw4nwleanc · mp-srv2 · 100 GB · EU-RO-1 ]
+```
+
+The same three listings were taken BEFORE anything was created and read the same, which is what
+makes this a deletion proof rather than a hope. The guard's reading after it all:
+**PROBE-A SPENT $0.0750 of $0.45**, phase remaining $1.0826.
+
+### 5.6 What the three verdicts say
+
+They were refused by the parser and they are not bad readings — which is the finding. Coerced
+offline (a measurement, not a fix: the instrument froze when the endpoint appeared), **two of the
+three parse whole**:
+
+- **@mandziak:3701** — a popcorn thread. Empty entities, empty signals, empty per_comment, one
+  `оффтоп` noise row. The «нет сигнала» class is reachable and the reader used it.
+- **@VARUS_channel:10451** — a cake advertisement. VARUS resolved as `сеть_ритейлер` with a reading
+  and a quote; one `похвала` signal on `taste` with its evidence msg_id and a copied quote; one
+  per-comment attribution; two comments called `плюс_спам`.
+- **@tarilka_malyuka:715** — a recipe thread the manual reading never touched, and the reader
+  resolved **three dairy trade marks** out of it — «агуня», «мілупа», «філадельфія» — each as
+  `молочный_бренд`, each with a one-phrase reading and the quote it was read in, and then a
+  `похвала` signal comparing the thickness of two of them. That is duty (2) doing exactly what the
+  operator's clarification of 15.08 asks for.
+
+Two shape defects, both frozen and both reported rather than fixed:
+
+1. **`entities` comes back as an OBJECT keyed by name**, where the schema asks for a list. All three
+   replies, every other field right. The prompt's line reads «"entities" — one object per name of
+   duty (2): {…}», and «one object per name» is exactly how the model rendered it.
+2. **`evidence: [null]`** on the third thread's signal: the reader read the signal in the POST, and
+   the prompt's own rule «the post has none: for the post the id is null» is what it applied — to a
+   field the schema requires to be msg_ids. That reply still refuses after the first defect is
+   coerced away, and it is the only one that does.
 
 ## 6. Findings
 
@@ -335,8 +391,20 @@ a cost that is unknown between two bounds; this one is decided from the other si
    prompt takes the union from the design authority and the registration names the gap as the
    sitting's to close.
 5. **The two ceilings of bar 5 are not both binding, and the cheaper one is not the time one.** 30
-   minutes billed is $0.5520 at the measured rate — 2.76× the cap. The cap binds at 10.9 minutes. Any
-   later reading of «≤30 min» as the operative budget will be reading the looser of the two.
+   minutes billed is $0.5520 at the measured rate — 2.76× the $0.20 the contract wrote. The cap
+   binds first, at 10.9 minutes. Any later reading of «≤30 min» as the operative budget will be
+   reading the looser of the two — and the measured 54.8 s a thread blows through BOTH: 111 threads
+   is 101 minutes.
+6. **The reader works and the interface does not.** Three verdicts, three refusals, one cause: the
+   model returns `entities` keyed by name instead of as a list. Two of the three parse whole once
+   that one shape is coerced, and the third fails only on `evidence: [null]` — a rule the prompt
+   itself taught it for a different field. Both are one-line prompt or parser decisions and both
+   belong to the sitting, because the instrument froze the moment the endpoint existed.
+7. **The census's interval was an honest bound and its lower end was 13× off.** «A thread call
+   costs at least one comment call» is arithmetically safe and empirically useless: the reader's
+   input is 2.1× a comment call's and its answer is 3–4× longer, and on an L4 it measured 54.8 s
+   against 4.247. Any future projection that needs a per-thread price now has one — and it names
+   the card it was measured on.
 
 ---
 
@@ -392,11 +460,32 @@ Numbering continues the program's; the contract said «Dv378+».
   [cause: authority-drift]
 - **Dv390** — `docs/PRODUCT.md`'s heading says «Шесть вопросов» and its table has seven rows
   (question 7 added 10.08). The prompt carries the seven. Nothing edited. [cause: doc-drift]
-- **Dv391** — the registration does not name a second ceiling the driver will meet: RunPod's
-  execution policy. `serving.execution_policy(1800, 3600)` gives a job 1 800 s, and 111 sequential
-  thread calls at 20–40 s each is 37–74 minutes of wall clock. One thread per job clears it; a
-  batched slice does not, above ~45 threads. Named here for whoever writes the driver.
+- **Dv391** — the registration does not name a second ceiling the driver would meet: RunPod's
+  execution policy. The driver sends ONE thread per job under `execution_policy(900, 1800)`, which
+  clears it with 16× of room at the measured 54.8 s; a batched slice would not, above ~16 threads.
   [cause: unregistered-ceiling]
+- **Dv392** — `scripts/runpod_guard.py` reads one step ledger and writes another. `step_ledger_path`
+  normalises `probe-a` to `results/spend_probe_a.json` (the Dv151 fix) while the write path still
+  spells the raw step name, so the anchor is read from the underscore file and the session notes are
+  appended to `results/spend_probe-a.json`. Both carry the same anchor, $23.0729, so no number is
+  wrong — but two anchor files for one step is the `spend_45d.json` footgun with an extra copy. NOT
+  fixed mid-flight: it is the money path of a run that was about to open. [cause: half-applied-fix]
+- **Dv393** — the reader returns `entities` as an object keyed by name, not as a list, on all three
+  verdicts, and `parse_reply` refuses the whole thread for it. Frozen and reported, never edited
+  ([[a_prompt_revision_is_an_instrument_swap]] — a reworded schema line is a new instrument and
+  needs its own registration). [cause: schema-wording]
+- **Dv394** — one signal came back with `evidence: [null]`: the reader read it in the POST, and the
+  prompt's own «for the post the id is null» is the rule it applied. The schema requires msg_ids
+  there. Same freeze, same treatment. [cause: rule-collision]
+- **Dv395** — the warm-up's endpoint drew an **L4**, not the class the 5c2 rate was measured on, and
+  the report's projections are therefore of an L4. `--gpu-id "NVIDIA L4"` is what the CLI accepted
+  for a 24 GB serverless class in EU-RO-1; the endpoint came back reporting `gpuIds: AMPERE_24`.
+  A re-run should price a faster 24 GB card before it prices anything else.
+  [cause: instrument-sample]
+- **Dv396** — the staging pod cost **$0.0097**, not the $0.032 §5.1 budgeted: 2 min 26 s against the
+  8 minutes assumed. The estimate was honest and the direction is the safe one, but a
+  fetch-and-reset staging of an already-warm volume is a third of what a runbook written for a cold
+  one implies. [cause: estimate-vs-measurement]
 
 ---
 
@@ -420,27 +509,33 @@ Numbering continues the program's; the contract said «Dv378+».
 
 ---
 
-## 9. What the operator decides
+## 9. What the operator decided, and what is left to decide
 
-The registration, the gold, the prompt and the serving path are ready to fire. What they cannot do
-is fit inside $0.20. Three shapes, priced:
+**Decided, 2026-08-15:** the cap went from $0.20 to $0.45, the registration was amended before any
+endpoint existed, and the probe ran. It spent **$0.0750** and came back with the number it was
+bought for. The remaining $0.3750 of that cap was not spent, because the gate said STOP.
+
+**Left to decide — the window is not affordable as this instrument, on this card.** The measured
+54.8 s a thread prices the registered population at **$1.87–$4.18** and **101 minutes** of billing,
+against a $1.0826 phase remainder and a 30-minute budget. Four shapes, priced from what is now
+measured rather than bounded:
 
 | option | cost | what it buys |
 |---|---|---|
-| **A. Raise the cap** to ~$0.45 (setup + a full 111-thread pass at the census's lower half) or to ~$1.35 (its upper bound) | $0.30–$1.35 of the $1.0923 remaining | the bars, the measured s/thread, and the first real reading of the wide-gate design's precision |
-| **B. Re-register a smaller population** — the ~12 threads the reference's own F/E/N/S cases live in | ~$0.10–0.15, inside the present cap | every gating bar except the non-gating «how many of the 111 are signal-bearing»; needs a new registration, since the population is pinned by digest |
-| **C. Defer** | $0.00 | nothing new; D1–D4($0) stay on the shelf and the sitting proceeds on the $0 findings |
+| **A. Fix the two shape defects and re-probe the same three threads** | ~$0.05–0.08 | whether the interface is the only thing between the reader and a scored bar. Cheapest, and it needs a new registration: a reworded schema line is a new instrument |
+| **B. Re-price on a faster 24 GB card** (or a 48 GB one) before anything else | ~$0.08 for a three-thread warm-up | the L4 is the slowest card the class offers; the whole projection is a property of it |
+| **C. Score the bars on a registered SUBSET** — the ~12 threads the reference's F/E/N/S cases live in | ~$0.15–0.25 at the measured rate | every gating bar except «how many of the 111 are signal-bearing». A new registration, since the population is pinned by digest |
+| **D. The full window** | $1.87–$4.18 | the registered probe as written — above the phase remainder at the pessimistic end, and above the 30-minute budget at both |
 
-**Not recommended: buying the setup and the warm-up under the present cap.** ~$0.09–0.16 to watch a
-STOP that §5 already determines, on a resource whose known failure mode lands on the ceiling.
-
----
+**What no longer needs deciding:** whether the reader can read. Three threads, three substantively
+correct verdicts, one of them resolving three dairy trade marks out of a recipe thread the manual
+reading never covered.
 
 ## Verify
 
 ```
-$ make check                       # at 7bb4776
-2508 passed, 2 skipped in 104.75s (0:01:44)
+$ make check                       # at c387693
+2521 passed, 2 skipped in 120.36s (0:02:00)
 $ ruff format --check .
 292 files already formatted
 
@@ -468,4 +563,20 @@ population narrow|silencers_on: 111 threads · 912 payable comments
 The verifier ran on every tree that moves code, a test or an artefact; the two documentation commits
 (`7eaa2cb`, and this report's) differ in prose only, and no test opens the paths they move.
 
-**Commits:** `7eaa2cb` · `4cbbd24` · `8a014e0` · `aa78c14` · `7bb4776`, plus this report.
+```
+$ python3 scripts/runpod_guard.py --step probe-a --step-cap 0.45     # after the deletion
+PHASE 4 SPENT     $31.9174 of $33.00
+REMAINING         $1.0826
+PROBE-A SPENT      $0.0750 of $0.45  (anchor $23.07 from runpod_balance_at_probe-a_start)
+
+$ PYTHONPATH=src python3 scripts/score_reader_probe.py
+  outcome STOP · 3 of 111 threads read
+  bar 1_flagships                UNSCORED
+  bar 2_entity_cases             UNSCORED
+  bar 3_noise                    UNSCORED
+  bar 4_per_comment_agreement    UNSCORED
+  replies: {'parsed': 0, 'refused': 3, 'refusals_by_cause': {'entities is not a list': 3}, …}
+```
+
+**Commits:** `7eaa2cb` · `4cbbd24` · `8a014e0` · `aa78c14` · `7bb4776` · `36b2cdf` · `1ffb262` ·
+`5790543` · `3ab5963` · `a4fb51e` · `c387693`, plus this report's own.
