@@ -566,8 +566,15 @@ population narrow|silencers_on: 111 threads · 912 payable comments
   payable per thread: min 0 · median 3 · max 125
 ```
 
-The verifier ran on every tree that moves code, a test or an artefact; the two documentation commits
-(`7eaa2cb`, and this report's) differ in prose only, and no test opens the paths they move.
+**The per-commit rule, stated rather than listed** (a list cannot name the commit that carries it —
+the `b2ff741` scar): the verifier ran on the tree of every commit that moves code, a test or a
+result artefact. The five documentation commits differ in prose only — `grep -rn "docs/reports"
+tests` returns one docstring mention and nothing that opens a file, and nothing in `tests/` reads
+`implementation-notes.md`. Two commits move only spend records (`a4fb51e`, and the ledger half of
+`c387693`); the two tests that read the real `results/spend_phase4.json` —
+`test_prereg_5c2.py::test_the_remainder_is_derived_from_the_live_cap_and_not_read_off_the_ledger`
+and `test_projection_5c2.py` — select their row **by timestamp and not by position**, on purpose and
+with the comment saying so, which is exactly why an appended session note cannot move them.
 
 ```
 $ python3 scripts/runpod_guard.py --step probe-a --step-cap 0.45     # after the deletion
