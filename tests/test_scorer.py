@@ -689,3 +689,143 @@ def test_text_tier_accuracy_refuses_an_empty_or_ragged_comparison():
         scorer.text_tier_accuracy([], [])
     with pytest.raises(ValueError, match="3 gold rows against 2 predicted"):
         scorer.text_tier_accuracy(["none"] * 3, ["none"] * 2)
+
+
+# --- the comment-signals reader (probe-a) ------------------------------------
+#
+# Every fixture below is invented. The probe has not run, and a test built from
+# its answers would be written after the fact — which is the one thing a
+# pre-registered matching rule may not be.
+
+FOUND_SIGNALS = [
+    {
+        "signal_type": "спрос",
+        "subject_type": "категория",
+        "aspect": "availability",
+        "evidence": [21599, 21601],
+    },
+    {
+        "signal_type": "проблема",  # a word outside the five, flagged proposed
+        "subject_type": "сеть_ритейлер",
+        "aspect": "quality",
+        "evidence": [21626, 21627],
+    },
+]
+
+
+def test_reader_signal_found_matches_on_evidence_and_never_on_the_word():
+    """The contract's own rule: «signal_type may differ in word, the finding must be there». The
+    gold calls it жалоба and the reader calls it проблема; they quote the same comment about the
+    same subject with the same aspect, so it is the same finding."""
+    gold = {"evidence": [21626], "subject_type": "сеть_ритейлер", "aspect": "quality"}
+    assert scorer.reader_signal_found(gold, FOUND_SIGNALS) == {
+        "found": True,
+        "index": 1,
+        "signal_type": "проблема",
+    }
+    # one evidence id in common is enough — the reader read two comments, the gold names one
+    assert scorer.reader_signal_found({"evidence": [21601]}, FOUND_SIGNALS)["index"] == 0
+
+
+def test_reader_signal_found_compares_only_the_fields_the_gold_states():
+    """A field the reference never wrote is not gold. Where it did write one, a disagreement on it
+    is a miss — the same signal about another subject is another signal."""
+    stated = {"evidence": [21626], "subject_type": "молочный_бренд", "aspect": "quality"}
+    assert scorer.reader_signal_found(stated, FOUND_SIGNALS)["found"] is False
+    wrong_aspect = {"evidence": [21626], "subject_type": "сеть_ритейлер", "aspect": "price"}
+    assert scorer.reader_signal_found(wrong_aspect, FOUND_SIGNALS)["found"] is False
+    # the same evidence with neither field stated: found, because nothing contradicts it
+    assert scorer.reader_signal_found({"evidence": [21626]}, FOUND_SIGNALS)["found"] is True
+    assert scorer.reader_signal_found({"evidence": [99999]}, FOUND_SIGNALS) == {
+        "found": False,
+        "index": None,
+        "signal_type": None,
+    }
+
+
+def test_reader_entity_found_reads_the_ruling_and_the_absence_case():
+    """Two shapes of the same bar. E1–E3 ask for a reading; E4 asks for silence, and «no Varto
+    entity in this thread» is a claim about the whole answer rather than about one row."""
+    entities = [
+        {"name": "Varus", "brand_ids": ["varus"], "subject_type": "молочный_бренд"},
+        {"name": "у Варусі", "brand_ids": ["varus"], "subject_type": "сеть_ритейлер"},
+    ]
+    gold = {"brand_id": "varus", "subject_type": "сеть_ритейлер"}
+    assert scorer.reader_entity_found(gold, entities) == {
+        "answered": True,
+        "expected": "сеть_ритейлер",
+        # both rows named the brand, and the record says what each of them called it
+        "reported": ["молочный_бренд", "сеть_ритейлер"],
+    }
+    assert scorer.reader_entity_found(gold, entities[:1])["answered"] is False
+    absent = {"brand_id": "varto", "expected": "absent"}
+    assert scorer.reader_entity_found(absent, entities) == {
+        "answered": True,
+        "expected": "absent",
+        "reported": [],
+    }
+    reported = [{"name": "варто", "brand_ids": ["varto"], "subject_type": "молочный_бренд"}]
+    assert scorer.reader_entity_found(absent, reported) == {
+        "answered": False,
+        "expected": "absent",
+        "reported": ["молочный_бренд"],
+    }
+
+
+def test_reader_comment_agreement_counts_silence_as_a_disagreement_and_says_so():
+    """Four rows, hand-counted: one agrees on both stated fields, one agrees on the only field its
+    gold states (the reader's extra stance is not scored), one contradicts the stance, and one the
+    reader never wrote at all. 2 of 4 = 0.5, with the absent row visible beside the disagreement so
+    the two failure modes cannot hide inside one rate."""
+    gold = [
+        {
+            "msg_id": 21626,
+            "subject_type": "сеть_ритейлер",
+            "stance": "negative",
+            "scored_fields": ["subject_type", "stance"],
+        },
+        {
+            "msg_id": 47899,
+            "subject_type": "категория",
+            "stance": None,
+            "scored_fields": ["subject_type"],
+        },
+        {"msg_id": 21629, "subject_type": None, "stance": "positive", "scored_fields": ["stance"]},
+        {
+            "msg_id": 580129,
+            "subject_type": "категория_личное",
+            "stance": None,
+            "scored_fields": ["subject_type"],
+        },
+    ]
+    per_comment = [
+        {"msg_id": 21626, "subject_type": "сеть_ритейлер", "stance": "negative"},
+        {"msg_id": "47899", "subject_type": "категория", "stance": "neutral"},
+        {"msg_id": 21629, "subject_type": "молочный_бренд", "stance": "negative"},
+    ]
+    result = scorer.reader_comment_agreement(gold, per_comment)
+    assert (result["n"], result["agreed"], result["disagreed"], result["absent"]) == (4, 2, 1, 1)
+    assert result["rate"] == pytest.approx(0.5)
+    assert result["rows"][2]["disagreed_on"] == {
+        "stance": {"gold": "positive", "reader": "negative"}
+    }
+    assert result["rows"][3] == {"msg_id": 580129, "agreed": False, "absent": True}
+    with pytest.raises(ValueError, match="the per-comment gold is empty"):
+        scorer.reader_comment_agreement([], per_comment)
+
+
+def test_reader_noise_count_counts_signals_and_reports_entities_beside_them():
+    """The operator's bar is «ноль сигналов» out of these threads. A name resolved inside a
+    giveaway thread is duty (2) done on a name that is really there, so entities are reported and
+    never added in."""
+    verdicts = {
+        "N1": {"signals": [], "entities": [{"name": "Pro Milk"}]},
+        "N4": {"signals": [{"signal_type": "жалоба"}, {"signal_type": "спрос"}], "entities": []},
+        "N5": {"signals": [], "entities": []},
+    }
+    assert scorer.reader_noise_count(verdicts) == {
+        "threads": 3,
+        "signals": 2,
+        "per_thread": {"N1": 0, "N4": 2, "N5": 0},
+        "entities": {"N1": 1, "N4": 0, "N5": 0},
+    }

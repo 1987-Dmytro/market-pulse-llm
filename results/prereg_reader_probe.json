@@ -1,0 +1,294 @@
+{
+  "attempt": "ONE attempt, no retry. A failed bar after a completed run closes the question by design review (plan §5). Anything this registration did not anticipate stops the run and is reported with the attempt intact",
+  "authority": {
+    "docs/PLAN-comment-signals.md": "5aa0b5861a6c5d8fbc260964dfbb5891b93e41399da499e94e49cfa5890367b3",
+    "docs/PROMPT-probe-a.md": "79138acb85aed7386bb0554d0dddef11d5ce9f52b8da15e0ce090e82ae98c2d7",
+    "docs/REFERENCE-signals-w1.md": "6408d4bbbb6e374394e48802f1a13a2c78d92825a54968666a9ac3c54d4835b3",
+    "results/reader_gold_w1.json": "ba86bcb31d597095124d3d7a32838a55a4b5be1f1f8f72e6c14368ecafb43225"
+  },
+  "bars": {
+    "1_flagships": {
+      "also_reported": "per-signal found/missed for all 7 gold signals, so the narrower reading of plan §5 (1) — which names five SIGNALS (F1a, F1b, F2a, F3a, F4a) and neither F1c nor F5 — can be read off the same table. The case reading is the stricter of the two and is the one registered",
+      "gold_signals": [
+        "F1a",
+        "F1b",
+        "F1c",
+        "F2a",
+        "F3a",
+        "F4a",
+        "F5a"
+      ],
+      "rule": "each of the reference's five flagship CASES is found when every gold signal it carries is found by scorer.reader_signal_found — evidence overlap, plus subject_type and aspect where the gold states them. signal_type is not compared and neither is subject_id",
+      "scored_over": [
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5"
+      ],
+      "scorer": "reader_signal_found",
+      "threshold": "5 of 5 cases"
+    },
+    "2_entity_cases": {
+      "rule": "an entity case is answered when the verdict for its thread carries an entity whose name or quote resolves to the case's brand_id through the watchlist matcher AND whose subject_type is the operator's ruling. E4 is the absence case: «чи варто» is the adverb, so the case is answered when NO entity in that thread names varto",
+      "scored_over": [
+        "E2",
+        "E3"
+      ],
+      "scorer": "reader_entity_found",
+      "the_contract_asked_for": "4 of 4",
+      "threshold": "2 of 2 reachable cases",
+      "unreachable": {
+        "E1": {
+          "in_the_window": true,
+          "passes_the_gate_with_no_silencer": true,
+          "reading": "the thread's only lexicon hit is one this silencer takes away, so the gate drops the whole thread — before payment, and therefore before the reader can resolve anything in it",
+          "removed_by": [
+            "varto_rule"
+          ]
+        },
+        "E4a": {
+          "in_the_window": true,
+          "passes_the_gate_with_no_silencer": true,
+          "reading": "the thread's only lexicon hit is one this silencer takes away, so the gate drops the whole thread — before payment, and therefore before the reader can resolve anything in it",
+          "removed_by": [
+            "varto_rule"
+          ]
+        },
+        "E4b": {
+          "in_the_window": true,
+          "passes_the_gate_with_no_silencer": true,
+          "reading": "the thread's only lexicon hit is one this silencer takes away, so the gate drops the whole thread — before payment, and therefore before the reader can resolve anything in it",
+          "removed_by": [
+            "varto_rule"
+          ]
+        }
+      },
+      "why_it_cannot_be_4": "E1 «Гармонія», E4a and E4b «чи варто» are in the window and NOT in the population: each passes the gate with no silencer running and is removed by the marker rule of SPEC 3.21 (1), which takes away the thread's only lexicon hit. The reader is never shown them, so 4/4 is unreachable by arithmetic and the missing three are a finding about the GATE, not about the reader"
+    },
+    "3_noise": {
+      "excluded_with_cause": {
+        "N1": "the reference's own S list reads a signal inside this thread (S1, msg 21420, «Половина товаров закончилась, гениально»), and the store shows two comments there rather than the «десятки «+»» the N list describes — the plus-spam it refers to was silenced before payment. A bar that failed the reader for agreeing with the reference would measure nothing. The signal count for N1 is reported beside the bar and gates nothing"
+      },
+      "rule": "zero signals in the verdicts of the reference's noise threads",
+      "scored_over": [
+        "N2",
+        "N4",
+        "N5",
+        "N6"
+      ],
+      "scorer": "reader_noise_count",
+      "threshold": "0 signals",
+      "unreachable": {
+        "N3": {
+          "in_the_window": true,
+          "passes_the_gate_with_no_silencer": true,
+          "reading": "the thread's only lexicon hit is one this silencer takes away, so the gate drops the whole thread — before payment, and therefore before the reader can resolve anything in it",
+          "removed_by": [
+            "varto_rule"
+          ]
+        }
+      }
+    },
+    "4_per_comment_agreement": {
+      "arithmetic": "13 rows are inside the population, so the bar is 11 of 13 (0.846) — 10 agreements scores 0.769 and fails",
+      "rule": "each gold row is compared on the fields the reference STATES for it (`scored_fields`) and on no others; a gold row the reader wrote no per_comment entry for counts as a disagreement and is also counted separately as `absent`",
+      "scored_over": [
+        21626,
+        21599,
+        21601,
+        21629,
+        580124,
+        580129,
+        47899,
+        47902,
+        48276,
+        48283,
+        579379,
+        579457,
+        20664
+      ],
+      "scorer": "reader_comment_agreement",
+      "threshold": "rate >= 0.8",
+      "unreachable": [
+        578951
+      ]
+    },
+    "5_time_and_cost": {
+      "prior": {
+        "rate_usd_per_second": 0.00030669,
+        "reading": "the 5c2 comment run's measured rate, carried as the PRIOR only. The probe's own rate is the one its endpoint bills, and it is what the projection uses",
+        "source": "results/run_5c2_comments.json"
+      },
+      "rule": "the warm-up measures billed worker seconds per thread; the window is projected two ways and the PESSIMISTIC one binds — per thread (mean seconds × 111) and per payable comment (seconds ÷ warm-up payable × 912). A rate is a property of the sample it was measured on, and a thread call is not a comment call",
+      "thresholds": {
+        "cap_usd_all_in": 0.2,
+        "window_minutes_billed": 30.0
+      }
+    }
+  },
+  "class": "PRE-REGISTRATION. Committed before the endpoint exists; git history is the only witness to that order, and no clock is stamped so the record re-derives byte for byte. Nothing here is a result. A pre-registration is a registration and not law: the layer's amendment comes after adjudication",
+  "contract": "docs/PROMPT-probe-a.md D3",
+  "frozen_when_the_endpoint_exists": [
+    "results/prereg_reader_probe.json",
+    "results/reader_gold_w1.json",
+    "the reader_thread_gm4 prompt text",
+    "src/market_pulse/scorer.py's four reader functions",
+    "scripts/reader_population.py's enumeration"
+  ],
+  "go_no_go": {
+    "pattern": "the (10)(a) go/no-go: measure a warm-up, project, and stop before the rest",
+    "stop_rule": "if the binding projection exceeds either ceiling — the remaining cap or 30 minutes billed for the window — STOP before any further call. The attempt stays intact, the measured rate goes back to the operator, and no bar is scored on a partial run",
+    "warm_up": {
+      "drawn": [
+        {
+          "channel": "@mandziak",
+          "payable_comments": 3,
+          "post_id": 3701,
+          "rank_by_size": 56,
+          "rendered_chars": 5639
+        },
+        {
+          "channel": "@VARUS_channel",
+          "payable_comments": 4,
+          "post_id": 10451,
+          "rank_by_size": 65,
+          "rendered_chars": 5728
+        },
+        {
+          "channel": "@tarilka_malyuka",
+          "payable_comments": 4,
+          "post_id": 715,
+          "rank_by_size": 69,
+          "rendered_chars": 7330
+        }
+      ],
+      "representativeness": "the drawn threads' payable counts are recorded beside the population's median and maximum. A middle-third draw prices a median thread, and the per-payable projection is what carries that price to the threads above it",
+      "rule": "the population ordered by payable comments, the MIDDLE third of that order, 3 threads drawn from it by the seed above. Never the head: a registered price names its sample",
+      "seed": "probe-a warm-up · narrow|silencers_on · 2026-08-15",
+      "threads": 3
+    },
+    "what_a_stop_costs": "the warm-up's own spend, and nothing else"
+  },
+  "instruments": {
+    "ceilings": {
+      "input_chars": 40000,
+      "input_rule": "a LOUD refusal, never a truncation. The largest thread of this population renders to 27593 characters, so the guard cannot fire on a thread the probe is registered to read",
+      "output_rule": "a ceiling against a truncated verdict, not a target. A reply that uses it all comes back `finish_reason: length` and is counted as a parse failure by cause — never read as a thread with nothing in it",
+      "output_tokens": 2000,
+      "threads_the_output_ceiling_may_truncate": [
+        "@matusi_ukr:22058 (125 payable)",
+        "@matusi_ukr:22295 (108 payable)",
+        "@matusi_ukr:22133 (105 payable)"
+      ]
+    },
+    "gold": {
+      "record": "results/reader_gold_w1.json",
+      "sha256": "ba86bcb31d597095124d3d7a32838a55a4b5be1f1f8f72e6c14368ecafb43225"
+    },
+    "parser": {
+      "function": "parse_reply",
+      "module": "src/market_pulse/prompts.py",
+      "sha256": "2250180fcadc18fef102991bc00b5c3ba3f2afffafb77c69d98f169eee9fc70f"
+    },
+    "prompt_sha256": "b272115637f784ad63c6fb2483e0b0ac3d6381901a096dc1cb5406b81a46c8cd",
+    "scorer": {
+      "functions": [
+        "reader_signal_found",
+        "reader_entity_found",
+        "reader_comment_agreement",
+        "reader_noise_count"
+      ],
+      "module": "src/market_pulse/scorer.py",
+      "sha256": "dbb5406a502f813ba1b4940e0914310efd632386a8da60e0c002cc8964a97d4f"
+    },
+    "serving": {
+      "adapter": null,
+      "adapter_note": "the reader is a NEW capability and the classification adapter stays out. `serve_handler.settings` refuses the whole ADAPTER_ENV set before the model loads and `assert_no_adapter` refuses the loaded object — the environment and the model are two different checks",
+      "chat_template": {
+        "add_generation_prompt": true,
+        "enable_thinking": false
+      },
+      "decoding": "greedy",
+      "do_sample": false,
+      "forward_batch_size": 1,
+      "merge_state": "base-no-adapter",
+      "model": "google/gemma-4-31b-it",
+      "model_revision": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+      "quantization": {
+        "bnb_4bit_compute_dtype": "bfloat16",
+        "bnb_4bit_quant_type": "nf4",
+        "bnb_4bit_use_double_quant": true,
+        "load_in_4bit": true
+      },
+      "serving_config": "READER",
+      "template_note": "a NEW serving template for the READER config. `settings()` refuses config-mixing by design; the srv-2d and CAPTION templates are never edited",
+      "thinking_note": "`enable_thinking: false` is explicit and registered: a thinking-ON reader is a NEW pre-registration and not a knob, and `parse_reply` reads from the first brace it finds"
+    },
+    "task": "reader_thread_gm4"
+  },
+  "money": {
+    "cap_usd_all_in": 0.2,
+    "guard": "scripts/runpod_guard.py before the endpoint is created, read from the guard and never from a ledger line (Dv33)",
+    "includes": "the warm-up, the run, and every second the endpoint bills while it exists"
+  },
+  "non_gating": [
+    "how many of the 111 the reader marks signal-bearing versus «нет сигнала», counted apart from replies that failed to parse — an unreadable reply is not a thread with no signal in it",
+    "parse failures by reason, and how many were `finish_reason: length`",
+    "signal types the reader proposed with `proposed: true`",
+    "comments that appear in both `per_comment` and `noise` in one verdict",
+    "entities resolved inside the noise threads",
+    "the plan §5 (1) five-signal reading of bar 1, beside the five-case one",
+    "signals raised in N1, the thread excluded from bar 3"
+  ],
+  "phase": "probe-a",
+  "population": {
+    "cell": "narrow|silencers_on",
+    "enumeration": {
+      "digest": "45cc560b16ba7ae3d74dd83e16538f8da23301e69b8f5c2750c523726af1b603",
+      "digest_rule": "sha256 over `channel:post_id\\tpayable msg_ids` for every thread, in the enumeration's order — the population pinned as a list rather than as a count",
+      "producer": "scripts/reader_population.py",
+      "sha256": "5ecb897d3d620d7d27916a3aa578a599ba1cd7c835abfb4ea136a350a440914a"
+    },
+    "payable_comments": 912,
+    "record": "results/gate_census_w1.json",
+    "sha256": "1338d4003ff787682962fd5f5f89014939e533af900083367c3e2be882d65602",
+    "sizes": {
+      "payable_comments": {
+        "max": 125,
+        "mean": 8.216,
+        "median": 3,
+        "min": 0,
+        "total": 912
+      },
+      "rendered_chars": {
+        "max": 27593,
+        "mean": 7024.45,
+        "median": 6095,
+        "min": 5303,
+        "total": 779714
+      }
+    },
+    "threads": 111,
+    "threads_with_no_payable_comment": [
+      "@tarilka_malyuka:829"
+    ]
+  },
+  "producer": {
+    "borrowed": {
+      "scripts/reader_population.py": "5ecb897d3d620d7d27916a3aa578a599ba1cd7c835abfb4ea136a350a440914a",
+      "scripts/write_reader_gold.py": "20a687a630387fa2556cb47cc890c4631e1cfff3a2e58dd86a927b0414385e7b",
+      "src/market_pulse/local_llm.py": "f9a6c4d6ed4bdc549519083f1873de3132fb7ba9a5d41d87a73d6c573c53c47f",
+      "src/market_pulse/prompts.py": "2250180fcadc18fef102991bc00b5c3ba3f2afffafb77c69d98f169eee9fc70f",
+      "src/market_pulse/scorer.py": "dbb5406a502f813ba1b4940e0914310efd632386a8da60e0c002cc8964a97d4f"
+    },
+    "script": "scripts/write_reader_prereg.py",
+    "sha256": "6b21786b9259d2fe5550137eec0964bfd6e07fcbbb13b30592480a1cacd03dbf"
+  },
+  "rulings": [
+    "operator 2026-08-15: the taxonomy of plan §3 ratified — subject, signal and noise words",
+    "operator 2026-08-15: per-comment agreement bar ≥ 0.80",
+    "operator 2026-08-15: window reading time budget ≤ 30 minutes billed",
+    "operator 2026-08-15: the gate is the narrow lexicon with its silencers; precision lives with the reader"
+  ]
+}

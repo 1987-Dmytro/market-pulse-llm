@@ -42,7 +42,7 @@ import gate_census_w1 as census  # noqa: E402
 import reader_population as population  # noqa: E402
 import window_summary_5c2 as summary  # noqa: E402
 
-from market_pulse import loop, prompts  # noqa: E402
+from market_pulse import brands, loop, prompts  # noqa: E402
 
 REFERENCE = REPO_ROOT / "docs" / "REFERENCE-signals-w1.md"
 PLAN = REPO_ROOT / "docs" / "PLAN-comment-signals.md"
@@ -445,6 +445,21 @@ def quote_state(quote: str | None, texts: list[str]) -> dict:
     }
 
 
+def one_brand(name: str, aliases: dict[str, str]) -> str:
+    """The single watchlist brand the reference's phrase names, or a refusal.
+
+    Exactly one, because the bar is keyed by it: a phrase that resolves to none could never be
+    answered and one that resolves to two could be answered by naming either.
+    """
+    found = sorted(one["brand_id"] for one in brands.find_watchlist_brands(name, aliases))
+    if len(found) != 1:
+        raise SystemExit(
+            f"{name!r} names {found or 'no'} watchlist brand — an entity case is scored by the"
+            " brand its phrase resolves to, and this one cannot be scored"
+        )
+    return found[0]
+
+
 def why_outside(thread: dict, gate) -> dict:
     """Which of the gate's silencers removed this thread — measured, one at a time.
 
@@ -568,6 +583,13 @@ def build(kept: list[dict], rows: dict, posts: dict, threads: list[dict], gate) 
         entities.append(
             {
                 **case,
+                # the key the bar matches on, resolved by the repo's own matcher rather than typed:
+                # the reference names the case by a PHRASE («Зайшла в Varus на Деміївській»), the
+                # reader will answer with a name of its own, and the only thing the two can be
+                # compared through is the brand the watchlist finds in each. Default matching, no
+                # r1 rules: the rules can only take a hit away, and whether «варто» is the brand
+                # here is the question this case asks the reader, not one the gate may pre-answer
+                "brand_id": one_brand(case["name"], gate[0]),
                 "thread": thread_state(case["channel"], case["post_id"]),
                 "evidence_row": row,
                 # E2's name is printed in the post, so the post is where the quote must be found

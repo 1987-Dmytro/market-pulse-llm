@@ -612,3 +612,126 @@ def text_tier_accuracy(y_true: list[str], y_pred: list[str]) -> float:
     if not y_true:
         raise ValueError("no scoreable rows: every adjudicated row was excluded")
     return sum(gold == pred for gold, pred in zip(y_true, y_pred)) / len(y_true)
+
+
+# --- the comment-signals reader (probe-a) -------------------------------------
+#
+# Four judgements, and they are separate because they fail separately: a finding
+# the reader reached by another route, a NAME it resolved, a thread it should
+# have said nothing about, and a comment it attributed. Every threshold lives in
+# `results/prereg_reader_probe.json` and none of them here — a bar is a
+# registration, not a constant somebody can grow to make a run pass.
+
+
+def reader_signal_found(gold: dict, signals: list[dict]) -> dict:
+    """Bar 1 — is this gold signal in the reader's verdict for its thread?
+
+    Matched on EVIDENCE first: a finding is the comments it was read from, and two readers who
+    quote the same comment about the same subject have found the same thing. ``signal_type`` is
+    deliberately NOT compared — «signal_type may differ in word, the finding must be there»
+    (docs/PROMPT-probe-a.md D3) — and neither is ``subject_id``, because the reference spells its
+    subjects in Russian prose while the reader answers in Ukrainian, and a string comparison across
+    those two would measure spelling.
+
+    ``subject_type`` and ``aspect`` are compared only where the gold states them. Three of the
+    reference's own flagship signals state no aspect and one states no subject at all; scoring a
+    field the team lead never wrote would be the executor adding to the gold.
+    """
+    wanted = set(gold["evidence"])
+    for index, one in enumerate(signals):
+        if not wanted & set(one.get("evidence") or ()):
+            continue
+        if gold.get("subject_type") and one.get("subject_type") != gold["subject_type"]:
+            continue
+        if gold.get("aspect") and one.get("aspect") != gold["aspect"]:
+            continue
+        return {"found": True, "index": index, "signal_type": one.get("signal_type")}
+    return {"found": False, "index": None, "signal_type": None}
+
+
+def reader_entity_found(gold: dict, entities: list[dict]) -> dict:
+    """Bar 2 — did the reader resolve this NAME the way the operator ruled it?
+
+    Each entity row arrives carrying ``brand_ids`` — what the watchlist matcher finds in the name
+    the reader wrote and the quote it read it in. Resolving a free-text name to a brand is the
+    matcher's job and not this module's; deciding whether the resolution matches the ruling is.
+
+    ``expected: "absent"`` is a case in its own right and not an absent case: «чи варто» is the
+    adverb, so the ruling is that the reader must NOT report a Varto entity at all. That claim can
+    only be checked as an absence over the whole thread, which is why it is answered here rather
+    than by the caller noticing nothing came back.
+    """
+    named = [one for one in entities if gold["brand_id"] in (one.get("brand_ids") or ())]
+    if gold.get("expected") == "absent":
+        return {
+            "answered": not named,
+            "expected": "absent",
+            "reported": [one.get("subject_type") for one in named],
+        }
+    agreeing = [one for one in named if one.get("subject_type") == gold["subject_type"]]
+    return {
+        "answered": bool(agreeing),
+        "expected": gold["subject_type"],
+        "reported": [one.get("subject_type") for one in named],
+    }
+
+
+def reader_comment_agreement(gold: list[dict], per_comment: list[dict]) -> dict:
+    """Bar 4 — the per-comment agreement of the operator's ruling of 2026-08-15 (≥ 0.80).
+
+    One row per gold msg-id, and each is compared on the fields the reference STATES for it
+    (``scored_fields``) and on no others. A gold row the reader wrote nothing for counts as a
+    disagreement — silence about a comment the team lead attributed is a miss, not an exemption —
+    and it is counted separately as ``absent`` so the two failure modes never hide inside one rate
+    ([[measure_on_the_rows_the_gate_scores]]).
+
+    A gold row is scored where the reader was GIVEN the comment; the caller filters to those. An
+    empty list is refused rather than scored 0.0 or 1.0: a rate over nothing is not a reading.
+    """
+    if not gold:
+        raise ValueError("no scoreable rows: the per-comment gold is empty")
+    answers = {int(one["msg_id"]): one for one in per_comment}
+    rows, agreed, absent = [], 0, 0
+    for row in gold:
+        answer = answers.get(int(row["msg_id"]))
+        fields = list(row["scored_fields"])
+        if answer is None:
+            absent += 1
+            rows.append({"msg_id": int(row["msg_id"]), "agreed": False, "absent": True})
+            continue
+        wrong = [name for name in fields if answer.get(name) != row[name]]
+        agreed += not wrong
+        rows.append(
+            {
+                "msg_id": int(row["msg_id"]),
+                "agreed": not wrong,
+                "absent": False,
+                "disagreed_on": {
+                    name: {"gold": row[name], "reader": answer.get(name)} for name in wrong
+                },
+            }
+        )
+    return {
+        "n": len(gold),
+        "agreed": agreed,
+        "disagreed": len(gold) - agreed - absent,
+        "absent": absent,
+        "rate": agreed / len(gold),
+        "rows": rows,
+    }
+
+
+def reader_noise_count(verdicts: dict[str, dict]) -> dict:
+    """Bar 3 — how many signals the reader raised out of threads the reference calls noise.
+
+    Signals only. An entity resolved inside a giveaway thread is the reader doing duty (2) on a
+    name that is really there, and the bar the operator set is «ноль сигналов из
+    плюс-спама/скама/гивевеев» — so entities are reported beside the number and never inside it.
+    """
+    per_thread = {name: len(one.get("signals") or ()) for name, one in verdicts.items()}
+    return {
+        "threads": len(verdicts),
+        "signals": sum(per_thread.values()),
+        "per_thread": per_thread,
+        "entities": {name: len(one.get("entities") or ()) for name, one in verdicts.items()},
+    }

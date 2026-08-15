@@ -182,6 +182,26 @@ def test_the_store_disagrees_with_the_reference_twice_and_the_record_names_both(
     assert both["case"] == "N1" and both["secondary"] == ["S1"]
 
 
+def test_each_entity_case_is_keyed_by_the_brand_its_phrase_resolves_to():
+    """The reference names a case by a PHRASE and the reader will answer with a name of its own, so
+    the two are compared through the brand the watchlist matcher finds in each. E3's key is the
+    private-label id — which is exactly why the case exists: «Зайшла в Varus» is the shop, and the
+    only thing the matcher can key that string to is the chain's own label."""
+    keys = {one["id"]: one["brand_id"] for one in RECORD["entity_cases"]}
+    assert keys == {
+        "E1": "garmonija",
+        "E2": "selianske",
+        "E3": "varus-pl",
+        "E4a": "varto",
+        "E4b": "varto",
+    }
+    aliases = population.gate()[0]
+    for case in RECORD["entity_cases"]:
+        assert gold.one_brand(case["name"], aliases) == case["brand_id"]
+    with pytest.raises(SystemExit, match="an entity case is scored by the"):
+        gold.one_brand("нічого впізнаваного", aliases)
+
+
 def test_the_gold_names_the_instrument_it_will_be_scored_against():
     """The gold and the prompt are frozen together the moment the endpoint exists, so the record
     carries the sha of the prompt it was built for."""
