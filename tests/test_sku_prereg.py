@@ -266,6 +266,13 @@ def test_every_pinned_input_still_hashes_to_what_it_says(record):
         # a positions table. One name short on arrival like every block before it. Stripped here
         # for the same reason as all of them: these pins are v1–v4's and predate every word of it.
         "amendment-3.21",
+        # 3.22 — the fix-b finding, closed by operator ruling (2026-08-15): a row-level promo
+        # surface prints the PRINTED badge's depth and never the arithmetic one, because the
+        # arithmetic reading beside the row's own promo price returns the extracted old price.
+        # The narrowest block of the family — it recomputes nothing, it rules on which of two
+        # readings already in the evidence may be shown. One name short on arrival like every
+        # block before it. Stripped here for the same reason: these pins are v1–v4's.
+        "amendment-3.22",
     ]
     assert prereg.RATIFICATION_NAME.findall(spec_text) == blocks
     law = prereg.registered_law(prereg.SPEC).decode("utf-8")

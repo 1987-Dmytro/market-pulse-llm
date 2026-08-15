@@ -948,6 +948,24 @@ index therefore still reads «the current revision is 3.18» and is now THREE am
 3.19, 3.20 and 3.21 are each their own index entry, here and in the two blocks before this one,
 until that pin retires.)
 <!-- amendment-3.21 end -->
+<!-- amendment-3.22 begin — stripped by write_sku_prereg.registered_law() before hashing
+docs/SPEC.md against every sealed pre-registration pin, all of which predate this text; the
+law those records registered is the stripped text. New law arrives ONLY inside its own marked
+block — a sealed registration is never re-pinned to make it green -->
+**Amendment 3.22 (operator, 2026-08-15, closing the fix-b finding — which depth reading a ROW
+may print):**
+1. Row-level promo surfaces (drill-down rows and any per-row rendering) carry the depth from the
+   PRINTED badge only, absent when no badge was printed. The arithmetic (price-pair) reading lives
+   exclusively in window aggregates, where no row's own promo price sits beside it. Operator ruling
+   2026-08-15, closing the fix-b finding: `promo ÷ (1 − arithmetic depth)` reconstructs the
+   extracted old price, which 3.17 (3) and 3.18 (7) keep off every surface.
+(Index note, in this block for the reason 3.19's, 3.20's and 3.21's own notes give: the
+`amendment-index` block above is one of the TEN blocks `write_prereg_5c2.KEEP_BLOCKS` holds INSIDE
+the sealed pin of `results/prereg_5c2_run.json`, so editing it would break that pin and re-pinning
+is refused. The index therefore still reads «the current revision is 3.18» and is now FOUR
+amendments behind: 3.19, 3.20, 3.21 and 3.22 are each their own index entry, here and in the three
+blocks before this one, until that pin retires.)
+<!-- amendment-3.22 end -->
 **Date:** 2026-07-26 · **Team lead:** Fable session · **Executor:** Claude Code
 **Repo folder:** `/Users/hdv_1987/Desktop/Projects/market-pulse-llm`
 **rev. 3 change (operator decision):** producers in Ukraine barely use Telegram for
