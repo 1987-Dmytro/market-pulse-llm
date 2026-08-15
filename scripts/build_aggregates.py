@@ -208,6 +208,7 @@ def main(argv: list[str] | None = None) -> int:
     print(f"  comments      {window[2]} bought · {window[3]} payable · {window[4]} text-less")
     for table in (
         "channels",
+        "watchlist",
         "comments",
         "comment_intents",
         "comment_brands",

@@ -4011,7 +4011,7 @@
       "results/window_summary_5c2.json": "7760d32d0ffec80cc73d6ebb27e464ab5b906ed9eda00ea0aa8d15b90ae7561c"
     },
     "producers": {
-      "scripts/build_aggregates.py": "65eba052a18549a6ccd91927cf38b5a38f341db2f3bc1597949480c9f57c0cd0",
+      "scripts/build_aggregates.py": "5094c95dd8faa4d0b4321bac95def5d8820b932cbc1c2e912525a96e2b1d5918",
       "scripts/export_dashboard_data.py": "e947c784a90fdb4561df42258c829c06ca9e98e276f431efd214a73a8d5ab7bb",
       "scripts/window_summary_5c2.py": "239d2d5fcc0f0c93158ca41383b5ce20beb7f8e9db38974913a302ea4831fdaf",
       "src/market_pulse/aggregates.py": "f7ff88c92a902c2a81d8be8fe6095df0cdde4a4166ccccb4f897aab6b0aa4e10",
