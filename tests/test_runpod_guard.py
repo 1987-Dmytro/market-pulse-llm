@@ -171,8 +171,8 @@ def test_a_hyphen_and_an_underscore_are_the_same_step(tmp_path):
     key is looked for under BOTH spellings inside it, because the driver writes
     `runpod_balance_at_sku-b_start` into the underscored file.
     """
-    assert guard.step_file("sku-b") == guard.step_file("sku_b")
-    assert guard.step_file("sku-b").name == "spend_sku_b.json"
+    assert guard.step_ledger_path("sku-b") == guard.step_ledger_path("sku_b")
+    assert guard.step_ledger_path("sku-b").name == "spend_sku_b.json"
 
     path = tmp_path / "spend_sku_b.json"
     path.write_text(
@@ -186,6 +186,31 @@ def test_a_hyphen_and_an_underscore_are_the_same_step(tmp_path):
     assert guard.read_step(path, "sku_b", 0.35, 1.0)["runpod_balance_at_sku-b_start"] == (
         12.4184987367
     )
+
+
+def test_one_step_writes_exactly_one_ledger_file(ledger, tmp_path, monkeypatch):
+    """Dv392, and why the assertion above was not enough to catch it.
+
+    `step_ledger_path` normalised the READ and `--note` rebuilt the WRITE from the raw step name, so
+    probe-a's anchor was read from `results/spend_probe_a.json` while its session note landed in
+    `results/spend_probe-a.json`. Both carried the same anchor, so no number was wrong — and two
+    anchor files for one step is the counter this module's docstring says must never restart.
+
+    A test that only compares two calls of the path function cannot see that: the second spelling was
+    never built by the function ([[a_guard_on_one_path_is_not_a_guard]]). This one drives `main` with
+    the write flag, without `--step-ledger`, and looks at the DIRECTORY.
+    """
+    monkeypatch.setattr(guard, "REPO_ROOT", tmp_path)
+    drive(monkeypatch, balance=23.00)
+
+    assert guard.main(["--step", "probe-b", "--step-cap", "0.35", "--note", "the anchor"]) == 0
+    assert guard.main(["--step", "probe-b", "--step-cap", "0.35", "--note", "a session"]) == 0
+
+    written = sorted(path.name for path in (tmp_path / "results").glob("spend_probe*.json"))
+    assert written == ["spend_probe_b.json"], written
+    body = json.loads((tmp_path / "results" / "spend_probe_b.json").read_text(encoding="utf-8"))
+    assert body["runpod_balance_at_probe-b_start"] == 23.00
+    assert [one["note"] for one in body["gpu_sessions"]] == ["the anchor", "a session"]
 
 
 def test_the_existing_anchor_is_what_the_cap_is_enforced_against(tmp_path, monkeypatch, capsys):

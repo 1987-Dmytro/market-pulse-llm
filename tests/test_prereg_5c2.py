@@ -439,6 +439,33 @@ re-pinned to follow it. That is the producer's own strongest refusal turned on i
 The record has never been rewritten and the producer had never been touched until today, so this is
 the only commit either of them needs."""
 
+MOVED_BORROWS = {"scripts/runpod_guard.py": "step_ledger_path"}
+"""The borrowed modules whose bytes have moved since the seal, each with the token it learned.
+
+`scripts/runpod_guard.py` moved on 2026-08-15 for Dv392: the guard normalised the step ledger's
+path on the READ and rebuilt it from the raw step name on the WRITE, so one `--step probe-a --note`
+maintained `results/spend_probe_a.json` and `results/spend_probe-a.json` at once. The fix routes
+every write through the one `step_ledger_path` result.
+
+Nothing this registration states follows it. The guard is borrowed here as the instrument that
+enforces the cap, and what changed is where a session NOTE is appended — no balance, no anchor, no
+threshold and no reading in this record is computed by the moved lines. The bytes stay RECOVERABLE:
+
+    git show 0e390ff:scripts/runpod_guard.py
+
+The token is read BOTH ways below — absent from the recovered blob, present on disk — so a recovery
+from the wrong commit fails instead of passing."""
+
+
+def sealed_blob(path: str) -> bytes:
+    """`path` as :data:`SEALING_COMMIT` carried it — git, and nothing on disk."""
+    return subprocess.run(
+        ["git", "show", f"{SEALING_COMMIT}:{path}"],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        check=True,
+    ).stdout
+
 
 def test_the_record_carries_no_clock_and_names_the_producer_that_wrote_it():
     """The producer moved under a sealed record, and the record is the one that stays put.
@@ -449,8 +476,9 @@ def test_the_record_carries_no_clock_and_names_the_producer_that_wrote_it():
     is read for the amendment's name too — a recovery that already carried it would mean this test
     is checking the wrong commit.
 
-    `borrows` is still hashed LIVE: none of those five modules moved, and the day one of them does
-    is the day this line has to be looked at rather than relaxed.
+    `borrows` is hashed LIVE except for the one module named in :data:`MOVED_BORROWS`, which was
+    looked at rather than relaxed — see that constant for what moved in it and why no number here
+    follows.
     """
     assert "generated_at" not in RECORD and "git" not in RECORD
     sealed = subprocess.run(
@@ -466,6 +494,14 @@ def test_the_record_carries_no_clock_and_names_the_producer_that_wrote_it():
     assert b"amendment-3.19" not in sealed, "the recovered producer predates the amendment"
     assert "amendment-3.19" in Path(writer.__file__).read_text(encoding="utf-8")
     for path, digest in RECORD["producer"]["borrows"].items():
+        if path in MOVED_BORROWS:
+            recovered = sealed_blob(path)
+            token = MOVED_BORROWS[path]
+            assert hashlib.sha256((REPO_ROOT / path).read_bytes()).hexdigest() != digest, path
+            assert hashlib.sha256(recovered).hexdigest() == digest, path
+            assert token.encode() not in recovered, path
+            assert token in (REPO_ROOT / path).read_text(encoding="utf-8"), path
+            continue
         assert hashlib.sha256((REPO_ROOT / path).read_bytes()).hexdigest() == digest, path
 
 

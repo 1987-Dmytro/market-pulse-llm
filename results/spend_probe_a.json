@@ -1,6 +1,13 @@
 {
   "gpu_note": "RunPod account balance read before the first pod of probe-a. Step spend = this anchor minus the balance now, enforced against $0.45. The SPEC amendment 3.4 (4) phase cap is enforced separately, against results/spend_phase4.json, and neither anchor may be regenerated.",
-  "gpu_sessions": [],
+  "gpu_sessions": [
+    {
+      "at": "2026-08-15T18:39:15+00:00",
+      "balance": 22.9979228605,
+      "note": "probe-a: warm-up done, gate STOP, endpoint and template deleted",
+      "step_spent_usd": 0.075
+    }
+  ],
   "probe-a_cap_usd": 0.45,
   "probe-a_gpu_cap_usd": 0.45,
   "runpod_balance_at_probe-a_start": 23.0729004744

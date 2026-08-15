@@ -126,7 +126,7 @@ def step_anchor_key(step: str) -> str:
     return f"runpod_balance_at_{step}_start"
 
 
-def step_file(step: str) -> Path:
+def step_ledger_path(step: str) -> Path:
     """The step's ledger, under ONE spelling: `sku-b` and `sku_b` are the same step.
 
     Dv151, measured: `--step sku-b` created `results/spend_sku-b.json` beside the driver's own
@@ -134,6 +134,12 @@ def step_file(step: str) -> Path:
     `step_spent_usd` of 0.0. Every number in it was false and none of them looked it — a second
     anchor for one step is a counter that restarts at today's balance, which is the footgun this
     module's docstring warns about, arriving through a naming convention instead of a delete.
+
+    Dv392, measured on probe-a: normalising here was only half the fix. `--note` rebuilt the path
+    from the raw step name, so the anchor was READ from `spend_probe_a.json` and the session note
+    APPENDED to `spend_probe-a.json` — the same two-anchor footgun, from the same step, in one
+    command. There is now exactly one call of this function per invocation and every write uses its
+    result ([[a_guard_on_one_path_is_not_a_guard]]).
     """
     return REPO_ROOT / "results" / f"spend_{step.replace('-', '_')}.json"
 
@@ -261,9 +267,9 @@ def main(argv: list[str] | None = None) -> int:
         )
         return 1
 
-    step_ledger, step_spent = None, None
+    step_ledger, step_path, step_spent = None, None, None
     if args.step:
-        path = args.step_ledger or step_file(args.step)
+        path = step_path = args.step_ledger or step_ledger_path(args.step)
         on_disk = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
         step_ledger = read_step(path, args.step, args.step_cap, balance_now)
         key = anchor_key_in(step_ledger, args.step)
@@ -295,9 +301,10 @@ def main(argv: list[str] | None = None) -> int:
                     "note": args.note,
                 }
             )
-            write_ledger_at(
-                args.step_ledger or REPO_ROOT / "results" / f"spend_{args.step}.json", step_ledger
-            )
+            # the SAME path the anchor was read from, and not a second construction of it: the
+            # write used to spell `spend_{step}.json` while the read normalised the separator, so
+            # one `--step probe-a --note …` maintained two ledgers for one step (Dv392)
+            write_ledger_at(step_path, step_ledger)
         ledger["sessions"].append(
             {
                 "at": datetime.now(UTC).isoformat(timespec="seconds"),
