@@ -7484,3 +7484,42 @@ the recurring one: the formatter sits outside `make check`, so anything hashing 
 rebuilt after it. Dv361 and Dv364 share a shape worth naming: a rule that cannot fire and a rule
 with two readings both look like working law until somebody asks what would have had to be true for
 the answer to differ.
+- **Dv367** — the `depth` column of the promo table: two readings of one clause, decided and named.
+  3.18 (1) makes the depth instrument the promo price and the printed −N%; 3.17 (3), read as a rule
+  about a per-row column, asks for the arithmetic `(old − promo) / old` on the 95 rows that carry
+  both prices. The tie-breaker is what the arithmetic reading hands a reader beside the promo price:
+  `price_old = promo / (1 − depth)`, exact. The table carries the BADGE, the arithmetic reading stays
+  the window aggregate it already is, and the reading is written into `promo.positions_table.law` so
+  the record answers the question rather than the producer. It is not a formality: 88 of the 95 rows
+  disagree at all, 8 by more than the 1.0 pp tolerance, the largest gap 7.1707 pp. [cause: two-readings]
+- **Dv368** — the table's order could not be stated. `ORDER BY … COLLATE NOCASE` in SQLite folds
+  ASCII only, so «ПростоНаше» and «Простонаше» ranked by code point while any Python-side statement
+  of the same rule folded them together — a test could only have passed by reimplementing SQLite's
+  collation. Sorted in Python with `casefold` instead, by index so no comparison reaches the row
+  dicts, and the SQL keeps no ORDER BY of its own. [cause: locale]
+- **Dv369** — the page stopped being byte-identical between runs. The brand filter's options came
+  from `sorted(<set>, key=str.casefold)`, and the two spellings above fold to the SAME key, so their
+  order fell to the set's iteration — which moves with the hash seed. Caught by the determinism test
+  (index 321923, one byte), not by anything that looked at the filter. The key is now
+  `(casefold, itself)`. [cause: nondeterminism]
+- **Dv370** — the blunt half of the old-price check forbade the explanation. `"price_old" not in
+  json.dumps(table)` fired on the block's own `law` field, which exists precisely to say that the
+  old price is absent and why. Narrowed to the ROWS, with a second assertion that the law text does
+  name it. [cause: test-scope]
+- **Dv371** — `row_link` prefixes « · » because it was written for a line of meta text; in a table
+  cell of its own that rendered a leading separator and wrapped onto two lines. Given `lead=False`
+  and `td.plain{white-space:nowrap}`. Found by looking at the page in a browser, not by a test.
+  [cause: presentation]
+- **Dv372** — reported, not fixed: the T5 drill-down prints the ARITHMETIC depth beside the promo
+  price for 15 of its 20 drawn position rows, and `promo / (1 − depth)` returns the extracted old
+  price exactly (19.99, 42.50, 55.90 on the first three). That is the exposure this contract's own
+  `depth` column was designed to avoid, on a surface 6a built and this contract does not name. The
+  fix is one line — drop `depth` from `position_row` — and it is the operator's ruling, not an
+  implementation choice made while rebuilding the page for another reason. [cause: law-gap]
+
+**Process signals — fix-b.** The determinism test was the only thing that could have seen Dv369: a
+`set` with a non-total sort key is invisible to every check that reads the page once. Dv367 was the
+contract — the code was an afternoon, choosing what `depth` MEANS and writing that choice where a
+reader meets it was the work. Dv372 is the shape worth keeping: a surface can obey the letter of a
+prohibition and still return the forbidden number by arithmetic, and the question «what can a reader
+DERIVE from this row» is not asked by any guard we have.
