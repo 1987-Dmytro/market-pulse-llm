@@ -2,24 +2,24 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-14 17:27:11 (every SessionStart)
+**Auto-refreshed:** 2026-08-15 10:05:50 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-c02f0ad fix(5c2-validate): six defects the adversarial review pass confirmed
-1532102 docs(report): the redraw, the 1 361 text-less comments, and four corrections
-d69c812 fix(5c2-validate): a correlated draw, and a quarter of the comment leg with no text
-12aba50 docs(report): 5c2-validate-prep -- the pack is buildable, and Dv307 was closed by a side effect
-8b6cbf4 feat(5c2-validate): the sitting pack -- drawn under seed 42, original beside verdict
+b2ff741 docs(report): 5c2-close -- the commit list amended after the commit that followed it
+3d30fb9 fix(5c2-close): a short hash in a guard, a check that could not fire, and a claim nobody measured
+3a4fe04 docs(report): 5c2-close -- both halves ratified, and one red test the table did not predict
+162ba0c docs(vault): the phase-close ADR, the [model] rule routed, and hot.md curated
+1fc50b8 feat(5c2-run): the phase ledger witnessed from the driver, on every exit that billed
 ```
 
 ## 📋 Recent decisions
 
+- `5c2-closed-the-sitting-and-the-shelf-life-redesign.md` — 5c2 closes: the sitting ratified both halves, 3.19 rules on the text-less comments, and the shelf-life redesign is named as a house pattern
 - `INDEX.md` — Decision records
 - `the-d-cut-and-the-fourth-kind.md` — The post leg's population is the D cut — 44 of 349 — and the marker row that makes its resume exact
-- `5c2-stop-ruling-and-cap-33.md` — The prep-c2 STOP is answered by raising the line, not by cutting the window — and the records written under the old cap are never re-scored
 
 ## 📅 Recent daily logs
 
@@ -30,17 +30,20 @@ d69c812 fix(5c2-validate): a correlated draw, and a quarter of the comment leg w
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-14 (закрытие фазы) — **ФАЗА 5c2 ЗАКРЫТА.** Сидение 3.18 (6) состоялось,
-**обе половины РАТИФИЦИРОВАНЫ** (6 постов / 36 позиций и 5 из 5 комментов, спорных 0, ORDERS 0),
-рулинг сидения = **SPEC амендмент 3.19**. `witness_phase_ledger` вшит в `finalise` драйвера. Phase
-4: **$31.4493 из $33.00**, остаток **$1.5507**. `make check` **2 332 / 2 skipped**, дерево чистое.
-Отчёт — `docs/reports/5c2-close.md` (Dv325–Dv329), ADR —
+**Last update:** 2026-08-14 (закрытие дня) — **ФАЗА 5c2 ЗАКРЫТА.** За день три контракта:
+`5c2-run` (платный, куплено ВСЁ окно за $7.5309), `5c2-validate-prep` ($0) и `5c2-close` ($0).
+Сидение 3.18 (6) состоялось, **обе половины РАТИФИЦИРОВАНЫ** (6 постов / 36 позиций и 5 из 5
+комментов, спорных 0, ORDERS 0), рулинг сидения = **SPEC амендмент 3.19**. `witness_phase_ledger`
+вшит в `finalise` драйвера. Phase 4: **$31.4493 из $33.00**, остаток **$1.5507**. `make check`
+**2 332 / 2 skipped**, дерево чистое. Отчёт — `docs/reports/5c2-close.md` (Dv325–Dv329), ADR —
 [[5c2-closed-the-sitting-and-the-shelf-life-redesign]]. Полный день — [[2026-08-14]].
 
 ## 🔥 What's Hot
 
-**Ждём приёмку `5c2-close` и рулинг оператора о деньгах.** Остатка $1.5507 не хватит ни на один
-платный цикл; линию поднимает ТОЛЬКО оператор. Все $0-задачи ниже можно делать не дожидаясь.
+**🔄 ТЫ ЗДЕСЬ (рукой тимлида в STATUS, приземлилось на закрытии дня): джойнт-планирование цикла-2 и
+Фазы 6.** Фаза 5 закрыта, хроника до 12.08 в STATUS сжата — полная история в git этого файла.
+Остатка $1.5507 не хватит ни на один платный цикл; линию поднимает ТОЛЬКО оператор. Все $0-задачи
+ниже можно делать не дожидаясь.
 
 **Что цикл-2 обязан унести из 3.19 (рулинг по Dv324):** бестекстовые комментарии ИСКЛЮЧАЮТСЯ из
 очереди инференса ДО оплаты — это правило ОЧЕРЕДИ, не удаление (строки остаются собранными,
@@ -55,16 +58,19 @@ d69c812 fix(5c2-validate): a correlated draw, and a quarter of the comment leg w
 
 ## ⏭️ Next
 
-1. **Приёмка `5c2-close`** — `docs/reports/5c2-close.md`. Внутри Dv327: правило `[model]` уехало в
-   третий дом, а не в один из двух названных контрактом, — это рулинг тимлида отменить или принять.
-2. **Рулинг оператора: деньги на цикл-2** (на счету $3.55). Без него платного контракта нет.
-3. **Авторизовано, не начато, $0:** сбор листовок сетей помимо АТБ (3.18 (7)(d)); докачка корпуса
-   (сборка стоит с 08.08).
-4. **Фаза 6 — дашборд.** Топливо готово: `results/window_summary_5c2.json`.
+**Кандидаты цикла-2 в порядке ценности — список тимлида из STATUS:**
 
-**Четыре долга пережили фазу, у каждого хозяин:** (1) правило очереди 3.19 (1) — реализует prep
-следующего цикла; (2) листовки не-АТБ — отдельная $0-задача; (3) история 11 143 под вотермарком —
-отдельный контракт, если решится; (4) цена страницы листовки **10.408 с/стр (n=159)** — вход
+1. **Деньги** — на счету ~$3.55, Phase 4 = $31.4493/$33.00. Пополнение или новый кап; без этого
+   платного контракта нет.
+2. **Батч-паритет** — единственный кандидат, окупаемый ДЕНЬГАМИ: −30–50% цены строки при удаче.
+3. **Скип-правило 3.19 в петлю** — реализует prep цикла-2 (правило ОЧЕРЕДИ, не удаление).
+4. **Сбор листовок Сільпо/Varus** — авторизован 3.18 (7)(d), бесплатно, не начат.
+5. **Докачка корпуса** — сборка стоит с 08.08.
+6. **История 11 143** — вход бесплатен, ~13 ч на текущей скорости, ЖДЁТ батча.
+7. **Приёмка `5c2-close`** — `docs/reports/5c2-close.md`; внутри Dv327 правило `[model]` уехало в
+   третий дом, а не в один из двух названных контрактом — принять или отменить.
+
+**Четвёртый долг, который не в списке:** цена страницы листовки **10.408 с/стр (n=159)** — вход
 следующей регистрации, старые записи НЕ перескориваются.
 
 ## 🚧 Blockers
