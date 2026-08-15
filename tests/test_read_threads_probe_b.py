@@ -152,7 +152,7 @@ def test_the_gate_projects_the_remainder_and_the_pessimistic_projection_binds(be
     The draw is 3 threads carrying 11 payable comments; at 12 s a thread the warm-up bills 36 s.
     The REMAINDER is 20 threads and 123 payable comments, so per thread 12 s → 240 s, and per
     payable comment 36/11 s → 402.5 s. The larger binds: 402.5 s × $0.00030669 = $0.1234, plus the
-    warm-up's own $0.0110 and the registered setup $0.0343 → $0.1688 of $0.35. GO.
+    warm-up's own $0.0110 and the registered setup $0.0440 → $0.1784 of $0.35. GO.
 
     v1's rule would have projected all 23 threads by payable comment — 134 × 36/11 = 438.5 s — and
     compared it against the cap MINUS the warm-up, double-counting the three threads it had just
@@ -186,7 +186,7 @@ def test_the_gate_projects_the_remainder_and_the_pessimistic_projection_binds(be
 
 def test_a_projection_over_the_cap_stops_the_run_and_the_run_refuses_to_open(bench):
     """The same draw at 40 s a thread: 120 s billed, the remainder 123 payable × 120/11 = 1341.8 s,
-    $0.4115 — plus $0.0368 of warm-up and $0.0343 of setup is $0.4826, over the $0.35 cap. STOP, the
+    $0.4115 — plus $0.0368 of warm-up and $0.0440 of setup is $0.4923, over the $0.35 cap. STOP, the
     exit code says STOP, and `--run` refuses to open on it."""
     endpoint = FakeEndpoint(seconds_per_thread=40.0)
     assert run(["--endpoint", "x", "--warm-up"], endpoint) == 2

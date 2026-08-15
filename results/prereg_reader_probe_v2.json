@@ -215,7 +215,7 @@
   "money": {
     "arithmetic": {
       "at_the_l4_rate_probe_a_measured": {
-        "all_in_usd": 0.6486,
+        "all_in_usd": 0.6583,
         "by_payable_comment": {
           "seconds": 2002.9,
           "usd": 0.6143
@@ -229,12 +229,12 @@
         "verdict": "does not fit the cap"
       },
       "break_even_rule": "the binding projection divided by the seconds the cap can buy after setup. A card this much faster than the L4 makes the registered population affordable; a slower one makes the go/no-go say STOP, which is the outcome this arithmetic exists to make legible BEFORE a resource is created rather than after",
-      "break_even_speedup": 1.946,
+      "break_even_speedup": 2.007,
       "rate_usd_per_second": 0.00030669,
-      "seconds_the_cap_buys_after_setup": 1029.4,
-      "setup_rule": "probe-a's settled step ledger ($0.0847) minus its own reading (164.4 billed worker seconds at the rate below) — the staging pod, the boot, the weight load and the idle tail, measured rather than budgeted. The rung that produces nothing is inside the same cap.",
-      "setup_usd": 0.0343,
-      "what_a_stop_costs": "the setup and the warm-up's three threads — at the L4's own rate $0.0343 + $0.0504, less on a faster card"
+      "seconds_the_cap_buys_after_setup": 997.8,
+      "setup_rule": "probe-a's SETTLED step ledger ($0.0944, read from scripts/runpod_guard.py) minus its own reading (164.4 billed worker seconds at the rate below) — the staging pod, the boot, the weight load and the idle tail, measured rather than budgeted. The rung that produces nothing is inside the same cap. Settled and not as-reported: docs/reports/probe-a.md closed at $0.0750 and RunPod's billing kept moving for hours afterwards, so a setup taken from that reading would have been optimistic by $0.010 — 2.8% of this cap, in the direction that opens runs ([[unreadable_now_versus_never]])",
+      "setup_usd": 0.044,
+      "what_a_stop_costs": "the setup and the warm-up's three threads — $0.0440 plus what three threads bill on the card that turns up; probe-a's L4 billed $0.0504 for exactly that draw"
     },
     "cap_usd_all_in": 0.35,
     "guard": "scripts/runpod_guard.py --step probe-b --step-cap 0.35, read from the guard and never from a ledger line or from a sentence in the contract (Dv33, Dv378)",
@@ -825,7 +825,7 @@
       "src/market_pulse/scorer.py": "dbb5406a502f813ba1b4940e0914310efd632386a8da60e0c002cc8964a97d4f"
     },
     "script": "scripts/write_reader_prereg_v2.py",
-    "sha256": "676d02fa48239d226beca90d9114b768a27e3664afb4e4d3fb0b551e058adf16"
+    "sha256": "f526a3105c92c89debeaad97dc63e786d5bca39eceae30176f4e514ae58688eb"
   },
   "supersedes": {
     "record": "results/prereg_reader_probe.json",

@@ -59,11 +59,15 @@ AGREEMENT_BAR = 0.80
 PRODUCTION — a full window of 111 threads — so for a 23-thread probe it is a REPORTED projection and
 not a gate; the cap is what binds here, and the stop rule below says so in one place."""
 
-SETUP_USD = 0.0343
+SETUP_USD = 0.0440
 SETUP_RULE = (
-    "probe-a's settled step ledger ($0.0847) minus its own reading (164.4 billed worker seconds at"
-    " the rate below) — the staging pod, the boot, the weight load and the idle tail, measured"
-    " rather than budgeted. The rung that produces nothing is inside the same cap."
+    "probe-a's SETTLED step ledger ($0.0944, read from scripts/runpod_guard.py) minus its own"
+    " reading (164.4 billed worker seconds at the rate below) — the staging pod, the boot, the"
+    " weight load and the idle tail, measured rather than budgeted. The rung that produces nothing"
+    " is inside the same cap. Settled and not as-reported: docs/reports/probe-a.md closed at $0.0750"
+    " and RunPod's billing kept moving for hours afterwards, so a setup taken from that reading"
+    " would have been optimistic by $0.010 — 2.8% of this cap, in the direction that opens runs"
+    " ([[unreadable_now_versus_never]])"
 )
 
 L4_SECONDS_PER_THREAD = 54.806
@@ -270,8 +274,8 @@ def arithmetic(kept: list[dict]) -> dict:
             " BEFORE a resource is created rather than after"
         ),
         "what_a_stop_costs": (
-            "the setup and the warm-up's three threads — at the L4's own rate $0.0343 + $0.0504,"
-            " less on a faster card"
+            f"the setup and the warm-up's three threads — ${SETUP_USD:.4f} plus what three threads"
+            " bill on the card that turns up; probe-a's L4 billed $0.0504 for exactly that draw"
         ),
     }
 
