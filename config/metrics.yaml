@@ -1,0 +1,220 @@
+# The metric dictionary — SPEC 3.20 (3). One home for names, formulas and help texts.
+#
+# The command centre is bilingual (UA/EN) and every displayed metric carries its definition from
+# HERE: the ⓘ tooltip and the T8 glossary render from the same entry, so a metric cannot be
+# explained one way in a tooltip and another way in the glossary.
+#
+# **No figures in this file.** SPEC 3.20 (1) says no hand-typed number reaches a presentation
+# surface, and a tooltip is a presentation surface. Every entry below is names, a formula and prose;
+# the values arrive from `results/dashboard_data_w1.json`, which is built from the aggregate layer.
+# Where a pitfall depends on a number, it names the field to read rather than stating it.
+#
+# `export_field` is the dotted path into that export, and `tests/test_metrics_dictionary.py` holds
+# the bijection both ways: every metric the export emits has an entry here, and every entry here
+# names a field the export carries. `NOT_COMPUTABLE` stubs are deliberately OUT of that bijection —
+# they live under `not_computable` in the export, they are not metrics with values, and the test
+# says so rather than leaving the scope to be guessed.
+#
+# `sample` is not decoration. Beside every rate the export names what it was measured ON, because a
+# rate is a property of its sample and not of the leg (.claude/rules/registrations-and-draws.md).
+
+version: 1
+authority: docs/SPEC.md amendment 3.20 (3); docs/PLAN-phase6-command-center.md §4
+
+metrics:
+  - id: volume
+    export_field: metrics.volume
+    formula: "rows(window, leg) — a count, split into text-bearing and text-less comments"
+    name:
+      ua: "Обсяг"
+      en: "Volume"
+    definition:
+      ua: >-
+        Скільки одиниць спостереження вікно принесло: коментарі, сторінки листівок і тексти
+        постів. Коментарі показані двома числами — ті, що несуть слова, і ті, що не несуть
+        (стікер, фото, голосове).
+      en: >-
+        How many units of observation the window carried: comments, leaflet pages and post
+        texts. Comments are shown as two numbers — the rows that carry words and the rows that
+        do not (a sticker, a photo, a voice note).
+    how_to_read:
+      ua: "Це знаменник усього іншого. Спершу подивіться на нього, потім на будь-яку частку."
+      en: "This is everything else's denominator. Read it before you read any share."
+    pitfalls:
+      ua:
+        - "Безтекстові коментарі — це теж сигнал, але не сигнал ПРО слова: у розподіли про слова вони не входять (SPEC 3.19 (2))."
+        - "Обсяг вікна залежить від того, які канали в реєстрі, а не лише від ринку."
+      en:
+        - "Text-less comments are a signal too, but not a signal ABOUT words: they stay out of distributions about words (SPEC 3.19 (2))."
+        - "The window's volume depends on which channels are in the registry, not on the market alone."
+
+  - id: nsr
+    export_field: metrics.nsr
+    formula: "(positive − negative) / scored"
+    name:
+      ua: "Чиста тональність (NSR)"
+      en: "Net sentiment rate (NSR)"
+    definition:
+      ua: >-
+        Різниця між часткою позитиву і часткою негативу серед рядків, які модель зуміла
+        розмітити. Знаменник — саме розмічені рядки, а не всі куплені.
+      en: >-
+        The share of positive rows minus the share of negative ones, over the rows the model
+        actually scored. The denominator is the scored rows, never everything bought.
+    how_to_read:
+      ua: "Вище нуля — розмова про категорію тепліша за холодну. Одне вікно — це база, а не тренд."
+      en: "Above zero the conversation runs warm rather than cold. One window is a baseline, not a trend."
+    pitfalls:
+      ua:
+        - "Нейтральні коментарі домінують, тому NSR завжди притиснутий до нуля — порівнюйте його з собою, а не з абсолютною шкалою."
+        - "Нечитабельні відповіді моделі не є нейтральними: вони лежать окремим класом і в знаменник не входять."
+      en:
+        - "Neutral rows dominate, so NSR sits close to zero by construction — compare it against itself, not against an absolute scale."
+        - "Replies the parser refused are not neutral: they are their own class and stay out of the denominator."
+
+  - id: negative_share_sarcasm_adjusted
+    export_field: metrics.negative_share_sarcasm_adjusted
+    formula: "(negative + sarcastic_not_already_negative) / scored"
+    name:
+      ua: "Частка негативу з поправкою на сарказм"
+      en: "Negative share, sarcasm-adjusted"
+    definition:
+      ua: >-
+        Частка негативу після того, як рядки з увімкненою головою сарказму, що не були негативними,
+        перечитані як негативні. Скільки саме рядків перекласифіковано — окреме поле поруч.
+      en: >-
+        The negative share after rows whose sarcasm head fired, and which were not already negative,
+        are re-read as negative. How many rows that moved is its own field beside it.
+    how_to_read:
+      ua: "Порівняйте з сирою часткою негативу: розрив і є ціна іронії в цій категорії."
+      en: "Read it against the raw negative share: the gap is what irony costs in this category."
+    pitfalls:
+      ua:
+        - "Поправка настільки ж надійна, як голова сарказму — її власний гейт наведено на вкладці «Методологія» з файлу результатів."
+        - "Саркастичних рядків мало, тому поправка чутлива до кількох рядків; дивіться на кількість перекласифікованих, а не лише на частку."
+      en:
+        - "The adjustment is exactly as good as the sarcasm head, whose own gate the methodology tab renders from its result file."
+        - "Sarcastic rows are few, so the adjustment turns on a handful of them; read the reclassified count, not only the share."
+
+  - id: sov
+    export_field: metrics.sov
+    formula: "mentions(brand) / mentions(all watchlist brands)"
+    name:
+      ua: "Частка голосу (SoV)"
+      en: "Share of voice (SoV)"
+    definition:
+      ua: >-
+        Частка згадок бренду серед усіх згадок брендів вотчлиста у вікні. Згадки знаходить
+        детерміністичний матчер по надісланому тексту — це не голова моделі.
+      en: >-
+        A brand's share of all watchlist-brand mentions in the window. Mentions are found by the
+        deterministic matcher over the text that was sent — this is not a model head.
+    how_to_read:
+      ua: "Головний конкурентний бенчмарк: не «скільки нас хвалять», а «скільки нас узагалі згадують»."
+      en: "The competitive benchmark: not how well the brand is spoken of, but how often it is spoken of at all."
+    pitfalls:
+      ua:
+        - "Вимірюється на рядках, де матчер щось знайшов, — це крихітна частина вікна, і export називає її поруч зі значенням."
+        - "Матчер бачить назви, а не наміри: збіг рядка не означає, що коментар про бренд."
+      en:
+        - "Measured on the rows where the matcher found something — a tiny part of the window, and the export names it beside the value."
+        - "The matcher sees names, not intent: a string hit does not make the comment about that brand."
+
+  - id: aspect_share
+    export_field: metrics.aspect_share
+    formula: "labels(aspect) / labels(all aspects)"
+    name:
+      ua: "Структура аспектів"
+      en: "Aspect share"
+    definition:
+      ua: >-
+        Про що саме говорять: ціна, смак, якість, паковання, наявність, сервіс. Знаменник —
+        МІТКИ, а не рядки: один коментар може нести кілька аспектів або жодного.
+      en: >-
+        What the conversation is about: price, taste, quality, packaging, availability, service.
+        The denominator is LABELS and not rows: one comment may carry several aspects or none.
+    how_to_read:
+      ua: "Це профіль причин. Разом із часткою рядків без жодного аспекту він показує, наскільки розмова взагалі предметна."
+      en: "A profile of reasons. Read it with the share of rows carrying no aspect at all, which says how specific the conversation is."
+    pitfalls:
+      ua:
+        - "Більшість розмічених рядків не несе жодного аспекту — частка рахується від міток, тож не додавайте її до кількості рядків."
+        - "Ціни з коментарів живуть лише тут: у промо-агрегати вони не потрапляють ніколи (SPEC 3.17, повторено 3.20 (5))."
+      en:
+        - "Most scored rows carry no aspect at all — the share is over labels, so it does not add up to a row count."
+        - "Comment-origin prices live only here: they never enter the promo aggregates (SPEC 3.17, restated by 3.20 (5))."
+
+  - id: promo_depth
+    export_field: metrics.promo_depth
+    formula: "median and quartiles of (1 − promo_price / old_price), beside median of printed −N%"
+    name:
+      ua: "Глибина промо"
+      en: "Promo depth"
+    definition:
+      ua: >-
+        Наскільки глибоко ріжуть ціну в листівках і промо-постах мереж. Два незалежні читання —
+        арифметика з пари цін і надрукований бейдж −N% — показані поруч і жодне не виправляє інше.
+      en: >-
+        How deep the chains cut prices in leaflets and promo posts. Two independent readings — the
+        arithmetic of the price pair and the printed −N% badge — stand side by side and neither
+        corrects the other.
+    how_to_read:
+      ua: "Читайте медіану з розкидом: одна позиція зі знижкою навпіл не є політикою мережі."
+      en: "Read the median with its spread: a single half-price line is not a chain's policy."
+    pitfalls:
+      ua:
+        - "Два читання не збігаються на частині позицій, і export несе кількість таких рядків — це властивість джерела, а не помилка."
+        - "Витягнута стара ціна залишається як вхід глибини й ПОМІЧЕНА: вона ніколи не показується як ціна (SPEC 3.18 (1))."
+        - "Листівки зібрані не по всіх мережах: які саме дали сторінки — назване у полі `sample` цієї метрики, а глибина решти рахується з текстів постів, іншим інструментом."
+      en:
+        - "The two readings disagree on part of the rows and the export carries that count — a property of the source, not a defect."
+        - "The extracted old price is kept as a depth input and FLAGGED: it is never shown as a price (SPEC 3.18 (1))."
+        - "Leaflets were not collected for every chain: which ones yielded pages is named in this metric's own `sample` field, and the rest of the depth comes from post text — a different instrument."
+
+  - id: promo_pressure
+    export_field: metrics.promo_pressure
+    formula: "position rows carrying the brand / position rows in the window"
+    name:
+      ua: "Промо-тиск"
+      en: "Promo pressure"
+    definition:
+      ua: >-
+        Як часто бренд узагалі з'являється у промо-матеріалах вікна — незалежно від того, наскільки
+        глибока знижка. Рахується по позиціях, а не по постах.
+      en: >-
+        How often a brand appears in the window's promo material at all, regardless of how deep the
+        discount is. Counted over positions, not over posts.
+    how_to_read:
+      ua: "Глибина каже, наскільки різко ріжуть; тиск каже, наскільки часто. Разом вони і є промо-політика."
+      en: "Depth says how hard they cut; pressure says how often. Together they are the promo policy."
+    pitfalls:
+      ua:
+        - "Це частота в ЗІБРАНИХ матеріалах, а не у справжньому промо-циклі мережі: чого не зібрано, того тут немає."
+        - "Позиції без розпізнаного бренду не зникають — вони лежать окремим класом, і export його називає."
+      en:
+        - "This is frequency in what was COLLECTED, not in the chain's real promo run: what was not collected is not here."
+        - "Positions with no resolved brand do not disappear — they are their own class and the export names it."
+
+  - id: coverage
+    export_field: metrics.coverage
+    formula: "channels with a row / channels in the registry; the same for audience segments"
+    name:
+      ua: "Покриття"
+      en: "Coverage"
+    definition:
+      ua: >-
+        Скільки каналів і скільки аудиторних сегментів реєстру взагалі дали хоч один рядок у цьому
+        вікні. Це чесність картинки, а не її обсяг.
+      en: >-
+        How many of the registry's channels and audience segments produced at least one row in this
+        window. This is the honesty of the picture, not its size.
+    how_to_read:
+      ua: "Низьке покриття сегмента означає, що висновок про цей сегмент спирається на кілька каналів."
+      en: "Low coverage of a segment means any conclusion about that segment rests on a handful of channels."
+    pitfalls:
+      ua:
+        - "Підписники — не охоплення. Ми не вимірюємо, скільки людей побачили пост, і ніде цього не стверджуємо."
+        - "Канал без рядків у вікні не означає мовчазний канал: він може бути без коментарів або поза категорією."
+      en:
+        - "Subscribers are not reach. We do not measure how many people saw a post and never claim to."
+        - "A channel with no rows in the window is not necessarily a silent channel: it may have comments off, or nothing in the tracked category."

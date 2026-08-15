@@ -1,0 +1,4042 @@
+{
+  "contract": "docs/PROMPT-phase6a.md deliverable 2; docs/SPEC.md amendment 3.20. The dashboard reads THIS file and nothing else — no presentation surface reads the database, and no number on any surface was typed by a human.",
+  "convergence": {
+    "anchor": "results/window_summary_5c2.json",
+    "not_shared": {
+      "cuts.brand_by_sentiment.*": "brand × sentiment. The anchor counts brand mentions and sentiment separately and never crosses them.",
+      "cuts.comment_by_segment.*": "the audience-segment cut. The anchor has no segment column; the join is this layer's.",
+      "metrics.*.by_sample.payable": "SPEC 3.19 (2)'s sample. The anchor predates the rule and was computed on the bought population, so there is nothing on its side to equal.",
+      "metrics.coverage.*": "channels and segments against the registry's own size. The anchor has no registry-side denominator — it counts evidence.",
+      "metrics.negative_share_sarcasm_adjusted.*.negative_share_sarcasm_adjusted": "a cross of two heads — sentiment and sarcasm — that the anchor never computed. New, not shared.",
+      "metrics.promo_depth.readings.*.q1|q3": "quartiles; the anchor's spread is n/min/median/max",
+      "metrics.promo_pressure.by_brand|by_chain": "positions grouped by brand and by chain. The anchor groups positions by channel and by carrier and never joins them to the registry.",
+      "metrics.sov.*.share": "a share among the watchlist; the anchor carries mention counts only"
+    },
+    "reading": "two checks, both of which refuse rather than warn. `shared_figures` compares every figure THIS record shares with the anchor, pair by pair, and names the anchor field each one was held against. `whole_record` re-derives every numeric leaf of the anchor's five aggregate blocks from SQL, which is the exhaustive half — the agreed paths are a count and not a list, because they are exactly the leaves of the anchor and `tests/test_export_dashboard_data.py` walks them again.",
+    "sha256": "7760d32d0ffec80cc73d6ebb27e464ab5b906ed9eda00ea0aa8d15b90ae7561c",
+    "shared_figures": {
+      "cuts.legs.leaflet_page.total.positions": {
+        "anchor_field": "leaflet_page.total.positions",
+        "value": 106
+      },
+      "cuts.legs.leaflet_page.total.unreadable.rows": {
+        "anchor_field": "leaflet_page.total.unreadable.rows",
+        "value": 2
+      },
+      "cuts.legs.post_text.total.positions": {
+        "anchor_field": "post_text.total.positions",
+        "value": 39
+      },
+      "cuts.legs.post_text.total.with_positions": {
+        "anchor_field": "post_text.total.with_positions",
+        "value": 21
+      },
+      "metrics.aspect_share.by_sample.bought.labels.availability": {
+        "anchor_field": "comment.total.intents.frequency.availability",
+        "value": 184
+      },
+      "metrics.aspect_share.by_sample.bought.labels.packaging": {
+        "anchor_field": "comment.total.intents.frequency.packaging",
+        "value": 17
+      },
+      "metrics.aspect_share.by_sample.bought.labels.price": {
+        "anchor_field": "comment.total.intents.frequency.price",
+        "value": 553
+      },
+      "metrics.aspect_share.by_sample.bought.labels.quality": {
+        "anchor_field": "comment.total.intents.frequency.quality",
+        "value": 138
+      },
+      "metrics.aspect_share.by_sample.bought.labels.service": {
+        "anchor_field": "comment.total.intents.frequency.service",
+        "value": 161
+      },
+      "metrics.aspect_share.by_sample.bought.labels.taste": {
+        "anchor_field": "comment.total.intents.frequency.taste",
+        "value": 245
+      },
+      "metrics.aspect_share.by_sample.bought.rows_with_no_aspect": {
+        "anchor_field": "comment.total.intents.rows_with_no_intent",
+        "value": 3944
+      },
+      "metrics.negative_share_sarcasm_adjusted.by_sample.bought.negative": {
+        "anchor_field": "comment.total.sentiment.negative",
+        "value": 270
+      },
+      "metrics.nsr.by_sample.bought.negative": {
+        "anchor_field": "comment.total.sentiment.negative",
+        "value": 270
+      },
+      "metrics.nsr.by_sample.bought.neutral": {
+        "anchor_field": "comment.total.sentiment.neutral",
+        "value": 4144
+      },
+      "metrics.nsr.by_sample.bought.positive": {
+        "anchor_field": "comment.total.sentiment.positive",
+        "value": 661
+      },
+      "metrics.nsr.by_sample.bought.scored": {
+        "anchor_field": "comment.total.scored",
+        "value": 5075
+      },
+      "metrics.promo_depth.printed_disagrees_with_computed": {
+        "anchor_field": "position_row.total.depth.printed_disagrees_with_computed",
+        "value": 8
+      },
+      "metrics.promo_depth.readings.from_price_pair.median": {
+        "anchor_field": "position_row.total.depth.from_price_pair.median",
+        "value": 0.4206
+      },
+      "metrics.promo_depth.readings.from_price_pair.n": {
+        "anchor_field": "position_row.total.depth.from_price_pair.n",
+        "value": 95
+      },
+      "metrics.promo_depth.readings.from_printed_badge.median": {
+        "anchor_field": "position_row.total.depth.from_printed_badge.median",
+        "value": 0.415
+      },
+      "metrics.promo_pressure.position_rows": {
+        "anchor_field": "position_row.total.rows",
+        "value": 145
+      },
+      "metrics.sov.by_sample.bought.mentions.garmonija": {
+        "anchor_field": "comment.total.brand_attribution.mentions.garmonija",
+        "value": 1
+      },
+      "metrics.sov.by_sample.bought.mentions.varto": {
+        "anchor_field": "comment.total.brand_attribution.mentions.varto",
+        "value": 7
+      },
+      "metrics.volume.comments.bought": {
+        "anchor_field": "comment.total.rows",
+        "value": 5075
+      },
+      "metrics.volume.comments.text_less": {
+        "anchor_field": "comment.total.empty_text.rows",
+        "value": 1361
+      },
+      "window.populations.bought": {
+        "anchor_field": "comment.total.rows",
+        "value": 5075
+      },
+      "window.populations.leaflet_pages": {
+        "anchor_field": "leaflet_page.total.rows",
+        "value": 159
+      },
+      "window.populations.position_rows": {
+        "anchor_field": "position_row.total.rows",
+        "value": 145
+      },
+      "window.populations.post_texts": {
+        "anchor_field": "post_text.total.rows",
+        "value": 44
+      },
+      "window.populations.text_less": {
+        "anchor_field": "comment.total.empty_text.rows",
+        "value": 1361
+      }
+    },
+    "whole_record": {
+      "agreed": 902,
+      "blocks": [
+        "populations_registered",
+        "comment",
+        "leaflet_page",
+        "post_text",
+        "position_row"
+      ],
+      "disagreed": {},
+      "extra": [],
+      "leaves": 902,
+      "missing": []
+    }
+  },
+  "cuts": {
+    "brand_by_sentiment": {
+      "rows": {
+        "garmonija": {
+          "positive": 1
+        },
+        "lasunka": {
+          "negative": 1
+        },
+        "limo": {
+          "neutral": 1
+        },
+        "rud": {
+          "neutral": 1
+        },
+        "varto": {
+          "neutral": 6,
+          "positive": 1
+        },
+        "varus-pl": {
+          "negative": 1,
+          "neutral": 1
+        }
+      },
+      "sample": {
+        "name": "payable",
+        "reading": "scored, text-bearing comment rows in which the matcher found the brand. A brand missing from this table was matched in no such row"
+      }
+    },
+    "comment_by_channel": {
+      "@HealthPsycholog": {
+        "bought": {
+          "brand_attribution": {
+            "mentions": {},
+            "rows_with_a_brand": 0
+          },
+          "empty_text": {
+            "rows": 2,
+            "with_no_intent": 2
+          },
+          "intents": {
+            "frequency": {
+              "price": 8,
+              "service": 15
+            },
+            "labels_per_scored_row": 0.2371,
+            "rows_with_no_intent": 74
+          },
+          "language": {
+            "rows": {
+              "en": 5,
+              "other": 9,
+              "ua": 83
+            },
+            "sentiment": {
+              "en": {
+                "neutral": 5
+              },
+              "other": {
+                "negative": 1,
+                "neutral": 7,
+                "positive": 1
+              },
+              "ua": {
+                "negative": 4,
+                "neutral": 70,
+                "positive": 9
+              }
+            }
+          },
+          "rows": 97,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 96,
+            "rate": 0.0103,
+            "true": 1
+          },
+          "scored": 97,
+          "sentiment": {
+            "negative": 5,
+            "neutral": 82,
+            "positive": 10
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "payable": {
+          "brand_attribution": {
+            "mentions": {},
+            "rows_with_a_brand": 0
+          },
+          "empty_text": {
+            "rows": 0,
+            "with_no_intent": 0
+          },
+          "intents": {
+            "frequency": {
+              "price": 8,
+              "service": 15
+            },
+            "labels_per_scored_row": 0.2421,
+            "rows_with_no_intent": 72
+          },
+          "language": {
+            "rows": {
+              "en": 5,
+              "other": 7,
+              "ua": 83
+            },
+            "sentiment": {
+              "en": {
+                "neutral": 5
+              },
+              "other": {
+                "negative": 1,
+                "neutral": 5,
+                "positive": 1
+              },
+              "ua": {
+                "negative": 4,
+                "neutral": 70,
+                "positive": 9
+              }
+            }
+          },
+          "rows": 95,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 94,
+            "rate": 0.0105,
+            "true": 1
+          },
+          "scored": 95,
+          "sentiment": {
+            "negative": 5,
+            "neutral": 80,
+            "positive": 10
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "segment": "health_fitness",
+        "source_id": "healthpsycholog",
+        "source_type": "community"
+      },
+      "@VARUS_channel": {
+        "bought": {
+          "brand_attribution": {
+            "mentions": {
+              "limo": 1,
+              "rud": 1,
+              "varus-pl": 2
+            },
+            "rows_with_a_brand": 2
+          },
+          "empty_text": {
+            "rows": 8,
+            "with_no_intent": 8
+          },
+          "intents": {
+            "frequency": {
+              "availability": 28,
+              "price": 19,
+              "quality": 14,
+              "service": 28,
+              "taste": 33
+            },
+            "labels_per_scored_row": 0.5041,
+            "rows_with_no_intent": 146
+          },
+          "language": {
+            "rows": {
+              "en": 4,
+              "other": 94,
+              "ru": 42,
+              "ua": 102
+            },
+            "sentiment": {
+              "en": {
+                "neutral": 4
+              },
+              "other": {
+                "negative": 8,
+                "neutral": 84,
+                "positive": 2
+              },
+              "ru": {
+                "negative": 20,
+                "neutral": 14,
+                "positive": 8
+              },
+              "ua": {
+                "negative": 26,
+                "neutral": 58,
+                "positive": 18
+              }
+            }
+          },
+          "rows": 242,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 227,
+            "rate": 0.062,
+            "true": 15
+          },
+          "scored": 242,
+          "sentiment": {
+            "negative": 54,
+            "neutral": 160,
+            "positive": 28
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "payable": {
+          "brand_attribution": {
+            "mentions": {
+              "limo": 1,
+              "rud": 1,
+              "varus-pl": 2
+            },
+            "rows_with_a_brand": 2
+          },
+          "empty_text": {
+            "rows": 0,
+            "with_no_intent": 0
+          },
+          "intents": {
+            "frequency": {
+              "availability": 28,
+              "price": 19,
+              "quality": 14,
+              "service": 28,
+              "taste": 33
+            },
+            "labels_per_scored_row": 0.5214,
+            "rows_with_no_intent": 138
+          },
+          "language": {
+            "rows": {
+              "en": 4,
+              "other": 86,
+              "ru": 42,
+              "ua": 102
+            },
+            "sentiment": {
+              "en": {
+                "neutral": 4
+              },
+              "other": {
+                "negative": 8,
+                "neutral": 76,
+                "positive": 2
+              },
+              "ru": {
+                "negative": 20,
+                "neutral": 14,
+                "positive": 8
+              },
+              "ua": {
+                "negative": 26,
+                "neutral": 58,
+                "positive": 18
+              }
+            }
+          },
+          "rows": 234,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 219,
+            "rate": 0.0641,
+            "true": 15
+          },
+          "scored": 234,
+          "sentiment": {
+            "negative": 54,
+            "neutral": 152,
+            "positive": 28
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "segment": "retail_official",
+        "source_id": "varus",
+        "source_type": "official_retail"
+      },
+      "@chifit_family": {
+        "bought": {
+          "brand_attribution": {
+            "mentions": {},
+            "rows_with_a_brand": 0
+          },
+          "empty_text": {
+            "rows": 0,
+            "with_no_intent": 0
+          },
+          "intents": {
+            "frequency": {},
+            "labels_per_scored_row": 0.0,
+            "rows_with_no_intent": 4
+          },
+          "language": {
+            "rows": {
+              "other": 2,
+              "ua": 2
+            },
+            "sentiment": {
+              "other": {
+                "positive": 2
+              },
+              "ua": {
+                "positive": 2
+              }
+            }
+          },
+          "rows": 4,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 4,
+            "rate": 0.0,
+            "true": 0
+          },
+          "scored": 4,
+          "sentiment": {
+            "positive": 4
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "payable": {
+          "brand_attribution": {
+            "mentions": {},
+            "rows_with_a_brand": 0
+          },
+          "empty_text": {
+            "rows": 0,
+            "with_no_intent": 0
+          },
+          "intents": {
+            "frequency": {},
+            "labels_per_scored_row": 0.0,
+            "rows_with_no_intent": 4
+          },
+          "language": {
+            "rows": {
+              "other": 2,
+              "ua": 2
+            },
+            "sentiment": {
+              "other": {
+                "positive": 2
+              },
+              "ua": {
+                "positive": 2
+              }
+            }
+          },
+          "rows": 4,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 4,
+            "rate": 0.0,
+            "true": 0
+          },
+          "scored": 4,
+          "sentiment": {
+            "positive": 4
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "segment": "health_fitness",
+        "source_id": "chifit_family",
+        "source_type": "community"
+      },
+      "@denisovapro": {
+        "bought": {
+          "brand_attribution": {
+            "mentions": {},
+            "rows_with_a_brand": 0
+          },
+          "empty_text": {
+            "rows": 0,
+            "with_no_intent": 0
+          },
+          "intents": {
+            "frequency": {},
+            "labels_per_scored_row": 0.0,
+            "rows_with_no_intent": 4
+          },
+          "language": {
+            "rows": {
+              "en": 1,
+              "other": 1,
+              "ua": 2
+            },
+            "sentiment": {
+              "en": {
+                "neutral": 1
+              },
+              "other": {
+                "neutral": 1
+              },
+              "ua": {
+                "neutral": 2
+              }
+            }
+          },
+          "rows": 4,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 4,
+            "rate": 0.0,
+            "true": 0
+          },
+          "scored": 4,
+          "sentiment": {
+            "neutral": 4
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "payable": {
+          "brand_attribution": {
+            "mentions": {},
+            "rows_with_a_brand": 0
+          },
+          "empty_text": {
+            "rows": 0,
+            "with_no_intent": 0
+          },
+          "intents": {
+            "frequency": {},
+            "labels_per_scored_row": 0.0,
+            "rows_with_no_intent": 4
+          },
+          "language": {
+            "rows": {
+              "en": 1,
+              "other": 1,
+              "ua": 2
+            },
+            "sentiment": {
+              "en": {
+                "neutral": 1
+              },
+              "other": {
+                "neutral": 1
+              },
+              "ua": {
+                "neutral": 2
+              }
+            }
+          },
+          "rows": 4,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 4,
+            "rate": 0.0,
+            "true": 0
+          },
+          "scored": 4,
+          "sentiment": {
+            "neutral": 4
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "segment": "health_fitness",
+        "source_id": "denisovapro",
+        "source_type": "community"
+      },
+      "@kkondr_fit": {
+        "bought": {
+          "brand_attribution": {
+            "mentions": {},
+            "rows_with_a_brand": 0
+          },
+          "empty_text": {
+            "rows": 0,
+            "with_no_intent": 0
+          },
+          "intents": {
+            "frequency": {},
+            "labels_per_scored_row": 0.0,
+            "rows_with_no_intent": 4
+          },
+          "language": {
+            "rows": {
+              "other": 3,
+              "ua": 1
+            },
+            "sentiment": {
+              "other": {
+                "neutral": 1,
+                "positive": 2
+              },
+              "ua": {
+                "neutral": 1
+              }
+            }
+          },
+          "rows": 4,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 4,
+            "rate": 0.0,
+            "true": 0
+          },
+          "scored": 4,
+          "sentiment": {
+            "neutral": 2,
+            "positive": 2
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "payable": {
+          "brand_attribution": {
+            "mentions": {},
+            "rows_with_a_brand": 0
+          },
+          "empty_text": {
+            "rows": 0,
+            "with_no_intent": 0
+          },
+          "intents": {
+            "frequency": {},
+            "labels_per_scored_row": 0.0,
+            "rows_with_no_intent": 4
+          },
+          "language": {
+            "rows": {
+              "other": 3,
+              "ua": 1
+            },
+            "sentiment": {
+              "other": {
+                "neutral": 1,
+                "positive": 2
+              },
+              "ua": {
+                "neutral": 1
+              }
+            }
+          },
+          "rows": 4,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 4,
+            "rate": 0.0,
+            "true": 0
+          },
+          "scored": 4,
+          "sentiment": {
+            "neutral": 2,
+            "positive": 2
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "segment": "health_fitness",
+        "source_id": "kkondr_fit",
+        "source_type": "community"
+      },
+      "@klopotenkofood": {
+        "bought": {
+          "brand_attribution": {
+            "mentions": {},
+            "rows_with_a_brand": 0
+          },
+          "empty_text": {
+            "rows": 10,
+            "with_no_intent": 10
+          },
+          "intents": {
+            "frequency": {
+              "availability": 3,
+              "quality": 6,
+              "service": 1,
+              "taste": 100
+            },
+            "labels_per_scored_row": 0.4955,
+            "rows_with_no_intent": 113
+          },
+          "language": {
+            "rows": {
+              "en": 1,
+              "other": 45,
+              "ru": 1,
+              "ua": 175
+            },
+            "sentiment": {
+              "en": {
+                "neutral": 1
+              },
+              "other": {
+                "negative": 1,
+                "neutral": 34,
+                "positive": 10
+              },
+              "ru": {
+                "neutral": 1
+              },
+              "ua": {
+                "negative": 16,
+                "neutral": 111,
+                "positive": 48
+              }
+            }
+          },
+          "rows": 222,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 219,
+            "rate": 0.0135,
+            "true": 3
+          },
+          "scored": 222,
+          "sentiment": {
+            "negative": 17,
+            "neutral": 147,
+            "positive": 58
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "payable": {
+          "brand_attribution": {
+            "mentions": {},
+            "rows_with_a_brand": 0
+          },
+          "empty_text": {
+            "rows": 0,
+            "with_no_intent": 0
+          },
+          "intents": {
+            "frequency": {
+              "availability": 3,
+              "quality": 6,
+              "service": 1,
+              "taste": 100
+            },
+            "labels_per_scored_row": 0.5189,
+            "rows_with_no_intent": 103
+          },
+          "language": {
+            "rows": {
+              "en": 1,
+              "other": 35,
+              "ru": 1,
+              "ua": 175
+            },
+            "sentiment": {
+              "en": {
+                "neutral": 1
+              },
+              "other": {
+                "negative": 1,
+                "neutral": 24,
+                "positive": 10
+              },
+              "ru": {
+                "neutral": 1
+              },
+              "ua": {
+                "negative": 16,
+                "neutral": 111,
+                "positive": 48
+              }
+            }
+          },
+          "rows": 212,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 209,
+            "rate": 0.0142,
+            "true": 3
+          },
+          "scored": 212,
+          "sentiment": {
+            "negative": 17,
+            "neutral": 137,
+            "positive": 58
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "segment": "cooking_recipes",
+        "source_id": "klopotenkofood",
+        "source_type": "community"
+      },
+      "@kopiyochka1": {
+        "bought": {
+          "brand_attribution": {
+            "mentions": {},
+            "rows_with_a_brand": 0
+          },
+          "empty_text": {
+            "rows": 14,
+            "with_no_intent": 14
+          },
+          "intents": {
+            "frequency": {
+              "availability": 95,
+              "packaging": 3,
+              "price": 22,
+              "quality": 3,
+              "service": 23
+            },
+            "labels_per_scored_row": 0.6547,
+            "rows_with_no_intent": 95
+          },
+          "language": {
+            "rows": {
+              "other": 37,
+              "ru": 1,
+              "ua": 185
+            },
+            "sentiment": {
+              "other": {
+                "negative": 3,
+                "neutral": 29,
+                "positive": 5
+              },
+              "ru": {
+                "neutral": 1
+              },
+              "ua": {
+                "negative": 18,
+                "neutral": 150,
+                "positive": 17
+              }
+            }
+          },
+          "rows": 223,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 219,
+            "rate": 0.0179,
+            "true": 4
+          },
+          "scored": 223,
+          "sentiment": {
+            "negative": 21,
+            "neutral": 180,
+            "positive": 22
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "payable": {
+          "brand_attribution": {
+            "mentions": {},
+            "rows_with_a_brand": 0
+          },
+          "empty_text": {
+            "rows": 0,
+            "with_no_intent": 0
+          },
+          "intents": {
+            "frequency": {
+              "availability": 95,
+              "packaging": 3,
+              "price": 22,
+              "quality": 3,
+              "service": 23
+            },
+            "labels_per_scored_row": 0.6986,
+            "rows_with_no_intent": 81
+          },
+          "language": {
+            "rows": {
+              "other": 23,
+              "ru": 1,
+              "ua": 185
+            },
+            "sentiment": {
+              "other": {
+                "negative": 3,
+                "neutral": 15,
+                "positive": 5
+              },
+              "ru": {
+                "neutral": 1
+              },
+              "ua": {
+                "negative": 18,
+                "neutral": 150,
+                "positive": 17
+              }
+            }
+          },
+          "rows": 209,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 205,
+            "rate": 0.0191,
+            "true": 4
+          },
+          "scored": 209,
+          "sentiment": {
+            "negative": 21,
+            "neutral": 166,
+            "positive": 22
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "segment": "supermarket_deals",
+        "source_id": "kopiyochka1",
+        "source_type": "community"
+      },
+      "@mamo_nepsichuy": {
+        "bought": {
+          "brand_attribution": {
+            "mentions": {},
+            "rows_with_a_brand": 0
+          },
+          "empty_text": {
+            "rows": 0,
+            "with_no_intent": 0
+          },
+          "intents": {
+            "frequency": {
+              "taste": 1
+            },
+            "labels_per_scored_row": 0.1111,
+            "rows_with_no_intent": 8
+          },
+          "language": {
+            "rows": {
+              "other": 2,
+              "ua": 7
+            },
+            "sentiment": {
+              "other": {
+                "neutral": 1,
+                "positive": 1
+              },
+              "ua": {
+                "neutral": 4,
+                "positive": 3
+              }
+            }
+          },
+          "rows": 9,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 9,
+            "rate": 0.0,
+            "true": 0
+          },
+          "scored": 9,
+          "sentiment": {
+            "neutral": 5,
+            "positive": 4
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "payable": {
+          "brand_attribution": {
+            "mentions": {},
+            "rows_with_a_brand": 0
+          },
+          "empty_text": {
+            "rows": 0,
+            "with_no_intent": 0
+          },
+          "intents": {
+            "frequency": {
+              "taste": 1
+            },
+            "labels_per_scored_row": 0.1111,
+            "rows_with_no_intent": 8
+          },
+          "language": {
+            "rows": {
+              "other": 2,
+              "ua": 7
+            },
+            "sentiment": {
+              "other": {
+                "neutral": 1,
+                "positive": 1
+              },
+              "ua": {
+                "neutral": 4,
+                "positive": 3
+              }
+            }
+          },
+          "rows": 9,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 9,
+            "rate": 0.0,
+            "true": 0
+          },
+          "scored": 9,
+          "sentiment": {
+            "neutral": 5,
+            "positive": 4
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "segment": "mothers_kids",
+        "source_id": "mamo_nepsichuy",
+        "source_type": "community"
+      },
+      "@mandziak": {
+        "bought": {
+          "brand_attribution": {
+            "mentions": {
+              "varto": 2
+            },
+            "rows_with_a_brand": 2
+          },
+          "empty_text": {
+            "rows": 17,
+            "with_no_intent": 17
+          },
+          "intents": {
+            "frequency": {
+              "packaging": 1,
+              "price": 35,
+              "quality": 31,
+              "service": 12,
+              "taste": 43
+            },
+            "labels_per_scored_row": 0.1189,
+            "rows_with_no_intent": 913
+          },
+          "language": {
+            "rows": {
+              "en": 7,
+              "other": 92,
+              "ru": 25,
+              "ua": 902
+            },
+            "sentiment": {
+              "en": {
+                "neutral": 7
+              },
+              "other": {
+                "negative": 13,
+                "neutral": 50,
+                "positive": 29
+              },
+              "ru": {
+                "negative": 2,
+                "neutral": 21,
+                "positive": 2
+              },
+              "ua": {
+                "negative": 63,
+                "neutral": 699,
+                "positive": 140
+              }
+            }
+          },
+          "rows": 1026,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 995,
+            "rate": 0.0302,
+            "true": 31
+          },
+          "scored": 1026,
+          "sentiment": {
+            "negative": 78,
+            "neutral": 777,
+            "positive": 171
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "payable": {
+          "brand_attribution": {
+            "mentions": {
+              "varto": 2
+            },
+            "rows_with_a_brand": 2
+          },
+          "empty_text": {
+            "rows": 0,
+            "with_no_intent": 0
+          },
+          "intents": {
+            "frequency": {
+              "packaging": 1,
+              "price": 35,
+              "quality": 31,
+              "service": 12,
+              "taste": 43
+            },
+            "labels_per_scored_row": 0.1209,
+            "rows_with_no_intent": 896
+          },
+          "language": {
+            "rows": {
+              "en": 7,
+              "other": 75,
+              "ru": 25,
+              "ua": 902
+            },
+            "sentiment": {
+              "en": {
+                "neutral": 7
+              },
+              "other": {
+                "negative": 13,
+                "neutral": 33,
+                "positive": 29
+              },
+              "ru": {
+                "negative": 2,
+                "neutral": 21,
+                "positive": 2
+              },
+              "ua": {
+                "negative": 63,
+                "neutral": 699,
+                "positive": 140
+              }
+            }
+          },
+          "rows": 1009,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 978,
+            "rate": 0.0307,
+            "true": 31
+          },
+          "scored": 1009,
+          "sentiment": {
+            "negative": 78,
+            "neutral": 760,
+            "positive": 171
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "segment": "health_fitness",
+        "source_id": "mandziak",
+        "source_type": "community"
+      },
+      "@matusi_ukr": {
+        "bought": {
+          "brand_attribution": {
+            "mentions": {
+              "garmonija": 1,
+              "lasunka": 1,
+              "varto": 2
+            },
+            "rows_with_a_brand": 4
+          },
+          "empty_text": {
+            "rows": 1172,
+            "with_no_intent": 1172
+          },
+          "intents": {
+            "frequency": {
+              "availability": 53,
+              "packaging": 9,
+              "price": 458,
+              "quality": 81,
+              "service": 49,
+              "taste": 31
+            },
+            "labels_per_scored_row": 0.2506,
+            "rows_with_no_intent": 2148
+          },
+          "language": {
+            "rows": {
+              "en": 33,
+              "other": 1384,
+              "ru": 367,
+              "ua": 933
+            },
+            "sentiment": {
+              "en": {
+                "neutral": 33
+              },
+              "other": {
+                "negative": 8,
+                "neutral": 1351,
+                "positive": 25
+              },
+              "ru": {
+                "negative": 29,
+                "neutral": 256,
+                "positive": 82
+              },
+              "ua": {
+                "negative": 30,
+                "neutral": 789,
+                "positive": 114
+              }
+            }
+          },
+          "rows": 2717,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 2711,
+            "rate": 0.0022,
+            "true": 6
+          },
+          "scored": 2717,
+          "sentiment": {
+            "negative": 67,
+            "neutral": 2429,
+            "positive": 221
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "payable": {
+          "brand_attribution": {
+            "mentions": {
+              "garmonija": 1,
+              "lasunka": 1,
+              "varto": 2
+            },
+            "rows_with_a_brand": 4
+          },
+          "empty_text": {
+            "rows": 0,
+            "with_no_intent": 0
+          },
+          "intents": {
+            "frequency": {
+              "availability": 53,
+              "packaging": 9,
+              "price": 458,
+              "quality": 81,
+              "service": 49,
+              "taste": 31
+            },
+            "labels_per_scored_row": 0.4408,
+            "rows_with_no_intent": 976
+          },
+          "language": {
+            "rows": {
+              "en": 33,
+              "other": 212,
+              "ru": 367,
+              "ua": 933
+            },
+            "sentiment": {
+              "en": {
+                "neutral": 33
+              },
+              "other": {
+                "negative": 8,
+                "neutral": 179,
+                "positive": 25
+              },
+              "ru": {
+                "negative": 29,
+                "neutral": 256,
+                "positive": 82
+              },
+              "ua": {
+                "negative": 30,
+                "neutral": 789,
+                "positive": 114
+              }
+            }
+          },
+          "rows": 1545,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 1539,
+            "rate": 0.0039,
+            "true": 6
+          },
+          "scored": 1545,
+          "sentiment": {
+            "negative": 67,
+            "neutral": 1257,
+            "positive": 221
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "segment": "mothers_kids",
+        "source_id": "matusi_ukr",
+        "source_type": "community"
+      },
+      "@msuaaaa": {
+        "bought": {
+          "brand_attribution": {
+            "mentions": {},
+            "rows_with_a_brand": 0
+          },
+          "empty_text": {
+            "rows": 126,
+            "with_no_intent": 126
+          },
+          "intents": {
+            "frequency": {
+              "availability": 5,
+              "packaging": 4,
+              "price": 7,
+              "service": 13,
+              "taste": 2
+            },
+            "labels_per_scored_row": 0.1902,
+            "rows_with_no_intent": 133
+          },
+          "language": {
+            "rows": {
+              "other": 128,
+              "ru": 3,
+              "ua": 32
+            },
+            "sentiment": {
+              "other": {
+                "neutral": 128
+              },
+              "ru": {
+                "neutral": 2,
+                "positive": 1
+              },
+              "ua": {
+                "negative": 7,
+                "neutral": 16,
+                "positive": 9
+              }
+            }
+          },
+          "rows": 163,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 161,
+            "rate": 0.0123,
+            "true": 2
+          },
+          "scored": 163,
+          "sentiment": {
+            "negative": 7,
+            "neutral": 146,
+            "positive": 10
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "payable": {
+          "brand_attribution": {
+            "mentions": {},
+            "rows_with_a_brand": 0
+          },
+          "empty_text": {
+            "rows": 0,
+            "with_no_intent": 0
+          },
+          "intents": {
+            "frequency": {
+              "availability": 5,
+              "packaging": 4,
+              "price": 7,
+              "service": 13,
+              "taste": 2
+            },
+            "labels_per_scored_row": 0.8378,
+            "rows_with_no_intent": 7
+          },
+          "language": {
+            "rows": {
+              "other": 2,
+              "ru": 3,
+              "ua": 32
+            },
+            "sentiment": {
+              "other": {
+                "neutral": 2
+              },
+              "ru": {
+                "neutral": 2,
+                "positive": 1
+              },
+              "ua": {
+                "negative": 7,
+                "neutral": 16,
+                "positive": 9
+              }
+            }
+          },
+          "rows": 37,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 35,
+            "rate": 0.0541,
+            "true": 2
+          },
+          "scored": 37,
+          "sentiment": {
+            "negative": 7,
+            "neutral": 20,
+            "positive": 10
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "segment": "supermarket_deals",
+        "source_id": "msuaaaa",
+        "source_type": "aggregator"
+      },
+      "@olgaa_trainer": {
+        "bought": {
+          "brand_attribution": {
+            "mentions": {},
+            "rows_with_a_brand": 0
+          },
+          "empty_text": {
+            "rows": 0,
+            "with_no_intent": 0
+          },
+          "intents": {
+            "frequency": {},
+            "labels_per_scored_row": 0.0,
+            "rows_with_no_intent": 4
+          },
+          "language": {
+            "rows": {
+              "other": 1,
+              "ua": 3
+            },
+            "sentiment": {
+              "other": {
+                "positive": 1
+              },
+              "ua": {
+                "positive": 3
+              }
+            }
+          },
+          "rows": 4,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 4,
+            "rate": 0.0,
+            "true": 0
+          },
+          "scored": 4,
+          "sentiment": {
+            "positive": 4
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "payable": {
+          "brand_attribution": {
+            "mentions": {},
+            "rows_with_a_brand": 0
+          },
+          "empty_text": {
+            "rows": 0,
+            "with_no_intent": 0
+          },
+          "intents": {
+            "frequency": {},
+            "labels_per_scored_row": 0.0,
+            "rows_with_no_intent": 4
+          },
+          "language": {
+            "rows": {
+              "other": 1,
+              "ua": 3
+            },
+            "sentiment": {
+              "other": {
+                "positive": 1
+              },
+              "ua": {
+                "positive": 3
+              }
+            }
+          },
+          "rows": 4,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 4,
+            "rate": 0.0,
+            "true": 0
+          },
+          "scored": 4,
+          "sentiment": {
+            "positive": 4
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "segment": "health_fitness",
+        "source_id": "olgaa_trainer",
+        "source_type": "community"
+      },
+      "@polyakova_fitness": {
+        "bought": {
+          "brand_attribution": {
+            "mentions": {},
+            "rows_with_a_brand": 0
+          },
+          "empty_text": {
+            "rows": 0,
+            "with_no_intent": 0
+          },
+          "intents": {
+            "frequency": {
+              "service": 1
+            },
+            "labels_per_scored_row": 0.125,
+            "rows_with_no_intent": 7
+          },
+          "language": {
+            "rows": {
+              "other": 2,
+              "ua": 6
+            },
+            "sentiment": {
+              "other": {
+                "positive": 2
+              },
+              "ua": {
+                "neutral": 3,
+                "positive": 3
+              }
+            }
+          },
+          "rows": 8,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 8,
+            "rate": 0.0,
+            "true": 0
+          },
+          "scored": 8,
+          "sentiment": {
+            "neutral": 3,
+            "positive": 5
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "payable": {
+          "brand_attribution": {
+            "mentions": {},
+            "rows_with_a_brand": 0
+          },
+          "empty_text": {
+            "rows": 0,
+            "with_no_intent": 0
+          },
+          "intents": {
+            "frequency": {
+              "service": 1
+            },
+            "labels_per_scored_row": 0.125,
+            "rows_with_no_intent": 7
+          },
+          "language": {
+            "rows": {
+              "other": 2,
+              "ua": 6
+            },
+            "sentiment": {
+              "other": {
+                "positive": 2
+              },
+              "ua": {
+                "neutral": 3,
+                "positive": 3
+              }
+            }
+          },
+          "rows": 8,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 8,
+            "rate": 0.0,
+            "true": 0
+          },
+          "scored": 8,
+          "sentiment": {
+            "neutral": 3,
+            "positive": 5
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "segment": "health_fitness",
+        "source_id": "polyakova_fitness",
+        "source_type": "community"
+      },
+      "@retsepty": {
+        "bought": {
+          "brand_attribution": {
+            "mentions": {},
+            "rows_with_a_brand": 0
+          },
+          "empty_text": {
+            "rows": 0,
+            "with_no_intent": 0
+          },
+          "intents": {
+            "frequency": {
+              "price": 3,
+              "taste": 25
+            },
+            "labels_per_scored_row": 0.2692,
+            "rows_with_no_intent": 76
+          },
+          "language": {
+            "rows": {
+              "other": 31,
+              "ru": 49,
+              "ua": 24
+            },
+            "sentiment": {
+              "other": {
+                "negative": 1,
+                "neutral": 12,
+                "positive": 18
+              },
+              "ru": {
+                "negative": 9,
+                "neutral": 35,
+                "positive": 5
+              },
+              "ua": {
+                "negative": 3,
+                "neutral": 2,
+                "positive": 19
+              }
+            }
+          },
+          "rows": 104,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 100,
+            "rate": 0.0385,
+            "true": 4
+          },
+          "scored": 104,
+          "sentiment": {
+            "negative": 13,
+            "neutral": 49,
+            "positive": 42
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "payable": {
+          "brand_attribution": {
+            "mentions": {},
+            "rows_with_a_brand": 0
+          },
+          "empty_text": {
+            "rows": 0,
+            "with_no_intent": 0
+          },
+          "intents": {
+            "frequency": {
+              "price": 3,
+              "taste": 25
+            },
+            "labels_per_scored_row": 0.2692,
+            "rows_with_no_intent": 76
+          },
+          "language": {
+            "rows": {
+              "other": 31,
+              "ru": 49,
+              "ua": 24
+            },
+            "sentiment": {
+              "other": {
+                "negative": 1,
+                "neutral": 12,
+                "positive": 18
+              },
+              "ru": {
+                "negative": 9,
+                "neutral": 35,
+                "positive": 5
+              },
+              "ua": {
+                "negative": 3,
+                "neutral": 2,
+                "positive": 19
+              }
+            }
+          },
+          "rows": 104,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 100,
+            "rate": 0.0385,
+            "true": 4
+          },
+          "scored": 104,
+          "sentiment": {
+            "negative": 13,
+            "neutral": 49,
+            "positive": 42
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "segment": "cooking_recipes",
+        "source_id": "retsepty",
+        "source_type": "community"
+      },
+      "@sashafitnesslife": {
+        "bought": {
+          "brand_attribution": {
+            "mentions": {},
+            "rows_with_a_brand": 0
+          },
+          "empty_text": {
+            "rows": 0,
+            "with_no_intent": 0
+          },
+          "intents": {
+            "frequency": {
+              "service": 4,
+              "taste": 1
+            },
+            "labels_per_scored_row": 0.0602,
+            "rows_with_no_intent": 78
+          },
+          "language": {
+            "rows": {
+              "other": 66,
+              "ua": 17
+            },
+            "sentiment": {
+              "other": {
+                "neutral": 64,
+                "positive": 2
+              },
+              "ua": {
+                "negative": 1,
+                "neutral": 9,
+                "positive": 7
+              }
+            }
+          },
+          "rows": 83,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 83,
+            "rate": 0.0,
+            "true": 0
+          },
+          "scored": 83,
+          "sentiment": {
+            "negative": 1,
+            "neutral": 73,
+            "positive": 9
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "payable": {
+          "brand_attribution": {
+            "mentions": {},
+            "rows_with_a_brand": 0
+          },
+          "empty_text": {
+            "rows": 0,
+            "with_no_intent": 0
+          },
+          "intents": {
+            "frequency": {
+              "service": 4,
+              "taste": 1
+            },
+            "labels_per_scored_row": 0.0602,
+            "rows_with_no_intent": 78
+          },
+          "language": {
+            "rows": {
+              "other": 66,
+              "ua": 17
+            },
+            "sentiment": {
+              "other": {
+                "neutral": 64,
+                "positive": 2
+              },
+              "ua": {
+                "negative": 1,
+                "neutral": 9,
+                "positive": 7
+              }
+            }
+          },
+          "rows": 83,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 83,
+            "rate": 0.0,
+            "true": 0
+          },
+          "scored": 83,
+          "sentiment": {
+            "negative": 1,
+            "neutral": 73,
+            "positive": 9
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "segment": "health_fitness",
+        "source_id": "sashafitnesslife",
+        "source_type": "community"
+      },
+      "@smirnov108": {
+        "bought": {
+          "brand_attribution": {
+            "mentions": {},
+            "rows_with_a_brand": 0
+          },
+          "empty_text": {
+            "rows": 0,
+            "with_no_intent": 0
+          },
+          "intents": {
+            "frequency": {
+              "service": 15
+            },
+            "labels_per_scored_row": 0.15,
+            "rows_with_no_intent": 85
+          },
+          "language": {
+            "rows": {
+              "other": 10,
+              "ru": 5,
+              "ua": 85
+            },
+            "sentiment": {
+              "other": {
+                "neutral": 3,
+                "positive": 7
+              },
+              "ru": {
+                "neutral": 3,
+                "positive": 2
+              },
+              "ua": {
+                "negative": 3,
+                "neutral": 40,
+                "positive": 42
+              }
+            }
+          },
+          "rows": 100,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 100,
+            "rate": 0.0,
+            "true": 0
+          },
+          "scored": 100,
+          "sentiment": {
+            "negative": 3,
+            "neutral": 46,
+            "positive": 51
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "payable": {
+          "brand_attribution": {
+            "mentions": {},
+            "rows_with_a_brand": 0
+          },
+          "empty_text": {
+            "rows": 0,
+            "with_no_intent": 0
+          },
+          "intents": {
+            "frequency": {
+              "service": 15
+            },
+            "labels_per_scored_row": 0.15,
+            "rows_with_no_intent": 85
+          },
+          "language": {
+            "rows": {
+              "other": 10,
+              "ru": 5,
+              "ua": 85
+            },
+            "sentiment": {
+              "other": {
+                "neutral": 3,
+                "positive": 7
+              },
+              "ru": {
+                "neutral": 3,
+                "positive": 2
+              },
+              "ua": {
+                "negative": 3,
+                "neutral": 40,
+                "positive": 42
+              }
+            }
+          },
+          "rows": 100,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 100,
+            "rate": 0.0,
+            "true": 0
+          },
+          "scored": 100,
+          "sentiment": {
+            "negative": 3,
+            "neutral": 46,
+            "positive": 51
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "segment": "health_fitness",
+        "source_id": "smirnov108",
+        "source_type": "community"
+      },
+      "@tarilka_malyuka": {
+        "bought": {
+          "brand_attribution": {
+            "mentions": {
+              "varto": 1
+            },
+            "rows_with_a_brand": 1
+          },
+          "empty_text": {
+            "rows": 11,
+            "with_no_intent": 11
+          },
+          "intents": {
+            "frequency": {
+              "quality": 3,
+              "taste": 8
+            },
+            "labels_per_scored_row": 0.2444,
+            "rows_with_no_intent": 34
+          },
+          "language": {
+            "rows": {
+              "other": 14,
+              "ua": 31
+            },
+            "sentiment": {
+              "other": {
+                "negative": 1,
+                "neutral": 11,
+                "positive": 2
+              },
+              "ua": {
+                "negative": 2,
+                "neutral": 20,
+                "positive": 9
+              }
+            }
+          },
+          "rows": 45,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 45,
+            "rate": 0.0,
+            "true": 0
+          },
+          "scored": 45,
+          "sentiment": {
+            "negative": 3,
+            "neutral": 31,
+            "positive": 11
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "payable": {
+          "brand_attribution": {
+            "mentions": {
+              "varto": 1
+            },
+            "rows_with_a_brand": 1
+          },
+          "empty_text": {
+            "rows": 0,
+            "with_no_intent": 0
+          },
+          "intents": {
+            "frequency": {
+              "quality": 3,
+              "taste": 8
+            },
+            "labels_per_scored_row": 0.3235,
+            "rows_with_no_intent": 23
+          },
+          "language": {
+            "rows": {
+              "other": 3,
+              "ua": 31
+            },
+            "sentiment": {
+              "other": {
+                "negative": 1,
+                "positive": 2
+              },
+              "ua": {
+                "negative": 2,
+                "neutral": 20,
+                "positive": 9
+              }
+            }
+          },
+          "rows": 34,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 34,
+            "rate": 0.0,
+            "true": 0
+          },
+          "scored": 34,
+          "sentiment": {
+            "negative": 3,
+            "neutral": 20,
+            "positive": 11
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "segment": "baby_food",
+        "source_id": "tarilka_malyuka",
+        "source_type": "community"
+      },
+      "@useful_healthy_fitness_menu": {
+        "bought": {
+          "brand_attribution": {
+            "mentions": {},
+            "rows_with_a_brand": 0
+          },
+          "empty_text": {
+            "rows": 1,
+            "with_no_intent": 1
+          },
+          "intents": {
+            "frequency": {
+              "taste": 1
+            },
+            "labels_per_scored_row": 0.25,
+            "rows_with_no_intent": 3
+          },
+          "language": {
+            "rows": {
+              "other": 2,
+              "ua": 2
+            },
+            "sentiment": {
+              "other": {
+                "neutral": 2
+              },
+              "ua": {
+                "positive": 2
+              }
+            }
+          },
+          "rows": 4,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 4,
+            "rate": 0.0,
+            "true": 0
+          },
+          "scored": 4,
+          "sentiment": {
+            "neutral": 2,
+            "positive": 2
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "payable": {
+          "brand_attribution": {
+            "mentions": {},
+            "rows_with_a_brand": 0
+          },
+          "empty_text": {
+            "rows": 0,
+            "with_no_intent": 0
+          },
+          "intents": {
+            "frequency": {
+              "taste": 1
+            },
+            "labels_per_scored_row": 0.3333,
+            "rows_with_no_intent": 2
+          },
+          "language": {
+            "rows": {
+              "other": 1,
+              "ua": 2
+            },
+            "sentiment": {
+              "other": {
+                "neutral": 1
+              },
+              "ua": {
+                "positive": 2
+              }
+            }
+          },
+          "rows": 3,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 3,
+            "rate": 0.0,
+            "true": 0
+          },
+          "scored": 3,
+          "sentiment": {
+            "neutral": 1,
+            "positive": 2
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "segment": "health_fitness",
+        "source_id": "useful_healthy_fitness_menu",
+        "source_type": "community"
+      },
+      "@ya_Nenka": {
+        "bought": {
+          "brand_attribution": {
+            "mentions": {
+              "varto": 2
+            },
+            "rows_with_a_brand": 2
+          },
+          "empty_text": {
+            "rows": 0,
+            "with_no_intent": 0
+          },
+          "intents": {
+            "frequency": {
+              "price": 1
+            },
+            "labels_per_scored_row": 0.0625,
+            "rows_with_no_intent": 15
+          },
+          "language": {
+            "rows": {
+              "other": 2,
+              "ua": 14
+            },
+            "sentiment": {
+              "other": {
+                "positive": 2
+              },
+              "ua": {
+                "negative": 1,
+                "neutral": 8,
+                "positive": 5
+              }
+            }
+          },
+          "rows": 16,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 15,
+            "rate": 0.0625,
+            "true": 1
+          },
+          "scored": 16,
+          "sentiment": {
+            "negative": 1,
+            "neutral": 8,
+            "positive": 7
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "payable": {
+          "brand_attribution": {
+            "mentions": {
+              "varto": 2
+            },
+            "rows_with_a_brand": 2
+          },
+          "empty_text": {
+            "rows": 0,
+            "with_no_intent": 0
+          },
+          "intents": {
+            "frequency": {
+              "price": 1
+            },
+            "labels_per_scored_row": 0.0625,
+            "rows_with_no_intent": 15
+          },
+          "language": {
+            "rows": {
+              "other": 2,
+              "ua": 14
+            },
+            "sentiment": {
+              "other": {
+                "positive": 2
+              },
+              "ua": {
+                "negative": 1,
+                "neutral": 8,
+                "positive": 5
+              }
+            }
+          },
+          "rows": 16,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 15,
+            "rate": 0.0625,
+            "true": 1
+          },
+          "scored": 16,
+          "sentiment": {
+            "negative": 1,
+            "neutral": 8,
+            "positive": 7
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "segment": "baby_food",
+        "source_id": "ya_nenka",
+        "source_type": "community"
+      }
+    },
+    "comment_by_segment": {
+      "baby_food": {
+        "bought": {
+          "brand_attribution": {
+            "mentions": {
+              "varto": 3
+            },
+            "rows_with_a_brand": 3
+          },
+          "empty_text": {
+            "rows": 11,
+            "with_no_intent": 11
+          },
+          "intents": {
+            "frequency": {
+              "price": 1,
+              "quality": 3,
+              "taste": 8
+            },
+            "labels_per_scored_row": 0.1967,
+            "rows_with_no_intent": 49
+          },
+          "language": {
+            "rows": {
+              "other": 16,
+              "ua": 45
+            },
+            "sentiment": {
+              "other": {
+                "negative": 1,
+                "neutral": 11,
+                "positive": 4
+              },
+              "ua": {
+                "negative": 3,
+                "neutral": 28,
+                "positive": 14
+              }
+            }
+          },
+          "rows": 61,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 60,
+            "rate": 0.0164,
+            "true": 1
+          },
+          "scored": 61,
+          "sentiment": {
+            "negative": 4,
+            "neutral": 39,
+            "positive": 18
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "channels": [
+          "@tarilka_malyuka",
+          "@ya_Nenka"
+        ],
+        "payable": {
+          "brand_attribution": {
+            "mentions": {
+              "varto": 3
+            },
+            "rows_with_a_brand": 3
+          },
+          "empty_text": {
+            "rows": 0,
+            "with_no_intent": 0
+          },
+          "intents": {
+            "frequency": {
+              "price": 1,
+              "quality": 3,
+              "taste": 8
+            },
+            "labels_per_scored_row": 0.24,
+            "rows_with_no_intent": 38
+          },
+          "language": {
+            "rows": {
+              "other": 5,
+              "ua": 45
+            },
+            "sentiment": {
+              "other": {
+                "negative": 1,
+                "positive": 4
+              },
+              "ua": {
+                "negative": 3,
+                "neutral": 28,
+                "positive": 14
+              }
+            }
+          },
+          "rows": 50,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 49,
+            "rate": 0.02,
+            "true": 1
+          },
+          "scored": 50,
+          "sentiment": {
+            "negative": 4,
+            "neutral": 28,
+            "positive": 18
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        }
+      },
+      "cooking_recipes": {
+        "bought": {
+          "brand_attribution": {
+            "mentions": {},
+            "rows_with_a_brand": 0
+          },
+          "empty_text": {
+            "rows": 10,
+            "with_no_intent": 10
+          },
+          "intents": {
+            "frequency": {
+              "availability": 3,
+              "price": 3,
+              "quality": 6,
+              "service": 1,
+              "taste": 125
+            },
+            "labels_per_scored_row": 0.4233,
+            "rows_with_no_intent": 189
+          },
+          "language": {
+            "rows": {
+              "en": 1,
+              "other": 76,
+              "ru": 50,
+              "ua": 199
+            },
+            "sentiment": {
+              "en": {
+                "neutral": 1
+              },
+              "other": {
+                "negative": 2,
+                "neutral": 46,
+                "positive": 28
+              },
+              "ru": {
+                "negative": 9,
+                "neutral": 36,
+                "positive": 5
+              },
+              "ua": {
+                "negative": 19,
+                "neutral": 113,
+                "positive": 67
+              }
+            }
+          },
+          "rows": 326,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 319,
+            "rate": 0.0215,
+            "true": 7
+          },
+          "scored": 326,
+          "sentiment": {
+            "negative": 30,
+            "neutral": 196,
+            "positive": 100
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "channels": [
+          "@klopotenkofood",
+          "@retsepty"
+        ],
+        "payable": {
+          "brand_attribution": {
+            "mentions": {},
+            "rows_with_a_brand": 0
+          },
+          "empty_text": {
+            "rows": 0,
+            "with_no_intent": 0
+          },
+          "intents": {
+            "frequency": {
+              "availability": 3,
+              "price": 3,
+              "quality": 6,
+              "service": 1,
+              "taste": 125
+            },
+            "labels_per_scored_row": 0.4367,
+            "rows_with_no_intent": 179
+          },
+          "language": {
+            "rows": {
+              "en": 1,
+              "other": 66,
+              "ru": 50,
+              "ua": 199
+            },
+            "sentiment": {
+              "en": {
+                "neutral": 1
+              },
+              "other": {
+                "negative": 2,
+                "neutral": 36,
+                "positive": 28
+              },
+              "ru": {
+                "negative": 9,
+                "neutral": 36,
+                "positive": 5
+              },
+              "ua": {
+                "negative": 19,
+                "neutral": 113,
+                "positive": 67
+              }
+            }
+          },
+          "rows": 316,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 309,
+            "rate": 0.0222,
+            "true": 7
+          },
+          "scored": 316,
+          "sentiment": {
+            "negative": 30,
+            "neutral": 186,
+            "positive": 100
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        }
+      },
+      "health_fitness": {
+        "bought": {
+          "brand_attribution": {
+            "mentions": {
+              "varto": 2
+            },
+            "rows_with_a_brand": 2
+          },
+          "empty_text": {
+            "rows": 20,
+            "with_no_intent": 20
+          },
+          "intents": {
+            "frequency": {
+              "packaging": 1,
+              "price": 43,
+              "quality": 31,
+              "service": 47,
+              "taste": 45
+            },
+            "labels_per_scored_row": 0.1252,
+            "rows_with_no_intent": 1176
+          },
+          "language": {
+            "rows": {
+              "en": 13,
+              "other": 188,
+              "ru": 30,
+              "ua": 1103
+            },
+            "sentiment": {
+              "en": {
+                "neutral": 13
+              },
+              "other": {
+                "negative": 14,
+                "neutral": 128,
+                "positive": 46
+              },
+              "ru": {
+                "negative": 2,
+                "neutral": 24,
+                "positive": 4
+              },
+              "ua": {
+                "negative": 71,
+                "neutral": 824,
+                "positive": 208
+              }
+            }
+          },
+          "rows": 1334,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 1302,
+            "rate": 0.024,
+            "true": 32
+          },
+          "scored": 1334,
+          "sentiment": {
+            "negative": 87,
+            "neutral": 989,
+            "positive": 258
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "channels": [
+          "@HealthPsycholog",
+          "@chifit_family",
+          "@denisovapro",
+          "@kkondr_fit",
+          "@mandziak",
+          "@olgaa_trainer",
+          "@polyakova_fitness",
+          "@sashafitnesslife",
+          "@smirnov108",
+          "@useful_healthy_fitness_menu"
+        ],
+        "payable": {
+          "brand_attribution": {
+            "mentions": {
+              "varto": 2
+            },
+            "rows_with_a_brand": 2
+          },
+          "empty_text": {
+            "rows": 0,
+            "with_no_intent": 0
+          },
+          "intents": {
+            "frequency": {
+              "packaging": 1,
+              "price": 43,
+              "quality": 31,
+              "service": 47,
+              "taste": 45
+            },
+            "labels_per_scored_row": 0.1271,
+            "rows_with_no_intent": 1156
+          },
+          "language": {
+            "rows": {
+              "en": 13,
+              "other": 168,
+              "ru": 30,
+              "ua": 1103
+            },
+            "sentiment": {
+              "en": {
+                "neutral": 13
+              },
+              "other": {
+                "negative": 14,
+                "neutral": 108,
+                "positive": 46
+              },
+              "ru": {
+                "negative": 2,
+                "neutral": 24,
+                "positive": 4
+              },
+              "ua": {
+                "negative": 71,
+                "neutral": 824,
+                "positive": 208
+              }
+            }
+          },
+          "rows": 1314,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 1282,
+            "rate": 0.0244,
+            "true": 32
+          },
+          "scored": 1314,
+          "sentiment": {
+            "negative": 87,
+            "neutral": 969,
+            "positive": 258
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        }
+      },
+      "mothers_kids": {
+        "bought": {
+          "brand_attribution": {
+            "mentions": {
+              "garmonija": 1,
+              "lasunka": 1,
+              "varto": 2
+            },
+            "rows_with_a_brand": 4
+          },
+          "empty_text": {
+            "rows": 1172,
+            "with_no_intent": 1172
+          },
+          "intents": {
+            "frequency": {
+              "availability": 53,
+              "packaging": 9,
+              "price": 458,
+              "quality": 81,
+              "service": 49,
+              "taste": 32
+            },
+            "labels_per_scored_row": 0.2502,
+            "rows_with_no_intent": 2156
+          },
+          "language": {
+            "rows": {
+              "en": 33,
+              "other": 1386,
+              "ru": 367,
+              "ua": 940
+            },
+            "sentiment": {
+              "en": {
+                "neutral": 33
+              },
+              "other": {
+                "negative": 8,
+                "neutral": 1352,
+                "positive": 26
+              },
+              "ru": {
+                "negative": 29,
+                "neutral": 256,
+                "positive": 82
+              },
+              "ua": {
+                "negative": 30,
+                "neutral": 793,
+                "positive": 117
+              }
+            }
+          },
+          "rows": 2726,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 2720,
+            "rate": 0.0022,
+            "true": 6
+          },
+          "scored": 2726,
+          "sentiment": {
+            "negative": 67,
+            "neutral": 2434,
+            "positive": 225
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "channels": [
+          "@mamo_nepsichuy",
+          "@matusi_ukr"
+        ],
+        "payable": {
+          "brand_attribution": {
+            "mentions": {
+              "garmonija": 1,
+              "lasunka": 1,
+              "varto": 2
+            },
+            "rows_with_a_brand": 4
+          },
+          "empty_text": {
+            "rows": 0,
+            "with_no_intent": 0
+          },
+          "intents": {
+            "frequency": {
+              "availability": 53,
+              "packaging": 9,
+              "price": 458,
+              "quality": 81,
+              "service": 49,
+              "taste": 32
+            },
+            "labels_per_scored_row": 0.4389,
+            "rows_with_no_intent": 984
+          },
+          "language": {
+            "rows": {
+              "en": 33,
+              "other": 214,
+              "ru": 367,
+              "ua": 940
+            },
+            "sentiment": {
+              "en": {
+                "neutral": 33
+              },
+              "other": {
+                "negative": 8,
+                "neutral": 180,
+                "positive": 26
+              },
+              "ru": {
+                "negative": 29,
+                "neutral": 256,
+                "positive": 82
+              },
+              "ua": {
+                "negative": 30,
+                "neutral": 793,
+                "positive": 117
+              }
+            }
+          },
+          "rows": 1554,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 1548,
+            "rate": 0.0039,
+            "true": 6
+          },
+          "scored": 1554,
+          "sentiment": {
+            "negative": 67,
+            "neutral": 1262,
+            "positive": 225
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        }
+      },
+      "regional": {
+        "bought": {
+          "brand_attribution": {
+            "mentions": {},
+            "rows_with_a_brand": 0
+          },
+          "empty_text": {
+            "rows": 0,
+            "with_no_intent": 0
+          },
+          "intents": {
+            "frequency": {},
+            "labels_per_scored_row": null,
+            "rows_with_no_intent": 0
+          },
+          "language": {
+            "rows": {},
+            "sentiment": {}
+          },
+          "rows": 0,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 0,
+            "rate": null,
+            "true": 0
+          },
+          "scored": 0,
+          "sentiment": {},
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "channels": [
+          "@gorishnie_plavni1",
+          "@kremen_news",
+          "@telegraf_kremenchuk"
+        ],
+        "payable": {
+          "brand_attribution": {
+            "mentions": {},
+            "rows_with_a_brand": 0
+          },
+          "empty_text": {
+            "rows": 0,
+            "with_no_intent": 0
+          },
+          "intents": {
+            "frequency": {},
+            "labels_per_scored_row": null,
+            "rows_with_no_intent": 0
+          },
+          "language": {
+            "rows": {},
+            "sentiment": {}
+          },
+          "rows": 0,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 0,
+            "rate": null,
+            "true": 0
+          },
+          "scored": 0,
+          "sentiment": {},
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        }
+      },
+      "retail_official": {
+        "bought": {
+          "brand_attribution": {
+            "mentions": {
+              "limo": 1,
+              "rud": 1,
+              "varus-pl": 2
+            },
+            "rows_with_a_brand": 2
+          },
+          "empty_text": {
+            "rows": 8,
+            "with_no_intent": 8
+          },
+          "intents": {
+            "frequency": {
+              "availability": 28,
+              "price": 19,
+              "quality": 14,
+              "service": 28,
+              "taste": 33
+            },
+            "labels_per_scored_row": 0.5041,
+            "rows_with_no_intent": 146
+          },
+          "language": {
+            "rows": {
+              "en": 4,
+              "other": 94,
+              "ru": 42,
+              "ua": 102
+            },
+            "sentiment": {
+              "en": {
+                "neutral": 4
+              },
+              "other": {
+                "negative": 8,
+                "neutral": 84,
+                "positive": 2
+              },
+              "ru": {
+                "negative": 20,
+                "neutral": 14,
+                "positive": 8
+              },
+              "ua": {
+                "negative": 26,
+                "neutral": 58,
+                "positive": 18
+              }
+            }
+          },
+          "rows": 242,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 227,
+            "rate": 0.062,
+            "true": 15
+          },
+          "scored": 242,
+          "sentiment": {
+            "negative": 54,
+            "neutral": 160,
+            "positive": 28
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "channels": [
+          "@VARUS_channel",
+          "@atb_market_official",
+          "@ekomarket_shop",
+          "@epicentrk_sale",
+          "@forainfo",
+          "@marketopt_promo",
+          "@silposilpo"
+        ],
+        "payable": {
+          "brand_attribution": {
+            "mentions": {
+              "limo": 1,
+              "rud": 1,
+              "varus-pl": 2
+            },
+            "rows_with_a_brand": 2
+          },
+          "empty_text": {
+            "rows": 0,
+            "with_no_intent": 0
+          },
+          "intents": {
+            "frequency": {
+              "availability": 28,
+              "price": 19,
+              "quality": 14,
+              "service": 28,
+              "taste": 33
+            },
+            "labels_per_scored_row": 0.5214,
+            "rows_with_no_intent": 138
+          },
+          "language": {
+            "rows": {
+              "en": 4,
+              "other": 86,
+              "ru": 42,
+              "ua": 102
+            },
+            "sentiment": {
+              "en": {
+                "neutral": 4
+              },
+              "other": {
+                "negative": 8,
+                "neutral": 76,
+                "positive": 2
+              },
+              "ru": {
+                "negative": 20,
+                "neutral": 14,
+                "positive": 8
+              },
+              "ua": {
+                "negative": 26,
+                "neutral": 58,
+                "positive": 18
+              }
+            }
+          },
+          "rows": 234,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 219,
+            "rate": 0.0641,
+            "true": 15
+          },
+          "scored": 234,
+          "sentiment": {
+            "negative": 54,
+            "neutral": 152,
+            "positive": 28
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        }
+      },
+      "supermarket_deals": {
+        "bought": {
+          "brand_attribution": {
+            "mentions": {},
+            "rows_with_a_brand": 0
+          },
+          "empty_text": {
+            "rows": 140,
+            "with_no_intent": 140
+          },
+          "intents": {
+            "frequency": {
+              "availability": 100,
+              "packaging": 7,
+              "price": 29,
+              "quality": 3,
+              "service": 36,
+              "taste": 2
+            },
+            "labels_per_scored_row": 0.4585,
+            "rows_with_no_intent": 228
+          },
+          "language": {
+            "rows": {
+              "other": 165,
+              "ru": 4,
+              "ua": 217
+            },
+            "sentiment": {
+              "other": {
+                "negative": 3,
+                "neutral": 157,
+                "positive": 5
+              },
+              "ru": {
+                "neutral": 3,
+                "positive": 1
+              },
+              "ua": {
+                "negative": 25,
+                "neutral": 166,
+                "positive": 26
+              }
+            }
+          },
+          "rows": 386,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 380,
+            "rate": 0.0155,
+            "true": 6
+          },
+          "scored": 386,
+          "sentiment": {
+            "negative": 28,
+            "neutral": 326,
+            "positive": 32
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        },
+        "channels": [
+          "@kopiyochka1",
+          "@msuaaaa"
+        ],
+        "payable": {
+          "brand_attribution": {
+            "mentions": {},
+            "rows_with_a_brand": 0
+          },
+          "empty_text": {
+            "rows": 0,
+            "with_no_intent": 0
+          },
+          "intents": {
+            "frequency": {
+              "availability": 100,
+              "packaging": 7,
+              "price": 29,
+              "quality": 3,
+              "service": 36,
+              "taste": 2
+            },
+            "labels_per_scored_row": 0.7195,
+            "rows_with_no_intent": 88
+          },
+          "language": {
+            "rows": {
+              "other": 25,
+              "ru": 4,
+              "ua": 217
+            },
+            "sentiment": {
+              "other": {
+                "negative": 3,
+                "neutral": 17,
+                "positive": 5
+              },
+              "ru": {
+                "neutral": 3,
+                "positive": 1
+              },
+              "ua": {
+                "negative": 25,
+                "neutral": 166,
+                "positive": 26
+              }
+            }
+          },
+          "rows": 246,
+          "sarcasm": {
+            "denominator": "scored",
+            "false": 240,
+            "rate": 0.0244,
+            "true": 6
+          },
+          "scored": 246,
+          "sentiment": {
+            "negative": 28,
+            "neutral": 186,
+            "positive": 32
+          },
+          "unreadable": {
+            "reasons": {},
+            "rows": 0
+          }
+        }
+      }
+    },
+    "legs": {
+      "leaflet_page": {
+        "per_channel": {
+          "@atb_market_official": {
+            "empty": 127,
+            "positions": 106,
+            "rows": 159,
+            "unreadable": {
+              "reasons": {
+                "malformed JSON": 1,
+                "price '67 90' is not one number": 1
+              },
+              "rows": 2
+            },
+            "with_positions": 30
+          }
+        },
+        "total": {
+          "empty": 127,
+          "positions": 106,
+          "rows": 159,
+          "unreadable": {
+            "reasons": {
+              "malformed JSON": 1,
+              "price '67 90' is not one number": 1
+            },
+            "rows": 2
+          },
+          "with_positions": 30
+        }
+      },
+      "post_text": {
+        "per_channel": {
+          "@VARUS_channel": {
+            "empty": 6,
+            "positions": 3,
+            "rows": 9,
+            "unreadable": {
+              "reasons": {},
+              "rows": 0
+            },
+            "with_positions": 3
+          },
+          "@ekomarket_shop": {
+            "empty": 0,
+            "positions": 11,
+            "rows": 5,
+            "unreadable": {
+              "reasons": {},
+              "rows": 0
+            },
+            "with_positions": 5
+          },
+          "@epicentrk_sale": {
+            "empty": 6,
+            "positions": 0,
+            "rows": 6,
+            "unreadable": {
+              "reasons": {},
+              "rows": 0
+            },
+            "with_positions": 0
+          },
+          "@forainfo": {
+            "empty": 0,
+            "positions": 9,
+            "rows": 4,
+            "unreadable": {
+              "reasons": {},
+              "rows": 0
+            },
+            "with_positions": 4
+          },
+          "@gorishnie_plavni1": {
+            "empty": 4,
+            "positions": 0,
+            "rows": 4,
+            "unreadable": {
+              "reasons": {},
+              "rows": 0
+            },
+            "with_positions": 0
+          },
+          "@kremen_news": {
+            "empty": 1,
+            "positions": 0,
+            "rows": 1,
+            "unreadable": {
+              "reasons": {},
+              "rows": 0
+            },
+            "with_positions": 0
+          },
+          "@marketopt_promo": {
+            "empty": 0,
+            "positions": 4,
+            "rows": 4,
+            "unreadable": {
+              "reasons": {},
+              "rows": 0
+            },
+            "with_positions": 4
+          },
+          "@msuaaaa": {
+            "empty": 0,
+            "positions": 1,
+            "rows": 1,
+            "unreadable": {
+              "reasons": {},
+              "rows": 0
+            },
+            "with_positions": 1
+          },
+          "@silposilpo": {
+            "empty": 1,
+            "positions": 2,
+            "rows": 2,
+            "unreadable": {
+              "reasons": {},
+              "rows": 0
+            },
+            "with_positions": 1
+          },
+          "@telegraf_kremenchuk": {
+            "empty": 4,
+            "positions": 9,
+            "rows": 8,
+            "unreadable": {
+              "reasons": {
+                "fat '1%, 1,2%' is not a percentage": 1
+              },
+              "rows": 1
+            },
+            "with_positions": 3
+          }
+        },
+        "total": {
+          "empty": 22,
+          "positions": 39,
+          "rows": 44,
+          "unreadable": {
+            "reasons": {
+              "fat '1%, 1,2%' is not a percentage": 1
+            },
+            "rows": 1
+          },
+          "with_positions": 21
+        }
+      }
+    },
+    "positions_by_carrier": {
+      "leaflet_page": 106,
+      "post_text": 39
+    },
+    "positions_by_category": {
+      "butter": 12,
+      "cheese": 27,
+      "curd": 6,
+      "dairy": 3,
+      "ice-cream": 69,
+      "kefir-ryazhanka": 2,
+      "milk": 6,
+      "plant-based-analogs": 1,
+      "sour-cream": 5,
+      "yogurt": 14
+    }
+  },
+  "dictionary": {
+    "metrics": [
+      "aspect_share",
+      "coverage",
+      "negative_share_sarcasm_adjusted",
+      "nsr",
+      "promo_depth",
+      "promo_pressure",
+      "sov",
+      "volume"
+    ],
+    "path": "config/metrics.yaml",
+    "sha256": "07b549a87fba9e9c10d37cc03ef2f0dbb4867f4d8c39bc680d3b52fe014563a2"
+  },
+  "metrics": {
+    "aspect_share": {
+      "by_sample": {
+        "bought": {
+          "labels": {
+            "availability": 184,
+            "packaging": 17,
+            "price": 553,
+            "quality": 138,
+            "service": 161,
+            "taste": 245
+          },
+          "rows_with_no_aspect": 3944,
+          "sample": {
+            "name": "bought",
+            "reading": "every comment row the 5c2 session paid for — the population results/window_summary_5c2.json was computed over, and the only sample the convergence anchor can be met on",
+            "rows": 5075
+          },
+          "scored": 5075,
+          "share": {
+            "availability": 0.1418,
+            "packaging": 0.0131,
+            "price": 0.426,
+            "quality": 0.1063,
+            "service": 0.124,
+            "taste": 0.1888
+          },
+          "total_labels": 1298
+        },
+        "payable": {
+          "labels": {
+            "availability": 184,
+            "packaging": 17,
+            "price": 553,
+            "quality": 138,
+            "service": 161,
+            "taste": 245
+          },
+          "rows_with_no_aspect": 2583,
+          "sample": {
+            "name": "payable",
+            "reading": "the comment rows that carry words. SPEC 3.19 (1) skips the rest before payment and 3.19 (2) makes this the denominator of any distribution about words; the text-less rows are counted beside it as their own class, never blended in",
+            "rows": 3714
+          },
+          "scored": 3714,
+          "share": {
+            "availability": 0.1418,
+            "packaging": 0.0131,
+            "price": 0.426,
+            "quality": 0.1063,
+            "service": 0.124,
+            "taste": 0.1888
+          },
+          "total_labels": 1298
+        }
+      },
+      "headline_sample": "payable",
+      "sample": {
+        "name": "payable",
+        "reading": "the comment rows that carry words. SPEC 3.19 (1) skips the rest before payment and 3.19 (2) makes this the denominator of any distribution about words; the text-less rows are counted beside it as their own class, never blended in",
+        "rows": 3714
+      }
+    },
+    "coverage": {
+      "channels": {
+        "in_registry": 66,
+        "share": 0.4242,
+        "with_a_row": 28
+      },
+      "sample": {
+        "name": "registry",
+        "reading": "the denominator is the registry, not the evidence. Subscribers are not reach: nothing here says how many people saw a post",
+        "rows": 66
+      },
+      "segments": {
+        "in_registry": 8,
+        "share": 0.875,
+        "with_a_row": 7
+      }
+    },
+    "negative_share_sarcasm_adjusted": {
+      "by_sample": {
+        "bought": {
+          "negative": 270,
+          "negative_share": 0.0532,
+          "negative_share_sarcasm_adjusted": 0.0538,
+          "reclassified_from_sarcasm": 3,
+          "sample": {
+            "name": "bought",
+            "reading": "every comment row the 5c2 session paid for — the population results/window_summary_5c2.json was computed over, and the only sample the convergence anchor can be met on",
+            "rows": 5075
+          },
+          "scored": 5075
+        },
+        "payable": {
+          "negative": 270,
+          "negative_share": 0.0727,
+          "negative_share_sarcasm_adjusted": 0.0735,
+          "reclassified_from_sarcasm": 3,
+          "sample": {
+            "name": "payable",
+            "reading": "the comment rows that carry words. SPEC 3.19 (1) skips the rest before payment and 3.19 (2) makes this the denominator of any distribution about words; the text-less rows are counted beside it as their own class, never blended in",
+            "rows": 3714
+          },
+          "scored": 3714
+        }
+      },
+      "headline_sample": "payable",
+      "sample": {
+        "name": "payable",
+        "reading": "the comment rows that carry words. SPEC 3.19 (1) skips the rest before payment and 3.19 (2) makes this the denominator of any distribution about words; the text-less rows are counted beside it as their own class, never blended in",
+        "rows": 3714
+      }
+    },
+    "nsr": {
+      "by_sample": {
+        "bought": {
+          "negative": 270,
+          "neutral": 4144,
+          "nsr": 0.077,
+          "positive": 661,
+          "sample": {
+            "name": "bought",
+            "reading": "every comment row the 5c2 session paid for — the population results/window_summary_5c2.json was computed over, and the only sample the convergence anchor can be met on",
+            "rows": 5075
+          },
+          "scored": 5075
+        },
+        "payable": {
+          "negative": 270,
+          "neutral": 2783,
+          "nsr": 0.1053,
+          "positive": 661,
+          "sample": {
+            "name": "payable",
+            "reading": "the comment rows that carry words. SPEC 3.19 (1) skips the rest before payment and 3.19 (2) makes this the denominator of any distribution about words; the text-less rows are counted beside it as their own class, never blended in",
+            "rows": 3714
+          },
+          "scored": 3714
+        }
+      },
+      "headline_sample": "payable",
+      "sample": {
+        "name": "payable",
+        "reading": "the comment rows that carry words. SPEC 3.19 (1) skips the rest before payment and 3.19 (2) makes this the denominator of any distribution about words; the text-less rows are counted beside it as their own class, never blended in",
+        "rows": 3714
+      }
+    },
+    "promo_depth": {
+      "by_carrier": {
+        "leaflet_page": {
+          "from_price_pair": {
+            "max": 0.5483,
+            "median": 0.4206,
+            "min": 0.2101,
+            "n": 95,
+            "q1": 0.3144,
+            "q3": 0.4697
+          },
+          "from_printed_badge": {
+            "max": 0.55,
+            "median": 0.41,
+            "min": 0.21,
+            "n": 100,
+            "q1": 0.32,
+            "q3": 0.46
+          },
+          "position_rows": 106,
+          "printed_disagrees_with_computed": 8
+        },
+        "post_text": {
+          "from_price_pair": {
+            "max": null,
+            "median": null,
+            "min": null,
+            "n": 0,
+            "q1": null,
+            "q3": null
+          },
+          "from_printed_badge": {
+            "max": 0.59,
+            "median": 0.445,
+            "min": 0.3,
+            "n": 28,
+            "q1": 0.38,
+            "q3": 0.4975
+          },
+          "position_rows": 39,
+          "printed_disagrees_with_computed": 0
+        }
+      },
+      "law": "SPEC 3.18 (1): the promo-depth aggregate is computed from the promo price and the PRINTED -N% badge. Where BOTH prices exist the code-computed arithmetic of 3.17 (3) stands and the printed % never substitutes it. The extracted old price is KEPT as the more accurate depth input and is FLAGGED — it never reaches a surface that prints it as a price and no was/now claim is built on it, so this record counts the rows that carry one and prints no value of it. Reconstructing the old price from the promo and the badge stays forbidden.",
+      "printed_disagrees_with_computed": 8,
+      "readings": {
+        "from_price_pair": {
+          "max": 0.5483,
+          "median": 0.4206,
+          "min": 0.2101,
+          "n": 95,
+          "q1": 0.3144,
+          "q3": 0.4697
+        },
+        "from_printed_badge": {
+          "max": 0.59,
+          "median": 0.415,
+          "min": 0.21,
+          "n": 128,
+          "q1": 0.33,
+          "q3": 0.4675
+        }
+      },
+      "sample": {
+        "name": "position_rows",
+        "reading": "the position rows the window's leaflet pages and promo post texts yielded. Leaflet pages were collected for atb only in window-1, so every other chain's depth here comes from post text — a different instrument on a smaller sample",
+        "rows": 145
+      }
+    },
+    "promo_pressure": {
+      "by_brand": {
+        "ferma": 10,
+        "halychyna": 3,
+        "lasunka": 6,
+        "limo": 9,
+        "molokija": 6,
+        "president": 2,
+        "rud": 16,
+        "selianske": 8,
+        "svoia-liniia": 13,
+        "try-vedmedi": 4,
+        "yagotynske": 1,
+        "zlahoda": 2
+      },
+      "by_chain": {
+        "atb": {
+          "by_carrier": {
+            "leaflet_page": 106
+          },
+          "named_by_amendment_3_20": true,
+          "position_rows": 106
+        },
+        "ekomarket_shop": {
+          "by_carrier": {
+            "post_text": 11
+          },
+          "named_by_amendment_3_20": false,
+          "position_rows": 11
+        },
+        "forainfo": {
+          "by_carrier": {
+            "post_text": 9
+          },
+          "named_by_amendment_3_20": false,
+          "position_rows": 9
+        },
+        "marketopt_promo": {
+          "by_carrier": {
+            "post_text": 4
+          },
+          "named_by_amendment_3_20": true,
+          "position_rows": 4
+        },
+        "msuaaaa": {
+          "by_carrier": {
+            "post_text": 1
+          },
+          "named_by_amendment_3_20": false,
+          "position_rows": 1
+        },
+        "silpo": {
+          "by_carrier": {
+            "post_text": 2
+          },
+          "named_by_amendment_3_20": true,
+          "position_rows": 2
+        },
+        "telegraf_kremenchuk": {
+          "by_carrier": {
+            "post_text": 9
+          },
+          "named_by_amendment_3_20": false,
+          "position_rows": 9
+        },
+        "varus": {
+          "by_carrier": {
+            "post_text": 3
+          },
+          "named_by_amendment_3_20": true,
+          "position_rows": 3
+        }
+      },
+      "position_rows": 145,
+      "rows_with_no_resolved_brand": 65,
+      "sample": {
+        "name": "position_rows",
+        "reading": "the position rows the window's leaflet pages and promo post texts yielded. Leaflet pages were collected for atb only in window-1, so every other chain's depth here comes from post text — a different instrument on a smaller sample",
+        "rows": 145
+      },
+      "share": {
+        "ferma": 0.069,
+        "halychyna": 0.0207,
+        "lasunka": 0.0414,
+        "limo": 0.0621,
+        "molokija": 0.0414,
+        "president": 0.0138,
+        "rud": 0.1103,
+        "selianske": 0.0552,
+        "svoia-liniia": 0.0897,
+        "try-vedmedi": 0.0276,
+        "yagotynske": 0.0069,
+        "zlahoda": 0.0138
+      }
+    },
+    "sov": {
+      "by_sample": {
+        "bought": {
+          "mentions": {
+            "ferma": 0,
+            "garmonija": 1,
+            "halychyna": 0,
+            "khladyk": 0,
+            "lasunka": 1,
+            "limo": 1,
+            "mgarske": 0,
+            "molokija": 0,
+            "myrhorodska-korivka": 0,
+            "premia": 0,
+            "president": 0,
+            "prostokvashyno": 0,
+            "rud": 1,
+            "selianske": 0,
+            "svoia-liniia": 0,
+            "try-vedmedi": 0,
+            "varto": 7,
+            "varus-pl": 2,
+            "voloshkove-pole": 0,
+            "yagotynske": 0,
+            "yahotynske-dlia-ditei": 0,
+            "zarih": 0,
+            "zlahoda": 0
+          },
+          "own_brands": [
+            "garmonija",
+            "mgarske"
+          ],
+          "sample": {
+            "name": "bought",
+            "reading": "every comment row the 5c2 session paid for — the population results/window_summary_5c2.json was computed over, and the only sample the convergence anchor can be met on",
+            "rows": 5075
+          },
+          "share": {
+            "ferma": 0.0,
+            "garmonija": 0.0769,
+            "halychyna": 0.0,
+            "khladyk": 0.0,
+            "lasunka": 0.0769,
+            "limo": 0.0769,
+            "mgarske": 0.0,
+            "molokija": 0.0,
+            "myrhorodska-korivka": 0.0,
+            "premia": 0.0,
+            "president": 0.0,
+            "prostokvashyno": 0.0,
+            "rud": 0.0769,
+            "selianske": 0.0,
+            "svoia-liniia": 0.0,
+            "try-vedmedi": 0.0,
+            "varto": 0.5385,
+            "varus-pl": 0.1538,
+            "voloshkove-pole": 0.0,
+            "yagotynske": 0.0,
+            "yahotynske-dlia-ditei": 0.0,
+            "zarih": 0.0,
+            "zlahoda": 0.0
+          },
+          "total_mentions": 13
+        },
+        "payable": {
+          "mentions": {
+            "ferma": 0,
+            "garmonija": 1,
+            "halychyna": 0,
+            "khladyk": 0,
+            "lasunka": 1,
+            "limo": 1,
+            "mgarske": 0,
+            "molokija": 0,
+            "myrhorodska-korivka": 0,
+            "premia": 0,
+            "president": 0,
+            "prostokvashyno": 0,
+            "rud": 1,
+            "selianske": 0,
+            "svoia-liniia": 0,
+            "try-vedmedi": 0,
+            "varto": 7,
+            "varus-pl": 2,
+            "voloshkove-pole": 0,
+            "yagotynske": 0,
+            "yahotynske-dlia-ditei": 0,
+            "zarih": 0,
+            "zlahoda": 0
+          },
+          "own_brands": [
+            "garmonija",
+            "mgarske"
+          ],
+          "sample": {
+            "name": "payable",
+            "reading": "the comment rows that carry words. SPEC 3.19 (1) skips the rest before payment and 3.19 (2) makes this the denominator of any distribution about words; the text-less rows are counted beside it as their own class, never blended in",
+            "rows": 3714
+          },
+          "share": {
+            "ferma": 0.0,
+            "garmonija": 0.0769,
+            "halychyna": 0.0,
+            "khladyk": 0.0,
+            "lasunka": 0.0769,
+            "limo": 0.0769,
+            "mgarske": 0.0,
+            "molokija": 0.0,
+            "myrhorodska-korivka": 0.0,
+            "premia": 0.0,
+            "president": 0.0,
+            "prostokvashyno": 0.0,
+            "rud": 0.0769,
+            "selianske": 0.0,
+            "svoia-liniia": 0.0,
+            "try-vedmedi": 0.0,
+            "varto": 0.5385,
+            "varus-pl": 0.1538,
+            "voloshkove-pole": 0.0,
+            "yagotynske": 0.0,
+            "yahotynske-dlia-ditei": 0.0,
+            "zarih": 0.0,
+            "zlahoda": 0.0
+          },
+          "total_mentions": 13
+        }
+      },
+      "headline_sample": "payable",
+      "sample": {
+        "name": "comment_rows_with_a_watchlist_brand",
+        "of": 5075,
+        "reading": "SoV is measured over the comment rows where the DETERMINISTIC matcher found a watchlist name in the text that was sent. That is a small part of the window and it is not a model head — the comment instrument has no brand head at all",
+        "rows": 11,
+        "share": 0.002167
+      }
+    },
+    "volume": {
+      "comments": {
+        "bought": 5075,
+        "payable": 3714,
+        "text_less": 1361
+      },
+      "leaflet_pages": 159,
+      "position_rows": 145,
+      "post_texts": 44,
+      "sample": {
+        "name": "window",
+        "reading": "every unit of observation the window carried, across the three legs",
+        "rows": 5278
+      }
+    }
+  },
+  "not_computable": {
+    "alert_baselines": {
+      "reason": "an alert fires on a deviation from a baseline and a baseline of one window is the window itself",
+      "surface": "T7",
+      "unlock": "window-2, then a threshold ruled by the operator on the alert design"
+    },
+    "category_layer": {
+      "reason": "the tracked taxonomy is approved but the category property is not computed for posts, so comments cannot inherit it",
+      "surface": "T6",
+      "unlock": "phase 5c3 builds the category layer"
+    },
+    "leaflet_depth_for_silpo_varus_marketopt": {
+      "reason": "leaflet PAGES were collected for one chain in window-1; the other three chains' promo depth here comes from post text, which is a different instrument",
+      "surface": "T5",
+      "unlock": "cycle-2 leaflet collection — SPEC 3.20 (6), contract cycle2-prep-b"
+    },
+    "reach": {
+      "reason": "subscriber counts are not reach and nothing in the store says how many people saw a post",
+      "surface": "T0 coverage, T8",
+      "unlock": "none from public Telegram data; the metric stays unclaimed"
+    },
+    "reactions_views_votes": {
+      "reason": "the store carries no reaction, view or poll-vote sidecar for this window",
+      "surface": "T0 volume, T1 weighting",
+      "unlock": "sidecar v2 (phase 5c3)"
+    },
+    "sales_linkage": {
+      "reason": "internal sales and shipment data are not in this system",
+      "surface": "not on any tab",
+      "unlock": "an owner decision on the ТПК data track, with its own legality and format gate"
+    },
+    "trend_vs_previous_window": {
+      "reason": "one window is a point; a trend needs two",
+      "surface": "T0, every KPI card's comparison",
+      "unlock": "the cycle-2 paid run writes window-2 into the same tables"
+    }
+  },
+  "phase": "6a",
+  "provenance": {
+    "evidence": {
+      "data/derived/inferences/HealthPsycholog.jsonl": "0b76918cf044609a71d80a46e5277cc1ecffe390802c966d39a13858d46b460f",
+      "data/derived/inferences/VARUS_channel.jsonl": "72321c09abad66a8ea0cc622ad7ab90e91108a12200c1705e3af2037ed20f5fb",
+      "data/derived/inferences/chifit_family.jsonl": "572cdeebb20239cc2b4806a5e2709eb89da2e6233ddc184dfd168c7a9dfbc90f",
+      "data/derived/inferences/denisovapro.jsonl": "3a90344aabadb47d114bbfd19a72732ba1bd894976368917abfae73cc89f85f0",
+      "data/derived/inferences/kkondr_fit.jsonl": "fa313f326363ed9e8e8a8ebfd8a20e428c67e3f0549eec402023e73ea2e1ac3c",
+      "data/derived/inferences/klopotenkofood.jsonl": "53060ce9b7fb7571cd781dfbbce31da3cb62d7bab1d873f10f80aa5fda6711c7",
+      "data/derived/inferences/kopiyochka1.jsonl": "30a981f7c7e51f2c03401ce7ecd7fae6b1eb22350b13557673791a727dc4c2dd",
+      "data/derived/inferences/mamo_nepsichuy.jsonl": "5f2a0d8dd3bf09da152df097eaaf3657dbf37e5750ba30023d03b9234fa0a16d",
+      "data/derived/inferences/mandziak.jsonl": "59f00b94e951e969bee0932cbed7ce945dc9ffcd9ca2fa7a5579db283cedd65c",
+      "data/derived/inferences/matusi_ukr.jsonl": "c481f4671ef8ff8fbc5cc5838aa3834020b8449c0aa0ea0c1dfe89849241bf7e",
+      "data/derived/inferences/msuaaaa.jsonl": "2f12fc8f45f4a67e188e6ddce434cbab6f73b2725cd99eff4497e2491a0f7ee1",
+      "data/derived/inferences/olgaa_trainer.jsonl": "1350080c18cd2713a2776e69371b9ad78c2221041bf71b01937cd7f79232cb19",
+      "data/derived/inferences/polyakova_fitness.jsonl": "c1fbc6fb04941d0e3f8f54c0498455099c75cb6977c9487743fc9a29061c06f3",
+      "data/derived/inferences/retsepty.jsonl": "6faa4ba37dc345a574a546a0b49cdb2282e730382886dddcb7a1148229bf82f5",
+      "data/derived/inferences/sashafitnesslife.jsonl": "bb0ce8090ce318ff20ade99e2124ca7f392327b7d526008553b09d8223e6edb8",
+      "data/derived/inferences/smirnov108.jsonl": "1348c7c7f7d7639abf3d43215336e77e7bc095a447fb898171d1be2ebf510206",
+      "data/derived/inferences/tarilka_malyuka.jsonl": "2787c95362ba9c835b5ae6e495e7ed06756fd6083f63a4019d44c78fb3039ffe",
+      "data/derived/inferences/useful_healthy_fitness_menu.jsonl": "4878d8c8b7c02c18bff2826d0dbdd231a94c7c85a040fd92e758fd20174220aa",
+      "data/derived/inferences/ya_Nenka.jsonl": "6e192bf6ff229324856238f509be5e07847ee7e758221c54e3bc0948cabf60e4",
+      "data/derived/leaflet_pages/atb_market_official.jsonl": "bea5d157ec7ec236e9a0d902cb9a2a10c852910776613bba0b3258b4339d62a5",
+      "data/derived/position_rows/atb_market_official.jsonl": "7fe52e2d36ce16249d6ecfc14ab5dd00f8e154e7cc46eaa146731c3b8bd1cd30",
+      "data/derived/post_position_rows/VARUS_channel.jsonl": "54565070aa866245989fd073106e7a15ed8cf94702f8e93b35eb106f2e85922b",
+      "data/derived/post_position_rows/ekomarket_shop.jsonl": "86dc4d83b35dcbfef1103227740284743571479a502a20af8c3af273dd766b4e",
+      "data/derived/post_position_rows/forainfo.jsonl": "a972150f932a78c808efd9b6c7d6df8056f4f759782d836e56446c083b86d35e",
+      "data/derived/post_position_rows/marketopt_promo.jsonl": "319a9f6cba1e1d55dc477588622f3dfa4ef51daf362576d59abc7f84d86cd881",
+      "data/derived/post_position_rows/msuaaaa.jsonl": "2b435f2d243ee795dcb3ba709eee265a2e5a0e7e530f01b3f310b1d21cc21e91",
+      "data/derived/post_position_rows/silposilpo.jsonl": "7272cf92c75e58298e7163c38167db2bd3388f641da5bde77e942a4dd7592184",
+      "data/derived/post_position_rows/telegraf_kremenchuk.jsonl": "ef29a26170e65dd88334f724cb43e4d1820070278b1929a41477d0c325299667",
+      "data/derived/post_texts/VARUS_channel.jsonl": "9f54441b40306950e0ad045647fe30897f5fe9682cb190d1cbd80d5423b459dc",
+      "data/derived/post_texts/ekomarket_shop.jsonl": "42d5f39bb4e7fb6564e865d426c7d2fb8c9603250006a8ed907049a98a560666",
+      "data/derived/post_texts/epicentrk_sale.jsonl": "8c44e8c624466cff2c8d8ca891ab4e095fc8b7a06866345da99308860812add3",
+      "data/derived/post_texts/forainfo.jsonl": "8b01158a44dab97ce70fd6b09182a274317eee1afe33ae18babf51b42b9aeea9",
+      "data/derived/post_texts/gorishnie_plavni1.jsonl": "b62ddc95dc14e739b488dd730510c2d9f281ca87340bedb26f3c6fe538369e75",
+      "data/derived/post_texts/kremen_news.jsonl": "d31ba8cb6d3b1aa1ce8e97efed41a6c34f871473d056b9accb17c69c2d48e43c",
+      "data/derived/post_texts/marketopt_promo.jsonl": "e4d613b3b70c544bcaa11658e44027535ad80234ea85449f6214ccabfb7bc3bd",
+      "data/derived/post_texts/msuaaaa.jsonl": "133f1ac36474f079bc2651d80f7e0990a466da3ce178ca6214f1f85185d697eb",
+      "data/derived/post_texts/silposilpo.jsonl": "c7ba3b62e4d318f0d26180e07cdfef6582cc9ac6691aad8bd1e9fe3bc4df15e7",
+      "data/derived/post_texts/telegraf_kremenchuk.jsonl": "1a0409464e2793928b37beb16c285bed095414861d69f65f4ab09fe535c6042a"
+    },
+    "inputs": {
+      "config/metrics.yaml": "07b549a87fba9e9c10d37cc03ef2f0dbb4867f4d8c39bc680d3b52fe014563a2",
+      "config/registry.yaml": "d4e3b2373c4378f3acc51079dc1d0560c28d58c46b71335b2bb352cae39be3ba",
+      "results/census_5c2.json": "a1384a12bcbe975954f8feaa1c5207d59cc66ab524b3d877099bad92ede5305f",
+      "results/prereg_5c2_run.json": "d5d3afd5e6d7e966233a7e449546b2001f9c2a08646cab207e87531f5df4cbc8",
+      "results/window_summary_5c2.json": "7760d32d0ffec80cc73d6ebb27e464ab5b906ed9eda00ea0aa8d15b90ae7561c"
+    },
+    "producers": {
+      "scripts/build_aggregates.py": "65eba052a18549a6ccd91927cf38b5a38f341db2f3bc1597949480c9f57c0cd0",
+      "scripts/export_dashboard_data.py": "eae5b75d4c23d84294987b6e41675f04ec77d23aa2a55799bb3fb2f72660be90",
+      "scripts/window_summary_5c2.py": "239d2d5fcc0f0c93158ca41383b5ce20beb7f8e9db38974913a302ea4831fdaf",
+      "src/market_pulse/aggregates.py": "8b254570d0f60155a164b8c4f3b7d93679d75c2614fb3896e5521917b6371c86",
+      "src/market_pulse/brands.py": "fa92ccca81c91603fe242e74226a3f5370ae8e6ce4486affee9cb953448e9721",
+      "src/market_pulse/langid.py": "65c9ba294c846b8574387d1893826313e9649282f7fd8581d04354ea6cc9a2de",
+      "src/market_pulse/loop.py": "3af31663cbd9d070ef00a14c033f93b285a1a0aebfb4153575d3ddda59853a1a",
+      "src/market_pulse/prompts.py": "de767900a1ea578ea7b48bdb0dcc497c9f023e466a09ae0b6100d60371fdc3ab"
+    },
+    "reads": "data/derived/ through the reading path of scripts/window_summary_5c2.py, plus the records below through the sealed registration's own pins. No clock and no git block: two runs over the same evidence are byte-identical."
+  },
+  "window": {
+    "anchor": "2026-08-09T00:00:00+00:00",
+    "days": 28,
+    "id": "w1",
+    "populations": {
+      "bought": 5075,
+      "leaflet_pages": 159,
+      "payable": 3714,
+      "position_rows": 145,
+      "post_texts": 44,
+      "text_less": 1361
+    },
+    "reading": "bought is what the 5c2 session paid for; payable is what SPEC 3.19 (1)'s queue rule leaves for the next cycle. They are stored apart and never conflated — the registration that names the next paid population must name the payable one.",
+    "rule": "since <= date < until, half-open",
+    "since": "2026-07-12T00:00:00+00:00",
+    "until": "2026-08-09T00:00:00+00:00"
+  }
+}

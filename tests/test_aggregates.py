@@ -30,7 +30,7 @@ def conn(tmp_path_factory):
     `prompts.build_messages` to recover what was sent.
     """
     out = tmp_path_factory.mktemp("pulse") / "pulse.db"
-    return builder.build(builder.DERIVED, builder.PREREG, builder.REGISTRY, out)
+    return builder.build(builder.DERIVED, builder.PREREG, builder.REGISTRY, out)[0]
 
 
 def test_every_number_of_the_sealed_window_summary_is_re_derived_from_sql(conn):
@@ -58,7 +58,7 @@ def test_a_single_flipped_row_reddens_the_gate(tmp_path):
     whose per-channel numbers had been shuffled.
     """
     out = tmp_path / "pulse.db"
-    conn = builder.build(builder.DERIVED, builder.PREREG, builder.REGISTRY, out)
+    conn, _ = builder.build(builder.DERIVED, builder.PREREG, builder.REGISTRY, out)
     conn.execute(
         "UPDATE comments SET sentiment = 'negative' WHERE rowid ="
         " (SELECT MIN(rowid) FROM comments WHERE sentiment = 'positive')"

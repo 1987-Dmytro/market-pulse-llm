@@ -31,16 +31,18 @@ import statistics
 
 SCHEMA = """
 CREATE TABLE windows (
-    window_id     TEXT PRIMARY KEY,
-    anchor        TEXT NOT NULL,
-    days          INTEGER NOT NULL,
-    since         TEXT NOT NULL,
-    until         TEXT NOT NULL,
-    bought        INTEGER NOT NULL,
-    payable       INTEGER NOT NULL,
-    text_less     INTEGER NOT NULL,
-    leaflet_pages INTEGER NOT NULL,
-    post_texts    INTEGER NOT NULL
+    window_id         TEXT PRIMARY KEY,
+    anchor            TEXT NOT NULL,
+    days              INTEGER NOT NULL,
+    since             TEXT NOT NULL,
+    until             TEXT NOT NULL,
+    bought            INTEGER NOT NULL,
+    payable           INTEGER NOT NULL,
+    text_less         INTEGER NOT NULL,
+    leaflet_pages     INTEGER NOT NULL,
+    post_texts        INTEGER NOT NULL,
+    registry_channels INTEGER NOT NULL,
+    registry_segments INTEGER NOT NULL
 );
 
 CREATE TABLE channels (
@@ -50,6 +52,13 @@ CREATE TABLE channels (
     source_type TEXT NOT NULL,
     segment     TEXT,
     PRIMARY KEY (window_id, channel)
+);
+
+CREATE TABLE watchlist (
+    window_id TEXT NOT NULL,
+    brand_id  TEXT NOT NULL,
+    own       INTEGER NOT NULL,
+    PRIMARY KEY (window_id, brand_id)
 );
 
 CREATE TABLE comments (
@@ -154,15 +163,19 @@ def connect(path) -> sqlite3.Connection:
 # --- filling it ----------------------------------------------------------------------------------
 
 
-def add_window(conn, window_id: str, anchor: dict, populations: dict, split: dict) -> None:
-    """One window's identity and its two populations, stored side by side and labelled.
+def add_window(
+    conn, window_id: str, anchor: dict, populations: dict, split: dict, registry_size: dict
+) -> None:
+    """One window's identity, its two populations, and the registry it was collected against.
 
     `populations` is the SEALED registration's (what was bought); `split` is what the rows on disk
     say about text. Storing `bought` and `payable` in the same row is the prep-a §1.5 memo made
     structural: collected is not payable, and a table that held one number could not say so.
+    `registry_size` is coverage's denominator: how many channels and segments COULD have produced a
+    row, which is a fact about the registry and not about the evidence.
     """
     conn.execute(
-        "INSERT INTO windows VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        "INSERT INTO windows VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
         (
             window_id,
             anchor["anchor"],
@@ -174,6 +187,8 @@ def add_window(conn, window_id: str, anchor: dict, populations: dict, split: dic
             split["text_less"],
             populations["leaflet_page"],
             populations["post_text"],
+            registry_size["channels"],
+            registry_size["segments"],
         ),
     )
 
@@ -185,6 +200,18 @@ def add_channels(conn, window_id: str, segments: dict) -> None:
             (window_id, handle, one["source_id"], one["source_type"], one["segment"])
             for handle, one in sorted(segments.items())
         ],
+    )
+
+
+def add_watchlist(conn, window_id: str, brands: list) -> None:
+    """The watchlist as a dimension, so a brand nobody mentioned is a ZERO and not an absence.
+
+    SoV is a share among the watchlist; a query that only saw the brands with a mention would rank
+    six brands and silently drop the rest of the field it is meant to be a share of.
+    """
+    conn.executemany(
+        "INSERT INTO watchlist VALUES (?, ?, ?)",
+        [(window_id, brand.brand_id, 1 if brand.own else 0) for brand in brands],
     )
 
 
@@ -299,18 +326,31 @@ def spread(values: list[float]) -> dict:
     }
 
 
-def _where(window_id: str, channel: str | None, extra: str = "") -> tuple[str, tuple]:
+def _where(
+    window_id: str, channel: str | None = None, segment: str | None = None, extra: str = ""
+) -> tuple[str, tuple]:
+    """The scope of one block, as a WHERE clause and its parameters.
+
+    A segment scope is a subquery against `channels` rather than a list of handles built in Python:
+    the join belongs in SQL, and a caller that assembled the handles itself would be a second place
+    that decides which channels a segment holds.
+    """
     sql = "window_id = ?"
     params: tuple = (window_id,)
     if channel is not None:
         sql += " AND channel = ?"
         params += (channel,)
+    if segment is not None:
+        sql += " AND channel IN (SELECT channel FROM channels WHERE window_id = ? AND segment = ?)"
+        params += (window_id, segment)
     if extra:
         sql += f" AND {extra}"
     return sql, params
 
 
-def comment_block(conn, window_id: str, *, channel: str | None = None, sample: str) -> dict:
+def comment_block(
+    conn, window_id: str, *, channel: str | None = None, segment: str | None = None, sample: str
+) -> dict:
     """The per-head distributions of one comment population — the shape the anchor carries.
 
     `sample` is `bought` or `payable` and is NOT optional: every rate below divides by rows this
@@ -320,7 +360,7 @@ def comment_block(conn, window_id: str, *, channel: str | None = None, sample: s
     """
     if sample not in SAMPLES:
         raise Refusal(f"unknown sample {sample!r} — the two are {sorted(SAMPLES)}")
-    where, params = _where(window_id, channel, SAMPLES[sample])
+    where, params = _where(window_id, channel, segment, SAMPLES[sample])
     scored_where = f"{where} AND scored = 1"
 
     (rows,) = conn.execute(f"SELECT COUNT(*) FROM comments WHERE {where}", params).fetchone()
@@ -407,14 +447,16 @@ def comment_block(conn, window_id: str, *, channel: str | None = None, sample: s
     }
 
 
-def marker_block(conn, window_id: str, leg: str, *, channel: str | None = None) -> dict:
+def marker_block(
+    conn, window_id: str, leg: str, *, channel: str | None = None, segment: str | None = None
+) -> dict:
     """A page or a post as an ANSWER: it found positions, it found none, or it was unreadable.
 
     Three states counted apart, the anchor's rule: `n_positions = 0` is a real answer and
     `unreadable` is the instrument failing, and folding the second into the first is how a parser's
     bad day reads as an empty market.
     """
-    where, params = _where(window_id, channel, "leg = ?")
+    where, params = _where(window_id, channel, segment, "leg = ?")
     params += (leg,)
     (rows,) = conn.execute(f"SELECT COUNT(*) FROM markers WHERE {where}", params).fetchone()
     (unreadable,) = conn.execute(
@@ -444,7 +486,14 @@ def marker_block(conn, window_id: str, leg: str, *, channel: str | None = None) 
     }
 
 
-def position_block(conn, window_id: str, *, carrier: str | None = None, channel=None) -> dict:
+def position_block(
+    conn,
+    window_id: str,
+    *,
+    carrier: str | None = None,
+    channel: str | None = None,
+    segment: str | None = None,
+) -> dict:
     """The tier ladder's distribution and the promo fields counted before they are valued.
 
     `price_fields_present` is `field IS NOT NULL AND field != 0` and that second clause is not
@@ -452,7 +501,7 @@ def position_block(conn, window_id: str, *, carrier: str | None = None, channel=
     so a zero-valued promo price counts as ABSENT there. Replicated rather than corrected — this
     block has to equal the sealed record, and the divergence would be silent.
     """
-    where, params = _where(window_id, channel)
+    where, params = _where(window_id, channel, segment)
     if carrier is not None:
         where += " AND carrier = ?"
         params += (carrier,)
@@ -525,6 +574,211 @@ def position_block(conn, window_id: str, *, carrier: str | None = None, channel=
                 f"SELECT COUNT(*) FROM positions WHERE {where} AND depth_disagrees_with_printed = 1",
                 params,
             ).fetchone()[0],
+        },
+    }
+
+
+# --- the metric dictionary's own numbers ---------------------------------------------------------
+
+
+def quartiles(values: list[float]) -> dict:
+    """q1 / q3 beside :func:`spread`'s median. `None` when there are too few values to cut.
+
+    `statistics.quantiles` needs at least two points; a single-row leg gets nulls rather than a
+    quartile equal to itself, which would read as a spread that had been measured.
+    """
+    if len(values) < 2:
+        return {"q1": None, "q3": None}
+    q1, _, q3 = statistics.quantiles(values, n=4)
+    return {"q1": round(q1, 4), "q3": round(q3, 4)}
+
+
+def sentiment_metrics(conn, window_id: str, *, sample: str, segment: str | None = None) -> dict:
+    """NSR and the two negative shares — raw, and after the sarcasm correction.
+
+    The adjustment is the one the T1 badge names: a row whose sarcasm head fired and whose sentiment
+    was NOT already negative is re-read as negative. `reclassified` is that count, carried beside the
+    share, because the correction has to be visible as a correction — a share that moved with no
+    number to explain it is the same number twice.
+    """
+    block = comment_block(conn, window_id, sample=sample, segment=segment)
+    scored = block["scored"]
+    counted = block["sentiment"]
+    positive, neutral, negative = (
+        counted.get(name, 0) for name in ("positive", "neutral", "negative")
+    )
+    where, params = _where(window_id, None, segment, SAMPLES[sample])
+    (reclassified,) = conn.execute(
+        f"SELECT COUNT(*) FROM comments WHERE {where} AND scored = 1 AND sarcasm = 1"
+        " AND sentiment != 'negative'",
+        params,
+    ).fetchone()
+    return {
+        "scored": scored,
+        "positive": positive,
+        "neutral": neutral,
+        "negative": negative,
+        "nsr": round((positive - negative) / scored, 4) if scored else None,
+        "negative_share": round(negative / scored, 4) if scored else None,
+        "reclassified_from_sarcasm": reclassified,
+        "negative_share_sarcasm_adjusted": round((negative + reclassified) / scored, 4)
+        if scored
+        else None,
+    }
+
+
+def share_of_voice(conn, window_id: str, *, sample: str) -> dict:
+    """Every watchlist brand's share of watchlist mentions — zeros included.
+
+    Left-joined off `watchlist` so the field is the whole watchlist: a brand with no mention in the
+    window has a share of 0.0, which is an answer, and dropping it would make the denominator look
+    like the set of brands that happened to be talked about.
+    """
+    where, params = _where(window_id, None, None, SAMPLES[sample])
+    mentions = {
+        brand: number
+        for brand, number in conn.execute(
+            f"SELECT brand_id, COUNT(*) FROM comment_brands JOIN comments USING (window_id,"
+            f" channel, msg_id) WHERE {where} GROUP BY brand_id",
+            params,
+        )
+    }
+    field = conn.execute(
+        "SELECT brand_id, own FROM watchlist WHERE window_id = ? ORDER BY brand_id", (window_id,)
+    ).fetchall()
+    total = sum(mentions.values())
+    return {
+        "mentions": {brand: mentions.get(brand, 0) for brand, _ in field},
+        "share": {
+            brand: round(mentions.get(brand, 0) / total, 4) if total else None for brand, _ in field
+        },
+        "total_mentions": total,
+        "own_brands": [brand for brand, own in field if own],
+    }
+
+
+def aspect_share(conn, window_id: str, *, sample: str, segment: str | None = None) -> dict:
+    """The aspect profile — a share over LABELS, with the rows that carry none named beside it."""
+    block = comment_block(conn, window_id, sample=sample, segment=segment)
+    labels = block["intents"]["frequency"]
+    total = sum(labels.values())
+    return {
+        "labels": labels,
+        "total_labels": total,
+        "share": {name: round(number / total, 4) for name, number in labels.items()}
+        if total
+        else {},
+        "rows_with_no_aspect": block["intents"]["rows_with_no_intent"],
+        "scored": block["scored"],
+    }
+
+
+def depth_readings(conn, window_id: str, *, carrier: str | None = None) -> dict:
+    """Both depth readings with quartiles — the arithmetic pair and the printed badge.
+
+    Neither corrects the other and neither is dropped: SPEC 3.18 (1) keeps them side by side, and
+    the count of rows where they DISAGREE is reported rather than resolved.
+    """
+    block = position_block(conn, window_id, carrier=carrier)
+    where, params = _where(window_id)
+    if carrier is not None:
+        where += " AND carrier = ?"
+        params += (carrier,)
+    pair = [
+        value
+        for (value,) in conn.execute(
+            f"SELECT depth FROM positions WHERE {where} AND depth IS NOT NULL ORDER BY depth",
+            params,
+        )
+    ]
+    badge = [
+        value / 100
+        for (value,) in conn.execute(
+            f"SELECT discount_pct_printed FROM positions WHERE {where} AND discount_pct_printed"
+            " IS NOT NULL ORDER BY discount_pct_printed",
+            params,
+        )
+    ]
+    return {
+        "from_price_pair": block["depth"]["from_price_pair"] | quartiles(pair),
+        "from_printed_badge": block["depth"]["from_printed_badge"] | quartiles(badge),
+        "printed_disagrees_with_computed": block["depth"]["printed_disagrees_with_computed"],
+        "position_rows": block["rows"],
+    }
+
+
+def promo_pressure(conn, window_id: str) -> dict:
+    """How often each brand appears in the window's promo material at all."""
+    (rows,) = conn.execute(
+        "SELECT COUNT(*) FROM positions WHERE window_id = ?", (window_id,)
+    ).fetchone()
+    per_brand = counts(
+        conn,
+        "SELECT brand_id, COUNT(*) FROM positions WHERE window_id = ? GROUP BY brand_id",
+        (window_id,),
+    )
+    return {
+        "position_rows": rows,
+        "by_brand": per_brand,
+        "share": {brand: round(number / rows, 4) for brand, number in per_brand.items()}
+        if rows
+        else {},
+        "rows_with_no_resolved_brand": conn.execute(
+            "SELECT COUNT(*) FROM positions WHERE window_id = ? AND brand_id IS NULL", (window_id,)
+        ).fetchone()[0],
+    }
+
+
+def promo_by_chain(conn, window_id: str, chains: tuple) -> dict:
+    """Positions per chain, split by carrier — every chain the law names, present or empty.
+
+    `chains` arrives from the caller and every one of them is a KEY here whether it carried a row or
+    not: SPEC 3.20 (6) puts Маркетопт on the promo surface, and a surface that renders whatever the
+    GROUP BY returned would drop a chain the day it goes quiet.
+    """
+    found: dict[str, dict] = {}
+    for source_id, carrier, number in conn.execute(
+        "SELECT ch.source_id, p.carrier, COUNT(*) FROM positions p JOIN channels ch"
+        " USING (window_id, channel) WHERE p.window_id = ? GROUP BY 1, 2 ORDER BY 1, 2",
+        (window_id,),
+    ):
+        found.setdefault(source_id, {})[carrier] = number
+    return {
+        source_id: {
+            "position_rows": sum(found.get(source_id, {}).values()),
+            "by_carrier": found.get(source_id, {}),
+            "named_by_amendment_3_20": source_id in chains,
+        }
+        for source_id in sorted(set(found) | set(chains))
+    }
+
+
+def coverage(conn, window_id: str) -> dict:
+    """Channels and segments that produced a row, against what the registry holds.
+
+    Both denominators come from the `windows` row — the registry's own size — and not from the
+    evidence, because a coverage figure whose denominator is the evidence is always 100%.
+    """
+    channels, segments = conn.execute(
+        "SELECT registry_channels, registry_segments FROM windows WHERE window_id = ?",
+        (window_id,),
+    ).fetchone()
+    (with_rows,) = conn.execute(
+        "SELECT COUNT(*) FROM channels WHERE window_id = ?", (window_id,)
+    ).fetchone()
+    (segments_with_rows,) = conn.execute(
+        "SELECT COUNT(DISTINCT segment) FROM channels WHERE window_id = ?", (window_id,)
+    ).fetchone()
+    return {
+        "channels": {
+            "with_a_row": with_rows,
+            "in_registry": channels,
+            "share": round(with_rows / channels, 4) if channels else None,
+        },
+        "segments": {
+            "with_a_row": segments_with_rows,
+            "in_registry": segments,
+            "share": round(segments_with_rows / segments, 4) if segments else None,
         },
     }
 

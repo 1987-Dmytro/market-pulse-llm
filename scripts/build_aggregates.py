@@ -102,14 +102,22 @@ def segment_for(segments: dict, channels: set) -> dict:
 
 
 def build(derived: Path, prereg_path: Path, registry_path: Path, out: Path):
+    """The database, and the sha256 of every file it was built from.
+
+    The sources come back with the connection rather than being enumerated again by the export: two
+    walks of the same directory are two answers to "what was read", and the one that ends up in
+    `provenance` has to be the one the rows actually came from.
+    """
     prereg = json.loads(summary.read_text_or_refuse(prereg_path))
     registry = summary.registry_through_the_seal(prereg, registry_path)
     census = through_the_seal(prereg, REPO_ROOT / PINNED_CENSUS, PINNED_CENSUS)
     aliases = brands.watchlist_aliases(registry.watchlist)
+    sources: dict[str, str] = {}
 
     def load(record_type: str) -> list[dict]:
         rows: list[dict] = []
         for path in summary.leg_files(derived, record_type):
+            sources[rel(path)] = summary.sha256_of(path)
             rows += summary.read_rows(path)
         return rows
 
@@ -128,6 +136,7 @@ def build(derived: Path, prereg_path: Path, registry_path: Path, out: Path):
         for kind in ("comment", "leaflet_page", "post_text")
     }
 
+    everyone = segments_of(registry)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.unlink(missing_ok=True)
     conn = aggregates.connect(out)
@@ -137,21 +146,23 @@ def build(derived: Path, prereg_path: Path, registry_path: Path, out: Path):
         census["anchor"],
         populations,
         {"payable": len(verdicts) - text_less, "text_less": text_less},
+        {
+            "channels": len(everyone),
+            "segments": len({one["segment"] for one in everyone.values() if one["segment"]}),
+        },
     )
     aggregates.add_channels(
         conn,
         WINDOW_ID,
-        segment_for(
-            segments_of(registry),
-            {row["channel"] for row in comments + pages + posts + positions},
-        ),
+        segment_for(everyone, {row["channel"] for row in comments + pages + posts + positions}),
     )
+    aggregates.add_watchlist(conn, WINDOW_ID, list(registry.watchlist))
     aggregates.add_comments(conn, WINDOW_ID, verdicts)
     aggregates.add_markers(conn, WINDOW_ID, loop.CARRIER, pages)
     aggregates.add_markers(conn, WINDOW_ID, loop.POST_CARRIER, posts)
     aggregates.add_positions(conn, WINDOW_ID, positions)
     conn.commit()
-    return conn
+    return conn, sources
 
 
 def check_convergence(conn, anchor_path: Path) -> dict:
@@ -184,7 +195,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--quiet", action="store_true")
     args = parser.parse_args(argv)
 
-    conn = build(args.derived_root, args.prereg, args.registry, args.out)
+    conn, _ = build(args.derived_root, args.prereg, args.registry, args.out)
     verdict = check_convergence(conn, args.anchor)
     if args.quiet:
         return 0
