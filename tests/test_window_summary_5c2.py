@@ -59,11 +59,26 @@ re-pinned. What moved is the module's bytes, and they stay RECOVERABLE:
     git show d69c812:src/market_pulse/brands.py
 """
 
-MOVED = MOVED_BY_THE_SKIP + MOVED_BY_R1
+MOVED_BY_THE_READER = ("src/market_pulse/prompts.py",)
+"""The one pinned file `docs/PROMPT-probe-a.md` D1 moved — a THIRD tuple, for the reason the second
+one is not part of the first: a shared branch would assert 3.19's witness about a file that never
+met it (`an_invariant_the_new_member_cannot_satisfy`).
+
+D1 registers `reader_thread_gm4` BESIDE the fifteen prompts already in :data:`prompts.PROMPTS`. Not
+one existing prompt's text moves — `test_prompt_hash_matches_the_pre_registered_value` and this
+record's own `comment.instrument.prompt_sha256` both still derive — so the strings this producer
+recovers out of every `rendering` are the strings it recovered when the record was sealed, and no
+number in it moves. What moved is the module's bytes, and they stay RECOVERABLE:
+
+    git show d69c812:src/market_pulse/prompts.py
+"""
+
+MOVED = MOVED_BY_THE_SKIP + MOVED_BY_R1 + MOVED_BY_THE_READER
 
 WITNESS = {
     **dict.fromkeys(MOVED_BY_THE_SKIP, "has_text"),
     **dict.fromkeys(MOVED_BY_R1, "watchlist_rules"),
+    **dict.fromkeys(MOVED_BY_THE_READER, "reader_thread_gm4"),
 }
 """What each moved file learned, by amendment. The token is read BOTH ways below — absent from the
 sealed blob, present on disk — so a recovery from the wrong commit is a failure rather than a pass.

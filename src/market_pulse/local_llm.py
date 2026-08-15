@@ -540,6 +540,26 @@ class PositionsClient:
         return replies
 
 
+READER_MAX_NEW_TOKENS = 2000
+"""The thread reader's output ceiling — arithmetic, not a round number.
+
+Measured on the pinned tokenizer, one part of the verdict at a time: the thread block with both
+summaries is 98 tokens, an entity 63, a signal with its quote 103, a `per_comment` row 47, a noise
+row 22. So a thread of 13 payable comments — the population's 90th percentile — with three entities,
+two signals and a row for EVERY one of its comments comes to ~1 114 tokens, and 2 000 leaves that
+answer room to be longer than the estimate rather than cutting it off.
+
+What it does NOT cover: the three threads of the population above a hundred payable comments (125,
+108, 105), where a row per comment would run past 6 000. `results/prereg_reader_probe.json` names
+them, because a reply that hits the ceiling comes back `finish_reason: length` and is counted as a
+parse failure by cause — never read as a thread with nothing in it
+([[the_empty_class_eats_the_parse_failures]]).
+
+A ceiling is not a target: an answer that ends earlier costs what it costs. The 30-minute window
+budget of the plan's §5 (5) binds long before this does — 111 threads inside it is 16.2 s a thread,
+which is the number the warm-up measures and the go/no-go decides on."""
+
+
 def nvidia_smi() -> dict:
     """Driver and card as the driver itself reports them, or ``{}`` off-GPU."""
     try:

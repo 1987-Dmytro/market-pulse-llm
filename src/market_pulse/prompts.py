@@ -575,6 +575,130 @@ POSITIONS_TEXT_PROMPT = _swap(POSITIONS_POST_PROMPT, POSITIONS_PAGE_INTRO, POSIT
 Registered BESIDE the page prompt with its own sha, never as a variant selected by a flag: a record
 has to be able to name which of the two produced it, and `positions_text_gm4` is that name."""
 
+READER_ENTITY_TYPES = ("молочный_бренд", "сеть_ритейлер", "категория_личное", "не_наш_рынок")
+"""The subject taxonomy the operator ratified 2026-08-15, spelled as it was ratified.
+
+Four readings of a NAME, which is what duty (2) of `docs/PLAN-comment-signals.md` §2 C asks for:
+the same word is a dairy trade mark in a catalogue, a shop somebody walked into, a remark about the
+product kind rather than the brand, or a business in another trade entirely. Russian tokens inside
+an English prompt on purpose — they are the operator's ratified vocabulary, and translating them
+here would make the prompt, the parser and the sitting's word three different taxonomies."""
+
+READER_SUBJECT_TYPES = (*READER_ENTITY_TYPES[:2], "категория", *READER_ENTITY_TYPES[2:])
+"""What a SIGNAL may be about: the four readings plus «категория».
+
+The fifth word is `docs/PLAN-comment-signals.md` §3's own — its schema example carries
+``{"signal_type": "спрос", "subject_type": "категория", "subject_id": "морозиво_без_цукру"}`` while
+the class list two paragraphs below names four. Three of the reference pack's five flagships are
+category-level findings (F1(б), F3, F4, F5) and none of them is about a named entity, so a reader
+holding to the four could not report them at all. The union is taken from the design authority
+rather than invented, and `results/prereg_reader_probe.json` registers the gap for the sitting:
+«категория» is not in the ratified entity taxonomy, and only the operator can put it there."""
+
+READER_SIGNAL_TYPES = ("спрос", "жалоба", "похвала", "привычка", "тренд")
+"""The five ratified signal words — an OPEN list (plan §3, «открытый список — слово оператора»),
+which is why the prompt offers `proposed: true` and the parser accepts a word outside this tuple
+only with that flag. A sixth type invented silently would be indistinguishable in the record from
+one of these five; flagged, it is an input to the adjudication sitting."""
+
+READER_NOISE_CLASSES = ("плюс_спам", "скам", "оффтоп")
+"""The noise taxonomy of the reference pack's header. The gate's silencers already remove what they
+can see for free ($0, before payment); these are the reader's own name for what got through."""
+
+READER_THREAD_PROMPT = """\
+You read ONE discussion thread from a Ukrainian Telegram channel — a retail chain, a discount \
+aggregator, a recipe feed or a parenting feed — and report what the marketing director of a dairy \
+producer needs from it. One thread, one answer: you are given the post and every comment under it, \
+and nothing else.
+
+A SIGNAL is only what answers one of the director's seven questions: (1) what is said, good or bad, \
+about a dairy trade mark; (2) what exactly is liked or disliked about it — taste, price, packaging, \
+quality, availability, service; (3) the same about the competing trade marks and the chains' own \
+labels; (4) which flavours and which kinds of dairy people want; (5) where it is said; (6) that the \
+talk about a brand has turned sharply positive or negative; (7) what a chain promotes, at what \
+price and at what discount. Anything else in this thread is not a signal, however interesting — a \
+thread that carries none is a normal answer and gets an empty list.
+
+Three duties, in this order. Never begin one before the one above it is finished.
+
+(1) THE THREAD. The POST sets the topic: the comments are answers to it and are read in its light, \
+never as texts standing on their own.
+
+(2) THE NAMES. Every trade mark and every chain name that appears anywhere in the thread — in the \
+post or in any comment — is resolved from the context it stands in: what it IS here, in one phrase, \
+with the quote you read it in. Four readings and no fifth:
+- "молочный_бренд" — a dairy trade mark named as a product, ours or a competitor's, a chain's own \
+label included;
+- "сеть_ритейлер" — a retail chain named as the shop: where somebody went, bought, ordered, or \
+whose service is being discussed;
+- "категория_личное" — the name stands inside a statement about the kind of product in general, \
+and charging that statement to the brand would be wrong;
+- "не_наш_рынок" — the name belongs to something that is not food retail at all: a school, a \
+centre, a club, a housing block, a business in another trade.
+A word that is both a name and an ordinary word of the language is a name only where the text uses \
+it as one. Used as the ordinary word, it is not a name: do not report it and do not attach anything \
+to it.
+
+(3) THE SIGNALS. Only now, and only what duty (2) has already resolved.
+
+Return ONE JSON object with exactly these keys.
+
+- "thread" — {"channel": the handle you were given, "post_id": the number you were given}.
+- "post_summary" — one sentence in Ukrainian: what the post is.
+- "discussion_summary" — one to three sentences in Ukrainian: what the comments are about.
+- "entities" — one object per name of duty (2): {"name": as it is written in the text, "msg_id": \
+the comment you read it in, or null when it is in the post, "subject_type": one of the four \
+readings, "reading": one phrase in Ukrainian, "quote": copied from that text}.
+- "signals" — one object per signal: {"signal_type": one of "спрос", "жалоба", "похвала", \
+"привычка", "тренд"; "subject_type": one of "молочный_бренд", "сеть_ритейлер", "категория", \
+"категория_личное", "не_наш_рынок"; "subject_id": the trade mark, the chain or the kind of product \
+as one lowercase word or phrase, or null; "aspect": one of "taste", "price", "packaging", \
+"quality", "availability", "service"; "stance": "positive", "negative" or "neutral"; "reading": one \
+sentence in Ukrainian for the director; "evidence": the msg_ids you read it from; "quote": copied \
+from one of them}. No signal_type in the list fits what you found? Write the word you need and put \
+"proposed": true beside it — a word of your own without that flag is an error.
+- "per_comment" — one object per comment that carries an attitude to a named subject or to the \
+tracked kind of product: {"msg_id"; "subject_type"; "subject_id" or null; "stance" or null; \
+"aspects": the aspects it touches, from the six above; "note": one phrase, only where the row needs \
+one}. A comment that carries neither gets no object: this is not a row per comment.
+- "noise" — one object per comment that is not discussion at all: {"msg_id", "class": one of \
+"плюс_спам" (a participation marker and nothing else), "скам" (money offered by a stranger with a \
+handle or a link), "оффтоп" (an advertisement or a subject with nothing to do with this thread)}.
+
+Rules that outrank everything above.
+
+- COPY a quote, never compose one: it must appear in the message you attribute it to, character for \
+character.
+- Every msg_id you write is one that was given to you. The post has none: for the post the id is \
+null.
+- A comment belongs to at most one of "per_comment" and "noise".
+- Do not carry a brand from the post into a comment that does not mention it, and do not read the \
+thread's subject off the channel it is in.
+- Judge what is written. Do not work out what the author probably meant, and do not report a signal \
+because the post advertises something nobody discussed.
+- Ukrainian in every prose field; the type words exactly as they are spelled above; the quotes in \
+the language they were written in.
+
+Answer with the JSON object alone: no explanation, no code fence, nothing before the first brace.\
+"""
+"""The thread reader of `docs/PLAN-comment-signals.md` §2 C — one call, one thread, one verdict.
+
+The duty ORDER is the prompt's spine and it is the operator's clarification of 2026-08-15: the
+thread first, then every name resolved from context, and only then signals. It is written as three
+numbered duties with «never begin one before the one above is finished» because the failure it
+guards is the one the manual reading did not make — a signal attached to a name nobody resolved,
+which is how «Гармонія» the children's centre becomes brand negative.
+
+**The four entity cases of plan §5 (4) are deliberately NOT in this text.** They are the bar; a
+prompt that names them would measure how well the answers were transcribed. What the prompt carries
+is the LAW they are drawn from — four readings, and «a word that is both a name and an ordinary word
+of the language is a name only where the text uses it as one» — which is the rule the operator ruled
+and the reader is meant to apply on its own.
+
+No shape line either, unlike the position prompts: every object's keys are spelled out inline, so
+the illustration would add nothing but a set of values a reader could copy. Zero-shot in the sense
+SPEC §7 fixes — rules, no worked example."""
+
 PROMPTS = {
     "T1": T1_PROMPT,
     "T2": T2_PROMPT,
@@ -592,6 +716,7 @@ PROMPTS = {
     "precheck_v2ctx_with_post": PRECHECK_PROMPT_V2CTX_WITH_POST,
     "positions_post_gm4": POSITIONS_POST_PROMPT,
     "positions_text_gm4": POSITIONS_TEXT_PROMPT,
+    "reader_thread_gm4": READER_THREAD_PROMPT,
 }
 RENDER_ONLY = {"precheck_v2ctx_with_post": "precheck_v2_with_post"}
 """Registered tasks whose prompt text *is* another task's, mapped to the base they share.
@@ -668,6 +793,17 @@ field list to put them in.
 `market_pulse.positions.parse_positions` validates against the position schema, which is where the
 tier ladder, the normalisation and the no-imputation rule live. A reply read by the labelling
 parser would come back as a dict of labels nothing downstream could use."""
+
+READER_TASK = "reader_thread_gm4"
+READER = frozenset({READER_TASK})
+"""The thread reader of the comment-signals layer. Registered and hashed like every other prompt,
+and out of the three labelling tables for the same reason :data:`POSITIONS` is: its answer is one
+verdict about a whole thread, not a label per row.
+
+Unlike :data:`POSITIONS` it is **not** refused by :func:`parse_reply`. The positions parser lives in
+`market_pulse.positions` because it validates a tier ladder, a normalisation and a no-imputation
+rule that only mean anything for extracted offers; the reader's answer is a labelled object of the
+kind this module has always read, so it is read here — one parser, `docs/PROMPT-probe-a.md` D1."""
 
 WITH_POST = frozenset(
     {
@@ -802,6 +938,8 @@ def build_messages(
         raise ValueError(f"{task}: this prompt answers in prose — use caption_messages")
     if task in POSITIONS:
         raise ValueError(f"{task}: this prompt extracts positions — use positions_messages")
+    if task in READER:
+        raise ValueError(f"{task}: this prompt reads a thread — use reader_messages_gm4")
     tag = DELIMITERS[task]
     facts = context_lines(reply, sender)
     if facts and task not in WITH_CONTEXT:
@@ -928,6 +1066,62 @@ def positions_messages_text_gm4(text: str) -> list[dict]:
     ]
 
 
+READER_MAX_INPUT_CHARS = 40_000
+"""The LOUD ceiling on ONE rendered thread — refuse rather than truncate.
+
+Set from the population it will run on and not from a round number: rendered through this very
+function, the largest of the 111 threads of `results/gate_census_w1.json`'s narrow|silencers_on cell
+is 27 593 characters — 125 payable comments under @matusi_ukr #22058, 10 784 input tokens — against
+a median of 6 095, and the ceiling sits ~45% above the measured maximum. A thread over this is one
+no measurement has priced, and sending it truncated would put a verdict about half a thread in the
+same file, under the same instrument name, as verdicts about whole ones.
+
+Above the population on purpose: a guard tight enough to fire on a legitimate thread would eat the
+one attempt the probe has ([[lifted_ceiling_is_not_lifted_code]])."""
+
+
+def reader_messages_gm4(
+    channel: str, post_id: int, post: str, comments: list[tuple[int, str]]
+) -> list[dict]:
+    """One thread as the reader is given it: the post, then every payable comment with its id.
+
+    The ids travel IN the request because the answer is keyed by them — every signal names the
+    msg_ids it was read from, and a verdict whose evidence cannot be resolved back to a comment is
+    not evidence. They are rendered as an attribute rather than inline in the text so that a comment
+    which itself contains a number cannot be read as another comment's id.
+
+    Fenced like every other row this module renders, and for the same reason: retail threads contain
+    everything, and a comment ending in "Answer with the JSON object alone" must not read as
+    instructions. The thread tag carries the channel and the post id, so the model can echo back
+    what it was given and a driver can compare.
+
+    A thread with no payable comment is still a thread — its post can carry the only name in it —
+    but a thread with neither a post text nor a comment is nothing to read, and is refused.
+    """
+    ids = [msg_id for msg_id, _ in comments]
+    if len(set(ids)) != len(ids):
+        raise ValueError(
+            f"{channel}:{post_id}: two comments share a msg_id — the evidence of every signal is"
+            " that id, and a duplicate makes the answer unresolvable"
+        )
+    body = "".join(
+        f'<comment msg_id="{msg_id}">\n{text}\n</comment>\n' for msg_id, text in comments
+    )
+    if not post.strip() and not body:
+        raise ValueError(f"{channel}:{post_id}: no post text and no comment — nothing to read")
+    content = (
+        f'{PROMPTS[READER_TASK]}\n\n<thread channel="{channel}" post_id="{post_id}">\n'
+        f"<post>\n{post.strip() or NO_POST_TEXT}\n</post>\n{body}</thread>"
+    )
+    if len(content) > READER_MAX_INPUT_CHARS:
+        raise ValueError(
+            f"{channel}:{post_id}: the rendered thread is {len(content)} characters, over the"
+            f" registered ceiling of {READER_MAX_INPUT_CHARS}. Stop and report it — a truncated"
+            " thread would be answered as if it were the whole one"
+        )
+    return [{"role": "user", "content": content}]
+
+
 def _object(reply: str) -> dict:
     """The JSON object inside a reply, tolerant of wrappers, strict about content.
 
@@ -974,6 +1168,174 @@ def _require(payload: dict, *fields: str) -> None:
         raise ParseError(f"missing field: {missing[0]}")
 
 
+def _text(value, field: str) -> str:
+    if not isinstance(value, str) or not value.strip():
+        raise ParseError(f"{field} is not a non-empty string")
+    return value.strip()
+
+
+def _msg_id(value, field: str) -> int:
+    """A message id, written as a number or as the same number in quotes.
+
+    Both spellings are one answer — the ids arrive in the request as an attribute, which is a
+    string, and a model that echoes the string it was shown has not made a mistake. ``bool`` is
+    excluded by hand because it is an ``int`` in Python and ``True`` is not a message.
+    """
+    if isinstance(value, bool) or not isinstance(value, int | str):
+        raise ParseError(f"{field} is not a msg_id")
+    try:
+        return int(value)
+    except ValueError:
+        raise ParseError(f"{field} is not a msg_id") from None
+
+
+def _objects(payload: dict, field: str) -> list[dict]:
+    rows = payload[field]
+    if not isinstance(rows, list):
+        raise ParseError(f"{field} is not a list")
+    if any(not isinstance(one, dict) for one in rows):
+        raise ParseError(f"{field} carries something that is not an object")
+    return rows
+
+
+def _reader(payload: dict) -> dict:
+    """The thread verdict of :data:`READER_THREAD_PROMPT`, validated field by field.
+
+    Strict about domains and silent about consistency, which is the split this module has always
+    made: a `subject_type` outside the taxonomy is an answer nothing downstream can read, while a
+    comment that appears in both ``per_comment`` and ``noise`` is a bookkeeping slip whose two rows
+    are each readable. The first is refused here; the second is counted by the scorer, where the
+    operator can see it. A refusal costs the whole thread, and the probe pays for every thread once.
+    """
+    _require(
+        payload,
+        "thread",
+        "post_summary",
+        "discussion_summary",
+        "entities",
+        "signals",
+        "per_comment",
+        "noise",
+    )
+    thread = payload["thread"]
+    if not isinstance(thread, dict):
+        raise ParseError("thread is not an object")
+    _require(thread, "channel", "post_id")
+
+    entities = []
+    for one in _objects(payload, "entities"):
+        _require(one, "name", "msg_id", "subject_type", "reading", "quote")
+        entities.append(
+            {
+                "name": _text(one["name"], "entities.name"),
+                # null is the POST: the name was printed by the channel, not written by a commenter
+                "msg_id": (
+                    None if one["msg_id"] is None else _msg_id(one["msg_id"], "entities.msg_id")
+                ),
+                "subject_type": _choice(
+                    one["subject_type"], "entities.subject_type", READER_ENTITY_TYPES
+                ),
+                "reading": _text(one["reading"], "entities.reading"),
+                "quote": _text(one["quote"], "entities.quote"),
+            }
+        )
+
+    signals = []
+    for one in _objects(payload, "signals"):
+        # `stance` and `subject_id` are NOT required: plan §3's own second signal carries neither,
+        # and an absent key read as null says «not stated», which is a different answer from
+        # «neutral». What the contract does require of every signal is its evidence and a quote.
+        _require(one, "signal_type", "subject_type", "aspect", "reading", "evidence", "quote")
+        proposed = _flag(one.get("proposed", False), "signals.proposed")
+        signal_type = _text(one["signal_type"], "signals.signal_type").casefold()
+        if signal_type not in READER_SIGNAL_TYPES and not proposed:
+            # the open list of plan §3, with its escape hatch: a sixth type is legal and has to be
+            # SAID, because an unflagged one is indistinguishable in the record from a ratified word
+            raise ParseError("signal_type outside its domain and not flagged proposed")
+        evidence = one["evidence"]
+        if not isinstance(evidence, list) or not evidence:
+            raise ParseError("signals.evidence is not a non-empty list")
+        signals.append(
+            {
+                "signal_type": signal_type,
+                "proposed": proposed,
+                "subject_type": _choice(
+                    one["subject_type"], "signals.subject_type", READER_SUBJECT_TYPES
+                ),
+                "subject_id": (
+                    None
+                    if one.get("subject_id") is None
+                    else _text(one["subject_id"], "signals.subject_id")
+                ),
+                "aspect": _choice(one["aspect"], "signals.aspect", INTENTS_V2),
+                "stance": (
+                    None
+                    if one.get("stance") is None
+                    else _choice(one["stance"], "signals.stance", SENTIMENT_LABELS)
+                ),
+                "reading": _text(one["reading"], "signals.reading"),
+                "evidence": [_msg_id(msg_id, "signals.evidence") for msg_id in evidence],
+                "quote": _text(one["quote"], "signals.quote"),
+            }
+        )
+
+    per_comment = []
+    for one in _objects(payload, "per_comment"):
+        _require(one, "msg_id", "subject_type")
+        aspects = one.get("aspects") or []
+        if not isinstance(aspects, list):
+            raise ParseError("per_comment.aspects is not a list")
+        per_comment.append(
+            {
+                "msg_id": _msg_id(one["msg_id"], "per_comment.msg_id"),
+                "subject_type": (
+                    None
+                    if one["subject_type"] is None
+                    else _choice(
+                        one["subject_type"], "per_comment.subject_type", READER_SUBJECT_TYPES
+                    )
+                ),
+                "subject_id": (
+                    None
+                    if one.get("subject_id") is None
+                    else _text(one["subject_id"], "per_comment.subject_id")
+                ),
+                "stance": (
+                    None
+                    if one.get("stance") is None
+                    else _choice(one["stance"], "per_comment.stance", SENTIMENT_LABELS)
+                ),
+                "aspects": sorted(
+                    {_choice(aspect, "per_comment.aspects", INTENTS_V2) for aspect in aspects}
+                ),
+                "note": None if one.get("note") is None else _text(one["note"], "per_comment.note"),
+            }
+        )
+
+    noise = []
+    for one in _objects(payload, "noise"):
+        _require(one, "msg_id", "class")
+        noise.append(
+            {
+                "msg_id": _msg_id(one["msg_id"], "noise.msg_id"),
+                "class": _choice(one["class"], "noise.class", READER_NOISE_CLASSES),
+            }
+        )
+
+    return {
+        "thread": {
+            "channel": _text(thread["channel"], "thread.channel"),
+            "post_id": _msg_id(thread["post_id"], "thread.post_id"),
+        },
+        "post_summary": _text(payload["post_summary"], "post_summary"),
+        "discussion_summary": _text(payload["discussion_summary"], "discussion_summary"),
+        "entities": entities,
+        "signals": signals,
+        "per_comment": per_comment,
+        "noise": noise,
+    }
+
+
 def parse_reply(task: str, reply: str) -> dict:
     """One model reply -> the labels, or :class:`ParseError` naming what is wrong.
 
@@ -995,6 +1357,11 @@ def parse_reply(task: str, reply: str) -> dict:
             f"{task}: this prompt answers with positions — use positions.parse_positions"
         )
     payload = _object(reply)
+    if task in READER:
+        # read HERE and not in a module of its own: `_object` already unwraps a fence and reads
+        # from the first brace, and a second parser would be a second answer to «was the promise
+        # kept» (docs/PROMPT-probe-a.md D1)
+        return _reader(payload)
     if fields := COMMENT_FIELDS.get(task):
         _require(payload, *fields)
         intents = payload["intents"]
