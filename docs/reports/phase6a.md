@@ -2,7 +2,7 @@
 
 **Contract:** `docs/PROMPT-phase6a.md` · **Design authority:** `docs/PLAN-phase6-command-center.md`
 §2 §4 §8 §11 · **Class:** $0, code + config + one law commit · **Spend:** $0.00
-**Baseline:** `make check` 2 347 passed / 2 skipped @ `7037fe3` → **2 369 passed / 2 skipped**
+**Baseline:** `make check` 2 347 passed / 2 skipped @ `7037fe3` → **2 370 passed / 2 skipped**
 `data/loop_cursor.json` unchanged (`9b59aa5f…` before and after). No GPU, no network, no collection.
 
 ---
@@ -91,8 +91,8 @@ substring test would have made the documentation the violation.
 
 ### 1.2 The schema, and the two populations
 
-`windows` · `channels` · `watchlist` · `comments` · `comment_intents` · `comment_brands` ·
-`markers` · `positions` · `position_warnings`. Every table keys on `window_id`: window-2 is an
+`windows` · `channels` · `segments` · `watchlist` · `comments` · `comment_intents` ·
+`comment_brands` · `markers` · `positions` · `position_warnings`. Every table keys on `window_id`: window-2 is an
 INSERT, not a migration (plan §11 (1)).
 
 `windows` stores **`bought` and `payable` side by side, labelled** — prep-a §1.5's memo made
@@ -114,6 +114,7 @@ out of SQL. `converge()` compares every numeric leaf.
 wrote data/derived/pulse.db  window w1  anchor 2026-08-09T00:00:00+00:00  28 days
   comments      5075 bought · 3714 payable · 1361 text-less
   channels           28
+  segments           8
   watchlist          23
   comments           5075
   comment_intents    1298
@@ -149,7 +150,7 @@ happen.
 
 ## 2. Deliverable 2 — the deterministic export
 
-`scripts/export_dashboard_data.py` → **`results/dashboard_data_w1.json`** (108 KB, committed).
+`scripts/export_dashboard_data.py` → **`results/dashboard_data_w1.json`** (110 KB, committed).
 Commits `6043d95` and `981c5ad`.
 
 ### 2.1 Convergence — both halves
@@ -188,9 +189,9 @@ $ diff v1.json v2.json ; echo "exit: $?"
 exit: 0
 $ diff results/dashboard_data_w1.json v1.json ; echo "exit: $?"
 exit: 0
-85e0e6cfb5faa5b512a960114d7aaa2aa542aa9a21b3d34ec929b33412c334a6  results/dashboard_data_w1.json
-85e0e6cfb5faa5b512a960114d7aaa2aa542aa9a21b3d34ec929b33412c334a6  v1.json
-85e0e6cfb5faa5b512a960114d7aaa2aa542aa9a21b3d34ec929b33412c334a6  v2.json
+e93673749b840bfe13fd72ab6af74945e12a54a420bbd1253e6c7dae2089c785  results/dashboard_data_w1.json
+e93673749b840bfe13fd72ab6af74945e12a54a420bbd1253e6c7dae2089c785  v1.json
+e93673749b840bfe13fd72ab6af74945e12a54a420bbd1253e6c7dae2089c785  v2.json
 ```
 
 Sorted keys, no clock, no git block. The second diff is what makes the first load-bearing: a
@@ -200,10 +201,10 @@ deterministic producer whose output nobody compared to the committed bytes would
 
 ```json
 "producers": {
-  "scripts/build_aggregates.py":        "5094c95dd8faa4d0b4321bac95def5d8820b932cbc1c2e912525a96e2b1d5918",
-  "scripts/export_dashboard_data.py":   "e947c784a90fdb4561df42258c829c06ca9e98e276f431efd214a73a8d5ab7bb",
+  "scripts/build_aggregates.py":        "1b54f0714bc2d4ce211af925c69d1f403baaa2953c3f4eff71aa4bff27c83c62",
+  "scripts/export_dashboard_data.py":   "03bffaa0bb7f84e6c45227922862bf495a6dcb354e8db76af8b365fbbd04b6e2",
   "scripts/window_summary_5c2.py":      "239d2d5fcc0f0c93158ca41383b5ce20beb7f8e9db38974913a302ea4831fdaf",
-  "src/market_pulse/aggregates.py":     "f7ff88c92a902c2a81d8be8fe6095df0cdde4a4166ccccb4f897aab6b0aa4e10",
+  "src/market_pulse/aggregates.py":     "868aeaf516ead1bc19784c2d11c59517396482b380b56b47e65e5db4ed1b2706",
   "src/market_pulse/prompts.py":        "de767900a1ea578ea7b48bdb0dcc497c9f023e466a09ae0b6100d60371fdc3ab",
   "src/market_pulse/brands.py":         "fa92ccca81c91603fe242e74226a3f5370ae8e6ce4486affee9cb953448e9721",
   "src/market_pulse/langid.py":         "65c9ba294c846b8574387d1893826313e9649282f7fd8581d04354ea6cc9a2de",
@@ -342,13 +343,30 @@ a correction that moved a number with no count to explain it is the same number 
 position rows, **0 comments**. It is present in `cuts.comment_by_segment` with zeros rather than
 absent, because an empty class is the definition's answer and the T3 screen has to render it.
 
+**(e) And one has neither — which the first version of the export could not say.** `food_quality`
+has one registry channel and produced no row of any kind this window, so it never entered the
+`channels` table and `cuts.comment_by_segment`, driven off that table, rendered **seven** cards
+where plan §3's T3 screen is one per registry audience. 6b built on that export would have shown
+seven and had no way to know an eighth existed — the same "absence read as nothing to show" the
+`NOT_COMPUTABLE` rule exists to prevent, and the same argument the `watchlist` dimension and
+`PROMO_CHAINS` had already won twice in this contract without anyone applying it here.
+
+Fixed with a `segments` dimension table fed from the registry — **not** by widening `channels`.
+`coverage.channels.with_a_row` counts rows in `channels`, so inserting all 66 registry handles
+would have read 66/66 and destroyed the metric with its own denominator. Three states are now
+distinguishable and all three are pinned by a test: an audience that talked, one that carried
+evidence and no conversation (`regional`), and one that was silent (`food_quality` — zeros,
+`registry_channels: 1`, an empty `channels_with_a_row`, and a **null** sarcasm rate, because a rate
+over no rows is null and never `0.0`). Commit `bc6d2bd`, **Dv341**. Convergence is untouched: the
+anchor has no segment dimension.
+
 ---
 
 ## 5. Verify
 
 ```
 $ make check
-2369 passed, 2 skipped in 70.39s (0:01:10)
+2370 passed, 2 skipped in 70.64s (0:01:10)
 
 $ ruff format --check .
 280 files already formatted
@@ -360,7 +378,7 @@ $ shasum -a 256 data/loop_cursor.json
 9b59aa5fd042bbb42d389b73ac55168f8941a16a64c4d8262e557e8f8f2a8b1a
 ```
 
-Baseline was 2 347/2 at `7037fe3`; +22 tests. Files touched under `results/`, `data/` and `config/`
+Baseline was 2 347/2 at `7037fe3`; +23 tests. Files touched under `results/`, `data/` and `config/`
 across the whole session:
 
 ```
@@ -375,7 +393,8 @@ collected.
 
 Commits: `97add7e` (step 0 tail) · `8513191` (amendment 3.20) · `63676db` (D1) · `6043d95` (D2+D3) ·
 `981c5ad` (self-review fixes) · `a7fd072` (a census line the printout skipped, found by re-deriving
-this report's figures against the artifacts) · this report.
+this report's figures against the artifacts) · `bc6d2bd` (the eighth segment card, §4e) · this
+report.
 
 ---
 
@@ -390,13 +409,18 @@ blocks and is unavailable while `results/` is frozen; imported instead. §1.1.
 **Dv339** `[process]` — the no-figures test caught a hand-typed «вікні-1» in a pitfall. §3.
 **Dv340** `[process]` — self-review: a spliced SQL filter and a private name across a module
 boundary, both fixed in `981c5ad`; the export's diff was two lines, both in `provenance.producers`.
+**Dv341** `[process]` — the segment cut rendered seven cards where the registry holds eight; fixed
+with a `segments` dimension rather than by widening `channels`, which would have destroyed the
+coverage metric. §4e.
 
 Full text in `implementation-notes.md`.
 
 ## 7. Process signals
 
-Four of the six deviations are one shape: the brief named a seam and did not price what hangs off
+Four of the seven deviations are one shape: the brief named a seam and did not price what hangs off
 it. Grepping the pins on `docs/SPEC.md` and on `window_summary_5c2.py` BEFORE the first edit turned
 two of those into fifteen-minute decisions rather than blockers — second contract running where that
-step paid. And the exhaustive gate (902 leaves, not the four spot checks the contract listed) was
-LESS code than a hand-listed map, not more.
+step paid. The exhaustive gate (902 leaves, not the four spot checks the contract listed) was LESS
+code than a hand-listed map, not more. And Dv341 is the one to keep: the argument that fixed it —
+a dimension is the registry's, never the evidence's — had already been made twice in this same
+contract, for brands and for chains, and was not carried across to segments.

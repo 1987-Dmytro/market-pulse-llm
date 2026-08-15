@@ -7276,8 +7276,20 @@ audit (`docs/reviews/2026-08-13-process-audit-and-self-improvement.md`).
   commit, and the export regenerated: the diff is exactly two lines, both in
   `provenance.producers`, which is the record saying what changed. [cause: process]
 
-**Process signals — phase6a.** Four of the six deviations are one shape: the brief named a seam and
-did not price what hangs off it. Grepping the pins on `docs/SPEC.md` and on `window_summary_5c2.py`
-BEFORE the first edit turned two of those into fifteen-minute decisions rather than blockers —
-second contract running where that step paid. And the exhaustive gate (902 leaves, not the four spot
-checks the contract listed) was LESS code than a hand-listed map, not more.
+- **Dv341** — `cuts.comment_by_segment` was driven off the `channels` table, which is fed from the
+  EVIDENCE, so `food_quality` (one registry channel, zero rows of any kind this window) never
+  appeared and the cut rendered seven cards where plan §3's T3 screen is one per registry audience.
+  A UI built on that export would have shown seven and had no way to know an eighth existed. Fixed
+  with a `segments` dimension table fed from the registry, and NOT by widening `channels` —
+  `coverage.channels.with_a_row` counts rows in `channels`, so inserting all 66 registry handles
+  would have turned 28/66 into 66/66 and destroyed the metric with its own denominator. The sharp
+  part is that the argument was already made TWICE in this contract (the `watchlist` dimension so an
+  unmentioned brand is a zero; `PROMO_CHAINS` present whether they carried a row or not) and was not
+  carried across to segments. [cause: process]
+
+**Process signals — phase6a.** Four of the seven deviations are one shape: the brief named a seam
+and did not price what hangs off it. Grepping the pins on `docs/SPEC.md` and on
+`window_summary_5c2.py` BEFORE the first edit turned two of those into fifteen-minute decisions
+rather than blockers — second contract running where that step paid. And Dv341 is the one to keep:
+a dimension belongs to the registry, never to the evidence, and that argument had already been won
+twice in this same contract before it was missed a third time.
