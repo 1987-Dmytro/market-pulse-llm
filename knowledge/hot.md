@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-15 11:19:02 (every SessionStart)
+**Auto-refreshed:** 2026-08-15 12:21:00 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-27fb09a docs(report): cycle2-prep-a -- the census/seal divergence, and the suite at its own commit
-7cef9c4 test(cycle2-prep-a): the census/seal divergence the skip opens, pinned before it bills
-dfe8a8a docs(vault): hot.md curated for cycle-2 -- the rule that landed and the projection that waits
-5427481 docs(vault): the team lead's Phase-6 command-centre plan, committed verbatim
-2bf4014 docs(report): cycle2-prep-a -- the queue rule, the pins it moved, and what the batch cannot be
+3a16b55 docs(report): phase6a -- the index block that could not move, and 902 numbers
+a7fd072 fix(phase6a): the census printout skipped a table it had just filled
+981c5ad refactor(phase6a): bind the filters, and stop reaching for a private name
+6043d95 feat(phase6a): the deterministic export and the metric dictionary
+63676db feat(phase6a): the SQLite aggregate layer, converged with the sealed window summary
 ```
 
 ## 📋 Recent decisions
@@ -30,10 +30,14 @@ dfe8a8a docs(vault): hot.md curated for cycle-2 -- the rule that landed and the 
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-15 (checkpoint 11:18) — исполнен `cycle2-prep-a` ($0): правило 3.19 вшито в
-очередь инференса, проекция батч-паритета написана. `make check` **2 347 / 2 skipped**, дерево
-чистое, потрачено $0.00. Отчёт — `docs/reports/cycle2-prep-a.md` (Dv330–Dv334), день —
-[[2026-08-15]]. Следом — `cycle2-prep-b` (сбор). Ниже — хвост 14.08.
+**Last update:** 2026-08-15 (checkpoint 12:18) — исполнен `phase6a` ($0): **амендмент 3.20 в SPEC**,
+слой агрегатов SQLite (`data/derived/pulse.db`, gitignored), детерминированный экспорт
+`results/dashboard_data_w1.json` и словарь метрик `config/metrics.yaml`. `make check`
+**2 369 / 2 skipped**, потрачено $0.00. Отчёт — `docs/reports/phase6a.md` (Dv335–Dv340).
+Следом — `6b` (UI) и `cycle2-prep-b` (сбор). День — [[2026-08-15]].
+
+**Предыдущий срез:** 2026-08-15 (11:18) — `cycle2-prep-a` ($0): правило 3.19 вшито в очередь
+инференса, проекция батч-паритета написана. Отчёт — `docs/reports/cycle2-prep-a.md` (Dv330–Dv334).
 
 **Предыдущий срез:** 2026-08-14 (закрытие дня) — **ФАЗА 5c2 ЗАКРЫТА.** За день три контракта:
 `5c2-run` (платный, куплено ВСЁ окно за $7.5309), `5c2-validate-prep` ($0) и `5c2-close` ($0).
@@ -49,6 +53,24 @@ dfe8a8a docs(vault): hot.md curated for cycle-2 -- the rule that landed and the 
 Фазы 6.** Фаза 5 закрыта, хроника до 12.08 в STATUS сжата — полная история в git этого файла.
 Остатка $1.5507 не хватит ни на один платный цикл; линию поднимает ТОЛЬКО оператор. Все $0-задачи
 ниже можно делать не дожидаясь.
+
+**ФАЗА 6a СДЕЛАНА (15.08, `phase6a`) — слой данных командного центра стоит.** SPEC вырос
+**амендментом 3.20** (числа только из артефактов через слой агрегатов · SQLite — дом агрегатов ·
+UA/EN и словарь метрик · выводы кодом · цены из комментов не в промо · **Маркетопт на промо-поверхности**).
+`data/derived/pulse.db` пересобирается из `data/derived/` за секунду и НИКОГДА не коммитится;
+дашборд читает ТОЛЬКО `results/dashboard_data_w1.json` (108 КБ, закоммичен, две пары байт-в-байт).
+Гейт сходимости исчерпывающий: `aggregates.mirror()` пересобирает пять блоков
+`window_summary_5c2.json` из SQL — **902 из 902 листьев**, 0 лишних, 0 пропущенных, плюс 30
+объявленных общих пар. Сборка ОТКАЗЫВАЕТ, а не предупреждает. Восемь метрик в
+`config/metrics.yaml` (UA/EN, биекция с экспортом в обе стороны), семь `NOT_COMPUTABLE`-заглушек с
+условиями разблокировки. **6b (UI) строится ТОЛЬКО на этом файле.**
+
+**Числа окна-1, которых раньше не было (из слоя, не из прозы).** Все **1 361** бестекстовых строк
+размечены `neutral` — все до одной; поэтому NSR прыгает **0.0770 (купленная) → 0.1053 (платимая),
++37%**, и headline дашборда — платимая выборка (3.19 (2)). **`retail_official` — единственный
+сегмент с отрицательным NSR** (−0.1111 на 234 строках), community-сегменты тёплые. Поправка на
+сарказм двигает **3 строки** (64 из 67 саркастичных и так негатив). `regional` — 3 канала,
+13 маркеров, 9 позиций, **0 комментариев**. SoV меряется на **11 строках из 5 075** — 0.22%.
 
 **Правило 3.19 ВШИТО (15.08, `cycle2-prep-a`).** Бестекстовые комментарии исключаются из очереди
 инференса ДО оплаты — правило ОЧЕРЕДИ, не удаление: строки остаются собранными, под вотермарком и
@@ -96,8 +118,11 @@ pre-registration обязана регистрировать ОПЛАЧИВАЕ�
    истории 11 143 и **$1.4511** на одном окне после 3.19; −50% — **$7.2574** / **$2.4189**.
    **Само правило 3.19 уже сэкономило $1.7727 на окне и бесплатно — больше, чем дал бы −30%.**
 3. ~~**Скип-правило 3.19 в петлю**~~ — **СДЕЛАНО 15.08** (`8d47fb3`), см. выше.
-4. **Сбор листовок Сільпо/Varus** — авторизован 3.18 (7)(d), бесплатно, не начат. Идёт в `prep-b`
-   вместе с докачкой корпуса.
+4. **Сбор листовок Сільпо / Varus / Маркетопт** — 3.18 (7)(d) расширен **амендментом 3.20 (6)**
+   (рулинг оператора 15.08: Маркетопт обязателен). Бесплатно, не начат. Идёт в `prep-b` вместе с
+   докачкой корпуса. В окне-1 листовочные СТРАНИЦЫ есть только у АТБ; у Сільпо/Varus/Маркетопта
+   позиции только из текстов постов — это записано в
+   `dashboard_data_w1.json :: not_computable.leaflet_depth_for_silpo_varus_marketopt`.
 5. **Докачка корпуса** — сборка стоит с 08.08.
 6. **История 11 143** — вход бесплатен, ~13 ч на текущей скорости, ЖДЁТ батча.
 7. ~~**Приёмка `5c2-close`**~~ — **RESOLVED 2026-08-15:** тимлид ратифицировал маршрутизацию
@@ -109,9 +134,10 @@ pre-registration обязана регистрировать ОПЛАЧИВАЕ�
 
 ## 🚧 Blockers
 
-**Ничего не блокирует работу.** `cycle2-prep-a` исполнен, суита зелёная (2 347 / 2 skipped), потрачено
-$0.00, дерево чистое. Ждём приёмки и `cycle2-prep-b`. Новый файл тимлида на утверждение оператора —
-`docs/PLAN-phase6-command-center.md` (командный центр Фазы 6, черновик 15.08).
+**Ничего не блокирует работу.** `phase6a` исполнен, суита зелёная (**2 369 / 2 skipped**), потрачено
+$0.00. Ждём приёмки `cycle2-prep-a` и `phase6a`; дальше — `6b` (UI на экспорте) и `cycle2-prep-b`
+(сбор). `docs/PLAN-phase6-command-center.md` — файл тимлида, его законная часть уже уехала
+амендментом 3.20.
 
 **⚠️ Деньги.** Phase 4: **$31.4493 из $33.00**, остаток **$1.5507** — на полный цикл НЕ хватит,
 линию поднимает только оператор. Остаток ВЫВОДИТЬ (`PHASE_CAP_USD - spent_usd`), а не читать из
@@ -152,6 +178,17 @@ $0.00, дерево чистое. Ждём приёмки и `cycle2-prep-b`. Н
 
 ## ⚠️ Footguns for the next run
 
+- **Блок `amendment-index` в `docs/SPEC.md` ПРАВИТЬ НЕЛЬЗЯ** (Dv335). Он один из десяти имён
+  `write_prereg_5c2.KEEP_BLOCKS`, то есть его байты ВНУТРИ запечатанного пина
+  `results/prereg_5c2_run.json`: правка выводит закон в `a39c05d5…` против запиненного `3dd43923…`.
+  Указатель поэтому отстал на два амендмента (3.19 и 3.20 — каждый сам себе индексная запись
+  внутри своего блока), и это сделано намеренно. Новый амендмент = новый маркированный блок
+  + строка в `BLOCKS_TODAY` + имя в перечислении `tests/test_sku_prereg.py`. Четыре детали, не три.
+- **Любая правка producer'а роняет `results/dashboard_data_w1.json`.** Экспорт держит sha восьми
+  файлов в `provenance.producers` (включая `loop.py`, `prompts.py`, `window_summary_5c2.py`), а тест
+  сравнивает закоммиченные байты с тем, что продюсер пишет СЕГОДНЯ. Тронул любой из них — прогони
+  `PYTHONPATH=src python3 scripts/export_dashboard_data.py` и закоммить файл в том же коммите.
+  Порядок: `ruff format` СНАЧАЛА, генерация ПОТОМ.
 - **The DRIVER writes a `contract:` provenance string nobody checks** (Dv176 — the bar producer's
   twin, closed as Dv170, is now a constant with a test). `positions_gm4_skub.head["contract"]` puts
   `docs/PROMPT-sku-b-v3-prep.md deliverable 2; … 3.17 (9), (10), (11)` INTO every run record,
