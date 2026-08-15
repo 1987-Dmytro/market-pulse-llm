@@ -7228,3 +7228,56 @@ audit (`docs/reviews/2026-08-13-process-audit-and-self-improvement.md`).
   header rules it («Файл тимлида: исполнитель читает и коммитит, не правит»), so it is committed by
   path and unedited. The standing trap is the one that has fired with every queued prompt since
   `docs/PROMPT-4.5g4.md`: `git add -A` would have swept it into a code commit. [cause: process]
+- **Dv335** — step 0 instructed «update the `amendment-index` block (live revision → 3.20, one index
+  line added)», and that block cannot be edited. It is one of the TEN names
+  `write_prereg_5c2.KEEP_BLOCKS` holds INSIDE the sealed pin of `results/prereg_5c2_run.json`, so
+  its bytes are hashed rather than stripped. Probed on a copy before the first edit: with the index
+  touched the registered law derives `a39c05d5…` against the pinned `3dd43923…`; with the block
+  appended alone it derives `3dd43923…`. 3.19 met the same wall and routed its index entry into its
+  own block, so 3.20's does the same and states out loud that the index now reads two amendments
+  behind. All four SPEC pins (v1/v4, B′, 5c2) still derive and no record was re-pinned.
+  [cause: contract-gap]
+- **Dv336** — the manoeuvre has FOUR moving parts and the contract named three.
+  `write_prereg_5c2.BLOCKS_TODAY` is the fourth: `check_the_strip_family_is_what_it_says` compares
+  the file's marked blocks against it and refuses on an unknown name, and three assertions in
+  `tests/test_prereg_5c2.py` read it. Its own docstring predicted the arrival («a twelfth block
+  appends HERE and nowhere else»), which is the design working — the amendment could not land
+  unseen. The negative-control intruder moved 3.20 → 3.21 for the same reason: a second block under
+  a name the producer already knows would test duplicate detection, not arrival. [cause: contract-gap]
+- **Dv337** — the seam clause offered two routes («import it, or lift the shared readers into
+  `src/`») and only one of them is available. A lift moves `scripts/window_summary_5c2.py` AND adds
+  a KEY to `producer.borrowed` in `results/window_summary_5c2.json` and
+  `results/validate_5c2_pack.json`; the sha-substitution pattern prep-a built rescues a moved
+  digest and cannot rescue a key that is not there, and `results/` is frozen by this contract's own
+  DO NOT. `MOVED_BY_THE_SKIP`'s docstring says the same from the other side («the day a third file
+  joins this tuple is a day to look at it rather than relax it»). So: imported, the way
+  `scripts/build_validate_pack.py` already imports it, and the reading lives in
+  `scripts/build_aggregates.py` while `src/market_pulse/aggregates.py` is schema and SQL over rows
+  handed in — which is also what keeps `src/` from importing `scripts/`. Zero bytes moved under
+  `results/` except the new export. [cause: contract-gap]
+- **Dv338** — D3's two closing tests needed a scope ruling the contract left open: are
+  `NOT_COMPUTABLE` stubs inside «every metric the export emits has a dictionary entry»? They are
+  not — they carry no value, they are honest stubs with an unlock condition, and a dictionary entry
+  for them would define a number nobody computes. The exclusion is ASSERTED rather than assumed
+  (`set(not_computable) & set(entries) == set()`, plus «no stub carries a number»), so the day one
+  of them grows a value the test says so instead of quietly scoping it out. [cause: contract-gap]
+- **Dv339** — the dictionary's no-figures test (SPEC 3.20 (1): a tooltip is a presentation surface)
+  reddened on a pitfall of its own author's writing: «У вікні-1 листівки зібрані лише по АТБ» and
+  its EN twin. Not a measurement but an IDENTITY, and one that goes stale the day window-2 lands —
+  a tooltip that names the window it was written in. Both halves now point at the metric's own
+  `sample` field, which the producer fills from the database. Two exemptions are carved and each is
+  narrow: a SPEC clause reference is a citation (and the strip is asserted to have FIRED), and
+  `formula` is algebra where `1 − promo / old` is an operator. [cause: process]
+- **Dv340** — self-review after the deliverables were committed. `aggregates.channels_with` took its
+  filter as a spliced clause and `export_dashboard_data.cuts_block` was building
+  `f"segment = '{segment}'"` out of a value that had just come from the database; correct today and
+  one refactor from carrying something that was never meant to be SQL. `sample_block` was also
+  reaching for `aggregates._where`, a private name across a module boundary. Both fixed in their own
+  commit, and the export regenerated: the diff is exactly two lines, both in
+  `provenance.producers`, which is the record saying what changed. [cause: process]
+
+**Process signals — phase6a.** Four of the six deviations are one shape: the brief named a seam and
+did not price what hangs off it. Grepping the pins on `docs/SPEC.md` and on `window_summary_5c2.py`
+BEFORE the first edit turned two of those into fifteen-minute decisions rather than blockers —
+second contract running where that step paid. And the exhaustive gate (902 leaves, not the four spot
+checks the contract listed) was LESS code than a hand-listed map, not more.
