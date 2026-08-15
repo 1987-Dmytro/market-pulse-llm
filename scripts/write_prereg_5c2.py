@@ -89,7 +89,7 @@ enumeration of these ten is what refuses to let it arrive quietly. A sealed regi
 re-pinned to make it green.
 """
 
-BLOCKS_TODAY = (*KEEP_BLOCKS, "amendment-3.19")
+BLOCKS_TODAY = (*KEEP_BLOCKS, "amendment-3.19", "amendment-3.20")
 """Every marked block the file carries NOW: the ten the seal keeps, plus each one that arrived after.
 
 Two questions were one constant until 3.19 landed, and they are not the same question. What the
@@ -101,7 +101,12 @@ greening this producer re-pin a sealed record, which is exactly what it exists t
 3.19 (operator, 2026-08-14, the 5c2-validate sitting): text-less comments are skipped before payment
 from the next paid cycle on. It moves no number of the 5 075 rows this registration bought — (3)
 says so out loud — so the strip takes it off and the pin survives. A twelfth block appends HERE and
-nowhere else, and `check_the_strip_family_is_what_it_says` is what refuses until it does."""
+nowhere else, and `check_the_strip_family_is_what_it_says` is what refuses until it does.
+
+3.20 (operator, 2026-08-15, the Phase-6 command-centre plan) is that twelfth block, and it arrived
+the way the sentence above predicted: the contract that landed it named three moving parts and this
+constant was the fourth. It moves no number either — it rules on where the DASHBOARD's figures come
+from — so the ten-name keep is untouched and the sealed pin still derives through it."""
 
 DRIFT = projection.DRIFT
 HALF_DOLLAR = 0.50

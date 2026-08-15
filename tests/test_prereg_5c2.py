@@ -235,7 +235,7 @@ def test_the_sealed_pin_still_derives_through_the_ten_block_keep():
     assert tuple(prereg.RATIFICATION_NAME.findall(spec.read_text(encoding="utf-8"))) == (
         writer.BLOCKS_TODAY
     )
-    assert writer.BLOCKS_TODAY[10:] == ("amendment-3.19",), "the block that arrived after the seal"
+    assert writer.BLOCKS_TODAY[10:] == ("amendment-3.19", "amendment-3.20"), "after the seal"
     assert hashlib.sha256(spec.read_bytes()).hexdigest() != pin, "3.19 is not in the file"
     assert hashlib.sha256(prereg.registered_law(spec, keep=writer.KEEP_BLOCKS)).hexdigest() == pin
     # and the block that carries the stop rules this record cites is one of the ten it keeps
@@ -260,8 +260,12 @@ def test_every_pinned_input_still_hashes_to_what_it_says():
 
 
 def test_the_strip_is_blind_to_3_19_and_to_nothing_the_keep_holds(tmp_path):
-    """The other direction of the decoupling, planted on a copy: 3.19's bytes may move under the
-    pin and a KEPT block's may not.
+    """The other direction of the decoupling, planted on a copy: the bytes of a block that arrived
+    AFTER the seal may move under the pin and a KEPT block's may not.
+
+    One line per post-seal block, and each names a phrase that block alone carries — 3.19's
+    parenthetical about stickers, 3.20's about the metric dictionary. A loop over
+    `BLOCKS_TODAY[10:]` would pass on a strip that had stopped finding either of them.
 
     Without this the reformulation above would be satisfied by a strip that hides the whole file,
     and the pin would have stopped being a pin. `docs/SPEC.md` itself is never written to — every
@@ -279,6 +283,7 @@ def test_the_strip_is_blind_to_3_19_and_to_nothing_the_keep_holds(tmp_path):
 
     assert derived(text) == pin, "the control: an unedited copy derives the pin"
     assert derived(text.replace("stickers, photos, voice notes", "stickers and photos")) == pin
+    assert derived(text.replace("one home for names, formulas", "one home for the names")) == pin
     for kept in ("**Amendment 3.18", "amendment 3.15 (the vis program moves"):
         assert text.count(kept) == 1
         assert derived(text.replace(kept, kept + " ")) != pin, kept
@@ -289,14 +294,16 @@ def test_a_twelfth_marked_block_is_refused_rather_than_stripped(monkeypatch, tmp
     the registered law silently, so the producer refuses on the block set rather than on the names
     it happens to know.
 
-    The intruder was `amendment-3.19` until 3.19 became law and the eleventh block real. It is a
-    3.20 now, and the second line is the direction that keeps this a control rather than a refusal
-    that refuses everything: the file as it stands must still pass.
+    The intruder was `amendment-3.19`, then `amendment-3.20`, and each time that name became law it
+    moved on. It has to: a second block under a name the producer already knows would test DUPLICATE
+    detection, and what is being tested is that a name nobody has looked at cannot arrive quietly.
+    The second line is the direction that keeps this a control rather than a refusal that refuses
+    everything: the file as it stands must still pass.
     """
     grown = tmp_path / "SPEC.md"
     grown.write_text(
         (REPO_ROOT / "docs" / "SPEC.md").read_text(encoding="utf-8")
-        + "<!-- amendment-3.20 begin -->\n(1) whatever.\n<!-- amendment-3.20 end -->\n",
+        + "<!-- amendment-3.21 begin -->\n(1) whatever.\n<!-- amendment-3.21 end -->\n",
         encoding="utf-8",
     )
 

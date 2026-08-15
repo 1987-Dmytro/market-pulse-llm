@@ -251,6 +251,14 @@ def test_every_pinned_input_still_hashes_to_what_it_says(record):
         # them predates it by weeks — and stripped by the SEALED 5c2 registration too, whose
         # ten-name keep (`write_prereg_5c2.KEEP_BLOCKS`) deliberately did NOT grow to meet it.
         "amendment-3.19",
+        # 3.20 — the Phase-6 command-centre plan (2026-08-15): every displayed figure comes from
+        # committed artifacts through the aggregate layer, SQLite is that layer's home, the centre
+        # is bilingual off `config/metrics.yaml`, overview insights are code-generated, and the
+        # promo surface gains Маркетопт. One name short on arrival like every block before it.
+        # Stripped here for the same reason: these pins are v1–v4's and predate all of it. Its
+        # index entry lives INSIDE the block — `amendment-index` is one of the ten blocks the
+        # SEALED 5c2 pin KEEPS, so an edit there would break `results/prereg_5c2_run.json`.
+        "amendment-3.20",
     ]
     assert prereg.RATIFICATION_NAME.findall(spec_text) == blocks
     law = prereg.registered_law(prereg.SPEC).decode("utf-8")
