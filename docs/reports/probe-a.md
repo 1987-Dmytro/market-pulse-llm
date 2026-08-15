@@ -506,6 +506,12 @@ Numbering continues the program's; the contract said «Dv378+».
    are pure and could have run anywhere; the tenth — that Gemma 4's own template at the pinned
    revision opens with `<bos>` and closes the thought channel on THIS request — is the one that
    could only be bought here, and it is the one that would have cost a boot to discover.
+5. **The gate did its job at a sixth of the cap, and the pre-run arithmetic was right for the wrong
+   reason.** §5.1 bounded the setup at $0.16 from a sibling ledger and it came in at ~$0.025; what
+   blew the budget was the one term no record could price, the reading itself, at 12.9× the only
+   bound that existed. The conclusion held either way — but the lesson is to name which term of a
+   bound is unmeasured and buy the smallest measurement that settles THAT one, which is exactly
+   what a registered warm-up is for.
 
 ---
 
