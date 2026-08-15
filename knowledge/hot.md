@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-15 13:50:32 (every SessionStart)
+**Auto-refreshed:** 2026-08-15 14:42:58 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+ce97b2c docs(vault): the 13:52 addendum -- the tab that needed JS to exist
 526fc3e fix(phase6b): every tab was hidden until the script ran, and a chain list nobody read
 8e46655 docs(vault): the phase6b checkpoint, the 6a backlog on the live map, and a new footgun
 d4ca8a2 docs(report): phase6b -- what the browser found, and the four fields 6a never exported
 569c830 fix(phase6b): a claim the rule never counted, and a blob that could end its own script block
-3d91f64 feat(phase6b): the command centre -- nine tabs, one figure source, and rows under every number
 ```
 
 ## 📋 Recent decisions
