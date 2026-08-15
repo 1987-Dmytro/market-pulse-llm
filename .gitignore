@@ -91,6 +91,12 @@ models/
 # small files that do get committed.
 *.pt
 
+# The aggregate layer (SPEC 3.20 (2)): rebuilt from data/derived/ by scripts/build_aggregates.py
+# in about a second, and it holds no fact its inputs do not. `data/*` above already covers it —
+# the entry is here because the DB is the one derived file a reader might expect to be committed,
+# and because what ships is results/dashboard_data_w1.json, not this.
+data/derived/pulse.db
+
 # smoke runs write a record shaped exactly like a real one — same shape, fake numbers
 results/smoke/
 
