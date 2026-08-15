@@ -262,6 +262,13 @@
       "spent_usd": 31.4493,
       "remaining_usd": 1.5507,
       "note": "5c2-run: Endpoint B, the comment leg (5 075 rows, 19 channels). Written by scripts/witness_phase_ledger.py from results/spend_5c2run.json :: runs[-1], so this entry and that run carry the SAME balance reading. remaining_usd is against the $33.00 cap in force when the money was spent."
+    },
+    {
+      "at": "2026-08-15T18:25:04+00:00",
+      "balance": 23.0729004744,
+      "spent_usd": 31.9174,
+      "remaining_usd": 1.0826,
+      "note": "probe-a: staging pod about to be created"
     }
   ]
 }

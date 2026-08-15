@@ -1,0 +1,6 @@
+{
+  "runpod_balance_at_probe-a_start": 23.0729004744,
+  "probe-a_gpu_cap_usd": 0.45,
+  "gpu_sessions": [],
+  "gpu_note": "RunPod account balance read before the first pod of probe-a. Step spend = this anchor minus the balance now, enforced against $0.45. The SPEC amendment 3.4 (4) phase cap is enforced separately, against results/spend_phase4.json, and neither anchor may be regenerated."
+}
