@@ -23,7 +23,7 @@ import run_loop  # noqa: E402
 from market_pulse import loop, serving  # noqa: E402
 from market_pulse.raw_store import RawStore  # noqa: E402
 
-from test_loop import ALIASES, CATEGORIES, jpeg  # noqa: E402
+from test_loop import ALIASES, CATEGORIES, jpeg, mixed_store  # noqa: E402
 
 PREREG = json.loads((REPO_ROOT / "results" / "prereg_5c2_run.json").read_text(encoding="utf-8"))
 
@@ -518,3 +518,29 @@ def test_the_config_a_expectation_refuses_when_the_carriers_disagree(monkeypatch
 
     with pytest.raises(SystemExit, match="disagree"):
         driver.config_a_expected()
+
+
+def test_a_registered_selection_is_met_by_a_smaller_queue_and_nothing_raises(tmp_path):
+    """What SPEC 3.19 (1) does to THIS driver — pinned, because it is a hazard and not a feature.
+
+    `restrict` is a filter, and nothing between it and the money compares the queue's length against
+    the length of what a registration sealed. Since the skip rule landed, `loop.queued` returns the
+    text-BEARING rows only, while a selection registered off the census is counted with
+    `loop.queue_depth`, which is deliberately blind to text. So a seal that says 5 075 is met by a
+    queue of 3 714 and no guard anywhere says so.
+
+    That is the correct behaviour of a QUEUE rule — the rows stay collected and counted — and it is
+    a NEW seam between the census and the seal: the next pre-registration has to register the
+    PAYABLE population, or `window_summary_5c2.assert_populations` refuses the summary after the
+    money is spent. This test exists so the next contract meets that fact as a red line rather than
+    as a paragraph in a report.
+    """
+    store = mixed_store(tmp_path / "raw", texted=(100, 102, 104), text_less=(101, 103))
+    registered = {100, 101, 102, 103, 104}
+
+    queue = driver.restrict(
+        loop.queued(store, RawStore(tmp_path / "derived"), "@VARUS_channel", None), registered
+    )
+
+    assert [row["msg_id"] for row in queue] == [100, 102, 104]
+    assert len(queue) < len(registered), "smaller than the seal, and nothing raised"
