@@ -7293,3 +7293,86 @@ and did not price what hangs off it. Grepping the pins on `docs/SPEC.md` and on
 rather than blockers — second contract running where that step paid. And Dv341 is the one to keep:
 a dimension belongs to the registry, never to the evidence, and that argument had already been won
 twice in this same contract before it was missed a third time.
+
+## phase6b — the command centre (2026-08-15)
+
+- **Dv342** — four surfaces the contract names have no field in the export, and they are a
+  DIFFERENT class from the seven `NOT_COMPUTABLE` entries: T2's brand × aspect heatmap
+  (`cuts.brand_by_aspect`), T2's negative profile (`cuts.aspect_by_sentiment`), T4's private-label
+  badge, and T8's «gates of the model with their figures and ceilings» (`gates.model`). The export's
+  own stubs say why a figure cannot exist yet; these say the aggregate layer never emitted one.
+  Conflating them would have hidden a backlog inside a passing test, so they live in `GAPS`, render
+  with their own border and their own words, and are 6a's backlog verbatim. The rule the contract
+  gave was followed: never a recomputation from rows, never a zero. [cause: contract-gap]
+- **Dv343** — the private-label flag does not exist anywhere in the repository.
+  `docs/PLAN-phase6-command-center.md` §2's data table names `config/lexicon.yaml` as the home of
+  «watchlist 23 бренда, private-label флаги»; that file is the CATEGORY vocabulary (SPEC 3.17 (8))
+  and holds no brand at all. The watchlist lives in `config/registry.yaml`, `WatchlistBrand` carries
+  `brand_id / display_names / own`, and the four chain labels are separated from the rest by a YAML
+  COMMENT — machine-unreadable. So the badge is a gap stub and the fix is a registry field, not a
+  dashboard heuristic. Grepping the file the brief named cost two minutes and changed the note from
+  «the export lacks it» to «nothing in the repo knows it». [cause: brief]
+- **Dv344** — T5 has no per-chain drill-down. The export keys chains by SOURCE ID
+  (`promo_pressure.by_chain.marketopt_promo`) and channels by `@handle`
+  (`cuts.legs.post_text.per_channel.@marketopt_promo`), and carries no join between the two spaces;
+  a position row read from the store names its channel, so its chain cannot be resolved from the
+  export alone. Reading the registry for that join would put a second source under a figure's
+  sample. T5 drills the whole position population and the price-pair reading instead — both
+  headline figures — and the join is named in the report for 6a. [cause: contract-gap]
+- **Dv345** — a comment's t.me link points at the POST it replies to, not at the comment. A
+  comment row carries `channel`, `msg_id` and `parent_msg_id`, and the id spaces are not the same
+  one: `@matusi_ukr` has `parent_msg_id` 22 042 against `msg_id` 576 143, which is the linked
+  discussion group's counter. The deep-link form `t.me/<channel>/<post>?comment=<id>` might resolve
+  and nothing in the row proves it, so the page links the post and says so in every comment
+  expander. Every one of the 196 drawn rows got a link: no leg lost one. [cause: data]
+- **Dv346** — one numeric format serves both languages (point decimal, narrow no-break space
+  between thousands) and the export's own `reading` prose is quoted untranslated. A UA comma
+  decimal would have doubled every rendered figure into two language-specific text nodes and made
+  guard 4 compare two spellings of one number; the export's readings are English strings in a
+  result file, and inventing UA twins for them would have created a second home for a fact whose
+  first home is sealed. Both are stated on the page, not only here. [cause: design]
+- **Dv347** — horizontal bar charts label every bar, against a literal reading of «numbers never on
+  every point — selective labels only». The rule is read as being about clutter in point-and-series
+  forms: a comparison bar chart's value at the end of its bar IS the reading, and the «10 seconds
+  per PRODUCT.md question» acceptance is what it is for. Selective labelling is applied where the
+  clutter risk is real — a diverging segment is labelled only when it is wide enough to hold its
+  own label, and a quartile band labels the median alone. [cause: contract-reading]
+- **Dv348** — every KPI tile's status slot reads «порогу не зареєстровано». The contract asks for
+  «status where defined» and no status threshold is registered for any of these metrics anywhere in
+  SPEC, the plan or the export. Inventing one would have been a bar with no producer on the one
+  screen an owner reads in ten seconds. The slot is rendered rather than dropped so that the absence
+  is visible and the operator can rule on it. [cause: no-registered-bar]
+- **Dv349** — the window banner reads «вікно 28 днів» where the contract writes «вікно 4 тижні».
+  Weeks would need a plural-agreement rule («4 тижні» / «5 тижнів») that a string file with no
+  digits cannot carry, and `window.days` is the field the export holds. The anchor and both bounds
+  are printed beside it, so nothing about the window is left to be inferred. [cause: design]
+- **Dv350** — «Гармонія via EMPHASIS» is typographic on T1's brand × sentiment chart and chromatic
+  on the SoV chart below it. The three colours of a diverging sentiment bar ARE the ordered scale;
+  spending one of them on which brand matters would have made the scale unreadable. So the own
+  brand's row label is set in ink and weight while the bars keep the pair, and the accent hue does
+  its work one chart down, where SoV has a hue to give away and context brands take `--muted` — the
+  gray the contract asks for, rather than a paler blue. [cause: contract-reading]
+- **Dv351** — the build reads `config/registry.yaml` for two things that are not figures: the
+  watchlist aliases `window_summary_5c2.comment_verdicts` requires, and brand display names, so the
+  owner reads «Гармонія» and not `garmonija`. Both are pinned — the file is checked against the
+  export's own `provenance.inputs` sha before it is opened, as is every one of the 38 evidence
+  files. The brand id stays in `data-brand`, in every tooltip and in every export path, so nothing
+  joins on the pretty name. [cause: design]
+- **Dv352** — self-review after the deliverable was committed, two findings. The T0 segment insight
+  read «Єдиний сегмент із від'ємною чистою тональністю»: the rule takes an argmin and the word
+  «єдиний» came from the template — true of window-1, guaranteed by nothing, and exactly how a
+  hand-typed claim enters through a string file. It now counts the negative segments. And the export
+  is embedded verbatim so the page can be compared to the file byte for byte, which means a `</`
+  inside it would end the script element early and swallow the rest of the document; today's export
+  has none, `embeddable()` refuses rather than mangling one, and the negative control plants `</b>`.
+  [cause: process]
+
+**Process signals — phase6b.** Opening the page in a browser found two rendering defects that no
+text-level check would have: a diverging chart drawn with a plot-width scale put a 100 %-negative
+bar straight through its own label column, and the whole first sentiment chart was EMPTY because
+`metrics.nsr.by_sample` holds its three counts at the top of the block while a cut holds them under
+`sentiment` — a silent zero, not an error. Four of the eleven deviations are one shape again: the
+contract named a surface and the export had no field for it, which is the seam between two
+contracts and is what the 6a backlog list is for. And Dv343 is the one to keep: the brief named a
+file as the home of a flag, and grepping that file before writing the note was the difference
+between «6a forgot to export it» and «nobody has ever recorded it».
