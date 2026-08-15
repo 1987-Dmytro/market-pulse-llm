@@ -2,15 +2,17 @@
 
 **Contract:** `docs/PROMPT-cycle2-prep-a.md` · **class:** zero-cost, code + paper · **spend: $0.00**
 **Baseline:** `make check` 2 332 passed / 2 skipped @ `b2ff741` — reproduced here before the first
-edit. **Now:** 2 346 passed / 2 skipped. Nothing was collected, no endpoint or pod exists, no
+edit. **Now:** 2 347 passed / 2 skipped. Nothing was collected, no endpoint or pod exists, no
 pre-registration was written, `docs/SPEC.md` was not touched and `data/loop_cursor.json` is
-byte-identical (`9b59aa5fd042bbb42d389b73ac55168f8941a16a64c4d8262e557e8f8f2a8b1a`, checked before
-the first write-capable action and after the last).
+byte-identical (`9b59aa5fd042bbb42d389b73ac55168f8941a16a64c4d8262e557e8f8f2a8b1a`, hashed before
+the first run of any loop script and again after the last; the earlier steps of the session were
+`make check` and commits, which do not open it).
 
 Commits: `2b74cdf` (step 0 — the standing tail), `8d47fb3` (deliverable 1), `574915b`
-(deliverable 2), `59618b2` (a self-review fix: a reading in the projection that re-derived a number
-the table above it already carried, and disagreed with it by a rounding), plus this report, the
-team lead's Phase-6 plan (Dv334) and the session's vault tail.
+(deliverable 2), `59618b2` and `7cef9c4` (two self-review findings: a reading in the projection that
+re-derived a number the table above it already carried and disagreed with it by a rounding, and the
+census/seal divergence of §1.5), plus `5427481` (the team lead's Phase-6 plan, Dv334), this report
+and the session's vault tail.
 
 ---
 
@@ -76,7 +78,7 @@ without an edit.
 | `src/market_pulse/loop.py` | **changed** — the seam, the predicate, the counter |
 | `scripts/run_loop.py` | **changed** — the pass summary and the smoke record carry the split |
 | `scripts/window_summary_5c2.py` | **changed**, *not named* — the predicate's old home, now a caller |
-| `scripts/run_5c2.py` | *not named*, **unchanged** — the paid driver calls `loop.queued` (`:909`) and inherits the skip, which is the point |
+| `scripts/run_5c2.py` | *not named*, **unchanged** — the paid driver calls `loop.queued` (`:909`) and inherits the skip. It also inherits a hazard, §1.5 |
 | `scripts/census_5c2.py` | unchanged by design — `queue_depth` did not move |
 | `scripts/collect_5c1.py` | unaffected — it uses `loop.POSTS` / `advance` / `save_cursor` only, never the comment queue |
 | `tests/test_loop.py` | **changed** — the fixture and three new tests |
@@ -106,6 +108,31 @@ Three added, both directions plus the window regression:
   agree on the population, the shared predicate reproduces the sealed `empty_text` flag per row on
   all five real texts in `results/validate_5c2_pack.json`, and a store of the artifact's shape plans
   to `rows − empty` / `empty`. **5 075, 1 361 and 3 714 are read out of the JSON, never typed.**
+
+### 1.5 The seam this opens between the census and the seal — for the next contract
+
+`queue_depth` (what the census counts) and `queued` (what a pass buys) now count **different
+populations by design**, and the paid driver does not notice. `scripts/run_5c2.py:250`:
+
+```python
+def restrict(rows: list[dict], keep: set) -> list[dict]:
+    """The queue, intersected with the registered selection. Order is the queue's — oldest first."""
+    return [row for row in rows if row["msg_id"] in keep]
+```
+
+It is a filter. Nothing between it and the money compares the queue's length against the length of
+what a registration sealed — the refusal at `:295` is `SliceTransport`'s and fires when a *pack* is
+missing a row's answer, not when the queue is short. So a pre-registration built from a census that
+registered 5 075 would be met by a queue of 3 714, buy 3 714, and only trip
+`window_summary_5c2.assert_populations` afterwards — **after the money is gone.**
+
+That is the correct behaviour of a queue rule (the rows stay collected and counted), so nothing was
+patched here: the money path is not this contract's to change, and the fix belongs in the next
+pre-registration's producer, which must register the **payable** population rather than the
+collected one. What was added instead is a red line for whoever writes it —
+`tests/test_run_5c2.py::test_a_registered_selection_is_met_by_a_smaller_queue_and_nothing_raises`
+pins the divergence with the number visible, so the next contract meets the fact as a test rather
+than as a paragraph in a report.
 
 ---
 
@@ -226,12 +253,12 @@ The money line is an open operator decision and this record does not take it.
 
 ## 3. Verify — evidence
 
-**`make check`** (tail, measured **after** the self-review fix, at `59618b2`):
+**`make check`** (tail, measured **after** the self-review pass that produced §1.5, at `7cef9c4`):
 
 ```
 ........................................................................ [ 98%]
-............................................                             [100%]
-2346 passed, 2 skipped in 64.85s (0:01:04)
+.............................................                            [100%]
+2347 passed, 2 skipped in 65.13s (0:01:05)
 ```
 
 `ruff format --check .` → `274 files already formatted` (the formatter is not in `make check`).
@@ -316,5 +343,6 @@ Full text in `implementation-notes.md § cycle2-prep-a`; numbering continues aft
    while a 24-row carve was byte-identical, and no ladder over a carve can see that.
 4. A rate measured on one window is not a rate for the backlog — the projection says so out loud
    rather than multiplying 26.8% by 11 143, which was the tempting line.
-5. The free rule out-earned the paid one this cycle ($1.77 vs $1.45 per window), which is worth
-   knowing before the operator prices a probe.
+5. A queue rule splits one population into two, and the guard that would notice sits downstream of
+   the money: `restrict` filters, `assert_populations` refuses, and only one of them runs before the
+   bill. Found by re-reading the paid driver after the deliverable was committed (§1.5).

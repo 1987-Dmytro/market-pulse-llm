@@ -56,7 +56,15 @@ b2ff741 docs(report): 5c2-close -- the commit list amended after the commit that
 `scripts/window_summary_5c2.py:198`; второго определения нет и не должно появиться. `strip()` и
 `== ""` проверены на окне с ОБЕИХ сторон (sent и source) — ровно 1 361 строка в каждом случае,
 расхождений 0. Считает и печатает рядом `text_less_skipped`. `scripts/run_5c2.py` наследует правило
-через `loop.queued` без правки — платный драйвер купит 3 714, а не 5 075.
+через `loop.queued` без правки.
+
+**⚠️ НОВЫЙ ШОВ: перепись и печать теперь считают РАЗНЫЕ популяции, и платный драйвер этого не
+видит.** `loop.queue_depth` (чем считает `census_5c2.py`) слеп к тексту, `loop.queued` — нет.
+`run_5c2.restrict` (`:250`) — просто фильтр, а отказ на `:295` про пару «пак/строка», не про
+короткую очередь. Регистрация, собранная из переписи на 5 075, будет встречена очередью в 3 714,
+купит 3 714 и упрётся только в `window_summary_5c2.assert_populations` — ПОСЛЕ трат. **Следующая
+pre-registration обязана регистрировать ОПЛАЧИВАЕМУЮ популяцию, а не собранную.** Красная линия
+стоит: `tests/test_run_5c2.py::test_a_registered_selection_is_met_by_a_smaller_queue_and_nothing_raises`.
 
 **⚠️ Правка `src/market_pulse/loop.py` роняет ДВА запечатанных рекорда.**
 `results/window_summary_5c2.json` и `results/validate_5c2_pack.json` держат его sha в
