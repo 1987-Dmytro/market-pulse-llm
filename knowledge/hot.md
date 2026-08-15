@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-15 12:34:24 (every SessionStart)
+**Auto-refreshed:** 2026-08-15 13:39:45 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
+d4ca8a2 docs(report): phase6b -- what the browser found, and the four fields 6a never exported
+569c830 fix(phase6b): a claim the rule never counted, and a blob that could end its own script block
+3d91f64 feat(phase6b): the command centre -- nine tabs, one figure source, and rows under every number
+ac1d840 chore(tail): the phase6b prompt, and the vault tail the Stop hook left
 bc71d0d docs(vault): the eighth segment card, in the day and in hot.md
-dc6a88e docs(report): phase6a -- the eighth segment card, and Dv341
-bc6d2bd fix(phase6a): the segment cut rendered seven cards where the registry holds eight
-06fcd93 docs(vault): the phase6a checkpoint -- what the layer said about window-1
-3a16b55 docs(report): phase6a -- the index block that could not move, and 902 numbers
 ```
 
 ## 📋 Recent decisions
@@ -30,11 +30,22 @@ bc6d2bd fix(phase6a): the segment cut rendered seven cards where the registry ho
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-15 (checkpoint 12:35) — исполнен `phase6a` ($0): **амендмент 3.20 в SPEC**,
+**Last update:** 2026-08-15 (checkpoint 13:38) — исполнен `phase6b` ($0): **командный центр**
+`dashboard/index.html` (девять вкладок, UA/EN, светлая/тёмная, ноль внешних запросов, экспорт вложен
+байт в байт), билд `scripts/build_dashboard.py`, словарь строк `config/ui_strings.yaml`. `make check`
+**2 392 / 2 skipped**, потрачено $0.00. Отчёт — `docs/reports/phase6b.md` (Dv342–**Dv352**).
+Следом — `cycle2-prep-b` (сбор Сільпо/Varus/Маркетопт) и `6c` (полировка под LinkedIn).
+День — [[2026-08-15]].
+
+**Бэклог 6a, из §4 отчёта 6b** (UI просит — экспорт не несёт): `cuts.brand_by_aspect` (T2,
+матрица бренд × аспект) · `cuts.aspect_by_sentiment` (T2, профиль негатива) · `gates.model` (T8,
+гейты модели с числами и потолками) · джойн «источник ↔ хендл» (без него у T5 нет drill-down по
+сетям) · **флаг приватной марки** — его нет НИГДЕ в репозитории, чинится полем реестра.
+
+**Предыдущий срез:** 2026-08-15 (12:35) — исполнен `phase6a` ($0): **амендмент 3.20 в SPEC**,
 слой агрегатов SQLite (`data/derived/pulse.db`, gitignored), детерминированный экспорт
 `results/dashboard_data_w1.json` и словарь метрик `config/metrics.yaml`. `make check`
-**2 370 / 2 skipped**, потрачено $0.00. Отчёт — `docs/reports/phase6a.md` (Dv335–**Dv341**).
-Следом — `6b` (UI) и `cycle2-prep-b` (сбор). День — [[2026-08-15]].
+**2 370 / 2 skipped**. Отчёт — `docs/reports/phase6a.md` (Dv335–**Dv341**).
 
 **Предыдущий срез:** 2026-08-15 (11:18) — `cycle2-prep-a` ($0): правило 3.19 вшито в очередь
 инференса, проекция батч-паритета написана. Отчёт — `docs/reports/cycle2-prep-a.md` (Dv330–Dv334).
@@ -53,6 +64,16 @@ bc6d2bd fix(phase6a): the segment cut rendered seven cards where the registry ho
 Фазы 6.** Фаза 5 закрыта, хроника до 12.08 в STATUS сжата — полная история в git этого файла.
 Остатка $1.5507 не хватит ни на один платный цикл; линию поднимает ТОЛЬКО оператор. Все $0-задачи
 ниже можно делать не дожидаясь.
+
+**ФАЗА 6b СДЕЛАНА (15.08, `phase6b`) — командный центр открывается.** `dashboard/index.html`
+собирается `scripts/build_dashboard.py` из экспорта + `config/metrics.yaml` + нового
+`config/ui_strings.yaml`: девять вкладок T0–T8 по вопросам PRODUCT.md, UA/EN и светлая/тёмная
+переключателями, всё инлайном, **ни одного внешнего запроса** (t.me у строк drill-down — единственные
+внешние ссылки), экспорт вложен в страницу байт в байт. Два сборки байт-в-байт, и закоммиченный файл
+ЕСТЬ эта сборка. 27 раскрытий drill-down, 196 строк жребием (сид на стратум), каждое объявляет поле
+экспорта со своей популяцией — **билд отказывает**, если строки не сходятся с числом. Заглушки двух
+классов: семь `NOT_COMPUTABLE` экспорта и четыре `GAPS` (бэклог 6a, выше). Приёмка — сидение по
+квизу «10 секунд на вопрос».
 
 **ФАЗА 6a СДЕЛАНА (15.08, `phase6a`) — слой данных командного центра стоит.** SPEC вырос
 **амендментом 3.20** (числа только из артефактов через слой агрегатов · SQLite — дом агрегатов ·
@@ -193,6 +214,12 @@ $0.00. Ждём приёмки `cycle2-prep-a` и `phase6a`; дальше — `6
   Указатель поэтому отстал на два амендмента (3.19 и 3.20 — каждый сам себе индексная запись
   внутри своего блока), и это сделано намеренно. Новый амендмент = новый маркированный блок
   + строка в `BLOCKS_TODAY` + имя в перечислении `tests/test_sku_prereg.py`. Четыре детали, не три.
+- **`dashboard/index.html` — генерат, и тест сравнивает его байты со свежей сборкой.** Тронул
+  `scripts/build_dashboard.py`, `config/ui_strings.yaml`, `config/metrics.yaml` или сам экспорт —
+  прогони `PYTHONPATH=src python3 scripts/build_dashboard.py` и закоммить страницу в ТОМ ЖЕ коммите.
+  Порядок тот же: `ruff format` СНАЧАЛА, сборка ПОТОМ. И проверяй страницу глазами в браузере, а не
+  только грепом: пустая диаграмма и полоса поверх подписей — не красный тест, а картинка
+  ([[the-helper-that-guesses-its-inputs-shape]]).
 - **Любая правка producer'а роняет `results/dashboard_data_w1.json`.** Экспорт держит sha восьми
   файлов в `provenance.producers` (включая `loop.py`, `prompts.py`, `window_summary_5c2.py`), а тест
   сравнивает закоммиченные байты с тем, что продюсер пишет СЕГОДНЯ. Тронул любой из них — прогони
