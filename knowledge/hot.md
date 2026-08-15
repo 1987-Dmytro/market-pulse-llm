@@ -367,10 +367,13 @@ $0.00, дерево чистое. Ждём приёмки `fix-a`; `fix-b` ст�
   `docs/PROMPT-sku-b-v3-prep.md deliverable 2; … 3.17 (9), (10), (11)` INTO every run record,
   including v4's, and omits (12). Nothing reads the field; fix it in the next contract that already
   touches the driver, never mid-flight on the money path.
-- **The staging class v3 priced at $0.24/h is not offered in EU-RO-1 any more** (Dv177). Cheapest
-  with stock is L4 at **$0.49/h** = $0.008/min, so a pod eats a tight cap headroom twice as fast:
-  build the bundle and write the staging script BEFORE `pod create`, and price the pod from its own
-  clock (the balance will still read $0.0000 — Dv166).
+- **Price the staging class from a reading taken TODAY, never from this line** (Dv177 → Dv387).
+  Dv177 said the $0.24/h class had left EU-RO-1 and the cheapest with stock was L4 at $0.49/h;
+  `runpodctl gpu list` on **15.08** offers **RTX 2000 Ada at $0.240/h in EU-RO-1, stock Low** — half
+  what the stale line assumed, and probe-a staged on it for **$0.0097** in 2 min 26 s. The durable
+  part is the habit, not the number: read the class list before `pod create`, build the bundle and
+  the staging script first, and price the pod from its own clock (the balance still reads $0.0000 —
+  Dv166).
 - **`runpodctl ssh info` answers with `ip`/`port`, not `host`** (Dv178). A readiness loop grepping
   for the wrong key runs its full timeout against an answer that was already complete — 55 s of
   billed pod, and it looks exactly like a slow resource.
