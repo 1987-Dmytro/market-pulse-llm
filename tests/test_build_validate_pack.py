@@ -50,20 +50,21 @@ def mirror(tmp_path: Path, drop: str | None = None) -> Path:
 def test_the_committed_pack_and_rendering_are_what_the_producer_writes_today(tmp_path):
     """The determinism pair: same seed, same evidence, byte-identical record AND rendering.
 
-    This pack pins the same two files `results/window_summary_5c2.json` does, and SPEC 3.19 (1)
-    moved both — so the two digests are answered by the sealing commit exactly as the sibling test
-    answers them, and the pack itself is never re-pinned (`results/validate_5c2_returns.json`
-    replies to its sha, and the sitting's ratified return is not something a code change edits).
-    The RENDERING carries no producer sha at all and stays byte-identical with nothing swapped,
-    which is the control: the two moved digests are the whole of the difference.
+    This pack pins the same moved files `results/window_summary_5c2.json` does — SPEC 3.19 (1) moved
+    two and 3.21 (1) a third — so those digests are answered by the sealing commit exactly as the
+    sibling test answers them, and the pack itself is never re-pinned
+    (`results/validate_5c2_returns.json` replies to its sha, and the sitting's ratified return is
+    not something a code change edits). The RENDERING carries no producer sha at all and stays
+    byte-identical with nothing swapped, which is the control: the moved digests are the whole of
+    the difference.
     """
     out, page = tmp_path / "pack.json", tmp_path / "pack.html"
     assert builder.main(["--out", str(out), "--page", str(page)]) == 0
 
     produced = out.read_bytes()
-    for path in sealed.MOVED_BY_THE_SKIP:
+    for path in sealed.MOVED:
         live, pinned = summary.sha256_of(REPO_ROOT / path), sealed.sealed_sha256(path)
-        assert live != pinned, f"{path} never learned the 3.19 skip"
+        assert live != pinned, f"{path} never learned {sealed.WITNESS[path]}"
         assert produced.count(live.encode()) == 1, path
         produced = produced.replace(live.encode(), pinned.encode())
 

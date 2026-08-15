@@ -40,7 +40,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build_aggregates as builder  # noqa: E402
 import window_summary_5c2 as summary  # noqa: E402
 
-from market_pulse import aggregates  # noqa: E402
+from market_pulse import aggregates, brands  # noqa: E402
 
 METRICS = REPO_ROOT / "config" / "metrics.yaml"
 OUT = REPO_ROOT / "results" / "dashboard_data_w1.json"
@@ -108,12 +108,12 @@ SHARED = (
         "comment.total.intents.rows_with_no_intent",
     ),
     (
-        "metrics.sov.by_sample.bought.mentions.varto",
-        "comment.total.brand_attribution.mentions.varto",
+        "metrics.sov.by_sample.bought.mentions.rud",
+        "comment.total.brand_attribution.mentions.rud",
     ),
     (
-        "metrics.sov.by_sample.bought.mentions.garmonija",
-        "comment.total.brand_attribution.mentions.garmonija",
+        "metrics.sov.by_sample.bought.mentions.limo",
+        "comment.total.brand_attribution.mentions.limo",
     ),
     (
         "metrics.promo_depth.readings.from_price_pair.n",
@@ -169,6 +169,11 @@ NOT_SHARED = {
     "cuts.brand_by_sentiment.*": (
         "brand × sentiment. The anchor counts brand mentions and sentiment separately and never"
         " crosses them."
+    ),
+    "metrics.sov.*.mentions.varto|selianske|garmonija": (
+        "the three brands SPEC 3.21 (1)'s revision r1 rules on. The anchor was matched before the"
+        " rules existed and is never rescored, so these counts CANNOT be equal — what holds them"
+        " instead is `convergence.watchlist_revision`, which checks that r1 only ever removes."
     ),
 }
 """What this record carries that the anchor cannot check, and why — by path pattern.
@@ -236,10 +241,11 @@ def metrics_block(conn, window_id: str) -> dict:
         )
     ]
     brand_rows = conn.execute(
-        "SELECT COUNT(*) FROM (SELECT DISTINCT channel, msg_id FROM comment_brands"
+        f"SELECT COUNT(*) FROM (SELECT DISTINCT channel, msg_id FROM {aggregates.REVISED_BRANDS}"
         " WHERE window_id = ?)",
         (window_id,),
     ).fetchone()[0]
+    revision = watchlist_revision(conn, window_id)
 
     depth = aggregates.depth_readings(conn, window_id)
     pressure = aggregates.promo_pressure(conn, window_id)
@@ -299,21 +305,30 @@ def metrics_block(conn, window_id: str) -> dict:
         },
         "sov": {
             "headline_sample": HEADLINE,
+            "watchlist_rules": revision["revision"],
             "sample": {
                 "name": "comment_rows_with_a_watchlist_brand",
                 "rows": brand_rows,
                 "of": window[0],
                 "share": round(brand_rows / window[0], 6) if window[0] else None,
+                "watchlist_rules": revision["revision"],
                 "reading": (
                     "SoV is measured over the comment rows where the DETERMINISTIC matcher found a"
-                    " watchlist name in the text that was sent. That is a small part of the window"
-                    " and it is not a model head — the comment instrument has no brand head at all"
+                    " watchlist name in the text that was sent, under the named rules revision"
+                    f" {revision['revision']} (SPEC 3.21 (1)). That is a small part of the window"
+                    " and it is not a model head — the comment instrument has no brand head at all."
+                    " A row here is a comment that MENTIONS the brand, never a stance towards it"
                 ),
             },
             "by_sample": by_sample(
                 conn,
                 window_id,
-                lambda name: aggregates.share_of_voice(conn, window_id, sample=name),
+                lambda name: (
+                    aggregates.share_of_voice(
+                        conn, window_id, sample=name, table=aggregates.REVISED_BRANDS
+                    )
+                    | {"watchlist_rules": revision["revision"]}
+                ),
             ),
         },
         "aspect_share": {
@@ -360,14 +375,33 @@ def metrics_block(conn, window_id: str) -> dict:
     }
 
 
+def watchlist_revision(conn, window_id: str) -> dict:
+    """Which rules revision the presentation cut was matched under — read from the database.
+
+    Read and not passed in: the r1 table and this row are written together by
+    `build_aggregates.add_revised_brands`, so a record that names a revision its rows were not
+    matched under is impossible rather than merely unlikely.
+    """
+    row = conn.execute(
+        "SELECT revision, dated, rules_sha256 FROM watchlist_revision WHERE window_id = ?",
+        (window_id,),
+    ).fetchone()
+    if row is None:
+        raise SystemExit(
+            "the database holds no watchlist revision — the brand surfaces have no matcher to name"
+        )
+    return {"revision": row[0], "dated": row[1], "rules_sha256": row[2]}
+
+
 def cuts_block(conn, window_id: str) -> dict:
     """The per-dimension aggregates the plan's tabs read — every one of them a GROUP BY."""
     channels = aggregates.channels_with(conn, window_id, "comments")
     segments = aggregates.registry_segments(conn, window_id)
+    revision = watchlist_revision(conn, window_id)
     brand_sentiment: dict[str, dict] = {}
     for brand, sentiment, number in conn.execute(
-        "SELECT b.brand_id, c.sentiment, COUNT(*) FROM comment_brands b JOIN comments c"
-        " USING (window_id, channel, msg_id) WHERE b.window_id = ? AND c.scored = 1"
+        f"SELECT b.brand_id, c.sentiment, COUNT(*) FROM {aggregates.REVISED_BRANDS} b JOIN comments"
+        " c USING (window_id, channel, msg_id) WHERE b.window_id = ? AND c.scored = 1"
         " AND c.has_text = 1 GROUP BY 1, 2 ORDER BY 1, 2",
         (window_id,),
     ):
@@ -414,11 +448,16 @@ def cuts_block(conn, window_id: str) -> dict:
             for segment, registry_channels in segments
         },
         "brand_by_sentiment": {
+            "watchlist_rules": revision["revision"],
             "sample": {
                 "name": "payable",
+                "watchlist_rules": revision["revision"],
                 "reading": (
-                    "scored, text-bearing comment rows in which the matcher found the brand. A"
-                    " brand missing from this table was matched in no such row"
+                    "scored, text-bearing comment rows in which the matcher found the brand under"
+                    f" rules revision {revision['revision']}. A brand missing from this table was"
+                    " matched in no such row. The cross is MENTION × the comment's own tonality:"
+                    " SPEC 3.21 (3) — until the stance layer is law, a row here says the comment"
+                    " named the brand and how that comment reads, never how it feels about it"
                 ),
             },
             "rows": brand_sentiment,
@@ -443,6 +482,20 @@ def cuts_block(conn, window_id: str) -> dict:
             "SELECT carrier, COUNT(*) FROM positions WHERE window_id = ? GROUP BY 1 ORDER BY 1",
             (window_id,),
         ),
+        # the two comment cuts above are the MIRROR's shape — the same `comment_block` the
+        # convergence gate re-derives the anchor's 902 leaves from — so their `brand_attribution`
+        # counts the matching the sealed record was measured under, not r1's. Said here rather than
+        # left to be inferred: one record must never carry two brand definitions unlabelled.
+        "brand_attribution_in_the_comment_cuts": {
+            "watchlist_rules": "anchor",
+            "reading": (
+                "`comment_by_channel` and `comment_by_segment` carry the matching"
+                " results/window_summary_5c2.json was sealed under, because the convergence gate"
+                " re-derives that record out of the same blocks and SPEC 3.21 (1) never rescores"
+                " G1e history. Every brand surface the DASHBOARD renders — metrics.sov and"
+                f" cuts.brand_by_sentiment — is {revision['revision']} and says so in its own block"
+            ),
+        },
     }
 
 
@@ -535,6 +588,43 @@ def check_shared(record: dict, anchor: dict) -> dict:
     return checked
 
 
+def check_revision(record: dict, anchor: dict, ruled: tuple[str, ...]) -> dict:
+    """What replaces the two shared pairs SPEC 3.21 (1) took away — and it checks more than they did.
+
+    The anchor's brand attribution is the matching of the day it was sealed; this record's is r1's.
+    Equality is therefore the wrong question. The right one is the shape of the difference: a rule
+    can only REMOVE a hit, so every brand r1 does not rule on must have exactly the anchor's count,
+    and every brand it does rule on must have no more than it. A revision that added a mention
+    anywhere would be a registry edit wearing a rules file's clothes, and this refuses it.
+    """
+    mine = dig(record, "metrics.sov.by_sample.bought.mentions")
+    theirs = dig(anchor, "comment.total.brand_attribution.mentions")
+    wrong = {}
+    for brand, count in sorted(mine.items()):
+        was = theirs.get(brand, 0)
+        if (count > was) if brand in ruled else (count != was):
+            wrong[brand] = {"export": count, "anchor": was, "ruled_by_r1": brand in ruled}
+    if wrong:
+        raise SystemExit(
+            "the revised brand cut is not a narrowing of the anchor's:"
+            f" {json.dumps(wrong, ensure_ascii=False)}"
+        )
+    return {
+        "ruled": list(ruled),
+        "removed": {
+            brand: {"anchor": theirs.get(brand, 0), "r1": mine[brand]}
+            for brand in ruled
+            if theirs.get(brand, 0) != mine.get(brand, 0)
+        },
+        "unchanged": sorted(brand for brand in mine if brand not in ruled),
+        "reading": (
+            "every brand r1 does not rule on carries the anchor's own count on the bought sample,"
+            " and every brand it does rule on carries no more. The rules can only remove, so this"
+            " is the pair check the two dropped SHARED figures used to be — widened to all 23"
+        ),
+    }
+
+
 def whole_record(verdict: dict) -> dict:
     """The exhaustive check, without its 902-path agreement list.
 
@@ -562,6 +652,10 @@ def whole_record(verdict: dict) -> dict:
 def export(conn, sources: dict, anchor_path: Path, metrics_path: Path) -> dict:
     anchor = json.loads(summary.read_text_or_refuse(anchor_path))
     dictionary = yaml.safe_load(summary.read_text_or_refuse(metrics_path))
+    # the LAW, not the database's copy of its name: `check_revision` needs to know which brands the
+    # rules file rules on, and reading that from the file the build matched with is what keeps the
+    # check from being satisfied by whatever the table happens to contain.
+    rules = brands.load_watchlist_rules(builder.RULES)
     window = conn.execute(
         "SELECT anchor, days, since, until, bought, payable, text_less, leaflet_pages, post_texts"
         " FROM windows WHERE window_id = ?",
@@ -613,6 +707,8 @@ def export(conn, sources: dict, anchor_path: Path, metrics_path: Path) -> dict:
         "sha256": summary.sha256_of(anchor_path),
         "shared_figures": check_shared(record, anchor),
         "not_shared": NOT_SHARED,
+        "watchlist_revision": watchlist_revision(conn, builder.WINDOW_ID)
+        | check_revision(record, anchor, tuple(sorted(rules.required))),
         "whole_record": whole_record(builder.check_convergence(conn, anchor_path)),
         "reading": (
             "two checks, both of which refuse rather than warn. `shared_figures` compares every"
@@ -633,6 +729,7 @@ def export(conn, sources: dict, anchor_path: Path, metrics_path: Path) -> dict:
                 builder.PREREG,
                 builder.CENSUS,
                 builder.REGISTRY,
+                builder.RULES,
             )
         },
     )

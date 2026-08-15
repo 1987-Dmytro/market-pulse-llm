@@ -42,8 +42,14 @@ DERIVED = REPO_ROOT / "data" / "derived"
 PREREG = REPO_ROOT / "results" / "prereg_5c2_run.json"
 CENSUS = REPO_ROOT / "results" / "census_5c2.json"
 REGISTRY = REPO_ROOT / "config" / "registry.yaml"
+RULES = REPO_ROOT / "config" / "watchlist_rules.yaml"
 ANCHOR = REPO_ROOT / "results" / "window_summary_5c2.json"
 OUT = DERIVED / "pulse.db"
+
+CARRIER = "comment"
+"""Which text the revised matcher is told it is reading. SPEC 3.21 (1) scopes the `garmonija` rule
+to comment text, and `find_watchlist_brands` refuses a revision without the carrier named — so this
+constant is the layer saying out loud that the r1 cut it fills is the COMMENT cut and no other."""
 
 WINDOW_ID = "w1"
 """The first window's id. A NAME and not a date, because `windows.anchor` already carries the date
@@ -101,6 +107,29 @@ def segment_for(segments: dict, channels: set) -> dict:
     return {handle: segments[handle] for handle in sorted(channels)}
 
 
+def revised_hits(comments: list[dict], aliases: dict, rules) -> list[dict]:
+    """The same rows, matched again under the named revision — SPEC 3.21 (1).
+
+    Matched again rather than filtered down from the anchor's hits: a rule is a requirement on the
+    TEXT, and a filter over `verdict["brands"]` would have to re-read that text anyway to check it.
+    Both passes read `summary.comment_text`, so the two tables differ in the rules and in nothing
+    else — which is the whole claim the anchor-parity split rests on.
+    """
+    return [
+        {
+            "channel": row["channel"],
+            "msg_id": row["msg_id"],
+            "brands": [
+                found["brand_id"]
+                for found in brands.find_watchlist_brands(
+                    summary.comment_text(row), aliases, rules, carrier=CARRIER
+                )
+            ],
+        }
+        for row in comments
+    ]
+
+
 def build(derived: Path, prereg_path: Path, registry_path: Path, out: Path):
     """The database, and the sha256 of every file it was built from.
 
@@ -112,7 +141,10 @@ def build(derived: Path, prereg_path: Path, registry_path: Path, out: Path):
     registry = summary.registry_through_the_seal(prereg, registry_path)
     census = through_the_seal(prereg, REPO_ROOT / PINNED_CENSUS, PINNED_CENSUS)
     aliases = brands.watchlist_aliases(registry.watchlist)
-    sources: dict[str, str] = {}
+    rules = brands.load_watchlist_rules(RULES)
+    # the rules file is an INPUT to the r1 table and belongs in the same block as the evidence: the
+    # export's provenance answers "what bytes made this record", and a matcher revision is bytes.
+    sources: dict[str, str] = {rel(RULES): summary.sha256_of(RULES)}
 
     def load(record_type: str) -> list[dict]:
         rows: list[dict] = []
@@ -156,6 +188,12 @@ def build(derived: Path, prereg_path: Path, registry_path: Path, out: Path):
     aggregates.add_segments(conn, WINDOW_ID, everyone)
     aggregates.add_watchlist(conn, WINDOW_ID, list(registry.watchlist))
     aggregates.add_comments(conn, WINDOW_ID, verdicts)
+    aggregates.add_revised_brands(
+        conn,
+        WINDOW_ID,
+        {"revision": rules.revision, "dated": rules.dated, "sha256": summary.sha256_of(RULES)},
+        revised_hits(comments, aliases, rules),
+    )
     aggregates.add_markers(conn, WINDOW_ID, loop.CARRIER, pages)
     aggregates.add_markers(conn, WINDOW_ID, loop.POST_CARRIER, posts)
     aggregates.add_positions(conn, WINDOW_ID, positions)
@@ -211,6 +249,7 @@ def main(argv: list[str] | None = None) -> int:
         "comments",
         "comment_intents",
         "comment_brands",
+        "comment_brands_r1",
         "markers",
         "positions",
         "position_warnings",

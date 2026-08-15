@@ -74,6 +74,59 @@ def test_a_single_flipped_row_reddens_the_gate(tmp_path):
         builder.check_convergence(conn, builder.ANCHOR)
 
 
+def test_the_revision_lives_beside_the_anchor_matching_and_not_on_top_of_it(conn):
+    """SPEC 3.21 (1)'s r1 fills its own table; the mirror still reads the anchor's.
+
+    Both counts are read from SQL. `comment_brands` holds what the sealed record was measured under
+    and `comment_brands_r1` what the honest cut shows, and the second being SMALLER is the whole
+    deliverable: a rule in `config/watchlist_rules.yaml` can only ever remove a hit.
+    """
+    anchor, revised = (
+        conn.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0]
+        for table in (aggregates.ANCHOR_BRANDS, aggregates.REVISED_BRANDS)
+    )
+    assert 0 < revised < anchor
+    revision = conn.execute("SELECT revision, dated FROM watchlist_revision").fetchone()
+    assert revision == ("r1", "2026-08-15")
+    # and the hits it keeps are a SUBSET of the anchor's, row for row — a revision that added a
+    # mention would be a registry edit wearing a rules file's clothes
+    assert (
+        conn.execute(
+            f"SELECT COUNT(*) FROM {aggregates.REVISED_BRANDS} r WHERE NOT EXISTS (SELECT 1 FROM"
+            f" {aggregates.ANCHOR_BRANDS} a WHERE a.window_id = r.window_id AND a.channel = r.channel"
+            " AND a.msg_id = r.msg_id AND a.brand_id = r.brand_id)"
+        ).fetchone()[0]
+        == 0
+    )
+
+
+def test_the_mirror_on_the_revised_table_reddens_the_gate_and_only_on_brand_leaves(tmp_path):
+    """The negative control for the anchor-parity split — the reason the two tables exist.
+
+    A guard that refuses proves something is blocked, never that the blocked set is the intended
+    one. So the anchor table is REPLACED with the revision's hits and the gate re-run: it has to go
+    red, and every leaf it moves has to be a `brand_attribution` leaf. If a leaf outside that family
+    ever moves, the split is not clean and the contract's own STOP rule applies.
+    """
+    out = tmp_path / "pulse.db"
+    conn, _ = builder.build(builder.DERIVED, builder.PREREG, builder.REGISTRY, out)
+    conn.execute(f"DELETE FROM {aggregates.ANCHOR_BRANDS}")
+    conn.execute(
+        f"INSERT INTO {aggregates.ANCHOR_BRANDS} SELECT * FROM {aggregates.REVISED_BRANDS}"
+    )
+
+    verdict = aggregates.converge(ANCHOR, aggregates.mirror(conn, builder.WINDOW_ID))
+    moved = sorted(verdict["disagreed"]) + sorted(verdict["missing"])
+
+    assert moved, "the revision has to reach the anchor's numbers, or the split guards nothing"
+    assert all("brand_attribution" in path for path in moved), moved
+    assert verdict["disagreed"]["comment.total.brand_attribution.rows_with_a_brand"] == {
+        "anchor": 11,
+        "database": 3,
+    }
+    assert len(verdict["agreed"]) == verdict["leaves"] - len(moved)
+
+
 def test_the_window_row_holds_both_populations_labelled(conn):
     """Collected is not payable — prep-a §1.5 — and the schema says so in two columns.
 

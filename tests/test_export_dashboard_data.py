@@ -114,9 +114,14 @@ def test_every_metric_and_every_cut_names_the_sample_it_was_measured_on():
         if "by_sample" in metric:
             assert metric["headline_sample"] == exporter.HEADLINE
 
-    assert RECORD["metrics"]["sov"]["sample"]["rows"] == 11
+    # three and not eleven since SPEC 3.21 (1): the sample is the rows the matcher found a brand in
+    # under revision r1, and the eight the rules removed were «варто» the adverb ×7 and a children's
+    # centre named Гармонія. The sample block says which revision it counted under, right here.
+    assert RECORD["metrics"]["sov"]["sample"]["rows"] == 3
     assert RECORD["metrics"]["sov"]["sample"]["of"] == 5075
+    assert RECORD["metrics"]["sov"]["sample"]["watchlist_rules"] == "r1"
     assert RECORD["cuts"]["brand_by_sentiment"]["sample"]["name"] == "payable"
+    assert RECORD["cuts"]["brand_by_sentiment"]["sample"]["watchlist_rules"] == "r1"
 
 
 def test_the_payable_sample_is_the_headline_and_differs_from_the_bought_one():

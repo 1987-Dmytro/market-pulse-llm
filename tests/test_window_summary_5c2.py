@@ -46,6 +46,29 @@ MOVED_BY_THE_SKIP = ("scripts/window_summary_5c2.py", "src/market_pulse/loop.py"
 hashed LIVE, and the day a third file joins this tuple is a day to look at it rather than relax it.
 """
 
+MOVED_BY_R1 = ("src/market_pulse/brands.py",)
+"""The one pinned file SPEC 3.21 (1) moved — and it is a SECOND tuple rather than a third entry in
+the first, because the two amendments are checked by different witnesses and a shared branch would
+assert 3.19's about a file that never met it (`an_invariant_the_new_member_cannot_satisfy`).
+
+3.21 (1) makes the watchlist's text rules law in `config/watchlist_rules.yaml` and teaches the
+matcher to read them. The rules are OPT-IN — `find_watchlist_brands` without them matches what it
+matched when this record was sealed — so the record's brand attribution does not move and is not
+re-pinned. What moved is the module's bytes, and they stay RECOVERABLE:
+
+    git show d69c812:src/market_pulse/brands.py
+"""
+
+MOVED = MOVED_BY_THE_SKIP + MOVED_BY_R1
+
+WITNESS = {
+    **dict.fromkeys(MOVED_BY_THE_SKIP, "has_text"),
+    **dict.fromkeys(MOVED_BY_R1, "watchlist_rules"),
+}
+"""What each moved file learned, by amendment. The token is read BOTH ways below — absent from the
+sealed blob, present on disk — so a recovery from the wrong commit is a failure rather than a pass.
+"""
+
 
 def sealed_blob(path: str) -> bytes:
     """`path` as :data:`SEALING_COMMIT` carried it — git, and nothing on disk."""
@@ -72,19 +95,23 @@ def test_the_committed_record_is_what_the_producer_writes_today(tmp_path):
     No clock and no git block is what makes this possible; `scripts/build_sitting_pack.py` writes
     a `git_state()` and could not have this test.
 
-    Since SPEC 3.19 (1) two of the shas in `producer` are the only bytes allowed to differ, and each
-    one is put back to what :data:`SEALING_COMMIT` carries before the comparison — so the claim is
-    still "every byte of this record re-derives", with exactly two digests answered by `git show`
+    Since SPEC 3.19 (1) some of the shas in `producer` are the only bytes allowed to differ, and
+    each one is put back to what :data:`SEALING_COMMIT` carries before the comparison — so the claim
+    is still "every byte of this record re-derives", with those digests answered by `git show`
     instead of by the disk. Each substitution must FIRE (`count == 1`): a swap that matched nothing
     would leave the comparison passing for a file that had silently gone back to the sealed bytes.
+
+    3.21 (1) put a third file in that list and NOT a third number in the record: the matcher's rules
+    are opt-in, this producer does not ask for them, and every brand count below is the one the
+    sitting was shown. That is what the byte comparison after the swaps proves.
     """
     out = tmp_path / "again.json"
     assert summary.main(["--out", str(out)]) == 0
 
     produced = out.read_bytes()
-    for path in MOVED_BY_THE_SKIP:
+    for path in MOVED:
         live, sealed = summary.sha256_of(REPO_ROOT / path), sealed_sha256(path)
-        assert live != sealed, f"{path} never learned the 3.19 skip"
+        assert live != sealed, f"{path} never learned {WITNESS[path]}"
         assert produced.count(live.encode()) == 1, path
         produced = produced.replace(live.encode(), sealed.encode())
 
@@ -397,20 +424,25 @@ def test_a_registry_that_moved_since_the_seal_is_a_refusal(tmp_path):
 def test_the_record_carries_the_producer_and_every_source_it_read(record):
     """A summary that cannot say which bytes it read is a claim, not evidence.
 
-    The two files SPEC 3.19 (1) moved are checked BOTH ways, because either leg alone passes for the
-    wrong reason: a live hash equal to the pin would mean the skip rule never landed, and the
-    recovered hash equal to the pin is what proves the record names the bytes that wrote it. The
-    recovered blobs are read for the new name too — a recovery that already carried `has_text` would
-    mean this is checking the wrong commit.
+    The files SPEC 3.19 (1) and 3.21 (1) moved are checked BOTH ways, because either leg alone
+    passes for the wrong reason: a live hash equal to the pin would mean the amendment never landed,
+    and the recovered hash equal to the pin is what proves the record names the bytes that wrote it.
+    The recovered blobs are read for the new name too — a recovery that already carried the witness
+    would mean this is checking the wrong commit.
+
+    The witness is per amendment (:data:`WITNESS`) and not one shared token: `brands.py` never
+    learned `has_text` and never will, so a single branch would have failed it for a reason that has
+    nothing to do with its pin.
     """
     assert record["producer"]["sha256"] == sealed_sha256(record["producer"]["script"])
     assert set(record["producer"]["borrowed"]) == set(summary.BORROWED)
     for name, digest in record["producer"]["borrowed"].items():
-        if name in MOVED_BY_THE_SKIP:
-            assert summary.sha256_of(REPO_ROOT / name) != digest, f"{name} never learned 3.19"
+        if name in MOVED:
+            witness = WITNESS[name]
+            assert summary.sha256_of(REPO_ROOT / name) != digest, f"{name} never learned {witness}"
             assert sealed_sha256(name) == digest
-            assert b"has_text" not in sealed_blob(name), f"{name}: recovered from the wrong commit"
-            assert "has_text" in (REPO_ROOT / name).read_text(encoding="utf-8")
+            assert witness.encode() not in sealed_blob(name), f"{name}: wrong commit recovered"
+            assert witness in (REPO_ROOT / name).read_text(encoding="utf-8")
         else:
             assert summary.sha256_of(REPO_ROOT / name) == digest
     everything = {

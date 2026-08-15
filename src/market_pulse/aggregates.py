@@ -96,6 +96,21 @@ CREATE TABLE comment_brands (
     brand_id  TEXT NOT NULL
 );
 
+CREATE TABLE comment_brands_r1 (
+    window_id TEXT NOT NULL,
+    channel   TEXT NOT NULL,
+    msg_id    INTEGER NOT NULL,
+    brand_id  TEXT NOT NULL
+);
+
+CREATE TABLE watchlist_revision (
+    window_id    TEXT NOT NULL,
+    revision     TEXT NOT NULL,
+    dated        TEXT NOT NULL,
+    rules_sha256 TEXT NOT NULL,
+    PRIMARY KEY (window_id)
+);
+
 CREATE TABLE markers (
     window_id     TEXT NOT NULL,
     leg           TEXT NOT NULL,
@@ -141,6 +156,16 @@ CREATE TABLE position_warnings (
 
 PRESENCE = ("brand", "line", "category", "size", "attribute")
 PROMO_FIELDS = ("price_promo", "price_old", "discount_pct_printed", "discount_footnote")
+
+ANCHOR_BRANDS = "comment_brands"
+REVISED_BRANDS = "comment_brands_r1"
+"""Two tables and not one table with a `rules` column, deliberately.
+
+The anchor table is what `results/window_summary_5c2.json` was measured under, and :func:`mirror`
+re-derives 35 of that record's 902 numeric leaves out of it. A column would have made every existing
+query on it wrong until somebody remembered a filter; two tables mean the convergence path's SQL is
+the SAME SQL, and that is checkable with `git diff` rather than with an argument about filters.
+The revised table is the presentation side (SPEC 3.21 (1)) and every block built from it says so."""
 
 SAMPLES = {
     "bought": "1",
@@ -278,6 +303,27 @@ def add_comments(conn, window_id: str, verdicts: list[dict]) -> None:
             "INSERT INTO comment_brands VALUES (?, ?, ?, ?)",
             [(window_id, row["channel"], row["msg_id"], name) for name in row["brands"]],
         )
+
+
+def add_revised_brands(conn, window_id: str, revision: dict, hits: list[dict]) -> None:
+    """The named revision's brand hits, in a table of their own — SPEC 3.21 (1).
+
+    `hits` are `{channel, msg_id, brands}` rows, the shape `add_comments` already reads. The
+    revision is stored beside them so the export can NAME which rules the presentation cut matched
+    under: a brand table whose matcher is not written down is a table nobody can re-derive.
+    """
+    conn.execute(
+        "INSERT INTO watchlist_revision VALUES (?, ?, ?, ?)",
+        (window_id, revision["revision"], revision["dated"], revision["sha256"]),
+    )
+    conn.executemany(
+        f"INSERT INTO {REVISED_BRANDS} VALUES (?, ?, ?, ?)",
+        [
+            (window_id, row["channel"], row["msg_id"], name)
+            for row in hits
+            for name in row["brands"]
+        ],
+    )
 
 
 def add_markers(conn, window_id: str, leg: str, rows: list[dict]) -> None:
@@ -655,18 +701,24 @@ def sentiment_metrics(conn, window_id: str, *, sample: str, segment: str | None 
     }
 
 
-def share_of_voice(conn, window_id: str, *, sample: str) -> dict:
+def share_of_voice(conn, window_id: str, *, sample: str, table: str = ANCHOR_BRANDS) -> dict:
     """Every watchlist brand's share of watchlist mentions — zeros included.
 
     Left-joined off `watchlist` so the field is the whole watchlist: a brand with no mention in the
     window has a share of 0.0, which is an answer, and dropping it would make the denominator look
     like the set of brands that happened to be talked about.
+
+    ``table`` names which matcher's hits to count (:data:`ANCHOR_BRANDS` / :data:`REVISED_BRANDS`)
+    and defaults to the anchor's, so a caller that does not think about revisions gets the matching
+    every sealed record was measured under. The dashboard asks for the revised one and labels it.
     """
+    if table not in (ANCHOR_BRANDS, REVISED_BRANDS):
+        raise Refusal(f"{table!r} is not a brand-hit table")
     where, params = _where(window_id, None, None, SAMPLES[sample])
     mentions = {
         brand: number
         for brand, number in conn.execute(
-            f"SELECT brand_id, COUNT(*) FROM comment_brands JOIN comments USING (window_id,"
+            f"SELECT brand_id, COUNT(*) FROM {table} JOIN comments USING (window_id,"
             f" channel, msg_id) WHERE {where} GROUP BY brand_id",
             params,
         )

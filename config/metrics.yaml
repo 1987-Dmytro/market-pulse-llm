@@ -104,11 +104,13 @@ metrics:
       en: "Share of voice (SoV)"
     definition:
       ua: >-
-        Частка згадок бренду серед усіх згадок брендів вотчлиста у вікні. Згадки знаходить
-        детерміністичний матчер по надісланому тексту — це не голова моделі.
+        Частка згадок бренду серед усіх згадок брендів вотчлиста у вікні. Це повідомлення, де
+        згадано бренд, а не ставлення до бренду. Згадки знаходить детерміністичний матчер по
+        надісланому тексту за іменованою ревізією правил — це не голова моделі.
       en: >-
-        A brand's share of all watchlist-brand mentions in the window. Mentions are found by the
-        deterministic matcher over the text that was sent — this is not a model head.
+        A brand's share of all watchlist-brand mentions in the window. These are messages that
+        MENTION the brand, not a stance towards it. Mentions are found by the deterministic matcher
+        over the text that was sent, under a named rules revision — this is not a model head.
     how_to_read:
       ua: "Головний конкурентний бенчмарк: не «скільки нас хвалять», а «скільки нас узагалі згадують»."
       en: "The competitive benchmark: not how well the brand is spoken of, but how often it is spoken of at all."
@@ -116,9 +118,11 @@ metrics:
       ua:
         - "Вимірюється на рядках, де матчер щось знайшов, — це крихітна частина вікна, і export називає її поруч зі значенням."
         - "Матчер бачить назви, а не наміри: збіг рядка не означає, що коментар про бренд."
+        - "Правила матчера — закон у config/watchlist_rules.yaml; ревізію, під якою пораховано цей зріз, export називає поруч. Попередні виміри під неї ніколи не перераховують."
       en:
         - "Measured on the rows where the matcher found something — a tiny part of the window, and the export names it beside the value."
         - "The matcher sees names, not intent: a string hit does not make the comment about that brand."
+        - "The matcher's rules are law in config/watchlist_rules.yaml; the export names the revision this cut was counted under. Past measurements are never rescored under it."
 
   - id: aspect_share
     export_field: metrics.aspect_share

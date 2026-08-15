@@ -46,9 +46,14 @@ EXPORT = REPO_ROOT / "results" / "dashboard_data_w1.json"
 STRINGS = REPO_ROOT / "config" / "ui_strings.yaml"
 METRICS = REPO_ROOT / "config" / "metrics.yaml"
 REGISTRY = REPO_ROOT / "config" / "registry.yaml"
+RULES = REPO_ROOT / "config" / "watchlist_rules.yaml"
 PREREG = REPO_ROOT / "results" / "prereg_5c2_run.json"
 DERIVED = REPO_ROOT / "data" / "derived"
 OUT = REPO_ROOT / "dashboard" / "index.html"
+
+REVISION_CARRIER = "comment"
+"""Which text the revised matcher is told the drill-down rows are. Same constant, same reason as
+`build_aggregates.CARRIER`: SPEC 3.21 (1) scopes one of its three rules to comment text."""
 
 SEED = 42
 """The draw's seed, recorded in every expander's caption. Each expander seeds `f"{SEED}:{key}"` and
@@ -278,11 +283,23 @@ def read_evidence(record: dict, derived: Path) -> dict:
             rows += summary.read_rows(path)
         return rows
 
+    through_the_provenance(record, "inputs", "config/watchlist_rules.yaml", RULES)
+    rules = brands.load_watchlist_rules(RULES)
     comments = load(loop.RECORD_TYPE)
     verdicts = summary.comment_verdicts(comments, aliases)
     for verdict, row in zip(verdicts, comments, strict=True):
         verdict["parent_msg_id"] = row["parent_msg_id"]
         verdict["row"] = row
+        # the page's brand figures are the export's, and the export counts under SPEC 3.21 (1)'s
+        # revision — so the rows a reader opens under one of those figures have to be selected the
+        # same way. `brands` (the anchor matching) stays on the verdict because the sealed record
+        # was measured with it; nothing on this page reads it.
+        verdict["brands_r1"] = [
+            found["brand_id"]
+            for found in brands.find_watchlist_brands(
+                summary.comment_text(row), aliases, rules, carrier=REVISION_CARRIER
+            )
+        ]
     positions = load(loop.POSITION_RECORD_TYPE) + load(loop.POST_POSITION_RECORD_TYPE)
     return {
         "comments": verdicts,
@@ -349,7 +366,7 @@ def drill_populations(record: dict, evidence: dict, strings: Strings) -> list[di
         "t1_brands",
         "t1",
         "metrics.sov.sample.rows",
-        [row for row in comments if row["brands"]],
+        [row for row in comments if row["brands_r1"]],
         *strings("t1.brands"),
     )
     plan(
@@ -390,7 +407,9 @@ def drill_populations(record: dict, evidence: dict, strings: Strings) -> list[di
                 "count_path": None,
                 "count": sum(by_sentiment.values()),
                 "count_reading": f"cuts.brand_by_sentiment.rows.{brand} (summed over its sentiments)",
-                "rows": [row for row in comments if scored_payable(row) and brand in row["brands"]],
+                "rows": [
+                    row for row in comments if scored_payable(row) and brand in row["brands_r1"]
+                ],
                 "label": (brand, brand),
             }
         )
@@ -1626,7 +1645,10 @@ overflow-wrap:anywhere}
 span.quote{display:block;color:var(--muted);font-size:12px;margin-top:2px;max-width:90ch}
 p.badge{display:inline-block;background:var(--surface);border:1px solid var(--grid);
 border-radius:6px;padding:6px 10px;margin:8px 0;font-size:13px}
-.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}
+/* 175px and not 210: `main` is capped at 1180, so the row has 1140 to spend and six tiles at 210
+   need 1310 — the KPI row wrapped 5 + 1 on every desktop. auto-fit still collapses it on narrow
+   screens, and the mobile rule below still takes over at 720. */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:10px}
 .tile{background:var(--surface);border:1px solid var(--grid);border-radius:10px;padding:12px}
 .tile h3{margin:0 0 6px;font-size:13px;color:var(--ink2);font-weight:600}
 .figure{font-size:26px;font-weight:650;margin:0;font-variant-numeric:tabular-nums}

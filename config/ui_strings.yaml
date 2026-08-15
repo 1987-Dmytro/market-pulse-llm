@@ -320,15 +320,17 @@ strings:
       The scale is ordered: negative left of neutral, positive right, and the gray middle is the
       neutral rows themselves. A bar's length is a share of the sample's scored rows.
   t1.brands:
-    ua: "Бренд × тональність"
-    en: "Brand × sentiment"
+    ua: "Повідомлення, де згадано бренд × тональність"
+    en: "Messages mentioning the brand × sentiment"
   t1.brands.note:
     ua: >-
-      Тут лише бренди, які матчер знайшов у тексті платних рядків. «Гармонія» виділена акцентом,
-      решта — контекст.
+      Тут лише бренди, які матчер знайшов у тексті платних рядків, за іменованою ревізією правил.
+      Тональність — це тональність самого повідомлення, а не ставлення до бренду: шар стансу ще не
+      закон (SPEC 3.21 (3)). «Гармонія» виділена акцентом, решта — контекст.
     en: >-
-      Only the brands the matcher found in the text of payable rows. Harmonia carries the accent
-      and the rest are context.
+      Only the brands the matcher found in the text of payable rows, under the named rules
+      revision. The sentiment is the MESSAGE's own, not a stance towards the brand — the stance
+      layer is not law yet (SPEC 3.21 (3)). Harmonia carries the accent and the rest are context.
   t1.sov:
     ua: "Частка голосу серед вотчлиста"
     en: "Share of voice across the watchlist"
@@ -350,8 +352,12 @@ strings:
       photo or a voice note. Every head answered them anyway, so the payable sample leaves them
       out (SPEC 3.19).
   t1.emphasis.own:
-    ua: "власна марка"
-    en: "own brand"
+    # SPEC 3.21 (3) and the contract's own wording: «власна марка» is the private-label vocabulary
+    # (a retailer's own line), and this cell means something else — the brand THIS system watches
+    # on its owner's behalf. Two meanings on one page, one of which is a gap the export still
+    # cannot fill, is exactly the collision the label change removes.
+    ua: "наш бренд"
+    en: "our brand"
 
   # --- T2 ----------------------------------------------------------------------------------------
   t2.aspects:
@@ -423,9 +429,12 @@ strings:
   t4.table.note:
     ua: >-
       Бренд без згадок — нуль, а не відсутній рядок. Клацніть по заголовку стовпця, щоб
-      відсортувати.
+      відсортувати. Стовпець NSR — тональність повідомлень, де згадано бренд, а не ставлення до
+      бренду (SPEC 3.21 (3)).
     en: >-
-      A brand with no mentions is a zero, not a missing row. Click a column header to sort.
+      A brand with no mentions is a zero, not a missing row. Click a column header to sort. The NSR
+      column is the sentiment of the messages that mention the brand, not a stance towards it
+      (SPEC 3.21 (3)).
   t4.column.own:
     ua: "Наша"
     en: "Own"

@@ -1,0 +1,154 @@
+# The watchlist matcher's text rules as LAW — SPEC 3.17 (2)'s `requires_anchor` idea, applied
+# early (SPEC amendment 3.21 (1), operator ruling 2026-08-15).
+#
+# **Why the rules live here and not in the registry.** The 2026-08-10 sitting ruled «Варто» and
+# «Селянське» and named the vehicle: the 5c3 two-level watchlist, brand → `lines[]` with
+# `requires_anchor`, inside `config/registry.yaml`. That file cannot carry them today —
+# `results/prereg_5c2_run.json` and `results/sku_pilot_prereg_v2.json` both pin its bytes, and
+# `config/lexicon.yaml` is pinned by the sku registration. A rule change that edited either would
+# break a sealed pre-registration, and re-pinning a sealed record is the one move the house refuses.
+# So the rules get a file of their own, which no pin holds, and the two configs stay untouched.
+#
+# **What a rule IS.** A requirement on a hit the alias table has ALREADY made. Nothing here adds a
+# name, a spelling or a brand; every rule can only take a hit away. `market_pulse.brands` is the one
+# matcher that reads this file, and it applies these rules only when a caller asks for a revision —
+# the default matching is the one every sealed record was measured under, and G1e history is never
+# rescored (3.21 (1)).
+#
+# **The window.** «Nearby» is read as THE SAME TEXT: the marker must occur somewhere in the text the
+# hit was found in. Comments are short — the median thread has four of them — so for the surface
+# this revision feeds, the same text and a tight character window are near enough the same rule.
+# A narrower window is a rule change and belongs to the next revision, not to a reader's judgement.
+
+revision: r1
+dated: 2026-08-15
+authority: docs/SPEC.md amendment 3.21 (1)
+matcher: >-
+  market_pulse.brands.find_watchlist_brands — a hit on a ruled brand survives only when the marker
+  family its rule names occurs in the same text. Hits on brands with no rule here are untouched.
+
+rules:
+  varto:
+    requires: brand_marker
+    applies_to: [comment, post_text, leaflet_page]
+    ruling: >-
+      operator sitting 2026-08-10 (knowledge/decisions/sitting-2026-08-10-composition-signed.md,
+      §1), applied early by the operator's ruling of 2026-08-15.
+    why: >-
+      «варто» is АТБ's private label AND the ordinary Ukrainian adverb "it is worth". It stands in
+      both columns of the second-instrument audit: 69 of that audit's 104 false-positive pairs, and
+      13 of its 102 missed brands — the pack's own printing, seen on images. Text matching is off
+      unless the text itself carries a brand marker; the Latin pack spelling is one.
+  selianske:
+    requires: garmonija_marker
+    applies_to: [comment, post_text, leaflet_page]
+    ruling: >-
+      operator sitting 2026-08-10 (§2), applied early by the operator's ruling of 2026-08-15, and
+      worded by amendment 3.21 (1).
+    why: >-
+      the string is three different things on the same leaflet pages — the TM, a butter grade
+      («МАСЛО 73% Селянське ТМ Столиця смаку»), and another brand's line («МОРОЗИВО СЕЛЯНСЬКЕ ТМ
+      Рудь»). A bare token is allowed to be none of them.
+  garmonija:
+    requires: dairy_marker
+    applies_to: [comment]
+    ruling: operator ruling 2026-08-15 — the children's-centre homonym.
+    why: >-
+      «Гармонія» is our own brand and the name of a children's centre, a fitness club, a housing
+      block and a choir. In window-1 the single `garmonija` hit in comment text was «В дитячому
+      центрі "Гармонія" на метро Турбоатом набираються нові групи вивчення англійської». The rule
+      is scoped to comment text by 3.21 (1): a leaflet page naming Гармонія is a retailer printing
+      a trade mark, and needs no category word beside it.
+
+markers:
+  brand_marker:
+    match: phrase
+    terms:
+      - "ТМ"
+      - "торгова марка"
+      - "торгової марки"
+      - "торговая марка"
+      - "торговой марки"
+      - "Varto"
+    note: >-
+      «Varto» is in this list as a MARKER and not only as an alias: the sitting ruled that the
+      Latin pack spelling survives the ruling as an anchored form, so the text that carries it is
+      text where the brand is printed rather than the adverb written.
+  garmonija_marker:
+    match: phrase
+    terms:
+      - "Гармонія"
+      - "Гармонии"
+      - "Гармония"
+      - "Гармонії"
+      - "Garmonija"
+    note: >-
+      the registry's own display names plus the two genitive forms a running sentence uses. Not
+      sourced from the registry at match time on purpose — this file is the law a reader checks,
+      and a marker list that resolved itself elsewhere could not be read here.
+  dairy_marker:
+    match: stem
+    source: >-
+      config/lexicon.yaml `tracked.dairy` + `tracked.ice-cream`, which SPEC 3.17 (8) migrated
+      byte-faithfully from data/category_lexicon_draft.json (sha256 1225ad75…). Both files are read
+      only; the terms are copied here so the rule can be read in one place, and
+      tests/test_watchlist_rules.py holds this copy to the law on every run.
+    matcher: "stem + one of `endings`, bounded by non-word characters on both sides"
+    known_collision: >-
+      the lexicon's own collisions travel with its stems: «сир» + «а» matches «креветка сира», and
+      «масл» + «ов» matches the surname «Маслов». Both are the SAFE direction here — a marker false
+      positive can only let a hit through, and every rule in this file exists to remove hits.
+    terms:
+      - "аналог"
+      - "десерт"
+      - "йогурт"
+      - "кефир"
+      - "кефір"
+      - "масл"
+      - "молок"
+      - "молочн"
+      - "рослинн"
+      - "ряжанк"
+      - "сир"
+      - "сирк"
+      - "сметан"
+      - "творог"
+      - "морожен"
+      - "морозив"
+    endings:
+      - ""
+      - "а"
+      - "у"
+      - "и"
+      - "і"
+      - "е"
+      - "о"
+      - "я"
+      - "ю"
+      - "ї"
+      - "й"
+      - "ы"
+      - "ів"
+      - "ой"
+      - "ою"
+      - "ом"
+      - "ем"
+      - "ім"
+      - "ам"
+      - "ям"
+      - "ах"
+      - "ях"
+      - "ей"
+      - "ов"
+      - "ий"
+      - "их"
+      - "ій"
+      - "ої"
+      - "не"
+      - "на"
+      - "ні"
+      - "ами"
+      - "ями"
+      - "ими"
+      - "ого"
+      - "ому"
