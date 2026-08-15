@@ -7558,3 +7558,58 @@ ruling that the sealed validate pack is the instrument the operator ruled WITH a
 surface. «The export cannot have moved» was a correct inference and still worth verifying: had it
 been wrong, the 18-node page diff would have grown 20 banner nodes and the report's claim would have
 changed shape.
+
+## probe-a — the reader registered, and a cap that cannot buy the run ($0.00)
+
+`docs/reports/probe-a.md` is the report; only what a later session would look for is repeated here.
+
+**The paid pass was not opened, and the reason is a division.** At the measured serverless rate
+($0.00030669/s) the contract's $0.20 cap buys **652.1 s** of billed worker time. The census's own
+most optimistic reading of the registered run — a thread call costing exactly what one comment call
+cost — needs 471.4 s for the 111 threads; one measured worker weight load is 99 s; a staging pod the
+volume cannot do without is another $0.032 at today's cheapest EU-RO-1 class. **$0.2069 before the
+warm-up is priced at all**, and that optimistic end is not reachable: the reader's input is a median
+1 717 tokens against a comment call's 809, and its output ceiling is 2 000 against 256. Nothing was
+created; `runpodctl serverless list` and `pod list -a` both answered `[]` before and after.
+
+**The three findings that survive the stop, all $0:**
+
+- **The gate's marker rule is a payment gate for the reader.** Three of the four obligatory entity
+  cases (E1 «Гармонія», E4a/E4b «чи варто») and one of the six noise threads (N3) are NOT in the
+  pinned population: each passes the gate with no silencer running and is removed by SPEC 3.21 (1)'s
+  rule, which takes away the thread's only lexicon hit. Bar 2 is registered 2/2 and bar 3 over four
+  threads, each exclusion carrying its measured cause.
+- **The reference's quotes are a reading aid, not extracts.** Six of eleven cannot be grepped in the
+  evidence store, four of them on flagships (F4a's «добираю **білок** пудінгами…» has no «білок» in
+  either evidence message). `results/reader_gold_w1.json` carries `evidence_text` beside every
+  `quote_reference` and recomputes the state on each build.
+- **Two of the reference's own attributions disagree with the store**: msg 20916 sits under post
+  #10375, not #10366; and #10529, which the N list calls plus-spam, holds the two comments the S
+  list itself reads a signal in. Both are in the record's `conflicts`, neither file edited.
+
+**Deviations Dv378–Dv391** are in the report. The four a later session is most likely to meet:
+
+- **Dv378** — the guard reads **$1.0923** remaining of the $33.00 phase cap, not the brief's ~$1.55.
+  Read the guard, never a ledger line (Dv33). [cause: brief-vs-instrument]
+- **Dv380** — registering a prompt moves `src/market_pulse/prompts.py`, which two SEALED records and
+  one live one pin. The sealed pair took the house recovery manoeuvre (a third `MOVED` tuple in
+  `tests/test_window_summary_5c2.py`, witness `reader_thread_gm4`); `results/dashboard_data_w1.json`
+  pins its producers LIVE and was regenerated — one line, and the page's only moved figures are the
+  twenty export banners and the one node naming the file. **A sixth registered prompt costs the same
+  three decisions.** [cause: pin-fan-out]
+- **Dv382** — `peft==0.20.0` and `accelerate` are now installed on this Mac, because
+  `scripts/preflight_serving_guards.py` refuses to run without them. A control in
+  `tests/test_srv2a_worker.py` read «peft is not installed here» and had to be re-anchored to the
+  metadata database. [cause: control-decay]
+- **Dv387** — `knowledge/hot.md`'s Dv177 is stale: **RTX 2000 Ada is offered in EU-RO-1 again at
+  $0.240/h** (stock Low), half what that footgun assumes. [cause: dated-live-state]
+
+**What is ready to fire the moment a cap allows it:** the prompt (`reader_thread_gm4`,
+`b272115637f784ad…`), the gold, the registration with the population pinned as a digest, the READER
+serving config end to end, and a preflight whose 57 checks pass. **What is not built:** the D5
+driver — code written against a decision nobody has taken.
+
+**Process signal.** A cap divided by a measured rate is a decision, not an estimate. The go/no-go
+was designed to collapse an 8×-wide interval; nobody had noticed that the interval's own floor plus
+one weight load is already over the ceiling. The division took two minutes and replaced the whole
+paid rung.
