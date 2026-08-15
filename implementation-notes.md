@@ -7186,3 +7186,45 @@ audit (`docs/reviews/2026-08-13-process-audit-and-self-improvement.md`).
   run, then re-running with it in place — the record is byte-identical across both and the shipped
   `verifier.green` therefore describes a suite that includes its own equalities. The class is
   `a_test_that_reads_a_shipped_artifact`. [cause: process]
+
+## cycle2-prep-a — the 3.19 skip in the queue, and the batch projection (2026-08-15, $0)
+
+- **Dv330** — the seam the contract names is pinned by two SEALED records, and the contract did not
+  price it. `results/window_summary_5c2.json` and `results/validate_5c2_pack.json` both carry
+  `producer.borrowed["src/market_pulse/loop.py"]`, and the "ONE text predicate" clause forces
+  `scripts/window_summary_5c2.py` to move as well — that file is the first record's own producer.
+  Three tests went red on bytes, not on numbers: both records' byte-regeneration pairs and the
+  summary's live-sha loop. **Neither record was re-pinned.** The guards recover the sealed bytes
+  with `git show d69c812b206faff15f5a12adff113a5ef1335154:` and assert both ways (the live file has
+  moved; the recovered one does not carry `has_text`), which is the pattern `tests/test_prereg_5c2.py`
+  established one contract ago for exactly this. The cost is that two test files outside the
+  contract's autonomy scope («loop.py + its tests») had to be edited; the alternative was to deliver
+  nothing. The class is `a-comment-only-edit-moves-the-files-hash`, second sighting, and the shape of
+  the surprise is the same: a consumer table built by grep cannot see a consumer that IS a sha256 of
+  the file the table tells you to edit. [cause: contract-gap]
+- **Dv331** — deliverable 2's six named anchors cannot answer (c). `results/spend_5c2run.json` is a
+  BALANCE anchor: two readings and a note, so it prices the account and not a step, and nothing in
+  the six carries the serverless $/s, the seconds-per-row over a bought population, or a serverless
+  boot — while (c) is defined as «boot + warm-up + N rows at measured serverless prices». Two files
+  were read beyond the six, `results/run_5c2_comments.json` and `results/window_summary_5c2.json`,
+  each declared `named_by_the_contract: false` in the record's own provenance with the reason. The
+  pod cold starts that ARE in the six (53.0 s and 46.2 s) were deliberately not used for a
+  serverless boot: that substitution is the exact error `.claude/rules/registrations-and-draws.md`
+  is about. [cause: contract-gap]
+- **Dv332** — the Verify gate asks for the smoke's summary line «with the new split visible», and on
+  the production store it renders zeros. The inference watermark covers the whole corpus (the
+  standing `hot.md` blocker: the comment queue reads 0, not 11 143), so every channel plans 0 rows
+  and 0 skips — the line is correct and proves nothing. The non-zero line in §Verify was produced by
+  driving the SAME `run_loop.main` over a throwaway store, module constants repointed, and the real
+  `data/loop_cursor.json` was sha-checked before and after (`9b59aa5f…`, unchanged). Both lines are
+  printed in the report. [cause: env]
+- **Dv333** — `tests/test_loop.py::store_with` built its comments with `text=""`. Under the new rule
+  that fixture makes every `rows_to_inference` in the file read zero, and the three watermark tests
+  would have gone on passing while measuring nothing — a fixture whose premise the contract had just
+  changed. It was given text, and text-less rows became a planted input in the tests that are about
+  them. Found by running the suite, not by reading it. [cause: process]
+- **Dv334** — a team-lead file arrived untracked mid-session, after Step 0's commit list was closed:
+  `docs/PLAN-phase6-command-center.md` (Phase-6 command centre, operator draft, 15.08). Its own
+  header rules it («Файл тимлида: исполнитель читает и коммитит, не правит»), so it is committed by
+  path and unedited. The standing trap is the one that has fired with every queued prompt since
+  `docs/PROMPT-4.5g4.md`: `git add -A` would have swept it into a code commit. [cause: process]
