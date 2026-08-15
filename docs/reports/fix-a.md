@@ -360,7 +360,7 @@ T0's six tiles: `Обсяг 3 714` · `NSR +10.53%` · `негатив 7.35%` ·
 | `dashboard/index.html` | `b704de49a1045211…` | 480 374 |
 | `results/gate_census_w1.json` | `1338d4003ff78768…` | 15 630 |
 | `scripts/gate_census_w1.py` | `4480a5fcd0eb21b5…` | 24 033 |
-| `src/market_pulse/brands.py` | `33ed070b3df9ac37…` | — (pinned at `fa92ccca…` in two sealed records; recoverable at `d69c812b…`) |
+| `src/market_pulse/brands.py` | `33ed070b3df9ac37…` | 6 980 — pinned at `fa92ccca…` in two sealed records, recoverable at `d69c812b…` |
 
 ---
 
