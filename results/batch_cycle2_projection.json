@@ -1,0 +1,354 @@
+{
+  "phase": "cycle-2 prep-a — deliverable 2",
+  "contract": "docs/PROMPT-cycle2-prep-a.md deliverable 2",
+  "asks": "batch parity for cycle 2, from records only. PAPER: no prereg is written, no SPEC is edited, no endpoint or pod is created and nothing is spent. The money line is an open operator decision and this record does not take it.",
+  "job_shape_today": {
+    "value": {
+      "route": "run",
+      "rows_per_job": "one input slice",
+      "forward_batch_size": 1,
+      "policy_ms": {
+        "executionTimeout": 3600000,
+        "ttl": 7200000
+      },
+      "row_dump": "/runpod-volume/parity_srv2_sarcasm_holdout.jsonl"
+    },
+    "source": "results/parity_srv2.json :: config.serving.job_shape",
+    "why": "what 'batch' means here: rows already travel many-per-JOB and the forward pass is one row at a time. The candidate is `forward_batch_size` in the worker, not the transport — which is why nothing in the loop or the driver would change"
+  },
+  "prices": {
+    "rate_usd_per_second": {
+      "value": 0.00030669,
+      "source": "results/run_5c2_comments.json :: rate_usd_per_second",
+      "why": "the serverless $/s the 5c2-run comment endpoint billed at — the machine's price",
+      "sample": "endpoint gfmtqi3uqcjyv5, the whole 5c2-run comment leg"
+    },
+    "row_seconds_batch_1_production": {
+      "value": 4.247,
+      "source": "results/run_5c2_comments.json :: timing.seconds_per_row",
+      "why": "worker seconds per row at forward batch 1 — the number a batch change would move, and the only one measured over a whole bought population",
+      "sample": "5 078 rows (5 075 gold + 3 warm-up), serverless RTX 4090, 2026-08-14"
+    },
+    "row_seconds_batch_1_gate_slice": {
+      "value": 4.536,
+      "source": "results/parity_srv2.json :: config.serving.timing.seconds_per_row",
+      "why": "the same quantity on the GATE population — carried to show how far two samples of the same rate sit apart on the same card, and used in no arithmetic below",
+      "sample": "758 rows of the v4 gate sets, srv-2d, 2026-08-08"
+    },
+    "row_seconds_batch_1_pod": {
+      "value": 4.071,
+      "source": "results/serving_5b.json :: adopted.seconds_per_row",
+      "why": "the POD anchor. SPEC 3.18 (4) forbids pricing serverless work with it; it is here as the ratio the two runtimes sit at, and enters no dollar figure",
+      "sample": "758 rows on an A6000 pod, 5b (2026-08-06)"
+    },
+    "boot_and_warmup_seconds": {
+      "value": 435.533,
+      "source": "results/run_5c2_comments.json :: go_no_go.billed_seconds",
+      "why": "everything the endpoint billed before the first GOLD call — staging, cold start and the two non-gold warm-up calls of SPEC 3.17 (9). A refusal after this point still pays it, so it is the session's floor and not an overhead line",
+      "sample": "one serverless session, n=1 (5c2-run comments, 2026-08-14)"
+    },
+    "idle_tail_seconds": {
+      "value": 60.0,
+      "source": "results/run_5c2_comments.json :: go_no_go.idle_tail_seconds",
+      "why": "the endpoint's idle tail after the last job, as the run's own gate priced it",
+      "sample": "the same one session"
+    },
+    "session_billed_usd": {
+      "value": 7.5309,
+      "source": "results/spend_5c2run.json :: runs[-1].step_spent_usd",
+      "why": "the whole 5c2-run session against its balance anchor — ANCHOR-RELATIVE, so this is the cumulative figure and the positions leg is inside it",
+      "sample": "5 278 rows across three legs — a blend, and named as one"
+    },
+    "positions_leg_usd": {
+      "value": 0.823,
+      "source": "results/spend_5c2run.json :: runs[0].step_spent_usd",
+      "why": "the first anchor-relative reading, so it is the positions leg on its own",
+      "sample": "159 leaflet pages + 44 posts"
+    }
+  },
+  "money": {
+    "marginal_usd_per_row": 0.0013025,
+    "marginal_is": "worker seconds x the machine's rate. THE price a batch change moves: the boot and the idle tail are per-session and do not scale with the batch, so every saving below is computed on this one and never on the all-in figure",
+    "all_in_usd_per_row": 0.0013218,
+    "all_in_is": "the comment leg's own billed dollars ($6.7079 — the two anchor-relative readings subtracted) over its 5075 gold rows, boot and idle inside it. Carried for the operator's arithmetic, used in no saving",
+    "comment_leg_usd": 6.7079,
+    "gold_rows": 5075
+  },
+  "a_batch_candidates": {
+    "asks": "which forward batch sizes a serverless RTX 4090 24 GB can be a candidate for",
+    "recorded_oom": {
+      "quote": "torch.OutOfMemoryError on the worker at the second sarcasm_holdout batch of 16: 1.85 GiB requested, 432 MiB free, 42.14 GiB allocated by PyTorch against a ~20 GiB model at rest",
+      "source": "results/batch_5b2_verdict.json :: blocker",
+      "read": {
+        "requested_gib": 1.85,
+        "free_mib": 432.0,
+        "allocated_gib": 42.14,
+        "weights_at_rest_gib": 20.0,
+        "batch_size": 16.0
+      }
+    },
+    "cards": {
+      "measured_on": {
+        "value": "NVIDIA RTX A6000",
+        "source": "results/batch_ladder_5b2.json :: worker.runtime.gpu",
+        "why": "the pod the 5b.2 ladder and the failed batch-16 attempt ran on",
+        "sample": "one pod, 5b.2 (2026-08-06)",
+        "total_gib": 47.988
+      },
+      "projected_onto": {
+        "value": "NVIDIA GeForce RTX 4090",
+        "source": "results/parity_srv2.json :: config.runtime.gpu",
+        "why": "the serverless class every paid row since srv-2d has been served on, and the one the 5c2 window was bought on",
+        "sample": "srv-2d parity, 758 rows, and the 5c2-run comment leg",
+        "total_gib": 23.988
+      },
+      "same_weights": {
+        "value": "nf4",
+        "source": "results/parity_srv2.json :: config.quantization.bnb_4bit_quant_type",
+        "why": "4-bit NF4 on both cards — `results/batch_ladder_5b2.json :: worker.quantization` is the identical block, so the ~20 GiB at rest transfers and the working set is the only variable",
+        "sample": "both records"
+      }
+    },
+    "derivable": {
+      "demand_at_the_failing_step_gib": 43.99,
+      "above_the_weights_gib": 23.99,
+      "headroom_on_24gb_above_the_weights_gib": 3.988,
+      "shortfall_factor": 6.02,
+      "linear_per_row_gib": 1.4994,
+      "largest_batch_the_inequality_admits": 2,
+      "ruled_out": [
+        3,
+        4,
+        8,
+        16
+      ],
+      "reading": "the batch-16 step demanded 23.99 GiB above the weights and a 24 GB 4090 has 3.99 GiB above them — short by 6.0x. Batch 16 is impossible on this card, and so is every N above the floor of that ratio. Batch 1 is not projected: it is DEMONSTRATED — the 5c2-run comment leg served the whole window on this class."
+    },
+    "not_measurable": {
+      "claim": "whether batch 2 actually fits on a 24 GB 4090",
+      "why": [
+        "the per-row figure above is the failing step's peak divided by 16, and GPU memory scales with TOKENS, not rows — the ladder chose 16 on a 24-row carve whose longest T1 batch fitted and the test set's did not (results/batch_5b2_verdict.json :: evidence[0])",
+        "no record in this repository carries a memory reading from the serverless worker: the ~20 GiB at rest is the pod's, on a different allocator and a different driver, and the 4090's resting footprint has never been measured",
+        "the KV cache of `max_new_tokens: 256` sits inside the working set and no record separates it from the activations"
+      ],
+      "what_would_settle_it": "a live probe on the serving class — priced in (c)"
+    }
+  },
+  "b_what_a_prereg_would_measure": {
+    "asks": "what a new prereg would measure and against which anchors",
+    "the_candidate_is_only_the_loop": {
+      "rule": {
+        "value": "SPEC amendment 3.11 (2) adopts N only if every 4.5h2-passed gate stays passing. Those are G1b, G1d, G1e. G1b is the sarcasm_holdout slice and this run scored 16 of 108 rows, so the rule has no input for it — an unmeasured gate is not a passing one. A failed measurement fixes serving at batch 1 permanently and returns the money question to the operator. One attempt, no retry, no second N.",
+        "source": "results/batch_5b2_verdict.json :: rule_could_not_run",
+        "why": "SPEC 3.11 (2) as the failed attempt states it: serving is fixed at batch 1 and only a NEW pre-registration may re-open it"
+      },
+      "so": "gate evals stay batch 1 forever. The measurable candidate is the PRODUCTION loop's row price on the comment leg — the one leg whose rows are bought by the thousand — and nothing that feeds a bar."
+    },
+    "what_it_must_measure": [
+      {
+        "what": "row IDENTITY against batch 1, on the production population",
+        "why": "the 5b.2 attempt scored 666 rows before it died and 6 of them DISAGREED with batch 1 (0.0090 of the rows), while every batch size on the 24-row carve was byte-identical. Batching this stack is not answer-neutral, and the carve is where that fact hides",
+        "anchor": "results/batch_5b2_verdict.json :: salvage.row_agreement_vs_batch_1"
+      },
+      {
+        "what": "seconds per row at the candidate N against batch 1",
+        "why": "the whole money case. The batch-1 reference is a POPULATION price and already exists — it does not have to be re-bought",
+        "anchor": "results/run_5c2_comments.json :: timing.seconds_per_row (n=5 078)"
+      },
+      {
+        "what": "peak GPU memory at the candidate N, reported per step",
+        "why": "the thing (a) cannot derive. The 5b.2 attempt learned its memory bound by dying at row 666 of 758, having written no record and no prediction dump (results/batch_5b2_verdict.json :: evidence[1])",
+        "anchor": "no anchor exists — this is the new measurement"
+      }
+    ],
+    "abort_rule_to_inherit": {
+      "value": "if the smoke projects the pair over $4, stop before the paid run and report projections instead; a failed or aborted pair closes the merge question in favour of A, no retry (SPEC amendment 3.11 (2))",
+      "source": "results/batch_5b2_projection.json :: abort_rule",
+      "why": "the 5b.2 registration's own stop, and the reason a retry is not on the table: one attempt, no retry, and a failed measurement closes the question"
+    },
+    "adopted_today": {
+      "value": 1,
+      "source": "results/batch_5b2_verdict.json :: adopted_batch_size",
+      "why": "what production serves at now, and until a new seal"
+    }
+  },
+  "c_measurement_session_cost": {
+    "asks": "the measurement session's own cost per candidate",
+    "fixed": {
+      "seconds": 495.533,
+      "usd": 0.152,
+      "what": "boot + staging + the two warm-up calls, plus the idle tail — billed whether the session buys a gold row or refuses at its own gate"
+    },
+    "per_row_usd": 0.0013025,
+    "per_row_is_a_ceiling": "arms are priced at the BATCH-1 seconds-per-row, because the candidate's own rate is what the session exists to measure. A batch that is faster costs less than this; a batch that is slower is not a candidate. NOT MEASURABLE before the probe.",
+    "arms": [
+      {
+        "rows_per_arm": 24,
+        "one_arm_usd": 0.0313,
+        "candidate_only_usd": 0.1833,
+        "with_a_batch_1_control_usd": 0.2145,
+        "blind_to_the_identity_defect": 0.8048
+      },
+      {
+        "rows_per_arm": 400,
+        "one_arm_usd": 0.521,
+        "candidate_only_usd": 0.673,
+        "with_a_batch_1_control_usd": 1.194,
+        "blind_to_the_identity_defect": 0.0268
+      },
+      {
+        "rows_per_arm": 758,
+        "one_arm_usd": 0.9873,
+        "candidate_only_usd": 1.1393,
+        "with_a_batch_1_control_usd": 2.1266,
+        "blind_to_the_identity_defect": 0.001
+      }
+    ],
+    "detection": "`blind_to_the_identity_defect` is (1 - 0.009009)^rows at the ONE recorded batch-vs-1 disagreement rate: the 5b.2 ladder's 24-row arm would have seen nothing four times out of five, which is exactly how a 24-row carve certified batch 16."
+  },
+  "d_break_even": {
+    "asks": "break-even at -30% and -50% row price against the reference volumes",
+    "priced_on": "the MARGINAL row price. A batch changes worker seconds and nothing else, so a saving computed on the all-in price would credit the batch with the boot it does not touch.",
+    "row_price_usd": 0.0013025,
+    "volumes": {
+      "history_backlog": {
+        "rows": 11143,
+        "source": "the contract's own reference volume; scripts/run_5c2.py :: nongold_comments"
+      },
+      "one_cycle_window_as_bought": {
+        "rows": 5075,
+        "source": "results/window_summary_5c2.json :: comment.total.rows"
+      },
+      "one_cycle_window_payable_after_3_19": {
+        "rows": 3714,
+        "source": "results/window_summary_5c2.json :: comment.total.rows minus comment.total.empty_text.rows — the rows deliverable 1's queue rule leaves in the paid queue"
+      }
+    },
+    "depths": {
+      "minus_30_pct": {
+        "saving_per_row_usd": 0.0003907,
+        "saving_by_volume_usd": {
+          "history_backlog": 4.3536,
+          "one_cycle_window_as_bought": 1.9828,
+          "one_cycle_window_payable_after_3_19": 1.4511
+        },
+        "break_even_rows": {
+          "24_row_arms_with_control": 550,
+          "400_row_arms_with_control": 3057,
+          "758_row_arms_with_control": 5444
+        }
+      },
+      "minus_50_pct": {
+        "saving_per_row_usd": 0.0006513,
+        "saving_by_volume_usd": {
+          "history_backlog": 7.2574,
+          "one_cycle_window_as_bought": 3.3053,
+          "one_cycle_window_payable_after_3_19": 2.4189
+        },
+        "break_even_rows": {
+          "24_row_arms_with_control": 330,
+          "400_row_arms_with_control": 1834,
+          "758_row_arms_with_control": 3266
+        }
+      }
+    },
+    "readings": [
+      "the 3.19 skip has already banked $1.7727 per window at $0 — 1361 rows of 5075 never reach the queue. That is more than a -30% batch would save on the rows that remain ($1.4512) and it needed no probe.",
+      "a probe costs between $0.2145 and $2.1266 with a control arm. Against the history backlog (11143 rows) it repays at both depths; against a single post-3.19 window it repays only at -50%, and only with the smaller arms.",
+      "the window's 26.8% text-less share is NOT applied to the history backlog: it is a rate measured on one 4-week window, and the history is a different sample (.claude/rules/registrations-and-draws.md). How many of the 11 143 carry no text is derivable at $0 and no anchor states it — NOT ANSWERED HERE."
+    ]
+  },
+  "ladder_for_reference": {
+    "what": "the 5b.2 ladder's wall seconds per row, on a POD and an A6000, over a 24-row training carve. A FLOOR-direction bound on what batching can buy and never a prediction of it: different card, different runtime, and a sample of 24",
+    "arms": {
+      "1": {
+        "value": 4.18,
+        "source": "results/batch_ladder_5b2.json :: arms.1.seconds_per_row_wall",
+        "why": "wall seconds per row of that arm's chunks"
+      },
+      "1-repeat": {
+        "value": 4.145,
+        "source": "results/batch_ladder_5b2.json :: arms.1-repeat.seconds_per_row_wall",
+        "why": "wall seconds per row of that arm's chunks"
+      },
+      "4": {
+        "value": 1.87,
+        "source": "results/batch_ladder_5b2.json :: arms.4.seconds_per_row_wall",
+        "why": "wall seconds per row of that arm's chunks"
+      },
+      "8": {
+        "value": 1.52,
+        "source": "results/batch_ladder_5b2.json :: arms.8.seconds_per_row_wall",
+        "why": "wall seconds per row of that arm's chunks"
+      },
+      "16": {
+        "value": 1.5,
+        "source": "results/batch_ladder_5b2.json :: arms.16.seconds_per_row_wall",
+        "why": "wall seconds per row of that arm's chunks"
+      }
+    },
+    "control": {
+      "value": true,
+      "source": "results/batch_ladder_5b2.json :: control.identical",
+      "why": "the 1-repeat arm: byte-identical replies on the carve"
+    }
+  },
+  "provenance": {
+    "anchors": [
+      {
+        "path": "results/spend_5c2run.json",
+        "sha256": "c0ceb9eaef26dcfc6cf204c05db436274ffcc529c28b48c953db7f553c82154d",
+        "named_by_the_contract": true,
+        "why": "the only population-priced serverless anchor — 5 278 rows bought"
+      },
+      {
+        "path": "results/parity_srv2.json",
+        "sha256": "d4d389596d8c2e84fc02e35d0c563ee3c319e3faccd4cbbbffba51c6b1c21c78",
+        "named_by_the_contract": true,
+        "why": "srv-2d parity, batch 1, 758 rows; and the serving card's identity"
+      },
+      {
+        "path": "results/serving_5b.json",
+        "sha256": "0f05aefa1443e598c60e38d83782d539d0d1e2049ba724f52e1d081b1ed516db",
+        "named_by_the_contract": true,
+        "why": "the pod cost anchor — carried as a ratio, never as a price"
+      },
+      {
+        "path": "results/batch_ladder_5b2.json",
+        "sha256": "02e39cfa6e46e85f392346b8647cfe50ab5465539857ceaa9bd3866de674f8df",
+        "named_by_the_contract": true,
+        "why": "the 5b.2 ladder: the arms, the control, and the A6000 it ran on"
+      },
+      {
+        "path": "results/batch_5b2_projection.json",
+        "sha256": "1a5efc51c6a6f71acf846f130ae91c425fb2ae45e2feba4909ec522e7ddf4758",
+        "named_by_the_contract": true,
+        "why": "the failed attempt's registration and its abort rule"
+      },
+      {
+        "path": "results/batch_5b2_verdict.json",
+        "sha256": "228a01009f22bdc8310debc2de79808fbb543e6cf22f93e64200346dcc0ba908",
+        "named_by_the_contract": true,
+        "why": "the OOM, the salvaged row agreement, and the batch-1 ruling"
+      },
+      {
+        "path": "results/run_5c2_comments.json",
+        "sha256": "1bd8c197ebde6eaba6d24a13b7d1958b2fed33945dd9a6c447644722c0eb675e",
+        "named_by_the_contract": false,
+        "why": "the serverless $/s, the population seconds-per-row and the boot. A balance anchor prices an account, not a step, so (c) cannot be answered without this file"
+      },
+      {
+        "path": "results/window_summary_5c2.json",
+        "sha256": "7760d32d0ffec80cc73d6ebb27e464ab5b906ed9eda00ea0aa8d15b90ae7561c",
+        "named_by_the_contract": false,
+        "why": "the reference cycle volume the contract names, and the 3.19 class beside it"
+      }
+    ],
+    "producer": {
+      "script": "scripts/projection_batch_cycle2.py",
+      "sha256": "06f998e54230be1191ef08a78441dda4ea962e45e821c88aa9dbcb385210633c",
+      "why": "no git block: `git status --porcelain` is a fact about the tree and would move this record on somebody else's commit (`projection_5c2.producer`'s reason)"
+    },
+    "not_typed": "every figure above is resolved through `projection_5c2.cite` / `dig` by the dotted path printed beside it, except HISTORY_ROWS, which is the contract's own reference volume and is grepped back out of it by the test"
+  }
+}
