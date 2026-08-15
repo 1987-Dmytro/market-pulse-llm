@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-15 18:41:05 (every SessionStart)
+**Auto-refreshed:** 2026-08-15 21:01:58 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-fdf9503 docs(report): fix-c -- four named parts, six moved, and one of them had rotted
-152004b fix(fix-c): the drill-down row prints the chain's badge, not our arithmetic
-22d49f7 law(3.22): the depth a row may print, and the control that had stopped controlling
-bfd801f docs(vault): the fix-b checkpoint, and the fix-c contract queued
-5ba95a0 fix(fix-b): the record claimed a prohibition the page next to it does not keep
+8c68107 docs(report): probe-a -- the per-commit rule restated for the range it now covers
+a3b2e2f docs(report): probe-a -- the fifth process signal, from the half that spent money
+65eb87a docs(notes): probe-a's paid half -- 54.8 s a thread, and the two defects it froze
+85a911d docs(report): probe-a -- the cap raised, the probe run, and the rate it came back with
+c387693 run(probe-a): the warm-up, the STOP it produced, and the three verdicts it bought
 ```
 
 ## 📋 Recent decisions
@@ -30,7 +30,37 @@ bfd801f docs(vault): the fix-b checkpoint, and the fix-c contract queued
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-15 (checkpoint 18:35) — исполнен `fix-c` ($0, микро): **поправка 3.22** в
+**Last update:** 2026-08-15 (checkpoint 20:56) — **`probe-a` исполнен целиком.** $0-часть (D1–D4)
+легла до всякого серверинга: промпт `reader_thread_gm4` (`b272115637f784ad…`), голд
+`results/reader_gold_w1.json`, прережка `results/prereg_reader_probe.json` (популяция пиннится
+СПИСКОМ, дайджест `45cc560b…`), конфиг **READER**, драйвер D5 и преflight **57/57**. Затем оператор
+поднял кап $0.20 → $0.45, прережка исправлена ДО эндпойнта (`5790543`), и проба прошла.
+`make check` **2 521 / 2 skipped**. Отчёт — `docs/reports/probe-a.md` (Dv378–**Dv396**).
+День — [[2026-08-15]].
+
+**⛔ Гейт сказал STOP, и это и есть результат: 54.806 с/тред** (варм-ап 3 треда, 164.4 с воркера) —
+**12.9× от нижней границы ценза (4.247 с)**. Окно проецируется в **$1.8657** по тредам и **$4.1807**
+по платным комментам; связывает пессимистичная, 111 тредов = **101 минута** против бюджета 30.
+Потрачено **$0.0750 из $0.45** (гвард; фаза — $1.0826). Карта — **NVIDIA L4** (класс AMPERE_24),
+и вся проекция — свойство этой карты. Всё удалено, листинги пустые до и после.
+Четыре варианта с ценой — §9 отчёта. См. [[the-setup-is-inside-the-cap]].
+
+**🔒 Инструмент заморожен, два дефекта НЕ починены** (правка после появления эндпойнта запрещена
+контрактом): `entities` приходит объектом по имени вместо списка (все 3 ответа; после офлайн-коэрса
+2 из 3 парсятся целиком), и один сигнал несёт `evidence: [null]` — правило промпта «у поста id =
+null», применённое к полю msg_id. Обе — вопрос сидения, и обе стоят одной строки.
+
+**✅ Читатель читает.** `@tarilka_malyuka:715`: три молочные ТМ разрешены из рецептного треда, у
+каждой чтение и цитата, плюс `похвала` о густоте одной против другой — тред, которого ручной разбор
+не касался.
+
+**🚩 Находка сидению ($0):** маркер-правило гейта — платёжные ворота читателя. E1 «Гармонія»,
+E4a/E4b «чи варто» и шумовой N3 **вне популяции**: каждый проходит гейт без глушителей и убирается
+правилом SPEC 3.21 (1). Бар 2 → 2/2, бар 3 → 4 треда, каждое исключение с причиной. Плюс: msg 20916
+лежит под #10375, а не #10366; #10529 назван и шумом (N), и сигналом (S) — в сторе там два коммента;
+**6 из 11 цитат референса** не грепаются в стор. [[an-absolute-bar-needs-a-reachability-state]]
+
+**Предыдущий срез:** 2026-08-15 (checkpoint 18:35) — исполнен `fix-c` ($0, микро): **поправка 3.22** в
 SPEC и один шов — drill-строка T5 печатает НАПЕЧАТАННЫЙ бейдж (`printed_pct / 100`), отсутствует без
 бейджа, и никогда арифметическое чтение. `make check` **2 438 / 2 skipped** (было 2 437), $0.00.
 Отчёт — `docs/reports/fix-c.md` (Dv374–**Dv377**). Коммиты `bfd801f` · `22d49f7` · `152004b` ·
@@ -57,7 +87,7 @@ SPEC и один шов — drill-строка T5 печатает НАПЕЧА�
 8.91 ₴, на 1 из 15 строк попадает в `price_old` точно; (4) `promo.positions_table.law` всё ещё
 указывает на находку fix-b, которую 3.22 закрыла — правится при следующей пересборке экспорта.
 
-**Предыдущий срез:** 2026-08-15 (checkpoint 17:57) — исполнен `fix-b` ($0): промо-ответ 3.21 (4) стал
+**Срез до него:** 2026-08-15 (checkpoint 17:57) — исполнен `fix-b` ($0): промо-ответ 3.21 (4) стал
 **таблицей из всех 145 позиций окна** — `promo.positions_table` в экспорте, сортируемая и
 фильтруемая T5 (бренд · сеть · носитель · «наші — конкуренти»), у каждого ряда ссылка на свой пост.
 `make check` **2 437 / 2 skipped**, $0.00. Отчёт — `docs/reports/fix-b.md` (Dv367–**Dv373**).
@@ -95,9 +125,13 @@ SPEC и один шов — drill-строка T5 печатает НАПЕЧА�
 «Гармонія»), из-за чего строка практически не может сматчиться; `varus-pl` ловит СЕТЬ «Varus» как
 приватную марку, r1 этого не правит (четвёртое правило = импровизация закона).
 
-**Следом:** `fix-b` и `fix-c` **исполнены** (см. верх файла). Очередь — дизайн-сидение по комментным
-сигналам (вопросы §4 fix-b, §3 fix-c и §5 fix-a), затем `cycle2-prep-b` (сбор Сільпо/Varus/Маркетопт)
-и `6c` (полировка под LinkedIn).
+**Следом:** `fix-b`, `fix-c` и `probe-a` **исполнены** (см. верх файла). На операторе — что делать с
+чтением окна: (A) починить две строки схемы и перепробовать те же три треда ~$0.05–0.08 · (B)
+переоценить на более быстрой 24 ГБ карте ~$0.08 · (C) забрать бары на зарегистрированном подмножестве
+~12 тредов референса ~$0.15–0.25 · (D) полное окно $1.87–$4.18 (выше остатка фазы на пессимистичном
+конце). Любой из A/B/C — НОВАЯ прережка: популяция и промпт запиннуты. Дальше — дизайн-сидение по
+комментным сигналам (вопросы §4 fix-b, §3 fix-c, §5 fix-a и §6 probe-a), затем `cycle2-prep-b`
+(сбор Сільпо/Varus/Маркетопт) и `6c` (полировка под LinkedIn).
 
 **Бэклог 6a, из §4 отчёта 6b** (UI просит — экспорт не несёт): `cuts.brand_by_aspect` (T2,
 матрица бренд × аспект) · `cuts.aspect_by_sentiment` (T2, профиль негатива) · `gates.model` (T8,
@@ -356,6 +390,11 @@ $0.00, дерево чистое. Ждём приёмки `fix-a`; `fix-b` ст�
   design.** `SERVING_CONFIG=CAPTION` beside `ADAPTER_DIR` or `MERGED_DIR` raises before the model
   loads. Create a NEW template with the three variables of `runbook_vis_b.md` §A.1 and nothing else.
   The refusal is against `serve_handler.ADAPTER_ENV` as a whole, so a third such variable still fires.
+- **`runpod_guard.py --step <name>` reads one ledger and writes another when the name has a hyphen.**
+  `step_ledger_path` normalises `probe-a` → `results/spend_probe_a.json` (the Dv151 fix) while the
+  write path still spells `spend_probe-a.json`, so the ANCHOR is read from the underscore file and
+  the session notes land in the hyphen one. Both carry the same anchor; probe-a left both committed
+  rather than fixing the money path mid-run (Dv392). Use an underscore step name, or expect two files.
 - **A RUNNING WORKER HOLDS THE CODE IT BOOTED WITH — a `git merge` on the volume reaches nothing.**
   vis-b paid $0.1581 to learn it. `serverless update` does not restart a worker, `--idle-timeout 60`
   does not stop one that failed a job, and **only `serverless delete` stops it**. **Stage the volume
