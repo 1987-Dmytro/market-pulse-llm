@@ -146,16 +146,14 @@ def build(derived: Path, prereg_path: Path, registry_path: Path, out: Path):
         census["anchor"],
         populations,
         {"payable": len(verdicts) - text_less, "text_less": text_less},
-        {
-            "channels": len(everyone),
-            "segments": len({one["segment"] for one in everyone.values() if one["segment"]}),
-        },
+        len(everyone),
     )
     aggregates.add_channels(
         conn,
         WINDOW_ID,
         segment_for(everyone, {row["channel"] for row in comments + pages + posts + positions}),
     )
+    aggregates.add_segments(conn, WINDOW_ID, everyone)
     aggregates.add_watchlist(conn, WINDOW_ID, list(registry.watchlist))
     aggregates.add_comments(conn, WINDOW_ID, verdicts)
     aggregates.add_markers(conn, WINDOW_ID, loop.CARRIER, pages)
@@ -208,6 +206,7 @@ def main(argv: list[str] | None = None) -> int:
     print(f"  comments      {window[2]} bought · {window[3]} payable · {window[4]} text-less")
     for table in (
         "channels",
+        "segments",
         "watchlist",
         "comments",
         "comment_intents",

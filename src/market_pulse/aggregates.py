@@ -41,8 +41,7 @@ CREATE TABLE windows (
     text_less         INTEGER NOT NULL,
     leaflet_pages     INTEGER NOT NULL,
     post_texts        INTEGER NOT NULL,
-    registry_channels INTEGER NOT NULL,
-    registry_segments INTEGER NOT NULL
+    registry_channels INTEGER NOT NULL
 );
 
 CREATE TABLE channels (
@@ -52,6 +51,13 @@ CREATE TABLE channels (
     source_type TEXT NOT NULL,
     segment     TEXT,
     PRIMARY KEY (window_id, channel)
+);
+
+CREATE TABLE segments (
+    window_id         TEXT NOT NULL,
+    segment           TEXT NOT NULL,
+    registry_channels INTEGER NOT NULL,
+    PRIMARY KEY (window_id, segment)
 );
 
 CREATE TABLE watchlist (
@@ -164,18 +170,19 @@ def connect(path) -> sqlite3.Connection:
 
 
 def add_window(
-    conn, window_id: str, anchor: dict, populations: dict, split: dict, registry_size: dict
+    conn, window_id: str, anchor: dict, populations: dict, split: dict, registry_channels: int
 ) -> None:
     """One window's identity, its two populations, and the registry it was collected against.
 
     `populations` is the SEALED registration's (what was bought); `split` is what the rows on disk
     say about text. Storing `bought` and `payable` in the same row is the prep-a §1.5 memo made
     structural: collected is not payable, and a table that held one number could not say so.
-    `registry_size` is coverage's denominator: how many channels and segments COULD have produced a
-    row, which is a fact about the registry and not about the evidence.
+    `registry_channels` is coverage's denominator: how many channels COULD have produced a row,
+    which is a fact about the registry and not about the evidence. The segment denominator is the
+    `segments` table, because that one has to be ENUMERABLE and not just counted.
     """
     conn.execute(
-        "INSERT INTO windows VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        "INSERT INTO windows VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
         (
             window_id,
             anchor["anchor"],
@@ -187,8 +194,7 @@ def add_window(
             split["text_less"],
             populations["leaflet_page"],
             populations["post_text"],
-            registry_size["channels"],
-            registry_size["segments"],
+            registry_channels,
         ),
     )
 
@@ -200,6 +206,28 @@ def add_channels(conn, window_id: str, segments: dict) -> None:
             (window_id, handle, one["source_id"], one["source_type"], one["segment"])
             for handle, one in sorted(segments.items())
         ],
+    )
+
+
+def add_segments(conn, window_id: str, segments: dict) -> None:
+    """Every audience segment the REGISTRY holds — including the ones no row reached.
+
+    `channels` is fed from the evidence and can only hold segments that produced a row, so a cut
+    driven off it renders however many segments happened to be talkative. The plan's T3 screen is
+    eight cards from the registry's audiences and it has to render eight: an audience that said
+    nothing this window is a finding, and a card missing from a screen is not.
+
+    Note what this table deliberately does NOT do: it is a segment dimension, not a channel one.
+    Widening `channels` to hold all 66 registry handles would make `coverage.channels.with_a_row`
+    read 66/66 and destroy the metric.
+    """
+    counted: dict[str, int] = {}
+    for one in segments.values():
+        if one["segment"] is not None:
+            counted[one["segment"]] = counted.get(one["segment"], 0) + 1
+    conn.executemany(
+        "INSERT INTO segments VALUES (?, ?, ?)",
+        [(window_id, name, number) for name, number in sorted(counted.items())],
     )
 
 
@@ -759,9 +787,11 @@ def coverage(conn, window_id: str) -> dict:
     Both denominators come from the `windows` row — the registry's own size — and not from the
     evidence, because a coverage figure whose denominator is the evidence is always 100%.
     """
-    channels, segments = conn.execute(
-        "SELECT registry_channels, registry_segments FROM windows WHERE window_id = ?",
-        (window_id,),
+    (channels,) = conn.execute(
+        "SELECT registry_channels FROM windows WHERE window_id = ?", (window_id,)
+    ).fetchone()
+    (segments,) = conn.execute(
+        "SELECT COUNT(*) FROM segments WHERE window_id = ?", (window_id,)
     ).fetchone()
     (with_rows,) = conn.execute(
         "SELECT COUNT(*) FROM channels WHERE window_id = ?", (window_id,)
@@ -802,6 +832,16 @@ def channels_with(
         sql += " AND segment = ?"
         params += (segment,)
     return [handle for (handle,) in conn.execute(sql + " ORDER BY channel", params)]
+
+
+def registry_segments(conn, window_id: str) -> list[tuple[str, int]]:
+    """(segment, how many registry channels it holds), sorted — the T3 screen's card list."""
+    return list(
+        conn.execute(
+            "SELECT segment, registry_channels FROM segments WHERE window_id = ? ORDER BY segment",
+            (window_id,),
+        )
+    )
 
 
 def sample_rows(conn, window_id: str, sample: str) -> int:

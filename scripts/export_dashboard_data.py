@@ -363,14 +363,7 @@ def metrics_block(conn, window_id: str) -> dict:
 def cuts_block(conn, window_id: str) -> dict:
     """The per-dimension aggregates the plan's tabs read — every one of them a GROUP BY."""
     channels = aggregates.channels_with(conn, window_id, "comments")
-    segments = [
-        segment
-        for (segment,) in conn.execute(
-            "SELECT DISTINCT segment FROM channels WHERE window_id = ? AND segment IS NOT NULL"
-            " ORDER BY segment",
-            (window_id,),
-        )
-    ]
+    segments = aggregates.registry_segments(conn, window_id)
     brand_sentiment: dict[str, dict] = {}
     for brand, sentiment, number in conn.execute(
         "SELECT b.brand_id, c.sentiment, COUNT(*) FROM comment_brands b JOIN comments c"
@@ -401,9 +394,16 @@ def cuts_block(conn, window_id: str) -> dict:
                 ).fetchone()
             ]
         },
+        # every segment the REGISTRY holds, not every segment that produced a row: the plan's T3
+        # screen is one card per audience, and an audience that said nothing this window is a
+        # finding. `channels_with_a_row` is empty for those and `registry_channels` says how many
+        # channels were listening.
         "comment_by_segment": {
             segment: {
-                "channels": aggregates.channels_with(conn, window_id, "channels", segment=segment),
+                "registry_channels": registry_channels,
+                "channels_with_a_row": aggregates.channels_with(
+                    conn, window_id, "channels", segment=segment
+                ),
                 "bought": aggregates.comment_block(
                     conn, window_id, segment=segment, sample="bought"
                 ),
@@ -411,7 +411,7 @@ def cuts_block(conn, window_id: str) -> dict:
                     conn, window_id, segment=segment, sample="payable"
                 ),
             }
-            for segment in segments
+            for segment, registry_channels in segments
         },
         "brand_by_sentiment": {
             "sample": {

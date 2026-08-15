@@ -129,6 +129,39 @@ def test_the_payable_sample_is_the_headline_and_differs_from_the_bought_one():
     assert exporter.HEADLINE == "payable"
 
 
+def test_the_segment_cut_carries_every_audience_the_registry_holds():
+    """Eight cards, not "however many segments happened to talk" — plan §3 T3.
+
+    `food_quality` has one registry channel and produced no row of any kind this window, so it never
+    reaches the `channels` table; a cut driven off the evidence renders seven. It is here with zeros
+    and with `registry_channels: 1`, because an audience that said nothing is a finding and a
+    missing card is not.
+
+    The trap the fix had to avoid is asserted on the line below the key set: `channels` must still
+    hold ONLY the channels that produced a row, or `coverage.channels.with_a_row` would read 66/66
+    and the metric would be destroyed by its own denominator.
+    """
+    registry = builder.summary.load_registry(builder.REGISTRY)
+    audiences = {source.audience for source in registry.sources if source.audience}
+    cut = RECORD["cuts"]["comment_by_segment"]
+
+    assert set(cut) == audiences
+    assert len(cut) == RECORD["metrics"]["coverage"]["segments"]["in_registry"] == 8
+    assert RECORD["metrics"]["coverage"]["segments"]["with_a_row"] == 7
+    assert RECORD["metrics"]["coverage"]["channels"]["with_a_row"] == 28
+    assert RECORD["metrics"]["coverage"]["channels"]["in_registry"] == 66
+
+    silent = cut["food_quality"]
+    assert silent["channels_with_a_row"] == []
+    assert silent["registry_channels"] == 1
+    assert silent["payable"]["rows"] == 0 and silent["bought"]["rows"] == 0
+    assert silent["payable"]["sarcasm"]["rate"] is None, "a rate over no rows is null, never 0.0"
+
+    # and the one that has evidence but no conversation is a different state again
+    quiet = cut["regional"]
+    assert quiet["channels_with_a_row"] and quiet["bought"]["rows"] == 0
+
+
 def test_the_promo_surface_carries_every_chain_the_amendment_names():
     """SPEC 3.20 (6): Маркетопт beside АТБ, Сільпо and Varus — present, not conditional on rows.
 
