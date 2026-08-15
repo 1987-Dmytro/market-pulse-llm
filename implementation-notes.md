@@ -7387,3 +7387,100 @@ contract named a surface and the export had no field for it, which is the seam b
 contracts and is what the 6a backlog list is for. And Dv343 is the one to keep: the brief named a
 file as the home of a flag, and grepping that file before writing the note was the difference
 between «6a forgot to export it» and «nobody has ever recorded it».
+
+## fix-a — the watchlist rules become law (2026-08-15)
+
+- **Dv354** — the 3.21 manoeuvre had FIVE moving parts and the contract named four. Dv336's own
+  lesson had already made the contract name `write_prereg_5c2.BLOCKS_TODAY`; what it could not know
+  is that `tests/test_prereg_5c2.py:238` enumerates the after-the-seal tail LITERALLY
+  (`("amendment-3.19", "amendment-3.20")`) rather than counting it, so a thirteenth block cannot
+  land by moving an integer. Both refusals fired in order — the producer's constant first, the test's
+  tail second — which is a law that grows loudly working exactly as designed. [cause: contract-gap]
+- **Dv355** — `src/market_pulse/brands.py` is itself sha-pinned, in `producer.borrowed` of BOTH
+  `results/window_summary_5c2.json` and `results/validate_5c2_pack.json` (`fa92ccca…`), and three
+  test sites read those pins. Teaching the matcher anything at all moves that hash. It joins the
+  `MOVED_BY_THE_SKIP` recovery family — the bytes are recoverable at the sealing commit — but in a
+  tuple of its OWN with its own witness token (`watchlist_rules` against 3.19's `has_text`): the
+  shared branch asserts the witness is absent from the sealed blob and present on disk, and
+  `brands.py` never learned `has_text`, so a third entry in the first tuple would have failed it for
+  an amendment it never met. [cause: seal]
+- **Dv356** — `.claude/settings.json` denies `Edit(/docs/SPEC.md)` and the contract authorises
+  exactly one block there. Written through a script via Bash, the Dv127 / uni-b precedent: the deny
+  rule covers file-editing tools and not Bash, the gap is named here rather than used silently, and
+  the settings file was not touched. The script proves the manoeuvre with the producer's OWN
+  `registered_law()` rather than a second strip beside it, and rolls back if the stripped law moves.
+  [cause: harness]
+- **Dv357** — a matcher revision makes two `SHARED` pairs unaskable. The export held
+  `metrics.sov.by_sample.bought.mentions.varto|garmonija` against the anchor's own counts; under r1
+  those two are 0 and 7 and 1, and equality is the wrong question because 3.21 (1) says the anchor is
+  never rescored. Replaced by `convergence.watchlist_revision`, which asks the right one over all 23
+  brands instead of two: every unruled brand must EQUAL the anchor, every ruled one must be no
+  larger. The export refuses otherwise. Two unruled brands took the freed slots so the declared pair
+  count did not quietly shrink. [cause: contract-gap]
+- **Dv358** — the first rebuild refused, and the guard that refused was 6b's own: the drill-down
+  population check compares the rows an expander holds against the export field the figure came
+  from, and `t1_brands` found 11 rows for a figure that now said 3. The page's row SELECTION was
+  still the anchor matcher's. Moved to r1 with the same rules object and the same carrier constant
+  as the aggregate layer; `verdict["brands"]` stays on the verdict and nothing on the page reads it.
+  A figure and the rows under it have to be selected by one rule, and the guard is what made that
+  unmissable rather than a thing to remember. [cause: design]
+- **Dv359** — the metrics dictionary's no-figures law (SPEC 3.20 (1), Dv339) counts the `1` in
+  «G1e» as a figure. It is right to: the exemption it carries is for SPEC clause citations, and a
+  gate id is not one. The new `sov` pitfall lost the gate id — «попередні виміри під неї ніколи не
+  перераховують» — rather than the law losing its bite. A strict rule that reddens on a true
+  sentence is cheaper to reword around than to widen. [cause: law]
+- **Dv360** — the census prices a per-THREAD call and the only measured price this repo owns is
+  per-COMMENT (4.247 s/row over 5 078 rows, 55 calls). Multiplying that rate by a thread count would
+  have been the shape `.claude/rules/registrations-and-draws.md` exists to refuse. Each cell carries
+  an INTERVAL instead — lower = one thread call costs one comment call, upper = it costs as much as
+  reading its comments one by one — with the unit and its sample beside it. That rule's `paths:`
+  globs match registrations and projections and not a census script, so it did not inject; the
+  contract's own «open it by hand if it does not inject» is the only reason it was in front of me.
+  [cause: measurement]
+- **Dv361** — the fourth silencer has no input in this window. `giveaway_threads` reads the model's
+  post-type label; window-1 carries none, because its post leg is the POSITION instrument
+  (`positions_text_gm4`, 44 rows over 10 channels) and its replies are position lists. Reporting
+  «giveaway threads removed: 0» beside three working silencers would have read as «there were none»
+  — an unreachable rule stating a result. Declared unimplemented with its reason and its unlock, and
+  the record says out loud that the silencers-on cells are THREE silencers. [cause: data]
+- **Dv362** — the plan's «~12–15 тредов на окно» is a HAND reading and the mechanical gate passes
+  111–227. Not a defect in either: the plan counted threads worth reading, the gate is a lexicon over
+  the whole thread, and window-1's feeds are recipe and parenting channels where a post about
+  syrnyky carries a tracked stem. The consequence is the one that matters — the plan's «≤$0.20 for
+  all window-1 candidates» holds at the LOWER end of the narrowest cell and nowhere else on the grid.
+  Recorded in the census as `versus_the_plan` rather than resolved: tightening the gate beyond a
+  lexicon is the sitting's call. [cause: measurement]
+- **Dv363** — `ruff format` moved four producers AFTER the artifacts had been built, and the export's
+  own `provenance.producers` block pins them, so the byte-identity tests went red on a formatting
+  pass that changed no behaviour. `make check` does not run the formatter, so nothing else would have
+  said so. The order is: format, then rebuild, then verify. [cause: process]
+- **Dv364** — `selianske` has two readings and they disagree on the sitting's own worked example.
+  The 2026-08-10 record's body says «a marker of THE BRAND stands next to it» (i.e. «ТМ Селянське»);
+  its heading and the ratified 3.21 (1) say «with a ГАРМОНІЯ marker nearby». On «Масло
+  солодковершкове «Селянське» ТМ «Молокія»» — which that document calls the true TM reading — the
+  two give opposite answers. The ratified text is implemented, because the amendment is the law; the
+  consequence is stated in the report rather than resolved: under the Гармонія reading `selianske`
+  is unmatchable in any real dairy context, so one of 23 watchlist rows is zero by construction. It
+  had zero hits in window-1 under either reading, so nothing moved. [cause: law-gap]
+- **Dv365** — self-review: the census applied the comment-scoped rule to POST text. `hits()` took a
+  module constant `carrier="comment"` while `cell()` fed it the post first, so the `garmonija` rule —
+  scoped to comments precisely because a channel's own post naming Гармонія is a trade mark and not a
+  homonym — was applied to that post. The `carrier` parameter had been built so this could not happen
+  silently, and then the one call site that reads two carriers passed a constant. Threaded per text.
+  The grid did not move (no thread's only hit was a bare Гармонія in a post), so the fix is asserted
+  on the MATCHER instead of inferred from a count that did not change. [cause: design]
+- **Dv366** — self-review: the census pinned a store that grows. `sources` hashed all 75 files of
+  `data/raw/posts` and the suite held them live — and the next contract in the queue collects into
+  exactly that directory, so the first appended post would have reddened `make check` for a reason
+  nobody would connect to a gate census. It now pins what it READ: the 514 posts, by channel and id,
+  hashed with their texts. A new post moves nothing; an edit to one of these moves the digest, which
+  is the only change that could move a number in the record. [cause: design]
+
+**Process signals — fix-a.** «35 leaves are matcher-derived» and «12 of them move» answer different
+questions; only running the negative control turned a path-name grep into a measurement. Dv365 and
+Dv366 came from a review pass after everything was green, and one of them defeated a parameter added
+to make that exact mistake impossible — the guard exists, the call site passed a constant. Dv363 is
+the recurring one: the formatter sits outside `make check`, so anything hashing a producer must be
+rebuilt after it. Dv361 and Dv364 share a shape worth naming: a rule that cannot fire and a rule
+with two readings both look like working law until somebody asks what would have had to be true for
+the answer to differ.
