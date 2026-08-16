@@ -11,6 +11,7 @@ written — they are what the repair is derived FROM.
 
 import importlib.util
 import json
+import sys
 from pathlib import Path
 
 import pytest
@@ -161,7 +162,22 @@ def test_a_step_ledger_with_no_paid_run_refuses(ledger, tmp_path, monkeypatch):
         repair.main(["--ledger", str(ledger)])
 
 
-# --- the permanent guard: a paid session may not leave the phase ledger silent ------------------
+# --- the permanent guard: a paid session may not leave the LIVE ledger silent -------------------
+
+LINE_LEDGER = REPO_ROOT / "results" / "spend_cycle2.json"
+"""The ledger that witnesses a paid run once Phase 4 is closed — SPEC amendment 3.23 (1).
+
+The check below was written when `results/spend_phase4.json` was the only place a paid session could
+land, and it stayed green for a week because every step since had run under the phase. Phase 4 is
+CLOSED now and `runpod_guard` writes a step's session into whichever ledger is LIVE, so the FIRST
+paid step under the cycle-2 line reddened this test while being witnessed exactly as it should be
+([[the_control_whose_premise_stopped_being_true]], [[a_green_suite_can_have_a_shelf_life]]).
+
+The invariant was never «the phase ledger hears about it» — it is «the ledger the guard reads before
+a start hears about it», and there are two of those now. Reading both is the version of that a test
+can state, and it is strictly what the original check meant: a run witnessed by neither is still
+named.
+"""
 
 WITNESSED_BY_A_LATER_READING = {
     # Three historical paid runs whose phase entry exists but carries a DIFFERENT balance: the step
@@ -181,16 +197,21 @@ already gone quiet twice."""
 
 
 def silent_paid_runs(sessions: list[dict]) -> list[tuple[str, str, float]]:
-    """Every paid step-ledger run that `sessions` does not witness, and the used excuses.
+    """Every paid step-ledger run that the LIVE ledgers do not witness, and the used excuses.
 
     A paid RunPod run is a step-ledger entry carrying a `balance` — which is what separates it from
     an OpenRouter `runs` row, whose fields are `model`/`usd`/`requests`.
 
+    `sessions` is the phase ledger's, passed in so the negative control can drop one row from it;
+    :data:`LINE_LEDGER`'s are read live and added, because after the phase closed that is where the
+    guard writes. A run witnessed by neither is what this returns.
+
     One direction only. The converse is not an invariant: the guard's own `--note` readings and the
     phase's close-out entries have no step ledger behind them and never will.
     """
-    by_balance = {session["balance"] for session in sessions}
-    by_at = {session["at"]: session for session in sessions}
+    line = json.loads(LINE_LEDGER.read_text(encoding="utf-8"))["sessions"]
+    by_balance = {session["balance"] for session in sessions} | {one["balance"] for one in line}
+    by_at = {session["at"]: session for session in [*sessions, *line]}
     silent, excused = [], []
     for path in sorted((REPO_ROOT / "results").glob("spend_*.json")):
         if path.name == repair.LEDGER.name:
@@ -220,14 +241,21 @@ def silent_paid_runs(sessions: list[dict]) -> list[tuple[str, str, float]]:
     return silent
 
 
-def test_no_paid_step_ledger_is_silent_in_the_phase_ledger():
+def test_no_paid_step_ledger_is_silent_in_the_live_ledger():
     """What actually went wrong: three paid sessions ran, each wrote its own step ledger, and
     `results/spend_phase4.json` — the file the guard reads before every start — heard about none of
     them for two days. The phase counter stayed right by arithmetic and lost its witness.
 
     Matched on the balance READING, because that is the number both files carry and the one a
-    mistyped entry would get wrong."""
+    mistyped entry would get wrong.
+
+    Both live ledgers, since Phase 4 closed — and the premise is ASSERTED rather than assumed: an
+    empty cycle-2 ledger would make the union silently equal to the phase ledger and this check
+    would go on passing while testing the older half of it."""
     sessions = json.loads(repair.LEDGER.read_text(encoding="utf-8"))["sessions"]
+    line = json.loads(LINE_LEDGER.read_text(encoding="utf-8"))["sessions"]
+    assert guard.closing_entry(sessions) is not None, "Phase 4 is closed and the line took over"
+    assert line, "the cycle-2 ledger witnesses the steps that ran after the close"
     assert silent_paid_runs(sessions) == []
     # and the three this contract repaired are matched by the rule, not by an excuse
     for source, _ in repair.MISSING:
@@ -246,6 +274,33 @@ def test_the_silence_check_fires_when_a_phase_entry_goes_missing():
     assert silent_paid_runs(without) == [
         ("results/spend_skub2.json", skub2["at"], skub2["balance"])
     ]
+
+
+def test_the_silence_check_fires_on_the_LINE_ledger_too(tmp_path, monkeypatch):
+    """The other half's negative control, and the half that has no history behind it yet.
+
+    Dropping a row from the phase ledger proves the check reads THAT file. It says nothing about the
+    branch added when the line took over — so the line's sessions are emptied here and every paid
+    step that ran after the close has to be named. A guard extended to a second source without a
+    control over that source is a guard tested on the half it already had.
+    """
+    empty = tmp_path / "spend_cycle2.json"
+    empty.write_text(json.dumps({"sessions": []}), encoding="utf-8")
+    monkeypatch.setattr(sys.modules[__name__], "LINE_LEDGER", empty)
+
+    sessions = json.loads(repair.LEDGER.read_text(encoding="utf-8"))["sessions"]
+    witnessed_by_the_line = [
+        one
+        for one in json.loads(
+            (REPO_ROOT / "results" / "spend_cycle2.json").read_text(encoding="utf-8")
+        )["sessions"]
+        if one["balance"] not in {session["balance"] for session in sessions}
+    ]
+    assert witnessed_by_the_line, "there is at least one paid step under the line to lose"
+    silent = silent_paid_runs(sessions)
+    assert silent, "with the line's ledger emptied, its steps must be named"
+    for one in witnessed_by_the_line:
+        assert any(row[2] == one["balance"] for row in silent), one
 
 
 def test_an_entry_that_is_not_after_the_last_one_refuses_and_writes_nothing(ledger):
