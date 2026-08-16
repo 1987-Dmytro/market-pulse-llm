@@ -245,6 +245,7 @@ def test_the_sealed_pin_still_derives_through_the_ten_block_keep():
         "amendment-3.21",
         "amendment-3.22",
         "amendment-3.23",
+        "amendment-3.24",
     ), "after the seal"
     assert hashlib.sha256(spec.read_bytes()).hexdigest() != pin, "3.19 is not in the file"
     assert hashlib.sha256(prereg.registered_law(spec, keep=writer.KEEP_BLOCKS)).hexdigest() == pin
@@ -304,18 +305,19 @@ def test_a_twelfth_marked_block_is_refused_rather_than_stripped(monkeypatch, tmp
     the registered law silently, so the producer refuses on the block set rather than on the names
     it happens to know.
 
-    The intruder was `amendment-3.19`, then `-3.20`, then `-3.21`, then `-3.23`, and each time that
-    name became law it moved on. It has to: a second block under a name the producer already knows
-    would test DUPLICATE detection, and what is being tested is that a name nobody has looked at
-    cannot arrive quietly. Moving it is the one part of the landing manoeuvre the suite does NOT
-    force — a duplicate still refuses, so the test still passes — and it was duly left behind when
-    3.21 landed. The assertion below is what makes the next omission red instead of silent, and it
-    did its job on the very next landing: 3.23 walked into the planted name and this line reddened.
+    The intruder was `amendment-3.19`, then `-3.20`, then `-3.21`, then `-3.23`, then `-3.24`, and
+    each time that name became law it moved on. It has to: a second block under a name the producer
+    already knows would test DUPLICATE detection, and what is being tested is that a name nobody has
+    looked at cannot arrive quietly. Moving it is the one part of the landing manoeuvre the suite
+    does NOT force — a duplicate still refuses, so the test still passes — and it was duly left
+    behind when 3.21 landed. The assertion below is what makes the next omission red instead of
+    silent, and it has now done its job on two consecutive landings: 3.23 and 3.24 each walked into
+    the planted name and this line reddened.
 
     The last line is the direction that keeps this a control rather than a refusal that refuses
     everything: the file as it stands must still pass.
     """
-    intruder = "amendment-3.24"
+    intruder = "amendment-3.25"
     assert intruder not in writer.BLOCKS_TODAY, "the intruder must be a name nobody has looked at"
 
     grown = tmp_path / "SPEC.md"

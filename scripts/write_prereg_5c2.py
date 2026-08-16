@@ -96,6 +96,7 @@ BLOCKS_TODAY = (
     "amendment-3.21",
     "amendment-3.22",
     "amendment-3.23",
+    "amendment-3.24",
 )
 """Every marked block the file carries NOW: the ten the seal keeps, plus each one that arrived after.
 
@@ -132,7 +133,13 @@ list that rules on MONEY: it opens the $20 cycle-2 line, fixes its $40.00 anchor
 Phase 4 at a final reading and sends the network volume's rent to its own line. Every number of THIS
 registration was priced against the phase cap of 3.18 (7)(b) and bought under it, and a line opened
 after the phase closed cannot reach back into them — `budget.phase_cap_usd` here is 33.00 and stays
-33.00. So the ten-name keep is untouched a fifth time."""
+33.00. So the ten-name keep is untouched a fifth time.
+
+3.24 (operator, 2026-08-16, at the acceptance of `cycle2-money`) is the sixteenth, and it is the
+first block in this list that REPEALS a clause of another one: 3.23 (2)'s $40.00 anchor floor was
+built on an assumption about a future payment that had already happened, and it retires with its
+constant. It rules on a line this registration cannot be charged against for the reason 3.23 could
+not either, so the ten-name keep is untouched a sixth time."""
 
 DRIFT = projection.DRIFT
 HALF_DOLLAR = 0.50

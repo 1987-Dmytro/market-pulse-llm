@@ -29,9 +29,8 @@ by the settled figure its closing entry carries, never by a delta that goes on g
 at the network volume's rate for as long as the volume exists.
 
 A ledger that has been CLOSED stops reporting a live delta. Phase 4 closes at its final
-reading, and what replaces it is the $20.00 cycle-2 line of SPEC amendment 3.23 —
-anchored only on a balance of $40.00 or more, so that between the two there is an
-inter-ledger gap in which nothing may run.
+reading, and what replaces it is the $20.00 cycle-2 line of SPEC amendment 3.23, anchored
+at the first balance this guard reads after the line's law is in force (3.24 (1)).
 
     python3.11 scripts/runpod_guard.py                 # before a start; exit 1 refuses
     python3.11 scripts/runpod_guard.py --note "4a zero-shot run"   # log a session
@@ -87,14 +86,6 @@ $33.00 stays exactly where it is and every record written under it keeps its num
 applied a third time): a line opened after a phase closed cannot reach back into what that phase
 bought. This constant is what ENFORCES the line, and `cycle2_cap_usd` in
 `results/spend_cycle2.json` moves with it or it is a lie waiting to be quoted."""
-
-CYCLE2_ANCHOR_MIN_USD = 40.00
-"""SPEC amendment 3.23 (2): the balance the cycle-2 anchor may first be taken at.
-
-The anchor is the first guard balance reading of $40.00 or more AFTER the operator's top-up, and
-anchoring below it is refused. A $20.00 line anchored on a balance that cannot pay for it is a
-counter that starts at the wrong number — the footgun this module's docstring names, arriving
-through a threshold instead of a delete."""
 
 
 def runpodctl(*args: str):
@@ -308,32 +299,36 @@ def read_ledger(balance_now: float) -> dict:
     }
 
 
-def read_cycle2(balance_now: float) -> dict | None:
-    """The cycle-2 line's ledger, anchored once — or None while the balance is too low to anchor it.
+def read_cycle2(balance_now: float) -> dict:
+    """The cycle-2 line's ledger, anchored once — at whatever the balance reads.
 
-    SPEC 3.23 (2). The threshold is the whole of the refusal: a balance below
-    :data:`CYCLE2_ANCHOR_MIN_USD` means the operator's top-up has not landed, and an anchor taken
-    there would open a $20.00 line on an account that cannot pay it. Returning None rather than
-    raising leaves the caller free to print the reading first and refuse afterwards — a guard that
-    exits before it says what it read is a guard nobody can debug.
+    SPEC amendment 3.24 (1). There was a threshold here: 3.23 (2) let the anchor be taken only on a
+    reading of $40.00 or more, and this function returned None below it so the caller could print
+    what it read before refusing. The clause is REPEALED — it was derived from an assumption about a
+    top-up still to come, and the $20.00 had already landed on 2026-08-15 — so there is no reading
+    at which anchoring is refused and no state in which this returns nothing.
+
+    What the repeal does NOT change is the one-shot: the anchor is written once and never
+    regenerated, so the first call after the amendment lands is the one that fixes the line's
+    starting number. That is why it is taken by a deliberate, supervised run and not as a side
+    effect of some other command.
     """
     if CYCLE2_LEDGER.exists():
         return json.loads(CYCLE2_LEDGER.read_text(encoding="utf-8"))
-    if balance_now < CYCLE2_ANCHOR_MIN_USD:
-        return None
     return {
         "cycle2_cap_usd": CYCLE2_CAP_USD,
         "runpod_balance_at_cycle2_start": balance_now,
         "anchored_at": datetime.now(UTC).isoformat(timespec="seconds"),
         "note": (
-            "RunPod account balance read at the start of cycle 2, on the first reading of"
-            f" ${CYCLE2_ANCHOR_MIN_USD:.2f} or more after the operator's top-up (SPEC amendment"
-            " 3.23 (2)). Cycle-2 spend = the pessimistic maximum of this anchor minus the balance"
-            " now and the billing walk since the timestamp above, and the $20.00 line of 3.23 (1)"
-            " is enforced against it. Delete or regenerate this file and the counter silently"
-            " restarts at today's balance — the same footgun results/spend_phase4.json carries."
-            " Phase 4 is closed and is NOT re-scored by this line: what it bought was bought under"
-            " the $33.00 cap of 3.18 (7)(b)."
+            "RunPod account balance read at the start of cycle 2 — the first guard reading taken"
+            " after SPEC amendment 3.24 landed, by a deliberate supervised run (3.24 (1)). No"
+            " threshold gates it: 3.23 (2)'s $40.00 floor is repealed, because the operator's $20"
+            " top-up landed 2026-08-15 and IS this balance. Cycle-2 spend = the pessimistic maximum"
+            " of this anchor minus the balance now and the billing walk since the timestamp above,"
+            " and the $20.00 line of 3.23 (1) is enforced against it. Delete or regenerate this"
+            " file and the counter silently restarts at today's balance — the same footgun"
+            " results/spend_phase4.json carries. Phase 4 is closed and is NOT re-scored by this"
+            " line: what it bought was bought under the $33.00 cap of 3.18 (7)(b)."
         ),
         "sessions": [],
     }
@@ -502,41 +497,28 @@ def main(argv: list[str] | None = None) -> int:
             f"  (final reading {phase_closed['at']})"
         )
         print_kinds(phase_closed.get("billing_by_kind"), "  ")
+        # 3.24 (1): no threshold gates the anchor any more, so there is no «NOT ANCHORED» state and
+        # no inter-ledger gap for the guard to report. 3.23 (3) still describes what that gap was —
+        # it is closed by this reading, not by a branch.
         cycle = read_cycle2(balance_now)
-        if cycle is None:
-            # printed here and not above the closed line: when the line IS anchored, `enforce`
-            # prints the balance itself and this branch would say it twice
-            print(f"balance now       ${balance_now:.2f}")
-            print(
-                f"CYCLE 2           NOT ANCHORED — the line is ${CYCLE2_CAP_USD:.2f} and its"
-                f" anchor needs a balance of ${CYCLE2_ANCHOR_MIN_USD:.2f} or more"
-            )
-            refusals.append(
-                f"Phase 4 is CLOSED at ${phase_closed['spent_usd']:.4f} and the cycle-2 line is not"
-                f" anchored — the balance reads ${balance_now:.2f}, under the"
-                f" ${CYCLE2_ANCHOR_MIN_USD:.2f} of SPEC 3.23 (2). This is the INTER-LEDGER GAP:"
-                " unbudgeted BY DESIGN (3.23 (3)) and nothing may run in it. The standing network"
-                " volume is the only thing that bills here. This is not a cap breach."
-            )
-        else:
-            anchor = float(cycle["runpod_balance_at_cycle2_start"])
-            spent, lines, how, said = enforce(
-                "CYCLE 2", CYCLE2_CAP_USD, anchor, cycle["anchored_at"], balance_now
-            )
-            refusals += said
-            live = {
-                "ledger": cycle,
-                "path": CYCLE2_LEDGER,
-                "cap": CYCLE2_CAP_USD,
-                "anchor": anchor,
-                "anchored_at": cycle["anchored_at"],
-                "spent": spent,
-                "lines": lines,
-                "how": how,
-            }
-            if not CYCLE2_LEDGER.exists():
-                write_ledger_at(CYCLE2_LEDGER, cycle)
-                print(f"anchored {CYCLE2_LEDGER.name} — commit it and never regenerate it")
+        anchor = float(cycle["runpod_balance_at_cycle2_start"])
+        spent, lines, how, said = enforce(
+            "CYCLE 2", CYCLE2_CAP_USD, anchor, cycle["anchored_at"], balance_now
+        )
+        refusals += said
+        live = {
+            "ledger": cycle,
+            "path": CYCLE2_LEDGER,
+            "cap": CYCLE2_CAP_USD,
+            "anchor": anchor,
+            "anchored_at": cycle["anchored_at"],
+            "spent": spent,
+            "lines": lines,
+            "how": how,
+        }
+        if not CYCLE2_LEDGER.exists():
+            write_ledger_at(CYCLE2_LEDGER, cycle)
+            print(f"anchored {CYCLE2_LEDGER.name} — commit it and never regenerate it")
 
     # --- closing the live ledger ----------------------------------------------------------------
     if args.close and not args.step:

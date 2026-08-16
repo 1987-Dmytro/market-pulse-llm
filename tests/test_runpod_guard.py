@@ -553,55 +553,87 @@ def test_the_guard_says_the_phase_is_closed_and_reads_the_final_entry_not_a_live
     tmp_path, monkeypatch, capsys
 ):
     """«The guard learns to SAY the phase is closed when it is.» It reads the closing entry's own
-    numbers: no `PHASE 4 SPENT` line, no live delta, and the decomposition the entry carries."""
+    numbers: no `PHASE 4 SPENT` line, no live delta, and the decomposition the entry carries.
+
+    The live-walk control is SCOPED to the phase's half of the print since 3.24. Under 3.23 (2) the
+    balance driven here was below the anchor floor, so the guard stopped before any walk and «$99
+    appears nowhere» was true for two reasons at once — the phase not asking, and the line not
+    existing. The floor is repealed, the line anchors on this very reading and its walk is asked and
+    printed; what must still be true is that the CLOSED phase's own figures are the settled ones.
+    """
     closed_phase(tmp_path, monkeypatch)
     drive(monkeypatch, balance=22.00, billing=(99.0, "read"))
     assert guard.main([]) == 1
     printed = capsys.readouterr().out
+    # split at the first line `enforce` prints: the phase is CLOSED, so the only ledger that reaches
+    # `enforce` — and therefore the only walk that is asked — is the cycle-2 line below it
+    phase_half, sep, line_half = printed.partition("anchor            $")
+    assert sep, "the line's own reading is what follows the closed phase"
 
-    assert "PHASE 4 CLOSED    $32.4611 of $33.00" in printed
+    assert "PHASE 4 CLOSED    $32.4611 of $33.00" in phase_half
     assert "PHASE 4 SPENT" not in printed, "a closed ledger prints its settlement, not a delta"
-    assert "network-volume  $3.2181" in printed
-    assert "$99.0" not in printed, "the live walk is not even asked for a closed phase"
+    assert "network-volume  $3.2181" in phase_half
+    assert "$99.0" not in phase_half, "the live walk is not asked for a closed phase"
+    assert "$99.0" in line_half, "and it IS asked for the line that replaced it"
 
 
-def test_a_closed_phase_refuses_with_the_gap_and_never_with_a_cap_breach(
+def test_a_closed_phase_anchors_the_line_and_never_refuses_a_cap_breach(
     tmp_path, monkeypatch, capsys
 ):
-    """SPEC 3.23 (3). The volume alone will carry the phase past $33.00 within days, so a closed
-    phase that still refused «the cap is reached» would reproduce Dv412 one layer up: a refusal
-    about a charge that belongs to nothing anybody started."""
+    """SPEC 3.23 (3) as 3.24 (1) leaves it. The volume alone will carry the phase past $33.00 within
+    days, so a closed phase that refused «the cap is reached» would reproduce Dv412 one layer up: a
+    refusal about a charge that belongs to nothing anybody started. What the repeal removes is the
+    OTHER refusal — the inter-ledger gap is closed by this reading rather than reported by it."""
     closed_phase(tmp_path, monkeypatch)
-    drive(monkeypatch, balance=22.5292058832)
-    assert guard.main([]) == 1
+    drive(monkeypatch, balance=22.5292058832, billing=(0.0, "no billing rows yet"))
+    assert guard.main([]) == 0
     out, err = capsys.readouterr()
 
-    assert "CYCLE 2           NOT ANCHORED" in out
-    assert "INTER-LEDGER GAP" in err and "nothing may run in it" in err
-    assert "cap is reached" not in err, "the gap is not a breach"
-    assert not (tmp_path / "spend_cycle2.json").exists(), "a refused anchor writes nothing"
+    assert "PHASE 4 CLOSED    $32.4611 of $33.00" in out
+    assert "CYCLE 2 SPENT     $0.0000 of $20.00" in out
+    assert "NOT ANCHORED" not in out and "INTER-LEDGER GAP" not in err
+    assert "cap is reached" not in err
+    assert (tmp_path / "spend_cycle2.json").exists(), "the line is anchored by this very reading"
 
 
-def test_the_cycle2_anchor_is_refused_under_forty_and_taken_at_forty(tmp_path, monkeypatch, capsys):
-    """SPEC 3.23 (2), both directions on the threshold itself. $39.99 refuses, $40.00 anchors —
-    and the anchor is the balance VERBATIM with the timestamp it was read at."""
+def test_the_cycle2_anchor_is_taken_at_the_balance_the_guard_reads(tmp_path, monkeypatch, capsys):
+    """SPEC amendment 3.24 (1): the $40.00 floor of 3.23 (2) is REPEALED.
+
+    The balance driven here is $22.5292058832 — the real reading of 2026-08-16, and the one the old
+    threshold refused. It anchors, VERBATIM and with the timestamp it was read at. The negative
+    control is the second half: the repealed constant is gone from the module, so a threshold that
+    survived the repeal by being renamed or defaulted could not pass this line
+    ([[a_lifted_ceiling_is_not_lifted_code]]).
+    """
     closed_phase(tmp_path, monkeypatch)
-    drive(monkeypatch, balance=39.99)
-    assert guard.main([]) == 1
-    assert not (tmp_path / "spend_cycle2.json").exists()
-    capsys.readouterr()
-
-    drive(monkeypatch, balance=40.0)
+    drive(monkeypatch, balance=22.5292058832, billing=(0.0, "no billing rows yet"))
     assert guard.main([]) == 0
     written = json.loads((tmp_path / "spend_cycle2.json").read_text(encoding="utf-8"))
-    assert written["runpod_balance_at_cycle2_start"] == 40.0
+    assert written["runpod_balance_at_cycle2_start"] == 22.5292058832
     assert written["anchored_at"].endswith("+00:00")
     # the ledger's own cap field and the enforced constant are ONE number. The literals are
     # deliberate: `== guard.CYCLE2_CAP_USD` alone would agree with the constant whatever it said,
     # so this is the test that reddens if either line is quietly moved.
     assert written["cycle2_cap_usd"] == guard.CYCLE2_CAP_USD == 20.00
-    assert guard.CYCLE2_ANCHOR_MIN_USD == 40.00
+    assert not hasattr(guard, "CYCLE2_ANCHOR_MIN_USD"), "the floor retires with the clause"
+    assert "3.24 (1)" in written["note"] and "repealed" in written["note"]
     assert "never regenerate" in capsys.readouterr().out
+
+
+def test_an_anchored_line_is_never_re_anchored_by_a_later_reading(tmp_path, monkeypatch, capsys):
+    """The one-shot the repeal does NOT touch. Without the threshold the first reading fixes the
+    line's starting number, so the second reading must find the file and leave it alone — the
+    footgun `results/spend_phase4.json` names, one ledger over."""
+    closed_phase(tmp_path, monkeypatch)
+    drive(monkeypatch, balance=22.5292058832, billing=(0.0, "no billing rows yet"))
+    assert guard.main([]) == 0
+    first = (tmp_path / "spend_cycle2.json").read_text(encoding="utf-8")
+    capsys.readouterr()
+
+    drive(monkeypatch, balance=21.00, billing=(0.0, "no billing rows yet"))
+    assert guard.main([]) == 0
+    assert (tmp_path / "spend_cycle2.json").read_text(encoding="utf-8") == first
+    assert "CYCLE 2 SPENT     $1.5292 of $20.00" in capsys.readouterr().out
 
 
 def test_the_cycle2_line_is_enforced_exactly_as_the_phase_cap_was(tmp_path, monkeypatch, capsys):

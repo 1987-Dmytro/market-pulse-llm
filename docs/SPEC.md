@@ -988,6 +988,31 @@ is refused. The index therefore still reads «the current revision is 3.18» and
 amendments behind: 3.19, 3.20, 3.21, 3.22 and 3.23 are each their own index entry, here and in the
 four blocks before this one, until that pin retires.)
 <!-- amendment-3.23 end -->
+<!-- amendment-3.24 begin — stripped by write_sku_prereg.registered_law() before hashing
+docs/SPEC.md against every sealed pre-registration pin, all of which predate this text; the
+law those records registered is the stripped text. New law arrives ONLY inside its own marked
+block — a sealed registration is never re-pinned to make it green -->
+**Amendment 3.24 (operator, 2026-08-16, at the acceptance of `cycle2-money` — the anchor floor is
+repealed):**
+1. **The $40.00 floor of 3.23 (2) is REPEALED.** It was derived from a false assumption — that the
+   operator's top-up was still to come, landing on top of the balance the account then held. It was
+   not: the $20.00 landed 2026-08-15 and IS the current balance, which the Phase-4 ledger's closing
+   entry proves by carrying two readings that differ by $19.990278. A `≥ $40.00` floor would have
+   demanded a SECOND top-up nobody planned. **The cycle-2 anchor is the first guard balance reading
+   taken AFTER this amendment lands**, recorded verbatim with its timestamp by a deliberate,
+   supervised run. No further payment is required, no threshold gates the anchor, and
+   `CYCLE2_ANCHOR_MIN_USD` and its refusal retire with the clause.
+2. **3.23's other clauses stand unchanged.** The line is $20.00; its homes are
+   `results/spend_cycle2.json` and `CYCLE2_CAP_USD` in `scripts/runpod_guard.py`; Phase 4 is CLOSED
+   at its final reading; a step reading names the network volume's rent separately from the step's
+   own resources. What (1) repeals is the threshold and nothing beside it.
+(Index note, in this block for the reason 3.19's, 3.20's, 3.21's, 3.22's and 3.23's own notes give:
+the `amendment-index` block above is one of the TEN blocks `write_prereg_5c2.KEEP_BLOCKS` holds
+INSIDE the sealed pin of `results/prereg_5c2_run.json`, so editing it would break that pin and
+re-pinning is refused. The index therefore still reads «the current revision is 3.18» and is now SIX
+amendments behind: 3.19, 3.20, 3.21, 3.22, 3.23 and 3.24 are each their own index entry, here and in
+the five blocks before this one, until that pin retires.)
+<!-- amendment-3.24 end -->
 **Date:** 2026-07-26 · **Team lead:** Fable session · **Executor:** Claude Code
 **Repo folder:** `/Users/hdv_1987/Desktop/Projects/market-pulse-llm`
 **rev. 3 change (operator decision):** producers in Ukraine barely use Telegram for

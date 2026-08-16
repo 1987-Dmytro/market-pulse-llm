@@ -280,6 +280,13 @@ def test_every_pinned_input_still_hashes_to_what_it_says(record):
         # rule on money. One name short on arrival like every block before it. Stripped here for the
         # same reason: these pins are v1–v4's and every dollar they price predates the line.
         "amendment-3.23",
+        # 3.24 — the acceptance of `cycle2-money` (2026-08-16): 3.23 (2)'s $40.00 anchor floor is
+        # REPEALED, because it was derived from an assumption about a top-up that had already
+        # landed, and the cycle-2 anchor becomes the first guard balance reading taken after this
+        # block. The first block of this family to repeal a clause of another one; `CYCLE2_ANCHOR
+        # _MIN_USD` retires with it. One name short on arrival like every block before it. Stripped
+        # here for the same reason: these pins are v1–v4's and no dollar of theirs is on that line.
+        "amendment-3.24",
     ]
     assert prereg.RATIFICATION_NAME.findall(spec_text) == blocks
     law = prereg.registered_law(prereg.SPEC).decode("utf-8")
