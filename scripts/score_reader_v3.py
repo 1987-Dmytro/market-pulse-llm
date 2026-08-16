@@ -230,7 +230,7 @@ def output_ceiling(evidence: list[dict], record: dict) -> dict:
     }
 
 
-def money(record: dict) -> dict:
+def money(record: dict, ledger_path: Path | None = None, phase: str = PHASE) -> dict:
     """Bar 5 — from the step ledger the guard wrote, in whichever of its two states it is in.
 
     A step ledger that has been CLOSED is priced by its closing entry's settled figure. An OPEN one
@@ -238,23 +238,32 @@ def money(record: dict) -> dict:
     pass: the billing walk settles hours late and the always-on volume drains into the same delta
     (Dv412). Nothing here calls RunPod — the live reading is the guard's, and its output goes in the
     report beside this record.
+
+    The ledger and the step are parameters with THIS step's defaults so that reader-v4 can point the
+    same three states at its own ledger instead of writing a second reading of them. Bar 5 is the
+    one bar whose arithmetic is about the guard's file rather than about the model, and two copies
+    of it would be two answers to one question.
     """
+    # resolved at CALL time and not bound as a default: `LEDGER` is the module's live constant and
+    # a default evaluated at import would be a constant nothing reads any more
+    # ([[a_monkeypatch_is_not_a_reader]])
+    ledger_path = LEDGER if ledger_path is None else ledger_path
     cap = float(record["money"]["cap_usd_all_in"])
-    if not LEDGER.exists():
+    if not ledger_path.exists():
         return {
             "cap_usd_all_in": cap,
             "state": "NO LEDGER",
             "passed": None,
-            "reason": f"{summary.rel(LEDGER)} does not exist — the step was never anchored",
+            "reason": f"{summary.rel(ledger_path)} does not exist — the step was never anchored",
         }
-    ledger = json.loads(LEDGER.read_text(encoding="utf-8"))
+    ledger = json.loads(ledger_path.read_text(encoding="utf-8"))
     sessions = ledger.get("gpu_sessions") or []
     shut = guard.closing_entry(sessions)
     block = {
         "cap_usd_all_in": cap,
-        "ledger": summary.rel(LEDGER),
-        "sha256": summary.sha256_of(LEDGER),
-        "anchor": ledger.get(guard.anchor_key_in(ledger, PHASE) or ""),
+        "ledger": summary.rel(ledger_path),
+        "sha256": summary.sha256_of(ledger_path),
+        "anchor": ledger.get(guard.anchor_key_in(ledger, phase) or ""),
         "anchored_at": ledger.get("anchored_at"),
         "sessions": len(sessions),
     }
