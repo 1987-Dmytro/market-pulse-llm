@@ -3,5 +3,16 @@
   "runpod_balance_at_cycle2_start": 22.5097614388,
   "anchored_at": "2026-08-16T12:14:48+00:00",
   "note": "RunPod account balance read at the start of cycle 2 — the first guard reading taken after SPEC amendment 3.24 landed, by a deliberate supervised run (3.24 (1)). No threshold gates it: 3.23 (2)'s $40.00 floor is repealed, because the operator's $20 top-up landed 2026-08-15 and IS this balance. Cycle-2 spend = the pessimistic maximum of this anchor minus the balance now and the billing walk since the timestamp above, and the $20.00 line of 3.23 (1) is enforced against it. Delete or regenerate this file and the counter silently restarts at today's balance — the same footgun results/spend_phase4.json carries. Phase 4 is closed and is NOT re-scored by this line: what it bought was bought under the $33.00 cap of 3.18 (7)(b).",
-  "sessions": []
+  "sessions": [
+    {
+      "at": "2026-08-16T15:27:33+00:00",
+      "balance": 22.4805947722,
+      "spent_usd": 0.0292,
+      "remaining_usd": 19.9708,
+      "balance_delta_usd": 0.0292,
+      "billing_since_usd": 0.019444,
+      "billing_read": "read",
+      "note": "reader-v3 staging: volume repo f0fd745 -> aa0ca18 by fetch + hard reset, three reader texts and the parser module byte-identical, pod deleted"
+    }
+  ]
 }
