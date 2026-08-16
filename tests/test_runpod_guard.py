@@ -16,6 +16,42 @@ guard = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(guard)
 
 
+REAL_CYCLE2_LEDGER = SCRIPT.parents[1] / "results" / "spend_cycle2.json"
+
+
+@pytest.fixture(autouse=True)
+def never_the_real_cycle2_ledger(tmp_path, monkeypatch):
+    """No test in this module may write `results/spend_cycle2.json`. Measured, not precautionary.
+
+    The cycle-2 anchor is a ONE-SHOT: `read_cycle2` creates it on the first reading after a closed
+    phase and it is never regenerated, so whatever balance writes it IS the line's starting number.
+    Until 3.24 this file could not reach it by accident — 3.23 (2)'s $40.00 floor refused every
+    balance these tests drive — and the floor was doing a second job nobody had registered it for.
+    Repealing it made the very next `make check` anchor the production ledger at a fixture's $22.00
+    (Dv424), through a test whose subject is the PHASE close and whose second reading happens to
+    fall through to the line.
+
+    So the redirect is autouse and on the MODULE, not on the test that was caught: a per-test patch
+    holds only until the next test drives `main()` past a closed phase, which is exactly how this
+    one arrived. `closed_phase` re-points it at a path its assertions name; this fixture is what
+    makes the real one unreachable in between.
+    """
+    monkeypatch.setattr(guard, "CYCLE2_LEDGER", tmp_path / "not-the-real-cycle2-ledger.json")
+
+
+def test_the_suite_cannot_reach_the_production_cycle2_anchor():
+    """The negative control for the fixture above, asserting the REDIRECT and not the absence of a
+    file: «the real ledger does not exist» would pass forever once the operator's deliberate run has
+    created it, which is exactly when the protection stops being observable
+    ([[guard_selftest_negative_control]]). That the redirect BITES — that `main()`'s write follows
+    this attribute rather than a path of its own — is what
+    `test_the_cycle2_anchor_is_taken_at_the_balance_the_guard_reads` shows, by finding the anchor in
+    a temp dir after driving the whole guard.
+    """
+    assert guard.CYCLE2_LEDGER != REAL_CYCLE2_LEDGER
+    assert not guard.CYCLE2_LEDGER.exists(), "and it starts unanchored, so a write here is visible"
+
+
 @pytest.fixture
 def ledger(tmp_path, monkeypatch):
     """An anchored ledger in a temp dir; the real one is a committed artifact."""
