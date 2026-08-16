@@ -441,22 +441,32 @@ re-pinned to follow it. That is the producer's own strongest refusal turned on i
 The record has never been rewritten and the producer had never been touched until today, so this is
 the only commit either of them needs."""
 
-MOVED_BORROWS = {"scripts/runpod_guard.py": "step_ledger_path"}
-"""The borrowed modules whose bytes have moved since the seal, each with the token it learned.
+MOVED_BORROWS = {"scripts/runpod_guard.py": ("step_ledger_path", "billing_by_kind")}
+"""The borrowed modules whose bytes have moved since the seal, each with the tokens it learned.
 
-`scripts/runpod_guard.py` moved on 2026-08-15 for Dv392: the guard normalised the step ledger's
-path on the READ and rebuilt it from the raw step name on the WRITE, so one `--step probe-a --note`
-maintained `results/spend_probe_a.json` and `results/spend_probe-a.json` at once. The fix routes
-every write through the one `step_ledger_path` result.
+A TUPLE and not one token, because the value is the only record of what moved and a module can move
+twice. It did. Written as a single string, this constant went on passing after the second move —
+`live != digest` was already true, the recovered blob still lacked `step_ledger_path` and the disk
+still carried it — so nothing in the suite could tell «the guard moved for Dv392» from «the guard
+moved for Dv392 and then again for 3.23». One name per move is what makes the omission red.
 
-Nothing this registration states follows it. The guard is borrowed here as the instrument that
-enforces the cap, and what changed is where a session NOTE is appended — no balance, no anchor, no
-threshold and no reading in this record is computed by the moved lines. The bytes stay RECOVERABLE:
+* **`step_ledger_path`** — 2026-08-15, Dv392: the guard normalised the step ledger's path on the
+  READ and rebuilt it from the raw step name on the WRITE, so one `--step probe-a --note`
+  maintained `results/spend_probe_a.json` and `results/spend_probe-a.json` at once. The fix routes
+  every write through the one `step_ledger_path` result.
+* **`billing_by_kind`** — 2026-08-16, SPEC 3.23 and the Dv411/Dv412 family: the billing walk returns
+  its three kinds APART instead of summed, a step takes both readings rather than the balance delta
+  alone, a ledger can be CLOSED, and the $20.00 cycle-2 line arrives beside the phase cap.
+
+Nothing this registration states follows either move. The guard is borrowed here as the instrument
+that enforces the cap, and `budget()` reads `PHASE_CAP_USD` — a constant neither move touched. The
+cycle-2 line is a line opened AFTER Phase 4 closed and 3.23 says so; SPEC 3.18 (7)(b) already
+forbids re-scoring what this record priced. The bytes stay RECOVERABLE:
 
     git show 0e390ff:scripts/runpod_guard.py
 
-The token is read BOTH ways below — absent from the recovered blob, present on disk — so a recovery
-from the wrong commit fails instead of passing."""
+Every token is read BOTH ways below — absent from the recovered blob, present on disk — so a
+recovery from the wrong commit fails instead of passing."""
 
 
 def sealed_blob(path: str) -> bytes:
@@ -498,11 +508,12 @@ def test_the_record_carries_no_clock_and_names_the_producer_that_wrote_it():
     for path, digest in RECORD["producer"]["borrows"].items():
         if path in MOVED_BORROWS:
             recovered = sealed_blob(path)
-            token = MOVED_BORROWS[path]
+            live_text = (REPO_ROOT / path).read_text(encoding="utf-8")
             assert hashlib.sha256((REPO_ROOT / path).read_bytes()).hexdigest() != digest, path
             assert hashlib.sha256(recovered).hexdigest() == digest, path
-            assert token.encode() not in recovered, path
-            assert token in (REPO_ROOT / path).read_text(encoding="utf-8"), path
+            for token in MOVED_BORROWS[path]:
+                assert token.encode() not in recovered, (path, token)
+                assert token in live_text, (path, token)
             continue
         assert hashlib.sha256((REPO_ROOT / path).read_bytes()).hexdigest() == digest, path
 

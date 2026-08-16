@@ -35,9 +35,19 @@ def ledger(tmp_path, monkeypatch):
     return path
 
 
-def drive(monkeypatch, balance, billing=(0.0, "read")):
+def drive(monkeypatch, balance, billing=(0.0, "read"), kinds=None):
+    """`balance` and the billing walk, faked.
+
+    `billing_by_kind` is what gets patched and not a total-returning wrapper: every leg of the guard
+    reads the walk through this one function, so a test that patched a sum would leave the STEP leg
+    reaching for `runpodctl` (Dv411's fix is what put a second caller there). `kinds` is for the
+    tests that care about the decomposition; the default puts the whole total under `pods`, which is
+    what every test written before 3.23 (4) meant by its one number.
+    """
+    total, how = billing
+    lines = dict(kinds) if kinds is not None else {"pods": total, "network-volume": 0.0}
     monkeypatch.setattr(guard, "balance", lambda: balance)
-    monkeypatch.setattr(guard, "billing_since", lambda anchored_at: billing)
+    monkeypatch.setattr(guard, "billing_by_kind", lambda anchored_at: (lines, how))
 
 
 def test_the_pessimistic_reading_wins():
@@ -69,8 +79,32 @@ def test_the_billing_walk_asks_for_serverless_too(monkeypatch):
         return [{"amount": 0.55, "endpointId": "zbptdon5jvfteu"}] if args[1] == "serverless" else []
 
     monkeypatch.setattr(guard, "runpodctl", one_reading)
-    assert guard.billing_since("2026-08-08T17:00:00+00:00") == (0.55, "read")
+    lines, how = guard.billing_by_kind("2026-08-08T17:00:00+00:00")
+    assert (sum(lines.values()), how) == (0.55, "read")
     assert asked == ["pods", "network-volume", "serverless"]
+    # 3.23 (4): the kinds arrive APART. A walk that returned the sum would make the volume's rent
+    # and the run's own bill one number, which is the whole of Dv412 one layer down.
+    assert lines == {"pods": 0.0, "network-volume": 0.0, "serverless": 0.55}
+
+
+def test_the_always_on_kinds_are_left_out_of_what_the_run_itself_billed(monkeypatch):
+    """SPEC 3.23 (4), on probe-b's own measured lines: the split is BY KIND and not by arithmetic.
+
+    Reading the numbers `docs/reports/probe-b.md` §10 settled, the two answers straddle the cap they
+    were judged against — $0.4396 refuses a $0.35 cap and $0.3132 does not, so this is the line
+    between «overrun» and «inside», not a rounding note.
+
+    The control is the constant emptied rather than the volume row deleted: dropping the row proves
+    only that `sum` skips what is not there, while emptying :data:`guard.ALWAYS_ON_KINDS` shows the
+    two readings COLLAPSE the moment nothing is declared always-on."""
+    measured = {"pods": 0.028689, "network-volume": 0.126389, "serverless": 0.284473}
+    assert guard.ALWAYS_ON_KINDS == ("network-volume",)
+    assert round(guard.own_resources(measured), 6) == 0.313162
+    assert round(sum(measured.values()), 6) == 0.439551
+    assert guard.own_resources(measured) < 0.35 < sum(measured.values())
+
+    monkeypatch.setattr(guard, "ALWAYS_ON_KINDS", ())
+    assert guard.own_resources(measured) == sum(measured.values())
 
 
 def test_a_start_under_the_cap_is_allowed(ledger, monkeypatch):
@@ -252,3 +286,428 @@ def test_the_existing_anchor_is_what_the_cap_is_enforced_against(tmp_path, monke
         12.2220
     )
     assert "anchored" in capsys.readouterr().out
+
+
+# --- Dv411: a step is read twice, like the phase, or its figure has no upper bound --------------
+
+
+def step_with(tmp_path, **fields) -> Path:
+    path = tmp_path / "spend_probe_b.json"
+    path.write_text(
+        json.dumps({"runpod_balance_at_probe-b_start": 22.9784784161, **fields}), encoding="utf-8"
+    )
+    return path
+
+
+PROBE_B_LINES = {"pods": 0.028689, "network-volume": 0.126389, "serverless": 0.284473}
+"""probe-b's window as `runpodctl billing` settled it, read back on 2026-08-16 and identical to the
+three lines `docs/reports/probe-b.md` §10 published. The balance delta over the same window is
+$0.4493, so this fixture is the one case where all three readings of one step are on the table."""
+
+
+def read_step_line(printed: str, prefix: str) -> str:
+    return next(line for line in printed.splitlines() if line.strip().startswith(prefix))
+
+
+def test_a_step_takes_two_readings_and_the_pessimistic_one_binds(
+    ledger, tmp_path, monkeypatch, capsys
+):
+    """Dv411: `spend()` takes `max(delta, billing)` for the phase and `--step` took the delta alone.
+
+    Driven on probe-b's real numbers. The delta ($0.4493) is the larger of the two here, so the
+    verdict is the delta — and the point is that it is a MAXIMUM and not the only reading: the
+    billing total is printed beside it and the step's own resources under that."""
+    path = step_with(tmp_path, anchored_at="2026-08-15T20:31:00+00:00")
+    drive(monkeypatch, balance=22.5292058832, billing=(0.0, "read"), kinds=PROBE_B_LINES)
+
+    assert guard.main(["--step", "probe-b", "--step-cap", "0.50", "--step-ledger", str(path)]) == 0
+    printed = capsys.readouterr().out
+    assert "PROBE-B SPENT      $0.4493 of $0.50" in printed
+    assert "balance delta   $0.4493" in printed
+    assert "billing since   $0.4396 (read)" in printed
+    assert "step resources  $0.3132" in printed
+
+
+def test_the_volumes_rent_is_named_beside_the_step_and_never_inside_it(
+    ledger, tmp_path, monkeypatch, capsys
+):
+    """SPEC 3.23 (4). The volume gets its own line and is marked always-on; the step's own figure
+    is the same lines with that kind left out. Both numbers are on the page, which is what makes
+    «$0.29 of probe + $0.15 of volume» readable instead of a $0.44 mystery."""
+    path = step_with(tmp_path, anchored_at="2026-08-15T20:31:00+00:00")
+    drive(monkeypatch, balance=22.5292058832, billing=(0.0, "read"), kinds=PROBE_B_LINES)
+    guard.main(["--step", "probe-b", "--step-cap", "0.50", "--step-ledger", str(path)])
+    printed = capsys.readouterr().out
+
+    volume = read_step_line(printed, "network-volume")
+    assert "$0.1264" in volume and "always on" in volume
+    assert "$0.0287" in read_step_line(printed, "pods")
+    assert "$0.2845" in read_step_line(printed, "serverless")
+    # and the step's own figure is the two that are not always-on
+    assert round(0.028689 + 0.284473, 4) == 0.3132
+    assert "step resources  $0.3132" in printed
+
+
+def test_an_unposted_bill_is_UNAVAILABLE_and_the_delta_is_called_a_lower_bound(
+    ledger, tmp_path, monkeypatch, capsys
+):
+    """Dv411's exact reading: «no billing rows yet» is not $0.00 of corroboration, it is the absence
+    of one. A step at 92% of its cap with the second reading missing is UNKNOWN, not INSIDE."""
+    path = step_with(tmp_path, anchored_at="2026-08-15T20:31:00+00:00")
+    drive(monkeypatch, balance=22.6555, billing=(0.0, "no billing rows yet"))
+    guard.main(["--step", "probe-b", "--step-cap", "0.50", "--step-ledger", str(path)])
+    printed = capsys.readouterr().out
+
+    assert "PROBE-B SPENT      $0.3230" in printed
+    assert "UNAVAILABLE (no billing rows yet)" in printed and "LOWER BOUND" in printed
+    assert "step resources" not in printed, "there is no decomposition to print"
+
+
+def test_a_ledger_with_no_anchor_time_says_so_and_not_that_billing_returned_nothing(
+    ledger, tmp_path, monkeypatch, capsys
+):
+    """The third state, which must not collapse into the second.
+
+    A step ledger written before the guard recorded its anchor TIME cannot have the walk asked for
+    it at all — there is no window. Printing «no billing rows yet» there would claim a reading that
+    was never taken, which is the same shape of lie the two-reading rule exists to stop."""
+    path = step_with(tmp_path)  # no `anchored_at`, exactly as results/spend_probe_b.json stood
+    drive(monkeypatch, balance=22.5292058832, billing=(0.0, "read"), kinds=PROBE_B_LINES)
+    guard.main(["--step", "probe-b", "--step-cap", "0.50", "--step-ledger", str(path)])
+    printed = capsys.readouterr().out
+
+    # scoped to the STEP's own block: the phase leg above it has an anchor time and does walk
+    step_block = printed.split("PROBE-B", 1)[1]
+    assert "records no anchor time" in step_block and "LOWER BOUND" in step_block
+    assert "no billing rows yet" not in step_block, "a window never asked is not an empty one"
+    assert "$0.4396" not in step_block, "the walk must not be run over some other ledger's window"
+    assert "step resources" not in step_block, "and there is no decomposition to print"
+
+
+def test_a_new_step_anchor_records_the_moment_its_balance_was_read(tmp_path, monkeypatch):
+    """The write half of the fix: from here on a step HAS a window, so state three empties out."""
+    monkeypatch.setattr(guard, "REPO_ROOT", tmp_path)
+    written = guard.read_step(tmp_path / "spend_new.json", "new", 1.0, 30.0)
+    assert written["anchored_at"].endswith("+00:00")
+    assert "the pessimistic maximum" in written["gpu_note"]
+
+    # and it is never given a later time it did not happen at: a ledger the DRIVER anchored first
+    # already carries the moment, and `read_step` adds its balance key beside it
+    path = tmp_path / "spend_driven.json"
+    path.write_text(json.dumps({"anchored_at": "2026-08-15T20:31:00+00:00"}), encoding="utf-8")
+    assert guard.read_step(path, "driven", 1.0, 30.0)["anchored_at"] == "2026-08-15T20:31:00+00:00"
+
+
+# --- Dv412: a step can be CLOSED, and a closed one stops growing at the volume's rate -----------
+
+
+def test_a_closed_step_is_priced_by_its_settled_figure_and_never_by_a_growing_delta(
+    ledger, tmp_path, monkeypatch, capsys
+):
+    """The whole of Dv412, driven twice with the balance moved between the runs.
+
+    `--close` settles the step from the billing walk over its window; the second invocation reads
+    the settled figure back out of the entry and does NOT ask the walk again. That is what makes the
+    figure stop moving: the balance has drifted $0.05 lower between the two calls — the volume doing
+    what it always does — and the printed number is identical."""
+    path = step_with(tmp_path, anchored_at="2026-08-15T20:31:00+00:00")
+    drive(monkeypatch, balance=22.5292058832, billing=(0.0, "read"), kinds=PROBE_B_LINES)
+
+    assert (
+        guard.main(
+            [
+                "--step",
+                "probe-b",
+                "--step-cap",
+                "0.35",
+                "--step-ledger",
+                str(path),
+                "--close",
+                "--note",
+                "probe-b closed",
+            ]
+        )
+        == 0
+    ), "the settled figure is inside the cap that the delta breached"
+    first = capsys.readouterr().out
+    assert "PROBE-B CLOSED     $0.3132 of $0.35" in first
+    entry = json.loads(path.read_text(encoding="utf-8"))["gpu_sessions"][-1]
+    assert entry["closed"] is True and entry["settled_usd"] == 0.313162
+    assert entry["billing_by_kind"]["network-volume"] == 0.126389
+    assert entry["balance_delta_usd"] == 0.4493, "the delta is recorded, it just does not bind"
+
+    # thirteen more hours of volume: the delta grows, the closed step does not
+    drive(monkeypatch, balance=22.4792058832, billing=(0.0, "read"), kinds=PROBE_B_LINES)
+    assert guard.main(["--step", "probe-b", "--step-cap", "0.35", "--step-ledger", str(path)]) == 0
+    again = capsys.readouterr().out
+    assert "PROBE-B CLOSED     $0.3132 of $0.35" in again
+    assert "SPENT" not in again.split("PHASE 4")[-1].split("PROBE-B")[-1]
+    assert json.loads(path.read_text(encoding="utf-8"))["gpu_sessions"][-1] == entry, "append-only"
+
+
+def test_a_closed_step_that_really_overran_still_refuses(ledger, tmp_path, monkeypatch):
+    """The other direction, and the reason closing is not an amnesty: the verdict moves to the
+    SETTLED figure, it does not disappear. Same lines, a cap of $0.30 instead of $0.35."""
+    path = step_with(tmp_path, anchored_at="2026-08-15T20:31:00+00:00")
+    drive(monkeypatch, balance=22.5292058832, billing=(0.0, "read"), kinds=PROBE_B_LINES)
+    assert (
+        guard.main(
+            [
+                "--step",
+                "probe-b",
+                "--step-cap",
+                "0.30",
+                "--step-ledger",
+                str(path),
+                "--close",
+                "--note",
+                "closed over its cap",
+            ]
+        )
+        == 1
+    )
+    assert json.loads(path.read_text(encoding="utf-8"))["gpu_sessions"][-1]["closed"] is True
+
+
+def test_closing_refuses_when_the_walk_cannot_settle_anything(ledger, tmp_path, monkeypatch):
+    """A closing entry is never re-derived, so it is never written over a reading that did not
+    answer. «no billing rows yet» would settle the step at $0.00 for good."""
+    path = step_with(tmp_path, anchored_at="2026-08-15T20:31:00+00:00")
+    before = path.read_text(encoding="utf-8")
+    drive(monkeypatch, balance=22.6555, billing=(0.0, "no billing rows yet"))
+    assert (
+        guard.main(
+            [
+                "--step",
+                "probe-b",
+                "--step-cap",
+                "0.50",
+                "--step-ledger",
+                str(path),
+                "--close",
+                "--note",
+                "would have settled at zero",
+            ]
+        )
+        == 1
+    )
+    assert path.read_text(encoding="utf-8") == before, "a refused closure wrote nothing"
+
+
+def test_a_step_with_no_window_cannot_be_closed_without_since(ledger, tmp_path, monkeypatch):
+    """`results/spend_probe_b.json` as it actually stood: an anchor, no anchor time. The window has
+    to be supplied and SOURCED, and the entry records which one it was closed over."""
+    path = step_with(tmp_path)
+    drive(monkeypatch, balance=22.5292058832, billing=(0.0, "read"), kinds=PROBE_B_LINES)
+    argv = ["--step", "probe-b", "--step-cap", "0.35", "--step-ledger", str(path)]
+    assert guard.main([*argv, "--close", "--note", "no window"]) == 1
+    assert "gpu_sessions" not in json.loads(path.read_text(encoding="utf-8"))
+
+    assert (
+        guard.main(
+            [*argv, "--close", "--note", "with a window", "--since", "2026-08-15T20:31:00+00:00"]
+        )
+        == 0
+    )
+    entry = json.loads(path.read_text(encoding="utf-8"))["gpu_sessions"][-1]
+    assert entry["window_start"] == "2026-08-15T20:31:00+00:00"
+    assert entry["settled_usd"] == 0.313162
+
+
+# --- SPEC 3.23: Phase 4 closes, and the $20 line is what replaces it ----------------------------
+
+
+def closed_phase(tmp_path, monkeypatch, spent=32.4611):
+    path = tmp_path / "spend_phase4.json"
+    path.write_text(
+        json.dumps(
+            {
+                "phase4_cap_usd": 33.0,
+                "runpod_balance_at_phase4_start": 35.0,
+                "anchored_at": "2026-08-01T09:00:00+00:00",
+                "sessions": [
+                    {"at": "2026-08-15T20:51:14+00:00", "balance": 22.68, "spent_usd": 32.01},
+                    {
+                        "at": "2026-08-16T12:00:00+00:00",
+                        "closed": True,
+                        "spent_usd": spent,
+                        "remaining_usd": round(33.0 - spent, 4),
+                        "billing_by_kind": {
+                            "pods": 17.692135,
+                            "network-volume": 3.218056,
+                            "serverless": 11.550881,
+                        },
+                        "note": "PHASE 4 IS CLOSED",
+                    },
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(guard, "LEDGER", path)
+    monkeypatch.setattr(guard, "CYCLE2_LEDGER", tmp_path / "spend_cycle2.json")
+    return path
+
+
+def test_the_guard_says_the_phase_is_closed_and_reads_the_final_entry_not_a_live_delta(
+    tmp_path, monkeypatch, capsys
+):
+    """«The guard learns to SAY the phase is closed when it is.» It reads the closing entry's own
+    numbers: no `PHASE 4 SPENT` line, no live delta, and the decomposition the entry carries."""
+    closed_phase(tmp_path, monkeypatch)
+    drive(monkeypatch, balance=22.00, billing=(99.0, "read"))
+    assert guard.main([]) == 1
+    printed = capsys.readouterr().out
+
+    assert "PHASE 4 CLOSED    $32.4611 of $33.00" in printed
+    assert "PHASE 4 SPENT" not in printed, "a closed ledger prints its settlement, not a delta"
+    assert "network-volume  $3.2181" in printed
+    assert "$99.0" not in printed, "the live walk is not even asked for a closed phase"
+
+
+def test_a_closed_phase_refuses_with_the_gap_and_never_with_a_cap_breach(
+    tmp_path, monkeypatch, capsys
+):
+    """SPEC 3.23 (3). The volume alone will carry the phase past $33.00 within days, so a closed
+    phase that still refused «the cap is reached» would reproduce Dv412 one layer up: a refusal
+    about a charge that belongs to nothing anybody started."""
+    closed_phase(tmp_path, monkeypatch)
+    drive(monkeypatch, balance=22.5292058832)
+    assert guard.main([]) == 1
+    out, err = capsys.readouterr()
+
+    assert "CYCLE 2           NOT ANCHORED" in out
+    assert "INTER-LEDGER GAP" in err and "nothing may run in it" in err
+    assert "cap is reached" not in err, "the gap is not a breach"
+    assert not (tmp_path / "spend_cycle2.json").exists(), "a refused anchor writes nothing"
+
+
+def test_the_cycle2_anchor_is_refused_under_forty_and_taken_at_forty(tmp_path, monkeypatch, capsys):
+    """SPEC 3.23 (2), both directions on the threshold itself. $39.99 refuses, $40.00 anchors —
+    and the anchor is the balance VERBATIM with the timestamp it was read at."""
+    closed_phase(tmp_path, monkeypatch)
+    drive(monkeypatch, balance=39.99)
+    assert guard.main([]) == 1
+    assert not (tmp_path / "spend_cycle2.json").exists()
+    capsys.readouterr()
+
+    drive(monkeypatch, balance=40.0)
+    assert guard.main([]) == 0
+    written = json.loads((tmp_path / "spend_cycle2.json").read_text(encoding="utf-8"))
+    assert written["runpod_balance_at_cycle2_start"] == 40.0
+    assert written["anchored_at"].endswith("+00:00")
+    # the ledger's own cap field and the enforced constant are ONE number. The literals are
+    # deliberate: `== guard.CYCLE2_CAP_USD` alone would agree with the constant whatever it said,
+    # so this is the test that reddens if either line is quietly moved.
+    assert written["cycle2_cap_usd"] == guard.CYCLE2_CAP_USD == 20.00
+    assert guard.CYCLE2_ANCHOR_MIN_USD == 40.00
+    assert "never regenerate" in capsys.readouterr().out
+
+
+def test_the_cycle2_line_is_enforced_exactly_as_the_phase_cap_was(tmp_path, monkeypatch, capsys):
+    """Once anchored the line is the live ledger: both readings, the pessimistic maximum, the same
+    two refusals. $19.99 spent is allowed and $20.00 is not — `spent >= cap`, as the phase has it."""
+    closed_phase(tmp_path, monkeypatch)
+    (tmp_path / "spend_cycle2.json").write_text(
+        json.dumps(
+            {
+                "cycle2_cap_usd": 20.0,
+                "runpod_balance_at_cycle2_start": 40.0,
+                "anchored_at": "2026-08-17T09:00:00+00:00",
+                "sessions": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+    drive(monkeypatch, balance=20.01, billing=(0.0, "no billing rows yet"))
+    assert guard.main([]) == 0
+    assert "CYCLE 2 SPENT     $19.9900 of $20.00" in capsys.readouterr().out
+
+    drive(monkeypatch, balance=20.00, billing=(0.0, "no billing rows yet"))
+    assert guard.main([]) == 1
+    assert "$20.00 CYCLE 2 cap is reached" in capsys.readouterr().err
+
+    # and the pessimistic maximum, on the corroborating side this time
+    drive(monkeypatch, balance=39.00, billing=(19.99, "read"))
+    assert guard.main([]) == 0
+    drive(monkeypatch, balance=39.00, billing=(20.00, "read"))
+    assert guard.main([]) == 1
+
+
+def test_a_note_after_the_close_lands_in_the_line_and_not_in_the_closed_phase(
+    tmp_path, monkeypatch
+):
+    """One live ledger at a time. A session logged after the phase closed belongs to the line that
+    replaced it, and the closed ledger never gains another row."""
+    phase = closed_phase(tmp_path, monkeypatch)
+    before = phase.read_text(encoding="utf-8")
+    (tmp_path / "spend_cycle2.json").write_text(
+        json.dumps(
+            {
+                "cycle2_cap_usd": 20.0,
+                "runpod_balance_at_cycle2_start": 40.0,
+                "anchored_at": "2026-08-17T09:00:00+00:00",
+                "sessions": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+    drive(monkeypatch, balance=39.50, kinds={"pods": 0.4, "network-volume": 0.1})
+    assert guard.main(["--note", "the first paid step of cycle 2"]) == 0
+
+    assert phase.read_text(encoding="utf-8") == before, "a closed ledger is append-only and closed"
+    row = json.loads((tmp_path / "spend_cycle2.json").read_text(encoding="utf-8"))["sessions"][-1]
+    assert (row["spent_usd"], row["balance_delta_usd"], row["billing_since_usd"]) == (0.5, 0.5, 0.5)
+    assert row["billing_read"] == "read", (
+        "Dv33: both readings travel with the row, not just the max"
+    )
+
+
+def test_the_phase_is_closed_by_the_guard_and_the_entry_carries_both_readings(
+    ledger, monkeypatch, capsys
+):
+    """D1's instrument. Every number in the closing entry comes from the walk and the balance the
+    guard just read — none of them is typed — and the decomposition rides along."""
+    drive(
+        monkeypatch,
+        balance=22.5292058832,
+        billing=(0.0, "read"),
+        kinds={"pods": 17.692135, "network-volume": 3.218056, "serverless": 11.550881},
+    )
+    assert guard.main(["--close", "--note", "PHASE 4 IS CLOSED"]) == 0
+    entry = json.loads(ledger.read_text(encoding="utf-8"))["sessions"][-1]
+
+    assert entry["closed"] is True and entry["note"] == "PHASE 4 IS CLOSED"
+    assert entry["spent_usd"] == 32.4611 and entry["balance_delta_usd"] == 12.4708
+    assert entry["billing_since_usd"] == 32.461072
+    assert entry["billing_by_kind"]["serverless"] == 11.550881
+    assert entry["remaining_usd"] == round(33.00 - 32.4611, 4)
+    assert "CLOSED spend_phase4.json at $32.4611" in capsys.readouterr().out
+
+    # and the next reading says so instead of taking the delta again
+    drive(monkeypatch, balance=22.0, billing=(0.0, "read"))
+    guard.main([])
+    assert "PHASE 4 CLOSED    $32.4611" in capsys.readouterr().out
+
+
+def test_the_closing_flags_refuse_to_be_used_half(ledger, monkeypatch):
+    """A closing entry with no note is a state change nobody signed, and `--since` outside a
+    closure is a window for a walk that is not happening."""
+    drive(monkeypatch, balance=30.0)
+    with pytest.raises(SystemExit):
+        guard.main(["--close"])
+    with pytest.raises(SystemExit):
+        guard.main(["--since", "2026-08-15T20:31:00+00:00", "--note", "x"])
+
+
+def test_a_refused_start_leaves_no_step_anchor_behind(ledger, tmp_path, monkeypatch):
+    """The write gate: a counter is created only for a step that is allowed to begin. Before the
+    refusals were collected instead of returned on, the phase leg returned first and this could not
+    happen; now that every leg runs, the anchor has to be gated on the verdict rather than on the
+    order of the code."""
+    fresh = tmp_path / "spend_never_ran.json"
+    drive(monkeypatch, balance=1.99, billing=(0.0, "no billing rows yet"))
+    assert (
+        guard.main(["--step", "never-ran", "--step-cap", "1.00", "--step-ledger", str(fresh)]) == 1
+    )
+    assert not fresh.exists(), "a step that was refused a start has no anchor"
