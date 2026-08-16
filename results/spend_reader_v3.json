@@ -7,6 +7,21 @@
       "balance": 22.4805947722,
       "note": "reader-v3 staging: volume repo f0fd745 -> aa0ca18 by fetch + hard reset, three reader texts and the parser module byte-identical, pod deleted",
       "step_spent_usd": 0.0
+    },
+    {
+      "at": "2026-08-16T17:08:16+00:00",
+      "closed": true,
+      "balance": 22.0675725277,
+      "window_start": "2026-08-16T15:16:06+00:00",
+      "balance_delta_usd": 0.413022,
+      "billing_since_usd": 0.403299,
+      "billing_by_kind": {
+        "pods": 0.021812,
+        "network-volume": 0.009722,
+        "serverless": 0.371765
+      },
+      "note": "reader-v3 settled: the serverless boot that read nothing (endpoint 77o1ing6cy0972, 1 211 005 ms) plus the staging pod. The breach stands recorded -- closing is bookkeeping, not amnesty.",
+      "settled_usd": 0.393577
     }
   ],
   "reader-v3_cap_usd": 0.35,
