@@ -601,7 +601,7 @@ def reader_guards(handler) -> dict:
         task: text.rstrip().endswith("<|channel>thought\n<channel|>")
         for task, text in rendered.items()
     }
-    print(f"\n14. the REAL chat template    both registered texts, <bos> {bos}")
+    print(f"\n14. the REAL chat template    {len(rendered)} registered texts, <bos> {bos}")
     for task, text in rendered.items():
         print(f"    {task:22s} <bos>: {text.startswith(bos)} · thought closed: {closed[task]}")
     checks["every reader request renders through the real template and keeps <bos>"] = all(
@@ -610,8 +610,14 @@ def reader_guards(handler) -> dict:
     checks["enable_thinking:false closes the thought channel on every reader request"] = all(
         closed.values()
     )
-    # the two texts are different instruments and the worker must not be able to blur them
-    checks["the two registered reader texts render differently"] = len(set(rendered.values())) == 2
+    # the registered texts are different instruments and the worker must not be able to blur them.
+    # Against `len(prompts.READER)` and never against a literal: written as `== 2` this check FAILED
+    # the moment v3 was registered — a preflight refusing a run for the family having grown, which
+    # is Dv428's shape one script over ([[an_invariant_the_new_member_cannot_satisfy]]). The
+    # generalised form still refuses two texts that render the same, and it refuses a fourth.
+    checks["every registered reader text renders differently"] = len(set(rendered.values())) == len(
+        prompts.READER
+    )
     wrong, how = refuses(client.render, prompts.POSITIONS_TASK_TEXT, thread)
     print(f"    another registered task                        {how}")
     checks["the reader client refuses a task it does not serve"] = wrong
