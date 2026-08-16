@@ -1,0 +1,1223 @@
+{
+  "5_time_and_cost": {
+    "anchor": 22.0675725277,
+    "anchored_at": "2026-08-16T17:49:04+00:00",
+    "cap_usd_all_in": 0.35,
+    "ledger": "results/spend_reader_v4.json",
+    "lower_bound_usd": 0.2446,
+    "passed": null,
+    "reason": "the step ledger carries no closing entry, so there is no settled figure. The largest balance-delta reading its sessions hold is a LOWER BOUND — it also carries the always-on volume, which belongs to no step — and closing is a named debt for the next guard run, never a number invented here",
+    "sessions": 2,
+    "sha256": "a906a8e8be2fa96e38a0f338e82d1d134f86f476861ed51356d1747550508494",
+    "state": "OPEN"
+  },
+  "bars": {
+    "1_flagships": {
+      "collapsed": true,
+      "reason": null,
+      "result": {
+        "cases": 5,
+        "cases_answered": 2,
+        "passed": false,
+        "per_case": [
+          {
+            "answered": false,
+            "id": "F1",
+            "signals": [
+              {
+                "found": true,
+                "id": "F1a",
+                "index": 1,
+                "signal_type": "жалоба"
+              },
+              {
+                "found": false,
+                "id": "F1b",
+                "index": null,
+                "signal_type": null
+              },
+              {
+                "found": false,
+                "id": "F1c",
+                "index": null,
+                "signal_type": null
+              }
+            ],
+            "thread": "@VARUS_channel:10613"
+          },
+          {
+            "answered": false,
+            "id": "F2",
+            "signals": [
+              {
+                "found": false,
+                "id": "F2a",
+                "index": null,
+                "signal_type": null
+              }
+            ],
+            "thread": "@matusi_ukr:22303"
+          },
+          {
+            "answered": false,
+            "id": "F3",
+            "signals": [
+              {
+                "found": false,
+                "id": "F3a",
+                "index": null,
+                "signal_type": null
+              }
+            ],
+            "thread": "@mandziak:3676"
+          },
+          {
+            "answered": true,
+            "id": "F4",
+            "signals": [
+              {
+                "found": true,
+                "id": "F4a",
+                "index": 0,
+                "signal_type": "похвала"
+              }
+            ],
+            "thread": "@mandziak:3703"
+          },
+          {
+            "answered": true,
+            "id": "F5",
+            "signals": [
+              {
+                "found": true,
+                "id": "F5a",
+                "index": 1,
+                "signal_type": "спрос"
+              }
+            ],
+            "thread": "@matusi_ukr:22272"
+          }
+        ],
+        "per_signal": [
+          {
+            "case": "F1",
+            "found": true,
+            "id": "F1a"
+          },
+          {
+            "case": "F1",
+            "found": false,
+            "id": "F1b"
+          },
+          {
+            "case": "F1",
+            "found": false,
+            "id": "F1c"
+          },
+          {
+            "case": "F2",
+            "found": false,
+            "id": "F2a"
+          },
+          {
+            "case": "F3",
+            "found": false,
+            "id": "F3a"
+          },
+          {
+            "case": "F4",
+            "found": true,
+            "id": "F4a"
+          },
+          {
+            "case": "F5",
+            "found": true,
+            "id": "F5a"
+          }
+        ],
+        "per_signal_reading": "plan §5 (1) names five SIGNALS and the reference five THREADS carrying seven; the bar is the case reading and this table is where the narrower one is read off"
+      },
+      "scored": true,
+      "scorer": "reader_signal_found",
+      "threads_in_the_evidence": [
+        "@VARUS_channel:10613",
+        "@matusi_ukr:22303",
+        "@mandziak:3676",
+        "@mandziak:3703",
+        "@matusi_ukr:22272"
+      ],
+      "threads_not_read": [],
+      "threads_registered": [
+        "@VARUS_channel:10613",
+        "@matusi_ukr:22303",
+        "@mandziak:3676",
+        "@mandziak:3703",
+        "@matusi_ukr:22272"
+      ],
+      "threshold": "5 of 5 cases",
+      "verdict": "SCORED"
+    },
+    "2_entity_cases": {
+      "collapsed": false,
+      "reason": null,
+      "result": {
+        "cases": 4,
+        "cases_answered": 4,
+        "passed": true,
+        "per_case": {
+          "E1": true,
+          "E2": true,
+          "E3": true,
+          "E4": true
+        },
+        "per_row": [
+          {
+            "answered": true,
+            "brand_id": "garmonija",
+            "expected": "не_наш_рынок",
+            "id": "E1",
+            "reported": [
+              "не_наш_рынок"
+            ],
+            "thread": "@matusi_ukr:22242"
+          },
+          {
+            "answered": true,
+            "brand_id": "selianske",
+            "expected": "молочный_бренд",
+            "id": "E2",
+            "reported": [
+              "молочный_бренд"
+            ],
+            "thread": "@VARUS_channel:10360"
+          },
+          {
+            "answered": true,
+            "brand_id": "varus-pl",
+            "expected": "сеть_ритейлер",
+            "id": "E3",
+            "reported": [
+              "сеть_ритейлер"
+            ],
+            "thread": "@VARUS_channel:10348"
+          },
+          {
+            "answered": true,
+            "brand_id": "varto",
+            "expected": "absent",
+            "id": "E4a",
+            "reported": [],
+            "thread": "@mandziak:3684"
+          },
+          {
+            "answered": true,
+            "brand_id": "varto",
+            "expected": "absent",
+            "id": "E4b",
+            "reported": [],
+            "thread": "@mandziak:3689"
+          }
+        ]
+      },
+      "scored": true,
+      "scorer": "reader_entity_found",
+      "threads_in_the_evidence": [
+        "@matusi_ukr:22242",
+        "@VARUS_channel:10360",
+        "@VARUS_channel:10348",
+        "@mandziak:3684",
+        "@mandziak:3689"
+      ],
+      "threads_not_read": [],
+      "threads_registered": [
+        "@matusi_ukr:22242",
+        "@VARUS_channel:10360",
+        "@VARUS_channel:10348",
+        "@mandziak:3684",
+        "@mandziak:3689"
+      ],
+      "threshold": "4 of 4 cases",
+      "verdict": "SCORED"
+    },
+    "3_noise": {
+      "collapsed": false,
+      "excluded_with_cause": {
+        "N1": "carried unchanged from v1: the reference's own S list reads a signal inside this thread (S1, msg 21420), and the store shows two comments there rather than the «десятки «+»» the N list describes. A bar that failed the reader for agreeing with the reference would measure nothing. The thread is READ — S1 is in the population — and its signal count is reported beside the bar"
+      },
+      "reason": null,
+      "result": {
+        "entities_beside_the_number": {
+          "@VARUS_channel:10366": 1,
+          "@retsepty:7312": 0,
+          "@retsepty:7325": 0,
+          "@retsepty:7327": 0,
+          "@sashafitnesslife:3939": 0
+        },
+        "passed": true,
+        "per_thread": {
+          "@VARUS_channel:10366": 0,
+          "@retsepty:7312": 0,
+          "@retsepty:7325": 0,
+          "@retsepty:7327": 0,
+          "@sashafitnesslife:3939": 0
+        },
+        "reachable": true,
+        "scored_over": [
+          "N2",
+          "N3",
+          "N4",
+          "N5",
+          "N6"
+        ],
+        "signals": 0,
+        "threads": {
+          "N2": "@VARUS_channel:10366",
+          "N3": "@sashafitnesslife:3939",
+          "N4": "@retsepty:7312",
+          "N5": "@retsepty:7325",
+          "N6": "@retsepty:7327"
+        },
+        "threads_refused": [],
+        "threads_registered": 5,
+        "threads_with_a_verdict": 5
+      },
+      "scored": true,
+      "scored_over": [
+        "N2",
+        "N3",
+        "N4",
+        "N5",
+        "N6"
+      ],
+      "scorer": "reader_noise_count",
+      "threads_in_the_evidence": [
+        "@VARUS_channel:10366",
+        "@sashafitnesslife:3939",
+        "@retsepty:7312",
+        "@retsepty:7325",
+        "@retsepty:7327"
+      ],
+      "threads_not_read": [],
+      "threads_registered": [
+        "@VARUS_channel:10366",
+        "@sashafitnesslife:3939",
+        "@retsepty:7312",
+        "@retsepty:7325",
+        "@retsepty:7327"
+      ],
+      "threshold": "0 signals",
+      "verdict": "SCORED"
+    },
+    "4_per_comment_agreement": {
+      "collapsed": true,
+      "reason": null,
+      "result": {
+        "absent": 3,
+        "agreed": 7,
+        "disagreed": 4,
+        "n": 14,
+        "passed": false,
+        "rate": 0.5,
+        "rows": [
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21626
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21599
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория",
+                "reader": "сеть_ритейлер"
+              }
+            },
+            "msg_id": 21601
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 21629
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "stance": {
+                "gold": "negative",
+                "reader": null
+              },
+              "subject_type": {
+                "gold": "молочный_бренд",
+                "reader": "сеть_ритейлер"
+              }
+            },
+            "msg_id": 580124
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория",
+                "reader": "молочный_бренд"
+              }
+            },
+            "msg_id": 580129
+          },
+          {
+            "absent": true,
+            "agreed": false,
+            "msg_id": 47899
+          },
+          {
+            "absent": true,
+            "agreed": false,
+            "msg_id": 47902
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48276
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория",
+                "reader": null
+              }
+            },
+            "msg_id": 48283
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579379
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579457
+          },
+          {
+            "absent": true,
+            "agreed": false,
+            "msg_id": 578951
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20664
+          }
+        ],
+        "scored": true
+      },
+      "scored": true,
+      "scorer": "reader_comment_agreement",
+      "threads_in_the_evidence": [
+        "@VARUS_channel:10348",
+        "@VARUS_channel:10613",
+        "@mandziak:3676",
+        "@mandziak:3703",
+        "@matusi_ukr:22242",
+        "@matusi_ukr:22272",
+        "@matusi_ukr:22303"
+      ],
+      "threads_not_read": [],
+      "threads_registered": [
+        "@VARUS_channel:10348",
+        "@VARUS_channel:10613",
+        "@mandziak:3676",
+        "@mandziak:3703",
+        "@matusi_ukr:22242",
+        "@matusi_ukr:22272",
+        "@matusi_ukr:22303"
+      ],
+      "threshold": "rate >= 0.8",
+      "verdict": "SCORED"
+    }
+  },
+  "beside_the_bars": {
+    "3_noise_over_v3s_six_threads": {
+      "reading": "v3 scored the reader on N1, whose signal the reference's own S list asserts (S1, msg 21420). This column is what the v4 bar would have been under v3's registration",
+      "restored_by_v4": [
+        "N1"
+      ],
+      "result": {
+        "entities_beside_the_number": {
+          "@VARUS_channel:10366": 1,
+          "@retsepty:7312": 0,
+          "@retsepty:7325": 0,
+          "@retsepty:7327": 0,
+          "@sashafitnesslife:3939": 0
+        },
+        "passed": true,
+        "per_thread": {
+          "@VARUS_channel:10366": 0,
+          "@retsepty:7312": 0,
+          "@retsepty:7325": 0,
+          "@retsepty:7327": 0,
+          "@sashafitnesslife:3939": 0
+        },
+        "reachable": true,
+        "scored_over": [
+          "N1",
+          "N2",
+          "N3",
+          "N4",
+          "N5",
+          "N6"
+        ],
+        "signals": 0,
+        "threads": {
+          "N1": "@VARUS_channel:10529",
+          "N2": "@VARUS_channel:10366",
+          "N3": "@sashafitnesslife:3939",
+          "N4": "@retsepty:7312",
+          "N5": "@retsepty:7325",
+          "N6": "@retsepty:7327"
+        },
+        "threads_refused": [
+          "@VARUS_channel:10529"
+        ],
+        "threads_registered": 6,
+        "threads_with_a_verdict": 5
+      },
+      "scored_over": [
+        "N1",
+        "N2",
+        "N3",
+        "N4",
+        "N5",
+        "N6"
+      ]
+    },
+    "rule": "REPORTED and never gating — no number here moves a verdict above",
+    "uncollapsed_vocabulary_reading": {
+      "bars": {
+        "1_flagships": {
+          "as_the_bar_collapsed": 2,
+          "uncollapsed": 1
+        },
+        "4_per_comment_agreement": {
+          "as_the_bar_collapsed": 0.5,
+          "uncollapsed": 0.35714285714285715
+        }
+      },
+      "detail": {
+        "1_flagships": {
+          "cases": 5,
+          "cases_answered": 1,
+          "passed": false,
+          "per_case": [
+            {
+              "answered": false,
+              "id": "F1",
+              "signals": [
+                {
+                  "found": true,
+                  "id": "F1a",
+                  "index": 1,
+                  "signal_type": "жалоба"
+                },
+                {
+                  "found": false,
+                  "id": "F1b",
+                  "index": null,
+                  "signal_type": null
+                },
+                {
+                  "found": false,
+                  "id": "F1c",
+                  "index": null,
+                  "signal_type": null
+                }
+              ],
+              "thread": "@VARUS_channel:10613"
+            },
+            {
+              "answered": false,
+              "id": "F2",
+              "signals": [
+                {
+                  "found": false,
+                  "id": "F2a",
+                  "index": null,
+                  "signal_type": null
+                }
+              ],
+              "thread": "@matusi_ukr:22303"
+            },
+            {
+              "answered": false,
+              "id": "F3",
+              "signals": [
+                {
+                  "found": false,
+                  "id": "F3a",
+                  "index": null,
+                  "signal_type": null
+                }
+              ],
+              "thread": "@mandziak:3676"
+            },
+            {
+              "answered": true,
+              "id": "F4",
+              "signals": [
+                {
+                  "found": true,
+                  "id": "F4a",
+                  "index": 0,
+                  "signal_type": "похвала"
+                }
+              ],
+              "thread": "@mandziak:3703"
+            },
+            {
+              "answered": false,
+              "id": "F5",
+              "signals": [
+                {
+                  "found": false,
+                  "id": "F5a",
+                  "index": null,
+                  "signal_type": null
+                }
+              ],
+              "thread": "@matusi_ukr:22272"
+            }
+          ],
+          "per_signal": [
+            {
+              "case": "F1",
+              "found": true,
+              "id": "F1a"
+            },
+            {
+              "case": "F1",
+              "found": false,
+              "id": "F1b"
+            },
+            {
+              "case": "F1",
+              "found": false,
+              "id": "F1c"
+            },
+            {
+              "case": "F2",
+              "found": false,
+              "id": "F2a"
+            },
+            {
+              "case": "F3",
+              "found": false,
+              "id": "F3a"
+            },
+            {
+              "case": "F4",
+              "found": true,
+              "id": "F4a"
+            },
+            {
+              "case": "F5",
+              "found": false,
+              "id": "F5a"
+            }
+          ],
+          "per_signal_reading": "plan §5 (1) names five SIGNALS and the reference five THREADS carrying seven; the bar is the case reading and this table is where the narrower one is read off"
+        },
+        "4_per_comment_agreement": {
+          "absent": 3,
+          "agreed": 5,
+          "disagreed": 6,
+          "n": 14,
+          "passed": false,
+          "rate": 0.35714285714285715,
+          "rows": [
+            {
+              "absent": false,
+              "agreed": true,
+              "disagreed_on": {},
+              "msg_id": 21626
+            },
+            {
+              "absent": false,
+              "agreed": true,
+              "disagreed_on": {},
+              "msg_id": 21599
+            },
+            {
+              "absent": false,
+              "agreed": false,
+              "disagreed_on": {
+                "subject_type": {
+                  "gold": "категория_личное",
+                  "reader": "сеть_ритейлер"
+                }
+              },
+              "msg_id": 21601
+            },
+            {
+              "absent": false,
+              "agreed": true,
+              "disagreed_on": {},
+              "msg_id": 21629
+            },
+            {
+              "absent": false,
+              "agreed": false,
+              "disagreed_on": {
+                "stance": {
+                  "gold": "negative",
+                  "reader": null
+                },
+                "subject_type": {
+                  "gold": "молочный_бренд",
+                  "reader": "сеть_ритейлер"
+                }
+              },
+              "msg_id": 580124
+            },
+            {
+              "absent": false,
+              "agreed": false,
+              "disagreed_on": {
+                "subject_type": {
+                  "gold": "категория_личное",
+                  "reader": "молочный_бренд"
+                }
+              },
+              "msg_id": 580129
+            },
+            {
+              "absent": true,
+              "agreed": false,
+              "msg_id": 47899
+            },
+            {
+              "absent": true,
+              "agreed": false,
+              "msg_id": 47902
+            },
+            {
+              "absent": false,
+              "agreed": true,
+              "disagreed_on": {},
+              "msg_id": 48276
+            },
+            {
+              "absent": false,
+              "agreed": false,
+              "disagreed_on": {
+                "subject_type": {
+                  "gold": "категория_личное",
+                  "reader": null
+                }
+              },
+              "msg_id": 48283
+            },
+            {
+              "absent": false,
+              "agreed": false,
+              "disagreed_on": {
+                "subject_type": {
+                  "gold": "категория_личное",
+                  "reader": "категория"
+                }
+              },
+              "msg_id": 579379
+            },
+            {
+              "absent": false,
+              "agreed": false,
+              "disagreed_on": {
+                "subject_type": {
+                  "gold": "категория_личное",
+                  "reader": "категория"
+                }
+              },
+              "msg_id": 579457
+            },
+            {
+              "absent": true,
+              "agreed": false,
+              "msg_id": 578951
+            },
+            {
+              "absent": false,
+              "agreed": true,
+              "disagreed_on": {},
+              "msg_id": 20664
+            }
+          ],
+          "scored": true
+        }
+      },
+      "why": "what bars 1 and 4 would read if «категория» and «категория_личное» were still two classes. The gap between this and the bar IS what ruling 4 was worth"
+    }
+  },
+  "boot_kill": {
+    "affordability_deadline_as_create_elapsed": 915.0,
+    "contract_ceiling_as_create_elapsed": 759.0,
+    "contract_ceiling_seconds": 720.0,
+    "elapsed_since_create_seconds": 179.4,
+    "first_reply_must_land_by_create_elapsed": 759.0,
+    "generation_started_at_create_elapsed": 39.0,
+    "pre_generation_budget_seconds": 195.039,
+    "read_from": {
+      "copied_back_at": null,
+      "exists": false,
+      "path": "results/reader_v4_pod.jsonl",
+      "rule": "«no reply has landed» is a statement about THIS file, and the pod writes to its own. Copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+    },
+    "reading_projection_seconds": 727.664,
+    "rule": "min(boot_kill_seconds, usable_seconds − seconds already elapsed since `pod create` − reading_projection_seconds). The contract's twelve minutes is a CEILING; what binds is whichever of the two comes first, because a boot that runs past the point where the remaining 23 threads no longer fit is spending on a pass that must stop anyway. Both numbers are printed at the gate and both land in the run record",
+    "seconds_left": 579.6,
+    "spent_so_far_usd": 0.0369,
+    "usable_seconds": 1642.7,
+    "usd_per_second": 0.000205556,
+    "verdict": "WAIT",
+    "which_binds": "the contract's twelve minutes"
+  },
+  "contract": "docs/PROMPT-reader-v4.md",
+  "evidence": {
+    "record": "results/reader_v4_w1.jsonl",
+    "sha256": "bd696f803b6c4ecb64b16bf1c2ca3a44753649bd3585167c1812871e6487cf71",
+    "threads_read": 23,
+    "threads_registered": 23
+  },
+  "go_no_go": {
+    "elapsed_since_create_seconds": 786.8,
+    "headroom_seconds": 356.0,
+    "measured_seconds": 545.332,
+    "measured_seconds_per_thread": 45.444,
+    "payable_comments_read": 75,
+    "payable_comments_unread": 59,
+    "probe_b_seconds_per_thread": 31.6376,
+    "projected_total_seconds": 1286.7,
+    "projections": {
+      "binding": {
+        "factor": 0.9167,
+        "seconds": 499.9,
+        "which": "by_thread"
+      },
+      "by_payable_comment": {
+        "factor": 0.7867,
+        "seconds": 429.0
+      },
+      "by_thread": {
+        "factor": 0.9167,
+        "seconds": 499.9
+      }
+    },
+    "seconds_per_thread_that_still_fits": 77.811,
+    "slowdown_vs_probe_b": 1.436,
+    "the_verdict_re_derives_from_here": "`measured_seconds_per_thread` ≤ `seconds_per_thread_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+    "threads_read": 12,
+    "threads_unread": 11,
+    "usable_seconds": 1642.7,
+    "usd": {
+      "cap_usd_all_in": 0.35,
+      "delete_margin_usd": 0.0123,
+      "projected_total_usd": 0.2645,
+      "spent_so_far_usd": 0.1617
+    },
+    "verdict": "GO"
+  },
+  "gold": {
+    "record": "results/reader_gold_w1_r2.json",
+    "revision": "r2",
+    "sha256": "716ff4174bdafa5957caa4d038a11241b6eb299df4035a5f0e983217ec2a46d9"
+  },
+  "non_gating": {
+    "boot_seconds": 175.119,
+    "card": "NVIDIA GeForce RTX 4090",
+    "completion_tokens": 18637,
+    "generation_seconds": 907.595,
+    "injected_under_probe_b": {
+      "rule": "probe-b's flag, carried because the population digest carries it. Under the reader's own census cell all 23 threads are production-reachable (Dv427) — and a probe row still never enters a production aggregate or a window price",
+      "threads": [
+        "@mandziak:3684",
+        "@mandziak:3689",
+        "@matusi_ukr:22242",
+        "@sashafitnesslife:3939"
+      ]
+    },
+    "prompt_tokens": 51631,
+    "seconds_per_thread": 39.461
+  },
+  "outcome": "GO",
+  "output_ceiling": {
+    "completion_tokens_over_parsed_threads": 15299,
+    "finish_reason_length": 0,
+    "finish_reason_per_thread": {
+      "@VARUS_channel:10348": "stop",
+      "@VARUS_channel:10360": "stop",
+      "@VARUS_channel:10366": "stop",
+      "@VARUS_channel:10451": "stop",
+      "@VARUS_channel:10465": "stop",
+      "@VARUS_channel:10471": "stop",
+      "@VARUS_channel:10529": "stop",
+      "@VARUS_channel:10593": "stop",
+      "@VARUS_channel:10603": "stop",
+      "@VARUS_channel:10613": "stop",
+      "@mandziak:3676": "stop",
+      "@mandziak:3684": "stop",
+      "@mandziak:3689": "stop",
+      "@mandziak:3701": "stop",
+      "@mandziak:3703": "stop",
+      "@matusi_ukr:22242": "stop",
+      "@matusi_ukr:22272": "stop",
+      "@matusi_ukr:22303": "stop",
+      "@retsepty:7312": "stop",
+      "@retsepty:7325": "stop",
+      "@retsepty:7327": "stop",
+      "@sashafitnesslife:3939": "stop",
+      "@tarilka_malyuka:715": "stop"
+    },
+    "max_new_tokens": 2000,
+    "per_comment_rows_requested": 111,
+    "per_comment_rows_returned": 93,
+    "probe_b_finish_reason_length": 0,
+    "rows_returned_over_rows_requested": 0.838,
+    "tokens_per_requested_per_comment_row": 137.83,
+    "tokens_per_returned_per_comment_row": 164.51,
+    "window_reading": "the reader census cell's largest thread carries 125 payable comments (results/gate_census_w1_reader.json). At the requested-row rate above that is what a window pass would owe in output tokens for that one thread, against the ceiling on the line above — computed here, decided nowhere: no window pass is opened by this contract"
+  },
+  "pairing": {
+    "bars": {
+      "1_flagships": {
+        "comparable_column": "probe_b_collapsed against reader_v4_collapsed",
+        "of": 5,
+        "probe_b_collapsed": 2,
+        "probe_b_uncollapsed": 2,
+        "reader_v4_collapsed": 2,
+        "reader_v4_uncollapsed": 1
+      },
+      "2_entity_cases": {
+        "comparable_column": "both, unchanged — the collapse does not reach this bar",
+        "of": 4,
+        "probe_b": 2,
+        "reader_v4": 4
+      },
+      "3_noise": {
+        "comparable_column": "both — v4 restores exactly the five threads v2 registered and probe-b was scored on, which is what makes this the one bar-3 column that IS paired",
+        "probe_b": 0,
+        "probe_b_scored_over": [
+          "N2",
+          "N3",
+          "N4",
+          "N5",
+          "N6"
+        ],
+        "reader_v4": 0,
+        "reader_v4_scored_over": [
+          "N2",
+          "N3",
+          "N4",
+          "N5",
+          "N6"
+        ]
+      },
+      "4_per_comment_agreement": {
+        "comparable_column": "probe_b_collapsed against reader_v4_against_gold_r2_collapsed, and even those two rest on different golds — r2 moved twelve cells to the ratified word. Under the collapse that difference is closed by construction, which is the whole reason the collapse is the bar",
+        "probe_b_against_gold_v1": 0.35714285714285715,
+        "probe_b_collapsed": 0.42857142857142855,
+        "reader_v4_against_gold_r2_collapsed": 0.5,
+        "reader_v4_uncollapsed": 0.35714285714285715
+      }
+    },
+    "per_thread": {
+      "@VARUS_channel:10348": {
+        "probe_b": "missing field: entities",
+        "probe_b_worker_seconds": 30.781,
+        "reader_v4": "parsed",
+        "reader_v4_seconds": 36.621
+      },
+      "@VARUS_channel:10360": {
+        "probe_b": "missing field: entities",
+        "probe_b_worker_seconds": 38.063,
+        "reader_v4": "parsed",
+        "reader_v4_seconds": 38.975
+      },
+      "@VARUS_channel:10366": {
+        "probe_b": "parsed",
+        "probe_b_worker_seconds": 22.924,
+        "reader_v4": "parsed",
+        "reader_v4_seconds": 52.265
+      },
+      "@VARUS_channel:10451": {
+        "probe_b": "parsed",
+        "probe_b_worker_seconds": 19.014,
+        "reader_v4": "parsed",
+        "reader_v4_seconds": 33.603
+      },
+      "@VARUS_channel:10465": {
+        "probe_b": "parsed",
+        "probe_b_worker_seconds": 29.097,
+        "reader_v4": "parsed",
+        "reader_v4_seconds": 38.706
+      },
+      "@VARUS_channel:10471": {
+        "probe_b": "parsed",
+        "probe_b_worker_seconds": 41.56,
+        "reader_v4": "parsed",
+        "reader_v4_seconds": 48.827
+      },
+      "@VARUS_channel:10529": {
+        "probe_b": "parsed",
+        "probe_b_worker_seconds": 29.101,
+        "reader_v4": "two disagreeing objects: name",
+        "reader_v4_seconds": 29.536
+      },
+      "@VARUS_channel:10593": {
+        "probe_b": "missing field: evidence",
+        "probe_b_worker_seconds": 31.429,
+        "reader_v4": "parsed",
+        "reader_v4_seconds": 24.689
+      },
+      "@VARUS_channel:10603": {
+        "probe_b": "parsed",
+        "probe_b_worker_seconds": 36.312,
+        "reader_v4": "parsed",
+        "reader_v4_seconds": 48.45
+      },
+      "@VARUS_channel:10613": {
+        "probe_b": "parsed",
+        "probe_b_worker_seconds": 78.529,
+        "reader_v4": "parsed",
+        "reader_v4_seconds": 94.554
+      },
+      "@mandziak:3676": {
+        "probe_b": "noise is not a list",
+        "probe_b_worker_seconds": 41.155,
+        "reader_v4": "two disagreeing objects: quote",
+        "reader_v4_seconds": 55.23
+      },
+      "@mandziak:3684": {
+        "probe_b": "parsed",
+        "probe_b_worker_seconds": 27.858,
+        "reader_v4": "parsed",
+        "reader_v4_seconds": 43.876
+      },
+      "@mandziak:3689": {
+        "probe_b": "signals.aspect is not a string",
+        "probe_b_worker_seconds": 32.979,
+        "reader_v4": "signals.aspect is not a string",
+        "reader_v4_seconds": 40.696
+      },
+      "@mandziak:3701": {
+        "probe_b": "parsed",
+        "probe_b_worker_seconds": 9.11,
+        "reader_v4": "parsed",
+        "reader_v4_seconds": 16.426
+      },
+      "@mandziak:3703": {
+        "probe_b": "parsed",
+        "probe_b_worker_seconds": 37.057,
+        "reader_v4": "parsed",
+        "reader_v4_seconds": 55.816
+      },
+      "@matusi_ukr:22242": {
+        "probe_b": "parsed",
+        "probe_b_worker_seconds": 48.194,
+        "reader_v4": "parsed",
+        "reader_v4_seconds": 45.299
+      },
+      "@matusi_ukr:22272": {
+        "probe_b": "parsed",
+        "probe_b_worker_seconds": 71.325,
+        "reader_v4": "parsed",
+        "reader_v4_seconds": 93.415
+      },
+      "@matusi_ukr:22303": {
+        "probe_b": "parsed",
+        "probe_b_worker_seconds": 41.192,
+        "reader_v4": "parsed",
+        "reader_v4_seconds": 38.506
+      },
+      "@retsepty:7312": {
+        "probe_b": "signals is not a list",
+        "probe_b_worker_seconds": 11.069,
+        "reader_v4": "parsed",
+        "reader_v4_seconds": 10.953
+      },
+      "@retsepty:7325": {
+        "probe_b": "signals is not a list",
+        "probe_b_worker_seconds": 10.008,
+        "reader_v4": "parsed",
+        "reader_v4_seconds": 9.831
+      },
+      "@retsepty:7327": {
+        "probe_b": "signals is not a list",
+        "probe_b_worker_seconds": 7.949,
+        "reader_v4": "parsed",
+        "reader_v4_seconds": 7.588
+      },
+      "@sashafitnesslife:3939": {
+        "probe_b": "signals is not a list",
+        "probe_b_worker_seconds": 6.701,
+        "reader_v4": "parsed",
+        "reader_v4_seconds": 6.319
+      },
+      "@tarilka_malyuka:715": {
+        "probe_b": "missing field: evidence",
+        "probe_b_worker_seconds": 26.257,
+        "reader_v4": "missing field: evidence",
+        "reader_v4_seconds": 37.414
+      }
+    },
+    "replies_parsed": {
+      "of": 23,
+      "probe_b": 13,
+      "reader_v4": 19
+    },
+    "seconds": {
+      "not_the_same_unit": "probe-b's are billed serverless worker seconds; these are a pod's generation seconds, measured around one `ReaderClient.read` call. The pod also bills for its boot and its idle, and none of that is in this column — bar 5 is where the money is, and it comes from the guard's ledger",
+      "probe_b_gpu": null,
+      "probe_b_worker_per_thread": 31.638,
+      "reader_v4_per_thread": 39.461
+    },
+    "threads_in_both": 23
+  },
+  "phase": "reader-v4",
+  "pod": {
+    "card": "NVIDIA GeForce RTX 4090",
+    "card_registered": "NVIDIA GeForce RTX 4090",
+    "created_at": "2026-08-16T18:00:12Z",
+    "generation_started_at": "2026-08-16T18:00:51Z",
+    "pod_id": "p7kyjc5ak4pq1n",
+    "priced_as_registered": true,
+    "usd_per_hour": 0.74,
+    "usd_per_hour_registered": 0.74,
+    "usd_per_second": 0.000205556
+  },
+  "refusals": {
+    "as_run": {
+      "missing field: evidence": 1,
+      "signals.aspect is not a string": 1,
+      "two disagreeing objects: name": 1,
+      "two disagreeing objects: quote": 1
+    },
+    "did_not_return": [
+      "missing field: entities",
+      "noise is not a list",
+      "signals is not a list"
+    ],
+    "new_against_probe_b": [
+      "two disagreeing objects: quote"
+    ],
+    "per_thread": {
+      "@VARUS_channel:10529": "two disagreeing objects: name",
+      "@mandziak:3676": "two disagreeing objects: quote",
+      "@mandziak:3689": "signals.aspect is not a string",
+      "@tarilka_malyuka:715": "missing field: evidence"
+    },
+    "probe_b_as_run_under_v2": {
+      "missing field: entities": 2,
+      "missing field: evidence": 2,
+      "noise is not a list": 1,
+      "signals is not a list": 4,
+      "signals.aspect is not a string": 1
+    },
+    "probe_b_replies_under_todays_parser": {
+      "missing field: evidence": 2,
+      "signals.aspect is not a string": 1,
+      "two disagreeing objects: name": 1
+    },
+    "reading": "«probe_b_replies_under_todays_parser» is probe-b's own 23 replies re-read by the v3 parser — the measurement the registration published as 19 of 23, recomputed here so the comparison is between two runs of one instrument and not between a run and a sentence in a report. It moves no probe-b number: that run's verdict is results/reader_probe_b_verdict.json",
+    "refused": 4,
+    "still_refusing_after_the_container_tolerance": [
+      "missing field: evidence",
+      "signals.aspect is not a string",
+      "two disagreeing objects: name"
+    ]
+  },
+  "registration": {
+    "attempt": "ONE attempt, no retry. A kill or a STOP closes the question, and so does a completed run with a failed bar: what follows is a new registration after a sitting, never a second pass at this one",
+    "population_threads": 23,
+    "record": "results/prereg_reader_probe_v4.json",
+    "sha256": "8a26784c85deb8064747e78af2296121b6ebebc531bfc830bfdc52d2afe717e9",
+    "task": "reader_thread_gm4_v3"
+  },
+  "repairs": {
+    "fired": {
+      "entities: empty object -> empty list": 0,
+      "entities: map keyed by msg_id -> list": 0,
+      "noise: empty object -> empty list": 0,
+      "noise: map keyed by msg_id -> list": 0,
+      "per_comment: empty object -> empty list": 0,
+      "per_comment: map keyed by msg_id -> list": 0,
+      "signals: empty object -> empty list": 0,
+      "signals: map keyed by msg_id -> list": 0,
+      "two top-level objects merged": 0
+    },
+    "reading": "gates nothing. A and B are ONE instrument and no ablation between them was bought, so a reply that parses here may not be attributed to the parser or to the prompt",
+    "registered": [
+      "entities: empty object -> empty list",
+      "entities: map keyed by msg_id -> list",
+      "noise: empty object -> empty list",
+      "noise: map keyed by msg_id -> list",
+      "per_comment: empty object -> empty list",
+      "per_comment: map keyed by msg_id -> list",
+      "signals: empty object -> empty list",
+      "signals: map keyed by msg_id -> list",
+      "two top-level objects merged"
+    ],
+    "threads_read_straight": 19,
+    "threads_repaired": [],
+    "unregistered_names_that_fired": []
+  },
+  "replies": {
+    "from_post_signals": 0,
+    "no_signal": 10,
+    "parsed": 19,
+    "proposed_signal_types": [],
+    "reading": "«no signal» is counted over PARSED replies only. A reply that could not be read is not a thread with nothing in it, and the two are never added together",
+    "refused": 4,
+    "signal_bearing": 9
+  },
+  "scorer": {
+    "bar_three_producer": "scripts/write_reader_prereg_v3.py::bar_three_over_answers",
+    "borrowed": "bars 1/2/4 through scripts/score_reader_probe_b.py, the censuses and bar 5 through scripts/score_reader_v3.py — the contract's «score with score_reader_v3.py, pointed at v4's bars», satisfied by calling it rather than by editing it",
+    "functions": [
+      "reader_comment_agreement",
+      "reader_entity_found",
+      "reader_noise_count",
+      "reader_signal_found"
+    ],
+    "module": "src/market_pulse/scorer.py",
+    "registered_sha256": "dbb5406a502f813ba1b4940e0914310efd632386a8da60e0c002cc8964a97d4f",
+    "sha256": "dbb5406a502f813ba1b4940e0914310efd632386a8da60e0c002cc8964a97d4f",
+    "unchanged": true
+  },
+  "scoring_rules": {
+    "vocabulary_collapse": {
+      "applied_to": [
+        "1_flagships",
+        "4_per_comment_agreement"
+      ],
+      "is_the_bar": "the numbers in `bars` above are the COLLAPSED ones. The uncollapsed reading is under `beside_the_bars` and gates nothing — the opposite of v3, where the collapse was the column and the reference's word was the bar",
+      "map": {
+        "категория_личное": "категория"
+      },
+      "symmetric": true
+    }
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "boot_kill": {
+    "affordability_deadline_as_create_elapsed": 915.0,
+    "contract_ceiling_as_create_elapsed": 759.0,
+    "contract_ceiling_seconds": 720.0,
+    "elapsed_since_create_seconds": 179.4,
+    "first_reply_must_land_by_create_elapsed": 759.0,
+    "generation_started_at_create_elapsed": 39.0,
+    "pre_generation_budget_seconds": 195.039,
+    "read_from": {
+      "copied_back_at": null,
+      "exists": false,
+      "path": "results/reader_v4_pod.jsonl",
+      "rule": "«no reply has landed» is a statement about THIS file, and the pod writes to its own. Copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+    },
+    "reading_projection_seconds": 727.664,
+    "rule": "min(boot_kill_seconds, usable_seconds − seconds already elapsed since `pod create` − reading_projection_seconds). The contract's twelve minutes is a CEILING; what binds is whichever of the two comes first, because a boot that runs past the point where the remaining 23 threads no longer fit is spending on a pass that must stop anyway. Both numbers are printed at the gate and both land in the run record",
+    "seconds_left": 579.6,
+    "spent_so_far_usd": 0.0369,
+    "usable_seconds": 1642.7,
+    "usd_per_second": 0.000205556,
+    "verdict": "WAIT",
+    "which_binds": "the contract's twelve minutes"
+  },
+  "deadlines_at_open": {
+    "affordability_deadline_as_create_elapsed": 915.0,
+    "contract_ceiling_as_create_elapsed": null,
+    "contract_ceiling_seconds": 720.0,
+    "elapsed_since_create_seconds": 5.5,
+    "first_reply_must_land_by_create_elapsed": 915.0,
+    "generation_started_at_create_elapsed": null,
+    "pre_generation_budget_seconds": 195.039,
+    "reading_projection_seconds": 727.664,
+    "rule": "min(boot_kill_seconds, usable_seconds − seconds already elapsed since `pod create` − reading_projection_seconds). The contract's twelve minutes is a CEILING; what binds is whichever of the two comes first, because a boot that runs past the point where the remaining 23 threads no longer fit is spending on a pass that must stop anyway. Both numbers are printed at the gate and both land in the run record",
+    "seconds_left": 909.6,
+    "spent_so_far_usd": 0.0011,
+    "usable_seconds": 1642.7,
+    "usd_per_second": 0.000205556,
+    "verdict": "WAIT",
+    "which_binds": "affordability — the generation has not started, so the contract's twelve minutes has no place on this axis yet"
+  },
+  "go_no_go": {
+    "elapsed_since_create_seconds": 786.8,
+    "headroom_seconds": 356.0,
+    "measured_seconds": 545.332,
+    "measured_seconds_per_thread": 45.444,
+    "payable_comments_read": 75,
+    "payable_comments_unread": 59,
+    "probe_b_seconds_per_thread": 31.6376,
+    "projected_total_seconds": 1286.7,
+    "projections": {
+      "binding": {
+        "factor": 0.9167,
+        "seconds": 499.9,
+        "which": "by_thread"
+      },
+      "by_payable_comment": {
+        "factor": 0.7867,
+        "seconds": 429.0
+      },
+      "by_thread": {
+        "factor": 0.9167,
+        "seconds": 499.9
+      }
+    },
+    "seconds_per_thread_that_still_fits": 77.811,
+    "slowdown_vs_probe_b": 1.436,
+    "the_verdict_re_derives_from_here": "`measured_seconds_per_thread` ≤ `seconds_per_thread_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+    "threads_read": 12,
+    "threads_unread": 11,
+    "usable_seconds": 1642.7,
+    "usd": {
+      "cap_usd_all_in": 0.35,
+      "delete_margin_usd": 0.0123,
+      "projected_total_usd": 0.2645,
+      "spent_so_far_usd": 0.1617
+    },
+    "verdict": "GO"
+  },
+  "phase": "reader-v4",
+  "pod": {
+    "card": "NVIDIA GeForce RTX 4090",
+    "card_registered": "NVIDIA GeForce RTX 4090",
+    "created_at": "2026-08-16T18:00:12Z",
+    "generation_started_at": "2026-08-16T18:00:51Z",
+    "pod_id": "p7kyjc5ak4pq1n",
+    "priced_as_registered": true,
+    "usd_per_hour": 0.74,
+    "usd_per_hour_registered": 0.74,
+    "usd_per_second": 0.000205556
+  }
+}
