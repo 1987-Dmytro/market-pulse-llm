@@ -804,3 +804,28 @@ def test_a_closing_entry_re_derives_from_the_lines_it_publishes():
         )
         is None
     )
+
+
+def test_the_balance_is_printed_once_whichever_ledger_is_live(tmp_path, monkeypatch, capsys):
+    """One reading, one line. The closed branch prints the balance itself when there is no line to
+    enforce, and stays quiet when there is — `enforce` says it in that case, and a guard that
+    printed two `balance now` rows would invite a reader to look for two readings."""
+    closed_phase(tmp_path, monkeypatch)
+    drive(monkeypatch, balance=22.5)
+    guard.main([])
+    assert capsys.readouterr().out.count("balance now") == 1
+
+    (tmp_path / "spend_cycle2.json").write_text(
+        json.dumps(
+            {
+                "cycle2_cap_usd": 20.0,
+                "runpod_balance_at_cycle2_start": 40.0,
+                "anchored_at": "2026-08-17T09:00:00+00:00",
+                "sessions": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+    drive(monkeypatch, balance=39.5)
+    guard.main([])
+    assert capsys.readouterr().out.count("balance now") == 1

@@ -497,7 +497,6 @@ def main(argv: list[str] | None = None) -> int:
             write_ledger(ledger)
             print(f"anchored {LEDGER.name} — commit it and never regenerate it")
     else:
-        print(f"balance now       ${balance_now:.2f}")
         print(
             f"PHASE 4 CLOSED    ${phase_closed['spent_usd']:.4f} of ${PHASE_CAP_USD:.2f}"
             f"  (final reading {phase_closed['at']})"
@@ -505,6 +504,9 @@ def main(argv: list[str] | None = None) -> int:
         print_kinds(phase_closed.get("billing_by_kind"), "  ")
         cycle = read_cycle2(balance_now)
         if cycle is None:
+            # printed here and not above the closed line: when the line IS anchored, `enforce`
+            # prints the balance itself and this branch would say it twice
+            print(f"balance now       ${balance_now:.2f}")
             print(
                 f"CYCLE 2           NOT ANCHORED — the line is ${CYCLE2_CAP_USD:.2f} and its"
                 f" anchor needs a balance of ${CYCLE2_ANCHOR_MIN_USD:.2f} or more"
