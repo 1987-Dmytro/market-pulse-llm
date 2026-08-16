@@ -1,0 +1,139 @@
+{
+  "authority": "the reader sitting of 2026-08-16, ruling 3 (knowledge/decisions/reader-sitting-16-08.md): SPEC 3.21 (1)'s marker rule is lifted for the READER PATH ONLY — the payment gate of classification and the r1 brand attribution are not touched — spam and scam threads are not removed, and this cell is MEASURED and never derived",
+  "beside_the_shipped_grid": {
+    "narrow|silencers_off": {
+      "comments_payable": 1116,
+      "threads": 129
+    },
+    "narrow|silencers_on": {
+      "comments_payable": 912,
+      "threads": 111
+    },
+    "reading": "the shipped record is NEVER rewritten — its producer's sha is pinned by its own record and by results/prereg_reader_probe*.json. These three rows are quoted from it so a reader can see this cell beside the grid it is missing from",
+    "record": "results/gate_census_w1.json",
+    "sha256": "1338d4003ff787682962fd5f5f89014939e533af900083367c3e2be882d65602",
+    "the_thread_count_alone_cannot_identify_this_cell": "this cell keeps 129 threads and so does narrow|silencers_off — the two silencers that stay ON drop COMMENTS, and in this window they never take a thread's last lexicon hit with them (`each_alone` reports 0 threads removed for both). The payable count is what tells them apart: 1032 here against 1116 there, a 84-comment difference that is exactly what plus_spam and scam removed. A cell identified by its thread count alone would have been indistinguishable from one nobody meant, which is the second reason ruling 3 asks for a MEASUREMENT",
+    "varto_rule_alone": {
+      "comments_silenced_window_wide": {
+        "plus_spam": 0,
+        "scam": 0
+      },
+      "threads": 111,
+      "threads_removed": 18
+    }
+  },
+  "cell": "narrow|varto_off|plus_spam+scam",
+  "contract": "docs/PROMPT-reader-v3-prep.md D4",
+  "expectation": {
+    "agrees": true,
+    "reading": "carried as an expectation and never as the source of the number. Ruling 3 is explicit that a cell arrived at by arithmetic over two older cells would be a number no census on disk can reproduce",
+    "source": "the operator's word at the sitting, ruling 3",
+    "threads": 129
+  },
+  "inputs": {
+    "config/lexicon.yaml": "21b50bac55c7768334efa270f4048f1cc441670f336707e4e372737378cf1d98",
+    "config/registry.yaml": "d4e3b2373c4378f3acc51079dc1d0560c28d58c46b71335b2bb352cae39be3ba",
+    "config/watchlist_rules.yaml": "40e4cb5e3537d1c3efe8a423cd93a5bfdd689387b32e294b008a343130ff07e4",
+    "results/gate_census_w1.json": "1338d4003ff787682962fd5f5f89014939e533af900083367c3e2be882d65602",
+    "results/prereg_5c2_run.json": "d5d3afd5e6d7e966233a7e449546b2001f9c2a08646cab207e87531f5df4cbc8"
+  },
+  "measured": {
+    "comments": 1883,
+    "comments_payable": 1032,
+    "comments_silenced_window_wide": {
+      "plus_spam": 110,
+      "scam": 6
+    },
+    "threads": 129
+  },
+  "phase": "reader-v3-prep",
+  "population": {
+    "enumeration_rule": "the keep predicate of gate_census_w1.cell, applied one thread at a time and held to the census's own measurement on BOTH numbers. A count cannot be joined against, and D5 needs each of probe-b's 23 threads' in/out status under this cell",
+    "largest": [
+      {
+        "payable_comments": 125,
+        "thread": "@matusi_ukr:22058"
+      },
+      {
+        "payable_comments": 108,
+        "thread": "@matusi_ukr:22295"
+      },
+      {
+        "payable_comments": 105,
+        "thread": "@matusi_ukr:22133"
+      },
+      {
+        "payable_comments": 43,
+        "thread": "@klopotenkofood:6040"
+      },
+      {
+        "payable_comments": 35,
+        "thread": "@matusi_ukr:22092"
+      }
+    ],
+    "payable_comments": 1032,
+    "payable_per_thread": {
+      "max": 125,
+      "mean": 8.0,
+      "median": 3,
+      "min": 0
+    },
+    "threads": 129
+  },
+  "price": {
+    "binding": "by_payable_comment",
+    "binding_usd": 1.7187,
+    "by_payable_comment": {
+      "rule": "1032 payable comments × 5.4303 s × the rate",
+      "seconds": 5604.1,
+      "usd": 1.7187
+    },
+    "by_thread": {
+      "rule": "129 threads × 31.6376 s × the rate",
+      "seconds": 4081.3,
+      "usd": 1.2517
+    },
+    "evidence": {
+      "results/reader_probe_b_w1.jsonl": "2ff3ea6be0fc0a64c27d2d96b9b1d96732be69b4f25b8c15a24373db8b844a08"
+    },
+    "excludes": "setup — the staging pod, the endpoint's boot and the warm-up. This is the READING cost of the cell and not an all-in figure for a contract",
+    "rate_usd_per_second": 0.00030669,
+    "sample": "23 threads and 134 payable comments in one pass, 727.664 billed worker seconds on an NVIDIA GeForce RTX 4090 (endpoint lfqvip37lpgcii, results/reader_probe_b_w1.jsonl), re-summed from the rows and not copied",
+    "seconds_per_payable_comment": 5.4303,
+    "seconds_per_thread": 31.6376
+  },
+  "producer": {
+    "borrowed": {
+      "scripts/gate_census_w1.py": "4480a5fcd0eb21b53f103e3e68b9eee41aa81e130de23fbf8ae0702a709fea6a",
+      "scripts/reader_population.py": "5ecb897d3d620d7d27916a3aa578a599ba1cd7c835abfb4ea136a350a440914a",
+      "scripts/window_summary_5c2.py": "239d2d5fcc0f0c93158ca41383b5ce20beb7f8e9db38974913a302ea4831fdaf",
+      "src/market_pulse/brands.py": "33ed070b3df9ac37d4c8579b9ecb372a9bd38b56be5d2091f7009f1579ce1674",
+      "src/market_pulse/lexicon.py": "517982917115216e3470c9abeec5257c8f74d5c98a698544740a06024e1d29d3",
+      "src/market_pulse/loop.py": "3af31663cbd9d070ef00a14c033f93b285a1a0aebfb4153575d3ddda59853a1a",
+      "src/market_pulse/yield_screen.py": "2e5204062ac7eef6f4332be749d8e7674d3645e2586a22af67f0d1014e8d2a7d"
+    },
+    "script": "scripts/gate_census_w1_reader.py",
+    "sha256": "42be312ef873a73f434b39cfa8060f6d110580ed1ace36ea2ee37b4d7c3e1c70"
+  },
+  "reported_risk": {
+    "ceiling": "local_llm.READER_MAX_NEW_TOKENS = 2000",
+    "measured_so_far": "probe-b returned `finish_reason: length` on ZERO of 23 replies under v2, and its largest thread carried 15 payable comments. This cell's largest carries 125, so the ceiling is a WINDOW risk and not a probe risk — the paired re-read of the same 23 threads cannot reach it, and a window pass under v3 might",
+    "probe_population_max_payable": 15,
+    "this_cell_max_payable": 125,
+    "unlock": "measure `finish_reason` per thread on the v3 re-read and re-price the ceiling against the observed tokens-per-row before any window pass is opened",
+    "what": "the v3 prompt asks for a `per_comment` row for EVERY comment shown, where v1 and v2 asked for one only where a comment carried a subject or an attitude. Output length now scales with the payable count of the thread"
+  },
+  "silencers": {
+    "not_removed": "spam and scam THREADS stay in the population — the two silencers above drop participation markers and scam COMMENTS, which is what the census always meant by them. Ruling 3's «spam/scam threads are not removed» is a statement about the thread gate and it is satisfied by there being no thread-level silencer here",
+    "plus_spam": {
+      "active": true
+    },
+    "scam": {
+      "active": true
+    },
+    "varto_rule": {
+      "active": false,
+      "why": "ruling 3. probe-b measured what it costs the reader: E1 (@matusi_ukr:22242, «дитячий центр Гармонія» → не_наш_рынок) and E4 (@mandziak:3684/#3689, «чи варто» → an adverb) are two of the operator's four obligatory entity cases, and the marker rule removes their threads BEFORE payment. probe-b bought them by injection and both were answered"
+    }
+  }
+}
