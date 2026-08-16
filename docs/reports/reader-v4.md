@@ -306,6 +306,13 @@ ablation, is that **no recovered reply came through a repair**, because none ran
 A did fire: the refuse-on-conflict clause **removed two replies**, one of which probe-b had parsed
 (`@VARUS_channel:10529`). A's net effect on the parse count here is 0 recovered and 2 refused.
 
+The closest thing to an ablation the evidence permits sits in the same census, and it has a number:
+probe-b's **own 23 replies**, re-read under today's parser, refuse **4** times against the **10** its
+run recorded under v2. That is the parser's half measured on a fixed reply set — six replies
+recovered by the parser alone, on replies the v2 prompt produced. It says nothing about which half
+recovered THIS run's six, and the registration is right to forbid that inference: the two
+measurements are over different replies.
+
 | refusal shape | v4 | probe-b as run (v2) | probe-b's replies re-read under today's parser |
 |---|---:|---:|---:|
 | `two disagreeing objects: name` | 1 | — | 1 |
@@ -401,7 +408,8 @@ READER-V4 SPENT      $0.2446 of $0.35  (anchor $22.07 from runpod_balance_at_rea
 $ shasum -a 256 results/prereg_reader_probe_v4.json
 8a26784c85deb8064747e78af2296121b6ebebc531bfc830bfdc52d2afe717e9
 
-$ PYTHONPATH=src python3 scripts/write_reader_prereg_v4.py --out /tmp/again.json && cmp results/prereg_reader_probe_v4.json /tmp/again.json
+$ PYTHONPATH=src python3 scripts/write_reader_prereg_v4.py --out $SCRATCH/v4_rebuild.json >/dev/null \
+    && cmp results/prereg_reader_probe_v4.json $SCRATCH/v4_rebuild.json && echo "byte-identical rebuild: OK"
 byte-identical rebuild: OK
 
 $ PYTHONPATH=src python3 scripts/score_reader_v4.py
@@ -415,15 +423,41 @@ wrote results/reader_v4_verdict.json  sha256 7f5c96c8352ad052…
   replies: 19 parsed · 4 refused
   refusals by shape: {'missing field: evidence': 1, 'signals.aspect is not a string': 1,
                       'two disagreeing objects: name': 1, 'two disagreeing objects: quote': 1}
-  repairs fired: {…all nine registered names: 0}
+  repairs fired: {'entities: empty object -> empty list': 0, 'entities: map keyed by msg_id -> list': 0,
+                  'noise: empty object -> empty list': 0, 'noise: map keyed by msg_id -> list': 0,
+                  'per_comment: empty object -> empty list': 0, 'per_comment: map keyed by msg_id -> list': 0,
+                  'signals: empty object -> empty list': 0, 'signals: map keyed by msg_id -> list': 0,
+                  'two top-level objects merged': 0}
   finish_reason length: 0 · tokens per requested per_comment row: 137.83
 ```
 
-The per-commit rule: `make check` was green at `48a32d7` (2 645 / 2 skipped) before the tail, red for
-exactly the two commits between the v3 close and its repair — `bf2502f` (the close) and `05df60d`
-(the anchor), both of which carry ledger data and no code — and green again from `ae7be77` onward.
-That redness is Dv447 and it is named rather than rewritten: the ledger a guard refused to accept is
-the honest history.
+### 8.1 The per-commit rule, checked out one by one
+
+`make check` was green at `48a32d7` (2 645 / 2 skipped) before the tail and is green at HEAD
+(2 685 / 2 skipped). In between, **three** commits carry a red
+`tests/test_repair_phase4_ledger.py` — not two, and not the two I first wrote down. Checked out one
+at a time in a throwaway worktree:
+
+```
+bf2502f  2 failed, 10 passed      the v3 close: the reading the line ledger had not heard
+12c3707  2 failed, 10 passed      the v4 registration
+ac6bfee  2 failed, 10 passed      the pod transport
+ae7be77  12 passed                the guard fix and the line's own witness, together
+b209286  12 passed
+05df60d  12 passed
+f1bb539  12 passed
+ace1a0d  12 passed
+```
+
+So the redness runs from the close to its repair — `bf2502f`, `12c3707`, `ac6bfee` — and closes at
+`ae7be77`, which is the commit that carries both halves of the fix. That is Dv447, named rather than
+rewritten: the ledger a guard refused to accept is the honest history.
+
+**The claim is scoped to that file on purpose.** A worktree of this repo cannot run the whole suite —
+the Telegram store under `data/` is gitignored, so 164 tests fail there for reasons that have nothing
+to do with any commit (`no stored posts, so no comment has a parent to read`). `test_repair_phase4_ledger.py`
+reads only committed ledger JSON and is therefore the one file a worktree can answer for; the
+full-suite figures above are from the real checkout, at the baseline and at HEAD.
 
 ## 9. Process signals
 
@@ -440,9 +474,10 @@ the honest history.
 4. **The collapse was worth measuring and is not the answer.** Ruling 4 lifts bar 1 from 1 to 2 and
    bar 4 from 0.357 to 0.500. The four remaining bar-4 disagreements are not vocabulary at all —
    they are the reader calling a comment about a category a comment about the chain.
-5. **The instrument's parse half was bought and never used.** Zero container repairs fired across 23
+5. **The instrument's repair half was bought and never used.** Zero container repairs fired across 23
    replies; the refuse-on-conflict clause removed two. What recovered six replies against probe-b was
-   not a repair, and the registration is right that no ablation was bought to say more than that.
+   not a repair — though on probe-b's OWN replies the same parser turns 10 refusals into 4, which is
+   the parser measured on a fixed reply set and still not an answer about this run.
 
 ## 10. What is open
 
