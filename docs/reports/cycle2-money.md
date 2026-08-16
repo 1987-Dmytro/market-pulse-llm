@@ -2,7 +2,7 @@
 
 **Contract:** `docs/PROMPT-cycle2-money.md` · **class:** zero-GPU, cloud READ-ONLY · **spend:** $0.00
 **Baseline:** `make check` **2 562 passed / 2 skipped**, HEAD `48c974a` with the standing tail
-**Close:** **2 583 passed / 2 skipped** (+21 tests), HEAD `c86d3fd`
+**Close:** **2 584 passed / 2 skipped** (+22 tests), HEAD `e941b34`
 **Law:** SPEC amendment **3.23**, landed by this contract — operator ruling 2026-08-16 (the reader
 sitting). Two ADR debts paid, Phase 4 CLOSED, probe-b's step SETTLED.
 
@@ -80,7 +80,7 @@ beside it.
   "closed": true,
   "balance": 22.519483661,
   "window_start": "2026-08-01T08:34:09+00:00",
-  "balance_delta_usd": 12.470794,
+  "balance_delta_usd": 12.480516,
   "billing_since_usd": 32.470794,
   "billing_by_kind": {"pods": 17.692135, "network-volume": 3.227778, "serverless": 11.550881},
   "spent_usd": 32.4708,
@@ -88,11 +88,13 @@ beside it.
 }
 ```
 
-**Both readings are carried BECAUSE they disagree, and the gap is exactly $20.00.** The operator
-topped the account up on 2026-08-15, after this ledger's anchor was taken, so the balance delta
-under-counts by that top-up and the billing walk is the binding number — as it has been since the
-top-up landed. A closing entry that carried only `spent_usd` would have hidden the one fact a reader
-needs to know about this ledger.
+**Both readings are carried BECAUSE they disagree, and the gap is $19.990278 — the operator's
+$20.00 top-up, less about a cent.** The top-up landed on 2026-08-15, after this ledger's anchor was
+taken, so the balance delta under-counts by it and the billing walk is the binding number, as it has
+been since. The residual ~$0.0097 is the billing walk lagging the balance by a hair of unsettled
+volume — the same lag Dv407 was withdrawn over — which is why the on-disk test asserts the gap as a
+BAND (`19.9 < … < 20.1`) rather than as $20.00 exactly. A closing entry that carried only `spent_usd`
+would have hidden the one fact a reader needs to know about this ledger.
 
 **Append-only, checked rather than asserted.** Against `HEAD~`: `sessions` 40 → 41, the prior 40
 entries byte-identical, `runpod_balance_at_phase4_start`, `anchored_at`, `phase4_cap_usd` and the
@@ -217,10 +219,11 @@ On probe-b's own settled lines the two answers **straddle the cap they were judg
 | pods + serverless — the step's own resources | **$0.313162** |
 | network volume `qw4nwleanc`, standing | $0.136111 |
 | everything the walk returned | $0.449273 |
-| the balance delta at this session's reading | $0.449000 |
+| the balance delta at the closing reading | $0.458995 |
 
-$0.3132 is inside $0.35 and $0.4493 is not. That is the distance between «overrun» and «inside», and
-it was never about probe-b.
+$0.3132 is inside $0.35; **neither** of the account's two readings — $0.4493 by the walk, $0.4590
+by the delta — is. That is the distance between «overrun» and «inside», and it was never about
+probe-b.
 
 ### (d) A step can be CLOSED
 
@@ -255,6 +258,13 @@ sealed registration states follows either move: it borrows the guard as the inst
 the cap and reads `PHASE_CAP_USD`, which neither move touched, and 3.18 (7)(b) already forbids
 re-scoring what it priced.
 
+The producer `write_prereg_5c2.py` moved in this contract too — `BLOCKS_TODAY` grew — and its own
+inline token assertion (`amendment-3.19` absent from the recovered blob, present on disk) stayed
+green. That one is left alone deliberately: its job is «the recovery is from the right commit», and
+3.19 still predates the sealing commit, so the sentence is as true after this landing as before it.
+`MOVED_BORROWS` is the opposite case — its token is the ONLY record of what moved — which is why one
+grew a member and the other did not.
+
 ---
 
 ## Verify
@@ -266,18 +276,18 @@ $ make check
 ruff check .
 All checks passed!
 pytest -q
-2583 passed, 2 skipped in 177.65s (0:02:57)
+2584 passed, 2 skipped in 176.17s (0:02:56)
 
 $ ruff format --check .
 306 files already formatted
 ```
 
-2 562 → **2 583**, +21 tests. The formatter was run before any sha was computed or any artifact
+2 562 → **2 584**, +22 tests. The formatter was run before any sha was computed or any artifact
 written (Dv363/Dv410's lesson).
 
 **Per commit, as a rule rather than a list** — an enumeration cannot name the commit that carries it.
 `make check` ran on the exact tree of every commit that moves code, a test or a result artifact:
-`b3db748` (2 562 / 2), `27eba42` (2 580 / 2), `c86d3fd` (2 583 / 2). The other three differ from a
+`b3db748` (2 562 / 2), `27eba42` (2 580 / 2), `c86d3fd` (2 583 / 2), `e941b34` (2 584 / 2). The other three differ from a
 verified tree in prose only — `c43a312` and `49cfe35` move `knowledge/**`, `f0ac23b` moves
 `docs/STATUS.md` and this contract — and checked rather than assumed: the only vault path any test
 opens is `knowledge/templates/daily-log.md` (`tests/test_templates.py`), untouched, and every
@@ -287,11 +297,11 @@ occurrence of `docs/reports/` under `tests/` is inside a docstring.
 
 ```
 $ python3 scripts/runpod_guard.py
-balance now       $22.52
 PHASE 4 CLOSED    $32.4708 of $33.00  (final reading 2026-08-16T11:09:48+00:00)
   pods            $17.6921
   network-volume  $3.2278   <- always on, beside the run and never inside it
   serverless      $11.5509
+balance now       $22.52
 CYCLE 2           NOT ANCHORED — the line is $20.00 and its anchor needs a balance of $40.00 or more
 
 REFUSED: Phase 4 is CLOSED at $32.4708 and the cycle-2 line is not anchored — the balance reads
@@ -324,10 +334,12 @@ written:
 17 failed, 17 passed in 0.41s
 ```
 
-Fifteen of the sixteen older tests pass on the old guard; the sixteenth,
-`test_the_billing_walk_asks_for_serverless_too`, fails because it now also asserts the kinds arrive
-apart. Every one of the seventeen failures is a behavioural claim about this fix. Two of the
-twenty-one new tests pass on the old guard and are named as such: `test_the_closing_flags_refuse_to_be_used_half` passes there only because
+The run held 34 tests — the 16 older ones and the first 18 new. (The four added afterwards are not
+in it: three of them read shipped artifacts or call functions the old guard does not have, so the
+control cannot be run for them at all.) Fifteen of the sixteen older tests pass on the old guard;
+the sixteenth, `test_the_billing_walk_asks_for_serverless_too`, fails because it now also asserts
+the kinds arrive apart. Every one of the seventeen failures is a behavioural claim about this fix.
+Two of the eighteen new tests pass on the old guard and are named as such: `test_the_closing_flags_refuse_to_be_used_half` passes there only because
 argparse rejects `--close` as unknown, and `test_a_refused_start_leaves_no_step_anchor_behind` passes
 because the old control flow made it true by accident — it is a regression guard for the restructure,
 which is why it exists.
@@ -339,7 +351,7 @@ which is why it exists.
 | `results/spend_phase4.json` | `8b4b041603ff9326` | 14 532 |
 | `results/spend_probe_b.json` | `30c629e34f855997` | 1 794 |
 | `docs/SPEC.md` | `6c57df087de49f48` | 82 195 |
-| `scripts/runpod_guard.py` | `ccedbddd114f1e89` | 34 335 |
+| `scripts/runpod_guard.py` | `728dc751c2079097` | 34 509 |
 
 ### The DO NOT list, as evidence
 
@@ -349,7 +361,7 @@ which is why it exists.
 | no cloud resource created | only `runpodctl user` and `runpodctl billing <kind>` were run, both read-only. Measured, not asserted: the walk from `2026-08-16T00:00:00Z` returns **0 pod rows and 0 serverless rows** beside one network-volume row ($0.106944), so the standing volume is the day's only charge and this contract spent **$0.00** |
 | no sealed record re-pinned | six SPEC pins re-derive; `MOVED_BORROWS` grew a token instead of the record growing a hash; `KEEP_BLOCKS` still ten |
 | `spend_*.json` anchors untouched | both writes are appends — prior entries byte-identical, no new top-level key, anchors and `anchored_at` unchanged |
-| no reader / r1 / census / dashboard / collection change | `git diff --name-only 48c974a..HEAD` returns eighteen paths (this report is the nineteenth), none of them under `src/`, `config/`, `data/` or `dashboard/` |
+| no reader / r1 / census / dashboard / collection change | `git diff --name-only 48c974a..HEAD` returns nineteen paths, none of them under `src/`, `config/`, `data/` or `dashboard/` |
 | never `git add -A` | all six commits staged by explicit path |
 
 ---
@@ -413,6 +425,17 @@ Numbering continues the programme's; probe-b's last was Dv412, so this report op
   the Verify block of `docs/reports/probe-b.md` (`… g.billing_since(...)`) no longer
   runs. That report is a historical record and was not edited; the replacement is
   `g.billing_by_kind(...)`. [cause: api-rename]
+
+- **Dv423** — **this report quoted fixture numbers as artifact numbers, and it is the same class
+  the contract exists to fix.** §1's closing entry was transcribed with `balance_delta_usd`
+  12.470794 and §3(c)'s table with a step delta of $0.449000; both are $35.00 and $22.9784784161
+  taken against **$22.5292058832** — the balance from this session's FIRST `runpodctl user` call and
+  the value the fixtures are driven with. Both closes were actually written at **$22.519483661**, so
+  the artifacts read 12.480516 and 0.458995. The shape is what makes it dangerous: fixture and
+  artifact share the anchors and differ only in the balance, so the two deltas look alike to five
+  significant figures. Corrected against the entries re-read from disk, every figure of both. The
+  discriminator is worth keeping: **any delta in a report derived from $22.5292 is a fixture value.**
+  [cause: hand-typed-number]
 
 **Named debt, as the contract asks:** **anchor deferred, awaiting funds.** The cycle-2 line has its
 law, its constants, its ledger shape and its refusal, all tested — but no anchor, because the balance
