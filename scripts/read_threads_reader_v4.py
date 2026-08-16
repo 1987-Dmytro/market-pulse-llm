@@ -230,23 +230,56 @@ def deadlines(
 def projection(record: dict, rate: float, rows: list[dict], elapsed: float, of: int) -> dict:
     """The full-pass gate — projected from the threads that HAVE answered, solved for seconds.
 
-    The registration's inequality: elapsed + (unread × measured seconds per thread) ≤ usable. The
-    threshold is published in the unit the gate measures, because the dollars round to four decimals
-    and agree on both sides of a margin ([[a_record_must_rederive_from_what_it_publishes]]).
+    The registration's inequality, with BOTH legs and the pessimistic one binding: elapsed +
+    max(unread threads ÷ read threads, unread payable ÷ read payable) × measured seconds ≤ usable.
+    probe-a's rule, probe-b's and v3's, kept — a single-leg projection is looser in the one
+    direction a cap guard may not be loose in, and these threads carry between 1 and 15 payable
+    comments against a prompt that asks for an output row per comment.
+
+    The threshold is published in the unit the gate measures, because the dollars round to four
+    decimals and agree on both sides of a margin ([[a_record_must_rederive_from_what_it_publishes]]).
     """
     usable = usable_seconds(record, rate)
     read = len(rows)
     if not read:
         raise SystemExit("no replies yet — there is nothing to project from")
-    per_thread = sum(float(row["seconds"]) for row in rows) / read
+    payable = {
+        one["thread"]: one["payable_comments"]
+        for one in record["population"]["enumeration"]["threads"]
+    }
+    measured = sum(float(row["seconds"]) for row in rows)
+    per_thread = measured / read
     unread = of - read
-    projected = elapsed + unread * per_thread
-    affordable = (usable - elapsed) / unread if unread else float("inf")
+    read_payable = sum(payable[row["thread"]] for row in rows) or 1
+    unread_payable = sum(payable.values()) - read_payable
+    factor = max(unread / read, unread_payable / read_payable)
+    projected = elapsed + factor * measured
+    affordable = (usable - elapsed) / (factor * read) if unread else float("inf")
     return {
         "threads_read": read,
         "threads_unread": unread,
+        "payable_comments_read": read_payable,
+        "payable_comments_unread": unread_payable,
         "elapsed_since_create_seconds": round(elapsed, 1),
+        "measured_seconds": round(measured, 3),
         "measured_seconds_per_thread": round(per_thread, 3),
+        "projections": {
+            "by_thread": {
+                "factor": round(unread / read, 4),
+                "seconds": round(measured * unread / read, 1),
+            },
+            "by_payable_comment": {
+                "factor": round(unread_payable / read_payable, 4),
+                "seconds": round(measured * unread_payable / read_payable, 1),
+            },
+            "binding": {
+                "factor": round(factor, 4),
+                "seconds": round(factor * measured, 1),
+                "which": "by_thread"
+                if unread / read >= unread_payable / read_payable
+                else ("by_payable_comment"),
+            },
+        },
         "probe_b_seconds_per_thread": record["money"]["arithmetic"]["probe_b"][
             "seconds_per_thread"
         ],
@@ -417,12 +450,33 @@ def main(argv: list[str] | None = None, now: datetime | None = None) -> int:
         rows = raw_rows(args.raw) if args.raw.exists() else []
 
     if args.deadlines or (args.gate and not rows):
-        gate = deadlines(record, rate, elapsed, generation_at)
+        gate = deadlines(record, rate, elapsed, generation_at) | {
+            "read_from": {
+                "path": rel(args.raw),
+                "exists": args.raw.exists(),
+                "copied_back_at": (
+                    None
+                    if not args.raw.exists()
+                    else datetime.fromtimestamp(args.raw.stat().st_mtime, UTC).isoformat(
+                        timespec="seconds"
+                    )
+                ),
+                "rule": (
+                    "«no reply has landed» is a statement about THIS file, and the pod writes to"
+                    " its own. Copy the partial jsonl back BEFORE every gate: a KILL read off a"
+                    " file nobody refreshed would kill a healthy run and put the wrong reason in"
+                    " this record"
+                ),
+            }
+        }
         save(state | {"boot_kill": gate})
         print(json.dumps(gate, ensure_ascii=False, indent=2))
         if not args.gate:
             return 0
-        print(f"VERDICT {gate['verdict']} — no reply has landed yet")
+        print(
+            f"VERDICT {gate['verdict']} — no reply in {rel(args.raw)}"
+            f" (copied back at {gate['read_from']['copied_back_at']})"
+        )
         return 2 if gate["verdict"] == "KILL" else 3
 
     if args.gate:

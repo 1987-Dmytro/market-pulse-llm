@@ -277,17 +277,28 @@ def go_no_go() -> dict:
             },
             "3_the_full_pass": {
                 "rule": (
-                    "at the first reply, project: elapsed_since_create + (23 − 1) ×"
-                    " measured_seconds_per_thread ≤ usable_seconds. Over it, KILL and STOP — a"
-                    " partial pass scores no bar at all (every bar's state is UNSCORED unless every"
-                    " registered thread was read), so continuing spends the rest of the cap for"
-                    " nothing"
+                    "at the first reply, project the UNREAD remainder two ways and let the"
+                    " PESSIMISTIC one bind: elapsed_since_create + max(unread threads ÷ read"
+                    " threads, unread payable comments ÷ read payable comments) × the seconds"
+                    " measured so far ≤ usable_seconds. Over it, KILL and STOP — a partial pass"
+                    " scores no bar at all (every bar's state is UNSCORED unless every registered"
+                    " thread was read), so continuing spends the rest of the cap for nothing"
+                ),
+                "binding": (
+                    "probe-a's and probe-b's rule and v3's, kept: BOTH projections are computed and"
+                    " the larger decides. v3's own registration carries it word for word — «the"
+                    " pessimistic of the per-thread and per-payable-comment projections» — and a"
+                    " single-leg projection is looser in the direction that opens runs, which is the"
+                    " one direction a cap guard may not be loose in. This population's threads carry"
+                    " between 1 and 15 payable comments and v3 asks for an output row per comment,"
+                    " so which leg binds depends on which threads have been read"
                 ),
                 "solved_for_seconds": (
-                    "seconds_per_thread_that_still_fits = (usable_seconds − elapsed) ÷ 22, printed"
-                    " beside the measured figure. The verdict re-derives from that pair and never"
-                    " from the dollars, which round to four decimals and agree on both sides of a"
-                    " margin ([[a_record_must_rederive_from_what_it_publishes]])"
+                    "seconds_per_thread_that_still_fits = (usable_seconds − elapsed) ÷ (binding"
+                    " factor × threads read), printed beside the measured figure. The verdict"
+                    " re-derives from that pair and never from the dollars, which round to four"
+                    " decimals and agree on both sides of a margin"
+                    " ([[a_record_must_rederive_from_what_it_publishes]])"
                 ),
                 "re_checked_after_every_thread": (
                     "the same inequality over the threads still unread. It cannot open anything —"

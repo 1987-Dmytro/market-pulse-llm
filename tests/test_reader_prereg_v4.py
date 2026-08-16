@@ -180,8 +180,16 @@ def test_the_gates_sit_on_the_step_that_spends_and_the_clock_starts_at_create():
     assert set(gate["gates"]) == {"1_staging", "2_boot_kill", "3_the_full_pass"}
     assert gate["gates"]["1_staging"]["expected_usd"] == 0.0
     assert "min(720 s" in gate["gates"]["2_boot_kill"]["rule"]
-    assert "23 − 1" in gate["gates"]["3_the_full_pass"]["rule"]
-    assert "÷ 22" in gate["gates"]["3_the_full_pass"]["solved_for_seconds"]
+    full = gate["gates"]["3_the_full_pass"]
+    # BOTH legs and the pessimistic one binding — probe-a's rule, probe-b's and v3's. A single-leg
+    # projection is looser in the one direction a cap guard may not be loose in
+    assert "PESSIMISTIC" in full["rule"]
+    assert "unread payable comments ÷ read payable comments" in full["rule"]
+    assert "binding factor × threads read" in full["solved_for_seconds"]
+    assert (
+        "the pessimistic of the per-thread and per-payable-comment projections"
+        in V3["go_no_go"]["binding"]
+    ), "v3 registered it in those words and v4 keeps it"
     # the backstop is named as NOT a cap guard, with the arithmetic that says so
     assert gate["backstop"]["terminate_after_minutes"] == 90
     assert "$1.11" in gate["backstop"]["rule"]

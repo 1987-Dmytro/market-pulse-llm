@@ -114,8 +114,16 @@ def test_the_kill_rule_fires_on_one_side_of_the_deadline_and_not_on_the_other():
 # --- the full-pass gate ---------------------------------------------------------------------
 
 
+PACK_ITEMS = RECORD["population"]["enumeration"]["threads"]
+
+
 def rows(n: int, seconds: float) -> list[dict]:
-    return [{"thread": f"t{i}", "seconds": seconds} for i in range(n)]
+    """n replies, drawn from the registered enumeration IN ORDER.
+
+    Real thread names and therefore real payable counts: the gate's second leg divides by them, and
+    a fixture with invented names would exercise only the leg that does not need them.
+    """
+    return [{"thread": one["thread"], "seconds": seconds} for one in PACK_ITEMS[:n]]
 
 
 def test_the_full_pass_gate_is_hand_computable_and_solved_for_seconds():
@@ -124,6 +132,12 @@ def test_the_full_pass_gate_is_hand_computable_and_solved_for_seconds():
     gate = driver.projection(RECORD, RATE, rows(1, 30.0), elapsed=500.0, of=23)
     assert gate["threads_unread"] == 22
     assert gate["measured_seconds_per_thread"] == 30.0
+    # both legs are computed and the pessimistic one binds: 22 unread threads over 1 read beats
+    # 127 unread payable comments over the 7 that thread carried
+    assert gate["payable_comments_read"] == 7 and gate["payable_comments_unread"] == 127
+    assert gate["projections"]["by_thread"]["factor"] == 22.0
+    assert gate["projections"]["by_payable_comment"]["factor"] == pytest.approx(127 / 7, abs=0.001)
+    assert gate["projections"]["binding"]["which"] == "by_thread"
     assert gate["projected_total_seconds"] == pytest.approx(1160.0, abs=0.05)
     assert gate["seconds_per_thread_that_still_fits"] == pytest.approx(
         (USABLE - 500.0) / 22, abs=0.001
@@ -152,6 +166,8 @@ def test_the_gate_re_projects_from_every_thread_read_so_far():
     """Three replies at 40 s with 700 s gone: 700 + 20×40 = 1500 ≤ 1642.7 and it still fits."""
     gate = driver.projection(RECORD, RATE, rows(3, 40.0), elapsed=700.0, of=23)
     assert gate["threads_read"] == 3 and gate["threads_unread"] == 20
+    assert gate["payable_comments_read"] == 21 and gate["payable_comments_unread"] == 113
+    assert gate["projections"]["binding"]["factor"] == pytest.approx(20 / 3, abs=0.001)
     assert gate["projected_total_seconds"] == pytest.approx(1500.0, abs=0.05)
     assert gate["verdict"] == "GO"
 

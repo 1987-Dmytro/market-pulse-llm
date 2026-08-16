@@ -80,9 +80,17 @@ export HF_HOME=/workspace/hf
 seconds since the process started, the instrument checks run BEFORE the load, and `READY` names the
 boot in seconds.
 
-From the Mac, in a second shell, stamp the generation's start and then poll:
+From the Mac, in a second shell, stamp the generation's start and then poll. **The scp comes FIRST,
+every single time** — `--gate` reads `results/reader_v4_pod.jsonl` on THIS machine and the pod
+writes to its own. A gate run against a file nobody refreshed reports «no reply has landed» when one
+has, kills a healthy run, and writes that reason into the run record. The `read_from` block in the
+output names the file and the moment it was copied back, so a stale reading is visible in the
+artefact; do not let it get there.
 
 ```bash
+scp -i ~/.runpod/ssh/runpodctl-ssh-key -o StrictHostKeyChecking=no \
+    -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -P <PORT> \
+    root@<HOST>:/workspace/reader_v4_pod.jsonl results/reader_v4_pod.jsonl 2>/dev/null
 PYTHONPATH=src python3 scripts/read_threads_reader_v4.py --gate \
   --generation-started-at '<UTC ISO8601 of the launch above>'
 ```
@@ -93,17 +101,20 @@ numbers are in the output. On a 2, go straight to §5.
 
 ## 4 — the rest of the pass
 
-After the first reply the same command projects the full pass from what has been measured:
-`elapsed + unread × seconds_per_thread ≤ 1 642.7`. Re-run it as replies land — it costs nothing and
-it is what deletes the pod before the cap rather than after. Copy the partial file back whenever it
-is asked for, and always before a kill:
+After the first reply the same pair of commands projects the full pass from what has been measured,
+BOTH ways, and the pessimistic one binds:
+`elapsed + max(unread threads ÷ read, unread payable ÷ read payable) × measured ≤ 1 642.7`. Re-run
+it as replies land — it costs nothing and it is what deletes the pod before the cap rather than
+after. The log comes back too, and always before a kill:
 
 ```bash
 scp -i ~/.runpod/ssh/runpodctl-ssh-key -o StrictHostKeyChecking=no \
     -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -P <PORT> \
-    root@<HOST>:/workspace/reader_v4_pod.jsonl results/reader_v4_pod.jsonl
-scp ... root@<HOST>:/workspace/reader_v4_pod.log results/reader_v4_pod.log
+    root@<HOST>:/workspace/reader_v4_pod.log results/reader_v4_pod.log
 ```
+
+**A wall-clock alarm at create + 27 minutes** (1 642.7 s). If the polling stops, the only thing left
+is `--terminate-after` at 90 min, which is three caps.
 
 ## 5 — delete, and prove it
 
