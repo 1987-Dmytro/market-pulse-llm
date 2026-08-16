@@ -615,3 +615,67 @@ read once the registration is committed.
 
 **Commits:** `d19d454` · `2bdb428` · `692f161` · `4a00952` · `5f93116` · `8bf5a14` · `8fd1b44` ·
 `a5089e0` · `72a9f40` · `6c975b4` · `f0fd745` · `275fefb` · `ac276fb`, plus this report's own.
+
+---
+
+## 10. Correction, 2026-08-16 — it was never the settling, it was the volume
+
+Re-read the next morning, the guard says **`REFUSED: probe-b's $0.35 cap is reached ($0.4493
+spent)`** and exits 1. It is wrong about the step, and the way it is wrong retires a finding this
+report published.
+
+`runpodctl billing` splits it exactly:
+
+| line | billed | amount | $/s |
+|---|---|---|---|
+| serverless endpoint `lfqvip37lpgcii` | 927.592 s | **$0.28447** | **$0.0003067** |
+| pod, RTX 4090 (the worker's own pod line) | 109.104 s | $0.02243 | |
+| pod, RTX 2000 Ada (staging) | 93.929 s | $0.00626 | |
+| **probe-b's GPU total** | | **$0.31316** | **inside the $0.35 cap** |
+| network volume `qw4nwleanc`, 100 GB | continuous | **$0.12639** | ~$0.0092/h, running since the anchor |
+| **balance delta** | | **$0.4493** | what `--step` reports |
+
+**Three things follow, and the first two are corrections.**
+
+**Dv412 — a step meter built on a balance delta measures the ACCOUNT, not the step, and it never
+stops.** `spend()` takes `max(delta, billing walk)` for the phase, but `--step` computes
+`step anchor − balance now` alone. The 100 GB network volume drains ~$0.0092 an hour whether or not
+anything runs, so a step's reported spend grows without bound after the step is over: $0.2907 at
+deletion, $0.3132 two hours later, **$0.4493 at thirteen hours**, and the guard now refuses every
+further `--step probe-b` command for a charge that has nothing to do with probe-b. This is
+[[a_balance_delta_is_not_a_per_leg_cost]] a second time and one layer up — the first instance priced
+a leg, this one prices a closed step forever. The fix is the phase's own rule applied to the step:
+take the billing walk scoped to the step's window and let the pessimistic reading of the two bind,
+with the volume line excluded by kind rather than by arithmetic. **Not fixed here** — it is a money
+path and this is the second morning in a row that a guard defect was found by using it (Dv392, Dv411).
+
+**Dv407 is withdrawn as stated.** «The bill settles upward» was the wrong cause. probe-a's own
+endpoint billed **$0.02486 over 127.889 s**, its L4 pod $0.04083, its share of staging ~$0.0093 —
+**≈$0.075, exactly the figure its report closed with.** The extra $0.019 that appeared overnight was
+two hours of volume, not late settlement. Both probes' «drift» is the same always-on charge landing
+in a meter that cannot tell it apart from the run.
+
+**Dv402 rested on that wrong premise.** The registration's setup constant was raised $0.0343 →
+$0.0440 because probe-a «settled» at $0.0944; the honest figure was the original $0.0343. The raise
+made the go/no-go more conservative — the safe direction, and the gate said GO with $0.0733 of
+headroom either way — but the stated reason was wrong and the record says so now.
+
+**And one thing is confirmed rather than corrected: the registered rate was right for this card.**
+$0.28447 over 927.592 s is **$0.0003067/s** against the **$0.00030669/s** the registration carried
+from `results/run_5c2_comments.json`. The 5c2 prior prices an `ADA_24` serverless endpoint to the
+seventh decimal, which is what §4's projections and §9's window figures ($0.71 by thread / $1.58 by
+payable comment) rest on — they stand.
+
+**The corrected money line for this contract: probe-b bought 23 threads for $0.31316 of GPU against
+a $0.35 cap.** The volume is a standing cost of the account, it is named in `knowledge/hot.md`
+(«Том биллится всегда: ≈ $0.012/ч»), and it belongs to no step.
+
+```
+$ runpodctl billing serverless --start-time 2026-08-15T20:25:00Z
+[{"amount": 0.2844725539907813, "endpointId": "lfqvip37lpgcii", "timeBilledMs": 927592, …}]
+$ runpodctl billing network-volume --start-time 2026-08-15T20:25:00Z
+[{"amount": 0.029166667722165585, …}, {"amount": 0.09722222574055195, …}]
+$ python3 scripts/runpod_guard.py --step probe-b --step-cap 0.35 ; echo $?
+REFUSED: probe-b's $0.35 cap is reached ($0.4493 spent). …
+1
+```
