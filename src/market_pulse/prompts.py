@@ -761,6 +761,138 @@ three probe-a verdicts were bought under it. A reworded schema line is a NEW ins
 own registration ([[prompt_revision_is_an_instrument_swap]]), which is why this is a second entry in
 :data:`PROMPTS` and not an edit to the first."""
 
+# --- v3: the frame the container defects came through, and the reading gap probe-b measured -------
+
+READER_ANSWER_ALONE_V2 = (
+    "Answer with the JSON object alone: no explanation, no code fence, nothing before the first"
+    " brace."
+)
+READER_ANSWER_ALONE_V3 = (
+    "Answer with ONE JSON object and nothing else: one opening brace before the first key, one"
+    " closing brace after the last, and every key above INSIDE them. No explanation, no code fence,"
+    " nothing before the first brace and nothing after the last — never a second object beside the"
+    " first, and never a key written outside the braces."
+)
+"""probe-b's shape 1, closed at the source. Two of 23 replies came back as two top-level objects and
+one closed its object after `discussion_summary` and went on writing `"entities": [...]` outside it.
+The v3 parser merges the first shape and refuses the third, and this line is what stops both from
+being written: the tolerance is belt-and-braces, not the fix (sitting ruling 2, A+B as ONE
+instrument)."""
+
+READER_ONE_OF_TWO_V2 = '- A comment belongs to at most one of "per_comment" and "noise".'
+READER_ONE_OF_TWO_V3 = (
+    '- A comment belongs to at most one of "per_comment" and "noise".\n'
+    '- "entities", "signals", "per_comment" and "noise" are LISTS. A list with nothing in it is'
+    " written [] — never {} and never an object keyed by an id or by a name."
+)
+"""probe-b's shapes 2 and 3, closed at the source. Five replies wrote `{}` for an empty list and one
+wrote `noise` as a map keyed by msg_id; the empty-object shape alone refused four of the five noise
+threads, which is where «nothing here» is the CORRECT answer. Attached to the rule about the two
+comment lists because that is where the reply's containers are already being talked about."""
+
+READER_PER_COMMENT_V2 = (
+    '- "per_comment" — one object per comment that carries an attitude to a named subject or to the'
+    ' tracked kind of product: {"msg_id"; "subject_type"; "subject_id" or null; "stance" or null;'
+    ' "aspects": the aspects it touches, from the six above; "note": one phrase, only where the row'
+    " needs one}. A comment that carries neither gets no object: this is not a row per comment."
+)
+READER_PER_COMMENT_V3 = (
+    '- "per_comment" — one object for EVERY comment you were given, in the order you were given'
+    ' them: {"msg_id"; "subject_type"; "subject_id" or null; "stance" or null; "aspects": the'
+    ' aspects it touches, from the six above; "note": one phrase, only where the row needs one}. A'
+    " comment that carries neither a subject nor an attitude still gets its object, with"
+    ' "subject_type": null and "stance": null — that row says «read, and nothing to charge to'
+    ' anybody». The only comments left out are the ones you report in "noise".'
+)
+"""probe-b finding 5, the largest half of the reading gap. Bar 4 scores the msg-ids the reference
+names, and four of them were ABSENT from replies that parsed cleanly — the model had read the
+comment and decided it carried nothing to report, which under v2's «this is not a row per comment»
+is obedience. A row per payable comment turns «nothing here» into an answer the bar can score
+instead of an absence it counts as a miss ([[the_empty_class_eats_the_parse_failures]], one layer
+down at the row)."""
+
+READER_DUTY_THREE_V2 = "(3) THE SIGNALS. Only now, and only what duty (2) has already resolved."
+READER_DUTY_THREE_V3 = (
+    "(3) THE SIGNALS. Only now, and only what duty (2) has already resolved. One thread usually"
+    " carries MORE THAN ONE: report every signal you find and never stop at the first."
+)
+"""probe-b §5.5 and finding 5. F1 carries three signals in the reference and the run returned one of
+them; bar 1 scores a flagship case as found only when EVERY signal it carries is found, so stopping
+at the first is a miss the reader never sees itself make."""
+
+READER_JUDGE_WHAT_IS_WRITTEN_V2 = (
+    "- Judge what is written. Do not work out what the author probably meant, and do not report a"
+    " signal because the post advertises something nobody discussed."
+)
+READER_JUDGE_WHAT_IS_WRITTEN_V3 = (
+    "- Judge what is written. Do not work out what the author probably meant, and do not report a"
+    " signal because the post advertises something nobody discussed.\n"
+    "- The channel's own reply inside the thread is evidence like any other comment. When somebody"
+    " asks for a kind of product and the channel answers with the trade marks it has, that exchange"
+    " is a signal about demand — read it, and do not skip a comment because the shop wrote it."
+)
+"""F1b, the reference's own reading: «спрос · категория «морозиво без цукру» · наличие (21599; ответ
+сети с SKU Рудь/Лімо — 21601)». Two of the three msg-ids that make the case are the CHANNEL's reply,
+and a reader that treats a retailer's own voice as noise cannot see the demand it answers."""
+
+READER_NOT_A_SIGNAL_V2 = (
+    "Anything else in this thread is not a signal, however interesting — a thread that carries none"
+    " is a normal answer and gets an empty list."
+)
+READER_NOT_A_SIGNAL_V3 = (
+    "Praise counts: «смачне», «беру постійно» about a tracked trade mark or about the tracked kind"
+    " of product is a signal (похвала) with the aspect it names, however short the comment is."
+    " Anything else in this thread is not a signal, however interesting — a thread that carries none"
+    " is a normal answer and gets an empty list []."
+)
+"""F1c, the reference's third F1 signal: «похвала · вкус (21629)». It is one short comment about
+taste, and it was missed in a thread the run parsed. Stated where the SIGNAL is defined rather than
+in the rules, because what it changes is the definition and not a procedure."""
+
+READER_THREAD_PROMPT_V3 = _swap(
+    _swap(
+        _swap(
+            _swap(
+                _swap(
+                    _swap(
+                        READER_THREAD_PROMPT_V2,
+                        READER_ANSWER_ALONE_V2,
+                        READER_ANSWER_ALONE_V3,
+                    ),
+                    READER_ONE_OF_TWO_V2,
+                    READER_ONE_OF_TWO_V3,
+                ),
+                READER_PER_COMMENT_V2,
+                READER_PER_COMMENT_V3,
+            ),
+            READER_DUTY_THREE_V2,
+            READER_DUTY_THREE_V3,
+        ),
+        READER_JUDGE_WHAT_IS_WRITTEN_V2,
+        READER_JUDGE_WHAT_IS_WRITTEN_V3,
+    ),
+    READER_NOT_A_SIGNAL_V2,
+    READER_NOT_A_SIGNAL_V3,
+)
+"""The thread reader of `docs/PROMPT-reader-v3-prep.md` D2 — half B of the sitting's ruling 2.
+
+DERIVED from :data:`READER_THREAD_PROMPT_V2` by SIX `_swap` calls, the probe-b discipline applied a
+second time: every change is a visible call, so «six wording changes» is a property of this file and
+not a claim in a report, and a seventh edit would have to appear here as a seventh call. Two of the
+six are the FRAME the container defects came through (one object, `[]` for empty) and four are the
+reading gap probe-b measured — each one traceable to a miss that was PAID for, none of them a guess
+about what might read better.
+
+A and B are one registration and not two because they move the same instrument: the sitting did not
+buy an ablation between the parser's tolerance and this text, so nothing downstream may attribute a
+recovered reply to one of them.
+
+v1 and v2 stay registered, untouched, hashed and servable — `results/prereg_reader_probe.json` and
+`results/prereg_reader_probe_v2.json` pin their shas and 26 paid verdicts were bought under them.
+:func:`reader_messages_gm4` keeps v2 as its DEFAULT for the same reason: a sealed caller must not be
+handed a different instrument by a keyword it never wrote ([[a_sealed_caller_forces_the_default]]),
+so v3 is opt-in and the run contract names it."""
+
 PROMPTS = {
     "T1": T1_PROMPT,
     "T2": T2_PROMPT,
@@ -780,6 +912,7 @@ PROMPTS = {
     "positions_text_gm4": POSITIONS_TEXT_PROMPT,
     "reader_thread_gm4": READER_THREAD_PROMPT,
     "reader_thread_gm4_v2": READER_THREAD_PROMPT_V2,
+    "reader_thread_gm4_v3": READER_THREAD_PROMPT_V3,
 }
 RENDER_ONLY = {"precheck_v2ctx_with_post": "precheck_v2_with_post"}
 """Registered tasks whose prompt text *is* another task's, mapped to the base they share.
@@ -859,7 +992,8 @@ parser would come back as a dict of labels nothing downstream could use."""
 
 READER_TASK = "reader_thread_gm4"
 READER_TASK_V2 = "reader_thread_gm4_v2"
-READER = frozenset({READER_TASK, READER_TASK_V2})
+READER_TASK_V3 = "reader_thread_gm4_v3"
+READER = frozenset({READER_TASK, READER_TASK_V2, READER_TASK_V3})
 """The thread reader of the comment-signals layer. Registered and hashed like every other prompt,
 and out of the three labelling tables for the same reason :data:`POSITIONS` is: its answer is one
 verdict about a whole thread, not a label per row.
@@ -869,10 +1003,17 @@ Unlike :data:`POSITIONS` it is **not** refused by :func:`parse_reply`. The posit
 rule that only mean anything for extracted offers; the reader's answer is a labelled object of the
 kind this module has always read, so it is read here — one parser, `docs/PROMPT-probe-a.md` D1.
 
-TWO registered versions since `docs/PROMPT-probe-b.md` D1, read by that one parser and rendered by
-one function. Which of them a record describes is the `task` it names and the sha it pins; v1 is
-frozen history and stays servable, because a run that could not re-render its own instrument could
-not reproduce its own evidence."""
+THREE registered versions since `docs/PROMPT-reader-v3-prep.md` D2, read by that one parser and
+rendered by one function. Which of them a record describes is the `task` it names and the sha it
+pins; v1 and v2 are frozen history and stay servable, because a run that could not re-render its own
+instrument could not reproduce its own evidence.
+
+The parser's CONTAINER tolerance is scoped to this family and therefore reaches all three, which is
+the sitting's ruling read literally: it rules on how the reader's answer is READ, not on which text
+asked for it. What that costs is one thing and it is stated here — a v1 or v2 reply re-read today
+can parse where it once refused, so any number quoted from probe-a or probe-b comes from the record
+that run WROTE and never from a re-read (SPEC §7, and `results/reader_probe_b_verdict.json` is the
+registered verdict of probe-b whatever this parser would say now)."""
 
 WITH_POST = frozenset(
     {
@@ -1159,8 +1300,12 @@ def reader_messages_gm4(
 ) -> list[dict]:
     """One thread as the reader is given it: the post, then every payable comment with its id.
 
-    ``task`` names WHICH registered reader text is rendered, and defaults to the live one. Two
-    versions exist and the pair a record has to agree on is (the task it names, the sha it pins):
+    ``task`` names WHICH registered reader text is rendered, and defaults to the one every driver
+    written so far was measured with. THREE versions exist since the reader sitting, and v3 is
+    deliberately opt-in rather than the new default: every caller that passes no ``task`` is a
+    caller whose evidence is already on disk, and moving the default would re-render a frozen
+    record's request under a text no thread was sent with. The pair a record has to agree on is
+    (the task it names, the sha it pins):
     the worker reports the sha of what it actually renders, and the driver compares that against the
     registration before a single thread is sent. A default that pointed at frozen history would make
     the quiet path the wrong one ([[a_sealed_caller_forces_the_default]]).
@@ -1202,6 +1347,106 @@ def reader_messages_gm4(
             " thread would be answered as if it were the whole one"
         )
     return [{"role": "user", "content": content}]
+
+
+READER_LIST_FIELDS = ("entities", "signals", "per_comment", "noise")
+"""The four reader fields the schema asks for as a LIST — the ones :func:`_reader_object` repairs.
+
+Named here and not derived from the schema line: the repairs are scoped by RULING to containers the
+run actually returned, and a set computed from something else would grow the day the schema does."""
+
+TWO_OBJECTS_MERGED = "two top-level objects merged"
+"""The name repair (1) logs. A constant because the refusal it is paired with and the log line have
+to be greppable together, and because `repairs: [...]` is read by a scorer, not only by a human."""
+
+
+def _top_level_objects(reply: str) -> list[dict]:
+    """Every top-level JSON object in a reply, in order — not just the first one.
+
+    :func:`_object` reads from the first brace and stops, which is correct for every task whose
+    answer is one object and is exactly how probe-b saw half an answer twice. The wrapper handling
+    is the same one, deliberately: a fence is formatting whichever branch reads it.
+    """
+    text = reply.strip()
+    if text.startswith("```"):
+        text = text.split("\n", 1)[-1].rsplit("```", 1)[0]
+    decoder, found, index = json.JSONDecoder(), [], 0
+    while True:
+        start = text.find("{", index)
+        if start < 0:
+            return found
+        try:
+            value, end = decoder.raw_decode(text[start:])
+        except ValueError:
+            return found
+        if isinstance(value, dict):
+            found.append(value)
+        index = start + end
+
+
+def _reader_object(reply: str) -> tuple[dict, list[str]]:
+    """The reader's answer with the THREE container repairs ruled at the 2026-08-16 sitting, and
+    the list of which ones fired.
+
+    The sitting's ruling 2 (A): «the parser becomes tolerant to the CONTAINER; the domains stay
+    strict». So exactly three shapes are repaired, each one measured in
+    `scripts/probe_b_coercion.py::repairs()` on replies this repo paid for:
+
+    1. an answer split into two top-level objects, merged — **and a key present in both with
+       different values is REFUSED**, never last-wins. That clause is the sitting's own answer to
+       the question probe-b left open, and it is what stops tolerance from becoming a silent repair
+       that AUTHORS structure: two objects that disagree are two answers, and choosing one of them
+       here would be the parser deciding what the model meant.
+    2. ``{}`` where the schema asks for a list — the empty list. Four of probe-b's five noise
+       threads answered this way, which is exactly where «nothing here» is the correct reading.
+    3. a map keyed by msg_id where a list belongs — the list it describes. probe-b returned
+       ``noise: {"47896": {"msg_id": "47896", …}}``: every row already carries its own id, so the
+       keys are dropped rather than folded in. A map keyed by anything ELSE is not repaired — see
+       the module's registered v3 changes for why that narrowing is deliberate.
+
+    What is NOT repaired, because it is a DOMAIN and not a container: ``aspect: null`` on a signal,
+    a ``from_post`` signal with no ``evidence`` key, and a bare un-braced fragment. Each of the
+    three stays a refusal. A repair invents nothing; those three would each have to invent a
+    reading, and the whole point of the split is that a tolerant container never buys a tolerant
+    domain ([[a_container_defect_moves_to_the_next_field]]).
+    """
+    parts = _top_level_objects(reply)
+    if not parts:
+        # no object at all: `_object` owns those refusals and their exact reasons, so a reply that
+        # was empty, unbraced or malformed is counted under the same cause it always was
+        return _object(reply), []
+
+    payload, repairs = dict(parts[0]), []
+    for extra in parts[1:]:
+        disagreeing = sorted(
+            key for key, value in extra.items() if payload.get(key, value) != value
+        )
+        if disagreeing:
+            raise ParseError(f"two disagreeing objects: {disagreeing[0]}")
+        payload |= extra
+        if TWO_OBJECTS_MERGED not in repairs:
+            repairs.append(TWO_OBJECTS_MERGED)
+
+    for field in READER_LIST_FIELDS:
+        value = payload.get(field)
+        if not isinstance(value, dict):
+            continue
+        if not value:
+            payload[field] = []
+            repairs.append(f"{field}: empty object -> empty list")
+        elif all(_is_msg_id_key(key) for key in value):
+            payload[field] = list(value.values())
+            repairs.append(f"{field}: map keyed by msg_id -> list")
+    return payload, repairs
+
+
+def _is_msg_id_key(key) -> bool:
+    """Is this mapping key a message id? JSON keys are strings, so the question is `int()`."""
+    try:
+        int(key)
+    except (TypeError, ValueError):
+        return False
+    return True
 
 
 def _object(reply: str) -> dict:
@@ -1446,12 +1691,17 @@ def parse_reply(task: str, reply: str) -> dict:
         raise ValueError(
             f"{task}: this prompt answers with positions — use positions.parse_positions"
         )
-    payload = _object(reply)
     if task in READER:
-        # read HERE and not in a module of its own: `_object` already unwraps a fence and reads
-        # from the first brace, and a second parser would be a second answer to «was the promise
-        # kept» (docs/PROMPT-probe-a.md D1)
-        return _reader(payload)
+        # read HERE and not in a module of its own: a second parser would be a second answer to
+        # «was the promise kept» (docs/PROMPT-probe-a.md D1). Its reader is `_reader_object` and
+        # not `_object`, because repair (1) is about the objects `_object` never looks at; every
+        # other refusal still comes back through `_object` with the cause it always had.
+        # `repairs` rides on EVERY reader verdict, empty list included, so a consumer can always
+        # say whether an answer was read straight or coerced instead of inferring it from a
+        # missing key (the sitting's ruling 2 (A), docs/PROMPT-reader-v3-prep.md D1).
+        payload, repairs = _reader_object(reply)
+        return _reader(payload) | {"repairs": repairs}
+    payload = _object(reply)
     if fields := COMMENT_FIELDS.get(task):
         _require(payload, *fields)
         intents = payload["intents"]

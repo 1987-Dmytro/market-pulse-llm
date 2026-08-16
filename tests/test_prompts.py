@@ -7,6 +7,7 @@ model is allowed to say, and what it is not — because a lenient parser that
 "fixes" a bad answer would hand a model a label it never produced.
 """
 
+import difflib
 import json
 import re
 from pathlib import Path
@@ -79,6 +80,7 @@ def test_taxonomy_v2_prompts_are_registered_beside_v1_and_not_inside_it():
         "positions_text_gm4",
         "reader_thread_gm4",
         "reader_thread_gm4_v2",
+        "reader_thread_gm4_v3",
     }
     # the label tables describe labelling tasks: the caption prompt answers in prose, the two
     # position prompts answer with records, the reader answers with one verdict about a whole
@@ -986,6 +988,7 @@ def test_a_text_request_fences_the_row_and_refuses_an_empty_one():
 
 READER = prompts.READER_TASK
 READER_V2 = prompts.READER_TASK_V2
+READER_V3 = prompts.READER_TASK_V3
 
 VERDICT = {
     "thread": {"channel": "@VARUS_channel", "post_id": 10613},
@@ -1038,13 +1041,14 @@ def verdict(**moves) -> str:
 
 
 def test_the_reader_is_registered_with_its_own_sha_and_out_of_every_labelling_table():
-    """A fifth instrument beside the two position prompts and the two caption ones, in TWO versions
-    since probe-b. Its answer is one verdict about a whole thread, so neither is in any of the three
-    label tables — and unlike the position prompts they are READ here, because the contract asks for
-    one parser, not a second."""
+    """A fifth instrument beside the two position prompts and the two caption ones, in THREE versions
+    since the reader sitting. Its answer is one verdict about a whole thread, so none of them is in
+    any of the three label tables — and unlike the position prompts they are READ here, because the
+    contract asks for one parser, not a second."""
     assert prompts.PROMPTS[READER] is prompts.READER_THREAD_PROMPT
     assert prompts.PROMPTS[READER_V2] is prompts.READER_THREAD_PROMPT_V2
-    assert prompts.READER == {READER, READER_V2}
+    assert prompts.PROMPTS[READER_V3] is prompts.READER_THREAD_PROMPT_V3
+    assert prompts.READER == {READER, READER_V2, READER_V3}
     for task in prompts.READER:
         for table in (prompts.DELIMITERS, prompts.INTENTS_OF, prompts.COMMENT_FIELDS):
             assert task not in table
@@ -1088,6 +1092,101 @@ def test_the_v2_reader_is_v1_with_exactly_two_defects_closed():
     assert 'null is the answer in exactly one field — "entities"."msg_id"' in v2
     # the rule v1 stated for every id field, and the one probe-a's reader applied to `evidence`
     assert "The post has none: for the post the id is null." not in v2
+
+
+def test_the_v3_reader_is_v2_with_exactly_six_measured_changes():
+    """D2 of `docs/PROMPT-reader-v3-prep.md`, half B of the sitting's ruling 2. Six changes, each
+    one a `_swap` call in `prompts.py` and each traceable to a miss probe-b PAID for — so «six
+    wording changes» is a property of the code, and a seventh would have to appear as a seventh
+    call.
+
+    Two of the six are the FRAME the container defects came through and four are the reading gap:
+
+    - one JSON object, opened once and closed once, everything inside it (shapes 1 and the bare
+      fragment, at the source);
+    - `[]` for an empty list, never `{}` and never a map (shapes 2 and 3, at the source);
+    - a `per_comment` row for EVERY comment, nulls where there is nothing to charge (finding 5, the
+      four gold rows absent from replies that parsed);
+    - several signals per thread, never stop at the first (F1 carries three, the run returned one);
+    - the channel's own reply is evidence (F1b, two of whose three msg-ids are the channel's);
+    - praise of taste is a signal (F1c).
+    """
+    v2, v3 = prompts.READER_THREAD_PROMPT_V2, prompts.READER_THREAD_PROMPT_V3
+    assert v2 != v3
+    assert len({prompts.prompt_sha256(task) for task in prompts.READER}) == 3
+
+    # SIX edits and not a positional zip: two of them turn one line into two, and a positional
+    # comparison would report every line after the first insertion as changed
+    opcodes = difflib.SequenceMatcher(
+        None, v2.split("\n"), v3.split("\n"), autojunk=False
+    ).get_opcodes()
+    edits = [one for one in opcodes if one[0] != "equal"]
+    assert len(edits) == 6, edits
+    # four rewrite a line and two ADD one beside a line they leave alone; nothing is deleted, which
+    # is what says v3 is v2 plus six changes rather than v2 with something quietly dropped
+    assert [one[0] for one in edits].count("replace") == 4
+    assert [one[0] for one in edits].count("insert") == 2
+    assert [one[0] for one in edits].count("delete") == 0
+    assert sum(one[2] - one[1] for one in edits) == 4, "four old lines rewritten"
+    assert sum(one[4] - one[3] for one in edits) == 6, "and six new ones in their place"
+
+    # each swap is checked BOTH ways — its NEW text absent from v2 and present exactly once in v3 —
+    # so a `_swap` that was written but never wired into the chain cannot pass on the presence of
+    # its own constant. Four of the six keep the old wording and add to it, so «the old text is gone
+    # from v3» is asserted below only for the two that really replace one
+    for before, after in (
+        (prompts.READER_ANSWER_ALONE_V2, prompts.READER_ANSWER_ALONE_V3),
+        (prompts.READER_ONE_OF_TWO_V2, prompts.READER_ONE_OF_TWO_V3),
+        (prompts.READER_PER_COMMENT_V2, prompts.READER_PER_COMMENT_V3),
+        (prompts.READER_DUTY_THREE_V2, prompts.READER_DUTY_THREE_V3),
+        (prompts.READER_JUDGE_WHAT_IS_WRITTEN_V2, prompts.READER_JUDGE_WHAT_IS_WRITTEN_V3),
+        (prompts.READER_NOT_A_SIGNAL_V2, prompts.READER_NOT_A_SIGNAL_V3),
+    ):
+        assert v2.count(before) == 1 and after not in v2, before[:50]
+        assert v3.count(after) == 1, after[:50]
+
+    # the frame
+    assert "Answer with ONE JSON object and nothing else" in v3
+    assert "never a second object beside the first" in v3
+    assert "nothing after the last" in v3
+    assert (
+        "A list with nothing in it is written [] — never {} and never an object keyed by an id"
+        in v3
+    )
+    # the reading gap, one assertion per measured miss
+    assert '- "per_comment" — one object for EVERY comment you were given' in v3
+    assert '"subject_type": null and "stance": null' in v3
+    assert "report every signal you find and never stop at the first" in v3
+    assert "The channel's own reply inside the thread is evidence like any other comment" in v3
+    assert "Praise counts" in v3 and "(похвала)" in v3
+    # and what v2 said instead, gone
+    assert "A comment that carries neither gets no object: this is not a row per comment." not in v3
+    assert "Answer with the JSON object alone" not in v3
+
+    # v1 and v2 are not touched by any of it
+    assert prompts.PROMPTS[READER] == prompts.READER_THREAD_PROMPT
+    assert prompts.prompt_sha256(READER_V2) == prompts.prompt_sha256(READER_V2)
+    assert "Answer with the JSON object alone" in v2 and "Praise counts" not in v2
+
+
+def test_v3_is_opt_in_and_the_default_rendering_stays_v2():
+    """A sealed caller must not be handed a different instrument by a keyword it never wrote. Every
+    driver that rendered a reader request before today passes no `task`, so the default is what a
+    frozen record's evidence was produced with — v3 is named by the run contract, never defaulted
+    into ([[a_sealed_caller_forces_the_default]])."""
+    thread = {
+        "channel": "@VARUS_channel",
+        "post_id": 10613,
+        "post": "Пост про морозиво.",
+        "comments": [(21626, "Перемерзле")],
+    }
+    default = prompts.reader_messages_gm4(**thread)
+    assert default == prompts.reader_messages_gm4(**thread, task=READER_V2)
+    assert default != prompts.reader_messages_gm4(**thread, task=READER_V3)
+    assert default[0]["content"].startswith(prompts.READER_THREAD_PROMPT_V2)
+    assert prompts.reader_messages_gm4(**thread, task=READER_V3)[0]["content"].startswith(
+        prompts.READER_THREAD_PROMPT_V3
+    )
 
 
 def test_the_reader_prompt_carries_the_ratified_taxonomy_the_parser_validates_against():
@@ -1264,7 +1363,9 @@ def test_the_open_signal_list_is_open_only_with_the_flag():
         ({"thread": {"channel": "@x"}}, "missing field: post_id"),
         ({"thread": []}, "thread is not an object"),
         ({"post_summary": "  "}, "post_summary is not a non-empty string"),
-        ({"signals": {}}, "signals is not a list"),
+        # `{}` and a map keyed by msg_id are REPAIRED since the 2026-08-16 sitting; a map keyed by
+        # anything else is not one of the three ruled shapes and stays exactly what it was
+        ({"signals": {"жалоба": VERDICT["signals"][0]}}, "signals is not a list"),
         ({"noise": ["плюс_спам"]}, "noise carries something that is not an object"),
     ],
 )
@@ -1339,6 +1440,167 @@ def test_a_reply_that_thinks_before_it_answers_is_decided_and_not_discovered():
     with pytest.raises(prompts.ParseError, match="malformed JSON"):
         prompts.parse_reply(READER, f"Спершу {{подумаю}}, потім відповім.\n{body}")
     assert prompts.parse_reply(READER, f"```json\n{body}\n```")["noise"][0]["msg_id"] == 20765
+
+
+# --- the v3 container tolerance: three repairs, and everything else still refuses ----------------
+
+PROBE_B_REPLIES = REPO_ROOT / "results" / "reader_probe_b_w1.jsonl"
+"""probe-b's 23 real paid replies. The v3 repairs were RULED off what these returned, so the drive
+below is the measurement and the synthetic cases beside it are the law written small."""
+
+
+@pytest.mark.parametrize("task", sorted(prompts.READER))
+def test_every_reader_verdict_says_whether_it_was_read_straight_or_coerced(task):
+    """`repairs` rides on every reader verdict, empty list included — for BOTH registered versions,
+    because the ruling scopes tolerance to the task family and not to v3. A key that appeared only
+    when something fired would make «read straight» and «written by an older parser» the same
+    absence."""
+    assert prompts.parse_reply(task, verdict())["repairs"] == []
+
+
+def test_repair_one_merges_two_top_level_objects_and_refuses_two_that_disagree():
+    """Ruling 2 (A), the clause the sitting added: merged, and **never last-wins**.
+
+    The merge half is measured on `@VARUS_channel:10348`, probe-b's own split answer — half the keys
+    in the first object, half in the second, nothing shared. The refusal half is the operator's
+    word: two objects that disagree on a key are two ANSWERS, and picking one would be the parser
+    deciding what the model meant.
+    """
+    head = {key: VERDICT[key] for key in ("thread", "post_summary", "discussion_summary")}
+    tail = {key: VERDICT[key] for key in ("entities", "signals", "per_comment", "noise")}
+    split = f"{json.dumps(head, ensure_ascii=False)}\n{json.dumps(tail, ensure_ascii=False)}"
+    merged = prompts.parse_reply(READER_V2, split)
+    assert merged["repairs"] == [prompts.TWO_OBJECTS_MERGED]
+    assert merged["entities"] == prompts.parse_reply(READER_V2, verdict())["entities"]
+
+    # a key in both with the SAME value is a clean merge and not a disagreement
+    agreeing = f"{json.dumps(head | {'noise': VERDICT['noise']}, ensure_ascii=False)}\n{json.dumps(tail, ensure_ascii=False)}"
+    assert prompts.parse_reply(READER_V2, agreeing)["noise"] == [
+        {"msg_id": 20765, "class": "плюс_спам"}
+    ]
+
+    clashing = json.dumps(head | {"post_summary": "Щось інше."}, ensure_ascii=False)
+    with pytest.raises(prompts.ParseError, match="two disagreeing objects: post_summary"):
+        prompts.parse_reply(READER_V2, f"{json.dumps(head, ensure_ascii=False)}\n{clashing}")
+
+
+def test_repair_two_reads_an_empty_object_as_the_empty_list():
+    """Where «nothing here» is the correct answer — four of probe-b's five noise threads wrote
+    `signals: {}`. The repair is per FIELD and is logged per field, so a verdict cannot say «I was
+    coerced» without saying where."""
+    parsed = prompts.parse_reply(READER_V2, verdict(signals={}, noise={}))
+    assert parsed["signals"] == [] and parsed["noise"] == []
+    assert parsed["repairs"] == [
+        "signals: empty object -> empty list",
+        "noise: empty object -> empty list",
+    ]
+
+
+def test_repair_three_reads_a_map_keyed_by_msg_id_as_the_list_it_describes():
+    """probe-b's `noise: {"47896": {"msg_id": "47896", …}}`. The key is DROPPED and not folded in:
+    every row already carries its own id, and writing the key into the body would be the parser
+    supplying a field the model did not.
+
+    The narrowing is the second half: a map keyed by a NAME is `entities`' Dv393 shape, which the v2
+    schema line closed at the source and which no probe-b reply returned. It is not one of the three
+    ruled repairs, so it stays the refusal it always was.
+    """
+    by_id = {
+        "47896": {"msg_id": 47896, "class": "плюс_спам"},
+        "47897": {"msg_id": "47897", "class": "оффтоп"},
+    }
+    parsed = prompts.parse_reply(READER_V2, verdict(noise=by_id))
+    assert parsed["repairs"] == ["noise: map keyed by msg_id -> list"]
+    assert parsed["noise"] == [
+        {"msg_id": 47896, "class": "плюс_спам"},
+        {"msg_id": 47897, "class": "оффтоп"},
+    ]
+
+    by_name = {one["name"]: one for one in VERDICT["entities"]}
+    with pytest.raises(prompts.ParseError, match="entities is not a list"):
+        prompts.parse_reply(READER_V2, verdict(entities=by_name))
+
+
+@pytest.mark.parametrize(
+    ("reply", "reason"),
+    [
+        (
+            verdict(signals=[{**VERDICT["signals"][0], "aspect": None}]),
+            "signals.aspect is not a string",
+        ),
+        (
+            verdict(
+                signals=[
+                    {
+                        key: value
+                        for key, value in VERDICT["signals"][0].items()
+                        if key != "evidence"
+                    }
+                    | {"from_post": True}
+                ]
+            ),
+            "missing field: evidence",
+        ),
+        ('"entities": [], "signals": []', "no JSON object in reply"),
+    ],
+)
+def test_the_three_standing_refusals_survive_the_container_tolerance(reply, reason):
+    """Domain, not container — the split the whole ruling turns on.
+
+    A null `aspect`, a `from_post` signal with no `evidence` key and a bare un-braced fragment each
+    stay a refusal: repairing them would mean inventing an aspect, writing the evidence a finding is
+    made of, or guessing where an answer began. `probe_b_coercion.repairs()` dropped the null aspect
+    as its FOURTH repair and the contract deliberately does not carry it over.
+    """
+    with pytest.raises(prompts.ParseError, match=re.escape(reason)):
+        prompts.parse_reply(READER_V2, reply)
+
+
+def test_the_v3_parser_on_probe_bs_own_twenty_three_paid_replies():
+    """The measurement the tolerance was ruled off, re-driven: 13 of 23 as run, **19 of 23** under
+    the v3 parser — the same 19 `results/reader_probe_b_coerced.json` reached with a WIDER repair
+    list, which is the evidence that the three ruled repairs are the ones that were paying.
+
+    The four that still refuse are the point. Two are `missing field: evidence` (a domain), one is
+    `signals.aspect is not a string` (a domain — the repair the contract left behind), and the
+    fourth is `@VARUS_channel:10360`, whose reply closes its object early and continues with bare
+    `"entities": [...]` pairs. Its array elements read as many top-level objects that disagree on
+    `name`, so the refuse-on-conflict clause catches probe-b's seventh shape too — and refusing it
+    is the correct outcome: last-wins would have turned five entities into one.
+    """
+    rows = [json.loads(line) for line in PROBE_B_REPLIES.read_text(encoding="utf-8").splitlines()]
+    assert len(rows) == 23
+    assert sum(1 for row in rows if row["parsed"]) == 13, "as run, under the v2 parser"
+
+    parsed, fired, refused = 0, {}, {}
+    for row in rows:
+        try:
+            verdict_now = prompts.parse_reply(row["task"], row["reply"])
+        except prompts.ParseError as err:
+            refused[row["thread"]] = err.reason
+            continue
+        parsed += 1
+        for one in verdict_now["repairs"]:
+            fired[one] = fired.get(one, 0) + 1
+
+    assert parsed == 19
+    assert fired == {
+        prompts.TWO_OBJECTS_MERGED: 1,
+        "noise: map keyed by msg_id -> list": 1,
+        "signals: empty object -> empty list": 4,
+    }
+    assert refused == {
+        "@tarilka_malyuka:715": "missing field: evidence",
+        "@VARUS_channel:10360": "two disagreeing objects: name",
+        "@VARUS_channel:10593": "missing field: evidence",
+        "@mandziak:3689": "signals.aspect is not a string",
+    }
+    # and the entity case §5.2 said was in the object beside the one the v2 parser read
+    recovered = prompts.parse_reply(
+        prompts.READER_TASK_V2,
+        next(row["reply"] for row in rows if row["thread"] == "@VARUS_channel:10348"),
+    )
+    assert "Varus" in [one["name"] for one in recovered["entities"]]
 
 
 @pytest.mark.parametrize("task", sorted(prompts.POSITIONS))

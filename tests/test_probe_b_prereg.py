@@ -6,7 +6,10 @@ fourteen rows, and how much faster than probe-a's L4 a card has to be for this p
 cap — are recomputed rather than read.
 """
 
+import hashlib
 import json
+import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -25,13 +28,104 @@ RECORD_PATH = REPO_ROOT / "results" / "prereg_reader_probe_v2.json"
 RECORD = json.loads(RECORD_PATH.read_text(encoding="utf-8"))
 GOLD = json.loads((REPO_ROOT / "results" / "reader_gold_w1.json").read_text(encoding="utf-8"))
 
+SEALING_COMMIT = "48c974a"
+"""probe-b's last commit — the tree this registration was spent against.
+
+The endpoint has existed and been deleted, and the run's 23 verdicts are on disk. A pinned file that
+moves afterwards is therefore never re-pinned: it joins the list below with its reason, `git show`
+keeps the sealed bytes recoverable, and the re-derivation test goes on claiming what it claimed on
+the day of the run rather than what is true today. Third time in this family — probe-a's record did
+it twice ([[tests/test_reader_prereg.py]] is the same manoeuvre, one registration back).
+"""
+
+MOVED_BY_THE_V3_READER = ("src/market_pulse/prompts.py",)
+"""The pinned file `docs/PROMPT-reader-v3-prep.md` D1 and D2 moved.
+
+D1 gives `parse_reply` the three CONTAINER repairs the 2026-08-16 sitting ruled, with the
+refuse-on-conflict clause and a `repairs: [...]` log on every reader verdict; D2 registers
+`reader_thread_gm4_v3` beside v1 and v2 by six `_swap` calls. Neither touches the v2 prompt's TEXT —
+`instruments.prompt_sha256` below is still derived LIVE and deliberately not relaxed — so every
+number registered here still describes the instrument that ran.
+
+    git show 48c974a:src/market_pulse/prompts.py
+"""
+
+MOVED_BY_NAMING_THE_TWO_TEXTS = ("scripts/write_reader_prereg_v2.py",)
+"""The producer itself, and a SECOND tuple because its witness is its own.
+
+`instruments.prompt_sha256` was derived from `sorted(prompts.READER)` — the LIVE family — and the
+reader sitting made that family three. Left as it was, this producer would re-derive a FROZEN record
+with a third entry nobody registered, which is a sealed registration rewriting itself because a
+later contract registered a prompt. It now names the two texts THIS registration registers. One
+line, and it is the line that keeps every other byte of this record true
+([[a_sealed_caller_forces_the_default]], the same fix `write_reader_prereg.rendering()` took when v2
+arrived).
+
+    git show 48c974a:scripts/write_reader_prereg_v2.py
+"""
+
+MOVED = MOVED_BY_THE_V3_READER + MOVED_BY_NAMING_THE_TWO_TEXTS
+WITNESS = {
+    "src/market_pulse/prompts.py": "reader_thread_gm4_v3",
+    "scripts/write_reader_prereg_v2.py": "sorted((prompts.READER_TASK, prompts.READER_TASK_V2))",
+}
+"""What each moved file learned, read BOTH ways below — absent from the sealed blob and present on
+disk — so a recovery from the wrong commit fails instead of passing."""
+
+NAMED_IN_THE_RECORD = {
+    "src/market_pulse/prompts.py": 2,  # instruments.parser.sha256 AND producer.borrowed
+    "scripts/write_reader_prereg_v2.py": 1,  # producer.sha256
+}
+"""How many times each moved file's sha appears in the record — stated, so a swap that put back one
+of two mentions cannot pass."""
+
+
+def sealed_blob(path: str) -> bytes:
+    """`path` as :data:`SEALING_COMMIT` carried it — git, and nothing on disk."""
+    return subprocess.run(
+        ["git", "show", f"{SEALING_COMMIT}:{path}"],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        check=True,
+    ).stdout
+
+
+def sealed_sha256(path: str) -> str:
+    return hashlib.sha256(sealed_blob(path)).hexdigest()
+
+
+def put_the_sealed_shas_back(produced: bytes) -> bytes:
+    """Swap every MOVED file's live sha for its sealed one — each swap must FIRE.
+
+    A substitution that matched nothing would leave the byte comparison passing for a file that had
+    silently gone back to the sealed bytes.
+    """
+    for path in MOVED:
+        live, sealed = summary.sha256_of(REPO_ROOT / path), sealed_sha256(path)
+        assert live != sealed, path
+        token = WITNESS[path]
+        assert token not in sealed_blob(path).decode("utf-8"), path
+        assert token in (REPO_ROOT / path).read_text(encoding="utf-8"), path
+        produced, count = re.subn(live.encode(), sealed.encode(), produced)
+        assert count == NAMED_IN_THE_RECORD[path], (path, count)
+    return produced
+
+
+def assert_pinned(name: str, digest: str) -> None:
+    """A pinned file is its live sha — or, on the MOVED list, the sha :data:`SEALING_COMMIT` has."""
+    live = summary.sha256_of(REPO_ROOT / name)
+    if name in MOVED:
+        assert live != digest and sealed_sha256(name) == digest, name
+    else:
+        assert live == digest, name
+
 
 def test_the_committed_registration_is_what_the_producer_writes_today(tmp_path):
     """No clock is stamped, so the record re-derives byte for byte and its date is the date of the
     commit that carries it — which is also the only witness that it preceded the endpoint."""
     out = tmp_path / "again.json"
     assert prereg.main(["--out", str(out)]) == 0
-    assert out.read_bytes() == RECORD_PATH.read_bytes()
+    assert put_the_sealed_shas_back(out.read_bytes()) == RECORD_PATH.read_bytes()
     assert "generated_at" not in RECORD_PATH.read_text(encoding="utf-8")
 
 
@@ -78,25 +172,31 @@ def test_the_population_is_pinned_as_a_list_with_its_injected_rows_marked():
 def test_every_instrument_is_pinned_by_the_bytes_it_will_run_with():
     instruments = RECORD["instruments"]
     assert instruments["task"] == prompts.READER_TASK_V2 == "reader_thread_gm4_v2"
+    # the two texts THIS registration registers, each still rendering the bytes it pinned. Not
+    # `set(prompts.READER)` any more: the reader sitting registered a third and a frozen record
+    # cannot name a prompt that did not exist when it was written. Both halves are asserted, because
+    # a subset check alone would also pass on a record that names two because v3 never landed
+    assert set(instruments["prompt_sha256"]) == {prompts.READER_TASK, prompts.READER_TASK_V2}
     assert instruments["prompt_sha256"] == {
-        task: prompts.prompt_sha256(task) for task in sorted(prompts.READER)
+        task: prompts.prompt_sha256(task) for task in (prompts.READER_TASK, prompts.READER_TASK_V2)
     }
-    assert set(instruments["prompt_sha256"]) == set(prompts.READER)
-    assert instruments["parser"]["sha256"] == summary.sha256_of(
-        REPO_ROOT / "src" / "market_pulse" / "prompts.py"
-    )
+    assert prompts.READER_TASK_V3 in prompts.READER
+    assert prompts.READER_TASK_V3 not in instruments["prompt_sha256"]
+    # the parser is one of the MOVED files: the sitting's ruling 2 (A) gave it the three container
+    # repairs and D2 registered a third reader text beside v2. The v2 prompt's own sha above is
+    # still LIVE and unrelaxed, which is what says this registration's instrument did not move —
+    # only the module around it
+    assert_pinned("src/market_pulse/prompts.py", instruments["parser"]["sha256"])
     assert instruments["scorer"]["sha256"] == summary.sha256_of(
         REPO_ROOT / "src" / "market_pulse" / "scorer.py"
     )
     for name in instruments["scorer"]["functions"]:
         assert callable(getattr(scorer, name)), name
     for name, digest in RECORD["authority"].items():
-        assert summary.sha256_of(REPO_ROOT / name) == digest, name
+        assert_pinned(name, digest)
     for name, digest in RECORD["producer"]["borrowed"].items():
-        assert summary.sha256_of(REPO_ROOT / name) == digest, name
-    assert RECORD["producer"]["sha256"] == summary.sha256_of(
-        REPO_ROOT / RECORD["producer"]["script"]
-    )
+        assert_pinned(name, digest)
+    assert_pinned(RECORD["producer"]["script"], RECORD["producer"]["sha256"])
 
 
 def test_the_ceilings_and_the_serving_block_are_the_code_and_the_rulings():

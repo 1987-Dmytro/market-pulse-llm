@@ -97,9 +97,11 @@ def run(argv, endpoint):
 
 
 def test_the_handshake_refuses_a_worker_that_is_behind_on_either_registered_prompt(bench):
-    """Two registered reader texts, and a worker that matched only the one this run reads with could
-    still be a session behind on the other — which is exactly the state a half-applied volume fetch
-    leaves. The whole dict is compared, and the message names the task that disagrees."""
+    """Every registered reader text, and a worker that matched only the one this run reads with
+    could still be a session behind on the others — which is exactly the state a half-applied volume
+    fetch leaves. The whole dict is compared against THIS CHECKOUT, and the message names the task
+    that disagrees. There were two texts when this was written and there are three now: the loop is
+    over `prompts.READER` and grows with it, which is why a third arriving did not weaken it."""
     ok = FakeEndpoint()
     assert run(["--endpoint", "x", "--handshake"], ok) == 0
 
@@ -122,6 +124,42 @@ def test_the_handshake_refuses_a_worker_that_is_behind_on_either_registered_prom
     wrong = FakeEndpoint(info={**ok.info(), "serving_config": "CAPTION"})
     with pytest.raises(SystemExit, match="not serving the registered configuration"):
         run(["--endpoint", "x", "--handshake"], wrong)
+
+
+def test_the_registration_still_demands_its_own_two_texts_after_a_third_was_registered(bench):
+    """The comparison `expected_worker` can no longer make, and the reason it moved.
+
+    `assert_serving` compares dicts WHOLE, so «the worker's reader map equals the registration's»
+    became unsatisfiable the day a third reader text was registered: this record names two and any
+    worker at this checkout serves three. Re-pinning a sealed registration to green it is refused,
+    so the field left `expected_worker` and the record's own claim — each text IT registered is
+    served with the bytes it registered — is asserted in `handshake` with a message of its own.
+
+    Both halves are checked. A worker whose v2 bytes disagree with the record is refused and the
+    message is NOT the volume one; and the third text is absent from the record while present in
+    `prompts.READER`, which is what says the relaxation is about a family that GREW and not about a
+    registration that lost a prompt.
+    """
+    assert set(RECORD["instruments"]["prompt_sha256"]) == {
+        prompts.READER_TASK,
+        prompts.READER_TASK_V2,
+    }
+    assert prompts.READER_TASK_V3 in prompts.READER
+    assert prompts.READER_TASK_V3 not in RECORD["instruments"]["prompt_sha256"]
+    assert "reader_prompt_sha256" not in driver.expected_worker(RECORD)
+
+    # a worker at this checkout on every text, but a record that pins other bytes for v2 — the
+    # state a re-run under a moved instrument would be in, and the one refusal that is not about a
+    # volume. `handshake` is called directly because the driver reads its registration from the
+    # committed file and this doctored one must never be written there.
+    ok = FakeEndpoint()
+    assert driver.handshake(ok, RECORD)["serving_config"] == "READER"
+    moved = json.loads(json.dumps(RECORD))
+    moved["instruments"]["prompt_sha256"][prompts.READER_TASK_V2] = "1" * 64
+    with pytest.raises(SystemExit, match="not serving what this run registered") as err:
+        driver.handshake(ok, moved)
+    assert "not at this session's commit" not in str(err.value), "the volume message, not this one"
+    assert prompts.READER_TASK_V2 in str(err.value)
 
 
 def test_the_warm_up_buys_the_registered_draw_and_nothing_else(bench):

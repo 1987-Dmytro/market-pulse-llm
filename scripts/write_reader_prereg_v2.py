@@ -369,7 +369,18 @@ def build(kept: list[dict], gold: dict) -> dict:
         },
         "instruments": {
             "task": prompts.READER_TASK_V2,
-            "prompt_sha256": {task: prompts.prompt_sha256(task) for task in sorted(prompts.READER)},
+            # the two texts THIS registration registers, named — not `sorted(prompts.READER)`, which
+            # is the live family and grew to three at the reader sitting. A frozen record derived
+            # from a family that grows is a record that rewrites itself the day a fourth text lands,
+            # and re-pinning a sealed registration is refused. Same narrowing `write_reader_prereg
+            # .rendering()` took when v2 arrived, one field over ([[a_sealed_caller_forces_the_
+            # default]]).
+            "prompt_sha256": {
+                task: prompts.prompt_sha256(task)
+                for task in sorted((prompts.READER_TASK, prompts.READER_TASK_V2))
+            },
+            # the committed record's own words, unchanged: this file re-derives that record byte for
+            # byte and a clearer sentence here would be a re-pinning of a sealed registration
             "prompt_rule": (
                 "a sha per REGISTERED reader text, compared whole against what the worker's `info`"
                 " answers. v1 stays servable so probe-a's evidence can be re-rendered; `task` above"

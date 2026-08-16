@@ -156,7 +156,14 @@ def expected_worker(record: dict) -> dict:
         "max_new_tokens": record["instruments"]["ceilings"]["output_tokens"],
         "model": block["model"],
         "revision_requested": block["model_revision"],
-        "reader_prompt_sha256": record["instruments"]["prompt_sha256"],
+        # `reader_prompt_sha256` is deliberately NOT here, and its absence is checked separately in
+        # `handshake` rather than left to be noticed. `assert_serving` compares dicts WHOLE, and the
+        # registration's map names the reader texts that existed when it was written — two of them.
+        # A third registered text makes whole-dict equality an invariant no worker at this checkout
+        # can satisfy, and re-pinning a sealed registration to green it is refused
+        # ([[an_invariant_the_new_member_cannot_satisfy]]). What the record can still demand is that
+        # each text IT registered is served with the bytes it registered, and that is a different
+        # comparison with a different message.
     }
 
 
@@ -186,6 +193,19 @@ def handshake(client, record: dict) -> dict:
         raise SystemExit(
             f"the worker's reader prompts are {served} and this checkout renders {live}."
             f" Disagreement: {wrong}. The volume is not at this session's commit."
+        )
+    # and SECOND, the registration's own texts — the comparison `expected_worker` cannot make any
+    # more, kept here so that dropping it from there did not drop it altogether. A distinct message
+    # on purpose: «the volume is behind» and «this worker is not serving what this run registered»
+    # are two different failures and only one of them is fixed by fetching the volume.
+    registered = record["instruments"]["prompt_sha256"]
+    moved = [task for task, sha in registered.items() if served.get(task) != sha]
+    if moved:
+        raise SystemExit(
+            f"the registration pins {[registered[task][:12] for task in moved]} for {moved} and the"
+            f" worker serves {[str(served.get(task))[:12] for task in moved]}. The check above"
+            " passed, so fetching the volume fixes nothing: this worker is not serving what this"
+            " run registered."
         )
     serving.assert_serving(info, expected_worker(record))
     return info

@@ -235,14 +235,17 @@ def test_the_positions_worker_names_both_registered_prompts():
     assert "caption_prompt_sha256" not in info
 
 
-def test_the_reader_worker_names_both_registered_prompts():
+def test_the_reader_worker_names_every_registered_prompt():
     """Same rule as the positions worker above, arrived at for the same reason and one contract
     later: probe-b registered `reader_thread_gm4_v2` and v1 stays servable, so a scalar could name
-    only one of the two and a worker a session behind would answer with a sha that matched the
+    only one of them and a worker a session behind would answer with a sha that matched the
     registration while the OTHER text had moved.
 
     The field is a dict the driver compares WHOLE, and it is derived from `prompts.READER` rather
-    than listed, so a third reader cannot be served without appearing in it.
+    than listed, so a third reader cannot be served without appearing in it. The reader sitting
+    registered exactly that third one and this test is where it had to show up: the literal below
+    is the assertion that the derivation reached it, and the count beside it is what says the three
+    are three DIFFERENT texts rather than one served under three names.
     """
     info = handler.describe(
         handler.settings({"SERVING_CONFIG": "READER", "MODEL_REVISION": PINNED_REVISION}),
@@ -255,9 +258,10 @@ def test_the_reader_worker_names_both_registered_prompts():
     assert info["reader_prompt_sha256"] == {
         "reader_thread_gm4": prompts.prompt_sha256("reader_thread_gm4"),
         "reader_thread_gm4_v2": prompts.prompt_sha256("reader_thread_gm4_v2"),
+        "reader_thread_gm4_v3": prompts.prompt_sha256("reader_thread_gm4_v3"),
     }
     assert set(info["reader_prompt_sha256"]) == set(prompts.READER)
-    assert len(set(info["reader_prompt_sha256"].values())) == 2
+    assert len(set(info["reader_prompt_sha256"].values())) == 3
     assert "positions_prompt_sha256" not in info and "caption_prompt_sha256" not in info
 
 
@@ -521,20 +525,28 @@ def test_the_reader_sends_one_thread_with_no_image_and_stays_greedy():
 
 
 def test_the_reader_serves_the_registered_prompts_and_nothing_else():
-    """Two registered reader texts since probe-b's D1, and the worker renders whichever the JOB
-    names — v1 so probe-a's evidence stays reproducible, v2 because it is the live instrument.
+    """THREE registered reader texts since the reader sitting, and the worker renders whichever the
+    JOB names — v1 and v2 so probe-a's and probe-b's evidence stay reproducible, v3 because it is
+    the instrument the next run registers.
 
     What the class does NOT do is decide which of them a run used. That is what `info` answers with,
     a sha per registered task, and what the driver compares against its registration before the
     first paid thread — so a v1 job on a v2 registration is caught by a number rather than by a
     default nobody reads ([[a_sealed_caller_forces_the_default]]).
+
+    The unregistered name at the end MOVED, and the premise it rests on is now asserted rather than
+    assumed: the planted name was `reader_thread_gm4_v3` and this contract made it law, which is
+    exactly the state where a control keeps passing while testing nothing
+    ([[the_control_whose_premise_stopped_being_true]]).
     """
     client = local_llm.ReaderClient(StubProcessor(), StubModel())
     rendered = {task: client.render(task, thread(comments=[])) for task in prompts.READER}
-    assert len(set(rendered.values())) == 2
+    assert len(set(rendered.values())) == 3
     for task, text in rendered.items():
         assert prompts.PROMPTS[task] in text
-    for other in (prompts.POSITIONS_TASK_TEXT, prompts.CAPTION_TASK_GM4, "reader_thread_gm4_v3"):
+    unregistered = "reader_thread_gm4_v4"
+    assert unregistered not in prompts.PROMPTS, "the control's premise, checked and not assumed"
+    for other in (prompts.POSITIONS_TASK_TEXT, prompts.CAPTION_TASK_GM4, unregistered):
         with pytest.raises(ValueError, match="and nothing else"):
             client.render(other, thread(comments=[]))
 
