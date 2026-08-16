@@ -139,7 +139,8 @@ step 7 is a hope rather than a proof.
 | ~15:29 → ~15:47 | `--handshake`: the `info` job outstanding, never answered | | |
 | before 15:49:41 | endpoint + template deleted; the three listings re-read | | |
 | 15:49:41 | guard — **REFUSED**, exit 1 | $22.0888293554 | **$0.3918** |
-| 15:52:33 | guard — the delta has stopped moving | $22.0888293554 | $0.3917654168 |
+| 15:52:33 | guard — the same reading to ten decimals, and see §4 for why that is not a stop | $22.0888293554 | $0.3917654168 |
+| 16:09:47 | guard — the volume's rent posts and the delta climbs again | — | $0.4033 |
 
 `runpodctl gpu list` was read **today** rather than assumed: RTX 2000 Ada at **$0.240/h**, EU-RO-1,
 stock Low — still the cheapest class with stock, and still the one probe-b staged on. `ls
@@ -222,12 +223,27 @@ included as the positive control. That is what makes this a deletion proof.
 
 ## 4. The money, and what cannot yet be said about it
 
-**$0.3917654168** — the step's balance delta, read at 15:49:41Z and **identical** at 15:52:33Z to ten
-decimals. Unlike probe-b's, this figure is **not** drifting upward while the report is written.
+**$0.3918 at the deletion, and it is a LOWER BOUND that is still climbing.** Four readings of the
+same step, in the order they were taken:
 
-**It cannot be decomposed by subtraction, and this report does not try.** At 15:27:33Z — seven
-minutes after the staging pod started — the delta was exactly **$0.0000**. RunPod had posted nothing.
-The $0.3918 that appeared later is a settlement event, not a meter anyone watched accumulate
+| reading (UTC) | balance | delta | what it is |
+|---|---|---|---|
+| 15:27:33 | $22.4805947722 | **$0.0000** | after seven minutes of staging pod — RunPod had posted nothing |
+| 15:49:41 | $22.0888293554 | **$0.3918** | minutes after the deletion; **the figure this report quotes** |
+| 15:52:33 | $22.0888293554 | $0.3918 | unchanged to ten decimals |
+| 16:09:47 | — | **$0.4033** | and moving again |
+
+The two identical readings three minutes apart do **not** mean the meter stopped, and an earlier
+draft of this section said they did. They mean the volume's rent posts in coarse chunks: over the
+same span the cycle-2 walk's `network-volume` line went $0.0194 → $0.0292, which is $0.0098 of the
+$0.0115 the delta gained. **This is Dv412 exactly** — a step meter built on a balance delta measures
+the ACCOUNT and never stops ([[a_step_meter_on_a_balance_delta_never_stops]]). The reading taken
+closest to the deletion is the one that means anything about the step, and it is the one quoted
+everywhere in this report.
+
+**And it cannot be decomposed by subtraction, so this report does not try.** At 15:27:33Z the delta
+was exactly $0.0000 while the staging pod had already run seven minutes. The $0.3918 that appeared
+later is a settlement event, not a meter anyone watched accumulate
 ([[a_balance_delta_is_not_a_per_leg_cost]]).
 
 What the billing walk says over the step's window, now:
@@ -238,8 +254,9 @@ $ runpodctl billing serverless     --start-time 2026-08-16T15:16:00Z → []
 $ runpodctl billing network-volume --start-time 2026-08-16T15:16:00Z → []
 ```
 
-Nothing has posted. Since the **cycle-2** anchor at 12:14:48Z one row exists — `network-volume
-$0.01944444`, 200 GB-hours — and pods and serverless are still empty there too.
+Nothing has posted. Since the **cycle-2** anchor at 12:14:48Z the only rows are the volume's —
+`network-volume` $0.0194 at 15:52 and $0.0292 by 16:09 — and pods and serverless are empty there too.
+**Not one second of the staging pod or of the endpoint has been billed into a row yet.**
 
 So, per the contract's own clause: **the deletion-time reading is reported as a LOWER BOUND and
 closing the step is a named debt** for tomorrow's first guard run. The guard refuses to close and the
@@ -251,8 +268,8 @@ REFUSED: the billing walk over reader-v3's window answered «no billing rows yet
 ```
 
 The one thing that can be bounded: the always-on volume rents at the measured ≈$0.0092/h, so over the
-36.5 minutes from the anchor to the last reading its share inside the delta is **at most ≈$0.006**.
-Taking it out does not bring the step under $0.35.
+33.5 minutes from the anchor to the deletion-time reading its share inside $0.3918 is **at most
+≈$0.005**. Taking it out does not bring the step under $0.35.
 
 `results/spend_reader_v3.json` carries the anchor and **one** session entry — the staging note,
 written at 15:27:33Z when the delta still read $0.0000. It carries no closing entry and no
@@ -260,8 +277,9 @@ deletion-time figure, because `main()` returns on its refusals before the `--not
 is the guard behaving correctly and it was **not** worked around by hand: the deletion-time reading
 lives in this report, where a number that no walk has settled belongs.
 
-**Cycle 2 stands at $0.4209 of $20.00, $19.5791 remaining. Phase 4 stays CLOSED at $32.4708 of
-$33.00.**
+**Cycle 2 read $0.4209 of $20.00 at 15:49:41Z and $0.4325 at 16:09:47Z — $19.5675 remaining on the
+later reading. Phase 4 stays CLOSED at $32.4708 of $33.00.** Cycle-2 figures carry their reading time
+for the same reason the step's do.
 
 ### 4.1 The number this run really bought
 
@@ -486,7 +504,7 @@ $ runpodctl serverless list && runpodctl pod list -a && runpodctl network-volume
 []
 [ qw4nwleanc · mp-srv2 · 100 GB · EU-RO-1 ]      # the positive control
 
-$ python3 scripts/runpod_guard.py --step reader-v3 --step-cap 0.35 ; echo $?
+$ python3 scripts/runpod_guard.py --step reader-v3 --step-cap 0.35 ; echo $?   # 15:49:41Z
 PHASE 4 CLOSED    $32.4708 of $33.00
 CYCLE 2 SPENT     $0.4209 of $20.00
 REMAINING         $19.5791
@@ -496,6 +514,12 @@ READER-V3 SPENT      $0.3918 of $0.35  (anchor $22.48 from runpod_balance_at_rea
 REFUSED: reader-v3's $0.35 cap is reached ($0.3918 spent). Stop and report — an overrun aborts,
          it does not raise the cap.
 1
+
+$ python3 scripts/runpod_guard.py --step reader-v3 --step-cap 0.35                # 16:09:47Z
+CYCLE 2 SPENT     $0.4325 of $20.00
+REMAINING         $19.5675
+READER-V3 SPENT      $0.4033 of $0.35   # Dv412: the delta measures the ACCOUNT and never stops
+  billing since   $0.0292 (read)        # cycle-2 window; network-volume only, pods and serverless $0
 
 $ python3 scripts/runpod_guard.py --step reader-v3 --step-cap 0.35 --close --note "…" ; echo $?
 REFUSED: the billing walk over reader-v3's window answered «no billing rows yet», so there is no
