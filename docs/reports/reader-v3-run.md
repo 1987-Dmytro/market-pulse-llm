@@ -369,6 +369,29 @@ ceiling stays an open risk with no reading against it.
 | **Dv442** | zsh does not word-split an unquoted `$SSHOPT`, so the first staging `ssh` loop failed on option parsing for five minutes while the pod billed — a footgun `scripts/runbook_4b.md` §90 already names, in a shell that was not the one it was written for. ≈$0.02 of the cap. Options written out literally afterwards. | `[cause: harness]` |
 | **Dv443** | **The cap was consumed before a single thread.** ≥20 minutes of a worker RunPod reported `running` with `completed: 0` and `retried: 0`. §3.4. | `[cause: cold-start]` |
 | **Dv444** | The step cannot be CLOSED: the billing walk has posted nothing, and the guard refuses to settle on it. The deletion-time reading stands as a LOWER BOUND and closing is a named debt for the next guard run. | `[cause: billing-latency]` |
+| **Dv445** | `tests/test_repair_phase4_ledger.py`'s silence check demanded every paid step run's balance appear in `results/spend_phase4.json`. Phase 4 is CLOSED and the guard writes a step's session into `results/spend_cycle2.json`, so **this contract's first `--note` reddened a suite that had been green for a week** — the run was witnessed exactly as it should be, by the other ledger. Both live ledgers are read now, the excuse table is untouched, and the check still names a run witnessed by neither. §8.1. → `6fde752` | `[cause: line-took-over]` |
+
+### 8.1 Dv445, and the control that came with it
+
+The invariant was never «the phase ledger hears about it» — it is «the ledger the guard reads before
+a start hears about it», and since amendment 3.23 (1) there are two of those. The old check was a
+true statement about a world in which Phase 4 was the only place a paid session could land, and it
+stopped being true the moment the line took over ([[the_control_whose_premise_stopped_being_true]],
+[[a_green_suite_can_have_a_shelf_life]] — the operator's first tick reddens it).
+
+A guard extended to a second source without a control over that source is a guard tested on the half
+it already had, so there are **two** negative controls now, one per ledger. The old one drops skub2's
+entry from the phase ledger. The new one empties the line's sessions and requires every step that ran
+after the close to be named — proven at the console rather than asserted:
+
+```
+with the real line ledger : []
+with it emptied           : [('results/spend_reader_v3.json', '2026-08-16T15:27:33+00:00', 22.4805947722)]
+```
+
+And the green path now asserts its own premise — Phase 4 carries a closing entry and the line's
+sessions are non-empty — so an empty cycle-2 ledger cannot make the union silently equal the older
+half while the test goes on passing.
 
 **Dv443's tag is provisional, and one free reading decides it.** When
 `runpodctl billing serverless --start-time 2026-08-16T15:16:00Z` posts a `timeBilledMs` for
@@ -439,6 +462,14 @@ $ make check                            # baseline, at 4bc128b
 
 $ make check                            # after D1, D2 and the preflight fix, at cca0534
 2644 passed, 2 skipped in 249.19s
+
+$ make check                            # RED after the first --note, and Dv445 is why
+2 failed, 2642 passed, 2 skipped
+FAILED tests/test_repair_phase4_ledger.py::test_no_paid_step_ledger_is_silent_in_the_phase_ledger
+FAILED tests/test_repair_phase4_ledger.py::test_the_silence_check_fires_when_a_phase_entry_goes_missing
+
+$ make check                            # after the witness fix, at 6fde752
+2645 passed, 2 skipped in 252.74s
 $ ruff format --check . && ruff check .
 316 files already formatted
 All checks passed!
@@ -480,9 +511,21 @@ results/reader_v3_w1.jsonl: no evidence — there is nothing to score
 
 **The per-commit rule, stated rather than listed:** the verifier ran on the tree of every commit that
 moves code or a test. `0c97b3e` and `8598948` move only vault and team-lead documentation and nothing
-in `tests/` opens `knowledge/` or `docs/reports`; `aa0ca18` moves only the step anchor, and no test
-reads `results/spend_reader_v3.json`. The two new test files are independent of each other — neither
-imports the other's subject — so each of `53fc13b` and `1846e5a` is green on its own tree.
+in `tests/` opens `knowledge/` or `docs/reports`.
 
-**Commits:** `0c97b3e` · `8598948` · `53fc13b` · `1846e5a` · `cca0534` · `aa0ca18` · `ae58b25`, plus this
-report's own and the ledger's session note.
+**Two commits are RED on their own trees and are named rather than rewritten.** Checked out one by
+one in a throwaway worktree rather than reasoned about:
+
+```
+aa0ca18  ->  11 passed          # the anchor alone; no gpu_sessions entry to witness yet
+ae58b25  ->  2 failed, 9 passed # the first --note lands, and Dv445 fires
+1b7b0bc  ->  2 failed, 9 passed # this report's first version, on the same tree
+6fde752  ->  12 passed          # the witness fix, and the second negative control
+```
+
+The honest history is a red commit and its repair. The two new test files are
+independent of each other — neither imports the other's subject — so each of `53fc13b` and `1846e5a`
+is green on its own tree.
+
+**Commits:** `0c97b3e` · `8598948` · `53fc13b` · `1846e5a` · `cca0534` · `aa0ca18` · `ae58b25` ·
+`1b7b0bc` (this report's first version) · `6fde752`, plus this report's own amendment.
