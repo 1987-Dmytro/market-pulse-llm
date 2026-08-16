@@ -7,8 +7,8 @@
 **Outcome in one line.** Step 0, the driver, the scorer and their 21 tests landed at $0 before any
 endpoint existed; the volume moved `f0fd745 → aa0ca18` by fetch and hard reset and rendered all
 **three** reader texts and the parser module byte-identical to this Mac; the endpoint came up with
-`gpuIds: ADA_24` read back for free — and then the **`info` job was never answered**. Twenty minutes
-of a worker RunPod reported as `running` with `completed: 0`, and the step's balance delta went
+`gpuIds: ADA_24` read back for free — and then the **`info` job was never answered**. At least twenty
+minutes of a worker RunPod reported as `running` with `completed: 0`, and the step's balance delta went
 $0.0000 → **$0.3918 against a $0.35 cap**. The endpoint and template were deleted, the deletion is
 proven by the same three listings taken before anything was created, and **not one thread was read**.
 Every bar is UNSCORED. The contract's one attempt is spent, and what it bought is a measurement:
@@ -257,6 +257,10 @@ $ runpodctl billing network-volume --start-time 2026-08-16T15:16:00Z → []
 Nothing has posted. Since the **cycle-2** anchor at 12:14:48Z the only rows are the volume's —
 `network-volume` $0.0194 at 15:52 and $0.0292 by 16:09 — and pods and serverless are empty there too.
 **Not one second of the staging pod or of the endpoint has been billed into a row yet.**
+
+Re-read at **16:11:55Z**, one last time before this session closed: still `[]` on both. The wait was
+stopped deliberately rather than left on a clock — a poll that expires is silent in exactly the way
+«nothing posted» is, and the debt below is the honest place for the question.
 
 So, per the contract's own clause: **the deletion-time reading is reported as a LOWER BOUND and
 closing the step is a named debt** for tomorrow's first guard run. The guard refuses to close and the
