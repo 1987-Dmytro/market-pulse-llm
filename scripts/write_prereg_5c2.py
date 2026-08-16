@@ -95,6 +95,7 @@ BLOCKS_TODAY = (
     "amendment-3.20",
     "amendment-3.21",
     "amendment-3.22",
+    "amendment-3.23",
 )
 """Every marked block the file carries NOW: the ten the seal keeps, plus each one that arrived after.
 
@@ -124,7 +125,14 @@ keeps the matching it was measured under. So the ten-name keep is untouched agai
 3.22 (operator, 2026-08-15, closing the fix-b finding) is the fourteenth, and it is the narrowest
 block in this list: it rules on which of two DEPTH READINGS a row-level surface may print. Neither
 reading is recomputed by it — both are already in the evidence these 5 075 rows carry — so it moves
-no number of this registration either, and the ten-name keep is untouched a fourth time."""
+no number of this registration either, and the ten-name keep is untouched a fourth time.
+
+3.23 (operator, 2026-08-16, the reader sitting) is the fifteenth, and it is the first block in this
+list that rules on MONEY: it opens the $20 cycle-2 line, fixes its $40.00 anchor threshold, closes
+Phase 4 at a final reading and sends the network volume's rent to its own line. Every number of THIS
+registration was priced against the phase cap of 3.18 (7)(b) and bought under it, and a line opened
+after the phase closed cannot reach back into them — `budget.phase_cap_usd` here is 33.00 and stays
+33.00. So the ten-name keep is untouched a fifth time."""
 
 DRIFT = projection.DRIFT
 HALF_DOLLAR = 0.50

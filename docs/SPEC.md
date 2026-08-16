@@ -966,6 +966,28 @@ is refused. The index therefore still reads «the current revision is 3.18» and
 amendments behind: 3.19, 3.20, 3.21 and 3.22 are each their own index entry, here and in the three
 blocks before this one, until that pin retires.)
 <!-- amendment-3.22 end -->
+<!-- amendment-3.23 begin — stripped by write_sku_prereg.registered_law() before hashing
+docs/SPEC.md against every sealed pre-registration pin, all of which predate this text; the
+law those records registered is the stripped text. New law arrives ONLY inside its own marked
+block — a sealed registration is never re-pinned to make it green -->
+**Amendment 3.23 (operator, 2026-08-16, the reader sitting — the cycle-2 budget line):**
+1. **The cycle-2 budget line is $20.00**, operator ruling 2026-08-16. Its home is
+   `results/spend_cycle2.json` and `CYCLE2_CAP_USD` in `scripts/runpod_guard.py`, beside
+   `PHASE_CAP_USD = 33.00`.
+2. **The anchor is the first guard balance reading of $40.00 or more after the operator's
+   top-up**, recorded verbatim with its timestamp. Anchoring below the threshold is refused.
+3. **Phase 4 is CLOSED at its final reading.** The inter-ledger gap — after the Phase-4 close and
+   before the cycle-2 anchor — is unbudgeted BY DESIGN and nothing may run in it; only the
+   standing network volume bills there.
+4. **Step readings name the volume's rent separately from the step's own resources**, never
+   inside a probe's figure.
+(Index note, in this block for the reason 3.19's, 3.20's, 3.21's and 3.22's own notes give: the
+`amendment-index` block above is one of the TEN blocks `write_prereg_5c2.KEEP_BLOCKS` holds INSIDE
+the sealed pin of `results/prereg_5c2_run.json`, so editing it would break that pin and re-pinning
+is refused. The index therefore still reads «the current revision is 3.18» and is now FIVE
+amendments behind: 3.19, 3.20, 3.21, 3.22 and 3.23 are each their own index entry, here and in the
+four blocks before this one, until that pin retires.)
+<!-- amendment-3.23 end -->
 **Date:** 2026-07-26 · **Team lead:** Fable session · **Executor:** Claude Code
 **Repo folder:** `/Users/hdv_1987/Desktop/Projects/market-pulse-llm`
 **rev. 3 change (operator decision):** producers in Ukraine barely use Telegram for

@@ -273,6 +273,13 @@ def test_every_pinned_input_still_hashes_to_what_it_says(record):
         # readings already in the evidence may be shown. One name short on arrival like every
         # block before it. Stripped here for the same reason: these pins are v1–v4's.
         "amendment-3.22",
+        # 3.23 — the reader sitting (2026-08-16): the $20 cycle-2 budget line with its two homes,
+        # the $40.00 anchor threshold and the refusal below it, Phase 4 CLOSED at a final reading
+        # with the inter-ledger gap unbudgeted by design, and a step reading that names the network
+        # volume's rent separately from the step's own resources. The first block of this family to
+        # rule on money. One name short on arrival like every block before it. Stripped here for the
+        # same reason: these pins are v1–v4's and every dollar they price predates the line.
+        "amendment-3.23",
     ]
     assert prereg.RATIFICATION_NAME.findall(spec_text) == blocks
     law = prereg.registered_law(prereg.SPEC).decode("utf-8")
