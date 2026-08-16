@@ -442,6 +442,25 @@ def closing_record(
     }
 
 
+def line_reading(live: dict, balance_now: float, *, note: str, at: str | None = None) -> dict:
+    """One reading of the LIVE ledger — the shape both the `--note` path and a step close write.
+
+    One function because the two are the same fact: the guard looked at the account at a moment and
+    this is what it saw. Two spellings of it would be two shapes in one file, and the check that
+    reads them matches on `balance`.
+    """
+    return {
+        "at": at or datetime.now(UTC).isoformat(timespec="seconds"),
+        "balance": balance_now,
+        "spent_usd": round(live["spent"], 4),
+        "remaining_usd": round(live["cap"] - live["spent"], 4),
+        "balance_delta_usd": round(live["anchor"] - balance_now, 4),
+        "billing_since_usd": round(sum(live["lines"].values()), 6),
+        "billing_read": live["how"],
+        "note": note,
+    }
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--note", help="record this reading as a pod session in the ledger")
@@ -599,6 +618,26 @@ def main(argv: list[str] | None = None) -> int:
                     step_ledger.setdefault("gpu_sessions", []).append(shut)
                     write_ledger_at(path, step_ledger)
                     print(f"CLOSED {path.name} at ${shut['settled_usd']:.4f} — entry APPENDED")
+                    # and the LIVE ledger hears about it. A step's close takes a fresh balance
+                    # reading that existed nowhere else: the `--note` branch below is skipped for
+                    # every `--close`, and it is skipped again when a cap refusal returns before it,
+                    # so a settled step could leave a reading only its own file carried — which is
+                    # exactly the silence tests/test_repair_phase4_ledger.py exists to catch, and it
+                    # caught this one. Written HERE, beside the entry it witnesses, so a refusal
+                    # after it cannot take the witness with it.
+                    if live is not None:
+                        live["ledger"]["sessions"].append(
+                            line_reading(
+                                live,
+                                balance_now,
+                                at=shut["at"],
+                                note=(
+                                    f"{args.step} CLOSED at ${shut['settled_usd']:.4f} —"
+                                    f" {args.note}"
+                                ),
+                            )
+                        )
+                        write_ledger_at(live["path"], live["ledger"])
 
         if shut is not None:
             step_spent = shut["settled_usd"]
@@ -655,18 +694,7 @@ def main(argv: list[str] | None = None) -> int:
             # one `--step probe-a --note …` maintained two ledgers for one step (Dv392)
             write_ledger_at(step_path, step_ledger)
         if live is not None:
-            live["ledger"]["sessions"].append(
-                {
-                    "at": datetime.now(UTC).isoformat(timespec="seconds"),
-                    "balance": balance_now,
-                    "spent_usd": round(live["spent"], 4),
-                    "remaining_usd": round(live["cap"] - live["spent"], 4),
-                    "balance_delta_usd": round(live["anchor"] - balance_now, 4),
-                    "billing_since_usd": round(sum(live["lines"].values()), 6),
-                    "billing_read": live["how"],
-                    "note": args.note,
-                }
-            )
+            live["ledger"]["sessions"].append(line_reading(live, balance_now, note=args.note))
             write_ledger_at(live["path"], live["ledger"])
         print(f"logged: {args.note}")
     return 0

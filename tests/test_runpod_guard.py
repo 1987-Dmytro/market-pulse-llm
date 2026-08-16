@@ -897,3 +897,72 @@ def test_the_balance_is_printed_once_whichever_ledger_is_live(tmp_path, monkeypa
     drive(monkeypatch, balance=39.5)
     guard.main([])
     assert capsys.readouterr().out.count("balance now") == 1
+
+
+def test_a_step_close_is_witnessed_in_the_live_ledger_even_when_the_cap_then_refuses(
+    tmp_path, monkeypatch, capsys
+):
+    """A close takes a FRESH balance reading, and until this fix it existed in one file only.
+
+    Two things had to line up for the silence: `--close` skips the `--note` branch that writes the
+    live ledger, and a step over its cap returns before that branch is reached at all. reader-v3 hit
+    both — settled at $0.3936 against a $0.35 cap — and left a balance in
+    `results/spend_reader_v3.json` that `results/spend_cycle2.json` had never heard, which is
+    exactly what `tests/test_repair_phase4_ledger.py` exists to catch. It caught it.
+
+    So the witness is written beside the closing entry, not after the refusal: driven here with a
+    cap the settled figure BREACHES, so the exit is 1 and the line is written anyway.
+    """
+    phase = closed_phase(tmp_path, monkeypatch)
+    line = tmp_path / "spend_cycle2.json"
+    line.write_text(
+        json.dumps(
+            {
+                "cycle2_cap_usd": 20.0,
+                "runpod_balance_at_cycle2_start": 22.51,
+                "anchored_at": "2026-08-16T12:14:48+00:00",
+                "sessions": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(guard, "CYCLE2_LEDGER", line)
+    step = step_with(tmp_path, anchored_at="2026-08-16T15:16:06+00:00")
+    drive(monkeypatch, balance=22.0675725277, billing=(0.0, "read"), kinds=PROBE_B_LINES)
+
+    assert (
+        guard.main(
+            [
+                "--step",
+                "probe-b",
+                "--step-cap",
+                "0.30",
+                "--step-ledger",
+                str(step),
+                "--close",
+                "--note",
+                "settled over its cap",
+            ]
+        )
+        == 1
+    ), "the settled figure breaches the cap and the guard says so"
+    assert "REFUSED" in capsys.readouterr().err
+
+    shut = json.loads(step.read_text(encoding="utf-8"))["gpu_sessions"][-1]
+    witness = json.loads(line.read_text(encoding="utf-8"))["sessions"][-1]
+    assert shut["closed"] is True
+    assert witness["balance"] == shut["balance"] == 22.0675725277, "matched on the READING"
+    assert witness["at"] == shut["at"], "the same moment, not two clocks"
+    assert "probe-b CLOSED at $0.3132" in witness["note"]
+    assert phase.exists()
+
+
+def test_the_live_witness_is_not_written_when_there_is_no_step_to_close(
+    ledger, tmp_path, monkeypatch
+):
+    """The negative control: `--close` WITHOUT a step is the line closing itself, and that branch
+    already appends its own entry. A second one would double-count the same reading."""
+    drive(monkeypatch, balance=22.0, billing=(0.0, "read"))
+    assert guard.main(["--close", "--note", "phase 4 is closed"]) == 0
+    sessions = json.loads(ledger.read_text(encoding="utf-8"))["sessions"]
+    assert len(sessions) == 1 and sessions[-1]["closed"] is True
