@@ -6,6 +6,21 @@
       "balance": 22.6877439273,
       "step_spent_usd": 0.2907,
       "note": "probe-b: warm-up GO on an ADA_24, all 23 threads read, endpoint and template deleted"
+    },
+    {
+      "at": "2026-08-16T11:09:46+00:00",
+      "closed": true,
+      "balance": 22.519483661,
+      "window_start": "2026-08-15T20:31:00+00:00",
+      "balance_delta_usd": 0.458995,
+      "billing_since_usd": 0.449273,
+      "billing_by_kind": {
+        "pods": 0.028689,
+        "network-volume": 0.136111,
+        "serverless": 0.284473
+      },
+      "note": "probe-b CLOSED. Every figure here is the guard's own reading at the moment above -- none is copied from a report, and each one re-derives from the billing_by_kind lines beside it. The window start is the step anchor's clock as docs/reports/probe-b.md 4.1 records it (20:31 UTC); the pods and serverless lines are identical whether the walk starts at 20:25, 20:31 or 20:33, and identical to the three lines that report settled. settled_usd is the step's OWN resources per SPEC 3.23 (4): the standing 100 GB network volume qw4nwleanc has its own line and is never inside this figure. balance_delta_usd is recorded beside it and does NOT bind -- it measures the account and goes on growing at the volume's rate long after the step is over (Dv412).",
+      "settled_usd": 0.313162
     }
   ],
   "probe-b_cap_usd": 0.35,

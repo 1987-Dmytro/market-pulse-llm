@@ -424,17 +424,25 @@ def closing_record(
     never re-derived. Refusing to close is recoverable; a wrong settlement is the one outcome that
     is not. The caller adds the headline field its ledger names — `spent_usd` for a phase or a line,
     `settled_usd` for a step — because they are not the same number and must not share a key.
+
+    Every figure is derived from the ROUNDED lines and not from the full-precision walk, so the
+    entry re-derives from what it publishes: a reader who adds up `billing_by_kind` gets
+    `billing_since_usd`, and the step's headline is the same sum with the always-on kinds left out.
+    Measured the other way round first — the headline came from the unrounded walk and disagreed
+    with its own decomposition by $0.000001, which is the whole distance between a record and a
+    record that can be checked.
     """
     if how != "read":
         return None
+    published = {kind: round(value, 6) for kind, value in lines.items()}
     return {
         "at": datetime.now(UTC).isoformat(timespec="seconds"),
         "closed": True,
         "balance": balance_now,
         "window_start": anchored_at,
-        "balance_delta_usd": round(anchor - balance_now, 4),
-        "billing_since_usd": round(sum(lines.values()), 6),
-        "billing_by_kind": {kind: round(value, 6) for kind, value in lines.items()},
+        "balance_delta_usd": round(anchor - balance_now, 6),
+        "billing_since_usd": round(sum(published.values()), 6),
+        "billing_by_kind": published,
         "note": note,
     }
 
@@ -551,9 +559,12 @@ def main(argv: list[str] | None = None) -> int:
                     " outcome."
                 )
             else:
+                # from the entry's OWN two readings, so `spent_usd` is the pessimistic maximum of
+                # the numbers a reader can see rather than of a pair only this process held
+                settled = max(entry["balance_delta_usd"], entry["billing_since_usd"])
                 entry |= {
-                    "spent_usd": round(live["spent"], 4),
-                    "remaining_usd": round(live["cap"] - live["spent"], 4),
+                    "spent_usd": round(settled, 4),
+                    "remaining_usd": round(live["cap"] - settled, 4),
                 }
                 live["ledger"]["sessions"].append(entry)
                 write_ledger_at(live["path"], live["ledger"])
@@ -600,7 +611,7 @@ def main(argv: list[str] | None = None) -> int:
                     # same number and deliberately do not share a key: the older field is a balance
                     # delta at a moment, this one is what the step's OWN resources billed, with the
                     # always-on kinds left outside it (3.23 (4)).
-                    shut["settled_usd"] = round(own_resources(lines), 6)
+                    shut["settled_usd"] = round(own_resources(shut["billing_by_kind"]), 6)
                     step_ledger.setdefault("gpu_sessions", []).append(shut)
                     write_ledger_at(path, step_ledger)
                     print(f"CLOSED {path.name} at ${shut['settled_usd']:.4f} — entry APPENDED")

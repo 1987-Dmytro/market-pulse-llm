@@ -434,7 +434,7 @@ def test_a_closed_step_is_priced_by_its_settled_figure_and_never_by_a_growing_de
     entry = json.loads(path.read_text(encoding="utf-8"))["gpu_sessions"][-1]
     assert entry["closed"] is True and entry["settled_usd"] == 0.313162
     assert entry["billing_by_kind"]["network-volume"] == 0.126389
-    assert entry["balance_delta_usd"] == 0.4493, "the delta is recorded, it just does not bind"
+    assert entry["balance_delta_usd"] == 0.449273, "the delta is recorded, it just does not bind"
 
     # thirteen more hours of volume: the delta grows, the closed step does not
     drive(monkeypatch, balance=22.4792058832, billing=(0.0, "read"), kinds=PROBE_B_LINES)
@@ -678,7 +678,7 @@ def test_the_phase_is_closed_by_the_guard_and_the_entry_carries_both_readings(
     entry = json.loads(ledger.read_text(encoding="utf-8"))["sessions"][-1]
 
     assert entry["closed"] is True and entry["note"] == "PHASE 4 IS CLOSED"
-    assert entry["spent_usd"] == 32.4611 and entry["balance_delta_usd"] == 12.4708
+    assert entry["spent_usd"] == 32.4611 and entry["balance_delta_usd"] == 12.470794
     assert entry["billing_since_usd"] == 32.461072
     assert entry["billing_by_kind"]["serverless"] == 11.550881
     assert entry["remaining_usd"] == round(33.00 - 32.4611, 4)
@@ -711,3 +711,96 @@ def test_a_refused_start_leaves_no_step_anchor_behind(ledger, tmp_path, monkeypa
         guard.main(["--step", "never-ran", "--step-cap", "1.00", "--step-ledger", str(fresh)]) == 1
     )
     assert not fresh.exists(), "a step that was refused a start has no anchor"
+
+
+# --- the two ledgers this contract actually closed, read from disk ------------------------------
+
+
+def test_phase_4_is_closed_on_disk_and_its_closing_entry_adds_up():
+    """The committed artifact, not a fixture. A closed ledger never moves again, so the literals
+    here are the shipped numbers rather than a snapshot with a shelf life.
+
+    Everything is re-derived from the entry's own fields: `spent_usd` must be the pessimistic
+    maximum of the two readings it carries, and `billing_since_usd` must be the sum of the kinds it
+    decomposes into. A hand-typed figure fails one of those two lines."""
+    ledger = json.loads(
+        (Path(__file__).resolve().parents[1] / "results" / "spend_phase4.json").read_text("utf-8")
+    )
+    entry = guard.closing_entry(ledger["sessions"])
+
+    assert entry is not None and entry["note"].startswith("PHASE 4 IS CLOSED")
+    assert entry is ledger["sessions"][-1], "the closing entry is the last thing appended"
+    assert (
+        entry["spent_usd"]
+        == 32.4708
+        == round(max(entry["balance_delta_usd"], entry["billing_since_usd"]), 4)
+    )
+    assert entry["remaining_usd"] == round(guard.PHASE_CAP_USD - entry["spent_usd"], 4) == 0.5292
+    assert round(sum(entry["billing_by_kind"].values()), 6) == entry["billing_since_usd"]
+    assert set(entry["billing_by_kind"]) == set(guard.BILLING_KINDS)
+    # the delta is $20.00 short of the billing walk, which is the operator's 2026-08-15 top-up
+    # landing after this ledger's anchor. Both readings are kept BECAUSE they disagree.
+    assert entry["balance_delta_usd"] == 12.480516
+    assert 19.9 < entry["billing_since_usd"] - entry["balance_delta_usd"] < 20.1
+    # untouched by the closure, and named so a regeneration would be seen
+    assert ledger["runpod_balance_at_phase4_start"] == 35.0
+    assert ledger["anchored_at"] == "2026-08-01T08:34:09+00:00"
+    assert len(ledger["sessions"]) == 41
+
+
+def test_probe_b_is_closed_on_disk_at_its_own_resources_and_inside_its_cap():
+    """Dv412's retirement, on the artifact. The step settles at what ITS resources billed; the
+    volume's rent is in the decomposition beside it and in neither the figure nor the verdict."""
+    path = Path(__file__).resolve().parents[1] / "results" / "spend_probe_b.json"
+    step = json.loads(path.read_text("utf-8"))
+    entry = guard.closing_entry(step["gpu_sessions"])
+
+    assert entry is not None and entry["window_start"] == "2026-08-15T20:31:00+00:00"
+    assert (
+        entry["settled_usd"] == 0.313162 == round(guard.own_resources(entry["billing_by_kind"]), 6)
+    )
+    assert entry["settled_usd"] < step["probe-b_gpu_cap_usd"] == 0.35
+    # the two readings the guard refused on before this contract, both recorded and neither binding
+    assert entry["billing_since_usd"] > 0.35 and entry["balance_delta_usd"] > 0.35
+    assert entry["billing_by_kind"]["network-volume"] == round(
+        entry["billing_since_usd"] - entry["settled_usd"], 6
+    )
+    # append-only: the anchor and the run's own session are exactly as probe-b left them
+    assert step["runpod_balance_at_probe-b_start"] == 22.9784784161
+    assert step["gpu_sessions"][0]["step_spent_usd"] == 0.2907
+    assert len(step["gpu_sessions"]) == 2
+
+
+def test_a_closing_entry_re_derives_from_the_lines_it_publishes():
+    """The rounding seam, at the producer rather than only on the shipped artifacts.
+
+    Built on the exact numbers that exposed it: `runpodctl` returned probe-b's pods and serverless
+    at full precision, whose raw sum rounds to $0.313161, while the two lines the record PUBLISHES
+    round to $0.028689 and $0.284473 and add to $0.313162. A reader adding up the decomposition got
+    a different number from the headline beside it — one micro-dollar, and a record that cannot be
+    checked against itself."""
+    raw = {"pods": 0.0286886, "network-volume": 0.1361111, "serverless": 0.2844725}
+    entry = guard.closing_record(
+        anchored_at="2026-08-15T20:31:00+00:00",
+        balance_now=22.5,
+        anchor=22.9784784161,
+        lines=raw,
+        how="read",
+        note="x",
+    )
+    assert round(sum(raw.values()), 6) == 0.449272 != entry["billing_since_usd"] == 0.449273
+    assert entry["billing_since_usd"] == round(sum(entry["billing_by_kind"].values()), 6)
+    assert round(guard.own_resources(entry["billing_by_kind"]), 6) == 0.313162
+
+    # and the other direction: a walk that did not answer settles nothing
+    assert (
+        guard.closing_record(
+            anchored_at="x",
+            balance_now=1.0,
+            anchor=2.0,
+            lines={},
+            how="no billing rows yet",
+            note="x",
+        )
+        is None
+    )

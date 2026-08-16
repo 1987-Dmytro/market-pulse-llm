@@ -283,6 +283,22 @@
       "spent_usd": 32.0118,
       "remaining_usd": 0.9882,
       "note": "probe-b: warm-up GO on an ADA_24, all 23 threads read, endpoint and template deleted"
+    },
+    {
+      "at": "2026-08-16T11:09:48+00:00",
+      "closed": true,
+      "balance": 22.519483661,
+      "window_start": "2026-08-01T08:34:09+00:00",
+      "balance_delta_usd": 12.480516,
+      "billing_since_usd": 32.470794,
+      "billing_by_kind": {
+        "pods": 17.692135,
+        "network-volume": 3.227778,
+        "serverless": 11.550881
+      },
+      "note": "PHASE 4 IS CLOSED at this final reading (operator ruling 2026-08-16, SPEC amendment 3.23 (3)). Both readings are carried per Dv33 and they are NOT comparable: the operator topped the account up on 2026-08-15, AFTER this ledger's anchor was taken, so balance_delta_usd under-counts by that top-up and billing_since_usd is the binding number -- as it has been since the top-up landed. Every figure re-derives from the billing_by_kind lines beside it. What follows this entry is the inter-ledger gap: unbudgeted by design, nothing may run in it, and only the standing 100 GB network volume qw4nwleanc bills there. The gap closes when the cycle-2 line of 3.23 (1) is anchored, which the guard refuses to do below the threshold of 3.23 (2).",
+      "spent_usd": 32.4708,
+      "remaining_usd": 0.5292
     }
   ]
 }
