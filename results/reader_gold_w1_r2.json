@@ -1,0 +1,1260 @@
+{
+  "authority": {
+    "docs/PLAN-comment-signals.md": "12a29138aa21bc2943a36152f6863dc69d0551f58564420b14704f413003f83e",
+    "docs/PRODUCT.md": "b271cb11542e482dae38918c65c28c1210469c511b1c45a857d71532dbe34d08",
+    "docs/REFERENCE-signals-w1.md": "6408d4bbbb6e374394e48802f1a13a2c78d92825a54968666a9ac3c54d4835b3"
+  },
+  "conflicts": [
+    {
+      "case": "N1",
+      "kind": "a noise thread the reference itself reads a signal in",
+      "reading": "the N list calls this thread noise and the S list names a signal inside it. The store has the second: the thread's surviving comments are 2, not the «десятки «+»» the N list describes. Bar 3 cannot score both readings and the record chooses neither — the sitting does",
+      "secondary": [
+        "S1"
+      ],
+      "thread": "@VARUS_channel:10529"
+    },
+    {
+      "case": "N2",
+      "evidence_text": "1",
+      "kind": "a named msg-id the store puts under another post",
+      "msg_id": 20916,
+      "post_id_in_the_reference": 10366,
+      "post_id_in_the_store": 10375
+    },
+    {
+      "cases": [
+        {
+          "case": "F1a",
+          "missing": [
+            "з нього просто тече вода, перемерзше"
+          ]
+        },
+        {
+          "case": "F3a",
+          "missing": [
+            "творог нежирний з атб, в пачці 300 г, сам такий купляю"
+          ]
+        },
+        {
+          "case": "F4a",
+          "missing": [
+            "добираю білок пудінгами і йогуртами з протеїном"
+          ]
+        },
+        {
+          "case": "F5a",
+          "missing": [
+            "давати вночі кефір/ряжанку/молоко"
+          ]
+        },
+        {
+          "case": "E1",
+          "missing": [
+            "дитячий центр \"гармонія\""
+          ]
+        },
+        {
+          "case": "E4b",
+          "missing": [
+            "чи варто"
+          ]
+        }
+      ],
+      "kind": "quotes the reference tightened",
+      "reading": "the reference's quotes are a reading aid, not extracts: none of them can be grepped in the store as written. `evidence_text` is what the reader will be given, and it is what any quote check must run against"
+    }
+  ],
+  "contract": "docs/PROMPT-probe-a.md D2",
+  "derivation": {
+    "aspects": {
+      "вкус": "taste",
+      "качество": "quality",
+      "наличие": "availability",
+      "сервис": "service",
+      "упаковка": "packaging",
+      "цена": "price"
+    },
+    "aspects_authority": "docs/PRODUCT.md question 2 names these six Russian words and scorer.INTENTS_V2 is the same six in English — the aspect layer the model already has",
+    "per_comment_rule": "a per-comment row carries the reading the reference states for that comment where it states one (`rule: stated`), else the subject and stance of the signal it is evidence for (`rule: signal`, the shape of plan §3's own example). A field the reference does not state is null and is not in `scored_fields`",
+    "quote_rule": "`quote_reference` is the reference's wording, `evidence_text` the store's. `quote.state` is recomputed from the store on every build: verbatim, fragmented (an elided quote whose every piece is present) or compressed",
+    "stance": {
+      "жалоба": "negative",
+      "похвала": "positive"
+    },
+    "stance_rule": "жалоба reads negative and похвала positive; спрос, привычка and тренд state no attitude and carry none. A stance invented for them would be the executor reinterpreting the reference, which D2 forbids"
+  },
+  "entity_cases": [
+    {
+      "brand_id": "garmonija",
+      "channel": "@matusi_ukr",
+      "evidence_row": {
+        "evidence_text": "В дитячому центрі \"Гармонія\" на метро Турбоатом набираються нові групи вивчення англійської дітками від 3 років. Дуже цікаві заняття, чудові результати! Сертифіковані викладачі.\nВ групах 5-7 діток.\nКому цікаво, вже можна записуватись і бронювати місця на новий навчальний рік. Буде відкрите безкоштовне заняття. Можна прийти познайомитись з простором і методикою.)\nЗапрошуємо Вас і Ваших діток! 😊",
+        "in_the_population": false,
+        "in_the_store": true,
+        "msg_id": 578951,
+        "payable": true,
+        "post_id_in_the_store": 22242
+      },
+      "id": "E1",
+      "msg_id": 578951,
+      "name": "дитячий центр \"Гармонія\"",
+      "post_id": 22242,
+      "quote": {
+        "missing": [
+          "дитячий центр \"гармонія\""
+        ],
+        "state": "compressed"
+      },
+      "reading_reference": "тема треда: английский для детей",
+      "subject_type": "не_наш_рынок",
+      "thread": {
+        "in_the_population": false,
+        "outside_because": {
+          "in_the_window": true,
+          "passes_the_gate_with_no_silencer": true,
+          "reading": "the thread's only lexicon hit is one this silencer takes away, so the gate drops the whole thread — before payment, and therefore before the reader can resolve anything in it",
+          "removed_by": [
+            "varto_rule"
+          ]
+        },
+        "payable_comments": null
+      }
+    },
+    {
+      "brand_id": "selianske",
+      "channel": "@VARUS_channel",
+      "evidence_row": null,
+      "id": "E2",
+      "msg_id": null,
+      "name": "Молоко Дитяче 3,2% ТМ Селянське",
+      "post_id": 10360,
+      "quote": {
+        "state": "verbatim"
+      },
+      "reading_reference": "контекст каталога",
+      "subject_type": "молочный_бренд",
+      "thread": {
+        "in_the_population": true,
+        "payable_comments": 2
+      }
+    },
+    {
+      "brand_id": "varus-pl",
+      "channel": "@VARUS_channel",
+      "evidence_row": {
+        "evidence_text": "Зайшла в Varus на Деміївській стоїть цінник 302 грн.по акції,показала фото,питаю\"де?\"хочу купити\"-\"в нас такого нема\"\nДе є?",
+        "in_the_population": true,
+        "in_the_store": true,
+        "msg_id": 20664,
+        "payable": true,
+        "post_id_in_the_store": 10348
+      },
+      "id": "E3",
+      "msg_id": 20664,
+      "name": "Зайшла в Varus на Деміївській",
+      "post_id": 10348,
+      "quote": {
+        "state": "verbatim"
+      },
+      "reading_reference": "не private-label бренд varus-pl",
+      "subject_type": "сеть_ритейлер",
+      "thread": {
+        "in_the_population": true,
+        "payable_comments": 7
+      }
+    },
+    {
+      "brand_id": "varto",
+      "channel": "@mandziak",
+      "evidence_row": {
+        "evidence_text": "Добрий день. Скажіть чи людині 100+кг вдасться з вами привести тіло і свій стан в порядок? Чи варто до вас йти?",
+        "in_the_population": false,
+        "in_the_store": true,
+        "msg_id": 48099,
+        "payable": true,
+        "post_id_in_the_store": 3684
+      },
+      "expected": "absent",
+      "id": "E4a",
+      "msg_id": 48099,
+      "name": "чи варто…",
+      "post_id": 3684,
+      "quote": {
+        "pieces": [
+          "чи варто"
+        ],
+        "state": "fragmented"
+      },
+      "reading_reference": "наречие,\n  никакого бренда Varto",
+      "subject_type": null,
+      "thread": {
+        "in_the_population": false,
+        "outside_because": {
+          "in_the_window": true,
+          "passes_the_gate_with_no_silencer": true,
+          "reading": "the thread's only lexicon hit is one this silencer takes away, so the gate drops the whole thread — before payment, and therefore before the reader can resolve anything in it",
+          "removed_by": [
+            "varto_rule"
+          ]
+        },
+        "payable_comments": null
+      }
+    },
+    {
+      "brand_id": "varto",
+      "channel": "@mandziak",
+      "evidence_row": {
+        "evidence_text": "А що скажете про протнїнові коктейлі, варто чи ні, якщо недоїдаю з їжі?...",
+        "in_the_population": false,
+        "in_the_store": true,
+        "msg_id": 48054,
+        "payable": true,
+        "post_id_in_the_store": 3689
+      },
+      "expected": "absent",
+      "id": "E4b",
+      "msg_id": 48054,
+      "name": "чи варто…",
+      "post_id": 3689,
+      "quote": {
+        "missing": [
+          "чи варто"
+        ],
+        "state": "compressed"
+      },
+      "reading_reference": "наречие,\n  никакого бренда Varto",
+      "subject_type": null,
+      "thread": {
+        "in_the_population": false,
+        "outside_because": {
+          "in_the_window": true,
+          "passes_the_gate_with_no_silencer": true,
+          "reading": "the thread's only lexicon hit is one this silencer takes away, so the gate drops the whole thread — before payment, and therefore before the reader can resolve anything in it",
+          "removed_by": [
+            "varto_rule"
+          ]
+        },
+        "payable_comments": null
+      }
+    }
+  ],
+  "evidence_store": {
+    "data/derived/inferences/HealthPsycholog.jsonl": "0b76918cf044609a71d80a46e5277cc1ecffe390802c966d39a13858d46b460f",
+    "data/derived/inferences/VARUS_channel.jsonl": "72321c09abad66a8ea0cc622ad7ab90e91108a12200c1705e3af2037ed20f5fb",
+    "data/derived/inferences/chifit_family.jsonl": "572cdeebb20239cc2b4806a5e2709eb89da2e6233ddc184dfd168c7a9dfbc90f",
+    "data/derived/inferences/denisovapro.jsonl": "3a90344aabadb47d114bbfd19a72732ba1bd894976368917abfae73cc89f85f0",
+    "data/derived/inferences/kkondr_fit.jsonl": "fa313f326363ed9e8e8a8ebfd8a20e428c67e3f0549eec402023e73ea2e1ac3c",
+    "data/derived/inferences/klopotenkofood.jsonl": "53060ce9b7fb7571cd781dfbbce31da3cb62d7bab1d873f10f80aa5fda6711c7",
+    "data/derived/inferences/kopiyochka1.jsonl": "30a981f7c7e51f2c03401ce7ecd7fae6b1eb22350b13557673791a727dc4c2dd",
+    "data/derived/inferences/mamo_nepsichuy.jsonl": "5f2a0d8dd3bf09da152df097eaaf3657dbf37e5750ba30023d03b9234fa0a16d",
+    "data/derived/inferences/mandziak.jsonl": "59f00b94e951e969bee0932cbed7ce945dc9ffcd9ca2fa7a5579db283cedd65c",
+    "data/derived/inferences/matusi_ukr.jsonl": "c481f4671ef8ff8fbc5cc5838aa3834020b8449c0aa0ea0c1dfe89849241bf7e",
+    "data/derived/inferences/msuaaaa.jsonl": "2f12fc8f45f4a67e188e6ddce434cbab6f73b2725cd99eff4497e2491a0f7ee1",
+    "data/derived/inferences/olgaa_trainer.jsonl": "1350080c18cd2713a2776e69371b9ad78c2221041bf71b01937cd7f79232cb19",
+    "data/derived/inferences/polyakova_fitness.jsonl": "c1fbc6fb04941d0e3f8f54c0498455099c75cb6977c9487743fc9a29061c06f3",
+    "data/derived/inferences/retsepty.jsonl": "6faa4ba37dc345a574a546a0b49cdb2282e730382886dddcb7a1148229bf82f5",
+    "data/derived/inferences/sashafitnesslife.jsonl": "bb0ce8090ce318ff20ade99e2124ca7f392327b7d526008553b09d8223e6edb8",
+    "data/derived/inferences/smirnov108.jsonl": "1348c7c7f7d7639abf3d43215336e77e7bc095a447fb898171d1be2ebf510206",
+    "data/derived/inferences/tarilka_malyuka.jsonl": "2787c95362ba9c835b5ae6e495e7ed06756fd6083f63a4019d44c78fb3039ffe",
+    "data/derived/inferences/useful_healthy_fitness_menu.jsonl": "4878d8c8b7c02c18bff2826d0dbdd231a94c7c85a040fd92e758fd20174220aa",
+    "data/derived/inferences/ya_Nenka.jsonl": "6e192bf6ff229324856238f509be5e07847ee7e758221c54e3bc0948cabf60e4"
+  },
+  "flagships": [
+    {
+      "channel": "@VARUS_channel",
+      "id": "F1",
+      "post_id": 10613,
+      "signals": [
+        {
+          "aspect": "quality",
+          "aspect_reference": "качество",
+          "evidence": [
+            21626
+          ],
+          "evidence_rows": [
+            {
+              "evidence_text": "Брав морозиво у Варусі, воно у них завжди особливе, з нього просто тече вода, воно просто перемерзше. Цим словам є підтвердження - чек. Повернення робив не один я.",
+              "in_the_population": true,
+              "in_the_store": true,
+              "msg_id": 21626,
+              "payable": true,
+              "post_id_in_the_store": 10613
+            }
+          ],
+          "id": "F1a",
+          "quote": {
+            "missing": [
+              "з нього просто тече вода, перемерзше"
+            ],
+            "state": "compressed"
+          },
+          "quote_reference": "з нього просто тече вода, перемерзше… Повернення робив не один я",
+          "reading_reference": "холодовая цепь",
+          "signal_type": "жалоба",
+          "stance": "negative",
+          "subject_id": "varus",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "aspect": "availability",
+          "aspect_reference": "наличие",
+          "evidence": [
+            21599,
+            21601
+          ],
+          "evidence_rows": [
+            {
+              "evidence_text": "А є морозиво без цукру?",
+              "in_the_population": true,
+              "in_the_store": true,
+              "msg_id": 21599,
+              "payable": true,
+              "post_id_in_the_store": 10613
+            },
+            {
+              "evidence_text": "Вітаємо Валентина!Так у VARUS є морозиво без цукру,а саме Рудь ванільне (ескімо 60 г або в стаканчику 110 г)Рудь шоколадне (ескімо 60 г)Лімо Velvet полуничне (з замінником цукру Zusto Gold, 70 г",
+              "in_the_population": true,
+              "in_the_store": true,
+              "msg_id": 21601,
+              "payable": true,
+              "post_id_in_the_store": 10613
+            }
+          ],
+          "id": "F1b",
+          "quote": {
+            "state": "none"
+          },
+          "quote_reference": null,
+          "reading_reference": "ответ сети с SKU Рудь/Лімо",
+          "signal_type": "спрос",
+          "stance": null,
+          "subject_id": "морозиво без цукру",
+          "subject_type": "категория_личное"
+        },
+        {
+          "aspect": "taste",
+          "aspect_reference": "вкус",
+          "evidence": [
+            21629
+          ],
+          "evidence_rows": [
+            {
+              "evidence_text": "Беремо завжди ось це-дуже смачне,навіть смачніссімо🥰🥰🥰",
+              "in_the_population": true,
+              "in_the_store": true,
+              "msg_id": 21629,
+              "payable": true,
+              "post_id_in_the_store": 10613
+            }
+          ],
+          "id": "F1c",
+          "quote": {
+            "state": "none"
+          },
+          "quote_reference": null,
+          "reading_reference": null,
+          "signal_type": "похвала",
+          "stance": "positive",
+          "subject_id": null,
+          "subject_type": null
+        }
+      ],
+      "thread": {
+        "in_the_population": true,
+        "payable_comments": 10
+      },
+      "title": "«День морозива»"
+    },
+    {
+      "channel": "@matusi_ukr",
+      "fork": {
+        "evidence_row": {
+          "evidence_text": "Ніяке не люблю. Хоч ласунка, хоч інше - не мій продукт.",
+          "in_the_population": true,
+          "in_the_store": true,
+          "msg_id": 580129,
+          "payable": true,
+          "post_id_in_the_store": 22303
+        },
+        "msg_id": 580129,
+        "quote": {
+          "state": "verbatim"
+        },
+        "quote_reference": "Ніяке не люблю. Хоч ласунка, хоч інше",
+        "reading_reference": "НЕ\n  бренд-негатив — обязательная развилка",
+        "subject_type": "категория_личное"
+      },
+      "id": "F2",
+      "post_id": 22303,
+      "signals": [
+        {
+          "aspect": "availability",
+          "aspect_reference": "наличие",
+          "evidence": [
+            580124
+          ],
+          "evidence_rows": [
+            {
+              "evidence_text": "Також сьогодні розбили біосферу,  там  були товари фрекен бок, смайл та інші😢",
+              "in_the_population": true,
+              "in_the_store": true,
+              "msg_id": 580124,
+              "payable": true,
+              "post_id_in_the_store": 22303
+            }
+          ],
+          "id": "F2a",
+          "quote": {
+            "state": "none"
+          },
+          "quote_reference": null,
+          "reading_reference": "рыночное событие (разрушен склад",
+          "signal_type": "жалоба",
+          "stance": "negative",
+          "subject_id": "lasunka",
+          "subject_type": "молочный_бренд"
+        }
+      ],
+      "thread": {
+        "in_the_population": true,
+        "payable_comments": 2
+      },
+      "title": "«Ласунка, склад»"
+    },
+    {
+      "channel": "@mandziak",
+      "id": "F3",
+      "post_id": 3676,
+      "signals": [
+        {
+          "aspect": null,
+          "aspect_reference": null,
+          "evidence": [
+            47899,
+            47902
+          ],
+          "evidence_rows": [
+            {
+              "evidence_text": "Погоджуюсь) я робила піцу з творога 0.2 % і цільнозернового борошна, випікала а зверху накладала все що люблю: курку, кукурудзу, томат, трохи сиру і виходило дійсно як справжня піца, ще й дуже ситно)) крохмаль не давала, лиш пів ложечки розпушувача)) \nВідколи зловила гіперфікс на творогові, навчилась робити купу всього з нього😅",
+              "in_the_population": true,
+              "in_the_store": true,
+              "msg_id": 47899,
+              "payable": true,
+              "post_id_in_the_store": 3676
+            },
+            {
+              "evidence_text": "На відео у жінки творог нежирний з атб. В пачці 300 гр. Сам такий купляю\n\nhttps://www.atbmarket.com/product/sir-kislomolocnij-300-g-den-u-den-nezirnij-pet-sajba",
+              "in_the_population": true,
+              "in_the_store": true,
+              "msg_id": 47902,
+              "payable": true,
+              "post_id_in_the_store": 3676
+            }
+          ],
+          "id": "F3a",
+          "quote": {
+            "missing": [
+              "творог нежирний з атб, в пачці 300 г, сам такий купляю"
+            ],
+            "state": "compressed"
+          },
+          "quote_reference": "творог нежирний з АТБ, в пачці 300 г, сам такий купляю",
+          "reading_reference": "упоминание ритейлера при категорийной привычке",
+          "signal_type": "привычка",
+          "stance": null,
+          "subject_id": "творог",
+          "subject_type": "категория_личное"
+        }
+      ],
+      "thread": {
+        "in_the_population": true,
+        "payable_comments": 9
+      },
+      "title": "«пицца из творога»"
+    },
+    {
+      "channel": "@mandziak",
+      "id": "F4",
+      "post_id": 3703,
+      "signals": [
+        {
+          "aspect": null,
+          "aspect_reference": null,
+          "evidence": [
+            48276,
+            48283
+          ],
+          "evidence_rows": [
+            {
+              "evidence_text": "Абсолютно згоден, хз як втоптати 0.5 кг курки за день. А якщо кожен день, то через 3 дні ти не зможеш на неї дивитись. Я спокійно добираю пудінгами і йогуртами з протеїном і не парюсь і отримую ще й десерт. Іноді навіть можу псіханути замішати протеїновий пудінг з білим сиром на сніданок і закриваю відразу 50% денної норми. Зараз є купа прикольної доступної і смачної молочки без цукру з протеїном в супермаркетах.",
+              "in_the_population": true,
+              "in_the_store": true,
+              "msg_id": 48276,
+              "payable": true,
+              "post_id_in_the_store": 3703
+            },
+            {
+              "evidence_text": "Так само як і попередні коментатори - не можу їсти багато їжі.\nРахував КБЖВ програмкою і виявилося, що окрім недобору калорій (1700-2000) ще й білка споживав десь 70-80г на 70 кг ваги. І не розумів чому м'язи не ростуть. Тому взяв за правило пити один протеїновий коктейль на день і прогрес пішов.\nЗрозуміло, що можна білок з м’яса замінити на яєчний або сирний. Але всеодно не кожен прийом їжі - це цисокобілковий продукт. Вівсянка з сухофруктами на сніданок і  тільки овочевий салат (бо за*бався задень) на вечерю - і білка меньше половини норми - звичайна справа",
+              "in_the_population": true,
+              "in_the_store": true,
+              "msg_id": 48283,
+              "payable": true,
+              "post_id_in_the_store": 3703
+            }
+          ],
+          "id": "F4a",
+          "quote": {
+            "missing": [
+              "добираю білок пудінгами і йогуртами з протеїном"
+            ],
+            "state": "compressed"
+          },
+          "quote_reference": "добираю білок пудінгами і йогуртами з протеїном",
+          "reading_reference": "ежедневный протеиновый коктейль",
+          "signal_type": "тренд",
+          "stance": null,
+          "subject_id": "функциональная молочка",
+          "subject_type": "категория_личное"
+        }
+      ],
+      "thread": {
+        "in_the_population": true,
+        "payable_comments": 9
+      },
+      "title": null
+    },
+    {
+      "channel": "@matusi_ukr",
+      "id": "F5",
+      "post_id": 22272,
+      "signals": [
+        {
+          "aspect": null,
+          "aspect_reference": null,
+          "evidence": [
+            579379,
+            579457
+          ],
+          "evidence_rows": [
+            {
+              "evidence_text": "Можна взагалі вже прибрати суміш, давати вночі воду, компот, можливо кефір, йогурт. А суміш це ц дитині стрес, Вам затратно і немає необхідності",
+              "in_the_population": true,
+              "in_the_store": true,
+              "msg_id": 579379,
+              "payable": true,
+              "post_id_in_the_store": 22272
+            },
+            {
+              "evidence_text": "Беріть ікеа чашку дитячу( синя чи зелена). Вона без зворотнього клапана, тобто якщо перевнути то рідина просто  буде  витікати,як зі  звичайної чашка з отворами. Суміш можете обрати по своему бюджету або ж давати вночі кефір/ряжанку/звичайне молоко з неї. Також не знаю вашої ситуації, але в наш час дуже мало ситуацій при яких треба завершувати ГВ. Більшість ліків сумісні з ГВ і їх можна перевірити на сайті єлактація. Мені нещодавно оперували зуб мудрости.  7 днів на антибиотиках,антигистамінних, знеболювальних+ перевязка з ліками і все сумісне з ГВ.",
+              "in_the_population": true,
+              "in_the_store": true,
+              "msg_id": 579457,
+              "payable": true,
+              "post_id_in_the_store": 22272
+            }
+          ],
+          "id": "F5a",
+          "quote": {
+            "missing": [
+              "давати вночі кефір/ряжанку/молоко"
+            ],
+            "state": "compressed"
+          },
+          "quote_reference": "давати вночі\n  кефір/ряжанку/молоко",
+          "reading_reference": null,
+          "signal_type": "привычка",
+          "stance": null,
+          "subject_id": "baby-food",
+          "subject_type": "категория_личное"
+        }
+      ],
+      "thread": {
+        "in_the_population": true,
+        "payable_comments": 15
+      },
+      "title": null
+    }
+  ],
+  "instrument": {
+    "prompt_sha256": "b272115637f784ad63c6fb2483e0b0ac3d6381901a096dc1cb5406b81a46c8cd",
+    "task": "reader_thread_gm4"
+  },
+  "noise_threads": [
+    {
+      "channel": "@VARUS_channel",
+      "class": "плюс_спам",
+      "id": "N1",
+      "post_id": 10529,
+      "reading_reference": "десятки «+»",
+      "thread": {
+        "in_the_population": true,
+        "payable_comments": 2
+      }
+    },
+    {
+      "channel": "@VARUS_channel",
+      "class": "плюс_спам",
+      "evidence_row": {
+        "evidence_text": "1",
+        "in_the_population": true,
+        "in_the_store": true,
+        "msg_id": 20916,
+        "payable": true,
+        "post_id_in_the_store": 10375
+      },
+      "id": "N2",
+      "msg_id": 20916,
+      "post_id": 10366,
+      "reading_reference": "msg 20916 «1»",
+      "thread": {
+        "in_the_population": true,
+        "payable_comments": 12
+      }
+    },
+    {
+      "channel": "@sashafitnesslife",
+      "class": "плюс_спам",
+      "id": "N3",
+      "post_id": 3939,
+      "reading_reference": "29 × «Тест»",
+      "thread": {
+        "in_the_population": false,
+        "outside_because": {
+          "in_the_window": true,
+          "passes_the_gate_with_no_silencer": true,
+          "reading": "the thread's only lexicon hit is one this silencer takes away, so the gate drops the whole thread — before payment, and therefore before the reader can resolve anything in it",
+          "removed_by": [
+            "varto_rule"
+          ]
+        },
+        "payable_comments": null
+      }
+    },
+    {
+      "channel": "@retsepty",
+      "class": "скам",
+      "id": "N4",
+      "post_id": 7312,
+      "reading_reference": "«работа 20 000 гривен…»",
+      "thread": {
+        "in_the_population": true,
+        "payable_comments": 3
+      }
+    },
+    {
+      "channel": "@retsepty",
+      "class": "скам",
+      "id": "N5",
+      "post_id": 7325,
+      "reading_reference": "«работа 20 000 гривен…»",
+      "thread": {
+        "in_the_population": true,
+        "payable_comments": 2
+      }
+    },
+    {
+      "channel": "@retsepty",
+      "class": "скам",
+      "id": "N6",
+      "post_id": 7327,
+      "reading_reference": "«работа 20 000 гривен…»",
+      "thread": {
+        "in_the_population": true,
+        "payable_comments": 1
+      }
+    }
+  ],
+  "per_comment": [
+    {
+      "aspect": "quality",
+      "channel": "@VARUS_channel",
+      "derived_from": "F1a",
+      "evidence_row": {
+        "evidence_text": "Брав морозиво у Варусі, воно у них завжди особливе, з нього просто тече вода, воно просто перемерзше. Цим словам є підтвердження - чек. Повернення робив не один я.",
+        "in_the_population": true,
+        "in_the_store": true,
+        "msg_id": 21626,
+        "payable": true,
+        "post_id_in_the_store": 10613
+      },
+      "msg_id": 21626,
+      "rule": "signal",
+      "scored_fields": [
+        "subject_type",
+        "stance"
+      ],
+      "stance": "negative",
+      "subject_id": "varus",
+      "subject_type": "сеть_ритейлер"
+    },
+    {
+      "aspect": "availability",
+      "channel": "@VARUS_channel",
+      "derived_from": "F1b",
+      "evidence_row": {
+        "evidence_text": "А є морозиво без цукру?",
+        "in_the_population": true,
+        "in_the_store": true,
+        "msg_id": 21599,
+        "payable": true,
+        "post_id_in_the_store": 10613
+      },
+      "msg_id": 21599,
+      "rule": "signal",
+      "scored_fields": [
+        "subject_type"
+      ],
+      "stance": null,
+      "subject_id": "морозиво без цукру",
+      "subject_type": "категория_личное"
+    },
+    {
+      "aspect": "availability",
+      "channel": "@VARUS_channel",
+      "derived_from": "F1b",
+      "evidence_row": {
+        "evidence_text": "Вітаємо Валентина!Так у VARUS є морозиво без цукру,а саме Рудь ванільне (ескімо 60 г або в стаканчику 110 г)Рудь шоколадне (ескімо 60 г)Лімо Velvet полуничне (з замінником цукру Zusto Gold, 70 г",
+        "in_the_population": true,
+        "in_the_store": true,
+        "msg_id": 21601,
+        "payable": true,
+        "post_id_in_the_store": 10613
+      },
+      "msg_id": 21601,
+      "rule": "signal",
+      "scored_fields": [
+        "subject_type"
+      ],
+      "stance": null,
+      "subject_id": "морозиво без цукру",
+      "subject_type": "категория_личное"
+    },
+    {
+      "aspect": "taste",
+      "channel": "@VARUS_channel",
+      "derived_from": "F1c",
+      "evidence_row": {
+        "evidence_text": "Беремо завжди ось це-дуже смачне,навіть смачніссімо🥰🥰🥰",
+        "in_the_population": true,
+        "in_the_store": true,
+        "msg_id": 21629,
+        "payable": true,
+        "post_id_in_the_store": 10613
+      },
+      "msg_id": 21629,
+      "rule": "signal",
+      "scored_fields": [
+        "stance"
+      ],
+      "stance": "positive",
+      "subject_id": null,
+      "subject_type": null
+    },
+    {
+      "aspect": "availability",
+      "channel": "@matusi_ukr",
+      "derived_from": "F2a",
+      "evidence_row": {
+        "evidence_text": "Також сьогодні розбили біосферу,  там  були товари фрекен бок, смайл та інші😢",
+        "in_the_population": true,
+        "in_the_store": true,
+        "msg_id": 580124,
+        "payable": true,
+        "post_id_in_the_store": 22303
+      },
+      "msg_id": 580124,
+      "rule": "signal",
+      "scored_fields": [
+        "subject_type",
+        "stance"
+      ],
+      "stance": "negative",
+      "subject_id": "lasunka",
+      "subject_type": "молочный_бренд"
+    },
+    {
+      "aspect": null,
+      "channel": "@matusi_ukr",
+      "derived_from": "F2.fork",
+      "evidence_row": {
+        "evidence_text": "Ніяке не люблю. Хоч ласунка, хоч інше - не мій продукт.",
+        "in_the_population": true,
+        "in_the_store": true,
+        "msg_id": 580129,
+        "payable": true,
+        "post_id_in_the_store": 22303
+      },
+      "msg_id": 580129,
+      "rule": "stated",
+      "scored_fields": [
+        "subject_type"
+      ],
+      "stance": null,
+      "subject_id": null,
+      "subject_type": "категория_личное"
+    },
+    {
+      "aspect": null,
+      "channel": "@mandziak",
+      "derived_from": "F3a",
+      "evidence_row": {
+        "evidence_text": "Погоджуюсь) я робила піцу з творога 0.2 % і цільнозернового борошна, випікала а зверху накладала все що люблю: курку, кукурудзу, томат, трохи сиру і виходило дійсно як справжня піца, ще й дуже ситно)) крохмаль не давала, лиш пів ложечки розпушувача)) \nВідколи зловила гіперфікс на творогові, навчилась робити купу всього з нього😅",
+        "in_the_population": true,
+        "in_the_store": true,
+        "msg_id": 47899,
+        "payable": true,
+        "post_id_in_the_store": 3676
+      },
+      "msg_id": 47899,
+      "rule": "signal",
+      "scored_fields": [
+        "subject_type"
+      ],
+      "stance": null,
+      "subject_id": "творог",
+      "subject_type": "категория_личное"
+    },
+    {
+      "aspect": null,
+      "channel": "@mandziak",
+      "derived_from": "F3a",
+      "evidence_row": {
+        "evidence_text": "На відео у жінки творог нежирний з атб. В пачці 300 гр. Сам такий купляю\n\nhttps://www.atbmarket.com/product/sir-kislomolocnij-300-g-den-u-den-nezirnij-pet-sajba",
+        "in_the_population": true,
+        "in_the_store": true,
+        "msg_id": 47902,
+        "payable": true,
+        "post_id_in_the_store": 3676
+      },
+      "msg_id": 47902,
+      "rule": "signal",
+      "scored_fields": [
+        "subject_type"
+      ],
+      "stance": null,
+      "subject_id": "творог",
+      "subject_type": "категория_личное"
+    },
+    {
+      "aspect": null,
+      "channel": "@mandziak",
+      "derived_from": "F4a",
+      "evidence_row": {
+        "evidence_text": "Абсолютно згоден, хз як втоптати 0.5 кг курки за день. А якщо кожен день, то через 3 дні ти не зможеш на неї дивитись. Я спокійно добираю пудінгами і йогуртами з протеїном і не парюсь і отримую ще й десерт. Іноді навіть можу псіханути замішати протеїновий пудінг з білим сиром на сніданок і закриваю відразу 50% денної норми. Зараз є купа прикольної доступної і смачної молочки без цукру з протеїном в супермаркетах.",
+        "in_the_population": true,
+        "in_the_store": true,
+        "msg_id": 48276,
+        "payable": true,
+        "post_id_in_the_store": 3703
+      },
+      "msg_id": 48276,
+      "rule": "signal",
+      "scored_fields": [
+        "subject_type"
+      ],
+      "stance": null,
+      "subject_id": "функциональная молочка",
+      "subject_type": "категория_личное"
+    },
+    {
+      "aspect": null,
+      "channel": "@mandziak",
+      "derived_from": "F4a",
+      "evidence_row": {
+        "evidence_text": "Так само як і попередні коментатори - не можу їсти багато їжі.\nРахував КБЖВ програмкою і виявилося, що окрім недобору калорій (1700-2000) ще й білка споживав десь 70-80г на 70 кг ваги. І не розумів чому м'язи не ростуть. Тому взяв за правило пити один протеїновий коктейль на день і прогрес пішов.\nЗрозуміло, що можна білок з м’яса замінити на яєчний або сирний. Але всеодно не кожен прийом їжі - це цисокобілковий продукт. Вівсянка з сухофруктами на сніданок і  тільки овочевий салат (бо за*бався задень) на вечерю - і білка меньше половини норми - звичайна справа",
+        "in_the_population": true,
+        "in_the_store": true,
+        "msg_id": 48283,
+        "payable": true,
+        "post_id_in_the_store": 3703
+      },
+      "msg_id": 48283,
+      "rule": "signal",
+      "scored_fields": [
+        "subject_type"
+      ],
+      "stance": null,
+      "subject_id": "функциональная молочка",
+      "subject_type": "категория_личное"
+    },
+    {
+      "aspect": null,
+      "channel": "@matusi_ukr",
+      "derived_from": "F5a",
+      "evidence_row": {
+        "evidence_text": "Можна взагалі вже прибрати суміш, давати вночі воду, компот, можливо кефір, йогурт. А суміш це ц дитині стрес, Вам затратно і немає необхідності",
+        "in_the_population": true,
+        "in_the_store": true,
+        "msg_id": 579379,
+        "payable": true,
+        "post_id_in_the_store": 22272
+      },
+      "msg_id": 579379,
+      "rule": "signal",
+      "scored_fields": [
+        "subject_type"
+      ],
+      "stance": null,
+      "subject_id": "baby-food",
+      "subject_type": "категория_личное"
+    },
+    {
+      "aspect": null,
+      "channel": "@matusi_ukr",
+      "derived_from": "F5a",
+      "evidence_row": {
+        "evidence_text": "Беріть ікеа чашку дитячу( синя чи зелена). Вона без зворотнього клапана, тобто якщо перевнути то рідина просто  буде  витікати,як зі  звичайної чашка з отворами. Суміш можете обрати по своему бюджету або ж давати вночі кефір/ряжанку/звичайне молоко з неї. Також не знаю вашої ситуації, але в наш час дуже мало ситуацій при яких треба завершувати ГВ. Більшість ліків сумісні з ГВ і їх можна перевірити на сайті єлактація. Мені нещодавно оперували зуб мудрости.  7 днів на антибиотиках,антигистамінних, знеболювальних+ перевязка з ліками і все сумісне з ГВ.",
+        "in_the_population": true,
+        "in_the_store": true,
+        "msg_id": 579457,
+        "payable": true,
+        "post_id_in_the_store": 22272
+      },
+      "msg_id": 579457,
+      "rule": "signal",
+      "scored_fields": [
+        "subject_type"
+      ],
+      "stance": null,
+      "subject_id": "baby-food",
+      "subject_type": "категория_личное"
+    },
+    {
+      "aspect": null,
+      "channel": "@matusi_ukr",
+      "derived_from": "E1",
+      "evidence_row": {
+        "evidence_text": "В дитячому центрі \"Гармонія\" на метро Турбоатом набираються нові групи вивчення англійської дітками від 3 років. Дуже цікаві заняття, чудові результати! Сертифіковані викладачі.\nВ групах 5-7 діток.\nКому цікаво, вже можна записуватись і бронювати місця на новий навчальний рік. Буде відкрите безкоштовне заняття. Можна прийти познайомитись з простором і методикою.)\nЗапрошуємо Вас і Ваших діток! 😊",
+        "in_the_population": false,
+        "in_the_store": true,
+        "msg_id": 578951,
+        "payable": true,
+        "post_id_in_the_store": 22242
+      },
+      "msg_id": 578951,
+      "rule": "stated",
+      "scored_fields": [
+        "subject_type"
+      ],
+      "stance": null,
+      "subject_id": null,
+      "subject_type": "не_наш_рынок"
+    },
+    {
+      "aspect": null,
+      "channel": "@VARUS_channel",
+      "derived_from": "E3",
+      "evidence_row": {
+        "evidence_text": "Зайшла в Varus на Деміївській стоїть цінник 302 грн.по акції,показала фото,питаю\"де?\"хочу купити\"-\"в нас такого нема\"\nДе є?",
+        "in_the_population": true,
+        "in_the_store": true,
+        "msg_id": 20664,
+        "payable": true,
+        "post_id_in_the_store": 10348
+      },
+      "msg_id": 20664,
+      "rule": "stated",
+      "scored_fields": [
+        "subject_type"
+      ],
+      "stance": null,
+      "subject_id": null,
+      "subject_type": "сеть_ритейлер"
+    }
+  ],
+  "population": {
+    "cell": "narrow|silencers_on",
+    "payable_comments": 912,
+    "record": "results/gate_census_w1.json",
+    "sha256": "1338d4003ff787682962fd5f5f89014939e533af900083367c3e2be882d65602",
+    "threads": 111
+  },
+  "producer": {
+    "borrowed": {
+      "scripts/gate_census_w1.py": "4480a5fcd0eb21b53f103e3e68b9eee41aa81e130de23fbf8ae0702a709fea6a",
+      "scripts/reader_population.py": "5ecb897d3d620d7d27916a3aa578a599ba1cd7c835abfb4ea136a350a440914a",
+      "scripts/window_summary_5c2.py": "239d2d5fcc0f0c93158ca41383b5ce20beb7f8e9db38974913a302ea4831fdaf",
+      "scripts/write_reader_gold.py": "20a687a630387fa2556cb47cc890c4631e1cfff3a2e58dd86a927b0414385e7b",
+      "src/market_pulse/prompts.py": "dfa7a79f39ed7d6248951f77b89af11b68f086ee376da7fc4a6341d1267d2ee4"
+    },
+    "script": "scripts/write_reader_gold_r2.py",
+    "sha256": "6af560133a3bb5211711a6b3ba362f721df94d8c1447cbf5b1ceb6d78097e014"
+  },
+  "reachability": {
+    "entity_cases": {
+      "reachable": [
+        "E2",
+        "E3"
+      ],
+      "unreachable": [
+        {
+          "cause": {
+            "in_the_window": true,
+            "passes_the_gate_with_no_silencer": true,
+            "reading": "the thread's only lexicon hit is one this silencer takes away, so the gate drops the whole thread — before payment, and therefore before the reader can resolve anything in it",
+            "removed_by": [
+              "varto_rule"
+            ]
+          },
+          "id": "E1"
+        },
+        {
+          "cause": {
+            "in_the_window": true,
+            "passes_the_gate_with_no_silencer": true,
+            "reading": "the thread's only lexicon hit is one this silencer takes away, so the gate drops the whole thread — before payment, and therefore before the reader can resolve anything in it",
+            "removed_by": [
+              "varto_rule"
+            ]
+          },
+          "id": "E4a"
+        },
+        {
+          "cause": {
+            "in_the_window": true,
+            "passes_the_gate_with_no_silencer": true,
+            "reading": "the thread's only lexicon hit is one this silencer takes away, so the gate drops the whole thread — before payment, and therefore before the reader can resolve anything in it",
+            "removed_by": [
+              "varto_rule"
+            ]
+          },
+          "id": "E4b"
+        }
+      ]
+    },
+    "flagships": {
+      "reachable": [
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5"
+      ],
+      "unreachable": []
+    },
+    "noise_threads": {
+      "reachable": [
+        "N1",
+        "N2",
+        "N4",
+        "N5",
+        "N6"
+      ],
+      "unreachable": [
+        {
+          "cause": {
+            "in_the_window": true,
+            "passes_the_gate_with_no_silencer": true,
+            "reading": "the thread's only lexicon hit is one this silencer takes away, so the gate drops the whole thread — before payment, and therefore before the reader can resolve anything in it",
+            "removed_by": [
+              "varto_rule"
+            ]
+          },
+          "id": "N3"
+        }
+      ]
+    },
+    "per_comment": {
+      "inside_the_population": [
+        21626,
+        21599,
+        21601,
+        21629,
+        580124,
+        580129,
+        47899,
+        47902,
+        48276,
+        48283,
+        579379,
+        579457,
+        20664
+      ],
+      "outside_the_population": [
+        578951
+      ],
+      "rows": 14
+    },
+    "reading": "a case whose thread the gate removed before payment cannot be answered by the reader at all: it is a fact about the gate, and a bar scored over it would fail by arithmetic rather than by reading. The bars of `results/prereg_reader_probe.json` are registered over the reachable rows, with the unreachable ones named and returned to the operator"
+  },
+  "reading_rule": "the per-comment bar is counted ONLY over the msg-ids this reference names explicitly (its own closing rule). Everything else the machine returns is adjudication input, and this file is never re-read against the machine's answer",
+  "revision": {
+    "cells": [
+      ".flagships[0].signals[1].subject_type",
+      ".flagships[2].signals[0].subject_type",
+      ".flagships[3].signals[0].subject_type",
+      ".flagships[4].signals[0].subject_type",
+      ".per_comment[10].subject_type",
+      ".per_comment[11].subject_type",
+      ".per_comment[1].subject_type",
+      ".per_comment[2].subject_type",
+      ".per_comment[6].subject_type",
+      ".per_comment[7].subject_type",
+      ".per_comment[8].subject_type",
+      ".per_comment[9].subject_type"
+    ],
+    "change": "every `subject_type` cell reading «категория» is re-labelled «категория_личное». Nothing else: same rows, same msg-ids, same reachability block, same conflicts. The walk keys on the field name and the exact value, so prose that discusses the word is untouched",
+    "name": "r2",
+    "ruling": {
+      "operator_words": [
+        "The sitting adjudicates them as **the same class**",
+        "the gold is re-derived as a NAMED revision (r2) in reader-v3",
+        "the reference file itself is NOT edited"
+      ],
+      "reading": "«категория» and «категория_личное» are ONE class. The reference states the first, the ratified taxonomy the second, and probe-b measured the cost of the disagreement in production: msg 21599 was scored gold «категория» against a reader that answered «категория_личное», and collapsing the two moved bar 4 from 0.357 to 0.429 as run and from 0.429 to 0.643 coerced",
+      "record": "knowledge/decisions/reader-sitting-16-08.md",
+      "which": "ruling 4 — the vocabulary adjudication"
+    },
+    "source": {
+      "docs/REFERENCE-signals-w1.md": "6408d4bbbb6e374394e48802f1a13a2c78d92825a54968666a9ac3c54d4835b3",
+      "rule": "the reference file is NOT edited — pins do not move for a vocabulary reading (ruling 4). Every row, msg-id, quote check and reachability cell below is v1's, rebuilt from this file by scripts/write_reader_gold.py"
+    },
+    "supersedes": {
+      "record": "results/reader_gold_w1.json",
+      "sha256": "ba86bcb31d597095124d3d7a32838a55a4b5be1f1f8f72e6c14368ecafb43225",
+      "untouched": "v1 is not edited and is not superseded as EVIDENCE: results/prereg_reader_probe.json and results/prereg_reader_probe_v2.json pin its sha and probe-a's and probe-b's bars were scored against it. This file is what a run AFTER the 2026-08-16 sitting scores against"
+    }
+  },
+  "secondary": [
+    {
+      "aspect": "availability",
+      "aspect_reference": "наличие",
+      "channel": "@VARUS_channel",
+      "evidence_row": {
+        "evidence_text": "Половина товаров закончилась, гениально",
+        "in_the_population": true,
+        "in_the_store": true,
+        "msg_id": 21420,
+        "payable": true,
+        "post_id_in_the_store": 10529
+      },
+      "id": "S1",
+      "msg_id": 21420,
+      "post_id": 10529,
+      "quote": {
+        "state": "verbatim"
+      },
+      "quote_reference": "половина товаров закончилась, гениально",
+      "reading_reference": "сарказм-жалоба",
+      "signal_type": "жалоба",
+      "subject_type": "сеть_ритейлер"
+    },
+    {
+      "aspect": "service",
+      "aspect_reference": "сервис",
+      "channel": "@VARUS_channel",
+      "evidence_row": {
+        "evidence_text": "А можна перевірити, а то не застосовується.",
+        "in_the_population": true,
+        "in_the_store": true,
+        "msg_id": 21507,
+        "payable": true,
+        "post_id_in_the_store": 10593
+      },
+      "id": "S2",
+      "msg_id": 21507,
+      "post_id": 10593,
+      "quote": {
+        "state": "none"
+      },
+      "quote_reference": null,
+      "reading_reference": "промокод не работает",
+      "signal_type": "жалоба",
+      "subject_type": "сеть_ритейлер"
+    },
+    {
+      "aspect": "availability",
+      "aspect_reference": "наличие",
+      "channel": "@VARUS_channel",
+      "evidence_row": {
+        "evidence_text": "А можно как то повлиять, чтобы акционый товар оказался на полке магазина? На остатках он есть. Одесса. Французский бульвар.",
+        "in_the_population": true,
+        "in_the_store": true,
+        "msg_id": 20737,
+        "payable": true,
+        "post_id_in_the_store": 10360
+      },
+      "id": "S3",
+      "msg_id": 20737,
+      "post_id": 10360,
+      "quote": {
+        "state": "none"
+      },
+      "quote_reference": null,
+      "reading_reference": "акционного нет на полке",
+      "signal_type": "жалоба",
+      "subject_type": "сеть_ритейлер"
+    },
+    {
+      "aspect": null,
+      "aspect_reference": null,
+      "channel": "@VARUS_channel",
+      "evidence_row": {
+        "evidence_text": "В нашому варусі поки ту піцу дочекаєшся, і фінал закінчиться🫤",
+        "in_the_population": true,
+        "in_the_store": true,
+        "msg_id": 21199,
+        "payable": true,
+        "post_id_in_the_store": 10465
+      },
+      "id": "S4",
+      "msg_id": 21199,
+      "post_id": null,
+      "quote": {
+        "state": "none"
+      },
+      "quote_reference": null,
+      "reading_reference": "Ритейл-сервис-кластер VARUS: пицца",
+      "signal_type": null,
+      "subject_type": "сеть_ритейлер"
+    },
+    {
+      "aspect": null,
+      "aspect_reference": null,
+      "channel": "@VARUS_channel",
+      "evidence_row": {
+        "evidence_text": "Який сенс ві ваших реклам якщо ви не можете налагодити доставку замовлень?",
+        "in_the_population": true,
+        "in_the_store": true,
+        "msg_id": 21256,
+        "payable": true,
+        "post_id_in_the_store": 10471
+      },
+      "id": "S5",
+      "msg_id": 21256,
+      "post_id": null,
+      "quote": {
+        "state": "none"
+      },
+      "quote_reference": null,
+      "reading_reference": "доставка",
+      "signal_type": null,
+      "subject_type": "сеть_ритейлер"
+    },
+    {
+      "aspect": "quality",
+      "aspect_reference": "качество",
+      "channel": "@VARUS_channel",
+      "evidence_row": {
+        "evidence_text": "Ось  такий   карась  привезли",
+        "in_the_population": true,
+        "in_the_store": true,
+        "msg_id": 21566,
+        "payable": true,
+        "post_id_in_the_store": 10603
+      },
+      "id": "S6",
+      "msg_id": 21566,
+      "post_id": null,
+      "quote": {
+        "state": "none"
+      },
+      "quote_reference": null,
+      "reading_reference": "рыба",
+      "signal_type": null,
+      "subject_type": "сеть_ритейлер"
+    }
+  ],
+  "window": "w1"
+}
