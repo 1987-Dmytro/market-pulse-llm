@@ -30,7 +30,19 @@ constraint on a different actor:
   balance would produce a counter that starts at the wrong number, which is the footgun
   `results/spend_phase4.json` has carried in its own note since the phase opened.
 
-The top-up itself is on the operator, and it is the third open item of the next briefing.
+**AMENDED THE SAME DAY, at the acceptance of `cycle2-money`.** The third clause landed in SPEC
+3.23 (2) as a numeric threshold — «the first guard balance reading of $40.00 or more after the
+top-up» — and the team lead withdrew it hours later: *«порог $40 … — ошибка тимлида (порог построен
+на непроверенном допущении «пополнение будет новым, поверх»); снимается амендментом 3.24 … якорь
+линии берётся осознанным прогоном от текущего баланса. Новых платежей НЕ требуется.»*
+
+**The money was already there, and the artifact this contract wrote is what proves it:** the
+Phase-4 ledger's closing entry carries both readings and they differ by **$19.990278** — the
+operator's $20 top-up of 2026-08-15, landing after that ledger's anchor. A `≥ $40.00` floor would
+have demanded a SECOND top-up nobody planned. The clause was implemented exactly as written and
+shipped with tests in both directions; that is its only defence, and no test could have reached the
+assumption, because the assumption was about a future payment. `CYCLE2_ANCHOR_MIN_USD` and its
+refusal retire with the clause, at step 0.5 of `reader-v3-prep`.
 
 ## Ruling 2 — the reader instrument is **A+B as ONE new registration (v3)**
 
