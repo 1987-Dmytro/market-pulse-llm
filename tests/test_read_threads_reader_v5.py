@@ -308,6 +308,21 @@ def test_a_unit_slow_enough_to_break_the_cap_is_a_STOP(pack):
     assert driver.projection(RECORD, RATE, rows, elapsed=250.0, pack=pack)["verdict"] == "STOP"
 
 
+def test_a_torn_LAST_line_is_dropped_and_a_torn_middle_one_still_raises(tmp_path, capsys):
+    """The jsonl is copied back while the pod appends to it, so its final line can be half written
+    at the moment scp reads it. That is a race, on the kill-rule path, where a traceback costs
+    billed seconds — but only the last line gets the benefit of the doubt."""
+    path = tmp_path / "pod.jsonl"
+    good = json.dumps({"id": "a", "seconds": 1.0})
+    path.write_text(f'{good}\n{{"id": "b", "sec', encoding="utf-8")
+    assert [row["id"] for row in driver.raw_rows(path)] == ["a"]
+    assert "dropped a torn last line" in capsys.readouterr().out
+
+    path.write_text(f'{{"id": "b", "sec\n{good}\n', encoding="utf-8")
+    with pytest.raises(json.JSONDecodeError):
+        driver.raw_rows(path)
+
+
 def test_every_gate_snapshot_is_APPENDED_and_none_is_overwritten(tmp_path, monkeypatch):
     """reader-v4's record overwrote its own first GO snapshot. A list cannot lose a reading."""
     monkeypatch.setattr(driver, "RECORD", tmp_path / "run.json")

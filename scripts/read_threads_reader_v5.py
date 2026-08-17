@@ -343,9 +343,29 @@ def ingest(record: dict, raw: list[dict], pack: dict) -> list[dict]:
 
 
 def raw_rows(path: Path) -> list[dict]:
+    """The pod's rows, and a TORN last line dropped rather than raised on.
+
+    This file is copied back while the pod is still appending to it, so its final line can be half
+    written at the moment `scp` reads it. That is a race and not corruption, and it lands on the
+    kill-rule path — the one place a traceback costs billed seconds (Dv468's lesson, one file over).
+    Only the LAST line may be dropped and the drop is printed; a torn line anywhere else is a
+    damaged file and still raises.
+    """
     if not path.exists():
         raise SystemExit(f"{rel(path)}: the pod has written nothing yet")
-    return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
+    lines = [line for line in path.read_text(encoding="utf-8").splitlines() if line]
+    rows = []
+    for index, line in enumerate(lines):
+        try:
+            rows.append(json.loads(line))
+        except json.JSONDecodeError:
+            if index != len(lines) - 1:
+                raise
+            print(
+                f"  (dropped a torn last line of {rel(path)}: {len(line)} chars, no closing brace"
+                " — the pod was mid-write when this copy was taken)"
+            )
+    return rows
 
 
 def run_record() -> dict:
