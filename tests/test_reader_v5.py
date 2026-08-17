@@ -176,7 +176,12 @@ def test_reader_v4s_own_replies_come_back_111_of_111_which_is_why_the_duty_names
     ]
 
 
-def test_an_id_answered_twice_and_an_id_nobody_asked_for_are_different_defects():
+def test_the_three_defects_are_counted_apart_because_they_have_three_causes():
+    """`extra` is an id nobody sent; `duplicated` is one id twice in the SAME list, which is what a
+    chunked request can break; `in_both_lists` is the prompt's «at most one of the two» broken,
+    which the parser tolerates by design. Leg B's m1 gates on the second and REPORTS the third —
+    folding them together would fail the mechanism bar for a slip reader-v4 made on 3 of 111 ids
+    with no chunking anywhere near it ([[an_absolute_bar_needs_a_reachability_state]])."""
     census = reader_v5.echo(
         [1, 2],
         verdict(per_comment=[{"msg_id": 1}, {"msg_id": 1}], noise=[{"msg_id": 9}]),
@@ -184,6 +189,16 @@ def test_an_id_answered_twice_and_an_id_nobody_asked_for_are_different_defects()
     assert census["duplicated"] == [1]
     assert census["extra"] == [9]
     assert census["absent"] == [2]
+    assert census["in_both_lists"] == []
+
+    # one id in both lists is NOT a duplicate — this is reader-v4's shape on @VARUS_channel:10366
+    both = reader_v5.echo([1, 2], verdict(per_comment=[{"msg_id": 1}], noise=[{"msg_id": 1}]))
+    assert both["in_both_lists"] == [1]
+    assert both["duplicated"] == []
+    assert both["absent"] == [2] and both["extra"] == []
+
+    # and twice inside `noise` IS one, the same way twice inside `per_comment` is
+    assert reader_v5.echo([1], verdict(noise=[{"msg_id": 1}, {"msg_id": 1}]))["duplicated"] == [1]
 
 
 def test_out_of_order_rows_are_reported_and_not_repaired():

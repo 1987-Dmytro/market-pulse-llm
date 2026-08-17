@@ -398,7 +398,23 @@ def mechanical_bars(leg_b: dict) -> dict:
                 " across parts and no id that was not sent"
             ),
             "scorer": "market_pulse.reader_v5.echo, per part, then the merge",
-            "threshold": f"{leg_b['payable_comments']} of {leg_b['payable_comments']}, 0 extra, 0 duplicated",
+            "threshold": (
+                f"{leg_b['payable_comments']} of {leg_b['payable_comments']} covered, 0 extra, 0 id"
+                " twice in the SAME list, and the merge made"
+            ),
+            "reachability": (
+                "«no duplicate across parts» is the rule and the predicate implements exactly that:"
+                " an id counted twice in `per_comment` or twice in `noise`. An id in BOTH lists is"
+                " REPORTED and does not fail this bar — it is the prompt's «at most one of the two»"
+                " broken, the parser deliberately tolerates it, and reader-v4 did it on 3 of 111"
+                " ids with no chunking anywhere near it. Gating m1 on it would fail the bar that"
+                " exists to prove the MECHANISM for a pre-existing obedience slip"
+                " ([[an_absolute_bar_needs_a_reachability_state]])"
+            ),
+            "in_both_lists_is_reported": (
+                "beside the bar, with reader-v4's 3 of 111 as the baseline. A run that lifts it is"
+                " a finding about the attribution block; a run that does not is not a leg-B failure"
+            ),
             "counts_both_lists": (
                 "because v4's evidence says the model answers every id and chooses WHICH list —"
                 " 111 of 111 covered, 93 in `per_comment` and 18 in `noise`. A bar over"

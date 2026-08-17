@@ -114,9 +114,11 @@
       "cannot_touch_leg_a": "these four are the ONLY bars leg B produces, and none of them reads gold, the reference or a flagship. Leg B's rows never enter bars 1-4, never enter the completeness census of leg A, and never enter a production aggregate",
       "m1_every_payable_id_exactly_once": {
         "counts_both_lists": "because v4's evidence says the model answers every id and chooses WHICH list — 111 of 111 covered, 93 in `per_comment` and 18 in `noise`. A bar over `per_comment` alone would fail the reader for obeying the prompt's own «a comment belongs to at most one of the two»",
+        "in_both_lists_is_reported": "beside the bar, with reader-v4's 3 of 111 as the baseline. A run that lifts it is a finding about the attribution block; a run that does not is not a leg-B failure",
+        "reachability": "«no duplicate across parts» is the rule and the predicate implements exactly that: an id counted twice in `per_comment` or twice in `noise`. An id in BOTH lists is REPORTED and does not fail this bar — it is the prompt's «at most one of the two» broken, the parser deliberately tolerates it, and reader-v4 did it on 3 of 111 ids with no chunking anywhere near it. Gating m1 on it would fail the bar that exists to prove the MECHANISM for a pre-existing obedience slip ([[an_absolute_bar_needs_a_reachability_state]])",
         "rule": "the union of the parts' `per_comment` and `noise` msg_ids equals EXACTLY the 43 payable ids of @klopotenkofood:6040, with no duplicate across parts and no id that was not sent",
         "scorer": "market_pulse.reader_v5.echo, per part, then the merge",
-        "threshold": "43 of 43, 0 extra, 0 duplicated"
+        "threshold": "43 of 43 covered, 0 extra, 0 id twice in the SAME list, and the merge made"
       },
       "m2_every_chunk_finished": {
         "reachability": "registered against an output ceiling of 4000 tokens. At 2 000 this bar is not reachable by arithmetic: a 16-row chunk's pessimistic answer is over it, and a bar that fails before the model is asked measures nothing ([[an_absolute_bar_needs_a_reachability_state]])",
@@ -510,7 +512,7 @@
         "echo": "the completeness census, counting THREE states: answered in `per_comment`, answered in `noise`, absent. Only `absent` is a shortfall",
         "merge": "the chunk join — `per_comment` and `noise` concatenated in chunk order with the partition VERIFIED, `signals` deduped on ['signal_type', 'subject_type', 'subject_id', 'aspect', 'stance'] with evidence unioned, `entities` deduped by (name, msg_id)",
         "module": "src/market_pulse/reader_v5.py",
-        "sha256": "e18e24489d7a205fdc0b9d7c6d0f5c7769f83e4e320d5ac2648d52649631d787"
+        "sha256": "111707f2ce883f9759e52126684d8d17887ba522289a96ca36e03cfcb3dbbe71"
       }
     },
     "prompt_rule": "a sha per reader text registered at the moment this record was written — FOUR of them, numbered 1, 2, 3 and 5. There is no v4 text: reader-v4 registered the v3 text on a pod, and the number follows the contract that registers a text. A text registered LATER is not in this map and is not expected to be; the pod's handshake compares the tasks THIS map pins, one by one, and the module sha separately",
@@ -1344,11 +1346,11 @@
       "scripts/write_reader_prereg_v3.py": "bb27b63fb82cbcde8c3d199ff7b2461cb71865ba1d825fc2e43242d1d33880dd",
       "scripts/write_reader_prereg_v4.py": "59125443b88f46fae11b057c28fa93f14e05703a160a39294824807f10cc6ec7",
       "src/market_pulse/prompts.py": "be5a81641afc2aa5b0ed7b63fd1b1de634c05fedc06be9924fc321ca6e6201cc",
-      "src/market_pulse/reader_v5.py": "e18e24489d7a205fdc0b9d7c6d0f5c7769f83e4e320d5ac2648d52649631d787",
+      "src/market_pulse/reader_v5.py": "111707f2ce883f9759e52126684d8d17887ba522289a96ca36e03cfcb3dbbe71",
       "src/market_pulse/scorer.py": "dbb5406a502f813ba1b4940e0914310efd632386a8da60e0c002cc8964a97d4f"
     },
     "script": "scripts/write_reader_prereg_v5.py",
-    "sha256": "90e93f60875a073bdd7ca9af459e220bc789e515519e5b4d977c859b30d60d7f"
+    "sha256": "67de11f5c990b6ed76f93ac92474e3fa7705d85cec485433ecad152674367ad9"
   },
   "programme_stop_rule": "**If this run COMPLETES and bars 1 and 4 are not BOTH taken, the prompt-engineering line CLOSES.** The next step is an architecture sitting — two passes, labelled data, a different base — and never a v6 of the same kind. The operator's ruling of 2026-08-17, pre-registered here so it binds the reading of this run's own result and cannot be re-decided once the numbers are in",
   "scoring_rules": {

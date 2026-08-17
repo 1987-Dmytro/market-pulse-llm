@@ -67,13 +67,20 @@ def balanced_prefix(text: str) -> str | None:
 def echo(requested: list[int], verdict: dict) -> dict:
     """Which of the ids the request listed came back, and in WHICH list — three states, not two.
 
-    `duplicated` is separate from `extra` on purpose: an id answered twice is a different defect
-    from an id that was never sent, and leg B's mechanical bar m1 is about the first.
+    Three defects and they are counted APART, because they have three causes and only one of them
+    is about chunking:
 
-    `in_both_lists` is separate again, because it has a different CAUSE: the prompt's «a comment
-    belongs to at most one of "per_comment" and "noise"» broken, which the parser deliberately does
-    not refuse — two rows about one comment are each readable and the scorer is where the operator
-    can see them. reader-v4 did it on three comments of `@VARUS_channel:10366`.
+    * `extra` — an id nobody sent;
+    * `duplicated` — the same id twice in the SAME list, which is what a chunked request can break:
+      two parts both answering for one comment. Leg B's mechanical bar m1 is about THIS one;
+    * `in_both_lists` — one id in `per_comment` AND in `noise`, which is the prompt's «a comment
+      belongs to at most one of the two» broken. The parser deliberately does not refuse it — two
+      rows about one comment are each readable — and reader-v4 did it on three comments of
+      `@VARUS_channel:10366`, with no chunking anywhere near it.
+
+    Folding the third into the second would make m1 fail for a pre-existing prompt-obedience slip
+    that has nothing to do with the mechanism m1 exists to prove
+    ([[an_absolute_bar_needs_a_reachability_state]]).
     """
     wanted = list(requested)
     per_comment = [row["msg_id"] for row in verdict.get("per_comment") or ()]
@@ -81,8 +88,9 @@ def echo(requested: list[int], verdict: dict) -> dict:
     answered = per_comment + noise
     seen = set(wanted)
     counts: dict[int, int] = {}
-    for msg_id in answered:
-        counts[msg_id] = counts.get(msg_id, 0) + 1
+    for row in (per_comment, noise):
+        for msg_id in row:
+            counts[msg_id] = max(counts.get(msg_id, 0), row.count(msg_id))
     return {
         "requested": len(wanted),
         "in_per_comment": [one for one in wanted if one in set(per_comment)],

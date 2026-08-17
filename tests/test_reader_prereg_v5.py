@@ -245,10 +245,14 @@ def test_the_mechanical_bars_read_no_gold_and_say_they_cannot_touch_leg_a():
     for forbidden in ("reader_gold", "flagship", "REFERENCE-signals", "категория", "субъект"):
         assert forbidden not in body, forbidden
     assert "never enter bars 1-4" in mechanical["cannot_touch_leg_a"]
-    assert (
-        mechanical["m1_every_payable_id_exactly_once"]["threshold"]
-        == "43 of 43, 0 extra, 0 duplicated"
-    )
+    m1 = mechanical["m1_every_payable_id_exactly_once"]
+    assert m1["threshold"].startswith("43 of 43 covered, 0 extra, 0 id twice in the SAME list")
+    # the reachability this bar needs: an id in BOTH lists is REPORTED and never fails it, because
+    # that is the prompt's «at most one of the two» broken and not a chunking defect — reader-v4 did
+    # it on 3 of 111 ids with no chunking anywhere near it, and the parser tolerates it by design
+    assert "REPORTED and does not fail this bar" in m1["reachability"]
+    assert "3 of 111" in m1["reachability"]
+    assert "no duplicate across parts" in m1["rule"]
     assert mechanical["m4_the_merge_has_no_duplicate_signal"]["rule"].count("signal_type") == 1
 
 

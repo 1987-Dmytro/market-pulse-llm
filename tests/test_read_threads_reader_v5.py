@@ -527,6 +527,37 @@ def test_m1_fails_on_a_duplicate_across_chunks_and_names_it(score, pack):
     ]
 
 
+def test_m1_does_NOT_fail_on_an_id_the_reader_put_in_BOTH_lists(score, pack):
+    """The reachability the registration states. reader-v4 broke «at most one of per_comment and
+    noise» on 3 of 111 ids with no chunking anywhere near it, and the parser tolerates it by design.
+    A bar that exists to prove the chunking MECHANISM may not fail for that
+    ([[an_absolute_bar_needs_a_reachability_state]])."""
+    rows = leg_b_perfect(pack)
+    merged = rows[-1]
+    both = merged["msg_ids"][0]
+    merged["echo"]["in_both_lists"] = [both]
+    merged["parsed"]["noise"] = [{"msg_id": both, "class": "оффтоп"}]
+    m1 = score(perfect(), leg_b_rows=rows)["leg_b_mechanical"]["m1_every_payable_id_exactly_once"]
+    assert m1["in_both_lists"] == [both]
+    assert m1["passed"] is True, "an at-most-one slip is REPORTED, never gating"
+    # the control, one line up: the same row with a real cross-part duplicate DOES fail
+    merged["echo"]["duplicated"] = [both]
+    assert (
+        score(perfect(), leg_b_rows=rows)["leg_b_mechanical"]["m1_every_payable_id_exactly_once"][
+            "passed"
+        ]
+        is False
+    )
+
+
+def test_m1_fails_when_the_merge_could_not_be_made(score, pack):
+    """A merge that raised leaves no union to count, and «43 of 43» over nothing is not a pass."""
+    rows = leg_b_perfect(pack)
+    rows[-1]["merge_error"] = "msg_id 21231 is in the per_comment of chunk 1 and chunk 2"
+    m1 = score(perfect(), leg_b_rows=rows)["leg_b_mechanical"]["m1_every_payable_id_exactly_once"]
+    assert m1["passed"] is False
+
+
 def test_m2_fails_when_a_chunk_ran_to_the_ceiling(score, pack):
     rows = leg_b_perfect(pack)
     rows[1]["finish_reason"] = "length"
@@ -552,6 +583,43 @@ def test_m4_fails_when_two_identical_signals_survive_the_merge(score, pack):
     record = score(perfect(), leg_b_rows=rows)
     assert record["leg_b_mechanical"]["m4_the_merge_has_no_duplicate_signal"]["passed"] is False
     assert record["leg_b_mechanical"]["m4_the_merge_has_no_duplicate_signal"]["distinct_keys"] == 1
+
+
+def test_the_gate_path_is_driven_through_main_and_names_a_missing_pack(tmp_path, monkeypatch, pack):
+    """v5's `--gate` reads the PACK, which v4's never had to — the projection's second leg needs the
+    per-unit payable counts. That is a new file dependency on the KILL-RULE path, so it is driven
+    end to end and its absence is a named refusal rather than a traceback on a live pod."""
+    monkeypatch.setattr(driver, "RECORD", tmp_path / "run.json")
+    monkeypatch.setattr(driver, "PACK", tmp_path / "pack.json")
+    monkeypatch.setattr(driver, "registration", lambda: RECORD)
+    raw = tmp_path / "pod.jsonl"
+    item = pack["items"][0]
+    raw.write_text(
+        json.dumps({"id": item["id"], "seconds": 40.0}, ensure_ascii=False) + "\n", encoding="utf-8"
+    )
+    (tmp_path / "run.json").write_text(
+        json.dumps(
+            {
+                "phase": "reader-v5",
+                "pod": {"created_at": CREATED, "usd_per_hour": 0.74},
+                "gates": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    # the pack is not there yet: a named refusal, and it says where to write it
+    with pytest.raises(SystemExit, match="does not exist, and the gate reads it"):
+        driver.main(["--gate", "--raw", str(raw)])
+
+    (tmp_path / "pack.json").write_text(json.dumps(pack, ensure_ascii=False), encoding="utf-8")
+    now = driver.stamp(CREATED).replace(minute=4)
+    assert driver.main(["--gate", "--raw", str(raw)], now=now) == 0
+    written = json.loads((tmp_path / "run.json").read_text(encoding="utf-8"))
+    assert [one["kind"] for one in written["gates"]] == ["full_pass"]
+    assert written["gates"][0]["verdict"] == "GO"
+    assert written["gates"][0]["units_read"] == 1 and written["gates"][0]["units_unread"] == 25
+    assert written["gates"][0]["read_from"]["exists"] is True
 
 
 def test_the_completeness_census_names_the_absent_ids_and_gates_nothing(score, pack):

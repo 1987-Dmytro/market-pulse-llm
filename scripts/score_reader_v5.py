@@ -131,6 +131,10 @@ def leg_b(evidence: list[dict], record: dict) -> dict:
         if verdict is None
         else [tuple(one.get(field) for field in reader_v5.SIGNAL_KEY) for one in verdict["signals"]]
     )
+    # «no duplicate ACROSS PARTS» is the registered rule, so `duplicated` (one id twice in the same
+    # list) is what gates and `in_both_lists` is REPORTED beside it. The second is the prompt's «at
+    # most one of the two» broken, which the parser tolerates by design and reader-v4 did on 3 of
+    # 111 ids with no chunking in sight ([[an_absolute_bar_needs_a_reachability_state]])
     m1 = bool(echo) and not echo["absent"] and not echo["extra"] and not echo["duplicated"]
     return {
         "thread": registered["thread"],
@@ -144,7 +148,16 @@ def leg_b(evidence: list[dict], record: dict) -> dict:
             "extra": echo.get("extra"),
             "duplicated": echo.get("duplicated"),
             "in_both_lists": echo.get("in_both_lists"),
-            "passed": m1 and echo.get("covered") == registered["payable_comments"],
+            "in_both_lists_gates_nothing": (
+                "the prompt's «at most one of per_comment and noise» broken, not a chunking defect."
+                " reader-v4's baseline on unchunked threads is 3 of 111"
+            ),
+            "merge_error": (merged or {}).get("merge_error"),
+            "passed": (
+                m1
+                and echo.get("covered") == registered["payable_comments"]
+                and (merged or {}).get("merge_error") is None
+            ),
         },
         "m2_every_chunk_finished": {
             "finish_reason": {row["id"]: row.get("finish_reason") for row in chunks},

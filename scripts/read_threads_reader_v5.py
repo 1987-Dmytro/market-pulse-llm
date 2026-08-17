@@ -447,6 +447,14 @@ def main(argv: list[str] | None = None, now: datetime | None = None) -> int:
             None if not launched else elapsed_since(state["pod"]["created_at"], stamp(launched))
         )
         rows = raw_rows(args.raw) if args.raw.exists() else []
+        # the gate reads the pack for the per-unit payable counts, which v4's did not have to. A
+        # missing file here is a traceback on the kill-rule path, on a live pod, so it is named
+        if not PACK.exists():
+            raise SystemExit(
+                f"{rel(PACK)} does not exist, and the gate reads it for the per-unit payable"
+                " counts the projection's second leg needs. Run `--pack` first — and write it to"
+                " THAT path, because this is where every later command looks."
+            )
         pack = json.loads(PACK.read_text(encoding="utf-8"))
 
     if args.deadlines or (args.gate and not rows):
