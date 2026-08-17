@@ -14,6 +14,13 @@ this stack has ever measured of **192.1 s**. The attempt closes. The finding is 
 contract's own transport, not a finding about pass 1 — and pass 1 is exactly as unmeasured tonight
 as it was this afternoon.
 
+**And there is a second finding underneath it that changes what a next attempt should ask for.** The
+registered boot ceiling was about to fire anyway: with the `KeyError` fixed, the first reply would
+have landed **0.6–26.6 s** inside a 392 s deadline, because the load took **267–293 s** where the
+registration charged v5b's **192.1 s**. The money was never the binding constraint — the $0.20 cap
+still leaves 203 s of spare at tonight's boot. `BOOT_KILL_S = 300` is what bound, and it is the
+constant a next registration has to move. Worked in D2 below.
+
 ---
 
 ## Read back first
@@ -334,7 +341,10 @@ committed in `bc4c829` **before** anything was created. Three listings immediate
 **Gate 0 worked twice running.** 23.4 s against a 180 s dead-man, on the second pod since the rule
 was bought. The transport difference reader-v5b paid for is now measured on two independent creates.
 
-**And then the run died in my own code.** From `/workspace/pass1.log`, after the weights had loaded:
+**And then the run died in my own code.** Transcribed from `/workspace/pass1.log` while the pod was
+still alive — **that file died with the pod and is not recoverable.** The contract's own «partial scp
+before every gate» would have brought it back and this run never made one, so the traceback below is
+the only surviving copy and it is a session read rather than an artifact:
 
 ```
 File "/workspace/repo-pass1/src/market_pulse/local_llm.py", line 580, in __init__
@@ -359,6 +369,35 @@ replaces `load_reader` — the function whose last line constructs the `ReaderCl
 constructor makes the call. **A stub that replaces the class also replaces its constructor's
 guard.** Nine tests passed over a code path that could not reach the defect.
 
+### The number the sitting needs: the boot ceiling was 0.6–26.6 s away from killing this run anyway
+
+The `KeyError` is a one-line fix and it hides a second, bigger finding. **The registered boot-kill
+deadline was about to fire regardless.**
+
+| | |
+|---|---|
+| generation started | 18:42:56Z = **92 s** of create-elapsed |
+| boot ceiling | 92 + `BOOT_KILL_S` 300 = **392 s** = 18:47:56Z |
+| affordability deadline | 913.0 − 409.7 = **503.3 s** = 18:49:47Z |
+| the gate takes `min()` | so **392 s binds**, and it is the boot ceiling, not the money |
+| the crash | between the watcher's ALIVE at 18:47:23 and its DEAD at 18:47:49 — **[359, 385] s** |
+| so the load took | **[267, 293] s**, against the 192.1 s the registration charged |
+
+With `render` correct, the first reply lands one call after the model is ready: **[361.9, 387.9] s**
+at the fitted 2.93 s, **[365.4, 391.4] s** at the registered bound of 6.402 s. Against a 392 s
+ceiling that is a margin of **4.1–30.1 s** on the fit and **0.6–26.6 s** on the bound. The run would
+have squeaked through the boot gate and then held the full pass comfortably (after unit 1 at ~385 s,
+the projection is 574 s at the fit and 788 s at the bound, both inside 913 s).
+
+**So the weakest number in the registration is `BOOT_KILL_S = 300`, and it was set from v5b's
+192.1 s boot on the same card and the same volume.** Tonight the same load took 267–293 s — a 1.4×–
+1.5× spread on a number the record treated as a constant. That is the ceiling a next attempt has to
+move, and the cap is not the problem: at a 300 s boot charge the registered bound needs 709.7 s of
+the 913.0 s the $0.20 cap already buys, leaving 203.3 s spare.
+
+The only witness to the crash moment is the watcher's ALIVE/DEAD pair, so the ranges above are
+bounds and not readings. Precision this report cannot have is not spent here.
+
 ### The second segment was priced and REFUSED
 
 ```
@@ -368,13 +407,14 @@ usable for segment 2    486.0 s  (one more delete margin)
 registered projection   409.7 s  -> affordability deadline  76.2 s of create-elapsed
 the FITTED projection   187.8 s  -> affordability deadline 298.2 s of create-elapsed
 boot measured v5b       192.1 s (cold, same card, same volume)
-boot measured segment 1 289.0 s (18:42:56Z launch -> ~18:47:45Z crash, weights loaded)
+boot measured segment 1 [267, 293] s (launch 18:42:56Z -> crash inside the watcher's
+                        ALIVE 18:47:23 / DEAD 18:47:49 pair; the pod is gone, so this is a bound)
 ```
 
 Under the registered bound a first reply would have to land at 76.2 s of create-elapsed, and no boot
-this stack has ever measured is under 192.1 s. Under the optimistic fit the deadline is 298.2 s
-against segment 1's own 289 s — 9 s of margin, before staging, on a pod whose page cache would be
-cold again. **The attempt closes on its own arithmetic, and it closes under both readings.** No cap
+this stack has ever measured is under 192.1 s. Under the optimistic fit the deadline is 298.2 s against
+segment 1's own boot of 267–293 s — between 5 s and 31 s of margin, before staging, on a pod whose
+page cache would be cold again. **The attempt closes on its own arithmetic, and it closes under both readings.** No cap
 raise was considered; the registration's one-attempt clause and the contract's DO NOT both say the
 sitting owns the next move.
 
@@ -474,7 +514,7 @@ reproduced in D1 above with the sentence each one proves.
 | **Dv484** | **The attempt was spent by a defect in this contract's own runner.** `local_llm.ReaderClient.__init__` renders a READER probe through `self.render` before it will build a client; the swapped render assumed a pass-1 item and raised `KeyError: 'topic'` after the weights were loaded. 427.0 billed seconds, $0.087772, zero replies. Fixed red-first — the new test reproduces that exact `KeyError` — and a second test asserts `local_llm`'s probe literal is still the one it guards against. | `[cause: a-guard-wired-only-when-it-can-fire]` |
 | **Dv485** | **The stub that proved the transport also hid the defect.** `podrunner.main` was driven end to end with a fake client passed as `loader=`, which replaces `load_reader` — the function whose last line constructs the client whose CONSTRUCTOR makes the failing call. Nine green tests over a path that could not reach it. The new test drives the swapped `render` directly with the shipped probe instead of through the client. | `[cause: the-vendors-own-worker-is-the-control]` |
 | **Dv486** | **The registration crashed the transport before the pod, twice, on SHAPE.** `read_threads_reader_v5b` reads `go_no_go.gates.0_transport_ssh_deadman.max_recreates` and `money.arithmetic.boot_kill_seconds` off the registration; my first record carried `go_no_go` as prose and named the boot rule `boot_kill_rule`. The first was caught by `--pre-create-check` at $0 and the record was regenerated before create. **The second was not** — `--deadlines` raised `KeyError: 'boot_deadline_rule'` with the pod running, and the deadline had to be computed by hand from the registered numbers. A frozen record cannot be repaired, so the gate this contract most needed at that moment was the one it could not execute. | `[cause: a-registered-bar-may-have-no-producer]` |
-| **Dv487** | **`producer.sha256` pinned a file that was not committed when the pod was created.** `dd1a1c1` (18:41:02Z) carries the record; the pod was created 22 s later; the producer had been re-formatted after the record was written and only the RECORD was staged. `registration()`'s `git ls-files` / `git diff HEAD` guard covers the record and not the files it pins. The bytes are unchanged and are committed now (`90f1cc6`), so the pin is recoverable — but the freeze proof is one file weaker than it reads. | `[cause: preregistration-is-a-file-not-a-constant]` |
+| **Dv487** | **`producer.sha256` pinned a file that was not committed when the pod was created, so the registration's own re-derivation test was RED at the commit the pod cloned.** At `dd1a1c1` (18:41:02Z) the producer on disk hashes `16dee2f4…`, which is what the record pins; `git show dd1a1c1:scripts/write_pass1_prereg.py` hashes `8aab2a94…`. A checkout of that commit therefore cannot rebuild the record it carries, and `test_the_committed_registration_and_pack_are_what_the_producer_writes_today` would fail on it — the pod cloned that tree 81 s later. `registration()`'s `git ls-files` / `git diff HEAD` guard covers the record and not the files it PINS. The bytes are unchanged and committed at `90f1cc6`, so it is recoverable; the check that would have caught it is running each commit's own suite. | `[cause: a-commit-must-run-its-own-suite]` |
 | **Dv488** | **A partial billing walk is a third state and the guard cannot see it.** At 17:23Z the v5b walk answered «no billing rows yet» and refused; by 18:37Z it had posted 1 513 961 ms of 1 514.0 s. In between it offered $0.0917 — 29% of the truth — and `closing_record` would have settled on it, because the closing path takes the WALK alone with no pessimistic maximum against the balance delta. The discriminator used here was `--pod-id … --bucket-size hour` against the run record's own billed seconds. | `[cause: a-settlement-is-a-reading-too]` |
 | **Dv489** | **Adding one prompt to `prompts.py` broke a frozen record's re-derivation, and the repair had to be narrowed rather than removed.** Two byte ranges of the v5 record moved, both the module's sha; the v5b producer's object-equality guard now restores exactly those two enumerated paths, only when the value is today's live sha, and refuses on any third difference. What the narrowing stops seeing is named and closed: the four reader texts and the four domain tuples are compared directly, so «prompts.py's bytes» became «the reader's law inside prompts.py». Both halves driven on hand-made pairs. | `[cause: a-hash-is-not-the-claim-it-carries]` |
 
@@ -495,9 +535,10 @@ reproduced in D1 above with the sentence each one proves.
 4. **Measure a walk's COMPLETENESS, not its emptiness.** «No rows yet» and «29% of the rows» look
    identical to a caller that only asks whether the list is empty, and one of them settles a record
    forever.
-5. **$0.088 bought one real fact:** gate 0 has now gone GO twice on two independent creates, at 23.4
-   s and 24 s against a 180 s dead-man — the transport reader-v5b paid to fix is fixed. Everything
-   else this contract bought, it bought at $0.
+5. **$0.088 bought two real facts.** Gate 0 has now gone GO twice on two independent creates, at
+   23.4 s and 24 s against a 180 s dead-man — the transport reader-v5b paid to fix is fixed. And the
+   boot on this stack is not 192.1 s but 192–293 s across two runs, which is the constant the next
+   registration has to charge from. Everything else this contract bought, it bought at $0.
 
 ---
 
@@ -507,7 +548,13 @@ Pass 1 is unmeasured. Bar P1 has no number, the census has no rows, and the wind
 input. The instrument, the registration, the pack, the transport and the scorer are all built,
 committed, green and — as of `90f1cc6` — free of the defect that ate the attempt. **Whether a second
 attempt is authorised is the sitting's call, not this contract's**, and the registration's own
-one-attempt clause plus the contract's DO NOT both point the same way. What a next attempt would
-need is a cap sized for a boot it cannot avoid: 192.1 s of provisioning against a 409.7 s bounded
-reading projection needs ~660 s of usable time, which is $0.148 all-in at $0.74/h before any margin
-— the $0.20 cap was sized for one clean boot and left no room for a second.
+one-attempt clause plus the contract's DO NOT both point the same way.
+
+If it is authorised, the number to move is **not the cap**. At tonight's measured boot the registered
+bound needs 709.7 s of the 913.0 s the $0.20 cap already buys, with 203.3 s spare — the money was
+never the binding constraint. What bound was **`BOOT_KILL_S = 300`**, charged from v5b's 192.1 s
+while the same load on the same card and the same volume took 267–293 s tonight, and it would have
+fired 0.6–26.6 s after a corrected first reply. A next registration should charge boot from BOTH
+measurements rather than the lower one, and set the ceiling above the higher: ~300 s charged, ~420 s
+ruled. That is a one-constant change to a record, and it is the difference between an attempt that
+measures pass 1 and an attempt that measures provisioning variance.
