@@ -242,3 +242,19 @@ thread-count `narrow|silencers_off`**; различает только плат�
 видов ПО ВИДУ: probe-b **$0.313162**, reader-v3 **$0.393577**, reader-v4 **$0.236118**. Фазу и линию —
 пессимистичным максимумом двух чтений. Дельта баланса меряет СЧЁТ, а не шаг, и после закрытия шага
 растёт вечно. Остаток ВЫВОДИТЬ (`CAP - spent_usd`), а не читать из `sessions[-1].remaining_usd`.
+
+## 🔫 Footguns этого файла
+
+**⛔ `knowledge/hot.md` грепается как ЦЕНОВОЙ ВХОД — два литерала обязаны стоять здесь дословно.**
+`scripts/volume_calc_5c1.py` читает их через `quoted(HOT, …)`, и отсутствие любого роняет **девять**
+тестов `tests/test_volume_calc_5c1.py`. Курирование этого блока 17.08 выронило оба и сделало ровно то,
+о чём предупреждала снесённая заметка. `make check` — после правки ЭТОГО файла, не только кода.
+
+- **Recorded rather than open:** том CA-MTL-3 удалён, его **~$0.24/day** больше не капают — литерал
+  нагруженный, не украшение, и он ОБЯЗАН стоять ровно так, по-английски со слэшем:
+  `scripts/volume_calc_5c1.py :: quoted(HOT, "~$0.24/day", 0.24)` грепает его ИЗ ЭТОГО ФАЙЛА как вход.
+  Перевод слова `day` уже уронил девять тестов один раз (12.08).
+- **A stopped pod with no network volume still bills its container disk.** 80 GB is about what the
+  100 GB network volume costs per month. Если под нужен на одну сессию — **delete**
+  (`runpodctl pod delete`, `pod terminate` не существует), не stop. Остановленный под — не
+  остановленный счёт, и `runpodctl pod list` показывает только running: смотри `pod list -a`.
