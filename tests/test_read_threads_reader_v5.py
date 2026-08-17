@@ -818,3 +818,30 @@ def test_the_gold_the_scorer_reads_is_the_registered_one(score):
     record = score(perfect())
     assert record["gold"]["revision"] == "r2"
     assert record["scorer"]["unchanged"] is True
+
+
+def test_the_scorer_PRINTS_its_leg_b_bars_and_does_not_trip_over_merge_error(
+    tmp_path, monkeypatch, pack, capsys
+):
+    """`main` is the half of the scorer nothing drove until a run produced leg-B evidence.
+
+    Its leg-B loop printed every key whose NAME starts with «m» — and `merge_error` does, so on the
+    first record that carried one it raised `TypeError: 'NoneType' object is not subscriptable`. After
+    the verdict file had been written, which is the only reason it cost nothing
+    ([[a_consumer_list_is_not_a_meaning_list]]).
+    """
+    monkeypatch.setattr(
+        scoring,
+        "EVIDENCE",
+        evidence_file(tmp_path / "evidence.jsonl", pack, perfect(), leg_b_perfect(pack)),
+    )
+    monkeypatch.setattr(scoring, "RUN", tmp_path / "no-such-run.json")
+    monkeypatch.setattr(scoring, "LEDGER", tmp_path / "no-such-ledger.json")
+    out = tmp_path / "verdict.json"
+    assert scoring.main(["--out", str(out)]) == 0
+    printed = capsys.readouterr().out
+    record = json.loads(out.read_text(encoding="utf-8"))
+    assert record["leg_b_mechanical"]["merge_error"] is None
+    for name in ("m1_every_payable_id_exactly_once", "m4_the_merge_has_no_duplicate_signal"):
+        assert f"leg B {name}" in printed
+    assert "merge_error" not in printed

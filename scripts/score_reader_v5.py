@@ -390,8 +390,13 @@ def main(argv: list[str] | None = None) -> int:
     cost = record["5_time_and_cost"]
     print(f"  bar 5_time_and_cost            {cost['state']} — passed {cost['passed']}")
     mechanical = record["leg_b_mechanical"]
-    for name in sorted(one for one in mechanical if one.startswith("m")):
-        print(f"  leg B {name:38s} {mechanical[name]['passed']}")
+    # the four bars are the entries that CARRY a verdict, not the entries whose name starts with «m»:
+    # `merge_error` does too, and on the first run that ever produced leg-B evidence it is None and
+    # this line was a TypeError — after the verdict file had been written, which is the only reason it
+    # cost nothing ([[a_consumer_list_is_not_a_meaning_list]])
+    for name, state in sorted(mechanical.items()):
+        if isinstance(state, dict) and "passed" in state:
+            print(f"  leg B {name:38s} {state['passed']}")
     totals = record["completeness"]["totals"]
     print(
         f"  completeness: {totals['covered']} of {totals['requested']} covered ·"

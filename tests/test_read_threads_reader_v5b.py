@@ -344,3 +344,33 @@ def test_the_normalized_file_is_what_both_readers_then_agree_on(tmp_path):
     rows, torn = pod.whole_lines(path.read_text(encoding="utf-8"), str(path))
     assert torn is None and [row["id"] for row in rows] == [PACK["items"][0]["id"]]
     assert [row["id"] for row in driver.raw_rows(path)] == [PACK["items"][0]["id"]]
+
+
+# --- the scorer's entry point ----------------------------------------------------------------------
+
+
+def test_the_v5b_scorer_calls_v5s_and_points_it_at_THIS_phases_files(tmp_path, monkeypatch):
+    """Dv478: `score_reader_v5.py` carries v5's paths as module constants, so run as it stands it
+    would score bar 5 against the reader-v5 ledger and refuse over v5's evidence file. The v5b entry
+    point CALLS it with its constants swapped — the arithmetic of every bar stays one implementation
+    across v4, v5 and v5b (Dv451's idiom, third generation)."""
+    import score_reader_v5 as scorer
+    import score_reader_v5b as ours
+
+    assert ours.PHASE == "reader-v5b"
+    assert ours.EVIDENCE.name == "reader_v5b_w1.jsonl"
+    assert ours.LEDGER.name == "spend_reader_v5b.json"
+    assert ours.OUT.name == "reader_v5b_verdict.json"
+    before = {name: getattr(scorer, name) for name in ours.SWAPPED}
+    assert before["EVIDENCE"].name == "reader_v5_w1.jsonl"
+
+    with ours.as_this_phase():
+        assert scorer.PHASE == "reader-v5b"
+        assert scorer.EVIDENCE == ours.EVIDENCE and scorer.LEDGER == ours.LEDGER
+    assert {name: getattr(scorer, name) for name in ours.SWAPPED} == before
+
+    # and the refusal a reader would meet names THIS phase's evidence file, not v5's
+    monkeypatch.setattr(ours, "EVIDENCE", tmp_path / "reader_v5b_w1.jsonl")
+    with pytest.raises(SystemExit, match="reader_v5b_w1.jsonl"):
+        ours.build()
+    assert {name: getattr(scorer, name) for name in ours.SWAPPED} == before
