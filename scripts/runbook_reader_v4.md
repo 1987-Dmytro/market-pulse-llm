@@ -14,8 +14,8 @@ the deletion itself is inside the cap).
 
 ```bash
 runpodctl pod list -a && runpodctl serverless list && runpodctl network-volume list
-PYTHONPATH=src python3 scripts/read_threads_reader_v4.py --pack results/reader_v4_pack.json
-python3 scripts/runpod_guard.py --step reader-v4 --step-cap 0.35 --note "reader-v4 anchor, before the pod"
+PYTHONPATH=src python3.11 scripts/read_threads_reader_v4.py --pack results/reader_v4_pack.json
+python3.11 scripts/runpod_guard.py --step reader-v4 --step-cap 0.35 --note "reader-v4 anchor, before the pod"
 git add results/spend_reader_v4.json results/reader_v4_pack.json && git commit
 ```
 
@@ -37,7 +37,7 @@ runpodctl pod create --name mp-reader-v4 --gpu-id 'NVIDIA GeForce RTX 4090' --gp
 **Read `costPerHr` and the card back out of the response and stamp the clock immediately:**
 
 ```bash
-PYTHONPATH=src python3 scripts/read_threads_reader_v4.py --open \
+PYTHONPATH=src python3.11 scripts/read_threads_reader_v4.py --open \
   --pod-id <POD_ID> --created-at '<the create response's stamp, UTC ISO8601>' \
   --usd-per-hour <costPerHr> --card '<the card the response names>'
 ```
@@ -91,7 +91,7 @@ artefact; do not let it get there.
 scp -i ~/.runpod/ssh/runpodctl-ssh-key -o StrictHostKeyChecking=no \
     -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -P <PORT> \
     root@<HOST>:/workspace/reader_v4_pod.jsonl results/reader_v4_pod.jsonl 2>/dev/null
-PYTHONPATH=src python3 scripts/read_threads_reader_v4.py --gate \
+PYTHONPATH=src python3.11 scripts/read_threads_reader_v4.py --gate \
   --generation-started-at '<UTC ISO8601 of the launch above>'
 ```
 
@@ -123,7 +123,7 @@ runpodctl pod delete <POD_ID>
 runpodctl pod list -a                # []
 runpodctl serverless list            # [] — nothing was ever created here
 runpodctl network-volume list        # the volume, unchanged: the positive control
-python3 scripts/runpod_guard.py --step reader-v4 --step-cap 0.35 --note "reader-v4 pod deleted"
+python3.11 scripts/runpod_guard.py --step reader-v4 --step-cap 0.35 --note "reader-v4 pod deleted"
 ```
 
 Three listings, and the volume has to be in the last one: a listing that returns `[]` for everything
@@ -132,11 +132,41 @@ proves the command runs, not that the pod is gone.
 ## 6 — score, on the Mac
 
 ```bash
-PYTHONPATH=src python3 scripts/read_threads_reader_v4.py --ingest
-PYTHONPATH=src python3 scripts/score_reader_v4.py
-python3 scripts/runpod_guard.py --step reader-v4 --step-cap 0.35 --close \
+PYTHONPATH=src python3.11 scripts/read_threads_reader_v4.py --ingest
+PYTHONPATH=src python3.11 scripts/score_reader_v4.py
+python3.11 scripts/runpod_guard.py --step reader-v4 --step-cap 0.35 --close \
   --note "reader-v4 settled"          # only once the billing walk answers
 ```
 
 The walk posts hours late. `--close` over an unanswered walk is refused by the guard and must be —
 a lower bound goes in the report as a named debt instead.
+
+---
+
+## Corrections carried forward — 2026-08-17, at the acceptance of reader-v4
+
+This file is the order that WAS followed; `docs/reports/reader-v4.md` holds the transcript of the
+session that followed it, unedited. Two things are corrected here so the next runbook inherits them
+instead of rediscovering them, and both were paid for.
+
+**1 — a detached launch must not hold the ssh channel (Dv454).** §3 above runs the generation inside
+an interactive ssh session and that is what worked. The trap is the shortcut that looks equivalent:
+`ssh … "nohup … &"` STILL holds the channel and times out at two minutes although the runner has
+already started, which is what happened and cost a confused minute of billed pod. If the launch is
+detached, detach it completely and verify it separately:
+
+```bash
+ssh <OPTS> -p <PORT> root@<HOST> \
+  'cd /workspace && nohup /workspace/venv/bin/python -u /workspace/<runner>.py … \
+     </dev/null >/workspace/<run>.log 2>&1 & echo launched $!'
+ssh <OPTS> -p <PORT> root@<HOST> 'pgrep -af <runner>.py'    # the check, not the launch, proves it
+```
+
+`</dev/null` and the redirection of BOTH streams are what free the channel; `ssh -f` is the other
+spelling. And never let a `pgrep -f` pattern match the shell that runs it
+([[a_remote_job_outlives_its_watcher]]).
+
+**2 — every verify command names `python3.11` explicitly.** The eight call sites above were rewritten
+from bare `python3` on this date. The team lead's own re-run of the scorer failed on a system
+`python3` that is 3.9 and reproduced byte-identically on 3.11 — a runbook whose commands only work
+on the author's PATH is a runbook nobody else can verify with.
