@@ -1,0 +1,1287 @@
+{
+  "gates": [
+    {
+      "at": "2026-08-17T16:22:19+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_this_segments_create_seconds": 9.8,
+      "kind": "open",
+      "next_step": "keep polling `runpodctl ssh info` at 3-4 s",
+      "pod_id": "r7702vbsrxhz0j",
+      "recreates_left": 2,
+      "rule": "if `runpodctl ssh info` has not answered with a connectable endpoint by 180 s of THIS segment's create-elapsed, KILL: delete the pod, prove it by listing, and create a replacement of the same card class in the same datacenter",
+      "seconds_left": 170.2,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "ssh_endpoint_answered": false,
+      "threshold_seconds": 180.0,
+      "verdict": "WAIT"
+    },
+    {
+      "at": "2026-08-17T16:22:46+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_this_segments_create_seconds": 36.5,
+      "kind": "gate0",
+      "next_step": "stage and launch",
+      "pod_id": "r7702vbsrxhz0j",
+      "recreates_left": 2,
+      "rule": "if `runpodctl ssh info` has not answered with a connectable endpoint by 180 s of THIS segment's create-elapsed, KILL: delete the pod, prove it by listing, and create a replacement of the same card class in the same datacenter",
+      "seconds_left": 143.5,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "ssh_endpoint_answered": true,
+      "threshold_seconds": 180.0,
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:29:11+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 422.0,
+      "headroom_seconds": 126.4,
+      "kind": "full_pass",
+      "legs_read": [
+        "A"
+      ],
+      "measured_seconds": 97.716,
+      "measured_seconds_per_unit": 48.858,
+      "payable_comments_read": 9,
+      "payable_comments_unread": 168,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 2246.0,
+      "projections": {
+        "binding": {
+          "factor": 18.6667,
+          "seconds": 1824.0,
+          "which": "by_payable_comment"
+        },
+        "by_payable_comment": {
+          "factor": 18.6667,
+          "seconds": 1824.0
+        },
+        "by_unit": {
+          "factor": 12.0,
+          "seconds": 1172.6
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:29:11+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": 52.244,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 2,
+      "units_unread": 24,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.4617,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.0867,
+        "spent_so_far_usd": 0.0867,
+        "spent_this_segment_usd": 0.0867
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:29:40+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 450.5,
+      "headroom_seconds": 750.8,
+      "kind": "full_pass",
+      "legs_read": [
+        "A"
+      ],
+      "measured_seconds": 152.753,
+      "measured_seconds_per_unit": 50.918,
+      "payable_comments_read": 21,
+      "payable_comments_unread": 156,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 1621.6,
+      "projections": {
+        "binding": {
+          "factor": 7.6667,
+          "seconds": 1171.1,
+          "which": "by_unit"
+        },
+        "by_payable_comment": {
+          "factor": 7.4286,
+          "seconds": 1134.7
+        },
+        "by_unit": {
+          "factor": 7.6667,
+          "seconds": 1171.1
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:29:40+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": 83.56,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 3,
+      "units_unread": 23,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.3333,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.0926,
+        "spent_so_far_usd": 0.0926,
+        "spent_this_segment_usd": 0.0926
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:30:07+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 477.5,
+      "headroom_seconds": 748.6,
+      "kind": "full_pass",
+      "legs_read": [
+        "A"
+      ],
+      "measured_seconds": 188.54,
+      "measured_seconds_per_unit": 47.135,
+      "payable_comments_read": 25,
+      "payable_comments_unread": 152,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 1623.8,
+      "projections": {
+        "binding": {
+          "factor": 6.08,
+          "seconds": 1146.3,
+          "which": "by_payable_comment"
+        },
+        "by_payable_comment": {
+          "factor": 6.08,
+          "seconds": 1146.3
+        },
+        "by_unit": {
+          "factor": 5.5,
+          "seconds": 1037.0
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:30:07+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": 77.917,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 4,
+      "units_unread": 22,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.3338,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.0982,
+        "spent_so_far_usd": 0.0982,
+        "spent_this_segment_usd": 0.0982
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:31:00+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 530.6,
+      "headroom_seconds": 659.1,
+      "kind": "full_pass",
+      "legs_read": [
+        "A"
+      ],
+      "measured_seconds": 241.383,
+      "measured_seconds_per_unit": 48.277,
+      "payable_comments_read": 30,
+      "payable_comments_unread": 147,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 1713.4,
+      "projections": {
+        "binding": {
+          "factor": 4.9,
+          "seconds": 1182.8,
+          "which": "by_payable_comment"
+        },
+        "by_payable_comment": {
+          "factor": 4.9,
+          "seconds": 1182.8
+        },
+        "by_unit": {
+          "factor": 4.2,
+          "seconds": 1013.8
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:31:00+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": 75.178,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 5,
+      "units_unread": 21,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.3522,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.1091,
+        "spent_so_far_usd": 0.1091,
+        "spent_this_segment_usd": 0.1091
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:31:53+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 583.9,
+      "headroom_seconds": 630.9,
+      "kind": "full_pass",
+      "legs_read": [
+        "A"
+      ],
+      "measured_seconds": 305.95,
+      "measured_seconds_per_unit": 43.707,
+      "payable_comments_read": 37,
+      "payable_comments_unread": 140,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 1741.5,
+      "projections": {
+        "binding": {
+          "factor": 3.7838,
+          "seconds": 1157.6,
+          "which": "by_payable_comment"
+        },
+        "by_payable_comment": {
+          "factor": 3.7838,
+          "seconds": 1157.6
+        },
+        "by_unit": {
+          "factor": 2.7143,
+          "seconds": 830.4
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:31:53+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": 67.528,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 7,
+      "units_unread": 19,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.358,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.12,
+        "spent_so_far_usd": 0.12,
+        "spent_this_segment_usd": 0.12
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:32:47+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 637.2,
+      "headroom_seconds": 520.8,
+      "kind": "full_pass",
+      "legs_read": [
+        "A"
+      ],
+      "measured_seconds": 343.223,
+      "measured_seconds_per_unit": 42.903,
+      "payable_comments_read": 39,
+      "payable_comments_unread": 138,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 1851.6,
+      "projections": {
+        "binding": {
+          "factor": 3.5385,
+          "seconds": 1214.5,
+          "which": "by_payable_comment"
+        },
+        "by_payable_comment": {
+          "factor": 3.5385,
+          "seconds": 1214.5
+        },
+        "by_unit": {
+          "factor": 2.25,
+          "seconds": 772.3
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:32:46+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": 61.3,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 8,
+      "units_unread": 18,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.3806,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.131,
+        "spent_so_far_usd": 0.131,
+        "spent_this_segment_usd": 0.131
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:33:40+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 690.5,
+      "headroom_seconds": 474.5,
+      "kind": "full_pass",
+      "legs_read": [
+        "A"
+      ],
+      "measured_seconds": 399.432,
+      "measured_seconds_per_unit": 44.381,
+      "payable_comments_read": 44,
+      "payable_comments_unread": 133,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 1897.9,
+      "projections": {
+        "binding": {
+          "factor": 3.0227,
+          "seconds": 1207.4,
+          "which": "by_payable_comment"
+        },
+        "by_payable_comment": {
+          "factor": 3.0227,
+          "seconds": 1207.4
+        },
+        "by_unit": {
+          "factor": 1.8889,
+          "seconds": 754.5
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:33:40+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": 61.824,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 9,
+      "units_unread": 17,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.3901,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.1419,
+        "spent_so_far_usd": 0.1419,
+        "spent_this_segment_usd": 0.1419
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:35:26+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 796.6,
+      "headroom_seconds": 419.1,
+      "kind": "full_pass",
+      "legs_read": [
+        "A"
+      ],
+      "measured_seconds": 507.794,
+      "measured_seconds_per_unit": 50.779,
+      "payable_comments_read": 54,
+      "payable_comments_unread": 123,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 1953.3,
+      "projections": {
+        "binding": {
+          "factor": 2.2778,
+          "seconds": 1156.6,
+          "which": "by_payable_comment"
+        },
+        "by_payable_comment": {
+          "factor": 2.2778,
+          "seconds": 1156.6
+        },
+        "by_unit": {
+          "factor": 1.6,
+          "seconds": 812.5
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:35:26+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": 69.181,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 10,
+      "units_unread": 16,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.4015,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.1638,
+        "spent_so_far_usd": 0.1638,
+        "spent_this_segment_usd": 0.1638
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:36:20+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 850.0,
+      "headroom_seconds": 498.2,
+      "kind": "full_pass",
+      "legs_read": [
+        "A"
+      ],
+      "measured_seconds": 566.021,
+      "measured_seconds_per_unit": 51.456,
+      "payable_comments_read": 63,
+      "payable_comments_unread": 114,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 1874.3,
+      "projections": {
+        "binding": {
+          "factor": 1.8095,
+          "seconds": 1024.2,
+          "which": "by_payable_comment"
+        },
+        "by_payable_comment": {
+          "factor": 1.8095,
+          "seconds": 1024.2
+        },
+        "by_unit": {
+          "factor": 1.3636,
+          "seconds": 771.8
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:36:19+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": 76.484,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 11,
+      "units_unread": 15,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.3853,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.1747,
+        "spent_so_far_usd": 0.1747,
+        "spent_this_segment_usd": 0.1747
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:37:13+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 903.5,
+      "headroom_seconds": 630.9,
+      "kind": "full_pass",
+      "legs_read": [
+        "A"
+      ],
+      "measured_seconds": 616.157,
+      "measured_seconds_per_unit": 51.346,
+      "payable_comments_read": 75,
+      "payable_comments_unread": 102,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 1741.5,
+      "projections": {
+        "binding": {
+          "factor": 1.36,
+          "seconds": 838.0,
+          "which": "by_payable_comment"
+        },
+        "by_payable_comment": {
+          "factor": 1.36,
+          "seconds": 838.0
+        },
+        "by_unit": {
+          "factor": 1.1667,
+          "seconds": 718.8
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:37:13+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": 90.007,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 12,
+      "units_unread": 14,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.358,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.1857,
+        "spent_so_far_usd": 0.1857,
+        "spent_this_segment_usd": 0.1857
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:38:07+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 957.1,
+      "headroom_seconds": 704.2,
+      "kind": "full_pass",
+      "legs_read": [
+        "A"
+      ],
+      "measured_seconds": 672.106,
+      "measured_seconds_per_unit": 48.008,
+      "payable_comments_read": 86,
+      "payable_comments_unread": 91,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 1668.2,
+      "projections": {
+        "binding": {
+          "factor": 1.0581,
+          "seconds": 711.2,
+          "which": "by_payable_comment"
+        },
+        "by_payable_comment": {
+          "factor": 1.0581,
+          "seconds": 711.2
+        },
+        "by_unit": {
+          "factor": 0.8571,
+          "seconds": 576.1
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:38:06+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": 95.544,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 14,
+      "units_unread": 12,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.3429,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.1967,
+        "spent_so_far_usd": 0.1967,
+        "spent_this_segment_usd": 0.1967
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:39:00+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 1010.4,
+      "headroom_seconds": 727.1,
+      "kind": "full_pass",
+      "legs_read": [
+        "A"
+      ],
+      "measured_seconds": 735.585,
+      "measured_seconds_per_unit": 49.039,
+      "payable_comments_read": 95,
+      "payable_comments_unread": 82,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 1645.4,
+      "projections": {
+        "binding": {
+          "factor": 0.8632,
+          "seconds": 634.9,
+          "which": "by_payable_comment"
+        },
+        "by_payable_comment": {
+          "factor": 0.8632,
+          "seconds": 634.9
+        },
+        "by_unit": {
+          "factor": 0.7333,
+          "seconds": 539.4
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:39:00+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": 105.196,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 15,
+      "units_unread": 11,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.3382,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.2077,
+        "spent_so_far_usd": 0.2077,
+        "spent_this_segment_usd": 0.2077
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:40:20+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 1090.4,
+      "headroom_seconds": 755.1,
+      "kind": "full_pass",
+      "legs_read": [
+        "A"
+      ],
+      "measured_seconds": 805.363,
+      "measured_seconds_per_unit": 50.335,
+      "payable_comments_read": 107,
+      "payable_comments_unread": 70,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 1617.3,
+      "projections": {
+        "binding": {
+          "factor": 0.6542,
+          "seconds": 526.9,
+          "which": "by_payable_comment"
+        },
+        "by_payable_comment": {
+          "factor": 0.6542,
+          "seconds": 526.9
+        },
+        "by_unit": {
+          "factor": 0.625,
+          "seconds": 503.4
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:40:19+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": 122.478,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 16,
+      "units_unread": 10,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.3324,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.2241,
+        "spent_so_far_usd": 0.2241,
+        "spent_this_segment_usd": 0.2241
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:42:06+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 1196.5,
+      "headroom_seconds": 694.6,
+      "kind": "full_pass",
+      "legs_read": [
+        "A"
+      ],
+      "measured_seconds": 909.174,
+      "measured_seconds_per_unit": 53.481,
+      "payable_comments_read": 122,
+      "payable_comments_unread": 55,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 1677.8,
+      "projections": {
+        "binding": {
+          "factor": 0.5294,
+          "seconds": 481.3,
+          "which": "by_unit"
+        },
+        "by_payable_comment": {
+          "factor": 0.4508,
+          "seconds": 409.9
+        },
+        "by_unit": {
+          "factor": 0.5294,
+          "seconds": 481.3
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:42:06+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": 130.657,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 17,
+      "units_unread": 9,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.3449,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.246,
+        "spent_so_far_usd": 0.246,
+        "spent_this_segment_usd": 0.246
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:42:33+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 1223.6,
+      "headroom_seconds": 725.6,
+      "kind": "full_pass",
+      "legs_read": [
+        "A"
+      ],
+      "measured_seconds": 952.148,
+      "measured_seconds_per_unit": 52.897,
+      "payable_comments_read": 124,
+      "payable_comments_unread": 53,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 1646.8,
+      "projections": {
+        "binding": {
+          "factor": 0.4444,
+          "seconds": 423.2,
+          "which": "by_unit"
+        },
+        "by_payable_comment": {
+          "factor": 0.4274,
+          "seconds": 407.0
+        },
+        "by_unit": {
+          "factor": 0.4444,
+          "seconds": 423.2
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:42:33+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": 143.603,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 18,
+      "units_unread": 8,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.3385,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.2515,
+        "spent_so_far_usd": 0.2515,
+        "spent_this_segment_usd": 0.2515
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:43:00+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 1250.6,
+      "headroom_seconds": 758.7,
+      "kind": "full_pass",
+      "legs_read": [
+        "A"
+      ],
+      "measured_seconds": 975.902,
+      "measured_seconds_per_unit": 48.795,
+      "payable_comments_read": 129,
+      "payable_comments_unread": 48,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 1613.7,
+      "projections": {
+        "binding": {
+          "factor": 0.3721,
+          "seconds": 363.1,
+          "which": "by_payable_comment"
+        },
+        "by_payable_comment": {
+          "factor": 0.3721,
+          "seconds": 363.1
+        },
+        "by_unit": {
+          "factor": 0.3,
+          "seconds": 292.8
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:43:00+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": 150.748,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 20,
+      "units_unread": 6,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.3317,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.2571,
+        "spent_so_far_usd": 0.2571,
+        "spent_this_segment_usd": 0.2571
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:43:27+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 1277.6,
+      "headroom_seconds": 735.9,
+      "kind": "full_pass",
+      "legs_read": [
+        "A"
+      ],
+      "measured_seconds": 992.558,
+      "measured_seconds_per_unit": 45.116,
+      "payable_comments_read": 130,
+      "payable_comments_unread": 47,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 1636.5,
+      "projections": {
+        "binding": {
+          "factor": 0.3615,
+          "seconds": 358.8,
+          "which": "by_payable_comment"
+        },
+        "by_payable_comment": {
+          "factor": 0.3615,
+          "seconds": 358.8
+        },
+        "by_unit": {
+          "factor": 0.1818,
+          "seconds": 180.5
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:43:27+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": 137.644,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 22,
+      "units_unread": 4,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.3364,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.2626,
+        "spent_so_far_usd": 0.2626,
+        "spent_this_segment_usd": 0.2626
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:44:21+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 1331.1,
+      "headroom_seconds": 709.1,
+      "kind": "full_pass",
+      "legs_read": [
+        "A"
+      ],
+      "measured_seconds": 1035.36,
+      "measured_seconds_per_unit": 45.016,
+      "payable_comments_read": 134,
+      "payable_comments_unread": 43,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 1663.4,
+      "projections": {
+        "binding": {
+          "factor": 0.3209,
+          "seconds": 332.2,
+          "which": "by_payable_comment"
+        },
+        "by_payable_comment": {
+          "factor": 0.3209,
+          "seconds": 332.2
+        },
+        "by_unit": {
+          "factor": 0.1304,
+          "seconds": 135.0
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:44:20+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": 141.089,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 23,
+      "units_unread": 3,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.3419,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.2736,
+        "spent_so_far_usd": 0.2736,
+        "spent_this_segment_usd": 0.2736
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:45:14+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 1384.5,
+      "headroom_seconds": 790.0,
+      "kind": "full_pass",
+      "legs_read": [
+        "A",
+        "B"
+      ],
+      "measured_seconds": 1099.341,
+      "measured_seconds_per_unit": 45.806,
+      "payable_comments_read": 150,
+      "payable_comments_unread": 27,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 1582.4,
+      "projections": {
+        "binding": {
+          "factor": 0.18,
+          "seconds": 197.9,
+          "which": "by_payable_comment"
+        },
+        "by_payable_comment": {
+          "factor": 0.18,
+          "seconds": 197.9
+        },
+        "by_unit": {
+          "factor": 0.0833,
+          "seconds": 91.6
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:45:14+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": 228.678,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 24,
+      "units_unread": 2,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.3253,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.2846,
+        "spent_so_far_usd": 0.2846,
+        "spent_this_segment_usd": 0.2846
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:46:07+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 1437.9,
+      "headroom_seconds": 857.4,
+      "kind": "full_pass",
+      "legs_read": [
+        "A",
+        "B"
+      ],
+      "measured_seconds": 1163.091,
+      "measured_seconds_per_unit": 46.524,
+      "payable_comments_read": 166,
+      "payable_comments_unread": 11,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 1515.0,
+      "projections": {
+        "binding": {
+          "factor": 0.0663,
+          "seconds": 77.1,
+          "which": "by_payable_comment"
+        },
+        "by_payable_comment": {
+          "factor": 0.0663,
+          "seconds": 77.1
+        },
+        "by_unit": {
+          "factor": 0.04,
+          "seconds": 46.5
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:46:07+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": 564.103,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 25,
+      "units_unread": 1,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.3114,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.2956,
+        "spent_so_far_usd": 0.2956,
+        "spent_this_segment_usd": 0.2956
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:47:01+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 1491.7,
+      "headroom_seconds": 880.7,
+      "kind": "full_pass",
+      "legs_read": [
+        "A",
+        "B"
+      ],
+      "measured_seconds": 1210.445,
+      "measured_seconds_per_unit": 46.556,
+      "payable_comments_read": 177,
+      "payable_comments_unread": 0,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 1491.7,
+      "projections": {
+        "binding": {
+          "factor": 0.0,
+          "seconds": 0.0,
+          "which": "by_unit"
+        },
+        "by_payable_comment": {
+          "factor": 0.0,
+          "seconds": 0.0
+        },
+        "by_unit": {
+          "factor": 0.0,
+          "seconds": 0.0
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:47:01+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": Infinity,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 26,
+      "units_unread": 0,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.3066,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.3066,
+        "spent_so_far_usd": 0.3066,
+        "spent_this_segment_usd": 0.3066
+      },
+      "verdict": "GO"
+    }
+  ],
+  "latest": {
+    "kind": "full_pass",
+    "segment": 1,
+    "verdict": "GO"
+  },
+  "phase": "reader-v5b",
+  "segments": [
+    {
+      "billed_seconds": 1514.0,
+      "billed_usd": 0.311211,
+      "card": "NVIDIA GeForce RTX 4090",
+      "card_registered": "NVIDIA GeForce RTX 4090",
+      "created_at": "2026-08-17T16:22:10Z",
+      "deleted_at": "2026-08-17T16:47:24Z",
+      "generation_started_at": "2026-08-17T16:23:27Z",
+      "outcome": "26 of 26 units read, every gate GO, deleted after the last reply",
+      "pod_id": "r7702vbsrxhz0j",
+      "priced_at_or_under_the_example": true,
+      "segment": 1,
+      "usd_per_hour": 0.74,
+      "usd_per_hour_worked_example": 0.74,
+      "usd_per_second": 0.000205556
+    }
+  ]
+}

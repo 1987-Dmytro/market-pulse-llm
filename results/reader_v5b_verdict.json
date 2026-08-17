@@ -1,0 +1,2402 @@
+{
+  "5_time_and_cost": {
+    "anchor": 21.4577480282,
+    "anchored_at": "2026-08-17T16:21:29+00:00",
+    "cap_usd_all_in": 0.5,
+    "ledger": "results/spend_reader_v5b.json",
+    "lower_bound_usd": 0.0,
+    "passed": null,
+    "reason": "the step ledger carries no closing entry, so there is no settled figure. The largest balance-delta reading its sessions hold is a LOWER BOUND — it also carries the always-on volume, which belongs to no step — and closing is a named debt for the next guard run, never a number invented here",
+    "sessions": 1,
+    "sha256": "7ac7b73abdafc1fdac4d0140c938b106803c5240b80cb0b09577c6f819e9a4f3",
+    "state": "OPEN"
+  },
+  "bars": {
+    "1_flagships": {
+      "collapsed": true,
+      "reason": null,
+      "result": {
+        "cases": 5,
+        "cases_answered": 2,
+        "passed": false,
+        "per_case": [
+          {
+            "answered": false,
+            "id": "F1",
+            "signals": [
+              {
+                "found": false,
+                "id": "F1a",
+                "index": null,
+                "signal_type": null
+              },
+              {
+                "found": false,
+                "id": "F1b",
+                "index": null,
+                "signal_type": null
+              },
+              {
+                "found": false,
+                "id": "F1c",
+                "index": null,
+                "signal_type": null
+              }
+            ],
+            "thread": "@VARUS_channel:10613"
+          },
+          {
+            "answered": false,
+            "id": "F2",
+            "signals": [
+              {
+                "found": false,
+                "id": "F2a",
+                "index": null,
+                "signal_type": null
+              }
+            ],
+            "thread": "@matusi_ukr:22303"
+          },
+          {
+            "answered": false,
+            "id": "F3",
+            "signals": [
+              {
+                "found": false,
+                "id": "F3a",
+                "index": null,
+                "signal_type": null
+              }
+            ],
+            "thread": "@mandziak:3676"
+          },
+          {
+            "answered": true,
+            "id": "F4",
+            "signals": [
+              {
+                "found": true,
+                "id": "F4a",
+                "index": 0,
+                "signal_type": "похвала"
+              }
+            ],
+            "thread": "@mandziak:3703"
+          },
+          {
+            "answered": true,
+            "id": "F5",
+            "signals": [
+              {
+                "found": true,
+                "id": "F5a",
+                "index": 1,
+                "signal_type": "спрос"
+              }
+            ],
+            "thread": "@matusi_ukr:22272"
+          }
+        ],
+        "per_signal": [
+          {
+            "case": "F1",
+            "found": false,
+            "id": "F1a"
+          },
+          {
+            "case": "F1",
+            "found": false,
+            "id": "F1b"
+          },
+          {
+            "case": "F1",
+            "found": false,
+            "id": "F1c"
+          },
+          {
+            "case": "F2",
+            "found": false,
+            "id": "F2a"
+          },
+          {
+            "case": "F3",
+            "found": false,
+            "id": "F3a"
+          },
+          {
+            "case": "F4",
+            "found": true,
+            "id": "F4a"
+          },
+          {
+            "case": "F5",
+            "found": true,
+            "id": "F5a"
+          }
+        ],
+        "per_signal_reading": "plan §5 (1) names five SIGNALS and the reference five THREADS carrying seven; the bar is the case reading and this table is where the narrower one is read off"
+      },
+      "scored": true,
+      "scorer": "reader_signal_found",
+      "threads_in_the_evidence": [
+        "@VARUS_channel:10613",
+        "@matusi_ukr:22303",
+        "@mandziak:3676",
+        "@mandziak:3703",
+        "@matusi_ukr:22272"
+      ],
+      "threads_not_read": [],
+      "threads_registered": [
+        "@VARUS_channel:10613",
+        "@matusi_ukr:22303",
+        "@mandziak:3676",
+        "@mandziak:3703",
+        "@matusi_ukr:22272"
+      ],
+      "threshold": "5 of 5 cases",
+      "verdict": "SCORED"
+    },
+    "2_entity_cases": {
+      "collapsed": false,
+      "reason": null,
+      "result": {
+        "cases": 4,
+        "cases_answered": 4,
+        "passed": true,
+        "per_case": {
+          "E1": true,
+          "E2": true,
+          "E3": true,
+          "E4": true
+        },
+        "per_row": [
+          {
+            "answered": true,
+            "brand_id": "garmonija",
+            "expected": "не_наш_рынок",
+            "id": "E1",
+            "reported": [
+              "не_наш_рынок"
+            ],
+            "thread": "@matusi_ukr:22242"
+          },
+          {
+            "answered": true,
+            "brand_id": "selianske",
+            "expected": "молочный_бренд",
+            "id": "E2",
+            "reported": [
+              "молочный_бренд"
+            ],
+            "thread": "@VARUS_channel:10360"
+          },
+          {
+            "answered": true,
+            "brand_id": "varus-pl",
+            "expected": "сеть_ритейлер",
+            "id": "E3",
+            "reported": [
+              "сеть_ритейлер"
+            ],
+            "thread": "@VARUS_channel:10348"
+          },
+          {
+            "answered": true,
+            "brand_id": "varto",
+            "expected": "absent",
+            "id": "E4a",
+            "reported": [],
+            "thread": "@mandziak:3684"
+          },
+          {
+            "answered": true,
+            "brand_id": "varto",
+            "expected": "absent",
+            "id": "E4b",
+            "reported": [],
+            "thread": "@mandziak:3689"
+          }
+        ]
+      },
+      "scored": true,
+      "scorer": "reader_entity_found",
+      "threads_in_the_evidence": [
+        "@matusi_ukr:22242",
+        "@VARUS_channel:10360",
+        "@VARUS_channel:10348",
+        "@mandziak:3684",
+        "@mandziak:3689"
+      ],
+      "threads_not_read": [],
+      "threads_registered": [
+        "@matusi_ukr:22242",
+        "@VARUS_channel:10360",
+        "@VARUS_channel:10348",
+        "@mandziak:3684",
+        "@mandziak:3689"
+      ],
+      "threshold": "4 of 4 cases",
+      "verdict": "SCORED"
+    },
+    "3_noise": {
+      "collapsed": false,
+      "excluded_with_cause": {
+        "N1": "carried unchanged from v1: the reference's own S list reads a signal inside this thread (S1, msg 21420), and the store shows two comments there rather than the «десятки «+»» the N list describes. A bar that failed the reader for agreeing with the reference would measure nothing. The thread is READ — S1 is in the population — and its signal count is reported beside the bar"
+      },
+      "reason": null,
+      "result": {
+        "entities_beside_the_number": {
+          "@VARUS_channel:10366": 1,
+          "@retsepty:7312": 0,
+          "@retsepty:7325": 0,
+          "@retsepty:7327": 0,
+          "@sashafitnesslife:3939": 0
+        },
+        "passed": true,
+        "per_thread": {
+          "@VARUS_channel:10366": 0,
+          "@retsepty:7312": 0,
+          "@retsepty:7325": 0,
+          "@retsepty:7327": 0,
+          "@sashafitnesslife:3939": 0
+        },
+        "reachable": true,
+        "scored_over": [
+          "N2",
+          "N3",
+          "N4",
+          "N5",
+          "N6"
+        ],
+        "signals": 0,
+        "threads": {
+          "N2": "@VARUS_channel:10366",
+          "N3": "@sashafitnesslife:3939",
+          "N4": "@retsepty:7312",
+          "N5": "@retsepty:7325",
+          "N6": "@retsepty:7327"
+        },
+        "threads_refused": [],
+        "threads_registered": 5,
+        "threads_with_a_verdict": 5
+      },
+      "scored": true,
+      "scored_over": [
+        "N2",
+        "N3",
+        "N4",
+        "N5",
+        "N6"
+      ],
+      "scorer": "reader_noise_count",
+      "threads_in_the_evidence": [
+        "@VARUS_channel:10366",
+        "@sashafitnesslife:3939",
+        "@retsepty:7312",
+        "@retsepty:7325",
+        "@retsepty:7327"
+      ],
+      "threads_not_read": [],
+      "threads_registered": [
+        "@VARUS_channel:10366",
+        "@sashafitnesslife:3939",
+        "@retsepty:7312",
+        "@retsepty:7325",
+        "@retsepty:7327"
+      ],
+      "threshold": "0 signals",
+      "verdict": "SCORED"
+    },
+    "4_per_comment_agreement": {
+      "collapsed": true,
+      "reason": null,
+      "result": {
+        "absent": 4,
+        "agreed": 6,
+        "disagreed": 4,
+        "n": 14,
+        "passed": false,
+        "rate": 0.42857142857142855,
+        "rows": [
+          {
+            "absent": true,
+            "agreed": false,
+            "msg_id": 21626
+          },
+          {
+            "absent": true,
+            "agreed": false,
+            "msg_id": 21599
+          },
+          {
+            "absent": true,
+            "agreed": false,
+            "msg_id": 21601
+          },
+          {
+            "absent": true,
+            "agreed": false,
+            "msg_id": 21629
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "молочный_бренд",
+                "reader": "сеть_ритейлер"
+              }
+            },
+            "msg_id": 580124
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория",
+                "reader": "молочный_бренд"
+              }
+            },
+            "msg_id": 580129
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 47899
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "категория",
+                "reader": "молочный_бренд"
+              }
+            },
+            "msg_id": 47902
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48276
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 48283
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579379
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 579457
+          },
+          {
+            "absent": false,
+            "agreed": false,
+            "disagreed_on": {
+              "subject_type": {
+                "gold": "не_наш_рынок",
+                "reader": null
+              }
+            },
+            "msg_id": 578951
+          },
+          {
+            "absent": false,
+            "agreed": true,
+            "disagreed_on": {},
+            "msg_id": 20664
+          }
+        ],
+        "scored": true
+      },
+      "scored": true,
+      "scorer": "reader_comment_agreement",
+      "threads_in_the_evidence": [
+        "@VARUS_channel:10348",
+        "@VARUS_channel:10613",
+        "@mandziak:3676",
+        "@mandziak:3703",
+        "@matusi_ukr:22242",
+        "@matusi_ukr:22272",
+        "@matusi_ukr:22303"
+      ],
+      "threads_not_read": [],
+      "threads_registered": [
+        "@VARUS_channel:10348",
+        "@VARUS_channel:10613",
+        "@mandziak:3676",
+        "@mandziak:3703",
+        "@matusi_ukr:22242",
+        "@matusi_ukr:22272",
+        "@matusi_ukr:22303"
+      ],
+      "threshold": "rate >= 0.8",
+      "verdict": "SCORED"
+    }
+  },
+  "beside_the_bars": {
+    "rule": "REPORTED and never gating — no number here moves a verdict above",
+    "transport_stop": {
+      "chars_cut": 62,
+      "never_balanced": [],
+      "rule": "what the first-balanced-object stop actually removed, per unit. It is the measurement ruling (b) was bought for and it gates nothing",
+      "units_cut": [
+        "@VARUS_channel:10348",
+        "@VARUS_channel:10360",
+        "@VARUS_channel:10366",
+        "@VARUS_channel:10451",
+        "@VARUS_channel:10465",
+        "@VARUS_channel:10471",
+        "@VARUS_channel:10529",
+        "@VARUS_channel:10593",
+        "@VARUS_channel:10603",
+        "@VARUS_channel:10613",
+        "@klopotenkofood:6040#2of3",
+        "@mandziak:3701",
+        "@mandziak:3703",
+        "@matusi_ukr:22272",
+        "@matusi_ukr:22303",
+        "@retsepty:7312",
+        "@retsepty:7325",
+        "@sashafitnesslife:3939",
+        "@tarilka_malyuka:715"
+      ]
+    },
+    "uncollapsed_vocabulary_reading": {
+      "bars": {
+        "1_flagships": {
+          "as_the_bar_collapsed": 2,
+          "uncollapsed": 2
+        },
+        "4_per_comment_agreement": {
+          "as_the_bar_collapsed": 0.42857142857142855,
+          "uncollapsed": 0.42857142857142855
+        }
+      },
+      "detail": {
+        "1_flagships": {
+          "cases": 5,
+          "cases_answered": 2,
+          "passed": false,
+          "per_case": [
+            {
+              "answered": false,
+              "id": "F1",
+              "signals": [
+                {
+                  "found": false,
+                  "id": "F1a",
+                  "index": null,
+                  "signal_type": null
+                },
+                {
+                  "found": false,
+                  "id": "F1b",
+                  "index": null,
+                  "signal_type": null
+                },
+                {
+                  "found": false,
+                  "id": "F1c",
+                  "index": null,
+                  "signal_type": null
+                }
+              ],
+              "thread": "@VARUS_channel:10613"
+            },
+            {
+              "answered": false,
+              "id": "F2",
+              "signals": [
+                {
+                  "found": false,
+                  "id": "F2a",
+                  "index": null,
+                  "signal_type": null
+                }
+              ],
+              "thread": "@matusi_ukr:22303"
+            },
+            {
+              "answered": false,
+              "id": "F3",
+              "signals": [
+                {
+                  "found": false,
+                  "id": "F3a",
+                  "index": null,
+                  "signal_type": null
+                }
+              ],
+              "thread": "@mandziak:3676"
+            },
+            {
+              "answered": true,
+              "id": "F4",
+              "signals": [
+                {
+                  "found": true,
+                  "id": "F4a",
+                  "index": 0,
+                  "signal_type": "похвала"
+                }
+              ],
+              "thread": "@mandziak:3703"
+            },
+            {
+              "answered": true,
+              "id": "F5",
+              "signals": [
+                {
+                  "found": true,
+                  "id": "F5a",
+                  "index": 1,
+                  "signal_type": "спрос"
+                }
+              ],
+              "thread": "@matusi_ukr:22272"
+            }
+          ],
+          "per_signal": [
+            {
+              "case": "F1",
+              "found": false,
+              "id": "F1a"
+            },
+            {
+              "case": "F1",
+              "found": false,
+              "id": "F1b"
+            },
+            {
+              "case": "F1",
+              "found": false,
+              "id": "F1c"
+            },
+            {
+              "case": "F2",
+              "found": false,
+              "id": "F2a"
+            },
+            {
+              "case": "F3",
+              "found": false,
+              "id": "F3a"
+            },
+            {
+              "case": "F4",
+              "found": true,
+              "id": "F4a"
+            },
+            {
+              "case": "F5",
+              "found": true,
+              "id": "F5a"
+            }
+          ],
+          "per_signal_reading": "plan §5 (1) names five SIGNALS and the reference five THREADS carrying seven; the bar is the case reading and this table is where the narrower one is read off"
+        },
+        "4_per_comment_agreement": {
+          "absent": 4,
+          "agreed": 6,
+          "disagreed": 4,
+          "n": 14,
+          "passed": false,
+          "rate": 0.42857142857142855,
+          "rows": [
+            {
+              "absent": true,
+              "agreed": false,
+              "msg_id": 21626
+            },
+            {
+              "absent": true,
+              "agreed": false,
+              "msg_id": 21599
+            },
+            {
+              "absent": true,
+              "agreed": false,
+              "msg_id": 21601
+            },
+            {
+              "absent": true,
+              "agreed": false,
+              "msg_id": 21629
+            },
+            {
+              "absent": false,
+              "agreed": false,
+              "disagreed_on": {
+                "subject_type": {
+                  "gold": "молочный_бренд",
+                  "reader": "сеть_ритейлер"
+                }
+              },
+              "msg_id": 580124
+            },
+            {
+              "absent": false,
+              "agreed": false,
+              "disagreed_on": {
+                "subject_type": {
+                  "gold": "категория_личное",
+                  "reader": "молочный_бренд"
+                }
+              },
+              "msg_id": 580129
+            },
+            {
+              "absent": false,
+              "agreed": true,
+              "disagreed_on": {},
+              "msg_id": 47899
+            },
+            {
+              "absent": false,
+              "agreed": false,
+              "disagreed_on": {
+                "subject_type": {
+                  "gold": "категория_личное",
+                  "reader": "молочный_бренд"
+                }
+              },
+              "msg_id": 47902
+            },
+            {
+              "absent": false,
+              "agreed": true,
+              "disagreed_on": {},
+              "msg_id": 48276
+            },
+            {
+              "absent": false,
+              "agreed": true,
+              "disagreed_on": {},
+              "msg_id": 48283
+            },
+            {
+              "absent": false,
+              "agreed": true,
+              "disagreed_on": {},
+              "msg_id": 579379
+            },
+            {
+              "absent": false,
+              "agreed": true,
+              "disagreed_on": {},
+              "msg_id": 579457
+            },
+            {
+              "absent": false,
+              "agreed": false,
+              "disagreed_on": {
+                "subject_type": {
+                  "gold": "не_наш_рынок",
+                  "reader": null
+                }
+              },
+              "msg_id": 578951
+            },
+            {
+              "absent": false,
+              "agreed": true,
+              "disagreed_on": {},
+              "msg_id": 20664
+            }
+          ],
+          "scored": true
+        }
+      }
+    }
+  },
+  "completeness": {
+    "absent_ids_by_thread": {},
+    "per_thread": {
+      "@VARUS_channel:10348": {
+        "absent": [],
+        "extra": [],
+        "in_both_lists": [],
+        "in_list_order": true,
+        "in_noise": 2,
+        "in_per_comment": 5,
+        "requested": 7
+      },
+      "@VARUS_channel:10360": {
+        "absent": [],
+        "extra": [],
+        "in_both_lists": [],
+        "in_list_order": true,
+        "in_noise": 0,
+        "in_per_comment": 2,
+        "requested": 2
+      },
+      "@VARUS_channel:10366": {
+        "absent": [],
+        "extra": [],
+        "in_both_lists": [],
+        "in_list_order": true,
+        "in_noise": 0,
+        "in_per_comment": 12,
+        "requested": 12
+      },
+      "@VARUS_channel:10451": {
+        "absent": [],
+        "extra": [],
+        "in_both_lists": [],
+        "in_list_order": true,
+        "in_noise": 0,
+        "in_per_comment": 4,
+        "requested": 4
+      },
+      "@VARUS_channel:10465": {
+        "absent": [],
+        "extra": [],
+        "in_both_lists": [],
+        "in_list_order": true,
+        "in_noise": 0,
+        "in_per_comment": 5,
+        "requested": 5
+      },
+      "@VARUS_channel:10471": {
+        "absent": [],
+        "extra": [],
+        "in_both_lists": [],
+        "in_list_order": true,
+        "in_noise": 0,
+        "in_per_comment": 5,
+        "requested": 5
+      },
+      "@VARUS_channel:10603": {
+        "absent": [],
+        "extra": [],
+        "in_both_lists": [],
+        "in_list_order": true,
+        "in_noise": 0,
+        "in_per_comment": 5,
+        "requested": 5
+      },
+      "@mandziak:3676": {
+        "absent": [],
+        "extra": [],
+        "in_both_lists": [],
+        "in_list_order": true,
+        "in_noise": 0,
+        "in_per_comment": 9,
+        "requested": 9
+      },
+      "@mandziak:3684": {
+        "absent": [],
+        "extra": [],
+        "in_both_lists": [],
+        "in_list_order": true,
+        "in_noise": 0,
+        "in_per_comment": 12,
+        "requested": 12
+      },
+      "@mandziak:3689": {
+        "absent": [],
+        "extra": [],
+        "in_both_lists": [],
+        "in_list_order": true,
+        "in_noise": 0,
+        "in_per_comment": 8,
+        "requested": 8
+      },
+      "@mandziak:3703": {
+        "absent": [],
+        "extra": [],
+        "in_both_lists": [],
+        "in_list_order": true,
+        "in_noise": 0,
+        "in_per_comment": 9,
+        "requested": 9
+      },
+      "@matusi_ukr:22242": {
+        "absent": [],
+        "extra": [],
+        "in_both_lists": [],
+        "in_list_order": true,
+        "in_noise": 0,
+        "in_per_comment": 12,
+        "requested": 12
+      },
+      "@matusi_ukr:22272": {
+        "absent": [],
+        "extra": [],
+        "in_both_lists": [],
+        "in_list_order": true,
+        "in_noise": 0,
+        "in_per_comment": 15,
+        "requested": 15
+      },
+      "@matusi_ukr:22303": {
+        "absent": [],
+        "extra": [],
+        "in_both_lists": [],
+        "in_list_order": true,
+        "in_noise": 0,
+        "in_per_comment": 2,
+        "requested": 2
+      },
+      "@retsepty:7312": {
+        "absent": [],
+        "extra": [],
+        "in_both_lists": [],
+        "in_list_order": true,
+        "in_noise": 3,
+        "in_per_comment": 0,
+        "requested": 3
+      },
+      "@retsepty:7325": {
+        "absent": [],
+        "extra": [],
+        "in_both_lists": [],
+        "in_list_order": true,
+        "in_noise": 2,
+        "in_per_comment": 0,
+        "requested": 2
+      },
+      "@retsepty:7327": {
+        "absent": [],
+        "extra": [],
+        "in_both_lists": [],
+        "in_list_order": true,
+        "in_noise": 1,
+        "in_per_comment": 0,
+        "requested": 1
+      },
+      "@sashafitnesslife:3939": {
+        "absent": [],
+        "extra": [],
+        "in_both_lists": [],
+        "in_list_order": true,
+        "in_noise": 0,
+        "in_per_comment": 0,
+        "requested": 0
+      },
+      "@tarilka_malyuka:715": {
+        "absent": [],
+        "extra": [],
+        "in_both_lists": [],
+        "in_list_order": true,
+        "in_noise": 0,
+        "in_per_comment": 4,
+        "requested": 4
+      }
+    },
+    "rule": "REPORTED and never gating — no number here moves a bar",
+    "threads_censused": 19,
+    "threads_out_of_list_order": [],
+    "totals": {
+      "absent": 0,
+      "covered": 117,
+      "extra": 0,
+      "in_both_lists": 0,
+      "in_noise": 8,
+      "in_per_comment": 109,
+      "requested": 117
+    },
+    "v4_baseline": {
+      "absent": 0,
+      "answered_only_in_noise": 18,
+      "in_both_lists": 3,
+      "per_comment_rows_requested": 111,
+      "per_comment_rows_returned": 93,
+      "reading": "over reader-v4's 19 parsed threads the union covered 111 of 111 with nothing absent, so the number to watch here is `absent` and the per_comment/noise SPLIT — not a 93-of-111 ratio, which is a statement about the split and not about completeness"
+    }
+  },
+  "contract": "docs/PROMPT-reader-v5-prep.md",
+  "evidence": {
+    "leg_a_read": 23,
+    "leg_a_registered": 23,
+    "leg_b_units": 3,
+    "record": "results/reader_v5b_w1.jsonl",
+    "sha256": "9540a84bc87109ce3589a636fa5640d56feb5c8382bb82adcf8345bd8e858e8c"
+  },
+  "gates": [
+    {
+      "at": "2026-08-17T16:22:19+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_this_segments_create_seconds": 9.8,
+      "kind": "open",
+      "next_step": "keep polling `runpodctl ssh info` at 3-4 s",
+      "pod_id": "r7702vbsrxhz0j",
+      "recreates_left": 2,
+      "rule": "if `runpodctl ssh info` has not answered with a connectable endpoint by 180 s of THIS segment's create-elapsed, KILL: delete the pod, prove it by listing, and create a replacement of the same card class in the same datacenter",
+      "seconds_left": 170.2,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "ssh_endpoint_answered": false,
+      "threshold_seconds": 180.0,
+      "verdict": "WAIT"
+    },
+    {
+      "at": "2026-08-17T16:22:46+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_this_segments_create_seconds": 36.5,
+      "kind": "gate0",
+      "next_step": "stage and launch",
+      "pod_id": "r7702vbsrxhz0j",
+      "recreates_left": 2,
+      "rule": "if `runpodctl ssh info` has not answered with a connectable endpoint by 180 s of THIS segment's create-elapsed, KILL: delete the pod, prove it by listing, and create a replacement of the same card class in the same datacenter",
+      "seconds_left": 143.5,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "ssh_endpoint_answered": true,
+      "threshold_seconds": 180.0,
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:29:11+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 422.0,
+      "headroom_seconds": 126.4,
+      "kind": "full_pass",
+      "legs_read": [
+        "A"
+      ],
+      "measured_seconds": 97.716,
+      "measured_seconds_per_unit": 48.858,
+      "payable_comments_read": 9,
+      "payable_comments_unread": 168,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 2246.0,
+      "projections": {
+        "binding": {
+          "factor": 18.6667,
+          "seconds": 1824.0,
+          "which": "by_payable_comment"
+        },
+        "by_payable_comment": {
+          "factor": 18.6667,
+          "seconds": 1824.0
+        },
+        "by_unit": {
+          "factor": 12.0,
+          "seconds": 1172.6
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:29:11+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": 52.244,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 2,
+      "units_unread": 24,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.4617,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.0867,
+        "spent_so_far_usd": 0.0867,
+        "spent_this_segment_usd": 0.0867
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:29:40+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 450.5,
+      "headroom_seconds": 750.8,
+      "kind": "full_pass",
+      "legs_read": [
+        "A"
+      ],
+      "measured_seconds": 152.753,
+      "measured_seconds_per_unit": 50.918,
+      "payable_comments_read": 21,
+      "payable_comments_unread": 156,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 1621.6,
+      "projections": {
+        "binding": {
+          "factor": 7.6667,
+          "seconds": 1171.1,
+          "which": "by_unit"
+        },
+        "by_payable_comment": {
+          "factor": 7.4286,
+          "seconds": 1134.7
+        },
+        "by_unit": {
+          "factor": 7.6667,
+          "seconds": 1171.1
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:29:40+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": 83.56,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 3,
+      "units_unread": 23,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.3333,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.0926,
+        "spent_so_far_usd": 0.0926,
+        "spent_this_segment_usd": 0.0926
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:30:07+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 477.5,
+      "headroom_seconds": 748.6,
+      "kind": "full_pass",
+      "legs_read": [
+        "A"
+      ],
+      "measured_seconds": 188.54,
+      "measured_seconds_per_unit": 47.135,
+      "payable_comments_read": 25,
+      "payable_comments_unread": 152,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 1623.8,
+      "projections": {
+        "binding": {
+          "factor": 6.08,
+          "seconds": 1146.3,
+          "which": "by_payable_comment"
+        },
+        "by_payable_comment": {
+          "factor": 6.08,
+          "seconds": 1146.3
+        },
+        "by_unit": {
+          "factor": 5.5,
+          "seconds": 1037.0
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:30:07+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": 77.917,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 4,
+      "units_unread": 22,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.3338,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.0982,
+        "spent_so_far_usd": 0.0982,
+        "spent_this_segment_usd": 0.0982
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:31:00+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 530.6,
+      "headroom_seconds": 659.1,
+      "kind": "full_pass",
+      "legs_read": [
+        "A"
+      ],
+      "measured_seconds": 241.383,
+      "measured_seconds_per_unit": 48.277,
+      "payable_comments_read": 30,
+      "payable_comments_unread": 147,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 1713.4,
+      "projections": {
+        "binding": {
+          "factor": 4.9,
+          "seconds": 1182.8,
+          "which": "by_payable_comment"
+        },
+        "by_payable_comment": {
+          "factor": 4.9,
+          "seconds": 1182.8
+        },
+        "by_unit": {
+          "factor": 4.2,
+          "seconds": 1013.8
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:31:00+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": 75.178,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 5,
+      "units_unread": 21,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.3522,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.1091,
+        "spent_so_far_usd": 0.1091,
+        "spent_this_segment_usd": 0.1091
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:31:53+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 583.9,
+      "headroom_seconds": 630.9,
+      "kind": "full_pass",
+      "legs_read": [
+        "A"
+      ],
+      "measured_seconds": 305.95,
+      "measured_seconds_per_unit": 43.707,
+      "payable_comments_read": 37,
+      "payable_comments_unread": 140,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 1741.5,
+      "projections": {
+        "binding": {
+          "factor": 3.7838,
+          "seconds": 1157.6,
+          "which": "by_payable_comment"
+        },
+        "by_payable_comment": {
+          "factor": 3.7838,
+          "seconds": 1157.6
+        },
+        "by_unit": {
+          "factor": 2.7143,
+          "seconds": 830.4
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:31:53+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": 67.528,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 7,
+      "units_unread": 19,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.358,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.12,
+        "spent_so_far_usd": 0.12,
+        "spent_this_segment_usd": 0.12
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:32:47+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 637.2,
+      "headroom_seconds": 520.8,
+      "kind": "full_pass",
+      "legs_read": [
+        "A"
+      ],
+      "measured_seconds": 343.223,
+      "measured_seconds_per_unit": 42.903,
+      "payable_comments_read": 39,
+      "payable_comments_unread": 138,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 1851.6,
+      "projections": {
+        "binding": {
+          "factor": 3.5385,
+          "seconds": 1214.5,
+          "which": "by_payable_comment"
+        },
+        "by_payable_comment": {
+          "factor": 3.5385,
+          "seconds": 1214.5
+        },
+        "by_unit": {
+          "factor": 2.25,
+          "seconds": 772.3
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:32:46+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": 61.3,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 8,
+      "units_unread": 18,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.3806,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.131,
+        "spent_so_far_usd": 0.131,
+        "spent_this_segment_usd": 0.131
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:33:40+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 690.5,
+      "headroom_seconds": 474.5,
+      "kind": "full_pass",
+      "legs_read": [
+        "A"
+      ],
+      "measured_seconds": 399.432,
+      "measured_seconds_per_unit": 44.381,
+      "payable_comments_read": 44,
+      "payable_comments_unread": 133,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 1897.9,
+      "projections": {
+        "binding": {
+          "factor": 3.0227,
+          "seconds": 1207.4,
+          "which": "by_payable_comment"
+        },
+        "by_payable_comment": {
+          "factor": 3.0227,
+          "seconds": 1207.4
+        },
+        "by_unit": {
+          "factor": 1.8889,
+          "seconds": 754.5
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:33:40+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": 61.824,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 9,
+      "units_unread": 17,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.3901,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.1419,
+        "spent_so_far_usd": 0.1419,
+        "spent_this_segment_usd": 0.1419
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:35:26+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 796.6,
+      "headroom_seconds": 419.1,
+      "kind": "full_pass",
+      "legs_read": [
+        "A"
+      ],
+      "measured_seconds": 507.794,
+      "measured_seconds_per_unit": 50.779,
+      "payable_comments_read": 54,
+      "payable_comments_unread": 123,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 1953.3,
+      "projections": {
+        "binding": {
+          "factor": 2.2778,
+          "seconds": 1156.6,
+          "which": "by_payable_comment"
+        },
+        "by_payable_comment": {
+          "factor": 2.2778,
+          "seconds": 1156.6
+        },
+        "by_unit": {
+          "factor": 1.6,
+          "seconds": 812.5
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:35:26+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": 69.181,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 10,
+      "units_unread": 16,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.4015,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.1638,
+        "spent_so_far_usd": 0.1638,
+        "spent_this_segment_usd": 0.1638
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:36:20+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 850.0,
+      "headroom_seconds": 498.2,
+      "kind": "full_pass",
+      "legs_read": [
+        "A"
+      ],
+      "measured_seconds": 566.021,
+      "measured_seconds_per_unit": 51.456,
+      "payable_comments_read": 63,
+      "payable_comments_unread": 114,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 1874.3,
+      "projections": {
+        "binding": {
+          "factor": 1.8095,
+          "seconds": 1024.2,
+          "which": "by_payable_comment"
+        },
+        "by_payable_comment": {
+          "factor": 1.8095,
+          "seconds": 1024.2
+        },
+        "by_unit": {
+          "factor": 1.3636,
+          "seconds": 771.8
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:36:19+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": 76.484,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 11,
+      "units_unread": 15,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.3853,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.1747,
+        "spent_so_far_usd": 0.1747,
+        "spent_this_segment_usd": 0.1747
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:37:13+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 903.5,
+      "headroom_seconds": 630.9,
+      "kind": "full_pass",
+      "legs_read": [
+        "A"
+      ],
+      "measured_seconds": 616.157,
+      "measured_seconds_per_unit": 51.346,
+      "payable_comments_read": 75,
+      "payable_comments_unread": 102,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 1741.5,
+      "projections": {
+        "binding": {
+          "factor": 1.36,
+          "seconds": 838.0,
+          "which": "by_payable_comment"
+        },
+        "by_payable_comment": {
+          "factor": 1.36,
+          "seconds": 838.0
+        },
+        "by_unit": {
+          "factor": 1.1667,
+          "seconds": 718.8
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:37:13+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": 90.007,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 12,
+      "units_unread": 14,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.358,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.1857,
+        "spent_so_far_usd": 0.1857,
+        "spent_this_segment_usd": 0.1857
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:38:07+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 957.1,
+      "headroom_seconds": 704.2,
+      "kind": "full_pass",
+      "legs_read": [
+        "A"
+      ],
+      "measured_seconds": 672.106,
+      "measured_seconds_per_unit": 48.008,
+      "payable_comments_read": 86,
+      "payable_comments_unread": 91,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 1668.2,
+      "projections": {
+        "binding": {
+          "factor": 1.0581,
+          "seconds": 711.2,
+          "which": "by_payable_comment"
+        },
+        "by_payable_comment": {
+          "factor": 1.0581,
+          "seconds": 711.2
+        },
+        "by_unit": {
+          "factor": 0.8571,
+          "seconds": 576.1
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:38:06+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": 95.544,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 14,
+      "units_unread": 12,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.3429,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.1967,
+        "spent_so_far_usd": 0.1967,
+        "spent_this_segment_usd": 0.1967
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:39:00+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 1010.4,
+      "headroom_seconds": 727.1,
+      "kind": "full_pass",
+      "legs_read": [
+        "A"
+      ],
+      "measured_seconds": 735.585,
+      "measured_seconds_per_unit": 49.039,
+      "payable_comments_read": 95,
+      "payable_comments_unread": 82,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 1645.4,
+      "projections": {
+        "binding": {
+          "factor": 0.8632,
+          "seconds": 634.9,
+          "which": "by_payable_comment"
+        },
+        "by_payable_comment": {
+          "factor": 0.8632,
+          "seconds": 634.9
+        },
+        "by_unit": {
+          "factor": 0.7333,
+          "seconds": 539.4
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:39:00+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": 105.196,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 15,
+      "units_unread": 11,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.3382,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.2077,
+        "spent_so_far_usd": 0.2077,
+        "spent_this_segment_usd": 0.2077
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:40:20+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 1090.4,
+      "headroom_seconds": 755.1,
+      "kind": "full_pass",
+      "legs_read": [
+        "A"
+      ],
+      "measured_seconds": 805.363,
+      "measured_seconds_per_unit": 50.335,
+      "payable_comments_read": 107,
+      "payable_comments_unread": 70,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 1617.3,
+      "projections": {
+        "binding": {
+          "factor": 0.6542,
+          "seconds": 526.9,
+          "which": "by_payable_comment"
+        },
+        "by_payable_comment": {
+          "factor": 0.6542,
+          "seconds": 526.9
+        },
+        "by_unit": {
+          "factor": 0.625,
+          "seconds": 503.4
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:40:19+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": 122.478,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 16,
+      "units_unread": 10,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.3324,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.2241,
+        "spent_so_far_usd": 0.2241,
+        "spent_this_segment_usd": 0.2241
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:42:06+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 1196.5,
+      "headroom_seconds": 694.6,
+      "kind": "full_pass",
+      "legs_read": [
+        "A"
+      ],
+      "measured_seconds": 909.174,
+      "measured_seconds_per_unit": 53.481,
+      "payable_comments_read": 122,
+      "payable_comments_unread": 55,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 1677.8,
+      "projections": {
+        "binding": {
+          "factor": 0.5294,
+          "seconds": 481.3,
+          "which": "by_unit"
+        },
+        "by_payable_comment": {
+          "factor": 0.4508,
+          "seconds": 409.9
+        },
+        "by_unit": {
+          "factor": 0.5294,
+          "seconds": 481.3
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:42:06+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": 130.657,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 17,
+      "units_unread": 9,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.3449,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.246,
+        "spent_so_far_usd": 0.246,
+        "spent_this_segment_usd": 0.246
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:42:33+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 1223.6,
+      "headroom_seconds": 725.6,
+      "kind": "full_pass",
+      "legs_read": [
+        "A"
+      ],
+      "measured_seconds": 952.148,
+      "measured_seconds_per_unit": 52.897,
+      "payable_comments_read": 124,
+      "payable_comments_unread": 53,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 1646.8,
+      "projections": {
+        "binding": {
+          "factor": 0.4444,
+          "seconds": 423.2,
+          "which": "by_unit"
+        },
+        "by_payable_comment": {
+          "factor": 0.4274,
+          "seconds": 407.0
+        },
+        "by_unit": {
+          "factor": 0.4444,
+          "seconds": 423.2
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:42:33+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": 143.603,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 18,
+      "units_unread": 8,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.3385,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.2515,
+        "spent_so_far_usd": 0.2515,
+        "spent_this_segment_usd": 0.2515
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:43:00+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 1250.6,
+      "headroom_seconds": 758.7,
+      "kind": "full_pass",
+      "legs_read": [
+        "A"
+      ],
+      "measured_seconds": 975.902,
+      "measured_seconds_per_unit": 48.795,
+      "payable_comments_read": 129,
+      "payable_comments_unread": 48,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 1613.7,
+      "projections": {
+        "binding": {
+          "factor": 0.3721,
+          "seconds": 363.1,
+          "which": "by_payable_comment"
+        },
+        "by_payable_comment": {
+          "factor": 0.3721,
+          "seconds": 363.1
+        },
+        "by_unit": {
+          "factor": 0.3,
+          "seconds": 292.8
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:43:00+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": 150.748,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 20,
+      "units_unread": 6,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.3317,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.2571,
+        "spent_so_far_usd": 0.2571,
+        "spent_this_segment_usd": 0.2571
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:43:27+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 1277.6,
+      "headroom_seconds": 735.9,
+      "kind": "full_pass",
+      "legs_read": [
+        "A"
+      ],
+      "measured_seconds": 992.558,
+      "measured_seconds_per_unit": 45.116,
+      "payable_comments_read": 130,
+      "payable_comments_unread": 47,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 1636.5,
+      "projections": {
+        "binding": {
+          "factor": 0.3615,
+          "seconds": 358.8,
+          "which": "by_payable_comment"
+        },
+        "by_payable_comment": {
+          "factor": 0.3615,
+          "seconds": 358.8
+        },
+        "by_unit": {
+          "factor": 0.1818,
+          "seconds": 180.5
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:43:27+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": 137.644,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 22,
+      "units_unread": 4,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.3364,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.2626,
+        "spent_so_far_usd": 0.2626,
+        "spent_this_segment_usd": 0.2626
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:44:21+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 1331.1,
+      "headroom_seconds": 709.1,
+      "kind": "full_pass",
+      "legs_read": [
+        "A"
+      ],
+      "measured_seconds": 1035.36,
+      "measured_seconds_per_unit": 45.016,
+      "payable_comments_read": 134,
+      "payable_comments_unread": 43,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 1663.4,
+      "projections": {
+        "binding": {
+          "factor": 0.3209,
+          "seconds": 332.2,
+          "which": "by_payable_comment"
+        },
+        "by_payable_comment": {
+          "factor": 0.3209,
+          "seconds": 332.2
+        },
+        "by_unit": {
+          "factor": 0.1304,
+          "seconds": 135.0
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:44:20+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": 141.089,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 23,
+      "units_unread": 3,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.3419,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.2736,
+        "spent_so_far_usd": 0.2736,
+        "spent_this_segment_usd": 0.2736
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:45:14+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 1384.5,
+      "headroom_seconds": 790.0,
+      "kind": "full_pass",
+      "legs_read": [
+        "A",
+        "B"
+      ],
+      "measured_seconds": 1099.341,
+      "measured_seconds_per_unit": 45.806,
+      "payable_comments_read": 150,
+      "payable_comments_unread": 27,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 1582.4,
+      "projections": {
+        "binding": {
+          "factor": 0.18,
+          "seconds": 197.9,
+          "which": "by_payable_comment"
+        },
+        "by_payable_comment": {
+          "factor": 0.18,
+          "seconds": 197.9
+        },
+        "by_unit": {
+          "factor": 0.0833,
+          "seconds": 91.6
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:45:14+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": 228.678,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 24,
+      "units_unread": 2,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.3253,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.2846,
+        "spent_so_far_usd": 0.2846,
+        "spent_this_segment_usd": 0.2846
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:46:07+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 1437.9,
+      "headroom_seconds": 857.4,
+      "kind": "full_pass",
+      "legs_read": [
+        "A",
+        "B"
+      ],
+      "measured_seconds": 1163.091,
+      "measured_seconds_per_unit": 46.524,
+      "payable_comments_read": 166,
+      "payable_comments_unread": 11,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 1515.0,
+      "projections": {
+        "binding": {
+          "factor": 0.0663,
+          "seconds": 77.1,
+          "which": "by_payable_comment"
+        },
+        "by_payable_comment": {
+          "factor": 0.0663,
+          "seconds": 77.1
+        },
+        "by_unit": {
+          "factor": 0.04,
+          "seconds": 46.5
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:46:07+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": 564.103,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 25,
+      "units_unread": 1,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.3114,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.2956,
+        "spent_so_far_usd": 0.2956,
+        "spent_this_segment_usd": 0.2956
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-17T16:47:01+00:00",
+      "billed_seconds_closed_segments": 0,
+      "cap_left_for_this_segment_usd": 0.5,
+      "cap_usd_all_in": 0.5,
+      "elapsed_since_create_seconds": 1491.7,
+      "headroom_seconds": 880.7,
+      "kind": "full_pass",
+      "legs_read": [
+        "A",
+        "B"
+      ],
+      "measured_seconds": 1210.445,
+      "measured_seconds_per_unit": 46.556,
+      "payable_comments_read": 177,
+      "payable_comments_unread": 0,
+      "pod_id": "r7702vbsrxhz0j",
+      "projected_total_seconds": 1491.7,
+      "projections": {
+        "binding": {
+          "factor": 0.0,
+          "seconds": 0.0,
+          "which": "by_unit"
+        },
+        "by_payable_comment": {
+          "factor": 0.0,
+          "seconds": 0.0
+        },
+        "by_unit": {
+          "factor": 0.0,
+          "seconds": 0.0
+        }
+      },
+      "read_from": {
+        "copied_back_at": "2026-08-17T16:47:01+00:00",
+        "exists": true,
+        "path": "results/reader_v5b_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "seconds_per_unit_that_still_fits": Infinity,
+      "segment": 1,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0,
+      "the_verdict_re_derives_from_here": "`measured_seconds_per_unit` ≤ `seconds_per_unit_that_still_fits` IS the verdict. The dollars below are the same statement rounded, and at the margin both sides of it print the same figure",
+      "units_read": 26,
+      "units_unread": 0,
+      "usable_seconds": 2372.4,
+      "usable_seconds_this_segment": 2372.4,
+      "usd": {
+        "cap_left_for_this_segment_usd": 0.5,
+        "cap_usd_all_in": 0.5,
+        "projected_total_usd": 0.3066,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.3066,
+        "spent_so_far_usd": 0.3066,
+        "spent_this_segment_usd": 0.3066
+      },
+      "verdict": "GO"
+    }
+  ],
+  "gold": {
+    "record": "results/reader_gold_w1_r2.json",
+    "revision": "r2",
+    "sha256": "716ff4174bdafa5957caa4d038a11241b6eb299df4035a5f0e983217ec2a46d9"
+  },
+  "leg_b_mechanical": {
+    "cannot_touch_leg_a": "ONE thread, bought to prove the CHUNKING MECHANISM and nothing else. It carries no semantic gold, it is not in the reference, and no bar of leg A can be moved by it — its own bars are MECHANICAL and are listed apart",
+    "chunks_answered": [
+      16,
+      16,
+      11
+    ],
+    "chunks_registered": [
+      16,
+      16,
+      11
+    ],
+    "m1_every_payable_id_exactly_once": {
+      "absent": [],
+      "covered": 43,
+      "duplicated": [],
+      "extra": [],
+      "in_both_lists": [],
+      "in_both_lists_gates_nothing": "the prompt's «at most one of per_comment and noise» broken, not a chunking defect. reader-v4's baseline on unchunked threads is 3 of 111",
+      "merge_error": null,
+      "passed": true,
+      "requested": 43
+    },
+    "m2_every_chunk_finished": {
+      "balanced": {
+        "@klopotenkofood:6040#1of3": true,
+        "@klopotenkofood:6040#2of3": true,
+        "@klopotenkofood:6040#3of3": true
+      },
+      "finish_reason": {
+        "@klopotenkofood:6040#1of3": "stop",
+        "@klopotenkofood:6040#2of3": "stop",
+        "@klopotenkofood:6040#3of3": "stop"
+      },
+      "passed": true
+    },
+    "m3_every_chunk_parses": {
+      "passed": true,
+      "refusals": {}
+    },
+    "m4_the_merge_has_no_duplicate_signal": {
+      "dedupe_key": [
+        "signal_type",
+        "subject_type",
+        "subject_id",
+        "aspect",
+        "stance"
+      ],
+      "distinct_keys": 0,
+      "passed": true,
+      "signals": 0
+    },
+    "merge_error": null,
+    "thread": "@klopotenkofood:6040"
+  },
+  "non_gating": {
+    "card": null,
+    "completion_tokens": 22488,
+    "generation_seconds": 1210.445,
+    "leg_a_seconds_per_thread": 45.016,
+    "v4_seconds_per_thread": 39.461
+  },
+  "outcome": "GO",
+  "output_ceiling": {
+    "completion_tokens_over_parsed_threads": 16236,
+    "finish_reason_length": 0,
+    "finish_reason_per_thread": {
+      "@VARUS_channel:10348": "stop",
+      "@VARUS_channel:10360": "stop",
+      "@VARUS_channel:10366": "stop",
+      "@VARUS_channel:10451": "stop",
+      "@VARUS_channel:10465": "stop",
+      "@VARUS_channel:10471": "stop",
+      "@VARUS_channel:10529": "stop",
+      "@VARUS_channel:10593": "stop",
+      "@VARUS_channel:10603": "stop",
+      "@VARUS_channel:10613": "stop",
+      "@mandziak:3676": "stop",
+      "@mandziak:3684": "stop",
+      "@mandziak:3689": "stop",
+      "@mandziak:3701": "stop",
+      "@mandziak:3703": "stop",
+      "@matusi_ukr:22242": "stop",
+      "@matusi_ukr:22272": "stop",
+      "@matusi_ukr:22303": "stop",
+      "@retsepty:7312": "stop",
+      "@retsepty:7325": "stop",
+      "@retsepty:7327": "stop",
+      "@sashafitnesslife:3939": "stop",
+      "@tarilka_malyuka:715": "stop"
+    },
+    "max_new_tokens": 4000,
+    "per_comment_rows_requested": 117,
+    "per_comment_rows_returned": 109,
+    "probe_b_finish_reason_length": 0,
+    "rows_returned_over_rows_requested": 0.932,
+    "tokens_per_requested_per_comment_row": 138.77,
+    "tokens_per_returned_per_comment_row": 148.95,
+    "window_reading": "the reader census cell's largest thread carries 125 payable comments (results/gate_census_w1_reader.json). At the requested-row rate above that is what a window pass would owe in output tokens for that one thread, against the ceiling on the line above — computed here, decided nowhere: no window pass is opened by this contract"
+  },
+  "phase": "reader-v5b",
+  "pod": null,
+  "refusals": {
+    "as_run": {
+      "malformed JSON": 1,
+      "missing field: entities": 2,
+      "missing field: evidence": 1
+    },
+    "did_not_return": [
+      "noise is not a list",
+      "signals is not a list",
+      "signals.aspect is not a string"
+    ],
+    "new_against_probe_b": [
+      "malformed JSON"
+    ],
+    "per_thread": {
+      "@VARUS_channel:10529": "missing field: entities",
+      "@VARUS_channel:10593": "missing field: evidence",
+      "@VARUS_channel:10613": "malformed JSON",
+      "@mandziak:3701": "missing field: entities"
+    },
+    "probe_b_as_run_under_v2": {
+      "missing field: entities": 2,
+      "missing field: evidence": 2,
+      "noise is not a list": 1,
+      "signals is not a list": 4,
+      "signals.aspect is not a string": 1
+    },
+    "probe_b_replies_under_todays_parser": {
+      "missing field: evidence": 2,
+      "signals.aspect is not a string": 1,
+      "two disagreeing objects: name": 1
+    },
+    "reading": "«probe_b_replies_under_todays_parser» is probe-b's own 23 replies re-read by the v3 parser — the measurement the registration published as 19 of 23, recomputed here so the comparison is between two runs of one instrument and not between a run and a sentence in a report. It moves no probe-b number: that run's verdict is results/reader_probe_b_verdict.json",
+    "refused": 4,
+    "still_refusing_after_the_container_tolerance": [
+      "missing field: evidence"
+    ]
+  },
+  "registration": {
+    "attempt": "ONE attempt, no retry. A kill or a STOP closes the question, and so does a completed run with a failed bar: what follows is a new registration after a sitting, never a second pass at this one",
+    "leg_a_threads": 23,
+    "leg_b_chunks": [
+      16,
+      16,
+      11
+    ],
+    "programme_stop_rule": "**If this run COMPLETES and bars 1 and 4 are not BOTH taken, the prompt-engineering line CLOSES.** The next step is an architecture sitting — two passes, labelled data, a different base — and never a v6 of the same kind. The operator's ruling of 2026-08-17, pre-registered here so it binds the reading of this run's own result and cannot be re-decided once the numbers are in",
+    "record": "results/prereg_reader_probe_v5b.json",
+    "sha256": "8122fce0eb25c223cff6a6983777e92fff69e3fd53db209b00b43fc4218a00c4",
+    "task": "reader_thread_gm4_v5"
+  },
+  "repairs": {
+    "fired": {
+      "entities: empty object -> empty list": 0,
+      "entities: map keyed by msg_id -> list": 0,
+      "noise: empty object -> empty list": 0,
+      "noise: map keyed by msg_id -> list": 0,
+      "per_comment: empty object -> empty list": 0,
+      "per_comment: map keyed by msg_id -> list": 0,
+      "signals: empty object -> empty list": 0,
+      "signals: map keyed by msg_id -> list": 0,
+      "two top-level objects merged": 0
+    },
+    "reading": "gates nothing. A and B are ONE instrument and no ablation between them was bought, so a reply that parses here may not be attributed to the parser or to the prompt",
+    "registered": [
+      "entities: empty object -> empty list",
+      "entities: map keyed by msg_id -> list",
+      "noise: empty object -> empty list",
+      "noise: map keyed by msg_id -> list",
+      "per_comment: empty object -> empty list",
+      "per_comment: map keyed by msg_id -> list",
+      "signals: empty object -> empty list",
+      "signals: map keyed by msg_id -> list",
+      "two top-level objects merged"
+    ],
+    "threads_read_straight": 19,
+    "threads_repaired": [],
+    "unregistered_names_that_fired": []
+  },
+  "replies": {
+    "parsed": 19,
+    "reading": "over LEG A only. Leg B's chunks are counted in `leg_b_mechanical` and never added to a leg-A count — they are a different population and a different question",
+    "refused": 4
+  },
+  "scorer": {
+    "borrowed": "bars 1/2/4 through scripts/score_reader_probe_b.py, bar 3 through scripts/write_reader_prereg_v3.py::bar_three_over_answers, the censuses and bar 5 through scripts/score_reader_v3.py, the collapse scope through scripts/score_reader_v4.py — every one of them CALLED, none of them edited",
+    "module": "src/market_pulse/scorer.py",
+    "registered_sha256": "dbb5406a502f813ba1b4940e0914310efd632386a8da60e0c002cc8964a97d4f",
+    "sha256": "dbb5406a502f813ba1b4940e0914310efd632386a8da60e0c002cc8964a97d4f",
+    "unchanged": true
+  },
+  "scoring_rules": {
+    "vocabulary_collapse": {
+      "applied_to": [
+        "1_flagships",
+        "4_per_comment_agreement"
+      ],
+      "is_the_bar": "the numbers in `bars` above are the COLLAPSED ones; the uncollapsed reading is under `beside_the_bars` and gates nothing",
+      "map": {
+        "категория_личное": "категория"
+      },
+      "symmetric": true
+    }
+  }
+}
