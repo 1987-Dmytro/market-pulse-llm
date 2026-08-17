@@ -454,6 +454,20 @@ Bar 4's arithmetic, named: of the seven non-agreed gold rows the contract listed
 is **absent**, together with `21626`, `21599` and `21629`: all four sit in `@VARUS_channel:10613`,
 the one thread whose reply refused with `malformed JSON`. Five of seven was the bar; two moved.
 
+**Which denominator the 0.4286 is over, because the next sitting will read this number.** The
+registered scorer counts the absent rows IN the denominator: `rate = agreed ÷ n = 6 ÷ 14`. Over the
+rows the reader actually answered it is `6 ÷ 10 = 0.600`. Both readings are below the bar's `≥ 0.80`,
+and both are **below reader-v4's**, which is the paired column that matters:
+
+| | n | agreed | disagreed | absent | rate | over answered rows |
+|---|---|---|---|---|---|---|
+| reader-v4 | 14 | 7 | 4 | 3 | **0.500** | 7 ÷ 11 = 0.636 |
+| reader-v5b | 14 | 6 | 4 | 4 | **0.4286** | 6 ÷ 10 = 0.600 |
+
+The new instrument did not move bar 4 in either reading. It is worth saying plainly that one of the
+four absences is transport and not judgement — `@VARUS_channel:10613`'s reply was cut at a brace that
+left invalid JSON — but the reading over answered rows removes that effect and still falls.
+
 The collapsed and uncollapsed readings agree exactly on both failing bars (2 and 2; 0.4286 and
 0.4286), so neither failure is an artefact of the vocabulary collapse.
 
