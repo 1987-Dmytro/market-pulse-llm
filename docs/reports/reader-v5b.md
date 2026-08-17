@@ -483,13 +483,23 @@ The collapsed and uncollapsed readings agree exactly on both failing bars (2 and
 | | |
 |---|---|
 | meter (create → delete) | 1 514.0 s × $0.000205556 = **$0.311211** |
-| guard, right now | **$0.2782 of $0.50**, and it says so as a **LOWER BOUND** — «billing since: UNAVAILABLE (no billing rows yet)» |
+| guard, after the delete | **$0.3126 of $0.50**, and it says so as a **LOWER BOUND** — «billing since: UNAVAILABLE (no billing rows yet)» |
 | step ledger | `results/spend_reader_v5b.json`, anchored $21.4577480282 at 16:21:29Z, not closed |
 
 Bar 5 is **OPEN, not passed**, and that is the scorer refusing to score a bar against an unsettled
-number rather than a failure. reader-v5's walk posted about two hours after its pod died; this one
-will settle the same way, and the close is the named debt this report carries. The meter's
-$0.311211 and the guard's $0.2782 lower bound bracket it, and both are under the cap.
+number rather than a failure. The close was attempted and the guard refused it, in its own words:
+
+```
+$ python3.11 scripts/runpod_guard.py --step reader-v5b --step-cap 0.50 --close --note "reader-v5b settled"
+REFUSED: the billing walk over reader-v5b's window answered «no billing rows yet», so there is no
+settled figure to close on.
+READER-V5B SPENT      $0.3126 of $0.50   (balance delta, a LOWER BOUND — it carries the always-on volume too)
+```
+
+The ledger is untouched: one session, the anchor. reader-v5's walk posted about two hours after its
+pod died and this one will settle the same way; **the close is the named debt this report carries.**
+The meter's $0.311211 and the guard's $0.3126 delta bracket it from both sides — the delta is larger
+because it also carries the network volume, which belongs to no step — and both are under the cap.
 
 ### 6.7 The counterfactual is no longer a forecast
 
@@ -620,7 +630,7 @@ READER-V5B SPENT      $0.2782 of $0.50  (anchor $21.46 from runpod_balance_at_re
 | **Dv478** | `scripts/score_reader_v5.py` points at v5's files by module constant, so bar 5 would have been scored against the reader-v5 ledger. Reached instead by a thin `scripts/score_reader_v5b.py` that CALLS it with its constants swapped (Dv451's idiom). | `[cause: reading-of-the-clause]` |
 | **Dv479** | The detached launch's ssh session never returned and printed no pid; the runner was alive and at `READY` on a second connection. A `pgrep -f`-based liveness watch could not have seen it die — the pattern matches its own remote shell — so the watch is by pid. | `[cause: the ssh channel stayed open]` |
 | **Dv480** | `score_reader_v5.py`'s `main()` printed every leg-B key whose name starts with «m», and `merge_error` does: `TypeError` on the first record that ever carried one, after the verdict was written. Fixed to print the entries carrying a `passed` field; test red against the previous commit; the verdict's sha does not move. | `[cause: a-consumer-list-is-not-a-meaning-list]` |
-| **Dv481** | Bar 5 is OPEN, not passed: the billing walk has not posted, so the step ledger has no closing entry. The meter says $0.311211 and the guard's lower bound says $0.2782, both under the cap. The close is this report's named debt. | `[cause: unreadable-now-versus-never]` |
+| **Dv481** | Bar 5 is OPEN, not passed: the billing walk has not posted, so the step ledger has no closing entry. The close was attempted and REFUSED by the guard in as many words. The meter says $0.311211 and the guard's lower bound says $0.3126, both under the cap; the close is this report's named debt. | `[cause: unreadable-now-versus-never]` |
 
 ## Process signals
 
