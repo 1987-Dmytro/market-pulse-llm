@@ -75,19 +75,24 @@ def opened(tmp_path, monkeypatch):
 
 
 def test_the_pack_is_the_registered_order_and_carries_the_v5b_registration():
+    """The registered order is v5's own — the descending-payable ruling was withdrawn before any pod,
+    on the gate table the registration publishes."""
     assert len(PACK["items"]) == 26
     assert "".join(one["leg"] for one in PACK["items"]) == "A" * 23 + "B" * 3
     assert [one["payable_comments"] for one in PACK["items"]] == [
-        15, 12, 12, 12, 10, 9, 9, 8, 7, 5, 5, 5, 4, 4, 3, 3, 2, 2, 2, 2, 2, 1, 0, 16, 16, 11
+        7, 2, 12, 4, 5, 5, 2, 2, 5, 10, 9, 12, 8, 3, 9, 12, 15, 2, 3, 2, 1, 0, 4, 16, 16, 11
     ]  # fmt: skip
     assert PACK["phase"] == "reader-v5b"
     assert PACK["registration"]["record"] == "results/prereg_reader_probe_v5b.json"
-    assert PACK["items"][0]["id"] == "@matusi_ukr:22272"
+    assert PACK["items"][0]["id"] == "@VARUS_channel:10348"
+    assert [one["id"] for one in PACK["items"]] == [
+        one["thread"] for one in RECORD["population"]["leg_a"]["enumeration"]["threads"]
+    ] + [one["id"] for one in RECORD["population"]["leg_b"]["items"]]
 
 
-def test_the_pack_is_v5s_pack_RE_ORDERED_and_not_a_second_population():
-    """The units and their rendering shas are a set equality against the frozen v5 record; only the
-    order moved. A pack that re-rendered anything would be a new population under an old digest."""
+def test_the_pack_is_v5s_pack_and_not_a_second_population():
+    """The units and their rendering shas against the frozen v5 record. A pack that re-rendered
+    anything would be a new population wearing an old digest."""
     pinned = {
         one["thread"]: one["rendering_sha256"]
         for one in V5_RECORD["population"]["leg_a"]["enumeration"]["threads"]
