@@ -225,84 +225,113 @@ def test_the_resume_protocol_normalizes_the_file_BEFORE_it_goes_back_up():
     assert "never re-asked" in protocol
 
 
-# --- difference 3: the order ----------------------------------------------------------------------
+# --- the order: v5's own, and the ruling that was withdrawn ---------------------------------------
 
 
-def test_the_order_is_descending_payable_with_a_TOTAL_key_and_the_tiebreak_registered():
-    """`-payable` alone is not a total order here: six counts are shared by two or three threads, so
-    two builds of one registration could produce two packs ([[an_order_key_that_is_not_total]])."""
-    threads = RECORD["population"]["leg_a"]["enumeration"]["threads"]
-    counts = [one["payable_comments"] for one in threads]
-    assert counts == sorted(counts, reverse=True)
-    assert counts == [15, 12, 12, 12, 10, 9, 9, 8, 7, 5, 5, 5, 4, 4, 3, 3, 2, 2, 2, 2, 2, 1, 0]
-    keys = [prereg.order_key(one) for one in threads]
-    assert keys == sorted(keys) and len(set(keys)) == len(keys)
-    assert RECORD["population"]["leg_a"]["order"] == [one["thread"] for one in threads]
-    assert "ties broken by the thread id ascending" in (RECORD["population"]["leg_a"]["order_rule"])
-    # the ties are named, so a reader can see the tiebreak had work to do
-    assert "[12, 9, 5, 4, 3, 2]" in RECORD["population"]["leg_a"]["order_rule"]
-
-
-def test_only_the_ORDER_moved_and_not_one_unit_of_the_population():
-    """The pairing three contracts have paid for: same 23 threads, same 23 rendering shas, same
-    digest, same leg B. A re-ordered enumeration that also re-rendered anything would be a new
-    population wearing the old digest."""
+def test_the_registered_order_is_v5s_enumeration_order_UNCHANGED():
+    """The third ruling of 17.08 was withdrawn the same day, so this is the population's own sequence
+    — not a set equality this time but the LIST, element for element."""
     old = V5["population"]["leg_a"]["enumeration"]
     new = RECORD["population"]["leg_a"]["enumeration"]
+    assert new == old
     assert new["digest"] == old["digest"]
-    assert {json.dumps(one, sort_keys=True) for one in new["threads"]} == {
-        json.dumps(one, sort_keys=True) for one in old["threads"]
-    }
-    assert {(one["thread"], one["rendering_sha256"]) for one in new["threads"]} == {
-        (one["thread"], one["rendering_sha256"]) for one in old["threads"]
-    }
+    assert RECORD["population"]["leg_a"]["order"] == [one["thread"] for one in new["threads"]]
+    assert [one["payable_comments"] for one in new["threads"]] == [
+        7, 2, 12, 4, 5, 5, 2, 2, 5, 10, 9, 12, 8, 3, 9, 12, 15, 2, 3, 2, 1, 0, 4
+    ]  # fmt: skip
+    assert "UNCHANGED" in RECORD["population"]["leg_a"]["order_rule"]
     assert RECORD["population"]["leg_b"] == V5["population"]["leg_b"]
     assert sum(one["payable_comments"] for one in new["threads"]) == 134
 
 
-def test_the_registered_order_makes_the_FIRST_full_pass_gate_STOP():
-    """The finding this registration was measured for, asserted so it cannot quietly disappear.
+def test_the_withdrawn_ruling_is_registered_with_its_dates_and_its_reason():
+    """A withdrawal whose evidence lives only in a report is a withdrawal the next contract can
+    re-decide ([[a_deviation_is_dated_not_just_true]])."""
+    gone = RECORD["population"]["leg_a"]["order_withdrawn"]
+    assert gone["ruled"].startswith("leg A by DESCENDING payable comments")
+    assert gone["ruled_on"] == "2026-08-17"
+    assert "before any pod of this attempt" in gone["withdrawn_on"]
+    assert "9% of margin at unit 2 (Dv471)" in gone["why_it_was_ruled"]
+    assert "105.3 s expected against 82.1 s" in gone["why_it_was_withdrawn"]
+    assert "the cap raise on its own" in gone["what_removed_the_knife_edge_instead"]
+    # the tiebreak it would have needed is registered too, with the ties that made it necessary
+    assert "[12, 9, 5, 4, 3, 2]" in gone["the_tiebreak_it_would_have_needed"]
+    keys = [
+        prereg.order_key(one)
+        for one in prereg.withdrawn_order(V5["population"]["leg_a"])["enumeration"]["threads"]
+    ]
+    assert keys == sorted(keys) and len(set(keys)) == len(keys)
+
+
+def test_the_registered_order_clears_every_one_of_the_26_gates():
+    gate = RECORD["money"]["arithmetic"]["full_pass_over_the_registered_order"]
+    assert gate["first_stop_after_units"] is None
+    assert all(one["verdict"] == "GO" for one in gate["rows"])
+    assert gate["rows"][0]["unit"] == "@VARUS_channel:10348"
+    assert gate["tightest_margin"]["after_units"] == 2
+    assert gate["tightest_margin"]["unit"] == "@VARUS_channel:10360"
+    assert gate["tightest_margin"]["seconds"] == pytest.approx(12.9, abs=0.1)
+    assert "not a threshold" in gate["reported_not_gating"]
+
+
+def test_the_WITHDRAWN_order_is_published_with_the_STOP_that_withdrew_it():
+    """The measurement the contract asked for, kept in the record it changed.
 
     Reading the payable-dense threads first removes v5's knife-edge at unit 2 and creates a worse one
     at unit 1: the by-UNIT leg extrapolates 25 unread units off whatever the first reply cost, and the
-    first unit is now the second-slowest thread v4 measured.
+    first unit would have been the second-slowest thread v4 measured.
     """
-    gate = RECORD["money"]["arithmetic"]["full_pass_over_the_registered_order"]
+    gate = RECORD["money"]["arithmetic"]["full_pass_over_the_withdrawn_order"]
     assert gate["first_stop_after_units"] == 1
     assert gate["rows"][0]["unit"] == "@matusi_ukr:22272"
     assert gate["rows"][0]["binding"] == "by_unit" and gate["rows"][0]["factor"] == 25.0
     assert gate["rows"][0]["verdict"] == "STOP"
     assert gate["tightest_margin"]["after_units"] == 1
-    assert gate["tightest_margin"]["seconds"] < 0
-    assert all(one["verdict"] == "GO" for one in gate["rows"][1:])
-    assert "not a threshold" in gate["reported_not_gating"]
+    assert gate["tightest_margin"]["seconds"] == pytest.approx(-23.2, abs=0.1)
+    assert "WITHDRAWN the same day on this table" in gate["why_it_is_here"]
+    # and the unit it stops on carries 15 payable comments against the registered order's 7
+    assert gate["the_first_gate_is_boot_free"]["first_unit_payable_comments"] == 15
 
 
-def test_the_first_gates_verdict_does_not_depend_on_the_boot_at_all():
-    """The loosest possible reading of the first gate charges NO provisioning and no model load, and
-    the first unit still does not fit — so the STOP is arithmetic and not a forecast about a boot."""
-    free = RECORD["money"]["arithmetic"]["full_pass_over_the_registered_order"][
+def test_the_first_gates_verdict_does_not_depend_on_the_boot_in_EITHER_order():
+    """The loosest possible reading of the first gate charges NO provisioning and no model load. The
+    registered order's first unit clears that ceiling and the withdrawn order's does not, so the STOP
+    was arithmetic and not a forecast about a boot."""
+    usable = RECORD["money"]["arithmetic"]["usable_seconds"]
+    kept = RECORD["money"]["arithmetic"]["full_pass_over_the_registered_order"][
         "the_first_gate_is_boot_free"
     ]
-    usable = RECORD["money"]["arithmetic"]["usable_seconds"]
-    assert free["ceiling_at_zero_boot_seconds"] == round(usable / 26, 1)
-    assert free["expected_seconds"] > free["ceiling_at_zero_boot_seconds"]
-    assert free["clears_at_zero_boot"] is False
-    assert free["first_unit_payable_comments"] == 15
+    gone = RECORD["money"]["arithmetic"]["full_pass_over_the_withdrawn_order"][
+        "the_first_gate_is_boot_free"
+    ]
+    for free in (kept, gone):
+        assert free["ceiling_at_zero_boot_seconds"] == round(usable / 26, 1) == 91.2
+    assert kept["expected_seconds"] < 91.2 and kept["clears_at_zero_boot"] is True
+    assert gone["expected_seconds"] > 91.2 and gone["clears_at_zero_boot"] is False
 
 
-def test_the_table_was_solved_with_the_LIVE_gates_own_function_at_v4s_measured_seconds():
+def test_both_tables_were_solved_with_the_LIVE_gates_own_function_at_v4s_measured_seconds():
     """A table computed by a second spelling of the inequality would prove nothing about the gate
-    that runs on the pod. The seconds are v4's own, off v4's own evidence file."""
-    gate = RECORD["money"]["arithmetic"]["full_pass_over_the_registered_order"]
-    assert "read_threads_reader_v5.projection" in gate["method"]
+    that runs on the pod, and two tables computed differently would not be comparable to each other.
+    The seconds are v4's own, off v4's own evidence file."""
     growth = RECORD["money"]["arithmetic"]["leg_a"]["growth_vs_v4"]
     measured = {row["thread"]: row["seconds"]["worker"] for row in v5writer.v4_rows()}
-    assert len(gate["rows"]) == 26
-    for row in gate["rows"][:23]:
-        assert row["expected_seconds"] == round(measured[row["unit"]] * growth, 1)
-    for row in gate["rows"][23:]:
-        assert row["unit"].startswith("@klopotenkofood:6040#")
+    for name in ("full_pass_over_the_registered_order", "full_pass_over_the_withdrawn_order"):
+        gate = RECORD["money"]["arithmetic"][name]
+        assert "read_threads_reader_v5.projection" in gate["method"], name
+        assert len(gate["rows"]) == 26, name
+        for row in gate["rows"][:23]:
+            assert row["expected_seconds"] == round(measured[row["unit"]] * growth, 1)
+        for row in gate["rows"][23:]:
+            assert row["unit"].startswith("@klopotenkofood:6040#")
+    # the two tables are the same 26 units in two orders, and nothing else differs
+    assert {
+        one["unit"]
+        for one in RECORD["money"]["arithmetic"]["full_pass_over_the_registered_order"]["rows"]
+    } == {
+        one["unit"]
+        for one in RECORD["money"]["arithmetic"]["full_pass_over_the_withdrawn_order"]["rows"]
+    }
 
 
 # --- the freeze ----------------------------------------------------------------------------------

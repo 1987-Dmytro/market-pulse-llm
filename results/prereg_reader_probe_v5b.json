@@ -637,6 +637,338 @@
       "boot_kill_usd_at_the_example": 0.148,
       "delete_margin_seconds": 60.0,
       "full_pass_over_the_registered_order": {
+        "first_stop_after_units": null,
+        "method": "`read_threads_reader_v5.projection` — the live gate's own function — over synthetic rows at v4's measured seconds x this registration's growth factor (1.127), leg B's chunks at 106.7 s each, starting from 214.1 s of create-elapsed (v4's own measured pre-generation 39.0 s + its measured boot 175.119 s)",
+        "reported_not_gating": "a FORECAST at v4's rate and not a threshold. The gate itself compares MEASURED seconds and is the law in `go_no_go.gates.3_the_full_pass`",
+        "rows": [
+          {
+            "after_units": 1,
+            "binding": "by_unit",
+            "expected_seconds": 41.3,
+            "factor": 25.0,
+            "headroom_seconds": 1085.2,
+            "mean_seconds_per_unit": 41.272,
+            "payable_comments": 7,
+            "seconds_per_unit_that_still_fits": 84.682,
+            "unit": "@VARUS_channel:10348",
+            "verdict": "GO"
+          },
+          {
+            "after_units": 2,
+            "binding": "by_payable_comment",
+            "expected_seconds": 43.9,
+            "factor": 18.6667,
+            "headroom_seconds": 482.8,
+            "mean_seconds_per_unit": 42.598,
+            "payable_comments": 2,
+            "seconds_per_unit_that_still_fits": 55.53,
+            "unit": "@VARUS_channel:10360",
+            "verdict": "GO"
+          },
+          {
+            "after_units": 3,
+            "binding": "by_unit",
+            "expected_seconds": 58.9,
+            "factor": 7.6667,
+            "headroom_seconds": 909.5,
+            "mean_seconds_per_unit": 48.033,
+            "payable_comments": 12,
+            "seconds_per_unit_that_still_fits": 87.575,
+            "unit": "@VARUS_channel:10366",
+            "verdict": "GO"
+          },
+          {
+            "after_units": 4,
+            "binding": "by_payable_comment",
+            "expected_seconds": 37.9,
+            "factor": 6.08,
+            "headroom_seconds": 870.0,
+            "mean_seconds_per_unit": 45.492,
+            "payable_comments": 4,
+            "seconds_per_unit_that_still_fits": 81.264,
+            "unit": "@VARUS_channel:10451",
+            "verdict": "GO"
+          },
+          {
+            "after_units": 5,
+            "binding": "by_payable_comment",
+            "expected_seconds": 43.6,
+            "factor": 4.9,
+            "headroom_seconds": 827.3,
+            "mean_seconds_per_unit": 45.118,
+            "payable_comments": 5,
+            "seconds_per_unit_that_still_fits": 78.887,
+            "unit": "@VARUS_channel:10465",
+            "verdict": "GO"
+          },
+          {
+            "after_units": 6,
+            "binding": "by_payable_comment",
+            "expected_seconds": 55.0,
+            "factor": 4.0571,
+            "headroom_seconds": 739.2,
+            "mean_seconds_per_unit": 46.77,
+            "payable_comments": 5,
+            "seconds_per_unit_that_still_fits": 77.135,
+            "unit": "@VARUS_channel:10471",
+            "verdict": "GO"
+          },
+          {
+            "after_units": 7,
+            "binding": "by_payable_comment",
+            "expected_seconds": 33.3,
+            "factor": 3.7838,
+            "headroom_seconds": 656.7,
+            "mean_seconds_per_unit": 44.844,
+            "payable_comments": 2,
+            "seconds_per_unit_that_still_fits": 69.636,
+            "unit": "@VARUS_channel:10529",
+            "verdict": "GO"
+          },
+          {
+            "after_units": 8,
+            "binding": "by_payable_comment",
+            "expected_seconds": 27.8,
+            "factor": 3.5385,
+            "headroom_seconds": 607.4,
+            "mean_seconds_per_unit": 42.716,
+            "payable_comments": 2,
+            "seconds_per_unit_that_still_fits": 64.173,
+            "unit": "@VARUS_channel:10593",
+            "verdict": "GO"
+          },
+          {
+            "after_units": 9,
+            "binding": "by_payable_comment",
+            "expected_seconds": 54.6,
+            "factor": 3.0227,
+            "headroom_seconds": 564.0,
+            "mean_seconds_per_unit": 44.037,
+            "payable_comments": 5,
+            "seconds_per_unit_that_still_fits": 64.768,
+            "unit": "@VARUS_channel:10603",
+            "verdict": "GO"
+          },
+          {
+            "after_units": 10,
+            "binding": "by_payable_comment",
+            "expected_seconds": 106.6,
+            "factor": 2.2778,
+            "headroom_seconds": 509.9,
+            "mean_seconds_per_unit": 50.29,
+            "payable_comments": 10,
+            "seconds_per_unit_that_still_fits": 72.677,
+            "unit": "@VARUS_channel:10613",
+            "verdict": "GO"
+          },
+          {
+            "after_units": 11,
+            "binding": "by_payable_comment",
+            "expected_seconds": 62.2,
+            "factor": 1.8095,
+            "headroom_seconds": 570.5,
+            "mean_seconds_per_unit": 51.376,
+            "payable_comments": 9,
+            "seconds_per_unit_that_still_fits": 80.04,
+            "unit": "@mandziak:3676",
+            "verdict": "GO"
+          },
+          {
+            "after_units": 12,
+            "binding": "by_payable_comment",
+            "expected_seconds": 49.4,
+            "factor": 1.36,
+            "headroom_seconds": 707.9,
+            "mean_seconds_per_unit": 51.216,
+            "payable_comments": 12,
+            "seconds_per_unit_that_still_fits": 94.591,
+            "unit": "@mandziak:3684",
+            "verdict": "GO"
+          },
+          {
+            "after_units": 13,
+            "binding": "by_payable_comment",
+            "expected_seconds": 45.9,
+            "factor": 1.1325,
+            "headroom_seconds": 749.9,
+            "mean_seconds_per_unit": 50.804,
+            "payable_comments": 8,
+            "seconds_per_unit_that_still_fits": 101.737,
+            "unit": "@mandziak:3689",
+            "verdict": "GO"
+          },
+          {
+            "after_units": 14,
+            "binding": "by_payable_comment",
+            "expected_seconds": 18.5,
+            "factor": 1.0581,
+            "headroom_seconds": 760.9,
+            "mean_seconds_per_unit": 48.498,
+            "payable_comments": 3,
+            "seconds_per_unit_that_still_fits": 99.862,
+            "unit": "@mandziak:3701",
+            "verdict": "GO"
+          },
+          {
+            "after_units": 15,
+            "binding": "by_payable_comment",
+            "expected_seconds": 62.9,
+            "factor": 0.8632,
+            "headroom_seconds": 776.1,
+            "mean_seconds_per_unit": 49.458,
+            "payable_comments": 9,
+            "seconds_per_unit_that_still_fits": 109.4,
+            "unit": "@mandziak:3703",
+            "verdict": "GO"
+          },
+          {
+            "after_units": 16,
+            "binding": "by_payable_comment",
+            "expected_seconds": 51.1,
+            "factor": 0.6542,
+            "headroom_seconds": 846.7,
+            "mean_seconds_per_unit": 49.558,
+            "payable_comments": 12,
+            "seconds_per_unit_that_still_fits": 130.444,
+            "unit": "@matusi_ukr:22242",
+            "verdict": "GO"
+          },
+          {
+            "after_units": 17,
+            "binding": "by_unit",
+            "expected_seconds": 105.3,
+            "factor": 0.5294,
+            "headroom_seconds": 784.6,
+            "mean_seconds_per_unit": 52.835,
+            "payable_comments": 15,
+            "seconds_per_unit_that_still_fits": 140.012,
+            "unit": "@matusi_ukr:22272",
+            "verdict": "GO"
+          },
+          {
+            "after_units": 18,
+            "binding": "by_unit",
+            "expected_seconds": 43.4,
+            "factor": 0.4444,
+            "headroom_seconds": 798.2,
+            "mean_seconds_per_unit": 52.311,
+            "payable_comments": 2,
+            "seconds_per_unit_that_still_fits": 152.09,
+            "unit": "@matusi_ukr:22303",
+            "verdict": "GO"
+          },
+          {
+            "after_units": 19,
+            "binding": "by_payable_comment",
+            "expected_seconds": 12.3,
+            "factor": 0.3937,
+            "headroom_seconds": 828.8,
+            "mean_seconds_per_unit": 50.207,
+            "payable_comments": 3,
+            "seconds_per_unit_that_still_fits": 161.006,
+            "unit": "@retsepty:7312",
+            "verdict": "GO"
+          },
+          {
+            "after_units": 20,
+            "binding": "by_payable_comment",
+            "expected_seconds": 11.1,
+            "factor": 0.3721,
+            "headroom_seconds": 834.2,
+            "mean_seconds_per_unit": 48.251,
+            "payable_comments": 2,
+            "seconds_per_unit_that_still_fits": 160.349,
+            "unit": "@retsepty:7325",
+            "verdict": "GO"
+          },
+          {
+            "after_units": 21,
+            "binding": "by_payable_comment",
+            "expected_seconds": 8.6,
+            "factor": 0.3615,
+            "headroom_seconds": 832.8,
+            "mean_seconds_per_unit": 46.361,
+            "payable_comments": 1,
+            "seconds_per_unit_that_still_fits": 156.045,
+            "unit": "@retsepty:7327",
+            "verdict": "GO"
+          },
+          {
+            "after_units": 22,
+            "binding": "by_payable_comment",
+            "expected_seconds": 7.1,
+            "factor": 0.3615,
+            "headroom_seconds": 823.1,
+            "mean_seconds_per_unit": 44.577,
+            "payable_comments": 0,
+            "seconds_per_unit_that_still_fits": 148.057,
+            "unit": "@sashafitnesslife:3939",
+            "verdict": "GO"
+          },
+          {
+            "after_units": 23,
+            "binding": "by_payable_comment",
+            "expected_seconds": 42.2,
+            "factor": 0.3209,
+            "headroom_seconds": 807.2,
+            "mean_seconds_per_unit": 44.472,
+            "payable_comments": 4,
+            "seconds_per_unit_that_still_fits": 153.843,
+            "unit": "@tarilka_malyuka:715",
+            "verdict": "GO"
+          },
+          {
+            "after_units": 24,
+            "binding": "by_payable_comment",
+            "expected_seconds": 106.7,
+            "factor": 0.18,
+            "headroom_seconds": 825.5,
+            "mean_seconds_per_unit": 47.064,
+            "payable_comments": 16,
+            "seconds_per_unit_that_still_fits": 238.145,
+            "unit": "@klopotenkofood:6040#1of3",
+            "verdict": "GO"
+          },
+          {
+            "after_units": 25,
+            "binding": "by_payable_comment",
+            "expected_seconds": 106.7,
+            "factor": 0.0663,
+            "headroom_seconds": 840.2,
+            "mean_seconds_per_unit": 49.448,
+            "payable_comments": 16,
+            "seconds_per_unit_that_still_fits": 556.625,
+            "unit": "@klopotenkofood:6040#2of3",
+            "verdict": "GO"
+          },
+          {
+            "after_units": 26,
+            "binding": "by_unit",
+            "expected_seconds": 106.7,
+            "factor": 0.0,
+            "headroom_seconds": 815.5,
+            "mean_seconds_per_unit": 51.648,
+            "payable_comments": 11,
+            "seconds_per_unit_that_still_fits": Infinity,
+            "unit": "@klopotenkofood:6040#3of3",
+            "verdict": "GO"
+          }
+        ],
+        "the_first_gate_is_boot_free": {
+          "ceiling_at_zero_boot_seconds": 91.2,
+          "clears_at_zero_boot": true,
+          "expected_seconds": 41.3,
+          "first_unit": "@VARUS_channel:10348",
+          "first_unit_payable_comments": 7,
+          "rule": "the first gate GOes only if `pre_generation + boot + 26 x m1 <= usable_seconds`, so the loosest possible reading of it charges NO boot at all and still bounds the first unit"
+        },
+        "tightest_margin": {
+          "after_units": 2,
+          "seconds": 12.93,
+          "unit": "@VARUS_channel:10360"
+        }
+      },
+      "full_pass_over_the_withdrawn_order": {
         "first_stop_after_units": 1,
         "method": "`read_threads_reader_v5.projection` — the live gate's own function — over synthetic rows at v4's measured seconds x this registration's growth factor (1.127), leg B's chunks at 106.7 s each, starting from 214.1 s of create-elapsed (v4's own measured pre-generation 39.0 s + its measured boot 175.119 s)",
         "reported_not_gating": "a FORECAST at v4's rate and not a threshold. The gate itself compares MEASURED seconds and is the law in `go_no_go.gates.3_the_full_pass`",
@@ -966,7 +1298,8 @@
           "after_units": 1,
           "seconds": -23.16,
           "unit": "@matusi_ukr:22272"
-        }
+        },
+        "why_it_is_here": "the order ruled on 2026-08-17 and WITHDRAWN the same day on this table, before any pod of this attempt existed. It is published because a withdrawal whose evidence lives only in a report is a withdrawal the next contract can re-decide ([[a_deviation_is_dated_not_just_true]])"
       },
       "leg_a": {
         "floor_rule": "23 x 39.461 s — v4's own measurement on exactly these threads, and the contract's registered FLOOR",
@@ -1074,7 +1407,7 @@
     "`finish_reason` per unit against the raised ceiling",
     "seconds per unit, leg A against v4's own 39.461 s a thread on the same threads",
     "the completeness census, three states per thread",
-    "the full-pass gate solved over the registered order at v4's measured rate",
+    "the full-pass gate solved over the registered order at v4's measured rate, and over the withdrawn one beside it",
     "the segment table: what one and two dead pods leave for the reading"
   ],
   "phase": "reader-v5b",
@@ -1088,34 +1421,42 @@
         "threads": [
           {
             "cases": [
-              "F5",
-              "pc:579379",
-              "pc:579457"
+              "E3",
+              "pc:20664"
             ],
             "in_the_reader_census_cell": true,
             "injected_under_probe_b": false,
             "msg_ids": [
-              579373,
-              579374,
-              579375,
-              579376,
-              579377,
-              579379,
-              579380,
-              579381,
-              579383,
-              579416,
-              579429,
-              579457,
-              580126,
-              580127,
-              580340
+              20594,
+              20595,
+              20656,
+              20664,
+              20665,
+              20672,
+              20673
             ],
-            "payable_comments": 15,
+            "payable_comments": 7,
             "payable_list_unchanged_by_the_cell": true,
-            "rendered_chars": 15673,
-            "rendering_sha256": "2609a00739cc792b8a245be508c5fb01e59e5be2b0ff8ac383f2d6ec6522f75c",
-            "thread": "@matusi_ukr:22272"
+            "rendered_chars": 10508,
+            "rendering_sha256": "da2cd7893519d24965ff6f42aa1eebc928144043b559d26333e5b86e0d573a87",
+            "thread": "@VARUS_channel:10348"
+          },
+          {
+            "cases": [
+              "E2",
+              "S3"
+            ],
+            "in_the_reader_census_cell": true,
+            "injected_under_probe_b": false,
+            "msg_ids": [
+              20737,
+              20741
+            ],
+            "payable_comments": 2,
+            "payable_list_unchanged_by_the_cell": true,
+            "rendered_chars": 10399,
+            "rendering_sha256": "d31588bcfee0fe2fd5b9c5300a5840b08b7651668e519ea409f29a1337acd2a9",
+            "thread": "@VARUS_channel:10360"
           },
           {
             "cases": [
@@ -1145,56 +1486,111 @@
           },
           {
             "cases": [
-              "E4a"
+              "warm-up"
             ],
             "in_the_reader_census_cell": true,
-            "injected_under_probe_b": true,
+            "injected_under_probe_b": false,
             "msg_ids": [
-              48004,
-              48009,
-              48011,
-              48016,
-              48018,
-              48020,
-              48036,
-              48040,
-              48041,
-              48047,
-              48064,
-              48099
+              21121,
+              21123,
+              21125,
+              21127
             ],
-            "payable_comments": 12,
+            "payable_comments": 4,
             "payable_list_unchanged_by_the_cell": true,
-            "rendered_chars": 11199,
-            "rendering_sha256": "ef8b445c51b0aaea33eb33dc2cf548e25de6def1f5cb18b9ebbc707557be9688",
-            "thread": "@mandziak:3684"
+            "rendered_chars": 10413,
+            "rendering_sha256": "21907ea9d78942991c05c78aeff53292f69615612940d20e45913e1f10216f7d",
+            "thread": "@VARUS_channel:10451"
           },
           {
             "cases": [
-              "E1",
-              "pc:578951"
+              "S4"
             ],
             "in_the_reader_census_cell": true,
-            "injected_under_probe_b": true,
+            "injected_under_probe_b": false,
             "msg_ids": [
-              578931,
-              578932,
-              578939,
-              578940,
-              578942,
-              578944,
-              578947,
-              578948,
-              578951,
-              578952,
-              579007,
-              579042
+              21195,
+              21198,
+              21199,
+              21209,
+              21211
             ],
-            "payable_comments": 12,
+            "payable_comments": 5,
             "payable_list_unchanged_by_the_cell": true,
-            "rendered_chars": 11797,
-            "rendering_sha256": "e335e1d74559e897623f3efe9261bf0ee0c12e9bfa0efaa3bf881b608ed550ee",
-            "thread": "@matusi_ukr:22242"
+            "rendered_chars": 10546,
+            "rendering_sha256": "70946647264baaa7f25e852017d7edaccb7ca14564529ec5f5afc30444f4af54",
+            "thread": "@VARUS_channel:10465"
+          },
+          {
+            "cases": [
+              "S5"
+            ],
+            "in_the_reader_census_cell": true,
+            "injected_under_probe_b": false,
+            "msg_ids": [
+              21253,
+              21256,
+              21258,
+              21262,
+              21266
+            ],
+            "payable_comments": 5,
+            "payable_list_unchanged_by_the_cell": true,
+            "rendered_chars": 10769,
+            "rendering_sha256": "9ecdf7d2f88c2a9add67b0366cf434322d28a928c175e77033f5a7445a2de532",
+            "thread": "@VARUS_channel:10471"
+          },
+          {
+            "cases": [
+              "N1",
+              "S1"
+            ],
+            "in_the_reader_census_cell": true,
+            "injected_under_probe_b": false,
+            "msg_ids": [
+              21420,
+              21421
+            ],
+            "payable_comments": 2,
+            "payable_list_unchanged_by_the_cell": true,
+            "rendered_chars": 10362,
+            "rendering_sha256": "e1c3da5015542a9760c31b9e15a7e85c32bfaa97b990e568d9b0cd3f1dcbd1b4",
+            "thread": "@VARUS_channel:10529"
+          },
+          {
+            "cases": [
+              "S2"
+            ],
+            "in_the_reader_census_cell": true,
+            "injected_under_probe_b": false,
+            "msg_ids": [
+              21507,
+              21509
+            ],
+            "payable_comments": 2,
+            "payable_list_unchanged_by_the_cell": true,
+            "rendered_chars": 10607,
+            "rendering_sha256": "94610f2596d143baae7209aa15372c81a19fd2e5ae173e7ab49e3f64a2392746",
+            "thread": "@VARUS_channel:10593"
+          },
+          {
+            "cases": [
+              "S6"
+            ],
+            "in_the_reader_census_cell": true,
+            "injected_under_probe_b": false,
+            "msg_ids": [
+              21566,
+              21571,
+              21575,
+              21576,
+              21578
+            ],
+            "payable_comments": 5,
+            "payable_list_unchanged_by_the_cell": true,
+            "rendered_chars": 10748,
+            "rendering_sha256": "12bcf92665017802e2f54ad4d5aacd383e061ff220ab54e2718ccb5987415571",
+            "thread": "@VARUS_channel:10603"
           },
           {
             "cases": [
@@ -1251,28 +1647,29 @@
           },
           {
             "cases": [
-              "F4",
-              "pc:48276",
-              "pc:48283"
+              "E4a"
             ],
             "in_the_reader_census_cell": true,
-            "injected_under_probe_b": false,
+            "injected_under_probe_b": true,
             "msg_ids": [
-              48174,
-              48176,
-              48177,
-              48178,
-              48181,
-              48231,
-              48276,
-              48283,
-              49098
+              48004,
+              48009,
+              48011,
+              48016,
+              48018,
+              48020,
+              48036,
+              48040,
+              48041,
+              48047,
+              48064,
+              48099
             ],
-            "payable_comments": 9,
+            "payable_comments": 12,
             "payable_list_unchanged_by_the_cell": true,
-            "rendered_chars": 12530,
-            "rendering_sha256": "7872acdf61dd1fb37aeaea12cc869154c779ee63c1f626b46e24ae81a6288825",
-            "thread": "@mandziak:3703"
+            "rendered_chars": 11199,
+            "rendering_sha256": "ef8b445c51b0aaea33eb33dc2cf548e25de6def1f5cb18b9ebbc707557be9688",
+            "thread": "@mandziak:3684"
           },
           {
             "cases": [
@@ -1298,121 +1695,6 @@
           },
           {
             "cases": [
-              "E3",
-              "pc:20664"
-            ],
-            "in_the_reader_census_cell": true,
-            "injected_under_probe_b": false,
-            "msg_ids": [
-              20594,
-              20595,
-              20656,
-              20664,
-              20665,
-              20672,
-              20673
-            ],
-            "payable_comments": 7,
-            "payable_list_unchanged_by_the_cell": true,
-            "rendered_chars": 10508,
-            "rendering_sha256": "da2cd7893519d24965ff6f42aa1eebc928144043b559d26333e5b86e0d573a87",
-            "thread": "@VARUS_channel:10348"
-          },
-          {
-            "cases": [
-              "S4"
-            ],
-            "in_the_reader_census_cell": true,
-            "injected_under_probe_b": false,
-            "msg_ids": [
-              21195,
-              21198,
-              21199,
-              21209,
-              21211
-            ],
-            "payable_comments": 5,
-            "payable_list_unchanged_by_the_cell": true,
-            "rendered_chars": 10546,
-            "rendering_sha256": "70946647264baaa7f25e852017d7edaccb7ca14564529ec5f5afc30444f4af54",
-            "thread": "@VARUS_channel:10465"
-          },
-          {
-            "cases": [
-              "S5"
-            ],
-            "in_the_reader_census_cell": true,
-            "injected_under_probe_b": false,
-            "msg_ids": [
-              21253,
-              21256,
-              21258,
-              21262,
-              21266
-            ],
-            "payable_comments": 5,
-            "payable_list_unchanged_by_the_cell": true,
-            "rendered_chars": 10769,
-            "rendering_sha256": "9ecdf7d2f88c2a9add67b0366cf434322d28a928c175e77033f5a7445a2de532",
-            "thread": "@VARUS_channel:10471"
-          },
-          {
-            "cases": [
-              "S6"
-            ],
-            "in_the_reader_census_cell": true,
-            "injected_under_probe_b": false,
-            "msg_ids": [
-              21566,
-              21571,
-              21575,
-              21576,
-              21578
-            ],
-            "payable_comments": 5,
-            "payable_list_unchanged_by_the_cell": true,
-            "rendered_chars": 10748,
-            "rendering_sha256": "12bcf92665017802e2f54ad4d5aacd383e061ff220ab54e2718ccb5987415571",
-            "thread": "@VARUS_channel:10603"
-          },
-          {
-            "cases": [
-              "warm-up"
-            ],
-            "in_the_reader_census_cell": true,
-            "injected_under_probe_b": false,
-            "msg_ids": [
-              21121,
-              21123,
-              21125,
-              21127
-            ],
-            "payable_comments": 4,
-            "payable_list_unchanged_by_the_cell": true,
-            "rendered_chars": 10413,
-            "rendering_sha256": "21907ea9d78942991c05c78aeff53292f69615612940d20e45913e1f10216f7d",
-            "thread": "@VARUS_channel:10451"
-          },
-          {
-            "cases": [
-              "warm-up"
-            ],
-            "in_the_reader_census_cell": true,
-            "injected_under_probe_b": false,
-            "msg_ids": [
-              45,
-              47,
-              48,
-              49
-            ],
-            "payable_comments": 4,
-            "payable_list_unchanged_by_the_cell": true,
-            "rendered_chars": 12015,
-            "rendering_sha256": "de3def319800d199ca6660a580fe192b63c1af73e51484448383ec6608759087",
-            "thread": "@tarilka_malyuka:715"
-          },
-          {
-            "cases": [
               "warm-up"
             ],
             "in_the_reader_census_cell": true,
@@ -1430,70 +1712,86 @@
           },
           {
             "cases": [
-              "N4"
+              "F4",
+              "pc:48276",
+              "pc:48283"
             ],
             "in_the_reader_census_cell": true,
             "injected_under_probe_b": false,
             "msg_ids": [
-              49531,
-              49541,
-              49560
+              48174,
+              48176,
+              48177,
+              48178,
+              48181,
+              48231,
+              48276,
+              48283,
+              49098
             ],
-            "payable_comments": 3,
+            "payable_comments": 9,
             "payable_list_unchanged_by_the_cell": true,
-            "rendered_chars": 10853,
-            "rendering_sha256": "6190a92d05275da11bc20eaee9b93cc2f995f161d3636294d5b01f87e8f2e882",
-            "thread": "@retsepty:7312"
+            "rendered_chars": 12530,
+            "rendering_sha256": "7872acdf61dd1fb37aeaea12cc869154c779ee63c1f626b46e24ae81a6288825",
+            "thread": "@mandziak:3703"
           },
           {
             "cases": [
-              "E2",
-              "S3"
+              "E1",
+              "pc:578951"
             ],
             "in_the_reader_census_cell": true,
-            "injected_under_probe_b": false,
+            "injected_under_probe_b": true,
             "msg_ids": [
-              20737,
-              20741
+              578931,
+              578932,
+              578939,
+              578940,
+              578942,
+              578944,
+              578947,
+              578948,
+              578951,
+              578952,
+              579007,
+              579042
             ],
-            "payable_comments": 2,
+            "payable_comments": 12,
             "payable_list_unchanged_by_the_cell": true,
-            "rendered_chars": 10399,
-            "rendering_sha256": "d31588bcfee0fe2fd5b9c5300a5840b08b7651668e519ea409f29a1337acd2a9",
-            "thread": "@VARUS_channel:10360"
+            "rendered_chars": 11797,
+            "rendering_sha256": "e335e1d74559e897623f3efe9261bf0ee0c12e9bfa0efaa3bf881b608ed550ee",
+            "thread": "@matusi_ukr:22242"
           },
           {
             "cases": [
-              "N1",
-              "S1"
+              "F5",
+              "pc:579379",
+              "pc:579457"
             ],
             "in_the_reader_census_cell": true,
             "injected_under_probe_b": false,
             "msg_ids": [
-              21420,
-              21421
+              579373,
+              579374,
+              579375,
+              579376,
+              579377,
+              579379,
+              579380,
+              579381,
+              579383,
+              579416,
+              579429,
+              579457,
+              580126,
+              580127,
+              580340
             ],
-            "payable_comments": 2,
+            "payable_comments": 15,
             "payable_list_unchanged_by_the_cell": true,
-            "rendered_chars": 10362,
-            "rendering_sha256": "e1c3da5015542a9760c31b9e15a7e85c32bfaa97b990e568d9b0cd3f1dcbd1b4",
-            "thread": "@VARUS_channel:10529"
-          },
-          {
-            "cases": [
-              "S2"
-            ],
-            "in_the_reader_census_cell": true,
-            "injected_under_probe_b": false,
-            "msg_ids": [
-              21507,
-              21509
-            ],
-            "payable_comments": 2,
-            "payable_list_unchanged_by_the_cell": true,
-            "rendered_chars": 10607,
-            "rendering_sha256": "94610f2596d143baae7209aa15372c81a19fd2e5ae173e7ab49e3f64a2392746",
-            "thread": "@VARUS_channel:10593"
+            "rendered_chars": 15673,
+            "rendering_sha256": "2609a00739cc792b8a245be508c5fb01e59e5be2b0ff8ac383f2d6ec6522f75c",
+            "thread": "@matusi_ukr:22272"
           },
           {
             "cases": [
@@ -1512,6 +1810,23 @@
             "rendered_chars": 11400,
             "rendering_sha256": "a5d207c0b0e208faacd427c129864ccf25ee6af1784bfa479a7bb300404463c0",
             "thread": "@matusi_ukr:22303"
+          },
+          {
+            "cases": [
+              "N4"
+            ],
+            "in_the_reader_census_cell": true,
+            "injected_under_probe_b": false,
+            "msg_ids": [
+              49531,
+              49541,
+              49560
+            ],
+            "payable_comments": 3,
+            "payable_list_unchanged_by_the_cell": true,
+            "rendered_chars": 10853,
+            "rendering_sha256": "6190a92d05275da11bc20eaee9b93cc2f995f161d3636294d5b01f87e8f2e882",
+            "thread": "@retsepty:7312"
           },
           {
             "cases": [
@@ -1556,37 +1871,63 @@
             "rendered_chars": 10051,
             "rendering_sha256": "3b85294c1678ce59ed7b89a2a1220fc928fa0bf6393ac3b34a9ec5c967d252a1",
             "thread": "@sashafitnesslife:3939"
+          },
+          {
+            "cases": [
+              "warm-up"
+            ],
+            "in_the_reader_census_cell": true,
+            "injected_under_probe_b": false,
+            "msg_ids": [
+              45,
+              47,
+              48,
+              49
+            ],
+            "payable_comments": 4,
+            "payable_list_unchanged_by_the_cell": true,
+            "rendered_chars": 12015,
+            "rendering_sha256": "de3def319800d199ca6660a580fe192b63c1af73e51484448383ec6608759087",
+            "thread": "@tarilka_malyuka:715"
           }
         ]
       },
       "injected_threads": 4,
       "order": [
-        "@matusi_ukr:22272",
-        "@VARUS_channel:10366",
-        "@mandziak:3684",
-        "@matusi_ukr:22242",
-        "@VARUS_channel:10613",
-        "@mandziak:3676",
-        "@mandziak:3703",
-        "@mandziak:3689",
         "@VARUS_channel:10348",
+        "@VARUS_channel:10360",
+        "@VARUS_channel:10366",
+        "@VARUS_channel:10451",
         "@VARUS_channel:10465",
         "@VARUS_channel:10471",
-        "@VARUS_channel:10603",
-        "@VARUS_channel:10451",
-        "@tarilka_malyuka:715",
-        "@mandziak:3701",
-        "@retsepty:7312",
-        "@VARUS_channel:10360",
         "@VARUS_channel:10529",
         "@VARUS_channel:10593",
+        "@VARUS_channel:10603",
+        "@VARUS_channel:10613",
+        "@mandziak:3676",
+        "@mandziak:3684",
+        "@mandziak:3689",
+        "@mandziak:3701",
+        "@mandziak:3703",
+        "@matusi_ukr:22242",
+        "@matusi_ukr:22272",
         "@matusi_ukr:22303",
+        "@retsepty:7312",
         "@retsepty:7325",
         "@retsepty:7327",
-        "@sashafitnesslife:3939"
+        "@sashafitnesslife:3939",
+        "@tarilka_malyuka:715"
       ],
-      "order_reason": "v5's order was the enumeration's own, and its second unit carried 2 payable comments against a first with 7 — which made the projection's payable leg extrapolate 168 comments off 9 and left 9% of margin at unit 2 (Dv471). Reading the payable-dense threads first is the operator's answer to it",
-      "order_rule": "DESCENDING payable comments, ties broken by the thread id ascending — the operator's ruling of 2026-08-17 plus the tiebreak this producer registers. Payable counts [12, 9, 5, 4, 3, 2] are each shared by two or three threads, so the count alone is not a total order and two builds of one registration could produce two packs. The 23 threads, their 23 rendering shas and the population digest are UNCHANGED: only the order moves",
+      "order_rule": "v5's enumeration order, UNCHANGED — the order this population has been read in since probe-b. The 23 threads, their 23 rendering shas, the population digest and their SEQUENCE are all v5's own",
+      "order_withdrawn": {
+        "ruled": "leg A by DESCENDING payable comments, ties by thread id ascending",
+        "ruled_on": "2026-08-17",
+        "the_tiebreak_it_would_have_needed": "`(-payable_comments, thread_id)`. Payable counts [12, 9, 5, 4, 3, 2] are each shared by two or three threads, so «descending payable» is not a total order on this population and two builds of one registration could have produced two packs ([[an_order_key_that_is_not_total]])",
+        "what_removed_the_knife_edge_instead": "the cap raise on its own. At $0.50 and this order, unit 2's margin is +12.9 s a unit — 23% where $0.45 left 9% — and no unit of the 26 fails",
+        "why_it_was_ruled": "v5's second unit carried 2 payable comments against a first with 7, so the projection's payable leg extrapolated 168 comments off 9 and left 9% of margin at unit 2 (Dv471). Reading the payable-dense threads first was the answer to that leg",
+        "why_it_was_withdrawn": "the gate has TWO legs and they pull opposite ways. The by-UNIT leg extrapolates the 25 unread units off whatever the FIRST reply cost, and descending payable puts the second-slowest thread v4 measured in that position: 105.3 s expected against 82.1 s allowed, a STOP after one unit. See `money.arithmetic.full_pass_over_the_withdrawn_order`",
+        "withdrawn_on": "2026-08-17, on the measurement below, before any pod of this attempt"
+      },
       "payable_comments": 134,
       "record": "scripts/probe_b_population.py",
       "renderings_rule": "the per-thread request shas are RE-DERIVED under `reader_thread_gm4_v5` and are deliberately different from v4's: the same thread shown a different instrument is a different request. The population DIGEST is unchanged and copied, because it is over the threads and their payable ids and carries no rendering — that is what keeps this leg paired to probe-b and to reader-v4",
@@ -1780,7 +2121,7 @@
       "scripts/write_reader_prereg_v5.py": "97b3edbe38e0f16f77fc8a74cfe26fad23007cc99d4cd8c9f6583b6fe958e314"
     },
     "script": "scripts/write_reader_prereg_v5b.py",
-    "sha256": "ba11f4bba17ca477c557f7596505304bb8d4e4ec897679557edea1e0fbe49a1d"
+    "sha256": "0dc4f8edfe23db7bd1dee20fe8e626c8c05e1081f0be6278b018e467f18c570c"
   },
   "programme_stop_rule": "**If this run COMPLETES and bars 1 and 4 are not BOTH taken, the prompt-engineering line CLOSES.** The next step is an architecture sitting — two passes, labelled data, a different base — and never a v6 of the same kind. The operator's ruling of 2026-08-17, pre-registered here so it binds the reading of this run's own result and cannot be re-decided once the numbers are in",
   "scoring_rules": {
@@ -1820,7 +2161,7 @@
     "what_it_changes": [
       "the cap: $0.45 -> $0.50, one attempt, up to 3 pod segments",
       "transport gate 0: `ssh info` connectable by 180 s or KILL and recreate",
-      "the pack order: leg A by descending payable comments, ties by thread id"
+      "nothing else. The third ruling of 2026-08-17 — leg A by descending payable — was WITHDRAWN the same day, before any pod, on the gate table this record publishes: see `population.leg_a.order_withdrawn`"
     ],
     "what_it_keeps": "EVERYTHING the reader is scored on, object-equal and checked by rebuilding v5's own record from v5's own producer: the v5 task and its four prompt shas, the parser, `market_pulse.reader_v5`, gold r2, the population digest and its 23 threads, leg B's thread and its three chunks, the 4 000-token output ceiling, the symmetric vocabulary collapse, N1's exclusion, the echo duty, bars 1-4 with their thresholds and leg B's four mechanical bars, the serving configuration, the scorer's bytes, the one-attempt class and the programme stop-rule"
   },

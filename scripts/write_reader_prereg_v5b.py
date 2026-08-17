@@ -95,34 +95,68 @@ def order_key(thread: dict) -> tuple[int, str]:
     return (-int(thread["payable_comments"]), str(thread["thread"]))
 
 
-def ruled_order(leg_a: dict) -> dict:
-    """Leg A's enumeration re-ordered, with nothing else about it touched.
+def withdrawn_order(leg_a: dict) -> dict:
+    """Leg A re-ordered the way the ruling of 2026-08-17 said, so its gate table can be published.
 
-    The population digest is computed from the STORE and not from this list, so re-ordering cannot
-    move it — which is the whole reason the order can be registered without touching the pairing.
+    Nothing is built from this: it exists to be MEASURED. The population digest is computed from the
+    STORE and not from this list, so a re-ordering cannot move it — which is what made the order a
+    thing the registration could change without touching the pairing.
     """
-    threads = sorted(leg_a["enumeration"]["threads"], key=order_key)
+    return leg_a | {
+        "enumeration": leg_a["enumeration"]
+        | {"threads": sorted(leg_a["enumeration"]["threads"], key=order_key)}
+    }
+
+
+def registered_order(leg_a: dict) -> dict:
+    """v5's enumeration order, UNCHANGED — and the ruling that was withdrawn, with its number.
+
+    The order ruling of 2026-08-17 was «leg A by descending payable comments». This producer solved
+    the registered full-pass gate backwards over it before anything was created and it STOPs after the
+    FIRST unit; the operator withdrew the order ruling the same day, on that measurement, with the cap
+    and gate 0 standing. Both tables are published in `money.arithmetic` — the withdrawal's evidence
+    belongs in the record that the withdrawal changed, not only in a report.
+    """
+    threads = leg_a["enumeration"]["threads"]
     counts = [one["payable_comments"] for one in threads]
     ties = sorted(
         {one["payable_comments"] for one in threads if counts.count(one["payable_comments"]) > 1},
         reverse=True,
     )
     return leg_a | {
-        "enumeration": leg_a["enumeration"] | {"threads": threads},
         "order": [one["thread"] for one in threads],
         "order_rule": (
-            "DESCENDING payable comments, ties broken by the thread id ascending — the operator's"
-            f" ruling of 2026-08-17 plus the tiebreak this producer registers. Payable counts {ties}"
-            " are each shared by two or three threads, so the count alone is not a total order and"
-            " two builds of one registration could produce two packs. The 23 threads, their 23"
-            " rendering shas and the population digest are UNCHANGED: only the order moves"
+            "v5's enumeration order, UNCHANGED — the order this population has been read in since"
+            " probe-b. The 23 threads, their 23 rendering shas, the population digest and their"
+            " SEQUENCE are all v5's own"
         ),
-        "order_reason": (
-            "v5's order was the enumeration's own, and its second unit carried 2 payable comments"
-            " against a first with 7 — which made the projection's payable leg extrapolate 168"
-            " comments off 9 and left 9% of margin at unit 2 (Dv471). Reading the payable-dense"
-            " threads first is the operator's answer to it"
-        ),
+        "order_withdrawn": {
+            "ruled": "leg A by DESCENDING payable comments, ties by thread id ascending",
+            "ruled_on": "2026-08-17",
+            "withdrawn_on": "2026-08-17, on the measurement below, before any pod of this attempt",
+            "why_it_was_ruled": (
+                "v5's second unit carried 2 payable comments against a first with 7, so the"
+                " projection's payable leg extrapolated 168 comments off 9 and left 9% of margin at"
+                " unit 2 (Dv471). Reading the payable-dense threads first was the answer to that leg"
+            ),
+            "why_it_was_withdrawn": (
+                "the gate has TWO legs and they pull opposite ways. The by-UNIT leg extrapolates the"
+                " 25 unread units off whatever the FIRST reply cost, and descending payable puts the"
+                " second-slowest thread v4 measured in that position: 105.3 s expected against 82.1 s"
+                " allowed, a STOP after one unit. See"
+                " `money.arithmetic.full_pass_over_the_withdrawn_order`"
+            ),
+            "what_removed_the_knife_edge_instead": (
+                "the cap raise on its own. At $0.50 and this order, unit 2's margin is +12.9 s a unit"
+                " — 23% where $0.45 left 9% — and no unit of the 26 fails"
+            ),
+            "the_tiebreak_it_would_have_needed": (
+                f"`(-payable_comments, thread_id)`. Payable counts {ties} are each shared by two or"
+                " three threads, so «descending payable» is not a total order on this population and"
+                " two builds of one registration could have produced two packs"
+                " ([[an_order_key_that_is_not_total]])"
+            ),
+        },
     }
 
 
@@ -435,13 +469,25 @@ def build() -> dict:
             " the two runs would not be comparable. Stop and report."
         )
 
-    leg_a = ruled_order(frozen["population"]["leg_a"])
+    leg_a = registered_order(frozen["population"]["leg_a"])
     leg_b = frozen["population"]["leg_b"]
     block = money()
-    # the table is solved against the money block that is being registered, so it is built second and
-    # folded back in — the gate reads `usable_seconds` off the cap it will actually run under
+    # the tables are solved against the money block that is being registered, so they are built second
+    # and folded back in — the gate reads `usable_seconds` off the cap it will actually run under
+    priced = frozen | {"money": block}
     block["arithmetic"] = block["arithmetic"] | {
-        "full_pass_over_the_registered_order": gate_table(frozen | {"money": block}, leg_a, leg_b)
+        "full_pass_over_the_registered_order": gate_table(priced, leg_a, leg_b),
+        "full_pass_over_the_withdrawn_order": gate_table(
+            priced, withdrawn_order(frozen["population"]["leg_a"]), leg_b
+        )
+        | {
+            "why_it_is_here": (
+                "the order ruled on 2026-08-17 and WITHDRAWN the same day on this table, before any"
+                " pod of this attempt existed. It is published because a withdrawal whose evidence"
+                " lives only in a report is a withdrawal the next contract can re-decide"
+                " ([[a_deviation_is_dated_not_just_true]])"
+            )
+        },
     }
 
     return frozen | {
@@ -477,7 +523,9 @@ def build() -> dict:
                 f" {MAX_RECREATES + 1} pod segments",
                 f"transport gate 0: `ssh info` connectable by {SSH_DEADMAN_S:.0f} s or KILL and"
                 " recreate",
-                "the pack order: leg A by descending payable comments, ties by thread id",
+                "nothing else. The third ruling of 2026-08-17 — leg A by descending payable — was"
+                " WITHDRAWN the same day, before any pod, on the gate table this record publishes:"
+                " see `population.leg_a.order_withdrawn`",
             ],
             "what_it_keeps": (
                 "EVERYTHING the reader is scored on, object-equal and checked by rebuilding v5's own"
@@ -523,7 +571,8 @@ def build() -> dict:
         ],
         "non_gating": frozen["non_gating"]
         + [
-            "the full-pass gate solved over the registered order at v4's measured rate",
+            "the full-pass gate solved over the registered order at v4's measured rate, and over the"
+            " withdrawn one beside it",
             "the segment table: what one and two dead pods leave for the reading",
         ],
         "producer": {
@@ -600,6 +649,13 @@ def main(argv: list[str] | None = None) -> int:
             f" {row['binding']:18s} x{row['factor']:6.2f} · fits"
             f" {row['seconds_per_unit_that_still_fits']:7.1f} s · {row['verdict']}"
         )
+    gone = sums["full_pass_over_the_withdrawn_order"]
+    print(
+        f"  the WITHDRAWN order (descending payable): first STOP after"
+        f" {gone['first_stop_after_units']} unit(s) · tightest margin"
+        f" {gone['tightest_margin']['seconds']} s/unit at unit"
+        f" {gone['tightest_margin']['after_units']} ({gone['tightest_margin']['unit']})"
+    )
     print(f"  gates: {sorted(record['go_no_go']['gates'])}")
     print(f"  bar 5 cap: ${record['bars']['5_time_and_cost']['thresholds']['cap_usd_all_in']:.2f}")
     return 0
