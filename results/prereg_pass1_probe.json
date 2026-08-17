@@ -1093,7 +1093,7 @@
     },
     "rule": "no clock is stamped, so the record re-derives byte for byte from its own inputs",
     "script": "scripts/write_pass1_prereg.py",
-    "sha256": "5ba72bd41e7347ad43a90bf4940907e62aa82947a27460eacded31c8477bcadf"
+    "sha256": "8aab2a94fdecbf3a8f0d5afa802423c5a8b791dc0c327c9446f085ca90c6b0b5"
   },
   "return_to_sitting": "**A FAILED BAR GOES BACK TO THE SITTING, never to a prompt iteration.** The options the sitting of 2026-08-17 left open are B (labelled subject_type data + LoRA) and C (a different base). There is no pass1-v2 prompt without a sitting ruling, and this clause is pre-registered so it cannot be re-decided once the number is in",
   "transport": {

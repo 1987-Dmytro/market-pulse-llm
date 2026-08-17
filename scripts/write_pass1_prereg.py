@@ -659,6 +659,10 @@ def build_pack(record: dict) -> dict:
         "instruments": {
             "prompt_sha256": record["instruments"]["prompt_sha256"],
             "renderer": record["instruments"]["renderer"],
+            # the pod's handshake asks BOTH questions off the pack: is the registered text what this
+            # checkout renders, and is the module the Mac will parse with the module the pod
+            # rendered from. The second needs the parser's sha to travel in the pack
+            "parser": record["instruments"]["parser"],
         },
         "serving": record["instruments"]["serving"],
         "reading": (

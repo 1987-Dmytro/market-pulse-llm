@@ -1,5 +1,11 @@
 {
   "instruments": {
+    "parser": {
+      "entry_point": "market_pulse.prompts.parse_pass1",
+      "module": "src/market_pulse/prompts.py",
+      "rule": "strict single object, domain-checked: the four subject_type readings, the stance domain, and the request's own msg_id echoed back. Everything else is a refusal and no container is repaired",
+      "sha256": "a4a5a5d08546f53af18117c37e49f7e396919555563e16737a633c1df1a86eec"
+    },
     "prompt_sha256": {
       "pass1_comment_gm4_v1": "5a4a3cb6ce4db89adb304c04de41210fdabfde0c53addfdb75adba0f1d866650"
     },
