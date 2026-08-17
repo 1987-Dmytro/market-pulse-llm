@@ -286,6 +286,29 @@ def test_the_raised_ceiling_clears_the_pessimistic_corner_and_2000_would_not():
     assert all(one["pessimistic_tokens"] < 4000 for one in ceilings["units"])
 
 
+def test_no_prose_in_the_record_still_calls_2000_THE_ceiling():
+    """The run contract's step 0. `reported_not_gating.finish_reason` was inherited from v4's frozen
+    record word for word, so a 4 000-ceiling instrument carried v4's sentence about «the 2 000-token
+    ceiling» — non-gating prose, and still the wrong number for the field the run reports.
+
+    The guard is over the WHOLE record and not over that one key, because the defect was inheritance
+    and inheritance happens again. 2 000 may still be named as history or as the counterfactual that
+    made a bar unreachable; what may not survive is calling it THE ceiling of this run.
+    """
+    reported = RECORD["bars"]["5_time_and_cost"]["reported_not_gating"]
+    assert "4000-token ceiling" in reported["finish_reason"]
+    text = json.dumps(RECORD, ensure_ascii=False)
+    assert "2 000-token ceiling" not in text and "2000-token ceiling" not in text
+    # and the two places 2 000 legitimately survives are still there, so this is not a blanket ban
+    assert (
+        "At 2 000 this bar is not reachable"
+        in RECORD["bars"]["leg_b_mechanical"]["m2_every_chunk_finished"]["reachability"]
+    )
+    assert (
+        "97.3% of 2 000" in RECORD["instruments"]["ceilings"]["output_arithmetic"]["why_it_moves"]
+    )
+
+
 def test_the_output_model_is_fitted_on_v4s_own_rows_and_can_be_recomputed():
     """The one number this producer computes rather than carries, recomputed here from the paid
     evidence so «from v4's own rows» is checkable."""

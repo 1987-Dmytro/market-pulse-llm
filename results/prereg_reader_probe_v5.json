@@ -102,7 +102,7 @@
       "reported_not_gating": {
         "balanced": "per unit — whether the reply closed a top-level object at all",
         "cut_chars": "per unit — how many characters the transport stop removed. It is the measurement ruling (b) was bought for and it gates nothing",
-        "finish_reason": "per thread, and it is the field that says whether the longer v3 output hit the 2 000-token ceiling. probe-b returned `length` on ZERO of 23 under v2; this is the run that can find out whether a row-per-comment changes that",
+        "finish_reason": "per unit, and it is the field that says whether v5's longer output hit the 4000-token ceiling this registration raised it to. Both runs before it returned `length` on ZERO of 23 threads under 2 000 — probe-b under v2, reader-v4 under v3 — and reader-v4's largest reply was 1946 tokens, 97.3% of that ceiling. This is the run that finds out what a row for every comment and a 16-row chunk do to it",
         "seconds_vs_probe_b": "per thread, so the slowdown the longer output really costs is measured rather than assumed. It is also what re-prices the 129-thread window cell"
       },
       "rule": "one pod, billed for every second it exists. The gates below stop it; this bar is what the guard's CLOSED step ledger says afterwards",
@@ -1350,7 +1350,7 @@
       "src/market_pulse/scorer.py": "dbb5406a502f813ba1b4940e0914310efd632386a8da60e0c002cc8964a97d4f"
     },
     "script": "scripts/write_reader_prereg_v5.py",
-    "sha256": "67de11f5c990b6ed76f93ac92474e3fa7705d85cec485433ecad152674367ad9"
+    "sha256": "97b3edbe38e0f16f77fc8a74cfe26fad23007cc99d4cd8c9f6583b6fe958e314"
   },
   "programme_stop_rule": "**If this run COMPLETES and bars 1 and 4 are not BOTH taken, the prompt-engineering line CLOSES.** The next step is an architecture sitting — two passes, labelled data, a different base — and never a v6 of the same kind. The operator's ruling of 2026-08-17, pre-registered here so it binds the reading of this run's own result and cannot be re-decided once the numbers are in",
   "scoring_rules": {

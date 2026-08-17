@@ -697,6 +697,18 @@ def bars(older: dict, leg_b: dict) -> dict:
                 " ruling (b) was bought for and it gates nothing"
             ),
             "balanced": "per unit — whether the reply closed a top-level object at all",
+            # v4's sentence named ITS ceiling, and copying it forward would have put «the 2 000-token
+            # ceiling» inside a 4 000-ceiling instrument. Only this key is re-written: the two other
+            # places the record says 2 000 are correct — one is the counterfactual that made bar 4
+            # unreachable, the other is v4's own history
+            "finish_reason": (
+                f"per unit, and it is the field that says whether v5's longer output hit the"
+                f" {OUTPUT_CEILING}-token ceiling this registration raised it to. Both runs before"
+                " it returned `length` on ZERO of 23 threads under 2 000 — probe-b under v2,"
+                " reader-v4 under v3 — and reader-v4's largest reply was 1946 tokens, 97.3% of that"
+                " ceiling. This is the run that finds out what a row for every comment and a"
+                " 16-row chunk do to it"
+            ),
         },
     }
     table["leg_b_mechanical"] = mechanical_bars(leg_b)
