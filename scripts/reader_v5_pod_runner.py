@@ -162,6 +162,32 @@ def load_reader(pack: dict, repo: Path):  # pragma: no cover — needs the GPU a
     return client
 
 
+def already_answered(out: Path, ids: set[str]) -> set[str]:
+    """The unit ids this out-file already carries — the whole mechanism of the recovery clause.
+
+    The run contract allows a replacement pod «to answer ONLY the units with no persisted reply —
+    answered units are NEVER re-asked», and one attempt means one answer per unit. Without this the
+    loop would re-ask all 26 from the top and APPEND a second reply for units that already have one,
+    which is worse than a re-ask: the Mac's projection counts rows, so the duplicates would loosen
+    the cap gate on a live pod.
+
+    A file carrying an id this pack never asked for belongs to a different run and is REFUSED here,
+    before the model is loaded, rather than resumed against. `--out` is append-only by design and a
+    stale file is the one way that design can hurt.
+    """
+    if not out.exists():
+        return set()
+    done = [json.loads(line)["id"] for line in out.read_text(encoding="utf-8").splitlines() if line]
+    foreign = sorted(set(done) - ids)
+    if foreign:
+        raise SystemExit(
+            f"{out} already carries {len(foreign)} unit id(s) this pack never asked for"
+            f" ({foreign[:3]}) — it is another run's file, and appending to it would mix two"
+            " populations. Move it aside and stop."
+        )
+    return set(done)
+
+
 def run(pack: dict, out: Path, repo: Path, loader=load_reader) -> int:
     started = time.monotonic()
     sys.path.insert(0, str(repo / "src"))
@@ -174,6 +200,15 @@ def run(pack: dict, out: Path, repo: Path, loader=load_reader) -> int:
     say(
         started, f"ceiling {pack['serving'].get('output_tokens')} output tokens · stop at the brace"
     )
+
+    order = {item["id"]: index for index, item in enumerate(items)}
+    done = already_answered(out, set(order))
+    todo = [item for item in items if item["id"] not in done]
+    if done:
+        say(started, f"{len(done)} of {len(items)} units are already answered and are NOT re-asked")
+    if not todo:
+        say(started, f"every unit in the pack is answered in {out} — nothing to generate")
+        return 0
     say(started, f"loading {pack['serving']['model']} @ {pack['serving']['model_revision'][:12]}…")
 
     client = loader(pack, repo)
@@ -182,7 +217,8 @@ def run(pack: dict, out: Path, repo: Path, loader=load_reader) -> int:
 
     task = pack["task"]
     with out.open("a", encoding="utf-8") as handle:
-        for index, item in enumerate(items):
+        for item in todo:
+            index = order[item["id"]]
             at = time.monotonic()
             reply = client.read(task, [item])[0]
             emitted = reply["content"]
@@ -215,7 +251,7 @@ def run(pack: dict, out: Path, repo: Path, loader=load_reader) -> int:
                 f" · cut {row['cut_chars']:4d} · balanced {row['balanced']}"
                 f" · finish {row['finish_reason']}",
             )
-    say(started, f"DONE · {len(items)} replies · {out}")
+    say(started, f"DONE · {len(todo)} generated here · {len(items)} replies in {out}")
     return 0
 
 

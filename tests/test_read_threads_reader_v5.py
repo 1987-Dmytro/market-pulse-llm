@@ -198,6 +198,48 @@ def test_the_runner_loads_when_nothing_moved_which_is_what_makes_the_refusals_me
     assert len(loaded) == 1
 
 
+def test_a_replacement_pod_answers_ONLY_the_units_with_no_persisted_reply(tmp_path, pack):
+    """The run contract's recovery clause, driven. One attempt means one answer per unit, so a
+    second `run()` over a half-written out-file must ask for the remainder and nothing else."""
+    out = tmp_path / "pod.jsonl"
+    first = FakeClient([VERDICT])
+    assert pod.run(a_pack(pack, items=1), out, REPO_ROOT, loader=lambda p, r: first) == 0
+    assert [one[1] for one in first.seen] == [pack["items"][0]["id"]]
+
+    second = FakeClient([VERDICT])
+    assert pod.run(a_pack(pack, items=3), out, REPO_ROOT, loader=lambda p, r: second) == 0
+    # the unit answered by the dead pod was never re-asked, and the other two were
+    assert [one[1] for one in second.seen] == [one["id"] for one in pack["items"][1:3]]
+    rows = [json.loads(line) for line in out.read_text(encoding="utf-8").splitlines() if line]
+    assert [row["id"] for row in rows] == [one["id"] for one in pack["items"][:3]]
+    # `index` stays the position in the PACK, not the position in the resumed loop
+    assert [row["index"] for row in rows] == [0, 1, 2]
+
+
+def test_a_complete_out_file_does_not_pay_for_a_boot(tmp_path, pack):
+    """The other end of the same clause: nothing to answer means nothing to load, and 59 GB of
+    weights is the most expensive thing this run can do for no rows."""
+    out = tmp_path / "pod.jsonl"
+    live = a_pack(pack, items=2)
+    assert pod.run(live, out, REPO_ROOT, loader=lambda p, r: FakeClient([VERDICT])) == 0
+    loaded = []
+    assert pod.run(live, out, REPO_ROOT, loader=lambda p, r: loaded.append(1)) == 0
+    assert loaded == []
+    assert len(out.read_text(encoding="utf-8").splitlines()) == 2
+
+
+def test_an_out_file_from_another_run_is_REFUSED_and_never_appended_to(tmp_path, pack):
+    """`--out` is append-only, and a stale file is the one way that design can hurt: a foreign row
+    would be counted by the Mac's projection and loosen the cap gate on a live pod."""
+    out = tmp_path / "pod.jsonl"
+    out.write_text(json.dumps({"id": "@somebody_else:1", "reply": "{}"}) + "\n", encoding="utf-8")
+    loaded = []
+    with pytest.raises(SystemExit, match="another run's file"):
+        pod.run(a_pack(pack), out, REPO_ROOT, loader=lambda p, r: loaded.append(1))
+    assert loaded == []
+    assert len(out.read_text(encoding="utf-8").splitlines()) == 1
+
+
 def test_a_chunked_item_renders_its_header_on_the_pod_too(pack):
     """The pod renders the request ITSELF, so the header has to be in the pod's renderer as well —
     a chunk whose header was dropped there would hash to something nobody pinned."""
