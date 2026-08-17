@@ -3,7 +3,7 @@
   "authority": {
     "knowledge/decisions/reader-programme-closed-and-the-architecture-sitting-17-08.md": "dc62df1521398c8e5e4c24efd70dea0d9fe3a04a22860052e1442c12be90894e",
     "results/prereg_reader_probe_v5b.json": "8122fce0eb25c223cff6a6983777e92fff69e3fd53db209b00b43fc4218a00c4",
-    "results/reader_v5b_verdict.json": "8c975558b8da31cfcd78463eae65ceef54cc9b11e267e8c4343adee4bc49b834"
+    "results/reader_v5b_verdict.json": "d39cd2332a043a9b20899cd77cd4645aeb2d85bc4ab121995a5d4254122a1740"
   },
   "bars": {
     "P1_per_comment_agreement": {
@@ -48,7 +48,37 @@
     "src/market_pulse/prompts.py — the renderer and the parser",
     "results/reader_gold_w1_r2.json"
   ],
-  "go_no_go": "before the FIRST paid call: the guard is anchored, the pack's rendering shas are re-derived on the pod and must equal the registered ones, and the full-pass gate is evaluated after every unit. A STOP deletes the pod and closes the attempt",
+  "go_no_go": {
+    "backstop": {
+      "rule": "passed at create. NOT a cap guard — it is what deletes the pod if this Mac dies with the run open",
+      "terminate_after_minutes": 60
+    },
+    "clock": "seconds since the `pod create` response, which is when the meter starts. Not since ssh came up and not since the model began loading — the machine is billed for provisioning too, and a clock that starts later prices a leg at zero",
+    "gate_records_APPEND": "the run record keeps `gates` as a LIST and every WAIT/GO/KILL snapshot is appended, none overwritten, each stamped with its segment and pod id",
+    "gates": {
+      "0_transport_ssh_deadman": {
+        "expected_usd": 0.0,
+        "max_recreates": 2,
+        "measured_on": "each segment's OWN create response stamp. The affordability leg is the attempt's and the reachability leg is the segment's",
+        "never_two_pods": "the replacement is created only after the dead one is deleted AND the deletion is proven by a listing — a check made BEFORE `pod create`",
+        "rule": "if `runpodctl ssh info` has not answered with a connectable endpoint by 180 s of THIS segment's create-elapsed, KILL: delete the pod, prove it by listing, and create a replacement of the same card class in the same datacenter",
+        "third_pod_is_a_stop": "at most 2 recreates per attempt. A third dead pod is a DATACENTER STATE and not bad luck: the attempt STOPs, the step closes, and the finding is infrastructural rather than about pass 1",
+        "threshold_seconds": 180.0
+      },
+      "1_staging": {
+        "expected_usd": 0.0,
+        "rule": "the volume's checkout is refreshed to the commit that carries this registration, and the HANDSHAKE proves it: the pass-1 prompt sha and the module sha this pod renders with must equal the pack's. A staging command's exit code proves nothing"
+      },
+      "2_boot_kill": {
+        "boot_kill_seconds": 300.0,
+        "rule": "the first reply must land inside the boot ceiling AND inside the affordability deadline, both on the create-elapsed axis. Whichever is lower binds; a miss deletes the pod"
+      },
+      "3_the_full_pass": {
+        "evaluated_before_the_money": "solved backwards over the built pack at the registered per-call bound and published in `money.arithmetic.full_pass_over_the_registered_order`",
+        "rule": "after every unit: elapsed + max(unread units ÷ read, unread payable ÷ read payable) × measured ≤ usable. STOP deletes the pod and closes the attempt. Every pass-1 unit carries one payable comment, so the two legs are one"
+      }
+    }
+  },
   "instruments": {
     "ceilings": {
       "input_chars": 12000,
@@ -118,6 +148,8 @@
       "affordability_deadline_seconds": 503.245,
       "boot_free_corner_rule": "what one unit may cost if the pod were provisioned for free — `usable ÷ units`, with no boot forecast in it at all. The FIRST unit's by-unit leg extrapolates the other units off it, so a first call above this bound STOPs the gate on arithmetic alone, whatever provisioning turns out to cost (Dv471's method)",
       "boot_free_corner_seconds_per_unit": 14.265,
+      "boot_kill_rule": "the FIRST reply must land within this many seconds of the generation process starting, and within the affordability deadline measured from `pod create`. The binding one is whichever comes first on the create-elapsed axis. v5b's own boot was 192.1 s, so the ceiling sits well above the measurement and is a deadline rather than a forecast",
+      "boot_kill_seconds": 300.0,
       "boot_seconds_charged": 192.13,
       "delete_margin_seconds": 60.0,
       "full_pass_over_the_registered_order": {
@@ -1093,7 +1125,7 @@
     },
     "rule": "no clock is stamped, so the record re-derives byte for byte from its own inputs",
     "script": "scripts/write_pass1_prereg.py",
-    "sha256": "8aab2a94fdecbf3a8f0d5afa802423c5a8b791dc0c327c9446f085ca90c6b0b5"
+    "sha256": "16dee2f4590597b55a5b31e38be88cab88a1d4f7bbf3d21f7bab7c8e897ab6c6"
   },
   "return_to_sitting": "**A FAILED BAR GOES BACK TO THE SITTING, never to a prompt iteration.** The options the sitting of 2026-08-17 left open are B (labelled subject_type data + LoRA) and C (a different base). There is no pass1-v2 prompt without a sitting ruling, and this clause is pre-registered so it cannot be re-decided once the number is in",
   "transport": {
