@@ -8,10 +8,18 @@
 **What happened, in one paragraph.** Step 0, step 0.5 and D1 went as written. D1's own measurement —
 the one the contract asked for — said the pack order the operator had ruled makes the registered
 full-pass gate **STOP after the FIRST unit**, by 23.2 seconds a unit, on any boot including none at
-all. Nothing was created; the finding went to the operator with the four orders measured beside it;
-**the order ruling was withdrawn the same day, with the cap and gate 0 standing.** Leg A is v5's
-enumeration order again, the registration and the pack were rebuilt at $0, and the withdrawn order's
-gate table stays inside the registration as the withdrawal's evidence. D2 then ran on that.
+all. Nothing was created; the finding went to the operator with four orders measured beside it; **the
+order ruling was withdrawn the same day, with the cap and gate 0 standing.** The registration and the
+pack were rebuilt at $0 in v5's own order, and the withdrawn order's gate table stays inside the
+registration as the withdrawal's evidence. **Then the run went the whole way: gate 0 answered in 24
+seconds where v5's pod never answered at all, 26 of 26 units were read, all 21 full-pass gates
+returned GO, and the pod was deleted after 1 514.0 billed seconds — $0.311211 of a $0.50 cap.**
+
+**And the answer is a negative one.** Bar 2 and bar 3 pass, leg B's four mechanical bars all pass and
+the chunking mechanism works on its first outing, the echo duty is obeyed on 117 of 117 requested ids
+with none absent — **and bars 1 and 4, the two this whole generation of the instrument existed to
+move, both FAIL.** The run COMPLETED, so **the pre-registered programme stop-rule fires: the
+prompt-engineering line closes and the next step is an architecture sitting, not a v6.**
 
 ---
 
@@ -47,9 +55,10 @@ is always the attempt's — the cap less what every closed segment billed, price
 the tightest point of all 26 units. Under the withdrawn order unit 2 was no better (**+1.0 s/unit**,
 82.1 s of mean against 83.1 s allowed, 1.2%) and the STOP had already fired one unit earlier (§4.2).
 
-**When the registration freezes.** At the **FIRST `pod create` of the attempt**. A recreated pod reads
-the SAME frozen record — that is what makes a replacement a segment of one attempt instead of a second
-attempt. Nothing has frozen yet.
+**When the registration freezes.** At the **FIRST `pod create` of the attempt** — which happened at
+`2026-08-17T16:22:10Z`. A recreated pod would have read the SAME frozen record; that is what makes a
+replacement a segment of one attempt instead of a second attempt. There was no recreate, and no
+frozen file moved after that stamp (§7 lists their shas).
 
 ---
 
@@ -366,11 +375,139 @@ one the v5b registration and driver already use). `[cause: reading-of-the-clause
 
 *(written as it happened; every figure points at `results/reader_v5b_run.json` or the step ledger)*
 
-**At the moment this commit was made the run had not been opened yet**: the anchor is next, then
-the three listings, then `--pre-create-check`, then `pod create`. This section is filled in after
-the pod is deleted. If it still reads like this, the session ended between the ruling and the
-anchor and nothing was billed — `results/spend_reader_v5b.json` and `results/reader_v5b_run.json`
-are the two files that would say otherwise.
+### 6.1 The timeline of segment 1
+
+Anchor `results/spend_reader_v5b.json` at $21.4577480282, `2026-08-17T16:21:29Z`, cap $0.50, committed
+in `a25ab76` **before** anything was created. Three listings immediately before create: `pod list -a`
+`[]`, `serverless list` `[]`, `network-volume list` `qw4nwleanc` `mp-srv2` EU-RO-1 100 GB — the volume
+is the positive control that the listing works at all. `--pre-create-check` → `may_create: true`,
+segment 0 of 3.
+
+| create-elapsed | wall | what |
+|---|---|---|
+| 0 s | 16:22:10Z | `pod create` — `r7702vbsrxhz0j`, RTX 4090, RO, `costPerHr` **0.74**, exactly the registered worked example, so no deadline is re-priced |
+| 9.8 s | 16:22:20Z | `--open`: segment 1 recorded, gate `open` **WAIT**, 170.2 s left on gate 0 |
+| 15 s · 19 s | | `runpodctl ssh info` → `{"error": "pod not ready", "status": "RUNNING"}` |
+| **24 s** | 16:22:34Z | **the endpoint answered** — `213.173.111.15:11201`. gate `gate0` **GO**, recreates left 2 |
+| 36 s | 16:22:46Z | scp: the 8.76 MB bundle at `a25ab76`, the pack, and BOTH runners |
+| ~55 s | | `git clone` → `repo-v5b`; `git rev-parse HEAD` = `a25ab76145ec…` = the Mac's HEAD; `git status --short` empty |
+| 77 s | 16:23:27Z | detached launch, `--repo /workspace/repo-v5b` passed explicitly |
+| 269 s | 16:26:39Z | `READY · boot 192.1s` (v4's measured boot: 175.119 s) |
+| 322 s | 16:27:32Z | reply 1 lands, and the kill clock stops |
+
+**Gate 0 is what this contract bought, and it cost nothing.** v5's pod was listed RUNNING and never
+answered `ssh info` across ~150 polls and 727.9 billed seconds; this one answered in **24 s**, three
+polls. The dead-man never fired, and the run that follows is the first evidence about the READER this
+programme has had since v4.
+
+### 6.2 Dv479 — the detached launch did not return, and the runner was alive anyway
+
+The launch `ssh … 'nohup … & echo launched $!'` printed nothing and did not return; the harness moved
+it to the background after 300 s. A SECOND ssh connection, opened while the first still hung, showed
+the python process running, the log already at `READY · boot 192.1s`, and two replies on disk. So the
+launch worked and only its channel stayed open. `& echo $!` is not proof of anything by itself, and
+the proof that counted came from the second connection — which is what Dv454's form is for.
+`[cause: the ssh channel stayed open]`
+
+It has one consequence worth writing down: on the pod, `pgrep -f reader_v5_pod_runner.py` matches the
+hung `bash -c` wrapper that carries that string AND the watcher's own remote shell, so a
+pattern-matching liveness watch can never reach zero and would be silent through a crash. The watch
+was rebuilt on `kill -0 <pid>` ([[a_remote_job_outlives_its_watcher]]).
+
+### 6.3 The run completed: 26 of 26, every gate GO, $0.311211 at the meter
+
+| | |
+|---|---|
+| units read | **26 of 26** — leg A's 23 threads whole, then leg B's 3 chunks |
+| gate snapshots | **23, all appended, none overwritten**: 1 `open` (WAIT), 1 `gate0` (GO), **21 `full_pass`, every one GO** — at units 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18, 20, 22, 23, 24, 25 and 26 |
+| tightest full-pass margin | **+3.39 s/unit at unit 2**, headroom 126.4 s — the unit the registration named, and it cleared |
+| final gate | unit 26, GO, headroom **880.7 s** |
+| billed | 1 514.0 s from create to delete = **$0.311211** at $0.74/h, against a $0.50 cap |
+| pod | `r7702vbsrxhz0j`, one segment, no recreate, deleted 1 s after the delete call returned |
+
+Segment closed with `--close-segment`; the three listings after are identical to the three before —
+`pod list -a` `[]`, `serverless list` `[]`, and the volume `qw4nwleanc` still there as the positive
+control that the listing works at all.
+
+### 6.4 The bars
+
+`results/reader_v5b_verdict.json` (`8c975558b8da31cf…`), scored by v5's own arithmetic through
+`scripts/score_reader_v5b.py`:
+
+| bar | verdict | what it measured |
+|---|---|---|
+| 1 flagships | **FAIL** | 2 of 5 cases answered (threshold 5 of 5). F4 and F5 found; F1, F2, F3 not |
+| 2 entity cases | **PASS** | 4 of 4 |
+| 3 noise | **PASS** | — |
+| 4 per-comment agreement | **FAIL** | rate **0.4286** — 14 rows: 6 agreed, 4 disagreed, **4 absent** |
+| 5 time and cost | **OPEN** | the step ledger has no closing entry yet (§6.6) |
+| leg B m1–m4 | **ALL PASS** | payable ids exactly once, every chunk finished, every chunk parsed, no duplicate signal survived the merge |
+
+**The programme stop-rule FIRES.** It was pre-registered in v5 and re-registered here verbatim: «if
+this run COMPLETES and bars 1 and 4 are not BOTH taken, the prompt-engineering line CLOSES; the next
+step is an architecture sitting — two passes, labelled data, a different base — and never a v6 of the
+same kind.» The run completed. Bars 1 and 4 both failed. The rule binds the reading of this run's own
+numbers because it was written before them.
+
+Bar 4's arithmetic, named: of the seven non-agreed gold rows the contract listed, **two moved** —
+`47899` and `48283` now agree. `580124`, `580129`, `47902` and `578951` still disagree, and `21601`
+is **absent**, together with `21626`, `21599` and `21629`: all four sit in `@VARUS_channel:10613`,
+the one thread whose reply refused with `malformed JSON`. Five of seven was the bar; two moved.
+
+The collapsed and uncollapsed readings agree exactly on both failing bars (2 and 2; 0.4286 and
+0.4286), so neither failure is an artefact of the vocabulary collapse.
+
+### 6.5 What the instrument DID buy, beside the bars
+
+- **The echo duty is obeyed, completely.** The three-state census over every parsed row: **117 of 117
+  requested ids covered — 109 in `per_comment`, 8 in `noise`, ZERO absent.** v4 could not tell those
+  states apart; here the shortfall the census exists to find is empty.
+- **The transport stop worked and cost almost nothing.** 26 of 26 replies balanced; **19 units cut, 62
+  characters in total**, and `never_balanced` is empty. v4's two «two disagreeing objects» refusals do
+  not recur.
+- **But the stop has a cost the registration did not name.** Three of the four refusals are short
+  replies where the stop took a balanced object that was not the answer: `@VARUS_channel:10529` (116
+  tokens, `missing field: entities`), `@mandziak:3701` (`missing field: entities`) and
+  `@VARUS_channel:10593` (`missing field: evidence`). The fourth, `@VARUS_channel:10613`, is
+  `malformed JSON` at 2 056 tokens. **4 refusals of 23 — exactly v4's count, on different threads.**
+- **The 4 000-token ceiling never fired.** Every unit's `finish_reason` is `stop`; the largest reply is
+  **2 056 tokens, 51% of the ceiling** — where v4's largest was 97.3% of its 2 000. The raised ceiling
+  was bought and not needed, which is the outcome a ceiling should have.
+- **Leg B, the chunking mechanism, worked on its first outing.** Three chunks of 16/16/11 rows, all
+  three parsed, the merge made with no duplicate signal, `merge_error: null`, and the merged verdict
+  carries all 43 payable ids exactly once. It cost **175.1 s against the registration's 320.0 s
+  projection** — a 16-row chunk is 64 s, cheaper per row than a thread.
+
+### 6.6 The money, and the one open number
+
+| | |
+|---|---|
+| meter (create → delete) | 1 514.0 s × $0.000205556 = **$0.311211** |
+| guard, right now | **$0.2782 of $0.50**, and it says so as a **LOWER BOUND** — «billing since: UNAVAILABLE (no billing rows yet)» |
+| step ledger | `results/spend_reader_v5b.json`, anchored $21.4577480282 at 16:21:29Z, not closed |
+
+Bar 5 is **OPEN, not passed**, and that is the scorer refusing to score a bar against an unsettled
+number rather than a failure. reader-v5's walk posted about two hours after its pod died; this one
+will settle the same way, and the close is the named debt this report carries. The meter's
+$0.311211 and the guard's $0.2782 lower bound bracket it, and both are under the cap.
+
+### 6.7 The counterfactual is no longer a forecast
+
+The registration's table said the withdrawn order would STOP at unit 1 because
+`@matusi_ukr:22272` would cost **105.3 s** against **82.1 s** allowed. That thread was read here, as
+unit 17: **103.8 seconds.** The forecast was 1.4% high. Under the ruled order this run would have
+been deleted after one thread; under the registered one it read 26 units and scored every bar.
+
+The rest of the forecast held too, which is what makes the first number trustworthy: leg A's 23
+threads took **1 035.4 s against v4's 907.6 s — a growth of 1.141 where the registration registered
+1.127** — and produced 19 200 completion tokens against v4's 18 637.
+
+**Dv480.** `scripts/score_reader_v5.py`'s `main()` printed «every key of the leg-B block whose name
+starts with `m`», and `merge_error` does. On the first record that ever carried one — this one — it
+raised `TypeError: 'NoneType' object is not subscriptable`, AFTER the verdict file was written, which
+is the only reason it cost nothing. Fixed to print the entries that carry a `passed` field, with a
+test that drives `main()` and is red against the previous commit. The verdict's sha256 does not move:
+the defect was in the printer, never in the arithmetic. `[cause: a-consumer-list-is-not-a-meaning-list]`
 
 ---
 
@@ -381,80 +518,126 @@ $ make check                                   # before step 0.5
 2782 passed, 2 skipped in 369.96s
 $ make check                                   # at c7e2395, the step 0.5 commit
 2789 passed, 2 skipped in 378.42s
-$ make check                                   # at cdf0e58, after D1
-<see §7.1>
+$ make check                                   # at 20db35c, before the pod was created
+2826 passed, 2 skipped in 453.00s
+$ make check                                   # after the run, with the scorer's printer fixed
+2828 passed, 2 skipped in 454.28s (0:07:34)
 $ python3.11 -m ruff format --check .
-336 files already formatted
-$ runpodctl pod list -a
+337 files already formatted
+$ runpodctl pod list -a          # after the delete; serverless [] and the volume still listed
 []
-$ shasum -a 256 results/prereg_reader_probe_v5b.json results/reader_v5b_pack.json
-6e2023deaffe8ef15fc18451ad1479b70c753a188623f86e5aa237b2b13412f2  results/prereg_reader_probe_v5b.json
-187fff2311969a74efaf14513a2a680893a1fb66c99fb0d4ce6788d178d8077a  results/reader_v5b_pack.json
+$ shasum -a 256 results/prereg_reader_probe_v5b.json results/reader_v5b_pack.json \
+      results/reader_v5b_w1.jsonl results/reader_v5b_verdict.json
+8122fce0eb25c223cff6a6983777e92fff69e3fd53db209b00b43fc4218a00c4  results/prereg_reader_probe_v5b.json
+f1f4a74d2f5b35bc52b3d127f078f9c53c8d673b7eb1d85529a52cb770d86e89  results/reader_v5b_pack.json
+9540a84bc87109ce3589a636fa5640d56feb5c8382bb82adcf8345bd8e858e8c  results/reader_v5b_w1.jsonl
+8c975558b8da31cfcd78463eae65ceef54cc9b11e267e8c4343adee4bc49b834  results/reader_v5b_verdict.json
 $ PYTHONPATH=src python3.11 scripts/read_threads_reader_v5b.py --pack
 pack results/reader_v5b_pack.json · 26 units, every sha matches the record
   leg A 23 threads · leg B 3 chunks
   task reader_thread_gm4_v5 · parser be5a81641afc2aa5… · ceiling 4000 output tokens
 ```
 
-The registration's own build, and the gate table it publishes:
+The registration's own build, with both gate tables:
 
 ```
 $ PYTHONPATH=src python3.11 scripts/write_reader_prereg_v5b.py
-wrote results/prereg_reader_probe_v5b.json  sha256 6e2023deaffe8ef1…
+wrote results/prereg_reader_probe_v5b.json  sha256 8122fce0eb25c223…
   cap $0.50 buys 2432.4 s · usable 2372.4 s · reading projection 1454.0 s
   pre-generation budget 198.5 s · affordability deadline 918.5 s
     1 segment(s): usable  2372.4 s · affordability   918.5 s · budget   198.5 s · reading fits True
     2 segment(s): usable  2132.4 s · affordability   678.5 s · budget   -41.5 s · reading fits True
     3 segment(s): usable  1892.4 s · affordability   438.5 s · budget  -281.5 s · reading fits True
-  payable, in order: [15, 12, 12, 12, 10, 9, 9, 8, 7, 5, 5, 5, 4, 4, 3, 3, 2, 2, 2, 2, 2, 1, 0]
-  full pass over that order: first STOP after 1 unit(s) · tightest margin -23.16 s/unit at unit 1 (@matusi_ukr:22272)
-  unit 1 @matusi_ukr:22272 · 15 payable · expected 105.3 s vs a zero-boot ceiling of 91.2 s -> clears False
+  payable, in order: [7, 2, 12, 4, 5, 5, 2, 2, 5, 10, 9, 12, 8, 3, 9, 12, 15, 2, 3, 2, 1, 0, 4]
+  full pass over that order: first STOP after None unit(s) · tightest margin 12.93 s/unit at unit 2 (@VARUS_channel:10360)
+  unit 1 @VARUS_channel:10348 · 7 payable · expected 41.3 s vs a zero-boot ceiling of 91.2 s -> clears True
+  the WITHDRAWN order (descending payable): first STOP after 1 unit(s) · tightest margin -23.16 s/unit at unit 1 (@matusi_ukr:22272)
   gates: ['0_transport_ssh_deadman', '1_staging', '2_boot_kill', '3_the_full_pass']
   bar 5 cap: $0.50
 ```
 
-No verdict record — and the refusal is Dv478's own evidence, because the file it names is **v5's**:
+The verdict, printed by the scorer:
 
 ```
-$ PYTHONPATH=src python3.11 scripts/score_reader_v5.py
-results/reader_v5_w1.jsonl: no evidence — there is nothing to score
+$ PYTHONPATH=src python3.11 scripts/score_reader_v5b.py
+wrote results/reader_v5b_verdict.json  sha256 8c975558b8da31cf…
+  outcome GO · leg A 23 of 23 · leg B 3 chunks
+  bar 1_flagships                SCORED — False (collapsed)
+  bar 2_entity_cases             SCORED — True
+  bar 3_noise                    SCORED — True
+  bar 4_per_comment_agreement    SCORED — False (collapsed)
+  bar 5_time_and_cost            OPEN — passed None
+  leg B m1_every_payable_id_exactly_once       True
+  leg B m2_every_chunk_finished                True
+  leg B m3_every_chunk_parses                  True
+  leg B m4_the_merge_has_no_duplicate_signal   True
+  completeness: 117 of 117 covered · 109 per_comment · 8 noise · 0 ABSENT · 0 in both
+  transport stop: 19 units cut, 62 chars
+  uncollapsed: {'1_flagships': {'as_the_bar_collapsed': 2, 'uncollapsed': 2}, '4_per_comment_agreement': {'as_the_bar_collapsed': 0.42857142857142855, 'uncollapsed': 0.42857142857142855}}
 ```
 
-### 7.1 The suite, after D1
+### 7.1 Nothing frozen moved while the pod existed
+
+The registration froze at the first `pod create`. The proof is the git history's own clock, not a
+sentence: **the pod was alive from 18:22:10 to 18:47:24 CEST and NO commit was made in that window.**
+The last commit before it is `a25ab76` at 18:21:41 — 29 seconds before create — and the next is
+`9e7cc5e` at 18:58:16, eleven minutes after the delete.
+
+Every file the registration lists as frozen, with the commit that last touched it:
 
 ```
-$ make check
-2825 passed, 2 skipped in 448.76s (0:07:28)
+f7e2263 18:11:50  results/prereg_reader_probe_v5b.json     (the registration itself)
+1942a74 18:12:36  results/reader_v5b_pack.json
+66dc418 15:05:41  results/prereg_reader_probe_v5.json
+3131bc0 16.08     results/reader_gold_w1_r2.json
+9fe6dd4 12:48:23  src/market_pulse/prompts.py
+647b47f 13:56:52  src/market_pulse/reader_v5.py
+aa78c14 15.08     src/market_pulse/scorer.py
+8bf5a14 15.08     scripts/probe_b_population.py
+9f0338d 16.08     results/gate_census_w1_reader.json
+f1bb539 16.08     results/prereg_reader_probe_v4.json
 ```
 
-2 782 at the baseline + 7 (step 0.5) + 18 (the v5b registration) + 18 (the v5b transport) = 2 825, and
-the arithmetic closes. The minute the suite gained is the registration's own byte-identical rebuild:
-the v5b producer calls v5's, so that one test rebuilds two records.
+All ten precede 18:22:10. The two files edited during the run — `scripts/score_reader_v5.py`'s printer
+and this report — are on neither the frozen list nor the pack's rendering path.
 
----
+And the guard, which is the one number still open:
+
+```
+$ python3.11 scripts/runpod_guard.py --step reader-v5b --step-cap 0.50
+READER-V5B SPENT      $0.2782 of $0.50  (anchor $21.46 from runpod_balance_at_reader-v5b_start)
+  balance delta   $0.2782
+  billing since   UNAVAILABLE (no billing rows yet) — the delta stands alone as a LOWER BOUND
+```
 
 ## 8. Deviations
 
 | | what | tag |
 |---|---|---|
 | **Dv475** | The contract's «~918 s pre-generation budget» is the AFFORDABILITY deadline; the registered `pre_generation_budget_seconds` is 198.5 s. Both positive, both published, the registered formula unchanged. | `[cause: two-readings-of-one-clause]` |
-| **Dv476** | «Descending payable» is not a total order — six counts are shared — so the registration registers `(-payable, thread_id)` and names the ties. | `[cause: an-order-key-that-is-not-total]` |
-| **Dv477** | D2 was not opened. The ruled order makes the registered gate STOP at unit 1, by 23.2 s/unit and on any boot; the attempt is unspent and awaits a ruling (§5). | `[cause: registered-gate-vs-ruled-order]` |
-| **Dv478** | `scripts/score_reader_v5.py` points at v5's files by module constant; when there is evidence, bar 5 will be reached by a thin v5b caller rather than by editing it (Dv451). Nothing scored today. | `[cause: reading-of-the-clause]` |
+| **Dv476** | «Descending payable» is not a total order — six counts are shared — so the registration registered `(-payable, thread_id)` and named the ties. The key survives in `order_withdrawn` as the tiebreak the ruling would have needed. | `[cause: an-order-key-that-is-not-total]` |
+| **Dv477** | D2 was not opened on the ruled order: solved backwards, the registered gate STOPs at unit 1 by 23.2 s/unit on any boot. Reported before any pod; the operator withdrew the order ruling and the run went ahead in v5's order. Unit 17 later measured **103.8 s** against the forecast's 105.3 s. | `[cause: registered-gate-vs-ruled-order]` |
+| **Dv478** | `scripts/score_reader_v5.py` points at v5's files by module constant, so bar 5 would have been scored against the reader-v5 ledger. Reached instead by a thin `scripts/score_reader_v5b.py` that CALLS it with its constants swapped (Dv451's idiom). | `[cause: reading-of-the-clause]` |
+| **Dv479** | The detached launch's ssh session never returned and printed no pid; the runner was alive and at `READY` on a second connection. A `pgrep -f`-based liveness watch could not have seen it die — the pattern matches its own remote shell — so the watch is by pid. | `[cause: the ssh channel stayed open]` |
+| **Dv480** | `score_reader_v5.py`'s `main()` printed every leg-B key whose name starts with «m», and `merge_error` does: `TypeError` on the first record that ever carried one, after the verdict was written. Fixed to print the entries carrying a `passed` field; test red against the previous commit; the verdict's sha does not move. | `[cause: a-consumer-list-is-not-a-meaning-list]` |
+| **Dv481** | Bar 5 is OPEN, not passed: the billing walk has not posted, so the step ledger has no closing entry. The meter says $0.311211 and the guard's lower bound says $0.2782, both under the cap. The close is this report's named debt. | `[cause: unreadable-now-versus-never]` |
 
 ## Process signals
 
-1. **The contract asked for the measurement that stopped it.** «Re-solve the gate backwards over the
-   new order and publish the table» was written expecting a confirmation; it cost $0 and returned a
-   refutation. The instruction to measure before spending is doing exactly what it is for.
-2. **A cap raise and an order change were ruled together and only one of them was needed.** The
-   $0.50 cap alone turns Dv471's 9% margin into 23%. The order change was aimed at the payable leg
-   and landed on the unit leg.
-3. **A ruling can be under-specified in a way only the data shows.** «Descending payable» reads total
-   and is not; the tiebreak had work to do on six groups.
-4. **Two guards on one number found each other.** The resume mechanism made the out-file readable
-   twice, which turned every row count into an identity question — and the torn-line defence written
-   for one reader had to be written again for the other, with a test standing between them.
-5. **The freeze line is where the report should already exist.** This file was written and committed
-   before any `pod create`, so a session that dies with a question open leaves the finding on disk
-   rather than in a chat.
+1. **The contract asked for the measurement that stopped it, and the measurement was right.** «Re-solve
+   the gate backwards over the new order» was written expecting a confirmation; it cost $0 and returned
+   a refutation. The thread it said would fail the first gate at 105.3 s was read here in **103.8 s**.
+2. **Two fixes were ruled together and only one of them was needed.** The $0.50 cap alone turned
+   Dv471's 9% margin into 23%; the order change was aimed at the payable leg and landed on the unit
+   leg. Pricing them apart is what made the withdrawal possible before any money.
+3. **The transport that was bought is the transport that worked.** Gate 0 answered in 24 s where v5's
+   pod never answered in 727.9 billed seconds — and the gate never had to fire. The thing the contract
+   spent its design budget on turned out to be the thing that did not go wrong this time, which is
+   what a dead-man is for.
+4. **A negative result arrived with its own rule already written.** The programme stop-rule was
+   pre-registered in v5 and re-registered verbatim here, so «bars 1 and 4 both failed» reads as a
+   decision that was made before the numbers rather than after them. That is the whole point of
+   pre-registration and this is the run that cashed it.
+5. **The evidence outlives the verdict.** 26 replies, 27 evidence rows, 23 appended gate snapshots, two
+   gate tables inside the registration and a withdrawn ruling with its dates — an architecture sitting
+   that starts from this file starts from measurements, not from a memory of them.
