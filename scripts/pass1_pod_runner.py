@@ -30,13 +30,28 @@ import reader_v5_pod_runner as runner  # noqa: E402
 from reader_v4_pod_runner import sha256_of  # noqa: E402
 
 
+SHIPPED_RENDER = runner.render
+"""The reader's render, captured at IMPORT — before any swap, so the dispatch below cannot recurse
+into itself the moment `as_pass1()` replaces the module global."""
+
+
 def render(prompts, item: dict, task: str) -> str:
     """One pass-1 request — the topic, the thread's resolved entities, and ONE comment.
 
     Rendered from the pack's own fields on the pod, exactly as the reader's is: shipping the string
     would prove the two machines agree about a string, not that the model is shown what the
     registration registered.
+
+    **A task that is not pass 1's goes to the reader's own render, and that branch is not defensive
+    programming — it is a call this run MAKES.** `local_llm.ReaderClient.__init__` probes the chat
+    template through `self.render(prompts.READER_TASK_V2, {…})` before it will build a client at all,
+    so a swap that assumed every call was a pass-1 item raised `KeyError: 'topic'` inside the
+    CONSTRUCTOR. pass1-probe's attempt died exactly there, at 427 billed seconds with the model
+    loaded and nothing read, and the stub-driven test could not see it because a fake client replaces
+    the very constructor whose self-check makes the call.
     """
+    if task not in prompts.PASS1:
+        return SHIPPED_RENDER(prompts, item, task)
     return prompts.pass1_messages_gm4(
         item["channel"],
         item["post_id"],

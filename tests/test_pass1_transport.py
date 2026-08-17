@@ -221,3 +221,43 @@ def test_the_ingest_parses_with_the_REQUESTS_msg_id_and_names_its_refusals(tmp_p
     ]
     assert [row["id"] for row in written] == [one["id"] for one in pack["items"]]
     assert all(row["rendering_sha256"] for row in written)
+
+
+# --- the defect that ate the attempt ---------------------------------------------------------------
+
+PROBE = {"channel": "@probe", "post_id": 1, "post": "проба", "comments": []}
+"""The exact item `local_llm.ReaderClient._assert_template_emits_bos` probes the chat template with.
+
+Copied here rather than imported because it is a LITERAL inside a module this contract may not edit,
+and the test below asserts that the literal is still that one — a probe that changed shape would make
+this check pass while the pod crashed again ([[the_control_whose_premise_stopped_being_true]])."""
+
+
+def test_the_swapped_render_survives_the_BOS_probe_local_llm_makes_on_every_client():
+    """pass1-probe's whole attempt died here, at 427 billed seconds with nothing read.
+
+    `ReaderClient.__init__` calls `_assert_template_emits_bos`, which renders a READER-shaped probe
+    with `READER_TASK_V2` through `self.render` — and `self.render` is the runner's swapped one. The
+    swap assumed every call it would ever see was a pass-1 item, so the constructor of the client
+    raised `KeyError: 'topic'` AFTER the model had loaded.
+
+    The stub-driven test above could not see it: a fake client replaces the very constructor whose
+    self-check makes the call.
+    """
+    with podrunner.as_pass1():
+        rendered = shipped.render(prompts, PROBE, prompts.READER_TASK_V2)
+    assert rendered.startswith(prompts.PROMPTS[prompts.READER_TASK_V2])
+    assert "@probe" in rendered
+    # and a pass-1 item still renders as pass 1 through the same swapped function
+    item = PACK["items"][0]
+    with podrunner.as_pass1():
+        mine = shipped.render(prompts, item, prompts.PASS1_TASK)
+    assert mine.startswith(prompts.PASS1_COMMENT_PROMPT)
+
+
+def test_the_probe_local_llm_uses_is_still_the_one_this_file_guards_against():
+    """The premise. If `local_llm`'s probe grows a field or changes task, the guard above stops
+    guarding the call that actually happens."""
+    source = (REPO_ROOT / "src" / "market_pulse" / "local_llm.py").read_text(encoding="utf-8")
+    assert 'probe = {"channel": "@probe", "post_id": 1, "post": "проба", "comments": []}' in source
+    assert "self.render(prompts.READER_TASK_V2, probe)" in source

@@ -325,6 +325,14 @@ def money(units: int) -> dict:
             "seconds_per_call_registered": per_call,
             "reading_projection_seconds": round(projection, 3),
             "boot_seconds_charged": boot,
+            "boot_kill_seconds": BOOT_KILL_S,
+            "boot_kill_rule": (
+                "the FIRST reply must land within this many seconds of the generation process"
+                " starting, and within the affordability deadline measured from `pod create`. The"
+                " binding one is whichever comes first on the create-elapsed axis. v5b's own boot"
+                f" was {boot:.1f} s, so the ceiling sits well above the measurement and is a"
+                " deadline rather than a forecast"
+            ),
             "pre_generation_budget_seconds": round(usable - BOOT_KILL_S - projection, 3),
             "affordability_deadline_seconds": round(usable - projection, 3),
             "boot_free_corner_seconds_per_unit": round(usable / units, 3),
@@ -570,11 +578,78 @@ def build() -> dict:
             "src/market_pulse/prompts.py — the renderer and the parser",
             "results/reader_gold_w1_r2.json",
         ],
-        "go_no_go": (
-            "before the FIRST paid call: the guard is anchored, the pack's rendering shas are"
-            " re-derived on the pod and must equal the registered ones, and the full-pass gate is"
-            " evaluated after every unit. A STOP deletes the pod and closes the attempt"
-        ),
+        "go_no_go": {
+            "clock": (
+                "seconds since the `pod create` response, which is when the meter starts. Not since"
+                " ssh came up and not since the model began loading — the machine is billed for"
+                " provisioning too, and a clock that starts later prices a leg at zero"
+            ),
+            "gate_records_APPEND": (
+                "the run record keeps `gates` as a LIST and every WAIT/GO/KILL snapshot is"
+                " appended, none overwritten, each stamped with its segment and pod id"
+            ),
+            "backstop": {
+                "terminate_after_minutes": 60,
+                "rule": (
+                    "passed at create. NOT a cap guard — it is what deletes the pod if this Mac"
+                    " dies with the run open"
+                ),
+            },
+            "gates": {
+                "0_transport_ssh_deadman": {
+                    "threshold_seconds": SSH_DEADMAN_S,
+                    "max_recreates": MAX_RECREATES,
+                    "expected_usd": 0.0,
+                    "rule": (
+                        "if `runpodctl ssh info` has not answered with a connectable endpoint by"
+                        f" {SSH_DEADMAN_S:.0f} s of THIS segment's create-elapsed, KILL: delete the"
+                        " pod, prove it by listing, and create a replacement of the same card class"
+                        " in the same datacenter"
+                    ),
+                    "third_pod_is_a_stop": (
+                        f"at most {MAX_RECREATES} recreates per attempt. A third dead pod is a"
+                        " DATACENTER STATE and not bad luck: the attempt STOPs, the step closes,"
+                        " and the finding is infrastructural rather than about pass 1"
+                    ),
+                    "never_two_pods": (
+                        "the replacement is created only after the dead one is deleted AND the"
+                        " deletion is proven by a listing — a check made BEFORE `pod create`"
+                    ),
+                    "measured_on": (
+                        "each segment's OWN create response stamp. The affordability leg is the"
+                        " attempt's and the reachability leg is the segment's"
+                    ),
+                },
+                "1_staging": {
+                    "expected_usd": 0.0,
+                    "rule": (
+                        "the volume's checkout is refreshed to the commit that carries this"
+                        " registration, and the HANDSHAKE proves it: the pass-1 prompt sha and the"
+                        " module sha this pod renders with must equal the pack's. A staging"
+                        " command's exit code proves nothing"
+                    ),
+                },
+                "2_boot_kill": {
+                    "boot_kill_seconds": BOOT_KILL_S,
+                    "rule": (
+                        "the first reply must land inside the boot ceiling AND inside the"
+                        " affordability deadline, both on the create-elapsed axis. Whichever is"
+                        " lower binds; a miss deletes the pod"
+                    ),
+                },
+                "3_the_full_pass": {
+                    "rule": (
+                        "after every unit: elapsed + max(unread units ÷ read, unread payable ÷ read"
+                        " payable) × measured ≤ usable. STOP deletes the pod and closes the attempt."
+                        " Every pass-1 unit carries one payable comment, so the two legs are one"
+                    ),
+                    "evaluated_before_the_money": (
+                        "solved backwards over the built pack at the registered per-call bound and"
+                        " published in `money.arithmetic.full_pass_over_the_registered_order`"
+                    ),
+                },
+            },
+        },
         "non_gating": (
             "the census, the refusal shapes, the seconds and tokens per call, and the window"
             " re-price. None of them moves P1"
