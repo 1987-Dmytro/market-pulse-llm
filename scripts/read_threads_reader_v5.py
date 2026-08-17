@@ -184,6 +184,40 @@ def _item(channel, post_id, post, comments, task, *, leg, unit_id, pinned, part=
     }
 
 
+def unit_ids(rows: list[dict], pack: dict, where: str) -> list[str]:
+    """The UNIT ids these rows answer — a duplicate or a foreign id refused BY NAME, right here.
+
+    Every count downstream is a count of identities and not of rows. Before the recovery clause this
+    was true by construction: the runner asked each unit once and appended one line. Now the out-file
+    can be read twice and resumed over, so a pre-fix file or a double launch could put two rows on one
+    unit — and counting ROWS, `units_unread` goes to zero (or negative), the binding factor with it,
+    and the full-pass gate returns a trivial GO on a run that has already blown its cap. The
+    runner-side skip is the only guard against that today and it runs on the other machine
+    ([[a_guard_on_one_path_is_not_a_guard]]).
+
+    A foreign id was a `KeyError` on the kill-rule path — the right refusal with a traceback for a
+    message.
+    """
+    known = {one["id"] for one in pack["items"]}
+    ids: list[str] = []
+    for row in rows:
+        unit = row["id"]
+        if unit not in known:
+            raise SystemExit(
+                f"{where}: {unit} is not one of the {len(known)} units of the {pack['phase']} pack"
+                f" ({rel(PACK)}) — this file belongs to another run, and one foreign row loosens"
+                " every projection built on it. Stop and report."
+            )
+        if unit in ids:
+            raise SystemExit(
+                f"{where}: {unit} appears twice in {len(rows)} rows. One attempt means ONE answer per"
+                " unit: two rows for one id would be counted as two units read, which shrinks"
+                " `units_unread` and turns a cap gate into a GO. Stop and report."
+            )
+        ids.append(unit)
+    return ids
+
+
 def projection(record: dict, rate: float, rows: list[dict], elapsed: float, pack: dict) -> dict:
     """The full-pass gate over UNITS, with both legs of the registration's inequality.
 
@@ -193,14 +227,16 @@ def projection(record: dict, rate: float, rows: list[dict], elapsed: float, pack
     run's units carry between 0 and 16 payable comments.
     """
     usable = usable_seconds(record, rate)
-    read = len(rows)
+    ids = unit_ids(rows, pack, "the full-pass gate")
+    read = len(ids)
     if not read:
         raise SystemExit("no replies yet — there is nothing to project from")
+    by_id = {one["id"]: one for one in pack["items"]}
     payable = {one["id"]: one["payable_comments"] for one in pack["items"]}
     measured = sum(float(row["seconds"]) for row in rows)
     of = len(pack["items"])
     unread = of - read
-    read_payable = sum(payable[row["id"]] for row in rows) or 1
+    read_payable = sum(payable[unit] for unit in ids) or 1
     unread_payable = sum(payable.values()) - read_payable
     by_unit, by_payable = unread / read, unread_payable / read_payable
     factor = max(by_unit, by_payable)
@@ -209,7 +245,7 @@ def projection(record: dict, rate: float, rows: list[dict], elapsed: float, pack
     return {
         "units_read": read,
         "units_unread": unread,
-        "legs_read": sorted({row.get("leg") or "?" for row in rows}),
+        "legs_read": sorted({by_id[unit]["leg"] for unit in ids}),
         "payable_comments_read": read_payable,
         "payable_comments_unread": unread_payable,
         "elapsed_since_create_seconds": round(elapsed, 1),
@@ -253,6 +289,7 @@ def ingest(record: dict, raw: list[dict], pack: dict) -> list[dict]:
     parts nobody could look at is a verdict nobody can argue with.
     """
     task = record["instruments"]["task"]
+    unit_ids(raw, pack, "the ingest")
     items = {one["id"]: one for one in pack["items"]}
     rows, chunks = [], {}
     for one in raw:
@@ -492,14 +529,9 @@ def main(argv: list[str] | None = None, now: datetime | None = None) -> int:
         return 2 if gate["verdict"] == "KILL" else 3
 
     if args.gate:
-        by_id = {one["id"]: one for one in pack["items"]}
-        gate = projection(
-            record,
-            rate,
-            [row | {"leg": by_id[row["id"]]["leg"]} for row in rows],
-            elapsed,
-            pack,
-        ) | {"read_from": _read_from(args.raw)}
+        # the rows go in as the pod wrote them: `projection` takes each row's LEG from the pack it is
+        # already holding, so a foreign id is its named refusal and not a KeyError on this line
+        gate = projection(record, rate, rows, elapsed, pack) | {"read_from": _read_from(args.raw)}
         append_gate(state, gate, "full_pass")
         print(json.dumps(gate, ensure_ascii=False, indent=2))
         print(f"VERDICT {gate['verdict']} — {rel(RECORD)}")

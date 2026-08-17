@@ -240,6 +240,60 @@ def test_an_out_file_from_another_run_is_REFUSED_and_never_appended_to(tmp_path,
     assert len(out.read_text(encoding="utf-8").splitlines()) == 1
 
 
+def test_a_torn_LAST_line_in_the_out_file_leaves_that_unit_UNANSWERED(tmp_path, pack):
+    """The resume path meets the mid-write death the recovery clause exists for.
+
+    The partial jsonl is copied back off a dying pod, so its final line can be half written; that
+    file is what a replacement pod resumes from. A traceback here costs a whole segment, and a torn
+    reply is NOT an answer — the unit is re-asked, and the file the runner appends to must be left
+    with whole lines only, or the next append concatenates onto the fragment.
+    """
+    out = tmp_path / "pod.jsonl"
+    live = a_pack(pack, items=3)
+    answered = json.dumps({"id": live["items"][0]["id"], "reply": VERDICT, "index": 0})
+    torn = json.dumps({"id": live["items"][1]["id"], "reply": VERDICT})[:40]
+    out.write_text(f"{answered}\n{torn}", encoding="utf-8")
+
+    client = FakeClient([VERDICT])
+    assert pod.run(live, out, REPO_ROOT, loader=lambda p, r: client) == 0
+    # the torn unit was re-asked, the whole one was not
+    assert [one[1] for one in client.seen] == [one["id"] for one in live["items"][1:3]]
+    rows = [json.loads(line) for line in out.read_text(encoding="utf-8").splitlines() if line]
+    assert [row["id"] for row in rows] == [one["id"] for one in live["items"]]
+    assert len(rows) == 3
+
+
+def test_a_torn_MIDDLE_line_in_the_out_file_is_REFUSED_before_the_model_is_loaded(tmp_path, pack):
+    """Only the LAST line gets the benefit of the doubt — anywhere else it is a damaged file, and
+    resuming over it would silently re-ask a unit that HAS an answer on the pod that died."""
+    out = tmp_path / "pod.jsonl"
+    good = json.dumps({"id": pack["items"][0]["id"], "reply": VERDICT})
+    out.write_text(f'{{"id": "torn", "rep\n{good}\n', encoding="utf-8")
+    loaded = []
+    with pytest.raises(SystemExit, match="is not the last one"):
+        pod.run(a_pack(pack), out, REPO_ROOT, loader=lambda p, r: loaded.append(1))
+    assert loaded == []
+
+
+def test_the_pod_runner_and_the_mac_driver_DROP_THE_SAME_torn_line(tmp_path):
+    """One rule, two implementations, and they cannot share a module: this one runs on the rented
+    pod with two files beside it, that one runs on the Mac inside the whole repo. So the agreement is
+    a TEST rather than an import ([[the_hardening_did_not_reach_the_sibling_reader]])."""
+    path = tmp_path / "pod.jsonl"
+    whole = json.dumps({"id": "a", "seconds": 1.0})
+    path.write_text(f'{whole}\n{{"id": "b", "sec', encoding="utf-8")
+    mac = driver.raw_rows(path)
+    ours, torn = pod.whole_lines(path.read_text(encoding="utf-8"), str(path))
+    assert [row["id"] for row in mac] == [row["id"] for row in ours] == ["a"]
+    assert torn == '{"id": "b", "sec'
+
+    path.write_text(f'{{"id": "b", "sec\n{whole}\n', encoding="utf-8")
+    with pytest.raises(json.JSONDecodeError):
+        driver.raw_rows(path)
+    with pytest.raises(SystemExit, match="is not the last one"):
+        pod.whole_lines(path.read_text(encoding="utf-8"), str(path))
+
+
 def test_a_chunked_item_renders_its_header_on_the_pod_too(pack):
     """The pod renders the request ITSELF, so the header has to be in the pod's renderer as well —
     a chunk whose header was dropped there would hash to something nobody pinned."""
@@ -306,6 +360,69 @@ def test_the_projection_computes_BOTH_legs_and_the_pessimistic_one_binds(pack):
 def test_a_unit_slow_enough_to_break_the_cap_is_a_STOP(pack):
     rows = [{"id": pack["items"][0]["id"], "seconds": 400.0, "leg": "A"}]
     assert driver.projection(RECORD, RATE, rows, elapsed=250.0, pack=pack)["verdict"] == "STOP"
+
+
+def test_a_DUPLICATE_row_is_REFUSED_by_name_and_never_counted_as_two_units(pack):
+    """The second guard a cap gate deserves, and the arithmetic it stops.
+
+    Thirteen units answered twice make 26 rows against a 26-unit pack: counting ROWS, `units_unread`
+    is 0, the binding factor with it, and the gate returns GO on a run that has already spent five
+    times its cap. The runner-side skip is the only thing that keeps duplicates out of the file today
+    and it runs on the other machine ([[the_store_key_is_coarser_than_the_row]]).
+    """
+    rows = [{"id": one["id"], "seconds": 500.0} for one in pack["items"][:13]]
+    assert len(rows + rows) == len(pack["items"])  # what the row count would have believed
+    with pytest.raises(SystemExit, match="appears twice"):
+        driver.projection(RECORD, RATE, rows + rows, elapsed=300.0, pack=pack)
+    # the negative control: the same seconds over THIRTEEN unique ids is the STOP it should be
+    assert driver.projection(RECORD, RATE, rows, elapsed=300.0, pack=pack)["verdict"] == "STOP"
+
+
+def test_a_row_whose_id_THIS_pack_never_asked_for_is_REFUSED_by_name(pack):
+    """A foreign id was a KeyError on the kill-rule path — the right refusal for the wrong reason,
+    with a traceback instead of the id in the message."""
+    rows = [
+        {"id": pack["items"][0]["id"], "seconds": 40.0},
+        {"id": "@somebody_else:1", "seconds": 40.0},
+    ]
+    with pytest.raises(SystemExit, match="@somebody_else:1"):
+        driver.projection(RECORD, RATE, rows, elapsed=250.0, pack=pack)
+    with pytest.raises(SystemExit, match="@somebody_else:1"):
+        driver.ingest(RECORD, [{"id": "@somebody_else:1", "reply": "{}"}], pack)
+
+
+def test_the_ingest_refuses_a_duplicate_reply_for_one_unit(pack):
+    """One attempt means one answer per unit: two replies for one id are two verdicts nobody chose
+    between, and the evidence file is what every bar is scored on."""
+    raw = raw_for(pack, {pack["items"][0]["id"]: VERDICT})
+    assert len(raw) == 1
+    with pytest.raises(SystemExit, match="appears twice"):
+        driver.ingest(RECORD, raw + raw, pack)
+
+
+def test_the_gate_path_refuses_a_foreign_id_through_main_instead_of_a_KeyError(
+    tmp_path, monkeypatch, pack
+):
+    """Driven through `main`, because that is where the row was decorated with its leg by a dict
+    lookup — the refusal has to arrive before it ([[a_guard_on_one_path_is_not_a_guard]])."""
+    monkeypatch.setattr(driver, "RECORD", tmp_path / "run.json")
+    monkeypatch.setattr(driver, "PACK", tmp_path / "pack.json")
+    monkeypatch.setattr(driver, "registration", lambda: RECORD)
+    (tmp_path / "pack.json").write_text(json.dumps(pack, ensure_ascii=False), encoding="utf-8")
+    (tmp_path / "run.json").write_text(
+        json.dumps(
+            {
+                "phase": "reader-v5",
+                "pod": {"created_at": CREATED, "usd_per_hour": 0.74},
+                "gates": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+    raw = tmp_path / "pod.jsonl"
+    raw.write_text(json.dumps({"id": "@somebody_else:1", "seconds": 40.0}) + "\n", encoding="utf-8")
+    with pytest.raises(SystemExit, match="@somebody_else:1"):
+        driver.main(["--gate", "--raw", str(raw)], now=driver.stamp(CREATED).replace(minute=4))
 
 
 def test_a_torn_LAST_line_is_dropped_and_a_torn_middle_one_still_raises(tmp_path, capsys):

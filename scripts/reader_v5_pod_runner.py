@@ -162,6 +162,36 @@ def load_reader(pack: dict, repo: Path):  # pragma: no cover — needs the GPU a
     return client
 
 
+def whole_lines(text: str, where: str) -> tuple[list[dict], str | None]:
+    """Every WHOLE json row of an out-file, and the torn LAST line if it has one.
+
+    The Mac's `read_threads_reader_v5.raw_rows` states the same rule and cannot be imported here:
+    that one runs inside the repo on the Mac, this one runs on a rented pod with two files beside it
+    and no `market_pulse` on the path until the checkout is verified. Two implementations of one rule
+    is a drift risk, so their agreement on one fixture is a TEST
+    (`test_the_pod_runner_and_the_mac_driver_DROP_THE_SAME_torn_line`) rather than a hope.
+
+    Only the last line is forgiven: this file is scp'd back off a dying pod while the pod is still
+    appending to it, so its final line can be half written. A torn line anywhere else is a damaged
+    file, and resuming over it would silently re-ask a unit that HAS an answer.
+    """
+    lines = [line for line in text.splitlines() if line]
+    rows, torn = [], None
+    for index, line in enumerate(lines):
+        try:
+            rows.append(json.loads(line))
+        except json.JSONDecodeError:
+            if index != len(lines) - 1:
+                raise SystemExit(
+                    f"{where}: line {index + 1} of {len(lines)} is not JSON, and it is not the last"
+                    " one — that is a damaged file and not the mid-write race the final line is"
+                    " forgiven for. Resuming over it would re-ask a unit that already has an answer."
+                    " Move it aside and stop."
+                ) from None
+            torn = line
+    return rows, torn
+
+
 def already_answered(out: Path, ids: set[str]) -> set[str]:
     """The unit ids this out-file already carries — the whole mechanism of the recovery clause.
 
@@ -174,16 +204,30 @@ def already_answered(out: Path, ids: set[str]) -> set[str]:
     A file carrying an id this pack never asked for belongs to a different run and is REFUSED here,
     before the model is loaded, rather than resumed against. `--out` is append-only by design and a
     stale file is the one way that design can hurt.
+
+    A TORN last line is not an answer, so its unit is re-asked — and the fragment is dropped from the
+    FILE and not only from this count: `--out` is opened in append mode, and a final line with no
+    newline would have the next reply concatenated onto it. The drop is a byte-prefix of the file, so
+    every reply that did land is left exactly as the pod wrote it.
     """
     if not out.exists():
         return set()
-    done = [json.loads(line)["id"] for line in out.read_text(encoding="utf-8").splitlines() if line]
+    text = out.read_text(encoding="utf-8")
+    rows, torn = whole_lines(text, str(out))
+    done = [row["id"] for row in rows]
     foreign = sorted(set(done) - ids)
     if foreign:
         raise SystemExit(
             f"{out} already carries {len(foreign)} unit id(s) this pack never asked for"
             f" ({foreign[:3]}) — it is another run's file, and appending to it would mix two"
             " populations. Move it aside and stop."
+        )
+    if torn is not None:
+        out.write_text(text[: len(text) - len(torn)], encoding="utf-8")
+        print(
+            f"  (dropped a torn last line of {out}: {len(torn)} chars, no closing brace — the pod"
+            " that wrote it died mid-write, and that unit counts as UNANSWERED)",
+            flush=True,
         )
     return set(done)
 
