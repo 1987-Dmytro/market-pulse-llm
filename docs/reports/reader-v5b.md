@@ -1,17 +1,17 @@
-# reader-v5b — the $0 half, and the ruled order that STOPs the registered gate at unit 1
+# reader-v5b — the ruled order withdrawn on its own gate table, and the run that followed
 
 **Contract:** `docs/PROMPT-reader-v5b.md` · **Registration:**
-`results/prereg_reader_probe_v5b.json` (`6e2023deaffe8ef1…`) · **Pack:**
-`results/reader_v5b_pack.json` (`187fff2311969a74…`) · **Baseline:** `make check` 2 782 passed /
+`results/prereg_reader_probe_v5b.json` (`8122fce0eb25c223…`) · **Pack:**
+`results/reader_v5b_pack.json` (`f1f4a74d2f5b35bc…`) · **Baseline:** `make check` 2 782 passed /
 2 skipped, measured here and equal to the team lead's own run.
 
-**Where this stands. Step 0, step 0.5 and D1 are DONE and committed. D2 — the paid run — has NOT
-been opened: no pod was created, the attempt is unspent, and the registration has not frozen.** The
-reason is D1's own measurement, which the contract asked for: solved backwards over the pack order
-the operator ruled, the registered full-pass gate returns **STOP after the FIRST unit**, by 23.2
-seconds a unit, on any boot including no boot at all. Creating a pod under this order would spend the
-one attempt to read one thread and stop. The finding is inside the registration, asserted in tests,
-and §5 states the narrow ruling it needs.
+**What happened, in one paragraph.** Step 0, step 0.5 and D1 went as written. D1's own measurement —
+the one the contract asked for — said the pack order the operator had ruled makes the registered
+full-pass gate **STOP after the FIRST unit**, by 23.2 seconds a unit, on any boot including none at
+all. Nothing was created; the finding went to the operator with the four orders measured beside it;
+**the order ruling was withdrawn the same day, with the cap and gate 0 standing.** Leg A is v5's
+enumeration order again, the registration and the pack were rebuilt at $0, and the withdrawn order's
+gate table stays inside the registration as the withdrawal's evidence. D2 then ran on that.
 
 ---
 
@@ -26,9 +26,10 @@ programme stop-rule. In this registration that is not a promise: the v5b produce
 and refuses unless it rebuilds v5's frozen record byte for byte, so those keys are the frozen
 record's own objects (§3.1).
 
-**The three that do move — all transport, all operator rulings of 17.08.** The cap $0.45 → **$0.50**;
-a transport **gate 0** (ssh dead-man at 180 s with at most 2 recreates); leg A ordered by
-**descending payable comments**.
+**The three that were ruled, and the two that moved — all transport, all operator rulings of 17.08.**
+The cap $0.45 → **$0.50**; a transport **gate 0** (ssh dead-man at 180 s with at most 2 recreates);
+and leg A by **descending payable comments** — which was ruled, measured before any pod, and
+**withdrawn on that measurement the same day** (§4, §5). The registered order is v5's own.
 
 **Gate 0 and the third pod.** If `runpodctl ssh info` has not answered with a connectable endpoint
 by **180 s of that segment's own create-elapsed**, the pod is deleted, the deletion is proven by a
@@ -41,10 +42,10 @@ once; each segment's boot gates are measured from its OWN create response, and t
 is always the attempt's — the cap less what every closed segment billed, priced at each segment's own
 `costPerHr` and never at a balance delta.
 
-**The re-solved unit-2 margin.** On **v5's own order** at the new cap it is **+12.9 s/unit** — 55.5 s
-allowed against 42.6 s expected, 23% of margin, where $0.45 left 9%. Under the **ruled** order unit 2
-is not the tightest unit but it is no better: **+1.0 s/unit**, 82.1 s of mean against 83.1 s allowed,
-1.2% of margin — and the STOP has already fired one unit earlier (§4.2).
+**The re-solved unit-2 margin.** On the registered order — v5's own — at the new cap it is
+**+12.9 s/unit**: 55.5 s allowed against 42.6 s expected, 23% of margin where $0.45 left 9%, and it is
+the tightest point of all 26 units. Under the withdrawn order unit 2 was no better (**+1.0 s/unit**,
+82.1 s of mean against 83.1 s allowed, 1.2%) and the STOP had already fired one unit earlier (§4.2).
 
 **When the registration freezes.** At the **FIRST `pod create` of the attempt**. A recreated pod reads
 the SAME frozen record — that is what makes a replacement a segment of one attempt instead of a second
@@ -236,20 +237,25 @@ recreate. Driven at 179 s (WAIT, 1.0 s left), at 180 s (KILL), and with the endp
 after the second meter has already started. It refuses while any segment lacks a `deleted_at`, and it
 refuses when three segments are already on record — before anything is created.
 
-### 3.4 Difference 3 — the order, and its tiebreak
+### 3.4 Difference 3 — the order: ruled, measured, withdrawn
 
-**Dv476.** The ruling says «descending payable». That is **not a total order** on this population:
-six payable counts are shared — 12 by three threads, and 9, 5, 4, 3, 2 by two or more. So the
-registration registers the key as `(-payable_comments, thread_id)` and says so in
-`population.leg_a.order_rule`; without the tiebreak, «the pack is in descending payable order» is
-unverifiable and two builds of one registration could produce two packs.
-`[cause: an-order-key-that-is-not-total]`
+**Dv476.** The ruling said «descending payable». That is **not a total order** on this population:
+six payable counts are shared — 12 by three threads, and 9, 5, 4, 3, 2 by two or more — so the
+registration registered the key as `(-payable_comments, thread_id)`. Without the tiebreak, «the pack
+is in descending payable order» is unverifiable and two builds of one registration could produce two
+packs. `[cause: an-order-key-that-is-not-total]`
+
+The order was then solved through the live gate (§4), the operator withdrew the ruling on that
+measurement, and the registered order is v5's enumeration order — element for element, not merely as
+a set. `population.leg_a.order_withdrawn` keeps the whole episode inside the record: what was ruled,
+when it was ruled and withdrawn, why each, what removed the knife-edge instead, and the tiebreak the
+withdrawn key would have needed.
 
 The pack: **26 units, `AAAAAAAAAAAAAAAAAAAAAAABBB`**, payable
-`15 12 12 12 10 9 9 8 7 5 5 5 4 4 3 3 2 2 2 2 2 1 0` then `16 16 11`, sha256
-`187fff2311969a74…`. Built by the same function that built v5's pack, and the
-`id → rendering_sha256` map is a **set equality** against the frozen v5 record: only the order moved,
-the digest did not, and no request was re-rendered.
+`7 2 12 4 5 5 2 2 5 10 9 12 8 3 9 12 15 2 3 2 1 0 4` then `16 16 11`, sha256
+`f1f4a74d2f5b35bc…`. Built by the same function that built v5's pack, and its id list is asserted
+equal to the registration's own leg-A enumeration followed by leg B's three chunks — not to a
+hand-typed permutation.
 
 ---
 
@@ -264,7 +270,7 @@ registration's own 106.7 s each, starting from 214.1 s of create-elapsed (v4's m
 pre-generation 39.0 s + its measured boot 175.119 s). Reported and gating nothing; the gate itself
 compares MEASURED seconds. This is Dv471's method at the order and the cap being registered.
 
-### 4.2 The ruled order STOPs at unit 1
+### 4.2 The ruled order STOPped at unit 1
 
 | after | unit | payable | mean s/unit | binding | factor | allowed s/unit | headroom | verdict |
 |---|---|---|---|---|---|---|---|---|
@@ -300,13 +306,13 @@ the optimistic end. (The threads that DID overshoot are `@VARUS_channel:10529` a
 
 ### 4.3 Four candidate orders through the same live gate, at the same cap
 
-$0, and the reason the finding is a decision and not just a number. Same function, same record, same
-expected seconds; only leg A's order differs:
+$0, and the reason the finding was a decision and not just a number — this is the table the ruling
+was withdrawn on. Same function, same record, same expected seconds; only leg A's order differs:
 
 | order | first STOP | tightest margin |
 |---|---|---|
-| **A.** v5's enumeration order, unchanged | none — GO through all 26 | **+12.9** s/unit at unit 2 |
-| **B.** descending payable — **ruled and registered** | **unit 1** (105.3 vs 82.1 allowed) | −23.2 s/unit at unit 1 |
+| **A.** v5's enumeration order — **now the registered one** | none — GO through all 26 | **+12.9** s/unit at unit 2 |
+| **B.** descending payable — **ruled, then withdrawn** | **unit 1** (105.3 vs 82.1 allowed) | −23.2 s/unit at unit 1 |
 | **C.** ascending payable | unit 2 (7.8 vs 6.1 allowed) | −9.5 s/unit at unit 6 |
 | **D.** descending payable per second | none — GO through all 26 | +24.7 s/unit at unit 1 |
 
@@ -321,47 +327,54 @@ order (Dv476 is the same lesson one column over).
 
 ---
 
-## 5. D2 — not opened, and the ruling it needs
+## 5. The ruling — the order withdrawn, before any pod
 
-**No pod was created. `runpodctl pod list -a` is `[]`, the step has no anchor, the attempt is
-unspent, and the registration has not frozen.**
+**Dv477.** The contract's D2 was not opened on the ruled order. Under the registered gate it reads one
+thread and STOPs: that spends the one attempt this registration allows, closes the reader question for
+it, and — because the programme stop-rule fires only «if the run COMPLETES» — leaves the programme
+exactly where reader-v5 left it, minus about $0.06. Every $0 item of the contract was done and
+committed first; then the finding went to the operator with §4.3's four orders beside it, and the
+question was put narrowly: the descending-payable ruling is arithmetically incompatible with the
+registered full-pass gate — is the ORDER ruling withdrawn, or is something else authorised?
+`[cause: registered-gate-vs-ruled-order]`
 
-**Dv477.** The contract's D2 was not executed. Under the registered gate and the ruled order the run
-reads one thread and STOPs: that spends the one attempt this registration allows, closes the reader
-question for it, and — because the programme stop-rule fires only «if the run COMPLETES» — leaves the
-programme exactly where reader-v5 left it, minus about $0.06. Every $0 item of the contract is done
-and committed; this is the one step that cannot be taken back, so it is the one that waits for a
-ruling. `[cause: registered-gate-vs-ruled-order]`
+**The ruling: the order ruling is withdrawn. The cap $0.50 and gate 0 stand. Leg A returns to v5's
+enumeration order.** Given at 2026-08-17, on the table above, before any pod of this attempt existed.
 
-**The narrow question: the descending-payable ruling is arithmetically incompatible with the
-registered full-pass gate. Is the ORDER ruling withdrawn — the cap and gate 0 standing, leg A back in
-v5's enumeration order, which clears every gate with 23% of margin at its tightest — or is something
-else authorised?** The gate itself is not in question: it is the registered law, word for word since
-probe-a, and re-ordering to loosen it is what this stack calls loosening a cap guard by arrangement.
-Option D above exists and has more margin than any other order measured; it is named here as a
-number, not as a recommendation, because it is an ordering rule nobody has ruled.
+What it cost to apply, all of it $0: `ruled_order()` became `registered_order()` and
+`withdrawn_order()` in `scripts/write_reader_prereg_v5b.py`, the registration rebuilt
+(`6e2023de…` → **`8122fce0eb25c223…`**), the pack rebuilt (`187fff23…` → **`f1f4a74d2f5b35bc…`**,
+same 26 units, same 26 rendering shas, only the sequence), five tests rewritten and one added.
+Commits `f7e2263` and `1942a74`.
 
-**What happens the moment a ruling lands.** If the order returns to v5's enumeration, the change is
-`ruled_order()`'s sort key in `scripts/write_reader_prereg_v5b.py` and the two claims in
-`tests/test_reader_prereg_v5b.py` that name the permutation and the STOP, then a rebuild of the
-registration and the pack (both $0, both re-derived, both re-tested), one commit, and then D2 runs as
-written: anchor →
-`--pre-create-check` → three listings with the volume as the positive control → create with
-`--terminate-after 90` → gate 0 at 3–4 s polls → stage from a bundle into a NEW directory with
-`--repo` passed explicitly → handshake → detached launch → gates appended with the partial jsonl
-copied back before each one → delete, never stop → three listings → guard read → close.
+**The withdrawal's evidence lives in the record it changed**, not only here: both gate tables are
+published in `money.arithmetic` — `full_pass_over_the_registered_order` (no STOP, GO through all 26,
+tightest +12.9 s/unit at unit 2) and `full_pass_over_the_withdrawn_order` (STOP after unit 1, −23.2
+s/unit) — and `population.leg_a.order_withdrawn` carries the dates and the reasons. A withdrawal whose
+evidence lives only in a report is a withdrawal the next contract can re-decide.
 
 **Dv478, named now rather than discovered later.** The Verify block calls
 `PYTHONPATH=src python3.11 scripts/score_reader_v5.py`, and that script's `PHASE`, `PREREG`,
 `EVIDENCE`, `RUN`, `LEDGER` and `OUT` are module constants pointing at v5's files — bar 5 would be
-scored against the v5 ledger. When there is evidence to score, the scorer will be reached the way
-this stack has always reached a shipped artefact it may not edit: a thin `score_reader_v5b.py` that
-CALLS it (Dv451's idiom, and the same idiom the v5b registration and driver already use). Nothing is
-scored today, because nothing was read. `[cause: reading-of-the-clause]`
+scored against the v5 ledger, and its refusal names `results/reader_v5_w1.jsonl` (§7). It is reached
+the way this stack reaches a shipped artefact it may not edit: a thin caller (Dv451's idiom, the same
+one the v5b registration and driver already use). `[cause: reading-of-the-clause]`
 
 ---
 
-## 6. Verify
+## 6. D2 — the run
+
+*(written as it happened; every figure points at `results/reader_v5b_run.json` or the step ledger)*
+
+**At the moment this commit was made the run had not been opened yet**: the anchor is next, then
+the three listings, then `--pre-create-check`, then `pod create`. This section is filled in after
+the pod is deleted. If it still reads like this, the session ended between the ruling and the
+anchor and nothing was billed — `results/spend_reader_v5b.json` and `results/reader_v5b_run.json`
+are the two files that would say otherwise.
+
+---
+
+## 7. Verify
 
 ```
 $ make check                                   # before step 0.5
@@ -369,7 +382,7 @@ $ make check                                   # before step 0.5
 $ make check                                   # at c7e2395, the step 0.5 commit
 2789 passed, 2 skipped in 378.42s
 $ make check                                   # at cdf0e58, after D1
-<see §6.1>
+<see §7.1>
 $ python3.11 -m ruff format --check .
 336 files already formatted
 $ runpodctl pod list -a
@@ -407,7 +420,7 @@ $ PYTHONPATH=src python3.11 scripts/score_reader_v5.py
 results/reader_v5_w1.jsonl: no evidence — there is nothing to score
 ```
 
-### 6.1 The suite, after D1
+### 7.1 The suite, after D1
 
 ```
 $ make check
@@ -420,7 +433,7 @@ the v5b producer calls v5's, so that one test rebuilds two records.
 
 ---
 
-## 7. Deviations
+## 8. Deviations
 
 | | what | tag |
 |---|---|---|
