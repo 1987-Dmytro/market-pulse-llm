@@ -53,6 +53,16 @@
       "billing_since_usd": 0.833863,
       "billing_read": "read",
       "note": "reader-v4 CLOSED at $0.2361 — reader-v4 settled"
+    },
+    {
+      "at": "2026-08-17T13:08:34+00:00",
+      "balance": 21.6370097948,
+      "spent_usd": 0.8728,
+      "remaining_usd": 19.1272,
+      "balance_delta_usd": 0.8728,
+      "billing_since_usd": 0.863029,
+      "billing_read": "read",
+      "note": "reader-v5 anchor, before the pod"
     }
   ]
 }
