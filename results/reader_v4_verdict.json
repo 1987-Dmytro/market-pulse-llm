@@ -2,14 +2,20 @@
   "5_time_and_cost": {
     "anchor": 22.0675725277,
     "anchored_at": "2026-08-16T17:49:04+00:00",
+    "billing_by_kind": {
+      "network-volume": 0.155556,
+      "pods": 0.236118,
+      "serverless": 0.0
+    },
     "cap_usd_all_in": 0.35,
     "ledger": "results/spend_reader_v4.json",
-    "lower_bound_usd": 0.2446,
-    "passed": null,
-    "reason": "the step ledger carries no closing entry, so there is no settled figure. The largest balance-delta reading its sessions hold is a LOWER BOUND — it also carries the always-on volume, which belongs to no step — and closing is a named debt for the next guard run, never a number invented here",
-    "sessions": 2,
-    "sha256": "a906a8e8be2fa96e38a0f338e82d1d134f86f476861ed51356d1747550508494",
-    "state": "OPEN"
+    "passed": true,
+    "reading": "the step's OWN resources, the always-on network volume excluded by kind and not by arithmetic (SPEC 3.23 (4), Dv412)",
+    "sessions": 3,
+    "settled_usd": 0.236118,
+    "sha256": "983b84ba276abf0605d3be74df52ee274c8216a4b6ffc78950128395e868168a",
+    "state": "CLOSED",
+    "window_start": "2026-08-16T17:49:04+00:00"
   },
   "bars": {
     "1_flagships": {

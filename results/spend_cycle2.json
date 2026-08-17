@@ -43,6 +43,16 @@
       "billing_since_usd": 0.442189,
       "billing_read": "read",
       "note": "reader-v4 pod p7kyjc5ak4pq1n deleted; 23 of 23 threads read, pod lived 1 143 s (18:00:12Z -> 18:19:15Z) at $0.74/h"
+    },
+    {
+      "at": "2026-08-17T10:17:10+00:00",
+      "balance": 21.6661764614,
+      "spent_usd": 0.8436,
+      "remaining_usd": 19.1564,
+      "balance_delta_usd": 0.8436,
+      "billing_since_usd": 0.833863,
+      "billing_read": "read",
+      "note": "reader-v4 CLOSED at $0.2361 — reader-v4 settled"
     }
   ]
 }
