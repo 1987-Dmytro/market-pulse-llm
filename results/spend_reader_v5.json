@@ -8,6 +8,12 @@
       "balance": 21.6370097948,
       "step_spent_usd": 0.0,
       "note": "reader-v5 anchor, before the pod"
+    },
+    {
+      "at": "2026-08-17T13:30:34+00:00",
+      "balance": 21.4964339726,
+      "step_spent_usd": 0.1406,
+      "note": "reader-v5 pod deleted after the boot deadline KILL, no reply"
     }
   ],
   "gpu_note": "RunPod account balance read before the first pod of reader-v5. Step spend = the pessimistic maximum of this anchor minus the balance now and the billing walk since `anchored_at` (SPEC 3.23 (4), Dv411), enforced against $0.45. The SPEC amendment 3.4 (4) phase cap is enforced separately, against results/spend_phase4.json, and neither anchor may be regenerated."

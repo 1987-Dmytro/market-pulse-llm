@@ -63,6 +63,16 @@
       "billing_since_usd": 0.863029,
       "billing_read": "read",
       "note": "reader-v5 anchor, before the pod"
+    },
+    {
+      "at": "2026-08-17T13:30:34+00:00",
+      "balance": 21.4964339726,
+      "spent_usd": 1.0133,
+      "remaining_usd": 18.9867,
+      "balance_delta_usd": 1.0133,
+      "billing_since_usd": 0.863029,
+      "billing_read": "read",
+      "note": "reader-v5 pod deleted after the boot deadline KILL, no reply"
     }
   ]
 }

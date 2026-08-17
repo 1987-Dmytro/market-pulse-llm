@@ -1,0 +1,113 @@
+{
+  "gates": [
+    {
+      "affordability_deadline_as_create_elapsed": 675.2,
+      "at": "2026-08-17T13:18:17+00:00",
+      "contract_ceiling_as_create_elapsed": null,
+      "contract_ceiling_seconds": 720.0,
+      "elapsed_since_create_seconds": 4.7,
+      "first_reply_must_land_by_create_elapsed": 675.2,
+      "generation_started_at_create_elapsed": null,
+      "kind": "open",
+      "pre_generation_budget_seconds": -44.785,
+      "reading_projection_seconds": 1454.0,
+      "rule": "min(boot_kill_seconds, usable_seconds − seconds since `pod create` − reading projection). Both numbers are printed at the gate and both land in the run record",
+      "seconds_left": 670.5,
+      "spent_so_far_usd": 0.001,
+      "usable_seconds": 2129.2,
+      "usd_per_second": 0.000205556,
+      "verdict": "WAIT",
+      "which_binds": "affordability — the generation has not started, so the contract's twelve minutes has no place on this axis yet"
+    },
+    {
+      "affordability_deadline_as_create_elapsed": 675.2,
+      "at": "2026-08-17T13:23:59+00:00",
+      "contract_ceiling_as_create_elapsed": null,
+      "contract_ceiling_seconds": 720.0,
+      "elapsed_since_create_seconds": 346.6,
+      "first_reply_must_land_by_create_elapsed": 675.2,
+      "generation_started_at_create_elapsed": null,
+      "kind": "boot_kill",
+      "pre_generation_budget_seconds": -44.785,
+      "read_from": {
+        "copied_back_at": null,
+        "exists": false,
+        "path": "results/reader_v5_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "reading_projection_seconds": 1454.0,
+      "rule": "min(boot_kill_seconds, usable_seconds − seconds since `pod create` − reading projection). Both numbers are printed at the gate and both land in the run record",
+      "seconds_left": 328.6,
+      "spent_so_far_usd": 0.0713,
+      "usable_seconds": 2129.2,
+      "usd_per_second": 0.000205556,
+      "verdict": "WAIT",
+      "which_binds": "affordability — the generation has not started, so the contract's twelve minutes has no place on this axis yet"
+    },
+    {
+      "affordability_deadline_as_create_elapsed": 675.2,
+      "at": "2026-08-17T13:27:32+00:00",
+      "contract_ceiling_as_create_elapsed": null,
+      "contract_ceiling_seconds": 720.0,
+      "elapsed_since_create_seconds": 559.3,
+      "first_reply_must_land_by_create_elapsed": 675.2,
+      "generation_started_at_create_elapsed": null,
+      "kind": "boot_kill",
+      "pre_generation_budget_seconds": -44.785,
+      "read_from": {
+        "copied_back_at": null,
+        "exists": false,
+        "path": "results/reader_v5_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "reading_projection_seconds": 1454.0,
+      "rule": "min(boot_kill_seconds, usable_seconds − seconds since `pod create` − reading projection). Both numbers are printed at the gate and both land in the run record",
+      "seconds_left": 115.8,
+      "spent_so_far_usd": 0.115,
+      "usable_seconds": 2129.2,
+      "usd_per_second": 0.000205556,
+      "verdict": "WAIT",
+      "which_binds": "affordability — the generation has not started, so the contract's twelve minutes has no place on this axis yet"
+    },
+    {
+      "affordability_deadline_as_create_elapsed": 675.2,
+      "at": "2026-08-17T13:30:14+00:00",
+      "contract_ceiling_as_create_elapsed": null,
+      "contract_ceiling_seconds": 720.0,
+      "elapsed_since_create_seconds": 721.5,
+      "first_reply_must_land_by_create_elapsed": 675.2,
+      "generation_started_at_create_elapsed": null,
+      "kind": "boot_kill",
+      "pre_generation_budget_seconds": -44.785,
+      "read_from": {
+        "copied_back_at": null,
+        "exists": false,
+        "path": "results/reader_v5_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "reading_projection_seconds": 1454.0,
+      "rule": "min(boot_kill_seconds, usable_seconds − seconds since `pod create` − reading projection). Both numbers are printed at the gate and both land in the run record",
+      "seconds_left": -46.3,
+      "spent_so_far_usd": 0.1483,
+      "usable_seconds": 2129.2,
+      "usd_per_second": 0.000205556,
+      "verdict": "KILL",
+      "which_binds": "affordability — the generation has not started, so the contract's twelve minutes has no place on this axis yet"
+    }
+  ],
+  "latest": {
+    "kind": "boot_kill",
+    "verdict": "KILL"
+  },
+  "phase": "reader-v5",
+  "pod": {
+    "card": "NVIDIA GeForce RTX 4090",
+    "card_registered": "NVIDIA GeForce RTX 4090",
+    "created_at": "2026-08-17T13:18:13Z",
+    "pod_id": "ivw5z93im4hfnz",
+    "priced_at_or_under_the_example": true,
+    "usd_per_hour": 0.74,
+    "usd_per_hour_worked_example": 0.74,
+    "usd_per_second": 0.000205556
+  }
+}
