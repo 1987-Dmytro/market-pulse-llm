@@ -913,9 +913,16 @@ has the whole thread will hallucinate the rest of it or refuse to answer for wha
 line is Ukrainian because that is what `reader_messages_gm4(part=…)` renders, and the two have to
 be the same string in the same alphabet ([[a_rename_the_data_cannot_follow]])."""
 
-READER_ATTRIBUTION_V5 = (
-    READER_DUTY_THREE_V3 + "\n\n"
+READER_ATTRIBUTION_HEAD_V5 = (
     'ATTRIBUTION. This is what decides `subject_type`, in "signals" and in "per_comment" alike.'
+)
+"""The one sentence of the attribution block that is ABOUT the thread reader's own two lists.
+
+Split off from the law below so pass 1 can carry the law without inheriting a sentence naming two
+fields its answer does not have. :data:`READER_ATTRIBUTION_V5` re-assembles the two, and
+`tests/test_reader_prompt_v5.py` asserts the v5 text did not move a byte."""
+
+READER_ATTRIBUTION_LAW_V5 = (
     " The subject is read off THE COMMENT ITSELF and never off the thread's protagonist: not off the"
     " channel, not off the trade mark the post is about, not off the shop the comment beside it"
     " discusses. One test settles it — would the complaint or the praise still stand if the chain"
@@ -931,6 +938,12 @@ READER_ATTRIBUTION_V5 = (
     " «сеть_ритейлер». It does not survive swapping the shop, so it is not «молочный_бренд».\n"
     "- «сирки з родзинками ніхто вже не робить такі, як колись», beside a comment naming one maker"
     " → «категория_личное». It is about the kind, so it is not «молочный_бренд»."
+)
+"""The swap test and its three examples — the half of the attribution block that is about READING a
+comment rather than about the reader's schema. Shared verbatim with pass 1."""
+
+READER_ATTRIBUTION_V5 = (
+    READER_DUTY_THREE_V3 + "\n\n" + READER_ATTRIBUTION_HEAD_V5 + (READER_ATTRIBUTION_LAW_V5)
 )
 """Pair 1, the attribution block — the sitting's ruling (a), and the largest single miss v4 bought.
 
@@ -1084,6 +1097,51 @@ v1, v2 and v3 stay registered, untouched, hashed and servable, and :func:`reader
 v2 as its DEFAULT: every caller that passes no `task` is a caller whose evidence is already on disk
 ([[a_sealed_caller_forces_the_default]]). v5 is opt-in and the run contract names it."""
 
+
+# --- pass 1: the decomposition of the sitting of 2026-08-17, one comment at a time ----------------
+
+PASS1_SUBJECT_TYPES = READER_ENTITY_TYPES
+"""The FOUR readings pass 1 may answer with — the ratified taxonomy, and nothing beside it.
+
+Not :data:`READER_SUBJECT_TYPES`, whose fifth word «категория» exists because v1's schema example
+offered it. The v5 text stopped offering it and the run MEASURED what that did: over v5b's 195
+`per_comment` rows the word does not appear once, where v4's v3-text run spelled it on 3 of its 26
+non-null rows. So the narrow domain costs nothing observed, and the gold's own «категория» is
+handled where it has always been handled — in the scorer's symmetric collapse, never in a parser."""
+
+PASS1_COMMENT_PROMPT = (
+    "You are given ONE comment from a discussion under a Ukrainian Telegram post, the topic of that"
+    " post, and the entities this thread has already been resolved to. Decide who the comment is"
+    " ABOUT and what attitude it carries towards them. Nothing else is asked of you.\n\n"
+    "ATTRIBUTION. This is what decides `subject_type`." + READER_ATTRIBUTION_LAW_V5 + "\n\n"
+    "The entities block is CONTEXT and not a menu. It says which names this thread has already been"
+    " read to carry and how, so that a comment saying «вони», «ця мережа» or «воно» can be resolved"
+    " to one of them. A name the block does not list is still a name — read it off the comment. And"
+    " a comment that points at none of them is not obliged to pick one.\n\n"
+    "Answer with ONE JSON object and nothing else — no preamble, no fence, no second object:\n"
+    '{"msg_id": the id of the comment you were given, copied back exactly;'
+    ' "subject_type": one of "молочный_бренд", "сеть_ритейлер", "категория_личное",'
+    ' "не_наш_рынок", or null where the comment is about nobody;'
+    ' "subject_id": the subject\'s name as the comment writes it — or the name from the entities'
+    " block where the comment points at it without spelling it — and null where there is no name;"
+    ' "stance": one of "positive", "negative", "neutral", or null where the comment carries no'
+    " attitude towards its subject}"
+)
+"""The pass-1 classifier of `docs/PROMPT-pass1-probe.md` D1 — the sitting's architecture D, in text.
+
+SHORT on purpose. The reader's whole verdict is what the stop-rule just closed; this asks the one
+question bar 4 measures and nothing else, on one comment at a time, with the thread's entities
+already resolved by a reading that has been PAID FOR. The attribution law is
+:data:`READER_ATTRIBUTION_LAW_V5` by reference and not by copy — the same bytes the reader was
+asked with, so a finding here is about the DECOMPOSITION and not about a re-worded law
+([[the_prompt_must_carry_the_annotators_law]]). Its three examples are the ones
+`tests/test_reader_prompt_v5.py` already proves synthetic, and
+`tests/test_pass1_prompt.py` proves it again over this text, corpus and positive control included.
+
+No gold value may appear here: no msg_id, no thread, no answer. The one attempt is the real guard
+and it is registered, but a prompt that named a gold row would make the measurement worthless
+whatever the bar said."""
+
 PROMPTS = {
     "T1": T1_PROMPT,
     "T2": T2_PROMPT,
@@ -1106,6 +1164,7 @@ PROMPTS = {
     "reader_thread_gm4_v3": READER_THREAD_PROMPT_V3,
     # no `_v4`: the number follows the contract that registers a text, and reader-v4 registered v3's
     "reader_thread_gm4_v5": READER_THREAD_PROMPT_V5,
+    "pass1_comment_gm4_v1": PASS1_COMMENT_PROMPT,
 }
 RENDER_ONLY = {"precheck_v2ctx_with_post": "precheck_v2_with_post"}
 """Registered tasks whose prompt text *is* another task's, mapped to the base they share.
@@ -1211,6 +1270,16 @@ asked for it. What that costs is one thing and it is stated here — a v1 or v2 
 can parse where it once refused, so any number quoted from probe-a or probe-b comes from the record
 that run WROTE and never from a re-read (SPEC §7, and `results/reader_probe_b_verdict.json` is the
 registered verdict of probe-b whatever this parser would say now)."""
+
+PASS1_TASK = "pass1_comment_gm4_v1"
+PASS1 = frozenset({PASS1_TASK})
+"""The per-comment classifier of architecture D. Registered and hashed like every other prompt, and
+out of the three labelling tables for the reason :data:`READER` and :data:`POSITIONS` are: its answer
+is one object about one comment in a taxonomy no `COMMENT_FIELDS` row describes.
+
+:func:`parse_reply` refuses it BY NAME, and points at :func:`parse_pass1` — which needs an argument
+`parse_reply` has no room for. The echo of the request's `msg_id` is the check that says the answer
+is about the comment that was sent, and a parser that cannot see the request cannot make it."""
 
 WITH_POST = frozenset(
     {
@@ -1347,6 +1416,8 @@ def build_messages(
         raise ValueError(f"{task}: this prompt extracts positions — use positions_messages")
     if task in READER:
         raise ValueError(f"{task}: this prompt reads a thread — use reader_messages_gm4")
+    if task in PASS1:
+        raise ValueError(f"{task}: this prompt classifies one comment — use pass1_messages_gm4")
     tag = DELIMITERS[task]
     facts = context_lines(reply, sender)
     if facts and task not in WITH_CONTEXT:
@@ -1570,6 +1641,111 @@ def reader_messages_gm4(
             " thread would be answered as if it were the whole one"
         )
     return [{"role": "user", "content": content}]
+
+
+PASS1_MAX_INPUT_CHARS = 12_000
+"""The LOUD ceiling on ONE rendered pass-1 request — refuse rather than truncate.
+
+Sized from what the request is MADE of and not from a round number: the prompt is ~2 300 characters,
+the largest entity block any of the seven gold threads resolves to is ten rows, and the longest
+payable comment of the census population is under 2 000. A request over this is one no projection
+priced, and pass 1's whole claim is that its calls are SHORT.
+"""
+
+
+def pass1_messages_gm4(
+    channel: str,
+    post_id: int,
+    topic: str,
+    entities: list[dict],
+    msg_id: int,
+    text: str,
+    *,
+    task: str = PASS1_TASK,
+) -> list[dict]:
+    """ONE comment as the pass-1 classifier is given it: the topic, the resolved entities, the row.
+
+    `reader_messages_gm4` is NOT touched and this is not derived from it — the two render different
+    requests for different tasks, and a shared renderer with a mode flag would put a frozen record's
+    re-render one boolean away from the wrong branch ([[a_sealed_caller_forces_the_default]]).
+
+    The entity block comes from a verdict ALREADY BOUGHT and is rendered as `name → subject_type →
+    one-phrase reading`; rows whose reading is missing render with the name and the type alone, so a
+    thread whose reader answered with a thin entity list still gets the context it has. The block may
+    legitimately be EMPTY — `@mandziak:3703`'s verdict resolves no entity at all — and an empty block
+    renders as one explicit line rather than as nothing, because «this thread resolved no entity» and
+    «the block was forgotten» must not look the same to the model.
+
+    Ids as attributes and everything fenced, exactly as the reader renders: a comment that itself
+    ends in "Answer with the JSON object alone" is retail text and not an instruction.
+    """
+    if task not in PASS1:
+        raise ValueError(f"{task}: not a registered pass-1 prompt — {sorted(PASS1)}")
+    if not text.strip():
+        raise ValueError(f"{channel}:{post_id}:{msg_id}: the comment has no text — nothing to read")
+    rows = []
+    for one in entities:
+        name = str(one.get("name", "")).strip()
+        if not name:
+            raise ValueError(
+                f"{channel}:{post_id}: an entity with no name — the block resolves references by"
+                " name, and a nameless row resolves nothing"
+            )
+        reading = str(one.get("reading") or "").strip()
+        subject_type = str(one.get("subject_type") or "").strip() or "?"
+        rows.append(f"{name} → {subject_type}" + (f" → {reading}" if reading else ""))
+    block = "\n".join(rows) if rows else "(this thread resolved no entity)"
+    content = (
+        f'{PROMPTS[task]}\n\n<thread channel="{channel}" post_id="{post_id}">\n'
+        f"<topic>\n{topic.strip() or NO_POST_TEXT}\n</topic>\n"
+        f"<entities>\n{block}\n</entities>\n"
+        f'<comment msg_id="{msg_id}">\n{text.strip()}\n</comment>\n</thread>'
+    )
+    if len(content) > PASS1_MAX_INPUT_CHARS:
+        raise ValueError(
+            f"{channel}:{post_id}:{msg_id}: the rendered request is {len(content)} characters, over"
+            f" the registered ceiling of {PASS1_MAX_INPUT_CHARS}. Stop and report it — a truncated"
+            " request would be answered as if it were the whole one"
+        )
+    return [{"role": "user", "content": content}]
+
+
+def parse_pass1(reply: str, *, msg_id: int) -> dict:
+    """The pass-1 answer, or :class:`ParseError` naming what is wrong. Strict everywhere.
+
+    `msg_id` is the id the request was BUILT with, and the reply has to echo it. That check is the
+    reason this is not reachable through :func:`parse_reply`: a classifier answering about a
+    different comment than the one it was sent is the failure mode a single-object schema cannot
+    catch on its own, and nothing downstream could see it — the row would simply be scored against
+    the wrong gold.
+
+    No container repair and no tolerance beyond the wrapper :func:`_object` has always stripped. The
+    reader's three repairs were bought for a four-list schema; this answer is four scalars, so there
+    is no container to be tolerant about, and every shape that is not the object asked for is an
+    outcome the census counts rather than a defect a parser hides.
+    """
+    payload = _object(reply)
+    _require(payload, "msg_id", "subject_type", "subject_id", "stance")
+    echoed = _msg_id(payload["msg_id"], "msg_id")
+    if echoed != msg_id:
+        raise ParseError(f"msg_id echoes {echoed}, not the {msg_id} it was asked about")
+    subject_type = (
+        None
+        if payload["subject_type"] is None
+        else _choice(payload["subject_type"], "subject_type", PASS1_SUBJECT_TYPES)
+    )
+    return {
+        "msg_id": echoed,
+        "subject_type": subject_type,
+        "subject_id": (
+            None if payload["subject_id"] is None else _text(payload["subject_id"], "subject_id")
+        ),
+        "stance": (
+            None
+            if payload["stance"] is None
+            else _choice(payload["stance"], "stance", SENTIMENT_LABELS)
+        ),
+    }
 
 
 READER_LIST_FIELDS = ("entities", "signals", "per_comment", "noise")
@@ -1913,6 +2089,13 @@ def parse_reply(task: str, reply: str) -> dict:
         # reader would return `{"intents": [...]}`-shaped nothing instead of stopping.
         raise ValueError(
             f"{task}: this prompt answers with positions — use positions.parse_positions"
+        )
+    if task in PASS1:
+        # Same refusal shape as POSITIONS, different reason: this parser needs the request's msg_id
+        # and `parse_reply` does not have one. Falling through would return an answer nobody could
+        # tell was about the wrong comment.
+        raise ValueError(
+            f"{task}: this prompt answers about ONE comment — use parse_pass1(reply, msg_id=…)"
         )
     if task in READER:
         # read HERE and not in a module of its own: a second parser would be a second answer to

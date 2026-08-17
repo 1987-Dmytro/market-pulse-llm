@@ -20,6 +20,12 @@ import gate_census_w1_reader as reader_cell  # noqa: E402
 import probe_b_population as subset  # noqa: E402
 import window_summary_5c2 as summary  # noqa: E402
 import write_reader_prereg_v5 as prereg  # noqa: E402
+from test_prompts import (  # noqa: E402
+    MOVED_BY_PASS1,
+    SEALED_AT_PASS1,
+    put_the_sealed_shas_back,
+    sealed_sha256,
+)
 
 from market_pulse import prompts, reader_v5  # noqa: E402
 
@@ -40,7 +46,19 @@ def test_the_committed_registration_is_what_the_producer_writes_today(tmp_path):
     commit that carries it — which is the only witness that it preceded the pod."""
     out = tmp_path / "again.json"
     assert prereg.main(["--out", str(out)]) == 0
-    assert out.read_bytes() == RECORD_PATH.read_bytes()
+    # `instruments.parser` and `producer.borrowed` are hashed LIVE, and `src/market_pulse/prompts.py`
+    # moved a second time when `docs/PROMPT-pass1-probe.md` D1 registered the pass-1 text. The record
+    # is NOT re-pinned — it froze when the pod existed — so the two byte ranges allowed to differ are
+    # put back to what the sealing commit carries, and the swap must fire exactly twice
+    assert (
+        put_the_sealed_shas_back(
+            out.read_bytes(),
+            times=2,
+            moved=("src/market_pulse/prompts.py",),
+            at=SEALED_AT_PASS1,
+        )
+        == RECORD_PATH.read_bytes()
+    )
     assert "generated_at" not in RECORD_PATH.read_text(encoding="utf-8")
 
 
@@ -59,7 +77,12 @@ def test_the_instrument_is_RE_DERIVED_and_names_the_four_things_that_moved():
     # the three v1/v2/v3 pins are the SAME numbers v4 registered — the older texts did not move
     for task in ("reader_thread_gm4", "reader_thread_gm4_v2", "reader_thread_gm4_v3"):
         assert instruments["prompt_sha256"][task] == V4["instruments"]["prompt_sha256"][task]
-    assert instruments["parser"]["sha256"] == summary.sha256_of(
+    # the parser is the MOVED file: pass 1 registered its text in the same module, so the pinned
+    # bytes are the sealing commit's and the live ones are deliberately different
+    assert instruments["parser"]["sha256"] == sealed_sha256(
+        "src/market_pulse/prompts.py", SEALED_AT_PASS1
+    )
+    assert instruments["parser"]["sha256"] != summary.sha256_of(
         REPO_ROOT / "src" / "market_pulse" / "prompts.py"
     )
     assert instruments["parser"]["v5_additions"]["sha256"] == summary.sha256_of(
@@ -476,4 +499,8 @@ def test_what_freezes_when_the_pod_exists():
         REPO_ROOT / "docs" / "PROMPT-reader-v5-prep.md"
     )
     for name, digest in RECORD["producer"]["borrowed"].items():
-        assert summary.sha256_of(REPO_ROOT / name) == digest, name
+        if name in MOVED_BY_PASS1:
+            assert sealed_sha256(name, SEALED_AT_PASS1) == digest, name
+            assert summary.sha256_of(REPO_ROOT / name) != digest, name
+        else:
+            assert summary.sha256_of(REPO_ROOT / name) == digest, name

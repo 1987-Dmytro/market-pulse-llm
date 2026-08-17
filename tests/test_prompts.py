@@ -84,11 +84,13 @@ def test_taxonomy_v2_prompts_are_registered_beside_v1_and_not_inside_it():
         "reader_thread_gm4_v2",
         "reader_thread_gm4_v3",
         "reader_thread_gm4_v5",
+        "pass1_comment_gm4_v1",
     }
     # the label tables describe labelling tasks: the caption prompt answers in prose, the two
     # position prompts answer with records, the reader answers with one verdict about a whole
-    # thread, none of them is in any of them, and `T2` labels a post rather than a comment
-    not_labelling = prompts.FREE_TEXT | prompts.POSITIONS | prompts.READER
+    # thread, pass 1 with one object about one comment in a taxonomy no COMMENT_FIELDS row spells,
+    # none of them is in any of them, and `T2` labels a post rather than a comment
+    not_labelling = prompts.FREE_TEXT | prompts.POSITIONS | prompts.READER | prompts.PASS1
     assert set(prompts.DELIMITERS) == set(prompts.PROMPTS) - not_labelling
     assert set(prompts.COMMENT_FIELDS) == set(prompts.PROMPTS) - not_labelling - {"T2"}
     assert set(prompts.INTENTS_OF) == set(prompts.COMMENT_FIELDS)
@@ -100,6 +102,14 @@ def test_taxonomy_v2_prompts_are_registered_beside_v1_and_not_inside_it():
     assert not prompts.POSITIONS & (prompts.WITH_POST | prompts.FREE_TEXT | prompts.WITH_CONTEXT)
     assert not prompts.READER & (
         prompts.WITH_POST | prompts.FREE_TEXT | prompts.WITH_CONTEXT | prompts.POSITIONS
+    )
+    assert prompts.PASS1 < set(prompts.PROMPTS)
+    assert not prompts.PASS1 & (
+        prompts.WITH_POST
+        | prompts.FREE_TEXT
+        | prompts.WITH_CONTEXT
+        | prompts.POSITIONS
+        | prompts.READER
     )
     assert {task: prompts.prompt_sha256(task) for task in prompts.TASKS} == PROMPT_SHA256
     assert prompts.prompt_sha256("T1v2") != PROMPT_SHA256["T1"]
@@ -1011,19 +1021,44 @@ WITNESS = {"src/market_pulse/prompts.py": "reader_thread_gm4_v5"}
 disk — so a recovery from the wrong commit fails instead of passing quietly."""
 
 
-def sealed_blob(path: str) -> bytes:
-    """`path` as :data:`SEALED_AT` carried it — git, and nothing on disk."""
+SEALED_AT_PASS1 = "e657056"
+"""The commit reader-v5b's pod read 26 units under — the last tree whose `src/market_pulse/prompts.py`
+and `scripts/write_reader_prereg_v5b.py` are the ones the v5 and v5b records pin.
+
+`docs/PROMPT-pass1-probe.md` D1 registers `pass1_comment_gm4_v1` in the same module, so the module
+moves a SECOND time and a second sealing moment exists. The v5/v5b registrations are not re-pinned
+for the same reason the v3/v4 ones were not: they froze when their pod existed. Two commits, two
+witnesses, one manoeuvre — the maps below are keyed by commit so a recovery from the wrong one
+cannot pass quietly.
+"""
+
+MOVED_BY_PASS1 = ("src/market_pulse/prompts.py", "scripts/write_reader_prereg_v5b.py")
+"""prompts.py, and the v5b producer whose guard had to learn that prompts.py may move."""
+
+WITNESS_AT = {
+    SEALED_AT: WITNESS,
+    SEALED_AT_PASS1: {
+        "src/market_pulse/prompts.py": "pass1_comment_gm4_v1",
+        "scripts/write_reader_prereg_v5b.py": "with_the_moved_module_put_back",
+    },
+}
+"""Per sealing commit, what each moved file LEARNED after it — absent from that commit's blob and
+present on disk, both asserted."""
+
+
+def sealed_blob(path: str, at: str = SEALED_AT) -> bytes:
+    """`path` as `at` carried it — git, and nothing on disk."""
     return subprocess.run(
-        ["git", "show", f"{SEALED_AT}:{path}"], cwd=REPO_ROOT, capture_output=True, check=True
+        ["git", "show", f"{at}:{path}"], cwd=REPO_ROOT, capture_output=True, check=True
     ).stdout
 
 
-def sealed_sha256(path: str) -> str:
-    return hashlib.sha256(sealed_blob(path)).hexdigest()
+def sealed_sha256(path: str, at: str = SEALED_AT) -> str:
+    return hashlib.sha256(sealed_blob(path, at)).hexdigest()
 
 
 def put_the_sealed_shas_back(
-    produced: bytes, times: int = 1, moved=MOVED_BY_THE_V5_READER
+    produced: bytes, times: int = 1, moved=MOVED_BY_THE_V5_READER, at: str = SEALED_AT
 ) -> bytes:
     """Swap every moved file's live sha for its sealed one — and each swap must FIRE `times` times.
 
@@ -1034,15 +1069,20 @@ def put_the_sealed_shas_back(
     (as the parser and as a borrowed producer) and the v4 one once, since v4 copies its whole
     `instruments` block out of the frozen v3 file instead of re-deriving it. A hard-coded 1 here
     would have quietly stopped repairing the second occurrence.
+
+    `times` may be a per-path mapping where one call has to repair files that appear a different
+    number of times: the v5b registration pins `prompts.py` twice and its own producer once, and a
+    single shared count would have to be wrong about one of them.
     """
     for path in moved:
-        live, sealed = live_sha256(path), sealed_sha256(path)
+        live, sealed = live_sha256(path), sealed_sha256(path, at)
         assert live != sealed, path
-        token = WITNESS[path]
-        assert token not in sealed_blob(path).decode("utf-8"), path
+        token = WITNESS_AT[at][path]
+        assert token not in sealed_blob(path, at).decode("utf-8"), path
         assert token in (REPO_ROOT / path).read_text(encoding="utf-8"), path
         produced, count = re.subn(live.encode(), sealed.encode(), produced)
-        assert count == times, (path, count, times)
+        wanted = times[path] if isinstance(times, dict) else times
+        assert count == wanted, (path, count, wanted)
     return produced
 
 
@@ -1067,6 +1107,29 @@ def test_the_v5_text_is_what_moved_the_module_and_the_recovery_names_it():
     assert WITNESS[path] not in sealed_blob(path).decode("utf-8")
     assert WITNESS[path] in (REPO_ROOT / path).read_text(encoding="utf-8")
     assert sealed_sha256(path) == "dfa7a79f39ed7d6248951f77b89af11b68f086ee376da7fc4a6341d1267d2ee4"
+
+
+def test_the_second_sealing_moment_is_the_tree_the_v5b_pod_ran_under():
+    """The pass-1 manoeuvre's own premise. Both moved files really moved, both witnesses are absent
+    from `e657056` and present on disk, and the sealed shas are the ones the v5/v5b records pin."""
+    for path in MOVED_BY_PASS1:
+        assert live_sha256(path) != sealed_sha256(path, SEALED_AT_PASS1), path
+        token = WITNESS_AT[SEALED_AT_PASS1][path]
+        assert token not in sealed_blob(path, SEALED_AT_PASS1).decode("utf-8"), path
+        assert token in (REPO_ROOT / path).read_text(encoding="utf-8"), path
+    v5b = json.loads(
+        (REPO_ROOT / "results" / "prereg_reader_probe_v5b.json").read_text(encoding="utf-8")
+    )
+    assert v5b["instruments"]["parser"]["sha256"] == sealed_sha256(
+        "src/market_pulse/prompts.py", SEALED_AT_PASS1
+    )
+    assert v5b["producer"]["sha256"] == sealed_sha256(
+        "scripts/write_reader_prereg_v5b.py", SEALED_AT_PASS1
+    )
+    # and the two sealing moments are different moments, so neither map can stand in for the other
+    assert sealed_sha256("src/market_pulse/prompts.py") != sealed_sha256(
+        "src/market_pulse/prompts.py", SEALED_AT_PASS1
+    )
 
 
 READER = prompts.READER_TASK

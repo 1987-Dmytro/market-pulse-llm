@@ -47,6 +47,8 @@ import window_summary_5c2 as summary  # noqa: E402
 import write_reader_prereg_v3 as v3  # noqa: E402
 import write_reader_prereg_v5 as v5writer  # noqa: E402
 
+from market_pulse import prompts  # noqa: E402
+
 OUT = REPO_ROOT / "results" / "prereg_reader_probe_v5b.json"
 SUPERSEDES = REPO_ROOT / "results" / "prereg_reader_probe_v5.json"
 CONTRACT = REPO_ROOT / "docs" / "PROMPT-reader-v5b.md"
@@ -456,17 +458,103 @@ def bars(older: dict) -> dict:
     return table
 
 
+MOVED_MODULE = "src/market_pulse/prompts.py"
+MOVED_RANGES = (
+    ("instruments", "parser", "sha256"),
+    ("producer", "borrowed", MOVED_MODULE),
+)
+"""The only two byte ranges of the frozen v5 record that a later contract may legitimately move.
+
+`docs/PROMPT-pass1-probe.md` D1 registers `pass1_comment_gm4_v1` INSIDE `prompts.py`, so the module's
+sha moves for a reason that has nothing to do with the reader — and these are the two cells that
+carry it. Enumerated as paths rather than swapped as a string: a THIRD occurrence appearing one day
+is a fact about the record and must refuse, never be repaired silently
+([[a_law_that_grows_loudly]]).
+
+What this narrowing costs is stated in :func:`the_readers_law_is_unmoved`, which closes it."""
+
+
+def the_readers_law_is_unmoved(frozen: dict) -> list[str]:
+    """What «the instrument did not move» means once the module's sha is allowed to, or the gaps.
+
+    A sha over `prompts.py` is a hash of a FILE, and the claim resting on it is about the READER's
+    law inside that file ([[a_hash_is_not_the_claim_it_carries]]). Tolerating the file's bytes would
+    otherwise go blind to exactly the edits that ARE the instrument the 26 paid verdicts were
+    validated against: the four reader texts, the subject/signal/noise domains the parser enforces,
+    and the entity taxonomy the other three are built out of. So each of them is compared here,
+    directly, and the frozen record's own `prompt_sha256` map is the authority for the texts.
+    """
+    gaps = []
+    texts = {task: prompts.prompt_sha256(task) for task in sorted(prompts.READER)}
+    if texts != frozen["instruments"]["prompt_sha256"]:
+        moved = sorted(
+            task
+            for task in set(texts) | set(frozen["instruments"]["prompt_sha256"])
+            if texts.get(task) != frozen["instruments"]["prompt_sha256"].get(task)
+        )
+        gaps.append(f"the reader's own texts moved: {moved}")
+    for name, expected in (
+        (
+            "READER_ENTITY_TYPES",
+            ("молочный_бренд", "сеть_ритейлер", "категория_личное", "не_наш_рынок"),
+        ),
+        (
+            "READER_SUBJECT_TYPES",
+            ("молочный_бренд", "сеть_ритейлер", "категория", "категория_личное", "не_наш_рынок"),
+        ),
+        ("READER_SIGNAL_TYPES", ("спрос", "жалоба", "похвала", "привычка", "тренд")),
+        ("READER_NOISE_CLASSES", ("плюс_спам", "скам", "оффтоп")),
+    ):
+        if getattr(prompts, name) != expected:
+            gaps.append(f"{name} is no longer {expected}")
+    return gaps
+
+
+def with_the_moved_module_put_back(rebuilt: dict, frozen: dict) -> dict:
+    """`rebuilt` with the two :data:`MOVED_RANGES` restored to what the frozen record pins.
+
+    Pure, and driven in `tests/test_reader_prereg_v5b.py` on hand-made pairs: one that differs ONLY
+    in those two cells (which must come back equal) and one that also moves the v5 text's own sha
+    (which must not) — a narrowing asserted rather than measured is a guard that permits what it
+    exists to forbid ([[guard_selftest_negative_control]]).
+
+    A range whose rebuilt value is NOT today's live module sha is left alone, so this cannot quietly
+    paper over a difference that has some other cause.
+    """
+    live = summary.sha256_of(REPO_ROOT / MOVED_MODULE)
+    patched = json.loads(json.dumps(rebuilt))
+    for path in MOVED_RANGES:
+        *branch, leaf = path
+        here, there = patched, frozen
+        for key in branch:
+            here, there = here.get(key), there.get(key)
+            if not isinstance(here, dict) or not isinstance(there, dict):
+                break
+        else:
+            if here.get(leaf) == live and leaf in there:
+                here[leaf] = there[leaf]
+    return patched
+
+
 def build() -> dict:
     rebuilt = v5writer.build()
     frozen = json.loads(summary.read_text_or_refuse(SUPERSEDES))
+    if rebuilt != frozen:
+        if gaps := the_readers_law_is_unmoved(frozen):
+            raise SystemExit(
+                f"{summary.rel(SUPERSEDES)} no longer rebuilds and the READER's own law moved with"
+                f" it — {gaps}. v5b registers the SAME instrument. Stop and report."
+            )
+        rebuilt = with_the_moved_module_put_back(rebuilt, frozen)
     if rebuilt != frozen:
         moved = sorted(
             key for key in set(rebuilt) | set(frozen) if rebuilt.get(key) != frozen.get(key)
         )
         raise SystemExit(
-            f"{summary.rel(SUPERSEDES)} no longer rebuilds from its own producer — {moved} differ."
-            " v5b registers the SAME instrument, so a moved key here means the instrument moved and"
-            " the two runs would not be comparable. Stop and report."
+            f"{summary.rel(SUPERSEDES)} no longer rebuilds from its own producer — {moved} differ,"
+            f" outside the {len(MOVED_RANGES)} ranges {summary.rel(SUPERSEDES)} allows a later"
+            " contract to move. v5b registers the SAME instrument, so a moved key here means the"
+            " instrument moved and the two runs would not be comparable. Stop and report."
         )
 
     leg_a = registered_order(frozen["population"]["leg_a"])

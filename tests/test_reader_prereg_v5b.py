@@ -20,6 +20,12 @@ import read_threads_reader_v5 as driver  # noqa: E402
 import window_summary_5c2 as summary  # noqa: E402
 import write_reader_prereg_v5 as v5writer  # noqa: E402
 import write_reader_prereg_v5b as prereg  # noqa: E402
+from test_prompts import (  # noqa: E402
+    MOVED_BY_PASS1,
+    SEALED_AT_PASS1,
+    put_the_sealed_shas_back,
+    sealed_sha256,
+)
 
 RECORD_PATH = REPO_ROOT / "results" / "prereg_reader_probe_v5b.json"
 RECORD = json.loads(RECORD_PATH.read_text(encoding="utf-8"))
@@ -52,8 +58,74 @@ def test_the_committed_registration_is_what_the_producer_writes_today(tmp_path):
     commit that carries it — the only witness that it preceded the first pod."""
     out = tmp_path / "again.json"
     assert prereg.main(["--out", str(out)]) == 0
-    assert out.read_bytes() == RECORD_PATH.read_bytes()
+    # ONE byte range moved, and measured rather than assumed: this producer's own sha, because its
+    # guard had to learn that `prompts.py` may move under `docs/PROMPT-pass1-probe.md` D1. The
+    # module's own two pins in this record do NOT move — v5b copies them out of the frozen v5
+    # record, so they carry the sealed value by construction and there is nothing here to repair
+    assert (
+        put_the_sealed_shas_back(
+            out.read_bytes(),
+            times=1,
+            moved=("scripts/write_reader_prereg_v5b.py",),
+            at=SEALED_AT_PASS1,
+        )
+        == RECORD_PATH.read_bytes()
+    )
     assert "generated_at" not in RECORD_PATH.read_text(encoding="utf-8")
+    # the half the swap above cannot see: the two `prompts.py` pins are the SEALING commit's bytes
+    # and not today's, in the record and in the rebuild alike
+    sealed = sealed_sha256("src/market_pulse/prompts.py", SEALED_AT_PASS1)
+    rebuilt = json.loads(out.read_text(encoding="utf-8"))
+    for holder in (RECORD, rebuilt):
+        assert holder["instruments"]["parser"]["sha256"] == sealed
+        assert holder["producer"]["borrowed"]["src/market_pulse/prompts.py"] == sealed
+    assert sealed != summary.sha256_of(REPO_ROOT / "src" / "market_pulse" / "prompts.py")
+    assert set(MOVED_BY_PASS1) == {
+        "src/market_pulse/prompts.py",
+        "scripts/write_reader_prereg_v5b.py",
+    }
+
+
+# --- the narrowing that let the record go on rebuilding, and its negative control -----------------
+
+
+def test_the_guard_restores_only_the_two_ranges_the_moved_module_reaches():
+    """The tolerance is a pure function and it is DRIVEN, not asserted.
+
+    A pair that differs only in the two allowed cells must come back equal; a pair that also moves
+    the v5 text's own sha must not. Without the second half, «safely narrowed» is a claim
+    ([[guard_selftest_negative_control]])."""
+    live = summary.sha256_of(REPO_ROOT / prereg.MOVED_MODULE)
+    sealed = V5["instruments"]["parser"]["sha256"]
+    assert live != sealed, "the module has not moved — this control would prove nothing"
+    rebuilt = json.loads(json.dumps(V5))
+    rebuilt["instruments"]["parser"]["sha256"] = live
+    rebuilt["producer"]["borrowed"][prereg.MOVED_MODULE] = live
+    assert prereg.with_the_moved_module_put_back(rebuilt, V5) == V5
+
+    # the same pair with the READER's own text moved: outside the two ranges, so it survives
+    moved_text = json.loads(json.dumps(rebuilt))
+    moved_text["instruments"]["prompt_sha256"]["reader_thread_gm4_v5"] = "0" * 64
+    assert prereg.with_the_moved_module_put_back(moved_text, V5) != V5
+
+    # and a range holding something that is NOT today's live sha is left alone rather than papered
+    other = json.loads(json.dumps(rebuilt))
+    other["instruments"]["parser"]["sha256"] = "1" * 64
+    assert prereg.with_the_moved_module_put_back(other, V5)["instruments"]["parser"]["sha256"] == (
+        "1" * 64
+    )
+
+
+def test_the_narrowing_still_sees_the_readers_own_law():
+    """What the file-sha tolerance would otherwise go blind to: the four reader texts and the three
+    domains the parser enforces. Compared directly, so «prompts.py's bytes» became «the reader's law
+    inside prompts.py» ([[a_hash_is_not_the_claim_it_carries]])."""
+    assert prereg.the_readers_law_is_unmoved(V5) == []
+    bent = json.loads(json.dumps(V5))
+    bent["instruments"]["prompt_sha256"]["reader_thread_gm4_v5"] = "0" * 64
+    assert prereg.the_readers_law_is_unmoved(bent) == [
+        "the reader's own texts moved: ['reader_thread_gm4_v5']"
+    ]
 
 
 # --- the instrument does not move ----------------------------------------------------------------
