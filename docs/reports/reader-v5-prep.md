@@ -1,14 +1,14 @@
 # reader-v5-prep — the sitting's rulings become an instrument, and the measurement that changed one of them
 
 **Contract:** `docs/PROMPT-reader-v5-prep.md` · **baseline:** `make check` **2 685 passed / 2 skipped**
-at `f19a9b4` (the team lead's figure, reproduced here) · **HEAD:** `7727a24` · **`make check` now:
-2 774 passed / 2 skipped** · **spent: $0.00.**
+at `f19a9b4` (the team lead's figure, reproduced here) · **HEAD:** `647b47f` · **`make check` now:
+2 777 passed / 2 skipped** · **spent: $0.00.**
 
 **Outcome in one line.** The accepted phase's four debts are paid, prompt v5 is seven visible
 `_swap` calls over v3 with every example proven synthetic against a 43.9-million-character corpus,
-the transport stop / echo census / chunk merge are a module with 20 tests of its own (47 with the
+the transport stop / echo census / chunk merge are a module with 20 tests of its own (50 with the
 driver's and the scorer's), and
-`results/prereg_reader_probe_v5.json` (`6f4bba850efd5716…`) is committed before any pod exists with
+`results/prereg_reader_probe_v5.json` (`48b6cbde119ec3b1…`) is committed before any pod exists with
 **25 tests** holding its claims. **Nothing billable was created:** `pod list -a` `[]`,
 `serverless list` `[]`, the volume unchanged as the positive control.
 
@@ -298,6 +298,15 @@ free:** all 23 replies reader-v4 paid for — every one that parses has a balanc
 the prefix gives a verdict IDENTICAL to parsing the whole reply, with at least one really shortened.
 The stop may only shorten an answer, never change it.
 
+**What is proven and what is not.** `balanced_prefix` is proven on 23 paid replies, and the
+PERSISTED bytes are correct whatever the stopping criterion does — the runner cuts the decoded text
+with the same function. What is NOT proven on this machine is the SAVING: that generation really
+ends early. `stop_at_balanced` needs `transformers` and a loaded model, so it carries
+`# pragma: no cover` and its first firing is on the pod. Both failure modes are caught rather than
+silent — a criterion that raises is loud, and one that never fires costs seconds the full-pass gate
+re-checks after every unit — but the report says which is which rather than letting the test list
+read as if the criterion were exercised.
+
 `merge` verifies the partition rather than assuming it: an id in two chunks' `per_comment` is a
 `MergeError`. `signals` dedupe on `(signal_type, subject_type, subject_id, aspect, stance)` with
 `evidence` UNIONED — `evidence` is deliberately out of the key, because the same finding read in two
@@ -354,7 +363,7 @@ bars. Bars 1–4 are computed over LEG A rows only, and the uncollapsed reading 
 
 ## 5. D3 — the registration, and the number it had to compute
 
-`results/prereg_reader_probe_v5.json` — **`6f4bba850efd5716…`**, byte-identical rebuild,
+`results/prereg_reader_probe_v5.json` — **`48b6cbde119ec3b1…`**, byte-identical rebuild,
 `tests/test_reader_prereg_v5.py` holds its claims in **25** tests.
 
 ### 5.1 Leg A: the digest copied, the renderings re-derived
@@ -454,7 +463,7 @@ read as a necessity would teach the next contract the wrong lesson.
 
 ```
 $ make check
-2774 passed, 2 skipped in 366.51s                 # baseline 2685 passed, 2 skipped at f19a9b4
+2777 passed, 2 skipped in 367.20s                 # baseline 2685 passed, 2 skipped at f19a9b4
 $ ruff check .        → All checks passed!
 $ ruff format --check .  → 332 files already formatted
 
@@ -472,7 +481,7 @@ $ shasum -a 256 results/reader_v4_verdict.json
   bars 1-4 byte-equal: True
 
 $ shasum -a 256 results/prereg_reader_probe_v5.json
-6f4bba850efd571665af193a57226a6b6d57e48cd2f35caddec31f45fc7f64d5
+48b6cbde119ec3b1f3f8ea6101b73b1d675a739031de8de748bbda204140c78a
 $ PYTHONPATH=src python3.11 scripts/write_reader_prereg_v5.py --out $SCRATCH/v5_rebuild.json >/dev/null \
     && cmp results/prereg_reader_probe_v5.json $SCRATCH/v5_rebuild.json && echo "byte-identical rebuild: OK"
 byte-identical rebuild: OK
@@ -517,7 +526,7 @@ test_read_threads_reader_v5.py::test_the_pod_runner_refuses_a_pack_that_carries_
 test_read_threads_reader_v5.py::test_every_gate_snapshot_is_APPENDED_and_none_is_overwritten  PASSED
 test_read_threads_reader_v5.py::test_the_ingest_merges_leg_bs_chunks_into_one_row_and_keeps_the_parts PASSED
 test_read_threads_reader_v5.py::test_leg_bs_rows_cannot_reach_a_leg_a_bar                     PASSED
-(47 in the two files, all passing)
+(50 in the two files, all passing)
 ```
 
 ### 6.2 The per-commit rule — every commit of this contract is green
@@ -536,6 +545,8 @@ bbc9b35  adr(reader)                             9 files  287 passed
 9fe6dd4  prompt(reader v5)                      10 files  304 passed
 3a9d6c7  transport(reader v5)                   11 files  324 passed
 7727a24  prereg(reader v5)                      13 files  376 passed
+64b36a2  docs(report)                           13 files  376 passed
+647b47f  fix(reader v5)                         13 files  379 passed
 ```
 
 **No red commit.** reader-v4 carried three; this contract carries none, because the prompt edit and
@@ -558,6 +569,8 @@ its whole fan-out went in as one commit and the registration went in with the co
 | **Dv464** | Runbook hygiene applied as an EDIT to `scripts/runbook_reader_v4.md`'s eight verify commands plus a dated corrections block. NO file under `docs/reports/` is touched: a runbook is a procedure, a report is the record of what was run. Runbooks of closed phases are left alone. | `[cause: procedure-not-transcript]` |
 | **Dv465** | Leg A's 23 per-thread request shas are RE-DERIVED under v5 and all 23 differ from v4's, while the population DIGEST is copied unchanged. «Copied object-equal where possible» reaches the bars and the digest; a rendering under a different instrument is a different request and may not be copied. | `[cause: the-digest-carries-no-rendering]` |
 | **Dv466** | `local_llm.py` is NOT edited. The chunk header and the stopping criterion reach the client through a subclass and a wrapped `generate` inside the v5 runner, so `ReaderClient.read` stays the one inference path and no sha three sealed registrations pin has to move for a keyword argument. | `[cause: keep-the-pins]` |
+| **Dv467** | m1 carried Dv461's defect one bar over. `echo` counted an id in `per_comment` AND in `noise` as `duplicated` and m1 gated on it, so the prompt's «at most one of the two» broken would fail the bar that exists to prove the CHUNKING mechanism — a slip reader-v4 made on 3 of 111 ids with no chunking near it and the parser tolerates by design. `duplicated` now means one id twice in the SAME list, which is what the registration's rule says («no duplicate across parts»); `in_both_lists` is REPORTED with v4's baseline and the reachability is registered. Both directions driven, and m1 also fails when the merge could not be made. | `[cause: bar-unreachable-as-registered]` |
+| **Dv468** | v5's `--gate` reads the PACK, which v4's never had to — the projection's second leg needs the per-unit payable counts. A new file dependency on the KILL-RULE path: named as a `SystemExit` that says where to write the pack, and `main(["--gate"])` driven end to end instead of only `projection()` with a fixture. The run contract inherits the constraint: the pack must land at `results/reader_v5_pack.json`. | `[cause: new-dependency-on-the-kill-path]` |
 
 ---
 
@@ -580,10 +593,13 @@ its whole fan-out went in as one commit and the registration went in with the co
    `local_llm.py`, the v3 parser's behaviour, gold r2 and every accepted report stayed still; the
    ceiling, the chunk header and the stop all arrived beside them. The one shipped file that WAS
    edited — v4's pod runner — was edited because its code and its own registration disagreed.
-5. **Seven commits, none red.** The prompt edit and its 16-test fan-out went in together, and the
-   registration went in with the code whose sha it pins. reader-v4 left three red commits behind and
-   named them honestly; the cheaper thing is to not make them, and the way to not make them is to ask
-   which artefact pins which before choosing where the commit boundary goes.
+5. **The finished contract was reviewed and it moved twice — both times for the same reason.** m1
+   could have failed for a defect that is not chunking, exactly as m2 could have failed for a
+   ceiling that is not the model; and the gate quietly grew a file dependency on the kill-rule path
+   that only a direct call to `projection()` was covering. Ten commits, none red. The prompt edit and its 16-test fan-out went in together, and the
+   registration went in with the code whose sha it pins — reader-v4 left three red commits behind
+   and named them honestly, and the way to not make them is to ask which artefact pins which before
+   choosing where the commit boundary goes.
 
 ---
 
@@ -594,6 +610,9 @@ its whole fan-out went in as one commit and the registration went in with the co
 - **The volume must be re-staged.** Gate 1 differs from v4's for the first time: `src/` HAS moved, so
   the run re-stages and the handshake is what proves the staging worked — not the staging command's
   exit code.
+- **The pack must land at `results/reader_v5_pack.json`.** `--gate` reads it for the per-unit
+  payable counts and a missing one is now a named refusal; the run contract's runbook has to write
+  it to that path and not to a scratch directory.
 - **Leg B's projection is an ESTIMATE.** No chunked request has ever been sent on this stack. Its own
   gate is the full-pass inequality, re-checked after every chunk exactly as after every thread.
 - **`@matusi_ukr:22242` is one thread answered wholly as noise**, and `@VARUS_channel:10366` put three
