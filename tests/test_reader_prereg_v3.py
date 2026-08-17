@@ -19,6 +19,11 @@ import gate_census_w1_reader as reader_cell  # noqa: E402
 import probe_b_population as subset  # noqa: E402
 import window_summary_5c2 as summary  # noqa: E402
 import write_reader_prereg_v3 as prereg  # noqa: E402
+from test_prompts import (  # noqa: E402
+    assert_pinned,
+    put_the_sealed_shas_back,
+    sealed_sha256,
+)
 
 from market_pulse import local_llm, prompts, scorer  # noqa: E402
 
@@ -42,7 +47,20 @@ def test_the_committed_registration_is_what_the_producer_writes_today(tmp_path):
     commit that carries it — which is also the only witness that it preceded the endpoint."""
     out = tmp_path / "again.json"
     assert prereg.main(["--out", str(out)]) == 0
-    assert out.read_bytes() == RECORD_PATH.read_bytes()
+    # `producer.borrowed` is hashed LIVE and `src/market_pulse/prompts.py` moved when v5 registered
+    # a fourth reader text. This record froze when v3's endpoint existed and is NOT re-pinned: the
+    # one byte range allowed to differ is put back to the sealing commit's, and the swap must fire
+    # TWICE in this record: `instruments.parser.sha256` and `producer.borrowed`
+    rebuilt = put_the_sealed_shas_back(out.read_bytes(), times=2)
+    # and this producer derives `instruments.prompt_sha256` LIVE over `prompts.READER`, so a rebuild
+    # today gains the fourth text. The record's own `prompt_rule` says that is expected — «a text
+    # registered LATER is not in this map and is not expected to be» — so the later entry is dropped
+    # before the comparison, and the drop must FIRE
+    later = (
+        f',\n      "{prompts.READER_TASK_V5}": "{prompts.prompt_sha256(prompts.READER_TASK_V5)}"'
+    ).encode()
+    assert rebuilt.count(later) == 1, "the fourth text is not where the repair expects it"
+    assert rebuilt.replace(later, b"") == RECORD_PATH.read_bytes()
     assert "generated_at" not in RECORD_PATH.read_text(encoding="utf-8")
 
 
@@ -116,7 +134,7 @@ def test_the_parser_block_is_re_derived_from_the_module_and_driven():
     a description of it: every repair name is built from `prompts`' own constants, and every one of
     them is made to FIRE here on a reply that produces it."""
     parser = RECORD["instruments"]["parser"]
-    assert parser["sha256"] == summary.sha256_of(REPO_ROOT / "src" / "market_pulse" / "prompts.py")
+    assert_pinned("src/market_pulse/prompts.py", parser["sha256"])
     assert parser["function"] == "parse_reply"
     assert parser["repairable_fields"] == list(prompts.READER_LIST_FIELDS)
 
@@ -280,10 +298,15 @@ def test_the_money_is_re_derived_from_the_guards_ledger_and_the_runs_own_rows():
 def test_every_instrument_is_pinned_by_the_bytes_it_will_run_with():
     instruments = RECORD["instruments"]
     assert instruments["task"] == prompts.READER_TASK_V3 == "reader_thread_gm4_v3"
+    # THREE texts, pinned the day this record was written. v5 registered a fourth AFTER it, and the
+    # record's own `prompt_rule` says a later text «is not in this map and is not expected to be» —
+    # so the pins are checked one by one and the map is a SUBSET of what is registered today
     assert instruments["prompt_sha256"] == {
-        task: prompts.prompt_sha256(task) for task in sorted(prompts.READER)
+        task: prompts.prompt_sha256(task)
+        for task in (prompts.READER_TASK, prompts.READER_TASK_V2, prompts.READER_TASK_V3)
     }
-    assert set(instruments["prompt_sha256"]) == set(prompts.READER)
+    assert set(instruments["prompt_sha256"]) < set(prompts.READER)
+    assert prompts.READER_TASK_V5 not in instruments["prompt_sha256"]
     assert instruments["scorer"]["sha256"] == summary.sha256_of(
         REPO_ROOT / "src" / "market_pulse" / "scorer.py"
     )
@@ -292,7 +315,10 @@ def test_every_instrument_is_pinned_by_the_bytes_it_will_run_with():
     for name, digest in RECORD["authority"].items():
         assert summary.sha256_of(REPO_ROOT / name) == digest, name
     for name, digest in RECORD["producer"]["borrowed"].items():
-        assert summary.sha256_of(REPO_ROOT / name) == digest, name
+        assert_pinned(name, digest)
+    assert RECORD["producer"]["borrowed"]["src/market_pulse/prompts.py"] == sealed_sha256(
+        "src/market_pulse/prompts.py"
+    )
     assert RECORD["producer"]["sha256"] == summary.sha256_of(
         REPO_ROOT / RECORD["producer"]["script"]
     )

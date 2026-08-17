@@ -54,12 +54,23 @@ def check_instrument(pack: dict, repo: Path, prompts) -> dict:
     what this checkout renders; the module sha says the PARSER the Mac will read these replies with
     is the module this pod rendered them from. probe-b's registration learned that distinction the
     hard way, and reader-v3 proved the volume can be moved to a commit and stay there.
+
+    The first check is over the tasks the PACK pins and not over `prompts.READER` whole, which is
+    what `results/prereg_reader_probe_v4.json`'s own `prompt_rule` says in as many words: «a text
+    registered LATER is not in this map and is not expected to be». It was written as a whole-dict
+    equality, so the day a fourth reader text was registered this refusal fired on a pack nothing
+    had touched — and with the wrong sentence, since what actually parted is the MODULE, which the
+    check below catches and names ([[a_new_guard_can_be_shadowed_by_an_old_one]]). Nothing is lost
+    by narrowing it: a pod carrying a different set of texts carries different `prompts.py` bytes.
     """
     want = dict(pack["instruments"]["prompt_sha256"])
     got = {task: prompts.prompt_sha256(task) for task in sorted(prompts.READER)}
-    if got != want:
+    unserved = sorted(set(want) - set(got))
+    moved = {task: got[task] for task in sorted(want) if task in got and got[task] != want[task]}
+    if unserved or moved:
         raise SystemExit(
-            f"the reader prompt shas on this pod are {got} and the registration pinned {want}."
+            f"the reader prompt shas on this pod are {got} and the registration pinned {want}"
+            f" (unserved here: {unserved}; moved: {sorted(moved)})."
             " This checkout is not the registered instrument — stop before the model is loaded."
         )
     module = sha256_of(repo / "src" / "market_pulse" / "prompts.py")

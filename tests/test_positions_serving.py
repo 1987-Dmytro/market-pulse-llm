@@ -244,8 +244,10 @@ def test_the_reader_worker_names_every_registered_prompt():
     The field is a dict the driver compares WHOLE, and it is derived from `prompts.READER` rather
     than listed, so a third reader cannot be served without appearing in it. The reader sitting
     registered exactly that third one and this test is where it had to show up: the literal below
-    is the assertion that the derivation reached it, and the count beside it is what says the three
-    are three DIFFERENT texts rather than one served under three names.
+    is the assertion that the derivation reached it, and the count beside it is what says the
+    registered texts are DIFFERENT texts rather than one served under several names. FOUR of them
+    since the sitting of 2026-08-17, numbered 1, 2, 3 and 5 — the gap is deliberate and
+    `tests/test_prompts.py` is where it is stated.
     """
     info = handler.describe(
         handler.settings({"SERVING_CONFIG": "READER", "MODEL_REVISION": PINNED_REVISION}),
@@ -259,9 +261,10 @@ def test_the_reader_worker_names_every_registered_prompt():
         "reader_thread_gm4": prompts.prompt_sha256("reader_thread_gm4"),
         "reader_thread_gm4_v2": prompts.prompt_sha256("reader_thread_gm4_v2"),
         "reader_thread_gm4_v3": prompts.prompt_sha256("reader_thread_gm4_v3"),
+        "reader_thread_gm4_v5": prompts.prompt_sha256("reader_thread_gm4_v5"),
     }
     assert set(info["reader_prompt_sha256"]) == set(prompts.READER)
-    assert len(set(info["reader_prompt_sha256"].values())) == 3
+    assert len(set(info["reader_prompt_sha256"].values())) == len(prompts.READER)
     assert "positions_prompt_sha256" not in info and "caption_prompt_sha256" not in info
 
 
@@ -525,9 +528,9 @@ def test_the_reader_sends_one_thread_with_no_image_and_stays_greedy():
 
 
 def test_the_reader_serves_the_registered_prompts_and_nothing_else():
-    """THREE registered reader texts since the reader sitting, and the worker renders whichever the
-    JOB names — v1 and v2 so probe-a's and probe-b's evidence stay reproducible, v3 because it is
-    the instrument the next run registers.
+    """FOUR registered reader texts since the sitting of 2026-08-17, and the worker renders
+    whichever the JOB names — v1, v2 and v3 so probe-a's, probe-b's and reader-v4's evidence stays
+    reproducible, v5 because it is the instrument the next run registers.
 
     What the class does NOT do is decide which of them a run used. That is what `info` answers with,
     a sha per registered task, and what the driver compares against its registration before the
@@ -541,7 +544,7 @@ def test_the_reader_serves_the_registered_prompts_and_nothing_else():
     """
     client = local_llm.ReaderClient(StubProcessor(), StubModel())
     rendered = {task: client.render(task, thread(comments=[])) for task in prompts.READER}
-    assert len(set(rendered.values())) == 3
+    assert len(set(rendered.values())) == len(prompts.READER) == 4
     for task, text in rendered.items():
         assert prompts.PROMPTS[task] in text
     unregistered = "reader_thread_gm4_v4"

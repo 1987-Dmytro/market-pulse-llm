@@ -19,6 +19,7 @@ import reader_population as population  # noqa: E402
 import window_summary_5c2 as summary  # noqa: E402
 import write_reader_gold as gold  # noqa: E402
 import write_reader_gold_r2 as r2  # noqa: E402
+from test_prompts import assert_pinned, put_the_sealed_shas_back  # noqa: E402
 
 RECORD_PATH = REPO_ROOT / "results" / "reader_gold_w1_r2.json"
 RECORD = json.loads(RECORD_PATH.read_text(encoding="utf-8"))
@@ -54,7 +55,11 @@ def test_the_committed_r2_is_what_the_producer_writes_today(tmp_path):
     commit that carries it."""
     out = tmp_path / "again.json"
     assert r2.main(["--out", str(out)]) == 0
-    assert out.read_bytes() == RECORD_PATH.read_bytes()
+    # `producer.borrowed` is hashed LIVE and `src/market_pulse/prompts.py` moved when the v5 reader
+    # text was registered. This gold is one of the artefacts a spent registration froze, so it is
+    # NOT re-pinned: the one byte range allowed to differ is put back to the sealing commit's, and
+    # the swap must fire — once, since this record names the module in `producer.borrowed` alone
+    assert put_the_sealed_shas_back(out.read_bytes(), times=1) == RECORD_PATH.read_bytes()
     assert "generated_at" not in RECORD_PATH.read_text(encoding="utf-8")
 
 
@@ -132,4 +137,4 @@ def test_the_producer_names_itself_and_borrows_the_one_that_wrote_the_rows():
         REPO_ROOT / "scripts" / "write_reader_gold.py"
     )
     for name, digest in producer["borrowed"].items():
-        assert summary.sha256_of(REPO_ROOT / name) == digest, name
+        assert_pinned(name, digest)

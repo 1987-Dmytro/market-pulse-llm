@@ -18,6 +18,11 @@ import score_reader_probe_b as scoring  # noqa: E402
 import window_summary_5c2 as summary  # noqa: E402
 import write_reader_prereg_v3 as v3  # noqa: E402
 import write_reader_prereg_v4 as prereg  # noqa: E402
+from test_prompts import (  # noqa: E402
+    assert_pinned,
+    put_the_sealed_shas_back,
+    sealed_sha256,
+)
 
 from market_pulse import prompts, scorer  # noqa: E402
 
@@ -33,7 +38,10 @@ def test_the_committed_registration_is_what_the_producer_writes_today(tmp_path):
     commit that carries it — which is the only witness that it preceded the pod."""
     out = tmp_path / "again.json"
     assert prereg.main(["--out", str(out)]) == 0
-    assert out.read_bytes() == RECORD_PATH.read_bytes()
+    # `producer.borrowed` is hashed LIVE, and `src/market_pulse/prompts.py` moved when the v5 text
+    # was registered. The record is NOT re-pinned — it froze when the pod existed — so the one byte
+    # range allowed to differ is put back to what the sealing commit carries, and the swap must fire
+    assert put_the_sealed_shas_back(out.read_bytes()) == RECORD_PATH.read_bytes()
     assert "generated_at" not in RECORD_PATH.read_text(encoding="utf-8")
 
 
@@ -47,9 +55,10 @@ def test_the_instrument_is_v3s_bytes_and_not_a_re_derivation():
     assert RECORD["instruments"]["prompt_sha256"][prompts.READER_TASK_V3] == prompts.prompt_sha256(
         prompts.READER_TASK_V3
     )
-    assert RECORD["instruments"]["parser"]["sha256"] == summary.sha256_of(
-        REPO_ROOT / "src" / "market_pulse" / "prompts.py"
-    )
+    # the parser is the MOVED file: v5 registered a fourth reader text, so the pinned bytes are the
+    # sealing commit's and the live ones are deliberately different
+    assert_pinned("src/market_pulse/prompts.py", RECORD["instruments"]["parser"]["sha256"])
+    assert RECORD["instruments"]["parser"]["sha256"] == sealed_sha256("src/market_pulse/prompts.py")
     assert RECORD["instruments"]["scorer"]["sha256"] == summary.sha256_of(
         REPO_ROOT / "src" / "market_pulse" / "scorer.py"
     )

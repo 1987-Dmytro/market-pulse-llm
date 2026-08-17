@@ -8,8 +8,10 @@ model is allowed to say, and what it is not — because a lenient parser that
 """
 
 import difflib
+import hashlib
 import json
 import re
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -81,6 +83,7 @@ def test_taxonomy_v2_prompts_are_registered_beside_v1_and_not_inside_it():
         "reader_thread_gm4",
         "reader_thread_gm4_v2",
         "reader_thread_gm4_v3",
+        "reader_thread_gm4_v5",
     }
     # the label tables describe labelling tasks: the caption prompt answers in prose, the two
     # position prompts answer with records, the reader answers with one verdict about a whole
@@ -986,9 +989,90 @@ def test_a_text_request_fences_the_row_and_refuses_an_empty_one():
             prompts.positions_messages_text_gm4(empty)
 
 
+SEALED_AT = "ace1a0d"
+"""The commit reader-v4's pod read 23 threads under — the last tree whose `src/market_pulse/prompts.py`
+is the one every reader record on disk pins.
+
+`docs/PROMPT-reader-v5-prep.md` D1 registers a fourth reader text, so the module's bytes MOVE and
+five committed records go on pinning `dfa7a79f…`. They are not re-pinned: gold r2, the v3 and v4
+registrations and the dashboard export were sealed against that module and their claims are about
+the day they were written. The sealed bytes stay recoverable:
+
+    git show ace1a0d:src/market_pulse/prompts.py
+
+This is the MOVED-tuple manoeuvre, third time in this family (`tests/test_reader_gold.py`,
+`tests/test_reader_prereg.py`, `tests/test_probe_b_prereg.py`, `tests/test_window_summary_5c2.py`),
+and it lives HERE rather than four more times because the file that moved is this file's subject.
+"""
+
+MOVED_BY_THE_V5_READER = ("src/market_pulse/prompts.py",)
+WITNESS = {"src/market_pulse/prompts.py": "reader_thread_gm4_v5"}
+"""What the moved file LEARNED, read both ways below — absent from the sealed blob and present on
+disk — so a recovery from the wrong commit fails instead of passing quietly."""
+
+
+def sealed_blob(path: str) -> bytes:
+    """`path` as :data:`SEALED_AT` carried it — git, and nothing on disk."""
+    return subprocess.run(
+        ["git", "show", f"{SEALED_AT}:{path}"], cwd=REPO_ROOT, capture_output=True, check=True
+    ).stdout
+
+
+def sealed_sha256(path: str) -> str:
+    return hashlib.sha256(sealed_blob(path)).hexdigest()
+
+
+def put_the_sealed_shas_back(
+    produced: bytes, times: int = 1, moved=MOVED_BY_THE_V5_READER
+) -> bytes:
+    """Swap every moved file's live sha for its sealed one — and each swap must FIRE `times` times.
+
+    A substitution that matched nothing would leave a byte comparison passing for a record that had
+    silently gone back to the sealed bytes, which is the one way this repair could hide a revert
+    ([[guard_selftest_negative_control]]). The COUNT is the caller's, because how many times a
+    record pins one file is a fact about that record: the v3 registration names `prompts.py` twice
+    (as the parser and as a borrowed producer) and the v4 one once, since v4 copies its whole
+    `instruments` block out of the frozen v3 file instead of re-deriving it. A hard-coded 1 here
+    would have quietly stopped repairing the second occurrence.
+    """
+    for path in moved:
+        live, sealed = live_sha256(path), sealed_sha256(path)
+        assert live != sealed, path
+        token = WITNESS[path]
+        assert token not in sealed_blob(path).decode("utf-8"), path
+        assert token in (REPO_ROOT / path).read_text(encoding="utf-8"), path
+        produced, count = re.subn(live.encode(), sealed.encode(), produced)
+        assert count == times, (path, count, times)
+    return produced
+
+
+def live_sha256(path: str) -> str:
+    return hashlib.sha256((REPO_ROOT / path).read_bytes()).hexdigest()
+
+
+def assert_pinned(name: str, digest: str) -> None:
+    """A pinned file is its live sha — or, on the moved tuple, the sha :data:`SEALED_AT` has."""
+    live = live_sha256(name)
+    if name in MOVED_BY_THE_V5_READER:
+        assert live != digest and sealed_sha256(name) == digest, name
+    else:
+        assert live == digest, name
+
+
+def test_the_v5_text_is_what_moved_the_module_and_the_recovery_names_it():
+    """The manoeuvre's own premise, asserted rather than assumed: the module really did move, the
+    sealed blob really does lack the witness, and the disk really does carry it."""
+    (path,) = MOVED_BY_THE_V5_READER
+    assert live_sha256(path) != sealed_sha256(path)
+    assert WITNESS[path] not in sealed_blob(path).decode("utf-8")
+    assert WITNESS[path] in (REPO_ROOT / path).read_text(encoding="utf-8")
+    assert sealed_sha256(path) == "dfa7a79f39ed7d6248951f77b89af11b68f086ee376da7fc4a6341d1267d2ee4"
+
+
 READER = prompts.READER_TASK
 READER_V2 = prompts.READER_TASK_V2
 READER_V3 = prompts.READER_TASK_V3
+READER_V5 = prompts.READER_TASK_V5
 
 VERDICT = {
     "thread": {"channel": "@VARUS_channel", "post_id": 10613},
@@ -1048,7 +1132,12 @@ def test_the_reader_is_registered_with_its_own_sha_and_out_of_every_labelling_ta
     assert prompts.PROMPTS[READER] is prompts.READER_THREAD_PROMPT
     assert prompts.PROMPTS[READER_V2] is prompts.READER_THREAD_PROMPT_V2
     assert prompts.PROMPTS[READER_V3] is prompts.READER_THREAD_PROMPT_V3
-    assert prompts.READER == {READER, READER_V2, READER_V3}
+    assert prompts.PROMPTS[READER_V5] is prompts.READER_THREAD_PROMPT_V5
+    assert prompts.READER == {READER, READER_V2, READER_V3, READER_V5}
+    # FOUR reader texts and the numbers run 1, 2, 3, 5: there is no `reader_thread_gm4_v4`, because
+    # reader-v4 registered the v3 TEXT on a pod. The number follows the contract that registers a
+    # text, and the gap is the honest name for that.
+    assert "reader_thread_gm4_v4" not in prompts.PROMPTS
     for task in prompts.READER:
         for table in (prompts.DELIMITERS, prompts.INTENTS_OF, prompts.COMMENT_FIELDS):
             assert task not in table
@@ -1113,7 +1202,7 @@ def test_the_v3_reader_is_v2_with_exactly_six_measured_changes():
     """
     v2, v3 = prompts.READER_THREAD_PROMPT_V2, prompts.READER_THREAD_PROMPT_V3
     assert v2 != v3
-    assert len({prompts.prompt_sha256(task) for task in prompts.READER}) == 3
+    assert len({prompts.prompt_sha256(task) for task in prompts.READER}) == len(prompts.READER)
 
     # SIX edits and not a positional zip: two of them turn one line into two, and a positional
     # comparison would report every line after the first insertion as changed

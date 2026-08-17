@@ -17,6 +17,7 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 import build_aggregates as builder  # noqa: E402
 import export_dashboard_data as exporter  # noqa: E402
+from test_prompts import assert_pinned, put_the_sealed_shas_back  # noqa: E402
 
 from market_pulse import aggregates  # noqa: E402
 
@@ -90,7 +91,11 @@ def test_two_exports_are_byte_identical_and_the_committed_one_is_that_record(tmp
         assert exporter.main(["--out", str(out), "--db", str(tmp_path / "pulse.db")]) == 0
 
     assert first.read_bytes() == second.read_bytes()
-    assert first.read_bytes() == exporter.OUT.read_bytes()
+    # `provenance.producers` is hashed LIVE and `src/market_pulse/prompts.py` moved when the v5
+    # reader text was registered. The shipped export is the file a screen renders and is NOT
+    # re-pinned by a reader contract: the one byte range allowed to differ is put back to the
+    # sealing commit's, and the swap must fire
+    assert put_the_sealed_shas_back(first.read_bytes(), times=1) == exporter.OUT.read_bytes()
     assert b'"at"' not in first.read_bytes(), "no clock in the body"
     diff = subprocess.run(
         ["diff", str(first), str(second)], capture_output=True, text=True, cwd=REPO_ROOT
@@ -286,7 +291,7 @@ def test_the_provenance_block_pins_its_inputs_and_its_producers():
     provenance = RECORD["provenance"]
 
     for name, digest in provenance["producers"].items():
-        assert builder.summary.sha256_of(REPO_ROOT / name) == digest, name
+        assert_pinned(name, digest)
     for name, digest in provenance["inputs"].items():
         assert builder.summary.sha256_of(REPO_ROOT / name) == digest, name
     for name, digest in provenance["evidence"].items():

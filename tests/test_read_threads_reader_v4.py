@@ -7,6 +7,7 @@ hand-computed at the registered price, on both sides of every threshold — a ga
 it passes is a gate nobody has seen fire.
 """
 
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -18,6 +19,8 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 import read_threads_reader_v4 as driver  # noqa: E402
 import reader_v4_pod_runner as pod  # noqa: E402
+
+from market_pulse import prompts  # noqa: E402
 
 RECORD = json.loads(
     (REPO_ROOT / "results" / "prereg_reader_probe_v4.json").read_text(encoding="utf-8")
@@ -191,10 +194,36 @@ class FakeClient:
         ]
 
 
+LIVE_PARSER_SHA = hashlib.sha256(
+    (REPO_ROOT / "src" / "market_pulse" / "prompts.py").read_bytes()
+).hexdigest()
+
+
 def a_pack(tmp_path, items=2):
+    """The registered pack, re-pinned to THIS checkout's `prompts.py` — and only that field.
+
+    The frozen registration pins the v4-era module, and `prompts.py` has moved since (the v5 text).
+    A positive control built on the frozen sha would be a control whose premise stopped being true:
+    it would refuse for a reason that has nothing to do with what the test is about, and the two
+    refusals below would then prove nothing ([[the_control_whose_premise_stopped_being_true]]).
+    That the SHIPPED pack refuses on this checkout is a separate fact and is asserted separately.
+    """
     pack = driver.build_pack(RECORD)
     pack["items"] = pack["items"][:items]
+    pack["instruments"]["parser"]["sha256"] = LIVE_PARSER_SHA
     return pack
+
+
+def test_the_shipped_pack_refuses_on_this_checkout_because_the_parser_moved(tmp_path):
+    """The other half of the fixture above, said out loud: `results/reader_v4_pack.json` pins the
+    module reader-v4 was read with, this checkout is not it, and the runner says WHICH thing parted
+    rather than blaming the prompt map."""
+    loaded = []
+    with pytest.raises(SystemExit) as err:
+        pod.run(driver.build_pack(RECORD), tmp_path / "pod.jsonl", REPO_ROOT, loader=loaded.append)
+    assert "the parser and the renderer have parted" in str(err.value)
+    assert RECORD["instruments"]["parser"]["sha256"] != LIVE_PARSER_SHA
+    assert loaded == []
 
 
 def test_the_runner_answers_every_item_and_flushes_one_line_as_each_lands(tmp_path):
@@ -228,6 +257,35 @@ def test_the_runner_refuses_a_moved_prompt_sha_BEFORE_the_model_is_loaded(tmp_pa
     assert "not the registered instrument" in str(err.value)
     assert loaded == []
     assert not (tmp_path / "pod.jsonl").exists()
+
+
+def test_a_reader_text_registered_LATER_does_not_refuse_a_pack_pinned_before_it_existed(tmp_path):
+    """The registration's own `prompt_rule`, made true of the code — Dv457.
+
+    «A text registered LATER is not in this map and is not expected to be.» The check was written as
+    a whole-dict equality, so registering `reader_thread_gm4_v5` refused this pack, untouched, with
+    a sentence about the wrong thing. The premise is asserted rather than assumed: the pack really
+    does pin FEWER tasks than this checkout serves, which is the only state the narrowing is about,
+    and the negative control right above still refuses a task the pack DOES pin.
+    """
+    pack = a_pack(tmp_path, items=1)
+    assert set(pack["instruments"]["prompt_sha256"]) < set(prompts.READER)
+    loaded = []
+    pod.run(
+        pack,
+        tmp_path / "pod.jsonl",
+        REPO_ROOT,
+        loader=lambda p, r: loaded.append(FakeClient(["{}"])) or loaded[0],
+    )
+    assert len(loaded) == 1
+
+    # and a task the pack pins but this pod cannot serve at all is still a refusal
+    pack["instruments"]["prompt_sha256"]["reader_thread_gm4_v9"] = "0" * 64
+    stopped = []
+    with pytest.raises(SystemExit) as err:
+        pod.run(pack, tmp_path / "again.jsonl", REPO_ROOT, loader=lambda p, r: stopped.append(1))
+    assert "unserved here: ['reader_thread_gm4_v9']" in str(err.value)
+    assert stopped == []
 
 
 def test_the_runner_refuses_a_moved_request_sha_BEFORE_the_model_is_loaded(tmp_path):

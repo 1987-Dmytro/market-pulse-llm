@@ -893,6 +893,197 @@ v1 and v2 stay registered, untouched, hashed and servable — `results/prereg_re
 handed a different instrument by a keyword it never wrote ([[a_sealed_caller_forces_the_default]]),
 so v3 is opt-in and the run contract names it."""
 
+# --- v5: the four rulings of the sitting of 2026-08-17, each traceable to a miss v4 PAID for -----
+
+READER_ONE_ANSWER_V3 = (
+    "One thread, one answer: you are given the post and every comment under it, and nothing else."
+)
+READER_ONE_ANSWER_V5 = (
+    "One thread, one answer: you are given the post and the comments under it, and nothing else."
+    " Sometimes a thread is too long to send at once and you are given a PART of it. The request"
+    " then carries the line «частина i з n» before the comments, and it means what it says: the"
+    " comments below that line are THIS part's comments, every duty on this page applies to them"
+    " and to them only, and the other parts are not yours to answer for. Without that line you were"
+    " given the whole thread."
+)
+"""Pair 7, the chunk header's semantics — the sitting's ruling (d), leg B.
+
+«every comment under it» is a promise a chunked request cannot keep, and a model that believes it
+has the whole thread will hallucinate the rest of it or refuse to answer for what it can see. The
+line is Ukrainian because that is what `reader_messages_gm4(part=…)` renders, and the two have to
+be the same string in the same alphabet ([[a_rename_the_data_cannot_follow]])."""
+
+READER_ATTRIBUTION_V5 = (
+    READER_DUTY_THREE_V3 + "\n\n"
+    'ATTRIBUTION. This is what decides `subject_type`, in "signals" and in "per_comment" alike.'
+    " The subject is read off THE COMMENT ITSELF and never off the thread's protagonist: not off the"
+    " channel, not off the trade mark the post is about, not off the shop the comment beside it"
+    " discusses. One test settles it — would the complaint or the praise still stand if the chain"
+    " were a different chain, or the trade mark a different trade mark? If it would, the comment is"
+    " about the KIND of product: «категория_личное», and neither the chain nor the brand."
+    " «сеть_ритейлер» is the subject only where the shop AS a shop is what is being talked about —"
+    " its service, its checkout, its delivery, its shelves, its queues. «молочный_бренд» only where"
+    " the named trade mark is what the attitude is about. Three examples, invented for this"
+    " instruction and taken from no thread:\n"
+    "- «жирність у таких йогуртах давно вже не та», under a post from a chain →"
+    " «категория_личное». It survives every chain, so it is not «сеть_ритейлер».\n"
+    "- «на касі простояла сорок хвилин із повним візком», under a post about a trade mark →"
+    " «сеть_ритейлер». It does not survive swapping the shop, so it is not «молочный_бренд».\n"
+    "- «сирки з родзинками ніхто вже не робить такі, як колись», beside a comment naming one maker"
+    " → «категория_личное». It is about the kind, so it is not «молочный_бренд»."
+)
+"""Pair 1, the attribution block — the sitting's ruling (a), and the largest single miss v4 bought.
+
+ALL FOUR of bar 4's disagreements are `subject_type`, and not one of them is a vocabulary
+disagreement: every gold value they were compared against is already the collapsed word. 21601 and
+48283 are comments about a category answered as the chain; 580124 is a brand answered as the chain;
+580129 is a category answered as a brand. Three confusion pairs, so three examples, one each.
+
+The swap test is the rule and the examples are its illustration — never the other way round. Every
+example is SYNTHETIC and `tests/test_reader_prompt_v5.py` proves it occurs in no stored comment, no
+post, no gold file and not in the reference: teaching the exam is a red gate, and a check that
+cannot fail is not a proof ([[guard_selftest_negative_control]])."""
+
+READER_SIGNAL_SUBJECTS_V3 = (
+    '"subject_type": one of "молочный_бренд", "сеть_ритейлер", "категория",'
+    ' "категория_личное", "не_наш_рынок";'
+)
+READER_SIGNAL_SUBJECTS_V5 = (
+    '"subject_type": one of "молочный_бренд", "сеть_ритейлер", "категория_личное",'
+    ' "не_наш_рынок" — one word for a statement about the kind of product, and it is'
+    ' "категория_личное";'
+)
+"""Pair 5, one vocabulary — the seam the collapse has been papering over since gold r2.
+
+The PARSER's :data:`READER_SUBJECT_TYPES` is deliberately NOT touched: five registered records and
+26 paid verdicts were validated against it, and narrowing a domain would refuse answers v1/v2/v3
+runs are allowed to have made. What moves is what the v5 TEXT offers, so the two words stop being
+offered as a choice; the collapse stays registered as a scoring rule, because gold r2 and probe-b's
+verdict still spell it the other way ([[a_prompt_revision_is_an_instrument_swap]])."""
+
+READER_ASPECT_V3 = (
+    '"aspect": one of "taste", "price", "packaging", "quality", "availability", "service";'
+)
+READER_ASPECT_V5 = (
+    '"aspect": one of "taste", "price", "packaging", "quality", "availability", "service" — the'
+    " aspect names what the text is ABOUT and not what the product is enjoyed for, so a question"
+    ' «а є у вас кефір без лактози?», or any request for a kind of product, is "availability" and'
+    ' never "taste";'
+)
+"""Pair 2, the aspect contrast — F1b's second half.
+
+The reference reads F1b as «спрос · категория «морозиво без цукру» · наличие», and a reader that
+answers `taste` because the product is a dessert has found the right comment and charged it to the
+wrong aspect. Stated where the aspect domain is, because what it changes is how that domain is
+chosen and not a procedure."""
+
+READER_PER_COMMENT_V5 = (
+    '- "per_comment" — one object for EVERY comment id you were given, in the order you were given'
+    " them. The ids ARE the list: each comment above carries its own msg_id, and every one of them"
+    " is owed an answer — copy the id back, never invent one, and never leave one out because the"
+    ' comment looked like nothing. {"msg_id"; "subject_type"; "subject_id" or null; "stance" or'
+    ' null; "aspects": the aspects it touches, from the six above; "note": one phrase, only where'
+    " the row needs one}. A comment that carries neither a subject nor an attitude still gets its"
+    ' object, with "subject_type": null and "stance": null — that row says «read, and nothing to'
+    " charge to anybody». The only ids that may be missing from this list are the ones you report"
+    ' in "noise", and they have to be THERE instead: between the two lists every id you were given'
+    " is answered exactly once."
+)
+"""Pair 6, the echo duty — the sitting's ruling (d), first leg.
+
+MEASURED before it was written, and the measurement changed it. v4 returned 93 `per_comment` rows
+against 111 requested, which the run's report reads as one row in six not written. It is not: the
+other 18 are in `noise`, and over the parsed threads `per_comment ∪ noise` covers **111 of 111**
+requested ids with nothing extra and nothing absent. A duty that demanded a `per_comment` row per id
+would therefore refuse the answers v3's own outranking rule — «a comment belongs to at most one of
+"per_comment" and "noise"» — obliges the model to give ([[count_the_kind_not_the_rows]]).
+
+So the duty is stated over the PAIR of lists, which is the only form of it the instrument can obey,
+and `reader_v5.echo` counts the three states apart: answered in `per_comment`, answered in `noise`,
+absent. Only the third is a shortfall."""
+
+READER_CARRY_V3 = (
+    "- Do not carry a brand from the post into a comment that does not mention it, and do not read"
+    " the thread's subject off the channel it is in."
+)
+READER_CARRY_V5 = (
+    READER_CARRY_V3 + "\n"
+    "- ONE narrow exception to the line above, and it is about EVENTS, never about opinions. A"
+    " comment that reports an event changing the AVAILABILITY or the STATUS of what the post is"
+    " about — a warehouse destroyed, a batch recalled, a line delisted, production stopped — is a"
+    " signal about the post's subject even where the comment does not name it:"
+    " «партію відкликали, у продажу її більше немає» under a post about a trade mark is"
+    " availability news about THAT trade mark. An opinion with no name in it is still never carried"
+    " over, and the line above stands for every «смачно», «дорого» and «не куплю більше» that names"
+    " nobody."
+)
+"""Pair 4, the F2a carve-out — the sitting's ruling (c), and it is narrow on purpose.
+
+F2 (`@matusi_ukr:22303`) is the reference's one case where the thread's subject IS carried into a
+comment that does not name it, and v4 missed F2a. The carve-out is scoped to availability-or-status
+EVENTS because that is the whole class the reference's case belongs to; widened to opinions it would
+re-open the defect the rule above exists for — «Гармонія» the children's centre read as brand
+negative — and cost bar 3, which is currently a PASS."""
+
+READER_EXCHANGE_V3 = "read it, and do not skip a comment because the shop wrote it."
+READER_EXCHANGE_V5 = (
+    "read it, and do not skip a comment because the shop wrote it. A question and the answer it"
+    ' gets are ONE signal, so its "evidence" carries BOTH msg_ids — the comment that asked and the'
+    " comment that answered — and never only one of them."
+)
+"""Pair 3, the evidence of an exchange — F1b's first half.
+
+The reference makes F1b out of three ids and two of them are the CHANNEL's reply: «спрос ·
+категория «морозиво без цукру» · наличие (21599; ответ сети с SKU Рудь/Лімо — 21601)». v3 already
+tells the reader not to skip the shop's own comment; what it never says is that the pair is one
+finding, so an evidence list naming only the question is a signal the bar cannot match."""
+
+READER_THREAD_PROMPT_V5 = _swap(
+    _swap(
+        _swap(
+            _swap(
+                _swap(
+                    _swap(
+                        _swap(
+                            READER_THREAD_PROMPT_V3,
+                            READER_ONE_ANSWER_V3,
+                            READER_ONE_ANSWER_V5,
+                        ),
+                        READER_DUTY_THREE_V3,
+                        READER_ATTRIBUTION_V5,
+                    ),
+                    READER_SIGNAL_SUBJECTS_V3,
+                    READER_SIGNAL_SUBJECTS_V5,
+                ),
+                READER_ASPECT_V3,
+                READER_ASPECT_V5,
+            ),
+            READER_PER_COMMENT_V3,
+            READER_PER_COMMENT_V5,
+        ),
+        READER_CARRY_V3,
+        READER_CARRY_V5,
+    ),
+    READER_EXCHANGE_V3,
+    READER_EXCHANGE_V5,
+)
+"""The thread reader of `docs/PROMPT-reader-v5-prep.md` D1 — the sitting of 2026-08-17, in the text.
+
+**There is deliberately no v4 prompt: the number follows the CONTRACT that registers it, not the
+prompt's own generation.** reader-v4 re-registered the v3 text on a pod and measured it; this is the
+first text since, so it is v5 and the gap is the honest name for what happened.
+
+DERIVED from :data:`READER_THREAD_PROMPT_V3` by SEVEN `_swap` calls, the probe-b discipline applied
+a third time: every change is a visible call, `_swap` refuses an `old` it cannot find exactly once,
+and an eighth edit would have to appear here as an eighth call. Each pair is traceable to a miss
+that was PAID for and none of them is a guess about what might read better — the four bar-4
+disagreements (pair 1), F1b's two halves (pairs 2 and 3), F2a (pair 4), the seam gold r2 opened
+(pair 5), the completeness census (pair 6) and the chunking leg (pair 7).
+
+v1, v2 and v3 stay registered, untouched, hashed and servable, and :func:`reader_messages_gm4` keeps
+v2 as its DEFAULT: every caller that passes no `task` is a caller whose evidence is already on disk
+([[a_sealed_caller_forces_the_default]]). v5 is opt-in and the run contract names it."""
+
 PROMPTS = {
     "T1": T1_PROMPT,
     "T2": T2_PROMPT,
@@ -913,6 +1104,8 @@ PROMPTS = {
     "reader_thread_gm4": READER_THREAD_PROMPT,
     "reader_thread_gm4_v2": READER_THREAD_PROMPT_V2,
     "reader_thread_gm4_v3": READER_THREAD_PROMPT_V3,
+    # no `_v4`: the number follows the contract that registers a text, and reader-v4 registered v3's
+    "reader_thread_gm4_v5": READER_THREAD_PROMPT_V5,
 }
 RENDER_ONLY = {"precheck_v2ctx_with_post": "precheck_v2_with_post"}
 """Registered tasks whose prompt text *is* another task's, mapped to the base they share.
@@ -993,7 +1186,11 @@ parser would come back as a dict of labels nothing downstream could use."""
 READER_TASK = "reader_thread_gm4"
 READER_TASK_V2 = "reader_thread_gm4_v2"
 READER_TASK_V3 = "reader_thread_gm4_v3"
-READER = frozenset({READER_TASK, READER_TASK_V2, READER_TASK_V3})
+READER_TASK_V5 = "reader_thread_gm4_v5"
+"""No `READER_TASK_V4`: reader-v4 registered the v3 TEXT on a pod, so no fourth text was ever
+written. The number follows the contract that registers a text, and the gap is what says so."""
+
+READER = frozenset({READER_TASK, READER_TASK_V2, READER_TASK_V3, READER_TASK_V5})
 """The thread reader of the comment-signals layer. Registered and hashed like every other prompt,
 and out of the three labelling tables for the same reason :data:`POSITIONS` is: its answer is one
 verdict about a whole thread, not a label per row.
@@ -1290,6 +1487,14 @@ Above the population on purpose: a guard tight enough to fire on a legitimate th
 one attempt the probe has ([[lifted_ceiling_is_not_lifted_code]])."""
 
 
+READER_PART_LINE = "<part>частина {i} з {n}</part>\n"
+"""The one line a chunked request adds, inside the thread fence and above the comments.
+
+Ukrainian and spelled exactly as :data:`READER_ONE_ANSWER_V5` quotes it — the prompt tells the model
+what «частина i з n» means, and a header the prompt cannot name is a header the model has no law
+for ([[a_rename_the_data_cannot_follow]])."""
+
+
 def reader_messages_gm4(
     channel: str,
     post_id: int,
@@ -1297,8 +1502,17 @@ def reader_messages_gm4(
     comments: list[tuple[int, str]],
     *,
     task: str = READER_TASK_V2,
+    part: tuple[int, int] | None = None,
 ) -> list[dict]:
     """One thread as the reader is given it: the post, then every payable comment with its id.
+
+    ``part`` is ``(i, n)`` — «this is chunk i of n» — and it defaults to ``None``, which renders
+    BYTE-IDENTICALLY to what every caller before it got: the header is a prefix that is the empty
+    string unless a part was asked for, so there is no second construction of the request and no
+    branch a frozen record's re-render can take by accident. The comments handed in are the ones
+    this call sends; slicing the thread is the CALLER's job, because which chunk carries which ids
+    is a registered fact and not something a renderer may decide ([[a_sealed_caller_forces_the_
+    default]]).
 
     ``task`` names WHICH registered reader text is rendered, and defaults to the one every driver
     written so far was measured with. THREE versions exist since the reader sitting, and v3 is
@@ -1336,9 +1550,18 @@ def reader_messages_gm4(
     )
     if not post.strip() and not body:
         raise ValueError(f"{channel}:{post_id}: no post text and no comment — nothing to read")
+    header = ""
+    if part is not None:
+        index, total = part
+        if not 1 <= index <= total:
+            raise ValueError(
+                f"{channel}:{post_id}: part {index} of {total} is not a part — the header would"
+                " tell the model something that is not true about the request it is in"
+            )
+        header = READER_PART_LINE.format(i=index, n=total)
     content = (
         f'{PROMPTS[task]}\n\n<thread channel="{channel}" post_id="{post_id}">\n'
-        f"<post>\n{post.strip() or NO_POST_TEXT}\n</post>\n{body}</thread>"
+        f"<post>\n{post.strip() or NO_POST_TEXT}\n</post>\n{header}{body}</thread>"
     )
     if len(content) > READER_MAX_INPUT_CHARS:
         raise ValueError(
