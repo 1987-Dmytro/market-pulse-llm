@@ -1,0 +1,2620 @@
+{
+  "instruments": {
+    "prompt_sha256": {
+      "pass1_comment_gm4_v1": "5a4a3cb6ce4db89adb304c04de41210fdabfde0c53addfdb75adba0f1d866650"
+    },
+    "renderer": "market_pulse.prompts.pass1_messages_gm4"
+  },
+  "items": [
+    {
+      "channel": "@VARUS_channel",
+      "entities": [
+        {
+          "msg_id": null,
+          "name": "Waschkonig",
+          "quote": "Гель для прання ТМ Waschkonig",
+          "reading": "бренд засобів для прання",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 20664,
+          "name": "Varus",
+          "quote": "Зайшла в Varus на Деміївській",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        }
+      ],
+      "id": "@VARUS_channel:10348#20594",
+      "leg": "census",
+      "msg_id": 20594,
+      "payable_comments": 1,
+      "post_id": 10348,
+      "rendered_chars": 2805,
+      "rendering_sha256": "a101c73f97e11dd2077eac96908b256ac28eb69f19f9d664005f68feb8c75774",
+      "text": "Dfcvvvccv",
+      "thread": "@VARUS_channel:10348",
+      "topic": "Реклама гелю для прання ТМ Waschkonig."
+    },
+    {
+      "channel": "@VARUS_channel",
+      "entities": [
+        {
+          "msg_id": null,
+          "name": "Waschkonig",
+          "quote": "Гель для прання ТМ Waschkonig",
+          "reading": "бренд засобів для прання",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 20664,
+          "name": "Varus",
+          "quote": "Зайшла в Varus на Деміївській",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        }
+      ],
+      "id": "@VARUS_channel:10348#20595",
+      "leg": "census",
+      "msg_id": 20595,
+      "payable_comments": 1,
+      "post_id": 10348,
+      "rendered_chars": 2840,
+      "rendering_sha256": "2ef7964cdd946b68792f76b5a8b88f5465c4bd3870cb2c7128b4284008bb56d3",
+      "text": "Sgdcvvbbvcvcvbhhhjjkknvv gg iuudufufufuufufu",
+      "thread": "@VARUS_channel:10348",
+      "topic": "Реклама гелю для прання ТМ Waschkonig."
+    },
+    {
+      "channel": "@VARUS_channel",
+      "entities": [
+        {
+          "msg_id": null,
+          "name": "Waschkonig",
+          "quote": "Гель для прання ТМ Waschkonig",
+          "reading": "бренд засобів для прання",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 20664,
+          "name": "Varus",
+          "quote": "Зайшла в Varus на Деміївській",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        }
+      ],
+      "id": "@VARUS_channel:10348#20656",
+      "leg": "census",
+      "msg_id": 20656,
+      "payable_comments": 1,
+      "post_id": 10348,
+      "rendered_chars": 2853,
+      "rendering_sha256": "65134559e57bd42e8fce8f470eab220f23bb37916988270ce13575f83e258f58",
+      "text": "В мене зелений, я задоволена. Все чисте, пахне, економний",
+      "thread": "@VARUS_channel:10348",
+      "topic": "Реклама гелю для прання ТМ Waschkonig."
+    },
+    {
+      "channel": "@VARUS_channel",
+      "entities": [
+        {
+          "msg_id": null,
+          "name": "Waschkonig",
+          "quote": "Гель для прання ТМ Waschkonig",
+          "reading": "бренд засобів для прання",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 20664,
+          "name": "Varus",
+          "quote": "Зайшла в Varus на Деміївській",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        }
+      ],
+      "id": "@VARUS_channel:10348#20664",
+      "leg": "gold",
+      "msg_id": 20664,
+      "payable_comments": 1,
+      "post_id": 10348,
+      "rendered_chars": 2919,
+      "rendering_sha256": "e4773f4c18d17bb6674adcb62dc07f6dec1e8396d47100e3792010c2275098ed",
+      "text": "Зайшла в Varus на Деміївській стоїть цінник 302 грн.по акції,показала фото,питаю\"де?\"хочу купити\"-\"в нас такого нема\"\nДе є?",
+      "thread": "@VARUS_channel:10348",
+      "topic": "Реклама гелю для прання ТМ Waschkonig."
+    },
+    {
+      "channel": "@VARUS_channel",
+      "entities": [
+        {
+          "msg_id": null,
+          "name": "Waschkonig",
+          "quote": "Гель для прання ТМ Waschkonig",
+          "reading": "бренд засобів для прання",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 20664,
+          "name": "Varus",
+          "quote": "Зайшла в Varus на Деміївській",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        }
+      ],
+      "id": "@VARUS_channel:10348#20665",
+      "leg": "census",
+      "msg_id": 20665,
+      "payable_comments": 1,
+      "post_id": 10348,
+      "rendered_chars": 2825,
+      "rendering_sha256": "3785ff0c40d4e91bf212431a70e6403b3077b3fdeee9c4aea1a97ae9fe9427ad",
+      "text": "Вітаємо!Вже з вами у діректі.",
+      "thread": "@VARUS_channel:10348",
+      "topic": "Реклама гелю для прання ТМ Waschkonig."
+    },
+    {
+      "channel": "@VARUS_channel",
+      "entities": [
+        {
+          "msg_id": null,
+          "name": "Waschkonig",
+          "quote": "Гель для прання ТМ Waschkonig",
+          "reading": "бренд засобів для прання",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 20664,
+          "name": "Varus",
+          "quote": "Зайшла в Varus на Деміївській",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        }
+      ],
+      "id": "@VARUS_channel:10348#20672",
+      "leg": "census",
+      "msg_id": 20672,
+      "payable_comments": 1,
+      "post_id": 10348,
+      "rendered_chars": 2868,
+      "rendering_sha256": "92c45e194182910fed58323a025e8a812b1671a250437399fe545eb7900f0135",
+      "text": "Місто Кривий Ріг, вул.Героїв Маріуполя є такий гель по акції одного дня?",
+      "thread": "@VARUS_channel:10348",
+      "topic": "Реклама гелю для прання ТМ Waschkonig."
+    },
+    {
+      "channel": "@VARUS_channel",
+      "entities": [
+        {
+          "msg_id": null,
+          "name": "Waschkonig",
+          "quote": "Гель для прання ТМ Waschkonig",
+          "reading": "бренд засобів для прання",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 20664,
+          "name": "Varus",
+          "quote": "Зайшла в Varus на Деміївській",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        }
+      ],
+      "id": "@VARUS_channel:10348#20673",
+      "leg": "census",
+      "msg_id": 20673,
+      "payable_comments": 1,
+      "post_id": 10348,
+      "rendered_chars": 2825,
+      "rendering_sha256": "d3f7911b0e95f96d50f5695659604dafa03b6c0423ab236995083670a208526c",
+      "text": "Вітаємо!Вже з вами у діректі.",
+      "thread": "@VARUS_channel:10348",
+      "topic": "Реклама гелю для прання ТМ Waschkonig."
+    },
+    {
+      "channel": "@VARUS_channel",
+      "entities": [
+        {
+          "msg_id": null,
+          "name": "VARUS",
+          "quote": "У VARUS зібрали все",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "msg_id": null,
+          "name": "Лімо",
+          "quote": "ТМ Лімо",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": null,
+          "name": "Рудь",
+          "quote": "ТМ Рудь",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": null,
+          "name": "Три Ведмеді",
+          "quote": "ТМ Три Ведмеді",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": null,
+          "name": "Хрещатик",
+          "quote": "ТМ Хрещатик",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 21601,
+          "name": "VARUS",
+          "quote": "Так у VARUS є морозиво",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "msg_id": 21601,
+          "name": "Рудь",
+          "quote": "Рудь ванільне",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 21601,
+          "name": "Лімо",
+          "quote": "Лімо Velvet полуничне",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 21626,
+          "name": "Варусі",
+          "quote": "Брав морозиво у Варусі",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "msg_id": 21678,
+          "name": "Варус",
+          "quote": "Люблю Варус",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        }
+      ],
+      "id": "@VARUS_channel:10613#21599",
+      "leg": "gold",
+      "msg_id": 21599,
+      "payable_comments": 1,
+      "post_id": 10613,
+      "rendered_chars": 3195,
+      "rendering_sha256": "bc1e6e94f46ea2ff35c4b41fdc98ea31bee3b75a104003f57084e75a62ac17ee",
+      "text": "А є морозиво без цукру?",
+      "thread": "@VARUS_channel:10613",
+      "topic": "Реклама акційних пропозицій на морозиво різних брендів у мережі VARUS до Дня морозива."
+    },
+    {
+      "channel": "@VARUS_channel",
+      "entities": [
+        {
+          "msg_id": null,
+          "name": "VARUS",
+          "quote": "У VARUS зібрали все",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "msg_id": null,
+          "name": "Лімо",
+          "quote": "ТМ Лімо",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": null,
+          "name": "Рудь",
+          "quote": "ТМ Рудь",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": null,
+          "name": "Три Ведмеді",
+          "quote": "ТМ Три Ведмеді",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": null,
+          "name": "Хрещатик",
+          "quote": "ТМ Хрещатик",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 21601,
+          "name": "VARUS",
+          "quote": "Так у VARUS є морозиво",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "msg_id": 21601,
+          "name": "Рудь",
+          "quote": "Рудь ванільне",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 21601,
+          "name": "Лімо",
+          "quote": "Лімо Velvet полуничне",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 21626,
+          "name": "Варусі",
+          "quote": "Брав морозиво у Варусі",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "msg_id": 21678,
+          "name": "Варус",
+          "quote": "Люблю Варус",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        }
+      ],
+      "id": "@VARUS_channel:10613#21601",
+      "leg": "gold",
+      "msg_id": 21601,
+      "payable_comments": 1,
+      "post_id": 10613,
+      "rendered_chars": 3366,
+      "rendering_sha256": "cd6cea0d76548fae8dd48eb73981a4ebd80a51c6d9db73f8c64435def80fa784",
+      "text": "Вітаємо Валентина!Так у VARUS є морозиво без цукру,а саме Рудь ванільне (ескімо 60 г або в стаканчику 110 г)Рудь шоколадне (ескімо 60 г)Лімо Velvet полуничне (з замінником цукру Zusto Gold, 70 г",
+      "thread": "@VARUS_channel:10613",
+      "topic": "Реклама акційних пропозицій на морозиво різних брендів у мережі VARUS до Дня морозива."
+    },
+    {
+      "channel": "@VARUS_channel",
+      "entities": [
+        {
+          "msg_id": null,
+          "name": "VARUS",
+          "quote": "У VARUS зібрали все",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "msg_id": null,
+          "name": "Лімо",
+          "quote": "ТМ Лімо",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": null,
+          "name": "Рудь",
+          "quote": "ТМ Рудь",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": null,
+          "name": "Три Ведмеді",
+          "quote": "ТМ Три Ведмеді",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": null,
+          "name": "Хрещатик",
+          "quote": "ТМ Хрещатик",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 21601,
+          "name": "VARUS",
+          "quote": "Так у VARUS є морозиво",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "msg_id": 21601,
+          "name": "Рудь",
+          "quote": "Рудь ванільне",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 21601,
+          "name": "Лімо",
+          "quote": "Лімо Velvet полуничне",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 21626,
+          "name": "Варусі",
+          "quote": "Брав морозиво у Варусі",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "msg_id": 21678,
+          "name": "Варус",
+          "quote": "Люблю Варус",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        }
+      ],
+      "id": "@VARUS_channel:10613#21609",
+      "leg": "census",
+      "msg_id": 21609,
+      "payable_comments": 1,
+      "post_id": 10613,
+      "rendered_chars": 3177,
+      "rendering_sha256": "1d71de5de369fcbc0401e140a44b5121c06216f7622366c1928f9133b24045b0",
+      "text": "Дякую",
+      "thread": "@VARUS_channel:10613",
+      "topic": "Реклама акційних пропозицій на морозиво різних брендів у мережі VARUS до Дня морозива."
+    },
+    {
+      "channel": "@VARUS_channel",
+      "entities": [
+        {
+          "msg_id": null,
+          "name": "VARUS",
+          "quote": "У VARUS зібрали все",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "msg_id": null,
+          "name": "Лімо",
+          "quote": "ТМ Лімо",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": null,
+          "name": "Рудь",
+          "quote": "ТМ Рудь",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": null,
+          "name": "Три Ведмеді",
+          "quote": "ТМ Три Ведмеді",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": null,
+          "name": "Хрещатик",
+          "quote": "ТМ Хрещатик",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 21601,
+          "name": "VARUS",
+          "quote": "Так у VARUS є морозиво",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "msg_id": 21601,
+          "name": "Рудь",
+          "quote": "Рудь ванільне",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 21601,
+          "name": "Лімо",
+          "quote": "Лімо Velvet полуничне",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 21626,
+          "name": "Варусі",
+          "quote": "Брав морозиво у Варусі",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "msg_id": 21678,
+          "name": "Варус",
+          "quote": "Люблю Варус",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        }
+      ],
+      "id": "@VARUS_channel:10613#21626",
+      "leg": "gold",
+      "msg_id": 21626,
+      "payable_comments": 1,
+      "post_id": 10613,
+      "rendered_chars": 3335,
+      "rendering_sha256": "75a9dd59593d086d6ee24be2ad9188f316483c3791aea156a29c9e7ab4b9b97c",
+      "text": "Брав морозиво у Варусі, воно у них завжди особливе, з нього просто тече вода, воно просто перемерзше. Цим словам є підтвердження - чек. Повернення робив не один я.",
+      "thread": "@VARUS_channel:10613",
+      "topic": "Реклама акційних пропозицій на морозиво різних брендів у мережі VARUS до Дня морозива."
+    },
+    {
+      "channel": "@VARUS_channel",
+      "entities": [
+        {
+          "msg_id": null,
+          "name": "VARUS",
+          "quote": "У VARUS зібрали все",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "msg_id": null,
+          "name": "Лімо",
+          "quote": "ТМ Лімо",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": null,
+          "name": "Рудь",
+          "quote": "ТМ Рудь",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": null,
+          "name": "Три Ведмеді",
+          "quote": "ТМ Три Ведмеді",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": null,
+          "name": "Хрещатик",
+          "quote": "ТМ Хрещатик",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 21601,
+          "name": "VARUS",
+          "quote": "Так у VARUS є морозиво",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "msg_id": 21601,
+          "name": "Рудь",
+          "quote": "Рудь ванільне",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 21601,
+          "name": "Лімо",
+          "quote": "Лімо Velvet полуничне",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 21626,
+          "name": "Варусі",
+          "quote": "Брав морозиво у Варусі",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "msg_id": 21678,
+          "name": "Варус",
+          "quote": "Люблю Варус",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        }
+      ],
+      "id": "@VARUS_channel:10613#21627",
+      "leg": "census",
+      "msg_id": 21627,
+      "payable_comments": 1,
+      "post_id": 10613,
+      "rendered_chars": 3246,
+      "rendering_sha256": "42cafa02d153a1674ee526d46e51fffd9df0c191795ab2f50ade424cdf7b2191",
+      "text": "Вже написали вам у приватні повідомлення, щоб розібратися в усьому разом✍🏻",
+      "thread": "@VARUS_channel:10613",
+      "topic": "Реклама акційних пропозицій на морозиво різних брендів у мережі VARUS до Дня морозива."
+    },
+    {
+      "channel": "@VARUS_channel",
+      "entities": [
+        {
+          "msg_id": null,
+          "name": "VARUS",
+          "quote": "У VARUS зібрали все",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "msg_id": null,
+          "name": "Лімо",
+          "quote": "ТМ Лімо",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": null,
+          "name": "Рудь",
+          "quote": "ТМ Рудь",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": null,
+          "name": "Три Ведмеді",
+          "quote": "ТМ Три Ведмеді",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": null,
+          "name": "Хрещатик",
+          "quote": "ТМ Хрещатик",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 21601,
+          "name": "VARUS",
+          "quote": "Так у VARUS є морозиво",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "msg_id": 21601,
+          "name": "Рудь",
+          "quote": "Рудь ванільне",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 21601,
+          "name": "Лімо",
+          "quote": "Лімо Velvet полуничне",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 21626,
+          "name": "Варусі",
+          "quote": "Брав морозиво у Варусі",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "msg_id": 21678,
+          "name": "Варус",
+          "quote": "Люблю Варус",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        }
+      ],
+      "id": "@VARUS_channel:10613#21629",
+      "leg": "gold",
+      "msg_id": 21629,
+      "payable_comments": 1,
+      "post_id": 10613,
+      "rendered_chars": 3226,
+      "rendering_sha256": "6fa166bfe03e8eee769665604f921f2633b3047c8ff5ee228decc62f8a774b04",
+      "text": "Беремо завжди ось це-дуже смачне,навіть смачніссімо🥰🥰🥰",
+      "thread": "@VARUS_channel:10613",
+      "topic": "Реклама акційних пропозицій на морозиво різних брендів у мережі VARUS до Дня морозива."
+    },
+    {
+      "channel": "@VARUS_channel",
+      "entities": [
+        {
+          "msg_id": null,
+          "name": "VARUS",
+          "quote": "У VARUS зібрали все",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "msg_id": null,
+          "name": "Лімо",
+          "quote": "ТМ Лімо",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": null,
+          "name": "Рудь",
+          "quote": "ТМ Рудь",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": null,
+          "name": "Три Ведмеді",
+          "quote": "ТМ Три Ведмеді",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": null,
+          "name": "Хрещатик",
+          "quote": "ТМ Хрещатик",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 21601,
+          "name": "VARUS",
+          "quote": "Так у VARUS є морозиво",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "msg_id": 21601,
+          "name": "Рудь",
+          "quote": "Рудь ванільне",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 21601,
+          "name": "Лімо",
+          "quote": "Лімо Velvet полуничне",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 21626,
+          "name": "Варусі",
+          "quote": "Брав морозиво у Варусі",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "msg_id": 21678,
+          "name": "Варус",
+          "quote": "Люблю Варус",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        }
+      ],
+      "id": "@VARUS_channel:10613#21631",
+      "leg": "census",
+      "msg_id": 21631,
+      "payable_comments": 1,
+      "post_id": 10613,
+      "rendered_chars": 3214,
+      "rendering_sha256": "f2a8455d9a4127d191060f0c51d7241a3cd260127138d973012ec9cb5a05c79c",
+      "text": "Зря стараєшся,або ти співробітник не пойму",
+      "thread": "@VARUS_channel:10613",
+      "topic": "Реклама акційних пропозицій на морозиво різних брендів у мережі VARUS до Дня морозива."
+    },
+    {
+      "channel": "@VARUS_channel",
+      "entities": [
+        {
+          "msg_id": null,
+          "name": "VARUS",
+          "quote": "У VARUS зібрали все",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "msg_id": null,
+          "name": "Лімо",
+          "quote": "ТМ Лімо",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": null,
+          "name": "Рудь",
+          "quote": "ТМ Рудь",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": null,
+          "name": "Три Ведмеді",
+          "quote": "ТМ Три Ведмеді",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": null,
+          "name": "Хрещатик",
+          "quote": "ТМ Хрещатик",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 21601,
+          "name": "VARUS",
+          "quote": "Так у VARUS є морозиво",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "msg_id": 21601,
+          "name": "Рудь",
+          "quote": "Рудь ванільне",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 21601,
+          "name": "Лімо",
+          "quote": "Лімо Velvet полуничне",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 21626,
+          "name": "Варусі",
+          "quote": "Брав морозиво у Варусі",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "msg_id": 21678,
+          "name": "Варус",
+          "quote": "Люблю Варус",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        }
+      ],
+      "id": "@VARUS_channel:10613#21670",
+      "leg": "census",
+      "msg_id": 21670,
+      "payable_comments": 1,
+      "post_id": 10613,
+      "rendered_chars": 3218,
+      "rendering_sha256": "a87e0d47479b97794be71a4a84c9ff9ae9ddb2c6c60d774e58363a8385fa521e",
+      "text": "Нет, он нормальный чел. Дякую йому за инфу. ❤️",
+      "thread": "@VARUS_channel:10613",
+      "topic": "Реклама акційних пропозицій на морозиво різних брендів у мережі VARUS до Дня морозива."
+    },
+    {
+      "channel": "@VARUS_channel",
+      "entities": [
+        {
+          "msg_id": null,
+          "name": "VARUS",
+          "quote": "У VARUS зібрали все",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "msg_id": null,
+          "name": "Лімо",
+          "quote": "ТМ Лімо",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": null,
+          "name": "Рудь",
+          "quote": "ТМ Рудь",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": null,
+          "name": "Три Ведмеді",
+          "quote": "ТМ Три Ведмеді",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": null,
+          "name": "Хрещатик",
+          "quote": "ТМ Хрещатик",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 21601,
+          "name": "VARUS",
+          "quote": "Так у VARUS є морозиво",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "msg_id": 21601,
+          "name": "Рудь",
+          "quote": "Рудь ванільне",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 21601,
+          "name": "Лімо",
+          "quote": "Лімо Velvet полуничне",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 21626,
+          "name": "Варусі",
+          "quote": "Брав морозиво у Варусі",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "msg_id": 21678,
+          "name": "Варус",
+          "quote": "Люблю Варус",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        }
+      ],
+      "id": "@VARUS_channel:10613#21678",
+      "leg": "census",
+      "msg_id": 21678,
+      "payable_comments": 1,
+      "post_id": 10613,
+      "rendered_chars": 3460,
+      "rendering_sha256": "8e4975aa8d74d9d4911126e7cbec16d5496c19b57e2b65eec581bf6502f52adc",
+      "text": "Дякую вам за неупередженість. Дуже прикро,коли стараєшся щиро ділитися чимось гарним,а тебе ще й в чомусь обвинувачуюсь.Люблю Варус,і хвалю,не тому що співробітник,а тому що подобається наш Варус. І хочу щоб і інші отримували  тільки найкращі послуги та товари,та не розчаровувалися❤️❤️❤️",
+      "thread": "@VARUS_channel:10613",
+      "topic": "Реклама акційних пропозицій на морозиво різних брендів у мережі VARUS до Дня морозива."
+    },
+    {
+      "channel": "@VARUS_channel",
+      "entities": [
+        {
+          "msg_id": null,
+          "name": "VARUS",
+          "quote": "У VARUS зібрали все",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "msg_id": null,
+          "name": "Лімо",
+          "quote": "ТМ Лімо",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": null,
+          "name": "Рудь",
+          "quote": "ТМ Рудь",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": null,
+          "name": "Три Ведмеді",
+          "quote": "ТМ Три Ведмеді",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": null,
+          "name": "Хрещатик",
+          "quote": "ТМ Хрещатик",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 21601,
+          "name": "VARUS",
+          "quote": "Так у VARUS є морозиво",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "msg_id": 21601,
+          "name": "Рудь",
+          "quote": "Рудь ванільне",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 21601,
+          "name": "Лімо",
+          "quote": "Лімо Velvet полуничне",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 21626,
+          "name": "Варусі",
+          "quote": "Брав морозиво у Варусі",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "msg_id": 21678,
+          "name": "Варус",
+          "quote": "Люблю Варус",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        }
+      ],
+      "id": "@VARUS_channel:10613#21680",
+      "leg": "census",
+      "msg_id": 21680,
+      "payable_comments": 1,
+      "post_id": 10613,
+      "rendered_chars": 3240,
+      "rendering_sha256": "2060ea5cfba907ff9b4f316f0ed5f43a9cb92ad38390e718adbb9a7bd32cf2dd",
+      "text": "У вас есть на это причины, так как на Калыны самое лучшее снабжение.",
+      "thread": "@VARUS_channel:10613",
+      "topic": "Реклама акційних пропозицій на морозиво різних брендів у мережі VARUS до Дня морозива."
+    },
+    {
+      "channel": "@mandziak",
+      "entities": [
+        {
+          "msg_id": 47902,
+          "name": "атб",
+          "quote": "творог нежирний з атб",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "msg_id": 47902,
+          "name": "День у День",
+          "quote": "sir-kislomolocnij-300-g-den-u-den-nezirnij-pet-sajba",
+          "reading": "торгова марка кисломолочного сиру",
+          "subject_type": "молочный_бренд"
+        }
+      ],
+      "id": "@mandziak:3676#47896",
+      "leg": "census",
+      "msg_id": 47896,
+      "payable_comments": 1,
+      "post_id": 3676,
+      "rendered_chars": 2789,
+      "rendering_sha256": "95969d0b24b4c684cc28ad30068c22a7fa27fb14782e51f501d018097b898de5",
+      "text": "👍",
+      "thread": "@mandziak:3676",
+      "topic": "Рецепт піци для схуднення."
+    },
+    {
+      "channel": "@mandziak",
+      "entities": [
+        {
+          "msg_id": 47902,
+          "name": "атб",
+          "quote": "творог нежирний з атб",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "msg_id": 47902,
+          "name": "День у День",
+          "quote": "sir-kislomolocnij-300-g-den-u-den-nezirnij-pet-sajba",
+          "reading": "торгова марка кисломолочного сиру",
+          "subject_type": "молочный_бренд"
+        }
+      ],
+      "id": "@mandziak:3676#47897",
+      "leg": "census",
+      "msg_id": 47897,
+      "payable_comments": 1,
+      "post_id": 3676,
+      "rendered_chars": 2793,
+      "rendering_sha256": "69b9c999a59bbe03ff279db380acc3627c1338edd484448e3ed2893c31ad3365",
+      "text": "Дякую",
+      "thread": "@mandziak:3676",
+      "topic": "Рецепт піци для схуднення."
+    },
+    {
+      "channel": "@mandziak",
+      "entities": [
+        {
+          "msg_id": 47902,
+          "name": "атб",
+          "quote": "творог нежирний з атб",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "msg_id": 47902,
+          "name": "День у День",
+          "quote": "sir-kislomolocnij-300-g-den-u-den-nezirnij-pet-sajba",
+          "reading": "торгова марка кисломолочного сиру",
+          "subject_type": "молочный_бренд"
+        }
+      ],
+      "id": "@mandziak:3676#47898",
+      "leg": "census",
+      "msg_id": 47898,
+      "payable_comments": 1,
+      "post_id": 3676,
+      "rendered_chars": 3157,
+      "rendering_sha256": "94b764171ed58419ba54acdc29dca9fe43d943844e9807f0f53e74bd82d9c18d",
+      "text": "Якщо у складі цієї \"піци\" є яйця, то крохмаль можна прибрати. Ще можна замінити тунця на фарш з курячого філе.\nЯ б зробила основу з кабачка та яєць, запекла б цей млинчик, а потім виклала б на нього тунця або фарш, дольки томатів і вже це все присипала б сиром і допекла б до готовності.\nЦе було б більш схоже на піцу, бо те, що пропонує дівчина з відео, - це запіканка",
+      "thread": "@mandziak:3676",
+      "topic": "Рецепт піци для схуднення."
+    },
+    {
+      "channel": "@mandziak",
+      "entities": [
+        {
+          "msg_id": 47902,
+          "name": "атб",
+          "quote": "творог нежирний з атб",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "msg_id": 47902,
+          "name": "День у День",
+          "quote": "sir-kislomolocnij-300-g-den-u-den-nezirnij-pet-sajba",
+          "reading": "торгова марка кисломолочного сиру",
+          "subject_type": "молочный_бренд"
+        }
+      ],
+      "id": "@mandziak:3676#47899",
+      "leg": "gold",
+      "msg_id": 47899,
+      "payable_comments": 1,
+      "post_id": 3676,
+      "rendered_chars": 3117,
+      "rendering_sha256": "3eb4b9b6f0af0a35e620ae61cb38f9773f4980450c7b4d78985facc956bdfdcb",
+      "text": "Погоджуюсь) я робила піцу з творога 0.2 % і цільнозернового борошна, випікала а зверху накладала все що люблю: курку, кукурудзу, томат, трохи сиру і виходило дійсно як справжня піца, ще й дуже ситно)) крохмаль не давала, лиш пів ложечки розпушувача)) \nВідколи зловила гіперфікс на творогові, навчилась робити купу всього з нього😅",
+      "thread": "@mandziak:3676",
+      "topic": "Рецепт піци для схуднення."
+    },
+    {
+      "channel": "@mandziak",
+      "entities": [
+        {
+          "msg_id": 47902,
+          "name": "атб",
+          "quote": "творог нежирний з атб",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "msg_id": 47902,
+          "name": "День у День",
+          "quote": "sir-kislomolocnij-300-g-den-u-den-nezirnij-pet-sajba",
+          "reading": "торгова марка кисломолочного сиру",
+          "subject_type": "молочный_бренд"
+        }
+      ],
+      "id": "@mandziak:3676#47900",
+      "leg": "census",
+      "msg_id": 47900,
+      "payable_comments": 1,
+      "post_id": 3676,
+      "rendered_chars": 2999,
+      "rendering_sha256": "8bd4f8d59dfa18893e522f3a2756aa1bb2b20f1bbb46a61bd39e6f8def46cb4b",
+      "text": "Я готую БЕЗ крохмалю і тунця ( не люблю його) , а ще НЕ змішую 2 сири- достатньо одного з них. І смачно і менш калорійно. А  зверху можна на готову ще покласти листовий салат і порізані помідорки. Добре насичує.",
+      "thread": "@mandziak:3676",
+      "topic": "Рецепт піци для схуднення."
+    },
+    {
+      "channel": "@mandziak",
+      "entities": [
+        {
+          "msg_id": 47902,
+          "name": "атб",
+          "quote": "творог нежирний з атб",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "msg_id": 47902,
+          "name": "День у День",
+          "quote": "sir-kislomolocnij-300-g-den-u-den-nezirnij-pet-sajba",
+          "reading": "торгова марка кисломолочного сиру",
+          "subject_type": "молочный_бренд"
+        }
+      ],
+      "id": "@mandziak:3676#47902",
+      "leg": "gold",
+      "msg_id": 47902,
+      "payable_comments": 1,
+      "post_id": 3676,
+      "rendered_chars": 2948,
+      "rendering_sha256": "f93039218893264545f0ae18c5d99ac0885ec0f7dc17527a485fe95f48bca638",
+      "text": "На відео у жінки творог нежирний з атб. В пачці 300 гр. Сам такий купляю\n\nhttps://www.atbmarket.com/product/sir-kislomolocnij-300-g-den-u-den-nezirnij-pet-sajba",
+      "thread": "@mandziak:3676",
+      "topic": "Рецепт піци для схуднення."
+    },
+    {
+      "channel": "@mandziak",
+      "entities": [
+        {
+          "msg_id": 47902,
+          "name": "атб",
+          "quote": "творог нежирний з атб",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "msg_id": 47902,
+          "name": "День у День",
+          "quote": "sir-kislomolocnij-300-g-den-u-den-nezirnij-pet-sajba",
+          "reading": "торгова марка кисломолочного сиру",
+          "subject_type": "молочный_бренд"
+        }
+      ],
+      "id": "@mandziak:3676#47904",
+      "leg": "census",
+      "msg_id": 47904,
+      "payable_comments": 1,
+      "post_id": 3676,
+      "rendered_chars": 2873,
+      "rendering_sha256": "83fd5130b416dc7f1e94357d3706c7ef7704db95483f9094a139a64764b97a16",
+      "text": "А я робила основу з привареної капусти з яйцем і пекла на сковорідці. Швидко і смачно",
+      "thread": "@mandziak:3676",
+      "topic": "Рецепт піци для схуднення."
+    },
+    {
+      "channel": "@mandziak",
+      "entities": [
+        {
+          "msg_id": 47902,
+          "name": "атб",
+          "quote": "творог нежирний з атб",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "msg_id": 47902,
+          "name": "День у День",
+          "quote": "sir-kislomolocnij-300-g-den-u-den-nezirnij-pet-sajba",
+          "reading": "торгова марка кисломолочного сиру",
+          "subject_type": "молочный_бренд"
+        }
+      ],
+      "id": "@mandziak:3676#47925",
+      "leg": "census",
+      "msg_id": 47925,
+      "payable_comments": 1,
+      "post_id": 3676,
+      "rendered_chars": 2863,
+      "rendering_sha256": "bdd149d9f6512326bee9bd1fa1599094040747ba9bffe12ca1846cdc8f0a16bf",
+      "text": "Люди, а скиньте рецепт Вашої піцци, там де основа з творога, кабачка, яйця.",
+      "thread": "@mandziak:3676",
+      "topic": "Рецепт піци для схуднення."
+    },
+    {
+      "channel": "@mandziak",
+      "entities": [
+        {
+          "msg_id": 47902,
+          "name": "атб",
+          "quote": "творог нежирний з атб",
+          "reading": "мережа супермаркетів",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "msg_id": 47902,
+          "name": "День у День",
+          "quote": "sir-kislomolocnij-300-g-den-u-den-nezirnij-pet-sajba",
+          "reading": "торгова марка кисломолочного сиру",
+          "subject_type": "молочный_бренд"
+        }
+      ],
+      "id": "@mandziak:3676#47926",
+      "leg": "census",
+      "msg_id": 47926,
+      "payable_comments": 1,
+      "post_id": 3676,
+      "rendered_chars": 3336,
+      "rendering_sha256": "0306d33d43241ed18de8a59ef5e62551c2365e3531508a66cec195d93b5737b9",
+      "text": "Піцу як таку роблю нечасто, а в сезон кабачків роблю кабачкові оладки.\nПотерти кабачок на крупну терку (як у дівчини на відео), додати яйце, посолити, поперчити, трохи розпушувача чи соди, додати цільнозернового борошна щоб була консистенція сметани. Ще додаю 1чайну ложку рослинної олії. Випікаю на антипригарній пательні як млинці. Можна їсти замість хліба, а можна покласти на цей млинець що забажаєте (куряче філе чи фарш, помідори, перець болгарський тощо), присипати тертим сиром і запекти в духовці, мікрохвильовці чи на пательні під кришкою",
+      "thread": "@mandziak:3676",
+      "topic": "Рецепт піци для схуднення."
+    },
+    {
+      "channel": "@mandziak",
+      "entities": [],
+      "id": "@mandziak:3703#48174",
+      "leg": "census",
+      "msg_id": 48174,
+      "payable_comments": 1,
+      "post_id": 3703,
+      "rendered_chars": 2778,
+      "rendering_sha256": "3404d24c21509d8374d3047ffa4982e6838d2f1f23bd9adfa5d39b5f0437f245",
+      "text": "залупа! 😁",
+      "thread": "@mandziak:3703",
+      "topic": "Обговорення доцільності використання добавок для добору норми білка та клітковини."
+    },
+    {
+      "channel": "@mandziak",
+      "entities": [],
+      "id": "@mandziak:3703#48176",
+      "leg": "census",
+      "msg_id": 48176,
+      "payable_comments": 1,
+      "post_id": 3703,
+      "rendered_chars": 2875,
+      "rendering_sha256": "98b7d9db46e42212a1cf10e35f6c0cfa7abad9350bde42a1cb475a2586e3eff3",
+      "text": "Коли бачу відео з цим інтервʼюером, не покидає думка, що цій жінці не завадило б піти на програму до Віті…",
+      "thread": "@mandziak:3703",
+      "topic": "Обговорення доцільності використання добавок для добору норми білка та клітковини."
+    },
+    {
+      "channel": "@mandziak",
+      "entities": [],
+      "id": "@mandziak:3703#48177",
+      "leg": "census",
+      "msg_id": 48177,
+      "payable_comments": 1,
+      "post_id": 3703,
+      "rendered_chars": 2843,
+      "rendering_sha256": "17aa7668a8748175a1abb50415ef136bced79e22071f711c84cfa29460bf4462",
+      "text": "П.Віктор а їсти тільки фрукти можна розкласти чи ні.\nЧекаю відповідь дякую",
+      "thread": "@mandziak:3703",
+      "topic": "Обговорення доцільності використання добавок для добору норми білка та клітковини."
+    },
+    {
+      "channel": "@mandziak",
+      "entities": [],
+      "id": "@mandziak:3703#48178",
+      "leg": "census",
+      "msg_id": 48178,
+      "payable_comments": 1,
+      "post_id": 3703,
+      "rendered_chars": 2852,
+      "rendering_sha256": "3723dc55dd475b6327e6124bae75a70693cd844852f34a7d9985ce301c75d48b",
+      "text": "Як ви відноситись до сублімованих фруктів? Чи вони дійсно корисніші ніж сухофрукти?",
+      "thread": "@mandziak:3703",
+      "topic": "Обговорення доцільності використання добавок для добору норми білка та клітковини."
+    },
+    {
+      "channel": "@mandziak",
+      "entities": [],
+      "id": "@mandziak:3703#48181",
+      "leg": "census",
+      "msg_id": 48181,
+      "payable_comments": 1,
+      "post_id": 3703,
+      "rendered_chars": 2842,
+      "rendering_sha256": "ab5659ef7fa09ea1ed9173f73152410815a77792a3099598e1368364939ebd03",
+      "text": "Людина не зїдає стільки продуктів за день. Хіба шо вона молода і здорова.",
+      "thread": "@mandziak:3703",
+      "topic": "Обговорення доцільності використання добавок для добору норми білка та клітковини."
+    },
+    {
+      "channel": "@mandziak",
+      "entities": [],
+      "id": "@mandziak:3703#48231",
+      "leg": "census",
+      "msg_id": 48231,
+      "payable_comments": 1,
+      "post_id": 3703,
+      "rendered_chars": 3267,
+      "rendering_sha256": "8a4956aa2b61754efca3b71c86e4a6127a9a9ca2133db79f2dffea3c22eaec5c",
+      "text": "Я не можу стільки мʼяса їсти на день, тим більше дієтичне. Зранку їм 2 яйця, а не 3. Клітковину щоб добрати треба 0,5 кг фруктів, але ж не всі фрукти мають великий вміст клітковини. Як виявляється не кожен овоч має хороший вміст клітковини. Ще й попробуй все це зʼісти.  Щоб добирати усе по нормах, має бути дуже добре продумане меню, це все треба ще й готувати, а ще й треба щось придумати для дітей, бо вони не все їдять. Скажу як Вітя \nза🫢балась, готувати, продумувати ще й рахувати. В мене все.",
+      "thread": "@mandziak:3703",
+      "topic": "Обговорення доцільності використання добавок для добору норми білка та клітковини."
+    },
+    {
+      "channel": "@mandziak",
+      "entities": [],
+      "id": "@mandziak:3703#48276",
+      "leg": "gold",
+      "msg_id": 48276,
+      "payable_comments": 1,
+      "post_id": 3703,
+      "rendered_chars": 3185,
+      "rendering_sha256": "a2daa21fc59a44f6c071e7a57c4d7a0dca5faeea3c3505b3e5108ff107aca03e",
+      "text": "Абсолютно згоден, хз як втоптати 0.5 кг курки за день. А якщо кожен день, то через 3 дні ти не зможеш на неї дивитись. Я спокійно добираю пудінгами і йогуртами з протеїном і не парюсь і отримую ще й десерт. Іноді навіть можу псіханути замішати протеїновий пудінг з білим сиром на сніданок і закриваю відразу 50% денної норми. Зараз є купа прикольної доступної і смачної молочки без цукру з протеїном в супермаркетах.",
+      "thread": "@mandziak:3703",
+      "topic": "Обговорення доцільності використання добавок для добору норми білка та клітковини."
+    },
+    {
+      "channel": "@mandziak",
+      "entities": [],
+      "id": "@mandziak:3703#48283",
+      "leg": "gold",
+      "msg_id": 48283,
+      "payable_comments": 1,
+      "post_id": 3703,
+      "rendered_chars": 3334,
+      "rendering_sha256": "820f8597628540ae65b01bdef23a317a3f3760c46f510f393f1c9e68c0bcb413",
+      "text": "Так само як і попередні коментатори - не можу їсти багато їжі.\nРахував КБЖВ програмкою і виявилося, що окрім недобору калорій (1700-2000) ще й білка споживав десь 70-80г на 70 кг ваги. І не розумів чому м'язи не ростуть. Тому взяв за правило пити один протеїновий коктейль на день і прогрес пішов.\nЗрозуміло, що можна білок з м’яса замінити на яєчний або сирний. Але всеодно не кожен прийом їжі - це цисокобілковий продукт. Вівсянка з сухофруктами на сніданок і  тільки овочевий салат (бо за*бався задень) на вечерю - і білка меньше половини норми - звичайна справа",
+      "thread": "@mandziak:3703",
+      "topic": "Обговорення доцільності використання добавок для добору норми білка та клітковини."
+    },
+    {
+      "channel": "@mandziak",
+      "entities": [],
+      "id": "@mandziak:3703#49098",
+      "leg": "census",
+      "msg_id": 49098,
+      "payable_comments": 1,
+      "post_id": 3703,
+      "rendered_chars": 3189,
+      "rendering_sha256": "8d35c5bf87a5eea89676afa3335d902dfebbcb02479a5d79cab5468be3fb5d9a",
+      "text": "Підтримую: їм мало, мʼяса практично не вживаю, бо не хочеться. Молочку люблю, але білка не добираю все одно. Хоча прискіпливо не рахую, бо потрібно тоді лише цим і займатись, шкода витрачати на це час. В дні тренувань вживаю протеїновий коктейль для кращого самопочуття і відновлення сил. Хоча не відмовилась би наростити пару кг мʼязів, але для цього потрібні якісні силові вправи, а мені здоровʼя не дозволяє, на жаль.",
+      "thread": "@mandziak:3703",
+      "topic": "Обговорення доцільності використання добавок для добору норми білка та клітковини."
+    },
+    {
+      "channel": "@matusi_ukr",
+      "entities": [
+        {
+          "msg_id": 578931,
+          "name": "LinguaBird",
+          "quote": "Звертайтесь у LinguaBird",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578932,
+          "name": "Radakidss",
+          "quote": "Radakidss",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578942,
+          "name": "cleverest. kh",
+          "quote": "cleverest. kh",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578947,
+          "name": "РАДА",
+          "quote": "Новые дома - РАДА",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578951,
+          "name": "Гармонія",
+          "quote": "В дитячому центрі \"Гармонія\"",
+          "reading": "дитячий центр",
+          "subject_type": "не_наш_рынок"
+        }
+      ],
+      "id": "@matusi_ukr:22242#578931",
+      "leg": "census",
+      "msg_id": 578931,
+      "payable_comments": 1,
+      "post_id": 22242,
+      "rendered_chars": 3176,
+      "rendering_sha256": "b5d03524a2d64dfeb1d97b2f453f1878c2f6f0fdb4d27e6923f5005f392932bc",
+      "text": "Вітаю! Звертайтесь у LinguaBird - розмовна англійська онлайн для дітей та дорослих 🙌🏼\n\nhttps://www.instagram.com/linguabird_english?igsh=MW9rbDNxb2JpbWdhZg%3D%3D&utm_source=qr",
+      "thread": "@matusi_ukr:22242",
+      "topic": "Попит на рекомендації курсів англійської мови для дітей у районах Нові Дома, ХТЗ та біля Палацу спорту."
+    },
+    {
+      "channel": "@matusi_ukr",
+      "entities": [
+        {
+          "msg_id": 578931,
+          "name": "LinguaBird",
+          "quote": "Звертайтесь у LinguaBird",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578932,
+          "name": "Radakidss",
+          "quote": "Radakidss",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578942,
+          "name": "cleverest. kh",
+          "quote": "cleverest. kh",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578947,
+          "name": "РАДА",
+          "quote": "Новые дома - РАДА",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578951,
+          "name": "Гармонія",
+          "quote": "В дитячому центрі \"Гармонія\"",
+          "reading": "дитячий центр",
+          "subject_type": "не_наш_рынок"
+        }
+      ],
+      "id": "@matusi_ukr:22242#578932",
+      "leg": "census",
+      "msg_id": 578932,
+      "payable_comments": 1,
+      "post_id": 22242,
+      "rendered_chars": 3055,
+      "rendering_sha256": "ae934dd5d6e6dc57c3db0e9c8b20d14b27708e92882a66db73c3c06b7c8273d0",
+      "text": "Radakidss,  онлайн або офлайн, пр Петра Григоренка 16.",
+      "thread": "@matusi_ukr:22242",
+      "topic": "Попит на рекомендації курсів англійської мови для дітей у районах Нові Дома, ХТЗ та біля Палацу спорту."
+    },
+    {
+      "channel": "@matusi_ukr",
+      "entities": [
+        {
+          "msg_id": 578931,
+          "name": "LinguaBird",
+          "quote": "Звертайтесь у LinguaBird",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578932,
+          "name": "Radakidss",
+          "quote": "Radakidss",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578942,
+          "name": "cleverest. kh",
+          "quote": "cleverest. kh",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578947,
+          "name": "РАДА",
+          "quote": "Новые дома - РАДА",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578951,
+          "name": "Гармонія",
+          "quote": "В дитячому центрі \"Гармонія\"",
+          "reading": "дитячий центр",
+          "subject_type": "не_наш_рынок"
+        }
+      ],
+      "id": "@matusi_ukr:22242#578939",
+      "leg": "census",
+      "msg_id": 578939,
+      "payable_comments": 1,
+      "post_id": 22242,
+      "rendered_chars": 3034,
+      "rendering_sha256": "324cc4140080c18b8896bebdee876e96667faa06bcaaad959e097dfdb5a2420f",
+      "text": "Можу вам допомогти) працюю онлайн",
+      "thread": "@matusi_ukr:22242",
+      "topic": "Попит на рекомендації курсів англійської мови для дітей у районах Нові Дома, ХТЗ та біля Палацу спорту."
+    },
+    {
+      "channel": "@matusi_ukr",
+      "entities": [
+        {
+          "msg_id": 578931,
+          "name": "LinguaBird",
+          "quote": "Звертайтесь у LinguaBird",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578932,
+          "name": "Radakidss",
+          "quote": "Radakidss",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578942,
+          "name": "cleverest. kh",
+          "quote": "cleverest. kh",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578947,
+          "name": "РАДА",
+          "quote": "Новые дома - РАДА",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578951,
+          "name": "Гармонія",
+          "quote": "В дитячому центрі \"Гармонія\"",
+          "reading": "дитячий центр",
+          "subject_type": "не_наш_рынок"
+        }
+      ],
+      "id": "@matusi_ukr:22242#578940",
+      "leg": "census",
+      "msg_id": 578940,
+      "payable_comments": 1,
+      "post_id": 22242,
+      "rendered_chars": 3204,
+      "rendering_sha256": "caceccf348c1158e78552cd5f11d944c9cd218dec84bc0b8862e1fe29955ba4d",
+      "text": "Якщо не принципово саме офлайн, можу порадити онлайн-заняття, які зараз відвідують багато дітей. Є безкоштовний пробний урок, щоб зрозуміти, чи підходить такий формат. Якщо буде цікаво - напишіть мені. 😊",
+      "thread": "@matusi_ukr:22242",
+      "topic": "Попит на рекомендації курсів англійської мови для дітей у районах Нові Дома, ХТЗ та біля Палацу спорту."
+    },
+    {
+      "channel": "@matusi_ukr",
+      "entities": [
+        {
+          "msg_id": 578931,
+          "name": "LinguaBird",
+          "quote": "Звертайтесь у LinguaBird",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578932,
+          "name": "Radakidss",
+          "quote": "Radakidss",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578942,
+          "name": "cleverest. kh",
+          "quote": "cleverest. kh",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578947,
+          "name": "РАДА",
+          "quote": "Новые дома - РАДА",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578951,
+          "name": "Гармонія",
+          "quote": "В дитячому центрі \"Гармонія\"",
+          "reading": "дитячий центр",
+          "subject_type": "не_наш_рынок"
+        }
+      ],
+      "id": "@matusi_ukr:22242#578942",
+      "leg": "census",
+      "msg_id": 578942,
+      "payable_comments": 1,
+      "post_id": 22242,
+      "rendered_chars": 3086,
+      "rendering_sha256": "12bff03ca091e98cd6408a0f19d09113fe24b11aa1c35a3b7c7fde2e5a3a3a6d",
+      "text": "Дк хтз cleverest. kh https://www.instagram.com/cleverest.kh?igsh=MXh6YmpyeHhzZHU2MQ==",
+      "thread": "@matusi_ukr:22242",
+      "topic": "Попит на рекомендації курсів англійської мови для дітей у районах Нові Дома, ХТЗ та біля Палацу спорту."
+    },
+    {
+      "channel": "@matusi_ukr",
+      "entities": [
+        {
+          "msg_id": 578931,
+          "name": "LinguaBird",
+          "quote": "Звертайтесь у LinguaBird",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578932,
+          "name": "Radakidss",
+          "quote": "Radakidss",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578942,
+          "name": "cleverest. kh",
+          "quote": "cleverest. kh",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578947,
+          "name": "РАДА",
+          "quote": "Новые дома - РАДА",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578951,
+          "name": "Гармонія",
+          "quote": "В дитячому центрі \"Гармонія\"",
+          "reading": "дитячий центр",
+          "subject_type": "не_наш_рынок"
+        }
+      ],
+      "id": "@matusi_ukr:22242#578944",
+      "leg": "census",
+      "msg_id": 578944,
+      "payable_comments": 1,
+      "post_id": 22242,
+      "rendered_chars": 3043,
+      "rendering_sha256": "46c47e6f93e5e066836e79619b42fd01828d800d2a699f8d7dbdbf2ffe902cab",
+      "text": "Офф-лайн (Каденюка)\nКому интересно-пишите)",
+      "thread": "@matusi_ukr:22242",
+      "topic": "Попит на рекомендації курсів англійської мови для дітей у районах Нові Дома, ХТЗ та біля Палацу спорту."
+    },
+    {
+      "channel": "@matusi_ukr",
+      "entities": [
+        {
+          "msg_id": 578931,
+          "name": "LinguaBird",
+          "quote": "Звертайтесь у LinguaBird",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578932,
+          "name": "Radakidss",
+          "quote": "Radakidss",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578942,
+          "name": "cleverest. kh",
+          "quote": "cleverest. kh",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578947,
+          "name": "РАДА",
+          "quote": "Новые дома - РАДА",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578951,
+          "name": "Гармонія",
+          "quote": "В дитячому центрі \"Гармонія\"",
+          "reading": "дитячий центр",
+          "subject_type": "не_наш_рынок"
+        }
+      ],
+      "id": "@matusi_ukr:22242#578947",
+      "leg": "census",
+      "msg_id": 578947,
+      "payable_comments": 1,
+      "post_id": 22242,
+      "rendered_chars": 3060,
+      "rendering_sha256": "ded82382ec6716ad827b0abef8424377ab768f5d30554a706f7c35b2c35764cc",
+      "text": "Новые дома - РАДА \nПреподаватель София \nСупер! \nРекомендую!",
+      "thread": "@matusi_ukr:22242",
+      "topic": "Попит на рекомендації курсів англійської мови для дітей у районах Нові Дома, ХТЗ та біля Палацу спорту."
+    },
+    {
+      "channel": "@matusi_ukr",
+      "entities": [
+        {
+          "msg_id": 578931,
+          "name": "LinguaBird",
+          "quote": "Звертайтесь у LinguaBird",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578932,
+          "name": "Radakidss",
+          "quote": "Radakidss",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578942,
+          "name": "cleverest. kh",
+          "quote": "cleverest. kh",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578947,
+          "name": "РАДА",
+          "quote": "Новые дома - РАДА",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578951,
+          "name": "Гармонія",
+          "quote": "В дитячому центрі \"Гармонія\"",
+          "reading": "дитячий центр",
+          "subject_type": "не_наш_рынок"
+        }
+      ],
+      "id": "@matusi_ukr:22242#578948",
+      "leg": "census",
+      "msg_id": 578948,
+      "payable_comments": 1,
+      "post_id": 22242,
+      "rendered_chars": 3107,
+      "rendering_sha256": "d16d1fb2237769949ff6021129d671b12cf358a7f1dc6713e3f6c91ed7267f58",
+      "text": "Екатерина, лучшая!🌷 С ней ваши дети английский будут учить легко и с удовольствием!!! Знаю по своей дочке.",
+      "thread": "@matusi_ukr:22242",
+      "topic": "Попит на рекомендації курсів англійської мови для дітей у районах Нові Дома, ХТЗ та біля Палацу спорту."
+    },
+    {
+      "channel": "@matusi_ukr",
+      "entities": [
+        {
+          "msg_id": 578931,
+          "name": "LinguaBird",
+          "quote": "Звертайтесь у LinguaBird",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578932,
+          "name": "Radakidss",
+          "quote": "Radakidss",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578942,
+          "name": "cleverest. kh",
+          "quote": "cleverest. kh",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578947,
+          "name": "РАДА",
+          "quote": "Новые дома - РАДА",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578951,
+          "name": "Гармонія",
+          "quote": "В дитячому центрі \"Гармонія\"",
+          "reading": "дитячий центр",
+          "subject_type": "не_наш_рынок"
+        }
+      ],
+      "id": "@matusi_ukr:22242#578951",
+      "leg": "gold",
+      "msg_id": 578951,
+      "payable_comments": 1,
+      "post_id": 22242,
+      "rendered_chars": 3397,
+      "rendering_sha256": "5f4da8c5ececa842ef6265ad4c39378d12e3c10fdb820618093b90b796bb4f0d",
+      "text": "В дитячому центрі \"Гармонія\" на метро Турбоатом набираються нові групи вивчення англійської дітками від 3 років. Дуже цікаві заняття, чудові результати! Сертифіковані викладачі.\nВ групах 5-7 діток.\nКому цікаво, вже можна записуватись і бронювати місця на новий навчальний рік. Буде відкрите безкоштовне заняття. Можна прийти познайомитись з простором і методикою.)\nЗапрошуємо Вас і Ваших діток! 😊",
+      "thread": "@matusi_ukr:22242",
+      "topic": "Попит на рекомендації курсів англійської мови для дітей у районах Нові Дома, ХТЗ та біля Палацу спорту."
+    },
+    {
+      "channel": "@matusi_ukr",
+      "entities": [
+        {
+          "msg_id": 578931,
+          "name": "LinguaBird",
+          "quote": "Звертайтесь у LinguaBird",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578932,
+          "name": "Radakidss",
+          "quote": "Radakidss",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578942,
+          "name": "cleverest. kh",
+          "quote": "cleverest. kh",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578947,
+          "name": "РАДА",
+          "quote": "Новые дома - РАДА",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578951,
+          "name": "Гармонія",
+          "quote": "В дитячому центрі \"Гармонія\"",
+          "reading": "дитячий центр",
+          "subject_type": "не_наш_рынок"
+        }
+      ],
+      "id": "@matusi_ukr:22242#578952",
+      "leg": "census",
+      "msg_id": 578952,
+      "payable_comments": 1,
+      "post_id": 22242,
+      "rendered_chars": 3037,
+      "rendering_sha256": "daf71242635015fcde1ca628d8f0ff9dbb89116f570198ea8fc89f0f27d9cbf7",
+      "text": "Напишите, пожалуйста,про английский.",
+      "thread": "@matusi_ukr:22242",
+      "topic": "Попит на рекомендації курсів англійської мови для дітей у районах Нові Дома, ХТЗ та біля Палацу спорту."
+    },
+    {
+      "channel": "@matusi_ukr",
+      "entities": [
+        {
+          "msg_id": 578931,
+          "name": "LinguaBird",
+          "quote": "Звертайтесь у LinguaBird",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578932,
+          "name": "Radakidss",
+          "quote": "Radakidss",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578942,
+          "name": "cleverest. kh",
+          "quote": "cleverest. kh",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578947,
+          "name": "РАДА",
+          "quote": "Новые дома - РАДА",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578951,
+          "name": "Гармонія",
+          "quote": "В дитячому центрі \"Гармонія\"",
+          "reading": "дитячий центр",
+          "subject_type": "не_наш_рынок"
+        }
+      ],
+      "id": "@matusi_ukr:22242#579007",
+      "leg": "census",
+      "msg_id": 579007,
+      "payable_comments": 1,
+      "post_id": 22242,
+      "rendered_chars": 3087,
+      "rendering_sha256": "4a606709e565d9b50c316ec76e306063fce67d8774cba42282ae222e693f773f",
+      "text": "ДК ХТЗ \ncleverest. kh https://www.instagram.com/cleverest.kh?igsh=MXh6YmpyeHhzZHU2MQ==",
+      "thread": "@matusi_ukr:22242",
+      "topic": "Попит на рекомендації курсів англійської мови для дітей у районах Нові Дома, ХТЗ та біля Палацу спорту."
+    },
+    {
+      "channel": "@matusi_ukr",
+      "entities": [
+        {
+          "msg_id": 578931,
+          "name": "LinguaBird",
+          "quote": "Звертайтесь у LinguaBird",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578932,
+          "name": "Radakidss",
+          "quote": "Radakidss",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578942,
+          "name": "cleverest. kh",
+          "quote": "cleverest. kh",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578947,
+          "name": "РАДА",
+          "quote": "Новые дома - РАДА",
+          "reading": "школа англійської мови",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 578951,
+          "name": "Гармонія",
+          "quote": "В дитячому центрі \"Гармонія\"",
+          "reading": "дитячий центр",
+          "subject_type": "не_наш_рынок"
+        }
+      ],
+      "id": "@matusi_ukr:22242#579042",
+      "leg": "census",
+      "msg_id": 579042,
+      "payable_comments": 1,
+      "post_id": 22242,
+      "rendered_chars": 3084,
+      "rendering_sha256": "b46e07ce8274339e35c14a16248faf68bc6eb84ea4d61f5d6993224511b1a604",
+      "text": "Прекрасный педагог .Наш ребенок  обожает ее 🫶.Знания на высшем уровне .Рекомендую 💪",
+      "thread": "@matusi_ukr:22242",
+      "topic": "Попит на рекомендації курсів англійської мови для дітей у районах Нові Дома, ХТЗ та біля Палацу спорту."
+    },
+    {
+      "channel": "@matusi_ukr",
+      "entities": [
+        {
+          "msg_id": 579429,
+          "name": "Нутрілон",
+          "quote": "вночі п'є молочко Нутрілон",
+          "reading": "бренд дитячої суміші",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 579457,
+          "name": "ікеа",
+          "quote": "Беріть ікеа чашку дитячу",
+          "reading": "магазин товарів для дому",
+          "subject_type": "не_наш_рынок"
+        }
+      ],
+      "id": "@matusi_ukr:22272#579373",
+      "leg": "census",
+      "msg_id": 579373,
+      "payable_comments": 1,
+      "post_id": 22272,
+      "rendered_chars": 2981,
+      "rendering_sha256": "a4bc045c140b347d61b48946935d4a91fbab21dbd18c2bcc315974638c1edf8e",
+      "text": "Термін зберігання готової суміші 1год.Спробуйте зі свого поільника,зазвичай суміш майже як вода за густиною",
+      "thread": "@matusi_ukr:22272",
+      "topic": "Мати просить поради, з чого (поїльник, непроливайка) давати суміш дитині в 11 місяців вночі після різкого припинення ГВ."
+    },
+    {
+      "channel": "@matusi_ukr",
+      "entities": [
+        {
+          "msg_id": 579429,
+          "name": "Нутрілон",
+          "quote": "вночі п'є молочко Нутрілон",
+          "reading": "бренд дитячої суміші",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 579457,
+          "name": "ікеа",
+          "quote": "Беріть ікеа чашку дитячу",
+          "reading": "магазин товарів для дому",
+          "subject_type": "не_наш_рынок"
+        }
+      ],
+      "id": "@matusi_ukr:22272#579374",
+      "leg": "census",
+      "msg_id": 579374,
+      "payable_comments": 1,
+      "post_id": 22272,
+      "rendered_chars": 2980,
+      "rendering_sha256": "3076e1967e0fab65e7b247fad4878aa69db949770765e4005e46a221442558fa",
+      "text": "Вночі можна набрати воду у термос,та змішати потім з порошком.Або купити чайниу який підтримує температуру",
+      "thread": "@matusi_ukr:22272",
+      "topic": "Мати просить поради, з чого (поїльник, непроливайка) давати суміш дитині в 11 місяців вночі після різкого припинення ГВ."
+    },
+    {
+      "channel": "@matusi_ukr",
+      "entities": [
+        {
+          "msg_id": 579429,
+          "name": "Нутрілон",
+          "quote": "вночі п'є молочко Нутрілон",
+          "reading": "бренд дитячої суміші",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 579457,
+          "name": "ікеа",
+          "quote": "Беріть ікеа чашку дитячу",
+          "reading": "магазин товарів для дому",
+          "subject_type": "не_наш_рынок"
+        }
+      ],
+      "id": "@matusi_ukr:22272#579375",
+      "leg": "census",
+      "msg_id": 579375,
+      "payable_comments": 1,
+      "post_id": 22272,
+      "rendered_chars": 2968,
+      "rendering_sha256": "9101ed592fbc7aeeaa646cc21f99d95eb1b20c07c1e6410239e05cf9dfdb62c5",
+      "text": "А навіщо їжа дитині вночі? Це рекомендація педіатрії? Не простіше взагалі прибирати їжу вночі?",
+      "thread": "@matusi_ukr:22272",
+      "topic": "Мати просить поради, з чого (поїльник, непроливайка) давати суміш дитині в 11 місяців вночі після різкого припинення ГВ."
+    },
+    {
+      "channel": "@matusi_ukr",
+      "entities": [
+        {
+          "msg_id": 579429,
+          "name": "Нутрілон",
+          "quote": "вночі п'є молочко Нутрілон",
+          "reading": "бренд дитячої суміші",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 579457,
+          "name": "ікеа",
+          "quote": "Беріть ікеа чашку дитячу",
+          "reading": "магазин товарів для дому",
+          "subject_type": "не_наш_рынок"
+        }
+      ],
+      "id": "@matusi_ukr:22272#579376",
+      "leg": "census",
+      "msg_id": 579376,
+      "payable_comments": 1,
+      "post_id": 22272,
+      "rendered_chars": 2941,
+      "rendering_sha256": "d4fe38d64b2968eab05cf15d7bfe86ba2cc6210536e2467f30d95c40f6c675d1",
+      "text": "Такі діти є які навіть в рік не припиняють хтось 1 раз за ніч їсти.",
+      "thread": "@matusi_ukr:22272",
+      "topic": "Мати просить поради, з чого (поїльник, непроливайка) давати суміш дитині в 11 місяців вночі після різкого припинення ГВ."
+    },
+    {
+      "channel": "@matusi_ukr",
+      "entities": [
+        {
+          "msg_id": 579429,
+          "name": "Нутрілон",
+          "quote": "вночі п'є молочко Нутрілон",
+          "reading": "бренд дитячої суміші",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 579457,
+          "name": "ікеа",
+          "quote": "Беріть ікеа чашку дитячу",
+          "reading": "магазин товарів для дому",
+          "subject_type": "не_наш_рынок"
+        }
+      ],
+      "id": "@matusi_ukr:22272#579377",
+      "leg": "census",
+      "msg_id": 579377,
+      "payable_comments": 1,
+      "post_id": 22272,
+      "rendered_chars": 3045,
+      "rendering_sha256": "f6b8ed6979b380a5e20d0f1941d7385172ed5004b2a13cdf6f06ba8b274a3413",
+      "text": "Якщо дитина вночі прокидається поїсти, то їй в 11 місяців не поясниш, що до ранку далеко. У мене син перед сном їв, а потім в 3 години прокидався - через 6 годин виходить.",
+      "thread": "@matusi_ukr:22272",
+      "topic": "Мати просить поради, з чого (поїльник, непроливайка) давати суміш дитині в 11 місяців вночі після різкого припинення ГВ."
+    },
+    {
+      "channel": "@matusi_ukr",
+      "entities": [
+        {
+          "msg_id": 579429,
+          "name": "Нутрілон",
+          "quote": "вночі п'є молочко Нутрілон",
+          "reading": "бренд дитячої суміші",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 579457,
+          "name": "ікеа",
+          "quote": "Беріть ікеа чашку дитячу",
+          "reading": "магазин товарів для дому",
+          "subject_type": "не_наш_рынок"
+        }
+      ],
+      "id": "@matusi_ukr:22272#579379",
+      "leg": "gold",
+      "msg_id": 579379,
+      "payable_comments": 1,
+      "post_id": 22272,
+      "rendered_chars": 3018,
+      "rendering_sha256": "1a65e4fc15824583602eb1ffe5e6da2c129b923f33a5c814c4f64fc649bf0bc4",
+      "text": "Можна взагалі вже прибрати суміш, давати вночі воду, компот, можливо кефір, йогурт. А суміш це ц дитині стрес, Вам затратно і немає необхідності",
+      "thread": "@matusi_ukr:22272",
+      "topic": "Мати просить поради, з чого (поїльник, непроливайка) давати суміш дитині в 11 місяців вночі після різкого припинення ГВ."
+    },
+    {
+      "channel": "@matusi_ukr",
+      "entities": [
+        {
+          "msg_id": 579429,
+          "name": "Нутрілон",
+          "quote": "вночі п'є молочко Нутрілон",
+          "reading": "бренд дитячої суміші",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 579457,
+          "name": "ікеа",
+          "quote": "Беріть ікеа чашку дитячу",
+          "reading": "магазин товарів для дому",
+          "subject_type": "не_наш_рынок"
+        }
+      ],
+      "id": "@matusi_ukr:22272#579380",
+      "leg": "census",
+      "msg_id": 579380,
+      "payable_comments": 1,
+      "post_id": 22272,
+      "rendered_chars": 3045,
+      "rendering_sha256": "ee8ec2264274c7c6ecbcc6eeb37fb19267660520f757ee1b6959edac0dc18019",
+      "text": "Навіщо вночі годувати? 2 дитинки на ШВ, з 1 місяця їли в 00.00 а наступне годування о 06.00,набирали добре норму, можливо одразу перейти на вечерю і потім одразу сніданок?",
+      "thread": "@matusi_ukr:22272",
+      "topic": "Мати просить поради, з чого (поїльник, непроливайка) давати суміш дитині в 11 місяців вночі після різкого припинення ГВ."
+    },
+    {
+      "channel": "@matusi_ukr",
+      "entities": [
+        {
+          "msg_id": 579429,
+          "name": "Нутрілон",
+          "quote": "вночі п'є молочко Нутрілон",
+          "reading": "бренд дитячої суміші",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 579457,
+          "name": "ікеа",
+          "quote": "Беріть ікеа чашку дитячу",
+          "reading": "магазин товарів для дому",
+          "subject_type": "не_наш_рынок"
+        }
+      ],
+      "id": "@matusi_ukr:22272#579381",
+      "leg": "census",
+      "msg_id": 579381,
+      "payable_comments": 1,
+      "post_id": 22272,
+      "rendered_chars": 3242,
+      "rendering_sha256": "9b80fccce99379096962f590b482310662a27b1ff0ad8360e1c22cb086c0b295",
+      "text": "В такому віці можна потроху вже привчити не їсти вночі, є ж вже прикорм. В мене дитина з 6 міс вночі не їла вже. І теж спочатку пляшку не брала, коли треба було догодовувати, але потроху привчили. Терпіння просто наберіться і пропонуйте. Хоча, якщо чесно, не бачу сенсу. Простіше пропонувати з поїльника вже, бо вже можна взагалі суміш прибрати. І для зубів безпечніше",
+      "thread": "@matusi_ukr:22272",
+      "topic": "Мати просить поради, з чого (поїльник, непроливайка) давати суміш дитині в 11 місяців вночі після різкого припинення ГВ."
+    },
+    {
+      "channel": "@matusi_ukr",
+      "entities": [
+        {
+          "msg_id": 579429,
+          "name": "Нутрілон",
+          "quote": "вночі п'є молочко Нутрілон",
+          "reading": "бренд дитячої суміші",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 579457,
+          "name": "ікеа",
+          "quote": "Беріть ікеа чашку дитячу",
+          "reading": "магазин товарів для дому",
+          "subject_type": "не_наш_рынок"
+        }
+      ],
+      "id": "@matusi_ukr:22272#579383",
+      "leg": "census",
+      "msg_id": 579383,
+      "payable_comments": 1,
+      "post_id": 22272,
+      "rendered_chars": 3207,
+      "rendering_sha256": "72f8d9af1f98b88965b1c9ad35d1bd16327bdda8aef888d9dd001f2e29192208",
+      "text": "Можна і з чашки давати, якщо пʼє, пробуйте з вашого поільника, сильно не нервуйте, дитина вже доросла, головне щоб нормально спала, може дійсно вже можна не годувати вночі. Суміш, за потреби, можна розводити вдень і давати пити. Я так замість молока давала вдень пару раз. Можна вночі давати не тільки суміш, а йогурт, кефір, компот…",
+      "thread": "@matusi_ukr:22272",
+      "topic": "Мати просить поради, з чого (поїльник, непроливайка) давати суміш дитині в 11 місяців вночі після різкого припинення ГВ."
+    },
+    {
+      "channel": "@matusi_ukr",
+      "entities": [
+        {
+          "msg_id": 579429,
+          "name": "Нутрілон",
+          "quote": "вночі п'є молочко Нутрілон",
+          "reading": "бренд дитячої суміші",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 579457,
+          "name": "ікеа",
+          "quote": "Беріть ікеа чашку дитячу",
+          "reading": "магазин товарів для дому",
+          "subject_type": "не_наш_рынок"
+        }
+      ],
+      "id": "@matusi_ukr:22272#579416",
+      "leg": "census",
+      "msg_id": 579416,
+      "payable_comments": 1,
+      "post_id": 22272,
+      "rendered_chars": 3923,
+      "rendering_sha256": "70d5d01678baff018f98110f9f25bd97aea64aa1e968488897bcb0066ddd8b3a",
+      "text": "У меня была аналогичная ситуация . В 11 месяцев нужно было резко завершать ГВ. Ни бутылку , ни поильники, ни соску ребенок не признавал. Ребенок третий))), опыт уже был по отлучению от груди. С первым заменила на смесь в бутылке, со вторым - компот . Но этот опыт отрицательный. Вся эта морока с ночными бутылочками , это кошмар , в итоге с боем и истериками завершали эти бутылки почти к 3 годам . В итоге: у старших «бутылочный кариес» , не знаю , совпало ли или почему так вышло, но их зубы это был треш.  \nИ вот точно так , с точно таким же запросом я обратилась в эту группу , только еще в ВК))), и почти все мамочки  дружно посоветовали ничем уже не заменять ГВ, перетерпеть и наслаждаться в будущем ночным сном ))) все так и вышло. Я выпила таблетку, и пропала из жизни ребенка на 2 дня. Отлучение прошло успешно. Никаких бутылок, никаких ночных кормежек. Полноценный сон у ребенка и мамы. И самое главное, никакого кариеса ))) \nЭто мой опыт. Решила поделиться, потому что Ваш вопрос идентичен моему))) удачи Вам в отлучении , все получится !",
+      "thread": "@matusi_ukr:22272",
+      "topic": "Мати просить поради, з чого (поїльник, непроливайка) давати суміш дитині в 11 місяців вночі після різкого припинення ГВ."
+    },
+    {
+      "channel": "@matusi_ukr",
+      "entities": [
+        {
+          "msg_id": 579429,
+          "name": "Нутрілон",
+          "quote": "вночі п'є молочко Нутрілон",
+          "reading": "бренд дитячої суміші",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 579457,
+          "name": "ікеа",
+          "quote": "Беріть ікеа чашку дитячу",
+          "reading": "магазин товарів для дому",
+          "subject_type": "не_наш_рынок"
+        }
+      ],
+      "id": "@matusi_ukr:22272#579429",
+      "leg": "census",
+      "msg_id": 579429,
+      "payable_comments": 1,
+      "post_id": 22272,
+      "rendered_chars": 3439,
+      "rendering_sha256": "742636430e3d480b80de666008392dfbe32033760ee9e381d4fe82113257be49",
+      "text": "Матуся бажаю вам терпіння в цей не легкий період🤗 вірю що у вас все вийде. Знаю по своєму досвіді, що вночі найважче, що мені допомогло: перше - можна спробувати поїлочку з твердим носиком, якщо пляшечка категорично ні, друге - ввдити додаткові асоціації на сон, погладжування, улюблена іграшка, колискова - тобто сталі речі які не змінюються, ну і третє - все має бути поступово, якщо забирати годування то тільки по одному, на це давати час тиждень, два, стільки скільки треба. В мене зараз доня в 1,5 роки теж вночі п'є молочко Нутрілон і прекрасно себе почуває😌",
+      "thread": "@matusi_ukr:22272",
+      "topic": "Мати просить поради, з чого (поїльник, непроливайка) давати суміш дитині в 11 місяців вночі після різкого припинення ГВ."
+    },
+    {
+      "channel": "@matusi_ukr",
+      "entities": [
+        {
+          "msg_id": 579429,
+          "name": "Нутрілон",
+          "quote": "вночі п'є молочко Нутрілон",
+          "reading": "бренд дитячої суміші",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 579457,
+          "name": "ікеа",
+          "quote": "Беріть ікеа чашку дитячу",
+          "reading": "магазин товарів для дому",
+          "subject_type": "не_наш_рынок"
+        }
+      ],
+      "id": "@matusi_ukr:22272#579457",
+      "leg": "gold",
+      "msg_id": 579457,
+      "payable_comments": 1,
+      "post_id": 22272,
+      "rendered_chars": 3429,
+      "rendering_sha256": "fcbeed01e5c6a01a5387f343065de6cfb7052286c9cee1646420d48961d0a260",
+      "text": "Беріть ікеа чашку дитячу( синя чи зелена). Вона без зворотнього клапана, тобто якщо перевнути то рідина просто  буде  витікати,як зі  звичайної чашка з отворами. Суміш можете обрати по своему бюджету або ж давати вночі кефір/ряжанку/звичайне молоко з неї. Також не знаю вашої ситуації, але в наш час дуже мало ситуацій при яких треба завершувати ГВ. Більшість ліків сумісні з ГВ і їх можна перевірити на сайті єлактація. Мені нещодавно оперували зуб мудрости.  7 днів на антибиотиках,антигистамінних, знеболювальних+ перевязка з ліками і все сумісне з ГВ.",
+      "thread": "@matusi_ukr:22272",
+      "topic": "Мати просить поради, з чого (поїльник, непроливайка) давати суміш дитині в 11 місяців вночі після різкого припинення ГВ."
+    },
+    {
+      "channel": "@matusi_ukr",
+      "entities": [
+        {
+          "msg_id": 579429,
+          "name": "Нутрілон",
+          "quote": "вночі п'є молочко Нутрілон",
+          "reading": "бренд дитячої суміші",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 579457,
+          "name": "ікеа",
+          "quote": "Беріть ікеа чашку дитячу",
+          "reading": "магазин товарів для дому",
+          "subject_type": "не_наш_рынок"
+        }
+      ],
+      "id": "@matusi_ukr:22272#580126",
+      "leg": "census",
+      "msg_id": 580126,
+      "payable_comments": 1,
+      "post_id": 22272,
+      "rendered_chars": 3118,
+      "rendering_sha256": "e00095f5a39ec4877bcf51b4b0761860cf27cef142c06b61e9ae5e54250f05f8",
+      "text": "Моєму сину 2 роки і прокидається вночі поїсти, ще досі на ГВ. Педіатр  сказала, що вночі можна лише воду, так як потім всі зуби будуть з карієсом. Тому, мені здається  краще вам спробувати водичку або молочко з тієї бутилочки що знайома дитині.",
+      "thread": "@matusi_ukr:22272",
+      "topic": "Мати просить поради, з чого (поїльник, непроливайка) давати суміш дитині в 11 місяців вночі після різкого припинення ГВ."
+    },
+    {
+      "channel": "@matusi_ukr",
+      "entities": [
+        {
+          "msg_id": 579429,
+          "name": "Нутрілон",
+          "quote": "вночі п'є молочко Нутрілон",
+          "reading": "бренд дитячої суміші",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 579457,
+          "name": "ікеа",
+          "quote": "Беріть ікеа чашку дитячу",
+          "reading": "магазин товарів для дому",
+          "subject_type": "не_наш_рынок"
+        }
+      ],
+      "id": "@matusi_ukr:22272#580127",
+      "leg": "census",
+      "msg_id": 580127,
+      "payable_comments": 1,
+      "post_id": 22272,
+      "rendered_chars": 2950,
+      "rendering_sha256": "86f604fcc701cb47942e89eee4f0ca7c937ea8048a753198e44dc84a5d583eab",
+      "text": "Я просто воду наливала понял что смеси не будет больше наноч не просыпался 🙂",
+      "thread": "@matusi_ukr:22272",
+      "topic": "Мати просить поради, з чого (поїльник, непроливайка) давати суміш дитині в 11 місяців вночі після різкого припинення ГВ."
+    },
+    {
+      "channel": "@matusi_ukr",
+      "entities": [
+        {
+          "msg_id": 579429,
+          "name": "Нутрілон",
+          "quote": "вночі п'є молочко Нутрілон",
+          "reading": "бренд дитячої суміші",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": 579457,
+          "name": "ікеа",
+          "quote": "Беріть ікеа чашку дитячу",
+          "reading": "магазин товарів для дому",
+          "subject_type": "не_наш_рынок"
+        }
+      ],
+      "id": "@matusi_ukr:22272#580340",
+      "leg": "census",
+      "msg_id": 580340,
+      "payable_comments": 1,
+      "post_id": 22272,
+      "rendered_chars": 3190,
+      "rendering_sha256": "d7a12052583394c3cdbd42b162979de9d2789748943aa778f671fc1c9acbcff6",
+      "text": "Мила, тримайтеся\nЄ спеціальні пляшечки з сосками, які імітують сосок\n\nЯ теж годувала дитя нутрілоном, то вдень була одна пляшечка, а вночі інша (це кілька років назад було, радили для прикусу міняти, але я в це зараз не сильно вірю)\n\nІндивідуальні речі дуже, треба пробувати і дивитися по дитині\n\nНехай все вдасться!",
+      "thread": "@matusi_ukr:22272",
+      "topic": "Мати просить поради, з чого (поїльник, непроливайка) давати суміш дитині в 11 місяців вночі після різкого припинення ГВ."
+    },
+    {
+      "channel": "@matusi_ukr",
+      "entities": [
+        {
+          "msg_id": null,
+          "name": "Ласунка",
+          "quote": "Морозиво «Ласунка»",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": null,
+          "name": "Millennium",
+          "quote": "Шоколад Millennium",
+          "reading": "бренд шоколаду",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 580124,
+          "name": "біосферу",
+          "quote": "розбили біосферу",
+          "reading": "мережа магазинів",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "msg_id": 580124,
+          "name": "фрекен бок",
+          "quote": "товари фрекен бок",
+          "reading": "бренд товарів для дітей",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 580124,
+          "name": "смайл",
+          "quote": "смайл",
+          "reading": "бренд товарів",
+          "subject_type": "не_наш_рынок"
+        }
+      ],
+      "id": "@matusi_ukr:22303#580124",
+      "leg": "gold",
+      "msg_id": 580124,
+      "payable_comments": 1,
+      "post_id": 22303,
+      "rendered_chars": 3061,
+      "rendering_sha256": "449062bc0db2a509bedc2db370c492f5f56c94811ac3f646dbd8fcfee647b3f6",
+      "text": "Також сьогодні розбили біосферу,  там  були товари фрекен бок, смайл та інші😢",
+      "thread": "@matusi_ukr:22303",
+      "topic": "Повідомлення про можливий дефіцит морозива «Ласунка» та шоколаду Millennium через обстріли складів у Дніпрі."
+    },
+    {
+      "channel": "@matusi_ukr",
+      "entities": [
+        {
+          "msg_id": null,
+          "name": "Ласунка",
+          "quote": "Морозиво «Ласунка»",
+          "reading": "бренд морозива",
+          "subject_type": "молочный_бренд"
+        },
+        {
+          "msg_id": null,
+          "name": "Millennium",
+          "quote": "Шоколад Millennium",
+          "reading": "бренд шоколаду",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 580124,
+          "name": "біосферу",
+          "quote": "розбили біосферу",
+          "reading": "мережа магазинів",
+          "subject_type": "сеть_ритейлер"
+        },
+        {
+          "msg_id": 580124,
+          "name": "фрекен бок",
+          "quote": "товари фрекен бок",
+          "reading": "бренд товарів для дітей",
+          "subject_type": "не_наш_рынок"
+        },
+        {
+          "msg_id": 580124,
+          "name": "смайл",
+          "quote": "смайл",
+          "reading": "бренд товарів",
+          "subject_type": "не_наш_рынок"
+        }
+      ],
+      "id": "@matusi_ukr:22303#580129",
+      "leg": "gold",
+      "msg_id": 580129,
+      "payable_comments": 1,
+      "post_id": 22303,
+      "rendered_chars": 3039,
+      "rendering_sha256": "272cbe5250c691d5f3285d9e3d205501c8d2cefc176f4920fdefec59b651005c",
+      "text": "Ніяке не люблю. Хоч ласунка, хоч інше - не мій продукт.",
+      "thread": "@matusi_ukr:22303",
+      "topic": "Повідомлення про можливий дефіцит морозива «Ласунка» та шоколаду Millennium через обстріли складів у Дніпрі."
+    }
+  ],
+  "order_rule": "thread-grouped in `channel:post_id` order, and inside a thread the store's own comment order — gold rows and census rows interleaved, never sorted apart. A pack that read the gold rows first would make the gate's first units unrepresentative of the rest",
+  "phase": "pass1-probe",
+  "reading": "the pod renders each item itself, from the fields in it, and refuses unless its sha equals the one above. Shipping the rendered string would only prove the two machines agree about a string; what has to be true is that the model is shown what the registration registered",
+  "registration": {
+    "record": "results/prereg_pass1_probe.json"
+  },
+  "serving": {
+    "adapter": null,
+    "chat_template": {
+      "add_generation_prompt": true,
+      "enable_thinking": false
+    },
+    "decoding": "greedy",
+    "do_sample": false,
+    "forward_batch_size": 1,
+    "gpu_class_preference": [
+      "ADA_24",
+      "ADA_24_PRO",
+      "AMPERE_24"
+    ],
+    "gpu_rule": "requested fastest-first and never asserted. probe-a asked for the display name «NVIDIA L4», the endpoint came back `gpuIds: AMPERE_24` and the worker reported an L4 runtime — so the CLASS is what is requested and the RUNTIME string is what lands in provenance. Seconds per thread are reported per card",
+    "merge_state": "base-no-adapter",
+    "model": "google/gemma-4-31b-it",
+    "model_revision": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+    "output_tokens": 256,
+    "quantization": {
+      "bnb_4bit_compute_dtype": "bfloat16",
+      "bnb_4bit_quant_type": "nf4",
+      "bnb_4bit_use_double_quant": true,
+      "load_in_4bit": true
+    },
+    "serving_config": "READER",
+    "template_note": "a NEW serving template for this run. `settings()` refuses config-mixing by design; the srv-2d, CAPTION and probe-a templates are never edited"
+  },
+  "task": "pass1_comment_gm4_v1"
+}

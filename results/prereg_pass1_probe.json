@@ -1,0 +1,1109 @@
+{
+  "attempt": "ONE attempt, no retry. A kill or a STOP closes the question, and so does a completed run with a failed bar",
+  "authority": {
+    "knowledge/decisions/reader-programme-closed-and-the-architecture-sitting-17-08.md": "dc62df1521398c8e5e4c24efd70dea0d9fe3a04a22860052e1442c12be90894e",
+    "results/prereg_reader_probe_v5b.json": "8122fce0eb25c223cff6a6983777e92fff69e3fd53db209b00b43fc4218a00c4",
+    "results/reader_v5b_verdict.json": "8c975558b8da31cfcd78463eae65ceef54cc9b11e267e8c4343adee4bc49b834"
+  },
+  "bars": {
+    "P1_per_comment_agreement": {
+      "collapse": {
+        "map": {
+          "категория_личное": "категория"
+        },
+        "symmetric": true
+      },
+      "comparison": "scorer.reader_comment_agreement — the SAME comparison bar 4 was scored with, called and never restated. The symmetric vocabulary collapse and the ABSENT state come with it; a fresh equality loop here would be a second definition of the bar",
+      "gating": true,
+      "loss_budget": {
+        "rows_that_may_be_lost": 2,
+        "rule": "a disagreement, a refusal and an ABSENT row each cost exactly one row, so the bar tolerates two losses of any mixture. Registered here so the result cannot be re-read afterwards against a budget nobody wrote down",
+        "the_thread_that_carries_the_most": "@VARUS_channel:10613"
+      },
+      "minimum_agreed": 12,
+      "n": 14,
+      "scored_fields": [],
+      "threshold": "12 of 14 rows agreed"
+    },
+    "census": {
+      "gating": false,
+      "n": 50,
+      "reports": [
+        "the per-thread distribution of subject_type over the neighbour rows",
+        "refusals by shape",
+        "seconds and completion tokens per call",
+        "the window pass-1 re-price: per-comment cost × the census cell's payable comments"
+      ],
+      "rule": "REPORTED and never gating — no number here moves P1"
+    }
+  },
+  "class": "PRE-REGISTRATION. Committed before any pod of this attempt exists; git history is the only witness that it preceded the money. It FREEZES at the FIRST `pod create` of the attempt and nothing after that may edit it — a recreated pod reads the SAME frozen record, which is what makes a replacement a segment of one attempt, not a second one",
+  "contract": {
+    "docs/PROMPT-pass1-probe.md": "f4e17aecf755b28b04038fae67b42ec819bba7aa33a346d9027c721cd6d3e72d"
+  },
+  "frozen_when_the_pod_exists": [
+    "results/prereg_pass1_probe.json",
+    "results/pass1_probe_pack.json",
+    "the pass1_comment_gm4_v1 prompt text",
+    "src/market_pulse/prompts.py — the renderer and the parser",
+    "results/reader_gold_w1_r2.json"
+  ],
+  "go_no_go": "before the FIRST paid call: the guard is anchored, the pack's rendering shas are re-derived on the pod and must equal the registered ones, and the full-pass gate is evaluated after every unit. A STOP deletes the pod and closes the attempt",
+  "instruments": {
+    "ceilings": {
+      "input_chars": 12000,
+      "input_rule": "a request over the input ceiling is REFUSED, never truncated",
+      "output_tokens": 256
+    },
+    "gold": {
+      "record": "results/reader_gold_w1_r2.json",
+      "revision": "r2",
+      "sha256": "716ff4174bdafa5957caa4d038a11241b6eb299df4035a5f0e983217ec2a46d9"
+    },
+    "parser": {
+      "entry_point": "market_pulse.prompts.parse_pass1",
+      "module": "src/market_pulse/prompts.py",
+      "rule": "strict single object, domain-checked: the four subject_type readings, the stance domain, and the request's own msg_id echoed back. Everything else is a refusal and no container is repaired",
+      "sha256": "a4a5a5d08546f53af18117c37e49f7e396919555563e16737a633c1df1a86eec"
+    },
+    "prompt_sha256": {
+      "pass1_comment_gm4_v1": "5a4a3cb6ce4db89adb304c04de41210fdabfde0c53addfdb75adba0f1d866650"
+    },
+    "renderer": "market_pulse.prompts.pass1_messages_gm4",
+    "scorer": {
+      "module": "src/market_pulse/scorer.py",
+      "sha256": "dbb5406a502f813ba1b4940e0914310efd632386a8da60e0c002cc8964a97d4f",
+      "unchanged": true
+    },
+    "serving": {
+      "adapter": null,
+      "chat_template": {
+        "add_generation_prompt": true,
+        "enable_thinking": false
+      },
+      "decoding": "greedy",
+      "do_sample": false,
+      "forward_batch_size": 1,
+      "gpu_class_preference": [
+        "ADA_24",
+        "ADA_24_PRO",
+        "AMPERE_24"
+      ],
+      "gpu_rule": "requested fastest-first and never asserted. probe-a asked for the display name «NVIDIA L4», the endpoint came back `gpuIds: AMPERE_24` and the worker reported an L4 runtime — so the CLASS is what is requested and the RUNTIME string is what lands in provenance. Seconds per thread are reported per card",
+      "merge_state": "base-no-adapter",
+      "model": "google/gemma-4-31b-it",
+      "model_revision": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+      "output_tokens": 256,
+      "quantization": {
+        "bnb_4bit_compute_dtype": "bfloat16",
+        "bnb_4bit_quant_type": "nf4",
+        "bnb_4bit_use_double_quant": true,
+        "load_in_4bit": true
+      },
+      "serving_config": "READER",
+      "template_note": "a NEW serving template for this run. `settings()` refuses config-mixing by design; the srv-2d, CAPTION and probe-a templates are never edited"
+    },
+    "serving_rule": "v5b's serving block object-equal except the output ceiling: same base, same adapter state, same quantisation, same greedy decoding, same batch of one. The ceiling drops 4 000 → 256 because the answer is four scalars, and `finish_reason: length` firing at all is counted beside the bar",
+    "subject_types": [
+      "молочный_бренд",
+      "сеть_ритейлер",
+      "категория_личное",
+      "не_наш_рынок"
+    ],
+    "subject_types_rule": "FOUR, not the reader parser's five. The v5 text stopped offering «категория» and the run measured what that did: over v5b's 195 per_comment rows the word does not appear once. The gold's own «категория» is handled by the scorer's symmetric collapse, where it has always been handled",
+    "task": "pass1_comment_gm4_v1"
+  },
+  "money": {
+    "arithmetic": {
+      "affordability_deadline_seconds": 503.245,
+      "boot_free_corner_rule": "what one unit may cost if the pod were provisioned for free — `usable ÷ units`, with no boot forecast in it at all. The FIRST unit's by-unit leg extrapolates the other units off it, so a first call above this bound STOPs the gate on arithmetic alone, whatever provisioning turns out to cost (Dv471's method)",
+      "boot_free_corner_seconds_per_unit": 14.265,
+      "boot_seconds_charged": 192.13,
+      "delete_margin_seconds": 60.0,
+      "full_pass_over_the_registered_order": {
+        "boot_seconds_charged": 192.13,
+        "first_stop_after_units": null,
+        "per_call_seconds": 6.402,
+        "per_unit": [
+          {
+            "after": 1,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 4.938,
+            "unit": "@VARUS_channel:10348#20594",
+            "verdict": "GO"
+          },
+          {
+            "after": 2,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 5.018,
+            "unit": "@VARUS_channel:10348#20595",
+            "verdict": "GO"
+          },
+          {
+            "after": 3,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 5.1,
+            "unit": "@VARUS_channel:10348#20656",
+            "verdict": "GO"
+          },
+          {
+            "after": 4,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 5.185,
+            "unit": "@VARUS_channel:10348#20664",
+            "verdict": "GO"
+          },
+          {
+            "after": 5,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 5.273,
+            "unit": "@VARUS_channel:10348#20665",
+            "verdict": "GO"
+          },
+          {
+            "after": 6,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 5.364,
+            "unit": "@VARUS_channel:10348#20672",
+            "verdict": "GO"
+          },
+          {
+            "after": 7,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 5.458,
+            "unit": "@VARUS_channel:10348#20673",
+            "verdict": "GO"
+          },
+          {
+            "after": 8,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 5.556,
+            "unit": "@VARUS_channel:10613#21599",
+            "verdict": "GO"
+          },
+          {
+            "after": 9,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 5.657,
+            "unit": "@VARUS_channel:10613#21601",
+            "verdict": "GO"
+          },
+          {
+            "after": 10,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 5.761,
+            "unit": "@VARUS_channel:10613#21609",
+            "verdict": "GO"
+          },
+          {
+            "after": 11,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 5.87,
+            "unit": "@VARUS_channel:10613#21626",
+            "verdict": "GO"
+          },
+          {
+            "after": 12,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 5.983,
+            "unit": "@VARUS_channel:10613#21627",
+            "verdict": "GO"
+          },
+          {
+            "after": 13,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 6.1,
+            "unit": "@VARUS_channel:10613#21629",
+            "verdict": "GO"
+          },
+          {
+            "after": 14,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 6.222,
+            "unit": "@VARUS_channel:10613#21631",
+            "verdict": "GO"
+          },
+          {
+            "after": 15,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 6.349,
+            "unit": "@VARUS_channel:10613#21670",
+            "verdict": "GO"
+          },
+          {
+            "after": 16,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 6.482,
+            "unit": "@VARUS_channel:10613#21678",
+            "verdict": "GO"
+          },
+          {
+            "after": 17,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 6.619,
+            "unit": "@VARUS_channel:10613#21680",
+            "verdict": "GO"
+          },
+          {
+            "after": 18,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 6.763,
+            "unit": "@mandziak:3676#47896",
+            "verdict": "GO"
+          },
+          {
+            "after": 19,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 6.914,
+            "unit": "@mandziak:3676#47897",
+            "verdict": "GO"
+          },
+          {
+            "after": 20,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 7.071,
+            "unit": "@mandziak:3676#47898",
+            "verdict": "GO"
+          },
+          {
+            "after": 21,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 7.235,
+            "unit": "@mandziak:3676#47899",
+            "verdict": "GO"
+          },
+          {
+            "after": 22,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 7.407,
+            "unit": "@mandziak:3676#47900",
+            "verdict": "GO"
+          },
+          {
+            "after": 23,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 7.588,
+            "unit": "@mandziak:3676#47902",
+            "verdict": "GO"
+          },
+          {
+            "after": 24,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 7.778,
+            "unit": "@mandziak:3676#47904",
+            "verdict": "GO"
+          },
+          {
+            "after": 25,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 7.977,
+            "unit": "@mandziak:3676#47925",
+            "verdict": "GO"
+          },
+          {
+            "after": 26,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 8.187,
+            "unit": "@mandziak:3676#47926",
+            "verdict": "GO"
+          },
+          {
+            "after": 27,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 8.409,
+            "unit": "@mandziak:3703#48174",
+            "verdict": "GO"
+          },
+          {
+            "after": 28,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 8.642,
+            "unit": "@mandziak:3703#48176",
+            "verdict": "GO"
+          },
+          {
+            "after": 29,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 8.889,
+            "unit": "@mandziak:3703#48177",
+            "verdict": "GO"
+          },
+          {
+            "after": 30,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 9.15,
+            "unit": "@mandziak:3703#48178",
+            "verdict": "GO"
+          },
+          {
+            "after": 31,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 9.428,
+            "unit": "@mandziak:3703#48181",
+            "verdict": "GO"
+          },
+          {
+            "after": 32,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 9.722,
+            "unit": "@mandziak:3703#48231",
+            "verdict": "GO"
+          },
+          {
+            "after": 33,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 10.036,
+            "unit": "@mandziak:3703#48276",
+            "verdict": "GO"
+          },
+          {
+            "after": 34,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 10.37,
+            "unit": "@mandziak:3703#48283",
+            "verdict": "GO"
+          },
+          {
+            "after": 35,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 10.728,
+            "unit": "@mandziak:3703#49098",
+            "verdict": "GO"
+          },
+          {
+            "after": 36,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 11.111,
+            "unit": "@matusi_ukr:22242#578931",
+            "verdict": "GO"
+          },
+          {
+            "after": 37,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 11.523,
+            "unit": "@matusi_ukr:22242#578932",
+            "verdict": "GO"
+          },
+          {
+            "after": 38,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 11.966,
+            "unit": "@matusi_ukr:22242#578939",
+            "verdict": "GO"
+          },
+          {
+            "after": 39,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 12.445,
+            "unit": "@matusi_ukr:22242#578940",
+            "verdict": "GO"
+          },
+          {
+            "after": 40,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 12.963,
+            "unit": "@matusi_ukr:22242#578942",
+            "verdict": "GO"
+          },
+          {
+            "after": 41,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 13.527,
+            "unit": "@matusi_ukr:22242#578944",
+            "verdict": "GO"
+          },
+          {
+            "after": 42,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 14.142,
+            "unit": "@matusi_ukr:22242#578947",
+            "verdict": "GO"
+          },
+          {
+            "after": 43,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 14.815,
+            "unit": "@matusi_ukr:22242#578948",
+            "verdict": "GO"
+          },
+          {
+            "after": 44,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 15.556,
+            "unit": "@matusi_ukr:22242#578951",
+            "verdict": "GO"
+          },
+          {
+            "after": 45,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 16.374,
+            "unit": "@matusi_ukr:22242#578952",
+            "verdict": "GO"
+          },
+          {
+            "after": 46,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 17.284,
+            "unit": "@matusi_ukr:22242#579007",
+            "verdict": "GO"
+          },
+          {
+            "after": 47,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 18.301,
+            "unit": "@matusi_ukr:22242#579042",
+            "verdict": "GO"
+          },
+          {
+            "after": 48,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 19.445,
+            "unit": "@matusi_ukr:22272#579373",
+            "verdict": "GO"
+          },
+          {
+            "after": 49,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 20.741,
+            "unit": "@matusi_ukr:22272#579374",
+            "verdict": "GO"
+          },
+          {
+            "after": 50,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 22.222,
+            "unit": "@matusi_ukr:22272#579375",
+            "verdict": "GO"
+          },
+          {
+            "after": 51,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 23.932,
+            "unit": "@matusi_ukr:22272#579376",
+            "verdict": "GO"
+          },
+          {
+            "after": 52,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 25.926,
+            "unit": "@matusi_ukr:22272#579377",
+            "verdict": "GO"
+          },
+          {
+            "after": 53,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 28.283,
+            "unit": "@matusi_ukr:22272#579379",
+            "verdict": "GO"
+          },
+          {
+            "after": 54,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 31.111,
+            "unit": "@matusi_ukr:22272#579380",
+            "verdict": "GO"
+          },
+          {
+            "after": 55,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 34.568,
+            "unit": "@matusi_ukr:22272#579381",
+            "verdict": "GO"
+          },
+          {
+            "after": 56,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 38.889,
+            "unit": "@matusi_ukr:22272#579383",
+            "verdict": "GO"
+          },
+          {
+            "after": 57,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 44.445,
+            "unit": "@matusi_ukr:22272#579416",
+            "verdict": "GO"
+          },
+          {
+            "after": 58,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 51.852,
+            "unit": "@matusi_ukr:22272#579429",
+            "verdict": "GO"
+          },
+          {
+            "after": 59,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 62.223,
+            "unit": "@matusi_ukr:22272#579457",
+            "verdict": "GO"
+          },
+          {
+            "after": 60,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 77.779,
+            "unit": "@matusi_ukr:22272#580126",
+            "verdict": "GO"
+          },
+          {
+            "after": 61,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 103.705,
+            "unit": "@matusi_ukr:22272#580127",
+            "verdict": "GO"
+          },
+          {
+            "after": 62,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 155.557,
+            "unit": "@matusi_ukr:22272#580340",
+            "verdict": "GO"
+          },
+          {
+            "after": 63,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": 311.115,
+            "unit": "@matusi_ukr:22303#580124",
+            "verdict": "GO"
+          },
+          {
+            "after": 64,
+            "binding_leg": "by_unit",
+            "headroom_seconds": 311.1,
+            "margin_seconds_per_unit": Infinity,
+            "unit": "@matusi_ukr:22303#580129",
+            "verdict": "GO"
+          }
+        ],
+        "rule": "the registered full-pass gate, evaluated after every unit at the per-call bound above. Reported and gating NOTHING here — the run's own gate is the one that binds — but it is in the record because a knife-edge nobody named before the money is a knife-edge discovered in a log",
+        "tightest": {
+          "after": 1,
+          "binding_leg": "by_unit",
+          "headroom_seconds": 311.1,
+          "margin_seconds_per_unit": 4.938,
+          "unit": "@VARUS_channel:10348#20594",
+          "verdict": "GO"
+        },
+        "two_legs_collapse": "every pass-1 unit carries exactly ONE payable comment, so the gate's by-payable leg and its by-unit leg are the same number by construction. v5b's knife-edge lived in the gap between them; this pack has no gap",
+        "unit_one_without_any_boot": {
+          "clears": true,
+          "expected_seconds": 6.402,
+          "rule": "the corner with NO provisioning forecast in it: even charging the pod nothing to boot, unit 1 may not cost more than `usable ÷ units`",
+          "unit": "@VARUS_channel:10348#20594",
+          "zero_boot_ceiling_seconds": 14.265
+        }
+      },
+      "pre_generation_budget_seconds": 203.245,
+      "reading_projection_seconds": 409.728,
+      "seconds_per_call_registered": 6.402,
+      "seconds_the_cap_buys": 972.973,
+      "units": 64,
+      "usable_seconds": 912.973
+    },
+    "cap_rule": "the contract's cap, all in. Every second the pod EXISTS is inside it — provisioning, idle and every segment of the attempt, dead pods included",
+    "cap_usd_all_in": 0.2,
+    "guard": "scripts/runpod_guard.py --step pass1-probe --step-cap 0.2, anchored BEFORE the first pod create and read from the guard, never from a sentence in a contract",
+    "meter": {
+      "card_requested": "NVIDIA GeForce RTX 4090",
+      "datacenter": "EU-RO-1, pinned by network volume qw4nwleanc — the volume decides",
+      "price_rule": "**READ ON THE DAY.** `costPerHr` in the create response is the meter of record and every figure in this block is recomputed from it before the generation process starts. A projection that no longer fits deletes the pod and STOPS",
+      "resource": "ONE rented pod, billed for every second it EXISTS — from `pod create` to `pod delete`. `pod stop` does not stop the bill, so the run deletes and never stops",
+      "usd_per_second_at_the_example": 0.000205556,
+      "worked_example_rule": "$0.74/h is what reader-v5b was BILLED at on 2026-08-17 and it is used below so the arithmetic is WORKED rather than described. It is an EXAMPLE and not the meter",
+      "worked_example_usd_per_hour": 0.74
+    },
+    "reading": {
+      "boot": {
+        "rule": "v5b's own measured boot, from `pod create` to the first request being answerable. The boot-kill deadline below is registered above it with room, and the projection charges it in full",
+        "seconds": 192.13
+      },
+      "ceiling": {
+        "completion_tokens": 96,
+        "gates": true,
+        "prompt_tokens": 2659,
+        "rule": "the cheapest call v5b actually made, used as a BOUND. It emitted more completion tokens and prefilled more prompt tokens than any pass-1 request can, on the same transport, the same card and the same serving config — so no pass-1 call can cost more, and the bound carries no forecast in it",
+        "seconds_per_pass1_call": 6.402,
+        "unit": "@mandziak:3701"
+      },
+      "fitted": {
+        "expected_answer_chars": 95,
+        "expected_completion_tokens": 35.59,
+        "fitted_over_completion_tokens": [
+          96,
+          2056
+        ],
+        "intercept_seconds": 1.062,
+        "line": "seconds ≈ intercept + slope × completion_tokens, least squares over the 26",
+        "seconds_per_pass1_call": 2.934,
+        "slope_seconds_per_token": 0.052599,
+        "why_it_does_not_gate": "a pass-1 answer is ~36 tokens and the line was fitted between 96 and 2 056, so using it would EXTRAPOLATE below its own range. It is published because the difference between the two readings is what the run measures"
+      },
+      "source": {
+        "calls": 26,
+        "record": "results/reader_v5b_w1.jsonl",
+        "sha256": "9540a84bc87109ce3589a636fa5640d56feb5c8382bb82adcf8345bd8e858e8c"
+      },
+      "v5b_totals": {
+        "chars_per_completion_token": 2.6693,
+        "completion_tokens": 22488,
+        "emitted_chars": 60028,
+        "seconds_per_completion_token": 0.053826,
+        "worker_seconds": 1210.445
+      }
+    },
+    "segments": "the cap is the ATTEMPT's. Per-segment spend is that segment's billed seconds times its OWN costPerHr, summed across segments — never a balance delta, which prices the account and not the step"
+  },
+  "non_gating": "the census, the refusal shapes, the seconds and tokens per call, and the window re-price. None of them moves P1",
+  "phase": "pass1-probe",
+  "population": {
+    "census": {
+      "carries_no_gold": true,
+      "n": 50,
+      "producer": "scripts/probe_b_population.py::population",
+      "rows": [
+        {
+          "msg_id": 20594,
+          "thread": "@VARUS_channel:10348"
+        },
+        {
+          "msg_id": 20595,
+          "thread": "@VARUS_channel:10348"
+        },
+        {
+          "msg_id": 20656,
+          "thread": "@VARUS_channel:10348"
+        },
+        {
+          "msg_id": 20665,
+          "thread": "@VARUS_channel:10348"
+        },
+        {
+          "msg_id": 20672,
+          "thread": "@VARUS_channel:10348"
+        },
+        {
+          "msg_id": 20673,
+          "thread": "@VARUS_channel:10348"
+        },
+        {
+          "msg_id": 21609,
+          "thread": "@VARUS_channel:10613"
+        },
+        {
+          "msg_id": 21627,
+          "thread": "@VARUS_channel:10613"
+        },
+        {
+          "msg_id": 21631,
+          "thread": "@VARUS_channel:10613"
+        },
+        {
+          "msg_id": 21670,
+          "thread": "@VARUS_channel:10613"
+        },
+        {
+          "msg_id": 21678,
+          "thread": "@VARUS_channel:10613"
+        },
+        {
+          "msg_id": 21680,
+          "thread": "@VARUS_channel:10613"
+        },
+        {
+          "msg_id": 47896,
+          "thread": "@mandziak:3676"
+        },
+        {
+          "msg_id": 47897,
+          "thread": "@mandziak:3676"
+        },
+        {
+          "msg_id": 47898,
+          "thread": "@mandziak:3676"
+        },
+        {
+          "msg_id": 47900,
+          "thread": "@mandziak:3676"
+        },
+        {
+          "msg_id": 47904,
+          "thread": "@mandziak:3676"
+        },
+        {
+          "msg_id": 47925,
+          "thread": "@mandziak:3676"
+        },
+        {
+          "msg_id": 47926,
+          "thread": "@mandziak:3676"
+        },
+        {
+          "msg_id": 48174,
+          "thread": "@mandziak:3703"
+        },
+        {
+          "msg_id": 48176,
+          "thread": "@mandziak:3703"
+        },
+        {
+          "msg_id": 48177,
+          "thread": "@mandziak:3703"
+        },
+        {
+          "msg_id": 48178,
+          "thread": "@mandziak:3703"
+        },
+        {
+          "msg_id": 48181,
+          "thread": "@mandziak:3703"
+        },
+        {
+          "msg_id": 48231,
+          "thread": "@mandziak:3703"
+        },
+        {
+          "msg_id": 49098,
+          "thread": "@mandziak:3703"
+        },
+        {
+          "msg_id": 578931,
+          "thread": "@matusi_ukr:22242"
+        },
+        {
+          "msg_id": 578932,
+          "thread": "@matusi_ukr:22242"
+        },
+        {
+          "msg_id": 578939,
+          "thread": "@matusi_ukr:22242"
+        },
+        {
+          "msg_id": 578940,
+          "thread": "@matusi_ukr:22242"
+        },
+        {
+          "msg_id": 578942,
+          "thread": "@matusi_ukr:22242"
+        },
+        {
+          "msg_id": 578944,
+          "thread": "@matusi_ukr:22242"
+        },
+        {
+          "msg_id": 578947,
+          "thread": "@matusi_ukr:22242"
+        },
+        {
+          "msg_id": 578948,
+          "thread": "@matusi_ukr:22242"
+        },
+        {
+          "msg_id": 578952,
+          "thread": "@matusi_ukr:22242"
+        },
+        {
+          "msg_id": 579007,
+          "thread": "@matusi_ukr:22242"
+        },
+        {
+          "msg_id": 579042,
+          "thread": "@matusi_ukr:22242"
+        },
+        {
+          "msg_id": 579373,
+          "thread": "@matusi_ukr:22272"
+        },
+        {
+          "msg_id": 579374,
+          "thread": "@matusi_ukr:22272"
+        },
+        {
+          "msg_id": 579375,
+          "thread": "@matusi_ukr:22272"
+        },
+        {
+          "msg_id": 579376,
+          "thread": "@matusi_ukr:22272"
+        },
+        {
+          "msg_id": 579377,
+          "thread": "@matusi_ukr:22272"
+        },
+        {
+          "msg_id": 579380,
+          "thread": "@matusi_ukr:22272"
+        },
+        {
+          "msg_id": 579381,
+          "thread": "@matusi_ukr:22272"
+        },
+        {
+          "msg_id": 579383,
+          "thread": "@matusi_ukr:22272"
+        },
+        {
+          "msg_id": 579416,
+          "thread": "@matusi_ukr:22272"
+        },
+        {
+          "msg_id": 579429,
+          "thread": "@matusi_ukr:22272"
+        },
+        {
+          "msg_id": 580126,
+          "thread": "@matusi_ukr:22272"
+        },
+        {
+          "msg_id": 580127,
+          "thread": "@matusi_ukr:22272"
+        },
+        {
+          "msg_id": 580340,
+          "thread": "@matusi_ukr:22272"
+        }
+      ],
+      "sha256": "468e5c5087c281b79c0ecccef5710548f0641ecd6bff3900ed7f5034fa0674fb"
+    },
+    "entity_context": {
+      "@VARUS_channel:10348": {
+        "entities": 2,
+        "post_summary_chars": 38,
+        "sha256": "9540a84bc87109ce3589a636fa5640d56feb5c8382bb82adcf8345bd8e858e8c",
+        "source": "results/reader_v5b_w1.jsonl"
+      },
+      "@VARUS_channel:10613": {
+        "entities": 10,
+        "post_summary_chars": 86,
+        "sha256": "bd696f803b6c4ecb64b16bf1c2ca3a44753649bd3585167c1812871e6487cf71",
+        "source": "results/reader_v4_w1.jsonl"
+      },
+      "@mandziak:3676": {
+        "entities": 2,
+        "post_summary_chars": 26,
+        "sha256": "9540a84bc87109ce3589a636fa5640d56feb5c8382bb82adcf8345bd8e858e8c",
+        "source": "results/reader_v5b_w1.jsonl"
+      },
+      "@mandziak:3703": {
+        "entities": 0,
+        "post_summary_chars": 82,
+        "sha256": "9540a84bc87109ce3589a636fa5640d56feb5c8382bb82adcf8345bd8e858e8c",
+        "source": "results/reader_v5b_w1.jsonl"
+      },
+      "@matusi_ukr:22242": {
+        "entities": 5,
+        "post_summary_chars": 103,
+        "sha256": "9540a84bc87109ce3589a636fa5640d56feb5c8382bb82adcf8345bd8e858e8c",
+        "source": "results/reader_v5b_w1.jsonl"
+      },
+      "@matusi_ukr:22272": {
+        "entities": 2,
+        "post_summary_chars": 120,
+        "sha256": "9540a84bc87109ce3589a636fa5640d56feb5c8382bb82adcf8345bd8e858e8c",
+        "source": "results/reader_v5b_w1.jsonl"
+      },
+      "@matusi_ukr:22303": {
+        "entities": 5,
+        "post_summary_chars": 108,
+        "sha256": "9540a84bc87109ce3589a636fa5640d56feb5c8382bb82adcf8345bd8e858e8c",
+        "source": "results/reader_v5b_w1.jsonl"
+      }
+    },
+    "gold": {
+      "n": 14,
+      "record": "results/reader_gold_w1_r2.json",
+      "revision": "r2",
+      "rows": [
+        {
+          "msg_id": 20664,
+          "thread": "@VARUS_channel:10348"
+        },
+        {
+          "msg_id": 21599,
+          "thread": "@VARUS_channel:10613"
+        },
+        {
+          "msg_id": 21601,
+          "thread": "@VARUS_channel:10613"
+        },
+        {
+          "msg_id": 21626,
+          "thread": "@VARUS_channel:10613"
+        },
+        {
+          "msg_id": 21629,
+          "thread": "@VARUS_channel:10613"
+        },
+        {
+          "msg_id": 47899,
+          "thread": "@mandziak:3676"
+        },
+        {
+          "msg_id": 47902,
+          "thread": "@mandziak:3676"
+        },
+        {
+          "msg_id": 48276,
+          "thread": "@mandziak:3703"
+        },
+        {
+          "msg_id": 48283,
+          "thread": "@mandziak:3703"
+        },
+        {
+          "msg_id": 578951,
+          "thread": "@matusi_ukr:22242"
+        },
+        {
+          "msg_id": 579379,
+          "thread": "@matusi_ukr:22272"
+        },
+        {
+          "msg_id": 579457,
+          "thread": "@matusi_ukr:22272"
+        },
+        {
+          "msg_id": 580124,
+          "thread": "@matusi_ukr:22303"
+        },
+        {
+          "msg_id": 580129,
+          "thread": "@matusi_ukr:22303"
+        }
+      ],
+      "sha256": "716ff4174bdafa5957caa4d038a11241b6eb299df4035a5f0e983217ec2a46d9"
+    },
+    "per_thread": {
+      "@VARUS_channel:10348": {
+        "census_rows": 6,
+        "gold_rows": 1,
+        "payable_comments": 7
+      },
+      "@VARUS_channel:10613": {
+        "census_rows": 6,
+        "gold_rows": 4,
+        "payable_comments": 10
+      },
+      "@mandziak:3676": {
+        "census_rows": 7,
+        "gold_rows": 2,
+        "payable_comments": 9
+      },
+      "@mandziak:3703": {
+        "census_rows": 7,
+        "gold_rows": 2,
+        "payable_comments": 9
+      },
+      "@matusi_ukr:22242": {
+        "census_rows": 11,
+        "gold_rows": 1,
+        "payable_comments": 12
+      },
+      "@matusi_ukr:22272": {
+        "census_rows": 13,
+        "gold_rows": 2,
+        "payable_comments": 15
+      },
+      "@matusi_ukr:22303": {
+        "census_rows": 0,
+        "gold_rows": 2,
+        "payable_comments": 2
+      }
+    },
+    "rule": "ENUMERATED, never chosen. The gating rows are bar 4's own fourteen out of gold r2; the census rows are every other payable comment of the same seven threads, out of the store through scripts/probe_b_population.py. Every count here is derived from those two files by this producer and typed nowhere",
+    "threads": [
+      "@VARUS_channel:10348",
+      "@VARUS_channel:10613",
+      "@mandziak:3676",
+      "@mandziak:3703",
+      "@matusi_ukr:22242",
+      "@matusi_ukr:22272",
+      "@matusi_ukr:22303"
+    ],
+    "units": 64
+  },
+  "producer": {
+    "borrowed": {
+      "scripts/probe_b_population.py": "468e5c5087c281b79c0ecccef5710548f0641ecd6bff3900ed7f5034fa0674fb",
+      "scripts/read_threads_reader_v5.py": "75b16f707d07630de745fb7cce0281da83ff8dda8905621b3633b639cb9eaed7",
+      "scripts/window_summary_5c2.py": "239d2d5fcc0f0c93158ca41383b5ce20beb7f8e9db38974913a302ea4831fdaf",
+      "src/market_pulse/prompts.py": "a4a5a5d08546f53af18117c37e49f7e396919555563e16737a633c1df1a86eec"
+    },
+    "rule": "no clock is stamped, so the record re-derives byte for byte from its own inputs",
+    "script": "scripts/write_pass1_prereg.py",
+    "sha256": "5ba72bd41e7347ad43a90bf4940907e62aa82947a27460eacded31c8477bcadf"
+  },
+  "return_to_sitting": "**A FAILED BAR GOES BACK TO THE SITTING, never to a prompt iteration.** The options the sitting of 2026-08-17 left open are B (labelled subject_type data + LoRA) and C (a different base). There is no pass1-v2 prompt without a sitting ruling, and this clause is pre-registered so it cannot be re-decided once the number is in",
+  "transport": {
+    "boot_kill_seconds": 300.0,
+    "delete_never_stop": true,
+    "gate_0_ssh_deadman_seconds": 180.0,
+    "gates_append": "every gate snapshot is APPENDED to a list and stamped with its segment and pod id. reader-v4 overwrote its first GO and the arithmetic had to be re-checked by hand",
+    "inherited_from": "results/prereg_reader_probe_v5b.json",
+    "max_recreates": 2,
+    "per_row_persistence": "request + its rendering sha, the raw reply, the parse outcome, seconds, finish_reason and cut_chars — one row per unit, exactly as v5b wrote them",
+    "third_dead_pod": "a datacenter state and a STOP, not a fourth create"
+  }
+}
