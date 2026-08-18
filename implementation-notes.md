@@ -7684,3 +7684,19 @@ measured argument that the rule is a payment gate for the reader. And `subject_t
 carries 8 of the 14 per-comment gold rows while `docs/PLAN-comment-signals.md`'s own schema example
 stopped using the word on 15.08 — the bars are reported both as registered and with the two words
 collapsed.
+
+## pass1-data-prep — file ownership, extended (2026-08-18)
+
+**`docs/labels-pass1-r1.jsonl` is a TEAM-LEAD file from the moment it exists.** The sitting of
+18.08 put the labelling in the team lead's hands, so the executor's whole relationship to that file
+is: validate it (`scripts/validate_pass1_labels.py`, which refuses and writes nothing) and commit it
+verbatim. Never edit a row, never generate a label into it, never `git add -A` around it. It joins
+`docs/STATUS.md`, `docs/SPEC.md` and `docs/PROMPT-*.md` in that rule and nowhere else changes.
+Freezing a provenance-tagged copy into `results/` — `labelled_by`, date, codebook, seed, pack sha —
+belongs to the NEXT contract, after the labels exist and validate.
+
+**The pack the labels answer** is `results/pass1_label_pack_r1.json` (500 units, seed 20260818,
+cap 14) with `docs/label-pack-pass1-r1.md` as the human rendering and
+`docs/label-pack-pass1-r1-blind40.md` as the operator's optional blind control. All three rebuild
+byte-identically from `scripts/build_pass1_label_pack.py`; the argument is in
+`docs/reports/pass1-data-prep.md`.
