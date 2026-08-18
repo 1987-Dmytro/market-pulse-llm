@@ -1,0 +1,3037 @@
+{
+  "authority": "the sitting of 2026-08-18 (evening): line B, and the TEAM LEAD labels — knowledge/decisions/sitting-b-line-b-and-the-team-lead-labels.md, registered in docs/STATUS.md. Labels are TRAINING data and are ablated at training time; the judge does not move and the labeller never touches exam material",
+  "blind": {
+    "file": "docs/label-pack-pass1-r1-blind40.md",
+    "rule": "40 of the drawn units, sampled off the SAME seeded stream immediately after the draw. Emitted UNLABELLED so a second reader can label them blind; no contract depends on whether anyone does",
+    "sha256": "d2364ff3e30b765ce1fa76bd379bcde8a09d505fc6f646075d12152b87a4e4b7",
+    "units": 40
+  },
+  "blind_units": [
+    {
+      "msg_id": 20680,
+      "thread": "@VARUS_channel:10349"
+    },
+    {
+      "msg_id": 20696,
+      "thread": "@VARUS_channel:10356"
+    },
+    {
+      "msg_id": 20916,
+      "thread": "@VARUS_channel:10375"
+    },
+    {
+      "msg_id": 21127,
+      "thread": "@VARUS_channel:10451"
+    },
+    {
+      "msg_id": 21379,
+      "thread": "@VARUS_channel:10525"
+    },
+    {
+      "msg_id": 21380,
+      "thread": "@VARUS_channel:10525"
+    },
+    {
+      "msg_id": 21410,
+      "thread": "@VARUS_channel:10528"
+    },
+    {
+      "msg_id": 21184,
+      "thread": "@klopotenkofood:6032"
+    },
+    {
+      "msg_id": 21232,
+      "thread": "@klopotenkofood:6040"
+    },
+    {
+      "msg_id": 21289,
+      "thread": "@klopotenkofood:6040"
+    },
+    {
+      "msg_id": 21346,
+      "thread": "@klopotenkofood:6060"
+    },
+    {
+      "msg_id": 47957,
+      "thread": "@mandziak:3679"
+    },
+    {
+      "msg_id": 47987,
+      "thread": "@mandziak:3679"
+    },
+    {
+      "msg_id": 48045,
+      "thread": "@mandziak:3685"
+    },
+    {
+      "msg_id": 48187,
+      "thread": "@mandziak:3700"
+    },
+    {
+      "msg_id": 49053,
+      "thread": "@mandziak:3702"
+    },
+    {
+      "msg_id": 48214,
+      "thread": "@mandziak:3707"
+    },
+    {
+      "msg_id": 48392,
+      "thread": "@mandziak:3718"
+    },
+    {
+      "msg_id": 48860,
+      "thread": "@mandziak:3753"
+    },
+    {
+      "msg_id": 48944,
+      "thread": "@mandziak:3753"
+    },
+    {
+      "msg_id": 578841,
+      "thread": "@matusi_ukr:22217"
+    },
+    {
+      "msg_id": 580098,
+      "thread": "@matusi_ukr:22263"
+    },
+    {
+      "msg_id": 579286,
+      "thread": "@matusi_ukr:22265"
+    },
+    {
+      "msg_id": 579766,
+      "thread": "@matusi_ukr:22295"
+    },
+    {
+      "msg_id": 579863,
+      "thread": "@matusi_ukr:22295"
+    },
+    {
+      "msg_id": 580041,
+      "thread": "@matusi_ukr:22295"
+    },
+    {
+      "msg_id": 580141,
+      "thread": "@matusi_ukr:22308"
+    },
+    {
+      "msg_id": 580142,
+      "thread": "@matusi_ukr:22308"
+    },
+    {
+      "msg_id": 580159,
+      "thread": "@matusi_ukr:22308"
+    },
+    {
+      "msg_id": 49398,
+      "thread": "@retsepty:7288"
+    },
+    {
+      "msg_id": 49560,
+      "thread": "@retsepty:7312"
+    },
+    {
+      "msg_id": 49626,
+      "thread": "@retsepty:7325"
+    },
+    {
+      "msg_id": 49630,
+      "thread": "@retsepty:7326"
+    },
+    {
+      "msg_id": 49636,
+      "thread": "@retsepty:7328"
+    },
+    {
+      "msg_id": 49678,
+      "thread": "@retsepty:7337"
+    },
+    {
+      "msg_id": 49717,
+      "thread": "@retsepty:7345"
+    },
+    {
+      "msg_id": 17,
+      "thread": "@tarilka_malyuka:695"
+    },
+    {
+      "msg_id": 183,
+      "thread": "@tarilka_malyuka:747"
+    },
+    {
+      "msg_id": 2590,
+      "thread": "@ya_Nenka:840"
+    },
+    {
+      "msg_id": 2599,
+      "thread": "@ya_Nenka:844"
+    }
+  ],
+  "contract": "docs/PROMPT-pass1-data-prep.md D1",
+  "draw": {
+    "cap": 14,
+    "cap_rule": "the 90th percentile of the remaining threads' payable counts, re-derived at every run and refused if it moves",
+    "drawn": 500,
+    "formula": "weight w = min(payable, CAP); allocate the target over the threads by LARGEST REMAINDER on w, tie-broken on (−remainder, thread); take that many msg_ids from the thread's msg-id-sorted payable list off one random.Random(SEED) stream",
+    "largest_thread_share": {
+      "allocated": 12,
+      "payable": 125,
+      "rule": "the thread with the most payable comments, and what the draw gave it. Uncapped proportional allocation is the counterfactual beside it",
+      "share_of_pack": 0.024,
+      "thread": "@matusi_ukr:22058",
+      "uncapped_would_be": 65,
+      "weight": 14
+    },
+    "per_thread": [
+      {
+        "allocated": 8,
+        "payable": 9,
+        "thread": "@VARUS_channel:10349",
+        "weight": 9
+      },
+      {
+        "allocated": 1,
+        "payable": 1,
+        "thread": "@VARUS_channel:10356",
+        "weight": 1
+      },
+      {
+        "allocated": 1,
+        "payable": 1,
+        "thread": "@VARUS_channel:10358",
+        "weight": 1
+      },
+      {
+        "allocated": 2,
+        "payable": 2,
+        "thread": "@VARUS_channel:10360",
+        "weight": 2
+      },
+      {
+        "allocated": 10,
+        "payable": 12,
+        "thread": "@VARUS_channel:10366",
+        "weight": 12
+      },
+      {
+        "allocated": 10,
+        "payable": 12,
+        "thread": "@VARUS_channel:10367",
+        "weight": 12
+      },
+      {
+        "allocated": 1,
+        "payable": 1,
+        "thread": "@VARUS_channel:10375",
+        "weight": 1
+      },
+      {
+        "allocated": 1,
+        "payable": 1,
+        "thread": "@VARUS_channel:10450",
+        "weight": 1
+      },
+      {
+        "allocated": 3,
+        "payable": 4,
+        "thread": "@VARUS_channel:10451",
+        "weight": 4
+      },
+      {
+        "allocated": 3,
+        "payable": 3,
+        "thread": "@VARUS_channel:10452",
+        "weight": 3
+      },
+      {
+        "allocated": 2,
+        "payable": 2,
+        "thread": "@VARUS_channel:10455",
+        "weight": 2
+      },
+      {
+        "allocated": 4,
+        "payable": 5,
+        "thread": "@VARUS_channel:10465",
+        "weight": 5
+      },
+      {
+        "allocated": 5,
+        "payable": 6,
+        "thread": "@VARUS_channel:10466",
+        "weight": 6
+      },
+      {
+        "allocated": 5,
+        "payable": 6,
+        "thread": "@VARUS_channel:10470",
+        "weight": 6
+      },
+      {
+        "allocated": 4,
+        "payable": 5,
+        "thread": "@VARUS_channel:10471",
+        "weight": 5
+      },
+      {
+        "allocated": 1,
+        "payable": 1,
+        "thread": "@VARUS_channel:10496",
+        "weight": 1
+      },
+      {
+        "allocated": 4,
+        "payable": 5,
+        "thread": "@VARUS_channel:10525",
+        "weight": 5
+      },
+      {
+        "allocated": 8,
+        "payable": 9,
+        "thread": "@VARUS_channel:10528",
+        "weight": 9
+      },
+      {
+        "allocated": 2,
+        "payable": 2,
+        "thread": "@VARUS_channel:10529",
+        "weight": 2
+      },
+      {
+        "allocated": 1,
+        "payable": 1,
+        "thread": "@VARUS_channel:10532",
+        "weight": 1
+      },
+      {
+        "allocated": 2,
+        "payable": 2,
+        "thread": "@VARUS_channel:10593",
+        "weight": 2
+      },
+      {
+        "allocated": 4,
+        "payable": 5,
+        "thread": "@VARUS_channel:10603",
+        "weight": 5
+      },
+      {
+        "allocated": 1,
+        "payable": 1,
+        "thread": "@klopotenkofood:6024",
+        "weight": 1
+      },
+      {
+        "allocated": 1,
+        "payable": 1,
+        "thread": "@klopotenkofood:6031",
+        "weight": 1
+      },
+      {
+        "allocated": 12,
+        "payable": 17,
+        "thread": "@klopotenkofood:6032",
+        "weight": 14
+      },
+      {
+        "allocated": 8,
+        "payable": 9,
+        "thread": "@klopotenkofood:6035",
+        "weight": 9
+      },
+      {
+        "allocated": 2,
+        "payable": 2,
+        "thread": "@klopotenkofood:6036",
+        "weight": 2
+      },
+      {
+        "allocated": 12,
+        "payable": 43,
+        "thread": "@klopotenkofood:6040",
+        "weight": 14
+      },
+      {
+        "allocated": 9,
+        "payable": 10,
+        "thread": "@klopotenkofood:6060",
+        "weight": 10
+      },
+      {
+        "allocated": 1,
+        "payable": 1,
+        "thread": "@kopiyochka1:21672",
+        "weight": 1
+      },
+      {
+        "allocated": 7,
+        "payable": 8,
+        "thread": "@kopiyochka1:21720",
+        "weight": 8
+      },
+      {
+        "allocated": 3,
+        "payable": 3,
+        "thread": "@mandziak:3666",
+        "weight": 3
+      },
+      {
+        "allocated": 4,
+        "payable": 5,
+        "thread": "@mandziak:3667",
+        "weight": 5
+      },
+      {
+        "allocated": 12,
+        "payable": 31,
+        "thread": "@mandziak:3679",
+        "weight": 14
+      },
+      {
+        "allocated": 10,
+        "payable": 12,
+        "thread": "@mandziak:3684",
+        "weight": 12
+      },
+      {
+        "allocated": 2,
+        "payable": 2,
+        "thread": "@mandziak:3685",
+        "weight": 2
+      },
+      {
+        "allocated": 7,
+        "payable": 8,
+        "thread": "@mandziak:3689",
+        "weight": 8
+      },
+      {
+        "allocated": 4,
+        "payable": 5,
+        "thread": "@mandziak:3694",
+        "weight": 5
+      },
+      {
+        "allocated": 4,
+        "payable": 5,
+        "thread": "@mandziak:3700",
+        "weight": 5
+      },
+      {
+        "allocated": 3,
+        "payable": 3,
+        "thread": "@mandziak:3701",
+        "weight": 3
+      },
+      {
+        "allocated": 7,
+        "payable": 8,
+        "thread": "@mandziak:3702",
+        "weight": 8
+      },
+      {
+        "allocated": 9,
+        "payable": 11,
+        "thread": "@mandziak:3707",
+        "weight": 11
+      },
+      {
+        "allocated": 12,
+        "payable": 20,
+        "thread": "@mandziak:3708",
+        "weight": 14
+      },
+      {
+        "allocated": 12,
+        "payable": 20,
+        "thread": "@mandziak:3718",
+        "weight": 14
+      },
+      {
+        "allocated": 3,
+        "payable": 4,
+        "thread": "@mandziak:3721",
+        "weight": 4
+      },
+      {
+        "allocated": 6,
+        "payable": 7,
+        "thread": "@mandziak:3736",
+        "weight": 7
+      },
+      {
+        "allocated": 1,
+        "payable": 1,
+        "thread": "@mandziak:3746",
+        "weight": 1
+      },
+      {
+        "allocated": 11,
+        "payable": 13,
+        "thread": "@mandziak:3753",
+        "weight": 13
+      },
+      {
+        "allocated": 4,
+        "payable": 5,
+        "thread": "@mandziak:3765",
+        "weight": 5
+      },
+      {
+        "allocated": 6,
+        "payable": 7,
+        "thread": "@mandziak:3768",
+        "weight": 7
+      },
+      {
+        "allocated": 3,
+        "payable": 3,
+        "thread": "@mandziak:3775",
+        "weight": 3
+      },
+      {
+        "allocated": 12,
+        "payable": 125,
+        "thread": "@matusi_ukr:22058",
+        "weight": 14
+      },
+      {
+        "allocated": 12,
+        "payable": 35,
+        "thread": "@matusi_ukr:22092",
+        "weight": 14
+      },
+      {
+        "allocated": 8,
+        "payable": 9,
+        "thread": "@matusi_ukr:22111",
+        "weight": 9
+      },
+      {
+        "allocated": 2,
+        "payable": 2,
+        "thread": "@matusi_ukr:22125",
+        "weight": 2
+      },
+      {
+        "allocated": 10,
+        "payable": 12,
+        "thread": "@matusi_ukr:22131",
+        "weight": 12
+      },
+      {
+        "allocated": 12,
+        "payable": 105,
+        "thread": "@matusi_ukr:22133",
+        "weight": 14
+      },
+      {
+        "allocated": 12,
+        "payable": 27,
+        "thread": "@matusi_ukr:22158",
+        "weight": 14
+      },
+      {
+        "allocated": 5,
+        "payable": 6,
+        "thread": "@matusi_ukr:22195",
+        "weight": 6
+      },
+      {
+        "allocated": 1,
+        "payable": 1,
+        "thread": "@matusi_ukr:22208",
+        "weight": 1
+      },
+      {
+        "allocated": 12,
+        "payable": 14,
+        "thread": "@matusi_ukr:22217",
+        "weight": 14
+      },
+      {
+        "allocated": 11,
+        "payable": 13,
+        "thread": "@matusi_ukr:22263",
+        "weight": 13
+      },
+      {
+        "allocated": 12,
+        "payable": 16,
+        "thread": "@matusi_ukr:22265",
+        "weight": 14
+      },
+      {
+        "allocated": 2,
+        "payable": 2,
+        "thread": "@matusi_ukr:22292",
+        "weight": 2
+      },
+      {
+        "allocated": 12,
+        "payable": 108,
+        "thread": "@matusi_ukr:22295",
+        "weight": 14
+      },
+      {
+        "allocated": 1,
+        "payable": 1,
+        "thread": "@matusi_ukr:22307",
+        "weight": 1
+      },
+      {
+        "allocated": 12,
+        "payable": 17,
+        "thread": "@matusi_ukr:22308",
+        "weight": 14
+      },
+      {
+        "allocated": 3,
+        "payable": 4,
+        "thread": "@matusi_ukr:22327",
+        "weight": 4
+      },
+      {
+        "allocated": 3,
+        "payable": 3,
+        "thread": "@msuaaaa:10651",
+        "weight": 3
+      },
+      {
+        "allocated": 1,
+        "payable": 1,
+        "thread": "@polyakova_fitness:1143",
+        "weight": 1
+      },
+      {
+        "allocated": 2,
+        "payable": 2,
+        "thread": "@retsepty:7278",
+        "weight": 2
+      },
+      {
+        "allocated": 1,
+        "payable": 1,
+        "thread": "@retsepty:7280",
+        "weight": 1
+      },
+      {
+        "allocated": 1,
+        "payable": 1,
+        "thread": "@retsepty:7281",
+        "weight": 1
+      },
+      {
+        "allocated": 1,
+        "payable": 1,
+        "thread": "@retsepty:7284",
+        "weight": 1
+      },
+      {
+        "allocated": 1,
+        "payable": 1,
+        "thread": "@retsepty:7288",
+        "weight": 1
+      },
+      {
+        "allocated": 1,
+        "payable": 1,
+        "thread": "@retsepty:7289",
+        "weight": 1
+      },
+      {
+        "allocated": 3,
+        "payable": 3,
+        "thread": "@retsepty:7293",
+        "weight": 3
+      },
+      {
+        "allocated": 2,
+        "payable": 2,
+        "thread": "@retsepty:7294",
+        "weight": 2
+      },
+      {
+        "allocated": 1,
+        "payable": 1,
+        "thread": "@retsepty:7296",
+        "weight": 1
+      },
+      {
+        "allocated": 1,
+        "payable": 1,
+        "thread": "@retsepty:7301",
+        "weight": 1
+      },
+      {
+        "allocated": 2,
+        "payable": 2,
+        "thread": "@retsepty:7302",
+        "weight": 2
+      },
+      {
+        "allocated": 2,
+        "payable": 2,
+        "thread": "@retsepty:7305",
+        "weight": 2
+      },
+      {
+        "allocated": 1,
+        "payable": 1,
+        "thread": "@retsepty:7310",
+        "weight": 1
+      },
+      {
+        "allocated": 3,
+        "payable": 3,
+        "thread": "@retsepty:7312",
+        "weight": 3
+      },
+      {
+        "allocated": 3,
+        "payable": 4,
+        "thread": "@retsepty:7313",
+        "weight": 4
+      },
+      {
+        "allocated": 1,
+        "payable": 1,
+        "thread": "@retsepty:7317",
+        "weight": 1
+      },
+      {
+        "allocated": 1,
+        "payable": 1,
+        "thread": "@retsepty:7318",
+        "weight": 1
+      },
+      {
+        "allocated": 1,
+        "payable": 1,
+        "thread": "@retsepty:7320",
+        "weight": 1
+      },
+      {
+        "allocated": 2,
+        "payable": 2,
+        "thread": "@retsepty:7321",
+        "weight": 2
+      },
+      {
+        "allocated": 2,
+        "payable": 2,
+        "thread": "@retsepty:7323",
+        "weight": 2
+      },
+      {
+        "allocated": 3,
+        "payable": 3,
+        "thread": "@retsepty:7324",
+        "weight": 3
+      },
+      {
+        "allocated": 2,
+        "payable": 2,
+        "thread": "@retsepty:7325",
+        "weight": 2
+      },
+      {
+        "allocated": 2,
+        "payable": 2,
+        "thread": "@retsepty:7326",
+        "weight": 2
+      },
+      {
+        "allocated": 1,
+        "payable": 1,
+        "thread": "@retsepty:7327",
+        "weight": 1
+      },
+      {
+        "allocated": 2,
+        "payable": 2,
+        "thread": "@retsepty:7328",
+        "weight": 2
+      },
+      {
+        "allocated": 2,
+        "payable": 2,
+        "thread": "@retsepty:7331",
+        "weight": 2
+      },
+      {
+        "allocated": 1,
+        "payable": 1,
+        "thread": "@retsepty:7335",
+        "weight": 1
+      },
+      {
+        "allocated": 1,
+        "payable": 1,
+        "thread": "@retsepty:7337",
+        "weight": 1
+      },
+      {
+        "allocated": 1,
+        "payable": 1,
+        "thread": "@retsepty:7340",
+        "weight": 1
+      },
+      {
+        "allocated": 4,
+        "payable": 5,
+        "thread": "@retsepty:7342",
+        "weight": 5
+      },
+      {
+        "allocated": 2,
+        "payable": 2,
+        "thread": "@retsepty:7343",
+        "weight": 2
+      },
+      {
+        "allocated": 3,
+        "payable": 3,
+        "thread": "@retsepty:7345",
+        "weight": 3
+      },
+      {
+        "allocated": 1,
+        "payable": 1,
+        "thread": "@retsepty:7348",
+        "weight": 1
+      },
+      {
+        "allocated": 1,
+        "payable": 1,
+        "thread": "@retsepty:7349",
+        "weight": 1
+      },
+      {
+        "allocated": 3,
+        "payable": 3,
+        "thread": "@retsepty:7350",
+        "weight": 3
+      },
+      {
+        "allocated": 1,
+        "payable": 1,
+        "thread": "@retsepty:7354",
+        "weight": 1
+      },
+      {
+        "allocated": 1,
+        "payable": 1,
+        "thread": "@retsepty:7361",
+        "weight": 1
+      },
+      {
+        "allocated": 0,
+        "payable": 0,
+        "thread": "@sashafitnesslife:3939",
+        "weight": 0
+      },
+      {
+        "allocated": 9,
+        "payable": 10,
+        "thread": "@tarilka_malyuka:695",
+        "weight": 10
+      },
+      {
+        "allocated": 3,
+        "payable": 4,
+        "thread": "@tarilka_malyuka:715",
+        "weight": 4
+      },
+      {
+        "allocated": 2,
+        "payable": 2,
+        "thread": "@tarilka_malyuka:746",
+        "weight": 2
+      },
+      {
+        "allocated": 3,
+        "payable": 4,
+        "thread": "@tarilka_malyuka:747",
+        "weight": 4
+      },
+      {
+        "allocated": 1,
+        "payable": 1,
+        "thread": "@tarilka_malyuka:764",
+        "weight": 1
+      },
+      {
+        "allocated": 2,
+        "payable": 2,
+        "thread": "@tarilka_malyuka:820",
+        "weight": 2
+      },
+      {
+        "allocated": 2,
+        "payable": 2,
+        "thread": "@tarilka_malyuka:825",
+        "weight": 2
+      },
+      {
+        "allocated": 1,
+        "payable": 1,
+        "thread": "@tarilka_malyuka:827",
+        "weight": 1
+      },
+      {
+        "allocated": 0,
+        "payable": 0,
+        "thread": "@tarilka_malyuka:829",
+        "weight": 0
+      },
+      {
+        "allocated": 1,
+        "payable": 1,
+        "thread": "@ya_Nenka:834",
+        "weight": 1
+      },
+      {
+        "allocated": 5,
+        "payable": 6,
+        "thread": "@ya_Nenka:836",
+        "weight": 6
+      },
+      {
+        "allocated": 3,
+        "payable": 3,
+        "thread": "@ya_Nenka:838",
+        "weight": 3
+      },
+      {
+        "allocated": 2,
+        "payable": 3,
+        "thread": "@ya_Nenka:840",
+        "weight": 3
+      },
+      {
+        "allocated": 2,
+        "payable": 3,
+        "thread": "@ya_Nenka:844",
+        "weight": 3
+      }
+    ],
+    "reachability": {
+      "capped_weight_sum": 572,
+      "reachable": true,
+      "reading": "the cap must leave the target REACHABLE or min(500, remaining) becomes a claim the draw cannot honour. At CAP=14 the ceiling is 572; at CAP=9 it is 483, below the target",
+      "target": 500
+    },
+    "seed": 20260818,
+    "target": 500,
+    "target_rule": "min(500, payable remaining after the exclusion)"
+  },
+  "exclusion": {
+    "payable_removed": 64,
+    "probe_units": 64,
+    "proof": {
+      "drawn_units_sharing_a_thread_with_a_probe_unit": [],
+      "gold_msg_ids": [
+        20664,
+        21599,
+        21601,
+        21626,
+        21629,
+        47899,
+        47902,
+        48276,
+        48283,
+        578951,
+        579379,
+        579457,
+        580124,
+        580129
+      ],
+      "gold_msg_ids_drawn": [],
+      "gold_msg_ids_in_the_remaining_population": [],
+      "gold_msg_ids_rendered": [],
+      "reading": "all four lists are empty in a correct pack. The last one is checked against the RENDERED text and not against the unit list, because the rendering shows every comment of a thread and not only the drawn ones"
+    },
+    "rule": "every thread carrying ANY of the 64 registered units of results/pass1_probe_b_pack.json leaves the population WHOLE. The sitting's contamination clause names the 14 gold rows and their threads; this is strictly larger, and it is what the pack is built under",
+    "the_units_are_the_payable_set": true,
+    "threads": [
+      "@VARUS_channel:10348",
+      "@VARUS_channel:10613",
+      "@mandziak:3676",
+      "@mandziak:3703",
+      "@matusi_ukr:22242",
+      "@matusi_ukr:22272",
+      "@matusi_ukr:22303"
+    ]
+  },
+  "inputs": {
+    "results/gate_census_w1_reader.json": "caa172160fbb5da67933b03cf88b92c4af3223417efcce92a1b48dd09ab66c41",
+    "results/pass1_probe_b_pack.json": "bbbe64203f9c909a2d2e8aeab03d8d61c0fd6604d4854e13462d0e190bc4e113",
+    "results/reader_gold_w1_r2.json": "716ff4174bdafa5957caa4d038a11241b6eb299df4035a5f0e983217ec2a46d9"
+  },
+  "labels": {
+    "field": "subject_type",
+    "file": "docs/labels-pass1-r1.jsonl",
+    "provenance_debt": "labelled_by, date, codebook and this record's sha are frozen into results/ by the NEXT contract, after the labels exist and validate — not here",
+    "validator": "scripts/validate_pass1_labels.py",
+    "values": [
+      "молочный_бренд",
+      "сеть_ритейлер",
+      "категория_личное",
+      "не_наш_рынок",
+      null
+    ],
+    "written_by": "the TEAM LEAD. It is a team-lead file from the moment it exists: the executor validates it and commits it verbatim, and never writes a label into it"
+  },
+  "phase": "pass1-data-prep",
+  "population": {
+    "arithmetic": "1032 payable in cell − 64 payable in the 7 excluded threads = 968 remaining → min(500, 968) = 500 drawn",
+    "cell": "narrow|varto_off|plus_spam+scam",
+    "payable_after_exclusion": 968,
+    "payable_in_cell": 1032,
+    "payable_per_thread": {
+      "max": 125,
+      "median": 3,
+      "min": 0,
+      "p90": 14
+    },
+    "record": "results/gate_census_w1_reader.json",
+    "sha256": "caa172160fbb5da67933b03cf88b92c4af3223417efcce92a1b48dd09ab66c41",
+    "threads_after_exclusion": 122,
+    "threads_in_cell": 129
+  },
+  "producer": {
+    "borrowed": {
+      "scripts/gate_census_w1.py": "4480a5fcd0eb21b53f103e3e68b9eee41aa81e130de23fbf8ae0702a709fea6a",
+      "scripts/gate_census_w1_reader.py": "42be312ef873a73f434b39cfa8060f6d110580ed1ace36ea2ee37b4d7c3e1c70",
+      "scripts/reader_population.py": "5ecb897d3d620d7d27916a3aa578a599ba1cd7c835abfb4ea136a350a440914a",
+      "scripts/window_summary_5c2.py": "239d2d5fcc0f0c93158ca41383b5ce20beb7f8e9db38974913a302ea4831fdaf",
+      "src/market_pulse/loop.py": "3af31663cbd9d070ef00a14c033f93b285a1a0aebfb4153575d3ddda59853a1a",
+      "src/market_pulse/prompts.py": "a4a5a5d08546f53af18117c37e49f7e396919555563e16737a633c1df1a86eec"
+    },
+    "script": "scripts/build_pass1_label_pack.py",
+    "sha256": "408bce3725ab3e3fe0eb7055d1c84536b260eacedf00ef099b03f66a4ef0ecd7"
+  },
+  "rendering": {
+    "chars": 278694,
+    "codebook": {
+      "attribution_law": "src/market_pulse/prompts.py::READER_ATTRIBUTION_LAW_V5",
+      "attribution_law_sha256": "4343df2179523fd351f4605848fb3ef8ae4694ee2cfc51ebeeac3d59ac603e9a",
+      "f2a_carve_out": "src/market_pulse/prompts.py::READER_CARRY_V5",
+      "f2a_carve_out_sha256": "5a2f520883b6ec48f9557ab4c1ab7ee9f001b9201303e6333ebaba868f922639",
+      "quoted_by": "the same bytes, read from the module the pass-1 prompt itself answers under — never retyped, so a label and an answer are decided by one law",
+      "r2_adjudication": "results/reader_gold_w1_r2.json::revision"
+    },
+    "file": "docs/label-pack-pass1-r1.md",
+    "rule": "each thread WHOLE — post first, then every comment in the store's own order, payable or not — with the drawn ones marked TARGET. Threads allocated no target are not rendered: the two listed above carry zero payable comments and cannot contribute one",
+    "sha256": "5aec5c9835f84e584d4d6f4770cb8c1080c4c5084acd0f3434caa6dd11fc0f93",
+    "threads_rendered": 120,
+    "threads_with_no_target": [
+      "@sashafitnesslife:3939",
+      "@tarilka_malyuka:829"
+    ]
+  },
+  "units": [
+    {
+      "msg_id": 20651,
+      "thread": "@VARUS_channel:10349"
+    },
+    {
+      "msg_id": 20655,
+      "thread": "@VARUS_channel:10349"
+    },
+    {
+      "msg_id": 20658,
+      "thread": "@VARUS_channel:10349"
+    },
+    {
+      "msg_id": 20660,
+      "thread": "@VARUS_channel:10349"
+    },
+    {
+      "msg_id": 20675,
+      "thread": "@VARUS_channel:10349"
+    },
+    {
+      "msg_id": 20678,
+      "thread": "@VARUS_channel:10349"
+    },
+    {
+      "msg_id": 20679,
+      "thread": "@VARUS_channel:10349"
+    },
+    {
+      "msg_id": 20680,
+      "thread": "@VARUS_channel:10349"
+    },
+    {
+      "msg_id": 20696,
+      "thread": "@VARUS_channel:10356"
+    },
+    {
+      "msg_id": 20720,
+      "thread": "@VARUS_channel:10358"
+    },
+    {
+      "msg_id": 20737,
+      "thread": "@VARUS_channel:10360"
+    },
+    {
+      "msg_id": 20741,
+      "thread": "@VARUS_channel:10360"
+    },
+    {
+      "msg_id": 20760,
+      "thread": "@VARUS_channel:10366"
+    },
+    {
+      "msg_id": 20782,
+      "thread": "@VARUS_channel:10366"
+    },
+    {
+      "msg_id": 20884,
+      "thread": "@VARUS_channel:10366"
+    },
+    {
+      "msg_id": 20912,
+      "thread": "@VARUS_channel:10366"
+    },
+    {
+      "msg_id": 20913,
+      "thread": "@VARUS_channel:10366"
+    },
+    {
+      "msg_id": 20919,
+      "thread": "@VARUS_channel:10366"
+    },
+    {
+      "msg_id": 20923,
+      "thread": "@VARUS_channel:10366"
+    },
+    {
+      "msg_id": 20939,
+      "thread": "@VARUS_channel:10366"
+    },
+    {
+      "msg_id": 21013,
+      "thread": "@VARUS_channel:10366"
+    },
+    {
+      "msg_id": 21370,
+      "thread": "@VARUS_channel:10366"
+    },
+    {
+      "msg_id": 20766,
+      "thread": "@VARUS_channel:10367"
+    },
+    {
+      "msg_id": 20945,
+      "thread": "@VARUS_channel:10367"
+    },
+    {
+      "msg_id": 20947,
+      "thread": "@VARUS_channel:10367"
+    },
+    {
+      "msg_id": 20979,
+      "thread": "@VARUS_channel:10367"
+    },
+    {
+      "msg_id": 20981,
+      "thread": "@VARUS_channel:10367"
+    },
+    {
+      "msg_id": 20982,
+      "thread": "@VARUS_channel:10367"
+    },
+    {
+      "msg_id": 20983,
+      "thread": "@VARUS_channel:10367"
+    },
+    {
+      "msg_id": 20984,
+      "thread": "@VARUS_channel:10367"
+    },
+    {
+      "msg_id": 20985,
+      "thread": "@VARUS_channel:10367"
+    },
+    {
+      "msg_id": 21006,
+      "thread": "@VARUS_channel:10367"
+    },
+    {
+      "msg_id": 20916,
+      "thread": "@VARUS_channel:10375"
+    },
+    {
+      "msg_id": 21113,
+      "thread": "@VARUS_channel:10450"
+    },
+    {
+      "msg_id": 21121,
+      "thread": "@VARUS_channel:10451"
+    },
+    {
+      "msg_id": 21123,
+      "thread": "@VARUS_channel:10451"
+    },
+    {
+      "msg_id": 21127,
+      "thread": "@VARUS_channel:10451"
+    },
+    {
+      "msg_id": 21130,
+      "thread": "@VARUS_channel:10452"
+    },
+    {
+      "msg_id": 21131,
+      "thread": "@VARUS_channel:10452"
+    },
+    {
+      "msg_id": 21164,
+      "thread": "@VARUS_channel:10452"
+    },
+    {
+      "msg_id": 21172,
+      "thread": "@VARUS_channel:10455"
+    },
+    {
+      "msg_id": 21201,
+      "thread": "@VARUS_channel:10455"
+    },
+    {
+      "msg_id": 21195,
+      "thread": "@VARUS_channel:10465"
+    },
+    {
+      "msg_id": 21199,
+      "thread": "@VARUS_channel:10465"
+    },
+    {
+      "msg_id": 21209,
+      "thread": "@VARUS_channel:10465"
+    },
+    {
+      "msg_id": 21211,
+      "thread": "@VARUS_channel:10465"
+    },
+    {
+      "msg_id": 21385,
+      "thread": "@VARUS_channel:10466"
+    },
+    {
+      "msg_id": 21386,
+      "thread": "@VARUS_channel:10466"
+    },
+    {
+      "msg_id": 21387,
+      "thread": "@VARUS_channel:10466"
+    },
+    {
+      "msg_id": 21390,
+      "thread": "@VARUS_channel:10466"
+    },
+    {
+      "msg_id": 21393,
+      "thread": "@VARUS_channel:10466"
+    },
+    {
+      "msg_id": 21236,
+      "thread": "@VARUS_channel:10470"
+    },
+    {
+      "msg_id": 21237,
+      "thread": "@VARUS_channel:10470"
+    },
+    {
+      "msg_id": 21238,
+      "thread": "@VARUS_channel:10470"
+    },
+    {
+      "msg_id": 21239,
+      "thread": "@VARUS_channel:10470"
+    },
+    {
+      "msg_id": 21241,
+      "thread": "@VARUS_channel:10470"
+    },
+    {
+      "msg_id": 21253,
+      "thread": "@VARUS_channel:10471"
+    },
+    {
+      "msg_id": 21258,
+      "thread": "@VARUS_channel:10471"
+    },
+    {
+      "msg_id": 21262,
+      "thread": "@VARUS_channel:10471"
+    },
+    {
+      "msg_id": 21266,
+      "thread": "@VARUS_channel:10471"
+    },
+    {
+      "msg_id": 21334,
+      "thread": "@VARUS_channel:10496"
+    },
+    {
+      "msg_id": 21379,
+      "thread": "@VARUS_channel:10525"
+    },
+    {
+      "msg_id": 21380,
+      "thread": "@VARUS_channel:10525"
+    },
+    {
+      "msg_id": 21381,
+      "thread": "@VARUS_channel:10525"
+    },
+    {
+      "msg_id": 21383,
+      "thread": "@VARUS_channel:10525"
+    },
+    {
+      "msg_id": 21396,
+      "thread": "@VARUS_channel:10528"
+    },
+    {
+      "msg_id": 21398,
+      "thread": "@VARUS_channel:10528"
+    },
+    {
+      "msg_id": 21399,
+      "thread": "@VARUS_channel:10528"
+    },
+    {
+      "msg_id": 21400,
+      "thread": "@VARUS_channel:10528"
+    },
+    {
+      "msg_id": 21403,
+      "thread": "@VARUS_channel:10528"
+    },
+    {
+      "msg_id": 21409,
+      "thread": "@VARUS_channel:10528"
+    },
+    {
+      "msg_id": 21410,
+      "thread": "@VARUS_channel:10528"
+    },
+    {
+      "msg_id": 21431,
+      "thread": "@VARUS_channel:10528"
+    },
+    {
+      "msg_id": 21420,
+      "thread": "@VARUS_channel:10529"
+    },
+    {
+      "msg_id": 21421,
+      "thread": "@VARUS_channel:10529"
+    },
+    {
+      "msg_id": 21504,
+      "thread": "@VARUS_channel:10532"
+    },
+    {
+      "msg_id": 21507,
+      "thread": "@VARUS_channel:10593"
+    },
+    {
+      "msg_id": 21509,
+      "thread": "@VARUS_channel:10593"
+    },
+    {
+      "msg_id": 21566,
+      "thread": "@VARUS_channel:10603"
+    },
+    {
+      "msg_id": 21571,
+      "thread": "@VARUS_channel:10603"
+    },
+    {
+      "msg_id": 21576,
+      "thread": "@VARUS_channel:10603"
+    },
+    {
+      "msg_id": 21578,
+      "thread": "@VARUS_channel:10603"
+    },
+    {
+      "msg_id": 21120,
+      "thread": "@klopotenkofood:6024"
+    },
+    {
+      "msg_id": 21164,
+      "thread": "@klopotenkofood:6031"
+    },
+    {
+      "msg_id": 21180,
+      "thread": "@klopotenkofood:6032"
+    },
+    {
+      "msg_id": 21182,
+      "thread": "@klopotenkofood:6032"
+    },
+    {
+      "msg_id": 21183,
+      "thread": "@klopotenkofood:6032"
+    },
+    {
+      "msg_id": 21184,
+      "thread": "@klopotenkofood:6032"
+    },
+    {
+      "msg_id": 21186,
+      "thread": "@klopotenkofood:6032"
+    },
+    {
+      "msg_id": 21188,
+      "thread": "@klopotenkofood:6032"
+    },
+    {
+      "msg_id": 21189,
+      "thread": "@klopotenkofood:6032"
+    },
+    {
+      "msg_id": 21190,
+      "thread": "@klopotenkofood:6032"
+    },
+    {
+      "msg_id": 21191,
+      "thread": "@klopotenkofood:6032"
+    },
+    {
+      "msg_id": 21192,
+      "thread": "@klopotenkofood:6032"
+    },
+    {
+      "msg_id": 21193,
+      "thread": "@klopotenkofood:6032"
+    },
+    {
+      "msg_id": 21194,
+      "thread": "@klopotenkofood:6032"
+    },
+    {
+      "msg_id": 21205,
+      "thread": "@klopotenkofood:6035"
+    },
+    {
+      "msg_id": 21206,
+      "thread": "@klopotenkofood:6035"
+    },
+    {
+      "msg_id": 21208,
+      "thread": "@klopotenkofood:6035"
+    },
+    {
+      "msg_id": 21209,
+      "thread": "@klopotenkofood:6035"
+    },
+    {
+      "msg_id": 21210,
+      "thread": "@klopotenkofood:6035"
+    },
+    {
+      "msg_id": 21211,
+      "thread": "@klopotenkofood:6035"
+    },
+    {
+      "msg_id": 21221,
+      "thread": "@klopotenkofood:6035"
+    },
+    {
+      "msg_id": 21229,
+      "thread": "@klopotenkofood:6035"
+    },
+    {
+      "msg_id": 21222,
+      "thread": "@klopotenkofood:6036"
+    },
+    {
+      "msg_id": 21269,
+      "thread": "@klopotenkofood:6036"
+    },
+    {
+      "msg_id": 21232,
+      "thread": "@klopotenkofood:6040"
+    },
+    {
+      "msg_id": 21236,
+      "thread": "@klopotenkofood:6040"
+    },
+    {
+      "msg_id": 21242,
+      "thread": "@klopotenkofood:6040"
+    },
+    {
+      "msg_id": 21247,
+      "thread": "@klopotenkofood:6040"
+    },
+    {
+      "msg_id": 21251,
+      "thread": "@klopotenkofood:6040"
+    },
+    {
+      "msg_id": 21257,
+      "thread": "@klopotenkofood:6040"
+    },
+    {
+      "msg_id": 21264,
+      "thread": "@klopotenkofood:6040"
+    },
+    {
+      "msg_id": 21265,
+      "thread": "@klopotenkofood:6040"
+    },
+    {
+      "msg_id": 21267,
+      "thread": "@klopotenkofood:6040"
+    },
+    {
+      "msg_id": 21286,
+      "thread": "@klopotenkofood:6040"
+    },
+    {
+      "msg_id": 21287,
+      "thread": "@klopotenkofood:6040"
+    },
+    {
+      "msg_id": 21289,
+      "thread": "@klopotenkofood:6040"
+    },
+    {
+      "msg_id": 21343,
+      "thread": "@klopotenkofood:6060"
+    },
+    {
+      "msg_id": 21344,
+      "thread": "@klopotenkofood:6060"
+    },
+    {
+      "msg_id": 21345,
+      "thread": "@klopotenkofood:6060"
+    },
+    {
+      "msg_id": 21346,
+      "thread": "@klopotenkofood:6060"
+    },
+    {
+      "msg_id": 21347,
+      "thread": "@klopotenkofood:6060"
+    },
+    {
+      "msg_id": 21349,
+      "thread": "@klopotenkofood:6060"
+    },
+    {
+      "msg_id": 21350,
+      "thread": "@klopotenkofood:6060"
+    },
+    {
+      "msg_id": 21351,
+      "thread": "@klopotenkofood:6060"
+    },
+    {
+      "msg_id": 21353,
+      "thread": "@klopotenkofood:6060"
+    },
+    {
+      "msg_id": 391300,
+      "thread": "@kopiyochka1:21672"
+    },
+    {
+      "msg_id": 391531,
+      "thread": "@kopiyochka1:21720"
+    },
+    {
+      "msg_id": 391532,
+      "thread": "@kopiyochka1:21720"
+    },
+    {
+      "msg_id": 391539,
+      "thread": "@kopiyochka1:21720"
+    },
+    {
+      "msg_id": 391542,
+      "thread": "@kopiyochka1:21720"
+    },
+    {
+      "msg_id": 391772,
+      "thread": "@kopiyochka1:21720"
+    },
+    {
+      "msg_id": 391773,
+      "thread": "@kopiyochka1:21720"
+    },
+    {
+      "msg_id": 391774,
+      "thread": "@kopiyochka1:21720"
+    },
+    {
+      "msg_id": 47833,
+      "thread": "@mandziak:3666"
+    },
+    {
+      "msg_id": 47838,
+      "thread": "@mandziak:3666"
+    },
+    {
+      "msg_id": 47839,
+      "thread": "@mandziak:3666"
+    },
+    {
+      "msg_id": 47830,
+      "thread": "@mandziak:3667"
+    },
+    {
+      "msg_id": 47832,
+      "thread": "@mandziak:3667"
+    },
+    {
+      "msg_id": 47860,
+      "thread": "@mandziak:3667"
+    },
+    {
+      "msg_id": 48201,
+      "thread": "@mandziak:3667"
+    },
+    {
+      "msg_id": 47932,
+      "thread": "@mandziak:3679"
+    },
+    {
+      "msg_id": 47939,
+      "thread": "@mandziak:3679"
+    },
+    {
+      "msg_id": 47940,
+      "thread": "@mandziak:3679"
+    },
+    {
+      "msg_id": 47941,
+      "thread": "@mandziak:3679"
+    },
+    {
+      "msg_id": 47942,
+      "thread": "@mandziak:3679"
+    },
+    {
+      "msg_id": 47943,
+      "thread": "@mandziak:3679"
+    },
+    {
+      "msg_id": 47952,
+      "thread": "@mandziak:3679"
+    },
+    {
+      "msg_id": 47957,
+      "thread": "@mandziak:3679"
+    },
+    {
+      "msg_id": 47976,
+      "thread": "@mandziak:3679"
+    },
+    {
+      "msg_id": 47987,
+      "thread": "@mandziak:3679"
+    },
+    {
+      "msg_id": 48000,
+      "thread": "@mandziak:3679"
+    },
+    {
+      "msg_id": 48002,
+      "thread": "@mandziak:3679"
+    },
+    {
+      "msg_id": 48009,
+      "thread": "@mandziak:3684"
+    },
+    {
+      "msg_id": 48016,
+      "thread": "@mandziak:3684"
+    },
+    {
+      "msg_id": 48018,
+      "thread": "@mandziak:3684"
+    },
+    {
+      "msg_id": 48020,
+      "thread": "@mandziak:3684"
+    },
+    {
+      "msg_id": 48036,
+      "thread": "@mandziak:3684"
+    },
+    {
+      "msg_id": 48040,
+      "thread": "@mandziak:3684"
+    },
+    {
+      "msg_id": 48041,
+      "thread": "@mandziak:3684"
+    },
+    {
+      "msg_id": 48047,
+      "thread": "@mandziak:3684"
+    },
+    {
+      "msg_id": 48064,
+      "thread": "@mandziak:3684"
+    },
+    {
+      "msg_id": 48099,
+      "thread": "@mandziak:3684"
+    },
+    {
+      "msg_id": 48045,
+      "thread": "@mandziak:3685"
+    },
+    {
+      "msg_id": 48048,
+      "thread": "@mandziak:3685"
+    },
+    {
+      "msg_id": 48054,
+      "thread": "@mandziak:3689"
+    },
+    {
+      "msg_id": 48055,
+      "thread": "@mandziak:3689"
+    },
+    {
+      "msg_id": 48056,
+      "thread": "@mandziak:3689"
+    },
+    {
+      "msg_id": 48057,
+      "thread": "@mandziak:3689"
+    },
+    {
+      "msg_id": 48067,
+      "thread": "@mandziak:3689"
+    },
+    {
+      "msg_id": 48081,
+      "thread": "@mandziak:3689"
+    },
+    {
+      "msg_id": 48268,
+      "thread": "@mandziak:3689"
+    },
+    {
+      "msg_id": 48098,
+      "thread": "@mandziak:3694"
+    },
+    {
+      "msg_id": 48105,
+      "thread": "@mandziak:3694"
+    },
+    {
+      "msg_id": 48107,
+      "thread": "@mandziak:3694"
+    },
+    {
+      "msg_id": 48108,
+      "thread": "@mandziak:3694"
+    },
+    {
+      "msg_id": 48160,
+      "thread": "@mandziak:3700"
+    },
+    {
+      "msg_id": 48165,
+      "thread": "@mandziak:3700"
+    },
+    {
+      "msg_id": 48187,
+      "thread": "@mandziak:3700"
+    },
+    {
+      "msg_id": 48336,
+      "thread": "@mandziak:3700"
+    },
+    {
+      "msg_id": 48164,
+      "thread": "@mandziak:3701"
+    },
+    {
+      "msg_id": 48302,
+      "thread": "@mandziak:3701"
+    },
+    {
+      "msg_id": 48323,
+      "thread": "@mandziak:3701"
+    },
+    {
+      "msg_id": 48182,
+      "thread": "@mandziak:3702"
+    },
+    {
+      "msg_id": 48199,
+      "thread": "@mandziak:3702"
+    },
+    {
+      "msg_id": 48207,
+      "thread": "@mandziak:3702"
+    },
+    {
+      "msg_id": 48209,
+      "thread": "@mandziak:3702"
+    },
+    {
+      "msg_id": 48216,
+      "thread": "@mandziak:3702"
+    },
+    {
+      "msg_id": 48346,
+      "thread": "@mandziak:3702"
+    },
+    {
+      "msg_id": 49053,
+      "thread": "@mandziak:3702"
+    },
+    {
+      "msg_id": 48214,
+      "thread": "@mandziak:3707"
+    },
+    {
+      "msg_id": 48215,
+      "thread": "@mandziak:3707"
+    },
+    {
+      "msg_id": 48217,
+      "thread": "@mandziak:3707"
+    },
+    {
+      "msg_id": 48219,
+      "thread": "@mandziak:3707"
+    },
+    {
+      "msg_id": 48220,
+      "thread": "@mandziak:3707"
+    },
+    {
+      "msg_id": 48230,
+      "thread": "@mandziak:3707"
+    },
+    {
+      "msg_id": 48242,
+      "thread": "@mandziak:3707"
+    },
+    {
+      "msg_id": 48243,
+      "thread": "@mandziak:3707"
+    },
+    {
+      "msg_id": 48348,
+      "thread": "@mandziak:3707"
+    },
+    {
+      "msg_id": 48226,
+      "thread": "@mandziak:3708"
+    },
+    {
+      "msg_id": 48233,
+      "thread": "@mandziak:3708"
+    },
+    {
+      "msg_id": 48234,
+      "thread": "@mandziak:3708"
+    },
+    {
+      "msg_id": 48240,
+      "thread": "@mandziak:3708"
+    },
+    {
+      "msg_id": 48241,
+      "thread": "@mandziak:3708"
+    },
+    {
+      "msg_id": 48244,
+      "thread": "@mandziak:3708"
+    },
+    {
+      "msg_id": 48273,
+      "thread": "@mandziak:3708"
+    },
+    {
+      "msg_id": 48275,
+      "thread": "@mandziak:3708"
+    },
+    {
+      "msg_id": 48278,
+      "thread": "@mandziak:3708"
+    },
+    {
+      "msg_id": 48280,
+      "thread": "@mandziak:3708"
+    },
+    {
+      "msg_id": 48288,
+      "thread": "@mandziak:3708"
+    },
+    {
+      "msg_id": 48313,
+      "thread": "@mandziak:3708"
+    },
+    {
+      "msg_id": 48391,
+      "thread": "@mandziak:3718"
+    },
+    {
+      "msg_id": 48392,
+      "thread": "@mandziak:3718"
+    },
+    {
+      "msg_id": 48394,
+      "thread": "@mandziak:3718"
+    },
+    {
+      "msg_id": 48395,
+      "thread": "@mandziak:3718"
+    },
+    {
+      "msg_id": 48399,
+      "thread": "@mandziak:3718"
+    },
+    {
+      "msg_id": 48405,
+      "thread": "@mandziak:3718"
+    },
+    {
+      "msg_id": 48407,
+      "thread": "@mandziak:3718"
+    },
+    {
+      "msg_id": 48408,
+      "thread": "@mandziak:3718"
+    },
+    {
+      "msg_id": 48415,
+      "thread": "@mandziak:3718"
+    },
+    {
+      "msg_id": 48450,
+      "thread": "@mandziak:3718"
+    },
+    {
+      "msg_id": 48694,
+      "thread": "@mandziak:3718"
+    },
+    {
+      "msg_id": 49067,
+      "thread": "@mandziak:3718"
+    },
+    {
+      "msg_id": 48430,
+      "thread": "@mandziak:3721"
+    },
+    {
+      "msg_id": 48445,
+      "thread": "@mandziak:3721"
+    },
+    {
+      "msg_id": 49075,
+      "thread": "@mandziak:3721"
+    },
+    {
+      "msg_id": 48527,
+      "thread": "@mandziak:3736"
+    },
+    {
+      "msg_id": 48528,
+      "thread": "@mandziak:3736"
+    },
+    {
+      "msg_id": 48530,
+      "thread": "@mandziak:3736"
+    },
+    {
+      "msg_id": 48535,
+      "thread": "@mandziak:3736"
+    },
+    {
+      "msg_id": 48596,
+      "thread": "@mandziak:3736"
+    },
+    {
+      "msg_id": 49159,
+      "thread": "@mandziak:3736"
+    },
+    {
+      "msg_id": 49218,
+      "thread": "@mandziak:3746"
+    },
+    {
+      "msg_id": 48853,
+      "thread": "@mandziak:3753"
+    },
+    {
+      "msg_id": 48854,
+      "thread": "@mandziak:3753"
+    },
+    {
+      "msg_id": 48855,
+      "thread": "@mandziak:3753"
+    },
+    {
+      "msg_id": 48860,
+      "thread": "@mandziak:3753"
+    },
+    {
+      "msg_id": 48867,
+      "thread": "@mandziak:3753"
+    },
+    {
+      "msg_id": 48868,
+      "thread": "@mandziak:3753"
+    },
+    {
+      "msg_id": 48870,
+      "thread": "@mandziak:3753"
+    },
+    {
+      "msg_id": 48873,
+      "thread": "@mandziak:3753"
+    },
+    {
+      "msg_id": 48882,
+      "thread": "@mandziak:3753"
+    },
+    {
+      "msg_id": 48944,
+      "thread": "@mandziak:3753"
+    },
+    {
+      "msg_id": 49220,
+      "thread": "@mandziak:3753"
+    },
+    {
+      "msg_id": 48995,
+      "thread": "@mandziak:3765"
+    },
+    {
+      "msg_id": 48996,
+      "thread": "@mandziak:3765"
+    },
+    {
+      "msg_id": 48997,
+      "thread": "@mandziak:3765"
+    },
+    {
+      "msg_id": 49051,
+      "thread": "@mandziak:3765"
+    },
+    {
+      "msg_id": 49012,
+      "thread": "@mandziak:3768"
+    },
+    {
+      "msg_id": 49013,
+      "thread": "@mandziak:3768"
+    },
+    {
+      "msg_id": 49015,
+      "thread": "@mandziak:3768"
+    },
+    {
+      "msg_id": 49018,
+      "thread": "@mandziak:3768"
+    },
+    {
+      "msg_id": 49023,
+      "thread": "@mandziak:3768"
+    },
+    {
+      "msg_id": 49225,
+      "thread": "@mandziak:3768"
+    },
+    {
+      "msg_id": 49072,
+      "thread": "@mandziak:3775"
+    },
+    {
+      "msg_id": 49094,
+      "thread": "@mandziak:3775"
+    },
+    {
+      "msg_id": 49104,
+      "thread": "@mandziak:3775"
+    },
+    {
+      "msg_id": 576359,
+      "thread": "@matusi_ukr:22058"
+    },
+    {
+      "msg_id": 576371,
+      "thread": "@matusi_ukr:22058"
+    },
+    {
+      "msg_id": 576471,
+      "thread": "@matusi_ukr:22058"
+    },
+    {
+      "msg_id": 576472,
+      "thread": "@matusi_ukr:22058"
+    },
+    {
+      "msg_id": 576477,
+      "thread": "@matusi_ukr:22058"
+    },
+    {
+      "msg_id": 576496,
+      "thread": "@matusi_ukr:22058"
+    },
+    {
+      "msg_id": 576538,
+      "thread": "@matusi_ukr:22058"
+    },
+    {
+      "msg_id": 576549,
+      "thread": "@matusi_ukr:22058"
+    },
+    {
+      "msg_id": 576565,
+      "thread": "@matusi_ukr:22058"
+    },
+    {
+      "msg_id": 576582,
+      "thread": "@matusi_ukr:22058"
+    },
+    {
+      "msg_id": 576594,
+      "thread": "@matusi_ukr:22058"
+    },
+    {
+      "msg_id": 576949,
+      "thread": "@matusi_ukr:22058"
+    },
+    {
+      "msg_id": 576878,
+      "thread": "@matusi_ukr:22092"
+    },
+    {
+      "msg_id": 576879,
+      "thread": "@matusi_ukr:22092"
+    },
+    {
+      "msg_id": 576882,
+      "thread": "@matusi_ukr:22092"
+    },
+    {
+      "msg_id": 576884,
+      "thread": "@matusi_ukr:22092"
+    },
+    {
+      "msg_id": 576886,
+      "thread": "@matusi_ukr:22092"
+    },
+    {
+      "msg_id": 576891,
+      "thread": "@matusi_ukr:22092"
+    },
+    {
+      "msg_id": 576899,
+      "thread": "@matusi_ukr:22092"
+    },
+    {
+      "msg_id": 576901,
+      "thread": "@matusi_ukr:22092"
+    },
+    {
+      "msg_id": 576902,
+      "thread": "@matusi_ukr:22092"
+    },
+    {
+      "msg_id": 576913,
+      "thread": "@matusi_ukr:22092"
+    },
+    {
+      "msg_id": 576932,
+      "thread": "@matusi_ukr:22092"
+    },
+    {
+      "msg_id": 576968,
+      "thread": "@matusi_ukr:22092"
+    },
+    {
+      "msg_id": 577082,
+      "thread": "@matusi_ukr:22111"
+    },
+    {
+      "msg_id": 577083,
+      "thread": "@matusi_ukr:22111"
+    },
+    {
+      "msg_id": 577085,
+      "thread": "@matusi_ukr:22111"
+    },
+    {
+      "msg_id": 577086,
+      "thread": "@matusi_ukr:22111"
+    },
+    {
+      "msg_id": 577088,
+      "thread": "@matusi_ukr:22111"
+    },
+    {
+      "msg_id": 577089,
+      "thread": "@matusi_ukr:22111"
+    },
+    {
+      "msg_id": 577092,
+      "thread": "@matusi_ukr:22111"
+    },
+    {
+      "msg_id": 577159,
+      "thread": "@matusi_ukr:22111"
+    },
+    {
+      "msg_id": 577220,
+      "thread": "@matusi_ukr:22125"
+    },
+    {
+      "msg_id": 577233,
+      "thread": "@matusi_ukr:22125"
+    },
+    {
+      "msg_id": 577262,
+      "thread": "@matusi_ukr:22131"
+    },
+    {
+      "msg_id": 577263,
+      "thread": "@matusi_ukr:22131"
+    },
+    {
+      "msg_id": 577265,
+      "thread": "@matusi_ukr:22131"
+    },
+    {
+      "msg_id": 577266,
+      "thread": "@matusi_ukr:22131"
+    },
+    {
+      "msg_id": 577267,
+      "thread": "@matusi_ukr:22131"
+    },
+    {
+      "msg_id": 577274,
+      "thread": "@matusi_ukr:22131"
+    },
+    {
+      "msg_id": 577282,
+      "thread": "@matusi_ukr:22131"
+    },
+    {
+      "msg_id": 577489,
+      "thread": "@matusi_ukr:22131"
+    },
+    {
+      "msg_id": 577623,
+      "thread": "@matusi_ukr:22131"
+    },
+    {
+      "msg_id": 578253,
+      "thread": "@matusi_ukr:22131"
+    },
+    {
+      "msg_id": 577305,
+      "thread": "@matusi_ukr:22133"
+    },
+    {
+      "msg_id": 577329,
+      "thread": "@matusi_ukr:22133"
+    },
+    {
+      "msg_id": 577333,
+      "thread": "@matusi_ukr:22133"
+    },
+    {
+      "msg_id": 577339,
+      "thread": "@matusi_ukr:22133"
+    },
+    {
+      "msg_id": 577475,
+      "thread": "@matusi_ukr:22133"
+    },
+    {
+      "msg_id": 577490,
+      "thread": "@matusi_ukr:22133"
+    },
+    {
+      "msg_id": 577493,
+      "thread": "@matusi_ukr:22133"
+    },
+    {
+      "msg_id": 577630,
+      "thread": "@matusi_ukr:22133"
+    },
+    {
+      "msg_id": 577694,
+      "thread": "@matusi_ukr:22133"
+    },
+    {
+      "msg_id": 577696,
+      "thread": "@matusi_ukr:22133"
+    },
+    {
+      "msg_id": 577719,
+      "thread": "@matusi_ukr:22133"
+    },
+    {
+      "msg_id": 577927,
+      "thread": "@matusi_ukr:22133"
+    },
+    {
+      "msg_id": 578034,
+      "thread": "@matusi_ukr:22158"
+    },
+    {
+      "msg_id": 578035,
+      "thread": "@matusi_ukr:22158"
+    },
+    {
+      "msg_id": 578037,
+      "thread": "@matusi_ukr:22158"
+    },
+    {
+      "msg_id": 578054,
+      "thread": "@matusi_ukr:22158"
+    },
+    {
+      "msg_id": 578055,
+      "thread": "@matusi_ukr:22158"
+    },
+    {
+      "msg_id": 578060,
+      "thread": "@matusi_ukr:22158"
+    },
+    {
+      "msg_id": 578061,
+      "thread": "@matusi_ukr:22158"
+    },
+    {
+      "msg_id": 578065,
+      "thread": "@matusi_ukr:22158"
+    },
+    {
+      "msg_id": 578067,
+      "thread": "@matusi_ukr:22158"
+    },
+    {
+      "msg_id": 578071,
+      "thread": "@matusi_ukr:22158"
+    },
+    {
+      "msg_id": 578075,
+      "thread": "@matusi_ukr:22158"
+    },
+    {
+      "msg_id": 578081,
+      "thread": "@matusi_ukr:22158"
+    },
+    {
+      "msg_id": 578384,
+      "thread": "@matusi_ukr:22195"
+    },
+    {
+      "msg_id": 578386,
+      "thread": "@matusi_ukr:22195"
+    },
+    {
+      "msg_id": 578388,
+      "thread": "@matusi_ukr:22195"
+    },
+    {
+      "msg_id": 578389,
+      "thread": "@matusi_ukr:22195"
+    },
+    {
+      "msg_id": 578457,
+      "thread": "@matusi_ukr:22195"
+    },
+    {
+      "msg_id": 578449,
+      "thread": "@matusi_ukr:22208"
+    },
+    {
+      "msg_id": 578835,
+      "thread": "@matusi_ukr:22217"
+    },
+    {
+      "msg_id": 578836,
+      "thread": "@matusi_ukr:22217"
+    },
+    {
+      "msg_id": 578838,
+      "thread": "@matusi_ukr:22217"
+    },
+    {
+      "msg_id": 578839,
+      "thread": "@matusi_ukr:22217"
+    },
+    {
+      "msg_id": 578840,
+      "thread": "@matusi_ukr:22217"
+    },
+    {
+      "msg_id": 578841,
+      "thread": "@matusi_ukr:22217"
+    },
+    {
+      "msg_id": 578842,
+      "thread": "@matusi_ukr:22217"
+    },
+    {
+      "msg_id": 578843,
+      "thread": "@matusi_ukr:22217"
+    },
+    {
+      "msg_id": 578844,
+      "thread": "@matusi_ukr:22217"
+    },
+    {
+      "msg_id": 578845,
+      "thread": "@matusi_ukr:22217"
+    },
+    {
+      "msg_id": 578895,
+      "thread": "@matusi_ukr:22217"
+    },
+    {
+      "msg_id": 579039,
+      "thread": "@matusi_ukr:22217"
+    },
+    {
+      "msg_id": 579242,
+      "thread": "@matusi_ukr:22263"
+    },
+    {
+      "msg_id": 579243,
+      "thread": "@matusi_ukr:22263"
+    },
+    {
+      "msg_id": 579244,
+      "thread": "@matusi_ukr:22263"
+    },
+    {
+      "msg_id": 579245,
+      "thread": "@matusi_ukr:22263"
+    },
+    {
+      "msg_id": 579246,
+      "thread": "@matusi_ukr:22263"
+    },
+    {
+      "msg_id": 579247,
+      "thread": "@matusi_ukr:22263"
+    },
+    {
+      "msg_id": 579249,
+      "thread": "@matusi_ukr:22263"
+    },
+    {
+      "msg_id": 579250,
+      "thread": "@matusi_ukr:22263"
+    },
+    {
+      "msg_id": 579397,
+      "thread": "@matusi_ukr:22263"
+    },
+    {
+      "msg_id": 579446,
+      "thread": "@matusi_ukr:22263"
+    },
+    {
+      "msg_id": 580098,
+      "thread": "@matusi_ukr:22263"
+    },
+    {
+      "msg_id": 579275,
+      "thread": "@matusi_ukr:22265"
+    },
+    {
+      "msg_id": 579276,
+      "thread": "@matusi_ukr:22265"
+    },
+    {
+      "msg_id": 579277,
+      "thread": "@matusi_ukr:22265"
+    },
+    {
+      "msg_id": 579285,
+      "thread": "@matusi_ukr:22265"
+    },
+    {
+      "msg_id": 579286,
+      "thread": "@matusi_ukr:22265"
+    },
+    {
+      "msg_id": 579287,
+      "thread": "@matusi_ukr:22265"
+    },
+    {
+      "msg_id": 579288,
+      "thread": "@matusi_ukr:22265"
+    },
+    {
+      "msg_id": 579293,
+      "thread": "@matusi_ukr:22265"
+    },
+    {
+      "msg_id": 579294,
+      "thread": "@matusi_ukr:22265"
+    },
+    {
+      "msg_id": 579295,
+      "thread": "@matusi_ukr:22265"
+    },
+    {
+      "msg_id": 579302,
+      "thread": "@matusi_ukr:22265"
+    },
+    {
+      "msg_id": 579314,
+      "thread": "@matusi_ukr:22265"
+    },
+    {
+      "msg_id": 579586,
+      "thread": "@matusi_ukr:22292"
+    },
+    {
+      "msg_id": 579590,
+      "thread": "@matusi_ukr:22292"
+    },
+    {
+      "msg_id": 579615,
+      "thread": "@matusi_ukr:22295"
+    },
+    {
+      "msg_id": 579642,
+      "thread": "@matusi_ukr:22295"
+    },
+    {
+      "msg_id": 579660,
+      "thread": "@matusi_ukr:22295"
+    },
+    {
+      "msg_id": 579699,
+      "thread": "@matusi_ukr:22295"
+    },
+    {
+      "msg_id": 579766,
+      "thread": "@matusi_ukr:22295"
+    },
+    {
+      "msg_id": 579786,
+      "thread": "@matusi_ukr:22295"
+    },
+    {
+      "msg_id": 579863,
+      "thread": "@matusi_ukr:22295"
+    },
+    {
+      "msg_id": 579908,
+      "thread": "@matusi_ukr:22295"
+    },
+    {
+      "msg_id": 579948,
+      "thread": "@matusi_ukr:22295"
+    },
+    {
+      "msg_id": 579994,
+      "thread": "@matusi_ukr:22295"
+    },
+    {
+      "msg_id": 580014,
+      "thread": "@matusi_ukr:22295"
+    },
+    {
+      "msg_id": 580041,
+      "thread": "@matusi_ukr:22295"
+    },
+    {
+      "msg_id": 580133,
+      "thread": "@matusi_ukr:22307"
+    },
+    {
+      "msg_id": 580137,
+      "thread": "@matusi_ukr:22308"
+    },
+    {
+      "msg_id": 580139,
+      "thread": "@matusi_ukr:22308"
+    },
+    {
+      "msg_id": 580141,
+      "thread": "@matusi_ukr:22308"
+    },
+    {
+      "msg_id": 580142,
+      "thread": "@matusi_ukr:22308"
+    },
+    {
+      "msg_id": 580144,
+      "thread": "@matusi_ukr:22308"
+    },
+    {
+      "msg_id": 580146,
+      "thread": "@matusi_ukr:22308"
+    },
+    {
+      "msg_id": 580147,
+      "thread": "@matusi_ukr:22308"
+    },
+    {
+      "msg_id": 580149,
+      "thread": "@matusi_ukr:22308"
+    },
+    {
+      "msg_id": 580150,
+      "thread": "@matusi_ukr:22308"
+    },
+    {
+      "msg_id": 580153,
+      "thread": "@matusi_ukr:22308"
+    },
+    {
+      "msg_id": 580159,
+      "thread": "@matusi_ukr:22308"
+    },
+    {
+      "msg_id": 580170,
+      "thread": "@matusi_ukr:22308"
+    },
+    {
+      "msg_id": 580336,
+      "thread": "@matusi_ukr:22327"
+    },
+    {
+      "msg_id": 580339,
+      "thread": "@matusi_ukr:22327"
+    },
+    {
+      "msg_id": 580345,
+      "thread": "@matusi_ukr:22327"
+    },
+    {
+      "msg_id": 13583,
+      "thread": "@msuaaaa:10651"
+    },
+    {
+      "msg_id": 13584,
+      "thread": "@msuaaaa:10651"
+    },
+    {
+      "msg_id": 13585,
+      "thread": "@msuaaaa:10651"
+    },
+    {
+      "msg_id": 2421,
+      "thread": "@polyakova_fitness:1143"
+    },
+    {
+      "msg_id": 49364,
+      "thread": "@retsepty:7278"
+    },
+    {
+      "msg_id": 49365,
+      "thread": "@retsepty:7278"
+    },
+    {
+      "msg_id": 49375,
+      "thread": "@retsepty:7280"
+    },
+    {
+      "msg_id": 49374,
+      "thread": "@retsepty:7281"
+    },
+    {
+      "msg_id": 49384,
+      "thread": "@retsepty:7284"
+    },
+    {
+      "msg_id": 49398,
+      "thread": "@retsepty:7288"
+    },
+    {
+      "msg_id": 49401,
+      "thread": "@retsepty:7289"
+    },
+    {
+      "msg_id": 49409,
+      "thread": "@retsepty:7293"
+    },
+    {
+      "msg_id": 49411,
+      "thread": "@retsepty:7293"
+    },
+    {
+      "msg_id": 49418,
+      "thread": "@retsepty:7293"
+    },
+    {
+      "msg_id": 49414,
+      "thread": "@retsepty:7294"
+    },
+    {
+      "msg_id": 49417,
+      "thread": "@retsepty:7294"
+    },
+    {
+      "msg_id": 49428,
+      "thread": "@retsepty:7296"
+    },
+    {
+      "msg_id": 49440,
+      "thread": "@retsepty:7301"
+    },
+    {
+      "msg_id": 49439,
+      "thread": "@retsepty:7302"
+    },
+    {
+      "msg_id": 49449,
+      "thread": "@retsepty:7302"
+    },
+    {
+      "msg_id": 49457,
+      "thread": "@retsepty:7305"
+    },
+    {
+      "msg_id": 49470,
+      "thread": "@retsepty:7305"
+    },
+    {
+      "msg_id": 49529,
+      "thread": "@retsepty:7310"
+    },
+    {
+      "msg_id": 49531,
+      "thread": "@retsepty:7312"
+    },
+    {
+      "msg_id": 49541,
+      "thread": "@retsepty:7312"
+    },
+    {
+      "msg_id": 49560,
+      "thread": "@retsepty:7312"
+    },
+    {
+      "msg_id": 49532,
+      "thread": "@retsepty:7313"
+    },
+    {
+      "msg_id": 49542,
+      "thread": "@retsepty:7313"
+    },
+    {
+      "msg_id": 49561,
+      "thread": "@retsepty:7313"
+    },
+    {
+      "msg_id": 49567,
+      "thread": "@retsepty:7317"
+    },
+    {
+      "msg_id": 49568,
+      "thread": "@retsepty:7318"
+    },
+    {
+      "msg_id": 49586,
+      "thread": "@retsepty:7320"
+    },
+    {
+      "msg_id": 49588,
+      "thread": "@retsepty:7321"
+    },
+    {
+      "msg_id": 49589,
+      "thread": "@retsepty:7321"
+    },
+    {
+      "msg_id": 49592,
+      "thread": "@retsepty:7323"
+    },
+    {
+      "msg_id": 49593,
+      "thread": "@retsepty:7323"
+    },
+    {
+      "msg_id": 49595,
+      "thread": "@retsepty:7324"
+    },
+    {
+      "msg_id": 49596,
+      "thread": "@retsepty:7324"
+    },
+    {
+      "msg_id": 49625,
+      "thread": "@retsepty:7324"
+    },
+    {
+      "msg_id": 49626,
+      "thread": "@retsepty:7325"
+    },
+    {
+      "msg_id": 49627,
+      "thread": "@retsepty:7325"
+    },
+    {
+      "msg_id": 49629,
+      "thread": "@retsepty:7326"
+    },
+    {
+      "msg_id": 49630,
+      "thread": "@retsepty:7326"
+    },
+    {
+      "msg_id": 49632,
+      "thread": "@retsepty:7327"
+    },
+    {
+      "msg_id": 49636,
+      "thread": "@retsepty:7328"
+    },
+    {
+      "msg_id": 49642,
+      "thread": "@retsepty:7328"
+    },
+    {
+      "msg_id": 49654,
+      "thread": "@retsepty:7331"
+    },
+    {
+      "msg_id": 49655,
+      "thread": "@retsepty:7331"
+    },
+    {
+      "msg_id": 49677,
+      "thread": "@retsepty:7335"
+    },
+    {
+      "msg_id": 49678,
+      "thread": "@retsepty:7337"
+    },
+    {
+      "msg_id": 49697,
+      "thread": "@retsepty:7340"
+    },
+    {
+      "msg_id": 49686,
+      "thread": "@retsepty:7342"
+    },
+    {
+      "msg_id": 49696,
+      "thread": "@retsepty:7342"
+    },
+    {
+      "msg_id": 49707,
+      "thread": "@retsepty:7342"
+    },
+    {
+      "msg_id": 49708,
+      "thread": "@retsepty:7342"
+    },
+    {
+      "msg_id": 49710,
+      "thread": "@retsepty:7343"
+    },
+    {
+      "msg_id": 49711,
+      "thread": "@retsepty:7343"
+    },
+    {
+      "msg_id": 49715,
+      "thread": "@retsepty:7345"
+    },
+    {
+      "msg_id": 49716,
+      "thread": "@retsepty:7345"
+    },
+    {
+      "msg_id": 49717,
+      "thread": "@retsepty:7345"
+    },
+    {
+      "msg_id": 49740,
+      "thread": "@retsepty:7348"
+    },
+    {
+      "msg_id": 49742,
+      "thread": "@retsepty:7349"
+    },
+    {
+      "msg_id": 49748,
+      "thread": "@retsepty:7350"
+    },
+    {
+      "msg_id": 49749,
+      "thread": "@retsepty:7350"
+    },
+    {
+      "msg_id": 49750,
+      "thread": "@retsepty:7350"
+    },
+    {
+      "msg_id": 49763,
+      "thread": "@retsepty:7354"
+    },
+    {
+      "msg_id": 49782,
+      "thread": "@retsepty:7361"
+    },
+    {
+      "msg_id": 8,
+      "thread": "@tarilka_malyuka:695"
+    },
+    {
+      "msg_id": 10,
+      "thread": "@tarilka_malyuka:695"
+    },
+    {
+      "msg_id": 11,
+      "thread": "@tarilka_malyuka:695"
+    },
+    {
+      "msg_id": 12,
+      "thread": "@tarilka_malyuka:695"
+    },
+    {
+      "msg_id": 16,
+      "thread": "@tarilka_malyuka:695"
+    },
+    {
+      "msg_id": 17,
+      "thread": "@tarilka_malyuka:695"
+    },
+    {
+      "msg_id": 18,
+      "thread": "@tarilka_malyuka:695"
+    },
+    {
+      "msg_id": 19,
+      "thread": "@tarilka_malyuka:695"
+    },
+    {
+      "msg_id": 50,
+      "thread": "@tarilka_malyuka:695"
+    },
+    {
+      "msg_id": 45,
+      "thread": "@tarilka_malyuka:715"
+    },
+    {
+      "msg_id": 48,
+      "thread": "@tarilka_malyuka:715"
+    },
+    {
+      "msg_id": 49,
+      "thread": "@tarilka_malyuka:715"
+    },
+    {
+      "msg_id": 82,
+      "thread": "@tarilka_malyuka:746"
+    },
+    {
+      "msg_id": 83,
+      "thread": "@tarilka_malyuka:746"
+    },
+    {
+      "msg_id": 84,
+      "thread": "@tarilka_malyuka:747"
+    },
+    {
+      "msg_id": 183,
+      "thread": "@tarilka_malyuka:747"
+    },
+    {
+      "msg_id": 187,
+      "thread": "@tarilka_malyuka:747"
+    },
+    {
+      "msg_id": 177,
+      "thread": "@tarilka_malyuka:764"
+    },
+    {
+      "msg_id": 169,
+      "thread": "@tarilka_malyuka:820"
+    },
+    {
+      "msg_id": 171,
+      "thread": "@tarilka_malyuka:820"
+    },
+    {
+      "msg_id": 182,
+      "thread": "@tarilka_malyuka:825"
+    },
+    {
+      "msg_id": 185,
+      "thread": "@tarilka_malyuka:825"
+    },
+    {
+      "msg_id": 179,
+      "thread": "@tarilka_malyuka:827"
+    },
+    {
+      "msg_id": 2575,
+      "thread": "@ya_Nenka:834"
+    },
+    {
+      "msg_id": 2577,
+      "thread": "@ya_Nenka:836"
+    },
+    {
+      "msg_id": 2579,
+      "thread": "@ya_Nenka:836"
+    },
+    {
+      "msg_id": 2580,
+      "thread": "@ya_Nenka:836"
+    },
+    {
+      "msg_id": 2581,
+      "thread": "@ya_Nenka:836"
+    },
+    {
+      "msg_id": 2595,
+      "thread": "@ya_Nenka:836"
+    },
+    {
+      "msg_id": 2584,
+      "thread": "@ya_Nenka:838"
+    },
+    {
+      "msg_id": 2585,
+      "thread": "@ya_Nenka:838"
+    },
+    {
+      "msg_id": 2586,
+      "thread": "@ya_Nenka:838"
+    },
+    {
+      "msg_id": 2590,
+      "thread": "@ya_Nenka:840"
+    },
+    {
+      "msg_id": 2591,
+      "thread": "@ya_Nenka:840"
+    },
+    {
+      "msg_id": 2597,
+      "thread": "@ya_Nenka:844"
+    },
+    {
+      "msg_id": 2599,
+      "thread": "@ya_Nenka:844"
+    }
+  ]
+}
