@@ -2,6 +2,13 @@
   "runpod_balance_at_pass1-probe-b_start": 20.9182116007,
   "anchored_at": "2026-08-18T09:47:08+00:00",
   "pass1-probe-b_gpu_cap_usd": 0.2,
-  "gpu_sessions": [],
+  "gpu_sessions": [
+    {
+      "at": "2026-08-18T09:59:15+00:00",
+      "balance": 20.8328926451,
+      "step_spent_usd": 0.0853,
+      "note": "pass1-probe-b pod deleted; 64 of 64 read"
+    }
+  ],
   "gpu_note": "RunPod account balance read before the first pod of pass1-probe-b. Step spend = the pessimistic maximum of this anchor minus the balance now and the billing walk since `anchored_at` (SPEC 3.23 (4), Dv411), enforced against $0.20. The SPEC amendment 3.4 (4) phase cap is enforced separately, against results/spend_phase4.json, and neither anchor may be regenerated."
 }

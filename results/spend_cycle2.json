@@ -113,6 +113,16 @@
       "billing_since_usd": 1.374328,
       "billing_read": "read",
       "note": "pass1-probe segment 1 deleted after the boot-kill deadline fired; no reply landed"
+    },
+    {
+      "at": "2026-08-18T09:59:15+00:00",
+      "balance": 20.8328926451,
+      "spent_usd": 1.6769,
+      "remaining_usd": 18.3231,
+      "balance_delta_usd": 1.6769,
+      "billing_since_usd": 1.581828,
+      "billing_read": "read",
+      "note": "pass1-probe-b pod deleted; 64 of 64 read"
     }
   ]
 }

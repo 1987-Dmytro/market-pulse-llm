@@ -1,0 +1,255 @@
+{
+  "bars": {
+    "P1_per_comment_agreement": {
+      "absent": 0,
+      "agreed": 9,
+      "collapse": {
+        "map": {
+          "категория_личное": "категория"
+        },
+        "symmetric": true
+      },
+      "comparison": "market_pulse.scorer.reader_comment_agreement",
+      "disagreed": 5,
+      "losses": {
+        "budget": 2,
+        "by_cause": {
+          "absent": 0,
+          "disagreed": 5
+        },
+        "spent": 5
+      },
+      "minimum_agreed": 12,
+      "n": 14,
+      "passed": false,
+      "rate": 0.6428571428571429,
+      "rate_over_the_rows_the_model_answered": null,
+      "rows": [
+        {
+          "absent": false,
+          "agreed": true,
+          "disagreed_on": {},
+          "msg_id": 21626
+        },
+        {
+          "absent": false,
+          "agreed": true,
+          "disagreed_on": {},
+          "msg_id": 21599
+        },
+        {
+          "absent": false,
+          "agreed": false,
+          "disagreed_on": {
+            "subject_type": {
+              "gold": "категория",
+              "reader": null
+            }
+          },
+          "msg_id": 21601
+        },
+        {
+          "absent": false,
+          "agreed": true,
+          "disagreed_on": {},
+          "msg_id": 21629
+        },
+        {
+          "absent": false,
+          "agreed": false,
+          "disagreed_on": {
+            "subject_type": {
+              "gold": "молочный_бренд",
+              "reader": "сеть_ритейлер"
+            }
+          },
+          "msg_id": 580124
+        },
+        {
+          "absent": false,
+          "agreed": true,
+          "disagreed_on": {},
+          "msg_id": 580129
+        },
+        {
+          "absent": false,
+          "agreed": true,
+          "disagreed_on": {},
+          "msg_id": 47899
+        },
+        {
+          "absent": false,
+          "agreed": false,
+          "disagreed_on": {
+            "subject_type": {
+              "gold": "категория",
+              "reader": "молочный_бренд"
+            }
+          },
+          "msg_id": 47902
+        },
+        {
+          "absent": false,
+          "agreed": true,
+          "disagreed_on": {},
+          "msg_id": 48276
+        },
+        {
+          "absent": false,
+          "agreed": false,
+          "disagreed_on": {
+            "subject_type": {
+              "gold": "категория",
+              "reader": null
+            }
+          },
+          "msg_id": 48283
+        },
+        {
+          "absent": false,
+          "agreed": true,
+          "disagreed_on": {},
+          "msg_id": 579379
+        },
+        {
+          "absent": false,
+          "agreed": false,
+          "disagreed_on": {
+            "subject_type": {
+              "gold": "категория",
+              "reader": "не_наш_рынок"
+            }
+          },
+          "msg_id": 579457
+        },
+        {
+          "absent": false,
+          "agreed": true,
+          "disagreed_on": {},
+          "msg_id": 578951
+        },
+        {
+          "absent": false,
+          "agreed": true,
+          "disagreed_on": {},
+          "msg_id": 20664
+        }
+      ],
+      "scored": true,
+      "threshold": "12 of 14 rows agreed"
+    }
+  },
+  "census": {
+    "n": 50,
+    "parsed": 50,
+    "per_thread": {
+      "@VARUS_channel:10348": {
+        "None": 4,
+        "не_наш_рынок": 1,
+        "сеть_ритейлер": 1
+      },
+      "@VARUS_channel:10613": {
+        "None": 2,
+        "категория_личное": 1,
+        "сеть_ритейлер": 3
+      },
+      "@mandziak:3676": {
+        "None": 7
+      },
+      "@mandziak:3703": {
+        "None": 3,
+        "категория_личное": 4
+      },
+      "@matusi_ukr:22242": {
+        "None": 2,
+        "категория_личное": 2,
+        "не_наш_рынок": 7
+      },
+      "@matusi_ukr:22272": {
+        "None": 7,
+        "категория_личное": 4,
+        "молочный_бренд": 2
+      }
+    },
+    "rule": "REPORTED and never gating — no number here moves bar P1",
+    "stance_distribution": {
+      "None": 24,
+      "negative": 4,
+      "neutral": 12,
+      "positive": 10
+    },
+    "subject_type_distribution": {
+      "None": 25,
+      "категория_личное": 11,
+      "молочный_бренд": 2,
+      "не_наш_рынок": 8,
+      "сеть_ритейлер": 4
+    }
+  },
+  "evidence": {
+    "record": "results/pass1_probe_b_rows.jsonl",
+    "sha256": "62507bd471877250d54febc0ce0a60369fb5b7cb87d94ff90617894155710069",
+    "units_read": 64,
+    "units_registered": 64
+  },
+  "gold": {
+    "record": "results/reader_gold_w1_r2.json",
+    "revision": "r2",
+    "sha256": "716ff4174bdafa5957caa4d038a11241b6eb299df4035a5f0e983217ec2a46d9"
+  },
+  "outcome": "STOP",
+  "pack": {
+    "record": "results/pass1_probe_b_pack.json",
+    "sha256": "bbbe64203f9c909a2d2e8aeab03d8d61c0fd6604d4854e13462d0e190bc4e113"
+  },
+  "per_call": {
+    "against_the_bound": 0.8062,
+    "against_the_fit": 1.7592,
+    "calls": 64,
+    "completion_tokens_per_call": 42.19,
+    "fitted_seconds_per_call": 2.934,
+    "measured": true,
+    "prompt_tokens_per_call": 871.27,
+    "registered_bound_seconds_per_call": 6.402,
+    "seconds": 330.341,
+    "seconds_per_call": 5.162
+  },
+  "phase": "pass1-probe-b",
+  "refusals": {
+    "by_leg": {},
+    "by_shape": {},
+    "finish_reason_length": [],
+    "never_balanced": [],
+    "of": 64,
+    "refused": 0
+  },
+  "registration": {
+    "record": "results/prereg_pass1_probe_b.json",
+    "sha256": "a29e85ad6e856f6fafa032b3f5ede0e635046171778cbe7a6902b64fa57bacad"
+  },
+  "return_to_sitting": "**A FAILED BAR GOES BACK TO THE SITTING, never to a prompt iteration.** The options the sitting of 2026-08-17 left open are B (labelled subject_type data + LoRA) and C (a different base). There is no pass1-v2 prompt without a sitting ruling, and this clause is pre-registered so it cannot be re-decided once the number is in",
+  "run": {
+    "billed_seconds": 657.0,
+    "billed_usd": 0.13505,
+    "gates": 3,
+    "record": "results/pass1_probe_b_run.json",
+    "segments": 1,
+    "sha256": "77666ba6f36be17d84f9fd81e9cddc7a33d69a2269e43779571537a713bb7669"
+  },
+  "scorer": {
+    "borrowed": "bar P1 through scorer.reader_comment_agreement and scripts/score_reader_probe_b.py::collapse — the reader's own comparison and the reader's own collapse, called and never restated",
+    "module": "src/market_pulse/scorer.py",
+    "sha256": "dbb5406a502f813ba1b4940e0914310efd632386a8da60e0c002cc8964a97d4f"
+  },
+  "window_pass1_price": {
+    "cell": "narrow|varto_off|plus_spam+scam",
+    "payable_comments": 1032,
+    "priced": true,
+    "record": "results/gate_census_w1_reader.json",
+    "rule": "generation seconds only, at the worked example price and this run's own measured seconds per call. It carries no boot, no staging and no second pod — it is a FLOOR for a window pass-1, not a quote",
+    "seconds": 5327.2,
+    "seconds_per_call": 5.162,
+    "sha256": "caa172160fbb5da67933b03cf88b92c4af3223417efcce92a1b48dd09ab66c41",
+    "usd_at_the_worked_example": 1.095
+  }
+}
