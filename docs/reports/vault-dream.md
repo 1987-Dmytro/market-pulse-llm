@@ -358,10 +358,19 @@ $ wc -l -c ~/.claude/projects/-Users-hdv-1987-Desktop-Projects-market-pulse-llm/
 $ ls ~/.claude/projects/.../memory/*.md | wc -l
      186                                   # unchanged: 51 pointers left, 0 files were deleted
 
-$ git status --porcelain
+$ git status --porcelain                          # at this contract's last commit
  M docs/STATUS.md                          # the team lead re-edited it at 23:51:57 — Dv528
 ?? docs/labels-pass1-r1.jsonl              # the TEAM LEAD's file, 500/500 — Dv528
 ```
+
+That is the state **at the last commit**, and it is the last state this contract controls. The Stop
+hook (`scripts/brain-session-end.py`) runs afterwards: it appends one `session ended (auto)` line to
+`knowledge/daily_logs/2026-08-18.md` and re-stamps `knowledge/index.md` with a fresh timestamp, so
+two vault paths go dirty again about a minute from now. That is by design — it is exactly how this
+session's tail reaches the **next** contract's step 0, and it is where the four paths this contract
+committed at its own step 0 came from. Its third output, `knowledge/.vault-state.json`, is
+gitignored (`.gitignore:24`). The hook was read rather than run: running the producer to see what it
+would produce is how an operator ruling got erased once [[the_producer_is_not_the_verifier]].
 
 `ruff format --check` is not run separately here [[verifier_format_gap]]: this contract changed no
 Python in the repo at all — the only tracked paths it touches are `knowledge/` and `docs/`, and the
