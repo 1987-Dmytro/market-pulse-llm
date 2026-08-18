@@ -25,6 +25,26 @@
       "balance": 14.1207219299,
       "step_spent_usd": 1.2332,
       "note": "srv-2d closed: endpoint, template and both pods deleted, listings empty"
+    },
+    {
+      "at": "2026-08-18T19:01:23+00:00",
+      "closed": true,
+      "balance": 20.6951737786,
+      "window_start": "2026-08-08T21:00:57+00:00",
+      "window_end": "2026-08-08T22:13:58+00:00",
+      "walk_ms": 3854869,
+      "expected_ms": null,
+      "balance_delta_usd": -5.341297,
+      "billing_since_usd": 1.172913,
+      "billing_by_kind": {
+        "pods": 0.005164,
+        "network-volume": 0.009722,
+        "serverless": 1.158027
+      },
+      "note": "srv-2d settled under the operator's 18.08 ruling: tolerance 0.07, window from the ledger's own first and last session",
+      "settled_usd": 1.163191,
+      "recorded_reading_usd": 1.2332,
+      "tolerance": 0.07
     }
   ],
   "gpu_note": "RunPod account balance read before the first pod of srv2d. Step spend = this anchor minus the balance now, enforced against $2.00. The SPEC amendment 3.4 (4) phase cap is enforced separately, against results/spend_phase4.json, and neither anchor may be regenerated."

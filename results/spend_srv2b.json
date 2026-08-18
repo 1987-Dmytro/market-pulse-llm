@@ -19,6 +19,26 @@
       "balance": 15.5013215893,
       "step_spent_usd": 0.9999,
       "note": "srv-2b ABORT at the handshake-timeout rung: our worker never consumed a job; vendor mock-worker control on the same volume/DC/class COMPLETED; both endpoints and templates deleted, volume kept"
+    },
+    {
+      "at": "2026-08-18T19:01:14+00:00",
+      "closed": true,
+      "balance": 20.6951737786,
+      "window_start": "2026-08-08T17:35:05+00:00",
+      "window_end": "2026-08-08T18:59:30+00:00",
+      "walk_ms": 3681605,
+      "expected_ms": null,
+      "balance_delta_usd": -4.193957,
+      "billing_since_usd": 0.949679,
+      "billing_by_kind": {
+        "pods": 0.389819,
+        "network-volume": 0.009722,
+        "serverless": 0.550138
+      },
+      "note": "srv-2b settled under the operator's 18.08 ruling: tolerance 0.07, window from the ledger's own first and last session",
+      "settled_usd": 0.939957,
+      "recorded_reading_usd": 0.9999,
+      "tolerance": 0.07
     }
   ],
   "gpu_note": "RunPod account balance read before the first pod of srv2b. Step spend = this anchor minus the balance now, enforced against $4.00. The SPEC amendment 3.4 (4) phase cap is enforced separately, against results/spend_phase4.json, and neither anchor may be regenerated."

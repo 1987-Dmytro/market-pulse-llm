@@ -123,6 +123,36 @@
       "billing_since_usd": 1.581828,
       "billing_read": "read",
       "note": "pass1-probe-b pod deleted; 64 of 64 read"
+    },
+    {
+      "at": "2026-08-18T19:01:05+00:00",
+      "balance": 20.6951737786,
+      "spent_usd": 1.8146,
+      "remaining_usd": 18.1854,
+      "balance_delta_usd": 1.8146,
+      "billing_since_usd": 1.804865,
+      "billing_read": "read",
+      "note": "45h2 CLOSED at $8.2176 — 45h2 settled under the operator's 18.08 ruling: tolerance 0.07, window from the ledger's own first and last session"
+    },
+    {
+      "at": "2026-08-18T19:01:14+00:00",
+      "balance": 20.6951737786,
+      "spent_usd": 1.8146,
+      "remaining_usd": 18.1854,
+      "balance_delta_usd": 1.8146,
+      "billing_since_usd": 1.804865,
+      "billing_read": "read",
+      "note": "srv2b CLOSED at $0.9400 — srv-2b settled under the operator's 18.08 ruling: tolerance 0.07, window from the ledger's own first and last session"
+    },
+    {
+      "at": "2026-08-18T19:01:23+00:00",
+      "balance": 20.6951737786,
+      "spent_usd": 1.8146,
+      "remaining_usd": 18.1854,
+      "balance_delta_usd": 1.8146,
+      "billing_since_usd": 1.814588,
+      "billing_read": "read",
+      "note": "srv2d CLOSED at $1.1632 — srv-2d settled under the operator's 18.08 ruling: tolerance 0.07, window from the ledger's own first and last session"
     }
   ]
 }

@@ -38,6 +38,26 @@
       "balance": 18.7045774359,
       "step_spent_usd": 8.8287,
       "note": "45h2 arm B: 432 steps 7.51 h, eval 758 rows 0 failures"
+    },
+    {
+      "at": "2026-08-18T19:01:05+00:00",
+      "closed": true,
+      "balance": 20.6951737786,
+      "window_start": "2026-08-04T12:32:37+00:00",
+      "window_end": "2026-08-05T06:42:18+00:00",
+      "walk_ms": 54679011,
+      "expected_ms": null,
+      "balance_delta_usd": 6.838117,
+      "billing_since_usd": 8.392558,
+      "billing_by_kind": {
+        "pods": 8.217558,
+        "network-volume": 0.175,
+        "serverless": 0.0
+      },
+      "note": "45h2 settled under the operator's 18.08 ruling: tolerance 0.07, window from the ledger's own first and last session",
+      "settled_usd": 8.217558,
+      "recorded_reading_usd": 8.8287,
+      "tolerance": 0.07
     }
   ],
   "gpu_note": "RunPod account balance read before the first pod of 45h2. Step spend = this anchor minus the balance now, enforced against $9.00. The SPEC amendment 3.4 (4) phase cap is enforced separately, against results/spend_phase4.json, and neither anchor may be regenerated."
