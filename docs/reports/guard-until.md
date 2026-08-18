@@ -424,9 +424,11 @@ $ PYTHONPATH=src python3.11 -m pytest tests/test_runpod_guard.py -q
 $ PYTHONPATH=src python3.11 -m pytest tests/test_preflight.py -q
 6 passed in 0.51s
 
-                       # every code commit checked out and run on its own, not just the tip
-$ git checkout --detach c871a4c && make check && git checkout main       # D1
-2917 passed, 2 skipped in 482.22s (0:08:02)                              # = 2911 + 6
+                       # every code commit checked out and run on its own, not just the tip.
+                       # `;` and not `&&`: the return to main must happen whether or not the
+                       # suite is green, or a red run leaves the reader on a detached HEAD
+$ git checkout -q --detach c871a4c; make check; RC=$?; git checkout -q main; echo $RC    # D1
+2917 passed, 2 skipped in 482.22s (0:08:02)   EXIT=0                     # = 2911 + 6
 $ make check                                                             # D2, at 46a477b's tree
 2927 passed, 2 skipped in 488.76s (0:08:08)                              # = 2917 + 10
                        # c392c2e adds only this file, and no test reads docs/reports/ —
@@ -492,7 +494,7 @@ check-wikilinks: OK, none broken
 | **Dv514** | **The required flag broke this module's own documented command, and nothing was red.** `--close --step … --note` with no `--tolerance` now exits 2, and that is the example in `scripts/runpod_guard.py`'s docstring — the P1 class, in the file the contract changes. Fixed there and in `scripts/runbook_reader_v4.md`; closed permanently by `test_every_command_the_module_docstring_shows_is_still_a_command`, which drives the docstring's block through a new `parse()` seam and is proved to bite (the pre-fix example raises `SystemExit(2)`). **Six `docs/PROMPT-*.md` carry the same now-broken shape and are NOT fixed here** — they are team-lead files, and every one of them is a contract that has already run. | `[cause: tooling]` `[[the-documents-command-is-its-own-artifact]]` |
 | **Dv515** | **`MS_BAND`'s two-sidedness was registered in prose and asserted nowhere.** The three ms tests covered under-reading and convergence, and the inflation test passed no `--expect-ms`, so the gate ran unarmed there — `complete()` could have been a one-sided floor and the suite would have stayed green. Closed with a window three times too wide (4 381 000 ms against a 657 000 record) that must refuse and write nothing, plus the honest walk through the same band. | `[cause: verify-gap]` `[[a-band-tested-on-one-side]]` |
 
-| **Dv516** | **A `git worktree` cannot verify a commit in this repo.** The obvious way to run a past commit's own suite — check it out in a worktree — fails at collection, because `data/*` is gitignored and a worktree starts without it; copying the tree back in still left **48 failed, 6 errors**. The control is what settles it: the SAME 12 tests fail at HEAD in that worktree while HEAD in the real tree is 2 927 green, so the failures are the environment. The commit was then verified by checking it out in the real repo on a clean tree. Recorded so the next per-commit check does not spend fifteen minutes rediscovering it. | `[cause: env]` `[[a-commit-must-run-its-own-suite]]` |
+| **Dv516** | **A worktree verification failed on a partially-tracked directory, and the first diagnosis was too broad.** A `git worktree` starts without `data/*` (gitignored), so collection errors immediately; the repair — `for item in $(ls data); do [ -e "$W/data/$item" ] \|\| cp -R …; done` — then left **48 failed, 6 errors**, and the first write-up charged that to the worktree method. Measured instead of assumed: `data/annotation` is **252 MB of the 313 MB**, it is PARTIALLY tracked (two `.jsonl` files are un-ignored), so the guard `[ -e ]` saw it present and skipped 250 MB of media. The method is fine; the copy was not. The control still stands and is what proved the failures were not the commit — the SAME 12 fail at HEAD in that worktree while HEAD in the real tree is 2 927 green — and the commit was verified by checking it out in the real repo on a clean tree. **A `[ -e ] \|\| copy` guard is wrong for any directory git tracks part of.** | `[cause: env]` `[[a-commit-must-run-its-own-suite]]` |
 
 **Split tally (H7).** Contract health — `contract-gap` 3 · `spec-gap` 1 · `verify-gap` 6 = **10**.
 Paid-lesson findings — `tooling` 3 · `process` 3 · `env` 1 = **7**. Total 17, and every one of them
