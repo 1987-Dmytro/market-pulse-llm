@@ -1,4 +1,4 @@
-# guard-until — the walk gets an end, the preflight becomes an instrument, and ZERO ledgers close
+# guard-until — the walk gets an end, the preflight becomes an instrument, and three ledgers close
 
 **Read back, one line each.**
 
@@ -11,7 +11,9 @@
 - **The close tolerance** — **MISMATCH, and the finding is bigger than the number.** The named
   artifact cannot yield a tolerance at all: its «6–7%» holds for 3 of 7 rows, the max divergence is
   **100.00%**, and every divergence decomposes into a defect in how the table's WINDOW was built
-  rather than into billing spread. **Nothing is closed** — the contract's own refusal gate.
+  rather than into billing spread. **Nothing was closed by this contract** — its own refusal gate —
+  and the operator then ruled the band at 7% and closed the three convergent ledgers by hand
+  (addendum under D3).
 - **What `--until` bounds:** the walk. Both callers of it — the step's open reading and the
   `--close` walk — and nothing else. It does NOT bound the balance delta, which has no window, so
   an open step goes on drifting; `--until` is what makes the CLOSE that stops the drift possible.
@@ -24,9 +26,10 @@
   belongs to the SITTING; the frozen records (`results/prereg_*`, packs, verdicts, gold); the team
   lead's files, which are committed verbatim and never edited.
 
-**Not one byte of any ledger moved.** 31 `results/spend_*.json`, hashed before the first edit and
-after the last command, `diff` empty. Every cloud call was a read: no pod, no serverless, no volume
-change. **$0.**
+**Not one byte of any ledger moved under the contract itself.** 31 `results/spend_*.json`, hashed
+before the first edit and after the last command of D1–D3, `diff` empty — at git level too. Four of
+them moved afterwards, under the operator's own ruling, and only by APPENDED entries (addendum under
+D3). Every cloud call throughout was a read: no pod, no serverless, no volume change. **$0.**
 
 ---
 
@@ -308,7 +311,7 @@ $ PYTHONPATH=src python3.11 -m pytest tests/test_prereg_5c2.py -q
 
 ---
 
-## D3 — the closes: ZERO, over-determined three ways
+## D3 — the closes: ZERO by this contract, then three by the operator's ruling
 
 Step 1's refusal gate blocks every close. So that the debt is carried with figures rather than with
 prose, every command the contract specifies was driven against the real ledgers' data in a
@@ -350,7 +353,7 @@ document, and they part by 1.59×. Under the run record the divergence is +0.36%
 under the ledger it is +58.9% and it does not. **The instrument implements the rule the contract
 wrote for the batch, so it refuses.** Step 1 had already stopped it; this is the second lock.
 
-### 3. The 22-ledger batch — 3 would close at 7%, 19 refuse
+### 3. The 22-ledger batch — 3 inside 7%, 19 refuse
 
 ```
 $ python3.11 …/sandbox/scripts/runpod_guard.py --step <each> --step-cap <its own> --close \
@@ -362,9 +365,9 @@ TOTAL  closed 3 · refused 19 of 22
 
 | ledger | verdict | figures |
 |---|---|---|
-| `45h2` | would CLOSE | settled **$8.217558** vs recorded $8.8287 — **6.92%** off, inside 7% |
-| `srv2b` | would CLOSE | settled **$0.939957** vs $0.9999 — **5.99%** |
-| `srv2d` | would CLOSE | settled **$1.163191** vs $1.2332 — **5.68%** |
+| `45h2` | inside 7% | settled **$8.217558** vs recorded $8.8287 — **6.92%** off |
+| `srv2b` | inside 7% | settled **$0.939957** vs $0.9999 — **5.99%** |
+| `srv2d` | inside 7% | settled **$1.163191** vs $1.2332 — **5.68%** |
 | `5b` | REFUSED | settled $1.484759 vs $1.706900 — **13.0%** off |
 | `srv2c` | REFUSED | settled $0.077418 vs $0.100600 — **23.0%** off |
 | `probe_a` | REFUSED | «no billing rows yet», **0 ms** — the window is zero-width |
@@ -388,24 +391,86 @@ steps. The refusal returns before any write.
 all five REFUSED, *«carries no `anchored_at` and no `--since` was given, so the closing walk has no
 window to ask for»*. `--until` does not change this: an end bound is not a window start.
 
-### The one-line authorisation, if the operator wants the three
+### ADDENDUM — the operator ruled, and the three are CLOSED (2026-08-18 evening)
 
-Nothing here is a recommendation. If the operator rules that 7% is the band and that the three
-convergent ledgers may settle, it is one command each, and it must be their word and not this
-contract's:
+**«закрой три сходящихся леджера под 7%».** The band is the operator's, the closes are theirs, and
+the caveat below was on the table before they ruled. Three commands, run verbatim against the
+production ledgers:
 
 ```
-python3.11 scripts/runpod_guard.py --step 45h2  --step-cap 9.00 --close --tolerance 0.07 \
-  --since 2026-08-04T12:32:37+00:00 --until 2026-08-05T06:42:18+00:00 --note "…"
-python3.11 scripts/runpod_guard.py --step srv2b --step-cap 4.00 --close --tolerance 0.07 \
-  --since 2026-08-08T17:35:05+00:00 --until 2026-08-08T18:59:30+00:00 --note "…"
-python3.11 scripts/runpod_guard.py --step srv2d --step-cap 2.00 --close --tolerance 0.07 \
-  --since 2026-08-08T21:00:57+00:00 --until 2026-08-08T22:13:58+00:00 --note "…"
+$ python3.11 scripts/runpod_guard.py --step 45h2 --step-cap 9.00 --close --tolerance 0.07 \
+    --since 2026-08-04T12:32:37+00:00 --until 2026-08-05T06:42:18+00:00 --note "…"
+CLOSED spend_45h2.json at $8.2176 — entry APPENDED
+45H2 CLOSED     $8.2176 of $9.00  (settled at 2026-08-18T19:01:05+00:00, window from 2026-08-04T12:32:37+00:00)
+  pods            $8.2176
+  network-volume  $0.1750   <- always on, beside the run and never inside it
+  serverless      $0.0000                                                              (exit 0)
+
+$ … --step srv2b --step-cap 4.00 … --since 2026-08-08T17:35:05+00:00 --until 2026-08-08T18:59:30+00:00
+CLOSED spend_srv2b.json at $0.9400 — entry APPENDED
+  pods $0.3898 · network-volume $0.0097 · serverless $0.5501                           (exit 0)
+
+$ … --step srv2d --step-cap 2.00 … --since 2026-08-08T21:00:57+00:00 --until 2026-08-08T22:13:58+00:00
+CLOSED spend_srv2d.json at $1.1632 — entry APPENDED
+  pods $0.0052 · network-volume $0.0097 · serverless $1.1580                           (exit 0)
 ```
 
-Beside them, the finding the operator should weigh first: each of those three windows starts at the
-ledger's first session and therefore misses $0.4204, $0.0000 and $0.0104 of pre-window spend, so a
-close settles the step at a figure that is right about the window it names and low about the step.
+| ledger | settled | its recorded reading | off | band | verdict |
+|---|---:|---:|---:|---:|---|
+| `45h2` | **$8.217558** | $8.828700 | 6.92% | 7.00% | CLOSED |
+| `srv2b` | **$0.939957** | $0.999900 | 5.99% | 7.00% | CLOSED |
+| `srv2d` | **$1.163191** | $1.233200 | 5.68% | 7.00% | CLOSED |
+
+Each entry carries `window_start`, `window_end`, `walk_ms`, `recorded_reading_usd` and the
+`tolerance` it was judged under, so the gate's verdict is re-derivable from the record rather than
+from this page. Each re-derives from what it publishes: `settled_usd` is exactly the sum of its own
+`billing_by_kind` with the always-on kinds left out, and `billing_since_usd` is the sum of all three.
+
+**Append-only, proved on all four files the closes touched** — the three steps and the live cycle-2
+line, which witnesses each close (Dv447):
+
+```
+$ find results -name 'spend_*.json' | sort | xargs shasum -a 256 | diff ledgers.pre_close -
+results/spend_45h2.json  results/spend_cycle2.json  results/spend_srv2b.json  results/spend_srv2d.json
+                                   # exactly 4 of 31; the other 27 byte-identical
+
+45h2     3 -> 4 entries   prefix-identical=True   every other field unchanged=True
+srv2b    3 -> 4 entries   prefix-identical=True   every other field unchanged=True
+srv2d    4 -> 5 entries   prefix-identical=True   every other field unchanged=True
+cycle2  12 -> 15 entries  prefix-identical=True   every other field unchanged=True
+```
+
+**The batch line changes: 3 closed · 19 refused of 22.** Section A's table above stands as the
+prediction; these are the same figures written to disk. Nothing in B or C moved — an anchor that
+does not exist and a window that was never recorded are not things a band can fix.
+
+**The caveat, now inside a settled record.** Each of the three windows starts at its ledger's first
+SESSION, so the settled figure is right about the window it names and low about the step by the
+pre-window spend: **$0.4204 for `45h2`, $0.0000 for `srv2b`, $0.0104 for `srv2d`**. It is recorded
+here because a closing entry is never re-derived, and the next reader of `spend_45h2.json` should
+know that $8.217558 is a window's figure and the step cost about $0.42 more.
+
+**The cycle-2 line after the closes** — unchanged, as a close of a step must leave it:
+
+```
+$ python3.11 scripts/runpod_guard.py
+CYCLE 2 SPENT     $1.8146 of $20.00
+REMAINING         $18.1854
+```
+
+`make check` after the three writes: **2 927 passed, 2 skipped**. Nothing in the suite reads the
+three step ledgers; `tests/test_repair_phase4_ledger.py` does read the live line and its invariant
+(«a paid step is witnessed by the ledger the guard reads before a start») is satisfied by the three
+witness entries rather than broken by them.
+
+### What this contract itself closed: nothing
+
+The three closes above are the operator's, taken after this contract's gate had already refused
+them and after the pre-window figures were on the table. What the contract delivered is the
+instrument and the refusal — and the refusal was the useful half: a run that had simply closed the
+three at 7% would have written the same numbers without ever learning that 7% was a window bug's
+shadow, and would have closed `pass1-probe-b` beside them on a right-hand side its own rule does
+not name.
 
 ---
 
@@ -496,9 +561,11 @@ check-wikilinks: OK, none broken
 
 | **Dv516** | **A worktree verification failed on a partially-tracked directory, and the first diagnosis was too broad.** A `git worktree` starts without `data/*` (gitignored), so collection errors immediately; the repair — `for item in $(ls data); do [ -e "$W/data/$item" ] \|\| cp -R …; done` — then left **48 failed, 6 errors**, and the first write-up charged that to the worktree method. Measured instead of assumed: `data/annotation` is **252 MB of the 313 MB**, it is PARTIALLY tracked (two `.jsonl` files are un-ignored), so the guard `[ -e ]` saw it present and skipped 250 MB of media. The method is fine; the copy was not. The control still stands and is what proved the failures were not the commit — the SAME 12 fail at HEAD in that worktree while HEAD in the real tree is 2 927 green — and the commit was verified by checking it out in the real repo on a clean tree. **A `[ -e ] \|\| copy` guard is wrong for any directory git tracks part of.** | `[cause: env]` `[[a-commit-must-run-its-own-suite]]` |
 
-**Split tally (H7).** Contract health — `contract-gap` 3 · `spec-gap` 1 · `verify-gap` 6 = **10**.
-Paid-lesson findings — `tooling` 3 · `process` 3 · `env` 1 = **7**. Total 17, and every one of them
-cost $0 to find. Enum v2 canonicity: **17 of 17**, zero empty, zero off-enum.
+| **Dv517** | **A step's close has ONE reading, and on an old ledger the second one is negative.** The live ledger's close takes `max(balance_delta, billing_since)`; a STEP's takes `own_resources(billing_by_kind)` alone — deliberately, because the delta includes the always-on volume and the headline must not. The consequence only shows on an old close: `srv2b` and `srv2d` recorded `balance_delta_usd` of **−$4.193957** and **−$5.341297**, because the account has been topped up twice since 2026-08-08. So Dv411's «a step takes both readings and the pessimistic one binds» is structurally unavailable at close time, the settled figure rests on the billing walk alone, and the delta sits in the entry as provenance a reader must not add up. Pre-existing, not introduced here, and named because three records now carry it. | `[cause: spec-gap]` `[[a-balance-delta-is-not-a-per-leg-cost]]` |
+
+**Split tally (H7).** Contract health — `contract-gap` 3 · `spec-gap` 2 · `verify-gap` 6 = **11**.
+Paid-lesson findings — `tooling` 3 · `process` 3 · `env` 1 = **7**. Total 18, and every one of them
+cost $0 to find. Enum v2 canonicity: **18 of 18**, zero empty, zero off-enum.
 
 ---
 
