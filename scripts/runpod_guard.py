@@ -35,8 +35,13 @@ at the first balance this guard reads after the line's law is in force (3.24 (1)
     python3.11 scripts/runpod_guard.py                 # before a start; exit 1 refuses
     python3.11 scripts/runpod_guard.py --note "4a zero-shot run"   # log a session
     python3.11 scripts/runpod_guard.py --step 45h2 --step-cap 9.00
-    python3.11 scripts/runpod_guard.py --step probe-b --step-cap 0.35 \
-        --close --since 2026-08-15T20:31:00+00:00 --note "probe-b closed"
+    python3.11 scripts/runpod_guard.py --step probe-b --step-cap 0.35 --close \
+        --since 2026-08-15T20:31:00+00:00 --until 2026-08-15T21:00:00+00:00 \
+        --expect-ms 1514000 --tolerance 0.07 --note "probe-b closed"
+
+Every command above is driven through :func:`parse` by the suite. A required flag added to a step
+close silently broke this block once already — the example predated `--tolerance` and argparse
+exited 2 on it — and a documented command nobody runs is a claim nobody checks.
 """
 
 import argparse
@@ -62,6 +67,24 @@ resources, never inside a probe's figure. Dv412 measured what happens when it do
 and $0.4493 at thirteen, and the guard refused every further command for a charge that had nothing
 to do with probe-b. The split is BY KIND and not by arithmetic: subtracting an hourly rate would be
 a second model of the bill beside the bill."""
+
+BILLING_BUCKET = "hour"
+"""The bucket `docs/reports/pass1-probe.md` §(3)'s bounded probe used. Cosmetic for a total —
+see :func:`billing_by_kind` for the measurement that says so — and it is what the contract names."""
+
+MS_BAND = 0.01
+"""How far a bounded walk's milliseconds may sit from the run record's own billed span.
+
+DERIVED, both ends measured on this stack: `pass1-probe-b`'s complete walk reads 657 684 ms against
+a record of 657 000 — **+0.104%** — while `pass1-probe`'s partial walk reads 300 000 against 427 000
+— **-29.7%**, unchanged over a day. 1% is an order of magnitude above the one measured convergence
+and a factor of thirty below the one measured shortfall, so it separates them without sitting on
+either. The band is TWO-SIDED: over-reading is the $86.49 class arriving through a window that is
+too wide, and a floor-only rule would wave it through."""
+
+MS_FLOOR = 1_000
+"""The run record publishes `billed_seconds` to whole seconds, so a walk may legitimately differ by
+up to a second. Below this the band is the rounding and not a tolerance."""
 
 PHASE_CAP_USD = 33.00
 """SPEC amendment 3.4 (4), raised 25 → 30 by amendment 3.18 (3) and 30 → 33 by amendment 3.18 (7)(b)
@@ -126,8 +149,11 @@ def sum_costs(payload) -> tuple[float, bool]:
     return total, seen
 
 
-def billing_by_kind(anchored_at: str) -> tuple[dict[str, float], str]:
-    """Pods, network volumes and serverless since the anchor: the dollars PER KIND, and how they read.
+def billing_by_kind(
+    anchored_at: str, until: str | None = None
+) -> tuple[dict[str, float], str, int]:
+    """Pods, network volumes and serverless over a WINDOW: the dollars PER KIND, how they read, and
+    the milliseconds the walk covered.
 
     All three kinds `runpodctl billing` offers. The walk knew the first two only until
     srv-2b, where a crash-looping worker billed ~$0.55 that this reading could not see —
@@ -139,21 +165,79 @@ def billing_by_kind(anchored_at: str) -> tuple[dict[str, float], str]:
     it sat on rented for $0.1264 while it did» — see :data:`ALWAYS_ON_KINDS`. `how` is the only field
     that says whether the dictionary means anything: on anything but ``"read"`` the totals are
     partial or absent and the caller must treat the reading as UNAVAILABLE, never as $0.00.
+
+    `until` is the END of the window and it is the whole of `docs/PROMPT-guard-until.md`. Without it
+    the walk runs to NOW, so (a) an OPEN step accrues the network volume's drip forever and drifts
+    over its own cap for a reason that is not the pod, and (b) `--close --since <an old window>`
+    settles that step on every dollar billed since — measured at 2.6x-120x over seven ledgers,
+    $86.49 against ~$13.4 recorded (docs/reports/pass1-probe.md, Dv483).
+
+    `--bucket-size` is passed on EVERY call, bounded or not, and it is the `hour` that report's
+    bounded probe used. Measured on the live account before it was wired: the bucket changes the row
+    GROUPING and never the total — 2026-07-20 to 2026-08-18 reads $18.60995761 over 122 329 741 ms
+    under `day` (26 rows) and under `hour` (78 rows) alike, and the volume $3.76250014 under both —
+    so this is not a basis change for the live cap readings, which is the one thing it must not be.
+
+    The third return is `timeBilledMs` summed across the walk. A settlement is a reading too
+    (Dv488): billing posts LATE, so a bounded walk can be a partial one, and the only thing that can
+    tell the two apart is the run record's own billed span. The caller compares them; this function
+    reports what it saw.
     """
-    lines, readable, empty = {}, False, True
+    lines, readable, empty, ms = {}, False, True, 0
+    bounds = ("--end-time", until) if until else ()
     for kind in BILLING_KINDS:
         try:
-            payload = runpodctl("billing", kind, "--start-time", anchored_at)
+            payload = runpodctl(
+                "billing",
+                kind,
+                "--start-time",
+                anchored_at,
+                *bounds,
+                "--bucket-size",
+                BILLING_BUCKET,
+            )
         except (OSError, subprocess.CalledProcessError, ValueError) as err:
-            return lines, f"unreadable ({type(err).__name__})"
+            return lines, f"unreadable ({type(err).__name__})", ms
         if payload:
             empty = False
         found, seen = sum_costs(payload)
         lines[kind] = found
+        ms += sum_ms(payload)
         readable |= seen
     if empty:
-        return lines, "no billing rows yet"
-    return lines, "read" if readable else "unreadable (no cost field in the payload)"
+        return lines, "no billing rows yet", ms
+    return lines, "read" if readable else "unreadable (no cost field in the payload)", ms
+
+
+def sum_ms(payload) -> int:
+    """Every `timeBilledMs` in a billing payload. Same broad walk as :func:`sum_costs`, same reason."""
+    total, stack = 0, [payload]
+    while stack:
+        node = stack.pop()
+        if isinstance(node, dict):
+            for key, value in node.items():
+                if key == "timeBilledMs" and isinstance(value, int | float):
+                    total += int(value)
+                else:
+                    stack.append(value)
+        elif isinstance(node, list):
+            stack.extend(node)
+    return total
+
+
+def recorded_reading(sessions: list[dict]) -> float | None:
+    """The figure the ledger itself last recorded for this step, or None if it never recorded one.
+
+    The right-hand side of the tolerance gate. It is a BALANCE DELTA at a moment and the walk is a
+    billing reading, so the two are not the same instrument — and on `pass1-probe-b` the difference
+    is measured rather than assumed: the ledger's $0.0853189556 is exactly what the same bounded
+    walk returns truncated at 09:52:00, seven minutes before the reading was taken. The balance
+    LAGS. That is a finding about the right-hand side, not a licence to widen the gate.
+    """
+    for row in reversed(sessions):
+        if not row.get("closed") and isinstance(row.get("step_spent_usd"), int | float):
+            return float(row["step_spent_usd"])
+    return None
 
 
 def own_resources(lines: dict[str, float]) -> float:
@@ -250,7 +334,7 @@ def read_step(path: Path, step: str, cap: float, balance_now: float) -> dict:
     return ledger
 
 
-def step_reading(step_ledger: dict, key: str, balance_now: float) -> dict:
+def step_reading(step_ledger: dict, key: str, balance_now: float, until: str | None = None) -> dict:
     """A step's TWO readings and the verdict they make — Dv411, the phase's own rule applied down.
 
     Three states, and collapsing any two of them rebuilds the defect one layer up:
@@ -273,7 +357,7 @@ def step_reading(step_ledger: dict, key: str, balance_now: float) -> dict:
             " to ask for and the delta stands alone as a LOWER BOUND"
         )
         return reading
-    lines, how = billing_by_kind(since)
+    lines, how, _ms = billing_by_kind(since, until)
     if how != "read":
         reading["how"] = f"UNAVAILABLE ({how}) — the delta stands alone as a LOWER BOUND"
         return reading
@@ -373,7 +457,7 @@ def enforce(
     the caller print every leg before it decides the exit code: a guard that returns on the first
     refusal cannot show the step figure the refusal is about.
     """
-    lines, how = billing_by_kind(anchored_at)
+    lines, how, _ms = billing_by_kind(anchored_at)
     billing_total = sum(lines.values())
     spent = spend(anchor, balance_now, billing_total)
 
@@ -409,8 +493,30 @@ def enforce(
     return spent, lines, how, refusals
 
 
+def complete(walk_ms: int, expect_ms: int | None) -> bool:
+    """Did the bounded walk cover the run record's own billed span?
+
+    Dv488, as a function: at 17:23Z the v5b walk answered «no billing rows yet» and refused; by
+    18:37Z it had posted 1 514 000 ms; in between it offered 29% of the truth and a close would have
+    settled on it. «Readable» and «complete» are different states and only the run record can tell
+    them apart. With no record to compare against — every one of the 22 old ledgers — there is
+    nothing to check and the caller's dollar tolerance is the only gate."""
+    if expect_ms is None:
+        return True
+    return abs(walk_ms - expect_ms) <= max(MS_FLOOR, MS_BAND * expect_ms)
+
+
 def closing_record(
-    *, anchored_at: str, balance_now: float, anchor: float, lines: dict, how: str, note: str
+    *,
+    anchored_at: str,
+    balance_now: float,
+    anchor: float,
+    lines: dict,
+    how: str,
+    note: str,
+    until: str | None = None,
+    walk_ms: int = 0,
+    expect_ms: int | None = None,
 ) -> dict | None:
     """The common half of a closing entry, or None when the walk cannot settle anything.
 
@@ -427,7 +533,7 @@ def closing_record(
     with its own decomposition by $0.000001, which is the whole distance between a record and a
     record that can be checked.
     """
-    if how != "read":
+    if how != "read" or not complete(walk_ms, expect_ms):
         return None
     published = {kind: round(value, 6) for kind, value in lines.items()}
     return {
@@ -435,6 +541,9 @@ def closing_record(
         "closed": True,
         "balance": balance_now,
         "window_start": anchored_at,
+        "window_end": until,
+        "walk_ms": walk_ms,
+        "expected_ms": expect_ms,
         "balance_delta_usd": round(anchor - balance_now, 6),
         "billing_since_usd": round(sum(published.values()), 6),
         "billing_by_kind": published,
@@ -461,7 +570,13 @@ def line_reading(live: dict, balance_now: float, *, note: str, at: str | None = 
     }
 
 
-def main(argv: list[str] | None = None) -> int:
+def parse(argv: list[str] | None = None) -> argparse.Namespace:
+    """The command line, and every cross-check that decides whether it is one.
+
+    Separate from :func:`main` so the examples in this module's docstring can be driven against it
+    without a balance, a ledger or a write — which is the only thing that could have caught
+    `--tolerance` breaking the block above.
+    """
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--note", help="record this reading as a pod session in the ledger")
     parser.add_argument("--step", help="also enforce a step cap, anchored in its own ledger")
@@ -476,6 +591,22 @@ def main(argv: list[str] | None = None) -> int:
         "--since",
         help="the closing walk's window start, for a ledger anchored before the guard recorded one",
     )
+    parser.add_argument(
+        "--until",
+        help="the walk's END, ISO-8601. Bounds the step reading AND the closing walk",
+    )
+    parser.add_argument(
+        "--expect-ms",
+        type=int,
+        help="the run record's own billed span; a walk outside MS_BAND of it is PARTIAL, not a read",
+    )
+    parser.add_argument(
+        "--tolerance",
+        type=float,
+        help="how far a settled figure may sit from the ledger's own recorded reading, as a"
+        " fraction. NO default: the control table the contract named cannot yield one, so the"
+        " caller says the number or there is no close",
+    )
     args = parser.parse_args(argv)
     if bool(args.step) != bool(args.step_cap):
         parser.error("--step and --step-cap go together: a cap with no anchor is not a cap")
@@ -483,6 +614,18 @@ def main(argv: list[str] | None = None) -> int:
         parser.error("--close writes a closing entry and a closing entry says why it closed")
     if args.since and not args.close:
         parser.error("--since is the closing walk's window and means nothing without --close")
+    if args.close and args.step and args.tolerance is None:
+        parser.error(
+            "--close on a step needs --tolerance: a settled figure is checked against the ledger's"
+            " own recorded reading, and this module has no number it is entitled to supply"
+        )
+    if args.expect_ms is not None and not args.close:
+        parser.error("--expect-ms is the completeness gate on a close and means nothing without it")
+    return args
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = parse(argv)
 
     balance_now = balance()
     refusals: list[str] = []
@@ -547,19 +690,31 @@ def main(argv: list[str] | None = None) -> int:
                 " no anchor yet."
             )
         else:
+            # The window and the figures have to be the SAME walk. `enforce` read from the ledger's
+            # own anchor with no end bound, so a `--since`/`--until` close taking its lines would
+            # record a `window_start` the numbers were never measured over. Re-walk when a window
+            # was supplied; keep `enforce`'s reading when it was not, so the ordinary close costs
+            # no second call.
+            window = args.since or live["anchored_at"]
+            lines, how, walk_ms = live["lines"], live["how"], 0
+            if args.since or args.until:
+                lines, how, walk_ms = billing_by_kind(window, args.until)
             entry = closing_record(
-                anchored_at=args.since or live["anchored_at"],
+                anchored_at=window,
                 balance_now=balance_now,
                 anchor=live["anchor"],
-                lines=live["lines"],
-                how=live["how"],
+                lines=lines,
+                how=how,
                 note=args.note,
+                until=args.until,
+                walk_ms=walk_ms,
+                expect_ms=args.expect_ms,
             )
             if entry is None:
                 refusals.append(
-                    f"the billing walk answered «{live['how']}», so there is no settled figure to"
-                    " close on. A closing entry is never re-derived — refusing is the recoverable"
-                    " outcome."
+                    f"the billing walk answered «{how}» and covered {walk_ms} ms against an expected"
+                    f" {args.expect_ms}, so there is no settled figure to close on. A closing entry"
+                    " is never re-derived — refusing is the recoverable outcome."
                 )
             else:
                 # from the entry's OWN two readings, so `spent_usd` is the pessimistic maximum of
@@ -595,7 +750,7 @@ def main(argv: list[str] | None = None) -> int:
                     " walk has no window to ask for."
                 )
             else:
-                lines, how = billing_by_kind(since)
+                lines, how, walk_ms = billing_by_kind(since, args.until)
                 shut = closing_record(
                     anchored_at=since,
                     balance_now=balance_now,
@@ -603,18 +758,43 @@ def main(argv: list[str] | None = None) -> int:
                     lines=lines,
                     how=how,
                     note=args.note,
+                    until=args.until,
+                    walk_ms=walk_ms,
+                    expect_ms=args.expect_ms,
+                )
+                settled = shut and round(own_resources(shut["billing_by_kind"]), 6)
+                recorded = recorded_reading(step_ledger.get("gpu_sessions", []))
+                off = (
+                    None
+                    if shut is None or recorded in (None, 0)
+                    else abs(settled - recorded) / abs(recorded)
                 )
                 if shut is None:
                     refusals.append(
-                        f"the billing walk over {args.step}'s window answered «{how}», so there is"
-                        " no settled figure to close on."
+                        f"the billing walk over {args.step}'s window answered «{how}» and covered"
+                        f" {walk_ms} ms against the run record's {args.expect_ms}, so there is no"
+                        " settled figure to close on. A PARTIAL walk is a third state and settling"
+                        " on it freezes a number that is never re-derived."
                     )
-                else:
+                elif off is not None and off > args.tolerance:
+                    # BEFORE the write, and it is the whole reason the gate exists: the $86.49 class
+                    # arrives as a plausible number, not as an error. Both figures go in the
+                    # refusal so the debt can be carried NAMED.
+                    shut = None
+                    refusals.append(
+                        f"{args.step} settles at ${settled:.6f} against its own recorded reading of"
+                        f" ${recorded:.6f} — {off:.1%} off, outside the registered tolerance of"
+                        f" {args.tolerance:.1%}. NOT closed: a close outside the band is a refusal,"
+                        " never a rounding, and the ledger stays OPEN and named."
+                    )
+                if shut is not None:
                     # `settled_usd` and the `step_spent_usd` of the entries above it are NOT the
                     # same number and deliberately do not share a key: the older field is a balance
                     # delta at a moment, this one is what the step's OWN resources billed, with the
                     # always-on kinds left outside it (3.23 (4)).
-                    shut["settled_usd"] = round(own_resources(shut["billing_by_kind"]), 6)
+                    shut["settled_usd"] = settled
+                    shut["recorded_reading_usd"] = recorded
+                    shut["tolerance"] = args.tolerance
                     step_ledger.setdefault("gpu_sessions", []).append(shut)
                     write_ledger_at(path, step_ledger)
                     print(f"CLOSED {path.name} at ${shut['settled_usd']:.4f} — entry APPENDED")
@@ -647,7 +827,7 @@ def main(argv: list[str] | None = None) -> int:
             )
             print_kinds(shut.get("billing_by_kind"), "  ")
         else:
-            reading = step_reading(step_ledger, key, balance_now)
+            reading = step_reading(step_ledger, key, balance_now, args.until)
             step_spent = reading["spent"]
             print(
                 f"{args.step.upper()} SPENT      ${step_spent:.4f} of ${args.step_cap:.2f}"

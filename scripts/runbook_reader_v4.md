@@ -135,6 +135,7 @@ proves the command runs, not that the pod is gone.
 PYTHONPATH=src python3.11 scripts/read_threads_reader_v4.py --ingest
 PYTHONPATH=src python3.11 scripts/score_reader_v4.py
 python3.11 scripts/runpod_guard.py --step reader-v4 --step-cap 0.35 --close \
+  --until <the last session's `at`> --tolerance 0.07 \
   --note "reader-v4 settled"          # only once the billing walk answers
 ```
 

@@ -6,6 +6,7 @@ the only way to prove the guard refuses rather than merely printing a number.
 
 import importlib.util
 import json
+import shlex
 from pathlib import Path
 
 import pytest
@@ -83,7 +84,7 @@ def drive(monkeypatch, balance, billing=(0.0, "read"), kinds=None):
     total, how = billing
     lines = dict(kinds) if kinds is not None else {"pods": total, "network-volume": 0.0}
     monkeypatch.setattr(guard, "balance", lambda: balance)
-    monkeypatch.setattr(guard, "billing_by_kind", lambda anchored_at: (lines, how))
+    monkeypatch.setattr(guard, "billing_by_kind", lambda anchored_at, until=None: (lines, how, 0))
 
 
 def test_the_pessimistic_reading_wins():
@@ -115,7 +116,7 @@ def test_the_billing_walk_asks_for_serverless_too(monkeypatch):
         return [{"amount": 0.55, "endpointId": "zbptdon5jvfteu"}] if args[1] == "serverless" else []
 
     monkeypatch.setattr(guard, "runpodctl", one_reading)
-    lines, how = guard.billing_by_kind("2026-08-08T17:00:00+00:00")
+    lines, how, _ms = guard.billing_by_kind("2026-08-08T17:00:00+00:00")
     assert (sum(lines.values()), how) == (0.55, "read")
     assert asked == ["pods", "network-volume", "serverless"]
     # 3.23 (4): the kinds arrive APART. A walk that returned the sum would make the volume's rent
@@ -459,6 +460,8 @@ def test_a_closed_step_is_priced_by_its_settled_figure_and_never_by_a_growing_de
                 "--step-ledger",
                 str(path),
                 "--close",
+                "--tolerance",
+                "0.07",
                 "--note",
                 "probe-b closed",
             ]
@@ -496,6 +499,8 @@ def test_a_closed_step_that_really_overran_still_refuses(ledger, tmp_path, monke
                 "--step-ledger",
                 str(path),
                 "--close",
+                "--tolerance",
+                "0.07",
                 "--note",
                 "closed over its cap",
             ]
@@ -521,6 +526,8 @@ def test_closing_refuses_when_the_walk_cannot_settle_anything(ledger, tmp_path, 
                 "--step-ledger",
                 str(path),
                 "--close",
+                "--tolerance",
+                "0.07",
                 "--note",
                 "would have settled at zero",
             ]
@@ -536,12 +543,21 @@ def test_a_step_with_no_window_cannot_be_closed_without_since(ledger, tmp_path, 
     path = step_with(tmp_path)
     drive(monkeypatch, balance=22.5292058832, billing=(0.0, "read"), kinds=PROBE_B_LINES)
     argv = ["--step", "probe-b", "--step-cap", "0.35", "--step-ledger", str(path)]
-    assert guard.main([*argv, "--close", "--note", "no window"]) == 1
+    assert guard.main([*argv, "--close", "--tolerance", "0.07", "--note", "no window"]) == 1
     assert "gpu_sessions" not in json.loads(path.read_text(encoding="utf-8"))
 
     assert (
         guard.main(
-            [*argv, "--close", "--note", "with a window", "--since", "2026-08-15T20:31:00+00:00"]
+            [
+                *argv,
+                "--close",
+                "--tolerance",
+                "0.07",
+                "--note",
+                "with a window",
+                "--since",
+                "2026-08-15T20:31:00+00:00",
+            ]
         )
         == 0
     )
@@ -940,6 +956,8 @@ def test_a_step_close_is_witnessed_in_the_live_ledger_even_when_the_cap_then_ref
                 "--step-ledger",
                 str(step),
                 "--close",
+                "--tolerance",
+                "0.07",
                 "--note",
                 "settled over its cap",
             ]
@@ -966,3 +984,380 @@ def test_the_live_witness_is_not_written_when_there_is_no_step_to_close(
     assert guard.main(["--close", "--note", "phase 4 is closed"]) == 0
     sessions = json.loads(ledger.read_text(encoding="utf-8"))["sessions"]
     assert len(sessions) == 1 and sessions[-1]["closed"] is True
+
+
+# --- the end bound (SPEC contract `docs/PROMPT-guard-until.md`, D2) ------------------------------
+#
+# Everything above patches `billing_by_kind` itself, which is the right seam for the guard's
+# arithmetic and the WRONG one for a flag whose whole content is the argv `runpodctl` is called
+# with: a `--until` that never reached the command line would ship green through all of it. The
+# block below patches `runpodctl` instead, one layer lower, and asserts the argument list.
+
+PASS1_PROBE_B_MS = 657_000
+"""`results/pass1_probe_b_run.json`, segment 1: created 09:47:42Z, deleted 09:58:39Z = 657.0 s, and
+`billed_seconds` says 657.0 independently. The run record's own billed span, in ms, which is what a
+bounded walk has to converge with before a close may settle anything."""
+
+PASS1_PROBE_MS = 427_000
+"""`results/pass1_probe_run.json`, segment 1: 18:41:24Z → 18:48:31Z = 427.0 s, `billed_seconds`
+427.0. Its bounded walk has read 300 000 ms since 2026-08-18 and still does — 70.3% — which is the
+partial state the three-state walk of Dv488 exists to refuse."""
+
+
+def calls_of(monkeypatch, payloads):
+    """`runpodctl` faked at the process boundary; returns the argv list every call was made with."""
+    seen = []
+
+    def fake(*args):
+        seen.append(list(args))
+        return payloads.get(args[1], [])
+
+    monkeypatch.setattr(guard, "runpodctl", fake)
+    return seen
+
+
+def test_the_bounded_walk_puts_end_time_and_bucket_size_on_the_command_line(monkeypatch):
+    """The argv assertion, because nothing else in this file can see one.
+
+    `--bucket-size hour` is the sizing `docs/reports/pass1-probe.md` §(3)'s bounded probe used and
+    the contract names it. MEASURED beside this test, on the live account: the bucket changes the
+    ROW GROUPING and never the total — 2026-07-20→2026-08-18 reads $18.60995761 / 122 329 741 ms
+    under `day` (26 rows) and under `hour` (78 rows) alike — so it is safe on the live cap readings
+    and is passed on every call rather than only the bounded ones.
+    """
+    seen = calls_of(monkeypatch, {"pods": [{"amount": 0.135538, "timeBilledMs": 657_684}]})
+    lines, how, ms = guard.billing_by_kind(
+        "2026-08-18T09:47:08+00:00", until="2026-08-18T09:59:15+00:00"
+    )
+
+    assert (lines["pods"], how, ms) == (0.135538, "read", 657_684)
+    for call in seen:
+        assert call[:2] == ["billing", call[1]]
+        assert "--start-time" in call and call[call.index("--start-time") + 1] == (
+            "2026-08-18T09:47:08+00:00"
+        )
+        assert call[call.index("--end-time") + 1] == "2026-08-18T09:59:15+00:00"
+        assert call[call.index("--bucket-size") + 1] == "hour"
+
+
+def test_an_unbounded_walk_carries_no_end_time_at_all(monkeypatch):
+    """The negative control on the line above: `--end-time` is ABSENT rather than empty when no
+    `--until` was given, because an empty end bound is not the same request."""
+    seen = calls_of(monkeypatch, {"pods": [{"amount": 1.0}]})
+    guard.billing_by_kind("2026-08-04T12:32:37+00:00")
+
+    assert seen and all("--end-time" not in call for call in seen)
+
+
+def test_the_unbounded_close_inflates_and_the_end_bound_is_what_stops_it(
+    ledger, tmp_path, monkeypatch, capsys
+):
+    """The $86.49 class, driven on `srv2d`'s own measured row (docs/reports/pass1-probe.md §(3)).
+
+    Unbounded, `--close --since 2026-08-08T21:00:57Z` settles the step on every dollar billed from
+    that window to now — $11.933193 against a recorded $1.2332, 9.68×. Bounded, the same walk reads
+    $1.163192. Both figures come out of ONE fake whose only input is whether `--end-time` was on the
+    command line, so this cannot pass by arithmetic that never asked."""
+    path = step_with(tmp_path, anchored_at="2026-08-08T21:00:57+00:00")
+    path.write_text(
+        json.dumps(
+            {
+                "runpod_balance_at_probe-b_start": 22.9784784161,
+                "anchored_at": "2026-08-08T21:00:57+00:00",
+                "gpu_sessions": [{"at": "2026-08-08T22:13:58+00:00", "step_spent_usd": 1.2332}],
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(guard, "balance", lambda: 20.0)
+
+    def bounded_or_not(*args):
+        if args[1] != "pods":
+            return []
+        amount = 1.163192 if "--end-time" in args else 11.933193
+        return [{"amount": amount, "timeBilledMs": 4_381_000}]
+
+    monkeypatch.setattr(guard, "runpodctl", bounded_or_not)
+    argv = ["--step", "probe-b", "--step-cap", "4.00", "--step-ledger", str(path), "--close"]
+
+    before = path.read_text(encoding="utf-8")
+    assert guard.main([*argv, "--tolerance", "0.07", "--note", "unbounded"]) == 1
+    out = capsys.readouterr()
+    assert "11.933193" in out.err and "1.2332" in out.err, "the refusal prints BOTH figures"
+    assert path.read_text(encoding="utf-8") == before, "a refused close wrote nothing"
+
+    assert (
+        guard.main(
+            [
+                *argv,
+                "--until",
+                "2026-08-08T22:13:58+00:00",
+                "--tolerance",
+                "0.07",
+                "--note",
+                "bounded",
+            ]
+        )
+        == 0
+    )
+    entry = json.loads(path.read_text(encoding="utf-8"))["gpu_sessions"][-1]
+    assert entry["closed"] is True and entry["settled_usd"] == 1.163192
+    assert entry["window_end"] == "2026-08-08T22:13:58+00:00"
+
+
+def test_a_partial_walk_refuses_and_prints_both_ms_figures(ledger, tmp_path, monkeypatch, capsys):
+    """`pass1-probe` as it actually stands: 300 000 ms of a run record's 427 000, unchanged over a
+    day. Dv488's three-state walk — a settlement is a reading too, and 70.3% of one is not a read."""
+    path = step_with(tmp_path, anchored_at="2026-08-17T18:39:40+00:00")
+    before = path.read_text(encoding="utf-8")
+    monkeypatch.setattr(guard, "balance", lambda: 20.9)
+    calls_of(monkeypatch, {"pods": [{"amount": 0.061667, "timeBilledMs": 300_000}]})
+
+    assert (
+        guard.main(
+            [
+                "--step",
+                "probe-b",
+                "--step-cap",
+                "0.20",
+                "--step-ledger",
+                str(path),
+                "--close",
+                "--until",
+                "2026-08-17T18:49:29+00:00",
+                "--expect-ms",
+                str(PASS1_PROBE_MS),
+                "--tolerance",
+                "0.07",
+                "--note",
+                "partial",
+            ]
+        )
+        == 1
+    )
+    err = capsys.readouterr().err
+    assert "300000" in err and "427000" in err, "both figures, so the debt can be carried named"
+    assert path.read_text(encoding="utf-8") == before
+
+
+def test_a_bounded_walk_that_converges_with_the_run_record_is_complete(
+    ledger, tmp_path, monkeypatch
+):
+    """`pass1-probe-b`: 657 684 ms measured against the record's 657 000, +0.104%. The other
+    direction of the test above, and the reason the ms gate is a BAND rather than a floor — an
+    unbounded walk over the same anchor reads the volume's drip on top and would sail through a
+    one-sided «at least as much as the record» rule."""
+    path = step_with(tmp_path, anchored_at="2026-08-18T09:47:08+00:00")
+    path.write_text(
+        json.dumps(
+            {
+                "runpod_balance_at_probe-b_start": 20.9182116007,
+                "anchored_at": "2026-08-18T09:47:08+00:00",
+                "gpu_sessions": [{"at": "2026-08-18T09:59:15+00:00", "step_spent_usd": 0.135538}],
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(guard, "balance", lambda: 20.7048960008)
+    calls_of(monkeypatch, {"pods": [{"amount": 0.1355378208681941, "timeBilledMs": 657_684}]})
+
+    assert (
+        guard.main(
+            [
+                "--step",
+                "probe-b",
+                "--step-cap",
+                "0.20",
+                "--step-ledger",
+                str(path),
+                "--close",
+                "--until",
+                "2026-08-18T09:59:15+00:00",
+                "--expect-ms",
+                str(PASS1_PROBE_B_MS),
+                "--tolerance",
+                "0.07",
+                "--note",
+                "complete",
+            ]
+        )
+        == 0
+    )
+    entry = json.loads(path.read_text(encoding="utf-8"))["gpu_sessions"][-1]
+    assert entry["settled_usd"] == 0.135538
+    assert entry["walk_ms"] == 657_684 and entry["expected_ms"] == PASS1_PROBE_B_MS
+
+
+def test_a_walk_that_reads_TOO_MUCH_is_refused_by_the_same_band(ledger, tmp_path, monkeypatch):
+    """The other side of `MS_BAND`, and the direction the whole contract is about.
+
+    `srv2d`'s window carries 4 381 000 ms of billed time against a run record that would say
+    657 000 — a window three times too wide, which is how the $86.49 class arrives: as a plausible
+    number, not as an error. A floor-only rule («at least as much as the record») waves it straight
+    through, and the constant's docstring registers the band as two-sided, so this is the assertion
+    that makes the registration true."""
+    path = step_with(tmp_path, anchored_at="2026-08-08T21:00:57+00:00")
+    before = path.read_text(encoding="utf-8")
+    monkeypatch.setattr(guard, "balance", lambda: 20.0)
+    calls_of(monkeypatch, {"pods": [{"amount": 11.933193, "timeBilledMs": 4_381_000}]})
+
+    assert not guard.complete(4_381_000, PASS1_PROBE_B_MS), "the unit, before the command"
+    assert (
+        guard.main(
+            [
+                "--step",
+                "probe-b",
+                "--step-cap",
+                "4.00",
+                "--step-ledger",
+                str(path),
+                "--close",
+                "--since",
+                "2026-08-08T21:00:57+00:00",
+                "--expect-ms",
+                str(PASS1_PROBE_B_MS),
+                "--tolerance",
+                "0.07",
+                "--note",
+                "a window three times too wide",
+            ]
+        )
+        == 1
+    )
+    assert path.read_text(encoding="utf-8") == before
+    # and the band lets the honest one through, so it is a band and not a ceiling
+    assert guard.complete(657_684, PASS1_PROBE_B_MS)
+
+
+def test_the_tolerance_gate_refuses_a_settlement_that_disagrees_with_the_ledger(
+    ledger, tmp_path, monkeypatch, capsys
+):
+    """`pass1-probe-b`'s real pair, and the reason nothing is closed under this contract: the walk
+    settles at $0.135538 while the ledger's own recorded reading is $0.0853189556 — 1.59×.
+
+    MEASURED, not noise: $0.08531895559281111 is exactly what the SAME walk returns bounded at
+    09:52:00, so the ledger's figure is a LAGGED reading of the walk and not a second opinion on it.
+    The gate does not know that and must not: a close outside the registered tolerance is a refusal,
+    never a rounding, whatever the mechanism turns out to be."""
+    path = step_with(tmp_path, anchored_at="2026-08-18T09:47:08+00:00")
+    path.write_text(
+        json.dumps(
+            {
+                "runpod_balance_at_probe-b_start": 20.9182116007,
+                "anchored_at": "2026-08-18T09:47:08+00:00",
+                "gpu_sessions": [{"at": "2026-08-18T09:59:15+00:00", "step_spent_usd": 0.0853}],
+            }
+        ),
+        encoding="utf-8",
+    )
+    before = path.read_text(encoding="utf-8")
+    monkeypatch.setattr(guard, "balance", lambda: 20.7048960008)
+    calls_of(monkeypatch, {"pods": [{"amount": 0.1355378208681941, "timeBilledMs": 657_684}]})
+    argv = [
+        "--step",
+        "probe-b",
+        "--step-cap",
+        "0.20",
+        "--step-ledger",
+        str(path),
+        "--close",
+        "--until",
+        "2026-08-18T09:59:15+00:00",
+        "--expect-ms",
+        str(PASS1_PROBE_B_MS),
+        "--note",
+        "the ripe one",
+    ]
+
+    assert guard.main([*argv, "--tolerance", "0.07"]) == 1
+    err = capsys.readouterr().err
+    assert "0.135538" in err and "0.0853" in err
+    assert path.read_text(encoding="utf-8") == before, "and it wrote nothing"
+    # the other direction, so the gate is a gate and not a permanent no
+    assert guard.main([*argv, "--tolerance", "0.60"]) == 0
+    assert json.loads(path.read_text(encoding="utf-8"))["gpu_sessions"][-1]["closed"] is True
+
+
+def test_a_step_close_will_not_run_without_a_tolerance(ledger, tmp_path, monkeypatch):
+    """`--tolerance` has NO default on purpose. The contract asked for the tolerance to be
+    re-derived from the control table in `docs/reports/pass1-probe.md` §(3); the re-derivation says
+    that table cannot yield one — its «6–7%» holds for 3 of 7 rows and the max divergence is 100%
+    (`probe_a`, whose window starts at the END of the step) — so there is no number this module is
+    entitled to supply. A required parameter makes the caller SAY one
+    ([[the_guard_you_built_and_then_bypassed]])."""
+    path = step_with(tmp_path, anchored_at="2026-08-18T09:47:08+00:00")
+    monkeypatch.setattr(guard, "balance", lambda: 20.7)
+    calls_of(monkeypatch, {"pods": [{"amount": 0.1, "timeBilledMs": 1000}]})
+    with pytest.raises(SystemExit):
+        guard.main(
+            [
+                "--step",
+                "probe-b",
+                "--step-cap",
+                "0.20",
+                "--step-ledger",
+                str(path),
+                "--close",
+                "--note",
+                "no tolerance given",
+            ]
+        )
+
+
+def test_until_bounds_the_open_step_reading_and_not_only_the_close(
+    ledger, tmp_path, monkeypatch, capsys
+):
+    """The Dv491/Dv499 family: an OPEN step's walk runs to NOW, so the volume's drip accrues into a
+    step that finished hours ago and the ledger drifts over its own cap for a reason that is not the
+    pod. Measured on `pass1-probe-b`: bounded at its last session the walk is $0.135538 with the
+    volume line empty; unbounded from the same anchor the volume has added $0.077778 over 8 rows and
+    is still counting.
+
+    The LIMIT is asserted by the fixture and not hidden by it: the balance is set to the anchor so
+    the walk is what binds. A balance delta has no window — there is one balance and it is now — and
+    `spend()` takes the pessimistic MAX of the two, so on the real ledger the delta goes on drifting
+    ($0.2075 at acceptance, $0.2230 a day later) whatever end bound the walk is given. `--until`
+    does not stop an open step drifting; it makes the CLOSE that stops it possible."""
+    path = step_with(tmp_path, anchored_at="2026-08-18T09:47:08+00:00")
+    anchor = json.loads(path.read_text(encoding="utf-8"))["runpod_balance_at_probe-b_start"]
+    monkeypatch.setattr(guard, "balance", lambda: anchor)  # no delta, so the WALK is what binds
+
+    def drips(*args):
+        if args[1] == "pods":
+            return [{"amount": 0.135538, "timeBilledMs": 657_684}]
+        if args[1] == "network-volume":
+            return [] if "--end-time" in args else [{"amount": 0.077778}]
+        return []
+
+    monkeypatch.setattr(guard, "runpodctl", drips)
+    argv = ["--step", "probe-b", "--step-cap", "0.20", "--step-ledger", str(path)]
+
+    assert guard.main(argv) == 1, "unbounded, the drip carries the step over its own cap"
+    assert "$0.2133" in capsys.readouterr().out
+    assert guard.main([*argv, "--until", "2026-08-18T09:59:15+00:00"]) == 0
+    assert "$0.1355" in capsys.readouterr().out
+
+
+def test_every_command_the_module_docstring_shows_is_still_a_command():
+    """The document's command is its own artifact, and this one broke without a red anywhere.
+
+    `--tolerance` arrived as a required flag for a step close, and the example in this module's own
+    docstring predated it: argparse exits 2 on it. Nothing in the 968 lines above could see that —
+    they all build their argv by hand. Driven through `parse()` rather than `main()` so it needs no
+    balance, no ledger and no write; the population is asserted non-empty first, because a regex
+    that stops matching would make this pass over nothing."""
+    block = [line.strip() for line in guard.__doc__.splitlines()]
+    commands, current = [], []
+    for line in block:
+        if line.startswith("python3.11 scripts/runpod_guard.py"):
+            current = [line.removeprefix("python3.11 scripts/runpod_guard.py")]
+        elif current:
+            current.append(line)
+        if current and not line.endswith("\\"):
+            commands.append(" ".join(current).replace("\\", ""))
+            current = []
+
+    assert len(commands) >= 4, f"the docstring's example block stopped matching: {commands}"
+    for command in commands:
+        argv = shlex.split(command.split("#")[0])
+        guard.parse(argv)  # a `parser.error` raises SystemExit(2) and fails the test

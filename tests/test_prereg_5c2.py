@@ -443,7 +443,7 @@ re-pinned to follow it. That is the producer's own strongest refusal turned on i
 The record has never been rewritten and the producer had never been touched until today, so this is
 the only commit either of them needs."""
 
-MOVED_BORROWS = {"scripts/runpod_guard.py": ("step_ledger_path", "billing_by_kind")}
+MOVED_BORROWS = {"scripts/runpod_guard.py": ("step_ledger_path", "billing_by_kind", "--until")}
 """The borrowed modules whose bytes have moved since the seal, each with the tokens it learned.
 
 A TUPLE and not one token, because the value is the only record of what moved and a module can move
@@ -459,6 +459,15 @@ moved for Dv392 and then again for 3.23». One name per move is what makes the o
 * **`billing_by_kind`** — 2026-08-16, SPEC 3.23 and the Dv411/Dv412 family: the billing walk returns
   its three kinds APART instead of summed, a step takes both readings rather than the balance delta
   alone, a ledger can be CLOSED, and the $20.00 cycle-2 line arrives beside the phase cap.
+* **`--until`** — 2026-08-18, `docs/PROMPT-guard-until.md`: the walk gains an END bound, so a step
+  reading stops accruing the volume's drip forever and `--close --since <an old window>` stops
+  settling on every dollar billed since. The token is the FLAG and not the word `until`, which the
+  sealed blob already carries in a docstring — a token the recovered bytes contain would assert
+  nothing.
+
+  The third move is why this constant is a tuple, and it arrived exactly as the paragraph above
+  predicted: the whole suite stayed green across it, because a list of what moved cannot check its
+  own completeness. Nothing but a human adding the name makes the omission red.
 
 Nothing this registration states follows either move. The guard is borrowed here as the instrument
 that enforces the cap, and `budget()` reads `PHASE_CAP_USD` — a constant neither move touched. The
