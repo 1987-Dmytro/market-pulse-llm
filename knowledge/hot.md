@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-18 22:37:48 (every SessionStart)
+**Auto-refreshed:** 2026-08-19 11:00:40 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-568c0aa chore(brain): the Stop hook picks up the two pass1-data-prep ADRs
-e15a4e8 docs(report): pass1-data-prep -- the gate passed on three constants and the fourth one nobody registered was the cap
-f464511 feat(pass1-data-prep): the labelling pack -- 500 units under seed 20260818, and the gate on the labels file
-b830d22 docs(adr): the B sitting rules line B with the team lead labelling, and guard-until's tolerance finding
-19e19b8 docs(team-lead): STATUS accepts guard-until and registers the B sitting; PROMPT-pass1-data-prep queued
+3529bad docs(report): vault-dream -- the porcelain block says which moment it is, and names the hook that moves it
+921f2a8 docs(report): vault-dream -- the ceiling came from the loader's own constants, and a citation is not a record
+cf01503 brain(vault-dream): the index is consolidated 197->147 with 51 proven homes, and hot.md carries what stayed open
+1be0ba2 docs(team-lead): STATUS accepts pass1-data-prep and registers the MEMORY.md blocker ruling; PROMPT-vault-dream queued
+e629569 chore(brain): the vault tail of the pass1-data-prep session -- the third session's log and the index
 ```
 
 ## 📋 Recent decisions
@@ -23,14 +23,14 @@ b830d22 docs(adr): the B sitting rules line B with the team lead labelling, and 
 
 ## 📅 Recent daily logs
 
+- `2026-08-19.md`
 - `2026-08-18.md`
 - `2026-08-17.md`
-- `2026-08-16.md`
 
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-18 `vault-dream`, поверх `/close` — **день трёх контрактов, и каждый закончился отказом, который
+**Last update:** 2026-08-19 `/save`, поверх `vault-dream` — **день трёх контрактов, и каждый закончился отказом, который
 оказался поставкой.** `pass1-probe-b` ИЗМЕРИЛ проход-1 и ПРОВАЛИЛ бар P1 (9 из 14 при пороге 12) →
 STOP. `guard-until` — гейт СРАБОТАЛ, контракт не закрыл НИЧЕГО, затем оператор постановил полосу 7%
 и три леджера ЗАКРЫТЫ. **Сидение выбрало линию B**, и `pass1-data-prep` собрал пак разметки:
@@ -151,8 +151,8 @@ thread-count `narrow|silencers_off`**; различает только плат�
 3. **Денежная гигиена (`money-anchors`, $0)** — правая часть закрытия шага, судьба зависшего walk'а
    `pass1-probe`, дисциплина `anchored_at` для 19 отказанных леджеров. По слову оператора.
 4. **Boot tax ≤9K — теперь РУЛИНГ, а не консолидация.** `vault-dream` исполнен; 9 323 Б трёх
-   `CLAUDE.md` + 24 532 Б `hot.md` = **8.30K ДО первого байта MEMORY.md**, поэтому ≤9K достижимо
-   только если ЭТОТ файл упадёт до ~8.2K Б (−67%). Что резать здесь — слово оператора.
+   `CLAUDE.md` + 24 583 Б `hot.md` = **8.30K ДО первого байта MEMORY.md**, поэтому ≤9K достижимо
+   только если ЭТОТ файл упадёт до ~8.1K Б (−67%). Что резать здесь — слово оператора.
 
 **Кандидаты цикла-2 в порядке ценности:** окно-2 ≈$4.8 · батч-пробник $2.13
 (`results/batch_cycle2_projection.json`: единственный кандидат **batch 2**, влезет ли — НЕ ИЗМЕРИМО
@@ -198,19 +198,21 @@ LoRA-регистрация против того же запечатанног�
 **6.7×** (179 · 373 · 175 · >1 200 с). Дедлайн вида `usable − projection` — не запас, а ставка на
 платформу. [[a-negative-pre-generation-budget-is-a-forecast]]
 
-**⛔ СУИТА КРАСНАЯ, И НЕ ПО КОДУ: 2 957 / 2 FAILED / 2 skipped.** Два теста `pass1-data-prep`
-утверждают, что `docs/labels-pass1-r1.jsonl` НЕ существует — тимлид его написал (500/500). Зелёное
-со сроком годности, истёкший ровно от той работы, ради которой пак и делался; имена тестов — в
-`docs/reports/vault-dream.md`. Чинит СЛЕДУЮЩИЙ контракт, тем же шагом, что коммитит файл дословно.
-[[a_green_suite_can_have_a_shelf_life]]
+**✅ СУИТА СНОВА ЗЕЛЁНАЯ: 2 960 / 2 skipped** (было 2 957 / 2 FAILED). Метки дословно, фриз
+`results/labels_pass1_r1.jsonl` с provenance-пином и ОБА переворота тестов легли ОДНИМ коммитом
+**`8d2e1ba`**: свежий clone не видит `docs/labels-pass1-r1.jsonl` без тестов, которые его
+пломбируют. Тест, утверждавший отсутствие, — это часы, а не верификатор.
+[[the-absence-test-is-a-clock-and-flips-with-its-artifact]]
 
-**⛔ BOOT TAX: MEMORY.md РАЗГРУЖЕН, ЦЕЛЬ ≤9K — НЕТ.** **147 строк / 18 447 Б** при пере-выведенном
-потолке загрузчика **200 строк / 25 000 знаков** — 73.5% и 73.8%, обе оси под баром 75%, запас
-53 строки. Вытеснена 51 ссылка, у каждой доказан durable-дом, файлы уроков ВСЕ на диске; карта
-«что ушло → где лежит» — `docs/reports/vault-dream.md`. Открыто: boot tax **13.1K**, ≤9K с этой
-стороны недостижимо (Next п.4) — **нужен рулинг, что резать в `hot.md`**. **Dv521 всё ещё ждёт
-дома** («блок записи, чьи поля пришли из разных строк: два `max()` по разным ключам развязались на
-тринадцати ничьих») — теперь под него есть место.
+**⛔ BOOT TAX: ЦЕЛЬ ≤9K ПРИОСТАНОВЛЕНА (рулинг 2, 19.08) — `hot.md` ради числа НЕ РЕЖЕМ.**
+MEMORY.md **148 строк / 18 587 Б** = **74.0% и 74.3%** потолка загрузчика **200 / 25 000**, обе оси
+под баром 75%; карта «что ушло → где лежит» — `docs/reports/vault-dream.md`. Ось census теперь ось
+загрузчика (Dv526, сдвиг −1 Б), `TARGET_KTOK` и текст предупреждения НЕ двигали: «> 9.0K» читается
+как «цель на пере-регистрации». Совместное сидение стартует с таблицы горячее/холодное (`hot.md`
+поблочно + три `CLAUDE.md`, 9 323 Б) в `docs/reports/labels-boot-audit.md`; пере-регистрация — от
+измеренного высокосигнального пола, владелец — оператор.
+[[boot-tax-target-suspended-and-the-census-axis]] **Dv521 всё ещё ждёт дома** («блок записи, чьи
+поля пришли из разных строк: два `max()` по разным ключам развязались на тринадцати ничьих»).
 
 ## 🔫 Footguns этого файла
 
