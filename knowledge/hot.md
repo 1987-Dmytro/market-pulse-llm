@@ -2,24 +2,24 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-19 11:59:25 (every SessionStart)
+**Auto-refreshed:** 2026-08-19 13:32:46 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-becc3aa docs(report): labels-boot-audit -- name the wikilink checker's scope, and Dv535's sum does not reproduce from its own addends
-104af73 docs(report): labels-boot-audit -- the clock flipped with the artifact, and the pin that is correct but invisible
-05dbae3 docs(adr): both 19.08 rulings become records, and hot.md closes one blocker and re-states the other
-d444be5 fix(census): the MEMORY.md share is what the loader injects, not min(st_size, 25*1024)
-8d2e1ba feat(pass1-data-prep): the labels are sealed -- 500 rows verbatim, frozen with provenance, and the two clocks flip in this same commit
+80b5174 docs(report): boot-debloat -- the nearest miss a keyword grep cannot see, and the Pitfalls remainder is a judgment call
+d007db4 docs(report): boot-debloat -- fourteen homes read, one that was a roster, and the number written last
+1f48431 docs(adr): the sitting's ruling on all five de-bloat groups, and the number that ended the suspension
+ab372c4 feat(census): TARGET_KTOK is re-registered at 10.7 -- the measured floor times 1.1, written last
+e2ca966 docs(claude-md): three sections become paths:-scoped rules, graphify folds into the tooling runbook
 ```
 
 ## 📋 Recent decisions
 
 - `INDEX.md` — Decision records
+- `boot-tax-re-registered-from-the-measured-floor.md` — The boot tax is de-bloated in all five groups, and the target is re-registered from the measured floor
 - `boot-tax-target-suspended-and-the-census-axis.md` — The ≤9K boot-tax target is SUSPENDED, and the census moves onto the loader's axis
-- `the-absence-test-is-a-clock-and-flips-with-its-artifact.md` — A test that asserts a planned artifact's ABSENCE is a clock, not a verifier
 
 ## 📅 Recent daily logs
 
@@ -30,7 +30,8 @@ d444be5 fix(census): the MEMORY.md share is what the loader injects, not min(st_
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-19 `boot-debloat` — вытеснение A+B+C по рулингу совместного сидения.
+**Last update:** 2026-08-19 `/save`, поверх `boot-debloat` — вытеснение A+B+C+D+E исполнено, boot tax
+**9.7K** при зарегистрированной цели **10.7K** (пол × 1.1).
 
 > Этот блок курируется руками. Археология закрытых контрактов живёт в отчётах и ADR — не
 > восстанавливать сюда то, у чего есть дом. Вытеснено 19.08 → mapping-таблица «блок → дом»
@@ -40,8 +41,9 @@ d444be5 fix(census): the MEMORY.md share is what the loader injects, not min(st_
 
 **🔄 ТЫ ЗДЕСЬ.** Линия промпт-инженерии читателя закрыта своим stop-правилом, архитектура **D**
 выбрана, её микро-замер СДЕЛАН и ОТРИЦАТЕЛЕН, и сидение 18.08 выбрало **линию B**: размеченные
-`subject_type` + LoRA, **разметку делает ТИМЛИД**. Пак построен. Следующий ход — **разметка (сессия
-тимлида)**, потом **LoRA-регистрация**. [[sitting-b-line-b-and-the-team-lead-labels]]
+`subject_type` + LoRA, **разметку делает ТИМЛИД**. Пак построен, метки написаны и ЗАПЛОМБИРОВАНЫ
+(`8d2e1ba`), фриз и провенанс лежат в `results/`. Следующий ход — **LoRA-регистрация**, вход
+готов. [[sitting-b-line-b-and-the-team-lead-labels]]
 
 **💵 ЦЕНА ПРОХОДА-1 ИЗМЕРЕНА: 5.162 с/вызов.** Окно: 1 032 платных комментария × 5.162 с =
 **$1.0950** генерации как **ПОЛ** — без бута, без стейджинга, без второго пода.
@@ -64,15 +66,7 @@ thread-count `narrow|silencers_off`**; различает только плат�
    провенанс лежат в `results/`. Нужен отдельный брифинг: конфиг тренировки, кап и прогноз цены ОТ
    ЗАМЕРОВ фазы 4 (H6-формулы), бар — тот же **запечатанный gold r2 ≥12/14**, и **аблация меток
    тимлида (train with/without) — закон этой регистрации**, названный в провенансе заранее.
-2. **Совместное сидение по boot tax (рулинг 2)** — цель ≤9K ПРИОСТАНОВЛЕНА, не провалена. Стартует
-   с готовой таблицы горячее/холодное (`hot.md` поблочно + три `CLAUDE.md`) в
-   `docs/reports/labels-boot-audit.md`; пере-регистрация — от измеренного высокосигнального пола.
-   Арифметику выводить ФОРМУЛОЙ, не цитатой: бюджет ≤9K = 36 000 Б, минус три `CLAUDE.md` и
-   загруженный MEMORY.md — остаток этому файлу. Замер 19.08 после `/save`: 9 323 + 18 756 →
-   `hot.md` ≤ **7 921 Б**. Эта величина от размера ЭТОГО файла не зависит, поэтому не протухает от
-   правок в нём; процент считать на момент чтения. Прошлая версия пункта складывала слагаемые из
-   РАЗНЫХ моментов и всё равно округлялась верно (Dv535).
-3. **Денежная гигиена (`money-anchors`, $0)** — правая часть закрытия шага, судьба зависшего walk'а
+2. **Денежная гигиена (`money-anchors`, $0)** — правая часть закрытия шага, судьба зависшего walk'а
    `pass1-probe`, дисциплина `anchored_at` для 19 отказанных леджеров. По слову оператора.
 
 **Кандидаты цикла-2 в порядке ценности:** окно-2 ≈$4.8 · батч-пробник $2.13
@@ -119,15 +113,14 @@ LoRA-регистрация против того же запечатанног�
 **6.7×** (179 · 373 · 175 · >1 200 с). Дедлайн вида `usable − projection` — не запас, а ставка на
 платформу. [[a-negative-pre-generation-budget-is-a-forecast]]
 
-**⛔ BOOT TAX: ЦЕЛЬ ≤9K ПРИОСТАНОВЛЕНА (рулинг 2, 19.08) — `hot.md` ради числа НЕ РЕЖЕМ.**
-MEMORY.md **149 строк / 18 757 Б** = **74.5% и 73.9%** (строки и UTF-16-юниты) потолка загрузчика
-**200 / 25 000**, обе оси под баром 75%; карта «что ушло → где лежит» — `docs/reports/vault-dream.md`. Ось census теперь ось
-загрузчика (Dv526, сдвиг −1 Б), `TARGET_KTOK` и текст предупреждения НЕ двигали: «> 9.0K» читается
-как «цель на пере-регистрации». Совместное сидение стартует с таблицы горячее/холодное (`hot.md`
-поблочно + три `CLAUDE.md`, 9 323 Б) в `docs/reports/labels-boot-audit.md`; пере-регистрация — от
-измеренного высокосигнального пола, владелец — оператор.
-[[boot-tax-target-suspended-and-the-census-axis]] **Dv521 всё ещё ждёт дома** («блок записи, чьи
-поля пришли из разных строк: два `max()` по разным ключам развязались на тринадцати ничьих»).
+**🧹 BOOT TAX — НЕ ЗАДАЧА, А ЧИСЛО.** Ценз **9.7K** при цели **10.7K** (`TARGET_KTOK`, пол × 1.1,
+сидение 19.08). Что ушло и куда — mapping-таблица в `docs/reports/boot-debloat.md`; правила с
+`paths:` держат 25 730 Б за **0**, `~/dev-stack-parked.md` вне загрузки. MEMORY.md **149/200 строк
+(74.5%) · 18 472/25 000 юнитов (73.9%)** — 150-я строка это ровно 75.0%, то есть уже не «под баром»:
+следующий урок либо дописывается в существующий файл, либо требует консолидации.
+⚠️ Без дома: **Dv521** («два `max()` по разным ключам развязались на тринадцати ничьих»), плюс два
+слуга из `boot-debloat` — `a-checker-whose-failure-is-silence` (Dv540) и
+`a-guard-that-runs-after-the-write` (Dv542). [[boot-tax-re-registered-from-the-measured-floor]]
 
 ## 🔫 Footguns этого файла
 
