@@ -2,24 +2,24 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-19 11:00:40 (every SessionStart)
+**Auto-refreshed:** 2026-08-19 11:59:25 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-3529bad docs(report): vault-dream -- the porcelain block says which moment it is, and names the hook that moves it
-921f2a8 docs(report): vault-dream -- the ceiling came from the loader's own constants, and a citation is not a record
-cf01503 brain(vault-dream): the index is consolidated 197->147 with 51 proven homes, and hot.md carries what stayed open
-1be0ba2 docs(team-lead): STATUS accepts pass1-data-prep and registers the MEMORY.md blocker ruling; PROMPT-vault-dream queued
-e629569 chore(brain): the vault tail of the pass1-data-prep session -- the third session's log and the index
+becc3aa docs(report): labels-boot-audit -- name the wikilink checker's scope, and Dv535's sum does not reproduce from its own addends
+104af73 docs(report): labels-boot-audit -- the clock flipped with the artifact, and the pin that is correct but invisible
+05dbae3 docs(adr): both 19.08 rulings become records, and hot.md closes one blocker and re-states the other
+d444be5 fix(census): the MEMORY.md share is what the loader injects, not min(st_size, 25*1024)
+8d2e1ba feat(pass1-data-prep): the labels are sealed -- 500 rows verbatim, frozen with provenance, and the two clocks flip in this same commit
 ```
 
 ## 📋 Recent decisions
 
 - `INDEX.md` — Decision records
-- `sitting-b-line-b-and-the-team-lead-labels.md` — The sitting rules line B — labelled `subject_type` + LoRA, and the TEAM LEAD does the labelling
-- `guard-until-the-tolerance-that-was-a-window-bug.md` — `guard --until` — the tolerance did not re-derive because the table measured its own window bug, and the operator closed three by ruling
+- `boot-tax-target-suspended-and-the-census-axis.md` — The ≤9K boot-tax target is SUSPENDED, and the census moves onto the loader's axis
+- `the-absence-test-is-a-clock-and-flips-with-its-artifact.md` — A test that asserts a planned artifact's ABSENCE is a clock, not a verifier
 
 ## 📅 Recent daily logs
 
@@ -30,7 +30,8 @@ e629569 chore(brain): the vault tail of the pass1-data-prep session -- the third
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-19 `/save`, поверх `vault-dream` — **день трёх контрактов, и каждый закончился отказом, который
+**Last update:** 2026-08-19 `/save`, поверх `labels-boot-audit` — **метки ЗАПЛОМБИРОВАНЫ (`8d2e1ba`), суита
+2 966 зелёная, boot tax под рулингом.** Раньше — **день трёх контрактов, и каждый закончился отказом, который
 оказался поставкой.** `pass1-probe-b` ИЗМЕРИЛ проход-1 и ПРОВАЛИЛ бар P1 (9 из 14 при пороге 12) →
 STOP. `guard-until` — гейт СРАБОТАЛ, контракт не закрыл НИЧЕГО, затем оператор постановил полосу 7%
 и три леджера ЗАКРЫТЫ. **Сидение выбрало линию B**, и `pass1-data-prep` собрал пак разметки:
@@ -49,16 +50,14 @@ STOP. `guard-until` — гейт СРАБОТАЛ, контракт не зак�
 `subject_type` + LoRA, **разметку делает ТИМЛИД**. Пак построен. Следующий ход — **разметка (сессия
 тимлида)**, потом **LoRA-регистрация**. [[sitting-b-line-b-and-the-team-lead-labels]]
 
-**🏷️ ПАК РАЗМЕТКИ ГОТОВ — ЧИТАТЬ И РАЗМЕЧАТЬ.**
-`docs/label-pack-pass1-r1.md` (278 694 знака, 120 тредов ЦЕЛИКОМ, 500 целей помечены `⬛ TARGET`) ·
-машинный `results/pass1_label_pack_r1.json` · слепые 40 `docs/label-pack-pass1-r1-blind40.md`
-(опция оператора, НИЧЕГО от неё не зависит). Метки — **только `subject_type`**, четыре чтения плюс
-JSON `null`, и `null` это ОТВЕТ («комментарий ни о ком»), а не пропуск. Писать в
-`docs/labels-pass1-r1.jsonl`, проверять:
-`PYTHONPATH=src python3.11 scripts/validate_pass1_labels.py docs/labels-pass1-r1.jsonl`
-(шесть именованных отказов, зелёный путь печатает распределение и НЕ ПИШЕТ ничего).
-⚠️ **`docs/labels-pass1-r1.jsonl` — файл ТИМЛИДА** с момента появления: исполнитель валидирует и
-коммитит дословно, ни строки не правит и метку не генерирует.
+**🏷️ МЕТКИ ЕСТЬ И ЗАПЛОМБИРОВАНЫ — ВХОД ТРЕНИРОВКИ ГОТОВ.** 500 строк тимлида,
+`docs/labels-pass1-r1.jsonl` (sha `776b204f…`), распределение **не_наш_рынок 251 · null 167 ·
+сеть_ритейлер 44 · категория_личное 36 · молочный_бренд 2**. Тренировка читает ФРИЗ
+`results/labels_pass1_r1.jsonl` (побайтово тот же), провенанс и пин —
+`results/labels_pass1_r1_provenance.json` (кто размечал, дата, кодбук, seed, sha, ДОЛГ АБЛЯЦИИ).
+Гейт `scripts/validate_pass1_labels.py` жив и гоняется на реальном файле в суите.
+⚠️ Файл ТИМЛИДА: правкам не подлежит, дрейф ловится дайджестом, распределением и байтовой
+идентичностью — каждая нога проверена перевёрнутой меткой.
 
 **🎲 ПАК ДЕТЕРМИНИРОВАН И ПЕРЕСОБИРАЕТСЯ ПОБАЙТОВО.** `SEED = 20260818` модульной константой (не
 флагом — опция seed это опция собрать другой пак) · вес `w = min(payable, CAP)` · наибольший остаток
@@ -141,18 +140,20 @@ thread-count `narrow|silencers_off`**; различает только плат�
 
 ## ⏭️ Next
 
-1. **РАЗМЕТКА — сессия ТИМЛИДА, параллельно следующему контракту.** Вход — `docs/label-pack-pass1-r1.md`,
-   выход — `docs/labels-pass1-r1.jsonl`, гейт — `scripts/validate_pass1_labels.py`. См. карточку пака
-   выше.
-2. **LoRA-регистрация линии B** — после меток: конфиг тренировки, кап и прогноз цены ОТ ЗАМЕРОВ
-   фазы 4 (H6-формулы), бар — тот же **запечатанный gold r2 ≥12/14**, и **аблация меток тимлида
-   (train with/without) — закон этой регистрации**, названный заранее. Заморозка provenance-копии
-   пака в `results/` (`labelled_by`, дата, кодбук, seed, sha пака) — шаг того же контракта.
+1. **LoRA-регистрация линии B — СЛЕДУЮЩИЙ ход, вход готов.** Метки запломбированы, фриз и
+   провенанс лежат в `results/`. Нужен отдельный брифинг: конфиг тренировки, кап и прогноз цены ОТ
+   ЗАМЕРОВ фазы 4 (H6-формулы), бар — тот же **запечатанный gold r2 ≥12/14**, и **аблация меток
+   тимлида (train with/without) — закон этой регистрации**, названный в провенансе заранее.
+2. **Совместное сидение по boot tax (рулинг 2)** — цель ≤9K ПРИОСТАНОВЛЕНА, не провалена. Стартует
+   с готовой таблицы горячее/холодное (`hot.md` поблочно + три `CLAUDE.md`) в
+   `docs/reports/labels-boot-audit.md`; пере-регистрация — от измеренного высокосигнального пола.
+   Арифметику выводить ФОРМУЛОЙ, не цитатой: бюджет ≤9K = 36 000 Б, минус три `CLAUDE.md` и
+   загруженный MEMORY.md — остаток этому файлу. Замер 19.08 после `/save`: 9 323 + 18 756 →
+   `hot.md` ≤ **7 921 Б**. Эта величина от размера ЭТОГО файла не зависит, поэтому не протухает от
+   правок в нём; процент считать на момент чтения. Прошлая версия пункта складывала слагаемые из
+   РАЗНЫХ моментов и всё равно округлялась верно (Dv535).
 3. **Денежная гигиена (`money-anchors`, $0)** — правая часть закрытия шага, судьба зависшего walk'а
    `pass1-probe`, дисциплина `anchored_at` для 19 отказанных леджеров. По слову оператора.
-4. **Boot tax ≤9K — теперь РУЛИНГ, а не консолидация.** `vault-dream` исполнен; 9 323 Б трёх
-   `CLAUDE.md` + 24 583 Б `hot.md` = **8.30K ДО первого байта MEMORY.md**, поэтому ≤9K достижимо
-   только если ЭТОТ файл упадёт до ~8.1K Б (−67%). Что резать здесь — слово оператора.
 
 **Кандидаты цикла-2 в порядке ценности:** окно-2 ≈$4.8 · батч-пробник $2.13
 (`results/batch_cycle2_projection.json`: единственный кандидат **batch 2**, влезет ли — НЕ ИЗМЕРИМО
@@ -198,15 +199,9 @@ LoRA-регистрация против того же запечатанног�
 **6.7×** (179 · 373 · 175 · >1 200 с). Дедлайн вида `usable − projection` — не запас, а ставка на
 платформу. [[a-negative-pre-generation-budget-is-a-forecast]]
 
-**✅ СУИТА СНОВА ЗЕЛЁНАЯ: 2 960 / 2 skipped** (было 2 957 / 2 FAILED). Метки дословно, фриз
-`results/labels_pass1_r1.jsonl` с provenance-пином и ОБА переворота тестов легли ОДНИМ коммитом
-**`8d2e1ba`**: свежий clone не видит `docs/labels-pass1-r1.jsonl` без тестов, которые его
-пломбируют. Тест, утверждавший отсутствие, — это часы, а не верификатор.
-[[the-absence-test-is-a-clock-and-flips-with-its-artifact]]
-
 **⛔ BOOT TAX: ЦЕЛЬ ≤9K ПРИОСТАНОВЛЕНА (рулинг 2, 19.08) — `hot.md` ради числа НЕ РЕЖЕМ.**
-MEMORY.md **148 строк / 18 587 Б** = **74.0% и 74.3%** потолка загрузчика **200 / 25 000**, обе оси
-под баром 75%; карта «что ушло → где лежит» — `docs/reports/vault-dream.md`. Ось census теперь ось
+MEMORY.md **149 строк / 18 757 Б** = **74.5% и 73.9%** (строки и UTF-16-юниты) потолка загрузчика
+**200 / 25 000**, обе оси под баром 75%; карта «что ушло → где лежит» — `docs/reports/vault-dream.md`. Ось census теперь ось
 загрузчика (Dv526, сдвиг −1 Б), `TARGET_KTOK` и текст предупреждения НЕ двигали: «> 9.0K» читается
 как «цель на пере-регистрации». Совместное сидение стартует с таблицы горячее/холодное (`hot.md`
 поблочно + три `CLAUDE.md`, 9 323 Б) в `docs/reports/labels-boot-audit.md`; пере-регистрация — от
