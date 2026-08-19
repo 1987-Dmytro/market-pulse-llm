@@ -144,9 +144,26 @@ def money(items: list[dict], projection: dict) -> dict:
                 " this stack and they disagree by 6.7×, so the pessimistic end is what the cap has"
                 " to survive"
             ),
+            "boot_deadline_rule": (
+                "the FIRST reply must have landed by the earlier of two deadlines put on one axis:"
+                f" {FIRST_REPLY_CEILING_SECONDS} s after the generation process started, and the"
+                " create-elapsed at which the remaining cap can no longer pay for the whole"
+                " reading. On this registration the cap is generous and the first is the binding"
+                " one; a generation that has not started yet has no ceiling on this axis"
+            ),
             "boot_kill_seconds": float(FIRST_REPLY_CEILING_SECONDS),
             "delete_margin_seconds": DELETE_MARGIN_SECONDS,
             "items": len(items),
+            "pre_generation_budget_seconds": round(
+                CAP_USD / 0.74 * 3600 - DELETE_MARGIN_SECONDS - generation, 1
+            ),
+            "pre_generation_budget_rule": (
+                "usable seconds at the worked example less the reading projection — what this"
+                " registration can afford to spend BEFORE the first reply. reader-v5's own"
+                " registration went NEGATIVE here (−44.8 s) and the pod that followed was billed"
+                " 727.9 s for a provisioning it had no budget for; the number is published so the"
+                " slack is a fact and not a hope"
+            ),
             "reading_projection_seconds": generation,
             "projection_record": {
                 "record": summary.rel(PROJECTION),
