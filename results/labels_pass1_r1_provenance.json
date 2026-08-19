@@ -1,0 +1,39 @@
+{
+  "ablation": "these labels are TRAINING data, not a judge. Any line-B model trained on them is ablated with/without them and both arms are reported (honesty frame §2, docs/STATUS.md). The bar stays the sealed gold r2 ≥12/14, which no row here touches",
+  "authority": "the sitting of 2026-08-18 (evening): line B, and the TEAM LEAD labels — knowledge/decisions/sitting-b-line-b-and-the-team-lead-labels.md, registered in docs/STATUS.md",
+  "codebook": {
+    "file": "docs/label-pack-pass1-r1.md",
+    "law": "the attribution law v5 in the same bytes + the F2a carve-out (ruling 17.08) + the gold r2 rulings, «категория» = «категория_личное» among them",
+    "sha256": "5aec5c9835f84e584d4d6f4770cb8c1080c4c5084acd0f3434caa6dd11fc0f93"
+  },
+  "contract": "docs/PROMPT-labels-boot-audit.md D1",
+  "distribution": {
+    "null": 167,
+    "категория_личное": 36,
+    "молочный_бренд": 2,
+    "не_наш_рынок": 251,
+    "сеть_ритейлер": 44
+  },
+  "frozen": {
+    "file": "results/labels_pass1_r1.jsonl",
+    "rule": "a byte-identical copy under results/, so training reads a frozen path and not a docs/ file that a later contract may re-render. Neither copy is ever edited; the equality is asserted by tests/test_validate_pass1_labels.py, not by this sentence",
+    "sha256": "776b204f3d3aa1a193f0faad7f68198595c81963199124efca8f6b74a9e1c920"
+  },
+  "labels": {
+    "date": "2026-08-18",
+    "field": "subject_type",
+    "file": "docs/labels-pass1-r1.jsonl",
+    "labelled_by": "the TEAM LEAD, by hand, off docs/label-pack-pass1-r1.md. The executor validates and commits it verbatim and never writes a label into it",
+    "rows": 500,
+    "sha256": "776b204f3d3aa1a193f0faad7f68198595c81963199124efca8f6b74a9e1c920",
+    "validator": "scripts/validate_pass1_labels.py"
+  },
+  "pack": {
+    "exclusion": "the 7 threads carrying the 64 registered probe units and the 14 gold rows left the population WHOLE before the draw — proof by msg_id in the pack's exclusion block",
+    "file": "results/pass1_label_pack_r1.json",
+    "seed": 20260818,
+    "sha256": "e5ca328e5d993b81d7536b2846924ddb6e5bef3364250ba51fcf8fd35a362e4a",
+    "units": 500
+  },
+  "phase": "pass1-data-prep"
+}

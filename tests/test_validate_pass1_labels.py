@@ -1,10 +1,14 @@
-"""The labels gate, red-first — four defects refused by name, and one green path.
+"""The labels gate, red-first — four defects refused by name, one green path, and the seal.
 
-Written against a SYNTHETIC labels file every time. `docs/labels-pass1-r1.jsonl` is a team-lead
-file from the moment it exists and nothing here may create one, so every fixture lives in
-`tmp_path` and the last test asserts the real path is still absent.
+The refusals are written against a SYNTHETIC labels file every time: `docs/labels-pass1-r1.jsonl`
+is a team-lead file and nothing here may create or edit one, so every defect fixture lives in
+`tmp_path`. The seal at the bottom is the other half — the real file exists now, and the two tests
+that guard it drive the validator ON it and pin its digest. Reading the team-lead file is licensed
+by the same source-level proof the green-path test makes: the gate contains no `write_text` and no
+`write_bytes`, so running it cannot touch what it reads.
 """
 
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -17,6 +21,15 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 import validate_pass1_labels as gate  # noqa: E402
 
 PACK = json.loads((REPO_ROOT / "results" / "pass1_label_pack_r1.json").read_text("utf-8"))
+
+DISTRIBUTION = {
+    "не_наш_рынок": 251,
+    "null": 167,
+    "сеть_ритейлер": 44,
+    "категория_личное": 36,
+    "молочный_бренд": 2,
+}
+"""What the TEAM LEAD's 500 rows say, counted off the file itself and registered in the contract."""
 
 
 def write(tmp_path: Path, rows: list[dict]) -> Path:
@@ -116,9 +129,44 @@ def test_a_missing_labels_file_is_refused(tmp_path):
         gate.main([str(tmp_path / "nothing.jsonl"), "--pack", str(gate.PACK)])
 
 
-def test_the_domain_is_the_prompt_s_and_the_real_labels_file_does_not_exist():
+def test_the_domain_is_the_prompt_s_and_the_real_labels_file_is_sealed():
+    """The domain, and the file it was labelled under — driven on the REAL labels, not a synthetic.
+
+    Until the team lead wrote it, this test asserted the file's ABSENCE, which is a clock and not a
+    verifier: it expired the moment the plan it was waiting for executed
+    ([[a_green_suite_can_have_a_shelf_life]]).
+    """
     from market_pulse import prompts
 
     assert gate.VALUES == (*prompts.PASS1_SUBJECT_TYPES, None)
     assert len(gate.VALUES) == 5
-    assert not gate.LABELS.exists()
+
+    assert gate.LABELS.exists()
+    rows = gate.read_rows(gate.LABELS)
+    assert len(rows) == 500 == sum(DISTRIBUTION.values())
+    assert gate.validate(rows, PACK) == DISTRIBUTION
+    assert gate.main([str(gate.LABELS), "--pack", str(gate.PACK)]) == 0
+
+
+def test_the_freeze_carries_the_labels_byte_for_byte_and_the_record_pins_them():
+    """`results/labels_pass1_r1.jsonl` is what training reads and the sidecar says where it came
+    from. Every digest is RE-DERIVED here and none is retyped: a sha with two homes goes green
+    while one of them drifts ([[a_moved_constant_fails_green]])."""
+    record = json.loads(
+        (REPO_ROOT / "results" / "labels_pass1_r1_provenance.json").read_text("utf-8")
+    )
+    frozen = REPO_ROOT / "results" / "labels_pass1_r1.jsonl"
+    assert frozen.read_bytes() == gate.LABELS.read_bytes()
+
+    for block in ("labels", "frozen", "codebook", "pack"):
+        named = REPO_ROOT / record[block]["file"]
+        assert hashlib.sha256(named.read_bytes()).hexdigest() == record[block]["sha256"], block
+
+    assert record["labels"]["file"] == "docs/labels-pass1-r1.jsonl"
+    assert record["frozen"]["file"] == "results/labels_pass1_r1.jsonl"
+    assert record["labels"]["sha256"] == record["frozen"]["sha256"]
+    assert record["distribution"] == DISTRIBUTION
+    assert record["labels"]["date"] == "2026-08-18"
+    assert "TEAM LEAD" in record["labels"]["labelled_by"]
+    assert record["pack"]["seed"] == 20260818
+    assert "ablated" in record["ablation"]

@@ -208,7 +208,7 @@ def test_the_two_zero_payable_threads_are_not_rendered(record):
 def test_the_pack_names_who_writes_the_labels(record):
     assert record["labels"]["file"] == "docs/labels-pass1-r1.jsonl"
     assert "TEAM LEAD" in record["labels"]["written_by"]
-    assert not (REPO_ROOT / "docs" / "labels-pass1-r1.jsonl").exists()
+    assert (REPO_ROOT / "docs" / "labels-pass1-r1.jsonl").exists()
 
 
 def test_the_codebook_leaks_no_bar_number_from_the_adjudication(built):
