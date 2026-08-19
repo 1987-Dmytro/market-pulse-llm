@@ -13,13 +13,22 @@ registrations, and a `render=` keyword would move it for a keyword ([[a_sealed_c
 default]]). The swap asserts that every name it replaces EXISTS first, so a rename in the shipped
 runner is a loud failure here rather than a silent second implementation.
 
+`--adapter` is this file's third thing and it is lora-b's: the PEFT adapter goes on AROUND the
+model `local_llm` constructs, after the shipped loader has built its client. `local_llm.py` is
+pinned and is not edited, and neither is the shipped runner's argument parser — the flag is
+consumed here and what reaches `reader_v5_pod_runner.main` is exactly the argv it has always
+parsed.
+
     HF_HOME=/workspace/hf PYTHONPATH=/workspace/repo/src \\
     /workspace/venv/bin/python -u /workspace/pass1_pod_runner.py \\
         --pack /workspace/pass1_probe_pack.json \\
         --out /workspace/pass1_probe_pod.jsonl \\
-        --repo /workspace/repo
+        --repo /workspace/repo \\
+        --adapter /workspace/run/arm_a/adapter
 """
 
+import argparse
+import json
 import sys
 from contextlib import contextmanager
 from pathlib import Path
@@ -112,9 +121,85 @@ def as_pass1():
             setattr(runner, name, value)
 
 
+def split(argv: list[str] | None) -> tuple[Path | None, Path | None, list[str]]:
+    """`--adapter` (and a peek at `--out`) taken out of the argv the shipped runner parses.
+
+    The shipped parser knows three options and `argparse` errors on a fourth, so the alternative
+    would be editing a file two frozen registrations pin by sha. `--out` is re-appended because it
+    IS the shipped runner's and this only needed to read it.
+    """
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument("--adapter", type=Path)
+    parser.add_argument("--out", type=Path)
+    ours, rest = parser.parse_known_args(argv)
+    if ours.out is not None:
+        rest += ["--out", str(ours.out)]
+    return ours.adapter, ours.out, rest
+
+
+def attach(client, adapter: Path):
+    """Wrap the model `local_llm` built in the PEFT adapter, and REFUSE if the wrap did not take.
+
+    `serve_handler.assert_no_adapter` runs inside `runner.load_reader`, which is called BEFORE
+    this: the base-only handshake is not skipped, it is passed and then deliberately reversed by a
+    run that registers an adapter. The refusal below is the other half — `from_pretrained` on a
+    path with no adapter in it can hand back something that answers every job looking exactly like
+    the base, and a run that quietly evaluated the base as an arm would publish an ablation with no
+    ablation in it.
+    """
+    from peft import PeftModel
+
+    model = PeftModel.from_pretrained(client.model, str(adapter))
+    if not sorted(getattr(model, "peft_config", None) or ()):
+        raise SystemExit(
+            f"{adapter} produced a model carrying no peft_config, so nothing was attached and this"
+            " run would score the BASE under an arm's name. Stop and report."
+        )
+    client.model = model
+    return client
+
+
+def with_adapter(adapter: Path | None):
+    """The loader the shipped runner calls: its own, or its own plus the wrap."""
+    if adapter is None:
+        return runner.load_reader
+
+    def load(pack: dict, repo: Path):
+        return attach(runner.load_reader(pack, repo), adapter)
+
+    return load
+
+
+def adapter_record(adapter: Path) -> dict:
+    """What was mounted, hashed file by file — written BEFORE the first reply.
+
+    `PeftModel.from_pretrained` injects the adapter into the base modules in place, so the wrapped
+    object and the base are not distinguishable by identity afterwards and no evidence row says
+    which arm produced it. This is the observable: the arm's own weights, hashed, beside the
+    evidence file they answered into ([[baseline_before_the_run_not_after]]).
+    """
+    files = sorted(one for one in adapter.iterdir() if one.is_file())
+    return {
+        "adapter": str(adapter),
+        "files": {one.name: sha256_of(one) for one in files},
+        "rule": (
+            "written before the run, from the directory that was mounted. An evidence file with no"
+            " record beside it was answered by the base"
+        ),
+    }
+
+
 def main(argv: list[str] | None = None, loader=None) -> int:
+    adapter, out, rest = split(sys.argv[1:] if argv is None else argv)
+    if adapter is not None and out is not None:
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.with_suffix(out.suffix + ".adapter.json").write_text(
+            json.dumps(adapter_record(adapter), ensure_ascii=False, indent=2, sort_keys=True)
+            + "\n",
+            encoding="utf-8",
+        )
     with as_pass1():
-        return runner.main(argv, loader=loader or runner.load_reader)
+        return runner.main(rest, loader=loader or with_adapter(adapter))
 
 
 if __name__ == "__main__":

@@ -102,6 +102,154 @@ either forbid the training data or, written loosely, permit the test sets.
 Every version of each, because a list that names only v2 is a guard that stopped covering
 the test set the moment v3 was frozen beside it."""
 
+SFT_RECORD = REPO_ROOT / "results" / "pass1_sft.json"
+"""The pass-1 datasets' own registration — `scripts/build_pass1_sft.py` writes it.
+
+A training run reads a dataset by path, and a path is not an identity: the file at it can be
+rebuilt, re-rendered or hand-edited between the registration and the pod. This record is what says
+which bytes were registered, and :func:`build_pass1` refuses a dataset whose sha it does not name.
+"""
+
+PASS1_K = 5
+"""The taxonomy's size — the four readings of `prompts.PASS1_SUBJECT_TYPES` plus `null`.
+
+Not `len(the classes present)`: a dataset that happens to hold four of the five would silently
+change every weight if K followed it, and the formula is pre-registered
+(docs/PROMPT-lora-b.md D1)."""
+
+PASS1_WEIGHT_CAP = 8.0
+"""The cap on `w_c = N / (K · n_c)`. Uncapped, a class with two rows in six hundred asks for a
+weight of 65 and the epoch becomes a loop over those two rows; the cap is what keeps a weighted
+epoch an epoch of the dataset."""
+
+
+def class_weights(rows: list[dict], k: int = PASS1_K, cap: float = PASS1_WEIGHT_CAP) -> dict:
+    """`w_c = N / (K · n_c)`, capped — computed on the arm's OWN dataset.
+
+    One implementation, called by both ends: the trainer samples with it and
+    `scripts/build_pass1_sft.py` publishes it into the record the registration quotes. A second
+    copy of a formula is a second answer the day one of them is edited.
+    """
+    counts: dict[str, int] = {}
+    for row in rows:
+        name = "null" if row.get("subject_type") is None else str(row["subject_type"])
+        counts[name] = counts.get(name, 0) + 1
+    total = sum(counts.values())
+    return {name: round(min(total / (k * n), cap), 6) for name, n in sorted(counts.items())}
+
+
+def sampling_order(count: int, weights: list[float] | None, seed: int) -> list[int]:
+    """The row order of one epoch: a shuffle, or `count` weighted draws WITH replacement.
+
+    The draw count is the dataset's own size in both branches, which is what keeps
+    `steps_per_epoch = ceil(n / effective_batch)` true — and therefore keeps the registered step
+    count, the projected seconds and the cap arithmetic true. A sampler that oversampled to balance
+    the classes would silently lengthen the run it was registered under.
+    """
+    stream = random.Random(seed)
+    if weights is None:
+        order = list(range(count))
+        stream.shuffle(order)
+        return order
+    return stream.choices(range(count), weights=weights, k=count)
+
+
+def load_sft(path: Path) -> list[dict]:
+    """A pre-rendered pass-1 dataset, with every target read back by the eval path's own parser.
+
+    The phase-4 half of this file asserts format identity by re-parsing what it serialized; this
+    asserts the same thing about a file it did not write, plus the two properties the masking rests
+    on — that the supervised head ends inside the target and that it carries the label, because a
+    `learn_chars` past the value would supervise nothing and go green.
+    """
+    rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
+    if not rows:
+        raise SystemExit(f"{path}: no rows")
+    for row in rows:
+        missing = {"id", "msg_id", "prompt", "target", "learn_chars", "subject_type", "task"} - set(
+            row
+        )
+        if missing:
+            raise SystemExit(f"{row.get('id', '?')}: the row has no {sorted(missing)}")
+        if row["task"] != prompts.PASS1_TASK:
+            raise SystemExit(f"{row['id']}: task {row['task']!r} is not {prompts.PASS1_TASK!r}")
+        parsed = prompts.parse_pass1(row["target"], msg_id=int(row["msg_id"]))
+        if parsed["subject_type"] != row["subject_type"]:
+            raise SystemExit(f"{row['id']}: the parser reads {parsed['subject_type']!r} back")
+        head = row["target"][: int(row["learn_chars"])]
+        label = "null" if row["subject_type"] is None else f'"{row["subject_type"]}"'
+        if not 0 < int(row["learn_chars"]) < len(row["target"]) or not head.endswith(label):
+            raise SystemExit(
+                f"{row['id']}: the supervised head {head!r} does not end at the label. A"
+                " learn_chars that stops short of the value trains on nothing and reports green."
+            )
+    ids = [row["id"] for row in rows]
+    if len(set(ids)) != len(ids):
+        raise SystemExit(f"{path}: {len(ids) - len(set(ids))} rows share an id")
+    return rows
+
+
+def build_pass1(config: dict, path: Path, weighted: bool) -> tuple[dict, dict]:
+    """The dataset this run trains on, held to the record that registered it.
+
+    No carve: the carve is phase 4's convergence thermometer, drawn from a pool this run does not
+    have, and 24 rows held out of 464 would be 24 labels bought and not trained on.
+    """
+    rows = load_sft(path)
+    record = json.loads(SFT_RECORD.read_text(encoding="utf-8"))
+    named = {
+        block["file"]: block
+        for block in record["datasets"].values()
+        if block["sha256"] == sha256(path.read_bytes()).hexdigest()
+    }
+    if not named:
+        raise SystemExit(
+            f"{path} hashes {sha256(path.read_bytes()).hexdigest()[:16]}… and"
+            f" {SFT_RECORD.name} registers"
+            f" {sorted(block['sha256'][:16] for block in record['datasets'].values())} — this is"
+            " not a registered dataset. Stop rather than train on bytes nobody pre-registered."
+        )
+    arm = next(name for name, block in record["datasets"].items() if block["file"] in named)
+    if record["instruments"]["prompt_sha256"] != {
+        prompts.PASS1_TASK: prompts.prompt_sha256(prompts.PASS1_TASK)
+    }:
+        raise SystemExit(
+            "the pass-1 prompt on this checkout is not the one the datasets were rendered under —"
+            " a fine-tune trained on a prompt that moved is trained for another task"
+        )
+    weights = class_weights(rows)
+    provenance = {
+        "arm": arm,
+        "dataset": {
+            "file": record["datasets"][arm]["file"],
+            "rows": len(rows),
+            "sha256": record["datasets"][arm]["sha256"],
+        },
+        "sft_record": {
+            "file": "results/pass1_sft.json",
+            "sha256": sha256(SFT_RECORD.read_bytes()).hexdigest(),
+        },
+        "labelled_by": "the TEAM LEAD — results/labels_pass1_r*_provenance.json",
+        "class_weights": weights if weighted else None,
+        "sampler": (
+            f"weighted with replacement, {len(rows)} draws per epoch, w_c = N/({PASS1_K}·n_c)"
+            f" capped at {PASS1_WEIGHT_CAP}"
+            if weighted
+            else "uniform shuffle — the default, unchanged"
+        ),
+        "supervision": record["supervision"],
+        "n_train": len(rows),
+        "n_carve": 0,
+        "train_sha256": content_hash(rows),
+        "task": prompts.PASS1_TASK,
+        "prompt_sha256": {prompts.PASS1_TASK: prompts.prompt_sha256(prompts.PASS1_TASK)},
+        "quantization": local_llm.QUANTIZATION,
+        "chat_template": local_llm.CHAT_TEMPLATE,
+        "config": config,
+    }
+    return {"train": rows, "carve": [], "kind": "pass1", "weighted": weighted}, provenance
+
+
 RAW_POSTS = REPO_ROOT / "data" / "raw" / "posts"
 CAPTIONS = ANNOTATION / "post_captions.jsonl"
 _POSTS: dict | None = None
@@ -349,6 +497,64 @@ def encode(tokenizer, example: dict, max_seq_len: int) -> dict:
     return {"input_ids": context + target, "labels": [-100] * len(context) + target}
 
 
+def text_tokenizer(loaded):
+    """The thing that turns text into ids, whether `loaded` is a tokenizer or the processor.
+
+    pass 1 trains through `local_llm.load_captioner` — the PROCESSOR — because that is what the
+    eval path builds its client on, and the chat template a processor applies is not guaranteed to
+    be the one its inner tokenizer would. Train/eval format identity is held by construction here
+    rather than by an assertion after the fact.
+    """
+    return getattr(loaded, "tokenizer", loaded)
+
+
+def pad_id_of(loaded) -> int:
+    inner = text_tokenizer(loaded)
+    return inner.pad_token_id if inner.pad_token_id is not None else inner.eos_token_id
+
+
+def encode_pass1(loaded, example: dict, max_seq_len: int) -> dict:
+    """One pre-rendered pass-1 request as ids, with the prompt AND the unlabelled tail masked.
+
+    The team lead labelled `subject_type`. The answer the parser demands carries `subject_id` and
+    `stance` beside it, and there is no gold for either — so they are written and NOT supervised.
+    The cut is made on CHARACTER offsets and not by tokenizing the head separately: a merge across
+    the boundary would move the cut by a token and nothing would say so. Any token that reaches
+    past the boundary is masked, which errs toward supervising less.
+
+    Nothing appends an end-of-turn marker. The transport stops at the first balanced object
+    (`reader_v5.balanced_prefix`, installed by the pod runner), so the stop is the harness's and
+    not a token this run has to teach — and teaching it would mean supervising the masked tail.
+    """
+    prompt = loaded.apply_chat_template(
+        [{"role": "user", "content": example["prompt"]}],
+        tokenize=False,
+        **local_llm.CHAT_TEMPLATE,
+    )
+    tokenizer = text_tokenizer(loaded)
+    context = tokenizer(prompt, add_special_tokens=False)["input_ids"]
+    encoded = tokenizer(example["target"], add_special_tokens=False, return_offsets_mapping=True)
+    offsets = encoded.get("offset_mapping")
+    if not offsets:
+        raise SystemExit(
+            "this tokenizer returns no offset mapping, so the supervised span cannot be located"
+            " without re-tokenizing the head and hoping the merges agree. Stop and report."
+        )
+    learn = int(example["learn_chars"])
+    target = encoded["input_ids"]
+    labels = [token if end <= learn else -100 for token, (_, end) in zip(target, offsets)]
+    if all(label == -100 for label in labels):
+        raise SystemExit(f"{example['id']}: every target token is masked — nothing would train")
+    if len(context) + len(target) > max_seq_len:
+        raise SystemExit(
+            f"{example['id']} needs {len(context) + len(target)} tokens against a max_seq_len of"
+            f" {max_seq_len}. config/qlora.yaml is frozen law — the dataset builder bounds every"
+            " row before it ships, so a row arriving here means the bound and the tokenizer have"
+            " parted. Stop and report."
+        )
+    return {"input_ids": context + target, "labels": [-100] * len(context) + labels}
+
+
 def collate(rows: list[dict], pad_id: int, device=None) -> dict:
     """Right-padded tensors; padding is masked out of both attention and loss."""
     import torch
@@ -393,13 +599,18 @@ def adapter_targets(model, lora: dict) -> list[str]:
     return names
 
 
-def load_for_training(config: dict, resume: Path | None = None):
-    """The NF4 base of `local_llm`, prepared for k-bit training, plus adapters."""
+def load_for_training(config: dict, resume: Path | None = None, pass1: bool = False):
+    """The NF4 base of `local_llm`, prepared for k-bit training, plus adapters.
+
+    `pass1` loads through :func:`local_llm.load_captioner` — the PROCESSOR the eval path builds its
+    client on — so a training example is rendered through the same chat template the gate is
+    answered through, by construction and not by an assertion made afterwards. Same weights, same
+    pinned revision, same NF4 dict; what differs is which object applies the template.
+    """
     from peft import LoraConfig, PeftModel, get_peft_model, prepare_model_for_kbit_training
 
-    tokenizer, model = local_llm.load(
-        revision=config["base"]["revision"], seed=config["training"]["seed"]
-    )
+    load = local_llm.load_captioner if pass1 else local_llm.load
+    tokenizer, model = load(revision=config["base"]["revision"], seed=config["training"]["seed"])
     model = prepare_model_for_kbit_training(
         model, use_gradient_checkpointing=config["training"]["gradient_checkpointing"]
     )
@@ -461,14 +672,25 @@ def train(config: dict, built: dict, out: Path, max_steps: int | None, resume: P
     from transformers import get_cosine_schedule_with_warmup
 
     settings, tuning = config["training"], config["optimizer"]
-    tokenizer, model = load_for_training(config, resume)
-    encoded = [encode(tokenizer, row, settings["max_seq_len"]) for row in built["train"]]
+    pass1 = built.get("kind") == "pass1"
+    tokenizer, model = load_for_training(config, resume, pass1=pass1)
+    encode_row = encode_pass1 if pass1 else encode
+    encoded = [encode_row(tokenizer, row, settings["max_seq_len"]) for row in built["train"]]
+    pad = pad_id_of(tokenizer)
     carve = [
-        collate(
-            [encode(tokenizer, row, settings["max_seq_len"])], tokenizer.pad_token_id, model.device
-        )
+        collate([encode_row(tokenizer, row, settings["max_seq_len"])], pad, model.device)
         for row in built["carve"]
     ]
+    # One weight per ROW, resolved from the per-class table once: the sampler draws row indices and
+    # a table lookup inside the epoch loop would recompute the same dict every epoch.
+    weights = None
+    if built.get("weighted"):
+        table = class_weights(built["train"])
+        weights = [
+            table["null" if row.get("subject_type") is None else row["subject_type"]]
+            for row in built["train"]
+        ]
+        print(f"weighted sampling ON — {table}")
 
     micro, accum = settings["micro_batch_size"], settings["grad_accum"]
     per_epoch = -(-len(encoded) // (micro * accum))
@@ -499,14 +721,13 @@ def train(config: dict, built: dict, out: Path, max_steps: int | None, resume: P
     began, window, since = time.time(), [], time.time()
     epoch, index = start_epoch, start_index
     for epoch in range(start_epoch, settings["epochs"]):
-        rows = list(range(len(encoded)))
-        random.Random(settings["seed"] + epoch).shuffle(rows)
+        rows = sampling_order(len(encoded), weights, settings["seed"] + epoch)
         index = start_index if epoch == start_epoch else 0
         seen = 0
         while index < len(rows) and step < total:
             chunk = [encoded[i] for i in rows[index : index + micro]]
             try:
-                loss = model(**collate(chunk, tokenizer.pad_token_id, model.device)).loss
+                loss = model(**collate(chunk, pad, model.device)).loss
                 (loss / accum).backward()
             except torch.cuda.OutOfMemoryError:
                 if micro == 1:
@@ -536,7 +757,7 @@ def train(config: dict, built: dict, out: Path, max_steps: int | None, resume: P
                     "micro_batch": micro,
                     "gpu_gb": round(torch.cuda.max_memory_allocated() / 2**30, 2),
                 }
-                if step % settings["carve_every"] == 0 or step == total:
+                if carve and (step % settings["carve_every"] == 0 or step == total):
                     line["carve_loss"] = carve_loss(model, carve)
                 with curve.open("a", encoding="utf-8") as handle:
                     handle.write(json.dumps(line) + "\n")
@@ -630,16 +851,41 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--max-steps", type=int, help="stop after N optimizer steps (smoke)")
     parser.add_argument("--resume-from", type=Path)
     parser.add_argument("--carve-eval", action="store_true", help="mechanics check after training")
+    parser.add_argument("--data", type=Path, help="a pre-rendered pass-1 SFT dataset (lora-b D1)")
+    parser.add_argument(
+        "--class-weights",
+        action="store_true",
+        help="pass 1: sample each epoch by w_c = N/(K*n_c), capped. OFF by default",
+    )
     args = parser.parse_args(argv)
 
+    if args.data and args.with_plast:
+        raise SystemExit(
+            "--with-plast is phase 4's ablation and --data is pass 1's dataset: one run cannot be"
+            " both arms of two experiments. Pick one."
+        )
+    if args.class_weights and not args.data:
+        raise SystemExit(
+            "--class-weights is the pass-1 sampler and needs the pass-1 dataset it weighs"
+            " (--data). Phase 4's arms are not registered under a weighted sampler."
+        )
     config = yaml.safe_load(args.config.read_text(encoding="utf-8"))
-    built, record = build(config, args.with_plast)
+    built, record = (
+        build_pass1(config, args.data, args.class_weights)
+        if args.data
+        else build(config, args.with_plast)
+    )
     print(json.dumps({k: v for k, v in record.items() if k != "config"}, indent=2, sort_keys=True))
     if args.build_only:
         return 0
     if not args.out:
         raise SystemExit("--out is required for a training run")
 
+    if args.carve_eval and not built["carve"]:
+        raise SystemExit(
+            "--carve-eval runs the local eval path over the carve, and a pass-1 dataset has none:"
+            " every labelled row is trained on. Ask for the mechanics check another way."
+        )
     record["run"] = train(config, built, args.out, args.max_steps, args.resume_from)
     if args.carve_eval:
         record["carve_mechanics"] = carve_mechanics(config, built, args.out / "adapter")

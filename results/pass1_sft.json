@@ -1,0 +1,211 @@
+{
+  "arms": {
+    "a": [
+      "r1"
+    ],
+    "b": [
+      "r1",
+      "r2"
+    ]
+  },
+  "census": {
+    "arms": {
+      "a": {
+        "context": {
+          "of": 464,
+          "with_a_bought_topic": 70,
+          "with_an_entity_block": 32
+        },
+        "distribution": {
+          "null": 138,
+          "категория_личное": 35,
+          "молочный_бренд": 1,
+          "не_наш_рынок": 246,
+          "сеть_ритейлер": 44
+        },
+        "effective_batch": 16,
+        "epochs": 2,
+        "file": "results/pass1_sft_arm_a.jsonl",
+        "n": 464,
+        "sampler_weights": {
+          "null": 0.672464,
+          "категория_личное": 2.651429,
+          "молочный_бренд": 8.0,
+          "не_наш_рынок": 0.377236,
+          "сеть_ритейлер": 2.109091
+        },
+        "steps": 58,
+        "steps_per_epoch": 29
+      },
+      "b": {
+        "context": {
+          "of": 607,
+          "with_a_bought_topic": 91,
+          "with_an_entity_block": 39
+        },
+        "distribution": {
+          "null": 178,
+          "категория_личное": 45,
+          "молочный_бренд": 1,
+          "не_наш_рынок": 335,
+          "сеть_ритейлер": 48
+        },
+        "effective_batch": 16,
+        "epochs": 2,
+        "file": "results/pass1_sft_arm_b.jsonl",
+        "n": 607,
+        "sampler_weights": {
+          "null": 0.682022,
+          "категория_личное": 2.697778,
+          "молочный_бренд": 8.0,
+          "не_наш_рынок": 0.362388,
+          "сеть_ритейлер": 2.529167
+        },
+        "steps": 76,
+        "steps_per_epoch": 38
+      }
+    },
+    "dropped_for_length": {
+      "by_pack": {
+        "r1": 36,
+        "r2": 7
+      },
+      "ids": [
+        "@mandziak:3667#47830",
+        "@mandziak:3667#47832",
+        "@mandziak:3667#47859",
+        "@mandziak:3667#47860",
+        "@mandziak:3667#48201",
+        "@mandziak:3721#48423",
+        "@mandziak:3721#48430",
+        "@mandziak:3721#48445",
+        "@mandziak:3721#49075",
+        "@mandziak:3736#48527",
+        "@mandziak:3736#48528",
+        "@mandziak:3736#48529",
+        "@mandziak:3736#48530",
+        "@mandziak:3736#48535",
+        "@mandziak:3736#48596",
+        "@mandziak:3736#49159",
+        "@mandziak:3768#49012",
+        "@mandziak:3768#49013",
+        "@mandziak:3768#49014",
+        "@mandziak:3768#49015",
+        "@mandziak:3768#49018",
+        "@mandziak:3768#49023",
+        "@mandziak:3768#49225",
+        "@polyakova_fitness:1143#2421",
+        "@tarilka_malyuka:695#12",
+        "@tarilka_malyuka:695#50",
+        "@tarilka_malyuka:825#185",
+        "@ya_Nenka:834#2575",
+        "@ya_Nenka:836#2577",
+        "@ya_Nenka:836#2579",
+        "@ya_Nenka:836#2580",
+        "@ya_Nenka:836#2581",
+        "@ya_Nenka:836#2582",
+        "@ya_Nenka:836#2595",
+        "@ya_Nenka:838#2584",
+        "@ya_Nenka:838#2585",
+        "@ya_Nenka:838#2586",
+        "@ya_Nenka:840#2589",
+        "@ya_Nenka:840#2590",
+        "@ya_Nenka:840#2591",
+        "@ya_Nenka:844#2597",
+        "@ya_Nenka:844#2598",
+        "@ya_Nenka:844#2599"
+      ],
+      "longest_kept": 1344,
+      "n": 43,
+      "rule": "bound_tokens > max_seq_len (1408, config/qlora.yaml, frozen law). The bound is the worst measured tokens-per-character times the request's characters, plus 16 tokens of template slack",
+      "shortest_dropped": 1412
+    },
+    "eval_pack": {
+      "items": 64,
+      "record": "results/pass1_probe_b_pack.json",
+      "sha256": "bbbe64203f9c909a2d2e8aeab03d8d61c0fd6604d4854e13462d0e190bc4e113",
+      "with_an_entity_block": 55
+    },
+    "the_gate_s_own_rows": {
+      "n": 14,
+      "reading": "the 14 rows the sealed bar is scored on, counted in the probe-b pack that serves them. This is the number the training set's own context census is compared against: the gate is answered under a rich entity block and the training rows mostly are not",
+      "with_an_entity_block": 12
+    }
+  },
+  "contract": "docs/PROMPT-lora-b.md D1",
+  "datasets": {
+    "a": {
+      "file": "results/pass1_sft_arm_a.jsonl",
+      "rows": 464,
+      "sha256": "37493f6319b9be352adf39d8f167802cac5132d72fd2de5c8da14f2b46de6fc7"
+    },
+    "b": {
+      "file": "results/pass1_sft_arm_b.jsonl",
+      "rows": 607,
+      "sha256": "e1e14ee7f5e17bc70e8c5f350c89e0116cbbca107a52f450de3bb7f6b0a03857"
+    }
+  },
+  "instruments": {
+    "parser": {
+      "entry_point": "market_pulse.prompts.parse_pass1",
+      "module": "src/market_pulse/prompts.py",
+      "rule": "every target in both files is read back by it at build time",
+      "sha256": "a4a5a5d08546f53af18117c37e49f7e396919555563e16737a633c1df1a86eec"
+    },
+    "prompt_sha256": {
+      "pass1_comment_gm4_v1": "5a4a3cb6ce4db89adb304c04de41210fdabfde0c53addfdb75adba0f1d866650"
+    },
+    "renderer": "market_pulse.prompts.pass1_messages_gm4"
+  },
+  "labels": {
+    "r1": {
+      "file": "results/labels_pass1_r1.jsonl",
+      "labelled_by": "the TEAM LEAD, by hand, off docs/label-pack-pass1-r1.md. The executor validates and commits it verbatim and never writes a label into it",
+      "sha256": "776b204f3d3aa1a193f0faad7f68198595c81963199124efca8f6b74a9e1c920"
+    },
+    "r2": {
+      "file": "results/labels_pass1_r2.jsonl",
+      "labelled_by": "the TEAM LEAD. It is a team-lead file from the moment it exists: the executor validates it and commits it verbatim, and never writes a label into it",
+      "sha256": "8f611437fdd3ed724acda516186bfa2837d94d7e8d74ac6c25e23a8e57d60e50"
+    }
+  },
+  "length": {
+    "bound": {
+      "measured_on": "@VARUS_channel:10613#21601",
+      "rows": 64,
+      "rule": "the maximum over probe-b's 64 paid rows of prompt_tokens / rendered_chars. The numerator counts the chat template the pod wraps the request in, so the bound is conservative by construction",
+      "source": {
+        "evidence": "results/pass1_probe_b_rows.jsonl",
+        "pack": "results/pass1_probe_b_pack.json"
+      },
+      "tokens_per_char_max": 0.291741
+    },
+    "config": "config/qlora.yaml",
+    "config_sha256": "6771ed373f9e7c52b3180a45506fe0dfef4446bc89b2c3ff6c1b39992f2d00ff",
+    "max_seq_len": 1408,
+    "template_slack_tokens": 16
+  },
+  "packs": {
+    "r1": {
+      "file": "results/pass1_label_pack_r1.json",
+      "sha256": "e5ca328e5d993b81d7536b2846924ddb6e5bef3364250ba51fcf8fd35a362e4a"
+    },
+    "r2": {
+      "file": "results/pass1_label_pack_r2.json",
+      "sha256": "5acae80b28463f580655a39f74ab006f810837eef95965e7695ff35ee7a0e07f"
+    }
+  },
+  "producer": {
+    "script": "scripts/build_pass1_sft.py",
+    "sha256": "c7f93ab6043bce9ab5c29da1cea9402f8b9322ea3ada545f6da056800608a556"
+  },
+  "supervision": {
+    "field": "subject_type",
+    "learn_chars": "each row's target is written whole and only its head — through the subject_type value — is supervised. `scripts/train_qlora.py` masks the rest out of the loss",
+    "unsupervised_fields": [
+      "subject_id",
+      "stance"
+    ],
+    "why": "the team lead labelled subject_type and nothing else. Training the two unlabelled fields as null would teach «stance is always null», and three of the fourteen sealed gold rows score stance — the reachable maximum would fall to 11 against a threshold of 12 and the gate would be unreachable by construction"
+  }
+}
