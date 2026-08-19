@@ -604,6 +604,28 @@ def test_the_swap_refuses_a_name_v5b_no_longer_has(monkeypatch):
             pass
 
 
+def test_an_inherited_reply_would_disable_the_boot_kill_and_the_out_file_starts_empty(synthetic):
+    """The blocker the review found before segment 3 was created.
+
+    `read_threads_reader_v5b.main` routes `--gate` to the boot-kill branch only while the raw file
+    is EMPTY. `/workspace` is the network volume, so a replacement pod mounts the previous
+    segment's replies — and one inherited row makes the registered 720 s kill unreachable for the
+    whole segment while the calibration that IS attempt B's cap guard is diluted by a measurement
+    this pod never made. Segment 2's reply is archived under its own name and both machines start
+    the segment with no out-file; the price is one unit re-asked.
+    """
+    source = Path(v5b.__file__).read_text(encoding="utf-8")
+    assert "if args.deadlines or (args.gate and not rows):" in source  # the branch this rests on
+    assert not driver.RAW.exists()  # the repo ships segment 3 with no raw file
+    archived = REPO_ROOT / "results" / "reader_topup_pod_segment2.jsonl"
+    assert archived.exists() and len(archived.read_text("utf-8").strip().splitlines()) == 1
+
+    runbook = (REPO_ROOT / "scripts" / "runbook_reader_topup.md").read_text(encoding="utf-8")
+    assert "rm -f /workspace/reader_topup_pod.jsonl" in runbook
+    assert "9 184.7 s" in runbook and "2 h 33 min" in runbook  # the REMAINING cap, not $2.00's
+    assert "create + 2 h 45 min" in runbook
+
+
 def test_the_driver_points_at_this_phases_files_and_not_v5bs():
     for name in driver.SWAPPED:
         ours = getattr(driver, name)

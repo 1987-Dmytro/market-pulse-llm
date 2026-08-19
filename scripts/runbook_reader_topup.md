@@ -7,9 +7,21 @@ comes out of it and nothing in this file may add a number the record does not ca
 `pod delete`. Not at ssh, not at the model load, not at the first job — a pod bills for existing.
 `pod stop` does NOT stop it. **Delete, never stop.**
 
-Cap **$2.00** = 9 729.7 s of pod at $0.74/h, of which **9 669.7 s** are usable (60 s held back so
-the deletion itself is inside the cap). The generation projection is **6 049 s** over 132 units, so
-the cap fits it 1.40× even after a 1 200 s boot, and 1.28× at the $0.80/h ceiling.
+**Segment 3 — the last the recovery clause allows, and it runs under ATTEMPT B's registration**
+(`results/reader_topup_prereg_b.json`). Segments 1 and 2 billed **485.0 s = $0.099695**, so the cap
+this segment is measured against is the REMAINDER: $1.900305, which buys **9 184.7 s** usable at
+$0.74/h and **8 491.4 s** at the $0.80/h ceiling (cap ÷ rate × 3600, less the 60 s the deletion
+itself is held back for). The generation projection is 6 049 s over 132 units, so the remainder
+still fits it with ~2 836 s of slack after a 300 s boot.
+
+**The out-file starts EMPTY, on both machines.** Segment 2's single reply is archived as
+`results/reader_topup_pod_segment2.jsonl` and the pod's own
+`/workspace/reader_topup_pod.jsonl` is deleted before the launch. This is not tidiness: `--gate`
+takes its BOOT-KILL branch only while the raw file is empty (`read_threads_reader_v5b.py`:
+`if args.deadlines or (args.gate and not rows)`), so one inherited row from a pod that no longer
+exists would make the 720 s boot kill unreachable for the whole segment — and would dilute the
+calibration that IS attempt B's cap guard with a measurement this pod never made. The price of
+starting clean is re-asking one unit: ~80 s, about $0.016.
 
 **What this buys:** 559 of the 650 pass-1 training rows get a bought topic instead of a cut post
 fragment, and the entity block is expected to reach ~279 of 650 against 39 today. The numbers and
@@ -41,8 +53,12 @@ example, over the cap). What guards the cap is gate 2 in §4.
 runpodctl pod create --name mp-reader-topup --gpu-id 'NVIDIA GeForce RTX 4090' --gpu-count 1 \
   --network-volume-id qw4nwleanc --data-center-ids EU-RO-1 --cloud-type SECURE \
   --image runpod/pytorch:1.0.2-cu1281-torch280-ubuntu2404 --container-disk-in-gb 30 \
-  --ports '22/tcp' --ssh --terminate-after '<UTC ISO8601, create + 3 h>'
+  --ports '22/tcp' --ssh --terminate-after '<UTC ISO8601, create + 2 h 45 min>'
 ```
+
+2 h 45 min and not 3 h: the backstop has to sit just above the 9 184.7 s this segment can afford,
+not above the full cap the first attempt was written for. It is still not a cap guard — at the
+worked example it is $2.04 — it is what deletes the pod if this Mac dies with the run open.
 
 **Read `costPerHr` and the card back out of the response and stamp the clock immediately:**
 
@@ -93,7 +109,14 @@ ssh -i $SSHK -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogL
 cd /workspace && rm -rf repo && git clone -q market-pulse-topup.bundle repo
 cd repo && git rev-parse HEAD && git status --short      # equals the Mac's HEAD, empty
 ls -d /workspace/venv /workspace/hf && du -sh /workspace/hf   # the volume is warm, or STOP
+rm -f /workspace/reader_topup_pod.jsonl                  # the volume REMEMBERS the last segment
+ls -l /workspace/reader_topup_pod.jsonl 2>&1 | tail -1   # "No such file" — the proof, not the hope
 ```
+
+The `rm` is the pod half of «the out-file starts empty». `/workspace` is the network volume, so a
+replacement pod mounts the previous segment's replies and `reader_v5_pod_runner.already_answered`
+would resume over them — which is the right behaviour for a resume and the wrong one for a segment
+whose kill rule has to be able to fire.
 
 If `/workspace/hf` is not there the weights are not on the volume, the boot is a 59 GB download,
 and this registration did not price one: delete and STOP.
@@ -121,17 +144,29 @@ PYTHONPATH=src python3.11 scripts/read_threads_reader_topup.py --gate \
 ```
 
 Exit codes ARE the rule: **3 = WAIT** (no reply yet, still inside the deadline), **2 = KILL/STOP**,
-**0 = GO**. The first reply must land by generation + 720 s; affordability sits at create + 3 621 s
-and is the looser of the two on this registration, which is why the twelve-minute ceiling binds.
+**0 = GO**. The first reply must land by generation + 720 s; affordability sits at create + 3 135.8 s
+on the REMAINING cap and is the looser of the two, which is why the twelve-minute ceiling binds.
 
-After the first reply the same pair projects the full pass BOTH ways and the pessimistic one binds:
-`elapsed + max(unread units ÷ read, unread payable ÷ read payable) × measured ≤ usable`. Re-run it
-as replies land — it costs nothing and it is what deletes the pod before the cap rather than after.
-The units are ordered **expensive first**, so the early seconds-per-unit is the worst this run will
-see and the projection it feeds is pessimistic by construction.
+`--gate` reaches the boot-kill branch only while no reply has landed, which is exactly why §3 empties
+the out-file on both machines. Until the first reply, `--deadlines` prints the same clock without
+depending on that.
 
-**A wall-clock alarm at create + 2 h 40 min** (9 669.7 s). If the polling stops, the only thing left
-is `--terminate-after` at 3 h.
+After the first reply the gate is ATTEMPT B's — each unread unit projected at its own size, and the
+sum calibrated by what this pod has actually done:
+`elapsed + max(measured ÷ fitted(read), 1.0) × Σ fitted(unread) ≤ usable`. Attempt A's two legs are
+still printed beside it and neither binds. Re-run it as replies land — it costs nothing and it is
+what deletes the pod before the cap rather than after.
+
+**Two named risks, from the review that preceded this segment.** The calibration is a single ratio,
+so at n=1 it decides all 132 units from one reading: a first unit at ≥1.47× its fit STOPs a run that
+would fit, and 2 of the 26 units the line was fitted on are that slow (1 of 9 among units of ≥10
+payable). The counter-evidence is direct — this pack's first unit was measured at 77.5 s on a real
+pod, 0.96× its fit. And the calibration is multiplicative, so it under-projects a per-unit ADDITIVE
+slowdown; the cap, not the gate, is what bounds that case.
+
+**A wall-clock alarm at create + 2 h 33 min** (9 184.7 s — the REMAINING cap at $0.74/h; 2 h 21 min
+if the create response prices the card at the $0.80/h ceiling). If the polling stops, the only thing
+left is `--terminate-after` at 2 h 45 min.
 
 Bring the log back too, and always before a kill:
 
