@@ -23,6 +23,13 @@ MEMORY_UNITS = 25_000
 («Step 1 — the constants»). `dde` is compared against `String.length` — UTF-16 code units, not the
 UTF-8 bytes a `stat()` returns, and not 25 * 1024 either (Dv526)."""
 
+JS_TRIM = "\t\n\v\f\r \u00a0\u1680\u2028\u2029\u202f\u205f\u3000\ufeff" + "".join(
+    map(chr, range(0x2000, 0x200B))
+)
+"""What `String.trim()` strips: JS WhiteSpace + LineTerminator, which is NOT `str.strip()`'s set.
+Python also takes U+001C–U+001F and U+0085, which JS keeps, and leaves U+FEFF, which JS takes — so
+a BOM'd file would be counted three bytes too heavy and a NEL-edged one three bytes too light."""
+
 
 def nbytes(p):
     try:
@@ -34,14 +41,15 @@ def nbytes(p):
 def loaded_memory(p):
     """The bytes of MEMORY.md the loader actually injects — the census's share of it.
 
-    The loader trims the text, keeps the first `MEMORY_LINES` lines, and if the result still
+    The loader trims the text with `String.trim()` (`JS_TRIM`, not `str.strip()`), keeps the first
+    `MEMORY_LINES` lines, and if the result still
     exceeds `MEMORY_UNITS` code units cuts it back to the last newline at or before the cap (a
     first line longer than the cap has none, and is cut mid-line). What comes back is a BYTE count,
     because that is the unit the census sums: returning the unit count would be the same defect
     Dv526 names, pointing the other way.
     """
     try:
-        text = p.read_text(encoding="utf-8", errors="replace").strip()
+        text = p.read_text(encoding="utf-8", errors="replace").strip(JS_TRIM)
     except OSError:
         return 0
     lines = text.split("\n")

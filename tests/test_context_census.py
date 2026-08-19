@@ -70,6 +70,18 @@ def test_a_first_line_longer_than_the_unit_cap_is_cut_mid_line(tmp_path):
     assert loaded == census.MEMORY_UNITS
 
 
+def test_the_trim_is_the_JS_one_so_a_BOM_goes_and_a_NEL_stays(tmp_path):
+    """`String.trim()` and `str.strip()` disagree at BOTH ends of their difference, so one fixture
+    cannot see it: the BOM proves something is stripped, the NEL-and-US edges prove it is not a
+    strip of everything Python calls whitespace ([[guard_selftest_negative_control]])."""
+    body = "- line one\n- line two"
+    assert census.loaded_memory(write(tmp_path, "\ufeff" + body + "\n")) == len(body.encode())
+
+    edged = "\u0085" + body + "\u001f"  # whitespace to Python, ordinary characters to JS
+    assert edged.strip() == body, "the fixture must be one str.strip() would have eaten"
+    assert census.loaded_memory(write(tmp_path, edged)) == len(edged.encode())
+
+
 def test_a_missing_memory_file_is_zero_and_not_a_crash(tmp_path):
     """A fresh clone has no MEMORY.md, and a census that raises there measures nothing at all."""
     assert census.loaded_memory(tmp_path / "nothing.md") == 0

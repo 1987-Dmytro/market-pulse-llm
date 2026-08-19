@@ -32,6 +32,16 @@ DISTRIBUTION = {
 """What the TEAM LEAD's 500 rows say, counted off the file itself and registered in the contract."""
 
 
+FILES = {
+    "labels": "docs/labels-pass1-r1.jsonl",
+    "frozen": "results/labels_pass1_r1.jsonl",
+    "codebook": "docs/label-pack-pass1-r1.md",
+    "pack": "results/pass1_label_pack_r1.json",
+}
+"""The four paths the record's blocks must NAME. Without this the digests still match — of whatever
+files the record happens to point at, which is a pin that moves with its own subject."""
+
+
 def write(tmp_path: Path, rows: list[dict]) -> Path:
     path = tmp_path / "labels.jsonl"
     path.write_text(
@@ -158,12 +168,11 @@ def test_the_freeze_carries_the_labels_byte_for_byte_and_the_record_pins_them():
     frozen = REPO_ROOT / "results" / "labels_pass1_r1.jsonl"
     assert frozen.read_bytes() == gate.LABELS.read_bytes()
 
-    for block in ("labels", "frozen", "codebook", "pack"):
+    for block, expected in FILES.items():
+        assert record[block]["file"] == expected, block  # the digest is of the file it NAMES
         named = REPO_ROOT / record[block]["file"]
         assert hashlib.sha256(named.read_bytes()).hexdigest() == record[block]["sha256"], block
 
-    assert record["labels"]["file"] == "docs/labels-pass1-r1.jsonl"
-    assert record["frozen"]["file"] == "results/labels_pass1_r1.jsonl"
     assert record["labels"]["sha256"] == record["frozen"]["sha256"]
     assert record["distribution"] == DISTRIBUTION
     assert record["labels"]["date"] == "2026-08-18"
