@@ -347,7 +347,13 @@ PASS-1 SFT — the two arms, bound at max_seq_len 1408; substituted topics cut t
 DROPPED FOR LENGTH  0 rows — every row fits; the longest is 1225 tokens
 CONTEXT             the gate's 14 rows carry 12 entity blocks; the eval pack's 64 items carry 55
                     arm b's 650 rows carry 39
+TOPIC               91 bought · 372 cut to the envelope · 187 substituted and already inside it
 ```
+
+The last line is how far the ruling actually reaches, and it is a field of the record rather than a
+sentence here: **372 of 650** topics were shortened by the cut, 187 substituted ones were already
+inside the envelope, and 91 were bought and are never cut. Rendered topics now run 16–147
+characters with a median of 139, and not one row falls back to «this post has no text».
 
 The arm distributions are now the contract's own, to the row: 251 · 167 · 44 · 36 · 2 for r1 and
 340 · 213 · 48 · 47 · 2 combined. **H6 re-derives all fourteen:**
@@ -371,10 +377,10 @@ CONTEXT    the gate's rows carry 12/14 entity blocks; arm B's training rows carr
 Determinism, the `--outdir` pair against the shipped copies, after the rebuild:
 
 ```
-pass1_sft_arm_a.jsonl          identical  0190d9c061ffdd5c…
-pass1_sft_arm_b.jsonl          identical  eb1650073bc2b138…
-pass1_sft.json                 identical  76b968d0f41037c1…
-prereg_lora_b.json             identical  c103d82e9a36a3a2…
+pass1_sft_arm_a.jsonl          identical  383fa254983163c2…
+pass1_sft_arm_b.jsonl          identical  378203ef77d98698…
+pass1_sft.json                 identical  249295f0d984dd79…
+prereg_lora_b.json             identical  6f412efca513a2df…
 ```
 
 One bounded topic, as the model now sees it, with the supervised head beside it:

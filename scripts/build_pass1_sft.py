@@ -304,6 +304,7 @@ def rendered(unit: dict, context: dict[str, tuple[str, dict]], limit: int) -> di
         "learn_chars": learn_chars,
         "context": {
             "topic_from": topic_source,
+            "topic_cut": topic.endswith("…"),
             "entities": len(entities),
             "verdict": source,
         },
@@ -388,6 +389,11 @@ def census(state: dict) -> dict:
             "with_an_entity_block": sum(1 for row in rows if row["context"]["entities"]),
             "with_a_bought_topic": sum(
                 1 for row in rows if row["context"]["topic_from"] == "reader verdict"
+            ),
+            # how far the branch-C cut actually reaches: a substituted topic already inside the
+            # envelope is rendered whole, so «bounded» is not the same as «cut»
+            "with_a_topic_the_cut_shortened": sum(
+                1 for row in rows if row["context"].get("topic_cut")
             ),
             "of": len(rows),
         }
@@ -558,6 +564,12 @@ def print_census(state: dict) -> None:
     print(
         f"                    arm b's {table['arms']['b']['context']['of']} rows carry"
         f" {table['arms']['b']['context']['with_an_entity_block']}"
+    )
+    print(
+        f"TOPIC               {table['arms']['b']['context']['with_a_bought_topic']} bought ·"
+        f" {table['arms']['b']['context']['with_a_topic_the_cut_shortened']} cut to the envelope ·"
+        f" {table['arms']['b']['context']['of'] - table['arms']['b']['context']['with_a_bought_topic'] - table['arms']['b']['context']['with_a_topic_the_cut_shortened']}"
+        " substituted and already inside it"
     )
 
 

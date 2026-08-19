@@ -185,6 +185,10 @@ def test_the_record_names_the_context_the_gate_carries_and_the_training_set_does
     assert gate["n"] == 14 and gate["with_an_entity_block"] == 12
     assert record["census"]["eval_pack"]["with_an_entity_block"] == 55
     assert (arm_b["with_an_entity_block"], arm_b["of"]) == (39, 650)
+    # how far the branch-C cut reaches: 91 topics were bought, 372 were cut, and 187 substituted
+    # ones were already inside the envelope — «bounded» and «cut» are not the same count
+    assert arm_b["with_a_bought_topic"] == 91
+    assert arm_b["with_a_topic_the_cut_shortened"] == 372
     assert arm_b["with_an_entity_block"] < arm_b["of"] * 0.1
     # branch C bounded the topic and did NOT buy a verdict, so this finding is unchanged by it
     assert "leaves the entity-block one open" in record["census"]["topic_rule"]

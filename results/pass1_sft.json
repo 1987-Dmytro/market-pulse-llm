@@ -14,6 +14,7 @@
         "context": {
           "of": 500,
           "with_a_bought_topic": 70,
+          "with_a_topic_the_cut_shortened": 295,
           "with_an_entity_block": 32
         },
         "distribution": {
@@ -41,6 +42,7 @@
         "context": {
           "of": 650,
           "with_a_bought_topic": 91,
+          "with_a_topic_the_cut_shortened": 372,
           "with_an_entity_block": 39
         },
         "distribution": {
@@ -91,12 +93,12 @@
     "a": {
       "file": "results/pass1_sft_arm_a.jsonl",
       "rows": 500,
-      "sha256": "0190d9c061ffdd5c01c7af6a21132f79a25da1e115f27e6eb74c703de5630e15"
+      "sha256": "383fa254983163c2464c86939df19fe9d2ce4a83c1ce0322a120e45589811da1"
     },
     "b": {
       "file": "results/pass1_sft_arm_b.jsonl",
       "rows": 650,
-      "sha256": "eb1650073bc2b138ab982186ec4c07e1efa63580f17bff1ee4b3e3a259b83294"
+      "sha256": "378203ef77d986982ea76687260635e37e7b5892bd6d52496cb3823ac31761cd"
     }
   },
   "instruments": {
@@ -158,7 +160,7 @@
   },
   "producer": {
     "script": "scripts/build_pass1_sft.py",
-    "sha256": "4d64e13451c27cd93ca4464d9036c7cd87834c1cf73c646ce12ffdae4a0237a7"
+    "sha256": "3624b5f7ff12772eddbe15ddbb2ce2530c46e2f85bea1a4063fddacb922c1c53"
   },
   "supervision": {
     "field": "subject_type",
