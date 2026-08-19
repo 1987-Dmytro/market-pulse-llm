@@ -1,0 +1,41 @@
+{
+  "ablation": "these labels are TRAINING data, not a judge. Arm B of docs/PROMPT-lora-b.md is the 650 rows r1 and r2 make together and arm A is r1's 500 alone, so the ablation this file enters asks whether MORE data of the same population helps — the targeted-re-draw premise died in the pass1-redraw census. The bar stays the sealed gold r2 ≥12/14, which no row here touches",
+  "authority": "sitting-2 of 2026-08-19 (LoRA, line B) and its r2 ruling: the 150 rows are labelled AS THEY ARE and arm B is renamed top-up — docs/STATUS.md «День 19.08», report docs/reports/pass1-redraw.md",
+  "codebook": {
+    "file": "docs/label-pack-pass1-r2.md",
+    "law": "the same bytes, read from the module the pass-1 prompt itself answers under — never retyped, so r1 and r2 are one instrument and not two",
+    "same_law_as_r1": true,
+    "sha256": "86919f8410b9692475fe919c72a7c934def74571c93589e0de55b3aaa533ab83"
+  },
+  "contract": "docs/PROMPT-lora-b.md Step 0 (3) — the seal; the pack is docs/PROMPT-pass1-redraw.md D2",
+  "distribution": {
+    "null": 46,
+    "категория_личное": 11,
+    "молочный_бренд": 0,
+    "не_наш_рынок": 89,
+    "сеть_ритейлер": 4
+  },
+  "distribution_rule": "every value of the taxonomy, zeros included. молочный_бренд is 0 and says so: a class the top-up did not reach is the finding the ablation is about, and a key dropped for being empty reads as a class nobody counted",
+  "frozen": {
+    "file": "results/labels_pass1_r2.jsonl",
+    "rule": "a byte-identical copy under results/, so training reads a frozen path and not a docs/ file that a later contract may re-render. Neither copy is ever edited; the equality is asserted by tests/test_validate_pass1_labels_r2.py, not by this sentence",
+    "sha256": "8f611437fdd3ed724acda516186bfa2837d94d7e8d74ac6c25e23a8e57d60e50"
+  },
+  "labels": {
+    "date": "2026-08-19",
+    "field": "subject_type",
+    "file": "docs/labels-pass1-r2.jsonl",
+    "labelled_by": "the TEAM LEAD. It is a team-lead file from the moment it exists: the executor validates it and commits it verbatim, and never writes a label into it",
+    "rows": 150,
+    "sha256": "8f611437fdd3ed724acda516186bfa2837d94d7e8d74ac6c25e23a8e57d60e50",
+    "validator": "scripts/validate_pass1_labels.py docs/labels-pass1-r2.jsonl --pack results/pass1_label_pack_r2.json"
+  },
+  "pack": {
+    "exclusion": "the 7 exam threads of the r1 record leave the population WHOLE, then r1's 500 units and the 14 gold rows leave it unit by unit. r2 and r1 therefore share no unit, and no labeller sees a comment twice",
+    "file": "results/pass1_label_pack_r2.json",
+    "seed": 20260819,
+    "sha256": "5acae80b28463f580655a39f74ab006f810837eef95965e7695ff35ee7a0e07f",
+    "units": 150
+  },
+  "phase": "pass1-redraw"
+}
