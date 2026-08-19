@@ -1,0 +1,8 @@
+[     0.1s] instrument OK · parser a4a5a5d08546f53a…
+[     0.1s] 132 requests match the registration's per-item shas
+[     0.1s] ceiling 4000 output tokens · stop at the brace
+[     0.1s] loading google/gemma-4-31b-it @ 842da3794eaa…
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+
+[   156.3s] READY · boot 156.3s · the kill clock stops at the first reply below
+[   233.8s] reply  1/132 @matusi_ukr:22058#1of8                   77.5s ·  3841 chars · cut    4 · balanced True · finish stop
