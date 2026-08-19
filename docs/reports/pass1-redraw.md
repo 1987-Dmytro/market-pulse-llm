@@ -258,9 +258,25 @@ $ git status --porcelain
 is why they differ. The bar is the loader's, so the planting is inside it — but the command the
 contract names cannot show that ([[check-granularity-matches-the-claim]]).
 
-**Census, named:** 9.4K → **9.5K**, entirely step 0.5 — `hot.md` +436 B and the one MEMORY.md index
-line (+136 units). D2 adds **0**: the pack, the page, the producer and the tests are not loaded at
-boot. Against `TARGET_KTOK = 10.7` the census prints no warning.
+**Census, named — and it does not start where the contract's baseline says.** The contract's
+Baselines block quotes **9.7K**; the reading at step 0 was **9.4K**, and the difference is not
+drift. 9.7K was `boot-debloat`'s floor at `hot.md` **13 457 B**; `/save` then curated the file to
+**12 187 B**, and that curation was on disk **uncommitted** when this contract was written — the
+contract's own porcelain list names it (` M knowledge/hot.md (hook/save tails)`) beside a census
+figure taken before it. The whole chain, three files and three readings:
+
+| moment | `hot.md` | census |
+|---|---:|---:|
+| `boot-debloat` D4, the registered floor | 13 457 B | **9.7K** |
+| `/save`'s curation (inherited, committed here as `115422e`) | 12 187 B | **9.4K** |
+| after this contract's step 0.5 (sweep +436 B, one index line +136 units) | 12 623 B | **9.5K** |
+
+D2 adds nothing loadable — the pack, the page, the producer and the tests are not read at boot —
+but «adds 0» would be one word too strong: `hot.md`'s AUTO-GEN block regenerates from `git log -5`
+at the next SessionStart, and this contract replaced all five subjects. Measured with the READER,
+never `main()`, `git status --porcelain` empty afterwards (Dv543's own precedent): the region is
+1 210 B on disk and **1 220 B** at the next boot, **+10 B = +0.0025K** against the 1.2K of headroom
+`TARGET_KTOK = 10.7` leaves at 9.5. The census prints no warning.
 
 **The pins, which the Verify block does not name but the DO NOT does:**
 
@@ -290,6 +306,7 @@ independent records — the provenance sidecar's and this pack's.
 | **Dv549** | **The Verify block's `wc -c` measures bytes and the bar is in UTF-16 units.** 18 895 B = 75.6% of 25 000 reads as a crossed bar; the loader's own `MEMORY_UNITS` axis reads **18 609 = 74.4%**, and Dv526 already ruled which one the loader uses. The two readings disagree about whether the step-0.5 planting was allowed at all. Pasted both, planted on the loader's axis. | `[cause: verify-gap]` `[[check-granularity-matches-the-claim]]` |
 | **Dv550** | **The Dv521 clause checks the direction that was already true.** `cooccurrence_is_not_explanation.md` states the 4.5g5 mechanism in full and never mentions `max()`, so «add it there if it only names the max() tie» has nothing to add. What has no home is Dv521's own mechanism, which the repo tags with that very wikilink — the pairing `vault-dream` Dv529 refused an eviction over. One direction is now proven clean and the other is named; a third planting is outside this contract's budget and the index has no line for it. | `[cause: contract-gap]` `[[a-citation-is-not-a-record]]` |
 | **Dv551** | **Half of the sweep was already done by a command that is not a contract.** `/save` ran between `boot-debloat` and this contract, and its own spec mandates curating Next/Blockers — so the ⛔ BOOT TAX blocker and the Next §2 line went then, arriving here inside the step-0 tail. The contract describes them as outstanding. What was genuinely left is a sentence neither the ruling nor the contract could have predicted: `hot.md` asserting that 150 index lines is **over** the bar the contract sets at exactly 150. Named because «the sweep found nothing to do» and «the sweep was already done» are different reports. | `[cause: contract-gap]` `[[the-gates-evidence-outlived-its-artifact]]` |
+| **Dv553** | **The contract's baseline census and its own porcelain list describe different moments.** Baselines quotes «census 9.7K», which is `boot-debloat`'s floor at `hot.md` 13 457 B — while the same block lists ` M knowledge/hot.md (hook/save tails)` as expected, i.e. the `/save` curation that had already taken the file to 12 187 B and the census to **9.4K**. Both sentences were written from the same tree and only one of them is current, so «≈9.7K ± the sweep's delta» cannot be checked as written. Reconciled by the chain above rather than by picking a number: 13 457 → 12 187 → 12 623 B against 9.7 → 9.4 → 9.5K, each reading printed by the census itself. | `[cause: contract-gap]` `[[the-gates-evidence-outlived-its-artifact]]` |
 | **Dv552** | **«Extend or parallel the validator» — neither was needed.** `validate_pass1_labels.py` already takes `--pack` and its refusals are all pack-relative, so the r2 gate is the r1 gate pointed at the r2 record: zero production lines, zero risk to the constants its tests consume, and one home for the taxonomy. The enumeration the contract asked for was still owed and is done — the only importers are `tests/test_validate_pass1_labels.py` and the new r2 file, and the r1 test touches **six** symbols (`gate.VALUES`, `gate.PACK`, `gate.LABELS`, `gate.validate`, `gate.main`, `gate.__file__`); beyond the module, the two rendered pack pages quote its command line. Nothing shared was edited, so the list is a proof and not a plan. | `[cause: process]` `[[a-consumer-list-is-not-a-meaning-list]]` |
 
 ## Process signals
