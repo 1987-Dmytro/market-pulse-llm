@@ -144,13 +144,21 @@ def money(items: list[dict], projection: dict) -> dict:
                 " this stack and they disagree by 6.7×, so the pessimistic end is what the cap has"
                 " to survive"
             ),
+            "boot_kill_seconds": float(FIRST_REPLY_CEILING_SECONDS),
             "delete_margin_seconds": DELETE_MARGIN_SECONDS,
-            "generation_projection_seconds": generation,
             "items": len(items),
+            "reading_projection_seconds": generation,
             "projection_record": {
                 "record": summary.rel(PROJECTION),
                 "sha256": summary.sha256_of(PROJECTION),
             },
+            "the_names_are_the_consumers": (
+                "`boot_kill_seconds`, `reading_projection_seconds` and `delete_margin_seconds` are"
+                " spelled the way `read_threads_reader_v4.deadlines` and `usable_seconds` READ"
+                " them. A registration is consumed by shipped code, and a field it cannot find is"
+                " a KeyError on the kill-rule path with a meter running — which is what the first"
+                " attempt at this run bought for 23 billed seconds"
+            ),
             "worst_case_that_still_fits": min(
                 one["times_the_projection_that_fits"] for one in table
             ),
@@ -215,8 +223,8 @@ def gates(items: list[dict], projection: dict) -> dict:
         ),
         "gates": {
             "0_transport_ssh_deadman": {
-                "kill_at_seconds": SSH_DEADMAN_SECONDS,
                 "max_recreates": MAX_RECREATES,
+                "threshold_seconds": float(SSH_DEADMAN_SECONDS),
                 "rule": (
                     f"if `runpodctl ssh info` has not answered with a connectable endpoint by"
                     f" {SSH_DEADMAN_SECONDS} s of THIS segment's create-elapsed, the pod is killed"
@@ -369,7 +377,7 @@ def main(argv: list[str] | None = None) -> int:
         f" against the registered 40 000 ceiling"
     )
     print(
-        f"MONEY       cap ${CAP_USD:.2f} · projection {sums['generation_projection_seconds']:.0f} s"
+        f"MONEY       cap ${CAP_USD:.2f} · projection {sums['reading_projection_seconds']:.0f} s"
         f" of generation · the worst row of the boot table still fits at"
         f" {sums['worst_case_that_still_fits']}× the projection"
     )

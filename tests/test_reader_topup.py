@@ -192,12 +192,12 @@ def test_the_cap_says_whose_derivation_it_is():
 
 def test_the_gates_are_the_proven_ones_and_the_binding_deadline_is_named():
     gates = PREREG["go_no_go"]["gates"]
-    assert gates["0_transport_ssh_deadman"]["kill_at_seconds"] == 180
+    assert gates["0_transport_ssh_deadman"]["threshold_seconds"] == 180
     assert gates["1_first_reply"]["ceiling_since_generation_started_seconds"] == 720
     affordability = gates["1_first_reply"]["affordability_deadline_since_create_seconds"]
     usable = 2.00 / 0.74 * 3600 - 60.0
     assert affordability == pytest.approx(
-        usable - PREREG["money"]["arithmetic"]["generation_projection_seconds"], abs=0.1
+        usable - PREREG["money"]["arithmetic"]["reading_projection_seconds"], abs=0.1
     )
     assert affordability > 720  # which is why the twelve-minute ceiling binds, as the record says
     assert "PESSIMISTIC" in gates["2_full_pass"]["rule"]
@@ -218,6 +218,192 @@ def test_the_population_digest_is_the_projections_and_the_producer_pins_what_it_
         (REPO_ROOT / "scripts" / "write_reader_topup_prereg.py").read_bytes()
     ).hexdigest()
     assert PREREG["producer"]["sha256"] == live
+
+
+# --- every command, driven at $0 --------------------------------------------
+#
+# This block is the one that was missing when the first pod was created, and the pod was deleted
+# 23 s later because `--open` raised a KeyError on a field the registration spelled its own way.
+# Dv486's rule, restated: a registered field no shipped command can read is a red gate HERE.
+
+
+@pytest.fixture
+def synthetic(tmp_path, monkeypatch):
+    """The driver pointed at throwaway state, with a ledger that exists."""
+    ledger = tmp_path / "spend.json"
+    ledger.write_text(json.dumps({"runpod_balance_at_reader-topup_start": 20.0}), "utf-8")
+    monkeypatch.setattr(driver, "RECORD", tmp_path / "run.json")
+    monkeypatch.setattr(driver, "RAW", tmp_path / "pod.jsonl")
+    monkeypatch.setattr(driver, "LEDGER", ledger)
+    return tmp_path
+
+
+def open_a_segment(now_minus_seconds: float = 30.0) -> str:
+    from datetime import UTC, datetime, timedelta
+
+    created = datetime.now(UTC) - timedelta(seconds=now_minus_seconds)
+    stamp = created.isoformat(timespec="seconds").replace("+00:00", "Z")
+    assert (
+        driver.main(
+            [
+                "--open",
+                "--pod-id",
+                "SYNTHETIC",
+                "--created-at",
+                stamp,
+                "--usd-per-hour",
+                "0.74",
+                "--card",
+                "NVIDIA GeForce RTX 4090",
+            ]
+        )
+        == 0
+    )
+    return stamp
+
+
+def test_pre_create_check_answers_before_anything_exists(synthetic, capsys):
+    assert driver.main(["--pre-create-check"]) == 0
+    said = json.loads(capsys.readouterr().out)
+    assert said["may_create"] is True
+    assert said["cap_usd_all_in"] == 2.00 and said["segments_allowed"] == 3
+
+
+def test_open_records_the_segment_and_reads_every_field_it_needs(synthetic, capsys):
+    """The command that failed on a live meter. It reads the meter block and gate 0's threshold."""
+    open_a_segment()
+    out = capsys.readouterr().out
+    state = json.loads((synthetic / "run.json").read_text("utf-8"))
+    assert len(state["segments"]) == 1
+    assert state["segments"][0]["usd_per_hour"] == 0.74
+    assert "gate0" in out or "threshold" in out or state["gates"]
+
+
+def test_a_second_open_is_refused_because_two_meters_never_run_at_once(synthetic):
+    open_a_segment()
+    with pytest.raises(SystemExit, match="Never two pods at once"):
+        open_a_segment()
+
+
+def test_gate_zero_waits_inside_the_threshold_and_kills_past_it(synthetic, capsys):
+    open_a_segment(now_minus_seconds=10.0)
+    assert driver.main(["--gate0"]) == 3  # WAIT
+    capsys.readouterr()
+    assert driver.main(["--gate0", "--ssh-ok"]) == 0  # GO
+    said = json.loads(capsys.readouterr().out)
+    assert said["threshold_seconds"] == 180.0 and said["verdict"] == "GO"
+
+
+def test_gate_zero_kills_once_the_deadman_is_past(synthetic, capsys):
+    open_a_segment(now_minus_seconds=400.0)
+    assert driver.main(["--gate0"]) == 2  # KILL
+    said = json.loads(capsys.readouterr().out)
+    assert said["verdict"] == "KILL" and said["seconds_left"] < 0
+
+
+def test_the_deadline_gate_reads_the_boot_and_reading_projections(synthetic, capsys):
+    open_a_segment(now_minus_seconds=60.0)
+    capsys.readouterr()
+    driver.main(["--deadlines"])
+    said = json.loads(capsys.readouterr().out)
+    assert said["contract_ceiling_seconds"] == 720.0
+    assert said["usable_seconds"] > 9000  # $2.00 at $0.74/h less the deletion margin
+    assert said["first_reply_must_land_by_create_elapsed"] > 0
+
+
+def test_the_gate_with_no_reply_yet_takes_the_boot_branch(synthetic, capsys):
+    open_a_segment(now_minus_seconds=60.0)
+    capsys.readouterr()
+    assert driver.main(["--gate", "--raw", str(synthetic / "pod.jsonl")]) == 3
+    said = json.loads(capsys.readouterr().out)
+    assert said["verdict"] == "WAIT"
+
+
+def test_the_gate_with_replies_takes_the_projection_branch(synthetic, capsys):
+    """The full-pass inequality, over units this pack really has."""
+    pack = json.loads((REPO_ROOT / "results" / "reader_topup_pack.json").read_text("utf-8"))
+    rows = [
+        {
+            "id": one["id"],
+            "seconds": 40.0,
+            "rendering_sha256": one["rendering_sha256"],
+            "reply": "{}",
+        }
+        for one in pack["items"][:3]
+    ]
+    (synthetic / "pod.jsonl").write_text(
+        "".join(json.dumps(row, ensure_ascii=False) + "\n" for row in rows), "utf-8"
+    )
+    open_a_segment(now_minus_seconds=300.0)
+    capsys.readouterr()
+    code = driver.main(["--gate", "--raw", str(synthetic / "pod.jsonl")])
+    said = json.loads(capsys.readouterr().out)
+    assert code in (0, 2)
+    assert said["units_read"] == 3 and said["units_unread"] == 129
+    assert said["projections"]["binding"]["which"] in ("by_unit", "by_payable_comment")
+    assert said["usd"]["cap_usd_all_in"] == 2.00
+
+
+def test_close_segment_writes_the_billed_end(synthetic, capsys):
+    from datetime import UTC, datetime
+
+    open_a_segment(now_minus_seconds=120.0)
+    capsys.readouterr()
+    assert (
+        driver.main(
+            [
+                "--close-segment",
+                "--deleted-at",
+                datetime.now(UTC).isoformat(timespec="seconds").replace("+00:00", "Z"),
+                "--outcome",
+                "synthetic",
+            ]
+        )
+        == 0
+    )
+    state = json.loads((synthetic / "run.json").read_text("utf-8"))
+    assert state["segments"][0]["deleted_at"]
+    assert state["segments"][0]["billed_seconds"] > 100
+
+
+def test_the_ingest_parses_merges_the_chunks_and_names_its_refusals(synthetic, tmp_path):
+    """A chunked thread's parts become one merged row — the property the population rests on."""
+    pack = json.loads((REPO_ROOT / "results" / "reader_topup_pack.json").read_text("utf-8"))
+    chunks = [one for one in pack["items"] if one["thread"] == "@matusi_ukr:22058"]
+    assert len(chunks) == 8
+    rows = []
+    for one in chunks:
+        verdict = {
+            "thread": one["thread"],
+            "post_summary": "проба",
+            "entities": [],
+            "signals": [],
+            "per_comment": [],
+            "noise": [],
+        }
+        rows.append(
+            {
+                "id": one["id"],
+                "seconds": 40.0,
+                "rendering_sha256": one["rendering_sha256"],
+                "reply": json.dumps(verdict, ensure_ascii=False),
+                "balanced": True,
+            }
+        )
+    raw = tmp_path / "pod.jsonl"
+    raw.write_text("".join(json.dumps(row, ensure_ascii=False) + "\n" for row in rows), "utf-8")
+    evidence = tmp_path / "evidence.jsonl"
+    import read_threads_reader_v5b as v5b_module
+
+    with driver.as_this_phase():
+        v5b_module.EVIDENCE = evidence
+        v5.EVIDENCE = evidence
+        assert v5b_module.main(["--ingest", "--raw", str(raw)]) == 0
+    out = [json.loads(line) for line in evidence.read_text("utf-8").splitlines() if line]
+    merged = [row for row in out if row["id"].endswith("#merged")]
+    assert len(merged) == 1
+    assert merged[0]["parsed"] is not None and merged[0]["merge_error"] is None
+    assert merged[0]["payable_comments"] == 125
 
 
 # --- the driver's swaps -----------------------------------------------------

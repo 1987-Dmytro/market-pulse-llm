@@ -18,9 +18,9 @@
     "gate_records_APPEND": "the run record keeps `gates` as a LIST; every WAIT/GO/KILL snapshot is appended, none overwritten, each stamped with its segment and pod id",
     "gates": {
       "0_transport_ssh_deadman": {
-        "kill_at_seconds": 180,
         "max_recreates": 2,
-        "rule": "if `runpodctl ssh info` has not answered with a connectable endpoint by 180 s of THIS segment's create-elapsed, the pod is killed and replaced. A third dead pod is a datacenter state and a STOP"
+        "rule": "if `runpodctl ssh info` has not answered with a connectable endpoint by 180 s of THIS segment's create-elapsed, the pod is killed and replaced. A third dead pod is a datacenter state and a STOP",
+        "threshold_seconds": 180.0
       },
       "1_first_reply": {
         "affordability_deadline_since_create_seconds": 3620.8,
@@ -176,13 +176,15 @@
         }
       ],
       "at_each_boot_rule": "the cap, at both prices, less the deletion margin and the boot, against the generation projection. A table and not a forecast: four boots are on record for this stack and they disagree by 6.7×, so the pessimistic end is what the cap has to survive",
+      "boot_kill_seconds": 720.0,
       "delete_margin_seconds": 60.0,
-      "generation_projection_seconds": 6048.9,
       "items": 132,
       "projection_record": {
         "record": "results/reader_topup_projection.json",
         "sha256": "cf925d30c7ee477eee76b9b5aa20001e57e16b74d25c501557a1aa96bd8566ab"
       },
+      "reading_projection_seconds": 6048.9,
+      "the_names_are_the_consumers": "`boot_kill_seconds`, `reading_projection_seconds` and `delete_margin_seconds` are spelled the way `read_threads_reader_v4.deadlines` and `usable_seconds` READ them. A registration is consumed by shipped code, and a field it cannot find is a KeyError on the kill-rule path with a meter running — which is what the first attempt at this run bought for 23 billed seconds",
       "worst_case_that_still_fits": 1.28
     },
     "cap_rule": "$2.00 all-in, frozen at the first `pod create`. It is the EXECUTOR's derivation from a price the operator ruled over — ≈$1.20 published in docs/reports/lora-b.md, $1.44 once the read is chunked into 132 units and priced at the $0.80/h ceiling — rounded up so the cap survives the worst boot on record at the worse price. Raising it is the operator's word BEFORE any endpoint; lowering it makes this record wrong, which is one constant and a rebuild",
@@ -2781,7 +2783,7 @@
       "results/reader_topup_projection.json": "cf925d30c7ee477eee76b9b5aa20001e57e16b74d25c501557a1aa96bd8566ab"
     },
     "script": "scripts/write_reader_topup_prereg.py",
-    "sha256": "c4c4413f6f137d1dac1715ff0eec5d3b52c827cffd685afbfe058f0722fc2d22"
+    "sha256": "73f91343bb133d736bbfe9a54e58426beb01abd35eb8ed4e37693ed79a123235"
   },
   "return_to_the_ruling": "a STOP at any gate returns the partial buy and its reason to the operator. It does not re-decide branch B, and it never widens the cap: a cap raised after a reading is a cap that was never a cap"
 }
