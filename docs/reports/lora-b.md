@@ -257,11 +257,19 @@ summaries run **26–147 characters** (median 87); the substituted post texts ru
 dropped rows over the ceiling. The arms would be trained on requests whose context field is mostly
 empty and graded on requests where it is mostly full.
 
-**It has a price.** A reader pass over the 105 uncovered threads is 105 × 51.3 s ≈ **5 390 s ≈ 1.5 h
-≈ $1.20** at the price ceiling — inside the $6.00 cap arithmetically, but it cannot happen inside
-D3: a dataset built during the paid session could not have been pre-registered before `pod create`,
-which is the clause the whole registration rests on. It is a separate session or it is a risk that
-is accepted knowingly. Registered as a risk; the ruling is the operator's.
+**It has a price, and there are three branches — all measured, none of them assumed.**
+
+| branch | what the arms train on | cost | what it fixes |
+|---|---|---|---:|
+| **A — run as registered** | topic = the raw post, entity block empty on 568 of 607 rows | **$0 extra**; D3 is $2.46 of the $6.00 cap | nothing; the risk is accepted knowingly |
+| **B — buy the reader pass first** | topic = a bought summary, entity block real, on every thread | **≈$1.20** · 105 × 51.3 s ≈ 5 390 s ≈ 1.5 h, in a SEPARATE session | both findings: the context gap AND the 43 dropped rows |
+| **C — bound the substituted topic** | topic = the post's first ≤147 characters (the bought-summary envelope), entity block still empty | **$0** | the length finding only: measured, **0 of 650 rows over the ceiling, max bound 1 225 tokens, both `молочный_бренд` rows kept** |
+
+Branch B cannot happen inside D3: a dataset built during the paid session could not have been
+pre-registered before `pod create`, which is the clause the whole registration rests on. Branch C
+is a rebuild of the datasets and a re-run of the prereg producer, both at $0, and it recovers the
+second brand row — but a truncated advertisement is not a summary, so it closes the length finding
+and leaves the context one open. Registered as a risk; the ruling is the operator's.
 
 ### Digests, after as before
 
