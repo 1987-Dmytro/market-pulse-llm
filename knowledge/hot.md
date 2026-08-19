@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-19 13:32:46 (every SessionStart)
+**Auto-refreshed:** 2026-08-19 15:45:59 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-80b5174 docs(report): boot-debloat -- the nearest miss a keyword grep cannot see, and the Pitfalls remainder is a judgment call
-d007db4 docs(report): boot-debloat -- fourteen homes read, one that was a roster, and the number written last
-1f48431 docs(adr): the sitting's ruling on all five de-bloat groups, and the number that ended the suspension
-ab372c4 feat(census): TARGET_KTOK is re-registered at 10.7 -- the measured floor times 1.1, written last
-e2ca966 docs(claude-md): three sections become paths:-scoped rules, graphify folds into the tooling runbook
+872449d chore(brain): the Stop hook's tail -- three session marks and the index timestamp
+20fcc13 docs(notes): pass1-redraw -- the comment-level pool is 9 after r2, and the rule detects the category not the brand
+32d95e4 docs(report): pass1-redraw -- Dv552 before Dv553
+271291b docs(report): pass1-redraw -- the baseline census is from another moment, and the AUTO-GEN delta is measured not assumed
+2788de0 docs(report): pass1-redraw -- the consumer enumeration is six symbols, not three
 ```
 
 ## 📋 Recent decisions
@@ -30,8 +30,9 @@ e2ca966 docs(claude-md): three sections become paths:-scoped rules, graphify fol
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-19 `/save`, поверх `boot-debloat` — вытеснение A+B+C+D+E исполнено, boot tax
-**9.7K** при зарегистрированной цели **10.7K** (пол × 1.1).
+**Last update:** 2026-08-19 `/save`, поверх `pass1-redraw` (ПРИНЯТ тимлидом) — пак r2 на 150
+юнитов построен, премиса «целевого» дорозыгрыша МЕРТВА, арм B переименован в top-up; boot tax
+**9.5K** при цели **10.7K**.
 
 > Этот блок курируется руками. Археология закрытых контрактов живёт в отчётах и ADR — не
 > восстанавливать сюда то, у чего есть дом. Вытеснено 19.08 → mapping-таблица «блок → дом»
@@ -42,8 +43,9 @@ e2ca966 docs(claude-md): three sections become paths:-scoped rules, graphify fol
 **🔄 ТЫ ЗДЕСЬ.** Линия промпт-инженерии читателя закрыта своим stop-правилом, архитектура **D**
 выбрана, её микро-замер СДЕЛАН и ОТРИЦАТЕЛЕН, и сидение 18.08 выбрало **линию B**: размеченные
 `subject_type` + LoRA, **разметку делает ТИМЛИД**. Пак построен, метки написаны и ЗАПЛОМБИРОВАНЫ
-(`8d2e1ba`), фриз и провенанс лежат в `results/`. Следующий ход — **LoRA-регистрация**, вход
-готов. [[sitting-b-line-b-and-the-team-lead-labels]]
+(`8d2e1ba`), фриз и провенанс лежат в `results/`. Пак **r2 на 150 юнитов** построен, принят и
+**РАЗМЕЧЕН** (валидатор зелёный). Следующий ход — **`lora-b`**, вход готов.
+[[sitting-b-line-b-and-the-team-lead-labels]]
 
 **💵 ЦЕНА ПРОХОДА-1 ИЗМЕРЕНА: 5.162 с/вызов.** Окно: 1 032 платных комментария × 5.162 с =
 **$1.0950** генерации как **ПОЛ** — без бута, без стейджинга, без второго пода.
@@ -59,13 +61,20 @@ APPEND · пре-регистрация + one-attempt + stop-rules · парны
 (`results/gate_census_w1_reader.json`, narrow · varto off · plus-spam/scam on). ⚠️ **129 — это ТАКЖЕ
 thread-count `narrow|silencers_off`**; различает только платный счёт (1 032 против 1 116).
 Самый большой тред — **125** платных. За вычетом семи экзаменационных: **122 треда · 968 платных**.
+⚠️ **Этот гейт УЖЕ молочный** (бренд ∪ трекаемая категория), поэтому «целевой» подвыборки в нём
+нет: правило отбирает 129 из 129. После r1 (500) и r2 (150) свободно **318** платных.
+
+**🏷️ ДАТАСЕТ ЛИНИИ B РАЗМЕЧЕН: 650 строк, «наших» 49 (7.5%), `молочный_бренд` = 2.** r2-150 дал
+11 «наших» и **ноль** бренда при прогнозе 11.6 / 0.6 — ценз предсказал верно. Целевой класс стоит
+на ДВУХ строках из 650 против бара gold r2 ≥12/14; это вход `lora-b`, а не находка после него.
 
 ## ⏭️ Next
 
-1. **LoRA-регистрация линии B — СЛЕДУЮЩИЙ ход, вход готов.** Метки запломбированы, фриз и
-   провенанс лежат в `results/`. Нужен отдельный брифинг: конфиг тренировки, кап и прогноз цены ОТ
-   ЗАМЕРОВ фазы 4 (H6-формулы), бар — тот же **запечатанный gold r2 ≥12/14**, и **аблация меток
-   тимлида (train with/without) — закон этой регистрации**, названный в провенансе заранее.
+1. **`lora-b` — платная регистрация, СЛЕДУЮЩАЯ; вход готов.** Армы **A = 500·вес / B = 650 top-up**
+   (после ценза аблация спрашивает «помогает ли БОЛЬШЕ данных той же популяции», а не «помогает ли
+   таргетинг»), кап **$6.00**, kill-clock на биллинговом часе, бар — запечатанный **gold r2 ≥12/14**,
+   аблация названа в провенансе заранее. Шаг 0.5 — инструмент **`make baselines`** (Baselines-блок
+   контракта = вставленный вывод команд на момент выдачи) плюс долги индекса и Dv521.
 2. **Денежная гигиена (`money-anchors`, $0)** — правая часть закрытия шага, судьба зависшего walk'а
    `pass1-probe`, дисциплина `anchored_at` для 19 отказанных леджеров. По слову оператора.
 
@@ -113,7 +122,7 @@ LoRA-регистрация против того же запечатанног�
 **6.7×** (179 · 373 · 175 · >1 200 с). Дедлайн вида `usable − projection` — не запас, а ставка на
 платформу. [[a-negative-pre-generation-budget-is-a-forecast]]
 
-**🧹 BOOT TAX — НЕ ЗАДАЧА, А ЧИСЛО.** Ценз **9.7K** при цели **10.7K** (`TARGET_KTOK`, пол × 1.1,
+**🧹 BOOT TAX — НЕ ЗАДАЧА, А ЧИСЛО.** Ценз **9.5K** при цели **10.7K** (`TARGET_KTOK`, пол × 1.1,
 сидение 19.08). Что ушло и куда — mapping-таблица в `docs/reports/boot-debloat.md`; правила с
 `paths:` держат 25 730 Б за **0**, `~/dev-stack-parked.md` вне загрузки. MEMORY.md **150/200 строк
 (75.0%) · 18 609/25 000 юнитов (74.4%)** — бар контракта `pass1-redraw` это **≤150 / ≤18 750**, то
