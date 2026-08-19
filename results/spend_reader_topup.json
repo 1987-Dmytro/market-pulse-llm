@@ -1,0 +1,14 @@
+{
+  "runpod_balance_at_reader-topup_start": 20.471562668,
+  "anchored_at": "2026-08-19T17:35:48+00:00",
+  "reader-topup_gpu_cap_usd": 2.0,
+  "gpu_sessions": [
+    {
+      "at": "2026-08-19T17:35:50+00:00",
+      "balance": 20.471562668,
+      "step_spent_usd": 0.0,
+      "note": "reader-topup anchor, before the pod (branch B, operator ruling 19.08)"
+    }
+  ],
+  "gpu_note": "RunPod account balance read before the first pod of reader-topup. Step spend = the pessimistic maximum of this anchor minus the balance now and the billing walk since `anchored_at` (SPEC 3.23 (4), Dv411), enforced against $2.00. The SPEC amendment 3.4 (4) phase cap is enforced separately, against results/spend_phase4.json, and neither anchor may be regenerated."
+}
