@@ -2,17 +2,17 @@
 
 # Hot Cache
 
-**Auto-refreshed:** 2026-08-19 15:45:59 (every SessionStart)
+**Auto-refreshed:** 2026-08-19 18:55:03 (every SessionStart)
 **Branch:** `main`
 
 ## 🔀 Recent commits (top 5)
 
 ```
-872449d chore(brain): the Stop hook's tail -- three session marks and the index timestamp
-20fcc13 docs(notes): pass1-redraw -- the comment-level pool is 9 after r2, and the rule detects the category not the brand
-32d95e4 docs(report): pass1-redraw -- Dv552 before Dv553
-271291b docs(report): pass1-redraw -- the baseline census is from another moment, and the AUTO-GEN delta is measured not assumed
-2788de0 docs(report): pass1-redraw -- the consumer enumeration is six symbols, not three
+3f70bbc feat(lora-b): the record says how far the branch-C cut reaches -- 372 of 650, not «bounded»
+5e135c2 docs(report): lora-b -- branch C executed, H6 green on fourteen, and the pod still not created
+0ad5258 feat(lora-b): branch C -- a substituted topic is cut to a bought one's envelope, and H6 goes green
+1d7ee4b docs(report): lora-b -- the fork has three branches and the cheap one is measured
+97e09c0 docs(report): lora-b -- the digest proof is the diff, and preflight's older pins are the population
 ```
 
 ## 📋 Recent decisions
@@ -30,9 +30,9 @@
 <!-- AUTO-GEN END (everything below preserved across refreshes) -->
 # Hot Cache — curated
 
-**Last update:** 2026-08-19 `/save`, поверх `pass1-redraw` (ПРИНЯТ тимлидом) — пак r2 на 150
-юнитов построен, премиса «целевого» дорозыгрыша МЕРТВА, арм B переименован в top-up; boot tax
-**9.5K** при цели **10.7K**.
+**Last update:** 2026-08-19 `lora-b` D0–D2 закрыты за $0, под НЕ создан. Метки r2 запломбированы,
+`make baselines` живёт, SFT-датасеты 500/650 построены и пре-регистрация закоммичена; H6 зелёный на
+всех 14 после рулинга «ветка C». Открыт один рулинг — ветка B (проход читателя, ≈$1.20).
 
 > Этот блок курируется руками. Археология закрытых контрактов живёт в отчётах и ADR — не
 > восстанавливать сюда то, у чего есть дом. Вытеснено 19.08 → mapping-таблица «блок → дом»
@@ -44,8 +44,17 @@
 выбрана, её микро-замер СДЕЛАН и ОТРИЦАТЕЛЕН, и сидение 18.08 выбрало **линию B**: размеченные
 `subject_type` + LoRA, **разметку делает ТИМЛИД**. Пак построен, метки написаны и ЗАПЛОМБИРОВАНЫ
 (`8d2e1ba`), фриз и провенанс лежат в `results/`. Пак **r2 на 150 юнитов** построен, принят и
-**РАЗМЕЧЕН** (валидатор зелёный). Следующий ход — **`lora-b`**, вход готов.
+**РАЗМЕЧЕН** (валидатор зелёный) и **ЗАПЛОМБИРОВАН** (`e027d0b`, sha `8f611437…`).
+`lora-b` D0–D2 исполнены: датасеты SFT **500 / 650** (арм A ⊂ арм B), пре-регистрация
+`results/prereg_lora_b.json` закоммичена ДО пода, **под не создан, $0**.
 [[sitting-b-line-b-and-the-team-lead-labels]]
+
+**⚖️ ЧЕМ УЧИМ И ЧЕГО НЕ УЧИМ.** Тимлид разметил ОДНО поле, а парсер требует четыре: `subject_id` и
+`stance` пишутся `null` и **выключены из лосса** (`learn_chars`) — обучение на них уронило бы
+потолок бара до **11 из 14** при пороге 12. Topic там, где вердикт читателя не куплен, — начало
+поста, обрезанное до конверта купленного (**147 симв.**, рулинг «ветка C»): 372 из 650 строк
+обрезаны и помечены многоточием, в eval-паке таких **0**. Entity-блок пуст у 611 из 650, а у
+**12 из 14 строк гейта он есть** — это открытая часть.
 
 **💵 ЦЕНА ПРОХОДА-1 ИЗМЕРЕНА: 5.162 с/вызов.** Окно: 1 032 платных комментария × 5.162 с =
 **$1.0950** генерации как **ПОЛ** — без бута, без стейджинга, без второго пода.
@@ -70,11 +79,12 @@ thread-count `narrow|silencers_off`**; различает только плат�
 
 ## ⏭️ Next
 
-1. **`lora-b` — платная регистрация, СЛЕДУЮЩАЯ; вход готов.** Армы **A = 500·вес / B = 650 top-up**
-   (после ценза аблация спрашивает «помогает ли БОЛЬШЕ данных той же популяции», а не «помогает ли
-   таргетинг»), кап **$6.00**, kill-clock на биллинговом часе, бар — запечатанный **gold r2 ≥12/14**,
-   аблация названа в провенансе заранее. Шаг 0.5 — инструмент **`make baselines`** (Baselines-блок
-   контракта = вставленный вывод команд на момент выдачи) плюс долги индекса и Dv521.
+1. **`lora-b` D3 — ЖДЁТ РУЛИНГА, не работы.** Всё, что потребляет платная сессия, закоммичено и
+   зелёное: датасеты, пре-регистрация (точные команды в `arms[*].command`), `--data`/`--class-weights`
+   тренера, `--adapter` транспорта; worst case **$2.6275** из капа **$6.00**. Открыт один вопрос —
+   **ветка B**: покупать ли проход читателя по 105 тредам (**≈$1.20**, ~1.5 ч, ОТДЕЛЬНОЙ сессией),
+   чтобы у обучающих запросов был entity-блок, как у 12 из 14 строк гейта. Ветка C ($0) уже
+   исполнена и закрыла только длину. Отчёт: `docs/reports/lora-b.md`.
 2. **Денежная гигиена (`money-anchors`, $0)** — правая часть закрытия шага, судьба зависшего walk'а
    `pass1-probe`, дисциплина `anchored_at` для 19 отказанных леджеров. По слову оператора.
 
@@ -128,10 +138,10 @@ LoRA-регистрация против того же запечатанног�
 (75.0%) · 18 609/25 000 юнитов (74.4%)** — бар контракта `pass1-redraw` это **≤150 / ≤18 750**, то
 есть строки ровно НА баре: следующий урок садится файлом (файл в индекс не входит и на буте стоит
 **0**), а строку индекса он получит только после консолидации.
-⚠️ Без дома остался **Dv521** — и причина названа точно: `cooccurrence_is_not_explanation` держит
-механизм 4.5g5 (23 сопутствующих против 10 объяснённых), а `max()` по разным ключам на тринадцати
-ничьих — ДРУГОЙ урок, который репозиторий тегает тем же вики-линком (Dv529 поймал это в обе
-стороны). Долг индекса: `a-checker-whose-failure-is-silence` — файл посажен, строки не хватило. [[boot-tax-re-registered-from-the-measured-floor]]
+✅ **Dv521 получил дом** — `the-argmax-and-the-max-are-two-rows` (argmax по одному ключу и max по
+другому в одной строке записи). Долгов индекса теперь ДВА, оба файлами на диске и оба за **0** на
+буте: `a-checker-whose-failure-is-silence` и `the-argmax-and-the-max-are-two-rows` — строки они
+получат только после консолидации. [[boot-tax-re-registered-from-the-measured-floor]]
 
 ## 🔫 Footguns этого файла
 
