@@ -194,6 +194,48 @@ def test_the_context_gap_is_registered_as_a_risk_before_the_attempt():
     assert "leaves this one open" in block["the_open_ruling"]
 
 
+def test_the_cut_marker_is_a_training_only_token_and_the_record_says_so():
+    """Branch C's own asymmetry, registered before the attempt rather than found after it.
+
+    A shortened topic ends in an ellipsis and a BOUGHT topic is never cut, so the marker sits on
+    most of the training set and on none of the 64 eval prompts. Both counts are re-derived here
+    off the artefacts themselves, because a registered asymmetry nobody can re-check is a sentence.
+    """
+    marker = RECORD["reachability"]["the_context_the_gate_carries"]["the_cut_marker"]
+    pack = json.loads((REPO_ROOT / "results" / "pass1_probe_b_pack.json").read_text("utf-8"))
+    assert marker["eval_items"] == len(pack["items"]) == 64
+    assert (
+        marker["eval_items_marked"]
+        == sum(1 for one in pack["items"] if one["topic"].rstrip().endswith("…"))
+        == 0
+    )
+    rows = [
+        json.loads(line)
+        for line in (REPO_ROOT / "results" / "pass1_sft_arm_b.jsonl")
+        .read_text("utf-8")
+        .splitlines()
+        if line
+    ]
+    marked = sum(1 for row in rows if row["context"]["topic_cut"])
+    assert marker["training_rows_marked"] == marked == 372
+    assert marker["of"] == len(rows) == 650
+
+
+def test_the_recovery_clause_knows_there_is_no_mid_arm_checkpoint():
+    """`save_every` is 100 and the arms are 64 and 82 steps, so nothing is written until the end."""
+    import yaml
+
+    block = RECORD["money"]["recovery"]["there_is_no_mid_arm_checkpoint"]
+    config = yaml.safe_load((REPO_ROOT / "config" / "qlora.yaml").read_text("utf-8"))
+    assert block["save_every"] == config["training"]["save_every"] == 100
+    assert block["arm_steps"] == {"a": 64, "b": 82}
+    assert not any(
+        step % block["save_every"] == 0 for step in range(1, max(block["arm_steps"].values()) + 1)
+    )
+    assert "loses that arm whole" in block["reading"]
+    assert "PROVEN by listing" in RECORD["money"]["recovery"]["rule"]
+
+
 def test_each_arm_evaluates_into_its_own_file_because_the_resume_would_skip():
     outs = {arm: block["eval_command"] for arm, block in RECORD["arms"].items()}
     assert len(set(outs.values())) == 2

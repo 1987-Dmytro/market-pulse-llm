@@ -392,7 +392,17 @@
         "worker_seconds": 1210.445
       }
     },
-    "recovery": "ONE pod re-creation, and only after a deletion PROVEN by listing. Never two billing endpoints at once — the goal is no parallel spend, whatever the letter. Pods, not serverless (16.08)"
+    "recovery": {
+      "rule": "ONE pod re-creation, and only after a deletion PROVEN by listing. Never two billing endpoints at once — the goal is no parallel spend, whatever the letter. Pods, not serverless (16.08)",
+      "there_is_no_mid_arm_checkpoint": {
+        "arm_steps": {
+          "a": 64,
+          "b": 82
+        },
+        "reading": "`step % save_every` never fires — the arms are 64 and 82 steps against a save_every of 100 — so the only adapter written is the one after the loop. A KILL at any rung DURING an arm loses that arm whole, and the single re-creation this clause allows restarts it from step 0. config/qlora.yaml is frozen law and is not edited for this; the fact is registered so the clause is read with it",
+        "save_every": 100
+      }
+    }
   },
   "phase": "lora-b",
   "population": {
@@ -479,7 +489,7 @@
       "results/prereg_pass1_probe_b.json": "a29e85ad6e856f6fafa032b3f5ede0e635046171778cbe7a6902b64fa57bacad"
     },
     "script": "scripts/write_lora_b_prereg.py",
-    "sha256": "2d1ca8de5420e52add8540f6f5a3909e5b0606e668e5c046cef2990656d4c3f1"
+    "sha256": "e9ed14a547d5f0a43082872b65bfd67b4970d0dc0315e21c7b2a04d812d3c17f"
   },
   "reachability": {
     "stance_is_not_trained": {
@@ -495,6 +505,13 @@
       "eval_pack_items_with_an_entity_block": 55,
       "gate_rows": 14,
       "gate_rows_with_an_entity_block": 12,
+      "the_cut_marker": {
+        "eval_items": 64,
+        "eval_items_marked": 0,
+        "of": 650,
+        "reading": "branch C marks a shortened topic with an ellipsis, and a BOUGHT topic is never cut — so the marker appears on most of the training set and on none of the eval prompts. It is the same class as the finding it was fixing, one size smaller, and it is registered here rather than discovered afterwards: after the one attempt it would be an uncontrolled variable nobody wrote down",
+        "training_rows_marked": 372
+      },
       "the_open_ruling": "REGISTERED AS A RISK, not as a defect: the arms are trained on requests whose entity block is almost always empty and graded on requests where it is almost always full. Removing it costs a reader pass over the 105 uncovered threads — 105 × 51.3 s = ~5 390 s ≈ $1.20 at the price ceiling, in a SEPARATE session, because a dataset built during the paid session could not have been pre-registered. The operator ruled branch C, which closes the length half and leaves this one open and named; this record says what was known before the attempt",
       "topic_envelope_chars": 147
     },

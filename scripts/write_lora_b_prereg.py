@@ -304,6 +304,21 @@ def reachability(sft: dict) -> dict:
             "arm_b_rows_with_an_entity_block": arms["b"]["context"]["with_an_entity_block"],
             "arm_b_rows": arms["b"]["n"],
             "topic_envelope_chars": envelope["limit"],
+            "the_cut_marker": {
+                "training_rows_marked": arms["b"]["context"]["with_a_topic_the_cut_shortened"],
+                "of": arms["b"]["n"],
+                "eval_items_marked": sum(
+                    1 for one in read(PROBE_PACK)["items"] if one["topic"].rstrip().endswith("…")
+                ),
+                "eval_items": len(read(PROBE_PACK)["items"]),
+                "reading": (
+                    "branch C marks a shortened topic with an ellipsis, and a BOUGHT topic is never"
+                    " cut — so the marker appears on most of the training set and on none of the"
+                    " eval prompts. It is the same class as the finding it was fixing, one size"
+                    " smaller, and it is registered here rather than discovered afterwards: after"
+                    " the one attempt it would be an uncontrolled variable nobody wrote down"
+                ),
+            },
             "cause": (
                 "a pass-1 request carries the thread's topic and entity block, and both come from a"
                 " reader verdict that was PAID FOR. 15 of the 120 labelled threads have one; the"
@@ -497,11 +512,26 @@ def build() -> dict:
                 ),
             },
             "reading": probe["money"]["reading"],
-            "recovery": (
-                "ONE pod re-creation, and only after a deletion PROVEN by listing. Never two"
-                " billing endpoints at once — the goal is no parallel spend, whatever the letter."
-                " Pods, not serverless (16.08)"
-            ),
+            "recovery": {
+                "rule": (
+                    "ONE pod re-creation, and only after a deletion PROVEN by listing. Never two"
+                    " billing endpoints at once — the goal is no parallel spend, whatever the"
+                    " letter. Pods, not serverless (16.08)"
+                ),
+                "there_is_no_mid_arm_checkpoint": {
+                    "save_every": int(config["training"]["save_every"]),
+                    "arm_steps": {arm: arms[arm]["steps"] for arm in sorted(arms)},
+                    "reading": (
+                        "`step % save_every` never fires — the arms are"
+                        f" {arms['a']['steps']} and {arms['b']['steps']} steps against a"
+                        f" save_every of {config['training']['save_every']} — so the only adapter"
+                        " written is the one after the loop. A KILL at any rung DURING an arm"
+                        " loses that arm whole, and the single re-creation this clause allows"
+                        " restarts it from step 0. config/qlora.yaml is frozen law and is not"
+                        " edited for this; the fact is registered so the clause is read with it"
+                    ),
+                },
+            },
         },
         "phase": "lora-b",
         "population": {

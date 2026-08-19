@@ -14,8 +14,10 @@ second `молочный_бренд` row to both arms, and **H6 now re-derives a
 The pod is still not created — the entity-block finding is the half branch C does not touch, and
 that is the ruling still open.
 
-Ten commits, `9317c80` → `HEAD`, `make check` green at every boundary — 3 004 / 3 009 / 3 053 /
-3 068 / **3 071 passed, 2 skipped** — and `ruff format --check` clean. Cause tags from the closed enum v2 only; lesson names ride as trailing
+Twelve commits, `9317c80` → `HEAD`, `make check` green at every boundary — 3 004 / 3 009 / 3 053 /
+3 068 / 3 071 / **3 073 passed, 2 skipped** — and `ruff format --check` clean. `knowledge/hot.md`
+carries the handoff the paid session boots from; the census reads **10.1K** against `TARGET_KTOK`
+10.7, up 0.3K for it and named rather than left to be noticed. Cause tags from the closed enum v2 only; lesson names ride as trailing
 `[[wiki-name]]`.
 
 ## Read back, before the first edit
@@ -393,11 +395,23 @@ target:      {"msg_id": 580336, "subject_type": "не_наш_рынок", "subje
 learn_chars: 49 -> '{"msg_id": 580336, "subject_type": "не_наш_рынок"'
 ```
 
-**What branch C did not do.** It bought no reader verdict, so the entity block is unchanged: 39 of
-650 training rows carry one against 12 of the gate's 14. The finding stands, it is registered in
-`results/prereg_lora_b.json` under `reachability.the_context_the_gate_carries`, and the branch that
-closes it is still B — a reader pass over the 105 uncovered threads, ≈$1.20, in its own session.
-**The pod is not created.**
+**What branch C did not do, and what it added.** It bought no reader verdict, so the entity block
+is unchanged: 39 of 650 training rows carry one against 12 of the gate's 14. And the cut brought an
+asymmetry of its own — **372 of 650 training topics end in an ellipsis and 0 of the 64 eval prompts
+do**, because a bought topic is never cut. That is the same class as the finding it was fixing, one
+size smaller; it is not rebuilt away (an unmarked fragment is not obviously better, and the ruling
+was C), it is REGISTERED, in `reachability.the_context_the_gate_carries.the_cut_marker`, with both
+counts re-derived by a test off the artefacts themselves. After the one attempt it would have been
+an uncontrolled variable nobody wrote down.
+
+One more fact the registration was missing, derived rather than noticed: **`save_every` is 100 and
+the arms are 64 and 82 steps**, so `step % save_every` never fires and the only adapter written is
+the one after the loop. A KILL at any rung DURING an arm loses that arm whole, and the single
+re-creation the recovery clause allows restarts it from step 0. `config/qlora.yaml` is frozen law
+and is not edited for it; the clause now carries the fact so it is read with it.
+
+The branch that closes the entity-block finding is still B — a reader pass over the 105 uncovered
+threads, ≈$1.20, in its own session. **The pod is not created.**
 
 ## Deviations from Dv554
 
@@ -413,6 +427,8 @@ closes it is still B — a reader pass over the 105 uncovered threads, ≈$1.20,
 | **Dv561** | **D3 is not run, and the contract's own H6 clause is why.** «A mismatch is a finding BEFORE the money» — seven of fourteen registered numbers moved, and the context finding lands on 12 of the gate's 14 rows with a removal that costs ~$1.20 in a session this registration cannot contain. Against ONE attempt at a sealed bar, spending it is a ruling and not an execution detail. Everything D3 consumes is committed and green; the split the contract itself offers («you MAY close D0–D2 in one session and run D3–D4 in a fresh one») is where this stops. **After branch C, H6 is green and the remaining reason is the entity block alone** — the ruling on branch B is what the pod waits for. | `[cause: contract-gap]` `[[an-absolute-bar-needs-a-reachability-state]]` |
 | **Dv562** | **A record's prose quoted numbers the record derives, and the ruling made it false.** `reachability.to_pass.reading` in the pre-registration producer spelled out «Arm B carries 45 rows of the first class and ONE of the second — the second brand row … was dropped». Both halves stopped being true the moment branch C rebuilt the datasets, and the block around them is regenerated from `results/pass1_sft.json`, so the record would have shipped a paragraph contradicting the numbers three lines above it. Rewritten as an f-string over the same source, and it says so: «the numbers are read off the dataset record rather than written here — this sentence has already been wrong once». | `[cause: verify-gap]` `[[corrections-break-derivations]]` |
 | **Dv563** | **The contract's arithmetic was right and the executor's substitute was what broke it.** Seven of the fourteen H6 rows were red on the first build, and after a $0 change to how ONE context field is rendered every one of them re-derives — 500 / 650 rows, 64 / 82 steps, 3 907 / 5 006 s, $2.6275 against a registered $2.63. The finding was real and the number it accused was not: H6 says «these two disagree», and reading it as «the contract is wrong» would have been the expensive half of being right. | `[cause: process]` `[[trace-the-producer-not-the-result]]` |
+| **Dv564** | **The fix for a shape difference introduced a smaller one.** Branch C marks a shortened topic with an ellipsis, and a bought topic is never cut — so the marker sits on **372 of the 650 training rows and on 0 of the 64 eval prompts**. Registered rather than rebuilt away: the operator ruled C, an unmarked fragment claims the topic ends there, and after the attempt the marker would be an uncontrolled variable nobody had written down. Both counts are re-derived by a test off the datasets and the eval pack, not quoted from this table. | `[cause: verify-gap]` `[[build-the-training-prompt-with-the-inference-call]]` |
+| **Dv565** | **The recovery clause assumed a checkpoint the config cannot write.** `save_every` is 100 and the arms are 64 and 82 steps, so `step % save_every` never fires: the only adapter written is the one after the loop. «ONE pod re-creation after a proven deletion» therefore means «restart the arm from step 0», not «resume it» — a KILL at rung 3 or 4 eighty minutes into arm B loses the arm. `config/qlora.yaml` is frozen law and was NOT edited; the fact is registered inside the clause it changes the meaning of. | `[cause: contract-gap]` `[[a-budget-is-not-an-elapsed]]` |
 
 ## Process signals
 
