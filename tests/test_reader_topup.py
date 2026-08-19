@@ -238,6 +238,16 @@ def synthetic(tmp_path, monkeypatch):
     return tmp_path
 
 
+def said(capsys) -> dict:
+    """The FIRST JSON object a gate prints, without the human lines it prints around it.
+
+    `raw_decode` and not a slice on the last brace: a KILL prints a verdict sentence after the
+    object and that sentence has braces of its own in it.
+    """
+    out = capsys.readouterr().out
+    return json.JSONDecoder().raw_decode(out[out.index("{") :])[0]
+
+
 def open_a_segment(now_minus_seconds: float = 30.0) -> str:
     from datetime import UTC, datetime, timedelta
 
@@ -264,9 +274,9 @@ def open_a_segment(now_minus_seconds: float = 30.0) -> str:
 
 def test_pre_create_check_answers_before_anything_exists(synthetic, capsys):
     assert driver.main(["--pre-create-check"]) == 0
-    said = json.loads(capsys.readouterr().out)
-    assert said["may_create"] is True
-    assert said["cap_usd_all_in"] == 2.00 and said["segments_allowed"] == 3
+    answer = said(capsys)
+    assert answer["may_create"] is True
+    assert answer["cap_usd_all_in"] == 2.00 and answer["segments_allowed"] == 3
 
 
 def test_open_records_the_segment_and_reads_every_field_it_needs(synthetic, capsys):
@@ -290,33 +300,33 @@ def test_gate_zero_waits_inside_the_threshold_and_kills_past_it(synthetic, capsy
     assert driver.main(["--gate0"]) == 3  # WAIT
     capsys.readouterr()
     assert driver.main(["--gate0", "--ssh-ok"]) == 0  # GO
-    said = json.loads(capsys.readouterr().out)
-    assert said["threshold_seconds"] == 180.0 and said["verdict"] == "GO"
+    answer = said(capsys)
+    assert answer["threshold_seconds"] == 180.0 and answer["verdict"] == "GO"
 
 
 def test_gate_zero_kills_once_the_deadman_is_past(synthetic, capsys):
     open_a_segment(now_minus_seconds=400.0)
+    capsys.readouterr()  # `--open` prints its segment AND a gate; both are drained
     assert driver.main(["--gate0"]) == 2  # KILL
-    said = json.loads(capsys.readouterr().out)
-    assert said["verdict"] == "KILL" and said["seconds_left"] < 0
+    answer = said(capsys)
+    assert answer["verdict"] == "KILL" and answer["seconds_left"] < 0
 
 
 def test_the_deadline_gate_reads_the_boot_and_reading_projections(synthetic, capsys):
     open_a_segment(now_minus_seconds=60.0)
     capsys.readouterr()
     driver.main(["--deadlines"])
-    said = json.loads(capsys.readouterr().out)
-    assert said["contract_ceiling_seconds"] == 720.0
-    assert said["usable_seconds"] > 9000  # $2.00 at $0.74/h less the deletion margin
-    assert said["first_reply_must_land_by_create_elapsed"] > 0
+    answer = said(capsys)
+    assert answer["contract_ceiling_seconds"] == 720.0
+    assert answer["usable_seconds"] > 9000  # $2.00 at $0.74/h less the deletion margin
+    assert answer["first_reply_must_land_by_create_elapsed"] > 0
 
 
 def test_the_gate_with_no_reply_yet_takes_the_boot_branch(synthetic, capsys):
     open_a_segment(now_minus_seconds=60.0)
     capsys.readouterr()
     assert driver.main(["--gate", "--raw", str(synthetic / "pod.jsonl")]) == 3
-    said = json.loads(capsys.readouterr().out)
-    assert said["verdict"] == "WAIT"
+    assert said(capsys)["verdict"] == "WAIT"
 
 
 def test_the_gate_with_replies_takes_the_projection_branch(synthetic, capsys):
@@ -337,11 +347,11 @@ def test_the_gate_with_replies_takes_the_projection_branch(synthetic, capsys):
     open_a_segment(now_minus_seconds=300.0)
     capsys.readouterr()
     code = driver.main(["--gate", "--raw", str(synthetic / "pod.jsonl")])
-    said = json.loads(capsys.readouterr().out)
+    answer = said(capsys)
     assert code in (0, 2)
-    assert said["units_read"] == 3 and said["units_unread"] == 129
-    assert said["projections"]["binding"]["which"] in ("by_unit", "by_payable_comment")
-    assert said["usd"]["cap_usd_all_in"] == 2.00
+    assert answer["units_read"] == 3 and answer["units_unread"] == 129
+    assert answer["projections"]["binding"]["which"] in ("by_unit", "by_payable_comment")
+    assert answer["usd"]["cap_usd_all_in"] == 2.00
 
 
 def test_close_segment_writes_the_billed_end(synthetic, capsys):
@@ -374,8 +384,9 @@ def test_the_ingest_parses_merges_the_chunks_and_names_its_refusals(synthetic, t
     rows = []
     for one in chunks:
         verdict = {
-            "thread": one["thread"],
+            "thread": {"channel": one["channel"], "post_id": one["post_id"]},
             "post_summary": "проба",
+            "discussion_summary": "проба",
             "entities": [],
             "signals": [],
             "per_comment": [],
