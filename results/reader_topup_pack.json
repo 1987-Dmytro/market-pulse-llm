@@ -6652,8 +6652,8 @@
   "phase": "reader-topup",
   "reading": "the pod renders each item itself, chunk header included, and refuses unless its sha equals the one above. Shipping the rendered string would only prove the two machines agree about a string; what has to be true is that the model is shown what the registration registered",
   "registration": {
-    "record": "results/reader_topup_prereg.json",
-    "sha256": "a6669b67226a3654de2bff3d746b4b9b1745814311f4b6573b010cb3e506b81a"
+    "record": "results/reader_topup_prereg_b.json",
+    "sha256": "e72175190023b07ef785a9ae7bf22384515b158e74ea292bb73baa6bf0d8aded"
   },
   "serving": {
     "adapter": null,
