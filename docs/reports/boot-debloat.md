@@ -206,9 +206,10 @@ costs nothing:
 
 **25 730 B on disk, 0 B at boot.**
 
-What stays in `./CLAUDE.md`: identity, Where the truth lives, File ownership, Rules, the two Pitfalls
-that are **not** collector-scoped (sarcasm labelling, the scorer as the single judge), Second brain,
-Stack & commands, Tooling with a one-line `graphify` trigger. **6 999 → 4 581 B, 115 → 80 lines**,
+What stays in `./CLAUDE.md`: identity, Where the truth lives, File ownership, Rules, Second brain,
+Stack & commands, Tooling with a one-line `graphify` trigger — the contract's own list — **plus the two
+Pitfalls sentences neither list covers** (sarcasm labelling, the scorer as the single judge). That is a
+judgment call and not compliance: see Dv544. **6 999 → 4 581 B, 115 → 80 lines**,
 against its own ≤200-line bar. Commit `e2ca966`; census **10.4K → 9.8K**; `make check`
 **2 967 / 2 skipped**.
 
@@ -304,7 +305,10 @@ AUTO-GEN region next:  1,257 B   (what the next SessionStart writes)
 drift               :    -43 B = -0.0107K against a 1.0K margin (10.7 - 9.7)
 ```
 
-The registered number survives the next boot with 1.0K of headroom against a 0.01K wobble.
+Taken at `1f48431`, before this report's own commit existed; the next SessionStart's top-5 swaps
+`d007db4` in for `a26db9f`, whose subjects are the same length to within a few bytes, so the
+bound holds. The registered number survives the next boot with 1.0K of headroom against a
+0.01K wobble.
 
 The ADR is `knowledge/decisions/boot-tax-re-registered-from-the-measured-floor.md` (commit
 `1f48431`), in `INDEX.md`, and it links to — and un-suspends —
@@ -349,9 +353,9 @@ $ git status --porcelain
 `make check` was run at **every** commit boundary and was green at each: `a26db9f` 2 967 · `cf00a44`
 2 967 · `e2ca966` 2 967 · `ab372c4` 2 967 (the run above). Step 0's two commits changed nothing in
 the working tree, so the 2 966 baseline run is their boundary. The final run stands at `1f48431`;
-this report's own commit adds one file under `docs/reports/`, which no test in the suite reads
-(`tests/test_templates.py` reads `knowledge/templates/`, `tests/test_reader_gold_r2.py` one path
-under `knowledge/decisions/`).
+this report's own commit adds one file under `docs/reports/`, which no test in the suite
+**opens**: 43 test files mention `docs/`, and `grep -rn 'docs/reports' tests/` returns nine hits,
+every one of them prose inside a docstring, none of them a `read_text`.
 
 **The DO NOT's check that the Verify block does not name.** Pinned records must match after as
 before, so preflight was run — by path, because its grep-join cannot reach a data file that never
@@ -376,13 +380,19 @@ covers the new ADR and the INDEX row, and says nothing about the `[[…]]` in th
 
 | # | finding | tag |
 |---|---|---|
-| **Dv537** | **The audit table's home for one block is a roster claim, and the block stays.** «one memory lesson per idiom, all of them written» names a set instead of stating a mechanism. Five of the six idioms resolve to a passage; **«право исполнителя на отказ» is stated in no file** — the only hit in `knowledge/`, `docs/reports/`, `CLAUDE.md` and the whole memory directory is `MEMORY.md`'s index line for `a_refusal_is_an_outcome_with_a_price`, which is about a **billed boot**, and `guard-until`'s ADR:17 is about a contract's own refusal gate. The ruling said all eleven A-blocks go; the no-home law kept one, and this report is where that is visible. | `[cause: contract-gap]` `[[a-citation-is-not-a-record]]` |
+| **Dv537** | **The audit table's home for one block is a roster claim, and the block stays.** «one memory lesson per idiom, all of them written» names a set instead of stating a mechanism. Five of the six idioms resolve to a passage; **«право исполнителя на отказ» is stated in no file** — the only hit in `knowledge/`, `docs/reports/`, `CLAUDE.md` and the whole memory directory is `MEMORY.md`'s index line for `a_refusal_is_an_outcome_with_a_price`, which is about a **billed boot**, and `guard-until`'s ADR:17 is about a contract's own refusal gate. **The nearest miss, named because a keyword grep structurally cannot match it** ([[an-empty-class-is-the-definitions-answer]]): `CLAUDE.md:39–40`, «Execute the given scope exactly … flag conflicts and stop», in a file that loads every session. I read that as a **duty to stop on a conflict**, not as the standing right to refuse a contract the idiom names, and the conservative call is the same either way — but the claim «stated in no file» is worth exactly as much as the instrument behind it, so the candidate it could not see stands here. The ruling said all eleven A-blocks go; the no-home law kept one, and this report is where that is visible. | `[cause: contract-gap]` `[[a-citation-is-not-a-record]]` |
 | **Dv538** | **The moved constant had FOUR homes, not the two the contract names.** Beside `TARGET_KTOK` and its test pin, `scripts/context-census.py:6` carried a hardcoded «warns above 9K» in the module docstring, and `tests/test_context_census.py:10` asserted the SUSPENSION in prose — a claim the D4 commit makes false. Both are consumers a `grep -rn '9K\|9\.0'` finds and a diff on the constant does not. All four move together; the literal in the module docstring is replaced by the name, so the class cannot recur there. | `[cause: verify-gap]` `[[a-moved-constant-fails-green]]` |
 | **Dv539** | **The contract routes two sentences to «the rule whose paths cover the collector scripts», and no such rule exists.** The registry holds three: `phase345-artifacts.md` (annotation/frozen artefacts), `registrations-and-draws.md` (prereg and pack producers) and `_TEMPLATE.md`. None of their 31 patterns reaches `scripts/collect_*`, `scripts/fetch_*` or `src/market_pulse/telegram_client.py`. A destination named with no file behind it is the same shape as a bar with no producer; created `.claude/rules/telegram-collection.md` with twelve patterns, all matching. | `[cause: contract-gap]` `[[a-registered-bar-may-have-no-producer]]` |
 | **Dv540** | **The checker group C could break fails SILENT, not red.** `scripts/stale-check.sh` greps `**Last update:** <ISO>` and is `[ -n "$LU" ]`-guarded: a rewritten header that loses the date shape produces **no output at all**, which reads exactly like «in sync». Group C rewrites that very line. The header keeps the ISO date immediately after the marker and the script was RUN after the edit as the proof — reading the regex would have proved nothing about the file. | `[cause: verify-gap]` `[[a-checker-whose-failure-is-silence]]` |
 | **Dv541** | **The file now contradicts the ruling that emptied it.** `hot.md`'s Next §2 and the ⛔ BOOT TAX blocker both still read «цель ≤9K ПРИОСТАНОВЛЕНА … пере-регистрация — от измеренного пола», and both sit on the contract's byte-intact list — twice, in D1's UNTOUCHED and in the DO NOT. They were true when written; D4 ended the suspension four commits later. Named, not fixed: the two-list conflict is the team lead's to resolve, and a silent edit of a protected block would be the worse error. | `[cause: contract-gap]` `[[the-gates-evidence-outlived-its-artifact]]` |
 | **Dv542** | **A guard that runs after the write is not a guard.** The D1 script asserted the sealed literal `~$0.24/day` appears exactly once — it appears **twice** — and the assertion sat AFTER `write_text`, so a wrong invariant left a wrongly-edited `hot.md` on disk and the fix needed `git checkout`. The invariant was wrong, not the edit, and the file was recoverable because it was committed; on an uncommitted or out-of-repo file (this contract had one: `~/CLAUDE.md`) it would not have been. The out-of-repo edit was written the other way round — `assert not parked.exists()` and the kept text compared to the source BEFORE either file was written. | `[cause: process]` `[[a-guard-that-runs-after-the-write]]` |
 | **Dv543** | **The registered floor includes a region this contract's own commits rewrite.** The census sums `knowledge/hot.md` whole, and its AUTO-GEN block is regenerated from `git log -5` at every SessionStart — with subjects this contract just made longer. Measured rather than assumed, and measured with the READER (`build_auto()`, never `main()`, `git status --porcelain` empty after): **−43 B = −0.011K** against the 1.0K the ×1.1 margin buys. Bounded, so the number registered today is defensible tomorrow. | `[cause: verify-gap]` `[[the-producer-is-not-the-verifier]]` |
+| **Dv544** | **The contract's two lists do not cover each other, and the gap is a section of `CLAUDE.md`.** D2 moves «the collector-scoped Pitfalls sentences» and lists what stays — identity, Where the truth lives, File ownership, Rules, Second brain, Stack & commands, the Tooling pointer. `## Pitfalls` is on NEITHER list, so its two remaining sentences (sarcasm labelling, the scorer as the single judge) are unrouted. Read under «never expand or silently shrink scope» they stay where they are, which is what I did — but it is a decision, not an instruction followed, and the section is now 327 → 176 B in the always-loaded file (measured, not carried over from the audit table's own split). | `[cause: contract-gap]` `[[the-contracts-scope-is-narrower-than-the-rulings]]` |
+
+**Two of the lesson slugs above have no file yet** — `[[a-checker-whose-failure-is-silence]]`
+(Dv540) and `[[a-guard-that-runs-after-the-write]]` (Dv542). Both mechanisms are written out in
+full in their rows; `check-wikilinks.py` does not scan `docs/`, so nothing here flags them. They
+are pointers-to-be, and they join `Dv521` on the list of lessons still waiting for a home.
 
 ## Process signals
 
