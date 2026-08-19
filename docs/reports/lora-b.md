@@ -263,6 +263,30 @@ D3: a dataset built during the paid session could not have been pre-registered b
 which is the clause the whole registration rests on. It is a separate session or it is a risk that
 is accepted knowingly. Registered as a risk; the ruling is the operator's.
 
+### Digests, after as before
+
+The DO-NOT list demands that every pinned or sealed file hash the same after this contract as
+before it. The exact proof is the diff, not a summary — `git diff --stat 872449d..HEAD` over
+`config/qlora.yaml`, `src/market_pulse/local_llm.py`, `src/market_pulse/prompts.py`,
+`results/reader_gold_w1_r2.json`, both label packs, both r1 label files and both rendered pack
+pages returns **empty**: not one of them moved.
+
+The pins the paid run will depend on resolve to the same bytes from two independent records:
+
+```
+prompts.py live           a4a5a5d08546f53af18117c37e49f7e396919555563e16737a633c1df1a86eec
+probe-b pack pins parser  a4a5a5d08546f53af18117c37e49f7e396919555563e16737a633c1df1a86eec True
+lora-b prereg pins parser a4a5a5d08546f53af18117c37e49f7e396919555563e16737a633c1df1a86eec True
+prompt sha pass1_comment_gm4_v1  5a4a3cb6ce4db89adb304c04de41210fdabfde0c53addfdb75adba0f1d866650  (pack == prereg)
+config/qlora.yaml         6771ed373f9e7c52b3180a45506fe0dfef4446bc89b2c3ff6c1b39992f2d00ff True
+```
+
+`scripts/preflight.py` on those paths also lists older pins on `prompts.py` and `local_llm.py`
+from reader-era records. Those are the population effect `make baselines` prints — 31 of 1 487
+paths carry a pin from an earlier state, by design — and not a finding of this contract: the two
+records the pass-1 instrument is registered under agree with the live bytes, and the git diff above
+is what says nothing moved.
+
 ## D3 / D4 — not run
 
 No `pod create`, no endpoint, no `runpodctl` call, `$0.00` spent. `git log` for this contract shows
