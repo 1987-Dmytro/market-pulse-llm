@@ -1,4 +1,4 @@
-.PHONY: check fmt preflight
+.PHONY: check fmt preflight baselines
 
 # The single verifier. Must be green after every commit (docs/SPEC.md §9).
 check:
@@ -15,3 +15,9 @@ fmt:
 #   make preflight ARGS='--limit 4 -- --until'
 preflight:
 	python3.11 scripts/preflight.py $(ARGS)
+
+# The Baselines block a contract pastes: porcelain, census, the suite count pytest itself
+# stamped, the boot files and the pin registry. Instrument output with a timestamp on it —
+# never a recollection (Dv553).
+baselines:
+	python3.11 scripts/baselines.py
