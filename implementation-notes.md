@@ -7700,3 +7700,78 @@ cap 14) with `docs/label-pack-pass1-r1.md` as the human rendering and
 `docs/label-pack-pass1-r1-blind40.md` as the operator's optional blind control. All three rebuild
 byte-identically from `scripts/build_pass1_label_pack.py`; the argument is in
 `docs/reports/pass1-data-prep.md`.
+
+## pass1-redraw — the comment-level rule, and why there is no r3 (2026-08-19, $0)
+
+**The measurement that would have justified an r3, and the one that kills it.** `pass1-redraw`'s
+census (D1) priced four thread-level candidate rules and one comment-level one against r1's own 500
+labels. Only the comment-level rule has real lift — a comment whose OWN text carries a watchlist or
+tracked-category hit reads **36.8% «ours»** (14 of 38) against the pack's 7.6%. Its ceiling was
+already the small number: **59** such payable comments exist in the whole tract with the exam and
+gold rows removed, 38 of them labelled in r1, so **21** were free when the census ran.
+
+**Then r2 drew, and the pool is 9.** The 150 units of `results/pass1_label_pack_r2.json` took 12 of
+those 21, because r2's rule is the thread-level one and does not know about this signal:
+
+| comment-level hits in the tract (exam + gold removed) | **59** |
+|---|---:|
+| labelled in r1 | 38 |
+| drawn by r2 (after the 21 was measured) | 12 |
+| **free** | **9** |
+
+The nine sit in seven threads (2, 2, 1, 1, 1, 1, 1). The p90 of those threads' payable counts is
+108, so `sum(min(free_in_thread, cap)) = 9` and any r3's target is `min(anything, 9) = 9`.
+
+**The rule detects the wrong half of the deficit, and that matters more than the size.** The 36.8%
+is **13 `категория_личное` + 1 `молочный_бренд`**. Against the class the arm is actually named
+after, the rule is indistinguishable from background:
+
+| | share | 95% Wilson | over 9 units |
+|---|---:|---|---:|
+| «ours» (бренд + категория) | 14/38 = 36.8% | [23.4%, 52.7%] | 2.1 – 4.7 |
+| `молочный_бренд` alone | 1/38 = 2.6% | [0.5%, 13.5%] | 0.0 – 1.2 |
+
+Even at the original ceiling of 21 units the rule projects ≈0.5 rows of `молочный_бренд`. It is a
+CATEGORY detector; the brand deficit is a property of what window-1's commenters wrote, not of how
+the pack was drawn, and no subset of this tract concentrates it.
+
+**Nothing is lost — the 12 are inside r2 and get labelled with it.** That also refines r2's own
+projection, which the pack record states at the thread-level rate: 12 units at 36.8% plus 138 at
+5.2% (r1's rate for comments with no own-text hit) = **≈11.6 «ours», of which ≈0.6
+`молочный_бренд`**.
+
+**Verdict: no r3.** Nine units do not repay a producer, a self-pinning record, a page, a gate,
+tests and a report, and a third pack would add a third arm to a two-arm registration — a design
+decision for the operator, not a free addition. The only honest lever on the pool is a **new
+collection window**: the wide lexicon leads to bakery/meat/drinks and is not law (SPEC 3.17 (8)),
+and synthetic data is opened by sitting-2 only if the gate runs red.
+
+**Re-derive the split.** The census's `--census` prints 59 and 21 against r1; the 38/12/9 split
+against r2 is the snippet below, run from the repo root — it was executed verbatim before being
+written down, and its output is the comment on the last line.
+
+```python
+import json, sys
+from collections import Counter
+from pathlib import Path
+
+sys.path.insert(0, "scripts")
+import build_pass1_label_pack_r2 as r2p
+
+r1 = r2p.r1_record()
+r2 = json.loads(Path("results/pass1_label_pack_r2.json").read_text(encoding="utf-8"))
+gold, exam = set(r2p.gold_msg_ids()), set(r2p.excluded_threads(r1))
+drawn = {
+    "r1": {(u["thread"], int(u["msg_id"])) for u in r1["units"]},
+    "r2": {(u["thread"], int(u["msg_id"])) for u in r2["units"]},
+}
+pool = [
+    (one["thread"], msg_id)
+    for one in r2p.signals()
+    if one["thread"] not in exam
+    for msg_id in one["own_hit"]
+    if msg_id not in gold
+]
+print(Counter("r1" if u in drawn["r1"] else "r2" if u in drawn["r2"] else "free" for u in pool))
+# Counter({'r1': 38, 'r2': 12, 'free': 9})
+```
