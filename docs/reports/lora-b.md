@@ -14,7 +14,7 @@ second `молочный_бренд` row to both arms, and **H6 now re-derives a
 The pod is still not created — the entity-block finding is the half branch C does not touch, and
 that is the ruling still open.
 
-Twelve commits, `9317c80` → `HEAD`, `make check` green at every boundary — 3 004 / 3 009 / 3 053 /
+Fourteen commits, `9317c80` → `d928339`, `make check` green at every boundary — 3 004 / 3 009 / 3 053 /
 3 068 / 3 071 / **3 073 passed, 2 skipped** — and `ruff format --check` clean. `knowledge/hot.md`
 carries the handoff the paid session boots from; the census reads **10.1K** against `TARGET_KTOK`
 10.7, up 0.3K for it and named rather than left to be noticed. Cause tags from the closed enum v2 only; lesson names ride as trailing
