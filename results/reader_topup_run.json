@@ -254,12 +254,1548 @@
         "spent_this_segment_usd": 0.0826
       },
       "verdict": "STOP"
+    },
+    {
+      "at": "2026-08-19T19:08:55+00:00",
+      "billed_seconds_closed_segments": 485.0,
+      "cap_left_for_this_segment_usd": 1.900305,
+      "cap_usd_all_in": 2.0,
+      "elapsed_since_this_segments_create_seconds": 9.6,
+      "kind": "open",
+      "next_step": "keep polling `runpodctl ssh info` at 3-4 s",
+      "pod_id": "fgsvky3pxo2k9o",
+      "recreates_left": 0,
+      "rule": "if `runpodctl ssh info` has not answered with a connectable endpoint by 180 s of THIS segment's create-elapsed, the pod is killed and replaced. A third dead pod is a datacenter state and a STOP",
+      "seconds_left": 170.4,
+      "segment": 3,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0.099695,
+      "ssh_endpoint_answered": false,
+      "threshold_seconds": 180.0,
+      "verdict": "WAIT"
+    },
+    {
+      "at": "2026-08-19T19:10:16+00:00",
+      "billed_seconds_closed_segments": 485.0,
+      "cap_left_for_this_segment_usd": 1.900305,
+      "cap_usd_all_in": 2.0,
+      "elapsed_since_this_segments_create_seconds": 90.5,
+      "kind": "gate0",
+      "next_step": "stage and launch",
+      "pod_id": "fgsvky3pxo2k9o",
+      "recreates_left": 0,
+      "rule": "if `runpodctl ssh info` has not answered with a connectable endpoint by 180 s of THIS segment's create-elapsed, the pod is killed and replaced. A third dead pod is a datacenter state and a STOP",
+      "seconds_left": 89.5,
+      "segment": 3,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0.099695,
+      "ssh_endpoint_answered": true,
+      "threshold_seconds": 180.0,
+      "verdict": "GO"
+    },
+    {
+      "affordability_deadline_as_create_elapsed": 3135.8,
+      "at": "2026-08-19T19:11:28+00:00",
+      "billed_seconds_closed_segments": 485.0,
+      "cap_left_for_this_segment_usd": 1.900305,
+      "cap_usd_all_in": 2.0,
+      "contract_ceiling_as_create_elapsed": null,
+      "contract_ceiling_seconds": 720.0,
+      "elapsed_since_create_seconds": 162.9,
+      "first_reply_must_land_by_create_elapsed": 3135.8,
+      "generation_started_at_create_elapsed": null,
+      "kind": "boot_kill",
+      "pod_id": "fgsvky3pxo2k9o",
+      "pre_generation_budget_seconds": 3620.8,
+      "read_from": {
+        "copied_back_at": null,
+        "exists": false,
+        "path": "results/reader_topup_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "reading_projection_seconds": 6048.9,
+      "rule": "the FIRST reply must have landed by the earlier of two deadlines put on one axis: 720 s after the generation process started, and the create-elapsed at which the remaining cap can no longer pay for the whole reading. On this registration the cap is generous and the first is the binding one; a generation that has not started yet has no ceiling on this axis",
+      "seconds_left": 2972.9,
+      "segment": 3,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0.099695,
+      "spent_so_far_usd": 0.1332,
+      "spent_this_segment_usd": 0.0335,
+      "usable_seconds": 9184.7,
+      "usable_seconds_this_segment": 9184.7,
+      "usd_per_second": 0.000205556,
+      "verdict": "WAIT",
+      "which_binds": "affordability — the generation has not started, so the contract's twelve minutes has no place on this axis yet"
+    },
+    {
+      "affordability_deadline_as_create_elapsed": 3135.8,
+      "at": "2026-08-19T19:11:37+00:00",
+      "billed_seconds_closed_segments": 485.0,
+      "cap_left_for_this_segment_usd": 1.900305,
+      "cap_usd_all_in": 2.0,
+      "contract_ceiling_as_create_elapsed": 856.0,
+      "contract_ceiling_seconds": 720.0,
+      "elapsed_since_create_seconds": 171.3,
+      "first_reply_must_land_by_create_elapsed": 856.0,
+      "generation_started_at_create_elapsed": 136.0,
+      "kind": "boot_kill",
+      "pod_id": "fgsvky3pxo2k9o",
+      "pre_generation_budget_seconds": 3620.8,
+      "read_from": {
+        "copied_back_at": null,
+        "exists": false,
+        "path": "results/reader_topup_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "reading_projection_seconds": 6048.9,
+      "rule": "the FIRST reply must have landed by the earlier of two deadlines put on one axis: 720 s after the generation process started, and the create-elapsed at which the remaining cap can no longer pay for the whole reading. On this registration the cap is generous and the first is the binding one; a generation that has not started yet has no ceiling on this axis",
+      "seconds_left": 684.7,
+      "segment": 3,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0.099695,
+      "spent_so_far_usd": 0.1349,
+      "spent_this_segment_usd": 0.0352,
+      "usable_seconds": 9184.7,
+      "usable_seconds_this_segment": 9184.7,
+      "usd_per_second": 0.000205556,
+      "verdict": "WAIT",
+      "which_binds": "the contract's twelve minutes"
+    },
+    {
+      "affordability_deadline_as_create_elapsed": 3135.8,
+      "at": "2026-08-19T19:12:30+00:00",
+      "billed_seconds_closed_segments": 485.0,
+      "cap_left_for_this_segment_usd": 1.900305,
+      "cap_usd_all_in": 2.0,
+      "contract_ceiling_as_create_elapsed": 856.0,
+      "contract_ceiling_seconds": 720.0,
+      "elapsed_since_create_seconds": 224.0,
+      "first_reply_must_land_by_create_elapsed": 856.0,
+      "generation_started_at_create_elapsed": 136.0,
+      "kind": "boot_kill",
+      "pod_id": "fgsvky3pxo2k9o",
+      "pre_generation_budget_seconds": 3620.8,
+      "read_from": {
+        "copied_back_at": null,
+        "exists": false,
+        "path": "results/reader_topup_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "reading_projection_seconds": 6048.9,
+      "rule": "the FIRST reply must have landed by the earlier of two deadlines put on one axis: 720 s after the generation process started, and the create-elapsed at which the remaining cap can no longer pay for the whole reading. On this registration the cap is generous and the first is the binding one; a generation that has not started yet has no ceiling on this axis",
+      "seconds_left": 632.0,
+      "segment": 3,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0.099695,
+      "spent_so_far_usd": 0.1457,
+      "spent_this_segment_usd": 0.0461,
+      "usable_seconds": 9184.7,
+      "usable_seconds_this_segment": 9184.7,
+      "usd_per_second": 0.000205556,
+      "verdict": "WAIT",
+      "which_binds": "the contract's twelve minutes"
+    },
+    {
+      "at": "2026-08-19T19:15:15+00:00",
+      "billed_seconds_closed_segments": 485.0,
+      "binding": {
+        "calibration_rule": "max(measured ÷ fitted, 1.0). A pod slower than the fit stretches the projection by exactly that factor; a pod faster than the fit is projected at the fit, because a fast start is not a licence to run long",
+        "calibration_used": 1.0,
+        "fitted_seconds_of_the_read_units": 80.4,
+        "fitted_seconds_of_the_unread_units": 5968.5,
+        "measured_over_fitted": 0.9552,
+        "seconds": 5968.5,
+        "units_unread": 131,
+        "which": "fitted_model"
+      },
+      "cap_left_for_this_segment_usd": 1.900305,
+      "cap_usd_all_in": 2.0,
+      "elapsed_since_create_seconds": 389.7,
+      "headroom_seconds": 2826.6,
+      "kind": "full_pass",
+      "legs_read": [
+        "B"
+      ],
+      "measured_seconds": 76.782,
+      "measured_seconds_per_unit": 76.782,
+      "payable_comments_read": 16,
+      "payable_comments_unread": 841,
+      "pod_id": "fgsvky3pxo2k9o",
+      "projected_total_seconds": 6358.2,
+      "read_from": {
+        "copied_back_at": "2026-08-19T19:14:54+00:00",
+        "exists": true,
+        "path": "results/reader_topup_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "reported_and_not_binding": {
+        "by_payable_comment": {
+          "factor": 52.5625,
+          "seconds": 4035.9
+        },
+        "by_unit": {
+          "factor": 131.0,
+          "seconds": 10058.4
+        },
+        "why": "attempt A's two legs, kept in sight. The by-unit one is what STOPped attempt A at its first reading, and printing it beside the model is how a reader sees the difference the correction makes rather than being told about it"
+      },
+      "segment": 3,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0.099695,
+      "the_verdict_re_derives_from_here": "`elapsed + calibration × Σ fitted(unread) ≤ usable` IS the verdict. The dollars below are the same statement at this segment's rate",
+      "units_read": 1,
+      "units_unread": 131,
+      "usable_seconds": 9184.7,
+      "usable_seconds_this_segment": 9184.7,
+      "usd": {
+        "cap_left_for_this_segment_usd": 1.900305,
+        "cap_usd_all_in": 2.0,
+        "projected_total_usd": 1.307,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.1798,
+        "spent_so_far_usd": 0.0801,
+        "spent_this_segment_usd": 0.0801
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-19T19:15:36+00:00",
+      "billed_seconds_closed_segments": 485.0,
+      "binding": {
+        "calibration_rule": "max(measured ÷ fitted, 1.0). A pod slower than the fit stretches the projection by exactly that factor; a pod faster than the fit is projected at the fit, because a fast start is not a licence to run long",
+        "calibration_used": 1.0,
+        "fitted_seconds_of_the_read_units": 80.4,
+        "fitted_seconds_of_the_unread_units": 5968.5,
+        "measured_over_fitted": 0.9552,
+        "seconds": 5968.5,
+        "units_unread": 131,
+        "which": "fitted_model"
+      },
+      "cap_left_for_this_segment_usd": 1.900305,
+      "cap_usd_all_in": 2.0,
+      "elapsed_since_create_seconds": 410.3,
+      "headroom_seconds": 2805.9,
+      "kind": "full_pass",
+      "legs_read": [
+        "B"
+      ],
+      "measured_seconds": 76.782,
+      "measured_seconds_per_unit": 76.782,
+      "payable_comments_read": 16,
+      "payable_comments_unread": 841,
+      "pod_id": "fgsvky3pxo2k9o",
+      "projected_total_seconds": 6378.8,
+      "read_from": {
+        "copied_back_at": "2026-08-19T19:15:35+00:00",
+        "exists": true,
+        "path": "results/reader_topup_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "reported_and_not_binding": {
+        "by_payable_comment": {
+          "factor": 52.5625,
+          "seconds": 4035.9
+        },
+        "by_unit": {
+          "factor": 131.0,
+          "seconds": 10058.4
+        },
+        "why": "attempt A's two legs, kept in sight. The by-unit one is what STOPped attempt A at its first reading, and printing it beside the model is how a reader sees the difference the correction makes rather than being told about it"
+      },
+      "segment": 3,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0.099695,
+      "the_verdict_re_derives_from_here": "`elapsed + calibration × Σ fitted(unread) ≤ usable` IS the verdict. The dollars below are the same statement at this segment's rate",
+      "units_read": 1,
+      "units_unread": 131,
+      "usable_seconds": 9184.7,
+      "usable_seconds_this_segment": 9184.7,
+      "usd": {
+        "cap_left_for_this_segment_usd": 1.900305,
+        "cap_usd_all_in": 2.0,
+        "projected_total_usd": 1.3112,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.184,
+        "spent_so_far_usd": 0.0843,
+        "spent_this_segment_usd": 0.0843
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-19T19:19:38+00:00",
+      "billed_seconds_closed_segments": 485.0,
+      "binding": {
+        "calibration_rule": "max(measured ÷ fitted, 1.0). A pod slower than the fit stretches the projection by exactly that factor; a pod faster than the fit is projected at the fit, because a fast start is not a licence to run long",
+        "calibration_used": 1.0044,
+        "fitted_seconds_of_the_read_units": 321.5,
+        "fitted_seconds_of_the_unread_units": 5727.3,
+        "measured_over_fitted": 1.0044,
+        "seconds": 5752.3,
+        "units_unread": 128,
+        "which": "fitted_model"
+      },
+      "cap_left_for_this_segment_usd": 1.900305,
+      "cap_usd_all_in": 2.0,
+      "elapsed_since_create_seconds": 652.1,
+      "headroom_seconds": 2780.4,
+      "kind": "full_pass",
+      "legs_read": [
+        "B"
+      ],
+      "measured_seconds": 322.943,
+      "measured_seconds_per_unit": 80.736,
+      "payable_comments_read": 64,
+      "payable_comments_unread": 793,
+      "pod_id": "fgsvky3pxo2k9o",
+      "projected_total_seconds": 6404.4,
+      "read_from": {
+        "copied_back_at": "2026-08-19T19:19:37+00:00",
+        "exists": true,
+        "path": "results/reader_topup_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "reported_and_not_binding": {
+        "by_payable_comment": {
+          "factor": 12.3906,
+          "seconds": 4001.5
+        },
+        "by_unit": {
+          "factor": 32.0,
+          "seconds": 10334.2
+        },
+        "why": "attempt A's two legs, kept in sight. The by-unit one is what STOPped attempt A at its first reading, and printing it beside the model is how a reader sees the difference the correction makes rather than being told about it"
+      },
+      "segment": 3,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0.099695,
+      "the_verdict_re_derives_from_here": "`elapsed + calibration × Σ fitted(unread) ≤ usable` IS the verdict. The dollars below are the same statement at this segment's rate",
+      "units_read": 4,
+      "units_unread": 128,
+      "usable_seconds": 9184.7,
+      "usable_seconds_this_segment": 9184.7,
+      "usd": {
+        "cap_left_for_this_segment_usd": 1.900305,
+        "cap_usd_all_in": 2.0,
+        "projected_total_usd": 1.3165,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.2337,
+        "spent_so_far_usd": 0.134,
+        "spent_this_segment_usd": 0.134
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-19T19:23:39+00:00",
+      "billed_seconds_closed_segments": 485.0,
+      "binding": {
+        "calibration_rule": "max(measured ÷ fitted, 1.0). A pod slower than the fit stretches the projection by exactly that factor; a pod faster than the fit is projected at the fit, because a fast start is not a licence to run long",
+        "calibration_used": 1.0,
+        "fitted_seconds_of_the_read_units": 562.7,
+        "fitted_seconds_of_the_unread_units": 5486.2,
+        "measured_over_fitted": 0.931,
+        "seconds": 5486.2,
+        "units_unread": 125,
+        "which": "fitted_model"
+      },
+      "cap_left_for_this_segment_usd": 1.900305,
+      "cap_usd_all_in": 2.0,
+      "elapsed_since_create_seconds": 893.9,
+      "headroom_seconds": 2804.6,
+      "kind": "full_pass",
+      "legs_read": [
+        "B"
+      ],
+      "measured_seconds": 523.86,
+      "measured_seconds_per_unit": 74.837,
+      "payable_comments_read": 112,
+      "payable_comments_unread": 745,
+      "pod_id": "fgsvky3pxo2k9o",
+      "projected_total_seconds": 6380.1,
+      "read_from": {
+        "copied_back_at": "2026-08-19T19:23:39+00:00",
+        "exists": true,
+        "path": "results/reader_topup_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "reported_and_not_binding": {
+        "by_payable_comment": {
+          "factor": 6.6518,
+          "seconds": 3484.6
+        },
+        "by_unit": {
+          "factor": 17.8571,
+          "seconds": 9354.6
+        },
+        "why": "attempt A's two legs, kept in sight. The by-unit one is what STOPped attempt A at its first reading, and printing it beside the model is how a reader sees the difference the correction makes rather than being told about it"
+      },
+      "segment": 3,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0.099695,
+      "the_verdict_re_derives_from_here": "`elapsed + calibration × Σ fitted(unread) ≤ usable` IS the verdict. The dollars below are the same statement at this segment's rate",
+      "units_read": 7,
+      "units_unread": 125,
+      "usable_seconds": 9184.7,
+      "usable_seconds_this_segment": 9184.7,
+      "usd": {
+        "cap_left_for_this_segment_usd": 1.900305,
+        "cap_usd_all_in": 2.0,
+        "projected_total_usd": 1.3115,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.2834,
+        "spent_so_far_usd": 0.1837,
+        "spent_this_segment_usd": 0.1837
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-19T19:27:41+00:00",
+      "billed_seconds_closed_segments": 485.0,
+      "binding": {
+        "calibration_rule": "max(measured ÷ fitted, 1.0). A pod slower than the fit stretches the projection by exactly that factor; a pod faster than the fit is projected at the fit, because a fast start is not a licence to run long",
+        "calibration_used": 1.0,
+        "fitted_seconds_of_the_read_units": 873.3,
+        "fitted_seconds_of_the_unread_units": 5175.5,
+        "measured_over_fitted": 0.9575,
+        "seconds": 5175.5,
+        "units_unread": 121,
+        "which": "fitted_model"
+      },
+      "cap_left_for_this_segment_usd": 1.900305,
+      "cap_usd_all_in": 2.0,
+      "elapsed_since_create_seconds": 1135.9,
+      "headroom_seconds": 2873.3,
+      "kind": "full_pass",
+      "legs_read": [
+        "B"
+      ],
+      "measured_seconds": 836.215,
+      "measured_seconds_per_unit": 76.02,
+      "payable_comments_read": 173,
+      "payable_comments_unread": 684,
+      "pod_id": "fgsvky3pxo2k9o",
+      "projected_total_seconds": 6311.4,
+      "read_from": {
+        "copied_back_at": "2026-08-19T19:27:41+00:00",
+        "exists": true,
+        "path": "results/reader_topup_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "reported_and_not_binding": {
+        "by_payable_comment": {
+          "factor": 3.9538,
+          "seconds": 3306.2
+        },
+        "by_unit": {
+          "factor": 11.0,
+          "seconds": 9198.4
+        },
+        "why": "attempt A's two legs, kept in sight. The by-unit one is what STOPped attempt A at its first reading, and printing it beside the model is how a reader sees the difference the correction makes rather than being told about it"
+      },
+      "segment": 3,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0.099695,
+      "the_verdict_re_derives_from_here": "`elapsed + calibration × Σ fitted(unread) ≤ usable` IS the verdict. The dollars below are the same statement at this segment's rate",
+      "units_read": 11,
+      "units_unread": 121,
+      "usable_seconds": 9184.7,
+      "usable_seconds_this_segment": 9184.7,
+      "usd": {
+        "cap_left_for_this_segment_usd": 1.900305,
+        "cap_usd_all_in": 2.0,
+        "projected_total_usd": 1.2973,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.3332,
+        "spent_so_far_usd": 0.2335,
+        "spent_this_segment_usd": 0.2335
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-19T19:31:43+00:00",
+      "billed_seconds_closed_segments": 485.0,
+      "binding": {
+        "calibration_rule": "max(measured ÷ fitted, 1.0). A pod slower than the fit stretches the projection by exactly that factor; a pod faster than the fit is projected at the fit, because a fast start is not a licence to run long",
+        "calibration_used": 1.0,
+        "fitted_seconds_of_the_read_units": 1180.3,
+        "fitted_seconds_of_the_unread_units": 4868.5,
+        "measured_over_fitted": 0.9172,
+        "seconds": 4868.5,
+        "units_unread": 117,
+        "which": "fitted_model"
+      },
+      "cap_left_for_this_segment_usd": 1.900305,
+      "cap_usd_all_in": 2.0,
+      "elapsed_since_create_seconds": 1377.6,
+      "headroom_seconds": 2938.6,
+      "kind": "full_pass",
+      "legs_read": [
+        "B"
+      ],
+      "measured_seconds": 1082.598,
+      "measured_seconds_per_unit": 72.173,
+      "payable_comments_read": 233,
+      "payable_comments_unread": 624,
+      "pod_id": "fgsvky3pxo2k9o",
+      "projected_total_seconds": 6246.1,
+      "read_from": {
+        "copied_back_at": "2026-08-19T19:31:43+00:00",
+        "exists": true,
+        "path": "results/reader_topup_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "reported_and_not_binding": {
+        "by_payable_comment": {
+          "factor": 2.6781,
+          "seconds": 2899.3
+        },
+        "by_unit": {
+          "factor": 7.8,
+          "seconds": 8444.3
+        },
+        "why": "attempt A's two legs, kept in sight. The by-unit one is what STOPped attempt A at its first reading, and printing it beside the model is how a reader sees the difference the correction makes rather than being told about it"
+      },
+      "segment": 3,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0.099695,
+      "the_verdict_re_derives_from_here": "`elapsed + calibration × Σ fitted(unread) ≤ usable` IS the verdict. The dollars below are the same statement at this segment's rate",
+      "units_read": 15,
+      "units_unread": 117,
+      "usable_seconds": 9184.7,
+      "usable_seconds_this_segment": 9184.7,
+      "usd": {
+        "cap_left_for_this_segment_usd": 1.900305,
+        "cap_usd_all_in": 2.0,
+        "projected_total_usd": 1.2839,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.3829,
+        "spent_so_far_usd": 0.2832,
+        "spent_this_segment_usd": 0.2832
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-19T19:35:45+00:00",
+      "billed_seconds_closed_segments": 485.0,
+      "binding": {
+        "calibration_rule": "max(measured ÷ fitted, 1.0). A pod slower than the fit stretches the projection by exactly that factor; a pod faster than the fit is projected at the fit, because a fast start is not a licence to run long",
+        "calibration_used": 1.0,
+        "fitted_seconds_of_the_read_units": 1341.1,
+        "fitted_seconds_of_the_unread_units": 4707.8,
+        "measured_over_fitted": 0.9494,
+        "seconds": 4707.8,
+        "units_unread": 115,
+        "which": "fitted_model"
+      },
+      "cap_left_for_this_segment_usd": 1.900305,
+      "cap_usd_all_in": 2.0,
+      "elapsed_since_create_seconds": 1619.3,
+      "headroom_seconds": 2857.6,
+      "kind": "full_pass",
+      "legs_read": [
+        "B"
+      ],
+      "measured_seconds": 1273.313,
+      "measured_seconds_per_unit": 74.901,
+      "payable_comments_read": 265,
+      "payable_comments_unread": 592,
+      "pod_id": "fgsvky3pxo2k9o",
+      "projected_total_seconds": 6327.1,
+      "read_from": {
+        "copied_back_at": "2026-08-19T19:35:44+00:00",
+        "exists": true,
+        "path": "results/reader_topup_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "reported_and_not_binding": {
+        "by_payable_comment": {
+          "factor": 2.234,
+          "seconds": 2844.5
+        },
+        "by_unit": {
+          "factor": 6.7647,
+          "seconds": 8613.6
+        },
+        "why": "attempt A's two legs, kept in sight. The by-unit one is what STOPped attempt A at its first reading, and printing it beside the model is how a reader sees the difference the correction makes rather than being told about it"
+      },
+      "segment": 3,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0.099695,
+      "the_verdict_re_derives_from_here": "`elapsed + calibration × Σ fitted(unread) ≤ usable` IS the verdict. The dollars below are the same statement at this segment's rate",
+      "units_read": 17,
+      "units_unread": 115,
+      "usable_seconds": 9184.7,
+      "usable_seconds_this_segment": 9184.7,
+      "usd": {
+        "cap_left_for_this_segment_usd": 1.900305,
+        "cap_usd_all_in": 2.0,
+        "projected_total_usd": 1.3006,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.4326,
+        "spent_so_far_usd": 0.3329,
+        "spent_this_segment_usd": 0.3329
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-19T19:39:47+00:00",
+      "billed_seconds_closed_segments": 485.0,
+      "binding": {
+        "calibration_rule": "max(measured ÷ fitted, 1.0). A pod slower than the fit stretches the projection by exactly that factor; a pod faster than the fit is projected at the fit, because a fast start is not a licence to run long",
+        "calibration_used": 1.0,
+        "fitted_seconds_of_the_read_units": 1582.3,
+        "fitted_seconds_of_the_unread_units": 4466.6,
+        "measured_over_fitted": 0.9816,
+        "seconds": 4466.6,
+        "units_unread": 112,
+        "which": "fitted_model"
+      },
+      "cap_left_for_this_segment_usd": 1.900305,
+      "cap_usd_all_in": 2.0,
+      "elapsed_since_create_seconds": 1861.0,
+      "headroom_seconds": 2857.1,
+      "kind": "full_pass",
+      "legs_read": [
+        "B"
+      ],
+      "measured_seconds": 1553.145,
+      "measured_seconds_per_unit": 77.657,
+      "payable_comments_read": 313,
+      "payable_comments_unread": 544,
+      "pod_id": "fgsvky3pxo2k9o",
+      "projected_total_seconds": 6327.6,
+      "read_from": {
+        "copied_back_at": "2026-08-19T19:39:46+00:00",
+        "exists": true,
+        "path": "results/reader_topup_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "reported_and_not_binding": {
+        "by_payable_comment": {
+          "factor": 1.738,
+          "seconds": 2699.4
+        },
+        "by_unit": {
+          "factor": 5.6,
+          "seconds": 8697.6
+        },
+        "why": "attempt A's two legs, kept in sight. The by-unit one is what STOPped attempt A at its first reading, and printing it beside the model is how a reader sees the difference the correction makes rather than being told about it"
+      },
+      "segment": 3,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0.099695,
+      "the_verdict_re_derives_from_here": "`elapsed + calibration × Σ fitted(unread) ≤ usable` IS the verdict. The dollars below are the same statement at this segment's rate",
+      "units_read": 20,
+      "units_unread": 112,
+      "usable_seconds": 9184.7,
+      "usable_seconds_this_segment": 9184.7,
+      "usd": {
+        "cap_left_for_this_segment_usd": 1.900305,
+        "cap_usd_all_in": 2.0,
+        "projected_total_usd": 1.3007,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.4822,
+        "spent_so_far_usd": 0.3825,
+        "spent_this_segment_usd": 0.3825
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-19T19:43:48+00:00",
+      "billed_seconds_closed_segments": 485.0,
+      "binding": {
+        "calibration_rule": "max(measured ÷ fitted, 1.0). A pod slower than the fit stretches the projection by exactly that factor; a pod faster than the fit is projected at the fit, because a fast start is not a licence to run long",
+        "calibration_used": 1.0055,
+        "fitted_seconds_of_the_read_units": 1798.0,
+        "fitted_seconds_of_the_unread_units": 4250.9,
+        "measured_over_fitted": 1.0055,
+        "seconds": 4274.4,
+        "units_unread": 109,
+        "which": "fitted_model"
+      },
+      "cap_left_for_this_segment_usd": 1.900305,
+      "cap_usd_all_in": 2.0,
+      "elapsed_since_create_seconds": 2102.8,
+      "headroom_seconds": 2807.5,
+      "kind": "full_pass",
+      "legs_read": [
+        "B"
+      ],
+      "measured_seconds": 1807.905,
+      "measured_seconds_per_unit": 78.605,
+      "payable_comments_read": 354,
+      "payable_comments_unread": 503,
+      "pod_id": "fgsvky3pxo2k9o",
+      "projected_total_seconds": 6377.2,
+      "read_from": {
+        "copied_back_at": "2026-08-19T19:43:48+00:00",
+        "exists": true,
+        "path": "results/reader_topup_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "reported_and_not_binding": {
+        "by_payable_comment": {
+          "factor": 1.4209,
+          "seconds": 2568.9
+        },
+        "by_unit": {
+          "factor": 4.7391,
+          "seconds": 8567.9
+        },
+        "why": "attempt A's two legs, kept in sight. The by-unit one is what STOPped attempt A at its first reading, and printing it beside the model is how a reader sees the difference the correction makes rather than being told about it"
+      },
+      "segment": 3,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0.099695,
+      "the_verdict_re_derives_from_here": "`elapsed + calibration × Σ fitted(unread) ≤ usable` IS the verdict. The dollars below are the same statement at this segment's rate",
+      "units_read": 23,
+      "units_unread": 109,
+      "usable_seconds": 9184.7,
+      "usable_seconds_this_segment": 9184.7,
+      "usd": {
+        "cap_left_for_this_segment_usd": 1.900305,
+        "cap_usd_all_in": 2.0,
+        "projected_total_usd": 1.3109,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.5319,
+        "spent_so_far_usd": 0.4322,
+        "spent_this_segment_usd": 0.4322
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-19T19:47:50+00:00",
+      "billed_seconds_closed_segments": 485.0,
+      "binding": {
+        "calibration_rule": "max(measured ÷ fitted, 1.0). A pod slower than the fit stretches the projection by exactly that factor; a pod faster than the fit is projected at the fit, because a fast start is not a licence to run long",
+        "calibration_used": 1.0,
+        "fitted_seconds_of_the_read_units": 2068.6,
+        "fitted_seconds_of_the_unread_units": 3980.2,
+        "measured_over_fitted": 0.9901,
+        "seconds": 3980.2,
+        "units_unread": 105,
+        "which": "fitted_model"
+      },
+      "cap_left_for_this_segment_usd": 1.900305,
+      "cap_usd_all_in": 2.0,
+      "elapsed_since_create_seconds": 2344.7,
+      "headroom_seconds": 2859.9,
+      "kind": "full_pass",
+      "legs_read": [
+        "B"
+      ],
+      "measured_seconds": 2048.175,
+      "measured_seconds_per_unit": 75.858,
+      "payable_comments_read": 404,
+      "payable_comments_unread": 453,
+      "pod_id": "fgsvky3pxo2k9o",
+      "projected_total_seconds": 6324.9,
+      "read_from": {
+        "copied_back_at": "2026-08-19T19:47:50+00:00",
+        "exists": true,
+        "path": "results/reader_topup_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "reported_and_not_binding": {
+        "by_payable_comment": {
+          "factor": 1.1213,
+          "seconds": 2296.6
+        },
+        "by_unit": {
+          "factor": 3.8889,
+          "seconds": 7965.1
+        },
+        "why": "attempt A's two legs, kept in sight. The by-unit one is what STOPped attempt A at its first reading, and printing it beside the model is how a reader sees the difference the correction makes rather than being told about it"
+      },
+      "segment": 3,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0.099695,
+      "the_verdict_re_derives_from_here": "`elapsed + calibration × Σ fitted(unread) ≤ usable` IS the verdict. The dollars below are the same statement at this segment's rate",
+      "units_read": 27,
+      "units_unread": 105,
+      "usable_seconds": 9184.7,
+      "usable_seconds_this_segment": 9184.7,
+      "usd": {
+        "cap_left_for_this_segment_usd": 1.900305,
+        "cap_usd_all_in": 2.0,
+        "projected_total_usd": 1.3001,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.5817,
+        "spent_so_far_usd": 0.482,
+        "spent_this_segment_usd": 0.482
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-19T19:51:52+00:00",
+      "billed_seconds_closed_segments": 485.0,
+      "binding": {
+        "calibration_rule": "max(measured ÷ fitted, 1.0). A pod slower than the fit stretches the projection by exactly that factor; a pod faster than the fit is projected at the fit, because a fast start is not a licence to run long",
+        "calibration_used": 1.0,
+        "fitted_seconds_of_the_read_units": 2408.8,
+        "fitted_seconds_of_the_unread_units": 3640.1,
+        "measured_over_fitted": 0.9459,
+        "seconds": 3640.1,
+        "units_unread": 100,
+        "which": "fitted_model"
+      },
+      "cap_left_for_this_segment_usd": 1.900305,
+      "cap_usd_all_in": 2.0,
+      "elapsed_since_create_seconds": 2586.3,
+      "headroom_seconds": 2958.3,
+      "kind": "full_pass",
+      "legs_read": [
+        "B"
+      ],
+      "measured_seconds": 2278.547,
+      "measured_seconds_per_unit": 71.205,
+      "payable_comments_read": 467,
+      "payable_comments_unread": 390,
+      "pod_id": "fgsvky3pxo2k9o",
+      "projected_total_seconds": 6226.4,
+      "read_from": {
+        "copied_back_at": "2026-08-19T19:51:51+00:00",
+        "exists": true,
+        "path": "results/reader_topup_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "reported_and_not_binding": {
+        "by_payable_comment": {
+          "factor": 0.8351,
+          "seconds": 1902.9
+        },
+        "by_unit": {
+          "factor": 3.125,
+          "seconds": 7120.5
+        },
+        "why": "attempt A's two legs, kept in sight. The by-unit one is what STOPped attempt A at its first reading, and printing it beside the model is how a reader sees the difference the correction makes rather than being told about it"
+      },
+      "segment": 3,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0.099695,
+      "the_verdict_re_derives_from_here": "`elapsed + calibration × Σ fitted(unread) ≤ usable` IS the verdict. The dollars below are the same statement at this segment's rate",
+      "units_read": 32,
+      "units_unread": 100,
+      "usable_seconds": 9184.7,
+      "usable_seconds_this_segment": 9184.7,
+      "usd": {
+        "cap_left_for_this_segment_usd": 1.900305,
+        "cap_usd_all_in": 2.0,
+        "projected_total_usd": 1.2799,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.6313,
+        "spent_so_far_usd": 0.5316,
+        "spent_this_segment_usd": 0.5316
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-19T19:55:54+00:00",
+      "billed_seconds_closed_segments": 485.0,
+      "binding": {
+        "calibration_rule": "max(measured ÷ fitted, 1.0). A pod slower than the fit stretches the projection by exactly that factor; a pod faster than the fit is projected at the fit, because a fast start is not a licence to run long",
+        "calibration_used": 1.0,
+        "fitted_seconds_of_the_read_units": 2658.0,
+        "fitted_seconds_of_the_unread_units": 3390.8,
+        "measured_over_fitted": 0.9325,
+        "seconds": 3390.8,
+        "units_unread": 95,
+        "which": "fitted_model"
+      },
+      "cap_left_for_this_segment_usd": 1.900305,
+      "cap_usd_all_in": 2.0,
+      "elapsed_since_create_seconds": 2828.0,
+      "headroom_seconds": 2965.9,
+      "kind": "full_pass",
+      "legs_read": [
+        "B"
+      ],
+      "measured_seconds": 2478.696,
+      "measured_seconds_per_unit": 66.992,
+      "payable_comments_read": 505,
+      "payable_comments_unread": 352,
+      "pod_id": "fgsvky3pxo2k9o",
+      "projected_total_seconds": 6218.8,
+      "read_from": {
+        "copied_back_at": "2026-08-19T19:55:53+00:00",
+        "exists": true,
+        "path": "results/reader_topup_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "reported_and_not_binding": {
+        "by_payable_comment": {
+          "factor": 0.697,
+          "seconds": 1727.7
+        },
+        "by_unit": {
+          "factor": 2.5676,
+          "seconds": 6364.2
+        },
+        "why": "attempt A's two legs, kept in sight. The by-unit one is what STOPped attempt A at its first reading, and printing it beside the model is how a reader sees the difference the correction makes rather than being told about it"
+      },
+      "segment": 3,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0.099695,
+      "the_verdict_re_derives_from_here": "`elapsed + calibration × Σ fitted(unread) ≤ usable` IS the verdict. The dollars below are the same statement at this segment's rate",
+      "units_read": 37,
+      "units_unread": 95,
+      "usable_seconds": 9184.7,
+      "usable_seconds_this_segment": 9184.7,
+      "usd": {
+        "cap_left_for_this_segment_usd": 1.900305,
+        "cap_usd_all_in": 2.0,
+        "projected_total_usd": 1.2783,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.681,
+        "spent_so_far_usd": 0.5813,
+        "spent_this_segment_usd": 0.5813
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-19T19:59:56+00:00",
+      "billed_seconds_closed_segments": 485.0,
+      "binding": {
+        "calibration_rule": "max(measured ÷ fitted, 1.0). A pod slower than the fit stretches the projection by exactly that factor; a pod faster than the fit is projected at the fit, because a fast start is not a licence to run long",
+        "calibration_used": 1.0,
+        "fitted_seconds_of_the_read_units": 3016.3,
+        "fitted_seconds_of_the_unread_units": 3032.5,
+        "measured_over_fitted": 0.9145,
+        "seconds": 3032.5,
+        "units_unread": 90,
+        "which": "fitted_model"
+      },
+      "cap_left_for_this_segment_usd": 1.900305,
+      "cap_usd_all_in": 2.0,
+      "elapsed_since_create_seconds": 3070.9,
+      "headroom_seconds": 3081.4,
+      "kind": "full_pass",
+      "legs_read": [
+        "A",
+        "B"
+      ],
+      "measured_seconds": 2758.355,
+      "measured_seconds_per_unit": 65.675,
+      "payable_comments_read": 573,
+      "payable_comments_unread": 284,
+      "pod_id": "fgsvky3pxo2k9o",
+      "projected_total_seconds": 6103.4,
+      "read_from": {
+        "copied_back_at": "2026-08-19T19:59:56+00:00",
+        "exists": true,
+        "path": "results/reader_topup_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "reported_and_not_binding": {
+        "by_payable_comment": {
+          "factor": 0.4956,
+          "seconds": 1367.1
+        },
+        "by_unit": {
+          "factor": 2.1429,
+          "seconds": 5910.8
+        },
+        "why": "attempt A's two legs, kept in sight. The by-unit one is what STOPped attempt A at its first reading, and printing it beside the model is how a reader sees the difference the correction makes rather than being told about it"
+      },
+      "segment": 3,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0.099695,
+      "the_verdict_re_derives_from_here": "`elapsed + calibration × Σ fitted(unread) ≤ usable` IS the verdict. The dollars below are the same statement at this segment's rate",
+      "units_read": 42,
+      "units_unread": 90,
+      "usable_seconds": 9184.7,
+      "usable_seconds_this_segment": 9184.7,
+      "usd": {
+        "cap_left_for_this_segment_usd": 1.900305,
+        "cap_usd_all_in": 2.0,
+        "projected_total_usd": 1.2546,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.7309,
+        "spent_so_far_usd": 0.6312,
+        "spent_this_segment_usd": 0.6312
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-19T20:03:58+00:00",
+      "billed_seconds_closed_segments": 485.0,
+      "binding": {
+        "calibration_rule": "max(measured ÷ fitted, 1.0). A pod slower than the fit stretches the projection by exactly that factor; a pod faster than the fit is projected at the fit, because a fast start is not a licence to run long",
+        "calibration_used": 1.0,
+        "fitted_seconds_of_the_read_units": 3316.5,
+        "fitted_seconds_of_the_unread_units": 2732.4,
+        "measured_over_fitted": 0.908,
+        "seconds": 2732.4,
+        "units_unread": 85,
+        "which": "fitted_model"
+      },
+      "cap_left_for_this_segment_usd": 1.900305,
+      "cap_usd_all_in": 2.0,
+      "elapsed_since_create_seconds": 3312.8,
+      "headroom_seconds": 3139.5,
+      "kind": "full_pass",
+      "legs_read": [
+        "A",
+        "B"
+      ],
+      "measured_seconds": 3011.359,
+      "measured_seconds_per_unit": 64.071,
+      "payable_comments_read": 625,
+      "payable_comments_unread": 232,
+      "pod_id": "fgsvky3pxo2k9o",
+      "projected_total_seconds": 6045.2,
+      "read_from": {
+        "copied_back_at": "2026-08-19T20:03:58+00:00",
+        "exists": true,
+        "path": "results/reader_topup_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "reported_and_not_binding": {
+        "by_payable_comment": {
+          "factor": 0.3712,
+          "seconds": 1117.8
+        },
+        "by_unit": {
+          "factor": 1.8085,
+          "seconds": 5446.1
+        },
+        "why": "attempt A's two legs, kept in sight. The by-unit one is what STOPped attempt A at its first reading, and printing it beside the model is how a reader sees the difference the correction makes rather than being told about it"
+      },
+      "segment": 3,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0.099695,
+      "the_verdict_re_derives_from_here": "`elapsed + calibration × Σ fitted(unread) ≤ usable` IS the verdict. The dollars below are the same statement at this segment's rate",
+      "units_read": 47,
+      "units_unread": 85,
+      "usable_seconds": 9184.7,
+      "usable_seconds_this_segment": 9184.7,
+      "usd": {
+        "cap_left_for_this_segment_usd": 1.900305,
+        "cap_usd_all_in": 2.0,
+        "projected_total_usd": 1.2426,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.7807,
+        "spent_so_far_usd": 0.681,
+        "spent_this_segment_usd": 0.681
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-19T20:08:00+00:00",
+      "billed_seconds_closed_segments": 485.0,
+      "binding": {
+        "calibration_rule": "max(measured ÷ fitted, 1.0). A pod slower than the fit stretches the projection by exactly that factor; a pod faster than the fit is projected at the fit, because a fast start is not a licence to run long",
+        "calibration_used": 1.0,
+        "fitted_seconds_of_the_read_units": 3532.6,
+        "fitted_seconds_of_the_unread_units": 2516.3,
+        "measured_over_fitted": 0.916,
+        "seconds": 2516.3,
+        "units_unread": 81,
+        "which": "fitted_model"
+      },
+      "cap_left_for_this_segment_usd": 1.900305,
+      "cap_usd_all_in": 2.0,
+      "elapsed_since_create_seconds": 3554.7,
+      "headroom_seconds": 3113.8,
+      "kind": "full_pass",
+      "legs_read": [
+        "A",
+        "B"
+      ],
+      "measured_seconds": 3235.709,
+      "measured_seconds_per_unit": 63.445,
+      "payable_comments_read": 660,
+      "payable_comments_unread": 197,
+      "pod_id": "fgsvky3pxo2k9o",
+      "projected_total_seconds": 6071.0,
+      "read_from": {
+        "copied_back_at": "2026-08-19T20:08:00+00:00",
+        "exists": true,
+        "path": "results/reader_topup_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "reported_and_not_binding": {
+        "by_payable_comment": {
+          "factor": 0.2985,
+          "seconds": 965.8
+        },
+        "by_unit": {
+          "factor": 1.5882,
+          "seconds": 5139.1
+        },
+        "why": "attempt A's two legs, kept in sight. The by-unit one is what STOPped attempt A at its first reading, and printing it beside the model is how a reader sees the difference the correction makes rather than being told about it"
+      },
+      "segment": 3,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0.099695,
+      "the_verdict_re_derives_from_here": "`elapsed + calibration × Σ fitted(unread) ≤ usable` IS the verdict. The dollars below are the same statement at this segment's rate",
+      "units_read": 51,
+      "units_unread": 81,
+      "usable_seconds": 9184.7,
+      "usable_seconds_this_segment": 9184.7,
+      "usd": {
+        "cap_left_for_this_segment_usd": 1.900305,
+        "cap_usd_all_in": 2.0,
+        "projected_total_usd": 1.2479,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.8304,
+        "spent_so_far_usd": 0.7307,
+        "spent_this_segment_usd": 0.7307
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-19T20:12:02+00:00",
+      "billed_seconds_closed_segments": 485.0,
+      "binding": {
+        "calibration_rule": "max(measured ÷ fitted, 1.0). A pod slower than the fit stretches the projection by exactly that factor; a pod faster than the fit is projected at the fit, because a fast start is not a licence to run long",
+        "calibration_used": 1.0,
+        "fitted_seconds_of_the_read_units": 3811.3,
+        "fitted_seconds_of_the_unread_units": 2237.5,
+        "measured_over_fitted": 0.9165,
+        "seconds": 2237.5,
+        "units_unread": 75,
+        "which": "fitted_model"
+      },
+      "cap_left_for_this_segment_usd": 1.900305,
+      "cap_usd_all_in": 2.0,
+      "elapsed_since_create_seconds": 3796.7,
+      "headroom_seconds": 3150.6,
+      "kind": "full_pass",
+      "legs_read": [
+        "A",
+        "B"
+      ],
+      "measured_seconds": 3493.229,
+      "measured_seconds_per_unit": 61.285,
+      "payable_comments_read": 700,
+      "payable_comments_unread": 157,
+      "pod_id": "fgsvky3pxo2k9o",
+      "projected_total_seconds": 6034.2,
+      "read_from": {
+        "copied_back_at": "2026-08-19T20:12:02+00:00",
+        "exists": true,
+        "path": "results/reader_topup_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "reported_and_not_binding": {
+        "by_payable_comment": {
+          "factor": 0.2243,
+          "seconds": 783.5
+        },
+        "by_unit": {
+          "factor": 1.3158,
+          "seconds": 4596.4
+        },
+        "why": "attempt A's two legs, kept in sight. The by-unit one is what STOPped attempt A at its first reading, and printing it beside the model is how a reader sees the difference the correction makes rather than being told about it"
+      },
+      "segment": 3,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0.099695,
+      "the_verdict_re_derives_from_here": "`elapsed + calibration × Σ fitted(unread) ≤ usable` IS the verdict. The dollars below are the same statement at this segment's rate",
+      "units_read": 57,
+      "units_unread": 75,
+      "usable_seconds": 9184.7,
+      "usable_seconds_this_segment": 9184.7,
+      "usd": {
+        "cap_left_for_this_segment_usd": 1.900305,
+        "cap_usd_all_in": 2.0,
+        "projected_total_usd": 1.2404,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.8801,
+        "spent_so_far_usd": 0.7804,
+        "spent_this_segment_usd": 0.7804
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-19T20:16:06+00:00",
+      "billed_seconds_closed_segments": 485.0,
+      "binding": {
+        "calibration_rule": "max(measured ÷ fitted, 1.0). A pod slower than the fit stretches the projection by exactly that factor; a pod faster than the fit is projected at the fit, because a fast start is not a licence to run long",
+        "calibration_used": 1.0,
+        "fitted_seconds_of_the_read_units": 4134.5,
+        "fitted_seconds_of_the_unread_units": 1914.3,
+        "measured_over_fitted": 0.9073,
+        "seconds": 1914.3,
+        "units_unread": 67,
+        "which": "fitted_model"
+      },
+      "cap_left_for_this_segment_usd": 1.900305,
+      "cap_usd_all_in": 2.0,
+      "elapsed_since_create_seconds": 4040.1,
+      "headroom_seconds": 3230.3,
+      "kind": "full_pass",
+      "legs_read": [
+        "A",
+        "B"
+      ],
+      "measured_seconds": 3751.399,
+      "measured_seconds_per_unit": 57.714,
+      "payable_comments_read": 740,
+      "payable_comments_unread": 117,
+      "pod_id": "fgsvky3pxo2k9o",
+      "projected_total_seconds": 5954.4,
+      "read_from": {
+        "copied_back_at": "2026-08-19T20:16:05+00:00",
+        "exists": true,
+        "path": "results/reader_topup_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "reported_and_not_binding": {
+        "by_payable_comment": {
+          "factor": 0.1581,
+          "seconds": 593.1
+        },
+        "by_unit": {
+          "factor": 1.0308,
+          "seconds": 3866.8
+        },
+        "why": "attempt A's two legs, kept in sight. The by-unit one is what STOPped attempt A at its first reading, and printing it beside the model is how a reader sees the difference the correction makes rather than being told about it"
+      },
+      "segment": 3,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0.099695,
+      "the_verdict_re_derives_from_here": "`elapsed + calibration × Σ fitted(unread) ≤ usable` IS the verdict. The dollars below are the same statement at this segment's rate",
+      "units_read": 65,
+      "units_unread": 67,
+      "usable_seconds": 9184.7,
+      "usable_seconds_this_segment": 9184.7,
+      "usd": {
+        "cap_left_for_this_segment_usd": 1.900305,
+        "cap_usd_all_in": 2.0,
+        "projected_total_usd": 1.224,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.9302,
+        "spent_so_far_usd": 0.8305,
+        "spent_this_segment_usd": 0.8305
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-19T20:20:07+00:00",
+      "billed_seconds_closed_segments": 485.0,
+      "binding": {
+        "calibration_rule": "max(measured ÷ fitted, 1.0). A pod slower than the fit stretches the projection by exactly that factor; a pod faster than the fit is projected at the fit, because a fast start is not a licence to run long",
+        "calibration_used": 1.0,
+        "fitted_seconds_of_the_read_units": 4509.9,
+        "fitted_seconds_of_the_unread_units": 1539.0,
+        "measured_over_fitted": 0.8823,
+        "seconds": 1539.0,
+        "units_unread": 56,
+        "which": "fitted_model"
+      },
+      "cap_left_for_this_segment_usd": 1.900305,
+      "cap_usd_all_in": 2.0,
+      "elapsed_since_create_seconds": 4281.9,
+      "headroom_seconds": 3363.8,
+      "kind": "full_pass",
+      "legs_read": [
+        "A",
+        "B"
+      ],
+      "measured_seconds": 3979.08,
+      "measured_seconds_per_unit": 52.356,
+      "payable_comments_read": 776,
+      "payable_comments_unread": 81,
+      "pod_id": "fgsvky3pxo2k9o",
+      "projected_total_seconds": 5820.9,
+      "read_from": {
+        "copied_back_at": "2026-08-19T20:20:07+00:00",
+        "exists": true,
+        "path": "results/reader_topup_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "reported_and_not_binding": {
+        "by_payable_comment": {
+          "factor": 0.1044,
+          "seconds": 415.3
+        },
+        "by_unit": {
+          "factor": 0.7368,
+          "seconds": 2932.0
+        },
+        "why": "attempt A's two legs, kept in sight. The by-unit one is what STOPped attempt A at its first reading, and printing it beside the model is how a reader sees the difference the correction makes rather than being told about it"
+      },
+      "segment": 3,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0.099695,
+      "the_verdict_re_derives_from_here": "`elapsed + calibration × Σ fitted(unread) ≤ usable` IS the verdict. The dollars below are the same statement at this segment's rate",
+      "units_read": 76,
+      "units_unread": 56,
+      "usable_seconds": 9184.7,
+      "usable_seconds_this_segment": 9184.7,
+      "usd": {
+        "cap_left_for_this_segment_usd": 1.900305,
+        "cap_usd_all_in": 2.0,
+        "projected_total_usd": 1.1965,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 0.9799,
+        "spent_so_far_usd": 0.8802,
+        "spent_this_segment_usd": 0.8802
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-19T20:24:09+00:00",
+      "billed_seconds_closed_segments": 485.0,
+      "binding": {
+        "calibration_rule": "max(measured ÷ fitted, 1.0). A pod slower than the fit stretches the projection by exactly that factor; a pod faster than the fit is projected at the fit, because a fast start is not a licence to run long",
+        "calibration_used": 1.0,
+        "fitted_seconds_of_the_read_units": 4963.2,
+        "fitted_seconds_of_the_unread_units": 1085.7,
+        "measured_over_fitted": 0.8528,
+        "seconds": 1085.7,
+        "units_unread": 41,
+        "which": "fitted_model"
+      },
+      "cap_left_for_this_segment_usd": 1.900305,
+      "cap_usd_all_in": 2.0,
+      "elapsed_since_create_seconds": 4523.8,
+      "headroom_seconds": 3575.2,
+      "kind": "full_pass",
+      "legs_read": [
+        "A",
+        "B"
+      ],
+      "measured_seconds": 4232.369,
+      "measured_seconds_per_unit": 46.51,
+      "payable_comments_read": 809,
+      "payable_comments_unread": 48,
+      "pod_id": "fgsvky3pxo2k9o",
+      "projected_total_seconds": 5609.5,
+      "read_from": {
+        "copied_back_at": "2026-08-19T20:24:09+00:00",
+        "exists": true,
+        "path": "results/reader_topup_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "reported_and_not_binding": {
+        "by_payable_comment": {
+          "factor": 0.0593,
+          "seconds": 251.1
+        },
+        "by_unit": {
+          "factor": 0.4505,
+          "seconds": 1906.9
+        },
+        "why": "attempt A's two legs, kept in sight. The by-unit one is what STOPped attempt A at its first reading, and printing it beside the model is how a reader sees the difference the correction makes rather than being told about it"
+      },
+      "segment": 3,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0.099695,
+      "the_verdict_re_derives_from_here": "`elapsed + calibration × Σ fitted(unread) ≤ usable` IS the verdict. The dollars below are the same statement at this segment's rate",
+      "units_read": 91,
+      "units_unread": 41,
+      "usable_seconds": 9184.7,
+      "usable_seconds_this_segment": 9184.7,
+      "usd": {
+        "cap_left_for_this_segment_usd": 1.900305,
+        "cap_usd_all_in": 2.0,
+        "projected_total_usd": 1.1531,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 1.0296,
+        "spent_so_far_usd": 0.9299,
+        "spent_this_segment_usd": 0.9299
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-19T20:28:11+00:00",
+      "billed_seconds_closed_segments": 485.0,
+      "binding": {
+        "calibration_rule": "max(measured ÷ fitted, 1.0). A pod slower than the fit stretches the projection by exactly that factor; a pod faster than the fit is projected at the fit, because a fast start is not a licence to run long",
+        "calibration_used": 1.0,
+        "fitted_seconds_of_the_read_units": 5350.7,
+        "fitted_seconds_of_the_unread_units": 698.2,
+        "measured_over_fitted": 0.8351,
+        "seconds": 698.2,
+        "units_unread": 27,
+        "which": "fitted_model"
+      },
+      "cap_left_for_this_segment_usd": 1.900305,
+      "cap_usd_all_in": 2.0,
+      "elapsed_since_create_seconds": 4765.8,
+      "headroom_seconds": 3720.7,
+      "kind": "full_pass",
+      "legs_read": [
+        "A",
+        "B"
+      ],
+      "measured_seconds": 4468.546,
+      "measured_seconds_per_unit": 42.558,
+      "payable_comments_read": 830,
+      "payable_comments_unread": 27,
+      "pod_id": "fgsvky3pxo2k9o",
+      "projected_total_seconds": 5464.0,
+      "read_from": {
+        "copied_back_at": "2026-08-19T20:28:11+00:00",
+        "exists": true,
+        "path": "results/reader_topup_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "reported_and_not_binding": {
+        "by_payable_comment": {
+          "factor": 0.0325,
+          "seconds": 145.4
+        },
+        "by_unit": {
+          "factor": 0.2571,
+          "seconds": 1149.1
+        },
+        "why": "attempt A's two legs, kept in sight. The by-unit one is what STOPped attempt A at its first reading, and printing it beside the model is how a reader sees the difference the correction makes rather than being told about it"
+      },
+      "segment": 3,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0.099695,
+      "the_verdict_re_derives_from_here": "`elapsed + calibration × Σ fitted(unread) ≤ usable` IS the verdict. The dollars below are the same statement at this segment's rate",
+      "units_read": 105,
+      "units_unread": 27,
+      "usable_seconds": 9184.7,
+      "usable_seconds_this_segment": 9184.7,
+      "usd": {
+        "cap_left_for_this_segment_usd": 1.900305,
+        "cap_usd_all_in": 2.0,
+        "projected_total_usd": 1.1232,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 1.0793,
+        "spent_so_far_usd": 0.9796,
+        "spent_this_segment_usd": 0.9796
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-19T20:32:13+00:00",
+      "billed_seconds_closed_segments": 485.0,
+      "binding": {
+        "calibration_rule": "max(measured ÷ fitted, 1.0). A pod slower than the fit stretches the projection by exactly that factor; a pod faster than the fit is projected at the fit, because a fast start is not a licence to run long",
+        "calibration_used": 1.0,
+        "fitted_seconds_of_the_read_units": 5919.6,
+        "fitted_seconds_of_the_unread_units": 129.3,
+        "measured_over_fitted": 0.7977,
+        "seconds": 129.3,
+        "units_unread": 5,
+        "which": "fitted_model"
+      },
+      "cap_left_for_this_segment_usd": 1.900305,
+      "cap_usd_all_in": 2.0,
+      "elapsed_since_create_seconds": 5007.7,
+      "headroom_seconds": 4047.8,
+      "kind": "full_pass",
+      "legs_read": [
+        "A",
+        "B"
+      ],
+      "measured_seconds": 4722.037,
+      "measured_seconds_per_unit": 37.181,
+      "payable_comments_read": 852,
+      "payable_comments_unread": 5,
+      "pod_id": "fgsvky3pxo2k9o",
+      "projected_total_seconds": 5137.0,
+      "read_from": {
+        "copied_back_at": "2026-08-19T20:32:13+00:00",
+        "exists": true,
+        "path": "results/reader_topup_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "reported_and_not_binding": {
+        "by_payable_comment": {
+          "factor": 0.0059,
+          "seconds": 27.7
+        },
+        "by_unit": {
+          "factor": 0.0394,
+          "seconds": 185.9
+        },
+        "why": "attempt A's two legs, kept in sight. The by-unit one is what STOPped attempt A at its first reading, and printing it beside the model is how a reader sees the difference the correction makes rather than being told about it"
+      },
+      "segment": 3,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0.099695,
+      "the_verdict_re_derives_from_here": "`elapsed + calibration × Σ fitted(unread) ≤ usable` IS the verdict. The dollars below are the same statement at this segment's rate",
+      "units_read": 127,
+      "units_unread": 5,
+      "usable_seconds": 9184.7,
+      "usable_seconds_this_segment": 9184.7,
+      "usd": {
+        "cap_left_for_this_segment_usd": 1.900305,
+        "cap_usd_all_in": 2.0,
+        "projected_total_usd": 1.0559,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 1.129,
+        "spent_so_far_usd": 1.0294,
+        "spent_this_segment_usd": 1.0294
+      },
+      "verdict": "GO"
+    },
+    {
+      "at": "2026-08-19T20:36:15+00:00",
+      "billed_seconds_closed_segments": 485.0,
+      "binding": {
+        "calibration_rule": "max(measured ÷ fitted, 1.0). A pod slower than the fit stretches the projection by exactly that factor; a pod faster than the fit is projected at the fit, because a fast start is not a licence to run long",
+        "calibration_used": 1.0,
+        "fitted_seconds_of_the_read_units": 6048.9,
+        "fitted_seconds_of_the_unread_units": 0,
+        "measured_over_fitted": 0.7902,
+        "seconds": 0.0,
+        "units_unread": 0,
+        "which": "fitted_model"
+      },
+      "cap_left_for_this_segment_usd": 1.900305,
+      "cap_usd_all_in": 2.0,
+      "elapsed_since_create_seconds": 5249.8,
+      "headroom_seconds": 3935.0,
+      "kind": "full_pass",
+      "legs_read": [
+        "A",
+        "B"
+      ],
+      "measured_seconds": 4779.701,
+      "measured_seconds_per_unit": 36.21,
+      "payable_comments_read": 857,
+      "payable_comments_unread": 0,
+      "pod_id": "fgsvky3pxo2k9o",
+      "projected_total_seconds": 5249.8,
+      "read_from": {
+        "copied_back_at": "2026-08-19T20:36:15+00:00",
+        "exists": true,
+        "path": "results/reader_topup_pod.jsonl",
+        "rule": "copy the partial jsonl back BEFORE every gate: a KILL read off a file nobody refreshed would kill a healthy run and put the wrong reason in this record"
+      },
+      "reported_and_not_binding": {
+        "by_payable_comment": {
+          "factor": 0.0,
+          "seconds": 0.0
+        },
+        "by_unit": {
+          "factor": 0.0,
+          "seconds": 0.0
+        },
+        "why": "attempt A's two legs, kept in sight. The by-unit one is what STOPped attempt A at its first reading, and printing it beside the model is how a reader sees the difference the correction makes rather than being told about it"
+      },
+      "segment": 3,
+      "segments_allowed": 3,
+      "spent_closed_segments_usd": 0.099695,
+      "the_verdict_re_derives_from_here": "`elapsed + calibration × Σ fitted(unread) ≤ usable` IS the verdict. The dollars below are the same statement at this segment's rate",
+      "units_read": 132,
+      "units_unread": 0,
+      "usable_seconds": 9184.7,
+      "usable_seconds_this_segment": 9184.7,
+      "usd": {
+        "cap_left_for_this_segment_usd": 1.900305,
+        "cap_usd_all_in": 2.0,
+        "projected_total_usd": 1.0791,
+        "reading": "`cap_usd_all_in` is the ATTEMPT's and never shrinks; what shrinks is `cap_left_for_this_segment_usd`, and the inequality above is solved against that",
+        "spent_all_segments_usd": 1.1788,
+        "spent_so_far_usd": 1.0791,
+        "spent_this_segment_usd": 1.0791
+      },
+      "verdict": "GO"
     }
   ],
   "latest": {
     "kind": "full_pass",
-    "segment": 2,
-    "verdict": "STOP"
+    "segment": 3,
+    "verdict": "GO"
   },
   "phase": "reader-topup",
   "segments": [
@@ -290,6 +1826,22 @@
       "pod_id": "kctcffmjugvc7s",
       "priced_at_or_under_the_example": true,
       "segment": 2,
+      "usd_per_hour": 0.74,
+      "usd_per_hour_worked_example": 0.74,
+      "usd_per_second": 0.000205556
+    },
+    {
+      "billed_seconds": 5479.0,
+      "billed_usd": 1.126239,
+      "card": "NVIDIA GeForce RTX 4090",
+      "card_registered": "NVIDIA GeForce RTX 4090",
+      "created_at": "2026-08-19T19:08:46Z",
+      "deleted_at": "2026-08-19T20:40:05Z",
+      "generation_started_at": "2026-08-19T19:11:02Z",
+      "outcome": "complete: 132 of 132 units read, every gate GO under attempt B, DONE at 4926.9 s of generation",
+      "pod_id": "fgsvky3pxo2k9o",
+      "priced_at_or_under_the_example": true,
+      "segment": 3,
       "usd_per_hour": 0.74,
       "usd_per_hour_worked_example": 0.74,
       "usd_per_second": 0.000205556

@@ -33,13 +33,23 @@ PREREG_B = json.loads((REPO_ROOT / "results" / "reader_topup_prereg_b.json").rea
 # --- the projection ---------------------------------------------------------
 
 
-def test_the_projection_rebuilds_byte_identical_and_is_what_shipped(tmp_path):
+def test_the_projection_is_deterministic_and_is_NOT_re_pinned_after_the_buy(tmp_path):
+    """It still rebuilds identically twice, and it no longer equals the shipped file — by design.
+
+    This record PRICED the buy: 105 threads with no verdict, 132 units, 6 049 s. The buy happened,
+    so `verdicts()` now answers for 99 of those threads and a rebuild would price a population that
+    no longer exists. The shipped file is the pre-buy artefact the ruling was made on and it is not
+    re-pinned; what is asserted instead is that it still says 105 and 132, which is what makes it
+    readable as the projection it was.
+    """
     first, second = tmp_path / "a", tmp_path / "b"
     assert projector.main(["--outdir", str(first)]) == 0
     assert projector.main(["--outdir", str(second)]) == 0
     name = projector.OUT_NAME
-    assert (first / name).read_bytes() == (second / name).read_bytes()
-    assert (first / name).read_bytes() == (REPO_ROOT / name).read_bytes()
+    assert (first / name).read_bytes() == (second / name).read_bytes()  # deterministic, still
+    assert (first / name).read_bytes() != (REPO_ROOT / name).read_bytes()  # and stale, by design
+    assert PROJECTION["population"]["threads_needing_a_verdict"] == 105
+    assert PROJECTION["projection"]["items"] == 132
 
 
 def test_the_in_sample_total_is_named_as_arithmetic_not_as_accuracy():
@@ -562,15 +572,25 @@ def test_attempt_b_differs_from_attempt_a_only_where_the_ruling_says():
     )
 
 
-def test_the_b_registration_rebuilds_byte_identical(tmp_path):
+def test_the_b_registration_is_deterministic_and_frozen_at_what_it_registered(tmp_path):
+    """Same shape as the projection: deterministic, and NOT re-pinned once the segment it
+    registered has billed.
+
+    `supersedes.billed_before_this_attempt_usd` is read out of the run record, so a rebuild after
+    segment 3 would carry segment 3's own $1.126 — a registration that quotes what it was written
+    to authorise. The shipped file says $0.099695, which is what had been billed when the pod was
+    created, and that is the number a reader of a pre-registration needs.
+    """
     import write_reader_topup_prereg_b as producer_b
 
     first, second = tmp_path / "a", tmp_path / "b"
     assert producer_b.main(["--outdir", str(first)]) == 0
     assert producer_b.main(["--outdir", str(second)]) == 0
     name = producer_b.OUT_NAME
-    assert (first / name).read_bytes() == (second / name).read_bytes()
-    assert (first / name).read_bytes() == (REPO_ROOT / name).read_bytes()
+    assert (first / name).read_bytes() == (second / name).read_bytes()  # deterministic, still
+    assert PREREG_B["supersedes"]["billed_before_this_attempt_usd"] == 0.099695
+    rebuilt = json.loads((first / name).read_text("utf-8"))
+    assert rebuilt["supersedes"]["billed_before_this_attempt_usd"] > 1.2  # segment 3, after
 
 
 def test_the_b_producer_refuses_a_change_nobody_ruled():

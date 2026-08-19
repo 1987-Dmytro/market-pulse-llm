@@ -130,7 +130,7 @@ def test_nothing_is_dropped_for_length_any_more_and_the_record_says_so():
     dropped = RECORD["dropped_for_length"]
     assert dropped["n"] == 0 and dropped["ids"] == [] and dropped["by_pack"] == {}
     assert dropped["longest_kept"] <= RECORD["training"]["max_seq_len"]
-    assert RECORD["reachability"]["the_context_the_gate_carries"]["topic_envelope_chars"] == 147
+    assert RECORD["reachability"]["the_context_the_gate_carries"]["topic_envelope_chars"] == 161
 
 
 def test_the_labels_distribution_the_contract_registered_re_derives():
@@ -186,7 +186,8 @@ def test_the_stance_arithmetic_that_decided_the_mask_is_in_the_record():
 def test_the_context_gap_is_registered_as_a_risk_before_the_attempt():
     block = RECORD["reachability"]["the_context_the_gate_carries"]
     assert block["gate_rows_with_an_entity_block"] == 12 and block["gate_rows"] == 14
-    assert block["arm_b_rows_with_an_entity_block"] == 39 and block["arm_b_rows"] == 650
+    # branch B was bought and executed: 39 -> 282 of 650, against the gate's own 12 of 14
+    assert block["arm_b_rows_with_an_entity_block"] == 282 and block["arm_b_rows"] == 650
     assert "reader pass" in block["the_open_ruling"]
     assert "SEPARATE session" in block["the_open_ruling"]
     # branch C moved the length half and NOT this one: the ratio is the same 39 over more rows
@@ -217,7 +218,8 @@ def test_the_cut_marker_is_a_training_only_token_and_the_record_says_so():
         if line
     ]
     marked = sum(1 for row in rows if row["context"]["topic_cut"])
-    assert marker["training_rows_marked"] == marked == 372
+    # branch B bought 99 verdicts, so the marker's asymmetry all but disappeared: 372 -> 6
+    assert marker["training_rows_marked"] == marked == 6
     assert marker["of"] == len(rows) == 650
 
 

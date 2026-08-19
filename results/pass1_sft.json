@@ -13,9 +13,9 @@
       "a": {
         "context": {
           "of": 500,
-          "with_a_bought_topic": 70,
-          "with_a_topic_the_cut_shortened": 295,
-          "with_an_entity_block": 32
+          "with_a_bought_topic": 481,
+          "with_a_topic_the_cut_shortened": 6,
+          "with_an_entity_block": 199
         },
         "distribution": {
           "null": 167,
@@ -41,9 +41,9 @@
       "b": {
         "context": {
           "of": 650,
-          "with_a_bought_topic": 91,
-          "with_a_topic_the_cut_shortened": 372,
-          "with_an_entity_block": 39
+          "with_a_bought_topic": 630,
+          "with_a_topic_the_cut_shortened": 6,
+          "with_an_entity_block": 282
         },
         "distribution": {
           "null": 213,
@@ -70,7 +70,7 @@
     "dropped_for_length": {
       "by_pack": {},
       "ids": [],
-      "longest_kept": 1225,
+      "longest_kept": 1222,
       "n": 0,
       "rule": "bound_tokens > max_seq_len (1408, config/qlora.yaml, frozen law). The bound is the worst measured tokens-per-character times the request's characters, plus 16 tokens of template slack",
       "shortest_dropped": 0
@@ -86,7 +86,7 @@
       "reading": "the 14 rows the sealed bar is scored on, counted in the probe-b pack that serves them. This is the number the training set's own context census is compared against: the gate is answered under a rich entity block and the training rows mostly are not",
       "with_an_entity_block": 12
     },
-    "topic_rule": "a topic from a bought reader verdict is rendered whole; a substituted one is the post's opening cut to 147 characters — the longest bought topic — at a word boundary, marked with an ellipsis. Operator ruling of 2026-08-19, branch C: it closes the length finding and leaves the entity-block one open"
+    "topic_rule": "a topic from a bought reader verdict is rendered whole; a substituted one is the post's opening cut to 161 characters — the longest bought topic — at a word boundary, marked with an ellipsis. Operator ruling of 2026-08-19, branch C: it closes the length finding and leaves the entity-block one open"
   },
   "context_sources": [
     {
@@ -96,10 +96,10 @@
       "threads_it_supplied": 21
     },
     {
-      "exists": false,
+      "exists": true,
       "record": "results/reader_topup_w1.jsonl",
-      "sha256": null,
-      "threads_it_supplied": 0
+      "sha256": "c65fee4dc51824aa8aa0611b1f550190416494fb50a1c7904f99aba879dbd0b8",
+      "threads_it_supplied": 99
     },
     {
       "exists": true,
@@ -113,12 +113,12 @@
     "a": {
       "file": "results/pass1_sft_arm_a.jsonl",
       "rows": 500,
-      "sha256": "383fa254983163c2464c86939df19fe9d2ce4a83c1ce0322a120e45589811da1"
+      "sha256": "610c996176d6a8af6b4997a8490acbecb98d26d182d1e77932ed083a599c3b77"
     },
     "b": {
       "file": "results/pass1_sft_arm_b.jsonl",
       "rows": 650,
-      "sha256": "378203ef77d986982ea76687260635e37e7b5892bd6d52496cb3823ac31761cd"
+      "sha256": "f5b3540ba4ac042c577ed37de7b2a4ffab879fa156a8aae4e7282c93df386341"
     }
   },
   "instruments": {
@@ -161,9 +161,9 @@
     "max_seq_len": 1408,
     "template_slack_tokens": 16,
     "topic_envelope": {
-      "limit": 147,
-      "measured_over": 24,
-      "median": 87,
+      "limit": 161,
+      "measured_over": 123,
+      "median": 76,
       "rule": "the longest post_summary any bought reader verdict carries. A substituted topic is cut to it at a word boundary, with an ellipsis where anything was removed; a bought topic is never cut, because it is already inside its own envelope",
       "shortest": 26
     }

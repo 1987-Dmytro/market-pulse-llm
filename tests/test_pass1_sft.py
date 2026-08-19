@@ -103,10 +103,13 @@ def test_no_row_can_exceed_the_frozen_max_seq_len(state):
 
 def test_a_substituted_topic_is_cut_to_the_envelope_a_bought_one_occupies(state):
     budget = state["envelope"]
-    assert budget["limit"] == 147 and budget["measured_over"] == 24
+    # the envelope is measured over the BOUGHT summaries, and branch B bought 99 more threads:
+    # 24 verdicts -> 123, and the longest summary among them is 161 characters
+    assert budget["limit"] == 161 and budget["measured_over"] == 123
     substituted = [row for row in state["rows"] if row["context"]["topic_from"].endswith("bounded")]
     bought = [row for row in state["rows"] if row["context"]["topic_from"] == "reader verdict"]
-    assert len(substituted) == 559 and len(bought) == 91
+    # after branch B: 630 of the 650 topics are bought summaries and 20 are still substituted
+    assert len(substituted) == 20 and len(bought) == 630
     for row in substituted:
         topic = row["prompt"].split("<topic>\n")[1].split("\n</topic>")[0]
         assert len(topic) <= budget["limit"] + 1, row["id"]  # +1 for the ellipsis
@@ -184,15 +187,17 @@ def test_the_record_names_the_context_the_gate_carries_and_the_training_set_does
     arm_b = record["census"]["arms"]["b"]["context"]
     assert gate["n"] == 14 and gate["with_an_entity_block"] == 12
     assert record["census"]["eval_pack"]["with_an_entity_block"] == 55
-    assert (arm_b["with_an_entity_block"], arm_b["of"]) == (39, 650)
-    # how far the branch-C cut reaches: 91 topics were bought, 372 were cut, and 187 substituted
-    # ones were already inside the envelope — «bounded» and «cut» are not the same count
-    assert arm_b["with_a_bought_topic"] == 91
-    assert arm_b["with_a_topic_the_cut_shortened"] == 372
-    assert arm_b["with_an_entity_block"] < arm_b["of"] * 0.1
-    # branch C bounded the topic and did NOT buy a verdict, so this finding is unchanged by it
+    # branch B was bought and executed: 39 of 650 rows carried a block before it, 282 after — the
+    # projection said ~279 and it was right to within 1%. The gate's own rows sit at 12 of 14, so
+    # what is left is the structural half: a verdict resolves entities only where the thread HAS
+    # them, and recipe and marketplace threads name nobody
+    assert (arm_b["with_an_entity_block"], arm_b["of"]) == (282, 650)
+    assert 0.40 < arm_b["with_an_entity_block"] / arm_b["of"] < 0.45
+    # and the branch-C cut all but disappeared with it: 630 bought topics, 6 still shortened
+    assert arm_b["with_a_bought_topic"] == 630
+    assert arm_b["with_a_topic_the_cut_shortened"] == 6
     assert "leaves the entity-block one open" in record["census"]["topic_rule"]
-    assert record["length"]["topic_envelope"]["limit"] == 147
+    assert record["length"]["topic_envelope"]["limit"] == 161
 
 
 def test_the_record_names_which_reader_files_supplied_the_context(built):
@@ -210,7 +215,9 @@ def test_the_record_names_which_reader_files_supplied_the_context(built):
         "results/reader_topup_w1.jsonl",
         "results/reader_v4_w1.jsonl",
     }
-    assert sum(one["threads_it_supplied"] for one in sources.values()) == 24
+    # v5b 21 · the branch-B top-up 99 · v4 3 — the middle row IS the buy
+    assert sum(one["threads_it_supplied"] for one in sources.values()) == 123
+    assert sources["results/reader_topup_w1.jsonl"]["threads_it_supplied"] == 99
     for one in sources.values():
         assert one["exists"] is ((REPO_ROOT / one["record"]).exists())
         assert (one["sha256"] is None) is not one["exists"]

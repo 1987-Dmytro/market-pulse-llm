@@ -14,6 +14,12 @@
       "balance": 20.3943618846,
       "step_spent_usd": 0.0772,
       "note": "reader-topup segments 1-2 deleted; 1 of 132 units read; the full-pass gate STOPped on its own estimator"
+    },
+    {
+      "at": "2026-08-19T20:40:19+00:00",
+      "balance": 19.2164279346,
+      "step_spent_usd": 1.2551,
+      "note": "reader-topup COMPLETE: 132 of 132 units read in segment 3; pod deleted and proven"
     }
   ],
   "gpu_note": "RunPod account balance read before the first pod of reader-topup. Step spend = the pessimistic maximum of this anchor minus the balance now and the billing walk since `anchored_at` (SPEC 3.23 (4), Dv411), enforced against $2.00. The SPEC amendment 3.4 (4) phase cap is enforced separately, against results/spend_phase4.json, and neither anchor may be regenerated."
