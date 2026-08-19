@@ -12,113 +12,66 @@
     "arms": {
       "a": {
         "context": {
-          "of": 464,
+          "of": 500,
           "with_a_bought_topic": 70,
           "with_an_entity_block": 32
         },
         "distribution": {
-          "null": 138,
-          "категория_личное": 35,
-          "молочный_бренд": 1,
-          "не_наш_рынок": 246,
+          "null": 167,
+          "категория_личное": 36,
+          "молочный_бренд": 2,
+          "не_наш_рынок": 251,
           "сеть_ритейлер": 44
         },
         "effective_batch": 16,
         "epochs": 2,
         "file": "results/pass1_sft_arm_a.jsonl",
-        "n": 464,
+        "n": 500,
         "sampler_weights": {
-          "null": 0.672464,
-          "категория_личное": 2.651429,
+          "null": 0.598802,
+          "категория_личное": 2.777778,
           "молочный_бренд": 8.0,
-          "не_наш_рынок": 0.377236,
-          "сеть_ритейлер": 2.109091
+          "не_наш_рынок": 0.398406,
+          "сеть_ритейлер": 2.272727
         },
-        "steps": 58,
-        "steps_per_epoch": 29
+        "steps": 64,
+        "steps_per_epoch": 32
       },
       "b": {
         "context": {
-          "of": 607,
+          "of": 650,
           "with_a_bought_topic": 91,
           "with_an_entity_block": 39
         },
         "distribution": {
-          "null": 178,
-          "категория_личное": 45,
-          "молочный_бренд": 1,
-          "не_наш_рынок": 335,
+          "null": 213,
+          "категория_личное": 47,
+          "молочный_бренд": 2,
+          "не_наш_рынок": 340,
           "сеть_ритейлер": 48
         },
         "effective_batch": 16,
         "epochs": 2,
         "file": "results/pass1_sft_arm_b.jsonl",
-        "n": 607,
+        "n": 650,
         "sampler_weights": {
-          "null": 0.682022,
-          "категория_личное": 2.697778,
+          "null": 0.610329,
+          "категория_личное": 2.765957,
           "молочный_бренд": 8.0,
-          "не_наш_рынок": 0.362388,
-          "сеть_ритейлер": 2.529167
+          "не_наш_рынок": 0.382353,
+          "сеть_ритейлер": 2.708333
         },
-        "steps": 76,
-        "steps_per_epoch": 38
+        "steps": 82,
+        "steps_per_epoch": 41
       }
     },
     "dropped_for_length": {
-      "by_pack": {
-        "r1": 36,
-        "r2": 7
-      },
-      "ids": [
-        "@mandziak:3667#47830",
-        "@mandziak:3667#47832",
-        "@mandziak:3667#47859",
-        "@mandziak:3667#47860",
-        "@mandziak:3667#48201",
-        "@mandziak:3721#48423",
-        "@mandziak:3721#48430",
-        "@mandziak:3721#48445",
-        "@mandziak:3721#49075",
-        "@mandziak:3736#48527",
-        "@mandziak:3736#48528",
-        "@mandziak:3736#48529",
-        "@mandziak:3736#48530",
-        "@mandziak:3736#48535",
-        "@mandziak:3736#48596",
-        "@mandziak:3736#49159",
-        "@mandziak:3768#49012",
-        "@mandziak:3768#49013",
-        "@mandziak:3768#49014",
-        "@mandziak:3768#49015",
-        "@mandziak:3768#49018",
-        "@mandziak:3768#49023",
-        "@mandziak:3768#49225",
-        "@polyakova_fitness:1143#2421",
-        "@tarilka_malyuka:695#12",
-        "@tarilka_malyuka:695#50",
-        "@tarilka_malyuka:825#185",
-        "@ya_Nenka:834#2575",
-        "@ya_Nenka:836#2577",
-        "@ya_Nenka:836#2579",
-        "@ya_Nenka:836#2580",
-        "@ya_Nenka:836#2581",
-        "@ya_Nenka:836#2582",
-        "@ya_Nenka:836#2595",
-        "@ya_Nenka:838#2584",
-        "@ya_Nenka:838#2585",
-        "@ya_Nenka:838#2586",
-        "@ya_Nenka:840#2589",
-        "@ya_Nenka:840#2590",
-        "@ya_Nenka:840#2591",
-        "@ya_Nenka:844#2597",
-        "@ya_Nenka:844#2598",
-        "@ya_Nenka:844#2599"
-      ],
-      "longest_kept": 1344,
-      "n": 43,
+      "by_pack": {},
+      "ids": [],
+      "longest_kept": 1225,
+      "n": 0,
       "rule": "bound_tokens > max_seq_len (1408, config/qlora.yaml, frozen law). The bound is the worst measured tokens-per-character times the request's characters, plus 16 tokens of template slack",
-      "shortest_dropped": 1412
+      "shortest_dropped": 0
     },
     "eval_pack": {
       "items": 64,
@@ -130,19 +83,20 @@
       "n": 14,
       "reading": "the 14 rows the sealed bar is scored on, counted in the probe-b pack that serves them. This is the number the training set's own context census is compared against: the gate is answered under a rich entity block and the training rows mostly are not",
       "with_an_entity_block": 12
-    }
+    },
+    "topic_rule": "a topic from a bought reader verdict is rendered whole; a substituted one is the post's opening cut to 147 characters — the longest bought topic — at a word boundary, marked with an ellipsis. Operator ruling of 2026-08-19, branch C: it closes the length finding and leaves the entity-block one open"
   },
   "contract": "docs/PROMPT-lora-b.md D1",
   "datasets": {
     "a": {
       "file": "results/pass1_sft_arm_a.jsonl",
-      "rows": 464,
-      "sha256": "37493f6319b9be352adf39d8f167802cac5132d72fd2de5c8da14f2b46de6fc7"
+      "rows": 500,
+      "sha256": "0190d9c061ffdd5c01c7af6a21132f79a25da1e115f27e6eb74c703de5630e15"
     },
     "b": {
       "file": "results/pass1_sft_arm_b.jsonl",
-      "rows": 607,
-      "sha256": "e1e14ee7f5e17bc70e8c5f350c89e0116cbbca107a52f450de3bb7f6b0a03857"
+      "rows": 650,
+      "sha256": "eb1650073bc2b138ab982186ec4c07e1efa63580f17bff1ee4b3e3a259b83294"
     }
   },
   "instruments": {
@@ -183,7 +137,14 @@
     "config": "config/qlora.yaml",
     "config_sha256": "6771ed373f9e7c52b3180a45506fe0dfef4446bc89b2c3ff6c1b39992f2d00ff",
     "max_seq_len": 1408,
-    "template_slack_tokens": 16
+    "template_slack_tokens": 16,
+    "topic_envelope": {
+      "limit": 147,
+      "measured_over": 24,
+      "median": 87,
+      "rule": "the longest post_summary any bought reader verdict carries. A substituted topic is cut to it at a word boundary, with an ellipsis where anything was removed; a bought topic is never cut, because it is already inside its own envelope",
+      "shortest": 26
+    }
   },
   "packs": {
     "r1": {
@@ -197,7 +158,7 @@
   },
   "producer": {
     "script": "scripts/build_pass1_sft.py",
-    "sha256": "c7f93ab6043bce9ab5c29da1cea9402f8b9322ea3ada545f6da056800608a556"
+    "sha256": "4d64e13451c27cd93ca4464d9036c7cd87834c1cf73c646ce12ffdae4a0237a7"
   },
   "supervision": {
     "field": "subject_type",

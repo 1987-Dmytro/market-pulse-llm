@@ -104,26 +104,33 @@ def test_the_gold_rows_are_re_derived_and_refuse_to_disagree_with_the_probe_regi
         producer.gold_rows()
 
 
-def test_h6_re_derives_every_registered_number_and_marks_the_ones_that_moved():
+def test_h6_re_derives_every_registered_number_and_none_of_them_moved():
+    """Green now, and it was RED on seven rows until the operator ruled branch C.
+
+    The arms were registered at 500 and 650 LABELS and the trainable set was 464 and 607 — every
+    row that rendered past the frozen `max_seq_len` had been dropped, and steps, seconds and the
+    worst case moved with them. Cutting a substituted topic to the envelope a bought one occupies
+    put every row back under the ceiling, and the contract's own numbers re-derive exactly. The
+    test asserts the values, not merely the absence of mismatches: `mismatches: []` would also be
+    what an empty table prints.
+    """
     table = RECORD["h6"]
     assert {row["name"] for row in table["rows"]} == set(producer.REGISTERED)
-    assert set(table["mismatches"]) == {
-        "arm_a_rows",
-        "arm_b_rows",
-        "arm_a_steps",
-        "arm_b_steps",
-        "arm_a_seconds",
-        "arm_b_seconds",
-        "worst_case_usd",
-    }
-    moved = {row["name"]: row for row in table["rows"] if not row["agrees"]}
-    assert moved["arm_a_rows"]["registered"] == 500 and moved["arm_a_rows"]["re_derived"] == 464
-    assert moved["arm_b_rows"]["registered"] == 650 and moved["arm_b_rows"]["re_derived"] == 607
-    # every mismatch is in the CHEAPER direction, which is why the cap still holds
-    for name in ("arm_a_seconds", "arm_b_seconds", "worst_case_usd"):
-        assert moved[name]["re_derived"] < moved[name]["registered"]
-    green = {row["name"] for row in table["rows"] if row["agrees"]}
-    assert {"census_50_baseline_none", "base_bar", "combined_distribution"} <= green
+    assert table["mismatches"] == []
+    assert table["reading"] == "every registered number re-derives"
+    got = {row["name"]: row for row in table["rows"]}
+    assert got["arm_a_rows"]["re_derived"] == got["arm_a_rows"]["registered"] == 500
+    assert got["arm_b_rows"]["re_derived"] == got["arm_b_rows"]["registered"] == 650
+    assert got["arm_a_steps"]["re_derived"] == 64 and got["arm_b_steps"]["re_derived"] == 82
+    assert abs(got["worst_case_usd"]["re_derived"] - 2.63) < 0.03
+    assert all(row["agrees"] for row in table["rows"])
+
+
+def test_nothing_is_dropped_for_length_any_more_and_the_record_says_so():
+    dropped = RECORD["dropped_for_length"]
+    assert dropped["n"] == 0 and dropped["ids"] == [] and dropped["by_pack"] == {}
+    assert dropped["longest_kept"] <= RECORD["training"]["max_seq_len"]
+    assert RECORD["reachability"]["the_context_the_gate_carries"]["topic_envelope_chars"] == 147
 
 
 def test_the_labels_distribution_the_contract_registered_re_derives():
@@ -165,7 +172,8 @@ def test_the_reachability_block_prices_the_rows_the_arm_must_turn():
     assert reach["rows_the_arm_must_turn"] == 3
     assert len(reach["the_five_missed"]) == 5
     assert reach["by_gold_class"] == {"категория": 4, "молочный_бренд": 1}
-    assert reach["training_rows_behind_them"]["молочный_бренд"] == 1
+    assert reach["training_rows_behind_them"]["молочный_бренд"] == 2  # both, since branch C
+    assert reach["training_rows_behind_them"]["категория_личное"] == 47
 
 
 def test_the_stance_arithmetic_that_decided_the_mask_is_in_the_record():
@@ -178,9 +186,12 @@ def test_the_stance_arithmetic_that_decided_the_mask_is_in_the_record():
 def test_the_context_gap_is_registered_as_a_risk_before_the_attempt():
     block = RECORD["reachability"]["the_context_the_gate_carries"]
     assert block["gate_rows_with_an_entity_block"] == 12 and block["gate_rows"] == 14
-    assert block["arm_b_rows_with_an_entity_block"] == 39 and block["arm_b_rows"] == 607
+    assert block["arm_b_rows_with_an_entity_block"] == 39 and block["arm_b_rows"] == 650
     assert "reader pass" in block["the_open_ruling"]
     assert "SEPARATE session" in block["the_open_ruling"]
+    # branch C moved the length half and NOT this one: the ratio is the same 39 over more rows
+    assert "bought no verdict" in block["cause"]
+    assert "leaves this one open" in block["the_open_ruling"]
 
 
 def test_each_arm_evaluates_into_its_own_file_because_the_resume_would_skip():

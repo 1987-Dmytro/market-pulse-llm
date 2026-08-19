@@ -257,6 +257,7 @@ def reachability(sft: dict) -> dict:
         told = row["disagreed_on"]["subject_type"]["gold"]
         by_class[told] = by_class.get(told, 0) + 1
     arms = sft["census"]["arms"]
+    envelope = sft["length"]["topic_envelope"]
     stance_rows = [one for one in gold["per_comment"] if "stance" in one["scored_fields"]]
     return {
         "to_pass": {
@@ -273,9 +274,11 @@ def reachability(sft: dict) -> dict:
             },
             "reading": (
                 "four of the five rows the arms must turn are gold «категория» and one is"
-                " «молочный_бренд». Arm B carries 45 rows of the first class and ONE of the second"
-                " — the second brand row of the labelled set renders past max_seq_len and was"
-                " dropped. A weight of 8.0 on one row is a weight on one row"
+                f" «молочный_бренд». Arm B carries {arms['b']['distribution']['категория_личное']}"
+                f" rows of the first class and {arms['b']['distribution']['молочный_бренд']} of the"
+                " second, and the sampler's cap of 8.0 is what the second one gets. The numbers are"
+                " read off the dataset record rather than written here: this sentence has already"
+                " been wrong once, when the length bound dropped one of the two brand rows"
             ),
         },
         "stance_is_not_trained": {
@@ -300,20 +303,26 @@ def reachability(sft: dict) -> dict:
             "eval_pack_items": sft["census"]["eval_pack"]["items"],
             "arm_b_rows_with_an_entity_block": arms["b"]["context"]["with_an_entity_block"],
             "arm_b_rows": arms["b"]["n"],
+            "topic_envelope_chars": envelope["limit"],
             "cause": (
                 "a pass-1 request carries the thread's topic and entity block, and both come from a"
                 " reader verdict that was PAID FOR. 15 of the 120 labelled threads have one; the"
-                " rest render the topic from the store's own post text and an empty entity block."
-                " The eval's topics are reader summaries of 26–147 characters and the substituted"
-                " post texts run to thousands, which is also what pushes 43 rows past max_seq_len"
+                " rest render the topic from the store's own post text, cut to the envelope a"
+                f" bought topic occupies ({envelope['limit']} characters, the longest of"
+                f" {envelope['measured_over']}), and an EMPTY entity block. The cut is the"
+                " operator's branch-C ruling of 2026-08-19: it put every row back under max_seq_len"
+                " — nothing is dropped now and both молочный_бренд rows train — and it bought no"
+                " verdict, so the entity block is exactly as empty as it was"
             ),
             "the_open_ruling": (
                 "REGISTERED AS A RISK, not as a defect: the arms are trained on requests whose"
-                " context field is mostly empty and graded on requests where it is mostly full."
-                " Removing it costs a reader pass over the 105 uncovered threads — 105 × 51.3 s ="
-                " ~5 390 s ≈ $1.20 at the price ceiling, in a SEPARATE session, because a dataset"
-                " built during the paid session could not have been pre-registered. The operator"
-                " rules; this record says what was known before the attempt"
+                " entity block is almost always empty and graded on requests where it is almost"
+                " always full. Removing it costs a reader pass over the 105 uncovered threads —"
+                " 105 × 51.3 s = ~5 390 s ≈ $1.20 at the price ceiling, in a SEPARATE session,"
+                " because a dataset built during the paid session could not have been"
+                " pre-registered. The operator ruled branch C, which closes the length half and"
+                " leaves this one open and named; this record says what was known before the"
+                " attempt"
             ),
         },
     }
@@ -404,6 +413,7 @@ def build() -> dict:
             OUT_NAME,
         ],
         "h6": h6(sft, sums),
+        "dropped_for_length": sft["census"]["dropped_for_length"],
         "instruments": {
             "config_sha256": summary.sha256_of(QLORA),
             "parser": {

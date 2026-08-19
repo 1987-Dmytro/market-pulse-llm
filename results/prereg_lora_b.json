@@ -5,51 +5,51 @@
       "command": "PYTHONPATH=/workspace/repo/src /workspace/venv/bin/python -u /workspace/repo/scripts/train_qlora.py --data results/pass1_sft_arm_a.jsonl --class-weights --out /workspace/run/arm_a",
       "dataset": {
         "file": "results/pass1_sft_arm_a.jsonl",
-        "rows": 464,
-        "sha256": "37493f6319b9be352adf39d8f167802cac5132d72fd2de5c8da14f2b46de6fc7"
+        "rows": 500,
+        "sha256": "0190d9c061ffdd5c01c7af6a21132f79a25da1e115f27e6eb74c703de5630e15"
       },
       "distribution": {
-        "null": 138,
-        "категория_личное": 35,
-        "молочный_бренд": 1,
-        "не_наш_рынок": 246,
+        "null": 167,
+        "категория_личное": 36,
+        "молочный_бренд": 2,
+        "не_наш_рынок": 251,
         "сеть_ритейлер": 44
       },
       "eval_command": "PYTHONPATH=/workspace/repo/src /workspace/venv/bin/python -u /workspace/repo/scripts/pass1_pod_runner.py --pack results/pass1_probe_b_pack.json --repo /workspace/repo --out /workspace/run/eval_arm_a.jsonl --adapter /workspace/run/arm_a/adapter",
-      "n": 464,
+      "n": 500,
       "sampler_weights": {
-        "null": 0.672464,
-        "категория_личное": 2.651429,
+        "null": 0.598802,
+        "категория_личное": 2.777778,
         "молочный_бренд": 8.0,
-        "не_наш_рынок": 0.377236,
-        "сеть_ритейлер": 2.109091
+        "не_наш_рынок": 0.398406,
+        "сеть_ритейлер": 2.272727
       },
-      "steps": 58
+      "steps": 64
     },
     "b": {
       "command": "PYTHONPATH=/workspace/repo/src /workspace/venv/bin/python -u /workspace/repo/scripts/train_qlora.py --data results/pass1_sft_arm_b.jsonl --class-weights --out /workspace/run/arm_b",
       "dataset": {
         "file": "results/pass1_sft_arm_b.jsonl",
-        "rows": 607,
-        "sha256": "e1e14ee7f5e17bc70e8c5f350c89e0116cbbca107a52f450de3bb7f6b0a03857"
+        "rows": 650,
+        "sha256": "eb1650073bc2b138ab982186ec4c07e1efa63580f17bff1ee4b3e3a259b83294"
       },
       "distribution": {
-        "null": 178,
-        "категория_личное": 45,
-        "молочный_бренд": 1,
-        "не_наш_рынок": 335,
+        "null": 213,
+        "категория_личное": 47,
+        "молочный_бренд": 2,
+        "не_наш_рынок": 340,
         "сеть_ритейлер": 48
       },
       "eval_command": "PYTHONPATH=/workspace/repo/src /workspace/venv/bin/python -u /workspace/repo/scripts/pass1_pod_runner.py --pack results/pass1_probe_b_pack.json --repo /workspace/repo --out /workspace/run/eval_arm_b.jsonl --adapter /workspace/run/arm_b/adapter",
-      "n": 607,
+      "n": 650,
       "sampler_weights": {
-        "null": 0.682022,
-        "категория_личное": 2.697778,
+        "null": 0.610329,
+        "категория_личное": 2.765957,
         "молочный_бренд": 8.0,
-        "не_наш_рынок": 0.362388,
-        "сеть_ритейлер": 2.529167
+        "не_наш_рынок": 0.382353,
+        "сеть_ритейлер": 2.708333
       },
-      "steps": 76
+      "steps": 82
     }
   },
   "attempt": "ONE. No retry, no second draw, and no tuning after any eval output is seen. The multiplicity of running two arms against one bar is named below and was accepted by the sitting; it is not re-decided once the number is in",
@@ -88,6 +88,14 @@
     }
   },
   "contract": "docs/PROMPT-lora-b.md D2",
+  "dropped_for_length": {
+    "by_pack": {},
+    "ids": [],
+    "longest_kept": 1225,
+    "n": 0,
+    "rule": "bound_tokens > max_seq_len (1408, config/qlora.yaml, frozen law). The bound is the worst measured tokens-per-character times the request's characters, plus 16 tokens of template slack",
+    "shortest_dropped": 0
+  },
   "frozen_when_the_pod_exists": [
     "config/qlora.yaml",
     "src/market_pulse/local_llm.py",
@@ -100,63 +108,55 @@
     "results/prereg_lora_b.json"
   ],
   "h6": {
-    "mismatches": [
-      "arm_a_rows",
-      "arm_a_seconds",
-      "arm_a_steps",
-      "arm_b_rows",
-      "arm_b_seconds",
-      "arm_b_steps",
-      "worst_case_usd"
-    ],
-    "reading": "the arm sizes and everything derived from them moved because the contract sized the arms at 500 and 650 LABELS and the trainable set is what fits config/qlora.yaml's frozen max_seq_len: 43 rows render past it and are dropped by name in results/pass1_sft.json. Every mismatch makes the run CHEAPER than registered and none was silently fixed",
+    "mismatches": [],
+    "reading": "every registered number re-derives",
     "rows": [
       {
-        "agrees": false,
+        "agrees": true,
         "formula": "the r1 labels, 500 units",
         "mode": "equals",
         "name": "arm_a_rows",
-        "re_derived": 464,
+        "re_derived": 500,
         "registered": 500
       },
       {
-        "agrees": false,
+        "agrees": true,
         "formula": "steps × 61.047 s/step",
         "mode": "equals",
         "name": "arm_a_seconds",
-        "re_derived": 3540.7,
+        "re_derived": 3907.0,
         "registered": 3907
       },
       {
-        "agrees": false,
+        "agrees": true,
         "formula": "ceil(n/16) × 2 epochs",
         "mode": "equals",
         "name": "arm_a_steps",
-        "re_derived": 58,
+        "re_derived": 64,
         "registered": 64
       },
       {
-        "agrees": false,
+        "agrees": true,
         "formula": "r1 + r2, 500 + 150 units",
         "mode": "equals",
         "name": "arm_b_rows",
-        "re_derived": 607,
+        "re_derived": 650,
         "registered": 650
       },
       {
-        "agrees": false,
+        "agrees": true,
         "formula": "steps × 61.047 s/step",
         "mode": "equals",
         "name": "arm_b_seconds",
-        "re_derived": 4639.6,
+        "re_derived": 5005.9,
         "registered": 5006
       },
       {
-        "agrees": false,
+        "agrees": true,
         "formula": "ceil(n/16) × 2 epochs",
         "mode": "equals",
         "name": "arm_b_steps",
-        "re_derived": 76,
+        "re_derived": 82,
         "registered": 82
       },
       {
@@ -228,11 +228,11 @@
         "registered": 122
       },
       {
-        "agrees": false,
+        "agrees": true,
         "formula": "(train + eval + boot + 0.5 h overhead) × $0.80/h",
         "mode": "equals",
         "name": "worst_case_usd",
-        "re_derived": 2.4647,
+        "re_derived": 2.6275,
         "registered": 2.63
       }
     ],
@@ -254,7 +254,7 @@
     },
     "sft_record": {
       "file": "results/pass1_sft.json",
-      "sha256": "edbea54af33fa85763d73da6c0fe646a27ec858e5af1fcbe370b3b313676aa40"
+      "sha256": "76b968d0f41037c1fb3060e6d5e28b12142a6e76c225c761e0c4a2bde7a03cb2"
     },
     "trainer": {
       "script": "scripts/train_qlora.py",
@@ -302,25 +302,25 @@
   "money": {
     "arithmetic": {
       "boot_seconds_charged": 450,
-      "cap_headroom_usd": 3.5353,
+      "cap_headroom_usd": 3.3725,
       "eval_rule": "2 adapters × the eval pack's 64 units × the measured seconds per call",
       "eval_seconds": 660.7,
-      "hours": 3.0808,
+      "hours": 3.2843,
       "milestone_rule": "the guard reading after arm A must be ≤ $2.50 or arm B does not start. The projection above is boot + arm A at the price ceiling; the STOP is on the READING, never on the projection",
       "overhead_hours": 0.5,
-      "projected_usd_at_the_arm_a_milestone": 0.8868,
+      "projected_usd_at_the_arm_a_milestone": 0.9682,
       "seconds_per_call": 5.162,
       "seconds_per_step": 61.047,
       "steps": {
-        "a": 58,
-        "b": 76
+        "a": 64,
+        "b": 82
       },
       "steps_rule": "ceil(n / (micro_batch_size × grad_accum)) × epochs, all three from config/qlora.yaml",
       "train_seconds": {
-        "a": 3540.7,
-        "b": 4639.6
+        "a": 3907.0,
+        "b": 5005.9
       },
-      "worst_case_usd": 2.4647
+      "worst_case_usd": 2.6275
     },
     "cap_rule": "$6.00 all-in, frozen at the FIRST `pod create`. Raising it is the operator's word BEFORE any endpoint exists, never after a reading",
     "cap_usd_all_in": 6.0,
@@ -475,11 +475,11 @@
   },
   "producer": {
     "borrowed": {
-      "results/pass1_sft.json": "edbea54af33fa85763d73da6c0fe646a27ec858e5af1fcbe370b3b313676aa40",
+      "results/pass1_sft.json": "76b968d0f41037c1fb3060e6d5e28b12142a6e76c225c761e0c4a2bde7a03cb2",
       "results/prereg_pass1_probe_b.json": "a29e85ad6e856f6fafa032b3f5ede0e635046171778cbe7a6902b64fa57bacad"
     },
     "script": "scripts/write_lora_b_prereg.py",
-    "sha256": "3f524667acb6abdb4fb837fef1dbcee1be179f798a62d837f2ff238c9cf674cd"
+    "sha256": "2d1ca8de5420e52add8540f6f5a3909e5b0606e668e5c046cef2990656d4c3f1"
   },
   "reachability": {
     "stance_is_not_trained": {
@@ -488,14 +488,15 @@
       "rule": "the team lead labelled subject_type alone. Writing null into the two unlabelled fields AND training on it would put every stance-scoring row out of reach and cap the bar at 11 of 14 — under the threshold, before the pod exists. The SFT builder masks them out of the loss instead, and this is the arithmetic that decided it"
     },
     "the_context_the_gate_carries": {
-      "arm_b_rows": 607,
+      "arm_b_rows": 650,
       "arm_b_rows_with_an_entity_block": 39,
-      "cause": "a pass-1 request carries the thread's topic and entity block, and both come from a reader verdict that was PAID FOR. 15 of the 120 labelled threads have one; the rest render the topic from the store's own post text and an empty entity block. The eval's topics are reader summaries of 26–147 characters and the substituted post texts run to thousands, which is also what pushes 43 rows past max_seq_len",
+      "cause": "a pass-1 request carries the thread's topic and entity block, and both come from a reader verdict that was PAID FOR. 15 of the 120 labelled threads have one; the rest render the topic from the store's own post text, cut to the envelope a bought topic occupies (147 characters, the longest of 24), and an EMPTY entity block. The cut is the operator's branch-C ruling of 2026-08-19: it put every row back under max_seq_len — nothing is dropped now and both молочный_бренд rows train — and it bought no verdict, so the entity block is exactly as empty as it was",
       "eval_pack_items": 64,
       "eval_pack_items_with_an_entity_block": 55,
       "gate_rows": 14,
       "gate_rows_with_an_entity_block": 12,
-      "the_open_ruling": "REGISTERED AS A RISK, not as a defect: the arms are trained on requests whose context field is mostly empty and graded on requests where it is mostly full. Removing it costs a reader pass over the 105 uncovered threads — 105 × 51.3 s = ~5 390 s ≈ $1.20 at the price ceiling, in a SEPARATE session, because a dataset built during the paid session could not have been pre-registered. The operator rules; this record says what was known before the attempt"
+      "the_open_ruling": "REGISTERED AS A RISK, not as a defect: the arms are trained on requests whose entity block is almost always empty and graded on requests where it is almost always full. Removing it costs a reader pass over the 105 uncovered threads — 105 × 51.3 s = ~5 390 s ≈ $1.20 at the price ceiling, in a SEPARATE session, because a dataset built during the paid session could not have been pre-registered. The operator ruled branch C, which closes the length half and leaves this one open and named; this record says what was known before the attempt",
+      "topic_envelope_chars": 147
     },
     "to_pass": {
       "agreed_now": 9,
@@ -504,7 +505,7 @@
         "молочный_бренд": 1
       },
       "minimum_agreed": 12,
-      "reading": "four of the five rows the arms must turn are gold «категория» and one is «молочный_бренд». Arm B carries 45 rows of the first class and ONE of the second — the second brand row of the labelled set renders past max_seq_len and was dropped. A weight of 8.0 on one row is a weight on one row",
+      "reading": "four of the five rows the arms must turn are gold «категория» and one is «молочный_бренд». Arm B carries 47 rows of the first class and 2 of the second, and the sampler's cap of 8.0 is what the second one gets. The numbers are read off the dataset record rather than written here: this sentence has already been wrong once, when the length bound dropped one of the two brand rows",
       "rows_the_arm_must_turn": 3,
       "the_five_missed": {
         "21601": {
@@ -529,8 +530,8 @@
         }
       },
       "training_rows_behind_them": {
-        "категория_личное": 45,
-        "молочный_бренд": 1
+        "категория_личное": 47,
+        "молочный_бренд": 2
       }
     }
   },

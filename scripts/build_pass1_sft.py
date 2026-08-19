@@ -26,10 +26,20 @@ block records exactly how many rows are in which state, because 12 of the 14 gat
 entity block and a training set that mostly does not is a difference between train and eval that
 belongs in the registration and not in a footnote ([[build_the_training_prompt_with_the_inference_call]]).
 
-**Length.** `config/qlora.yaml` is frozen law and its `max_seq_len` is 1408. A row over it is a
-`SystemExit` inside the training loop, on a billed pod. Rows are bounded HERE, at the worst
-tokens-per-character ratio measured over probe-b's own 64 paid rows, and the ones that do not fit
-are dropped by name into the record rather than discovered at $0.80/h.
+**Length, and the operator's branch-C ruling.** `config/qlora.yaml` is frozen law and its
+`max_seq_len` is 1408. A row over it is a `SystemExit` inside the training loop, on a billed pod,
+so every row is bounded HERE at the worst tokens-per-character ratio measured over probe-b's own 64
+paid rows, and anything that still does not fit is dropped by name into the record rather than
+discovered at $0.80/h.
+
+The first build dropped 43 rows — one of them the second of the labelled set's two `молочный_бренд`
+rows — and the cause was the substitute itself: a bought topic is a summary of 26–147 characters
+and a raw post runs to thousands. The operator's ruling of 2026-08-19 takes branch C: a substituted
+topic is CUT to the envelope a bought one occupies, at a word boundary, with an ellipsis where
+something was removed. The envelope is measured from the bought summaries at every run
+(:func:`envelope`) and never typed. It closes the length finding — nothing is dropped and both
+brand rows survive — and it closes nothing else: the entity block is still empty wherever no
+verdict was bought, and the census below still prints that against the gate's own rows.
 
     PYTHONPATH=src python3.11 scripts/build_pass1_sft.py --census   # measure, write nothing
     PYTHONPATH=src python3.11 scripts/build_pass1_sft.py
@@ -214,15 +224,63 @@ def bound_tokens(prompt: str, target: str, per_char: float) -> int:
     return math.ceil((len(prompt) + len(target)) * per_char) + TEMPLATE_SLACK
 
 
-def rendered(unit: dict, context: dict[str, tuple[str, dict]]) -> dict:
+def envelope(context: dict[str, tuple[str, dict]]) -> dict:
+    """The character budget a substituted topic gets: the longest topic a BOUGHT one occupies.
+
+    Measured at every run over the reader verdicts themselves, so the bound is a property of the
+    population and not a number somebody liked. It is the eval's own envelope — every request the
+    gate is answered under carries a topic inside it — which is the whole point of cutting to it
+    rather than to a round number.
+    """
+    lengths = sorted(
+        len((verdict.get("post_summary") or "").strip())
+        for _, verdict in context.values()
+        if (verdict.get("post_summary") or "").strip()
+    )
+    if not lengths:
+        raise SystemExit(
+            "no bought verdict carries a post_summary — there is no envelope to cut to"
+        )
+    return {
+        "limit": lengths[-1],
+        "measured_over": len(lengths),
+        "shortest": lengths[0],
+        "median": lengths[len(lengths) // 2],
+        "rule": (
+            "the longest post_summary any bought reader verdict carries. A substituted topic is cut"
+            " to it at a word boundary, with an ellipsis where anything was removed; a bought topic"
+            " is never cut, because it is already inside its own envelope"
+        ),
+    }
+
+
+def bound_topic(text: str, limit: int) -> str:
+    """A post's opening, cut to `limit` characters at a word boundary. Marked where it was cut.
+
+    The ellipsis is deliberate. A cut advertisement presented whole is a claim that the topic ends
+    there; the marker says the sentence continues and the model has seen that shape a million
+    times. The word-boundary search gives up when the only whitespace sits in the first half —
+    cutting a 147-character budget down to 20 to avoid splitting a word is the worse trade.
+    """
+    text = (text or "").strip()
+    if len(text) <= limit:
+        return text
+    head = text[:limit]
+    boundary = max(head.rfind(one) for one in (" ", "\n", "\t"))
+    kept = head[:boundary] if boundary > limit // 2 else head
+    return kept.rstrip() + "…"
+
+
+def rendered(unit: dict, context: dict[str, tuple[str, dict]], limit: int) -> dict:
     """One SFT row: the transport's own request, the team lead's answer, and where its context came
     from."""
     store = unit["store"]
     source, verdict = context.get(unit["thread"], (None, {}))
     topic = (verdict.get("post_summary") or "").strip()
-    topic_source = "reader verdict" if topic else "the store's post text"
+    topic_source = "reader verdict"
     if not topic:
-        topic = store["post_text"] or ""
+        topic_source = "the store's post text, bounded"
+        topic = bound_topic(store["post_text"] or "", limit)
     entities = verdict.get("entities") or []
     prompt = prompts.pass1_messages_gm4(
         store["channel"],
@@ -256,11 +314,12 @@ def measure() -> dict:
     """Everything the record needs, computed once: the rows, the bound, and what does not fit."""
     context = verdicts()
     per = ratio()
+    budget = envelope(context)
     config = yaml.safe_load(QLORA.read_text(encoding="utf-8"))
     max_seq_len = int(config["training"]["max_seq_len"])
     rows, dropped = [], []
     for unit in labelled_units():
-        row = rendered(unit, context)
+        row = rendered(unit, context, budget["limit"])
         row["bound_tokens"] = bound_tokens(row["prompt"], row["target"], per["tokens_per_char_max"])
         if row["bound_tokens"] > max_seq_len:
             dropped.append(row)
@@ -268,6 +327,7 @@ def measure() -> dict:
             rows.append(row)
     return {
         "context": context,
+        "envelope": budget,
         "ratio": per,
         "max_seq_len": max_seq_len,
         "rows": rows,
@@ -333,6 +393,12 @@ def census(state: dict) -> dict:
         }
 
     return {
+        "topic_rule": (
+            "a topic from a bought reader verdict is rendered whole; a substituted one is the"
+            f" post's opening cut to {state['envelope']['limit']} characters — the longest bought"
+            " topic — at a word boundary, marked with an ellipsis. Operator ruling of 2026-08-19,"
+            " branch C: it closes the length finding and leaves the entity-block one open"
+        ),
         "arms": {
             arm: {
                 **steps(len(arm_rows(state, arm)), config),
@@ -424,6 +490,7 @@ def build(state: dict | None = None) -> tuple[dict, dict[str, str]]:
         },
         "length": {
             "bound": state["ratio"],
+            "topic_envelope": state["envelope"],
             "max_seq_len": state["max_seq_len"],
             "template_slack_tokens": TEMPLATE_SLACK,
             "config": "config/qlora.yaml",
@@ -454,7 +521,11 @@ def build(state: dict | None = None) -> tuple[dict, dict[str, str]]:
 
 def print_census(state: dict) -> None:
     table = census(state)
-    print(f"\nPASS-1 SFT — the two arms, bound at max_seq_len {state['max_seq_len']}\n")
+    print(
+        f"\nPASS-1 SFT — the two arms, bound at max_seq_len {state['max_seq_len']};"
+        f" substituted topics cut to {state['envelope']['limit']} chars"
+        f" (the longest of {state['envelope']['measured_over']} bought ones)\n"
+    )
     print(
         f"{'arm':>4}  {'rows':>5}  {'steps':>6}  {'бренд':>6} {'кат':>5} {'сеть':>5}"
         f" {'нн':>5} {'null':>5}   {'entities':>9} {'topic':>6}"
@@ -471,11 +542,13 @@ def print_census(state: dict) -> None:
     for arm, block in table["arms"].items():
         print(f"  arm {arm} sampler weights: {block['sampler_weights']}")
     dropped = table["dropped_for_length"]
-    print(
-        f"\nDROPPED FOR LENGTH  {dropped['n']} rows {dropped['by_pack']} —"
-        f" longest kept {dropped['longest_kept']} tokens,"
-        f" shortest dropped {dropped['shortest_dropped']}"
+    tail = (
+        f" — longest kept {dropped['longest_kept']} tokens, shortest dropped"
+        f" {dropped['shortest_dropped']}"
+        if dropped["n"]
+        else f" — every row fits; the longest is {dropped['longest_kept']} tokens"
     )
+    print(f"\nDROPPED FOR LENGTH  {dropped['n']} rows{tail}")
     gate = table["the_gate_s_own_rows"]
     print(
         f"CONTEXT             the gate's {gate['n']} rows carry"

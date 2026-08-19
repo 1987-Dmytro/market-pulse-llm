@@ -94,6 +94,34 @@ def test_no_row_can_exceed_the_frozen_max_seq_len(state):
     assert state["max_seq_len"] == 1408
     assert all(row["bound_tokens"] <= state["max_seq_len"] for row in state["rows"])
     assert all(row["bound_tokens"] > state["max_seq_len"] for row in state["dropped"])
+    # branch C: with the substituted topic cut to a bought one's envelope, nothing is dropped and
+    # every labelled unit trains. `dropped` stays because the ceiling has not moved — the guard is
+    # what proves the bound holds, not the fact that it currently catches nothing.
+    assert state["dropped"] == []
+    assert len(state["rows"]) == 650
+
+
+def test_a_substituted_topic_is_cut_to_the_envelope_a_bought_one_occupies(state):
+    budget = state["envelope"]
+    assert budget["limit"] == 147 and budget["measured_over"] == 24
+    substituted = [row for row in state["rows"] if row["context"]["topic_from"].endswith("bounded")]
+    bought = [row for row in state["rows"] if row["context"]["topic_from"] == "reader verdict"]
+    assert len(substituted) == 559 and len(bought) == 91
+    for row in substituted:
+        topic = row["prompt"].split("<topic>\n")[1].split("\n</topic>")[0]
+        assert len(topic) <= budget["limit"] + 1, row["id"]  # +1 for the ellipsis
+    for row in bought:
+        topic = row["prompt"].split("<topic>\n")[1].split("\n</topic>")[0]
+        assert not topic.endswith("…"), row["id"]  # a bought topic is never cut
+
+
+def test_the_cut_marks_itself_and_keeps_whole_words():
+    limit = 20
+    assert sft.bound_topic("short enough", limit) == "short enough"
+    assert sft.bound_topic("a sentence that runs well past the budget", limit) == "a sentence that…"
+    # a single unbroken token is cut hard rather than thrown away
+    assert sft.bound_topic("x" * 60, limit) == "x" * 20 + "…"
+    assert sft.bound_topic("", limit) == ""
 
 
 def test_the_bound_is_the_worst_ratio_probe_b_measured_not_the_mean(state):
@@ -119,6 +147,7 @@ def test_arm_a_is_a_subset_of_arm_b_and_that_is_the_whole_ablation(state):
     a = {row["id"] for row in sft.arm_rows(state, "a")}
     b = {row["id"] for row in sft.arm_rows(state, "b")}
     assert a < b
+    assert (len(a), len(b)) == (500, 650)  # every labelled unit of each pack
     assert {row["pack"] for row in sft.arm_rows(state, "a")} == {"r1"}
     assert {row["pack"] for row in sft.arm_rows(state, "b")} == {"r1", "r2"}
 
@@ -140,7 +169,7 @@ def test_the_sampler_weights_are_the_pre_registered_formula(state):
         rows = sft.arm_rows(state, arm)
         assert sft.sampler_weights(rows) == train_qlora.class_weights(rows)
         weights = sft.sampler_weights(rows)
-        assert weights["молочный_бренд"] == 8.0  # the cap bites on the one row of the class
+        assert weights["молочный_бренд"] == 8.0  # the cap bites on the two rows of the class
         assert all(0 < value <= 8.0 for value in weights.values())
         total = len(rows)
         counts = {name: n for name, n in sft.distribution(rows).items() if n}
@@ -155,7 +184,11 @@ def test_the_record_names_the_context_the_gate_carries_and_the_training_set_does
     arm_b = record["census"]["arms"]["b"]["context"]
     assert gate["n"] == 14 and gate["with_an_entity_block"] == 12
     assert record["census"]["eval_pack"]["with_an_entity_block"] == 55
+    assert (arm_b["with_an_entity_block"], arm_b["of"]) == (39, 650)
     assert arm_b["with_an_entity_block"] < arm_b["of"] * 0.1
+    # branch C bounded the topic and did NOT buy a verdict, so this finding is unchanged by it
+    assert "leaves the entity-block one open" in record["census"]["topic_rule"]
+    assert record["length"]["topic_envelope"]["limit"] == 147
 
 
 def test_the_datasets_rebuild_byte_identical(tmp_path):
