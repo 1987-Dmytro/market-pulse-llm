@@ -338,11 +338,17 @@ brain-census: 13.2Ktok boot tax  ⚠️ > 9.0K target — …   (52 627 B)
 brain-census: 13.2Ktok boot tax  ⚠️ > 9.0K target — …   (52 716 B, +89 from hot.md's two edits)
 
 $ python3.11 scripts/check-wikilinks.py
-check-wikilinks: OK, none broken
+check-wikilinks: OK, none broken       # scope: knowledge/** + the memory dir — see below
 
 $ git status --porcelain              # after the D3 commit, before this report's own
 ?? docs/reports/labels-boot-audit.md
 ```
+
+The checker scans `knowledge/**` and the project's memory directory and never opens `docs/`, so
+that OK certifies the two ADRs' `[[…]]` — which is what the contract asked for — and NOT this
+report's own pointers, three of which name lessons that have no memory file yet (`MEMORY.md` is
+under this contract's DO NOT). Unchecked by design, and said so rather than left to read as
+covered.
 
 **The final count is 2 959 + 7**: one freeze/provenance test in the sealing commit and six census
 guards in D2. Nothing was removed, and the two that were failing are among the passed. The porcelain
@@ -391,7 +397,7 @@ $ make preflight ARGS='docs/labels-pass1-r1.jsonl'
 | **Dv532** | **The Verify block's own preflight command cannot display what it promises, and the pin is fine.** `make preflight ARGS='labels-pass1-r1'` shows 4 of 4 digests matching and NOT the labels file, because block 3 joins the pin registry onto the query's grep hits and the subject of a query is the one file that never names itself — `git grep -F labels-pass1-r1` on the jsonl exits 1. Shaping the sidecar differently cannot fix it: it is the join, not the record. Both runs ship, the by-path one showing `docs/labels-pass1-r1.jsonl <- …labels.sha256 776b204f3d3a…`, 5 of 5 matching. `scripts/preflight.py` NOT touched — a pinned instrument is not adjusted to make a report read better [[the_subject_of_a_query_never_names_itself]]. | `[cause: verify-gap]` |
 | **Dv533** | **The renamed test's MODULE DOCSTRING asserted the same expired fact, one level up.** The contract names the test to rename; `tests/test_validate_pass1_labels.py`'s docstring said «every fixture lives in `tmp_path` and the last test asserts the real path is still absent». Flipping the assertion and leaving the prose would have reproduced exactly the defect the rename exists to remove — a file describing itself as the opposite of what it does. Rewritten in the same commit, and it now names what licenses reading a team-lead file: the source-level proof that the gate holds no `write_text`/`write_bytes` [[the_docstring_is_a_consumer_of_the_test]]. | `[cause: contract-gap]` |
 | **Dv534** | **A boot-tax contract grew `knowledge/hot.md` by 89 B, and both writes were mandatory.** Edit 1 shrank the file 53 B by closing the red-suite blocker; edit 2 grew it 142 B, because a suspension has to carry more than an open question did — the ruling, the axis, the owner, the pointer to the sitting's table. Measured after the last edit and re-run through the census rather than asserted: 24 718 → 24 807 B, census 52 627 → 52 716 B, still 13.2K printed. Same shape as Dv530, and it is the arithmetic of a contract whose D3 is a WRITE into the file its D2 measures [[a_probe_must_not_create_what_it_measures]]. | `[cause: process]` |
-| **Dv535** | **`hot.md` quotes its own size, and the quote was already stale before this contract opened it.** Next §4 says «24 583 Б `hot.md`» and «~8.1K Б (−67%)»; the file read 24 718 B on arrival and 24 807 B on exit, so the derived −67% is wrong in the third digit and cannot be right for long — any edit to the file invalidates it. Not fixed: the contract authorises exactly two edits and this is neither. Named in the audit table so the sitting starts from a live measurement instead of the file's own memory of itself [[a_file_that_quotes_its_own_size]]. | `[cause: contract-gap]` |
+| **Dv535** | **`hot.md` quotes its own size, and the sentence that does it mixes two vintages of that number.** Next §4 reads «9 323 Б трёх `CLAUDE.md` + 24 583 Б `hot.md` = **8.30K** ДО первого байта MEMORY.md». The sum does not reproduce from its own addends — (9 323 + 24 583)/4000 = **8.4765K**; 8.30K is exactly (9 323 + **23 885**)/4000, `hot.md`'s size BEFORE `vault-dream` touched it. One sentence, two moments, and the `=` false under either. The derived half is the trap: «~8.1K Б (−67%)» still rounds true today (the file needs to fall to **8 091 B**, −67.4%, at the live 24 807 B), so a reader checking the conclusion finds it right and never reaches the addends. Not fixed — the contract authorises exactly two edits here and this is neither — and re-derived live in the audit table instead [[a_file_that_quotes_its_own_size]]. | `[cause: contract-gap]` |
 | **Dv536** | **Two live numbers in `hot.md` have drifted from their producers, and the audit is how they surfaced.** The money card reads «цикл-2 $1.8146» where `docs/STATUS.md` reads $1.8243 (both are prose copies of a reading whose home is the guard's ledger — and this file's own law says money is read FROM the guard); the preflight card reads «1 466 путей» where the live registry printed 1 469 before this contract and 1 472 after it. Neither is fixable inside the two-edit budget, and one of them lives in a team-lead file. Classified, not corrected [[trace_the_producer_not_the_result]]. | `[cause: process]` |
 
 ## Process signals
