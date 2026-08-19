@@ -1,0 +1,1642 @@
+{
+  "authority": "sitting-2 of 2026-08-19, registered in docs/STATUS.md: the class deficit is closed by WEIGHTING plus a TARGETED RE-DRAW from dairy-signal threads (synthetic only if the gate later runs red), and the two training arms are A = 500 weighted and B = 500 + this re-draw, with the re-draw ablated at training time",
+  "blind": {
+    "drawn": 0,
+    "rule": "NOT drawn for r2. The operator's blind-40 option lives on r1 (docs/label-pack-pass1-r1-blind40.md) and this pack spends no row on it"
+  },
+  "census": {
+    "_reading": "«ours» is молочный_бренд + категория_личное, the two classes sitting-2 is short of. The share is measured on r1's own 500 labels, restricted to the rows the definition would have kept; the pack's own baseline is the first row, which is the whole tract",
+    "brand or category (D1's rule, = the shipped gate)": {
+      "already_drawn_by_r1": 500,
+      "available": 468,
+      "candidate_threads": 129,
+      "payable": 968,
+      "r1_ours_in_them": 38,
+      "r1_ours_share": 0.076,
+      "r1_rows_in_them": 500,
+      "threads_after_exam": 122
+    },
+    "category and no brand": {
+      "already_drawn_by_r1": 343,
+      "available": 438,
+      "candidate_threads": 87,
+      "payable": 781,
+      "r1_ours_in_them": 38,
+      "r1_ours_share": 0.1108,
+      "r1_rows_in_them": 343,
+      "threads_after_exam": 84
+    },
+    "tracked category only": {
+      "already_drawn_by_r1": 364,
+      "available": 440,
+      "candidate_threads": 96,
+      "payable": 804,
+      "r1_ours_in_them": 38,
+      "r1_ours_share": 0.1044,
+      "r1_rows_in_them": 364,
+      "threads_after_exam": 91
+    },
+    "watchlist brand only": {
+      "already_drawn_by_r1": 157,
+      "available": 30,
+      "candidate_threads": 42,
+      "payable": 187,
+      "r1_ours_in_them": 0,
+      "r1_ours_share": 0.0,
+      "r1_rows_in_them": 157,
+      "threads_after_exam": 38
+    }
+  },
+  "contract": "docs/PROMPT-pass1-redraw.md D2",
+  "draw": {
+    "cap": 14,
+    "cap_rule": "the 90th percentile of the CANDIDATE threads' payable counts, re-derived at every run and refused if it moves. The candidate subset is r1's remaining population thread for thread, so this is r1's cap re-derived and not r1's cap copied",
+    "drawn": 150,
+    "formula": "weight w = min(units still available in the thread, cap) — what r2 may draw is what r1 left. Allocate the target over the threads by LARGEST REMAINDER on w, tie-broken on (−remainder, thread); take that many msg_ids from the thread's sorted available list off one random.Random(SEED) stream",
+    "per_thread": [
+      {
+        "allocated": 1,
+        "available": 1,
+        "payable": 9,
+        "thread": "@VARUS_channel:10349",
+        "weight": 1
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 1,
+        "thread": "@VARUS_channel:10356",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 1,
+        "thread": "@VARUS_channel:10358",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 2,
+        "thread": "@VARUS_channel:10360",
+        "weight": 0
+      },
+      {
+        "allocated": 2,
+        "available": 2,
+        "payable": 12,
+        "thread": "@VARUS_channel:10366",
+        "weight": 2
+      },
+      {
+        "allocated": 1,
+        "available": 2,
+        "payable": 12,
+        "thread": "@VARUS_channel:10367",
+        "weight": 2
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 1,
+        "thread": "@VARUS_channel:10375",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 1,
+        "thread": "@VARUS_channel:10450",
+        "weight": 0
+      },
+      {
+        "allocated": 1,
+        "available": 1,
+        "payable": 4,
+        "thread": "@VARUS_channel:10451",
+        "weight": 1
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 3,
+        "thread": "@VARUS_channel:10452",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 2,
+        "thread": "@VARUS_channel:10455",
+        "weight": 0
+      },
+      {
+        "allocated": 1,
+        "available": 1,
+        "payable": 5,
+        "thread": "@VARUS_channel:10465",
+        "weight": 1
+      },
+      {
+        "allocated": 1,
+        "available": 1,
+        "payable": 6,
+        "thread": "@VARUS_channel:10466",
+        "weight": 1
+      },
+      {
+        "allocated": 1,
+        "available": 1,
+        "payable": 6,
+        "thread": "@VARUS_channel:10470",
+        "weight": 1
+      },
+      {
+        "allocated": 1,
+        "available": 1,
+        "payable": 5,
+        "thread": "@VARUS_channel:10471",
+        "weight": 1
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 1,
+        "thread": "@VARUS_channel:10496",
+        "weight": 0
+      },
+      {
+        "allocated": 1,
+        "available": 1,
+        "payable": 5,
+        "thread": "@VARUS_channel:10525",
+        "weight": 1
+      },
+      {
+        "allocated": 1,
+        "available": 1,
+        "payable": 9,
+        "thread": "@VARUS_channel:10528",
+        "weight": 1
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 2,
+        "thread": "@VARUS_channel:10529",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 1,
+        "thread": "@VARUS_channel:10532",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 2,
+        "thread": "@VARUS_channel:10593",
+        "weight": 0
+      },
+      {
+        "allocated": 1,
+        "available": 1,
+        "payable": 5,
+        "thread": "@VARUS_channel:10603",
+        "weight": 1
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 1,
+        "thread": "@klopotenkofood:6024",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 1,
+        "thread": "@klopotenkofood:6031",
+        "weight": 0
+      },
+      {
+        "allocated": 4,
+        "available": 5,
+        "payable": 17,
+        "thread": "@klopotenkofood:6032",
+        "weight": 5
+      },
+      {
+        "allocated": 1,
+        "available": 1,
+        "payable": 9,
+        "thread": "@klopotenkofood:6035",
+        "weight": 1
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 2,
+        "thread": "@klopotenkofood:6036",
+        "weight": 0
+      },
+      {
+        "allocated": 12,
+        "available": 31,
+        "payable": 43,
+        "thread": "@klopotenkofood:6040",
+        "weight": 14
+      },
+      {
+        "allocated": 1,
+        "available": 1,
+        "payable": 10,
+        "thread": "@klopotenkofood:6060",
+        "weight": 1
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 1,
+        "thread": "@kopiyochka1:21672",
+        "weight": 0
+      },
+      {
+        "allocated": 1,
+        "available": 1,
+        "payable": 8,
+        "thread": "@kopiyochka1:21720",
+        "weight": 1
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 3,
+        "thread": "@mandziak:3666",
+        "weight": 0
+      },
+      {
+        "allocated": 1,
+        "available": 1,
+        "payable": 5,
+        "thread": "@mandziak:3667",
+        "weight": 1
+      },
+      {
+        "allocated": 12,
+        "available": 19,
+        "payable": 31,
+        "thread": "@mandziak:3679",
+        "weight": 14
+      },
+      {
+        "allocated": 1,
+        "available": 2,
+        "payable": 12,
+        "thread": "@mandziak:3684",
+        "weight": 2
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 2,
+        "thread": "@mandziak:3685",
+        "weight": 0
+      },
+      {
+        "allocated": 1,
+        "available": 1,
+        "payable": 8,
+        "thread": "@mandziak:3689",
+        "weight": 1
+      },
+      {
+        "allocated": 1,
+        "available": 1,
+        "payable": 5,
+        "thread": "@mandziak:3694",
+        "weight": 1
+      },
+      {
+        "allocated": 1,
+        "available": 1,
+        "payable": 5,
+        "thread": "@mandziak:3700",
+        "weight": 1
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 3,
+        "thread": "@mandziak:3701",
+        "weight": 0
+      },
+      {
+        "allocated": 1,
+        "available": 1,
+        "payable": 8,
+        "thread": "@mandziak:3702",
+        "weight": 1
+      },
+      {
+        "allocated": 1,
+        "available": 2,
+        "payable": 11,
+        "thread": "@mandziak:3707",
+        "weight": 2
+      },
+      {
+        "allocated": 7,
+        "available": 8,
+        "payable": 20,
+        "thread": "@mandziak:3708",
+        "weight": 8
+      },
+      {
+        "allocated": 7,
+        "available": 8,
+        "payable": 20,
+        "thread": "@mandziak:3718",
+        "weight": 8
+      },
+      {
+        "allocated": 1,
+        "available": 1,
+        "payable": 4,
+        "thread": "@mandziak:3721",
+        "weight": 1
+      },
+      {
+        "allocated": 1,
+        "available": 1,
+        "payable": 7,
+        "thread": "@mandziak:3736",
+        "weight": 1
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 1,
+        "thread": "@mandziak:3746",
+        "weight": 0
+      },
+      {
+        "allocated": 1,
+        "available": 2,
+        "payable": 13,
+        "thread": "@mandziak:3753",
+        "weight": 2
+      },
+      {
+        "allocated": 1,
+        "available": 1,
+        "payable": 5,
+        "thread": "@mandziak:3765",
+        "weight": 1
+      },
+      {
+        "allocated": 1,
+        "available": 1,
+        "payable": 7,
+        "thread": "@mandziak:3768",
+        "weight": 1
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 3,
+        "thread": "@mandziak:3775",
+        "weight": 0
+      },
+      {
+        "allocated": 12,
+        "available": 113,
+        "payable": 125,
+        "thread": "@matusi_ukr:22058",
+        "weight": 14
+      },
+      {
+        "allocated": 12,
+        "available": 23,
+        "payable": 35,
+        "thread": "@matusi_ukr:22092",
+        "weight": 14
+      },
+      {
+        "allocated": 1,
+        "available": 1,
+        "payable": 9,
+        "thread": "@matusi_ukr:22111",
+        "weight": 1
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 2,
+        "thread": "@matusi_ukr:22125",
+        "weight": 0
+      },
+      {
+        "allocated": 1,
+        "available": 2,
+        "payable": 12,
+        "thread": "@matusi_ukr:22131",
+        "weight": 2
+      },
+      {
+        "allocated": 12,
+        "available": 93,
+        "payable": 105,
+        "thread": "@matusi_ukr:22133",
+        "weight": 14
+      },
+      {
+        "allocated": 12,
+        "available": 15,
+        "payable": 27,
+        "thread": "@matusi_ukr:22158",
+        "weight": 14
+      },
+      {
+        "allocated": 1,
+        "available": 1,
+        "payable": 6,
+        "thread": "@matusi_ukr:22195",
+        "weight": 1
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 1,
+        "thread": "@matusi_ukr:22208",
+        "weight": 0
+      },
+      {
+        "allocated": 1,
+        "available": 2,
+        "payable": 14,
+        "thread": "@matusi_ukr:22217",
+        "weight": 2
+      },
+      {
+        "allocated": 1,
+        "available": 2,
+        "payable": 13,
+        "thread": "@matusi_ukr:22263",
+        "weight": 2
+      },
+      {
+        "allocated": 3,
+        "available": 4,
+        "payable": 16,
+        "thread": "@matusi_ukr:22265",
+        "weight": 4
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 2,
+        "thread": "@matusi_ukr:22292",
+        "weight": 0
+      },
+      {
+        "allocated": 12,
+        "available": 96,
+        "payable": 108,
+        "thread": "@matusi_ukr:22295",
+        "weight": 14
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 1,
+        "thread": "@matusi_ukr:22307",
+        "weight": 0
+      },
+      {
+        "allocated": 4,
+        "available": 5,
+        "payable": 17,
+        "thread": "@matusi_ukr:22308",
+        "weight": 5
+      },
+      {
+        "allocated": 1,
+        "available": 1,
+        "payable": 4,
+        "thread": "@matusi_ukr:22327",
+        "weight": 1
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 3,
+        "thread": "@msuaaaa:10651",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 1,
+        "thread": "@polyakova_fitness:1143",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 2,
+        "thread": "@retsepty:7278",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 1,
+        "thread": "@retsepty:7280",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 1,
+        "thread": "@retsepty:7281",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 1,
+        "thread": "@retsepty:7284",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 1,
+        "thread": "@retsepty:7288",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 1,
+        "thread": "@retsepty:7289",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 3,
+        "thread": "@retsepty:7293",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 2,
+        "thread": "@retsepty:7294",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 1,
+        "thread": "@retsepty:7296",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 1,
+        "thread": "@retsepty:7301",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 2,
+        "thread": "@retsepty:7302",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 2,
+        "thread": "@retsepty:7305",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 1,
+        "thread": "@retsepty:7310",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 3,
+        "thread": "@retsepty:7312",
+        "weight": 0
+      },
+      {
+        "allocated": 1,
+        "available": 1,
+        "payable": 4,
+        "thread": "@retsepty:7313",
+        "weight": 1
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 1,
+        "thread": "@retsepty:7317",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 1,
+        "thread": "@retsepty:7318",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 1,
+        "thread": "@retsepty:7320",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 2,
+        "thread": "@retsepty:7321",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 2,
+        "thread": "@retsepty:7323",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 3,
+        "thread": "@retsepty:7324",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 2,
+        "thread": "@retsepty:7325",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 2,
+        "thread": "@retsepty:7326",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 1,
+        "thread": "@retsepty:7327",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 2,
+        "thread": "@retsepty:7328",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 2,
+        "thread": "@retsepty:7331",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 1,
+        "thread": "@retsepty:7335",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 1,
+        "thread": "@retsepty:7337",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 1,
+        "thread": "@retsepty:7340",
+        "weight": 0
+      },
+      {
+        "allocated": 1,
+        "available": 1,
+        "payable": 5,
+        "thread": "@retsepty:7342",
+        "weight": 1
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 2,
+        "thread": "@retsepty:7343",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 3,
+        "thread": "@retsepty:7345",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 1,
+        "thread": "@retsepty:7348",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 1,
+        "thread": "@retsepty:7349",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 3,
+        "thread": "@retsepty:7350",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 1,
+        "thread": "@retsepty:7354",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 1,
+        "thread": "@retsepty:7361",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 0,
+        "thread": "@sashafitnesslife:3939",
+        "weight": 0
+      },
+      {
+        "allocated": 1,
+        "available": 1,
+        "payable": 10,
+        "thread": "@tarilka_malyuka:695",
+        "weight": 1
+      },
+      {
+        "allocated": 1,
+        "available": 1,
+        "payable": 4,
+        "thread": "@tarilka_malyuka:715",
+        "weight": 1
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 2,
+        "thread": "@tarilka_malyuka:746",
+        "weight": 0
+      },
+      {
+        "allocated": 1,
+        "available": 1,
+        "payable": 4,
+        "thread": "@tarilka_malyuka:747",
+        "weight": 1
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 1,
+        "thread": "@tarilka_malyuka:764",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 2,
+        "thread": "@tarilka_malyuka:820",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 2,
+        "thread": "@tarilka_malyuka:825",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 1,
+        "thread": "@tarilka_malyuka:827",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 0,
+        "thread": "@tarilka_malyuka:829",
+        "weight": 0
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 1,
+        "thread": "@ya_Nenka:834",
+        "weight": 0
+      },
+      {
+        "allocated": 1,
+        "available": 1,
+        "payable": 6,
+        "thread": "@ya_Nenka:836",
+        "weight": 1
+      },
+      {
+        "allocated": 0,
+        "available": 0,
+        "payable": 3,
+        "thread": "@ya_Nenka:838",
+        "weight": 0
+      },
+      {
+        "allocated": 1,
+        "available": 1,
+        "payable": 3,
+        "thread": "@ya_Nenka:840",
+        "weight": 1
+      },
+      {
+        "allocated": 1,
+        "available": 1,
+        "payable": 3,
+        "thread": "@ya_Nenka:844",
+        "weight": 1
+      }
+    ],
+    "reachability": {
+      "available": 468,
+      "binding": "ceiling",
+      "capped_weight_sum": 176,
+      "ceiling": 150,
+      "reachable": true,
+      "reading": "computed and printed BEFORE the target froze. An absolute number needs a reachability state, and the cap can put the ceiling below the number somebody wrote down",
+      "target": 150
+    },
+    "seed": 20260819,
+    "target": 150,
+    "target_rule": "min(150, available, sum of the capped weights)"
+  },
+  "exclusion": {
+    "gold_msg_ids": [
+      20664,
+      21599,
+      21601,
+      21626,
+      21629,
+      47899,
+      47902,
+      48276,
+      48283,
+      578951,
+      579379,
+      579457,
+      580124,
+      580129
+    ],
+    "proof": {
+      "drawn_units_already_drawn_by_r1": [],
+      "drawn_units_in_an_exam_thread": [],
+      "gold_msg_ids_drawn": [],
+      "gold_msg_ids_in_the_candidate_population": [],
+      "gold_msg_ids_rendered": [],
+      "reading": "all five lists are empty in a correct pack. The last is checked against the RENDERED text and not against the unit list, because the rendering shows every comment of a thread and not only the drawn ones"
+    },
+    "r1_units": 500,
+    "rule": "the 7 exam threads of the r1 record leave the population WHOLE, then r1's 500 units and the 14 gold rows leave it unit by unit. r2 and r1 therefore share no unit, and no labeller sees a comment twice",
+    "threads": [
+      "@VARUS_channel:10348",
+      "@VARUS_channel:10613",
+      "@mandziak:3676",
+      "@mandziak:3703",
+      "@matusi_ukr:22242",
+      "@matusi_ukr:22272",
+      "@matusi_ukr:22303"
+    ]
+  },
+  "inputs": {
+    "docs/labels-pass1-r1.jsonl": "776b204f3d3aa1a193f0faad7f68198595c81963199124efca8f6b74a9e1c920",
+    "results/gate_census_w1_reader.json": "caa172160fbb5da67933b03cf88b92c4af3223417efcce92a1b48dd09ab66c41",
+    "results/pass1_label_pack_r1.json": "e5ca328e5d993b81d7536b2846924ddb6e5bef3364250ba51fcf8fd35a362e4a",
+    "results/pass1_probe_b_pack.json": "bbbe64203f9c909a2d2e8aeab03d8d61c0fd6604d4854e13462d0e190bc4e113",
+    "results/reader_gold_w1_r2.json": "716ff4174bdafa5957caa4d038a11241b6eb299df4035a5f0e983217ec2a46d9"
+  },
+  "labels": {
+    "field": "subject_type",
+    "file": "docs/labels-pass1-r2.jsonl",
+    "provenance_debt": "labelled_by, date, codebook and this record's sha are frozen into results/ by the NEXT contract, after the labels exist and validate — not here",
+    "validator": "scripts/validate_pass1_labels.py docs/labels-pass1-r2.jsonl --pack results/pass1_label_pack_r2.json — the r1 gate unchanged, pointed at this pack. Its refusals are pack-relative already, so a second validator would have been a second place for the taxonomy to drift",
+    "values": [
+      "молочный_бренд",
+      "сеть_ритейлер",
+      "категория_личное",
+      "не_наш_рынок",
+      null
+    ],
+    "written_by": "the TEAM LEAD. It is a team-lead file from the moment it exists: the executor validates it and commits it verbatim, and never writes a label into it"
+  },
+  "phase": "pass1-redraw",
+  "population": {
+    "already_drawn_by_r1": 500,
+    "arithmetic": "968 payable in the 122 candidate threads that survive the 7 exam threads − 500 already drawn by r1 − 0 gold rows (every gold row lives inside an exam thread) = 468 available → min(150, 468, 176) = 150 drawn",
+    "available": 468,
+    "candidate_rule": "a thread where the shipped matcher finds a watchlist hit — a dairy brand or a tracked category — in the post or in the comments the cell's silencers leave, under DEFAULT matching (rules=None). That is gate_census_w1.hits, the predicate the cell itself was selected with",
+    "candidate_threads": 129,
+    "cell": "narrow|varto_off|plus_spam+scam",
+    "gold_rows_inside_candidates": 0,
+    "matcher": {
+      "brand_half": "market_pulse.brands.find_watchlist_brands (rules=None)",
+      "category_half": "market_pulse.yield_screen.category_hits over gate_census_w1.compiled(wide=False) — config/lexicon.yaml's tracked groups, dairy and ice-cream",
+      "reading": "the contract names market_pulse.brands as «the ONE matcher», quoting config/watchlist_rules.yaml — whose header says it is the one matcher THAT READS THAT FILE. The category half of a watchlist hit lives in yield_screen, and D1's own parenthetical («dairy brand or category») requires it"
+    },
+    "payable_in_candidates": 968,
+    "payable_per_candidate_thread": {
+      "max": 125,
+      "median": 3,
+      "min": 0,
+      "p90": 14
+    },
+    "record": "results/gate_census_w1_reader.json",
+    "sha256": "caa172160fbb5da67933b03cf88b92c4af3223417efcce92a1b48dd09ab66c41",
+    "the_candidate_rule_selects_the_whole_tract": true,
+    "threads_after_exam": 122,
+    "threads_in_cell": 129
+  },
+  "producer": {
+    "borrowed": {
+      "scripts/gate_census_w1.py": "4480a5fcd0eb21b53f103e3e68b9eee41aa81e130de23fbf8ae0702a709fea6a",
+      "scripts/gate_census_w1_reader.py": "42be312ef873a73f434b39cfa8060f6d110580ed1ace36ea2ee37b4d7c3e1c70",
+      "scripts/reader_population.py": "5ecb897d3d620d7d27916a3aa578a599ba1cd7c835abfb4ea136a350a440914a",
+      "scripts/window_summary_5c2.py": "239d2d5fcc0f0c93158ca41383b5ce20beb7f8e9db38974913a302ea4831fdaf",
+      "src/market_pulse/brands.py": "33ed070b3df9ac37d4c8579b9ecb372a9bd38b56be5d2091f7009f1579ce1674",
+      "src/market_pulse/loop.py": "3af31663cbd9d070ef00a14c033f93b285a1a0aebfb4153575d3ddda59853a1a",
+      "src/market_pulse/prompts.py": "a4a5a5d08546f53af18117c37e49f7e396919555563e16737a633c1df1a86eec"
+    },
+    "r1_producer_untouched": true,
+    "script": "scripts/build_pass1_label_pack_r2.py",
+    "sha256": "208b115620a721c386d77e0602cfc1954405b2c6368c52b677b7b4b8ec2b5243"
+  },
+  "rendering": {
+    "chars": 213585,
+    "codebook": {
+      "attribution_law": "src/market_pulse/prompts.py::READER_ATTRIBUTION_LAW_V5",
+      "attribution_law_sha256": "4343df2179523fd351f4605848fb3ef8ae4694ee2cfc51ebeeac3d59ac603e9a",
+      "f2a_carve_out": "src/market_pulse/prompts.py::READER_CARRY_V5",
+      "f2a_carve_out_sha256": "5a2f520883b6ec48f9557ab4c1ab7ee9f001b9201303e6333ebaba868f922639",
+      "quoted_by": "the same bytes, read from the module the pass-1 prompt itself answers under — never retyped, so r1 and r2 are one instrument and not two",
+      "r2_adjudication": "results/reader_gold_w1_r2.json::revision",
+      "same_law_as_r1": true
+    },
+    "file": "docs/label-pack-pass1-r2.md",
+    "rule": "each thread WHOLE — post first, then every comment in the store's own order, payable or not — with the drawn ones marked TARGET",
+    "sha256": "86919f8410b9692475fe919c72a7c934def74571c93589e0de55b3aaa533ab83",
+    "threads_rendered": 52
+  },
+  "units": [
+    {
+      "msg_id": 20649,
+      "thread": "@VARUS_channel:10349"
+    },
+    {
+      "msg_id": 20863,
+      "thread": "@VARUS_channel:10366"
+    },
+    {
+      "msg_id": 20922,
+      "thread": "@VARUS_channel:10366"
+    },
+    {
+      "msg_id": 21005,
+      "thread": "@VARUS_channel:10367"
+    },
+    {
+      "msg_id": 21125,
+      "thread": "@VARUS_channel:10451"
+    },
+    {
+      "msg_id": 21198,
+      "thread": "@VARUS_channel:10465"
+    },
+    {
+      "msg_id": 21389,
+      "thread": "@VARUS_channel:10466"
+    },
+    {
+      "msg_id": 21240,
+      "thread": "@VARUS_channel:10470"
+    },
+    {
+      "msg_id": 21256,
+      "thread": "@VARUS_channel:10471"
+    },
+    {
+      "msg_id": 21377,
+      "thread": "@VARUS_channel:10525"
+    },
+    {
+      "msg_id": 21406,
+      "thread": "@VARUS_channel:10528"
+    },
+    {
+      "msg_id": 21575,
+      "thread": "@VARUS_channel:10603"
+    },
+    {
+      "msg_id": 21177,
+      "thread": "@klopotenkofood:6032"
+    },
+    {
+      "msg_id": 21181,
+      "thread": "@klopotenkofood:6032"
+    },
+    {
+      "msg_id": 21187,
+      "thread": "@klopotenkofood:6032"
+    },
+    {
+      "msg_id": 21195,
+      "thread": "@klopotenkofood:6032"
+    },
+    {
+      "msg_id": 21207,
+      "thread": "@klopotenkofood:6035"
+    },
+    {
+      "msg_id": 21231,
+      "thread": "@klopotenkofood:6040"
+    },
+    {
+      "msg_id": 21234,
+      "thread": "@klopotenkofood:6040"
+    },
+    {
+      "msg_id": 21235,
+      "thread": "@klopotenkofood:6040"
+    },
+    {
+      "msg_id": 21239,
+      "thread": "@klopotenkofood:6040"
+    },
+    {
+      "msg_id": 21245,
+      "thread": "@klopotenkofood:6040"
+    },
+    {
+      "msg_id": 21246,
+      "thread": "@klopotenkofood:6040"
+    },
+    {
+      "msg_id": 21250,
+      "thread": "@klopotenkofood:6040"
+    },
+    {
+      "msg_id": 21254,
+      "thread": "@klopotenkofood:6040"
+    },
+    {
+      "msg_id": 21255,
+      "thread": "@klopotenkofood:6040"
+    },
+    {
+      "msg_id": 21256,
+      "thread": "@klopotenkofood:6040"
+    },
+    {
+      "msg_id": 21268,
+      "thread": "@klopotenkofood:6040"
+    },
+    {
+      "msg_id": 21270,
+      "thread": "@klopotenkofood:6040"
+    },
+    {
+      "msg_id": 21366,
+      "thread": "@klopotenkofood:6060"
+    },
+    {
+      "msg_id": 391544,
+      "thread": "@kopiyochka1:21720"
+    },
+    {
+      "msg_id": 47859,
+      "thread": "@mandziak:3667"
+    },
+    {
+      "msg_id": 47933,
+      "thread": "@mandziak:3679"
+    },
+    {
+      "msg_id": 47935,
+      "thread": "@mandziak:3679"
+    },
+    {
+      "msg_id": 47936,
+      "thread": "@mandziak:3679"
+    },
+    {
+      "msg_id": 47938,
+      "thread": "@mandziak:3679"
+    },
+    {
+      "msg_id": 47948,
+      "thread": "@mandziak:3679"
+    },
+    {
+      "msg_id": 47950,
+      "thread": "@mandziak:3679"
+    },
+    {
+      "msg_id": 47986,
+      "thread": "@mandziak:3679"
+    },
+    {
+      "msg_id": 47988,
+      "thread": "@mandziak:3679"
+    },
+    {
+      "msg_id": 47990,
+      "thread": "@mandziak:3679"
+    },
+    {
+      "msg_id": 47995,
+      "thread": "@mandziak:3679"
+    },
+    {
+      "msg_id": 47998,
+      "thread": "@mandziak:3679"
+    },
+    {
+      "msg_id": 48001,
+      "thread": "@mandziak:3679"
+    },
+    {
+      "msg_id": 48004,
+      "thread": "@mandziak:3684"
+    },
+    {
+      "msg_id": 48109,
+      "thread": "@mandziak:3689"
+    },
+    {
+      "msg_id": 48097,
+      "thread": "@mandziak:3694"
+    },
+    {
+      "msg_id": 48816,
+      "thread": "@mandziak:3700"
+    },
+    {
+      "msg_id": 48171,
+      "thread": "@mandziak:3702"
+    },
+    {
+      "msg_id": 48239,
+      "thread": "@mandziak:3707"
+    },
+    {
+      "msg_id": 48227,
+      "thread": "@mandziak:3708"
+    },
+    {
+      "msg_id": 48235,
+      "thread": "@mandziak:3708"
+    },
+    {
+      "msg_id": 48236,
+      "thread": "@mandziak:3708"
+    },
+    {
+      "msg_id": 48238,
+      "thread": "@mandziak:3708"
+    },
+    {
+      "msg_id": 48245,
+      "thread": "@mandziak:3708"
+    },
+    {
+      "msg_id": 48279,
+      "thread": "@mandziak:3708"
+    },
+    {
+      "msg_id": 48314,
+      "thread": "@mandziak:3708"
+    },
+    {
+      "msg_id": 48390,
+      "thread": "@mandziak:3718"
+    },
+    {
+      "msg_id": 48396,
+      "thread": "@mandziak:3718"
+    },
+    {
+      "msg_id": 48397,
+      "thread": "@mandziak:3718"
+    },
+    {
+      "msg_id": 48398,
+      "thread": "@mandziak:3718"
+    },
+    {
+      "msg_id": 48400,
+      "thread": "@mandziak:3718"
+    },
+    {
+      "msg_id": 48401,
+      "thread": "@mandziak:3718"
+    },
+    {
+      "msg_id": 48406,
+      "thread": "@mandziak:3718"
+    },
+    {
+      "msg_id": 48423,
+      "thread": "@mandziak:3721"
+    },
+    {
+      "msg_id": 48529,
+      "thread": "@mandziak:3736"
+    },
+    {
+      "msg_id": 48881,
+      "thread": "@mandziak:3753"
+    },
+    {
+      "msg_id": 49017,
+      "thread": "@mandziak:3765"
+    },
+    {
+      "msg_id": 49014,
+      "thread": "@mandziak:3768"
+    },
+    {
+      "msg_id": 576269,
+      "thread": "@matusi_ukr:22058"
+    },
+    {
+      "msg_id": 576306,
+      "thread": "@matusi_ukr:22058"
+    },
+    {
+      "msg_id": 576335,
+      "thread": "@matusi_ukr:22058"
+    },
+    {
+      "msg_id": 576336,
+      "thread": "@matusi_ukr:22058"
+    },
+    {
+      "msg_id": 576407,
+      "thread": "@matusi_ukr:22058"
+    },
+    {
+      "msg_id": 576478,
+      "thread": "@matusi_ukr:22058"
+    },
+    {
+      "msg_id": 576504,
+      "thread": "@matusi_ukr:22058"
+    },
+    {
+      "msg_id": 576514,
+      "thread": "@matusi_ukr:22058"
+    },
+    {
+      "msg_id": 576587,
+      "thread": "@matusi_ukr:22058"
+    },
+    {
+      "msg_id": 576602,
+      "thread": "@matusi_ukr:22058"
+    },
+    {
+      "msg_id": 576723,
+      "thread": "@matusi_ukr:22058"
+    },
+    {
+      "msg_id": 576800,
+      "thread": "@matusi_ukr:22058"
+    },
+    {
+      "msg_id": 576876,
+      "thread": "@matusi_ukr:22092"
+    },
+    {
+      "msg_id": 576877,
+      "thread": "@matusi_ukr:22092"
+    },
+    {
+      "msg_id": 576885,
+      "thread": "@matusi_ukr:22092"
+    },
+    {
+      "msg_id": 576890,
+      "thread": "@matusi_ukr:22092"
+    },
+    {
+      "msg_id": 576914,
+      "thread": "@matusi_ukr:22092"
+    },
+    {
+      "msg_id": 576915,
+      "thread": "@matusi_ukr:22092"
+    },
+    {
+      "msg_id": 576917,
+      "thread": "@matusi_ukr:22092"
+    },
+    {
+      "msg_id": 576919,
+      "thread": "@matusi_ukr:22092"
+    },
+    {
+      "msg_id": 576942,
+      "thread": "@matusi_ukr:22092"
+    },
+    {
+      "msg_id": 576943,
+      "thread": "@matusi_ukr:22092"
+    },
+    {
+      "msg_id": 576969,
+      "thread": "@matusi_ukr:22092"
+    },
+    {
+      "msg_id": 576970,
+      "thread": "@matusi_ukr:22092"
+    },
+    {
+      "msg_id": 577084,
+      "thread": "@matusi_ukr:22111"
+    },
+    {
+      "msg_id": 577264,
+      "thread": "@matusi_ukr:22131"
+    },
+    {
+      "msg_id": 577323,
+      "thread": "@matusi_ukr:22133"
+    },
+    {
+      "msg_id": 577346,
+      "thread": "@matusi_ukr:22133"
+    },
+    {
+      "msg_id": 577404,
+      "thread": "@matusi_ukr:22133"
+    },
+    {
+      "msg_id": 577426,
+      "thread": "@matusi_ukr:22133"
+    },
+    {
+      "msg_id": 577466,
+      "thread": "@matusi_ukr:22133"
+    },
+    {
+      "msg_id": 577481,
+      "thread": "@matusi_ukr:22133"
+    },
+    {
+      "msg_id": 577501,
+      "thread": "@matusi_ukr:22133"
+    },
+    {
+      "msg_id": 577525,
+      "thread": "@matusi_ukr:22133"
+    },
+    {
+      "msg_id": 577646,
+      "thread": "@matusi_ukr:22133"
+    },
+    {
+      "msg_id": 577740,
+      "thread": "@matusi_ukr:22133"
+    },
+    {
+      "msg_id": 577794,
+      "thread": "@matusi_ukr:22133"
+    },
+    {
+      "msg_id": 577945,
+      "thread": "@matusi_ukr:22133"
+    },
+    {
+      "msg_id": 578029,
+      "thread": "@matusi_ukr:22158"
+    },
+    {
+      "msg_id": 578032,
+      "thread": "@matusi_ukr:22158"
+    },
+    {
+      "msg_id": 578036,
+      "thread": "@matusi_ukr:22158"
+    },
+    {
+      "msg_id": 578038,
+      "thread": "@matusi_ukr:22158"
+    },
+    {
+      "msg_id": 578048,
+      "thread": "@matusi_ukr:22158"
+    },
+    {
+      "msg_id": 578050,
+      "thread": "@matusi_ukr:22158"
+    },
+    {
+      "msg_id": 578053,
+      "thread": "@matusi_ukr:22158"
+    },
+    {
+      "msg_id": 578056,
+      "thread": "@matusi_ukr:22158"
+    },
+    {
+      "msg_id": 578059,
+      "thread": "@matusi_ukr:22158"
+    },
+    {
+      "msg_id": 578064,
+      "thread": "@matusi_ukr:22158"
+    },
+    {
+      "msg_id": 578066,
+      "thread": "@matusi_ukr:22158"
+    },
+    {
+      "msg_id": 578098,
+      "thread": "@matusi_ukr:22158"
+    },
+    {
+      "msg_id": 578383,
+      "thread": "@matusi_ukr:22195"
+    },
+    {
+      "msg_id": 579480,
+      "thread": "@matusi_ukr:22217"
+    },
+    {
+      "msg_id": 579251,
+      "thread": "@matusi_ukr:22263"
+    },
+    {
+      "msg_id": 579278,
+      "thread": "@matusi_ukr:22265"
+    },
+    {
+      "msg_id": 579279,
+      "thread": "@matusi_ukr:22265"
+    },
+    {
+      "msg_id": 579301,
+      "thread": "@matusi_ukr:22265"
+    },
+    {
+      "msg_id": 579646,
+      "thread": "@matusi_ukr:22295"
+    },
+    {
+      "msg_id": 579665,
+      "thread": "@matusi_ukr:22295"
+    },
+    {
+      "msg_id": 579725,
+      "thread": "@matusi_ukr:22295"
+    },
+    {
+      "msg_id": 579758,
+      "thread": "@matusi_ukr:22295"
+    },
+    {
+      "msg_id": 579768,
+      "thread": "@matusi_ukr:22295"
+    },
+    {
+      "msg_id": 579780,
+      "thread": "@matusi_ukr:22295"
+    },
+    {
+      "msg_id": 579857,
+      "thread": "@matusi_ukr:22295"
+    },
+    {
+      "msg_id": 579868,
+      "thread": "@matusi_ukr:22295"
+    },
+    {
+      "msg_id": 579875,
+      "thread": "@matusi_ukr:22295"
+    },
+    {
+      "msg_id": 579885,
+      "thread": "@matusi_ukr:22295"
+    },
+    {
+      "msg_id": 580015,
+      "thread": "@matusi_ukr:22295"
+    },
+    {
+      "msg_id": 580196,
+      "thread": "@matusi_ukr:22295"
+    },
+    {
+      "msg_id": 580138,
+      "thread": "@matusi_ukr:22308"
+    },
+    {
+      "msg_id": 580143,
+      "thread": "@matusi_ukr:22308"
+    },
+    {
+      "msg_id": 580167,
+      "thread": "@matusi_ukr:22308"
+    },
+    {
+      "msg_id": 580173,
+      "thread": "@matusi_ukr:22308"
+    },
+    {
+      "msg_id": 580335,
+      "thread": "@matusi_ukr:22327"
+    },
+    {
+      "msg_id": 49524,
+      "thread": "@retsepty:7313"
+    },
+    {
+      "msg_id": 49685,
+      "thread": "@retsepty:7342"
+    },
+    {
+      "msg_id": 9,
+      "thread": "@tarilka_malyuka:695"
+    },
+    {
+      "msg_id": 47,
+      "thread": "@tarilka_malyuka:715"
+    },
+    {
+      "msg_id": 85,
+      "thread": "@tarilka_malyuka:747"
+    },
+    {
+      "msg_id": 2582,
+      "thread": "@ya_Nenka:836"
+    },
+    {
+      "msg_id": 2589,
+      "thread": "@ya_Nenka:840"
+    },
+    {
+      "msg_id": 2598,
+      "thread": "@ya_Nenka:844"
+    }
+  ]
+}
