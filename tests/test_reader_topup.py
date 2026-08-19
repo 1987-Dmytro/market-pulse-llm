@@ -354,7 +354,8 @@ def test_the_gate_with_replies_takes_the_projection_branch(synthetic, capsys):
     answer = said(capsys)
     assert code in (0, 2)
     assert answer["units_read"] == 3 and answer["units_unread"] == 129
-    assert answer["projections"]["binding"]["which"] in ("by_unit", "by_payable_comment")
+    assert answer["binding"]["which"] == "fitted_model"
+    assert sorted(answer["reported_and_not_binding"]) == ["by_payable_comment", "by_unit", "why"]
     assert answer["usd"]["cap_usd_all_in"] == 2.00
 
 
@@ -443,6 +444,12 @@ def the_pack() -> dict:
     return json.loads((REPO_ROOT / "results" / "reader_topup_pack.json").read_text("utf-8"))
 
 
+RATE = 0.74 / 3600
+"""USD per SECOND. `usable_seconds` divides the cap by it, and `read_threads_reader_v5b.rate_of`
+hands it the segment's `usd_per_second` — passing $/h here reads the cap as 2.7 seconds of pod and
+turns every projection negative, which is how this constant earned a name."""
+
+
 def test_ATTEMPT_A_s_gate_stops_at_its_own_fitted_first_reading():
     """The $0 question nobody asked before the create, kept as arithmetic.
 
@@ -459,7 +466,7 @@ def test_ATTEMPT_A_s_gate_stops_at_its_own_fitted_first_reading():
     pack = the_pack()
     first = pack["items"][0]
     assert first["payable_comments"] == 16  # expensive first, and this is the largest unit
-    answer = v5.projection(PREREG, 0.74, rows_at(pack, 1), 460.0, pack)
+    answer = v5.projection(PREREG, RATE, rows_at(pack, 1), 460.0, pack)
 
     assert answer["verdict"] == "STOP"
     assert answer["units_read"] == 1 and answer["projections"]["binding"]["which"] == "by_unit"
@@ -487,8 +494,8 @@ def test_ATTEMPT_B_s_gate_goes_on_the_same_reading(synthetic, capsys):
 
 def test_the_calibration_floors_at_the_fit_so_a_fast_start_buys_nothing():
     pack = the_pack()
-    quick = driver.projection(PREREG_B, 0.74, rows_at(pack, 3, speed=0.5), 460.0, pack)
-    exact = driver.projection(PREREG_B, 0.74, rows_at(pack, 3, speed=1.0), 460.0, pack)
+    quick = driver.projection(PREREG_B, RATE, rows_at(pack, 3, speed=0.5), 460.0, pack)
+    exact = driver.projection(PREREG_B, RATE, rows_at(pack, 3, speed=1.0), 460.0, pack)
     assert quick["binding"]["measured_over_fitted"] < 1.0
     assert quick["binding"]["calibration_used"] == 1.0 == exact["binding"]["calibration_used"]
     assert quick["binding"]["seconds"] == exact["binding"]["seconds"]
@@ -497,7 +504,7 @@ def test_the_calibration_floors_at_the_fit_so_a_fast_start_buys_nothing():
 def test_a_pod_slower_than_the_fit_stretches_the_projection_and_stops():
     pack = the_pack()
     verdicts = {
-        speed: driver.projection(PREREG_B, 0.74, rows_at(pack, 3, speed=speed), 460.0, pack)
+        speed: driver.projection(PREREG_B, RATE, rows_at(pack, 3, speed=speed), 460.0, pack)
         for speed in (1.0, 1.5, 2.0, 3.0)
     }
     assert verdicts[1.0]["verdict"] == "GO"
@@ -516,11 +523,11 @@ def test_the_whole_pack_at_fitted_seconds_never_stops():
     for count in range(1, len(pack["items"]) + 1):
         rows = rows_at(pack, count)
         elapsed = 285.0 + sum(row["seconds"] for row in rows)
-        gate = driver.projection(PREREG_B, 0.74, rows, elapsed, pack)
+        gate = driver.projection(PREREG_B, RATE, rows, elapsed, pack)
         if gate["verdict"] != "GO":
             stops.append((count, gate["projected_total_seconds"], gate["usable_seconds"]))
     assert stops == []
-    final = driver.projection(PREREG_B, 0.74, rows_at(pack, len(pack["items"])), elapsed, pack)
+    final = driver.projection(PREREG_B, RATE, rows_at(pack, len(pack["items"])), elapsed, pack)
     assert final["units_unread"] == 0 and final["binding"]["seconds"] == 0.0
     assert final["projected_total_seconds"] < final["usable_seconds"]
 
