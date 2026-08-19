@@ -417,6 +417,61 @@ def test_the_ingest_parses_merges_the_chunks_and_names_its_refusals(synthetic, t
     assert merged[0]["payable_comments"] == 125
 
 
+def test_the_gate_stops_at_its_own_fitted_first_reading(synthetic, capsys):
+    """The $0 question nobody asked before the create, written as arithmetic.
+
+    Substitute the registration's OWN fitted seconds for the first unit and ask what the gate
+    prints at n=1. It prints STOP — not because the run is unaffordable but because
+    `max(unread units ÷ read, unread payable ÷ read payable)` extrapolates the largest unit across
+    all 132, and the units are ordered expensive-first. The run's one real measurement (77.5 s
+    against a fitted 80.4 s) confirms the model; the gate's estimator is what does not survive a
+    population whose unit sizes span 1 to 16 with a median of 2.
+
+    This test asserts the CURRENT registration's behaviour, and it is meant to be edited: a
+    corrected estimator has to turn this into a GO deliberately, in the open, rather than by
+    nobody noticing. The corrected reading is computed beside it so the next registration has the
+    number ([[a_new_leg_joins_the_gates_denominator]]).
+    """
+    pack = json.loads((REPO_ROOT / "results" / "reader_topup_pack.json").read_text("utf-8"))
+    model = PROJECTION["instrument"]["model"]
+    fitted = lambda payable: (  # noqa: E731 — the registration's own line, applied per unit
+        model["intercept_seconds"] + model["slope_seconds_per_payable"] * payable
+    )
+    first = pack["items"][0]
+    assert first["payable_comments"] == 16  # expensive first, and this is the largest unit
+    (synthetic / "pod.jsonl").write_text(
+        json.dumps(
+            {
+                "id": first["id"],
+                "seconds": round(fitted(first["payable_comments"]), 3),
+                "rendering_sha256": first["rendering_sha256"],
+                "reply": "{}",
+            },
+            ensure_ascii=False,
+        )
+        + "\n",
+        "utf-8",
+    )
+    open_a_segment(now_minus_seconds=460.0)
+    capsys.readouterr()
+    code = driver.main(["--gate", "--raw", str(synthetic / "pod.jsonl")])
+    answer = said(capsys)
+
+    assert code == 2 and answer["verdict"] == "STOP"
+    assert answer["units_read"] == 1 and answer["projections"]["binding"]["which"] == "by_unit"
+    assert answer["projections"]["by_unit"]["seconds"] > answer["usable_seconds"]
+
+    # and the estimator that WOULD have carried it, over the same unread units
+    unread = [one for one in pack["items"] if one["id"] != first["id"]]
+    corrected = sum(fitted(one["payable_comments"]) for one in unread)
+    assert corrected < answer["projections"]["by_unit"]["seconds"] / 1.5
+    assert 460.0 + corrected < answer["usable_seconds"]
+    assert (
+        460.0 + corrected * PROJECTION["instrument"]["out_of_sample"]["ratio"]
+        < answer["usable_seconds"]
+    )
+
+
 # --- the driver's swaps -----------------------------------------------------
 
 
