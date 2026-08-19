@@ -254,7 +254,7 @@
     },
     "sft_record": {
       "file": "results/pass1_sft.json",
-      "sha256": "249295f0d984dd79745af8c7cf7a5e4249811bc4154ab40e9a4a586776a9a36f"
+      "sha256": "b3e2c5ed256d698d4187633b372c6f2d312be990fdd41b16c9ff3ab31953fed0"
     },
     "trainer": {
       "script": "scripts/train_qlora.py",
@@ -485,7 +485,7 @@
   },
   "producer": {
     "borrowed": {
-      "results/pass1_sft.json": "249295f0d984dd79745af8c7cf7a5e4249811bc4154ab40e9a4a586776a9a36f",
+      "results/pass1_sft.json": "b3e2c5ed256d698d4187633b372c6f2d312be990fdd41b16c9ff3ab31953fed0",
       "results/prereg_pass1_probe_b.json": "a29e85ad6e856f6fafa032b3f5ede0e635046171778cbe7a6902b64fa57bacad"
     },
     "script": "scripts/write_lora_b_prereg.py",

@@ -81,6 +81,7 @@ PROVENANCE = {
     "r2": REPO_ROOT / "results" / "labels_pass1_r2_provenance.json",
 }
 V5B = REPO_ROOT / "results" / "reader_v5b_w1.jsonl"
+TOPUP = REPO_ROOT / "results" / "reader_topup_w1.jsonl"
 V4 = REPO_ROOT / "results" / "reader_v4_w1.jsonl"
 PROBE_PACK = REPO_ROOT / "results" / "pass1_probe_b_pack.json"
 PROBE_ROWS = REPO_ROOT / "results" / "pass1_probe_b_rows.jsonl"
@@ -116,15 +117,42 @@ def verdicts() -> dict[str, tuple[str, dict]]:
 
     v5b first because it is the latest reading, v4 behind it — the precedence
     `scripts/write_pass1_prereg.py::entity_context` fixed when it built the probe pack's own
-    context, restated by nobody: the same two files in the same order.
+    context, restated by nobody: the same two files in the same order. The branch-B top-up sits
+    between them and is DISJOINT from both by construction — it read exactly the threads that had
+    no verdict — so its position is a statement of intent and not a tie-break that decides anything.
+
+    The top-up file is read WHEN it exists. That is not an absence test wearing a different hat: a
+    producer whose optional input is missing has to render something, and what it renders — the
+    bounded post text — is the state the record already publishes. Which sources were read, and how
+    many verdicts each one supplied, goes into the record so the rendering can be traced to them.
     """
     found: dict[str, tuple[str, dict]] = {}
-    for path in (V5B, V4):
+    for path in (V5B, TOPUP, V4):
+        if not path.exists():
+            continue
         for row in jsonl(path):
             key = f"{row.get('channel')}:{row.get('post_id')}"
             if row.get("parsed") and key not in found:
                 found[key] = (summary.rel(path), row["parsed"])
     return found
+
+
+def verdict_sources() -> list[dict]:
+    """Which reader evidence files the rendering read, and what each one supplied."""
+    found = verdicts()
+    out = []
+    for path in (V5B, TOPUP, V4):
+        name = summary.rel(path)
+        used = sum(1 for source, _ in found.values() if source == name)
+        out.append(
+            {
+                "record": name,
+                "exists": path.exists(),
+                "sha256": summary.sha256_of(path) if path.exists() else None,
+                "threads_it_supplied": used,
+            }
+        )
+    return out
 
 
 def labelled_units() -> list[dict]:
@@ -484,6 +512,7 @@ def build(state: dict | None = None) -> tuple[dict, dict[str, str]]:
             },
             "renderer": "market_pulse.prompts.pass1_messages_gm4",
         },
+        "context_sources": verdict_sources(),
         "labels": {
             name: {
                 "file": summary.rel(LABELS[name]),

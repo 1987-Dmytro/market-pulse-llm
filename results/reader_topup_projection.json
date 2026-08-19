@@ -1,0 +1,216 @@
+{
+  "authorises_nothing": "this record prices a buy and measures what it would change. It carries NO cap: caps in this repo are the operator's word, and a projection that named one would be a registration nobody ruled",
+  "buys": {
+    "entity_block": {
+      "expected_after": 279,
+      "expected_rule": "the 91 rows in bought threads carry a block at 43%, measured on 15 threads and 91 rows — a thin sample, and the only one there is. Applied to the rows in the unbought threads it projects the count below",
+      "of": 650,
+      "rate_inside_the_threads_already_bought": 0.4286,
+      "rows_with_one_today": 39,
+      "the_gate_for_comparison": "12 of 14 gate rows carry a block",
+      "this_is_the_half_the_buy_closes_PARTIALLY": true,
+      "threads_resolving_at_least_one_entity": "14 of 24",
+      "why": "a reader verdict resolves entities only where the thread HAS them. Ten of the 24 threads already bought resolve none at all — recipe and marketplace threads name nobody — while the gate's rows sit in exam threads chosen for carrying signal. The residual gap is a property of the population and no amount of money closes it"
+    },
+    "topic": {
+      "after": "every one of the 650 topics becomes a bought reader summary — the same kind the eval prompts carry. The branch-C ellipsis marker, which sits on 372 training rows and 0 eval prompts, disappears entirely",
+      "rows_whose_topic_is_cut_and_marked_today": 372,
+      "rows_whose_topic_is_substituted_today": 559,
+      "this_is_the_half_the_buy_closes_completely": true
+    }
+  },
+  "contract": "docs/reports/lora-b.md — branch B of the fork, ruled by the operator 2026-08-19",
+  "instrument": {
+    "measured_on": "results/reader_v5b_w1.jsonl",
+    "model": {
+      "in_sample_total_is_not_evidence": "least squares with an intercept forces the residuals to sum to zero, so this line reproduces the total of its OWN 26 items exactly. That is arithmetic. The check below is the one that carries information",
+      "intercept_seconds": 22.2242,
+      "line": "seconds ≈ intercept + slope × payable comments, least squares",
+      "n": 26,
+      "residuals": {
+        "max": 49.79,
+        "median": 3.29,
+        "min": -26.73
+      },
+      "slope_seconds_per_payable": 3.63508
+    },
+    "out_of_sample": {
+      "items": 22,
+      "measured_seconds": 901.3,
+      "predicted_seconds": 976.0,
+      "ratio": 1.0829,
+      "reading": "the v5b fit predicts v4's threads 1.08× high — a different prompt revision on the same instrument family, which is the closest thing to a held-out set this run has",
+      "record": "results/reader_v4_w1.jsonl",
+      "run": "reader-v4"
+    },
+    "pack": "results/reader_v5b_pack.json",
+    "sha256": "9540a84bc87109ce3589a636fa5640d56feb5c8382bb82adcf8345bd8e858e8c"
+  },
+  "population": {
+    "enumeration_rule": "sha256 over `channel:post_id\\tpayable msg_ids` per thread in sorted order. A pack built later is held to THIS list rather than re-deriving a population that may have moved",
+    "enumeration_sha256": "7445a7a6a87bd3279ea21f4c1340471c55b3184151cd034aa636ab651f4d6ef9",
+    "largest": [
+      {
+        "payable": 125,
+        "thread": "@matusi_ukr:22058"
+      },
+      {
+        "payable": 108,
+        "thread": "@matusi_ukr:22295"
+      },
+      {
+        "payable": 105,
+        "thread": "@matusi_ukr:22133"
+      },
+      {
+        "payable": 35,
+        "thread": "@matusi_ukr:22092"
+      },
+      {
+        "payable": 31,
+        "thread": "@mandziak:3679"
+      }
+    ],
+    "payable_comments": 857,
+    "per_thread": {
+      "max": 125,
+      "median": 2,
+      "min": 1
+    },
+    "sizes": {
+      "@VARUS_channel:10349": 9,
+      "@VARUS_channel:10356": 1,
+      "@VARUS_channel:10358": 1,
+      "@VARUS_channel:10367": 12,
+      "@VARUS_channel:10375": 1,
+      "@VARUS_channel:10450": 1,
+      "@VARUS_channel:10452": 3,
+      "@VARUS_channel:10455": 2,
+      "@VARUS_channel:10466": 6,
+      "@VARUS_channel:10470": 6,
+      "@VARUS_channel:10496": 1,
+      "@VARUS_channel:10525": 5,
+      "@VARUS_channel:10528": 9,
+      "@VARUS_channel:10529": 2,
+      "@VARUS_channel:10532": 1,
+      "@klopotenkofood:6024": 1,
+      "@klopotenkofood:6031": 1,
+      "@klopotenkofood:6032": 17,
+      "@klopotenkofood:6035": 9,
+      "@klopotenkofood:6036": 2,
+      "@klopotenkofood:6060": 10,
+      "@kopiyochka1:21672": 1,
+      "@kopiyochka1:21720": 8,
+      "@mandziak:3666": 3,
+      "@mandziak:3667": 5,
+      "@mandziak:3679": 31,
+      "@mandziak:3685": 2,
+      "@mandziak:3694": 5,
+      "@mandziak:3700": 5,
+      "@mandziak:3702": 8,
+      "@mandziak:3707": 11,
+      "@mandziak:3708": 20,
+      "@mandziak:3718": 20,
+      "@mandziak:3721": 4,
+      "@mandziak:3736": 7,
+      "@mandziak:3746": 1,
+      "@mandziak:3753": 13,
+      "@mandziak:3765": 5,
+      "@mandziak:3768": 7,
+      "@mandziak:3775": 3,
+      "@matusi_ukr:22058": 125,
+      "@matusi_ukr:22092": 35,
+      "@matusi_ukr:22111": 9,
+      "@matusi_ukr:22125": 2,
+      "@matusi_ukr:22131": 12,
+      "@matusi_ukr:22133": 105,
+      "@matusi_ukr:22158": 27,
+      "@matusi_ukr:22195": 6,
+      "@matusi_ukr:22208": 1,
+      "@matusi_ukr:22217": 14,
+      "@matusi_ukr:22263": 13,
+      "@matusi_ukr:22265": 16,
+      "@matusi_ukr:22292": 2,
+      "@matusi_ukr:22295": 108,
+      "@matusi_ukr:22307": 1,
+      "@matusi_ukr:22308": 17,
+      "@matusi_ukr:22327": 4,
+      "@msuaaaa:10651": 3,
+      "@polyakova_fitness:1143": 1,
+      "@retsepty:7278": 2,
+      "@retsepty:7280": 1,
+      "@retsepty:7281": 1,
+      "@retsepty:7284": 1,
+      "@retsepty:7288": 1,
+      "@retsepty:7289": 1,
+      "@retsepty:7293": 3,
+      "@retsepty:7294": 2,
+      "@retsepty:7296": 1,
+      "@retsepty:7301": 1,
+      "@retsepty:7302": 2,
+      "@retsepty:7305": 2,
+      "@retsepty:7310": 1,
+      "@retsepty:7313": 4,
+      "@retsepty:7317": 1,
+      "@retsepty:7318": 1,
+      "@retsepty:7320": 1,
+      "@retsepty:7321": 2,
+      "@retsepty:7323": 2,
+      "@retsepty:7324": 3,
+      "@retsepty:7326": 2,
+      "@retsepty:7328": 2,
+      "@retsepty:7331": 2,
+      "@retsepty:7335": 1,
+      "@retsepty:7337": 1,
+      "@retsepty:7340": 1,
+      "@retsepty:7342": 5,
+      "@retsepty:7343": 2,
+      "@retsepty:7345": 3,
+      "@retsepty:7348": 1,
+      "@retsepty:7349": 1,
+      "@retsepty:7350": 3,
+      "@retsepty:7354": 1,
+      "@retsepty:7361": 1,
+      "@tarilka_malyuka:695": 10,
+      "@tarilka_malyuka:746": 2,
+      "@tarilka_malyuka:747": 4,
+      "@tarilka_malyuka:764": 1,
+      "@tarilka_malyuka:820": 2,
+      "@tarilka_malyuka:825": 2,
+      "@tarilka_malyuka:827": 1,
+      "@ya_Nenka:834": 1,
+      "@ya_Nenka:836": 6,
+      "@ya_Nenka:838": 3,
+      "@ya_Nenka:840": 3,
+      "@ya_Nenka:844": 3
+    },
+    "threads_already_bought": 15,
+    "threads_needing_a_verdict": 105
+  },
+  "producer": {
+    "script": "scripts/project_reader_topup.py",
+    "sha256": "951ae95ee20fc4fb5030507ebbb96041e8d2b5ed44877790f302f478448ec1e7"
+  },
+  "projection": {
+    "all_in_hours": 1.8052,
+    "all_in_seconds": 6498.9,
+    "at_the_out_of_sample_ratio": {
+      "ceiling": 1.5597,
+      "reader_card_example": 1.4427
+    },
+    "boot_seconds_charged": 450,
+    "chunk_payable_max": 16,
+    "chunk_rule": "the largest unit v5b ever read is 16 payable comments — it split its 43-comment thread into 16/16/11. Three threads here hold 105, 108 and 125, so the rule decides the item count and not just the order",
+    "generation_seconds": 6048.9,
+    "items": 132,
+    "usd": {
+      "ceiling": 1.4442,
+      "reader_card_example": 1.3359
+    },
+    "what_the_report_published": {
+      "how": "105 threads × the MEAN 51.3 s of the 27 already read",
+      "usd": 1.2,
+      "why_it_was_wrong": "the mean of one population applied to another. These threads are smaller on average and there are more items than threads, and the two errors do not cancel"
+    }
+  }
+}

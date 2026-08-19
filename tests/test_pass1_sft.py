@@ -195,6 +195,28 @@ def test_the_record_names_the_context_the_gate_carries_and_the_training_set_does
     assert record["length"]["topic_envelope"]["limit"] == 147
 
 
+def test_the_record_names_which_reader_files_supplied_the_context(built):
+    """A rendering that reads an optional input has to say whether it was there.
+
+    The branch-B top-up file is read when it exists; until it does, the row for it says so with a
+    null digest and zero threads. Traceability of the rendering to its sources, not a clock: the
+    producer renders either way, and what it renders when the file is absent is the state the
+    census block already publishes.
+    """
+    record, _ = built
+    sources = {one["record"]: one for one in record["context_sources"]}
+    assert set(sources) == {
+        "results/reader_v5b_w1.jsonl",
+        "results/reader_topup_w1.jsonl",
+        "results/reader_v4_w1.jsonl",
+    }
+    assert sum(one["threads_it_supplied"] for one in sources.values()) == 24
+    for one in sources.values():
+        assert one["exists"] is ((REPO_ROOT / one["record"]).exists())
+        assert (one["sha256"] is None) is not one["exists"]
+    assert sft.TOPUP.name == "reader_topup_w1.jsonl"
+
+
 def test_the_datasets_rebuild_byte_identical(tmp_path):
     first, second = tmp_path / "a", tmp_path / "b"
     assert sft.main(["--outdir", str(first)]) == 0

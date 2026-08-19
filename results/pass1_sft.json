@@ -88,6 +88,26 @@
     },
     "topic_rule": "a topic from a bought reader verdict is rendered whole; a substituted one is the post's opening cut to 147 characters — the longest bought topic — at a word boundary, marked with an ellipsis. Operator ruling of 2026-08-19, branch C: it closes the length finding and leaves the entity-block one open"
   },
+  "context_sources": [
+    {
+      "exists": true,
+      "record": "results/reader_v5b_w1.jsonl",
+      "sha256": "9540a84bc87109ce3589a636fa5640d56feb5c8382bb82adcf8345bd8e858e8c",
+      "threads_it_supplied": 21
+    },
+    {
+      "exists": false,
+      "record": "results/reader_topup_w1.jsonl",
+      "sha256": null,
+      "threads_it_supplied": 0
+    },
+    {
+      "exists": true,
+      "record": "results/reader_v4_w1.jsonl",
+      "sha256": "bd696f803b6c4ecb64b16bf1c2ca3a44753649bd3585167c1812871e6487cf71",
+      "threads_it_supplied": 3
+    }
+  ],
   "contract": "docs/PROMPT-lora-b.md D1",
   "datasets": {
     "a": {
@@ -160,7 +180,7 @@
   },
   "producer": {
     "script": "scripts/build_pass1_sft.py",
-    "sha256": "3624b5f7ff12772eddbe15ddbb2ce2530c46e2f85bea1a4063fddacb922c1c53"
+    "sha256": "8452e1a955cf7b1f329eafb6546c072d8034269f3a9a6980051906e1922ec323"
   },
   "supervision": {
     "field": "subject_type",
