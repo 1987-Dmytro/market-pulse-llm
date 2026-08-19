@@ -46,6 +46,19 @@ the scoping rule in the file's own `_comment`.
 - **`claude-in-chrome`** — no web sources in the MVP (Telegram only, `docs/SPEC.md`).
 - Disabled plugins: `code-review`, `improve`, `drawio`, `serena`.
 
+## graphify — the repo's knowledge graph
+
+This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.
+
+Rules:
+- For codebase questions, first run `graphify query "<question>"` when graphify-out/graph.json exists. Use `graphify path "<A>" "<B>"` for relationships and `graphify explain "<concept>"` for focused concepts. These return a scoped subgraph, usually much smaller than GRAPH_REPORT.md or raw grep output.
+- If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
+- Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
+- After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).
+
+Moved out of `CLAUDE.md` on 2026-08-19 by `boot-debloat`, verbatim; the one-line
+trigger stayed there.
+
 ## Gotchas
 
 - **Telegram is not an MCP.** Collection is Telethon inside `scripts/collect_*.py`; handle FloodWait

@@ -40,8 +40,6 @@ decisions are in STATUS.md.
   or silently shrink scope — flag conflicts and stop.
 
 ## Pitfalls
-- Handle Telegram FloodWait with backoff + cursor resume; no member harvesting.
-- Verify source channels have comments enabled before relying on them.
 - Sarcasm labeling: follow the annotation guideline; `unclear` excluded from gates.
 - src/market_pulse/scorer.py is the single judge of all numbers; never fork it.
 
@@ -70,31 +68,6 @@ inside a `.venv` if they are not on PATH.
   fails; prefix with `PYTHONPATH=src`.
 - Registry CLI: `PYTHONPATH=src python3 -m market_pulse.registry config/registry.yaml`.
 
-## Code map
-
-Which phase is live is in `knowledge/hot.md` and `docs/STATUS.md`, never here or in code comments.
-
-- `src/market_pulse/scorer.py` — one public function per Tier-1 gate, all implemented (the module
-  holds zero `NotImplementedError`). `tests/test_scorer.py::test_every_public_scorer_function_has_a_hand_computed_test`
-  discovers the public functions reflectively and demands a hand-computed `test_<name>_*` for each,
-  so adding a public function to the module immediately puts it under the same rule.
-- `src/market_pulse/registry.py` — `config/registry.yaml` → frozen `Source` / `Taxonomy` /
-  `WatchlistBrand` inside a `Registry`, raising `ValueError` that names the defect (malformed
-  `@handle`, duplicate id, empty channel list, unknown `source_type`, no tracked groups). Strict on
-  purpose: a silently accepted typo collects nothing and only surfaces as wrong analytics much
-  later. Channel handles are candidates with `verified: false` until the Phase 2 entry check.
-- The target pipeline — collector → normalize/dedup/lang-id → model service → aggregation →
-  dashboard, behind a source-agnostic connector interface — is specified in SPEC §5; `src/` is the
-  authority on which parts are built.
-
-## Harness plumbing
-
-- Hooks in `.claude/settings.json`: SessionStart runs `scripts/refresh-hot-cache.py`,
-  `scripts/stale-check.sh` and `scripts/context-census.py`; Stop runs
-  `scripts/brain-session-end.py`, which regenerates `knowledge/index.md` and the daily-log stub.
-  Generated regions belong to those scripts — do not hand-edit them.
-- `/save` (checkpoint) and `/close` (end of day) in `.claude/commands/` are operator-invoked only.
-
 ## Tooling
 
 - Library/API docs → `context7` or `ref`; never guess a version.
@@ -102,14 +75,6 @@ Which phase is live is in `knowledge/hot.md` and `docs/STATUS.md`, never here or
 - `blockscout` / `rust-analyzer-lsp` are user-level and irrelevant here — do not reach for them.
 - `ponytail` is active (level `full`) — smallest working diff; a deliberate simplification carries a
   `ponytail:` comment naming its ceiling.
+- `graphify` — knowledge graph at `graphify-out/`; run `graphify query "<question>"` before
+  grepping the codebase, and `graphify update .` after changing code. Rules: the runbook below.
 - Full inventory, auth and gotchas: `knowledge/runbooks/tooling.md`.
-
-## graphify
-
-This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.
-
-Rules:
-- For codebase questions, first run `graphify query "<question>"` when graphify-out/graph.json exists. Use `graphify path "<A>" "<B>"` for relationships and `graphify explain "<concept>"` for focused concepts. These return a scoped subgraph, usually much smaller than GRAPH_REPORT.md or raw grep output.
-- If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
-- Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
-- After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).
