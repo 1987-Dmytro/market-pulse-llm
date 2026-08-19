@@ -1,0 +1,556 @@
+{
+  "ablation": "arm A's rows are a SUBSET of arm B's, so the one variable is the r2 top-up. After the pass1-redraw census the question is «does more data of the same population help», not «does targeting help» — the targeted-re-draw premise died there and the arm keeps the name top-up",
+  "arms": {
+    "a": {
+      "command": "PYTHONPATH=/workspace/repo/src /workspace/venv/bin/python -u /workspace/repo/scripts/train_qlora.py --data results/pass1_sft_arm_a.jsonl --class-weights --out /workspace/run/arm_a",
+      "dataset": {
+        "file": "results/pass1_sft_arm_a.jsonl",
+        "rows": 464,
+        "sha256": "37493f6319b9be352adf39d8f167802cac5132d72fd2de5c8da14f2b46de6fc7"
+      },
+      "distribution": {
+        "null": 138,
+        "категория_личное": 35,
+        "молочный_бренд": 1,
+        "не_наш_рынок": 246,
+        "сеть_ритейлер": 44
+      },
+      "eval_command": "PYTHONPATH=/workspace/repo/src /workspace/venv/bin/python -u /workspace/repo/scripts/pass1_pod_runner.py --pack results/pass1_probe_b_pack.json --repo /workspace/repo --out /workspace/run/eval_arm_a.jsonl --adapter /workspace/run/arm_a/adapter",
+      "n": 464,
+      "sampler_weights": {
+        "null": 0.672464,
+        "категория_личное": 2.651429,
+        "молочный_бренд": 8.0,
+        "не_наш_рынок": 0.377236,
+        "сеть_ритейлер": 2.109091
+      },
+      "steps": 58
+    },
+    "b": {
+      "command": "PYTHONPATH=/workspace/repo/src /workspace/venv/bin/python -u /workspace/repo/scripts/train_qlora.py --data results/pass1_sft_arm_b.jsonl --class-weights --out /workspace/run/arm_b",
+      "dataset": {
+        "file": "results/pass1_sft_arm_b.jsonl",
+        "rows": 607,
+        "sha256": "e1e14ee7f5e17bc70e8c5f350c89e0116cbbca107a52f450de3bb7f6b0a03857"
+      },
+      "distribution": {
+        "null": 178,
+        "категория_личное": 45,
+        "молочный_бренд": 1,
+        "не_наш_рынок": 335,
+        "сеть_ритейлер": 48
+      },
+      "eval_command": "PYTHONPATH=/workspace/repo/src /workspace/venv/bin/python -u /workspace/repo/scripts/pass1_pod_runner.py --pack results/pass1_probe_b_pack.json --repo /workspace/repo --out /workspace/run/eval_arm_b.jsonl --adapter /workspace/run/arm_b/adapter",
+      "n": 607,
+      "sampler_weights": {
+        "null": 0.682022,
+        "категория_личное": 2.697778,
+        "молочный_бренд": 8.0,
+        "не_наш_рынок": 0.362388,
+        "сеть_ритейлер": 2.529167
+      },
+      "steps": 76
+    }
+  },
+  "attempt": "ONE. No retry, no second draw, and no tuning after any eval output is seen. The multiplicity of running two arms against one bar is named below and was accepted by the sitting; it is not re-decided once the number is in",
+  "authority": "sitting-2 of 2026-08-19 (LoRA, line B) and its r2 ruling — docs/STATUS.md «День 19.08», ADR knowledge/decisions/sitting-b-line-b-and-the-team-lead-labels.md",
+  "bars": {
+    "P1_per_comment_agreement": {
+      "arm_rule": "max(gold14(arm A), gold14(arm B)) ≥ 12 of 14",
+      "borrowed_from": "results/prereg_pass1_probe_b.json — the same block, read and never retyped",
+      "collapse": {
+        "map": {
+          "категория_личное": "категория"
+        },
+        "symmetric": true
+      },
+      "comparison": "scorer.reader_comment_agreement — the SAME comparison bar 4 was scored with, called and never restated. The symmetric vocabulary collapse and the ABSENT state come with it; a fresh equality loop here would be a second definition of the bar",
+      "gating": true,
+      "loss_budget": {
+        "rows_that_may_be_lost": 2,
+        "rule": "a disagreement, a refusal and an ABSENT row each cost exactly one row, so the bar tolerates two losses of any mixture. Registered here so the result cannot be re-read afterwards against a budget nobody wrote down",
+        "the_thread_that_carries_the_most": "@VARUS_channel:10613"
+      },
+      "minimum_agreed": 12,
+      "multiplicity": "TWO shots at one bar is approximately double the false-pass odds of one, and it is accepted by the sitting-2 ruling rather than hidden: with two independent arms at a false-pass rate p the probability that at least one passes is 1-(1-p)² ≈ 2p. Registered here so the verdict cannot be read later as if one arm had been run",
+      "n": 14,
+      "red": "line B is CLOSED and the question returns to the sitting (option C, a different base). A red bar is an ANSWER, not a bug to fix in-session",
+      "scored_by": "scripts/score_pass1_probe.py through score_lora_b's file swap — probe-b's own scorer",
+      "scored_fields": [],
+      "threshold": "12 of 14 rows agreed",
+      "tie": "a tie ships arm B — named before the numbers exist"
+    },
+    "census_50": {
+      "baseline_none": 25,
+      "gating": false,
+      "n": 50,
+      "rule": "OBSERVATION ONLY. The base answered None on 25 of the 50 neighbour rows; an arm that moves that profile is interesting and moves no bar"
+    }
+  },
+  "contract": "docs/PROMPT-lora-b.md D2",
+  "frozen_when_the_pod_exists": [
+    "config/qlora.yaml",
+    "src/market_pulse/local_llm.py",
+    "src/market_pulse/prompts.py",
+    "results/reader_gold_w1_r2.json",
+    "results/pass1_probe_b_verdict.json",
+    "results/pass1_probe_b_pack.json",
+    "results/pass1_sft_arm_a.jsonl",
+    "results/pass1_sft_arm_b.jsonl",
+    "results/prereg_lora_b.json"
+  ],
+  "h6": {
+    "mismatches": [
+      "arm_a_rows",
+      "arm_a_seconds",
+      "arm_a_steps",
+      "arm_b_rows",
+      "arm_b_seconds",
+      "arm_b_steps",
+      "worst_case_usd"
+    ],
+    "reading": "the arm sizes and everything derived from them moved because the contract sized the arms at 500 and 650 LABELS and the trainable set is what fits config/qlora.yaml's frozen max_seq_len: 43 rows render past it and are dropped by name in results/pass1_sft.json. Every mismatch makes the run CHEAPER than registered and none was silently fixed",
+    "rows": [
+      {
+        "agrees": false,
+        "formula": "the r1 labels, 500 units",
+        "mode": "equals",
+        "name": "arm_a_rows",
+        "re_derived": 464,
+        "registered": 500
+      },
+      {
+        "agrees": false,
+        "formula": "steps × 61.047 s/step",
+        "mode": "equals",
+        "name": "arm_a_seconds",
+        "re_derived": 3540.7,
+        "registered": 3907
+      },
+      {
+        "agrees": false,
+        "formula": "ceil(n/16) × 2 epochs",
+        "mode": "equals",
+        "name": "arm_a_steps",
+        "re_derived": 58,
+        "registered": 64
+      },
+      {
+        "agrees": false,
+        "formula": "r1 + r2, 500 + 150 units",
+        "mode": "equals",
+        "name": "arm_b_rows",
+        "re_derived": 607,
+        "registered": 650
+      },
+      {
+        "agrees": false,
+        "formula": "steps × 61.047 s/step",
+        "mode": "equals",
+        "name": "arm_b_seconds",
+        "re_derived": 4639.6,
+        "registered": 5006
+      },
+      {
+        "agrees": false,
+        "formula": "ceil(n/16) × 2 epochs",
+        "mode": "equals",
+        "name": "arm_b_steps",
+        "re_derived": 76,
+        "registered": 82
+      },
+      {
+        "agrees": true,
+        "formula": "the base model's agreed rows over the sealed fourteen",
+        "mode": "equals",
+        "name": "base_bar",
+        "re_derived": 9,
+        "registered": 9
+      },
+      {
+        "agrees": true,
+        "formula": "the worst boot measured (293 s) × 1.5",
+        "mode": "at_least",
+        "name": "boot_gate_seconds",
+        "re_derived": 439.5,
+        "registered": 450
+      },
+      {
+        "agrees": true,
+        "formula": "the base model's None count over the 50 census rows",
+        "mode": "equals",
+        "name": "census_50_baseline_none",
+        "re_derived": 25,
+        "registered": 25
+      },
+      {
+        "agrees": true,
+        "formula": "the two labels files counted together",
+        "mode": "equals",
+        "name": "combined_distribution",
+        "re_derived": {
+          "null": 213,
+          "категория_личное": 47,
+          "молочный_бренд": 2,
+          "не_наш_рынок": 340,
+          "сеть_ритейлер": 48
+        },
+        "registered": {
+          "null": 213,
+          "категория_личное": 47,
+          "молочный_бренд": 2,
+          "не_наш_рынок": 340,
+          "сеть_ритейлер": 48
+        }
+      },
+      {
+        "agrees": true,
+        "formula": "2 adapters × 64 units × 5.162 s",
+        "mode": "equals",
+        "name": "eval_seconds",
+        "re_derived": 660.7,
+        "registered": 660
+      },
+      {
+        "agrees": true,
+        "formula": "cap / price ceiling",
+        "mode": "equals",
+        "name": "session_ceiling_hours",
+        "re_derived": 7.5,
+        "registered": 7.5
+      },
+      {
+        "agrees": true,
+        "formula": "2 × the measured s/step",
+        "mode": "at_most",
+        "name": "step_watchdog_seconds",
+        "re_derived": 122.094,
+        "registered": 122
+      },
+      {
+        "agrees": false,
+        "formula": "(train + eval + boot + 0.5 h overhead) × $0.80/h",
+        "mode": "equals",
+        "name": "worst_case_usd",
+        "re_derived": 2.4647,
+        "registered": 2.63
+      }
+    ],
+    "rule": "every number docs/PROMPT-lora-b.md registers, re-derived from the formula the contract names for it. `equals` allows 1% — a rounding is not a finding; a kill threshold is checked for the direction of its margin instead, and is red on the wrong side of its own derivation"
+  },
+  "instruments": {
+    "config_sha256": "6771ed373f9e7c52b3180a45506fe0dfef4446bc89b2c3ff6c1b39992f2d00ff",
+    "parser": {
+      "entry_point": "market_pulse.prompts.parse_pass1",
+      "module": "src/market_pulse/prompts.py",
+      "sha256": "a4a5a5d08546f53af18117c37e49f7e396919555563e16737a633c1df1a86eec"
+    },
+    "prompt_sha256": {
+      "pass1_comment_gm4_v1": "5a4a3cb6ce4db89adb304c04de41210fdabfde0c53addfdb75adba0f1d866650"
+    },
+    "scorer": {
+      "module": "src/market_pulse/scorer.py",
+      "sha256": "dbb5406a502f813ba1b4940e0914310efd632386a8da60e0c002cc8964a97d4f"
+    },
+    "sft_record": {
+      "file": "results/pass1_sft.json",
+      "sha256": "edbea54af33fa85763d73da6c0fe646a27ec858e5af1fcbe370b3b313676aa40"
+    },
+    "trainer": {
+      "script": "scripts/train_qlora.py",
+      "sha256": "85207e2d012f7894cce0099b091cbda834bb57aa813e70c57a9c3111c66c768b"
+    },
+    "transport": {
+      "adapter_flag": "--adapter mounts the arm's adapter AROUND the model local_llm builds and writes <out>.adapter.json beside the evidence BEFORE the first reply. Each arm evaluates into its OWN out file: the shipped runner's resume skips every unit already answered, so a second arm sharing one file would answer nothing and look complete",
+      "script": "scripts/pass1_pod_runner.py",
+      "sha256": "d4796df2cf152e3ba15f551ac8a2f5564e465fa9d62c5b753810eb6935558cb3"
+    }
+  },
+  "kill_clock": [
+    {
+      "before": "the endpoint exists",
+      "read": "costPerHr in the create response is the meter of record (Dv448)",
+      "rule": "live A6000-class price > $0.80/h at create → STOP, no endpoint",
+      "rung": 1
+    },
+    {
+      "before": "the model is loaded",
+      "rule": "ssh dead-man ≤ 180 s or KILL — the proven gate-0 of pass1-probe",
+      "rung": 2
+    },
+    {
+      "before": "the first optimizer step",
+      "rule": "boot-to-training-start ≤ 450 s or KILL (the worst boot measured, 293 s, × 1.5)",
+      "rung": 3
+    },
+    {
+      "before": "the run is allowed to continue",
+      "rule": "s/step > 122 s over 5 consecutive log lines → KILL",
+      "rung": 4
+    },
+    {
+      "before": "arm B starts",
+      "rule": "guard reading ≤ $2.50 else STOP — arm B does not start and the session closes with arm A",
+      "rung": 5
+    },
+    {
+      "before": "anything",
+      "rule": "absolute session ceiling 7.5 h = cap / price ceiling; `runpod_guard --until` bounds the window",
+      "rung": 6
+    }
+  ],
+  "money": {
+    "arithmetic": {
+      "boot_seconds_charged": 450,
+      "cap_headroom_usd": 3.5353,
+      "eval_rule": "2 adapters × the eval pack's 64 units × the measured seconds per call",
+      "eval_seconds": 660.7,
+      "hours": 3.0808,
+      "milestone_rule": "the guard reading after arm A must be ≤ $2.50 or arm B does not start. The projection above is boot + arm A at the price ceiling; the STOP is on the READING, never on the projection",
+      "overhead_hours": 0.5,
+      "projected_usd_at_the_arm_a_milestone": 0.8868,
+      "seconds_per_call": 5.162,
+      "seconds_per_step": 61.047,
+      "steps": {
+        "a": 58,
+        "b": 76
+      },
+      "steps_rule": "ceil(n / (micro_batch_size × grad_accum)) × epochs, all three from config/qlora.yaml",
+      "train_seconds": {
+        "a": 3540.7,
+        "b": 4639.6
+      },
+      "worst_case_usd": 2.4647
+    },
+    "cap_rule": "$6.00 all-in, frozen at the FIRST `pod create`. Raising it is the operator's word BEFORE any endpoint exists, never after a reading",
+    "cap_usd_all_in": 6.0,
+    "guard": "PYTHONPATH=src python3.11 scripts/runpod_guard.py --step lora-b --step-cap 6.00 --until <ISO> — read at every milestone, and the reading is what the rungs act on",
+    "meter": {
+      "card_requested": "NVIDIA GeForce RTX 4090",
+      "datacenter": "EU-RO-1, pinned by network volume qw4nwleanc — the volume decides",
+      "price_rule": "**READ ON THE DAY.** `costPerHr` in the create response is the meter of record and every figure in this block is recomputed from it before the generation process starts. A projection that no longer fits deletes the pod and STOPS",
+      "resource": "ONE rented pod, billed for every second it EXISTS — from `pod create` to `pod delete`. `pod stop` does not stop the bill, so the run deletes and never stops",
+      "usd_per_second_at_the_example": 0.000205556,
+      "worked_example_rule": "the kill-clock's own price CEILING, used as the worked example so every figure here prices the worst machine this run is allowed to rent. probe-b's own example was $0.74/h on a 4090; this run needs an A6000-class card",
+      "worked_example_usd_per_hour": 0.8
+    },
+    "reading": {
+      "boot": {
+        "charged": 300.0,
+        "measurements": [
+          {
+            "kind": "READING — the pod answered and its own row carries boot_seconds",
+            "record": "results/reader_v5b_w1.jsonl",
+            "run": "reader-v5b",
+            "seconds": 192.13
+          },
+          {
+            "kind": "BOUND — the runner crashed after the weights loaded and the only witness to the moment is the watcher's ALIVE 18:47:23Z / DEAD 18:47:49Z pair, less the 92 s of create-elapsed at which the generation process launched",
+            "record": "results/pass1_probe_run.json",
+            "run": "pass1-probe",
+            "seconds_bound": [
+              267,
+              293
+            ]
+          }
+        ],
+        "rule": "the MAXIMUM of the two boots this stack has measured, charged in full. A boot charged from one measurement is a constant assumed from a sample of one, and the sample of two spreads 1.4x-1.5x",
+        "seconds": 300.0,
+        "why_the_max": "the same card, the same network volume and the same weights loaded in 192.1 s once and in 267-293 s the next night. Nothing in either run explains the spread, so it is treated as variance of the boot and the pessimistic end is the one registered"
+      },
+      "ceiling": {
+        "completion_tokens": 96,
+        "gates": true,
+        "prompt_tokens": 2659,
+        "rule": "the cheapest call v5b actually made, used as a BOUND. It emitted more completion tokens and prefilled more prompt tokens than any pass-1 request can, on the same transport, the same card and the same serving config — so no pass-1 call can cost more, and the bound carries no forecast in it",
+        "seconds_per_pass1_call": 6.402,
+        "unit": "@mandziak:3701"
+      },
+      "fitted": {
+        "expected_answer_chars": 95,
+        "expected_completion_tokens": 35.59,
+        "fitted_over_completion_tokens": [
+          96,
+          2056
+        ],
+        "intercept_seconds": 1.062,
+        "line": "seconds ≈ intercept + slope × completion_tokens, least squares over the 26",
+        "seconds_per_pass1_call": 2.934,
+        "slope_seconds_per_token": 0.052599,
+        "why_it_does_not_gate": "a pass-1 answer is ~36 tokens and the line was fitted between 96 and 2 056, so using it would EXTRAPOLATE below its own range. It is published because the difference between the two readings is what the run measures"
+      },
+      "source": {
+        "calls": 26,
+        "record": "results/reader_v5b_w1.jsonl",
+        "sha256": "9540a84bc87109ce3589a636fa5640d56feb5c8382bb82adcf8345bd8e858e8c"
+      },
+      "v5b_totals": {
+        "chars_per_completion_token": 2.6693,
+        "completion_tokens": 22488,
+        "emitted_chars": 60028,
+        "seconds_per_completion_token": 0.053826,
+        "worker_seconds": 1210.445
+      }
+    },
+    "recovery": "ONE pod re-creation, and only after a deletion PROVEN by listing. Never two billing endpoints at once — the goal is no parallel spend, whatever the letter. Pods, not serverless (16.08)"
+  },
+  "phase": "lora-b",
+  "population": {
+    "base": {
+      "agreed": 9,
+      "of": 14,
+      "record": "results/pass1_probe_b_verdict.json",
+      "sha256": "4f3a0cbf226a06a8084b1dc8030316222defcc3f5a94584801ff0d5f3d55ef42"
+    },
+    "eval_pack": {
+      "items": 64,
+      "record": "results/pass1_probe_b_pack.json",
+      "rule": "probe-b's own 64-unit pack, unchanged: 14 gold and 50 census rows. The base's per-row verdicts were measured on it and are NOT re-run — the arms are paired against a sealed record, on identical instances and the same prompt sha",
+      "sha256": "bbbe64203f9c909a2d2e8aeab03d8d61c0fd6604d4854e13462d0e190bc4e113"
+    },
+    "gold": {
+      "n": 14,
+      "record": "results/reader_gold_w1_r2.json",
+      "revision": "r2",
+      "rows": [
+        {
+          "msg_id": 20664,
+          "thread": "@VARUS_channel:10348"
+        },
+        {
+          "msg_id": 21599,
+          "thread": "@VARUS_channel:10613"
+        },
+        {
+          "msg_id": 21601,
+          "thread": "@VARUS_channel:10613"
+        },
+        {
+          "msg_id": 21626,
+          "thread": "@VARUS_channel:10613"
+        },
+        {
+          "msg_id": 21629,
+          "thread": "@VARUS_channel:10613"
+        },
+        {
+          "msg_id": 47899,
+          "thread": "@mandziak:3676"
+        },
+        {
+          "msg_id": 47902,
+          "thread": "@mandziak:3676"
+        },
+        {
+          "msg_id": 48276,
+          "thread": "@mandziak:3703"
+        },
+        {
+          "msg_id": 48283,
+          "thread": "@mandziak:3703"
+        },
+        {
+          "msg_id": 578951,
+          "thread": "@matusi_ukr:22242"
+        },
+        {
+          "msg_id": 579379,
+          "thread": "@matusi_ukr:22272"
+        },
+        {
+          "msg_id": 579457,
+          "thread": "@matusi_ukr:22272"
+        },
+        {
+          "msg_id": 580124,
+          "thread": "@matusi_ukr:22303"
+        },
+        {
+          "msg_id": 580129,
+          "thread": "@matusi_ukr:22303"
+        }
+      ],
+      "sha256": "716ff4174bdafa5957caa4d038a11241b6eb299df4035a5f0e983217ec2a46d9"
+    }
+  },
+  "producer": {
+    "borrowed": {
+      "results/pass1_sft.json": "edbea54af33fa85763d73da6c0fe646a27ec858e5af1fcbe370b3b313676aa40",
+      "results/prereg_pass1_probe_b.json": "a29e85ad6e856f6fafa032b3f5ede0e635046171778cbe7a6902b64fa57bacad"
+    },
+    "script": "scripts/write_lora_b_prereg.py",
+    "sha256": "3f524667acb6abdb4fb837fef1dbcee1be179f798a62d837f2ff238c9cf674cd"
+  },
+  "reachability": {
+    "stance_is_not_trained": {
+      "gold_rows_scoring_stance": 3,
+      "reachable_maximum_if_stance_were_taught_null": 11,
+      "rule": "the team lead labelled subject_type alone. Writing null into the two unlabelled fields AND training on it would put every stance-scoring row out of reach and cap the bar at 11 of 14 — under the threshold, before the pod exists. The SFT builder masks them out of the loss instead, and this is the arithmetic that decided it"
+    },
+    "the_context_the_gate_carries": {
+      "arm_b_rows": 607,
+      "arm_b_rows_with_an_entity_block": 39,
+      "cause": "a pass-1 request carries the thread's topic and entity block, and both come from a reader verdict that was PAID FOR. 15 of the 120 labelled threads have one; the rest render the topic from the store's own post text and an empty entity block. The eval's topics are reader summaries of 26–147 characters and the substituted post texts run to thousands, which is also what pushes 43 rows past max_seq_len",
+      "eval_pack_items": 64,
+      "eval_pack_items_with_an_entity_block": 55,
+      "gate_rows": 14,
+      "gate_rows_with_an_entity_block": 12,
+      "the_open_ruling": "REGISTERED AS A RISK, not as a defect: the arms are trained on requests whose context field is mostly empty and graded on requests where it is mostly full. Removing it costs a reader pass over the 105 uncovered threads — 105 × 51.3 s = ~5 390 s ≈ $1.20 at the price ceiling, in a SEPARATE session, because a dataset built during the paid session could not have been pre-registered. The operator rules; this record says what was known before the attempt"
+    },
+    "to_pass": {
+      "agreed_now": 9,
+      "by_gold_class": {
+        "категория": 4,
+        "молочный_бренд": 1
+      },
+      "minimum_agreed": 12,
+      "reading": "four of the five rows the arms must turn are gold «категория» and one is «молочный_бренд». Arm B carries 45 rows of the first class and ONE of the second — the second brand row of the labelled set renders past max_seq_len and was dropped. A weight of 8.0 on one row is a weight on one row",
+      "rows_the_arm_must_turn": 3,
+      "the_five_missed": {
+        "21601": {
+          "gold": "категория",
+          "reader": null
+        },
+        "47902": {
+          "gold": "категория",
+          "reader": "молочный_бренд"
+        },
+        "48283": {
+          "gold": "категория",
+          "reader": null
+        },
+        "579457": {
+          "gold": "категория",
+          "reader": "не_наш_рынок"
+        },
+        "580124": {
+          "gold": "молочный_бренд",
+          "reader": "сеть_ритейлер"
+        }
+      },
+      "training_rows_behind_them": {
+        "категория_личное": 45,
+        "молочный_бренд": 1
+      }
+    }
+  },
+  "return_to_sitting": "**A FAILED BAR GOES BACK TO THE SITTING, never to a prompt iteration.** The options the sitting of 2026-08-17 left open are B (labelled subject_type data + LoRA) and C (a different base). There is no pass1-v2 prompt without a sitting ruling, and this clause is pre-registered so it cannot be re-decided once the number is in",
+  "training": {
+    "config": "config/qlora.yaml",
+    "config_is_frozen_law": "never edited. The arms differ by a data path and a sampler flag, both of them CLI arguments recorded here; a hyperparameter moved between the arms would make the comparison meaningless rather than merely wrong",
+    "effective_batch": 16,
+    "epochs": 2,
+    "max_seq_len": 1408,
+    "sampler": "class-weighted, w_c = N/(5·n_c) capped at 8.0, computed on the arm's own dataset. Both arms weighted: the ablation is the data, not the sampler. The epoch draws the dataset's own size WITH replacement, so steps/epoch is unchanged",
+    "seed": 42,
+    "supervision": {
+      "field": "subject_type",
+      "learn_chars": "each row's target is written whole and only its head — through the subject_type value — is supervised. `scripts/train_qlora.py` masks the rest out of the loss",
+      "unsupervised_fields": [
+        "subject_id",
+        "stance"
+      ],
+      "why": "the team lead labelled subject_type and nothing else. Training the two unlabelled fields as null would teach «stance is always null», and three of the fourteen sealed gold rows score stance — the reachable maximum would fall to 11 against a threshold of 12 and the gate would be unreachable by construction"
+    }
+  }
+}

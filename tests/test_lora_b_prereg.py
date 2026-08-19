@@ -1,0 +1,207 @@
+"""`results/prereg_lora_b.json` — the registration, and the two things a registration can get wrong.
+
+It can register a bar its scorer cannot read: the test below hands this record to
+`score_pass1_probe.bar_p1`, the function D4 will actually score with, and makes it produce a
+verdict. And it can register numbers nobody re-derived: H6 is a block of the record and three of
+its rows come out RED on purpose, so the test asserts the mismatch rather than a green table.
+"""
+
+import json
+import sys
+from pathlib import Path
+
+import pytest
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(REPO_ROOT / "scripts"))
+
+import score_pass1_probe as scoring  # noqa: E402
+import write_lora_b_prereg as producer  # noqa: E402
+
+RECORD = json.loads((REPO_ROOT / "results" / "prereg_lora_b.json").read_text("utf-8"))
+PROBE = json.loads((REPO_ROOT / "results" / "prereg_pass1_probe_b.json").read_text("utf-8"))
+GOLD = json.loads((REPO_ROOT / "results" / "reader_gold_w1_r2.json").read_text("utf-8"))
+SFT = json.loads((REPO_ROOT / "results" / "pass1_sft.json").read_text("utf-8"))
+
+
+def evidence(wrong: int = 0) -> list[dict]:
+    """One answered row per gold unit, `wrong` of them answered with the wrong class."""
+    rows = []
+    for index, one in enumerate(GOLD["per_comment"]):
+        said = one["subject_type"] if index >= wrong else "не_наш_рынок"
+        if index < wrong and one["subject_type"] == "не_наш_рынок":
+            said = "сеть_ритейлер"
+        rows.append(
+            {
+                "id": f"x#{one['msg_id']}",
+                "leg": "gold",
+                "thread": "t",
+                "msg_id": int(one["msg_id"]),
+                "parse_error": None,
+                "parsed": {
+                    "msg_id": int(one["msg_id"]),
+                    "subject_type": said,
+                    "subject_id": one["subject_id"],
+                    "stance": one["stance"],
+                },
+            }
+        )
+    return rows
+
+
+def test_the_record_rebuilds_byte_identical(tmp_path):
+    first, second = tmp_path / "a", tmp_path / "b"
+    assert producer.main(["--outdir", str(first)]) == 0
+    assert producer.main(["--outdir", str(second)]) == 0
+    name = producer.OUT_NAME
+    assert (first / name).read_bytes() == (second / name).read_bytes()
+    assert str(tmp_path) not in (first / name).read_text("utf-8")
+
+
+def test_the_shipped_record_is_what_the_producer_builds_today(tmp_path):
+    assert producer.main(["--outdir", str(tmp_path)]) == 0
+    assert (tmp_path / producer.OUT_NAME).read_bytes() == (
+        REPO_ROOT / producer.OUT_NAME
+    ).read_bytes()
+
+
+def test_the_scorer_that_will_grade_the_arms_can_read_this_registration():
+    """The consumer decides the shape. `bar_p1` is what D4 calls, and it is called here."""
+    perfect = scoring.bar_p1(RECORD, evidence())
+    assert perfect["n"] == 14 and perfect["agreed"] == 14 and perfect["passed"] is True
+    assert perfect["minimum_agreed"] == 12
+    two_wrong = scoring.bar_p1(RECORD, evidence(wrong=2))
+    assert two_wrong["agreed"] == 12 and two_wrong["passed"] is True  # exactly at the bar
+    three_wrong = scoring.bar_p1(RECORD, evidence(wrong=3))
+    assert three_wrong["agreed"] == 11 and three_wrong["passed"] is False
+    assert three_wrong["losses"]["budget"] == 2
+
+
+def test_the_bar_block_is_probe_bs_own_with_the_arm_rule_added():
+    bar = RECORD["bars"]["P1_per_comment_agreement"]
+    borrowed = PROBE["bars"]["P1_per_comment_agreement"]
+    for key, value in borrowed.items():
+        assert bar[key] == value, key
+    assert bar["arm_rule"] == "max(gold14(arm A), gold14(arm B)) ≥ 12 of 14"
+    assert "double the false-pass odds" in bar["multiplicity"]
+    assert "arm B" in bar["tie"]
+    assert "CLOSED" in bar["red"]
+
+
+def test_the_gold_rows_are_re_derived_and_refuse_to_disagree_with_the_probe_registration(
+    monkeypatch,
+):
+    assert RECORD["population"]["gold"]["rows"] == producer.gold_rows()
+    assert len(RECORD["population"]["gold"]["rows"]) == 14
+    stale = json.loads(json.dumps(PROBE))
+    stale["population"]["gold"]["rows"] = stale["population"]["gold"]["rows"][:-1]
+    monkeypatch.setattr(
+        producer,
+        "read",
+        lambda path: stale if "prereg_pass1" in str(path) else json.loads(path.read_text("utf-8")),
+    )
+    with pytest.raises(SystemExit, match="not the fourteen probe-b registered"):
+        producer.gold_rows()
+
+
+def test_h6_re_derives_every_registered_number_and_marks_the_ones_that_moved():
+    table = RECORD["h6"]
+    assert {row["name"] for row in table["rows"]} == set(producer.REGISTERED)
+    assert set(table["mismatches"]) == {
+        "arm_a_rows",
+        "arm_b_rows",
+        "arm_a_steps",
+        "arm_b_steps",
+        "arm_a_seconds",
+        "arm_b_seconds",
+        "worst_case_usd",
+    }
+    moved = {row["name"]: row for row in table["rows"] if not row["agrees"]}
+    assert moved["arm_a_rows"]["registered"] == 500 and moved["arm_a_rows"]["re_derived"] == 464
+    assert moved["arm_b_rows"]["registered"] == 650 and moved["arm_b_rows"]["re_derived"] == 607
+    # every mismatch is in the CHEAPER direction, which is why the cap still holds
+    for name in ("arm_a_seconds", "arm_b_seconds", "worst_case_usd"):
+        assert moved[name]["re_derived"] < moved[name]["registered"]
+    green = {row["name"] for row in table["rows"] if row["agrees"]}
+    assert {"census_50_baseline_none", "base_bar", "combined_distribution"} <= green
+
+
+def test_the_labels_distribution_the_contract_registered_re_derives():
+    row = next(one for one in RECORD["h6"]["rows"] if one["name"] == "combined_distribution")
+    assert row["agrees"] is True
+    assert row["re_derived"]["молочный_бренд"] == 2
+    assert sum(row["re_derived"].values()) == 650
+
+
+def test_the_worst_case_fits_the_cap_and_the_milestone_sits_under_its_stop():
+    sums = RECORD["money"]["arithmetic"]
+    assert sums["worst_case_usd"] < RECORD["money"]["cap_usd_all_in"]
+    assert sums["cap_headroom_usd"] > 0
+    assert sums["projected_usd_at_the_arm_a_milestone"] < producer.MILESTONE_USD
+    # `hours` is published rounded and the dollars are the product of the unrounded value, so the
+    # two agree to a hundredth of a cent and not to the last digit
+    assert abs(sums["worst_case_usd"] - sums["hours"] * 0.80) < 1e-3
+    assert sums["steps"] == {
+        "a": SFT["census"]["arms"]["a"]["steps"],
+        "b": SFT["census"]["arms"]["b"]["steps"],
+    }
+
+
+def test_the_kill_clock_is_six_rungs_in_order_each_before_its_milestone():
+    rungs = RECORD["kill_clock"]
+    assert [one["rung"] for one in rungs] == [1, 2, 3, 4, 5, 6]
+    assert all(one["before"] and one["rule"] for one in rungs)
+    assert "0.80" in rungs[0]["rule"] and "no endpoint" in rungs[0]["rule"]
+    assert "180 s" in rungs[1]["rule"]
+    assert "450 s" in rungs[2]["rule"]
+    assert "122 s" in rungs[3]["rule"]
+    assert "2.50" in rungs[4]["rule"] and "arm B does not start" in rungs[4]["rule"]
+    assert "7.5 h" in rungs[5]["rule"]
+
+
+def test_the_reachability_block_prices_the_rows_the_arm_must_turn():
+    reach = RECORD["reachability"]["to_pass"]
+    assert reach["agreed_now"] == 9 and reach["minimum_agreed"] == 12
+    assert reach["rows_the_arm_must_turn"] == 3
+    assert len(reach["the_five_missed"]) == 5
+    assert reach["by_gold_class"] == {"категория": 4, "молочный_бренд": 1}
+    assert reach["training_rows_behind_them"]["молочный_бренд"] == 1
+
+
+def test_the_stance_arithmetic_that_decided_the_mask_is_in_the_record():
+    block = RECORD["reachability"]["stance_is_not_trained"]
+    assert block["gold_rows_scoring_stance"] == 3
+    assert block["reachable_maximum_if_stance_were_taught_null"] == 11
+    assert block["reachable_maximum_if_stance_were_taught_null"] < 12
+
+
+def test_the_context_gap_is_registered_as_a_risk_before_the_attempt():
+    block = RECORD["reachability"]["the_context_the_gate_carries"]
+    assert block["gate_rows_with_an_entity_block"] == 12 and block["gate_rows"] == 14
+    assert block["arm_b_rows_with_an_entity_block"] == 39 and block["arm_b_rows"] == 607
+    assert "reader pass" in block["the_open_ruling"]
+    assert "SEPARATE session" in block["the_open_ruling"]
+
+
+def test_each_arm_evaluates_into_its_own_file_because_the_resume_would_skip():
+    outs = {arm: block["eval_command"] for arm, block in RECORD["arms"].items()}
+    assert len(set(outs.values())) == 2
+    assert "eval_arm_a.jsonl" in outs["a"] and "eval_arm_b.jsonl" in outs["b"]
+    assert "--adapter /workspace/run/arm_a/adapter" in outs["a"]
+    assert "resume skips" in RECORD["instruments"]["transport"]["adapter_flag"]
+
+
+def test_the_producer_pins_itself_and_what_it_borrowed():
+    import hashlib
+
+    live = hashlib.sha256(
+        (REPO_ROOT / "scripts" / "write_lora_b_prereg.py").read_bytes()
+    ).hexdigest()
+    assert RECORD["producer"]["sha256"] == live
+    for path, sha in RECORD["producer"]["borrowed"].items():
+        assert hashlib.sha256((REPO_ROOT / path).read_bytes()).hexdigest() == sha, path
+
+
+def test_every_path_frozen_when_the_pod_exists_is_on_disk():
+    for path in RECORD["frozen_when_the_pod_exists"]:
+        assert (REPO_ROOT / path).exists(), path
