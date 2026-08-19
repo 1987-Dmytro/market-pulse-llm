@@ -7,8 +7,10 @@ back to the last newline (`vee` / `dde`, re-derived from the binary in
 ones and the truncation semantics so a move back is red rather than quiet
 ([[a_moved_constant_fails_green]]).
 
-`TARGET_KTOK` is pinned here too. It is SUSPENDED by the operator's ruling of 2026-08-19, not
-moved, and a suspended number with nothing watching it is the one that drifts.
+`TARGET_KTOK` is pinned here too. The 19.08 ruling suspended the old ≤9.0K bar; the joint sitting
+of the same day re-registered it by a formula — the measured post-debloat floor (9.7K) × 1.1 → 10.7
+— and a constant with two homes goes green while one of them drifts, which is why the pin moves in
+the same commit as the constant.
 """
 
 import importlib.util
@@ -31,7 +33,7 @@ def write(tmp_path: Path, text: str) -> Path:
 
 def test_the_constants_are_the_loaders_and_the_target_is_where_the_ruling_left_it():
     assert (census.MEMORY_LINES, census.MEMORY_UNITS) == (200, 25_000)
-    assert census.TARGET_KTOK == 9.0
+    assert census.TARGET_KTOK == 10.7  # floor 9.7 x 1.1, sitting 2026-08-19
     assert not hasattr(census, "MEMORY_CAP"), "the flat 25 * 1024 byte cap is what Dv526 removed"
 
 

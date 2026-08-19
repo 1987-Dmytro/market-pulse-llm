@@ -3,7 +3,8 @@
 
 Sum of bytes//4 over: ~/.claude/CLAUDE.md · ~/CLAUDE.md · ./CLAUDE.md (+@import, 1 level) ·
 MEMORY.md (what the LOADER injects, not the file on disk) · knowledge/hot.md · .claude/rules/*.md
-WITHOUT paths: (those load every session). One line of output; warns above 9K. Exits 0.
+WITHOUT paths: (those load every session). One line of output; warns above `TARGET_KTOK`.
+Exits 0.
 """
 
 import re
@@ -12,10 +13,13 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 HOME = Path.home()
-TARGET_KTOK = 9.0
-"""Suspended, not moved: the operator's ruling of 2026-08-19 re-registers it from the measured
-high-signal floor at a joint sitting, so until then «> 9.0K» reads as «the target is on
-re-registration» and this file does not chase it."""
+TARGET_KTOK = 10.7
+"""Re-registered 2026-08-19 by the joint sitting's PRE-REGISTERED FORMULA — the measured
+post-debloat floor × 1.1, rounded half-up to one decimal. The floor is this script's OWN printed
+reading once groups A–E had left: **9.7K**, identical across three consecutive runs, so
+9.7 × 1.1 = 10.67 → **10.7**. The number was written from the measurement and never before it, and
+the suspension the 19.08 ruling put on the old ≤9.0K target ENDS here
+(knowledge/decisions/boot-tax-re-registered-from-the-measured-floor.md)."""
 
 MEMORY_LINES = 200
 MEMORY_UNITS = 25_000
