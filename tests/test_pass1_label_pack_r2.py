@@ -202,6 +202,17 @@ def test_the_census_prices_every_definition_on_r1_s_own_labels(record):
     )
 
 
+def test_the_census_prices_the_comment_level_rule_it_does_not_draw_on(record):
+    """The one cut of this tract with a large lift — measured, and NOT the pack's rule. Its
+    ceiling is the number the next ruling needs, so it is asserted rather than left in prose."""
+    row = record["census"]["(not a thread rule) the COMMENT's own text hits"]
+    assert row["payable"] == 59 and row["available"] == 21
+    assert row["r1_ours_in_them"] == 14 and row["r1_rows_in_them"] == 38
+    assert row["r1_ours_share"] > 0.35
+    assert "not drawn on" in row["reading"]
+    assert len({(one["thread"], one["msg_id"]) for one in record["units"]}) == 150
+
+
 def test_the_codebook_carries_r1_s_law_by_the_same_bytes(built, record):
     _, rendering = built
     from market_pulse import prompts

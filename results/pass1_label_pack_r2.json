@@ -5,6 +5,17 @@
     "rule": "NOT drawn for r2. The operator's blind-40 option lives on r1 (docs/label-pack-pass1-r1-blind40.md) and this pack spends no row on it"
   },
   "census": {
+    "(not a thread rule) the COMMENT's own text hits": {
+      "already_drawn_by_r1": 38,
+      "available": 21,
+      "candidate_threads": 48,
+      "payable": 59,
+      "r1_ours_in_them": 14,
+      "r1_ours_share": 0.3684,
+      "r1_rows_in_them": 38,
+      "reading": "NOT the pack's rule and not drawn on — D1 defines a candidate as a THREAD. Measured because it is the only cut of this tract with a large lift, and its ceiling is the number the next ruling needs: this is what a comment-level re-draw could reach",
+      "threads_after_exam": 41
+    },
     "_reading": "«ours» is молочный_бренд + категория_личное, the two classes sitting-2 is short of. The share is measured on r1's own 500 labels, restricted to the rows the definition would have kept; the pack's own baseline is the first row, which is the whole tract",
     "brand or category (D1's rule, = the shipped gate)": {
       "already_drawn_by_r1": 500,
@@ -1019,7 +1030,7 @@
     },
     "r1_producer_untouched": true,
     "script": "scripts/build_pass1_label_pack_r2.py",
-    "sha256": "208b115620a721c386d77e0602cfc1954405b2c6368c52b677b7b4b8ec2b5243"
+    "sha256": "7ae4f6e440ffdf4130d94d4cebcab6ed73acac16f3d8071985fb650a0ec83202"
   },
   "rendering": {
     "chars": 213585,

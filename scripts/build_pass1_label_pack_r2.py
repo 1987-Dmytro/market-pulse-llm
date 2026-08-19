@@ -155,6 +155,14 @@ def signals() -> list[dict]:
                 "brands": sorted(found["brands"]),
                 "categories": sorted(found["categories"]),
                 "payable": [int(row["msg_id"]) for row in one["comments"]],
+                "own_hit": [
+                    int(row["msg_id"])
+                    for row in one["comments"]
+                    if any(
+                        census.hits(row["text"], categories, aliases, None, census.CARRIER)[half]
+                        for half in ("brands", "categories")
+                    )
+                ],
             }
         )
     return sorted(out, key=lambda one: one["thread"])
@@ -217,6 +225,27 @@ def census_table(rows: list[dict], r1: dict, gold: set[int], excluded: set[str])
             "r1_ours_in_them": ours,
             "r1_ours_share": round(ours / len(answered), 4) if answered else None,
         }
+    own = {one["thread"]: set(one["own_hit"]) for one in rows}
+    after = [one for one in rows if one["thread"] not in excluded]
+    hit_rows = [row for row in labels if int(row["msg_id"]) in own[row["thread"]]]
+    ours_hit = sum(1 for row in hit_rows if row["subject_type"] in OURS)
+    out["(not a thread rule) the COMMENT's own text hits"] = {
+        "candidate_threads": sum(1 for one in rows if one["own_hit"]),
+        "threads_after_exam": sum(1 for one in after if one["own_hit"]),
+        "payable": sum(len(one["own_hit"]) for one in after),
+        "already_drawn_by_r1": sum(
+            len(set(one["own_hit"]) - set(available[one["thread"]])) for one in after
+        ),
+        "available": sum(len(set(one["own_hit"]) & set(available[one["thread"]])) for one in after),
+        "r1_rows_in_them": len(hit_rows),
+        "r1_ours_in_them": ours_hit,
+        "r1_ours_share": round(ours_hit / len(hit_rows), 4) if hit_rows else None,
+        "reading": (
+            "NOT the pack's rule and not drawn on — D1 defines a candidate as a THREAD. Measured"
+            " because it is the only cut of this tract with a large lift, and its ceiling is the"
+            " number the next ruling needs: this is what a comment-level re-draw could reach"
+        ),
+    }
     out["_reading"] = (
         "«ours» is молочный_бренд + категория_личное, the two classes sitting-2 is short of. The"
         " share is measured on r1's own 500 labels, restricted to the rows the definition would"
